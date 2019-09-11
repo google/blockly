@@ -48,7 +48,7 @@ Blockly.Cursor = function() {
 Blockly.Cursor.prototype.drawer = null;
 
 /**
- * Sets the drawer for the cursor.
+ * Sets the object in charge of drawing the cursor.
  * @param{Blockly.CursorSvg} drawer The object in charge of drawing the cursor.
  */
 Blockly.Cursor.prototype.setDrawer = function(drawer) {

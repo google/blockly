@@ -267,9 +267,12 @@ Blockly.navigation.focusFlyout = function() {
  */
 Blockly.navigation.getFlyoutCursor_ = function() {
   var workspace = Blockly.getMainWorkspace();
-  var toolbox = workspace.getToolbox();
-  var flyout = toolbox ? toolbox.flyout_ : workspace.getFlyout();
-  var cursor = flyout ? flyout.workspace_.getCursor() : null;
+  var cursor = null;
+  if (workspace.rendered) {
+    var toolbox = workspace.getToolbox();
+    var flyout = toolbox ? toolbox.flyout_ : workspace.getFlyout();
+    cursor = flyout ? flyout.workspace_.getCursor() : null;
+  }
   return cursor;
 };
 
@@ -639,6 +642,7 @@ Blockly.navigation.disconnectBlocks = function() {
  * block or a set position on the workspace.
  */
 Blockly.navigation.focusWorkspace = function() {
+  Blockly.hideChaff();
   var cursor = Blockly.getMainWorkspace().getCursor();
   var reset = Blockly.getMainWorkspace().getToolbox() ? true : false;
   var topBlocks = Blockly.getMainWorkspace().getTopBlocks();
@@ -765,30 +769,11 @@ Blockly.navigation.moveCursorOnBlockMutation = function(mutatedBlock) {
 Blockly.navigation.onKeyPress = function(e) {
   var key = Blockly.user.keyMap.serializeKeyEvent(e);
   var action = Blockly.user.keyMap.getActionByKeyCode(key);
-  var readOnly = Blockly.getMainWorkspace().options.readOnly;
-  var actionHandled = false;
 
   if (action) {
-    if (Blockly.keyboardAccessibilityMode) {
-      if (!readOnly) {
-        var curNode = Blockly.getMainWorkspace().getCursor().getCurNode();
-        if (curNode && curNode.getType() === Blockly.ASTNode.types.FIELD) {
-          actionHandled = curNode.getLocation().onBlocklyAction(action);
-        }
-        if (!actionHandled) {
-          actionHandled = Blockly.navigation.onBlocklyAction(action);
-        }
-      // If in readonly mode only handle valid actions.
-      } else if (Blockly.navigation.READONLY_ACTION_LIST.indexOf(action) > -1) {
-        actionHandled = Blockly.navigation.onBlocklyAction(action);
-      }
-    // If not in accessibility mode only hanlde turning on keyboard navigation.
-    } else if (action.name === Blockly.navigation.actionNames.TOGGLE_KEYBOARD_NAV) {
-      Blockly.navigation.enableKeyboardAccessibility();
-      actionHandled = true;
-    }
+    return Blockly.navigation.onBlocklyAction(action);
   }
-  return actionHandled;
+  return false;
 };
 
 /**
@@ -796,9 +781,39 @@ Blockly.navigation.onKeyPress = function(e) {
  * the given action.
  * @param {!Blockly.Action} action The current action.
  * @return {boolean} True if the action has been handled, false otherwise.
- * @package
  */
 Blockly.navigation.onBlocklyAction = function(action) {
+  var readOnly = Blockly.getMainWorkspace().options.readOnly;
+  var actionHandled = false;
+
+  if (Blockly.keyboardAccessibilityMode) {
+    if (!readOnly) {
+      var curNode = Blockly.getMainWorkspace().getCursor().getCurNode();
+      if (curNode && curNode.getType() === Blockly.ASTNode.types.FIELD) {
+        actionHandled = curNode.getLocation().onBlocklyAction(action);
+      }
+      if (!actionHandled) {
+        actionHandled = Blockly.navigation.handleActions_(action);
+      }
+    // If in readonly mode only handle valid actions.
+    } else if (Blockly.navigation.READONLY_ACTION_LIST.indexOf(action) > -1) {
+      actionHandled = Blockly.navigation.handleActions_(action);
+    }
+  // If not in accessibility mode only hanlde turning on keyboard navigation.
+  } else if (action.name === Blockly.navigation.actionNames.TOGGLE_KEYBOARD_NAV) {
+    Blockly.navigation.enableKeyboardAccessibility();
+    actionHandled = true;
+  }
+  return actionHandled;
+};
+
+/**
+ * Handles the action or dispatches to the appropriate action handler.
+ * @param {!Blockly.Action} action The current action
+ * @return {boolean} True if the action has been handled, false otherwise.
+ * @private
+ */
+Blockly.navigation.handleActions_ = function(action) {
   if (action.name === Blockly.navigation.actionNames.TOGGLE_KEYBOARD_NAV) {
     Blockly.navigation.disableKeyboardAccessibility();
     return true;

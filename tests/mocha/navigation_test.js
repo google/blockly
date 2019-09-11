@@ -320,8 +320,6 @@ suite('Navigation', function() {
     setup(function() {
       this.workspace = new Blockly.Workspace({readOnly: false});
       Blockly.user.keyMap.setKeyMap(Blockly.user.keyMap.createDefaultKeyMap());
-      this.workspace.setCursor(new Blockly.Cursor());
-      this.workspace.setMarker(new Blockly.MarkerCursor());
       Blockly.mainWorkspace = this.workspace;
       Blockly.keyboardAccessibilityMode = true;
 
@@ -332,7 +330,7 @@ suite('Navigation', function() {
       };
     });
     test('Action does not exist', function() {
-      var field = new Blockly.Field('value');
+      var field = new Blockly.FieldDropdown([['a','b'], ['c','d']]);
       sinon.spy(field, 'onBlocklyAction');
       this.workspace.getCursor().setLocation(Blockly.ASTNode.createFieldNode(field));
 
@@ -345,36 +343,30 @@ suite('Navigation', function() {
     });
 
     test('Action exists - field handles action', function() {
-      var field = new Blockly.Field('value');
-      sinon.spy(Blockly.navigation, 'onBlocklyAction');
+      var field = new Blockly.FieldDropdown([['a','b'], ['c','d']]);
       sinon.stub(field, 'onBlocklyAction').callsFake(function(){
         return true;
       });
       this.workspace.getCursor().setLocation(Blockly.ASTNode.createFieldNode(field));
 
-      this.mockEvent.keyCode = Blockly.utils.KeyCodes.A;
-      var isHandled = Blockly.navigation.onKeyPress(this.mockEvent);
+      var isHandled = Blockly.navigation.onBlocklyAction(Blockly.navigation.ACTION_OUT);
       chai.assert.isTrue(isHandled);
       chai.assert.isTrue(field.onBlocklyAction.calledOnce);
-      chai.assert.isFalse(Blockly.navigation.onBlocklyAction.calledOnce);
 
-      Blockly.navigation.onBlocklyAction.restore();
       field.onBlocklyAction.restore();
     });
 
     test('Action exists - field does not handle action', function() {
-      var field = new Blockly.Field('value');
+      var field = new Blockly.FieldDropdown([['a','b'], ['c','d']]);
       sinon.spy(field, 'onBlocklyAction');
-      sinon.spy(Blockly.navigation, 'onBlocklyAction');
       this.workspace.getCursor().setLocation(Blockly.ASTNode.createFieldNode(field));
 
       this.mockEvent.keyCode = Blockly.utils.KeyCodes.A;
-      var isHandled = Blockly.navigation.onKeyPress(this.mockEvent);
+      var isHandled = Blockly.navigation.onBlocklyAction(Blockly.navigation.ACTION_OUT);
       chai.assert.isTrue(isHandled);
       chai.assert.isTrue(field.onBlocklyAction.calledOnce);
 
       field.onBlocklyAction.restore();
-      Blockly.navigation.onBlocklyAction.restore();
     });
 
     test('Toggle Action Off', function() {
@@ -390,7 +382,6 @@ suite('Navigation', function() {
     });
 
     test('Toggle Action On', function() {
-      this.workspace = Blockly.inject('blocklyDiv', {readOnly: false});
       this.mockEvent.keyCode = 'Control75';
       sinon.stub(Blockly.navigation, 'focusWorkspace');
       Blockly.keyboardAccessibilityMode = false;

@@ -42,6 +42,7 @@ goog.inherits(Blockly.FlyoutCursor, Blockly.Cursor);
  * Find the next connection, field, or block.
  * @return {Blockly.ASTNode} The next element, or null if the current node is
  *     not set or there is no next value.
+ * @override
  */
 Blockly.FlyoutCursor.prototype.next = function() {
   if (!this.isMarker_) {
@@ -59,9 +60,9 @@ Blockly.FlyoutCursor.prototype.next = function() {
 };
 
 /**
- * Find the in connection or field.
- * @return {Blockly.ASTNode} The in element, or null if the current node is
- *     not set or there is no in value.
+ * This is a  no-op since a flyout cursor can not go in.
+ * @return {null} null
+ * @override
  */
 Blockly.FlyoutCursor.prototype.in = function() {
   return null;
@@ -71,6 +72,7 @@ Blockly.FlyoutCursor.prototype.in = function() {
  * Find the previous connection, field, or block.
  * @return {Blockly.ASTNode} The previous element, or null if the current node
  *     is not set or there is no previous value.
+ * @override
  */
 Blockly.FlyoutCursor.prototype.prev = function() {
   if (!this.isMarker_) {
@@ -88,9 +90,9 @@ Blockly.FlyoutCursor.prototype.prev = function() {
 };
 
 /**
- * Find the out connection, field, or block.
- * @return {Blockly.ASTNode} The out element, or null if the current node is
- *     not set or there is no out value.
+ * This is a  no-op since a flyout cursor can not go out.
+ * @return {null} null
+ * @override
  */
 Blockly.FlyoutCursor.prototype.out = function() {
   return null;

@@ -116,15 +116,15 @@ Blockly.Workspace = function(opt_options) {
    */
   this.potentialVariableMap_ = null;
 
-  // this.setCursor(new Blockly.Cursor());
-
-  // this.setMarker(new Blockly.MarkerCursor());
-
   // Set the default theme. This is for headless workspaces. This will get
   // overwritten by the theme passed into the inject call for rendered workspaces.
   if (!Blockly.getTheme()) {
     Blockly.setTheme(Blockly.Themes.Classic);
   }
+
+  this.setCursor(new Blockly.Cursor());
+
+  this.setMarker(new Blockly.MarkerCursor());
 };
 
 /**

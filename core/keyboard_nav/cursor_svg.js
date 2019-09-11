@@ -30,7 +30,8 @@ goog.provide('Blockly.CursorSvg');
  * Class for a cursor.
  * @param {!Blockly.Workspace} workspace The workspace the cursor belongs to.
  * @param {boolean} isMarker True if we want to use the marker rendering, false
- *     otherwise.
+ *     otherwise. The marker rendering is a solid blue line instead of a flashing
+ *     red one.
  * @constructor
  */
 Blockly.CursorSvg = function(workspace, isMarker) {
@@ -477,4 +478,3 @@ Blockly.CursorSvg.prototype.dispose = function() {
     Blockly.utils.dom.removeNode(this.svgGroup_);
   }
 };
-

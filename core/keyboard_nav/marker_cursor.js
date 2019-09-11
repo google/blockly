@@ -39,32 +39,36 @@ Blockly.MarkerCursor = function() {
 goog.inherits(Blockly.MarkerCursor, Blockly.Cursor);
 
 /**
- * This is a no/op since markers do not move.
+ * This is a no-op since markers do not move.
  * @return {null} null
+ * @override
  */
 Blockly.MarkerCursor.prototype.next = function() {
   return null;
 };
 
 /**
- * This is a no/op since markers do not move.
+ * This is a no-op since markers do not move.
  * @return {null} null
+ * @override
  */
 Blockly.MarkerCursor.prototype.in = function() {
   return null;
 };
 
 /**
- * This is a no/op since markers do not move.
+ * This is a no-op since markers do not move.
  * @return {null} null
+ * @override
  */
 Blockly.MarkerCursor.prototype.prev = function() {
   return null;
 };
 
 /**
- * This is a no/op since markers do not move.
+ * This is a no-op since markers do not move.
  * @return {null} null
+ * @override
  */
 Blockly.MarkerCursor.prototype.out = function() {
   return null;

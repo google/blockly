@@ -50,7 +50,7 @@ run_test_command () {
 }
 
 # Set up the environment (Chrome, Selenium, etc.)
-run_test_command "test_setup" "npm run test:prepare"
+# run_test_command "test_setup" "npm run test:prepare"
 
 # Lint the codebase.
 run_test_command "eslint" "eslint ."

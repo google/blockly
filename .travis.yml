@@ -1,14 +1,12 @@
 language: node_js
 os: linux
-dist: trusty
+dist: xenial
 node_js:
   - 8
   - 10
-sudo: required
 addons:
   firefox: latest
   apt:
-    update: true
     packages:
       - google-chrome-stable
     # TODO (#2114): reenable osx build.

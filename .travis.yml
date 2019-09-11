@@ -8,8 +8,10 @@ sudo: required
 addons:
   firefox: latest
   apt:
+    sources:
+      - google-chrome
     packages:
-    - google-chrome-stable
+      - google-chrome-stable
     # TODO (#2114): reenable osx build.
     # - os: osx
     #   node_js: stable

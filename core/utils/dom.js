@@ -274,7 +274,7 @@ Blockly.utils.dom.getTextWidth = function(textElement) {
   }
 
   if (!Blockly.utils.dom.canvasContext_) {
-    // Inject the compute canvas element.
+    // Inject the canvas element used for computing text widths.
     var computeCanvas = document.createElement('canvas');
     computeCanvas.className = 'blocklyComputeCanvas';
     document.body.appendChild(computeCanvas);

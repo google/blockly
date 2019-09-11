@@ -1,6 +1,6 @@
 language: node_js
 os: linux
-dist: trusty
+dist: bionic
 node_js:
   - 8
   - 10

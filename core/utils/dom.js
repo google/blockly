@@ -66,6 +66,18 @@ Blockly.utils.dom.Node = {
 };
 
 /**
+ * Point size of text.  Should match blocklyText's font-size in CSS.
+ * @const {number}
+ */
+Blockly.utils.dom.FONT_SIZE = 11;
+
+/**
+ * Text font family.  Should match blocklyText's font-family in CSS.
+ * @const {string}
+ */
+Blockly.utils.dom.FONT_FAMILY = 'sans-serif';
+
+/**
  * Temporary cache of text widths.
  * @type {Object}
  * @private
@@ -78,6 +90,13 @@ Blockly.utils.dom.cacheWidths_ = null;
  * @private
  */
 Blockly.utils.dom.cacheReference_ = 0;
+
+/**
+ * A HTML canvas context used for computing text width.
+ * @type {CanvasRenderingContext2D}
+ * @private
+ */
+Blockly.utils.dom.canvasContext_ = null;
 
 /**
  * Helper method for creating SVG elements.
@@ -242,7 +261,8 @@ Blockly.utils.dom.stopTextWidthCache = function() {
  * @return {number} Width of element.
  */
 Blockly.utils.dom.getTextWidth = function(textElement) {
-  var key = textElement.textContent + '\n' + textElement.className.baseVal;
+  var text = textElement.textContent;
+  var key = text + '\n' + textElement.className.baseVal;
   var width;
 
   // Return the cached width if it exists.
@@ -253,20 +273,22 @@ Blockly.utils.dom.getTextWidth = function(textElement) {
     }
   }
 
-  // Attempt to compute fetch the width of the SVG text element.
-  try {
-    if (Blockly.utils.userAgent.IE || Blockly.utils.userAgent.EDGE) {
-      width = textElement.getBBox().width;
-    } else {
-      width = textElement.getComputedTextLength();
-    }
-  } catch (e) {
-    // In other cases where we fail to get the computed text. Instead, use an
-    // approximation and do not cache the result. At some later point in time
-    // when the block is inserted into the visible DOM, this method will be
-    // called again and, at that point in time, will not throw an exception.
-    return textElement.textContent.length * 8;
+  if (!Blockly.utils.dom.canvasContext_) {
+    // Inject the compute canvas element.
+    var computeCanvas = document.createElement('canvas');
+    computeCanvas.className = 'blocklyComputeCanvas';
+    document.body.appendChild(computeCanvas);
+
+    // Initialize the HTML canvas context and set the font.
+    // The context font must match blocklyText's fontsize and font-family
+    // set in CSS.
+    Blockly.utils.dom.canvasContext_ = computeCanvas.getContext('2d');
+    Blockly.utils.dom.canvasContext_.font = 
+        Blockly.utils.dom.FONT_SIZE + 'pt ' +
+        Blockly.utils.dom.FONT_FAMILY;
   }
+  // Measure the text width using the helper canvas context.
+  width = Blockly.utils.dom.canvasContext_.measureText(text).width;
 
   // Cache the computed width and return.
   if (Blockly.utils.dom.cacheWidths_) {

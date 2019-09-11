@@ -54,7 +54,10 @@ async function runLangGeneratorInBrowser(browser, filename, codegenFn) {
 async function runGeneratorsInBrowser() {
   var options = {
       capabilities: {
-          browserName: 'firefox'
+          browserName: 'firefox',
+          "moz:firefoxOptions": {
+            args: ['-headless']
+          },
       }
   };
 

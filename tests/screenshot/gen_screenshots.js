@@ -109,13 +109,16 @@ async function cleanUp(browser_new, browser_old) {
 async function buildBrowser(url, isRtl) {
   var options = {
     capabilities: {
-      browserName: 'chrome',
-      'goog:chromeOptions': {
-        args: ['--headless', '--no-sandbox', '--disable-dev-shm-usage'],
-      }
+      browserName: 'chrome'
     },
     logLevel: 'warn'
   };
+  // Run in headless mode on Travis.
+  if (process.env.TRAVIS_CI) {
+    options.capabilities['goog:chromeOptions'] = {
+      args: ['--headless', '--no-sandbox', '--disable-dev-shm-usage']
+    };
+  }
   console.log('Starting webdriverio...');
   const browser = await webdriverio.remote(options);
   var injectBlockly = function(isRtl) {

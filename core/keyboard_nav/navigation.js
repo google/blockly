@@ -117,8 +117,8 @@ Blockly.navigation.removeMark = function() {
 /**
  * Gets the top node on a block.
  * This is either the previous connection, output connection or the block.
- * @param {Blockly.Block} block The block to find the top most ast node on.
- * @return {Blockly.ASTNode} The ast node holding the top most node on the
+ * @param {Blockly.Block} block The block to find the top most AST node on.
+ * @return {Blockly.ASTNode} The AST node holding the top most node on the
  *     block.
  * @package
  */

@@ -402,7 +402,7 @@ gulp.task('watch', buildWatchTaskFn('blockly_node_javascript_en'));
 // As well as generating the typings of each of the files under core/ and msg/,
 // the script also pulls in a number of part files from typings/parts.
 // This includes the header (incl License), additional useful interfaces
-// including Blockly Options and Google Closure typings
+// including Blockly Options and Google Closure typings.
 gulp.task('typings', function (cb) {
   const tmpDir = './typings/tmp';
   const blocklySrcs = [
@@ -415,13 +415,13 @@ gulp.task('typings', function (cb) {
     "core/utils",
     "msg/"
   ];
-  // Clean directory if exists
+  // Clean directory if exists.
   if (fs.existsSync(tmpDir)) {
     rimraf.sync(tmpDir);
   }
   fs.mkdirSync(tmpDir);
 
-  // Find all files that will be included in the typings file
+  // Find all files that will be included in the typings file.
   let files = [];
   blocklySrcs.forEach((src) => {
     files = files.concat(fs.readdirSync(src)
@@ -429,9 +429,12 @@ gulp.task('typings', function (cb) {
       .map(fn => path.join(src, fn)));
   });
 
-  // Generate typings file for each file
+  // Generate typings file for each file.
   files.forEach((file) => {
     const typescriptFileName = `${path.join(tmpDir, file)}.d.ts`;
+    if (file.indexOf('core/msg.js') > -1) {
+      return;
+    }
     const cmd = `node ./node_modules/typescript-closure-tools/definition-generator/src/main.js ${file} ${typescriptFileName}`;
     console.log(`Generating typings for ${file}`);
     execSync(cmd, { stdio: 'inherit' });
@@ -454,7 +457,7 @@ gulp.task('typings', function (cb) {
     .pipe(gulp.concat('blockly.d.ts'))
     .pipe(gulp.dest('typings'))
     .on('end', function () {
-      // Clean up tmp directory
+      // Clean up tmp directory.
       if (fs.existsSync(tmpDir)) {
         rimraf.sync(tmpDir);
       }
@@ -834,7 +837,7 @@ gulp.task('package', gulp.parallel(
 // The release task prepares Blockly for an npm release.
 // It rebuilds the Blockly compressed files and updates the TypeScript
 // typings, and then packages all the npm release files into the /dist directory
-gulp.task('release', gulp.series(['build', /*'typings',*/ function() {
+gulp.task('release', gulp.series(['build', 'typings', function() {
   // Clean directory if exists
   if (fs.existsSync(packageDistribution)) {
     rimraf.sync(packageDistribution);

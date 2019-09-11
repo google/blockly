@@ -385,7 +385,6 @@ Blockly.Workspace.prototype.getAllBlocks = function(ordered) {
 
 /**
  * Dispose of all blocks and comments in workspace.
- * @export
  */
 Blockly.Workspace.prototype.clear = function() {
   this.isClearing = true;
@@ -654,7 +653,6 @@ Blockly.Workspace.prototype.undo = function(redo) {
 
 /**
  * Clear the undo/redo stacks.
- * @export
  */
 Blockly.Workspace.prototype.clearUndo = function() {
   this.undoStack_.length = 0;
@@ -670,7 +668,6 @@ Blockly.Workspace.prototype.clearUndo = function() {
  * milliseconds before the change listener was added.
  * @param {!Function} func Function to call.
  * @return {!Function} Obsolete return value, ignore.
- * @export
  */
 Blockly.Workspace.prototype.addChangeListener = function(func) {
   this.listeners_.push(func);
@@ -680,7 +677,6 @@ Blockly.Workspace.prototype.addChangeListener = function(func) {
 /**
  * Stop listening for this workspace's changes.
  * @param {Function} func Function to stop calling.
- * @export
  */
 Blockly.Workspace.prototype.removeChangeListener = function(func) {
   Blockly.utils.arrayRemove(this.listeners_, func);

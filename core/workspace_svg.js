@@ -961,7 +961,6 @@ Blockly.WorkspaceSvg.prototype.getWidth = function() {
  * Toggles the visibility of the workspace.
  * Currently only intended for main workspace.
  * @param {boolean} isVisible True if workspace should be visible.
- * @export
  */
 Blockly.WorkspaceSvg.prototype.setVisible = function(isVisible) {
 

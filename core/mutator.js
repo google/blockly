@@ -445,7 +445,6 @@ Blockly.Mutator.prototype.updateBlockStyle = function() {
  * @param {!Blockly.Block} block Parent block.
  * @param {string} inputName Name of input on parent block.
  * @return {boolean} True iff a reconnection was made, false otherwise.
- * @export
  */
 Blockly.Mutator.reconnect = function(connectionChild, block, inputName) {
   if (!connectionChild || !connectionChild.getSourceBlock().workspace) {

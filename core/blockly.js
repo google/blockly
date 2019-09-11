@@ -382,7 +382,6 @@ Blockly.hideChaff = function(opt_allowToolbox) {
  * @return {!Array.<!Array>} Opaque data that can be passed to
  *     removeChangeListener.
  * @deprecated April 2015
- * @export
  */
 Blockly.addChangeListener = function(func) {
   // Backwards compatibility from before there could be multiple workspaces.
@@ -397,7 +396,6 @@ Blockly.addChangeListener = function(func) {
  * focus).  Try not to use this function, particularly if there are multiple
  * Blockly instances on a page.
  * @return {!Blockly.Workspace} The main workspace.
- * @export
  */
 Blockly.getMainWorkspace = function() {
   return Blockly.mainWorkspace;

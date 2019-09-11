@@ -45,7 +45,6 @@ goog.require('Blockly.utils.xml');
  * @param {!Blockly.Workspace} workspace The workspace containing blocks.
  * @param {boolean=} opt_noId True if the encoder should skip the block IDs.
  * @return {!Element} XML document.
- * @export
  */
 Blockly.Xml.workspaceToDom = function(workspace, opt_noId) {
   var xml = Blockly.utils.xml.createElement('xml');
@@ -289,7 +288,6 @@ Blockly.Xml.cloneShadow_ = function(shadow, opt_noId) {
  * Currently the text format is fairly ugly: all one line with no whitespace.
  * @param {!Element} dom A tree of XML elements.
  * @return {string} Text representation.
- * @export
  */
 Blockly.Xml.domToText = function(dom) {
   return Blockly.utils.xml.domToText(dom);
@@ -299,7 +297,6 @@ Blockly.Xml.domToText = function(dom) {
  * Converts a DOM structure into properly indented text.
  * @param {!Element} dom A tree of XML elements.
  * @return {string} Text representation.
- * @export
  */
 Blockly.Xml.domToPrettyText = function(dom) {
   // This function is not guaranteed to be correct for all XML.
@@ -333,7 +330,6 @@ Blockly.Xml.domToPrettyText = function(dom) {
  * @return {!Element} A DOM object representing the singular child of the
  *     document element.
  * @throws if the text doesn't parse.
- * @export
  */
 Blockly.Xml.textToDom = function(text) {
   var doc = Blockly.utils.xml.textToDomDocument(text);
@@ -364,7 +360,6 @@ Blockly.Xml.clearWorkspaceAndLoadFromXml = function(xml, workspace) {
  * @param {!Element} xml XML DOM.
  * @param {!Blockly.Workspace} workspace The workspace.
  * @return {!Array.<string>} An array containing new block IDs.
- * @export
  */
 Blockly.Xml.domToWorkspace = function(xml, workspace) {
   if (xml instanceof Blockly.Workspace) {

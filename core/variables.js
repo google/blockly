@@ -274,7 +274,6 @@ Blockly.Variables.generateUniqueName = function(workspace) {
  *     button), or undefined if an existing variable was chosen.
  * @param {string=} opt_type The type of the variable like 'int', 'string', or
  *     ''. This will default to '', which is a specific type.
- * @export
  */
 Blockly.Variables.createVariableButtonHandler = function(
     workspace, opt_callback, opt_type) {
@@ -329,7 +328,6 @@ Blockly.Variables.createVariableButtonHandler = function(
  *     button), or undefined if an existing variable was chosen.
  * @param {string=} opt_type The type of the variable like 'int', 'string', or
  *     ''. This will default to '', which is a specific type.
- * @export
  */
 Blockly.Variables.createVariable =
     Blockly.Variables.createVariableButtonHandler;

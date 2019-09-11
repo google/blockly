@@ -395,19 +395,22 @@ Blockly.WorkspaceSvg.prototype.inverseScreenCTM_ = null;
 Blockly.WorkspaceSvg.prototype.inverseScreenCTMDirty_ = true;
 
 /**
- * Adds cursor for keyboard navigation.
- * @return {!Blockly.CursorSvg} Cursor for keyboard navigation.
+ * Sets the cursor for use with keyboard navigation.
+ * @param {!Blockly.CursorSvg} cursor The cursor used to move around this workspace.
  */
-Blockly.WorkspaceSvg.prototype.createCursor = function() {
-  return new Blockly.CursorSvg(this);
+Blockly.WorkspaceSvg.prototype.setCursor = function(cursor) {
+  cursor.setDrawer(new Blockly.CursorSvg(this, cursor.isMarker_));
+  this.cursor = cursor;
 };
 
 /**
- * Adds marker for keyboard navigation.
- * @return {!Blockly.CursorSvg} Marker for keyboard navigation.
+ * Sets the marker for use with keyboard navigation.
+ * @param {!Blockly.CursorSvg} marker The immovable cursor used to mark a
+ *     location on the workspace.
  */
-Blockly.WorkspaceSvg.prototype.createMarker = function() {
-  return new Blockly.CursorSvg(this, true);
+Blockly.WorkspaceSvg.prototype.setMarker = function(marker) {
+  marker.setDrawer(new Blockly.CursorSvg(this, marker.isMarker_));
+  this.marker = marker;
 };
 
 /**
@@ -577,10 +580,10 @@ Blockly.WorkspaceSvg.prototype.createDom = function(opt_backgroundClass) {
   }
   this.recordDeleteAreas();
 
-  var svgCursor = this.cursor.createDom();
+  var svgCursor = this.cursor.getDrawer().createDom();
   this.svgGroup_.appendChild(svgCursor);
 
-  var svgMarker = this.marker.createDom();
+  var svgMarker = this.marker.getDrawer().createDom();
   this.svgGroup_.appendChild(svgMarker);
 
   return this.svgGroup_;
@@ -625,11 +628,11 @@ Blockly.WorkspaceSvg.prototype.dispose = function() {
   }
 
   if (this.marker) {
-    this.marker.dispose();
+    this.marker.getDrawer().dispose();
   }
 
   if (this.cursor) {
-    this.cursor.dispose();
+    this.cursor.getDrawer().dispose();
   }
 
   if (this.audioManager_) {

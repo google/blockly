@@ -116,17 +116,9 @@ Blockly.Workspace = function(opt_options) {
    */
   this.potentialVariableMap_ = null;
 
-  /**
-   * The cursor for navigating blocks.
-   * @type {!Blockly.Cursor}
-   */
-  this.cursor = this.createCursor();
+  this.setCursor(new Blockly.Cursor());
 
-  /**
-   * The marker that shows where a user has marked while navigating blocks.
-   * @type {!Blockly.Cursor}
-   */
-  this.marker = this.createMarker();
+  this.setMarker(new Blockly.Cursor(true));
 
   // Set the default theme. This is for headless workspaces. This will get
   // overwritten by the theme passed into the inject call for rendered workspaces.
@@ -165,16 +157,24 @@ Blockly.Workspace.prototype.connectionDBList = null;
  * Adds cursor for keyboard navigation.
  * @return {!Blockly.Cursor} Cursor for keyboard navigation.
  */
-Blockly.Workspace.prototype.createCursor = function() {
-  return new Blockly.Cursor();
+Blockly.Workspace.prototype.setCursor = function(cursor) {
+  this.cursor = cursor;
 };
 
 /**
  * Adds marker for keyboard navigation.
  * @return {!Blockly.Cursor} Cursor for keyboard navigation.
  */
-Blockly.Workspace.prototype.createMarker = function() {
-  return new Blockly.Cursor(true);
+Blockly.Workspace.prototype.setMarker = function(marker) {
+  this.marker = marker;
+};
+
+Blockly.Workspace.prototype.getCursor = function() {
+  return this.cursor;
+};
+
+Blockly.Workspace.prototype.getMarker = function() {
+  return this.marker;
 };
 
 

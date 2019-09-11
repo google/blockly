@@ -218,6 +218,9 @@ Blockly.createMainWorkspace_ = function(svg, options, blockDragSurface,
   var mainWorkspace =
       new Blockly.WorkspaceSvg(options, blockDragSurface, workspaceDragSurface);
   mainWorkspace.scale = options.zoomOptions.startScale;
+  mainWorkspace.setCursor(new Blockly.Cursor());
+  mainWorkspace.setMarker(new Blockly.Cursor(true));
+
   svg.appendChild(mainWorkspace.createDom('blocklyMainBackground'));
 
   if (!options.hasCategories && options.languageTree) {
@@ -231,9 +234,6 @@ Blockly.createMainWorkspace_ = function(svg, options, blockDragSurface,
   if (options.zoomOptions && options.zoomOptions.controls) {
     mainWorkspace.addZoomControls();
   }
-
-  Blockly.navigation.setCursor(mainWorkspace.cursor);
-  Blockly.navigation.setMarker(mainWorkspace.marker);
 
   // A null translation will also apply the correct initial scale.
   mainWorkspace.translate(0, 0);

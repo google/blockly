@@ -83,7 +83,8 @@ goog.addDependency("../../../" + dir + "/core/insertion_marker_manager.js", ['Bl
 goog.addDependency("../../../" + dir + "/core/keyboard_nav/action.js", ['Blockly.Action'], []);
 goog.addDependency("../../../" + dir + "/core/keyboard_nav/ast_node.js", ['Blockly.ASTNode'], []);
 goog.addDependency("../../../" + dir + "/core/keyboard_nav/cursor.js", ['Blockly.Cursor'], []);
-goog.addDependency("../../../" + dir + "/core/keyboard_nav/cursor_svg.js", ['Blockly.CursorSvg'], ['Blockly.Cursor']);
+goog.addDependency("../../../" + dir + "/core/keyboard_nav/cursor_svg.js", ['Blockly.CursorSvg'], []);
+goog.addDependency("../../../" + dir + "/core/keyboard_nav/flyout_cursor.js", ['Blockly.FlyoutCursor'], []);
 goog.addDependency("../../../" + dir + "/core/keyboard_nav/key_map.js", ['Blockly.user.keyMap'], ['Blockly.utils.KeyCodes']);
 goog.addDependency("../../../" + dir + "/core/keyboard_nav/navigation.js", ['Blockly.navigation'], ['Blockly.Action', 'Blockly.ASTNode', 'Blockly.user.keyMap']);
 goog.addDependency("../../../" + dir + "/core/msg.js", ['Blockly.Msg'], []);
@@ -224,6 +225,7 @@ goog.require('Blockly.FieldTextInput');
 goog.require('Blockly.FieldVariable');
 goog.require('Blockly.Flyout');
 goog.require('Blockly.FlyoutButton');
+goog.require('Blockly.FlyoutCursor');
 goog.require('Blockly.FlyoutDragger');
 goog.require('Blockly.Generator');
 goog.require('Blockly.Gesture');

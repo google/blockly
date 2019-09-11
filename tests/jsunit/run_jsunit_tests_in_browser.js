@@ -34,10 +34,7 @@ module.exports = runJsUnitTestsInBrowser;
 async function runJsUnitTestsInBrowser() {
   var options = {
       capabilities: {
-          browserName: 'chrome',
-          'goog:chromeOptions': {
-            args: ['--headless'],
-          }
+          browserName: 'chrome'
       }
   };
 

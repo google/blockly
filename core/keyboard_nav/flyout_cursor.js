@@ -19,7 +19,7 @@
  */
 
 /**
- * @fileoverview The class representing a cursor.
+ * @fileoverview The class representing a cursor used to navigate the flyout.
  * Used primarily for keyboard navigation.
  * @author aschmiedt@google.com (Abby Schmiedt)
  */

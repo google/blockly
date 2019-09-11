@@ -117,7 +117,7 @@ Blockly.Workspace = function(opt_options) {
   this.potentialVariableMap_ = null;
 
   /**
-   * The cursor used to navigate around the ast for keyboard navigation.
+   * The cursor used to navigate around the AST for keyboard navigation.
    * @type {Blockly.Cursor}
    * @private
    */
@@ -169,8 +169,8 @@ Blockly.Workspace.prototype.connectionDBList = null;
 
 /**
  * Sets the cursor for keyboard navigation.
- * @param {Blockly.Cursor} cursor The cursor used to navigate around the blockly
- *     ast for keyboard navigation.
+ * @param {Blockly.Cursor} cursor The cursor used to navigate around the Blockly
+ *     AST for keyboard navigation.
  */
 Blockly.Workspace.prototype.setCursor = function(cursor) {
   this.cursor_ = cursor;
@@ -186,7 +186,7 @@ Blockly.Workspace.prototype.setMarker = function(marker) {
 };
 
 /**
- * Get the cursor used to navigate around the ast for keyboard navigation.
+ * Get the cursor used to navigate around the AST for keyboard navigation.
  * @return {Blockly.Cursor} The cursor for this workspace.
  */
 Blockly.Workspace.prototype.getCursor = function() {

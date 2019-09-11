@@ -37,19 +37,28 @@ goog.provide('Blockly.CursorSvg');
  */
 Blockly.CursorSvg = function(workspace, opt_marker) {
   /**
+   * The workspace the cursor belongs to.
    * @type {!Blockly.Workspace}
    * @private
    */
   this.workspace_ = workspace;
 
   /**
+   * True if the cursor should be drawn as a marker, false otherwise.
+   * A marker is drawn as a solid blue line, while the cursor is drawns as a
+   * flashing red one.
    * @type {boolean}
    * @private
    */
   this.isMarker_ = opt_marker;
 
-  this.constants = new Blockly.blockRendering.ConstantProvider();
-  this.constants.init();
+  /**
+   * The constants necessary to draw the cursor.
+   * @type {Blockly.blockRendering.ConstantProvider}
+   * @private
+   */
+  this.constants_ = new Blockly.blockRendering.ConstantProvider();
+  this.constants_.init();
 };
 
 /**
@@ -222,7 +231,7 @@ Blockly.CursorSvg.prototype.showWithInputOutput_ = function(curNode) {
       (curNode.getLocation());
   this.currentCursorSvg = this.cursorInputOutput_;
   var path = Blockly.utils.svgPaths.moveTo(0, 0) +
-      this.constants.shapeFor(connection).pathDown;
+      this.constants_.shapeFor(connection).pathDown;
   this.cursorInputOutput_.setAttribute('d', path);
   this.setParent_(connection.getSourceBlock().getSvgRoot());
   this.positionInputOutput_(connection);

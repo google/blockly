@@ -32,7 +32,7 @@ goog.require('Blockly.Cursor');
 
 /**
  * Class for a marker.
- * This is used in keyboard navigation to save a location in the blockly ast.
+ * This is used in keyboard navigation to save a location in the Blockly AST.
  * @constructor
  * @extends {Blockly.Cursor}
  */

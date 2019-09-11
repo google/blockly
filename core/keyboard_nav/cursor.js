@@ -30,7 +30,7 @@ goog.provide('Blockly.Cursor');
 
 /**
  * Class for a cursor.
- * A cursor controls how a user navigates the blockly ast.
+ * A cursor controls how a user navigates the Blockly AST.
  * @constructor
  */
 Blockly.Cursor = function() {
@@ -40,14 +40,14 @@ Blockly.Cursor = function() {
    * @private
    */
   this.curNode_ = null;
-};
 
-/**
- * The object in charge of drawing the visual representation of the current node.
- * @type {Blockly.CursorSvg}
- * @private
- */
-Blockly.Cursor.prototype.drawer_ = null;
+  /**
+   * The object in charge of drawing the visual representation of the current node.
+   * @type {Blockly.CursorSvg}
+   * @private
+   */
+  this.drawer_ = null;
+};
 
 /**
  * Sets the object in charge of drawing the cursor.

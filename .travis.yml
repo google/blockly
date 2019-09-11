@@ -1,6 +1,7 @@
 language: node_js
 os: linux
-dist: trusty
+dist: bionic
+sudo: required
 node_js:
   - 8
   - 10
@@ -15,11 +16,6 @@ addons:
     #   osx_image: xcode8.3
     #   addons:
     #     firefox: latest
-
-before_install:
-  - sudo apt-get clean
-  - sudo apt-get update
-  - sudo apt-get install -y dpkg
 
 before_script:
   # Symlink closure library used by test/jsunit

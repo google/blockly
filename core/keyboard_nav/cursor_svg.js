@@ -28,7 +28,9 @@ goog.provide('Blockly.CursorSvg');
 
 /**
  * Class for a cursor.
- * @param {!Blockly.Workspace} workspace The workspace to sit in.
+ * @param {!Blockly.Workspace} workspace The workspace the cursor belongs to.
+ * @param {boolean} isMarker True if we want to use the marker rendering, false
+ *     otherwise.
  * @constructor
  */
 Blockly.CursorSvg = function(workspace, isMarker) {
@@ -172,6 +174,7 @@ Blockly.CursorSvg.prototype.setParent_ = function(newParent) {
 
 /**
  * Show the cursor using coordinates.
+ * @param {!Blockly.ASTNode} curNode The node that we want to draw the cursor for.
  * @private
  */
 Blockly.CursorSvg.prototype.showWithCoordinates_ = function(curNode) {
@@ -184,7 +187,8 @@ Blockly.CursorSvg.prototype.showWithCoordinates_ = function(curNode) {
 };
 
 /**
- * Show the cursor using a block
+ * Show the cursor using a block.
+ * @param {!Blockly.ASTNode} curNode The node that we want to draw the cursor for.
  * @private
  */
 Blockly.CursorSvg.prototype.showWithBlock_ = function(curNode) {
@@ -197,7 +201,8 @@ Blockly.CursorSvg.prototype.showWithBlock_ = function(curNode) {
 };
 
 /**
- * Show the cursor using a connection with input or output type
+ * Show the cursor using a connection with input or output type.
+ * @param {!Blockly.ASTNode} curNode The node that we want to draw the cursor for.
  * @private
  */
 Blockly.CursorSvg.prototype.showWithInputOutput_ = function(curNode) {
@@ -213,7 +218,8 @@ Blockly.CursorSvg.prototype.showWithInputOutput_ = function(curNode) {
 };
 
 /**
- * Show the cursor using a next connection
+ * Show the cursor using a next connection.
+ * @param {!Blockly.ASTNode} curNode The node that we want to draw the cursor for.
  * @private
  */
 Blockly.CursorSvg.prototype.showWithNext_ = function(curNode) {
@@ -231,6 +237,7 @@ Blockly.CursorSvg.prototype.showWithNext_ = function(curNode) {
 
 /**
  * Show the cursor using a previous connection.
+  * @param {!Blockly.ASTNode} curNode The node that we want to draw the cursor for.
  * @private
  */
 Blockly.CursorSvg.prototype.showWithPrev_ = function(curNode) {
@@ -246,6 +253,7 @@ Blockly.CursorSvg.prototype.showWithPrev_ = function(curNode) {
 
 /**
  * Show the cursor using a field.
+  * @param {!Blockly.ASTNode} curNode The node that we want to draw the cursor for.
  * @private
  */
 Blockly.CursorSvg.prototype.showWithField_ = function(curNode) {
@@ -261,6 +269,7 @@ Blockly.CursorSvg.prototype.showWithField_ = function(curNode) {
 
 /**
  * Show the cursor using a stack.
+  * @param {!Blockly.ASTNode} curNode The node that we want to draw the cursor for.
  * @private
  */
 Blockly.CursorSvg.prototype.showWithStack_ = function(curNode) {
@@ -351,6 +360,7 @@ Blockly.CursorSvg.prototype.hide = function() {
 
 /**
  * Update the cursor.
+ * @param {!Blockly.ASTNode} curNode The node that we want to draw the cursor for.
  * @package
  */
 Blockly.CursorSvg.prototype.draw = function(curNode) {

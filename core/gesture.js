@@ -769,7 +769,7 @@ Blockly.Gesture.prototype.doWorkspaceClick_ = function(e) {
     var screenCoord = new Blockly.utils.Coordinate(e.clientX, e.clientY);
     var wsCoord = Blockly.utils.screenToWsCoordinates(ws, screenCoord);
     var wsNode = Blockly.ASTNode.createWorkspaceNode(ws, wsCoord);
-    ws.cursor.setLocation(wsNode);
+    ws.getCursor().setLocation(wsNode);
   } else if (Blockly.selected) {
     Blockly.selected.unselect();
   }

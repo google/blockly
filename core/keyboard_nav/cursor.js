@@ -29,25 +29,16 @@ goog.provide('Blockly.Cursor');
 
 /**
  * Class for a cursor.
- * @param {boolean=} opt_marker True if the cursor is a marker. A marker is used
- *     to save a location and is an immovable cursor. False or undefined if the
- *     cursor is not a marker.
+ * A cursor controls how a user navigates the blockly ast.
  * @constructor
  */
-Blockly.Cursor = function(opt_marker) {
+Blockly.Cursor = function() {
   /*
    * The current location of the cursor.
    * @type {Blockly.Field|Blockly.Connection|Blockly.Block}
    * @private
    */
   this.curNode_ = null;
-
-  /**
-   * Whether or not the cursor is a marker.
-   * @type {boolean} True if the cursor is a marker. False otherwise.
-   * @private
-   */
-  this.isMarker_ = !!opt_marker;
 };
 
 /**
@@ -109,22 +100,20 @@ Blockly.Cursor.prototype.hide = function() {
  *     not set or there is no next value.
  */
 Blockly.Cursor.prototype.next = function() {
-  if (!this.isMarker_) {
-    var curNode = this.getCurNode();
-    if (!curNode) {
-      return null;
-    }
-    var newNode = curNode.next();
-
-    if (newNode && newNode.getType() === Blockly.ASTNode.types.NEXT) {
-      newNode = newNode.next() || newNode;
-    }
-
-    if (newNode) {
-      this.setLocation(newNode);
-    }
-    return newNode;
+  var curNode = this.getCurNode();
+  if (!curNode) {
+    return null;
   }
+  var newNode = curNode.next();
+
+  if (newNode && newNode.getType() === Blockly.ASTNode.types.NEXT) {
+    newNode = newNode.next() || newNode;
+  }
+
+  if (newNode) {
+    this.setLocation(newNode);
+  }
+  return newNode;
 };
 
 /**
@@ -133,22 +122,20 @@ Blockly.Cursor.prototype.next = function() {
  *     not set or there is no in value.
  */
 Blockly.Cursor.prototype.in = function() {
-  if (!this.isMarker_) {
-    var curNode = this.getCurNode();
-    if (!curNode) {
-      return null;
-    }
-    var newNode = curNode.in();
-
-    if (newNode && newNode.getType() === Blockly.ASTNode.types.OUTPUT) {
-      newNode = newNode.next() || newNode;
-    }
-
-    if (newNode) {
-      this.setLocation(newNode);
-    }
-    return newNode;
+  var curNode = this.getCurNode();
+  if (!curNode) {
+    return null;
   }
+  var newNode = curNode.in();
+
+  if (newNode && newNode.getType() === Blockly.ASTNode.types.OUTPUT) {
+    newNode = newNode.next() || newNode;
+  }
+
+  if (newNode) {
+    this.setLocation(newNode);
+  }
+  return newNode;
 };
 
 /**
@@ -157,22 +144,20 @@ Blockly.Cursor.prototype.in = function() {
  *     is not set or there is no previous value.
  */
 Blockly.Cursor.prototype.prev = function() {
-  if (!this.isMarker_) {
-    var curNode = this.getCurNode();
-    if (!curNode) {
-      return null;
-    }
-    var newNode = curNode.prev();
-
-    if (newNode && newNode.getType() === Blockly.ASTNode.types.NEXT) {
-      newNode = newNode.prev() || newNode;
-    }
-
-    if (newNode) {
-      this.setLocation(newNode);
-    }
-    return newNode;
+  var curNode = this.getCurNode();
+  if (!curNode) {
+    return null;
   }
+  var newNode = curNode.prev();
+
+  if (newNode && newNode.getType() === Blockly.ASTNode.types.NEXT) {
+    newNode = newNode.prev() || newNode;
+  }
+
+  if (newNode) {
+    this.setLocation(newNode);
+  }
+  return newNode;
 };
 
 /**
@@ -181,15 +166,13 @@ Blockly.Cursor.prototype.prev = function() {
  *     not set or there is no out value.
  */
 Blockly.Cursor.prototype.out = function() {
-  if (!this.isMarker_) {
-    var curNode = this.getCurNode();
-    if (!curNode) {
-      return null;
-    }
-    var newNode = curNode.out();
-    if (newNode) {
-      this.setLocation(newNode);
-    }
-    return newNode;
+  var curNode = this.getCurNode();
+  if (!curNode) {
+    return null;
   }
+  var newNode = curNode.out();
+  if (newNode) {
+    this.setLocation(newNode);
+  }
+  return newNode;
 };

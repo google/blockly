@@ -26,17 +26,15 @@
 
 goog.provide('Blockly.FlyoutCursor');
 
+goog.require('Blockly.Cursor');
 
 /**
- * Class for a cursor.
- * @param {Blockly.Workspace} workspace The workpace the cursor belongs to.
- * @param {boolean=} opt_marker True if the cursor is a marker. A marker is used
- *     to save a location and is an immovable cursor. False or undefined if the
- *     cursor is not a marker.
+ * Class for a flyout cursor.
+ * This controls how a user navigates blocks in the flyout.
  * @constructor
  */
-Blockly.FlyoutCursor = function(workspace, opt_marker) {
-  Blockly.FlyoutCursor.superClass_.constructor.call(this, workspace, opt_marker);
+Blockly.FlyoutCursor = function() {
+  Blockly.FlyoutCursor.superClass_.constructor.call(this);
 };
 goog.inherits(Blockly.FlyoutCursor, Blockly.Cursor);
 

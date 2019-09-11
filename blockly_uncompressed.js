@@ -86,6 +86,7 @@ goog.addDependency("../../../" + dir + "/core/keyboard_nav/cursor.js", ['Blockly
 goog.addDependency("../../../" + dir + "/core/keyboard_nav/cursor_svg.js", ['Blockly.CursorSvg'], []);
 goog.addDependency("../../../" + dir + "/core/keyboard_nav/flyout_cursor.js", ['Blockly.FlyoutCursor'], []);
 goog.addDependency("../../../" + dir + "/core/keyboard_nav/key_map.js", ['Blockly.user.keyMap'], ['Blockly.utils.KeyCodes']);
+goog.addDependency("../../../" + dir + "/core/keyboard_nav/marker_cursor.js", ['Blockly.MarkerCursor'], []);
 goog.addDependency("../../../" + dir + "/core/keyboard_nav/navigation.js", ['Blockly.navigation'], ['Blockly.Action', 'Blockly.ASTNode', 'Blockly.user.keyMap']);
 goog.addDependency("../../../" + dir + "/core/msg.js", ['Blockly.Msg'], []);
 goog.addDependency("../../../" + dir + "/core/mutator.js", ['Blockly.Mutator'], ['Blockly.Bubble', 'Blockly.Events', 'Blockly.Events.BlockChange', 'Blockly.Events.Ui', 'Blockly.Icon', 'Blockly.utils', 'Blockly.utils.dom', 'Blockly.utils.global', 'Blockly.utils.xml', 'Blockly.WorkspaceSvg', 'Blockly.Xml']);
@@ -234,6 +235,7 @@ goog.require('Blockly.HorizontalFlyout');
 goog.require('Blockly.Icon');
 goog.require('Blockly.Input');
 goog.require('Blockly.InsertionMarkerManager');
+goog.require('Blockly.MarkerCursor');
 goog.require('Blockly.Menu');
 goog.require('Blockly.MenuItem');
 goog.require('Blockly.Msg');

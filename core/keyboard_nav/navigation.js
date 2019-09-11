@@ -36,13 +36,6 @@ goog.require('Blockly.user.keyMap');
 Blockly.navigation.currentCategory_ = null;
 
 /**
- * The current selected block in the flyout.
- * @type {Blockly.BlockSvg}
- * @private
- */
-Blockly.navigation.flyoutBlock_ = null;
-
-/**
  * A function to call to give feedback to the user about logs, warnings, and
  * errors.  You can override this to customize feedback (e.g. warning sounds,
  * reading out the warning text, etc).
@@ -262,33 +255,22 @@ Blockly.navigation.focusFlyout = function() {
     var topBlocks = flyout.getWorkspace().getTopBlocks();
     if (topBlocks.length > 0) {
       topBlock = topBlocks[0];
-      Blockly.navigation.flyoutBlock_ = topBlock;
       var astNode = Blockly.ASTNode.createStackNode(topBlock);
       Blockly.navigation.getFlyoutCursor_().setLocation(astNode);
     }
   }
 };
 
+/**
+ * Get the cursor from the flyouts workspace.
+ * @return {Blockly.FlyoutCursor} The flyouts cursor or null if no flyout exists.
+ */
 Blockly.navigation.getFlyoutCursor_ = function() {
   var workspace = Blockly.getMainWorkspace();
   var toolbox = workspace.getToolbox();
   var flyout = toolbox ? toolbox.flyout_ : workspace.getFlyout();
-  return flyout.workspace_.getCursor();
-};
-
-/**
- * Get a list of all blocks in the flyout.
- * @return {!Array<Blockly.BlockSvg>} List of blocks in the flyout.
- */
-Blockly.navigation.getFlyoutBlocks_ = function() {
-  var workspace = Blockly.getMainWorkspace();
-  var toolbox = workspace.getToolbox();
-  var topBlocks = [];
-  var flyout = toolbox ? toolbox.flyout_ : workspace.getFlyout();
-  if (flyout && flyout.getWorkspace()) {
-    topBlocks = flyout.getWorkspace().getTopBlocks();
-  }
-  return topBlocks;
+  var cursor = flyout ? flyout.workspace_.getCursor() : null;
+  return cursor;
 };
 
 /**
@@ -328,7 +310,6 @@ Blockly.navigation.insertFromFlyout = function() {
  * @param {boolean} shouldHide True if the flyout should be hidden.
  */
 Blockly.navigation.resetFlyout = function(shouldHide) {
-  Blockly.navigation.flyoutBlock_ = null;
   if (Blockly.navigation.getFlyoutCursor_()) {
     Blockly.navigation.getFlyoutCursor_().hide();
     if (shouldHide) {
@@ -727,6 +708,9 @@ Blockly.navigation.getSourceBlock_ = function(node) {
  * @package
  */
 Blockly.navigation.moveCursorOnBlockDelete = function(deletedBlock) {
+  if (!Blockly.getMainWorkspace()) {
+    return;
+  }
   var cursor = Blockly.getMainWorkspace().getCursor();
   if (cursor) {
     var curNode = cursor.getCurNode();

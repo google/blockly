@@ -399,7 +399,7 @@ Blockly.WorkspaceSvg.prototype.inverseScreenCTMDirty_ = true;
  * @param {!Blockly.CursorSvg} cursor The cursor used to move around this workspace.
  */
 Blockly.WorkspaceSvg.prototype.setCursor = function(cursor) {
-  cursor.setDrawer(new Blockly.CursorSvg(this, cursor.isMarker_));
+  cursor.setDrawer(new Blockly.CursorSvg(this, false));
   this.cursor = cursor;
 };
 
@@ -409,7 +409,7 @@ Blockly.WorkspaceSvg.prototype.setCursor = function(cursor) {
  *     location on the workspace.
  */
 Blockly.WorkspaceSvg.prototype.setMarker = function(marker) {
-  marker.setDrawer(new Blockly.CursorSvg(this, marker.isMarker_));
+  marker.setDrawer(new Blockly.CursorSvg(this, true));
   this.marker = marker;
 };
 
@@ -1083,7 +1083,7 @@ Blockly.WorkspaceSvg.prototype.pasteBlock_ = function(xmlBlock) {
     var block = Blockly.Xml.domToBlock(xmlBlock, this);
 
     // Handle paste for keyboard navigation
-    var markedNode = Blockly.navigation.marker_.getCurNode();
+    var markedNode = this.getMarker().getCurNode();
     if (Blockly.keyboardAccessibilityMode && markedNode) {
       Blockly.navigation.insertBlock(block, markedNode.getLocation());
       return;

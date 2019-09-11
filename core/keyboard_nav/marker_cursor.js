@@ -26,51 +26,46 @@
 
 goog.provide('Blockly.MarkerCursor');
 
+goog.require('Blockly.Cursor');
+
 /**
- * Class for a cursor.
- * @param {Blockly.Workspace} workspace The workpace the cursor belongs to.
- * @param {boolean=} opt_marker True if the cursor is a marker. A marker is used
- *     to save a location and is an immovable cursor. False or undefined if the
- *     cursor is not a marker.
+ * Class for a marker.
+ * This is used in keyboard navigation to save a location in the blockly ast.
  * @constructor
  */
-Blockly.MarkerCursor = function(workspace, opt_marker) {
-  Blockly.MarkerCursor.superClass_.constructor.call(this, workspace, opt_marker);
+Blockly.MarkerCursor = function() {
+  Blockly.MarkerCursor.superClass_.constructor.call(this);
 };
 goog.inherits(Blockly.MarkerCursor, Blockly.Cursor);
 
 /**
- * Find the next connection, field, or block.
- * @return {Blockly.ASTNode} The next element, or null if the current node is
- *     not set or there is no next value.
+ * This is a no/op since markers do not move.
+ * @return {null} null
  */
-Blockly.FlyoutCursor.prototype.next = function() {
+Blockly.MarkerCursor.prototype.next = function() {
   return null;
 };
 
 /**
- * Find the in connection or field.
- * @return {Blockly.ASTNode} The in element, or null if the current node is
- *     not set or there is no in value.
+ * This is a no/op since markers do not move.
+ * @return {null} null
  */
-Blockly.FlyoutCursor.prototype.in = function() {
+Blockly.MarkerCursor.prototype.in = function() {
   return null;
 };
 
 /**
- * Find the previous connection, field, or block.
- * @return {Blockly.ASTNode} The previous element, or null if the current node
- *     is not set or there is no previous value.
+ * This is a no/op since markers do not move.
+ * @return {null} null
  */
-Blockly.FlyoutCursor.prototype.prev = function() {
+Blockly.MarkerCursor.prototype.prev = function() {
   return null;
 };
 
 /**
- * Find the out connection, field, or block.
- * @return {Blockly.ASTNode} The out element, or null if the current node is
- *     not set or there is no out value.
+ * This is a no/op since markers do not move.
+ * @return {null} null
  */
-Blockly.FlyoutCursor.prototype.out = function() {
+Blockly.MarkerCursor.prototype.out = function() {
   return null;
 };

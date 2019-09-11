@@ -219,7 +219,7 @@ Blockly.createMainWorkspace_ = function(svg, options, blockDragSurface,
       new Blockly.WorkspaceSvg(options, blockDragSurface, workspaceDragSurface);
   mainWorkspace.scale = options.zoomOptions.startScale;
   mainWorkspace.setCursor(new Blockly.Cursor());
-  mainWorkspace.setMarker(new Blockly.Cursor(true));
+  mainWorkspace.setMarker(new Blockly.MarkerCursor());
 
   svg.appendChild(mainWorkspace.createDom('blocklyMainBackground'));
 

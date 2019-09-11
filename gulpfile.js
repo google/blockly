@@ -94,7 +94,6 @@ function compile(compilerOptions, opt_verbose) {
   compilerOptions.warning_level = opt_verbose ? 'VERBOSE' : 'DEFAULT';
   compilerOptions.language_out = 'ECMASCRIPT5_STRICT';
   compilerOptions.rewrite_polyfills = false;
-  compilerOptions.generate_exports = true;
   compilerOptions.hide_warnings_for = 'node_modules';
 
   const platform = ['native', 'java', 'javascript'];
@@ -109,7 +108,7 @@ function compile(compilerOptions, opt_verbose) {
 gulp.task('build-core', function () {
   const defines = 'Blockly.VERSION="' + packageJson.version + '"';
   return gulp.src([
-      'core/**/**/*.js',
+      'core/**/**/*.js'
     ], {base: './'})
     // Directories in Blockly are used to group similar files together
     // but are not used to limit access with @package, instead the

@@ -441,14 +441,14 @@ suite('Navigation', function() {
 
       test('Perform valid action for read only', function() {
         var astNode = Blockly.ASTNode.createBlockNode(this.fieldBlock1);
-        this.workspace.cursor.setLocation(astNode);
+        this.workspace.getCursor().setLocation(astNode);
         this.mockEvent.keyCode = Blockly.utils.KeyCodes.S;
         chai.assert.isTrue(Blockly.navigation.onKeyPress(this.mockEvent));
       });
 
       test('Perform invalid action for read only', function() {
         var astNode = Blockly.ASTNode.createBlockNode(this.fieldBlock1);
-        this.workspace.cursor.setLocation(astNode);
+        this.workspace.getCursor().setLocation(astNode);
         this.mockEvent.keyCode = Blockly.utils.KeyCodes.I;
         chai.assert.isFalse(Blockly.navigation.onKeyPress(this.mockEvent));
       });
@@ -456,7 +456,7 @@ suite('Navigation', function() {
       test('Try to perform action on a field', function() {
         var field = this.fieldBlock1.inputList[0].fieldRow[0];
         var astNode = Blockly.ASTNode.createFieldNode(field);
-        this.workspace.cursor.setLocation(astNode);
+        this.workspace.getCursor().setLocation(astNode);
         this.mockEvent.keyCode = Blockly.utils.KeyCodes.ENTER;
         chai.assert.isFalse(Blockly.navigation.onKeyPress(this.mockEvent));
       });
@@ -671,18 +671,18 @@ suite('Navigation', function() {
       this.basicBlockA.nextConnection.connect(this.basicBlockB.previousConnection);
       var astNode = Blockly.ASTNode.createBlockNode(this.basicBlockB);
       // Set the cursor to be on the child block
-      this.workspace.cursor.setLocation(astNode);
+      this.workspace.getCursor().setLocation(astNode);
       // Remove the child block
       this.basicBlockB.dispose();
-      chai.assert.equal(this.workspace.cursor.getCurNode().getType(),
+      chai.assert.equal(this.workspace.getCursor().getCurNode().getType(),
           Blockly.ASTNode.types.NEXT);
     });
 
     test('Delete block - no parent ', function() {
       var astNode = Blockly.ASTNode.createBlockNode(this.basicBlockB);
-      this.workspace.cursor.setLocation(astNode);
+      this.workspace.getCursor().setLocation(astNode);
       this.basicBlockB.dispose();
-      chai.assert.equal(this.workspace.cursor.getCurNode().getType(),
+      chai.assert.equal(this.workspace.getCursor().getCurNode().getType(),
           Blockly.ASTNode.types.WORKSPACE);
     });
 
@@ -690,10 +690,10 @@ suite('Navigation', function() {
       this.basicBlockA.nextConnection.connect(this.basicBlockB.previousConnection);
       var astNode = Blockly.ASTNode.createBlockNode(this.basicBlockB);
       // Set the cursor to be on the child block
-      this.workspace.cursor.setLocation(astNode);
+      this.workspace.getCursor().setLocation(astNode);
       // Remove the parent block
       this.basicBlockA.dispose();
-      chai.assert.equal(this.workspace.cursor.getCurNode().getType(),
+      chai.assert.equal(this.workspace.getCursor().getCurNode().getType(),
           Blockly.ASTNode.types.WORKSPACE);
     });
 
@@ -701,10 +701,10 @@ suite('Navigation', function() {
       this.basicBlockA.nextConnection.connect(this.basicBlockB.previousConnection);
       var astNode = Blockly.ASTNode.createStackNode(this.basicBlockA);
       // Set the cursor to be on the stack
-      this.workspace.cursor.setLocation(astNode);
+      this.workspace.getCursor().setLocation(astNode);
       // Remove the top block in the stack
       this.basicBlockA.dispose();
-      chai.assert.equal(this.workspace.cursor.getCurNode().getType(),
+      chai.assert.equal(this.workspace.getCursor().getCurNode().getType(),
           Blockly.ASTNode.types.WORKSPACE);
     });
   });

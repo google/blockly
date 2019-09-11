@@ -21,6 +21,7 @@
 /**
  * @fileoverview The class representing a cursor.
  * Used primarily for keyboard navigation.
+ * @author aschmiedt@google.com (Abby Schmiedt)
  */
 'use strict';
 
@@ -28,10 +29,12 @@ goog.provide('Blockly.FlyoutCursor');
 
 goog.require('Blockly.Cursor');
 
+
 /**
  * Class for a flyout cursor.
  * This controls how a user navigates blocks in the flyout.
  * @constructor
+ * @extends {Blockly.Cursor}
  */
 Blockly.FlyoutCursor = function() {
   Blockly.FlyoutCursor.superClass_.constructor.call(this);
@@ -61,7 +64,7 @@ Blockly.FlyoutCursor.prototype.next = function() {
 
 /**
  * This is a  no-op since a flyout cursor can not go in.
- * @return {null} null
+ * @return {null} Always null.
  * @override
  */
 Blockly.FlyoutCursor.prototype.in = function() {
@@ -91,7 +94,7 @@ Blockly.FlyoutCursor.prototype.prev = function() {
 
 /**
  * This is a  no-op since a flyout cursor can not go out.
- * @return {null} null
+ * @return {null} Always null.
  * @override
  */
 Blockly.FlyoutCursor.prototype.out = function() {

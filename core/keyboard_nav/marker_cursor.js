@@ -21,6 +21,7 @@
 /**
  * @fileoverview The class representing a cursor.
  * Used primarily for keyboard navigation.
+ * @author aschmiedt@google.com (Abby Schmiedt)
  */
 'use strict';
 
@@ -28,10 +29,12 @@ goog.provide('Blockly.MarkerCursor');
 
 goog.require('Blockly.Cursor');
 
+
 /**
  * Class for a marker.
  * This is used in keyboard navigation to save a location in the blockly ast.
  * @constructor
+ * @extends {Blockly.Cursor}
  */
 Blockly.MarkerCursor = function() {
   Blockly.MarkerCursor.superClass_.constructor.call(this);
@@ -40,7 +43,7 @@ goog.inherits(Blockly.MarkerCursor, Blockly.Cursor);
 
 /**
  * This is a no-op since markers do not move.
- * @return {null} null
+ * @return {null} Always null.
  * @override
  */
 Blockly.MarkerCursor.prototype.next = function() {
@@ -49,7 +52,7 @@ Blockly.MarkerCursor.prototype.next = function() {
 
 /**
  * This is a no-op since markers do not move.
- * @return {null} null
+ * @return {null} Always null.
  * @override
  */
 Blockly.MarkerCursor.prototype.in = function() {
@@ -58,7 +61,7 @@ Blockly.MarkerCursor.prototype.in = function() {
 
 /**
  * This is a no-op since markers do not move.
- * @return {null} null
+ * @return {null} Always null.
  * @override
  */
 Blockly.MarkerCursor.prototype.prev = function() {
@@ -67,7 +70,7 @@ Blockly.MarkerCursor.prototype.prev = function() {
 
 /**
  * This is a no-op since markers do not move.
- * @return {null} null
+ * @return {null} Always null.
  * @override
  */
 Blockly.MarkerCursor.prototype.out = function() {

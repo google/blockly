@@ -21,6 +21,7 @@
 /**
  * @fileoverview The class representing a cursor.
  * Used primarily for keyboard navigation.
+ * @author aschmiedt@google.com (Abby Schmiedt)
  */
 'use strict';
 
@@ -35,7 +36,7 @@ goog.provide('Blockly.Cursor');
 Blockly.Cursor = function() {
   /*
    * The current location of the cursor.
-   * @type {Blockly.Field|Blockly.Connection|Blockly.Block}
+   * @type {Blockly.ASTNode}
    * @private
    */
   this.curNode_ = null;
@@ -44,15 +45,16 @@ Blockly.Cursor = function() {
 /**
  * The object in charge of drawing the visual representation of the current node.
  * @type {Blockly.CursorSvg}
+ * @private
  */
-Blockly.Cursor.prototype.drawer = null;
+Blockly.Cursor.prototype.drawer_ = null;
 
 /**
  * Sets the object in charge of drawing the cursor.
- * @param{Blockly.CursorSvg} drawer The object in charge of drawing the cursor.
+ * @param {Blockly.CursorSvg} drawer The object in charge of drawing the cursor.
  */
 Blockly.Cursor.prototype.setDrawer = function(drawer) {
-  this.drawer = drawer;
+  this.drawer_ = drawer;
 };
 
 /**
@@ -60,7 +62,7 @@ Blockly.Cursor.prototype.setDrawer = function(drawer) {
  * @return {Blockly.CursorSvg} The object in charge of drawing the cursor.
  */
 Blockly.Cursor.prototype.getDrawer = function() {
-  return this.drawer;
+  return this.drawer_;
 };
 
 /**
@@ -80,8 +82,8 @@ Blockly.Cursor.prototype.getCurNode = function() {
  */
 Blockly.Cursor.prototype.setLocation = function(newNode) {
   this.curNode_ = newNode;
-  if (this.drawer) {
-    this.drawer.draw(this.getCurNode());
+  if (this.drawer_) {
+    this.drawer_.draw(this.getCurNode());
   }
 };
 
@@ -89,8 +91,8 @@ Blockly.Cursor.prototype.setLocation = function(newNode) {
  * Hide the cursor svg.
  */
 Blockly.Cursor.prototype.hide = function() {
-  if (this.drawer) {
-    this.drawer.hide();
+  if (this.drawer_) {
+    this.drawer_.hide();
   }
 };
 

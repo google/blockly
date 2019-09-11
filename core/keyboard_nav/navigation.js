@@ -18,13 +18,18 @@
  * limitations under the License.
  */
 
+/**
+ * @fileoverview The class in charge of handling actions related to keyboard
+ *     navigation.
+ * @author aschmiedt@google.com (Abby Schmiedt)
+ */
+'use strict';
+
 goog.provide('Blockly.navigation');
 
 goog.require('Blockly.Action');
 goog.require('Blockly.ASTNode');
 goog.require('Blockly.user.keyMap');
-
-
 
 
 /**

@@ -26,19 +26,31 @@
 
 goog.provide('Blockly.CursorSvg');
 
+
 /**
  * Class for a cursor.
  * @param {!Blockly.Workspace} workspace The workspace the cursor belongs to.
- * @param {boolean} isMarker True if we want to use the marker rendering, false
- *     otherwise. The marker rendering is a solid blue line instead of a flashing
- *     red one.
+ * @param {boolean=} opt_marker True if the cursor is a marker. A marker is used
+ *     to save a location and is an immovable cursor. False or undefined if the
+ *     cursor is not a marker.
  * @constructor
  */
-Blockly.CursorSvg = function(workspace, isMarker) {
+Blockly.CursorSvg = function(workspace, opt_marker) {
+  /**
+   * @type {!Blockly.Workspace}
+   * @private
+   */
+
   this.workspace_ = workspace;
+
+  /**
+   * @type {boolean}
+   * @private
+   */
+  this.isMarker_ = opt_marker;
+
   this.constants = new Blockly.blockRendering.ConstantProvider();
   this.constants.init();
-  this.isMarker_ = isMarker;
 };
 
 /**

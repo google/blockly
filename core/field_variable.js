@@ -63,6 +63,7 @@ Blockly.FieldVariable = function(varname, opt_validator, opt_variableTypes,
   this.defaultVariableName = varname || '';
 
   this.setTypes_(opt_variableTypes, opt_defaultType);
+  this.value_ = null;
 
   /**
    * The size of the area rendered by the field.

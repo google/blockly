@@ -31,6 +31,7 @@ goog.require('Blockly.Events.BlockChange');
 goog.require('Blockly.Field');
 goog.require('Blockly.fieldRegistry');
 goog.require('Blockly.utils.dom');
+goog.require('Blockly.utils.object');
 goog.require('Blockly.utils.Size');
 
 
@@ -68,7 +69,7 @@ Blockly.FieldCheckbox = function(opt_value, opt_validator, opt_config) {
 
   this.configure_(opt_config);
 };
-goog.inherits(Blockly.FieldCheckbox, Blockly.Field);
+Blockly.utils.object.inherits(Blockly.FieldCheckbox, Blockly.Field);
 
 /**
  * Construct a FieldCheckbox from a JSON arg object.

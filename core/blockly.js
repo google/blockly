@@ -786,11 +786,3 @@ Blockly.updateBlockStyles_ = function(blocks) {
 Blockly.getTheme = function() {
   return Blockly.theme_;
 };
-
-// Export symbols that would otherwise be renamed by Closure compiler.
-if (!Blockly.utils.global['Blockly']) {
-  Blockly.utils.global['Blockly'] = {};
-}
-Blockly.utils.global['Blockly']['getMainWorkspace'] = Blockly.getMainWorkspace;
-Blockly.utils.global['Blockly']['addChangeListener'] =
-    Blockly.addChangeListener;

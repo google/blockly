@@ -2,10 +2,6 @@
 
 'use strict';
 
-goog.provide('Blockly.Msg.hu');
-
-goog.require('Blockly.Msg');
-
 Blockly.Msg["ADD_COMMENT"] = "Megjegyzés hozzáadása";
 Blockly.Msg["CANNOT_DELETE_VARIABLE_PROCEDURE"] = "A(z) „%1” változó nem törölhető, mert része a(z) „%2” függvény definíciójának.";
 Blockly.Msg["CHANGE_VALUE_TITLE"] = "Érték módosítása:";
@@ -393,6 +389,7 @@ Blockly.Msg["TEXT_TRIM_OPERATOR_RIGHT"] = "szóközök levágása a végéről";
 Blockly.Msg["TEXT_TRIM_TOOLTIP"] = "Levágja a megadott szöveg végeiről a szóközöket.";
 Blockly.Msg["TODAY"] = "Ma";
 Blockly.Msg["UNDO"] = "Visszavonás";
+Blockly.Msg["UNNAMED_KEY"] = "unnamed";  // untranslated
 Blockly.Msg["VARIABLES_DEFAULT_NAME"] = "változó";
 Blockly.Msg["VARIABLES_GET_CREATE_SET"] = "Készíts \"%1=\"";
 Blockly.Msg["VARIABLES_GET_HELPURL"] = "https://github.com/google/blockly/wiki/Variables#get";  // untranslated

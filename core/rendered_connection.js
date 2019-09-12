@@ -31,6 +31,7 @@ goog.require('Blockly.Events');
 goog.require('Blockly.utils');
 goog.require('Blockly.utils.Coordinate');
 goog.require('Blockly.utils.dom');
+goog.require('Blockly.utils.object');
 
 
 /**
@@ -50,7 +51,7 @@ Blockly.RenderedConnection = function(source, type) {
    */
   this.offsetInBlock_ = new Blockly.utils.Coordinate(0, 0);
 };
-goog.inherits(Blockly.RenderedConnection, Blockly.Connection);
+Blockly.utils.object.inherits(Blockly.RenderedConnection, Blockly.Connection);
 
 /**
  * Returns the distance between this connection and another connection in

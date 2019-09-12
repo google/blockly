@@ -813,12 +813,3 @@ Blockly.Workspace.getAll = function() {
   }
   return workspaces;
 };
-
-// Export symbols that would otherwise be renamed by Closure compiler.
-Blockly.Workspace.prototype['clear'] = Blockly.Workspace.prototype.clear;
-Blockly.Workspace.prototype['clearUndo'] =
-    Blockly.Workspace.prototype.clearUndo;
-Blockly.Workspace.prototype['addChangeListener'] =
-    Blockly.Workspace.prototype.addChangeListener;
-Blockly.Workspace.prototype['removeChangeListener'] =
-    Blockly.Workspace.prototype.removeChangeListener;

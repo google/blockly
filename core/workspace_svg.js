@@ -45,6 +45,7 @@ goog.require('Blockly.Trashcan');
 goog.require('Blockly.utils');
 goog.require('Blockly.utils.Coordinate');
 goog.require('Blockly.utils.dom');
+goog.require('Blockly.utils.object');
 goog.require('Blockly.utils.Rect');
 goog.require('Blockly.VariablesDynamic');
 goog.require('Blockly.Workspace');
@@ -127,7 +128,7 @@ Blockly.WorkspaceSvg = function(options,
 
   Blockly.blockRendering.init();
 };
-goog.inherits(Blockly.WorkspaceSvg, Blockly.Workspace);
+Blockly.utils.object.inherits(Blockly.WorkspaceSvg, Blockly.Workspace);
 
 /**
  * A wrapper function called when a resize event occurs.
@@ -2431,7 +2432,3 @@ Blockly.WorkspaceSvg.prototype.getAudioManager = function() {
 Blockly.WorkspaceSvg.prototype.getGrid = function() {
   return this.grid_;
 };
-
-// Export symbols that would otherwise be renamed by Closure compiler.
-Blockly.WorkspaceSvg.prototype['setVisible'] =
-    Blockly.WorkspaceSvg.prototype.setVisible;

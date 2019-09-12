@@ -26,6 +26,9 @@
 
 goog.provide('Blockly.CursorSvg');
 
+goog.require('Blockly.Cursor');
+goog.require('Blockly.utils.object');
+
 
 /**
  * Class for a cursor.
@@ -60,6 +63,10 @@ Blockly.CursorSvg = function(workspace, opt_marker) {
   this.constants_ = new Blockly.blockRendering.ConstantProvider();
   this.constants_.init();
 };
+<<<<<<< HEAD
+=======
+Blockly.utils.object.inherits(Blockly.CursorSvg, Blockly.Cursor);
+>>>>>>> 8ab51c863983ae9e3033d4648021f1cbc987c54a
 
 /**
  * Height of the horizontal cursor.

@@ -2,10 +2,6 @@
 
 'use strict';
 
-goog.provide('Blockly.Msg.da');
-
-goog.require('Blockly.Msg');
-
 Blockly.Msg["ADD_COMMENT"] = "Tilføj kommentar";
 Blockly.Msg["CANNOT_DELETE_VARIABLE_PROCEDURE"] = "Kan ikke slette variablen »%1« da den er en del af definitionen af funktionen »%2«";
 Blockly.Msg["CHANGE_VALUE_TITLE"] = "Skift værdi:";
@@ -393,6 +389,7 @@ Blockly.Msg["TEXT_TRIM_OPERATOR_RIGHT"] = "fjern mellemrum fra højre side af";
 Blockly.Msg["TEXT_TRIM_TOOLTIP"] = "Returner en kopi af teksten med mellemrum fjernet fra den ene eller begge sider.";
 Blockly.Msg["TODAY"] = "I dag";
 Blockly.Msg["UNDO"] = "Fortryd";
+Blockly.Msg["UNNAMED_KEY"] = "unnamed";  // untranslated
 Blockly.Msg["VARIABLES_DEFAULT_NAME"] = "element";
 Blockly.Msg["VARIABLES_GET_CREATE_SET"] = "Opret 'sæt %1'";
 Blockly.Msg["VARIABLES_GET_HELPURL"] = "https://github.com/google/blockly/wiki/Variables#get";  // untranslated

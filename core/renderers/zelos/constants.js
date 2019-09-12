@@ -28,6 +28,7 @@
 goog.provide('Blockly.zelos.ConstantProvider');
 
 goog.require('Blockly.blockRendering.ConstantProvider');
+goog.require('Blockly.utils.object');
 goog.require('Blockly.utils.svgPaths');
 
 
@@ -57,7 +58,7 @@ Blockly.zelos.ConstantProvider = function() {
   this.TAB_OFFSET_FROM_TOP = 0;
 
 };
-goog.inherits(Blockly.zelos.ConstantProvider,
+Blockly.utils.object.inherits(Blockly.zelos.ConstantProvider,
     Blockly.blockRendering.ConstantProvider);
 
 /**

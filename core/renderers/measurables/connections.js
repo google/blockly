@@ -31,6 +31,8 @@ goog.provide('Blockly.blockRendering.PreviousConnection');
 goog.require('Blockly.blockRendering.Measurable');
 goog.require('Blockly.blockRendering.Types');
 goog.require('Blockly.RenderedConnection');
+goog.require('Blockly.utils.object');
+
 
 
 /**
@@ -48,7 +50,7 @@ Blockly.blockRendering.Connection = function(connectionModel) {
   this.shape = this.constants_.shapeFor(connectionModel);
   this.type |= Blockly.blockRendering.Types.CONNECTION;
 };
-goog.inherits(Blockly.blockRendering.Connection,
+Blockly.utils.object.inherits(Blockly.blockRendering.Connection,
     Blockly.blockRendering.Measurable);
 
 /**
@@ -69,7 +71,7 @@ Blockly.blockRendering.OutputConnection = function(connectionModel) {
   this.connectionOffsetY = this.constants_.TAB_OFFSET_FROM_TOP;
   this.startX = this.width;
 };
-goog.inherits(Blockly.blockRendering.OutputConnection,
+Blockly.utils.object.inherits(Blockly.blockRendering.OutputConnection,
     Blockly.blockRendering.Connection);
 
 /**
@@ -98,7 +100,7 @@ Blockly.blockRendering.PreviousConnection = function(connectionModel) {
   this.width = this.shape.width;
 
 };
-goog.inherits(Blockly.blockRendering.PreviousConnection,
+Blockly.utils.object.inherits(Blockly.blockRendering.PreviousConnection,
     Blockly.blockRendering.Connection);
 
 /**
@@ -117,5 +119,5 @@ Blockly.blockRendering.NextConnection = function(connectionModel) {
   this.height = this.shape.height;
   this.width = this.shape.width;
 };
-goog.inherits(Blockly.blockRendering.NextConnection,
+Blockly.utils.object.inherits(Blockly.blockRendering.NextConnection,
     Blockly.blockRendering.Connection);

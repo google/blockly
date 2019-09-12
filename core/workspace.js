@@ -27,6 +27,7 @@
 goog.provide('Blockly.Workspace');
 
 goog.require('Blockly.Cursor');
+goog.require('Blockly.MarkerCursor');
 goog.require('Blockly.Events');
 goog.require('Blockly.Themes.Classic');
 goog.require('Blockly.utils');

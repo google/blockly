@@ -39,7 +39,7 @@ goog.require('Blockly.Cursor');
 Blockly.FlyoutCursor = function() {
   Blockly.FlyoutCursor.superClass_.constructor.call(this);
 };
-goog.inherits(Blockly.FlyoutCursor, Blockly.Cursor);
+Blockly.utils.object.inherits(Blockly.FlyoutCursor, Blockly.Cursor);
 
 /**
  * Find the next connection, field, or block.

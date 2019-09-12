@@ -39,7 +39,7 @@ goog.require('Blockly.Cursor');
 Blockly.MarkerCursor = function() {
   Blockly.MarkerCursor.superClass_.constructor.call(this);
 };
-goog.inherits(Blockly.MarkerCursor, Blockly.Cursor);
+Blockly.utils.object.inherits(Blockly.MarkerCursor, Blockly.Cursor);
 
 /**
  * This is a no-op since markers do not move.

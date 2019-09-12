@@ -31,6 +31,7 @@ goog.require('Blockly.fieldRegistry');
 goog.require('Blockly.FieldTextInput');
 goog.require('Blockly.utils.dom');
 goog.require('Blockly.utils.math');
+goog.require('Blockly.utils.object');
 goog.require('Blockly.utils.userAgent');
 
 
@@ -52,7 +53,7 @@ Blockly.FieldAngle = function(opt_value, opt_validator) {
   Blockly.FieldAngle.superClass_.constructor.call(
       this, opt_value, opt_validator);
 };
-goog.inherits(Blockly.FieldAngle, Blockly.FieldTextInput);
+Blockly.utils.object.inherits(Blockly.FieldAngle, Blockly.FieldTextInput);
 
 /**
  * Construct a FieldAngle from a JSON arg object.

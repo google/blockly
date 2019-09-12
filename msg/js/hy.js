@@ -2,10 +2,6 @@
 
 'use strict';
 
-goog.provide('Blockly.Msg.hy');
-
-goog.require('Blockly.Msg');
-
 Blockly.Msg["ADD_COMMENT"] = "Ավելացնել մեկնաբանություն";
 Blockly.Msg["CANNOT_DELETE_VARIABLE_PROCEDURE"] = "Հնարավոր չի ջնջել %1 փոփոխականը, որովհետև այն '%2' ֆունկցիայի հայտարարման մասն է";
 Blockly.Msg["CHANGE_VALUE_TITLE"] = "Փոխել նշանակություն:";
@@ -393,6 +389,7 @@ Blockly.Msg["TEXT_TRIM_OPERATOR_RIGHT"] = "կտրում է բացատները ա
 Blockly.Msg["TEXT_TRIM_TOOLTIP"] = "Վերադարձնում է տեքստի կրկնօրինակը, առանց սկզբի կամ/և վերջի բացատների։";
 Blockly.Msg["TODAY"] = "Այսօր";
 Blockly.Msg["UNDO"] = "Հետ շրջել";
+Blockly.Msg["UNNAMED_KEY"] = "unnamed";  // untranslated
 Blockly.Msg["VARIABLES_DEFAULT_NAME"] = "տարր";
 Blockly.Msg["VARIABLES_GET_CREATE_SET"] = "Ստեղծել 'վերագրել %1'";
 Blockly.Msg["VARIABLES_GET_HELPURL"] = "https://github.com/google/blockly/wiki/Variables#get";  // untranslated

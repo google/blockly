@@ -32,8 +32,10 @@ goog.require('Blockly.Field');
 goog.require('Blockly.fieldRegistry');
 goog.require('Blockly.utils');
 goog.require('Blockly.utils.dom');
+goog.require('Blockly.utils.object');
 goog.require('Blockly.utils.Size');
 
+var CustomFields = CustomFields || {};
 
 // Generally field's values should be optional, and have logical defaults.
 // If this is not possible (for example image fields can't have logical
@@ -66,7 +68,7 @@ CustomFields.FieldTurtle = function(
       this, value, opt_validator);
   this.size_ = new Blockly.utils.Size(0, 0);
 };
-goog.inherits(CustomFields.FieldTurtle, Blockly.Field);
+Blockly.utils.object.inherits(CustomFields.FieldTurtle, Blockly.Field);
 
 // This allows the field to be constructed using a JSON block definition.
 CustomFields.FieldTurtle.fromJson = function(options) {

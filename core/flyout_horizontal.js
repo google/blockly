@@ -30,6 +30,7 @@ goog.require('Blockly.Block');
 goog.require('Blockly.Flyout');
 goog.require('Blockly.FlyoutButton');
 goog.require('Blockly.utils');
+goog.require('Blockly.utils.object');
 goog.require('Blockly.utils.Rect');
 
 
@@ -51,7 +52,7 @@ Blockly.HorizontalFlyout = function(workspaceOptions) {
    */
   this.horizontalLayout_ = true;
 };
-goog.inherits(Blockly.HorizontalFlyout, Blockly.Flyout);
+Blockly.utils.object.inherits(Blockly.HorizontalFlyout, Blockly.Flyout);
 
 /**
  * Return an object with all the metrics required to size scrollbars for the

@@ -285,12 +285,25 @@ Blockly.Xml.cloneShadow_ = function(shadow, opt_noId) {
 
 /**
  * Converts a DOM structure into plain text.
- * Currently the text format is fairly ugly: all one line with no whitespace.
+ * Currently the text format is fairly ugly: all one line with no whitespace,
+ * unless the DOM itself has whitespace built-in.
  * @param {!Element} dom A tree of XML elements.
  * @return {string} Text representation.
  */
 Blockly.Xml.domToText = function(dom) {
-  return Blockly.utils.xml.domToText(dom);
+  var text = Blockly.utils.xml.domToText(dom);
+  // Replace line breaks in text content with '&#10;' to make them single line.
+  // E.g. <foo>hello\nworld</foo> -> <foo>hello&#10;world</foo>
+  // Do not replace line breaks between tags.
+  // E.g. ...</foo>\n</bar> is unchanged.
+  // Can't use global flag on regexp since backtracking is needed.
+  var regexp = /(<[^/](?:[^>]*[^/])?>[^<]*)\n([^<]*<\/)/;
+  var oldText;
+  do {
+    oldText = text;
+    text = text.replace(regexp, '$1&#10;$2');
+  } while (text != oldText);
+  return text;
 };
 
 /**
@@ -789,17 +802,3 @@ Blockly.Xml.deleteNext = function(xmlBlock) {
     }
   }
 };
-
-// Export symbols that would otherwise be renamed by Closure compiler.
-if (!Blockly.utils.global['Blockly']) {
-  Blockly.utils.global['Blockly'] = {};
-}
-if (!Blockly.utils.global['Blockly']['Xml']) {
-  Blockly.utils.global['Blockly']['Xml'] = {};
-}
-Blockly.utils.global['Blockly']['Xml']['domToText'] = Blockly.Xml.domToText;
-Blockly.utils.global['Blockly']['Xml']['domToWorkspace'] =
-    Blockly.Xml.domToWorkspace;
-Blockly.utils.global['Blockly']['Xml']['textToDom'] = Blockly.Xml.textToDom;
-Blockly.utils.global['Blockly']['Xml']['workspaceToDom'] =
-    Blockly.Xml.workspaceToDom;

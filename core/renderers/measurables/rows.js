@@ -37,6 +37,7 @@ goog.require('Blockly.blockRendering.NextConnection');
 goog.require('Blockly.blockRendering.PreviousConnection');
 goog.require('Blockly.blockRendering.Types');
 goog.require('Blockly.RenderedConnection');
+goog.require('Blockly.utils.object');
 
 
 /**
@@ -249,7 +250,8 @@ Blockly.blockRendering.TopRow = function() {
    */
   this.connection = null;
 };
-goog.inherits(Blockly.blockRendering.TopRow, Blockly.blockRendering.Row);
+Blockly.utils.object.inherits(Blockly.blockRendering.TopRow,
+    Blockly.blockRendering.Row);
 
 /**
  * Create all non-spacer elements that belong on the top row.
@@ -368,7 +370,8 @@ Blockly.blockRendering.BottomRow = function() {
    */
   this.baseline = 0;
 };
-goog.inherits(Blockly.blockRendering.BottomRow, Blockly.blockRendering.Row);
+Blockly.utils.object.inherits(Blockly.blockRendering.BottomRow,
+    Blockly.blockRendering.Row);
 
 /**
  * Create all non-spacer elements that belong on the bottom row.
@@ -456,7 +459,7 @@ Blockly.blockRendering.SpacerRow = function(height, width) {
   this.widthWithConnectedBlocks = 0;
   this.elements = [new Blockly.blockRendering.InRowSpacer(width)];
 };
-goog.inherits(Blockly.blockRendering.SpacerRow,
+Blockly.utils.object.inherits(Blockly.blockRendering.SpacerRow,
     Blockly.blockRendering.Row);
 
 /**
@@ -483,7 +486,7 @@ Blockly.blockRendering.InputRow = function() {
    */
   this.connectedBlockWidths = 0;
 };
-goog.inherits(Blockly.blockRendering.InputRow,
+Blockly.utils.object.inherits(Blockly.blockRendering.InputRow,
     Blockly.blockRendering.Row);
 
 /**

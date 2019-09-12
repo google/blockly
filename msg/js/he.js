@@ -2,10 +2,6 @@
 
 'use strict';
 
-goog.provide('Blockly.Msg.he');
-
-goog.require('Blockly.Msg');
-
 Blockly.Msg["ADD_COMMENT"] = "הוסף תגובה";
 Blockly.Msg["CANNOT_DELETE_VARIABLE_PROCEDURE"] = "אי אפשר למחוק את המשתנה \"%1\", מכיוון שהגדרת הפונקציה \"%2\" משתמשת בו.";
 Blockly.Msg["CHANGE_VALUE_TITLE"] = "שנה ערך:";
@@ -65,7 +61,7 @@ Blockly.Msg["CONTROLS_WHILEUNTIL_TOOLTIP_WHILE"] = "כל עוד הערך הוא 
 Blockly.Msg["DELETE_ALL_BLOCKS"] = "האם למחוק את כל %1 קטעי הקוד?";
 Blockly.Msg["DELETE_BLOCK"] = "מחק קטע קוד";
 Blockly.Msg["DELETE_VARIABLE"] = "מחק את משתנה ה'%1'";
-Blockly.Msg["DELETE_VARIABLE_CONFIRMATION"] = "Delete %1 uses of the '%2' variable?";  // untranslated
+Blockly.Msg["DELETE_VARIABLE_CONFIRMATION"] = "למחוק %1 שימושים במשתנה ‚%2’?";
 Blockly.Msg["DELETE_X_BLOCKS"] = "מחק %1 קטעי קוד";
 Blockly.Msg["DISABLE_BLOCK"] = "נטרל קטע קוד";
 Blockly.Msg["DUPLICATE_BLOCK"] = "שכפל";
@@ -393,6 +389,7 @@ Blockly.Msg["TEXT_TRIM_OPERATOR_RIGHT"] = "למחוק רווחים משמאל";
 Blockly.Msg["TEXT_TRIM_TOOLTIP"] = "להחזיר עותק של הטקסט לאחר מחיקת רווחים מאחד או משני הקצוות.";
 Blockly.Msg["TODAY"] = "היום";
 Blockly.Msg["UNDO"] = "ביטול";
+Blockly.Msg["UNNAMED_KEY"] = "unnamed";  // untranslated
 Blockly.Msg["VARIABLES_DEFAULT_NAME"] = "פריט";
 Blockly.Msg["VARIABLES_GET_CREATE_SET"] = "ליצור 'הגדר %1'";
 Blockly.Msg["VARIABLES_GET_HELPURL"] = "https://github.com/google/blockly/wiki/Variables#get";  // untranslated

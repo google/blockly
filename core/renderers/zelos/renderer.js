@@ -28,6 +28,7 @@ goog.provide('Blockly.zelos.Renderer');
 
 goog.require('Blockly.blockRendering.Debug');
 goog.require('Blockly.blockRendering.Renderer');
+goog.require('Blockly.utils.object');
 goog.require('Blockly.zelos.ConstantProvider');
 goog.require('Blockly.zelos.Drawer');
 goog.require('Blockly.zelos.RenderInfo');
@@ -45,5 +46,6 @@ Blockly.zelos.Renderer = function() {
   this.drawer = Blockly.zelos.Drawer;
   this.debugger = Blockly.blockRendering.Debug;
 };
-goog.inherits(Blockly.zelos.Renderer, Blockly.blockRendering.Renderer);
+Blockly.utils.object.inherits(Blockly.zelos.Renderer,
+    Blockly.blockRendering.Renderer);
 

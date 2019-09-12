@@ -2,10 +2,6 @@
 
 'use strict';
 
-goog.provide('Blockly.Msg.sq');
-
-goog.require('Blockly.Msg');
-
 Blockly.Msg["ADD_COMMENT"] = "Vendos nje Koment";
 Blockly.Msg["CANNOT_DELETE_VARIABLE_PROCEDURE"] = "Nuk mund të fshihet variabla '%1' sepse është pjesë e definicionit të funksionit '%2'";
 Blockly.Msg["CHANGE_VALUE_TITLE"] = "Ndrysho Vlerat:";
@@ -393,6 +389,7 @@ Blockly.Msg["TEXT_TRIM_OPERATOR_RIGHT"] = "prit hapesirat nga ana e djathte";
 Blockly.Msg["TEXT_TRIM_TOOLTIP"] = "Pergjigju me nje kopje te tekstit me hapesira te fshira nga njera ane ose te dyja anet.";
 Blockly.Msg["TODAY"] = "Sot";
 Blockly.Msg["UNDO"] = "Zhbëj";
+Blockly.Msg["UNNAMED_KEY"] = "unnamed";  // untranslated
 Blockly.Msg["VARIABLES_DEFAULT_NAME"] = "send";
 Blockly.Msg["VARIABLES_GET_CREATE_SET"] = "Krijo 'vendos %1";
 Blockly.Msg["VARIABLES_GET_HELPURL"] = "https://github.com/google/blockly/wiki/Variables#get";  // untranslated

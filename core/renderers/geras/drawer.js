@@ -30,6 +30,7 @@ goog.require('Blockly.blockRendering.ConstantProvider');
 goog.require('Blockly.blockRendering.Drawer');
 goog.require('Blockly.geras.Highlighter');
 goog.require('Blockly.geras.RenderInfo');
+goog.require('Blockly.utils.object');
 goog.require('Blockly.utils.svgPaths');
 
 
@@ -47,7 +48,8 @@ Blockly.geras.Drawer = function(block, info) {
   // Unlike Thrasos, Geras has highlights and drop shadows.
   this.highlighter_ = new Blockly.geras.Highlighter(info);
 };
-goog.inherits(Blockly.geras.Drawer, Blockly.blockRendering.Drawer);
+Blockly.utils.object.inherits(Blockly.geras.Drawer,
+    Blockly.blockRendering.Drawer);
 
 /**
  * @override

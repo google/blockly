@@ -214,6 +214,17 @@ Blockly.PHP.quote_ = function(string) {
 };
 
 /**
+ * Encode a string as a properly escaped multiline PHP string, complete with
+ * quotes.
+ * @param {string} string Text to encode.
+ * @return {string} PHP string.
+ * @private
+ */
+Blockly.PHP.multiline_quote_ = function(string) {
+  return '<<<EOT\n' + string + '\nEOT';
+};
+
+/**
  * Common tasks for generating PHP from blocks.
  * Handles comments for the specified block and any connected value blocks.
  * Calls any statements following this block.

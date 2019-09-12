@@ -31,6 +31,7 @@ goog.require('Blockly.blockRendering.Debug');
 goog.require('Blockly.blockRendering.Drawer');
 goog.require('Blockly.blockRendering.RenderInfo');
 
+
 /**
  * The base class for a block renderer.
  * @package

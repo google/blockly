@@ -23,7 +23,11 @@
     "package": "gulp package",
     "prepare": "gulp blockly_node_javascript_en",
     "release": "gulp release",
-    "test": "tests/run_all_tests.sh",
+    "test": "concurrently 'npm run test:prepare' 'sleep 5 && npm run test:run'",
+    "test:run": "tests/run_all_tests.sh",
+    "test:prepare": "npm run test:setupselenium && npm run test:startselenium",
+    "test:setupselenium": "selenium-standalone install --config=./tests/scripts/selenium-config.js",
+    "test:startselenium": "selenium-standalone start --config=./tests/scripts/selenium-config.js",
     "typings": "gulp typings"
   },
   "main": "./index.js",
@@ -38,6 +42,7 @@
   "license": "Apache-2.0",
   "devDependencies": {
     "chai": "^4.2.0",
+    "concurrently": "^4.1.2",
     "eslint": "^5.13.0",
     "fs": "0.0.1-security",
     "google-closure-compiler": "^20190618.0.0",
@@ -54,6 +59,7 @@
     "mocha": "^6.1.4",
     "pixelmatch": "^4.0.2",
     "pngjs": "^3.4.0",
+    "selenium-standalone": "^6.16.0",
     "rimraf": "^2.6.3",
     "typescript-closure-tools": "^0.0.7",
     "webdriverio": "^5.11.5",

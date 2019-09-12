@@ -32,6 +32,7 @@ goog.require('Blockly.blockRendering.Measurable');
 goog.require('Blockly.blockRendering.Types');
 goog.require('Blockly.RenderedConnection');
 
+
 /**
  * The base class to represent a connection and the space that it takes up on
  * the block.

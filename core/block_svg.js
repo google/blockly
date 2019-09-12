@@ -107,6 +107,20 @@ Blockly.BlockSvg = function(workspace, prototypeName, opt_id) {
   if (this.svgGroup_.dataset) {
     this.svgGroup_.dataset.id = this.id;
   }
+
+  /**
+   * The svg root of the cursor on the block.
+   * @type {SVGElement}
+   * @private
+   */
+  this.cursorSvg_ = null;
+
+  /**
+   * The svg root of the marker on the block.
+   * @type {SVGElement}
+   * @private
+   */
+  this.markerSvg_ = null;
 };
 Blockly.utils.object.inherits(Blockly.BlockSvg, Blockly.Block);
 
@@ -1596,4 +1610,32 @@ Blockly.BlockSvg.prototype.updateConnectionLocations_ = function() {
       this.nextConnection.tighten_();
     }
   }
+};
+
+/**
+ * Set the parent svg group for the cursor.
+ * @param {SVGElement} cursorSvg The svg root of the cursor to be added to the
+ *     block.
+ * @package
+ */
+Blockly.BlockSvg.prototype.setCursorParent = function(cursorSvg) {
+  if (this.svgGroup_) {
+    this.svgGroup_.appendChild(cursorSvg);
+    this.cursorSvg_ = cursorSvg;
+  }
+};
+
+/**
+ * Set the parent svg group for the marker.
+ * @param {SVGElement} markerSvg The svg root of the marker to be added to the
+ *     block.
+ * @package
+ */
+Blockly.BlockSvg.prototype.setMarkerParent = function(markerSvg) {
+  if (this.cursorSvg_) {
+    this.svgGroup_.insertBefore(markerSvg, this.cursorSvg_);
+  } else {
+    this.svgGroup_.appendChild(markerSvg);
+  }
+  this.markerSvg = markerSvg;
 };

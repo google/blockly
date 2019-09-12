@@ -113,6 +113,20 @@ Blockly.WorkspaceSvg = function(options,
   this.grid_ = this.options.gridPattern ?
       new Blockly.Grid(options.gridPattern, options.gridOptions) : null;
 
+  /**
+   * The svg root of the cursor.
+   * @type {SVGElement}
+   * @private
+   */
+  this.cursorSvg_ = null;
+
+  /**
+   * The svg root of the marker.
+   * @type {SVGElement}
+   * @private
+   */
+  this.markerSvg_ = null;
+
   if (Blockly.Variables && Blockly.Variables.flyoutCategory) {
     this.registerToolboxCategoryCallback(Blockly.VARIABLE_CATEGORY_NAME,
         Blockly.Variables.flyoutCategory);
@@ -423,6 +437,35 @@ Blockly.WorkspaceSvg.prototype.setMarker = function(marker) {
   this.marker_.setDrawer(new Blockly.CursorSvg(this, true));
   if (this.svgGroup_) {
     this.svgGroup_.appendChild(this.marker_.getDrawer().createDom());
+  }
+};
+
+/**
+ * Set the parent svg group for the cursor.
+ * @param {SVGElement} cursorSvg The svg root of the cursor to be added to the
+ *     workspace svg group.
+ * @package
+ */
+Blockly.WorkspaceSvg.prototype.setCursorParent = function(cursorSvg) {
+  if (this.svgGroup_) {
+    this.svgGroup_.appendChild(cursorSvg);
+    this.cursorSvg_ = cursorSvg;
+  }
+};
+
+/**
+ * Set the parent svg group for the marker.
+ * @param {SVGElement} markerSvg The svg root of the marker to be added to the
+ *     workspace svg group.
+ * @package
+ */
+Blockly.WorkspaceSvg.prototype.setMarkerParent = function(markerSvg) {
+  if (this.svgGroup_) {
+    if (this.cursorSvg_) {
+      this.svgGroup_.insertBefore(markerSvg, this.cursorSvg_);
+    } else {
+      this.svgGroup_.appendChild(markerSvg);
+    }
   }
 };
 

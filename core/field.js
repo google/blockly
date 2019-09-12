@@ -905,3 +905,27 @@ Blockly.Field.prototype.getParentInput = function() {
 Blockly.Field.prototype.onBlocklyAction = function(_action) {
   return false;
 };
+
+/**
+ * Set the parent svg group for the cursor.
+ * @param {SVGElement} cursorSvg The svg root of the cursor to be added to the
+ *     workspace svg group.
+ * @package
+ */
+Blockly.Field.prototype.setCursorParent = function(cursorSvg) {
+  if (this.fieldGroup_) {
+    this.fieldGroup_.appendChild(cursorSvg);
+  }
+};
+
+/**
+ * Set the parent svg group for the marker.
+ * @param {SVGElement} markerSvg The svg root of the marker to be added to the
+ *     workspace svg group.
+ * @package
+ */
+Blockly.Field.prototype.setMarkerParent = function(markerSvg) {
+  if (this.fieldGroup_) {
+    this.fieldGroup_.appendChild(markerSvg);
+  }
+};

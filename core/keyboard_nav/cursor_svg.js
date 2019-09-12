@@ -181,7 +181,7 @@ Blockly.CursorSvg.prototype.createDom = function() {
 
 /**
  * Attaches the svg root of the cursor to the svg group of the parent.
- * @param {!Blockly.Workspace_Svg|!Blockly.Field|!Blockly.BlockSvg} newParent
+ * @param {!Blockly.WorkspaceSvg|!Blockly.Field|!Blockly.BlockSvg} newParent
  *    The workspace, field, or block that the cursor svg element should be
  *    attached to.
  */

@@ -28,24 +28,23 @@
 goog.provide('Blockly.geras');
 goog.provide('Blockly.geras.RenderInfo');
 
-goog.require('Blockly.blockRendering.RenderInfo');
-goog.require('Blockly.blockRendering.Measurable');
-goog.require('Blockly.blockRendering.Types');
 goog.require('Blockly.blockRendering.BottomRow');
-goog.require('Blockly.blockRendering.InputRow');
-goog.require('Blockly.blockRendering.Row');
-goog.require('Blockly.blockRendering.SpacerRow');
-goog.require('Blockly.blockRendering.TopRow');
-
-goog.require('Blockly.blockRendering.InlineInput');
 goog.require('Blockly.blockRendering.ExternalValueInput');
-goog.require('Blockly.blockRendering.StatementInput');
-
-goog.require('Blockly.blockRendering.PreviousConnection');
+goog.require('Blockly.blockRendering.InlineInput');
+goog.require('Blockly.blockRendering.InputRow');
+goog.require('Blockly.blockRendering.Measurable');
 goog.require('Blockly.blockRendering.NextConnection');
 goog.require('Blockly.blockRendering.OutputConnection');
-
+goog.require('Blockly.blockRendering.PreviousConnection');
+goog.require('Blockly.blockRendering.RenderInfo');
+goog.require('Blockly.blockRendering.Row');
+goog.require('Blockly.blockRendering.SpacerRow');
+goog.require('Blockly.blockRendering.StatementInput');
+goog.require('Blockly.blockRendering.TopRow');
+goog.require('Blockly.blockRendering.Types');
 goog.require('Blockly.RenderedConnection');
+goog.require('Blockly.utils.object');
+
 
 /**
  * An object containing all sizing information needed to draw this block.
@@ -62,7 +61,8 @@ goog.require('Blockly.RenderedConnection');
 Blockly.geras.RenderInfo = function(block) {
   Blockly.geras.RenderInfo.superClass_.constructor.call(this, block);
 };
-goog.inherits(Blockly.geras.RenderInfo, Blockly.blockRendering.RenderInfo);
+Blockly.utils.object.inherits(Blockly.geras.RenderInfo,
+    Blockly.blockRendering.RenderInfo);
 
 /**
  * @override

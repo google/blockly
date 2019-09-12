@@ -58,7 +58,7 @@ If your application needs to generate code from the Blockly blocks, you'll want 
 ```js
 import 'blockly/python';
 ```
-to include the Python generator, you can also import ``blockly/js``, ``blockly/php``, ``blockly/dart`` and ``blockly/lua``.
+to include the Python generator, you can also import ``blockly/javascript``, ``blockly/php``, ``blockly/dart`` and ``blockly/lua``.
 
 #### Blockly Languages
 

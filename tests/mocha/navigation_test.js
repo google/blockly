@@ -370,6 +370,37 @@ suite('Navigation', function() {
       field.onBlocklyAction.restore();
       Blockly.navigation.onBlocklyAction.restore();
     });
+
+    test('Toggle Action Off', function() {
+      var cursor = new Blockly.Cursor();
+      Blockly.navigation.setCursor(cursor);
+      this.mockEvent.keyCode = 'Control75';
+      sinon.spy(Blockly.navigation, 'onBlocklyAction');
+      Blockly.keyboardAccessibilityMode = true;
+
+      var isHandled = Blockly.navigation.onKeyPress(this.mockEvent);
+      chai.assert.isTrue(isHandled);
+      chai.assert.isTrue(Blockly.navigation.onBlocklyAction.calledOnce);
+      chai.assert.isFalse(Blockly.keyboardAccessibilityMode);
+      Blockly.navigation.onBlocklyAction.restore();
+    });
+
+    test('Toggle Action On', function() {
+      var cursor = new Blockly.Cursor();
+      Blockly.navigation.setCursor(cursor);
+      this.workspace = Blockly.inject('blocklyDiv', {readOnly: false});
+      this.mockEvent.keyCode = 'Control75';
+      sinon.stub(Blockly.navigation, 'focusWorkspace');
+      Blockly.keyboardAccessibilityMode = false;
+
+      var isHandled = Blockly.navigation.onKeyPress(this.mockEvent);
+      chai.assert.isTrue(isHandled);
+      chai.assert.isTrue(Blockly.navigation.focusWorkspace.calledOnce);
+      chai.assert.isTrue(Blockly.keyboardAccessibilityMode);
+      Blockly.navigation.focusWorkspace.restore();
+      this.workspace.dispose();
+    });
+
     suite('Test key press in read only mode', function() {
       setup(function() {
         Blockly.defineBlocksWithJsonArray([{

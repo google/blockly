@@ -32,6 +32,8 @@ goog.require('Blockly.blockRendering.Renderer');
 goog.require('Blockly.geras.Drawer');
 goog.require('Blockly.geras.HighlightConstantProvider');
 goog.require('Blockly.geras.RenderInfo');
+goog.require('Blockly.utils.object');
+
 
 /**
  * The geras renderer.
@@ -45,7 +47,8 @@ Blockly.geras.Renderer = function() {
   this.drawer = Blockly.geras.Drawer;
   this.debugger = Blockly.blockRendering.Debug;
 };
-goog.inherits(Blockly.geras.Renderer, Blockly.blockRendering.Renderer);
+Blockly.utils.object.inherits(Blockly.geras.Renderer,
+    Blockly.blockRendering.Renderer);
 
 /**
  * Initialize the renderer.  Geras has a highlight provider in addition to

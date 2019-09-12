@@ -29,6 +29,7 @@ goog.provide('Blockly.zelos.Drawer');
 goog.require('Blockly.blockRendering.ConstantProvider');
 goog.require('Blockly.blockRendering.Drawer');
 goog.require('Blockly.blockRendering.Types');
+goog.require('Blockly.utils.object');
 goog.require('Blockly.zelos.RenderInfo');
 
 
@@ -44,7 +45,8 @@ goog.require('Blockly.zelos.RenderInfo');
 Blockly.zelos.Drawer = function(block, info) {
   Blockly.zelos.Drawer.superClass_.constructor.call(this, block, info);
 };
-goog.inherits(Blockly.zelos.Drawer, Blockly.blockRendering.Drawer);
+Blockly.utils.object.inherits(Blockly.zelos.Drawer,
+    Blockly.blockRendering.Drawer);
 
 
 /**
@@ -201,7 +203,7 @@ Blockly.zelos.Drawer.prototype.drawFlatBottom_ = function() {
 
   this.outlinePath_ +=
     Blockly.utils.svgPaths.lineOnAxis('V', bottomRow.baseline);
-  
+
   this.outlinePath_ += Blockly.utils.svgPaths.lineOnAxis('h', -bottomRow.width);
 };
 

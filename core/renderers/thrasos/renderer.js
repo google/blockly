@@ -31,6 +31,7 @@ goog.require('Blockly.blockRendering.Debug');
 goog.require('Blockly.blockRendering.Drawer');
 goog.require('Blockly.blockRendering.Renderer');
 goog.require('Blockly.thrasos.RenderInfo');
+goog.require('Blockly.utils.object');
 
 /**
  * The thrasos renderer.
@@ -44,4 +45,5 @@ Blockly.thrasos.Renderer = function() {
   this.drawer = Blockly.blockRendering.Drawer;
   this.debugger = Blockly.blockRendering.Debug;
 };
-goog.inherits(Blockly.thrasos.Renderer, Blockly.blockRendering.Renderer);
+Blockly.utils.object.inherits(Blockly.thrasos.Renderer,
+    Blockly.blockRendering.Renderer);

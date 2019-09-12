@@ -28,29 +28,27 @@
 goog.provide('Blockly.zelos');
 goog.provide('Blockly.zelos.RenderInfo');
 
-goog.require('Blockly.blockRendering.RenderInfo');
-goog.require('Blockly.blockRendering.Measurable');
 goog.require('Blockly.blockRendering.BottomRow');
-goog.require('Blockly.blockRendering.InputRow');
-goog.require('Blockly.blockRendering.Row');
-goog.require('Blockly.blockRendering.SpacerRow');
-goog.require('Blockly.blockRendering.TopRow');
-goog.require('Blockly.blockRendering.Types');
-
-goog.require('Blockly.blockRendering.InlineInput');
 goog.require('Blockly.blockRendering.ExternalValueInput');
-goog.require('Blockly.blockRendering.StatementInput');
-
-goog.require('Blockly.blockRendering.PreviousConnection');
+goog.require('Blockly.blockRendering.InlineInput');
+goog.require('Blockly.blockRendering.InputRow');
+goog.require('Blockly.blockRendering.Measurable');
 goog.require('Blockly.blockRendering.NextConnection');
 goog.require('Blockly.blockRendering.OutputConnection');
-
+goog.require('Blockly.blockRendering.PreviousConnection');
+goog.require('Blockly.blockRendering.RenderInfo');
+goog.require('Blockly.blockRendering.Row');
+goog.require('Blockly.blockRendering.SpacerRow');
+goog.require('Blockly.blockRendering.StatementInput');
+goog.require('Blockly.blockRendering.TopRow');
+goog.require('Blockly.blockRendering.Types');
 goog.require('Blockly.RenderedConnection');
-
+goog.require('Blockly.utils.object');
 goog.require('Blockly.zelos.AfterStatementSpacerRow');
 goog.require('Blockly.zelos.BeforeStatementSpacerRow');
 goog.require('Blockly.zelos.BottomRow');
 goog.require('Blockly.zelos.TopRow');
+
 
 /**
  * An object containing all sizing information needed to draw this block.
@@ -81,7 +79,8 @@ Blockly.zelos.RenderInfo = function(block) {
    */
   this.bottomRow = new Blockly.zelos.BottomRow();
 };
-goog.inherits(Blockly.zelos.RenderInfo, Blockly.blockRendering.RenderInfo);
+Blockly.utils.object.inherits(Blockly.zelos.RenderInfo,
+    Blockly.blockRendering.RenderInfo);
 
 
 /**
@@ -350,7 +349,7 @@ Blockly.zelos.RenderInfo.prototype.finalize_ = function() {
   var widestRowWithConnectedBlocks = 0;
   for (var i = 0, row; (row = this.rows[i]); i++) {
     row.xPos = this.startX;
-    
+
     widestRowWithConnectedBlocks =
         Math.max(widestRowWithConnectedBlocks, row.widthWithConnectedBlocks);
     var xCursor = row.xPos;

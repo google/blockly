@@ -28,7 +28,9 @@
 goog.provide('Blockly.zelos.ConstantProvider');
 
 goog.require('Blockly.blockRendering.ConstantProvider');
+goog.require('Blockly.utils.object');
 goog.require('Blockly.utils.svgPaths');
+
 
 /**
  * An object that provides constants for rendering blocks in Zelos mode.
@@ -38,7 +40,7 @@ goog.require('Blockly.utils.svgPaths');
  */
 Blockly.zelos.ConstantProvider = function() {
   Blockly.zelos.ConstantProvider.superClass_.constructor.call(this);
-  
+
   this.GRID_UNIT = 4;
 
   this.CORNER_RADIUS = 1 * this.GRID_UNIT;
@@ -56,7 +58,7 @@ Blockly.zelos.ConstantProvider = function() {
   this.TAB_OFFSET_FROM_TOP = 0;
 
 };
-goog.inherits(Blockly.zelos.ConstantProvider,
+Blockly.utils.object.inherits(Blockly.zelos.ConstantProvider,
     Blockly.blockRendering.ConstantProvider);
 
 /**

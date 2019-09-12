@@ -28,6 +28,7 @@
 goog.provide('Blockly.tree.TreeNode');
 
 goog.require('Blockly.tree.BaseNode');
+goog.require('Blockly.utils.object');
 goog.require('Blockly.utils.KeyCodes');
 
 
@@ -46,7 +47,7 @@ Blockly.tree.TreeNode = function(toolbox, content, config) {
   this.toolbox_ = toolbox;
   Blockly.tree.BaseNode.call(this, content, config);
 };
-goog.inherits(Blockly.tree.TreeNode, Blockly.tree.BaseNode);
+Blockly.utils.object.inherits(Blockly.tree.TreeNode, Blockly.tree.BaseNode);
 
 /**
  * Returns the tree.

@@ -28,6 +28,7 @@ goog.provide('Blockly.Events.Ui');
 
 goog.require('Blockly.Events');
 goog.require('Blockly.Events.Abstract');
+goog.require('Blockly.utils.object');
 
 
 /**
@@ -53,7 +54,7 @@ Blockly.Events.Ui = function(block, element, oldValue, newValue) {
   // UI events do not undo or redo.
   this.recordUndo = false;
 };
-goog.inherits(Blockly.Events.Ui, Blockly.Events.Abstract);
+Blockly.utils.object.inherits(Blockly.Events.Ui, Blockly.Events.Abstract);
 
 /**
  * Type of this event.

@@ -1,3 +1,28 @@
+/**
+ * @license
+ * Visual Blocks Editor
+ *
+ * Copyright 2019 Google Inc.
+ * https://developers.google.com/blockly/
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/**
+ * @fileoverview Objects representing elements in a row of a rendered
+ * block.
+ * @author fenichel@google.com (Rachel Fenichel)
+ */
 
 goog.provide('Blockly.blockRendering.Field');
 goog.provide('Blockly.blockRendering.Hat');
@@ -6,9 +31,11 @@ goog.provide('Blockly.blockRendering.InRowSpacer');
 goog.provide('Blockly.blockRendering.JaggedEdge');
 goog.provide('Blockly.blockRendering.RoundCorner');
 goog.provide('Blockly.blockRendering.SquareCorner');
-goog.require('Blockly.blockRendering.Types');
 
 goog.require('Blockly.blockRendering.Measurable');
+goog.require('Blockly.blockRendering.Types');
+goog.require('Blockly.utils.object');
+
 
 /**
  * An object containing information about the space an icon takes up during
@@ -28,7 +55,8 @@ Blockly.blockRendering.Icon = function(icon) {
   this.height = size.height;
   this.width = size.width;
 };
-goog.inherits(Blockly.blockRendering.Icon, Blockly.blockRendering.Measurable);
+Blockly.utils.object.inherits(Blockly.blockRendering.Icon,
+    Blockly.blockRendering.Measurable);
 
 /**
  * An object containing information about the jagged edge of a collapsed block
@@ -43,7 +71,7 @@ Blockly.blockRendering.JaggedEdge = function() {
   this.height = this.constants_.JAGGED_TEETH.height;
   this.width = this.constants_.JAGGED_TEETH.width;
 };
-goog.inherits(Blockly.blockRendering.JaggedEdge,
+Blockly.utils.object.inherits(Blockly.blockRendering.JaggedEdge,
     Blockly.blockRendering.Measurable);
 
 
@@ -68,7 +96,8 @@ Blockly.blockRendering.Field = function(field, parentInput) {
   this.width = size.width;
   this.parentInput = parentInput;
 };
-goog.inherits(Blockly.blockRendering.Field, Blockly.blockRendering.Measurable);
+Blockly.utils.object.inherits(Blockly.blockRendering.Field,
+    Blockly.blockRendering.Measurable);
 
 /**
  * An object containing information about the space a hat takes up during
@@ -85,7 +114,8 @@ Blockly.blockRendering.Hat = function() {
   this.ascenderHeight = this.height;
 
 };
-goog.inherits(Blockly.blockRendering.Hat, Blockly.blockRendering.Measurable);
+Blockly.utils.object.inherits(Blockly.blockRendering.Hat,
+    Blockly.blockRendering.Measurable);
 
 /**
  * An object containing information about the space a square corner takes up
@@ -105,7 +135,7 @@ Blockly.blockRendering.SquareCorner = function(opt_position) {
   this.width = this.constants_.NO_PADDING;
 
 };
-goog.inherits(Blockly.blockRendering.SquareCorner,
+Blockly.utils.object.inherits(Blockly.blockRendering.SquareCorner,
     Blockly.blockRendering.Measurable);
 
 /**
@@ -128,7 +158,7 @@ Blockly.blockRendering.RoundCorner = function(opt_position) {
   this.height = this.constants_.CORNER_RADIUS / 2;
 
 };
-goog.inherits(Blockly.blockRendering.RoundCorner,
+Blockly.utils.object.inherits(Blockly.blockRendering.RoundCorner,
     Blockly.blockRendering.Measurable);
 
 /**
@@ -146,6 +176,6 @@ Blockly.blockRendering.InRowSpacer = function(width) {
   this.width = width;
   this.height = this.constants_.SPACER_DEFAULT_HEIGHT;
 };
-goog.inherits(Blockly.blockRendering.InRowSpacer,
+Blockly.utils.object.inherits(Blockly.blockRendering.InRowSpacer,
     Blockly.blockRendering.Measurable);
 

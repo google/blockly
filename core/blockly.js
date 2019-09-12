@@ -217,9 +217,7 @@ Blockly.onKeyDown_ = function(e) {
 
   if (mainWorkspace.options.readOnly) {
     // When in read only mode handle key actions for keyboard navigation.
-    if (Blockly.keyboardAccessibilityMode) {
-      Blockly.navigation.onKeyPress(e);
-    }
+    Blockly.navigation.onKeyPress(e);
     return;
   }
 
@@ -228,8 +226,7 @@ Blockly.onKeyDown_ = function(e) {
     // Pressing esc closes the context menu.
     Blockly.hideChaff();
     Blockly.navigation.onBlocklyAction(Blockly.navigation.ACTION_EXIT);
-  } else if (Blockly.keyboardAccessibilityMode &&
-      Blockly.navigation.onKeyPress(e)) {
+  } else if (Blockly.navigation.onKeyPress(e)) {
     // If the keyboard or field handled the key press return.
     return;
   } else if (e.keyCode == Blockly.utils.KeyCodes.BACKSPACE ||
@@ -790,11 +787,3 @@ Blockly.updateBlockStyles_ = function(blocks) {
 Blockly.getTheme = function() {
   return Blockly.theme_;
 };
-
-// Export symbols that would otherwise be renamed by Closure compiler.
-if (!Blockly.utils.global['Blockly']) {
-  Blockly.utils.global['Blockly'] = {};
-}
-Blockly.utils.global['Blockly']['getMainWorkspace'] = Blockly.getMainWorkspace;
-Blockly.utils.global['Blockly']['addChangeListener'] =
-    Blockly.addChangeListener;

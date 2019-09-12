@@ -37,6 +37,7 @@ goog.provide('Blockly.Events.Move');  // Deprecated.
 goog.require('Blockly.Events');
 goog.require('Blockly.Events.Abstract');
 goog.require('Blockly.utils.Coordinate');
+goog.require('Blockly.utils.object');
 goog.require('Blockly.utils.xml');
 
 
@@ -56,7 +57,8 @@ Blockly.Events.BlockBase = function(block) {
   this.blockId = block.id;
   this.workspaceId = block.workspace.id;
 };
-goog.inherits(Blockly.Events.BlockBase, Blockly.Events.Abstract);
+Blockly.utils.object.inherits(Blockly.Events.BlockBase,
+    Blockly.Events.Abstract);
 
 /**
  * Encode the event as JSON.
@@ -97,7 +99,7 @@ Blockly.Events.Change = function(block, element, name, oldValue, newValue) {
   this.oldValue = oldValue;
   this.newValue = newValue;
 };
-goog.inherits(Blockly.Events.Change, Blockly.Events.BlockBase);
+Blockly.utils.object.inherits(Blockly.Events.Change, Blockly.Events.BlockBase);
 
 /**
  * Class for a block change event.
@@ -224,7 +226,7 @@ Blockly.Events.Create = function(block) {
   }
   this.ids = Blockly.Events.getDescendantIds_(block);
 };
-goog.inherits(Blockly.Events.Create, Blockly.Events.BlockBase);
+Blockly.utils.object.inherits(Blockly.Events.Create, Blockly.Events.BlockBase);
 
 /**
  * Class for a block creation event.
@@ -306,7 +308,7 @@ Blockly.Events.Delete = function(block) {
   }
   this.ids = Blockly.Events.getDescendantIds_(block);
 };
-goog.inherits(Blockly.Events.Delete, Blockly.Events.BlockBase);
+Blockly.utils.object.inherits(Blockly.Events.Delete, Blockly.Events.BlockBase);
 
 /**
  * Class for a block deletion event.
@@ -380,7 +382,7 @@ Blockly.Events.Move = function(block) {
   this.oldInputName = location.inputName;
   this.oldCoordinate = location.coordinate;
 };
-goog.inherits(Blockly.Events.Move, Blockly.Events.BlockBase);
+Blockly.utils.object.inherits(Blockly.Events.Move, Blockly.Events.BlockBase);
 
 /**
  * Class for a block move event.  Created before the move.

@@ -34,6 +34,7 @@ goog.require('Blockly.utils');
 goog.require('Blockly.utils.Coordinate');
 goog.require('Blockly.utils.dom');
 goog.require('Blockly.utils.KeyCodes');
+goog.require('Blockly.utils.object');
 goog.require('Blockly.utils.userAgent');
 
 
@@ -55,7 +56,8 @@ Blockly.FieldMultilineInput = function(opt_value, opt_validator) {
   Blockly.FieldMultilineInput.superClass_.constructor.call(this,
       opt_value, opt_validator);
 };
-goog.inherits(Blockly.FieldMultilineInput, Blockly.FieldTextInput);
+Blockly.utils.object.inherits(Blockly.FieldMultilineInput,
+    Blockly.FieldTextInput);
 
 
 /**

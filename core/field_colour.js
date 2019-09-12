@@ -113,7 +113,7 @@ Blockly.FieldColour.prototype.CURSOR = 'default';
  * rendered. Colour fields are statically sized, and only need to be
  * rendered at initialization.
  * @type {boolean}
- * @private
+ * @protected
  */
 Blockly.FieldColour.prototype.isDirty_ = false;
 
@@ -183,15 +183,15 @@ Blockly.FieldColour.prototype.initView = function() {
 
 /**
  * Ensure that the input value is a valid colour.
- * @param {string=} opt_newValue The input value.
+ * @param {string} newValue The input value.
  * @return {?string} A valid colour, or null if invalid.
  * @protected
  */
-Blockly.FieldColour.prototype.doClassValidation_ = function(opt_newValue) {
-  if (typeof opt_newValue != 'string') {
+Blockly.FieldColour.prototype.doClassValidation_ = function(newValue) {
+  if (typeof newValue != 'string') {
     return null;
   }
-  return Blockly.utils.colour.parse(opt_newValue);
+  return Blockly.utils.colour.parse(newValue);
 };
 
 /**
@@ -211,7 +211,7 @@ Blockly.FieldColour.prototype.doValueUpdate_ = function(newValue) {
  * @return {string} Text representing the value of this field.
  */
 Blockly.FieldColour.prototype.getText = function() {
-  var colour = this.value_;
+  var colour = /** @type {string} */ (this.value_);
   // Try to use #rgb format if possible, rather than #rrggbb.
   if (/^#(.)\1(.)\2(.)\3$/.test(colour)) {
     colour = '#' + colour[1] + colour[3] + colour[5];

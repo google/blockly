@@ -69,7 +69,7 @@ Blockly.Field = function(value, opt_validator, opt_config) {
   /**
    * Used to cache the field's tooltip value if setTooltip is called when the
    * field is not yet initialized. Is *not* guaranteed to be accurate.
-   * @type {?string}
+   * @type {string|Function|!Element}
    * @private
    */
   this.tooltip_ = null;
@@ -82,7 +82,7 @@ Blockly.Field = function(value, opt_validator, opt_config) {
   this.size_ = new Blockly.utils.Size(0, 0);
   opt_config && this.configure_(opt_config);
   this.setValue(value);
-  this.setValidator(opt_validator);
+  opt_validator && this.setValidator(opt_validator);
 };
 
 /**
@@ -150,7 +150,7 @@ Blockly.Field.prototype.sourceBlock_ = null;
 /**
  * Does this block need to be re-rendered?
  * @type {boolean}
- * @private
+ * @protected
  */
 Blockly.Field.prototype.isDirty_ = true;
 
@@ -772,10 +772,11 @@ Blockly.Field.prototype.getValue = function() {
  * @param {*} newValue The value to be validated.
  * @return {*} The validated value, same as input by default.
  * @protected
+ * @suppress {deprecated}
  */
 Blockly.Field.prototype.doClassValidation_ = function(newValue) {
   // For backwards compatibility.
-  newValue = this.classValidator(newValue);
+  newValue = this.classValidator(/** @type {string} */ (newValue));
   return newValue;
 };
 

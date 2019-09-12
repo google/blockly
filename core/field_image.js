@@ -145,7 +145,7 @@ Blockly.FieldImage.prototype.EDITABLE = false;
  * rendered. Image fields are statically sized, and only need to be
  * rendered at initialization.
  * @type {boolean}
- * @private
+ * @protected
  */
 Blockly.FieldImage.prototype.isDirty_ = false;
 
@@ -163,20 +163,20 @@ Blockly.FieldImage.prototype.initView = function() {
       },
       this.fieldGroup_);
   this.imageElement_.setAttributeNS(Blockly.utils.dom.XLINK_NS,
-      'xlink:href', this.value_);
+      'xlink:href', /** @type {string} */ (this.value_));
 };
 
 /**
  * Ensure that the input value (the source URL) is a string.
- * @param {string=} opt_newValue The input value.
+ * @param {string} newValue The input value.
  * @return {?string} A string, or null if invalid.
  * @protected
  */
-Blockly.FieldImage.prototype.doClassValidation_ = function(opt_newValue) {
-  if (typeof opt_newValue != 'string') {
+Blockly.FieldImage.prototype.doClassValidation_ = function(newValue) {
+  if (typeof newValue != 'string') {
     return null;
   }
-  return opt_newValue;
+  return newValue;
 };
 
 /**

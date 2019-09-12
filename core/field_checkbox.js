@@ -126,7 +126,7 @@ Blockly.FieldCheckbox.prototype.CURSOR = 'default';
  * rendered. Checkbox fields are statically sized, and only need to be
  * rendered at initialization.
  * @type {boolean}
- * @private
+ * @protected
  */
 Blockly.FieldCheckbox.prototype.isDirty_ = false;
 
@@ -180,15 +180,15 @@ Blockly.FieldCheckbox.prototype.showEditor_ = function() {
 
 /**
  * Ensure that the input value is valid ('TRUE' or 'FALSE').
- * @param {string|boolean=} opt_newValue The input value.
+ * @param {string|boolean} newValue The input value.
  * @return {?string} A valid value ('TRUE' or 'FALSE), or null if invalid.
  * @protected
  */
-Blockly.FieldCheckbox.prototype.doClassValidation_ = function(opt_newValue) {
-  if (opt_newValue === true || opt_newValue === 'TRUE') {
+Blockly.FieldCheckbox.prototype.doClassValidation_ = function(newValue) {
+  if (newValue === true || newValue === 'TRUE') {
     return 'TRUE';
   }
-  if (opt_newValue === false || opt_newValue === 'FALSE') {
+  if (newValue === false || newValue === 'FALSE') {
     return 'FALSE';
   }
   return null;
@@ -217,10 +217,10 @@ Blockly.FieldCheckbox.prototype.getValue = function() {
 
 /**
  * Get the boolean value of this field.
- * @return {string} The boolean value of this field.
+ * @return {boolean} The boolean value of this field.
  */
 Blockly.FieldCheckbox.prototype.getValueBoolean = function() {
-  return this.value_;
+  return /** @type {boolean} */ (this.value_);
 };
 
 /**

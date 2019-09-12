@@ -369,13 +369,13 @@ Blockly.FieldAngle.prototype.onHtmlInputKeyDown_ = function(e) {
 
 /**
  * Ensure that the input value is a valid angle.
- * @param {string|number=} opt_newValue The input value.
+ * @param {string|number} newValue The input value.
  * @return {?number} A valid angle, or null if invalid.
  * @protected
  * @override
  */
-Blockly.FieldAngle.prototype.doClassValidation_ = function(opt_newValue) {
-  var n = Number(opt_newValue) % 360;
+Blockly.FieldAngle.prototype.doClassValidation_ = function(newValue) {
+  var n = Number(newValue) % 360;
   if (isNaN(n)) {
     return null;
   }

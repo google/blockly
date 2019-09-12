@@ -109,15 +109,15 @@ Blockly.FieldTextInput.prototype.spellcheck_ = true;
 
 /**
  * Ensure that the input value casts to a valid string.
- * @param {string=} opt_newValue The input value.
+ * @param {string} newValue The input value.
  * @return {?string} A valid string, or null if invalid.
  * @protected
  */
-Blockly.FieldTextInput.prototype.doClassValidation_ = function(opt_newValue) {
-  if (opt_newValue === null || opt_newValue === undefined) {
+Blockly.FieldTextInput.prototype.doClassValidation_ = function(newValue) {
+  if (newValue === null) {
     return null;
   }
-  return String(opt_newValue);
+  return String(newValue);
 };
 
 /**

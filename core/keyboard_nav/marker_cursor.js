@@ -28,6 +28,7 @@
 goog.provide('Blockly.MarkerCursor');
 
 goog.require('Blockly.Cursor');
+goog.require('Blockly.utils.object');
 
 
 /**

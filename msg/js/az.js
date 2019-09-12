@@ -2,10 +2,6 @@
 
 'use strict';
 
-goog.provide('Blockly.Msg.az');
-
-goog.require('Blockly.Msg');
-
 Blockly.Msg["ADD_COMMENT"] = "Şərh əlavə et";
 Blockly.Msg["CANNOT_DELETE_VARIABLE_PROCEDURE"] = "'%1' dəyişənini silmək mümkün deyil, çünki o '%2' funksiyasının təyin hissəsidir";
 Blockly.Msg["CHANGE_VALUE_TITLE"] = "Qiyməti dəyiş:";
@@ -393,6 +389,7 @@ Blockly.Msg["TEXT_TRIM_OPERATOR_RIGHT"] = "boşluqları yalnız sağ tərəfdən
 Blockly.Msg["TEXT_TRIM_TOOLTIP"] = "Mətnin hər iki və ya yalnız bir tərəfdən olan boşluqları pozulmuş surətini qaytarın.";
 Blockly.Msg["TODAY"] = "Bugün";
 Blockly.Msg["UNDO"] = "Geri";
+Blockly.Msg["UNNAMED_KEY"] = "unnamed";  // untranslated
 Blockly.Msg["VARIABLES_DEFAULT_NAME"] = "element";
 Blockly.Msg["VARIABLES_GET_CREATE_SET"] = "'%1 - i təyin et' - i yarat";
 Blockly.Msg["VARIABLES_GET_HELPURL"] = "https://github.com/google/blockly/wiki/Variables#get";  // untranslated

@@ -43,6 +43,7 @@ goog.require('Blockly.blockRendering.StatementInput');
 goog.require('Blockly.blockRendering.TopRow');
 goog.require('Blockly.blockRendering.Types');
 goog.require('Blockly.RenderedConnection');
+goog.require('Blockly.utils.object');
 
 
 /**
@@ -60,7 +61,8 @@ goog.require('Blockly.RenderedConnection');
 Blockly.geras.RenderInfo = function(block) {
   Blockly.geras.RenderInfo.superClass_.constructor.call(this, block);
 };
-goog.inherits(Blockly.geras.RenderInfo, Blockly.blockRendering.RenderInfo);
+Blockly.utils.object.inherits(Blockly.geras.RenderInfo,
+    Blockly.blockRendering.RenderInfo);
 
 /**
  * @override

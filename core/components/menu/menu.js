@@ -27,8 +27,9 @@
 goog.provide('Blockly.Menu');
 
 goog.require('Blockly.Component');
-goog.require('Blockly.utils.dom');
 goog.require('Blockly.utils.aria');
+goog.require('Blockly.utils.dom');
+goog.require('Blockly.utils.object');
 
 
 /**
@@ -47,7 +48,7 @@ Blockly.Menu = function() {
    */
   this.highlightedIndex_ = -1;
 };
-goog.inherits(Blockly.Menu, Blockly.Component);
+Blockly.utils.object.inherits(Blockly.Menu, Blockly.Component);
 
 
 /**

@@ -28,7 +28,7 @@ suite('Field Registry', function() {
   function CustomFieldType(value) {
     CustomFieldType.superClass_.constructor.call(this, value);
   }
-  goog.inherits(CustomFieldType, Blockly.Field);
+  Blockly.utils.object.inherits(CustomFieldType, Blockly.Field);
   CustomFieldType.fromJson = function(options) {
     return new CustomFieldType(options['value']);
   };

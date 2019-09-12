@@ -31,6 +31,7 @@ goog.require('Blockly.Events');
 goog.require('Blockly.Events.Ui');
 goog.require('Blockly.Icon');
 goog.require('Blockly.utils.dom');
+goog.require('Blockly.utils.object');
 
 
 /**
@@ -45,7 +46,7 @@ Blockly.Warning = function(block) {
   // The text_ object can contain multiple warnings.
   this.text_ = {};
 };
-goog.inherits(Blockly.Warning, Blockly.Icon);
+Blockly.utils.object.inherits(Blockly.Warning, Blockly.Icon);
 
 /**
  * Does this icon get hidden when the block is collapsed.

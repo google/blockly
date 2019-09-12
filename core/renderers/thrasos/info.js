@@ -43,6 +43,8 @@ goog.require('Blockly.blockRendering.StatementInput');
 goog.require('Blockly.blockRendering.TopRow');
 goog.require('Blockly.blockRendering.Types');
 goog.require('Blockly.RenderedConnection');
+goog.require('Blockly.utils.object');
+
 
 /**
  * An object containing all sizing information needed to draw this block.
@@ -59,7 +61,8 @@ goog.require('Blockly.RenderedConnection');
 Blockly.thrasos.RenderInfo = function(block) {
   Blockly.thrasos.RenderInfo.superClass_.constructor.call(this, block);
 };
-goog.inherits(Blockly.thrasos.RenderInfo, Blockly.blockRendering.RenderInfo);
+Blockly.utils.object.inherits(Blockly.thrasos.RenderInfo,
+    Blockly.blockRendering.RenderInfo);
 
 /**
  * @override

@@ -31,64 +31,52 @@ suite('Checkbox Fields', function() {
   suite('Constructor', function() {
     test('Empty', function() {
       var checkboxField = new Blockly.FieldCheckbox();
-      checkboxField.initValue();
       assertValueDefault(checkboxField);
     });
     test('Undefined', function() {
       var checkboxField = new Blockly.FieldCheckbox(undefined);
-      checkboxField.initValue();
       assertValueDefault(checkboxField);
     });
     test('True', function() {
       var checkboxField = new Blockly.FieldCheckbox(true);
-      checkboxField.initValue();
       assertValue(checkboxField, 'TRUE', 'true');
     });
     test('False', function() {
       var checkboxField = new Blockly.FieldCheckbox(false);
-      checkboxField.initValue();
       assertValue(checkboxField, 'FALSE', 'false');
     });
     test('String TRUE', function() {
       var checkboxField = new Blockly.FieldCheckbox('TRUE');
-      checkboxField.initValue();
       assertValue(checkboxField, 'TRUE', 'true');
     });
     test('String FALSE', function() {
       var checkboxField = new Blockly.FieldCheckbox('FALSE');
-      checkboxField.initValue();
       assertValue(checkboxField, 'FALSE', 'false');
     });
   });
   suite('fromJson', function() {
     test('Empty', function() {
       var checkboxField = Blockly.FieldCheckbox.fromJson({});
-      checkboxField.initValue();
       assertValueDefault(checkboxField);
     });
     test('Undefined', function() {
       var checkboxField = Blockly.FieldCheckbox.fromJson({ checked: undefined});
-      checkboxField.initValue();
       assertValueDefault(checkboxField);
     });
     test('True', function() {
       var checkboxField = Blockly.FieldCheckbox.fromJson({ checked: true});
-      checkboxField.initValue();
       assertValue(checkboxField, 'TRUE', 'true');
     });
     test('False', function() {
       var checkboxField = Blockly.FieldCheckbox.fromJson({ checked: false});
-      checkboxField.initValue();
       assertValue(checkboxField, 'FALSE', 'false');
     });
     test('String TRUE', function() {
       var checkboxField = Blockly.FieldCheckbox.fromJson({ checked: 'TRUE'});
-      checkboxField.initValue();
       assertValue(checkboxField, 'TRUE', 'true');
     });
     test('String FALSE', function() {
       var checkboxField = Blockly.FieldCheckbox.fromJson({ checked: 'FALSE'});
-      checkboxField.initValue();
       assertValue(checkboxField, 'FALSE', 'false');
     });
   });
@@ -96,7 +84,6 @@ suite('Checkbox Fields', function() {
     suite('True -> New Value', function() {
       setup(function() {
         this.checkboxField = new Blockly.FieldCheckbox('TRUE');
-        this.checkboxField.initValue();
       });
       test('Null', function() {
         this.checkboxField.setValue(null);
@@ -118,7 +105,6 @@ suite('Checkbox Fields', function() {
     suite('False -> New Value', function() {
       setup(function() {
         this.checkboxField = new Blockly.FieldCheckbox('FALSE');
-        this.checkboxField.initValue();
       });
       test('Null', function() {
         this.checkboxField.setValue(null);
@@ -141,7 +127,6 @@ suite('Checkbox Fields', function() {
   suite('Validators', function() {
     setup(function() {
       this.checkboxField = new Blockly.FieldCheckbox(true);
-      this.checkboxField.initValue();
     });
     teardown(function() {
       this.checkboxField.setValidator(null);

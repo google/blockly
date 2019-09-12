@@ -48,10 +48,6 @@ goog.require('Blockly.utils.Size');
  */
 Blockly.FieldImage = function(src, width, height,
     opt_alt, opt_onClick, opt_flipRtl) {
-  Blockly.FieldImage.superClass_.constructor.call(
-      this, src || '', null);
-
-  this.sourceBlock_ = null;
 
   if (!src) {
     throw Error('Src value of an image field is required');
@@ -78,15 +74,6 @@ Blockly.FieldImage = function(src, width, height,
   this.imageHeight_ = imageHeight;
 
   /**
-   * The size of the area rendered by the field.
-   * @type {Blockly.utils.Size}
-   * @protected
-   * @override
-   */
-  this.size_ = new Blockly.utils.Size(imageWidth,
-      imageHeight + Blockly.FieldImage.Y_PADDING);
-
-  /**
    * Whether to flip this image in RTL.
    * @type {boolean}
    * @private
@@ -103,6 +90,18 @@ Blockly.FieldImage = function(src, width, height,
   if (typeof opt_onClick == 'function') {
     this.clickHandler_ = opt_onClick;
   }
+
+  Blockly.FieldImage.superClass_.constructor.call(
+      this, src || '', null);
+
+  /**
+   * The size of the area rendered by the field.
+   * @type {Blockly.utils.Size}
+   * @protected
+   * @override
+   */
+  this.size_ = new Blockly.utils.Size(imageWidth,
+      imageHeight + Blockly.FieldImage.Y_PADDING);
 };
 Blockly.utils.object.inherits(Blockly.FieldImage, Blockly.Field);
 

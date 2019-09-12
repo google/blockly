@@ -33,84 +33,68 @@ suite('Angle Fields', function() {
   suite('Constructor', function() {
     test('Empty', function() {
       var angleField = new Blockly.FieldAngle();
-      angleField.initValue();
       assertValueDefault(angleField);
     });
     test('Undefined', function() {
       var angleField = new Blockly.FieldAngle(undefined);
-      angleField.initValue();
       assertValueDefault(angleField);
     });
     test('NaN', function() {
       var angleField = new Blockly.FieldAngle(NaN);
-      angleField.initValue();
       assertValueDefault(angleField);
     });
     test('Integer', function() {
       var angleField = new Blockly.FieldAngle(1);
-      angleField.initValue();
       assertValue(angleField, 1);
     });
     test('Float', function() {
       var angleField = new Blockly.FieldAngle(1.5);
-      angleField.initValue();
       assertValue(angleField, 1.5);
     });
     test('Integer String', function() {
       var angleField = new Blockly.FieldAngle('1');
-      angleField.initValue();
       assertValue(angleField, 1);
     });
     test('Float String', function() {
       var angleField = new Blockly.FieldAngle('1.5');
-      angleField.initValue();
       assertValue(angleField, 1.5);
     });
     test('> 360°', function() {
       var angleField = new Blockly.FieldAngle(362);
-      angleField.initValue();
       assertValue(angleField, 2);
     });
   });
   suite('fromJson', function() {
     test('Empty', function() {
       var angleField = Blockly.FieldAngle.fromJson({});
-      angleField.initValue();
       assertValueDefault(angleField);
     });
     test('Undefined', function() {
       var angleField = Blockly.FieldAngle.fromJson({ angle:undefined });
-      angleField.initValue();
       assertValueDefault(angleField);
     });
     test('NaN', function() {
       var angleField = Blockly.FieldAngle.fromJson({ angle:NaN });
-      angleField.initValue();
       assertValueDefault(angleField);
     });
     test('Integer', function() {
       var angleField = Blockly.FieldAngle.fromJson({ angle:1 });
-      angleField.initValue();
       assertValue(angleField, 1);
     });
     test('Float', function() {
       var angleField = Blockly.FieldAngle.fromJson({ angle:1.5 });
-      angleField.initValue();
       assertValue(angleField, 1.5);
     });
     test('Integer String', function() {
       var angleField = Blockly.FieldAngle.fromJson({ angle:'1' });
-      angleField.initValue();
       assertValue(angleField, 1);
     });
     test('Float String', function() {
       var angleField = Blockly.FieldAngle.fromJson({ angle:'1.5' });
-      angleField.initValue();
       assertValue(angleField, 1.5);
     });
     test('> 360°', function() {
       var angleField = Blockly.FieldAngle.fromJson({ angle:362 });
-      angleField.initValue();
       assertValue(angleField, 2);
     });
   });
@@ -118,7 +102,6 @@ suite('Angle Fields', function() {
     suite('Empty -> New Value', function() {
       setup(function() {
         this.angleField = new Blockly.FieldAngle();
-        this.angleField.initValue();
       });
       test('Null', function() {
         this.angleField.setValue(null);
@@ -168,7 +151,6 @@ suite('Angle Fields', function() {
     suite('Value -> New Value', function() {
       setup(function() {
         this.angleField = new Blockly.FieldAngle(1);
-        this.angleField.initValue();
       });
       test('Null', function() {
         this.angleField.setValue(null);
@@ -219,7 +201,6 @@ suite('Angle Fields', function() {
   suite('Validators', function() {
     setup(function() {
       this.angleField = new Blockly.FieldAngle(1);
-      this.angleField.initValue();
       this.angleField.htmlInput_ = Object.create(null);
       this.angleField.htmlInput_.oldValue_ = '1';
       this.angleField.htmlInput_.untypedDefaultValue_ = 1;

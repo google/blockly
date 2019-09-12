@@ -44,6 +44,13 @@ goog.require('Blockly.utils.Size');
  * @constructor
  */
 Blockly.FieldLabel = function(opt_value, opt_class) {
+  /**
+   * The html class name to use for this field.
+   * @type {string}
+   * @private
+   */
+  this.class_ = opt_class;
+
   if (opt_value == null) {
     opt_value = '';
   }
@@ -57,13 +64,6 @@ Blockly.FieldLabel = function(opt_value, opt_class) {
    * @override
    */
   this.size_ = new Blockly.utils.Size(0, Blockly.Field.TEXT_DEFAULT_HEIGHT);
-
-  /**
-   * The html class name to use for this field.
-   * @type {string}
-   * @private
-   */
-  this.class_ = opt_class;
 };
 Blockly.utils.object.inherits(Blockly.FieldLabel, Blockly.Field);
 

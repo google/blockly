@@ -95,7 +95,6 @@ suite('Field Registry', function() {
       };
 
       var field = Blockly.fieldRegistry.fromJson(json);
-      field.initValue();
       chai.assert.isNotNull(field);
       chai.assert.equal('ok', field.getValue());
     });
@@ -120,7 +119,6 @@ suite('Field Registry', function() {
       };
 
       var field = Blockly.fieldRegistry.fromJson(json);
-      field.initValue();
       chai.assert.isNotNull(field);
       chai.assert.equal('ok', field.getValue());
     });

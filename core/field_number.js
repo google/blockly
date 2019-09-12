@@ -46,11 +46,32 @@ goog.require('Blockly.utils.object');
  */
 Blockly.FieldNumber = function(opt_value, opt_min, opt_max, opt_precision,
     opt_validator) {
+  
+  /**
+   * The minimum value constraint.
+   * @type {number}
+   * @protected
+   */
+  this.min_ = -Infinity;
+
+  /**
+   * The maximum value constraint.
+   * @type {number}
+   * @protected
+   */
+  this.max_ = Infinity;
+
+  /**
+   * The precision constraint for the value.
+   * @type {number}
+   * @protected
+   */
+  this.precision_ = 0;
+
   Blockly.FieldNumber.superClass_.constructor.call(
       this, opt_value || 0, opt_validator);
 
   this.setConstraints(opt_min, opt_max, opt_precision);
-  
 };
 Blockly.utils.object.inherits(Blockly.FieldNumber, Blockly.FieldTextInput);
 
@@ -88,15 +109,21 @@ Blockly.FieldNumber.prototype.SERIALIZABLE = true;
  */
 Blockly.FieldNumber.prototype.setConstraints = function(min, max, precision) {
   precision = Number(precision);
-  this.precision_ = isNaN(precision) ? 0 : precision;
+  if (!isNaN(precision)) {
+    this.precision_ = precision;
+  }
   var precisionString = this.precision_.toString();
   var decimalIndex = precisionString.indexOf('.');
   this.fractionalDigits_ = (decimalIndex == -1) ? -1 :
       precisionString.length - (decimalIndex + 1);
   min = Number(min);
-  this.min_ = isNaN(min) ? -Infinity : min;
+  if (!isNaN(min)) {
+    this.min_ = min;
+  }
   max = Number(max);
-  this.max_ = isNaN(max) ? Infinity : max;
+  if (!isNaN(max)) {
+    this.max_ = max;
+  }
   this.setValue(this.getValue());
 };
 

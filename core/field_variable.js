@@ -106,15 +106,6 @@ Blockly.FieldVariable.prototype.workspace_ = null;
 Blockly.FieldVariable.prototype.SERIALIZABLE = true;
 
 /**
- * Initializes the value of this field.
- * @package
- * @override
- */
-Blockly.FieldVariable.prototype.initValue = function() {
-  // NOP
-};
-
-/**
  * Initialize the model for this field if it has not already been initialized.
  * If the value has not been set to a variable by the first render, we make up a
  * variable rather than let the value be invalid.

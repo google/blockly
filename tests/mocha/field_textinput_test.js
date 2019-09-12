@@ -32,75 +32,61 @@ suite('Text Input Fields', function() {
   suite('Constructor', function() {
     test('Empty', function() {
       var textInputField = new Blockly.FieldTextInput();
-      textInputField.initValue();
       assertValueDefault(textInputField);
     });
     test('Undefined', function() {
       var textInputField = new Blockly.FieldTextInput(undefined);
-      textInputField.initValue();
       assertValueDefault(textInputField);
     });
     test('String', function() {
       var textInputField = new Blockly.FieldTextInput('value');
-      textInputField.initValue();
       assertValue(textInputField, 'value');
     });
     test('Number (Truthy)', function() {
       var textInputField = new Blockly.FieldTextInput(1);
-      textInputField.initValue();
       assertValue(textInputField, '1');
     });
     test('Number (Falsy)', function() {
       var textInputField = new Blockly.FieldTextInput(0);
-      textInputField.initValue();
       assertValue(textInputField, '0');
     });
     test('Boolean True', function() {
       var textInputField = new Blockly.FieldTextInput(true);
-      textInputField.initValue();
       assertValue(textInputField, 'true');
     });
     test('Boolean False', function() {
       var textInputField = new Blockly.FieldTextInput(false);
-      textInputField.initValue();
       assertValue(textInputField, 'false');
     });
   });
   suite('fromJson', function() {
     test('Empty', function() {
       var textInputField = new Blockly.FieldTextInput.fromJson({});
-      textInputField.initValue();
       assertValueDefault(textInputField);
     });
     test('Undefined', function() {
       var textInputField = new Blockly.FieldTextInput
           .fromJson({ text: undefined});
-      textInputField.initValue();
       assertValueDefault(textInputField);
     });
     test('String', function() {
       var textInputField = Blockly.FieldTextInput.fromJson({ text:'value' });
-      textInputField.initValue();
       assertValue(textInputField, 'value');
     });
     test('Number (Truthy)', function() {
       var textInputField = Blockly.FieldTextInput.fromJson({ text:1 });
-      textInputField.initValue();
       assertValue(textInputField, '1');
     });
     test('Number (Falsy)', function() {
       var textInputField = Blockly.FieldTextInput.fromJson({ text:0 });
-      textInputField.initValue();
       assertValue(textInputField, '0');
     });
     test('Boolean True', function() {
       var textInputField = Blockly.FieldTextInput.fromJson({ text:true });
-      textInputField.initValue();
       assertValue(textInputField, 'true');
     });
     test('Boolean False', function() {
       var textInputField = Blockly.FieldTextInput.fromJson({ text:false });
-      textInputField.initValue();
       assertValue(textInputField, 'false');
     });
   });
@@ -108,7 +94,6 @@ suite('Text Input Fields', function() {
     suite('Empty -> New Value', function() {
       setup(function() {
         this.textInputField = new Blockly.FieldTextInput();
-        this.textInputField.initValue();
       });
       test('Null', function() {
         this.textInputField.setValue(null);
@@ -142,7 +127,6 @@ suite('Text Input Fields', function() {
     suite('Value -> New Value', function() {
       setup(function() {
         this.textInputField = new Blockly.FieldTextInput('value');
-        this.textInputField.initValue();
       });
       test('Null', function() {
         this.textInputField.setValue(null);
@@ -177,7 +161,6 @@ suite('Text Input Fields', function() {
   suite('Validators', function() {
     setup(function() {
       this.textInputField = new Blockly.FieldTextInput('value');
-      this.textInputField.initValue();
       this.textInputField.htmlInput_ = Object.create(null);
       this.textInputField.htmlInput_.oldValue_ = 'value';
       this.textInputField.htmlInput_.untypedDefaultValue_ = 'value';

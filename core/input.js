@@ -118,7 +118,6 @@ Blockly.Input.prototype.insertFieldAt = function(index, field, opt_name) {
   if (this.sourceBlock_.rendered) {
     field.init();
   }
-  field.initValue();
   field.name = opt_name;
 
   if (field.prefixField) {

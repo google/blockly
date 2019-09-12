@@ -60,20 +60,6 @@ Blockly.Field = function(value, opt_validator, opt_config) {
   this.value_ = null;
 
   /**
-   * Whether or not the field's value has been initialized.
-   * @type {!boolean}
-   * @private
-   */
-  this.valueInitialized_ = false;
-
-  /**
-   * The initial value to be set when the field's value is initialized.
-   * @type {*}
-   * @private
-   */
-  this.initialValue_ = value;
-
-  /**
    * Validation function called when user edits an editable field.
    * @type {Function}
    * @protected
@@ -81,19 +67,12 @@ Blockly.Field = function(value, opt_validator, opt_config) {
   this.validator_ = null;
 
   /**
-   * The initial validator function to be set when the field's value
-   * is initialized.
-   * @type {Function|undefined}
+   * Used to cache the field's tooltip value if setTooltip is called when the
+   * field is not yet initialized. Is *not* guaranteed to be accurate.
+   * @type {?string}
    * @private
    */
-  this.initialValidator_ = opt_validator;
-
-  /**
-   * A map of options used to configure this field when initialized.
-   * @type {Object|undefined}
-   * @private
-   */
-  this.config_ = opt_config;
+  this.tooltip_ = null;
 
   /**
    * The size of the area rendered by the field.
@@ -101,6 +80,9 @@ Blockly.Field = function(value, opt_validator, opt_config) {
    * @protected
    */
   this.size_ = new Blockly.utils.Size(0, 0);
+  opt_config && this.configure_(opt_config);
+  this.setValue(value);
+  this.setValidator(opt_validator);
 };
 
 /**
@@ -157,14 +139,6 @@ Blockly.Field.prototype.disposed = false;
  * @type {number}
  */
 Blockly.Field.prototype.maxDisplayLength = 50;
-
-/**
- * Used to cache the field's tooltip value if setTooltip is called when the
- * field is not yet initialized. Is *not* guaranteed to be accurate.
- * @type {?string}
- * @private
- */
-Blockly.Field.prototype.tooltip_ = null;
 
 /**
  * Block this field is attached to.  Starts as null, then set in init.
@@ -281,27 +255,11 @@ Blockly.Field.prototype.init = function() {
     this.fieldGroup_.style.display = 'none';
   }
   this.sourceBlock_.getSvgRoot().appendChild(this.fieldGroup_);
-  this.initValue();
   this.initView();
   this.updateEditable();
   this.setTooltip(this.tooltip_);
   this.bindEvents_();
   this.initModel();
-};
-
-
-/**
- * Initializes the value of this field.
- * @package
- */
-Blockly.Field.prototype.initValue = function() {
-  if (this.valueInitialized_) {
-    return;
-  }
-  this.config_ && this.configure_(this.config_);
-  this.setValue(this.initialValue_);
-  this.initialValidator_ && this.setValidator(this.initialValidator_);
-  this.valueInitialized_ = true;
 };
 
 /**
@@ -310,6 +268,7 @@ Blockly.Field.prototype.initValue = function() {
  * @package
  */
 Blockly.Field.prototype.initModel = function() {
+  // NOP
 };
 
 /**

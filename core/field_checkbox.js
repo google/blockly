@@ -50,14 +50,6 @@ goog.require('Blockly.utils.Size');
  * @constructor
  */
 Blockly.FieldCheckbox = function(opt_value, opt_validator, opt_config) {
-  if (opt_value == null) {
-    opt_value = 'FALSE';
-  }
-  Blockly.FieldCheckbox.superClass_.constructor.call(
-      this, opt_value, opt_validator, opt_config);
-
-  this.size_.width = Blockly.FieldCheckbox.WIDTH;
-
   /**
    * Character for the check mark. Used to apply a different check mark
    * character to individual fields.
@@ -65,6 +57,14 @@ Blockly.FieldCheckbox = function(opt_value, opt_validator, opt_config) {
    * @private
    */
   this.checkChar_ = null;
+
+  if (opt_value == null) {
+    opt_value = 'FALSE';
+  }
+  Blockly.FieldCheckbox.superClass_.constructor.call(
+      this, opt_value, opt_validator, opt_config);
+
+  this.size_.width = Blockly.FieldCheckbox.WIDTH;
 
 };
 Blockly.utils.object.inherits(Blockly.FieldCheckbox, Blockly.Field);

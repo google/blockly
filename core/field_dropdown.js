@@ -59,7 +59,21 @@ Blockly.FieldDropdown = function(menuGenerator, opt_validator) {
     Blockly.FieldDropdown.validateOptions_(menuGenerator);
   }
 
+  /**
+   * An array of options for a dropdown list,
+   * or a function which generates these options.
+   * @type {(!Array.<!Array>|!Function)}
+   * @protected
+   */
   this.menuGenerator_ = menuGenerator;
+
+  /**
+   * The currently selected index. A value of -1 indicates no option
+   * has been selected.
+   * @type {number}
+   * @private
+   */
+  this.selectedIndex_ = -1;
 
   this.trimOptions_();
   var firstTuple = this.getOptions()[0];
@@ -69,12 +83,11 @@ Blockly.FieldDropdown = function(menuGenerator, opt_validator) {
       opt_validator);
 
   /**
-   * The currently selected index. A value of -1 indicates no option
-   * has been selected.
-   * @type {number}
+   * SVG image element if currently selected option is an image, or null.
+   * @type {SVGElement}
    * @private
    */
-  this.selectedIndex_ = -1;
+  this.imageElement_ = null;
 
   /**
    * A reference to the currently selected menu item.
@@ -153,13 +166,6 @@ Blockly.FieldDropdown.ARROW_CHAR =
  * Mouse cursor style when over the hotspot that initiates the editor.
  */
 Blockly.FieldDropdown.prototype.CURSOR = 'default';
-
-/**
- * SVG image element if currently selected option is an image, or null.
- * @type {SVGElement}
- * @private
- */
-Blockly.FieldDropdown.prototype.imageElement_ = null;
 
 /**
  * Create the block UI for this dropdown.

@@ -179,6 +179,12 @@ Blockly.CursorSvg.prototype.createDom = function() {
   return this.svgGroup_;
 };
 
+/**
+ * Attaches the svg root to the svg element of the parent.
+ * @param {!Blockly.Workspace_Svg|!Blockly.Field|!Blockly.BlockSvg} newParent
+ *    The workspace, field, or block that the cursor svg element should be
+ *    attached to.
+ */
 Blockly.CursorSvg.prototype.setParent_ = function(newParent) {
   if (this.parent_) {
     this.parent_.cursorSvg_ = null;
@@ -221,7 +227,7 @@ Blockly.CursorSvg.prototype.showWithBlockPrevOutput_ = function(block) {
 };
 
 /**
- * Show the visual representation of a workspace coordinates.
+ * Show the visual representation of a workspace coordinate.
  * This is a horizontal line.
  * @param {!Blockly.ASTNode} curNode The node that we want to draw the cursor for.
  * @private
@@ -262,7 +268,7 @@ Blockly.CursorSvg.prototype.showWithInput_ = function(curNode) {
   var connection = /** @type {Blockly.Connection} */
       (curNode.getLocation());
   var path = Blockly.utils.svgPaths.moveTo(0,0) +
-    this.constants_.PUZZLE_TAB.pathDown;
+      this.constants_.PUZZLE_TAB.pathDown;
   this.currentCursorSvg = this.cursorInput_;
   this.cursorInput_.setAttribute('d', path);
   this.setParent_(connection.getSourceBlock());
@@ -292,7 +298,7 @@ Blockly.CursorSvg.prototype.showWithNext_ = function(curNode) {
 
 /**
  * Show the visual representation of a stack.
- * This is a box with padding around the entire stack of blocks.
+ * This is a box with extra padding around the entire stack of blocks.
  * @param {!Blockly.ASTNode} curNode The node that we want to draw the cursor for.
  * @private
  */
@@ -334,7 +340,7 @@ Blockly.CursorSvg.prototype.showCurrent_ = function() {
  * Position the cursor for a block.
  * Displays an outline of the top half of a rectangle around a block.
  * @param {!number} width The width of the block.
- * @param {!number} cursorOffset The offset of the cursor from around the block.
+ * @param {!number} cursorOffset The extra padding for around the block.
  * @param {!number} cursorHeight The height of the cursor.
  */
 Blockly.CursorSvg.prototype.positionBlock_ = function(width, cursorOffset, cursorHeight) {

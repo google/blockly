@@ -442,8 +442,7 @@ Blockly.WorkspaceSvg.prototype.setMarker = function(marker) {
 
 /**
  * Set the parent svg group for the cursor.
- * @param {SVGElement} cursorSvg The svg root of the cursor to be added to the
- *     workspace svg group.
+ * @param {SVGElement} cursorSvg The svg root of the cursor.
  * @package
  */
 Blockly.WorkspaceSvg.prototype.setCursorParent = function(cursorSvg) {
@@ -455,8 +454,7 @@ Blockly.WorkspaceSvg.prototype.setCursorParent = function(cursorSvg) {
 
 /**
  * Set the parent svg group for the marker.
- * @param {SVGElement} markerSvg The svg root of the marker to be added to the
- *     workspace svg group.
+ * @param {SVGElement} markerSvg The svg root of the marker.
  * @package
  */
 Blockly.WorkspaceSvg.prototype.setMarkerParent = function(markerSvg) {

@@ -27,6 +27,7 @@
 goog.provide('Blockly.Flyout');
 
 goog.require('Blockly.Block');
+goog.require('Blockly.blockRendering');
 goog.require('Blockly.Events');
 goog.require('Blockly.Events.BlockCreate');
 goog.require('Blockly.Events.VarCreate');
@@ -34,6 +35,7 @@ goog.require('Blockly.FlyoutButton');
 goog.require('Blockly.FlyoutCursor');
 goog.require('Blockly.Gesture');
 goog.require('Blockly.MarkerCursor');
+goog.require('Blockly.Scrollbar');
 goog.require('Blockly.Tooltip');
 goog.require('Blockly.Touch');
 goog.require('Blockly.utils');
@@ -109,6 +111,13 @@ Blockly.Flyout = function(workspaceOptions) {
    * @private
    */
   this.permanentlyDisabled_ = [];
+
+  /**
+   * Width of output tab.
+   * @type {number}
+   * @const
+   */
+  this.tabWidth_ = Blockly.blockRendering.getConstants().TAB_WIDTH;
 };
 
 /**

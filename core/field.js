@@ -163,7 +163,7 @@ Blockly.Field.prototype.visible_ = true;
 
 /**
  * The element the click handler is bound to.
- * @type {!Element}
+ * @type {Element}
  * @private
  */
 Blockly.Field.prototype.clickTarget_ = null;
@@ -769,15 +769,18 @@ Blockly.Field.prototype.getValue = function() {
 /**
  * Used to validate a value. Returns input by default. Can be overridden by
  * subclasses, see FieldDropdown.
- * @param {*} newValue The value to be validated.
+ * @param {*=} opt_newValue The value to be validated.
  * @return {*} The validated value, same as input by default.
  * @protected
  * @suppress {deprecated}
  */
-Blockly.Field.prototype.doClassValidation_ = function(newValue) {
+Blockly.Field.prototype.doClassValidation_ = function(opt_newValue) {
+  if (opt_newValue === null || opt_newValue === undefined) {
+    return null;
+  }
   // For backwards compatibility.
-  newValue = this.classValidator(/** @type {string} */ (newValue));
-  return newValue;
+  opt_newValue = this.classValidator(/** @type {string} */ (opt_newValue));
+  return opt_newValue;
 };
 
 /**

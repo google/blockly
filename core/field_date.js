@@ -99,20 +99,20 @@ Blockly.FieldDate.prototype.DROPDOWN_BACKGROUND_COLOUR = 'white';
 
 /**
  * Ensure that the input value is a valid date.
- * @param {string} newValue The input value.
+ * @param {*=} opt_newValue The input value.
  * @return {?string} A valid date, or null if invalid.
  * @protected
  */
-Blockly.FieldDate.prototype.doClassValidation_ = function(newValue) {
-  if (!newValue) {
+Blockly.FieldDate.prototype.doClassValidation_ = function(opt_newValue) {
+  if (!opt_newValue) {
     return null;
   }
   // Check if the new value is parsable or not.
-  var date = goog.date.Date.fromIsoString(newValue);
-  if (!date || date.toIsoString(true) != newValue) {
+  var date = goog.date.Date.fromIsoString(opt_newValue);
+  if (!date || date.toIsoString(true) != opt_newValue) {
     return null;
   }
-  return newValue;
+  return opt_newValue;
 };
 
 /**

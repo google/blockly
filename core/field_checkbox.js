@@ -180,15 +180,15 @@ Blockly.FieldCheckbox.prototype.showEditor_ = function() {
 
 /**
  * Ensure that the input value is valid ('TRUE' or 'FALSE').
- * @param {string|boolean} newValue The input value.
+ * @param {*=} opt_newValue The input value.
  * @return {?string} A valid value ('TRUE' or 'FALSE), or null if invalid.
  * @protected
  */
-Blockly.FieldCheckbox.prototype.doClassValidation_ = function(newValue) {
-  if (newValue === true || newValue === 'TRUE') {
+Blockly.FieldCheckbox.prototype.doClassValidation_ = function(opt_newValue) {
+  if (opt_newValue === true || opt_newValue === 'TRUE') {
     return 'TRUE';
   }
-  if (newValue === false || newValue === 'FALSE') {
+  if (opt_newValue === false || opt_newValue === 'FALSE') {
     return 'FALSE';
   }
   return null;

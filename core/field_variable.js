@@ -231,11 +231,15 @@ Blockly.FieldVariable.prototype.getValidator = function() {
 
 /**
  * Ensure that the id belongs to a valid variable of an allowed type.
- * @param {string} newId The id of the new variable to set.
+ * @param {*=} opt_newValue The id of the new variable to set.
  * @return {?string} The validated id, or null if invalid.
  * @protected
  */
-Blockly.FieldVariable.prototype.doClassValidation_ = function(newId) {
+Blockly.FieldVariable.prototype.doClassValidation_ = function(opt_newValue) {
+  if (opt_newValue === null) {
+    return null;
+  }
+  var newId = /** @type {string} */ (opt_newValue);
   var variable = Blockly.Variables.getVariable(this.workspace_, newId);
   if (!variable) {
     console.warn('Variable id doesn\'t point to a real variable! ' +

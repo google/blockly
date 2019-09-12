@@ -168,15 +168,15 @@ Blockly.FieldImage.prototype.initView = function() {
 
 /**
  * Ensure that the input value (the source URL) is a string.
- * @param {string} newValue The input value.
+ * @param {*=} opt_newValue The input value.
  * @return {?string} A string, or null if invalid.
  * @protected
  */
-Blockly.FieldImage.prototype.doClassValidation_ = function(newValue) {
-  if (typeof newValue != 'string') {
+Blockly.FieldImage.prototype.doClassValidation_ = function(opt_newValue) {
+  if (typeof opt_newValue != 'string') {
     return null;
   }
-  return newValue;
+  return opt_newValue;
 };
 
 /**

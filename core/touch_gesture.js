@@ -30,6 +30,7 @@ goog.provide('Blockly.TouchGesture');
 goog.require('Blockly.Gesture');
 goog.require('Blockly.utils');
 goog.require('Blockly.utils.Coordinate');
+goog.require('Blockly.utils.object');
 
 
 /*
@@ -88,7 +89,7 @@ Blockly.TouchGesture = function(e, creatorWorkspace) {
    */
   this.onStartWrapper_ = null;
 };
-goog.inherits(Blockly.TouchGesture, Blockly.Gesture);
+Blockly.utils.object.inherits(Blockly.TouchGesture, Blockly.Gesture);
 
 /**
  * A multiplier used to convert the gesture scale to a zoom in delta.

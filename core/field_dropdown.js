@@ -36,6 +36,7 @@ goog.require('Blockly.Menu');
 goog.require('Blockly.MenuItem');
 goog.require('Blockly.utils');
 goog.require('Blockly.utils.dom');
+goog.require('Blockly.utils.object');
 goog.require('Blockly.utils.Size');
 goog.require('Blockly.utils.string');
 goog.require('Blockly.utils.uiMenu');
@@ -82,7 +83,7 @@ Blockly.FieldDropdown = function(menuGenerator, opt_validator) {
    */
   this.selectedMenuItem_ = null;
 };
-goog.inherits(Blockly.FieldDropdown, Blockly.Field);
+Blockly.utils.object.inherits(Blockly.FieldDropdown, Blockly.Field);
 
 /**
  * Dropdown image properties.

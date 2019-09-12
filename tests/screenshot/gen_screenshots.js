@@ -113,6 +113,12 @@ async function buildBrowser(url, isRtl) {
     },
     logLevel: 'warn'
   };
+  // Run in headless mode on Travis.
+  if (process.env.TRAVIS_CI) {
+    options.capabilities['goog:chromeOptions'] = {
+      args: ['--headless', '--no-sandbox', '--disable-dev-shm-usage']
+    };
+  }
   console.log('Starting webdriverio...');
   const browser = await webdriverio.remote(options);
   var injectBlockly = function(isRtl) {

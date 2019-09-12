@@ -28,24 +28,23 @@
 goog.provide('Blockly.thrasos');
 goog.provide('Blockly.thrasos.RenderInfo');
 
-goog.require('Blockly.blockRendering.RenderInfo');
-goog.require('Blockly.blockRendering.Measurable');
-goog.require('Blockly.blockRendering.Types');
 goog.require('Blockly.blockRendering.BottomRow');
-goog.require('Blockly.blockRendering.InputRow');
-goog.require('Blockly.blockRendering.Row');
-goog.require('Blockly.blockRendering.SpacerRow');
-goog.require('Blockly.blockRendering.TopRow');
-
-goog.require('Blockly.blockRendering.InlineInput');
 goog.require('Blockly.blockRendering.ExternalValueInput');
-goog.require('Blockly.blockRendering.StatementInput');
-
-goog.require('Blockly.blockRendering.PreviousConnection');
+goog.require('Blockly.blockRendering.InlineInput');
+goog.require('Blockly.blockRendering.InputRow');
+goog.require('Blockly.blockRendering.Measurable');
 goog.require('Blockly.blockRendering.NextConnection');
 goog.require('Blockly.blockRendering.OutputConnection');
-
+goog.require('Blockly.blockRendering.PreviousConnection');
+goog.require('Blockly.blockRendering.RenderInfo');
+goog.require('Blockly.blockRendering.Row');
+goog.require('Blockly.blockRendering.SpacerRow');
+goog.require('Blockly.blockRendering.StatementInput');
+goog.require('Blockly.blockRendering.TopRow');
+goog.require('Blockly.blockRendering.Types');
 goog.require('Blockly.RenderedConnection');
+goog.require('Blockly.utils.object');
+
 
 /**
  * An object containing all sizing information needed to draw this block.
@@ -62,7 +61,8 @@ goog.require('Blockly.RenderedConnection');
 Blockly.thrasos.RenderInfo = function(block) {
   Blockly.thrasos.RenderInfo.superClass_.constructor.call(this, block);
 };
-goog.inherits(Blockly.thrasos.RenderInfo, Blockly.blockRendering.RenderInfo);
+Blockly.utils.object.inherits(Blockly.thrasos.RenderInfo,
+    Blockly.blockRendering.RenderInfo);
 
 /**
  * @override
@@ -190,28 +190,15 @@ Blockly.thrasos.RenderInfo.prototype.getInRowSpacing_ = function(prev, next) {
       return this.constants_.NO_PADDING;
     }
     // Spacing between a square corner and a previous or next connection
-    if (Blockly.blockRendering.Types.isPreviousConnection(next)) {
+    if (Blockly.blockRendering.Types.isPreviousConnection(next) ||
+        Blockly.blockRendering.Types.isNextConnection(next)) {
       return next.notchOffset;
-    } else if (Blockly.blockRendering.Types.isNextConnection(next)) {
-      // Next connections are shifted slightly to the left (in both LTR and RTL)
-      // to make the dark path under the previous connection show through.
-      var offset = (this.RTL ? 1 : -1) *
-          this.constants_.DARK_PATH_OFFSET / 2;
-      return next.notchOffset + offset;
     }
   }
 
   // Spacing between a rounded corner and a previous or next connection.
   if (Blockly.blockRendering.Types.isLeftRoundedCorner(prev) && next) {
-    if (Blockly.blockRendering.Types.isPreviousConnection(next)) {
-      return next.notchOffset - this.constants_.CORNER_RADIUS;
-    } else if (Blockly.blockRendering.Types.isNextConnection(next)) {
-      // Next connections are shifted slightly to the left (in both LTR and RTL)
-      // to make the dark path under the previous connection show through.
-      var offset = (this.RTL ? 1 : -1) *
-          this.constants_.DARK_PATH_OFFSET / 2;
-      return next.notchOffset - this.constants_.CORNER_RADIUS + offset;
-    }
+    return next.notchOffset - this.constants_.CORNER_RADIUS;
   }
 
   // Spacing between two fields of the same editability.

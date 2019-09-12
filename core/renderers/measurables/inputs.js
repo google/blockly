@@ -24,14 +24,15 @@
  * @author fenichel@google.com (Rachel Fenichel)
  */
 
-goog.provide('Blockly.blockRendering.InputConnection');
-goog.provide('Blockly.blockRendering.InlineInput');
-goog.provide('Blockly.blockRendering.StatementInput');
 goog.provide('Blockly.blockRendering.ExternalValueInput');
+goog.provide('Blockly.blockRendering.InlineInput');
+goog.provide('Blockly.blockRendering.InputConnection');
+goog.provide('Blockly.blockRendering.StatementInput');
 
 goog.require('Blockly.blockRendering.Connection');
 goog.require('Blockly.blockRendering.Measurable');
 goog.require('Blockly.blockRendering.Types');
+goog.require('Blockly.utils.object');
 
 
 /**
@@ -66,7 +67,7 @@ Blockly.blockRendering.InputConnection = function(input) {
   this.connectionOffsetX = 0;
   this.connectionOffsetY = 0;
 };
-goog.inherits(Blockly.blockRendering.InputConnection,
+Blockly.utils.object.inherits(Blockly.blockRendering.InputConnection,
     Blockly.blockRendering.Connection);
 
 /**
@@ -99,7 +100,7 @@ Blockly.blockRendering.InlineInput = function(input) {
   this.connectionHeight = this.shape.height;
   this.connectionWidth = this.shape.width;
 };
-goog.inherits(Blockly.blockRendering.InlineInput,
+Blockly.utils.object.inherits(Blockly.blockRendering.InlineInput,
     Blockly.blockRendering.InputConnection);
 
 /**
@@ -128,7 +129,7 @@ Blockly.blockRendering.StatementInput = function(input) {
   this.width = this.constants_.NOTCH_OFFSET_LEFT +
       this.shape.width;
 };
-goog.inherits(Blockly.blockRendering.StatementInput,
+Blockly.utils.object.inherits(Blockly.blockRendering.StatementInput,
     Blockly.blockRendering.InputConnection);
 
 /**
@@ -158,5 +159,5 @@ Blockly.blockRendering.ExternalValueInput = function(input) {
   this.connectionHeight = this.shape.height;
   this.connectionWidth = this.shape.width;
 };
-goog.inherits(Blockly.blockRendering.ExternalValueInput,
+Blockly.utils.object.inherits(Blockly.blockRendering.ExternalValueInput,
     Blockly.blockRendering.InputConnection);

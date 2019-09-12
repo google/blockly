@@ -314,7 +314,7 @@ Blockly.Constants.Logic.CONTROLS_IF_MUTATOR_MIXIN = {
   /**
    * Create XML to represent the number of else-if and else inputs.
    * @return {Element} XML storage element.
-   * @this Blockly.Block
+   * @this {Blockly.Block}
    */
   mutationToDom: function() {
     if (!this.elseifCount_ && !this.elseCount_) {
@@ -332,7 +332,7 @@ Blockly.Constants.Logic.CONTROLS_IF_MUTATOR_MIXIN = {
   /**
    * Parse XML to restore the else-if and else inputs.
    * @param {!Element} xmlElement XML storage element.
-   * @this Blockly.Block
+   * @this {Blockly.Block}
    */
   domToMutation: function(xmlElement) {
     this.elseifCount_ = parseInt(xmlElement.getAttribute('elseif'), 10) || 0;
@@ -343,7 +343,7 @@ Blockly.Constants.Logic.CONTROLS_IF_MUTATOR_MIXIN = {
    * Populate the mutator's dialog with this block's components.
    * @param {!Blockly.Workspace} workspace Mutator's workspace.
    * @return {!Blockly.Block} Root block in mutator.
-   * @this Blockly.Block
+   * @this {Blockly.Block}
    */
   decompose: function(workspace) {
     var containerBlock = workspace.newBlock('controls_if_if');
@@ -365,7 +365,7 @@ Blockly.Constants.Logic.CONTROLS_IF_MUTATOR_MIXIN = {
   /**
    * Reconfigure this block based on the mutator dialog's components.
    * @param {!Blockly.Block} containerBlock Root block in mutator.
-   * @this Blockly.Block
+   * @this {Blockly.Block}
    */
   compose: function(containerBlock) {
     var clauseBlock = containerBlock.nextConnection.targetBlock();
@@ -400,7 +400,7 @@ Blockly.Constants.Logic.CONTROLS_IF_MUTATOR_MIXIN = {
   /**
    * Store pointers to any connected child blocks.
    * @param {!Blockly.Block} containerBlock Root block in mutator.
-   * @this Blockly.Block
+   * @this {Blockly.Block}
    */
   saveConnections: function(containerBlock) {
     var clauseBlock = containerBlock.nextConnection.targetBlock();
@@ -430,6 +430,7 @@ Blockly.Constants.Logic.CONTROLS_IF_MUTATOR_MIXIN = {
   },
   /**
    * Reconstructs the block with all child blocks attached.
+   * @this {Blockly.Block}
    */
   rebuildShape_: function() {
     var valueConnections = [null];
@@ -453,7 +454,7 @@ Blockly.Constants.Logic.CONTROLS_IF_MUTATOR_MIXIN = {
   },
   /**
    * Modify this block to have the correct number of inputs.
-   * @this Blockly.Block
+   * @this {Blockly.Block}
    * @private
    */
   updateShape_: function() {
@@ -488,6 +489,7 @@ Blockly.Constants.Logic.CONTROLS_IF_MUTATOR_MIXIN = {
    * statement connections for do input.
    * @param {?Blockly.RenderedConnection} elseStatementConnection Statement
    * connection for else input.
+   * @this {Blockly.Block}
    */
   reconnectChildBlocks_: function(valueConnections, statementConnections,
       elseStatementConnection) {
@@ -505,7 +507,7 @@ Blockly.Extensions.registerMutator('controls_if_mutator',
 /**
  * "controls_if" extension function. Adds mutator, shape updating methods, and
  * dynamic tooltip to "controls_if" blocks.
- * @this Blockly.Block
+ * @this {Blockly.Block}
  * @package
  */
 Blockly.Constants.Logic.CONTROLS_IF_TOOLTIP_EXTENSION = function() {
@@ -540,7 +542,7 @@ Blockly.Constants.Logic.LOGIC_COMPARE_ONCHANGE_MIXIN = {
    * Called whenever anything on the workspace changes.
    * Prevent mismatched types from being compared.
    * @param {!Blockly.Events.Abstract} e Change event.
-   * @this Blockly.Block
+   * @this {Blockly.Block}
    */
   onchange: function(e) {
     if (!this.prevBlocks_) {
@@ -582,7 +584,7 @@ Blockly.Constants.Logic.LOGIC_COMPARE_ONCHANGE_MIXIN = {
 /**
  * "logic_compare" extension function. Adds type left and right side type
  * checking to "logic_compare" blocks.
- * @this Blockly.Block
+ * @this {Blockly.Block}
  * @package
  * @readonly
  */
@@ -608,7 +610,7 @@ Blockly.Constants.Logic.LOGIC_TERNARY_ONCHANGE_MIXIN = {
    * Called whenever anything on the workspace changes.
    * Prevent mismatched types.
    * @param {!Blockly.Events.Abstract} e Change event.
-   * @this Blockly.Block
+   * @this {Blockly.Block}
    */
   onchange: function(e) {
     var blockA = this.getInputTargetBlock('THEN');

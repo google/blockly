@@ -27,6 +27,7 @@
 goog.provide('Blockly.Workspace');
 
 goog.require('Blockly.Cursor');
+goog.require('Blockly.MarkerCursor');
 goog.require('Blockly.Events');
 goog.require('Blockly.Themes.Classic');
 goog.require('Blockly.utils');
@@ -117,22 +118,28 @@ Blockly.Workspace = function(opt_options) {
   this.potentialVariableMap_ = null;
 
   /**
-   * The cursor for navigating blocks.
-   * @type {!Blockly.Cursor}
+   * The cursor used to navigate around the AST for keyboard navigation.
+   * @type {Blockly.Cursor}
+   * @private
    */
-  this.cursor = this.createCursor();
+  this.cursor_ = null;
 
   /**
-   * The marker that shows where a user has marked while navigating blocks.
-   * @type {!Blockly.Cursor}
+   * The marker used to mark a location for keyboard navigation.
+   * @type {Blockly.MarkerCursor}
+   * @private
    */
-  this.marker = this.createMarker();
+  this.marker_ = null;
 
   // Set the default theme. This is for headless workspaces. This will get
   // overwritten by the theme passed into the inject call for rendered workspaces.
   if (!Blockly.getTheme()) {
     Blockly.setTheme(Blockly.Themes.Classic);
   }
+
+  this.setCursor(new Blockly.Cursor());
+
+  this.setMarker(new Blockly.MarkerCursor());
 };
 
 /**
@@ -162,19 +169,37 @@ Blockly.Workspace.prototype.MAX_UNDO = 1024;
 Blockly.Workspace.prototype.connectionDBList = null;
 
 /**
- * Adds cursor for keyboard navigation.
- * @return {!Blockly.Cursor} Cursor for keyboard navigation.
+ * Sets the cursor for keyboard navigation.
+ * @param {Blockly.Cursor} cursor The cursor used to navigate around the Blockly
+ *     AST for keyboard navigation.
  */
-Blockly.Workspace.prototype.createCursor = function() {
-  return new Blockly.Cursor();
+Blockly.Workspace.prototype.setCursor = function(cursor) {
+  this.cursor_ = cursor;
 };
 
 /**
- * Adds marker for keyboard navigation.
- * @return {!Blockly.Cursor} Cursor for keyboard navigation.
+ * Sets the marker for keyboard navigation.
+ * @param {Blockly.MarkerCursor} marker The marker used to mark a location for
+ *     keyboard navigation.
  */
-Blockly.Workspace.prototype.createMarker = function() {
-  return new Blockly.Cursor(true);
+Blockly.Workspace.prototype.setMarker = function(marker) {
+  this.marker_ = marker;
+};
+
+/**
+ * Get the cursor used to navigate around the AST for keyboard navigation.
+ * @return {Blockly.Cursor} The cursor for this workspace.
+ */
+Blockly.Workspace.prototype.getCursor = function() {
+  return this.cursor_;
+};
+
+/**
+ * Get the marker used to mark a location for keyboard navigation.
+ * @return {Blockly.MarkerCursor} the marker for this workspace.
+ */
+Blockly.Workspace.prototype.getMarker = function() {
+  return this.marker_;
 };
 
 
@@ -789,12 +814,3 @@ Blockly.Workspace.getAll = function() {
   }
   return workspaces;
 };
-
-// Export symbols that would otherwise be renamed by Closure compiler.
-Blockly.Workspace.prototype['clear'] = Blockly.Workspace.prototype.clear;
-Blockly.Workspace.prototype['clearUndo'] =
-    Blockly.Workspace.prototype.clearUndo;
-Blockly.Workspace.prototype['addChangeListener'] =
-    Blockly.Workspace.prototype.addChangeListener;
-Blockly.Workspace.prototype['removeChangeListener'] =
-    Blockly.Workspace.prototype.removeChangeListener;

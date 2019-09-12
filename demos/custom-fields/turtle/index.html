@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8">
     <title>Blockly Demo: Custom Turtle Field</title>
-    <script src="../../../blockly_compressed.js"></script>
+    <script src="../../../blockly_uncompressed.js"></script>
     <script src="blocks.js"></script>
     <script src="field_turtle.js"></script>
     <script src="../../../msg/js/en.js"></script>
@@ -113,6 +113,7 @@
       }
 
       function toggleEditable() {
+        Blockly.hideChaff();
         var blocks = workspace.getAllBlocks();
         for(var i = 0, block; block = blocks[i]; i++) {
           block.setEditable(!block.isEditable());
@@ -120,6 +121,7 @@
       }
 
       function toggleCollapsed() {
+        Blockly.hideChaff();
         var blocks = workspace.getAllBlocks();
         for(var i = 0, block; block = blocks[i]; i++) {
           block.setCollapsed(!block.isCollapsed());

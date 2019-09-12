@@ -347,7 +347,7 @@ suite('Abstract Fields', function() {
       CustomField.superClass_.constructor.call(
           this, 'value', null, opt_config);
     }
-    goog.inherits(CustomField, Blockly.Field);
+    Blockly.utils.object.inherits(CustomField, Blockly.Field);
     CustomField.fromJson = function(options) {
       return new CustomField(options);
     };

@@ -125,6 +125,13 @@ Blockly.Field.TEXT_DEFAULT_HEIGHT = 12.5;
 Blockly.Field.X_PADDING = 10;
 
 /**
+ * The padding added to the height by the border rect, if it exists.
+ * @type {number}
+ * @package
+ */
+Blockly.Field.Y_PADDING = 10;
+
+/**
  * The default offset between the left of the text element and the left of the
  * border rect, if the border rect exists.
  * @type {number}

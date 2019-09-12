@@ -30,6 +30,7 @@ goog.require('Blockly.Field');
 goog.require('Blockly.fieldRegistry');
 goog.require('Blockly.utils');
 goog.require('Blockly.utils.dom');
+goog.require('Blockly.utils.object');
 goog.require('Blockly.utils.Size');
 
 
@@ -103,7 +104,7 @@ Blockly.FieldImage = function(src, width, height,
     this.clickHandler_ = opt_onClick;
   }
 };
-goog.inherits(Blockly.FieldImage, Blockly.Field);
+Blockly.utils.object.inherits(Blockly.FieldImage, Blockly.Field);
 
 /**
  * Construct a FieldImage from a JSON arg object,

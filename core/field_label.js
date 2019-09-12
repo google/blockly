@@ -31,6 +31,7 @@ goog.require('Blockly.Field');
 goog.require('Blockly.fieldRegistry');
 goog.require('Blockly.utils');
 goog.require('Blockly.utils.dom');
+goog.require('Blockly.utils.object');
 goog.require('Blockly.utils.Size');
 
 
@@ -64,7 +65,7 @@ Blockly.FieldLabel = function(opt_value, opt_class) {
    */
   this.class_ = opt_class;
 };
-goog.inherits(Blockly.FieldLabel, Blockly.Field);
+Blockly.utils.object.inherits(Blockly.FieldLabel, Blockly.Field);
 
 /**
  * Construct a FieldLabel from a JSON arg object,

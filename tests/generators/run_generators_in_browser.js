@@ -57,6 +57,12 @@ async function runGeneratorsInBrowser() {
           browserName: 'firefox'
       }
   };
+  // Run in headless mode on Travis.
+  if (process.env.TRAVIS_CI) {
+    options.capabilities['moz:firefoxOptions'] = {
+      args: ['-headless']
+    };
+  }
 
   var url = 'file://' + __dirname + '/index.html';
   var prefix = 'tests/generators/tmp/generated';

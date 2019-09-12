@@ -26,15 +26,16 @@
 
 goog.provide('Blockly.blockRendering.Drawer');
 
-goog.require('Blockly.blockRendering.Debug');
-goog.require('Blockly.blockRendering.RenderInfo');
-goog.require('Blockly.blockRendering.Measurable');
-goog.require('Blockly.blockRendering.Types');
 goog.require('Blockly.blockRendering.BottomRow');
+goog.require('Blockly.blockRendering.Debug');
 goog.require('Blockly.blockRendering.InputRow');
+goog.require('Blockly.blockRendering.Measurable');
+goog.require('Blockly.blockRendering.RenderInfo');
 goog.require('Blockly.blockRendering.Row');
 goog.require('Blockly.blockRendering.SpacerRow');
 goog.require('Blockly.blockRendering.TopRow');
+goog.require('Blockly.blockRendering.Types');
+goog.require('Blockly.utils.svgPaths');
 
 
 /**
@@ -51,7 +52,6 @@ Blockly.blockRendering.Drawer = function(block, info) {
   this.topLeft_ = block.getRelativeToSurfaceXY();
   this.outlinePath_ = '';
   this.inlinePath_ = '';
-  this.pathObject_ = new Blockly.BlockSvg.PathObject();
   this.constants_ = Blockly.blockRendering.getConstants();
 };
 
@@ -70,10 +70,13 @@ Blockly.blockRendering.Drawer.prototype.draw = function() {
   this.drawOutline_();
   this.drawInternals_();
 
-  this.pathObject_.steps = [this.outlinePath_];
-  this.pathObject_.inlineSteps = [this.inlinePath_];
 
-  this.block_.setPaths_(this.pathObject_);
+  var pathObject = new Blockly.BlockSvg.PathObject();
+
+  pathObject.steps = [this.outlinePath_];
+  pathObject.inlineSteps = [this.inlinePath_];
+
+  this.block_.setPaths_(pathObject);
   if (Blockly.blockRendering.useDebugger) {
     this.block_.renderingDebugger.drawDebug(this.block_, this.info_);
   }
@@ -89,10 +92,8 @@ Blockly.blockRendering.Drawer.prototype.draw = function() {
 Blockly.blockRendering.Drawer.prototype.recordSizeOnBlock_ = function() {
   // This is used when the block is reporting its size to anyone else.
   // The dark path adds to the size of the block in both X and Y.
-  this.block_.height = this.info_.height +
-      this.constants_.DARK_PATH_OFFSET;
-  this.block_.width = this.info_.widthWithChildren +
-      this.constants_.DARK_PATH_OFFSET;
+  this.block_.height = this.info_.height;
+  this.block_.width = this.info_.widthWithChildren;
 };
 
 /**
@@ -179,9 +180,13 @@ Blockly.blockRendering.Drawer.prototype.drawValueInput_ = function(row) {
   var input = row.getLastInput();
   this.positionExternalValueConnection_(row);
 
+  var pathDown = (typeof input.shape.pathDown == "function") ?
+      input.shape.pathDown(input.height) :
+      input.shape.pathDown;
+
   this.outlinePath_ +=
       Blockly.utils.svgPaths.lineOnAxis('H', input.xPos + input.width) +
-      input.shape.pathDown +
+      pathDown +
       Blockly.utils.svgPaths.lineOnAxis('v', row.height - input.connectionHeight);
 };
 
@@ -266,10 +271,14 @@ Blockly.blockRendering.Drawer.prototype.drawLeft_ = function() {
   if (outputConnection) {
     var tabBottom = outputConnection.connectionOffsetY +
         outputConnection.height;
+    var pathUp = (typeof outputConnection.shape.pathUp == "function") ?
+        outputConnection.shape.pathUp(outputConnection.height) :
+        outputConnection.shape.pathUp;
+
     // Draw a line up to the bottom of the tab.
     this.outlinePath_ +=
         Blockly.utils.svgPaths.lineOnAxis('V', tabBottom) +
-        outputConnection.shape.pathUp;
+        pathUp;
   }
   // Close off the path.  This draws a vertical line up to the start of the
   // block's path, which may be either a rounded or a sharp corner.

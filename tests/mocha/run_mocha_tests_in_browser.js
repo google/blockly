@@ -37,6 +37,12 @@ async function runMochaTestsInBrowser() {
           browserName: 'chrome'
       }
   };
+  // Run in headless mode on Travis.
+  if (process.env.TRAVIS_CI) {
+    options.capabilities['goog:chromeOptions'] = {
+      args: ['--headless', '--no-sandbox', '--disable-dev-shm-usage']
+    };
+  }
 
   var url = 'file://' + __dirname + '/index.html';
   console.log('Starting webdriverio...');

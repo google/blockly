@@ -2,10 +2,6 @@
 
 'use strict';
 
-goog.provide('Blockly.Msg.de');
-
-goog.require('Blockly.Msg');
-
 Blockly.Msg["ADD_COMMENT"] = "Kommentar hinzufügen";
 Blockly.Msg["CANNOT_DELETE_VARIABLE_PROCEDURE"] = "Die Variable „%1“ kann nicht gelöscht werden, da sie Teil der Definition der Funktion „%2“ ist.";
 Blockly.Msg["CHANGE_VALUE_TITLE"] = "Wert ändern:";
@@ -393,6 +389,7 @@ Blockly.Msg["TEXT_TRIM_OPERATOR_RIGHT"] = "entferne Leerzeichen vom Ende (rechts
 Blockly.Msg["TEXT_TRIM_TOOLTIP"] = "Entfernt Leerzeichen vom Anfang und / oder Ende eines Textes.";
 Blockly.Msg["TODAY"] = "Heute";
 Blockly.Msg["UNDO"] = "Rückgängig";
+Blockly.Msg["UNNAMED_KEY"] = "unnamed";  // untranslated
 Blockly.Msg["VARIABLES_DEFAULT_NAME"] = "Element";
 Blockly.Msg["VARIABLES_GET_CREATE_SET"] = "Erzeuge \"Schreibe %1\"";
 Blockly.Msg["VARIABLES_GET_HELPURL"] = "https://de.wikipedia.org/wiki/Variable_%28Programmierung%29";

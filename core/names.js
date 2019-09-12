@@ -26,6 +26,8 @@
 
 goog.provide('Blockly.Names');
 
+goog.require('Blockly.Msg');
+
 
 /**
  * Class for a database of entity names (variables, functions, etc).

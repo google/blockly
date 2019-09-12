@@ -33,6 +33,7 @@ goog.provide('Blockly.zelos.BeforeStatementSpacerRow');
 goog.require('Blockly.blockRendering.BottomRow');
 goog.require('Blockly.blockRendering.TopRow');
 goog.require('Blockly.blockRendering.SpacerRow');
+goog.require('Blockly.utils.object');
 
 
 /**
@@ -49,7 +50,8 @@ goog.require('Blockly.blockRendering.SpacerRow');
 Blockly.zelos.TopRow = function() {
   Blockly.zelos.TopRow.superClass_.constructor.call(this);
 };
-goog.inherits(Blockly.zelos.TopRow, Blockly.blockRendering.TopRow);
+Blockly.utils.object.inherits(Blockly.zelos.TopRow,
+    Blockly.blockRendering.TopRow);
 
 /**
  * Create all non-spacer elements that belong on the top row.
@@ -70,21 +72,21 @@ Blockly.zelos.TopRow.prototype.populate = function(block) {
 };
 
 /**
- * Never render a left square corner. Always round.
+ * Render a round corner unless the block has an output connection.
  * @override
  */
-Blockly.zelos.TopRow.prototype.hasLeftSquareCorner = function(_block) {
-  return false;
+Blockly.zelos.TopRow.prototype.hasLeftSquareCorner = function(block) {
+  return !!block.outputConnection;
 };
 
 /**
  * Returns whether or not the top row has a right square corner.
- * @param {!Blockly.BlockSvg} _block The block whose top row this represents.
+ * @param {!Blockly.BlockSvg} block The block whose top row this represents.
  * @returns {boolean} Whether or not the top row has a left square corner.
  */
-Blockly.zelos.TopRow.prototype.hasRightSquareCorner = function(_block) {
-  // Never render a right square corner. Always round.
-  return false;
+Blockly.zelos.TopRow.prototype.hasRightSquareCorner = function(block) {
+  // Render a round corner unless the block has an output connection.
+  return !!block.outputConnection;
 };
 
 /**
@@ -99,7 +101,8 @@ Blockly.zelos.TopRow.prototype.hasRightSquareCorner = function(_block) {
 Blockly.zelos.BottomRow = function() {
   Blockly.zelos.BottomRow.superClass_.constructor.call(this);
 };
-goog.inherits(Blockly.zelos.BottomRow, Blockly.blockRendering.BottomRow);
+Blockly.utils.object.inherits(Blockly.zelos.BottomRow,
+    Blockly.blockRendering.BottomRow);
 
 /**
  * Create all non-spacer elements that belong on the bottom row.
@@ -120,21 +123,21 @@ Blockly.zelos.BottomRow.prototype.populate = function(block) {
 };
 
 /**
- * Never render a left square corner. Always round.
+ * Render a round corner unless the block has an output connection.
  * @override
  */
-Blockly.zelos.BottomRow.prototype.hasLeftSquareCorner = function(_block) {
-  return false;
+Blockly.zelos.BottomRow.prototype.hasLeftSquareCorner = function(block) {
+  return !!block.outputConnection;
 };
 
 /**
  * Returns whether or not the bottom row has a right square corner.
- * @param {!Blockly.BlockSvg} _block The block whose bottom row this represents.
+ * @param {!Blockly.BlockSvg} block The block whose bottom row this represents.
  * @returns {boolean} Whether or not the bottom row has a left square corner.
  */
-Blockly.zelos.BottomRow.prototype.hasRightSquareCorner = function(_block) {
-  // Never render a right square corner. Always round.
-  return false;
+Blockly.zelos.BottomRow.prototype.hasRightSquareCorner = function(block) {
+  // Render a round corner unless the block has an output connection.
+  return !!block.outputConnection;
 };
 
 /**
@@ -152,7 +155,7 @@ Blockly.zelos.BeforeStatementSpacerRow = function(height, width) {
   this.type |=
       Blockly.blockRendering.Types.getType('BEFORE_STATEMENT_SPACER_ROW');
 };
-goog.inherits(Blockly.zelos.BeforeStatementSpacerRow,
+Blockly.utils.object.inherits(Blockly.zelos.BeforeStatementSpacerRow,
     Blockly.blockRendering.SpacerRow);
 
 /**
@@ -170,5 +173,5 @@ Blockly.zelos.AfterStatementSpacerRow = function(height, width) {
   this.type |=
       Blockly.blockRendering.Types.getType('AFTER_STATEMENT_SPACER_ROW');
 };
-goog.inherits(Blockly.zelos.AfterStatementSpacerRow,
+Blockly.utils.object.inherits(Blockly.zelos.AfterStatementSpacerRow,
     Blockly.blockRendering.SpacerRow);

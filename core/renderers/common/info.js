@@ -262,10 +262,6 @@ Blockly.blockRendering.RenderInfo.prototype.shouldStartNewRow_ = function(input,
   if (!lastInput) {
     return false;
   }
-  // A statement input always gets a new row.
-  if (input.type == Blockly.NEXT_STATEMENT) {
-    return true;
-  }
   // A statement input or an input following one always gets a new row.
   if (input.type == Blockly.NEXT_STATEMENT ||
       lastInput.type == Blockly.NEXT_STATEMENT) {

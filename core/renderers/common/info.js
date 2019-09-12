@@ -266,6 +266,11 @@ Blockly.blockRendering.RenderInfo.prototype.shouldStartNewRow_ = function(input,
   if (input.type == Blockly.NEXT_STATEMENT) {
     return true;
   }
+  // A statement input or an input following one always gets a new row.
+  if (input.type == Blockly.NEXT_STATEMENT ||
+      lastInput.type == Blockly.NEXT_STATEMENT) {
+    return true;
+  }
   // Value and dummy inputs get new row if inputs are not inlined.
   if (input.type == Blockly.INPUT_VALUE || input.type == Blockly.DUMMY_INPUT) {
     return !this.isInline;
@@ -371,18 +376,15 @@ Blockly.blockRendering.RenderInfo.prototype.computeBounds_ = function() {
  */
 Blockly.blockRendering.RenderInfo.prototype.alignRowElements_ = function() {
   for (var i = 0, row; (row = this.rows[i]); i++) {
-    // TODO (#2921): this still doesn't handle the row having an inline input.
-    if (!row.hasInlineInput) {
-      if (row.hasStatement) {
-        this.alignStatementRow_(
-            /** @type {Blockly.RenderedConnection} */ (row));
-      } else {
-        var currentWidth = row.width;
-        var desiredWidth = this.width - this.startX;
-        var missingSpace = desiredWidth - currentWidth;
-        if (missingSpace) {
-          this.addAlignmentPadding_(row, missingSpace);
-        }
+    if (row.hasStatement) {
+      this.alignStatementRow_(
+          /** @type {Blockly.RenderedConnection} */ (row));
+    } else {
+      var currentWidth = row.width;
+      var desiredWidth = this.width - this.startX;
+      var missingSpace = desiredWidth - currentWidth;
+      if (missingSpace) {
+        this.addAlignmentPadding_(row, missingSpace);
       }
     }
   }

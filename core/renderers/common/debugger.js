@@ -64,9 +64,9 @@ Blockly.blockRendering.Debug = function() {
 
 Blockly.blockRendering.Debug.getDebugConfig = function() {
   return {
-    // rowSpacers: true,
+     rowSpacers: true,
     // elemSpacers: true,
-    // rows: true,
+     rows: true,
     elems: true,
     // connections: true,
     blockBounds: true,

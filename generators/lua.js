@@ -158,6 +158,20 @@ Blockly.Lua.quote_ = function(string) {
 };
 
 /**
+ * Encode a string as a properly escaped multiline Lua string, complete with
+ * quotes.
+ * @param {string} string Text to encode.
+ * @return {string} Lua string.
+ * @private
+ */
+Blockly.Lua.multiline_quote_ = function(string) {
+  string = string.replace(/\\/g, '\\\\')
+                 .replace(/\n/g, '\\\n')
+                 .replace(/'/g, '\\\'');
+  return '[===' + string + '===]';
+};
+
+/**
  * Common tasks for generating Lua from blocks.
  * Handles comments for the specified block and any connected value blocks.
  * Calls any statements following this block.

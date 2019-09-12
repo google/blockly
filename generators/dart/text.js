@@ -37,6 +37,12 @@ Blockly.Dart['text'] = function(block) {
   return [code, Blockly.Dart.ORDER_ATOMIC];
 };
 
+Blockly.Dart['text_multiline'] = function(block) {
+  // Text value.
+  var code = Blockly.Dart.multiline_quote_(block.getFieldValue('TEXT'));
+  return [code, Blockly.Dart.ORDER_ATOMIC];
+};
+
 Blockly.Dart['text_join'] = function(block) {
   // Create a string made up of any number of elements of any type.
   switch (block.itemCount_) {

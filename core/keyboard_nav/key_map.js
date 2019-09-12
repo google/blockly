@@ -28,6 +28,7 @@
 goog.provide('Blockly.user.keyMap');
 
 goog.require('Blockly.utils.KeyCodes');
+goog.require('Blockly.utils.object');
 
 
 /**
@@ -118,7 +119,7 @@ Blockly.user.keyMap.getKeyByAction = function(action) {
  * @return {!string} A string containing the serialized key event.
  */
 Blockly.user.keyMap.serializeKeyEvent = function(e) {
-  var modifiers = Object.values(Blockly.user.keyMap.modifierKeys);
+  var modifiers = Blockly.utils.object.values(Blockly.user.keyMap.modifierKeys);
   var key = '';
   for (var i = 0, keyName; keyName = modifiers[i]; i++) {
     if (e.getModifierState(keyName)) {
@@ -138,7 +139,7 @@ Blockly.user.keyMap.serializeKeyEvent = function(e) {
  */
 Blockly.user.keyMap.createSerializedKey = function(keyCode, modifiers) {
   var key = '';
-  var validModifiers = Object.values(Blockly.user.keyMap.modifierKeys);
+  var validModifiers = Blockly.utils.object.values(Blockly.user.keyMap.modifierKeys);
   for (var i = 0, keyName; keyName = modifiers[i]; i++) {
     if (validModifiers.indexOf(keyName) > -1) {
       key += keyName;

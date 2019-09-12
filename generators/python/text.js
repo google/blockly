@@ -35,6 +35,12 @@ Blockly.Python['text'] = function(block) {
   return [code, Blockly.Python.ORDER_ATOMIC];
 };
 
+Blockly.Python['text_multiline'] = function(block) {
+  // Text value.
+  var code = Blockly.Python.multiline_quote_(block.getFieldValue('TEXT'));
+  return [code, Blockly.Python.ORDER_ATOMIC];
+};
+
 /**
  * Enclose the provided value in 'str(...)' function.
  * Leave string literals alone.

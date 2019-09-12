@@ -50,3 +50,18 @@ Blockly.utils.object.mixin = function(target, source) {
     target[x] = source[x];
   }
 };
+
+/**
+ * Returns an array of a given object's own enumerable property values.
+ * @param {!Object} obj Object containing values.
+ * @return {!Array} Array of values.
+ */
+Blockly.utils.object.values = function(obj) {
+  if (Object.values) {
+    return Object.values(obj);
+  }
+  // Fallback for IE.
+  return Object.keys(obj).map(function(e) {
+    return obj[e];
+  });
+};

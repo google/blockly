@@ -129,7 +129,7 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
 Blockly.Blocks['lists_create_with'] = {
   /**
    * Block for creating a list with any number of elements of any type.
-   * @this Blockly.Block
+   * @this {Blockly.Block}
    */
   init: function() {
     this.setHelpUrl(Blockly.Msg['LISTS_CREATE_WITH_HELPURL']);
@@ -143,7 +143,7 @@ Blockly.Blocks['lists_create_with'] = {
   /**
    * Create XML to represent list inputs.
    * @return {!Element} XML storage element.
-   * @this Blockly.Block
+   * @this {Blockly.Block}
    */
   mutationToDom: function() {
     var container = Blockly.utils.xml.createElement('mutation');
@@ -153,7 +153,7 @@ Blockly.Blocks['lists_create_with'] = {
   /**
    * Parse XML to restore the list inputs.
    * @param {!Element} xmlElement XML storage element.
-   * @this Blockly.Block
+   * @this {Blockly.Block}
    */
   domToMutation: function(xmlElement) {
     this.itemCount_ = parseInt(xmlElement.getAttribute('items'), 10);
@@ -163,7 +163,7 @@ Blockly.Blocks['lists_create_with'] = {
    * Populate the mutator's dialog with this block's components.
    * @param {!Blockly.Workspace} workspace Mutator's workspace.
    * @return {!Blockly.Block} Root block in mutator.
-   * @this Blockly.Block
+   * @this {Blockly.Block}
    */
   decompose: function(workspace) {
     var containerBlock = workspace.newBlock('lists_create_with_container');
@@ -180,7 +180,7 @@ Blockly.Blocks['lists_create_with'] = {
   /**
    * Reconfigure this block based on the mutator dialog's components.
    * @param {!Blockly.Block} containerBlock Root block in mutator.
-   * @this Blockly.Block
+   * @this {Blockly.Block}
    */
   compose: function(containerBlock) {
     var itemBlock = containerBlock.getInputTargetBlock('STACK');
@@ -208,7 +208,7 @@ Blockly.Blocks['lists_create_with'] = {
   /**
    * Store pointers to any connected child blocks.
    * @param {!Blockly.Block} containerBlock Root block in mutator.
-   * @this Blockly.Block
+   * @this {Blockly.Block}
    */
   saveConnections: function(containerBlock) {
     var itemBlock = containerBlock.getInputTargetBlock('STACK');
@@ -224,7 +224,7 @@ Blockly.Blocks['lists_create_with'] = {
   /**
    * Modify this block to have the correct number of inputs.
    * @private
-   * @this Blockly.Block
+   * @this {Blockly.Block}
    */
   updateShape_: function() {
     if (this.itemCount_ && this.getInput('EMPTY')) {
@@ -253,7 +253,7 @@ Blockly.Blocks['lists_create_with'] = {
 Blockly.Blocks['lists_create_with_container'] = {
   /**
    * Mutator block for list container.
-   * @this Blockly.Block
+   * @this {Blockly.Block}
    */
   init: function() {
     this.setStyle('list_blocks');
@@ -268,7 +268,7 @@ Blockly.Blocks['lists_create_with_container'] = {
 Blockly.Blocks['lists_create_with_item'] = {
   /**
    * Mutator block for adding items.
-   * @this Blockly.Block
+   * @this {Blockly.Block}
    */
   init: function() {
     this.setStyle('list_blocks');
@@ -284,7 +284,7 @@ Blockly.Blocks['lists_create_with_item'] = {
 Blockly.Blocks['lists_indexOf'] = {
   /**
    * Block for finding an item in the list.
-   * @this Blockly.Block
+   * @this {Blockly.Block}
    */
   init: function() {
     var OPERATORS =
@@ -313,7 +313,7 @@ Blockly.Blocks['lists_indexOf'] = {
 Blockly.Blocks['lists_getIndex'] = {
   /**
    * Block for getting element at index.
-   * @this Blockly.Block
+   * @this {Blockly.Block}
    */
   init: function() {
     var MODE =
@@ -411,7 +411,7 @@ Blockly.Blocks['lists_getIndex'] = {
    * Create XML to represent whether the block is a statement or a value.
    * Also represent whether there is an 'AT' input.
    * @return {Element} XML storage element.
-   * @this Blockly.Block
+   * @this {Blockly.Block}
    */
   mutationToDom: function() {
     var container = Blockly.utils.xml.createElement('mutation');
@@ -424,7 +424,7 @@ Blockly.Blocks['lists_getIndex'] = {
   /**
    * Parse XML to restore the 'AT' input.
    * @param {!Element} xmlElement XML storage element.
-   * @this Blockly.Block
+   * @this {Blockly.Block}
    */
   domToMutation: function(xmlElement) {
     // Note: Until January 2013 this block did not have mutations,
@@ -439,7 +439,7 @@ Blockly.Blocks['lists_getIndex'] = {
    * @param {boolean} newStatement True if the block should be a statement.
    *     False if the block should be a value.
    * @private
-   * @this Blockly.Block
+   * @this {Blockly.Block}
    */
   updateStatement_: function(newStatement) {
     var oldStatement = !this.outputConnection;
@@ -460,7 +460,7 @@ Blockly.Blocks['lists_getIndex'] = {
    * Create or delete an input for the numeric index.
    * @param {boolean} isAt True if the input should exist.
    * @private
-   * @this Blockly.Block
+   * @this {Blockly.Block}
    */
   updateAt_: function(isAt) {
     // Destroy old 'AT' and 'ORDINAL' inputs.
@@ -498,7 +498,7 @@ Blockly.Blocks['lists_getIndex'] = {
 Blockly.Blocks['lists_setIndex'] = {
   /**
    * Block for setting the element at index.
-   * @this Blockly.Block
+   * @this {Blockly.Block}
    */
   init: function() {
     var MODE =
@@ -575,7 +575,7 @@ Blockly.Blocks['lists_setIndex'] = {
   /**
    * Create XML to represent whether there is an 'AT' input.
    * @return {Element} XML storage element.
-   * @this Blockly.Block
+   * @this {Blockly.Block}
    */
   mutationToDom: function() {
     var container = Blockly.utils.xml.createElement('mutation');
@@ -586,7 +586,7 @@ Blockly.Blocks['lists_setIndex'] = {
   /**
    * Parse XML to restore the 'AT' input.
    * @param {!Element} xmlElement XML storage element.
-   * @this Blockly.Block
+   * @this {Blockly.Block}
    */
   domToMutation: function(xmlElement) {
     // Note: Until January 2013 this block did not have mutations,
@@ -598,7 +598,7 @@ Blockly.Blocks['lists_setIndex'] = {
    * Create or delete an input for the numeric index.
    * @param {boolean} isAt True if the input should exist.
    * @private
-   * @this Blockly.Block
+   * @this {Blockly.Block}
    */
   updateAt_: function(isAt) {
     // Destroy old 'AT' and 'ORDINAL' input.
@@ -638,7 +638,7 @@ Blockly.Blocks['lists_setIndex'] = {
 Blockly.Blocks['lists_getSublist'] = {
   /**
    * Block for getting sublist.
-   * @this Blockly.Block
+   * @this {Blockly.Block}
    */
   init: function() {
     this['WHERE_OPTIONS_1'] =
@@ -673,7 +673,7 @@ Blockly.Blocks['lists_getSublist'] = {
   /**
    * Create XML to represent whether there are 'AT' inputs.
    * @return {Element} XML storage element.
-   * @this Blockly.Block
+   * @this {Blockly.Block}
    */
   mutationToDom: function() {
     var container = Blockly.utils.xml.createElement('mutation');
@@ -686,7 +686,7 @@ Blockly.Blocks['lists_getSublist'] = {
   /**
    * Parse XML to restore the 'AT' inputs.
    * @param {!Element} xmlElement XML storage element.
-   * @this Blockly.Block
+   * @this {Blockly.Block}
    */
   domToMutation: function(xmlElement) {
     var isAt1 = (xmlElement.getAttribute('at1') == 'true');
@@ -700,7 +700,7 @@ Blockly.Blocks['lists_getSublist'] = {
    * @param {number} n Specify first or second input (1 or 2).
    * @param {boolean} isAt True if the input should exist.
    * @private
-   * @this Blockly.Block
+   * @this {Blockly.Block}
    */
   updateAt_: function(n, isAt) {
     // Create or delete an input for the numeric index.
@@ -748,7 +748,7 @@ Blockly.Blocks['lists_getSublist'] = {
 Blockly.Blocks['lists_sort'] = {
   /**
    * Block for sorting a list.
-   * @this Blockly.Block
+   * @this {Blockly.Block}
    */
   init: function() {
     this.jsonInit({
@@ -788,7 +788,7 @@ Blockly.Blocks['lists_sort'] = {
 Blockly.Blocks['lists_split'] = {
   /**
    * Block for splitting text into a list, or joining a list into text.
-   * @this Blockly.Block
+   * @this {Blockly.Block}
    */
   init: function() {
     // Assign 'this' to a variable for use in the closures below.
@@ -825,7 +825,7 @@ Blockly.Blocks['lists_split'] = {
    * Modify this block to have the correct input and output types.
    * @param {string} newMode Either 'SPLIT' or 'JOIN'.
    * @private
-   * @this Blockly.Block
+   * @this {Blockly.Block}
    */
   updateType_: function(newMode) {
     var mode = this.getFieldValue('MODE');
@@ -853,7 +853,7 @@ Blockly.Blocks['lists_split'] = {
   /**
    * Create XML to represent the input and output types.
    * @return {!Element} XML storage element.
-   * @this Blockly.Block
+   * @this {Blockly.Block}
    */
   mutationToDom: function() {
     var container = Blockly.utils.xml.createElement('mutation');
@@ -863,7 +863,7 @@ Blockly.Blocks['lists_split'] = {
   /**
    * Parse XML to restore the input and output types.
    * @param {!Element} xmlElement XML storage element.
-   * @this Blockly.Block
+   * @this {Blockly.Block}
    */
   domToMutation: function(xmlElement) {
     this.updateType_(xmlElement.getAttribute('mode'));

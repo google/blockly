@@ -170,9 +170,9 @@ Blockly.Field.prototype.clickTarget_ = null;
 
 /**
  * A developer hook to override the returned text of this field.
- * Override if the text representation of the value of this field is not
- * just a string cast of its value. Return null to restort to a string cast.
- * @type {function():?string}
+ * Override if the text representation of the value of this field
+ * is not just a string cast of its value.
+ * @return {?string} Current text. Return null to resort to a string cast.
  * @protected
  */
 Blockly.Field.prototype.getText_;

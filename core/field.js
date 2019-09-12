@@ -57,6 +57,23 @@ Blockly.Field = function(value, opt_validator, opt_config) {
    * @protected
    */
   this.size_ = new Blockly.utils.Size(0, 0);
+
+  /**
+   * Holds the cursors svg element when the cursor is attached to the field.
+   * This is null if there is no cursor on the field.
+   * @type {SVGElement}
+   * @private
+   */
+  this.cursorSvg_ = null;
+
+  /**
+   * Holds the markers svg element when the marker is attached to the field.
+   * This is null if there is no marker on the field.
+   * @type {SVGElement}
+   * @private
+   */
+  this.markerSvg_ = null;
+
   this.setValue(value);
   this.setValidator(opt_validator);
   this.configure_(opt_config);
@@ -912,9 +929,10 @@ Blockly.Field.prototype.onBlocklyAction = function(_action) {
  *     workspace svg group.
  * @package
  */
-Blockly.Field.prototype.setCursorParent = function(cursorSvg) {
+Blockly.Field.prototype.setCursorSvg = function(cursorSvg) {
   if (this.fieldGroup_) {
     this.fieldGroup_.appendChild(cursorSvg);
+    this.cursorSvg_ = cursorSvg;
   }
 };
 
@@ -924,8 +942,9 @@ Blockly.Field.prototype.setCursorParent = function(cursorSvg) {
  *     workspace svg group.
  * @package
  */
-Blockly.Field.prototype.setMarkerParent = function(markerSvg) {
+Blockly.Field.prototype.setMarkerSvg = function(markerSvg) {
   if (this.fieldGroup_) {
     this.fieldGroup_.appendChild(markerSvg);
+    this.markerSvg_ = markerSvg;
   }
 };

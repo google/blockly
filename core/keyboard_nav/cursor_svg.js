@@ -180,7 +180,7 @@ Blockly.CursorSvg.prototype.createDom = function() {
 };
 
 /**
- * Attaches the svg root to the svg element of the parent.
+ * Attaches the svg root of the cursor to the svg group of the parent.
  * @param {!Blockly.Workspace_Svg|!Blockly.Field|!Blockly.BlockSvg} newParent
  *    The workspace, field, or block that the cursor svg element should be
  *    attached to.
@@ -191,9 +191,9 @@ Blockly.CursorSvg.prototype.setParent_ = function(newParent) {
   }
   this.parent_ = newParent;
   if (this.isMarker_) {
-    this.parent_.setMarkerParent(this.getSvgRoot());
+    this.parent_.setMarkerSvg(this.getSvgRoot());
   } else {
-    this.parent_.setCursorParent(this.getSvgRoot());
+    this.parent_.setCursorSvg(this.getSvgRoot());
   }
 };
 

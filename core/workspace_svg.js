@@ -114,14 +114,16 @@ Blockly.WorkspaceSvg = function(options,
       new Blockly.Grid(options.gridPattern, options.gridOptions) : null;
 
   /**
-   * The svg root of the cursor.
+   * Holds the cursors svg element when the cursor is attached to the workspace.
+   * This is null if there is no cursor on the workspace.
    * @type {SVGElement}
    * @private
    */
   this.cursorSvg_ = null;
 
   /**
-   * The svg root of the marker.
+   * Holds the markers svg element when the marker is attached to the workspace.
+   * This is null if there is no marker on the workspace.
    * @type {SVGElement}
    * @private
    */
@@ -419,9 +421,7 @@ Blockly.WorkspaceSvg.prototype.setCursor = function(cursor) {
   }
   this.cursor_ = cursor;
   this.cursor_.setDrawer(new Blockly.CursorSvg(this, false));
-  if (this.svgGroup_) {
-    this.svgGroup_.appendChild(this.cursor_.getDrawer().createDom());
-  }
+  this.setCursorSvg(this.cursor_.getDrawer().createDom());
 };
 
 /**
@@ -435,9 +435,7 @@ Blockly.WorkspaceSvg.prototype.setMarker = function(marker) {
   }
   this.marker_ = marker;
   this.marker_.setDrawer(new Blockly.CursorSvg(this, true));
-  if (this.svgGroup_) {
-    this.svgGroup_.appendChild(this.marker_.getDrawer().createDom());
-  }
+  this.setMarkerSvg(this.marker_.getDrawer().createDom());
 };
 
 /**
@@ -445,7 +443,7 @@ Blockly.WorkspaceSvg.prototype.setMarker = function(marker) {
  * @param {SVGElement} cursorSvg The svg root of the cursor.
  * @package
  */
-Blockly.WorkspaceSvg.prototype.setCursorParent = function(cursorSvg) {
+Blockly.WorkspaceSvg.prototype.setCursorSvg = function(cursorSvg) {
   if (this.svgGroup_) {
     this.svgGroup_.appendChild(cursorSvg);
     this.cursorSvg_ = cursorSvg;
@@ -457,7 +455,7 @@ Blockly.WorkspaceSvg.prototype.setCursorParent = function(cursorSvg) {
  * @param {SVGElement} markerSvg The svg root of the marker.
  * @package
  */
-Blockly.WorkspaceSvg.prototype.setMarkerParent = function(markerSvg) {
+Blockly.WorkspaceSvg.prototype.setMarkerSvg = function(markerSvg) {
   if (this.svgGroup_) {
     if (this.cursorSvg_) {
       this.svgGroup_.insertBefore(markerSvg, this.cursorSvg_);

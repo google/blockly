@@ -109,14 +109,16 @@ Blockly.BlockSvg = function(workspace, prototypeName, opt_id) {
   }
 
   /**
-   * The svg root of the cursor on the block.
+   * Holds the cursors svg element when the cursor is attached to the block.
+   * This is null if there is no cursor on the block.
    * @type {SVGElement}
    * @private
    */
   this.cursorSvg_ = null;
 
   /**
-   * The svg root of the marker on the block.
+   * Holds the markers svg element when the marker is attached to the block.
+   * This is null if there is no marker on the block.
    * @type {SVGElement}
    * @private
    */
@@ -1618,7 +1620,7 @@ Blockly.BlockSvg.prototype.updateConnectionLocations_ = function() {
  *     block.
  * @package
  */
-Blockly.BlockSvg.prototype.setCursorParent = function(cursorSvg) {
+Blockly.BlockSvg.prototype.setCursorSvg = function(cursorSvg) {
   if (this.svgGroup_) {
     this.svgGroup_.appendChild(cursorSvg);
     this.cursorSvg_ = cursorSvg;
@@ -1631,7 +1633,7 @@ Blockly.BlockSvg.prototype.setCursorParent = function(cursorSvg) {
  *     block.
  * @package
  */
-Blockly.BlockSvg.prototype.setMarkerParent = function(markerSvg) {
+Blockly.BlockSvg.prototype.setMarkerSvg = function(markerSvg) {
   if (this.cursorSvg_) {
     this.svgGroup_.insertBefore(markerSvg, this.cursorSvg_);
   } else {

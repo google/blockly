@@ -268,7 +268,7 @@ Blockly.MenuItem.prototype.setEnabled = function(enabled) {
 
 /**
  * Handles click events. If the component is enabled, trigger
- * the action assosiated with this menu item.
+ * the action associated with this menu item.
  * @param {Event} _e Mouse event to handle.
  * @package
  */

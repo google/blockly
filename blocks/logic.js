@@ -483,10 +483,10 @@ Blockly.Constants.Logic.CONTROLS_IF_MUTATOR_MIXIN = {
   },
   /**
    * Reconnects child blocks.
-   * @param {!Array<?Blockly.RenderedConnection>} valueConnections List of value
-   * connectsions for if input.
-   * @param {!Array<?Blockly.RenderedConnection>} statementConnections List of
-   * statement connections for do input.
+   * @param {!Array.<?Blockly.RenderedConnection>} valueConnections List of
+   * value connections for 'if' input.
+   * @param {!Array.<?Blockly.RenderedConnection>} statementConnections List of
+   * statement connections for 'do' input.
    * @param {?Blockly.RenderedConnection} elseStatementConnection Statement
    * connection for else input.
    * @this {Blockly.Block}

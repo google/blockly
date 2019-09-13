@@ -679,7 +679,7 @@ Blockly.checkBlockColourConstants = function() {
  * Checks for a constant in the Blockly namespace, verifying it is undefined or
  * has the old/original value. Prints a warning if this is not true.
  * @param {string} msgName The Msg constant identifier.
- * @param {Array<string>} blocklyNamePath The name parts of the tested
+ * @param {Array.<string>} blocklyNamePath The name parts of the tested
  *     constant.
  * @param {number|undefined} expectedValue The expected value of the constant.
  * @private

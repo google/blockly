@@ -208,7 +208,7 @@ Blockly.Block = function(workspace, prototypeName, opt_id) {
 };
 
 /**
- * Optional text data that round-trips beween blocks and XML.
+ * Optional text data that round-trips between blocks and XML.
  * Has no effect. May be used by 3rd parties for meta information.
  * @type {?string}
  */

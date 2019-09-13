@@ -94,6 +94,8 @@ Blockly.blockRendering.init = function(name) {
     throw Error('Renderer not registered: ', name);
   }
   /**
+   * Wrap the renderer constructor into a temporary constructor
+   * function so the closure compiler treats it as a constructor.
    * @constructor
    * @extends {Blockly.blockRendering.Renderer}
    */
@@ -102,8 +104,8 @@ Blockly.blockRendering.init = function(name) {
   };
   Blockly.utils.object.inherits(rendererCtor,
       Blockly.blockRendering.rendererMap_[name]);
-  Blockly.blockRendering.renderer = new rendererCtor();
-  Blockly.blockRendering.renderer.init();
+  Blockly.blockRendering.renderer_ = new rendererCtor();
+  Blockly.blockRendering.renderer_.init();
 };
 
 /**
@@ -113,7 +115,7 @@ Blockly.blockRendering.init = function(name) {
  * @public
  */
 Blockly.blockRendering.render = function(block) {
-  Blockly.blockRendering.renderer.render(block);
+  Blockly.blockRendering.renderer_.render(block);
 };
 
 /**
@@ -121,7 +123,7 @@ Blockly.blockRendering.render = function(block) {
  * @return {Blockly.blockRendering.Renderer} The current renderer.
  */
 Blockly.blockRendering.getRenderer = function() {
-  return Blockly.blockRendering.renderer;
+  return Blockly.blockRendering.renderer_;
 };
 
 /**
@@ -129,5 +131,5 @@ Blockly.blockRendering.getRenderer = function() {
  * @return {Blockly.blockRendering.ConstantProvider} The constant provider.
  */
 Blockly.blockRendering.getConstants = function() {
-  return Blockly.blockRendering.renderer.constants;
+  return Blockly.blockRendering.renderer_.constants;
 };

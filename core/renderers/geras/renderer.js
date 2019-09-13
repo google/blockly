@@ -47,6 +47,12 @@ Blockly.geras.Renderer = function() {
   this.renderInfo = Blockly.geras.RenderInfo;
   this.drawer = Blockly.geras.Drawer;
   this.debugger = Blockly.blockRendering.Debug;
+
+  /**
+   * The renderer's highlight constant provider.
+   * @type {Blockly.geras.HighlightConstantProvider}
+   */
+  this.highlightConstants_ = null;
 };
 Blockly.utils.object.inherits(Blockly.geras.Renderer,
     Blockly.blockRendering.Renderer);
@@ -58,18 +64,17 @@ Blockly.utils.object.inherits(Blockly.geras.Renderer,
  */
 Blockly.geras.Renderer.prototype.init = function() {
   Blockly.geras.Renderer.superClass_.init.call(this);
-  this.highlightConstants = new Blockly.geras.HighlightConstantProvider();
+  this.highlightConstants_ = new Blockly.geras.HighlightConstantProvider();
 };
 
 /**
- * Initialize the renderer.  Geras has a highlight provider in addition to
- * the normal constant provider.
+ * Get the renderer's highlight constant provider.
  * @return {Blockly.geras.HighlightConstantProvider} The highlight constant
  *     provider.
  * @package
  */
 Blockly.geras.Renderer.prototype.getHighlightConstants = function() {
-  return Blockly.blockRendering.renderer.highlightConstants;
+  return this.highlightConstants_;
 };
 
 Blockly.blockRendering.register('geras', Blockly.geras.Renderer);

@@ -48,6 +48,7 @@ Blockly.utils.object.inherits(Blockly.thrasos.Renderer,
  * @param {!Blockly.BlockSvg} block The block to measure.
  * @return {!Blockly.thrasos.RenderInfo} The render info object.
  * @protected
+ * @override
  */
 Blockly.thrasos.Renderer.prototype.makeRenderInfo_ = function(block) {
   return new Blockly.thrasos.RenderInfo(this, block);

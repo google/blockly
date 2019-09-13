@@ -50,6 +50,7 @@ Blockly.utils.object.inherits(Blockly.zelos.Renderer,
  * Create a new instance of the renderer's constant provider.
  * @return {!Blockly.zelos.ConstantProvider} The constant provider.
  * @protected
+ * @override
  */
 Blockly.zelos.Renderer.prototype.makeConstants_ = function() {
   return new Blockly.zelos.ConstantProvider();
@@ -60,6 +61,7 @@ Blockly.zelos.Renderer.prototype.makeConstants_ = function() {
  * @param {!Blockly.BlockSvg} block The block to measure.
  * @return {!Blockly.zelos.RenderInfo} The render info object.
  * @protected
+ * @override
  */
 Blockly.zelos.Renderer.prototype.makeRenderInfo_ = function(block) {
   return new Blockly.zelos.RenderInfo(this, block);
@@ -72,6 +74,7 @@ Blockly.zelos.Renderer.prototype.makeRenderInfo_ = function(block) {
  *   information needed to render this block.
  * @return {!Blockly.zelos.Drawer} The drawer.
  * @protected
+ * @override
  */
 Blockly.zelos.Renderer.prototype.makeDrawer_ = function(block, info) {
   return new Blockly.zelos.Drawer(block,

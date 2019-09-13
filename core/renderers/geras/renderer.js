@@ -57,6 +57,7 @@ Blockly.utils.object.inherits(Blockly.geras.Renderer,
  * Initialize the renderer.  Geras has a highlight provider in addition to
  * the normal constant provider.
  * @package
+ * @override
  */
 Blockly.geras.Renderer.prototype.init = function() {
   Blockly.geras.Renderer.superClass_.init.call(this);
@@ -68,6 +69,7 @@ Blockly.geras.Renderer.prototype.init = function() {
  * @param {!Blockly.BlockSvg} block The block to measure.
  * @return {!Blockly.geras.RenderInfo} The render info object.
  * @protected
+ * @override
  */
 Blockly.geras.Renderer.prototype.makeRenderInfo_ = function(block) {
   return new Blockly.geras.RenderInfo(this, block);
@@ -80,6 +82,7 @@ Blockly.geras.Renderer.prototype.makeRenderInfo_ = function(block) {
  *   information needed to render this block.
  * @return {!Blockly.geras.Drawer} The drawer.
  * @protected
+ * @override
  */
 Blockly.geras.Renderer.prototype.makeDrawer_ = function(block, info) {
   return new Blockly.geras.Drawer(block,

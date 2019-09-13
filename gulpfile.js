@@ -411,6 +411,8 @@ gulp.task('typings', function (cb) {
     "core/components/tree",
     "core/components/menu",
     "core/keyboard_nav",
+    "core/renderers/common",
+    "core/renderers/measurables",
     "core/theme",
     "core/utils",
     "msg/"
@@ -449,6 +451,8 @@ gulp.task('typings', function (cb) {
     `${tmpDir}/core/components/tree/**`,
     `${tmpDir}/core/components/menu/**`,
     `${tmpDir}/core/keyboard_nav/**`,
+    `${tmpDir}/core/renderers/common/**`,
+    `${tmpDir}/core/renderers/measurables/**`,
     `${tmpDir}/core/utils/**`,
     `${tmpDir}/core/theme/**`,
     `${tmpDir}/msg/**`

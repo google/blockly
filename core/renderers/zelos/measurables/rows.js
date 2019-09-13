@@ -157,7 +157,7 @@ Blockly.zelos.BottomRow.prototype.hasRightSquareCorner = function(block) {
  */
 Blockly.zelos.BeforeStatementSpacerRow = function(constants, height, width) {
   Blockly.zelos.BeforeStatementSpacerRow.superClass_.constructor.call(
-      this, height, width);
+      this, constants, height, width);
   this.type |=
       Blockly.blockRendering.Types.getType('BEFORE_STATEMENT_SPACER_ROW');
 };

@@ -212,7 +212,7 @@ class Gen_compressed(threading.Thread):
 
     # Read in all the source files.
     filenames = calcdeps.CalculateDependencies(self.search_paths,
-        [os.path.join("core", "blockly.js")])
+        [os.path.join("core", "requires.js")])
     filenames.sort()  # Deterministic build.
     for filename in filenames:
       # Filter out the Closure files (the compiler will add them).

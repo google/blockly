@@ -476,7 +476,7 @@ BlockDefinitionExtractor.buildFieldDropdown_ = function(dropdown) {
   } else if (Array.isArray(menuGenerator)) {
     var options = menuGenerator;
   } else {
-    throw new Error('Unrecognized type of menuGenerator: ' + menuGenerator);
+    throw Error('Unrecognized type of menuGenerator: ' + menuGenerator);
   }
 
   var fieldDropdown = BlockDefinitionExtractor.newDomElement_(

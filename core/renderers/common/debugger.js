@@ -54,24 +54,20 @@ Blockly.blockRendering.Debug = function() {
    * @type {SVGElement}
    */
   this.svgRoot_ = null;
-
-  /**
-   * @type {Object} Configuration object containing booleans to enable and
-   *     disable debug rendering of specific rendering components.
-   */
-  this.config_ = Blockly.blockRendering.Debug.getDebugConfig();
 };
 
-Blockly.blockRendering.Debug.getDebugConfig = function() {
-  return {
-    // rowSpacers: true,
-    // elemSpacers: true,
-    // rows: true,
-    elems: true,
-    // connections: true,
-    blockBounds: true,
-    // connectedBlockBounds: true
-  };
+/**
+ * @type {!Object.<string, boolean>} Configuration object containing booleans
+ *    to enable and disable debug rendering of specific rendering components.
+ */
+Blockly.blockRendering.Debug.config = {
+  rowSpacers: true,
+  elemSpacers: true,
+  rows: true,
+  elems: true,
+  connections: true,
+  blockBounds: true,
+  connectedBlockBounds: true
 };
 
 /**
@@ -94,7 +90,7 @@ Blockly.blockRendering.Debug.prototype.clearElems = function() {
  * @package
  */
 Blockly.blockRendering.Debug.prototype.drawSpacerRow = function(row, cursorY, isRtl) {
-  if (!this.config_.rowSpacers) {
+  if (!Blockly.blockRendering.Debug.config.rowSpacers) {
     return;
   }
 
@@ -121,7 +117,7 @@ Blockly.blockRendering.Debug.prototype.drawSpacerRow = function(row, cursorY, is
  * @package
  */
 Blockly.blockRendering.Debug.prototype.drawSpacerElem = function(elem, rowHeight, isRtl) {
-  if (!this.config_.elemSpacers) {
+  if (!Blockly.blockRendering.Debug.config.elemSpacers) {
     return;
   }
 
@@ -153,7 +149,7 @@ Blockly.blockRendering.Debug.prototype.drawSpacerElem = function(elem, rowHeight
  * @package
  */
 Blockly.blockRendering.Debug.prototype.drawRenderedElem = function(elem, isRtl) {
-  if (this.config_.elems) {
+  if (Blockly.blockRendering.Debug.config.elems) {
     var xPos = elem.xPos;
     if (isRtl) {
       xPos = -(xPos + elem.width);
@@ -174,7 +170,8 @@ Blockly.blockRendering.Debug.prototype.drawRenderedElem = function(elem, isRtl) 
   }
 
 
-  if (Blockly.blockRendering.Types.isInput(elem) && this.config_.connections) {
+  if (Blockly.blockRendering.Types.isInput(elem) &&
+      Blockly.blockRendering.Debug.config.connections) {
     this.drawConnection(elem.connection);
   }
 };
@@ -187,7 +184,7 @@ Blockly.blockRendering.Debug.prototype.drawRenderedElem = function(elem, isRtl) 
  * @package
  */
 Blockly.blockRendering.Debug.prototype.drawConnection = function(conn) {
-  if (!this.config_.connections) {
+  if (!Blockly.blockRendering.Debug.config.connections) {
     return;
   }
 
@@ -231,7 +228,7 @@ Blockly.blockRendering.Debug.prototype.drawConnection = function(conn) {
  * @package
  */
 Blockly.blockRendering.Debug.prototype.drawRenderedRow = function(row, cursorY, isRtl) {
-  if (!this.config_.rows) {
+  if (!Blockly.blockRendering.Debug.config.rows) {
     return;
   }
   this.debugElements_.push(Blockly.utils.dom.createSvgElement('rect',
@@ -251,7 +248,7 @@ Blockly.blockRendering.Debug.prototype.drawRenderedRow = function(row, cursorY, 
     return;
   }
 
-  if (this.config_.connectedBlockBounds) {
+  if (Blockly.blockRendering.Debug.config.connectedBlockBounds) {
     this.debugElements_.push(Blockly.utils.dom.createSvgElement('rect',
         {
           'class': 'connectedBlockWidth blockRenderDebug',
@@ -293,7 +290,7 @@ Blockly.blockRendering.Debug.prototype.drawRowWithElements = function(row, curso
  * @package
  */
 Blockly.blockRendering.Debug.prototype.drawBoundingBox = function(info) {
-  if (!this.config_.blockBounds) {
+  if (!Blockly.blockRendering.Debug.config.blockBounds) {
     return;
   }
   // Bounding box without children.
@@ -313,7 +310,7 @@ Blockly.blockRendering.Debug.prototype.drawBoundingBox = function(info) {
       },
       this.svgRoot_));
 
-  if (this.config_.connectedBlockBounds) {
+  if (Blockly.blockRendering.Debug.config.connectedBlockBounds) {
     // Bounding box with children.
     xPos = info.RTL ? -info.widthWithChildren : 0;
     this.debugElements_.push(Blockly.utils.dom.createSvgElement('rect',

@@ -114,7 +114,9 @@ Blockly.FieldNumber.prototype.SERIALIZABLE = true;
  */
 Blockly.FieldNumber.prototype.configure_ = function(config) {
   Blockly.FieldNumber.superClass_.configure_.call(this, config);
-  this.setConstraints(config['min'], config['max'], config['precision']);
+  this.setMinInternal_(config['min']);
+  this.setMaxInternal_(config['max']);
+  this.setPrecisionInternal_(config['precision']);
 };
 
 /**
@@ -129,29 +131,9 @@ Blockly.FieldNumber.prototype.configure_ = function(config) {
  * @param {number|string|undefined} precision Precision for value.
  */
 Blockly.FieldNumber.prototype.setConstraints = function(min, max, precision) {
-  min = Number(min);
-  if (!isNaN(min)) {
-    this.min_ = min;
-  }
-  max = Number(max);
-  if (!isNaN(max)) {
-    this.max_ = max;
-  }
-  precision = Number(precision);
-  if (!isNaN(precision)) {
-    this.precision_ = precision;
-  }
-
-  var precisionString = this.precision_.toString();
-  var decimalIndex = precisionString.indexOf('.');
-  if (decimalIndex == -1) {
-    // If the precision is 0 (float) allow any number of decimals,
-    // otherwise allow none.
-    this.decimalPlaces_ = precision ? 0 : null;
-  } else {
-    this.decimalPlaces_ = precisionString.length - decimalIndex - 1;
-  }
-
+  this.setMinInternal_(min);
+  this.setMaxInternal_(max);
+  this.setPrecisionInternal_(precision);
   this.setValue(this.getValue());
 };
 
@@ -166,6 +148,113 @@ Blockly.FieldNumber.prototype.getConstraints = function() {
     max: this.max_,
     precision: this.precision_
   };
+};
+
+/**
+ * Sets the minimum value this field can contain. Updates the value to reflect.
+ * @param {number|string|undefined} min Minimum value.
+ */
+Blockly.FieldNumber.prototype.setMin = function(min) {
+  this.setMinInternal_(min);
+  this.setValue(this.getValue());
+};
+
+/**
+ * Sets the minimum value this field can contain. Called internally to avoid
+ * value updates.
+ * @param {number|string|undefined} min Minimum value.
+ * @private
+ */
+Blockly.FieldNumber.prototype.setMinInternal_ = function(min) {
+  min = Number(min);
+  if (!isNaN(min)) {
+    this.min_ = min;
+  }
+};
+
+/**
+ * Returns the current minimum value this field can contain. Default is
+ * -Infinity.
+ * @return {number} The current minimum value this field can contain.
+ */
+Blockly.FieldNumber.prototype.getMin = function() {
+  return this.min_;
+};
+
+/**
+ * Sets the maximum value this field can contain. Updates the value to reflect.
+ * @param {number|string|undefined} max Maximum value.
+ */
+Blockly.FieldNumber.prototype.setMax = function(max) {
+  this.setMaxInternal_(max);
+  this.setValue(this.getValue());
+};
+
+/**
+ * Sets the maximum value this field can contain. Called internally to avoid
+ * value updates.
+ * @param {number|string|undefined} max Maximum value.
+ * @private
+ */
+Blockly.FieldNumber.prototype.setMaxInternal_ = function(max) {
+  max = Number(max);
+  if (!isNaN(max)) {
+    this.max_ = max;
+  }
+};
+
+/**
+ * Returns the current maximum value this field can contain. Default is
+ * Infinity.
+ * @return {number} The current maximum value this field can contain.
+ */
+Blockly.FieldNumber.prototype.getMax = function() {
+  return this.max_;
+};
+
+/**
+ * Sets the precision of this field's value, i.e. the number to which the
+ * value is rounded. Updates the field to reflect.
+ * @param {number|string|undefined} precision The number to which the
+ *    field's value is rounded.
+ */
+Blockly.FieldNumber.prototype.setPrecision = function(precision) {
+  this.setPrecisionInternal_(precision);
+  this.setValue(this.getValue());
+};
+
+/**
+ * Sets the precision of this field's value. Called internally to avoid
+ * value updates.
+ * @param {number|string|undefined} precision The number to which the
+ *    field's value is rounded.
+ * @private
+ */
+Blockly.FieldNumber.prototype.setPrecisionInternal_ = function(precision) {
+  precision = Number(precision);
+  if (!isNaN(precision)) {
+    this.precision_ = precision;
+  }
+
+  var precisionString = this.precision_.toString();
+  var decimalIndex = precisionString.indexOf('.');
+  if (decimalIndex == -1) {
+    // If the precision is 0 (float) allow any number of decimals,
+    // otherwise allow none.
+    this.decimalPlaces_ = precision ? 0 : null;
+  } else {
+    this.decimalPlaces_ = precisionString.length - decimalIndex - 1;
+  }
+};
+
+/**
+ * Returns the current precision of this field. The precision being the
+ * number to which the field's value is rounded. A precision of 0 means that
+ * the value is not rounded.
+ * @return {number} The number to which this field's value is rounded.
+ */
+Blockly.FieldNumber.prototype.getPrecision = function() {
+  return this.precision_;
 };
 
 /**

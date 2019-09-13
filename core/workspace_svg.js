@@ -126,7 +126,7 @@ Blockly.WorkspaceSvg = function(options,
         Blockly.Procedures.flyoutCategory);
   }
 
-  Blockly.blockRendering.init(this.options.renderer);
+  Blockly.blockRendering.init(this.options.renderer || 'geras');
 };
 Blockly.utils.object.inherits(Blockly.WorkspaceSvg, Blockly.Workspace);
 

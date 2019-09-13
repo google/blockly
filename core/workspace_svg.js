@@ -126,7 +126,12 @@ Blockly.WorkspaceSvg = function(options,
         Blockly.Procedures.flyoutCategory);
   }
 
-  Blockly.blockRendering.init(this.options.renderer || 'geras');
+  /**
+   * The block renderer used for rendering blocks on this workspace.
+   * @type {!Blockly.blockRendering.Renderer}
+   * @private
+   */
+  this.renderer_ = Blockly.blockRendering.init(this.options.renderer || 'geras');
 };
 Blockly.utils.object.inherits(Blockly.WorkspaceSvg, Blockly.Workspace);
 
@@ -394,6 +399,14 @@ Blockly.WorkspaceSvg.prototype.inverseScreenCTM_ = null;
  * @private
  */
 Blockly.WorkspaceSvg.prototype.inverseScreenCTMDirty_ = true;
+
+/**
+ * Get the block renderer attached to this workspace.
+ * @return {!Blockly.blockRendering.Renderer} The renderer attached to this workspace.
+ */
+Blockly.WorkspaceSvg.prototype.getRenderer = function() {
+  return this.renderer_;
+};
 
 /**
  * Sets the cursor for use with keyboard navigation.

@@ -27,9 +27,6 @@
 goog.provide('Blockly.thrasos.Renderer');
 
 goog.require('Blockly.blockRendering');
-goog.require('Blockly.blockRendering.ConstantProvider');
-goog.require('Blockly.blockRendering.Debug');
-goog.require('Blockly.blockRendering.Drawer');
 goog.require('Blockly.blockRendering.Renderer');
 goog.require('Blockly.thrasos.RenderInfo');
 goog.require('Blockly.utils.object');
@@ -41,12 +38,21 @@ goog.require('Blockly.utils.object');
  * @extends {Blockly.blockRendering.Renderer}
  */
 Blockly.thrasos.Renderer = function() {
-  this.constantProvider = Blockly.blockRendering.ConstantProvider;
-  this.renderInfo = Blockly.thrasos.RenderInfo;
-  this.drawer = Blockly.blockRendering.Drawer;
-  this.debugger = Blockly.blockRendering.Debug;
+  Blockly.thrasos.Renderer.superClass_.constructor.call(this);
 };
 Blockly.utils.object.inherits(Blockly.thrasos.Renderer,
     Blockly.blockRendering.Renderer);
+
+/**
+ * Create a new instance of the renderer's render info object.
+ * @param {!Blockly.BlockSvg} block The block to measure.
+ * @return {!Blockly.thrasos.RenderInfo} The render info object.
+ * @protected
+ * @override
+ */
+Blockly.thrasos.Renderer.prototype.makeRenderInfo_ = function(block) {
+  return new Blockly.thrasos.RenderInfo(this, block);
+};
+
 
 Blockly.blockRendering.register('thrasos', Blockly.thrasos.Renderer);

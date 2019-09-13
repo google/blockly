@@ -57,31 +57,40 @@ goog.require('Blockly.zelos.TopRow');
  * may choose to rerender when getSize() is called).  However, calling it
  * repeatedly may be expensive.
  *
+ * @param {!Blockly.zelos.Renderer} renderer The renderer in use.
  * @param {!Blockly.BlockSvg} block The block to measure.
  * @constructor
  * @package
  * @extends {Blockly.blockRendering.RenderInfo}
  */
-Blockly.zelos.RenderInfo = function(block) {
-  Blockly.zelos.RenderInfo.superClass_.constructor.call(this, block);
+Blockly.zelos.RenderInfo = function(renderer, block) {
+  Blockly.zelos.RenderInfo.superClass_.constructor.call(this, renderer, block);
 
   /**
    * An object with rendering information about the top row of the block.
    * @type {!Blockly.zelos.TopRow}
    * @override
    */
-  this.topRow = new Blockly.zelos.TopRow();
+  this.topRow = new Blockly.zelos.TopRow(this.constants_);
 
   /**
    * An object with rendering information about the bottom row of the block.
    * @type {!Blockly.zelos.BottomRow}
    * @override
    */
-  this.bottomRow = new Blockly.zelos.BottomRow();
+  this.bottomRow = new Blockly.zelos.BottomRow(this.constants_);
 };
 Blockly.utils.object.inherits(Blockly.zelos.RenderInfo,
     Blockly.blockRendering.RenderInfo);
 
+/**
+ * Get the block renderer in use.
+ * @return {!Blockly.zelos.Renderer} The block renderer in use.
+ * @package
+ */
+Blockly.zelos.RenderInfo.prototype.getRenderer = function() {
+  return /** @type {!Blockly.zelos.Renderer} */ (this.renderer_);
+};
 
 /**
  * @override
@@ -242,15 +251,18 @@ Blockly.zelos.RenderInfo.prototype.makeSpacerRow_ = function(prev, next) {
   if (Blockly.blockRendering.Types.isInputRow(next) && next.hasStatement) {
     var spacer =
         new Blockly.zelos.BeforeStatementSpacerRow(
+            this.constants_,
             Math.max(height, this.constants_.INSIDE_CORNERS.rightHeight || 0),
             width);
   } else if (Blockly.blockRendering.Types.isInputRow(prev) && prev.hasStatement) {
     var spacer =
         new Blockly.zelos.AfterStatementSpacerRow(
+            this.constants_,
             Math.max(height, this.constants_.INSIDE_CORNERS.rightHeight || 0),
             width);
   } else {
-    var spacer = new Blockly.blockRendering.SpacerRow(height, width);
+    var spacer = new Blockly.blockRendering.SpacerRow(
+        this.constants_, height, width);
   }
   if (prev.hasStatement) {
     spacer.followsStatement = true;

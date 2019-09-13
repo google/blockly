@@ -52,7 +52,13 @@ Blockly.blockRendering.Drawer = function(block, info) {
   this.topLeft_ = block.getRelativeToSurfaceXY();
   this.outlinePath_ = '';
   this.inlinePath_ = '';
-  this.constants_ = Blockly.blockRendering.getConstants();
+
+  /**
+   * The renderer's constant provider.
+   * @type {!Blockly.blockRendering.ConstantProvider}
+   * @protected
+   */
+  this.constants_ = info.getRenderer().getConstants();
 };
 
 /**

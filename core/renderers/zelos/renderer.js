@@ -27,7 +27,6 @@
 goog.provide('Blockly.zelos.Renderer');
 
 goog.require('Blockly.blockRendering');
-goog.require('Blockly.blockRendering.Debug');
 goog.require('Blockly.blockRendering.Renderer');
 goog.require('Blockly.utils.object');
 goog.require('Blockly.zelos.ConstantProvider');
@@ -42,12 +41,44 @@ goog.require('Blockly.zelos.RenderInfo');
  * @extends {Blockly.blockRendering.Renderer}
  */
 Blockly.zelos.Renderer = function() {
-  this.constantProvider = Blockly.zelos.ConstantProvider;
-  this.renderInfo = Blockly.zelos.RenderInfo;
-  this.drawer = Blockly.zelos.Drawer;
-  this.debugger = Blockly.blockRendering.Debug;
+  Blockly.zelos.Renderer.superClass_.constructor.call(this);
 };
 Blockly.utils.object.inherits(Blockly.zelos.Renderer,
     Blockly.blockRendering.Renderer);
+
+/**
+ * Create a new instance of the renderer's constant provider.
+ * @return {!Blockly.zelos.ConstantProvider} The constant provider.
+ * @protected
+ * @override
+ */
+Blockly.zelos.Renderer.prototype.makeConstants_ = function() {
+  return new Blockly.zelos.ConstantProvider();
+};
+
+/**
+ * Create a new instance of the renderer's render info object.
+ * @param {!Blockly.BlockSvg} block The block to measure.
+ * @return {!Blockly.zelos.RenderInfo} The render info object.
+ * @protected
+ * @override
+ */
+Blockly.zelos.Renderer.prototype.makeRenderInfo_ = function(block) {
+  return new Blockly.zelos.RenderInfo(this, block);
+};
+
+/**
+ * Create a new instance of the renderer's drawer.
+ * @param {!Blockly.BlockSvg} block The block to render.
+ * @param {!Blockly.blockRendering.RenderInfo} info An object containing all
+ *   information needed to render this block.
+ * @return {!Blockly.zelos.Drawer} The drawer.
+ * @protected
+ * @override
+ */
+Blockly.zelos.Renderer.prototype.makeDrawer_ = function(block, info) {
+  return new Blockly.zelos.Drawer(block,
+      /** @type {!Blockly.zelos.RenderInfo} */ (info));
+};
 
 Blockly.blockRendering.register('zelos', Blockly.zelos.Renderer);

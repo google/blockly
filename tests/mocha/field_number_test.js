@@ -404,7 +404,7 @@ suite('Number Fields', function() {
             undefined, -1, undefined, undefined, undefined, {
               min: -10
             });
-        assertNumberField(field, -10, Infinity, 0, 0);
+        assertNumberField(field, -1, Infinity, 0, 0);
       });
     });
     suite('Max', function() {
@@ -435,7 +435,7 @@ suite('Number Fields', function() {
             undefined, undefined, 1, undefined, undefined, {
               max: 10
             });
-        assertNumberField(field, -Infinity, 10, 0, 0);
+        assertNumberField(field, -Infinity, 1, 0, 0);
       });
     });
     suite('Precision', function() {
@@ -466,7 +466,7 @@ suite('Number Fields', function() {
             undefined, undefined, undefined, .5, undefined, {
               precision: 1
             });
-        assertNumberField(field, -Infinity, Infinity, 1, 0);
+        assertNumberField(field, -Infinity, Infinity, .5, 0);
       });
     });
   });

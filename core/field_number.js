@@ -138,19 +138,6 @@ Blockly.FieldNumber.prototype.setConstraints = function(min, max, precision) {
 };
 
 /**
- * Returns the value constraints on this number field.
- * @return {{min: number, max: number, precision: number}} The constraints
- *    on the number field.
- */
-Blockly.FieldNumber.prototype.getConstraints = function() {
-  return {
-    min: this.min_,
-    max: this.max_,
-    precision: this.precision_
-  };
-};
-
-/**
  * Sets the minimum value this field can contain. Updates the value to reflect.
  * @param {number|string|undefined} min Minimum value.
  */

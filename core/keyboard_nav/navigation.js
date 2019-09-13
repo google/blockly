@@ -48,7 +48,7 @@ Blockly.navigation.currentCategory_ = null;
  * Null by default.
  * The first argument is one of 'log', 'warn', and 'error'.
  * The second argument is the message.
- * @type {function(string, string)}
+ * @type {?function(string, string)}
  * @public
  */
 Blockly.navigation.loggingCallback = null;
@@ -396,7 +396,7 @@ Blockly.navigation.modifyWarn_ = function() {
  */
 Blockly.navigation.moveBlockToWorkspace_ = function(block, wsNode) {
   if (block.isShadow()) {
-    Blockly.navigation.warn('Cannot move a shadow block to the workspace.');
+    Blockly.navigation.warn_('Cannot move a shadow block to the workspace.');
     return false;
   }
   if (block.getParent()) {
@@ -453,7 +453,7 @@ Blockly.navigation.disconnectChild_ = function(movingConnection, destConnection)
   var destBlock = destConnection.getSourceBlock();
 
   if (movingBlock.getRootBlock() == destBlock.getRootBlock()) {
-    if (movingBlock.getDescendants().indexOf(destBlock) > -1) {
+    if (movingBlock.getDescendants(false).indexOf(destBlock) > -1) {
       Blockly.navigation.getInferiorConnection_(destConnection).disconnect();
     } else {
       Blockly.navigation.getInferiorConnection_(movingConnection).disconnect();
@@ -725,7 +725,6 @@ Blockly.navigation.getSourceBlock_ = function(node) {
 /**
  * Before a block is deleted move the cursor to the appropriate position.
  * @param {!Blockly.Block} deletedBlock The block that is being deleted.
- * @private
  */
 Blockly.navigation.moveCursorOnBlockDelete = function(deletedBlock) {
   if (!Blockly.getMainWorkspace()) {
@@ -779,7 +778,7 @@ Blockly.navigation.moveCursorOnBlockMutation = function(mutatedBlock) {
 
 /**
  * Handler for all the keyboard navigation events.
- * @param {Event} e The keyboard event.
+ * @param {!Event} e The keyboard event.
  * @return {boolean} True if the key was handled false otherwise.
  */
 Blockly.navigation.onKeyPress = function(e) {

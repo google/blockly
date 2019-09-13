@@ -111,7 +111,7 @@ Blockly.BlockSvg = function(workspace, prototypeName, opt_id) {
   /**
    * Holds the cursors svg element when the cursor is attached to the block.
    * This is null if there is no cursor on the block.
-   * @type {SVGElement}
+   * @type {Element}
    * @private
    */
   this.cursorSvg_ = null;
@@ -119,7 +119,7 @@ Blockly.BlockSvg = function(workspace, prototypeName, opt_id) {
   /**
    * Holds the markers svg element when the marker is attached to the block.
    * This is null if there is no marker on the block.
-   * @type {SVGElement}
+   * @type {Element}
    * @private
    */
   this.markerSvg_ = null;
@@ -1616,7 +1616,7 @@ Blockly.BlockSvg.prototype.updateConnectionLocations_ = function() {
 
 /**
  * Add the cursor svg to this block's svg group.
- * @param {SVGElement} cursorSvg The svg root of the cursor to be added to the
+ * @param {Element} cursorSvg The svg root of the cursor to be added to the
  *     block svg group.
  * @package
  */
@@ -1634,7 +1634,7 @@ Blockly.BlockSvg.prototype.setCursorSvg = function(cursorSvg) {
 
 /**
  * Add the marker svg to this block's svg group.
- * @param {SVGElement} markerSvg The svg root of the marker to be added to the
+ * @param {Element} markerSvg The svg root of the marker to be added to the
  *     block svg group.
  * @package
  */

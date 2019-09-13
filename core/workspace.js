@@ -120,16 +120,14 @@ Blockly.Workspace = function(opt_options) {
   /**
    * The cursor used to navigate around the AST for keyboard navigation.
    * @type {Blockly.Cursor}
-   * @private
    */
-  this.cursor_ = null;
+  this.cursor = null;
 
   /**
    * The marker used to mark a location for keyboard navigation.
    * @type {Blockly.MarkerCursor}
-   * @private
    */
-  this.marker_ = null;
+  this.marker = null;
 
   // Set the default theme. This is for headless workspaces. This will get
   // overwritten by the theme passed into the inject call for rendered workspaces.
@@ -174,7 +172,7 @@ Blockly.Workspace.prototype.connectionDBList = null;
  *     AST for keyboard navigation.
  */
 Blockly.Workspace.prototype.setCursor = function(cursor) {
-  this.cursor_ = cursor;
+  this.cursor = cursor;
 };
 
 /**
@@ -183,7 +181,7 @@ Blockly.Workspace.prototype.setCursor = function(cursor) {
  *     keyboard navigation.
  */
 Blockly.Workspace.prototype.setMarker = function(marker) {
-  this.marker_ = marker;
+  this.marker = marker;
 };
 
 /**
@@ -191,7 +189,7 @@ Blockly.Workspace.prototype.setMarker = function(marker) {
  * @return {Blockly.Cursor} The cursor for this workspace.
  */
 Blockly.Workspace.prototype.getCursor = function() {
-  return this.cursor_;
+  return this.cursor;
 };
 
 /**
@@ -199,7 +197,7 @@ Blockly.Workspace.prototype.getCursor = function() {
  * @return {Blockly.MarkerCursor} the marker for this workspace.
  */
 Blockly.Workspace.prototype.getMarker = function() {
-  return this.marker_;
+  return this.marker;
 };
 
 

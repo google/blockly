@@ -26,6 +26,7 @@
 
 goog.provide('Blockly.thrasos.Renderer');
 
+goog.require('Blockly.blockRendering');
 goog.require('Blockly.blockRendering.ConstantProvider');
 goog.require('Blockly.blockRendering.Debug');
 goog.require('Blockly.blockRendering.Drawer');
@@ -47,3 +48,5 @@ Blockly.thrasos.Renderer = function() {
 };
 Blockly.utils.object.inherits(Blockly.thrasos.Renderer,
     Blockly.blockRendering.Renderer);
+
+Blockly.blockRendering.register('thrasos', Blockly.thrasos.Renderer);

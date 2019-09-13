@@ -26,6 +26,7 @@
 
 goog.provide('Blockly.geras.Renderer');
 
+goog.require('Blockly.blockRendering');
 goog.require('Blockly.blockRendering.ConstantProvider');
 goog.require('Blockly.blockRendering.Debug');
 goog.require('Blockly.blockRendering.Renderer');
@@ -59,3 +60,16 @@ Blockly.geras.Renderer.prototype.init = function() {
   Blockly.geras.Renderer.superClass_.init.call(this);
   this.highlightConstants = new Blockly.geras.HighlightConstantProvider();
 };
+
+/**
+ * Initialize the renderer.  Geras has a highlight provider in addition to
+ * the normal constant provider.
+ * @return {Blockly.geras.HighlightConstantProvider} The highlight constant
+ *     provider.
+ * @package
+ */
+Blockly.geras.Renderer.prototype.getHighlightConstants = function() {
+  return Blockly.blockRendering.renderer.highlightConstants;
+};
+
+Blockly.blockRendering.register('geras', Blockly.geras.Renderer);

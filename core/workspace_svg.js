@@ -126,7 +126,7 @@ Blockly.WorkspaceSvg = function(options,
         Blockly.Procedures.flyoutCategory);
   }
 
-  Blockly.blockRendering.init();
+  Blockly.blockRendering.init(this.options.renderer);
 };
 Blockly.utils.object.inherits(Blockly.WorkspaceSvg, Blockly.Workspace);
 
@@ -725,7 +725,8 @@ Blockly.WorkspaceSvg.prototype.addFlyout_ = function(tagName) {
     RTL: this.RTL,
     oneBasedIndex: this.options.oneBasedIndex,
     horizontalLayout: this.horizontalLayout,
-    toolboxPosition: this.options.toolboxPosition
+    toolboxPosition: this.options.toolboxPosition,
+    renderer: this.options.renderer
   };
   if (this.horizontalLayout) {
     this.flyout_ = new Blockly.HorizontalFlyout(workspaceOptions);

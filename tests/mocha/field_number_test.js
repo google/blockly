@@ -392,6 +392,11 @@ suite('Number Fields', function() {
         field.setConstraints(-10);
         assertNumberField(field, -10, Infinity, 0, 0);
       });
+      test('Set Min', function() {
+        var field = new Blockly.FieldNumber();
+        field.setMin(-10);
+        assertNumberField(field, -10, Infinity, 0, 0);
+      });
       test('JS Configuration - Simple', function() {
         var field = new Blockly.FieldNumber(
             undefined, undefined, undefined, undefined, undefined, {
@@ -423,6 +428,11 @@ suite('Number Fields', function() {
         field.setConstraints(undefined, 10);
         assertNumberField(field, -Infinity, 10, 0, 0);
       });
+      test('Set Max', function() {
+        var field = new Blockly.FieldNumber();
+        field.setMax(10);
+        assertNumberField(field, -Infinity, 10, 0, 0);
+      });
       test('JS Configuration - Simple', function() {
         var field = new Blockly.FieldNumber(
             undefined, undefined, undefined, undefined, undefined, {
@@ -452,6 +462,11 @@ suite('Number Fields', function() {
       test('Set Constraints', function() {
         var field = new Blockly.FieldNumber();
         field.setConstraints(undefined, undefined, 1);
+        assertNumberField(field, -Infinity, Infinity, 1, 0);
+      });
+      test('Set Precision', function() {
+        var field = new Blockly.FieldNumber();
+        field.setPrecision(1);
         assertNumberField(field, -Infinity, Infinity, 1, 0);
       });
       test('JS Configuration - Simple', function() {

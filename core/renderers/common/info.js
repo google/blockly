@@ -213,7 +213,7 @@ Blockly.blockRendering.RenderInfo.prototype.createRows_ = function() {
     }
   }
 
-  var lastInput = undefined;
+  var lastInput = null;
   // Loop across all of the inputs on the block, creating objects for anything
   // that needs to be rendered and breaking the block up into visual rows.
   for (var i = 0, input; (input = this.block_.inputList[i]); i++) {
@@ -279,8 +279,8 @@ Blockly.blockRendering.RenderInfo.prototype.addInput_ = function(input, activeRo
 
 /**
  * Decide whether to start a new row between the two Blockly.Inputs.
- * @param {!Blockly.Input}  input The first input to consider
- * @param {Blockly.Input}  lastInput The input that follows.
+ * @param {!Blockly.Input} input The first input to consider
+ * @param {Blockly.Input} lastInput The input that follows.
  * @return {boolean} True if the next input should be rendered on a new row.
  * @protected
  */
@@ -403,7 +403,7 @@ Blockly.blockRendering.RenderInfo.prototype.alignRowElements_ = function() {
   for (var i = 0, row; (row = this.rows[i]); i++) {
     if (row.hasStatement) {
       this.alignStatementRow_(
-          /** @type {Blockly.RenderedConnection} */ (row));
+          /** @type {!Blockly.blockRendering.InputRow} */ (row));
     } else {
       var currentWidth = row.width;
       var desiredWidth = this.width - this.startX;

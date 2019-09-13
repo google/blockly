@@ -75,30 +75,6 @@ Blockly.BlockSvg.prototype.getHeightWidth = function() {
 };
 
 /**
- * Update the block's SVG paths based on the paths that were computed during
- * this render pass.
- * @param {!Blockly.BlockSvg.PathObject} pathObject The object containing
- *     partially constructed SVG paths, which will be modified by this function.
- * @private
- */
-Blockly.BlockSvg.prototype.setPaths_ = function(pathObject) {
-  var pathString = pathObject.steps.join(' ') + '\n' +
-      pathObject.inlineSteps.join(' ');
-  this.svgPath_.setAttribute('d', pathString);
-  this.svgPathDark_.setAttribute('d', pathString);
-
-  pathString = pathObject.highlightSteps.join(' ') + '\n' +
-      pathObject.highlightInlineSteps.join(' ');
-  this.svgPathLight_.setAttribute('d', pathString);
-  if (this.RTL) {
-    // Mirror the block's path.
-    this.svgPath_.setAttribute('transform', 'scale(-1 1)');
-    this.svgPathLight_.setAttribute('transform', 'scale(-1 1)');
-    this.svgPathDark_.setAttribute('transform', 'translate(1,1) scale(-1 1)');
-  }
-};
-
-/**
  * Position an new block correctly, so that it doesn't move the existing block
  * when connected to it.
  * @param {!Blockly.Block} newBlock The block to position - either the first

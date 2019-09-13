@@ -70,7 +70,7 @@ Blockly.blockRendering.ConstantProvider = function() {
 
   /**
    * Rounded corner radius.
-   * @const
+   * @type {number}
    */
   this.CORNER_RADIUS = 8;
 

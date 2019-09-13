@@ -92,7 +92,7 @@ Blockly.geras.Renderer.prototype.makeDrawer_ = function(block, info) {
 
 /**
  * Create a new instance of a renderer path object.
- * @param {!SVGElement} root The root SVG Element.
+ * @param {!SVGElement} root The root SVG element.
  * @return {!Blockly.geras.PathObject} The renderer path object.
  * @package
  * @override

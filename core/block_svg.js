@@ -66,7 +66,7 @@ Blockly.BlockSvg = function(workspace, prototypeName, opt_id) {
   this.svgGroup_.translate_ = '';
 
   this.pathObject =
-      Blockly.blockRendering.renderer.makePathObject(this.svgGroup_);
+      workspace.getRenderer().makePathObject(this.svgGroup_);
 
   // The next three paths are set only for backwards compatibility reasons.
   /**
@@ -1539,7 +1539,7 @@ Blockly.BlockSvg.prototype.positionNearConnection = function(sourceConnection,
   }
 };
 
-/*
+/**
  * Render the block.
  * Lays out and reflows a block based on its contents and settings.
  * @param {boolean=} opt_bubble If false, just render this block.

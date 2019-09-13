@@ -234,14 +234,14 @@ Blockly.Component.prototype.setElementInternal = function(element) {
 Blockly.Component.prototype.setParent = function(parent) {
   if (this == parent) {
     // Attempting to add a child to itself is an error.
-    throw new Error(Blockly.Component.Error.PARENT_UNABLE_TO_BE_SET);
+    throw Error(Blockly.Component.Error.PARENT_UNABLE_TO_BE_SET);
   }
 
   if (parent && this.parent_ && this.id_ && this.parent_.getChild(this.id_) &&
       this.parent_ != parent) {
     // This component is already the child of some parent, so it should be
     // removed using removeChild/removeChildAt first.
-    throw new Error(Blockly.Component.Error.PARENT_UNABLE_TO_BE_SET);
+    throw Error(Blockly.Component.Error.PARENT_UNABLE_TO_BE_SET);
   }
 
   this.parent_ = parent;
@@ -328,7 +328,7 @@ Blockly.Component.prototype.renderBefore = function(sibling) {
 Blockly.Component.prototype.render_ = function(
     opt_parentElement, opt_beforeNode) {
   if (this.inDocument_) {
-    throw new Error(Blockly.Component.Error.ALREADY_RENDERED);
+    throw Error(Blockly.Component.Error.ALREADY_RENDERED);
   }
 
   if (!this.element_) {
@@ -526,12 +526,12 @@ Blockly.Component.prototype.addChildAt = function(child, index, opt_render) {
   if (child.inDocument_ && (opt_render || !this.inDocument_)) {
     // Adding a child that's already in the document is an error, except if the
     // parent is also in the document and opt_render is false (e.g. decorate()).
-    throw new Error(Blockly.Component.Error.ALREADY_RENDERED);
+    throw Error(Blockly.Component.Error.ALREADY_RENDERED);
   }
 
   if (index < 0 || index > this.getChildCount()) {
     // Allowing sparse child arrays would lead to strange behavior, so we don't.
-    throw new Error(Blockly.Component.Error.CHILD_INDEX_OUT_OF_BOUNDS);
+    throw Error(Blockly.Component.Error.CHILD_INDEX_OUT_OF_BOUNDS);
   }
 
   // Create the index and the child array on first use.
@@ -626,7 +626,7 @@ Blockly.Component.prototype.isRightToLeft = function() {
  */
 Blockly.Component.prototype.setRightToLeft = function(rightToLeft) {
   if (this.inDocument_) {
-    throw new Error(Blockly.Component.Error.ALREADY_RENDERED);
+    throw Error(Blockly.Component.Error.ALREADY_RENDERED);
   }
   this.rightToLeft_ = rightToLeft;
 };
@@ -771,7 +771,7 @@ Blockly.Component.prototype.removeChild = function(child, opt_unrender) {
   }
 
   if (!child) {
-    throw new Error(Blockly.Component.Error.NOT_OUR_CHILD);
+    throw Error(Blockly.Component.Error.NOT_OUR_CHILD);
   }
 
   return /** @type {!Blockly.Component} */ (child);

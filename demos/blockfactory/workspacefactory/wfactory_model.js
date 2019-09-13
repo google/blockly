@@ -164,7 +164,7 @@ WorkspaceFactoryModel.prototype.moveElementToIndex = function(element, newIndex,
   // Check that indexes are in bounds.
   if (newIndex < 0 || newIndex >= this.toolboxList.length || oldIndex < 0 ||
       oldIndex >= this.toolboxList.length) {
-    throw new Error('Index out of bounds when moving element in the model.');
+    throw Error('Index out of bounds when moving element in the model.');
   }
   this.deleteElementFromList(oldIndex);
   this.toolboxList.splice(newIndex, 0, element);

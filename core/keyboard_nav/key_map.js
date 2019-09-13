@@ -50,7 +50,7 @@ Blockly.user.keyMap.modifierKeys = {
 
 /**
  * Update the key map to contain the new action.
- * @param {!string} keyCode The key code serialized by the serializeKeyEvent.
+ * @param {string} keyCode The key code serialized by the serializeKeyEvent.
  * @param {!Blockly.Action} action The action to be executed when the keys
  *     corresponding to the serialized key code is pressed.
  * @package
@@ -116,7 +116,7 @@ Blockly.user.keyMap.getKeyByAction = function(action) {
 /**
  * Serialize the key event.
  * @param {!Event} e A key up event holding the key code.
- * @return {!string} A string containing the serialized key event.
+ * @return {string} A string containing the serialized key event.
  */
 Blockly.user.keyMap.serializeKeyEvent = function(e) {
   var modifiers = Blockly.utils.object.values(Blockly.user.keyMap.modifierKeys);
@@ -132,8 +132,8 @@ Blockly.user.keyMap.serializeKeyEvent = function(e) {
 
 /**
  * Create the serialized key code that will be used in the key map.
- * @param {!number} keyCode Number code representing the key.
- * @param {!Array<string>} modifiers List of modifiers to be used with the key.
+ * @param {number} keyCode Number code representing the key.
+ * @param {!Array.<string>} modifiers List of modifiers to be used with the key.
  *     All valid modifiers can be found in the Blockly.user.keyMap.modifierKeys.
  * @return {string} The serialized key code for the given modifiers and key.
  */

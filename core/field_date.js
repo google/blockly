@@ -52,12 +52,8 @@ goog.require('goog.ui.DatePicker');
  * @constructor
  */
 Blockly.FieldDate = function(opt_value, opt_validator) {
-  opt_value = this.doClassValidation_(opt_value);
-  if (!opt_value) {
-    opt_value = new goog.date.Date().toIsoString(true);
-  }
   Blockly.FieldDate.superClass_.constructor.call(this,
-      opt_value, opt_validator);
+      opt_value || new goog.date.Date().toIsoString(true), opt_validator);
 };
 Blockly.utils.object.inherits(Blockly.FieldDate, Blockly.Field);
 
@@ -103,7 +99,7 @@ Blockly.FieldDate.prototype.DROPDOWN_BACKGROUND_COLOUR = 'white';
 
 /**
  * Ensure that the input value is a valid date.
- * @param {string=} opt_newValue The input value.
+ * @param {*=} opt_newValue The input value.
  * @return {?string} A valid date, or null if invalid.
  * @protected
  */

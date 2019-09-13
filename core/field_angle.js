@@ -46,12 +46,8 @@ goog.require('Blockly.utils.userAgent');
  * @constructor
  */
 Blockly.FieldAngle = function(opt_value, opt_validator) {
-  opt_value = this.doClassValidation_(opt_value);
-  if (opt_value === null) {
-    opt_value = 0;
-  }
   Blockly.FieldAngle.superClass_.constructor.call(
-      this, opt_value, opt_validator);
+      this, opt_value || 0, opt_validator);
 };
 Blockly.utils.object.inherits(Blockly.FieldAngle, Blockly.FieldTextInput);
 
@@ -373,7 +369,7 @@ Blockly.FieldAngle.prototype.onHtmlInputKeyDown_ = function(e) {
 
 /**
  * Ensure that the input value is a valid angle.
- * @param {string|number=} opt_newValue The input value.
+ * @param {*=} opt_newValue The input value.
  * @return {?number} A valid angle, or null if invalid.
  * @protected
  * @override

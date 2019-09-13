@@ -53,10 +53,6 @@ suite('Colour Fields', function() {
       var colourField = new Blockly.FieldColour(undefined);
       assertValueDefault(colourField);
     });
-    test('Non-Parsable String', function() {
-      var colourField = new Blockly.FieldColour('not_a_colour');
-      assertValueDefault(colourField);
-    });
     test('#AAAAAA', function() {
       var colourField = new Blockly.FieldColour('#AAAAAA');
       assertValue(colourField, '#aaaaaa', '#aaa');
@@ -105,11 +101,6 @@ suite('Colour Fields', function() {
     });
     test('Undefined', function() {
       var colourField = new Blockly.FieldColour.fromJson({ colour:undefined });
-      assertValueDefault(colourField);
-    });
-    test('Non-Parsable String', function() {
-      var colourField = new Blockly.FieldColour.fromJson(
-          { colour:'not_a_colour' });
       assertValueDefault(colourField);
     });
     test('#AAAAAA', function() {

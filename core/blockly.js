@@ -378,21 +378,6 @@ Blockly.hideChaff = function(opt_allowToolbox) {
 };
 
 /**
- * When something in Blockly's workspace changes, call a function.
- * @param {!Function} func Function to call.
- * @return {!Array.<!Array>} Opaque data that can be passed to
- *     removeChangeListener.
- * @deprecated April 2015
- */
-Blockly.addChangeListener = function(func) {
-  // Backwards compatibility from before there could be multiple workspaces.
-  console.warn(
-      'Deprecated call to Blockly.addChangeListener, ' +
-      'use workspace.addChangeListener instead.');
-  return Blockly.getMainWorkspace().addChangeListener(func);
-};
-
-/**
  * Returns the main workspace.  Returns the last used main workspace (based on
  * focus).  Try not to use this function, particularly if there are multiple
  * Blockly instances on a page.
@@ -694,7 +679,7 @@ Blockly.checkBlockColourConstants = function() {
  * Checks for a constant in the Blockly namespace, verifying it is undefined or
  * has the old/original value. Prints a warning if this is not true.
  * @param {string} msgName The Msg constant identifier.
- * @param {Array<string>} blocklyNamePath The name parts of the tested
+ * @param {Array.<string>} blocklyNamePath The name parts of the tested
  *     constant.
  * @param {number|undefined} expectedValue The expected value of the constant.
  * @private

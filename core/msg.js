@@ -30,9 +30,16 @@
  */
 goog.provide('Blockly.Msg');
 
+goog.require('Blockly.utils.global');
+
+
 /**
  * Exported so that if Blockly is compiled with ADVANCED_COMPILATION,
  * the Blockly.Msg object exists for message files included in script tags.
- * @export
  */
-Blockly.Msg = {};
+if (!Blockly.utils.global['Blockly']) {
+  Blockly.utils.global['Blockly'] = {};
+}
+if (!Blockly.utils.global['Blockly']['Msg']) {
+  Blockly.utils.global['Blockly']['Msg'] = Blockly.Msg;
+}

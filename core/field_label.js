@@ -44,13 +44,26 @@ goog.require('Blockly.utils.Size');
  * @constructor
  */
 Blockly.FieldLabel = function(opt_value, opt_class) {
-  this.size_ = new Blockly.utils.Size(0, Blockly.Field.TEXT_DEFAULT_HEIGHT);
-  this.class_ = opt_class;
-  opt_value = this.doClassValidation_(opt_value);
-  if (opt_value === null) {
+  /**
+   * The html class name to use for this field.
+   * @type {?string}
+   * @private
+   */
+  this.class_ = opt_class || null;
+
+  if (opt_value == null) {
     opt_value = '';
   }
-  this.setValue(opt_value);
+  Blockly.FieldLabel.superClass_.constructor.call(
+      this, opt_value, null);
+
+  /**
+   * The size of the area rendered by the field.
+   * @type {Blockly.utils.Size}
+   * @protected
+   * @override
+   */
+  this.size_ = new Blockly.utils.Size(0, Blockly.Field.TEXT_DEFAULT_HEIGHT);
 };
 Blockly.utils.object.inherits(Blockly.FieldLabel, Blockly.Field);
 
@@ -90,7 +103,7 @@ Blockly.FieldLabel.prototype.initView = function() {
 
 /**
  * Ensure that the input value casts to a valid string.
- * @param {string=} opt_newValue The input value.
+ * @param {*=} opt_newValue The input value.
  * @return {?string} A valid string, or null if invalid.
  * @protected
  */

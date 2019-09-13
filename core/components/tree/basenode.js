@@ -786,7 +786,7 @@ Blockly.tree.BaseNode.prototype.getIconDom = function() {
  * @protected
  */
 Blockly.tree.BaseNode.prototype.getCalculatedIconClass = function() {
-  throw new Error('unimplemented abstract method');
+  throw Error('unimplemented abstract method');
 };
 
 /**

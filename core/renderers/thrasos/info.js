@@ -67,26 +67,6 @@ Blockly.utils.object.inherits(Blockly.thrasos.RenderInfo,
 /**
  * @override
  */
-Blockly.thrasos.RenderInfo.prototype.shouldStartNewRow_ = function(input, lastInput) {
-  // If this is the first input, just add to the existing row.
-  // That row is either empty or has some icons in it.
-  if (!lastInput) {
-    return false;
-  }
-  // A statement input always gets a new row.
-  if (input.type == Blockly.NEXT_STATEMENT) {
-    return true;
-  }
-  // Value and dummy inputs get new row if inputs are not inlined.
-  if (input.type == Blockly.INPUT_VALUE || input.type == Blockly.DUMMY_INPUT) {
-    return !this.isInline;
-  }
-  return false;
-};
-
-/**
- * @override
- */
 Blockly.thrasos.RenderInfo.prototype.getInRowSpacing_ = function(prev, next) {
   if (!prev) {
     // Between an editable field and the beginning of the row.

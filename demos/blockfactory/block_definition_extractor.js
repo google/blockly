@@ -323,7 +323,7 @@ BlockDefinitionExtractor.input_ = function(input, align) {
 
 /**
  * Constructs a sequence <block> elements representing the field definition.
- * @param {Array<Blockly.Field>} fieldRow A list of fields in a Blockly.Input.
+ * @param {Array.<Blockly.Field>} fieldRow A list of fields in a Blockly.Input.
  * @return {Element} The fist <block> element of the sequence
  *     (and the root of the constructed DOM).
  * @private
@@ -476,7 +476,7 @@ BlockDefinitionExtractor.buildFieldDropdown_ = function(dropdown) {
   } else if (Array.isArray(menuGenerator)) {
     var options = menuGenerator;
   } else {
-    throw new Error('Unrecognized type of menuGenerator: ' + menuGenerator);
+    throw Error('Unrecognized type of menuGenerator: ' + menuGenerator);
   }
 
   var fieldDropdown = BlockDefinitionExtractor.newDomElement_(
@@ -600,7 +600,7 @@ BlockDefinitionExtractor.buildFieldImage_ =
 /**
  * Creates a <block> element a group of allowed connection constraint types.
  *
- * @param {Array<string>} types List of type names in this group.
+ * @param {Array.<string>} types List of type names in this group.
  * @return {Element} The <block> element representing the group, with child
  *     types attached.
  * @private

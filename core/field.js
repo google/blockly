@@ -668,7 +668,7 @@ Blockly.Field.prototype.getText = function() {
  * @deprecated 2019 setText should not be used directly. Use setValue instead.
  */
 Blockly.Field.prototype.setText = function(_newText) {
-  throw new Error('setText method is deprecated');
+  throw Error('setText method is deprecated');
 };
 
 /**

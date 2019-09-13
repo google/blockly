@@ -770,7 +770,7 @@ Blockly.navigation.moveCursorOnBlockMutation = function(mutatedBlock) {
 /**
  * Handler for all the keyboard navigation events.
  * @param {Event} e The keyboard event.
- * @return {!boolean} True if the key was handled false otherwise.
+ * @return {boolean} True if the key was handled false otherwise.
  */
 Blockly.navigation.onKeyPress = function(e) {
   var key = Blockly.user.keyMap.serializeKeyEvent(e);
@@ -1070,7 +1070,7 @@ Blockly.navigation.ACTION_TOGGLE_KEYBOARD_NAV = new Blockly.Action(
 
 /**
  * List of actions that can be performed in read only mode.
- * @type {!Array<!Blockly.Action>}
+ * @type {!Array.<!Blockly.Action>}
  */
 Blockly.navigation.READONLY_ACTION_LIST = [
   Blockly.navigation.ACTION_PREVIOUS,

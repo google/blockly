@@ -23,7 +23,7 @@ function _nonCommentArg(desiredNonCommentArgIndex, expectedNumberOfNonCommentArg
 function _validateArguments(expectedNumberOfNonCommentArgs, args) {
   if (!( args.length == expectedNumberOfNonCommentArgs ||
       (args.length == expectedNumberOfNonCommentArgs + 1 && (typeof(args[0]) == 'string') || args[0] == null))) {
-    throw new Error('Incorrect arguments passed to assert function');
+    throw Error('Incorrect arguments passed to assert function');
   }
 }
 /**
@@ -56,7 +56,7 @@ function assertTrue() {
   var commentArg = _commentArg(1, arguments);
   var booleanValue = _nonCommentArg(1, 1, arguments);
   if (typeof(booleanValue) != 'boolean') {
-    throw new Error('Bad argument to assertTrue(boolean)');
+    throw Error('Bad argument to assertTrue(boolean)');
   }
 
   chai.assert.isTrue(booleanValue, commentArg);
@@ -71,7 +71,7 @@ function assertFalse() {
   var booleanValue = _nonCommentArg(1, 1, arguments);
 
   if (typeof(booleanValue) != 'boolean') {
-    throw new Error('Bad argument to assertFalse(boolean)');
+    throw Error('Bad argument to assertFalse(boolean)');
   }
 
   chai.assert.isNotTrue(booleanValue, commentArg);
@@ -175,4 +175,3 @@ function defineStatementBlock() {
     "helpUrl": ""
   }]);
 }
-

@@ -165,7 +165,7 @@ Blockly.zelos.ConstantProvider.prototype.shapeFor = function(
     case Blockly.NEXT_STATEMENT:
       return this.NOTCH;
     default:
-      throw new Error('Unknown type');
+      throw Error('Unknown type');
   }
 };
 

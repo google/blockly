@@ -70,7 +70,7 @@ Blockly.tree.TreeControl.prototype.getTree = function() {
 };
 
 /**
- * Returns the assosiated toolbox.
+ * Returns the associated toolbox.
  * @return {Blockly.Toolbox} The toolbox.
  * @package
  */

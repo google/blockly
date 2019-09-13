@@ -194,7 +194,7 @@ Blockly.Generator.prototype.blockToCode = function(block, opt_thisOnly) {
   }
   // First argument to func.call is the value of 'this' in the generator.
   // Prior to 24 September 2013 'this' was the only way to access the block.
-  // The current prefered method of accessing the block is through the second
+  // The current preferred method of accessing the block is through the second
   // argument to func.call, which becomes the first parameter to the generator.
   var code = func.call(block, block);
   if (Array.isArray(code)) {

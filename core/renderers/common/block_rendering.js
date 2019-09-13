@@ -66,7 +66,7 @@ Blockly.blockRendering.register = function(name, rendererClass) {
  * @package
  */
 Blockly.blockRendering.startDebugger = function() {
-  Blockly.blockRendering.useDebugger_ = true;
+  Blockly.blockRendering.useDebugger = true;
 };
 
 /**
@@ -74,7 +74,7 @@ Blockly.blockRendering.startDebugger = function() {
  * @package
  */
 Blockly.blockRendering.stopDebugger = function() {
-  Blockly.blockRendering.useDebugger_ = false;
+  Blockly.blockRendering.useDebugger = false;
 };
 
 /**

@@ -930,6 +930,11 @@ Blockly.Field.prototype.onBlocklyAction = function(_action) {
  * @package
  */
 Blockly.Field.prototype.setCursorSvg = function(cursorSvg) {
+  if (!cursorSvg) {
+    this.cursorSvg_ = null;
+    return;
+  }
+
   if (this.fieldGroup_) {
     this.fieldGroup_.appendChild(cursorSvg);
     this.cursorSvg_ = cursorSvg;
@@ -939,10 +944,15 @@ Blockly.Field.prototype.setCursorSvg = function(cursorSvg) {
 /**
  * Add the marker svg to this fields svg group.
  * @param {SVGElement} markerSvg The svg root of the marker to be added to the
- *     fields group.
+ *     field group.
  * @package
  */
 Blockly.Field.prototype.setMarkerSvg = function(markerSvg) {
+  if (!markerSvg) {
+    this.markerSvg_ = null;
+    return;
+  }
+
   if (this.fieldGroup_) {
     this.fieldGroup_.appendChild(markerSvg);
     this.markerSvg_ = markerSvg;

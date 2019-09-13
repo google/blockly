@@ -1615,12 +1615,17 @@ Blockly.BlockSvg.prototype.updateConnectionLocations_ = function() {
 };
 
 /**
- * Add the cursor svg to this blocks svg group.
+ * Add the cursor svg to this block's svg group.
  * @param {SVGElement} cursorSvg The svg root of the cursor to be added to the
  *     block svg group.
  * @package
  */
 Blockly.BlockSvg.prototype.setCursorSvg = function(cursorSvg) {
+  if (!cursorSvg) {
+    this.cursorSvg_ = null;
+    return;
+  }
+
   if (this.svgGroup_) {
     this.svgGroup_.appendChild(cursorSvg);
     this.cursorSvg_ = cursorSvg;
@@ -1628,16 +1633,21 @@ Blockly.BlockSvg.prototype.setCursorSvg = function(cursorSvg) {
 };
 
 /**
- * Add the marker svg to this blocks svg group.
+ * Add the marker svg to this block's svg group.
  * @param {SVGElement} markerSvg The svg root of the marker to be added to the
  *     block svg group.
  * @package
  */
 Blockly.BlockSvg.prototype.setMarkerSvg = function(markerSvg) {
+  if (!markerSvg) {
+    this.markerSvg_ = null;
+    return;
+  }
+
   if (this.cursorSvg_) {
     this.svgGroup_.insertBefore(markerSvg, this.cursorSvg_);
   } else {
     this.svgGroup_.appendChild(markerSvg);
   }
-  this.markerSvg = markerSvg;
+  this.markerSvg_ = markerSvg;
 };

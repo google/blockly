@@ -187,15 +187,18 @@ Blockly.CursorSvg.prototype.createDom = function() {
  * @private
  */
 Blockly.CursorSvg.prototype.setParent_ = function(newParent) {
-  if (this.parent_) {
-    this.parent_.cursorSvg_ = null;
+  if (this.isMarker_) {
+    if (this.parent_) {
+      this.parent_.setMarkerSvg(null);
+    }
+    newParent.setMarkerSvg(this.getSvgRoot());
+  } else {
+    if (this.parent_) {
+      this.parent_.setCursorSvg(null);
+    }
+    newParent.setCursorSvg(this.getSvgRoot());
   }
   this.parent_ = newParent;
-  if (this.isMarker_) {
-    this.parent_.setMarkerSvg(this.getSvgRoot());
-  } else {
-    this.parent_.setCursorSvg(this.getSvgRoot());
-  }
 };
 
 /**************************/

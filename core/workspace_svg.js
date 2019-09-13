@@ -445,6 +445,11 @@ Blockly.WorkspaceSvg.prototype.setMarker = function(marker) {
  * @package
  */
 Blockly.WorkspaceSvg.prototype.setCursorSvg = function(cursorSvg) {
+  if (!cursorSvg) {
+    this.cursorSvg_ = null;
+    return;
+  }
+
   if (this.svgGroup_) {
     this.svgGroup_.appendChild(cursorSvg);
     this.cursorSvg_ = cursorSvg;
@@ -458,12 +463,18 @@ Blockly.WorkspaceSvg.prototype.setCursorSvg = function(cursorSvg) {
  * @package
  */
 Blockly.WorkspaceSvg.prototype.setMarkerSvg = function(markerSvg) {
+  if (!markerSvg) {
+    this.markerSvg_ = null;
+    return;
+  }
+
   if (this.svgGroup_) {
     if (this.cursorSvg_) {
       this.svgGroup_.insertBefore(markerSvg, this.cursorSvg_);
     } else {
       this.svgGroup_.appendChild(markerSvg);
     }
+    this.markerSvg_ = markerSvg;
   }
 };
 

@@ -283,7 +283,7 @@ Blockly.utils.dom.getTextWidth = function(textElement) {
     // The context font must match blocklyText's fontsize and font-family
     // set in CSS.
     Blockly.utils.dom.canvasContext_ = computeCanvas.getContext('2d');
-    Blockly.utils.dom.canvasContext_.font = 
+    Blockly.utils.dom.canvasContext_.font =
         Blockly.utils.dom.FONT_SIZE + 'pt ' +
         Blockly.utils.dom.FONT_FAMILY;
   }

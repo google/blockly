@@ -65,6 +65,11 @@ Blockly.BlockSvg = function(workspace, prototypeName, opt_id) {
   this.svgGroup_ = Blockly.utils.dom.createSvgElement('g', {}, null);
   this.svgGroup_.translate_ = '';
 
+  /**
+   * The renderer's path object.
+   * @type {Blockly.blockRendering.IPathObject}
+   * @package
+   */
   this.pathObject =
       workspace.getRenderer().makePathObject(this.svgGroup_);
 

@@ -52,14 +52,37 @@ goog.require('Blockly.utils.style');
  */
 Blockly.Field = function(value, opt_validator, opt_config) {
   /**
+   * A generic value possessed by the field.
+   * Should generally be non-null, only null when the field is created.
+   * @type {*}
+   * @protected
+   */
+  this.value_ = null;
+
+  /**
+   * Validation function called when user edits an editable field.
+   * @type {Function}
+   * @protected
+   */
+  this.validator_ = null;
+
+  /**
+   * Used to cache the field's tooltip value if setTooltip is called when the
+   * field is not yet initialized. Is *not* guaranteed to be accurate.
+   * @type {string|Function|!Element}
+   * @private
+   */
+  this.tooltip_ = null;
+
+  /**
    * The size of the area rendered by the field.
-   * @type {Blockly.utils.Size}
+   * @type {!Blockly.utils.Size}
    * @protected
    */
   this.size_ = new Blockly.utils.Size(0, 0);
+  opt_config && this.configure_(opt_config);
   this.setValue(value);
-  this.setValidator(opt_validator);
-  this.configure_(opt_config);
+  opt_validator && this.setValidator(opt_validator);
 };
 
 /**
@@ -118,22 +141,6 @@ Blockly.Field.prototype.disposed = false;
 Blockly.Field.prototype.maxDisplayLength = 50;
 
 /**
- * A generic value possessed by the field.
- * Should generally be non-null, only null when the field is created.
- * @type {*}
- * @protected
- */
-Blockly.Field.prototype.value_ = null;
-
-/**
- * Used to cache the field's tooltip value if setTooltip is called when the
- * field is not yet initialized. Is *not* guaranteed to be accurate.
- * @type {?string}
- * @private
- */
-Blockly.Field.prototype.tooltip_ = null;
-
-/**
  * Block this field is attached to.  Starts as null, then set in init.
  * @type {Blockly.Block}
  * @protected
@@ -143,7 +150,7 @@ Blockly.Field.prototype.sourceBlock_ = null;
 /**
  * Does this block need to be re-rendered?
  * @type {boolean}
- * @private
+ * @protected
  */
 Blockly.Field.prototype.isDirty_ = true;
 
@@ -155,15 +162,8 @@ Blockly.Field.prototype.isDirty_ = true;
 Blockly.Field.prototype.visible_ = true;
 
 /**
- * Validation function called when user edits an editable field.
- * @type {Function}
- * @protected
- */
-Blockly.Field.prototype.validator_ = null;
-
-/**
  * The element the click handler is bound to.
- * @type {!Element}
+ * @type {Element}
  * @private
  */
 Blockly.Field.prototype.clickTarget_ = null;
@@ -203,20 +203,17 @@ Blockly.Field.prototype.EDITABLE = true;
 Blockly.Field.prototype.SERIALIZABLE = false;
 
 /**
- * Configure the field based on the given map of options.
- * @param {Object} opt_config The map of options to configure the field
- *    based on.
- * @private
+ * Process the configuration map passed to the field.
+ * @param {!Object} config A map of options used to configure the field. See
+ *    the individual field's documentation for a list of properties this
+ *    parameter supports.
+ * @protected
  */
-Blockly.Field.prototype.configure_ = function(opt_config) {
-  if (!opt_config) {
-    return;
-  }
-
-  var tooltip = opt_config['tooltip'];
+Blockly.Field.prototype.configure_ = function(config) {
+  var tooltip = config['tooltip'];
   if (typeof tooltip == 'string') {
     tooltip = Blockly.utils.replaceMessageReferences(
-        opt_config['tooltip']);
+        config['tooltip']);
   }
   tooltip && this.setTooltip(tooltip);
 
@@ -275,6 +272,14 @@ Blockly.Field.prototype.initView = function() {
 };
 
 /**
+ * Initializes the model of the field after it has been installed on a block.
+ * No-op by default.
+ * @package
+ */
+Blockly.Field.prototype.initModel = function() {
+};
+
+/**
  * Create a field border rect element. Not to be overridden by subclasses.
  * Instead modify the result of the function inside initView, or create a
  * separate function to call.
@@ -325,14 +330,6 @@ Blockly.Field.prototype.bindEvents_ = function() {
   this.mouseDownWrapper_ =
       Blockly.bindEventWithChecks_(
           this.getClickTarget_(), 'mousedown', this, this.onMouseDown_);
-};
-
-/**
- * Initializes the model of the field after it has been installed on a block.
- * No-op by default.
- * @package
- */
-Blockly.Field.prototype.initModel = function() {
 };
 
 /**
@@ -772,14 +769,18 @@ Blockly.Field.prototype.getValue = function() {
 /**
  * Used to validate a value. Returns input by default. Can be overridden by
  * subclasses, see FieldDropdown.
- * @param {*} newValue The value to be validated.
+ * @param {*=} opt_newValue The value to be validated.
  * @return {*} The validated value, same as input by default.
  * @protected
+ * @suppress {deprecated}
  */
-Blockly.Field.prototype.doClassValidation_ = function(newValue) {
+Blockly.Field.prototype.doClassValidation_ = function(opt_newValue) {
+  if (opt_newValue === null || opt_newValue === undefined) {
+    return null;
+  }
   // For backwards compatibility.
-  newValue = this.classValidator(newValue);
-  return newValue;
+  opt_newValue = this.classValidator(/** @type {string} */ (opt_newValue));
+  return opt_newValue;
 };
 
 /**

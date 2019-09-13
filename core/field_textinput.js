@@ -51,12 +51,11 @@ goog.require('Blockly.utils.userAgent');
  * @constructor
  */
 Blockly.FieldTextInput = function(opt_value, opt_validator) {
-  opt_value = this.doClassValidation_(opt_value);
-  if (opt_value === null) {
+  if (opt_value == null) {
     opt_value = '';
   }
-  Blockly.FieldTextInput.superClass_.constructor.call(this, opt_value,
-      opt_validator);
+  Blockly.FieldTextInput.superClass_.constructor.call(this,
+      opt_value, opt_validator);
 };
 Blockly.utils.object.inherits(Blockly.FieldTextInput, Blockly.Field);
 
@@ -92,7 +91,8 @@ Blockly.FieldTextInput.prototype.SERIALIZABLE = true;
 Blockly.FieldTextInput.FONTSIZE = 11;
 
 /**
- * Pixel size of input border radius.  Should match blocklyText's border-radius in CSS.
+ * Pixel size of input border radius.
+ * Should match blocklyText's border-radius in CSS.
  */
 Blockly.FieldTextInput.BORDERRADIUS = 4;
 
@@ -109,8 +109,8 @@ Blockly.FieldTextInput.prototype.spellcheck_ = true;
 
 /**
  * Ensure that the input value casts to a valid string.
- * @param {string=} opt_newValue The input value.
- * @return {?string} A valid string, or null if invalid.
+ * @param {*=} opt_newValue The input value.
+ * @return {*} A valid string, or null if invalid.
  * @protected
  */
 Blockly.FieldTextInput.prototype.doClassValidation_ = function(opt_newValue) {

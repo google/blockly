@@ -92,6 +92,9 @@ function start() {
   var side = match ? match[1] : 'start';
   document.forms.options.elements.side.value = side;
   var autoimport = !!location.search.match(/autoimport=([^&]+)/);
+  match = location.search.match(/renderer=([^&]+)/);
+  var renderer = match ? match[1] : 'geras';
+  document.forms.options.elements.renderer.value = renderer;
   // Create main workspace.
   workspace = Blockly.inject('blocklyDiv',
       {
@@ -119,6 +122,7 @@ function start() {
         },
         toolbox: toolbox,
         toolboxPosition: side == 'top' || side == 'start' ? 'start' : 'end',
+        renderer: renderer,
         zoom:
           {
             controls: true,
@@ -296,6 +300,9 @@ function toXml() {
 
 function fromXml() {
   var input = document.getElementById('importExport');
+  if (!input.value) {
+    return;
+  }
   var xml = Blockly.Xml.textToDom(input.value);
   Blockly.Xml.domToWorkspace(xml, workspace);
   taChange();
@@ -344,10 +351,10 @@ function toggleRenderingDebug(state) {
   }
   if (state) {
     document.getElementById('blocklyDiv').className = 'renderingDebug';
-    Blockly.blockRendering.useDebugger = true;
+    Blockly.blockRendering.startDebugger();
   } else {
     document.getElementById('blocklyDiv').className = '';
-    Blockly.blockRendering.useDebugger = false;
+    Blockly.blockRendering.stopDebugger();
   }
 }
 
@@ -487,6 +494,11 @@ h1 {
       <option value="end">End</option>
       <option value="top">Top</option>
       <option value="bottom">Bottom</option>
+    </select>
+    <select name="renderer" onchange="document.forms.options.submit()">
+      <option value="geras">Geras</option>
+      <option value="thrasos">Thrasos</option>
+      <option value="zelos">Zelos</option>
     </select>
   </form>
   <select id="themeChanger" name="theme" onchange="changeTheme()">

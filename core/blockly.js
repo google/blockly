@@ -47,8 +47,10 @@ goog.require('Blockly.FieldMultilineInput');
 goog.require('Blockly.FieldNumber');
 goog.require('Blockly.FieldVariable');
 goog.require('Blockly.Generator');
+goog.require('Blockly.geras.Renderer');
 goog.require('Blockly.navigation');
 goog.require('Blockly.Procedures');
+goog.require('Blockly.thrasos.Renderer');
 goog.require('Blockly.Toolbox');
 goog.require('Blockly.Tooltip');
 goog.require('Blockly.Touch');
@@ -58,13 +60,8 @@ goog.require('Blockly.constants');
 goog.require('Blockly.inject');
 goog.require('Blockly.utils');
 goog.require('Blockly.Xml');
+goog.require('Blockly.zelos.Renderer');
 
-
-// Turn off debugging when compiled.
-// Unused within the Blockly library, but used in Closure.
-/* eslint-disable no-unused-vars */
-var CLOSURE_DEFINES = {'goog.DEBUG': false};
-/* eslint-enable no-unused-vars */
 
 /**
  * Blockly core version.

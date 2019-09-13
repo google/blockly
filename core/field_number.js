@@ -75,7 +75,7 @@ Blockly.FieldNumber = function(opt_value, opt_min, opt_max, opt_precision,
    * The number of decimal places to allow, or null to allow any number of
    * decimal digits.
    * @type {?number}
-   * @protected
+   * @private
    */
   this.decimalPlaces_ = null;
 

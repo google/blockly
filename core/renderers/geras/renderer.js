@@ -51,6 +51,7 @@ Blockly.geras.Renderer = function() {
   /**
    * The renderer's highlight constant provider.
    * @type {Blockly.geras.HighlightConstantProvider}
+   * @private
    */
   this.highlightConstants_ = null;
 };

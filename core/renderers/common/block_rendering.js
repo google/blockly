@@ -93,10 +93,13 @@ Blockly.blockRendering.init = function(name) {
   if (!Blockly.blockRendering.rendererMap_[name]) {
     throw Error('Renderer not registered: ', name);
   }
-  /** @constructor @extends {Blockly.blockRendering.Renderer} */
+  /**
+   * @constructor
+   * @extends {Blockly.blockRendering.Renderer}
+   */
   var rendererCtor = function() {
     rendererCtor.superClass_.constructor.call(this);
-  }
+  };
   Blockly.utils.object.inherits(rendererCtor,
       Blockly.blockRendering.rendererMap_[name]);
   Blockly.blockRendering.renderer = new rendererCtor();

@@ -417,13 +417,13 @@ Blockly.WorkspaceSvg.prototype.inverseScreenCTMDirty_ = true;
  * @override
  */
 Blockly.WorkspaceSvg.prototype.setCursor = function(cursor) {
-  if (this.cursor) {
-    this.cursor.getDrawer().dispose();
+  if (this.cursor_) {
+    this.cursor_.getDrawer().dispose();
   }
-  this.cursor = cursor;
-  if (this.cursor) {
-    this.cursor.setDrawer(new Blockly.CursorSvg(this, false));
-    this.setCursorSvg(this.cursor.getDrawer().createDom());
+  this.cursor_ = cursor;
+  if (this.cursor_) {
+    this.cursor_.setDrawer(new Blockly.CursorSvg(this, false));
+    this.setCursorSvg(this.cursor_.getDrawer().createDom());
   }
 };
 
@@ -434,13 +434,13 @@ Blockly.WorkspaceSvg.prototype.setCursor = function(cursor) {
  * @override
  */
 Blockly.WorkspaceSvg.prototype.setMarker = function(marker) {
-  if (this.marker) {
-    this.marker.getDrawer().dispose();
+  if (this.marker_) {
+    this.marker_.getDrawer().dispose();
   }
-  this.marker = marker;
-  if (this.marker) {
-    this.marker.setDrawer(new Blockly.CursorSvg(this, true));
-    this.setMarkerSvg(this.marker.getDrawer().createDom());
+  this.marker_ = marker;
+  if (this.marker_) {
+    this.marker_.setDrawer(new Blockly.CursorSvg(this, true));
+    this.setMarkerSvg(this.marker_.getDrawer().createDom());
   }
 };
 
@@ -651,10 +651,10 @@ Blockly.WorkspaceSvg.prototype.createDom = function(opt_backgroundClass) {
   }
   this.recordDeleteAreas();
 
-  var svgCursor = this.cursor.getDrawer().createDom();
+  var svgCursor = this.cursor_.getDrawer().createDom();
   this.svgGroup_.appendChild(svgCursor);
 
-  var svgMarker = this.marker.getDrawer().createDom();
+  var svgMarker = this.marker_.getDrawer().createDom();
   this.svgGroup_.appendChild(svgMarker);
 
   return this.svgGroup_;
@@ -698,8 +698,8 @@ Blockly.WorkspaceSvg.prototype.dispose = function() {
     this.zoomControls_ = null;
   }
 
-  if (this.marker) {
-    this.marker.getDrawer().dispose();
+  if (this.marker_) {
+    this.marker_.getDrawer().dispose();
   }
 
   if (this.getCursor()) {

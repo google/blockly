@@ -52,7 +52,7 @@ goog.require('Blockly.utils.Size');
  */
 Blockly.FieldImage = function(src, width, height,
     opt_alt, opt_onClick, opt_flipRtl, opt_config) {
-  /* Return early. */
+  // Return early.
   if (!src) {
     throw Error('Src value of an image field is required');
   }
@@ -67,7 +67,7 @@ Blockly.FieldImage = function(src, width, height,
       ' than 0.');
   }
 
-  /* Initialize configurable properties. */
+  // Initialize configurable properties.
   /**
    * Whether to flip this image in RTL.
    * @type {boolean}
@@ -85,7 +85,7 @@ Blockly.FieldImage = function(src, width, height,
   Blockly.FieldImage.superClass_.constructor.call(
       this, src || '', null, opt_config);
 
-  /* Give constructor parameters priority. */
+  // Give constructor parameters priority.
   if (opt_flipRtl != null) {
     this.flipRtl_ = !!opt_flipRtl;
   }
@@ -93,7 +93,7 @@ Blockly.FieldImage = function(src, width, height,
     this.altText_ = opt_alt;
   }
 
-  /* Initialize other properties. */
+  // Initialize other properties.
   /**
    * The size of the area rendered by the field.
    * @type {Blockly.utils.Size}

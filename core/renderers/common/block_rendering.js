@@ -123,7 +123,7 @@ Blockly.blockRendering.getRenderer = function() {
 
 /**
  * Get the current renderer's constant provider.
- * @return {Blockly.blockRendering.ConstantProvider} The current renderer.
+ * @return {Blockly.blockRendering.ConstantProvider} The constant provider.
  */
 Blockly.blockRendering.getConstants = function() {
   return Blockly.blockRendering.renderer.constants;

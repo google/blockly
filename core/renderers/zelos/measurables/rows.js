@@ -43,12 +43,14 @@ goog.require('Blockly.utils.object');
  * connections.
  * After this constructor is called, the row will contain all non-spacer
  * elements it needs.
+ * @param {!Blockly.blockRendering.ConstantProvider} constants The rendering
+ *   constants provider.
  * @package
  * @constructor
  * @extends {Blockly.blockRendering.TopRow}
  */
-Blockly.zelos.TopRow = function() {
-  Blockly.zelos.TopRow.superClass_.constructor.call(this);
+Blockly.zelos.TopRow = function(constants) {
+  Blockly.zelos.TopRow.superClass_.constructor.call(this, constants);
 };
 Blockly.utils.object.inherits(Blockly.zelos.TopRow,
     Blockly.blockRendering.TopRow);
@@ -65,9 +67,9 @@ Blockly.zelos.TopRow.prototype.populate = function(block) {
   var rightSquareCorner = this.hasRightSquareCorner(block);
 
   if (rightSquareCorner) {
-    this.elements.push(new Blockly.blockRendering.SquareCorner('right'));
+    this.elements.push(new Blockly.blockRendering.SquareCorner(this.constants_, 'right'));
   } else {
-    this.elements.push(new Blockly.blockRendering.RoundCorner('right'));
+    this.elements.push(new Blockly.blockRendering.RoundCorner(this.constants_, 'right'));
   }
 };
 
@@ -94,12 +96,14 @@ Blockly.zelos.TopRow.prototype.hasRightSquareCorner = function(block) {
  * a block as well as spacing information for the top row.
  * Elements in a bottom row can consist of corners, spacers and next
  * connections.
+ * @param {!Blockly.blockRendering.ConstantProvider} constants The rendering
+ *   constants provider.
  * @package
  * @constructor
  * @extends {Blockly.blockRendering.BottomRow}
  */
-Blockly.zelos.BottomRow = function() {
-  Blockly.zelos.BottomRow.superClass_.constructor.call(this);
+Blockly.zelos.BottomRow = function(constants) {
+  Blockly.zelos.BottomRow.superClass_.constructor.call(this, constants);
 };
 Blockly.utils.object.inherits(Blockly.zelos.BottomRow,
     Blockly.blockRendering.BottomRow);
@@ -116,9 +120,9 @@ Blockly.zelos.BottomRow.prototype.populate = function(block) {
   var rightSquareCorner = this.hasRightSquareCorner(block);
 
   if (rightSquareCorner) {
-    this.elements.push(new Blockly.blockRendering.SquareCorner('right'));
+    this.elements.push(new Blockly.blockRendering.SquareCorner(this.constants_, 'right'));
   } else {
-    this.elements.push(new Blockly.blockRendering.RoundCorner('right'));
+    this.elements.push(new Blockly.blockRendering.RoundCorner(this.constants_, 'right'));
   }
 };
 
@@ -143,13 +147,15 @@ Blockly.zelos.BottomRow.prototype.hasRightSquareCorner = function(block) {
 /**
  * An object containing information about a row spacer that comes right
  *   before a statement input.
+ * @param {!Blockly.blockRendering.ConstantProvider} constants The rendering
+ *   constants provider.
  * @param {number} height The height of the spacer.
  * @param {number} width The width of the spacer.
  * @package
  * @constructor
  * @extends {Blockly.blockRendering.SpacerRow}
  */
-Blockly.zelos.BeforeStatementSpacerRow = function(height, width) {
+Blockly.zelos.BeforeStatementSpacerRow = function(constants, height, width) {
   Blockly.zelos.BeforeStatementSpacerRow.superClass_.constructor.call(
       this, height, width);
   this.type |=
@@ -161,15 +167,17 @@ Blockly.utils.object.inherits(Blockly.zelos.BeforeStatementSpacerRow,
 /**
  * An object containing information about a row spacer that comes right
  *   after a statement input.
+ * @param {!Blockly.blockRendering.ConstantProvider} constants The rendering
+ *   constants provider.
  * @param {number} height The height of the spacer.
  * @param {number} width The width of the spacer.
  * @package
  * @constructor
  * @extends {Blockly.blockRendering.SpacerRow}
  */
-Blockly.zelos.AfterStatementSpacerRow = function(height, width) {
+Blockly.zelos.AfterStatementSpacerRow = function(constants, height, width) {
   Blockly.zelos.AfterStatementSpacerRow.superClass_.constructor.call(
-      this, height, width);
+      this, constants, height, width);
   this.type |=
       Blockly.blockRendering.Types.getType('AFTER_STATEMENT_SPACER_ROW');
 };

@@ -47,7 +47,7 @@ goog.require('Blockly.utils.Rect');
 /**
  * Class for a block's SVG representation.
  * Not normally called directly, workspace.newBlock() is preferred.
- * @param {!Blockly.Workspace} workspace The block's workspace.
+ * @param {!Blockly.WorkspaceSvg} workspace The block's workspace.
  * @param {?string} prototypeName Name of the language object containing
  *     type-specific functions for this block.
  * @param {string=} opt_id Optional ID.  Use this ID if provided, otherwise
@@ -1546,8 +1546,7 @@ Blockly.BlockSvg.prototype.positionNearConnection = function(sourceConnection,
 Blockly.BlockSvg.prototype.render = function(opt_bubble) {
   Blockly.utils.dom.startTextWidthCache();
   this.rendered = true;
-  // TODO (#2702): Choose an API for picking the renderer.
-  Blockly.blockRendering.render(this);
+  (/** @type {!Blockly.WorkspaceSvg} */ (this.workspace)).getRenderer().render(this);
   // No matter how we rendered, connection locations should now be correct.
   this.updateConnectionLocations_();
   if (opt_bubble !== false) {

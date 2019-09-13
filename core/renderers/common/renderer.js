@@ -38,10 +38,13 @@ goog.require('Blockly.blockRendering.RenderInfo');
  * @constructor
  */
 Blockly.blockRendering.Renderer = function() {
-  this.constantProvider = Blockly.blockRendering.ConstantProvider;
-  this.renderInfo = Blockly.blockRendering.RenderInfo;
-  this.drawer = Blockly.blockRendering.Drawer;
-  this.debugger = Blockly.blockRendering.Debug;
+  
+  /**
+   * The renderer's constant provider.
+   * @type {Blockly.blockRendering.ConstantProvider}
+   * @private
+   */
+  this.constants_ = null;
 };
 
 /**
@@ -49,8 +52,60 @@ Blockly.blockRendering.Renderer = function() {
  * @package
  */
 Blockly.blockRendering.Renderer.prototype.init = function() {
-  this.constants = new this.constantProvider();
-  this.constants.init();
+  this.constants_ = this.makeConstants_();
+  this.constants_.init();
+};
+
+/**
+ * Create a new instance of the renderer's constant provider.
+ * @return {!Blockly.blockRendering.ConstantProvider} The constant provider.
+ * @protected
+ */
+Blockly.blockRendering.Renderer.prototype.makeConstants_ = function() {
+  return new Blockly.blockRendering.ConstantProvider();
+};
+
+/**
+ * Create a new instance of the renderer's render info object.
+ * @param {!Blockly.BlockSvg} block The block to measure.
+ * @return {!Blockly.blockRendering.RenderInfo} The render info object.
+ * @protected
+ */
+Blockly.blockRendering.Renderer.prototype.makeRenderInfo_ = function(block) {
+  return new Blockly.blockRendering.RenderInfo(this, block);
+};
+
+/**
+ * Create a new instance of the renderer's drawer.
+ * @param {!Blockly.BlockSvg} block The block to render.
+ * @param {!Blockly.blockRendering.RenderInfo} info An object containing all
+ *   information needed to render this block.
+ * @return {!Blockly.blockRendering.Drawer} The drawer.
+ * @protected
+ */
+Blockly.blockRendering.Renderer.prototype.makeDrawer_ = function(block, info) {
+  return new Blockly.blockRendering.Drawer(block, info);
+};
+
+/**
+ * Create a new instance of the renderer's debugger.
+ * @return {!Blockly.blockRendering.Debug} The renderer debugger.
+ * @protected
+ */
+Blockly.blockRendering.Renderer.prototype.makeDebugger_ = function() {
+  return new Blockly.blockRendering.Debug();
+};
+
+/**
+ * Get the current renderer's constant provider.  We assume that when this is
+ * called, the renderer has already been initialized.
+ * @return {!Blockly.blockRendering.ConstantProvider} The constant provider.
+ * @package
+ */
+Blockly.blockRendering.Renderer.prototype.getConstants = function() {
+  return (
+    /** @type {!Blockly.blockRendering.ConstantProvider} */
+    (this.constants_));
 };
 
 /**
@@ -60,9 +115,9 @@ Blockly.blockRendering.Renderer.prototype.init = function() {
  */
 Blockly.blockRendering.Renderer.prototype.render = function(block) {
   if (!block.renderingDebugger) {
-    block.renderingDebugger = new this.debugger();
+    block.renderingDebugger = this.makeDebugger_();
   }
-  var info = new this.renderInfo(block);
+  var info = this.makeRenderInfo_(block);
   info.measure();
-  new this.drawer(block, info).draw();
+  this.makeDrawer_(block, info).draw();
 };

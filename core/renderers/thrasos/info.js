@@ -53,16 +53,26 @@ goog.require('Blockly.utils.object');
  * may choose to rerender when getSize() is called).  However, calling it
  * repeatedly may be expensive.
  *
+ * @param {!Blockly.thrasos.Renderer} renderer The renderer in use.
  * @param {!Blockly.BlockSvg} block The block to measure.
  * @constructor
  * @package
  * @extends {Blockly.blockRendering.RenderInfo}
  */
-Blockly.thrasos.RenderInfo = function(block) {
-  Blockly.thrasos.RenderInfo.superClass_.constructor.call(this, block);
+Blockly.thrasos.RenderInfo = function(renderer, block) {
+  Blockly.thrasos.RenderInfo.superClass_.constructor.call(this, renderer, block);
 };
 Blockly.utils.object.inherits(Blockly.thrasos.RenderInfo,
     Blockly.blockRendering.RenderInfo);
+
+/**
+ * Get the block renderer in use.
+ * @return {!Blockly.thrasos.Renderer} The block renderer in use.
+ * @package
+ */
+Blockly.thrasos.RenderInfo.prototype.getRenderer = function() {
+  return /** @type {!Blockly.thrasos.Renderer} */ (this.renderer_);
+};
 
 /**
  * @override

@@ -61,8 +61,18 @@ Blockly.geras.Highlighter = function(info) {
 
   this.RTL_ = this.info_.RTL;
 
-  this.constants_ = Blockly.blockRendering.getConstants();
-  this.highlightConstants_ = Blockly.blockRendering.getRenderer().getHighlightConstants();
+  var renderer = /** @type {!Blockly.geras.Renderer} */ (info.getRenderer());
+
+  /**
+   * The renderer's constant provider.
+   * @type {!Blockly.blockRendering.ConstantProvider}
+   */
+  this.constants_ = renderer.getConstants();
+
+  /**
+   * @type {!Blockly.geras.HighlightConstantProvider}
+   */
+  this.highlightConstants_ = renderer.getHighlightConstants();
   /**
    * The offset between the block's main path and highlight path.
    * @type {number}

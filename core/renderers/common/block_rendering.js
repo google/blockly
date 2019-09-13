@@ -34,13 +34,6 @@ goog.require('Blockly.utils.object');
 
 
 /**
- * The current renderer.
- * @type {Blockly.blockRendering.Renderer}
- * @private
- */
-Blockly.blockRendering.renderer_ = null;
-
-/**
  * The set of all registered renderers, keyed by their name.
  * @type {!Object<string, !Function>}
  * @private
@@ -87,6 +80,8 @@ Blockly.blockRendering.stopDebugger = function() {
 /**
  * Initialize anything needed for rendering (constants, etc).
  * @param {!string} name Name of the renderer to initialize.
+ * @return {!Blockly.blockRendering.Renderer} The new instance of a renderer.
+ *     Already initialized.
  * @package
  */
 Blockly.blockRendering.init = function(name) {
@@ -104,32 +99,7 @@ Blockly.blockRendering.init = function(name) {
   };
   Blockly.utils.object.inherits(rendererCtor,
       Blockly.blockRendering.rendererMap_[name]);
-  Blockly.blockRendering.renderer_ = new rendererCtor();
-  Blockly.blockRendering.renderer_.init();
-};
-
-/**
- * Render the given block, using the new rendering.
- * Developers should not call this directly.  Instead, call block.render().
- * @param {!Blockly.BlockSvg} block The block to render
- * @public
- */
-Blockly.blockRendering.render = function(block) {
-  Blockly.blockRendering.renderer_.render(block);
-};
-
-/**
- * Get the current renderer.
- * @return {Blockly.blockRendering.Renderer} The current renderer.
- */
-Blockly.blockRendering.getRenderer = function() {
-  return Blockly.blockRendering.renderer_;
-};
-
-/**
- * Get the current renderer's constant provider.
- * @return {Blockly.blockRendering.ConstantProvider} The constant provider.
- */
-Blockly.blockRendering.getConstants = function() {
-  return Blockly.blockRendering.renderer_.constants;
+  var renderer = new rendererCtor();
+  renderer.init();
+  return renderer;
 };

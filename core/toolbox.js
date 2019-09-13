@@ -45,13 +45,13 @@ goog.require('Blockly.VerticalFlyout');
 /**
  * Class for a Toolbox.
  * Creates the toolbox's DOM.
- * @param {!Blockly.Workspace} workspace The workspace in which to create new
+ * @param {!Blockly.WorkspaceSvg} workspace The workspace in which to create new
  *     blocks.
  * @constructor
  */
 Blockly.Toolbox = function(workspace) {
   /**
-   * @type {!Blockly.Workspace}
+   * @type {!Blockly.WorkspaceSvg}
    * @private
    */
   this.workspace_ = workspace;

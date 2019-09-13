@@ -38,14 +38,17 @@ goog.require('Blockly.utils.object');
 /**
  * The base class to represent a connection and the space that it takes up on
  * the block.
+ * @param {!Blockly.blockRendering.ConstantProvider} constants The rendering
+ *   constants provider.
  * @param {Blockly.RenderedConnection} connectionModel The connection object on
  *     the block that this represents.
  * @package
  * @constructor
  * @extends {Blockly.blockRendering.Measurable}
  */
-Blockly.blockRendering.Connection = function(connectionModel) {
-  Blockly.blockRendering.Connection.superClass_.constructor.call(this);
+Blockly.blockRendering.Connection = function(constants, connectionModel) {
+  Blockly.blockRendering.Connection.superClass_.constructor.call(this,
+      constants);
   this.connectionModel = connectionModel;
   this.shape = this.constants_.shapeFor(connectionModel);
   this.type |= Blockly.blockRendering.Types.CONNECTION;
@@ -56,15 +59,17 @@ Blockly.utils.object.inherits(Blockly.blockRendering.Connection,
 /**
  * An object containing information about the space an output connection takes
  * up during rendering.
+ * @param {!Blockly.blockRendering.ConstantProvider} constants The rendering
+ *   constants provider.
  * @param {Blockly.RenderedConnection} connectionModel The connection object on
  *     the block that this represents.
  * @package
  * @constructor
  * @extends {Blockly.blockRendering.Connection}
  */
-Blockly.blockRendering.OutputConnection = function(connectionModel) {
+Blockly.blockRendering.OutputConnection = function(constants, connectionModel) {
   Blockly.blockRendering.OutputConnection.superClass_.constructor.call(this,
-      connectionModel);
+      constants, connectionModel);
   this.type |= Blockly.blockRendering.Types.OUTPUT_CONNECTION;
   this.height = this.shape.height;
   this.width = this.shape.width;
@@ -86,15 +91,18 @@ Blockly.blockRendering.OutputConnection.prototype.isDynamic = function() {
 /**
  * An object containing information about the space a previous connection takes
  * up during rendering.
+ * @param {!Blockly.blockRendering.ConstantProvider} constants The rendering
+ *   constants provider.
  * @param {Blockly.RenderedConnection} connectionModel The connection object on
  *     the block that this represents.
  * @package
  * @constructor
  * @extends {Blockly.blockRendering.Connection}
  */
-Blockly.blockRendering.PreviousConnection = function(connectionModel) {
+Blockly.blockRendering.PreviousConnection = function(
+    constants, connectionModel) {
   Blockly.blockRendering.PreviousConnection.superClass_.constructor.call(this,
-      connectionModel);
+      constants, connectionModel);
   this.type |= Blockly.blockRendering.Types.PREVIOUS_CONNECTION;
   this.height = this.shape.height;
   this.width = this.shape.width;
@@ -106,15 +114,17 @@ Blockly.utils.object.inherits(Blockly.blockRendering.PreviousConnection,
 /**
  * An object containing information about the space a next connection takes
  * up during rendering.
+ * @param {!Blockly.blockRendering.ConstantProvider} constants The rendering
+ *   constants provider.
  * @param {Blockly.RenderedConnection} connectionModel The connection object on
  *     the block that this represents.
  * @package
  * @constructor
  * @extends {Blockly.blockRendering.Connection}
  */
-Blockly.blockRendering.NextConnection = function(connectionModel) {
+Blockly.blockRendering.NextConnection = function(constants, connectionModel) {
   Blockly.blockRendering.NextConnection.superClass_.constructor.call(this,
-      connectionModel);
+      constants, connectionModel);
   this.type |= Blockly.blockRendering.Types.NEXT_CONNECTION;
   this.height = this.shape.height;
   this.width = this.shape.width;

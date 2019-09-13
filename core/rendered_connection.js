@@ -36,7 +36,7 @@ goog.require('Blockly.utils.object');
 
 /**
  * Class for a connection between blocks that may be rendered on screen.
- * @param {!Blockly.Block} source The block establishing this connection.
+ * @param {!Blockly.BlockSvg} source The block establishing this connection.
  * @param {number} type The type of the connection.
  * @extends {Blockly.Connection}
  * @constructor
@@ -212,19 +212,22 @@ Blockly.RenderedConnection.prototype.closest = function(maxLimit, dxy) {
  */
 Blockly.RenderedConnection.prototype.highlight = function() {
   var steps;
+  var sourceBlockSvg = /** @type {!Blockly.BlockSvg} */ (this.sourceBlock_);
+  var renderingConstants =
+    sourceBlockSvg.workspace.getRenderer().getConstants();
   if (this.type == Blockly.INPUT_VALUE || this.type == Blockly.OUTPUT_VALUE) {
     // Vertical line, puzzle tab, vertical line.
     var yLen = 5;
     steps = Blockly.utils.svgPaths.moveBy(0, -yLen) +
         Blockly.utils.svgPaths.lineOnAxis('v', yLen) +
-        Blockly.blockRendering.getConstants().PUZZLE_TAB.pathDown +
+        renderingConstants.PUZZLE_TAB.pathDown +
         Blockly.utils.svgPaths.lineOnAxis('v', yLen);
   } else {
     var xLen = 5;
     // Horizontal line, notch, horizontal line.
     steps = Blockly.utils.svgPaths.moveBy(-xLen, 0) +
         Blockly.utils.svgPaths.lineOnAxis('h', xLen) +
-        Blockly.blockRendering.getConstants().NOTCH.pathLeft +
+        renderingConstants.NOTCH.pathLeft +
         Blockly.utils.svgPaths.lineOnAxis('h', xLen);
   }
   var xy = this.sourceBlock_.getRelativeToSurfaceXY();

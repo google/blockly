@@ -55,7 +55,7 @@ Blockly.Flyout = function(workspaceOptions) {
   workspaceOptions.setMetrics = this.setMetrics_.bind(this);
 
   /**
-   * @type {!Blockly.Workspace}
+   * @type {!Blockly.WorkspaceSvg}
    * @protected
    */
   this.workspace_ = new Blockly.WorkspaceSvg(workspaceOptions);
@@ -117,7 +117,7 @@ Blockly.Flyout = function(workspaceOptions) {
    * @type {number}
    * @const
    */
-  this.tabWidth_ = Blockly.blockRendering.getConstants().TAB_WIDTH;
+  this.tabWidth_ = this.workspace_.getRenderer().getConstants().TAB_WIDTH;
 };
 
 /**

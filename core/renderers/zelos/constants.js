@@ -28,7 +28,9 @@
 goog.provide('Blockly.zelos.ConstantProvider');
 
 goog.require('Blockly.blockRendering.ConstantProvider');
+goog.require('Blockly.utils.object');
 goog.require('Blockly.utils.svgPaths');
+
 
 /**
  * An object that provides constants for rendering blocks in Zelos mode.
@@ -39,21 +41,24 @@ goog.require('Blockly.utils.svgPaths');
 Blockly.zelos.ConstantProvider = function() {
   Blockly.zelos.ConstantProvider.superClass_.constructor.call(this);
 
-  var GRID_UNIT = 4;
+  this.GRID_UNIT = 4;
 
-  this.CORNER_RADIUS = 1 * GRID_UNIT;
+  this.CORNER_RADIUS = 1 * this.GRID_UNIT;
 
-  this.NOTCH_WIDTH = 9 * GRID_UNIT;
+  this.NOTCH_WIDTH = 9 * this.GRID_UNIT;
 
-  this.NOTCH_HEIGHT = 2 * GRID_UNIT;
+  this.NOTCH_HEIGHT = 2 * this.GRID_UNIT;
 
-  this.NOTCH_OFFSET_LEFT = 3 * GRID_UNIT;
+  this.NOTCH_OFFSET_LEFT = 3 * this.GRID_UNIT;
 
-  this.MIN_BLOCK_HEIGHT = 12 * GRID_UNIT;
+  this.MIN_BLOCK_HEIGHT = 12 * this.GRID_UNIT;
 
   this.DARK_PATH_OFFSET = 0;
+
+  this.TAB_OFFSET_FROM_TOP = 0;
+
 };
-goog.inherits(Blockly.zelos.ConstantProvider,
+Blockly.utils.object.inherits(Blockly.zelos.ConstantProvider,
     Blockly.blockRendering.ConstantProvider);
 
 /**
@@ -61,35 +66,78 @@ goog.inherits(Blockly.zelos.ConstantProvider,
  */
 Blockly.zelos.ConstantProvider.prototype.init = function() {
   Blockly.zelos.ConstantProvider.superClass_.init.call(this);
-  this.TRIANGLE = this.makeTriangle();
+  this.HEXAGONAL = this.makeHexagonal();
+  this.ROUNDED = this.makeRounded();
 };
 
 /**
  * @return {!Object} An object containing sizing and path information about
- *     a triangle shape for connections.
+ *     a hexagonal shape for connections.
  * @package
  */
-Blockly.zelos.ConstantProvider.prototype.makeTriangle = function() {
-  var width = 20;
-  var height = 20;
+Blockly.zelos.ConstantProvider.prototype.makeHexagonal = function() {
   // The 'up' and 'down' versions of the paths are the same, but the Y sign
   // flips.  Forward and back are the signs to use to move the cursor in the
   // direction that the path is being drawn.
-  function makeMainPath(up) {
+  function makeMainPath(height, up, right) {
+    var width = height / 2;
     var forward = up ? -1 : 1;
+    var direction = right ? -1 : 1;
 
-    return Blockly.utils.svgPaths.lineTo(-width, forward * height / 2) +
-        Blockly.utils.svgPaths.lineTo(width, forward * height / 2);
+    return Blockly.utils.svgPaths.lineTo(-1 * direction * width, forward * height / 2) +
+        Blockly.utils.svgPaths.lineTo(direction * width, forward * height / 2);
   }
 
-  var pathUp = makeMainPath(true);
-  var pathDown = makeMainPath(false);
+  return {
+    width: 0,
+    height: 0,
+    isDynamic: true,
+    pathDown: function(height) {
+      return makeMainPath(height, false, false);
+    },
+    pathUp: function(height) {
+      return makeMainPath(height, true, false);
+    },
+    pathRightDown: function(height) {
+      return makeMainPath(height, false, true);
+    },
+    pathRightUp: function(height) {
+      return makeMainPath(height, false, true);
+    },
+  };
+};
+
+/**
+ * @return {!Object} An object containing sizing and path information about
+ *     a rounded shape for connections.
+ * @package
+ */
+Blockly.zelos.ConstantProvider.prototype.makeRounded = function() {
+  // The 'up' and 'down' versions of the paths are the same, but the Y sign
+  // flips.  Forward and back are the signs to use to move the cursor in the
+  // direction that the path is being drawn.
+  function makeMainPath(height, up, right) {
+    var edgeWidth = height / 2;
+    return Blockly.utils.svgPaths.arc('a', '0 0 ' + (up || right ? 1 : 0), edgeWidth,
+        Blockly.utils.svgPaths.point(0, (up ? -1 : 1) * edgeWidth * 2));
+  }
 
   return {
-    width: width,
-    height: height,
-    pathDown: pathDown,
-    pathUp: pathUp
+    width: 0,
+    height: 0,
+    isDynamic: true,
+    pathDown: function(height) {
+      return makeMainPath(height, false, false);
+    },
+    pathUp: function(height) {
+      return makeMainPath(height, true, false);
+    },
+    pathRightDown: function(height) {
+      return makeMainPath(height, false, true);
+    },
+    pathRightUp: function(height) {
+      return makeMainPath(height, false, true);
+    },
   };
 };
 
@@ -104,14 +152,20 @@ Blockly.zelos.ConstantProvider.prototype.shapeFor = function(
     case Blockly.OUTPUT_VALUE:
       // Includes doesn't work in IE.
       if (checks && checks.indexOf('Boolean') != -1) {
-        return this.TRIANGLE;
+        return this.HEXAGONAL;
+      }
+      if (checks && checks.indexOf('Number') != -1) {
+        return this.ROUNDED;
+      }
+      if (checks && checks.indexOf('String') != -1) {
+        return this.ROUNDED;
       }
       return this.PUZZLE_TAB;
     case Blockly.PREVIOUS_STATEMENT:
     case Blockly.NEXT_STATEMENT:
       return this.NOTCH;
     default:
-      throw new Error('Unknown type');
+      throw Error('Unknown type');
   }
 };
 

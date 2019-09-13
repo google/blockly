@@ -29,20 +29,23 @@ goog.provide('Blockly.geras.HighlightConstantProvider');
 goog.require('Blockly.blockRendering.ConstantProvider');
 goog.require('Blockly.utils.svgPaths');
 
+
 /**
  * An object that provides constants for rendering highlights on blocks.
  * Some highlights are simple offsets of the parent paths and can be generated
  * programmatically.  Others, especially on curves, are just made out of piles
  * of constants and are hard to tweak.
+ * @param {!Blockly.blockRendering.ConstantProvider} constants The rendering
+ *   constants provider.
  * @constructor
  * @package
  */
-Blockly.geras.HighlightConstantProvider = function() {
+Blockly.geras.HighlightConstantProvider = function(constants) {
   /**
-   * An object that provides the constants used for base block rendering.
+   * The renderer's constant provider.
    * @type {!Blockly.blockRendering.ConstantProvider}
    */
-  this.constantProvider = Blockly.blockRendering.getConstants();
+  this.constantProvider = constants;
 
   /**
    * The offset between the block's main path and highlight path.

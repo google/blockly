@@ -36,6 +36,7 @@ goog.require('Blockly.Menu');
 goog.require('Blockly.MenuItem');
 goog.require('Blockly.utils');
 goog.require('Blockly.utils.dom');
+goog.require('Blockly.utils.object');
 goog.require('Blockly.utils.Size');
 goog.require('Blockly.utils.string');
 goog.require('Blockly.utils.uiMenu');
@@ -58,10 +59,13 @@ Blockly.FieldDropdown = function(menuGenerator, opt_validator) {
     Blockly.FieldDropdown.validateOptions_(menuGenerator);
   }
 
+  /**
+   * An array of options for a dropdown list,
+   * or a function which generates these options.
+   * @type {(!Array.<!Array>|!Function)}
+   * @protected
+   */
   this.menuGenerator_ = menuGenerator;
-
-  this.trimOptions_();
-  var firstTuple = this.getOptions()[0];
 
   /**
    * The currently selected index. A value of -1 indicates no option
@@ -71,9 +75,19 @@ Blockly.FieldDropdown = function(menuGenerator, opt_validator) {
    */
   this.selectedIndex_ = -1;
 
+  this.trimOptions_();
+  var firstTuple = this.getOptions()[0];
+
   // Call parent's constructor.
   Blockly.FieldDropdown.superClass_.constructor.call(this, firstTuple[1],
       opt_validator);
+
+  /**
+   * SVG image element if currently selected option is an image, or null.
+   * @type {SVGElement}
+   * @private
+   */
+  this.imageElement_ = null;
 
   /**
    * A reference to the currently selected menu item.
@@ -82,7 +96,7 @@ Blockly.FieldDropdown = function(menuGenerator, opt_validator) {
    */
   this.selectedMenuItem_ = null;
 };
-goog.inherits(Blockly.FieldDropdown, Blockly.Field);
+Blockly.utils.object.inherits(Blockly.FieldDropdown, Blockly.Field);
 
 /**
  * Dropdown image properties.
@@ -152,13 +166,6 @@ Blockly.FieldDropdown.ARROW_CHAR =
  * Mouse cursor style when over the hotspot that initiates the editor.
  */
 Blockly.FieldDropdown.prototype.CURSOR = 'default';
-
-/**
- * SVG image element if currently selected option is an image, or null.
- * @type {SVGElement}
- * @private
- */
-Blockly.FieldDropdown.prototype.imageElement_ = null;
 
 /**
  * Create the block UI for this dropdown.
@@ -429,7 +436,7 @@ Blockly.FieldDropdown.prototype.getOptions = function() {
 
 /**
  * Ensure that the input value is a valid language-neutral option.
- * @param {string=} opt_newValue The input value.
+ * @param {*=} opt_newValue The input value.
  * @return {?string} A valid language-neutral option, or null if invalid.
  * @protected
  */
@@ -451,7 +458,7 @@ Blockly.FieldDropdown.prototype.doClassValidation_ = function(opt_newValue) {
     }
     return null;
   }
-  return opt_newValue;
+  return /** @type {string} */ (opt_newValue);
 };
 
 /**

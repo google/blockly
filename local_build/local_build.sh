@@ -53,10 +53,8 @@ fi
 # Find the Closure Compiler.
 if [ -f "$(npm root)/google-closure-compiler-java/compiler.jar" ]; then
   COMPILER="$(npm root)/google-closure-compiler-java/compiler.jar"
-  CLOSURE_LIBRARY="$(npm root)/google-closure-library"
 elif [ -f closure-compiler*.jar ]; then
   COMPILER="closure-compiler*.jar"
-  CLOSURE_LIBRARY="../../closure-library"
   # TODO: Check whether multiple files were found.
 else
   echo "ERROR: Closure Compiler not found."
@@ -66,13 +64,10 @@ else
 fi
 
 echo Using $COMPILER as the compiler.
-echo Using $CLOSURE_LIBRARY as the closure library.
 rm local_blockly_compressed.js 2> /dev/null
 echo Compiling Blockly core...
 java -jar $COMPILER \
   --js='../core/**.js' \
-  --js="$CLOSURE_LIBRARY/closure/goog/**.js" \
-  --js="$CLOSURE_LIBRARY/third_party/closure/goog/**.js" \
   --generate_exports \
   --warning_level='DEFAULT' \
   --compilation_level SIMPLE_OPTIMIZATIONS \
@@ -99,8 +94,6 @@ echo -e "'use strict';\ngoog.provide('Blockly');goog.provide('Blockly.Blocks');"
 cat ../blocks/*.js| grep -v "^'use strict';" >> temp.js
 java -jar $COMPILER \
   --js='temp.js' \
-  --js="$CLOSURE_LIBRARY/closure/goog/**.js" \
-  --js="$CLOSURE_LIBRARY/third_party/closure/goog/**.js" \
   --generate_exports \
   --warning_level='DEFAULT' \
   --compilation_level SIMPLE_OPTIMIZATIONS \

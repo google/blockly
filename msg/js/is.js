@@ -2,10 +2,6 @@
 
 'use strict';
 
-goog.provide('Blockly.Msg.is');
-
-goog.require('Blockly.Msg');
-
 Blockly.Msg["ADD_COMMENT"] = "Skrifa skýringu";
 Blockly.Msg["CANNOT_DELETE_VARIABLE_PROCEDURE"] = "Can't delete the variable '%1' because it's part of the definition of the function '%2'";  // untranslated
 Blockly.Msg["CHANGE_VALUE_TITLE"] = "Breyta gildi:";
@@ -393,6 +389,7 @@ Blockly.Msg["TEXT_TRIM_OPERATOR_RIGHT"] = "eyða bilum hægra megin við";
 Blockly.Msg["TEXT_TRIM_TOOLTIP"] = "Skila afriti af textanum þar sem möguleg bil við báða enda hafa verið fjarlægð.";
 Blockly.Msg["TODAY"] = "Í dag";
 Blockly.Msg["UNDO"] = "Afturkalla";
+Blockly.Msg["UNNAMED_KEY"] = "unnamed";  // untranslated
 Blockly.Msg["VARIABLES_DEFAULT_NAME"] = "atriði";
 Blockly.Msg["VARIABLES_GET_CREATE_SET"] = "Búa til 'stilla %1'";
 Blockly.Msg["VARIABLES_GET_HELPURL"] = "https://github.com/google/blockly/wiki/Variables#get";

@@ -27,8 +27,9 @@
 goog.provide('Blockly.MenuItem');
 
 goog.require('Blockly.Component');
-goog.require('Blockly.utils.dom');
 goog.require('Blockly.utils.aria');
+goog.require('Blockly.utils.dom');
+goog.require('Blockly.utils.object');
 
 
 /**
@@ -64,7 +65,7 @@ Blockly.MenuItem = function(content, opt_value) {
    */
   this.nextSibling_;
 };
-goog.inherits(Blockly.MenuItem, Blockly.Component);
+Blockly.utils.object.inherits(Blockly.MenuItem, Blockly.Component);
 
 
 /**
@@ -267,7 +268,7 @@ Blockly.MenuItem.prototype.setEnabled = function(enabled) {
 
 /**
  * Handles click events. If the component is enabled, trigger
- * the action assosiated with this menu item.
+ * the action associated with this menu item.
  * @param {Event} _e Mouse event to handle.
  * @package
  */

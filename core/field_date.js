@@ -30,6 +30,7 @@ goog.require('Blockly.Events');
 goog.require('Blockly.Field');
 goog.require('Blockly.fieldRegistry');
 goog.require('Blockly.utils.dom');
+goog.require('Blockly.utils.object');
 goog.require('Blockly.utils.string');
 
 goog.require('goog.date');
@@ -51,13 +52,10 @@ goog.require('goog.ui.DatePicker');
  * @constructor
  */
 Blockly.FieldDate = function(opt_value, opt_validator) {
-  opt_value = this.doClassValidation_(opt_value);
-  if (!opt_value) {
-    opt_value = new goog.date.Date().toIsoString(true);
-  }
-  Blockly.FieldDate.superClass_.constructor.call(this, opt_value, opt_validator);
+  Blockly.FieldDate.superClass_.constructor.call(this,
+      opt_value || new goog.date.Date().toIsoString(true), opt_validator);
 };
-goog.inherits(Blockly.FieldDate, Blockly.Field);
+Blockly.utils.object.inherits(Blockly.FieldDate, Blockly.Field);
 
 /**
  * Construct a FieldDate from a JSON arg object.
@@ -101,7 +99,7 @@ Blockly.FieldDate.prototype.DROPDOWN_BACKGROUND_COLOUR = 'white';
 
 /**
  * Ensure that the input value is a valid date.
- * @param {string=} opt_newValue The input value.
+ * @param {*=} opt_newValue The input value.
  * @return {?string} A valid date, or null if invalid.
  * @protected
  */
@@ -325,3 +323,34 @@ Blockly.FieldDate.CSS = [
 ];
 
 Blockly.fieldRegistry.register('field_date', Blockly.FieldDate);
+
+
+/**
+ * Back up original getMsg function.
+ * @type {!Function}
+ */
+goog.getMsgOrig = goog.getMsg;
+
+/**
+ * Gets a localized message.
+ * Overrides the default Closure function to check for a Blockly.Msg first.
+ * Used infrequently, only known case is TODAY button in date picker.
+ * @param {string} str Translatable string, places holders in the form {$foo}.
+ * @param {Object.<string, string>=} opt_values Maps place holder name to value.
+ * @return {string} Message with placeholders filled.
+ * @suppress {duplicate}
+ */
+goog.getMsg = function(str, opt_values) {
+  var key = goog.getMsg.blocklyMsgMap[str];
+  if (key) {
+    str = Blockly.Msg[key];
+  }
+  return goog.getMsgOrig(str, opt_values);
+};
+
+/**
+ * Mapping of Closure messages to Blockly.Msg names.
+ */
+goog.getMsg.blocklyMsgMap = {
+  'Today': 'TODAY'
+};

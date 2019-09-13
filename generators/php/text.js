@@ -35,6 +35,12 @@ Blockly.PHP['text'] = function(block) {
   return [code, Blockly.PHP.ORDER_ATOMIC];
 };
 
+Blockly.PHP['text_multiline'] = function(block) {
+  // Text value.
+  var code = Blockly.PHP.multiline_quote_(block.getFieldValue('TEXT'));
+  return [code, Blockly.PHP.ORDER_ATOMIC];
+};
+
 Blockly.PHP['text_join'] = function(block) {
   // Create a string made up of any number of elements of any type.
   if (block.itemCount_ == 0) {

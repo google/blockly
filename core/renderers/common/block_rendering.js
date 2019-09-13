@@ -30,37 +30,76 @@
  */
 goog.provide('Blockly.blockRendering');
 
-goog.require('Blockly.geras.Renderer');
-goog.require('Blockly.thrasos.Renderer');
-goog.require('Blockly.zelos.Renderer');
+goog.require('Blockly.utils.object');
 
 
+/**
+ * The set of all registered renderers, keyed by their name.
+ * @type {!Object<string, !Function>}
+ * @private
+ */
+Blockly.blockRendering.rendererMap_ = {};
+
+/**
+ * Whether or not the debugger is turned on.
+ * @type {boolean}
+ * @package
+ */
 Blockly.blockRendering.useDebugger = false;
 
 /**
- * Initialize anything needed for rendering (constants, etc).
- * @package
+ * Registers a new renderer.
+ * @param {string} name The name of the renderer.
+ * @param {!Function} rendererClass The new renderer class
+ *     to register.
+ * @throws {Error} if a renderer with the same name has already been registered.
  */
-Blockly.blockRendering.init = function() {
-  // TODO (#2702): Pick an API for choosing a renderer.
-  Blockly.blockRendering.renderer = new Blockly.geras.Renderer();
-  Blockly.blockRendering.renderer.init();
+Blockly.blockRendering.register = function(name, rendererClass) {
+  if (Blockly.blockRendering.rendererMap_[name]) {
+    throw Error('Renderer has already been registered.');
+  }
+  Blockly.blockRendering.rendererMap_[name] = rendererClass;
 };
 
 /**
- * Render the given block, using the new rendering.
- * Developers should not call this directly.  Instead, call block.render().
- * @param {!Blockly.BlockSvg} block The block to render
- * @public
+ * Turn on the blocks debugger.
+ * @package
  */
-Blockly.blockRendering.render = function(block) {
-  Blockly.blockRendering.renderer.render(block);
+Blockly.blockRendering.startDebugger = function() {
+  Blockly.blockRendering.useDebugger = true;
 };
 
-Blockly.blockRendering.getConstants = function() {
-  return Blockly.blockRendering.renderer.constants;
+/**
+ * Turn off the blocks debugger.
+ * @package
+ */
+Blockly.blockRendering.stopDebugger = function() {
+  Blockly.blockRendering.useDebugger = false;
 };
 
-Blockly.blockRendering.getHighlightConstants = function() {
-  return Blockly.blockRendering.renderer.highlightConstants;
+/**
+ * Initialize anything needed for rendering (constants, etc).
+ * @param {!string} name Name of the renderer to initialize.
+ * @return {!Blockly.blockRendering.Renderer} The new instance of a renderer.
+ *     Already initialized.
+ * @package
+ */
+Blockly.blockRendering.init = function(name) {
+  if (!Blockly.blockRendering.rendererMap_[name]) {
+    throw Error('Renderer not registered: ', name);
+  }
+  /**
+   * Wrap the renderer constructor into a temporary constructor
+   * function so the closure compiler treats it as a constructor.
+   * @constructor
+   * @extends {Blockly.blockRendering.Renderer}
+   */
+  var rendererCtor = function() {
+    rendererCtor.superClass_.constructor.call(this);
+  };
+  Blockly.utils.object.inherits(rendererCtor,
+      Blockly.blockRendering.rendererMap_[name]);
+  var renderer = new rendererCtor();
+  renderer.init();
+  return renderer;
 };

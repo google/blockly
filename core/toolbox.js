@@ -37,6 +37,7 @@ goog.require('Blockly.utils');
 goog.require('Blockly.utils.aria');
 goog.require('Blockly.utils.colour');
 goog.require('Blockly.utils.dom');
+goog.require('Blockly.utils.object');
 goog.require('Blockly.utils.Rect');
 goog.require('Blockly.VerticalFlyout');
 
@@ -44,13 +45,13 @@ goog.require('Blockly.VerticalFlyout');
 /**
  * Class for a Toolbox.
  * Creates the toolbox's DOM.
- * @param {!Blockly.Workspace} workspace The workspace in which to create new
+ * @param {!Blockly.WorkspaceSvg} workspace The workspace in which to create new
  *     blocks.
  * @constructor
  */
 Blockly.Toolbox = function(workspace) {
   /**
-   * @type {!Blockly.Workspace}
+   * @type {!Blockly.WorkspaceSvg}
    * @private
    */
   this.workspace_ = workspace;
@@ -176,7 +177,8 @@ Blockly.Toolbox.prototype.init = function() {
     RTL: workspace.RTL,
     oneBasedIndex: workspace.options.oneBasedIndex,
     horizontalLayout: workspace.horizontalLayout,
-    toolboxPosition: workspace.options.toolboxPosition
+    toolboxPosition: workspace.options.toolboxPosition,
+    renderer: workspace.options.renderer
   };
   /**
    * @type {!Blockly.Flyout}
@@ -246,7 +248,8 @@ Blockly.Toolbox.prototype.handleBeforeTreeSelected_ = function(node) {
  * @param {Blockly.tree.BaseNode} newNode The newly selected node.
  * @private
  */
-Blockly.Toolbox.prototype.handleAfterTreeSelected_ = function(oldNode, newNode) {
+Blockly.Toolbox.prototype.handleAfterTreeSelected_ = function(
+    oldNode, newNode) {
   if (newNode && newNode.blocks && newNode.blocks.length) {
     this.flyout_.show(newNode.blocks);
     // Scroll the flyout to the top if the category has changed.
@@ -654,4 +657,5 @@ Blockly.Toolbox.prototype.refreshSelection = function() {
 Blockly.Toolbox.TreeSeparator = function(config) {
   Blockly.tree.TreeNode.call(this, null, '', config);
 };
-goog.inherits(Blockly.Toolbox.TreeSeparator, Blockly.tree.TreeNode);
+Blockly.utils.object.inherits(Blockly.Toolbox.TreeSeparator,
+    Blockly.tree.TreeNode);

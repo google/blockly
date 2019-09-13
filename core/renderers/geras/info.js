@@ -28,24 +28,23 @@
 goog.provide('Blockly.geras');
 goog.provide('Blockly.geras.RenderInfo');
 
-goog.require('Blockly.blockRendering.RenderInfo');
-goog.require('Blockly.blockRendering.Measurable');
-goog.require('Blockly.blockRendering.Types');
 goog.require('Blockly.blockRendering.BottomRow');
-goog.require('Blockly.blockRendering.InputRow');
-goog.require('Blockly.blockRendering.Row');
-goog.require('Blockly.blockRendering.SpacerRow');
-goog.require('Blockly.blockRendering.TopRow');
-
-goog.require('Blockly.blockRendering.InlineInput');
 goog.require('Blockly.blockRendering.ExternalValueInput');
-goog.require('Blockly.blockRendering.StatementInput');
-
-goog.require('Blockly.blockRendering.PreviousConnection');
+goog.require('Blockly.blockRendering.InlineInput');
+goog.require('Blockly.blockRendering.InputRow');
+goog.require('Blockly.blockRendering.Measurable');
 goog.require('Blockly.blockRendering.NextConnection');
 goog.require('Blockly.blockRendering.OutputConnection');
-
+goog.require('Blockly.blockRendering.PreviousConnection');
+goog.require('Blockly.blockRendering.RenderInfo');
+goog.require('Blockly.blockRendering.Row');
+goog.require('Blockly.blockRendering.SpacerRow');
+goog.require('Blockly.blockRendering.StatementInput');
+goog.require('Blockly.blockRendering.TopRow');
+goog.require('Blockly.blockRendering.Types');
 goog.require('Blockly.RenderedConnection');
+goog.require('Blockly.utils.object');
+
 
 /**
  * An object containing all sizing information needed to draw this block.
@@ -54,34 +53,25 @@ goog.require('Blockly.RenderedConnection');
  * may choose to rerender when getSize() is called).  However, calling it
  * repeatedly may be expensive.
  *
+ * @param {!Blockly.geras.Renderer} renderer The renderer in use.
  * @param {!Blockly.BlockSvg} block The block to measure.
  * @constructor
  * @package
  * @extends {Blockly.blockRendering.RenderInfo}
  */
-Blockly.geras.RenderInfo = function(block) {
-  Blockly.geras.RenderInfo.superClass_.constructor.call(this, block);
+Blockly.geras.RenderInfo = function(renderer, block) {
+  Blockly.geras.RenderInfo.superClass_.constructor.call(this, renderer, block);
 };
-goog.inherits(Blockly.geras.RenderInfo, Blockly.blockRendering.RenderInfo);
+Blockly.utils.object.inherits(Blockly.geras.RenderInfo,
+    Blockly.blockRendering.RenderInfo);
 
 /**
- * @override
+ * Get the block renderer in use.
+ * @return {!Blockly.geras.Renderer} The block renderer in use.
+ * @package
  */
-Blockly.geras.RenderInfo.prototype.shouldStartNewRow_ = function(input, lastInput) {
-  // If this is the first input, just add to the existing row.
-  // That row is either empty or has some icons in it.
-  if (!lastInput) {
-    return false;
-  }
-  // A statement input always gets a new row.
-  if (input.type == Blockly.NEXT_STATEMENT) {
-    return true;
-  }
-  // Value and dummy inputs get new row if inputs are not inlined.
-  if (input.type == Blockly.INPUT_VALUE || input.type == Blockly.DUMMY_INPUT) {
-    return !this.isInline;
-  }
-  return false;
+Blockly.geras.RenderInfo.prototype.getRenderer = function() {
+  return /** @type {!Blockly.geras.Renderer} */ (this.renderer_);
 };
 
 /**
@@ -286,7 +276,7 @@ Blockly.geras.RenderInfo.prototype.getSpacerRowHeight_ = function(prev, next) {
   if (prev.hasStatement && next.hasStatement) {
     return this.constants_.LARGE_PADDING;
   }
-  if (next.hasDummyInput) {
+  if (!prev.hasStatement && next.hasDummyInput) {
     return this.constants_.LARGE_PADDING;
   }
   return this.constants_.MEDIUM_PADDING;
@@ -359,8 +349,10 @@ Blockly.geras.RenderInfo.prototype.finalize_ = function() {
   }
   this.bottomRow.baseline = yCursor - this.bottomRow.descenderHeight;
 
-  this.widthWithChildren = widestRowWithConnectedBlocks + this.startX;
-
-  this.height = yCursor;
+  // The dark (lowlight) adds to the size of the block in both x and y.
+  this.widthWithChildren = widestRowWithConnectedBlocks +
+      this.startX + this.constants_.DARK_PATH_OFFSET;
+  this.width += this.constants_.DARK_PATH_OFFSET;
+  this.height = yCursor + this.constants_.DARK_PATH_OFFSET;
   this.startY = this.topRow.capline;
 };

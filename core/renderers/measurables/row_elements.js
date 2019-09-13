@@ -1,3 +1,28 @@
+/**
+ * @license
+ * Visual Blocks Editor
+ *
+ * Copyright 2019 Google Inc.
+ * https://developers.google.com/blockly/
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/**
+ * @fileoverview Objects representing elements in a row of a rendered
+ * block.
+ * @author fenichel@google.com (Rachel Fenichel)
+ */
 
 goog.provide('Blockly.blockRendering.Field');
 goog.provide('Blockly.blockRendering.Hat');
@@ -6,20 +31,24 @@ goog.provide('Blockly.blockRendering.InRowSpacer');
 goog.provide('Blockly.blockRendering.JaggedEdge');
 goog.provide('Blockly.blockRendering.RoundCorner');
 goog.provide('Blockly.blockRendering.SquareCorner');
-goog.require('Blockly.blockRendering.Types');
 
 goog.require('Blockly.blockRendering.Measurable');
+goog.require('Blockly.blockRendering.Types');
+goog.require('Blockly.utils.object');
+
 
 /**
  * An object containing information about the space an icon takes up during
  * rendering
+ * @param {!Blockly.blockRendering.ConstantProvider} constants The rendering
+ *   constants provider.
  * @param {!Blockly.Icon} icon The icon to measure and store information for.
  * @package
  * @constructor
  * @extends {Blockly.blockRendering.Measurable}
  */
-Blockly.blockRendering.Icon = function(icon) {
-  Blockly.blockRendering.Icon.superClass_.constructor.call(this);
+Blockly.blockRendering.Icon = function(constants, icon) {
+  Blockly.blockRendering.Icon.superClass_.constructor.call(this, constants);
   this.icon = icon;
   this.isVisible = icon.isVisible();
   this.type |= Blockly.blockRendering.Types.ICON;
@@ -28,36 +57,42 @@ Blockly.blockRendering.Icon = function(icon) {
   this.height = size.height;
   this.width = size.width;
 };
-goog.inherits(Blockly.blockRendering.Icon, Blockly.blockRendering.Measurable);
+Blockly.utils.object.inherits(Blockly.blockRendering.Icon,
+    Blockly.blockRendering.Measurable);
 
 /**
  * An object containing information about the jagged edge of a collapsed block
  * takes up during rendering
+ * @param {!Blockly.blockRendering.ConstantProvider} constants The rendering
+ *   constants provider.
  * @package
  * @constructor
  * @extends {Blockly.blockRendering.Measurable}
  */
-Blockly.blockRendering.JaggedEdge = function() {
-  Blockly.blockRendering.JaggedEdge.superClass_.constructor.call(this);
+Blockly.blockRendering.JaggedEdge = function(constants) {
+  Blockly.blockRendering.JaggedEdge.superClass_.constructor.call(
+      this, constants);
   this.type |= Blockly.blockRendering.Types.JAGGED_EDGE;
   this.height = this.constants_.JAGGED_TEETH.height;
   this.width = this.constants_.JAGGED_TEETH.width;
 };
-goog.inherits(Blockly.blockRendering.JaggedEdge,
+Blockly.utils.object.inherits(Blockly.blockRendering.JaggedEdge,
     Blockly.blockRendering.Measurable);
 
 
 /**
  * An object containing information about the space a field takes up during
  * rendering
+ * @param {!Blockly.blockRendering.ConstantProvider} constants The rendering
+ *   constants provider.
  * @param {!Blockly.Field} field The field to measure and store information for.
  * @param {!Blockly.Input} parentInput The parent input for the field.
  * @package
  * @constructor
  * @extends {Blockly.blockRendering.Measurable}
  */
-Blockly.blockRendering.Field = function(field, parentInput) {
-  Blockly.blockRendering.Field.superClass_.constructor.call(this);
+Blockly.blockRendering.Field = function(constants, field, parentInput) {
+  Blockly.blockRendering.Field.superClass_.constructor.call(this, constants);
   this.field = field;
   this.isEditable = field.isCurrentlyEditable();
   this.flipRtl = field instanceof Blockly.FieldImage && field.getFlipRtl();
@@ -68,35 +103,42 @@ Blockly.blockRendering.Field = function(field, parentInput) {
   this.width = size.width;
   this.parentInput = parentInput;
 };
-goog.inherits(Blockly.blockRendering.Field, Blockly.blockRendering.Measurable);
+Blockly.utils.object.inherits(Blockly.blockRendering.Field,
+    Blockly.blockRendering.Measurable);
 
 /**
  * An object containing information about the space a hat takes up during
  * rendering.
+ * @param {!Blockly.blockRendering.ConstantProvider} constants The rendering
+ *   constants provider.
  * @package
  * @constructor
  * @extends {Blockly.blockRendering.Measurable}
  */
-Blockly.blockRendering.Hat = function() {
-  Blockly.blockRendering.Hat.superClass_.constructor.call(this);
+Blockly.blockRendering.Hat = function(constants) {
+  Blockly.blockRendering.Hat.superClass_.constructor.call(this, constants);
   this.type |= Blockly.blockRendering.Types.HAT;
   this.height = this.constants_.START_HAT.height;
   this.width = this.constants_.START_HAT.width;
   this.ascenderHeight = this.height;
 
 };
-goog.inherits(Blockly.blockRendering.Hat, Blockly.blockRendering.Measurable);
+Blockly.utils.object.inherits(Blockly.blockRendering.Hat,
+    Blockly.blockRendering.Measurable);
 
 /**
  * An object containing information about the space a square corner takes up
  * during rendering.
+ * @param {!Blockly.blockRendering.ConstantProvider} constants The rendering
+ *   constants provider.
  * @param {string=} opt_position The position of this corner.
  * @package
  * @constructor
  * @extends {Blockly.blockRendering.Measurable}
  */
-Blockly.blockRendering.SquareCorner = function(opt_position) {
-  Blockly.blockRendering.SquareCorner.superClass_.constructor.call(this);
+Blockly.blockRendering.SquareCorner = function(constants, opt_position) {
+  Blockly.blockRendering.SquareCorner.superClass_.constructor.call(this,
+      constants);
   this.type = ((!opt_position || opt_position == 'left') ?
       Blockly.blockRendering.Types.LEFT_SQUARE_CORNER :
       Blockly.blockRendering.Types.RIGHT_SQUARE_CORNER) |
@@ -105,19 +147,22 @@ Blockly.blockRendering.SquareCorner = function(opt_position) {
   this.width = this.constants_.NO_PADDING;
 
 };
-goog.inherits(Blockly.blockRendering.SquareCorner,
+Blockly.utils.object.inherits(Blockly.blockRendering.SquareCorner,
     Blockly.blockRendering.Measurable);
 
 /**
  * An object containing information about the space a rounded corner takes up
  * during rendering.
+ * @param {!Blockly.blockRendering.ConstantProvider} constants The rendering
+ *   constants provider.
  * @param {string=} opt_position The position of this corner.
  * @package
  * @constructor
  * @extends {Blockly.blockRendering.Measurable}
  */
-Blockly.blockRendering.RoundCorner = function(opt_position) {
-  Blockly.blockRendering.RoundCorner.superClass_.constructor.call(this);
+Blockly.blockRendering.RoundCorner = function(constants, opt_position) {
+  Blockly.blockRendering.RoundCorner.superClass_.constructor.call(this,
+      constants);
   this.type = ((!opt_position || opt_position == 'left') ?
       Blockly.blockRendering.Types.LEFT_ROUND_CORNER :
       Blockly.blockRendering.Types.RIGHT_ROUND_CORNER) |
@@ -128,24 +173,27 @@ Blockly.blockRendering.RoundCorner = function(opt_position) {
   this.height = this.constants_.CORNER_RADIUS / 2;
 
 };
-goog.inherits(Blockly.blockRendering.RoundCorner,
+Blockly.utils.object.inherits(Blockly.blockRendering.RoundCorner,
     Blockly.blockRendering.Measurable);
 
 /**
  * An object containing information about a spacer between two elements on a
  * row.
+ * @param {!Blockly.blockRendering.ConstantProvider} constants The rendering
+ *   constants provider.
  * @param {number} width The width of the spacer.
  * @package
  * @constructor
  * @extends {Blockly.blockRendering.Measurable}
  */
-Blockly.blockRendering.InRowSpacer = function(width) {
-  Blockly.blockRendering.InRowSpacer.superClass_.constructor.call(this);
+Blockly.blockRendering.InRowSpacer = function(constants, width) {
+  Blockly.blockRendering.InRowSpacer.superClass_.constructor.call(this,
+      constants);
   this.type |= Blockly.blockRendering.Types.SPACER |
       Blockly.blockRendering.Types.IN_ROW_SPACER;
   this.width = width;
   this.height = this.constants_.SPACER_DEFAULT_HEIGHT;
 };
-goog.inherits(Blockly.blockRendering.InRowSpacer,
+Blockly.utils.object.inherits(Blockly.blockRendering.InRowSpacer,
     Blockly.blockRendering.Measurable);
 

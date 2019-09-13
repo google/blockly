@@ -28,6 +28,7 @@ goog.provide('Blockly.blockRendering.ConstantProvider');
 
 goog.require('Blockly.utils.svgPaths');
 
+
 /**
  * An object that provides constants for rendering blocks.
  * @constructor
@@ -372,6 +373,6 @@ Blockly.blockRendering.ConstantProvider.prototype.shapeFor = function(
     case Blockly.NEXT_STATEMENT:
       return this.NOTCH;
     default:
-      throw new Error('Unknown connection type');
+      throw Error('Unknown connection type');
   }
 };

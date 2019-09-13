@@ -31,6 +31,7 @@ goog.require('Blockly.blockRendering.Drawer');
 goog.require('Blockly.geras.Highlighter');
 goog.require('Blockly.geras.PathObject');
 goog.require('Blockly.geras.RenderInfo');
+goog.require('Blockly.utils.object');
 goog.require('Blockly.utils.svgPaths');
 
 
@@ -48,7 +49,8 @@ Blockly.geras.Drawer = function(block, info) {
   // Unlike Thrasos, Geras has highlights and drop shadows.
   this.highlighter_ = new Blockly.geras.Highlighter(info);
 };
-goog.inherits(Blockly.geras.Drawer, Blockly.blockRendering.Drawer);
+Blockly.utils.object.inherits(Blockly.geras.Drawer,
+    Blockly.blockRendering.Drawer);
 
 /**
  * @override
@@ -65,18 +67,6 @@ Blockly.geras.Drawer.prototype.draw = function() {
     this.block_.renderingDebugger.drawDebug(this.block_, this.info_);
   }
   this.recordSizeOnBlock_();
-};
-
-/**
- * @override
- */
-Blockly.geras.Drawer.prototype.recordSizeOnBlock_ = function() {
-  // This is used when the block is reporting its size to anyone else.
-  // The dark path adds to the size of the block in both X and Y.
-  this.block_.height = this.info_.height +
-      this.constants_.DARK_PATH_OFFSET;
-  this.block_.width = this.info_.widthWithChildren +
-      this.constants_.DARK_PATH_OFFSET;
 };
 
 /**

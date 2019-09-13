@@ -28,24 +28,23 @@
 goog.provide('Blockly.thrasos');
 goog.provide('Blockly.thrasos.RenderInfo');
 
-goog.require('Blockly.blockRendering.RenderInfo');
-goog.require('Blockly.blockRendering.Measurable');
-goog.require('Blockly.blockRendering.Types');
 goog.require('Blockly.blockRendering.BottomRow');
-goog.require('Blockly.blockRendering.InputRow');
-goog.require('Blockly.blockRendering.Row');
-goog.require('Blockly.blockRendering.SpacerRow');
-goog.require('Blockly.blockRendering.TopRow');
-
-goog.require('Blockly.blockRendering.InlineInput');
 goog.require('Blockly.blockRendering.ExternalValueInput');
-goog.require('Blockly.blockRendering.StatementInput');
-
-goog.require('Blockly.blockRendering.PreviousConnection');
+goog.require('Blockly.blockRendering.InlineInput');
+goog.require('Blockly.blockRendering.InputRow');
+goog.require('Blockly.blockRendering.Measurable');
 goog.require('Blockly.blockRendering.NextConnection');
 goog.require('Blockly.blockRendering.OutputConnection');
-
+goog.require('Blockly.blockRendering.PreviousConnection');
+goog.require('Blockly.blockRendering.RenderInfo');
+goog.require('Blockly.blockRendering.Row');
+goog.require('Blockly.blockRendering.SpacerRow');
+goog.require('Blockly.blockRendering.StatementInput');
+goog.require('Blockly.blockRendering.TopRow');
+goog.require('Blockly.blockRendering.Types');
 goog.require('Blockly.RenderedConnection');
+goog.require('Blockly.utils.object');
+
 
 /**
  * An object containing all sizing information needed to draw this block.
@@ -54,34 +53,25 @@ goog.require('Blockly.RenderedConnection');
  * may choose to rerender when getSize() is called).  However, calling it
  * repeatedly may be expensive.
  *
+ * @param {!Blockly.thrasos.Renderer} renderer The renderer in use.
  * @param {!Blockly.BlockSvg} block The block to measure.
  * @constructor
  * @package
  * @extends {Blockly.blockRendering.RenderInfo}
  */
-Blockly.thrasos.RenderInfo = function(block) {
-  Blockly.thrasos.RenderInfo.superClass_.constructor.call(this, block);
+Blockly.thrasos.RenderInfo = function(renderer, block) {
+  Blockly.thrasos.RenderInfo.superClass_.constructor.call(this, renderer, block);
 };
-goog.inherits(Blockly.thrasos.RenderInfo, Blockly.blockRendering.RenderInfo);
+Blockly.utils.object.inherits(Blockly.thrasos.RenderInfo,
+    Blockly.blockRendering.RenderInfo);
 
 /**
- * @override
+ * Get the block renderer in use.
+ * @return {!Blockly.thrasos.Renderer} The block renderer in use.
+ * @package
  */
-Blockly.thrasos.RenderInfo.prototype.shouldStartNewRow_ = function(input, lastInput) {
-  // If this is the first input, just add to the existing row.
-  // That row is either empty or has some icons in it.
-  if (!lastInput) {
-    return false;
-  }
-  // A statement input always gets a new row.
-  if (input.type == Blockly.NEXT_STATEMENT) {
-    return true;
-  }
-  // Value and dummy inputs get new row if inputs are not inlined.
-  if (input.type == Blockly.INPUT_VALUE || input.type == Blockly.DUMMY_INPUT) {
-    return !this.isInline;
-  }
-  return false;
+Blockly.thrasos.RenderInfo.prototype.getRenderer = function() {
+  return /** @type {!Blockly.thrasos.Renderer} */ (this.renderer_);
 };
 
 /**

@@ -201,7 +201,7 @@ WorkspaceFactoryView.prototype.moveTabToIndex =
   // Check that indexes are in bounds.
   if (newIndex < 0 || newIndex >= table.rows.length || oldIndex < 0 ||
       oldIndex >= table.rows.length) {
-    throw new Error('Index out of bounds when moving tab in the view.');
+    throw Error('Index out of bounds when moving tab in the view.');
   }
 
   if (newIndex < oldIndex) {

@@ -2,10 +2,6 @@
 
 'use strict';
 
-goog.provide('Blockly.Msg.skr.arab');
-
-goog.require('Blockly.Msg');
-
 Blockly.Msg["ADD_COMMENT"] = "تبصرہ کرو";
 Blockly.Msg["CANNOT_DELETE_VARIABLE_PROCEDURE"] = "Can't delete the variable '%1' because it's part of the definition of the function '%2'";  // untranslated
 Blockly.Msg["CHANGE_VALUE_TITLE"] = "ویلیو تبدیل کرو:";
@@ -19,7 +15,7 @@ Blockly.Msg["COLOUR_BLEND_HELPURL"] = "https://meyerweb.com/eric/tools/color-ble
 Blockly.Msg["COLOUR_BLEND_RATIO"] = "نسبت";
 Blockly.Msg["COLOUR_BLEND_TITLE"] = "مرکب";
 Blockly.Msg["COLOUR_BLEND_TOOLTIP"] = "Blends two colours together with a given ratio (0.0 - 1.0).";  // untranslated
-Blockly.Msg["COLOUR_PICKER_HELPURL"] = "https://en.wikipedia.org/wiki/Color";  // untranslated
+Blockly.Msg["COLOUR_PICKER_HELPURL"] = "https://en.wikipedia.org/wiki/Color";
 Blockly.Msg["COLOUR_PICKER_TOOLTIP"] = "Choose a colour from the palette.";  // untranslated
 Blockly.Msg["COLOUR_RANDOM_HELPURL"] = "http://randomcolour.com";  // untranslated
 Blockly.Msg["COLOUR_RANDOM_TITLE"] = "بنا ترتيب رنگ";
@@ -149,7 +145,7 @@ Blockly.Msg["LISTS_REVERSE_MESSAGE0"] = "reverse %1";  // untranslated
 Blockly.Msg["LISTS_REVERSE_TOOLTIP"] = "Reverse a copy of a list.";  // untranslated
 Blockly.Msg["LISTS_SET_INDEX_HELPURL"] = "https://github.com/google/blockly/wiki/Lists#in-list--set";  // untranslated
 Blockly.Msg["LISTS_SET_INDEX_INPUT_TO"] = "بطور";
-Blockly.Msg["LISTS_SET_INDEX_INSERT"] = "insert at";  // untranslated
+Blockly.Msg["LISTS_SET_INDEX_INSERT"] = "تے درج کرو";
 Blockly.Msg["LISTS_SET_INDEX_SET"] = "سیٹ";
 Blockly.Msg["LISTS_SET_INDEX_TOOLTIP_INSERT_FIRST"] = "Inserts the item at the start of a list.";  // untranslated
 Blockly.Msg["LISTS_SET_INDEX_TOOLTIP_INSERT_FROM"] = "Inserts the item at the specified position in a list.";  // untranslated
@@ -315,7 +311,7 @@ Blockly.Msg["PROCEDURES_HIGHLIGHT_DEF"] = "Highlight function definition";  // u
 Blockly.Msg["PROCEDURES_IFRETURN_HELPURL"] = "http://c2.com/cgi/wiki?GuardClause";  // untranslated
 Blockly.Msg["PROCEDURES_IFRETURN_TOOLTIP"] = "If a value is true, then return a second value.";  // untranslated
 Blockly.Msg["PROCEDURES_IFRETURN_WARNING"] = "Warning: This block may be used only within a function definition.";  // untranslated
-Blockly.Msg["PROCEDURES_MUTATORARG_TITLE"] = "input name:";  // untranslated
+Blockly.Msg["PROCEDURES_MUTATORARG_TITLE"] = "ان پُٹ ناں:";
 Blockly.Msg["PROCEDURES_MUTATORARG_TOOLTIP"] = "Add an input to the function.";  // untranslated
 Blockly.Msg["PROCEDURES_MUTATORCONTAINER_TITLE"] = "inputs";  // untranslated
 Blockly.Msg["PROCEDURES_MUTATORCONTAINER_TOOLTIP"] = "Add, remove, or reorder inputs to this function.";  // untranslated
@@ -393,6 +389,7 @@ Blockly.Msg["TEXT_TRIM_OPERATOR_RIGHT"] = "trim spaces from right side of";  // 
 Blockly.Msg["TEXT_TRIM_TOOLTIP"] = "Return a copy of the text with spaces removed from one or both ends.";  // untranslated
 Blockly.Msg["TODAY"] = "اڄ";
 Blockly.Msg["UNDO"] = "واپس";
+Blockly.Msg["UNNAMED_KEY"] = "unnamed";  // untranslated
 Blockly.Msg["VARIABLES_DEFAULT_NAME"] = "آئٹم";
 Blockly.Msg["VARIABLES_GET_CREATE_SET"] = "Create 'set %1'";  // untranslated
 Blockly.Msg["VARIABLES_GET_HELPURL"] = "https://github.com/google/blockly/wiki/Variables#get";  // untranslated

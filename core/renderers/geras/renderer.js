@@ -26,13 +26,14 @@
 
 goog.provide('Blockly.geras.Renderer');
 
-goog.require('Blockly.blockRendering.ConstantProvider');
-goog.require('Blockly.blockRendering.Debug');
+goog.require('Blockly.blockRendering');
 goog.require('Blockly.blockRendering.Renderer');
 goog.require('Blockly.geras.Drawer');
 goog.require('Blockly.geras.HighlightConstantProvider');
 goog.require('Blockly.geras.PathObject');
 goog.require('Blockly.geras.RenderInfo');
+goog.require('Blockly.utils.object');
+
 
 /**
  * The geras renderer.
@@ -41,20 +42,88 @@ goog.require('Blockly.geras.RenderInfo');
  * @extends {Blockly.blockRendering.Renderer}
  */
 Blockly.geras.Renderer = function() {
-  this.constantProvider = Blockly.blockRendering.ConstantProvider;
-  this.renderInfo = Blockly.geras.RenderInfo;
-  this.drawer = Blockly.geras.Drawer;
-  this.debugger = Blockly.blockRendering.Debug;
-  this.pathObject = Blockly.geras.PathObject;
+  Blockly.geras.Renderer.superClass_.constructor.call(this);
+
+  /**
+   * The renderer's highlight constant provider.
+   * @type {Blockly.geras.HighlightConstantProvider}
+   * @private
+   */
+  this.highlightConstants_ = null;
 };
-goog.inherits(Blockly.geras.Renderer, Blockly.blockRendering.Renderer);
+Blockly.utils.object.inherits(Blockly.geras.Renderer,
+    Blockly.blockRendering.Renderer);
 
 /**
  * Initialize the renderer.  Geras has a highlight provider in addition to
  * the normal constant provider.
  * @package
+ * @override
  */
 Blockly.geras.Renderer.prototype.init = function() {
   Blockly.geras.Renderer.superClass_.init.call(this);
-  this.highlightConstants = new Blockly.geras.HighlightConstantProvider();
+  this.highlightConstants_ = this.makeHighlightConstants_();
 };
+
+/**
+ * Create a new instance of the renderer's render info object.
+ * @param {!Blockly.BlockSvg} block The block to measure.
+ * @return {!Blockly.geras.RenderInfo} The render info object.
+ * @protected
+ * @override
+ */
+Blockly.geras.Renderer.prototype.makeRenderInfo_ = function(block) {
+  return new Blockly.geras.RenderInfo(this, block);
+};
+
+/**
+ * Create a new instance of the renderer's drawer.
+ * @param {!Blockly.BlockSvg} block The block to render.
+ * @param {!Blockly.blockRendering.RenderInfo} info An object containing all
+ *   information needed to render this block.
+ * @return {!Blockly.geras.Drawer} The drawer.
+ * @protected
+ * @override
+ */
+Blockly.geras.Renderer.prototype.makeDrawer_ = function(block, info) {
+  return new Blockly.geras.Drawer(block,
+      /** @type {!Blockly.geras.RenderInfo} */ (info));
+};
+
+/**
+ * Create a new instance of a renderer path object.
+ * @param {!SVGElement} root The root SVG Element.
+ * @return {!Blockly.geras.PathObject} The renderer path object.
+ * @package
+ * @override
+ */
+Blockly.geras.Renderer.prototype.makePathObject = function(root) {
+  return new Blockly.geras.PathObject(root);
+};
+
+/**
+ * Create a new instance of the renderer's highlight constant provider.
+ * @return {!Blockly.geras.HighlightConstantProvider} The highlight constant
+ *     provider.
+ * @protected
+ */
+Blockly.blockRendering.Renderer.prototype.makeHighlightConstants_ = function() {
+  return new Blockly.geras.HighlightConstantProvider(
+      /** @type {!Blockly.blockRendering.ConstantProvider} */
+      (this.getConstants()));
+};
+
+/**
+ * Get the renderer's highlight constant provider.  We assume that when this is
+ * called, the renderer has already been initialized.
+ * @return {!Blockly.geras.HighlightConstantProvider} The highlight constant
+ *     provider.
+ * @package
+ */
+Blockly.geras.Renderer.prototype.getHighlightConstants = function() {
+  return (
+    /** @type {!Blockly.geras.HighlightConstantProvider} */
+    (this.highlightConstants_));
+};
+
+Blockly.blockRendering.register('geras', Blockly.geras.Renderer);

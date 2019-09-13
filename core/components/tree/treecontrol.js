@@ -30,6 +30,7 @@ goog.provide('Blockly.tree.TreeControl');
 goog.require('Blockly.tree.TreeNode');
 goog.require('Blockly.tree.BaseNode');
 goog.require('Blockly.utils.aria');
+goog.require('Blockly.utils.object');
 goog.require('Blockly.utils.style');
 
 
@@ -58,7 +59,7 @@ Blockly.tree.TreeControl = function(toolbox, config) {
    */
   this.selectedItem_ = this;
 };
-goog.inherits(Blockly.tree.TreeControl, Blockly.tree.BaseNode);
+Blockly.utils.object.inherits(Blockly.tree.TreeControl, Blockly.tree.BaseNode);
 
 /**
  * Returns the tree.
@@ -69,7 +70,7 @@ Blockly.tree.TreeControl.prototype.getTree = function() {
 };
 
 /**
- * Returns the assosiated toolbox.
+ * Returns the associated toolbox.
  * @return {Blockly.Toolbox} The toolbox.
  * @package
  */

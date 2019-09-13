@@ -28,6 +28,7 @@ goog.provide('Blockly.FieldNumber');
 
 goog.require('Blockly.fieldRegistry');
 goog.require('Blockly.FieldTextInput');
+goog.require('Blockly.utils.object');
 
 
 /**
@@ -45,15 +46,34 @@ goog.require('Blockly.FieldTextInput');
  */
 Blockly.FieldNumber = function(opt_value, opt_min, opt_max, opt_precision,
     opt_validator) {
-  this.setConstraints(opt_min, opt_max, opt_precision);
-  opt_value = this.doClassValidation_(opt_value);
-  if (opt_value === null) {
-    opt_value = 0;
-  }
+  
+  /**
+   * The minimum value constraint.
+   * @type {number}
+   * @protected
+   */
+  this.min_ = -Infinity;
+
+  /**
+   * The maximum value constraint.
+   * @type {number}
+   * @protected
+   */
+  this.max_ = Infinity;
+
+  /**
+   * The precision constraint for the value.
+   * @type {number}
+   * @protected
+   */
+  this.precision_ = 0;
+
   Blockly.FieldNumber.superClass_.constructor.call(
-      this, opt_value, opt_validator);
+      this, opt_value || 0, opt_validator);
+
+  this.setConstraints(opt_min, opt_max, opt_precision);
 };
-goog.inherits(Blockly.FieldNumber, Blockly.FieldTextInput);
+Blockly.utils.object.inherits(Blockly.FieldNumber, Blockly.FieldTextInput);
 
 /**
  * Construct a FieldNumber from a JSON arg object.
@@ -89,28 +109,34 @@ Blockly.FieldNumber.prototype.SERIALIZABLE = true;
  */
 Blockly.FieldNumber.prototype.setConstraints = function(min, max, precision) {
   precision = Number(precision);
-  this.precision_ = isNaN(precision) ? 0 : precision;
+  if (!isNaN(precision)) {
+    this.precision_ = precision;
+  }
   var precisionString = this.precision_.toString();
   var decimalIndex = precisionString.indexOf('.');
   this.fractionalDigits_ = (decimalIndex == -1) ? -1 :
       precisionString.length - (decimalIndex + 1);
   min = Number(min);
-  this.min_ = isNaN(min) ? -Infinity : min;
+  if (!isNaN(min)) {
+    this.min_ = min;
+  }
   max = Number(max);
-  this.max_ = isNaN(max) ? Infinity : max;
+  if (!isNaN(max)) {
+    this.max_ = max;
+  }
   this.setValue(this.getValue());
 };
 
 /**
  * Ensure that the input value is a valid number (must fulfill the
  * constraints placed on the field).
- * @param {string|number=} opt_newValue The input value.
+ * @param {*=} opt_newValue The input value.
  * @return {?number} A valid number, or null if invalid.
  * @protected
  * @override
  */
 Blockly.FieldNumber.prototype.doClassValidation_ = function(opt_newValue) {
-  if (opt_newValue === null || opt_newValue === undefined) {
+  if (opt_newValue === null) {
     return null;
   }
   // Clean up text.
@@ -141,7 +167,7 @@ Blockly.FieldNumber.prototype.doClassValidation_ = function(opt_newValue) {
 
 /**
  * Create the number input editor widget.
- * @return {!HTMLInputElement} The newly created number input editor.
+ * @return {!HTMLElement} The newly created number input editor.
  * @protected
  * @override
  */

@@ -29,8 +29,11 @@ goog.provide('Blockly.HorizontalFlyout');
 goog.require('Blockly.Block');
 goog.require('Blockly.Flyout');
 goog.require('Blockly.FlyoutButton');
+goog.require('Blockly.Scrollbar');
 goog.require('Blockly.utils');
+goog.require('Blockly.utils.object');
 goog.require('Blockly.utils.Rect');
+goog.require('Blockly.WidgetDiv');
 
 
 /**
@@ -51,7 +54,7 @@ Blockly.HorizontalFlyout = function(workspaceOptions) {
    */
   this.horizontalLayout_ = true;
 };
-goog.inherits(Blockly.HorizontalFlyout, Blockly.Flyout);
+Blockly.utils.object.inherits(Blockly.HorizontalFlyout, Blockly.Flyout);
 
 /**
  * Return an object with all the metrics required to size scrollbars for the
@@ -268,17 +271,17 @@ Blockly.HorizontalFlyout.prototype.wheel_ = function(e) {
 Blockly.HorizontalFlyout.prototype.layout_ = function(contents, gaps) {
   this.workspace_.scale = this.targetWorkspace_.scale;
   var margin = this.MARGIN;
-  var cursorX = this.RTL ? margin : margin + Blockly.BlockSvg.TAB_WIDTH;
+  var cursorX = margin + this.tabWidth_;
   var cursorY = margin;
   if (this.RTL) {
     contents = contents.reverse();
   }
 
-  for (var i = 0, item; item = contents[i]; i++) {
+  for (var i = 0, item; (item = contents[i]); i++) {
     if (item.type == 'block') {
       var block = item.block;
       var allBlocks = block.getDescendants(false);
-      for (var j = 0, child; child = allBlocks[j]; j++) {
+      for (var j = 0, child; (child = allBlocks[j]); j++) {
         // Mark blocks as being inside a flyout.  This is used to detect and
         // prevent the closure of the flyout if the user right-clicks on such a
         // block.
@@ -289,11 +292,11 @@ Blockly.HorizontalFlyout.prototype.layout_ = function(contents, gaps) {
       var blockHW = block.getHeightWidth();
 
       // Figure out where to place the block.
-      var tab = block.outputConnection ? Blockly.BlockSvg.TAB_WIDTH : 0;
+      var tab = block.outputConnection ? this.tabWidth_ : 0;
       if (this.RTL) {
         var moveX = cursorX + blockHW.width;
       } else {
-        var moveX = cursorX + tab;
+        var moveX = cursorX - tab;
       }
       block.moveBy(moveX, cursorY);
 
@@ -366,7 +369,7 @@ Blockly.HorizontalFlyout.prototype.reflowInternal_ = function() {
   this.workspace_.scale = this.targetWorkspace_.scale;
   var flyoutHeight = 0;
   var blocks = this.workspace_.getTopBlocks(false);
-  for (var i = 0, block; block = blocks[i]; i++) {
+  for (var i = 0, block; (block = blocks[i]); i++) {
     flyoutHeight = Math.max(flyoutHeight, block.getHeightWidth().height);
   }
   flyoutHeight += this.MARGIN * 1.5;
@@ -374,7 +377,7 @@ Blockly.HorizontalFlyout.prototype.reflowInternal_ = function() {
   flyoutHeight += Blockly.Scrollbar.scrollbarThickness;
 
   if (this.height_ != flyoutHeight) {
-    for (var i = 0, block; block = blocks[i]; i++) {
+    for (var i = 0, block; (block = blocks[i]); i++) {
       if (block.flyoutRect_) {
         this.moveRectToBlock_(block.flyoutRect_, block);
       }

@@ -45,6 +45,7 @@ goog.require('Blockly.Trashcan');
 goog.require('Blockly.utils');
 goog.require('Blockly.utils.Coordinate');
 goog.require('Blockly.utils.dom');
+goog.require('Blockly.utils.object');
 goog.require('Blockly.utils.Rect');
 goog.require('Blockly.VariablesDynamic');
 goog.require('Blockly.Workspace');
@@ -125,9 +126,14 @@ Blockly.WorkspaceSvg = function(options,
         Blockly.Procedures.flyoutCategory);
   }
 
-  Blockly.blockRendering.init();
+  /**
+   * The block renderer used for rendering blocks on this workspace.
+   * @type {!Blockly.blockRendering.Renderer}
+   * @private
+   */
+  this.renderer_ = Blockly.blockRendering.init(this.options.renderer || 'geras');
 };
-goog.inherits(Blockly.WorkspaceSvg, Blockly.Workspace);
+Blockly.utils.object.inherits(Blockly.WorkspaceSvg, Blockly.Workspace);
 
 /**
  * A wrapper function called when a resize event occurs.
@@ -395,19 +401,42 @@ Blockly.WorkspaceSvg.prototype.inverseScreenCTM_ = null;
 Blockly.WorkspaceSvg.prototype.inverseScreenCTMDirty_ = true;
 
 /**
- * Adds cursor for keyboard navigation.
- * @return {!Blockly.CursorSvg} Cursor for keyboard navigation.
+ * Get the block renderer attached to this workspace.
+ * @return {!Blockly.blockRendering.Renderer} The renderer attached to this workspace.
  */
-Blockly.WorkspaceSvg.prototype.createCursor = function() {
-  return new Blockly.CursorSvg(this);
+Blockly.WorkspaceSvg.prototype.getRenderer = function() {
+  return this.renderer_;
 };
 
 /**
- * Adds marker for keyboard navigation.
- * @return {!Blockly.CursorSvg} Marker for keyboard navigation.
+ * Sets the cursor for use with keyboard navigation.
+ * @param {!Blockly.Cursor} cursor The cursor used to move around this workspace.
  */
-Blockly.WorkspaceSvg.prototype.createMarker = function() {
-  return new Blockly.CursorSvg(this, true);
+Blockly.WorkspaceSvg.prototype.setCursor = function(cursor) {
+  if (this.cursor_) {
+    this.cursor_.getDrawer().dispose();
+  }
+  this.cursor_ = cursor;
+  this.cursor_.setDrawer(new Blockly.CursorSvg(this, false));
+  if (this.svgGroup_) {
+    this.svgGroup_.appendChild(this.cursor_.getDrawer().createDom());
+  }
+};
+
+/**
+ * Sets the marker for use with keyboard navigation.
+ * @param {!Blockly.MarkerCursor} marker The immovable cursor used to mark a
+ *     location on the workspace.
+ */
+Blockly.WorkspaceSvg.prototype.setMarker = function(marker) {
+  if (this.marker_) {
+    this.marker_.getDrawer().dispose();
+  }
+  this.marker_ = marker;
+  this.marker_.setDrawer(new Blockly.CursorSvg(this, true));
+  if (this.svgGroup_) {
+    this.svgGroup_.appendChild(this.marker_.getDrawer().createDom());
+  }
 };
 
 /**
@@ -577,10 +606,10 @@ Blockly.WorkspaceSvg.prototype.createDom = function(opt_backgroundClass) {
   }
   this.recordDeleteAreas();
 
-  var svgCursor = this.cursor.createDom();
+  var svgCursor = this.cursor_.getDrawer().createDom();
   this.svgGroup_.appendChild(svgCursor);
 
-  var svgMarker = this.marker.createDom();
+  var svgMarker = this.marker_.getDrawer().createDom();
   this.svgGroup_.appendChild(svgMarker);
 
   return this.svgGroup_;
@@ -624,12 +653,12 @@ Blockly.WorkspaceSvg.prototype.dispose = function() {
     this.zoomControls_ = null;
   }
 
-  if (this.marker) {
-    this.marker.dispose();
+  if (this.marker_) {
+    this.marker_.getDrawer().dispose();
   }
 
-  if (this.cursor) {
-    this.cursor.dispose();
+  if (this.cursor_) {
+    this.cursor_.getDrawer().dispose();
   }
 
   if (this.audioManager_) {
@@ -709,7 +738,8 @@ Blockly.WorkspaceSvg.prototype.addFlyout_ = function(tagName) {
     RTL: this.RTL,
     oneBasedIndex: this.options.oneBasedIndex,
     horizontalLayout: this.horizontalLayout,
-    toolboxPosition: this.options.toolboxPosition
+    toolboxPosition: this.options.toolboxPosition,
+    renderer: this.options.renderer
   };
   if (this.horizontalLayout) {
     this.flyout_ = new Blockly.HorizontalFlyout(workspaceOptions);
@@ -1080,7 +1110,7 @@ Blockly.WorkspaceSvg.prototype.pasteBlock_ = function(xmlBlock) {
     var block = Blockly.Xml.domToBlock(xmlBlock, this);
 
     // Handle paste for keyboard navigation
-    var markedNode = Blockly.navigation.marker_.getCurNode();
+    var markedNode = this.getMarker().getCurNode();
     if (Blockly.keyboardAccessibilityMode && markedNode) {
       Blockly.navigation.insertBlock(block, markedNode.getLocation());
       return;
@@ -2416,7 +2446,3 @@ Blockly.WorkspaceSvg.prototype.getAudioManager = function() {
 Blockly.WorkspaceSvg.prototype.getGrid = function() {
   return this.grid_;
 };
-
-// Export symbols that would otherwise be renamed by Closure compiler.
-Blockly.WorkspaceSvg.prototype['setVisible'] =
-    Blockly.WorkspaceSvg.prototype.setVisible;

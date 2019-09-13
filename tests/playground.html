@@ -91,6 +91,10 @@ function start() {
   match = location.search.match(/side=([^&]+)/);
   var side = match ? match[1] : 'start';
   document.forms.options.elements.side.value = side;
+  var autoimport = !!location.search.match(/autoimport=([^&]+)/);
+  match = location.search.match(/renderer=([^&]+)/);
+  var renderer = match ? match[1] : 'geras';
+  document.forms.options.elements.renderer.value = renderer;
   // Create main workspace.
   workspace = Blockly.inject('blocklyDiv',
       {
@@ -118,6 +122,7 @@ function start() {
         },
         toolbox: toolbox,
         toolboxPosition: side == 'top' || side == 'start' ? 'start' : 'end',
+        renderer: renderer,
         zoom:
           {
             controls: true,
@@ -146,6 +151,9 @@ function start() {
     logEvents(false);
   }
   taChange();
+  if (autoimport) {
+    fromXml();
+  }
 }
 
 function addToolboxButtonCallbacks() {
@@ -292,6 +300,9 @@ function toXml() {
 
 function fromXml() {
   var input = document.getElementById('importExport');
+  if (!input.value) {
+    return;
+  }
   var xml = Blockly.Xml.textToDom(input.value);
   Blockly.Xml.domToWorkspace(xml, workspace);
   taChange();
@@ -340,10 +351,18 @@ function toggleRenderingDebug(state) {
   }
   if (state) {
     document.getElementById('blocklyDiv').className = 'renderingDebug';
-    Blockly.blockRendering.useDebugger = true;
+    Blockly.blockRendering.startDebugger();
   } else {
     document.getElementById('blocklyDiv').className = '';
-    Blockly.blockRendering.useDebugger = false;
+    Blockly.blockRendering.stopDebugger();
+  }
+}
+
+function toggleAccessibilityMode(state) {
+  if (state) {
+    Blockly.navigation.enableKeyboardAccessibility();
+  } else {
+    Blockly.navigation.disableKeyboardAccessibility();
   }
 }
 
@@ -476,6 +495,11 @@ h1 {
       <option value="top">Top</option>
       <option value="bottom">Bottom</option>
     </select>
+    <select name="renderer" onchange="document.forms.options.submit()">
+      <option value="geras">Geras</option>
+      <option value="thrasos">Thrasos</option>
+      <option value="zelos">Zelos</option>
+    </select>
   </form>
   <select id="themeChanger" name="theme" onchange="changeTheme()">
     <option value="classic">Classic</option>
@@ -515,6 +539,12 @@ h1 {
     Block rendering debug: &nbsp;
     <input type="checkbox" onclick="toggleRenderingDebug(this.checked)" id="blockRenderDebugCheck">
   </p>
+
+  <p>
+    Enable Accessibility Mode: &nbsp;
+    <input type="checkbox" onclick="toggleAccessibilityMode(this.checked)" id="accessibilityModeCheck">
+  </p>
+
 
   <!-- The next three blocks of XML are sample toolboxes for testing basic
   configurations.  For more information on building toolboxes, see https://developers.google.com/blockly/guides/configure/web/toolbox -->
@@ -693,6 +723,7 @@ h1 {
     </category>
     <category name="Text" categorystyle="text_category">
       <block type="text"></block>
+      <block type="text_multiline"></block>
       <block type="text_join"></block>
       <block type="text_append">
         <value name="TEXT">
@@ -1034,6 +1065,7 @@ h1 {
     </category>
     <category name="Text" categorystyle="text_category">
       <block type="text"></block>
+      <block type="text_multiline"></block>
       <block type="text_join"></block>
       <block type="text_append">
         <value name="TEXT">
@@ -1423,13 +1455,6 @@ h1 {
         <block type="test_validators_colour_force_red"></block>
         <sep gap="12"></sep>
         <block type="test_validators_colour_red_null"></block>
-        <label text="Dates"></label>
-        <sep gap="12"></sep>
-        <block type="test_validators_date_null"></block>
-        <sep gap="12"></sep>
-        <block type="test_validators_date_force_20s"></block>
-        <sep gap="12"></sep>
-        <block type="test_validators_date_20s_null"></block>
         <label text="Dropdowns"></label>
         <sep gap="12"></sep>
         <block type="test_validators_dropdown_null"></block>

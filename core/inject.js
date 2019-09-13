@@ -232,9 +232,6 @@ Blockly.createMainWorkspace_ = function(svg, options, blockDragSurface,
     mainWorkspace.addZoomControls();
   }
 
-  Blockly.navigation.setCursor(mainWorkspace.cursor);
-  Blockly.navigation.setMarker(mainWorkspace.marker);
-
   // A null translation will also apply the correct initial scale.
   mainWorkspace.translate(0, 0);
   Blockly.mainWorkspace = mainWorkspace;
@@ -530,15 +527,4 @@ Blockly.inject.loadSounds_ = function(pathToMedia, workspace) {
   soundBinds.push(
       Blockly.bindEventWithChecks_(document, 'touchstart', null, unbindSounds,
           true));
-};
-
-/**
- * Modify the block tree on the existing toolbox.
- * @param {Node|string} tree DOM tree of blocks, or text representation of same.
- * @deprecated April 2015
- */
-Blockly.updateToolbox = function(tree) {
-  console.warn('Deprecated call to Blockly.updateToolbox, ' +
-               'use workspace.updateToolbox instead.');
-  Blockly.getMainWorkspace().updateToolbox(tree);
 };

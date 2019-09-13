@@ -59,10 +59,6 @@ suite('Number Fields', function() {
       var numberField = createNumberFieldSameValuesConstructor(undefined);
       assertNumberFieldDefault(numberField);
     });
-    test('Non-Parsable String', function() {
-      var numberField = createNumberFieldSameValuesConstructor('bad');
-      assertNumberFieldDefault(numberField);
-    });
     test('NaN', function() {
       var numberField = createNumberFieldSameValuesConstructor(NaN);
       assertNumberFieldDefault(numberField);
@@ -99,10 +95,6 @@ suite('Number Fields', function() {
     });
     test('Undefined', function() {
       var numberField = createNumberFieldSameValuesJson(undefined);
-      assertNumberFieldDefault(numberField);
-    });
-    test('Non-Parsable String', function() {
-      var numberField = createNumberFieldSameValuesJson('bad');
       assertNumberFieldDefault(numberField);
     });
     test('NaN', function() {

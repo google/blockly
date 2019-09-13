@@ -30,6 +30,7 @@ goog.require('Blockly.Field');
 goog.require('Blockly.fieldRegistry');
 goog.require('Blockly.utils');
 goog.require('Blockly.utils.dom');
+goog.require('Blockly.utils.object');
 goog.require('Blockly.utils.Size');
 
 
@@ -47,7 +48,6 @@ goog.require('Blockly.utils.Size');
  */
 Blockly.FieldImage = function(src, width, height,
     opt_alt, opt_onClick, opt_flipRtl) {
-  this.sourceBlock_ = null;
 
   if (!src) {
     throw Error('Src value of an image field is required');
@@ -65,10 +65,13 @@ Blockly.FieldImage = function(src, width, height,
     throw Error('Height and width values of an image field must be greater' +
       ' than 0.');
   }
-  // Store the image height, since it is different from the field height.
+
+  /**
+   * Store the image height, since it is different from the field height.
+   * @type {number}
+   * @private
+   */
   this.imageHeight_ = imageHeight;
-  this.size_ = new Blockly.utils.Size(imageWidth,
-      imageHeight + Blockly.FieldImage.Y_PADDING);
 
   /**
    * Whether to flip this image in RTL.
@@ -84,13 +87,23 @@ Blockly.FieldImage = function(src, width, height,
    */
   this.altText_ = opt_alt || '';
 
-  this.setValue(src || '');
-
   if (typeof opt_onClick == 'function') {
     this.clickHandler_ = opt_onClick;
   }
+
+  Blockly.FieldImage.superClass_.constructor.call(
+      this, src || '', null);
+
+  /**
+   * The size of the area rendered by the field.
+   * @type {Blockly.utils.Size}
+   * @protected
+   * @override
+   */
+  this.size_ = new Blockly.utils.Size(imageWidth,
+      imageHeight + Blockly.FieldImage.Y_PADDING);
 };
-goog.inherits(Blockly.FieldImage, Blockly.Field);
+Blockly.utils.object.inherits(Blockly.FieldImage, Blockly.Field);
 
 /**
  * Construct a FieldImage from a JSON arg object,
@@ -132,7 +145,7 @@ Blockly.FieldImage.prototype.EDITABLE = false;
  * rendered. Image fields are statically sized, and only need to be
  * rendered at initialization.
  * @type {boolean}
- * @private
+ * @protected
  */
 Blockly.FieldImage.prototype.isDirty_ = false;
 
@@ -150,12 +163,12 @@ Blockly.FieldImage.prototype.initView = function() {
       },
       this.fieldGroup_);
   this.imageElement_.setAttributeNS(Blockly.utils.dom.XLINK_NS,
-      'xlink:href', this.value_);
+      'xlink:href', /** @type {string} */ (this.value_));
 };
 
 /**
  * Ensure that the input value (the source URL) is a string.
- * @param {string=} opt_newValue The input value.
+ * @param {*=} opt_newValue The input value.
  * @return {?string} A string, or null if invalid.
  * @protected
  */

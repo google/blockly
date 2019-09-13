@@ -46,7 +46,8 @@ suite('Cursor', function() {
     }
     ]);
     this.workspace = new Blockly.Workspace();
-    this.cursor = this.workspace.cursor;
+    this.workspace.setCursor(new Blockly.Cursor());
+    this.cursor = this.workspace.getCursor();
     var blockA = this.workspace.newBlock('input_statement');
     var blockB = this.workspace.newBlock('input_statement');
     var blockC = this.workspace.newBlock('input_statement');

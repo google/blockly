@@ -29,6 +29,7 @@ goog.provide('Blockly.tree.BaseNode');
 
 goog.require('Blockly.Component');
 goog.require('Blockly.utils.aria');
+goog.require('Blockly.utils.object');
 goog.require('Blockly.utils.KeyCodes');
 goog.require('Blockly.utils.style');
 
@@ -112,7 +113,7 @@ Blockly.tree.BaseNode = function(content, config) {
    */
   this.depth_ = -1;
 };
-goog.inherits(Blockly.tree.BaseNode, Blockly.Component);
+Blockly.utils.object.inherits(Blockly.tree.BaseNode, Blockly.Component);
 
 
 /**
@@ -785,7 +786,7 @@ Blockly.tree.BaseNode.prototype.getIconDom = function() {
  * @protected
  */
 Blockly.tree.BaseNode.prototype.getCalculatedIconClass = function() {
-  throw new Error('unimplemented abstract method');
+  throw Error('unimplemented abstract method');
 };
 
 /**

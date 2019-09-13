@@ -448,7 +448,7 @@ Blockly.utils.aria.removeRole = function(element) {
  * @param {!(Blockly.utils.aria.State|string)} stateName State attribute being set.
  *     Automatically adds prefix 'aria-' to the state name if the attribute is
  *     not an extra attribute.
- * @param {string|boolean|number|!Array<string>} value Value
+ * @param {string|boolean|number|!Array.<string>} value Value
  * for the state attribute.
  */
 Blockly.utils.aria.setState = function(element, stateName, value) {

@@ -27,14 +27,14 @@
 
 goog.provide('Blockly.geras.Highlighter');
 
-goog.require('Blockly.blockRendering.RenderInfo');
-goog.require('Blockly.blockRendering.Measurable');
-goog.require('Blockly.blockRendering.Types');
 goog.require('Blockly.blockRendering.BottomRow');
 goog.require('Blockly.blockRendering.InputRow');
+goog.require('Blockly.blockRendering.Measurable');
+goog.require('Blockly.blockRendering.RenderInfo');
 goog.require('Blockly.blockRendering.Row');
 goog.require('Blockly.blockRendering.SpacerRow');
 goog.require('Blockly.blockRendering.TopRow');
+goog.require('Blockly.blockRendering.Types');
 goog.require('Blockly.utils.svgPaths');
 
 
@@ -61,8 +61,18 @@ Blockly.geras.Highlighter = function(info) {
 
   this.RTL_ = this.info_.RTL;
 
-  this.constants_ = Blockly.blockRendering.getConstants();
-  this.highlightConstants_ = Blockly.blockRendering.getHighlightConstants();
+  var renderer = /** @type {!Blockly.geras.Renderer} */ (info.getRenderer());
+
+  /**
+   * The renderer's constant provider.
+   * @type {!Blockly.blockRendering.ConstantProvider}
+   */
+  this.constants_ = renderer.getConstants();
+
+  /**
+   * @type {!Blockly.geras.HighlightConstantProvider}
+   */
+  this.highlightConstants_ = renderer.getHighlightConstants();
   /**
    * The offset between the block's main path and highlight path.
    * @type {number}
@@ -202,7 +212,7 @@ Blockly.geras.Highlighter.prototype.drawLeft = function() {
       this.steps_ += Blockly.utils.svgPaths.moveTo(this.info_.startX, tabBottom);
     } else {
       var left = this.info_.startX + this.highlightOffset_;
-      var bottom = this.info_.height - this.highlightOffset_;
+      var bottom = this.info_.bottomRow.baseline - this.highlightOffset_;
       this.steps_ += Blockly.utils.svgPaths.moveTo(left, bottom);
       this.steps_ += Blockly.utils.svgPaths.lineOnAxis('V', tabBottom);
     }

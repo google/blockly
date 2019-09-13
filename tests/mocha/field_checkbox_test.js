@@ -37,10 +37,6 @@ suite('Checkbox Fields', function() {
       var checkboxField = new Blockly.FieldCheckbox(undefined);
       assertValueDefault(checkboxField);
     });
-    test('Non-Parsable String', function() {
-      var checkboxField = new Blockly.FieldCheckbox('bad');
-      assertValueDefault(checkboxField);
-    });
     test('True', function() {
       var checkboxField = new Blockly.FieldCheckbox(true);
       assertValue(checkboxField, 'TRUE', 'true');
@@ -65,10 +61,6 @@ suite('Checkbox Fields', function() {
     });
     test('Undefined', function() {
       var checkboxField = Blockly.FieldCheckbox.fromJson({ checked: undefined});
-      assertValueDefault(checkboxField);
-    });
-    test('Non-Parsable String', function() {
-      var checkboxField = Blockly.FieldCheckbox.fromJson({ checked: 'bad'});
       assertValueDefault(checkboxField);
     });
     test('True', function() {

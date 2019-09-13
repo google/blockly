@@ -39,6 +39,7 @@ goog.require('Blockly.Input');
 goog.require('Blockly.Mutator');
 goog.require('Blockly.utils');
 goog.require('Blockly.utils.Coordinate');
+goog.require('Blockly.utils.object');
 goog.require('Blockly.fieldRegistry');
 goog.require('Blockly.utils.string');
 goog.require('Blockly.Warning');
@@ -171,7 +172,7 @@ Blockly.Block = function(workspace, prototypeName, opt_id) {
     if (!prototype || typeof prototype != 'object') {
       throw TypeError('Unknown block type: ' + prototypeName);
     }
-    goog.mixin(this, prototype);
+    Blockly.utils.object.mixin(this, prototype);
   }
 
   workspace.addTopBlock(this);
@@ -207,21 +208,7 @@ Blockly.Block = function(workspace, prototypeName, opt_id) {
 };
 
 /**
- * Obtain a newly created block.
- * @param {!Blockly.Workspace} workspace The block's workspace.
- * @param {?string} prototypeName Name of the language object containing
- *     type-specific functions for this block.
- * @return {!Blockly.Block} The created block.
- * @deprecated December 2015
- */
-Blockly.Block.obtain = function(workspace, prototypeName) {
-  console.warn('Deprecated call to Blockly.Block.obtain, ' +
-               'use workspace.newBlock instead.');
-  return workspace.newBlock(prototypeName);
-};
-
-/**
- * Optional text data that round-trips beween blocks and XML.
+ * Optional text data that round-trips between blocks and XML.
  * Has no effect. May be used by 3rd parties for meta information.
  * @type {?string}
  */
@@ -1557,7 +1544,7 @@ Blockly.Block.prototype.mixin = function(mixinObj, opt_disableCheck) {
           JSON.stringify(overwrites));
     }
   }
-  goog.mixin(this, mixinObj);
+  Blockly.utils.object.mixin(this, mixinObj);
 };
 
 /**

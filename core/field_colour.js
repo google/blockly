@@ -32,9 +32,10 @@ goog.require('Blockly.Events.BlockChange');
 goog.require('Blockly.Field');
 goog.require('Blockly.fieldRegistry');
 goog.require('Blockly.utils.aria');
+goog.require('Blockly.utils.colour');
 goog.require('Blockly.utils.dom');
 goog.require('Blockly.utils.IdGenerator');
-goog.require('Blockly.utils.colour');
+goog.require('Blockly.utils.object');
 goog.require('Blockly.utils.Size');
 
 
@@ -52,16 +53,20 @@ goog.require('Blockly.utils.Size');
  * @constructor
  */
 Blockly.FieldColour = function(opt_value, opt_validator, opt_config) {
-  opt_value = this.doClassValidation_(opt_value);
-  if (opt_value === null) {
-    opt_value = Blockly.FieldColour.COLOURS[0];
-  }
   Blockly.FieldColour.superClass_.constructor.call(
-      this, opt_value, opt_validator, opt_config);
+      this, opt_value || Blockly.FieldColour.COLOURS[0],
+      opt_validator, opt_config);
 
-  this.configure_(opt_config);
+  /**
+   * The size of the area rendered by the field.
+   * @type {Blockly.utils.Size}
+   * @protected
+   * @override
+   */
+  this.size_ = new Blockly.utils.Size(Blockly.FieldColour.DEFAULT_WIDTH,
+      Blockly.FieldColour.DEFAULT_HEIGHT);
 };
-goog.inherits(Blockly.FieldColour, Blockly.Field);
+Blockly.utils.object.inherits(Blockly.FieldColour, Blockly.Field);
 
 /**
  * Construct a FieldColour from a JSON arg object.
@@ -108,7 +113,7 @@ Blockly.FieldColour.prototype.CURSOR = 'default';
  * rendered. Colour fields are statically sized, and only need to be
  * rendered at initialization.
  * @type {boolean}
- * @private
+ * @protected
  */
 Blockly.FieldColour.prototype.isDirty_ = false;
 
@@ -152,19 +157,17 @@ Blockly.FieldColour.prototype.DROPDOWN_BACKGROUND_COLOUR = 'white';
 
 /**
  * Configure the field based on the given map of options.
- * @param {Object} opt_config A map of options to configure the field based on.
+ * @param {!Object} config A map of options to configure the field based on.
  * @private
  */
-Blockly.FieldColour.prototype.configure_ = function(opt_config) {
-  if (!opt_config) {
-    return;
+Blockly.FieldColour.prototype.configure_ = function(config) {
+  Blockly.FieldColour.superClass_.configure_.call(this, config);
+  if (config['colourOptions']) {
+    this.colours_ = config['colourOptions'];
+    this.titles_ = config['colourTitles'];
   }
-
-  if (opt_config['colourOptions']) {
-    this.setColours(opt_config['colourOptions'], opt_config['colourTitles']);
-  }
-  if (opt_config['columns']) {
-    this.setColumns(opt_config['columns']);
+  if (config['columns']) {
+    this.columns_ = config['columns'];
   }
 };
 
@@ -173,8 +176,6 @@ Blockly.FieldColour.prototype.configure_ = function(opt_config) {
  * @package
  */
 Blockly.FieldColour.prototype.initView = function() {
-  this.size_ = new Blockly.utils.Size(Blockly.FieldColour.DEFAULT_WIDTH,
-      Blockly.FieldColour.DEFAULT_HEIGHT);
   this.createBorderRect_();
   this.borderRect_.style['fillOpacity'] = 1;
   this.borderRect_.style.fill = this.value_;
@@ -182,7 +183,7 @@ Blockly.FieldColour.prototype.initView = function() {
 
 /**
  * Ensure that the input value is a valid colour.
- * @param {string=} opt_newValue The input value.
+ * @param {*=} opt_newValue The input value.
  * @return {?string} A valid colour, or null if invalid.
  * @protected
  */
@@ -210,7 +211,7 @@ Blockly.FieldColour.prototype.doValueUpdate_ = function(newValue) {
  * @return {string} Text representing the value of this field.
  */
 Blockly.FieldColour.prototype.getText = function() {
-  var colour = this.value_;
+  var colour = /** @type {string} */ (this.value_);
   // Try to use #rgb format if possible, rather than #rrggbb.
   if (/^#(.)\1(.)\2(.)\3$/.test(colour)) {
     colour = '#' + colour[1] + colour[3] + colour[5];

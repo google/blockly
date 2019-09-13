@@ -39,10 +39,6 @@ suite('Angle Fields', function() {
       var angleField = new Blockly.FieldAngle(undefined);
       assertValueDefault(angleField);
     });
-    test('Non-Parsable String', function() {
-      var angleField = new Blockly.FieldAngle('bad');
-      assertValueDefault(angleField);
-    });
     test('NaN', function() {
       var angleField = new Blockly.FieldAngle(NaN);
       assertValueDefault(angleField);
@@ -67,14 +63,6 @@ suite('Angle Fields', function() {
       var angleField = new Blockly.FieldAngle(362);
       assertValue(angleField, 2);
     });
-    test('Infinity', function() {
-      var angleField = new Blockly.FieldAngle(Infinity);
-      assertValueDefault(angleField);
-    });
-    test('Negative Infinity String', function() {
-      var angleField = new Blockly.FieldAngle('-Infinity');
-      assertValueDefault(angleField);
-    });
   });
   suite('fromJson', function() {
     test('Empty', function() {
@@ -83,10 +71,6 @@ suite('Angle Fields', function() {
     });
     test('Undefined', function() {
       var angleField = Blockly.FieldAngle.fromJson({ angle:undefined });
-      assertValueDefault(angleField);
-    });
-    test('Non-Parsable String', function() {
-      var angleField = Blockly.FieldAngle.fromJson({ angle:'bad' });
       assertValueDefault(angleField);
     });
     test('NaN', function() {
@@ -112,14 +96,6 @@ suite('Angle Fields', function() {
     test('> 360°', function() {
       var angleField = Blockly.FieldAngle.fromJson({ angle:362 });
       assertValue(angleField, 2);
-    });
-    test('Infinity', function() {
-      var angleField = Blockly.FieldAngle.fromJson({ angle:Infinity });
-      assertValueDefault(angleField);
-    });
-    test('Negative Infinity String', function() {
-      var angleField = Blockly.FieldAngle.fromJson({ angle:'-Infinity' });
-      assertValueDefault(angleField);
     });
   });
   suite('setValue', function() {

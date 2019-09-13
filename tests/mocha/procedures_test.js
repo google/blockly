@@ -19,7 +19,7 @@
  */
 
 goog.require('Blockly.Blocks.procedures');
-goog.require('Blockly.Msg.en');
+goog.require('Blockly.Msg');
 
 suite('Procedures', function() {
   setup(function() {

@@ -97,7 +97,7 @@ Blockly.Constants.Variables.CUSTOM_CONTEXT_MENU_VARIABLE_GETTER_SETTER_MIXIN = {
   /**
    * Add menu option to create getter/setter block for this setter/getter.
    * @param {!Array} options List of menu options to add to.
-   * @this Blockly.Block
+   * @this {Blockly.Block}
    */
   customContextMenu: function(options) {
     if (!this.isInFlyout) {

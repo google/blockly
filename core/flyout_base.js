@@ -27,11 +27,15 @@
 goog.provide('Blockly.Flyout');
 
 goog.require('Blockly.Block');
+goog.require('Blockly.blockRendering');
 goog.require('Blockly.Events');
 goog.require('Blockly.Events.BlockCreate');
 goog.require('Blockly.Events.VarCreate');
 goog.require('Blockly.FlyoutButton');
+goog.require('Blockly.FlyoutCursor');
 goog.require('Blockly.Gesture');
+goog.require('Blockly.MarkerCursor');
+goog.require('Blockly.Scrollbar');
 goog.require('Blockly.Tooltip');
 goog.require('Blockly.Touch');
 goog.require('Blockly.utils');
@@ -51,11 +55,13 @@ Blockly.Flyout = function(workspaceOptions) {
   workspaceOptions.setMetrics = this.setMetrics_.bind(this);
 
   /**
-   * @type {!Blockly.Workspace}
+   * @type {!Blockly.WorkspaceSvg}
    * @protected
    */
   this.workspace_ = new Blockly.WorkspaceSvg(workspaceOptions);
   this.workspace_.isFlyout = true;
+  this.workspace_.setCursor(new Blockly.FlyoutCursor());
+  this.workspace_.setMarker(new Blockly.MarkerCursor());
 
   /**
    * Is RTL vs LTR.
@@ -105,6 +111,13 @@ Blockly.Flyout = function(workspaceOptions) {
    * @private
    */
   this.permanentlyDisabled_ = [];
+
+  /**
+   * Width of output tab.
+   * @type {number}
+   * @const
+   */
+  this.tabWidth_ = this.workspace_.getRenderer().getConstants().TAB_WIDTH;
 };
 
 /**

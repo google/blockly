@@ -43,11 +43,14 @@ goog.require('Blockly.FieldDropdown');
 goog.require('Blockly.FieldLabelSerializable');
 goog.require('Blockly.FieldImage');
 goog.require('Blockly.FieldTextInput');
+goog.require('Blockly.FieldMultilineInput');
 goog.require('Blockly.FieldNumber');
 goog.require('Blockly.FieldVariable');
 goog.require('Blockly.Generator');
+goog.require('Blockly.geras.Renderer');
 goog.require('Blockly.navigation');
 goog.require('Blockly.Procedures');
+goog.require('Blockly.thrasos.Renderer');
 goog.require('Blockly.Toolbox');
 goog.require('Blockly.Tooltip');
 goog.require('Blockly.Touch');
@@ -57,13 +60,8 @@ goog.require('Blockly.constants');
 goog.require('Blockly.inject');
 goog.require('Blockly.utils');
 goog.require('Blockly.Xml');
+goog.require('Blockly.zelos.Renderer');
 
-
-// Turn off debugging when compiled.
-// Unused within the Blockly library, but used in Closure.
-/* eslint-disable no-unused-vars */
-var CLOSURE_DEFINES = {'goog.DEBUG': false};
-/* eslint-enable no-unused-vars */
 
 /**
  * Blockly core version.
@@ -216,9 +214,7 @@ Blockly.onKeyDown_ = function(e) {
 
   if (mainWorkspace.options.readOnly) {
     // When in read only mode handle key actions for keyboard navigation.
-    if (Blockly.keyboardAccessibilityMode) {
-      Blockly.navigation.onKeyPress(e);
-    }
+    Blockly.navigation.onKeyPress(e);
     return;
   }
 
@@ -227,8 +223,7 @@ Blockly.onKeyDown_ = function(e) {
     // Pressing esc closes the context menu.
     Blockly.hideChaff();
     Blockly.navigation.onBlocklyAction(Blockly.navigation.ACTION_EXIT);
-  } else if (Blockly.keyboardAccessibilityMode &&
-      Blockly.navigation.onKeyPress(e)) {
+  } else if (Blockly.navigation.onKeyPress(e)) {
     // If the keyboard or field handled the key press return.
     return;
   } else if (e.keyCode == Blockly.utils.KeyCodes.BACKSPACE ||
@@ -377,21 +372,6 @@ Blockly.hideChaff = function(opt_allowToolbox) {
       workspace.toolbox_.clearSelection();
     }
   }
-};
-
-/**
- * When something in Blockly's workspace changes, call a function.
- * @param {!Function} func Function to call.
- * @return {!Array.<!Array>} Opaque data that can be passed to
- *     removeChangeListener.
- * @deprecated April 2015
- */
-Blockly.addChangeListener = function(func) {
-  // Backwards compatibility from before there could be multiple workspaces.
-  console.warn(
-      'Deprecated call to Blockly.addChangeListener, ' +
-      'use workspace.addChangeListener instead.');
-  return Blockly.getMainWorkspace().addChangeListener(func);
 };
 
 /**
@@ -696,7 +676,7 @@ Blockly.checkBlockColourConstants = function() {
  * Checks for a constant in the Blockly namespace, verifying it is undefined or
  * has the old/original value. Prints a warning if this is not true.
  * @param {string} msgName The Msg constant identifier.
- * @param {Array<string>} blocklyNamePath The name parts of the tested
+ * @param {Array.<string>} blocklyNamePath The name parts of the tested
  *     constant.
  * @param {number|undefined} expectedValue The expected value of the constant.
  * @private
@@ -789,11 +769,3 @@ Blockly.updateBlockStyles_ = function(blocks) {
 Blockly.getTheme = function() {
   return Blockly.theme_;
 };
-
-// Export symbols that would otherwise be renamed by Closure compiler.
-if (!Blockly.utils.global['Blockly']) {
-  Blockly.utils.global['Blockly'] = {};
-}
-Blockly.utils.global['Blockly']['getMainWorkspace'] = Blockly.getMainWorkspace;
-Blockly.utils.global['Blockly']['addChangeListener'] =
-    Blockly.addChangeListener;

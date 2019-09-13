@@ -40,6 +40,7 @@ goog.require('Blockly.Touch');
 goog.require('Blockly.utils');
 goog.require('Blockly.utils.Coordinate');
 goog.require('Blockly.utils.dom');
+goog.require('Blockly.utils.object');
 goog.require('Blockly.utils.Rect');
 goog.require('Blockly.blockRendering.PathObject');
 
@@ -47,7 +48,7 @@ goog.require('Blockly.blockRendering.PathObject');
 /**
  * Class for a block's SVG representation.
  * Not normally called directly, workspace.newBlock() is preferred.
- * @param {!Blockly.Workspace} workspace The block's workspace.
+ * @param {!Blockly.WorkspaceSvg} workspace The block's workspace.
  * @param {?string} prototypeName Name of the language object containing
  *     type-specific functions for this block.
  * @param {string=} opt_id Optional ID.  Use this ID if provided, otherwise
@@ -109,7 +110,7 @@ Blockly.BlockSvg = function(workspace, prototypeName, opt_id) {
     this.svgGroup_.dataset.id = this.id;
   }
 };
-goog.inherits(Blockly.BlockSvg, Blockly.Block);
+Blockly.utils.object.inherits(Blockly.BlockSvg, Blockly.Block);
 
 /**
  * Height of this block, not including any statement blocks above or below.
@@ -1547,8 +1548,7 @@ Blockly.BlockSvg.prototype.positionNearConnection = function(sourceConnection,
 Blockly.BlockSvg.prototype.render = function(opt_bubble) {
   Blockly.utils.dom.startTextWidthCache();
   this.rendered = true;
-  // TODO (#2702): Choose an API for picking the renderer.
-  Blockly.blockRendering.render(this);
+  (/** @type {!Blockly.WorkspaceSvg} */ (this.workspace)).getRenderer().render(this);
   // No matter how we rendered, connection locations should now be correct.
   this.updateConnectionLocations_();
   if (opt_bubble !== false) {

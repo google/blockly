@@ -1,6 +1,4 @@
 goog.provide('Main');
-// Messages (in some language)
-goog.require('Blockly.Msg.en');
 // Core
 goog.require('Blockly');
 // Blocks

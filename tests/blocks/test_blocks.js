@@ -988,55 +988,6 @@ Blockly.Blocks['test_validators_colour_red_null'] = {
   }
 };
 
-Blockly.Blocks['test_validators_date_null'] = {
-  init: function() {
-    this.appendDummyInput()
-      .appendField("always null")
-      .appendField(new Blockly.FieldDate("2020-02-20", this.validate), "INPUT");
-    this.setColour(230);
-    this.setCommentText('All input validates to null (invalid). This means' +
-      ' the field value should not change.');
-  },
-
-  validate: function(newValue) {
-    // We should be able to expect validators to like their initial values.
-    if (newValue != '2020-02-20') {
-      return null;
-    }
-  }
-};
-Blockly.Blocks['test_validators_date_force_20s'] = {
-  init: function() {
-    this.appendDummyInput()
-      .appendField("force day 20s")
-      .appendField(new Blockly.FieldDate("2020-02-20", this.validate), "INPUT");
-    this.setColour(230);
-    this.setCommentText('The input\'s date will change to always be in the' +
-      ' 20s.');
-  },
-
-  validate: function(newValue) {
-    return newValue.substr(0, 8) + '2' + newValue.substr(9, 1);
-  }
-};
-Blockly.Blocks['test_validators_date_20s_null'] = {
-  init: function() {
-    this.appendDummyInput()
-      .appendField("not 20s -> null")
-      .appendField(new Blockly.FieldDate("2020-02-20", this.validate), "INPUT");
-    this.setColour(230);
-    this.setCommentText('If the input is not in the 20s, the input will' +
-      ' validate to null (invalid). Otherwise it will return the input value.');
-  },
-
-  validate: function(newValue) {
-    if (newValue.charAt(8) != '2') {
-      return null;
-    }
-    return newValue;
-  }
-};
-
 Blockly.Blocks['test_validators_dropdown_null'] = {
   init: function() {
     this.appendDummyInput()

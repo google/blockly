@@ -35,6 +35,7 @@ goog.require('Blockly.utils');
 goog.require('Blockly.utils.aria');
 goog.require('Blockly.utils.Coordinate');
 goog.require('Blockly.utils.dom');
+goog.require('Blockly.utils.object');
 goog.require('Blockly.utils.Size');
 goog.require('Blockly.utils.userAgent');
 
@@ -50,14 +51,13 @@ goog.require('Blockly.utils.userAgent');
  * @constructor
  */
 Blockly.FieldTextInput = function(opt_value, opt_validator) {
-  opt_value = this.doClassValidation_(opt_value);
-  if (opt_value === null) {
+  if (opt_value == null) {
     opt_value = '';
   }
-  Blockly.FieldTextInput.superClass_.constructor.call(this, opt_value,
-      opt_validator);
+  Blockly.FieldTextInput.superClass_.constructor.call(this,
+      opt_value, opt_validator);
 };
-goog.inherits(Blockly.FieldTextInput, Blockly.Field);
+Blockly.utils.object.inherits(Blockly.FieldTextInput, Blockly.Field);
 
 /**
  * Construct a FieldTextInput from a JSON arg object,
@@ -91,7 +91,8 @@ Blockly.FieldTextInput.prototype.SERIALIZABLE = true;
 Blockly.FieldTextInput.FONTSIZE = 11;
 
 /**
- * Pixel size of input border radius.  Should match blocklyText's border-radius in CSS.
+ * Pixel size of input border radius.
+ * Should match blocklyText's border-radius in CSS.
  */
 Blockly.FieldTextInput.BORDERRADIUS = 4;
 
@@ -102,14 +103,14 @@ Blockly.FieldTextInput.prototype.CURSOR = 'text';
 
 /**
  * Allow browser to spellcheck this field.
- * @private
+ * @protected
  */
 Blockly.FieldTextInput.prototype.spellcheck_ = true;
 
 /**
  * Ensure that the input value casts to a valid string.
- * @param {string=} opt_newValue The input value.
- * @return {?string} A valid string, or null if invalid.
+ * @param {*=} opt_newValue The input value.
+ * @return {*} A valid string, or null if invalid.
  * @protected
  */
 Blockly.FieldTextInput.prototype.doClassValidation_ = function(opt_newValue) {
@@ -244,7 +245,7 @@ Blockly.FieldTextInput.prototype.showInlineEditor_ = function(quietInput) {
 
 /**
  * Create the text input editor widget.
- * @return {!HTMLInputElement} The newly created text input editor.
+ * @return {!HTMLElement} The newly created text input editor.
  * @protected
  */
 Blockly.FieldTextInput.prototype.widgetCreate_ = function() {
@@ -310,9 +311,9 @@ Blockly.FieldTextInput.prototype.widgetDispose_ = function() {
 
 /**
  * Bind handlers for user input on the text input field's editor.
- * @param {!HTMLInputElement} htmlInput The htmlInput to which event
+ * @param {!HTMLElement} htmlInput The htmlInput to which event
  *    handlers will be bound.
- * @private
+ * @protected
  */
 Blockly.FieldTextInput.prototype.bindInputEvents_ = function(htmlInput) {
   // Trap Enter without IME and Esc to hide.

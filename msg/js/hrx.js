@@ -2,10 +2,6 @@
 
 'use strict';
 
-goog.provide('Blockly.Msg.hrx');
-
-goog.require('Blockly.Msg');
-
 Blockly.Msg["ADD_COMMENT"] = "Kommentar hinzufüche";
 Blockly.Msg["CANNOT_DELETE_VARIABLE_PROCEDURE"] = "Can't delete the variable '%1' because it's part of the definition of the function '%2'";  // untranslated
 Blockly.Msg["CHANGE_VALUE_TITLE"] = "Neie Variable...";
@@ -393,6 +389,7 @@ Blockly.Msg["TEXT_TRIM_OPERATOR_RIGHT"] = "entferne Leerzeiche von End Seite von
 Blockly.Msg["TEXT_TRIM_TOOLTIP"] = "Entfernt Leerzeiche vom Oonfang und / orrer End von en Text.";
 Blockly.Msg["TODAY"] = "Today";  // untranslated
 Blockly.Msg["UNDO"] = "Undo";  // untranslated
+Blockly.Msg["UNNAMED_KEY"] = "unnamed";  // untranslated
 Blockly.Msg["VARIABLES_DEFAULT_NAME"] = "Element";
 Blockly.Msg["VARIABLES_GET_CREATE_SET"] = "Generier/erzeiche \"Schreibe %1\"";
 Blockly.Msg["VARIABLES_GET_HELPURL"] = "https://github.com/google/blockly/wiki/Variables#get";  // untranslated

@@ -2,10 +2,6 @@
 
 'use strict';
 
-goog.provide('Blockly.Msg.th');
-
-goog.require('Blockly.Msg');
-
 Blockly.Msg["ADD_COMMENT"] = "ใส่คำอธิบาย";
 Blockly.Msg["CANNOT_DELETE_VARIABLE_PROCEDURE"] = "ไม่สามารถลบตัวแปร '%1' ได้เนื่องจากเป็นส่วนหนึ่งของนิยามของฟังก์ชัน '%2'";
 Blockly.Msg["CHANGE_VALUE_TITLE"] = "เปลี่ยนค่า:";
@@ -393,6 +389,7 @@ Blockly.Msg["TEXT_TRIM_OPERATOR_RIGHT"] = "ลบช่องว่างข้�
 Blockly.Msg["TEXT_TRIM_TOOLTIP"] = "คืนค่าสำเนาของข้อความที่ลบเอาช่องว่างหน้าและหลังข้อความออกแล้ว";
 Blockly.Msg["TODAY"] = "วันนี้";
 Blockly.Msg["UNDO"] = "ย้อนกลับ";
+Blockly.Msg["UNNAMED_KEY"] = "unnamed";  // untranslated
 Blockly.Msg["VARIABLES_DEFAULT_NAME"] = "รายการ";
 Blockly.Msg["VARIABLES_GET_CREATE_SET"] = "สร้าง \"กำหนด %1\"";
 Blockly.Msg["VARIABLES_GET_HELPURL"] = "https://github.com/google/blockly/wiki/Variables#get";  // untranslated

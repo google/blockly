@@ -498,9 +498,12 @@ Blockly.Gesture.prototype.doStart = function(e) {
   Blockly.Tooltip.block();
 
   if (this.targetBlock_) {
-    this.targetBlock_.select();
     if (!this.targetBlock_.isInFlyout && e.shiftKey) {
       Blockly.navigation.enableKeyboardAccessibility();
+      this.creatorWorkspace_.cursor.setLocation(
+          Blockly.navigation.getTopNode(this.targetBlock_));
+    } else {
+      this.targetBlock_.select();
     }
   }
 
@@ -760,14 +763,13 @@ Blockly.Gesture.prototype.doBlockClick_ = function() {
  * @private
  */
 Blockly.Gesture.prototype.doWorkspaceClick_ = function(e) {
-  Blockly.navigation.disableKeyboardAccessibility();
   var ws = this.creatorWorkspace_;
   if (e.shiftKey) {
     Blockly.navigation.enableKeyboardAccessibility();
     var screenCoord = new Blockly.utils.Coordinate(e.clientX, e.clientY);
     var wsCoord = Blockly.utils.screenToWsCoordinates(ws, screenCoord);
     var wsNode = Blockly.ASTNode.createWorkspaceNode(ws, wsCoord);
-    ws.cursor.setLocation(wsNode);
+    ws.getCursor().setLocation(wsNode);
   } else if (Blockly.selected) {
     Blockly.selected.unselect();
   }

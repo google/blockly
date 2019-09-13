@@ -42,7 +42,7 @@ There are two main branches for Blockly.
 
 ## Issues and Milestones
 
-We typically triage all bugs within 2 working days, which includes adding any appropriate labels and assigning it to a milestone. Please keep in mind, we are a small team so even feature reqeusts that everyone agrees on may not be prioritized.
+We typically triage all bugs within 2 working days, which includes adding any appropriate labels and assigning it to a milestone. Please keep in mind, we are a small team so even feature requests that everyone agrees on may not be prioritized.
 
 ### Milestones
 

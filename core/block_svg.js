@@ -1615,9 +1615,9 @@ Blockly.BlockSvg.prototype.updateConnectionLocations_ = function() {
 };
 
 /**
- * Set the parent svg group for the cursor.
+ * Add the cursor svg to this blocks svg group.
  * @param {SVGElement} cursorSvg The svg root of the cursor to be added to the
- *     block.
+ *     block svg group.
  * @package
  */
 Blockly.BlockSvg.prototype.setCursorSvg = function(cursorSvg) {
@@ -1628,9 +1628,9 @@ Blockly.BlockSvg.prototype.setCursorSvg = function(cursorSvg) {
 };
 
 /**
- * Set the parent svg group for the marker.
+ * Add the marker svg to this blocks svg group.
  * @param {SVGElement} markerSvg The svg root of the marker to be added to the
- *     block.
+ *     block svg group.
  * @package
  */
 Blockly.BlockSvg.prototype.setMarkerSvg = function(markerSvg) {

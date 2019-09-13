@@ -103,7 +103,7 @@ Blockly.ASTNode.DEFAULT_OFFSET_Y = -20;
  * Whether an AST node of the given type points to a connection.
  * @param {string} type The type to check.  One of Blockly.ASTNode.types.
  * @return {boolean} True if a node of the given type points to a connection.
- * @package
+ * @private
  */
 Blockly.ASTNode.isConnectionType_ = function(type) {
   switch (type) {

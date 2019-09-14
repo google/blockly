@@ -29,7 +29,6 @@ suite('Label Serializable Fields', function() {
     assertValue(labelField, '');
   }
   function assertClass(labelField, cssClass) {
-    labelField.initValue();
     labelField.fieldGroup_ = Blockly.utils.dom.createSvgElement('g', {}, null);
     labelField.initView();
     chai.assert.isTrue(Blockly.utils.dom.hasClass(
@@ -192,10 +191,10 @@ suite('Label Serializable Fields', function() {
       assertClass(field, 'testClass');
     });
     test('JS Configuration - Override', function() {
-      var field = new Blockly.FieldLabelSerializable('text', 'oldClass', {
-        class: 'testClass'
+      var field = new Blockly.FieldLabelSerializable('text', 'paramClass', {
+        class: 'configClass'
       });
-      assertClass(field, 'testClass');
+      assertClass(field, 'paramClass');
     });
     suite('setClass', function() {
       test('setClass', function() {

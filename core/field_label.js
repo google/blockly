@@ -49,9 +49,22 @@ goog.require('Blockly.utils.Size');
 Blockly.FieldLabel = function(opt_value, opt_class, opt_config) {
   if (opt_value == null) {
     opt_value = '';
-  }
+  }  // Else it gets cast to a string (e.g. false -> 'false').
+
+  /**
+   * The html class name to use for this field.
+   * @type {string}
+   * @private
+   */
+  this.class_ = opt_class || '';
+
   Blockly.FieldLabel.superClass_.constructor.call(
       this, opt_value, null, opt_config);
+
+  // Give constructor parameters priority.
+  if (opt_class != null) {
+    this.class_ = opt_class;
+  }
 
   /**
    * The size of the area rendered by the field.
@@ -60,13 +73,6 @@ Blockly.FieldLabel = function(opt_value, opt_class, opt_config) {
    * @override
    */
   this.size_ = new Blockly.utils.Size(0, Blockly.Field.TEXT_DEFAULT_HEIGHT);
-
-  /**
-   * The html class name to use for this field.
-   * @type {string}
-   * @private
-   */
-  this.class_ = opt_class || '';
 };
 Blockly.utils.object.inherits(Blockly.FieldLabel, Blockly.Field);
 

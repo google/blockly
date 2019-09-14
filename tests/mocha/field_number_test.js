@@ -33,9 +33,9 @@ suite('Number Fields', function() {
   function assertNumberField(numberField, expectedMin, expectedMax,
       expectedPrecision, expectedValue) {
     assertValue(numberField, expectedValue);
-    chai.assert.equal(numberField.getConstraints().min, expectedMin);
-    chai.assert.equal(numberField.getConstraints().max, expectedMax);
-    chai.assert.equal(numberField.getConstraints().precision, expectedPrecision);
+    chai.assert.equal(numberField.getMin(), expectedMin);
+    chai.assert.equal(numberField.getMax(), expectedMax);
+    chai.assert.equal(numberField.getPrecision(), expectedPrecision);
   }
   function assertNumberFieldDefault(numberField) {
     assertNumberField(numberField, -Infinity, Infinity, 0, 0);

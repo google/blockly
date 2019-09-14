@@ -249,14 +249,12 @@ suite('Text Input Fields', function() {
       });
       test('Default', function() {
         var field = new Blockly.FieldTextInput('test');
-        field.initValue();
         this.assertSpellcheck(field, true);
       });
       test('JS Constructor', function() {
         var field = new Blockly.FieldTextInput('test', null, {
           spellcheck: false
         });
-        field.initValue();
         this.assertSpellcheck(field, false);
       });
       test('JSON Definition', function() {
@@ -264,18 +262,15 @@ suite('Text Input Fields', function() {
           text: 'test',
           spellcheck: false
         });
-        field.initValue();
         this.assertSpellcheck(field, false);
       });
       test('setSpellcheck Editor Hidden', function() {
         var field = new Blockly.FieldTextInput('test');
-        field.initValue();
         field.setSpellcheck(false);
         this.assertSpellcheck(field, false);
       });
       test('setSpellcheck Editor Shown', function() {
         var field = new Blockly.FieldTextInput('test');
-        field.initValue();
         this.prepField(field);
         field.showEditor_();
         field.setSpellcheck(false);

@@ -57,8 +57,6 @@ Blockly.FieldTextInput = function(opt_value, opt_validator, opt_config) {
   if (opt_value == null) {
     opt_value = '';
   }
-  Blockly.FieldTextInput.superClass_.constructor.call(this,
-      opt_value, opt_validator, opt_config);
 
   /**
    * Allow browser to spellcheck this field.
@@ -66,6 +64,9 @@ Blockly.FieldTextInput = function(opt_value, opt_validator, opt_config) {
    * @private
    */
   this.spellcheck_ = true;
+
+  Blockly.FieldTextInput.superClass_.constructor.call(this,
+      opt_value, opt_validator, opt_config);
 };
 Blockly.utils.object.inherits(Blockly.FieldTextInput, Blockly.Field);
 

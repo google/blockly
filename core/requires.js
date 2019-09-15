@@ -20,7 +20,7 @@
 
 /**
  * @fileoverview Default Blockly entry point. Use this to pick and choose which
- * fields and renderes to include in your Blockly bundle.
+ * fields and renderers to include in your Blockly bundle.
  * @author samelh@google.com (Sam El-Husseini)
  */
 'use strict';

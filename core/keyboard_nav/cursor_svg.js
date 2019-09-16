@@ -50,7 +50,7 @@ Blockly.CursorSvg = function(workspace, opt_marker) {
    * True if the cursor should be drawn as a marker, false otherwise.
    * A marker is drawn as a solid blue line, while the cursor is drawns as a
    * flashing red one.
-   * @type {boolean | undefined}
+   * @type {boolean|undefined}
    * @private
    */
   this.isMarker_ = opt_marker;
@@ -156,7 +156,7 @@ Blockly.CursorSvg.prototype.currentCursorSvg = null;
 
 /**
  * Return the root node of the SVG or null if none exists.
- * @return {Element} The root SVG node.
+ * @return {SVGElement} The root SVG node.
  */
 Blockly.CursorSvg.prototype.getSvgRoot = function() {
   return this.svgGroup_;
@@ -164,7 +164,7 @@ Blockly.CursorSvg.prototype.getSvgRoot = function() {
 
 /**
  * Create the DOM element for the cursor.
- * @return {!Element} The cursor controls SVG group.
+ * @return {!SVGElement} The cursor controls SVG group.
  * @package
  */
 Blockly.CursorSvg.prototype.createDom = function() {

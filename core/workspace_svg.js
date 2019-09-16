@@ -116,7 +116,7 @@ Blockly.WorkspaceSvg = function(options,
   /**
    * Holds the cursors svg element when the cursor is attached to the workspace.
    * This is null if there is no cursor on the workspace.
-   * @type {Element}
+   * @type {SVGElement}
    * @private
    */
   this.cursorSvg_ = null;
@@ -124,7 +124,7 @@ Blockly.WorkspaceSvg = function(options,
   /**
    * Holds the markers svg element when the marker is attached to the workspace.
    * This is null if there is no marker on the workspace.
-   * @type {Element}
+   * @type {SVGElement}
    * @private
    */
   this.markerSvg_ = null;
@@ -446,7 +446,7 @@ Blockly.WorkspaceSvg.prototype.setMarker = function(marker) {
 
 /**
  * Add the cursor svg to this workspaces svg group.
- * @param {Element} cursorSvg The svg root of the cursor to be added to the
+ * @param {SVGElement} cursorSvg The svg root of the cursor to be added to the
  *     workspace svg group.
  * @package
  */
@@ -464,7 +464,7 @@ Blockly.WorkspaceSvg.prototype.setCursorSvg = function(cursorSvg) {
 
 /**
  * Add the marker svg to this workspaces svg group.
- * @param {Element} markerSvg The svg root of the marker to be added to the
+ * @param {SVGElement} markerSvg The svg root of the marker to be added to the
  *     workspace svg group.
  * @package
  */

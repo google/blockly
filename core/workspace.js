@@ -120,14 +120,14 @@ Blockly.Workspace = function(opt_options) {
   /**
    * The cursor used to navigate around the AST for keyboard navigation.
    * @type {Blockly.Cursor}
-   * @private
+   * @protected
    */
   this.cursor_ = null;
 
   /**
    * The marker used to mark a location for keyboard navigation.
    * @type {Blockly.MarkerCursor}
-   * @private
+   * @protected
    */
   this.marker_ = null;
 

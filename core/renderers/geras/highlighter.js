@@ -90,21 +90,12 @@ Blockly.geras.Highlighter = function(info) {
 };
 
 /**
- * Get the steps for the main highlight path.
- * @return {string} The steps for the main highlight path.
+ * Get the steps for the highlight path.
+ * @return {string} The steps for the highlight path.
  * @package
  */
-Blockly.geras.Highlighter.prototype.getSteps = function() {
-  return this.steps_;
-};
-
-/**
- * Get the steps for the inline highlight path.
- * @return {string} The steps for the inline highlight path.
- * @package
- */
-Blockly.geras.Highlighter.prototype.getInlineSteps = function() {
-  return this.inlineSteps_;
+Blockly.geras.Highlighter.prototype.getPath = function() {
+  return this.steps_ + '\n' + this.inlineSteps_;
 };
 
 Blockly.geras.Highlighter.prototype.drawTopCorner = function(row) {

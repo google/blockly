@@ -33,24 +33,9 @@ goog.provide('Blockly');
 goog.require('Blockly.BlockSvg.render');
 goog.require('Blockly.Events');
 goog.require('Blockly.Events.Ui');
-goog.require('Blockly.FieldAngle');
-goog.require('Blockly.FieldCheckbox');
-goog.require('Blockly.FieldColour');
-// Date picker commented out since it increases footprint by 60%.
-// Add it only if you need it.
-//goog.require('Blockly.FieldDate');
-goog.require('Blockly.FieldDropdown');
-goog.require('Blockly.FieldLabelSerializable');
-goog.require('Blockly.FieldImage');
-goog.require('Blockly.FieldTextInput');
-goog.require('Blockly.FieldMultilineInput');
-goog.require('Blockly.FieldNumber');
-goog.require('Blockly.FieldVariable');
 goog.require('Blockly.Generator');
-goog.require('Blockly.geras.Renderer');
 goog.require('Blockly.navigation');
 goog.require('Blockly.Procedures');
-goog.require('Blockly.thrasos.Renderer');
 goog.require('Blockly.Toolbox');
 goog.require('Blockly.Tooltip');
 goog.require('Blockly.Touch');
@@ -60,7 +45,6 @@ goog.require('Blockly.constants');
 goog.require('Blockly.inject');
 goog.require('Blockly.utils');
 goog.require('Blockly.Xml');
-goog.require('Blockly.zelos.Renderer');
 
 
 /**

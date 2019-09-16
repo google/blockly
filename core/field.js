@@ -80,6 +80,23 @@ Blockly.Field = function(value, opt_validator, opt_config) {
    * @protected
    */
   this.size_ = new Blockly.utils.Size(0, 0);
+
+  /**
+   * Holds the cursors svg element when the cursor is attached to the field.
+   * This is null if there is no cursor on the field.
+   * @type {SVGElement}
+   * @private
+   */
+  this.cursorSvg_ = null;
+
+  /**
+   * Holds the markers svg element when the marker is attached to the field.
+   * This is null if there is no marker on the field.
+   * @type {SVGElement}
+   * @private
+   */
+  this.markerSvg_ = null;
+
   opt_config && this.configure_(opt_config);
   this.setValue(value);
   opt_validator && this.setValidator(opt_validator);
@@ -905,4 +922,36 @@ Blockly.Field.prototype.getParentInput = function() {
  */
 Blockly.Field.prototype.onBlocklyAction = function(_action) {
   return false;
+};
+
+/**
+ * Add the cursor svg to this fields svg group.
+ * @param {SVGElement} cursorSvg The svg root of the cursor to be added to the
+ *     field group.
+ * @package
+ */
+Blockly.Field.prototype.setCursorSvg = function(cursorSvg) {
+  if (!cursorSvg) {
+    this.cursorSvg_ = null;
+    return;
+  }
+
+  this.fieldGroup_.appendChild(cursorSvg);
+  this.cursorSvg_ = cursorSvg;
+};
+
+/**
+ * Add the marker svg to this fields svg group.
+ * @param {SVGElement} markerSvg The svg root of the marker to be added to the
+ *     field group.
+ * @package
+ */
+Blockly.Field.prototype.setMarkerSvg = function(markerSvg) {
+  if (!markerSvg) {
+    this.markerSvg_ = null;
+    return;
+  }
+
+  this.fieldGroup_.appendChild(markerSvg);
+  this.markerSvg_ = markerSvg;
 };

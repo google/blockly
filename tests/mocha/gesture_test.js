@@ -87,6 +87,8 @@ suite('Gesture', function() {
   test('Workspace click - Shift click enters accessibility mode', function() {
     var event = {
       shiftKey : true,
+      clientX : 10,
+      clientY : 10,
 
     };
     var ws = Blockly.inject('blocklyDiv', {});

@@ -28,6 +28,7 @@ goog.provide('Blockly.BlockSvg');
 
 goog.require('Blockly.Block');
 goog.require('Blockly.blockAnimations');
+goog.require('Blockly.blockRendering.IPathObject');
 goog.require('Blockly.ContextMenu');
 goog.require('Blockly.Events');
 goog.require('Blockly.Events.Ui');
@@ -65,26 +66,35 @@ Blockly.BlockSvg = function(workspace, prototypeName, opt_id) {
   this.svgGroup_.translate_ = '';
 
   /**
+   * The renderer's path object.
+   * @type {Blockly.blockRendering.IPathObject}
+   * @package
+   */
+  this.pathObject =
+      workspace.getRenderer().makePathObject(this.svgGroup_);
+
+  // The next three paths are set only for backwards compatibility reasons.
+  /**
+   * The dark path of the block.
    * @type {SVGElement}
    * @private
    */
-  this.svgPathDark_ = Blockly.utils.dom.createSvgElement('path',
-      {'class': 'blocklyPathDark', 'transform': 'translate(1,1)'},
-      this.svgGroup_);
+  this.svgPathDark_ = this.pathObject.svgPathDark || null;
 
   /**
+   * The primary path of the block.
    * @type {SVGElement}
    * @private
    */
-  this.svgPath_ = Blockly.utils.dom.createSvgElement('path',
-      {'class': 'blocklyPath'}, this.svgGroup_);
+  this.svgPath_ = this.pathObject.svgPath || null;
 
   /**
+   * The light path of the block.
    * @type {SVGElement}
    * @private
    */
-  this.svgPathLight_ = Blockly.utils.dom.createSvgElement('path',
-      {'class': 'blocklyPathLight'}, this.svgGroup_);
+  this.svgPathLight_ = this.pathObject.svgPathLight || null;
+
   this.svgPath_.tooltip = this;
 
   /** @type {boolean} */
@@ -107,6 +117,22 @@ Blockly.BlockSvg = function(workspace, prototypeName, opt_id) {
   if (this.svgGroup_.dataset) {
     this.svgGroup_.dataset.id = this.id;
   }
+
+  /**
+   * Holds the cursors svg element when the cursor is attached to the block.
+   * This is null if there is no cursor on the block.
+   * @type {SVGElement}
+   * @private
+   */
+  this.cursorSvg_ = null;
+
+  /**
+   * Holds the markers svg element when the marker is attached to the block.
+   * This is null if there is no marker on the block.
+   * @type {SVGElement}
+   * @private
+   */
+  this.markerSvg_ = null;
 };
 Blockly.utils.object.inherits(Blockly.BlockSvg, Blockly.Block);
 
@@ -1537,7 +1563,7 @@ Blockly.BlockSvg.prototype.positionNearConnection = function(sourceConnection,
   }
 };
 
-/*
+/**
  * Render the block.
  * Lays out and reflows a block based on its contents and settings.
  * @param {boolean=} opt_bubble If false, just render this block.
@@ -1595,4 +1621,40 @@ Blockly.BlockSvg.prototype.updateConnectionLocations_ = function() {
       this.nextConnection.tighten_();
     }
   }
+};
+
+/**
+ * Add the cursor svg to this block's svg group.
+ * @param {SVGElement} cursorSvg The svg root of the cursor to be added to the
+ *     block svg group.
+ * @package
+ */
+Blockly.BlockSvg.prototype.setCursorSvg = function(cursorSvg) {
+  if (!cursorSvg) {
+    this.cursorSvg_ = null;
+    return;
+  }
+
+  this.svgGroup_.appendChild(cursorSvg);
+  this.cursorSvg_ = cursorSvg;
+};
+
+/**
+ * Add the marker svg to this block's svg group.
+ * @param {SVGElement} markerSvg The svg root of the marker to be added to the
+ *     block svg group.
+ * @package
+ */
+Blockly.BlockSvg.prototype.setMarkerSvg = function(markerSvg) {
+  if (!markerSvg) {
+    this.markerSvg_ = null;
+    return;
+  }
+
+  if (this.cursorSvg_) {
+    this.svgGroup_.insertBefore(markerSvg, this.cursorSvg_);
+  } else {
+    this.svgGroup_.appendChild(markerSvg);
+  }
+  this.markerSvg_ = markerSvg;
 };

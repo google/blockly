@@ -315,7 +315,7 @@ Blockly.blockRendering.TopRow.prototype.hasLeftSquareCorner = function(block) {
   var prevBlock = block.getPreviousBlock();
 
   return !!block.outputConnection ||
-      hasHat || (prevBlock && prevBlock.getNextBlock() == block);
+      hasHat || (prevBlock ? prevBlock.getNextBlock() == block : false);
 };
 
 /**

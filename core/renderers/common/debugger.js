@@ -57,8 +57,9 @@ Blockly.blockRendering.Debug = function() {
 };
 
 /**
- * @type {!Object.<string, boolean>} Configuration object containing booleans
- *    to enable and disable debug rendering of specific rendering components.
+ * Configuration object containing booleans to enable and disable debug
+ * rendering of specific rendering components.
+ * @type {!Object.<string, boolean>}
  */
 Blockly.blockRendering.Debug.config = {
   rowSpacers: true,

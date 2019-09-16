@@ -267,53 +267,47 @@ function addToolboxButtonCallbacks() {
 
 function setRenderDebugOptionCheckboxState(overrideOptions) {
   Blockly.blockRendering.Debug.config = overrideOptions || {};
-  if(!overrideOptions) return;
+  if (!overrideOptions) {
+    return;
+  }
   var renderDebugOptionsListEl = document.getElementById('renderDebugOptions');
   var renderDebugOptionInputs =
-      renderDebugOptionsListEl.getElementsByTagName('INPUT');
-  for (var optionInput of renderDebugOptionInputs) {
-    var optionId = optionInput.getAttribute('id');
-    var checkboxMatch = optionId.match('^RenderDebug(.*)Check$');
-    if (!checkboxMatch) continue;
-    var optionName = checkboxMatch[1];
+      renderDebugOptionsListEl.getElementsByTagName('input');
+  for (var i = 0, optionInput;
+      (optionInput = renderDebugOptionInputs[i]); i++) {
+    var optionName = optionInput.getAttribute('data-optionName');
     optionInput.checked = !!overrideOptions[optionName];
   }
 }
 
-function updateRenderDebugOptions() {
-  var renderDebugOptionsListEl = document.getElementById('renderDebugOptions');
-  var renderDebugOptionInputs =
-      renderDebugOptionsListEl.getElementsByTagName('INPUT');
-  var debugOptions = {};
-  for (var optionInput of renderDebugOptionInputs) {
-    var optionId = optionInput.getAttribute('id');
-    var checkboxMatch = optionId.match('^RenderDebug(.*)Check$');
-    if (!checkboxMatch) continue;
-    var optionName = checkboxMatch[1];
-    debugOptions[optionName] = optionInput.checked;
-  }
-  Blockly.blockRendering.Debug.config = debugOptions;
+function updateRenderDebugOptions(e) {
+  var target = e.target;
+  var optionName = target.getAttribute('data-optionName');
+  var config = Blockly.blockRendering.Debug.config;
+  config[optionName] = !!target.checked;
   sessionStorage.setItem(
-      'blockRenderDebugOptions',JSON.stringify(debugOptions));
+      'blockRenderDebugOptions', JSON.stringify(config));
+  workspace.render();
 }
 
 function addRenderDebugOptionsCheckboxes() {
   var renderDebugConfig = Blockly.blockRendering.Debug.config;
   var renderDebugOptionsListEl = document.getElementById('renderDebugOptions');
-  for (var optionName in renderDebugConfig) {
+  Object.keys(renderDebugConfig).forEach(function(optionName) {
     var optionCheckId = 'RenderDebug' + optionName + 'Check';
-    var optionLabel = document.createElement('LABEL');
+    var optionLabel = document.createElement('label');
     optionLabel.setAttribute('htmlFor', optionCheckId);
-    optionLabel.innerHTML = optionName;
-    var optionCheck = document.createElement('INPUT');
+    optionLabel.textContent = optionName;
+    var optionCheck = document.createElement('input');
     optionCheck.setAttribute('type', 'checkbox');
     optionCheck.setAttribute('id', optionCheckId);
+    optionCheck.setAttribute('data-optionName', optionName);
     optionCheck.onclick = updateRenderDebugOptions;
     var optionLi = document.createElement('li');
     optionLi.appendChild(optionLabel);
     optionLi.appendChild(optionCheck);
     renderDebugOptionsListEl.appendChild(optionLi);
-  }
+  });
 }
 
 function changeTheme() {

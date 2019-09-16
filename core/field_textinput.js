@@ -47,15 +47,18 @@ goog.require('Blockly.utils.userAgent');
  * @param {Function=} opt_validator A function that is called to validate
  *    changes to the field's value. Takes in a string & returns a validated
  *    string, or null to abort the change.
+ * @param {Object=} opt_config A map of options used to configure the field.
+ *    See the [field creation documentation]{@link https://developers.google.com/blockly/guides/create-custom-blocks/fields/built-in-fields/text-input#creation}
+ *    for a list of properties this parameter supports.
  * @extends {Blockly.Field}
  * @constructor
  */
-Blockly.FieldTextInput = function(opt_value, opt_validator) {
+Blockly.FieldTextInput = function(opt_value, opt_validator, opt_config) {
   if (opt_value == null) {
     opt_value = '';
   }
   Blockly.FieldTextInput.superClass_.constructor.call(this,
-      opt_value, opt_validator);
+      opt_value, opt_validator, opt_config);
 };
 Blockly.utils.object.inherits(Blockly.FieldTextInput, Blockly.Field);
 

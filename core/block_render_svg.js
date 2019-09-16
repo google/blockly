@@ -32,40 +32,6 @@ goog.require('Blockly.BlockSvg');
 goog.require('Blockly.utils.dom');
 
 
-/**
- * An object that holds information about the paths that are used to render the
- * block.  Each path is built up as an array of steps during the render process.
- * The arrays are then turned into strings, which are set in the block's SVG.
- * @constructor
- * @struct
- * @private
- */
-Blockly.BlockSvg.PathObject = function() {
-  /**
-   * The primary outline of the block.
-   * @type {!Array.<string|number>}
-   */
-  this.steps = [];
-
-  /**
-   * The highlight on the primary outline of the block.
-   * @type {!Array.<string|number>}
-   */
-  this.highlightSteps = [];
-
-  /**
-   * The holes in the block for inline inputs.
-   * @type {!Array.<string|number>}
-   */
-  this.inlineSteps = [];
-
-  /**
-   * The highlights on holes in the block for inline inputs.
-   * @type {!Array.<string|number>}
-   */
-  this.highlightInlineSteps = [];
-};
-
 // UI constants for rendering blocks.
 /**
  * Vertical space between elements.
@@ -106,30 +72,6 @@ Blockly.BlockSvg.prototype.getHeightWidth = function() {
     width = Math.max(width, nextHeightWidth.width);
   }
   return {height: height, width: width};
-};
-
-/**
- * Update the block's SVG paths based on the paths that were computed during
- * this render pass.
- * @param {!Blockly.BlockSvg.PathObject} pathObject The object containing
- *     partially constructed SVG paths, which will be modified by this function.
- * @private
- */
-Blockly.BlockSvg.prototype.setPaths_ = function(pathObject) {
-  var pathString = pathObject.steps.join(' ') + '\n' +
-      pathObject.inlineSteps.join(' ');
-  this.svgPath_.setAttribute('d', pathString);
-  this.svgPathDark_.setAttribute('d', pathString);
-
-  pathString = pathObject.highlightSteps.join(' ') + '\n' +
-      pathObject.highlightInlineSteps.join(' ');
-  this.svgPathLight_.setAttribute('d', pathString);
-  if (this.RTL) {
-    // Mirror the block's path.
-    this.svgPath_.setAttribute('transform', 'scale(-1 1)');
-    this.svgPathLight_.setAttribute('transform', 'scale(-1 1)');
-    this.svgPathDark_.setAttribute('transform', 'translate(1,1) scale(-1 1)');
-  }
 };
 
 /**

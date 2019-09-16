@@ -278,7 +278,9 @@ Blockly.blockRendering.Debug.prototype.drawRenderedRow = function(row, cursorY, 
 Blockly.blockRendering.Debug.prototype.drawRowWithElements = function(row, cursorY, isRtl) {
   for (var i = 0, elem; (elem = row.elements[i]); i++) {
     if (Blockly.blockRendering.Types.isSpacer(elem)) {
-      this.drawSpacerElem(elem, row.height, isRtl);
+      this.drawSpacerElem(
+          /** @type {Blockly.blockRendering.InRowSpacer} */ (elem),
+          row.height, isRtl);
     } else {
       this.drawRenderedElem(elem, isRtl);
     }

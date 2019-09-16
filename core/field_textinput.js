@@ -47,15 +47,25 @@ goog.require('Blockly.utils.userAgent');
  * @param {Function=} opt_validator A function that is called to validate
  *    changes to the field's value. Takes in a string & returns a validated
  *    string, or null to abort the change.
+ * @param {Object=} opt_config A map of options used to configure the field.
+ *    See the [field creation documentation]{@link https://developers.google.com/blockly/guides/create-custom-blocks/fields/built-in-fields/text-input#creation}
+ *    for a list of properties this parameter supports.
  * @extends {Blockly.Field}
  * @constructor
  */
-Blockly.FieldTextInput = function(opt_value, opt_validator) {
+Blockly.FieldTextInput = function(opt_value, opt_validator, opt_config) {
+  /**
+   * Allow browser to spellcheck this field.
+   * @type {boolean}
+   * @private
+   */
+  this.spellcheck_ = true;
+
   if (opt_value == null) {
     opt_value = '';
   }
   Blockly.FieldTextInput.superClass_.constructor.call(this,
-      opt_value, opt_validator);
+      opt_value, opt_validator, opt_config);
 };
 Blockly.utils.object.inherits(Blockly.FieldTextInput, Blockly.Field);
 
@@ -70,11 +80,7 @@ Blockly.utils.object.inherits(Blockly.FieldTextInput, Blockly.Field);
  */
 Blockly.FieldTextInput.fromJson = function(options) {
   var text = Blockly.utils.replaceMessageReferences(options['text']);
-  var field = new Blockly.FieldTextInput(text);
-  if (typeof options['spellcheck'] === 'boolean') {
-    field.setSpellcheck(options['spellcheck']);
-  }
-  return field;
+  return new Blockly.FieldTextInput(text, null, options);
 };
 
 /**
@@ -102,10 +108,14 @@ Blockly.FieldTextInput.BORDERRADIUS = 4;
 Blockly.FieldTextInput.prototype.CURSOR = 'text';
 
 /**
- * Allow browser to spellcheck this field.
- * @protected
+ * @override
  */
-Blockly.FieldTextInput.prototype.spellcheck_ = true;
+Blockly.FieldTextInput.prototype.configure_ = function(config) {
+  Blockly.FieldTextInput.superClass_.configure_.call(this, config);
+  if (typeof config['spellcheck'] == 'boolean') {
+    this.spellcheck_ = config['spellcheck'];
+  }
+};
 
 /**
  * Ensure that the input value casts to a valid string.
@@ -191,7 +201,13 @@ Blockly.FieldTextInput.prototype.render_ = function() {
  * @param {boolean} check True if checked.
  */
 Blockly.FieldTextInput.prototype.setSpellcheck = function(check) {
+  if (check == this.spellcheck_) {
+    return;
+  }
   this.spellcheck_ = check;
+  if (this.htmlInput_) {
+    this.htmlInput_.setAttribute('spellcheck', this.spellcheck_);
+  }
 };
 
 /**

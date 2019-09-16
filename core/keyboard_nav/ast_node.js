@@ -460,7 +460,7 @@ Blockly.ASTNode.prototype.getOutAstNodeForBlock_ = function(block) {
     return Blockly.ASTNode.createInputNode(
         topConnection.targetConnection.getParentInput());
   } else {
-    // Go to stack level if you are not underneath an input
+    // Go to stack level if you are not underneath an input.
     return Blockly.ASTNode.createStackNode(topBlock);
   }
 };
@@ -634,7 +634,7 @@ Blockly.ASTNode.prototype.out = function() {
   switch (this.type_) {
     case Blockly.ASTNode.types.STACK:
       var blockPos = this.location_.getRelativeToSurfaceXY();
-      // TODO: Make sure this is in the bounds of the workspace
+      // TODO: Make sure this is in the bounds of the workspace.
       var wsCoordinate = new Blockly.utils.Coordinate(
           blockPos.x, blockPos.y + Blockly.ASTNode.DEFAULT_OFFSET_Y);
       return Blockly.ASTNode.createWorkspaceNode(

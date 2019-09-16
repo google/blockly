@@ -388,14 +388,6 @@ suite('ASTNode', function() {
         var nextNode = node.next();
         assertEquals(nextNode, null);
       });
-      test('moveCursorToRight', function() {
-        var coordinate = new Blockly.utils.Coordinate(100, 100);
-        var node = Blockly.ASTNode.createWorkspaceNode(this.workspace, coordinate);
-        var nextNode = node.next();
-        assertEquals(nextNode.wsCoordinate_.x, 110);
-        assertEquals(nextNode.getLocation(), this.workspace);
-        assertEquals(nextNode.getType(), Blockly.ASTNode.types.WORKSPACE);
-      });
     });
 
     suite('Previous', function() {
@@ -574,14 +566,6 @@ suite('ASTNode', function() {
         var prevNode = node.prev();
         assertEquals(prevNode.getLocation(), this.blocks.statementInput1);
         assertEquals(prevNode.getType(), Blockly.ASTNode.types.STACK);
-      });
-      test('moveCursorToLeft', function() {
-        var coordinate = new Blockly.utils.Coordinate(100, 100);
-        var node = Blockly.ASTNode.createWorkspaceNode(this.workspace, coordinate);
-        var nextNode = node.prev();
-        assertEquals(nextNode.wsCoordinate_.x, 90);
-        assertEquals(nextNode.getLocation(), this.workspace);
-        assertEquals(nextNode.getType(), Blockly.ASTNode.types.WORKSPACE);
       });
     });
 

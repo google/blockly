@@ -84,14 +84,6 @@ Blockly.ASTNode.types = {
 };
 
 /**
- * The amount to move the workspace coordinate to the left or right.
- * This occurs when we get the next or previous node from a workspace node.
- * @type {number}
- * @private
- */
-Blockly.ASTNode.wsMove_ = 10;
-
-/**
  * The default y offset to use when moving the cursor from a stack to the
  * workspace.
  * @type {number}
@@ -468,7 +460,7 @@ Blockly.ASTNode.prototype.getOutAstNodeForBlock_ = function(block) {
     return Blockly.ASTNode.createInputNode(
         topConnection.targetConnection.getParentInput());
   } else {
-    //Go to stack level if you are not underneath an input
+    // Go to stack level if you are not underneath an input
     return Blockly.ASTNode.createStackNode(topBlock);
   }
 };
@@ -523,15 +515,6 @@ Blockly.ASTNode.prototype.findTopOfSubStack_ = function(sourceBlock) {
  */
 Blockly.ASTNode.prototype.next = function() {
   switch (this.type_) {
-    case Blockly.ASTNode.types.WORKSPACE:
-      //TODO: Need to limit this. The view is bounded to half a screen beyond
-      //the furthest block.
-      var newX = this.wsCoordinate_.x + Blockly.ASTNode.wsMove_;
-      var newWsCoordinate = new Blockly.utils.Coordinate(newX, this.wsCoordinate_.y);
-      var workspace = /** @type {Blockly.Workspace} */ (this.location_);
-      return Blockly.ASTNode.createWorkspaceNode(workspace,
-          newWsCoordinate);
-
     case Blockly.ASTNode.types.STACK:
       return this.navigateBetweenStacks_(true);
 
@@ -606,12 +589,6 @@ Blockly.ASTNode.prototype.in = function() {
  */
 Blockly.ASTNode.prototype.prev = function() {
   switch (this.type_) {
-    case Blockly.ASTNode.types.WORKSPACE:
-      var newX = this.wsCoordinate_.x - Blockly.ASTNode.wsMove_;
-      var newCoord = new Blockly.utils.Coordinate(newX, this.wsCoordinate_.y);
-      var ws = /** @type {Blockly.Workspace} */ (this.location_);
-      return Blockly.ASTNode.createWorkspaceNode(ws, newCoord);
-
     case Blockly.ASTNode.types.STACK:
       return this.navigateBetweenStacks_(false);
 
@@ -657,7 +634,7 @@ Blockly.ASTNode.prototype.out = function() {
   switch (this.type_) {
     case Blockly.ASTNode.types.STACK:
       var blockPos = this.location_.getRelativeToSurfaceXY();
-      //TODO: Make sure this is in the bounds of the workspace
+      // TODO: Make sure this is in the bounds of the workspace
       var wsCoordinate = new Blockly.utils.Coordinate(
           blockPos.x, blockPos.y + Blockly.ASTNode.DEFAULT_OFFSET_Y);
       return Blockly.ASTNode.createWorkspaceNode(

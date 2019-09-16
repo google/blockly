@@ -25,7 +25,7 @@
  */
 'use strict';
 
-goog.provide('Blockly.Requires');
+goog.provide('Blockly.requires');
 
 // Blockly Core.
 goog.require('Blockly');

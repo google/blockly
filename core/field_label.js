@@ -47,10 +47,6 @@ goog.require('Blockly.utils.Size');
  * @constructor
  */
 Blockly.FieldLabel = function(opt_value, opt_class, opt_config) {
-  if (opt_value == null) {
-    opt_value = '';
-  }  // Else it gets cast to a string (e.g. false -> 'false').
-
   /**
    * The html class name to use for this field.
    * @type {?string}
@@ -58,6 +54,9 @@ Blockly.FieldLabel = function(opt_value, opt_class, opt_config) {
    */
   this.class_ = null;
 
+  if (opt_value == null) {
+    opt_value = '';
+  }
   Blockly.FieldLabel.superClass_.constructor.call(
       this, opt_value, null, opt_config);
 

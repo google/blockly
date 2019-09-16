@@ -321,8 +321,8 @@ Blockly.ASTNode.prototype.findNextForField_ = function() {
   var block = location.getSourceBlock();
   var curIdx = block.inputList.indexOf(input);
   var fieldIdx = input.fieldRow.indexOf(location) + 1;
-  for (var i = curIdx, input; input = block.inputList[i]; i++) {
-    var fieldRow = input.fieldRow;
+  for (var i = curIdx, newInput; newInput = block.inputList[i]; i++) {
+    var fieldRow = newInput.fieldRow;
     while (fieldIdx < fieldRow.length) {
       if (fieldRow[fieldIdx].EDITABLE) {
         return Blockly.ASTNode.createFieldNode(fieldRow[fieldIdx]);
@@ -330,8 +330,8 @@ Blockly.ASTNode.prototype.findNextForField_ = function() {
       fieldIdx++;
     }
     fieldIdx = 0;
-    if (input.connection) {
-      return Blockly.ASTNode.createInputNode(input);
+    if (newInput.connection) {
+      return Blockly.ASTNode.createInputNode(newInput);
     }
   }
   return null;
@@ -452,6 +452,9 @@ Blockly.ASTNode.prototype.findTopASTNodeForBlock_ = function(block) {
  * @private
  */
 Blockly.ASTNode.prototype.getOutAstNodeForBlock_ = function(block) {
+  if (!block) {
+    return null;
+  }
   var topBlock = null;
   // If the block doesn't have a previous connection then it is the top of the
   // substack.
@@ -475,7 +478,7 @@ Blockly.ASTNode.prototype.getOutAstNodeForBlock_ = function(block) {
 
 /**
  * Find the first editable field or input with a connection on a given block.
- * @param {!Blockly.BlockSvg} block The source block of the current location.
+ * @param {!Blockly.Block} block The source block of the current location.
  * @return {Blockly.ASTNode} An AST node pointing to the first field or input.
  * Null if there are no editable fields or inputs with connections on the block.
  * @private

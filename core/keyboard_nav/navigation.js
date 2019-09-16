@@ -751,7 +751,7 @@ Blockly.navigation.moveCursorOnBlockDelete = function(deletedBlock) {
       }
     // If the cursor is on a block whose parent is being deleted, move the
     // cursor to the workspace.
-    } else if (deletedBlock.getChildren().indexOf(block) > -1) {
+    } else if (deletedBlock.getChildren(false).indexOf(block) > -1) {
       cursor.setLocation(Blockly.ASTNode.createWorkspaceNode(block.workspace,
           block.getRelativeToSurfaceXY()));
     }

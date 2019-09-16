@@ -48,7 +48,7 @@ Blockly.navigation.currentCategory_ = null;
  * Null by default.
  * The first argument is one of 'log', 'warn', and 'error'.
  * The second argument is the message.
- * @type {function(string, string)}
+ * @type {?function(string, string)}
  * @public
  */
 Blockly.navigation.loggingCallback = null;
@@ -258,7 +258,7 @@ Blockly.navigation.focusFlyout = function() {
   }
 
   if (flyout && flyout.getWorkspace()) {
-    var topBlocks = flyout.getWorkspace().getTopBlocks();
+    var topBlocks = flyout.getWorkspace().getTopBlocks(true);
     if (topBlocks.length > 0) {
       topBlock = topBlocks[0];
       var astNode = Blockly.ASTNode.createStackNode(topBlock);
@@ -445,7 +445,7 @@ Blockly.navigation.disconnectChild_ = function(movingConnection, destConnection)
   var destBlock = destConnection.getSourceBlock();
 
   if (movingBlock.getRootBlock() == destBlock.getRootBlock()) {
-    if (movingBlock.getDescendants().indexOf(destBlock) > -1) {
+    if (movingBlock.getDescendants(false).indexOf(destBlock) > -1) {
       Blockly.navigation.getInferiorConnection_(destConnection).disconnect();
     } else {
       Blockly.navigation.getInferiorConnection_(movingConnection).disconnect();
@@ -651,7 +651,7 @@ Blockly.navigation.focusWorkspace = function() {
   Blockly.hideChaff();
   var cursor = Blockly.getMainWorkspace().getCursor();
   var reset = Blockly.getMainWorkspace().getToolbox() ? true : false;
-  var topBlocks = Blockly.getMainWorkspace().getTopBlocks();
+  var topBlocks = Blockly.getMainWorkspace().getTopBlocks(true);
 
   Blockly.navigation.resetFlyout(reset);
   Blockly.navigation.currentState_ = Blockly.navigation.STATE_WS;
@@ -702,9 +702,9 @@ Blockly.navigation.getSourceBlock_ = function(node) {
     return null;
   }
   if (node.getType() === Blockly.ASTNode.types.BLOCK) {
-    return node.getLocation();
+    return /** @type {Blockly.Block} */ (node.getLocation());
   } else if (node.getType() === Blockly.ASTNode.types.STACK) {
-    return node.getLocation();
+    return /** @type {Blockly.Block} */ (node.getLocation());
   } else if (node.getType() === Blockly.ASTNode.types.WORKSPACE) {
     return null;
   } else {
@@ -769,7 +769,7 @@ Blockly.navigation.moveCursorOnBlockMutation = function(mutatedBlock) {
 
 /**
  * Handler for all the keyboard navigation events.
- * @param {Event} e The keyboard event.
+ * @param {!Event} e The keyboard event.
  * @return {boolean} True if the key was handled false otherwise.
  */
 Blockly.navigation.onKeyPress = function(e) {

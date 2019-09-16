@@ -49,18 +49,16 @@ Blockly.utils.object.inherits(Blockly.FlyoutCursor, Blockly.Cursor);
  * @override
  */
 Blockly.FlyoutCursor.prototype.next = function() {
-  if (!this.isMarker_) {
-    var curNode = this.getCurNode();
-    if (!curNode) {
-      return null;
-    }
-    var newNode = curNode.next();
-
-    if (newNode) {
-      this.setLocation(newNode);
-    }
-    return newNode;
+  var curNode = this.getCurNode();
+  if (!curNode) {
+    return null;
   }
+  var newNode = curNode.next();
+
+  if (newNode) {
+    this.setLocation(newNode);
+  }
+  return newNode;
 };
 
 /**
@@ -79,18 +77,16 @@ Blockly.FlyoutCursor.prototype.in = function() {
  * @override
  */
 Blockly.FlyoutCursor.prototype.prev = function() {
-  if (!this.isMarker_) {
-    var curNode = this.getCurNode();
-    if (!curNode) {
-      return null;
-    }
-    var newNode = curNode.prev();
-    
-    if (newNode) {
-      this.setLocation(newNode);
-    }
-    return newNode;
+  var curNode = this.getCurNode();
+  if (!curNode) {
+    return null;
   }
+  var newNode = curNode.prev();
+
+  if (newNode) {
+    this.setLocation(newNode);
+  }
+  return newNode;
 };
 
 /**

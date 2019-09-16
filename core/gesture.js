@@ -500,7 +500,7 @@ Blockly.Gesture.prototype.doStart = function(e) {
   if (this.targetBlock_) {
     if (!this.targetBlock_.isInFlyout && e.shiftKey) {
       Blockly.navigation.enableKeyboardAccessibility();
-      this.creatorWorkspace_.cursor.setLocation(
+      this.creatorWorkspace_.getCursor().setLocation(
           Blockly.navigation.getTopNode(this.targetBlock_));
     } else {
       this.targetBlock_.select();

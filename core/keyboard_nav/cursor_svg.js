@@ -50,7 +50,7 @@ Blockly.CursorSvg = function(workspace, opt_marker) {
    * True if the cursor should be drawn as a marker, false otherwise.
    * A marker is drawn as a solid blue line, while the cursor is drawns as a
    * flashing red one.
-   * @type {boolean}
+   * @type {boolean|undefined}
    * @private
    */
   this.isMarker_ = opt_marker;
@@ -384,13 +384,15 @@ Blockly.CursorSvg.prototype.hide = function() {
 
 /**
  * Update the cursor.
- * @param {!Blockly.ASTNode} curNode The node that we want to draw the cursor for.
+ * @param {Blockly.ASTNode} curNode The node that we want to draw the cursor for.
  * @package
  */
 Blockly.CursorSvg.prototype.draw = function(curNode) {
   if (!curNode) {
+    this.hide();
     return;
   }
+  curNode = /** @type {!Blockly.ASTNode} */ (curNode);
   if (curNode.getType() === Blockly.ASTNode.types.BLOCK) {
     this.showWithBlock_(curNode);
     // This needs to be the location type because next connections can be input

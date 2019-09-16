@@ -53,16 +53,16 @@ Blockly.FieldLabel = function(opt_value, opt_class, opt_config) {
 
   /**
    * The html class name to use for this field.
-   * @type {string}
+   * @type {?string}
    * @private
    */
-  this.class_ = '';
+  this.class_ = null;
 
   Blockly.FieldLabel.superClass_.constructor.call(
       this, opt_value, null, opt_config);
 
   if (!opt_config) {  // If the config was not passed use old configuration.
-    this.class_ = opt_class || '';
+    this.class_ = opt_class || null;
   }
 
   /**
@@ -101,7 +101,7 @@ Blockly.FieldLabel.prototype.EDITABLE = false;
  */
 Blockly.FieldLabel.prototype.configure_ = function(config) {
   Blockly.FieldLabel.superClass_.configure_.call(this, config);
-  this.class_ = config['class'] || '';
+  this.class_ = config['class'] || null;
 };
 
 /**

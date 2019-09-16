@@ -17,7 +17,7 @@ suite('Navigation', function() {
       }]);
       var toolbox = document.getElementById('toolbox-categories');
       this.workspace = Blockly.inject('blocklyDiv', {toolbox: toolbox});
-      Blockly.navigation.focusToolbox();
+      Blockly.navigation.focusToolbox_();
       this.mockEvent = {
         getModifierState: function() {
           return false;
@@ -45,7 +45,7 @@ suite('Navigation', function() {
 
     // Should be a no-op.
     test('Next at end', function() {
-      Blockly.navigation.nextCategory();
+      Blockly.navigation.nextCategory_();
       this.mockEvent.keyCode = Blockly.utils.KeyCodes.S;
       var startCategory = Blockly.navigation.currentCategory_;
       chai.assert.isTrue(Blockly.navigation.onKeyPress(this.mockEvent));
@@ -57,7 +57,7 @@ suite('Navigation', function() {
 
     test('Previous', function() {
       // Go forward one so that we can go back one:
-      Blockly.navigation.nextCategory();
+      Blockly.navigation.nextCategory_();
       this.mockEvent.keyCode = Blockly.utils.KeyCodes.W;
       chai.assert.equal(Blockly.navigation.currentCategory_,
           this.secondCategory_);
@@ -134,8 +134,8 @@ suite('Navigation', function() {
       }]);
       var toolbox = document.getElementById('toolbox-categories');
       this.workspace = Blockly.inject('blocklyDiv', {toolbox: toolbox});
-      Blockly.navigation.focusToolbox();
-      Blockly.navigation.focusFlyout();
+      Blockly.navigation.focusToolbox_();
+      Blockly.navigation.focusFlyout_();
       this.mockEvent = {
         getModifierState: function() {
           return false;
@@ -383,14 +383,14 @@ suite('Navigation', function() {
 
     test('Toggle Action On', function() {
       this.mockEvent.keyCode = 'Control75';
-      sinon.stub(Blockly.navigation, 'focusWorkspace');
+      sinon.stub(Blockly.navigation, 'focusWorkspace_');
       Blockly.keyboardAccessibilityMode = false;
 
       var isHandled = Blockly.navigation.onKeyPress(this.mockEvent);
       chai.assert.isTrue(isHandled);
-      chai.assert.isTrue(Blockly.navigation.focusWorkspace.calledOnce);
+      chai.assert.isTrue(Blockly.navigation.focusWorkspace_.calledOnce);
       chai.assert.isTrue(Blockly.keyboardAccessibilityMode);
-      Blockly.navigation.focusWorkspace.restore();
+      Blockly.navigation.focusWorkspace_.restore();
       this.workspace.dispose();
     });
 
@@ -493,8 +493,8 @@ suite('Navigation', function() {
       var prevNode = Blockly.ASTNode.createConnectionNode(previousConnection);
       this.workspace.getMarker().setLocation(prevNode);
 
-      Blockly.navigation.focusToolbox();
-      Blockly.navigation.focusFlyout();
+      Blockly.navigation.focusToolbox_();
+      Blockly.navigation.focusFlyout_();
       Blockly.navigation.insertFromFlyout();
 
       var insertedBlock = this.basicBlock.previousConnection.targetBlock();
@@ -505,8 +505,8 @@ suite('Navigation', function() {
     });
 
     test('Insert Block from flyout without marking a connection', function() {
-      Blockly.navigation.focusToolbox();
-      Blockly.navigation.focusFlyout();
+      Blockly.navigation.focusToolbox_();
+      Blockly.navigation.focusFlyout_();
       Blockly.navigation.insertFromFlyout();
 
       var numBlocks = this.workspace.getTopBlocks().length;
@@ -599,7 +599,7 @@ suite('Navigation', function() {
       var markedLocation = this.basicBlock2.previousConnection;
       var cursorLocation = this.basicBlock3.previousConnection;
 
-      Blockly.navigation.connect(cursorLocation, markedLocation);
+      Blockly.navigation.connect_(cursorLocation, markedLocation);
 
       chai.assert.equal(this.basicBlock.nextConnection.targetBlock(), this.basicBlock3);
       chai.assert.equal(this.basicBlock2.previousConnection.targetBlock(), this.basicBlock4);
@@ -609,7 +609,7 @@ suite('Navigation', function() {
       var markedLocation = this.basicBlock3.previousConnection;
       var cursorLocation = this.basicBlock2.previousConnection;
 
-      Blockly.navigation.connect(cursorLocation, markedLocation);
+      Blockly.navigation.connect_(cursorLocation, markedLocation);
 
       chai.assert.equal(this.basicBlock.nextConnection.targetBlock(), this.basicBlock3);
       chai.assert.equal(this.basicBlock2.previousConnection.targetBlock(), this.basicBlock4);
@@ -620,7 +620,7 @@ suite('Navigation', function() {
       var markedLocation = this.basicBlock2.previousConnection;
       var cursorLocation = this.basicBlock4.nextConnection;
 
-      Blockly.navigation.connect(cursorLocation, markedLocation);
+      Blockly.navigation.connect_(cursorLocation, markedLocation);
 
       chai.assert.equal(this.basicBlock.nextConnection.targetBlock(), this.basicBlock4);
       chai.assert.equal(this.basicBlock3.nextConnection.targetConnection, null);
@@ -630,7 +630,7 @@ suite('Navigation', function() {
       var markedLocation = this.basicBlock3.previousConnection;
       var cursorLocation = this.basicBlock2.nextConnection;
 
-      Blockly.navigation.connect(cursorLocation, markedLocation);
+      Blockly.navigation.connect_(cursorLocation, markedLocation);
 
       chai.assert.equal(this.basicBlock3.previousConnection.targetBlock(), this.basicBlock2);
     });
@@ -639,7 +639,7 @@ suite('Navigation', function() {
       var markedLocation = this.inlineBlock2.inputList[0].connection;
       var cursorLocation = this.inlineBlock1.outputConnection;
 
-      Blockly.navigation.connect(cursorLocation, markedLocation);
+      Blockly.navigation.connect_(cursorLocation, markedLocation);
 
       chai.assert.equal(this.inlineBlock2.outputConnection.targetBlock(), null);
       chai.assert.equal(this.inlineBlock1.outputConnection.targetBlock(), this.inlineBlock2);

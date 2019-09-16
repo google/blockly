@@ -124,7 +124,7 @@ gulp.task('build-core', function () {
     .pipe(stripApacheLicense())
     .pipe(compile({
       dependency_mode: 'PRUNE',
-      entry_point: './core-blockly.js',
+      entry_point: './core-requires.js',
       js_output_file: 'blockly_compressed.js',
       externs: './externs/svg-externs.js',
       define: defines

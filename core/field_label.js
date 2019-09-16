@@ -40,22 +40,29 @@ goog.require('Blockly.utils.Size');
  * @param {string=} opt_value The initial value of the field. Should cast to a
  *    string. Defaults to an empty string if null or undefined.
  * @param {string=} opt_class Optional CSS class for the field's text.
+ * @param {Object=} opt_config A map of options used to configure the field.
+ *    See the [field creation documentation]{@link https://developers.google.com/blockly/guides/create-custom-blocks/fields/built-in-fields/label#creation}
+ *    for a list of properties this parameter supports.
  * @extends {Blockly.Field}
  * @constructor
  */
-Blockly.FieldLabel = function(opt_value, opt_class) {
+Blockly.FieldLabel = function(opt_value, opt_class, opt_config) {
   /**
    * The html class name to use for this field.
    * @type {?string}
    * @private
    */
-  this.class_ = opt_class || null;
+  this.class_ = null;
 
   if (opt_value == null) {
     opt_value = '';
   }
   Blockly.FieldLabel.superClass_.constructor.call(
-      this, opt_value, null);
+      this, opt_value, null, opt_config);
+
+  if (!opt_config) {  // If the config was not passed use old configuration.
+    this.class_ = opt_class;
+  }
 
   /**
    * The size of the area rendered by the field.
@@ -77,7 +84,7 @@ Blockly.utils.object.inherits(Blockly.FieldLabel, Blockly.Field);
  */
 Blockly.FieldLabel.fromJson = function(options) {
   var text = Blockly.utils.replaceMessageReferences(options['text']);
-  return new Blockly.FieldLabel(text, options['class']);
+  return new Blockly.FieldLabel(text, null, options);
 };
 
 /**
@@ -87,6 +94,14 @@ Blockly.FieldLabel.fromJson = function(options) {
  * @const
  */
 Blockly.FieldLabel.prototype.EDITABLE = false;
+
+/**
+ * @override
+ */
+Blockly.FieldLabel.prototype.configure_ = function(config) {
+  Blockly.FieldLabel.superClass_.configure_.call(this, config);
+  this.class_ = config['class'];
+};
 
 /**
  * Create block UI for this label.
@@ -112,6 +127,24 @@ Blockly.FieldLabel.prototype.doClassValidation_ = function(opt_newValue) {
     return null;
   }
   return String(opt_newValue);
+};
+
+/**
+ * Set the css class applied to the field's textElement_.
+ * @param {?string} cssClass The new css class name, or null to remove.
+ */
+Blockly.FieldLabel.prototype.setClass = function(cssClass) {
+  if (this.textElement_) {
+    // This check isn't necessary, but it's faster than letting removeClass
+    // figure it out.
+    if (this.class_) {
+      Blockly.utils.dom.removeClass(this.textElement_, this.class_);
+    }
+    if (cssClass) {
+      Blockly.utils.dom.addClass(this.textElement_, cssClass);
+    }
+  }
+  this.class_ = cssClass;
 };
 
 Blockly.fieldRegistry.register('field_label', Blockly.FieldLabel);

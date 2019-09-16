@@ -493,8 +493,10 @@ FactoryUtils.getFieldsJs_ = function(block) {
           var width = Number(block.getFieldValue('WIDTH'));
           var height = Number(block.getFieldValue('HEIGHT'));
           var alt = JSON.stringify(block.getFieldValue('ALT'));
+          var flipRtl = Json.stringify(block.getFieldValue('FLIP_RTL'));
           fields.push('new Blockly.FieldImage(' +
-              src + ', ' + width + ', ' + height + ', ' + alt + ')');
+              src + ', ' + width + ', ' + height +
+              ', { alt: ' + alt + ', flipRtl: ' + flipRtl + ' })');
           break;
       }
     }

@@ -85,12 +85,9 @@ Blockly.FieldImage = function(src, width, height,
   Blockly.FieldImage.superClass_.constructor.call(
       this, src || '', null, opt_config);
 
-  // Give constructor parameters priority.
-  if (opt_flipRtl != null) {
+  if (!opt_config) {  // If the config wasn't passed, do old configuration.
     this.flipRtl_ = !!opt_flipRtl;
-  }
-  if (opt_alt != null) {
-    this.altText_ = opt_alt;
+    this.altText_ = opt_alt || '';
   }
 
   // Initialize other properties.

@@ -196,11 +196,23 @@ suite('Image Fields', function() {
         });
         chai.assert.equal(field.altText_, 'alt');
       });
-      test('JS Configuration - Override', function() {
+      test('JS Configuration - Ignore', function() {
         var field = new Blockly.FieldImage('src', 10, 10, 'alt', null, null, {
-          alt: 'otherAlt'
+          alt: 'configAlt'
         });
-        chai.assert.equal(field.altText_, 'alt');
+        chai.assert.equal(field.altText_, 'configAlt');
+      });
+      test('JS Configuration - Ignore - \'\'', function() {
+        var field = new Blockly.FieldImage('src', 10, 10, '', null, null, {
+          alt: 'configAlt'
+        });
+        chai.assert.equal(field.altText_, 'configAlt');
+      });
+      test('JS Configuration - Ignore - Config \'\'', function() {
+        var field = new Blockly.FieldImage('src', 10, 10, 'alt', null, null, {
+          alt: ''
+        });
+        chai.assert.equal(field.altText_, '');
       });
     });
     suite('Flip RTL', function() {
@@ -223,9 +235,15 @@ suite('Image Fields', function() {
         });
         chai.assert.isTrue(field.getFlipRtl());
       });
-      test('JS Configuration - Override', function() {
+      test('JS Configuration - Ignore - True', function() {
         var field = new Blockly.FieldImage('src', 10, 10, null, null, true, {
           flipRtl: false
+        });
+        chai.assert.isFalse(field.getFlipRtl());
+      });
+      test('JS Configuration - Ignore - False', function() {
+        var field = new Blockly.FieldImage('src', 10, 10, null, null, false, {
+          flipRtl: true
         });
         chai.assert.isTrue(field.getFlipRtl());
       });

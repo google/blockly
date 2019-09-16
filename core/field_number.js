@@ -82,7 +82,9 @@ Blockly.FieldNumber = function(opt_value, opt_min, opt_max, opt_precision,
   Blockly.FieldNumber.superClass_.constructor.call(
       this, opt_value || 0, opt_validator, opt_config);
 
-  this.setConstraints(opt_min, opt_max, opt_precision);
+  if (!opt_config) {  // Only do one kind of configuration or the other.
+    this.setConstraints(opt_min, opt_max, opt_precision);
+  }
 };
 Blockly.utils.object.inherits(Blockly.FieldNumber, Blockly.FieldTextInput);
 
@@ -96,7 +98,7 @@ Blockly.utils.object.inherits(Blockly.FieldNumber, Blockly.FieldTextInput);
  */
 Blockly.FieldNumber.fromJson = function(options) {
   return new Blockly.FieldNumber(options['value'],
-      options['min'], options['max'], options['precision'], null, options);
+      null, null, null, null, options);
 };
 
 /**

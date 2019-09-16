@@ -2,7 +2,7 @@
  * @license
  * Visual Blocks Editor
  *
- * Copyright 2016 Google Inc.
+ * Copyright 2019 Google Inc.
  * https://developers.google.com/blockly/
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,7 +19,7 @@
  */
 
 /**
- * @fileoverview TODO
+ * @fileoverview An object that owns a block's rendering SVG elements.
  * @author fenichel@google.com (Rachel Fenichel)
  */
 
@@ -46,6 +46,7 @@ Blockly.geras.PathObject = function(root) {
   // effectively sets their z-indices.
 
   /**
+   * The dark path of the block.
    * @type {SVGElement}
    * @package
    */
@@ -54,6 +55,7 @@ Blockly.geras.PathObject = function(root) {
       this.svgRoot);
 
   /**
+   * The primary path of the block.
    * @type {SVGElement}
    * @package
    */
@@ -62,6 +64,7 @@ Blockly.geras.PathObject = function(root) {
 
 
   /**
+   * The light path of the block.
    * @type {SVGElement}
    * @package
    */

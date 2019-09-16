@@ -28,6 +28,7 @@ goog.provide('Blockly.BlockSvg');
 
 goog.require('Blockly.Block');
 goog.require('Blockly.blockAnimations');
+goog.require('Blockly.blockRendering.IPathObject');
 goog.require('Blockly.ContextMenu');
 goog.require('Blockly.Events');
 goog.require('Blockly.Events.Ui');
@@ -42,7 +43,6 @@ goog.require('Blockly.utils.Coordinate');
 goog.require('Blockly.utils.dom');
 goog.require('Blockly.utils.object');
 goog.require('Blockly.utils.Rect');
-goog.require('Blockly.blockRendering.PathObject');
 
 
 /**
@@ -75,18 +75,21 @@ Blockly.BlockSvg = function(workspace, prototypeName, opt_id) {
 
   // The next three paths are set only for backwards compatibility reasons.
   /**
+   * The dark path of the block.
    * @type {SVGElement}
    * @private
    */
   this.svgPathDark_ = this.pathObject.svgPathDark || null;
 
   /**
+   * The primary path of the block.
    * @type {SVGElement}
    * @private
    */
   this.svgPath_ = this.pathObject.svgPath || null;
 
   /**
+   * The light path of the block.
    * @type {SVGElement}
    * @private
    */

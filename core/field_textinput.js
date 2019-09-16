@@ -54,10 +54,6 @@ goog.require('Blockly.utils.userAgent');
  * @constructor
  */
 Blockly.FieldTextInput = function(opt_value, opt_validator, opt_config) {
-  if (opt_value == null) {
-    opt_value = '';
-  }
-
   /**
    * Allow browser to spellcheck this field.
    * @type {boolean}
@@ -65,6 +61,9 @@ Blockly.FieldTextInput = function(opt_value, opt_validator, opt_config) {
    */
   this.spellcheck_ = true;
 
+  if (opt_value == null) {
+    opt_value = '';
+  }
   Blockly.FieldTextInput.superClass_.constructor.call(this,
       opt_value, opt_validator, opt_config);
 };

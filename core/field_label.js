@@ -56,14 +56,13 @@ Blockly.FieldLabel = function(opt_value, opt_class, opt_config) {
    * @type {string}
    * @private
    */
-  this.class_ = opt_class || '';
+  this.class_ = '';
 
   Blockly.FieldLabel.superClass_.constructor.call(
       this, opt_value, null, opt_config);
 
-  // Give constructor parameters priority.
-  if (opt_class != null) {
-    this.class_ = opt_class;
+  if (!opt_config) {  // If the config was not passed use old configuration.
+    this.class_ = opt_class || '';
   }
 
   /**

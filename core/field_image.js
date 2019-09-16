@@ -56,12 +56,13 @@ Blockly.FieldImage = function(src, width, height,
   if (!src) {
     throw Error('Src value of an image field is required');
   }
-  if (isNaN(height) || isNaN(width)) {
+  src = Blockly.utils.replaceMessageReferences(src);
+  var imageHeight = Number(Blockly.utils.replaceMessageReferences(height));
+  var imageWidth = Number(Blockly.utils.replaceMessageReferences(width));
+  if (isNaN(imageHeight) || isNaN(imageWidth)) {
     throw Error('Height and width values of an image field must cast to' +
       ' numbers.');
   }
-  var imageHeight = Number(height);
-  var imageWidth = Number(width);
   if (imageHeight <= 0 || imageWidth <= 0) {
     throw Error('Height and width values of an image field must be greater' +
       ' than 0.');
@@ -87,7 +88,7 @@ Blockly.FieldImage = function(src, width, height,
 
   if (!opt_config) {  // If the config wasn't passed, do old configuration.
     this.flipRtl_ = !!opt_flipRtl;
-    this.altText_ = opt_alt || '';
+    this.altText_ = Blockly.utils.replaceMessageReferences(opt_alt) || '';
   }
 
   // Initialize other properties.
@@ -130,15 +131,9 @@ Blockly.utils.object.inherits(Blockly.FieldImage, Blockly.Field);
  * @nocollapse
  */
 Blockly.FieldImage.fromJson = function(options) {
-  var src = Blockly.utils.replaceMessageReferences(options['src']);
-  var width = Number(Blockly.utils.replaceMessageReferences(
-      options['width']));
-  var height = Number(Blockly.utils.replaceMessageReferences(
-      options['height']));
-  var alt = Blockly.utils.replaceMessageReferences(options['alt']);
-  var flipRtl = !!options['flipRtl'];
-  return new Blockly.FieldImage(src, width, height,
-      alt, null, flipRtl, options);
+  return new Blockly.FieldImage(
+      options['src'], options['width'], options['height'],
+      null, null, null, options);
 };
 
 /**
@@ -174,7 +169,7 @@ Blockly.FieldImage.prototype.isDirty_ = false;
 Blockly.FieldImage.prototype.configure_ = function(config) {
   Blockly.FieldImage.superClass_.configure_.call(this, config);
   this.flipRtl_ = !!config['flipRtl'];
-  this.altText_ = config['alt'] || '';
+  this.altText_ = Blockly.utils.replaceMessageReferences(config['alt']) || '';
 };
 
 /**

@@ -158,13 +158,13 @@ Blockly.geras.RenderInfo.prototype.getInRowSpacing_ = function(prev, next) {
 
   // Spacing between an icon and an icon or field.
   if (Blockly.blockRendering.Types.isIcon(prev) &&
-      !Blockly.blockRendering.Types.isInput(next)) {
+      next && !Blockly.blockRendering.Types.isInput(next)) {
     return this.constants_.LARGE_PADDING;
   }
 
   // Spacing between an inline input and a field.
   if (Blockly.blockRendering.Types.isInlineInput(prev) &&
-      !Blockly.blockRendering.Types.isInput(next)) {
+      next && !Blockly.blockRendering.Types.isInput(next)) {
     // Editable field after inline input.
     if (next.isEditable) {
       return this.constants_.MEDIUM_PADDING;
@@ -206,7 +206,7 @@ Blockly.geras.RenderInfo.prototype.getInRowSpacing_ = function(prev, next) {
 
   // Spacing between two fields of the same editability.
   if (!Blockly.blockRendering.Types.isInput(prev) &&
-      !Blockly.blockRendering.Types.isInput(next) &&
+      next && !Blockly.blockRendering.Types.isInput(next) &&
       (prev.isEditable == next.isEditable)) {
     return this.constants_.LARGE_PADDING;
   }

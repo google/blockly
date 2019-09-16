@@ -28,6 +28,7 @@ goog.provide('Blockly.BlockSvg');
 
 goog.require('Blockly.Block');
 goog.require('Blockly.blockAnimations');
+goog.require('Blockly.blockRendering.IPathObject');
 goog.require('Blockly.ContextMenu');
 goog.require('Blockly.Events');
 goog.require('Blockly.Events.Ui');
@@ -65,26 +66,35 @@ Blockly.BlockSvg = function(workspace, prototypeName, opt_id) {
   this.svgGroup_.translate_ = '';
 
   /**
+   * The renderer's path object.
+   * @type {Blockly.blockRendering.IPathObject}
+   * @package
+   */
+  this.pathObject =
+      workspace.getRenderer().makePathObject(this.svgGroup_);
+
+  // The next three paths are set only for backwards compatibility reasons.
+  /**
+   * The dark path of the block.
    * @type {SVGElement}
    * @private
    */
-  this.svgPathDark_ = Blockly.utils.dom.createSvgElement('path',
-      {'class': 'blocklyPathDark', 'transform': 'translate(1,1)'},
-      this.svgGroup_);
+  this.svgPathDark_ = this.pathObject.svgPathDark || null;
 
   /**
+   * The primary path of the block.
    * @type {SVGElement}
    * @private
    */
-  this.svgPath_ = Blockly.utils.dom.createSvgElement('path',
-      {'class': 'blocklyPath'}, this.svgGroup_);
+  this.svgPath_ = this.pathObject.svgPath || null;
 
   /**
+   * The light path of the block.
    * @type {SVGElement}
    * @private
    */
-  this.svgPathLight_ = Blockly.utils.dom.createSvgElement('path',
-      {'class': 'blocklyPathLight'}, this.svgGroup_);
+  this.svgPathLight_ = this.pathObject.svgPathLight || null;
+
   this.svgPath_.tooltip = this;
 
   /** @type {boolean} */
@@ -1537,7 +1547,7 @@ Blockly.BlockSvg.prototype.positionNearConnection = function(sourceConnection,
   }
 };
 
-/*
+/**
  * Render the block.
  * Lays out and reflows a block based on its contents and settings.
  * @param {boolean=} opt_bubble If false, just render this block.

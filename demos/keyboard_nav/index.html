@@ -170,91 +170,12 @@
                                demoWorkspace);
 
     /**
-     * Decides what nodes to traverse and which ones to skip. Currently, it
-     * skips output, stack and workspace nodes.
-     * @param {Blockly.ASTNode} node The AST node to check whether it is valid.
-     * @return {boolean} True if the node should be visited, false otherwise.
-     * @package
-     */
-    function validNode(node) {
-      var isValid = false;
-      var type = node && node.getType();
-      if (type == Blockly.ASTNode.types.BLOCK ||
-          type == Blockly.ASTNode.types.INPUT ||
-          type == Blockly.ASTNode.types.FIELD ||
-          type == Blockly.ASTNode.types.NEXT ||
-          type == Blockly.ASTNode.types.PREVIOUS) {
-        isValid = true;
-      }
-      return isValid;
-    }
-
-    /**
-     * From the given node find either the next valid sibling or parent.
-     * @param {Blockly.ASTNode} node The current position in the AST.
-     * @return {Blockly.ASTNode} The parent AST node or null if there are no
-     * valid parents.
-     * @package
-     */
-    function findSiblingOrParent(node) {
-      if (!node) {
-        return null;
-      }
-      var nextNode = node.next();
-      if (nextNode) {
-        return nextNode;
-      }
-      return findSiblingOrParent(node.out());
-    }
-
-    /**
-     * Uses pre order traversal to go navigate the Blockly AST. This will allow
-     * a user to easily navigate the entire Blockly AST without having to go in
-     * and out levels on the tree.
-     * @param {Blockly.ASTNode} node The current position in the AST.
-     * @return {Blockly.ASTNode} The next node in the traversal.
-     * @package
-     */
-    function treeTraversal(node) {
-      if (!node) {
-        return null;
-      }
-      var newNode = node.in() || node.next();
-      if (validNode(newNode)) {
-        return newNode;
-      } else if (newNode) {
-        return treeTraversal(newNode);
-      }
-      var siblingOrParent = findSiblingOrParent(node.out());
-      if (validNode(siblingOrParent)) {
-        return siblingOrParent;
-      } else if (siblingOrParent &&
-          siblingOrParent.getType() !== Blockly.ASTNode.types.WORKSPACE) {
-        return treeTraversal(siblingOrParent);
-      }
-      return null;
-    }
-
-    /**
-     * Finds the next node in the tree traversal starting at the location of
-     * the cursor.
-     * @return {Blockly.ASTNode} The next node in the traversal.
-     * @package
-     */
-    function findNext() {
-      var cursor = Blockly.navigation.cursor_;
-      var curNode = cursor.getCurNode();
-      return treeTraversal(curNode);
-    }
-
-    /**
      * Shows the next node in the tree traversal every second.
      * @package
      */
     function demo() {
       var doNext = function() {
-        var node = findNext();
-        Blockly.navigation.cursor_.setLocation(node);
+        var node = Blockly.getMainWorkspace().getCursor().next();
         if (node) {
           setTimeout(doNext, 1000);
         }
@@ -267,6 +188,7 @@
      * @package
      */
     function preOrderDemo() {
+      Blockly.getMainWorkspace().setCursor(new Blockly.BasicCursor());
       Blockly.navigation.enableKeyboardAccessibility();
       demo();
     }
@@ -278,7 +200,7 @@
     * @package
     */
     function turnOnAccessibility() {
-      Blockly.navigation.enableKeyboardAccessibility();
+      Blockly.navigation.onBlocklyAction(Blockly.navigation.ACTION_TOGGLE_KEYBOARD_NAV);
     }
   </script>
 

@@ -173,6 +173,11 @@ Blockly.Cursor.prototype.out = function() {
     return null;
   }
   var newNode = curNode.out();
+  
+  if (newNode.getType() === Blockly.ASTNode.types.BLOCK) {
+    newNode = newNode.prev();
+  }
+
   if (newNode) {
     this.setLocation(newNode);
   }

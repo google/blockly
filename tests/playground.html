@@ -297,7 +297,7 @@ function addRenderDebugOptionsCheckboxes() {
   for (var i = 0, optionName; (optionName = optionNames[i]); i++) {
     var optionCheckId = 'RenderDebug' + optionName + 'Check';
     var optionLabel = document.createElement('label');
-    optionLabel.setAttribute('htmlFor', optionCheckId);
+    optionLabel.setAttribute('for', optionCheckId);
     optionLabel.textContent = optionName;
     var optionCheck = document.createElement('input');
     optionCheck.setAttribute('type', 'checkbox');

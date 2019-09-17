@@ -439,7 +439,7 @@ Blockly.FieldAngle.prototype.onHtmlInputKeyDown_ = function(e) {
  */
 Blockly.FieldAngle.prototype.doClassValidation_ = function(opt_newValue) {
   var value = Number(opt_newValue);
-  if (isNaN(value)) {
+  if (isNaN(value) || !isFinite(value)) {
     return null;
   }
   return this.wrapValue_(value);

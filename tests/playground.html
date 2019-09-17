@@ -293,7 +293,8 @@ function updateRenderDebugOptions(e) {
 function addRenderDebugOptionsCheckboxes() {
   var renderDebugConfig = Blockly.blockRendering.Debug.config;
   var renderDebugOptionsListEl = document.getElementById('renderDebugOptions');
-  Object.keys(renderDebugConfig).forEach(function(optionName) {
+  var optionNames = Object.keys(renderDebugConfig);
+  for (var i = 0, optionName; (optionName = optionNames[i]); i++) {
     var optionCheckId = 'RenderDebug' + optionName + 'Check';
     var optionLabel = document.createElement('label');
     optionLabel.setAttribute('htmlFor', optionCheckId);
@@ -307,7 +308,7 @@ function addRenderDebugOptionsCheckboxes() {
     optionLi.appendChild(optionLabel);
     optionLi.appendChild(optionCheck);
     renderDebugOptionsListEl.appendChild(optionLi);
-  });
+  }
 }
 
 function changeTheme() {

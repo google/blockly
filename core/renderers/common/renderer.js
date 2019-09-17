@@ -32,6 +32,7 @@ goog.require('Blockly.blockRendering.Drawer');
 goog.require('Blockly.blockRendering.IPathObject');
 goog.require('Blockly.blockRendering.PathObject');
 goog.require('Blockly.blockRendering.RenderInfo');
+goog.require('Blockly.CursorSvg');
 
 
 /**
@@ -50,7 +51,7 @@ Blockly.blockRendering.Renderer = function() {
 };
 
 /**
- * Initialize the renderer
+ * Initialize the renderer.
  * @package
  */
 Blockly.blockRendering.Renderer.prototype.init = function() {
@@ -99,6 +100,19 @@ Blockly.blockRendering.Renderer.prototype.makeDebugger_ = function() {
 };
 
 /**
+ * Create a new instance of the renderer's cursor drawer
+ * @param {!Blockly.WorkspaceSvg} workspace The workspace the cursor belongs to.
+ * @param {boolean=} opt_marker True if the cursor is a marker. A marker is used
+ *     to save a location and is an immovable cursor. False or undefined if the
+ *     cursor is not a marker.
+ * @return {!Blockly.CursorSvg} The cursor drawer.
+ * @package
+ */
+Blockly.blockRendering.Renderer.prototype.makeCursorDrawer = function(workspace, opt_marker) {
+  return new Blockly.CursorSvg(workspace, opt_marker);
+};
+
+/**
  * Create a new instance of a renderer path object.
  * @param {!SVGElement} root The root SVG element.
  * @return {!Blockly.blockRendering.IPathObject} The renderer path object.
@@ -133,4 +147,3 @@ Blockly.blockRendering.Renderer.prototype.render = function(block) {
   info.measure();
   this.makeDrawer_(block, info).draw();
 };
-

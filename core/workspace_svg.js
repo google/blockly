@@ -139,15 +139,15 @@ Blockly.WorkspaceSvg = function(options,
     this.registerToolboxCategoryCallback(Blockly.PROCEDURE_CATEGORY_NAME,
         Blockly.Procedures.flyoutCategory);
   }
-
-  /**
-   * The block renderer used for rendering blocks on this workspace.
-   * @type {!Blockly.blockRendering.Renderer}
-   * @private
-   */
-  this.renderer_ = Blockly.blockRendering.init(this.options.renderer || 'geras');
 };
 Blockly.utils.object.inherits(Blockly.WorkspaceSvg, Blockly.Workspace);
+
+/**
+ * The block renderer used for rendering blocks on this workspace.
+ * @type {!Blockly.blockRendering.Renderer}
+ * @private
+ */
+Blockly.WorkspaceSvg.prototype.renderer_ = undefined;
 
 /**
  * A wrapper function called when a resize event occurs.
@@ -419,6 +419,10 @@ Blockly.WorkspaceSvg.prototype.inverseScreenCTMDirty_ = true;
  * @return {!Blockly.blockRendering.Renderer} The renderer attached to this workspace.
  */
 Blockly.WorkspaceSvg.prototype.getRenderer = function() {
+  if (!this.renderer_) {
+    this.renderer_ =
+        Blockly.blockRendering.init(this.options.renderer || 'geras');
+  }
   return this.renderer_;
 };
 
@@ -433,7 +437,7 @@ Blockly.WorkspaceSvg.prototype.setCursor = function(cursor) {
   }
   this.cursor_ = cursor;
   if (this.cursor_) {
-    this.cursor_.setDrawer(new Blockly.CursorSvg(this, false));
+    this.cursor_.setDrawer(this.getRenderer().makeCursorDrawer(this, false));
     this.setCursorSvg(this.cursor_.getDrawer().createDom());
   }
 };
@@ -450,7 +454,7 @@ Blockly.WorkspaceSvg.prototype.setMarker = function(marker) {
   }
   this.marker_ = marker;
   if (this.marker_) {
-    this.marker_.setDrawer(new Blockly.CursorSvg(this, true));
+    this.marker_.setDrawer(this.getRenderer().makeCursorDrawer(this, true));
     this.setMarkerSvg(this.marker_.getDrawer().createDom());
   }
 };

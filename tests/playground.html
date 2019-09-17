@@ -134,6 +134,7 @@ function start() {
           }
       });
   addToolboxButtonCallbacks();
+  addRenderDebugOptionsCheckboxes();
   // Restore previously displayed text.
   if (sessionStorage) {
     var text = sessionStorage.getItem('textarea');
@@ -146,6 +147,10 @@ function start() {
     // Restore render debug state.
     var renderDebugState = sessionStorage.getItem('blockRenderDebug');
     toggleRenderingDebug(Boolean(Number(renderDebugState)));
+    // Restore render debug options state.
+    var renderDebugOptionsState =
+        JSON.parse(sessionStorage.getItem('blockRenderDebugOptions'));
+    setRenderDebugOptionCheckboxState(renderDebugOptionsState);
   } else {
     // MSIE 11 does not support sessionStorage on file:// URLs.
     logEvents(false);
@@ -260,6 +265,52 @@ function addToolboxButtonCallbacks() {
       'removeDynamicOption', Blockly.TestBlocks.removeDynamicDropdownOption_);
 }
 
+function setRenderDebugOptionCheckboxState(overrideOptions) {
+  Blockly.blockRendering.Debug.config = overrideOptions || {};
+  if (!overrideOptions) {
+    return;
+  }
+  var renderDebugOptionsListEl = document.getElementById('renderDebugOptions');
+  var renderDebugOptionInputs =
+      renderDebugOptionsListEl.getElementsByTagName('input');
+  for (var i = 0, optionInput;
+      (optionInput = renderDebugOptionInputs[i]); i++) {
+    var optionName = optionInput.getAttribute('data-optionName');
+    optionInput.checked = !!overrideOptions[optionName];
+  }
+}
+
+function updateRenderDebugOptions(e) {
+  var target = e.target;
+  var optionName = target.getAttribute('data-optionName');
+  var config = Blockly.blockRendering.Debug.config;
+  config[optionName] = !!target.checked;
+  sessionStorage.setItem(
+      'blockRenderDebugOptions', JSON.stringify(config));
+  workspace.render();
+}
+
+function addRenderDebugOptionsCheckboxes() {
+  var renderDebugConfig = Blockly.blockRendering.Debug.config;
+  var renderDebugOptionsListEl = document.getElementById('renderDebugOptions');
+  var optionNames = Object.keys(renderDebugConfig);
+  for (var i = 0, optionName; (optionName = optionNames[i]); i++) {
+    var optionCheckId = 'RenderDebug' + optionName + 'Check';
+    var optionLabel = document.createElement('label');
+    optionLabel.setAttribute('for', optionCheckId);
+    optionLabel.textContent = optionName;
+    var optionCheck = document.createElement('input');
+    optionCheck.setAttribute('type', 'checkbox');
+    optionCheck.setAttribute('id', optionCheckId);
+    optionCheck.setAttribute('data-optionName', optionName);
+    optionCheck.onclick = updateRenderDebugOptions;
+    var optionLi = document.createElement('li');
+    optionLi.appendChild(optionLabel);
+    optionLi.appendChild(optionCheck);
+    renderDebugOptionsListEl.appendChild(optionLi);
+  }
+}
+
 function changeTheme() {
   var theme = document.getElementById('themeChanger');
   if (theme.value === "modern") {
@@ -352,9 +403,11 @@ function toggleRenderingDebug(state) {
   if (state) {
     document.getElementById('blocklyDiv').className = 'renderingDebug';
     Blockly.blockRendering.startDebugger();
+    document.getElementById('renderDebugOptions').style.display = 'block';
   } else {
     document.getElementById('blocklyDiv').className = '';
     Blockly.blockRendering.stopDebugger();
+    document.getElementById('renderDebugOptions').style.display = 'none';
   }
 }
 
@@ -434,39 +487,46 @@ var spaghettiXml = [
 </script>
 
 <style>
-html, body {
-  height: 100%;
-}
-body {
-  background-color: #fff;
-  font-family: sans-serif;
-  overflow: hidden;
-}
-h1 {
-  font-weight: normal;
-  font-size: 140%;
-}
-#blocklyDiv {
-  float: right;
-  height: 95%;
-  width: 70%;
-}
-#importExport {
-  font-family: monospace;
-}
+  html, body {
+    height: 100%;
+  }
+  body {
+    background-color: #fff;
+    font-family: sans-serif;
+    overflow: hidden;
+  }
+  h1 {
+    font-weight: normal;
+    font-size: 140%;
+  }
+  #blocklyDiv {
+    float: right;
+    height: 95%;
+    width: 70%;
+  }
+  #importExport {
+    font-family: monospace;
+  }
 
-.ioLabel>.blocklyFlyoutLabelText {
-  font-style: italic;
-}
+  .ioLabel>.blocklyFlyoutLabelText {
+    font-style: italic;
+  }
 
-#blocklyDiv.renderingDebug .blockRenderDebug {
-  display: block;
-}
+  #blocklyDiv.renderingDebug .blockRenderDebug {
+    display: block;
+  }
 
-.blockRenderDebug {
-  display: none;
-}
+  .playgroundToggleOptions {
+    list-style: none;
+    padding: 0;
+  }
+  .playgroundToggleOptions li {
+    margin-top: 1em;
+  }
 
+  .blockRenderDebug {
+    display: none;
+  }
 </style>
 </head>
 <body onload="start()">
@@ -530,20 +590,21 @@ h1 {
     <input type="button" value="Airstrike!" onclick="airstrike(100)">
     <input type="button" value="Spaghetti!" onclick="spaghetti(8)">
   </p>
-  <p>
-    Log events: &nbsp;
-    <input type="checkbox" onclick="logEvents(this.checked)" id="logCheck">
-  </p>
-
-  <p>
-    Block rendering debug: &nbsp;
-    <input type="checkbox" onclick="toggleRenderingDebug(this.checked)" id="blockRenderDebugCheck">
-  </p>
-
-  <p>
-    Enable Accessibility Mode: &nbsp;
-    <input type="checkbox" onclick="toggleAccessibilityMode(this.checked)" id="accessibilityModeCheck">
-  </p>
+  <ul class="playgroundToggleOptions">
+    <li>
+      <label for="logCheck">Log events:</label>
+      <input type="checkbox" onclick="logEvents(this.checked)" id="logCheck">
+    </li>
+    <li>
+      <label for="blockRenderDebugCheck">Enable block rendering debug:</label>
+      <input type="checkbox" onclick="toggleRenderingDebug(this.checked)" id="blockRenderDebugCheck">
+      <ul id="renderDebugOptions"></ul>
+    </li>
+    <li>
+      <label for="accessibilityModeCheck">Enable Accessibility Mode:</label>
+      <input type="checkbox" onclick="toggleAccessibilityMode(this.checked)" id="accessibilityModeCheck">
+    </li>
+  </ul>
 
 
   <!-- The next three blocks of XML are sample toolboxes for testing basic

@@ -60,7 +60,7 @@
   <p>
       Enable Accessibility Mode:
       <input type="checkbox" onclick="toggleAccessibilityMode(this.checked)" id="accessibilityModeCheck">
-      <select id="cursorChanger" name="cursor" onchange="changeCursor()">
+      <select id="cursorChanger" name="cursor" onchange="changeCursor(this.value)">
         <option value="default">Default Cursor</option>
         <option value="basic">Basic Cursor</option>
       </select>
@@ -219,10 +219,10 @@
     }
 
     /**
-    * Turn on/off accessibility mode depending on the state.
-    * @param {boolean} true to turn on accessibility mode, false otherwise.
-    * @package
-    */
+     * Turn on/off accessibility mode depending on the state.
+     * @param {boolean} true to turn on accessibility mode, false otherwise.
+     * @package
+     */
     function toggleAccessibilityMode(state) {
       if (state) {
         Blockly.navigation.enableKeyboardAccessibility();
@@ -237,7 +237,7 @@
      * @param {string} cursorType The type of the cursor.
      * @package
      */
-    function changeCursorByValue(cursorType) {
+    function changeCursor(cursorType) {
       Blockly.navigation.enableKeyboardAccessibility();
       document.getElementById('accessibilityModeCheck').checked = true;
       document.getElementById('cursorChanger').value = cursorType;
@@ -251,15 +251,6 @@
       if (oldCurNode) {
         Blockly.getMainWorkspace().getCursor().setLocation(oldCurNode);
       }
-    }
-
-    /**
-     * Choose the type of cursor to use.
-     * @package
-     */
-     function changeCursor() {
-      var cursorChanger = document.getElementById('cursorChanger');
-      changeCursorByValue(cursorChanger.value);
     }
   </script>
 

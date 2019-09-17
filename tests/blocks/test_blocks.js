@@ -1210,3 +1210,21 @@ Blockly.TestBlocks.removeDynamicDropdownOption_ = function() {
     }
   })
 };
+
+Blockly.Blocks['test_dropdowns_dynamic_random'] = {
+  init: function() {
+    var dropdown = new Blockly.FieldDropdown(this.dynamicOptions);
+    this.appendDummyInput()
+      .appendField('dynamic random')
+      .appendField(dropdown, 'OPTIONS');
+  },
+
+  dynamicOptions: function() {
+    var random = Math.floor(Math.random() * 10) + 1;
+    var options = [];
+    for (var i = 0; i < random; i++) {
+      options.push([String(i), String(i)]);
+    }
+    return options;
+  }
+};

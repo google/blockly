@@ -68,15 +68,23 @@ Blockly.FieldDropdown = function(menuGenerator, opt_validator) {
   this.menuGenerator_ = menuGenerator;
 
   /**
-   * The currently selected index. A value of -1 indicates no option
-   * has been selected.
+   * A cache of the most recently generated options.
+   * @type {Array.<!Array.<string>>}
+   * @private
+   */
+  this.generatedOptions_ = null;
+
+  /**
+   * The currently selected index. The field is initialized with the
+   * first option selected.
    * @type {number}
    * @private
    */
-  this.selectedIndex_ = -1;
+  this.selectedIndex_ = 0;
 
   this.trimOptions_();
-  var firstTuple = this.getOptions()[0];
+  var options = this.getOptions(true);
+  var firstTuple = options[0];
 
   // Call parent's constructor.
   Blockly.FieldDropdown.superClass_.constructor.call(this, firstTuple[1],
@@ -230,7 +238,8 @@ Blockly.FieldDropdown.prototype.widgetCreate_ = function() {
   menu.setRightToLeft(this.sourceBlock_.RTL);
   menu.setRole('listbox');
 
-  var options = this.getOptions();
+  var options = this.getOptions(true);
+  this.selectedMenuItem_ = null;
   for (var i = 0; i < options.length; i++) {
     var content = options[i][0]; // Human-readable text or image.
     var value = options[i][1];   // Language-neutral value.
@@ -421,15 +430,18 @@ Blockly.FieldDropdown.prototype.isOptionListDynamic = function() {
 
 /**
  * Return a list of the options for this dropdown.
+ * @param {boolean=} opt_regenerate Whether or not to re-generate the options.
  * @return {!Array.<!Array>} Array of option tuples:
  *     (human-readable text or image, language-neutral name).
  * @throws If generated options are incorrectly structured.
  */
-Blockly.FieldDropdown.prototype.getOptions = function() {
+Blockly.FieldDropdown.prototype.getOptions = function(opt_regenerate) {
   if (this.isOptionListDynamic()) {
-    var generatedOptions = this.menuGenerator_.call(this);
-    Blockly.FieldDropdown.validateOptions_(generatedOptions);
-    return generatedOptions;
+    if (!this.generatedOptions_ || opt_regenerate) {
+      this.generatedOptions_ = this.menuGenerator_.call(this);
+      Blockly.FieldDropdown.validateOptions_(this.generatedOptions_);
+    }
+    return this.generatedOptions_;
   }
   return /** @type {!Array.<!Array.<string>>} */ (this.menuGenerator_);
 };
@@ -616,6 +628,9 @@ Blockly.FieldDropdown.validateOptions_ = function(options) {
           'string label or image description. Found' + tuple[0] + ' in: ',
           tuple);
     }
+  }
+  if (!options.length) {
+    throw TypeError('FieldDropdown options must not be an empty array.');
   }
   if (foundError) {
     throw TypeError('Found invalid FieldDropdown options.');

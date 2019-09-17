@@ -56,7 +56,7 @@ Blockly.ASTNode = function(type, location, opt_params) {
    * @type {boolean}
    * @private
    */
-  this.isConnection_ = Blockly.ASTNode.isConnectionType(type);
+  this.isConnection_ = Blockly.ASTNode.isConnectionType_(type);
 
   /**
    * The location of the AST node.
@@ -103,9 +103,9 @@ Blockly.ASTNode.DEFAULT_OFFSET_Y = -20;
  * Whether an AST node of the given type points to a connection.
  * @param {string} type The type to check.  One of Blockly.ASTNode.types.
  * @return {boolean} True if a node of the given type points to a connection.
- * @package
+ * @private
  */
-Blockly.ASTNode.isConnectionType = function(type) {
+Blockly.ASTNode.isConnectionType_ = function(type) {
   switch (type) {
     case Blockly.ASTNode.types.PREVIOUS:
     case Blockly.ASTNode.types.NEXT:
@@ -161,11 +161,7 @@ Blockly.ASTNode.createInputNode = function(input) {
   if (!input) {
     return null;
   }
-  var params = {
-    "input": input
-  };
-  return new Blockly.ASTNode(Blockly.ASTNode.types.INPUT, input.connection,
-      params);
+  return new Blockly.ASTNode(Blockly.ASTNode.types.INPUT, input.connection);
 };
 
 /**
@@ -216,8 +212,6 @@ Blockly.ASTNode.prototype.processParams_ = function(params) {
   }
   if (params['wsCoordinate']) {
     this.wsCoordinate_ = params['wsCoordinate'];
-  } else if (params['input']) {
-    this.parentInput_ = params['input'];
   }
 };
 
@@ -248,16 +242,6 @@ Blockly.ASTNode.prototype.getType = function() {
  */
 Blockly.ASTNode.prototype.getWsCoordinate = function() {
   return this.wsCoordinate_;
-};
-
-/**
- * Get the parent input of the location.
- * @return {Blockly.Input} The parent input of the location or null if the node
- * is not input type.
- * @package
- */
-Blockly.ASTNode.prototype.getParentInput = function() {
-  return this.parentInput_;
 };
 
 /**

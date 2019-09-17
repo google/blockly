@@ -51,9 +51,6 @@ suite('Image Fields', function() {
         new Blockly.FieldImage('src', 'bad', 'bad');
       });
     });
-    // Note: passing invalid an src path doesn't need to throw errors
-    // because the developer can see they did it incorrectly when they view
-    // the block.
     test('With Alt', function() {
       var imageField = new Blockly.FieldImage('src', 1, 1, 'alt');
       assertValue(imageField, 'src', 'alt');
@@ -131,27 +128,124 @@ suite('Image Fields', function() {
       assertValue(this.imageField, 'newSrc', 'alt');
     });
   });
-  suite('setAlt', function() {
-    suite('Alt', function() {
+  suite('Customizations', function() {
+    suite('On Click Handler', function() {
       setup(function() {
-        this.imageField = new Blockly.FieldImage('src', 1, 1, 'alt');
+        this.onClick = function() {
+          console.log('on click');
+        };
+      });
+      teardown(function() {
+        delete this.onClick;
+      });
+      test('JS Constructor', function() {
+        var field = new Blockly.FieldImage('src', 10, 10, null, this.onClick);
+        chai.assert.equal(field.clickHandler_, this.onClick);
+      });
+      test('setOnClickHandler', function() {
+        var field = new Blockly.FieldImage('src', 10, 10);
+        field.setOnClickHandler(this.onClick);
+        chai.assert.equal(field.clickHandler_, this.onClick);
+      });
+      test('Remove Click Handler', function() {
+        var field = new Blockly.FieldImage('src', 10, 10, null, this.onClick);
+        field.setOnClickHandler(null);
+        chai.assert.equal(field.clickHandler_, null);
+      });
+    });
+    suite('Alt', function() {
+      test('JS Constructor', function() {
+        var field = new Blockly.FieldImage('src', 10, 10, 'alt');
+        chai.assert.equal(field.altText_, 'alt');
+      });
+      test('JSON Definition', function() {
+        var field = Blockly.FieldImage.fromJson({
+          src: 'src',
+          width: 10,
+          height: 10,
+          alt: 'alt'
+        });
+        chai.assert.equal(field.altText_, 'alt');
       });
       test('Deprecated - setText', function() {
+        var field = new Blockly.FieldImage('src', 10, 10, 'alt');
         chai.assert.throws(function() {
-          this.imageField.setText('newAlt');
+          field.setText('newAlt');
         });
       });
-      test('Null', function() {
-        this.imageField.setAlt(null);
-        assertValue(this.imageField, 'src', '');
+      suite('SetAlt', function() {
+        setup(function() {
+          this.imageField = new Blockly.FieldImage('src', 10, 10, 'alt');
+        });
+        test('Null', function() {
+          this.imageField.setAlt(null);
+          assertValue(this.imageField, 'src', '');
+        });
+        test('Empty String', function() {
+          this.imageField.setAlt('');
+          assertValue(this.imageField, 'src', '');
+        });
+        test('Good Alt', function() {
+          this.imageField.setAlt('newAlt');
+          assertValue(this.imageField, 'src', 'newAlt');
+        });
       });
-      test('Empty String', function() {
-        this.imageField.setAlt('');
-        assertValue(this.imageField, 'src', '');
+      test('JS Configuration - Simple', function() {
+        var field = new Blockly.FieldImage('src', 10, 10, null, null, null, {
+          alt: 'alt'
+        });
+        chai.assert.equal(field.altText_, 'alt');
       });
-      test('Good Alt', function() {
-        this.imageField.setAlt('newAlt');
-        assertValue(this.imageField, 'src', 'newAlt');
+      test('JS Configuration - Ignore', function() {
+        var field = new Blockly.FieldImage('src', 10, 10, 'alt', null, null, {
+          alt: 'configAlt'
+        });
+        chai.assert.equal(field.altText_, 'configAlt');
+      });
+      test('JS Configuration - Ignore - \'\'', function() {
+        var field = new Blockly.FieldImage('src', 10, 10, '', null, null, {
+          alt: 'configAlt'
+        });
+        chai.assert.equal(field.altText_, 'configAlt');
+      });
+      test('JS Configuration - Ignore - Config \'\'', function() {
+        var field = new Blockly.FieldImage('src', 10, 10, 'alt', null, null, {
+          alt: ''
+        });
+        chai.assert.equal(field.altText_, '');
+      });
+    });
+    suite('Flip RTL', function() {
+      test('JS Constructor', function() {
+        var field = new Blockly.FieldImage('src', 10, 10, null, null, true);
+        chai.assert.isTrue(field.getFlipRtl());
+      });
+      test('JSON Definition', function() {
+        var field = Blockly.FieldImage.fromJson({
+          src: 'src',
+          width: 10,
+          height: 10,
+          flipRtl: true
+        });
+        chai.assert.isTrue(field.getFlipRtl());
+      });
+      test('JS Configuration - Simple', function() {
+        var field = new Blockly.FieldImage('src', 10, 10, null, null, null, {
+          flipRtl: true
+        });
+        chai.assert.isTrue(field.getFlipRtl());
+      });
+      test('JS Configuration - Ignore - True', function() {
+        var field = new Blockly.FieldImage('src', 10, 10, null, null, true, {
+          flipRtl: false
+        });
+        chai.assert.isFalse(field.getFlipRtl());
+      });
+      test('JS Configuration - Ignore - False', function() {
+        var field = new Blockly.FieldImage('src', 10, 10, null, null, false, {
+          flipRtl: true
+        });
+        chai.assert.isTrue(field.getFlipRtl());
       });
     });
   });

@@ -106,8 +106,9 @@ Blockly.Input.prototype.insertFieldAt = function(index, field, opt_name) {
     throw Error('index ' + index + ' out of bounds.');
   }
 
-  // Empty string, Null or undefined generates no field, unless field is named.
-  if (!field && !opt_name) {
+  // Falsy field values don't generate a field, unless the field is an empty
+  // string and named.
+  if (!field && !(field == '' && opt_name)) {
     return index;
   }
   // Generate a FieldLabel when given a plain text field.

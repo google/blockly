@@ -29,6 +29,8 @@ goog.provide('Blockly.blockRendering.Renderer');
 goog.require('Blockly.blockRendering.ConstantProvider');
 goog.require('Blockly.blockRendering.Debug');
 goog.require('Blockly.blockRendering.Drawer');
+goog.require('Blockly.blockRendering.IPathObject');
+goog.require('Blockly.blockRendering.PathObject');
 goog.require('Blockly.blockRendering.RenderInfo');
 
 
@@ -97,6 +99,16 @@ Blockly.blockRendering.Renderer.prototype.makeDebugger_ = function() {
 };
 
 /**
+ * Create a new instance of a renderer path object.
+ * @param {!SVGElement} root The root SVG element.
+ * @return {!Blockly.blockRendering.IPathObject} The renderer path object.
+ * @package
+ */
+Blockly.blockRendering.Renderer.prototype.makePathObject = function(root) {
+  return new Blockly.blockRendering.PathObject(root);
+};
+
+/**
  * Get the current renderer's constant provider.  We assume that when this is
  * called, the renderer has already been initialized.
  * @return {!Blockly.blockRendering.ConstantProvider} The constant provider.
@@ -121,3 +133,4 @@ Blockly.blockRendering.Renderer.prototype.render = function(block) {
   info.measure();
   this.makeDrawer_(block, info).draw();
 };
+

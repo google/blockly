@@ -102,6 +102,6 @@ suite('Cursor', function() {
     this.cursor.setLocation(prevConnectionNode);
     this.cursor.prev();
     var curNode = this.cursor.getCurNode();
-    assertEquals(curNode.getLocation(), this.blocks.A);
+    assertEquals(curNode.getLocation(), this.blocks.A.previousConnection);
   });
 });

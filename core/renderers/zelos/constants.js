@@ -43,18 +43,39 @@ Blockly.zelos.ConstantProvider = function() {
 
   this.GRID_UNIT = 4;
 
+  /**
+   * @override
+   */
   this.CORNER_RADIUS = 1 * this.GRID_UNIT;
 
+  /**
+   * @override
+   */
   this.NOTCH_WIDTH = 9 * this.GRID_UNIT;
 
+  /**
+   * @override
+   */
   this.NOTCH_HEIGHT = 2 * this.GRID_UNIT;
 
+  /**
+   * @override
+   */
   this.NOTCH_OFFSET_LEFT = 3 * this.GRID_UNIT;
 
+  /**
+   * @override
+   */
   this.MIN_BLOCK_HEIGHT = 12 * this.GRID_UNIT;
 
+  /**
+   * @override
+   */
   this.DARK_PATH_OFFSET = 0;
 
+  /**
+   * @override
+   */
   this.TAB_OFFSET_FROM_TOP = 0;
 
 };

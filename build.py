@@ -460,6 +460,13 @@ class Gen_langfiles(threading.Thread):
       else:
         print("FAILED to create " + f)
 
+# Class to hold arguments if user passes in old argument style.
+class Arguments:
+  def __init__(self):
+    self.core = False
+    self.generators = False
+    self.langfiles = False
+
 # Gets the command line arguments.
 def get_args():
   parser = argparse.ArgumentParser(description="Decide which files to build.")
@@ -467,12 +474,24 @@ def get_args():
   parser.add_argument('-generators', action="store_true", default=False, help="Build the generators")
   parser.add_argument('-langfiles', action="store_true", default=False, help="Build all the language files")
 
-  args = parser.parse_args()
-  if (not args.core) and (not args.generators) and (not args.langfiles):
-    # No arguments, use these defaults:
-    args.core = True
-    args.generators = True
-    args.langfiles = True
+  # New argument style: ./build.py -core
+  # Old argument style: ./build.py core
+  # Changed as of July 2019.
+  try:
+    args = parser.parse_args()
+    if (not args.core) and (not args.generators) and (not args.langfiles):
+      # No arguments, use these defaults:
+      args.core = True
+      args.generators = True
+      args.langfiles = True
+  except SystemExit:
+    # Fall back to old argument style.
+    args = Arguments()
+    args.core = 'core' in sys.argv
+    args.generators = 'generators' in sys.argv
+    args.langfiles = 'langfiles' in sys.argv
+    if 'accessible' in sys.argv:
+      print("The Blockly accessibility demo has moved to https://github.com/google/blockly-experimental")
   return args
 
 if __name__ == "__main__":

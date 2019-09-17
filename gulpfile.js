@@ -509,8 +509,6 @@ function packageCommonJS(namespace, dependencies) {
  */
 gulp.task('package-blockly', function() {
   return gulp.src('blockly_compressed.js')
-    .pipe(gulp.insert.prepend(`
-    var self = this;`))
     .pipe(packageUMD('Blockly', []))
     .pipe(gulp.rename('blockly.js'))
     .pipe(gulp.dest(packageDistribution));
@@ -524,9 +522,8 @@ gulp.task('package-blockly', function() {
 gulp.task('package-blockly-node', function() {
   // Override textToDomDocument, providing a Node.js alternative to DOMParser.
   return gulp.src('blockly_compressed.js')
-    .pipe(gulp.insert.wrap(`
-    var self = global;`,
-      `if (typeof DOMParser !== 'function') {
+    .pipe(gulp.insert.append(`
+      if (typeof DOMParser !== 'function') {
         var JSDOM = require('jsdom').JSDOM;
         var window = (new JSDOM()).window;
         var document = window.document;

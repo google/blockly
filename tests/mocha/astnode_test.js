@@ -496,10 +496,9 @@ suite('ASTNode', function() {
       });
       test('fromPreviousToInput', function() {
         var prevConnection = this.blocks.statementInput3.previousConnection;
-        var inputConnection = this.blocks.statementInput2.inputList[1].connection;
         var node = Blockly.ASTNode.createConnectionNode(prevConnection);
         var prevNode = node.prev();
-        assertEquals(prevNode.getLocation(), inputConnection);
+        assertEquals(prevNode, null);
       });
       test('fromBlockToPrevious', function() {
         var node = Blockly.ASTNode.createBlockNode(this.blocks.statementInput1);

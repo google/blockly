@@ -7,6 +7,7 @@
   <script src="../../blocks_compressed.js"></script>
   <script src="../../javascript_compressed.js"></script>
   <script src="../../msg/js/en.js"></script>
+  <script src="basic_cursor.js"></script>
   <style>
     body {
       background-color: #fff;
@@ -44,15 +45,28 @@
   Feel free to just play around in accessibility mode or hit the button below to see the demo.
   The demo uses <a href="https://en.wikipedia.org/wiki/Tree_traversal#Pre-order_(NLR)">preorder tree traversal</a>
   as an alternative way to navigate the blocks,
-  connections, and fields on the workspace.
-  </p>
+  connections, and fields on the workspace.<br><br>
 
   <!-- TODO: Update when we add keyboard navigation to site -->
   <!-- <p>&rarr; More info on <a href="">Keyboard Navigation</a>.</p> -->
 
+  <b>Cursor</b><br>
+  The cursor controls how the user navigates the blocks, inputs, fields and connections on a workspace.
+  This demo shows two different cursors:<br>
+  <b>Default Cursor:</b> Allow the user to go to previous, next, in and out from a location.<br>
+  <b>Basic Cursor:</b> Using the pre order traversal allows the user to go to the next and previous location.
+  </p>
+
   <p>
-    <button onclick="preOrderDemo()">Pre-order Demo</button>
-    <button onclick="turnOnAccessibility()">Accessibility Mode</button>
+      Enable Accessibility Mode:
+      <input type="checkbox" onclick="toggleAccessibilityMode(this.checked)" id="accessibilityModeCheck">
+      <select id="cursorChanger" name="cursor" onchange="changeCursor()">
+        <option value="default">Default Cursor</option>
+        <option value="basic">Basic Cursor</option>
+      </select>
+
+    <button onclick="preOrderDemo()">Start Pre-order Demo</button>
+    <button onclick="stopDemo()">Stop Pre-order Demo</button>
   </p>
 
   <div id="blocklyDiv" style="height: 480px; width: 600px;"></div>
@@ -168,6 +182,7 @@
          toolbox: document.getElementById('toolbox')});
     Blockly.Xml.domToWorkspace(document.getElementById('startBlocks'),
                                demoWorkspace);
+    var timeout;
 
     /**
      * Shows the next node in the tree traversal every second.
@@ -177,30 +192,74 @@
       var doNext = function() {
         var node = Blockly.getMainWorkspace().getCursor().next();
         if (node) {
-          setTimeout(doNext, 1000);
+          timeout = setTimeout(doNext, 1000);
         }
       }
       doNext();
     }
 
     /**
-     * Sets up accessibility mode so that the demo can successfully run.
+     * Stop the running demo.
+     * @package
+     */
+    function stopDemo() {
+      clearTimeout(timeout);
+      document.getElementById('accessibilityModeCheck').disabled = false;
+    };
+
+    /**
+     * Sets up accessibility mode and change the cursor to basic cursor so that
+     * the demo can successfully run.
      * @package
      */
     function preOrderDemo() {
-      Blockly.getMainWorkspace().setCursor(new Blockly.BasicCursor());
-      Blockly.navigation.enableKeyboardAccessibility();
-      demo();
+      changeCursorByValue('basic');
+      document.getElementById('accessibilityModeCheck').disabled = true;
+      setTimeout(demo, 1000);
     }
 
     /**
-    * Turn on accessibility mode.
-    * If there is a block on the workspace add the cursor to the block otherwise
-    * add the cursor to the workspace.
+    * Turn on/off accessibility mode depending on the state.
+    * @param {boolean} true to turn on accessibility mode, false otherwise.
     * @package
     */
-    function turnOnAccessibility() {
-      Blockly.navigation.onBlocklyAction(Blockly.navigation.ACTION_TOGGLE_KEYBOARD_NAV);
+    function toggleAccessibilityMode(state) {
+      if (state) {
+        Blockly.navigation.enableKeyboardAccessibility();
+      } else {
+        Blockly.navigation.disableKeyboardAccessibility();
+      }
+    }
+
+    /**
+     * Change the type of the cursor and set to the location of the old cursor.
+     * Changing the cursor changes how a user navigates the blocks on the workspace.
+     * @param {string} cursorType The type of the cursor.
+     * @package
+     */
+    function changeCursorByValue(cursorType) {
+      Blockly.navigation.enableKeyboardAccessibility();
+      document.getElementById('accessibilityModeCheck').checked = true;
+      document.getElementById('cursorChanger').value = cursorType;
+      var oldCurNode = Blockly.getMainWorkspace().getCursor().getCurNode();
+
+      if (cursorType === "basic") {
+        Blockly.getMainWorkspace().setCursor(new Blockly.BasicCursor());
+      } else {
+        Blockly.getMainWorkspace().setCursor(new Blockly.Cursor());
+      }
+      if (oldCurNode) {
+        Blockly.getMainWorkspace().getCursor().setLocation(oldCurNode);
+      }
+    }
+
+    /**
+     * Choose the type of cursor to use.
+     * @package
+     */
+     function changeCursor() {
+      var cursorChanger = document.getElementById('cursorChanger');
+      changeCursorByValue(cursorChanger.value);
     }
   </script>
 

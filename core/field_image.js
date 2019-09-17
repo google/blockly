@@ -218,6 +218,7 @@ Blockly.FieldImage.prototype.doValueUpdate_ = function(newValue) {
 /**
  * Get whether to flip this image in RTL
  * @return {boolean} True if we should flip in RTL.
+ * @override
  */
 Blockly.FieldImage.prototype.getFlipRtl = function() {
   return this.flipRtl_;

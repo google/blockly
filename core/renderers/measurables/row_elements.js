@@ -95,7 +95,7 @@ Blockly.blockRendering.Field = function(constants, field, parentInput) {
   Blockly.blockRendering.Field.superClass_.constructor.call(this, constants);
   this.field = field;
   this.isEditable = field.isCurrentlyEditable();
-  this.flipRtl = field.getFlipRtl && field.getFlipRtl();
+  this.flipRtl = field.getFlipRtl();
   this.type |= Blockly.blockRendering.Types.FIELD;
 
   var size = this.field.getSize();

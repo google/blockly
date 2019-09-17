@@ -245,8 +245,20 @@ class Gen_compressed(threading.Thread):
       ]
 
     # Read in all the source files.
-    # Add Blockly.Blocks to be compatible with the compiler.
-    params.append(("js_code", "goog.provide('Blockly');goog.provide('Blockly.Blocks');"))
+    # Add Blockly, Blockly.Blocks, and all fields to be compatible with the compiler.
+    params.append(("js_code", """
+goog.provide('Blockly');
+goog.provide('Blockly.Blocks');
+goog.provide('Blockly.FieldCheckbox');
+goog.provide('Blockly.FieldColour');
+goog.provide('Blockly.FieldDropdown');
+goog.provide('Blockly.FieldImage');
+goog.provide('Blockly.FieldLabel');
+goog.provide('Blockly.FieldMultilineInput');
+goog.provide('Blockly.FieldNumber');
+goog.provide('Blockly.FieldTextInput');
+goog.provide('Blockly.FieldVariable');
+"""))
     filenames = glob.glob(os.path.join("blocks", "*.js"))
     filenames.sort()  # Deterministic build.
     for filename in filenames:
@@ -254,8 +266,8 @@ class Gen_compressed(threading.Thread):
       params.append(("js_code", "".join(f.readlines()).encode("utf-8")))
       f.close()
 
-    # Remove Blockly.Blocks to be compatible with Blockly.
-    remove = "var Blockly={Blocks:{}};"
+    # Remove Blockly, Blockly.Blocks and all fields to be compatible with Blockly.
+    remove = "var Blockly={Blocks:{},FieldCheckbox:{},FieldColour:{},FieldDropdown:{},FieldImage:{},FieldLabel:{},FieldMultilineInput:{},FieldNumber:{},FieldTextInput:{},FieldVariable:{}};"
     self.do_compile(params, target_filename, filenames, remove)
 
   def gen_generator(self, language):

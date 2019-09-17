@@ -355,5 +355,41 @@ suite('Angle Fields', function() {
         chai.assert.equal(field.round_, 30);
       });
     });
+    suite('Mode', function() {
+      suite('Compass', function() {
+        test('JS Configuration', function() {
+          var field = new Blockly.FieldAngle(0, null, {
+            mode: 'compass'
+          });
+          chai.assert.equal(field.offset_, 90);
+          chai.assert.isTrue(field.clockwise_);
+        });
+        test('JS Configuration', function() {
+          var field = Blockly.FieldAngle.fromJson({
+            value: 0,
+            mode: 'compass'
+          });
+          chai.assert.equal(field.offset_, 90);
+          chai.assert.isTrue(field.clockwise_);
+        });
+      });
+      suite('Protractor', function() {
+        test('JS Configuration', function() {
+          var field = new Blockly.FieldAngle(0, null, {
+            mode: 'protractor'
+          });
+          chai.assert.equal(field.offset_, 0);
+          chai.assert.isFalse(field.clockwise_);
+        });
+        test('JS Configuration', function() {
+          var field = Blockly.FieldAngle.fromJson({
+            value: 0,
+            mode: 'protractor'
+          });
+          chai.assert.equal(field.offset_, 0);
+          chai.assert.isFalse(field.clockwise_);
+        });
+      });
+    });
   });
 });

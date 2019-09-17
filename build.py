@@ -43,10 +43,15 @@
 #   dart_compressed.js: The compressed Dart generator.
 #   msg/js/<LANG>.js for every language <LANG> defined in msg/js/<LANG>.json.
 
+import argparse
+import codecs
+import glob
+import json
+import os
+import re
+import subprocess
 import sys
-
-import errno, glob, json, os, re, subprocess, threading, codecs, argparse
-from cStringIO import StringIO
+import threading
 
 if sys.version_info[0] == 2:
   import httplib
@@ -138,7 +143,7 @@ this.BLOCKLY_BOOT = function(root) {
 
     provides = []
     # Exclude field_date.js as it still has a dependency on the closure library
-    # see issue #2890. 
+    # see issue #2890.
     for dep in calcdeps.BuildDependenciesFromFiles(self.search_paths):
       if not dep.filename.startswith('closure') and not dep.filename.startswith('core/field_date.js'):
         provides.extend(dep.provides)
@@ -176,20 +181,17 @@ class Gen_compressed(threading.Thread):
   Uses the Closure Compiler's online API.
   Runs in a separate thread.
   """
-  def __init__(self, search_paths, bundles, use_default):
+  def __init__(self, search_paths, bundles):
     threading.Thread.__init__(self)
     self.search_paths = search_paths
     self.bundles = bundles
-    self.use_default = use_default
 
   def run(self):
-    if (self.bundles.core or self.use_default):
+    if (self.bundles.core):
       self.gen_core()
-
-    if (self.bundles.core or self.use_default):
       self.gen_blocks()
 
-    if (self.bundles.generators or self.use_default):
+    if (self.bundles.generators):
       self.gen_generator("javascript")
       self.gen_generator("python")
       self.gen_generator("php")
@@ -219,11 +221,12 @@ class Gen_compressed(threading.Thread):
       if filename.startswith("closure"):
         continue
       f = codecs.open(filename, encoding="utf-8")
-      code = "".join(f.readlines()).encode("utf-8")
+      code = "".join(f.readlines())
       # Inject the Blockly version.
       if filename == "core/blockly.js":
-        code = code.replace("Blockly.VERSION = 'uncompiled';", "Blockly.VERSION = '" + blocklyVersion + "';")
-      params.append(("js_code", code))
+        code = code.replace("Blockly.VERSION = 'uncompiled';",
+                            "Blockly.VERSION = '%s';" % blocklyVersion)
+      params.append(("js_code", code.encode("utf-8")))
       f.close()
 
     self.do_compile(params, target_filename, filenames, "")
@@ -407,46 +410,23 @@ class Gen_langfiles(threading.Thread):
   Runs in a separate thread.
   """
 
-  def __init__(self, force_gen):
+  def __init__(self):
     threading.Thread.__init__(self)
-    self.force_gen = force_gen
-
-  def _rebuild(self, srcs, dests):
-    # Determine whether any of the files in srcs is newer than any in dests.
-    try:
-      return (max(os.path.getmtime(src) for src in srcs) >
-              min(os.path.getmtime(dest) for dest in dests))
-    except OSError as e:
-      # Was a file not found?
-      if e.errno == errno.ENOENT:
-        # If it was a source file, we can't proceed.
-        if e.filename in srcs:
-          print("Source file missing: " + e.filename)
-          sys.exit(1)
-        else:
-          # If a destination file was missing, rebuild.
-          return True
-      else:
-        print("Error checking file creation times: " + str(e))
 
   def run(self):
     # The files msg/json/{en,qqq,synonyms}.json depend on msg/messages.js.
-    if (self.force_gen or
-        self._rebuild([os.path.join("msg", "messages.js")],
-                      [os.path.join("msg", "json", f) for f in
-                      ["en.json", "qqq.json", "synonyms.json"]])):
-      try:
-        subprocess.check_call([
-            "python",
-            os.path.join("i18n", "js_to_json.py"),
-            "--input_file", "msg/messages.js",
-            "--output_dir", "msg/json/",
-            "--quiet"])
-      except (subprocess.CalledProcessError, OSError) as e:
-        # Documentation for subprocess.check_call says that CalledProcessError
-        # will be raised on failure, but I found that OSError is also possible.
-        print("Error running i18n/js_to_json.py: ", e)
-        sys.exit(1)
+    try:
+      subprocess.check_call([
+          "python",
+          os.path.join("i18n", "js_to_json.py"),
+          "--input_file", "msg/messages.js",
+          "--output_dir", "msg/json/",
+          "--quiet"])
+    except (subprocess.CalledProcessError, OSError) as e:
+      # Documentation for subprocess.check_call says that CalledProcessError
+      # will be raised on failure, but I found that OSError is also possible.
+      print("Error running i18n/js_to_json.py: ", e)
+      sys.exit(1)
 
     # Checking whether it is necessary to rebuild the js files would be a lot of
     # work since we would have to compare each <lang>.json file with each
@@ -487,22 +467,25 @@ class Arguments:
     self.generators = False
     self.langfiles = False
 
-# Setup the argument parser.
-def setup_parser():
+# Gets the command line arguments.
+def get_args():
   parser = argparse.ArgumentParser(description="Decide which files to build.")
   parser.add_argument('-core', action="store_true", default=False, help="Build core")
   parser.add_argument('-generators', action="store_true", default=False, help="Build the generators")
   parser.add_argument('-langfiles', action="store_true", default=False, help="Build all the language files")
-  return parser
 
-# Gets the command line arguments.
-# If the user passes in the old style or arguments we create the arguments object
-# otherwise the argument object is created from the ArgumentParser.
-def get_args():
-  parser = setup_parser()
+  # New argument style: ./build.py -core
+  # Old argument style: ./build.py core
+  # Changed as of July 2019.
   try:
     args = parser.parse_args()
+    if (not args.core) and (not args.generators) and (not args.langfiles):
+      # No arguments, use these defaults:
+      args.core = True
+      args.generators = True
+      args.langfiles = True
   except SystemExit:
+    # Fall back to old argument style.
     args = Arguments()
     args.core = 'core' in sys.argv
     args.generators = 'generators' in sys.argv
@@ -513,21 +496,18 @@ def get_args():
 
 if __name__ == "__main__":
   args = get_args()
-  use_default = not args.core and not args.generators and not args.langfiles
   calcdeps = import_path(os.path.join("closure", "bin", "calcdeps.py"))
   full_search_paths = calcdeps.ExpandDirectories(["core", "closure"])
   full_search_paths = sorted(full_search_paths)  # Deterministic build.
 
   # Uncompressed and compressed are run in parallel threads.
   # Uncompressed is limited by processor speed.
-  if (args.core or use_default):
+  if (args.core):
     Gen_uncompressed(full_search_paths, 'blockly_uncompressed.js').start()
 
   # Compressed is limited by network and server speed.
-  Gen_compressed(full_search_paths, args, use_default).start()
+  Gen_compressed(full_search_paths, args).start()
 
   # This is run locally in a separate thread
-  # defaultlangfiles checks for changes in the msg files, while manually asking
-  # to build langfiles will force the messages to be rebuilt
-  if (args.langfiles or use_default):
-    Gen_langfiles(args.langfiles).start()
+  if (args.langfiles):
+    Gen_langfiles().start()

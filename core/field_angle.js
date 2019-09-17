@@ -143,8 +143,8 @@ Blockly.FieldAngle.OFFSET = 0;
 Blockly.FieldAngle.WRAP = 360;
 
 /**
- * The default amount to round angles to when using a mouse. A round value
- * of 0 disables rounding.
+ * The default amount to round angles to when using a mouse. Must be a
+ * positive integer to support keyboard navigation.
  * @const {number}
  */
 Blockly.FieldAngle.ROUND = 15;
@@ -339,31 +339,22 @@ Blockly.FieldAngle.prototype.onMouseMove = function(e) {
   } else {
     angle = 360 - (this.offset_ - angle);
   }
-  if (angle > 360) {
-    angle -= 360;
-  }
 
-  this.setAngle(angle);
+  this.displayMouseOrKeyboardValue_(angle);
 };
 
 /**
- * Set the angle value and update the graph.
+ * Handles and displays values that are input via mouse or arrow key input.
+ * These values need to be rounded and wrapped before being displayed so
+ * that the text input's value is appropriate.
  * @param {number} angle New angle.
+ * @private
  */
-Blockly.FieldAngle.prototype.setAngle = function(angle) {
-  // Do rounding.
+Blockly.FieldAngle.prototype.displayMouseOrKeyboardValue_ = function(angle) {
   if (this.round_) {
     angle = Math.round(angle / this.round_) * this.round_;
   }
-
-  // Do wrapping.
-  if (angle > this.wrap_) {
-    angle -= 360;
-  } else if (angle < 0) {
-    angle += 360;
-  }
-
-  // Update value.
+  angle = this.wrapValue_(angle);
   if (angle != this.value_) {
     this.setEditorValue_(angle);
   }
@@ -432,8 +423,8 @@ Blockly.FieldAngle.prototype.onHtmlInputKeyDown_ = function(e) {
     multiplier = 1;
   }
   if (multiplier) {
-    this.setAngle(Number(this.getValue()) +
-        (multiplier * this.round_));
+    this.displayMouseOrKeyboardValue_(
+        this.getValue() + (multiplier * this.round_));
     e.preventDefault();
     e.stopPropagation();
   }
@@ -447,17 +438,22 @@ Blockly.FieldAngle.prototype.onHtmlInputKeyDown_ = function(e) {
  * @override
  */
 Blockly.FieldAngle.prototype.doClassValidation_ = function(opt_newValue) {
-  var n = Number(opt_newValue) % 360;
-  if (isNaN(n)) {
+  var value = Number(opt_newValue);
+  if (isNaN(value)) {
     return null;
   }
-  if (n < 0) {
-    n += 360;
+  return this.wrapValue_(value);
+};
+
+Blockly.FieldAngle.prototype.wrapValue_ = function(value) {
+  value %= 360;
+  if (value < 0) {
+    value += 360;
   }
-  if (n > this.wrap_) {
-    n -= 360;
+  if (value > this.wrap_) {
+    value -= 360;
   }
-  return n;
+  return value;
 };
 
 Blockly.fieldRegistry.register('field_angle', Blockly.FieldAngle);

@@ -53,7 +53,7 @@ Blockly.FieldAngle = function(opt_value, opt_validator, opt_config) {
   /**
    * Should the angle increase as the angle picker is moved clockwise (true)
    * or counterclockwise (false)
-   * @see CLOCKWISE
+   * @see Blockly.FieldAngle.CLOCKWISE
    * @type {boolean}
    * @private
    */
@@ -61,7 +61,7 @@ Blockly.FieldAngle = function(opt_value, opt_validator, opt_config) {
 
   /**
    * The offset of zero degrees (and all other angles).
-   * @see OFFSET
+   * @see Blockly.FieldAngle.OFFSET
    * @type {number}
    * @private
    */
@@ -69,15 +69,15 @@ Blockly.FieldAngle = function(opt_value, opt_validator, opt_config) {
 
   /**
    * The maximum angle to allow before wrapping.
-   * @see WRAP
+   * @see Blockly.FieldAngle.WRAP
    * @type {number}
    * @private
    */
   this.wrap_ = Blockly.FieldAngle.WRAP;
 
   /**
-   * The amount to round angles to when using a mouse.
-   * @see ROUND
+   * The amount to round angles to when using a mouse or keyboard nav input.
+   * @see Blockly.FieldAngle.ROUND
    * @type {number}
    * @private
    */
@@ -143,8 +143,8 @@ Blockly.FieldAngle.OFFSET = 0;
 Blockly.FieldAngle.WRAP = 360;
 
 /**
- * The default amount to round angles to when using a mouse. Must be a
- * positive integer to support keyboard navigation.
+ * The default amount to round angles to when using a mouse or keyboard nav
+ * input. Must be a positive integer to support keyboard navigation.
  * @const {number}
  */
 Blockly.FieldAngle.ROUND = 15;

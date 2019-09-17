@@ -358,7 +358,6 @@ Blockly.FieldTextInput.prototype.unbindInputEvents_ = function() {
  * @protected
  */
 Blockly.FieldTextInput.prototype.onHtmlInputKeyDown_ = function(e) {
-  console.log(e);
   if (e.keyCode == Blockly.utils.KeyCodes.ENTER) {
     Blockly.WidgetDiv.hide();
     Blockly.DropDownDiv.hideWithoutAnimation();

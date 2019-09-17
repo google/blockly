@@ -62,7 +62,7 @@ Blockly.BasicCursor.prototype.validNode_ = function(node) {
  * From the given node find either the next valid sibling or parent.
  * @param {Blockly.ASTNode} node The current position in the AST.
  * @return {Blockly.ASTNode} The parent AST node or null if there are no
- * valid parents.
+ *     valid parents.
  * @private
  */
 Blockly.BasicCursor.prototype.findSiblingOrParent_ = function(node) {

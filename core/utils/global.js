@@ -19,7 +19,7 @@
  */
 
 /**
- * @fileoverview Core utility methods for Blockly
+ * @fileoverview Provides a reference to the global object.
  * @author samelh@google.com (Sam El-Husseini)
  */
 'use strict';

@@ -914,6 +914,22 @@ Blockly.Field.prototype.getParentInput = function() {
 };
 
 /**
+ * Returns whether or not we should flip the field in RTL.
+ * @return {boolean} True if we should flip in RTL.
+ */
+Blockly.Field.prototype.getFlipRtl = function() {
+  return false;
+};
+
+/**
+ * Returns whether or not the field is tab navigable.
+ * @return {boolean} True if the field is tab navigable.
+ */
+Blockly.Field.prototype.isTabNavigable = function() {
+  return false;
+};
+
+/**
  * Handles the given action.
  * This is only triggered when keyboard accessibility mode is enabled.
  * @param {!Blockly.Action} _action The action to be handled.

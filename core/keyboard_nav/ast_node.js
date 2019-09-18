@@ -612,7 +612,7 @@ Blockly.ASTNode.prototype.prev = function() {
 
     case Blockly.ASTNode.types.PREVIOUS:
       var targetConnection = this.location_.targetConnection;
-      if (targetConnection) {
+      if (targetConnection && !targetConnection.getParentInput()) {
         return Blockly.ASTNode.createConnectionNode(targetConnection);
       }
       break;

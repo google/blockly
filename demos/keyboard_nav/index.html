@@ -7,6 +7,7 @@
   <script src="../../blocks_compressed.js"></script>
   <script src="../../javascript_compressed.js"></script>
   <script src="../../msg/js/en.js"></script>
+  <script src="basic_cursor.js"></script>
   <style>
     body {
       background-color: #fff;
@@ -26,33 +27,46 @@
   <h1><a href="https://developers.google.com/blockly/">Blockly</a> &gt;
     <a href="../index.html">Demos</a> &gt; Keyboard Navigation</h1>
 
-  <p>Keyboard Navigation is our first step towards an accessible Blockly.<br>
+  <p>Keyboard Navigation is our first step towards an accessible Blockly.<br />
   You can enter accessibility mode by <b>shift clicking anywhere on the
-  workspace or on a block</b>. <br>Some basic commands for moving around are below.
-  More complete documentation is still in progress.<br><br>
-    <b>Workspace Navigation</b><br>
-    W: Previous block/field/input at the same level<br>
+  workspace or on a block</b>. <br />Some basic commands for moving around are below.
+  More complete documentation is still in progress.<br /><br />
+    <b>Workspace Navigation</b><br />
+    W: Previous block/field/input at the same level<br />
     A: Up one level (Field (or input) -> Block -> Input (or field) -> Block ->
-    Stack -> Workspace)<br>
-    S: Next block/field/input at the same level<br>
+    Stack -> Workspace)<br />
+    S: Next block/field/input at the same level<br />
     D: Down one level (Workspace -> Stack -> Block -> Input (or field) -> Block
-     -> Field (or input))<br>
-    T: Will open the toolbox. Once in there you can moving around using the WASD keys. And insert a block by hitting Enter<br>
-    X: While on a connection hit X to disconnect the block after the cursor<br><br>
+     -> Field (or input))<br />
+    T: Will open the toolbox. Once in there you can moving around using the WASD keys. And insert a block by hitting Enter<br />
+    X: While on a connection hit X to disconnect the block after the cursor<br /><br />
 
-  <b>Pre Order Traversal</b><br>
+  <b>Pre Order Traversal</b><br />
   Feel free to just play around in accessibility mode or hit the button below to see the demo.
   The demo uses <a href="https://en.wikipedia.org/wiki/Tree_traversal#Pre-order_(NLR)">preorder tree traversal</a>
   as an alternative way to navigate the blocks,
-  connections, and fields on the workspace.
-  </p>
+  connections, and fields on the workspace.<br /><br />
 
   <!-- TODO: Update when we add keyboard navigation to site -->
   <!-- <p>&rarr; More info on <a href="">Keyboard Navigation</a>.</p> -->
 
+  <b>Cursor</b><br />
+  The cursor controls how the user navigates the blocks, inputs, fields and connections on a workspace.
+  This demo shows two different cursors:<br />
+  <b>Default Cursor:</b> Allow the user to go to the previous, next, in or out location.<br />
+  <b>Basic Cursor:</b> Using the pre order traversal allows the user to go to the next and previous location.
+  </p>
+
   <p>
-    <button onclick="preOrderDemo()">Pre-order Demo</button>
-    <button onclick="turnOnAccessibility()">Accessibility Mode</button>
+      Enable Accessibility Mode:
+      <input type="checkbox" onclick="toggleAccessibilityMode(this.checked)" id="accessibilityModeCheck">
+      <select id="cursorChanger" name="cursor" onchange="changeCursor(this.value)">
+        <option value="default">Default Cursor</option>
+        <option value="basic">Basic Cursor</option>
+      </select>
+
+    <button onclick="preOrderDemo()">Start Pre-order Demo</button>
+    <button onclick="stopDemo()">Stop Pre-order Demo</button>
   </p>
 
   <div id="blocklyDiv" style="height: 480px; width: 600px;"></div>
@@ -168,84 +182,7 @@
          toolbox: document.getElementById('toolbox')});
     Blockly.Xml.domToWorkspace(document.getElementById('startBlocks'),
                                demoWorkspace);
-
-    /**
-     * Decides what nodes to traverse and which ones to skip. Currently, it
-     * skips output, stack and workspace nodes.
-     * @param {Blockly.ASTNode} node The AST node to check whether it is valid.
-     * @return {boolean} True if the node should be visited, false otherwise.
-     * @package
-     */
-    function validNode(node) {
-      var isValid = false;
-      var type = node && node.getType();
-      if (type == Blockly.ASTNode.types.BLOCK ||
-          type == Blockly.ASTNode.types.INPUT ||
-          type == Blockly.ASTNode.types.FIELD ||
-          type == Blockly.ASTNode.types.NEXT ||
-          type == Blockly.ASTNode.types.PREVIOUS) {
-        isValid = true;
-      }
-      return isValid;
-    }
-
-    /**
-     * From the given node find either the next valid sibling or parent.
-     * @param {Blockly.ASTNode} node The current position in the AST.
-     * @return {Blockly.ASTNode} The parent AST node or null if there are no
-     * valid parents.
-     * @package
-     */
-    function findSiblingOrParent(node) {
-      if (!node) {
-        return null;
-      }
-      var nextNode = node.next();
-      if (nextNode) {
-        return nextNode;
-      }
-      return findSiblingOrParent(node.out());
-    }
-
-    /**
-     * Uses pre order traversal to go navigate the Blockly AST. This will allow
-     * a user to easily navigate the entire Blockly AST without having to go in
-     * and out levels on the tree.
-     * @param {Blockly.ASTNode} node The current position in the AST.
-     * @return {Blockly.ASTNode} The next node in the traversal.
-     * @package
-     */
-    function treeTraversal(node) {
-      if (!node) {
-        return null;
-      }
-      var newNode = node.in() || node.next();
-      if (validNode(newNode)) {
-        return newNode;
-      } else if (newNode) {
-        return treeTraversal(newNode);
-      }
-      var siblingOrParent = findSiblingOrParent(node.out());
-      if (validNode(siblingOrParent)) {
-        return siblingOrParent;
-      } else if (siblingOrParent &&
-          siblingOrParent.getType() !== Blockly.ASTNode.types.WORKSPACE) {
-        return treeTraversal(siblingOrParent);
-      }
-      return null;
-    }
-
-    /**
-     * Finds the next node in the tree traversal starting at the location of
-     * the cursor.
-     * @return {Blockly.ASTNode} The next node in the traversal.
-     * @package
-     */
-    function findNext() {
-      var cursor = Blockly.navigation.cursor_;
-      var curNode = cursor.getCurNode();
-      return treeTraversal(curNode);
-    }
+    var timeout;
 
     /**
      * Shows the next node in the tree traversal every second.
@@ -253,32 +190,67 @@
      */
     function demo() {
       var doNext = function() {
-        var node = findNext();
-        Blockly.navigation.cursor_.setLocation(node);
+        var node = Blockly.getMainWorkspace().getCursor().next();
         if (node) {
-          setTimeout(doNext, 1000);
+          timeout = setTimeout(doNext, 1000);
         }
       }
       doNext();
     }
 
     /**
-     * Sets up accessibility mode so that the demo can successfully run.
+     * Stop the running demo.
+     * @package
+     */
+    function stopDemo() {
+      clearTimeout(timeout);
+      document.getElementById('accessibilityModeCheck').disabled = false;
+    };
+
+    /**
+     * Sets up accessibility mode and change the cursor to basic cursor so that
+     * the demo can successfully run.
      * @package
      */
     function preOrderDemo() {
-      Blockly.navigation.enableKeyboardAccessibility();
-      demo();
+      changeCursorByValue('basic');
+      document.getElementById('accessibilityModeCheck').disabled = true;
+      setTimeout(demo, 1000);
     }
 
     /**
-    * Turn on accessibility mode.
-    * If there is a block on the workspace add the cursor to the block otherwise
-    * add the cursor to the workspace.
-    * @package
-    */
-    function turnOnAccessibility() {
+     * Turn on/off accessibility mode depending on the state.
+     * @param {boolean} state True to turn on accessibility mode, false otherwise.
+     * @package
+     */
+    function toggleAccessibilityMode(state) {
+      if (state) {
+        Blockly.navigation.enableKeyboardAccessibility();
+      } else {
+        Blockly.navigation.disableKeyboardAccessibility();
+      }
+    }
+
+    /**
+     * Change the type of the cursor and set to the location of the old cursor.
+     * Changing the cursor changes how a user navigates the blocks on the workspace.
+     * @param {string} cursorType The type of the cursor.
+     * @package
+     */
+    function changeCursor(cursorType) {
       Blockly.navigation.enableKeyboardAccessibility();
+      document.getElementById('accessibilityModeCheck').checked = true;
+      document.getElementById('cursorChanger').value = cursorType;
+      var oldCurNode = Blockly.getMainWorkspace().getCursor().getCurNode();
+
+      if (cursorType === "basic") {
+        Blockly.getMainWorkspace().setCursor(new Blockly.BasicCursor());
+      } else {
+        Blockly.getMainWorkspace().setCursor(new Blockly.Cursor());
+      }
+      if (oldCurNode) {
+        Blockly.getMainWorkspace().getCursor().setLocation(oldCurNode);
+      }
     }
   </script>
 

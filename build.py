@@ -244,7 +244,6 @@ class Gen_compressed(threading.Thread):
         ("warning_level", "DEFAULT"),
       ]
 
-    # Read in all the source files.
     # Add Blockly, Blockly.Blocks, and all fields to be compatible with the compiler.
     params.append(("js_code", """
 goog.provide('Blockly');
@@ -259,6 +258,7 @@ goog.provide('Blockly.FieldNumber');
 goog.provide('Blockly.FieldTextInput');
 goog.provide('Blockly.FieldVariable');
 """))
+    # Read in all the source files.
     filenames = glob.glob(os.path.join("blocks", "*.js"))
     filenames.sort()  # Deterministic build.
     for filename in filenames:
@@ -267,7 +267,7 @@ goog.provide('Blockly.FieldVariable');
       f.close()
 
     # Remove Blockly, Blockly.Blocks and all fields to be compatible with Blockly.
-    remove = "var Blockly={Blocks:{},FieldCheckbox:{},FieldColour:{},FieldDropdown:{},FieldImage:{},FieldLabel:{},FieldMultilineInput:{},FieldNumber:{},FieldTextInput:{},FieldVariable:{}};"
+    remove = r"var Blockly=\{[^;]*\};\n?"
     self.do_compile(params, target_filename, filenames, remove)
 
   def gen_generator(self, language):
@@ -286,7 +286,10 @@ goog.provide('Blockly.FieldVariable');
     # Read in all the source files.
     # Add Blockly.Generator and Blockly.utils.string to be compatible
     # with the compiler.
-    params.append(("js_code", "goog.provide('Blockly.Generator');goog.provide('Blockly.utils.string');"))
+    params.append(("js_code", """
+goog.provide('Blockly.Generator');
+goog.provide('Blockly.utils.string');
+"""))
     filenames = glob.glob(
         os.path.join("generators", language, "*.js"))
     filenames.sort()  # Deterministic build.
@@ -299,7 +302,7 @@ goog.provide('Blockly.FieldVariable');
 
     # Remove Blockly.Generator and Blockly.utils.string to be compatible
     # with Blockly.
-    remove = "var Blockly={Generator:{},utils:{}};Blockly.utils.string={};"
+    remove = r"var Blockly=\{[^;]*\};\s*Blockly.utils.string={};\n?"
     self.do_compile(params, target_filename, filenames, remove)
 
   def do_compile(self, params, target_filename, filenames, remove):
@@ -361,7 +364,8 @@ goog.provide('Blockly.FieldVariable');
         sys.exit(1)
 
       code = HEADER + "\n" + json_data["compiledCode"]
-      code = code.replace(remove, "")
+      # Remove Blockly definitions to be compatible with Blockly.
+      code = re.sub(remove, "", code)
       code = self.trim_licence(code)
 
       stats = json_data["statistics"]

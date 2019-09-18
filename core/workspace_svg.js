@@ -139,15 +139,15 @@ Blockly.WorkspaceSvg = function(options,
     this.registerToolboxCategoryCallback(Blockly.PROCEDURE_CATEGORY_NAME,
         Blockly.Procedures.flyoutCategory);
   }
+
+  /**
+   * The block renderer used for rendering blocks on this workspace.
+   * @type {!Blockly.blockRendering.Renderer}
+   * @private
+   */
+  this.renderer_ = Blockly.blockRendering.init(this.options.renderer || 'geras');
 };
 Blockly.utils.object.inherits(Blockly.WorkspaceSvg, Blockly.Workspace);
-
-/**
- * The block renderer used for rendering blocks on this workspace.
- * @type {!Blockly.blockRendering.Renderer}
- * @private
- */
-Blockly.WorkspaceSvg.prototype.renderer_ = undefined;
 
 /**
  * A wrapper function called when a resize event occurs.
@@ -419,20 +419,17 @@ Blockly.WorkspaceSvg.prototype.inverseScreenCTMDirty_ = true;
  * @return {!Blockly.blockRendering.Renderer} The renderer attached to this workspace.
  */
 Blockly.WorkspaceSvg.prototype.getRenderer = function() {
-  if (!this.renderer_) {
-    this.renderer_ =
-        Blockly.blockRendering.init(this.options.renderer || 'geras');
-  }
   return this.renderer_;
 };
 
 /**
  * Sets the cursor for use with keyboard navigation.
+ *
  * @param {Blockly.Cursor} cursor The cursor used to move around this workspace.
  * @override
  */
 Blockly.WorkspaceSvg.prototype.setCursor = function(cursor) {
-  if (this.cursor_) {
+  if (this.cursor_ && this.cursor_.getDrawer()) {
     this.cursor_.getDrawer().dispose();
   }
   this.cursor_ = cursor;
@@ -449,7 +446,7 @@ Blockly.WorkspaceSvg.prototype.setCursor = function(cursor) {
  * @override
  */
 Blockly.WorkspaceSvg.prototype.setMarker = function(marker) {
-  if (this.marker_) {
+  if (this.marker_ && this.marker_.getDrawer()) {
     this.marker_.getDrawer().dispose();
   }
   this.marker_ = marker;
@@ -666,9 +663,11 @@ Blockly.WorkspaceSvg.prototype.createDom = function(opt_backgroundClass) {
   }
   this.recordDeleteAreas();
 
+  this.cursor_.setDrawer(this.getRenderer().makeCursorDrawer(this, false));
   var svgCursor = this.cursor_.getDrawer().createDom();
   this.svgGroup_.appendChild(svgCursor);
 
+  this.marker_.setDrawer(this.getRenderer().makeCursorDrawer(this, true));
   var svgMarker = this.marker_.getDrawer().createDom();
   this.svgGroup_.appendChild(svgMarker);
 

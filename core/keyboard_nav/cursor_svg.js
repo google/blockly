@@ -68,8 +68,7 @@ Blockly.CursorSvg = function(workspace, opt_marker) {
    * @type {Blockly.blockRendering.ConstantProvider}
    * @private
    */
-  this.constants_ = new Blockly.blockRendering.ConstantProvider();
-  this.constants_.init();
+  this.constants_ = workspace.getRenderer().getConstants();
 };
 
 /**

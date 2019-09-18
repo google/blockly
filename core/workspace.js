@@ -122,24 +122,20 @@ Blockly.Workspace = function(opt_options) {
    * @type {Blockly.Cursor}
    * @protected
    */
-  this.cursor_ = null;
+  this.cursor_ = new Blockly.Cursor();
 
   /**
    * The marker used to mark a location for keyboard navigation.
    * @type {Blockly.MarkerCursor}
    * @protected
    */
-  this.marker_ = null;
+  this.marker_ = new Blockly.MarkerCursor();
 
   // Set the default theme. This is for headless workspaces. This will get
   // overwritten by the theme passed into the inject call for rendered workspaces.
   if (!Blockly.getTheme()) {
     Blockly.setTheme(Blockly.Themes.Classic);
   }
-
-  this.setCursor(new Blockly.Cursor());
-
-  this.setMarker(new Blockly.MarkerCursor());
 };
 
 /**

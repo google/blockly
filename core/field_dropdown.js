@@ -45,14 +45,15 @@ goog.require('Blockly.utils.userAgent');
 
 /**
  * Class for an editable dropdown field.
- * @param {(!Array.<!Array>|!Function)} menuGenerator An array of options
- *     for a dropdown list, or a function which generates these options.
+ * @param {(!Array.<!Array>|!Function)} menuGenerator A non-empty array of
+ *     options for a dropdown list, or a function which generates these options.
  * @param {Function=} opt_validator A function that is called to validate
  *    changes to the field's value. Takes in a language-neutral dropdown
  *    option & returns a validated language-neutral dropdown option, or null to
  *    abort the change.
  * @extends {Blockly.Field}
  * @constructor
+ * @throws {TypeError} If `menuGenerator` options are incorrectly structured.
  */
 Blockly.FieldDropdown = function(menuGenerator, opt_validator) {
   if (typeof menuGenerator != 'function') {
@@ -68,15 +69,22 @@ Blockly.FieldDropdown = function(menuGenerator, opt_validator) {
   this.menuGenerator_ = menuGenerator;
 
   /**
-   * The currently selected index. A value of -1 indicates no option
-   * has been selected.
+   * A cache of the most recently generated options.
+   * @type {Array.<!Array.<string>>}
+   * @private
+   */
+  this.generatedOptions_ = null;
+
+  /**
+   * The currently selected index. The field is initialized with the
+   * first option selected.
    * @type {number}
    * @private
    */
-  this.selectedIndex_ = -1;
+  this.selectedIndex_ = 0;
 
   this.trimOptions_();
-  var firstTuple = this.getOptions()[0];
+  var firstTuple = this.getOptions(false)[0];
 
   // Call parent's constructor.
   Blockly.FieldDropdown.superClass_.constructor.call(this, firstTuple[1],
@@ -230,7 +238,8 @@ Blockly.FieldDropdown.prototype.widgetCreate_ = function() {
   menu.setRightToLeft(this.sourceBlock_.RTL);
   menu.setRole('listbox');
 
-  var options = this.getOptions();
+  var options = this.getOptions(false);
+  this.selectedMenuItem_ = null;
   for (var i = 0; i < options.length; i++) {
     var content = options[i][0]; // Human-readable text or image.
     var value = options[i][1];   // Language-neutral value.
@@ -421,15 +430,19 @@ Blockly.FieldDropdown.prototype.isOptionListDynamic = function() {
 
 /**
  * Return a list of the options for this dropdown.
- * @return {!Array.<!Array>} Array of option tuples:
+ * @param {boolean=} opt_useCache For dynamic options, whether or not to use the
+ *     cached options or to re-generate them.
+ * @return {!Array.<!Array>} A non-empty array of option tuples:
  *     (human-readable text or image, language-neutral name).
- * @throws If generated options are incorrectly structured.
+ * @throws {TypeError} If generated options are incorrectly structured.
  */
-Blockly.FieldDropdown.prototype.getOptions = function() {
+Blockly.FieldDropdown.prototype.getOptions = function(opt_useCache) {
   if (this.isOptionListDynamic()) {
-    var generatedOptions = this.menuGenerator_.call(this);
-    Blockly.FieldDropdown.validateOptions_(generatedOptions);
-    return generatedOptions;
+    if (!this.generatedOptions_ || !opt_useCache) {
+      this.generatedOptions_ = this.menuGenerator_.call(this);
+      Blockly.FieldDropdown.validateOptions_(this.generatedOptions_);
+    }
+    return this.generatedOptions_;
   }
   return /** @type {!Array.<!Array.<string>>} */ (this.menuGenerator_);
 };
@@ -442,7 +455,7 @@ Blockly.FieldDropdown.prototype.getOptions = function() {
  */
 Blockly.FieldDropdown.prototype.doClassValidation_ = function(opt_newValue) {
   var isValueValid = false;
-  var options = this.getOptions();
+  var options = this.getOptions(true);
   for (var i = 0, option; option = options[i]; i++) {
     // Options are tuples of human-readable text and language-neutral values.
     if (option[1] == opt_newValue) {
@@ -468,7 +481,7 @@ Blockly.FieldDropdown.prototype.doClassValidation_ = function(opt_newValue) {
  */
 Blockly.FieldDropdown.prototype.doValueUpdate_ = function(newValue) {
   Blockly.FieldDropdown.superClass_.doValueUpdate_.call(this, newValue);
-  var options = this.getOptions();
+  var options = this.getOptions(true);
   for (var i = 0, option; option = options[i]; i++) {
     if (option[1] == this.value_) {
       this.selectedIndex_ = i;
@@ -501,7 +514,7 @@ Blockly.FieldDropdown.prototype.render_ = function() {
   this.imageElement_.style.display = 'none';
 
   // Show correct element.
-  var options = this.getOptions();
+  var options = this.getOptions(true);
   var selectedOption = this.selectedIndex_ >= 0 &&
       options[this.selectedIndex_][0];
   if (selectedOption && typeof selectedOption == 'object') {
@@ -576,7 +589,7 @@ Blockly.FieldDropdown.prototype.getText_ = function() {
   if (this.selectedIndex_ < 0) {
     return null;
   }
-  var options = this.getOptions();
+  var options = this.getOptions(true);
   var selectedOption = options[this.selectedIndex_][0];
   if (typeof selectedOption == 'object') {
     return selectedOption['alt'];
@@ -587,12 +600,15 @@ Blockly.FieldDropdown.prototype.getText_ = function() {
 /**
  * Validates the data structure to be processed as an options list.
  * @param {?} options The proposed dropdown options.
- * @throws If proposed options are incorrectly structured.
+ * @throws {TypeError} If proposed options are incorrectly structured.
  * @private
  */
 Blockly.FieldDropdown.validateOptions_ = function(options) {
   if (!Array.isArray(options)) {
     throw TypeError('FieldDropdown options must be an array.');
+  }
+  if (!options.length) {
+    throw TypeError('FieldDropdown options must not be an empty array.');
   }
   var foundError = false;
   for (var i = 0; i < options.length; ++i) {

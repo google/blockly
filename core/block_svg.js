@@ -532,6 +532,22 @@ Blockly.BlockSvg.prototype.getBoundingRectangle = function() {
   return new Blockly.utils.Rect(top, bottom, left, right);
 };
 
+
+/**
+ * Toggles the visibility of the block.
+ * @param {boolean} isVisible True if block should be visible.
+ */
+Blockly.BlockSvg.prototype.setVisible = function(isVisible) {
+  var display = isVisible ? 'block' : 'none';
+
+  this.getSvgRoot().style.display = display;
+
+  // Show/hide the inputs.
+  for (var i = 0, input; input = this.inputList[i]; i++) {
+    input.setVisible(isVisible);
+  }
+};
+
 /**
  * Set whether the block is collapsed or not.
  * @param {boolean} collapsed True if collapsed.

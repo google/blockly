@@ -1068,10 +1068,20 @@ Blockly.WorkspaceSvg.prototype.setVisible = function(isVisible) {
     // Currently does not support toolboxes in mutators.
     this.toolbox_.HtmlDiv.style.display = isVisible ? 'block' : 'none';
   }
+
+  // Set visibility of all blocks.
+  var blocks = this.getAllBlocks(false);
+  for (var i = blocks.length - 1; i >= 0; i--) {
+    blocks[i].setVisible(isVisible);
+  }
+
   if (isVisible) {
     this.render();
     if (this.toolbox_) {
       this.toolbox_.position();
+    }
+    if (this.scrollbar) {
+      this.scrollbar.resize();
     }
   } else {
     Blockly.hideChaff(true);

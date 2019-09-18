@@ -541,6 +541,7 @@ Blockly.Xml.domToBlock = function(xmlBlock, workspace) {
       topBlock.setConnectionsHidden(true);
       // Render each block.
       for (var i = blocks.length - 1; i >= 0; i--) {
+        blocks[i].setVisible(workspace.isVisible());
         blocks[i].initSvg();
       }
       for (var i = blocks.length - 1; i >= 0; i--) {

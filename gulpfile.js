@@ -138,7 +138,18 @@ gulp.task('build-core', function () {
  *     blocks_compressed.js
  */
 gulp.task('build-blocks', function () {
-  const provides = `goog.provide('Blockly');\ngoog.provide('Blockly.Blocks');\n`;
+  const provides = `
+goog.provide('Blockly');
+goog.provide('Blockly.Blocks');
+goog.provide('Blockly.FieldCheckbox');
+goog.provide('Blockly.FieldColour');
+goog.provide('Blockly.FieldDropdown');
+goog.provide('Blockly.FieldImage');
+goog.provide('Blockly.FieldLabel');
+goog.provide('Blockly.FieldMultilineInput');
+goog.provide('Blockly.FieldNumber');
+goog.provide('Blockly.FieldTextInput');
+goog.provide('Blockly.FieldVariable');`;
   return gulp.src('blocks/*.js', {base: './'})
     // Add Blockly.Blocks to be compatible with the compiler.
     .pipe(gulp.replace(`goog.provide('Blockly.Constants.Colour');`,
@@ -150,7 +161,9 @@ gulp.task('build-blocks', function () {
     }, argv.verbose))
     .pipe(gulp.replace('\'use strict\';', '\'use strict\';\n\n\n'))
     // Remove Blockly.Blocks to be compatible with Blockly.
-    .pipe(gulp.replace('var Blockly={Blocks:{}};', ''))
+    .pipe(gulp.replace(/var Blockly=\{[^;]*\};\n?/, ''))
+    // Remove Blockly Fields to be compatible with Blockly.
+    .pipe(gulp.replace(/Blockly\.Field[^=\(]+=\{[^;]*\};/g, ''))
     .pipe(prependHeader())
     .pipe(gulp.dest('./'));
 });
@@ -161,7 +174,9 @@ gulp.task('build-blocks', function () {
  * @param {string} namespace Language namespace.
  */
 function buildGenerator(language, namespace) {
-  var provides = `goog.provide('Blockly.Generator');\ngoog.provide('Blockly.utils.string');\n`;
+  var provides = `
+goog.provide('Blockly.Generator');
+goog.provide('Blockly.utils.string');`;
   return gulp.src([`generators/${language}.js`, `generators/${language}/*.js`], {base: './'})
     .pipe(stripApacheLicense())
     // Add Blockly.Generator and Blockly.utils.string to be compatible with the compiler.
@@ -173,7 +188,7 @@ function buildGenerator(language, namespace) {
     }, argv.verbose))
     .pipe(gulp.replace('\'use strict\';', '\'use strict\';\n\n\n'))
     // Remove Blockly.Generator and Blockly.utils.string to be compatible with Blockly.
-    .pipe(gulp.replace('var Blockly={Generator:{},utils:{}};Blockly.utils.string={};', ''))
+    .pipe(gulp.replace(/var Blockly=\{[^;]*\};\s*Blockly.utils.string={};\n?/, ''))
     .pipe(prependHeader())
     .pipe(gulp.dest('./'));
 };

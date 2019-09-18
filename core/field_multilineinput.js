@@ -26,7 +26,7 @@
  */
 'use strict';
 
-goog.provide('Blockly.FieldMultilineCode');
+goog.provide('Blockly.FieldMultilineInput');
 
 goog.require('Blockly.DropDownDiv');
 goog.require('Blockly.FieldTextInput');

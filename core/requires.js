@@ -29,6 +29,7 @@ goog.provide('Blockly.requires');
 
 // Blockly Core.
 goog.require('Blockly');
+goog.require('Blockly.Trashcan');
 // Blockly Fields.
 goog.require('Blockly.FieldAngle');
 goog.require('Blockly.FieldCheckbox');

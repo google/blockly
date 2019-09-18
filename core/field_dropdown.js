@@ -53,6 +53,7 @@ goog.require('Blockly.utils.userAgent');
  *    abort the change.
  * @extends {Blockly.Field}
  * @constructor
+ * @throws {TypeError} If `menuGenerator` options are incorrectly structured.
  */
 Blockly.FieldDropdown = function(menuGenerator, opt_validator) {
   if (typeof menuGenerator != 'function') {
@@ -433,6 +434,7 @@ Blockly.FieldDropdown.prototype.isOptionListDynamic = function() {
  *     cached options or to re-generate them.
  * @return {!Array.<!Array>} A non-empty array of option tuples:
  *     (human-readable text or image, language-neutral name).
+ * @throws {TypeError} If generated options are incorrectly structured.
  */
 Blockly.FieldDropdown.prototype.getOptions = function(opt_useCache) {
   if (this.isOptionListDynamic()) {

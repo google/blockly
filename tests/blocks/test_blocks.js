@@ -273,6 +273,19 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     "helpUrl": ""
   },
   {
+    "type": "test_fields_multilinetext",
+    "message0": "code %1",
+    "args0": [
+      {
+        "type": "field_multilinetext",
+        "name": "CODE",
+        "text": "default1\ndefault2"
+      }
+    ],
+    "style": "math_blocks",
+    "tooltip": "test tooltip"
+  },
+  {
     "type": "test_fields_checkbox",
     "message0": "checkbox %1",
     "args0": [

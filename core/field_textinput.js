@@ -73,8 +73,7 @@ Blockly.utils.object.inherits(Blockly.FieldTextInput, Blockly.Field);
 /**
  * Construct a FieldTextInput from a JSON arg object,
  * dereferencing any string table references.
- * @param {!Object} options A JSON object with options (text, class, and
- *                          spellcheck).
+ * @param {!Object} options A JSON object with options (text, and spellcheck).
  * @return {!Blockly.FieldTextInput} The new field instance.
  * @package
  * @nocollapse

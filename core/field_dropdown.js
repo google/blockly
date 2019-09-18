@@ -433,7 +433,6 @@ Blockly.FieldDropdown.prototype.isOptionListDynamic = function() {
  *     cached options or to re-generate them.
  * @return {!Array.<!Array>} A non-empty array of option tuples:
  *     (human-readable text or image, language-neutral name).
- * @throws If generated options are incorrectly structured.
  */
 Blockly.FieldDropdown.prototype.getOptions = function(opt_useCache) {
   if (this.isOptionListDynamic()) {
@@ -599,7 +598,7 @@ Blockly.FieldDropdown.prototype.getText_ = function() {
 /**
  * Validates the data structure to be processed as an options list.
  * @param {?} options The proposed dropdown options.
- * @throws If proposed options are incorrectly structured.
+ * @throws {TypeError} If proposed options are incorrectly structured.
  * @private
  */
 Blockly.FieldDropdown.validateOptions_ = function(options) {

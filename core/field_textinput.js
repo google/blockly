@@ -35,6 +35,7 @@ goog.require('Blockly.utils');
 goog.require('Blockly.utils.aria');
 goog.require('Blockly.utils.Coordinate');
 goog.require('Blockly.utils.dom');
+goog.require('Blockly.utils.KeyCodes');
 goog.require('Blockly.utils.object');
 goog.require('Blockly.utils.Size');
 goog.require('Blockly.utils.userAgent');
@@ -357,15 +358,14 @@ Blockly.FieldTextInput.prototype.unbindInputEvents_ = function() {
  * @protected
  */
 Blockly.FieldTextInput.prototype.onHtmlInputKeyDown_ = function(e) {
-  var tabKey = 9, enterKey = 13, escKey = 27;
-  if (e.keyCode == enterKey) {
+  if (e.keyCode == Blockly.utils.KeyCodes.ENTER) {
     Blockly.WidgetDiv.hide();
     Blockly.DropDownDiv.hideWithoutAnimation();
-  } else if (e.keyCode == escKey) {
+  } else if (e.keyCode == Blockly.utils.KeyCodes.ESC) {
     this.htmlInput_.value = this.htmlInput_.defaultValue;
     Blockly.WidgetDiv.hide();
     Blockly.DropDownDiv.hideWithoutAnimation();
-  } else if (e.keyCode == tabKey) {
+  } else if (e.keyCode == Blockly.utils.KeyCodes.TAB) {
     Blockly.WidgetDiv.hide();
     Blockly.DropDownDiv.hideWithoutAnimation();
     this.sourceBlock_.tab(this, !e.shiftKey);
@@ -477,6 +477,15 @@ Blockly.FieldTextInput.nonnegativeIntegerValidator = function(text) {
     n = String(Math.max(0, Math.floor(n)));
   }
   return n;
+};
+
+/**
+ * Returns whether or not the field is tab navigable.
+ * @return {boolean} True if the field is tab navigable.
+ * @override
+ */
+Blockly.FieldTextInput.prototype.isTabNavigable = function() {
+  return true;
 };
 
 /**

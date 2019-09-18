@@ -25,10 +25,12 @@
  */
 'use strict';
 
-goog.provide('Blockly.Requires');
+goog.provide('Blockly.requires');
 
 // Blockly Core.
 goog.require('Blockly');
+goog.require('Blockly.Trashcan');
+goog.require('Blockly.ZoomControls');
 // Blockly Fields.
 goog.require('Blockly.FieldAngle');
 goog.require('Blockly.FieldCheckbox');

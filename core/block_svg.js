@@ -33,7 +33,6 @@ goog.require('Blockly.ContextMenu');
 goog.require('Blockly.Events');
 goog.require('Blockly.Events.Ui');
 goog.require('Blockly.Events.BlockMove');
-goog.require('Blockly.Grid');
 goog.require('Blockly.Msg');
 goog.require('Blockly.RenderedConnection');
 goog.require('Blockly.Tooltip');
@@ -632,8 +631,7 @@ Blockly.BlockSvg.prototype.createTabList_ = function() {
   var list = [];
   for (var i = 0, input; input = this.inputList[i]; i++) {
     for (var j = 0, field; field = input.fieldRow[j]; j++) {
-      if (field instanceof Blockly.FieldTextInput && field.isVisible()) {
-        // TODO (#1276): Also support dropdown fields.
+      if (field.isTabNavigable() && field.isVisible()) {
         list.push(field);
       }
     }

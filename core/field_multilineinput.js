@@ -82,7 +82,7 @@ Blockly.FieldMultilineInput.LINE_HEIGHT = 20;
  */
 Blockly.FieldMultilineInput.fromJson = function(options) {
   var text = Blockly.utils.replaceMessageReferences(options['text']);
-  return new Blockly.FieldMultilineInput(text, null, options);
+  return new Blockly.FieldMultilineInput(text, undefined, options);
 };
 
 /**

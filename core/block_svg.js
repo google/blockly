@@ -33,7 +33,6 @@ goog.require('Blockly.ContextMenu');
 goog.require('Blockly.Events');
 goog.require('Blockly.Events.Ui');
 goog.require('Blockly.Events.BlockMove');
-goog.require('Blockly.Grid');
 goog.require('Blockly.Msg');
 goog.require('Blockly.RenderedConnection');
 goog.require('Blockly.Tooltip');

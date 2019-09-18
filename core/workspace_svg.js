@@ -41,7 +41,6 @@ goog.require('Blockly.Options');
 goog.require('Blockly.ScrollbarPair');
 goog.require('Blockly.Touch');
 goog.require('Blockly.TouchGesture');
-goog.require('Blockly.Trashcan');
 goog.require('Blockly.utils');
 goog.require('Blockly.utils.Coordinate');
 goog.require('Blockly.utils.dom');
@@ -55,7 +54,6 @@ goog.require('Blockly.WorkspaceCommentSvg');
 goog.require('Blockly.WorkspaceCommentSvg.render');
 goog.require('Blockly.WorkspaceDragSurfaceSvg');
 goog.require('Blockly.Xml');
-goog.require('Blockly.ZoomControls');
 
 
 /**
@@ -766,6 +764,9 @@ Blockly.WorkspaceSvg.prototype.newBlock = function(prototypeName, opt_id) {
  * @package
  */
 Blockly.WorkspaceSvg.prototype.addTrashcan = function() {
+  if (!Blockly.Trashcan) {
+    throw Error('Missing require for Blockly.Trashcan');
+  }
   /** @type {Blockly.Trashcan} */
   this.trashcan = new Blockly.Trashcan(this);
   var svgTrashcan = this.trashcan.createDom();
@@ -777,6 +778,9 @@ Blockly.WorkspaceSvg.prototype.addTrashcan = function() {
  * @package
  */
 Blockly.WorkspaceSvg.prototype.addZoomControls = function() {
+  if (!Blockly.ZoomControls) {
+    throw Error('Missing require for Blockly.ZoomControls');
+  }
   /** @type {Blockly.ZoomControls} */
   this.zoomControls_ = new Blockly.ZoomControls(this);
   var svgZoomControls = this.zoomControls_.createDom();

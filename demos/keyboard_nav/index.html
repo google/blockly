@@ -302,6 +302,7 @@
       if (oldCurNode) {
         Blockly.getMainWorkspace().getCursor().setLocation(oldCurNode);
       }
+      document.activeElement.blur();
     }
 
     // Start key mapping demo functions
@@ -430,7 +431,7 @@
     /**
      * Set the key to be the correct value from the key map.
      * @param {string} actionKey The serialized key for a given action.
-     * @param {Element} keyDropdown The dropdown that displays the key.
+     * @param {Element} keyDropdown The dropdown that displays the primary key.
      * @package
      */
     function setKeyDropdown(actionKey, keyDropdown) {

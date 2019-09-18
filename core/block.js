@@ -1338,11 +1338,7 @@ Blockly.Block.prototype.toString = function(opt_maxLength, opt_emptyToken) {
   } else {
     for (var i = 0, input; input = this.inputList[i]; i++) {
       for (var j = 0, field; field = input.fieldRow[j]; j++) {
-        if (field instanceof Blockly.FieldDropdown && !field.getValue()) {
-          text.push(emptyFieldPlaceholder);
-        } else {
-          text.push(field.getText());
-        }
+        text.push(field.getText());
       }
       if (input.connection) {
         var child = input.connection.targetBlock();

@@ -302,8 +302,12 @@ Blockly.navigation.insertFromFlyout = function() {
     return;
   }
 
-  var newBlock = flyout.createBlock(
-      Blockly.navigation.getFlyoutCursor_().getCurNode().getLocation());
+  var curBlock = Blockly.navigation.getFlyoutCursor_().getCurNode().getLocation();
+  if (!curBlock.isEnabled()) {
+    return;
+  }
+
+  var newBlock = flyout.createBlock(curBlock);
   // Render to get the sizing right.
   newBlock.render();
   // Connections are hidden when the block is first created.  Normally there's

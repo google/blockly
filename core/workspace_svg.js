@@ -54,7 +54,6 @@ goog.require('Blockly.WorkspaceCommentSvg');
 goog.require('Blockly.WorkspaceCommentSvg.render');
 goog.require('Blockly.WorkspaceDragSurfaceSvg');
 goog.require('Blockly.Xml');
-goog.require('Blockly.ZoomControls');
 
 
 /**
@@ -779,6 +778,9 @@ Blockly.WorkspaceSvg.prototype.addTrashcan = function() {
  * @package
  */
 Blockly.WorkspaceSvg.prototype.addZoomControls = function() {
+  if (!Blockly.ZoomControls) {
+    throw Error('Missing require for Blockly.ZoomControls');
+  }
   /** @type {Blockly.ZoomControls} */
   this.zoomControls_ = new Blockly.ZoomControls(this);
   var svgZoomControls = this.zoomControls_.createDom();

@@ -304,6 +304,7 @@ Blockly.navigation.insertFromFlyout = function() {
 
   var curBlock = Blockly.navigation.getFlyoutCursor_().getCurNode().getLocation();
   if (!curBlock.isEnabled()) {
+    Blockly.navigation.warn_('Can\'t insert a disabled block.');
     return;
   }
 

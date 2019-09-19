@@ -108,17 +108,17 @@ Blockly.FieldAngle.fromJson = function(options) {
 Blockly.FieldAngle.prototype.SERIALIZABLE = true;
 
 /**
+ * The default amount to round angles to when using a mouse or keyboard nav
+ * input. Must be a positive integer to support keyboard navigation.
+ * @const {number}
+ */
+Blockly.FieldAngle.ROUND = 15;
+
+/**
  * Half the width of protractor image.
  * @const {number}
  */
 Blockly.FieldAngle.HALF = 100 / 2;
-
-/**
- * Radius of protractor circle.  Slightly smaller than protractor size since
- * otherwise SVG crops off half the border at the edges.
- * @const {number}
- */
-Blockly.FieldAngle.RADIUS = Blockly.FieldAngle.HALF - 1;
 
 /**
  * Default property describing which direction makes an angle field's value
@@ -143,11 +143,11 @@ Blockly.FieldAngle.OFFSET = 0;
 Blockly.FieldAngle.WRAP = 360;
 
 /**
- * The default amount to round angles to when using a mouse or keyboard nav
- * input. Must be a positive integer to support keyboard navigation.
+ * Radius of protractor circle.  Slightly smaller than protractor size since
+ * otherwise SVG crops off half the border at the edges.
  * @const {number}
  */
-Blockly.FieldAngle.ROUND = 15;
+Blockly.FieldAngle.RADIUS = Blockly.FieldAngle.HALF - 1;
 
 /**
  * Configure the field based on the given map of options.

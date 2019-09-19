@@ -80,7 +80,7 @@ Blockly.Cursor.prototype.getCurNode = function() {
  * output or previous connection on a stack.
  * @param {Blockly.ASTNode} newNode The new location of the cursor.
  */
-Blockly.Cursor.prototype.setLocation = function(newNode) {
+Blockly.Cursor.prototype.setCurNode = function(newNode) {
   this.curNode_ = newNode;
   if (this.drawer_) {
     this.drawer_.draw(this.getCurNode());
@@ -115,7 +115,7 @@ Blockly.Cursor.prototype.next = function() {
   }
 
   if (newNode) {
-    this.setLocation(newNode);
+    this.setCurNode(newNode);
   }
   return newNode;
 };
@@ -143,7 +143,7 @@ Blockly.Cursor.prototype.in = function() {
   }
 
   if (newNode) {
-    this.setLocation(newNode);
+    this.setCurNode(newNode);
   }
   return newNode;
 };
@@ -167,7 +167,7 @@ Blockly.Cursor.prototype.prev = function() {
   }
 
   if (newNode) {
-    this.setLocation(newNode);
+    this.setCurNode(newNode);
   }
   return newNode;
 };
@@ -189,7 +189,7 @@ Blockly.Cursor.prototype.out = function() {
   }
 
   if (newNode) {
-    this.setLocation(newNode);
+    this.setCurNode(newNode);
   }
   return newNode;
 };

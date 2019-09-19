@@ -102,7 +102,7 @@ Blockly.navigation.actionNames = {
  * @private
  */
 Blockly.navigation.markAtCursor_ = function() {
-  Blockly.getMainWorkspace().getMarker().setLocation(
+  Blockly.getMainWorkspace().getMarker().setCurNode(
       Blockly.getMainWorkspace().getCursor().getCurNode());
 };
 
@@ -111,7 +111,7 @@ Blockly.navigation.markAtCursor_ = function() {
  * @private
  */
 Blockly.navigation.removeMark_ = function() {
-  Blockly.getMainWorkspace().getMarker().setLocation(null);
+  Blockly.getMainWorkspace().getMarker().setCurNode(null);
   Blockly.getMainWorkspace().getMarker().hide();
 };
 
@@ -268,7 +268,7 @@ Blockly.navigation.focusFlyout_ = function() {
     if (topBlocks.length > 0) {
       topBlock = topBlocks[0];
       var astNode = Blockly.ASTNode.createStackNode(topBlock);
-      Blockly.navigation.getFlyoutCursor_().setLocation(astNode);
+      Blockly.navigation.getFlyoutCursor_().setCurNode(astNode);
     }
   }
 };
@@ -315,14 +315,14 @@ Blockly.navigation.insertFromFlyout = function() {
   // enough time for them to become unhidden in the user's mouse movements,
   // but not here.
   newBlock.setConnectionsHidden(false);
-  Blockly.getMainWorkspace().getCursor().setLocation(
+  Blockly.getMainWorkspace().getCursor().setCurNode(
       Blockly.ASTNode.createBlockNode(newBlock));
   if (!Blockly.navigation.modify_()) {
     Blockly.navigation.warn_('Something went wrong while inserting a block from the flyout.');
   }
 
   Blockly.navigation.focusWorkspace_();
-  Blockly.getMainWorkspace().getCursor().setLocation(Blockly.navigation.getTopNode(newBlock));
+  Blockly.getMainWorkspace().getCursor().setCurNode(Blockly.navigation.getTopNode(newBlock));
   Blockly.navigation.removeMark_();
 };
 
@@ -649,7 +649,7 @@ Blockly.navigation.disconnectBlocks_ = function() {
   rootBlock.bringToFront();
 
   var connectionNode = Blockly.ASTNode.createConnectionNode(superiorConnection);
-  Blockly.getMainWorkspace().getCursor().setLocation(connectionNode);
+  Blockly.getMainWorkspace().getCursor().setCurNode(connectionNode);
 };
 
 /*************************/
@@ -670,13 +670,13 @@ Blockly.navigation.focusWorkspace_ = function() {
   Blockly.navigation.resetFlyout_(reset);
   Blockly.navigation.currentState_ = Blockly.navigation.STATE_WS;
   if (topBlocks.length > 0) {
-    cursor.setLocation(Blockly.navigation.getTopNode(topBlocks[0]));
+    cursor.setCurNode(Blockly.navigation.getTopNode(topBlocks[0]));
   } else {
     var ws = Blockly.getMainWorkspace();
     // TODO: Find the center of the visible workspace.
     var wsCoord = new Blockly.utils.Coordinate(100, 100);
     var wsNode = Blockly.ASTNode.createWorkspaceNode(ws, wsCoord);
-    cursor.setLocation(wsNode);
+    cursor.setCurNode(wsNode);
   }
 };
 
@@ -746,18 +746,18 @@ Blockly.navigation.moveCursorOnBlockDelete = function(deletedBlock) {
         var topConnection = block.previousConnection ?
           block.previousConnection : block.outputConnection;
         if (topConnection) {
-          cursor.setLocation(
+          cursor.setCurNode(
               Blockly.ASTNode.createConnectionNode(topConnection.targetConnection));
         }
       } else {
         // If the block is by itself move the cursor to the workspace.
-        cursor.setLocation(Blockly.ASTNode.createWorkspaceNode(block.workspace,
+        cursor.setCurNode(Blockly.ASTNode.createWorkspaceNode(block.workspace,
             block.getRelativeToSurfaceXY()));
       }
     // If the cursor is on a block whose parent is being deleted, move the
     // cursor to the workspace.
     } else if (deletedBlock.getChildren().indexOf(block) > -1) {
-      cursor.setLocation(Blockly.ASTNode.createWorkspaceNode(block.workspace,
+      cursor.setCurNode(Blockly.ASTNode.createWorkspaceNode(block.workspace,
           block.getRelativeToSurfaceXY()));
     }
   }
@@ -776,7 +776,7 @@ Blockly.navigation.moveCursorOnBlockMutation = function(mutatedBlock) {
     var block = Blockly.navigation.getSourceBlock_(curNode);
 
     if (block === mutatedBlock) {
-      cursor.setLocation(Blockly.ASTNode.createBlockNode(block));
+      cursor.setCurNode(Blockly.ASTNode.createBlockNode(block));
     }
   }
 };

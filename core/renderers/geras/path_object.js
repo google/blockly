@@ -62,7 +62,6 @@ Blockly.geras.PathObject = function(root) {
   this.svgPath = Blockly.utils.dom.createSvgElement('path',
       {'class': 'blocklyPath'}, this.svgRoot);
 
-
   /**
    * The light path of the block.
    * @type {SVGElement}
@@ -82,10 +81,15 @@ Blockly.geras.PathObject.prototype.setPaths = function(mainPath, highlightPath) 
   this.svgPath.setAttribute('d', mainPath);
   this.svgPathDark.setAttribute('d', mainPath);
   this.svgPathLight.setAttribute('d', highlightPath);
-  if (this.RTL) {
-    // Mirror the block's path.
-    this.svgPath.setAttribute('transform', 'scale(-1 1)');
-    this.svgPathLight.setAttribute('transform', 'scale(-1 1)');
-    this.svgPathDark.setAttribute('transform', 'translate(1,1) scale(-1 1)');
-  }
+};
+
+/**
+ * Flip the SVG paths in RTL.
+ * @package
+ */
+Blockly.geras.PathObject.prototype.flipRTL = function() {
+  // Mirror the block's path.
+  this.svgPath.setAttribute('transform', 'scale(-1 1)');
+  this.svgPathLight.setAttribute('transform', 'scale(-1 1)');
+  this.svgPathDark.setAttribute('transform', 'translate(1,1) scale(-1 1)');
 };

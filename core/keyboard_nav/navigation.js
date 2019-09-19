@@ -264,7 +264,7 @@ Blockly.navigation.focusFlyout_ = function() {
   }
 
   if (flyout && flyout.getWorkspace()) {
-    var topBlocks = flyout.getWorkspace().getTopBlocks();
+    var topBlocks = flyout.getWorkspace().getTopBlocks(true);
     if (topBlocks.length > 0) {
       topBlock = topBlocks[0];
       var astNode = Blockly.ASTNode.createStackNode(topBlock);
@@ -665,7 +665,7 @@ Blockly.navigation.focusWorkspace_ = function() {
   Blockly.hideChaff();
   var cursor = Blockly.getMainWorkspace().getCursor();
   var reset = Blockly.getMainWorkspace().getToolbox() ? true : false;
-  var topBlocks = Blockly.getMainWorkspace().getTopBlocks();
+  var topBlocks = Blockly.getMainWorkspace().getTopBlocks(true);
 
   Blockly.navigation.resetFlyout_(reset);
   Blockly.navigation.currentState_ = Blockly.navigation.STATE_WS;
@@ -717,9 +717,9 @@ Blockly.navigation.getSourceBlock_ = function(node) {
     return null;
   }
   if (node.getType() === Blockly.ASTNode.types.BLOCK) {
-    return node.getLocation();
+    return /** @type {Blockly.Block} */ (node.getLocation());
   } else if (node.getType() === Blockly.ASTNode.types.STACK) {
-    return node.getLocation();
+    return /** @type {Blockly.Block} */ (node.getLocation());
   } else if (node.getType() === Blockly.ASTNode.types.WORKSPACE) {
     return null;
   } else {
@@ -756,7 +756,7 @@ Blockly.navigation.moveCursorOnBlockDelete = function(deletedBlock) {
       }
     // If the cursor is on a block whose parent is being deleted, move the
     // cursor to the workspace.
-    } else if (deletedBlock.getChildren().indexOf(block) > -1) {
+    } else if (deletedBlock.getChildren(false).indexOf(block) > -1) {
       cursor.setCurNode(Blockly.ASTNode.createWorkspaceNode(block.workspace,
           block.getRelativeToSurfaceXY()));
     }

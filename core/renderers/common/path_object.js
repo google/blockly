@@ -30,6 +30,7 @@ goog.provide('Blockly.blockRendering.PathObject');
 
 goog.require('Blockly.utils.dom');
 
+
 /**
  * An interface for a block's path object.
  * @param {!SVGElement} _root The root SVG element.
@@ -86,11 +87,15 @@ Blockly.blockRendering.PathObject = function(root) {
  */
 Blockly.blockRendering.PathObject.prototype.setPaths = function(pathString) {
   this.svgPath.setAttribute('d', pathString);
-  if (this.RTL) {
-    // Mirror the block's path.
-    this.svgPath.setAttribute('transform', 'scale(-1 1)');
-  }
-
   this.svgPathLight.style.display = 'none';
   this.svgPathDark.style.display = 'none';
+};
+
+/**
+ * Flip the SVG paths in RTL.
+ * @package
+ */
+Blockly.blockRendering.PathObject.prototype.flipRTL = function() {
+  // Mirror the block's path.
+  this.svgPath.setAttribute('transform', 'scale(-1 1)');
 };

@@ -1092,6 +1092,9 @@ Blockly.BlockSvg.prototype.setCommentText = function(text) {
   var changedState = false;
   if (typeof text == 'string') {
     if (!this.comment) {
+      if (!Blockly.Comment) {
+        throw Error('Missing require for Blockly.Comment');
+      }
       this.comment = new Blockly.Comment(this);
       changedState = true;
     }

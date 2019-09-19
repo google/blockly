@@ -99,7 +99,7 @@ Blockly.user.keyMap.getActionByKeyCode = function(keyCode) {
  * Get the serialized key that corresponds to the action.
  * @param {!Blockly.Action} action The action for which we want to get
  *     the key.
- * @return {string} The serialized key or null if the action does not have
+ * @return {?string} The serialized key or null if the action does not have
  *     a key mapping.
  * @package
  */

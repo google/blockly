@@ -40,7 +40,7 @@ goog.require('Blockly.utils.style');
  * Similar to Closure's goog.ui.tree.TreeControl
  *
  * @param {Blockly.Toolbox} toolbox The parent toolbox for this tree.
- * @param {Blockly.tree.BaseNode.Config} config The configuration for the tree.
+ * @param {!Blockly.tree.BaseNode.Config} config The configuration for the tree.
  * @constructor
  * @extends {Blockly.tree.BaseNode}
  */

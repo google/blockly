@@ -40,7 +40,7 @@ goog.require('Blockly.utils.style');
  *
  * @param {string} content The content of the node label treated as
  *     plain-text and will be HTML escaped.
- * @param {Blockly.tree.BaseNode.Config} config The configuration for the tree.
+ * @param {!Blockly.tree.BaseNode.Config} config The configuration for the tree.
  * @constructor
  * @extends {Blockly.Component}
  */
@@ -49,7 +49,7 @@ Blockly.tree.BaseNode = function(content, config) {
 
   /**
    * The configuration for the tree.
-   * @type {Blockly.tree.BaseNode.Config}
+   * @type {!Blockly.tree.BaseNode.Config}
    * @private
    */
   this.config_ = config;
@@ -488,6 +488,17 @@ Blockly.tree.BaseNode.prototype.select = function() {
 };
 
 /**
+ * Selects the first node.
+ * @protected
+ */
+Blockly.tree.BaseNode.prototype.selectFirst = function() {
+  var tree = this.getTree();
+  if (tree && this.firstChild_) {
+    tree.setSelectedItem(this.firstChild_);
+  }
+};
+
+/**
  * Called from the tree to instruct the node change its selection state.
  * @param {boolean} selected The new selection state.
  * @protected
@@ -885,7 +896,7 @@ Blockly.tree.BaseNode.prototype.getElement = function() {
 /**
  * @return {Element} The row is the div that is used to draw the node without
  *     the children.
- * @protected
+ * @package
  */
 Blockly.tree.BaseNode.prototype.getRowElement = function() {
   var el = this.getElement();
@@ -1116,43 +1127,22 @@ Blockly.tree.BaseNode.prototype.onKeyDown = function(e) {
       if (e.altKey) {
         break;
       }
-      if (this.hasChildren()) {
-        if (!this.getExpanded()) {
-          this.setExpanded(true);
-        } else {
-          this.getFirstChild().select();
-        }
-      }
+      handled = this.selectChild();
       break;
 
     case Blockly.utils.KeyCodes.LEFT:
       if (e.altKey) {
         break;
       }
-      if (this.hasChildren() && this.getExpanded() && this.isUserCollapsible_) {
-        this.setExpanded(false);
-      } else {
-        var parent = this.getParent();
-        var tree = this.getTree();
-        // don't go to root if hidden
-        if (parent && (parent != tree)) {
-          parent.select();
-        }
-      }
+      handled = this.selectParent();
       break;
 
     case Blockly.utils.KeyCodes.DOWN:
-      var nextNode = this.getNextShownNode();
-      if (nextNode) {
-        nextNode.select();
-      }
+      handled = this.selectNext();
       break;
 
     case Blockly.utils.KeyCodes.UP:
-      var previousNode = this.getPreviousShownNode();
-      if (previousNode) {
-        previousNode.select();
-      }
+      handled = this.selectPrevious();
       break;
 
     default:
@@ -1164,6 +1154,70 @@ Blockly.tree.BaseNode.prototype.onKeyDown = function(e) {
   }
 
   return handled;
+};
+
+
+/**
+ * Select the next node.
+ * @return {boolean} True if the action has been handled, false otherwise.
+ * @package
+ */
+Blockly.tree.BaseNode.prototype.selectNext = function() {
+  var nextNode = this.getNextShownNode();
+  if (nextNode) {
+    nextNode.select();
+  }
+  return true;
+};
+
+/**
+ * Select the previous node.
+ * @return {boolean} True if the action has been handled, false otherwise.
+ * @package
+ */
+Blockly.tree.BaseNode.prototype.selectPrevious = function() {
+  var previousNode = this.getPreviousShownNode();
+  if (previousNode) {
+    previousNode.select();
+  }
+  return true;
+};
+
+/**
+ * Select the parent node or collapse the current node.
+ * @return {boolean} True if the action has been handled, false otherwise.
+ * @package
+ */
+Blockly.tree.BaseNode.prototype.selectParent = function() {
+  if (this.hasChildren() && this.getExpanded() && this.isUserCollapsible_) {
+    this.setExpanded(false);
+  } else {
+    var parent = this.getParent();
+    var tree = this.getTree();
+    // don't go to root if hidden
+    if (parent && (parent != tree)) {
+      parent.select();
+    }
+  }
+  return true;
+};
+
+/**
+ * Expand the current node if it's not already expanded, or select the
+ * child node.
+ * @return {boolean} True if the action has been handled, false otherwise.
+ * @package
+ */
+Blockly.tree.BaseNode.prototype.selectChild = function() {
+  if (this.hasChildren()) {
+    if (!this.getExpanded()) {
+      this.setExpanded(true);
+    } else {
+      this.getFirstChild().select();
+    }
+    return true;
+  }
+  return false;
 };
 
 /**
@@ -1222,7 +1276,7 @@ Blockly.tree.BaseNode.prototype.getPreviousShownNode = function() {
 };
 
 /**
- * @return {Blockly.tree.BaseNode.Config} The configuration for the tree.
+ * @return {!Blockly.tree.BaseNode.Config} The configuration for the tree.
  * @protected
  */
 Blockly.tree.BaseNode.prototype.getConfig = function() {

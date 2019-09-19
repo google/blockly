@@ -1,4 +1,40 @@
+/**
+ * @license
+ * Visual Blocks Editor
+ *
+ * Copyright 2019 Google Inc.
+ * https://developers.google.com/blockly/
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/**
+ * @fileoverview Navigation tests.
+ * @author aschmiedt@google.com (Abby Schmiedt)
+ */
+'use strict';
+
+
 suite('Navigation', function() {
+  function createNavigationWorkspace(enableKeyboardNav) {
+    var toolbox = document.getElementById('toolbox-categories');
+    var workspace = Blockly.inject('blocklyDiv', {toolbox: toolbox});
+    if (enableKeyboardNav) {
+      Blockly.navigation.enableKeyboardAccessibility();
+      Blockly.navigation.currentState_ = Blockly.navigation.STATE_WS;
+    }
+    return workspace;
+  }
 
   // Test that toolbox key handlers call through to the right functions and
   // transition correctly between toolbox, workspace, and flyout.
@@ -15,8 +51,7 @@ suite('Navigation', function() {
           }
         ]
       }]);
-      var toolbox = document.getElementById('toolbox-categories');
-      this.workspace = Blockly.inject('blocklyDiv', {toolbox: toolbox});
+      this.workspace = createNavigationWorkspace(true);
       Blockly.navigation.focusToolbox_();
       this.mockEvent = {
         getModifierState: function() {
@@ -31,7 +66,6 @@ suite('Navigation', function() {
     teardown(function() {
       delete Blockly.Blocks['basic_block'];
       this.workspace.dispose();
-      Blockly.navigation.currentCategory_ = null;
     });
 
     test('Next', function() {
@@ -39,43 +73,45 @@ suite('Navigation', function() {
       chai.assert.isTrue(Blockly.navigation.onKeyPress(this.mockEvent));
       chai.assert.equal(Blockly.navigation.currentState_,
           Blockly.navigation.STATE_TOOLBOX);
-      chai.assert.equal(Blockly.navigation.currentCategory_,
+      chai.assert.equal(this.workspace.getToolbox().tree_.getSelectedItem(),
           this.secondCategory_);
     });
 
     // Should be a no-op.
     test('Next at end', function() {
-      Blockly.navigation.nextCategory_();
+      this.workspace.getToolbox().tree_.getSelectedItem().selectNext();
       this.mockEvent.keyCode = Blockly.utils.KeyCodes.S;
-      var startCategory = Blockly.navigation.currentCategory_;
+      // Go forward one so that we can go back one.
+      Blockly.navigation.onKeyPress(this.mockEvent);
+      var startCategory = this.workspace.getToolbox().tree_.getSelectedItem();
       chai.assert.isTrue(Blockly.navigation.onKeyPress(this.mockEvent));
       chai.assert.equal(Blockly.navigation.currentState_,
           Blockly.navigation.STATE_TOOLBOX);
-      chai.assert.equal(Blockly.navigation.currentCategory_,
+      chai.assert.equal(this.workspace.getToolbox().tree_.getSelectedItem(),
           startCategory);
     });
 
     test('Previous', function() {
       // Go forward one so that we can go back one:
-      Blockly.navigation.nextCategory_();
+      this.workspace.getToolbox().tree_.getSelectedItem().selectNext();
       this.mockEvent.keyCode = Blockly.utils.KeyCodes.W;
-      chai.assert.equal(Blockly.navigation.currentCategory_,
+      chai.assert.equal(this.workspace.getToolbox().tree_.getSelectedItem(),
           this.secondCategory_);
       chai.assert.isTrue(Blockly.navigation.onKeyPress(this.mockEvent));
       chai.assert.equal(Blockly.navigation.currentState_,
           Blockly.navigation.STATE_TOOLBOX);
-      chai.assert.equal(Blockly.navigation.currentCategory_,
+      chai.assert.equal(this.workspace.getToolbox().tree_.getSelectedItem(),
           this.firstCategory_);
     });
 
     // Should be a no-op.
     test('Previous at start', function() {
-      var startCategory = Blockly.navigation.currentCategory_;
+      var startCategory = this.workspace.getToolbox().tree_.getSelectedItem();
       this.mockEvent.keyCode = Blockly.utils.KeyCodes.W;
       chai.assert.isTrue(Blockly.navigation.onKeyPress(this.mockEvent));
       chai.assert.equal(Blockly.navigation.currentState_,
           Blockly.navigation.STATE_TOOLBOX);
-      chai.assert.equal(Blockly.navigation.currentCategory_,
+      chai.assert.equal(this.workspace.getToolbox().tree_.getSelectedItem(),
           startCategory);
     });
 
@@ -132,8 +168,7 @@ suite('Navigation', function() {
           }
         ]
       }]);
-      var toolbox = document.getElementById('toolbox-categories');
-      this.workspace = Blockly.inject('blocklyDiv', {toolbox: toolbox});
+      this.workspace = createNavigationWorkspace(true);
       Blockly.navigation.focusToolbox_();
       Blockly.navigation.focusFlyout_();
       this.mockEvent = {
@@ -146,7 +181,6 @@ suite('Navigation', function() {
     teardown(function() {
       delete Blockly.Blocks['basic_block'];
       this.workspace.dispose();
-      Blockly.navigation.currentCategory_ = null;
     });
 
     // Should be a no-op
@@ -225,9 +259,7 @@ suite('Navigation', function() {
         "previousStatement": null,
         "nextStatement": null
       }]);
-      var toolbox = document.getElementById('toolbox-categories');
-      this.workspace = Blockly.inject('blocklyDiv', {toolbox: toolbox});
-      Blockly.navigation.enableKeyboardAccessibility();
+      this.workspace = createNavigationWorkspace(true);
       this.basicBlock = this.workspace.newBlock('basic_block');
       this.firstCategory_ = this.workspace.getToolbox().tree_.firstChild_;
       this.mockEvent = {
@@ -240,7 +272,6 @@ suite('Navigation', function() {
     teardown(function() {
       delete Blockly.Blocks['basic_block'];
       this.workspace.dispose();
-      Blockly.navigation.currentCategory_ = null;
     });
 
     test('Previous', function() {
@@ -310,7 +341,7 @@ suite('Navigation', function() {
     test('Toolbox', function() {
       this.mockEvent.keyCode = Blockly.utils.KeyCodes.T;
       chai.assert.isTrue(Blockly.navigation.onKeyPress(this.mockEvent));
-      chai.assert.equal(Blockly.navigation.currentCategory_, this.firstCategory_);
+      chai.assert.equal(this.workspace.getToolbox().tree_.getSelectedItem(), this.firstCategory_);
       chai.assert.equal(Blockly.navigation.currentState_,
           Blockly.navigation.STATE_TOOLBOX);
     });
@@ -322,6 +353,7 @@ suite('Navigation', function() {
       Blockly.user.keyMap.setKeyMap(Blockly.user.keyMap.createDefaultKeyMap());
       Blockly.mainWorkspace = this.workspace;
       Blockly.keyboardAccessibilityMode = true;
+      Blockly.navigation.currentState_ = Blockly.navigation.STATE_WS;
 
       this.mockEvent = {
         getModifierState: function() {
@@ -330,7 +362,9 @@ suite('Navigation', function() {
       };
     });
     test('Action does not exist', function() {
+      var block = new Blockly.Block(this.workspace);
       var field = new Blockly.FieldDropdown([['a','b'], ['c','d']]);
+      field.setSourceBlock(block);
       sinon.spy(field, 'onBlocklyAction');
       this.workspace.getCursor().setCurNode(Blockly.ASTNode.createFieldNode(field));
 
@@ -343,7 +377,9 @@ suite('Navigation', function() {
     });
 
     test('Action exists - field handles action', function() {
+      var block = new Blockly.Block(this.workspace);
       var field = new Blockly.FieldDropdown([['a','b'], ['c','d']]);
+      field.setSourceBlock(block);
       sinon.stub(field, 'onBlocklyAction').callsFake(function(){
         return true;
       });
@@ -357,7 +393,9 @@ suite('Navigation', function() {
     });
 
     test('Action exists - field does not handle action', function() {
+      var block = new Blockly.Block(this.workspace);
       var field = new Blockly.FieldDropdown([['a','b'], ['c','d']]);
+      field.setSourceBlock(block);
       sinon.spy(field, 'onBlocklyAction');
       this.workspace.getCursor().setCurNode(Blockly.ASTNode.createFieldNode(field));
 
@@ -424,8 +462,10 @@ suite('Navigation', function() {
         this.workspace = new Blockly.Workspace({readOnly: true});
         this.workspace.setCursor(new Blockly.Cursor());
         Blockly.mainWorkspace = this.workspace;
-        this.fieldBlock1 = this.workspace.newBlock('field_block');
         Blockly.keyboardAccessibilityMode = true;
+        Blockly.navigation.currentState_ = Blockly.navigation.STATE_WS;
+
+        this.fieldBlock1 = this.workspace.newBlock('field_block');
         this.mockEvent = {
           getModifierState: function() {
             return false;
@@ -435,7 +475,6 @@ suite('Navigation', function() {
 
       teardown(function() {
         delete Blockly.Blocks['field_block'];
-        Blockly.mainWorkspace = null;
         this.workspace.dispose();
       });
 
@@ -472,8 +511,7 @@ suite('Navigation', function() {
         "nextStatement": null,
       }]);
 
-      var toolbox = document.getElementById('toolbox-categories');
-      this.workspace = Blockly.inject('blocklyDiv', {toolbox: toolbox});
+      this.workspace = createNavigationWorkspace(true);
 
       var basicBlock = this.workspace.newBlock('basic_block');
       var basicBlock2 = this.workspace.newBlock('basic_block');
@@ -485,7 +523,6 @@ suite('Navigation', function() {
     teardown(function() {
       delete Blockly.Blocks['basic_block'];
       this.workspace.dispose();
-      Blockly.navigation.currentCategory_ = null;
     });
 
     test('Insert from flyout with a valid connection marked', function() {
@@ -562,8 +599,7 @@ suite('Navigation', function() {
         "helpUrl": ""
       }]);
 
-      var toolbox = document.getElementById('toolbox-categories');
-      this.workspace = Blockly.inject('blocklyDiv', {toolbox: toolbox});
+      this.workspace = createNavigationWorkspace(true);
 
       var basicBlock = this.workspace.newBlock('basic_block');
       var basicBlock2 = this.workspace.newBlock('basic_block');
@@ -592,7 +628,6 @@ suite('Navigation', function() {
     teardown(function() {
       delete Blockly.Blocks['basic_block'];
       this.workspace.dispose();
-      Blockly.navigation.currentCategory_ = null;
     });
 
     test('Connect cursor on previous into stack', function() {
@@ -655,9 +690,7 @@ suite('Navigation', function() {
         "previousStatement": null,
         "nextStatement": null,
       }]);
-      var toolbox = document.getElementById('toolbox-categories');
-      this.workspace = Blockly.inject('blocklyDiv', {toolbox: toolbox});
-      Blockly.navigation.enableKeyboardAccessibility();
+      this.workspace = createNavigationWorkspace(true);
       this.basicBlockA = this.workspace.newBlock('basic_block');
       this.basicBlockB = this.workspace.newBlock('basic_block');
     });

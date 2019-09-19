@@ -33,7 +33,6 @@
  */
 goog.provide('Blockly.Extensions');
 
-goog.require('Blockly.Mutator');
 goog.require('Blockly.utils');
 
 
@@ -115,6 +114,9 @@ Blockly.Extensions.registerMutator = function(name, mixinObj, opt_helperFn,
   // Sanity checks passed.
   Blockly.Extensions.register(name, function() {
     if (hasMutatorDialog) {
+      if (!Blockly.Mutator) {
+        throw Error(errorPrefix + 'Missing require for Blockly.Mutator');
+      }
       this.setMutator(new Blockly.Mutator(opt_blockList));
     }
     // Mixin the object.

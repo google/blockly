@@ -31,6 +31,7 @@ goog.require('Blockly.Blocks');
 goog.require('Blockly.FieldCheckbox');
 goog.require('Blockly.FieldLabel');
 goog.require('Blockly.FieldTextInput');
+goog.require('Blockly.Mutator');
 
 
 Blockly.Blocks['procedures_defnoreturn'] = {

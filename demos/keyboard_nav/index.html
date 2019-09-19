@@ -13,13 +13,38 @@
       background-color: #fff;
       font-family: sans-serif;
     }
+
     h1 {
       font-weight: normal;
       font-size: 140%;
     }
-
-    .blockRenderDebug {
-      display: none;
+    .wrapper {
+      display: flex;
+    }
+    #keyboard_nav {
+      background-color: #ededed;
+      border: 1px solid black;
+      padding: 1em;
+    }
+    #keyboard_announce {
+      font-size: 1.5em;
+      font-weight: 500;
+      text-align: center;
+    }
+    #keyboard_mappings {
+      font-size: 1.3em;
+      font-weight: 400;
+    }
+    label {
+      margin-right: .5em;
+      min-width: 100px;
+    }
+    div[data-actionname] {
+      display: flex;
+      width: 100%;
+    }
+    select {
+      font-size: .8em;
     }
   </style>
 </head>
@@ -58,18 +83,26 @@
   </p>
 
   <p>
-      Enable Accessibility Mode:
-      <input type="checkbox" onclick="toggleAccessibilityMode(this.checked)" id="accessibilityModeCheck">
-      <select id="cursorChanger" name="cursor" onchange="changeCursor(this.value)">
-        <option value="default">Default Cursor</option>
-        <option value="basic">Basic Cursor</option>
-      </select>
+    <label for="accessibilityModeCheck">Enable Accessibility Mode:</label>
+    <input type="checkbox" onclick="toggleAccessibilityMode(this.checked)" id="accessibilityModeCheck">
+    <select id="cursorChanger" name="cursor" onchange="changeCursor(this.value)">
+      <option value="default">Default Cursor</option>
+      <option value="basic">Basic Cursor</option>
+    </select>
 
     <button onclick="preOrderDemo()">Start Pre-order Demo</button>
     <button onclick="stopDemo()">Stop Pre-order Demo</button>
+    <label for="displayKeyMappings">Open Key Mappings:</label>
+    <input type="checkbox" onclick="toggleDisplayKeyMappings(this.checked)" id="displayKeyMappings">
   </p>
 
-  <div id="blocklyDiv" style="height: 480px; width: 600px;"></div>
+  <div class="wrapper">
+    <div id="blocklyDiv" style="height: 480px; width: 600px;"></div>
+    <div id="keyboard_nav" style="display:none">
+      <p id="keyboard_announce" aria-live="assertive">Set key mappings below</p>
+      <form id="keyboard_mappings"></form>
+    </div>    
+  </div>
 
   <xml xmlns="https://developers.google.com/blockly/xml" id="toolbox" style="display: none">
     <category name="Logic" colour="%{BKY_LOGIC_HUE}">
@@ -184,6 +217,19 @@
                                demoWorkspace);
     var timeout;
 
+    var actions = [
+      Blockly.navigation.ACTION_PREVIOUS,
+      Blockly.navigation.ACTION_OUT,
+      Blockly.navigation.ACTION_NEXT,
+      Blockly.navigation.ACTION_IN,
+      Blockly.navigation.ACTION_INSERT,
+      Blockly.navigation.ACTION_MARK,
+      Blockly.navigation.ACTION_DISCONNECT,
+      Blockly.navigation.ACTION_TOOLBOX,
+      Blockly.navigation.ACTION_EXIT
+    ];
+    createKeyMappingList(actions);
+
     /**
      * Shows the next node in the tree traversal every second.
      * @package
@@ -213,7 +259,7 @@
      * @package
      */
     function preOrderDemo() {
-      changeCursorByValue('basic');
+      changeCursor('basic');
       document.getElementById('accessibilityModeCheck').disabled = true;
       setTimeout(demo, 1000);
     }
@@ -251,7 +297,269 @@
       if (oldCurNode) {
         Blockly.getMainWorkspace().getCursor().setLocation(oldCurNode);
       }
+      document.activeElement.blur();
     }
+
+    // Start key mapping demo functions
+
+    /**
+     * Save the current key map in session storage.
+     * @package
+     */
+    function saveKeyMap() {
+      var currentMap = Blockly.user.keyMap.getKeyMap();
+      if (sessionStorage) {
+        sessionStorage.setItem('keyMap', JSON.stringify(currentMap));
+      }
+    }
+
+    /**
+     * Set the key map to the map from session storage.
+     * @package
+     */
+    function restoreKeyMap() {
+      var defaultMap = Blockly.user.keyMap.map_;
+      var stringifiedMap = sessionStorage.getItem('keyMap');
+      var restoredMap = {};
+      if (sessionStorage && stringifiedMap) {
+        var keyMap = JSON.parse(stringifiedMap);
+        var keys = Object.keys(keyMap);
+        for (var i = 0, key; key = keys[i]; i++) {
+          restoredMap[key] = Object.assign(new Blockly.Action, keyMap[key]);
+        }
+        Blockly.user.keyMap.setKeyMap(restoredMap);
+      }
+    }
+
+    /**
+     * Given the three dropdowns create the serialized key that will be stored
+     * in the key map.
+     * @param {Array.<Element>} selectDivs The three dropdown divs that display
+     *     the key combination.
+     * @package
+     */
+    function serializeKey(selectDivs) {
+      var modifiers = Blockly.utils.object.values(Blockly.user.keyMap.modifierKeys);
+      var newModifiers = [];
+      var newKeyCode = '';
+      var keyValue = selectDivs[2].value;
+
+      // Get the new modifiers from the first two dropdowns.
+      for (var i = 0; i < 2; i++) {
+        var selectDiv = selectDivs[i];
+        var key = selectDiv.value;
+        if (key !== 'None') {
+          newModifiers.push(key);
+        }
+      }
+      // Get the key code from the last dropdown.
+      if (keyValue !== 'None') {
+        if (keyValue === 'Escape') {
+          newKeyCode = Blockly.utils.KeyCodes.ESC;
+        } else if (keyValue === 'Enter') {
+          newKeyCode = Blockly.utils.KeyCodes.ENTER;
+        } else {
+          newKeyCode = keyValue.toUpperCase().charCodeAt(0);
+        }
+      }
+      return Blockly.user.keyMap.createSerializedKey(newKeyCode, newModifiers);
+    }
+
+    /**
+     * Set all dropdowns for that action to none.
+     * We clear dropdowns when a user chooses the same key combination for a
+     * second action.
+     * @param {Blockly.Action} action The action that we want to clear the
+     *     dropdowns for.
+     * @package
+     */
+    function clearDropdown(action) {
+      var actionDiv = document.querySelectorAll('[data-actionname='+ action.name +']')[0];
+      var selectDivs = actionDiv.getElementsByTagName('select');
+      for (var i = 0, selectDiv; selectDiv = selectDivs[i]; i++) {
+        selectDiv.value = 'None';
+      }
+    }
+
+    /**
+     * Given the three dropdowns create a human readable string so the screen reader
+     * can read it out.
+     * @param {Array.<Element>} selectDivs The three dropdown divs that display
+     *     the key combination.
+     * @package
+     */
+    function getReadableKey(selectDivs) {
+      var readableKey = '';
+
+      for (var i = 0, selectDiv; selectDiv = selectDivs[i]; i++) {
+        if (selectDiv.value !== 'None') {
+          readableKey += selectDiv.value + ' ';
+        }
+      }
+      return readableKey;
+    }
+
+    /**
+     * Update the key in the key map when the user selects a new value in one of the
+     * dropdowns.
+     * @param {Event} e The event dispatched from changing a dropdown.
+     * @package
+     */
+    function updateKey(e) {
+      var keyboardAnnouncerText = '';
+      var actionDiv = e.srcElement.parentElement;
+      var action = actionDiv.action;
+      var selectDivs = actionDiv.getElementsByTagName('select');
+      var key = serializeKey(selectDivs);
+      var oldAction = Blockly.user.keyMap.getActionByKeyCode(key);
+
+      if (oldAction) {
+        keyboardAnnouncerText += oldAction.name + ' action key was overwritten. \n';
+        clearDropdown(oldAction);
+      }
+      keyboardAnnouncerText += action.name + ' key was set to ' + getReadableKey(selectDivs);
+      document.getElementById('keyboard_announce').innerText = keyboardAnnouncerText;
+      Blockly.user.keyMap.setActionForKey(key, action);
+      saveKeyMap();
+      document.activeElement.blur();
+    }
+
+    /**
+     * Set the key to be the correct value from the key map.
+     * @param {string} actionKey The serialized key for a given action.
+     * @param {Element} keyDropdown The dropdown that displays the primary key.
+     * @package
+     */
+    function setKeyDropdown(actionKey, keyDropdown) {
+      // Strip off any modifier to just get the key code.
+      var keyCode = actionKey.match(/\d+/)[0];
+      var keyValue = String.fromCharCode(keyCode);
+      if (parseInt(keyCode) === Blockly.utils.KeyCodes.ESC) {
+          keyValue = 'Escape';
+      } else if (parseInt(keyCode) === Blockly.utils.KeyCodes.ENTER) {
+        keyValue = 'Enter';
+      }
+      keyDropdown.value = keyValue;
+    }
+
+    /**
+     * Set the modifiers to be the correct value from the key map.
+     * @param {string} actionKey The key code holding the modifiers and key.
+     * @param {Array.<Element>} modifierDropdowns A list of dropdowns for
+     *     the modifier values.
+     * @package
+     */
+    function setModifiers(actionKey, modifierDropdowns) {
+      var modifiers = Blockly.utils.object.values(Blockly.user.keyMap.modifierKeys);
+      for (var i = 0; i < 2; i++) {
+        var modifierDropdown = modifierDropdowns[i];
+        for (var j = 0, modifier; modifier = modifiers[j]; j++) {
+          if (actionKey.indexOf(modifier) > -1) {
+            modifierDropdown.value = modifier;
+            actionKey = actionKey.replace(modifier, '');
+            break;
+          }
+        }
+      }
+    }
+
+    /**
+     * Set the dropdowns to display the correct combination of modifiers and
+     * keys for the action key.
+     * @param {Blockly.Action} action The Blockly action.
+     * @param {Element} actionDiv The div holding the dropdowns and label for the
+     *     given action.
+     * @param {string} actionKey The key corresponding to the given action.
+     * @package
+     */
+    function setDropdowns(action, actionDiv, actionKey) {
+      var selectDivs = actionDiv.getElementsByTagName('select');
+      if (actionKey) {
+        setModifiers(actionKey, selectDivs);
+        setKeyDropdown(actionKey, selectDivs[selectDivs.length - 1]);
+      } else {
+        clearDropdown(action);
+      }
+    }
+
+    /**
+     * Create a dropdown with the given list of possible keys.
+     * @param {Blockly.Action} action The Blockly action.
+     * @param {Element} actionDiv The div holding the dropdowns and labels for
+     *     a given action.
+     * @param {Array.<string>} keys The list of keys to add to the dropdown.
+     * @package
+     */
+    function createDropdown(action, actionDiv, keys) {
+      var select = document.createElement('select');
+      select.addEventListener('change', updateKey);
+      select.setAttribute('aria-labelledby', action.name + '_label');
+      for (var i = 0, key; key = keys[i]; i++) {
+        select.options.add(new Option(key, key));
+      }
+      actionDiv.appendChild(select);
+    }
+
+    /**
+     * Create two dropdowns that display possible modifiers and a single dropdown
+     * displaying a list of keys.
+     * @param {Blockly.Action} action The Blockly action.
+     * @param {string} actionKey The key corresponding to the given action.
+     * @param {Element} actionDiv The div holding the dropdowns and label for the
+     *     given action.
+     * @package
+     */
+    function createDropdowns(action, actionKey, actionDiv) {
+      var modifiers = ['None'].concat(Blockly.utils.object.values(Blockly.user.keyMap.modifierKeys));
+      var keys = ['None', 'Enter', 'Escape'].concat("ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890".split(''));
+      createDropdown(action, actionDiv, modifiers);
+      createDropdown(action, actionDiv, modifiers);
+      createDropdown(action, actionDiv, keys);
+      setDropdowns(action, actionDiv, actionKey);
+    }
+
+    /**
+     * For each action create a row of 3 dropdowns and an action label. Update
+     * the dropdowns to reflect the value in the key map.
+     * @param {Array.<Blockly.Action>} actions List of blockly actions.
+     * @package
+     */
+    function createKeyMappingList(actions) {
+      // Update the key map to reflect the key map saved in session storage.
+      restoreKeyMap();
+      var keyMapDiv = document.getElementById('keyboard_mappings');
+      for (var i = 0, action; action = actions[i]; i++) {
+        var actionDiv = document.createElement('div');
+        actionDiv.setAttribute('data-actionname', action.name);
+        actionDiv.action = action;
+
+        var labelDiv = document.createElement('label');
+        labelDiv.innerText = action.name;
+        labelDiv.setAttribute('id', action.name + '_label');
+
+        actionDiv.appendChild(labelDiv);
+        keyMapDiv.appendChild(actionDiv);
+
+        var actionKey = Blockly.user.keyMap.getKeyByAction(action);
+        createDropdowns(action, actionKey, actionDiv);
+      }
+    }
+
+    /**
+     * Hide/show the key map panel.
+     * @param {boolean} state The state of the checkbox. True if checked, false
+     *     otherwise.
+     * @package
+     */
+    function toggleDisplayKeyMappings(state) {
+      if (state) {
+        document.getElementById('keyboard_nav').style.display = 'block';
+      } else {
+        document.getElementById('keyboard_nav').style.display = 'none';
+      }
+    }
+    // End key mapping demo functions
+
   </script>
 
 </body>

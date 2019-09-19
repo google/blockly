@@ -28,6 +28,7 @@ goog.provide('Blockly.Blocks.procedures');
 
 goog.require('Blockly');
 goog.require('Blockly.Blocks');
+goog.require('Blockly.Comment');
 goog.require('Blockly.FieldCheckbox');
 goog.require('Blockly.FieldLabel');
 goog.require('Blockly.FieldTextInput');

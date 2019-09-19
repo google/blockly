@@ -141,6 +141,7 @@ gulp.task('build-blocks', function () {
   const provides = `
 goog.provide('Blockly');
 goog.provide('Blockly.Blocks');
+goog.provide('Blockly.Comment');
 goog.provide('Blockly.FieldCheckbox');
 goog.provide('Blockly.FieldColour');
 goog.provide('Blockly.FieldDropdown');

@@ -35,6 +35,9 @@ goog.require('Blockly');
 // configuration must be false, and no blocks may be loaded from XML which
 // define comments.
 goog.require('Blockly.Comment');
+// If the toolbox does not have categories and only has a simple flyout, then
+// 'Blockly.Toolbox' is not needed.
+goog.require('Blockly.Toolbox');
 // If a trashcan on the workspace isn't required, then Blockly.inject's
 // "trashcan" configuration must be false.
 goog.require('Blockly.Trashcan');

@@ -146,7 +146,7 @@ Blockly.navigation.focusToolbox_ = function() {
   if (!Blockly.getMainWorkspace().getMarker().getCurNode()) {
     Blockly.navigation.markAtCursor_();
   }
-  toolbox.selectFirst();
+  toolbox.selectFirstCategory();
 };
 
 /***********************/

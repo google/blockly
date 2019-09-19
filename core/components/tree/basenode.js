@@ -1206,7 +1206,7 @@ Blockly.tree.BaseNode.prototype.selectParent = function() {
  * Expand the current node if it's not already expanded, or select the
  * child node.
  * @return {boolean} True if the action has been handled, false otherwise.
- * @protected
+ * @package
  */
 Blockly.tree.BaseNode.prototype.selectChild = function() {
   if (this.hasChildren()) {

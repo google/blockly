@@ -683,7 +683,7 @@ Blockly.Toolbox.prototype.refreshSelection = function() {
  * Select the first toolbox category if no category is selected.
  * @package
  */
-Blockly.Toolbox.prototype.selectFirst = function() {
+Blockly.Toolbox.prototype.selectFirstCategory = function() {
   var selectedItem = this.tree_.getSelectedItem();
   if (!selectedItem) {
     this.tree_.selectFirst();

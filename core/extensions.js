@@ -33,7 +33,6 @@
  */
 goog.provide('Blockly.Extensions');
 
-goog.require('Blockly.Mutator');
 goog.require('Blockly.utils');
 
 
@@ -98,6 +97,9 @@ Blockly.Extensions.registerMixin = function(name, mixinObj) {
 Blockly.Extensions.registerMutator = function(name, mixinObj, opt_helperFn,
     opt_blockList) {
   var errorPrefix = 'Error when registering mutator "' + name + '": ';
+  if (!Blockly.Mutator) {
+    throw Error(errorPrefix + 'Missing require for Blockly.Mutator');
+  }
 
   // Sanity check the mixin object before registering it.
   Blockly.Extensions.checkHasFunction_(

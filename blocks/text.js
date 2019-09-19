@@ -34,6 +34,7 @@ goog.require('Blockly.FieldImage');
 goog.require('Blockly.FieldMultilineInput');
 goog.require('Blockly.FieldTextInput');
 goog.require('Blockly.FieldVariable');
+goog.require('Blockly.Mutator');
 
 
 /**

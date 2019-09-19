@@ -36,7 +36,6 @@ goog.require('Blockly.Events.BlockDelete');
 goog.require('Blockly.Events.BlockMove');
 goog.require('Blockly.Extensions');
 goog.require('Blockly.Input');
-goog.require('Blockly.Mutator');
 goog.require('Blockly.utils');
 goog.require('Blockly.utils.Coordinate');
 goog.require('Blockly.utils.object');

@@ -38,6 +38,7 @@ goog.require('Blockly.FieldDropdown');
 goog.require('Blockly.FieldLabel');
 goog.require('Blockly.FieldNumber');
 goog.require('Blockly.FieldVariable');
+goog.require('Blockly.Mutator');
 
 
 /**

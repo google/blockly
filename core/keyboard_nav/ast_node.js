@@ -313,8 +313,8 @@ Blockly.ASTNode.prototype.findNextForField_ = function() {
   var block = location.getSourceBlock();
   var curIdx = block.inputList.indexOf(input);
   var fieldIdx = input.fieldRow.indexOf(location) + 1;
-  for (var i = curIdx, input; input = block.inputList[i]; i++) {
-    var fieldRow = input.fieldRow;
+  for (var i = curIdx, newInput; newInput = block.inputList[i]; i++) {
+    var fieldRow = newInput.fieldRow;
     while (fieldIdx < fieldRow.length) {
       if (fieldRow[fieldIdx].EDITABLE) {
         return Blockly.ASTNode.createFieldNode(fieldRow[fieldIdx]);
@@ -322,8 +322,8 @@ Blockly.ASTNode.prototype.findNextForField_ = function() {
       fieldIdx++;
     }
     fieldIdx = 0;
-    if (input.connection) {
-      return Blockly.ASTNode.createInputNode(input);
+    if (newInput.connection) {
+      return Blockly.ASTNode.createInputNode(newInput);
     }
   }
   return null;
@@ -438,12 +438,15 @@ Blockly.ASTNode.prototype.findTopASTNodeForBlock_ = function(block) {
 /**
  * Get the AST node pointing to the input that the block is nested under or if
  * the block is not nested then get the stack AST node.
- * @param {!Blockly.Block} block The source block of the current location.
+ * @param {Blockly.Block} block The source block of the current location.
  * @return {Blockly.ASTNode} The AST node pointing to the input connection or
  *     the top block of the stack this block is in.
  * @private
  */
 Blockly.ASTNode.prototype.getOutAstNodeForBlock_ = function(block) {
+  if (!block) {
+    return null;
+  }
   var topBlock = null;
   // If the block doesn't have a previous connection then it is the top of the
   // substack.
@@ -467,7 +470,7 @@ Blockly.ASTNode.prototype.getOutAstNodeForBlock_ = function(block) {
 
 /**
  * Find the first editable field or input with a connection on a given block.
- * @param {!Blockly.BlockSvg} block The source block of the current location.
+ * @param {!Blockly.Block} block The source block of the current location.
  * @return {Blockly.ASTNode} An AST node pointing to the first field or input.
  * Null if there are no editable fields or inputs with connections on the block.
  * @private
@@ -568,6 +571,7 @@ Blockly.ASTNode.prototype.in = function() {
       return this.findTopASTNodeForBlock_(block);
 
     case Blockly.ASTNode.types.BLOCK:
+      var block = /** @type {!Blockly.Block} */ (this.location_);
       return this.findFirstFieldOrInput_(this.location_);
 
     case Blockly.ASTNode.types.INPUT:

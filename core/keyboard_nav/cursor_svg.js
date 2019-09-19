@@ -347,9 +347,9 @@ Blockly.CursorSvg.prototype.showCurrent_ = function() {
 /**
  * Position the cursor for a block.
  * Displays an outline of the top half of a rectangle around a block.
- * @param {!number} width The width of the block.
- * @param {!number} cursorOffset The extra padding for around the block.
- * @param {!number} cursorHeight The height of the cursor.
+ * @param {number} width The width of the block.
+ * @param {number} cursorOffset The extra padding for around the block.
+ * @param {number} cursorHeight The height of the cursor.
  */
 Blockly.CursorSvg.prototype.positionBlock_ = function(width, cursorOffset, cursorHeight) {
   var cursorPath = Blockly.utils.svgPaths.moveBy(-1 * cursorOffset, cursorHeight) +
@@ -377,9 +377,9 @@ Blockly.CursorSvg.prototype.positionInput_ = function(connection) {
 /**
  * Move and show the cursor at the specified coordinate in workspace units.
  * Displays a horizontal line.
- * @param {!number} x The new x, in workspace units.
- * @param {!number} y The new y, in workspace units.
- * @param {!number} width The new width, in workspace units.
+ * @param {number} x The new x, in workspace units.
+ * @param {number} y The new y, in workspace units.
+ * @param {number} width The new width, in workspace units.
  * @private
  */
 Blockly.CursorSvg.prototype.positionLine_ = function(x, y, width) {
@@ -391,8 +391,8 @@ Blockly.CursorSvg.prototype.positionLine_ = function(x, y, width) {
 /**
  * Position the cursor for an output connection.
  * Displays a puzzle outline and the top and bottom path.
- * @param {!number} width The width of the block.
- * @param {!number} height The height of the block.
+ * @param {number} width The width of the block.
+ * @param {number} height The height of the block.
  * @private
  */
 Blockly.CursorSvg.prototype.positionOutput_ = function(width, height) {
@@ -409,9 +409,9 @@ Blockly.CursorSvg.prototype.positionOutput_ = function(width, height) {
  * Position the cursor for a previous connection.
  * Displays a half rectangle with a notch in the top to represent the previous
  * conenction.
- * @param {!number} width The width of the block.
- * @param {!number} cursorOffset The offset of the cursor from around the block.
- * @param {!number} cursorHeight The height of the cursor.
+ * @param {number} width The width of the block.
+ * @param {number} cursorOffset The offset of the cursor from around the block.
+ * @param {number} cursorHeight The height of the cursor.
  * @private
  */
 Blockly.CursorSvg.prototype.positionPrevious_ = function(width, cursorOffset, cursorHeight) {
@@ -428,10 +428,10 @@ Blockly.CursorSvg.prototype.positionPrevious_ = function(width, cursorOffset, cu
 /**
  * Move and show the cursor at the specified coordinate in workspace units.
  * Displays a filled in rectangle.
- * @param {!number} x The new x, in workspace units.
- * @param {!number} y The new y, in workspace units.
- * @param {!number} width The new width, in workspace units.
- * @param {!number} height The new height, in workspace units.
+ * @param {number} x The new x, in workspace units.
+ * @param {number} y The new y, in workspace units.
+ * @param {number} width The new width, in workspace units.
+ * @param {number} height The new height, in workspace units.
  * @private
  */
 Blockly.CursorSvg.prototype.positionRect_ = function(x, y, width, height) {
@@ -459,8 +459,10 @@ Blockly.CursorSvg.prototype.hide = function() {
  */
 Blockly.CursorSvg.prototype.draw = function(curNode) {
   if (!curNode) {
+    this.hide();
     return;
   }
+
   if (curNode.getType() === Blockly.ASTNode.types.BLOCK) {
     var block = /** @type {Blockly.BlockSvg} */ (curNode.getLocation());
     this.showWithBlockPrevOutput_(block);

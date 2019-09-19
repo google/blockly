@@ -836,6 +836,7 @@ Blockly.navigation.toolboxOnAction_ = function(action) {
   var handled = toolbox.onBlocklyAction(action);
   if (!handled && action.name === Blockly.navigation.actionNames.IN) {
     Blockly.navigation.focusFlyout_();
+    return true;
   }
 
   return handled;

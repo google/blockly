@@ -424,16 +424,17 @@ Blockly.WorkspaceSvg.prototype.getRenderer = function() {
 
 /**
  * Sets the cursor for use with keyboard navigation.
+ *
  * @param {Blockly.Cursor} cursor The cursor used to move around this workspace.
  * @override
  */
 Blockly.WorkspaceSvg.prototype.setCursor = function(cursor) {
-  if (this.cursor_) {
+  if (this.cursor_ && this.cursor_.getDrawer()) {
     this.cursor_.getDrawer().dispose();
   }
   this.cursor_ = cursor;
   if (this.cursor_) {
-    this.cursor_.setDrawer(new Blockly.CursorSvg(this, false));
+    this.cursor_.setDrawer(this.getRenderer().makeCursorDrawer(this, false));
     this.setCursorSvg(this.cursor_.getDrawer().createDom());
   }
 };
@@ -445,12 +446,12 @@ Blockly.WorkspaceSvg.prototype.setCursor = function(cursor) {
  * @override
  */
 Blockly.WorkspaceSvg.prototype.setMarker = function(marker) {
-  if (this.marker_) {
+  if (this.marker_ && this.marker_.getDrawer()) {
     this.marker_.getDrawer().dispose();
   }
   this.marker_ = marker;
   if (this.marker_) {
-    this.marker_.setDrawer(new Blockly.CursorSvg(this, true));
+    this.marker_.setDrawer(this.getRenderer().makeCursorDrawer(this, true));
     this.setMarkerSvg(this.marker_.getDrawer().createDom());
   }
 };
@@ -662,9 +663,11 @@ Blockly.WorkspaceSvg.prototype.createDom = function(opt_backgroundClass) {
   }
   this.recordDeleteAreas();
 
+  this.cursor_.setDrawer(this.getRenderer().makeCursorDrawer(this, false));
   var svgCursor = this.cursor_.getDrawer().createDom();
   this.svgGroup_.appendChild(svgCursor);
 
+  this.marker_.setDrawer(this.getRenderer().makeCursorDrawer(this, true));
   var svgMarker = this.marker_.getDrawer().createDom();
   this.svgGroup_.appendChild(svgMarker);
 

@@ -31,6 +31,7 @@ goog.require('Blockly.Events');
 goog.require('Blockly.Events.BlockChange');
 goog.require('Blockly.Field');
 goog.require('Blockly.fieldRegistry');
+goog.require('Blockly.navigation');
 goog.require('Blockly.utils.aria');
 goog.require('Blockly.utils.colour');
 goog.require('Blockly.utils.dom');

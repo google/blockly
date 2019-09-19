@@ -40,7 +40,6 @@ goog.require('Blockly.utils.Coordinate');
 goog.require('Blockly.utils.object');
 goog.require('Blockly.fieldRegistry');
 goog.require('Blockly.utils.string');
-goog.require('Blockly.Warning');
 goog.require('Blockly.Workspace');
 
 

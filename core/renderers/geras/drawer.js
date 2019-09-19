@@ -62,7 +62,9 @@ Blockly.geras.Drawer.prototype.draw = function() {
 
   this.block_.pathObject.setPaths(this.outlinePath_ + '\n' + this.inlinePath_,
       this.highlighter_.getPath());
-
+  if (this.info_.RTL) {
+    this.block_.pathObject.flipRTL();
+  }
   if (Blockly.blockRendering.useDebugger) {
     this.block_.renderingDebugger.drawDebug(this.block_, this.info_);
   }

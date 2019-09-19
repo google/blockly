@@ -27,27 +27,41 @@
 
 goog.provide('Blockly.requires');
 
-// Blockly Core.
+// Blockly Core (absolutely mandatory).
 goog.require('Blockly');
+
+
+// If block comments aren't required, then Blockly.inject's "comments"
+// configuration must be false, and no blocks may be loaded from XML which
+// define comments.
 goog.require('Blockly.Comment');
-goog.require('Blockly.Mutator');
+// If a trashcan on the workspace isn't required, then Blockly.inject's
+// "trashcan" configuration must be false.
 goog.require('Blockly.Trashcan');
+// If zoom controls aren't required, then Blockly.inject's
+// "zoom"/"controls" configuration must be false.
 goog.require('Blockly.ZoomControls');
-// Blockly Fields.
-goog.require('Blockly.FieldAngle');
-goog.require('Blockly.FieldCheckbox');
-goog.require('Blockly.FieldColour');
-// Date picker commented out since it increases footprint by 60%.
-// Add it only if you need it.
-// goog.require('Blockly.FieldDate');
-goog.require('Blockly.FieldDropdown');
-goog.require('Blockly.FieldLabelSerializable');
-goog.require('Blockly.FieldImage');
-goog.require('Blockly.FieldTextInput');
-goog.require('Blockly.FieldMultilineInput');
-goog.require('Blockly.FieldNumber');
-goog.require('Blockly.FieldVariable');
+
+
+// Block dependencies.
+// None of these should be required since individual block files should
+// include the requirements they depend on.
+// goog.require('Blockly.Mutator');
+// goog.require('Blockly.FieldAngle');
+// goog.require('Blockly.FieldCheckbox');
+// goog.require('Blockly.FieldColour');
+// goog.require('Blockly.FieldDropdown');
+// goog.require('Blockly.FieldLabelSerializable');
+// goog.require('Blockly.FieldImage');
+// goog.require('Blockly.FieldTextInput');
+// goog.require('Blockly.FieldMultilineInput');
+// goog.require('Blockly.FieldNumber');
+// goog.require('Blockly.FieldVariable');
+
+
 // Blockly Renderers.
+// At least one renderer is mandatory.  Geras is the default one.
+// Others may be chosen using Blockly.inject's "renderer" configuration.
 goog.require('Blockly.geras.Renderer');
-goog.require('Blockly.thrasos.Renderer');
-goog.require('Blockly.zelos.Renderer');
+// goog.require('Blockly.thrasos.Renderer');
+// goog.require('Blockly.zelos.Renderer');

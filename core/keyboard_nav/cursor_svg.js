@@ -463,7 +463,7 @@ Blockly.CursorSvg.prototype.draw = function(curNode) {
     this.hide();
     return;
   }
-  curNode = /** @type {!Blockly.ASTNode} */ (curNode);
+
   if (curNode.getType() === Blockly.ASTNode.types.BLOCK) {
     var block = /** @type {Blockly.BlockSvg} */ (curNode.getLocation());
     this.showWithBlockPrevOutput_(block);

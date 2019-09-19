@@ -31,6 +31,7 @@ suite('Navigation', function() {
     var workspace = Blockly.inject('blocklyDiv', {toolbox: toolbox});
     if (enableKeyboardNav) {
       Blockly.navigation.enableKeyboardAccessibility();
+      Blockly.navigation.currentState_ = Blockly.navigation.STATE_WS;
     }
     return workspace;
   }
@@ -352,6 +353,7 @@ suite('Navigation', function() {
       Blockly.user.keyMap.setKeyMap(Blockly.user.keyMap.createDefaultKeyMap());
       Blockly.mainWorkspace = this.workspace;
       Blockly.keyboardAccessibilityMode = true;
+      Blockly.navigation.currentState_ = Blockly.navigation.STATE_WS;
 
       this.mockEvent = {
         getModifierState: function() {
@@ -360,7 +362,9 @@ suite('Navigation', function() {
       };
     });
     test('Action does not exist', function() {
+      var block = new Blockly.Block(this.workspace);
       var field = new Blockly.FieldDropdown([['a','b'], ['c','d']]);
+      field.setSourceBlock(block);
       sinon.spy(field, 'onBlocklyAction');
       this.workspace.getCursor().setLocation(Blockly.ASTNode.createFieldNode(field));
 
@@ -373,7 +377,9 @@ suite('Navigation', function() {
     });
 
     test('Action exists - field handles action', function() {
+      var block = new Blockly.Block(this.workspace);
       var field = new Blockly.FieldDropdown([['a','b'], ['c','d']]);
+      field.setSourceBlock(block);
       sinon.stub(field, 'onBlocklyAction').callsFake(function(){
         return true;
       });
@@ -387,7 +393,9 @@ suite('Navigation', function() {
     });
 
     test('Action exists - field does not handle action', function() {
+      var block = new Blockly.Block(this.workspace);
       var field = new Blockly.FieldDropdown([['a','b'], ['c','d']]);
+      field.setSourceBlock(block);
       sinon.spy(field, 'onBlocklyAction');
       this.workspace.getCursor().setLocation(Blockly.ASTNode.createFieldNode(field));
 
@@ -455,6 +463,8 @@ suite('Navigation', function() {
         this.workspace.setCursor(new Blockly.Cursor());
         Blockly.mainWorkspace = this.workspace;
         Blockly.keyboardAccessibilityMode = true;
+        Blockly.navigation.currentState_ = Blockly.navigation.STATE_WS;
+
         this.fieldBlock1 = this.workspace.newBlock('field_block');
         this.mockEvent = {
           getModifierState: function() {

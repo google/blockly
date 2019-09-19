@@ -35,6 +35,7 @@ goog.require('Blockly.Events');
 goog.require('Blockly.Events.Ui');
 goog.require('Blockly.Events.BlockMove');
 goog.require('Blockly.Msg');
+goog.require('Blockly.Mutator');
 goog.require('Blockly.RenderedConnection');
 goog.require('Blockly.Tooltip');
 goog.require('Blockly.Touch');
@@ -43,6 +44,7 @@ goog.require('Blockly.utils.Coordinate');
 goog.require('Blockly.utils.dom');
 goog.require('Blockly.utils.object');
 goog.require('Blockly.utils.Rect');
+goog.require('Blockly.Warning');
 
 
 /**

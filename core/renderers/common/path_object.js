@@ -40,17 +40,6 @@ goog.require('Blockly.utils.dom');
 Blockly.blockRendering.IPathObject = function(_root) {};
 
 /**
- * @type {function(...)}
- */
-Blockly.blockRendering.IPathObject.prototype.setPaths;
-
-/**
- * @type {function()}
- */
-Blockly.blockRendering.IPathObject.prototype.flipRTL;
-
-
-/**
  * An object that handles creating and setting each of the SVG elements
  * used by the renderer.
  * @param {!SVGElement} root The root SVG element.

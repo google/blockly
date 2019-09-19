@@ -1,4 +1,39 @@
+/**
+ * @license
+ * Visual Blocks Editor
+ *
+ * Copyright 2019 Google Inc.
+ * https://developers.google.com/blockly/
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/**
+ * @fileoverview Navigation tests.
+ * @author aschmiedt@google.com (Abby Schmiedt)
+ */
+'use strict';
+
+
 suite('Navigation', function() {
+  function createNavigationWorkspace(enableKeyboardNav) {
+    var toolbox = document.getElementById('toolbox-categories');
+    var workspace = Blockly.inject('blocklyDiv', {toolbox: toolbox});
+    if (enableKeyboardNav) {
+      Blockly.navigation.enableKeyboardAccessibility();
+    }
+    return workspace;
+  }
 
   // Test that toolbox key handlers call through to the right functions and
   // transition correctly between toolbox, workspace, and flyout.
@@ -15,9 +50,7 @@ suite('Navigation', function() {
           }
         ]
       }]);
-      var toolbox = document.getElementById('toolbox-categories');
-      this.workspace = Blockly.inject('blocklyDiv', {toolbox: toolbox});
-      Blockly.keyboardAccessibilityMode = true;
+      this.workspace = createNavigationWorkspace(true);
       Blockly.navigation.focusToolbox_();
       this.mockEvent = {
         getModifierState: function() {
@@ -134,8 +167,7 @@ suite('Navigation', function() {
           }
         ]
       }]);
-      var toolbox = document.getElementById('toolbox-categories');
-      this.workspace = Blockly.inject('blocklyDiv', {toolbox: toolbox});
+      this.workspace = createNavigationWorkspace(true);
       Blockly.navigation.focusToolbox_();
       Blockly.navigation.focusFlyout_();
       this.mockEvent = {
@@ -226,9 +258,7 @@ suite('Navigation', function() {
         "previousStatement": null,
         "nextStatement": null
       }]);
-      var toolbox = document.getElementById('toolbox-categories');
-      this.workspace = Blockly.inject('blocklyDiv', {toolbox: toolbox});
-      Blockly.navigation.enableKeyboardAccessibility();
+      this.workspace = createNavigationWorkspace(true);
       this.basicBlock = this.workspace.newBlock('basic_block');
       this.firstCategory_ = this.workspace.getToolbox().tree_.firstChild_;
       this.mockEvent = {
@@ -424,8 +454,8 @@ suite('Navigation', function() {
         this.workspace = new Blockly.Workspace({readOnly: true});
         this.workspace.setCursor(new Blockly.Cursor());
         Blockly.mainWorkspace = this.workspace;
-        this.fieldBlock1 = this.workspace.newBlock('field_block');
         Blockly.keyboardAccessibilityMode = true;
+        this.fieldBlock1 = this.workspace.newBlock('field_block');
         this.mockEvent = {
           getModifierState: function() {
             return false;
@@ -435,7 +465,6 @@ suite('Navigation', function() {
 
       teardown(function() {
         delete Blockly.Blocks['field_block'];
-        Blockly.mainWorkspace = null;
         this.workspace.dispose();
       });
 
@@ -472,8 +501,7 @@ suite('Navigation', function() {
         "nextStatement": null,
       }]);
 
-      var toolbox = document.getElementById('toolbox-categories');
-      this.workspace = Blockly.inject('blocklyDiv', {toolbox: toolbox});
+      this.workspace = createNavigationWorkspace(true);
 
       var basicBlock = this.workspace.newBlock('basic_block');
       var basicBlock2 = this.workspace.newBlock('basic_block');
@@ -561,8 +589,7 @@ suite('Navigation', function() {
         "helpUrl": ""
       }]);
 
-      var toolbox = document.getElementById('toolbox-categories');
-      this.workspace = Blockly.inject('blocklyDiv', {toolbox: toolbox});
+      this.workspace = createNavigationWorkspace(true);
 
       var basicBlock = this.workspace.newBlock('basic_block');
       var basicBlock2 = this.workspace.newBlock('basic_block');
@@ -653,9 +680,7 @@ suite('Navigation', function() {
         "previousStatement": null,
         "nextStatement": null,
       }]);
-      var toolbox = document.getElementById('toolbox-categories');
-      this.workspace = Blockly.inject('blocklyDiv', {toolbox: toolbox});
-      Blockly.navigation.enableKeyboardAccessibility();
+      this.workspace = createNavigationWorkspace(true);
       this.basicBlockA = this.workspace.newBlock('basic_block');
       this.basicBlockB = this.workspace.newBlock('basic_block');
     });

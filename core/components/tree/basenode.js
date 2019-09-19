@@ -1159,7 +1159,7 @@ Blockly.tree.BaseNode.prototype.onKeyDown = function(e) {
 
 /**
  * Select the next node.
- * @return {boolean} True if the field handled the action, false otherwise.
+ * @return {boolean} True if the action has been handled, false otherwise.
  * @package
  */
 Blockly.tree.BaseNode.prototype.selectNext = function() {
@@ -1172,7 +1172,7 @@ Blockly.tree.BaseNode.prototype.selectNext = function() {
 
 /**
  * Select the previous node.
- * @return {boolean} True if the field handled the action, false otherwise.
+ * @return {boolean} True if the action has been handled, false otherwise.
  * @package
  */
 Blockly.tree.BaseNode.prototype.selectPrevious = function() {
@@ -1185,7 +1185,7 @@ Blockly.tree.BaseNode.prototype.selectPrevious = function() {
 
 /**
  * Select the parent node or collapse the current node.
- * @return {boolean} True if the field handled the action, false otherwise.
+ * @return {boolean} True if the action has been handled, false otherwise.
  * @package
  */
 Blockly.tree.BaseNode.prototype.selectParent = function() {
@@ -1205,7 +1205,7 @@ Blockly.tree.BaseNode.prototype.selectParent = function() {
 /**
  * Expand the current node if it's not already expanded, or select the
  * child node.
- * @return {boolean} True if the field handled the action, false otherwise.
+ * @return {boolean} True if the action has been handled, false otherwise.
  * @protected
  */
 Blockly.tree.BaseNode.prototype.selectChild = function() {

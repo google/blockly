@@ -445,6 +445,12 @@ Blockly.FieldAngle.prototype.doClassValidation_ = function(opt_newValue) {
   return this.wrapValue_(value);
 };
 
+/**
+ * Wraps the value so that it is in the range (-360 + wrap, wrap).
+ * @param {number} value The value to wrap.
+ * @return {number} The wrapped value.
+ * @private
+ */
 Blockly.FieldAngle.prototype.wrapValue_ = function(value) {
   value %= 360;
   if (value < 0) {

@@ -27,7 +27,6 @@
 goog.provide('Blockly.Block');
 
 goog.require('Blockly.Blocks');
-goog.require('Blockly.Comment');
 goog.require('Blockly.Connection');
 goog.require('Blockly.Events');
 goog.require('Blockly.Events.BlockChange');

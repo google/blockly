@@ -29,6 +29,7 @@ goog.provide('Blockly.requires');
 
 // Blockly Core.
 goog.require('Blockly');
+goog.require('Blockly.Comment');
 goog.require('Blockly.Mutator');
 goog.require('Blockly.Trashcan');
 goog.require('Blockly.ZoomControls');

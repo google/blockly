@@ -438,7 +438,7 @@ Blockly.ASTNode.prototype.findTopASTNodeForBlock_ = function(block) {
 /**
  * Get the AST node pointing to the input that the block is nested under or if
  * the block is not nested then get the stack AST node.
- * @param {!Blockly.Block} block The source block of the current location.
+ * @param {Blockly.Block} block The source block of the current location.
  * @return {Blockly.ASTNode} The AST node pointing to the input connection or
  *     the top block of the stack this block is in.
  * @private
@@ -571,6 +571,7 @@ Blockly.ASTNode.prototype.in = function() {
       return this.findTopASTNodeForBlock_(block);
 
     case Blockly.ASTNode.types.BLOCK:
+      var block = /** @type {!Blockly.Block} */ (this.location_);
       return this.findFirstFieldOrInput_(this.location_);
 
     case Blockly.ASTNode.types.INPUT:

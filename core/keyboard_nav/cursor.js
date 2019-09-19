@@ -184,7 +184,7 @@ Blockly.Cursor.prototype.out = function() {
   }
   var newNode = curNode.out();
   
-  if (newNode.getType() === Blockly.ASTNode.types.BLOCK) {
+  if (newNode && newNode.getType() === Blockly.ASTNode.types.BLOCK) {
     newNode = newNode.prev();
   }
 

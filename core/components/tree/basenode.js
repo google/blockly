@@ -40,7 +40,7 @@ goog.require('Blockly.utils.style');
  *
  * @param {string} content The content of the node label treated as
  *     plain-text and will be HTML escaped.
- * @param {Blockly.tree.BaseNode.Config} config The configuration for the tree.
+ * @param {!Blockly.tree.BaseNode.Config} config The configuration for the tree.
  * @constructor
  * @extends {Blockly.Component}
  */
@@ -49,7 +49,7 @@ Blockly.tree.BaseNode = function(content, config) {
 
   /**
    * The configuration for the tree.
-   * @type {Blockly.tree.BaseNode.Config}
+   * @type {!Blockly.tree.BaseNode.Config}
    * @private
    */
   this.config_ = config;
@@ -488,6 +488,17 @@ Blockly.tree.BaseNode.prototype.select = function() {
 };
 
 /**
+ * Selects the first node.
+ * @protected
+ */
+Blockly.tree.BaseNode.prototype.selectFirst = function() {
+  var tree = this.getTree();
+  if (tree && this.firstChild_) {
+    tree.setSelectedItem(this.firstChild_);
+  }
+};
+
+/**
  * Called from the tree to instruct the node change its selection state.
  * @param {boolean} selected The new selection state.
  * @protected
@@ -885,7 +896,7 @@ Blockly.tree.BaseNode.prototype.getElement = function() {
 /**
  * @return {Element} The row is the div that is used to draw the node without
  *     the children.
- * @protected
+ * @package
  */
 Blockly.tree.BaseNode.prototype.getRowElement = function() {
   var el = this.getElement();
@@ -1222,7 +1233,7 @@ Blockly.tree.BaseNode.prototype.getPreviousShownNode = function() {
 };
 
 /**
- * @return {Blockly.tree.BaseNode.Config} The configuration for the tree.
+ * @return {!Blockly.tree.BaseNode.Config} The configuration for the tree.
  * @protected
  */
 Blockly.tree.BaseNode.prototype.getConfig = function() {

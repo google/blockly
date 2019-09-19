@@ -34,14 +34,6 @@ goog.require('Blockly.user.keyMap');
 
 
 /**
- * The current selected category if the toolbox is open or
- * last selected category if focus is on a different element.
- * @type {Blockly.tree.BaseNode}
- * @private
- */
-Blockly.navigation.currentCategory_ = null;
-
-/**
  * A function to call to give feedback to the user about logs, warnings, and
  * errors.  You can override this to customize feedback (e.g. warning sounds,
  * reading out the warning text, etc).
@@ -154,94 +146,7 @@ Blockly.navigation.focusToolbox_ = function() {
   if (!Blockly.getMainWorkspace().getMarker().getCurNode()) {
     Blockly.navigation.markAtCursor_();
   }
-  if (workspace && !Blockly.navigation.currentCategory_) {
-    Blockly.navigation.currentCategory_ = toolbox.tree_.firstChild_;
-  }
-  toolbox.tree_.setSelectedItem(Blockly.navigation.currentCategory_);
-};
-
-/**
- * Select the next category.
- * Taken from closure/goog/ui/tree/basenode.js
- * @private
- */
-Blockly.navigation.nextCategory_ = function() {
-  if (!Blockly.navigation.currentCategory_) {
-    return;
-  }
-  var curCategory = Blockly.navigation.currentCategory_;
-  var nextNode = curCategory.getNextShownNode();
-
-  if (nextNode) {
-    nextNode.select();
-    Blockly.navigation.currentCategory_ = nextNode;
-  }
-};
-
-/**
- * Select the previous category.
- * Taken from closure/goog/ui/tree/basenode.js
- * @private
- */
-Blockly.navigation.previousCategory_ = function() {
-  if (!Blockly.navigation.currentCategory_) {
-    return;
-  }
-  var curCategory = Blockly.navigation.currentCategory_;
-  var previousNode = curCategory.getPreviousShownNode();
-
-  if (previousNode) {
-    previousNode.select();
-    Blockly.navigation.currentCategory_ = previousNode;
-  }
-};
-
-/**
- * Go to child category if there is a nested category.
- * Taken from closure/goog/ui/tree/basenode.js
- * @private
- */
-Blockly.navigation.inCategory_ = function() {
-  if (!Blockly.navigation.currentCategory_) {
-    return;
-  }
-  var curCategory = Blockly.navigation.currentCategory_;
-
-  if (curCategory.hasChildren()) {
-    if (!curCategory.getExpanded()) {
-      curCategory.setExpanded(true);
-    } else {
-      curCategory.getFirstChild().select();
-      Blockly.navigation.currentCategory_ = curCategory.getFirstChild();
-    }
-  } else {
-    Blockly.navigation.focusFlyout_();
-  }
-};
-
-/**
- * Go to parent category if we are in a child category.
- * Taken from closure/goog/ui/tree/basenode.js
- * @private
- */
-Blockly.navigation.outCategory_ = function() {
-  if (!Blockly.navigation.currentCategory_) {
-    return;
-  }
-  var curCategory = Blockly.navigation.currentCategory_;
-
-  if (curCategory.hasChildren() && curCategory.getExpanded() && curCategory.isUserCollapsible()) {
-    curCategory.setExpanded(false);
-  } else {
-    var parent = curCategory.getParent();
-    var tree = curCategory.getTree();
-    if (parent && parent != tree) {
-      parent.select();
-
-      Blockly.navigation.currentCategory_ = /** @type {Blockly.tree.BaseNode} */
-        (parent);
-    }
-  }
+  toolbox.selectFirst();
 };
 
 /***********************/
@@ -923,25 +828,17 @@ Blockly.navigation.flyoutOnAction_ = function(action) {
  * @private
  */
 Blockly.navigation.toolboxOnAction_ = function(action) {
-  switch (action.name) {
-    case Blockly.navigation.actionNames.PREVIOUS:
-      Blockly.navigation.previousCategory_();
-      return true;
-    case Blockly.navigation.actionNames.OUT:
-      Blockly.navigation.outCategory_();
-      return true;
-    case Blockly.navigation.actionNames.NEXT:
-      Blockly.navigation.nextCategory_();
-      return true;
-    case Blockly.navigation.actionNames.IN:
-      Blockly.navigation.inCategory_();
-      return true;
-    case Blockly.navigation.actionNames.EXIT:
-      Blockly.navigation.focusWorkspace_();
-      return true;
-    default:
-      return false;
+  if (action.name === Blockly.navigation.actionNames.EXIT) {
+    Blockly.navigation.focusWorkspace_();
+    return true;
   }
+  var toolbox = Blockly.getMainWorkspace().getToolbox();
+  var handled = toolbox.onBlocklyAction(action);
+  if (!handled && action.name === Blockly.navigation.actionNames.IN) {
+    Blockly.navigation.focusFlyout_();
+  }
+
+  return handled;
 };
 
 /**

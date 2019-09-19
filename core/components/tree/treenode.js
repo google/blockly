@@ -39,7 +39,7 @@ goog.require('Blockly.utils.KeyCodes');
  * @param {Blockly.Toolbox} toolbox The parent toolbox for this tree.
  * @param {string} content The content of the node label treated as
  *     plain-text and will be HTML escaped.
- * @param {Blockly.tree.BaseNode.Config} config The configuration for the tree.
+ * @param {!Blockly.tree.BaseNode.Config} config The configuration for the tree.
  * @constructor
  * @extends {Blockly.tree.BaseNode}
  */

@@ -1127,43 +1127,22 @@ Blockly.tree.BaseNode.prototype.onKeyDown = function(e) {
       if (e.altKey) {
         break;
       }
-      if (this.hasChildren()) {
-        if (!this.getExpanded()) {
-          this.setExpanded(true);
-        } else {
-          this.getFirstChild().select();
-        }
-      }
+      handled = this.selectChild();
       break;
 
     case Blockly.utils.KeyCodes.LEFT:
       if (e.altKey) {
         break;
       }
-      if (this.hasChildren() && this.getExpanded() && this.isUserCollapsible_) {
-        this.setExpanded(false);
-      } else {
-        var parent = this.getParent();
-        var tree = this.getTree();
-        // don't go to root if hidden
-        if (parent && (parent != tree)) {
-          parent.select();
-        }
-      }
+      handled = this.selectParent();
       break;
 
     case Blockly.utils.KeyCodes.DOWN:
-      var nextNode = this.getNextShownNode();
-      if (nextNode) {
-        nextNode.select();
-      }
+      handled = this.selectNext();
       break;
 
     case Blockly.utils.KeyCodes.UP:
-      var previousNode = this.getPreviousShownNode();
-      if (previousNode) {
-        previousNode.select();
-      }
+      handled = this.selectPrevious();
       break;
 
     default:
@@ -1175,6 +1154,70 @@ Blockly.tree.BaseNode.prototype.onKeyDown = function(e) {
   }
 
   return handled;
+};
+
+
+/**
+ * Select the next node.
+ * @return {boolean} True if the field handled the action, false otherwise.
+ * @package
+ */
+Blockly.tree.BaseNode.prototype.selectNext = function() {
+  var nextNode = this.getNextShownNode();
+  if (nextNode) {
+    nextNode.select();
+  }
+  return true;
+};
+
+/**
+ * Select the previous node.
+ * @return {boolean} True if the field handled the action, false otherwise.
+ * @package
+ */
+Blockly.tree.BaseNode.prototype.selectPrevious = function() {
+  var previousNode = this.getPreviousShownNode();
+  if (previousNode) {
+    previousNode.select();
+  }
+  return true;
+};
+
+/**
+ * Select the parent node or collapse the current node.
+ * @return {boolean} True if the field handled the action, false otherwise.
+ * @package
+ */
+Blockly.tree.BaseNode.prototype.selectParent = function() {
+  if (this.hasChildren() && this.getExpanded() && this.isUserCollapsible_) {
+    this.setExpanded(false);
+  } else {
+    var parent = this.getParent();
+    var tree = this.getTree();
+    // don't go to root if hidden
+    if (parent && (parent != tree)) {
+      parent.select();
+    }
+  }
+  return true;
+};
+
+/**
+ * Expand the current node if it's not already expanded, or select the
+ * child node.
+ * @return {boolean} True if the field handled the action, false otherwise.
+ * @protected
+ */
+Blockly.tree.BaseNode.prototype.selectChild = function() {
+  if (this.hasChildren()) {
+    if (!this.getExpanded()) {
+      this.setExpanded(true);
+    } else {
+      this.getFirstChild().select();
+    }
+    return true;
+  }
+  return false;
 };
 
 /**

@@ -17,6 +17,7 @@ suite('Navigation', function() {
       }]);
       var toolbox = document.getElementById('toolbox-categories');
       this.workspace = Blockly.inject('blocklyDiv', {toolbox: toolbox});
+      Blockly.keyboardAccessibilityMode = true;
       Blockly.navigation.focusToolbox_();
       this.mockEvent = {
         getModifierState: function() {
@@ -31,7 +32,6 @@ suite('Navigation', function() {
     teardown(function() {
       delete Blockly.Blocks['basic_block'];
       this.workspace.dispose();
-      Blockly.navigation.currentCategory_ = null;
     });
 
     test('Next', function() {
@@ -39,43 +39,45 @@ suite('Navigation', function() {
       chai.assert.isTrue(Blockly.navigation.onKeyPress(this.mockEvent));
       chai.assert.equal(Blockly.navigation.currentState_,
           Blockly.navigation.STATE_TOOLBOX);
-      chai.assert.equal(Blockly.navigation.currentCategory_,
+      chai.assert.equal(this.workspace.getToolbox().tree_.getSelectedItem(),
           this.secondCategory_);
     });
 
     // Should be a no-op.
     test('Next at end', function() {
-      Blockly.navigation.nextCategory_();
+      this.workspace.getToolbox().tree_.getSelectedItem().selectNext();
       this.mockEvent.keyCode = Blockly.utils.KeyCodes.S;
-      var startCategory = Blockly.navigation.currentCategory_;
+      // Go forward one so that we can go back one.
+      Blockly.navigation.onKeyPress(this.mockEvent);
+      var startCategory = this.workspace.getToolbox().tree_.getSelectedItem();
       chai.assert.isTrue(Blockly.navigation.onKeyPress(this.mockEvent));
       chai.assert.equal(Blockly.navigation.currentState_,
           Blockly.navigation.STATE_TOOLBOX);
-      chai.assert.equal(Blockly.navigation.currentCategory_,
+      chai.assert.equal(this.workspace.getToolbox().tree_.getSelectedItem(),
           startCategory);
     });
 
     test('Previous', function() {
       // Go forward one so that we can go back one:
-      Blockly.navigation.nextCategory_();
+      this.workspace.getToolbox().tree_.getSelectedItem().selectNext();
       this.mockEvent.keyCode = Blockly.utils.KeyCodes.W;
-      chai.assert.equal(Blockly.navigation.currentCategory_,
+      chai.assert.equal(this.workspace.getToolbox().tree_.getSelectedItem(),
           this.secondCategory_);
       chai.assert.isTrue(Blockly.navigation.onKeyPress(this.mockEvent));
       chai.assert.equal(Blockly.navigation.currentState_,
           Blockly.navigation.STATE_TOOLBOX);
-      chai.assert.equal(Blockly.navigation.currentCategory_,
+      chai.assert.equal(this.workspace.getToolbox().tree_.getSelectedItem(),
           this.firstCategory_);
     });
 
     // Should be a no-op.
     test('Previous at start', function() {
-      var startCategory = Blockly.navigation.currentCategory_;
+      var startCategory = this.workspace.getToolbox().tree_.getSelectedItem();
       this.mockEvent.keyCode = Blockly.utils.KeyCodes.W;
       chai.assert.isTrue(Blockly.navigation.onKeyPress(this.mockEvent));
       chai.assert.equal(Blockly.navigation.currentState_,
           Blockly.navigation.STATE_TOOLBOX);
-      chai.assert.equal(Blockly.navigation.currentCategory_,
+      chai.assert.equal(this.workspace.getToolbox().tree_.getSelectedItem(),
           startCategory);
     });
 
@@ -146,7 +148,6 @@ suite('Navigation', function() {
     teardown(function() {
       delete Blockly.Blocks['basic_block'];
       this.workspace.dispose();
-      Blockly.navigation.currentCategory_ = null;
     });
 
     // Should be a no-op
@@ -240,7 +241,6 @@ suite('Navigation', function() {
     teardown(function() {
       delete Blockly.Blocks['basic_block'];
       this.workspace.dispose();
-      Blockly.navigation.currentCategory_ = null;
     });
 
     test('Previous', function() {
@@ -310,7 +310,7 @@ suite('Navigation', function() {
     test('Toolbox', function() {
       this.mockEvent.keyCode = Blockly.utils.KeyCodes.T;
       chai.assert.isTrue(Blockly.navigation.onKeyPress(this.mockEvent));
-      chai.assert.equal(Blockly.navigation.currentCategory_, this.firstCategory_);
+      chai.assert.equal(this.workspace.getToolbox().tree_.getSelectedItem(), this.firstCategory_);
       chai.assert.equal(Blockly.navigation.currentState_,
           Blockly.navigation.STATE_TOOLBOX);
     });
@@ -485,7 +485,6 @@ suite('Navigation', function() {
     teardown(function() {
       delete Blockly.Blocks['basic_block'];
       this.workspace.dispose();
-      Blockly.navigation.currentCategory_ = null;
     });
 
     test('Insert from flyout with a valid connection marked', function() {
@@ -592,7 +591,6 @@ suite('Navigation', function() {
     teardown(function() {
       delete Blockly.Blocks['basic_block'];
       this.workspace.dispose();
-      Blockly.navigation.currentCategory_ = null;
     });
 
     test('Connect cursor on previous into stack', function() {

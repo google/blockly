@@ -85,7 +85,7 @@ function prependHeader() {
 
 /**
  * Helper method for calling the Closure compiler.
- * @param {*} compilerOptions 
+ * @param {*} compilerOptions
  * @param {boolean=} opt_verbose Optional option for verbose logging
  */
 function compile(compilerOptions, opt_verbose) {
@@ -149,7 +149,8 @@ goog.provide('Blockly.FieldLabel');
 goog.provide('Blockly.FieldMultilineInput');
 goog.provide('Blockly.FieldNumber');
 goog.provide('Blockly.FieldTextInput');
-goog.provide('Blockly.FieldVariable');`;
+goog.provide('Blockly.FieldVariable');
+goog.provide('Blockly.Mutator');`;
   return gulp.src('blocks/*.js', {base: './'})
     // Add Blockly.Blocks to be compatible with the compiler.
     .pipe(gulp.replace(`goog.provide('Blockly.Constants.Colour');`,
@@ -700,7 +701,7 @@ gulp.task('package-node-core', function() {
  * A helper method for packaging a Blockly code generator into a UMD module.
  * @param {string} file Source file name.
  * @param {string} rename Destination file name.
- * @param {string} generator Generator export namespace. 
+ * @param {string} generator Generator export namespace.
  */
 function packageGenerator(file, rename, generator) {
   return gulp.src(file)

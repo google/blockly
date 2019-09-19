@@ -97,9 +97,6 @@ Blockly.Extensions.registerMixin = function(name, mixinObj) {
 Blockly.Extensions.registerMutator = function(name, mixinObj, opt_helperFn,
     opt_blockList) {
   var errorPrefix = 'Error when registering mutator "' + name + '": ';
-  if (!Blockly.Mutator) {
-    throw Error(errorPrefix + 'Missing require for Blockly.Mutator');
-  }
 
   // Sanity check the mixin object before registering it.
   Blockly.Extensions.checkHasFunction_(
@@ -117,6 +114,9 @@ Blockly.Extensions.registerMutator = function(name, mixinObj, opt_helperFn,
   // Sanity checks passed.
   Blockly.Extensions.register(name, function() {
     if (hasMutatorDialog) {
+      if (!Blockly.Mutator) {
+        throw Error(errorPrefix + 'Missing require for Blockly.Mutator');
+      }
       this.setMutator(new Blockly.Mutator(opt_blockList));
     }
     // Mixin the object.

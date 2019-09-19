@@ -257,6 +257,7 @@ goog.provide('Blockly.FieldMultilineInput');
 goog.provide('Blockly.FieldNumber');
 goog.provide('Blockly.FieldTextInput');
 goog.provide('Blockly.FieldVariable');
+goog.provide('Blockly.Mutator');
 """))
     # Read in all the source files.
     filenames = glob.glob(os.path.join("blocks", "*.js"))

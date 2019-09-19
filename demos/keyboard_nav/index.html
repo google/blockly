@@ -22,8 +22,8 @@
       display: flex;
     }
     #keyboard_nav {
-      border: 1px solid black;
       background-color: #ededed;
+      border: 1px solid black;
       padding: 1em;
     }
     #keyboard_announce {
@@ -39,9 +39,9 @@
       margin-right: .5em;
       min-width: 100px;
     }
-    div[actionname] {
-      width: 100%;
+    div[data-actionname] {
       display: flex;
+      width: 100%;
     }
     select {
       font-size: .8em;
@@ -83,7 +83,7 @@
   </p>
 
   <p>
-    Enable Accessibility Mode:
+    <label for="accessibilityModeCheck">Enable Accessibility Mode:</label>
     <input type="checkbox" onclick="toggleAccessibilityMode(this.checked)" id="accessibilityModeCheck">
     <select id="cursorChanger" name="cursor" onchange="changeCursor(this.value)">
       <option value="default">Default Cursor</option>
@@ -323,7 +323,8 @@
       var restoredMap = {};
       if (sessionStorage && stringifiedMap) {
         var keyMap = JSON.parse(stringifiedMap);
-        for (var i = 0, key; key = Object.keys(keyMap)[i]; i++) {
+        var keys = Object.keys(keyMap);
+        for (var i = 0, key; key = keys[i]; i++) {
           restoredMap[key] = Object.assign(new Blockly.Action, keyMap[key]);
         }
         Blockly.user.keyMap.setKeyMap(restoredMap);
@@ -354,12 +355,12 @@
       // Get the key code from the last dropdown.
       if (keyValue !== 'None') {
         if (keyValue === 'Escape') {
-            newKeyCode = Blockly.utils.KeyCodes.ESC;
-          } else if (keyValue === 'Enter') {
-            newKeyCode = Blockly.utils.KeyCodes.ENTER;
-          } else {
-            newKeyCode = keyValue.toUpperCase().charCodeAt(0);
-          }
+          newKeyCode = Blockly.utils.KeyCodes.ESC;
+        } else if (keyValue === 'Enter') {
+          newKeyCode = Blockly.utils.KeyCodes.ENTER;
+        } else {
+          newKeyCode = keyValue.toUpperCase().charCodeAt(0);
+        }
       }
       return Blockly.user.keyMap.createSerializedKey(newKeyCode, newModifiers);
     }
@@ -373,7 +374,7 @@
      * @package
      */
     function clearDropdown(action) {
-      var actionDiv = document.querySelectorAll('[actionname='+ action.name +']')[0];
+      var actionDiv = document.querySelectorAll('[data-actionname='+ action.name +']')[0];
       var selectDivs = actionDiv.getElementsByTagName('select');
       for (var i = 0, selectDiv; selectDiv = selectDivs[i]; i++) {
         selectDiv.value = 'None';
@@ -417,7 +418,7 @@
         clearDropdown(oldAction);
       }
       keyboardAnnouncerText += action.name + ' key was set to ' + getReadableKey(selectDivs);
-      document.getElementById('keyboard_announce').innerHTML = keyboardAnnouncerText;
+      document.getElementById('keyboard_announce').innerText = keyboardAnnouncerText;
       Blockly.user.keyMap.setActionForKey(key, action);
       saveKeyMap();
       document.activeElement.blur();
@@ -529,11 +530,11 @@
       var keyMapDiv = document.getElementById('keyboard_mappings');
       for (var i = 0, action; action = actions[i]; i++) {
         var actionDiv = document.createElement('div');
-        actionDiv.setAttribute('actionname', action.name);
+        actionDiv.setAttribute('data-actionname', action.name);
         actionDiv.action = action;
 
         var labelDiv = document.createElement('label');
-        labelDiv.innerHTML = action.name;
+        labelDiv.innerText = action.name;
         labelDiv.setAttribute('id', action.name + '_label');
 
         actionDiv.appendChild(labelDiv);

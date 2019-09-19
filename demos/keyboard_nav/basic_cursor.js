@@ -165,7 +165,7 @@ Blockly.BasicCursor.prototype.next = function() {
   var newNode = this.getNextNode_(curNode);
 
   if (newNode) {
-    this.setLocation(newNode);
+    this.setCurNode(newNode);
   }
   return newNode;
 };
@@ -195,7 +195,7 @@ Blockly.BasicCursor.prototype.prev = function() {
   var newNode = this.getPreviousNode_(curNode);
   
   if (newNode) {
-    this.setLocation(newNode);
+    this.setCurNode(newNode);
   }
   return newNode;
 };

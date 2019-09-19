@@ -56,7 +56,7 @@ Blockly.FlyoutCursor.prototype.next = function() {
   var newNode = curNode.next();
 
   if (newNode) {
-    this.setLocation(newNode);
+    this.setCurNode(newNode);
   }
   return newNode;
 };
@@ -84,7 +84,7 @@ Blockly.FlyoutCursor.prototype.prev = function() {
   var newNode = curNode.prev();
 
   if (newNode) {
-    this.setLocation(newNode);
+    this.setCurNode(newNode);
   }
   return newNode;
 };

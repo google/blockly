@@ -30,6 +30,7 @@ goog.require('Blockly.blockRendering.BottomRow');
 goog.require('Blockly.blockRendering.ExternalValueInput');
 goog.require('Blockly.blockRendering.Hat');
 goog.require('Blockly.blockRendering.InlineInput');
+goog.require('Blockly.blockRendering.InRowSpacer');
 goog.require('Blockly.blockRendering.InputRow');
 goog.require('Blockly.blockRendering.Measurable');
 goog.require('Blockly.blockRendering.NextConnection');
@@ -395,17 +396,23 @@ Blockly.blockRendering.RenderInfo.prototype.addElemSpacing_ = function() {
     var oldElems = row.elements;
     row.elements = [];
     // No spacing needed before the corner on the top row or the bottom row.
-    if (!Blockly.blockRendering.Types.isTopRow(row) &&
-        !Blockly.blockRendering.Types.isBottomRow(row)) {
+    if (row.startsWithElemSpacer()) {
       // There's a spacer before the first element in the row.
       row.elements.push(new Blockly.blockRendering.InRowSpacer(
           this.constants_, this.getInRowSpacing_(null, oldElems[0])));
     }
-    for (var e = 0; e < oldElems.length; e++) {
+    for (var e = 0; e < oldElems.length - 1; e++) {
       row.elements.push(oldElems[e]);
       var spacing = this.getInRowSpacing_(oldElems[e], oldElems[e + 1]);
       row.elements.push(
           new Blockly.blockRendering.InRowSpacer(this.constants_, spacing));
+    }
+    row.elements.push(oldElems[oldElems.length - 1]);
+    if (row.endsWithElemSpacer()) {
+      // There's a spacer after the last element in the row.
+      row.elements.push(new Blockly.blockRendering.InRowSpacer(
+          this.constants_,
+          this.getInRowSpacing_(oldElems[oldElems.length - 1], null)));
     }
   }
 };

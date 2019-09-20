@@ -363,11 +363,6 @@ Blockly.zelos.RenderInfo.prototype.getElemCenterline_ = function(row,
 Blockly.zelos.RenderInfo.prototype.addAlignmentPadding_ = function(row,
     missingSpace) {
   var lastSpacer = row.getLastSpacer();
-  // Skip the right corner element on the top and bottom row, so we don't have
-  // any spacing after the right corner element.
-  if (Blockly.blockRendering.Types.isTopOrBottomRow(row)) {
-    lastSpacer = row.elements[row.elements.length - 3];
-  }
   if (lastSpacer) {
     lastSpacer.width += missingSpace;
     row.width += missingSpace;

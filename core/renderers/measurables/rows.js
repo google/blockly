@@ -185,6 +185,22 @@ Blockly.blockRendering.Row.prototype.getLastInput = function() {
 };
 
 /**
+ * Determines whether this row should start with an element spacer.
+ * @return {boolean} Whether the row should start with a spacer.
+ */
+Blockly.blockRendering.Row.prototype.startsWithElemSpacer = function() {
+  return true;
+};
+
+/**
+ * Determines whether this row should end with an element spacer.
+ * @return {boolean} Whether the row should end with a spacer.
+ */
+Blockly.blockRendering.Row.prototype.endsWithElemSpacer = function() {
+  return true;
+};
+
+/**
  * Convenience method to get the first spacer element on this row.
  * @return {Blockly.blockRendering.InRowSpacer} The first spacer element on
  *   this row.
@@ -301,6 +317,13 @@ Blockly.blockRendering.TopRow.prototype.measure = function() {
 };
 
 /**
+ * @override
+ */
+Blockly.blockRendering.TopRow.prototype.startsWithElemSpacer = function() {
+  return false;
+};
+
+/**
  * An object containing information about what elements are in the bottom row of
  * a block as well as spacing information for the top row.
  * Elements in a bottom row can consist of corners, spacers and next
@@ -382,6 +405,14 @@ Blockly.blockRendering.BottomRow.prototype.measure = function() {
   this.descenderHeight = descenderHeight;
   this.widthWithConnectedBlocks = this.width;
 };
+
+/**
+ * @override
+ */
+Blockly.blockRendering.BottomRow.prototype.startsWithElemSpacer = function() {
+  return false;
+};
+
 /**
  * An object containing information about a spacer between two rows.
  * @param {!Blockly.blockRendering.ConstantProvider} constants The rendering
@@ -465,21 +496,6 @@ Blockly.blockRendering.InputRow.prototype.measure = function() {
 /**
  * @override
  */
-Blockly.blockRendering.InputRow.prototype.getLastSpacer = function() {
-  // Adding spacing after the input connection would look weird.  Find the
-  // before the last input connection and add it there instead.
-  if (this.hasExternalInput || this.hasStatement) {
-    var elems = this.elements;
-    for (var i = elems.length - 1, elem; (elem = elems[i]); i--) {
-      if (Blockly.blockRendering.Types.isSpacer(elem)) {
-        continue;
-      }
-      if (Blockly.blockRendering.Types.isInput(elem)) {
-        var spacer = elems[i - 1];
-        return /** @type {Blockly.blockRendering.InRowSpacer} */ (spacer);
-      }
-    }
-
-  }
-  return Blockly.blockRendering.InputRow.superClass_.getLastSpacer.call(this);
+Blockly.blockRendering.InputRow.prototype.endsWithElemSpacer = function() {
+  return !this.hasExternalInput && !this.hasStatement;
 };

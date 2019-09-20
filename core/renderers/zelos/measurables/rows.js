@@ -56,6 +56,13 @@ Blockly.utils.object.inherits(Blockly.zelos.TopRow,
     Blockly.blockRendering.TopRow);
 
 /**
+ * @override
+ */
+Blockly.zelos.TopRow.prototype.endsWithElemSpacer = function() {
+  return false;
+};
+
+/**
  * Render a round corner unless the block has an output connection.
  * @override
  */
@@ -89,6 +96,13 @@ Blockly.zelos.BottomRow = function(constants) {
 };
 Blockly.utils.object.inherits(Blockly.zelos.BottomRow,
     Blockly.blockRendering.BottomRow);
+
+/**
+ * @override
+ */
+Blockly.zelos.BottomRow.prototype.endsWithElemSpacer = function() {
+  return false;
+};
 
 /**
  * Render a round corner unless the block has an output connection.

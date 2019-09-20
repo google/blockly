@@ -214,8 +214,6 @@ Blockly.thrasos.RenderInfo.prototype.addAlignmentPadding_ = function(row, missin
   var firstSpacer = row.getFirstSpacer();
   var lastSpacer = row.getLastSpacer();
   if (row.hasExternalInput || row.hasStatement) {
-    // Get the spacer right before the input socket.
-    lastSpacer = elems[elems.length - 3];
     row.widthWithConnectedBlocks += missingSpace;
   }
 

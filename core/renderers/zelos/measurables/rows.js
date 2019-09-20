@@ -56,24 +56,6 @@ Blockly.utils.object.inherits(Blockly.zelos.TopRow,
     Blockly.blockRendering.TopRow);
 
 /**
- * Create all non-spacer elements that belong on the top row.
- * @param {!Blockly.BlockSvg} block The block whose top row this represents.
- * @package
- * @override
- */
-Blockly.zelos.TopRow.prototype.populate = function(block) {
-  Blockly.zelos.TopRow.superClass_.populate.call(this, block);
-
-  var rightSquareCorner = this.hasRightSquareCorner(block);
-
-  if (rightSquareCorner) {
-    this.elements.push(new Blockly.blockRendering.SquareCorner(this.constants_, 'right'));
-  } else {
-    this.elements.push(new Blockly.blockRendering.RoundCorner(this.constants_, 'right'));
-  }
-};
-
-/**
  * Render a round corner unless the block has an output connection.
  * @override
  */
@@ -107,24 +89,6 @@ Blockly.zelos.BottomRow = function(constants) {
 };
 Blockly.utils.object.inherits(Blockly.zelos.BottomRow,
     Blockly.blockRendering.BottomRow);
-
-/**
- * Create all non-spacer elements that belong on the bottom row.
- * @param {!Blockly.BlockSvg} block The block whose bottom row this represents.
- * @package
- * @override
- */
-Blockly.zelos.BottomRow.prototype.populate = function(block) {
-  Blockly.zelos.BottomRow.superClass_.populate.call(this, block);
-
-  var rightSquareCorner = this.hasRightSquareCorner(block);
-
-  if (rightSquareCorner) {
-    this.elements.push(new Blockly.blockRendering.SquareCorner(this.constants_, 'right'));
-  } else {
-    this.elements.push(new Blockly.blockRendering.RoundCorner(this.constants_, 'right'));
-  }
-};
 
 /**
  * Render a round corner unless the block has an output connection.

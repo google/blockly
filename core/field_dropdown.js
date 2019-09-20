@@ -280,6 +280,7 @@ Blockly.FieldDropdown.prototype.widgetCreate_ = function() {
  */
 Blockly.FieldDropdown.prototype.widgetDispose_ = function() {
   this.menu_.dispose();
+  this.menu_ = null;
 };
 
 /**

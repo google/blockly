@@ -713,13 +713,7 @@ Blockly.navigation.onBlocklyAction = function(action) {
 
   if (Blockly.keyboardAccessibilityMode) {
     if (!readOnly) {
-      var curNode = Blockly.getMainWorkspace().getCursor().getCurNode();
-      if (curNode && curNode.getType() === Blockly.ASTNode.types.FIELD) {
-        actionHandled = curNode.getLocation().onBlocklyAction(action);
-      }
-      if (!actionHandled) {
-        actionHandled = Blockly.navigation.handleActions_(action);
-      }
+      actionHandled = Blockly.navigation.handleActions_(action);
     // If in readonly mode only handle valid actions.
     } else if (Blockly.navigation.READONLY_ACTION_LIST.indexOf(action) > -1) {
       actionHandled = Blockly.navigation.handleActions_(action);
@@ -750,7 +744,15 @@ Blockly.navigation.handleActions_ = function(action) {
     }
     return true;
   } else if (Blockly.navigation.currentState_ === Blockly.navigation.STATE_WS) {
-    return Blockly.navigation.workspaceOnAction_(action);
+    var curNode = Blockly.getMainWorkspace().getCursor().getCurNode();
+    var actionHandled = false;
+    if (curNode && curNode.getType() === Blockly.ASTNode.types.FIELD) {
+      actionHandled = curNode.getLocation().onBlocklyAction(action);
+    }
+    if (!actionHandled) {
+      actionHandled = Blockly.navigation.workspaceOnAction_(action);
+    }
+    return actionHandled;
   } else if (Blockly.navigation.currentState_ === Blockly.navigation.STATE_FLYOUT) {
     return Blockly.navigation.flyoutOnAction_(action);
   } else if (Blockly.navigation.currentState_ === Blockly.navigation.STATE_TOOLBOX) {

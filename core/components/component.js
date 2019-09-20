@@ -97,13 +97,6 @@ Blockly.Component = function() {
 
 
 /**
- * Generator for unique IDs.
- * @type {!Blockly.utils.IdGenerator}
- * @private
- */
-Blockly.Component.prototype.idGenerator_ = Blockly.utils.IdGenerator.getInstance();
-
-/**
  * The default right to left value.
  * @type {?boolean}
  * @private
@@ -171,27 +164,7 @@ Blockly.Component.setDefaultRightToLeft = function(rightToLeft) {
  * @package
  */
 Blockly.Component.prototype.getId = function() {
-  return this.id_ || (this.id_ = this.idGenerator_.getNextUniqueId());
-};
-
-/**
- * Assigns an ID to this component instance.  It is the caller's responsibility
- * to guarantee that the ID is unique.  If the component is a child of a parent
- * component, then the parent component's child index is updated to reflect the
- * new ID; this may throw an error if the parent already has a child with an ID
- * that conflicts with the new ID.
- * @param {string} id Unique component ID.
- * @protected
- */
-Blockly.Component.prototype.setId = function(id) {
-  if (this.parent_ && this.parent_.childIndex_) {
-    // Update the parent's child index.
-    delete this.parent_.childIndex_[this.id_];
-    this.parent_.childIndex_[id] = this;
-  }
-
-  // Update the component ID.
-  this.id_ = id;
+  return this.id_ || (this.id_ = Blockly.utils.IdGenerator.getNextUniqueId());
 };
 
 /**

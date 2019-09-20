@@ -163,14 +163,15 @@ Blockly.Xml.blockToDom = function(block, opt_noId) {
 
   var commentText = block.getCommentText();
   if (commentText) {
+    var size = block.commentModel.size;
+    var pinned = block.commentModel.pinned;
+
     var commentElement = Blockly.utils.xml.createElement('comment');
     commentElement.appendChild(Blockly.utils.xml.createTextNode(commentText));
-    if (typeof block.comment == 'object') {
-      commentElement.setAttribute('pinned', block.comment.isVisible());
-      var hw = block.comment.getBubbleSize();
-      commentElement.setAttribute('h', hw.height);
-      commentElement.setAttribute('w', hw.width);
-    }
+    commentElement.setAttribute('pinned', pinned);
+    commentElement.setAttribute('h', size.height);
+    commentElement.setAttribute('w', size.width);
+
     element.appendChild(commentElement);
   }
 
@@ -655,22 +656,21 @@ Blockly.Xml.domToBlockHeadless_ = function(xmlBlock, workspace) {
         }
         break;
       case 'comment':
-        block.setCommentText(xmlChild.textContent);
-        var visible = xmlChild.getAttribute('pinned');
-        if (visible && !block.isInFlyout) {
-          // Give the renderer a millisecond to render and position the block
-          // before positioning the comment bubble.
-          setTimeout(function() {
-            if (block.comment && block.comment.setVisible) {
-              block.comment.setVisible(visible == 'true');
-            }
-          }, 1);
+        var text = xmlChild.textContent;
+        var pinned = xmlChild.getAttribute('pinned') == 'true';
+        var width = parseInt(xmlChild.getAttribute('w'), 10);
+        var height = parseInt(xmlChild.getAttribute('h'), 10);
+
+        block.setCommentText(text);
+        block.commentModel.pinned = pinned;
+        if (!isNaN(width) && !isNaN(height)) {
+          block.commentModel.size = new Blockly.utils.Size(width, height);
         }
-        var bubbleW = parseInt(xmlChild.getAttribute('w'), 10);
-        var bubbleH = parseInt(xmlChild.getAttribute('h'), 10);
-        if (!isNaN(bubbleW) && !isNaN(bubbleH) &&
-            block.comment && block.comment.setVisible) {
-          block.comment.setBubbleSize(bubbleW, bubbleH);
+
+        if (pinned && block.getCommentIcon && !block.isInFlyout) {
+          setTimeout(function() {
+            block.getCommentIcon().setVisible(true);
+          }, 1);
         }
         break;
       case 'data':

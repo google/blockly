@@ -40,7 +40,6 @@ goog.require('Blockly.utils.Coordinate');
 goog.require('Blockly.utils.object');
 goog.require('Blockly.fieldRegistry');
 goog.require('Blockly.utils.string');
-goog.require('Blockly.Warning');
 goog.require('Blockly.Workspace');
 
 
@@ -128,8 +127,23 @@ Blockly.Block = function(workspace, prototypeName, opt_id) {
    */
   this.collapsed_ = false;
 
-  /** @type {string|Blockly.Comment} */
+  /**
+   * A string representing the comment attached to this block.
+   * @type {string|Blockly.Comment}
+   * @deprecated August 2019. Use getCommentText instead.
+   */
   this.comment = null;
+
+  /**
+   * A model of the comment attached to this block.
+   * @type {!Blockly.Block.CommentModel}
+   * @package
+   */
+  this.commentModel = {
+    text: null,
+    pinned: false,
+    size: new Blockly.utils.Size(160, 80)
+  };
 
   /**
    * The block's position in workspace units.  (0, 0) is at the workspace's
@@ -204,6 +218,15 @@ Blockly.Block = function(workspace, prototypeName, opt_id) {
     this.setOnChange(this.onchange);
   }
 };
+
+/**
+ * @typedef {{
+ *            text:?string,
+ *            pinned:boolean,
+ *            size:Blockly.utils.Size
+ *          }}
+ */
+Blockly.Block.CommentModel;
 
 /**
  * Optional text data that round-trips between blocks and XML.
@@ -1783,11 +1806,11 @@ Blockly.Block.prototype.getInputTargetBlock = function(name) {
 };
 
 /**
- * Returns the comment on this block (or '' if none).
+ * Returns the comment on this block (or null if there is no comment).
  * @return {string} Block's comment.
  */
 Blockly.Block.prototype.getCommentText = function() {
-  return this.comment || '';
+  return this.commentModel.text;
 };
 
 /**
@@ -1795,11 +1818,13 @@ Blockly.Block.prototype.getCommentText = function() {
  * @param {?string} text The text, or null to delete.
  */
 Blockly.Block.prototype.setCommentText = function(text) {
-  if (this.comment != text) {
-    Blockly.Events.fire(new Blockly.Events.BlockChange(
-        this, 'comment', null, this.comment, text || ''));
-    this.comment = text;
+  if (this.commentModel.text == text) {
+    return;
   }
+  Blockly.Events.fire(new Blockly.Events.BlockChange(
+      this, 'comment', null, this.commentModel.text, text));
+  this.commentModel.text = text;
+  this.comment = text;  // For backwards compatibility.
 };
 
 /**

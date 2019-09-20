@@ -42,6 +42,7 @@ goog.require('Blockly.utils.Coordinate');
 goog.require('Blockly.utils.dom');
 goog.require('Blockly.utils.object');
 goog.require('Blockly.utils.Rect');
+goog.require('Blockly.Warning');
 
 
 /**
@@ -258,8 +259,16 @@ Blockly.BlockSvg.prototype.mutator = null;
 /**
  * Block's comment icon (if any).
  * @type {Blockly.Comment}
+ * @deprecated August 2019. Use getCommentIcon instead.
  */
 Blockly.BlockSvg.prototype.comment = null;
+
+/**
+ * Block's comment icon (if any).
+ * @type {Blockly.Comment}
+ * @private
+ */
+Blockly.BlockSvg.prototype.commentIcon_ = null;
 
 /**
  * Block's warning icon (if any).
@@ -276,8 +285,8 @@ Blockly.BlockSvg.prototype.getIcons = function() {
   if (this.mutator) {
     icons.push(this.mutator);
   }
-  if (this.comment) {
-    icons.push(this.comment);
+  if (this.commentIcon_) {
+    icons.push(this.commentIcon_);
   }
   if (this.warning) {
     icons.push(this.warning);
@@ -951,28 +960,11 @@ Blockly.BlockSvg.prototype.dispose = function(healStack, animate) {
     this.warningTextDb_ = null;
   }
 
-  // If the block is rendered we need to record the event before disposing of
-  // the icons to prevent losing information.
-  // TODO (#1969): Remove event generation/firing once comments are fixed.
-  this.unplug(healStack);
-  var deleteEvent;
-  if (Blockly.Events.isEnabled()) {
-    deleteEvent = new Blockly.Events.BlockDelete(this);
+  var icons = this.getIcons();
+  for (var i = 0; i < icons.length; i++) {
+    icons[i].dispose();
   }
-  Blockly.Events.disable();
-  try {
-    var icons = this.getIcons();
-    for (var i = 0; i < icons.length; i++) {
-      icons[i].dispose();
-    }
-    // TODO (#1969): Move out of disable block once comments are fixed.
-    Blockly.BlockSvg.superClass_.dispose.call(this, healStack);
-  } finally {
-    Blockly.Events.enable();
-  }
-  if (Blockly.Events.isEnabled() && deleteEvent) {
-    Blockly.Events.fire(deleteEvent);
-  }
+  Blockly.BlockSvg.superClass_.dispose.call(this, healStack);
 
   Blockly.utils.dom.removeNode(this.svgGroup_);
   blockWorkspace.resizeContents();
@@ -1072,16 +1064,12 @@ Blockly.BlockSvg.prototype.updateDisabled = function() {
 };
 
 /**
- * Returns the comment on this block (or '' if none).
- * @return {string} Block's comment.
+ * Get the comment icon attached to this block, or null if the block has no
+ * comment.
+ * @return {Blockly.Comment} The comment icon attached to this block, or null.
  */
-Blockly.BlockSvg.prototype.getCommentText = function() {
-  if (this.comment) {
-    var comment = this.comment.getText();
-    // Trim off trailing whitespace.
-    return comment.replace(/\s+$/, '').replace(/ +\n/g, '\n');
-  }
-  return '';
+Blockly.BlockSvg.prototype.getCommentIcon = function() {
+  return this.commentIcon_;
 };
 
 /**
@@ -1089,23 +1077,30 @@ Blockly.BlockSvg.prototype.getCommentText = function() {
  * @param {?string} text The text, or null to delete.
  */
 Blockly.BlockSvg.prototype.setCommentText = function(text) {
-  var changedState = false;
-  if (typeof text == 'string') {
-    if (!this.comment) {
-      if (!Blockly.Comment) {
-        throw Error('Missing require for Blockly.Comment');
-      }
-      this.comment = new Blockly.Comment(this);
-      changedState = true;
-    }
-    this.comment.setText(/** @type {string} */ (text));
-  } else {
-    if (this.comment) {
-      this.comment.dispose();
-      changedState = true;
-    }
+  if (!Blockly.Comment) {
+    throw Error('Missing require for Blockly.Comment');
   }
-  if (changedState && this.rendered) {
+  if (this.commentModel.text == text) {
+    return;
+  }
+  Blockly.BlockSvg.superClass_.setCommentText.call(this, text);
+
+  var shouldHaveComment = text != null;
+  if (!!this.commentIcon_ == shouldHaveComment) {
+    // If the comment's state of existence is correct, but the text is new
+    // that means we're just updating a comment.
+    this.commentIcon_.updateText();
+    return;
+  }
+  if (shouldHaveComment) {
+    this.commentIcon_ = new Blockly.Comment(this);
+    this.comment = this.commentIcon_; // For backwards compatibility.
+  } else {
+    this.commentIcon_.dispose();
+    this.commentIcon_ = null;
+    this.comment = null;  // For backwards compatibility.
+  }
+  if (this.rendered) {
     this.render();
     // Adding or removing a comment icon will cause the block to change shape.
     this.bumpNeighbours_();

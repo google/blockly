@@ -363,7 +363,7 @@ Blockly.CursorSvg.prototype.positionBlock_ = function(width, cursorOffset, curso
     Blockly.utils.svgPaths.lineOnAxis('V', cursorHeight);
   this.cursorBlock_.setAttribute('d', cursorPath);
   if (this.workspace_.RTL) {
-    this.flipRtl(this.cursorBlock_);
+    this.flipRtl_(this.cursorBlock_);
   }
   this.currentCursorSvg = this.cursorBlock_;
 };
@@ -418,7 +418,7 @@ Blockly.CursorSvg.prototype.positionOutput_ = function(width, height) {
     Blockly.utils.svgPaths.lineOnAxis('H', width);
   this.cursorBlock_.setAttribute('d', cursorPath);
   if (this.workspace_.RTL) {
-    this.flipRtl(this.cursorBlock_);
+    this.flipRtl_(this.cursorBlock_);
   }
   this.currentCursorSvg = this.cursorBlock_;
 };
@@ -441,7 +441,7 @@ Blockly.CursorSvg.prototype.positionPrevious_ = function(width, cursorOffset, cu
     Blockly.utils.svgPaths.lineOnAxis('V', cursorHeight);
   this.cursorBlock_.setAttribute('d', cursorPath);
   if (this.workspace_.RTL) {
-    this.flipRtl(this.cursorBlock_);
+    this.flipRtl_(this.cursorBlock_);
   }
   this.currentCursorSvg = this.cursorBlock_;
 };
@@ -466,8 +466,9 @@ Blockly.CursorSvg.prototype.positionRect_ = function(x, y, width, height) {
 /**
  * Flip the SVG paths in RTL.
  * @param {SVGElement} cursor The cursor that we want to flip.
+ * @private
  */
-Blockly.CursorSvg.prototype.flipRtl = function(cursor) {
+Blockly.CursorSvg.prototype.flipRtl_ = function(cursor) {
   cursor.setAttribute('transform', 'scale(-1 1)');
 };
 

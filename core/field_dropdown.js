@@ -51,11 +51,14 @@ goog.require('Blockly.utils.userAgent');
  *    changes to the field's value. Takes in a language-neutral dropdown
  *    option & returns a validated language-neutral dropdown option, or null to
  *    abort the change.
+ * @param {Object=} opt_config A map of options used to configure the field.
+ *    See the [field creation documentation]{@link https://developers.google.com/blockly/guides/create-custom-blocks/fields/built-in-fields/dropdown#creation}
+ *    for a list of properties this parameter supports.
  * @extends {Blockly.Field}
  * @constructor
  * @throws {TypeError} If `menuGenerator` options are incorrectly structured.
  */
-Blockly.FieldDropdown = function(menuGenerator, opt_validator) {
+Blockly.FieldDropdown = function(menuGenerator, opt_validator, opt_config) {
   if (typeof menuGenerator != 'function') {
     Blockly.FieldDropdown.validateOptions_(menuGenerator);
   }
@@ -87,8 +90,8 @@ Blockly.FieldDropdown = function(menuGenerator, opt_validator) {
   var firstTuple = this.getOptions(false)[0];
 
   // Call parent's constructor.
-  Blockly.FieldDropdown.superClass_.constructor.call(this, firstTuple[1],
-      opt_validator);
+  Blockly.FieldDropdown.superClass_.constructor.call(
+      this, firstTuple[1], opt_validator, opt_config);
 
   /**
    * SVG image element if currently selected option is an image, or null.
@@ -125,7 +128,7 @@ Blockly.FieldDropdown.ImageProperties;
  * @nocollapse
  */
 Blockly.FieldDropdown.fromJson = function(options) {
-  return new Blockly.FieldDropdown(options['options']);
+  return new Blockly.FieldDropdown(options['options'], undefined, options);
 };
 
 /**

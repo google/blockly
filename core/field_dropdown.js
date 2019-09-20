@@ -641,4 +641,24 @@ Blockly.FieldDropdown.validateOptions_ = function(options) {
   }
 };
 
+/**
+ * Handles the given action.
+ * This is only triggered when keyboard accessibility mode is enabled.
+ * @param {!Blockly.Action} action The action to be handled.
+ * @return {boolean} True if the field handled the action, false otherwise.
+ * @package
+ */
+Blockly.FieldDropdown.prototype.onBlocklyAction = function(action) {
+  if (this.menu_) {
+    if (action === Blockly.navigation.ACTION_PREVIOUS) {
+      this.menu_.highlightPrevious();
+      return true;
+    } else if (action === Blockly.navigation.ACTION_NEXT) {
+      this.menu_.highlightNext();
+      return true;
+    }
+  }
+  return Blockly.FieldDropdown.superClass_.onBlocklyAction.call(this, action);
+};
+
 Blockly.fieldRegistry.register('field_dropdown', Blockly.FieldDropdown);

@@ -292,9 +292,10 @@ Blockly.Menu.prototype.setHighlighted = function(item) {
 /**
  * Highlights the next highlightable item (or the first if nothing is currently
  * highlighted).
- * @protected
+ * @package
  */
 Blockly.Menu.prototype.highlightNext = function() {
+  this.unhighlightCurrent();
   this.highlightHelper(function(index, max) {
     return (index + 1) % max;
   }, this.highlightedIndex_);
@@ -303,9 +304,10 @@ Blockly.Menu.prototype.highlightNext = function() {
 /**
  * Highlights the previous highlightable item (or the last if nothing is
  * currently highlighted).
- * @protected
+ * @package
  */
 Blockly.Menu.prototype.highlightPrevious = function() {
+  this.unhighlightCurrent();
   this.highlightHelper(function(index, max) {
     index--;
     return index < 0 ? max - 1 : index;
@@ -465,12 +467,10 @@ Blockly.Menu.prototype.handleKeyEventInternal = function(e) {
       break;
 
     case Blockly.utils.KeyCodes.UP:
-      this.unhighlightCurrent();
       this.highlightPrevious();
       break;
 
     case Blockly.utils.KeyCodes.DOWN:
-      this.unhighlightCurrent();
       this.highlightNext();
       break;
 

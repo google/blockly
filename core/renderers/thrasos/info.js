@@ -210,12 +210,9 @@ Blockly.thrasos.RenderInfo.prototype.getInRowSpacing_ = function(prev, next) {
  * @override
  */
 Blockly.thrasos.RenderInfo.prototype.addAlignmentPadding_ = function(row, missingSpace) {
-  var elems = row.elements;
   var firstSpacer = row.getFirstSpacer();
   var lastSpacer = row.getLastSpacer();
   if (row.hasExternalInput || row.hasStatement) {
-    // Get the spacer right before the input socket.
-    lastSpacer = elems[elems.length - 3];
     row.widthWithConnectedBlocks += missingSpace;
   }
 

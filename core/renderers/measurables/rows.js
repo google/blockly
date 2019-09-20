@@ -187,6 +187,7 @@ Blockly.blockRendering.Row.prototype.getLastInput = function() {
 /**
  * Determines whether this row should start with an element spacer.
  * @return {boolean} Whether the row should start with a spacer.
+ * @package
  */
 Blockly.blockRendering.Row.prototype.startsWithElemSpacer = function() {
   return true;
@@ -195,6 +196,7 @@ Blockly.blockRendering.Row.prototype.startsWithElemSpacer = function() {
 /**
  * Determines whether this row should end with an element spacer.
  * @return {boolean} Whether the row should end with a spacer.
+ * @package
  */
 Blockly.blockRendering.Row.prototype.endsWithElemSpacer = function() {
   return true;

@@ -260,8 +260,8 @@ Blockly.CursorSvg.prototype.showWithCoordinates_ = function(curNode) {
  */
 Blockly.CursorSvg.prototype.showWithField_ = function(curNode) {
   var field = /** @type {Blockly.Field} */ (curNode.getLocation());
-  var width = field.borderRect_.width.baseVal.value;
-  var height = field.borderRect_.height.baseVal.value;
+  var width = field.getSize().width;
+  var height = field.getSize().height;
 
   this.positionRect_(0, 0, width, height);
   this.setParent_(field);

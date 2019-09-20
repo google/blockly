@@ -465,7 +465,7 @@ Blockly.CursorSvg.prototype.positionRect_ = function(x, y, width, height) {
 
 /**
  * Flip the SVG paths in RTL.
- * @param {SVGElement} cursor The cursor that we want to flip.
+ * @param {!SVGElement} cursor The cursor that we want to flip.
  * @private
  */
 Blockly.CursorSvg.prototype.flipRtl_ = function(cursor) {

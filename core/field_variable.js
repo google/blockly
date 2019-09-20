@@ -90,7 +90,9 @@ Blockly.FieldVariable = function(varName, opt_validator, opt_variableTypes,
   opt_config && this.configure_(opt_config);
   opt_validator && this.setValidator(opt_validator);
 
-  this.setTypes_(opt_variableTypes, opt_defaultType);
+  if (!opt_config) {  // Only do one kind of configuration or the other.
+    this.setTypes_(opt_variableTypes, opt_defaultType);
+  }
 };
 Blockly.utils.object.inherits(Blockly.FieldVariable, Blockly.FieldDropdown);
 
@@ -105,10 +107,8 @@ Blockly.utils.object.inherits(Blockly.FieldVariable, Blockly.FieldDropdown);
  */
 Blockly.FieldVariable.fromJson = function(options) {
   var varName = Blockly.utils.replaceMessageReferences(options['variable']);
-  var variableTypes = options['variableTypes'];
-  var defaultType = options['defaultType'];
   return new Blockly.FieldVariable(
-      varName, undefined, variableTypes, defaultType, options);
+      varName, undefined, undefined, undefined, options);
 };
 
 /**
@@ -125,6 +125,16 @@ Blockly.FieldVariable.prototype.workspace_ = null;
  * @const
  */
 Blockly.FieldVariable.prototype.SERIALIZABLE = true;
+
+/**
+ * Configure the field based on the given map of options.
+ * @param {!Object} config A map of options to configure the field based on.
+ * @protected
+ */
+Blockly.FieldVariable.prototype.configure_ = function(config) {
+  Blockly.FieldVariable.superClass_.configure_.call(this, config);
+  this.setTypes_(config['variableTypes'], config['defaultType']);
+};
 
 /**
  * Initialize the model for this field if it has not already been initialized.

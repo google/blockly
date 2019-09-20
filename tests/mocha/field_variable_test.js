@@ -211,6 +211,43 @@ suite('Variable Fields', function() {
       });
     });
   });
+  suite('Customizations', function() {
+    suite('Types and Default Types', function() {
+      test('JS Constructor', function() {
+        var field = new Blockly.FieldVariable(
+            'test', undefined, ['Type1'], 'Type1');
+        chai.assert.deepEqual(field.variableTypes, ['Type1']);
+        chai.assert.equal(field.defaultType_, 'Type1');
+      });
+      test('JSON Definition', function() {
+        var field = Blockly.FieldVariable.fromJson({
+          variable: 'test',
+          variableTypes: ['Type1'],
+          defaultType: 'Type1'
+        });
+        chai.assert.deepEqual(field.variableTypes, ['Type1']);
+        chai.assert.equal(field.defaultType_, 'Type1');
+      });
+      test('JS Configuration - Simple', function() {
+        var field = new Blockly.FieldVariable(
+            'test', undefined, undefined, undefined, {
+              variableTypes: ['Type1'],
+              defaultType: 'Type1'
+            });
+        chai.assert.deepEqual(field.variableTypes, ['Type1']);
+        chai.assert.equal(field.defaultType_, 'Type1');
+      });
+      test('JS Configuration - Ignore', function() {
+        var field = new Blockly.FieldVariable(
+            'test', undefined, ['Type2'], 'Type2', {
+              variableTypes: ['Type1'],
+              defaultType: 'Type1'
+            });
+        chai.assert.deepEqual(field.variableTypes, ['Type1']);
+        chai.assert.equal(field.defaultType_, 'Type1');
+      });
+    });
+  });
   suite('Get variable types', function() {
     setup(function() {
       this.workspace.createVariable('name1', 'type1');

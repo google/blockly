@@ -87,16 +87,6 @@ Blockly.tree.TreeControl.prototype.getDepth = function() {
 };
 
 /**
- * Expands the parent chain of this node so that it is visible.
- * @override
- */
-Blockly.tree.TreeControl.prototype.reveal = function() {
-  // always expanded by default
-  // needs to be overriden so that we don't try to reveal our parent
-  // which is a generic component
-};
-
-/**
  * Handles focus on the tree.
  * @param {!Event} _e The browser event.
  * @private
@@ -248,38 +238,6 @@ Blockly.tree.TreeControl.prototype.onAfterSelected = function(fn) {
  */
 Blockly.tree.TreeControl.prototype.getSelectedItem = function() {
   return this.selectedItem_;
-};
-
-/**
- * Updates the lines after the tree has been drawn.
- * @private
- */
-Blockly.tree.TreeControl.prototype.updateLinesAndExpandIcons_ = function() {
-  var tree = this;
-  var showLines = false;
-  var showRootLines = false;
-
-  /**
-   * Recursively walk through all nodes and update the class names of the
-   * expand icon and the children element.
-   * @param {!Blockly.tree.BaseNode} node tree node
-   */
-  function updateShowLines(node) {
-    var childrenEl = node.getChildrenElement();
-    if (childrenEl) {
-      var hideLines = !showLines || tree == node.getParent() && !showRootLines;
-      var childClass = hideLines ? node.getConfig().cssChildrenNoLines :
-                                   node.getConfig().cssChildren;
-      childrenEl.className = childClass;
-
-      var expandIconEl = node.getExpandIconElement();
-      if (expandIconEl) {
-        expandIconEl.className = node.getExpandIconClass();
-      }
-    }
-    node.forEachChild(updateShowLines);
-  }
-  updateShowLines(this);
 };
 
 /**

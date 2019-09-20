@@ -618,82 +618,6 @@ Blockly.tree.BaseNode.prototype.toggle = function() {
 };
 
 /**
- * Expands the node.
- * @protected
- */
-Blockly.tree.BaseNode.prototype.expand = function() {
-  this.setExpanded(true);
-};
-/**
- * Collapses the node.
- * @protected
- */
-Blockly.tree.BaseNode.prototype.collapse = function() {
-  this.setExpanded(false);
-};
-
-/**
- * Collapses the children of the node.
- * @protected
- */
-Blockly.tree.BaseNode.prototype.collapseChildren = function() {
-  this.forEachChild(function(child) { child.collapseAll(); });
-};
-
-/**
- * Collapses the children and the node.
- * @protected
- */
-Blockly.tree.BaseNode.prototype.collapseAll = function() {
-  this.collapseChildren();
-  this.collapse();
-};
-
-/**
- * Expands the children of the node.
- * @protected
- */
-Blockly.tree.BaseNode.prototype.expandChildren = function() {
-  this.forEachChild(function(child) { child.expandAll(); });
-};
-
-/**
- * Expands the children and the node.
- * @protected
- */
-Blockly.tree.BaseNode.prototype.expandAll = function() {
-  this.expandChildren();
-  this.expand();
-};
-
-/**
- * Expands the parent chain of this node so that it is visible.
- * @protected
- */
-Blockly.tree.BaseNode.prototype.reveal = function() {
-  var parent = this.getParent();
-  if (parent) {
-    parent.setExpanded(true);
-    parent.reveal();
-  }
-};
-
-/**
- * Sets whether the node will allow the user to collapse it.
- * @param {boolean} isCollapsible Whether to allow node collapse.
- * @protected
- */
-Blockly.tree.BaseNode.prototype.setIsUserCollapsible = function(isCollapsible) {
-  this.isUserCollapsible_ = isCollapsible;
-  if (!this.isUserCollapsible_) {
-    this.expand();
-  }
-  if (this.getElement()) {
-    this.updateExpandIcon();
-  }
-};
-
-/**
  * @return {boolean} Whether the node is collapsible by user actions.
  * @protected
  */
@@ -776,7 +700,6 @@ Blockly.tree.BaseNode.prototype.getRowClassName = function() {
 Blockly.tree.BaseNode.prototype.getLabelDom = function() {
   var label = document.createElement('span');
   label.setAttribute('class', this.config_.cssItemLabel || '');
-  label.setAttribute('title', this.getToolTip() || '');
   label.textContent = this.getText();
   return label;
 };
@@ -933,15 +856,6 @@ Blockly.tree.BaseNode.prototype.getLabelElement = function() {
 };
 
 /**
- * @return {Element} The element after the label.
- * @protected
- */
-Blockly.tree.BaseNode.prototype.getAfterLabelElement = function() {
-  var el = this.getRowElement();
-  return el ? /** @type {Element} */ (el.lastChild) : null;
-};
-
-/**
  * @return {Element} The div containing the children.
  * @protected
  */
@@ -951,36 +865,12 @@ Blockly.tree.BaseNode.prototype.getChildrenElement = function() {
 };
 
 /**
- * Sets the icon class for the node.
- * @param {string} s The icon class.
- * @protected
- */
-Blockly.tree.BaseNode.prototype.setIconClass = function(s) {
-  this.iconClass_ = s;
-  if (this.isInDocument()) {
-    this.updateIcon_();
-  }
-};
-
-/**
  * Gets the icon class for the node.
  * @return {string} s The icon source.
  * @protected
  */
 Blockly.tree.BaseNode.prototype.getIconClass = function() {
   return this.iconClass_;
-};
-
-/**
- * Sets the icon class for when the node is expanded.
- * @param {string} s The expanded icon class.
- * @protected
- */
-Blockly.tree.BaseNode.prototype.setExpandedIconClass = function(s) {
-  this.expandedIconClass_ = s;
-  if (this.isInDocument()) {
-    this.updateIcon_();
-  }
 };
 
 /**
@@ -1009,28 +899,6 @@ Blockly.tree.BaseNode.prototype.setText = function(s) {
  */
 Blockly.tree.BaseNode.prototype.getText = function() {
   return this.content_;
-};
-
-/**
- * Sets the text of the tooltip.
- * @param {string} s The tooltip text to set.
- * @protected
- */
-Blockly.tree.BaseNode.prototype.setToolTip = function(s) {
-  this.toolTip_ = s;
-  var el = this.getLabelElement();
-  if (el) {
-    el.title = s;
-  }
-};
-
-/**
- * Returns the text of the tooltip.
- * @return {?string} The tooltip text.
- * @protected
- */
-Blockly.tree.BaseNode.prototype.getToolTip = function() {
-  return this.toolTip_;
 };
 
 /**
@@ -1094,24 +962,6 @@ Blockly.tree.BaseNode.prototype.onMouseDown = function(e) {
  */
 Blockly.tree.BaseNode.prototype.onClick_ = function(e) {
   e.preventDefault();
-};
-
-/**
- * Handles a double click event.
- * @param {!Event} e The browser event.
- * @protected
- */
-Blockly.tree.BaseNode.prototype.onDoubleClick_ = function(e) {
-  var el = e.target;
-  // expand icon
-  var type = el.getAttribute('type');
-  if (type == 'expand' && this.hasChildren()) {
-    return;
-  }
-
-  if (this.isUserCollapsible_) {
-    this.toggle();
-  }
 };
 
 /**

@@ -399,9 +399,6 @@ Blockly.CursorSvg.prototype.positionLine_ = function(x, y, width) {
   this.cursorSvgLine_.setAttribute('x', x);
   this.cursorSvgLine_.setAttribute('y', y);
   this.cursorSvgLine_.setAttribute('width', width);
-  if (this.workspace_.RTL) {
-    this.flipRtl(this.cursorSvgLine_);
-  }
   this.currentCursorSvg = this.cursorSvgLine_;
 };
 

@@ -1076,6 +1076,9 @@ Blockly.BlockSvg.prototype.getCommentIcon = function() {
  * @param {?string} text The text, or null to delete.
  */
 Blockly.BlockSvg.prototype.setCommentText = function(text) {
+  if (!Blockly.Comment) {
+    throw Error('Missing require for Blockly.Comment');
+  }
   if (this.commentModel.text == text) {
     return;
   }

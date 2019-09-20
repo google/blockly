@@ -492,17 +492,17 @@ Blockly.navigation.connect_ = function(movingConnection, destConnection) {
 Blockly.navigation.insertBlock = function(block, destConnection) {
   switch (destConnection.type) {
     case Blockly.PREVIOUS_STATEMENT:
-      if (Blockly.navigation.moveAndConnect_(block.nextConnection, destConnection)) {
+      if (Blockly.navigation.connect_(block.nextConnection, destConnection)) {
         return true;
       }
       break;
     case Blockly.NEXT_STATEMENT:
-      if (Blockly.navigation.moveAndConnect_(block.previousConnection, destConnection)) {
+      if (Blockly.navigation.connect_(block.previousConnection, destConnection)) {
         return true;
       }
       break;
     case Blockly.INPUT_VALUE:
-      if (Blockly.navigation.moveAndConnect_(block.outputConnection, destConnection)) {
+      if (Blockly.navigation.connect_(block.outputConnection, destConnection)) {
         return true;
       }
       break;
@@ -510,7 +510,7 @@ Blockly.navigation.insertBlock = function(block, destConnection) {
       for (var i = 0; i < block.inputList.length; i++) {
         var inputConnection = block.inputList[i].connection;
         if (inputConnection.type === Blockly.INPUT_VALUE &&
-            Blockly.navigation.moveAndConnect_(inputConnection, destConnection)) {
+            Blockly.navigation.connect_(inputConnection, destConnection)) {
           return true;
         }
       }

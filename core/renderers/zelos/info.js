@@ -37,7 +37,9 @@ goog.require('Blockly.blockRendering.NextConnection');
 goog.require('Blockly.blockRendering.OutputConnection');
 goog.require('Blockly.blockRendering.PreviousConnection');
 goog.require('Blockly.blockRendering.RenderInfo');
+goog.require('Blockly.blockRendering.RoundCorner');
 goog.require('Blockly.blockRendering.Row');
+goog.require('Blockly.blockRendering.SquareCorner');
 goog.require('Blockly.blockRendering.SpacerRow');
 goog.require('Blockly.blockRendering.StatementInput');
 goog.require('Blockly.blockRendering.TopRow');
@@ -90,6 +92,44 @@ Blockly.utils.object.inherits(Blockly.zelos.RenderInfo,
  */
 Blockly.zelos.RenderInfo.prototype.getRenderer = function() {
   return /** @type {!Blockly.zelos.Renderer} */ (this.renderer_);
+};
+
+/**
+ * Create all non-spacer elements that belong on the top row.
+ * @package
+ * @override
+ */
+Blockly.zelos.RenderInfo.prototype.populateTopRow_ = function() {
+  Blockly.zelos.RenderInfo.superClass_.populateTopRow_.call(this);
+
+  var rightSquareCorner = this.topRow.hasRightSquareCorner(this.block_);
+
+  if (rightSquareCorner) {
+    this.topRow.elements.push(
+        new Blockly.blockRendering.SquareCorner(this.constants_, 'right'));
+  } else {
+    this.topRow.elements.push(
+        new Blockly.blockRendering.RoundCorner(this.constants_, 'right'));
+  }
+};
+
+/**
+ * Create all non-spacer elements that belong on the bottom row.
+ * @package
+ * @override
+ */
+Blockly.zelos.RenderInfo.prototype.populateBottomRow_ = function() {
+  Blockly.zelos.RenderInfo.superClass_.populateBottomRow_.call(this);
+
+  var rightSquareCorner = this.bottomRow.hasRightSquareCorner(block);
+
+  if (rightSquareCorner) {
+    this.bottomRow.elements.push(
+        new Blockly.blockRendering.SquareCorner(this.constants_, 'right'));
+  } else {
+    this.bottomRow.elements.push(
+        new Blockly.blockRendering.RoundCorner(this.constants_, 'right'));
+  }
 };
 
 /**

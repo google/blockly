@@ -264,48 +264,6 @@ Blockly.utils.object.inherits(Blockly.blockRendering.TopRow,
     Blockly.blockRendering.Row);
 
 /**
- * Create all non-spacer elements that belong on the top row.
- * @param {!Blockly.BlockSvg} block The block whose top row this represents.
- * @package
- */
-Blockly.blockRendering.TopRow.prototype.populate = function(block) {
-  var hasHat = block.hat ? block.hat === 'cap' : Blockly.BlockSvg.START_HAT;
-  var hasPrevious = !!block.previousConnection;
-  var leftSquareCorner = this.hasLeftSquareCorner(block);
-
-  if (leftSquareCorner) {
-    this.elements.push(
-        new Blockly.blockRendering.SquareCorner(this.constants_));
-  } else {
-    this.elements.push(
-        new Blockly.blockRendering.RoundCorner(this.constants_));
-  }
-
-  if (hasHat) {
-    var hat = new Blockly.blockRendering.Hat(this.constants_);
-    this.elements.push(hat);
-    this.capline = hat.ascenderHeight;
-  } else if (hasPrevious) {
-    this.hasPreviousConnection = true;
-    this.connection = new Blockly.blockRendering.PreviousConnection(
-        this.constants_,
-        /** @type {Blockly.RenderedConnection} */ (block.previousConnection));
-    this.elements.push(this.connection);
-  }
-
-  var precedesStatement = block.inputList.length &&
-      block.inputList[0].type == Blockly.NEXT_STATEMENT;
-
-  // This is the minimum height for the row. If one of its elements has a
-  // greater height it will be overwritten in the compute pass.
-  if (precedesStatement && !block.isCollapsed()) {
-    this.minHeight = this.constants_.LARGE_PADDING;
-  } else {
-    this.minHeight = this.constants_.MEDIUM_PADDING;
-  }
-};
-
-/**
  * Returns whether or not the top row has a left square corner.
  * @param {!Blockly.BlockSvg} block The block whose top row this represents.
  * @returns {boolean} Whether or not the top row has a left square corner.
@@ -389,44 +347,6 @@ Blockly.blockRendering.BottomRow = function(constants) {
 };
 Blockly.utils.object.inherits(Blockly.blockRendering.BottomRow,
     Blockly.blockRendering.Row);
-
-/**
- * Create all non-spacer elements that belong on the bottom row.
- * @param {!Blockly.BlockSvg} block The block whose bottom row this represents.
- * @package
- */
-Blockly.blockRendering.BottomRow.prototype.populate = function(block) {
-  this.hasNextConnection = !!block.nextConnection;
-
-  var followsStatement =
-      block.inputList.length &&
-      block.inputList[block.inputList.length - 1].type == Blockly.NEXT_STATEMENT;
-
-  // This is the minimum height for the row. If one of its elements has a
-  // greater height it will be overwritten in the compute pass.
-  if (followsStatement) {
-    this.minHeight = this.constants_.LARGE_PADDING;
-  } else {
-    this.minHeight = this.constants_.MEDIUM_PADDING - 1;
-  }
-
-  var leftSquareCorner = this.hasLeftSquareCorner(block);
-
-  if (leftSquareCorner) {
-    this.elements.push(
-        new Blockly.blockRendering.SquareCorner(this.constants_));
-  } else {
-    this.elements.push(
-        new Blockly.blockRendering.RoundCorner(this.constants_));
-  }
-
-  if (this.hasNextConnection) {
-    this.connection = new Blockly.blockRendering.NextConnection(
-        this.constants_,
-        /** @type {Blockly.RenderedConnection} */ (block.nextConnection));
-    this.elements.push(this.connection);
-  }
-};
 
 /**
  * Returns whether or not the bottom row has a left square corner.

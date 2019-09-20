@@ -273,10 +273,12 @@ Blockly.InsertionMarkerManager.prototype.createMarkerBlock_ = function(sourceBlo
     // rendered size of the insertion marker.  Note that we do not care about
     // child blocks here.
     for (var i = 0; i < sourceBlock.inputList.length; i++) {
-      var input = sourceBlock.inputList[i];
-      for (var j = 0; j < input.fieldRow.length; j++) {
-        var field = input.fieldRow[j];
-        result.setFieldValue(field.getValue(), field.name);
+      var sourceInput = sourceBlock.inputList[i];
+      var resultInput = result.inputList[i];
+      for (var j = 0; j < sourceInput.fieldRow.length; j++) {
+        var sourceField = sourceInput.fieldRow[j];
+        var resultField = resultInput.fieldRow[j];
+        resultField.setValue(sourceField.getValue());
       }
     }
 

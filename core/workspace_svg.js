@@ -468,8 +468,8 @@ Blockly.WorkspaceSvg.prototype.setCursorSvg = function(cursorSvg) {
     return;
   }
 
-  if (this.svgGroup_) {
-    this.svgGroup_.appendChild(cursorSvg);
+  if (this.svgBlockCanvas_) {
+    this.svgBlockCanvas_.appendChild(cursorSvg);
     this.cursorSvg_ = cursorSvg;
   }
 };
@@ -486,11 +486,11 @@ Blockly.WorkspaceSvg.prototype.setMarkerSvg = function(markerSvg) {
     return;
   }
 
-  if (this.svgGroup_) {
+  if (this.svgBlockCanvas_) {
     if (this.cursorSvg_) {
-      this.svgGroup_.insertBefore(markerSvg, this.cursorSvg_);
+      this.svgBlockCanvas_.insertBefore(markerSvg, this.cursorSvg_);
     } else {
-      this.svgGroup_.appendChild(markerSvg);
+      this.svgBlockCanvas_.appendChild(markerSvg);
     }
     this.markerSvg_ = markerSvg;
   }

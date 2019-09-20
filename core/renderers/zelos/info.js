@@ -121,7 +121,7 @@ Blockly.zelos.RenderInfo.prototype.populateTopRow_ = function() {
 Blockly.zelos.RenderInfo.prototype.populateBottomRow_ = function() {
   Blockly.zelos.RenderInfo.superClass_.populateBottomRow_.call(this);
 
-  var rightSquareCorner = this.bottomRow.hasRightSquareCorner(block);
+  var rightSquareCorner = this.bottomRow.hasRightSquareCorner(this.block_);
 
   if (rightSquareCorner) {
     this.bottomRow.elements.push(

@@ -410,34 +410,6 @@ Blockly.Component.prototype.disposeInternal = function() {
 };
 
 /**
- * Helper function for subclasses that gets a unique id for a given fragment,
- * this can be used by components to generate unique string ids for DOM
- * elements.
- * @param {string} idFragment A partial id.
- * @return {string} Unique element id.
- * @protected
- */
-Blockly.Component.prototype.makeId = function(idFragment) {
-  return this.getId() + '.' + idFragment;
-};
-
-/**
- * Makes a collection of ids.  This is a convenience method for makeId.  The
- * object's values are the id fragments and the new values are the generated
- * ids.  The key will remain the same.
- * @param {Object} object The object that will be used to create the ids.
- * @return {!Object<string, string>} An object of id keys to generated ids.
- * @protected
- */
-Blockly.Component.prototype.makeIds = function(object) {
-  var ids = {};
-  for (var key in object) {
-    ids[key] = this.makeId(object[key]);
-  }
-  return ids;
-};
-
-/**
  * Adds the specified component as the last child of this component.  See
  * {@link Blockly.Component#addChildAt} for detailed semantics.
  *
@@ -620,22 +592,6 @@ Blockly.Component.prototype.hasChildren = function() {
  */
 Blockly.Component.prototype.getChildCount = function() {
   return this.children_ ? this.children_.length : 0;
-};
-
-/**
- * Returns an array containing the IDs of the children of this component, or an
- * empty array if the component has no children.
- * @return {!Array.<string>} Child component IDs.
- * @protected
- */
-Blockly.Component.prototype.getChildIds = function() {
-  var ids = [];
-
-  this.forEachChild(function(child) {
-    ids.push(child.getId());
-  });
-
-  return ids;
 };
 
 /**

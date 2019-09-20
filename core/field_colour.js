@@ -533,7 +533,6 @@ Blockly.FieldColour.prototype.dropdownCreate_ = function() {
       Math.floor(colours.length / columns));
   Blockly.utils.aria.setState(table, 'colcount', columns);
   var row;
-  var idGenerator = Blockly.utils.IdGenerator.getInstance();
   for (var i = 0; i < colours.length; i++) {
     if (i % columns == 0) {
       row = document.createElement('tr');
@@ -544,7 +543,7 @@ Blockly.FieldColour.prototype.dropdownCreate_ = function() {
     row.appendChild(cell);
     cell.label = colours[i];  // This becomes the value, if clicked.
     cell.title = titles[i] || colours[i];
-    cell.id = idGenerator.getNextUniqueId();
+    cell.id = Blockly.utils.IdGenerator.getNextUniqueId();
     cell.setAttribute('data-index', i);
     Blockly.utils.aria.setRole(cell, Blockly.utils.aria.Role.GRIDCELL);
     Blockly.utils.aria.setState(cell,

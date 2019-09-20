@@ -30,37 +30,18 @@ goog.provide('Blockly.utils.IdGenerator');
 
 
 /**
- * Creates a new ID generator.
- * @constructor
- * @final
- */
-Blockly.utils.IdGenerator = function() {};
-
-/**
- * Get the singleton instance of Blockly.utils.IdGenerator.
- * @return {Blockly.utils.IdGenerator} singleton instance
- */
-Blockly.utils.IdGenerator.getInstance = function() {
-  if (!Blockly.utils.IdGenerator.instance_) {
-    Blockly.utils.IdGenerator.instance_ = new Blockly.utils.IdGenerator();
-  }
-  return Blockly.utils.IdGenerator.instance_;
-};
-
-/**
  * Next unique ID to use.
  * @type {number}
  * @private
  */
-Blockly.utils.IdGenerator.prototype.nextId_ = 0;
+Blockly.utils.IdGenerator.nextId_ = 0;
 
 /**
  * Gets the next unique ID.
- * The difference between this and genUid is that getNextUniqueId generates
- * IDs compatible with the HTML4 id attribute restrictions:
+ * IDs are compatible with the HTML4 id attribute restrictions:
  * Use only ASCII letters, digits, '_', '-' and '.'
  * @return {string} The next unique identifier.
  */
-Blockly.utils.IdGenerator.prototype.getNextUniqueId = function() {
-  return 'blockly:' + (this.nextId_++).toString(36);
+Blockly.utils.IdGenerator.getNextUniqueId = function() {
+  return 'blockly:' + (Blockly.utils.IdGenerator.nextId_++).toString(36);
 };

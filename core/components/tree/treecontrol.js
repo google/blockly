@@ -54,7 +54,7 @@ Blockly.tree.TreeControl = function(toolbox, config) {
   this.setSelectedInternal(true);
 
   /**
-   * Currenty selected item.
+   * Currently selected item.
    * @private {Blockly.tree.BaseNode}
    */
   this.selectedItem_ = this;
@@ -174,8 +174,6 @@ Blockly.tree.TreeControl.prototype.getCalculatedIconClass = function() {
   var config = this.getConfig();
   if (expanded && config.cssExpandedRootIcon) {
     return config.cssTreeIcon + ' ' + config.cssExpandedRootIcon;
-  } else if (!expanded && config.cssCollapsedRootIcon) {
-    return config.cssTreeIcon + ' ' + config.cssCollapsedRootIcon;
   }
   return '';
 };

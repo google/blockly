@@ -406,8 +406,7 @@ Blockly.Menu.prototype.handleMouseEnter_ = function(_e) {
  * @private
  */
 Blockly.Menu.prototype.handleMouseLeave_ = function(_e) {
-  var el = this.getElement();
-  if (el) {
+  if (this.getElement()) {
     this.blur();
     this.clearHighlighted();
   }

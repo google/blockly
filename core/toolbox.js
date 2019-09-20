@@ -84,7 +84,6 @@ Blockly.Toolbox = function(workspace) {
     indentWidth: 19,
     cssRoot: 'blocklyTreeRoot',
     cssHideRoot: 'blocklyHidden',
-    cssItem: '',
     cssTreeRow: 'blocklyTreeRow',
     cssItemLabel: 'blocklyTreeLabel',
     cssTreeIcon: 'blocklyTreeIcon',

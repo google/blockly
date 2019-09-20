@@ -690,8 +690,7 @@ Blockly.Component.prototype.forEachChild = function(f, opt_obj) {
  * @protected
  */
 Blockly.Component.prototype.indexOfChild = function(child) {
-  return (this.children_ && child) ? this.children_.indexOf(child) :
-                                     -1;
+  return (this.children_ && child) ? this.children_.indexOf(child) : -1;
 };
 
 /**

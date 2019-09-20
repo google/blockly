@@ -122,27 +122,12 @@ Blockly.utils.object.inherits(Blockly.tree.BaseNode, Blockly.Component);
  *            indentWidth:number,
  *            cssRoot:string,
  *            cssHideRoot:string,
- *            cssItem:string,
- *            cssChildren:string,
- *            cssChildrenNoLines:string,
  *            cssTreeRow:string,
  *            cssItemLabel:string,
  *            cssTreeIcon:string,
- *            cssExpandTreeIcon:string,
- *            cssExpandTreeIconPlus:string,
- *            cssExpandTreeIconMinus:string,
- *            cssExpandTreeIconTPlus:string,
- *            cssExpandTreeIconTMinus:string,
- *            cssExpandTreeIconLPlus:string,
- *            cssExpandTreeIconLMinus:string,
- *            cssExpandTreeIconT:string,
- *            cssExpandTreeIconL:string,
- *            cssExpandTreeIconBlank:string,
  *            cssExpandedFolderIcon:string,
  *            cssCollapsedFolderIcon:string,
  *            cssFileIcon:string,
- *            cssExpandedRootIcon:string,
- *            cssCollapsedRootIcon:string,
  *            cssSelectedRow:string
  *          }}
  */
@@ -194,12 +179,12 @@ Blockly.tree.BaseNode.prototype.initAccessibility = function() {
     var img = this.getIconElement();
     if (img) {
       Blockly.utils.aria.setRole(img,
-          Blockly.utils.aria.Role.PRESENTATION);
+          Blockly.utils.aria.Role.PRESENTATION + '1');
     }
     var ei = this.getExpandIconElement();
     if (ei) {
       Blockly.utils.aria.setRole(ei,
-          Blockly.utils.aria.Role.PRESENTATION);
+          Blockly.utils.aria.Role.PRESENTATION + '2');
     }
 
     var ce = this.getChildrenElement();
@@ -631,12 +616,9 @@ Blockly.tree.BaseNode.prototype.isUserCollapsible = function() {
  * @protected
  */
 Blockly.tree.BaseNode.prototype.toDom = function() {
-  var childClass = this.config_.cssChildrenNoLines;
-
   var nonEmptyAndExpanded = this.getExpanded() && this.hasChildren();
 
   var children = document.createElement('div');
-  children.setAttribute('class', childClass || '');
   children.setAttribute('style', this.getLineStyle());
 
   if (nonEmptyAndExpanded) {
@@ -645,7 +627,6 @@ Blockly.tree.BaseNode.prototype.toDom = function() {
   }
 
   var node = document.createElement('div');
-  node.setAttribute('class', this.config_.cssItem || '');
   node.setAttribute('id', this.getId());
 
   node.appendChild(this.getRowDom());
@@ -729,59 +710,6 @@ Blockly.tree.BaseNode.prototype.getCalculatedIconClass = function() {
  */
 Blockly.tree.BaseNode.prototype.getExpandIconDom = function() {
   return document.createElement('span');
-};
-
-/**
- * @return {string} The class names of the icon used for expanding the node.
- * @protected
- */
-Blockly.tree.BaseNode.prototype.getExpandIconClass = function() {
-  var config = this.config_;
-  var sb = '';
-  sb += config.cssTreeIcon + ' ' + config.cssExpandTreeIcon + ' ';
-
-  if (this.hasChildren()) {
-    var bits = 0;
-    /*
-      Bitmap used to determine which icon to use
-      1  Plus
-      2  Minus
-      4  T Line
-      8  L Line
-    */
-
-    switch (bits) {
-      case 1:
-        sb += config.cssExpandTreeIconPlus;
-        break;
-      case 2:
-        sb += config.cssExpandTreeIconMinus;
-        break;
-      case 4:
-        sb += config.cssExpandTreeIconL;
-        break;
-      case 5:
-        sb += config.cssExpandTreeIconLPlus;
-        break;
-      case 6:
-        sb += config.cssExpandTreeIconLMinus;
-        break;
-      case 8:
-        sb += config.cssExpandTreeIconT;
-        break;
-      case 9:
-        sb += config.cssExpandTreeIconTPlus;
-        break;
-      case 10:
-        sb += config.cssExpandTreeIconTMinus;
-        break;
-      default:  // 0
-        sb += config.cssExpandTreeIconBlank;
-    }
-  } else {
-    sb += config.cssExpandTreeIconBlank;
-  }
-  return sb;
 };
 
 /**
@@ -919,7 +847,7 @@ Blockly.tree.BaseNode.prototype.updateRow = function() {
 Blockly.tree.BaseNode.prototype.updateExpandIcon = function() {
   var img = this.getExpandIconElement();
   if (img) {
-    img.className = this.getExpandIconClass();
+    img.className = this.config_.cssTreeIcon;
   }
   var cel = this.getChildrenElement();
   if (cel) {

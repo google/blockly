@@ -367,7 +367,7 @@ Blockly.Css.CONTENT = [
     'font-family: sans-serif;',
     'font-size: 11pt;',
   '}',
-  
+
   '.blocklyMultilineText {',
   '  font-family: monospace;',
   '}',
@@ -752,7 +752,6 @@ Blockly.Css.CONTENT = [
     'padding: 5px 0;',
     'margin: 0 5px;',
   '}',
-
 
   '.blocklyTreeIcon {',
     'background-image: url(<<<PATH>>>/sprites.png);',

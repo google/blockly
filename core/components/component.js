@@ -97,13 +97,6 @@ Blockly.Component = function() {
 
 
 /**
- * Generator for unique IDs.
- * @type {!Blockly.utils.IdGenerator}
- * @private
- */
-Blockly.Component.prototype.idGenerator_ = Blockly.utils.IdGenerator.getInstance();
-
-/**
  * The default right to left value.
  * @type {?boolean}
  * @private
@@ -171,27 +164,7 @@ Blockly.Component.setDefaultRightToLeft = function(rightToLeft) {
  * @package
  */
 Blockly.Component.prototype.getId = function() {
-  return this.id_ || (this.id_ = this.idGenerator_.getNextUniqueId());
-};
-
-/**
- * Assigns an ID to this component instance.  It is the caller's responsibility
- * to guarantee that the ID is unique.  If the component is a child of a parent
- * component, then the parent component's child index is updated to reflect the
- * new ID; this may throw an error if the parent already has a child with an ID
- * that conflicts with the new ID.
- * @param {string} id Unique component ID.
- * @protected
- */
-Blockly.Component.prototype.setId = function(id) {
-  if (this.parent_ && this.parent_.childIndex_) {
-    // Update the parent's child index.
-    delete this.parent_.childIndex_[this.id_];
-    this.parent_.childIndex_[id] = this;
-  }
-
-  // Update the component ID.
-  this.id_ = id;
+  return this.id_ || (this.id_ = Blockly.utils.IdGenerator.getNextUniqueId());
 };
 
 /**
@@ -234,14 +207,14 @@ Blockly.Component.prototype.setElementInternal = function(element) {
 Blockly.Component.prototype.setParent = function(parent) {
   if (this == parent) {
     // Attempting to add a child to itself is an error.
-    throw new Error(Blockly.Component.Error.PARENT_UNABLE_TO_BE_SET);
+    throw Error(Blockly.Component.Error.PARENT_UNABLE_TO_BE_SET);
   }
 
   if (parent && this.parent_ && this.id_ && this.parent_.getChild(this.id_) &&
       this.parent_ != parent) {
     // This component is already the child of some parent, so it should be
     // removed using removeChild/removeChildAt first.
-    throw new Error(Blockly.Component.Error.PARENT_UNABLE_TO_BE_SET);
+    throw Error(Blockly.Component.Error.PARENT_UNABLE_TO_BE_SET);
   }
 
   this.parent_ = parent;
@@ -328,7 +301,7 @@ Blockly.Component.prototype.renderBefore = function(sibling) {
 Blockly.Component.prototype.render_ = function(
     opt_parentElement, opt_beforeNode) {
   if (this.inDocument_) {
-    throw new Error(Blockly.Component.Error.ALREADY_RENDERED);
+    throw Error(Blockly.Component.Error.ALREADY_RENDERED);
   }
 
   if (!this.element_) {
@@ -437,34 +410,6 @@ Blockly.Component.prototype.disposeInternal = function() {
 };
 
 /**
- * Helper function for subclasses that gets a unique id for a given fragment,
- * this can be used by components to generate unique string ids for DOM
- * elements.
- * @param {string} idFragment A partial id.
- * @return {string} Unique element id.
- * @protected
- */
-Blockly.Component.prototype.makeId = function(idFragment) {
-  return this.getId() + '.' + idFragment;
-};
-
-/**
- * Makes a collection of ids.  This is a convenience method for makeId.  The
- * object's values are the id fragments and the new values are the generated
- * ids.  The key will remain the same.
- * @param {Object} object The object that will be used to create the ids.
- * @return {!Object<string, string>} An object of id keys to generated ids.
- * @protected
- */
-Blockly.Component.prototype.makeIds = function(object) {
-  var ids = {};
-  for (var key in object) {
-    ids[key] = this.makeId(object[key]);
-  }
-  return ids;
-};
-
-/**
  * Adds the specified component as the last child of this component.  See
  * {@link Blockly.Component#addChildAt} for detailed semantics.
  *
@@ -526,12 +471,12 @@ Blockly.Component.prototype.addChildAt = function(child, index, opt_render) {
   if (child.inDocument_ && (opt_render || !this.inDocument_)) {
     // Adding a child that's already in the document is an error, except if the
     // parent is also in the document and opt_render is false (e.g. decorate()).
-    throw new Error(Blockly.Component.Error.ALREADY_RENDERED);
+    throw Error(Blockly.Component.Error.ALREADY_RENDERED);
   }
 
   if (index < 0 || index > this.getChildCount()) {
     // Allowing sparse child arrays would lead to strange behavior, so we don't.
-    throw new Error(Blockly.Component.Error.CHILD_INDEX_OUT_OF_BOUNDS);
+    throw Error(Blockly.Component.Error.CHILD_INDEX_OUT_OF_BOUNDS);
   }
 
   // Create the index and the child array on first use.
@@ -626,7 +571,7 @@ Blockly.Component.prototype.isRightToLeft = function() {
  */
 Blockly.Component.prototype.setRightToLeft = function(rightToLeft) {
   if (this.inDocument_) {
-    throw new Error(Blockly.Component.Error.ALREADY_RENDERED);
+    throw Error(Blockly.Component.Error.ALREADY_RENDERED);
   }
   this.rightToLeft_ = rightToLeft;
 };
@@ -647,22 +592,6 @@ Blockly.Component.prototype.hasChildren = function() {
  */
 Blockly.Component.prototype.getChildCount = function() {
   return this.children_ ? this.children_.length : 0;
-};
-
-/**
- * Returns an array containing the IDs of the children of this component, or an
- * empty array if the component has no children.
- * @return {!Array.<string>} Child component IDs.
- * @protected
- */
-Blockly.Component.prototype.getChildIds = function() {
-  var ids = [];
-
-  this.forEachChild(function(child) {
-    ids.push(child.getId());
-  });
-
-  return ids;
 };
 
 /**
@@ -717,8 +646,7 @@ Blockly.Component.prototype.forEachChild = function(f, opt_obj) {
  * @protected
  */
 Blockly.Component.prototype.indexOfChild = function(child) {
-  return (this.children_ && child) ? this.children_.indexOf(child) :
-                                     -1;
+  return (this.children_ && child) ? this.children_.indexOf(child) : -1;
 };
 
 /**
@@ -771,7 +699,7 @@ Blockly.Component.prototype.removeChild = function(child, opt_unrender) {
   }
 
   if (!child) {
-    throw new Error(Blockly.Component.Error.NOT_OUR_CHILD);
+    throw Error(Blockly.Component.Error.NOT_OUR_CHILD);
   }
 
   return /** @type {!Blockly.Component} */ (child);

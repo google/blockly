@@ -33,23 +33,9 @@ goog.provide('Blockly');
 goog.require('Blockly.BlockSvg.render');
 goog.require('Blockly.Events');
 goog.require('Blockly.Events.Ui');
-goog.require('Blockly.FieldAngle');
-goog.require('Blockly.FieldCheckbox');
-goog.require('Blockly.FieldColour');
-// Date picker commented out since it increases footprint by 60%.
-// Add it only if you need it.
-//goog.require('Blockly.FieldDate');
-goog.require('Blockly.FieldDropdown');
-goog.require('Blockly.FieldLabelSerializable');
-goog.require('Blockly.FieldImage');
-goog.require('Blockly.FieldTextInput');
-goog.require('Blockly.FieldMultilineInput');
-goog.require('Blockly.FieldNumber');
-goog.require('Blockly.FieldVariable');
 goog.require('Blockly.Generator');
 goog.require('Blockly.navigation');
 goog.require('Blockly.Procedures');
-goog.require('Blockly.Toolbox');
 goog.require('Blockly.Tooltip');
 goog.require('Blockly.Touch');
 goog.require('Blockly.WidgetDiv');
@@ -59,12 +45,6 @@ goog.require('Blockly.inject');
 goog.require('Blockly.utils');
 goog.require('Blockly.Xml');
 
-
-// Turn off debugging when compiled.
-// Unused within the Blockly library, but used in Closure.
-/* eslint-disable no-unused-vars */
-var CLOSURE_DEFINES = {'goog.DEBUG': false};
-/* eslint-enable no-unused-vars */
 
 /**
  * Blockly core version.
@@ -361,35 +341,20 @@ Blockly.hideChaff = function(opt_allowToolbox) {
   Blockly.Tooltip.hide();
   Blockly.WidgetDiv.hide();
   Blockly.DropDownDiv.hideWithoutAnimation();
-  // For now the trashcan flyout always autocloses because it overlays the
-  // trashcan UI (no trashcan to click to close it)
-  var workspace = Blockly.getMainWorkspace();
-  if (workspace.trashcan &&
-      workspace.trashcan.flyout_) {
-    workspace.trashcan.flyout_.hide();
-  }
   if (!opt_allowToolbox) {
+    var workspace = Blockly.getMainWorkspace();
+    // For now the trashcan flyout always autocloses because it overlays the
+    // trashcan UI (no trashcan to click to close it).
+    if (workspace.trashcan &&
+      workspace.trashcan.flyout_) {
+      workspace.trashcan.flyout_.hide();
+    }
     if (workspace.toolbox_ &&
         workspace.toolbox_.flyout_ &&
         workspace.toolbox_.flyout_.autoClose) {
       workspace.toolbox_.clearSelection();
     }
   }
-};
-
-/**
- * When something in Blockly's workspace changes, call a function.
- * @param {!Function} func Function to call.
- * @return {!Array.<!Array>} Opaque data that can be passed to
- *     removeChangeListener.
- * @deprecated April 2015
- */
-Blockly.addChangeListener = function(func) {
-  // Backwards compatibility from before there could be multiple workspaces.
-  console.warn(
-      'Deprecated call to Blockly.addChangeListener, ' +
-      'use workspace.addChangeListener instead.');
-  return Blockly.getMainWorkspace().addChangeListener(func);
 };
 
 /**
@@ -694,7 +659,7 @@ Blockly.checkBlockColourConstants = function() {
  * Checks for a constant in the Blockly namespace, verifying it is undefined or
  * has the old/original value. Prints a warning if this is not true.
  * @param {string} msgName The Msg constant identifier.
- * @param {Array<string>} blocklyNamePath The name parts of the tested
+ * @param {Array.<string>} blocklyNamePath The name parts of the tested
  *     constant.
  * @param {number|undefined} expectedValue The expected value of the constant.
  * @private

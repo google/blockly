@@ -30,6 +30,7 @@ goog.require('Blockly.Events');
 goog.require('Blockly.Events.Ui');
 goog.require('Blockly.Flyout');
 goog.require('Blockly.HorizontalFlyout');
+goog.require('Blockly.navigation');
 goog.require('Blockly.Touch');
 goog.require('Blockly.tree.TreeControl');
 goog.require('Blockly.tree.TreeNode');
@@ -45,13 +46,13 @@ goog.require('Blockly.VerticalFlyout');
 /**
  * Class for a Toolbox.
  * Creates the toolbox's DOM.
- * @param {!Blockly.Workspace} workspace The workspace in which to create new
+ * @param {!Blockly.WorkspaceSvg} workspace The workspace in which to create new
  *     blocks.
  * @constructor
  */
 Blockly.Toolbox = function(workspace) {
   /**
-   * @type {!Blockly.Workspace}
+   * @type {!Blockly.WorkspaceSvg}
    * @private
    */
   this.workspace_ = workspace;
@@ -77,14 +78,13 @@ Blockly.Toolbox = function(workspace) {
 
   /**
    * Configuration constants for Closure's tree UI.
-   * @type {Object.<string,*>}
+   * @type {!Object.<string,*>}
    * @private
    */
   this.config_ = {
     indentWidth: 19,
     cssRoot: 'blocklyTreeRoot',
     cssHideRoot: 'blocklyHidden',
-    cssItem: '',
     cssTreeRow: 'blocklyTreeRow',
     cssItemLabel: 'blocklyTreeLabel',
     cssTreeIcon: 'blocklyTreeIcon',
@@ -96,7 +96,7 @@ Blockly.Toolbox = function(workspace) {
 
   /**
    * Configuration constants for tree separator.
-   * @type {Object.<string,*>}
+   * @type {!Object.<string,*>}
    * @private
    */
   this.treeSeparatorConfig_ = {
@@ -177,7 +177,8 @@ Blockly.Toolbox.prototype.init = function() {
     RTL: workspace.RTL,
     oneBasedIndex: workspace.options.oneBasedIndex,
     horizontalLayout: workspace.horizontalLayout,
-    toolboxPosition: workspace.options.toolboxPosition
+    toolboxPosition: workspace.options.toolboxPosition,
+    renderer: workspace.options.renderer
   };
   /**
    * @type {!Blockly.Flyout}
@@ -197,12 +198,16 @@ Blockly.Toolbox.prototype.init = function() {
   this.config_['cleardotPath'] = workspace.options.pathToMedia + '1x1.gif';
   this.config_['cssCollapsedFolderIcon'] =
       'blocklyTreeIconClosed' + (workspace.RTL ? 'Rtl' : 'Ltr');
-  var tree = new Blockly.tree.TreeControl(this, this.config_);
+  var tree = new Blockly.tree.TreeControl(this,
+      /** @type {!Blockly.tree.BaseNode.Config} */ (this.config_));
   this.tree_ = tree;
   tree.setSelectedItem(null);
   tree.onBeforeSelected(this.handleBeforeTreeSelected_);
   tree.onAfterSelected(this.handleAfterTreeSelected_);
-  var openNode = this.populate_(workspace.options.languageTree);
+  var openNode = null;
+  if (workspace.options.languageTree) {
+    openNode = this.populate_(workspace.options.languageTree);
+  }
   tree.render(this.HtmlDiv);
   if (openNode) {
     tree.setSelectedItem(openNode);
@@ -213,7 +218,7 @@ Blockly.Toolbox.prototype.init = function() {
   // Trees have an implicit orientation of vertical, so we only need to set this
   // when the toolbox is in horizontal mode.
   if (this.horizontalLayout_) {
-    Blockly.utils.aria.setState(this.tree_.getElement(),
+    Blockly.utils.aria.setState(/** @type {!Element} */ (this.tree_.getElement()),
         Blockly.utils.aria.State.ORIENTATION, 'horizontal');
   }
 };
@@ -281,6 +286,32 @@ Blockly.Toolbox.prototype.handleNodeSizeChanged_ = function() {
 };
 
 /**
+ * Handles the given Blockly action on a toolbox.
+ * This is only triggered when keyboard accessibility mode is enabled.
+ * @param {!Blockly.Action} action The action to be handled.
+ * @return {boolean} True if the field handled the action, false otherwise.
+ * @package
+ */
+Blockly.Toolbox.prototype.onBlocklyAction = function(action) {
+  var selected = this.tree_.getSelectedItem();
+  if (!selected) {
+    return false;
+  }
+  switch (action.name) {
+    case Blockly.navigation.actionNames.PREVIOUS:
+      return selected.selectPrevious();
+    case Blockly.navigation.actionNames.OUT:
+      return selected.selectParent();
+    case Blockly.navigation.actionNames.NEXT:
+      return selected.selectNext();
+    case Blockly.navigation.actionNames.IN:
+      return selected.selectChild();
+    default:
+      return false;
+  }
+};
+
+/**
  * Dispose of this toolbox.
  */
 Blockly.Toolbox.prototype.dispose = function() {
@@ -343,7 +374,7 @@ Blockly.Toolbox.prototype.position = function() {
 /**
  * Fill the toolbox with categories and blocks.
  * @param {!Node} newTree DOM tree of blocks.
- * @return {Node} Tree node to open at startup (or null).
+ * @return {Blockly.tree.BaseNode} Tree node to open at startup (or null).
  * @private
  */
 Blockly.Toolbox.prototype.populate_ = function(newTree) {
@@ -369,7 +400,7 @@ Blockly.Toolbox.prototype.populate_ = function(newTree) {
  * @param {!Blockly.tree.BaseNode} treeOut The TreeControl or TreeNode
  *     object built from treeIn.
  * @param {string} pathToMedia The path to the Blockly media directory.
- * @return {Node} Tree node to open at startup (or null).
+ * @return {Blockly.tree.BaseNode} Tree node to open at startup (or null).
  * @private
  */
 Blockly.Toolbox.prototype.syncTrees_ = function(treeIn, treeOut, pathToMedia) {
@@ -431,7 +462,7 @@ Blockly.Toolbox.prototype.syncTrees_ = function(treeIn, treeOut, pathToMedia) {
           // Separator between two categories.
           // <sep></sep>
           treeOut.add(new Blockly.Toolbox.TreeSeparator(
-              this.treeSeparatorConfig_));
+              /** @type {!Blockly.tree.BaseNode.Config} */ (this.treeSeparatorConfig_)));
           break;
         }
         // Otherwise falls through.
@@ -648,8 +679,19 @@ Blockly.Toolbox.prototype.refreshSelection = function() {
 };
 
 /**
+ * Select the first toolbox category if no category is selected.
+ * @package
+ */
+Blockly.Toolbox.prototype.selectFirstCategory = function() {
+  var selectedItem = this.tree_.getSelectedItem();
+  if (!selectedItem) {
+    this.tree_.selectFirst();
+  }
+};
+
+/**
  * A blank separator node in the tree.
- * @param {Blockly.tree.BaseNode.Config} config The configuration for the tree.
+ * @param {!Blockly.tree.BaseNode.Config} config The configuration for the tree.
  * @constructor
  * @extends {Blockly.tree.TreeNode}
  */

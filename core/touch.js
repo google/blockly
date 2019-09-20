@@ -124,7 +124,7 @@ Blockly.longStart_ = function(e, gesture) {
 /**
  * Nope, that's not a long-press.  Either touchend or touchcancel was fired,
  * or a drag hath begun.  Kill the queued long-press task.
- * @private
+ * @package
  */
 Blockly.longStop_ = function() {
   if (Blockly.longPid_) {

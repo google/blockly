@@ -493,8 +493,10 @@ FactoryUtils.getFieldsJs_ = function(block) {
           var width = Number(block.getFieldValue('WIDTH'));
           var height = Number(block.getFieldValue('HEIGHT'));
           var alt = JSON.stringify(block.getFieldValue('ALT'));
+          var flipRtl = Json.stringify(block.getFieldValue('FLIP_RTL'));
           fields.push('new Blockly.FieldImage(' +
-              src + ', ' + width + ', ' + height + ', ' + alt + ')');
+              src + ', ' + width + ', ' + height +
+              ', { alt: ' + alt + ', flipRtl: ' + flipRtl + ' })');
           break;
       }
     }
@@ -767,7 +769,7 @@ FactoryUtils.getBlockTypeFromJsDefinition = function(blockDef) {
   if (indexOfStartBracket != -1 && indexOfEndBracket != -1) {
     return blockDef.substring(indexOfStartBracket + 2, indexOfEndBracket);
   } else {
-    throw new Error ('Could not parse block type out of JavaScript block ' +
+    throw Error('Could not parse block type out of JavaScript block ' +
         'definition. Brackets normally enclosing block type not found.');
   }
 };
@@ -921,7 +923,7 @@ FactoryUtils.sameBlockXml = function(blockXml1, blockXml2) {
   // Each XML element should contain a single child element with a 'block' tag
   if (blockXml1.tagName.toLowerCase() != 'xml' ||
       blockXml2.tagName.toLowerCase() != 'xml') {
-    throw new Error('Expected two XML elements, received elements with tag ' +
+    throw Error('Expected two XML elements, received elements with tag ' +
         'names: ' + blockXml1.tagName + ' and ' + blockXml2.tagName + '.');
   }
 
@@ -931,7 +933,7 @@ FactoryUtils.sameBlockXml = function(blockXml1, blockXml2) {
   var blockElement2 = blockXml2.getElementsByTagName('block')[0];
 
   if (!(blockElement1 && blockElement2)) {
-    throw new Error('Could not get find block element in XML.');
+    throw Error('Could not get find block element in XML.');
   }
 
   var cleanBlockXml1 = FactoryUtils.cleanXml(blockElement1);

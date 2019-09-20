@@ -500,7 +500,7 @@ Blockly.Gesture.prototype.doStart = function(e) {
   if (this.targetBlock_) {
     if (!this.targetBlock_.isInFlyout && e.shiftKey) {
       Blockly.navigation.enableKeyboardAccessibility();
-      this.creatorWorkspace_.cursor.setLocation(
+      this.creatorWorkspace_.getCursor().setCurNode(
           Blockly.navigation.getTopNode(this.targetBlock_));
     } else {
       this.targetBlock_.select();
@@ -769,7 +769,7 @@ Blockly.Gesture.prototype.doWorkspaceClick_ = function(e) {
     var screenCoord = new Blockly.utils.Coordinate(e.clientX, e.clientY);
     var wsCoord = Blockly.utils.screenToWsCoordinates(ws, screenCoord);
     var wsNode = Blockly.ASTNode.createWorkspaceNode(ws, wsCoord);
-    ws.cursor.setLocation(wsNode);
+    ws.getCursor().setCurNode(wsNode);
   } else if (Blockly.selected) {
     Blockly.selected.unselect();
   }

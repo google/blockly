@@ -92,6 +92,9 @@ function start() {
   var side = match ? match[1] : 'start';
   document.forms.options.elements.side.value = side;
   var autoimport = !!location.search.match(/autoimport=([^&]+)/);
+  match = location.search.match(/renderer=([^&]+)/);
+  var renderer = match ? match[1] : 'geras';
+  document.forms.options.elements.renderer.value = renderer;
   // Create main workspace.
   workspace = Blockly.inject('blocklyDiv',
       {
@@ -119,6 +122,7 @@ function start() {
         },
         toolbox: toolbox,
         toolboxPosition: side == 'top' || side == 'start' ? 'start' : 'end',
+        renderer: renderer,
         zoom:
           {
             controls: true,
@@ -130,6 +134,7 @@ function start() {
           }
       });
   addToolboxButtonCallbacks();
+  addRenderDebugOptionsCheckboxes();
   // Restore previously displayed text.
   if (sessionStorage) {
     var text = sessionStorage.getItem('textarea');
@@ -142,6 +147,10 @@ function start() {
     // Restore render debug state.
     var renderDebugState = sessionStorage.getItem('blockRenderDebug');
     toggleRenderingDebug(Boolean(Number(renderDebugState)));
+    // Restore render debug options state.
+    var renderDebugOptionsState =
+        JSON.parse(sessionStorage.getItem('blockRenderDebugOptions'));
+    setRenderDebugOptionCheckboxState(renderDebugOptionsState);
   } else {
     // MSIE 11 does not support sessionStorage on file:// URLs.
     logEvents(false);
@@ -256,6 +265,52 @@ function addToolboxButtonCallbacks() {
       'removeDynamicOption', Blockly.TestBlocks.removeDynamicDropdownOption_);
 }
 
+function setRenderDebugOptionCheckboxState(overrideOptions) {
+  Blockly.blockRendering.Debug.config = overrideOptions || {};
+  if (!overrideOptions) {
+    return;
+  }
+  var renderDebugOptionsListEl = document.getElementById('renderDebugOptions');
+  var renderDebugOptionInputs =
+      renderDebugOptionsListEl.getElementsByTagName('input');
+  for (var i = 0, optionInput;
+      (optionInput = renderDebugOptionInputs[i]); i++) {
+    var optionName = optionInput.getAttribute('data-optionName');
+    optionInput.checked = !!overrideOptions[optionName];
+  }
+}
+
+function updateRenderDebugOptions(e) {
+  var target = e.target;
+  var optionName = target.getAttribute('data-optionName');
+  var config = Blockly.blockRendering.Debug.config;
+  config[optionName] = !!target.checked;
+  sessionStorage.setItem(
+      'blockRenderDebugOptions', JSON.stringify(config));
+  workspace.render();
+}
+
+function addRenderDebugOptionsCheckboxes() {
+  var renderDebugConfig = Blockly.blockRendering.Debug.config;
+  var renderDebugOptionsListEl = document.getElementById('renderDebugOptions');
+  var optionNames = Object.keys(renderDebugConfig);
+  for (var i = 0, optionName; (optionName = optionNames[i]); i++) {
+    var optionCheckId = 'RenderDebug' + optionName + 'Check';
+    var optionLabel = document.createElement('label');
+    optionLabel.setAttribute('for', optionCheckId);
+    optionLabel.textContent = optionName;
+    var optionCheck = document.createElement('input');
+    optionCheck.setAttribute('type', 'checkbox');
+    optionCheck.setAttribute('id', optionCheckId);
+    optionCheck.setAttribute('data-optionName', optionName);
+    optionCheck.onclick = updateRenderDebugOptions;
+    var optionLi = document.createElement('li');
+    optionLi.appendChild(optionLabel);
+    optionLi.appendChild(optionCheck);
+    renderDebugOptionsListEl.appendChild(optionLi);
+  }
+}
+
 function changeTheme() {
   var theme = document.getElementById('themeChanger');
   if (theme.value === "modern") {
@@ -296,6 +351,9 @@ function toXml() {
 
 function fromXml() {
   var input = document.getElementById('importExport');
+  if (!input.value) {
+    return;
+  }
   var xml = Blockly.Xml.textToDom(input.value);
   Blockly.Xml.domToWorkspace(xml, workspace);
   taChange();
@@ -344,10 +402,12 @@ function toggleRenderingDebug(state) {
   }
   if (state) {
     document.getElementById('blocklyDiv').className = 'renderingDebug';
-    Blockly.blockRendering.useDebugger = true;
+    Blockly.blockRendering.startDebugger();
+    document.getElementById('renderDebugOptions').style.display = 'block';
   } else {
     document.getElementById('blocklyDiv').className = '';
-    Blockly.blockRendering.useDebugger = false;
+    Blockly.blockRendering.stopDebugger();
+    document.getElementById('renderDebugOptions').style.display = 'none';
   }
 }
 
@@ -427,39 +487,46 @@ var spaghettiXml = [
 </script>
 
 <style>
-html, body {
-  height: 100%;
-}
-body {
-  background-color: #fff;
-  font-family: sans-serif;
-  overflow: hidden;
-}
-h1 {
-  font-weight: normal;
-  font-size: 140%;
-}
-#blocklyDiv {
-  float: right;
-  height: 95%;
-  width: 70%;
-}
-#importExport {
-  font-family: monospace;
-}
+  html, body {
+    height: 100%;
+  }
+  body {
+    background-color: #fff;
+    font-family: sans-serif;
+    overflow: hidden;
+  }
+  h1 {
+    font-weight: normal;
+    font-size: 140%;
+  }
+  #blocklyDiv {
+    float: right;
+    height: 95%;
+    width: 70%;
+  }
+  #importExport {
+    font-family: monospace;
+  }
 
-.ioLabel>.blocklyFlyoutLabelText {
-  font-style: italic;
-}
+  .ioLabel>.blocklyFlyoutLabelText {
+    font-style: italic;
+  }
 
-#blocklyDiv.renderingDebug .blockRenderDebug {
-  display: block;
-}
+  #blocklyDiv.renderingDebug .blockRenderDebug {
+    display: block;
+  }
 
-.blockRenderDebug {
-  display: none;
-}
+  .playgroundToggleOptions {
+    list-style: none;
+    padding: 0;
+  }
+  .playgroundToggleOptions li {
+    margin-top: 1em;
+  }
 
+  .blockRenderDebug {
+    display: none;
+  }
 </style>
 </head>
 <body onload="start()">
@@ -487,6 +554,11 @@ h1 {
       <option value="end">End</option>
       <option value="top">Top</option>
       <option value="bottom">Bottom</option>
+    </select>
+    <select name="renderer" onchange="document.forms.options.submit()">
+      <option value="geras">Geras</option>
+      <option value="thrasos">Thrasos</option>
+      <option value="zelos">Zelos</option>
     </select>
   </form>
   <select id="themeChanger" name="theme" onchange="changeTheme()">
@@ -518,20 +590,21 @@ h1 {
     <input type="button" value="Airstrike!" onclick="airstrike(100)">
     <input type="button" value="Spaghetti!" onclick="spaghetti(8)">
   </p>
-  <p>
-    Log events: &nbsp;
-    <input type="checkbox" onclick="logEvents(this.checked)" id="logCheck">
-  </p>
-
-  <p>
-    Block rendering debug: &nbsp;
-    <input type="checkbox" onclick="toggleRenderingDebug(this.checked)" id="blockRenderDebugCheck">
-  </p>
-
-  <p>
-    Enable Accessibility Mode: &nbsp;
-    <input type="checkbox" onclick="toggleAccessibilityMode(this.checked)" id="accessibilityModeCheck">
-  </p>
+  <ul class="playgroundToggleOptions">
+    <li>
+      <label for="logCheck">Log events:</label>
+      <input type="checkbox" onclick="logEvents(this.checked)" id="logCheck">
+    </li>
+    <li>
+      <label for="blockRenderDebugCheck">Enable block rendering debug:</label>
+      <input type="checkbox" onclick="toggleRenderingDebug(this.checked)" id="blockRenderDebugCheck">
+      <ul id="renderDebugOptions"></ul>
+    </li>
+    <li>
+      <label for="accessibilityModeCheck">Enable Accessibility Mode:</label>
+      <input type="checkbox" onclick="toggleAccessibilityMode(this.checked)" id="accessibilityModeCheck">
+    </li>
+  </ul>
 
 
   <!-- The next three blocks of XML are sample toolboxes for testing basic
@@ -1362,6 +1435,7 @@ h1 {
         <block type="test_fields_colour"></block>
         <block type="test_fields_colour_options"></block>
         <block type="test_fields_text_input"></block>
+        <block type="test_fields_multilinetext"></block>
         <block type="test_fields_variable"></block>
         <button text="randomize label text" callbackKey="randomizeLabelText"></button>
         <sep gap="12"></sep>
@@ -1390,11 +1464,21 @@ h1 {
           <field name="NOTE">60</field>
         </block>
       </category>
+      <category name="Angles">
+        <block type="test_angles_clockwise"></block>
+        <block type="test_angles_offset"></block>
+        <block type="test_angles_wrap"></block>
+        <block type="test_angles_round_30"></block>
+        <block type="test_angles_round_0"></block>
+        <block type="test_angles_protractor"></block>
+        <block type="test_angles_compass"></block>
+      </category>
       <category name="Drop-downs">
         <label text="Dynamic"></label>
         <block type="test_dropdowns_dynamic"></block>
         <button text="Add option" callbackKey="addDynamicOption"></button>
         <button text="Remove option" callbackKey="removeDynamicOption"></button>
+        <block type="test_dropdowns_dynamic_random"></block>
         <label text="Other"></label>
         <block type="test_dropdowns_long"></block>
         <block type="test_dropdowns_images"></block>
@@ -1443,13 +1527,6 @@ h1 {
         <block type="test_validators_colour_force_red"></block>
         <sep gap="12"></sep>
         <block type="test_validators_colour_red_null"></block>
-        <label text="Dates"></label>
-        <sep gap="12"></sep>
-        <block type="test_validators_date_null"></block>
-        <sep gap="12"></sep>
-        <block type="test_validators_date_force_20s"></block>
-        <sep gap="12"></sep>
-        <block type="test_validators_date_20s_null"></block>
         <label text="Dropdowns"></label>
         <sep gap="12"></sep>
         <block type="test_validators_dropdown_null"></block>

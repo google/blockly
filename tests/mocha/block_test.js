@@ -410,9 +410,135 @@ suite('Blocks', function() {
               .connect(blockB.previousConnection);
 
           this.blockA.removeInput('STATEMENT');
-          console.log(blockB.disposed, blockB);
           chai.assert.isTrue(blockB.disposed);
           chai.assert.equal(this.blockA.getChildren().length, 0);
+        });
+      });
+    });
+  });
+  suite('Comments', function() {
+    setup(function() {
+      Blockly.defineBlocksWithJsonArray([
+        {
+          "type": "empty_block",
+          "message0": "",
+          "args0": []
+        },
+      ]);
+      this.eventSpy = sinon.spy(Blockly.Events, 'fire');
+    });
+    teardown(function() {
+      delete Blockly.Blocks['empty_block'];
+      this.eventSpy.restore();
+    });
+    suite('Set/Get Text', function() {
+      function assertCommentEvent(eventSpy, oldValue, newValue) {
+        var calls = eventSpy.getCalls();
+        var event = calls[calls.length - 1].args[0];
+        chai.assert.equal(event.type, Blockly.Events.BLOCK_CHANGE);
+        chai.assert.equal(event.element, 'comment');
+        chai.assert.equal(event.oldValue, oldValue);
+        chai.assert.equal(event.newValue, newValue);
+      }
+      function assertNoCommentEvent(eventSpy) {
+        var calls = eventSpy.getCalls();
+        var event = calls[calls.length - 1].args[0];
+        chai.assert.notEqual(event.type, Blockly.Events.BLOCK_CHANGE);
+      }
+      suite('Headless', function() {
+        setup(function() {
+          this.block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
+              '<block type="empty_block"/>'
+          ), this.workspace);
+        });
+        test('Text', function() {
+          this.block.setCommentText('test text');
+          chai.assert.equal(this.block.getCommentText(), 'test text');
+          assertCommentEvent(this.eventSpy, null, 'test text');
+        });
+        test('Text Empty', function() {
+          this.block.setCommentText('');
+          chai.assert.equal(this.block.getCommentText(), '');
+          assertCommentEvent(this.eventSpy, null, '');
+        });
+        test('Text Null', function() {
+          this.block.setCommentText(null);
+          chai.assert.equal(this.block.getCommentText(), null);
+          assertNoCommentEvent(this.eventSpy);
+        });
+        test('Text -> Null', function() {
+          this.block.setCommentText('first text');
+
+          this.block.setCommentText(null);
+          chai.assert.equal(this.block.getCommentText(), null);
+          assertCommentEvent(this.eventSpy, 'first text', null);
+        });
+      });
+      suite('Rendered', function() {
+        setup(function() {
+          // Let the parent teardown take care of this.
+          this.workspace = Blockly.inject('blocklyDiv', {
+            comments: true,
+            scrollbars: true
+          });
+          this.block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
+              '<block type="empty_block"/>'
+          ), this.workspace);
+        });
+        test('Text', function() {
+          this.block.setCommentText('test text');
+          chai.assert.equal(this.block.getCommentText(), 'test text');
+          assertCommentEvent(this.eventSpy, null, 'test text');
+        });
+        test('Text Empty', function() {
+          this.block.setCommentText('');
+          chai.assert.equal(this.block.getCommentText(), '');
+          assertCommentEvent(this.eventSpy, null, '');
+        });
+        test('Text Null', function() {
+          this.block.setCommentText(null);
+          chai.assert.equal(this.block.getCommentText(), null);
+          assertNoCommentEvent(this.eventSpy);
+        });
+        test('Text -> Null', function() {
+          this.block.setCommentText('first text');
+
+          this.block.setCommentText(null);
+          chai.assert.equal(this.block.getCommentText(), null);
+          assertCommentEvent(this.eventSpy, 'first text', null);
+        });
+        test('Set While Visible - Editable', function() {
+          this.block.setCommentText('test1');
+          var icon = this.block.getCommentIcon();
+          icon.setVisible(true);
+
+          this.block.setCommentText('test2');
+          chai.assert.equal(this.block.getCommentText(), 'test2');
+          assertCommentEvent(this.eventSpy, 'test1', 'test2');
+          chai.assert.equal(icon.textarea_.value, 'test2');
+        });
+        test('Set While Visible - NonEditable', function() {
+          this.block.setCommentText('test1');
+          var editableStub = sinon.stub(this.block, 'isEditable').returns(false);
+          var icon = this.block.getCommentIcon();
+          icon.setVisible(true);
+
+          this.block.setCommentText('test2');
+          chai.assert.equal(this.block.getCommentText(), 'test2');
+          assertCommentEvent(this.eventSpy, 'test1', 'test2');
+          chai.assert.equal(icon.paragraphElement_.firstChild.textContent,
+              'test2');
+
+          editableStub.restore();
+        });
+        test('Get Text While Editing', function() {
+          this.block.setCommentText('test1');
+          var icon = this.block.getCommentIcon();
+          icon.setVisible(true);
+          icon.textarea_.value = 'test2';
+          icon.textarea_.dispatchEvent(new Event('input'));
+
+          chai.assert.equal(this.block.getCommentText(), 'test2');
         });
       });
     });

@@ -40,7 +40,7 @@ goog.require('Blockly.utils.style');
  * Similar to Closure's goog.ui.tree.TreeControl
  *
  * @param {Blockly.Toolbox} toolbox The parent toolbox for this tree.
- * @param {Blockly.tree.BaseNode.Config} config The configuration for the tree.
+ * @param {!Blockly.tree.BaseNode.Config} config The configuration for the tree.
  * @constructor
  * @extends {Blockly.tree.BaseNode}
  */
@@ -54,7 +54,7 @@ Blockly.tree.TreeControl = function(toolbox, config) {
   this.setSelectedInternal(true);
 
   /**
-   * Currenty selected item.
+   * Currently selected item.
    * @private {Blockly.tree.BaseNode}
    */
   this.selectedItem_ = this;
@@ -70,7 +70,7 @@ Blockly.tree.TreeControl.prototype.getTree = function() {
 };
 
 /**
- * Returns the assosiated toolbox.
+ * Returns the associated toolbox.
  * @return {Blockly.Toolbox} The toolbox.
  * @package
  */
@@ -84,16 +84,6 @@ Blockly.tree.TreeControl.prototype.getToolbox = function() {
  */
 Blockly.tree.TreeControl.prototype.getDepth = function() {
   return 0;
-};
-
-/**
- * Expands the parent chain of this node so that it is visible.
- * @override
- */
-Blockly.tree.TreeControl.prototype.reveal = function() {
-  // always expanded by default
-  // needs to be overriden so that we don't try to reveal our parent
-  // which is a generic component
 };
 
 /**
@@ -148,12 +138,6 @@ Blockly.tree.TreeControl.prototype.getIconElement = function() {
 };
 
 /** @override */
-Blockly.tree.TreeControl.prototype.getExpandIconElement = function() {
-  // no expand icon for root element
-  return null;
-};
-
-/** @override */
 Blockly.tree.TreeControl.prototype.updateExpandIcon = function() {
   // no expand icon
 };
@@ -184,8 +168,6 @@ Blockly.tree.TreeControl.prototype.getCalculatedIconClass = function() {
   var config = this.getConfig();
   if (expanded && config.cssExpandedRootIcon) {
     return config.cssTreeIcon + ' ' + config.cssExpandedRootIcon;
-  } else if (!expanded && config.cssCollapsedRootIcon) {
-    return config.cssTreeIcon + ' ' + config.cssCollapsedRootIcon;
   }
   return '';
 };
@@ -248,38 +230,6 @@ Blockly.tree.TreeControl.prototype.onAfterSelected = function(fn) {
  */
 Blockly.tree.TreeControl.prototype.getSelectedItem = function() {
   return this.selectedItem_;
-};
-
-/**
- * Updates the lines after the tree has been drawn.
- * @private
- */
-Blockly.tree.TreeControl.prototype.updateLinesAndExpandIcons_ = function() {
-  var tree = this;
-  var showLines = false;
-  var showRootLines = false;
-
-  /**
-   * Recursively walk through all nodes and update the class names of the
-   * expand icon and the children element.
-   * @param {!Blockly.tree.BaseNode} node tree node
-   */
-  function updateShowLines(node) {
-    var childrenEl = node.getChildrenElement();
-    if (childrenEl) {
-      var hideLines = !showLines || tree == node.getParent() && !showRootLines;
-      var childClass = hideLines ? node.getConfig().cssChildrenNoLines :
-                                   node.getConfig().cssChildren;
-      childrenEl.className = childClass;
-
-      var expandIconEl = node.getExpandIconElement();
-      if (expandIconEl) {
-        expandIconEl.className = node.getExpandIconClass();
-      }
-    }
-    node.forEachChild(updateShowLines);
-  }
-  updateShowLines(this);
 };
 
 /**

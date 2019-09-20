@@ -267,14 +267,8 @@ Blockly.Menu.prototype.setHighlightedIndex = function(index) {
   if (child) {
     child.setHighlighted(true);
     this.highlightedIndex_ = index;
-    if (this.highlightHandler_) {
-      this.highlightHandler_(child);
-    }
   } else if (this.highlightedIndex_ > -1) {
     this.getHighlighted().setHighlighted(false);
-    if (this.highlightHandler_) {
-      this.highlightHandler_();
-    }
     this.highlightedIndex_ = -1;
   }
 
@@ -359,15 +353,6 @@ Blockly.Menu.prototype.canHighlightItem = function(item) {
   return item.isEnabled();
 };
 
-/**
- * Set the handler that's triggered when a menuitem is highlighted.
- * @param {function(?Blockly.MenuItem)} fn The handler.
- * @package
- */
-Blockly.Menu.prototype.onHighlighted = function(fn) {
-  this.highlightHandler_ = fn;
-};
-
 // Mouse events.
 
 /**
@@ -421,8 +406,7 @@ Blockly.Menu.prototype.handleMouseEnter_ = function(_e) {
  * @private
  */
 Blockly.Menu.prototype.handleMouseLeave_ = function(_e) {
-  var el = this.getElement();
-  if (el) {
+  if (this.getElement()) {
     this.blur();
     this.clearHighlighted();
   }

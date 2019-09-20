@@ -52,7 +52,13 @@ Blockly.blockRendering.Drawer = function(block, info) {
   this.topLeft_ = block.getRelativeToSurfaceXY();
   this.outlinePath_ = '';
   this.inlinePath_ = '';
-  this.constants_ = Blockly.blockRendering.getConstants();
+
+  /**
+   * The renderer's constant provider.
+   * @type {!Blockly.blockRendering.ConstantProvider}
+   * @protected
+   */
+  this.constants_ = info.getRenderer().getConstants();
 };
 
 /**
@@ -70,13 +76,10 @@ Blockly.blockRendering.Drawer.prototype.draw = function() {
   this.drawOutline_();
   this.drawInternals_();
 
-
-  var pathObject = new Blockly.BlockSvg.PathObject();
-
-  pathObject.steps = [this.outlinePath_];
-  pathObject.inlineSteps = [this.inlinePath_];
-
-  this.block_.setPaths_(pathObject);
+  this.block_.pathObject.setPaths(this.outlinePath_ + '\n' + this.inlinePath_);
+  if (this.info_.RTL) {
+    this.block_.pathObject.flipRTL();
+  }
   if (Blockly.blockRendering.useDebugger) {
     this.block_.renderingDebugger.drawDebug(this.block_, this.info_);
   }
@@ -85,8 +88,8 @@ Blockly.blockRendering.Drawer.prototype.draw = function() {
 
 /**
  * Save sizing information back to the block
- * Most of the rendering information can be thrown away at the end of the render.
- * Anything that needs to be kept around should be set in this function.
+ * Most of the rendering information can be thrown away at the end of the
+ * render. Anything that needs to be kept around should be set in this function.
  * @protected
  */
 Blockly.blockRendering.Drawer.prototype.recordSizeOnBlock_ = function() {
@@ -294,10 +297,13 @@ Blockly.blockRendering.Drawer.prototype.drawInternals_ = function() {
   for (var i = 0, row; (row = this.info_.rows[i]); i++) {
     for (var j = 0, elem; (elem = row.elements[j]); j++) {
       if (Blockly.blockRendering.Types.isInlineInput(elem)) {
-        this.drawInlineInput_(elem);
+        this.drawInlineInput_(
+            /** @type {!Blockly.blockRendering.InlineInput} */ (elem));
       } else if (Blockly.blockRendering.Types.isIcon(elem) ||
           Blockly.blockRendering.Types.isField(elem)) {
-        this.layoutField_(elem);
+        this.layoutField_(
+            /** @type {!Blockly.blockRendering.Field|!Blockly.blockRendering.Icon} */
+            (elem));
       }
     }
   }
@@ -344,7 +350,7 @@ Blockly.blockRendering.Drawer.prototype.layoutField_ = function(fieldInfo) {
 
 /**
  * Add steps for an inline input.
- * @param {Blockly.blockRendering.InlineInput} input The information about the
+ * @param {!Blockly.blockRendering.InlineInput} input The information about the
  * input to render.
  * @protected
  */

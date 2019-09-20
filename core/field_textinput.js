@@ -35,6 +35,7 @@ goog.require('Blockly.utils');
 goog.require('Blockly.utils.aria');
 goog.require('Blockly.utils.Coordinate');
 goog.require('Blockly.utils.dom');
+goog.require('Blockly.utils.KeyCodes');
 goog.require('Blockly.utils.object');
 goog.require('Blockly.utils.Size');
 goog.require('Blockly.utils.userAgent');
@@ -47,35 +48,39 @@ goog.require('Blockly.utils.userAgent');
  * @param {Function=} opt_validator A function that is called to validate
  *    changes to the field's value. Takes in a string & returns a validated
  *    string, or null to abort the change.
+ * @param {Object=} opt_config A map of options used to configure the field.
+ *    See the [field creation documentation]{@link https://developers.google.com/blockly/guides/create-custom-blocks/fields/built-in-fields/text-input#creation}
+ *    for a list of properties this parameter supports.
  * @extends {Blockly.Field}
  * @constructor
  */
-Blockly.FieldTextInput = function(opt_value, opt_validator) {
-  opt_value = this.doClassValidation_(opt_value);
-  if (opt_value === null) {
+Blockly.FieldTextInput = function(opt_value, opt_validator, opt_config) {
+  /**
+   * Allow browser to spellcheck this field.
+   * @type {boolean}
+   * @private
+   */
+  this.spellcheck_ = true;
+
+  if (opt_value == null) {
     opt_value = '';
   }
-  Blockly.FieldTextInput.superClass_.constructor.call(this, opt_value,
-      opt_validator);
+  Blockly.FieldTextInput.superClass_.constructor.call(this,
+      opt_value, opt_validator, opt_config);
 };
 Blockly.utils.object.inherits(Blockly.FieldTextInput, Blockly.Field);
 
 /**
  * Construct a FieldTextInput from a JSON arg object,
  * dereferencing any string table references.
- * @param {!Object} options A JSON object with options (text, class, and
- *                          spellcheck).
+ * @param {!Object} options A JSON object with options (text, and spellcheck).
  * @return {!Blockly.FieldTextInput} The new field instance.
  * @package
  * @nocollapse
  */
 Blockly.FieldTextInput.fromJson = function(options) {
   var text = Blockly.utils.replaceMessageReferences(options['text']);
-  var field = new Blockly.FieldTextInput(text);
-  if (typeof options['spellcheck'] === 'boolean') {
-    field.setSpellcheck(options['spellcheck']);
-  }
-  return field;
+  return new Blockly.FieldTextInput(text, null, options);
 };
 
 /**
@@ -92,7 +97,8 @@ Blockly.FieldTextInput.prototype.SERIALIZABLE = true;
 Blockly.FieldTextInput.FONTSIZE = 11;
 
 /**
- * Pixel size of input border radius.  Should match blocklyText's border-radius in CSS.
+ * Pixel size of input border radius.
+ * Should match blocklyText's border-radius in CSS.
  */
 Blockly.FieldTextInput.BORDERRADIUS = 4;
 
@@ -102,15 +108,19 @@ Blockly.FieldTextInput.BORDERRADIUS = 4;
 Blockly.FieldTextInput.prototype.CURSOR = 'text';
 
 /**
- * Allow browser to spellcheck this field.
- * @protected
+ * @override
  */
-Blockly.FieldTextInput.prototype.spellcheck_ = true;
+Blockly.FieldTextInput.prototype.configure_ = function(config) {
+  Blockly.FieldTextInput.superClass_.configure_.call(this, config);
+  if (typeof config['spellcheck'] == 'boolean') {
+    this.spellcheck_ = config['spellcheck'];
+  }
+};
 
 /**
  * Ensure that the input value casts to a valid string.
- * @param {string=} opt_newValue The input value.
- * @return {?string} A valid string, or null if invalid.
+ * @param {*=} opt_newValue The input value.
+ * @return {*} A valid string, or null if invalid.
  * @protected
  */
 Blockly.FieldTextInput.prototype.doClassValidation_ = function(opt_newValue) {
@@ -191,7 +201,13 @@ Blockly.FieldTextInput.prototype.render_ = function() {
  * @param {boolean} check True if checked.
  */
 Blockly.FieldTextInput.prototype.setSpellcheck = function(check) {
+  if (check == this.spellcheck_) {
+    return;
+  }
   this.spellcheck_ = check;
+  if (this.htmlInput_) {
+    this.htmlInput_.setAttribute('spellcheck', this.spellcheck_);
+  }
 };
 
 /**
@@ -341,15 +357,14 @@ Blockly.FieldTextInput.prototype.unbindInputEvents_ = function() {
  * @protected
  */
 Blockly.FieldTextInput.prototype.onHtmlInputKeyDown_ = function(e) {
-  var tabKey = 9, enterKey = 13, escKey = 27;
-  if (e.keyCode == enterKey) {
+  if (e.keyCode == Blockly.utils.KeyCodes.ENTER) {
     Blockly.WidgetDiv.hide();
     Blockly.DropDownDiv.hideWithoutAnimation();
-  } else if (e.keyCode == escKey) {
+  } else if (e.keyCode == Blockly.utils.KeyCodes.ESC) {
     this.htmlInput_.value = this.htmlInput_.defaultValue;
     Blockly.WidgetDiv.hide();
     Blockly.DropDownDiv.hideWithoutAnimation();
-  } else if (e.keyCode == tabKey) {
+  } else if (e.keyCode == Blockly.utils.KeyCodes.TAB) {
     Blockly.WidgetDiv.hide();
     Blockly.DropDownDiv.hideWithoutAnimation();
     this.sourceBlock_.tab(this, !e.shiftKey);
@@ -461,6 +476,15 @@ Blockly.FieldTextInput.nonnegativeIntegerValidator = function(text) {
     n = String(Math.max(0, Math.floor(n)));
   }
   return n;
+};
+
+/**
+ * Returns whether or not the field is tab navigable.
+ * @return {boolean} True if the field is tab navigable.
+ * @override
+ */
+Blockly.FieldTextInput.prototype.isTabNavigable = function() {
+  return true;
 };
 
 /**

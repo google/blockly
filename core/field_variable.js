@@ -59,12 +59,19 @@ Blockly.FieldVariable = function(varname, opt_validator, opt_variableTypes,
   // The FieldDropdown constructor would call setValue, which might create a
   // spurious variable.  Just do the relevant parts of the constructor.
   this.menuGenerator_ = Blockly.FieldVariable.dropdownCreate;
-  this.size_ = new Blockly.utils.Size(0, Blockly.BlockSvg.MIN_BLOCK_Y);
   opt_validator && this.setValidator(opt_validator);
   this.defaultVariableName = varname || '';
 
   this.setTypes_(opt_variableTypes, opt_defaultType);
   this.value_ = null;
+
+  /**
+   * The size of the area rendered by the field.
+   * @type {Blockly.utils.Size}
+   * @protected
+   * @override
+   */
+  this.size_ = new Blockly.utils.Size(0, Blockly.BlockSvg.MIN_BLOCK_Y);
 };
 Blockly.utils.object.inherits(Blockly.FieldVariable, Blockly.FieldDropdown);
 
@@ -224,11 +231,15 @@ Blockly.FieldVariable.prototype.getValidator = function() {
 
 /**
  * Ensure that the id belongs to a valid variable of an allowed type.
- * @param {string} newId The id of the new variable to set.
+ * @param {*=} opt_newValue The id of the new variable to set.
  * @return {?string} The validated id, or null if invalid.
  * @protected
  */
-Blockly.FieldVariable.prototype.doClassValidation_ = function(newId) {
+Blockly.FieldVariable.prototype.doClassValidation_ = function(opt_newValue) {
+  if (opt_newValue === null) {
+    return null;
+  }
+  var newId = /** @type {string} */ (opt_newValue);
   var variable = Blockly.Variables.getVariable(this.workspace_, newId);
   if (!variable) {
     console.warn('Variable id doesn\'t point to a real variable! ' +

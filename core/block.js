@@ -27,7 +27,6 @@
 goog.provide('Blockly.Block');
 
 goog.require('Blockly.Blocks');
-goog.require('Blockly.Comment');
 goog.require('Blockly.Connection');
 goog.require('Blockly.Events');
 goog.require('Blockly.Events.BlockChange');
@@ -36,13 +35,11 @@ goog.require('Blockly.Events.BlockDelete');
 goog.require('Blockly.Events.BlockMove');
 goog.require('Blockly.Extensions');
 goog.require('Blockly.Input');
-goog.require('Blockly.Mutator');
 goog.require('Blockly.utils');
 goog.require('Blockly.utils.Coordinate');
 goog.require('Blockly.utils.object');
 goog.require('Blockly.fieldRegistry');
 goog.require('Blockly.utils.string');
-goog.require('Blockly.Warning');
 goog.require('Blockly.Workspace');
 
 
@@ -130,8 +127,23 @@ Blockly.Block = function(workspace, prototypeName, opt_id) {
    */
   this.collapsed_ = false;
 
-  /** @type {string|Blockly.Comment} */
+  /**
+   * A string representing the comment attached to this block.
+   * @type {string|Blockly.Comment}
+   * @deprecated August 2019. Use getCommentText instead.
+   */
   this.comment = null;
+
+  /**
+   * A model of the comment attached to this block.
+   * @type {!Blockly.Block.CommentModel}
+   * @package
+   */
+  this.commentModel = {
+    text: null,
+    pinned: false,
+    size: new Blockly.utils.Size(160, 80)
+  };
 
   /**
    * The block's position in workspace units.  (0, 0) is at the workspace's
@@ -208,21 +220,16 @@ Blockly.Block = function(workspace, prototypeName, opt_id) {
 };
 
 /**
- * Obtain a newly created block.
- * @param {!Blockly.Workspace} workspace The block's workspace.
- * @param {?string} prototypeName Name of the language object containing
- *     type-specific functions for this block.
- * @return {!Blockly.Block} The created block.
- * @deprecated December 2015
+ * @typedef {{
+ *            text:?string,
+ *            pinned:boolean,
+ *            size:Blockly.utils.Size
+ *          }}
  */
-Blockly.Block.obtain = function(workspace, prototypeName) {
-  console.warn('Deprecated call to Blockly.Block.obtain, ' +
-               'use workspace.newBlock instead.');
-  return workspace.newBlock(prototypeName);
-};
+Blockly.Block.CommentModel;
 
 /**
- * Optional text data that round-trips beween blocks and XML.
+ * Optional text data that round-trips between blocks and XML.
  * Has no effect. May be used by 3rd parties for meta information.
  * @type {?string}
  */
@@ -1352,11 +1359,7 @@ Blockly.Block.prototype.toString = function(opt_maxLength, opt_emptyToken) {
   } else {
     for (var i = 0, input; input = this.inputList[i]; i++) {
       for (var j = 0, field; field = input.fieldRow[j]; j++) {
-        if (field instanceof Blockly.FieldDropdown && !field.getValue()) {
-          text.push(emptyFieldPlaceholder);
-        } else {
-          text.push(field.getText());
-        }
+        text.push(field.getText());
       }
       if (input.connection) {
         var child = input.connection.targetBlock();
@@ -1803,11 +1806,11 @@ Blockly.Block.prototype.getInputTargetBlock = function(name) {
 };
 
 /**
- * Returns the comment on this block (or '' if none).
+ * Returns the comment on this block (or null if there is no comment).
  * @return {string} Block's comment.
  */
 Blockly.Block.prototype.getCommentText = function() {
-  return this.comment || '';
+  return this.commentModel.text;
 };
 
 /**
@@ -1815,11 +1818,13 @@ Blockly.Block.prototype.getCommentText = function() {
  * @param {?string} text The text, or null to delete.
  */
 Blockly.Block.prototype.setCommentText = function(text) {
-  if (this.comment != text) {
-    Blockly.Events.fire(new Blockly.Events.BlockChange(
-        this, 'comment', null, this.comment, text || ''));
-    this.comment = text;
+  if (this.commentModel.text == text) {
+    return;
   }
+  Blockly.Events.fire(new Blockly.Events.BlockChange(
+      this, 'comment', null, this.commentModel.text, text));
+  this.commentModel.text = text;
+  this.comment = text;  // For backwards compatibility.
 };
 
 /**

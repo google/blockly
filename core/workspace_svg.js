@@ -41,7 +41,6 @@ goog.require('Blockly.Options');
 goog.require('Blockly.ScrollbarPair');
 goog.require('Blockly.Touch');
 goog.require('Blockly.TouchGesture');
-goog.require('Blockly.Trashcan');
 goog.require('Blockly.utils');
 goog.require('Blockly.utils.Coordinate');
 goog.require('Blockly.utils.dom');
@@ -55,7 +54,6 @@ goog.require('Blockly.WorkspaceCommentSvg');
 goog.require('Blockly.WorkspaceCommentSvg.render');
 goog.require('Blockly.WorkspaceDragSurfaceSvg');
 goog.require('Blockly.Xml');
-goog.require('Blockly.ZoomControls');
 
 
 /**
@@ -113,6 +111,22 @@ Blockly.WorkspaceSvg = function(options,
   this.grid_ = this.options.gridPattern ?
       new Blockly.Grid(options.gridPattern, options.gridOptions) : null;
 
+  /**
+   * Holds the cursors svg element when the cursor is attached to the workspace.
+   * This is null if there is no cursor on the workspace.
+   * @type {SVGElement}
+   * @private
+   */
+  this.cursorSvg_ = null;
+
+  /**
+   * Holds the markers svg element when the marker is attached to the workspace.
+   * This is null if there is no marker on the workspace.
+   * @type {SVGElement}
+   * @private
+   */
+  this.markerSvg_ = null;
+
   if (Blockly.Variables && Blockly.Variables.flyoutCategory) {
     this.registerToolboxCategoryCallback(Blockly.VARIABLE_CATEGORY_NAME,
         Blockly.Variables.flyoutCategory);
@@ -126,7 +140,12 @@ Blockly.WorkspaceSvg = function(options,
         Blockly.Procedures.flyoutCategory);
   }
 
-  Blockly.blockRendering.init();
+  /**
+   * The block renderer used for rendering blocks on this workspace.
+   * @type {!Blockly.blockRendering.Renderer}
+   * @private
+   */
+  this.renderer_ = Blockly.blockRendering.init(this.options.renderer || 'geras');
 };
 Blockly.utils.object.inherits(Blockly.WorkspaceSvg, Blockly.Workspace);
 
@@ -396,19 +415,85 @@ Blockly.WorkspaceSvg.prototype.inverseScreenCTM_ = null;
 Blockly.WorkspaceSvg.prototype.inverseScreenCTMDirty_ = true;
 
 /**
- * Adds cursor for keyboard navigation.
- * @return {!Blockly.CursorSvg} Cursor for keyboard navigation.
+ * Get the block renderer attached to this workspace.
+ * @return {!Blockly.blockRendering.Renderer} The renderer attached to this workspace.
  */
-Blockly.WorkspaceSvg.prototype.createCursor = function() {
-  return new Blockly.CursorSvg(this);
+Blockly.WorkspaceSvg.prototype.getRenderer = function() {
+  return this.renderer_;
 };
 
 /**
- * Adds marker for keyboard navigation.
- * @return {!Blockly.CursorSvg} Marker for keyboard navigation.
+ * Sets the cursor for use with keyboard navigation.
+ *
+ * @param {Blockly.Cursor} cursor The cursor used to move around this workspace.
+ * @override
  */
-Blockly.WorkspaceSvg.prototype.createMarker = function() {
-  return new Blockly.CursorSvg(this, true);
+Blockly.WorkspaceSvg.prototype.setCursor = function(cursor) {
+  if (this.cursor_ && this.cursor_.getDrawer()) {
+    this.cursor_.getDrawer().dispose();
+  }
+  this.cursor_ = cursor;
+  if (this.cursor_) {
+    this.cursor_.setDrawer(this.getRenderer().makeCursorDrawer(this, false));
+    this.setCursorSvg(this.cursor_.getDrawer().createDom());
+  }
+};
+
+/**
+ * Sets the marker for use with keyboard navigation.
+ * @param {Blockly.MarkerCursor} marker The immovable cursor used to mark a
+ *     location on the workspace.
+ * @override
+ */
+Blockly.WorkspaceSvg.prototype.setMarker = function(marker) {
+  if (this.marker_ && this.marker_.getDrawer()) {
+    this.marker_.getDrawer().dispose();
+  }
+  this.marker_ = marker;
+  if (this.marker_) {
+    this.marker_.setDrawer(this.getRenderer().makeCursorDrawer(this, true));
+    this.setMarkerSvg(this.marker_.getDrawer().createDom());
+  }
+};
+
+/**
+ * Add the cursor svg to this workspaces svg group.
+ * @param {SVGElement} cursorSvg The svg root of the cursor to be added to the
+ *     workspace svg group.
+ * @package
+ */
+Blockly.WorkspaceSvg.prototype.setCursorSvg = function(cursorSvg) {
+  if (!cursorSvg) {
+    this.cursorSvg_ = null;
+    return;
+  }
+
+  if (this.svgGroup_) {
+    this.svgGroup_.appendChild(cursorSvg);
+    this.cursorSvg_ = cursorSvg;
+  }
+};
+
+/**
+ * Add the marker svg to this workspaces svg group.
+ * @param {SVGElement} markerSvg The svg root of the marker to be added to the
+ *     workspace svg group.
+ * @package
+ */
+Blockly.WorkspaceSvg.prototype.setMarkerSvg = function(markerSvg) {
+  if (!markerSvg) {
+    this.markerSvg_ = null;
+    return;
+  }
+
+  if (this.svgGroup_) {
+    if (this.cursorSvg_) {
+      this.svgGroup_.insertBefore(markerSvg, this.cursorSvg_);
+    } else {
+      this.svgGroup_.appendChild(markerSvg);
+    }
+    this.markerSvg_ = markerSvg;
+  }
 };
 
 /**
@@ -571,6 +656,9 @@ Blockly.WorkspaceSvg.prototype.createDom = function(opt_backgroundClass) {
   // Determine if there needs to be a category tree, or a simple list of
   // blocks.  This cannot be changed later, since the UI is very different.
   if (this.options.hasCategories) {
+    if (!Blockly.Toolbox) {
+      throw Error('Missing require for Blockly.Toolbox');
+    }
     this.toolbox_ = new Blockly.Toolbox(this);
   }
   if (this.grid_) {
@@ -578,10 +666,12 @@ Blockly.WorkspaceSvg.prototype.createDom = function(opt_backgroundClass) {
   }
   this.recordDeleteAreas();
 
-  var svgCursor = this.cursor.createDom();
+  this.cursor_.setDrawer(this.getRenderer().makeCursorDrawer(this, false));
+  var svgCursor = this.cursor_.getDrawer().createDom();
   this.svgGroup_.appendChild(svgCursor);
 
-  var svgMarker = this.marker.createDom();
+  this.marker_.setDrawer(this.getRenderer().makeCursorDrawer(this, true));
+  var svgMarker = this.marker_.getDrawer().createDom();
   this.svgGroup_.appendChild(svgMarker);
 
   return this.svgGroup_;
@@ -625,12 +715,12 @@ Blockly.WorkspaceSvg.prototype.dispose = function() {
     this.zoomControls_ = null;
   }
 
-  if (this.marker) {
-    this.marker.dispose();
+  if (this.marker_) {
+    this.marker_.getDrawer().dispose();
   }
 
-  if (this.cursor) {
-    this.cursor.dispose();
+  if (this.getCursor()) {
+    this.getCursor().getDrawer().dispose();
   }
 
   if (this.audioManager_) {
@@ -680,6 +770,9 @@ Blockly.WorkspaceSvg.prototype.newBlock = function(prototypeName, opt_id) {
  * @package
  */
 Blockly.WorkspaceSvg.prototype.addTrashcan = function() {
+  if (!Blockly.Trashcan) {
+    throw Error('Missing require for Blockly.Trashcan');
+  }
   /** @type {Blockly.Trashcan} */
   this.trashcan = new Blockly.Trashcan(this);
   var svgTrashcan = this.trashcan.createDom();
@@ -691,6 +784,9 @@ Blockly.WorkspaceSvg.prototype.addTrashcan = function() {
  * @package
  */
 Blockly.WorkspaceSvg.prototype.addZoomControls = function() {
+  if (!Blockly.ZoomControls) {
+    throw Error('Missing require for Blockly.ZoomControls');
+  }
   /** @type {Blockly.ZoomControls} */
   this.zoomControls_ = new Blockly.ZoomControls(this);
   var svgZoomControls = this.zoomControls_.createDom();
@@ -710,7 +806,8 @@ Blockly.WorkspaceSvg.prototype.addFlyout_ = function(tagName) {
     RTL: this.RTL,
     oneBasedIndex: this.options.oneBasedIndex,
     horizontalLayout: this.horizontalLayout,
-    toolboxPosition: this.options.toolboxPosition
+    toolboxPosition: this.options.toolboxPosition,
+    renderer: this.options.renderer
   };
   if (this.horizontalLayout) {
     this.flyout_ = new Blockly.HorizontalFlyout(workspaceOptions);
@@ -1081,7 +1178,7 @@ Blockly.WorkspaceSvg.prototype.pasteBlock_ = function(xmlBlock) {
     var block = Blockly.Xml.domToBlock(xmlBlock, this);
 
     // Handle paste for keyboard navigation
-    var markedNode = Blockly.navigation.marker_.getCurNode();
+    var markedNode = this.getMarker().getCurNode();
     if (Blockly.keyboardAccessibilityMode && markedNode) {
       Blockly.navigation.insertBlock(block, markedNode.getLocation());
       return;

@@ -1,6 +1,8 @@
 goog.provide('Main');
 // Core
+// Either require 'Blockly.requires', or just the components you use:
 goog.require('Blockly');
+goog.require('Blockly.geras.Renderer');
 // Blocks
 goog.require('Blockly.Constants.Logic');
 goog.require('Blockly.Constants.Loops');

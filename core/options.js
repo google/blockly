@@ -121,6 +121,8 @@ Blockly.Options = function(options) {
   var theme = options['theme'] || Blockly.Themes.Classic;
   var keyMap = options['keyMap'] || Blockly.user.keyMap.createDefaultKeyMap();
 
+  var renderer = options['renderer'] || 'geras';
+
   this.RTL = rtl;
   this.oneBasedIndex = oneBasedIndex;
   this.collapse = hasCollapse;
@@ -145,6 +147,7 @@ Blockly.Options = function(options) {
   this.toolboxPosition = toolboxPosition;
   this.theme = theme;
   this.keyMap = keyMap;
+  this.renderer = renderer;
 };
 
 /**

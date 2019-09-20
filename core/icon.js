@@ -34,10 +34,15 @@ goog.require('Blockly.utils.Size');
 
 /**
  * Class for an icon.
- * @param {Blockly.Block} block The block associated with this icon.
+ * @param {Blockly.BlockSvg} block The block associated with this icon.
  * @constructor
  */
 Blockly.Icon = function(block) {
+  /**
+   * The block this icon is attached to.
+   * @type {Blockly.BlockSvg}
+   * @protected
+   */
   this.block_ = block;
 };
 
@@ -108,6 +113,7 @@ Blockly.Icon.prototype.dispose = function() {
  * Add or remove the UI indicating if this icon may be clicked or not.
  */
 Blockly.Icon.prototype.updateEditable = function() {
+  // No-op on the base class.
 };
 
 /**

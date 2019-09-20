@@ -27,6 +27,20 @@ goog.provide('Blockly.Theme');
 
 
 /**
+ * Class for a theme.
+ * @param {!Object.<string, Blockly.Theme.BlockStyle>} blockStyles A map from style
+ *     names (strings) to objects with style attributes relating to blocks.
+ * @param {!Object.<string, Blockly.Theme.CategoryStyle>} categoryStyles A map from
+ *     style names (strings) to objects with style attributes relating to
+ *     categories.
+ * @constructor
+ */
+Blockly.Theme = function(blockStyles, categoryStyles) {
+  this.blockStyles_ = blockStyles;
+  this.categoryStyles_ = categoryStyles;
+};
+
+/**
  * A block style.
  * @typedef {{
   *            colourPrimary:string,
@@ -44,20 +58,6 @@ Blockly.Theme.BlockStyle;
   *          }}
   */
 Blockly.Theme.CategoryStyle;
-
-/**
- * Class for a theme.
- * @param {!Object.<string, Blockly.Theme.BlockStyle>} blockStyles A map from style
- *     names (strings) to objects with style attributes relating to blocks.
- * @param {!Object.<string, Blockly.Theme.CategoryStyle>} categoryStyles A map from
- *     style names (strings) to objects with style attributes relating to
- *     categories.
- * @constructor
- */
-Blockly.Theme = function(blockStyles, categoryStyles) {
-  this.blockStyles_ = blockStyles;
-  this.categoryStyles_ = categoryStyles;
-};
 
 /**
  * Overrides or adds all values from blockStyles to blockStyles_

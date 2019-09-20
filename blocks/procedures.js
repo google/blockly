@@ -26,8 +26,13 @@
 
 goog.provide('Blockly.Blocks.procedures');
 
-goog.require('Blockly.Blocks');
 goog.require('Blockly');
+goog.require('Blockly.Blocks');
+goog.require('Blockly.Comment');
+goog.require('Blockly.FieldCheckbox');
+goog.require('Blockly.FieldLabel');
+goog.require('Blockly.FieldTextInput');
+goog.require('Blockly.Mutator');
 
 
 Blockly.Blocks['procedures_defnoreturn'] = {
@@ -480,6 +485,9 @@ Blockly.Blocks['procedures_mutatorcontainer'] = {
     this.setTooltip(Blockly.Msg['PROCEDURES_MUTATORCONTAINER_TOOLTIP']);
     this.contextMenu = false;
   },
+
+  // TODO: Move this to a validator on the arg blocks, that way it can be
+  //  tested.
   /**
    * This will create & delete variables and in dialogs workspace to ensure
    * that when a new block is dragged out it will have a unique parameter name.

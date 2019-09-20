@@ -32,8 +32,12 @@
 goog.provide('Blockly.Blocks.logic');  // Deprecated
 goog.provide('Blockly.Constants.Logic');
 
-goog.require('Blockly.Blocks');
 goog.require('Blockly');
+goog.require('Blockly.Blocks');
+goog.require('Blockly.FieldDropdown');
+goog.require('Blockly.FieldLabel');
+goog.require('Blockly.Mutator');
+
 
 /**
  * Unused constant for the common HSV hue for all blocks in this category.
@@ -483,10 +487,10 @@ Blockly.Constants.Logic.CONTROLS_IF_MUTATOR_MIXIN = {
   },
   /**
    * Reconnects child blocks.
-   * @param {!Array<?Blockly.RenderedConnection>} valueConnections List of value
-   * connectsions for if input.
-   * @param {!Array<?Blockly.RenderedConnection>} statementConnections List of
-   * statement connections for do input.
+   * @param {!Array.<?Blockly.RenderedConnection>} valueConnections List of
+   * value connections for 'if' input.
+   * @param {!Array.<?Blockly.RenderedConnection>} statementConnections List of
+   * statement connections for 'do' input.
    * @param {?Blockly.RenderedConnection} elseStatementConnection Statement
    * connection for else input.
    * @this {Blockly.Block}

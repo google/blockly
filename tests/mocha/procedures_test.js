@@ -19,7 +19,7 @@
  */
 
 goog.require('Blockly.Blocks.procedures');
-goog.require('Blockly.Msg.en');
+goog.require('Blockly.Msg');
 
 suite('Procedures', function() {
   setup(function() {
@@ -123,7 +123,6 @@ suite('Procedures', function() {
 
         defInput.htmlInput_.value = 'start name';
         defInput.onHtmlInputChange_(null);
-        console.log(this.defType);
         chai.assert.equal(this.defBlock.getFieldValue('NAME'), 'start name');
         chai.assert.equal(this.callBlock.getFieldValue('NAME'), 'start name');
       }, 'START NAME');
@@ -312,7 +311,7 @@ suite('Procedures', function() {
       }, 'name');
     });
   });
-  suite('Arguments', function() {
+  suite('Mutation', function() {
     setup(function() {
       this.findParentStub = sinon.stub(Blockly.Mutator, 'findParentWs')
           .returns(this.workspace);
@@ -320,110 +319,242 @@ suite('Procedures', function() {
     teardown(function() {
       this.findParentStub.restore();
     });
-    suite('Untyped Arguments', function() {
-      function createMutator(argArray) {
-        this.mutatorWorkspace = new Blockly.Workspace();
-        this.containerBlock = this.defBlock.decompose(this.mutatorWorkspace);
-        this.connection = this.containerBlock.getInput('STACK').connection;
-        for (var i = 0; i < argArray.length; i++) {
-          this.argBlock = new Blockly.Block(
-              this.mutatorWorkspace, 'procedures_mutatorarg');
-          this.argBlock.setFieldValue(argArray[i], 'NAME');
-          this.connection.connect(this.argBlock.previousConnection);
-          this.connection = this.argBlock.nextConnection;
+    suite('Composition', function() {
+      suite('Statements', function() {
+        function setStatementValue(defBlock, value) {
+          var mutatorWorkspace = new Blockly.Workspace();
+          defBlock.decompose(mutatorWorkspace);
+          var containerBlock = mutatorWorkspace.getTopBlocks()[0];
+          var statementField = containerBlock.getField('STATEMENTS');
+          statementField.setValue(value);
+          defBlock.compose(containerBlock);
         }
-        this.defBlock.compose(this.containerBlock);
-      }
-      function assertArgs(argArray) {
-        chai.assert.equal(this.defBlock.arguments_.length, argArray.length);
-        for (var i = 0; i < argArray.length; i++) {
-          chai.assert.equal(this.defBlock.arguments_[i], argArray[i]);
+        test('Has Statements', function() {
+          var defBlock = new Blockly.Block(this.workspace, 'procedures_defreturn');
+          setStatementValue(defBlock, true);
+          chai.assert.isTrue(defBlock.hasStatements_);
+        });
+        test('Has No Statements', function() {
+          var defBlock = new Blockly.Block(this.workspace, 'procedures_defreturn');
+          setStatementValue(defBlock, false);
+          chai.assert.isFalse(defBlock.hasStatements_);
+        });
+        test('Saving Statements', function() {
+          var blockXml = Blockly.Xml.textToDom(
+              '<block type="procedures_defreturn">' +
+              '  <statement name="STACK">' +
+              '    <block type="procedures_ifreturn" id="test"></block>' +
+              '  </statement>' +
+              '</block>'
+          );
+          var defBlock = Blockly.Xml.domToBlock(blockXml, this.workspace);
+          setStatementValue(defBlock, false);
+          chai.assert.isNull(defBlock.getInput('STACK'));
+          setStatementValue(defBlock, true);
+          chai.assert.isNotNull(defBlock.getInput('STACK'));
+          var statementBlocks = defBlock.getChildren();
+          chai.assert.equal(statementBlocks.length, 1);
+          var block = statementBlocks[0];
+          chai.assert.equal(block.type, 'procedures_ifreturn');
+          chai.assert.equal(block.id, 'test');
+        });
+      });
+      suite('Untyped Arguments', function() {
+        function createMutator(argArray) {
+          this.mutatorWorkspace = new Blockly.Workspace();
+          this.containerBlock = this.defBlock.decompose(this.mutatorWorkspace);
+          this.connection = this.containerBlock.getInput('STACK').connection;
+          for (var i = 0; i < argArray.length; i++) {
+            this.argBlock = new Blockly.Block(
+                this.mutatorWorkspace, 'procedures_mutatorarg');
+            this.argBlock.setFieldValue(argArray[i], 'NAME');
+            this.connection.connect(this.argBlock.previousConnection);
+            this.connection = this.argBlock.nextConnection;
+          }
+          this.defBlock.compose(this.containerBlock);
         }
-        chai.assert.equal(this.callBlock.arguments_.length, argArray.length);
-        for (var i = 0; i < argArray.length; i++) {
-          chai.assert.equal(this.callBlock.arguments_[i], argArray[i]);
+        function assertArgs(argArray) {
+          chai.assert.equal(this.defBlock.arguments_.length, argArray.length);
+          for (var i = 0; i < argArray.length; i++) {
+            chai.assert.equal(this.defBlock.arguments_[i], argArray[i]);
+          }
+          chai.assert.equal(this.callBlock.arguments_.length, argArray.length);
+          for (var i = 0; i < argArray.length; i++) {
+            chai.assert.equal(this.callBlock.arguments_[i], argArray[i]);
+          }
         }
-      }
-      function clearVariables() {
-        // TODO: Update this for typed vars.
-        var variables = this.workspace.getVariablesOfType('');
-        var variableMap = this.workspace.getVariableMap();
-        for (var i = 0, variable; variable = variables[i]; i++) {
-          variableMap.deleteVariable(variable);
+        function clearVariables() {
+          // TODO: Update this for typed vars.
+          var variables = this.workspace.getVariablesOfType('');
+          var variableMap = this.workspace.getVariableMap();
+          for (var i = 0, variable; variable = variables[i]; i++) {
+            variableMap.deleteVariable(variable);
+          }
         }
-      }
-      test('Simple Add Arg', function() {
-        this.callForAllTypes(function() {
-          var args = ['arg1'];
-          createMutator.call(this, args);
-          assertArgs.call(this, args);
-          clearVariables.call(this);
-        }, 'name');
+        test('Simple Add Arg', function() {
+          this.callForAllTypes(function() {
+            var args = ['arg1'];
+            createMutator.call(this, args);
+            assertArgs.call(this, args);
+            clearVariables.call(this);
+          }, 'name');
+        });
+        // TODO: Reenable the following two once arg name validation has been
+        //  moved to the arg blocks.
+        test.skip('Add Identical Arg', function() {
+          this.callForAllTypes(function() {
+            var args = ['x', 'x'];
+            createMutator.call(this, args);
+            assertArgs.call(this, ['x', 'i']);
+            clearVariables.call(this);
+          });
+        });
+        test.skip('Add Identical (except case) Arg', function() {
+          this.callForAllTypes(function() {
+            var args = ['x', 'X'];
+            createMutator.call(this, args);
+            assertArgs.call(this, ['x', 'i']);
+            clearVariables.call(this);
+          });
+        });
+        test('Multiple Args', function() {
+          this.callForAllTypes(function() {
+            var args = ['arg1', 'arg2', 'arg3'];
+            createMutator.call(this, args);
+            assertArgs.call(this, args);
+            clearVariables.call(this);
+          }, 'name');
+        });
+        test('Simple Change Arg', function() {
+          this.callForAllTypes(function() {
+            createMutator.call(this, ['arg1']);
+            this.argBlock.setFieldValue('arg2', 'NAME');
+            this.defBlock.compose(this.containerBlock);
+            assertArgs.call(this, ['arg2']);
+            clearVariables.call(this);
+          }, 'name');
+        });
+        test('lower -> CAPS', function() {
+          this.callForAllTypes(function() {
+            createMutator.call(this, ['arg']);
+            this.argBlock.setFieldValue('ARG', 'NAME');
+            this.defBlock.compose(this.containerBlock);
+            assertArgs.call(this, ['ARG']);
+            clearVariables.call(this);
+          }, 'name');
+        });
+        test('CAPS -> lower', function() {
+          this.callForAllTypes(function() {
+            createMutator.call(this, ['ARG']);
+            this.argBlock.setFieldValue('arg', 'NAME');
+            this.defBlock.compose(this.containerBlock);
+            assertArgs.call(this, ['arg']);
+            clearVariables.call(this);
+          }, 'name');
+        });
+        // Test case for #1958
+        test('Set Arg Empty', function() {
+          this.callForAllTypes(function() {
+            var args = ['arg1'];
+            createMutator.call(this, args);
+            this.argBlock.setFieldValue('', 'NAME');
+            this.defBlock.compose(this.containerBlock);
+            assertArgs.call(this, args);
+            clearVariables.call(this);
+          }, 'name');
+        });
+        test('Whitespace', function() {
+          this.callForAllTypes(function() {
+            var args = ['arg1'];
+            createMutator.call(this, args);
+            this.argBlock.setFieldValue(' ', 'NAME');
+            this.defBlock.compose(this.containerBlock);
+            assertArgs.call(this, args);
+            clearVariables.call(this);
+          }, 'name');
+        });
+        test('Whitespace and Text', function() {
+          this.callForAllTypes(function() {
+            createMutator.call(this, ['arg1']);
+            this.argBlock.setFieldValue(' text ', 'NAME');
+            this.defBlock.compose(this.containerBlock);
+            assertArgs.call(this, ['text']);
+            clearVariables.call(this);
+          }, 'name');
+        });
+        test('<>', function() {
+          this.callForAllTypes(function() {
+            var args = ['<>'];
+            createMutator.call(this, args);
+            assertArgs.call(this, args);
+            clearVariables.call(this);
+          }, 'name');
+        });
       });
-      test('Multiple Args', function() {
-        this.callForAllTypes(function() {
-          var args = ['arg1', 'arg2', 'arg3'];
-          createMutator.call(this, args);
-          assertArgs.call(this, args);
-          clearVariables.call(this);
-        }, 'name');
+    });
+    suite('Decomposition', function() {
+      suite('Statements', function() {
+        test('Has Statement Input', function() {
+          this.callForAllTypes(function() {
+            var mutatorWorkspace = new Blockly.Workspace();
+            this.defBlock.decompose(mutatorWorkspace);
+            var statementInput = mutatorWorkspace.getTopBlocks()[0]
+                .getInput('STATEMENT_INPUT');
+            if (this.defType == 'procedures_defreturn') {
+              chai.assert.isNotNull(statementInput);
+            } else {
+              chai.assert.isNull(statementInput);
+            }
+          }, 'name');
+        });
+        test('Has Statements', function() {
+          var defBlock = new Blockly.Block(this.workspace, 'procedures_defreturn');
+          defBlock.hasStatements_ = true;
+          var mutatorWorkspace = new Blockly.Workspace();
+          defBlock.decompose(mutatorWorkspace);
+          var statementValue = mutatorWorkspace.getTopBlocks()[0]
+              .getField('STATEMENTS').getValueBoolean();
+          chai.assert.isTrue(statementValue);
+        });
+        test('No Has Statements', function() {
+          var defBlock = new Blockly.Block(this.workspace, 'procedures_defreturn');
+          defBlock.hasStatements_ = false;
+          var mutatorWorkspace = new Blockly.Workspace();
+          defBlock.decompose(mutatorWorkspace);
+          var statementValue = mutatorWorkspace.getTopBlocks()[0]
+              .getField('STATEMENTS').getValueBoolean();
+          chai.assert.isFalse(statementValue);
+        });
       });
-      test('Simple Change Arg', function() {
-        this.callForAllTypes(function() {
-          createMutator.call(this, ['arg1']);
-          this.argBlock.setFieldValue('arg2', 'NAME');
-          this.defBlock.compose(this.containerBlock);
-          assertArgs.call(this, ['arg2']);
-          clearVariables.call(this);
-        }, 'name');
-      });
-      test('lower -> CAPS', function() {
-        this.callForAllTypes(function() {
-          createMutator.call(this, ['arg']);
-          this.argBlock.setFieldValue('ARG', 'NAME');
-          this.defBlock.compose(this.containerBlock);
-          assertArgs.call(this, ['ARG']);
-          clearVariables.call(this);
-        }, 'name');
-      });
-      test('CAPS -> lower', function() {
-        this.callForAllTypes(function() {
-          createMutator.call(this, ['ARG']);
-          this.argBlock.setFieldValue('arg', 'NAME');
-          this.defBlock.compose(this.containerBlock);
-          assertArgs.call(this, ['arg']);
-          clearVariables.call(this);
-        }, 'name');
-      });
-      // Test case for #1958
-      test('Set Arg Empty', function() {
-        this.callForAllTypes(function() {
-          var args = ['arg1'];
-          createMutator.call(this, args);
-          this.argBlock.setFieldValue('', 'NAME');
-          this.defBlock.compose(this.containerBlock);
-          assertArgs.call(this, args);
-          clearVariables.call(this);
-        }, 'name');
-      });
-      test('Whitespace', function() {
-        this.callForAllTypes(function() {
-          var args = ['arg1'];
-          createMutator.call(this, args);
-          this.argBlock.setFieldValue(' ', 'NAME');
-          this.defBlock.compose(this.containerBlock);
-          assertArgs.call(this, args);
-          clearVariables.call(this);
-        }, 'name');
-      });
-      test('Whitespace and Text', function() {
-        this.callForAllTypes(function() {
-          createMutator.call(this, ['arg1']);
-          this.argBlock.setFieldValue(' text ', 'NAME');
-          this.defBlock.compose(this.containerBlock);
-          assertArgs.call(this, ['text']);
-          clearVariables.call(this);
-        }, 'name');
+      suite('Untyped Arguments', function() {
+        function assertArguments(argumentsArray) {
+          this.defBlock.arguments_ = argumentsArray;
+          var mutatorWorkspace = new Blockly.Workspace();
+          this.defBlock.decompose(mutatorWorkspace);
+          var argBlocks = mutatorWorkspace.getBlocksByType('procedures_mutatorarg');
+          chai.assert.equal(argBlocks.length, argumentsArray.length);
+
+          for (var i = 0; i < argumentsArray.length; i++) {
+            var argString = argumentsArray[i];
+            var argBlockValue = argBlocks[i].getFieldValue('NAME');
+            chai.assert.equal(argBlockValue, argString);
+          }
+        }
+        test('Simple Single Arg', function() {
+          this.callForAllTypes(function() {
+            assertArguments.call(this, ['arg']);
+          }, 'name');
+        });
+        test('Multiple Args', function() {
+          this.callForAllTypes(function() {
+            assertArguments.call(this, ['arg1', 'arg2']);
+          }, 'name');
+        });
+        test('<>', function() {
+          this.callForAllTypes(function() {
+            assertArguments.call(this, ['<>']);
+          }, 'name');
+        });
       });
     });
   });

@@ -29,7 +29,10 @@ goog.provide('Blockly.blockRendering.Renderer');
 goog.require('Blockly.blockRendering.ConstantProvider');
 goog.require('Blockly.blockRendering.Debug');
 goog.require('Blockly.blockRendering.Drawer');
+goog.require('Blockly.blockRendering.IPathObject');
+goog.require('Blockly.blockRendering.PathObject');
 goog.require('Blockly.blockRendering.RenderInfo');
+goog.require('Blockly.CursorSvg');
 
 
 /**
@@ -38,19 +41,98 @@ goog.require('Blockly.blockRendering.RenderInfo');
  * @constructor
  */
 Blockly.blockRendering.Renderer = function() {
-  this.constantProvider = Blockly.blockRendering.ConstantProvider;
-  this.renderInfo = Blockly.blockRendering.RenderInfo;
-  this.drawer = Blockly.blockRendering.Drawer;
-  this.debugger = Blockly.blockRendering.Debug;
+  
+  /**
+   * The renderer's constant provider.
+   * @type {Blockly.blockRendering.ConstantProvider}
+   * @private
+   */
+  this.constants_ = null;
 };
 
 /**
- * Initialize the renderer
+ * Initialize the renderer.
  * @package
  */
 Blockly.blockRendering.Renderer.prototype.init = function() {
-  this.constants = new this.constantProvider();
-  this.constants.init();
+  this.constants_ = this.makeConstants_();
+  this.constants_.init();
+};
+
+/**
+ * Create a new instance of the renderer's constant provider.
+ * @return {!Blockly.blockRendering.ConstantProvider} The constant provider.
+ * @protected
+ */
+Blockly.blockRendering.Renderer.prototype.makeConstants_ = function() {
+  return new Blockly.blockRendering.ConstantProvider();
+};
+
+/**
+ * Create a new instance of the renderer's render info object.
+ * @param {!Blockly.BlockSvg} block The block to measure.
+ * @return {!Blockly.blockRendering.RenderInfo} The render info object.
+ * @protected
+ */
+Blockly.blockRendering.Renderer.prototype.makeRenderInfo_ = function(block) {
+  return new Blockly.blockRendering.RenderInfo(this, block);
+};
+
+/**
+ * Create a new instance of the renderer's drawer.
+ * @param {!Blockly.BlockSvg} block The block to render.
+ * @param {!Blockly.blockRendering.RenderInfo} info An object containing all
+ *   information needed to render this block.
+ * @return {!Blockly.blockRendering.Drawer} The drawer.
+ * @protected
+ */
+Blockly.blockRendering.Renderer.prototype.makeDrawer_ = function(block, info) {
+  return new Blockly.blockRendering.Drawer(block, info);
+};
+
+/**
+ * Create a new instance of the renderer's debugger.
+ * @return {!Blockly.blockRendering.Debug} The renderer debugger.
+ * @protected
+ */
+Blockly.blockRendering.Renderer.prototype.makeDebugger_ = function() {
+  return new Blockly.blockRendering.Debug();
+};
+
+/**
+ * Create a new instance of the renderer's cursor drawer.
+ * @param {!Blockly.WorkspaceSvg} workspace The workspace the cursor belongs to.
+ * @param {boolean=} opt_marker True if the cursor is a marker. A marker is used
+ *     to save a location and is an immovable cursor. False or undefined if the
+ *     cursor is not a marker.
+ * @return {!Blockly.CursorSvg} The cursor drawer.
+ * @package
+ */
+Blockly.blockRendering.Renderer.prototype.makeCursorDrawer = function(
+    workspace, opt_marker) {
+  return new Blockly.CursorSvg(workspace, opt_marker);
+};
+
+/**
+ * Create a new instance of a renderer path object.
+ * @param {!SVGElement} root The root SVG element.
+ * @return {!Blockly.blockRendering.IPathObject} The renderer path object.
+ * @package
+ */
+Blockly.blockRendering.Renderer.prototype.makePathObject = function(root) {
+  return new Blockly.blockRendering.PathObject(root);
+};
+
+/**
+ * Get the current renderer's constant provider.  We assume that when this is
+ * called, the renderer has already been initialized.
+ * @return {!Blockly.blockRendering.ConstantProvider} The constant provider.
+ * @package
+ */
+Blockly.blockRendering.Renderer.prototype.getConstants = function() {
+  return (
+    /** @type {!Blockly.blockRendering.ConstantProvider} */
+    (this.constants_));
 };
 
 /**
@@ -60,9 +142,9 @@ Blockly.blockRendering.Renderer.prototype.init = function() {
  */
 Blockly.blockRendering.Renderer.prototype.render = function(block) {
   if (!block.renderingDebugger) {
-    block.renderingDebugger = new this.debugger();
+    block.renderingDebugger = this.makeDebugger_();
   }
-  var info = new this.renderInfo(block);
+  var info = this.makeRenderInfo_(block);
   info.measure();
-  new this.drawer(block, info).draw();
+  this.makeDrawer_(block, info).draw();
 };

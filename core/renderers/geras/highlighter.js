@@ -61,8 +61,18 @@ Blockly.geras.Highlighter = function(info) {
 
   this.RTL_ = this.info_.RTL;
 
-  this.constants_ = Blockly.blockRendering.getConstants();
-  this.highlightConstants_ = Blockly.blockRendering.getHighlightConstants();
+  var renderer = /** @type {!Blockly.geras.Renderer} */ (info.getRenderer());
+
+  /**
+   * The renderer's constant provider.
+   * @type {!Blockly.blockRendering.ConstantProvider}
+   */
+  this.constants_ = renderer.getConstants();
+
+  /**
+   * @type {!Blockly.geras.HighlightConstantProvider}
+   */
+  this.highlightConstants_ = renderer.getHighlightConstants();
   /**
    * The offset between the block's main path and highlight path.
    * @type {number}
@@ -80,21 +90,12 @@ Blockly.geras.Highlighter = function(info) {
 };
 
 /**
- * Get the steps for the main highlight path.
- * @return {string} The steps for the main highlight path.
+ * Get the steps for the highlight path.
+ * @return {string} The steps for the highlight path.
  * @package
  */
-Blockly.geras.Highlighter.prototype.getSteps = function() {
-  return this.steps_;
-};
-
-/**
- * Get the steps for the inline highlight path.
- * @return {string} The steps for the inline highlight path.
- * @package
- */
-Blockly.geras.Highlighter.prototype.getInlineSteps = function() {
-  return this.inlineSteps_;
+Blockly.geras.Highlighter.prototype.getPath = function() {
+  return this.steps_ + '\n' + this.inlineSteps_;
 };
 
 Blockly.geras.Highlighter.prototype.drawTopCorner = function(row) {

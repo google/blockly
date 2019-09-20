@@ -183,6 +183,7 @@ Blockly.Mutator.prototype.createEditor_ = function() {
  * Add or remove the UI indicating if this icon may be clicked or not.
  */
 Blockly.Mutator.prototype.updateEditable = function() {
+  Blockly.Mutator.superClass_.updateEditable.call(this);
   if (!this.block_.isInFlyout) {
     if (this.block_.isEditable()) {
       if (this.iconGroup_) {
@@ -200,8 +201,6 @@ Blockly.Mutator.prototype.updateEditable = function() {
       }
     }
   }
-  // Default behaviour for an icon.
-  Blockly.Icon.prototype.updateEditable.call(this);
 };
 
 /**
@@ -297,7 +296,6 @@ Blockly.Mutator.prototype.setVisible = function(visible) {
       };
       this.block_.workspace.addChangeListener(this.sourceListener_);
     }
-    this.resizeBubble_();
     // When the mutator's workspace changes, update the source block.
     this.workspace_.addChangeListener(this.workspaceChanged_.bind(this));
     this.updateColour();

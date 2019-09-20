@@ -38,14 +38,16 @@ goog.require('Blockly.utils.object');
 /**
  * The base class to represent an input that takes up space on a block
  * during rendering
+ * @param {!Blockly.blockRendering.ConstantProvider} constants The rendering
+ *   constants provider.
  * @param {!Blockly.Input} input The input to measure and store information for.
  * @package
  * @constructor
  * @extends {Blockly.blockRendering.Connection}
  */
-Blockly.blockRendering.InputConnection = function(input) {
+Blockly.blockRendering.InputConnection = function(constants, input) {
   Blockly.blockRendering.InputConnection.superClass_.constructor.call(this,
-      input.connection);
+      constants, input.connection);
 
   this.type |= Blockly.blockRendering.Types.INPUT;
   this.input = input;
@@ -73,15 +75,17 @@ Blockly.utils.object.inherits(Blockly.blockRendering.InputConnection,
 /**
  * An object containing information about the space an inline input takes up
  * during rendering
+ * @param {!Blockly.blockRendering.ConstantProvider} constants The rendering
+ *   constants provider.
  * @param {!Blockly.Input} input The inline input to measure and store
  *     information for.
  * @package
  * @constructor
  * @extends {Blockly.blockRendering.InputConnection}
  */
-Blockly.blockRendering.InlineInput = function(input) {
+Blockly.blockRendering.InlineInput = function(constants, input) {
   Blockly.blockRendering.InlineInput.superClass_.constructor.call(this,
-      input);
+      constants, input);
   this.type |= Blockly.blockRendering.Types.INLINE_INPUT;
 
   if (!this.connectedBlock) {
@@ -106,15 +110,17 @@ Blockly.utils.object.inherits(Blockly.blockRendering.InlineInput,
 /**
  * An object containing information about the space a statement input takes up
  * during rendering
+ * @param {!Blockly.blockRendering.ConstantProvider} constants The rendering
+ *   constants provider.
  * @param {!Blockly.Input} input The statement input to measure and store
  *     information for.
  * @package
  * @constructor
  * @extends {Blockly.blockRendering.InputConnection}
  */
-Blockly.blockRendering.StatementInput = function(input) {
+Blockly.blockRendering.StatementInput = function(constants, input) {
   Blockly.blockRendering.StatementInput.superClass_.constructor.call(this,
-      input);
+      constants, input);
   this.type |= Blockly.blockRendering.Types.STATEMENT_INPUT;
 
   if (!this.connectedBlock) {
@@ -135,15 +141,17 @@ Blockly.utils.object.inherits(Blockly.blockRendering.StatementInput,
 /**
  * An object containing information about the space an external value input
  * takes up during rendering
+ * @param {!Blockly.blockRendering.ConstantProvider} constants The rendering
+ *   constants provider.
  * @param {!Blockly.Input} input The external value input to measure and store
  *     information for.
  * @package
  * @constructor
  * @extends {Blockly.blockRendering.InputConnection}
  */
-Blockly.blockRendering.ExternalValueInput = function(input) {
+Blockly.blockRendering.ExternalValueInput = function(constants, input) {
   Blockly.blockRendering.ExternalValueInput.superClass_.constructor.call(this,
-      input);
+      constants, input);
   this.type |= Blockly.blockRendering.Types.EXTERNAL_VALUE_INPUT;
 
   if (!this.connectedBlock) {

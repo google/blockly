@@ -28,11 +28,11 @@ goog.provide('Blockly.BlockSvg');
 
 goog.require('Blockly.Block');
 goog.require('Blockly.blockAnimations');
+goog.require('Blockly.blockRendering.IPathObject');
 goog.require('Blockly.ContextMenu');
 goog.require('Blockly.Events');
 goog.require('Blockly.Events.Ui');
 goog.require('Blockly.Events.BlockMove');
-goog.require('Blockly.Grid');
 goog.require('Blockly.Msg');
 goog.require('Blockly.RenderedConnection');
 goog.require('Blockly.Tooltip');
@@ -42,12 +42,13 @@ goog.require('Blockly.utils.Coordinate');
 goog.require('Blockly.utils.dom');
 goog.require('Blockly.utils.object');
 goog.require('Blockly.utils.Rect');
+goog.require('Blockly.Warning');
 
 
 /**
  * Class for a block's SVG representation.
  * Not normally called directly, workspace.newBlock() is preferred.
- * @param {!Blockly.Workspace} workspace The block's workspace.
+ * @param {!Blockly.WorkspaceSvg} workspace The block's workspace.
  * @param {?string} prototypeName Name of the language object containing
  *     type-specific functions for this block.
  * @param {string=} opt_id Optional ID.  Use this ID if provided, otherwise
@@ -65,26 +66,35 @@ Blockly.BlockSvg = function(workspace, prototypeName, opt_id) {
   this.svgGroup_.translate_ = '';
 
   /**
+   * The renderer's path object.
+   * @type {Blockly.blockRendering.IPathObject}
+   * @package
+   */
+  this.pathObject =
+      workspace.getRenderer().makePathObject(this.svgGroup_);
+
+  // The next three paths are set only for backwards compatibility reasons.
+  /**
+   * The dark path of the block.
    * @type {SVGElement}
    * @private
    */
-  this.svgPathDark_ = Blockly.utils.dom.createSvgElement('path',
-      {'class': 'blocklyPathDark', 'transform': 'translate(1,1)'},
-      this.svgGroup_);
+  this.svgPathDark_ = this.pathObject.svgPathDark || null;
 
   /**
+   * The primary path of the block.
    * @type {SVGElement}
    * @private
    */
-  this.svgPath_ = Blockly.utils.dom.createSvgElement('path',
-      {'class': 'blocklyPath'}, this.svgGroup_);
+  this.svgPath_ = this.pathObject.svgPath || null;
 
   /**
+   * The light path of the block.
    * @type {SVGElement}
    * @private
    */
-  this.svgPathLight_ = Blockly.utils.dom.createSvgElement('path',
-      {'class': 'blocklyPathLight'}, this.svgGroup_);
+  this.svgPathLight_ = this.pathObject.svgPathLight || null;
+
   this.svgPath_.tooltip = this;
 
   /** @type {boolean} */
@@ -107,6 +117,22 @@ Blockly.BlockSvg = function(workspace, prototypeName, opt_id) {
   if (this.svgGroup_.dataset) {
     this.svgGroup_.dataset.id = this.id;
   }
+
+  /**
+   * Holds the cursors svg element when the cursor is attached to the block.
+   * This is null if there is no cursor on the block.
+   * @type {SVGElement}
+   * @private
+   */
+  this.cursorSvg_ = null;
+
+  /**
+   * Holds the markers svg element when the marker is attached to the block.
+   * This is null if there is no marker on the block.
+   * @type {SVGElement}
+   * @private
+   */
+  this.markerSvg_ = null;
 };
 Blockly.utils.object.inherits(Blockly.BlockSvg, Blockly.Block);
 
@@ -233,8 +259,16 @@ Blockly.BlockSvg.prototype.mutator = null;
 /**
  * Block's comment icon (if any).
  * @type {Blockly.Comment}
+ * @deprecated August 2019. Use getCommentIcon instead.
  */
 Blockly.BlockSvg.prototype.comment = null;
+
+/**
+ * Block's comment icon (if any).
+ * @type {Blockly.Comment}
+ * @private
+ */
+Blockly.BlockSvg.prototype.commentIcon_ = null;
 
 /**
  * Block's warning icon (if any).
@@ -251,8 +285,8 @@ Blockly.BlockSvg.prototype.getIcons = function() {
   if (this.mutator) {
     icons.push(this.mutator);
   }
-  if (this.comment) {
-    icons.push(this.comment);
+  if (this.commentIcon_) {
+    icons.push(this.commentIcon_);
   }
   if (this.warning) {
     icons.push(this.warning);
@@ -606,8 +640,7 @@ Blockly.BlockSvg.prototype.createTabList_ = function() {
   var list = [];
   for (var i = 0, input; input = this.inputList[i]; i++) {
     for (var j = 0, field; field = input.fieldRow[j]; j++) {
-      if (field instanceof Blockly.FieldTextInput && field.isVisible()) {
-        // TODO (#1276): Also support dropdown fields.
+      if (field.isTabNavigable() && field.isVisible()) {
         list.push(field);
       }
     }
@@ -927,28 +960,11 @@ Blockly.BlockSvg.prototype.dispose = function(healStack, animate) {
     this.warningTextDb_ = null;
   }
 
-  // If the block is rendered we need to record the event before disposing of
-  // the icons to prevent losing information.
-  // TODO (#1969): Remove event generation/firing once comments are fixed.
-  this.unplug(healStack);
-  var deleteEvent;
-  if (Blockly.Events.isEnabled()) {
-    deleteEvent = new Blockly.Events.BlockDelete(this);
+  var icons = this.getIcons();
+  for (var i = 0; i < icons.length; i++) {
+    icons[i].dispose();
   }
-  Blockly.Events.disable();
-  try {
-    var icons = this.getIcons();
-    for (var i = 0; i < icons.length; i++) {
-      icons[i].dispose();
-    }
-    // TODO (#1969): Move out of disable block once comments are fixed.
-    Blockly.BlockSvg.superClass_.dispose.call(this, healStack);
-  } finally {
-    Blockly.Events.enable();
-  }
-  if (Blockly.Events.isEnabled() && deleteEvent) {
-    Blockly.Events.fire(deleteEvent);
-  }
+  Blockly.BlockSvg.superClass_.dispose.call(this, healStack);
 
   Blockly.utils.dom.removeNode(this.svgGroup_);
   blockWorkspace.resizeContents();
@@ -1048,16 +1064,12 @@ Blockly.BlockSvg.prototype.updateDisabled = function() {
 };
 
 /**
- * Returns the comment on this block (or '' if none).
- * @return {string} Block's comment.
+ * Get the comment icon attached to this block, or null if the block has no
+ * comment.
+ * @return {Blockly.Comment} The comment icon attached to this block, or null.
  */
-Blockly.BlockSvg.prototype.getCommentText = function() {
-  if (this.comment) {
-    var comment = this.comment.getText();
-    // Trim off trailing whitespace.
-    return comment.replace(/\s+$/, '').replace(/ +\n/g, '\n');
-  }
-  return '';
+Blockly.BlockSvg.prototype.getCommentIcon = function() {
+  return this.commentIcon_;
 };
 
 /**
@@ -1065,20 +1077,30 @@ Blockly.BlockSvg.prototype.getCommentText = function() {
  * @param {?string} text The text, or null to delete.
  */
 Blockly.BlockSvg.prototype.setCommentText = function(text) {
-  var changedState = false;
-  if (typeof text == 'string') {
-    if (!this.comment) {
-      this.comment = new Blockly.Comment(this);
-      changedState = true;
-    }
-    this.comment.setText(/** @type {string} */ (text));
-  } else {
-    if (this.comment) {
-      this.comment.dispose();
-      changedState = true;
-    }
+  if (!Blockly.Comment) {
+    throw Error('Missing require for Blockly.Comment');
   }
-  if (changedState && this.rendered) {
+  if (this.commentModel.text == text) {
+    return;
+  }
+  Blockly.BlockSvg.superClass_.setCommentText.call(this, text);
+
+  var shouldHaveComment = text != null;
+  if (!!this.commentIcon_ == shouldHaveComment) {
+    // If the comment's state of existence is correct, but the text is new
+    // that means we're just updating a comment.
+    this.commentIcon_.updateText();
+    return;
+  }
+  if (shouldHaveComment) {
+    this.commentIcon_ = new Blockly.Comment(this);
+    this.comment = this.commentIcon_; // For backwards compatibility.
+  } else {
+    this.commentIcon_.dispose();
+    this.commentIcon_ = null;
+    this.comment = null;  // For backwards compatibility.
+  }
+  if (this.rendered) {
     this.render();
     // Adding or removing a comment icon will cause the block to change shape.
     this.bumpNeighbours_();
@@ -1537,7 +1559,7 @@ Blockly.BlockSvg.prototype.positionNearConnection = function(sourceConnection,
   }
 };
 
-/*
+/**
  * Render the block.
  * Lays out and reflows a block based on its contents and settings.
  * @param {boolean=} opt_bubble If false, just render this block.
@@ -1546,8 +1568,7 @@ Blockly.BlockSvg.prototype.positionNearConnection = function(sourceConnection,
 Blockly.BlockSvg.prototype.render = function(opt_bubble) {
   Blockly.utils.dom.startTextWidthCache();
   this.rendered = true;
-  // TODO (#2702): Choose an API for picking the renderer.
-  Blockly.blockRendering.render(this);
+  (/** @type {!Blockly.WorkspaceSvg} */ (this.workspace)).getRenderer().render(this);
   // No matter how we rendered, connection locations should now be correct.
   this.updateConnectionLocations_();
   if (opt_bubble !== false) {
@@ -1596,4 +1617,40 @@ Blockly.BlockSvg.prototype.updateConnectionLocations_ = function() {
       this.nextConnection.tighten_();
     }
   }
+};
+
+/**
+ * Add the cursor svg to this block's svg group.
+ * @param {SVGElement} cursorSvg The svg root of the cursor to be added to the
+ *     block svg group.
+ * @package
+ */
+Blockly.BlockSvg.prototype.setCursorSvg = function(cursorSvg) {
+  if (!cursorSvg) {
+    this.cursorSvg_ = null;
+    return;
+  }
+
+  this.svgGroup_.appendChild(cursorSvg);
+  this.cursorSvg_ = cursorSvg;
+};
+
+/**
+ * Add the marker svg to this block's svg group.
+ * @param {SVGElement} markerSvg The svg root of the marker to be added to the
+ *     block svg group.
+ * @package
+ */
+Blockly.BlockSvg.prototype.setMarkerSvg = function(markerSvg) {
+  if (!markerSvg) {
+    this.markerSvg_ = null;
+    return;
+  }
+
+  if (this.cursorSvg_) {
+    this.svgGroup_.insertBefore(markerSvg, this.cursorSvg_);
+  } else {
+    this.svgGroup_.appendChild(markerSvg);
+  }
+  this.markerSvg_ = markerSvg;
 };

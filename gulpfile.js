@@ -85,7 +85,7 @@ function prependHeader() {
 
 /**
  * Helper method for calling the Closure compiler.
- * @param {*} compilerOptions 
+ * @param {*} compilerOptions
  * @param {boolean=} opt_verbose Optional option for verbose logging
  */
 function compile(compilerOptions, opt_verbose) {
@@ -124,7 +124,7 @@ gulp.task('build-core', function () {
     .pipe(stripApacheLicense())
     .pipe(compile({
       dependency_mode: 'PRUNE',
-      entry_point: './core-blockly.js',
+      entry_point: './core-requires.js',
       js_output_file: 'blockly_compressed.js',
       externs: './externs/svg-externs.js',
       define: defines
@@ -138,7 +138,20 @@ gulp.task('build-core', function () {
  *     blocks_compressed.js
  */
 gulp.task('build-blocks', function () {
-  const provides = `goog.provide('Blockly');\ngoog.provide('Blockly.Blocks');\n`;
+  const provides = `
+goog.provide('Blockly');
+goog.provide('Blockly.Blocks');
+goog.provide('Blockly.Comment');
+goog.provide('Blockly.FieldCheckbox');
+goog.provide('Blockly.FieldColour');
+goog.provide('Blockly.FieldDropdown');
+goog.provide('Blockly.FieldImage');
+goog.provide('Blockly.FieldLabel');
+goog.provide('Blockly.FieldMultilineInput');
+goog.provide('Blockly.FieldNumber');
+goog.provide('Blockly.FieldTextInput');
+goog.provide('Blockly.FieldVariable');
+goog.provide('Blockly.Mutator');`;
   return gulp.src('blocks/*.js', {base: './'})
     // Add Blockly.Blocks to be compatible with the compiler.
     .pipe(gulp.replace(`goog.provide('Blockly.Constants.Colour');`,
@@ -150,7 +163,9 @@ gulp.task('build-blocks', function () {
     }, argv.verbose))
     .pipe(gulp.replace('\'use strict\';', '\'use strict\';\n\n\n'))
     // Remove Blockly.Blocks to be compatible with Blockly.
-    .pipe(gulp.replace('var Blockly={Blocks:{}};', ''))
+    .pipe(gulp.replace(/var Blockly=\{[^;]*\};\n?/, ''))
+    // Remove Blockly Fields to be compatible with Blockly.
+    .pipe(gulp.replace(/Blockly\.Field[^=\(]+=\{[^;]*\};/g, ''))
     .pipe(prependHeader())
     .pipe(gulp.dest('./'));
 });
@@ -161,7 +176,9 @@ gulp.task('build-blocks', function () {
  * @param {string} namespace Language namespace.
  */
 function buildGenerator(language, namespace) {
-  var provides = `goog.provide('Blockly.Generator');\ngoog.provide('Blockly.utils.string');\n`;
+  var provides = `
+goog.provide('Blockly.Generator');
+goog.provide('Blockly.utils.string');`;
   return gulp.src([`generators/${language}.js`, `generators/${language}/*.js`], {base: './'})
     .pipe(stripApacheLicense())
     // Add Blockly.Generator and Blockly.utils.string to be compatible with the compiler.
@@ -173,7 +190,7 @@ function buildGenerator(language, namespace) {
     }, argv.verbose))
     .pipe(gulp.replace('\'use strict\';', '\'use strict\';\n\n\n'))
     // Remove Blockly.Generator and Blockly.utils.string to be compatible with Blockly.
-    .pipe(gulp.replace('var Blockly={Generator:{},utils:{}};Blockly.utils.string={};', ''))
+    .pipe(gulp.replace(/var Blockly=\{[^;]*\};\s*Blockly.utils.string={};\n?/, ''))
     .pipe(prependHeader())
     .pipe(gulp.dest('./'));
 };
@@ -411,6 +428,8 @@ gulp.task('typings', function (cb) {
     "core/components/tree",
     "core/components/menu",
     "core/keyboard_nav",
+    "core/renderers/common",
+    "core/renderers/measurables",
     "core/theme",
     "core/utils",
     "msg/"
@@ -449,6 +468,8 @@ gulp.task('typings', function (cb) {
     `${tmpDir}/core/components/tree/**`,
     `${tmpDir}/core/components/menu/**`,
     `${tmpDir}/core/keyboard_nav/**`,
+    `${tmpDir}/core/renderers/common/**`,
+    `${tmpDir}/core/renderers/measurables/**`,
     `${tmpDir}/core/utils/**`,
     `${tmpDir}/core/theme/**`,
     `${tmpDir}/msg/**`
@@ -505,8 +526,6 @@ function packageCommonJS(namespace, dependencies) {
  */
 gulp.task('package-blockly', function() {
   return gulp.src('blockly_compressed.js')
-    .pipe(gulp.insert.prepend(`
-    var self = this;`))
     .pipe(packageUMD('Blockly', []))
     .pipe(gulp.rename('blockly.js'))
     .pipe(gulp.dest(packageDistribution));
@@ -520,9 +539,8 @@ gulp.task('package-blockly', function() {
 gulp.task('package-blockly-node', function() {
   // Override textToDomDocument, providing a Node.js alternative to DOMParser.
   return gulp.src('blockly_compressed.js')
-    .pipe(gulp.insert.wrap(`
-    var self = global;`,
-      `if (typeof DOMParser !== 'function') {
+    .pipe(gulp.insert.append(`
+      if (typeof DOMParser !== 'function') {
         var JSDOM = require('jsdom').JSDOM;
         var window = (new JSDOM()).window;
         var document = window.document;
@@ -684,7 +702,7 @@ gulp.task('package-node-core', function() {
  * A helper method for packaging a Blockly code generator into a UMD module.
  * @param {string} file Source file name.
  * @param {string} rename Destination file name.
- * @param {string} generator Generator export namespace. 
+ * @param {string} generator Generator export namespace.
  */
 function packageGenerator(file, rename, generator) {
   return gulp.src(file)

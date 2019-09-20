@@ -213,8 +213,9 @@ Blockly.Dart.scrub_ = function(block, code, opt_thisOnly) {
   if (!block.outputConnection || !block.outputConnection.targetConnection) {
     // Collect comment for this block.
     var comment = block.getCommentText();
-    comment = Blockly.utils.string.wrap(comment, Blockly.Dart.COMMENT_WRAP - 3);
     if (comment) {
+      comment = Blockly.utils.string.wrap(comment,
+          Blockly.Dart.COMMENT_WRAP - 3);
       if (block.getProcedureDef) {
         // Use documentation comment for function comments.
         commentCode += Blockly.Dart.prefixLines(comment + '\n', '/// ');

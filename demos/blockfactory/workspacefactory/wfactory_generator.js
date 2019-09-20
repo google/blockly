@@ -71,7 +71,7 @@ WorkspaceFactoryGenerator.prototype.generateToolboxXml = function() {
     // Toolbox has categories.
     // Assert that selected != null
     if (!this.model.getSelected()) {
-      throw new Error('Selected is null when the toolbox is empty.');
+      throw Error('Selected is null when the toolbox is empty.');
     }
 
     var xml = this.model.getSelectedXml();

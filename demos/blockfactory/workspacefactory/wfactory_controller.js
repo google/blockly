@@ -340,7 +340,7 @@ WorkspaceFactoryController.prototype.exportXmlFile = function(exportMode) {
     // Unknown mode. Throw error.
     var msg = 'Unknown export mode: ' + exportMode;
     BlocklyDevTools.Analytics.onError(msg);
-    throw new Error(msg);
+    throw Error(msg);
   }
 
   // Unpack self-closing tags.  These tags fail when embedded in HTML.
@@ -760,7 +760,7 @@ WorkspaceFactoryController.prototype.importFile = function(file, importMode) {
         BlocklyDevTools.Analytics.onImport('WorkspaceContents.xml');
       } else {
         // Throw error if invalid mode.
-        throw new Error('Unknown import mode: ' + importMode);
+        throw Error('Unknown import mode: ' + importMode);
       }
     } catch(e) {
       var msg = 'Cannot load XML from file.';

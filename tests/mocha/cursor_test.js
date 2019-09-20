@@ -46,7 +46,8 @@ suite('Cursor', function() {
     }
     ]);
     this.workspace = new Blockly.Workspace();
-    this.cursor = this.workspace.cursor;
+    this.workspace.setCursor(new Blockly.Cursor());
+    this.cursor = this.workspace.getCursor();
     var blockA = this.workspace.newBlock('input_statement');
     var blockB = this.workspace.newBlock('input_statement');
     var blockC = this.workspace.newBlock('input_statement');
@@ -74,14 +75,14 @@ suite('Cursor', function() {
 
   test('Next - From a block skip over next connection', function() {
     var blockNode = Blockly.ASTNode.createBlockNode(this.blocks.A);
-    this.cursor.setLocation(blockNode);
+    this.cursor.setCurNode(blockNode);
     this.cursor.next();
     var curNode = this.cursor.getCurNode();
     assertEquals(curNode.getLocation(), this.blocks.B.previousConnection);
   });
   test('Next - From last block in a stack go to next connection', function() {
     var blockNode = Blockly.ASTNode.createBlockNode(this.blocks.B);
-    this.cursor.setLocation(blockNode);
+    this.cursor.setCurNode(blockNode);
     this.cursor.next();
     var curNode = this.cursor.getCurNode();
     assertEquals(curNode.getLocation(), this.blocks.B.nextConnection);
@@ -89,7 +90,7 @@ suite('Cursor', function() {
 
   test('In - From input skip over output connection', function() {
     var inputNode = Blockly.ASTNode.createInputNode(this.blocks.A.inputList[0]);
-    this.cursor.setLocation(inputNode);
+    this.cursor.setCurNode(inputNode);
     this.cursor.in();
     var curNode = this.cursor.getCurNode();
     assertEquals(curNode.getLocation(), this.blocks.E);
@@ -98,9 +99,9 @@ suite('Cursor', function() {
   test('Prev - From previous connection skip over next connection', function() {
     var prevConnection = this.blocks.B.previousConnection;
     var prevConnectionNode = Blockly.ASTNode.createConnectionNode(prevConnection);
-    this.cursor.setLocation(prevConnectionNode);
+    this.cursor.setCurNode(prevConnectionNode);
     this.cursor.prev();
     var curNode = this.cursor.getCurNode();
-    assertEquals(curNode.getLocation(), this.blocks.A);
+    assertEquals(curNode.getLocation(), this.blocks.A.previousConnection);
   });
 });

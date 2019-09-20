@@ -29,6 +29,7 @@ goog.provide('Blockly.geras.Drawer');
 goog.require('Blockly.blockRendering.ConstantProvider');
 goog.require('Blockly.blockRendering.Drawer');
 goog.require('Blockly.geras.Highlighter');
+goog.require('Blockly.geras.PathObject');
 goog.require('Blockly.geras.RenderInfo');
 goog.require('Blockly.utils.object');
 goog.require('Blockly.utils.svgPaths');
@@ -59,13 +60,11 @@ Blockly.geras.Drawer.prototype.draw = function() {
   this.drawOutline_();
   this.drawInternals_();
 
-  var pathObject = new Blockly.BlockSvg.PathObject();
-  pathObject.steps = [this.outlinePath_];
-  pathObject.inlineSteps = [this.inlinePath_];
-  pathObject.highlightSteps = [this.highlighter_.getSteps()];
-  pathObject.highlightInlineSteps = [this.highlighter_.getInlineSteps()];
-
-  this.block_.setPaths_(pathObject);
+  this.block_.pathObject.setPaths(this.outlinePath_ + '\n' + this.inlinePath_,
+      this.highlighter_.getPath());
+  if (this.info_.RTL) {
+    this.block_.pathObject.flipRTL();
+  }
   if (Blockly.blockRendering.useDebugger) {
     this.block_.renderingDebugger.drawDebug(this.block_, this.info_);
   }

@@ -59,8 +59,8 @@ function isEqualArrays(array1, array2) {
  *     the parameters if any exist.
  * @param {!Object} scope The scope of the method to be mocked out.
  * @param {!string} funcName The name of the function we're going to mock.
- * @param {Array<Object>} parameters The parameters to call the mock with.
- * @param {Array<!Object>} return_values The values to return when called.
+ * @param {Array.<Object>} parameters The parameters to call the mock with.
+ * @param {Array.<!Object>} return_values The values to return when called.
  * @return {!sinon.SinonStub} The stub method.
  */
 function setUpMockMethod(scope, funcName, parameters, return_values) {

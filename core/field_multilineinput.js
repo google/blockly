@@ -46,15 +46,20 @@ goog.require('Blockly.utils.userAgent');
  *     to validate any constraints on what the user entered.  Takes the new
  *     text as an argument and returns either the accepted text, a replacement
  *     text, or null to abort the change.
+ * @param {Object=} opt_config A map of options used to configure the field.
+ *    See the [field creation documentation]{@link https://developers.google.com/blockly/guides/create-custom-blocks/fields/built-in-fields/text-input#creation}
+ *    for a list of properties this parameter supports.
  * @extends {Blockly.FieldTextInput}
  * @constructor
  */
-Blockly.FieldMultilineInput = function(opt_value, opt_validator) {
-  if (opt_value === null) {
+Blockly.FieldMultilineInput = function(opt_value, opt_validator, opt_config) {
+  // TODO: Once this field is documented the opt_config link should point to its
+  //  creation documentation, rather than the text input field's.
+  if (opt_value == null) {
     opt_value = '';
   }
   Blockly.FieldMultilineInput.superClass_.constructor.call(this,
-      opt_value, opt_validator);
+      opt_value, opt_validator, opt_config);
 };
 Blockly.utils.object.inherits(Blockly.FieldMultilineInput,
     Blockly.FieldTextInput);
@@ -70,19 +75,14 @@ Blockly.FieldMultilineInput.LINE_HEIGHT = 20;
 /**
  * Construct a FieldMultilineInput from a JSON arg object,
  * dereferencing any string table references.
- * @param {!Object} options A JSON object with options (text, class, and
- *                          spellcheck).
+ * @param {!Object} options A JSON object with options (text, and spellcheck).
  * @return {!Blockly.FieldMultilineInput} The new field instance.
  * @package
  * @nocollapse
  */
 Blockly.FieldMultilineInput.fromJson = function(options) {
   var text = Blockly.utils.replaceMessageReferences(options['text']);
-  var field = new Blockly.FieldMultilineInput(text);
-  if (typeof options['spellcheck'] === 'boolean') {
-    field.setSpellcheck(options['spellcheck']);
-  }
-  return field;
+  return new Blockly.FieldMultilineInput(text, undefined, options);
 };
 
 /**

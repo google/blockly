@@ -21,6 +21,7 @@
 /**
  * @fileoverview The class representing a cursor.
  * Used primarily for keyboard navigation.
+ * @author aschmiedt@google.com (Abby Schmiedt)
  */
 'use strict';
 
@@ -29,39 +30,39 @@ goog.provide('Blockly.Cursor');
 
 /**
  * Class for a cursor.
- * @param {boolean=} opt_marker True if the cursor is a marker. A marker is used
- *     to save a location and is an immovable cursor. False or undefined if the
- *     cursor is not a marker.
+ * A cursor controls how a user navigates the Blockly AST.
  * @constructor
  */
-Blockly.Cursor = function(opt_marker) {
+Blockly.Cursor = function() {
   /*
    * The current location of the cursor.
-   * @type {Blockly.Field|Blockly.Connection|Blockly.Block}
+   * @type {Blockly.ASTNode}
    * @private
    */
   this.curNode_ = null;
 
   /**
-   * Whether or not the cursor is a marker.
-   * @type {boolean} True if the cursor is a marker. False otherwise.
+   * The object in charge of drawing the visual representation of the current node.
+   * @type {Blockly.CursorSvg}
    * @private
    */
-  this.isMarker_ = !!opt_marker;
+  this.drawer_ = null;
 };
 
 /**
- * Object holding different types for a cursor.
+ * Sets the object in charge of drawing the cursor.
+ * @param {Blockly.CursorSvg} drawer The object in charge of drawing the cursor.
  */
-Blockly.Cursor.prototype.types = {
-  FIELD: 'field',
-  BLOCK: 'block',
-  INPUT: 'input',
-  OUTPUT: 'output',
-  NEXT: 'next',
-  PREVIOUS: 'previous',
-  STACK: 'stack',
-  WORKSPACE: 'workspace'
+Blockly.Cursor.prototype.setDrawer = function(drawer) {
+  this.drawer_ = drawer;
+};
+
+/**
+ * Get the current drawer for the cursor.
+ * @return {Blockly.CursorSvg} The object in charge of drawing the cursor.
+ */
+Blockly.Cursor.prototype.getDrawer = function() {
+  return this.drawer_;
 };
 
 /**
@@ -79,22 +80,21 @@ Blockly.Cursor.prototype.getCurNode = function() {
  * output or previous connection on a stack.
  * @param {Blockly.ASTNode} newNode The new location of the cursor.
  */
-Blockly.Cursor.prototype.setLocation = function(newNode) {
+Blockly.Cursor.prototype.setCurNode = function(newNode) {
   this.curNode_ = newNode;
-  this.update_();
+  if (this.drawer_) {
+    this.drawer_.draw(this.getCurNode());
+  }
 };
 
 /**
- * Update method to be overwritten in cursor_svg.
- * @protected
+ * Hide the cursor svg.
  */
-Blockly.Cursor.prototype.update_ = function() {};
-
-/**
- * Hide method to be overwritten in cursor_svg.
- * @protected
- */
-Blockly.Cursor.prototype.hide = function() {};
+Blockly.Cursor.prototype.hide = function() {
+  if (this.drawer_) {
+    this.drawer_.hide();
+  }
+};
 
 /**
  * Find the next connection, field, or block.
@@ -106,14 +106,16 @@ Blockly.Cursor.prototype.next = function() {
   if (!curNode) {
     return null;
   }
-  var newNode = curNode.next();
 
-  if (newNode && newNode.getType() === Blockly.ASTNode.types.NEXT) {
-    newNode = newNode.next() || newNode;
+  var newNode = curNode.next();
+  while (newNode && newNode.next() &&
+    (newNode.getType() === Blockly.ASTNode.types.NEXT ||
+    newNode.getType() === Blockly.ASTNode.types.BLOCK)) {
+    newNode = newNode.next();
   }
 
   if (newNode) {
-    this.setLocation(newNode);
+    this.setCurNode(newNode);
   }
   return newNode;
 };
@@ -128,6 +130,12 @@ Blockly.Cursor.prototype.in = function() {
   if (!curNode) {
     return null;
   }
+  // If we are on a previous or output connection, go to the block level before
+  // performing next operation.
+  if (curNode.getType() === Blockly.ASTNode.types.PREVIOUS ||
+    curNode.getType() === Blockly.ASTNode.types.OUTPUT) {
+    curNode = curNode.next();
+  }
   var newNode = curNode.in();
 
   if (newNode && newNode.getType() === Blockly.ASTNode.types.OUTPUT) {
@@ -135,7 +143,7 @@ Blockly.Cursor.prototype.in = function() {
   }
 
   if (newNode) {
-    this.setLocation(newNode);
+    this.setCurNode(newNode);
   }
   return newNode;
 };
@@ -152,12 +160,14 @@ Blockly.Cursor.prototype.prev = function() {
   }
   var newNode = curNode.prev();
 
-  if (newNode && newNode.getType() === Blockly.ASTNode.types.NEXT) {
-    newNode = newNode.prev() || newNode;
+  while (newNode && newNode.prev() &&
+    (newNode.getType() === Blockly.ASTNode.types.NEXT ||
+    newNode.getType() === Blockly.ASTNode.types.BLOCK)) {
+    newNode = newNode.prev();
   }
 
   if (newNode) {
-    this.setLocation(newNode);
+    this.setCurNode(newNode);
   }
   return newNode;
 };
@@ -173,8 +183,13 @@ Blockly.Cursor.prototype.out = function() {
     return null;
   }
   var newNode = curNode.out();
+  
+  if (newNode && newNode.getType() === Blockly.ASTNode.types.BLOCK) {
+    newNode = newNode.prev();
+  }
+
   if (newNode) {
-    this.setLocation(newNode);
+    this.setCurNode(newNode);
   }
   return newNode;
 };

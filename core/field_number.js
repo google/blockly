@@ -41,18 +41,50 @@ goog.require('Blockly.utils.object');
  * @param {Function=} opt_validator A function that is called to validate
  *    changes to the field's value. Takes in a number & returns a validated
  *    number, or null to abort the change.
+ * @param {Object=} opt_config A map of options used to configure the field.
+ *    See the [field creation documentation]{@link https://developers.google.com/blockly/guides/create-custom-blocks/fields/built-in-fields/number#creation}
+ *    for a list of properties this parameter supports.
  * @extends {Blockly.FieldTextInput}
  * @constructor
  */
 Blockly.FieldNumber = function(opt_value, opt_min, opt_max, opt_precision,
-    opt_validator) {
-  this.setConstraints(opt_min, opt_max, opt_precision);
-  opt_value = this.doClassValidation_(opt_value);
-  if (opt_value === null) {
-    opt_value = 0;
-  }
+    opt_validator, opt_config) {
+
+  /**
+   * The minimum value this number field can contain.
+   * @type {number}
+   * @protected
+   */
+  this.min_ = -Infinity;
+
+  /**
+   * The maximum value this number field can contain.
+   * @type {number}
+   * @protected
+   */
+  this.max_ = Infinity;
+
+  /**
+   * The multiple to which this fields value is rounded.
+   * @type {number}
+   * @protected
+   */
+  this.precision_ = 0;
+
+  /**
+   * The number of decimal places to allow, or null to allow any number of
+   * decimal digits.
+   * @type {?number}
+   * @private
+   */
+  this.decimalPlaces_ = null;
+
   Blockly.FieldNumber.superClass_.constructor.call(
-      this, opt_value, opt_validator);
+      this, opt_value || 0, opt_validator, opt_config);
+
+  if (!opt_config) {  // Only do one kind of configuration or the other.
+    this.setConstraints(opt_min, opt_max, opt_precision);
+  }
 };
 Blockly.utils.object.inherits(Blockly.FieldNumber, Blockly.FieldTextInput);
 
@@ -66,7 +98,7 @@ Blockly.utils.object.inherits(Blockly.FieldNumber, Blockly.FieldTextInput);
  */
 Blockly.FieldNumber.fromJson = function(options) {
   return new Blockly.FieldNumber(options['value'],
-      options['min'], options['max'], options['precision']);
+      null, null, null, null, options);
 };
 
 /**
@@ -76,6 +108,18 @@ Blockly.FieldNumber.fromJson = function(options) {
  * @const
  */
 Blockly.FieldNumber.prototype.SERIALIZABLE = true;
+
+/**
+ * Configure the field based on the given map of options.
+ * @param {!Object} config A map of options to configure the field based on.
+ * @private
+ */
+Blockly.FieldNumber.prototype.configure_ = function(config) {
+  Blockly.FieldNumber.superClass_.configure_.call(this, config);
+  this.setMinInternal_(config['min']);
+  this.setMaxInternal_(config['max']);
+  this.setPrecisionInternal_(config['precision']);
+};
 
 /**
  * Set the maximum, minimum and precision constraints on this field.
@@ -89,29 +133,129 @@ Blockly.FieldNumber.prototype.SERIALIZABLE = true;
  * @param {number|string|undefined} precision Precision for value.
  */
 Blockly.FieldNumber.prototype.setConstraints = function(min, max, precision) {
+  this.setMinInternal_(min);
+  this.setMaxInternal_(max);
+  this.setPrecisionInternal_(precision);
+  this.setValue(this.getValue());
+};
+
+/**
+ * Sets the minimum value this field can contain. Updates the value to reflect.
+ * @param {number|string|undefined} min Minimum value.
+ */
+Blockly.FieldNumber.prototype.setMin = function(min) {
+  this.setMinInternal_(min);
+  this.setValue(this.getValue());
+};
+
+/**
+ * Sets the minimum value this field can contain. Called internally to avoid
+ * value updates.
+ * @param {number|string|undefined} min Minimum value.
+ * @private
+ */
+Blockly.FieldNumber.prototype.setMinInternal_ = function(min) {
+  min = Number(min);
+  if (!isNaN(min)) {
+    this.min_ = min;
+  }
+};
+
+/**
+ * Returns the current minimum value this field can contain. Default is
+ * -Infinity.
+ * @return {number} The current minimum value this field can contain.
+ */
+Blockly.FieldNumber.prototype.getMin = function() {
+  return this.min_;
+};
+
+/**
+ * Sets the maximum value this field can contain. Updates the value to reflect.
+ * @param {number|string|undefined} max Maximum value.
+ */
+Blockly.FieldNumber.prototype.setMax = function(max) {
+  this.setMaxInternal_(max);
+  this.setValue(this.getValue());
+};
+
+/**
+ * Sets the maximum value this field can contain. Called internally to avoid
+ * value updates.
+ * @param {number|string|undefined} max Maximum value.
+ * @private
+ */
+Blockly.FieldNumber.prototype.setMaxInternal_ = function(max) {
+  max = Number(max);
+  if (!isNaN(max)) {
+    this.max_ = max;
+  }
+};
+
+/**
+ * Returns the current maximum value this field can contain. Default is
+ * Infinity.
+ * @return {number} The current maximum value this field can contain.
+ */
+Blockly.FieldNumber.prototype.getMax = function() {
+  return this.max_;
+};
+
+/**
+ * Sets the precision of this field's value, i.e. the number to which the
+ * value is rounded. Updates the field to reflect.
+ * @param {number|string|undefined} precision The number to which the
+ *    field's value is rounded.
+ */
+Blockly.FieldNumber.prototype.setPrecision = function(precision) {
+  this.setPrecisionInternal_(precision);
+  this.setValue(this.getValue());
+};
+
+/**
+ * Sets the precision of this field's value. Called internally to avoid
+ * value updates.
+ * @param {number|string|undefined} precision The number to which the
+ *    field's value is rounded.
+ * @private
+ */
+Blockly.FieldNumber.prototype.setPrecisionInternal_ = function(precision) {
   precision = Number(precision);
-  this.precision_ = isNaN(precision) ? 0 : precision;
+  if (!isNaN(precision)) {
+    this.precision_ = precision;
+  }
+
   var precisionString = this.precision_.toString();
   var decimalIndex = precisionString.indexOf('.');
-  this.fractionalDigits_ = (decimalIndex == -1) ? -1 :
-      precisionString.length - (decimalIndex + 1);
-  min = Number(min);
-  this.min_ = isNaN(min) ? -Infinity : min;
-  max = Number(max);
-  this.max_ = isNaN(max) ? Infinity : max;
-  this.setValue(this.getValue());
+  if (decimalIndex == -1) {
+    // If the precision is 0 (float) allow any number of decimals,
+    // otherwise allow none.
+    this.decimalPlaces_ = precision ? 0 : null;
+  } else {
+    this.decimalPlaces_ = precisionString.length - decimalIndex - 1;
+  }
+};
+
+/**
+ * Returns the current precision of this field. The precision being the
+ * number to which the field's value is rounded. A precision of 0 means that
+ * the value is not rounded.
+ * @return {number} The number to which this field's value is rounded.
+ */
+Blockly.FieldNumber.prototype.getPrecision = function() {
+  return this.precision_;
 };
 
 /**
  * Ensure that the input value is a valid number (must fulfill the
  * constraints placed on the field).
- * @param {string|number=} opt_newValue The input value.
+ * @param {*=} opt_newValue The input value.
  * @return {?number} A valid number, or null if invalid.
  * @protected
  * @override
  */
 Blockly.FieldNumber.prototype.doClassValidation_ = function(opt_newValue) {
-  if (opt_newValue === null || opt_newValue === undefined) {
+  if (opt_newValue === null) {
     return null;
   }
   // Clean up text.
@@ -135,14 +279,15 @@ Blockly.FieldNumber.prototype.doClassValidation_ = function(opt_newValue) {
     n = Math.round(n / this.precision_) * this.precision_;
   }
   // Clean up floating point errors.
-  n = (this.fractionalDigits_ == -1) ? n :
-      Number(n.toFixed(this.fractionalDigits_));
+  if (this.decimalPlaces_ != null) {
+    n = Number(n.toFixed(this.decimalPlaces_));
+  }
   return n;
 };
 
 /**
  * Create the number input editor widget.
- * @return {!HTMLInputElement} The newly created number input editor.
+ * @return {!HTMLElement} The newly created number input editor.
  * @protected
  * @override
  */

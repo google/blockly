@@ -70,7 +70,7 @@ Blockly.blockRendering.ConstantProvider = function() {
 
   /**
    * Rounded corner radius.
-   * @const
+   * @type {number}
    */
   this.CORNER_RADIUS = 8;
 
@@ -373,6 +373,6 @@ Blockly.blockRendering.ConstantProvider.prototype.shapeFor = function(
     case Blockly.NEXT_STATEMENT:
       return this.NOTCH;
     default:
-      throw new Error('Unknown connection type');
+      throw Error('Unknown connection type');
   }
 };

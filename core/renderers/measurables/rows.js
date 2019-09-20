@@ -43,10 +43,12 @@ goog.require('Blockly.utils.object');
 /**
  * An object representing a single row on a rendered block and all of its
  * subcomponents.
+ * @param {!Blockly.blockRendering.ConstantProvider} constants The rendering
+ *   constants provider.
  * @package
  * @constructor
  */
-Blockly.blockRendering.Row = function() {
+Blockly.blockRendering.Row = function(constants) {
   /**
    * The type of this rendering object.
    * @package
@@ -148,7 +150,13 @@ Blockly.blockRendering.Row = function() {
    */
   this.hasJaggedEdge = false;
 
-  this.constants_ = Blockly.blockRendering.getConstants();
+  /**
+   * The renderer's constant provider.
+   * @type {!Blockly.blockRendering.ConstantProvider}
+   * @protected
+   */
+  this.constants_ = constants;
+
   this.notchOffset = this.constants_.NOTCH_OFFSET_LEFT;
 };
 
@@ -174,6 +182,24 @@ Blockly.blockRendering.Row.prototype.getLastInput = function() {
     }
   }
   return null;
+};
+
+/**
+ * Determines whether this row should start with an element spacer.
+ * @return {boolean} Whether the row should start with a spacer.
+ * @package
+ */
+Blockly.blockRendering.Row.prototype.startsWithElemSpacer = function() {
+  return true;
+};
+
+/**
+ * Determines whether this row should end with an element spacer.
+ * @return {boolean} Whether the row should end with a spacer.
+ * @package
+ */
+Blockly.blockRendering.Row.prototype.endsWithElemSpacer = function() {
+  return true;
 };
 
 /**
@@ -213,12 +239,14 @@ Blockly.blockRendering.Row.prototype.getLastSpacer = function() {
  * connections.
  * After this constructor is called, the row will contain all non-spacer
  * elements it needs.
+ * @param {!Blockly.blockRendering.ConstantProvider} constants The rendering
+ *   constants provider.
  * @package
  * @constructor
  * @extends {Blockly.blockRendering.Row}
  */
-Blockly.blockRendering.TopRow = function() {
-  Blockly.blockRendering.TopRow.superClass_.constructor.call(this);
+Blockly.blockRendering.TopRow = function(constants) {
+  Blockly.blockRendering.TopRow.superClass_.constructor.call(this, constants);
 
   this.type |= Blockly.blockRendering.Types.TOP_ROW;
 
@@ -254,45 +282,6 @@ Blockly.utils.object.inherits(Blockly.blockRendering.TopRow,
     Blockly.blockRendering.Row);
 
 /**
- * Create all non-spacer elements that belong on the top row.
- * @param {!Blockly.BlockSvg} block The block whose top row this represents.
- * @package
- */
-Blockly.blockRendering.TopRow.prototype.populate = function(block) {
-  var hasHat = block.hat ? block.hat === 'cap' : Blockly.BlockSvg.START_HAT;
-  var hasPrevious = !!block.previousConnection;
-  var leftSquareCorner = this.hasLeftSquareCorner(block);
-
-  if (leftSquareCorner) {
-    this.elements.push(new Blockly.blockRendering.SquareCorner());
-  } else {
-    this.elements.push(new Blockly.blockRendering.RoundCorner());
-  }
-
-  if (hasHat) {
-    var hat = new Blockly.blockRendering.Hat();
-    this.elements.push(hat);
-    this.capline = hat.ascenderHeight;
-  } else if (hasPrevious) {
-    this.hasPreviousConnection = true;
-    this.connection = new Blockly.blockRendering.PreviousConnection(
-        /** @type {Blockly.RenderedConnection} */ (block.previousConnection));
-    this.elements.push(this.connection);
-  }
-
-  var precedesStatement = block.inputList.length &&
-      block.inputList[0].type == Blockly.NEXT_STATEMENT;
-
-  // This is the minimum height for the row. If one of its elements has a
-  // greater height it will be overwritten in the compute pass.
-  if (precedesStatement && !block.isCollapsed()) {
-    this.minHeight = this.constants_.LARGE_PADDING;
-  } else {
-    this.minHeight = this.constants_.MEDIUM_PADDING;
-  }
-};
-
-/**
  * Returns whether or not the top row has a left square corner.
  * @param {!Blockly.BlockSvg} block The block whose top row this represents.
  * @returns {boolean} Whether or not the top row has a left square corner.
@@ -302,7 +291,7 @@ Blockly.blockRendering.TopRow.prototype.hasLeftSquareCorner = function(block) {
   var prevBlock = block.getPreviousBlock();
 
   return !!block.outputConnection ||
-      hasHat || (prevBlock && prevBlock.getNextBlock() == block);
+      hasHat || (prevBlock ? prevBlock.getNextBlock() == block : false);
 };
 
 /**
@@ -330,15 +319,26 @@ Blockly.blockRendering.TopRow.prototype.measure = function() {
 };
 
 /**
+ * @override
+ */
+Blockly.blockRendering.TopRow.prototype.startsWithElemSpacer = function() {
+  return false;
+};
+
+/**
  * An object containing information about what elements are in the bottom row of
  * a block as well as spacing information for the top row.
- * Elements in a bottom row can consist of corners, spacers and next connections.
+ * Elements in a bottom row can consist of corners, spacers and next
+ * connections.
+ * @param {!Blockly.blockRendering.ConstantProvider} constants The rendering
+ *   constants provider.
  * @package
  * @constructor
  * @extends {Blockly.blockRendering.Row}
  */
-Blockly.blockRendering.BottomRow = function() {
-  Blockly.blockRendering.BottomRow.superClass_.constructor.call(this);
+Blockly.blockRendering.BottomRow = function(constants) {
+  Blockly.blockRendering.BottomRow.superClass_.constructor.call(this,
+      constants);
   this.type |= Blockly.blockRendering.Types.BOTTOM_ROW;
 
   /**
@@ -374,41 +374,6 @@ Blockly.utils.object.inherits(Blockly.blockRendering.BottomRow,
     Blockly.blockRendering.Row);
 
 /**
- * Create all non-spacer elements that belong on the bottom row.
- * @param {!Blockly.BlockSvg} block The block whose bottom row this represents.
- * @package
- */
-Blockly.blockRendering.BottomRow.prototype.populate = function(block) {
-  this.hasNextConnection = !!block.nextConnection;
-
-  var followsStatement =
-      block.inputList.length &&
-      block.inputList[block.inputList.length - 1].type == Blockly.NEXT_STATEMENT;
-
-  // This is the minimum height for the row. If one of its elements has a
-  // greater height it will be overwritten in the compute pass.
-  if (followsStatement) {
-    this.minHeight = this.constants_.LARGE_PADDING;
-  } else {
-    this.minHeight = this.constants_.MEDIUM_PADDING - 1;
-  }
-
-  var leftSquareCorner = this.hasLeftSquareCorner(block);
-
-  if (leftSquareCorner) {
-    this.elements.push(new Blockly.blockRendering.SquareCorner());
-  } else {
-    this.elements.push(new Blockly.blockRendering.RoundCorner());
-  }
-
-  if (this.hasNextConnection) {
-    this.connection = new Blockly.blockRendering.NextConnection(
-        /** @type {Blockly.RenderedConnection} */ (block.nextConnection));
-    this.elements.push(this.connection);
-  }
-};
-
-/**
  * Returns whether or not the bottom row has a left square corner.
  * @param {!Blockly.BlockSvg} block The block whose bottom row this represents.
  * @returns {boolean} Whether or not the bottom row has a left square corner.
@@ -442,22 +407,35 @@ Blockly.blockRendering.BottomRow.prototype.measure = function() {
   this.descenderHeight = descenderHeight;
   this.widthWithConnectedBlocks = this.width;
 };
+
+/**
+ * @override
+ */
+Blockly.blockRendering.BottomRow.prototype.startsWithElemSpacer = function() {
+  return false;
+};
+
 /**
  * An object containing information about a spacer between two rows.
+ * @param {!Blockly.blockRendering.ConstantProvider} constants The rendering
+ *   constants provider.
  * @param {number} height The height of the spacer.
  * @param {number} width The width of the spacer.
  * @package
  * @constructor
  * @extends {Blockly.blockRendering.Row}
  */
-Blockly.blockRendering.SpacerRow = function(height, width) {
+Blockly.blockRendering.SpacerRow = function(constants, height, width) {
+  Blockly.blockRendering.SpacerRow.superClass_.constructor.call(this,
+      constants);
   this.type |= Blockly.blockRendering.Types.SPACER |
       Blockly.blockRendering.Types.BETWEEN_ROW_SPACER;
   this.width = width;
   this.height = height;
   this.followsStatement = false;
   this.widthWithConnectedBlocks = 0;
-  this.elements = [new Blockly.blockRendering.InRowSpacer(width)];
+  this.elements = [
+    new Blockly.blockRendering.InRowSpacer(this.constants_, width)];
 };
 Blockly.utils.object.inherits(Blockly.blockRendering.SpacerRow,
     Blockly.blockRendering.Row);
@@ -471,12 +449,14 @@ Blockly.blockRendering.SpacerRow.prototype.measure = function() {
 
 /**
  * An object containing information about a row that holds one or more inputs.
+ * @param {!Blockly.blockRendering.ConstantProvider} constants The rendering
+ *   constants provider.
  * @package
  * @constructor
  * @extends {Blockly.blockRendering.Row}
  */
-Blockly.blockRendering.InputRow = function() {
-  Blockly.blockRendering.InputRow.superClass_.constructor.call(this);
+Blockly.blockRendering.InputRow = function(constants) {
+  Blockly.blockRendering.InputRow.superClass_.constructor.call(this, constants);
   this.type |= Blockly.blockRendering.Types.INPUT_ROW;
 
   /**
@@ -518,21 +498,6 @@ Blockly.blockRendering.InputRow.prototype.measure = function() {
 /**
  * @override
  */
-Blockly.blockRendering.InputRow.prototype.getLastSpacer = function() {
-  // Adding spacing after the input connection would look weird.  Find the
-  // before the last input connection and add it there instead.
-  if (this.hasExternalInput || this.hasStatement) {
-    var elems = this.elements;
-    for (var i = elems.length - 1, elem; (elem = elems[i]); i--) {
-      if (Blockly.blockRendering.Types.isSpacer(elem)) {
-        continue;
-      }
-      if (Blockly.blockRendering.Types.isInput(elem)) {
-        var spacer = elems[i - 1];
-        return /** @type {Blockly.blockRendering.InRowSpacer} */ (spacer);
-      }
-    }
-
-  }
-  return Blockly.blockRendering.InputRow.superClass_.getLastSpacer.call(this);
+Blockly.blockRendering.InputRow.prototype.endsWithElemSpacer = function() {
+  return !this.hasExternalInput && !this.hasStatement;
 };

@@ -138,12 +138,6 @@ Blockly.tree.TreeControl.prototype.getIconElement = function() {
 };
 
 /** @override */
-Blockly.tree.TreeControl.prototype.getExpandIconElement = function() {
-  // no expand icon for root element
-  return null;
-};
-
-/** @override */
 Blockly.tree.TreeControl.prototype.updateExpandIcon = function() {
   // no expand icon
 };

@@ -178,13 +178,7 @@ Blockly.tree.BaseNode.prototype.initAccessibility = function() {
 
     var img = this.getIconElement();
     if (img) {
-      Blockly.utils.aria.setRole(img,
-          Blockly.utils.aria.Role.PRESENTATION + '1');
-    }
-    var ei = this.getExpandIconElement();
-    if (ei) {
-      Blockly.utils.aria.setRole(ei,
-          Blockly.utils.aria.Role.PRESENTATION + '2');
+      Blockly.utils.aria.setRole(img, Blockly.utils.aria.Role.PRESENTATION);
     }
 
     var ce = this.getChildrenElement();
@@ -644,7 +638,6 @@ Blockly.tree.BaseNode.prototype.getRowDom = function() {
   row.setAttribute('class', this.getRowClassName());
   row.setAttribute('style', style);
 
-  row.appendChild(this.getExpandIconDom());
   row.appendChild(this.getIconDom());
   row.appendChild(this.getLabelDom());
 
@@ -694,14 +687,6 @@ Blockly.tree.BaseNode.prototype.getCalculatedIconClass = function() {
 };
 
 /**
- * @return {!Element} The source for the icon.
- * @protected
- */
-Blockly.tree.BaseNode.prototype.getExpandIconDom = function() {
-  return document.createElement('span');
-};
-
-/**
  * @return {string} The line style.
  * @protected
  */
@@ -744,21 +729,12 @@ Blockly.tree.BaseNode.prototype.getRowElement = function() {
 };
 
 /**
- * @return {Element} The expanded icon element.
- * @protected
- */
-Blockly.tree.BaseNode.prototype.getExpandIconElement = function() {
-  var el = this.getRowElement();
-  return el ? /** @type {Element} */ (el.firstChild) : null;
-};
-
-/**
  * @return {Element} The icon element.
  * @protected
  */
 Blockly.tree.BaseNode.prototype.getIconElement = function() {
   var el = this.getRowElement();
-  return el ? /** @type {Element} */ (el.childNodes[1]) : null;
+  return el ? /** @type {Element} */ (el.firstChild) : null;
 };
 
 /**
@@ -834,10 +810,6 @@ Blockly.tree.BaseNode.prototype.updateRow = function() {
  * @protected
  */
 Blockly.tree.BaseNode.prototype.updateExpandIcon = function() {
-  var img = this.getExpandIconElement();
-  if (img) {
-    img.className = this.config_.cssTreeIcon;
-  }
   var cel = this.getChildrenElement();
   if (cel) {
     cel.style.backgroundPosition = this.getBackgroundPosition();

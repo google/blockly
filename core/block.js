@@ -37,6 +37,7 @@ goog.require('Blockly.Extensions');
 goog.require('Blockly.Input');
 goog.require('Blockly.utils');
 goog.require('Blockly.utils.Coordinate');
+goog.require('Blockly.utils.colour');
 goog.require('Blockly.utils.object');
 goog.require('Blockly.fieldRegistry');
 goog.require('Blockly.utils.string');

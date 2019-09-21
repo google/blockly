@@ -47,7 +47,7 @@ Blockly.Component = function() {
    * been set by calling {@link #setRightToLeft} explicitly.
    * @private {?boolean}
    */
-  this.rightToLeft_ = Blockly.Component.defaultRightToLeft_;
+  this.rightToLeft_ = Blockly.Component.defaultRightToLeft;
 
   /**
    * Unique ID of the component, lazily initialized in {@link
@@ -77,42 +77,36 @@ Blockly.Component = function() {
   this.parent_ = null;
 
   /**
-   * Array of child components.  Lazily initialized on first use.  Must be kept
-   * in sync with `childIndex_`.  This property is strictly private and
-   * must not be accessed directly outside of this class!
+   * Array of child components.
+   * Must be kept in sync with `childIndex_`.  This property is strictly
+   * private and must not be accessed directly outside of this class!
    * @private {?Array.<?Blockly.Component>}
    */
-  this.children_ = null;
+  this.children_ = [];
 
   /**
    * Map of child component IDs to child components.  Used for constant-time
-   * random access to child components by ID.  Lazily initialized on first use.
+   * random access to child components by ID.
    * Must be kept in sync with `children_`.  This property is strictly
    * private and must not be accessed directly outside of this class!
    *
    * @private {?Object}
    */
-  this.childIndex_ = null;
+  this.childIndex_ = {};
 };
 
 
 /**
  * The default right to left value.
- * @type {?boolean}
- * @private
+ * @type {boolean}
  */
-Blockly.Component.defaultRightToLeft_ = false;
+Blockly.Component.defaultRightToLeft = false;
 
 /**
  * Errors thrown by the component.
  * @enum {string}
  */
 Blockly.Component.Error = {
-  /**
-   * Error when a method is not supported.
-   */
-  NOT_SUPPORTED: 'Method not supported',
-
   /**
    * Error when the component is already rendered and another render attempt is
    * made.
@@ -130,31 +124,6 @@ Blockly.Component.Error = {
    * index.  We don't support sparse child arrays.
    */
   CHILD_INDEX_OUT_OF_BOUNDS: 'Child component index out of bounds',
-
-  /**
-   * Error when an attempt is made to remove a child component from a component
-   * other than its parent.
-   */
-  NOT_OUR_CHILD: 'Child is not in parent component',
-
-  /**
-   * Error when an operation requiring DOM interaction is made when the
-   * component is not in the document
-   */
-  NOT_IN_DOCUMENT: 'Operation not supported while component is not in document'
-};
-
-/**
- * Set the default right-to-left value. This causes all component's created from
- * this point forward to have the given value. This is useful for cases where
- * a given page is always in one directionality, avoiding unnecessary
- * right to left determinations.
- * @param {?boolean} rightToLeft Whether the components should be rendered
- *     right-to-left. Null iff components should determine their directionality.
- * @package
- */
-Blockly.Component.setDefaultRightToLeft = function(rightToLeft) {
-  Blockly.Component.defaultRightToLeft_ = rightToLeft;
 };
 
 /**
@@ -196,11 +165,7 @@ Blockly.Component.prototype.setElementInternal = function(element) {
 /**
  * Sets the parent of this component to use for event bubbling.  Throws an error
  * if the component already has a parent or if an attempt is made to add a
- * component to itself as a child.  Callers must use `removeChild`
- * or `removeChildAt` to remove components from their containers before
- * calling this method.
- * @see Blockly.Component#removeChild
- * @see Blockly.Component#removeChildAt
+ * component to itself as a child.
  * @param {Blockly.Component} parent The parent component.
  * @protected
  */
@@ -212,8 +177,7 @@ Blockly.Component.prototype.setParent = function(parent) {
 
   if (parent && this.parent_ && this.id_ && this.parent_.getChild(this.id_) &&
       this.parent_ != parent) {
-    // This component is already the child of some parent, so it should be
-    // removed using removeChild/removeChildAt first.
+    // This component is already the child of some parent.
     throw Error(Blockly.Component.Error.PARENT_UNABLE_TO_BE_SET);
   }
 
@@ -479,12 +443,6 @@ Blockly.Component.prototype.addChildAt = function(child, index, opt_render) {
     throw Error(Blockly.Component.Error.CHILD_INDEX_OUT_OF_BOUNDS);
   }
 
-  // Create the index and the child array on first use.
-  if (!this.childIndex_ || !this.children_) {
-    this.childIndex_ = {};
-    this.children_ = [];
-  }
-
   // Moving child within component, remove old reference.
   this.childIndex_[child.getId()] = child;
   if (child.getParent() == this) {
@@ -554,16 +512,12 @@ Blockly.Component.prototype.getContentElement = function() {
  * @protected
  */
 Blockly.Component.prototype.isRightToLeft = function() {
-  if (this.rightToLeft_ == null) {
-    this.rightToLeft_ = Blockly.utils.style.isRightToLeft(
-        this.inDocument_ ? this.element_ : document.body);
-  }
   return this.rightToLeft_;
 };
 
 /**
  * Set is right-to-left. This function should be used if the component needs
- * to know the rendering direction during dom creation (i.e. before
+ * to know the rendering direction during DOM creation (i.e. before
  * {@link #enterDocument} is called and is right-to-left is set).
  * @param {boolean} rightToLeft Whether the component is rendered
  *     right-to-left.
@@ -582,7 +536,7 @@ Blockly.Component.prototype.setRightToLeft = function(rightToLeft) {
  * @protected
  */
 Blockly.Component.prototype.hasChildren = function() {
-  return !!this.children_ && this.children_.length != 0;
+  return this.children_.length != 0;
 };
 
 /**
@@ -591,7 +545,7 @@ Blockly.Component.prototype.hasChildren = function() {
  * @protected
  */
 Blockly.Component.prototype.getChildCount = function() {
-  return this.children_ ? this.children_.length : 0;
+  return this.children_.length;
 };
 
 /**
@@ -602,10 +556,8 @@ Blockly.Component.prototype.getChildCount = function() {
  */
 Blockly.Component.prototype.getChild = function(id) {
   // Use childIndex_ for O(1) access by ID.
-  return (this.childIndex_ && id) ?
-      /** @type {Blockly.Component} */ (
-        this.childIndex_[id]) ||
-        null : null;
+  return id ?
+      /** @type {Blockly.Component} */ (this.childIndex_[id]) || null : null;
 };
 
 /**
@@ -616,7 +568,7 @@ Blockly.Component.prototype.getChild = function(id) {
  */
 Blockly.Component.prototype.getChildAt = function(index) {
   // Use children_ for access by index.
-  return this.children_ ? this.children_[index] || null : null;
+  return this.children_[index] || null;
 };
 
 /**
@@ -631,10 +583,8 @@ Blockly.Component.prototype.getChildAt = function(index) {
  * @protected
  */
 Blockly.Component.prototype.forEachChild = function(f, opt_obj) {
-  if (this.children_) {
-    for (var i = 0; i < this.children_.length; i++) {
-      f.call(/** @type {?} */ (opt_obj), this.children_[i], i);
-    }
+  for (var i = 0; i < this.children_.length; i++) {
+    f.call(/** @type {?} */ (opt_obj), this.children_[i], i);
   }
 };
 
@@ -646,96 +596,5 @@ Blockly.Component.prototype.forEachChild = function(f, opt_obj) {
  * @protected
  */
 Blockly.Component.prototype.indexOfChild = function(child) {
-  return (this.children_ && child) ? this.children_.indexOf(child) : -1;
-};
-
-/**
- * Removes the given child from this component, and returns it.  Throws an error
- * if the argument is invalid or if the specified child isn't found in the
- * parent component.  The argument can either be a string (interpreted as the
- * ID of the child component to remove) or the child component itself.
- *
- * If `opt_unrender` is true, calls {@link Blockly.Component#exitDocument}
- * on the removed child, and subsequently detaches the child's DOM from the
- * document.  Otherwise it is the caller's responsibility to clean up the child
- * component's DOM.
- *
- * @see Blockly.Component#removeChildAt
- * @param {string|Blockly.Component|null} child The ID of the child to remove,
- *    or the child component itself.
- * @param {boolean=} opt_unrender If true, calls `exitDocument` on the
- *    removed child component, and detaches its DOM from the document.
- * @return {Blockly.Component} The removed component, if any.
- * @protected
- */
-Blockly.Component.prototype.removeChild = function(child, opt_unrender) {
-  if (child) {
-    // Normalize child to be the object and id to be the ID string.  This also
-    // ensures that the child is really ours.
-    var id = (typeof child === 'string' || child instanceof String) ?
-        String(child) : child.getId();
-    child = this.getChild(id);
-
-    if (id && child) {
-      delete this.childIndex_[id];
-      var index = this.children_.indexOf(child);
-      if (index > -1) {
-        this.children_.splice(index, 1);
-      }
-
-      if (opt_unrender) {
-        // Remove the child component's DOM from the document.  We have to call
-        // exitDocument first (see documentation).
-        child.exitDocument();
-        if (child.element_) {
-          Blockly.utils.dom.removeNode(child.element_);
-        }
-      }
-
-      // Child's parent must be set to null after exitDocument is called
-      // so that the child can unlisten to its parent if required.
-      child.setParent(null);
-    }
-  }
-
-  if (!child) {
-    throw Error(Blockly.Component.Error.NOT_OUR_CHILD);
-  }
-
-  return /** @type {!Blockly.Component} */ (child);
-};
-
-/**
- * Removes the child at the given index from this component, and returns it.
- * Throws an error if the argument is out of bounds, or if the specified child
- * isn't found in the parent.  See {@link Blockly.Component#removeChild} for
- * detailed semantics.
- *
- * @see Blockly.Component#removeChild
- * @param {number} index 0-based index of the child to remove.
- * @param {boolean=} opt_unrender If true, calls `exitDocument` on the
- *    removed child component, and detaches its DOM from the document.
- * @return {Blockly.Component} The removed component, if any.
- * @protected
- */
-Blockly.Component.prototype.removeChildAt = function(index, opt_unrender) {
-  // removeChild(null) will throw error.
-  return this.removeChild(this.getChildAt(index), opt_unrender);
-};
-
-/**
- * Removes every child component attached to this one and returns them.
- *
- * @see Blockly.Component#removeChild
- * @param {boolean=} opt_unrender If true, calls {@link #exitDocument} on the
- *    removed child components, and detaches their DOM from the document.
- * @return {!Array.<Blockly.Component>} The removed components if any.
- * @protected
- */
-Blockly.Component.prototype.removeChildren = function(opt_unrender) {
-  var removedChildren = [];
-  while (this.hasChildren()) {
-    removedChildren.push(this.removeChildAt(0, opt_unrender));
-  }
-  return removedChildren;
+  return this.children_.indexOf(child);
 };

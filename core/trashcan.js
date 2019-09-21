@@ -26,8 +26,10 @@
 
 goog.provide('Blockly.Trashcan');
 
+goog.require('Blockly.HorizontalFlyout');
 goog.require('Blockly.utils.dom');
 goog.require('Blockly.utils.Rect');
+goog.require('Blockly.VerticalFlyout');
 goog.require('Blockly.Xml');
 
 

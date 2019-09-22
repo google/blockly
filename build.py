@@ -119,12 +119,6 @@ this.BLOCKLY_DIR = (function(root) {
 })(this);
 
 this.BLOCKLY_BOOT = function(root) {
-  var dir = '';
-  if (root.IS_NODE_JS) {
-    dir = 'blockly';
-  } else {
-    dir = this.BLOCKLY_DIR.match(/[^\\/]+$/)[0];
-  }
   // Execute after Closure has loaded.
 """)
     add_dependency = []
@@ -133,12 +127,6 @@ this.BLOCKLY_BOOT = function(root) {
       add_dependency.append(calcdeps.GetDepsLine(dep, base_path))
     add_dependency.sort()  # Deterministic build.
     add_dependency = '\n'.join(add_dependency)
-    # Find the Blockly directory name and replace it with a JS variable.
-    # This allows blockly_uncompressed.js to be compiled on one computer and be
-    # used on another, even if the directory name differs.
-    m = re.search('[\\/]([^\\/]+)[\\/]core[\\/]blockly.js', add_dependency)
-    add_dependency = re.sub('([\\/])' + re.escape(m.group(1)) +
-        '([\\/](core)[\\/])', '\\1../../" + dir + "\\2', add_dependency)
     f.write(add_dependency + '\n')
 
     provides = []
@@ -163,9 +151,6 @@ if (this.IS_NODE_JS) {
   this.BLOCKLY_BOOT(this);
   module.exports = Blockly;
 } else {
-  // Delete any existing Closure (e.g. Soy's nogoog_shim).
-  document.write('<script>var goog = undefined;</script>');
-  // Load fresh Closure Library.
   document.write('<script src="' + this.BLOCKLY_DIR +
       '/closure/goog/base.js"></script>');
   document.write('<script>this.BLOCKLY_BOOT(this);</script>');

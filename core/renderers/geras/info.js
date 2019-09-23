@@ -29,19 +29,22 @@ goog.provide('Blockly.geras');
 goog.provide('Blockly.geras.RenderInfo');
 
 goog.require('Blockly.blockRendering.BottomRow');
-goog.require('Blockly.blockRendering.ExternalValueInput');
-goog.require('Blockly.blockRendering.InlineInput');
 goog.require('Blockly.blockRendering.InputRow');
 goog.require('Blockly.blockRendering.Measurable');
 goog.require('Blockly.blockRendering.NextConnection');
 goog.require('Blockly.blockRendering.OutputConnection');
 goog.require('Blockly.blockRendering.PreviousConnection');
 goog.require('Blockly.blockRendering.RenderInfo');
-goog.require('Blockly.blockRendering.Row');
-goog.require('Blockly.blockRendering.SpacerRow');
-goog.require('Blockly.blockRendering.StatementInput');
-goog.require('Blockly.blockRendering.TopRow');
+goog.require('Blockly.blockRendering.BottomRow');
+goog.require('Blockly.blockRendering.InputRow');
+goog.require('Blockly.blockRendering.Measurable');
+goog.require('Blockly.blockRendering.NextConnection');
+goog.require('Blockly.blockRendering.OutputConnection');
+goog.require('Blockly.blockRendering.PreviousConnection');
 goog.require('Blockly.blockRendering.Types');
+goog.require('Blockly.blockRendering.ExternalValueInput');
+goog.require('Blockly.geras.InlineInput');
+goog.require('Blockly.geras.StatementInput');
 goog.require('Blockly.RenderedConnection');
 goog.require('Blockly.utils.object');
 
@@ -72,6 +75,30 @@ Blockly.utils.object.inherits(Blockly.geras.RenderInfo,
  */
 Blockly.geras.RenderInfo.prototype.getRenderer = function() {
   return /** @type {!Blockly.geras.Renderer} */ (this.renderer_);
+};
+
+/**
+ * @override
+ */
+Blockly.geras.RenderInfo.prototype.addInput_ = function(input, activeRow) {
+  // Non-dummy inputs have visual representations onscreen.
+  if (this.isInline && input.type == Blockly.INPUT_VALUE) {
+    activeRow.elements.push(
+        new Blockly.geras.InlineInput(this.constants_, input));
+    activeRow.hasInlineInput = true;
+  } else if (input.type == Blockly.NEXT_STATEMENT) {
+    activeRow.elements.push(
+        new Blockly.geras.StatementInput(this.constants_, input));
+    activeRow.hasStatement = true;
+  } else if (input.type == Blockly.INPUT_VALUE) {
+    activeRow.elements.push(
+        new Blockly.blockRendering.ExternalValueInput(this.constants_, input));
+    activeRow.hasExternalInput = true;
+  } else if (input.type == Blockly.DUMMY_INPUT) {
+    // Dummy inputs have no visual representation, but the information is still
+    // important.
+    activeRow.hasDummyInput = true;
+  }
 };
 
 /**

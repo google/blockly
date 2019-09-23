@@ -19,7 +19,7 @@
  */
 
 /**
- * @fileoverview An object that provides constants for rendering blocks in Zelos
+ * @fileoverview An object that provides constants for rendering blocks in Geras
  * mode.
  * @author kozbial@google.com (Monica Kozbial)
  */
@@ -32,7 +32,7 @@ goog.require('Blockly.utils.object');
 
 
 /**
- * An object that provides constants for rendering blocks in Zelos mode.
+ * An object that provides constants for rendering blocks in Geras mode.
  * @constructor
  * @package
  * @extends {Blockly.blockRendering.ConstantProvider}

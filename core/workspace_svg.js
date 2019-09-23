@@ -1079,6 +1079,12 @@ Blockly.WorkspaceSvg.prototype.setVisible = function(isVisible) {
     this.toolbox_.HtmlDiv.style.display = isVisible ? 'block' : 'none';
   }
   if (isVisible) {
+    var blocks = this.getAllBlocks(false);
+    // Tell each block on the workspace to mark it's fields as dirty.
+    for (var i = blocks.length - 1; i >= 0; i--) {
+      blocks[i].markDirty();
+    }
+
     this.render();
     if (this.toolbox_) {
       this.toolbox_.position();

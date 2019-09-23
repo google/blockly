@@ -99,6 +99,7 @@ Blockly.Component = function() {
 /**
  * The default right to left value.
  * @type {boolean}
+ * @package
  */
 Blockly.Component.defaultRightToLeft = false;
 
@@ -123,7 +124,7 @@ Blockly.Component.Error = {
    * Error when an attempt is made to add a child component at an out-of-bounds
    * index.  We don't support sparse child arrays.
    */
-  CHILD_INDEX_OUT_OF_BOUNDS: 'Child component index out of bounds',
+  CHILD_INDEX_OUT_OF_BOUNDS: 'Child component index out of bounds'
 };
 
 /**

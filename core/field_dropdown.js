@@ -67,7 +67,8 @@ Blockly.FieldDropdown = function(menuGenerator, opt_validator, opt_config) {
   /**
    * An array of options for a dropdown list,
    * or a function which generates these options.
-   * @type {(!Array.<!Array>|!Function)}
+   * @type {(!Array.<!Array>|
+   *    !function(this:Blockly.FieldDropdown): !Array.<!Array>)}
    * @protected
    */
   this.menuGenerator_ = menuGenerator;

@@ -1741,7 +1741,7 @@ Blockly.WorkspaceSvg.prototype.markFocused = function() {
     Blockly.mainWorkspace = this;
     // We call e.preventDefault in many event handlers which means we
     // need to explicitly grab focus (e.g from a textarea) because
-    // the browser will not do it for us.  How to do this is browser dependant.
+    // the browser will not do it for us.  How to do this is browser dependent.
     this.setBrowserFocus();
   }
 };
@@ -1751,7 +1751,7 @@ Blockly.WorkspaceSvg.prototype.markFocused = function() {
  * @private
  */
 Blockly.WorkspaceSvg.prototype.setBrowserFocus = function() {
-  // Blur whatever was focused since explcitly grabbing focus below does not
+  // Blur whatever was focused since explicitly grabbing focus below does not
   // work in Edge.
   if (document.activeElement) {
     document.activeElement.blur();

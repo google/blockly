@@ -204,6 +204,7 @@ Blockly.Toolbox.prototype.init = function() {
 /**
  * Fill the toolbox with categories and blocks.
  * @param {!Node} languageTree DOM tree of blocks.
+ * @package
  */
 Blockly.Toolbox.prototype.renderTree = function(languageTree) {
   if (this.tree_) {

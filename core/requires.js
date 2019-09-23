@@ -47,24 +47,24 @@ goog.require('Blockly.ZoomControls');
 
 
 // Block dependencies.
-// None of these should be required since individual block files should
-// include the requirements they depend on.
-// goog.require('Blockly.Mutator');
-// goog.require('Blockly.FieldAngle');
-// goog.require('Blockly.FieldCheckbox');
-// goog.require('Blockly.FieldColour');
-// goog.require('Blockly.FieldDropdown');
-// goog.require('Blockly.FieldLabelSerializable');
-// goog.require('Blockly.FieldImage');
-// goog.require('Blockly.FieldTextInput');
-// goog.require('Blockly.FieldMultilineInput');
-// goog.require('Blockly.FieldNumber');
-// goog.require('Blockly.FieldVariable');
+// None of these should be required when using advanced compilation since
+// individual block files should include the requirements they depend on.
+goog.require('Blockly.Mutator');
+goog.require('Blockly.FieldAngle');
+goog.require('Blockly.FieldCheckbox');
+goog.require('Blockly.FieldColour');
+goog.require('Blockly.FieldDropdown');
+goog.require('Blockly.FieldLabelSerializable');
+goog.require('Blockly.FieldImage');
+goog.require('Blockly.FieldTextInput');
+goog.require('Blockly.FieldMultilineInput');
+goog.require('Blockly.FieldNumber');
+goog.require('Blockly.FieldVariable');
 
 
 // Blockly Renderers.
 // At least one renderer is mandatory.  Geras is the default one.
 // Others may be chosen using Blockly.inject's "renderer" configuration.
 goog.require('Blockly.geras.Renderer');
-// goog.require('Blockly.thrasos.Renderer');
-// goog.require('Blockly.zelos.Renderer');
+goog.require('Blockly.thrasos.Renderer');
+goog.require('Blockly.zelos.Renderer');

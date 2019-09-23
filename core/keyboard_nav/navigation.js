@@ -108,6 +108,15 @@ Blockly.navigation.removeMark_ = function() {
 };
 
 /**
+ * Set the current navigation state.
+ * @param {number} newState The new navigation state.
+ * @package
+ */
+Blockly.navigation.setState = function(newState) {
+  Blockly.navigation.currentState_ = newState;
+};
+
+/**
  * Gets the top node on a block.
  * This is either the previous connection, output connection or the block.
  * @param {Blockly.Block} block The block to find the top most AST node on.
@@ -133,20 +142,23 @@ Blockly.navigation.getTopNode = function(block) {
 /************************/
 
 /**
- * Set the state to the toolbox state and the current category as the first
+ * If a toolbox exists, set the navigation state to toolbox and select the first
+ * category in the toolbox.
  * category.
  * @private
  */
 Blockly.navigation.focusToolbox_ = function() {
-  Blockly.navigation.resetFlyout_(false /* shouldHide */);
-  Blockly.navigation.currentState_ = Blockly.navigation.STATE_TOOLBOX;
   var workspace = Blockly.getMainWorkspace();
   var toolbox = workspace.getToolbox();
+  if (toolbox) {
+    Blockly.navigation.currentState_ = Blockly.navigation.STATE_TOOLBOX;
+    Blockly.navigation.resetFlyout_(false /* shouldHide */);
 
-  if (!Blockly.getMainWorkspace().getMarker().getCurNode()) {
-    Blockly.navigation.markAtCursor_();
+    if (!Blockly.getMainWorkspace().getMarker().getCurNode()) {
+      Blockly.navigation.markAtCursor_();
+    }
+    toolbox.selectFirstCategory();
   }
-  toolbox.selectFirstCategory();
 };
 
 /***********************/

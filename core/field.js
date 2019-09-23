@@ -707,7 +707,7 @@ Blockly.Field.prototype.markDirty = function() {
  * @package
  */
 Blockly.Field.prototype.forceRerender = function() {
-  this.markDirty();
+  this.isDirty_ = true;
   if (this.sourceBlock_ && this.sourceBlock_.rendered) {
     this.sourceBlock_.render();
     this.sourceBlock_.bumpNeighbours_();

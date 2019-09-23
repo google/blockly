@@ -5,11 +5,11 @@
 
 # These values should be updated with each release
 # Size of blockly_compressed.js
-blockly_size_expected=500000 # 813K in July 2019 release
+blockly_size_expected=573000 # 813K in July 2019 release
 # Size of blocks_compressed.js
 blocks_size_expected=76500 # 75K in July 2019 release
 # Size of blockly_compressed.js.gz
-blockly_gz_size_expected=109000 # 180K in July 2019 release
+blockly_gz_size_expected=123000 # 180K in July 2019 release
 # Size of blocks_compressed.js.gz
 blocks_gz_size_expected=15200 # 14.5K in July 2019 release
 

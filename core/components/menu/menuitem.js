@@ -82,12 +82,11 @@ Blockly.MenuItem.prototype.createDom = function() {
       (!this.enabled_ ? 'goog-menuitem-disabled ' : '') +
       (this.checked_ ? 'goog-option-selected ' : '') +
       (this.isRightToLeft() ? 'goog-menuitem-rtl ' : ''));
-  element.setAttribute('style', 'user-select: none');
 
   var content = this.getContentWrapperDom();
   element.appendChild(content);
 
-  // Add a cheeckbox for checkable menu items.
+  // Add a checkbox for checkable menu items.
   var checkboxDom = this.getCheckboxDom();
   if (checkboxDom) {
     content.appendChild(checkboxDom);
@@ -113,7 +112,6 @@ Blockly.MenuItem.prototype.getCheckboxDom = function() {
   }
   var menuItemCheckbox = document.createElement('div');
   menuItemCheckbox.setAttribute('class', 'goog-menuitem-checkbox');
-  menuItemCheckbox.setAttribute('style', 'user-select: none;');
   return menuItemCheckbox;
 };
 
@@ -136,7 +134,6 @@ Blockly.MenuItem.prototype.getContentDom = function() {
 Blockly.MenuItem.prototype.getContentWrapperDom = function() {
   var contentWrapper = document.createElement('div');
   contentWrapper.setAttribute('class', 'goog-menuitem-content');
-  contentWrapper.setAttribute('style', 'user-select: none;');
   return contentWrapper;
 };
 
@@ -210,15 +207,6 @@ Blockly.MenuItem.prototype.setChecked = function(checked) {
           Blockly.utils.aria.State.SELECTED, false);
     }
   }
-};
-
-/**
- * Returns true if the component is currently highlighted, false otherwise.
- * @return {boolean} Whether the component is highlighted.
- * @package
- */
-Blockly.MenuItem.prototype.isHighlighted = function() {
-  return this.highlight_;
 };
 
 /**

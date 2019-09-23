@@ -233,8 +233,7 @@ Blockly.tree.BaseNode.prototype.exitDocument = function() {
  * The method assumes that the child doesn't have parent node yet.
  * @override
  */
-Blockly.tree.BaseNode.prototype.addChildAt = function(
-    child, index) {
+Blockly.tree.BaseNode.prototype.addChildAt = function(child, index) {
   child = /** @type {Blockly.tree.BaseNode} */ (child);
   var prevNode = this.getChildAt(index - 1);
   var nextNode = this.getChildAt(index);
@@ -293,21 +292,15 @@ Blockly.tree.BaseNode.prototype.addChildAt = function(
 };
 
 /**
- * Adds a node as a child to the current node.
+ * Appends a node as a child to the current node.
  * @param {Blockly.tree.BaseNode} child The child to add.
- * @param {Blockly.tree.BaseNode=} opt_before If specified, the new child is
- *    added as a child before this one. If not specified, it's appended to the
- *    end.
- * @return {!Blockly.tree.BaseNode} The added child.
  * @package
  */
-Blockly.tree.BaseNode.prototype.add = function(child, opt_before) {
+Blockly.tree.BaseNode.prototype.add = function(child) {
   if (child.getParent()) {
-    child.getParent().removeChild(child);
+    throw Error(Blockly.Component.Error.PARENT_UNABLE_TO_BE_SET);
   }
-  this.addChildAt(
-      child, opt_before ? this.indexOfChild(opt_before) : this.getChildCount());
-  return child;
+  this.addChildAt(child, this.getChildCount());
 };
 
 /**

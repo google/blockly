@@ -1727,10 +1727,7 @@ Blockly.WorkspaceSvg.prototype.updateToolbox = function(tree) {
       throw Error('Existing toolbox has no categories.  Can\'t change mode.');
     }
     this.options.languageTree = tree;
-    var openNode = this.toolbox_.populate_(tree);
-    this.toolbox_.addColour_();
-    this.toolbox_.position();
-    this.toolbox_.tree_.setSelectedItem(openNode);
+    this.toolbox_.renderTree(tree);
   } else {
     if (!this.flyout_) {
       throw Error('Existing toolbox has categories.  Can\'t change mode.');
@@ -1750,7 +1747,7 @@ Blockly.WorkspaceSvg.prototype.markFocused = function() {
     Blockly.mainWorkspace = this;
     // We call e.preventDefault in many event handlers which means we
     // need to explicitly grab focus (e.g from a textarea) because
-    // the browser will not do it for us.  How to do this is browser dependant.
+    // the browser will not do it for us.  How to do this is browser dependent.
     this.setBrowserFocus();
   }
 };
@@ -1760,7 +1757,7 @@ Blockly.WorkspaceSvg.prototype.markFocused = function() {
  * @private
  */
 Blockly.WorkspaceSvg.prototype.setBrowserFocus = function() {
-  // Blur whatever was focused since explcitly grabbing focus below does not
+  // Blur whatever was focused since explicitly grabbing focus below does not
   // work in Edge.
   if (document.activeElement) {
     document.activeElement.blur();

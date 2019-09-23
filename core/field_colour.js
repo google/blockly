@@ -504,7 +504,7 @@ Blockly.FieldColour.prototype.setHighlightedCell_ = function(cell, index) {
   if (highlighted) {
     Blockly.utils.dom.removeClass(highlighted, 'blocklyColourHighlighted');
   }
-  // Highight new item.
+  // Highlight new item.
   Blockly.utils.dom.addClass(cell, 'blocklyColourHighlighted');
   // Set new highlighted index.
   this.highlightedIndex_ = index;

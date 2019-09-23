@@ -96,7 +96,7 @@ Blockly.createDom_ = function(container, options) {
   // then manually positions content in RTL as needed.
   container.setAttribute('dir', 'LTR');
   // Set the default direction for Components to use.
-  Blockly.Component.setDefaultRightToLeft(options.RTL);
+  Blockly.Component.defaultRightToLeft = options.RTL;
 
   // Load CSS.
   Blockly.Css.inject(options.hasCss, options.pathToMedia);

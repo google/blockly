@@ -198,6 +198,19 @@ Blockly.Toolbox.prototype.init = function() {
   this.config_['cleardotPath'] = workspace.options.pathToMedia + '1x1.gif';
   this.config_['cssCollapsedFolderIcon'] =
       'blocklyTreeIconClosed' + (workspace.RTL ? 'Rtl' : 'Ltr');
+  this.renderTree(workspace.options.languageTree);
+};
+
+/**
+ * Fill the toolbox with categories and blocks.
+ * @param {!Node} languageTree DOM tree of blocks.
+ * @package
+ */
+Blockly.Toolbox.prototype.renderTree = function(languageTree) {
+  if (this.tree_) {
+    this.tree_.dispose();  // Delete any existing content.
+    this.lastCategory_ = null;
+  }
   var tree = new Blockly.tree.TreeControl(this,
       /** @type {!Blockly.tree.BaseNode.Config} */ (this.config_));
   this.tree_ = tree;
@@ -205,8 +218,18 @@ Blockly.Toolbox.prototype.init = function() {
   tree.onBeforeSelected(this.handleBeforeTreeSelected_);
   tree.onAfterSelected(this.handleAfterTreeSelected_);
   var openNode = null;
-  if (workspace.options.languageTree) {
-    openNode = this.populate_(workspace.options.languageTree);
+  if (languageTree) {
+    this.tree_.blocks = [];
+    this.hasColours_ = false;
+    var openNode =
+      this.syncTrees_(languageTree, this.tree_, this.workspace_.options.pathToMedia);
+
+    if (this.tree_.blocks.length) {
+      throw Error('Toolbox cannot have both blocks and categories ' +
+          'in the root level.');
+    }
+    // Fire a resize event since the toolbox may have changed width and height.
+    this.workspace_.resizeContents();
   }
   tree.render(this.HtmlDiv);
   if (openNode) {
@@ -375,29 +398,6 @@ Blockly.Toolbox.prototype.position = function() {
     this.width = treeDiv.offsetWidth;
   }
   this.flyout_.position();
-};
-
-/**
- * Fill the toolbox with categories and blocks.
- * @param {!Node} newTree DOM tree of blocks.
- * @return {Blockly.tree.BaseNode} Tree node to open at startup (or null).
- * @private
- */
-Blockly.Toolbox.prototype.populate_ = function(newTree) {
-  this.tree_.removeChildren();  // Delete any existing content.
-  this.tree_.blocks = [];
-  this.hasColours_ = false;
-  var openNode =
-    this.syncTrees_(newTree, this.tree_, this.workspace_.options.pathToMedia);
-
-  if (this.tree_.blocks.length) {
-    throw Error('Toolbox cannot have both blocks and categories ' +
-        'in the root level.');
-  }
-
-  // Fire a resize event since the toolbox may have changed width and height.
-  this.workspace_.resizeContents();
-  return openNode;
 };
 
 /**

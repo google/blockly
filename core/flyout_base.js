@@ -371,7 +371,7 @@ Blockly.Flyout.prototype.updateDisplay_ = function() {
     show = this.isVisible();
   }
   this.svgGroup_.style.display = show ? 'block' : 'none';
-  // Update the scrollbar's visiblity too since it should mimic the
+  // Update the scrollbar's visibility too since it should mimic the
   // flyout's visibility.
   this.scrollbar_.setContainerVisible(show);
 };

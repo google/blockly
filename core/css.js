@@ -136,7 +136,6 @@ Blockly.Css.CONTENT = [
 
   '.blocklyNonSelectable {',
     'user-select: none;',
-    '-moz-user-select: none;',
     '-ms-user-select: none;',
     '-webkit-user-select: none;',
   '}',
@@ -431,7 +430,6 @@ Blockly.Css.CONTENT = [
   */
   '.blocklySvg text, .blocklyBlockDragSurface text {',
     'user-select: none;',
-    '-moz-user-select: none;',
     '-ms-user-select: none;',
     '-webkit-user-select: none;',
     'cursor: inherit;',
@@ -699,7 +697,6 @@ Blockly.Css.CONTENT = [
     'overflow-y: auto;',
     'position: absolute;',
     'user-select: none;',
-    '-moz-user-select: none;',
     '-ms-user-select: none;',
     '-webkit-user-select: none;',
     'z-index: 70;', /* so blocks go under toolbox when dragging */

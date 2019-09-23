@@ -1080,7 +1080,7 @@ Blockly.WorkspaceSvg.prototype.setVisible = function(isVisible) {
   }
   if (isVisible) {
     var blocks = this.getAllBlocks(false);
-    // Tell each block on the workspace to mark it's fields as dirty.
+    // Tell each block on the workspace to mark its fields as dirty.
     for (var i = blocks.length - 1; i >= 0; i--) {
       blocks[i].markDirty();
     }

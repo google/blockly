@@ -398,7 +398,7 @@ Blockly.ASTNode.prototype.navigateBetweenStacks_ = function(forward) {
   if (!(curLocation instanceof Blockly.Block)) {
     curLocation = curLocation.getSourceBlock();
   }
-  if (!curLocation) {
+  if (!curLocation || !curLocation.workspace) {
     return null;
   }
   var curRoot = curLocation.getRootBlock();

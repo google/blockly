@@ -368,18 +368,20 @@ Blockly.FieldColour.prototype.onKeyDown_ = function(e) {
  * @package
  */
 Blockly.FieldColour.prototype.onBlocklyAction = function(action) {
-  if (action === Blockly.navigation.ACTION_PREVIOUS) {
-    this.moveHighlightBy_(0, -1);
-    return true;
-  } else if (action === Blockly.navigation.ACTION_NEXT) {
-    this.moveHighlightBy_(0, 1);
-    return true;
-  } else if (action === Blockly.navigation.ACTION_OUT) {
-    this.moveHighlightBy_(-1, 0);
-    return true;
-  } else if (action === Blockly.navigation.ACTION_IN) {
-    this.moveHighlightBy_(1, 0);
-    return true;
+  if (this.picker_) {
+    if (action === Blockly.navigation.ACTION_PREVIOUS) {
+      this.moveHighlightBy_(0, -1);
+      return true;
+    } else if (action === Blockly.navigation.ACTION_NEXT) {
+      this.moveHighlightBy_(0, 1);
+      return true;
+    } else if (action === Blockly.navigation.ACTION_OUT) {
+      this.moveHighlightBy_(-1, 0);
+      return true;
+    } else if (action === Blockly.navigation.ACTION_IN) {
+      this.moveHighlightBy_(1, 0);
+      return true;
+    }
   }
   return Blockly.FieldColour.superClass_.onBlocklyAction.call(this, action);
 };
@@ -583,6 +585,7 @@ Blockly.FieldColour.prototype.dropdownDispose_ = function() {
   Blockly.unbindEvent_(this.onMouseEnterWrapper_);
   Blockly.unbindEvent_(this.onMouseLeaveWrapper_);
   Blockly.unbindEvent_(this.onKeyDownWrapper_);
+  this.picker_ = null;
 };
 
 Blockly.fieldRegistry.register('field_colour', Blockly.FieldColour);

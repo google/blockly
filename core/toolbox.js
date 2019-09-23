@@ -260,9 +260,15 @@ Blockly.Toolbox.prototype.handleAfterTreeSelected_ = function(
     if (this.lastCategory_ != newNode) {
       this.flyout_.scrollToStart();
     }
+    if (Blockly.keyboardAccessibilityMode) {
+      Blockly.navigation.setState(Blockly.navigation.STATE_TOOLBOX);
+    }
   } else {
     // Hide the flyout.
     this.flyout_.hide();
+    if (Blockly.keyboardAccessibilityMode) {
+      Blockly.navigation.setState(Blockly.navigation.STATE_WS);
+    }
   }
   if (oldNode != newNode && oldNode != this) {
     var event = new Blockly.Events.Ui(null, 'category',

@@ -25,30 +25,11 @@
  */
 'use strict';
 
-goog.provide('Blockly.geras.ExternalValueInput');
 goog.provide('Blockly.geras.InlineInput');
-goog.provide('Blockly.geras.InputConnection');
 goog.provide('Blockly.geras.StatementInput');
 
 goog.require('Blockly.blockRendering.Connection');
 goog.require('Blockly.utils.object');
-
-/**
- * The base class to represent an input that takes up space on a block
- * during rendering
- * @param {!Blockly.blockRendering.ConstantProvider} constants The rendering
- *   constants provider.
- * @param {!Blockly.Input} input The input to measure and store information for.
- * @package
- * @constructor
- * @extends {Blockly.blockRendering.Connection}
- */
-Blockly.geras.InputConnection = function(constants, input) {
-  Blockly.geras.InputConnection.superClass_.constructor.call(
-      this, constants, input);
-};
-Blockly.utils.object.inherits(Blockly.geras.InputConnection,
-    Blockly.blockRendering.InputConnection);
 
 /**
  * An object containing information about the space an inline input takes up
@@ -98,24 +79,3 @@ Blockly.geras.StatementInput = function(constants, input) {
 };
 Blockly.utils.object.inherits(Blockly.geras.StatementInput,
     Blockly.blockRendering.StatementInput);
-
-
-
-/**
- * An object containing information about the space an external value input
- * takes up during rendering
- * @param {!Blockly.blockRendering.ConstantProvider} constants The rendering
- *   constants provider.
- * @param {!Blockly.Input} input The external value input to measure and store
- *     information for.
- * @package
- * @constructor
- * @extends {Blockly.blockRendering.InputConnection}
- */
-Blockly.geras.ExternalValueInput = function(constants, input) {
-  Blockly.geras.ExternalValueInput.superClass_.constructor.call(
-      this, constants, input);
-};
-Blockly.utils.object.inherits(Blockly.geras.ExternalValueInput,
-    Blockly.blockRendering.ExternalValueInput);
-

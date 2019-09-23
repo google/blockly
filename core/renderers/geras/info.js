@@ -42,7 +42,7 @@ goog.require('Blockly.blockRendering.NextConnection');
 goog.require('Blockly.blockRendering.OutputConnection');
 goog.require('Blockly.blockRendering.PreviousConnection');
 goog.require('Blockly.blockRendering.Types');
-goog.require('Blockly.geras.ExternalValueInput');
+goog.require('Blockly.blockRendering.ExternalValueInput');
 goog.require('Blockly.geras.InlineInput');
 goog.require('Blockly.geras.StatementInput');
 goog.require('Blockly.RenderedConnection');
@@ -92,7 +92,7 @@ Blockly.geras.RenderInfo.prototype.addInput_ = function(input, activeRow) {
     activeRow.hasStatement = true;
   } else if (input.type == Blockly.INPUT_VALUE) {
     activeRow.elements.push(
-        new Blockly.geras.ExternalValueInput(this.constants_, input));
+        new Blockly.blockRendering.ExternalValueInput(this.constants_, input));
     activeRow.hasExternalInput = true;
   } else if (input.type == Blockly.DUMMY_INPUT) {
     // Dummy inputs have no visual representation, but the information is still

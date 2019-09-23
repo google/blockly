@@ -413,9 +413,11 @@ Blockly.Block.prototype.unplugFromRow_ = function(opt_healStack) {
   var childConnection = thisConnection.targetConnection;
   // Disconnect the child block.
   childConnection.disconnect();
-  // Move the child to the parent, if possible.
+  // Connect child to the parent if possible, otherwise bump away.
   if (childConnection.checkType_(parentConnection)) {
     parentConnection.connect(childConnection);
+  } else {
+    childConnection.bumpAwayFrom_(parentConnection);
   }
 };
 

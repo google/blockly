@@ -207,6 +207,16 @@ Blockly.Input.prototype.setVisible = function(visible) {
 };
 
 /**
+ * Mark all fields on this input as dirty.
+ * @package
+ */
+Blockly.Input.prototype.markDirty = function() {
+  for (var y = 0, field; field = this.fieldRow[y]; y++) {
+    field.markDirty();
+  }
+};
+
+/**
  * Change a connection's compatibility.
  * @param {string|Array.<string>|null} check Compatible value type or
  *     list of value types.  Null if all types are compatible.

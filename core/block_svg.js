@@ -541,6 +541,16 @@ Blockly.BlockSvg.prototype.getBoundingRectangle = function() {
 };
 
 /**
+ * Notify every input on this block to mark its fields as dirty.
+ * A dirty field is a field that needs to be re-rendererd.
+ */
+Blockly.BlockSvg.prototype.markDirty = function() {
+  for (var i = 0, input; input = this.inputList[i]; i++) {
+    input.markDirty();
+  }
+};
+
+/**
  * Set whether the block is collapsed or not.
  * @param {boolean} collapsed True if collapsed.
  */

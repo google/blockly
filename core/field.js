@@ -695,6 +695,17 @@ Blockly.Field.prototype.setText = function(_newText) {
  * already been recorded.
  * @package
  */
+Blockly.Field.prototype.markDirty = function() {
+  this.isDirty_ = true;
+};
+
+/**
+ * Force a rerender of the block that this field is installed on, which will
+ * rerender this field and adjust for any sizing changes.
+ * Other fields on the same block will not rerender, because their sizes have
+ * already been recorded.
+ * @package
+ */
 Blockly.Field.prototype.forceRerender = function() {
   this.isDirty_ = true;
   if (this.sourceBlock_ && this.sourceBlock_.rendered) {

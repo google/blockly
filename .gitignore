@@ -5,6 +5,7 @@ build-debug.log
 .DS_Store
 .settings
 .project
+*.gz
 *.pyc
 *.komodoproject
 /nbproject/private/

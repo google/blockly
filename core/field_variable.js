@@ -75,7 +75,7 @@ Blockly.FieldVariable = function(varName, opt_validator, opt_variableTypes,
    * The initial variable name passed to this field's constructor, or an
    * empty string if a name wasn't provided. Used to create the initial
    * variable.
-   * @type {!string}
+   * @type {string}
    */
   this.defaultVariableName = varName || '';
 

@@ -281,14 +281,13 @@ Blockly.FieldAngle.prototype.dropdownCreate_ = function() {
 
   // The angle picker is different from other fields in that it updates on
   // mousemove even if it's not in the middle of a drag.  In future we may
-  // change this behaviour.  For now, using bindEvent_ instead of
-  // bindEventWithChecks_ allows it to work without a mousedown/touchstart.
+  // change this behaviour.
   this.clickWrapper_ =
-      Blockly.bindEvent_(svg, 'click', this, this.hide_);
+      Blockly.bindEventWithChecks_(svg, 'click', this, this.hide_);
   this.mouseDownWrapper_ =
-      Blockly.bindEvent_(circle, 'mousedown', this, this.onMouseMove);
+      Blockly.bindEventWithChecks_(circle, 'click', this, this.onMouseMove, true, true);
   this.mouseMoveWrapper_ =
-      Blockly.bindEvent_(circle, 'mousemove', this, this.onMouseMove);
+      Blockly.bindEventWithChecks_(circle, 'mousemove', this, this.onMouseMove, true, true);
   return svg;
 };
 

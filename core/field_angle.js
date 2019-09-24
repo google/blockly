@@ -248,7 +248,8 @@ Blockly.FieldAngle.prototype.dropdownCreate_ = function() {
     'xmlns:xlink': Blockly.utils.dom.XLINK_NS,
     'version': '1.1',
     'height': (Blockly.FieldAngle.HALF * 2) + 'px',
-    'width': (Blockly.FieldAngle.HALF * 2) + 'px'
+    'width': (Blockly.FieldAngle.HALF * 2) + 'px',
+    'style': 'touch-action: none'
   }, null);
   var circle = Blockly.utils.dom.createSvgElement('circle', {
     'cx': Blockly.FieldAngle.HALF,
@@ -286,9 +287,6 @@ Blockly.FieldAngle.prototype.dropdownCreate_ = function() {
       Blockly.bindEvent_(svg, 'click', this, this.hide_);
   this.moveWrapper1_ =
       Blockly.bindEvent_(circle, 'mousemove', this, this.onMouseMove);
-  this.moveWrapper2_ =
-      Blockly.bindEvent_(this.gauge_, 'mousemove', this, this.onMouseMove);
-
   return svg;
 };
 
@@ -299,7 +297,6 @@ Blockly.FieldAngle.prototype.dropdownCreate_ = function() {
 Blockly.FieldAngle.prototype.dropdownDispose_ = function() {
   Blockly.unbindEvent_(this.clickWrapper_);
   Blockly.unbindEvent_(this.moveWrapper1_);
-  Blockly.unbindEvent_(this.moveWrapper2_);
 };
 
 /**

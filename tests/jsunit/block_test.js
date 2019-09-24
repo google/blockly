@@ -85,6 +85,17 @@ function assertUnpluggedHealed(blocks) {
   assertNull(blocks.B.getParent());
 }
 
+function assertUnpluggedHealFailed(blocks) {
+  // A has nothing connected to it.
+  assertEquals(0, blocks.A.getChildren().length);
+  // B has nothing connected to it.
+  assertEquals(0, blocks.B.getChildren().length);
+  // B is the top of its stack.
+  assertNull(blocks.B.getParent());
+  // C is the top of its stack.
+  assertNull(blocks.C.getParent());
+}
+
 function setUpRowBlocks() {
   var blockA = workspace.newBlock('row_block');
   var blockB = workspace.newBlock('row_block');
@@ -207,7 +218,7 @@ function test_block_row_unplug_heal_bad_checks() {
 
     // Each block has only one input, but the types don't work.
     blocks.B.unplug(true);
-    assertUnpluggedNoheal(blocks);
+    assertUnpluggedHealFailed(blocks);
   } finally {
     blockTest_tearDown();
   }

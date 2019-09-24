@@ -417,7 +417,7 @@ Blockly.Block.prototype.unplugFromRow_ = function(opt_healStack) {
   if (childConnection.checkType_(parentConnection)) {
     parentConnection.connect(childConnection);
   } else {
-    childConnection.bumpAwayFrom_(parentConnection);
+    childConnection.onFailedConnect(parentConnection);
   }
 };
 

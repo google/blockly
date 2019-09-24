@@ -285,7 +285,7 @@ Blockly.FieldAngle.prototype.dropdownCreate_ = function() {
   this.clickWrapper_ =
       Blockly.bindEventWithChecks_(svg, 'click', this, this.hide_);
   // On touch devices, the picker's value is only updated with a drag. Add
-  // a click handler on the drag surface to update the value if a surface
+  // a click handler on the drag surface to update the value if the surface
   // is clicked.
   this.mouseDownWrapper_ =
       Blockly.bindEventWithChecks_(circle, 'click', this, this.onMouseMove, true, true);

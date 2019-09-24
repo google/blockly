@@ -165,20 +165,7 @@ function test_block_stack_unplug_heal_bad_checks() {
     // The types don't work.
     blocks.B.unplug(true);
 
-    // Stack blocks unplug before checking whether the types match.
-    // TODO (#1994): Check types before unplugging.
-    // A has nothing connected to it.
-    assertEquals(0, blocks.A.getChildren().length);
-    // B has nothing connected to it.
-    assertEquals(0, blocks.B.getChildren().length);
-    // C has nothing connected to it.
-    assertEquals(0, blocks.C.getChildren().length);
-    // A is the top of its stack.
-    assertNull(blocks.A.getParent());
-    // B is the top of its stack.
-    assertNull(blocks.B.getParent());
-    // C is the top of its stack.
-    assertNull(blocks.C.getParent());
+    assertUnpluggedHealFailed(blocks);
   } finally {
     blockTest_tearDown();
   }

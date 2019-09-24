@@ -287,9 +287,9 @@ Blockly.FieldAngle.prototype.dropdownCreate_ = function() {
   // On touch devices, the picker's value is only updated with a drag. Add
   // a click handler on the drag surface to update the value if the surface
   // is clicked.
-  this.mouseDownWrapper_ =
+  this.clickSurfaceWrapper_ =
       Blockly.bindEventWithChecks_(circle, 'click', this, this.onMouseMove, true, true);
-  this.mouseMoveWrapper_ =
+  this.moveSurfaceWrapper_ =
       Blockly.bindEventWithChecks_(circle, 'mousemove', this, this.onMouseMove, true, true);
   return svg;
 };
@@ -300,8 +300,8 @@ Blockly.FieldAngle.prototype.dropdownCreate_ = function() {
  */
 Blockly.FieldAngle.prototype.dropdownDispose_ = function() {
   Blockly.unbindEvent_(this.clickWrapper_);
-  Blockly.unbindEvent_(this.mouseDownWrapper_);
-  Blockly.unbindEvent_(this.mouseMoveWrapper_);
+  Blockly.unbindEvent_(this.clickSurfaceWrapper_);
+  Blockly.unbindEvent_(this.moveSurfaceWrapper_);
 };
 
 /**

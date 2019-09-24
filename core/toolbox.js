@@ -28,8 +28,6 @@ goog.provide('Blockly.Toolbox');
 
 goog.require('Blockly.Events');
 goog.require('Blockly.Events.Ui');
-goog.require('Blockly.Flyout');
-goog.require('Blockly.HorizontalFlyout');
 goog.require('Blockly.navigation');
 goog.require('Blockly.Touch');
 goog.require('Blockly.tree.TreeControl');
@@ -40,7 +38,6 @@ goog.require('Blockly.utils.colour');
 goog.require('Blockly.utils.dom');
 goog.require('Blockly.utils.object');
 goog.require('Blockly.utils.Rect');
-goog.require('Blockly.VerticalFlyout');
 
 
 /**
@@ -186,8 +183,14 @@ Blockly.Toolbox.prototype.init = function() {
    */
   this.flyout_ = null;
   if (workspace.horizontalLayout) {
+    if (!Blockly.HorizontalFlyout) {
+      throw Error('Missing require for Blockly.HorizontalFlyout');
+    }
     this.flyout_ = new Blockly.HorizontalFlyout(workspaceOptions);
   } else {
+    if (!Blockly.VerticalFlyout) {
+      throw Error('Missing require for Blockly.VerticalFlyout');
+    }
     this.flyout_ = new Blockly.VerticalFlyout(workspaceOptions);
   }
   // Insert the flyout after the workspace.

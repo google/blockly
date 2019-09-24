@@ -35,6 +35,9 @@ goog.require('Blockly');
 // configuration must be false, and no blocks may be loaded from XML which
 // define comments.
 goog.require('Blockly.Comment');
+// One of these two will almost certainly be needed (usually VerticalFlyout).
+goog.require('Blockly.HorizontalFlyout');
+goog.require('Blockly.VerticalFlyout');
 // If the toolbox does not have categories and only has a simple flyout, then
 // 'Blockly.Toolbox' is not needed.
 goog.require('Blockly.Toolbox');

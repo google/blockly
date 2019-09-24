@@ -67,7 +67,7 @@ run_test_command "generators" "tests/scripts/run_generators.sh"
 # Generate TypeScript typings and ensure there are no errors.
 run_test_command "typings" "tests/scripts/compile_typings.sh"
 
-# Check the sizes of built files for unexpected growth
+# Check the sizes of built files for unexpected growth.
 run_test_command "metadata" "tests/scripts/check_metadata.sh"
 
 # # Attempt advanced compilation of a Blockly app.

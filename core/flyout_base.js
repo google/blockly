@@ -496,6 +496,9 @@ Blockly.Flyout.prototype.show = function(xmlList) {
       case 'LABEL':
       case 'BUTTON':
         var isLabel = xml.tagName.toUpperCase() == 'LABEL';
+        if (!Blockly.FlyoutButton) {
+          throw Error('Missing require for Blockly.FlyoutButton');
+        }
         var curButton = new Blockly.FlyoutButton(this.workspace_,
             this.targetWorkspace_, xml, isLabel);
         contents.push({type: 'button', button: curButton});

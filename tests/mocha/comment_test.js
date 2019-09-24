@@ -29,9 +29,9 @@ suite('Comments', function() {
     ]);
 
     this.workspace = Blockly.inject('blocklyDiv', {
-      comments: true,
-      scrollbars: true
+      comments: true
     });
+    this.workspace.removeChangeListener(Blockly.bumpObjects_);
     this.block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
         '<block type="empty_block"/>'
     ), this.workspace);

@@ -31,7 +31,6 @@ goog.require('Blockly.blockRendering');
 goog.require('Blockly.Events');
 goog.require('Blockly.Events.BlockCreate');
 goog.require('Blockly.Events.VarCreate');
-goog.require('Blockly.FlyoutButton');
 goog.require('Blockly.FlyoutCursor');
 goog.require('Blockly.Gesture');
 goog.require('Blockly.MarkerCursor');

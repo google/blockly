@@ -285,7 +285,9 @@ Blockly.FieldAngle.prototype.dropdownCreate_ = function() {
   // bindEventWithChecks_ allows it to work without a mousedown/touchstart.
   this.clickWrapper_ =
       Blockly.bindEvent_(svg, 'click', this, this.hide_);
-  this.moveWrapper1_ =
+  this.mouseDownWrapper_ =
+      Blockly.bindEvent_(circle, 'mousedown', this, this.onMouseMove);
+  this.mouseMoveWrapper_ =
       Blockly.bindEvent_(circle, 'mousemove', this, this.onMouseMove);
   return svg;
 };
@@ -296,7 +298,8 @@ Blockly.FieldAngle.prototype.dropdownCreate_ = function() {
  */
 Blockly.FieldAngle.prototype.dropdownDispose_ = function() {
   Blockly.unbindEvent_(this.clickWrapper_);
-  Blockly.unbindEvent_(this.moveWrapper1_);
+  Blockly.unbindEvent_(this.mouseDownWrapper_);
+  Blockly.unbindEvent_(this.mouseMoveWrapper_);
 };
 
 /**

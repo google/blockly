@@ -791,7 +791,7 @@ Blockly.Scrollbar.prototype.onMouseUpHandle_ = function() {
 
 /**
  * Hide chaff and stop binding to mouseup and mousemove events.  Call this to
- * wrap up lose ends associated with the scrollbar.
+ * wrap up loose ends associated with the scrollbar.
  * @private
  */
 Blockly.Scrollbar.prototype.cleanUp_ = function() {

@@ -28,7 +28,6 @@ goog.provide('Blockly.HorizontalFlyout');
 
 goog.require('Blockly.Block');
 goog.require('Blockly.Flyout');
-goog.require('Blockly.FlyoutButton');
 goog.require('Blockly.Scrollbar');
 goog.require('Blockly.utils');
 goog.require('Blockly.utils.object');

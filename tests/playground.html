@@ -314,11 +314,11 @@ function addRenderDebugOptionsCheckboxes() {
 function changeTheme() {
   var theme = document.getElementById('themeChanger');
   if (theme.value === "modern") {
-    Blockly.setTheme(Blockly.Themes.Modern);
+    Blockly.getMainWorkspace().setTheme(Blockly.Themes.Modern);
   } else if (theme.value === "high_contrast") {
-    Blockly.setTheme(Blockly.Themes.HighContrast);
+    Blockly.getMainWorkspace().setTheme(Blockly.Themes.HighContrast);
   } else {
-    Blockly.setTheme(Blockly.Themes.Classic);
+    Blockly.getMainWorkspace().setTheme(Blockly.Themes.Classic);
   }
 }
 

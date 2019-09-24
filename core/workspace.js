@@ -131,11 +131,13 @@ Blockly.Workspace = function(opt_options) {
    */
   this.marker_ = new Blockly.MarkerCursor();
 
-  // Set the default theme. This is for headless workspaces. This will get
-  // overwritten by the theme passed into the inject call for rendered workspaces.
-  if (!Blockly.getTheme()) {
-    Blockly.setTheme(Blockly.Themes.Classic);
-  }
+  /**
+   * The workspace theme.
+   * @type {!Blockly.Theme}
+   * @private
+   */
+  this.theme_ = this.options.theme;
+
 };
 
 /**
@@ -198,6 +200,61 @@ Blockly.Workspace.prototype.getMarker = function() {
   return this.marker_;
 };
 
+/**
+ * Get the workspace theme object.
+ * @return {!Blockly.Theme} The workspace theme object.
+ */
+Blockly.Workspace.prototype.getTheme = function() {
+  return this.theme_;
+};
+
+/**
+ * Sets the workspace theme and refreshes all blocks in the toolbox,
+ * flyout and workspace.
+ * @param {!Blockly.Theme} theme The desired workspace theme.
+ */
+Blockly.Workspace.prototype.setTheme = function(theme) {
+  this.theme_ = theme;
+
+  // Update all blocks in workspace that have a style name.
+  this.updateBlockStyles_(this.getAllBlocks().filter(
+      function(block) {
+        return block.getStyleName() !== undefined;
+      }
+  ));
+
+  // Update blocks in the flyout.
+  if (!this.toolbox_ && this.flyout_ && this.flyout_.workspace_) {
+    this.flyout_.workspace_.setTheme(theme);
+  } else {
+    this.refreshToolboxSelection();
+  }
+
+  // Update colours on the categories.
+  if (this.toolbox_) {
+    this.toolbox_.updateColourFromTheme(theme);
+  }
+
+  var event = new Blockly.Events.Ui(null, 'theme');
+  event.workspaceId = this.id;
+  Blockly.Events.fire(event);
+};
+
+/**
+ * Updates all the blocks with new style.
+ * @param {!Array.<!Blockly.Block>} blocks List of blocks to update the style
+ * on.
+ * @private
+ */
+Blockly.Workspace.prototype.updateBlockStyles_ = function(blocks) {
+  for (var i = 0, block; block = blocks[i]; i++) {
+    var blockStyleName = block.getStyleName();
+    block.setStyle(blockStyleName);
+    if (block.mutator) {
+      block.mutator.updateBlockStyle(blockStyleName);
+    }
+  }
+};
 
 /**
  * Dispose of this workspace.

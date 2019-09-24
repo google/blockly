@@ -175,7 +175,8 @@ Blockly.Toolbox.prototype.init = function() {
     oneBasedIndex: workspace.options.oneBasedIndex,
     horizontalLayout: workspace.horizontalLayout,
     toolboxPosition: workspace.options.toolboxPosition,
-    renderer: workspace.options.renderer
+    renderer: workspace.options.renderer,
+    theme: workspace.options.theme
   };
   /**
    * @type {!Blockly.Flyout}
@@ -532,8 +533,9 @@ Blockly.Toolbox.prototype.setColour_ = function(colourValue, childOut,
 Blockly.Toolbox.prototype.setColourFromStyle_ = function(
     styleName, childOut, categoryName) {
   childOut.styleName = styleName;
-  if (styleName && Blockly.getTheme()) {
-    var style = Blockly.getTheme().getCategoryStyle(styleName);
+  var theme = this.workspace_.getTheme();
+  if (styleName && theme) {
+    var style = theme.getCategoryStyle(styleName);
     if (style && style.colour) {
       this.setColour_(style.colour, childOut, categoryName);
     } else {
@@ -565,8 +567,13 @@ Blockly.Toolbox.prototype.updateColourFromTheme_ = function(opt_tree) {
 
 /**
  * Updates the category colours and background colour of selected categories.
+ * @param {!Blockly.Theme} theme Theme for Blockly.
+ * @package
  */
-Blockly.Toolbox.prototype.updateColourFromTheme = function() {
+Blockly.Toolbox.prototype.updateColourFromTheme = function(theme) {
+  if (this.flyout_ && this.flyout_.workspace_) {
+    this.flyout_.workspace_.setTheme(theme);
+  }
   var tree = this.tree_;
   if (tree) {
     this.updateColourFromTheme_(tree);

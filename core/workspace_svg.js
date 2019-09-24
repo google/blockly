@@ -807,7 +807,8 @@ Blockly.WorkspaceSvg.prototype.addFlyout_ = function(tagName) {
     oneBasedIndex: this.options.oneBasedIndex,
     horizontalLayout: this.horizontalLayout,
     toolboxPosition: this.options.toolboxPosition,
-    renderer: this.options.renderer
+    renderer: this.options.renderer,
+    theme: this.options.theme
   };
   if (this.horizontalLayout) {
     if (!Blockly.HorizontalFlyout) {

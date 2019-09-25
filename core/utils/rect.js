@@ -66,3 +66,11 @@ Blockly.utils.Rect = function(top, bottom, left, right) {
 Blockly.utils.Rect.prototype.contains = function(x, y) {
   return x >= this.left && x <= this.right && y >= this.top && y <= this.bottom;
 };
+
+Blockly.utils.Rect.prototype.getWidth = function() {
+  return this.right - this.left;
+};
+
+Blockly.utils.Rect.prototype.getHeight = function() {
+  return this.bottom - this.top;
+};

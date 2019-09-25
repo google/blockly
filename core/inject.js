@@ -331,7 +331,7 @@ Blockly.bumpObjects_ = function(e) {
  * @package
  */
 Blockly.bumpObject_ = function(object, metrics) {
-  var objectMetrics = Blockly.getObjectMetrics_(object);
+  var rect = object.getBoundingRectangle();
 
   // The idea is to find the region of valid coordinates for the top
   // left corner of the object, and then clamp the object's
@@ -343,22 +343,22 @@ Blockly.bumpObject_ = function(object, metrics) {
   // The top of the object should ideally be positioned so that
   // the bottom of the object is not below the bottom of the
   // workspace.
-  var bottomClamp = metrics.viewBottom - objectMetrics.height;
+  var bottomClamp = metrics.viewBottom - rect.getHeight();
   // If the object is taller than the workspace we want to
   // top-align the block, which means setting the bottom clamp to
   // match.
   bottomClamp = Math.max(topClamp, bottomClamp);
 
   var newYPosition = Blockly.utils.math.clamp(
-      topClamp, objectMetrics.top, bottomClamp);
-  var deltaY = newYPosition - objectMetrics.top;
+      topClamp, rect.top, bottomClamp);
+  var deltaY = newYPosition - rect.top;
 
   // The left edge of the object should ideally be positioned at
   // or to the right of the left edge of the workspace.
   var leftClamp = metrics.viewLeft;
   // The left edge of the object should ideally be positioned so
   // that the right of the object is not outside the workspace bounds.
-  var rightClamp = metrics.viewRight - objectMetrics.width;
+  var rightClamp = metrics.viewRight - rect.getWidth();
   if (metrics.RTL) {
     // If the object is wider than the workspace and we're in RTL
     // mode we want to right-align the block, which means setting
@@ -372,8 +372,8 @@ Blockly.bumpObject_ = function(object, metrics) {
   }
 
   var newXPosition = Blockly.utils.math.clamp(
-      leftClamp, objectMetrics.left, rightClamp);
-  var deltaX = newXPosition - objectMetrics.left;
+      leftClamp, rect.left, rightClamp);
+  var deltaX = newXPosition - rect.left;
 
   object.moveBy(deltaX, deltaY);
 };
@@ -421,30 +421,6 @@ Blockly.getWorkspaceMetrics_ = function(workspace) {
   }
 
   return workspaceMetrics;
-};
-
-/**
- * Helps the bumpObjects_ method by returning the metrics of the object
- * (e.g. block, comment, etc).
- * @param {!Blockly.BlockSvg|!Blockly.WorkspaceCommentSvg} object The object to
- *    get the metrics of.
- * @return {{
- *   left: number,
- *   top: number,
- *   right: number,
- *   bottom: number,
- *   width: number,
- *   height: number
- * }}
- * The edges and size of the object in workspace coordinates/units.
- * @private
- */
-Blockly.getObjectMetrics_ = function(object) {
-  // TODO: This logic can probably be moved to the Rect object.
-  var objectMetrics = object.getBoundingRectangle();
-  objectMetrics.height = objectMetrics.bottom - objectMetrics.top;
-  objectMetrics.width = objectMetrics.right - objectMetrics.left;
-  return objectMetrics;
 };
 
 /**

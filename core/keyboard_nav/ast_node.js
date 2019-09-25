@@ -378,7 +378,7 @@ Blockly.ASTNode.prototype.findPrevForField_ = function() {
       }
       fieldIdx--;
     }
-    //Reset the fieldIdx to the length of the field row of the previous input
+    // Reset the fieldIdx to the length of the field row of the previous input.
     if (i - 1 >= 0) {
       fieldIdx = block.inputList[i - 1].fieldRow.length - 1;
     }

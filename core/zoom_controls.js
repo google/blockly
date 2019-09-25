@@ -353,4 +353,4 @@ Blockly.Css.register([
   '.blocklyZoom>image:active, .blocklyZoom>svg>image:active {',
     'opacity: .8;',
   '}'
-]);
+]);  // eslint-disable-line indent

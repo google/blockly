@@ -833,4 +833,4 @@ Blockly.Css.register([
   '.blocklyTreeSelected .blocklyTreeLabel {',
     'color: #fff;',
   '}'
-]);
+]);  // eslint-disable-line indent

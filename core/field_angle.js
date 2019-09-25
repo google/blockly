@@ -490,6 +490,6 @@ Blockly.Css.register([
     'stroke-linecap: round;',
     'pointer-events: none;',
   '}'
-]);
+]);  // eslint-disable-line indent
 
 Blockly.fieldRegistry.register('field_angle', Blockly.FieldAngle);

@@ -117,6 +117,7 @@ Blockly.Css.setCursor = function(cursor) {
  * Array making up the CSS content for Blockly.
  */
 Blockly.Css.CONTENT = [
+
   '.blocklySvg {',
     'background-color: #fff;',
     'outline: none;',
@@ -798,4 +799,4 @@ Blockly.Css.CONTENT = [
     'margin-right: -24px;',
   '}',
   ''
-];
+];  // eslint-disable-line indent

@@ -621,6 +621,6 @@ Blockly.Css.register([
     'outline: 1px solid #333;',
     'position: relative;',
   '}'
-]);
+]);  // eslint-disable-line indent
 
 Blockly.fieldRegistry.register('field_colour', Blockly.FieldColour);

@@ -288,4 +288,4 @@ Blockly.Css.register([
   '.blocklyFlyoutLabelText {',
     'fill: #000;',
   '}'
-]);
+]);  // eslint-disable-line indent

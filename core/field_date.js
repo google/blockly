@@ -321,7 +321,7 @@ Blockly.Css.register([
   '.blocklyDatePicker .goog-date-picker-date:hover {',
     'background-color: rgb(218, 220, 224, .5);',
   '}'
-]);
+]);  // eslint-disable-line indent
 
 Blockly.fieldRegistry.register('field_date', Blockly.FieldDate);
 

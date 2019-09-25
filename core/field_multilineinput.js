@@ -287,7 +287,7 @@ Blockly.Css.register([
     'height: 100%;',
     'text-align: left;',
   '}'
-]);
+]);  // eslint-disable-line indent
 
 
 Blockly.fieldRegistry.register('field_multilinetext', Blockly.FieldMultilineInput);

@@ -276,8 +276,8 @@ Blockly.BumpObjectsWorkspaceMetrics;
 Blockly.bumpObjects_ = function(e) {
   // We always check isMovable_ again because the original
   // "not movable" state of isMovable_ could have been changed.
-  if (this.isDragging() || this.isMovable ||
-      Blockly.Events.BUMP_EVENTS.indexOf(e) == -1) {
+  if (this.isDragging() || this.isMovable() ||
+      Blockly.Events.BUMP_EVENTS.indexOf(e.type) == -1) {
     return;
   }
 

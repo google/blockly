@@ -333,7 +333,7 @@ suite('XML', function() {
         });
         teardown(function() {
           this.workspace.dispose();
-        })
+        });
         test('Text', function() {
           this.block.setCommentText('test text');
           var xml = Blockly.Xml.blockToDom(this.block);

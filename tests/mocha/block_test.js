@@ -502,7 +502,7 @@ suite('Blocks', function() {
         });
         teardown(function() {
           this.workspace.dispose();
-        })
+        });
         test('Text', function() {
           this.block.setCommentText('test text');
           chai.assert.equal(this.block.getCommentText(), 'test text');

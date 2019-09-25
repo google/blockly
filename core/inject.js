@@ -307,9 +307,6 @@ Blockly.bumpObjects_ = function(e) {
             topClamp, objectMetrics.top, bottomClamp);
         var deltaY = newYPosition - objectMetrics.top;
 
-        // Note: Even in RTL mode the "anchor" of the object is the
-        // top-left corner of the object.
-
         // The left edge of the object should ideally be positioned at
         // or to the right of the left edge of the workspace.
         var leftClamp = metrics.viewLeft;

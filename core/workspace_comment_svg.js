@@ -273,9 +273,9 @@ Blockly.WorkspaceCommentSvg.prototype.removeFocus = function() {
 };
 
 /**
- * Return the coordinates of the top-left corner of this comment relative to
+ * Returns the coordinate of the top-start corner of this comment relative to
  * the drawing surface's origin (0,0), in workspace units.
- * If the comment is on the workspace, (0, 0) is the origin of the workspace
+ * If the comment is on the workspace, (0,0) is the origin of the workspace
  * coordinate system.
  * This does not change with workspace scale.
  * @return {!Blockly.utils.Coordinate} Object with .x and .y properties in
@@ -428,21 +428,17 @@ Blockly.WorkspaceCommentSvg.prototype.clearTransformAttributes_ = function() {
  * @package
  */
 Blockly.WorkspaceCommentSvg.prototype.getBoundingRectangle = function() {
-  var blockXY = this.getRelativeToSurfaceXY();
+  var commentXY = this.getRelativeToSurfaceXY();
   var commentBounds = this.getHeightWidth();
-  var top = blockXY.y;
-  var bottom = blockXY.y + commentBounds.height;
+  var top = commentXY.y;
+  var bottom = commentXY.y + commentBounds.height;
   var left, right;
   if (this.RTL) {
-    left = blockXY.x - commentBounds.width;
-    // Add the width of the tab/puzzle piece knob to the x coordinate
-    // since X is the corner of the rectangle, not the whole puzzle piece.
-    right = blockXY.x;
+    left = commentXY.x - commentBounds.width;
+    right = commentXY.x;
   } else {
-    // Subtract the width of the tab/puzzle piece knob to the x coordinate
-    // since X is the corner of the rectangle, not the whole puzzle piece.
-    left = blockXY.x;
-    right = blockXY.x + commentBounds.width;
+    left = commentXY.x;
+    right = commentXY.x + commentBounds.width;
   }
   return new Blockly.utils.Rect(top, bottom, left, right);
 };

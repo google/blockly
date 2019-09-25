@@ -257,28 +257,33 @@ Blockly.TouchGesture.prototype.handleTouchMove = function(e) {
   // Update the cache
   this.cachedPoints_[pointerId] = this.getTouchPoint(e);
 
-  var pointers = Object.keys(this.cachedPoints_);
-  // If two pointers are down, check for pinch gestures
-  if (pointers.length == 2) {
-    // Calculate the distance between the two pointers
-    var point0 = this.cachedPoints_[pointers[0]];
-    var point1 = this.cachedPoints_[pointers[1]];
-    var moveDistance = Blockly.utils.Coordinate.distance(point0, point1);
-    var startDistance = this.startDistance_;
-    var scale = this.touchScale_ = moveDistance / startDistance;
+  var workspace = this.startWorkspace_;
+  // If pinch option is enabled
+  if (workspace.options.zoomOptions && workspace.options.zoomOptions.pinch) {
+    var pointers = Object.keys(this.cachedPoints_);
+    // If two pointers are down, check for pinch gestures
+    if (pointers.length == 2) {
+      // Calculate the distance between the two pointers
+      var point0 = this.cachedPoints_[pointers[0]];
+      var point1 = this.cachedPoints_[pointers[1]];
+      var moveDistance = Blockly.utils.Coordinate.distance(point0, point1);
+      var startDistance = this.startDistance_;
+      var scale = this.touchScale_ = moveDistance / startDistance;
 
-    if (this.previousScale_ > 0 && this.previousScale_ < Infinity) {
-      var gestureScale = scale - this.previousScale_;
-      var delta = gestureScale > 0 ?
-        gestureScale * Blockly.TouchGesture.ZOOM_IN_MULTIPLIER :
-        gestureScale * Blockly.TouchGesture.ZOOM_OUT_MULTIPLIER;
-      var workspace = this.startWorkspace_;
-      var position = Blockly.utils.mouseToSvg(
-          e, workspace.getParentSvg(), workspace.getInverseScreenCTM());
-      workspace.zoom(position.x, position.y, delta);
+      if (this.previousScale_ > 0 && this.previousScale_ < Infinity) {
+        var gestureScale = scale - this.previousScale_;
+        var delta = gestureScale > 0 ?
+            gestureScale * Blockly.TouchGesture.ZOOM_IN_MULTIPLIER :
+            gestureScale * Blockly.TouchGesture.ZOOM_OUT_MULTIPLIER;
+        var position = Blockly.utils.mouseToSvg(
+            e, workspace.getParentSvg(), workspace.getInverseScreenCTM());
+        workspace.zoom(position.x, position.y, delta);
+      }
+      this.previousScale_ = scale;
+      e.preventDefault();
     }
-    this.previousScale_ = scale;
-    e.preventDefault();
+  } else {
+    Blockly.TouchGesture.superClass_.handleMove.call(this, e);
   }
 };
 

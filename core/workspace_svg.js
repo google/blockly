@@ -1438,7 +1438,8 @@ Blockly.WorkspaceSvg.prototype.isContentBounded = function() {
       (this.options.moveOptions && this.options.moveOptions.wheel) ||
       (this.options.moveOptions && this.options.moveOptions.drag) ||
       (this.options.zoomOptions && this.options.zoomOptions.controls) ||
-      (this.options.zoomOptions && this.options.zoomOptions.wheel);
+      (this.options.zoomOptions && this.options.zoomOptions.wheel) ||
+      (this.options.zoomOptions && this.options.zoomOptions.pinch);
 };
 
 /**
@@ -1446,8 +1447,8 @@ Blockly.WorkspaceSvg.prototype.isContentBounded = function() {
  *
  * This means the user can reposition the X Y coordinates of the workspace
  * through input. This can be through scrollbars, scroll wheel, dragging, or
- * through zooming with the scroll wheel (since the zoom is centered on the
- * mouse position). This does not include zooming with the zoom controls
+ * through zooming with the scroll wheel or pinch (since the zoom is centered on
+ * the mouse position). This does not include zooming with the zoom controls
  * since the X Y coordinates are decided programmatically.
  * @return {boolean} True if the workspace is movable, false otherwise.
  * @package
@@ -1456,7 +1457,8 @@ Blockly.WorkspaceSvg.prototype.isMovable = function() {
   return (this.options.moveOptions && this.options.moveOptions.scrollbars) ||
       (this.options.moveOptions && this.options.moveOptions.wheel) ||
       (this.options.moveOptions && this.options.moveOptions.drag) ||
-      (this.options.zoomOptions && this.options.zoomOptions.wheel);
+      (this.options.zoomOptions && this.options.zoomOptions.wheel) ||
+      (this.options.zoomOptions && this.options.zoomOptions.pinch);
 };
 
 /**
@@ -1799,12 +1801,6 @@ Blockly.WorkspaceSvg.prototype.setBrowserFocus = function() {
  *     amount values zoom in.
  */
 Blockly.WorkspaceSvg.prototype.zoom = function(x, y, amount) {
-  // TODO (#2782): Consider removing once pinch understands zoom configuration
-  // Mutators and flyouts don't support zooming, and pinch doesn't understand
-  // that.
-  if (this.isFlyout || this.isMutator) {
-    return;
-  }
   // Scale factor.
   var speed = this.options.zoomOptions.scaleSpeed;
   var scaleChange = Math.pow(speed, amount);

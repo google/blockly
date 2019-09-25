@@ -1,5 +1,4 @@
 /**
- * @license
  * Blockly Demos: Block Factory
  *
  * Copyright 2016 Google Inc.

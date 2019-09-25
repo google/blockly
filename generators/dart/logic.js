@@ -1,5 +1,4 @@
 /**
- * @license
  * Visual Blocks Language
  *
  * Copyright 2014 Google Inc.

@@ -1,7 +1,6 @@
 // diff-reporter.js
 
 /**
- * @license
  * Visual Blocks Editor
  *
  * Copyright 2019 Google Inc.

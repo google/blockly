@@ -1,5 +1,4 @@
 /**
- * @license
  * Blockly Tests
  *
  * Copyright 2012 Google Inc.

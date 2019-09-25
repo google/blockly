@@ -353,7 +353,6 @@ goog.provide('Blockly.utils.string');
       code = HEADER + "\n" + json_data["compiledCode"]
       # Remove Blockly definitions to be compatible with Blockly.
       code = re.sub(remove, "", code)
-      code = self.trim_licence(code)
 
       stats = json_data["statistics"]
       original_b = stats["originalSize"]
@@ -371,40 +370,6 @@ goog.provide('Blockly.utils.string');
             original_kb, compressed_kb, ratio))
       else:
         print("UNKNOWN ERROR")
-
-  def trim_licence(self, code):
-    """Strip out Google's and MIT's Apache licences.
-
-    JS Compiler preserves dozens of Apache licences in the Blockly code.
-    Remove these if they belong to Google or MIT.
-    MIT's permission to do this is logged in Blockly issue 2412.
-
-    Args:
-      code: Large blob of compiled source code.
-
-    Returns:
-      Code with Google's and MIT's Apache licences trimmed.
-    """
-    apache2 = re.compile("""/\\*
-
- [\\w: ]+
-
- (Copyright \\d+ (Google Inc.|Massachusetts Institute of Technology))
- (https://developers.google.com/blockly/|All rights reserved.)
-
- Licensed under the Apache License, Version 2.0 \\(the "License"\\);
- you may not use this file except in compliance with the License.
- You may obtain a copy of the License at
-
-   http://www.apache.org/licenses/LICENSE-2.0
-
- Unless required by applicable law or agreed to in writing, software
- distributed under the License is distributed on an "AS IS" BASIS,
- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- See the License for the specific language governing permissions and
- limitations under the License.
-\\*/""")
-    return re.sub(apache2, "", code)
 
 
 class Gen_langfiles(threading.Thread):

@@ -129,6 +129,19 @@ Blockly.Extensions.registerMutator = function(name, mixinObj, opt_helperFn,
 };
 
 /**
+ * Unregisters extension with the given name.
+ * @param {string} name The name of the extension to unregister.
+ */
+Blockly.Extensions.unregister = function(name) {
+  if (Blockly.Extensions.ALL_[name]) {
+    Blockly.Extensions.ALL_[name] = undefined;
+  } else {
+    console.warn('No extension mapping for name "' + name +
+        '" found to unregister');
+  }
+};
+
+/**
  * Applies an extension method to a block. This should only be called during
  * block construction.
  * @param {string} name The name of the extension.

@@ -236,7 +236,7 @@ Blockly.TouchGesture.prototype.handleTouchStart = function(e) {
   // store the pointerId in the current list of pointers
   this.cachedPoints_[pointerId] = this.getTouchPoint(e);
   var pointers = Object.keys(this.cachedPoints_);
-  // If two pointers are down, check for pinch gestures
+  // If two pointers are down, store info
   if (pointers.length == 2) {
     var point0 = this.cachedPoints_[pointers[0]];
     var point1 = this.cachedPoints_[pointers[1]];

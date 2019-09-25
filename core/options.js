@@ -243,7 +243,7 @@ Blockly.Options.parseZoomOptions_ = function(options) {
   if (zoom['pinch'] === undefined) {
     zoomOptions.pinch = zoomOptions.wheel || zoomOptions.controls;
   } else {
-    zoomOptions.pinch =!!zoom['pinch'];
+    zoomOptions.pinch = !!zoom['pinch'];
   }
   return zoomOptions;
 };

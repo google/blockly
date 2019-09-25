@@ -291,9 +291,9 @@ Blockly.DropDownDiv.show = function(owner, primaryX, primaryY,
   if (metrics.arrowVisible) {
     Blockly.DropDownDiv.arrow_.style.display = '';
     Blockly.DropDownDiv.arrow_.style.transform = 'translate(' +
-      metrics.arrowX + 'px,' + metrics.arrowY + 'px) rotate(45deg)'; // rotate(45deg)
+        metrics.arrowX + 'px,' + metrics.arrowY + 'px) rotate(45deg)';
     Blockly.DropDownDiv.arrow_.setAttribute('class', metrics.arrowAtTop ?
-      'blocklyDropDownArrow arrowTop' : 'blocklyDropDownArrow arrowBottom');
+        'blocklyDropDownArrow arrowTop' : 'blocklyDropDownArrow arrowBottom');
   } else {
     Blockly.DropDownDiv.arrow_.style.display = 'none';
   }

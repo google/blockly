@@ -57,13 +57,11 @@ Blockly.utils.object.inherits(Blockly.Menu, Blockly.Component);
  */
 Blockly.Menu.prototype.createDom = function() {
   var element = document.createElement('div');
-  element.setAttribute('id', this.getId());
+  element.id = this.getId();
   this.setElementInternal(element);
 
   // Set class
-  element.setAttribute('class', 'goog-menu goog-menu-vertical');
-  element.setAttribute('style', 'user-select: none;');
-
+  element.className = 'goog-menu goog-menu-vertical blocklyNonSelectable';
   element.tabIndex = 0;
 
   // Initialize ARIA role.

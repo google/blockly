@@ -152,7 +152,7 @@ Blockly.Toolbox.prototype.init = function() {
    * @type {Element}
    */
   this.HtmlDiv = document.createElement('div');
-  this.HtmlDiv.className = 'blocklyToolboxDiv';
+  this.HtmlDiv.className = 'blocklyToolboxDiv blocklyNonSelectable';
   this.HtmlDiv.setAttribute('dir', workspace.RTL ? 'RTL' : 'LTR');
   svg.parentNode.insertBefore(this.HtmlDiv, svg);
 

@@ -265,6 +265,7 @@ Blockly.FieldDate.loadLanguage_ = function() {
  * CSS for date picker.  See css.js for use.
  */
 Blockly.Css.register([
+  /* eslint-disable indent */
   '.blocklyDatePicker,',
   '.blocklyDatePicker th,',
   '.blocklyDatePicker td {',
@@ -321,7 +322,8 @@ Blockly.Css.register([
   '.blocklyDatePicker .goog-date-picker-date:hover {',
     'background-color: rgb(218, 220, 224, .5);',
   '}'
-]);  // eslint-disable-line indent
+  /* eslint-enable indent */
+]);
 
 Blockly.fieldRegistry.register('field_date', Blockly.FieldDate);
 

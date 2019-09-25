@@ -280,6 +280,7 @@ Blockly.FieldMultilineInput.prototype.onHtmlInputKeyDown_ = function(e) {
  * CSS for multiline field.  See css.js for use.
  */
 Blockly.Css.register([
+  /* eslint-disable indent */
   '.blocklyHtmlTextAreaInput {',
     'font-family: monospace;',
     'resize: none;',
@@ -287,7 +288,8 @@ Blockly.Css.register([
     'height: 100%;',
     'text-align: left;',
   '}'
-]);  // eslint-disable-line indent
+  /* eslint-enable indent */
+]);
 
 
 Blockly.fieldRegistry.register('field_multilinetext', Blockly.FieldMultilineInput);

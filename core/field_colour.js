@@ -593,6 +593,7 @@ Blockly.FieldColour.prototype.dropdownDispose_ = function() {
  * CSS for colour picker.  See css.js for use.
  */
 Blockly.Css.register([
+  /* eslint-disable indent */
   '.blocklyColourTable {',
     'border-collapse: collapse;',
     'display: block;',
@@ -621,6 +622,7 @@ Blockly.Css.register([
     'outline: 1px solid #333;',
     'position: relative;',
   '}'
-]);  // eslint-disable-line indent
+  /* eslint-enable indent */
+]);
 
 Blockly.fieldRegistry.register('field_colour', Blockly.FieldColour);

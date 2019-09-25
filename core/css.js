@@ -92,7 +92,7 @@ Blockly.Css.inject = function(hasCss, pathToMedia) {
     return;
   }
   // Strip off any trailing slash (either Unix or Windows).
-  var mediaPath = pathToMedia.replace(/[\\\/]$/, '');
+  var mediaPath = pathToMedia.replace(/[\\/]$/, '');
   text = text.replace(/<<<PATH>>>/g, mediaPath);
 
   // Inject CSS tag at start of head.
@@ -108,7 +108,7 @@ Blockly.Css.inject = function(hasCss, pathToMedia) {
  * @param {Blockly.Css.Cursor} cursor Enum.
  * @deprecated April 2017.
  */
-Blockly.Css.setCursor = function(cursor) {
+Blockly.Css.setCursor = function(_cursor) {
   console.warn('Deprecated call to Blockly.Css.setCursor. ' +
       'See https://github.com/google/blockly/issues/981 for context');
 };
@@ -117,7 +117,7 @@ Blockly.Css.setCursor = function(cursor) {
  * Array making up the CSS content for Blockly.
  */
 Blockly.Css.CONTENT = [
-
+  /* eslint-disable indent */
   '.blocklySvg {',
     'background-color: #fff;',
     'outline: none;',
@@ -797,6 +797,6 @@ Blockly.Css.CONTENT = [
   '.blocklyDropDownDiv .goog-menuitem-rtl .goog-menuitem-icon {',
     'float: right;',
     'margin-right: -24px;',
-  '}',
-  ''
-];  // eslint-disable-line indent
+  '}'
+  /* eslint-enable indent */
+];

@@ -342,6 +342,7 @@ Blockly.ZoomControls.prototype.createZoomResetSvg_ = function(rnd) {
  * CSS for zoom controls.  See css.js for use.
  */
 Blockly.Css.register([
+  /* eslint-disable indent */
   '.blocklyZoom>image, .blocklyZoom>svg>image {',
     'opacity: .4;',
   '}',
@@ -353,4 +354,5 @@ Blockly.Css.register([
   '.blocklyZoom>image:active, .blocklyZoom>svg>image:active {',
     'opacity: .8;',
   '}'
-]);  // eslint-disable-line indent
+  /* eslint-enable indent */
+]);

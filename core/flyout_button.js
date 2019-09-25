@@ -264,6 +264,7 @@ Blockly.FlyoutButton.prototype.onMouseUp_ = function(e) {
  * CSS for buttons and labels.  See css.js for use.
  */
 Blockly.Css.register([
+  /* eslint-disable indent */
   '.blocklyFlyoutButton {',
     'fill: #888;',
     'cursor: default;',
@@ -288,4 +289,5 @@ Blockly.Css.register([
   '.blocklyFlyoutLabelText {',
     'fill: #000;',
   '}'
-]);  // eslint-disable-line indent
+  /* eslint-enable indent */
+]);

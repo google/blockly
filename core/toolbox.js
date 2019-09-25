@@ -715,6 +715,7 @@ Blockly.utils.object.inherits(Blockly.Toolbox.TreeSeparator,
  * CSS for Toolbox.  See css.js for use.
  */
 Blockly.Css.register([
+  /* eslint-disable indent */
   '.blocklyToolboxDelete {',
     'cursor: url("<<<PATH>>>/handdelete.cur"), auto;',
   '}',
@@ -833,4 +834,5 @@ Blockly.Css.register([
   '.blocklyTreeSelected .blocklyTreeLabel {',
     'color: #fff;',
   '}'
-]);  // eslint-disable-line indent
+  /* eslint-enable indent */
+]);

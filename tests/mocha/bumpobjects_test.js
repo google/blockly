@@ -23,25 +23,22 @@
 // that metrics are returned correctly.
 suite('Bump Objects', function() {
   setup(function() {
-    this.logStub = sinon.stub(console, 'log');
-    this.warnStub = sinon.stub(console, 'warn');
     this.clock = sinon.useFakeTimers();
 
     Blockly.Events.disable();
 
-    this.createCommentEvent = function(x, y, width, height) {
-      var comment = new Blockly.WorkspaceCommentSvg(
+    this.createBumpableObject = function(x, y, width, height) {
+      var object = new Blockly.WorkspaceCommentSvg(
           this.workspace, '', height, width);
-      comment.moveTo(x, y);
-
-      Blockly.Events.enable();
-      Blockly.Events.fire(new Blockly.Events.CommentMove(comment));
-      Blockly.Events.disable();
-      this.clock.tick(1);
-      return comment;
+      object.moveTo(x, y);
+      return object;
     };
-    this.assertCommentRect = function(comment, left, top, right, bottom) {
-      var rect = comment.getBoundingRectangle();
+    this.runBump = function(object) {
+      Blockly.bumpObject_(
+          object, Blockly.getWorkspaceMetrics_(this.workspace));
+    };
+    this.assertObjectRect = function(object, left, top, right, bottom) {
+      var rect = object.getBoundingRectangle();
       chai.assert.equal(rect.left, left);
       chai.assert.equal(rect.top, top);
       chai.assert.equal(rect.right, right);
@@ -49,8 +46,6 @@ suite('Bump Objects', function() {
     };
   });
   teardown(function() {
-    this.logStub.restore();
-    this.warnStub.restore();
     this.clock.restore();
     Blockly.Events.enable();
   });
@@ -63,38 +58,46 @@ suite('Bump Objects', function() {
     });
     suite('Object Smaller than Bounds', function() {
       test('Top Left', function() {
-        var comment = this.createCommentEvent(-25, -25, 50, 50);
-        this.assertCommentRect(comment, 0, 0, 50, 50);
+        var object = this.createBumpableObject(-25, -25, 50, 50);
+        this.runBump(object);
+        this.assertObjectRect(object, 0, 0, 50, 50);
       });
       test('Top Right', function() {
-        var comment = this.createCommentEvent(75, -25, 50, 50);
-        this.assertCommentRect(comment, 50, 0, 100, 50);
+        var object = this.createBumpableObject(75, -25, 50, 50);
+        this.runBump(object);
+        this.assertObjectRect(object, 50, 0, 100, 50);
       });
       test('Bottom Left', function() {
-        var comment = this.createCommentEvent(-25, 75, 50, 50);
-        this.assertCommentRect(comment, 0, 50, 50, 100);
+        var object = this.createBumpableObject(-25, 75, 50, 50);
+        this.runBump(object);
+        this.assertObjectRect(object, 0, 50, 50, 100);
       });
       test('Bottom Right', function() {
-        var comment = this.createCommentEvent(75, 75, 50, 50);
-        this.assertCommentRect(comment, 50, 50, 100, 100);
+        var object = this.createBumpableObject(75, 75, 50, 50);
+        this.runBump(object);
+        this.assertObjectRect(object, 50, 50, 100, 100);
       });
     });
     suite('Object Larger than Bounds', function() {
       test('Taller - Above', function() {
-        var comment = this.createCommentEvent(0, -25, 50, 150);
-        this.assertCommentRect(comment, 0, 0, 50, 150);
+        var object = this.createBumpableObject(0, -25, 50, 150);
+        this.runBump(object);
+        this.assertObjectRect(object, 0, 0, 50, 150);
       });
       test('Taller - Below', function() {
-        var comment = this.createCommentEvent(0, 25, 50, 150);
-        this.assertCommentRect(comment, 0, 0, 50, 150);
+        var object = this.createBumpableObject(0, 25, 50, 150);
+        this.runBump(object);
+        this.assertObjectRect(object, 0, 0, 50, 150);
       });
       test('Wider - Start', function() {
-        var comment = this.createCommentEvent(-25, 0, 150, 50);
-        this.assertCommentRect(comment, 0, 0, 150, 50);
+        var object = this.createBumpableObject(-25, 0, 150, 50);
+        this.runBump(object);
+        this.assertObjectRect(object, 0, 0, 150, 50);
       });
       test('Wider - End', function() {
-        var comment = this.createCommentEvent(25, 0, 150, 50);
-        this.assertCommentRect(comment, 0, 0, 150, 50);
+        var object = this.createBumpableObject(25, 0, 150, 50);
+        this.runBump(object);
+        this.assertObjectRect(object, 0, 0, 150, 50);
       });
     });
   });
@@ -111,38 +114,46 @@ suite('Bump Objects', function() {
     });
     suite('Object Smaller than Bounds', function() {
       test('Top Left', function() {
-        var comment = this.createCommentEvent(25, -25, 50, 50);
-        this.assertCommentRect(comment, 0, 0, 50, 50);
+        var object = this.createBumpableObject(25, -25, 50, 50);
+        this.runBump(object);
+        this.assertObjectRect(object, 0, 0, 50, 50);
       });
       test('Top Right', function() {
-        var comment = this.createCommentEvent(125, -25, 50, 50);
-        this.assertCommentRect(comment, 50, 0, 100, 50);
+        var object = this.createBumpableObject(125, -25, 50, 50);
+        this.runBump(object);
+        this.assertObjectRect(object, 50, 0, 100, 50);
       });
       test('Bottom Left', function() {
-        var comment = this.createCommentEvent(25, 75, 50, 50);
-        this.assertCommentRect(comment, 0, 50, 50, 100);
+        var object = this.createBumpableObject(25, 75, 50, 50);
+        this.runBump(object);
+        this.assertObjectRect(object, 0, 50, 50, 100);
       });
       test('Bottom Right', function() {
-        var comment = this.createCommentEvent(125, 75, 50, 50);
-        this.assertCommentRect(comment, 50, 50, 100, 100);
+        var object = this.createBumpableObject(125, 75, 50, 50);
+        this.runBump(object);
+        this.assertObjectRect(object, 50, 50, 100, 100);
       });
     });
     suite('Object Larger than Bounds', function() {
       test('Taller - Above', function() {
-        var comment = this.createCommentEvent(50, -25, 50, 150);
-        this.assertCommentRect(comment, 0, 0, 50, 150);
+        var object = this.createBumpableObject(50, -25, 50, 150);
+        this.runBump(object);
+        this.assertObjectRect(object, 0, 0, 50, 150);
       });
       test('Taller - Below', function() {
-        var comment = this.createCommentEvent(50, 25, 50, 150);
-        this.assertCommentRect(comment, 0, 0, 50, 150);
+        var object = this.createBumpableObject(50, 25, 50, 150);
+        this.runBump(object);
+        this.assertObjectRect(object, 0, 0, 50, 150);
       });
       test('Wider - Start', function() {
-        var comment = this.createCommentEvent(125, 0, 150, 50);
-        this.assertCommentRect(comment, -50, 0, 100, 50);
+        var object = this.createBumpableObject(125, 0, 150, 50);
+        this.runBump(object);
+        this.assertObjectRect(object, -50, 0, 100, 50);
       });
       test('Wider - End', function() {
-        var comment = this.createCommentEvent(75, 0, 150, 50);
-        this.assertCommentRect(comment, -50, 0, 100, 50);
+        var object = this.createBumpableObject(75, 0, 150, 50);
+        this.runBump(object);
+        this.assertObjectRect(object, -50, 0, 100, 50);
       });
     });
   });

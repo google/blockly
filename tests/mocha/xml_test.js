@@ -326,12 +326,14 @@ suite('XML', function() {
       });
       suite('Rendered', function() {
         setup(function() {
-          // Let the parent teardown dispose of it.
           this.workspace = Blockly.inject('blocklyDiv', {comments: true});
           this.block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
               '<block type="empty_block"/>'
           ), this.workspace);
         });
+        teardown(function() {
+          this.workspace.dispose();
+        })
         test('Text', function() {
           this.block.setCommentText('test text');
           var xml = Blockly.Xml.blockToDom(this.block);
@@ -569,8 +571,10 @@ suite('XML', function() {
       });
       suite('Rendered', function() {
         setup(function() {
-          // Let the parent teardown dispose of it.
           this.workspace = Blockly.inject('blocklyDiv', {comments: true});
+        });
+        teardown(function() {
+          this.workspace.dispose();
         });
         test('Text', function() {
           var block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(

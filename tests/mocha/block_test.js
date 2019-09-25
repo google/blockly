@@ -492,7 +492,6 @@ suite('Blocks', function() {
       });
       suite('Rendered', function() {
         setup(function() {
-          // Let the parent teardown take care of this.
           this.workspace = Blockly.inject('blocklyDiv', {
             comments: true
           });
@@ -501,6 +500,9 @@ suite('Blocks', function() {
               '<block type="empty_block"/>'
           ), this.workspace);
         });
+        teardown(function() {
+          this.workspace.dispose();
+        })
         test('Text', function() {
           this.block.setCommentText('test text');
           chai.assert.equal(this.block.getCommentText(), 'test text');

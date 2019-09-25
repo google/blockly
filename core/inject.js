@@ -249,104 +249,8 @@ Blockly.createMainWorkspace_ = function(svg, options, blockDragSurface,
 };
 
 /**
- * Bumps objects back within the bounds of the workspace if the workspace is
- * bounded. Used as a workspace change listener callback.
- * @param {!Blockly.Events.Abstract} e An object representing some kind of
- *    workspace event.
- * @private
- */
-Blockly.bumpObjects_ = function(e) {
-  // We always check isMovable_ again because the original
-  // "not movable" state of isMovable_ could have been changed.
-  if (!this.isDragging() && !this.isMovable() &&
-    (Blockly.Events.BUMP_EVENTS.indexOf(e.type) != -1)) {
-    var metrics = Blockly.getWorkspaceMetrics_(this);
-    if (metrics.contentTop < metrics.viewTop ||
-      metrics.contentBottom > metrics.viewBottom ||
-      metrics.contentLeft < metrics.viewLeft ||
-      metrics.contentRight > metrics.viewRight) {
-
-      // Handle undo.
-      var oldGroup = null;
-      if (e) {
-        oldGroup = Blockly.Events.getGroup();
-        Blockly.Events.setGroup(e.group);
-      }
-
-      switch (e.type) {
-        case Blockly.Events.BLOCK_CREATE:
-        case Blockly.Events.BLOCK_MOVE:
-          var object = this.getBlockById(e.blockId);
-          object = object.getRootBlock();
-          break;
-        case Blockly.Events.COMMENT_CREATE:
-        case Blockly.Events.COMMENT_MOVE:
-          var object = this.getCommentById(e.commentId);
-          break;
-      }
-      if (object) {
-        var objectMetrics = Blockly.getObjectMetrics_(object);
-
-        // The idea is to find the region of valid coordinates for the top
-        // left corner of the object, and then clamp the object's
-        // top left corner within that region.
-
-        // The top of the object should always be at or below the top of
-        // the workspace.
-        var topClamp = metrics.viewTop;
-        // The top of the object should ideally be positioned so that
-        // the bottom of the object is not below the bottom of the
-        // workspace.
-        var bottomClamp = metrics.viewBottom - objectMetrics.height;
-        // If the object is taller than the workspace we want to
-        // top-align the block, which means setting the bottom clamp to
-        // match.
-        bottomClamp = Math.max(topClamp, bottomClamp);
-
-        var newYPosition = Blockly.utils.math.clamp(
-            topClamp, objectMetrics.top, bottomClamp);
-        var deltaY = newYPosition - objectMetrics.top;
-
-        // The left edge of the object should ideally be positioned at
-        // or to the right of the left edge of the workspace.
-        var leftClamp = metrics.viewLeft;
-        // The left edge of the object should ideally be positioned so
-        // that the right of the object is not outside the workspace bounds.
-        var rightClamp = metrics.viewRight - objectMetrics.width;
-        if (metrics.RTL) {
-          // If the object is wider than the workspace and we're in RTL
-          // mode we want to right-align the block, which means setting
-          // the left clamp to match.
-          leftClamp = Math.min(rightClamp, leftClamp);
-        } else {
-          // If the object is wider than the workspace and we're in LTR
-          // mode we want to left-align the block, which means setting
-          // the right clamp to match.
-          rightClamp = Math.max(leftClamp, rightClamp);
-        }
-
-        var newXPosition = Blockly.utils.math.clamp(
-            leftClamp, objectMetrics.left, rightClamp);
-        var deltaX = newXPosition - objectMetrics.left;
-
-        object.moveBy(deltaX, deltaY);
-      }
-      if (e) {
-        if (!e.group) {
-          console.log('WARNING: Moved object in bounds but there was no' +
-            ' event group. This may break undo.');
-        }
-        Blockly.Events.setGroup(oldGroup);
-      }
-    }
-  }
-};
-
-/**
- * Helps the bumpObjects_ method by returning workspace metrics that it can
- * use more easily than the default metrics.
- * @param {!Blockly.WorkspaceSvg} workspace The workspace to get the metrics of.
- * @return {{
+ * Defines the workspace metrics used by the bumpObject_ function.
+ * @typedef {{
  *   RTL: boolean,
  *   viewLeft: number,
  *   viewTop: number,
@@ -357,8 +261,130 @@ Blockly.bumpObjects_ = function(e) {
  *   contentRight: number,
  *   contentButton: number,
  * }}
- * The metrics of the workspace in workspace units.
  * @private
+ */
+Blockly.BumpObjectsWorkspaceMetrics;
+
+/**
+ * Bumps objects back within the bounds of the workspace if the workspace is
+ * bounded. Used as a workspace change listener callback.
+ * @param {!Blockly.Events.Abstract} e An object representing some kind of
+ *    workspace event.
+ * @this {Blockly.WorkspaceSvg}
+ * @private
+ */
+Blockly.bumpObjects_ = function(e) {
+  // We always check isMovable_ again because the original
+  // "not movable" state of isMovable_ could have been changed.
+  if (this.isDragging() || this.isMovable ||
+      Blockly.Events.BUMP_EVENTS.indexOf(e) == -1) {
+    return;
+  }
+
+  // Do a quick check to see if anything is outside the bounds of the workspace.
+  var metrics = Blockly.getWorkspaceMetrics_(this);
+  if (!(metrics.contentTop < metrics.viewTop ||
+    metrics.contentBottom > metrics.viewBottom ||
+    metrics.contentLeft < metrics.viewLeft ||
+    metrics.contentRight > metrics.viewRight)) {
+    return;
+  }
+
+  var object;
+  switch (e.type) {
+    case Blockly.Events.BLOCK_CREATE:
+    case Blockly.Events.BLOCK_MOVE:
+      object = this.getBlockById(e.blockId).getRootBlock();
+      break;
+    case Blockly.Events.COMMENT_CREATE:
+    case Blockly.Events.COMMENT_MOVE:
+      object = this.getCommentById(e.commentId);
+      break;
+  }
+  if (!object) {
+    return;
+  }
+
+  // Handle undo.
+  var oldGroup = Blockly.Events.getGroup();
+  Blockly.Events.setGroup(e.group);
+
+  Blockly.bumpObject_(object, metrics);
+
+  if (!e.group) {
+    console.warn('Moved object in bounds but there was no' +
+      ' event group. This may break undo.');
+  }
+  Blockly.Events.setGroup(oldGroup);
+};
+
+// TODO: BlockSvg and WorkspaceCommentSvg should probably be changed to
+//  extend some sort of "workspace object" interface, for more readable
+//  typing & extendability.
+/**
+ * Bumps the object back within the bounds of the workspace if the workspace
+ * is bounded.
+ * @param {!Blockly.BlockSvg|!Blockly.WorkspaceCommentSvg} object The object
+ *    to (possibly) bump back within the bounds of the workspace.
+ * @param {!Blockly.BumpObjectsWorkspaceMetrics} metrics The metrics of the
+ *    workspace the object belongs to.
+ * @package
+ */
+Blockly.bumpObject_ = function(object, metrics) {
+  var objectMetrics = Blockly.getObjectMetrics_(object);
+
+  // The idea is to find the region of valid coordinates for the top
+  // left corner of the object, and then clamp the object's
+  // top left corner within that region.
+
+  // The top of the object should always be at or below the top of
+  // the workspace.
+  var topClamp = metrics.viewTop;
+  // The top of the object should ideally be positioned so that
+  // the bottom of the object is not below the bottom of the
+  // workspace.
+  var bottomClamp = metrics.viewBottom - objectMetrics.height;
+  // If the object is taller than the workspace we want to
+  // top-align the block, which means setting the bottom clamp to
+  // match.
+  bottomClamp = Math.max(topClamp, bottomClamp);
+
+  var newYPosition = Blockly.utils.math.clamp(
+      topClamp, objectMetrics.top, bottomClamp);
+  var deltaY = newYPosition - objectMetrics.top;
+
+  // The left edge of the object should ideally be positioned at
+  // or to the right of the left edge of the workspace.
+  var leftClamp = metrics.viewLeft;
+  // The left edge of the object should ideally be positioned so
+  // that the right of the object is not outside the workspace bounds.
+  var rightClamp = metrics.viewRight - objectMetrics.width;
+  if (metrics.RTL) {
+    // If the object is wider than the workspace and we're in RTL
+    // mode we want to right-align the block, which means setting
+    // the left clamp to match.
+    leftClamp = Math.min(rightClamp, leftClamp);
+  } else {
+    // If the object is wider than the workspace and we're in LTR
+    // mode we want to left-align the block, which means setting
+    // the right clamp to match.
+    rightClamp = Math.max(leftClamp, rightClamp);
+  }
+
+  var newXPosition = Blockly.utils.math.clamp(
+      leftClamp, objectMetrics.left, rightClamp);
+  var deltaX = newXPosition - objectMetrics.left;
+
+  object.moveBy(deltaX, deltaY);
+};
+
+/**
+ * Helps the bumpObjects_ method by returning workspace metrics that it can
+ * use more easily than the default metrics.
+ * @param {!Blockly.WorkspaceSvg} workspace The workspace to get the metrics of.
+ * @return {!Blockly.BumpObjectsWorkspaceMetrics} The metrics of the
+ *    workspace in workspace units.
+ * @package
  */
 Blockly.getWorkspaceMetrics_ = function(workspace) {
   // TODO (#2300): Move metrics math back to the WorkspaceSvg.
@@ -400,8 +426,8 @@ Blockly.getWorkspaceMetrics_ = function(workspace) {
 /**
  * Helps the bumpObjects_ method by returning the metrics of the object
  * (e.g. block, comment, etc).
- * @param {!Blockly.Block|!Blockly.Comment} object The object to get the
- *    metrics of.
+ * @param {!Blockly.BlockSvg|!Blockly.WorkspaceCommentSvg} object The object to
+ *    get the metrics of.
  * @return {{
  *   left: number,
  *   top: number,

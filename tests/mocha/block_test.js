@@ -34,35 +34,36 @@ suite('Blocks', function() {
 
   suite('Connection Management', function() {
     setup(function() {
-      Blockly.defineBlocksWithJsonArray([{
-        "type": "stack_block",
-        "message0": "",
-        "previousStatement": null,
-        "nextStatement": null
-      },
-      {
-        "type": "row_block",
-        "message0": "%1",
-        "args0": [
-          {
-            "type": "input_value",
-            "name": "INPUT"
-          }
-        ],
-        "output": null
-      },
-      {
-        "type": "statement_block",
-        "message0": "%1",
-        "args0": [
-          {
-            "type": "input_statement",
-            "name": "STATEMENT"
-          }
-        ],
-        "previousStatement": null,
-        "nextStatement": null
-      }]);
+      Blockly.defineBlocksWithJsonArray([
+        {
+          "type": "stack_block",
+          "message0": "",
+          "previousStatement": null,
+          "nextStatement": null
+        },
+        {
+          "type": "row_block",
+          "message0": "%1",
+          "args0": [
+            {
+              "type": "input_value",
+              "name": "INPUT"
+            }
+          ],
+          "output": null
+        },
+        {
+          "type": "statement_block",
+          "message0": "%1",
+          "args0": [
+            {
+              "type": "input_statement",
+              "name": "STATEMENT"
+            }
+          ],
+          "previousStatement": null,
+          "nextStatement": null
+        }]);
     });
     teardown(function() {
       delete Blockly.Blocks['stack_block'];
@@ -450,133 +451,6 @@ suite('Blocks', function() {
         });
       });
     });
-  });
-  suite('Comments', function() {
-    setup(function() {
-      Blockly.defineBlocksWithJsonArray([
-        {
-          "type": "empty_block",
-          "message0": "",
-          "args0": []
-        },
-      ]);
-      this.eventSpy = sinon.spy(Blockly.Events, 'fire');
-    });
-    teardown(function() {
-      delete Blockly.Blocks['empty_block'];
-      this.eventSpy.restore();
-    });
-    suite('Set/Get Text', function() {
-      function assertCommentEvent(eventSpy, oldValue, newValue) {
-        var calls = eventSpy.getCalls();
-        var event = calls[calls.length - 1].args[0];
-        chai.assert.equal(event.type, Blockly.Events.BLOCK_CHANGE);
-        chai.assert.equal(event.element, 'comment');
-        chai.assert.equal(event.oldValue, oldValue);
-        chai.assert.equal(event.newValue, newValue);
-      }
-      function assertNoCommentEvent(eventSpy) {
-        var calls = eventSpy.getCalls();
-        var event = calls[calls.length - 1].args[0];
-        chai.assert.notEqual(event.type, Blockly.Events.BLOCK_CHANGE);
-      }
-      suite('Headless', function() {
-        setup(function() {
-          this.block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
-              '<block type="empty_block"/>'
-          ), this.workspace);
-        });
-        test('Text', function() {
-          this.block.setCommentText('test text');
-          chai.assert.equal(this.block.getCommentText(), 'test text');
-          assertCommentEvent(this.eventSpy, null, 'test text');
-        });
-        test('Text Empty', function() {
-          this.block.setCommentText('');
-          chai.assert.equal(this.block.getCommentText(), '');
-          assertCommentEvent(this.eventSpy, null, '');
-        });
-        test('Text Null', function() {
-          this.block.setCommentText(null);
-          chai.assert.equal(this.block.getCommentText(), null);
-          assertNoCommentEvent(this.eventSpy);
-        });
-        test('Text -> Null', function() {
-          this.block.setCommentText('first text');
-
-          this.block.setCommentText(null);
-          chai.assert.equal(this.block.getCommentText(), null);
-          assertCommentEvent(this.eventSpy, 'first text', null);
-        });
-      });
-      suite('Rendered', function() {
-        setup(function() {
-          // Let the parent teardown take care of this.
-          this.workspace = Blockly.inject('blocklyDiv', {
-            comments: true,
-            scrollbars: true
-          });
-          this.block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
-              '<block type="empty_block"/>'
-          ), this.workspace);
-        });
-        test('Text', function() {
-          this.block.setCommentText('test text');
-          chai.assert.equal(this.block.getCommentText(), 'test text');
-          assertCommentEvent(this.eventSpy, null, 'test text');
-        });
-        test('Text Empty', function() {
-          this.block.setCommentText('');
-          chai.assert.equal(this.block.getCommentText(), '');
-          assertCommentEvent(this.eventSpy, null, '');
-        });
-        test('Text Null', function() {
-          this.block.setCommentText(null);
-          chai.assert.equal(this.block.getCommentText(), null);
-          assertNoCommentEvent(this.eventSpy);
-        });
-        test('Text -> Null', function() {
-          this.block.setCommentText('first text');
-
-          this.block.setCommentText(null);
-          chai.assert.equal(this.block.getCommentText(), null);
-          assertCommentEvent(this.eventSpy, 'first text', null);
-        });
-        test('Set While Visible - Editable', function() {
-          this.block.setCommentText('test1');
-          var icon = this.block.getCommentIcon();
-          icon.setVisible(true);
-
-          this.block.setCommentText('test2');
-          chai.assert.equal(this.block.getCommentText(), 'test2');
-          assertCommentEvent(this.eventSpy, 'test1', 'test2');
-          chai.assert.equal(icon.textarea_.value, 'test2');
-        });
-        test('Set While Visible - NonEditable', function() {
-          this.block.setCommentText('test1');
-          var editableStub = sinon.stub(this.block, 'isEditable').returns(false);
-          var icon = this.block.getCommentIcon();
-          icon.setVisible(true);
-
-          this.block.setCommentText('test2');
-          chai.assert.equal(this.block.getCommentText(), 'test2');
-          assertCommentEvent(this.eventSpy, 'test1', 'test2');
-          chai.assert.equal(icon.paragraphElement_.firstChild.textContent,
-              'test2');
-
-          editableStub.restore();
-        });
-        test('Get Text While Editing', function() {
-          this.block.setCommentText('test1');
-          var icon = this.block.getCommentIcon();
-          icon.setVisible(true);
-          icon.textarea_.value = 'test2';
-          icon.textarea_.dispatchEvent(new Event('input'));
-
-          chai.assert.equal(this.block.getCommentText(), 'test2');
-        });
-      });
-    });
     suite('Connection Tracking', function() {
       setup(function() {
         this.workspace.dispose();
@@ -607,306 +481,270 @@ suite('Blocks', function() {
           chai.assert.isEmpty(this.getPrevious());
         };
 
-        this.blockA.removeInput('STATEMENT');
-        chai.assert.isTrue(blockB.disposed);
-        chai.assert.equal(this.blockA.getChildren().length, 0);
+        this.clock = sinon.useFakeTimers();
       });
-    });
-  });
-  suite('Connection Tracking', function() {
-    setup(function() {
-      this.workspace.dispose();
-      // The new rendered workspace will get disposed by the parent teardown.
-      this.workspace = Blockly.inject('blocklyDiv');
+      teardown(function() {
+        this.clock.restore();
+      });
+      suite('Deserialization', function() {
+        test('Stack', function() {
+          Blockly.Xml.appendDomToWorkspace(Blockly.Xml.textToDom(
+              '<xml>' +
+              '  <block type="stack_block"/>' +
+              '</xml>'
+          ), this.workspace);
+          this.assertConnectionsEmpty();
+          this.clock.tick(1);
+          chai.assert.equal(this.getPrevious().length, 1);
+          chai.assert.equal(this.getNext().length, 1);
+        });
+        test('Multi-Stack', function() {
+          Blockly.Xml.appendDomToWorkspace(Blockly.Xml.textToDom(
+              '<xml>' +
+              '  <block type="stack_block">' +
+              '    <next>' +
+              '      <block type="stack_block">' +
+              '        <next>' +
+              '          <block type="stack_block"/>' +
+              '        </next>' +
+              '      </block>' +
+              '    </next>' +
+              '  </block>' +
+              '</xml>'
+          ), this.workspace);
+          this.assertConnectionsEmpty();
+          this.clock.tick(1);
+          chai.assert.equal(this.getPrevious().length, 3);
+          chai.assert.equal(this.getNext().length, 3);
+        });
+        test('Collapsed Stack', function() {
+          Blockly.Xml.appendDomToWorkspace(Blockly.Xml.textToDom(
+              '<xml>' +
+              '  <block type="stack_block" collapsed="true"/>' +
+              '</xml>'
+          ), this.workspace);
+          this.assertConnectionsEmpty();
+          this.clock.tick(1);
+          chai.assert.equal(this.getPrevious().length, 1);
+          chai.assert.equal(this.getNext().length, 1);
+        });
+        test('Collapsed Multi-Stack', function() {
+          Blockly.Xml.appendDomToWorkspace(Blockly.Xml.textToDom(
+              '<xml>' +
+              '  <block type="stack_block" collapsed="true">' +
+              '    <next>' +
+              '      <block type="stack_block" collapsed="true">' +
+              '        <next>' +
+              '          <block type="stack_block" collapsed="true"/>' +
+              '        </next>' +
+              '      </block>' +
+              '    </next>' +
+              '  </block>' +
+              '</xml>'
+          ), this.workspace);
+          this.assertConnectionsEmpty();
+          this.clock.tick(1);
+          chai.assert.equal(this.getPrevious().length, 3);
+          chai.assert.equal(this.getNext().length, 3);
+        });
+        test('Row', function() {
+          Blockly.Xml.appendDomToWorkspace(Blockly.Xml.textToDom(
+              '<xml>' +
+              '  <block type="row_block"/>' +
+              '</xml>'
+          ), this.workspace);
+          this.assertConnectionsEmpty();
+          this.clock.tick(1);
+          chai.assert.equal(this.getOutputs().length, 1);
+          chai.assert.equal(this.getInputs().length, 1);
+        });
+        test('Multi-Row', function() {
+          Blockly.Xml.appendDomToWorkspace(Blockly.Xml.textToDom(
+              '<xml>' +
+              '  <block type="row_block">' +
+              '    <value name="INPUT">' +
+              '      <block type="row_block">' +
+              '        <value name="INPUT">' +
+              '          <block type="row_block"/>' +
+              '        </value>' +
+              '      </block>' +
+              '    </value>' +
+              '  </block>' +
+              '</xml>'
+          ), this.workspace);
+          this.assertConnectionsEmpty();
+          this.clock.tick(1);
+          chai.assert.equal(this.getOutputs().length, 3);
+          chai.assert.equal(this.getInputs().length, 3);
+        });
+        test('Collapsed Row', function() {
+          Blockly.Xml.appendDomToWorkspace(Blockly.Xml.textToDom(
+              '<xml>' +
+              '  <block type="row_block" collapsed="true"/>' +
+              '</xml>'
+          ), this.workspace);
+          this.assertConnectionsEmpty();
+          this.clock.tick(1);
+          chai.assert.equal(this.getOutputs().length, 1);
+          chai.assert.equal(this.getInputs().length, 0);
+        });
+        test('Collapsed Multi-Row', function() {
+          Blockly.Xml.appendDomToWorkspace(Blockly.Xml.textToDom(
+              '<xml>' +
+              '  <block type="row_block" collapsed="true">' +
+              '    <value name="INPUT">' +
+              '      <block type="row_block">' +
+              '        <value name="INPUT">' +
+              '          <block type="row_block"/>' +
+              '        </value>' +
+              '      </block>' +
+              '    </value>' +
+              '  </block>' +
+              '</xml>'
+          ), this.workspace);
+          this.assertConnectionsEmpty();
+          this.clock.tick(1);
+          chai.assert.equal(this.getOutputs().length, 1);
+          chai.assert.equal(this.getInputs().length, 0);
+        });
+        test('Collapsed Multi-Row Middle', function() {
+          Blockly.Xml.appendDomToWorkspace(Blockly.Xml.textToDom(
+              '<xml>' +
+              '  <block type="row_block">' +
+              '    <value name="INPUT">' +
+              '      <block type="row_block" collapsed="true">' +
+              '        <value name="INPUT">' +
+              '          <block type="row_block"/>' +
+              '        </value>' +
+              '      </block>' +
+              '    </value>' +
+              '  </block>' +
+              '</xml>'
+          ), this.workspace);
+          this.assertConnectionsEmpty();
+          this.clock.tick(1);
+          chai.assert.equal(this.getOutputs().length, 2);
+          chai.assert.equal(this.getInputs().length, 1);
+        });
+        test('Statement', function() {
+          Blockly.Xml.appendDomToWorkspace(Blockly.Xml.textToDom(
+              '<xml>' +
+              '  <block type="statement_block"/>' +
+              '</xml>'
+          ), this.workspace);
+          this.assertConnectionsEmpty();
+          this.clock.tick(1);
+          chai.assert.equal(this.getPrevious().length, 1);
+          chai.assert.equal(this.getNext().length, 2);
+        });
+        test('Multi-Statement', function() {
+          Blockly.Xml.appendDomToWorkspace(Blockly.Xml.textToDom(
+              '<xml>' +
+              '  <block type="statement_block">' +
+              '    <statement name="STATEMENT">' +
+              '      <block type="statement_block">' +
+              '        <statement name="STATEMENT">' +
+              '          <block type="statement_block"/>' +
+              '        </statement>' +
+              '      </block>' +
+              '    </statement>' +
+              '  </block>' +
+              '</xml>'
+          ), this.workspace);
+          this.assertConnectionsEmpty();
+          this.clock.tick(1);
+          chai.assert.equal(this.getPrevious().length, 3);
+          chai.assert.equal(this.getNext().length, 6);
+        });
+        test('Collapsed Statement', function() {
+          Blockly.Xml.appendDomToWorkspace(Blockly.Xml.textToDom(
+              '<xml>' +
+              '  <block type="statement_block" collapsed="true"/>' +
+              '</xml>'
+          ), this.workspace);
+          this.assertConnectionsEmpty();
+          this.clock.tick(1);
+          chai.assert.equal(this.getPrevious().length, 1);
+          chai.assert.equal(this.getNext().length, 1);
+        });
+        test('Collapsed Multi-Statement', function() {
+          Blockly.Xml.appendDomToWorkspace(Blockly.Xml.textToDom(
+              '<xml>' +
+              '  <block type="statement_block" collapsed="true">' +
+              '    <statement name="STATEMENT">' +
+              '      <block type="statement_block">' +
+              '        <statement name="STATEMENT">' +
+              '          <block type="statement_block"/>' +
+              '        </statement>' +
+              '      </block>' +
+              '    </statement>' +
+              '  </block>' +
+              '</xml>'
+          ), this.workspace);
+          this.assertConnectionsEmpty();
+          this.clock.tick(1);
+          chai.assert.equal(this.getPrevious().length, 1);
+          chai.assert.equal(this.getNext().length, 1);
+        });
+        test('Collapsed Multi-Statement Middle', function() {
+          Blockly.Xml.appendDomToWorkspace(Blockly.Xml.textToDom(
+              '<xml>' +
+              '  <block type="statement_block">' +
+              '    <statement name="STATEMENT">' +
+              '      <block type="statement_block" collapsed="true">' +
+              '        <statement name="STATEMENT">' +
+              '          <block type="statement_block"/>' +
+              '        </statement>' +
+              '      </block>' +
+              '    </statement>' +
+              '  </block>' +
+              '</xml>'
+          ), this.workspace);
+          this.assertConnectionsEmpty();
+          this.clock.tick(1);
+          chai.assert.equal(this.getPrevious().length, 2);
+          chai.assert.equal(this.getNext().length, 3);
+        });
+      });
+      suite('Programmatic Block Creation', function() {
+        test('Stack', function() {
+          // TODO: I think this is the recommended method of creating a block
+          //  programmatically?
+          var block = this.workspace.newBlock('stack_block');
+          this.assertConnectionsEmpty();
+          block.initSvg();
+          block.render();
 
-      this.getInputs = function() {
-        return this.workspace
-            .connectionDBList[Blockly.INPUT_VALUE].connections_;
-      };
-      this.getOutputs = function() {
-        return this.workspace
-            .connectionDBList[Blockly.OUTPUT_VALUE].connections_;
-      };
-      this.getNext = function() {
-        return this.workspace
-            .connectionDBList[Blockly.NEXT_STATEMENT].connections_;
-      };
-      this.getPrevious = function() {
-        return this.workspace
-            .connectionDBList[Blockly.PREVIOUS_STATEMENT].connections_;
-      };
+          chai.assert.equal(this.getPrevious().length, 1);
+          chai.assert.equal(this.getNext().length, 1);
+        });
+        test('Row', function() {
+          var block = this.workspace.newBlock('row_block');
+          this.assertConnectionsEmpty();
+          block.initSvg();
+          block.render();
 
-      this.assertConnectionsEmpty = function() {
-        chai.assert.isEmpty(this.getInputs());
-        chai.assert.isEmpty(this.getOutputs());
-        chai.assert.isEmpty(this.getNext());
-        chai.assert.isEmpty(this.getPrevious());
-      };
+          chai.assert.equal(this.getOutputs().length, 1);
+          chai.assert.equal(this.getInputs().length, 1);
+        });
+        test('Statement', function() {
+          var block = this.workspace.newBlock('statement_block');
+          this.assertConnectionsEmpty();
+          block.initSvg();
+          block.render();
 
-      this.clock = sinon.useFakeTimers();
-    });
-    teardown(function() {
-      this.clock.restore();
-    });
-    suite('Deserialization', function() {
-      test('Stack', function() {
-        Blockly.Xml.appendDomToWorkspace(Blockly.Xml.textToDom(
-            '<xml>' +
-            '  <block type="stack_block"/>' +
-            '</xml>'
-        ), this.workspace);
-        this.assertConnectionsEmpty();
-        this.clock.tick(1);
-        chai.assert.equal(this.getPrevious().length, 1);
-        chai.assert.equal(this.getNext().length, 1);
+          chai.assert.equal(this.getPrevious().length, 1);
+          chai.assert.equal(this.getNext().length, 2);
+        });
       });
-      test('Multi-Stack', function() {
-        Blockly.Xml.appendDomToWorkspace(Blockly.Xml.textToDom(
-            '<xml>' +
-            '  <block type="stack_block">' +
-            '    <next>' +
-            '      <block type="stack_block">' +
-            '        <next>' +
-            '          <block type="stack_block"/>' +
-            '        </next>' +
-            '      </block>' +
-            '    </next>' +
-            '  </block>' +
-            '</xml>'
-        ), this.workspace);
-        this.assertConnectionsEmpty();
-        this.clock.tick(1);
-        chai.assert.equal(this.getPrevious().length, 3);
-        chai.assert.equal(this.getNext().length, 3);
-      });
-      test('Collapsed Stack', function() {
-        Blockly.Xml.appendDomToWorkspace(Blockly.Xml.textToDom(
-            '<xml>' +
-            '  <block type="stack_block" collapsed="true"/>' +
-            '</xml>'
-        ), this.workspace);
-        this.assertConnectionsEmpty();
-        this.clock.tick(1);
-        chai.assert.equal(this.getPrevious().length, 1);
-        chai.assert.equal(this.getNext().length, 1);
-      });
-      test('Collapsed Multi-Stack', function() {
-        Blockly.Xml.appendDomToWorkspace(Blockly.Xml.textToDom(
-            '<xml>' +
-            '  <block type="stack_block" collapsed="true">' +
-            '    <next>' +
-            '      <block type="stack_block" collapsed="true">' +
-            '        <next>' +
-            '          <block type="stack_block" collapsed="true"/>' +
-            '        </next>' +
-            '      </block>' +
-            '    </next>' +
-            '  </block>' +
-            '</xml>'
-        ), this.workspace);
-        this.assertConnectionsEmpty();
-        this.clock.tick(1);
-        chai.assert.equal(this.getPrevious().length, 3);
-        chai.assert.equal(this.getNext().length, 3);
-      });
-      test('Row', function() {
-        Blockly.Xml.appendDomToWorkspace(Blockly.Xml.textToDom(
-            '<xml>' +
-            '  <block type="row_block"/>' +
-            '</xml>'
-        ), this.workspace);
-        this.assertConnectionsEmpty();
-        this.clock.tick(1);
-        chai.assert.equal(this.getOutputs().length, 1);
-        chai.assert.equal(this.getInputs().length, 1);
-      });
-      test('Multi-Row', function() {
-        Blockly.Xml.appendDomToWorkspace(Blockly.Xml.textToDom(
-            '<xml>' +
-            '  <block type="row_block">' +
-            '    <value name="INPUT">' +
-            '      <block type="row_block">' +
-            '        <value name="INPUT">' +
-            '          <block type="row_block"/>' +
-            '        </value>' +
-            '      </block>' +
-            '    </value>' +
-            '  </block>' +
-            '</xml>'
-        ), this.workspace);
-        this.assertConnectionsEmpty();
-        this.clock.tick(1);
-        chai.assert.equal(this.getOutputs().length, 3);
-        chai.assert.equal(this.getInputs().length, 3);
-      });
-      test('Collapsed Row', function() {
-        Blockly.Xml.appendDomToWorkspace(Blockly.Xml.textToDom(
-            '<xml>' +
-            '  <block type="row_block" collapsed="true"/>' +
-            '</xml>'
-        ), this.workspace);
-        this.assertConnectionsEmpty();
-        this.clock.tick(1);
-        chai.assert.equal(this.getOutputs().length, 1);
-        chai.assert.equal(this.getInputs().length, 0);
-      });
-      test('Collapsed Multi-Row', function() {
-        Blockly.Xml.appendDomToWorkspace(Blockly.Xml.textToDom(
-            '<xml>' +
-            '  <block type="row_block" collapsed="true">' +
-            '    <value name="INPUT">' +
-            '      <block type="row_block">' +
-            '        <value name="INPUT">' +
-            '          <block type="row_block"/>' +
-            '        </value>' +
-            '      </block>' +
-            '    </value>' +
-            '  </block>' +
-            '</xml>'
-        ), this.workspace);
-        this.assertConnectionsEmpty();
-        this.clock.tick(1);
-        chai.assert.equal(this.getOutputs().length, 1);
-        chai.assert.equal(this.getInputs().length, 0);
-      });
-      test('Collapsed Multi-Row Middle', function() {
-        Blockly.Xml.appendDomToWorkspace(Blockly.Xml.textToDom(
-            '<xml>' +
-            '  <block type="row_block">' +
-            '    <value name="INPUT">' +
-            '      <block type="row_block" collapsed="true">' +
-            '        <value name="INPUT">' +
-            '          <block type="row_block"/>' +
-            '        </value>' +
-            '      </block>' +
-            '    </value>' +
-            '  </block>' +
-            '</xml>'
-        ), this.workspace);
-        this.assertConnectionsEmpty();
-        this.clock.tick(1);
-        chai.assert.equal(this.getOutputs().length, 2);
-        chai.assert.equal(this.getInputs().length, 1);
-      });
-      test('Statement', function() {
-        Blockly.Xml.appendDomToWorkspace(Blockly.Xml.textToDom(
-            '<xml>' +
-            '  <block type="statement_block"/>' +
-            '</xml>'
-        ), this.workspace);
-        this.assertConnectionsEmpty();
-        this.clock.tick(1);
-        chai.assert.equal(this.getPrevious().length, 1);
-        chai.assert.equal(this.getNext().length, 2);
-      });
-      test('Multi-Statement', function() {
-        Blockly.Xml.appendDomToWorkspace(Blockly.Xml.textToDom(
-            '<xml>' +
-            '  <block type="statement_block">' +
-            '    <statement name="STATEMENT">' +
-            '      <block type="statement_block">' +
-            '        <statement name="STATEMENT">' +
-            '          <block type="statement_block"/>' +
-            '        </statement>' +
-            '      </block>' +
-            '    </statement>' +
-            '  </block>' +
-            '</xml>'
-        ), this.workspace);
-        this.assertConnectionsEmpty();
-        this.clock.tick(1);
-        chai.assert.equal(this.getPrevious().length, 3);
-        chai.assert.equal(this.getNext().length, 6);
-      });
-      test('Collapsed Statement', function() {
-        Blockly.Xml.appendDomToWorkspace(Blockly.Xml.textToDom(
-            '<xml>' +
-            '  <block type="statement_block" collapsed="true"/>' +
-            '</xml>'
-        ), this.workspace);
-        this.assertConnectionsEmpty();
-        this.clock.tick(1);
-        chai.assert.equal(this.getPrevious().length, 1);
-        chai.assert.equal(this.getNext().length, 1);
-      });
-      test('Collapsed Multi-Statement', function() {
-        Blockly.Xml.appendDomToWorkspace(Blockly.Xml.textToDom(
-            '<xml>' +
-            '  <block type="statement_block" collapsed="true">' +
-            '    <statement name="STATEMENT">' +
-            '      <block type="statement_block">' +
-            '        <statement name="STATEMENT">' +
-            '          <block type="statement_block"/>' +
-            '        </statement>' +
-            '      </block>' +
-            '    </statement>' +
-            '  </block>' +
-            '</xml>'
-        ), this.workspace);
-        this.assertConnectionsEmpty();
-        this.clock.tick(1);
-        chai.assert.equal(this.getPrevious().length, 1);
-        chai.assert.equal(this.getNext().length, 1);
-      });
-      test('Collapsed Multi-Statement Middle', function() {
-        Blockly.Xml.appendDomToWorkspace(Blockly.Xml.textToDom(
-            '<xml>' +
-            '  <block type="statement_block">' +
-            '    <statement name="STATEMENT">' +
-            '      <block type="statement_block" collapsed="true">' +
-            '        <statement name="STATEMENT">' +
-            '          <block type="statement_block"/>' +
-            '        </statement>' +
-            '      </block>' +
-            '    </statement>' +
-            '  </block>' +
-            '</xml>'
-        ), this.workspace);
-        this.assertConnectionsEmpty();
-        this.clock.tick(1);
-        chai.assert.equal(this.getPrevious().length, 2);
-        chai.assert.equal(this.getNext().length, 3);
-      });
-    });
-    suite('Programmatic Block Creation', function() {
-      test('Stack', function() {
-        // TODO: I think this is the recommended method of creating a block
-        //  programmatically?
-        var block = this.workspace.newBlock('stack_block');
-        this.assertConnectionsEmpty();
-        block.initSvg();
-        block.render();
-
-        chai.assert.equal(this.getPrevious().length, 1);
-        chai.assert.equal(this.getNext().length, 1);
-      });
-      test('Row', function() {
-        var block = this.workspace.newBlock('row_block');
-        this.assertConnectionsEmpty();
-        block.initSvg();
-        block.render();
-
-        chai.assert.equal(this.getOutputs().length, 1);
-        chai.assert.equal(this.getInputs().length, 1);
-      });
-      test('Statement', function() {
-        var block = this.workspace.newBlock('statement_block');
-        this.assertConnectionsEmpty();
-        block.initSvg();
-        block.render();
-
-        chai.assert.equal(this.getPrevious().length, 1);
-        chai.assert.equal(this.getNext().length, 2);
-      });
-    });
-    suite('setCollapsed', function() {
-      test('Stack', function() {
-        var block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
-            '<block type="stack_block"/>'
-        ), this.workspace);
-        this.clock.tick(1);
-        chai.assert.equal(this.getPrevious().length, 1);
-        chai.assert.equal(this.getNext().length, 1);
+      suite('setCollapsed', function() {
+        test('Stack', function() {
+          var block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
+              '<block type="stack_block"/>'
+          ), this.workspace);
+          this.clock.tick(1);
+          chai.assert.equal(this.getPrevious().length, 1);
+          chai.assert.equal(this.getNext().length, 1);
 
           block.setCollapsed(true);
           chai.assert.equal(this.getPrevious().length, 1);
@@ -1143,54 +981,184 @@ suite('Blocks', function() {
           chai.assert.equal(this.getNext().length, 6);
         });
       });
+      suite('Icon Management', function() {
+        suite('Bubbles and Collapsing', function() {
+          setup(function() {
+            this.workspace.dispose();
+            // The new rendered workspace will get disposed by the parent teardown.
+            this.workspace = Blockly.inject('blocklyDiv');
+          });
+          test('Has Icon', function() {
+            var block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
+                '<block type="statement_block"/>'
+            ), this.workspace);
+            block.setCommentText('test text');
+            block.comment.setVisible(true);
+            chai.assert.isTrue(block.comment.isVisible());
+            block.setCollapsed(true);
+            chai.assert.isFalse(block.comment.isVisible());
+          });
+          test('Child Has Icon', function() {
+            var block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
+                '<block type="statement_block">' +
+                '  <statement name="STATEMENT">' +
+                '    <block type="statement_block"/>' +
+                '  </statement>' +
+                '</block>'
+            ), this.workspace);
+            var childBlock = block.getInputTargetBlock('STATEMENT');
+            childBlock.setCommentText('test text');
+            childBlock.comment.setVisible(true);
+            chai.assert.isTrue(childBlock.comment.isVisible());
+            block.setCollapsed(true);
+            chai.assert.isFalse(childBlock.comment.isVisible());
+          });
+          test('Next Block Has Icon', function() {
+            var block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
+                '<block type="statement_block">' +
+                '  <next>' +
+                '    <block type="statement_block"/>' +
+                '  </next>' +
+                '</block>'
+            ), this.workspace);
+            var nextBlock = block.getNextBlock();
+            nextBlock.setCommentText('test text');
+            nextBlock.comment.setVisible(true);
+            chai.assert.isTrue(nextBlock.comment.isVisible());
+            block.setCollapsed(true);
+            chai.assert.isTrue(nextBlock.comment.isVisible());
+          });
+        });
+      });
     });
   });
-  suite('Icon Management', function() {
-    suite('Bubbles and Collapsing', function() {
-      setup(function() {
-        this.workspace.dispose();
-        // The new rendered workspace will get disposed by the parent teardown.
-        this.workspace = Blockly.inject('blocklyDiv');
+  suite('Comments', function() {
+    setup(function() {
+      Blockly.defineBlocksWithJsonArray([
+        {
+          "type": "empty_block",
+          "message0": "",
+          "args0": []
+        },
+      ]);
+      this.eventSpy = sinon.spy(Blockly.Events, 'fire');
+    });
+    teardown(function() {
+      delete Blockly.Blocks['empty_block'];
+      this.eventSpy.restore();
+    });
+    suite('Set/Get Text', function() {
+      function assertCommentEvent(eventSpy, oldValue, newValue) {
+        var calls = eventSpy.getCalls();
+        var event = calls[calls.length - 1].args[0];
+        chai.assert.equal(event.type, Blockly.Events.BLOCK_CHANGE);
+        chai.assert.equal(event.element, 'comment');
+        chai.assert.equal(event.oldValue, oldValue);
+        chai.assert.equal(event.newValue, newValue);
+      }
+
+      function assertNoCommentEvent(eventSpy) {
+        var calls = eventSpy.getCalls();
+        var event = calls[calls.length - 1].args[0];
+        chai.assert.notEqual(event.type, Blockly.Events.BLOCK_CHANGE);
+      }
+
+      suite('Headless', function() {
+        setup(function() {
+          this.block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
+              '<block type="empty_block"/>'
+          ), this.workspace);
+        });
+        test('Text', function() {
+          this.block.setCommentText('test text');
+          chai.assert.equal(this.block.getCommentText(), 'test text');
+          assertCommentEvent(this.eventSpy, null, 'test text');
+        });
+        test('Text Empty', function() {
+          this.block.setCommentText('');
+          chai.assert.equal(this.block.getCommentText(), '');
+          assertCommentEvent(this.eventSpy, null, '');
+        });
+        test('Text Null', function() {
+          this.block.setCommentText(null);
+          chai.assert.equal(this.block.getCommentText(), null);
+          assertNoCommentEvent(this.eventSpy);
+        });
+        test('Text -> Null', function() {
+          this.block.setCommentText('first text');
+
+          this.block.setCommentText(null);
+          chai.assert.equal(this.block.getCommentText(), null);
+          assertCommentEvent(this.eventSpy, 'first text', null);
+        });
       });
-      test('Has Icon', function() {
-        var block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
-            '<block type="statement_block"/>'
-        ), this.workspace);
-        block.setCommentText('test text');
-        block.comment.setVisible(true);
-        chai.assert.isTrue(block.comment.isVisible());
-        block.setCollapsed(true);
-        chai.assert.isFalse(block.comment.isVisible());
-      });
-      test('Child Has Icon', function() {
-        var block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
-            '<block type="statement_block">' +
-            '  <statement name="STATEMENT">' +
-            '    <block type="statement_block"/>' +
-            '  </statement>' +
-            '</block>'
-        ), this.workspace);
-        var childBlock = block.getInputTargetBlock('STATEMENT');
-        childBlock.setCommentText('test text');
-        childBlock.comment.setVisible(true);
-        chai.assert.isTrue(childBlock.comment.isVisible());
-        block.setCollapsed(true);
-        chai.assert.isFalse(childBlock.comment.isVisible());
-      });
-      test('Next Block Has Icon', function() {
-        var block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
-            '<block type="statement_block">' +
-            '  <next>' +
-            '    <block type="statement_block"/>' +
-            '  </next>' +
-            '</block>'
-        ), this.workspace);
-        var nextBlock = block.getNextBlock();
-        nextBlock.setCommentText('test text');
-        nextBlock.comment.setVisible(true);
-        chai.assert.isTrue(nextBlock.comment.isVisible());
-        block.setCollapsed(true);
-        chai.assert.isTrue(nextBlock.comment.isVisible());
+      suite('Rendered', function() {
+        setup(function() {
+          // Let the parent teardown take care of this.
+          this.workspace = Blockly.inject('blocklyDiv', {
+            comments: true,
+            scrollbars: true
+          });
+          this.block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
+              '<block type="empty_block"/>'
+          ), this.workspace);
+        });
+        test('Text', function() {
+          this.block.setCommentText('test text');
+          chai.assert.equal(this.block.getCommentText(), 'test text');
+          assertCommentEvent(this.eventSpy, null, 'test text');
+        });
+        test('Text Empty', function() {
+          this.block.setCommentText('');
+          chai.assert.equal(this.block.getCommentText(), '');
+          assertCommentEvent(this.eventSpy, null, '');
+        });
+        test('Text Null', function() {
+          this.block.setCommentText(null);
+          chai.assert.equal(this.block.getCommentText(), null);
+          assertNoCommentEvent(this.eventSpy);
+        });
+        test('Text -> Null', function() {
+          this.block.setCommentText('first text');
+
+          this.block.setCommentText(null);
+          chai.assert.equal(this.block.getCommentText(), null);
+          assertCommentEvent(this.eventSpy, 'first text', null);
+        });
+        test('Set While Visible - Editable', function() {
+          this.block.setCommentText('test1');
+          var icon = this.block.getCommentIcon();
+          icon.setVisible(true);
+
+          this.block.setCommentText('test2');
+          chai.assert.equal(this.block.getCommentText(), 'test2');
+          assertCommentEvent(this.eventSpy, 'test1', 'test2');
+          chai.assert.equal(icon.textarea_.value, 'test2');
+        });
+        test('Set While Visible - NonEditable', function() {
+          this.block.setCommentText('test1');
+          var editableStub = sinon.stub(this.block, 'isEditable')
+              .returns(false);
+          var icon = this.block.getCommentIcon();
+          icon.setVisible(true);
+
+          this.block.setCommentText('test2');
+          chai.assert.equal(this.block.getCommentText(), 'test2');
+          assertCommentEvent(this.eventSpy, 'test1', 'test2');
+          chai.assert.equal(icon.paragraphElement_.firstChild.textContent,
+              'test2');
+
+          editableStub.restore();
+        });
+        test('Get Text While Editing', function() {
+          this.block.setCommentText('test1');
+          var icon = this.block.getCommentIcon();
+          icon.setVisible(true);
+          icon.textarea_.value = 'test2';
+          icon.textarea_.dispatchEvent(new Event('input'));
+
+          chai.assert.equal(this.block.getCommentText(), 'test2');
+        });
       });
     });
   });

@@ -74,7 +74,7 @@ Blockly.RenderedConnection = function(source, type) {
    */
   this.offsetInBlock_ = new Blockly.utils.Coordinate(0, 0);
 };
-goog.inherits(Blockly.RenderedConnection, Blockly.Connection);
+Blockly.utils.object.inherits(Blockly.RenderedConnection, Blockly.Connection);
 
 /**
  * Dispose of this connection. Remove it from the database (if it is

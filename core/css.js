@@ -105,7 +105,7 @@ Blockly.Css.inject = function(hasCss, pathToMedia) {
 /**
  * Set the cursor to be displayed when over something draggable.
  * See See https://github.com/google/blockly/issues/981 for context.
- * @param {Blockly.Css.Cursor} cursor Enum.
+ * @param {Blockly.Css.Cursor} _cursor Enum.
  * @deprecated April 2017.
  */
 Blockly.Css.setCursor = function(_cursor) {
@@ -520,7 +520,7 @@ Blockly.Css.CONTENT = [
   '}',
 
   /* Edge and IE introduce a close icon when the input value is longer than a
-     certain length. This affects our sizing calcutations of the text input.
+     certain length. This affects our sizing calculations of the text input.
      Hiding the close icon to avoid that. */
   '.blocklyHtmlInput::-ms-clear {',
     'display: none;',

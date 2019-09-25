@@ -26,6 +26,7 @@
 
 goog.provide('Blockly.Toolbox');
 
+goog.require('Blockly.Css');
 goog.require('Blockly.Events');
 goog.require('Blockly.Events.Ui');
 goog.require('Blockly.navigation');
@@ -709,3 +710,127 @@ Blockly.Toolbox.TreeSeparator = function(config) {
 };
 Blockly.utils.object.inherits(Blockly.Toolbox.TreeSeparator,
     Blockly.tree.TreeNode);
+
+/**
+ * CSS for Toolbox.  See css.js for use.
+ */
+Blockly.Css.register([
+  '.blocklyToolboxDelete {',
+    'cursor: url("<<<PATH>>>/handdelete.cur"), auto;',
+  '}',
+
+  '.blocklyToolboxGrab {',
+    'cursor: url("<<<PATH>>>/handclosed.cur"), auto;',
+    'cursor: grabbing;',
+    'cursor: -webkit-grabbing;',
+  '}',
+
+  /* Category tree in Toolbox. */
+  '.blocklyToolboxDiv {',
+    'background-color: #ddd;',
+    'overflow-x: visible;',
+    'overflow-y: auto;',
+    'position: absolute;',
+    'z-index: 70;', /* so blocks go under toolbox when dragging */
+    '-webkit-tap-highlight-color: transparent;', /* issue #1345 */
+  '}',
+
+  '.blocklyTreeRoot {',
+    'padding: 4px 0;',
+  '}',
+
+  '.blocklyTreeRoot:focus {',
+    'outline: none;',
+  '}',
+
+  '.blocklyTreeRow {',
+    'height: 22px;',
+    'line-height: 22px;',
+    'margin-bottom: 3px;',
+    'padding-right: 8px;',
+    'white-space: nowrap;',
+  '}',
+
+  '.blocklyHorizontalTree {',
+    'float: left;',
+    'margin: 1px 5px 8px 0;',
+  '}',
+
+  '.blocklyHorizontalTreeRtl {',
+    'float: right;',
+    'margin: 1px 0 8px 5px;',
+  '}',
+
+  '.blocklyToolboxDiv[dir="RTL"] .blocklyTreeRow {',
+    'margin-left: 8px;',
+  '}',
+
+  '.blocklyTreeRow:not(.blocklyTreeSelected):hover {',
+    'background-color: #e4e4e4;',
+  '}',
+
+  '.blocklyTreeSeparator {',
+    'border-bottom: solid #e5e5e5 1px;',
+    'height: 0;',
+    'margin: 5px 0;',
+  '}',
+
+  '.blocklyTreeSeparatorHorizontal {',
+    'border-right: solid #e5e5e5 1px;',
+    'width: 0;',
+    'padding: 5px 0;',
+    'margin: 0 5px;',
+  '}',
+
+  '.blocklyTreeIcon {',
+    'background-image: url(<<<PATH>>>/sprites.png);',
+    'height: 16px;',
+    'vertical-align: middle;',
+    'width: 16px;',
+  '}',
+
+  '.blocklyTreeIconClosedLtr {',
+    'background-position: -32px -1px;',
+  '}',
+
+  '.blocklyTreeIconClosedRtl {',
+    'background-position: 0 -1px;',
+  '}',
+
+  '.blocklyTreeIconOpen {',
+    'background-position: -16px -1px;',
+  '}',
+
+  '.blocklyTreeSelected>.blocklyTreeIconClosedLtr {',
+    'background-position: -32px -17px;',
+  '}',
+
+  '.blocklyTreeSelected>.blocklyTreeIconClosedRtl {',
+    'background-position: 0 -17px;',
+  '}',
+
+  '.blocklyTreeSelected>.blocklyTreeIconOpen {',
+    'background-position: -16px -17px;',
+  '}',
+
+  '.blocklyTreeIconNone,',
+  '.blocklyTreeSelected>.blocklyTreeIconNone {',
+    'background-position: -48px -1px;',
+  '}',
+
+  '.blocklyTreeLabel {',
+    'cursor: default;',
+    'font-family: sans-serif;',
+    'font-size: 16px;',
+    'padding: 0 3px;',
+    'vertical-align: middle;',
+  '}',
+
+  '.blocklyToolboxDelete .blocklyTreeLabel {',
+    'cursor: url("<<<PATH>>>/handdelete.cur"), auto;',
+  '}',
+
+  '.blocklyTreeSelected .blocklyTreeLabel {',
+    'color: #fff;',
+  '}'
+]);

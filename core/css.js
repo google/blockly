@@ -56,11 +56,19 @@ Blockly.Css.currentCursor_ = '';
 Blockly.Css.injected_ = false;
 
 /**
- * Path to media directory, with any trailing slash removed.
- * @type {string}
- * @private
+ * Add some CSS to the blob that will be injected later.  Allows optional
+ * components such as fields and the toolbox to store separate CSS.
+ * The provided array of CSS will be destroyed by this function.
+ * @param {!Array.<string>} cssArray Array of CSS strings.
  */
-Blockly.Css.mediaPath_ = '';
+Blockly.Css.register = function(cssArray) {
+  if (Blockly.Css.injected_) {
+    throw Error('CSS already injected');
+  }
+  // Concatenate cssArray onto Blockly.Css.CONTENT.
+  Array.prototype.push.apply(Blockly.Css.CONTENT, cssArray);
+  cssArray.length = 0;  // Garbage collect provided CSS content.
+};
 
 /**
  * Inject the CSS into the DOM.  This is preferable over using a regular CSS
@@ -78,18 +86,14 @@ Blockly.Css.inject = function(hasCss, pathToMedia) {
     return;
   }
   Blockly.Css.injected_ = true;
-  // Placeholder for cursor rule.  Must be first rule (index 0).
-  var text = '.blocklyDraggable {}\n';
-  if (hasCss) {
-    text += Blockly.Css.CONTENT.join('\n');
-    Blockly.Css.CONTENT = null;  // Garbage collect 13 KB.
-    if (Blockly.FieldDate) {
-      text += Blockly.FieldDate.CSS.join('\n');
-    }
+  var text = Blockly.Css.CONTENT.join('\n');
+  Blockly.Css.CONTENT.length = 0;  // Garbage collect CSS content.
+  if (!hasCss) {
+    return;
   }
   // Strip off any trailing slash (either Unix or Windows).
-  Blockly.Css.mediaPath_ = pathToMedia.replace(/[\\\/]$/, '');
-  text = text.replace(/<<<PATH>>>/g, Blockly.Css.mediaPath_);
+  var mediaPath = pathToMedia.replace(/[\\\/]$/, '');
+  text = text.replace(/<<<PATH>>>/g, mediaPath);
 
   // Inject CSS tag at start of head.
   var cssNode = document.createElement('style');
@@ -311,16 +315,6 @@ Blockly.Css.CONTENT = [
 
   '.blocklyDragging.blocklyDraggingDelete {',
     'cursor: url("<<<PATH>>>/handdelete.cur"), auto;',
-  '}',
-
-  '.blocklyToolboxDelete {',
-    'cursor: url("<<<PATH>>>/handdelete.cur"), auto;',
-  '}',
-
-  '.blocklyToolboxGrab {',
-    'cursor: url("<<<PATH>>>/handclosed.cur"), auto;',
-    'cursor: grabbing;',
-    'cursor: -webkit-grabbing;',
   '}',
 
   '.blocklyDragging>.blocklyPath,',
@@ -597,18 +591,6 @@ Blockly.Css.CONTENT = [
     'fill: #bbb;',
   '}',
 
-  '.blocklyZoom>image, .blocklyZoom>svg>image {',
-    'opacity: .4;',
-  '}',
-
-  '.blocklyZoom>image:hover, .blocklyZoom>svg>image:hover {',
-    'opacity: .6;',
-  '}',
-
-  '.blocklyZoom>image:active, .blocklyZoom>svg>image:active {',
-    'opacity: .8;',
-  '}',
-
   /* Darken flyout scrollbars due to being on a grey background. */
   /* By contrast, workspace scrollbars are on a white background. */
   '.blocklyFlyout .blocklyScrollbarHandle {',
@@ -622,30 +604,6 @@ Blockly.Css.CONTENT = [
 
   '.blocklyInvalidInput {',
     'background: #faa;',
-  '}',
-
-  '.blocklyAngleCircle {',
-    'stroke: #444;',
-    'stroke-width: 1;',
-    'fill: #ddd;',
-    'fill-opacity: .8;',
-  '}',
-
-  '.blocklyAngleMarks {',
-    'stroke: #444;',
-    'stroke-width: 1;',
-  '}',
-
-  '.blocklyAngleGauge {',
-    'fill: #f88;',
-    'fill-opacity: .8;',
-  '}',
-
-  '.blocklyAngleLine {',
-    'stroke: #f00;',
-    'stroke-width: 2;',
-    'stroke-linecap: round;',
-    'pointer-events: none;',
   '}',
 
   '.blocklyContextMenu {',
@@ -683,154 +641,6 @@ Blockly.Css.CONTENT = [
   '.blocklyDropDownDiv .goog-option-selected .goog-menuitem-checkbox,',
   '.blocklyDropDownDiv .goog-option-selected .goog-menuitem-icon {',
     'background: url(<<<PATH>>>/sprites.png) no-repeat -48px -16px;',
-  '}',
-
-  /* Category tree in Toolbox. */
-  '.blocklyToolboxDiv {',
-    'background-color: #ddd;',
-    'overflow-x: visible;',
-    'overflow-y: auto;',
-    'position: absolute;',
-    'z-index: 70;', /* so blocks go under toolbox when dragging */
-    '-webkit-tap-highlight-color: transparent;', /* issue #1345 */
-  '}',
-
-  '.blocklyTreeRoot {',
-    'padding: 4px 0;',
-  '}',
-
-  '.blocklyTreeRoot:focus {',
-    'outline: none;',
-  '}',
-
-  '.blocklyTreeRow {',
-    'height: 22px;',
-    'line-height: 22px;',
-    'margin-bottom: 3px;',
-    'padding-right: 8px;',
-    'white-space: nowrap;',
-  '}',
-
-  '.blocklyHorizontalTree {',
-    'float: left;',
-    'margin: 1px 5px 8px 0;',
-  '}',
-
-  '.blocklyHorizontalTreeRtl {',
-    'float: right;',
-    'margin: 1px 0 8px 5px;',
-  '}',
-
-  '.blocklyToolboxDiv[dir="RTL"] .blocklyTreeRow {',
-    'margin-left: 8px;',
-  '}',
-
-  '.blocklyTreeRow:not(.blocklyTreeSelected):hover {',
-    'background-color: #e4e4e4;',
-  '}',
-
-  '.blocklyTreeSeparator {',
-    'border-bottom: solid #e5e5e5 1px;',
-    'height: 0;',
-    'margin: 5px 0;',
-  '}',
-
-  '.blocklyTreeSeparatorHorizontal {',
-    'border-right: solid #e5e5e5 1px;',
-    'width: 0;',
-    'padding: 5px 0;',
-    'margin: 0 5px;',
-  '}',
-
-  '.blocklyTreeIcon {',
-    'background-image: url(<<<PATH>>>/sprites.png);',
-    'height: 16px;',
-    'vertical-align: middle;',
-    'width: 16px;',
-  '}',
-
-  '.blocklyTreeIconClosedLtr {',
-    'background-position: -32px -1px;',
-  '}',
-
-  '.blocklyTreeIconClosedRtl {',
-    'background-position: 0 -1px;',
-  '}',
-
-  '.blocklyTreeIconOpen {',
-    'background-position: -16px -1px;',
-  '}',
-
-  '.blocklyTreeSelected>.blocklyTreeIconClosedLtr {',
-    'background-position: -32px -17px;',
-  '}',
-
-  '.blocklyTreeSelected>.blocklyTreeIconClosedRtl {',
-    'background-position: 0 -17px;',
-  '}',
-
-  '.blocklyTreeSelected>.blocklyTreeIconOpen {',
-    'background-position: -16px -17px;',
-  '}',
-
-  '.blocklyTreeIconNone,',
-  '.blocklyTreeSelected>.blocklyTreeIconNone {',
-    'background-position: -48px -1px;',
-  '}',
-
-  '.blocklyTreeLabel {',
-    'cursor: default;',
-    'font-family: sans-serif;',
-    'font-size: 16px;',
-    'padding: 0 3px;',
-    'vertical-align: middle;',
-  '}',
-
-  '.blocklyToolboxDelete .blocklyTreeLabel {',
-    'cursor: url("<<<PATH>>>/handdelete.cur"), auto;',
-  '}',
-
-  '.blocklyTreeSelected .blocklyTreeLabel {',
-    'color: #fff;',
-  '}',
-
-  /* Colour Picker Field */
-  '.blocklyColourTable {',
-    'border-collapse: collapse;',
-    'outline: none;',
-    'padding: 1px;',
-    'display: block;',
-  '}',
-
-  '.blocklyColourTable>tr>td {',
-    'padding: 0;',
-    'cursor: pointer;',
-    'border: .5px solid transparent;',
-    'height: 25px;',
-    'width: 25px;',
-    'box-sizing: border-box;',
-    'display: inline-block;',
-  '}',
-
-  '.blocklyColourTable>tr>td.blocklyColourHighlighted {',
-    'border-color: #eee;',
-    'position: relative;',
-    'box-shadow: 2px 2px 7px 2px rgba(0,0,0,.3);',
-  '}',
-
-  '.blocklyColourSelected, .blocklyColourSelected:hover {',
-    'border-color: #eee !important;',
-    'outline: 1px solid #333;',
-    'position: relative;',
-  '}',
-
-  /* Multiline (Textarea) Field */
-  '.blocklyHtmlTextAreaInput {',
-    'font-family: monospace;',
-    'resize: none;',
-    'overflow: hidden;',
-    'height: 100%;',
-    'text-align: left;',
   '}',
 
   /* Copied from: goog/css/menu.css */
@@ -1011,28 +821,5 @@ Blockly.Css.CONTENT = [
     'float: right;',
     'margin-right: -24px;',
   '}',
-
-
-  /* Copied from: goog/css/menuseparator.css */
-  /*
-   * Copyright 2009 The Closure Library Authors. All Rights Reserved.
-   *
-   * Use of this source code is governed by the Apache License, Version 2.0.
-   * See the COPYING file for details.
-   */
-
-  /**
-   * Standard styling for menus created by goog.ui.MenuSeparatorRenderer.
-   *
-   * @author attila@google.com (Attila Bodis)
-   */
-
-  '.blocklyWidgetDiv .goog-menuseparator,',
-  '.blocklyDropDownDiv .goog-menuseparator {',
-    'border-top: 1px solid #ccc;',
-    'margin: 4px 0;',
-    'padding: 0;',
-  '}',
-
   ''
 ];

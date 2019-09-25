@@ -26,6 +26,7 @@
 
 goog.provide('Blockly.FieldAngle');
 
+goog.require('Blockly.Css');
 goog.require('Blockly.DropDownDiv');
 goog.require('Blockly.fieldRegistry');
 goog.require('Blockly.FieldTextInput');
@@ -461,5 +462,34 @@ Blockly.FieldAngle.prototype.wrapValue_ = function(value) {
   }
   return value;
 };
+
+/**
+ * CSS for angle field.  See css.js for use.
+ */
+Blockly.Css.register([
+  '.blocklyAngleCircle {',
+    'stroke: #444;',
+    'stroke-width: 1;',
+    'fill: #ddd;',
+    'fill-opacity: .8;',
+  '}',
+
+  '.blocklyAngleMarks {',
+    'stroke: #444;',
+    'stroke-width: 1;',
+  '}',
+
+  '.blocklyAngleGauge {',
+    'fill: #f88;',
+    'fill-opacity: .8;',
+  '}',
+
+  '.blocklyAngleLine {',
+    'stroke: #f00;',
+    'stroke-width: 2;',
+    'stroke-linecap: round;',
+    'pointer-events: none;',
+  '}'
+]);
 
 Blockly.fieldRegistry.register('field_angle', Blockly.FieldAngle);

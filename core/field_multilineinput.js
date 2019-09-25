@@ -28,6 +28,7 @@
 
 goog.provide('Blockly.FieldMultilineInput');
 
+goog.require('Blockly.Css');
 goog.require('Blockly.DropDownDiv');
 goog.require('Blockly.FieldTextInput');
 goog.require('Blockly.utils');
@@ -274,5 +275,19 @@ Blockly.FieldMultilineInput.prototype.onHtmlInputKeyDown_ = function(e) {
     Blockly.FieldMultilineInput.superClass_.onHtmlInputKeyDown_.call(this, e);
   }
 };
+
+/**
+ * CSS for multiline field.  See css.js for use.
+ */
+Blockly.Css.register([
+  '.blocklyHtmlTextAreaInput {',
+    'font-family: monospace;',
+    'resize: none;',
+    'overflow: hidden;',
+    'height: 100%;',
+    'text-align: left;',
+  '}'
+]);
+
 
 Blockly.fieldRegistry.register('field_multilinetext', Blockly.FieldMultilineInput);

@@ -26,6 +26,7 @@
 
 goog.provide('Blockly.FieldColour');
 
+goog.require('Blockly.Css');
 goog.require('Blockly.DropDownDiv');
 goog.require('Blockly.Events');
 goog.require('Blockly.Events.BlockChange');
@@ -587,5 +588,39 @@ Blockly.FieldColour.prototype.dropdownDispose_ = function() {
   Blockly.unbindEvent_(this.onKeyDownWrapper_);
   this.picker_ = null;
 };
+
+/**
+ * CSS for colour picker.  See css.js for use.
+ */
+Blockly.Css.register([
+  '.blocklyColourTable {',
+    'border-collapse: collapse;',
+    'display: block;',
+    'outline: none;',
+    'padding: 1px;',
+  '}',
+
+  '.blocklyColourTable>tr>td {',
+    'border: .5px solid #888;',
+    'box-sizing: border-box;',
+    'cursor: pointer;',
+    'display: inline-block;',
+    'height: 20px;',
+    'padding: 0;',
+    'width: 20px;',
+  '}',
+
+  '.blocklyColourTable>tr>td.blocklyColourHighlighted {',
+    'border-color: #eee;',
+    'box-shadow: 2px 2px 7px 2px rgba(0,0,0,.3);',
+    'position: relative;',
+  '}',
+
+  '.blocklyColourSelected, .blocklyColourSelected:hover {',
+    'border-color: #eee !important;',
+    'outline: 1px solid #333;',
+    'position: relative;',
+  '}'
+]);
 
 Blockly.fieldRegistry.register('field_colour', Blockly.FieldColour);

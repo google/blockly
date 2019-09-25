@@ -392,30 +392,6 @@ Blockly.Css.CONTENT = [
     'position: absolute;',
     'z-index: 20;',
   '}',
-  '.blocklyFlyoutButton {',
-    'fill: #888;',
-    'cursor: default;',
-  '}',
-
-  '.blocklyFlyoutButtonShadow {',
-    'fill: #666;',
-  '}',
-
-  '.blocklyFlyoutButton:hover {',
-    'fill: #aaa;',
-  '}',
-
-  '.blocklyFlyoutLabel {',
-    'cursor: default;',
-  '}',
-
-  '.blocklyFlyoutLabelBackground {',
-    'opacity: 0;',
-  '}',
-
-  '.blocklyFlyoutLabelText {',
-    'fill: #000;',
-  '}',
 
   /*
     Don't allow users to select text.  It gets annoying when trying to

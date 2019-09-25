@@ -90,7 +90,7 @@
 
       function setRandomStyle() {
         var blocks = workspace.getAllBlocks();
-        var styles = Object.keys(Blockly.getTheme().getAllBlockStyles());
+        var styles = Object.keys(workspace.getTheme().getAllBlockStyles());
         styles.splice(styles.indexOf(blocks[0].getStyleName()), 1);
         var style = styles[Math.floor(Math.random() * styles.length)];
         for(var i = 0, block; block = blocks[i]; i++) {

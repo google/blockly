@@ -155,6 +155,8 @@ Blockly.Toolbox.prototype.init = function() {
   this.HtmlDiv.className = 'blocklyToolboxDiv';
   this.HtmlDiv.setAttribute('dir', workspace.RTL ? 'RTL' : 'LTR');
   svg.parentNode.insertBefore(this.HtmlDiv, svg);
+  workspace.getThemeManager().subscribe(this.HtmlDiv, 'toolbox', 'background-color');
+  workspace.getThemeManager().subscribe(this.HtmlDiv, 'toolboxText', 'color');
 
   // Clicking on toolbox closes popups.
   Blockly.bindEventWithChecks_(this.HtmlDiv, 'mousedown', this,
@@ -350,6 +352,7 @@ Blockly.Toolbox.prototype.onBlocklyAction = function(action) {
 Blockly.Toolbox.prototype.dispose = function() {
   this.flyout_.dispose();
   this.tree_.dispose();
+  this.workspace_.getThemeManager().unsubscribe(this.HtmlDiv);
   Blockly.utils.dom.removeNode(this.HtmlDiv);
   this.workspace_ = null;
   this.lastCategory_ = null;
@@ -567,13 +570,9 @@ Blockly.Toolbox.prototype.updateColourFromTheme_ = function(opt_tree) {
 
 /**
  * Updates the category colours and background colour of selected categories.
- * @param {!Blockly.Theme} theme Theme for Blockly.
  * @package
  */
-Blockly.Toolbox.prototype.updateColourFromTheme = function(theme) {
-  if (this.flyout_ && this.flyout_.workspace_) {
-    this.flyout_.workspace_.setTheme(theme);
-  }
+Blockly.Toolbox.prototype.updateColourFromTheme = function() {
   var tree = this.tree_;
   if (tree) {
     this.updateColourFromTheme_(tree);

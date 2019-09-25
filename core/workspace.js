@@ -29,7 +29,7 @@ goog.provide('Blockly.Workspace');
 goog.require('Blockly.Cursor');
 goog.require('Blockly.MarkerCursor');
 goog.require('Blockly.Events');
-goog.require('Blockly.Themes.Classic');
+goog.require('Blockly.ThemeManager');
 goog.require('Blockly.utils');
 goog.require('Blockly.utils.math');
 goog.require('Blockly.VariableMap');
@@ -132,12 +132,15 @@ Blockly.Workspace = function(opt_options) {
   this.marker_ = new Blockly.MarkerCursor();
 
   /**
-   * The workspace theme.
-   * @type {!Blockly.Theme}
-   * @private
+   * Object in charge of storing and updating the workspace theme.
+   * @type {!Blockly.ThemeManager}
+   * @protected
    */
-  this.theme_ = this.options.theme;
-
+  this.themeManager_ = this.options.parentWorkspace ?
+      this.options.parentWorkspace.getThemeManager() :
+      new Blockly.ThemeManager(this, this.options.theme);
+  
+  this.themeManager_.subscribeWorkspace(this);
 };
 
 /**
@@ -205,7 +208,15 @@ Blockly.Workspace.prototype.getMarker = function() {
  * @return {!Blockly.Theme} The workspace theme object.
  */
 Blockly.Workspace.prototype.getTheme = function() {
-  return this.theme_;
+  return this.themeManager_.getTheme();
+};
+
+/**
+ * Set the workspace theme object.
+ * @param {!Blockly.Theme} theme The workspace theme object.
+ */
+Blockly.Workspace.prototype.setTheme = function(theme) {
+  this.themeManager_.setTheme(theme);
 };
 
 /**
@@ -213,9 +224,7 @@ Blockly.Workspace.prototype.getTheme = function() {
  * flyout and workspace.
  * @param {!Blockly.Theme} theme The desired workspace theme.
  */
-Blockly.Workspace.prototype.setTheme = function(theme) {
-  this.theme_ = theme;
-
+Blockly.Workspace.prototype.refreshTheme = function() {
   // Update all blocks in workspace that have a style name.
   this.updateBlockStyles_(this.getAllBlocks().filter(
       function(block) {
@@ -223,16 +232,10 @@ Blockly.Workspace.prototype.setTheme = function(theme) {
       }
   ));
 
-  // Update blocks in the flyout.
-  if (!this.toolbox_ && this.flyout_ && this.flyout_.workspace_) {
-    this.flyout_.workspace_.setTheme(theme);
-  } else {
-    this.refreshToolboxSelection();
-  }
-
-  // Update colours on the categories.
+  // Update current toolbox selection.
   if (this.toolbox_) {
-    this.toolbox_.updateColourFromTheme(theme);
+    this.refreshToolboxSelection();
+    this.toolbox_.updateColourFromTheme();
   }
 
   var event = new Blockly.Events.Ui(null, 'theme');
@@ -259,12 +262,19 @@ Blockly.Workspace.prototype.updateBlockStyles_ = function(blocks) {
 /**
  * Dispose of this workspace.
  * Unlink from all DOM elements to prevent memory leaks.
+ * @suppress {checkTypes}
  */
 Blockly.Workspace.prototype.dispose = function() {
   this.listeners_.length = 0;
   this.clear();
   // Remove from workspace database.
   delete Blockly.Workspace.WorkspaceDB_[this.id];
+
+  this.themeManager_.unsubscribeWorkspace(this);
+  if (this.themeManager_ && this.themeManager_.isOwner(this)) {
+    this.themeManager_.dispose();
+    this.themeManager_ = null;
+  }
 };
 
 /**
@@ -866,4 +876,12 @@ Blockly.Workspace.getAll = function() {
     workspaces.push(Blockly.Workspace.WorkspaceDB_[workspaceId]);
   }
   return workspaces;
+};
+
+/**
+ * Get the theme manager for this workspace.
+ * @return {!Blockly.ThemeManager} The theme manager for this workspace.
+ */
+Blockly.Workspace.prototype.getThemeManager = function() {
+  return this.themeManager_;
 };

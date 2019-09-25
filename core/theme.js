@@ -33,11 +33,28 @@ goog.provide('Blockly.Theme');
  * @param {!Object.<string, Blockly.Theme.CategoryStyle>} categoryStyles A map from
  *     style names (strings) to objects with style attributes relating to
  *     categories.
+ * @param {Object.<string, string>=} componentStyles A map of Blockly component names
+ *     to style value.
  * @constructor
  */
-Blockly.Theme = function(blockStyles, categoryStyles) {
+Blockly.Theme = function(blockStyles, categoryStyles, componentStyles) {
+  /**
+   * The block styles map.
+   * @type {!Object.<string, Blockly.Theme.BlockStyle>}
+   */
   this.blockStyles_ = blockStyles;
+
+  /**
+   * The category styles map.
+   * @type {!Object.<string, Blockly.Theme.CategoryStyle>}
+   */
   this.categoryStyles_ = categoryStyles;
+
+  /**
+   * The UI components styles map.
+   * @type {!Object.<string, *>}
+   */
+  this.componentStyles_ = componentStyles || {};
 };
 
 /**
@@ -113,4 +130,29 @@ Blockly.Theme.prototype.getCategoryStyle = function(categoryStyleName) {
 Blockly.Theme.prototype.setCategoryStyle = function(categoryStyleName,
     categoryStyle) {
   this.categoryStyles_[categoryStyleName] = categoryStyle;
+};
+
+/**
+ * Gets the style for a given Blockly UI component.  If the style value is a
+ * string, we attempt to find the value of any named references.
+ * @param {string} componentName The name of the component.
+ * @return {string} The style value.
+ */
+Blockly.Theme.prototype.getComponentStyle = function(componentName) {
+  var style = this.componentStyles_[componentName];
+  if (style && typeof propertyValue == 'string' &&
+      this.getComponentStyle(/** @type {string} */ (style))) {
+    return this.getComponentStyle(/** @type {string} */ (style));
+  }
+  return String(style);
+};
+
+/**
+ * Configure a specific Blockly UI component with a style value.
+ * @param {string} componentName The name of the component.
+ * @param {*} styleValue The style value.
+*/
+Blockly.Theme.prototype.setComponentStyle = function(componentName,
+    styleValue) {
+  this.componentStyles_[componentName] = styleValue;
 };

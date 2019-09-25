@@ -230,6 +230,8 @@ Blockly.createMainWorkspace_ = function(svg, options, blockDragSurface,
   if (options.zoomOptions && options.zoomOptions.controls) {
     mainWorkspace.addZoomControls();
   }
+  // Register the workspace svg as a UI component.
+  mainWorkspace.getThemeManager().subscribe(svg, 'workspace', 'background-color');
 
   // A null translation will also apply the correct initial scale.
   mainWorkspace.translate(0, 0);

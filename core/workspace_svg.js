@@ -98,7 +98,7 @@ Blockly.WorkspaceSvg = function(options,
 
   /**
    * Object in charge of loading, storing, and playing audio for a workspace.
-   * @type {Blockly.WorkspaceAudio}
+   * @type {!Blockly.WorkspaceAudio}
    * @private
    */
   this.audioManager_ = new Blockly.WorkspaceAudio(options.parentWorkspace);
@@ -637,6 +637,8 @@ Blockly.WorkspaceSvg.prototype.createDom = function(opt_backgroundClass) {
     if (opt_backgroundClass == 'blocklyMainBackground' && this.grid_) {
       this.svgBackground_.style.fill =
           'url(#' + this.grid_.getPatternId() + ')';
+    } else {
+      this.themeManager_.subscribe(this.svgBackground_, 'workspace', 'fill');
     }
   }
   /** @type {SVGElement} */
@@ -687,6 +689,7 @@ Blockly.WorkspaceSvg.prototype.dispose = function() {
   if (this.currentGesture_) {
     this.currentGesture_.cancel();
   }
+  this.themeManager_.unsubscribe(this.svgBackground_);
   Blockly.WorkspaceSvg.superClass_.dispose.call(this);
   if (this.svgGroup_) {
     Blockly.utils.dom.removeNode(this.svgGroup_);
@@ -807,8 +810,7 @@ Blockly.WorkspaceSvg.prototype.addFlyout_ = function(tagName) {
     oneBasedIndex: this.options.oneBasedIndex,
     horizontalLayout: this.horizontalLayout,
     toolboxPosition: this.options.toolboxPosition,
-    renderer: this.options.renderer,
-    theme: this.options.theme
+    renderer: this.options.renderer
   };
   if (this.horizontalLayout) {
     if (!Blockly.HorizontalFlyout) {
@@ -2510,7 +2512,7 @@ Blockly.WorkspaceSvg.prototype.cancelCurrentGesture = function() {
 
 /**
  * Get the audio manager for this workspace.
- * @return {Blockly.WorkspaceAudio} The audio manager for this workspace.
+ * @return {!Blockly.WorkspaceAudio} The audio manager for this workspace.
  */
 Blockly.WorkspaceSvg.prototype.getAudioManager = function() {
   return this.audioManager_;

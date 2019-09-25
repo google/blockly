@@ -185,7 +185,7 @@ function addToolboxButtonCallbacks() {
   };
   var setRandomStyle = function(button) {
     var blocks = button.workspace_.getAllBlocks();
-    var styles = Object.keys(Blockly.getTheme().getAllBlockStyles());
+    var styles = Object.keys(workspace.getTheme().getAllBlockStyles());
     styles.splice(styles.indexOf(blocks[0].getStyleName()), 1);
     var style = styles[Math.floor(Math.random() * styles.length)];
     for(var i = 0, block; block = blocks[i]; i++) {
@@ -315,6 +315,8 @@ function changeTheme() {
   var theme = document.getElementById('themeChanger');
   if (theme.value === "modern") {
     Blockly.getMainWorkspace().setTheme(Blockly.Themes.Modern);
+  } else if (theme.value === "dark") {
+    Blockly.getMainWorkspace().setTheme(Blockly.Themes.Dark);
   } else if (theme.value === "high_contrast") {
     Blockly.getMainWorkspace().setTheme(Blockly.Themes.HighContrast);
   } else {
@@ -564,6 +566,7 @@ var spaghettiXml = [
   <select id="themeChanger" name="theme" onchange="changeTheme()">
     <option value="classic">Classic</option>
     <option value="modern">Modern</option>
+    <option value="dark">Dark</option>
     <option value="high_contrast">High Contrast</option>
   </select>
   <p>

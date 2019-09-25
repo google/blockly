@@ -131,10 +131,10 @@ function test_setTheme() {
 
   var mockControl_ = setUpMockMethod(Blockly, 'getMainWorkspace', null, [workspace]);
 
-  Blockly.setTheme(blockStyles);
+  workspace.setTheme(blockStyles);
 
   //Checks that the theme was set correctly on Blockly namespace
-  stringifyAndCompare(Blockly.getTheme(), blockStyles);
+  stringifyAndCompare(workspace.getTheme(), blockStyles);
 
   //Checks that the setTheme function was called on the block
   assertEquals(blockA.getStyleName(), 'styleTwo');

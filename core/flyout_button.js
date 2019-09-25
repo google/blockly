@@ -155,6 +155,10 @@ Blockly.FlyoutButton.prototype.createDom = function() {
       },
       this.svgGroup_);
   svgText.textContent = Blockly.utils.replaceMessageReferences(this.text_);
+  if (this.isLabel_) {
+    this.svgText_ = svgText;
+    this.workspace_.getThemeManager().subscribe(this.svgText_, 'flyoutText', 'fill');
+  }
 
   this.width = Blockly.utils.dom.getTextWidth(svgText);
   this.height = 20;  // Can't compute it :(
@@ -233,6 +237,9 @@ Blockly.FlyoutButton.prototype.dispose = function() {
   if (this.svgGroup_) {
     Blockly.utils.dom.removeNode(this.svgGroup_);
     this.svgGroup_ = null;
+  }
+  if (this.svgText_) {
+    this.workspace_.getThemeManager().unsubscribe(this.svgText_);
   }
   this.workspace_ = null;
   this.targetWorkspace_ = null;

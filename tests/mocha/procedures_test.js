@@ -23,12 +23,12 @@ goog.require('Blockly.Msg');
 
 suite('Procedures', function() {
   setup(function() {
-    Blockly.setTheme(new Blockly.Theme({
+    this.workspace = new Blockly.Workspace();
+    this.workspace.setTheme(new Blockly.Theme({
       "procedure_blocks": {
         "colourPrimary": "290"
       }
     }));
-    this.workspace = new Blockly.Workspace();
 
     this.callForAllTypes = function(func, startName) {
       var typesArray = [

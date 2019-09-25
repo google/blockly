@@ -349,6 +349,18 @@ Blockly.RenderedConnection.prototype.isConnectionAllowed = function(candidate,
 };
 
 /**
+ * Behavior after a connection attempt fails.
+ * @param {Blockly.Connection} otherConnection Connection that this connection
+ *     failed to connect to.
+ * @package
+ */
+Blockly.RenderedConnection.prototype.onFailedConnect = function(
+    otherConnection) {
+  this.bumpAwayFrom_(otherConnection);
+};
+
+
+/**
  * Disconnect two blocks that are connected by this connection.
  * @param {!Blockly.Block} parentBlock The superior block.
  * @param {!Blockly.Block} childBlock The inferior block.

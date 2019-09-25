@@ -410,12 +410,14 @@ Blockly.Block.prototype.unplugFromRow_ = function(opt_healStack) {
     return;
   }
 
-  // Only disconnect the child if it's possible to move it to the parent.
   var childConnection = thisConnection.targetConnection;
+  // Disconnect the child block.
+  childConnection.disconnect();
+  // Connect child to the parent if possible, otherwise bump away.
   if (childConnection.checkType_(parentConnection)) {
-    // Disconnect the child block.
-    childConnection.disconnect();
     parentConnection.connect(childConnection);
+  } else {
+    childConnection.onFailedConnect(parentConnection);
   }
 };
 
@@ -464,7 +466,6 @@ Blockly.Block.prototype.unplugFromStack_ = function(opt_healStack) {
     // Disconnect the next statement.
     var nextTarget = this.nextConnection.targetConnection;
     nextTarget.disconnect();
-    // TODO (#1994): Check types before unplugging.
     if (previousTarget && previousTarget.checkType_(nextTarget)) {
       // Attach the next statement to the previous statement.
       previousTarget.connect(nextTarget);

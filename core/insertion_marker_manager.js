@@ -245,8 +245,6 @@ Blockly.InsertionMarkerManager.prototype.update = function(dxy, deleteArea) {
   }
 };
 
-/**** Begin initialization functions ****/
-
 /**
  * Create an insertion marker that represents the given block.
  * @param {!Blockly.BlockSvg} sourceBlock The block that the insertion marker
@@ -311,9 +309,6 @@ Blockly.InsertionMarkerManager.prototype.initAvailableConnections_ = function() 
   }
   return available;
 };
-
-/**** End initialization functions ****/
-
 
 /**
  * Whether the previews (insertion marker and replacement marker) should be
@@ -474,8 +469,6 @@ Blockly.InsertionMarkerManager.prototype.shouldDelete_ = function(candidate,
   return wouldDelete && !wouldConnect;
 };
 
-/**** Begin preview visibility functions ****/
-
 /**
  * Show an insertion marker or replacement highlighting during a drag, if
  * needed.
@@ -576,10 +569,6 @@ Blockly.InsertionMarkerManager.prototype.hidePreview_ = function() {
   }
 };
 
-/**** End preview visibility functions ****/
-
-/**** Begin block highlighting functions ****/
-
 /**
  * Add highlighting showing which block will be replaced.
  */
@@ -612,10 +601,6 @@ Blockly.InsertionMarkerManager.prototype.unhighlightBlock_ = function() {
   this.highlightedBlock_ = null;
   this.highlightingBlock_ = false;
 };
-
-/**** End block highlighting functions ****/
-
-/**** Begin insertion marker display functions ****/
 
 /**
  * Disconnect the insertion marker block in a manner that returns the stack to
@@ -699,8 +684,6 @@ Blockly.InsertionMarkerManager.prototype.connectMarker_ = function() {
   imConn.connect(closest);
   this.markerConnection_ = imConn;
 };
-
-/**** End insertion marker display functions ****/
 
 /**
  * Get a list of the insertion markers that currently exist.  Drags have 0, 1,

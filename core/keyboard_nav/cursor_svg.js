@@ -201,9 +201,9 @@ Blockly.CursorSvg.prototype.setParent_ = function(newParent) {
   this.parent_ = newParent;
 };
 
-/**************************/
-/**** Display          ****/
-/**************************/
+/**************************
+ * Display
+ **************************/
 
 /**
  * Show the cursor as a combination of the previous connection and block,
@@ -345,9 +345,9 @@ Blockly.CursorSvg.prototype.showCurrent_ = function() {
   this.currentCursorSvg.style.display = '';
 };
 
-/**************************/
-/**** Position         ****/
-/**************************/
+/**************************
+ * Position
+ **************************/
 
 /**
  * Position the cursor for a block.

@@ -128,13 +128,13 @@ Blockly.TouchGesture.prototype.doStart = function(e) {
 Blockly.TouchGesture.prototype.bindMouseEvents = function(e) {
   this.onStartWrapper_ = Blockly.bindEventWithChecks_(
       document, 'mousedown', null, this.handleStart.bind(this),
-      /*opt_noCaptureIdentifier*/ true);
+      /* opt_noCaptureIdentifier */ true);
   this.onMoveWrapper_ = Blockly.bindEventWithChecks_(
       document, 'mousemove', null, this.handleMove.bind(this),
-      /*opt_noCaptureIdentifier*/ true);
+      /* opt_noCaptureIdentifier */ true);
   this.onUpWrapper_ = Blockly.bindEventWithChecks_(
       document, 'mouseup', null, this.handleUp.bind(this),
-      /*opt_noCaptureIdentifier*/ true);
+      /* opt_noCaptureIdentifier */ true);
 
   e.preventDefault();
   e.stopPropagation();

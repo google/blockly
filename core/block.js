@@ -1433,7 +1433,7 @@ Blockly.Block.prototype.jsonInit = function(json) {
   // Makes styles backward compatible with old way of defining hat style.
   if (json['style'] && json['style'].hat) {
     this.hat = json['style'].hat;
-    //Must set to null so it doesn't error when checking for style and colour.
+    // Must set to null so it doesn't error when checking for style and colour.
     json['style'] = null;
   }
 

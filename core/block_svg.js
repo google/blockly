@@ -115,7 +115,7 @@ Blockly.BlockSvg = function(workspace, prototypeName, opt_id) {
 
   // Expose this block's ID on its top-level SVG group.
   if (this.svgGroup_.dataset) {
-    this.svgGroup_.dataset.id = this.id;
+    this.svgGroup_.dataset['id'] = this.id;
   }
 
   /**

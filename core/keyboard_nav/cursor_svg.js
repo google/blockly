@@ -56,7 +56,7 @@ Blockly.CursorSvg = function(workspace, opt_marker) {
   this.isMarker_ = opt_marker;
 
   /**
-   * The workspace, field, or block that the cursor svg element should be
+   * The workspace, field, or block that the cursor SVG element should be
    * attached to.
    * @type {Blockly.WorkspaceSvg|Blockly.Field|Blockly.BlockSvg}
    * @private
@@ -136,13 +136,13 @@ Blockly.CursorSvg.CURSOR_COLOR = '#cc0a0a';
 Blockly.CursorSvg.MARKER_COLOR = '#4286f4';
 
 /**
- * The name of the css class for a cursor.
+ * The name of the CSS class for a cursor.
  * @const {string}
  */
 Blockly.CursorSvg.CURSOR_CLASS = 'blocklyCursor';
 
 /**
- * The name of the css class for a marker.
+ * The name of the CSS class for a marker.
  * @const {string}
  */
 Blockly.CursorSvg.MARKER_CLASS = 'blocklyMarker';
@@ -180,9 +180,9 @@ Blockly.CursorSvg.prototype.createDom = function() {
 };
 
 /**
- * Attaches the svg root of the cursor to the svg group of the parent.
+ * Attaches the SVG root of the cursor to the SVG group of the parent.
  * @param {!Blockly.WorkspaceSvg|!Blockly.Field|!Blockly.BlockSvg} newParent
- *    The workspace, field, or block that the cursor svg element should be
+ *    The workspace, field, or block that the cursor SVG element should be
  *    attached to.
  * @private
  */
@@ -358,9 +358,9 @@ Blockly.CursorSvg.prototype.showCurrent_ = function() {
  */
 Blockly.CursorSvg.prototype.positionBlock_ = function(width, cursorOffset, cursorHeight) {
   var cursorPath = Blockly.utils.svgPaths.moveBy(-1 * cursorOffset, cursorHeight) +
-    Blockly.utils.svgPaths.lineOnAxis('V', -1 * cursorOffset) +
-    Blockly.utils.svgPaths.lineOnAxis('H', width + cursorOffset * 2) +
-    Blockly.utils.svgPaths.lineOnAxis('V', cursorHeight);
+      Blockly.utils.svgPaths.lineOnAxis('V', -1 * cursorOffset) +
+      Blockly.utils.svgPaths.lineOnAxis('H', width + cursorOffset * 2) +
+      Blockly.utils.svgPaths.lineOnAxis('V', cursorHeight);
   this.cursorBlock_.setAttribute('d', cursorPath);
   if (this.workspace_.RTL) {
     this.flipRtl_(this.cursorBlock_);
@@ -426,7 +426,7 @@ Blockly.CursorSvg.prototype.positionOutput_ = function(width, height) {
 /**
  * Position the cursor for a previous connection.
  * Displays a half rectangle with a notch in the top to represent the previous
- * conenction.
+ * connection.
  * @param {number} width The width of the block.
  * @param {number} cursorOffset The offset of the cursor from around the block.
  * @param {number} cursorHeight The height of the cursor.
@@ -434,11 +434,11 @@ Blockly.CursorSvg.prototype.positionOutput_ = function(width, height) {
  */
 Blockly.CursorSvg.prototype.positionPrevious_ = function(width, cursorOffset, cursorHeight) {
   var cursorPath = Blockly.utils.svgPaths.moveBy(-1 * cursorOffset, cursorHeight) +
-    Blockly.utils.svgPaths.lineOnAxis('V', -1 * cursorOffset) +
-    Blockly.utils.svgPaths.lineOnAxis('H', this.constants_.NOTCH_OFFSET_LEFT) +
-    this.constants_.NOTCH.pathLeft +
-    Blockly.utils.svgPaths.lineOnAxis('H', width + cursorOffset * 2) +
-    Blockly.utils.svgPaths.lineOnAxis('V', cursorHeight);
+      Blockly.utils.svgPaths.lineOnAxis('V', -1 * cursorOffset) +
+      Blockly.utils.svgPaths.lineOnAxis('H', this.constants_.NOTCH_OFFSET_LEFT) +
+      this.constants_.NOTCH.pathLeft +
+      Blockly.utils.svgPaths.lineOnAxis('H', width + cursorOffset * 2) +
+      Blockly.utils.svgPaths.lineOnAxis('V', cursorHeight);
   this.cursorBlock_.setAttribute('d', cursorPath);
   if (this.workspace_.RTL) {
     this.flipRtl_(this.cursorBlock_);

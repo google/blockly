@@ -80,7 +80,7 @@ Blockly.ThemeManager.prototype.getTheme = function() {
 };
 
 /**
- * Set the workspace theme, and refresh the workspace.
+ * Set the workspace theme, and refresh the workspace and all components.
  * @param {!Blockly.Theme} theme The workspace theme.
  * @package
  */

@@ -178,8 +178,7 @@ Blockly.Toolbox.prototype.init = function() {
     oneBasedIndex: workspace.options.oneBasedIndex,
     horizontalLayout: workspace.horizontalLayout,
     toolboxPosition: workspace.options.toolboxPosition,
-    renderer: workspace.options.renderer,
-    theme: workspace.options.theme
+    renderer: workspace.options.renderer
   };
   /**
    * @type {!Blockly.Flyout}

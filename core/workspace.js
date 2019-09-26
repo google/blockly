@@ -30,6 +30,7 @@ goog.require('Blockly.Cursor');
 goog.require('Blockly.MarkerCursor');
 goog.require('Blockly.Events');
 goog.require('Blockly.ThemeManager');
+goog.require('Blockly.Themes.Classic');
 goog.require('Blockly.utils');
 goog.require('Blockly.utils.math');
 goog.require('Blockly.VariableMap');
@@ -138,7 +139,7 @@ Blockly.Workspace = function(opt_options) {
    */
   this.themeManager_ = this.options.parentWorkspace ?
       this.options.parentWorkspace.getThemeManager() :
-      new Blockly.ThemeManager(this.options.theme);
+      new Blockly.ThemeManager(this.options.theme || Blockly.Themes.Classic);
   
   this.themeManager_.subscribeWorkspace(this);
 };
@@ -213,9 +214,13 @@ Blockly.Workspace.prototype.getTheme = function() {
 
 /**
  * Set the workspace theme object.
- * @param {!Blockly.Theme} theme The workspace theme object.
+ * If no theme is passed, default to the `Blockly.Themes.Classic` theme.
+ * @param {Blockly.Theme} theme The workspace theme object.
  */
 Blockly.Workspace.prototype.setTheme = function(theme) {
+  if (!theme) {
+    theme = /** @type {!Blockly.Theme} */ (Blockly.Themes.Classic);
+  }
   this.themeManager_.setTheme(theme);
 };
 
@@ -239,7 +244,7 @@ Blockly.Workspace.prototype.refreshTheme = function() {
 /**
  * Updates all the blocks with new style.
  * @param {!Array.<!Blockly.Block>} blocks List of blocks to update the style
- * on.
+ *     on.
  * @private
  */
 Blockly.Workspace.prototype.updateBlockStyles_ = function(blocks) {

@@ -26,7 +26,6 @@
 
 goog.provide('Blockly.Options');
 
-goog.require('Blockly.Themes.Classic');
 goog.require('Blockly.utils.userAgent');
 goog.require('Blockly.Xml');
 
@@ -118,7 +117,7 @@ Blockly.Options = function(options) {
   } else {
     var oneBasedIndex = !!options['oneBasedIndex'];
   }
-  var theme = options['theme'] || Blockly.Themes.Classic;
+  var theme = options['theme'];
   var keyMap = options['keyMap'] || Blockly.user.keyMap.createDefaultKeyMap();
 
   var renderer = options['renderer'] || 'geras';

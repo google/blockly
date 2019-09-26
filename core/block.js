@@ -991,10 +991,6 @@ Blockly.Block.prototype.setColour = function(colour) {
  */
 Blockly.Block.prototype.setStyle = function(blockStyleName) {
   var theme = this.workspace.getTheme();
-  if (!theme) {
-    throw Error('Trying to set block style to ' + blockStyleName +
-        ' before theme was defined via this.workspace.setTheme().');
-  }
   var blockStyle = theme.getBlockStyle(blockStyleName);
   this.styleName_ = blockStyleName;
 

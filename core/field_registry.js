@@ -38,7 +38,7 @@ goog.provide('Blockly.fieldRegistry');
 Blockly.fieldRegistry.typeMap_ = {};
 
 /**
- * Registers a field type. May also override an existing field type.
+ * Registers a field type.
  * Blockly.fieldRegistry.fromJson uses this registry to
  * find the appropriate field type.
  * @param {string} type The field type name as used in the JSON definition.
@@ -64,9 +64,7 @@ Blockly.fieldRegistry.register = function(type, fieldClass) {
 };
 
 /**
- * Registers a field type. May also override an existing field type.
- * Blockly.fieldRegistry.fromJson uses this registry to
- * find the appropriate field type.
+ * Unregisters the field registered with the given type.
  * @param {string} type The field type name as used in the JSON definition.
  */
 Blockly.fieldRegistry.unregister = function(type) {

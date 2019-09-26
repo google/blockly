@@ -62,7 +62,7 @@ Blockly.blockRendering.register = function(name, rendererClass) {
 };
 
 /**
- * Unregisters renderer with the given name.
+ * Unregisters the renderer registered with the given name.
  * @param {string} name The name of the renderer.
  */
 Blockly.blockRendering.unregister = function(name) {

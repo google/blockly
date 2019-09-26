@@ -129,7 +129,7 @@ Blockly.Extensions.registerMutator = function(name, mixinObj, opt_helperFn,
 };
 
 /**
- * Unregisters extension with the given name.
+ * Unregisters the extension registered with the given name.
  * @param {string} name The name of the extension to unregister.
  */
 Blockly.Extensions.unregister = function(name) {

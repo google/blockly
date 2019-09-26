@@ -47,6 +47,8 @@ goog.require('Blockly.Toolbox');
 // If a trashcan on the workspace isn't required, then Blockly.inject's
 // "trashcan" configuration must be false.
 goog.require('Blockly.Trashcan');
+// Only needed if one is using the 'VARIABLE_DYNAMIC' typed variables category.
+goog.require('Blockly.VariablesDynamic');
 // If zoom controls aren't required, then Blockly.inject's
 // "zoom"/"controls" configuration must be false.
 goog.require('Blockly.ZoomControls');

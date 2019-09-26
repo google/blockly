@@ -77,7 +77,7 @@ Blockly.utils.object.inherits(Blockly.FieldCheckbox, Blockly.Field);
  * @nocollapse
  */
 Blockly.FieldCheckbox.fromJson = function(options) {
-  return new Blockly.FieldCheckbox(options['checked'], null, options);
+  return new Blockly.FieldCheckbox(options['checked'], undefined, options);
 };
 
 /**

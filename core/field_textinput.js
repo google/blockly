@@ -80,7 +80,7 @@ Blockly.utils.object.inherits(Blockly.FieldTextInput, Blockly.Field);
  */
 Blockly.FieldTextInput.fromJson = function(options) {
   var text = Blockly.utils.replaceMessageReferences(options['text']);
-  return new Blockly.FieldTextInput(text, null, options);
+  return new Blockly.FieldTextInput(text, undefined, options);
 };
 
 /**

@@ -79,7 +79,7 @@ Blockly.utils.object.inherits(Blockly.FieldColour, Blockly.Field);
  * @nocollapse
  */
 Blockly.FieldColour.fromJson = function(options) {
-  return new Blockly.FieldColour(options['colour'], null, options);
+  return new Blockly.FieldColour(options['colour'], undefined, options);
 };
 
 /**

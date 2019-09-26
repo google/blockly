@@ -97,7 +97,7 @@ Blockly.utils.object.inherits(Blockly.FieldAngle, Blockly.FieldTextInput);
  * @nocollapse
  */
 Blockly.FieldAngle.fromJson = function(options) {
-  return new Blockly.FieldAngle(options['angle'], null, options);
+  return new Blockly.FieldAngle(options['angle'], undefined, options);
 };
 
 /**

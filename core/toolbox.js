@@ -293,7 +293,10 @@ Blockly.Toolbox.prototype.handleAfterTreeSelected_ = function(
   } else {
     // Hide the flyout.
     this.flyout_.hide();
-    if (Blockly.keyboardAccessibilityMode) {
+
+    // Don't change focus when the user navigates to a TreeSeparator. This makes
+    // it impossible for them to navigate to the nodes after the TreeSeparator.
+    if (Blockly.keyboardAccessibilityMode && !(newNode instanceof Blockly.Toolbox.TreeSeparator)) {
       Blockly.navigation.setState(Blockly.navigation.STATE_WS);
     }
   }

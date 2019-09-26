@@ -138,10 +138,6 @@ Blockly.Cursor.prototype.in = function() {
   }
   var newNode = curNode.in();
 
-  if (newNode && newNode.getType() == Blockly.ASTNode.types.OUTPUT) {
-    newNode = newNode.next() || newNode;
-  }
-
   if (newNode) {
     this.setCurNode(newNode);
   }

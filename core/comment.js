@@ -34,6 +34,7 @@ goog.require('Blockly.Icon');
 goog.require('Blockly.utils.dom');
 goog.require('Blockly.utils.object');
 goog.require('Blockly.utils.userAgent');
+goog.require('Blockly.Warning');
 
 
 /**

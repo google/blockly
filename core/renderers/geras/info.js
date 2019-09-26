@@ -45,7 +45,6 @@ goog.require('Blockly.blockRendering.Types');
 goog.require('Blockly.blockRendering.ExternalValueInput');
 goog.require('Blockly.geras.InlineInput');
 goog.require('Blockly.geras.StatementInput');
-goog.require('Blockly.RenderedConnection');
 goog.require('Blockly.utils.object');
 
 

@@ -43,7 +43,6 @@ goog.require('Blockly.blockRendering.StatementInput');
 goog.require('Blockly.blockRendering.SquareCorner');
 goog.require('Blockly.blockRendering.TopRow');
 goog.require('Blockly.blockRendering.Types');
-goog.require('Blockly.RenderedConnection');
 
 
 /**

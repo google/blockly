@@ -36,7 +36,6 @@ goog.require('Blockly.blockRendering.Measurable');
 goog.require('Blockly.blockRendering.NextConnection');
 goog.require('Blockly.blockRendering.PreviousConnection');
 goog.require('Blockly.blockRendering.Types');
-goog.require('Blockly.RenderedConnection');
 goog.require('Blockly.utils.object');
 
 

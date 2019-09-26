@@ -288,7 +288,7 @@ Blockly.Bubble.prototype.getSvgRoot = function() {
  */
 Blockly.Bubble.prototype.setSvgId = function(id) {
   if (this.bubbleGroup_.dataset) {
-    this.bubbleGroup_.dataset.blockId = id;
+    this.bubbleGroup_.dataset['blockId'] = id;
   }
 };
 

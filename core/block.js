@@ -56,7 +56,8 @@ goog.require('Blockly.Workspace');
  * @throws When block is not valid or block name is not allowed.
  */
 Blockly.Block = function(workspace, prototypeName, opt_id) {
-  if (typeof Blockly.Generator.prototype[prototypeName] !== 'undefined') {
+  if (Blockly.Generator &&
+      typeof Blockly.Generator.prototype[prototypeName] != 'undefined') {
     // Occluding Generator class members is not allowed.
     throw Error('Block prototypeName "' + prototypeName +
         '" conflicts with Blockly.Generator members.');
@@ -1056,7 +1057,7 @@ Blockly.Block.prototype.setOnChange = function(onchangeFn) {
 Blockly.Block.prototype.getField = function(name) {
   for (var i = 0, input; input = this.inputList[i]; i++) {
     for (var j = 0, field; field = input.fieldRow[j]; j++) {
-      if (field.name === name) {
+      if (field.name == name) {
         return field;
       }
     }

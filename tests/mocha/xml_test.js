@@ -276,6 +276,14 @@ suite('XML', function() {
           var resultFieldDom = Blockly.Xml.blockToDom(block).childNodes[0];
           assertVariableField(resultFieldDom, 'VAR', null, 'id1', 'name1');
         });
+        test('Variable Typed', function() {
+          this.workspace.createVariable('name1', 'string', 'id1');
+          var block = new Blockly.Block(this.workspace,
+              'field_variable_test_block');
+          block.inputList[0].fieldRow[0].setValue('id1');
+          var resultFieldDom = Blockly.Xml.blockToDom(block).childNodes[0];
+          assertVariableField(resultFieldDom, 'VAR', 'string', 'id1', 'name1');
+        });
         test('Variable Default Case', function() {
           var cacheGenUid = Blockly.utils.genUid;
           Blockly.utils.genUid = function() {

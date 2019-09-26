@@ -55,7 +55,7 @@ Blockly.ThemeManager = function(theme) {
 
   /**
    * A map of subscribed UI components, keyed by component name.
-   * @type {!Object<string, !Array.<!Blockly.ThemeManager.Component>>}
+   * @type {!Object.<string, !Array.<!Blockly.ThemeManager.Component>>}
    * @private
    */
   this.componentDB_ = Object.create(null);
@@ -64,7 +64,7 @@ Blockly.ThemeManager = function(theme) {
 /**
  * A Blockly UI component type.
  * @typedef {{
-  *            element:Element,
+  *            element:!Element,
   *            propertyName:string
   *          }}
   */

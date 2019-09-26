@@ -33,11 +33,11 @@ goog.provide('Blockly.Theme');
  * @param {!Object.<string, Blockly.Theme.CategoryStyle>} categoryStyles A map from
  *     style names (strings) to objects with style attributes relating to
  *     categories.
- * @param {Object.<string, string>=} componentStyles A map of Blockly component names
+ * @param {!Object.<string, *>=} opt_componentStyles A map of Blockly component names
  *     to style value.
  * @constructor
  */
-Blockly.Theme = function(blockStyles, categoryStyles, componentStyles) {
+Blockly.Theme = function(blockStyles, categoryStyles, opt_componentStyles) {
   /**
    * The block styles map.
    * @type {!Object.<string, Blockly.Theme.BlockStyle>}
@@ -54,7 +54,7 @@ Blockly.Theme = function(blockStyles, categoryStyles, componentStyles) {
    * The UI components styles map.
    * @type {!Object.<string, *>}
    */
-  this.componentStyles_ = componentStyles || Object.create(null);
+  this.componentStyles_ = opt_componentStyles || Object.create(null);
 };
 
 /**
@@ -136,7 +136,7 @@ Blockly.Theme.prototype.setCategoryStyle = function(categoryStyleName,
  * Gets the style for a given Blockly UI component.  If the style value is a
  * string, we attempt to find the value of any named references.
  * @param {string} componentName The name of the component.
- * @return {string} The style value.
+ * @return {?string} The style value.
  */
 Blockly.Theme.prototype.getComponentStyle = function(componentName) {
   var style = this.componentStyles_[componentName];
@@ -144,7 +144,7 @@ Blockly.Theme.prototype.getComponentStyle = function(componentName) {
       this.getComponentStyle(/** @type {string} */ (style))) {
     return this.getComponentStyle(/** @type {string} */ (style));
   }
-  return String(style);
+  return style ? String(style) : null;
 };
 
 /**

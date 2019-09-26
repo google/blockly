@@ -93,14 +93,14 @@ Blockly.ThemeManager.prototype.setTheme = function(theme) {
   this.theme_ = theme;
 
   // Refresh all subscribed workspaces.
-  for (var i = 0, workspace; workspace = this.subscribedWorkspaces_[i]; i++) {
+  for (var i = 0, workspace; (workspace = this.subscribedWorkspaces_[i]); i++) {
     workspace.refreshTheme();
   }
 
   // Refresh all registered Blockly UI components.
   for (var i = 0, keys = Object.keys(this.componentDB_),
     key; key = keys[i]; i++) {
-    for (var j = 0, component; component = this.componentDB_[key][j]; j++) {
+    for (var j = 0, component; (component = this.componentDB_[key][j]); j++) {
       var element = component.element;
       var propertyName = component.propertyName;
       var style = this.theme_ && this.theme_.getComponentStyle(key);
@@ -169,7 +169,7 @@ Blockly.ThemeManager.prototype.unsubscribe = function(element) {
   }
   // Go through all component, and remove any references to this element.
   var componentNames = Object.keys(this.componentDB_);
-  for (var c = 0, componentName; componentName = componentNames[c]; c++) {
+  for (var c = 0, componentName; (componentName = componentNames[c]); c++) {
     var elements = this.componentDB_[componentName];
     for (var i = elements.length - 1; i >= 0; i--) {
       if (elements[i].element === element) {

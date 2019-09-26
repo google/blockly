@@ -167,7 +167,7 @@ Blockly.Toolbox.prototype.init = function() {
           Blockly.hideChaff(true);
         }
         Blockly.Touch.clearTouchIdentifier();  // Don't block future drags.
-      }, /*opt_noCaptureIdentifier*/ false, /*opt_noPreventDefault*/ true);
+      }, /* opt_noCaptureIdentifier */ false, /* opt_noPreventDefault */ true);
   var workspaceOptions = {
     disabledPatternId: workspace.options.disabledPatternId,
     parentWorkspace: workspace,

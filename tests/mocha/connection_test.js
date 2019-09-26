@@ -288,11 +288,11 @@ suite('Connections', function() {
         var blockD = this.workspace.newBlock('row_block');
 
         blockB.setShadow(true);
-        var shadowStatement = Blockly.Xml.blockToDom(blockB, true /*noid*/);
+        var shadowStatement = Blockly.Xml.blockToDom(blockB, true /* noid */);
         blockB.setShadow(false);
 
         blockD.setShadow(true);
-        var shadowValue = Blockly.Xml.blockToDom(blockD, true /*noid*/);
+        var shadowValue = Blockly.Xml.blockToDom(blockD, true /* noid */);
         blockD.setShadow(false);
 
         var connection = blockA.getInput('STATEMENT').connection;

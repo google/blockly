@@ -69,10 +69,11 @@
         "no-console": ["off"],
         "no-multi-spaces": ["error", { "ignoreEOLComments": true }],
         "operator-linebreak": ["error", "after"],
-        "spaced-comment": ["warn", "always", {
+        "spaced-comment": ["error", "always", {
             "block": {
                 "balanced": true
-            }
+            },
+            "exceptions": ["*"]
         }]
     },
     "env": {

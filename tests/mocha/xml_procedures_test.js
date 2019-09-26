@@ -217,8 +217,8 @@ suite('Procedures XML', function() {
           chai.assert.isEmpty(block.arguments_);
           // TODO: argumentVarModels_ is undefined for call_return, but
           //  defined for call_noreturn. Make it defined for both.
-          /*chai.assert.isArray(block.argumentVarModels_);
-          chai.assert.isEmpty(block.argumentVarModels_);*/
+          /* chai.assert.isArray(block.argumentVarModels_);
+          chai.assert.isEmpty(block.argumentVarModels_); */
         });
       });
       // TODO: I couldn't get this test (of creating a definition) to work
@@ -239,8 +239,8 @@ suite('Procedures XML', function() {
           chai.assert.isEmpty(block.arguments_);
           // TODO: argumentVarModels_ is undefined for call_return, but
           //  defined for call_noreturn. Make it defined for both.
-          /*chai.assert.isArray(block.argumentVarModels_);
-          chai.assert.isEmpty(block.argumentVarModels_);*/
+          /* chai.assert.isArray(block.argumentVarModels_);
+          chai.assert.isEmpty(block.argumentVarModels_); */
           chai.assert.equal(this.workspace.getAllBlocks().count, 2);
         });
       });

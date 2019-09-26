@@ -33,20 +33,11 @@ goog.require('Blockly.Theme');
 
 /**
  * Class for storing and updating a workspace's theme and UI components.
- * @param {!Blockly.Workspace} workspace The workspace that this theme
- *     manager belongs to.
  * @param {!Blockly.Theme} theme The workspace theme.
  * @constructor
  * @package
  */
-Blockly.ThemeManager = function(workspace, theme) {
-
-  /**
-   * The workspace that this object belongs to.
-   * @type {!Blockly.Workspace}
-   * @private
-   */
-  this.workspace_ = workspace;
+Blockly.ThemeManager = function(theme) {
 
   /**
    * The Blockly theme to use.
@@ -67,7 +58,7 @@ Blockly.ThemeManager = function(workspace, theme) {
    * @type {!Object<string, !Array.<!Blockly.ThemeManager.Component>>}
    * @private
    */
-  this.componentMap_ = {};
+  this.componentDB_ = Object.create(null);
 };
 
 /**
@@ -78,16 +69,6 @@ Blockly.ThemeManager = function(workspace, theme) {
   *          }}
   */
 Blockly.ThemeManager.Component;
-
-/**
- * Check whether or not a workspace is the owner of this theme manager.
- * @param {!Blockly.Workspace} workspace The workspace to check.
- * @return {boolean} True if the workspace is the owner of this theme manager.
- * @package
- */
-Blockly.ThemeManager.prototype.isOwner = function(workspace) {
-  return this.workspace_ === workspace;
-};
 
 /**
  * Get the workspace theme.
@@ -117,12 +98,13 @@ Blockly.ThemeManager.prototype.setTheme = function(theme) {
   }
 
   // Refresh all registered Blockly UI components.
-  for (var i = 0, keys = Object.keys(this.componentMap_),
+  for (var i = 0, keys = Object.keys(this.componentDB_),
     key; key = keys[i]; i++) {
-    for (var j = 0, component; component = this.componentMap_[key][j]; j++) {
+    for (var j = 0, component; component = this.componentDB_[key][j]; j++) {
       var element = component.element;
       var propertyName = component.propertyName;
-      element.style[propertyName] = this.theme_.getComponentStyle(key) || '';
+      var style = this.theme_ && this.theme_.getComponentStyle(key);
+      element.style[propertyName] = style || '';
     }
   }
 };
@@ -143,8 +125,11 @@ Blockly.ThemeManager.prototype.subscribeWorkspace = function(workspace) {
  * @package
  */
 Blockly.ThemeManager.prototype.unsubscribeWorkspace = function(workspace) {
-  this.subscribedWorkspaces_.splice(
-      this.subscribedWorkspaces_.indexOf(workspace), 1);
+  var index = this.subscribedWorkspaces_.indexOf(workspace);
+  if (index < 0) {
+    throw Error('Cannot unsubscribe a workspace that hasn\'t been subscribed.');
+  }
+  this.subscribedWorkspaces_.splice(index, 1);
 };
 
 /**
@@ -158,19 +143,19 @@ Blockly.ThemeManager.prototype.unsubscribeWorkspace = function(workspace) {
  */
 Blockly.ThemeManager.prototype.subscribe = function(element, componentName,
     propertyName) {
-  if (!this.componentMap_[componentName]) {
-    this.componentMap_[componentName] = [];
+  if (!this.componentDB_[componentName]) {
+    this.componentDB_[componentName] = [];
   }
 
   // Add the element to our component map.
-  this.componentMap_[componentName].push({
+  this.componentDB_[componentName].push({
     element: element,
     propertyName: propertyName
   });
 
   // Initialize the element with its corresponding theme style.
-  element.style[propertyName] =
-      this.theme_.getComponentStyle(componentName) || '';
+  var style = this.theme_ && this.theme_.getComponentStyle(componentName);
+  element.style[propertyName] = style || '';
 };
 
 /**
@@ -183,17 +168,17 @@ Blockly.ThemeManager.prototype.unsubscribe = function(element) {
     return;
   }
   // Go through all component, and remove any references to this element.
-  var componentNames = Object.keys(this.componentMap_);
+  var componentNames = Object.keys(this.componentDB_);
   for (var c = 0, componentName; componentName = componentNames[c]; c++) {
-    var elements = this.componentMap_[componentName];
+    var elements = this.componentDB_[componentName];
     for (var i = elements.length - 1; i >= 0; i--) {
       if (elements[i].element === element) {
         elements.splice(i, 1);
       }
     }
     // Clean up the component map entry if the list is empty.
-    if (!this.componentMap_[componentName].length) {
-      delete this.componentMap_[componentName];
+    if (!this.componentDB_[componentName].length) {
+      delete this.componentDB_[componentName];
     }
   }
 };
@@ -207,5 +192,5 @@ Blockly.ThemeManager.prototype.dispose = function() {
   this.owner_ = null;
   this.theme_ = null;
   this.subscribedWorkspaces_ = null;
-  this.componentMap_ = null;
+  this.componentDB_ = null;
 };

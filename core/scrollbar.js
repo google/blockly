@@ -347,12 +347,14 @@ Blockly.Scrollbar.prototype.dispose = function() {
   Blockly.unbindEvent_(this.onMouseDownHandleWrapper_);
   this.onMouseDownHandleWrapper_ = null;
 
-  this.workspace_.getThemeManager().unsubscribe(this.svgHandle_);
   Blockly.utils.dom.removeNode(this.outerSvg_);
   this.outerSvg_ = null;
   this.svgGroup_ = null;
   this.svgBackground_ = null;
-  this.svgHandle_ = null;
+  if (this.svgHandle_) {
+    this.workspace_.getThemeManager().unsubscribe(this.svgHandle_);
+    this.svgHandle_ = null;
+  }
   this.workspace_ = null;
 };
 

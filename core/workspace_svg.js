@@ -689,8 +689,6 @@ Blockly.WorkspaceSvg.prototype.dispose = function() {
   if (this.currentGesture_) {
     this.currentGesture_.cancel();
   }
-  this.themeManager_.unsubscribe(this.svgBackground_);
-  Blockly.WorkspaceSvg.superClass_.dispose.call(this);
   if (this.svgGroup_) {
     Blockly.utils.dom.removeNode(this.svgGroup_);
     this.svgGroup_ = null;
@@ -735,6 +733,11 @@ Blockly.WorkspaceSvg.prototype.dispose = function() {
     this.grid_.dispose();
     this.grid_ = null;
   }
+
+  if (this.themeManager_) {
+    this.themeManager_.unsubscribe(this.svgBackground_);
+  }
+  Blockly.WorkspaceSvg.superClass_.dispose.call(this);
 
   this.connectionDBList = null;
 
@@ -2525,4 +2528,18 @@ Blockly.WorkspaceSvg.prototype.getAudioManager = function() {
  */
 Blockly.WorkspaceSvg.prototype.getGrid = function() {
   return this.grid_;
+};
+
+/**
+ * Refresh all blocks on the workspace, toolbox and flyout after a theme update.
+ * @override
+ */
+Blockly.WorkspaceSvg.prototype.refreshTheme = function() {
+  Blockly.WorkspaceSvg.superClass_.refreshTheme.call(this);
+
+  // Update current toolbox selection.
+  this.refreshToolboxSelection();
+  if (this.toolbox_) {
+    this.toolbox_.updateColourFromTheme();
+  }
 };

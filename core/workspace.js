@@ -138,7 +138,7 @@ Blockly.Workspace = function(opt_options) {
    */
   this.themeManager_ = this.options.parentWorkspace ?
       this.options.parentWorkspace.getThemeManager() :
-      new Blockly.ThemeManager(this, this.options.theme);
+      new Blockly.ThemeManager(this.options.theme);
   
   this.themeManager_.subscribeWorkspace(this);
 };
@@ -220,9 +220,7 @@ Blockly.Workspace.prototype.setTheme = function(theme) {
 };
 
 /**
- * Sets the workspace theme and refreshes all blocks in the toolbox,
- * flyout and workspace.
- * @param {!Blockly.Theme} theme The desired workspace theme.
+ * Refresh all blocks on the workspace after a theme update.
  */
 Blockly.Workspace.prototype.refreshTheme = function() {
   // Update all blocks in workspace that have a style name.
@@ -232,13 +230,7 @@ Blockly.Workspace.prototype.refreshTheme = function() {
       }
   ));
 
-  // Update current toolbox selection.
-  if (this.toolbox_) {
-    this.refreshToolboxSelection();
-    this.toolbox_.updateColourFromTheme();
-  }
-
-  var event = new Blockly.Events.Ui(null, 'theme');
+  var event = new Blockly.Events.Ui(null, 'theme', null, null);
   event.workspaceId = this.id;
   Blockly.Events.fire(event);
 };
@@ -270,10 +262,13 @@ Blockly.Workspace.prototype.dispose = function() {
   // Remove from workspace database.
   delete Blockly.Workspace.WorkspaceDB_[this.id];
 
-  this.themeManager_.unsubscribeWorkspace(this);
-  if (this.themeManager_ && this.themeManager_.isOwner(this)) {
-    this.themeManager_.dispose();
-    this.themeManager_ = null;
+  if (this.themeManager_) {
+    this.themeManager_.unsubscribeWorkspace(this);
+    this.themeManager_.unsubscribe(this.svgBackground_);
+    if (!this.options.parentWorkspace) {
+      this.themeManager_.dispose();
+      this.themeManager_ = null;
+    }
   }
 };
 

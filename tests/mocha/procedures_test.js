@@ -252,7 +252,9 @@ suite('Procedures', function() {
     });
     test('Multiple Workspaces', function() {
       this.callForAllTypes(function() {
-        var workspace = new Blockly.Workspace();
+        var workspace = new Blockly.Workspace({
+          theme: this.workspace.getTheme()
+        });
         var def2 = new Blockly.Block(workspace, this.defType);
         def2.setFieldValue('name', 'NAME');
         var caller2 = new Blockly.Block(workspace, this.callType);
@@ -294,7 +296,9 @@ suite('Procedures', function() {
     });
     test('Multiple Workspaces', function() {
       this.callForAllTypes(function() {
-        var workspace = new Blockly.Workspace();
+        var workspace = new Blockly.Workspace({
+          theme: this.workspace.getTheme()
+        });
         var def2 = new Blockly.Block(workspace, this.defType);
         def2.setFieldValue('name', 'NAME');
         var caller2 = new Blockly.Block(workspace, this.callType);
@@ -321,8 +325,10 @@ suite('Procedures', function() {
     });
     suite('Composition', function() {
       suite('Statements', function() {
-        function setStatementValue(defBlock, value) {
-          var mutatorWorkspace = new Blockly.Workspace();
+        function setStatementValue(mainWorkspace, defBlock, value) {
+          var mutatorWorkspace = new Blockly.Workspace({
+            parentWorkspace: mainWorkspace
+          });
           defBlock.decompose(mutatorWorkspace);
           var containerBlock = mutatorWorkspace.getTopBlocks()[0];
           var statementField = containerBlock.getField('STATEMENTS');
@@ -331,12 +337,12 @@ suite('Procedures', function() {
         }
         test('Has Statements', function() {
           var defBlock = new Blockly.Block(this.workspace, 'procedures_defreturn');
-          setStatementValue(defBlock, true);
+          setStatementValue(this.workspace, defBlock, true);
           chai.assert.isTrue(defBlock.hasStatements_);
         });
         test('Has No Statements', function() {
           var defBlock = new Blockly.Block(this.workspace, 'procedures_defreturn');
-          setStatementValue(defBlock, false);
+          setStatementValue(this.workspace, defBlock, false);
           chai.assert.isFalse(defBlock.hasStatements_);
         });
         test('Saving Statements', function() {
@@ -348,9 +354,9 @@ suite('Procedures', function() {
               '</block>'
           );
           var defBlock = Blockly.Xml.domToBlock(blockXml, this.workspace);
-          setStatementValue(defBlock, false);
+          setStatementValue(this.workspace, defBlock, false);
           chai.assert.isNull(defBlock.getInput('STACK'));
-          setStatementValue(defBlock, true);
+          setStatementValue(this.workspace, defBlock, true);
           chai.assert.isNotNull(defBlock.getInput('STACK'));
           var statementBlocks = defBlock.getChildren();
           chai.assert.equal(statementBlocks.length, 1);
@@ -361,7 +367,9 @@ suite('Procedures', function() {
       });
       suite('Untyped Arguments', function() {
         function createMutator(argArray) {
-          this.mutatorWorkspace = new Blockly.Workspace();
+          this.mutatorWorkspace = new Blockly.Workspace({
+            parentWorkspace: this.workspace
+          });
           this.containerBlock = this.defBlock.decompose(this.mutatorWorkspace);
           this.connection = this.containerBlock.getInput('STACK').connection;
           for (var i = 0; i < argArray.length; i++) {
@@ -496,7 +504,9 @@ suite('Procedures', function() {
       suite('Statements', function() {
         test('Has Statement Input', function() {
           this.callForAllTypes(function() {
-            var mutatorWorkspace = new Blockly.Workspace();
+            var mutatorWorkspace = new Blockly.Workspace({
+              parentWorkspace: this.workspace
+            });
             this.defBlock.decompose(mutatorWorkspace);
             var statementInput = mutatorWorkspace.getTopBlocks()[0]
                 .getInput('STATEMENT_INPUT');
@@ -510,7 +520,9 @@ suite('Procedures', function() {
         test('Has Statements', function() {
           var defBlock = new Blockly.Block(this.workspace, 'procedures_defreturn');
           defBlock.hasStatements_ = true;
-          var mutatorWorkspace = new Blockly.Workspace();
+          var mutatorWorkspace = new Blockly.Workspace({
+            parentWorkspace: this.workspace
+          });
           defBlock.decompose(mutatorWorkspace);
           var statementValue = mutatorWorkspace.getTopBlocks()[0]
               .getField('STATEMENTS').getValueBoolean();
@@ -519,7 +531,9 @@ suite('Procedures', function() {
         test('No Has Statements', function() {
           var defBlock = new Blockly.Block(this.workspace, 'procedures_defreturn');
           defBlock.hasStatements_ = false;
-          var mutatorWorkspace = new Blockly.Workspace();
+          var mutatorWorkspace = new Blockly.Workspace({
+            parentWorkspace: this.workspace
+          });
           defBlock.decompose(mutatorWorkspace);
           var statementValue = mutatorWorkspace.getTopBlocks()[0]
               .getField('STATEMENTS').getValueBoolean();
@@ -529,7 +543,9 @@ suite('Procedures', function() {
       suite('Untyped Arguments', function() {
         function assertArguments(argumentsArray) {
           this.defBlock.arguments_ = argumentsArray;
-          var mutatorWorkspace = new Blockly.Workspace();
+          var mutatorWorkspace = new Blockly.Workspace({
+            parentWorkspace: this.workspace
+          });
           this.defBlock.decompose(mutatorWorkspace);
           var argBlocks = mutatorWorkspace.getBlocksByType('procedures_mutatorarg');
           chai.assert.equal(argBlocks.length, argumentsArray.length);

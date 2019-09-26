@@ -2532,6 +2532,7 @@ Blockly.WorkspaceSvg.prototype.getGrid = function() {
 
 /**
  * Refresh all blocks on the workspace, toolbox and flyout after a theme update.
+ * @package
  * @override
  */
 Blockly.WorkspaceSvg.prototype.refreshTheme = function() {

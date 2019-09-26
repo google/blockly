@@ -221,6 +221,7 @@ Blockly.Workspace.prototype.setTheme = function(theme) {
 
 /**
  * Refresh all blocks on the workspace after a theme update.
+ * @package
  */
 Blockly.Workspace.prototype.refreshTheme = function() {
   // Update all blocks in workspace that have a style name.
@@ -876,6 +877,7 @@ Blockly.Workspace.getAll = function() {
 /**
  * Get the theme manager for this workspace.
  * @return {!Blockly.ThemeManager} The theme manager for this workspace.
+ * @package
  */
 Blockly.Workspace.prototype.getThemeManager = function() {
   return this.themeManager_;

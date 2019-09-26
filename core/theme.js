@@ -54,7 +54,7 @@ Blockly.Theme = function(blockStyles, categoryStyles, componentStyles) {
    * The UI components styles map.
    * @type {!Object.<string, *>}
    */
-  this.componentStyles_ = componentStyles || {};
+  this.componentStyles_ = componentStyles || Object.create(null);
 };
 
 /**

@@ -147,7 +147,7 @@ Blockly.navigation.focusWorkspace_ = function() {
   Blockly.hideChaff();
   var workspace = Blockly.getMainWorkspace();
   var cursor = workspace.getCursor();
-  var reset = workspace.getToolbox() ? true : false;
+  var reset = !!workspace.getToolbox();
   var topBlocks = workspace.getTopBlocks(true);
 
   Blockly.navigation.resetFlyout_(reset);
@@ -604,16 +604,14 @@ Blockly.navigation.getSourceBlock_ = function(node) {
 /**
  * Gets the top node on a block.
  * This is either the previous connection, output connection or the block.
- * @param {Blockly.Block} block The block to find the top most AST node on.
+ * @param {!Blockly.Block} block The block to find the top most AST node on.
  * @return {Blockly.ASTNode} The AST node holding the top most node on the
  *     block.
  * @package
  */
 Blockly.navigation.getTopNode = function(block) {
-  var prevConnection = block.previousConnection;
-  var outConnection = block.outputConnection;
-  var topConnection = prevConnection ? prevConnection : outConnection;
-  var astNode = null;
+  var astNode;
+  var topConnection = block.previousConnection || block.outputConnection;
   if (topConnection) {
     astNode = Blockly.ASTNode.createConnectionNode(topConnection);
   } else {
@@ -639,8 +637,7 @@ Blockly.navigation.moveCursorOnBlockDelete = function(deletedBlock) {
     if (block === deletedBlock) {
       // If the block has a parent move the cursor to their connection point.
       if (block.getParent()) {
-        var topConnection = block.previousConnection ?
-          block.previousConnection : block.outputConnection;
+        var topConnection = block.previousConnection || block.outputConnection;
         if (topConnection) {
           cursor.setCurNode(
               Blockly.ASTNode.createConnectionNode(topConnection.targetConnection));
@@ -706,7 +703,7 @@ Blockly.navigation.disableKeyboardAccessibility = function() {
  * Navigation log handler. If loggingCallback is defined, use it.
  * Otherwise just log to the console.
  * @param {string} msg The message to log.
- * @package
+ * @private
  */
 Blockly.navigation.log_ = function(msg) {
   if (Blockly.navigation.loggingCallback) {
@@ -720,7 +717,7 @@ Blockly.navigation.log_ = function(msg) {
  * Navigation warning handler. If loggingCallback is defined, use it.
  * Otherwise call Blockly.navigation.warn_.
  * @param {string} msg The warning message.
- * @package
+ * @private
  */
 Blockly.navigation.warn_ = function(msg) {
   if (Blockly.navigation.loggingCallback) {
@@ -734,7 +731,7 @@ Blockly.navigation.warn_ = function(msg) {
  * Navigation error handler. If loggingCallback is defined, use it.
  * Otherwise call console.error.
  * @param {string} msg The error message.
- * @package
+ * @private
  */
 Blockly.navigation.error_ = function(msg) {
   if (Blockly.navigation.loggingCallback) {
@@ -916,9 +913,8 @@ Blockly.navigation.handleEnterForWS_ = function() {
   var cursor = Blockly.getMainWorkspace().getCursor();
   var curNode = cursor.getCurNode();
   var nodeType = curNode.getType();
-  if (nodeType === Blockly.ASTNode.types.FIELD) {
-    var location = curNode.getLocation();
-    location.showEditor_();
+  if (nodeType == Blockly.ASTNode.types.FIELD) {
+    curNode.getLocation().showEditor_();
   } else if (curNode.isConnection() ||
       nodeType == Blockly.ASTNode.types.WORKSPACE) {
     Blockly.navigation.markAtCursor_();

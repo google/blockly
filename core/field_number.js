@@ -98,7 +98,7 @@ Blockly.utils.object.inherits(Blockly.FieldNumber, Blockly.FieldTextInput);
  */
 Blockly.FieldNumber.fromJson = function(options) {
   return new Blockly.FieldNumber(options['value'],
-      null, null, null, null, options);
+      undefined, undefined, undefined, undefined, options);
 };
 
 /**

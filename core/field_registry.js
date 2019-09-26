@@ -38,25 +38,42 @@ goog.provide('Blockly.fieldRegistry');
 Blockly.fieldRegistry.typeMap_ = {};
 
 /**
- * Registers a field type. May also override an existing field type.
+ * Registers a field type.
  * Blockly.fieldRegistry.fromJson uses this registry to
  * find the appropriate field type.
  * @param {string} type The field type name as used in the JSON definition.
  * @param {!{fromJson: Function}} fieldClass The field class containing a
  *     fromJson function that can construct an instance of the field.
- * @throws {Error} if the type name is empty, or the fieldClass is not an
- *     object containing a fromJson function.
+ * @throws {Error} if the type name is empty, the field is already
+ *     registered, or the fieldClass is not an object containing a fromJson
+ *     function.
  */
 Blockly.fieldRegistry.register = function(type, fieldClass) {
   if ((typeof type != 'string') || (type.trim() == '')) {
     throw Error('Invalid field type "' + type + '". The type must be a' +
       ' non-empty string.');
   }
+  if (Blockly.fieldRegistry.typeMap_[type]) {
+    throw Error('Error: Field "' + type + '" is already registered.');
+  }
   if (!fieldClass || (typeof fieldClass.fromJson != 'function')) {
     throw Error('Field "' + fieldClass + '" must have a fromJson function');
   }
   type = type.toLowerCase();
   Blockly.fieldRegistry.typeMap_[type] = fieldClass;
+};
+
+/**
+ * Unregisters the field registered with the given type.
+ * @param {string} type The field type name as used in the JSON definition.
+ */
+Blockly.fieldRegistry.unregister = function(type) {
+  if (Blockly.fieldRegistry.typeMap_[type]) {
+    Blockly.fieldRegistry.typeMap_[type] = undefined;
+  } else {
+    console.warn('No field mapping for type "' + type +
+        '" found to unregister');
+  }
 };
 
 /**

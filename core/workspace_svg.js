@@ -97,7 +97,7 @@ Blockly.WorkspaceSvg = function(options,
 
   /**
    * Object in charge of loading, storing, and playing audio for a workspace.
-   * @type {Blockly.WorkspaceAudio}
+   * @type {!Blockly.WorkspaceAudio}
    * @private
    */
   this.audioManager_ = new Blockly.WorkspaceAudio(options.parentWorkspace);
@@ -636,6 +636,8 @@ Blockly.WorkspaceSvg.prototype.createDom = function(opt_backgroundClass) {
     if (opt_backgroundClass == 'blocklyMainBackground' && this.grid_) {
       this.svgBackground_.style.fill =
           'url(#' + this.grid_.getPatternId() + ')';
+    } else {
+      this.themeManager_.subscribe(this.svgBackground_, 'workspace', 'fill');
     }
   }
   /** @type {SVGElement} */
@@ -686,7 +688,6 @@ Blockly.WorkspaceSvg.prototype.dispose = function() {
   if (this.currentGesture_) {
     this.currentGesture_.cancel();
   }
-  Blockly.WorkspaceSvg.superClass_.dispose.call(this);
   if (this.svgGroup_) {
     Blockly.utils.dom.removeNode(this.svgGroup_);
     this.svgGroup_ = null;
@@ -731,6 +732,11 @@ Blockly.WorkspaceSvg.prototype.dispose = function() {
     this.grid_.dispose();
     this.grid_ = null;
   }
+
+  if (this.themeManager_) {
+    this.themeManager_.unsubscribe(this.svgBackground_);
+  }
+  Blockly.WorkspaceSvg.superClass_.dispose.call(this);
 
   this.connectionDBList = null;
 
@@ -2508,7 +2514,7 @@ Blockly.WorkspaceSvg.prototype.cancelCurrentGesture = function() {
 
 /**
  * Get the audio manager for this workspace.
- * @return {Blockly.WorkspaceAudio} The audio manager for this workspace.
+ * @return {!Blockly.WorkspaceAudio} The audio manager for this workspace.
  */
 Blockly.WorkspaceSvg.prototype.getAudioManager = function() {
   return this.audioManager_;
@@ -2521,4 +2527,19 @@ Blockly.WorkspaceSvg.prototype.getAudioManager = function() {
  */
 Blockly.WorkspaceSvg.prototype.getGrid = function() {
   return this.grid_;
+};
+
+/**
+ * Refresh all blocks on the workspace, toolbox and flyout after a theme update.
+ * @package
+ * @override
+ */
+Blockly.WorkspaceSvg.prototype.refreshTheme = function() {
+  Blockly.WorkspaceSvg.superClass_.refreshTheme.call(this);
+
+  // Update current toolbox selection.
+  this.refreshToolboxSelection();
+  if (this.toolbox_) {
+    this.toolbox_.updateColourFromTheme();
+  }
 };

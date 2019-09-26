@@ -351,7 +351,10 @@ Blockly.Scrollbar.prototype.dispose = function() {
   this.outerSvg_ = null;
   this.svgGroup_ = null;
   this.svgBackground_ = null;
-  this.svgHandle_ = null;
+  if (this.svgHandle_) {
+    this.workspace_.getThemeManager().unsubscribe(this.svgHandle_);
+    this.svgHandle_ = null;
+  }
   this.workspace_ = null;
 };
 
@@ -625,6 +628,8 @@ Blockly.Scrollbar.prototype.createDom_ = function(opt_class) {
         'ry': radius
       },
       this.svgGroup_);
+  this.workspace_.getThemeManager().subscribe(this.svgHandle_, 'scrollbar', 'fill');
+  this.workspace_.getThemeManager().subscribe(this.svgHandle_, 'scrollbarOpacity', 'fill-opacity');
   Blockly.utils.dom.insertAfter(this.outerSvg_, this.workspace_.getParentSvg());
 };
 

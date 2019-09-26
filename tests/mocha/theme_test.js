@@ -137,10 +137,10 @@ suite('Theme', function() {
 
     var stub = sinon.stub(Blockly, "getMainWorkspace").returns(workspace);
 
-    Blockly.setTheme(blockStyles);
+    workspace.setTheme(blockStyles);
 
     // Checks that the theme was set correctly on Blockly namespace
-    stringifyAndCompare(Blockly.getTheme(), blockStyles);
+    stringifyAndCompare(workspace.getTheme(), blockStyles);
 
     // Checks that the setTheme function was called on the block
     assertEquals(blockA.getStyleName(), 'styleTwo');

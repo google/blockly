@@ -156,6 +156,9 @@ Blockly.Toolbox.prototype.init = function() {
   this.HtmlDiv.className = 'blocklyToolboxDiv blocklyNonSelectable';
   this.HtmlDiv.setAttribute('dir', workspace.RTL ? 'RTL' : 'LTR');
   svg.parentNode.insertBefore(this.HtmlDiv, svg);
+  var themeManager = workspace.getThemeManager();
+  themeManager.subscribe(this.HtmlDiv, 'toolbox', 'background-color');
+  themeManager.subscribe(this.HtmlDiv, 'toolboxText', 'color');
 
   // Clicking on toolbox closes popups.
   Blockly.bindEventWithChecks_(this.HtmlDiv, 'mousedown', this,
@@ -350,6 +353,7 @@ Blockly.Toolbox.prototype.onBlocklyAction = function(action) {
 Blockly.Toolbox.prototype.dispose = function() {
   this.flyout_.dispose();
   this.tree_.dispose();
+  this.workspace_.getThemeManager().unsubscribe(this.HtmlDiv);
   Blockly.utils.dom.removeNode(this.HtmlDiv);
   this.workspace_ = null;
   this.lastCategory_ = null;
@@ -533,8 +537,9 @@ Blockly.Toolbox.prototype.setColour_ = function(colourValue, childOut,
 Blockly.Toolbox.prototype.setColourFromStyle_ = function(
     styleName, childOut, categoryName) {
   childOut.styleName = styleName;
-  if (styleName && Blockly.getTheme()) {
-    var style = Blockly.getTheme().getCategoryStyle(styleName);
+  var theme = this.workspace_.getTheme();
+  if (styleName && theme) {
+    var style = theme.getCategoryStyle(styleName);
     if (style && style.colour) {
       this.setColour_(style.colour, childOut, categoryName);
     } else {
@@ -566,6 +571,7 @@ Blockly.Toolbox.prototype.updateColourFromTheme_ = function(opt_tree) {
 
 /**
  * Updates the category colours and background colour of selected categories.
+ * @package
  */
 Blockly.Toolbox.prototype.updateColourFromTheme = function() {
   var tree = this.tree_;

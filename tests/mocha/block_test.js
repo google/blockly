@@ -69,6 +69,16 @@ suite('Blocks', function() {
         // B is the top of its stack.
         assertNull(blocks.B.getParent());
       }
+      function assertUnpluggedHealFailed(blocks) {
+        // A has nothing connected to it.
+        assertEquals(0, blocks.A.getChildren().length);
+        // B has nothing connected to it.
+        assertEquals(0, blocks.B.getChildren().length);
+        // B is the top of its stack.
+        assertNull(blocks.B.getParent());
+        // C is the top of its stack.
+        assertNull(blocks.C.getParent());
+      }
 
       suite('Row', function() {
         setup(function() {
@@ -106,7 +116,7 @@ suite('Blocks', function() {
 
           // Each block has only one input, but the types don't work.
           blocks.B.unplug(true);
-          assertUnpluggedNoheal(blocks);
+          assertUnpluggedHealFailed(blocks);
         });
         test('A has multiple inputs', function() {
           var blocks = this.blocks;
@@ -165,7 +175,7 @@ suite('Blocks', function() {
           this.blocks.B.unplug(true);
           assertUnpluggedHealed(this.blocks);
         });
-        test.skip('Heal with bad checks', function() {
+        test('Heal with bad checks', function() {
           var blocks = this.blocks;
           // A and C can't connect, but both can connect to B.
           blocks.A.nextConnection.setCheck('type1');
@@ -174,9 +184,7 @@ suite('Blocks', function() {
           // The types don't work.
           blocks.B.unplug(true);
 
-          // TODO (#1994): Check types before unplugging. Currently
-          //  everything disconnects, when C should stick with B
-          assertUnpluggedNoheal();
+          assertUnpluggedHealFailed(blocks);
         });
         test('C is Shadow', function() {
           var blocks = this.blocks;
@@ -206,6 +214,16 @@ suite('Blocks', function() {
         assertEquals(blocks.A, blocks.C.getParent());
         // B is disposed.
         chai.assert.isTrue(blocks.B.disposed);
+      }
+      function assertDisposedHealFailed(blocks) {
+        chai.assert.isFalse(blocks.A.disposed);
+        chai.assert.isFalse(blocks.C.disposed);
+        // A has nothing connected to it.
+        chai.assert.equal(0, blocks.A.getChildren().length);
+        // B is disposed.
+        chai.assert.isTrue(blocks.B.disposed);
+        // C is the top of its stack.
+        assertNull(blocks.C.getParent());
       }
 
       suite('Row', function() {
@@ -244,7 +262,7 @@ suite('Blocks', function() {
 
           // Each block has only one input, but the types don't work.
           blocks.B.dispose(true);
-          assertDisposedNoheal(blocks);
+          assertDisposedHealFailed(blocks);
         });
         test('A has multiple inputs', function() {
           var blocks = this.blocks;
@@ -303,7 +321,7 @@ suite('Blocks', function() {
           this.blocks.B.dispose(true);
           assertDisposedHealed(this.blocks);
         });
-        test.skip('Heal with bad checks', function() {
+        test('Heal with bad checks', function() {
           var blocks = this.blocks;
           // A and C can't connect, but both can connect to B.
           blocks.A.nextConnection.setCheck('type1');
@@ -312,9 +330,7 @@ suite('Blocks', function() {
           // The types don't work.
           blocks.B.dispose(true);
 
-          // TODO (#1994): Check types before unplugging. Current C gets
-          //  left behind when it should get disposed with B.
-          assertDisposedNoheal(blocks);
+          assertDisposedHealFailed(blocks);
         });
         test('C is Shadow', function() {
           var blocks = this.blocks;

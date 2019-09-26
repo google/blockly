@@ -606,7 +606,7 @@ Blockly.tree.BaseNode.prototype.toDom = function() {
   var nonEmptyAndExpanded = this.getExpanded() && this.hasChildren();
 
   var children = document.createElement('div');
-  children.setAttribute('style', this.getLineStyle());
+  children.style = this.getLineStyle();
 
   if (nonEmptyAndExpanded) {
     // children
@@ -614,7 +614,7 @@ Blockly.tree.BaseNode.prototype.toDom = function() {
   }
 
   var node = document.createElement('div');
-  node.setAttribute('id', this.getId());
+  node.id = this.getId();
 
   node.appendChild(this.getRowDom());
   node.appendChild(children);
@@ -639,8 +639,8 @@ Blockly.tree.BaseNode.prototype.getRowDom = function() {
       this.getPixelIndent_() + 'px';
 
   var row = document.createElement('div');
-  row.setAttribute('class', this.getRowClassName());
-  row.setAttribute('style', style);
+  row.className = this.getRowClassName();
+  row.style = style;
 
   row.appendChild(this.getIconDom());
   row.appendChild(this.getLabelDom());
@@ -666,7 +666,7 @@ Blockly.tree.BaseNode.prototype.getRowClassName = function() {
  */
 Blockly.tree.BaseNode.prototype.getLabelDom = function() {
   var label = document.createElement('span');
-  label.setAttribute('class', this.config_.cssItemLabel || '');
+  label.className = this.config_.cssItemLabel || '';
   label.textContent = this.getText();
   return label;
 };
@@ -677,8 +677,8 @@ Blockly.tree.BaseNode.prototype.getLabelDom = function() {
  */
 Blockly.tree.BaseNode.prototype.getIconDom = function() {
   var icon = document.createElement('span');
-  icon.setAttribute('style', 'display: inline-block;');
-  icon.setAttribute('class', this.getCalculatedIconClass());
+  icon.style.display = 'inline-block';
+  icon.className = this.getCalculatedIconClass();
   return icon;
 };
 
@@ -706,7 +706,7 @@ Blockly.tree.BaseNode.prototype.getLineStyle = function() {
  */
 Blockly.tree.BaseNode.prototype.getBackgroundPosition = function() {
   return (this.isLastSibling() ? '-100' : (this.getDepth() - 1) *
-                  this.config_.indentWidth) + 'px 0';
+      this.config_.indentWidth) + 'px 0';
 };
 
 /**

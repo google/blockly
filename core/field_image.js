@@ -133,7 +133,7 @@ Blockly.utils.object.inherits(Blockly.FieldImage, Blockly.Field);
 Blockly.FieldImage.fromJson = function(options) {
   return new Blockly.FieldImage(
       options['src'], options['width'], options['height'],
-      null, null, null, options);
+      undefined, undefined, undefined, options);
 };
 
 /**

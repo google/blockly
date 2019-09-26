@@ -212,9 +212,9 @@ Blockly.Connection.prototype.connect_ = function(childConnection) {
           if (orphanBlock.workspace && !orphanBlock.getParent()) {
             Blockly.Events.setGroup(group);
             if (orphanBlock.outputConnection) {
-              orphanBlock.outputConnection.bumpAwayFrom_(parentConnection);
+              orphanBlock.outputConnection.onFailedConnect(parentConnection);
             } else if (orphanBlock.previousConnection) {
-              orphanBlock.previousConnection.bumpAwayFrom_(parentConnection);
+              orphanBlock.previousConnection.onFailedConnect(parentConnection);
             }
             Blockly.Events.setGroup(false);
           }
@@ -454,6 +454,16 @@ Blockly.Connection.prototype.isConnectionAllowed = function(candidate) {
   }
 
   return true;
+};
+
+/**
+ * Behavior after a connection attempt fails.
+ * @param {Blockly.Connection} _otherConnection Connection that this connection
+ *     failed to connect to.
+ * @package
+ */
+Blockly.Connection.prototype.onFailedConnect = function(_otherConnection) {
+  // NOP
 };
 
 /**

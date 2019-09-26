@@ -410,12 +410,14 @@ Blockly.Block.prototype.unplugFromRow_ = function(opt_healStack) {
     return;
   }
 
-  // Only disconnect the child if it's possible to move it to the parent.
   var childConnection = thisConnection.targetConnection;
+  // Disconnect the child block.
+  childConnection.disconnect();
+  // Connect child to the parent if possible, otherwise bump away.
   if (childConnection.checkType_(parentConnection)) {
-    // Disconnect the child block.
-    childConnection.disconnect();
     parentConnection.connect(childConnection);
+  } else {
+    childConnection.onFailedConnect(parentConnection);
   }
 };
 
@@ -464,7 +466,6 @@ Blockly.Block.prototype.unplugFromStack_ = function(opt_healStack) {
     // Disconnect the next statement.
     var nextTarget = this.nextConnection.targetConnection;
     nextTarget.disconnect();
-    // TODO (#1994): Check types before unplugging.
     if (previousTarget && previousTarget.checkType_(nextTarget)) {
       // Attach the next statement to the previous statement.
       previousTarget.connect(nextTarget);
@@ -613,6 +614,21 @@ Blockly.Block.prototype.getRootBlock = function() {
     block = rootBlock.parentBlock_;
   } while (block);
   return rootBlock;
+};
+
+/**
+ * Walk up from the given block up through the stack of blocks to find
+ * the top block of the sub stack. If we are nested in a statement input only
+ * find the top-most nested block. Do not go all the way to the root block.
+ * @return {!Blockly.Block} The top block in a stack.
+ * @private
+ */
+Blockly.Block.prototype.getTopStackBlock = function() {
+  var block = this;
+  do {
+    var previous = block.getPreviousBlock();
+  } while (previous && previous.getNextBlock() == block && (block = previous));
+  return block;
 };
 
 /**
@@ -1432,7 +1448,7 @@ Blockly.Block.prototype.jsonInit = function(json) {
   // Makes styles backward compatible with old way of defining hat style.
   if (json['style'] && json['style'].hat) {
     this.hat = json['style'].hat;
-    //Must set to null so it doesn't error when checking for style and colour.
+    // Must set to null so it doesn't error when checking for style and colour.
     json['style'] = null;
   }
 

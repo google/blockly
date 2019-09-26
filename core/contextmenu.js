@@ -40,6 +40,7 @@ goog.require('Blockly.utils.Coordinate');
 goog.require('Blockly.utils.dom');
 goog.require('Blockly.utils.uiMenu');
 goog.require('Blockly.utils.userAgent');
+goog.require('Blockly.WorkspaceCommentSvg');
 goog.require('Blockly.Xml');
 
 

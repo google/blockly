@@ -74,14 +74,14 @@ Blockly.utils.object.inherits(Blockly.MenuItem, Blockly.Component);
  */
 Blockly.MenuItem.prototype.createDom = function() {
   var element = document.createElement('div');
-  element.setAttribute('id', this.getId());
+  element.id = this.getId();
   this.setElementInternal(element);
 
   // Set class and style
-  element.setAttribute('class', 'goog-menuitem goog-option ' +
+  element.className = 'goog-menuitem goog-option ' +
       (!this.enabled_ ? 'goog-menuitem-disabled ' : '') +
       (this.checked_ ? 'goog-option-selected ' : '') +
-      (this.isRightToLeft() ? 'goog-menuitem-rtl ' : ''));
+      (this.isRightToLeft() ? 'goog-menuitem-rtl ' : '');
 
   var content = this.getContentWrapperDom();
   element.appendChild(content);
@@ -111,7 +111,7 @@ Blockly.MenuItem.prototype.getCheckboxDom = function() {
     return null;
   }
   var menuItemCheckbox = document.createElement('div');
-  menuItemCheckbox.setAttribute('class', 'goog-menuitem-checkbox');
+  menuItemCheckbox.className = 'goog-menuitem-checkbox';
   return menuItemCheckbox;
 };
 
@@ -133,7 +133,7 @@ Blockly.MenuItem.prototype.getContentDom = function() {
  */
 Blockly.MenuItem.prototype.getContentWrapperDom = function() {
   var contentWrapper = document.createElement('div');
-  contentWrapper.setAttribute('class', 'goog-menuitem-content');
+  contentWrapper.className = 'goog-menuitem-content';
   return contentWrapper;
 };
 

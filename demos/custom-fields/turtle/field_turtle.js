@@ -411,7 +411,7 @@ CustomFields.FieldTurtle.prototype.dropdownCreate_ = function() {
   };
 
   var widget = document.createElement('div');
-  widget.className = 'customFieldsTurtleWidget';
+  widget.className = 'customFieldsTurtleWidget blocklyNonSelectable';
 
   var table = document.createElement('div');
   table.className = 'table';

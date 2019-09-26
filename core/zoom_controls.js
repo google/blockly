@@ -26,6 +26,7 @@
 
 goog.provide('Blockly.ZoomControls');
 
+goog.require('Blockly.Css');
 goog.require('Blockly.Touch');
 goog.require('Blockly.utils.dom');
 
@@ -336,3 +337,22 @@ Blockly.ZoomControls.prototype.createZoomResetSvg_ = function(rnd) {
     e.preventDefault();  // Stop double-clicking from selecting text.
   });
 };
+
+/**
+ * CSS for zoom controls.  See css.js for use.
+ */
+Blockly.Css.register([
+  /* eslint-disable indent */
+  '.blocklyZoom>image, .blocklyZoom>svg>image {',
+    'opacity: .4;',
+  '}',
+
+  '.blocklyZoom>image:hover, .blocklyZoom>svg>image:hover {',
+    'opacity: .6;',
+  '}',
+
+  '.blocklyZoom>image:active, .blocklyZoom>svg>image:active {',
+    'opacity: .8;',
+  '}'
+  /* eslint-enable indent */
+]);

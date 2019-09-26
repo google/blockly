@@ -38,6 +38,9 @@ goog.require('Blockly.Comment');
 // One of these two will almost certainly be needed (usually VerticalFlyout).
 goog.require('Blockly.HorizontalFlyout');
 goog.require('Blockly.VerticalFlyout');
+// Flyout buttons are needed by the variable category,
+// and by any custom toolbox that has a button or a label.
+goog.require('Blockly.FlyoutButton');
 // If the toolbox does not have categories and only has a simple flyout, then
 // 'Blockly.Toolbox' is not needed.
 goog.require('Blockly.Toolbox');

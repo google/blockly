@@ -245,7 +245,7 @@ Blockly.blockRendering.RenderInfo.prototype.createRows_ = function() {
         new Blockly.blockRendering.JaggedEdge(this.constants_));
   }
 
-  if (activeRow.elements.length) {
+  if (activeRow.elements.length || activeRow.hasDummyInput) {
     this.rows.push(activeRow);
   }
   this.populateBottomRow_();

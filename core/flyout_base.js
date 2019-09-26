@@ -31,7 +31,6 @@ goog.require('Blockly.blockRendering');
 goog.require('Blockly.Events');
 goog.require('Blockly.Events.BlockCreate');
 goog.require('Blockly.Events.VarCreate');
-goog.require('Blockly.FlyoutButton');
 goog.require('Blockly.FlyoutCursor');
 goog.require('Blockly.Gesture');
 goog.require('Blockly.MarkerCursor');
@@ -496,6 +495,9 @@ Blockly.Flyout.prototype.show = function(xmlList) {
       case 'LABEL':
       case 'BUTTON':
         var isLabel = xml.tagName.toUpperCase() == 'LABEL';
+        if (!Blockly.FlyoutButton) {
+          throw Error('Missing require for Blockly.FlyoutButton');
+        }
         var curButton = new Blockly.FlyoutButton(this.workspace_,
             this.targetWorkspace_, xml, isLabel);
         contents.push({type: 'button', button: curButton});

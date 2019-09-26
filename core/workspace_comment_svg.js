@@ -37,6 +37,7 @@ goog.require('Blockly.utils.dom');
 goog.require('Blockly.utils.object');
 goog.require('Blockly.utils.Rect');
 goog.require('Blockly.WorkspaceComment');
+goog.require('Blockly.WorkspaceCommentSvg.render');
 
 
 /**

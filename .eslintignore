@@ -3,7 +3,6 @@
 blockly_node_javascript_en.js
 gulpfile.js
 /msg/*
-/core/css.js
 /core/utils/global.js
 /tests/blocks/*
 /tests/compile/*
@@ -15,7 +14,6 @@ gulpfile.js
 /tests/workspace_svg/*
 /generators/*
 /demos/*
-/accessible/*
 /appengine/*
 /externs/*
 /closure/*

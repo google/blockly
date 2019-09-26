@@ -45,7 +45,7 @@ suite('Abstract Fields', function() {
     FieldFalseTrue.prototype.EDITABLE = false;
     FieldFalseTrue.prototype.SERIALIZABLE = true;
 
-    /* Test Backwards Compatibility*/
+    /* Test Backwards Compatibility */
     test('Editable Default(true), Serializable Default(false)', function() {
       // An old default field should be serialized.
       var field = new FieldDefault();

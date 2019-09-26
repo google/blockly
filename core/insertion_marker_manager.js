@@ -501,7 +501,7 @@ Blockly.InsertionMarkerManager.prototype.maybeShowPreview_ = function(candidate)
   // Something went wrong and we're trying to connect to an invalid connection.
   if (closest == this.closestConnection_ ||
       closest.sourceBlock_.isInsertionMarker()) {
-    console.log("trying to connect to an insertion marker");
+    console.log('Trying to connect to an insertion marker');
     return;
   }
   // Add an insertion marker or replacement marker.

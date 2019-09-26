@@ -449,11 +449,7 @@ Blockly.ASTNode.prototype.getOutAstNodeForBlock_ = function(block) {
   var topBlock;
   // If the block doesn't have a previous connection then it is the top of the
   // substack.
-  if (!block.previousConnection) {
-    topBlock = block;
-  } else {
-    topBlock = block.getRootBlock();
-  }
+  topBlock = block.getTopStackBlock();
   var topConnection = topBlock.previousConnection || topBlock.outputConnection;
   // If the top connection has a parentInput, create an AST node pointing to
   // that input.

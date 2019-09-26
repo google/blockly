@@ -617,6 +617,21 @@ Blockly.Block.prototype.getRootBlock = function() {
 };
 
 /**
+ * Walk up from the given block up through the stack of blocks to find
+ * the top block of the sub stack. If we are nested in a statement input only
+ * find the top-most nested block. Do not go all the way to the root block.
+ * @return {!Blockly.Block} The top block in a stack.
+ * @private
+ */
+Blockly.Block.prototype.getTopStackBlock = function() {
+  var block = this;
+  do {
+    var previous = block.getPreviousBlock();
+  } while (previous && previous.getNextBlock() == block && (block = previous));
+  return block;
+};
+
+/**
  * Find all the blocks that are directly nested inside this one.
  * Includes value and statement inputs, as well as any following statement.
  * Excludes any connection on an output tab or any preceding statement.

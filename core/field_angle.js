@@ -485,6 +485,7 @@ Blockly.Css.register([
   '.blocklyAngleGauge {',
     'fill: #f88;',
     'fill-opacity: .8;',
+    'pointer-events: none;',
   '}',
 
   '.blocklyAngleLine {',

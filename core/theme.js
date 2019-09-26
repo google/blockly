@@ -28,13 +28,13 @@ goog.provide('Blockly.Theme');
 
 /**
  * Class for a theme.
- * @param {!Object.<string, Blockly.Theme.BlockStyle>} blockStyles A map from style
- *     names (strings) to objects with style attributes relating to blocks.
- * @param {!Object.<string, Blockly.Theme.CategoryStyle>} categoryStyles A map from
- *     style names (strings) to objects with style attributes relating to
+ * @param {!Object.<string, Blockly.Theme.BlockStyle>} blockStyles A map from
+ *     style names (strings) to objects with style attributes for blocks.
+ * @param {!Object.<string, Blockly.Theme.CategoryStyle>} categoryStyles A map
+ *     from style names (strings) to objects with style attributes for
  *     categories.
- * @param {!Object.<string, *>=} opt_componentStyles A map of Blockly component names
- *     to style value.
+ * @param {!Object.<string, *>=} opt_componentStyles A map of Blockly component
+ *     names to style value.
  * @constructor
  */
 Blockly.Theme = function(blockStyles, categoryStyles, opt_componentStyles) {

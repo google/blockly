@@ -697,8 +697,6 @@ suite('Blocks', function() {
       });
       suite('Programmatic Block Creation', function() {
         test('Stack', function() {
-          // TODO: I think this is the recommended method of creating a block
-          //  programmatically?
           var block = this.workspace.newBlock('stack_block');
           this.assertConnectionsEmpty();
           block.initSvg();

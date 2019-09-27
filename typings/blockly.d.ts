@@ -2810,12 +2810,6 @@ declare module Blockly.ContextMenu {
 declare module Blockly.Css {
 
     /**
-     * List of cursors.
-     * @enum {string}
-     */
-    enum Cursor { OPEN, CLOSED, DELETE } 
-
-    /**
      * Inject the CSS into the DOM.  This is preferable over using a regular CSS
      * file since:
      * a) It loads synchronously and doesn't force a redraw later.
@@ -2830,10 +2824,10 @@ declare module Blockly.Css {
     /**
      * Set the cursor to be displayed when over something draggable.
      * See See https://github.com/google/blockly/issues/981 for context.
-     * @param {Blockly.Css.Cursor} cursor Enum.
+     * @param {*} cursor Enum.
      * @deprecated April 2017.
      */
-    function setCursor(cursor: Blockly.Css.Cursor): void;
+    function setCursor(cursor: any): void;
 
     /**
      * Array making up the CSS content for Blockly.

@@ -32,23 +32,6 @@ goog.provide('Blockly.Css');
 
 
 /**
- * List of cursors.
- * @enum {string}
- */
-Blockly.Css.Cursor = {
-  OPEN: 'handopen',
-  CLOSED: 'handclosed',
-  DELETE: 'handdelete'
-};
-
-/**
- * Current cursor (cached value).
- * @type {string}
- * @private
- */
-Blockly.Css.currentCursor_ = '';
-
-/**
  * Has CSS already been injected?
  * @type {boolean}
  * @private
@@ -105,7 +88,7 @@ Blockly.Css.inject = function(hasCss, pathToMedia) {
 /**
  * Set the cursor to be displayed when over something draggable.
  * See See https://github.com/google/blockly/issues/981 for context.
- * @param {Blockly.Css.Cursor} _cursor Enum.
+ * @param {*} _cursor Enum.
  * @deprecated April 2017.
  */
 Blockly.Css.setCursor = function(_cursor) {

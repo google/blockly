@@ -281,19 +281,6 @@ function test_appendDomToWorkspace() {
   }
 }
 
-function test_blockToDom_fieldToDom_trivial() {
-  xmlTest_setUpWithMockBlocks();
-  // TODO (#1199): make a similar test where the variable is given a non-empty
-  // type.f
-  workspace.createVariable('name1', '', 'id1');
-  var block = new Blockly.Block(workspace, 'field_variable_test_block');
-  block.inputList[0].fieldRow[0].setValue('id1');
-  var resultFieldDom = Blockly.Xml.blockToDom(block).childNodes[0];
-  xmlTest_checkVariableFieldDomValues(resultFieldDom, 'VAR', null, 'id1',
-      'name1');
-  xmlTest_tearDownWithMockBlocks();
-}
-
 function test_blockToDom_fieldToDom_defaultCase() {
   xmlTest_setUpWithMockBlocks();
   mockControl_ = setUpMockMethod(Blockly.utils, 'genUid', null, ['1', '1']);

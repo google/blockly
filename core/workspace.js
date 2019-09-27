@@ -578,7 +578,7 @@ Blockly.Workspace.prototype.variableIndexOf = function(_name) {
  *     defaults to the empty string, which is a specific type.
  * @return {Blockly.VariableModel} The variable with the given name.
  */
-// TODO (#1199): Possibly delete this function.
+// TODO (#1559): Possibly delete this function after resolving #1559.
 Blockly.Workspace.prototype.getVariable = function(name, opt_type) {
   return this.variableMap_.getVariable(name, opt_type);
 };

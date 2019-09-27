@@ -338,80 +338,6 @@ gulp.task('build', gulp.parallel(
 ));
 
 ////////////////////////////////////////////////////////////
-//                         Node                           //
-////////////////////////////////////////////////////////////
-
-// Concatenates the necessary files to load Blockly in a Node.js VM.  Blockly's
-// individual libraries target use in a browser, where globals (via the window
-// objects) are used to share state and APIs.  By concatenating all the
-// necessary components into a single file, Blockly can be loaded as a Node.js
-// module.
-//
-// This task builds Node with the assumption that the app needs English blocks
-// and JavaScript code generation.  If you need another localization or
-// generator language, just copy and edit the srcs. Only one localization
-// language can be included.
-gulp.task('blockly_node_javascript_en', function() {
-  var srcs = [
-    'blockly_compressed.js',
-    'blocks_compressed.js',
-    'javascript_compressed.js',
-    'msg/js/en.js'
-  ];
-  // Concatenate the sources, appending the module export at the bottom.
-  // Override textToDomDocument, providing Node alternative to DOMParser.
-  return gulp.src(srcs)
-      .pipe(gulp.concat('blockly_node_javascript_en.js'))
-      .pipe(gulp.insert.append(`
-if (typeof DOMParser !== 'function') {
-  var JSDOM = require('jsdom').JSDOM;
-  var window = (new JSDOM()).window;
-  var document = window.document;
-  var Element = window.Element;
-  Blockly.utils.xml.textToDomDocument = function(text) {
-    var jsdom = new JSDOM(text, { contentType: 'text/xml' });
-    return jsdom.window.document;
-  };
-}
-if (typeof module === 'object') { module.exports = Blockly; }
-if (typeof window === 'object') { window.Blockly = Blockly; }\n`))
-      .pipe(gulp.dest('.'));
-});
-
-/**
- * Task-builder for the watch function. Currently any change invokes the whole
- * build script. Invoke with "gulp watch".
- *
- * @param {?string=} concatTask Name of the concatenating task for node usage.
- */
-// TODO: Only run the necessary phases of the build script for a given change.
-function buildWatchTaskFn(concatTask) {
-  return function() {
-    // Tasks to trigger.
-    var tasks = ['build'];
-    if (concatTask) {
-      tasks.push(concatTask);
-    }
-
-    // Currently any changes invokes the whole build script. (To fix.)
-    var srcs = [
-      'core/**/*.js',                      // Blockly core code
-      'blocks/*.js',                       // Block definitions
-      'generators/**/*.js',                // Code generation
-      'msg/messages.js', 'msg/json/*.json' // Localization data
-    ];
-    var options = {
-      debounceDelay: 2000  // Milliseconds to delay rebuild.
-    };
-    gulp.watch(srcs, options, gulp.parallel(tasks));
-  };
-}
-
-// Watch Blockly files for changes and trigger automatic rebuilds, including
-// the Node-ready blockly_node_javascript_en.js file.
-gulp.task('watch', buildWatchTaskFn('blockly_node_javascript_en'));
-
-////////////////////////////////////////////////////////////
 //                        Typings                         //
 ////////////////////////////////////////////////////////////
 
@@ -863,6 +789,5 @@ gulp.task('release', gulp.series(['build', 'typings', function() {
   fs.mkdirSync(packageDistribution);
 }, 'package']));
 
-// The default task concatenates files for Node.js, using English language
-// blocks and the JavaScript generator.
-gulp.task('default', gulp.series(['build', 'blockly_node_javascript_en']));
+// The default task builds Blockly.
+gulp.task('default', gulp.series(['build']));

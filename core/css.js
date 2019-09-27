@@ -88,7 +88,7 @@ Blockly.Css.inject = function(hasCss, pathToMedia) {
 /**
  * Set the cursor to be displayed when over something draggable.
  * See See https://github.com/google/blockly/issues/981 for context.
- * @param {Blockly.Css.Cursor} _cursor Enum.
+ * @param {*} _cursor Enum.
  * @deprecated April 2017.
  */
 Blockly.Css.setCursor = function(_cursor) {

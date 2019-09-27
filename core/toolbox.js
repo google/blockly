@@ -293,7 +293,8 @@ Blockly.Toolbox.prototype.handleAfterTreeSelected_ = function(
   } else {
     // Hide the flyout.
     this.flyout_.hide();
-    if (Blockly.keyboardAccessibilityMode && !(newNode instanceof Blockly.Toolbox.TreeSeparator)) {
+    if (Blockly.keyboardAccessibilityMode &&
+        !(newNode instanceof Blockly.Toolbox.TreeSeparator)) {
       Blockly.navigation.setState(Blockly.navigation.STATE_WS);
     }
   }

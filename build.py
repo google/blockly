@@ -129,17 +129,9 @@ this.BLOCKLY_BOOT = function(root) {
     add_dependency = '\n'.join(add_dependency)
     f.write(add_dependency + '\n')
 
-    provides = []
-    # Exclude field_date.js as it still has a dependency on the closure library
-    # see issue #2890.
-    for dep in calcdeps.BuildDependenciesFromFiles(self.search_paths):
-      if not dep.filename.startswith('closure') and not dep.filename.startswith('core/field_date.js'):
-        provides.extend(dep.provides)
-    provides.sort()  # Deterministic build.
     f.write('\n')
     f.write('// Load Blockly.\n')
-    for provide in provides:
-      f.write("goog.require('%s');\n" % provide)
+    f.write('goog.require(\'Blockly.requires\')\n')
 
     f.write("""
 delete root.BLOCKLY_DIR;

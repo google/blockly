@@ -207,9 +207,6 @@ def CalculateDependencies(paths, inputs):
     A list of all files, including inputs, that are needed to compile the given
     inputs.
   """
-  paths.sort()
-  print(paths)
-  print(inputs)
   deps = BuildDependenciesFromFiles(paths + inputs)
   search_hash = BuildDependencyHashFromDependencies(deps)
   result_list = []

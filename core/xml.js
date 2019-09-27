@@ -431,9 +431,19 @@ Blockly.Xml.domToWorkspace = function(xml, workspace) {
         throw TypeError('Shadow block cannot be a top-level block.');
       } else if (name == 'comment') {
         if (workspace.rendered) {
-          Blockly.WorkspaceCommentSvg.fromXml(xmlChild, workspace, width);
+          if (!Blockly.WorkspaceCommentSvg) {
+            console.warn('Missing require for Blockly.WorkspaceCommentSvg, ' +
+                'ignoring comment block.');
+          } else {
+            Blockly.WorkspaceCommentSvg.fromXml(xmlChild, workspace, width);
+          }
         } else {
-          Blockly.WorkspaceComment.fromXml(xmlChild, workspace);
+          if (!Blockly.WorkspaceComment) {
+            console.warn('Missing require for Blockly.WorkspaceComment, ' +
+                'ignoring comment block.');
+          } else {
+            Blockly.WorkspaceComment.fromXml(xmlChild, workspace);
+          }
         }
       } else if (name == 'variables') {
         if (variablesFirst) {

@@ -40,7 +40,6 @@ goog.require('Blockly.utils.Coordinate');
 goog.require('Blockly.utils.dom');
 goog.require('Blockly.utils.uiMenu');
 goog.require('Blockly.utils.userAgent');
-goog.require('Blockly.WorkspaceCommentSvg');
 goog.require('Blockly.Xml');
 
 
@@ -345,6 +344,9 @@ Blockly.ContextMenu.commentDuplicateOption = function(comment) {
  * @package
  */
 Blockly.ContextMenu.workspaceCommentOption = function(ws, e) {
+  if (!Blockly.WorkspaceCommentSvg) {
+    throw Error('Missing require for Blockly.WorkspaceCommentSvg');
+  }
   // Helper function to create and position a comment correctly based on the
   // location of the mouse event.
   var addWsComment = function() {

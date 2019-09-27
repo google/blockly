@@ -433,14 +433,14 @@ Blockly.Xml.domToWorkspace = function(xml, workspace) {
         if (workspace.rendered) {
           if (!Blockly.WorkspaceCommentSvg) {
             console.warn('Missing require for Blockly.WorkspaceCommentSvg, ' +
-                'ignoring comment block.');
+                'ignoring workspace comment.');
           } else {
             Blockly.WorkspaceCommentSvg.fromXml(xmlChild, workspace, width);
           }
         } else {
           if (!Blockly.WorkspaceComment) {
             console.warn('Missing require for Blockly.WorkspaceComment, ' +
-                'ignoring comment block.');
+                'ignoring workspace comment.');
           } else {
             Blockly.WorkspaceComment.fromXml(xmlChild, workspace);
           }
@@ -668,6 +668,11 @@ Blockly.Xml.domToBlockHeadless_ = function(xmlBlock, workspace) {
         }
         break;
       case 'comment':
+        if (!Blockly.Comment) {
+          console.warn('Missing require for Blockly.Comment, ' +
+              'ignoring block comment.');
+          break;
+        }
         var text = xmlChild.textContent;
         var pinned = xmlChild.getAttribute('pinned') == 'true';
         var width = parseInt(xmlChild.getAttribute('w'), 10);

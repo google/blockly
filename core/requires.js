@@ -86,3 +86,10 @@ goog.require('Blockly.geras.Renderer');
 // The debug renderer, which shows simplified versions of the blocks for
 // developer use.
 // goog.require('Blockly.blockRendering.Debug');
+
+// Blockly Themes.
+// Classic is the default theme.
+goog.require('Blockly.Themes.Classic');
+goog.require('Blockly.Themes.Dark');
+goog.require('Blockly.Themes.HighContrast');
+goog.require('Blockly.Themes.Modern');

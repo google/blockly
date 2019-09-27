@@ -606,7 +606,10 @@ Blockly.tree.BaseNode.prototype.toDom = function() {
   var nonEmptyAndExpanded = this.getExpanded() && this.hasChildren();
 
   var children = document.createElement('div');
-  children.style = this.getLineStyle();
+  children.style.backgroundPosition = this.getBackgroundPosition();
+  if (!nonEmptyAndExpanded) {
+    children.style.display = 'none';
+  }
 
   if (nonEmptyAndExpanded) {
     // children
@@ -635,12 +638,10 @@ Blockly.tree.BaseNode.prototype.getPixelIndent_ = function() {
  * @protected
  */
 Blockly.tree.BaseNode.prototype.getRowDom = function() {
-  var style = 'padding-' + (this.isRightToLeft() ? 'right' : 'left') + ':' +
-      this.getPixelIndent_() + 'px';
-
   var row = document.createElement('div');
   row.className = this.getRowClassName();
-  row.style = style;
+  row.style['padding-' + (this.isRightToLeft() ? 'right' : 'left')] =
+      this.getPixelIndent_() + 'px';
 
   row.appendChild(this.getIconDom());
   row.appendChild(this.getLabelDom());
@@ -688,16 +689,6 @@ Blockly.tree.BaseNode.prototype.getIconDom = function() {
  */
 Blockly.tree.BaseNode.prototype.getCalculatedIconClass = function() {
   throw Error('unimplemented abstract method');
-};
-
-/**
- * @return {string} The line style.
- * @protected
- */
-Blockly.tree.BaseNode.prototype.getLineStyle = function() {
-  var nonEmptyAndExpanded = this.getExpanded() && this.hasChildren();
-  return 'background-position: ' + this.getBackgroundPosition() + '; ' +
-      (nonEmptyAndExpanded ? '' : 'display: none');
 };
 
 /**

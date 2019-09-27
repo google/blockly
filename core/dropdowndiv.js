@@ -28,8 +28,8 @@
 
 goog.provide('Blockly.DropDownDiv');
 
+goog.require('Blockly.utils.dom');
 goog.require('Blockly.utils.math');
-
 goog.require('Blockly.utils.style');
 
 
@@ -105,6 +105,20 @@ Blockly.DropDownDiv.PADDING_Y = 16;
 Blockly.DropDownDiv.ANIMATION_TIME = 0.25;
 
 /**
+ * The default dropdown div border color.
+ * @type {string}
+ * @const
+ */
+Blockly.DropDownDiv.DEFAULT_DROPDOWN_BORDER_COLOR = '#dadce0';
+
+/**
+ * The default dropdown div color.
+ * @type {string}
+ * @const
+ */
+Blockly.DropDownDiv.DEFAULT_DROPDOWN_COLOR = '#fff';
+
+/**
  * Timer for animation out, to be cleared if we need to immediately hide
  * without disrupting new shows.
  * @type {number}
@@ -126,6 +140,8 @@ Blockly.DropDownDiv.createDom = function() {
   }
   var div = document.createElement('div');
   div.className = 'blocklyDropDownDiv';
+  div.style.backgroundColor = Blockly.DropDownDiv.DEFAULT_DROPDOWN_COLOR;
+  div.style.borderColor = Blockly.DropDownDiv.DEFAULT_DROPDOWN_BORDER_COLOR;
   document.body.appendChild(div);
   Blockly.DropDownDiv.DIV_ = div;
 
@@ -185,10 +201,16 @@ Blockly.DropDownDiv.clearContent = function() {
  * Set the colour for the drop-down.
  * @param {string} backgroundColour Any CSS colour for the background.
  * @param {string} borderColour Any CSS colour for the border.
+ * @param {boolean=} opt_invertedText Whether or not the text color should be
+ *     inverted.
  */
-Blockly.DropDownDiv.setColour = function(backgroundColour, borderColour) {
+Blockly.DropDownDiv.setColour = function(backgroundColour, borderColour,
+    opt_invertedText) {
   Blockly.DropDownDiv.DIV_.style.backgroundColor = backgroundColour;
   Blockly.DropDownDiv.DIV_.style.borderColor = borderColour;
+  if (opt_invertedText) {
+    Blockly.utils.dom.addClass(Blockly.DropDownDiv.DIV_, 'inverted');
+  }
 };
 
 /**
@@ -229,8 +251,10 @@ Blockly.DropDownDiv.showPositionedByBlock = function(field, block,
     secondaryY += opt_secondaryYOffset;
   }
   // Set bounds to workspace; show the drop-down.
-  Blockly.DropDownDiv.setBoundsElement(block.workspace.getParentSvg().parentNode);
-  return Blockly.DropDownDiv.show(field, primaryX, primaryY, secondaryX, secondaryY, opt_onHide);
+  Blockly.DropDownDiv.setBoundsElement(
+      block.workspace.getParentSvg().parentNode);
+  return Blockly.DropDownDiv.show(
+      field, primaryX, primaryY, secondaryX, secondaryY, opt_onHide);
 };
 
 /**
@@ -521,11 +545,17 @@ Blockly.DropDownDiv.isVisible = function() {
 /**
  * Hide the menu only if it is owned by the provided object.
  * @param {Object} owner Object which must be owning the drop-down to hide.
+ * @param {boolean=} opt_withoutAnimation True if we should hide the dropdown
+ *     without animating.
  * @return {boolean} True if hidden.
  */
-Blockly.DropDownDiv.hideIfOwner = function(owner) {
+Blockly.DropDownDiv.hideIfOwner = function(owner, opt_withoutAnimation) {
   if (Blockly.DropDownDiv.owner_ === owner) {
-    Blockly.DropDownDiv.hide();
+    if (opt_withoutAnimation) {
+      Blockly.DropDownDiv.hideWithoutAnimation();
+    } else {
+      Blockly.DropDownDiv.hide();
+    }
     return true;
   }
   return false;
@@ -542,12 +572,13 @@ Blockly.DropDownDiv.hide = function() {
   div.style.opacity = 0;
   // Finish animation - reset all values to default.
   Blockly.DropDownDiv.animateOutTimer_ =
-      setTimeout(Blockly.DropDownDiv.hideWithoutAnimation,
-          Blockly.DropDownDiv.ANIMATION_TIME * 1000);
-  if (Blockly.DropDownDiv.onHide_) {
-    Blockly.DropDownDiv.onHide_();
-    Blockly.DropDownDiv.onHide_ = null;
-  }
+      setTimeout(function() {
+        Blockly.DropDownDiv.hideWithoutAnimation();
+        if (Blockly.DropDownDiv.onHide_) {
+          Blockly.DropDownDiv.onHide_();
+          Blockly.DropDownDiv.onHide_ = null;
+        }
+      }, Blockly.DropDownDiv.ANIMATION_TIME * 1000);
 };
 
 /**
@@ -569,6 +600,9 @@ Blockly.DropDownDiv.hideWithoutAnimation = function() {
   div.style.top = '';
   div.style.opacity = 0;
   div.style.display = 'none';
+  div.style.backgroundColor = Blockly.DropDownDiv.DEFAULT_DROPDOWN_COLOR;
+  div.style.borderColor = Blockly.DropDownDiv.DEFAULT_DROPDOWN_BORDER_COLOR;
+  Blockly.utils.dom.removeClass(div, 'inverted');
 
   Blockly.DropDownDiv.clearContent();
   Blockly.DropDownDiv.owner_ = null;

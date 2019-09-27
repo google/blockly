@@ -927,7 +927,7 @@ Blockly.Block.prototype.getColourShadow = function() {
   if (colourSecondary) {
     return colourSecondary;
   }
-  return Blockly.utils.colour.blend('white', this.getColour(), 0.6);
+  return Blockly.utils.colour.blend('#fff', this.getColour(), 0.6);
 };
 
 /**
@@ -951,8 +951,8 @@ Blockly.Block.prototype.getColourBorder = function() {
   var colour = this.getColour();
   return {
     colourBorder: null,
-    colourLight: Blockly.utils.colour.blend('white', colour, 0.3),
-    colourDark: Blockly.utils.colour.blend('black', colour, 0.2)
+    colourLight: Blockly.utils.colour.blend('#fff', colour, 0.3),
+    colourDark: Blockly.utils.colour.blend('#000', colour, 0.2)
   };
 };
 

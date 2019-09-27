@@ -45,8 +45,6 @@ goog.require('Blockly.utils.object');
 goog.require('Blockly.utils.Rect');
 goog.require('Blockly.Workspace');
 goog.require('Blockly.WorkspaceAudio');
-goog.require('Blockly.WorkspaceComment');
-goog.require('Blockly.WorkspaceCommentSvg');
 goog.require('Blockly.WorkspaceDragSurfaceSvg');
 goog.require('Blockly.Xml');
 

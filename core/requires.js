@@ -53,6 +53,9 @@ goog.require('Blockly.Toolbox');
 goog.require('Blockly.Trashcan');
 // Only needed if one is using the 'VARIABLE_DYNAMIC' typed variables category.
 goog.require('Blockly.VariablesDynamic');
+// Only need to require these two if you're using workspace comments.
+// goog.require('Blockly.WorkspaceCommentSvg');
+// goog.require('Blockly.WorkspaceCommentSvg.render');
 // If zoom controls aren't required, then Blockly.inject's
 // "zoom"/"controls" configuration must be false.
 goog.require('Blockly.ZoomControls');

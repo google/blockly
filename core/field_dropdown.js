@@ -180,22 +180,6 @@ Blockly.FieldDropdown.ARROW_CHAR =
 Blockly.FieldDropdown.prototype.CURSOR = 'default';
 
 /**
- * Border colour for the dropdown div showing the dropdown menu.  Must be a CSS
- * string.
- * @type {string}
- * @private
- */
-Blockly.FieldDropdown.prototype.DROPDOWN_BORDER_COLOUR = '#dadce0';
-
-/**
- * Background colour for the dropdown div showing the dropdown menu.  Must be a
- * CSS string.
- * @type {string}
- * @private
- */
-Blockly.FieldDropdown.prototype.DROPDOWN_BACKGROUND_COLOUR = 'white';
-
-/**
  * Create the block UI for this dropdown.
  * @package
  */

@@ -32,23 +32,6 @@ goog.provide('Blockly.Css');
 
 
 /**
- * List of cursors.
- * @enum {string}
- */
-Blockly.Css.Cursor = {
-  OPEN: 'handopen',
-  CLOSED: 'handclosed',
-  DELETE: 'handdelete'
-};
-
-/**
- * Current cursor (cached value).
- * @type {string}
- * @private
- */
-Blockly.Css.currentCursor_ = '';
-
-/**
  * Has CSS already been injected?
  * @type {boolean}
  * @private

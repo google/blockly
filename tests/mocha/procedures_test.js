@@ -1,7 +1,5 @@
 /**
  * @license
- * Blockly Tests
- *
  * Copyright 2019 Google LLC
  * https://developers.google.com/blockly/
  *

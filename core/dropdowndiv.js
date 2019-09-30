@@ -1,7 +1,5 @@
 /**
  * @license
- * Visual Blocks Editor
- *
  * Copyright 2016 Massachusetts Institute of Technology
  * All rights reserved.
  *

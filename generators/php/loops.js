@@ -1,7 +1,5 @@
 /**
  * @license
- * Visual Blocks Language
- *
  * Copyright 2015 Google LLC
  * https://developers.google.com/blockly/
  *

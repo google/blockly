@@ -1,7 +1,5 @@
 /**
  * @license
- * Visual Blocks Editor
- *
  * Copyright 2018 Google LLC
  * https://developers.google.com/blockly/
  *

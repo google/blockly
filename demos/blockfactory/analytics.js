@@ -1,7 +1,5 @@
 /**
  * @license
- * Blockly Demos: Block Factory
- *
  * Copyright 2017 Google LLC
  * https://developers.google.com/blockly/
  *

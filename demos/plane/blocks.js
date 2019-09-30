@@ -1,6 +1,5 @@
 /**
- * Blockly Demos: Plane Seat Calculator Blocks
- *
+ * @license
  * Copyright 2013 Google LLC
  * https://developers.google.com/blockly/
  *

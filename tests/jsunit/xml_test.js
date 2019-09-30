@@ -1,7 +1,5 @@
 /**
  * @license
- * Blockly Tests
- *
  * Copyright 2014 Google LLC
  * https://developers.google.com/blockly/
  *

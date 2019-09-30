@@ -453,8 +453,8 @@ gulp.task('package-blockly-node', function() {
   return gulp.src('blockly_compressed.js')
     .pipe(gulp.insert.append(`
       if (typeof DOMParser !== 'function') {
-        const { JSDOM } = require('jsdom');
-        const { XMLSerializer } = require("jsdom/lib/jsdom/living");
+        var JSDOM = require('jsdom').JSDOM;
+        var XMLSerializer = require("jsdom/lib/jsdom/living").XMLSerializer;
         var window = (new JSDOM()).window;
         var document = window.document;
         var DOMParser = window.DOMParser;

@@ -453,16 +453,15 @@ gulp.task('package-blockly-node', function() {
   return gulp.src('blockly_compressed.js')
     .pipe(gulp.insert.append(`
       if (typeof DOMParser !== 'function') {
-        var JSDOM = require('jsdom').JSDOM;
         var DOMParser = require("jsdom/lib/jsdom/living").DOMParser;
         var XMLSerializer = require("jsdom/lib/jsdom/living").XMLSerializer;
-        var window = (new JSDOM()).window;
-        var document = window.document;
+        var doc = Blockly.utils.xml.textToDomDocument(
+          '<xml xmlns="https://developers.google.com/blockly/xml"></xml>');
         Blockly.utils.xml.createTextNode = function(text) {
-          return document.createTextNode(text);
+          return doc.createTextNode(text);
         };        
         Blockly.utils.xml.createElement = function(tagName) {
-          return document.createElementNS(Blockly.utils.xml.NAME_SPACE, tagName);
+          return doc.createElementNS(Blockly.utils.xml.NAME_SPACE, tagName);
         };
         Blockly.utils.xml.textToDomDocument = function(text) {
           var oParser = new DOMParser();

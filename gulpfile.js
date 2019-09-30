@@ -457,19 +457,8 @@ gulp.task('package-blockly-node', function() {
         var XMLSerializer = require("jsdom/lib/jsdom/living").XMLSerializer;
         var doc = Blockly.utils.xml.textToDomDocument(
           '<xml xmlns="https://developers.google.com/blockly/xml"></xml>');
-        Blockly.utils.xml.createTextNode = function(text) {
-          return doc.createTextNode(text);
-        };        
-        Blockly.utils.xml.createElement = function(tagName) {
-          return doc.createElementNS(Blockly.utils.xml.NAME_SPACE, tagName);
-        };
-        Blockly.utils.xml.textToDomDocument = function(text) {
-          var oParser = new DOMParser();
-          return oParser.parseFromString(text, 'text/xml');
-        };
-        Blockly.utils.xml.domToText = function(dom) {
-          var oSerializer = new XMLSerializer();
-          return oSerializer.serializeToString(dom);
+        Blockly.utils.xml.document = function() {
+          return doc;
         };
       }`))
     .pipe(packageCommonJS('Blockly', []))

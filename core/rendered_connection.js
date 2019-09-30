@@ -87,10 +87,10 @@ Blockly.utils.object.inherits(Blockly.RenderedConnection, Blockly.Connection);
  * @override
  */
 Blockly.RenderedConnection.prototype.dispose = function() {
-  Blockly.RenderedConnection.superClass_.dispose.call(this);
   if (this.inDB_) {
     this.db_.removeConnection_(this);
   }
+  Blockly.RenderedConnection.superClass_.dispose.call(this);
 };
 
 /**

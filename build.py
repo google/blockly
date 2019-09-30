@@ -377,8 +377,10 @@ goog.provide('Blockly.utils.string');
       Code with Google's and MIT's Apache licences trimmed.
     """
     apache2 = re.compile("""/\\*
+
  (Copyright \\d+ (Google LLC|Massachusetts Institute of Technology))
- (All rights reserved.\n)?
+( All rights reserved.
+)?
  Licensed under the Apache License, Version 2.0 \\(the "License"\\);
  you may not use this file except in compliance with the License.
  You may obtain a copy of the License at

@@ -31,7 +31,6 @@ goog.require('Blockly.blockRendering');
 goog.require('Blockly.Events');
 goog.require('Blockly.Events.BlockCreate');
 goog.require('Blockly.Events.VarCreate');
-goog.require('Blockly.FlyoutButton');
 goog.require('Blockly.FlyoutCursor');
 goog.require('Blockly.Gesture');
 goog.require('Blockly.MarkerCursor');
@@ -231,6 +230,8 @@ Blockly.Flyout.prototype.createDom = function(tagName) {
   this.svgBackground_ = Blockly.utils.dom.createSvgElement('path',
       {'class': 'blocklyFlyoutBackground'}, this.svgGroup_);
   this.svgGroup_.appendChild(this.workspace_.createDom());
+  this.workspace_.getThemeManager().subscribe(this.svgBackground_, 'flyout', 'fill');
+  this.workspace_.getThemeManager().subscribe(this.svgBackground_, 'flyoutOpacity', 'fill-opacity');
   return this.svgGroup_;
 };
 
@@ -287,6 +288,7 @@ Blockly.Flyout.prototype.dispose = function() {
     this.scrollbar_ = null;
   }
   if (this.workspace_) {
+    this.workspace_.getThemeManager().unsubscribe(this.svgBackground_);
     this.workspace_.targetWorkspace = null;
     this.workspace_.dispose();
     this.workspace_ = null;
@@ -371,7 +373,7 @@ Blockly.Flyout.prototype.updateDisplay_ = function() {
     show = this.isVisible();
   }
   this.svgGroup_.style.display = show ? 'block' : 'none';
-  // Update the scrollbar's visiblity too since it should mimic the
+  // Update the scrollbar's visibility too since it should mimic the
   // flyout's visibility.
   this.scrollbar_.setContainerVisible(show);
 };
@@ -496,6 +498,9 @@ Blockly.Flyout.prototype.show = function(xmlList) {
       case 'LABEL':
       case 'BUTTON':
         var isLabel = xml.tagName.toUpperCase() == 'LABEL';
+        if (!Blockly.FlyoutButton) {
+          throw Error('Missing require for Blockly.FlyoutButton');
+        }
         var curButton = new Blockly.FlyoutButton(this.workspace_,
             this.targetWorkspace_, xml, isLabel);
         contents.push({type: 'button', button: curButton});

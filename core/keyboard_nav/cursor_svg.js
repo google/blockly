@@ -56,7 +56,7 @@ Blockly.CursorSvg = function(workspace, opt_marker) {
   this.isMarker_ = opt_marker;
 
   /**
-   * The workspace, field, or block that the cursor svg element should be
+   * The workspace, field, or block that the cursor SVG element should be
    * attached to.
    * @type {Blockly.WorkspaceSvg|Blockly.Field|Blockly.BlockSvg}
    * @private
@@ -136,13 +136,13 @@ Blockly.CursorSvg.CURSOR_COLOR = '#cc0a0a';
 Blockly.CursorSvg.MARKER_COLOR = '#4286f4';
 
 /**
- * The name of the css class for a cursor.
+ * The name of the CSS class for a cursor.
  * @const {string}
  */
 Blockly.CursorSvg.CURSOR_CLASS = 'blocklyCursor';
 
 /**
- * The name of the css class for a marker.
+ * The name of the CSS class for a marker.
  * @const {string}
  */
 Blockly.CursorSvg.MARKER_CLASS = 'blocklyMarker';
@@ -180,9 +180,9 @@ Blockly.CursorSvg.prototype.createDom = function() {
 };
 
 /**
- * Attaches the svg root of the cursor to the svg group of the parent.
+ * Attaches the SVG root of the cursor to the SVG group of the parent.
  * @param {!Blockly.WorkspaceSvg|!Blockly.Field|!Blockly.BlockSvg} newParent
- *    The workspace, field, or block that the cursor svg element should be
+ *    The workspace, field, or block that the cursor SVG element should be
  *    attached to.
  * @private
  */
@@ -201,9 +201,9 @@ Blockly.CursorSvg.prototype.setParent_ = function(newParent) {
   this.parent_ = newParent;
 };
 
-/**************************/
-/**** Display          ****/
-/**************************/
+/**************************
+ * Display
+ **************************/
 
 /**
  * Show the cursor as a combination of the previous connection and block,
@@ -228,7 +228,6 @@ Blockly.CursorSvg.prototype.showWithBlockPrevOutput_ = function(block) {
     this.positionBlock_(width, cursorOffset, cursorHeight);
   }
 
-  this.currentCursorSvg = this.cursorBlock_;
   this.setParent_(block);
   this.showCurrent_();
 };
@@ -241,10 +240,15 @@ Blockly.CursorSvg.prototype.showWithBlockPrevOutput_ = function(block) {
  */
 Blockly.CursorSvg.prototype.showWithCoordinates_ = function(curNode) {
   var wsCoordinate = curNode.getWsCoordinate();
-  this.currentCursorSvg = this.cursorSvgLine_;
+  var x = wsCoordinate.x;
+  var y = wsCoordinate.y;
+
+  if (this.workspace_.RTL) {
+    x -= Blockly.CursorSvg.CURSOR_WIDTH;
+  }
+
+  this.positionLine_(x, y, Blockly.CursorSvg.CURSOR_WIDTH);
   this.setParent_(this.workspace_);
-  this.positionLine_(wsCoordinate.x, wsCoordinate.y,
-      Blockly.CursorSvg.CURSOR_WIDTH);
   this.showCurrent_();
 };
 
@@ -256,12 +260,11 @@ Blockly.CursorSvg.prototype.showWithCoordinates_ = function(curNode) {
  */
 Blockly.CursorSvg.prototype.showWithField_ = function(curNode) {
   var field = /** @type {Blockly.Field} */ (curNode.getLocation());
-  var width = field.borderRect_.width.baseVal.value;
-  var height = field.borderRect_.height.baseVal.value;
+  var width = field.getSize().width;
+  var height = field.getSize().height;
 
-  this.currentCursorSvg = this.cursorSvgRect_;
-  this.setParent_(field);
   this.positionRect_(0, 0, width, height);
+  this.setParent_(field);
   this.showCurrent_();
 };
 
@@ -274,13 +277,10 @@ Blockly.CursorSvg.prototype.showWithField_ = function(curNode) {
 Blockly.CursorSvg.prototype.showWithInput_ = function(curNode) {
   var connection = /** @type {Blockly.Connection} */
       (curNode.getLocation());
-  var path = Blockly.utils.svgPaths.moveTo(0,0) +
-      this.constants_.PUZZLE_TAB.pathDown;
   var sourceBlock = /** @type {Blockly.BlockSvg} */ (connection.getSourceBlock());
-  this.currentCursorSvg = this.cursorInput_;
-  this.cursorInput_.setAttribute('d', path);
-  this.setParent_(sourceBlock);
+
   this.positionInput_(connection);
+  this.setParent_(sourceBlock);
   this.showCurrent_();
 };
 
@@ -297,10 +297,11 @@ Blockly.CursorSvg.prototype.showWithNext_ = function(curNode) {
   var x = 0;
   var y = connection.getOffsetInBlock().y;
   var width = targetBlock.getHeightWidth().width;
-
-  this.currentCursorSvg = this.cursorSvgLine_;
-  this.setParent_(targetBlock);
+  if (this.workspace_.RTL) {
+    x = -width;
+  }
   this.positionLine_(x, y, width);
+  this.setParent_(targetBlock);
   this.showCurrent_();
 };
 
@@ -321,13 +322,17 @@ Blockly.CursorSvg.prototype.showWithStack_ = function(curNode) {
   var height = heightWidth.height + Blockly.CursorSvg.STACK_PADDING;
 
   // Shift the rectangle slightly to upper left so padding is equal on all sides.
-  var x = -1 * Blockly.CursorSvg.STACK_PADDING / 2;
-  var y = -1 * Blockly.CursorSvg.STACK_PADDING / 2;
+  var xPadding = -1 * Blockly.CursorSvg.STACK_PADDING / 2;
+  var yPadding = -1 * Blockly.CursorSvg.STACK_PADDING / 2;
 
-  this.currentCursorSvg = this.cursorSvgRect_;
-  this.setParent_(block);
+  var x = xPadding;
+  var y = yPadding;
 
+  if (this.workspace_.RTL) {
+    x = -(width + xPadding);
+  }
   this.positionRect_(x, y, width, height);
+  this.setParent_(block);
   this.showCurrent_();
 };
 
@@ -340,9 +345,9 @@ Blockly.CursorSvg.prototype.showCurrent_ = function() {
   this.currentCursorSvg.style.display = '';
 };
 
-/**************************/
-/**** Position         ****/
-/**************************/
+/**************************
+ * Position
+ **************************/
 
 /**
  * Position the cursor for a block.
@@ -353,10 +358,14 @@ Blockly.CursorSvg.prototype.showCurrent_ = function() {
  */
 Blockly.CursorSvg.prototype.positionBlock_ = function(width, cursorOffset, cursorHeight) {
   var cursorPath = Blockly.utils.svgPaths.moveBy(-1 * cursorOffset, cursorHeight) +
-    Blockly.utils.svgPaths.lineOnAxis('V', -1 * cursorOffset) +
-    Blockly.utils.svgPaths.lineOnAxis('H', width + cursorOffset * 2) +
-    Blockly.utils.svgPaths.lineOnAxis('V', cursorHeight);
+      Blockly.utils.svgPaths.lineOnAxis('V', -1 * cursorOffset) +
+      Blockly.utils.svgPaths.lineOnAxis('H', width + cursorOffset * 2) +
+      Blockly.utils.svgPaths.lineOnAxis('V', cursorHeight);
   this.cursorBlock_.setAttribute('d', cursorPath);
+  if (this.workspace_.RTL) {
+    this.flipRtl_(this.cursorBlock_);
+  }
+  this.currentCursorSvg = this.cursorBlock_;
 };
 
 /**
@@ -369,9 +378,13 @@ Blockly.CursorSvg.prototype.positionInput_ = function(connection) {
   var x = connection.getOffsetInBlock().x;
   var y = connection.getOffsetInBlock().y;
 
+  var path = Blockly.utils.svgPaths.moveTo(0,0) +
+      this.constants_.PUZZLE_TAB.pathDown;
+
+  this.cursorInput_.setAttribute('d', path);
   this.cursorInput_.setAttribute('transform',
-      'translate(' + x + ',' + y + ')' +
-      (connection.getSourceBlock().RTL ? ' scale(-1 1)' : ''));
+      'translate(' + x + ',' + y + ')' + (this.workspace_.RTL ? ' scale(-1 1)' : ''));
+  this.currentCursorSvg = this.cursorInput_;
 };
 
 /**
@@ -386,6 +399,7 @@ Blockly.CursorSvg.prototype.positionLine_ = function(x, y, width) {
   this.cursorSvgLine_.setAttribute('x', x);
   this.cursorSvgLine_.setAttribute('y', y);
   this.cursorSvgLine_.setAttribute('width', width);
+  this.currentCursorSvg = this.cursorSvgLine_;
 };
 
 /**
@@ -403,12 +417,16 @@ Blockly.CursorSvg.prototype.positionOutput_ = function(width, height) {
     Blockly.utils.svgPaths.lineOnAxis('V', height) +
     Blockly.utils.svgPaths.lineOnAxis('H', width);
   this.cursorBlock_.setAttribute('d', cursorPath);
+  if (this.workspace_.RTL) {
+    this.flipRtl_(this.cursorBlock_);
+  }
+  this.currentCursorSvg = this.cursorBlock_;
 };
 
 /**
  * Position the cursor for a previous connection.
  * Displays a half rectangle with a notch in the top to represent the previous
- * conenction.
+ * connection.
  * @param {number} width The width of the block.
  * @param {number} cursorOffset The offset of the cursor from around the block.
  * @param {number} cursorHeight The height of the cursor.
@@ -416,13 +434,16 @@ Blockly.CursorSvg.prototype.positionOutput_ = function(width, height) {
  */
 Blockly.CursorSvg.prototype.positionPrevious_ = function(width, cursorOffset, cursorHeight) {
   var cursorPath = Blockly.utils.svgPaths.moveBy(-1 * cursorOffset, cursorHeight) +
-    Blockly.utils.svgPaths.lineOnAxis('V', -1 * cursorOffset) +
-    Blockly.utils.svgPaths.lineOnAxis('H', this.constants_.NOTCH_OFFSET_LEFT) +
-    this.constants_.NOTCH.pathLeft +
-    Blockly.utils.svgPaths.lineOnAxis('H', width + cursorOffset * 2) +
-    Blockly.utils.svgPaths.lineOnAxis('V', cursorHeight);
+      Blockly.utils.svgPaths.lineOnAxis('V', -1 * cursorOffset) +
+      Blockly.utils.svgPaths.lineOnAxis('H', this.constants_.NOTCH_OFFSET_LEFT) +
+      this.constants_.NOTCH.pathLeft +
+      Blockly.utils.svgPaths.lineOnAxis('H', width + cursorOffset * 2) +
+      Blockly.utils.svgPaths.lineOnAxis('V', cursorHeight);
   this.cursorBlock_.setAttribute('d', cursorPath);
-  this.cursorInput_.setAttribute('transform', ' scale(-1 1)');
+  if (this.workspace_.RTL) {
+    this.flipRtl_(this.cursorBlock_);
+  }
+  this.currentCursorSvg = this.cursorBlock_;
 };
 
 /**
@@ -439,6 +460,16 @@ Blockly.CursorSvg.prototype.positionRect_ = function(x, y, width, height) {
   this.cursorSvgRect_.setAttribute('y', y);
   this.cursorSvgRect_.setAttribute('width', width);
   this.cursorSvgRect_.setAttribute('height', height);
+  this.currentCursorSvg = this.cursorSvgRect_;
+};
+
+/**
+ * Flip the SVG paths in RTL.
+ * @param {!SVGElement} cursor The cursor that we want to flip.
+ * @private
+ */
+Blockly.CursorSvg.prototype.flipRtl_ = function(cursor) {
+  cursor.setAttribute('transform', 'scale(-1 1)');
 };
 
 /**

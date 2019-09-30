@@ -160,7 +160,7 @@ Blockly.VariableMap.prototype.renameVariableWithConflict_ = function(variable,
 
 };
 
-/* End functions for renaming variabless. */
+/* End functions for renaming variables. */
 
 /**
  * Create a variable with a given name, optional type, and optional ID.

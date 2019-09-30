@@ -73,27 +73,28 @@ suite('Cursor', function() {
     this.workspace.dispose();
   });
 
-  test('Next - From a block skip over next connection', function() {
-    var blockNode = Blockly.ASTNode.createBlockNode(this.blocks.A);
-    this.cursor.setCurNode(blockNode);
+  test('Next - From a Previous skip over next connection and block', function() {
+    var prevNode = Blockly.ASTNode.createConnectionNode(this.blocks.A.previousConnection);
+    this.cursor.setCurNode(prevNode);
     this.cursor.next();
     var curNode = this.cursor.getCurNode();
     assertEquals(curNode.getLocation(), this.blocks.B.previousConnection);
   });
   test('Next - From last block in a stack go to next connection', function() {
-    var blockNode = Blockly.ASTNode.createBlockNode(this.blocks.B);
-    this.cursor.setCurNode(blockNode);
+    var prevNode = Blockly.ASTNode.createConnectionNode(this.blocks.B.previousConnection);
+    this.cursor.setCurNode(prevNode);
     this.cursor.next();
     var curNode = this.cursor.getCurNode();
     assertEquals(curNode.getLocation(), this.blocks.B.nextConnection);
   });
 
-  test('In - From input skip over output connection', function() {
-    var inputNode = Blockly.ASTNode.createInputNode(this.blocks.A.inputList[0]);
-    this.cursor.setCurNode(inputNode);
+  test('In - From output connection', function() {
+    var fieldBlock = this.blocks.E;
+    var outputNode = Blockly.ASTNode.createConnectionNode(fieldBlock.outputConnection);
+    this.cursor.setCurNode(outputNode);
     this.cursor.in();
     var curNode = this.cursor.getCurNode();
-    assertEquals(curNode.getLocation(), this.blocks.E);
+    assertEquals(curNode.getLocation(), fieldBlock.inputList[0].fieldRow[0]);
   });
 
   test('Prev - From previous connection skip over next connection', function() {
@@ -103,5 +104,14 @@ suite('Cursor', function() {
     this.cursor.prev();
     var curNode = this.cursor.getCurNode();
     assertEquals(curNode.getLocation(), this.blocks.A.previousConnection);
+  });
+
+  test('Out - From field skip over block node', function() {
+    var field = this.blocks.E.inputList[0].fieldRow[0];
+    var fieldNode = Blockly.ASTNode.createFieldNode(field);
+    this.cursor.setCurNode(fieldNode);
+    this.cursor.out();
+    var curNode = this.cursor.getCurNode();
+    assertEquals(curNode.getLocation(), this.blocks.E.outputConnection);
   });
 });

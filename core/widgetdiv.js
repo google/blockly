@@ -32,8 +32,6 @@
  */
 goog.provide('Blockly.WidgetDiv');
 
-goog.require('Blockly.Css');
-
 goog.require('Blockly.utils.style');
 
 

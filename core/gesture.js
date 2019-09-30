@@ -663,6 +663,9 @@ Blockly.Gesture.prototype.handleWsStart = function(e, ws) {
   this.setStartWorkspace_(ws);
   this.mostRecentEvent_ = e;
   this.doStart(e);
+  if (Blockly.keyboardAccessibilityMode) {
+    Blockly.navigation.setState(Blockly.navigation.STATE_WS);
+  }
 };
 
 /**

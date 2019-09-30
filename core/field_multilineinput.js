@@ -28,6 +28,7 @@
 
 goog.provide('Blockly.FieldMultilineInput');
 
+goog.require('Blockly.Css');
 goog.require('Blockly.DropDownDiv');
 goog.require('Blockly.FieldTextInput');
 goog.require('Blockly.utils');
@@ -233,14 +234,12 @@ Blockly.FieldMultilineInput.prototype.widgetCreate_ = function() {
   var scale = this.workspace_.scale;
 
   var htmlInput = /** @type {HTMLTextAreaElement} */ (document.createElement('textarea'));
-  htmlInput.setAttribute('class', 'blocklyHtmlInput blocklyHtmlTextAreaInput');
+  htmlInput.className = 'blocklyHtmlInput blocklyHtmlTextAreaInput';
   htmlInput.setAttribute('spellcheck', this.spellcheck_);
-  var fontSize =
-      (Blockly.FieldTextInput.FONTSIZE * scale) + 'pt';
+  var fontSize = (Blockly.FieldTextInput.FONTSIZE * scale) + 'pt';
   div.style.fontSize = fontSize;
   htmlInput.style.fontSize = fontSize;
-  var borderRadius =
-      (Blockly.FieldTextInput.BORDERRADIUS * scale) + 'px';
+  var borderRadius = (Blockly.FieldTextInput.BORDERRADIUS * scale) + 'px';
   htmlInput.style.borderRadius = borderRadius;
   var padding = Blockly.Field.DEFAULT_TEXT_OFFSET * scale;
   htmlInput.style.paddingLeft = padding + 'px';
@@ -276,5 +275,21 @@ Blockly.FieldMultilineInput.prototype.onHtmlInputKeyDown_ = function(e) {
     Blockly.FieldMultilineInput.superClass_.onHtmlInputKeyDown_.call(this, e);
   }
 };
+
+/**
+ * CSS for multiline field.  See css.js for use.
+ */
+Blockly.Css.register([
+  /* eslint-disable indent */
+  '.blocklyHtmlTextAreaInput {',
+    'font-family: monospace;',
+    'resize: none;',
+    'overflow: hidden;',
+    'height: 100%;',
+    'text-align: left;',
+  '}'
+  /* eslint-enable indent */
+]);
+
 
 Blockly.fieldRegistry.register('field_multilinetext', Blockly.FieldMultilineInput);

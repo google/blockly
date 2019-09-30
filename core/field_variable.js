@@ -42,7 +42,7 @@ goog.require('Blockly.Xml');
 
 /**
  * Class for a variable's dropdown field.
- * @param {?string} varname The default name for the variable.  If null,
+ * @param {?string} varName The default name for the variable.  If null,
  *     a unique variable name will be generated.
  * @param {Function=} opt_validator A function that is called to validate
  *    changes to the field's value. Takes in a variable ID  & returns a
@@ -51,19 +51,33 @@ goog.require('Blockly.Xml');
  *     to include in the dropdown.
  * @param {string=} opt_defaultType The type of variable to create if this
  *     field's value is not explicitly set.  Defaults to ''.
+ * @param {Object=} opt_config A map of options used to configure the field.
+ *    See the [field creation documentation]{@link https://developers.google.com/blockly/guides/create-custom-blocks/fields/built-in-fields/variable#creation}
+ *    for a list of properties this parameter supports.
  * @extends {Blockly.FieldDropdown}
  * @constructor
  */
-Blockly.FieldVariable = function(varname, opt_validator, opt_variableTypes,
-    opt_defaultType) {
-  // The FieldDropdown constructor would call setValue, which might create a
-  // spurious variable.  Just do the relevant parts of the constructor.
-  this.menuGenerator_ = Blockly.FieldVariable.dropdownCreate;
-  opt_validator && this.setValidator(opt_validator);
-  this.defaultVariableName = varname || '';
+Blockly.FieldVariable = function(varName, opt_validator, opt_variableTypes,
+    opt_defaultType, opt_config) {
+  // The FieldDropdown constructor expects the field's initial value to be
+  // the first entry in the menu generator, which it may or may not be.
+  // Just do the relevant parts of the constructor.
 
-  this.setTypes_(opt_variableTypes, opt_defaultType);
-  this.value_ = null;
+  /**
+   * An array of options for a dropdown list,
+   * or a function which generates these options.
+   * @type {!function(this:Blockly.FieldVariable): !Array.<!Array>}
+   * @protected
+   */
+  this.menuGenerator_ = Blockly.FieldVariable.dropdownCreate;
+
+  /**
+   * The initial variable name passed to this field's constructor, or an
+   * empty string if a name wasn't provided. Used to create the initial
+   * variable.
+   * @type {string}
+   */
+  this.defaultVariableName = varName || '';
 
   /**
    * The size of the area rendered by the field.
@@ -72,6 +86,13 @@ Blockly.FieldVariable = function(varname, opt_validator, opt_variableTypes,
    * @override
    */
   this.size_ = new Blockly.utils.Size(0, Blockly.BlockSvg.MIN_BLOCK_Y);
+
+  opt_config && this.configure_(opt_config);
+  opt_validator && this.setValidator(opt_validator);
+
+  if (!opt_config) {  // Only do one kind of configuration or the other.
+    this.setTypes_(opt_variableTypes, opt_defaultType);
+  }
 };
 Blockly.utils.object.inherits(Blockly.FieldVariable, Blockly.FieldDropdown);
 
@@ -85,10 +106,9 @@ Blockly.utils.object.inherits(Blockly.FieldVariable, Blockly.FieldDropdown);
  * @nocollapse
  */
 Blockly.FieldVariable.fromJson = function(options) {
-  var varname = Blockly.utils.replaceMessageReferences(options['variable']);
-  var variableTypes = options['variableTypes'];
-  var defaultType = options['defaultType'];
-  return new Blockly.FieldVariable(varname, null, variableTypes, defaultType);
+  var varName = Blockly.utils.replaceMessageReferences(options['variable']);
+  return new Blockly.FieldVariable(
+      varName, undefined, undefined, undefined, options);
 };
 
 /**
@@ -105,6 +125,16 @@ Blockly.FieldVariable.prototype.workspace_ = null;
  * @const
  */
 Blockly.FieldVariable.prototype.SERIALIZABLE = true;
+
+/**
+ * Configure the field based on the given map of options.
+ * @param {!Object} config A map of options to configure the field based on.
+ * @protected
+ */
+Blockly.FieldVariable.prototype.configure_ = function(config) {
+  Blockly.FieldVariable.superClass_.configure_.call(this, config);
+  this.setTypes_(config['variableTypes'], config['defaultType']);
+};
 
 /**
  * Initialize the model for this field if it has not already been initialized.

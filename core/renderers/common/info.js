@@ -43,7 +43,6 @@ goog.require('Blockly.blockRendering.StatementInput');
 goog.require('Blockly.blockRendering.SquareCorner');
 goog.require('Blockly.blockRendering.TopRow');
 goog.require('Blockly.blockRendering.Types');
-goog.require('Blockly.RenderedConnection');
 
 
 /**
@@ -245,7 +244,7 @@ Blockly.blockRendering.RenderInfo.prototype.createRows_ = function() {
         new Blockly.blockRendering.JaggedEdge(this.constants_));
   }
 
-  if (activeRow.elements.length) {
+  if (activeRow.elements.length || activeRow.hasDummyInput) {
     this.rows.push(activeRow);
   }
   this.populateBottomRow_();

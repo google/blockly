@@ -88,7 +88,7 @@ Blockly.Cursor.prototype.setCurNode = function(newNode) {
 };
 
 /**
- * Hide the cursor svg.
+ * Hide the cursor SVG.
  */
 Blockly.Cursor.prototype.hide = function() {
   if (this.drawer_) {
@@ -109,8 +109,8 @@ Blockly.Cursor.prototype.next = function() {
 
   var newNode = curNode.next();
   while (newNode && newNode.next() &&
-    (newNode.getType() === Blockly.ASTNode.types.NEXT ||
-    newNode.getType() === Blockly.ASTNode.types.BLOCK)) {
+    (newNode.getType() == Blockly.ASTNode.types.NEXT ||
+    newNode.getType() == Blockly.ASTNode.types.BLOCK)) {
     newNode = newNode.next();
   }
 
@@ -132,15 +132,11 @@ Blockly.Cursor.prototype.in = function() {
   }
   // If we are on a previous or output connection, go to the block level before
   // performing next operation.
-  if (curNode.getType() === Blockly.ASTNode.types.PREVIOUS ||
-    curNode.getType() === Blockly.ASTNode.types.OUTPUT) {
+  if (curNode.getType() == Blockly.ASTNode.types.PREVIOUS ||
+    curNode.getType() == Blockly.ASTNode.types.OUTPUT) {
     curNode = curNode.next();
   }
   var newNode = curNode.in();
-
-  if (newNode && newNode.getType() === Blockly.ASTNode.types.OUTPUT) {
-    newNode = newNode.next() || newNode;
-  }
 
   if (newNode) {
     this.setCurNode(newNode);
@@ -161,8 +157,8 @@ Blockly.Cursor.prototype.prev = function() {
   var newNode = curNode.prev();
 
   while (newNode && newNode.prev() &&
-    (newNode.getType() === Blockly.ASTNode.types.NEXT ||
-    newNode.getType() === Blockly.ASTNode.types.BLOCK)) {
+    (newNode.getType() == Blockly.ASTNode.types.NEXT ||
+    newNode.getType() == Blockly.ASTNode.types.BLOCK)) {
     newNode = newNode.prev();
   }
 
@@ -183,9 +179,9 @@ Blockly.Cursor.prototype.out = function() {
     return null;
   }
   var newNode = curNode.out();
-  
-  if (newNode && newNode.getType() === Blockly.ASTNode.types.BLOCK) {
-    newNode = newNode.prev();
+
+  if (newNode && newNode.getType() == Blockly.ASTNode.types.BLOCK) {
+    newNode = newNode.prev() || newNode;
   }
 
   if (newNode) {

@@ -42,7 +42,6 @@ goog.require('Blockly.blockRendering.SpacerRow');
 goog.require('Blockly.blockRendering.StatementInput');
 goog.require('Blockly.blockRendering.TopRow');
 goog.require('Blockly.blockRendering.Types');
-goog.require('Blockly.RenderedConnection');
 goog.require('Blockly.utils.object');
 
 

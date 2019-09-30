@@ -33,6 +33,7 @@ goog.require('Blockly.DropDownDiv');
 goog.require('Blockly.Events');
 goog.require('Blockly.Grid');
 goog.require('Blockly.Options');
+goog.require('Blockly.ScrollbarPair');
 goog.require('Blockly.Tooltip');
 goog.require('Blockly.utils');
 goog.require('Blockly.utils.dom');
@@ -72,7 +73,6 @@ Blockly.inject = function(container, opt_options) {
 
   var workspace = Blockly.createMainWorkspace_(svg, options, blockDragSurface,
       workspaceDragSurface);
-  Blockly.setTheme(options.theme);
   Blockly.user.keyMap.setKeyMap(options.keyMap);
 
   Blockly.init_(workspace);
@@ -96,7 +96,7 @@ Blockly.createDom_ = function(container, options) {
   // then manually positions content in RTL as needed.
   container.setAttribute('dir', 'LTR');
   // Set the default direction for Components to use.
-  Blockly.Component.setDefaultRightToLeft(options.RTL);
+  Blockly.Component.defaultRightToLeft = options.RTL;
 
   // Load CSS.
   Blockly.Css.inject(options.hasCss, options.pathToMedia);
@@ -231,6 +231,8 @@ Blockly.createMainWorkspace_ = function(svg, options, blockDragSurface,
   if (options.zoomOptions && options.zoomOptions.controls) {
     mainWorkspace.addZoomControls();
   }
+  // Register the workspace svg as a UI component.
+  mainWorkspace.getThemeManager().subscribe(svg, 'workspace', 'background-color');
 
   // A null translation will also apply the correct initial scale.
   mainWorkspace.translate(0, 0);

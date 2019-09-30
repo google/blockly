@@ -26,6 +26,7 @@
 
 goog.provide('Blockly.FieldColour');
 
+goog.require('Blockly.Css');
 goog.require('Blockly.DropDownDiv');
 goog.require('Blockly.Events');
 goog.require('Blockly.Events.BlockChange');
@@ -78,7 +79,7 @@ Blockly.utils.object.inherits(Blockly.FieldColour, Blockly.Field);
  * @nocollapse
  */
 Blockly.FieldColour.fromJson = function(options) {
-  return new Blockly.FieldColour(options['colour'], null, options);
+  return new Blockly.FieldColour(options['colour'], undefined, options);
 };
 
 /**
@@ -368,18 +369,20 @@ Blockly.FieldColour.prototype.onKeyDown_ = function(e) {
  * @package
  */
 Blockly.FieldColour.prototype.onBlocklyAction = function(action) {
-  if (action === Blockly.navigation.ACTION_PREVIOUS) {
-    this.moveHighlightBy_(0, -1);
-    return true;
-  } else if (action === Blockly.navigation.ACTION_NEXT) {
-    this.moveHighlightBy_(0, 1);
-    return true;
-  } else if (action === Blockly.navigation.ACTION_OUT) {
-    this.moveHighlightBy_(-1, 0);
-    return true;
-  } else if (action === Blockly.navigation.ACTION_IN) {
-    this.moveHighlightBy_(1, 0);
-    return true;
+  if (this.picker_) {
+    if (action === Blockly.navigation.ACTION_PREVIOUS) {
+      this.moveHighlightBy_(0, -1);
+      return true;
+    } else if (action === Blockly.navigation.ACTION_NEXT) {
+      this.moveHighlightBy_(0, 1);
+      return true;
+    } else if (action === Blockly.navigation.ACTION_OUT) {
+      this.moveHighlightBy_(-1, 0);
+      return true;
+    } else if (action === Blockly.navigation.ACTION_IN) {
+      this.moveHighlightBy_(1, 0);
+      return true;
+    }
   }
   return Blockly.FieldColour.superClass_.onBlocklyAction.call(this, action);
 };
@@ -502,7 +505,7 @@ Blockly.FieldColour.prototype.setHighlightedCell_ = function(cell, index) {
   if (highlighted) {
     Blockly.utils.dom.removeClass(highlighted, 'blocklyColourHighlighted');
   }
-  // Highight new item.
+  // Highlight new item.
   Blockly.utils.dom.addClass(cell, 'blocklyColourHighlighted');
   // Set new highlighted index.
   this.highlightedIndex_ = index;
@@ -583,6 +586,43 @@ Blockly.FieldColour.prototype.dropdownDispose_ = function() {
   Blockly.unbindEvent_(this.onMouseEnterWrapper_);
   Blockly.unbindEvent_(this.onMouseLeaveWrapper_);
   Blockly.unbindEvent_(this.onKeyDownWrapper_);
+  this.picker_ = null;
 };
+
+/**
+ * CSS for colour picker.  See css.js for use.
+ */
+Blockly.Css.register([
+  /* eslint-disable indent */
+  '.blocklyColourTable {',
+    'border-collapse: collapse;',
+    'display: block;',
+    'outline: none;',
+    'padding: 1px;',
+  '}',
+
+  '.blocklyColourTable>tr>td {',
+    'border: .5px solid #888;',
+    'box-sizing: border-box;',
+    'cursor: pointer;',
+    'display: inline-block;',
+    'height: 20px;',
+    'padding: 0;',
+    'width: 20px;',
+  '}',
+
+  '.blocklyColourTable>tr>td.blocklyColourHighlighted {',
+    'border-color: #eee;',
+    'box-shadow: 2px 2px 7px 2px rgba(0,0,0,.3);',
+    'position: relative;',
+  '}',
+
+  '.blocklyColourSelected, .blocklyColourSelected:hover {',
+    'border-color: #eee !important;',
+    'outline: 1px solid #333;',
+    'position: relative;',
+  '}'
+  /* eslint-enable indent */
+]);
 
 Blockly.fieldRegistry.register('field_colour', Blockly.FieldColour);

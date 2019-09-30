@@ -33,7 +33,6 @@ goog.provide('Blockly');
 goog.require('Blockly.BlockSvg.render');
 goog.require('Blockly.Events');
 goog.require('Blockly.Events.Ui');
-goog.require('Blockly.Generator');
 goog.require('Blockly.navigation');
 goog.require('Blockly.Procedures');
 goog.require('Blockly.Tooltip');
@@ -43,12 +42,13 @@ goog.require('Blockly.WorkspaceSvg');
 goog.require('Blockly.constants');
 goog.require('Blockly.inject');
 goog.require('Blockly.utils');
+goog.require('Blockly.utils.colour');
 goog.require('Blockly.Xml');
 
 
 /**
  * Blockly core version.
- * This constant is overriden by the build script (build.py) to the value of the version
+ * This constant is overridden by the build script (build.py) to the value of the version
  * in package.json. This is done during the gen_core build step.
  * For local builds, you can pass --define='Blockly.VERSION=X.Y.Z' to the compiler
  * to override this constant.
@@ -115,13 +115,6 @@ Blockly.clipboardTypeCounts_ = null;
  * @private
  */
 Blockly.cache3dSupported_ = null;
-
-/**
- * Holds all Blockly style attributes.
- * @type {Blockly.Theme}
- * @private
- */
-Blockly.theme_ = null;
 
 /**
  * Returns the dimensions of the specified SVG image.
@@ -682,73 +675,4 @@ Blockly.checkBlockColourConstant_ = function(
     var warning = warningPattern.replace('%1', namePath).replace('%2', msgName);
     console.warn(warning);
   }
-};
-
-
-/**
- * Sets the theme for Blockly and refreshes all blocks in the toolbox and
- * workspace.
- * @param {!Blockly.Theme} theme Theme for Blockly.
- */
-Blockly.setTheme = function(theme) {
-  Blockly.theme_ = theme;
-  var ws = Blockly.getMainWorkspace();
-
-  if (ws) {
-    Blockly.refreshTheme_(ws);
-  }
-};
-
-/**
- * Refresh the theme for all items on the workspace.
- * @param {!Blockly.Workspace} ws Blockly workspace to refresh theme on.
- * @private
- */
-Blockly.refreshTheme_ = function(ws) {
-  // Update all blocks in workspace that have a style name.
-  Blockly.updateBlockStyles_(ws.getAllBlocks().filter(
-      function(block) {
-        return block.getStyleName() !== undefined;
-      }
-  ));
-
-  // Update blocks in the flyout.
-  if (!ws.toolbox_ && ws.flyout_ && ws.flyout_.workspace_) {
-    Blockly.updateBlockStyles_(ws.flyout_.workspace_.getAllBlocks());
-  } else {
-    ws.refreshToolboxSelection();
-  }
-
-  // Update colours on the categories.
-  if (ws.toolbox_) {
-    ws.toolbox_.updateColourFromTheme();
-  }
-
-  var event = new Blockly.Events.Ui(null, 'theme');
-  event.workspaceId = ws.id;
-  Blockly.Events.fire(event);
-};
-
-/**
- * Updates all the blocks with new style.
- * @param {!Array.<!Blockly.Block>} blocks List of blocks to update the style
- * on.
- * @private
- */
-Blockly.updateBlockStyles_ = function(blocks) {
-  for (var i = 0, block; block = blocks[i]; i++) {
-    var blockStyleName = block.getStyleName();
-    block.setStyle(blockStyleName);
-    if (block.mutator) {
-      block.mutator.updateBlockStyle(blockStyleName);
-    }
-  }
-};
-
-/**
- * Gets the theme.
- * @return {Blockly.Theme} Theme for Blockly.
- */
-Blockly.getTheme = function() {
-  return Blockly.theme_;
 };

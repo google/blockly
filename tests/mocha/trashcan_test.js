@@ -19,12 +19,16 @@
  */
 
 suite("Trashcan", function() {
+  var themeManager = new Blockly.ThemeManager(Blockly.Themes.Classic);
   var workspace = {
     addChangeListener: function(func) {
       this.listener = func;
     },
     triggerListener: function(event) {
       this.listener(event);
+    },
+    getThemeManager: function() {
+      return themeManager;
     },
     options: {
       maxTrashcanContents: Infinity

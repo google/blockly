@@ -3,6 +3,7 @@ goog.provide('Main');
 // Either require 'Blockly.requires', or just the components you use:
 goog.require('Blockly');
 goog.require('Blockly.geras.Renderer');
+goog.require('Blockly.VerticalFlyout');
 // Blocks
 goog.require('Blockly.Constants.Logic');
 goog.require('Blockly.Constants.Loops');

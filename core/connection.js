@@ -212,9 +212,9 @@ Blockly.Connection.prototype.connect_ = function(childConnection) {
           if (orphanBlock.workspace && !orphanBlock.getParent()) {
             Blockly.Events.setGroup(group);
             if (orphanBlock.outputConnection) {
-              orphanBlock.outputConnection.bumpAwayFrom_(parentConnection);
+              orphanBlock.outputConnection.onFailedConnect(parentConnection);
             } else if (orphanBlock.previousConnection) {
-              orphanBlock.previousConnection.bumpAwayFrom_(parentConnection);
+              orphanBlock.previousConnection.onFailedConnect(parentConnection);
             }
             Blockly.Events.setGroup(false);
           }
@@ -457,6 +457,16 @@ Blockly.Connection.prototype.isConnectionAllowed = function(candidate) {
 };
 
 /**
+ * Behavior after a connection attempt fails.
+ * @param {Blockly.Connection} _otherConnection Connection that this connection
+ *     failed to connect to.
+ * @package
+ */
+Blockly.Connection.prototype.onFailedConnect = function(_otherConnection) {
+  // NOP
+};
+
+/**
  * Connect this connection to another connection.
  * @param {!Blockly.Connection} otherConnection Connection to connect to.
  */
@@ -671,8 +681,8 @@ Blockly.Connection.prototype.onCheckChanged_ = function() {
 
 /**
  * Change a connection's compatibility.
- * @param {*} check Compatible value type or list of value types.
- *     Null if all types are compatible.
+ * @param {string|!Array<string>} check Compatible value type or list of value
+ *    types. Null if all types are compatible.
  * @return {!Blockly.Connection} The connection being modified
  *     (to allow chaining).
  */

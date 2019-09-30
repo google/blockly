@@ -157,7 +157,8 @@ Blockly.Mutator.prototype.createEditor_ = function() {
         Blockly.TOOLBOX_AT_LEFT,
     horizontalLayout: false,
     getMetrics: this.getFlyoutMetrics_.bind(this),
-    setMetrics: null
+    setMetrics: null,
+    renderer: this.block_.workspace.options.renderer
   };
   this.workspace_ = new Blockly.WorkspaceSvg(workspaceOptions);
   this.workspace_.isMutator = true;

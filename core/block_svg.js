@@ -115,7 +115,7 @@ Blockly.BlockSvg = function(workspace, prototypeName, opt_id) {
 
   // Expose this block's ID on its top-level SVG group.
   if (this.svgGroup_.dataset) {
-    this.svgGroup_.dataset.id = this.id;
+    this.svgGroup_.dataset['id'] = this.id;
   }
 
   /**
@@ -538,6 +538,16 @@ Blockly.BlockSvg.prototype.getBoundingRectangle = function() {
     right = blockXY.x + blockBounds.width - tab;
   }
   return new Blockly.utils.Rect(top, bottom, left, right);
+};
+
+/**
+ * Notify every input on this block to mark its fields as dirty.
+ * A dirty field is a field that needs to be re-rendererd.
+ */
+Blockly.BlockSvg.prototype.markDirty = function() {
+  for (var i = 0, input; input = this.inputList[i]; i++) {
+    input.markDirty();
+  }
 };
 
 /**

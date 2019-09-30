@@ -24,12 +24,12 @@ goog.require('Blockly.Msg');
 suite('Procedures XML', function() {
   suite('Deserialization', function() {
     setup(function() {
-      Blockly.setTheme(new Blockly.Theme({
+      this.workspace = new Blockly.Workspace();
+      this.workspace.setTheme(new Blockly.Theme({
         "procedure_blocks": {
           "colourPrimary": "290"
         }
       }));
-      this.workspace = new Blockly.Workspace();
 
       this.callForAllTypes = function(func) {
         var typesArray = [
@@ -217,8 +217,8 @@ suite('Procedures XML', function() {
           chai.assert.isEmpty(block.arguments_);
           // TODO: argumentVarModels_ is undefined for call_return, but
           //  defined for call_noreturn. Make it defined for both.
-          /*chai.assert.isArray(block.argumentVarModels_);
-          chai.assert.isEmpty(block.argumentVarModels_);*/
+          /* chai.assert.isArray(block.argumentVarModels_);
+          chai.assert.isEmpty(block.argumentVarModels_); */
         });
       });
       // TODO: I couldn't get this test (of creating a definition) to work
@@ -239,8 +239,8 @@ suite('Procedures XML', function() {
           chai.assert.isEmpty(block.arguments_);
           // TODO: argumentVarModels_ is undefined for call_return, but
           //  defined for call_noreturn. Make it defined for both.
-          /*chai.assert.isArray(block.argumentVarModels_);
-          chai.assert.isEmpty(block.argumentVarModels_);*/
+          /* chai.assert.isArray(block.argumentVarModels_);
+          chai.assert.isEmpty(block.argumentVarModels_); */
           chai.assert.equal(this.workspace.getAllBlocks().count, 2);
         });
       });

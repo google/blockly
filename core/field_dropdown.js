@@ -34,6 +34,7 @@ goog.require('Blockly.Field');
 goog.require('Blockly.fieldRegistry');
 goog.require('Blockly.Menu');
 goog.require('Blockly.MenuItem');
+goog.require('Blockly.navigation');
 goog.require('Blockly.utils');
 goog.require('Blockly.utils.dom');
 goog.require('Blockly.utils.object');
@@ -66,7 +67,8 @@ Blockly.FieldDropdown = function(menuGenerator, opt_validator, opt_config) {
   /**
    * An array of options for a dropdown list,
    * or a function which generates these options.
-   * @type {(!Array.<!Array>|!Function)}
+   * @type {(!Array.<!Array>|
+   *    !function(this:Blockly.FieldDropdown): !Array.<!Array>)}
    * @protected
    */
   this.menuGenerator_ = menuGenerator;
@@ -279,6 +281,7 @@ Blockly.FieldDropdown.prototype.widgetCreate_ = function() {
  */
 Blockly.FieldDropdown.prototype.widgetDispose_ = function() {
   this.menu_.dispose();
+  this.menu_ = null;
 };
 
 /**
@@ -581,7 +584,7 @@ Blockly.FieldDropdown.prototype.renderSelectedText_ = function() {
 };
 
 /**
- * Use the `getText_` developer hook to override the field's text represenation.
+ * Use the `getText_` developer hook to override the field's text representation.
  * Get the selected option text. If the selected option is an image
  * we return the image alt text.
  * @return {?string} Selected option text.
@@ -639,6 +642,26 @@ Blockly.FieldDropdown.validateOptions_ = function(options) {
   if (foundError) {
     throw TypeError('Found invalid FieldDropdown options.');
   }
+};
+
+/**
+ * Handles the given action.
+ * This is only triggered when keyboard accessibility mode is enabled.
+ * @param {!Blockly.Action} action The action to be handled.
+ * @return {boolean} True if the field handled the action, false otherwise.
+ * @package
+ */
+Blockly.FieldDropdown.prototype.onBlocklyAction = function(action) {
+  if (this.menu_) {
+    if (action === Blockly.navigation.ACTION_PREVIOUS) {
+      this.menu_.highlightPrevious();
+      return true;
+    } else if (action === Blockly.navigation.ACTION_NEXT) {
+      this.menu_.highlightNext();
+      return true;
+    }
+  }
+  return Blockly.FieldDropdown.superClass_.onBlocklyAction.call(this, action);
 };
 
 Blockly.fieldRegistry.register('field_dropdown', Blockly.FieldDropdown);

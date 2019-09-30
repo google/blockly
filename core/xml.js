@@ -38,6 +38,8 @@ goog.require('Blockly.utils');
 goog.require('Blockly.utils.dom');
 goog.require('Blockly.utils.global');
 goog.require('Blockly.utils.xml');
+goog.require('Blockly.WorkspaceComment');
+goog.require('Blockly.WorkspaceCommentSvg');
 
 
 /**
@@ -429,9 +431,19 @@ Blockly.Xml.domToWorkspace = function(xml, workspace) {
         throw TypeError('Shadow block cannot be a top-level block.');
       } else if (name == 'comment') {
         if (workspace.rendered) {
-          Blockly.WorkspaceCommentSvg.fromXml(xmlChild, workspace, width);
+          if (!Blockly.WorkspaceCommentSvg) {
+            console.warn('Missing require for Blockly.WorkspaceCommentSvg, ' +
+                'ignoring workspace comment.');
+          } else {
+            Blockly.WorkspaceCommentSvg.fromXml(xmlChild, workspace, width);
+          }
         } else {
-          Blockly.WorkspaceComment.fromXml(xmlChild, workspace);
+          if (!Blockly.WorkspaceComment) {
+            console.warn('Missing require for Blockly.WorkspaceComment, ' +
+                'ignoring workspace comment.');
+          } else {
+            Blockly.WorkspaceComment.fromXml(xmlChild, workspace);
+          }
         }
       } else if (name == 'variables') {
         if (variablesFirst) {
@@ -656,6 +668,11 @@ Blockly.Xml.domToBlockHeadless_ = function(xmlBlock, workspace) {
         }
         break;
       case 'comment':
+        if (!Blockly.Comment) {
+          console.warn('Missing require for Blockly.Comment, ' +
+              'ignoring block comment.');
+          break;
+        }
         var text = xmlChild.textContent;
         var pinned = xmlChild.getAttribute('pinned') == 'true';
         var width = parseInt(xmlChild.getAttribute('w'), 10);

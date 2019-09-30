@@ -21,7 +21,7 @@
     "build:debug": "gulp build-core --verbose > build-debug.log 2>&1",
     "lint": "eslint .",
     "package": "gulp package",
-    "prepare": "gulp blockly_node_javascript_en",
+    "prepare": "npm run package",
     "release": "gulp release",
     "test": "concurrently 'npm run test:prepare' 'sleep 5 && npm run test:run'",
     "test:run": "tests/run_all_tests.sh",

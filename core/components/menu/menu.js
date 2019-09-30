@@ -57,13 +57,11 @@ Blockly.utils.object.inherits(Blockly.Menu, Blockly.Component);
  */
 Blockly.Menu.prototype.createDom = function() {
   var element = document.createElement('div');
-  element.setAttribute('id', this.getId());
+  element.id = this.getId();
   this.setElementInternal(element);
 
   // Set class
-  element.setAttribute('class', 'goog-menu goog-menu-vertical');
-  element.setAttribute('style', 'user-select: none;');
-
+  element.className = 'goog-menu goog-menu-vertical blocklyNonSelectable';
   element.tabIndex = 0;
 
   // Initialize ARIA role.
@@ -292,9 +290,10 @@ Blockly.Menu.prototype.setHighlighted = function(item) {
 /**
  * Highlights the next highlightable item (or the first if nothing is currently
  * highlighted).
- * @protected
+ * @package
  */
 Blockly.Menu.prototype.highlightNext = function() {
+  this.unhighlightCurrent();
   this.highlightHelper(function(index, max) {
     return (index + 1) % max;
   }, this.highlightedIndex_);
@@ -303,9 +302,10 @@ Blockly.Menu.prototype.highlightNext = function() {
 /**
  * Highlights the previous highlightable item (or the last if nothing is
  * currently highlighted).
- * @protected
+ * @package
  */
 Blockly.Menu.prototype.highlightPrevious = function() {
+  this.unhighlightCurrent();
   this.highlightHelper(function(index, max) {
     index--;
     return index < 0 ? max - 1 : index;
@@ -465,12 +465,10 @@ Blockly.Menu.prototype.handleKeyEventInternal = function(e) {
       break;
 
     case Blockly.utils.KeyCodes.UP:
-      this.unhighlightCurrent();
       this.highlightPrevious();
       break;
 
     case Blockly.utils.KeyCodes.DOWN:
-      this.unhighlightCurrent();
       this.highlightNext();
       break;
 

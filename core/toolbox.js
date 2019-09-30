@@ -26,10 +26,9 @@
 
 goog.provide('Blockly.Toolbox');
 
+goog.require('Blockly.Css');
 goog.require('Blockly.Events');
 goog.require('Blockly.Events.Ui');
-goog.require('Blockly.Flyout');
-goog.require('Blockly.HorizontalFlyout');
 goog.require('Blockly.navigation');
 goog.require('Blockly.Touch');
 goog.require('Blockly.tree.TreeControl');
@@ -40,7 +39,6 @@ goog.require('Blockly.utils.colour');
 goog.require('Blockly.utils.dom');
 goog.require('Blockly.utils.object');
 goog.require('Blockly.utils.Rect');
-goog.require('Blockly.VerticalFlyout');
 
 
 /**
@@ -155,9 +153,12 @@ Blockly.Toolbox.prototype.init = function() {
    * @type {Element}
    */
   this.HtmlDiv = document.createElement('div');
-  this.HtmlDiv.className = 'blocklyToolboxDiv';
+  this.HtmlDiv.className = 'blocklyToolboxDiv blocklyNonSelectable';
   this.HtmlDiv.setAttribute('dir', workspace.RTL ? 'RTL' : 'LTR');
   svg.parentNode.insertBefore(this.HtmlDiv, svg);
+  var themeManager = workspace.getThemeManager();
+  themeManager.subscribe(this.HtmlDiv, 'toolbox', 'background-color');
+  themeManager.subscribe(this.HtmlDiv, 'toolboxText', 'color');
 
   // Clicking on toolbox closes popups.
   Blockly.bindEventWithChecks_(this.HtmlDiv, 'mousedown', this,
@@ -170,7 +171,7 @@ Blockly.Toolbox.prototype.init = function() {
           Blockly.hideChaff(true);
         }
         Blockly.Touch.clearTouchIdentifier();  // Don't block future drags.
-      }, /*opt_noCaptureIdentifier*/ false, /*opt_noPreventDefault*/ true);
+      }, /* opt_noCaptureIdentifier */ false, /* opt_noPreventDefault */ true);
   var workspaceOptions = {
     disabledPatternId: workspace.options.disabledPatternId,
     parentWorkspace: workspace,
@@ -186,8 +187,14 @@ Blockly.Toolbox.prototype.init = function() {
    */
   this.flyout_ = null;
   if (workspace.horizontalLayout) {
+    if (!Blockly.HorizontalFlyout) {
+      throw Error('Missing require for Blockly.HorizontalFlyout');
+    }
     this.flyout_ = new Blockly.HorizontalFlyout(workspaceOptions);
   } else {
+    if (!Blockly.VerticalFlyout) {
+      throw Error('Missing require for Blockly.VerticalFlyout');
+    }
     this.flyout_ = new Blockly.VerticalFlyout(workspaceOptions);
   }
   // Insert the flyout after the workspace.
@@ -198,6 +205,19 @@ Blockly.Toolbox.prototype.init = function() {
   this.config_['cleardotPath'] = workspace.options.pathToMedia + '1x1.gif';
   this.config_['cssCollapsedFolderIcon'] =
       'blocklyTreeIconClosed' + (workspace.RTL ? 'Rtl' : 'Ltr');
+  this.renderTree(workspace.options.languageTree);
+};
+
+/**
+ * Fill the toolbox with categories and blocks.
+ * @param {!Node} languageTree DOM tree of blocks.
+ * @package
+ */
+Blockly.Toolbox.prototype.renderTree = function(languageTree) {
+  if (this.tree_) {
+    this.tree_.dispose();  // Delete any existing content.
+    this.lastCategory_ = null;
+  }
   var tree = new Blockly.tree.TreeControl(this,
       /** @type {!Blockly.tree.BaseNode.Config} */ (this.config_));
   this.tree_ = tree;
@@ -205,8 +225,18 @@ Blockly.Toolbox.prototype.init = function() {
   tree.onBeforeSelected(this.handleBeforeTreeSelected_);
   tree.onAfterSelected(this.handleAfterTreeSelected_);
   var openNode = null;
-  if (workspace.options.languageTree) {
-    openNode = this.populate_(workspace.options.languageTree);
+  if (languageTree) {
+    this.tree_.blocks = [];
+    this.hasColours_ = false;
+    var openNode =
+      this.syncTrees_(languageTree, this.tree_, this.workspace_.options.pathToMedia);
+
+    if (this.tree_.blocks.length) {
+      throw Error('Toolbox cannot have both blocks and categories ' +
+          'in the root level.');
+    }
+    // Fire a resize event since the toolbox may have changed width and height.
+    this.workspace_.resizeContents();
   }
   tree.render(this.HtmlDiv);
   if (openNode) {
@@ -260,9 +290,16 @@ Blockly.Toolbox.prototype.handleAfterTreeSelected_ = function(
     if (this.lastCategory_ != newNode) {
       this.flyout_.scrollToStart();
     }
+    if (Blockly.keyboardAccessibilityMode) {
+      Blockly.navigation.setState(Blockly.navigation.STATE_TOOLBOX);
+    }
   } else {
     // Hide the flyout.
     this.flyout_.hide();
+    if (Blockly.keyboardAccessibilityMode &&
+        !(newNode instanceof Blockly.Toolbox.TreeSeparator)) {
+      Blockly.navigation.setState(Blockly.navigation.STATE_WS);
+    }
   }
   if (oldNode != newNode && oldNode != this) {
     var event = new Blockly.Events.Ui(null, 'category',
@@ -317,6 +354,7 @@ Blockly.Toolbox.prototype.onBlocklyAction = function(action) {
 Blockly.Toolbox.prototype.dispose = function() {
   this.flyout_.dispose();
   this.tree_.dispose();
+  this.workspace_.getThemeManager().unsubscribe(this.HtmlDiv);
   Blockly.utils.dom.removeNode(this.HtmlDiv);
   this.workspace_ = null;
   this.lastCategory_ = null;
@@ -369,29 +407,6 @@ Blockly.Toolbox.prototype.position = function() {
     this.width = treeDiv.offsetWidth;
   }
   this.flyout_.position();
-};
-
-/**
- * Fill the toolbox with categories and blocks.
- * @param {!Node} newTree DOM tree of blocks.
- * @return {Blockly.tree.BaseNode} Tree node to open at startup (or null).
- * @private
- */
-Blockly.Toolbox.prototype.populate_ = function(newTree) {
-  this.tree_.removeChildren();  // Delete any existing content.
-  this.tree_.blocks = [];
-  this.hasColours_ = false;
-  var openNode =
-    this.syncTrees_(newTree, this.tree_, this.workspace_.options.pathToMedia);
-
-  if (this.tree_.blocks.length) {
-    throw Error('Toolbox cannot have both blocks and categories ' +
-        'in the root level.');
-  }
-
-  // Fire a resize event since the toolbox may have changed width and height.
-  this.workspace_.resizeContents();
-  return openNode;
 };
 
 /**
@@ -523,8 +538,9 @@ Blockly.Toolbox.prototype.setColour_ = function(colourValue, childOut,
 Blockly.Toolbox.prototype.setColourFromStyle_ = function(
     styleName, childOut, categoryName) {
   childOut.styleName = styleName;
-  if (styleName && Blockly.getTheme()) {
-    var style = Blockly.getTheme().getCategoryStyle(styleName);
+  var theme = this.workspace_.getTheme();
+  if (styleName && theme) {
+    var style = theme.getCategoryStyle(styleName);
     if (style && style.colour) {
       this.setColour_(style.colour, childOut, categoryName);
     } else {
@@ -556,6 +572,7 @@ Blockly.Toolbox.prototype.updateColourFromTheme_ = function(opt_tree) {
 
 /**
  * Updates the category colours and background colour of selected categories.
+ * @package
  */
 Blockly.Toolbox.prototype.updateColourFromTheme = function() {
   var tree = this.tree_;
@@ -700,3 +717,129 @@ Blockly.Toolbox.TreeSeparator = function(config) {
 };
 Blockly.utils.object.inherits(Blockly.Toolbox.TreeSeparator,
     Blockly.tree.TreeNode);
+
+/**
+ * CSS for Toolbox.  See css.js for use.
+ */
+Blockly.Css.register([
+  /* eslint-disable indent */
+  '.blocklyToolboxDelete {',
+    'cursor: url("<<<PATH>>>/handdelete.cur"), auto;',
+  '}',
+
+  '.blocklyToolboxGrab {',
+    'cursor: url("<<<PATH>>>/handclosed.cur"), auto;',
+    'cursor: grabbing;',
+    'cursor: -webkit-grabbing;',
+  '}',
+
+  /* Category tree in Toolbox. */
+  '.blocklyToolboxDiv {',
+    'background-color: #ddd;',
+    'overflow-x: visible;',
+    'overflow-y: auto;',
+    'position: absolute;',
+    'z-index: 70;', /* so blocks go under toolbox when dragging */
+    '-webkit-tap-highlight-color: transparent;', /* issue #1345 */
+  '}',
+
+  '.blocklyTreeRoot {',
+    'padding: 4px 0;',
+  '}',
+
+  '.blocklyTreeRoot:focus {',
+    'outline: none;',
+  '}',
+
+  '.blocklyTreeRow {',
+    'height: 22px;',
+    'line-height: 22px;',
+    'margin-bottom: 3px;',
+    'padding-right: 8px;',
+    'white-space: nowrap;',
+  '}',
+
+  '.blocklyHorizontalTree {',
+    'float: left;',
+    'margin: 1px 5px 8px 0;',
+  '}',
+
+  '.blocklyHorizontalTreeRtl {',
+    'float: right;',
+    'margin: 1px 0 8px 5px;',
+  '}',
+
+  '.blocklyToolboxDiv[dir="RTL"] .blocklyTreeRow {',
+    'margin-left: 8px;',
+  '}',
+
+  '.blocklyTreeRow:not(.blocklyTreeSelected):hover {',
+    'background-color: #e4e4e4;',
+  '}',
+
+  '.blocklyTreeSeparator {',
+    'border-bottom: solid #e5e5e5 1px;',
+    'height: 0;',
+    'margin: 5px 0;',
+  '}',
+
+  '.blocklyTreeSeparatorHorizontal {',
+    'border-right: solid #e5e5e5 1px;',
+    'width: 0;',
+    'padding: 5px 0;',
+    'margin: 0 5px;',
+  '}',
+
+  '.blocklyTreeIcon {',
+    'background-image: url(<<<PATH>>>/sprites.png);',
+    'height: 16px;',
+    'vertical-align: middle;',
+    'width: 16px;',
+  '}',
+
+  '.blocklyTreeIconClosedLtr {',
+    'background-position: -32px -1px;',
+  '}',
+
+  '.blocklyTreeIconClosedRtl {',
+    'background-position: 0 -1px;',
+  '}',
+
+  '.blocklyTreeIconOpen {',
+    'background-position: -16px -1px;',
+  '}',
+
+  '.blocklyTreeSelected>.blocklyTreeIconClosedLtr {',
+    'background-position: -32px -17px;',
+  '}',
+
+  '.blocklyTreeSelected>.blocklyTreeIconClosedRtl {',
+    'background-position: 0 -17px;',
+  '}',
+
+  '.blocklyTreeSelected>.blocklyTreeIconOpen {',
+    'background-position: -16px -17px;',
+  '}',
+
+  '.blocklyTreeIconNone,',
+  '.blocklyTreeSelected>.blocklyTreeIconNone {',
+    'background-position: -48px -1px;',
+  '}',
+
+  '.blocklyTreeLabel {',
+    'cursor: default;',
+    'font-family: sans-serif;',
+    'font-size: 16px;',
+    'padding: 0 3px;',
+    'vertical-align: middle;',
+  '}',
+
+  '.blocklyToolboxDelete .blocklyTreeLabel {',
+    'cursor: url("<<<PATH>>>/handdelete.cur"), auto;',
+  '}',
+
+  '.blocklyTreeSelected .blocklyTreeLabel {',
+    'color: #fff;',
+  '}'
+  /* eslint-enable indent */
+]);

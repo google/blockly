@@ -129,6 +129,19 @@ Blockly.Extensions.registerMutator = function(name, mixinObj, opt_helperFn,
 };
 
 /**
+ * Unregisters the extension registered with the given name.
+ * @param {string} name The name of the extension to unregister.
+ */
+Blockly.Extensions.unregister = function(name) {
+  if (Blockly.Extensions.ALL_[name]) {
+    Blockly.Extensions.ALL_[name] = undefined;
+  } else {
+    console.warn('No extension mapping for name "' + name +
+        '" found to unregister');
+  }
+};
+
+/**
  * Applies an extension method to a block. This should only be called during
  * block construction.
  * @param {string} name The name of the extension.
@@ -342,7 +355,7 @@ Blockly.Extensions.buildTooltipForDropdown = function(dropdownName,
    * @this {Blockly.Block}
    */
   var extensionFn = function() {
-    if (this.type && blockTypesChecked.indexOf(this.type) === -1) {
+    if (this.type && blockTypesChecked.indexOf(this.type) == -1) {
       Blockly.Extensions.checkDropdownOptionsInTable_(
           this, dropdownName, lookupTable);
       blockTypesChecked.push(this.type);
@@ -352,7 +365,7 @@ Blockly.Extensions.buildTooltipForDropdown = function(dropdownName,
       var value = this.getFieldValue(dropdownName);
       var tooltip = lookupTable[value];
       if (tooltip == null) {
-        if (blockTypesChecked.indexOf(this.type) === -1) {
+        if (blockTypesChecked.indexOf(this.type) == -1) {
           // Warn for missing values on generated tooltips.
           var warning = 'No tooltip mapping for value ' + value +
               ' of field ' + dropdownName;

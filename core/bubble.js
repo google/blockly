@@ -26,6 +26,7 @@
 
 goog.provide('Blockly.Bubble');
 
+goog.require('Blockly.Scrollbar');
 goog.require('Blockly.Touch');
 goog.require('Blockly.utils');
 goog.require('Blockly.utils.Coordinate');
@@ -151,7 +152,7 @@ Blockly.Bubble.unbindDragEvents_ = function() {
  * @param {!Event} e Mouse up event.
  * @private
  */
-Blockly.Bubble.bubbleMouseUp_ = function(/*e*/) {
+Blockly.Bubble.bubbleMouseUp_ = function(/* e */) {
   Blockly.Touch.clearTouchIdentifier();
   Blockly.Bubble.unbindDragEvents_();
 };
@@ -288,7 +289,7 @@ Blockly.Bubble.prototype.getSvgRoot = function() {
  */
 Blockly.Bubble.prototype.setSvgId = function(id) {
   if (this.bubbleGroup_.dataset) {
-    this.bubbleGroup_.dataset.blockId = id;
+    this.bubbleGroup_.dataset['blockId'] = id;
   }
 };
 

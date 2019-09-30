@@ -19,7 +19,7 @@
  */
 
 /**
- * @fileoverview Utility functions for handling variables dynamic.
+ * @fileoverview Utility functions for handling typed variables.
  *
  * @author duzc2dtw@gmail.com (Du Tian Wei)
  */
@@ -32,7 +32,6 @@ goog.require('Blockly.Blocks');
 goog.require('Blockly.Msg');
 goog.require('Blockly.utils.xml');
 goog.require('Blockly.VariableModel');
-goog.require('Blockly.Xml');
 
 
 Blockly.VariablesDynamic.onCreateVariableButtonClick_String = function(button) {

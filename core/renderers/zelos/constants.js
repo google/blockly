@@ -71,11 +71,6 @@ Blockly.zelos.ConstantProvider = function() {
   /**
    * @override
    */
-  this.DARK_PATH_OFFSET = 0;
-
-  /**
-   * @override
-   */
   this.TAB_OFFSET_FROM_TOP = 0;
 
 };

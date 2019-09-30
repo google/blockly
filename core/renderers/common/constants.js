@@ -46,11 +46,6 @@ Blockly.blockRendering.ConstantProvider = function() {
   // Matches existing rendering (in 2019).
   this.TALL_INPUT_FIELD_OFFSET_Y = this.MEDIUM_PADDING;
 
-
-  // The dark/shadow path in classic rendering is the same as the normal block
-  // path, but translated down one and right one.
-  this.DARK_PATH_OFFSET = 1;
-
   this.TAB_HEIGHT = 15;
 
   this.TAB_OFFSET_FROM_TOP = 5;

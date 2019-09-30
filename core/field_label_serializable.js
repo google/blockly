@@ -62,7 +62,7 @@ Blockly.utils.object.inherits(Blockly.FieldLabelSerializable,
  */
 Blockly.FieldLabelSerializable.fromJson = function(options) {
   var text = Blockly.utils.replaceMessageReferences(options['text']);
-  return new Blockly.FieldLabelSerializable(text, null, options);
+  return new Blockly.FieldLabelSerializable(text, undefined, options);
 };
 
 /**

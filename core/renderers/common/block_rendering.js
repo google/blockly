@@ -62,6 +62,19 @@ Blockly.blockRendering.register = function(name, rendererClass) {
 };
 
 /**
+ * Unregisters the renderer registered with the given name.
+ * @param {string} name The name of the renderer.
+ */
+Blockly.blockRendering.unregister = function(name) {
+  if (Blockly.blockRendering.rendererMap_[name]) {
+    Blockly.blockRendering.rendererMap_[name] = undefined;
+  } else {
+    console.warn('No renderer mapping for name "' + name +
+        '" found to unregister');
+  }
+};
+
+/**
  * Turn on the blocks debugger.
  * @package
  */

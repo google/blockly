@@ -57,11 +57,11 @@ suite('Field Registry', function() {
         Blockly.fieldRegistry.register(CustomFieldType.fromJson, '');
       }, 'Invalid field type');
     });
-    // TODO (#2788): What do you want it to do if you overwrite a key?
     test('Overwrite a Key', function() {
       Blockly.fieldRegistry.register('field_custom_test', CustomFieldType);
-
-      Blockly.fieldRegistry.register('field_custom_test', CustomFieldType);
+      chai.assert.throws(function() {
+        Blockly.fieldRegistry.register('field_custom_test', CustomFieldType);
+      }, 'already registered');
     });
     test('Null Value', function() {
       chai.assert.throws(function() {

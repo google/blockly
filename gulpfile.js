@@ -453,13 +453,24 @@ gulp.task('package-blockly-node', function() {
   return gulp.src('blockly_compressed.js')
     .pipe(gulp.insert.append(`
       if (typeof DOMParser !== 'function') {
-        var JSDOM = require('jsdom').JSDOM;
+        const { JSDOM } = require('jsdom');
+        const { XMLSerializer } = require("jsdom/lib/jsdom/living");
         var window = (new JSDOM()).window;
         var document = window.document;
-        var Element = window.Element;
+        var DOMParser = window.DOMParser;
+        Blockly.utils.xml.createTextNode = function(text) {
+          return document.createTextNode(text);
+        };        
+        Blockly.utils.xml.createElement = function(tagName) {
+          return document.createElementNS(Blockly.utils.xml.NAME_SPACE, tagName);
+        };
         Blockly.utils.xml.textToDomDocument = function(text) {
-          var jsdom = new JSDOM(text, { contentType: 'text/xml' });
-          return jsdom.window.document;
+          var oParser = new DOMParser();
+          return oParser.parseFromString(text, 'text/xml');
+        };
+        Blockly.utils.xml.domToText = function(dom) {
+          var oSerializer = new XMLSerializer();
+          return oSerializer.serializeToString(dom);
         };
       }`))
     .pipe(packageCommonJS('Blockly', []))

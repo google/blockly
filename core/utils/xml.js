@@ -39,29 +39,31 @@ Blockly.utils.xml.NAME_SPACE = 'https://developers.google.com/blockly/xml';
 
 /**
  * Create DOM element for XML.
+ * This method will be overridden in the Node.js build of Blockly.
+ * See gulpfile.js, package-blockly-node task.
  * @param {string} tagName Name of DOM element.
  * @return {!Element} New DOM element.
  * @public
  */
 Blockly.utils.xml.createElement = function(tagName) {
-  // TODO (#2082): Support node.js.
   return document.createElementNS(Blockly.utils.xml.NAME_SPACE, tagName);
 };
 
 /**
  * Create text element for XML.
+ * This method will be overridden in the Node.js build of Blockly.
+ * See gulpfile.js, package-blockly-node task.
  * @param {string} text Text content.
  * @return {!Node} New DOM node.
  * @public
  */
 Blockly.utils.xml.createTextNode = function(text) {
-  // TODO (#2082): Support node.js.
   return document.createTextNode(text);
 };
 
 /**
  * Converts an XML string into a DOM tree. This method will be overridden in
- * the Node.js build of Blockly. See gulpfile.js, blockly_javascript_en task.
+ * the Node.js build of Blockly. See gulpfile.js, package-blockly-node task.
  * @param {string} text XML string.
  * @return {Document} The DOM document.
  * @throws if XML doesn't parse.
@@ -75,12 +77,13 @@ Blockly.utils.xml.textToDomDocument = function(text) {
 /**
  * Converts a DOM structure into plain text.
  * Currently the text format is fairly ugly: all one line with no whitespace.
+ * This method will be overridden in the Node.js build of Blockly.
+ * See gulpfile.js, package-blockly-node task.
  * @param {!Element} dom A tree of XML elements.
  * @return {string} Text representation.
  * @public
  */
 Blockly.utils.xml.domToText = function(dom) {
-  // TODO (#2082): Support node.js.
   var oSerializer = new XMLSerializer();
   return oSerializer.serializeToString(dom);
 };

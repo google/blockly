@@ -2,7 +2,6 @@
 # Compresses the core Blockly files into a single JavaScript file.
 #
 # Copyright 2012 Google LLC
-# https://developers.google.com/blockly/
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -378,12 +377,8 @@ goog.provide('Blockly.utils.string');
       Code with Google's and MIT's Apache licences trimmed.
     """
     apache2 = re.compile("""/\\*
-
- [\\w: ]+
-
  (Copyright \\d+ (Google LLC|Massachusetts Institute of Technology))
- (https://developers.google.com/blockly/|All rights reserved.)
-
+ (All rights reserved.\n)?
  Licensed under the Apache License, Version 2.0 \\(the "License"\\);
  you may not use this file except in compliance with the License.
  You may obtain a copy of the License at

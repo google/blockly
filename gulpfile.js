@@ -1,7 +1,6 @@
 /**
  * @license
  * Copyright 2018 Google LLC
- * https://developers.google.com/blockly/
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -45,10 +44,8 @@ var argv = require('yargs').argv;
 
 const licenseRegex = `\\/\\*\\*
  \\* @license
- \\* [\\w: ]+
- \\*
  \\* (Copyright \\d+ (Google LLC|Massachusetts Institute of Technology))
- \\* (https://developers.google.com/blockly/|All rights reserved.)
+ (\\* All rights reserved.\n)?
  \\*
  \\* Licensed under the Apache License, Version 2.0 \\(the "License"\\);
  \\* you may not use this file except in compliance with the License.

@@ -1,7 +1,7 @@
 #!/usr/bin/python2.7
 # Compresses the core Blockly files into a single JavaScript file.
 #
-# Copyright 2012 Google Inc.
+# Copyright 2012 Google LLC
 # https://developers.google.com/blockly/
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -381,7 +381,7 @@ goog.provide('Blockly.utils.string');
 
  [\\w: ]+
 
- (Copyright \\d+ (Google Inc.|Massachusetts Institute of Technology))
+ (Copyright \\d+ (Google LLC|Massachusetts Institute of Technology))
  (https://developers.google.com/blockly/|All rights reserved.)
 
  Licensed under the Apache License, Version 2.0 \\(the "License"\\);

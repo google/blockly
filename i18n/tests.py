@@ -3,7 +3,7 @@
 
 # Tests of i18n scripts.
 #
-# Copyright 2013 Google Inc.
+# Copyright 2013 Google LLC
 # https://developers.google.com/blockly/
 #
 # Licensed under the Apache License, Version 2.0 (the "License");

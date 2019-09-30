@@ -3,7 +3,7 @@
 # Locally build and compress the core Blockly files into a single JavaScript
 # file.
 #
-# Copyright 2018 Google Inc.
+# Copyright 2018 Google LLC
 # https://developers.google.com/blockly/
 #
 # Licensed under the Apache License, Version 2.0 (the "License");

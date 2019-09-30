@@ -2,7 +2,7 @@
  * @license
  * Visual Blocks Editor
  *
- * Copyright 2018 Google Inc.
+ * Copyright 2018 Google LLC
  * https://developers.google.com/blockly/
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -49,7 +49,7 @@ const licenseRegex = `\\/\\*\\*
  \\* @license
  \\* [\\w: ]+
  \\*
- \\* (Copyright \\d+ (Google Inc.|Massachusetts Institute of Technology))
+ \\* (Copyright \\d+ (Google LLC|Massachusetts Institute of Technology))
  \\* (https://developers.google.com/blockly/|All rights reserved.)
  \\*
  \\* Licensed under the Apache License, Version 2.0 \\(the "License"\\);

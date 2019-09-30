@@ -1,7 +1,7 @@
 /**
  * Visual Blocks Editor
  *
- * Copyright 2016 Google Inc.
+ * Copyright 2016 Google LLC
  * https://github.com/google/blockly-games
  *
  * Licensed under the Apache License, Version 2.0 (the "License");

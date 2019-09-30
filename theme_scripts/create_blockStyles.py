@@ -4,7 +4,7 @@
 # Secondary Colour - Lightens the primary colour by .8
 # Tertiary Colour - Darkens the primary colour by .2
 #
-# Copyright 2012 Google Inc.
+# Copyright 2012 Google LLC
 # https://developers.google.com/blockly/
 #
 # Licensed under the Apache License, Version 2.0 (the "License");

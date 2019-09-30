@@ -454,10 +454,10 @@ gulp.task('package-blockly-node', function() {
     .pipe(gulp.insert.append(`
       if (typeof DOMParser !== 'function') {
         var JSDOM = require('jsdom').JSDOM;
+        var DOMParser = require("jsdom/lib/jsdom/living").DOMParser;
         var XMLSerializer = require("jsdom/lib/jsdom/living").XMLSerializer;
         var window = (new JSDOM()).window;
         var document = window.document;
-        var DOMParser = window.DOMParser;
         Blockly.utils.xml.createTextNode = function(text) {
           return document.createTextNode(text);
         };        

@@ -1438,6 +1438,41 @@ Blockly.BlockSvg.prototype.appendInput_ = function(type, name) {
 };
 
 /**
+ * Set whether the connections are hidden (not tracked in a database) or not.
+ * Recursively walk down all child blocks (except collapsed blocks).
+ * @param {boolean} hidden True if connections are hidden.
+ * @package
+ */
+Blockly.BlockSvg.prototype.setConnectionsHidden = function(hidden) {
+  if (!hidden && this.isCollapsed()) {
+    if (this.outputConnection) {
+      this.outputConnection.setHidden(hidden);
+    }
+    if (this.previousConnection) {
+      this.previousConnection.setHidden(hidden);
+    }
+    if (this.nextConnection) {
+      this.nextConnection.setHidden(hidden);
+      var child = this.nextConnection.targetBlock();
+      if (child) {
+        child.setConnectionsHidden(hidden);
+      }
+    }
+  } else {
+    var myConnections = this.getConnections_(true);
+    for (var i = 0, connection; connection = myConnections[i]; i++) {
+      connection.setHidden(hidden);
+      if (connection.isSuperior()) {
+        var child = connection.targetBlock();
+        if (child) {
+          child.setConnectionsHidden(hidden);
+        }
+      }
+    }
+  }
+};
+
+/**
  * Returns connections originating from this block.
  * @param {boolean} all If true, return all connections even hidden ones.
  *     Otherwise, for a non-rendered block return an empty list, and for a

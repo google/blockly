@@ -45,13 +45,53 @@ Blockly.RenderedConnection = function(source, type) {
   Blockly.RenderedConnection.superClass_.constructor.call(this, source, type);
 
   /**
+   * Connection database for connections of this type on the current workspace.
+   * @const {!Blockly.ConnectionDB}
+   * @private
+   */
+  this.db_ = source.workspace.connectionDBList[type];
+
+  /**
+   * Connection database for connections compatible with this type on the
+   * current workspace.
+   * @const {!Blockly.ConnectionDB}
+   * @private
+   */
+  this.dbOpposite_ = source.workspace
+      .connectionDBList[Blockly.OPPOSITE_TYPE[type]];
+
+  /**
    * Workspace units, (0, 0) is top left of block.
    * @type {!Blockly.utils.Coordinate}
    * @private
    */
   this.offsetInBlock_ = new Blockly.utils.Coordinate(0, 0);
+
+  /**
+   * Has this connection been added to the connection database?
+   * @type {boolean}
+   * @private
+   */
+  this.inDB_ = false;
+
+  /**
+   * Whether this connections is hidden (not tracked in a database) or not.
+   * @type {boolean}
+   * @private
+   */
+  this.hidden_ = !this.db_;
 };
 Blockly.utils.object.inherits(Blockly.RenderedConnection, Blockly.Connection);
+
+/**
+ * @override
+ */
+Blockly.RenderedConnection.prototype.dispose = function() {
+  if (this.inDB_) {
+    this.db_.removeConnection_(this);
+  }
+  Blockly.RenderedConnection.superClass_.dispose.call(this);
+};
 
 /**
  * Returns the distance between this connection and another connection in

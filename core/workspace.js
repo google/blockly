@@ -34,7 +34,6 @@ goog.require('Blockly.Themes.Classic');
 goog.require('Blockly.utils');
 goog.require('Blockly.utils.math');
 goog.require('Blockly.VariableMap');
-goog.require('Blockly.WorkspaceComment');
 
 
 /**

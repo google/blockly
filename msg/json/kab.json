@@ -3,10 +3,12 @@
 		"authors": [
 			"Amaziɣ maziɣ",
 			"Belkacem77",
-			"Alem"
+			"Alem",
+			"YubaWissin"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "aferdis",
+	"UNNAMED_KEY": "warisem",
 	"TODAY": "Ass-a",
 	"DUPLICATE_BLOCK": "Sleg",
 	"ADD_COMMENT": "Rnu awennit",
@@ -46,7 +48,7 @@
 	"COLOUR_RANDOM_TITLE": "ini agacuran",
 	"COLOUR_RANDOM_TOOLTIP": "Fren ini s wudem agacuran.",
 	"COLOUR_RGB_TITLE": "ini s",
-	"COLOUR_RGB_RED": "azeggwaɣ",
+	"COLOUR_RGB_RED": "azeggaɣ",
 	"COLOUR_RGB_GREEN": "azegzaw",
 	"COLOUR_RGB_BLUE": "anili",
 	"COLOUR_RGB_TOOLTIP": "Rnu ini s tnecta yettunefk s tesmekta n uzeggaɣ, azegzaw, akked unili. Yessefk akk azalen ad ilin gar 0 akked 100.",

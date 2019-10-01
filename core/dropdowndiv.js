@@ -570,12 +570,12 @@ Blockly.DropDownDiv.hideWithoutAnimation = function() {
   div.style.opacity = 0;
   div.style.display = 'none';
 
-  Blockly.DropDownDiv.clearContent();
-  Blockly.DropDownDiv.owner_ = null;
   if (Blockly.DropDownDiv.onHide_) {
     Blockly.DropDownDiv.onHide_();
     Blockly.DropDownDiv.onHide_ = null;
   }
+  Blockly.DropDownDiv.clearContent();
+  Blockly.DropDownDiv.owner_ = null;
 };
 
 /**

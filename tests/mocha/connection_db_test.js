@@ -47,10 +47,7 @@ suite('Connection Database', function() {
       }
     };
   });
-  // TODO: Re-enable once flyout checking is handled by the connection
-  //  (better yet - let it be handled by the flyout, but that's out of the
-  //  scope of this).
-  test.skip('Add Connection', function() {
+  test('Add Connection', function() {
     var y2 = {y_: 2};
     var y4 = {y_: 4};
     var y1 = {y_: 1};
@@ -78,7 +75,7 @@ suite('Connection Database', function() {
         this.database.connections_, [y1, y2, y3b, y3a, y4]);
 
   });
-  test.skip('Remove Connection', function() {
+  test('Remove Connection', function() {
     var y2 = {y_: 2};
     var y4 = {y_: 4};
     var y1 = {y_: 1};

@@ -262,6 +262,7 @@ Blockly.tree.TreeControl.prototype.exitDocument = function() {
 /**
  * Adds the event listeners to the tree.
  * @private
+ * @suppress {deprecated}
  */
 Blockly.tree.TreeControl.prototype.attachEvents_ = function() {
   var el = this.getElement();

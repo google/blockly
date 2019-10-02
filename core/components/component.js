@@ -39,10 +39,8 @@ goog.require('Blockly.utils.style');
 Blockly.Component = function() {
 
   /**
-   * Whether the component is rendered right-to-left.  Right-to-left is set
-   * lazily when {@link #isRightToLeft} is called the first time, unless it has
-   * been set by calling {@link #setRightToLeft} explicitly.
-   * @private {?boolean}
+   * Whether the component is rendered right-to-left.
+   * @private {boolean}
    */
   this.rightToLeft_ = Blockly.Component.defaultRightToLeft;
 

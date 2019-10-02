@@ -68,7 +68,7 @@ Blockly.ZoomControls.prototype.MARGIN_SIDE_ = 20;
 
 /**
  * The SVG group containing the zoom controls.
- * @type {Element}
+ * @type {SVGElement}
  * @private
  */
 Blockly.ZoomControls.prototype.svgGroup_ = null;
@@ -89,7 +89,7 @@ Blockly.ZoomControls.prototype.top_ = 0;
 
 /**
  * Create the zoom controls.
- * @return {!Element} The zoom controls SVG group.
+ * @return {!SVGElement} The zoom controls SVG group.
  */
 Blockly.ZoomControls.prototype.createDom = function() {
   this.svgGroup_ =

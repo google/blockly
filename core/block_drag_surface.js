@@ -49,7 +49,7 @@ Blockly.BlockDragSurfaceSvg = function(container) {
 
 /**
  * The SVG drag surface. Set once by Blockly.BlockDragSurfaceSvg.createDom.
- * @type {Element}
+ * @type {SVGElement}
  * @private
  */
 Blockly.BlockDragSurfaceSvg.prototype.SVG_ = null;
@@ -57,7 +57,7 @@ Blockly.BlockDragSurfaceSvg.prototype.SVG_ = null;
 /**
  * This is where blocks live while they are being dragged if the drag surface
  * is enabled.
- * @type {Element}
+ * @type {SVGElement}
  * @private
  */
 Blockly.BlockDragSurfaceSvg.prototype.dragGroup_ = null;
@@ -106,7 +106,7 @@ Blockly.BlockDragSurfaceSvg.prototype.createDom = function() {
 /**
  * Set the SVG blocks on the drag surface's group and show the surface.
  * Only one block group should be on the drag surface at a time.
- * @param {!Element} blocks Block or group of blocks to place on the drag
+ * @param {!SVGElement} blocks Block or group of blocks to place on the drag
  * surface.
  */
 Blockly.BlockDragSurfaceSvg.prototype.setBlocksAndShow = function(blocks) {
@@ -180,7 +180,7 @@ Blockly.BlockDragSurfaceSvg.prototype.getSurfaceTranslation = function() {
 /**
  * Provide a reference to the drag group (primarily for
  * BlockSvg.getRelativeToSurfaceXY).
- * @return {Element} Drag surface group element.
+ * @return {SVGElement} Drag surface group element.
  */
 Blockly.BlockDragSurfaceSvg.prototype.getGroup = function() {
   return this.dragGroup_;

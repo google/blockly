@@ -236,7 +236,7 @@ Blockly.FieldAngle.prototype.showEditor_ = function() {
 
 /**
  * Create the angle dropdown editor.
- * @return {!Element} The newly created angle picker.
+ * @return {!SVGElement} The newly created angle picker.
  * @private
  */
 Blockly.FieldAngle.prototype.dropdownCreate_ = function() {

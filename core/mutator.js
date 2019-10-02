@@ -118,7 +118,7 @@ Blockly.Mutator.prototype.iconClick_ = function(e) {
 
 /**
  * Create the editor for the mutator's bubble.
- * @return {!Element} The top-level node of the editor.
+ * @return {!SVGElement} The top-level node of the editor.
  * @private
  */
 Blockly.Mutator.prototype.createEditor_ = function() {

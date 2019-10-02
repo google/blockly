@@ -438,6 +438,22 @@ Blockly.blockRendering.RenderInfo.prototype.getInRowSpacing_ = function(prev, ne
     }
   }
 
+  // Spacing between a square corner and a previous or next connection
+  if (prev && Blockly.blockRendering.Types.isLeftSquareCorner(prev) && next) {
+    if (Blockly.blockRendering.Types.isPreviousConnection(next) ||
+        Blockly.blockRendering.Types.isNextConnection(next)) {
+      return next.notchOffset;
+    }
+  }
+
+  // Spacing between a rounded corner and a previous or next connection.
+  if (prev && Blockly.blockRendering.Types.isLeftRoundedCorner(prev) && next) {
+    if (Blockly.blockRendering.Types.isPreviousConnection(next) ||
+      Blockly.blockRendering.Types.isNextConnection(next)) {
+      return next.notchOffset - this.constants_.CORNER_RADIUS;
+    }
+  }
+
   return this.constants_.MEDIUM_PADDING;
 };
 
@@ -612,16 +628,30 @@ Blockly.blockRendering.RenderInfo.prototype.getSpacerRowHeight_ = function(
  * vertically, with no special cases.  You will likely need extra logic to
  * handle (at minimum) top and bottom rows.
  * @param {!Blockly.blockRendering.Row} row The row containing the element.
- * @param {!Blockly.blockRendering.Measurable} _elem The element to place.
+ * @param {!Blockly.blockRendering.Measurable} elem The element to place.
  * @return {number} The desired centerline of the given element, as an offset
  *     from the top left of the block.
  * @protected
  */
 Blockly.blockRendering.RenderInfo.prototype.getElemCenterline_ = function(row,
-    _elem) {
-  var result = row.yPos;
-  result += (row.height / 2);
-  return result;
+    elem) {
+  if (Blockly.blockRendering.Types.isSpacer(elem)) {
+    return row.yPos + elem.height / 2;
+  }
+  if (Blockly.blockRendering.Types.isBottomRow(row)) {
+    var baseline = row.yPos + row.height - row.descenderHeight;
+    if (Blockly.blockRendering.Types.isNextConnection(elem)) {
+      return baseline + elem.height / 2;
+    }
+    return baseline - elem.height / 2;
+  }
+  if (Blockly.blockRendering.Types.isTopRow(row)) {
+    if (Blockly.blockRendering.Types.isHat(elem)) {
+      return row.capline - elem.height / 2;
+    }
+    return row.capline + elem.height / 2;
+  }
+  return row.yPos + row.height / 2;
 };
 
 /**

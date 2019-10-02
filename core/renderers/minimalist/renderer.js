@@ -19,51 +19,51 @@
  */
 
 /**
- * @fileoverview Sample renderer.
+ * @fileoverview Minimalist renderer.
  */
 'use strict';
 
-goog.provide('Blockly.sample.Renderer');
+goog.provide('Blockly.minimalist.Renderer');
 
 goog.require('Blockly.blockRendering');
 goog.require('Blockly.blockRendering.Renderer');
 goog.require('Blockly.utils.object');
-goog.require('Blockly.sample.ConstantProvider');
-goog.require('Blockly.sample.Drawer');
-goog.require('Blockly.sample.RenderInfo');
+goog.require('Blockly.minimalist.ConstantProvider');
+goog.require('Blockly.minimalist.Drawer');
+goog.require('Blockly.minimalist.RenderInfo');
 
 
 /**
- * The sample renderer.
+ * The minimalist renderer.
  * @package
  * @constructor
  * @extends {Blockly.blockRendering.Renderer}
  */
-Blockly.sample.Renderer = function() {
-  Blockly.sample.Renderer.superClass_.constructor.call(this);
+Blockly.minimalist.Renderer = function() {
+  Blockly.minimalist.Renderer.superClass_.constructor.call(this);
 };
-Blockly.utils.object.inherits(Blockly.sample.Renderer,
+Blockly.utils.object.inherits(Blockly.minimalist.Renderer,
     Blockly.blockRendering.Renderer);
 
 /**
  * Create a new instance of the renderer's constant provider.
- * @return {!Blockly.sample.ConstantProvider} The constant provider.
+ * @return {!Blockly.minimalist.ConstantProvider} The constant provider.
  * @protected
  * @override
  */
-Blockly.sample.Renderer.prototype.makeConstants_ = function() {
-  return new Blockly.sample.ConstantProvider();
+Blockly.minimalist.Renderer.prototype.makeConstants_ = function() {
+  return new Blockly.minimalist.ConstantProvider();
 };
 
 /**
  * Create a new instance of the renderer's render info object.
  * @param {!Blockly.BlockSvg} block The block to measure.
- * @return {!Blockly.sample.RenderInfo} The render info object.
+ * @return {!Blockly.minimalist.RenderInfo} The render info object.
  * @protected
  * @override
  */
-Blockly.sample.Renderer.prototype.makeRenderInfo_ = function(block) {
-  return new Blockly.sample.RenderInfo(this, block);
+Blockly.minimalist.Renderer.prototype.makeRenderInfo_ = function(block) {
+  return new Blockly.minimalist.RenderInfo(this, block);
 };
 
 /**
@@ -71,13 +71,13 @@ Blockly.sample.Renderer.prototype.makeRenderInfo_ = function(block) {
  * @param {!Blockly.BlockSvg} block The block to render.
  * @param {!Blockly.blockRendering.RenderInfo} info An object containing all
  *   information needed to render this block.
- * @return {!Blockly.sample.Drawer} The drawer.
+ * @return {!Blockly.minimalist.Drawer} The drawer.
  * @protected
  * @override
  */
-Blockly.sample.Renderer.prototype.makeDrawer_ = function(block, info) {
-  return new Blockly.sample.Drawer(block,
-      /** @type {!Blockly.sample.RenderInfo} */ (info));
+Blockly.minimalist.Renderer.prototype.makeDrawer_ = function(block, info) {
+  return new Blockly.minimalist.Drawer(block,
+      /** @type {!Blockly.minimalist.RenderInfo} */ (info));
 };
 
-Blockly.blockRendering.register('sample', Blockly.sample.Renderer);
+Blockly.blockRendering.register('minimalist', Blockly.minimalist.Renderer);

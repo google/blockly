@@ -201,16 +201,10 @@ Blockly.DropDownDiv.clearContent = function() {
  * Set the colour for the drop-down.
  * @param {string} backgroundColour Any CSS colour for the background.
  * @param {string} borderColour Any CSS colour for the border.
- * @param {boolean=} opt_invertedText Whether or not the text color should be
- *     inverted.
  */
-Blockly.DropDownDiv.setColour = function(backgroundColour, borderColour,
-    opt_invertedText) {
+Blockly.DropDownDiv.setColour = function(backgroundColour, borderColour) {
   Blockly.DropDownDiv.DIV_.style.backgroundColor = backgroundColour;
   Blockly.DropDownDiv.DIV_.style.borderColor = borderColour;
-  if (opt_invertedText) {
-    Blockly.utils.dom.addClass(Blockly.DropDownDiv.DIV_, 'inverted');
-  }
 };
 
 /**
@@ -602,7 +596,6 @@ Blockly.DropDownDiv.hideWithoutAnimation = function() {
   div.style.display = 'none';
   div.style.backgroundColor = Blockly.DropDownDiv.DEFAULT_DROPDOWN_COLOR;
   div.style.borderColor = Blockly.DropDownDiv.DEFAULT_DROPDOWN_BORDER_COLOR;
-  Blockly.utils.dom.removeClass(div, 'inverted');
 
   Blockly.DropDownDiv.clearContent();
   Blockly.DropDownDiv.owner_ = null;

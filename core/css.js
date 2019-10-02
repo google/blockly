@@ -711,9 +711,6 @@ Blockly.Css.CONTENT = [
   '.blocklyDropDownDiv .goog-menuitem-content {',
     'color: #000;',
   '}',
-  '.blocklyDropDownDiv.inverted .goog-menuitem-content {',
-    'color: #fff;',
-  '}',
 
   /* State: disabled. */
   '.blocklyWidgetDiv .goog-menuitem-disabled,',

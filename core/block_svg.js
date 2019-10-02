@@ -1,9 +1,6 @@
 /**
  * @license
- * Visual Blocks Editor
- *
- * Copyright 2012 Google Inc.
- * https://developers.google.com/blockly/
+ * Copyright 2012 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -918,7 +915,7 @@ Blockly.BlockSvg.prototype.setInsertionMarker = function(insertionMarker) {
 
 /**
  * Return the root node of the SVG or null if none exists.
- * @return {Element} The root SVG node (probably a group).
+ * @return {SVGElement} The root SVG node (probably a group).
  */
 Blockly.BlockSvg.prototype.getSvgRoot = function() {
   return this.svgGroup_;
@@ -1435,6 +1432,41 @@ Blockly.BlockSvg.prototype.appendInput_ = function(type, name) {
     this.bumpNeighbours_();
   }
   return input;
+};
+
+/**
+ * Set whether the connections are hidden (not tracked in a database) or not.
+ * Recursively walk down all child blocks (except collapsed blocks).
+ * @param {boolean} hidden True if connections are hidden.
+ * @package
+ */
+Blockly.BlockSvg.prototype.setConnectionsHidden = function(hidden) {
+  if (!hidden && this.isCollapsed()) {
+    if (this.outputConnection) {
+      this.outputConnection.setHidden(hidden);
+    }
+    if (this.previousConnection) {
+      this.previousConnection.setHidden(hidden);
+    }
+    if (this.nextConnection) {
+      this.nextConnection.setHidden(hidden);
+      var child = this.nextConnection.targetBlock();
+      if (child) {
+        child.setConnectionsHidden(hidden);
+      }
+    }
+  } else {
+    var myConnections = this.getConnections_(true);
+    for (var i = 0, connection; connection = myConnections[i]; i++) {
+      connection.setHidden(hidden);
+      if (connection.isSuperior()) {
+        var child = connection.targetBlock();
+        if (child) {
+          child.setConnectionsHidden(hidden);
+        }
+      }
+    }
+  }
 };
 
 /**

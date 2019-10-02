@@ -1,9 +1,6 @@
 /**
  * @license
- * Visual Blocks Editor
- *
- * Copyright 2019 Google Inc.
- * https://developers.google.com/blockly/
+ * Copyright 2019 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,25 +23,33 @@ var assert = require('chai').assert;
 var Blockly = require('../../dist/');
 
 var xmlText = `<xml xmlns="https://developers.google.com/blockly/xml">
-<block type="text_print" x="37" y="63">
-  <value name="TEXT">
-    <shadow type="text">
-      <field name="TEXT">Hello from Blockly!</field>
-    </shadow>
-  </value>
-</block>
+  <block type="text_print" x="37" y="63">
+    <value name="TEXT">
+      <shadow type="text">
+        <field name="TEXT">Hello from Blockly!</field>
+      </shadow>
+    </value>
+  </block>
 </xml>`;
 
 suite('Test Node.js', function() {
   test('Import XML', function() {
-    assert.doesNotThrow(function() {
-      const xml = Blockly.Xml.textToDom(xmlText);
+    const xml = Blockly.Xml.textToDom(xmlText);
 
-      // Create workspace and import the XML
-      const workspace = new Blockly.Workspace();
-      Blockly.Xml.domToWorkspace(xml, workspace);
+    // Create workspace and import the XML
+    const workspace = new Blockly.Workspace();
+    Blockly.Xml.domToWorkspace(xml, workspace);
+  });
+  test('Roundtrip XML', function() {
+    const xml = Blockly.Xml.textToDom(xmlText);
 
-    }, "Failed to import XML");
+    const workspace = new Blockly.Workspace();
+    Blockly.Xml.domToWorkspace(xml, workspace);
+
+    var headlessXml = Blockly.Xml.workspaceToDom(workspace, true);
+    var headlessText = Blockly.Xml.domToPrettyText(headlessXml);
+
+    assert.equal(headlessText, xmlText, 'equal');
   });
   test('Generate Code', function() {
     const xml = Blockly.Xml.textToDom(xmlText);

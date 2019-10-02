@@ -1,9 +1,6 @@
 /**
  * @license
- * Visual Blocks Editor
- *
- * Copyright 2019 Google Inc.
- * https://developers.google.com/blockly/
+ * Copyright 2019 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -498,10 +495,16 @@ Blockly.navigation.insertBlock = function(block, destConnection) {
     case Blockly.OUTPUT_VALUE:
       for (var i = 0; i < block.inputList.length; i++) {
         var inputConnection = block.inputList[i].connection;
-        if (inputConnection.type === Blockly.INPUT_VALUE &&
+        if (inputConnection && inputConnection.type === Blockly.INPUT_VALUE &&
             Blockly.navigation.connect_(inputConnection, destConnection)) {
           return true;
         }
+      }
+      // If there are no input values pass the output and destination connections
+      // to connect_ to find a way to connect the two.
+      if (block.outputConnection &&
+          Blockly.navigation.connect_(block.outputConnection, destConnection)) {
+        return true;
       }
       break;
   }

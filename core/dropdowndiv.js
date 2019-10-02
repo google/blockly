@@ -1,7 +1,5 @@
 /**
  * @license
- * Visual Blocks Editor
- *
  * Copyright 2016 Massachusetts Institute of Technology
  * All rights reserved.
  *
@@ -597,12 +595,12 @@ Blockly.DropDownDiv.hideWithoutAnimation = function() {
   div.style.backgroundColor = Blockly.DropDownDiv.DEFAULT_DROPDOWN_COLOR;
   div.style.borderColor = Blockly.DropDownDiv.DEFAULT_DROPDOWN_BORDER_COLOR;
 
-  Blockly.DropDownDiv.clearContent();
-  Blockly.DropDownDiv.owner_ = null;
   if (Blockly.DropDownDiv.onHide_) {
     Blockly.DropDownDiv.onHide_();
     Blockly.DropDownDiv.onHide_ = null;
   }
+  Blockly.DropDownDiv.clearContent();
+  Blockly.DropDownDiv.owner_ = null;
 };
 
 /**

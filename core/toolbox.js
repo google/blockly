@@ -1,9 +1,6 @@
 /**
  * @license
- * Visual Blocks Editor
- *
- * Copyright 2011 Google Inc.
- * https://developers.google.com/blockly/
+ * Copyright 2011 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -296,7 +293,8 @@ Blockly.Toolbox.prototype.handleAfterTreeSelected_ = function(
   } else {
     // Hide the flyout.
     this.flyout_.hide();
-    if (Blockly.keyboardAccessibilityMode) {
+    if (Blockly.keyboardAccessibilityMode &&
+        !(newNode instanceof Blockly.Toolbox.TreeSeparator)) {
       Blockly.navigation.setState(Blockly.navigation.STATE_WS);
     }
   }

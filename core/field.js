@@ -1,9 +1,6 @@
 /**
  * @license
- * Visual Blocks Editor
- *
- * Copyright 2012 Google Inc.
- * https://developers.google.com/blockly/
+ * Copyright 2012 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -69,7 +66,7 @@ Blockly.Field = function(value, opt_validator, opt_config) {
   /**
    * Used to cache the field's tooltip value if setTooltip is called when the
    * field is not yet initialized. Is *not* guaranteed to be accurate.
-   * @type {string|Function|!Element}
+   * @type {string|Function|!SVGElement}
    * @private
    */
   this.tooltip_ = null;
@@ -541,10 +538,10 @@ Blockly.Field.prototype.callValidator = function(text) {
 /**
  * Gets the group element for this editable field.
  * Used for measuring the size and for positioning.
- * @return {!Element} The group element.
+ * @return {!SVGElement} The group element.
  */
 Blockly.Field.prototype.getSvgRoot = function() {
-  return /** @type {!Element} */ (this.fieldGroup_);
+  return /** @type {!SVGElement} */ (this.fieldGroup_);
 };
 
 /**
@@ -850,7 +847,7 @@ Blockly.Field.prototype.onMouseDown_ = function(e) {
 
 /**
  * Change the tooltip text for this field.
- * @param {string|Function|!Element} newTip Text for tooltip or a parent
+ * @param {string|Function|!SVGElement} newTip Text for tooltip or a parent
  *    element to link to for its tooltip.
  */
 Blockly.Field.prototype.setTooltip = function(newTip) {

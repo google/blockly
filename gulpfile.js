@@ -1,9 +1,6 @@
 /**
  * @license
- * Visual Blocks Editor
- *
- * Copyright 2018 Google Inc.
- * https://developers.google.com/blockly/
+ * Copyright 2018 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -47,11 +44,9 @@ var argv = require('yargs').argv;
 
 const licenseRegex = `\\/\\*\\*
  \\* @license
- \\* [\\w: ]+
- \\*
- \\* (Copyright \\d+ (Google Inc.|Massachusetts Institute of Technology))
- \\* (https://developers.google.com/blockly/|All rights reserved.)
- \\*
+ \\* (Copyright \\d+ (Google LLC|Massachusetts Institute of Technology))
+( \\* All rights reserved.
+)? \\*
  \\* Licensed under the Apache License, Version 2.0 \\(the "License"\\);
  \\* you may not use this file except in compliance with the License.
  \\* You may obtain a copy of the License at
@@ -262,12 +257,6 @@ this.BLOCKLY_DIR = (function(root) {
 })(this);
 
 this.BLOCKLY_BOOT = function(root) {
-  var dir = '';
-  if (root.IS_NODE_JS) {
-    dir = 'blockly';
-  } else {
-    dir = this.BLOCKLY_DIR.match(/[^\\/]+$/)[0];
-  }
   // Execute after Closure has loaded.
 `;
   const footer = `
@@ -284,7 +273,7 @@ if (this.IS_NODE_JS) {
   document.write('<script>var goog = undefined;</script>');
   // Load fresh Closure Library.
   document.write('<script src="' + this.BLOCKLY_DIR +
-      '/closure-library/base.js"></script>');
+      '/closure/goog/base.js"></script>');
   document.write('<script>this.BLOCKLY_BOOT(this);</script>');
 }
 `;
@@ -294,15 +283,7 @@ if (this.IS_NODE_JS) {
     --root_with_prefix="./core ../core" > ${file}`;
   execSync(cmd, { stdio: 'inherit' });
 
-  let providesBuilder = `\n// Load Blockly.\n`;
-  const provides = new Set();
-  const dependencies = fs.readFileSync(file, "utf8");
-  const re = /\'(Blockly[^\']*)\'/gi;
-  let m;
-  while (m = re.exec(dependencies)) {
-    provides.add(`goog.require('${m[1]}');`);
-  }
-  providesBuilder += Array.from(provides).sort().join('\n') + '\n';
+  const requires = `\n// Load Blockly.\ngoog.require('Blockly.requires');\n`;
 
   return gulp.src(file)
     // Remove comments so we're compatible with the build.py script
@@ -312,8 +293,8 @@ if (this.IS_NODE_JS) {
     // Find the Blockly directory name and replace it with a JS variable.
     // This allows blockly_uncompressed.js to be compiled on one computer and be
     // used on another, even if the directory name differs.
-    .pipe(gulp.replace(/\.\.\/core/gm, `../../" + dir + "/core`))
-    .pipe(gulp.insert.wrap(header, providesBuilder + footer))
+    .pipe(gulp.replace(/\.\.\/core/gm, `../../core`))
+    .pipe(gulp.insert.wrap(header, requires + footer))
     .pipe(gulp.dest('./'));
 });
 
@@ -467,13 +448,12 @@ gulp.task('package-blockly-node', function() {
   return gulp.src('blockly_compressed.js')
     .pipe(gulp.insert.append(`
       if (typeof DOMParser !== 'function') {
-        var JSDOM = require('jsdom').JSDOM;
-        var window = (new JSDOM()).window;
-        var document = window.document;
-        var Element = window.Element;
-        Blockly.utils.xml.textToDomDocument = function(text) {
-          var jsdom = new JSDOM(text, { contentType: 'text/xml' });
-          return jsdom.window.document;
+        var DOMParser = require("jsdom/lib/jsdom/living").DOMParser;
+        var XMLSerializer = require("jsdom/lib/jsdom/living").XMLSerializer;
+        var doc = Blockly.utils.xml.textToDomDocument(
+          '<xml xmlns="https://developers.google.com/blockly/xml"></xml>');
+        Blockly.utils.xml.document = function() {
+          return doc;
         };
       }`))
     .pipe(packageCommonJS('Blockly', []))

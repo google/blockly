@@ -1,8 +1,7 @@
 #!/usr/bin/python2.7
 # Compresses the core Blockly files into a single JavaScript file.
 #
-# Copyright 2012 Google Inc.
-# https://developers.google.com/blockly/
+# Copyright 2012 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -129,17 +128,9 @@ this.BLOCKLY_BOOT = function(root) {
     add_dependency = '\n'.join(add_dependency)
     f.write(add_dependency + '\n')
 
-    provides = []
-    # Exclude field_date.js as it still has a dependency on the closure library
-    # see issue #2890.
-    for dep in calcdeps.BuildDependenciesFromFiles(self.search_paths):
-      if not dep.filename.startswith('closure') and not dep.filename.startswith('core/field_date.js'):
-        provides.extend(dep.provides)
-    provides.sort()  # Deterministic build.
     f.write('\n')
     f.write('// Load Blockly.\n')
-    for provide in provides:
-      f.write("goog.require('%s');\n" % provide)
+    f.write('goog.require(\'Blockly.requires\')\n')
 
     f.write("""
 delete root.BLOCKLY_DIR;
@@ -387,11 +378,9 @@ goog.provide('Blockly.utils.string');
     """
     apache2 = re.compile("""/\\*
 
- [\\w: ]+
-
- (Copyright \\d+ (Google Inc.|Massachusetts Institute of Technology))
- (https://developers.google.com/blockly/|All rights reserved.)
-
+ (Copyright \\d+ (Google LLC|Massachusetts Institute of Technology))
+( All rights reserved.
+)?
  Licensed under the Apache License, Version 2.0 \\(the "License"\\);
  you may not use this file except in compliance with the License.
  You may obtain a copy of the License at

@@ -1,9 +1,6 @@
 /**
  * @license
- * Visual Blocks Editor
- *
- * Copyright 2011 Google Inc.
- * https://developers.google.com/blockly/
+ * Copyright 2011 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -166,14 +163,14 @@ Blockly.Trashcan.prototype.minOpenness_ = 0;
 
 /**
  * The SVG group containing the trash can.
- * @type {Element}
+ * @type {SVGElement}
  * @private
  */
 Blockly.Trashcan.prototype.svgGroup_ = null;
 
 /**
  * The SVG image element of the trash can lid.
- * @type {Element}
+ * @type {SVGElement}
  * @private
  */
 Blockly.Trashcan.prototype.svgLid_ = null;
@@ -208,7 +205,7 @@ Blockly.Trashcan.prototype.top_ = 0;
 
 /**
  * Create the trash can elements.
- * @return {!Element} The trash can's SVG group.
+ * @return {!SVGElement} The trash can's SVG group.
  */
 Blockly.Trashcan.prototype.createDom = function() {
   /* Here's the markup that will be generated:

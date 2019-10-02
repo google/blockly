@@ -1,9 +1,6 @@
 /**
  * @license
- * Visual Blocks Editor
- *
- * Copyright 2019 Google Inc.
- * https://developers.google.com/blockly/
+ * Copyright 2019 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -52,7 +49,8 @@ Blockly.BasicCursor.prototype.validNode_ = function(node) {
       type == Blockly.ASTNode.types.INPUT ||
       type == Blockly.ASTNode.types.FIELD ||
       type == Blockly.ASTNode.types.NEXT ||
-      type == Blockly.ASTNode.types.PREVIOUS) {
+      type == Blockly.ASTNode.types.PREVIOUS ||
+      type == Blockly.ASTNode.types.WORKSPACE) {
     isValid = true;
   }
   return isValid;
@@ -97,8 +95,7 @@ Blockly.BasicCursor.prototype.getNextNode_ = function(node) {
   var siblingOrParent = this.findSiblingOrParent_(node.out());
   if (this.validNode_(siblingOrParent)) {
     return siblingOrParent;
-  } else if (siblingOrParent &&
-      siblingOrParent.getType() !== Blockly.ASTNode.types.WORKSPACE) {
+  } else if (siblingOrParent) {
     return this.getNextNode_(siblingOrParent);
   }
   return null;

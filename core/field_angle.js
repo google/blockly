@@ -1,9 +1,6 @@
 /**
  * @license
- * Visual Blocks Editor
- *
- * Copyright 2013 Google Inc.
- * https://developers.google.com/blockly/
+ * Copyright 2013 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -239,7 +236,7 @@ Blockly.FieldAngle.prototype.showEditor_ = function() {
 
 /**
  * Create the angle dropdown editor.
- * @return {!Element} The newly created angle picker.
+ * @return {!SVGElement} The newly created angle picker.
  * @private
  */
 Blockly.FieldAngle.prototype.dropdownCreate_ = function() {

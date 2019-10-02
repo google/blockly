@@ -1,9 +1,6 @@
 /**
  * @license
- * Visual Blocks Editor
- *
- * Copyright 2019 Google Inc.
- * https://developers.google.com/blockly/
+ * Copyright 2019 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -81,8 +78,11 @@ goog.require('Blockly.FieldVariable');
 // At least one renderer is mandatory.  Geras is the default one.
 // Others may be chosen using Blockly.inject's "renderer" configuration.
 goog.require('Blockly.geras.Renderer');
-goog.require('Blockly.thrasos.Renderer');
-goog.require('Blockly.zelos.Renderer');
+// goog.require('Blockly.thrasos.Renderer');
+// goog.require('Blockly.zelos.Renderer');
+// The debug renderer, which shows simplified versions of the blocks for
+// developer use.
+// goog.require('Blockly.blockRendering.Debug');
 
 // Blockly Themes.
 // Classic is the default theme.

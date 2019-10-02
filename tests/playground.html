@@ -67,6 +67,13 @@
 <script src="blocks/test_blocks.js"></script>
 
 <script>
+// Custom requires for the playground.
+goog.require('Blockly.blockRendering.Debug');
+goog.require('Blockly.minimalist.Renderer');
+goog.require('Blockly.thrasos.Renderer');
+goog.require('Blockly.zelos.Renderer');
+</script>
+<script>
 'use strict';
 var workspace = null;
 
@@ -560,6 +567,7 @@ var spaghettiXml = [
       <option value="geras">Geras</option>
       <option value="thrasos">Thrasos</option>
       <option value="zelos">Zelos</option>
+      <option value="minimalist">Minimalist</option>
     </select>
   </form>
   <select id="themeChanger" name="theme" onchange="changeTheme()">

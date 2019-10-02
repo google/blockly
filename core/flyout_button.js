@@ -1,9 +1,6 @@
 /**
  * @license
- * Visual Blocks Editor
- *
- * Copyright 2016 Google Inc.
- * https://developers.google.com/blockly/
+ * Copyright 2016 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -118,7 +115,7 @@ Blockly.FlyoutButton.prototype.onMouseUpWrapper_ = null;
 
 /**
  * Create the button elements.
- * @return {!Element} The button's SVG group.
+ * @return {!SVGElement} The button's SVG group.
  */
 Blockly.FlyoutButton.prototype.createDom = function() {
   var cssClass = this.isLabel_ ? 'blocklyFlyoutLabel' : 'blocklyFlyoutButton';

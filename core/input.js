@@ -1,9 +1,6 @@
 /**
  * @license
- * Visual Blocks Editor
- *
- * Copyright 2012 Google Inc.
- * https://developers.google.com/blockly/
+ * Copyright 2012 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -178,6 +175,9 @@ Blockly.Input.prototype.isVisible = function() {
  * @package
  */
 Blockly.Input.prototype.setVisible = function(visible) {
+  // Note: Currently there are only unit tests for block.setCollapsed()
+  // because this function is package. If this function goes back to being a
+  // public API tests (lots of tests) should be added.
   var renderList = [];
   if (this.visible_ == visible) {
     return renderList;

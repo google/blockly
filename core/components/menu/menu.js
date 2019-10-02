@@ -270,7 +270,9 @@ Blockly.Menu.prototype.setHighlightedIndex = function(index) {
   // Bring the highlighted item into view. This has no effect if the menu is not
   // scrollable.
   if (child) {
-    Blockly.utils.style.scrollIntoContainerView(child.getElement(), this.getElement());
+    Blockly.utils.style.scrollIntoContainerView(
+        /** @type {!Element} */ (child.getElement()),
+        /** @type {!Element} */ (this.getElement()));
   }
 };
 

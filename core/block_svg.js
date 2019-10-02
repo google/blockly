@@ -180,6 +180,7 @@ Blockly.BlockSvg.COLLAPSED_WARNING_ID = 'TEMP_COLLAPSED_WARNING_';
  * Vertical space between elements.
  * TODO (#3142): Remove.
  * @const
+ * @package
  */
 Blockly.BlockSvg.SEP_SPACE_Y = 10;
 
@@ -187,6 +188,7 @@ Blockly.BlockSvg.SEP_SPACE_Y = 10;
  * Minimum height of a block.
  * TODO (#3142): Remove.
  * @const
+ * @package
  */
 Blockly.BlockSvg.MIN_BLOCK_Y = 25;
 
@@ -194,6 +196,7 @@ Blockly.BlockSvg.MIN_BLOCK_Y = 25;
  * Width of horizontal puzzle tab.
  * TODO (#3142): Remove.
  * @const
+ * @package
  */
 Blockly.BlockSvg.TAB_WIDTH = 8;
 
@@ -201,6 +204,7 @@ Blockly.BlockSvg.TAB_WIDTH = 8;
  * Do blocks with no previous or output connections have a 'hat' on top?
  * TODO (#3142): Remove.
  * @const
+ * @package
  */
 Blockly.BlockSvg.START_HAT = false;
 
@@ -1731,6 +1735,7 @@ Blockly.BlockSvg.prototype.setMarkerSvg = function(markerSvg) {
  * and any blocks stacked below it.
  * @return {!{height: number, width: number}} Object with height and width
  *    properties in workspace units.
+ * @package
  */
 Blockly.BlockSvg.prototype.getHeightWidth = function() {
   var height = this.height;
@@ -1756,6 +1761,7 @@ Blockly.BlockSvg.prototype.getHeightWidth = function() {
  *     block.
  * @param {!Blockly.Connection} existingConnection The connection on the
  *     existing block, which newBlock should line up with.
+ * @package
  */
 Blockly.BlockSvg.prototype.positionNewBlock = function(newBlock, newConnection,
     existingConnection) {
@@ -1774,6 +1780,7 @@ Blockly.BlockSvg.prototype.positionNewBlock = function(newBlock, newConnection,
  * Visual effect to show that if the dragging block is dropped, this block will
  * be replaced.  If a shadow block, it will disappear.  Otherwise it will bump.
  * @param {boolean} add True if highlighting should be added.
+ * @package
  */
 Blockly.BlockSvg.prototype.highlightForReplacement = function(add) {
   if (add) {

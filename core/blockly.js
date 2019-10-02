@@ -27,7 +27,6 @@
  */
 goog.provide('Blockly');
 
-goog.require('Blockly.BlockSvg.render');
 goog.require('Blockly.Events');
 goog.require('Blockly.Events.Ui');
 goog.require('Blockly.navigation');

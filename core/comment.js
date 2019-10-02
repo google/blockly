@@ -102,7 +102,7 @@ Blockly.Comment.prototype.drawIcon_ = function(group) {
 
 /**
  * Create the editor for the comment's bubble.
- * @return {!Element} The top-level node of the editor.
+ * @return {!SVGElement} The top-level node of the editor.
  * @private
  */
 Blockly.Comment.prototype.createEditor_ = function() {

@@ -132,7 +132,7 @@ Blockly.blockAnimations.connectionUiEffect = function(block) {
 
 /**
  * Expand a ripple around a connection.
- * @param {!Element} ripple Element to animate.
+ * @param {!SVGElement} ripple Element to animate.
  * @param {!Date} start Date of animation's start.
  * @param {number} scale Scale of workspace.
  * @private

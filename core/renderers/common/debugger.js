@@ -126,15 +126,14 @@ Blockly.blockRendering.Debug.prototype.drawSpacerElem = function(elem, rowHeight
   if (isRtl) {
     xPos = -(xPos + elem.width);
   }
-  var debugRenderedHeight = Math.min(elem.height, rowHeight);
-  var yPos = elem.centerline - debugRenderedHeight / 2;
+  var yPos = elem.centerline - elem.height / 2;
   this.debugElements_.push(Blockly.utils.dom.createSvgElement('rect',
       {
         'class': 'elemSpacerRect blockRenderDebug',
         'x': xPos,
         'y': yPos,
         'width': elem.width,
-        'height': debugRenderedHeight,
+        'height': elem.height,
         'stroke': 'pink',
         'fill': 'pink',
         'fill-opacity': '0.5',

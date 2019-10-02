@@ -309,6 +309,9 @@ Blockly.geras.RenderInfo.prototype.getSpacerRowHeight_ = function(prev, next) {
  * @override
  */
 Blockly.geras.RenderInfo.prototype.getElemCenterline_ = function(row, elem) {
+  if (Blockly.blockRendering.Types.isSpacer(elem)) {
+    return row.yPos + elem.height / 2;
+  }
   if (Blockly.blockRendering.Types.isBottomRow(row)) {
     var baseline = row.yPos + row.height - row.descenderHeight;
     if (Blockly.blockRendering.Types.isNextConnection(elem)) {
@@ -363,12 +366,7 @@ Blockly.geras.RenderInfo.prototype.finalize_ = function() {
       this.bottomRow.height += diff;
       yCursor += diff;
     }
-    var xCursor = row.xPos;
-    for (var j = 0, elem; (elem = row.elements[j]); j++) {
-      elem.xPos = xCursor;
-      elem.centerline = this.getElemCenterline_(row, elem);
-      xCursor += elem.width;
-    }
+    this.recordElemPositions_(row);
   }
   this.bottomRow.baseline = yCursor - this.bottomRow.descenderHeight;
 

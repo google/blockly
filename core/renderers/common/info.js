@@ -625,6 +625,26 @@ Blockly.blockRendering.RenderInfo.prototype.getElemCenterline_ = function(row,
 };
 
 /**
+ * Record final position information on elements on the given row, for use in
+ * drawing.  At minimum this records xPos and centerline on each element.
+ * @param {!Blockly.blockRendering.Row} row The row containing the elements.
+ * @private
+ */
+Blockly.blockRendering.RenderInfo.prototype.recordElemPositions_ = function(
+    row) {
+  var xCursor = row.xPos;
+  for (var j = 0, elem; (elem = row.elements[j]); j++) {
+    // Now that row heights are finalized, make spacers use the row height.
+    if (Blockly.blockRendering.Types.isSpacer(elem)) {
+      elem.height = row.height;
+    }
+    elem.xPos = xCursor;
+    elem.centerline = this.getElemCenterline_(row, elem);
+    xCursor += elem.width;
+  }
+};
+
+/**
  * Make any final changes to the rendering information object.  In particular,
  * store the y position of each row, and record the height of the full block.
  * @protected
@@ -642,12 +662,7 @@ Blockly.blockRendering.RenderInfo.prototype.finalize_ = function() {
 
     widestRowWithConnectedBlocks =
         Math.max(widestRowWithConnectedBlocks, row.widthWithConnectedBlocks);
-    var xCursor = row.xPos;
-    for (var j = 0, elem; (elem = row.elements[j]); j++) {
-      elem.xPos = xCursor;
-      elem.centerline = this.getElemCenterline_(row, elem);
-      xCursor += elem.width;
-    }
+    this.recordElemPositions_(row);
   }
 
   this.widthWithChildren = widestRowWithConnectedBlocks + this.startX;

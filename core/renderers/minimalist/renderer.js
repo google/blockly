@@ -80,4 +80,4 @@ Blockly.minimalist.Renderer.prototype.makeDrawer_ = function(block, info) {
       /** @type {!Blockly.minimalist.RenderInfo} */ (info));
 };
 
-Blockly.blockRendering.register('sample', Blockly.minimalist.Renderer);
+Blockly.blockRendering.register('minimalist', Blockly.minimalist.Renderer);

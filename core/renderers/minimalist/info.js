@@ -19,12 +19,12 @@
  */
 
 /**
- * @fileoverview Sample render info object.
+ * @fileoverview Minimalist render info object.
  */
 'use strict';
 
-goog.provide('Blockly.sample');
-goog.provide('Blockly.sample.RenderInfo');
+goog.provide('Blockly.minimalist');
+goog.provide('Blockly.minimalist.RenderInfo');
 
 goog.require('Blockly.utils.object');
 
@@ -36,24 +36,24 @@ goog.require('Blockly.utils.object');
  * may choose to rerender when getSize() is called).  However, calling it
  * repeatedly may be expensive.
  *
- * @param {!Blockly.sample.Renderer} renderer The renderer in use.
+ * @param {!Blockly.minimalist.Renderer} renderer The renderer in use.
  * @param {!Blockly.BlockSvg} block The block to measure.
  * @constructor
  * @package
  * @extends {Blockly.blockRendering.RenderInfo}
  */
-Blockly.sample.RenderInfo = function(renderer, block) {
-  Blockly.sample.RenderInfo.superClass_.constructor.call(this, renderer, block);
+Blockly.minimalist.RenderInfo = function(renderer, block) {
+  Blockly.minimalist.RenderInfo.superClass_.constructor.call(this, renderer, block);
 
 };
-Blockly.utils.object.inherits(Blockly.sample.RenderInfo,
+Blockly.utils.object.inherits(Blockly.minimalist.RenderInfo,
     Blockly.blockRendering.RenderInfo);
 
 /**
  * Get the block renderer in use.
- * @return {!Blockly.sample.Renderer} The block renderer in use.
+ * @return {!Blockly.minimalist.Renderer} The block renderer in use.
  * @package
  */
-Blockly.sample.RenderInfo.prototype.getRenderer = function() {
-  return /** @type {!Blockly.sample.Renderer} */ (this.renderer_);
+Blockly.minimalist.RenderInfo.prototype.getRenderer = function() {
+  return /** @type {!Blockly.minimalist.Renderer} */ (this.renderer_);
 };

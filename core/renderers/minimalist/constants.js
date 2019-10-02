@@ -20,11 +20,11 @@
 
 /**
  * @fileoverview An object that provides constants for rendering blocks in the
- * sample renderer.
+ * minimalist renderer.
  */
 'use strict';
 
-goog.provide('Blockly.sample.ConstantProvider');
+goog.provide('Blockly.minimalist.ConstantProvider');
 
 goog.require('Blockly.blockRendering.ConstantProvider');
 goog.require('Blockly.utils.object');
@@ -36,8 +36,8 @@ goog.require('Blockly.utils.object');
  * @package
  * @extends {Blockly.blockRendering.ConstantProvider}
  */
-Blockly.sample.ConstantProvider = function() {
-  Blockly.sample.ConstantProvider.superClass_.constructor.call(this);
+Blockly.minimalist.ConstantProvider = function() {
+  Blockly.minimalist.ConstantProvider.superClass_.constructor.call(this);
 };
-Blockly.utils.object.inherits(Blockly.sample.ConstantProvider,
+Blockly.utils.object.inherits(Blockly.minimalist.ConstantProvider,
     Blockly.blockRendering.ConstantProvider);

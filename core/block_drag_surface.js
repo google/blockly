@@ -109,7 +109,7 @@ Blockly.BlockDragSurfaceSvg.prototype.createDom = function() {
 /**
  * Set the SVG blocks on the drag surface's group and show the surface.
  * Only one block group should be on the drag surface at a time.
- * @param {!Element} blocks Block or group of blocks to place on the drag
+ * @param {!SVGElement} blocks Block or group of blocks to place on the drag
  * surface.
  */
 Blockly.BlockDragSurfaceSvg.prototype.setBlocksAndShow = function(blocks) {

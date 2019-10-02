@@ -918,7 +918,7 @@ Blockly.BlockSvg.prototype.setInsertionMarker = function(insertionMarker) {
 
 /**
  * Return the root node of the SVG or null if none exists.
- * @return {Element} The root SVG node (probably a group).
+ * @return {SVGElement} The root SVG node (probably a group).
  */
 Blockly.BlockSvg.prototype.getSvgRoot = function() {
   return this.svgGroup_;

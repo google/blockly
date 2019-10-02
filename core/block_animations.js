@@ -174,7 +174,7 @@ Blockly.blockAnimations.disconnectUiEffect = function(block) {
 };
 /**
  * Animate a brief wiggle of a disconnected block.
- * @param {!Element} group SVG element to animate.
+ * @param {!SVGElement} group SVG element to animate.
  * @param {number} magnitude Maximum degrees skew (reversed for RTL).
  * @param {!Date} start Date of animation's start.
  * @private

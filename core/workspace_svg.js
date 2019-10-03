@@ -947,9 +947,9 @@ Blockly.WorkspaceSvg.prototype.getParentSvg = function() {
   while (element) {
     if (element.tagName == 'svg') {
       this.cachedParentSvg_ = element;
-      return /** @type {!SVGElement} */ (element);
+      return element;
     }
-    element = element.parentNode;
+    element = /** @type {!SVGElement} */ (element.parentNode);
   }
   return null;
 };

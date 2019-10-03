@@ -37,7 +37,6 @@ goog.require('Blockly.utils.dom');
 goog.require('Blockly.utils.object');
 goog.require('Blockly.utils.Size');
 goog.require('Blockly.utils.string');
-goog.require('Blockly.utils.uiMenu');
 goog.require('Blockly.utils.userAgent');
 
 
@@ -206,16 +205,14 @@ Blockly.FieldDropdown.prototype.initView = function() {
  * @private
  */
 Blockly.FieldDropdown.prototype.showEditor_ = function() {
-  Blockly.WidgetDiv.show(this, this.sourceBlock_.RTL,
-      this.widgetDispose_.bind(this));
-  this.menu_ = this.widgetCreate_();
-
-  this.menu_.render(Blockly.WidgetDiv.DIV);
+  this.menu_ = this.dropdownCreate_();
   // Element gets created in render.
+  this.menu_.render(Blockly.DropDownDiv.getContentDiv());
   Blockly.utils.dom.addClass(
       /** @type {!Element} */ (this.menu_.getElement()), 'blocklyDropdownMenu');
 
-  this.positionMenu_(this.menu_);
+  Blockly.DropDownDiv.showPositionedByField(
+      this, this.dropdownDispose_.bind(this));
 
   // Focusing needs to be handled after the menu is rendered and positioned.
   // Otherwise it will cause a page scroll to get the misplaced menu in
@@ -231,11 +228,11 @@ Blockly.FieldDropdown.prototype.showEditor_ = function() {
 };
 
 /**
- * Create the dropdown editor widget.
+ * Create the dropdown editor.
  * @return {Blockly.Menu} The newly created dropdown menu.
  * @private
  */
-Blockly.FieldDropdown.prototype.widgetCreate_ = function() {
+Blockly.FieldDropdown.prototype.dropdownCreate_ = function() {
   var menu = new Blockly.Menu();
   menu.setRightToLeft(this.sourceBlock_.RTL);
   menu.setRole('listbox');
@@ -276,7 +273,7 @@ Blockly.FieldDropdown.prototype.widgetCreate_ = function() {
  * Dispose of events belonging to the dropdown editor.
  * @private
  */
-Blockly.FieldDropdown.prototype.widgetDispose_ = function() {
+Blockly.FieldDropdown.prototype.dropdownDispose_ = function() {
   this.menu_.dispose();
   this.menu_ = null;
 };
@@ -287,55 +284,8 @@ Blockly.FieldDropdown.prototype.widgetDispose_ = function() {
  * @private
  */
 Blockly.FieldDropdown.prototype.handleMenuActionEvent_ = function(menuItem) {
-  Blockly.WidgetDiv.hideIfOwner(this);
+  Blockly.DropDownDiv.hideIfOwner(this, true);
   this.onItemSelected(this.menu_, menuItem);
-};
-
-/**
- * Place the menu correctly on the screen, taking into account the dimensions
- * of the menu and the dimensions of the screen so that it doesn't run off any
- * edges.
- * @param {!Blockly.Menu} menu The menu to position.
- * @private
- */
-Blockly.FieldDropdown.prototype.positionMenu_ = function(menu) {
-  var viewportBBox = Blockly.utils.getViewportBBox();
-  var anchorBBox = this.getAnchorDimensions_();
-
-  var menuSize = Blockly.utils.uiMenu.getSize(menu);
-
-  var menuMaxHeightPx = Blockly.FieldDropdown.MAX_MENU_HEIGHT_VH *
-      document.documentElement.clientHeight;
-  if (menuSize.height > menuMaxHeightPx) {
-    menuSize.height = menuMaxHeightPx;
-  }
-
-  if (this.sourceBlock_.RTL) {
-    Blockly.utils.uiMenu.adjustBBoxesForRTL(viewportBBox, anchorBBox, menuSize);
-  }
-  Blockly.WidgetDiv.positionWithAnchor(viewportBBox, anchorBBox, menuSize,
-      this.sourceBlock_.RTL);
-};
-
-/**
- * Returns the coordinates of the anchor rectangle for the widget div.
- * On a FieldDropdown we take the top-left corner of the field, then adjust for
- * the size of the checkmark that is displayed next to the currently selected
- * item. This means that the item text will be positioned directly under the
- * field text, rather than offset slightly.
- * @return {!Object} The bounding rectangle of the anchor, in window
- *     coordinates.
- * @private
- */
-Blockly.FieldDropdown.prototype.getAnchorDimensions_ = function() {
-  var boundingBox = this.getScaledBBox_();
-  if (this.sourceBlock_.RTL) {
-    boundingBox.right += Blockly.FieldDropdown.CHECKMARK_OVERHANG;
-  } else {
-    boundingBox.left -= Blockly.FieldDropdown.CHECKMARK_OVERHANG;
-  }
-
-  return boundingBox;
 };
 
 /**

@@ -706,7 +706,7 @@ Blockly.Css.CONTENT = [
   '}',
 
   '.blocklyDropDownDiv .goog-menuitem-content {',
-    'color: #fff;',
+    'color: #000;',
   '}',
 
   /* State: disabled. */
@@ -727,14 +727,9 @@ Blockly.Css.CONTENT = [
   '}',
 
   /* State: hover. */
-  '.blocklyWidgetDiv .goog-menuitem-highlight,',
-  '.blocklyWidgetDiv .goog-menuitem-hover {',
-    'background-color: #f1f3f4;',
-  '}',
-
-  '.blocklyDropDownDiv .goog-menuitem-highlight,',
-  '.blocklyDropDownDiv .goog-menuitem-hover {',
-    'background-color: rgba(0,0,0,.2);',
+  '.blocklyWidgetDiv .goog-menuitem-highlight ,',
+  '.blocklyDropDownDiv .goog-menuitem-highlight {',
+    'background-color: rgba(0,0,0,.1);',
   '}',
 
   /* State: selected/checked. */

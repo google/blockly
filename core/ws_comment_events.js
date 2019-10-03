@@ -62,7 +62,7 @@ Blockly.Events.CommentBase = function(comment) {
    * perspective, and should be undone together.
    * @type {string}
    */
-  this.group = Blockly.Events.group_;
+  this.group = Blockly.Events.getGroup();
 
   /**
    * Sets whether the event should be added to the undo stack.
@@ -315,7 +315,7 @@ Blockly.Events.CommentMove = function(comment) {
 
   /**
    * The location after the move, in workspace coordinates.
-   * @type {!Blockly.utils.Coordinate}
+   * @type {Blockly.utils.Coordinate}
    */
   this.newCoordinate_ = null;
 };

@@ -51,7 +51,7 @@ Blockly.Events.FinishedLoading = function(workspace) {
    * perspective, and should be undone together.
    * @type {string}
    */
-  this.group = Blockly.Events.group_;
+  this.group = Blockly.Events.getGroup();
 
   // Workspace events do not undo or redo.
   this.recordUndo = false;

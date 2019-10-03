@@ -365,7 +365,7 @@ Blockly.createMainWorkspace_ = function(svg, options, blockDragSurface,
               console.log('WARNING: Moved object in bounds but there was no' +
                   ' event group. This may break undo.');
             }
-            if (oldGroup) {
+            if (oldGroup !== null) {
               Blockly.Events.setGroup(oldGroup);
             }
           }

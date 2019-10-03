@@ -95,9 +95,9 @@ Blockly.Events.Abstract.prototype.run = function(_forward) {
  * Get workspace the event belongs to.
  * @return {!Blockly.Workspace} The workspace the event belongs to.
  * @throws {Error} if workspace is null.
- * @package
+ * @protected
  */
-Blockly.Events.Abstract.prototype.getEventWorkspace = function() {
+Blockly.Events.Abstract.prototype.getEventWorkspace_ = function() {
   if (this.workspaceId) {
     var workspace = Blockly.Workspace.getById(this.workspaceId);
   }

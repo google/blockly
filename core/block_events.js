@@ -156,7 +156,7 @@ Blockly.Events.Change.prototype.isNull = function() {
  * @param {boolean} forward True if run forward, false if run backward (undo).
  */
 Blockly.Events.Change.prototype.run = function(forward) {
-  var workspace = this.getEventWorkspace();
+  var workspace = this.getEventWorkspace_();
   var block = workspace.getBlockById(this.blockId);
   if (!block) {
     console.warn("Can't change non-existent block: " + this.blockId);
@@ -267,7 +267,7 @@ Blockly.Events.Create.prototype.fromJson = function(json) {
  * @param {boolean} forward True if run forward, false if run backward (undo).
  */
 Blockly.Events.Create.prototype.run = function(forward) {
-  var workspace = this.getEventWorkspace();
+  var workspace = this.getEventWorkspace_();
   if (forward) {
     var xml = Blockly.utils.xml.createElement('xml');
     xml.appendChild(this.xml);
@@ -347,7 +347,7 @@ Blockly.Events.Delete.prototype.fromJson = function(json) {
  * @param {boolean} forward True if run forward, false if run backward (undo).
  */
 Blockly.Events.Delete.prototype.run = function(forward) {
-  var workspace = this.getEventWorkspace();
+  var workspace = this.getEventWorkspace_();
   if (forward) {
     for (var i = 0, id; id = this.ids[i]; i++) {
       var block = workspace.getBlockById(id);
@@ -448,7 +448,7 @@ Blockly.Events.Move.prototype.recordNew = function() {
  * @private
  */
 Blockly.Events.Move.prototype.currentLocation_ = function() {
-  var workspace = this.getEventWorkspace();
+  var workspace = this.getEventWorkspace_();
   var block = workspace.getBlockById(this.blockId);
   var location = {};
   var parent = block.getParent();
@@ -479,7 +479,7 @@ Blockly.Events.Move.prototype.isNull = function() {
  * @param {boolean} forward True if run forward, false if run backward (undo).
  */
 Blockly.Events.Move.prototype.run = function(forward) {
-  var workspace = this.getEventWorkspace();
+  var workspace = this.getEventWorkspace_();
   var block = workspace.getBlockById(this.blockId);
   if (!block) {
     console.warn("Can't move non-existent block: " + this.blockId);

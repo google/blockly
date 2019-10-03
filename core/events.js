@@ -195,7 +195,10 @@ Blockly.Events.fireNow_ = function() {
   var queue = Blockly.Events.filter(Blockly.Events.FIRE_QUEUE_, true);
   Blockly.Events.FIRE_QUEUE_.length = 0;
   for (var i = 0, event; event = queue[i]; i++) {
-    var workspace = event.getEventWorkspace();
+    if (!event.workspaceId) {
+      continue;
+    }
+    var workspace = Blockly.Workspace.getById(event.workspaceId);
     if (workspace) {
       workspace.fireChangeListener(event);
     }
@@ -405,7 +408,10 @@ Blockly.Events.fromJson = function(json, workspace) {
 Blockly.Events.disableOrphans = function(event) {
   if (event.type == Blockly.Events.MOVE ||
       event.type == Blockly.Events.CREATE) {
-    var workspace = event.getEventWorkspace();
+    if (!event.workspaceId) {
+      return;
+    }
+    var workspace = Blockly.Workspace.getById(event.workspaceId);
     var block = workspace.getBlockById(event.blockId);
     if (block) {
       var parent = block.getParent();

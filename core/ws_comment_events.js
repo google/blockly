@@ -62,7 +62,7 @@ Blockly.Events.CommentBase = function(comment) {
    * perspective, and should be undone together.
    * @type {string}
    */
-  this.group = Blockly.Events.group_;
+  this.group = Blockly.Events.getGroup();
 
   /**
    * Sets whether the event should be added to the undo stack.

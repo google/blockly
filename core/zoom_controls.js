@@ -31,10 +31,14 @@ goog.require('Blockly.utils.dom');
 
 /**
  * Class for a zoom controls.
- * @param {!Blockly.Workspace} workspace The workspace to sit in.
+ * @param {!Blockly.WorkspaceSVG} workspace The workspace to sit in.
  * @constructor
  */
 Blockly.ZoomControls = function(workspace) {
+  /**
+   * @type {!Blockly.WorkspaceSvg}
+   * @private
+   */
   this.workspace_ = workspace;
 };
 
@@ -128,9 +132,7 @@ Blockly.ZoomControls.prototype.init = function(verticalSpacing) {
 Blockly.ZoomControls.prototype.dispose = function() {
   if (this.svgGroup_) {
     Blockly.utils.dom.removeNode(this.svgGroup_);
-    this.svgGroup_ = null;
   }
-  this.workspace_ = null;
 };
 
 /**

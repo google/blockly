@@ -31,7 +31,7 @@ suite('Inputs', function() {
     ), this.workspace);
 
     this.renderStub = sinon.stub(this.block, 'render');
-    this.bumpNeighboursStub = sinon.stub(this.block, 'bumpNeighbours_');
+    this.bumpNeighboursStub = sinon.stub(this.block, 'bumpNeighbours');
 
     this.dummy = this.block.appendDummyInput('DUMMY');
     this.value = this.block.appendValueInput('VALUE');

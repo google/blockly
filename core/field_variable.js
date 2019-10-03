@@ -326,7 +326,7 @@ Blockly.FieldVariable.prototype.getVariableTypes_ = function() {
   var variableTypes = this.variableTypes;
   if (variableTypes === null) {
     // If variableTypes is null, return all variable types.
-    if (this.sourceBlock_.workspace) {
+    if (this.sourceBlock_ && this.sourceBlock_.workspace) {
       return this.sourceBlock_.workspace.getVariableTypes();
     }
   }
@@ -403,7 +403,7 @@ Blockly.FieldVariable.dropdownCreate = function() {
   }
   var name = this.getText();
   var variableModelList = [];
-  if (this.sourceBlock_.workspace) {
+  if (this.sourceBlock_ && this.sourceBlock_.workspace) {
     var variableTypes = this.getVariableTypes_();
     // Get a copy of the list, so that adding rename and new variable options
     // doesn't modify the workspace's list.
@@ -444,7 +444,7 @@ Blockly.FieldVariable.dropdownCreate = function() {
 Blockly.FieldVariable.prototype.onItemSelected = function(menu, menuItem) {
   var id = menuItem.getValue();
   // Handle special cases.
-  if (this.sourceBlock_.workspace) {
+  if (this.sourceBlock_ && this.sourceBlock_.workspace) {
     if (id == Blockly.RENAME_VARIABLE_ID) {
       // Rename variable.
       Blockly.Variables.renameVariable(

@@ -26,7 +26,7 @@
  * @param {string} data SVG datauri.
  * @param {number} width Image width.
  * @param {number} height Image height.
- * @param {Function} callback Callback.
+ * @param {!Function} callback Callback.
  */
 function svgToPng_(data, width, height, callback) {
   var canvas = document.createElement("canvas");
@@ -52,8 +52,8 @@ function svgToPng_(data, width, height, callback) {
 
 /**
  * Create an SVG of the blocks on the workspace.
- * @param {Blockly.WorkspaceSvg} workspace The workspace.
- * @param {Function} callback Callback.
+ * @param {!Blockly.WorkspaceSvg} workspace The workspace.
+ * @param {!Function} callback Callback.
  */
 function workspaceToSvg_(workspace, callback) {
 
@@ -99,7 +99,7 @@ function workspaceToSvg_(workspace, callback) {
 
 /**
  * Download a screenshot of the blocks on a Blockly workspace.
- * @param {Blockly.WorkspaceSvg} workspace The Blockly workspace.
+ * @param {!Blockly.WorkspaceSvg} workspace The Blockly workspace.
  */
 Blockly.downloadScreenshot = function(workspace) {
   workspaceToSvg_(workspace, function(datauri) {

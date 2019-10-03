@@ -209,6 +209,26 @@ Blockly.BlockSvg.TAB_WIDTH = 8;
 Blockly.BlockSvg.START_HAT = false;
 
 /**
+ * An optional method called when a mutator dialog is first opened.
+ * This function must create and initialize a top-level block for the mutator
+ * dialog, and return it. This function should also populate this top-level
+ * block with any sub-blocks which are appropriate. This method must also be
+ * coupled with defining a `compose` method for the default mutation dialog
+ * button and UI to appear.
+ * @type {?function(Blockly.WorkspaceSvg):!Blockly.BlockSvg}
+ */
+Blockly.BlockSvg.prototype.decompose;
+
+/**
+ * An optional method called when a mutator dialog saves its content.
+ * This function is called to modify the original block according to new
+ * settings. This method must also be coupled with defining a `decompose`
+ * method for the default mutation dialog button and UI to appear.
+ * @type {?function(!Blockly.BlockSvg)}
+ */
+Blockly.BlockSvg.prototype.compose;
+
+/**
  * Create and initialize the SVG representation of the block.
  * May be called more than once.
  */

@@ -280,6 +280,27 @@ Blockly.Block.prototype.colourTertiary_ = null;
 Blockly.Block.prototype.styleName_ = null;
 
 /**
+ * An optional serialization method for defining how to serialize the
+ * mutation state. This must be coupled with defining `domToMutation`.
+ * @type {?function(...):!Element}
+ */
+Blockly.Block.prototype.mutationToDom;
+
+/**
+ * An optional deserialization method for defining how to deserialize the
+ * mutation state. This must be coupled with defining `mutationToDom`.
+ * @type {?function(!Element)}
+ */
+Blockly.Block.prototype.domToMutation;
+
+/**
+ * An optional property for suppressing adding STATEMENT_PREFIX and
+ * STATEMENT_SUFFIX to generated code.
+ * @type {?boolean}
+ */
+Blockly.Block.prototype.suppressPrefixSuffix;
+
+/**
  * Dispose of this block.
  * @param {boolean} healStack If true, then try to heal any gap by connecting
  *     the next statement with the previous statement.  Otherwise, dispose of

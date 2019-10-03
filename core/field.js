@@ -201,8 +201,6 @@ Blockly.Field.NBSP = '\u00A0';
  * Editable fields usually show some sort of UI indicating they are editable.
  * They will also be saved by the XML renderer.
  * @type {boolean}
- * @const
- * @default
  */
 Blockly.Field.prototype.EDITABLE = true;
 
@@ -211,8 +209,6 @@ Blockly.Field.prototype.EDITABLE = true;
  * are not. Editable fields should also be serializable. This is not the
  * case by default so that SERIALIZABLE is backwards compatible.
  * @type {boolean}
- * @const
- * @default
  */
 Blockly.Field.prototype.SERIALIZABLE = false;
 
@@ -707,7 +703,7 @@ Blockly.Field.prototype.forceRerender = function() {
   this.isDirty_ = true;
   if (this.sourceBlock_ && this.sourceBlock_.rendered) {
     this.sourceBlock_.render();
-    this.sourceBlock_.bumpNeighbours_();
+    this.sourceBlock_.bumpNeighbours();
   }
 };
 
@@ -752,7 +748,7 @@ Blockly.Field.prototype.setValue = function(newValue) {
 
   if (this.sourceBlock_ && Blockly.Events.isEnabled()) {
     Blockly.Events.fire(new Blockly.Events.BlockChange(
-        this.sourceBlock_, 'field', this.name, oldValue, newValue));
+        this.sourceBlock_, 'field', this.name || null, oldValue, newValue));
   }
   this.doValueUpdate_(newValue);
   if (this.isDirty_) {
@@ -797,7 +793,7 @@ Blockly.Field.prototype.getValue = function() {
  * @param {*=} opt_newValue The value to be validated.
  * @return {*} The validated value, same as input by default.
  * @protected
- * @suppress {deprecated}
+ * @suppress {deprecated} Suppress deprecated this.classValidator call.
  */
 Blockly.Field.prototype.doClassValidation_ = function(opt_newValue) {
   if (opt_newValue === null || opt_newValue === undefined) {

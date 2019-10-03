@@ -66,7 +66,7 @@ Blockly.fieldRegistry.register = function(type, fieldClass) {
  */
 Blockly.fieldRegistry.unregister = function(type) {
   if (Blockly.fieldRegistry.typeMap_[type]) {
-    Blockly.fieldRegistry.typeMap_[type] = undefined;
+    delete Blockly.fieldRegistry.typeMap_[type];
   } else {
     console.warn('No field mapping for type "' + type +
         '" found to unregister');

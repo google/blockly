@@ -495,6 +495,6 @@ Blockly.RenderedConnection.prototype.onCheckChanged_ = function() {
     var child = this.isSuperior() ? this.targetBlock() : this.sourceBlock_;
     child.unplug();
     // Bump away.
-    this.sourceBlock_.bumpNeighbours_();
+    this.sourceBlock_.bumpNeighbours();
   }
 };

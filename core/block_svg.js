@@ -1110,7 +1110,7 @@ Blockly.BlockSvg.prototype.setCommentText = function(text) {
   if (this.rendered) {
     this.render();
     // Adding or removing a comment icon will cause the block to change shape.
-    this.bumpNeighbours_();
+    this.bumpNeighbours();
   }
 };
 
@@ -1193,7 +1193,7 @@ Blockly.BlockSvg.prototype.setWarningText = function(text, opt_id) {
   if (changedState && this.rendered) {
     this.render();
     // Adding or removing a warning icon will cause the block to change shape.
-    this.bumpNeighbours_();
+    this.bumpNeighbours();
   }
 };
 
@@ -1331,7 +1331,7 @@ Blockly.BlockSvg.prototype.setPreviousStatement = function(newBoolean,
 
   if (this.rendered) {
     this.render();
-    this.bumpNeighbours_();
+    this.bumpNeighbours();
   }
 };
 
@@ -1347,7 +1347,7 @@ Blockly.BlockSvg.prototype.setNextStatement = function(newBoolean, opt_check) {
 
   if (this.rendered) {
     this.render();
-    this.bumpNeighbours_();
+    this.bumpNeighbours();
   }
 };
 
@@ -1363,7 +1363,7 @@ Blockly.BlockSvg.prototype.setOutput = function(newBoolean, opt_check) {
 
   if (this.rendered) {
     this.render();
-    this.bumpNeighbours_();
+    this.bumpNeighbours();
   }
 };
 
@@ -1376,7 +1376,7 @@ Blockly.BlockSvg.prototype.setInputsInline = function(newBoolean) {
 
   if (this.rendered) {
     this.render();
-    this.bumpNeighbours_();
+    this.bumpNeighbours();
   }
 };
 
@@ -1393,7 +1393,7 @@ Blockly.BlockSvg.prototype.removeInput = function(name, opt_quiet) {
   if (this.rendered) {
     this.render();
     // Removing an input will cause the block to change shape.
-    this.bumpNeighbours_();
+    this.bumpNeighbours();
   }
 };
 
@@ -1410,7 +1410,7 @@ Blockly.BlockSvg.prototype.moveNumberedInputBefore = function(
   if (this.rendered) {
     this.render();
     // Moving an input will cause the block to change shape.
-    this.bumpNeighbours_();
+    this.bumpNeighbours();
   }
 };
 
@@ -1429,7 +1429,7 @@ Blockly.BlockSvg.prototype.appendInput_ = function(type, name) {
   if (this.rendered) {
     this.render();
     // Adding an input will cause the block to change shape.
-    this.bumpNeighbours_();
+    this.bumpNeighbours();
   }
   return input;
 };
@@ -1513,9 +1513,9 @@ Blockly.BlockSvg.prototype.makeConnection_ = function(type) {
 /**
  * Bump unconnected blocks out of alignment.  Two blocks which aren't actually
  * connected should not coincidentally line up on screen.
- * @private
+ * @package
  */
-Blockly.BlockSvg.prototype.bumpNeighbours_ = function() {
+Blockly.BlockSvg.prototype.bumpNeighbours = function() {
   if (!this.workspace) {
     return;  // Deleted block.
   }
@@ -1532,7 +1532,7 @@ Blockly.BlockSvg.prototype.bumpNeighbours_ = function() {
 
     // Spider down from this block bumping all sub-blocks.
     if (connection.isConnected() && connection.isSuperior()) {
-      connection.targetBlock().bumpNeighbours_();
+      connection.targetBlock().bumpNeighbours();
     }
 
     var neighbours = connection.neighbours_(Blockly.SNAP_RADIUS);
@@ -1574,7 +1574,7 @@ Blockly.BlockSvg.prototype.scheduleSnapAndBump = function() {
 
   setTimeout(function() {
     Blockly.Events.setGroup(group);
-    block.bumpNeighbours_();
+    block.bumpNeighbours();
     Blockly.Events.setGroup(false);
   }, Blockly.BUMP_DELAY);
 };

@@ -119,7 +119,6 @@ Blockly.FieldVariable.prototype.workspace_ = null;
  * Serializable fields are saved by the XML renderer, non-serializable fields
  * are not. Editable fields should also be serializable.
  * @type {boolean}
- * @const
  */
 Blockly.FieldVariable.prototype.SERIALIZABLE = true;
 
@@ -144,7 +143,8 @@ Blockly.FieldVariable.prototype.initModel = function() {
     return; // Initialization already happened.
   }
   var variable = Blockly.Variables.getOrCreateVariablePackage(
-      this.workspace_, null, this.defaultVariableName, this.defaultType_);
+      this.sourceBlock_.workspace, null,
+      this.defaultVariableName, this.defaultType_);
 
   // Don't fire a change event for this setValue.  It would have null as the
   // old value, which is not valid.
@@ -167,7 +167,7 @@ Blockly.FieldVariable.prototype.fromXml = function(fieldElement) {
       fieldElement.getAttribute('variableType') || '';
 
   var variable = Blockly.Variables.getOrCreateVariablePackage(
-      this.workspace_, id, variableName, variableType);
+      this.sourceBlock_.workspace, id, variableName, variableType);
 
   // This should never happen :)
   if (variableType != null && variableType !== variable.type) {
@@ -207,7 +207,6 @@ Blockly.FieldVariable.prototype.setSourceBlock = function(block) {
     throw Error('Variable fields are not allowed to exist on shadow blocks.');
   }
   Blockly.FieldVariable.superClass_.setSourceBlock.call(this, block);
-  this.workspace_ = block.workspace;
 };
 
 /**
@@ -267,7 +266,8 @@ Blockly.FieldVariable.prototype.doClassValidation_ = function(opt_newValue) {
     return null;
   }
   var newId = /** @type {string} */ (opt_newValue);
-  var variable = Blockly.Variables.getVariable(this.workspace_, newId);
+  var variable = Blockly.Variables.getVariable(
+      this.sourceBlock_.workspace, newId);
   if (!variable) {
     console.warn('Variable id doesn\'t point to a real variable! ' +
         'ID was ' + newId);
@@ -287,11 +287,12 @@ Blockly.FieldVariable.prototype.doClassValidation_ = function(opt_newValue) {
  *
  * The variable ID should be valid at this point, but if a variable field
  * validator returns a bad ID, this could break.
- * @param {string} newId The id of the new variable.
+ * @param {*} newId The value to be saved.
  * @protected
  */
 Blockly.FieldVariable.prototype.doValueUpdate_ = function(newId) {
-  this.variable_ = Blockly.Variables.getVariable(this.workspace_, newId);
+  this.variable_ = Blockly.Variables.getVariable(
+      this.sourceBlock_.workspace, /** @type {string} */ (newId));
   Blockly.FieldVariable.superClass_.doValueUpdate_.call(this, newId);
 };
 
@@ -325,8 +326,8 @@ Blockly.FieldVariable.prototype.getVariableTypes_ = function() {
   var variableTypes = this.variableTypes;
   if (variableTypes === null) {
     // If variableTypes is null, return all variable types.
-    if (this.workspace_) {
-      return this.workspace_.getVariableTypes();
+    if (this.sourceBlock_.workspace) {
+      return this.sourceBlock_.workspace.getVariableTypes();
     }
   }
   variableTypes = variableTypes || [''];
@@ -402,13 +403,14 @@ Blockly.FieldVariable.dropdownCreate = function() {
   }
   var name = this.getText();
   var variableModelList = [];
-  if (this.workspace_) {
+  if (this.sourceBlock_.workspace) {
     var variableTypes = this.getVariableTypes_();
     // Get a copy of the list, so that adding rename and new variable options
     // doesn't modify the workspace's list.
     for (var i = 0; i < variableTypes.length; i++) {
       var variableType = variableTypes[i];
-      var variables = this.workspace_.getVariablesOfType(variableType);
+      var variables =
+        this.sourceBlock_.workspace.getVariablesOfType(variableType);
       variableModelList = variableModelList.concat(variables);
     }
   }
@@ -442,14 +444,15 @@ Blockly.FieldVariable.dropdownCreate = function() {
 Blockly.FieldVariable.prototype.onItemSelected = function(menu, menuItem) {
   var id = menuItem.getValue();
   // Handle special cases.
-  if (this.workspace_) {
+  if (this.sourceBlock_.workspace) {
     if (id == Blockly.RENAME_VARIABLE_ID) {
       // Rename variable.
-      Blockly.Variables.renameVariable(this.workspace_, this.variable_);
+      Blockly.Variables.renameVariable(
+          this.sourceBlock_.workspace, this.variable_);
       return;
     } else if (id == Blockly.DELETE_VARIABLE_ID) {
       // Delete variable.
-      this.workspace_.deleteVariableById(this.variable_.getId());
+      this.sourceBlock_.workspace.deleteVariableById(this.variable_.getId());
       return;
     }
   }

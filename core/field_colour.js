@@ -99,7 +99,6 @@ Blockly.FieldColour.DEFAULT_HEIGHT = Blockly.Field.BORDER_RECT_DEFAULT_HEIGHT;
  * Serializable fields are saved by the XML renderer, non-serializable fields
  * are not. Editable fields should also be serializable.
  * @type {boolean}
- * @const
  */
 Blockly.FieldColour.prototype.SERIALIZABLE = true;
 
@@ -196,7 +195,7 @@ Blockly.FieldColour.prototype.doClassValidation_ = function(opt_newValue) {
 
 /**
  * Update the value of this colour field, and update the displayed colour.
- * @param {string} newValue The new colour in '#rrggbb' format.
+ * @param {*} newValue The value to be saved. A colour in '#rrggbb' format.
  * @protected
  */
 Blockly.FieldColour.prototype.doValueUpdate_ = function(newValue) {

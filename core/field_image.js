@@ -145,7 +145,6 @@ Blockly.FieldImage.Y_PADDING = 1;
  * Editable fields usually show some sort of UI indicating they are
  * editable. This field should not.
  * @type {boolean}
- * @const
  */
 Blockly.FieldImage.prototype.EDITABLE = false;
 
@@ -201,7 +200,7 @@ Blockly.FieldImage.prototype.doClassValidation_ = function(opt_newValue) {
 
 /**
  * Update the value of this image field, and update the displayed image.
- * @param {string} newValue The new image src.
+ * @param {*} newValue The value to be saved.
  * @protected
  */
 Blockly.FieldImage.prototype.doValueUpdate_ = function(newValue) {

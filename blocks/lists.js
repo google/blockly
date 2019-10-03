@@ -839,7 +839,7 @@ Blockly.Blocks['lists_split'] = {
         if (inputBlock.isShadow()) {
           inputBlock.dispose();
         } else {
-          this.bumpNeighbours_();
+          this.bumpNeighbours();
         }
       }
     }

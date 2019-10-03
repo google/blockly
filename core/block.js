@@ -518,11 +518,11 @@ Blockly.Block.prototype.lastConnectionInStack = function() {
 /**
  * Bump unconnected blocks out of alignment.  Two blocks which aren't actually
  * connected should not coincidentally line up on screen.
- * @protected
+ * @package
  */
-Blockly.Block.prototype.bumpNeighbours_ = function() {
-  console.warn('Not expected to reach Block.bumpNeighbours_ function. ' +
-      'BlockSvg.bumpNeighbours_ was expected to be called instead.');
+Blockly.Block.prototype.bumpNeighbours = function() {
+  console.warn('Not expected to reach Block.bumpNeighbours function. ' +
+      'BlockSvg.bumpNeighbours was expected to be called instead.');
 };
 
 /**
@@ -1051,7 +1051,8 @@ Blockly.Block.prototype.getVarModels = function() {
   for (var i = 0, input; input = this.inputList[i]; i++) {
     for (var j = 0, field; field = input.fieldRow[j]; j++) {
       if (field.referencesVariables()) {
-        var model = this.workspace.getVariableById(field.getValue());
+        var model = this.workspace.getVariableById(
+            /** @type {string} */ (field.getValue()));
         // Check if the variable actually exists (and isn't just a potential
         // variable).
         if (model) {
@@ -1106,7 +1107,7 @@ Blockly.Block.prototype.renameVarById = function(oldId, newId) {
 Blockly.Block.prototype.getFieldValue = function(name) {
   var field = this.getField(name);
   if (field) {
-    return field.getValue();
+    return String(field.getValue());
   }
   return null;
 };

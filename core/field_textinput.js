@@ -55,7 +55,7 @@ Blockly.FieldTextInput = function(opt_value, opt_validator, opt_config) {
   /**
    * Allow browser to spellcheck this field.
    * @type {boolean}
-   * @private
+   * @protected
    */
   this.spellcheck_ = true;
 
@@ -84,7 +84,6 @@ Blockly.FieldTextInput.fromJson = function(options) {
  * Serializable fields are saved by the XML renderer, non-serializable fields
  * are not. Editable fields should also be serializable.
  * @type {boolean}
- * @const
  */
 Blockly.FieldTextInput.prototype.SERIALIZABLE = true;
 
@@ -144,7 +143,7 @@ Blockly.FieldTextInput.prototype.doValueInvalid_ = function(_invalidValue) {
     this.value_ = this.htmlInput_.untypedDefaultValue_;
     if (this.sourceBlock_ && Blockly.Events.isEnabled()) {
       Blockly.Events.fire(new Blockly.Events.BlockChange(
-          this.sourceBlock_, 'field', this.name, oldValue, this.value_));
+          this.sourceBlock_, 'field', this.name || null, oldValue, this.value_));
     }
   }
 };
@@ -153,7 +152,7 @@ Blockly.FieldTextInput.prototype.doValueInvalid_ = function(_invalidValue) {
  * Called by setValue if the text input is valid. Updates the value of the
  * field, and updates the text of the field if it is not currently being
  * edited (i.e. handled by the htmlInput_).
- * @param {string} newValue The new validated value of the field.
+ * @param {*} newValue The value to be saved.
  * @protected
  */
 Blockly.FieldTextInput.prototype.doValueUpdate_ = function(newValue) {

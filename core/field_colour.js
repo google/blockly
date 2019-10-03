@@ -140,22 +140,6 @@ Blockly.FieldColour.prototype.titles_ = null;
 Blockly.FieldColour.prototype.columns_ = 0;
 
 /**
- * Border colour for the dropdown div showing the colour picker.  Must be a CSS
- * string.
- * @type {string}
- * @private
- */
-Blockly.FieldColour.prototype.DROPDOWN_BORDER_COLOUR = '#dadce0';
-
-/**
- * Background colour for the dropdown div showing the colour picker.  Must be a
- * CSS string.
- * @type {string}
- * @private
- */
-Blockly.FieldColour.prototype.DROPDOWN_BACKGROUND_COLOUR = 'white';
-
-/**
  * Configure the field based on the given map of options.
  * @param {!Object} config A map of options to configure the field based on.
  * @private
@@ -296,9 +280,6 @@ Blockly.FieldColour.prototype.setColumns = function(columns) {
 Blockly.FieldColour.prototype.showEditor_ = function() {
   this.picker_ = this.dropdownCreate_();
   Blockly.DropDownDiv.getContentDiv().appendChild(this.picker_);
-
-  Blockly.DropDownDiv.setColour(
-      this.DROPDOWN_BACKGROUND_COLOUR, this.DROPDOWN_BORDER_COLOUR);
 
   Blockly.DropDownDiv.showPositionedByField(
       this, this.dropdownDispose_.bind(this));

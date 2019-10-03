@@ -103,6 +103,7 @@ Blockly.DropDownDiv.PADDING_Y = 16;
 Blockly.DropDownDiv.ANIMATION_TIME = 0.25;
 
 /**
+<<<<<<< HEAD
  * The default dropdown div border color.
  * @type {string}
  * @const
@@ -115,6 +116,14 @@ Blockly.DropDownDiv.DEFAULT_DROPDOWN_BORDER_COLOR = '#dadce0';
  * @const
  */
 Blockly.DropDownDiv.DEFAULT_DROPDOWN_COLOR = '#fff';
+
+/**
+ * Transition animation for transform and opacity.
+ * @const {string}
+ */
+Blockly.DropDownDiv.TRANSITION = 'transform ' +
+    Blockly.DropDownDiv.ANIMATION_TIME + 's, ' +
+    'opacity ' + Blockly.DropDownDiv.ANIMATION_TIME + 's';
 
 /**
  * Timer for animation out, to be cleared if we need to immediately hide
@@ -154,11 +163,7 @@ Blockly.DropDownDiv.createDom = function() {
   Blockly.DropDownDiv.arrow_ = arrow;
 
   Blockly.DropDownDiv.DIV_.style.opacity = 0;
-
-  // Transition animation for transform: translate() and opacity.
-  Blockly.DropDownDiv.DIV_.style.transition = 'transform ' +
-    Blockly.DropDownDiv.ANIMATION_TIME + 's, ' +
-    'opacity ' + Blockly.DropDownDiv.ANIMATION_TIME + 's';
+  Blockly.DropDownDiv.DIV_.style.transition = Blockly.DropDownDiv.TRANSITION;
 
   // Handle focusin/out events to add a visual indicator when
   // a child is focused or blurred.
@@ -192,7 +197,23 @@ Blockly.DropDownDiv.getContentDiv = function() {
  */
 Blockly.DropDownDiv.clearContent = function() {
   Blockly.DropDownDiv.content_.innerHTML = '';
-  Blockly.DropDownDiv.content_.style.width = '';
+  Blockly.DropDownDiv.content_.style.cssText = '';
+};
+
+/**
+ * Resets the CSS of the div.
+ * @param {boolean} persistDisplay True to persist the display mode,
+ *    otherwise it will be set to 'none'.
+ */
+Blockly.DropDownDiv.resetCss = function(persistDisplay) {
+  var style = Blockly.DropDownDiv.DIV_.style;
+  var displayMode = style.display;
+  style.cssText = '';
+  style.opacity = 0;
+  style.transition = Blockly.DropDownDiv.TRANSITION;
+  style.backgroundColor = Blockly.DropDownDiv.DEFAULT_DROPDOWN_COLOR;
+  style.borderColor = Blockly.DropDownDiv.DEFAULT_DROPDOWN_BORDER_COLOR;
+  style.display = persistDisplay ? displayMode : 'none';
 };
 
 /**
@@ -592,17 +613,9 @@ Blockly.DropDownDiv.hideWithoutAnimation = function() {
     clearTimeout(Blockly.DropDownDiv.animateOutTimer_);
   }
 
-  // Reset style properties in case this gets called directly
-  // instead of hide() - see discussion on #2551.
-  var div = Blockly.DropDownDiv.DIV_;
-  div.style.transform = '';
-  div.style.left = '';
-  div.style.top = '';
-  div.style.opacity = 0;
-  div.style.display = 'none';
-  div.style.backgroundColor = Blockly.DropDownDiv.DEFAULT_DROPDOWN_COLOR;
-  div.style.borderColor = Blockly.DropDownDiv.DEFAULT_DROPDOWN_BORDER_COLOR;
-
+  Blockly.DropDownDiv.clearContent();
+  Blockly.DropDownDiv.resetCss();
+  Blockly.DropDownDiv.owner_ = null;
   if (Blockly.DropDownDiv.onHide_) {
     Blockly.DropDownDiv.onHide_();
     Blockly.DropDownDiv.onHide_ = null;

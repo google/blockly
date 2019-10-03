@@ -85,18 +85,30 @@ Blockly.WidgetDiv.show = function(newOwner, rtl, dispose) {
 };
 
 /**
- * Destroy the widget and hide the div.
+ * Destroy the widget, reset the css, and hide the div.
  */
 Blockly.WidgetDiv.hide = function() {
-  if (Blockly.WidgetDiv.owner_) {
-    Blockly.WidgetDiv.owner_ = null;
-    Blockly.WidgetDiv.DIV.style.display = 'none';
-    Blockly.WidgetDiv.DIV.style.left = '';
-    Blockly.WidgetDiv.DIV.style.top = '';
-    Blockly.WidgetDiv.dispose_ && Blockly.WidgetDiv.dispose_();
-    Blockly.WidgetDiv.dispose_ = null;
-    Blockly.WidgetDiv.DIV.innerHTML = '';
+  if (!this.isVisible()) {
+    return;
   }
+
+  Blockly.WidgetDiv.owner_ = null;
+  Blockly.WidgetDiv.DIV.innerHTML = '';
+  Blockly.WidgetDiv.resetCss_();
+  Blockly.WidgetDiv.dispose_ && Blockly.WidgetDiv.dispose_();
+  Blockly.WidgetDiv.dispose_ = null;
+};
+
+/**
+ * Resets the css of the div.
+ * @private
+ */
+Blockly.WidgetDiv.resetCss_ = function() {
+  var style = Blockly.WidgetDiv.DIV.style;
+  style.cssText = '';
+  style.display = 'none';
+  style.width = 'auto';
+  style.height = 'auto';
 };
 
 /**

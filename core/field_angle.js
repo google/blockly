@@ -101,7 +101,6 @@ Blockly.FieldAngle.fromJson = function(options) {
  * Serializable fields are saved by the XML renderer, non-serializable fields
  * are not. Editable fields should also be serializable.
  * @type {boolean}
- * @const
  */
 Blockly.FieldAngle.prototype.SERIALIZABLE = true;
 
@@ -423,8 +422,9 @@ Blockly.FieldAngle.prototype.onHtmlInputKeyDown_ = function(e) {
     multiplier = 1;
   }
   if (multiplier) {
+    var value = /** @type {number} */ (this.getValue());
     this.displayMouseOrKeyboardValue_(
-        this.getValue() + (multiplier * this.round_));
+        value + (multiplier * this.round_));
     e.preventDefault();
     e.stopPropagation();
   }

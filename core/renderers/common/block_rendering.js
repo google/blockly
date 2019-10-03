@@ -64,7 +64,7 @@ Blockly.blockRendering.register = function(name, rendererClass) {
  */
 Blockly.blockRendering.unregister = function(name) {
   if (Blockly.blockRendering.rendererMap_[name]) {
-    Blockly.blockRendering.rendererMap_[name] = undefined;
+    delete Blockly.blockRendering.rendererMap_[name];
   } else {
     console.warn('No renderer mapping for name "' + name +
         '" found to unregister');

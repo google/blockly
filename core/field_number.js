@@ -102,7 +102,6 @@ Blockly.FieldNumber.fromJson = function(options) {
  * Serializable fields are saved by the XML renderer, non-serializable fields
  * are not. Editable fields should also be serializable.
  * @type {boolean}
- * @const
  */
 Blockly.FieldNumber.prototype.SERIALIZABLE = true;
 

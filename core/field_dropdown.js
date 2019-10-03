@@ -133,7 +133,6 @@ Blockly.FieldDropdown.fromJson = function(options) {
  * Serializable fields are saved by the XML renderer, non-serializable fields
  * are not. Editable fields should also be serializable.
  * @type {boolean}
- * @const
  */
 Blockly.FieldDropdown.prototype.SERIALIZABLE = true;
 
@@ -429,7 +428,8 @@ Blockly.FieldDropdown.prototype.doClassValidation_ = function(opt_newValue) {
 
 /**
  * Update the value of this dropdown field.
- * @param {string} newValue The new language-neutral value.
+ * @param {*} newValue The value to be saved. The default validator guarantees
+ * that this is one of the valid dropdown options.
  * @protected
  */
 Blockly.FieldDropdown.prototype.doValueUpdate_ = function(newValue) {

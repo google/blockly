@@ -58,7 +58,7 @@ Blockly.FieldLabel = function(opt_value, opt_class, opt_config) {
       this, opt_value, null, opt_config);
 
   if (!opt_config) {  // If the config was not passed use old configuration.
-    this.class_ = opt_class;
+    this.class_ = opt_class || null;
   }
 
   /**
@@ -88,7 +88,6 @@ Blockly.FieldLabel.fromJson = function(options) {
  * Editable fields usually show some sort of UI indicating they are
  * editable. This field should not.
  * @type {boolean}
- * @const
  */
 Blockly.FieldLabel.prototype.EDITABLE = false;
 

@@ -133,7 +133,7 @@ Blockly.Input.prototype.insertFieldAt = function(index, field, opt_name) {
   if (this.sourceBlock_.rendered) {
     this.sourceBlock_.render();
     // Adding a field will cause the block to change shape.
-    this.sourceBlock_.bumpNeighbours_();
+    this.sourceBlock_.bumpNeighbours();
   }
   return index;
 };
@@ -151,7 +151,7 @@ Blockly.Input.prototype.removeField = function(name) {
       if (this.sourceBlock_.rendered) {
         this.sourceBlock_.render();
         // Removing a field will cause the block to change shape.
-        this.sourceBlock_.bumpNeighbours_();
+        this.sourceBlock_.bumpNeighbours();
       }
       return;
     }

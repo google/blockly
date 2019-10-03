@@ -113,6 +113,7 @@ Blockly.Names.prototype.getNameForUserVariable_ = function(id) {
  * @param {string} type The type of entity in Blockly
  *     ('VARIABLE', 'PROCEDURE', 'BUILTIN', etc...).
  * @return {string} An entity name that is legal in the exported language.
+ * @suppress {deprecated} Suppress deprecated Blockly.Variables.NAME_TYPE.
  */
 Blockly.Names.prototype.getName = function(name, type) {
   if (type == Blockly.Variables.NAME_TYPE) {

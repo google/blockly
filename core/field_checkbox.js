@@ -109,7 +109,6 @@ Blockly.FieldCheckbox.CHECK_Y_OFFSET = 14;
  * Serializable fields are saved by the XML renderer, non-serializable fields
  * are not. Editable fields should also be serializable.
  * @type {boolean}
- * @const
  */
 Blockly.FieldCheckbox.prototype.SERIALIZABLE = true;
 
@@ -193,7 +192,8 @@ Blockly.FieldCheckbox.prototype.doClassValidation_ = function(opt_newValue) {
 
 /**
  * Update the value of the field, and update the checkElement.
- * @param {string} newValue The new value ('TRUE' or 'FALSE') of the field.
+ * @param {*} newValue The value to be saved. The default validator guarantees
+ * that this is a either 'TRUE' or 'FALSE'.
  * @protected
  */
 Blockly.FieldCheckbox.prototype.doValueUpdate_ = function(newValue) {

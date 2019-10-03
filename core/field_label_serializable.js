@@ -66,7 +66,6 @@ Blockly.FieldLabelSerializable.fromJson = function(options) {
  * Editable fields usually show some sort of UI indicating they are
  * editable. This field should not.
  * @type {boolean}
- * @public
  */
 Blockly.FieldLabelSerializable.prototype.EDITABLE = false;
 
@@ -74,7 +73,6 @@ Blockly.FieldLabelSerializable.prototype.EDITABLE = false;
  * Serializable fields are saved by the XML renderer, non-serializable fields
  * are not.  This field should be serialized, but only edited programmatically.
  * @type {boolean}
- * @public
  */
 Blockly.FieldLabelSerializable.prototype.SERIALIZABLE = true;
 

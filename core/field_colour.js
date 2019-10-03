@@ -195,7 +195,8 @@ Blockly.FieldColour.prototype.doClassValidation_ = function(opt_newValue) {
 
 /**
  * Update the value of this colour field, and update the displayed colour.
- * @param {*} newValue The value to be saved. A colour in '#rrggbb' format.
+ * @param {*} newValue The value to be saved. The default validator guarantees
+ * that this is a colour in '#rrggbb' format.
  * @protected
  */
 Blockly.FieldColour.prototype.doValueUpdate_ = function(newValue) {

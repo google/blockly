@@ -200,7 +200,8 @@ Blockly.FieldImage.prototype.doClassValidation_ = function(opt_newValue) {
 
 /**
  * Update the value of this image field, and update the displayed image.
- * @param {*} newValue The value to be saved.
+ * @param {*} newValue The value to be saved. The default validator guarantees
+ * that this is a string.
  * @protected
  */
 Blockly.FieldImage.prototype.doValueUpdate_ = function(newValue) {

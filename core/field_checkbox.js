@@ -192,7 +192,8 @@ Blockly.FieldCheckbox.prototype.doClassValidation_ = function(opt_newValue) {
 
 /**
  * Update the value of the field, and update the checkElement.
- * @param {*} newValue The value to be saved.
+ * @param {*} newValue The value to be saved. The default validator guarantees
+ * that this is a either 'TRUE' or 'FALSE'.
  * @protected
  */
 Blockly.FieldCheckbox.prototype.doValueUpdate_ = function(newValue) {

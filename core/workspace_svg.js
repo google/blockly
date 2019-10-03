@@ -921,7 +921,7 @@ Blockly.WorkspaceSvg.prototype.updateScreenCalculationsIfScrolled =
 
 /**
  * Get the SVG element that forms the drawing surface.
- * @return {!Element} SVG element.
+ * @return {!SVGElement} SVG element.
  */
 Blockly.WorkspaceSvg.prototype.getCanvas = function() {
   return this.svgBlockCanvas_;
@@ -937,7 +937,7 @@ Blockly.WorkspaceSvg.prototype.getBubbleCanvas = function() {
 
 /**
  * Get the SVG element that contains this workspace.
- * @return {Element} SVG element.
+ * @return {SVGElement} SVG element.
  */
 Blockly.WorkspaceSvg.prototype.getParentSvg = function() {
   if (this.cachedParentSvg_) {
@@ -947,7 +947,7 @@ Blockly.WorkspaceSvg.prototype.getParentSvg = function() {
   while (element) {
     if (element.tagName == 'svg') {
       this.cachedParentSvg_ = element;
-      return element;
+      return /** @type {!SVGElement} */ (element);
     }
     element = element.parentNode;
   }

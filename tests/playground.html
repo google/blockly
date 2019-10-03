@@ -65,6 +65,7 @@
 <script src="../blocks/variables_dynamic.js"></script>
 <script src="../blocks/procedures.js"></script>
 <script src="blocks/test_blocks.js"></script>
+<script src="./playgrounds/screenshot.js"></script>
 
 <script>
 // Custom requires for the playground.
@@ -139,6 +140,7 @@ function start() {
             scaleSpeed: 1.1
           }
       });
+  workspace.configureContextMenu = configureContextMenu;
   addToolboxButtonCallbacks();
   addRenderDebugOptionsCheckboxes();
   // Restore previously displayed text.
@@ -425,6 +427,17 @@ function toggleAccessibilityMode(state) {
   } else {
     Blockly.navigation.disableKeyboardAccessibility();
   }
+}
+
+function configureContextMenu(menuOptions) {
+  var screenshotOption = {
+    text: 'Download Screenshot',
+    enabled: workspace.getTopBlocks().length,
+    callback: function() {
+      Blockly.downloadScreenshot(workspace);
+    }
+  };
+  menuOptions.push(screenshotOption);
 }
 
 function logger(e) {

@@ -210,12 +210,11 @@ Blockly.BlockSvg.START_HAT = false;
 
 /**
  * An optional method called when a mutator dialog is first opened.
- * This function must create an initialize a top-level block for the mutator
+ * This function must create and initialize a top-level block for the mutator
  * dialog, and return it. This function should also populate this top-level
  * block with any sub-blocks which are appropriate. This method must also be
  * coupled with defining a `compose` method for the default mutation dialog
  * button and UI to appear.
- * mutation state. This should be coupled with defining `domToMutation`.
  * @type {?function(Blockly.WorkspaceSvg):!Blockly.BlockSvg}
  */
 Blockly.BlockSvg.prototype.decompose;

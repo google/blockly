@@ -59,8 +59,7 @@ function workspaceToSvg_(workspace, callback) {
 
   // Go through all text areas and set their value.
   var textAreas = document.getElementsByTagName("textarea");
-  for (var i = 0; i < textAreas.length; i++)
-  {
+  for (var i = 0; i < textAreas.length; i++) {
     textAreas[i].innerHTML = textAreas[i].value;
   }
 

@@ -156,7 +156,7 @@ Blockly.Events.Change.prototype.isNull = function() {
  * @param {boolean} forward True if run forward, false if run backward (undo).
  */
 Blockly.Events.Change.prototype.run = function(forward) {
-  var workspace = this.getEventWorkspace_();
+  var workspace = this.getEventWorkspace();
   var block = workspace.getBlockById(this.blockId);
   if (!block) {
     console.warn("Can't change non-existent block: " + this.blockId);
@@ -177,16 +177,16 @@ Blockly.Events.Change.prototype.run = function(forward) {
       }
       break;
     case 'comment':
-      block.setCommentText(value || null);
+      block.setCommentText(/** @type {string} */ (value) || null);
       break;
     case 'collapsed':
-      block.setCollapsed(value);
+      block.setCollapsed(!!value);
       break;
     case 'disabled':
       block.setEnabled(!value);
       break;
     case 'inline':
-      block.setInputsInline(value);
+      block.setInputsInline(!!value);
       break;
     case 'mutation':
       var oldMutation = '';
@@ -195,7 +195,7 @@ Blockly.Events.Change.prototype.run = function(forward) {
         oldMutation = oldMutationDom && Blockly.Xml.domToText(oldMutationDom);
       }
       if (block.domToMutation) {
-        var dom = Blockly.Xml.textToDom(value || '<mutation/>');
+        var dom = Blockly.Xml.textToDom(/** @type {string} */ (value) || '<mutation/>');
         block.domToMutation(dom);
       }
       Blockly.Events.fire(new Blockly.Events.Change(
@@ -223,7 +223,7 @@ Blockly.Events.Create = function(block) {
   } else {
     this.xml = Blockly.Xml.blockToDom(block);
   }
-  this.ids = Blockly.Events.getDescendantIds_(block);
+  this.ids = Blockly.Events.getDescendantIds(block);
 };
 Blockly.utils.object.inherits(Blockly.Events.Create, Blockly.Events.BlockBase);
 
@@ -267,7 +267,7 @@ Blockly.Events.Create.prototype.fromJson = function(json) {
  * @param {boolean} forward True if run forward, false if run backward (undo).
  */
 Blockly.Events.Create.prototype.run = function(forward) {
-  var workspace = this.getEventWorkspace_();
+  var workspace = this.getEventWorkspace();
   if (forward) {
     var xml = Blockly.utils.xml.createElement('xml');
     xml.appendChild(this.xml);
@@ -276,7 +276,7 @@ Blockly.Events.Create.prototype.run = function(forward) {
     for (var i = 0, id; id = this.ids[i]; i++) {
       var block = workspace.getBlockById(id);
       if (block) {
-        block.dispose(false, false);
+        block.dispose(false);
       } else if (id == this.blockId) {
         // Only complain about root-level block.
         console.warn("Can't uncreate non-existent block: " + id);
@@ -305,7 +305,7 @@ Blockly.Events.Delete = function(block) {
   } else {
     this.oldXml = Blockly.Xml.blockToDom(block);
   }
-  this.ids = Blockly.Events.getDescendantIds_(block);
+  this.ids = Blockly.Events.getDescendantIds(block);
 };
 Blockly.utils.object.inherits(Blockly.Events.Delete, Blockly.Events.BlockBase);
 
@@ -347,12 +347,12 @@ Blockly.Events.Delete.prototype.fromJson = function(json) {
  * @param {boolean} forward True if run forward, false if run backward (undo).
  */
 Blockly.Events.Delete.prototype.run = function(forward) {
-  var workspace = this.getEventWorkspace_();
+  var workspace = this.getEventWorkspace();
   if (forward) {
     for (var i = 0, id; id = this.ids[i]; i++) {
       var block = workspace.getBlockById(id);
       if (block) {
-        block.dispose(false, false);
+        block.dispose(false);
       } else if (id == this.blockId) {
         // Only complain about root-level block.
         console.warn("Can't delete non-existent block: " + id);
@@ -448,7 +448,7 @@ Blockly.Events.Move.prototype.recordNew = function() {
  * @private
  */
 Blockly.Events.Move.prototype.currentLocation_ = function() {
-  var workspace = Blockly.Workspace.getById(this.workspaceId);
+  var workspace = this.getEventWorkspace();
   var block = workspace.getBlockById(this.blockId);
   var location = {};
   var parent = block.getParent();
@@ -479,7 +479,7 @@ Blockly.Events.Move.prototype.isNull = function() {
  * @param {boolean} forward True if run forward, false if run backward (undo).
  */
 Blockly.Events.Move.prototype.run = function(forward) {
-  var workspace = this.getEventWorkspace_();
+  var workspace = this.getEventWorkspace();
   var block = workspace.getBlockById(this.blockId);
   if (!block) {
     console.warn("Can't move non-existent block: " + this.blockId);

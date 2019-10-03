@@ -152,7 +152,7 @@ Blockly.Events.CommentChange.prototype.isNull = function() {
  * @param {boolean} forward True if run forward, false if run backward (undo).
  */
 Blockly.Events.CommentChange.prototype.run = function(forward) {
-  var workspace = this.getEventWorkspace_();
+  var workspace = this.getEventWorkspace();
   var comment = workspace.getCommentById(this.commentId);
   if (!comment) {
     console.warn('Can\'t change non-existent comment: ' + this.commentId);
@@ -222,7 +222,7 @@ Blockly.Events.CommentCreate.prototype.run = function(forward) {
  * @param {boolean} create if True then Create, if False then Delete
  */
 Blockly.Events.CommentCreateDeleteHelper = function(event, create) {
-  var workspace = event.getEventWorkspace_();
+  var workspace = event.getEventWorkspace();
   if (create) {
     var xml = Blockly.utils.xml.createElement('xml');
     xml.appendChild(event.xml);
@@ -315,7 +315,7 @@ Blockly.Events.CommentMove = function(comment) {
 
   /**
    * The location after the move, in workspace coordinates.
-   * @type {!Blockly.utils.Coordinate}
+   * @type {Blockly.utils.Coordinate}
    */
   this.newCoordinate_ = null;
 };
@@ -393,7 +393,7 @@ Blockly.Events.CommentMove.prototype.isNull = function() {
  * @param {boolean} forward True if run forward, false if run backward (undo).
  */
 Blockly.Events.CommentMove.prototype.run = function(forward) {
-  var workspace = this.getEventWorkspace_();
+  var workspace = this.getEventWorkspace();
   var comment = workspace.getCommentById(this.commentId);
   if (!comment) {
     console.warn('Can\'t move non-existent comment: ' + this.commentId);

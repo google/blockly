@@ -118,7 +118,7 @@ Blockly.Events.VarCreate.prototype.fromJson = function(json) {
  * @param {boolean} forward True if run forward, false if run backward (undo).
  */
 Blockly.Events.VarCreate.prototype.run = function(forward) {
-  var workspace = this.getEventWorkspace_();
+  var workspace = this.getEventWorkspace();
   if (forward) {
     workspace.createVariable(this.varName, this.varType, this.varId);
   } else {
@@ -175,7 +175,7 @@ Blockly.Events.VarDelete.prototype.fromJson = function(json) {
  * @param {boolean} forward True if run forward, false if run backward (undo).
  */
 Blockly.Events.VarDelete.prototype.run = function(forward) {
-  var workspace = this.getEventWorkspace_();
+  var workspace = this.getEventWorkspace();
   if (forward) {
     workspace.deleteVariableById(this.varId);
   } else {
@@ -233,7 +233,7 @@ Blockly.Events.VarRename.prototype.fromJson = function(json) {
  * @param {boolean} forward True if run forward, false if run backward (undo).
  */
 Blockly.Events.VarRename.prototype.run = function(forward) {
-  var workspace = this.getEventWorkspace_();
+  var workspace = this.getEventWorkspace();
   if (forward) {
     workspace.renameVariableById(this.varId, this.newName);
   } else {

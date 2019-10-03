@@ -44,7 +44,7 @@ Blockly.Events.Abstract = function() {
    * perspective, and should be undone together.
    * @type {string}
    */
-  this.group = Blockly.Events.group_;
+  this.group = Blockly.Events.getGroup();
 
   /**
    * Sets whether the event should be added to the undo stack.
@@ -93,12 +93,14 @@ Blockly.Events.Abstract.prototype.run = function(_forward) {
 
 /**
  * Get workspace the event belongs to.
- * @return {Blockly.Workspace} The workspace the event belongs to.
+ * @return {!Blockly.Workspace} The workspace the event belongs to.
  * @throws {Error} if workspace is null.
- * @protected
+ * @package
  */
-Blockly.Events.Abstract.prototype.getEventWorkspace_ = function() {
-  var workspace = Blockly.Workspace.getById(this.workspaceId);
+Blockly.Events.Abstract.prototype.getEventWorkspace = function() {
+  if (this.workspaceId) {
+    var workspace = Blockly.Workspace.getById(this.workspaceId);
+  }
   if (!workspace) {
     throw Error('Workspace is null. Event must have been generated from real' +
         ' Blockly events.');

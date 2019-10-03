@@ -328,7 +328,7 @@ Blockly.geras.RenderInfo.prototype.getElemCenterline_ = function(row, elem) {
       Blockly.blockRendering.Types.isIcon(elem)) {
     result += (elem.height / 2);
     if ((row.hasInlineInput || row.hasStatement) &&
-        elem.height > row.height + this.constants_.TALL_INPUT_FIELD_OFFSET_Y) {
+        elem.height + this.constants_.TALL_INPUT_FIELD_OFFSET_Y <= row.height) {
       result += this.constants_.TALL_INPUT_FIELD_OFFSET_Y;
     }
   } else if (Blockly.blockRendering.Types.isInlineInput(elem)) {

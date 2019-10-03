@@ -1102,12 +1102,12 @@ Blockly.Block.prototype.renameVarById = function(oldId, newId) {
 /**
  * Returns the language-neutral value from the field of a block.
  * @param {string} name The name of the field.
- * @return {?string} Value from the field or null if field does not exist.
+ * @return {*} Value from the field or null if field does not exist.
  */
 Blockly.Block.prototype.getFieldValue = function(name) {
   var field = this.getField(name);
   if (field) {
-    return String(field.getValue());
+    return field.getValue();
   }
   return null;
 };

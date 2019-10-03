@@ -234,13 +234,10 @@ Blockly.FlyoutButton.prototype.dispose = function() {
   }
   if (this.svgGroup_) {
     Blockly.utils.dom.removeNode(this.svgGroup_);
-    this.svgGroup_ = null;
   }
   if (this.svgText_) {
     this.workspace_.getThemeManager().unsubscribe(this.svgText_);
   }
-  this.workspace_ = null;
-  this.targetWorkspace_ = null;
 };
 
 /**

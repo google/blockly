@@ -33,7 +33,7 @@ goog.require('Blockly.utils');
 /**
  * Group ID for new events.  Grouped events are indivisible.
  * @type {string}
- * @package
+ * @private
  */
 Blockly.Events.group_ = '';
 

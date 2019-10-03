@@ -31,7 +31,7 @@ goog.require('Blockly.utils.dom');
 
 /**
  * Class for a zoom controls.
- * @param {!Blockly.WorkspaceSVG} workspace The workspace to sit in.
+ * @param {!Blockly.WorkspaceSvg} workspace The workspace to sit in.
  * @constructor
  */
 Blockly.ZoomControls = function(workspace) {

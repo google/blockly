@@ -146,27 +146,19 @@ Blockly.InsertionMarkerManager = function(block) {
  * @package
  */
 Blockly.InsertionMarkerManager.prototype.dispose = function() {
-  this.topBlock_ = null;
-  this.workspace_ = null;
   this.availableConnections_.length = 0;
-  this.closestConnection_ = null;
-  this.localConnection_ = null;
 
   Blockly.Events.disable();
   try {
     if (this.firstMarker_) {
       this.firstMarker_.dispose();
-      this.firstMarker_ = null;
     }
     if (this.lastMarker_) {
       this.lastMarker_.dispose();
-      this.lastMarker_ = null;
     }
   } finally {
     Blockly.Events.enable();
   }
-
-  this.highlightedBlock_ = null;
 };
 
 /**

@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta charset="utf-8">
 <title>Blockly Playground</title>
 <script src="../blockly_uncompressed.js"></script>
@@ -237,7 +238,6 @@ function addToolboxButtonCallbacks() {
     for (var i = 0, block; block = blocks[i]; i++) {
       var imageField = block.getField('IMAGE');
       imageField.setValue(src);
-      imageField.setText(image);
     }
   };
   var addVariables = function(button) {
@@ -523,7 +523,7 @@ var spaghettiXml = [
   #blocklyDiv {
     float: right;
     height: 95%;
-    width: 70%;
+    width: 100%;
   }
   #importExport {
     font-family: monospace;

@@ -78,7 +78,9 @@ Blockly.user.keyMap.setKeyMap = function(keyMap) {
  * @package
  */
 Blockly.user.keyMap.getKeyMap = function() {
-  return Object.assign({}, Blockly.user.keyMap.map_);
+  var map = {};
+  Blockly.utils.object.mixin(map, Blockly.user.keyMap.map_);
+  return map;
 };
 
 /**

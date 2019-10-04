@@ -297,12 +297,12 @@ Blockly.BlockDragger.prototype.updateCursorDuringBlockDrag_ = function() {
   if (this.wouldDeleteBlock_) {
     this.draggingBlock_.setDeleteStyle(true);
     if (this.deleteArea_ == Blockly.DELETE_AREA_TRASH && trashcan) {
-      trashcan.setOpen_(true);
+      trashcan.setOpen(true);
     }
   } else {
     this.draggingBlock_.setDeleteStyle(false);
     if (trashcan) {
-      trashcan.setOpen_(false);
+      trashcan.setOpen(false);
     }
   }
 };

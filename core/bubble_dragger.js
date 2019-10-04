@@ -178,12 +178,12 @@ Blockly.BubbleDragger.prototype.updateCursorDuringBubbleDrag_ = function() {
   if (this.wouldDeleteBubble_) {
     this.draggingBubble_.setDeleteStyle(true);
     if (this.deleteArea_ == Blockly.DELETE_AREA_TRASH && trashcan) {
-      trashcan.setOpen_(true);
+      trashcan.setOpen(true);
     }
   } else {
     this.draggingBubble_.setDeleteStyle(false);
     if (trashcan) {
-      trashcan.setOpen_(false);
+      trashcan.setOpen(false);
     }
   }
 };

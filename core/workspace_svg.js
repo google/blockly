@@ -361,7 +361,7 @@ Blockly.WorkspaceSvg.prototype.lastRecordedPageScroll_ = null;
 /**
  * Map from function names to callbacks, for deciding what to do when a button
  * is clicked.
- * @type {!Object.<string, function(!Blockly.FlyoutButton)>}
+ * @type {!Object.<string, ?function(!Blockly.FlyoutButton)>}
  * @private
  */
 Blockly.WorkspaceSvg.prototype.flyoutButtonCallbacks_ = {};
@@ -369,7 +369,7 @@ Blockly.WorkspaceSvg.prototype.flyoutButtonCallbacks_ = {};
 /**
  * Map from function names to callbacks, for deciding what to do when a custom
  * toolbox category is opened.
- * @type {!Object.<string, function(!Blockly.Workspace):!Array.<!Element>>}
+ * @type {!Object.<string, ?function(!Blockly.Workspace):!Array.<!Element>>}
  * @private
  */
 Blockly.WorkspaceSvg.prototype.toolboxCategoryCallbacks_ = {};

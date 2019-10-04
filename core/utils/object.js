@@ -64,20 +64,3 @@ Blockly.utils.object.valuesShim = function(obj) {
     return obj[e];
   });
 };
-
-
-/**
- * Copy values from one object to another.
- * @param {!Object} target Target object.
- * @param {!Object} source Source object.
- * @return {!Object} The target object.
- */
-Blockly.utils.object.assignShim = function(target, source) {
-  target = target || {};
-  /* eslint-disable es5/no-es6-methods */
-  Object.keys(source).forEach(function(k) {
-    target[k] = source[k];
-  });
-  /* eslint-enable es5/no-es6-methods */
-  return target;
-};

@@ -37,7 +37,7 @@ goog.provide('Blockly.utils.string');
  * @param {string} prefix A string to look for at the start of `str`.
  * @return {boolean} True if `str` begins with `prefix`.
  */
-Blockly.utils.string.startsWithShim = function(str, prefix) {
+Blockly.utils.string.startsWith = function(str, prefix) {
   return str.lastIndexOf(prefix, 0) == 0;
 };
 

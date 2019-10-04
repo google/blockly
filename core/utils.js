@@ -344,7 +344,7 @@ Blockly.utils.tokenizeInterpolation_ = function(message,
           // BKY_ is the prefix used to namespace the strings used in Blockly
           // core files and the predefined blocks in ../blocks/.
           // These strings are defined in ../msgs/ files.
-          var bklyKey = Blockly.utils.string.startsWithShim(keyUpper, 'BKY_') ?
+          var bklyKey = Blockly.utils.string.startsWith(keyUpper, 'BKY_') ?
               keyUpper.substring(4) : null;
           if (bklyKey && bklyKey in Blockly.Msg) {
             var rawValue = Blockly.Msg[bklyKey];

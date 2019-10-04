@@ -539,7 +539,6 @@ Blockly.Block.prototype.lastConnectionInStack = function() {
 /**
  * Bump unconnected blocks out of alignment.  Two blocks which aren't actually
  * connected should not coincidentally line up on screen.
- * @package
  */
 Blockly.Block.prototype.bumpNeighbours = function() {
   console.warn('Not expected to reach Block.bumpNeighbours function. ' +

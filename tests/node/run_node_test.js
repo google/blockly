@@ -22,28 +22,28 @@
 var assert = require('chai').assert;
 var Blockly = require('../../dist/');
 
-var xmlText = '<xml xmlns="https://developers.google.com/blockly/xml">' +
-'  <block type="text_print" x="37" y="63">' +
-'    <value name="TEXT">' +
-'      <shadow type="text">' +
-'        <field name="TEXT">Hello from Blockly!</field>' +
-'      </shadow>' +
-'    </value>' +
-'  </block>' +
-'</xml>';
+var xmlText = `<xml xmlns="https://developers.google.com/blockly/xml">
+  <block type="text_print" x="37" y="63">
+    <value name="TEXT">
+      <shadow type="text">
+        <field name="TEXT">Hello from Blockly!</field>
+      </shadow>
+    </value>
+  </block>
+</xml>`;
 
 suite('Test Node.js', function() {
   test('Import XML', function() {
-    var xml = Blockly.Xml.textToDom(xmlText);
+    const xml = Blockly.Xml.textToDom(xmlText);
 
     // Create workspace and import the XML
-    var workspace = new Blockly.Workspace();
+    const workspace = new Blockly.Workspace();
     Blockly.Xml.domToWorkspace(xml, workspace);
   });
   test('Roundtrip XML', function() {
-    var xml = Blockly.Xml.textToDom(xmlText);
+    const xml = Blockly.Xml.textToDom(xmlText);
 
-    var workspace = new Blockly.Workspace();
+    const workspace = new Blockly.Workspace();
     Blockly.Xml.domToWorkspace(xml, workspace);
 
     var headlessXml = Blockly.Xml.workspaceToDom(workspace, true);
@@ -52,14 +52,14 @@ suite('Test Node.js', function() {
     assert.equal(headlessText, xmlText, 'equal');
   });
   test('Generate Code', function() {
-    var xml = Blockly.Xml.textToDom(xmlText);
+    const xml = Blockly.Xml.textToDom(xmlText);
 
     // Create workspace and import the XML
-    var workspace = new Blockly.Workspace();
+    const workspace = new Blockly.Workspace();
     Blockly.Xml.domToWorkspace(xml, workspace);
 
     // Convert code
-    var code = Blockly.JavaScript.workspaceToCode(workspace);
+    const code = Blockly.JavaScript.workspaceToCode(workspace);
     
     // Check output
     assert.equal(`window.alert('Hello from Blockly!');`, code.trim(), 'equal');

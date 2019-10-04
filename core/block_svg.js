@@ -1566,7 +1566,6 @@ Blockly.BlockSvg.prototype.makeConnection_ = function(type) {
 /**
  * Bump unconnected blocks out of alignment.  Two blocks which aren't actually
  * connected should not coincidentally line up on screen.
- * @package
  */
 Blockly.BlockSvg.prototype.bumpNeighbours = function() {
   if (!this.workspace) {

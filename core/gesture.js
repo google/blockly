@@ -250,24 +250,14 @@ Blockly.Gesture.prototype.dispose = function() {
     Blockly.unbindEvent_(this.onUpWrapper_);
   }
 
-
-  this.startField_ = null;
-  this.startBlock_ = null;
-  this.targetBlock_ = null;
-  this.startWorkspace_ = null;
-  this.flyout_ = null;
-
   if (this.blockDragger_) {
     this.blockDragger_.dispose();
-    this.blockDragger_ = null;
   }
   if (this.workspaceDragger_) {
     this.workspaceDragger_.dispose();
-    this.workspaceDragger_ = null;
   }
   if (this.bubbleDragger_) {
     this.bubbleDragger_.dispose();
-    this.bubbleDragger_ = null;
   }
 };
 

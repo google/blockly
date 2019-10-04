@@ -100,14 +100,10 @@ Blockly.BlockDragger = function(block, workspace) {
  * @package
  */
 Blockly.BlockDragger.prototype.dispose = function() {
-  this.draggingBlock_ = null;
-  this.workspace_ = null;
-  this.startWorkspace_ = null;
   this.dragIconData_.length = 0;
 
   if (this.draggedConnectionManager_) {
     this.draggedConnectionManager_.dispose();
-    this.draggedConnectionManager_ = null;
   }
 };
 

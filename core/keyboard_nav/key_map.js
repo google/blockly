@@ -78,7 +78,7 @@ Blockly.user.keyMap.setKeyMap = function(keyMap) {
  * @package
  */
 Blockly.user.keyMap.getKeyMap = function() {
-  return Object.assign({}, Blockly.user.keyMap.map_);
+  return Blockly.utils.object.assignShim({}, Blockly.user.keyMap.map_);
 };
 
 /**
@@ -116,7 +116,7 @@ Blockly.user.keyMap.getKeyByAction = function(action) {
  * @return {string} A string containing the serialized key event.
  */
 Blockly.user.keyMap.serializeKeyEvent = function(e) {
-  var modifiers = Blockly.utils.object.values(Blockly.user.keyMap.modifierKeys);
+  var modifiers = Blockly.utils.object.valuesShim(Blockly.user.keyMap.modifierKeys);
   var key = '';
   for (var i = 0, keyName; keyName = modifiers[i]; i++) {
     if (e.getModifierState(keyName)) {
@@ -136,7 +136,7 @@ Blockly.user.keyMap.serializeKeyEvent = function(e) {
  */
 Blockly.user.keyMap.createSerializedKey = function(keyCode, modifiers) {
   var key = '';
-  var validModifiers = Blockly.utils.object.values(Blockly.user.keyMap.modifierKeys);
+  var validModifiers = Blockly.utils.object.valuesShim(Blockly.user.keyMap.modifierKeys);
   for (var i = 0, keyName; keyName = modifiers[i]; i++) {
     if (validModifiers.indexOf(keyName) > -1) {
       key += keyName;

@@ -83,5 +83,8 @@
         "Blockly": true,
         "goog": true
     },
-    "extends": "eslint:recommended"
+    "extends": [
+        "eslint:recommended",
+        "plugin:es5/no-es2015"
+    ]
 }

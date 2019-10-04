@@ -22,14 +22,14 @@
 var assert = require('chai').assert;
 var Blockly = require('../../dist/');
 
-var xmlText = '<xml xmlns="https://developers.google.com/blockly/xml">' +
-'  <block type="text_print" x="37" y="63">' +
-'    <value name="TEXT">' +
-'      <shadow type="text">' +
-'        <field name="TEXT">Hello from Blockly!</field>' +
-'      </shadow>' +
-'    </value>' +
-'  </block>' +
+var xmlText = '<xml xmlns="https://developers.google.com/blockly/xml">\n' +
+'  <block type="text_print" x="37" y="63">\n' +
+'    <value name="TEXT">\n' +
+'      <shadow type="text">\n' +
+'        <field name="TEXT">Hello from Blockly!</field>\n' +
+'      </shadow>\n' +
+'    </value>\n' +
+'  </block>\n' +
 '</xml>';
 
 suite('Test Node.js', function() {
@@ -62,7 +62,7 @@ suite('Test Node.js', function() {
     var code = Blockly.JavaScript.workspaceToCode(workspace);
     
     // Check output
-    assert.equal('window.alert("Hello from Blockly!");', code.trim(), 'equal');
+    assert.equal('window.alert(\'Hello from Blockly!\');', code.trim(), 'equal');
   });
 });
 

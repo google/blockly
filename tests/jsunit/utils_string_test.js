@@ -17,10 +17,10 @@
 'use strict';
 
 function test_startsWith() {
-  assertEquals('Does not start with', false, Blockly.utils.string.startsWith('123', '2'));
-  assertEquals('Start with', true, Blockly.utils.string.startsWith('123', '12'));
-  assertEquals('Start with empty string 1', true, Blockly.utils.string.startsWith('123', ''));
-  assertEquals('Start with empty string 2', true, Blockly.utils.string.startsWith('', ''));
+  assertEquals('Does not start with', false, Blockly.utils.string.startsWithShim('123', '2'));
+  assertEquals('Start with', true, Blockly.utils.string.startsWithShim('123', '12'));
+  assertEquals('Start with empty string 1', true, Blockly.utils.string.startsWithShim('123', ''));
+  assertEquals('Start with empty string 2', true, Blockly.utils.string.startsWithShim('', ''));
 }
 
 function test_commonWordPrefix() {

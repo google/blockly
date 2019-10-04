@@ -246,7 +246,7 @@ Blockly.FieldDate.prototype.onDateSelected_ = function(event) {
  */
 Blockly.FieldDate.loadLanguage_ = function() {
   for (var prop in goog.i18n) {
-    if (Blockly.utils.string.startsWith(prop, 'DateTimeSymbols_')) {
+    if (Blockly.utils.string.startsWithShim(prop, 'DateTimeSymbols_')) {
       var lang = prop.substr(16).toLowerCase().replace('_', '.');
       // E.g. 'DateTimeSymbols_pt_BR' -> 'pt.br'
       if (goog.getObjectByName(lang, Blockly.Msg)) {

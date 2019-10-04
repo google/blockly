@@ -209,7 +209,7 @@ Blockly.Touch.checkTouchIdentifier = function(e) {
  * @param {!Event} e A touch event.
  */
 Blockly.Touch.setClientFromTouch = function(e) {
-  if (Blockly.utils.string.startsWith(e.type, 'touch')) {
+  if (Blockly.utils.string.startsWithShim(e.type, 'touch')) {
     // Map the touch event's properties to the event.
     var touchPoint = e.changedTouches[0];
     e.clientX = touchPoint.clientX;
@@ -223,9 +223,9 @@ Blockly.Touch.setClientFromTouch = function(e) {
  * @return {boolean} True if it is a mouse or touch event; false otherwise.
  */
 Blockly.Touch.isMouseOrTouchEvent = function(e) {
-  return Blockly.utils.string.startsWith(e.type, 'touch') ||
-      Blockly.utils.string.startsWith(e.type, 'mouse') ||
-      Blockly.utils.string.startsWith(e.type, 'pointer');
+  return Blockly.utils.string.startsWithShim(e.type, 'touch') ||
+      Blockly.utils.string.startsWithShim(e.type, 'mouse') ||
+      Blockly.utils.string.startsWithShim(e.type, 'pointer');
 };
 
 /**
@@ -234,8 +234,8 @@ Blockly.Touch.isMouseOrTouchEvent = function(e) {
  * @return {boolean} True if it is a touch event; false otherwise.
  */
 Blockly.Touch.isTouchEvent = function(e) {
-  return Blockly.utils.string.startsWith(e.type, 'touch') ||
-      Blockly.utils.string.startsWith(e.type, 'pointer');
+  return Blockly.utils.string.startsWithShim(e.type, 'touch') ||
+      Blockly.utils.string.startsWithShim(e.type, 'pointer');
 };
 
 /**

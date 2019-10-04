@@ -316,16 +316,18 @@ CustomFields.FieldTurtle.prototype.renderEditor_ = function() {
 // included inside render_ (it is not called anywhere else), but it is
 // usually separated to keep code more organized.
 CustomFields.FieldTurtle.prototype.updateSize_ = function() {
-  var size = this.movableGroup_.getBBox();
+  var bbox = this.movableGroup_.getBBox();
+  var width = bbox.width;
+  var height = bbox.height;
   if (this.borderRect_) {
-    size.width += this.PADDING;
-    size.height += this.PADDING;
-    this.borderRect_.setAttribute('width', size.width);
-    this.borderRect_.setAttribute('height', size.height);
+    width += this.PADDING;
+    height += this.PADDING;
+    this.borderRect_.setAttribute('width', width);
+    this.borderRect_.setAttribute('height', height);
   }
   // Note how both the width and the height can be dynamic.
-  this.size_.width = size.width;
-  this.size_.height = size.height;
+  this.size_.width = width;
+  this.size_.height = height;
 };
 
 // Called when the field is clicked. It is usually used to show an editor,

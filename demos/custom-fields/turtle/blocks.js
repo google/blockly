@@ -48,7 +48,11 @@ Blockly.Blocks['turtle_nullifier'] = {
   },
 
   validate: function(newValue) {
-    this.cachedValidatedValue_ = Object.assign({}, newValue);
+    this.cachedValidatedValue_ = {
+      turtleName: newValue.turtleName,
+      pattern: newValue.pattern,
+      hat: newValue.hat,
+    };
     if ((newValue.turtleName == 'Leonardo' && newValue.hat == 'Mask') ||
         (newValue.turtleName == 'Yertle' && newValue.hat == 'Crown') ||
         (newValue.turtleName == 'Franklin') && newValue.hat == 'Propeller') {

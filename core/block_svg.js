@@ -133,6 +133,14 @@ Blockly.BlockSvg = function(workspace, prototypeName, opt_id) {
    * @private
    */
   this.markerSvg_ = null;
+
+  /**
+   * Should the block tell its connections to start tracking inside the render
+   * method?
+   * @type {boolean}
+   * @private
+   */
+  this.callTrackConnections_ = true;
 };
 Blockly.utils.object.inherits(Blockly.BlockSvg, Blockly.Block);
 
@@ -162,14 +170,6 @@ Blockly.BlockSvg.prototype.dragStartXY_ = null;
  * @private
  */
 Blockly.BlockSvg.prototype.warningTextDb_ = null;
-
-/**
- * Should the block tell its connections to start tracking inside the render
- * method?
- * @type {boolean}
- * @private
- */
-Blockly.BlockSvg.prototype.doNotCallTrackConnections_ = false;
 
 /**
  * Constant for identifying rows that are to be rendered inline.
@@ -1455,7 +1455,7 @@ Blockly.BlockSvg.prototype.appendInput_ = function(type, name) {
  * @package
  */
 Blockly.BlockSvg.prototype.waitToTrackConnections = function() {
-  this.doNotCallTrackConnections_ = true;
+  this.callTrackConnections_ = false;
   var children = this.getChildren();
   for (var i = 0, child; child = children[i]; i++) {
     child.waitToTrackConnections();
@@ -1651,9 +1651,9 @@ Blockly.BlockSvg.prototype.render = function(opt_bubble) {
   // TODO: This should be handled inside a robust init method, because it would
   //  make it a lot cleaner, but for now it's handled here for backwards
   //  compatibility.
-  if (!this.doNotCallTrackConnections_) {
+  if (this.callTrackConnections_) {
     this.startTrackingConnections();
-    this.doNotCallTrackConnections_ = true;
+    this.callTrackConnections_ = false;
   }
   if (opt_bubble !== false) {
     // Render all blocks above this one (propagate a reflow).

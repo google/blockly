@@ -226,7 +226,7 @@ Blockly.Workspace.prototype.setTheme = function(theme) {
  */
 Blockly.Workspace.prototype.refreshTheme = function() {
   // Update all blocks in workspace that have a style name.
-  this.updateBlockStyles_(this.getAllBlocks().filter(
+  this.updateBlockStyles_(this.getAllBlocks(false).filter(
       function(block) {
         return block.getStyleName() !== undefined;
       }
@@ -479,7 +479,7 @@ Blockly.Workspace.prototype.clear = function() {
       Blockly.Events.setGroup(true);
     }
     while (this.topBlocks_.length) {
-      this.topBlocks_[0].dispose();
+      this.topBlocks_[0].dispose(false);
     }
     while (this.topComments_.length) {
       this.topComments_[this.topComments_.length - 1].dispose();
@@ -651,7 +651,7 @@ Blockly.Workspace.prototype.remainingCapacity = function() {
     return Infinity;
   }
 
-  return this.options.maxBlocks - this.getAllBlocks().length;
+  return this.options.maxBlocks - this.getAllBlocks(false).length;
 };
 
 /**
@@ -665,7 +665,7 @@ Blockly.Workspace.prototype.remainingCapacityOfType = function(type) {
     return Infinity;
   }
   return (this.options.maxInstances[type] || Infinity) -
-      this.getBlocksByType(type).length;
+      this.getBlocksByType(type, false).length;
 };
 
 /**

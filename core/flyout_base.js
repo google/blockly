@@ -275,6 +275,8 @@ Blockly.Flyout.prototype.init = function(targetWorkspace) {
  */
 Blockly.Flyout.prototype.dispose = function() {
   this.hide();
+  this.clearOldBlocks_();
+
   Blockly.unbindEvent_(this.eventWrappers_);
   if (this.filterWrapper_) {
     this.targetWorkspace_.removeChangeListener(this.filterWrapper_);
@@ -546,7 +548,7 @@ Blockly.Flyout.prototype.clearOldBlocks_ = function() {
   var oldBlocks = this.workspace_.getTopBlocks(false);
   for (var i = 0, block; block = oldBlocks[i]; i++) {
     if (block.workspace == this.workspace_) {
-      block.dispose(false, false);
+      block.dispose(false);
     }
   }
   // Delete any mats from a previous showing.

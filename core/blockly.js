@@ -262,7 +262,7 @@ Blockly.onKeyDown_ = function(e) {
   if (deleteBlock && !Blockly.selected.workspace.isFlyout) {
     Blockly.Events.setGroup(true);
     Blockly.hideChaff();
-    Blockly.selected.dispose(/* heal */ true, true);
+    Blockly.selected.dispose(/* heal */ true);
     Blockly.Events.setGroup(false);
   }
 };

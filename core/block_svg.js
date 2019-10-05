@@ -568,7 +568,7 @@ Blockly.BlockSvg.prototype.snapToGrid = function() {
  * @return {!Blockly.utils.Rect} Object with coordinates of the bounding box.
  */
 Blockly.BlockSvg.prototype.getBoundingRectangle = function() {
-  var blockXY = this.getRelativeToSurfaceXY(this);
+  var blockXY = this.getRelativeToSurfaceXY();
   var tab = this.outputConnection ? Blockly.BlockSvg.TAB_WIDTH : 0;
   var blockBounds = this.getHeightWidth();
   var top = blockXY.y;

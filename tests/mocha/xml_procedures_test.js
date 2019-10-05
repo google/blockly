@@ -238,7 +238,7 @@ suite('Procedures XML', function() {
           //  defined for call_noreturn. Make it defined for both.
           /* chai.assert.isArray(block.argumentVarModels_);
           chai.assert.isEmpty(block.argumentVarModels_); */
-          chai.assert.equal(this.workspace.getAllBlocks().count, 2);
+          chai.assert.equal(this.workspace.getAllBlocks(false).count, 2);
         });
       });
       test('Caller W/ Params', function() {

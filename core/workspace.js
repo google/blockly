@@ -226,7 +226,7 @@ Blockly.Workspace.prototype.setTheme = function(theme) {
  */
 Blockly.Workspace.prototype.refreshTheme = function() {
   // Update all blocks in workspace that have a style name.
-  this.updateBlockStyles_(this.getAllBlocks().filter(
+  this.updateBlockStyles_(this.getAllBlocks(false).filter(
       function(block) {
         return block.getStyleName() !== undefined;
       }
@@ -651,7 +651,7 @@ Blockly.Workspace.prototype.remainingCapacity = function() {
     return Infinity;
   }
 
-  return this.options.maxBlocks - this.getAllBlocks().length;
+  return this.options.maxBlocks - this.getAllBlocks(false).length;
 };
 
 /**

@@ -218,10 +218,10 @@ Blockly.BubbleDragger.prototype.endBubbleDrag = function(
   }
   this.workspace_.setResizesEnabled(true);
 
-  if (this.workspace_.toolbox_) {
+  if (this.workspace_.getToolbox()) {
     var style = this.draggingBubble_.isDeletable() ? 'blocklyToolboxDelete' :
         'blocklyToolboxGrab';
-    this.workspace_.toolbox_.removeStyle(style);
+    this.workspace_.getToolbox().removeStyle(style);
   }
   Blockly.Events.setGroup(false);
 };
@@ -232,7 +232,8 @@ Blockly.BubbleDragger.prototype.endBubbleDrag = function(
  */
 Blockly.BubbleDragger.prototype.fireMoveEvent_ = function() {
   if (this.draggingBubble_.isComment) {
-    var event = new Blockly.Events.CommentMove(this.draggingBubble_);
+    var event = new Blockly.Events.CommentMove(
+        /** @type {!Blockly.WorkspaceCommentSvg} */ (this.draggingBubble_));
     event.setOldCoordinate(this.startXY_);
     event.recordNew();
     Blockly.Events.fire(event);

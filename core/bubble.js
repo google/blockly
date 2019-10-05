@@ -455,12 +455,10 @@ Blockly.Bubble.prototype.layoutBubble_ = function() {
 /**
  * Calculate the what percentage of the bubble overlaps with the visible
  * workspace (what percentage of the bubble is visible).
- * @param {!Object} relativeMin The position of the top-left corner of the
- *    bubble relative to the anchor point.
- * @param {number} relativeMin.x The x-position of the relativeMin.
- * @param {number} relativeMin.y The y-position of the relativeMin.
+ * @param {!{x: number, y: number}} relativeMin The position of the top-left
+ *     corner of the bubble relative to the anchor point.
  * @param {!Object} metrics The metrics of the workspace the bubble will
- *    appear in.
+ *     appear in.
  * @return {number} The percentage of the bubble that is visible.
  * @private
  */

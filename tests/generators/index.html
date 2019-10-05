@@ -257,7 +257,7 @@ function toDart() {
 function changeIndex() {
   var oneBasedIndex = document.getElementById('indexing').checked;
   demoWorkspace.options.oneBasedIndex = oneBasedIndex;
-  demoWorkspace.toolbox_.flyout_.workspace_.options.oneBasedIndex = oneBasedIndex;
+  demoWorkspace.getToolbox().flyout_.workspace_.options.oneBasedIndex = oneBasedIndex;
 }
 </script>
 

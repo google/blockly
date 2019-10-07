@@ -42,7 +42,7 @@ goog.require('Blockly.utils.userAgent');
  * Class for an editable text field.
  * @param {string=} opt_value The initial value of the field. Should cast to a
  *    string. Defaults to an empty string if null or undefined.
- * @param {Function=} opt_validator A function that is called to validate
+ * @param {?Function=} opt_validator A function that is called to validate
  *    changes to the field's value. Takes in a string & returns a validated
  *    string, or null to abort the change.
  * @param {Object=} opt_config A map of options used to configure the field.

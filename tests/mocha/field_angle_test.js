@@ -305,6 +305,17 @@ suite('Angle Fields', function() {
         var field = new Blockly.FieldAngle();
         chai.assert.equal(field.offset_, 90);
       });
+      test('Null', function() {
+        // Note: Generally constants should be set at compile time, not
+        // runtime (since they are constants) but for testing purposes we
+        // can do this.
+        Blockly.FieldAngle.OFFSET = 90;
+        var field = Blockly.FieldAngle.fromJson({
+          value: 0,
+          offset: null
+        });
+        chai.assert.equal(field.offset_, 90);
+      });
     });
     suite('Wrap', function() {
       test('JS Configuration', function() {
@@ -328,6 +339,17 @@ suite('Angle Fields', function() {
         var field = new Blockly.FieldAngle();
         chai.assert.equal(field.wrap_, 180);
       });
+      test('Null', function() {
+        // Note: Generally constants should be set at compile time, not
+        // runtime (since they are constants) but for testing purposes we
+        // can do this.
+        Blockly.FieldAngle.WRAP = 180;
+        var field = Blockly.FieldAngle.fromJson({
+          value: 0,
+          wrap: null
+        });
+        chai.assert.equal(field.wrap_, 180);
+      });
     });
     suite('Round', function() {
       test('JS Configuration', function() {
@@ -349,6 +371,17 @@ suite('Angle Fields', function() {
         // can do this.
         Blockly.FieldAngle.ROUND = 30;
         var field = new Blockly.FieldAngle();
+        chai.assert.equal(field.round_, 30);
+      });
+      test('Null', function() {
+        // Note: Generally constants should be set at compile time, not
+        // runtime (since they are constants) but for testing purposes we
+        // can do this.
+        Blockly.FieldAngle.ROUND = 30;
+        var field = Blockly.FieldAngle.fromJson({
+          value: 0,
+          round: null
+        });
         chai.assert.equal(field.round_, 30);
       });
     });

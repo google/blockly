@@ -172,19 +172,31 @@ Blockly.FieldAngle.prototype.configure_ = function(config) {
   if (typeof clockwise == 'boolean') {
     this.clockwise_ = clockwise;
   }
-  var offset = Number(config['offset']);
-  if (!isNaN(offset)) {
-    this.offset_ = offset;
+
+  var offset = config['offset'];
+  if (offset != null) {
+    offset = Number(offset);
+    if (!isNaN(offset)) {
+      this.offset_ = offset;
+    }
   }
-  var wrap = Number(config['wrap']);
-  if (!isNaN(wrap)) {
-    this.wrap_ = wrap;
+  var wrap = config['wrap'];
+  if (wrap != null) {
+    wrap = Number(wrap);
+    if (!isNaN(wrap)) {
+      this.wrap_ = wrap;
+    }
   }
-  var round = Number(config['round']);
-  if (!isNaN(round)) {
-    this.round_ = round;
+  var round = config['round'];
+  if (round != null) {
+    round = Number(round);
+    if (!isNaN(round)) {
+      this.round_ = round;
+    }
   }
 };
+
+
 
 /**
  * Create the block UI for this field.

@@ -288,7 +288,6 @@ Blockly.blockRendering.ConstantProvider.prototype.makeNotch = function() {
           Blockly.utils.svgPaths.point(dir * outerWidth, -height)
         ]);
   }
-  // TODO: Find a relationship between width and path
   var pathLeft = makeMainPath(1);
   var pathRight = makeMainPath(-1);
 

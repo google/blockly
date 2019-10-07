@@ -110,23 +110,6 @@ suite('ASTNode', function() {
   });
 
   suite('HelperFunctions', function() {
-    test('findPreviousEditableField_', function() {
-      var input = this.blocks.statementInput1.inputList[0];
-      var field = input.fieldRow[1];
-      var prevField = input.fieldRow[0];
-      var node = Blockly.ASTNode.createFieldNode(prevField);
-      var editableField = node.findPreviousEditableField_(field, input);
-      assertEquals(editableField.getLocation(), prevField);
-    });
-
-    test('findPreviousEditableFieldLast_', function() {
-      var input = this.blocks.statementInput1.inputList[0];
-      var field = input.fieldRow[0];
-      var node = Blockly.ASTNode.createFieldNode(field);
-      var editableField = node.findPreviousEditableField_(field, input, true);
-      assertEquals(editableField.getLocation(), input.fieldRow[1]);
-    });
-
     test('findNextForInput_', function() {
       var input = this.blocks.statementInput1.inputList[0];
       var input2 = this.blocks.statementInput1.inputList[1];

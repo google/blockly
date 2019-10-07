@@ -243,33 +243,6 @@ Blockly.ASTNode.prototype.isConnection = function() {
 };
 
 /**
- * Get either the previous editable field, or get the first editable field for
- * the given input.
- * @param {!(Blockly.Field|Blockly.Connection)} location The current location of
- *     the cursor, which must be a field or connection.
- * @param {!Blockly.Input} parentInput The parentInput of the field.
- * @param {boolean=} opt_last If true find the last editable field otherwise get
- *     the previous field.
- * @return {Blockly.ASTNode} The AST node holding the previous or last field or
- *     null if no previous field exists.
- * @private
- */
-Blockly.ASTNode.prototype.findPreviousEditableField_ = function(location,
-    parentInput, opt_last) {
-  var fieldRow = parentInput.fieldRow;
-  var fieldIdx = fieldRow.indexOf(location);
-  var previousField = null;
-  var startIdx = (opt_last ? fieldRow.length : fieldIdx) - 1;
-  for (var i = startIdx, field; field = fieldRow[i]; i--) {
-    if (field.EDITABLE) {
-      previousField = field;
-      return Blockly.ASTNode.createFieldNode(previousField);
-    }
-  }
-  return null;
-};
-
-/**
  * Given an input find the next editable field or an input with a non null
  * connection in the same block. The current location must be an input
  * connection.

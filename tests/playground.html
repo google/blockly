@@ -192,7 +192,7 @@ function addToolboxButtonCallbacks() {
     }
   };
   var setRandomStyle = function(button) {
-    var blocks = button.workspace_.getAllBlocks();
+    var blocks = button.workspace_.getAllBlocks(false);
     var styles = Object.keys(workspace.getTheme().getAllBlockStyles());
     styles.splice(styles.indexOf(blocks[0].getStyleName()), 1);
     var style = styles[Math.floor(Math.random() * styles.length)];
@@ -201,26 +201,26 @@ function addToolboxButtonCallbacks() {
     }
   };
   var toggleEnabled = function(button) {
-    var blocks = button.workspace_.getAllBlocks();
+    var blocks = button.workspace_.getAllBlocks(false);
     for(var i = 0, block; block = blocks[i]; i++) {
       block.setEnabled(!block.isEnabled());
     }
   };
   var toggleShadow = function(button) {
-    var blocks = button.workspace_.getAllBlocks();
+    var blocks = button.workspace_.getAllBlocks(false);
     for(var i = 0, block; block = blocks[i]; i++) {
       block.setShadow(!block.isShadow());
     }
   };
   var toggleCollapsed = function(button) {
-    var blocks = button.workspace_.getAllBlocks();
+    var blocks = button.workspace_.getAllBlocks(false);
     for(var i = 0, block; block = blocks[i]; i++) {
       block.setCollapsed(!block.isCollapsed());
     }
   };
   var setInput = function(button) {
     Blockly.prompt('Input text to set.', 'ab', function(input) {
-      var blocks = button.getTargetWorkspace().getAllBlocks();
+      var blocks = button.getTargetWorkspace().getAllBlocks(false);
       for(var i = 0, block; block = blocks[i]; i++) {
         if (block.getField('INPUT')) {
           block.setFieldValue(input, 'INPUT');

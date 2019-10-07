@@ -411,8 +411,8 @@ Blockly.init_ = function(mainWorkspace) {
   Blockly.inject.bindDocumentEvents_();
 
   if (options.languageTree) {
-    if (mainWorkspace.toolbox_) {
-      mainWorkspace.toolbox_.init(mainWorkspace);
+    if (mainWorkspace.getToolbox()) {
+      mainWorkspace.getToolbox().init(mainWorkspace);
     } else if (mainWorkspace.flyout_) {
       // Build a fixed flyout with the root blocks.
       mainWorkspace.flyout_.init(mainWorkspace);

@@ -90,7 +90,8 @@ Blockly.WorkspaceSvg = function(options,
    * @type {!Blockly.WorkspaceAudio}
    * @private
    */
-  this.audioManager_ = new Blockly.WorkspaceAudio(options.parentWorkspace);
+  this.audioManager_ = new Blockly.WorkspaceAudio(
+      /** @type {Blockly.WorkspaceSvg} */ (options.parentWorkspace));
 
   /**
    * This workspace's grid object or null.

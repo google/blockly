@@ -255,7 +255,8 @@ Blockly.Comment.prototype.createEditableBubble_ = function() {
  */
 Blockly.Comment.prototype.createNonEditableBubble_ = function() {
   // TODO (#2917): It would be great if the comment could support line breaks.
-  Blockly.Warning.prototype.createBubble.call(this);
+  Blockly.Warning.prototype.createBubble.call(
+      /** @type {Blockly.Warning} */ (this));
 };
 
 /**
@@ -265,7 +266,8 @@ Blockly.Comment.prototype.createNonEditableBubble_ = function() {
 Blockly.Comment.prototype.disposeBubble_ = function() {
   if (this.paragraphElement_) {
     // We're using the warning UI so we have to let it dispose.
-    Blockly.Warning.prototype.disposeBubble.call(this);
+    Blockly.Warning.prototype.disposeBubble.call(
+        /** @type {Blockly.Warning} */ (this));
     return;
   }
 

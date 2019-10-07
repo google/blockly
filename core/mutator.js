@@ -420,14 +420,14 @@ Blockly.Mutator.prototype.dispose = function() {
 Blockly.Mutator.prototype.updateBlockStyle = function() {
   var ws = this.workspace_;
 
-  if (ws && ws.getAllBlocks()) {
-    var workspaceBlocks = ws.getAllBlocks();
+  if (ws && ws.getAllBlocks(false)) {
+    var workspaceBlocks = ws.getAllBlocks(false);
     for (var i = 0; i < workspaceBlocks.length; i++) {
       var block = workspaceBlocks[i];
       block.setStyle(block.getStyleName());
     }
 
-    var flyoutBlocks = ws.flyout_.workspace_.getAllBlocks();
+    var flyoutBlocks = ws.flyout_.workspace_.getAllBlocks(false);
     for (var i = 0; i < flyoutBlocks.length; i++) {
       var block = flyoutBlocks[i];
       block.setStyle(block.getStyleName());

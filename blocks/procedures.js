@@ -496,7 +496,7 @@ Blockly.Blocks['procedures_mutatorcontainer'] = {
         (event.type != Blockly.Events.BLOCK_DELETE && event.type != Blockly.Events.BLOCK_CREATE)) {
       return;
     }
-    var blocks = this.workspace.getAllBlocks();
+    var blocks = this.workspace.getAllBlocks(false);
     var allVariables = this.workspace.getAllVariables();
     if (event.type == Blockly.Events.BLOCK_DELETE) {
       var variableNamesToKeep = [];
@@ -602,7 +602,7 @@ Blockly.Blocks['procedures_mutatorarg'] = {
     }
 
     // Prevents duplicate parameter names in functions
-    var blocks = sourceBlock.workspace.getAllBlocks();
+    var blocks = sourceBlock.workspace.getAllBlocks(false);
     for (var i = 0; i < blocks.length; i++) {
       if (blocks[i].id == this.getSourceBlock().id) {
         continue;

@@ -545,8 +545,8 @@ Blockly.Xml.domToBlock = function(xmlBlock, workspace) {
     // Generate list of all blocks.
     var blocks = topBlock.getDescendants(false);
     if (workspace.rendered) {
-      // Hide connections to speed up assembly.
-      topBlock.setConnectionsHidden(true);
+      // Wait to track connections to speed up assembly.
+      topBlock.waitToTrackConnections();
       // Render each block.
       for (var i = blocks.length - 1; i >= 0; i--) {
         blocks[i].initSvg();
@@ -557,8 +557,8 @@ Blockly.Xml.domToBlock = function(xmlBlock, workspace) {
       // Populating the connection database may be deferred until after the
       // blocks have rendered.
       setTimeout(function() {
-        if (topBlock.workspace) {  // Check that the block hasn't been deleted.
-          topBlock.setConnectionsHidden(false);
+        if (!topBlock.disposed) {
+          topBlock.startTrackingConnections();
         }
       }, 1);
       topBlock.updateDisabled();

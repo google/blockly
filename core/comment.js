@@ -267,7 +267,7 @@ Blockly.Comment.prototype.disposeBubble_ = function() {
   if (this.paragraphElement_) {
     // We're using the warning UI so we have to let it dispose.
     Blockly.Warning.prototype.disposeBubble.call(
-      /** @type {Blockly.Warning} */ (this));
+        /** @type {Blockly.Warning} */ (this));
     return;
   }
 

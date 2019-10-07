@@ -151,9 +151,13 @@ Blockly.FieldNumber.prototype.setMin = function(min) {
  * @private
  */
 Blockly.FieldNumber.prototype.setMinInternal_ = function(min) {
-  min = Number(min);
-  if (!isNaN(min)) {
-    this.min_ = min;
+  if (min == null) {
+    this.min_ = -Infinity;
+  } else {
+    min = Number(min);
+    if (!isNaN(min)) {
+      this.min_ = min;
+    }
   }
 };
 
@@ -182,9 +186,13 @@ Blockly.FieldNumber.prototype.setMax = function(max) {
  * @private
  */
 Blockly.FieldNumber.prototype.setMaxInternal_ = function(max) {
-  max = Number(max);
-  if (!isNaN(max)) {
-    this.max_ = max;
+  if (max == null) {
+    this.max_ = Infinity;
+  } else {
+    max = Number(max);
+    if (!isNaN(max)) {
+      this.max_ = max;
+    }
   }
 };
 
@@ -216,9 +224,14 @@ Blockly.FieldNumber.prototype.setPrecision = function(precision) {
  * @private
  */
 Blockly.FieldNumber.prototype.setPrecisionInternal_ = function(precision) {
-  precision = Number(precision);
-  if (!isNaN(precision)) {
-    this.precision_ = precision;
+  if (precision == null) {
+    // Number(precision) would also be 0, but set explicitly to be clear.
+    this.precision_ = 0;
+  } else {
+    precision = Number(precision);
+    if (!isNaN(precision)) {
+      this.precision_ = precision;
+    }
   }
 
   var precisionString = this.precision_.toString();

@@ -247,6 +247,12 @@ suite('Number Fields', function() {
           numberField.setValue(123.456);
           assertValue(numberField, 123);
         });
+        test('null', function() {
+          var numberField = new Blockly.FieldNumber
+              .fromJson({ precision: null});
+          numberField.setValue(123.456);
+          assertValue(numberField, 123.456);
+        });
       });
       suite('Min', function() {
         test('-10', function() {
@@ -276,6 +282,12 @@ suite('Number Fields', function() {
           numberField.setValue(20);
           assertValue(numberField, 20);
         });
+        test('null', function() {
+          var numberField = new Blockly.FieldNumber
+              .fromJson({ min: null});
+          numberField.setValue(-20);
+          assertValue(numberField, -20);
+        });
       });
       suite('Max', function() {
         test('-10', function() {
@@ -304,6 +316,12 @@ suite('Number Fields', function() {
           assertValue(numberField, 0);
           numberField.setValue(20);
           assertValue(numberField, 10);
+        });
+        test('null', function() {
+          var numberField = new Blockly.FieldNumber
+              .fromJson({ max: null});
+          numberField.setValue(20);
+          assertValue(numberField, 20);
         });
       });
     });

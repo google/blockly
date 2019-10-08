@@ -79,13 +79,13 @@ declare module Blockly {
     viewWidth: number;
   }
 
-}
-
-declare namespace goog {
-  function require(name: string): void;
-  function provide(name: string): void;
-  function inherits(child: any, parent: any): void;
-  function isFunction(f: any): boolean;
+  /**
+   * Set the Blockly locale.
+   * Note: this method is only available in the npm release of Blockly.
+   * @param {!Object} msg An object of Blockly message strings in the desired
+   *     language.
+   */
+  function setLocale(msg: {[key: string]: string;}): void;
 }
 
 

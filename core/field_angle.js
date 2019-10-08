@@ -304,13 +304,15 @@ Blockly.FieldAngle.prototype.dropdownCreate_ = function() {
 };
 
 /**
- * Dispose of events belonging to the angle editor.
+ * Disposes of events and dom-references belonging to the angle editor.
  * @private
  */
 Blockly.FieldAngle.prototype.dropdownDispose_ = function() {
   Blockly.unbindEvent_(this.clickWrapper_);
   Blockly.unbindEvent_(this.clickSurfaceWrapper_);
   Blockly.unbindEvent_(this.moveSurfaceWrapper_);
+  this.gauge_ = null;
+  this.line_ = null;
 };
 
 /**

@@ -292,34 +292,28 @@ Blockly.FieldTextInput.prototype.widgetCreate_ = function() {
 };
 
 /**
- * Close the editor, save the results, and dispose any events bound to the
- * text input's editor.
+ * Closes the editor, saves the results, and disposes of any events or
+ * dom-references belonging to the editor.
  * @private
  */
 Blockly.FieldTextInput.prototype.widgetDispose_ = function() {
-  // Finalize value.
+  // Non-disposal related things that we do when the editor closes.
   this.isBeingEdited_ = false;
   this.isTextValid_ = true;
-
-  // Always re-render when the we close the editor as value
-  // set on the field's node may be inconsistent with the field's
-  // internal value.
+  // Make sure the field's node matches the field's internal value.
   this.forceRerender();
-
-  // Call onFinishEditing
-  // TODO: Get rid of this or make it less of a hack.
+  // TODO(#2496): Make this less of a hack.
   if (this.onFinishEditing_) {
     this.onFinishEditing_(this.value_);
   }
 
-  // Remove htmlInput events.
+  // Actual disposal.
   this.unbindInputEvents_();
-
-  // Delete style properties.
   var style = Blockly.WidgetDiv.DIV.style;
   style.width = 'auto';
   style.height = 'auto';
   style.fontSize = '';
+  this.htmlInput_ = null;
 };
 
 /**

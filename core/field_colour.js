@@ -507,6 +507,7 @@ Blockly.FieldColour.prototype.dropdownCreate_ = function() {
   var table = document.createElement('table');
   table.className = 'blocklyColourTable';
   table.tabIndex = 0;
+  table.dir = 'ltr';
   Blockly.utils.aria.setRole(table,
       Blockly.utils.aria.Role.GRID);
   Blockly.utils.aria.setState(table,

@@ -224,7 +224,7 @@ Blockly.Connection.prototype.dispose = function() {
 
 /**
  * Get the source block for this connection.
- * @return {Blockly.Block} The source block, or null if there is none.
+ * @return {!Blockly.Block} The source block.
  */
 Blockly.Connection.prototype.getSourceBlock = function() {
   return this.sourceBlock_;
@@ -253,9 +253,9 @@ Blockly.Connection.prototype.isConnected = function() {
  * @param {Blockly.Connection} target Connection to check compatibility with.
  * @return {number} Blockly.Connection.CAN_CONNECT if the connection is legal,
  *    an error code otherwise.
- * @private
+ * @package
  */
-Blockly.Connection.prototype.canConnectWithReason_ = function(target) {
+Blockly.Connection.prototype.canConnectWithReason = function(target) {
   if (!target) {
     return Blockly.Connection.REASON_TARGET_NULL;
   }
@@ -285,10 +285,10 @@ Blockly.Connection.prototype.canConnectWithReason_ = function(target) {
  * and throws an exception if they are not.
  * @param {Blockly.Connection} target The connection to check compatibility
  *    with.
- * @private
+ * @package
  */
-Blockly.Connection.prototype.checkConnection_ = function(target) {
-  switch (this.canConnectWithReason_(target)) {
+Blockly.Connection.prototype.checkConnection = function(target) {
+  switch (this.canConnectWithReason(target)) {
     case Blockly.Connection.CAN_CONNECT:
       break;
     case Blockly.Connection.REASON_SELF_CONNECTION:
@@ -358,7 +358,7 @@ Blockly.Connection.prototype.isConnectionAllowed = function(candidate) {
     return false;
   }
   // Type checking.
-  var canConnect = this.canConnectWithReason_(candidate);
+  var canConnect = this.canConnectWithReason(candidate);
   if (canConnect != Blockly.Connection.CAN_CONNECT) {
     return false;
   }
@@ -431,7 +431,7 @@ Blockly.Connection.prototype.connect = function(otherConnection) {
     // Already connected together.  NOP.
     return;
   }
-  this.checkConnection_(otherConnection);
+  this.checkConnection(otherConnection);
   var eventGroup = Blockly.Events.getGroup();
   if (!eventGroup) {
     Blockly.Events.setGroup(true);

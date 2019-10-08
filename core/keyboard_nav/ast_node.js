@@ -28,7 +28,7 @@ goog.provide('Blockly.ASTNode');
  * Class for an AST node.
  * It is recommended that you use one of the createNode methods instead of
  * creating a node directly.
- * @param {!string} type The type of the location.
+ * @param {string} type The type of the location.
  *     Must be in Bockly.ASTNode.types.
  * @param {!(Blockly.Block|Blockly.Connection|Blockly.Field|Blockly.Workspace)}
  *     location The position in the AST.
@@ -413,7 +413,8 @@ Blockly.ASTNode.prototype.findTopASTNodeForBlock_ = function(block) {
     return /** @type {!Blockly.ASTNode} */ (Blockly.ASTNode.createConnectionNode(
         topConnection));
   } else {
-    return /** @type {!Blockly.ASTNode} */ (Blockly.ASTNode.createBlockNode(block));
+    return /** @type {!Blockly.ASTNode} */ (Blockly.ASTNode.createBlockNode(
+        block));
   }
 };
 

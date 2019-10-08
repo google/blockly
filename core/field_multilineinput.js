@@ -58,6 +58,13 @@ Blockly.FieldMultilineInput = function(opt_value, opt_validator, opt_config) {
   }
   Blockly.FieldMultilineInput.superClass_.constructor.call(this,
       opt_value, opt_validator, opt_config);
+
+  /**
+   * The SVG group element that will contain a text element for each text row
+   *     when initialized.
+   * @type {SVGGElement}
+   */
+  this.textGroup_ = null;
 };
 Blockly.utils.object.inherits(Blockly.FieldMultilineInput,
     Blockly.FieldTextInput);
@@ -89,10 +96,11 @@ Blockly.FieldMultilineInput.fromJson = function(options) {
  */
 Blockly.FieldMultilineInput.prototype.initView = function() {
   this.createBorderRect_();
-  this.textGroup_ = Blockly.utils.dom.createSvgElement('g',
-      {
-        'class': 'blocklyEditableText',
-      }, this.fieldGroup_);
+  this.textGroup_ = /** @type {!SVGGElement} **/
+      (Blockly.utils.dom.createSvgElement('g',
+          {
+            'class': 'blocklyEditableText',
+          }, this.fieldGroup_));
 };
 
 /**
@@ -271,6 +279,15 @@ Blockly.FieldMultilineInput.prototype.onHtmlInputKeyDown_ = function(e) {
   if (e.keyCode !== Blockly.utils.KeyCodes.ENTER) {
     Blockly.FieldMultilineInput.superClass_.onHtmlInputKeyDown_.call(this, e);
   }
+};
+
+/**
+ * Dispose of all DOM objects and events belonging to this editable field.
+ * @package
+ */
+Blockly.FieldMultilineInput.prototype.dispose = function() {
+  Blockly.FieldMultilineInput.superClass_.dispose.call(this);
+  this.textGroup_ = null;
 };
 
 /**

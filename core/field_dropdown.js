@@ -92,18 +92,32 @@ Blockly.FieldDropdown = function(menuGenerator, opt_validator, opt_config) {
       this, firstTuple[1], opt_validator, opt_config);
 
   /**
-   * SVG image element if currently selected option is an image, or null.
-   * @type {SVGElement}
-   * @private
-   */
-  this.imageElement_ = null;
-
-  /**
    * A reference to the currently selected menu item.
    * @type {Blockly.MenuItem}
    * @private
    */
   this.selectedMenuItem_ = null;
+
+  /**
+   * The dropdown menu.
+   * @type {Blockly.Menu}
+   * @private
+   */
+  this.menu_ = null;
+
+  /**
+   * SVG image element if currently selected option is an image, or null.
+   * @type {SVGImageElement}
+   * @private
+   */
+  this.imageElement_ = null;
+
+  /**
+   * SVG arrow element.
+   * @type {SVGTSpanElement}
+   * @private
+   */
+  this.arrow_ = null;
 };
 Blockly.utils.object.inherits(Blockly.FieldDropdown, Blockly.Field);
 
@@ -182,12 +196,15 @@ Blockly.FieldDropdown.prototype.CURSOR = 'default';
 Blockly.FieldDropdown.prototype.initView = function() {
   Blockly.FieldDropdown.superClass_.initView.call(this);
 
-  this.imageElement_ = Blockly.utils.dom.createSvgElement( 'image',
-      {
-        'y': Blockly.FieldDropdown.IMAGE_Y_OFFSET
-      }, this.fieldGroup_);
+  this.imageElement_ = /** @type {!SVGImageElement} */
+      (Blockly.utils.dom.createSvgElement('image',
+          {
+            'y': Blockly.FieldDropdown.IMAGE_Y_OFFSET
+          }, this.fieldGroup_));
 
-  this.arrow_ = Blockly.utils.dom.createSvgElement('tspan', {}, this.textElement_);
+  this.arrow_ = /** @type {!SVGTspanElement} */
+      (Blockly.utils.dom.createSvgElement('tspan',
+          {}, this.textElement_));
   this.arrow_.appendChild(document.createTextNode(
       this.sourceBlock_.RTL ?
       Blockly.FieldDropdown.ARROW_CHAR + ' ' :
@@ -228,7 +245,7 @@ Blockly.FieldDropdown.prototype.showEditor_ = function() {
 
 /**
  * Create the dropdown editor.
- * @return {Blockly.Menu} The newly created dropdown menu.
+ * @return {!Blockly.Menu} The newly created dropdown menu.
  * @private
  */
 Blockly.FieldDropdown.prototype.dropdownCreate_ = function() {
@@ -275,6 +292,7 @@ Blockly.FieldDropdown.prototype.dropdownCreate_ = function() {
 Blockly.FieldDropdown.prototype.dropdownDispose_ = function() {
   this.menu_.dispose();
   this.menu_ = null;
+  this.selectedMenuItem_ = null;
 };
 
 /**
@@ -531,9 +549,9 @@ Blockly.FieldDropdown.prototype.renderSelectedText_ = function() {
 };
 
 /**
- * Use the `getText_` developer hook to override the field's text representation.
- * Get the selected option text. If the selected option is an image
- * we return the image alt text.
+ * Use the `getText_` developer hook to override the field's text
+ * representation.  Get the selected option text. If the selected option is an
+ * image we return the image alt text.
  * @return {?string} Selected option text.
  * @protected
  * @override
@@ -609,6 +627,17 @@ Blockly.FieldDropdown.prototype.onBlocklyAction = function(action) {
     }
   }
   return Blockly.FieldDropdown.superClass_.onBlocklyAction.call(this, action);
+};
+
+/**
+ * Dispose of all DOM objects and events belonging to this editable field.
+ * @package
+ * @override
+ */
+Blockly.FieldDropdown.prototype.dispose = function() {
+  Blockly.FieldDropdown.superClass_.dispose.call(this);
+  this.imageElement_ = null;
+  this.arrow_ = null;
 };
 
 Blockly.fieldRegistry.register('field_dropdown', Blockly.FieldDropdown);

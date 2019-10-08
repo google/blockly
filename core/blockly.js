@@ -114,6 +114,12 @@ Blockly.clipboardTypeCounts_ = null;
 Blockly.cache3dSupported_ = null;
 
 /**
+ * Blockly opaque event data.
+ * @typedef {!Array.<!Array>}
+ */
+Blockly.EventData;
+
+/**
  * Returns the dimensions of the specified SVG image.
  * @param {!Element} svg SVG image.
  * @return {!Object} Contains width and height properties.
@@ -455,7 +461,7 @@ Blockly.defineBlocksWithJsonArray = function(jsonArray) {
  *     should prevent the default handler.  False by default.  If
  *     opt_noPreventDefault is provided, opt_noCaptureIdentifier must also be
  *     provided.
- * @return {!Array.<!Array>} Opaque data that can be passed to unbindEvent_.
+ * @return {!Blockly.EventData} Opaque data that can be passed to unbindEvent_.
  */
 Blockly.bindEventWithChecks_ = function(node, name, thisObject, func,
     opt_noCaptureIdentifier, opt_noPreventDefault) {
@@ -521,7 +527,7 @@ Blockly.bindEventWithChecks_ = function(node, name, thisObject, func,
  * @param {string} name Event name to listen to (e.g. 'mousedown').
  * @param {Object} thisObject The value of 'this' in the function.
  * @param {!Function} func Function to call when event is triggered.
- * @return {!Array.<!Array>} Opaque data that can be passed to unbindEvent_.
+ * @return {!Blockly.EventData} Opaque data that can be passed to unbindEvent_.
  */
 Blockly.bindEvent_ = function(node, name, thisObject, func) {
   var wrapFunc = function(e) {

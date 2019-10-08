@@ -83,6 +83,18 @@ Blockly.FieldAngle = function(opt_value, opt_validator, opt_config) {
 
   Blockly.FieldAngle.superClass_.constructor.call(
       this, opt_value || 0, opt_validator, opt_config);
+
+  /**
+   * The angle picker's gauge path depending on the value.
+   * @type {SVGElement}
+   */
+  this.gauge_ = null;
+
+  /**
+   * The angle picker's line drawn representing the value's angle.
+   * @type {SVGElement}
+   */
+  this.line_ = null;
 };
 Blockly.utils.object.inherits(Blockly.FieldAngle, Blockly.FieldTextInput);
 

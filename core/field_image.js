@@ -115,6 +115,13 @@ Blockly.FieldImage = function(src, width, height,
   if (typeof opt_onClick == 'function') {
     this.clickHandler_ = opt_onClick;
   }
+
+  /**
+   * The rendered field's image element.
+   * @type {SVGImageElement}
+   * @private
+   */
+  this.imageElement_ = null;
 };
 Blockly.utils.object.inherits(Blockly.FieldImage, Blockly.Field);
 
@@ -173,14 +180,15 @@ Blockly.FieldImage.prototype.configure_ = function(config) {
  * @package
  */
 Blockly.FieldImage.prototype.initView = function() {
-  this.imageElement_ = Blockly.utils.dom.createSvgElement(
-      'image',
-      {
-        'height': this.imageHeight_ + 'px',
-        'width': this.size_.width + 'px',
-        'alt': this.altText_
-      },
-      this.fieldGroup_);
+  this.imageElement_ = /** @type {!SVGImageElement} */
+      (Blockly.utils.dom.createSvgElement(
+          'image',
+          {
+            'height': this.imageHeight_ + 'px',
+            'width': this.size_.width + 'px',
+            'alt': this.altText_
+          },
+          this.fieldGroup_));
   this.imageElement_.setAttributeNS(Blockly.utils.dom.XLINK_NS,
       'xlink:href', /** @type {string} */ (this.value_));
 };
@@ -248,7 +256,7 @@ Blockly.FieldImage.prototype.showEditor_ = function() {
 
 /**
  * Set the function that is called when this image  is clicked.
- * @param {?function(!Blockly.FieldImage)} func The function that is called
+ * @param {?function(!Blockly.FieldImage):void} func The function that is called
  *    when the image is clicked, or null to remove.
  */
 Blockly.FieldImage.prototype.setOnClickHandler = function(func) {
@@ -265,6 +273,16 @@ Blockly.FieldImage.prototype.setOnClickHandler = function(func) {
  */
 Blockly.FieldImage.prototype.getText_ = function() {
   return this.altText_;
+};
+
+/**
+ * Dispose of all DOM objects and events belonging to this editable field.
+ * @package
+ * @override
+ */
+Blockly.FieldImage.prototype.dispose = function() {
+  Blockly.FieldImage.superClass_.dispose.call(this);
+  this.imageElement_ = null;
 };
 
 Blockly.fieldRegistry.register('field_image', Blockly.FieldImage);

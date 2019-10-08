@@ -64,6 +64,12 @@ Blockly.FieldTextInput = function(opt_value, opt_validator, opt_config) {
   }
   Blockly.FieldTextInput.superClass_.constructor.call(this,
       opt_value, opt_validator, opt_config);
+
+  /**
+   * The HTML input element.
+   * @type {HTMLElement}
+   */
+  this.htmlInput_ = null;
 };
 Blockly.utils.object.inherits(Blockly.FieldTextInput, Blockly.Field);
 

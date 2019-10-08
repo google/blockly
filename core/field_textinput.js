@@ -299,6 +299,10 @@ Blockly.FieldTextInput.prototype.widgetCreate_ = function() {
 Blockly.FieldTextInput.prototype.widgetDispose_ = function() {
   this.onEditorClose_();
   this.unbindInputEvents_();
+  var style = Blockly.WidgetDiv.DIV.style;
+  style.width = 'auto';
+  style.height = 'auto';
+  style.fontSize = '';
   this.htmlInput_ = null;
 };
 

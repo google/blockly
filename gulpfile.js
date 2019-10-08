@@ -369,7 +369,6 @@ gulp.task('typings', function (cb) {
   const srcs = [
     'typings/parts/blockly-header.d.ts',
     'typings/parts/blockly-interfaces.d.ts',
-    'typings/parts/goog-closure.d.ts',
     `${tmpDir}/core/**`,
     `${tmpDir}/core/components/**`,
     `${tmpDir}/core/components/tree/**`,

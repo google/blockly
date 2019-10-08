@@ -56,4 +56,11 @@ declare module Blockly {
     viewWidth: number;
   }
 
+  /**
+   * Set the Blockly locale.
+   * Note: this method is only available in the npm release of Blockly.
+   * @param {!Object} msg An object of Blockly message strings in the desired
+   *     language.
+   */
+  function setLocale(msg: {[key: string]: string;}): void;
 }

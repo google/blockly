@@ -80,10 +80,10 @@ Blockly.utils.object.inherits(Blockly.RenderedConnection, Blockly.Connection);
  * @package
  */
 Blockly.RenderedConnection.prototype.dispose = function() {
+  Blockly.RenderedConnection.superClass_.dispose.call(this);
   if (this.tracked_) {
     this.db_.removeConnection(this, this.y_);
   }
-  Blockly.RenderedConnection.superClass_.dispose.call(this);
 };
 
 /**

@@ -22,3 +22,12 @@ before_script:
   - sleep 2
 script:
   - npm run test:run
+
+
+jobs:
+  include:
+    - stage: "Tests"
+      name: "Mocha Tests"
+    - script: tests/mocha/run_mocha_tests_in_browser.js
+    - script: tests/jsunit/run_jsunit_tests_in_browser.js
+      name: "JS Tests"

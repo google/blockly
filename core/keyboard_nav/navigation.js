@@ -283,7 +283,7 @@ Blockly.navigation.modifyWarn_ = function() {
 /**
  * Disconnect the block from its parent and move to the position of the
  * workspace node.
- * @param {!Blockly.Block} block The block to be moved to the workspace.
+ * @param {Blockly.Block} block The block to be moved to the workspace.
  * @param {!Blockly.ASTNode} wsNode The workspace node holding the position the
  *     block will be moved to.
  * @return {boolean} True if the block can be moved to the workspace,
@@ -291,6 +291,9 @@ Blockly.navigation.modifyWarn_ = function() {
  * @private
  */
 Blockly.navigation.moveBlockToWorkspace_ = function(block, wsNode) {
+  if (!block) {
+    return false;
+  }
   if (block.isShadow()) {
     Blockly.navigation.warn_('Cannot move a shadow block to the workspace.');
     return false;
@@ -323,10 +326,14 @@ Blockly.navigation.modify_ = function() {
   var markerLoc = markerNode.getLocation();
 
   if (markerNode.isConnection() && cursorNode.isConnection()) {
+    cursorLoc = /** @type {!Blockly.Connection} */ (cursorLoc);
+    markerLoc = /** @type {!Blockly.Connection} */ (markerLoc);
     return Blockly.navigation.connect_(cursorLoc, markerLoc);
   } else if (markerNode.isConnection() &&
         (cursorType == Blockly.ASTNode.types.BLOCK ||
         cursorType == Blockly.ASTNode.types.STACK)) {
+    cursorLoc = /** @type {!Blockly.Block} */ (cursorLoc);
+    markerLoc = /** @type {!Blockly.Connection} */ (markerLoc);
     return Blockly.navigation.insertBlock(cursorLoc, markerLoc);
   } else if (markerType == Blockly.ASTNode.types.WORKSPACE) {
     var block = Blockly.navigation.getSourceBlock_(cursorNode);
@@ -372,7 +379,7 @@ Blockly.navigation.moveAndConnect_ = function(movingConnection, destConnection) 
   }
   var movingBlock = movingConnection.getSourceBlock();
 
-  if (destConnection.canConnectWithReason_(movingConnection) ==
+  if (destConnection.canConnectWithReason(movingConnection) ==
       Blockly.Connection.CAN_CONNECT) {
 
     Blockly.navigation.disconnectChild_(movingConnection, destConnection);
@@ -458,7 +465,7 @@ Blockly.navigation.connect_ = function(movingConnection, destConnection) {
     return true;
   } else {
     try {
-      destConnection.checkConnection_(movingConnection);
+      destConnection.checkConnection(movingConnection);
     }
     catch (e) {
       // If nothing worked report the error from the original connections.
@@ -472,7 +479,7 @@ Blockly.navigation.connect_ = function(movingConnection, destConnection) {
  * Tries to connect the given block to the destination connection, making an
  * intelligent guess about which connection to use to on the moving block.
  * @param {!Blockly.Block} block The block to move.
- * @param {Blockly.Connection} destConnection The connection to connect to.
+ * @param {!Blockly.Connection} destConnection The connection to connect to.
  * @return {boolean} Whether the connection was successful.
  */
 Blockly.navigation.insertBlock = function(block, destConnection) {
@@ -525,7 +532,7 @@ Blockly.navigation.disconnectBlocks_ = function() {
     Blockly.navigation.log_('Cannot disconnect blocks when the cursor is not on a connection');
     return;
   }
-  var curConnection = curNode.getLocation();
+  var curConnection = /** @type {!Blockly.Connection} */ (curNode.getLocation());
   if (!curConnection.isConnected()) {
     Blockly.navigation.log_('Cannot disconnect unconnected connection');
     return;
@@ -652,7 +659,7 @@ Blockly.navigation.moveCursorOnBlockDelete = function(deletedBlock) {
       }
     // If the cursor is on a block whose parent is being deleted, move the
     // cursor to the workspace.
-    } else if (deletedBlock.getChildren(false).indexOf(block) > -1) {
+    } else if (block && deletedBlock.getChildren(false).indexOf(block) > -1) {
       cursor.setCurNode(Blockly.ASTNode.createWorkspaceNode(block.workspace,
           block.getRelativeToSurfaceXY()));
     }

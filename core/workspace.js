@@ -168,7 +168,7 @@ Blockly.Workspace.prototype.connectionDBList = null;
 
 /**
  * Sets the cursor for keyboard navigation.
- * @param {Blockly.Cursor} cursor The cursor used to navigate around the Blockly
+ * @param {!Blockly.Cursor} cursor The cursor used to navigate around the Blockly
  *     AST for keyboard navigation.
  */
 Blockly.Workspace.prototype.setCursor = function(cursor) {
@@ -177,7 +177,7 @@ Blockly.Workspace.prototype.setCursor = function(cursor) {
 
 /**
  * Sets the marker for keyboard navigation.
- * @param {Blockly.MarkerCursor} marker The marker used to mark a location for
+ * @param {!Blockly.MarkerCursor} marker The marker used to mark a location for
  *     keyboard navigation.
  */
 Blockly.Workspace.prototype.setMarker = function(marker) {

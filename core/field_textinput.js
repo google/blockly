@@ -297,20 +297,7 @@ Blockly.FieldTextInput.prototype.widgetCreate_ = function() {
  * @private
  */
 Blockly.FieldTextInput.prototype.widgetDispose_ = function() {
-  this.onEditorClose_();
-  this.unbindInputEvents_();
-  var style = Blockly.WidgetDiv.DIV.style;
-  style.width = 'auto';
-  style.height = 'auto';
-  style.fontSize = '';
-  this.htmlInput_ = null;
-};
-
-/**
- * Deals with the not-disposal parts of closing the text input field's editor.
- * @private
- */
-Blockly.FieldTextInput.prototype.onEditorClose_ = function() {
+  // Non-disposal related things that we do when the editor closes.
   this.isBeingEdited_ = false;
   this.isTextValid_ = true;
   // Make sure the field's node matches the field's internal value.
@@ -319,6 +306,14 @@ Blockly.FieldTextInput.prototype.onEditorClose_ = function() {
   if (this.onFinishEditing_) {
     this.onFinishEditing_(this.value_);
   }
+
+  // Actual disposal.
+  this.unbindInputEvents_();
+  var style = Blockly.WidgetDiv.DIV.style;
+  style.width = 'auto';
+  style.height = 'auto';
+  style.fontSize = '';
+  this.htmlInput_ = null;
 };
 
 /**

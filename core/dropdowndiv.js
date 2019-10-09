@@ -600,11 +600,11 @@ Blockly.DropDownDiv.hide = function() {
   Blockly.DropDownDiv.animateOutTimer_ =
       setTimeout(function() {
         Blockly.DropDownDiv.hideWithoutAnimation();
-        if (Blockly.DropDownDiv.onHide_) {
-          Blockly.DropDownDiv.onHide_();
-          Blockly.DropDownDiv.onHide_ = null;
-        }
       }, Blockly.DropDownDiv.ANIMATION_TIME * 1000);
+  if (Blockly.DropDownDiv.onHide_) {
+    Blockly.DropDownDiv.onHide_();
+    Blockly.DropDownDiv.onHide_ = null;
+  }
 };
 
 /**

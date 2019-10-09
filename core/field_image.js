@@ -275,14 +275,4 @@ Blockly.FieldImage.prototype.getText_ = function() {
   return this.altText_;
 };
 
-/**
- * Dispose of all DOM objects and events belonging to this editable field.
- * @package
- * @override
- */
-Blockly.FieldImage.prototype.dispose = function() {
-  Blockly.FieldImage.superClass_.dispose.call(this);
-  this.imageElement_ = null;
-};
-
 Blockly.fieldRegistry.register('field_image', Blockly.FieldImage);

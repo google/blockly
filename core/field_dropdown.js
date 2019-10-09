@@ -633,15 +633,5 @@ Blockly.FieldDropdown.prototype.onBlocklyAction = function(action) {
   return Blockly.FieldDropdown.superClass_.onBlocklyAction.call(this, action);
 };
 
-/**
- * Dispose of all DOM objects and events belonging to this editable field.
- * @package
- * @override
- */
-Blockly.FieldDropdown.prototype.dispose = function() {
-  Blockly.FieldDropdown.superClass_.dispose.call(this);
-  this.imageElement_ = null;
-  this.arrow_ = null;
-};
 
 Blockly.fieldRegistry.register('field_dropdown', Blockly.FieldDropdown);

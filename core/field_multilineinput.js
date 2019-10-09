@@ -283,15 +283,6 @@ Blockly.FieldMultilineInput.prototype.onHtmlInputKeyDown_ = function(e) {
 };
 
 /**
- * Dispose of all DOM objects and events belonging to this editable field.
- * @package
- */
-Blockly.FieldMultilineInput.prototype.dispose = function() {
-  Blockly.FieldMultilineInput.superClass_.dispose.call(this);
-  this.textGroup_ = null;
-};
-
-/**
  * CSS for multiline field.  See css.js for use.
  */
 Blockly.Css.register([

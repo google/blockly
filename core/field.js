@@ -428,11 +428,6 @@ Blockly.Field.prototype.dispose = function() {
 
   Blockly.utils.dom.removeNode(this.fieldGroup_);
 
-  this.fieldGroup_ = null;
-  this.textElement_ = null;
-  this.textContent_ = null;
-  this.borderRect_ = null;
-
   this.disposed = true;
 };
 

@@ -63,10 +63,10 @@ Blockly.Gesture = function(e, creatorWorkspace) {
   /**
    * How far the mouse has moved during this drag, in pixel units.
    * (0, 0) is at this.mouseDownXY_.
-   * @type {Blockly.utils.Coordinate}
+   * @type {!Blockly.utils.Coordinate}
    * @private
    */
-  this.currentDragDeltaXY_ = null;
+  this.currentDragDeltaXY_ = new Blockly.utils.Coordinate(0, 0);
 
   /**
    * The bubble that the gesture started on, or null if it did not start on a

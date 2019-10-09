@@ -202,8 +202,7 @@ Blockly.Mutator.prototype.updateEditable = function() {
 };
 
 /**
- * Callback function triggered when the bubble has resized.
- * Resize the workspace accordingly.
+ * Resize the bubble to match the size of the workspace.
  * @private
  */
 Blockly.Mutator.prototype.resizeBubble_ = function() {
@@ -294,6 +293,7 @@ Blockly.Mutator.prototype.setVisible = function(visible) {
       };
       this.block_.workspace.addChangeListener(this.sourceListener_);
     }
+    this.resizeBubble_();
     // When the mutator's workspace changes, update the source block.
     this.workspace_.addChangeListener(this.workspaceChanged_.bind(this));
     this.updateColour();
@@ -420,14 +420,14 @@ Blockly.Mutator.prototype.dispose = function() {
 Blockly.Mutator.prototype.updateBlockStyle = function() {
   var ws = this.workspace_;
 
-  if (ws && ws.getAllBlocks()) {
-    var workspaceBlocks = ws.getAllBlocks();
+  if (ws && ws.getAllBlocks(false)) {
+    var workspaceBlocks = ws.getAllBlocks(false);
     for (var i = 0; i < workspaceBlocks.length; i++) {
       var block = workspaceBlocks[i];
       block.setStyle(block.getStyleName());
     }
 
-    var flyoutBlocks = ws.flyout_.workspace_.getAllBlocks();
+    var flyoutBlocks = ws.flyout_.workspace_.getAllBlocks(false);
     for (var i = 0; i < flyoutBlocks.length; i++) {
       var block = flyoutBlocks[i];
       block.setStyle(block.getStyleName());

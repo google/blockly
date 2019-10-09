@@ -507,6 +507,7 @@ Blockly.FieldColour.prototype.dropdownCreate_ = function() {
   var table = document.createElement('table');
   table.className = 'blocklyColourTable';
   table.tabIndex = 0;
+  table.dir = 'ltr';
   Blockly.utils.aria.setRole(table,
       Blockly.utils.aria.Role.GRID);
   Blockly.utils.aria.setState(table,
@@ -555,7 +556,7 @@ Blockly.FieldColour.prototype.dropdownCreate_ = function() {
 };
 
 /**
- * Dispose of events belonging to the colour editor.
+ * Disposes of events and dom-references belonging to the colour editor.
  * @private
  */
 Blockly.FieldColour.prototype.dropdownDispose_ = function() {

@@ -63,10 +63,10 @@ Blockly.Gesture = function(e, creatorWorkspace) {
   /**
    * How far the mouse has moved during this drag, in pixel units.
    * (0, 0) is at this.mouseDownXY_.
-   * @type {Blockly.utils.Coordinate}
+   * @type {!Blockly.utils.Coordinate}
    * @private
    */
-  this.currentDragDeltaXY_ = null;
+  this.currentDragDeltaXY_ = new Blockly.utils.Coordinate(0, 0);
 
   /**
    * The bubble that the gesture started on, or null if it did not start on a
@@ -250,24 +250,14 @@ Blockly.Gesture.prototype.dispose = function() {
     Blockly.unbindEvent_(this.onUpWrapper_);
   }
 
-
-  this.startField_ = null;
-  this.startBlock_ = null;
-  this.targetBlock_ = null;
-  this.startWorkspace_ = null;
-  this.flyout_ = null;
-
   if (this.blockDragger_) {
     this.blockDragger_.dispose();
-    this.blockDragger_ = null;
   }
   if (this.workspaceDragger_) {
     this.workspaceDragger_.dispose();
-    this.workspaceDragger_ = null;
   }
   if (this.bubbleDragger_) {
     this.bubbleDragger_.dispose();
-    this.bubbleDragger_ = null;
   }
 };
 

@@ -639,7 +639,7 @@ Blockly.Block.prototype.getRootBlock = function() {
  * the top block of the sub stack. If we are nested in a statement input only
  * find the top-most nested block. Do not go all the way to the root block.
  * @return {!Blockly.Block} The top block in a stack.
- * @private
+ * @package
  */
 Blockly.Block.prototype.getTopStackBlock = function() {
   var block = this;

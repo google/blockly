@@ -274,7 +274,7 @@ Blockly.CursorSvg.prototype.showWithField_ = function(curNode) {
 Blockly.CursorSvg.prototype.showWithInput_ = function(curNode) {
   var connection = /** @type {Blockly.Connection} */
       (curNode.getLocation());
-  var sourceBlock = /** @type {Blockly.BlockSvg} */ (connection.getSourceBlock());
+  var sourceBlock = /** @type {!Blockly.BlockSvg} */ (connection.getSourceBlock());
 
   this.positionInput_(connection);
   this.setParent_(sourceBlock);

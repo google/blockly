@@ -339,10 +339,11 @@ Blockly.hideChaff = function(opt_allowToolbox) {
       workspace.trashcan.flyout_) {
       workspace.trashcan.flyout_.hide();
     }
-    if (workspace.toolbox_ &&
-        workspace.toolbox_.flyout_ &&
-        workspace.toolbox_.flyout_.autoClose) {
-      workspace.toolbox_.clearSelection();
+    var toolbox = workspace.getToolbox();
+    if (toolbox &&
+        toolbox.flyout_ &&
+        toolbox.flyout_.autoClose) {
+      toolbox.clearSelection();
     }
   }
 };

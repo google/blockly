@@ -241,7 +241,6 @@ Blockly.zelos.ConstantProvider.prototype.makeNotch = function() {
     );
   }
 
-  // TODO: Find a relationship between width and path
   var pathLeft = makeMainPath(1);
   var pathRight = makeMainPath(-1);
 

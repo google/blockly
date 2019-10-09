@@ -166,7 +166,6 @@ Blockly.blockRendering.Row.prototype.measure = function() {
 
 /**
  * Get the last input on this row, if it has one.
- * TODO: Consider moving this to InputRow, if possible.
  * @return {Blockly.blockRendering.InputConnection} The last input on the row,
  *     or null.
  * @package

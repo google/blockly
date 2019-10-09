@@ -168,7 +168,7 @@ Blockly.Workspace.prototype.connectionDBList = null;
 
 /**
  * Sets the cursor for keyboard navigation.
- * @param {Blockly.Cursor} cursor The cursor used to navigate around the Blockly
+ * @param {!Blockly.Cursor} cursor The cursor used to navigate around the Blockly
  *     AST for keyboard navigation.
  */
 Blockly.Workspace.prototype.setCursor = function(cursor) {
@@ -177,7 +177,7 @@ Blockly.Workspace.prototype.setCursor = function(cursor) {
 
 /**
  * Sets the marker for keyboard navigation.
- * @param {Blockly.MarkerCursor} marker The marker used to mark a location for
+ * @param {!Blockly.MarkerCursor} marker The marker used to mark a location for
  *     keyboard navigation.
  */
 Blockly.Workspace.prototype.setMarker = function(marker) {
@@ -226,7 +226,7 @@ Blockly.Workspace.prototype.setTheme = function(theme) {
  */
 Blockly.Workspace.prototype.refreshTheme = function() {
   // Update all blocks in workspace that have a style name.
-  this.updateBlockStyles_(this.getAllBlocks().filter(
+  this.updateBlockStyles_(this.getAllBlocks(false).filter(
       function(block) {
         return block.getStyleName() !== undefined;
       }
@@ -651,7 +651,7 @@ Blockly.Workspace.prototype.remainingCapacity = function() {
     return Infinity;
   }
 
-  return this.options.maxBlocks - this.getAllBlocks().length;
+  return this.options.maxBlocks - this.getAllBlocks(false).length;
 };
 
 /**

@@ -73,11 +73,11 @@ function test_emptyWorkspace() {
   try {
     assertEquals('Empty workspace (1).', 0, workspace.getTopBlocks(true).length);
     assertEquals('Empty workspace (2).', 0, workspace.getTopBlocks(false).length);
-    assertEquals('Empty workspace (3).', 0, workspace.getAllBlocks().length);
+    assertEquals('Empty workspace (3).', 0, workspace.getAllBlocks(false).length);
     workspace.clear();
     assertEquals('Empty workspace (4).', 0, workspace.getTopBlocks(true).length);
     assertEquals('Empty workspace (5).', 0, workspace.getTopBlocks(false).length);
-    assertEquals('Empty workspace (6).', 0, workspace.getAllBlocks().length);
+    assertEquals('Empty workspace (6).', 0, workspace.getAllBlocks(false).length);
   } finally {
     workspace.dispose();
   }
@@ -90,11 +90,11 @@ function test_flatWorkspace() {
     blockA = helper_createNewBlock(workspace, '');
     assertEquals('One block workspace (1).', 1, workspace.getTopBlocks(true).length);
     assertEquals('One block workspace (2).', 1, workspace.getTopBlocks(false).length);
-    assertEquals('One block workspace (3).', 1, workspace.getAllBlocks().length);
+    assertEquals('One block workspace (3).', 1, workspace.getAllBlocks(false).length);
     blockB = helper_createNewBlock(workspace, '');
     assertEquals('Two block workspace (1).', 2, workspace.getTopBlocks(true).length);
     assertEquals('Two block workspace (2).', 2, workspace.getTopBlocks(false).length);
-    assertEquals('Two block workspace (3).', 2, workspace.getAllBlocks().length);
+    assertEquals('Two block workspace (3).', 2, workspace.getAllBlocks(false).length);
     try {
       blockA.dispose();
     } catch (e) {
@@ -103,11 +103,11 @@ function test_flatWorkspace() {
 
     assertEquals('One block workspace (4).', 1, workspace.getTopBlocks(true).length);
     assertEquals('One block workspace (5).', 1, workspace.getTopBlocks(false).length);
-    assertEquals('One block workspace (6).', 1, workspace.getAllBlocks().length);
+    assertEquals('One block workspace (6).', 1, workspace.getAllBlocks(false).length);
     workspace.clear();
     assertEquals('Cleared workspace (1).', 0, workspace.getTopBlocks(true).length);
     assertEquals('Cleared workspace (2).', 0, workspace.getTopBlocks(false).length);
-    assertEquals('Cleared workspace (3).', 0, workspace.getAllBlocks().length);
+    assertEquals('Cleared workspace (3).', 0, workspace.getAllBlocks(false).length);
   } finally {
     blockB && blockB.dispose();
     blockA && blockA.dispose();
@@ -125,10 +125,10 @@ function test_appendDomToWorkspace() {
       '  </block>' +
       '</xml>');
     Blockly.Xml.appendDomToWorkspace(dom, workspace);
-    assertEquals('Block count', 1, workspace.getAllBlocks().length);
+    assertEquals('Block count', 1, workspace.getAllBlocks(false).length);
     Blockly.Xml.appendDomToWorkspace(dom, workspace);
-    assertEquals('Block count', 2, workspace.getAllBlocks().length);
-    var blocks =  workspace.getAllBlocks();
+    assertEquals('Block count', 2, workspace.getAllBlocks(false).length);
+    var blocks =  workspace.getAllBlocks(false);
     assertEquals('Block 1 position x',21,blocks[0].getRelativeToSurfaceXY().x);
     assertEquals('Block 1 position y',23,blocks[0].getRelativeToSurfaceXY().y);
     assertEquals('Block 2 position x',21,blocks[1].getRelativeToSurfaceXY().x);
@@ -153,7 +153,7 @@ function test_svgDisposeWithShadow() {
       '</xml>');
 
     Blockly.Xml.appendDomToWorkspace(dom, workspace);
-    assertEquals('Block count', 2, workspace.getAllBlocks().length);
+    assertEquals('Block count', 2, workspace.getAllBlocks(false).length);
     var inputConnection = workspace.getTopBlocks()[0].getInput('NAME').connection;
 
     blockNew = helper_createNewBlock(workspace, 'simple_test_block');

@@ -130,6 +130,14 @@ Blockly.BlockSvg = function(workspace, prototypeName, opt_id) {
    * @private
    */
   this.markerSvg_ = null;
+
+  /**
+   * Should the block tell its connections to start tracking inside the render
+   * method?
+   * @type {boolean}
+   * @private
+   */
+  this.callTrackConnections_ = true;
 };
 Blockly.utils.object.inherits(Blockly.BlockSvg, Blockly.Block);
 
@@ -138,6 +146,7 @@ Blockly.utils.object.inherits(Blockly.BlockSvg, Blockly.Block);
  * Height is in workspace units.
  */
 Blockly.BlockSvg.prototype.height = 0;
+
 /**
  * Width of this block, including any connected value blocks.
  * Width is in workspace units.
@@ -1488,35 +1497,58 @@ Blockly.BlockSvg.prototype.appendInput_ = function(type, name) {
 };
 
 /**
- * Set whether the connections are hidden (not tracked in a database) or not.
- * Recursively walk down all child blocks (except collapsed blocks).
- * @param {boolean} hidden True if connections are hidden.
+ * Tell the block to wait for an outside source to call
+ * startTrackingConnections, rather than starting connection
+ * tracking automatically.
+ *
+ * Also tells children of this block to wait.
  * @package
  */
-Blockly.BlockSvg.prototype.setConnectionsHidden = function(hidden) {
-  if (!hidden && this.isCollapsed()) {
-    if (this.outputConnection) {
-      this.outputConnection.setHidden(hidden);
+Blockly.BlockSvg.prototype.waitToTrackConnections = function() {
+  this.callTrackConnections_ = false;
+  var children = this.getChildren();
+  for (var i = 0, child; child = children[i]; i++) {
+    child.waitToTrackConnections();
+  }
+};
+
+/**
+ * Tell this block's connections to add themselves to the connection
+ * database (i.e. start tracking).
+ *
+ * All following/next blocks will be told to start tracking. Inner blocks
+ * (i.e. blocks attached to value/statement inputs) will be told to start
+ * tracking if this block is not collapsed.
+ * @package
+ */
+Blockly.BlockSvg.prototype.startTrackingConnections = function() {
+  if (this.previousConnection) {
+    this.previousConnection.setTracking(true);
+  }
+  if (this.outputConnection) {
+    this.outputConnection.setTracking(true);
+  }
+  if (this.nextConnection) {
+    this.nextConnection.setTracking(true);
+    var child = this.nextConnection.targetBlock();
+    if (child) {
+      child.startTrackingConnections();
     }
-    if (this.previousConnection) {
-      this.previousConnection.setHidden(hidden);
-    }
-    if (this.nextConnection) {
-      this.nextConnection.setHidden(hidden);
-      var child = this.nextConnection.targetBlock();
-      if (child) {
-        child.setConnectionsHidden(hidden);
-      }
-    }
-  } else {
-    var myConnections = this.getConnections_(true);
-    for (var i = 0, connection; connection = myConnections[i]; i++) {
-      connection.setHidden(hidden);
-      if (connection.isSuperior()) {
-        var child = connection.targetBlock();
-        if (child) {
-          child.setConnectionsHidden(hidden);
-        }
+  }
+
+  if (this.collapsed_) {
+    return;
+  }
+
+  for (var i = 0; i < this.inputList.length; i++) {
+    var conn = this.inputList[i].connection;
+    if (conn) {
+      conn.setTracking(true);
+
+      // Pass tracking on down the chain.
+      var block = conn.targetBlock();
+      if (block) {
+        block.startTrackingConnections();
       }
     }
   }
@@ -1665,6 +1697,13 @@ Blockly.BlockSvg.prototype.render = function(opt_bubble) {
   (/** @type {!Blockly.WorkspaceSvg} */ (this.workspace)).getRenderer().render(this);
   // No matter how we rendered, connection locations should now be correct.
   this.updateConnectionLocations_();
+  // TODO: This should be handled inside a robust init method, because it would
+  //  make it a lot cleaner, but for now it's handled here for backwards
+  //  compatibility.
+  if (this.callTrackConnections_) {
+    this.startTrackingConnections();
+    this.callTrackConnections_ = false;
+  }
   if (opt_bubble !== false) {
     // Render all blocks above this one (propagate a reflow).
     var parentBlock = this.getParent();

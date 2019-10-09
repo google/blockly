@@ -39,7 +39,7 @@ goog.require('Blockly.utils.style');
 /**
  * Abstract class for an editable field.
  * @param {*} value The initial value of the field.
- * @param {Function=} opt_validator  A function that is called to validate
+ * @param {?Function=} opt_validator  A function that is called to validate
  *    changes to the field's value. Takes in a value & returns a validated
  *    value, or null to abort the change.
  * @param {Object=} opt_config A map of options used to configure the field. See
@@ -557,8 +557,10 @@ Blockly.Field.prototype.updateColour = function() {
  * @protected
  */
 Blockly.Field.prototype.render_ = function() {
-  this.textContent_.nodeValue = this.getDisplayText_();
-  this.updateSize_();
+  if (this.textContent_) {
+    this.textContent_.nodeValue = this.getDisplayText_();
+    this.updateSize_();
+  }
 };
 
 /**

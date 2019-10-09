@@ -222,7 +222,8 @@ Blockly.Field.prototype.clickTarget_ = null;
  * Override if the text representation of the value of this field
  * is not just a string cast of its value.
  * Return null to resort to a string cast.
- * @type {?function():?string}
+ * @return {?string} Current text. Return null to resort to a string cast.
+ * @protected
  */
 Blockly.Field.prototype.getText_;
 
@@ -230,7 +231,8 @@ Blockly.Field.prototype.getText_;
  * An optional method that can be defined to show an editor when the field is
  *     clicked. Blockly will automatically set the field as clickable if this
  *     method is defined.
- * @type {?function():void}
+ * @return {void}
+ * @protected
  */
 Blockly.Field.prototype.showEditor_;
 

@@ -80,35 +80,35 @@ Blockly.FieldColour = function(opt_value, opt_validator, opt_config) {
    */
   this.highlightedIndex_ = null;
 
-  /** 
+  /**
    * Mouse click event data. 
    * @type {?Blockly.EventData}
    * @private
    */
   this.onClickWrapper_ = null;
 
-  /** 
+  /**
    * Mouse move event data. 
    * @type {?Blockly.EventData}
    * @private
    */
   this.onMouseMoveWrapper_ = null;
 
-  /** 
+  /**
    * Mouse enter event data. 
    * @type {?Blockly.EventData}
    * @private
    */
   this.onMouseEnterWrapper_ = null;
 
-  /** 
+  /**
    * Mouse leave event data. 
    * @type {?Blockly.EventData}
    * @private
    */
   this.onMouseLeaveWrapper_ = null;
 
-  /** 
+  /**
    * Key down event data. 
    * @type {?Blockly.EventData}
    * @private

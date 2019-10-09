@@ -66,7 +66,7 @@ Blockly.FieldColour = function(opt_value, opt_validator, opt_config) {
   this.size_ = new Blockly.utils.Size(Blockly.FieldColour.DEFAULT_WIDTH,
       Blockly.FieldColour.DEFAULT_HEIGHT);
 
-  /** 
+  /**
    * The field's colour picker element.
    * @type {Element}
    * @private
@@ -74,42 +74,42 @@ Blockly.FieldColour = function(opt_value, opt_validator, opt_config) {
   this.picker_ = null;
 
   /**
-   * 
+   * Index of the currently highlighted element.
    * @type {?number}
    * @private
    */
   this.highlightedIndex_ = null;
 
   /**
-   * Mouse click event data. 
+   * Mouse click event data.
    * @type {?Blockly.EventData}
    * @private
    */
   this.onClickWrapper_ = null;
 
   /**
-   * Mouse move event data. 
+   * Mouse move event data.
    * @type {?Blockly.EventData}
    * @private
    */
   this.onMouseMoveWrapper_ = null;
 
   /**
-   * Mouse enter event data. 
+   * Mouse enter event data.
    * @type {?Blockly.EventData}
    * @private
    */
   this.onMouseEnterWrapper_ = null;
 
   /**
-   * Mouse leave event data. 
+   * Mouse leave event data.
    * @type {?Blockly.EventData}
    * @private
    */
   this.onMouseLeaveWrapper_ = null;
 
   /**
-   * Key down event data. 
+   * Key down event data.
    * @type {?Blockly.EventData}
    * @private
    */

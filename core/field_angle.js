@@ -97,21 +97,21 @@ Blockly.FieldAngle = function(opt_value, opt_validator, opt_config) {
   this.line_ = null;
 
   /**
-   * Wrapper click event data. 
+   * Wrapper click event data.
    * @type {?Blockly.EventData}
    * @private
    */
   this.clickWrapper_ = null;
 
   /**
-   * Surface click event data. 
+   * Surface click event data.
    * @type {?Blockly.EventData}
    * @private
    */
   this.clickSurfaceWrapper_ = null;
 
   /**
-   * Surface mouse move event data. 
+   * Surface mouse move event data.
    * @type {?Blockly.EventData}
    * @private
    */

@@ -175,12 +175,13 @@ Blockly.FieldMultilineInput.prototype.render_ = function() {
     } else {
       this.resizeEditor_();
     }
+    var htmlInput = /** @type {!HTMLElement} */(this.htmlInput_);
     if (!this.isTextValid_) {
-      Blockly.utils.dom.addClass(this.htmlInput_, 'blocklyInvalidInput');
-      Blockly.utils.aria.setState(this.htmlInput_, 'invalid', true);
+      Blockly.utils.dom.addClass(htmlInput, 'blocklyInvalidInput');
+      Blockly.utils.aria.setState(htmlInput, 'invalid', true);
     } else {
-      Blockly.utils.dom.removeClass(this.htmlInput_, 'blocklyInvalidInput');
-      Blockly.utils.aria.setState(this.htmlInput_, 'invalid', false);
+      Blockly.utils.dom.removeClass(htmlInput, 'blocklyInvalidInput');
+      Blockly.utils.aria.setState(htmlInput, 'invalid', false);
     }
   }
 };
@@ -194,7 +195,7 @@ Blockly.FieldMultilineInput.prototype.updateSize_ = function() {
   var totalWidth = 0;
   var totalHeight = 0;
   for (var i = 0; i < nodes.length; i++) {
-    var tspan = nodes[i];
+    var tspan = /** @type {!Element} */ (nodes[i]);
     var textWidth = Blockly.utils.dom.getTextWidth(tspan);
     if (textWidth > totalWidth) {
       totalWidth = textWidth;

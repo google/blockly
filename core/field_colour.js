@@ -68,7 +68,7 @@ Blockly.FieldColour = function(opt_value, opt_validator, opt_config) {
 
   /** 
    * The field's colour picker element.
-   * @type {HTMLElement}
+   * @type {Element}
    * @private
    */
   this.picker_ = null;
@@ -209,7 +209,7 @@ Blockly.FieldColour.prototype.configure_ = function(config) {
  */
 Blockly.FieldColour.prototype.initView = function() {
   this.createBorderRect_();
-  this.borderRect_.style['fillOpacity'] = 1;
+  this.borderRect_.style['fillOpacity'] = '1';
   this.borderRect_.style.fill = this.value_;
 };
 
@@ -538,13 +538,13 @@ Blockly.FieldColour.prototype.setHighlightedCell_ = function(cell, index) {
   this.highlightedIndex_ = index;
 
   // Update accessibility roles.
-  Blockly.utils.aria.setState(this.picker_,
+  Blockly.utils.aria.setState(/** @type {!Element} */ (this.picker_),
       Blockly.utils.aria.State.ACTIVEDESCENDANT, cell.getAttribute('id'));
 };
 
 /**
  * Create a colour picker dropdown editor.
- * @return {!HTMLElement} The newly created colour picker.
+ * @return {!Element} The newly created colour picker.
  * @private
  */
 Blockly.FieldColour.prototype.dropdownCreate_ = function() {
@@ -609,11 +609,21 @@ Blockly.FieldColour.prototype.dropdownCreate_ = function() {
  * @private
  */
 Blockly.FieldColour.prototype.dropdownDispose_ = function() {
-  Blockly.unbindEvent_(this.onClickWrapper_);
-  Blockly.unbindEvent_(this.onMouseMoveWrapper_);
-  Blockly.unbindEvent_(this.onMouseEnterWrapper_);
-  Blockly.unbindEvent_(this.onMouseLeaveWrapper_);
-  Blockly.unbindEvent_(this.onKeyDownWrapper_);
+  if (this.onClickWrapper_) {
+    Blockly.unbindEvent_(this.onClickWrapper_);
+  }
+  if (this.onMouseMoveWrapper_) {
+    Blockly.unbindEvent_(this.onMouseMoveWrapper_);
+  }
+  if (this.onMouseEnterWrapper_) {
+    Blockly.unbindEvent_(this.onMouseEnterWrapper_);
+  }
+  if (this.onMouseLeaveWrapper_) {
+    Blockly.unbindEvent_(this.onMouseLeaveWrapper_);
+  }
+  if (this.onKeyDownWrapper_) {
+    Blockly.unbindEvent_(this.onKeyDownWrapper_);
+  }
   this.picker_ = null;
   this.highlightedIndex_ = null;
 };

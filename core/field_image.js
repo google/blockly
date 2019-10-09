@@ -216,7 +216,7 @@ Blockly.FieldImage.prototype.doValueUpdate_ = function(newValue) {
   this.value_ = newValue;
   if (this.imageElement_) {
     this.imageElement_.setAttributeNS(Blockly.utils.dom.XLINK_NS,
-        'xlink:href', this.value_ || '');
+        'xlink:href', String(this.value_));
   }
 };
 

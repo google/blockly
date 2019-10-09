@@ -202,7 +202,7 @@ Blockly.FieldDropdown.prototype.initView = function() {
             'y': Blockly.FieldDropdown.IMAGE_Y_OFFSET
           }, this.fieldGroup_));
 
-  this.arrow_ = /** @type {!SVGTspanElement} */
+  this.arrow_ = /** @type {!SVGTSpanElement} */
       (Blockly.utils.dom.createSvgElement('tspan',
           {}, this.textElement_));
   this.arrow_.appendChild(document.createTextNode(
@@ -290,7 +290,9 @@ Blockly.FieldDropdown.prototype.dropdownCreate_ = function() {
  * @private
  */
 Blockly.FieldDropdown.prototype.dropdownDispose_ = function() {
-  this.menu_.dispose();
+  if (this.menu_) {
+    this.menu_.dispose();
+  }
   this.menu_ = null;
   this.selectedMenuItem_ = null;
 };
@@ -302,15 +304,16 @@ Blockly.FieldDropdown.prototype.dropdownDispose_ = function() {
  */
 Blockly.FieldDropdown.prototype.handleMenuActionEvent_ = function(menuItem) {
   Blockly.DropDownDiv.hideIfOwner(this, true);
-  this.onItemSelected(this.menu_, menuItem);
+  this.onItemSelected_(/** @type {!Blockly.Menu} */ (this.menu_), menuItem);
 };
 
 /**
  * Handle the selection of an item in the dropdown menu.
  * @param {!Blockly.Menu} menu The Menu component clicked.
  * @param {!Blockly.MenuItem} menuItem The MenuItem selected within menu.
+ * @protected
  */
-Blockly.FieldDropdown.prototype.onItemSelected = function(menu, menuItem) {
+Blockly.FieldDropdown.prototype.onItemSelected_ = function(menu, menuItem) {
   this.setValue(menuItem.getValue());
 };
 
@@ -510,7 +513,8 @@ Blockly.FieldDropdown.prototype.renderSelectedImage_ = function(imageJson) {
   this.imageElement_.setAttribute('height', imageJson.height);
   this.imageElement_.setAttribute('width', imageJson.width);
 
-  var arrowWidth = Blockly.utils.dom.getTextWidth(this.arrow_);
+  var arrowWidth = Blockly.utils.dom.getTextWidth(
+      /** @type {!SVGTSpanElement} */ (this.arrow_));
 
   var imageHeight = Number(imageJson.height);
   var imageWidth = Number(imageJson.width);

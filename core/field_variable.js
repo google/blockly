@@ -440,8 +440,9 @@ Blockly.FieldVariable.dropdownCreate = function() {
  * In the rename case, prompt the user for a new name.
  * @param {!Blockly.Menu} menu The Menu component clicked.
  * @param {!Blockly.MenuItem} menuItem The MenuItem selected within menu.
+ * @protected
  */
-Blockly.FieldVariable.prototype.onItemSelected = function(menu, menuItem) {
+Blockly.FieldVariable.prototype.onItemSelected_ = function(menu, menuItem) {
   var id = menuItem.getValue();
   // Handle special cases.
   if (this.sourceBlock_ && this.sourceBlock_.workspace) {

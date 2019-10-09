@@ -114,7 +114,8 @@ Blockly.clipboardTypeCounts_ = null;
 Blockly.cache3dSupported_ = null;
 
 /**
- * Blockly opaque event data.
+ * Blockly opaque event data used to unbind events when using
+ * `Blockly.bindEvent_` and `Blockly.bindEventWithChecks_`.
  * @typedef {!Array.<!Array>}
  */
 Blockly.EventData;

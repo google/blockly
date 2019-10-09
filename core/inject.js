@@ -467,7 +467,7 @@ Blockly.inject.bindDocumentEvents_ = function() {
         }
       }
     });
-    Blockly.bindEventWithChecks_(document, 'keydown', null, Blockly.onKeyDown_);
+    Blockly.bindEventWithChecks_(document, 'keydown', null, Blockly.onKeyDown);
     // longStop needs to run to stop the context menu from showing up.  It
     // should run regardless of what other touch event handlers have run.
     Blockly.bindEvent_(document, 'touchend', null, Blockly.longStop_);

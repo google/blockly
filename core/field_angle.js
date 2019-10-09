@@ -95,6 +95,27 @@ Blockly.FieldAngle = function(opt_value, opt_validator, opt_config) {
    * @type {SVGElement}
    */
   this.line_ = null;
+
+  /** 
+   * Wrapper click event data. 
+   * @type {?Blockly.EventData}
+   * @private
+   */
+  this.clickWrapper_ = null;
+
+  /** 
+   * Surface click event data. 
+   * @type {?Blockly.EventData}
+   * @private
+   */
+  this.clickSurfaceWrapper_ = null;
+
+  /** 
+   * Surface mouse move event data. 
+   * @type {?Blockly.EventData}
+   * @private
+   */
+  this.moveSurfaceWrapper_ = null;
 };
 Blockly.utils.object.inherits(Blockly.FieldAngle, Blockly.FieldTextInput);
 
@@ -320,9 +341,15 @@ Blockly.FieldAngle.prototype.dropdownCreate_ = function() {
  * @private
  */
 Blockly.FieldAngle.prototype.dropdownDispose_ = function() {
-  Blockly.unbindEvent_(this.clickWrapper_);
-  Blockly.unbindEvent_(this.clickSurfaceWrapper_);
-  Blockly.unbindEvent_(this.moveSurfaceWrapper_);
+  if (this.clickWrapper_) {
+    Blockly.unbindEvent_(this.clickWrapper_);
+  }
+  if (this.clickSurfaceWrapper_) {
+    Blockly.unbindEvent_(this.clickSurfaceWrapper_);
+  }
+  if (this.moveSurfaceWrapper_) {
+    Blockly.unbindEvent_(this.moveSurfaceWrapper_);
+  }
   this.gauge_ = null;
   this.line_ = null;
 };

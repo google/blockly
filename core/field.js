@@ -557,8 +557,10 @@ Blockly.Field.prototype.updateColour = function() {
  * @protected
  */
 Blockly.Field.prototype.render_ = function() {
-  this.textContent_.nodeValue = this.getDisplayText_();
-  this.updateSize_();
+  if (this.textContent_) {
+    this.textContent_.nodeValue = this.getDisplayText_();
+    this.updateSize_();
+  }
 };
 
 /**

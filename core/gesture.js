@@ -314,6 +314,9 @@ Blockly.Gesture.prototype.updateDragDelta_ = function(currentXY) {
  * @private
  */
 Blockly.Gesture.prototype.updateIsDraggingFromFlyout_ = function() {
+  if (!this.targetBlock_) {
+    return false;
+  }
   if (!this.flyout_.isBlockCreatable_(this.targetBlock_)) {
     return false;
   }
@@ -620,7 +623,7 @@ Blockly.Gesture.prototype.cancel = function() {
 Blockly.Gesture.prototype.handleRightClick = function(e) {
   if (this.targetBlock_) {
     this.bringBlockToFront_();
-    Blockly.hideChaff(this.flyout_);
+    Blockly.hideChaff(!!this.flyout_);
     this.targetBlock_.showContextMenu_(e);
   } else if (this.startBubble_) {
     this.startBubble_.showContextMenu_(e);

@@ -625,9 +625,12 @@ Blockly.Scrollbar.prototype.createDom_ = function(opt_class) {
         'ry': radius
       },
       this.svgGroup_);
-  this.workspace_.getThemeManager().subscribe(this.svgHandle_, 'scrollbar', 'fill');
-  this.workspace_.getThemeManager().subscribe(this.svgHandle_, 'scrollbarOpacity', 'fill-opacity');
-  Blockly.utils.dom.insertAfter(this.outerSvg_, this.workspace_.getParentSvg());
+  this.workspace_.getThemeManager().subscribe(
+      this.svgHandle_, 'scrollbar', 'fill');
+  this.workspace_.getThemeManager().subscribe(
+      this.svgHandle_, 'scrollbarOpacity', 'fill-opacity');
+  Blockly.utils.dom.insertAfter(this.outerSvg_,
+      this.workspace_.getRequiredParentSvg());
 };
 
 /**
@@ -709,7 +712,8 @@ Blockly.Scrollbar.prototype.onMouseDownBar_ = function(e) {
     e.stopPropagation();
     return;
   }
-  var mouseXY = Blockly.utils.mouseToSvg(e, this.workspace_.getParentSvg(),
+  var mouseXY = Blockly.utils.mouseToSvg(e,
+      this.workspace_.getRequiredParentSvg(),
       this.workspace_.getInverseScreenCTM());
   var mouseLocation = this.horizontal_ ? mouseXY.x : mouseXY.y;
 

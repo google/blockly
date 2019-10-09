@@ -849,6 +849,15 @@ Blockly.Workspace.prototype.getVariableMap = function() {
 };
 
 /**
+ * Set the map of all variables on the workspace.
+ * @param {Blockly.VariableMap} variableMap The variable map.
+ * @package
+ */
+Blockly.Workspace.prototype.setVariableMap = function(variableMap) {
+  this.variableMap_ = variableMap;
+};
+
+/**
  * Database of all workspaces.
  * @private
  */

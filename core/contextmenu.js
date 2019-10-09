@@ -352,7 +352,7 @@ Blockly.ContextMenu.workspaceCommentOption = function(ws, e) {
         Blockly.WorkspaceCommentSvg.DEFAULT_SIZE,
         Blockly.WorkspaceCommentSvg.DEFAULT_SIZE);
 
-    var injectionDiv = ws.getInjectionDiv();
+    var injectionDiv = ws.getRequiredInjectionDiv();
     // Bounding rect coordinates are in client coordinates, meaning that they
     // are in pixels relative to the upper left corner of the visible browser
     // window.  These coordinates change when you scroll the browser window.

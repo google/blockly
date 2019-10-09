@@ -345,7 +345,7 @@ Blockly.WorkspaceSvg.prototype.isDragSurfaceActive_ = false;
 /**
  * The first parent div with 'injectionDiv' in the name, or null if not set.
  * Access this with getInjectionDiv.
- * @type {!Element}
+ * @type {Element}
  * @private
  */
 Blockly.WorkspaceSvg.prototype.injectionDiv_ = null;
@@ -354,7 +354,7 @@ Blockly.WorkspaceSvg.prototype.injectionDiv_ = null;
  * Last known position of the page scroll.
  * This is used to determine whether we have recalculated screen coordinate
  * stuff since the page scrolled.
- * @type {!Blockly.utils.Coordinate}
+ * @type {Blockly.utils.Coordinate}
  * @private
  */
 Blockly.WorkspaceSvg.prototype.lastRecordedPageScroll_ = null;
@@ -380,7 +380,7 @@ Blockly.WorkspaceSvg.prototype.toolboxCategoryCallbacks_ = {};
  * workspace's context menu or edit the workspace-created set of menu options.
  * @param {!Array.<!Object>} options List of menu options to add to.
  */
-Blockly.WorkspaceSvg.prototype.configureContextMenu = null;
+Blockly.WorkspaceSvg.prototype.configureContextMenu;
 
 /**
  * In a flyout, the target workspace where blocks should be placed after a drag.
@@ -491,7 +491,7 @@ Blockly.WorkspaceSvg.prototype.getInverseScreenCTM = function() {
   // Defer getting the screen CTM until we actually need it, this should
   // avoid forced reflows from any calls to updateInverseScreenCTM.
   if (this.inverseScreenCTMDirty_) {
-    var ctm = this.getParentSvg().getScreenCTM();
+    var ctm = this.getRequiredParentSvg().getScreenCTM();
     if (ctm) {
       this.inverseScreenCTM_ = ctm.inverse();
       this.inverseScreenCTMDirty_ = false;
@@ -544,8 +544,8 @@ Blockly.WorkspaceSvg.prototype.getSvgXY = function(element) {
     }
     x += xy.x * scale;
     y += xy.y * scale;
-    element = element.parentNode;
-  } while (element && element != this.getParentSvg());
+    element = /** @type {!Element} */ (element.parentNode);
+  } while (element && element != this.getRequiredParentSvg());
   return new Blockly.utils.Coordinate(x, y);
 };
 
@@ -564,7 +564,7 @@ Blockly.WorkspaceSvg.prototype.getOriginOffsetInPixels = function() {
 /**
  * Return the injection div that is a parent of this workspace.
  * Walks the DOM the first time it's called, then returns a cached value.
- * @return {!Element} The first parent div with 'injectionDiv' in the name.
+ * @return {Element} The first parent div with 'injectionDiv' in the name.
  * @package
  */
 Blockly.WorkspaceSvg.prototype.getInjectionDiv = function() {
@@ -578,10 +578,21 @@ Blockly.WorkspaceSvg.prototype.getInjectionDiv = function() {
         this.injectionDiv_ = element;
         break;
       }
-      element = element.parentNode;
+      element = /** @type {!Element} */ (element.parentNode);
     }
   }
   return this.injectionDiv_;
+};
+
+
+/**
+ * Return the injection div that is a parent of this workspace.
+ * Walks the DOM the first time it's called, then returns a cached value.
+ * @return {!Element} The first parent div with 'injectionDiv' in the name.
+ * @package
+ */
+Blockly.WorkspaceSvg.prototype.getRequiredInjectionDiv = function() {
+  return /** @type {!Element} */ (this.getInjectionDiv());
 };
 
 /**
@@ -733,7 +744,7 @@ Blockly.WorkspaceSvg.prototype.dispose = function() {
   if (!this.options.parentWorkspace) {
     // Top-most workspace.  Dispose of the div that the
     // SVG is injected into (i.e. injectionDiv).
-    var div = this.getParentSvg().parentNode;
+    var div = this.getRequiredParentSvg().parentNode;
     if (div) {
       Blockly.utils.dom.removeNode(div);
     }
@@ -789,9 +800,9 @@ Blockly.WorkspaceSvg.prototype.addZoomControls = function() {
  * Add a flyout element in an element with the given tag name.
  * @param {string} tagName What type of tag the flyout belongs in.
  * @return {!Element} The element containing the flyout DOM.
- * @private
+ * @package
  */
-Blockly.WorkspaceSvg.prototype.addFlyout_ = function(tagName) {
+Blockly.WorkspaceSvg.prototype.addFlyout = function(tagName) {
   var workspaceOptions = {
     disabledPatternId: this.options.disabledPatternId,
     parentWorkspace: this,
@@ -824,15 +835,16 @@ Blockly.WorkspaceSvg.prototype.addFlyout_ = function(tagName) {
  * Getter for the flyout associated with this workspace.  This flyout may be
  * owned by either the toolbox or the workspace, depending on toolbox
  * configuration.  It will be null if there is no flyout.
+ * @param {boolean=} opt_own Only return the workspace's own flyout if True.
  * @return {Blockly.Flyout} The flyout on this workspace.
  * @package
  */
-Blockly.WorkspaceSvg.prototype.getFlyout = function() {
-  if (this.flyout_) {
+Blockly.WorkspaceSvg.prototype.getFlyout = function(opt_own) {
+  if (this.flyout_ || opt_own) {
     return this.flyout_;
   }
   if (this.toolbox_) {
-    return this.toolbox_.flyout_;
+    return this.toolbox_.getFlyout();
   }
   return null;
 };
@@ -952,6 +964,14 @@ Blockly.WorkspaceSvg.prototype.getParentSvg = function() {
 };
 
 /**
+ * Get the SVG element that contains this workspace.
+ * @return {!SVGElement} SVG element.
+ */
+Blockly.WorkspaceSvg.prototype.getRequiredParentSvg = function() {
+  return /** @type {!SVGElement} */ (this.getParentSvg());
+};
+
+/**
  * Translate this workspace to new coordinates.
  * @param {number} x Horizontal translation, in pixel units relative to the
  *    top left of the Blockly div.
@@ -1025,8 +1045,8 @@ Blockly.WorkspaceSvg.prototype.setupDragSurface = function() {
   // Figure out where we want to put the canvas back.  The order
   // in the is important because things are layered.
   var previousElement = this.svgBlockCanvas_.previousSibling;
-  var width = parseInt(this.getParentSvg().getAttribute('width'), 10);
-  var height = parseInt(this.getParentSvg().getAttribute('height'), 10);
+  var width = parseInt(this.getRequiredParentSvg().getAttribute('width'), 10);
+  var height = parseInt(this.getRequiredParentSvg().getAttribute('height'), 10);
   var coord = Blockly.utils.getRelativeXY(this.svgBlockCanvas_);
   this.workspaceDragSurface_.setContentsAndShow(this.svgBlockCanvas_,
       this.svgBubbleCanvas_, previousElement, width, height, this.scale);
@@ -1071,7 +1091,7 @@ Blockly.WorkspaceSvg.prototype.setVisible = function(isVisible) {
     this.getFlyout().setContainerVisible(isVisible);
   }
 
-  this.getParentSvg().style.display = isVisible ? 'block' : 'none';
+  this.getRequiredParentSvg().style.display = isVisible ? 'block' : 'none';
   if (this.toolbox_) {
     // Currently does not support toolboxes in mutators.
     this.toolbox_.HtmlDiv.style.display = isVisible ? 'block' : 'none';
@@ -1281,7 +1301,7 @@ Blockly.WorkspaceSvg.prototype.pasteWorkspaceComment_ = function(xmlComment) {
  */
 Blockly.WorkspaceSvg.prototype.refreshToolboxSelection = function() {
   var ws = this.isFlyout ? this.targetWorkspace : this;
-  if (ws && !ws.currentGesture_ && ws.toolbox_ && ws.toolbox_.flyout_) {
+  if (ws && !ws.currentGesture_ && ws.toolbox_ && ws.toolbox_.getFlyout()) {
     ws.toolbox_.refreshSelection();
   }
 };
@@ -1384,7 +1404,7 @@ Blockly.WorkspaceSvg.prototype.onMouseDown_ = function(e) {
  */
 Blockly.WorkspaceSvg.prototype.startDrag = function(e, xy) {
   // Record the starting offset between the bubble's location and the mouse.
-  var point = Blockly.utils.mouseToSvg(e, this.getParentSvg(),
+  var point = Blockly.utils.mouseToSvg(e, this.getRequiredParentSvg(),
       this.getInverseScreenCTM());
   // Fix scale of mouse event.
   point.x /= this.scale;
@@ -1398,7 +1418,7 @@ Blockly.WorkspaceSvg.prototype.startDrag = function(e, xy) {
  * @return {!Blockly.utils.Coordinate} New location of object.
  */
 Blockly.WorkspaceSvg.prototype.moveDrag = function(e) {
-  var point = Blockly.utils.mouseToSvg(e, this.getParentSvg(),
+  var point = Blockly.utils.mouseToSvg(e, this.getRequiredParentSvg(),
       this.getInverseScreenCTM());
   // Fix scale of mouse event.
   point.x /= this.scale;
@@ -1480,7 +1500,7 @@ Blockly.WorkspaceSvg.prototype.onMouseWheel_ = function(e) {
     // button.
     var PIXELS_PER_ZOOM_STEP = 50;
     var delta = -scrollDelta.y / PIXELS_PER_ZOOM_STEP;
-    var position = Blockly.utils.mouseToSvg(e, this.getParentSvg(),
+    var position = Blockly.utils.mouseToSvg(e, this.getRequiredParentSvg(),
         this.getInverseScreenCTM());
     this.zoom(position.x, position.y, delta);
   } else {
@@ -1765,7 +1785,7 @@ Blockly.WorkspaceSvg.prototype.setBrowserFocus = function() {
   }
   try {
     // Focus the workspace SVG - this is for Chrome and Firefox.
-    this.getParentSvg().focus();
+    this.getRequiredParentSvg().focus();
   } catch (e) {
     // IE and Edge do not support focus on SVG elements. When that fails
     // above, get the injectionDiv (the workspace's parent) and focus that
@@ -1773,11 +1793,11 @@ Blockly.WorkspaceSvg.prototype.setBrowserFocus = function() {
     try {
       // In IE11, use setActive (which is IE only) so the page doesn't scroll
       // to the workspace gaining focus.
-      this.getParentSvg().parentNode.setActive();
+      this.getRequiredParentSvg().parentNode.setActive();
     } catch (e) {
       // setActive support was discontinued in Edge so when that fails, call
       // focus instead.
-      this.getParentSvg().parentNode.focus();
+      this.getRequiredParentSvg().parentNode.focus();
     }
   }
 };
@@ -1820,7 +1840,7 @@ Blockly.WorkspaceSvg.prototype.zoom = function(x, y, amount) {
   // canvas' space, so that they are in workspace units relative to the top
   // left of the visible portion of the workspace.
   var matrix = this.getCanvas().getCTM();
-  var center = this.getParentSvg().createSVGPoint();
+  var center = this.getRequiredParentSvg().createSVGPoint();
   center.x = x;
   center.y = y;
   center = center.matrixTransform(matrix.inverse());
@@ -1887,9 +1907,9 @@ Blockly.WorkspaceSvg.prototype.zoomToFit = function() {
     // the flyout, and the area we want to fit them includes the portion of
     // the workspace that is behind the flyout.
     if (this.horizontalLayout) {
-      workspaceHeight += this.flyout_.height_;
+      workspaceHeight += this.flyout_.getHeight();
       // Convert from pixels to workspace coordinates.
-      blocksHeight += this.flyout_.height_ / this.scale;
+      blocksHeight += this.flyout_.getHeight() / this.scale;
     } else {
       workspaceWidth += this.flyout_.getWidth();
       // Convert from pixels to workspace coordinates.
@@ -2262,7 +2282,7 @@ Blockly.WorkspaceSvg.getTopLevelWorkspaceMetrics_ = function() {
 
   // Contains height and width in CSS pixels.
   // svgSize is equivalent to the size of the injectionDiv at this point.
-  var svgSize = Blockly.svgSize(this.getParentSvg());
+  var svgSize = Blockly.svgSize(this.getRequiredParentSvg());
   var viewSize = {height: svgSize.height, width: svgSize.width};
   if (this.toolbox_) {
     if (this.toolboxPosition == Blockly.TOOLBOX_AT_TOP ||
@@ -2349,6 +2369,17 @@ Blockly.WorkspaceSvg.setTopLevelWorkspaceMetrics_ = function(xyRatio) {
   var y = this.scrollY + metrics.absoluteTop;
   // We could call scroll here, but that has extra checks we don't need to do.
   this.translate(x, y);
+};
+
+/**
+ * Finds the top-level blocks and returns them.  Blocks are optionally sorted
+ * by position; top to bottom (with slight LTR or RTL bias).
+ * @param {boolean} ordered Sort the list if true.
+ * @return {!Array.<!Blockly.BlockSvg>} The top-level block objects.
+ * @override
+ */
+Blockly.WorkspaceSvg.prototype.getTopBlocks = function(ordered) {
+  return Blockly.WorkspaceSvg.superClass_.getTopBlocks.call(this, ordered);
 };
 
 /**

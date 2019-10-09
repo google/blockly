@@ -110,6 +110,13 @@ Blockly.Toolbox = function(workspace) {
         'blocklyHorizontalTreeRtl' : 'blocklyHorizontalTree');
     this.config_['cssTreeIcon'] = '';
   }
+
+  /**
+   * The toolbox flyout.
+   * @type {Blockly.Flyout}
+   * @private
+   */
+  this.flyout_ = null;
 };
 
 /**
@@ -140,10 +147,12 @@ Blockly.Toolbox.prototype.lastCategory_ = null;
 
 /**
  * Initializes the toolbox.
+ * @throws {Error} If missing a require for both `Blockly.HorizontalFlyout` and
+ *     `Blockly.VerticalFlyout`.
  */
 Blockly.Toolbox.prototype.init = function() {
   var workspace = this.workspace_;
-  var svg = this.workspace_.getParentSvg();
+  var svg = this.workspace_.getRequiredParentSvg();
 
   /**
    * HTML container for the Toolbox menu.
@@ -178,11 +187,6 @@ Blockly.Toolbox.prototype.init = function() {
     toolboxPosition: workspace.options.toolboxPosition,
     renderer: workspace.options.renderer
   };
-  /**
-   * @type {!Blockly.Flyout}
-   * @private
-   */
-  this.flyout_ = null;
   if (workspace.horizontalLayout) {
     if (!Blockly.HorizontalFlyout) {
       throw Error('Missing require for Blockly.HorizontalFlyout');
@@ -194,9 +198,13 @@ Blockly.Toolbox.prototype.init = function() {
     }
     this.flyout_ = new Blockly.VerticalFlyout(workspaceOptions);
   }
+  if (!this.flyout_) {
+    throw Error('One of Blockly.VerticalFlyout or Blockly.Horizontal must be' +
+        'required.');
+  }
+  
   // Insert the flyout after the workspace.
-  Blockly.utils.dom.insertAfter(this.flyout_.createDom('svg'),
-      this.workspace_.getParentSvg());
+  Blockly.utils.dom.insertAfter(this.flyout_.createDom('svg'), svg);
   this.flyout_.init(workspace);
 
   this.config_['cleardotPath'] = workspace.options.pathToMedia + '1x1.gif';
@@ -207,7 +215,7 @@ Blockly.Toolbox.prototype.init = function() {
 
 /**
  * Fill the toolbox with categories and blocks.
- * @param {!Node} languageTree DOM tree of blocks.
+ * @param {Node} languageTree DOM tree of blocks.
  * @package
  */
 Blockly.Toolbox.prototype.renderTree = function(languageTree) {
@@ -225,8 +233,8 @@ Blockly.Toolbox.prototype.renderTree = function(languageTree) {
   if (languageTree) {
     this.tree_.blocks = [];
     this.hasColours_ = false;
-    var openNode =
-      this.syncTrees_(languageTree, this.tree_, this.workspace_.options.pathToMedia);
+    openNode = this.syncTrees_(
+        languageTree, this.tree_, this.workspace_.options.pathToMedia);
 
     if (this.tree_.blocks.length) {
       throw Error('Toolbox cannot have both blocks and categories ' +
@@ -245,7 +253,8 @@ Blockly.Toolbox.prototype.renderTree = function(languageTree) {
   // Trees have an implicit orientation of vertical, so we only need to set this
   // when the toolbox is in horizontal mode.
   if (this.horizontalLayout_) {
-    Blockly.utils.aria.setState(/** @type {!Element} */ (this.tree_.getElement()),
+    Blockly.utils.aria.setState(
+        /** @type {!Element} */ (this.tree_.getElement()),
         Blockly.utils.aria.State.ORIENTATION, 'horizontal');
   }
 };
@@ -353,7 +362,6 @@ Blockly.Toolbox.prototype.dispose = function() {
   this.tree_.dispose();
   this.workspace_.getThemeManager().unsubscribe(this.HtmlDiv);
   Blockly.utils.dom.removeNode(this.HtmlDiv);
-  this.workspace_ = null;
   this.lastCategory_ = null;
 };
 
@@ -374,6 +382,14 @@ Blockly.Toolbox.prototype.getHeight = function() {
 };
 
 /**
+ * Get the toolbox flyout.
+ * @return {Blockly.Flyout} The toolbox flyout.
+ */
+Blockly.Toolbox.prototype.getFlyout = function() {
+  return this.flyout_;
+};
+
+/**
  * Move the toolbox to the edge.
  */
 Blockly.Toolbox.prototype.position = function() {
@@ -382,8 +398,7 @@ Blockly.Toolbox.prototype.position = function() {
     // Not initialized yet.
     return;
   }
-  var svg = this.workspace_.getParentSvg();
-  var svgSize = Blockly.svgSize(svg);
+  var svgSize = Blockly.svgSize(this.workspace_.getRequiredParentSvg());
   if (this.horizontalLayout_) {
     treeDiv.style.left = '0';
     treeDiv.style.height = 'auto';
@@ -474,7 +489,8 @@ Blockly.Toolbox.prototype.syncTrees_ = function(treeIn, treeOut, pathToMedia) {
           // Separator between two categories.
           // <sep></sep>
           treeOut.add(new Blockly.Toolbox.TreeSeparator(
-              /** @type {!Blockly.tree.BaseNode.Config} */ (this.treeSeparatorConfig_)));
+              /** @type {!Blockly.tree.BaseNode.Config} */
+              (this.treeSeparatorConfig_)));
           break;
         }
         // Otherwise falls through.

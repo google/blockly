@@ -244,7 +244,7 @@ Blockly.DropDownDiv.showPositionedByBlock = function(field, block,
   }
   // Set bounds to workspace; show the drop-down.
   Blockly.DropDownDiv.setBoundsElement(
-      block.workspace.getParentSvg().parentNode);
+      block.workspace.getRequiredParentSvg().parentNode);
   return Blockly.DropDownDiv.show(
       field, block.RTL, primaryX, primaryY, secondaryX, secondaryY, opt_onHide);
 };
@@ -277,7 +277,7 @@ Blockly.DropDownDiv.showPositionedByField = function(field,
   // Set bounds to workspace; show the drop-down.
   Blockly.DropDownDiv.positionToField_ = true;
   Blockly.DropDownDiv.setBoundsElement(
-      sourceBlock.workspace.getParentSvg().parentNode);
+      sourceBlock.workspace.getRequiredParentSvg().parentNode);
   return Blockly.DropDownDiv.show(
       field, sourceBlock.RTL,
       primaryX, primaryY, secondaryX, secondaryY, opt_onHide);

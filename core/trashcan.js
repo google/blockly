@@ -31,13 +31,13 @@ goog.require('Blockly.Xml');
 
 /**
  * Class for a trash can.
- * @param {!Blockly.Workspace} workspace The workspace to sit in.
+ * @param {!Blockly.WorkspaceSvg} workspace The workspace to sit in.
  * @constructor
  */
 Blockly.Trashcan = function(workspace) {
   /**
    * The workspace the trashcan sits in.
-   * @type {!Blockly.Workspace}
+   * @type {!Blockly.WorkspaceSvg}
    * @private
    */
   this.workspace_ = workspace;
@@ -49,6 +49,12 @@ Blockly.Trashcan = function(workspace) {
    */
   this.contents_ = [];
 
+  /**
+   * The trashcan flyout.
+   * @type {Blockly.Flyout}
+   * @private
+   */
+  this.flyout_ = null;
 
   if (this.workspace_.options.maxTrashcanContents <= 0) {
     return;
@@ -285,7 +291,7 @@ Blockly.Trashcan.prototype.createDom = function() {
 Blockly.Trashcan.prototype.init = function(verticalSpacing) {
   if (this.workspace_.options.maxTrashcanContents > 0) {
     Blockly.utils.dom.insertAfter(this.flyout_.createDom('svg'),
-        this.workspace_.getParentSvg());
+        this.workspace_.getRequiredParentSvg());
     this.flyout_.init(this.workspace_);
     this.flyout_.isBlockCreatable_ = function() {
       // All blocks, including disabled ones, can be dragged from the
@@ -297,6 +303,15 @@ Blockly.Trashcan.prototype.init = function(verticalSpacing) {
   this.verticalSpacing_ = this.MARGIN_BOTTOM_ + verticalSpacing;
   this.setOpen(false);
   return this.verticalSpacing_ + this.BODY_HEIGHT_ + this.LID_HEIGHT_;
+};
+
+/**
+ * Get the trashcan flyout.
+ * @return {Blockly.Flyout} The trashcan flyout.
+ * @package
+ */
+Blockly.Trashcan.prototype.getFlyout = function() {
+  return this.flyout_;
 };
 
 /**

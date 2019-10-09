@@ -115,7 +115,7 @@ Blockly.cache3dSupported_ = null;
 
 /**
  * Returns the dimensions of the specified SVG image.
- * @param {!Element} svg SVG image.
+ * @param {!SVGElement} svg SVG image.
  * @return {!Object} Contains width and height properties.
  */
 Blockly.svgSize = function(svg) {
@@ -147,7 +147,7 @@ Blockly.svgResize = function(workspace) {
   while (mainWorkspace.options.parentWorkspace) {
     mainWorkspace = mainWorkspace.options.parentWorkspace;
   }
-  var svg = mainWorkspace.getParentSvg();
+  var svg = mainWorkspace.getRequiredParentSvg();
   var div = svg.parentNode;
   if (!div) {
     // Workspace deleted, or something.
@@ -170,7 +170,7 @@ Blockly.svgResize = function(workspace) {
  * Handle a key-down on SVG drawing surface. Does nothing if the main workspace
  * is not visible.
  * @param {!Event} e Key down event.
- * @private
+ * @package
  */
 // TODO (https://github.com/google/blockly/issues/1998) handle cases where there
 // are multiple workspaces and non-main workspaces are able to accept input.
@@ -336,13 +336,13 @@ Blockly.hideChaff = function(opt_allowToolbox) {
     // For now the trashcan flyout always autocloses because it overlays the
     // trashcan UI (no trashcan to click to close it).
     if (workspace.trashcan &&
-      workspace.trashcan.flyout_) {
-      workspace.trashcan.flyout_.hide();
+      workspace.trashcan.getFlyout()) {
+      workspace.trashcan.getFlyout().hide();
     }
     var toolbox = workspace.getToolbox();
     if (toolbox &&
-        toolbox.flyout_ &&
-        toolbox.flyout_.autoClose) {
+        toolbox.getFlyout() &&
+        toolbox.getFlyout().autoClose) {
       toolbox.clearSelection();
     }
   }

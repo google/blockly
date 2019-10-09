@@ -1,9 +1,6 @@
 /**
  * @license
- * Visual Blocks Editor
- *
- * Copyright 2019 Google Inc.
- * https://developers.google.com/blockly/
+ * Copyright 2019 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -51,7 +48,11 @@ Blockly.Blocks['turtle_nullifier'] = {
   },
 
   validate: function(newValue) {
-    this.cachedValidatedValue_ = Object.assign({}, newValue);
+    this.cachedValidatedValue_ = {
+      turtleName: newValue.turtleName,
+      pattern: newValue.pattern,
+      hat: newValue.hat,
+    };
     if ((newValue.turtleName == 'Leonardo' && newValue.hat == 'Mask') ||
         (newValue.turtleName == 'Yertle' && newValue.hat == 'Crown') ||
         (newValue.turtleName == 'Franklin') && newValue.hat == 'Propeller') {

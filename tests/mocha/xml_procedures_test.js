@@ -1,9 +1,6 @@
 /**
  * @license
- * Blockly Tests
- *
- * Copyright 2019 Google Inc.
- * https://developers.google.com/blockly/
+ * Copyright 2019 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -241,7 +238,7 @@ suite('Procedures XML', function() {
           //  defined for call_noreturn. Make it defined for both.
           /* chai.assert.isArray(block.argumentVarModels_);
           chai.assert.isEmpty(block.argumentVarModels_); */
-          chai.assert.equal(this.workspace.getAllBlocks().count, 2);
+          chai.assert.equal(this.workspace.getAllBlocks(false).count, 2);
         });
       });
       test('Caller W/ Params', function() {

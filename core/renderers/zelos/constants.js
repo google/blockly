@@ -1,9 +1,6 @@
 /**
  * @license
- * Visual Blocks Editor
- *
- * Copyright 2019 Google Inc.
- * https://developers.google.com/blockly/
+ * Copyright 2019 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -244,7 +241,6 @@ Blockly.zelos.ConstantProvider.prototype.makeNotch = function() {
     );
   }
 
-  // TODO: Find a relationship between width and path
   var pathLeft = makeMainPath(1);
   var pathRight = makeMainPath(-1);
 

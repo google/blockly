@@ -1,3 +1,20 @@
+/**
+ * @license
+ * Copyright 2019 Google LLC
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 suite('ASTNode', function() {
   setup(function() {
     Blockly.defineBlocksWithJsonArray([{
@@ -93,23 +110,6 @@ suite('ASTNode', function() {
   });
 
   suite('HelperFunctions', function() {
-    test('findPreviousEditableField_', function() {
-      var input = this.blocks.statementInput1.inputList[0];
-      var field = input.fieldRow[1];
-      var prevField = input.fieldRow[0];
-      var node = Blockly.ASTNode.createFieldNode(prevField);
-      var editableField = node.findPreviousEditableField_(field, input);
-      assertEquals(editableField.getLocation(), prevField);
-    });
-
-    test('findPreviousEditableFieldLast_', function() {
-      var input = this.blocks.statementInput1.inputList[0];
-      var field = input.fieldRow[0];
-      var node = Blockly.ASTNode.createFieldNode(field);
-      var editableField = node.findPreviousEditableField_(field, input, true);
-      assertEquals(editableField.getLocation(), input.fieldRow[1]);
-    });
-
     test('findNextForInput_', function() {
       var input = this.blocks.statementInput1.inputList[0];
       var input2 = this.blocks.statementInput1.inputList[1];

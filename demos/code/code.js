@@ -1,8 +1,6 @@
 /**
- * Blockly Demos: Code
- *
- * Copyright 2012 Google Inc.
- * https://developers.google.com/blockly/
+ * @license
+ * Copyright 2012 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -381,9 +379,9 @@ Code.init = function() {
       el.style.width = (2 * bBox.width - el.offsetWidth) + 'px';
     }
     // Make the 'Blocks' tab line up with the toolbox.
-    if (Code.workspace && Code.workspace.toolbox_.width) {
+    if (Code.workspace && Code.workspace.getToolbox().width) {
       document.getElementById('tab_blocks').style.minWidth =
-          (Code.workspace.toolbox_.width - 38) + 'px';
+          (Code.workspace.getToolbox().width - 38) + 'px';
           // Account for the 19 pixel margin and on each side.
     }
   };

@@ -1,9 +1,6 @@
 /**
  * @license
- * Visual Blocks Editor
- *
- * Copyright 2015 Google Inc.
- * https://developers.google.com/blockly/
+ * Copyright 2015 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -73,7 +70,6 @@ Blockly.FieldDate.fromJson = function(options) {
  * Serializable fields are saved by the XML renderer, non-serializable fields
  * are not. Editable fields should also be serializable.
  * @type {boolean}
- * @const
  */
 Blockly.FieldDate.prototype.SERIALIZABLE = true;
 

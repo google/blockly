@@ -1,9 +1,6 @@
 /**
  * @license
- * Visual Blocks Editor
- *
- * Copyright 2019 Google Inc.
- * https://developers.google.com/blockly/
+ * Copyright 2019 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,6 +27,9 @@
 // Include the EN Locale by default.
 Blockly.setLocale(En);
 
-Blockly.Blocks = Object.assign(Blockly.Blocks, BlocklyBlocks);
+Blockly.Blocks = Blockly.Blocks || {};
+Object.keys(BlocklyBlocks).forEach(function (k) {
+  Blockly.Blocks[k] = BlocklyBlocks[k];
+});
 
 Blockly.JavaScript = BlocklyJS;

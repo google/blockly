@@ -1,9 +1,6 @@
 /**
  * @license
- * Visual Blocks Editor
- *
- * Copyright 2015 Google Inc.
- * https://developers.google.com/blockly/
+ * Copyright 2015 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,10 +31,14 @@ goog.require('Blockly.utils.dom');
 
 /**
  * Class for a zoom controls.
- * @param {!Blockly.Workspace} workspace The workspace to sit in.
+ * @param {!Blockly.WorkspaceSvg} workspace The workspace to sit in.
  * @constructor
  */
 Blockly.ZoomControls = function(workspace) {
+  /**
+   * @type {!Blockly.WorkspaceSvg}
+   * @private
+   */
   this.workspace_ = workspace;
 };
 
@@ -71,7 +72,7 @@ Blockly.ZoomControls.prototype.MARGIN_SIDE_ = 20;
 
 /**
  * The SVG group containing the zoom controls.
- * @type {Element}
+ * @type {SVGElement}
  * @private
  */
 Blockly.ZoomControls.prototype.svgGroup_ = null;
@@ -92,7 +93,7 @@ Blockly.ZoomControls.prototype.top_ = 0;
 
 /**
  * Create the zoom controls.
- * @return {!Element} The zoom controls SVG group.
+ * @return {!SVGElement} The zoom controls SVG group.
  */
 Blockly.ZoomControls.prototype.createDom = function() {
   this.svgGroup_ =
@@ -131,9 +132,7 @@ Blockly.ZoomControls.prototype.init = function(verticalSpacing) {
 Blockly.ZoomControls.prototype.dispose = function() {
   if (this.svgGroup_) {
     Blockly.utils.dom.removeNode(this.svgGroup_);
-    this.svgGroup_ = null;
   }
-  this.workspace_ = null;
 };
 
 /**

@@ -1,9 +1,6 @@
 /**
  * @license
- * Visual Blocks Editor
- *
- * Copyright 2012 Google Inc.
- * https://developers.google.com/blockly/
+ * Copyright 2012 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -136,7 +133,7 @@ Blockly.Input.prototype.insertFieldAt = function(index, field, opt_name) {
   if (this.sourceBlock_.rendered) {
     this.sourceBlock_.render();
     // Adding a field will cause the block to change shape.
-    this.sourceBlock_.bumpNeighbours_();
+    this.sourceBlock_.bumpNeighbours();
   }
   return index;
 };
@@ -154,7 +151,7 @@ Blockly.Input.prototype.removeField = function(name) {
       if (this.sourceBlock_.rendered) {
         this.sourceBlock_.render();
         // Removing a field will cause the block to change shape.
-        this.sourceBlock_.bumpNeighbours_();
+        this.sourceBlock_.bumpNeighbours();
       }
       return;
     }
@@ -194,9 +191,9 @@ Blockly.Input.prototype.setVisible = function(visible) {
   if (this.connection) {
     // Has a connection.
     if (visible) {
-      renderList = this.connection.unhideAll();
+      renderList = this.connection.startTrackingAll();
     } else {
-      this.connection.hideAll();
+      this.connection.stopTrackingAll();
     }
     var child = this.connection.targetBlock();
     if (child) {

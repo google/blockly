@@ -1,9 +1,6 @@
 /**
  * @license
- * Visual Blocks Editor
- *
- * Copyright 2016 Google Inc.
- * https://developers.google.com/blockly/
+ * Copyright 2016 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -51,7 +48,7 @@ Blockly.FlyoutButton = function(workspace, targetWorkspace, xml, isLabel) {
   this.workspace_ = workspace;
 
   /**
-   * @type {!Blockly.Workspace}
+   * @type {!Blockly.WorkspaceSvg}
    * @private
    */
   this.targetWorkspace_ = targetWorkspace;
@@ -118,7 +115,7 @@ Blockly.FlyoutButton.prototype.onMouseUpWrapper_ = null;
 
 /**
  * Create the button elements.
- * @return {!Element} The button's SVG group.
+ * @return {!SVGElement} The button's SVG group.
  */
 Blockly.FlyoutButton.prototype.createDom = function() {
   var cssClass = this.isLabel_ ? 'blocklyFlyoutLabel' : 'blocklyFlyoutButton';
@@ -237,13 +234,10 @@ Blockly.FlyoutButton.prototype.dispose = function() {
   }
   if (this.svgGroup_) {
     Blockly.utils.dom.removeNode(this.svgGroup_);
-    this.svgGroup_ = null;
   }
   if (this.svgText_) {
     this.workspace_.getThemeManager().unsubscribe(this.svgText_);
   }
-  this.workspace_ = null;
-  this.targetWorkspace_ = null;
 };
 
 /**

@@ -1,9 +1,6 @@
 /**
  * @license
- * Visual Blocks Editor
- *
- * Copyright 2018 Google Inc.
- * https://developers.google.com/blockly/
+ * Copyright 2018 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -47,11 +44,9 @@ var argv = require('yargs').argv;
 
 const licenseRegex = `\\/\\*\\*
  \\* @license
- \\* [\\w: ]+
- \\*
- \\* (Copyright \\d+ (Google Inc.|Massachusetts Institute of Technology))
- \\* (https://developers.google.com/blockly/|All rights reserved.)
- \\*
+ \\* (Copyright \\d+ (Google LLC|Massachusetts Institute of Technology))
+( \\* All rights reserved.
+)? \\*
  \\* Licensed under the Apache License, Version 2.0 \\(the "License"\\);
  \\* you may not use this file except in compliance with the License.
  \\* You may obtain a copy of the License at
@@ -374,7 +369,6 @@ gulp.task('typings', function (cb) {
   const srcs = [
     'typings/parts/blockly-header.d.ts',
     'typings/parts/blockly-interfaces.d.ts',
-    'typings/parts/goog-closure.d.ts',
     `${tmpDir}/core/**`,
     `${tmpDir}/core/components/**`,
     `${tmpDir}/core/components/tree/**`,
@@ -453,13 +447,12 @@ gulp.task('package-blockly-node', function() {
   return gulp.src('blockly_compressed.js')
     .pipe(gulp.insert.append(`
       if (typeof DOMParser !== 'function') {
-        var JSDOM = require('jsdom').JSDOM;
-        var window = (new JSDOM()).window;
-        var document = window.document;
-        var Element = window.Element;
-        Blockly.utils.xml.textToDomDocument = function(text) {
-          var jsdom = new JSDOM(text, { contentType: 'text/xml' });
-          return jsdom.window.document;
+        var DOMParser = require("jsdom/lib/jsdom/living").DOMParser;
+        var XMLSerializer = require("jsdom/lib/jsdom/living").XMLSerializer;
+        var doc = Blockly.utils.xml.textToDomDocument(
+          '<xml xmlns="https://developers.google.com/blockly/xml"></xml>');
+        Blockly.utils.xml.document = function() {
+          return doc;
         };
       }`))
     .pipe(packageCommonJS('Blockly', []))

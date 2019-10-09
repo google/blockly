@@ -1,9 +1,6 @@
 /**
  * @license
- * Visual Blocks Editor
- *
- * Copyright 2016 Google Inc.
- * https://developers.google.com/blockly/
+ * Copyright 2016 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -48,7 +45,7 @@ Blockly.WorkspaceDragSurfaceSvg = function(container) {
 
 /**
  * The SVG drag surface. Set once by Blockly.WorkspaceDragSurfaceSvg.createDom.
- * @type {Element}
+ * @type {SVGElement}
  * @private
  */
 Blockly.WorkspaceDragSurfaceSvg.prototype.SVG_ = null;
@@ -170,9 +167,9 @@ Blockly.WorkspaceDragSurfaceSvg.prototype.clearAndHide = function(newSurface) {
 /**
  * Set the SVG to have the block canvas and bubble canvas in it and then
  * show the surface.
- * @param {!Element} blockCanvas The block canvas <g> element from the
+ * @param {!SVGElement} blockCanvas The block canvas <g> element from the
  *     workspace.
- * @param {!Element} bubbleCanvas The <g> element that contains the bubbles.
+ * @param {!SVGElement} bubbleCanvas The <g> element that contains the bubbles.
  * @param {Element} previousSibling The element to insert the block canvas and
        bubble canvas after when it goes back in the DOM at the end of a drag.
  * @param {number} width The width of the workspace SVG element.

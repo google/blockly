@@ -1,9 +1,6 @@
 /**
  * @license
- * Visual Blocks Editor
- *
- * Copyright 2013 Google Inc.
- * https://developers.google.com/blockly/
+ * Copyright 2013 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -104,7 +101,6 @@ Blockly.FieldAngle.fromJson = function(options) {
  * Serializable fields are saved by the XML renderer, non-serializable fields
  * are not. Editable fields should also be serializable.
  * @type {boolean}
- * @const
  */
 Blockly.FieldAngle.prototype.SERIALIZABLE = true;
 
@@ -176,19 +172,31 @@ Blockly.FieldAngle.prototype.configure_ = function(config) {
   if (typeof clockwise == 'boolean') {
     this.clockwise_ = clockwise;
   }
-  var offset = Number(config['offset']);
-  if (!isNaN(offset)) {
-    this.offset_ = offset;
+
+  var offset = config['offset'];
+  if (offset != null) {
+    offset = Number(offset);
+    if (!isNaN(offset)) {
+      this.offset_ = offset;
+    }
   }
-  var wrap = Number(config['wrap']);
-  if (!isNaN(wrap)) {
-    this.wrap_ = wrap;
+  var wrap = config['wrap'];
+  if (wrap != null) {
+    wrap = Number(wrap);
+    if (!isNaN(wrap)) {
+      this.wrap_ = wrap;
+    }
   }
-  var round = Number(config['round']);
-  if (!isNaN(round)) {
-    this.round_ = round;
+  var round = config['round'];
+  if (round != null) {
+    round = Number(round);
+    if (!isNaN(round)) {
+      this.round_ = round;
+    }
   }
 };
+
+
 
 /**
  * Create the block UI for this field.
@@ -239,7 +247,7 @@ Blockly.FieldAngle.prototype.showEditor_ = function() {
 
 /**
  * Create the angle dropdown editor.
- * @return {!Element} The newly created angle picker.
+ * @return {!SVGElement} The newly created angle picker.
  * @private
  */
 Blockly.FieldAngle.prototype.dropdownCreate_ = function() {
@@ -296,13 +304,15 @@ Blockly.FieldAngle.prototype.dropdownCreate_ = function() {
 };
 
 /**
- * Dispose of events belonging to the angle editor.
+ * Disposes of events and dom-references belonging to the angle editor.
  * @private
  */
 Blockly.FieldAngle.prototype.dropdownDispose_ = function() {
   Blockly.unbindEvent_(this.clickWrapper_);
   Blockly.unbindEvent_(this.clickSurfaceWrapper_);
   Blockly.unbindEvent_(this.moveSurfaceWrapper_);
+  this.gauge_ = null;
+  this.line_ = null;
 };
 
 /**
@@ -426,8 +436,9 @@ Blockly.FieldAngle.prototype.onHtmlInputKeyDown_ = function(e) {
     multiplier = 1;
   }
   if (multiplier) {
+    var value = /** @type {number} */ (this.getValue());
     this.displayMouseOrKeyboardValue_(
-        this.getValue() + (multiplier * this.round_));
+        value + (multiplier * this.round_));
     e.preventDefault();
     e.stopPropagation();
   }

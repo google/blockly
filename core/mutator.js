@@ -1,9 +1,6 @@
 /**
  * @license
- * Visual Blocks Editor
- *
- * Copyright 2012 Google Inc.
- * https://developers.google.com/blockly/
+ * Copyright 2012 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -121,7 +118,7 @@ Blockly.Mutator.prototype.iconClick_ = function(e) {
 
 /**
  * Create the editor for the mutator's bubble.
- * @return {!Element} The top-level node of the editor.
+ * @return {!SVGElement} The top-level node of the editor.
  * @private
  */
 Blockly.Mutator.prototype.createEditor_ = function() {
@@ -205,8 +202,7 @@ Blockly.Mutator.prototype.updateEditable = function() {
 };
 
 /**
- * Callback function triggered when the bubble has resized.
- * Resize the workspace accordingly.
+ * Resize the bubble to match the size of the workspace.
  * @private
  */
 Blockly.Mutator.prototype.resizeBubble_ = function() {
@@ -297,6 +293,7 @@ Blockly.Mutator.prototype.setVisible = function(visible) {
       };
       this.block_.workspace.addChangeListener(this.sourceListener_);
     }
+    this.resizeBubble_();
     // When the mutator's workspace changes, update the source block.
     this.workspace_.addChangeListener(this.workspaceChanged_.bind(this));
     this.updateColour();
@@ -367,7 +364,7 @@ Blockly.Mutator.prototype.workspaceChanged_ = function(e) {
       var group = Blockly.Events.getGroup();
       setTimeout(function() {
         Blockly.Events.setGroup(group);
-        block.bumpNeighbours_();
+        block.bumpNeighbours();
         Blockly.Events.setGroup(false);
       }, Blockly.BUMP_DELAY);
     }
@@ -423,14 +420,14 @@ Blockly.Mutator.prototype.dispose = function() {
 Blockly.Mutator.prototype.updateBlockStyle = function() {
   var ws = this.workspace_;
 
-  if (ws && ws.getAllBlocks()) {
-    var workspaceBlocks = ws.getAllBlocks();
+  if (ws && ws.getAllBlocks(false)) {
+    var workspaceBlocks = ws.getAllBlocks(false);
     for (var i = 0; i < workspaceBlocks.length; i++) {
       var block = workspaceBlocks[i];
       block.setStyle(block.getStyleName());
     }
 
-    var flyoutBlocks = ws.flyout_.workspace_.getAllBlocks();
+    var flyoutBlocks = ws.flyout_.workspace_.getAllBlocks(false);
     for (var i = 0; i < flyoutBlocks.length; i++) {
       var block = flyoutBlocks[i];
       block.setStyle(block.getStyleName());

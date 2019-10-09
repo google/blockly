@@ -1,9 +1,6 @@
 /**
  * @license
- * Visual Blocks Editor
- *
- * Copyright 2011 Google Inc.
- * https://developers.google.com/blockly/
+ * Copyright 2011 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,19 +27,19 @@
  */
 goog.provide('Blockly');
 
-goog.require('Blockly.BlockSvg.render');
+goog.require('Blockly.constants');
 goog.require('Blockly.Events');
 goog.require('Blockly.Events.Ui');
+goog.require('Blockly.inject');
 goog.require('Blockly.navigation');
 goog.require('Blockly.Procedures');
 goog.require('Blockly.Tooltip');
 goog.require('Blockly.Touch');
-goog.require('Blockly.WidgetDiv');
-goog.require('Blockly.WorkspaceSvg');
-goog.require('Blockly.constants');
-goog.require('Blockly.inject');
 goog.require('Blockly.utils');
 goog.require('Blockly.utils.colour');
+goog.require('Blockly.Variables');
+goog.require('Blockly.WidgetDiv');
+goog.require('Blockly.WorkspaceSvg');
 goog.require('Blockly.Xml');
 
 
@@ -342,10 +339,11 @@ Blockly.hideChaff = function(opt_allowToolbox) {
       workspace.trashcan.flyout_) {
       workspace.trashcan.flyout_.hide();
     }
-    if (workspace.toolbox_ &&
-        workspace.toolbox_.flyout_ &&
-        workspace.toolbox_.flyout_.autoClose) {
-      workspace.toolbox_.clearSelection();
+    var toolbox = workspace.getToolbox();
+    if (toolbox &&
+        toolbox.flyout_ &&
+        toolbox.flyout_.autoClose) {
+      toolbox.clearSelection();
     }
   }
 };

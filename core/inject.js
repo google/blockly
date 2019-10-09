@@ -1,9 +1,6 @@
 /**
  * @license
- * Visual Blocks Editor
- *
- * Copyright 2011 Google Inc.
- * https://developers.google.com/blockly/
+ * Copyright 2011 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -368,7 +365,9 @@ Blockly.createMainWorkspace_ = function(svg, options, blockDragSurface,
               console.log('WARNING: Moved object in bounds but there was no' +
                   ' event group. This may break undo.');
             }
-            Blockly.Events.setGroup(oldGroup);
+            if (oldGroup !== null) {
+              Blockly.Events.setGroup(oldGroup);
+            }
           }
         }
       }
@@ -412,8 +411,8 @@ Blockly.init_ = function(mainWorkspace) {
   Blockly.inject.bindDocumentEvents_();
 
   if (options.languageTree) {
-    if (mainWorkspace.toolbox_) {
-      mainWorkspace.toolbox_.init(mainWorkspace);
+    if (mainWorkspace.getToolbox()) {
+      mainWorkspace.getToolbox().init(mainWorkspace);
     } else if (mainWorkspace.flyout_) {
       // Build a fixed flyout with the root blocks.
       mainWorkspace.flyout_.init(mainWorkspace);

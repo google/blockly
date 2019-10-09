@@ -1,9 +1,6 @@
 /**
  * @license
- * Visual Blocks Editor
- *
- * Copyright 2012 Google Inc.
- * https://developers.google.com/blockly/
+ * Copyright 2012 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -256,7 +253,7 @@ Blockly.Blocks['procedures_defnoreturn'] = {
           if (this.statementConnection_) {
             var stackBlock = stackConnection.targetBlock();
             stackBlock.unplug();
-            stackBlock.bumpNeighbours_();
+            stackBlock.bumpNeighbours();
           }
           this.setStatements_(false);
         }
@@ -499,7 +496,7 @@ Blockly.Blocks['procedures_mutatorcontainer'] = {
         (event.type != Blockly.Events.BLOCK_DELETE && event.type != Blockly.Events.BLOCK_CREATE)) {
       return;
     }
-    var blocks = this.workspace.getAllBlocks();
+    var blocks = this.workspace.getAllBlocks(false);
     var allVariables = this.workspace.getAllVariables();
     if (event.type == Blockly.Events.BLOCK_DELETE) {
       var variableNamesToKeep = [];
@@ -605,7 +602,7 @@ Blockly.Blocks['procedures_mutatorarg'] = {
     }
 
     // Prevents duplicate parameter names in functions
-    var blocks = sourceBlock.workspace.getAllBlocks();
+    var blocks = sourceBlock.workspace.getAllBlocks(false);
     for (var i = 0; i < blocks.length; i++) {
       if (blocks[i].id == this.getSourceBlock().id) {
         continue;
@@ -755,7 +752,7 @@ Blockly.Blocks['procedures_callnoreturn'] = {
             paramIds.indexOf(this.quarkIds_[i]) == -1) {
           // This connection should no longer be attached to this block.
           connection.disconnect();
-          connection.getSourceBlock().bumpNeighbours_();
+          connection.getSourceBlock().bumpNeighbours();
         }
       }
     }

@@ -1,9 +1,6 @@
 /**
  * @license
- * Visual Blocks Editor
- *
- * Copyright 2012 Google Inc.
- * https://developers.google.com/blockly/
+ * Copyright 2012 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -148,7 +145,6 @@ Blockly.FieldImage.Y_PADDING = 1;
  * Editable fields usually show some sort of UI indicating they are
  * editable. This field should not.
  * @type {boolean}
- * @const
  */
 Blockly.FieldImage.prototype.EDITABLE = false;
 
@@ -204,7 +200,8 @@ Blockly.FieldImage.prototype.doClassValidation_ = function(opt_newValue) {
 
 /**
  * Update the value of this image field, and update the displayed image.
- * @param {string} newValue The new image src.
+ * @param {*} newValue The value to be saved. The default validator guarantees
+ * that this is a string.
  * @protected
  */
 Blockly.FieldImage.prototype.doValueUpdate_ = function(newValue) {

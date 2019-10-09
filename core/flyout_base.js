@@ -1,9 +1,6 @@
 /**
  * @license
- * Visual Blocks Editor
- *
- * Copyright 2011 Google Inc.
- * https://developers.google.com/blockly/
+ * Copyright 2011 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -85,7 +82,7 @@ Blockly.Flyout = function(workspaceOptions) {
   /**
    * List of background mats that lurk behind each block to catch clicks
    * landing in the blocks' lakes and bays.
-   * @type {!Array.<!Element>}
+   * @type {!Array.<!SVGElement>}
    * @private
    */
   this.mats_ = [];
@@ -214,7 +211,7 @@ Blockly.Flyout.prototype.dragAngleRange_ = 70;
  * separate svg element.
  * @param {string} tagName The type of tag to put the flyout in. This
  *     should be <svg> or <g>.
- * @return {!Element} The flyout's SVG group.
+ * @return {!SVGElement} The flyout's SVG group.
  */
 Blockly.Flyout.prototype.createDom = function(tagName) {
   /*
@@ -572,10 +569,10 @@ Blockly.Flyout.prototype.clearOldBlocks_ = function() {
 
 /**
  * Add listeners to a block that has been added to the flyout.
- * @param {!Element} root The root node of the SVG group the block is in.
+ * @param {!SVGElement} root The root node of the SVG group the block is in.
  * @param {!Blockly.Block} block The block to add listeners for.
- * @param {!Element} rect The invisible rectangle under the block that acts as
- *     a mat for that block.
+ * @param {!SVGElement} rect The invisible rectangle under the block that acts
+ *     as a mat for that block.
  * @protected
  */
 Blockly.Flyout.prototype.addBlockListeners_ = function(root, block, rect) {

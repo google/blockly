@@ -1,9 +1,6 @@
 /**
  * @license
- * Visual Blocks Editor
- *
- * Copyright 2012 Google Inc.
- * https://developers.google.com/blockly/
+ * Copyright 2012 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -38,8 +35,6 @@ goog.require('Blockly.utils');
 goog.require('Blockly.utils.dom');
 goog.require('Blockly.utils.global');
 goog.require('Blockly.utils.xml');
-goog.require('Blockly.WorkspaceComment');
-goog.require('Blockly.WorkspaceCommentSvg');
 
 
 /**
@@ -550,8 +545,8 @@ Blockly.Xml.domToBlock = function(xmlBlock, workspace) {
     // Generate list of all blocks.
     var blocks = topBlock.getDescendants(false);
     if (workspace.rendered) {
-      // Hide connections to speed up assembly.
-      topBlock.setConnectionsHidden(true);
+      // Wait to track connections to speed up assembly.
+      topBlock.waitToTrackConnections();
       // Render each block.
       for (var i = blocks.length - 1; i >= 0; i--) {
         blocks[i].initSvg();
@@ -562,8 +557,8 @@ Blockly.Xml.domToBlock = function(xmlBlock, workspace) {
       // Populating the connection database may be deferred until after the
       // blocks have rendered.
       setTimeout(function() {
-        if (topBlock.workspace) {  // Check that the block hasn't been deleted.
-          topBlock.setConnectionsHidden(false);
+        if (!topBlock.disposed) {
+          topBlock.startTrackingConnections();
         }
       }, 1);
       topBlock.updateDisabled();

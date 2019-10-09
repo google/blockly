@@ -1,9 +1,6 @@
 /**
  * @license
- * Visual Blocks Editor
- *
- * Copyright 2019 Google Inc.
- * https://developers.google.com/blockly/
+ * Copyright 2019 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -42,10 +39,8 @@ goog.require('Blockly.utils.style');
 Blockly.Component = function() {
 
   /**
-   * Whether the component is rendered right-to-left.  Right-to-left is set
-   * lazily when {@link #isRightToLeft} is called the first time, unless it has
-   * been set by calling {@link #setRightToLeft} explicitly.
-   * @private {?boolean}
+   * Whether the component is rendered right-to-left.
+   * @private {boolean}
    */
   this.rightToLeft_ = Blockly.Component.defaultRightToLeft;
 

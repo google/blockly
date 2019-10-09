@@ -1,9 +1,6 @@
 /**
  * @license
- * Visual Blocks Editor
- *
- * Copyright 2019 Google Inc.
- * https://developers.google.com/blockly/
+ * Copyright 2019 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,7 +31,7 @@ suite('Inputs', function() {
     ), this.workspace);
 
     this.renderStub = sinon.stub(this.block, 'render');
-    this.bumpNeighboursStub = sinon.stub(this.block, 'bumpNeighbours_');
+    this.bumpNeighboursStub = sinon.stub(this.block, 'bumpNeighbours');
 
     this.dummy = this.block.appendDummyInput('DUMMY');
     this.value = this.block.appendValueInput('VALUE');

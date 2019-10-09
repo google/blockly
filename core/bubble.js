@@ -1,9 +1,6 @@
 /**
  * @license
- * Visual Blocks Editor
- *
- * Copyright 2012 Google Inc.
- * https://developers.google.com/blockly/
+ * Copyright 2012 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -207,7 +204,7 @@ Blockly.Bubble.prototype.autoLayout_ = true;
  * Create the bubble's DOM.
  * @param {!Element} content SVG content for the bubble.
  * @param {boolean} hasResize Add diagonal resize gripper if true.
- * @return {!Element} The bubble's SVG group.
+ * @return {!SVGElement} The bubble's SVG group.
  * @private
  */
 Blockly.Bubble.prototype.createDom_ = function(content, hasResize) {
@@ -277,7 +274,7 @@ Blockly.Bubble.prototype.createDom_ = function(content, hasResize) {
 
 /**
  * Return the root node of the bubble's SVG group.
- * @return {Element} The root SVG node of the bubble's group.
+ * @return {SVGElement} The root SVG node of the bubble's group.
  */
 Blockly.Bubble.prototype.getSvgRoot = function() {
   return this.bubbleGroup_;
@@ -458,12 +455,10 @@ Blockly.Bubble.prototype.layoutBubble_ = function() {
 /**
  * Calculate the what percentage of the bubble overlaps with the visible
  * workspace (what percentage of the bubble is visible).
- * @param {!Object} relativeMin The position of the top-left corner of the
- *    bubble relative to the anchor point.
- * @param {number} relativeMin.x The x-position of the relativeMin.
- * @param {number} relativeMin.y The y-position of the relativeMin.
+ * @param {!{x: number, y: number}} relativeMin The position of the top-left
+ *     corner of the bubble relative to the anchor point.
  * @param {!Object} metrics The metrics of the workspace the bubble will
- *    appear in.
+ *     appear in.
  * @return {number} The percentage of the bubble that is visible.
  * @private
  */

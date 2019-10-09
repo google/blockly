@@ -1,9 +1,6 @@
 /**
  * @license
- * Visual Blocks Editor
- *
- * Copyright 2011 Google Inc.
- * https://developers.google.com/blockly/
+ * Copyright 2011 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -102,7 +99,7 @@ Blockly.Comment.prototype.drawIcon_ = function(group) {
 
 /**
  * Create the editor for the comment's bubble.
- * @return {!Element} The top-level node of the editor.
+ * @return {!SVGElement} The top-level node of the editor.
  * @private
  */
 Blockly.Comment.prototype.createEditor_ = function() {
@@ -258,7 +255,8 @@ Blockly.Comment.prototype.createEditableBubble_ = function() {
  */
 Blockly.Comment.prototype.createNonEditableBubble_ = function() {
   // TODO (#2917): It would be great if the comment could support line breaks.
-  Blockly.Warning.prototype.createBubble.call(this);
+  Blockly.Warning.prototype.createBubble.call(
+      /** @type {Blockly.Warning} */ (this));
 };
 
 /**
@@ -268,7 +266,8 @@ Blockly.Comment.prototype.createNonEditableBubble_ = function() {
 Blockly.Comment.prototype.disposeBubble_ = function() {
   if (this.paragraphElement_) {
     // We're using the warning UI so we have to let it dispose.
-    Blockly.Warning.prototype.disposeBubble.call(this);
+    Blockly.Warning.prototype.disposeBubble.call(
+        /** @type {Blockly.Warning} */ (this));
     return;
   }
 

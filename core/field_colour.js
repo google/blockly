@@ -1,9 +1,6 @@
 /**
  * @license
- * Visual Blocks Editor
- *
- * Copyright 2012 Google Inc.
- * https://developers.google.com/blockly/
+ * Copyright 2012 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -102,7 +99,6 @@ Blockly.FieldColour.DEFAULT_HEIGHT = Blockly.Field.BORDER_RECT_DEFAULT_HEIGHT;
  * Serializable fields are saved by the XML renderer, non-serializable fields
  * are not. Editable fields should also be serializable.
  * @type {boolean}
- * @const
  */
 Blockly.FieldColour.prototype.SERIALIZABLE = true;
 
@@ -141,22 +137,6 @@ Blockly.FieldColour.prototype.titles_ = null;
  * @private
  */
 Blockly.FieldColour.prototype.columns_ = 0;
-
-/**
- * Border colour for the dropdown div showing the colour picker.  Must be a CSS
- * string.
- * @type {string}
- * @private
- */
-Blockly.FieldColour.prototype.DROPDOWN_BORDER_COLOUR = '#dadce0';
-
-/**
- * Background colour for the dropdown div showing the colour picker.  Must be a
- * CSS string.
- * @type {string}
- * @private
- */
-Blockly.FieldColour.prototype.DROPDOWN_BACKGROUND_COLOUR = 'white';
 
 /**
  * Configure the field based on the given map of options.
@@ -199,7 +179,8 @@ Blockly.FieldColour.prototype.doClassValidation_ = function(opt_newValue) {
 
 /**
  * Update the value of this colour field, and update the displayed colour.
- * @param {string} newValue The new colour in '#rrggbb' format.
+ * @param {*} newValue The value to be saved. The default validator guarantees
+ * that this is a colour in '#rrggbb' format.
  * @protected
  */
 Blockly.FieldColour.prototype.doValueUpdate_ = function(newValue) {
@@ -299,9 +280,6 @@ Blockly.FieldColour.prototype.setColumns = function(columns) {
 Blockly.FieldColour.prototype.showEditor_ = function() {
   this.picker_ = this.dropdownCreate_();
   Blockly.DropDownDiv.getContentDiv().appendChild(this.picker_);
-
-  Blockly.DropDownDiv.setColour(
-      this.DROPDOWN_BACKGROUND_COLOUR, this.DROPDOWN_BORDER_COLOUR);
 
   Blockly.DropDownDiv.showPositionedByField(
       this, this.dropdownDispose_.bind(this));
@@ -529,6 +507,7 @@ Blockly.FieldColour.prototype.dropdownCreate_ = function() {
   var table = document.createElement('table');
   table.className = 'blocklyColourTable';
   table.tabIndex = 0;
+  table.dir = 'ltr';
   Blockly.utils.aria.setRole(table,
       Blockly.utils.aria.Role.GRID);
   Blockly.utils.aria.setState(table,
@@ -577,7 +556,7 @@ Blockly.FieldColour.prototype.dropdownCreate_ = function() {
 };
 
 /**
- * Dispose of events belonging to the colour editor.
+ * Disposes of events and dom-references belonging to the colour editor.
  * @private
  */
 Blockly.FieldColour.prototype.dropdownDispose_ = function() {

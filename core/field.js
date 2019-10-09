@@ -1,9 +1,6 @@
 /**
  * @license
- * Visual Blocks Editor
- *
- * Copyright 2012 Google Inc.
- * https://developers.google.com/blockly/
+ * Copyright 2012 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -42,7 +39,7 @@ goog.require('Blockly.utils.style');
 /**
  * Abstract class for an editable field.
  * @param {*} value The initial value of the field.
- * @param {Function=} opt_validator  A function that is called to validate
+ * @param {?Function=} opt_validator  A function that is called to validate
  *    changes to the field's value. Takes in a value & returns a validated
  *    value, or null to abort the change.
  * @param {Object=} opt_config A map of options used to configure the field. See
@@ -69,7 +66,7 @@ Blockly.Field = function(value, opt_validator, opt_config) {
   /**
    * Used to cache the field's tooltip value if setTooltip is called when the
    * field is not yet initialized. Is *not* guaranteed to be accurate.
-   * @type {string|Function|!Element}
+   * @type {string|Function|!SVGElement}
    * @private
    */
   this.tooltip_ = null;
@@ -204,8 +201,6 @@ Blockly.Field.NBSP = '\u00A0';
  * Editable fields usually show some sort of UI indicating they are editable.
  * They will also be saved by the XML renderer.
  * @type {boolean}
- * @const
- * @default
  */
 Blockly.Field.prototype.EDITABLE = true;
 
@@ -214,8 +209,6 @@ Blockly.Field.prototype.EDITABLE = true;
  * are not. Editable fields should also be serializable. This is not the
  * case by default so that SERIALIZABLE is backwards compatible.
  * @type {boolean}
- * @const
- * @default
  */
 Blockly.Field.prototype.SERIALIZABLE = false;
 
@@ -541,10 +534,10 @@ Blockly.Field.prototype.callValidator = function(text) {
 /**
  * Gets the group element for this editable field.
  * Used for measuring the size and for positioning.
- * @return {!Element} The group element.
+ * @return {!SVGElement} The group element.
  */
 Blockly.Field.prototype.getSvgRoot = function() {
-  return /** @type {!Element} */ (this.fieldGroup_);
+  return /** @type {!SVGElement} */ (this.fieldGroup_);
 };
 
 /**
@@ -564,8 +557,10 @@ Blockly.Field.prototype.updateColour = function() {
  * @protected
  */
 Blockly.Field.prototype.render_ = function() {
-  this.textContent_.nodeValue = this.getDisplayText_();
-  this.updateSize_();
+  if (this.textContent_) {
+    this.textContent_.nodeValue = this.getDisplayText_();
+    this.updateSize_();
+  }
 };
 
 /**
@@ -710,7 +705,7 @@ Blockly.Field.prototype.forceRerender = function() {
   this.isDirty_ = true;
   if (this.sourceBlock_ && this.sourceBlock_.rendered) {
     this.sourceBlock_.render();
-    this.sourceBlock_.bumpNeighbours_();
+    this.sourceBlock_.bumpNeighbours();
   }
 };
 
@@ -755,7 +750,7 @@ Blockly.Field.prototype.setValue = function(newValue) {
 
   if (this.sourceBlock_ && Blockly.Events.isEnabled()) {
     Blockly.Events.fire(new Blockly.Events.BlockChange(
-        this.sourceBlock_, 'field', this.name, oldValue, newValue));
+        this.sourceBlock_, 'field', this.name || null, oldValue, newValue));
   }
   this.doValueUpdate_(newValue);
   if (this.isDirty_) {
@@ -800,7 +795,7 @@ Blockly.Field.prototype.getValue = function() {
  * @param {*=} opt_newValue The value to be validated.
  * @return {*} The validated value, same as input by default.
  * @protected
- * @suppress {deprecated}
+ * @suppress {deprecated} Suppress deprecated this.classValidator call.
  */
 Blockly.Field.prototype.doClassValidation_ = function(opt_newValue) {
   if (opt_newValue === null || opt_newValue === undefined) {
@@ -850,7 +845,7 @@ Blockly.Field.prototype.onMouseDown_ = function(e) {
 
 /**
  * Change the tooltip text for this field.
- * @param {string|Function|!Element} newTip Text for tooltip or a parent
+ * @param {string|Function|!SVGElement} newTip Text for tooltip or a parent
  *    element to link to for its tooltip.
  */
 Blockly.Field.prototype.setTooltip = function(newTip) {

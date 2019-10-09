@@ -1,9 +1,6 @@
 /**
  * @license
- * Visual Blocks Editor
- *
- * Copyright 2017 Google Inc.
- * https://developers.google.com/blockly/
+ * Copyright 2017 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -134,7 +131,7 @@ Blockly.Extensions.registerMutator = function(name, mixinObj, opt_helperFn,
  */
 Blockly.Extensions.unregister = function(name) {
   if (Blockly.Extensions.ALL_[name]) {
-    Blockly.Extensions.ALL_[name] = undefined;
+    delete Blockly.Extensions.ALL_[name];
   } else {
     console.warn('No extension mapping for name "' + name +
         '" found to unregister');

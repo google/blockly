@@ -1,9 +1,6 @@
 /**
  * @license
- * Visual Blocks Editor
- *
- * Copyright 2011 Google Inc.
- * https://developers.google.com/blockly/
+ * Copyright 2011 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -166,14 +163,14 @@ Blockly.Trashcan.prototype.minOpenness_ = 0;
 
 /**
  * The SVG group containing the trash can.
- * @type {Element}
+ * @type {SVGElement}
  * @private
  */
 Blockly.Trashcan.prototype.svgGroup_ = null;
 
 /**
  * The SVG image element of the trash can lid.
- * @type {Element}
+ * @type {SVGElement}
  * @private
  */
 Blockly.Trashcan.prototype.svgLid_ = null;
@@ -208,7 +205,7 @@ Blockly.Trashcan.prototype.top_ = 0;
 
 /**
  * Create the trash can elements.
- * @return {!Element} The trash can's SVG group.
+ * @return {!SVGElement} The trash can's SVG group.
  */
 Blockly.Trashcan.prototype.createDom = function() {
   /* Here's the markup that will be generated:
@@ -298,7 +295,7 @@ Blockly.Trashcan.prototype.init = function(verticalSpacing) {
   }
 
   this.verticalSpacing_ = this.MARGIN_BOTTOM_ + verticalSpacing;
-  this.setOpen_(false);
+  this.setOpen(false);
   return this.verticalSpacing_ + this.BODY_HEIGHT_ + this.LID_HEIGHT_;
 };
 
@@ -373,9 +370,9 @@ Blockly.Trashcan.prototype.getClientRect = function() {
 /**
  * Flip the lid open or shut.
  * @param {boolean} state True if open.
- * @private
+ * @package
  */
-Blockly.Trashcan.prototype.setOpen_ = function(state) {
+Blockly.Trashcan.prototype.setOpen = function(state) {
   if (this.isOpen == state) {
     return;
   }
@@ -419,7 +416,7 @@ Blockly.Trashcan.prototype.setLidAngle_ = function(lidAngle) {
  * Called externally after a drag.
  */
 Blockly.Trashcan.prototype.close = function() {
-  this.setOpen_(false);
+  this.setOpen(false);
 };
 
 /**
@@ -443,7 +440,7 @@ Blockly.Trashcan.prototype.click = function() {
  */
 Blockly.Trashcan.prototype.mouseOver_ = function() {
   if (this.contents_.length) {
-    this.setOpen_(true);
+    this.setOpen(true);
   }
 };
 
@@ -454,8 +451,8 @@ Blockly.Trashcan.prototype.mouseOver_ = function() {
  */
 Blockly.Trashcan.prototype.mouseOut_ = function() {
   // No need to do a .hasBlocks check here because if it doesn't the trashcan
-  // wont be open in the first place, and setOpen_ won't run.
-  this.setOpen_(false);
+  // won't be open in the first place, and setOpen won't run.
+  this.setOpen(false);
 };
 
 /**

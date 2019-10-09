@@ -1,9 +1,6 @@
 /**
  * @license
- * Visual Blocks Editor
- *
- * Copyright 2019 Google Inc.
- * https://developers.google.com/blockly/
+ * Copyright 2019 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -69,7 +66,7 @@ Blockly.fieldRegistry.register = function(type, fieldClass) {
  */
 Blockly.fieldRegistry.unregister = function(type) {
   if (Blockly.fieldRegistry.typeMap_[type]) {
-    Blockly.fieldRegistry.typeMap_[type] = undefined;
+    delete Blockly.fieldRegistry.typeMap_[type];
   } else {
     console.warn('No field mapping for type "' + type +
         '" found to unregister');

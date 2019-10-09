@@ -1,9 +1,6 @@
 /**
  * @license
- * Visual Blocks Editor
- *
- * Copyright 2019 Google Inc.
- * https://developers.google.com/blockly/
+ * Copyright 2019 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -240,7 +237,6 @@ Blockly.geras.Highlighter.prototype.drawInlineInput = function(input) {
   var startY = yPos + offset;
 
   if (this.RTL_) {
-    // TODO: Check if this is different when the inline input is populated.
     var aboveTabHeight = input.connectionOffsetY - offset;
     var belowTabHeight = input.height -
         (input.connectionOffsetY + input.connectionHeight) + offset;

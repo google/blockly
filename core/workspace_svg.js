@@ -1,9 +1,6 @@
 /**
  * @license
- * Visual Blocks Editor
- *
- * Copyright 2014 Google Inc.
- * https://developers.google.com/blockly/
+ * Copyright 2014 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,8 +23,7 @@
 
 goog.provide('Blockly.WorkspaceSvg');
 
-// TODO(scr): Fix circular dependencies
-// goog.require('Blockly.BlockSvg');
+goog.require('Blockly.BlockSvg');
 goog.require('Blockly.blockRendering');
 goog.require('Blockly.ConnectionDB');
 goog.require('Blockly.constants');
@@ -94,7 +90,8 @@ Blockly.WorkspaceSvg = function(options,
    * @type {!Blockly.WorkspaceAudio}
    * @private
    */
-  this.audioManager_ = new Blockly.WorkspaceAudio(options.parentWorkspace);
+  this.audioManager_ = new Blockly.WorkspaceAudio(
+      /** @type {Blockly.WorkspaceSvg} */ (options.parentWorkspace));
 
   /**
    * This workspace's grid object or null.
@@ -365,7 +362,7 @@ Blockly.WorkspaceSvg.prototype.lastRecordedPageScroll_ = null;
 /**
  * Map from function names to callbacks, for deciding what to do when a button
  * is clicked.
- * @type {!Object.<string, function(!Blockly.FlyoutButton)>}
+ * @type {!Object.<string, ?function(!Blockly.FlyoutButton)>}
  * @private
  */
 Blockly.WorkspaceSvg.prototype.flyoutButtonCallbacks_ = {};
@@ -373,7 +370,7 @@ Blockly.WorkspaceSvg.prototype.flyoutButtonCallbacks_ = {};
 /**
  * Map from function names to callbacks, for deciding what to do when a custom
  * toolbox category is opened.
- * @type {!Object.<string, function(!Blockly.Workspace):!Array.<!Element>>}
+ * @type {!Object.<string, ?function(!Blockly.Workspace):!Array.<!Element>>}
  * @private
  */
 Blockly.WorkspaceSvg.prototype.toolboxCategoryCallbacks_ = {};
@@ -418,35 +415,31 @@ Blockly.WorkspaceSvg.prototype.getRenderer = function() {
 /**
  * Sets the cursor for use with keyboard navigation.
  *
- * @param {Blockly.Cursor} cursor The cursor used to move around this workspace.
+ * @param {!Blockly.Cursor} cursor The cursor used to move around this workspace.
  * @override
  */
 Blockly.WorkspaceSvg.prototype.setCursor = function(cursor) {
-  if (this.cursor_ && this.cursor_.getDrawer()) {
+  if (this.cursor_.getDrawer()) {
     this.cursor_.getDrawer().dispose();
   }
   this.cursor_ = cursor;
-  if (this.cursor_) {
-    this.cursor_.setDrawer(this.getRenderer().makeCursorDrawer(this, false));
-    this.setCursorSvg(this.cursor_.getDrawer().createDom());
-  }
+  this.cursor_.setDrawer(this.getRenderer().makeCursorDrawer(this, false));
+  this.setCursorSvg(this.cursor_.getDrawer().createDom());
 };
 
 /**
  * Sets the marker for use with keyboard navigation.
- * @param {Blockly.MarkerCursor} marker The immovable cursor used to mark a
+ * @param {!Blockly.MarkerCursor} marker The immovable cursor used to mark a
  *     location on the workspace.
  * @override
  */
 Blockly.WorkspaceSvg.prototype.setMarker = function(marker) {
-  if (this.marker_ && this.marker_.getDrawer()) {
+  if (this.marker_.getDrawer()) {
     this.marker_.getDrawer().dispose();
   }
   this.marker_ = marker;
-  if (this.marker_) {
-    this.marker_.setDrawer(this.getRenderer().makeCursorDrawer(this, true));
-    this.setMarkerSvg(this.marker_.getDrawer().createDom());
-  }
+  this.marker_.setDrawer(this.getRenderer().makeCursorDrawer(this, true));
+  this.setMarkerSvg(this.marker_.getDrawer().createDom());
 };
 
 /**
@@ -925,7 +918,7 @@ Blockly.WorkspaceSvg.prototype.updateScreenCalculationsIfScrolled =
 
 /**
  * Get the SVG element that forms the drawing surface.
- * @return {!Element} SVG element.
+ * @return {!SVGElement} SVG element.
  */
 Blockly.WorkspaceSvg.prototype.getCanvas = function() {
   return this.svgBlockCanvas_;
@@ -941,7 +934,7 @@ Blockly.WorkspaceSvg.prototype.getBubbleCanvas = function() {
 
 /**
  * Get the SVG element that contains this workspace.
- * @return {Element} SVG element.
+ * @return {SVGElement} SVG element.
  */
 Blockly.WorkspaceSvg.prototype.getParentSvg = function() {
   if (this.cachedParentSvg_) {
@@ -953,7 +946,7 @@ Blockly.WorkspaceSvg.prototype.getParentSvg = function() {
       this.cachedParentSvg_ = element;
       return element;
     }
-    element = element.parentNode;
+    element = /** @type {!SVGElement} */ (element.parentNode);
   }
   return null;
 };
@@ -1190,8 +1183,11 @@ Blockly.WorkspaceSvg.prototype.pasteBlock_ = function(xmlBlock) {
 
     // Handle paste for keyboard navigation
     var markedNode = this.getMarker().getCurNode();
-    if (Blockly.keyboardAccessibilityMode && markedNode) {
-      Blockly.navigation.insertBlock(block, markedNode.getLocation());
+    if (Blockly.keyboardAccessibilityMode && markedNode &&
+        markedNode.isConnection()) {
+      var markedLocation =
+        /** @type {!Blockly.Connection} */ (markedNode.getLocation());
+      Blockly.navigation.insertBlock(block, markedLocation);
       return;
     }
 

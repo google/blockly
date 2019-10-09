@@ -1375,7 +1375,12 @@ Blockly.BlockSvg.prototype.bringToFront = function() {
   var block = this;
   do {
     var root = block.getSvgRoot();
-    root.parentNode.appendChild(root);
+    var parent = root.parentNode;
+    var childNodes = parent.childNodes;
+    // Avoid moving the block if it's already at the bottom.
+    if (childNodes[childNodes.length - 1] !== root) {
+      parent.appendChild(root);
+    }
     block = block.getParent();
   } while (block);
 };

@@ -263,7 +263,7 @@ Blockly.DropDownDiv.showPositionedByBlock = function(field, block,
  */
 Blockly.DropDownDiv.showPositionedByField = function(field,
     opt_onHide, opt_secondaryYOffset) {
-  var position = field.fieldGroup_.getBoundingClientRect();
+  var position = field.getSvgRoot().getBoundingClientRect();
   // If we can fit it, render below the block.
   var primaryX = position.left + position.width / 2;
   var primaryY = position.bottom;
@@ -574,11 +574,11 @@ Blockly.DropDownDiv.hide = function() {
   Blockly.DropDownDiv.animateOutTimer_ =
       setTimeout(function() {
         Blockly.DropDownDiv.hideWithoutAnimation();
-        if (Blockly.DropDownDiv.onHide_) {
-          Blockly.DropDownDiv.onHide_();
-          Blockly.DropDownDiv.onHide_ = null;
-        }
       }, Blockly.DropDownDiv.ANIMATION_TIME * 1000);
+  if (Blockly.DropDownDiv.onHide_) {
+    Blockly.DropDownDiv.onHide_();
+    Blockly.DropDownDiv.onHide_ = null;
+  }
 };
 
 /**

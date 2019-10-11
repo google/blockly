@@ -1807,7 +1807,9 @@ Blockly.BlockSvg.prototype.getHeightWidth = function() {
   var nextBlock = this.getNextBlock();
   if (nextBlock) {
     var nextHeightWidth = nextBlock.getHeightWidth();
-    height += nextHeightWidth.height - 4;  // Height of tab.
+    var workspace = /** @type {!Blockly.WorkspaceSvg} */ (this.workspace);
+    var tabHeight = workspace.getRenderer().getConstants().NOTCH_HEIGHT;
+    height += nextHeightWidth.height - tabHeight;
     width = Math.max(width, nextHeightWidth.width);
   }
   return {height: height, width: width};

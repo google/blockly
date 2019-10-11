@@ -151,18 +151,10 @@ Blockly.blockRendering.ExternalValueInput = function(constants, input) {
   this.type |= Blockly.blockRendering.Types.EXTERNAL_VALUE_INPUT;
 
   if (!this.connectedBlock) {
-    if (input.extraInfo.style === Blockly.INDENTED_VALUE) {
-      this.height = this.constants_.EMPTY_STATEMENT_INPUT_HEIGHT;
-    } else {
-      this.height = this.shape.height;
-    }
+    this.height = this.shape.height;
   } else {
-    if (input.extraInfo.style === Blockly.INDENTED_VALUE) {
-      this.height = this.connectedBlockHeight;
-    } else {
-      this.height =
-          this.connectedBlockHeight - 2 * this.constants_.TAB_OFFSET_FROM_TOP;
-    }
+    this.height =
+        this.connectedBlockHeight - 2 * this.constants_.TAB_OFFSET_FROM_TOP;
   }
   this.width = this.shape.width +
       this.constants_.EXTERNAL_VALUE_INPUT_PADDING;
@@ -173,3 +165,24 @@ Blockly.blockRendering.ExternalValueInput = function(constants, input) {
 };
 Blockly.utils.object.inherits(Blockly.blockRendering.ExternalValueInput,
     Blockly.blockRendering.InputConnection);
+
+/**
+ * An object containing information about the space an indented value input
+ * takes up during rendering
+ * @param {!Blockly.blockRendering.ConstantProvider} constants The rendering
+ *     constants provider.
+ * @param {!Blockly.Input} input The indented value input to measure and store
+ *     information for.
+ * @constructor
+ */
+Blockly.blockRendering.IndentedValueInput = function(constants, input) {
+  Blockly.blockRendering.IndentedValueInput.superClass_.constructor.call(this,
+      constants, input);
+  if (!this.connectedBlock) {
+    this.height = this.constants_.EMPTY_STATEMENT_INPUT_HEIGHT;
+  } else {
+    this.height = this.connectedBlockHeight;
+  }
+};
+Blockly.utils.object.inherits(Blockly.blockRendering.IndentedValueInput,
+    Blockly.blockRendering.ExternalValueInput);

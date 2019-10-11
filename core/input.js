@@ -34,7 +34,8 @@ goog.require('Blockly.FieldLabel');
  *     input again.
  * @param {!Blockly.Block} block The block containing this input.
  * @param {Blockly.Connection} connection Optional connection for this input.
- * @param {?Object.<string, *>=} opt_extras
+ * @param {?Object.<string, *>=} opt_extras Extra information about the input.
+ *     - style: Rendering style hint (undefined or {@see Blockly.INDENTED_VALUE})
  * @constructor
  */
 Blockly.Input = function(type, name, block, connection, opt_extras) {

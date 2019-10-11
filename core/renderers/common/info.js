@@ -347,6 +347,11 @@ Blockly.blockRendering.RenderInfo.prototype.addInput_ = function(input, activeRo
     activeRow.elements.push(
         new Blockly.blockRendering.StatementInput(this.constants_, input));
     activeRow.hasStatement = true;
+  } else if (input.type == Blockly.INPUT_VALUE &&
+             input.extraInfo.style == Blockly.INDENTED_VALUE) {
+    activeRow.elements.push(
+        new Blockly.blockRendering.IndentedValueInput(this.constants_, input));
+    activeRow.hasIndentedInput  = true;
   } else if (input.type == Blockly.INPUT_VALUE) {
     activeRow.elements.push(
         new Blockly.blockRendering.ExternalValueInput(this.constants_, input));
@@ -466,7 +471,7 @@ Blockly.blockRendering.RenderInfo.prototype.computeBounds_ = function() {
   for (var i = 0, row; (row = this.rows[i]); i++) {
     row.measure();
     blockWidth = Math.max(blockWidth, row.width);
-    if (this.isStatementLike_(row)) {
+    if (row.isStatementLike()) {
       var statementInput = row.getLastInput();
       var innerWidth = row.width - statementInput.width;
       widestStatementRowFields = Math.max(widestStatementRowFields, innerWidth);
@@ -479,7 +484,7 @@ Blockly.blockRendering.RenderInfo.prototype.computeBounds_ = function() {
   this.width = blockWidth;
 
   for (var i = 0, row; (row = this.rows[i]); i++) {
-    if (this.isStatementLike_(row)) {
+    if (row.isStatementLike()) {
       row.statementEdge = this.statementEdge;
     }
   }
@@ -501,7 +506,7 @@ Blockly.blockRendering.RenderInfo.prototype.computeBounds_ = function() {
  */
 Blockly.blockRendering.RenderInfo.prototype.alignRowElements_ = function() {
   for (var i = 0, row; (row = this.rows[i]); i++) {
-    if (this.isStatementLike_(row)) {
+    if (row.isStatementLike()) {
       this.alignStatementRow_(
           /** @type {!Blockly.blockRendering.InputRow} */ (row));
     } else {
@@ -694,10 +699,4 @@ Blockly.blockRendering.RenderInfo.prototype.finalize_ = function() {
   this.height = yCursor;
   this.startY = this.topRow.capline;
   this.bottomRow.baseline = yCursor - this.bottomRow.descenderHeight;
-};
-
-Blockly.blockRendering.RenderInfo.prototype.isStatementLike_ = function(row) {
-  return row.hasStatement ||
-    (row.hasExternalInput &&
-      row.getLastInput().input.extraInfo.style === Blockly.INDENTED_VALUE);
 };

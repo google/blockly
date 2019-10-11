@@ -175,6 +175,8 @@ Blockly.ALIGN_CENTRE = 0;
 Blockly.ALIGN_RIGHT = 1;
 
 /***
+ * ENUM to indicate that a value input should be indented like
+ * a statement input.
  * @const
  */
 Blockly.INDENTED_VALUE = 1;

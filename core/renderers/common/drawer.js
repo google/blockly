@@ -117,6 +117,8 @@ Blockly.blockRendering.Drawer.prototype.drawOutline_ = function() {
       this.drawJaggedEdge_(row);
     } else if (row.hasStatement) {
       this.drawStatementInput_(row);
+    } else if (row.hasIndentedInput) {
+      this.drawIndentedInput_(row);
     } else if (row.hasExternalInput) {
       this.drawValueInput_(row);
     } else {
@@ -183,19 +185,34 @@ Blockly.blockRendering.Drawer.prototype.drawValueInput_ = function(row) {
       input.shape.pathDown(input.height) :
       input.shape.pathDown;
 
-  if (input.input.extraInfo.style === Blockly.INDENTED_VALUE) {
-    this.outlinePath_ +=
-        Blockly.utils.svgPaths.lineOnAxis('H', input.xPos + input.connectionWidth) +
-        Blockly.utils.svgPaths.lineOnAxis('v', input.connectionOffsetY) +
-        pathDown +
-        Blockly.utils.svgPaths.lineOnAxis('v', row.height - input.connectionHeight - input.connectionOffsetY) +
-        Blockly.utils.svgPaths.lineOnAxis('H', input.xPos + input.width);
-  } else {
-    this.outlinePath_ +=
-        Blockly.utils.svgPaths.lineOnAxis('H', input.xPos + input.width) +
-        pathDown +
-        Blockly.utils.svgPaths.lineOnAxis('v', row.height - input.connectionHeight);
-  }
+  this.outlinePath_ +=
+      Blockly.utils.svgPaths.lineOnAxis('H', input.xPos + input.width) +
+      pathDown +
+      Blockly.utils.svgPaths.lineOnAxis('v', row.height - input.connectionHeight);
+};
+
+
+/**
+ * Add steps for an indented value input, rendered as a notch in the side
+ * of the block but at the same X value as any statement inputs.
+ * @param {!Blockly.blockRendering.Row} row The row that this input
+ *     belongs to.
+ * @protected
+ */
+Blockly.blockRendering.Drawer.prototype.drawIndentedInput_ = function(row) {
+  var input = row.getLastInput();
+  this.positionIndentedValueConnection_(row);
+
+  var pathDown = (typeof input.shape.pathDown == "function") ?
+    input.shape.pathDown(input.height) :
+    input.shape.pathDown;
+
+  this.outlinePath_ +=
+      Blockly.utils.svgPaths.lineOnAxis('H', input.xPos + input.connectionWidth) +
+      Blockly.utils.svgPaths.lineOnAxis('v', input.connectionOffsetY) +
+      pathDown +
+      Blockly.utils.svgPaths.lineOnAxis('v', row.height - input.connectionHeight - input.connectionOffsetY) +
+      Blockly.utils.svgPaths.lineOnAxis('H', input.xPos + input.width);
 };
 
 
@@ -428,20 +445,29 @@ Blockly.blockRendering.Drawer.prototype.positionStatementInputConnection_ = func
 Blockly.blockRendering.Drawer.prototype.positionExternalValueConnection_ = function(row) {
   var input = row.getLastInput();
   if (input.connection) {
-    var connX = row.xPos;
-    if (input.input.extraInfo.style === Blockly.INDENTED_VALUE) {
-      connX += row.statementEdge + row.getLastInput().connectionWidth;
-    } else {
-      connX += row.width;
-    }
+    var connX = row.xPos + row.width;
     if (this.info_.RTL) {
       connX *= -1;
     }
-    var connY = row.yPos;
-    if (input.input.extraInfo.style === Blockly.INDENTED_VALUE) {
-      connY += input.connectionOffsetY;
+    input.connection.setOffsetInBlock(connX, row.yPos);
+  }
+};
+
+/**
+ * Position the connection on an indented value input, taking into account
+ * RTL and the small gap between the parent block and child block which lets the
+ * parent block's dark path show through.
+ * @param {!Blockly.blockRendering.Row} row The row that the connection is on.
+ * @protected
+ */
+Blockly.blockRendering.Drawer.prototype.positionIndentedValueConnection_ = function(row) {
+  var input = row.getLastInput();
+  if (input.connection) {
+    var connX = row.xPos + row.statementEdge + input.connectionWidth;
+    if (this.info_.RTL) {
+      connX *= -1;
     }
-    input.connection.setOffsetInBlock(connX, connY);
+    input.connection.setOffsetInBlock(connX, row.yPos + input.connectionOffsetY);
   }
 };
 

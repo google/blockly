@@ -1385,7 +1385,8 @@ Blockly.Block.prototype.toString = function(opt_maxLength, opt_emptyToken) {
  * Shortcut for appending a value input row.
  * @param {string} name Language-neutral identifier which may used to find this
  *     input again.  Should be unique to this block.
- * @param {?Object.<string, *>=} opt_extras
+ * @param {?Object.<string, *>=} opt_extras Extra information about the input.
+ *     - style: Rendering style hint (undefined or {@see Blockly.INDENTED_VALUE})
  * @return {!Blockly.Input} The input object created.
  */
 Blockly.Block.prototype.appendValueInput = function(name, opt_extras) {

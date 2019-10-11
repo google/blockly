@@ -86,6 +86,11 @@ Blockly.geras.RenderInfo.prototype.addInput_ = function(input, activeRow) {
     activeRow.elements.push(
         new Blockly.geras.StatementInput(this.constants_, input));
     activeRow.hasStatement = true;
+  } else if (input.type == Blockly.INPUT_VALUE &&
+             input.extraInfo.style == Blockly.INDENTED_VALUE) {
+    activeRow.elements.push(
+        new Blockly.blockRendering.IndentedValueInput(this.constants_, input));
+    activeRow.hasIndentedInput = true;
   } else if (input.type == Blockly.INPUT_VALUE) {
     activeRow.elements.push(
         new Blockly.blockRendering.ExternalValueInput(this.constants_, input));
@@ -248,7 +253,7 @@ Blockly.geras.RenderInfo.prototype.getInRowSpacing_ = function(prev, next) {
 Blockly.geras.RenderInfo.prototype.addAlignmentPadding_ = function(row, missingSpace) {
   var firstSpacer = row.getFirstSpacer();
   var lastSpacer = row.getLastSpacer();
-  if (row.hasExternalInput || row.hasStatement) {
+  if (row.hasExternalInput || row.hasStatement || row.hasIndentedInput) {
     row.widthWithConnectedBlocks += missingSpace;
   }
 
@@ -327,7 +332,7 @@ Blockly.geras.RenderInfo.prototype.getElemCenterline_ = function(row, elem) {
   if (Blockly.blockRendering.Types.isField(elem) ||
       Blockly.blockRendering.Types.isIcon(elem)) {
     result += (elem.height / 2);
-    if ((row.hasInlineInput || row.hasStatement) &&
+    if ((row.hasInlineInput || row.hasStatement || row.hasIndentedInput) &&
         elem.height + this.constants_.TALL_INPUT_FIELD_OFFSET_Y <= row.height) {
       result += this.constants_.TALL_INPUT_FIELD_OFFSET_Y;
     }

@@ -1385,10 +1385,11 @@ Blockly.Block.prototype.toString = function(opt_maxLength, opt_emptyToken) {
  * Shortcut for appending a value input row.
  * @param {string} name Language-neutral identifier which may used to find this
  *     input again.  Should be unique to this block.
+ * @param {?Object.<string, *>=} opt_extras
  * @return {!Blockly.Input} The input object created.
  */
-Blockly.Block.prototype.appendValueInput = function(name) {
-  return this.appendInput_(Blockly.INPUT_VALUE, name);
+Blockly.Block.prototype.appendValueInput = function(name, opt_extras) {
+  return this.appendInput_(Blockly.INPUT_VALUE, name, opt_extras);
 };
 
 /**
@@ -1681,15 +1682,17 @@ Blockly.Block.prototype.interpolate_ = function(message, args, lastDummyAlign) {
  *     Blockly.DUMMY_INPUT.
  * @param {string} name Language-neutral identifier which may used to find this
  *     input again.  Should be unique to this block.
+ * @param {?Object.<string, *>=} opt_extras Extra information about the input.
+ *     - style: Rendering style hint (undefined or {@see Blockly.INDENTED_VALUE})
  * @return {!Blockly.Input} The input object created.
  * @protected
  */
-Blockly.Block.prototype.appendInput_ = function(type, name) {
+Blockly.Block.prototype.appendInput_ = function(type, name, opt_extras) {
   var connection = null;
   if (type == Blockly.INPUT_VALUE || type == Blockly.NEXT_STATEMENT) {
     connection = this.makeConnection_(type);
   }
-  var input = new Blockly.Input(type, name, this, connection);
+  var input = new Blockly.Input(type, name, this, connection, opt_extras);
   // Append input to list.
   this.inputList.push(input);
   return input;

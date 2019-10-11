@@ -174,6 +174,11 @@ Blockly.ALIGN_CENTRE = 0;
  */
 Blockly.ALIGN_RIGHT = 1;
 
+/***
+ * @const
+ */
+Blockly.INDENTED_VALUE = 1;
+
 /**
  * ENUM for no drag operation.
  * @const

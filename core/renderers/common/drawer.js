@@ -183,10 +183,19 @@ Blockly.blockRendering.Drawer.prototype.drawValueInput_ = function(row) {
       input.shape.pathDown(input.height) :
       input.shape.pathDown;
 
-  this.outlinePath_ +=
-      Blockly.utils.svgPaths.lineOnAxis('H', input.xPos + input.width) +
-      pathDown +
-      Blockly.utils.svgPaths.lineOnAxis('v', row.height - input.connectionHeight);
+  if (input.input.extraInfo.style === Blockly.INDENTED_VALUE) {
+    this.outlinePath_ +=
+        Blockly.utils.svgPaths.lineOnAxis('H', input.xPos + input.connectionWidth) +
+        Blockly.utils.svgPaths.lineOnAxis('v', input.connectionOffsetY) +
+        pathDown +
+        Blockly.utils.svgPaths.lineOnAxis('v', row.height - input.connectionHeight - input.connectionOffsetY) +
+        Blockly.utils.svgPaths.lineOnAxis('H', input.xPos + input.width);
+  } else {
+    this.outlinePath_ +=
+        Blockly.utils.svgPaths.lineOnAxis('H', input.xPos + input.width) +
+        pathDown +
+        Blockly.utils.svgPaths.lineOnAxis('v', row.height - input.connectionHeight);
+  }
 };
 
 
@@ -419,11 +428,20 @@ Blockly.blockRendering.Drawer.prototype.positionStatementInputConnection_ = func
 Blockly.blockRendering.Drawer.prototype.positionExternalValueConnection_ = function(row) {
   var input = row.getLastInput();
   if (input.connection) {
-    var connX = row.xPos + row.width;
+    var connX = row.xPos;
+    if (input.input.extraInfo.style === Blockly.INDENTED_VALUE) {
+      connX += row.statementEdge + row.getLastInput().connectionWidth;
+    } else {
+      connX += row.width;
+    }
     if (this.info_.RTL) {
       connX *= -1;
     }
-    input.connection.setOffsetInBlock(connX, row.yPos);
+    var connY = row.yPos;
+    if (input.input.extraInfo.style === Blockly.INDENTED_VALUE) {
+      connY += input.connectionOffsetY;
+    }
+    input.connection.setOffsetInBlock(connX, connY);
   }
 };
 

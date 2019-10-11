@@ -211,6 +211,20 @@ Blockly.Procedures.flyoutCategory = function(workspace) {
     block.appendChild(nameField);
     xmlList.push(block);
   }
+  if (Blockly.Blocks['procedures_defreturnexpr']) {
+    // <block type="procedures_defreturnexpr" gap="16">
+    //     <field name="NAME">do something</field>
+    // </block>
+    var block = Blockly.utils.xml.createElement('block');
+    block.setAttribute('type', 'procedures_defreturnexpr');
+    block.setAttribute('gap', 16);
+    var nameField = Blockly.utils.xml.createElement('field');
+    nameField.setAttribute('name', 'NAME');
+    nameField.appendChild(Blockly.utils.xml.createTextNode(
+      Blockly.Msg['PROCEDURES_DEFRETURN_PROCEDURE']));
+    block.appendChild(nameField);
+    xmlList.push(block);
+  }
   if (Blockly.Blocks['procedures_ifreturn']) {
     // <block type="procedures_ifreturn" gap="16"></block>
     var block = Blockly.utils.xml.createElement('block');

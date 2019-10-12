@@ -146,6 +146,24 @@ Blockly.geras.Highlighter.prototype.drawValueInput = function(row) {
   }
 };
 
+Blockly.geras.Highlighter.prototype.drawIndentedInput = function(row) {
+  var input = row.getLastInput();
+  if (this.RTL_) {
+    var belowTabHeight = row.height - input.connectionHeight - input.connectionOffsetY;
+
+    this.steps_ +=
+      Blockly.utils.svgPaths.moveTo(
+        input.xPos + this.highlightOffset_ + input.connectionWidth - 1, row.yPos) +
+      Blockly.utils.svgPaths.lineOnAxis('v', input.connectionOffsetY) +
+      this.puzzleTabPaths_.pathDown(this.RTL_) +
+      Blockly.utils.svgPaths.lineOnAxis('v', belowTabHeight);
+  } else {
+    this.steps_ +=
+      Blockly.utils.svgPaths.moveTo(input.xPos + input.connectionWidth, row.yPos + input.connectionOffsetY) +
+      this.puzzleTabPaths_.pathDown(this.RTL_);
+  }
+};
+
 Blockly.geras.Highlighter.prototype.drawStatementInput = function(row) {
   var input = row.getLastInput();
   if (this.RTL_) {

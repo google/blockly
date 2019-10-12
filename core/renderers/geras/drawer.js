@@ -99,6 +99,15 @@ Blockly.geras.Drawer.prototype.drawValueInput_ = function(row) {
 /**
  * @override
  */
+Blockly.geras.Drawer.prototype.drawIndentedInput_ = function(row) {
+  this.highlighter_.drawIndentedInput(row);
+
+  Blockly.geras.Drawer.superClass_.drawIndentedInput_.call(this, row);
+};
+
+/**
+ * @override
+ */
 Blockly.geras.Drawer.prototype.drawStatementInput_ = function(row) {
   this.highlighter_.drawStatementInput(row);
 

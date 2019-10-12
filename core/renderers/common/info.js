@@ -351,7 +351,7 @@ Blockly.blockRendering.RenderInfo.prototype.addInput_ = function(input, activeRo
              input.extraInfo.style == Blockly.INDENTED_VALUE) {
     activeRow.elements.push(
         new Blockly.blockRendering.IndentedValueInput(this.constants_, input));
-    activeRow.hasIndentedInput  = true;
+    activeRow.hasIndentedInput = true;
   } else if (input.type == Blockly.INPUT_VALUE) {
     activeRow.elements.push(
         new Blockly.blockRendering.ExternalValueInput(this.constants_, input));

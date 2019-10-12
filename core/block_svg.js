@@ -1487,12 +1487,14 @@ Blockly.BlockSvg.prototype.moveNumberedInputBefore = function(
  *     Blockly.DUMMY_INPUT.
  * @param {string} name Language-neutral identifier which may used to find this
  *     input again.  Should be unique to this block.
- * @param {?Object.<string, *>=} opt_extras
+ * @param {?Object.<string, *>=} opt_extras Extra information describing the
+ *     input.
  * @return {!Blockly.Input} The input object created.
  * @private
  */
 Blockly.BlockSvg.prototype.appendInput_ = function(type, name, opt_extras) {
-  var input = Blockly.BlockSvg.superClass_.appendInput_.call(this, type, name, opt_extras);
+  var input = Blockly.BlockSvg.superClass_.appendInput_.call(this, type, name,
+      opt_extras);
 
   if (this.rendered) {
     this.render();

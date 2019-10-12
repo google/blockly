@@ -221,7 +221,7 @@ Blockly.Procedures.flyoutCategory = function(workspace) {
     var nameField = Blockly.utils.xml.createElement('field');
     nameField.setAttribute('name', 'NAME');
     nameField.appendChild(Blockly.utils.xml.createTextNode(
-      Blockly.Msg['PROCEDURES_DEFRETURN_PROCEDURE']));
+        Blockly.Msg['PROCEDURES_DEFRETURN_PROCEDURE']));
     block.appendChild(nameField);
     xmlList.push(block);
   }

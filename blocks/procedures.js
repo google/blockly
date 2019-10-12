@@ -471,12 +471,12 @@ Blockly.Blocks['procedures_defreturnexpr'] = {
     var nameField = new Blockly.FieldTextInput('', Blockly.Procedures.rename);
     nameField.setSpellcheck(false);
     this.appendDummyInput()
-      .appendField(Blockly.Msg['PROCEDURES_DEFRETURN_TITLE'])
-      .appendField(nameField, 'NAME')
-      .appendField('', 'PARAMS');
+        .appendField(Blockly.Msg['PROCEDURES_DEFRETURN_TITLE'])
+        .appendField(nameField, 'NAME')
+        .appendField('', 'PARAMS');
     this.appendValueInput('RETURN', {style: Blockly.INDENTED_VALUE})
-      .setAlign(Blockly.ALIGN_RIGHT)
-      .appendField(Blockly.Msg['PROCEDURES_DEFRETURN_RETURN']);
+        .setAlign(Blockly.ALIGN_RIGHT)
+        .appendField(Blockly.Msg['PROCEDURES_DEFRETURN_RETURN']);
     this.setMutator(new Blockly.Mutator(['procedures_mutatorarg']));
     if ((this.workspace.options.comments ||
       (this.workspace.options.parentWorkspace &&

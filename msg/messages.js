@@ -172,10 +172,10 @@ Blockly.Msg.NEW_VARIABLE_TYPE_TITLE = 'New variable type:';
 Blockly.Msg.NEW_VARIABLE_TITLE = 'New variable name:';
 /** @type {string} */
 /// alert - Tells the user that the name they entered is already in use.
-Blockly.Msg.VARIABLE_ALREADY_EXISTS = 'A variable named "%1" already exists.';
+Blockly.Msg.VARIABLE_ALREADY_EXISTS = 'A variable named "%1" already exists (as "%2").';
 /** @type {string} */
 /// alert - Tells the user that the name they entered is already in use for another type.
-Blockly.Msg.VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE = 'A variable named "%1" already exists for another type: "%2".';
+Blockly.Msg.VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE = 'A variable named "%1" already exists for another type: "%2" (as "%3").';
 
 // Variable deletion.
 /** @type {string} */

@@ -286,11 +286,12 @@ Blockly.Variables.createVariableButtonHandler = function(
               var lowerCase = text.toLowerCase();
               if (existing.type == type) {
                 var msg = Blockly.Msg['VARIABLE_ALREADY_EXISTS'].replace(
-                    '%1', lowerCase);
+                    '%1', lowerCase).replace('%2', existing.name);
               } else {
                 var msg =
                     Blockly.Msg['VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE'];
-                msg = msg.replace('%1', lowerCase).replace('%2', existing.type);
+                msg = msg.replace('%1', lowerCase).replace('%2', existing.type)
+                    .replace('%3', existing.name);
               }
               Blockly.alert(msg,
                   function() {
@@ -352,7 +353,8 @@ Blockly.Variables.renameVariable = function(workspace, variable,
             if (existing) {
               var msg = Blockly.Msg['VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE']
                   .replace('%1', newName.toLowerCase())
-                  .replace('%2', existing.type);
+                  .replace('%2', existing.type)
+                  .replace('%3', existing.name);
               Blockly.alert(msg,
                   function() {
                     promptAndCheckWithAlert(newName);  // Recurse

@@ -153,13 +153,14 @@ Blockly.geras.Highlighter.prototype.drawIndentedInput = function(row) {
 
     this.steps_ +=
       Blockly.utils.svgPaths.moveTo(
-        input.xPos + this.highlightOffset_ + input.connectionWidth - 1, row.yPos) +
+          input.xPos + this.highlightOffset_ + input.connectionWidth - 1, row.yPos) +
       Blockly.utils.svgPaths.lineOnAxis('v', input.connectionOffsetY) +
       this.puzzleTabPaths_.pathDown(this.RTL_) +
       Blockly.utils.svgPaths.lineOnAxis('v', belowTabHeight);
   } else {
     this.steps_ +=
-      Blockly.utils.svgPaths.moveTo(input.xPos + input.connectionWidth, row.yPos + input.connectionOffsetY) +
+      Blockly.utils.svgPaths.moveTo(input.xPos + input.connectionWidth,
+          row.yPos + input.connectionOffsetY) +
       this.puzzleTabPaths_.pathDown(this.RTL_);
   }
 };

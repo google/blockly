@@ -511,6 +511,12 @@ Blockly.CursorSvg.prototype.draw = function(curNode) {
   } else if (curNode.getType() === Blockly.ASTNode.types.STACK) {
     this.showWithStack_(curNode);
   }
+
+  // Ensures the cursor will be visible immediately after the move.
+  var animate = this.currentCursorSvg.childNodes[0];
+  if (animate !== undefined) {
+    animate.beginElement && animate.beginElement();
+  }
 };
 
 /**

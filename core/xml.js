@@ -393,7 +393,7 @@ Blockly.Xml.domToWorkspace = function(xml, workspace) {
       var xmlChild = xml.childNodes[i];
       var name = xmlChild.nodeName.toLowerCase();
       var handler = Blockly.Xml.tagMap_[name] ||
-        Blockly.Xml.unrecognizedTagType;
+           Blockly.Xml.unrecognizedTagType;
       handler(workspace, xmlChild, state);
     }
   } finally {
@@ -450,24 +450,23 @@ Blockly.Xml.serializers_ = [];
 
 /**
  * The function to handle unrecognized tags when parsing an XML document.
- * @param {!Blockly.Workspace} workspace the Blockly workspace
- * @param {!Element} xmlChild the XML element being parsed
- * @param {!Blockly.Xml.ParserState} _state parse state information (not used
+ * @param {!Blockly.Workspace} workspace The Blockly workspace.
+ * @param {!Element} xmlChild The XML element being parsed.
+ * @param {!Blockly.Xml.ParserState} _state Parser state information (not used
  *     in this implementation, but may be used by projects that provide a
  *     different behavior.
  * @public
  */
 Blockly.Xml.unrecognizedTagType = function(workspace, xmlChild, _state) {
-  if (xmlChild.nodeName.toLowerCase() != '#text' &&
-      xmlChild.nodeName.toLowerCase() != '#comment') {
-    Blockly.Xml.onError('Unrecognized tag ' + xmlChild.nodeName.toLowerCase() +
-      ' in XML');
+  var name = xmlChild.nodeName.toLowerCase();
+  if (name != '#text' && name != '#comment') {
+    Blockly.Xml.onError('Unrecognized tag ' + name + ' in XML');
   }
 };
 
 /**
  * Shared state used by different tag parsers.
- * @param {!Blockly.Workspace} workspace the target workspace for parsing
+ * @param {!Blockly.Workspace} workspace The target workspace for parsing.
  * @constructor
  */
 Blockly.Xml.ParserState = function(workspace) {
@@ -488,7 +487,7 @@ Blockly.Xml.ParserState = function(workspace) {
  * @param {!function(!Element, !Blockly.Workspace, boolean=)} save A
  *     function to serialize a workspace into the given tag.
  * @param {boolean=} opt_force Force registering the handler even if it
- *     will overwrite an existing handler
+ *     will overwrite an existing handler.
  */
 Blockly.Xml.registerTopLevelTag = function(tagName, load, save, opt_force) {
   if (tagName in Blockly.Xml.tagMap_ && !opt_force) {

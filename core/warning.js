@@ -1,9 +1,6 @@
 /**
  * @license
- * Visual Blocks Editor
- *
- * Copyright 2012 Google Inc.
- * https://developers.google.com/blockly/
+ * Copyright 2012 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,6 +28,7 @@ goog.require('Blockly.Events');
 goog.require('Blockly.Events.Ui');
 goog.require('Blockly.Icon');
 goog.require('Blockly.utils.dom');
+goog.require('Blockly.utils.object');
 
 
 /**
@@ -45,7 +43,7 @@ Blockly.Warning = function(block) {
   // The text_ object can contain multiple warnings.
   this.text_ = {};
 };
-goog.inherits(Blockly.Warning, Blockly.Icon);
+Blockly.utils.object.inherits(Blockly.Warning, Blockly.Icon);
 
 /**
  * Does this icon get hidden when the block is collapsed.
@@ -115,38 +113,55 @@ Blockly.Warning.textToDom_ = function(text) {
  */
 Blockly.Warning.prototype.setVisible = function(visible) {
   if (visible == this.isVisible()) {
-    // No change.
     return;
   }
   Blockly.Events.fire(
       new Blockly.Events.Ui(this.block_, 'warningOpen', !visible, visible));
   if (visible) {
-    // Create the bubble to display all warnings.
-    var paragraph = Blockly.Warning.textToDom_(this.getText());
-    this.bubble_ = new Blockly.Bubble(
-        /** @type {!Blockly.WorkspaceSvg} */ (this.block_.workspace),
-        paragraph, this.block_.svgPath_, this.iconXY_, null, null);
-    // Expose this warning's block's ID on its top-level SVG group.
-    this.bubble_.setSvgId(this.block_.id);
-    if (this.block_.RTL) {
-      // Right-align the paragraph.
-      // This cannot be done until the bubble is rendered on screen.
-      var maxWidth = paragraph.getBBox().width;
-      for (var i = 0, textElement; textElement = paragraph.childNodes[i]; i++) {
-        textElement.setAttribute('text-anchor', 'end');
-        textElement.setAttribute('x', maxWidth + Blockly.Bubble.BORDER_WIDTH);
-      }
-    }
-    this.updateColour();
-    // Bump the warning into the right location.
-    var size = this.bubble_.getBubbleSize();
-    this.bubble_.setBubbleSize(size.width, size.height);
+    this.createBubble();
   } else {
-    // Dispose of the bubble.
-    this.bubble_.dispose();
-    this.bubble_ = null;
-    this.body_ = null;
+    this.disposeBubble();
   }
+};
+
+/**
+ * Show the bubble.
+ * @package
+ */
+Blockly.Warning.prototype.createBubble = function() {
+  // TODO (#2943): This is package because comments steal this UI for
+  //  non-editable comments, but really this should be private.
+  this.paragraphElement_ = Blockly.Warning.textToDom_(this.getText());
+  this.bubble_ = new Blockly.Bubble(
+      /** @type {!Blockly.WorkspaceSvg} */ (this.block_.workspace),
+      this.paragraphElement_, this.block_.svgPath_, this.iconXY_, null, null);
+  // Expose this warning's block's ID on its top-level SVG group.
+  this.bubble_.setSvgId(this.block_.id);
+  if (this.block_.RTL) {
+    // Right-align the paragraph.
+    // This cannot be done until the bubble is rendered on screen.
+    var maxWidth = this.paragraphElement_.getBBox().width;
+    for (var i = 0, textElement;
+      textElement = this.paragraphElement_.childNodes[i]; i++) {
+
+      textElement.setAttribute('text-anchor', 'end');
+      textElement.setAttribute('x', maxWidth + Blockly.Bubble.BORDER_WIDTH);
+    }
+  }
+  this.updateColour();
+};
+
+/**
+ * Dispose of the bubble and references to it.
+ * @package
+ */
+Blockly.Warning.prototype.disposeBubble = function() {
+  // TODO (#2943): This is package because comments steal this UI for
+  //  non-editable comments, but really this should be private.
+  this.bubble_.dispose();
+  this.bubble_ = null;
+  this.body_ = null;
+  this.paragraphElement_ = null;
 };
 
 /**
@@ -161,7 +176,8 @@ Blockly.Warning.prototype.bodyFocus_ = function(_e) {
 
 /**
  * Set this warning's text.
- * @param {string} text Warning text (or '' to delete).
+ * @param {string} text Warning text (or '' to delete). This supports
+ *    linebreaks.
  * @param {string} id An ID for this text entry to be able to maintain
  *     multiple warnings.
  */

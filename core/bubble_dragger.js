@@ -1,9 +1,6 @@
 /**
  * @license
- * Visual Blocks Editor
- *
- * Copyright 2018 Google Inc.
- * https://developers.google.com/blockly/
+ * Copyright 2018 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,7 +28,6 @@ goog.require('Blockly.Events');
 goog.require('Blockly.Events.CommentMove');
 goog.require('Blockly.utils');
 goog.require('Blockly.utils.Coordinate');
-goog.require('Blockly.WorkspaceCommentSvg');
 
 
 /**
@@ -143,7 +139,7 @@ Blockly.BubbleDragger.prototype.dragBubble = function(e, currentDragDeltaXY) {
   this.draggingBubble_.moveDuringDrag(this.dragSurface_, newLoc);
 
   if (this.draggingBubble_.isDeletable()) {
-    this.deleteArea_ =  this.workspace_.isDeleteArea(e);
+    this.deleteArea_ = this.workspace_.isDeleteArea(e);
     this.updateCursorDuringBubbleDrag_();
   }
 };

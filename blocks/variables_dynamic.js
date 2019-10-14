@@ -1,9 +1,6 @@
 /**
  * @license
- * Visual Blocks Editor
- *
- * Copyright 2017 Google Inc.
- * https://developers.google.com/blockly/
+ * Copyright 2017 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,8 +28,10 @@
 
 goog.provide('Blockly.Constants.VariablesDynamic');
 
-goog.require('Blockly.Blocks');
 goog.require('Blockly');
+goog.require('Blockly.Blocks');
+goog.require('Blockly.FieldLabel');
+goog.require('Blockly.FieldVariable');
 
 
 /**
@@ -93,7 +92,7 @@ Blockly.Constants.VariablesDynamic.CUSTOM_CONTEXT_MENU_VARIABLE_GETTER_SETTER_MI
   /**
    * Add menu option to create getter/setter block for this setter/getter.
    * @param {!Array} options List of menu options to add to.
-   * @this Blockly.Block
+   * @this {Blockly.Block}
    */
   customContextMenu: function(options) {
     // Getter blocks have the option to create a setter block, and vice versa.
@@ -146,7 +145,7 @@ Blockly.Constants.VariablesDynamic.CUSTOM_CONTEXT_MENU_VARIABLE_GETTER_SETTER_MI
    * Called whenever anything on the workspace changes.
    * Set the connection type for this block.
    * @param {!Blockly.Events.Abstract} _e Change event.
-   * @this Blockly.Block
+   * @this {Blockly.Block}
    */
   onchange: function(_e) {
     var id = this.getFieldValue('VAR');

@@ -2,10 +2,6 @@
 
 'use strict';
 
-goog.provide('Blockly.Msg.nl');
-
-goog.require('Blockly.Msg');
-
 Blockly.Msg["ADD_COMMENT"] = "Opmerking toevoegen";
 Blockly.Msg["CANNOT_DELETE_VARIABLE_PROCEDURE"] = "De variabele \"%1\" kan niet verwijderd worden omdat die onderdeel uitmaakt van de definitie van de functie \"%2\"";
 Blockly.Msg["CHANGE_VALUE_TITLE"] = "Waarde wijzigen:";
@@ -393,6 +389,7 @@ Blockly.Msg["TEXT_TRIM_OPERATOR_RIGHT"] = "spaties van de rechterkant verwijdere
 Blockly.Msg["TEXT_TRIM_TOOLTIP"] = "Geeft een kopie van de tekst met verwijderde spaties van één of beide kanten.";
 Blockly.Msg["TODAY"] = "Vandaag";
 Blockly.Msg["UNDO"] = "Ongedaan maken";
+Blockly.Msg["UNNAMED_KEY"] = "zonder naam";
 Blockly.Msg["VARIABLES_DEFAULT_NAME"] = "item";
 Blockly.Msg["VARIABLES_GET_CREATE_SET"] = "Maak \"verander %1\"";
 Blockly.Msg["VARIABLES_GET_HELPURL"] = "https://github.com/google/blockly/wiki/Variables#get";

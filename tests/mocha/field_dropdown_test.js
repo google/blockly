@@ -1,9 +1,6 @@
 /**
  * @license
- * Visual Blocks Editor
- *
- * Copyright 2019 Google Inc.
- * https://developers.google.com/blockly/
+ * Copyright 2019 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +15,7 @@
  * limitations under the License.
  */
 
-suite ('Dropdown Fields', function() {
+suite('Dropdown Fields', function() {
   function assertValue(dropdownField, expectedValue, expectedText) {
     var actualValue = dropdownField.getValue();
     var actualText = dropdownField.getText();
@@ -29,11 +26,6 @@ suite ('Dropdown Fields', function() {
     test('Empty', function() {
       chai.assert.throws(function() {
         new Blockly.FieldDropdown();
-      });
-    });
-    test('Null', function() {
-      chai.assert.throws(function() {
-        new Blockly.FieldDropdown(null);
       });
     });
     test('Undefined', function() {
@@ -100,11 +92,6 @@ suite ('Dropdown Fields', function() {
     test('Empty', function() {
       chai.assert.throws(function() {
         Blockly.FieldDropdown.fromJson({});
-      });
-    });
-    test('Null', function() {
-      chai.assert.throws(function() {
-        Blockly.FieldDropdown.fromJson({ options: null });
       });
     });
     test('Undefined', function() {

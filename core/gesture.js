@@ -1,9 +1,6 @@
 /**
  * @license
- * Visual Blocks Editor
- *
- * Copyright 2017 Google Inc.
- * https://developers.google.com/blockly/
+ * Copyright 2017 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -498,7 +495,13 @@ Blockly.Gesture.prototype.doStart = function(e) {
   Blockly.Tooltip.block();
 
   if (this.targetBlock_) {
-    this.targetBlock_.select();
+    if (!this.targetBlock_.isInFlyout && e.shiftKey) {
+      Blockly.navigation.enableKeyboardAccessibility();
+      this.creatorWorkspace_.getCursor().setCurNode(
+          Blockly.navigation.getTopNode(this.targetBlock_));
+    } else {
+      this.targetBlock_.select();
+    }
   }
 
   if (Blockly.utils.isRightButton(e)) {
@@ -586,7 +589,7 @@ Blockly.Gesture.prototype.handleUp = function(e) {
   } else if (this.isBlockClick_()) {
     this.doBlockClick_();
   } else if (this.isWorkspaceClick_()) {
-    this.doWorkspaceClick_();
+    this.doWorkspaceClick_(e);
   }
 
   e.preventDefault();
@@ -657,6 +660,9 @@ Blockly.Gesture.prototype.handleWsStart = function(e, ws) {
   this.setStartWorkspace_(ws);
   this.mostRecentEvent_ = e;
   this.doStart(e);
+  if (Blockly.keyboardAccessibilityMode) {
+    Blockly.navigation.setState(Blockly.navigation.STATE_WS);
+  }
 };
 
 /**
@@ -751,15 +757,23 @@ Blockly.Gesture.prototype.doBlockClick_ = function() {
 };
 
 /**
- * Execute a workspace click.
+ * Execute a workspace click. Shift clicking puts the workspace in accessibility
+ * mode.
+ * @param {!Event} e A mouse up or touch end event.
  * @private
  */
-Blockly.Gesture.prototype.doWorkspaceClick_ = function() {
-  if (Blockly.selected) {
+Blockly.Gesture.prototype.doWorkspaceClick_ = function(e) {
+  var ws = this.creatorWorkspace_;
+  if (e.shiftKey) {
+    Blockly.navigation.enableKeyboardAccessibility();
+    var screenCoord = new Blockly.utils.Coordinate(e.clientX, e.clientY);
+    var wsCoord = Blockly.utils.screenToWsCoordinates(ws, screenCoord);
+    var wsNode = Blockly.ASTNode.createWorkspaceNode(ws, wsCoord);
+    ws.getCursor().setCurNode(wsNode);
+  } else if (Blockly.selected) {
     Blockly.selected.unselect();
   }
 };
-
 
 /* End functions defining what actions to take to execute clicks on each type
  * of target. */

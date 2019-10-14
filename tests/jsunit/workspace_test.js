@@ -1,9 +1,6 @@
 /**
  * @license
- * Blockly Tests
- *
- * Copyright 2012 Google Inc.
- * https://developers.google.com/blockly/
+ * Copyright 2012 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,8 +16,6 @@
  */
 'use strict';
 
-goog.require('goog.testing');
-goog.require('goog.testing.MockControl');
 
 var workspace;
 var mockControl_;
@@ -28,12 +23,13 @@ var mockControl_;
 function workspaceTest_setUp() {
   defineGetVarBlock();
   workspace = new Blockly.Workspace();
-  mockControl_ = new goog.testing.MockControl();
 }
 
 function workspaceTest_tearDown() {
   undefineGetVarBlock();
-  mockControl_.$tearDown();
+  if (mockControl_) {
+    mockControl_.restore();
+  }
   workspace.dispose();
 }
 
@@ -186,7 +182,7 @@ function test_clear_Trivial() {
   workspaceTest_setUp();
   workspace.createVariable('name1', 'type1', 'id1');
   workspace.createVariable('name2', 'type2', 'id2');
-  setUpMockMethod(mockControl_, Blockly.Events, 'setGroup', [true, false],
+  mockControl_ = setUpMockMethod(Blockly.Events, 'setGroup', [true, false],
     null);
 
   try {
@@ -202,7 +198,7 @@ function test_clear_Trivial() {
 
 function test_clear_NoVariables() {
   workspaceTest_setUp();
-  setUpMockMethod(mockControl_, Blockly.Events, 'setGroup', [true, false],
+  mockControl_ = setUpMockMethod(Blockly.Events, 'setGroup', [true, false],
     null);
 
   try {

@@ -1,9 +1,6 @@
 /**
  * @license
- * Visual Blocks Editor
- *
- * Copyright 2019 Google Inc.
- * https://developers.google.com/blockly/
+ * Copyright 2019 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -37,6 +34,12 @@ async function runMochaTestsInBrowser() {
           browserName: 'chrome'
       }
   };
+  // Run in headless mode on Travis.
+  if (process.env.TRAVIS_CI) {
+    options.capabilities['goog:chromeOptions'] = {
+      args: ['--headless', '--no-sandbox', '--disable-dev-shm-usage']
+    };
+  }
 
   var url = 'file://' + __dirname + '/index.html';
   console.log('Starting webdriverio...');
@@ -48,9 +51,9 @@ async function runMochaTestsInBrowser() {
     var elem = await browser.$('#failureCount');
     var text = await elem.getAttribute('tests_failed');
     return text != 'unset';
-  })
+  }, 6000);
 
-  const elem = await browser.$('#failureCount')
+  const elem = await browser.$('#failureCount');
   const numOfFailure = await elem.getAttribute('tests_failed');
 
   console.log('============Blockly Mocha Test Summary=================');

@@ -2,10 +2,6 @@
 
 'use strict';
 
-goog.provide('Blockly.Msg.el');
-
-goog.require('Blockly.Msg');
-
 Blockly.Msg["ADD_COMMENT"] = "Πρόσθεσε Το Σχόλιο";
 Blockly.Msg["CANNOT_DELETE_VARIABLE_PROCEDURE"] = "Δεν μπορώ να διαγράψω την μεταβλητή '%1' διότι είναι μέρος του ορισμού της λειτουργίας '%2'";
 Blockly.Msg["CHANGE_VALUE_TITLE"] = "Άλλαξε την τιμή:";
@@ -393,6 +389,7 @@ Blockly.Msg["TEXT_TRIM_OPERATOR_RIGHT"] = "περίκοψε τα κενά από
 Blockly.Msg["TEXT_TRIM_TOOLTIP"] = "Επιστρέφει ένα αντίγραφο του κειμένου με αφαιρεμένα τα κενά από το ένα ή και τα δύο άκρα.";
 Blockly.Msg["TODAY"] = "Σήμερα";
 Blockly.Msg["UNDO"] = "Αναίρεση";
+Blockly.Msg["UNNAMED_KEY"] = "unnamed";  // untranslated
 Blockly.Msg["VARIABLES_DEFAULT_NAME"] = "αντικείμενο";
 Blockly.Msg["VARIABLES_GET_CREATE_SET"] = "Δημιούργησε «όρισε %1»";
 Blockly.Msg["VARIABLES_GET_HELPURL"] = "https://github.com/google/blockly/wiki/Variables#get";  // untranslated

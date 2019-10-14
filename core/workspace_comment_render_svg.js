@@ -1,9 +1,6 @@
 /**
  * @license
- * Visual Blocks Editor
- *
- * Copyright 2017 Google Inc.
- * https://developers.google.com/blockly/
+ * Copyright 2017 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,7 +26,6 @@ goog.provide('Blockly.WorkspaceCommentSvg.render');
 goog.require('Blockly.utils');
 goog.require('Blockly.utils.Coordinate');
 goog.require('Blockly.utils.dom');
-goog.require('Blockly.WorkspaceCommentSvg');
 
 
 /**
@@ -257,7 +253,6 @@ Blockly.WorkspaceCommentSvg.prototype.addDeleteDom_ = function() {
  * @private
  */
 Blockly.WorkspaceCommentSvg.prototype.resizeMouseDown_ = function(e) {
-  //this.promote_();
   this.unbindDragEvents_();
   if (Blockly.utils.isRightButton(e)) {
     // No right-click.
@@ -335,7 +330,7 @@ Blockly.WorkspaceCommentSvg.prototype.unbindDragEvents_ = function() {
  * @param {!Event} e Mouse up event.
  * @private
  */
-Blockly.WorkspaceCommentSvg.prototype.resizeMouseUp_ = function(/*e*/) {
+Blockly.WorkspaceCommentSvg.prototype.resizeMouseUp_ = function(/* e */) {
   Blockly.Touch.clearTouchIdentifier();
   this.unbindDragEvents_();
 };

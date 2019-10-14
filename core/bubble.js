@@ -1,9 +1,6 @@
 /**
  * @license
- * Visual Blocks Editor
- *
- * Copyright 2012 Google Inc.
- * https://developers.google.com/blockly/
+ * Copyright 2012 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,6 +23,7 @@
 
 goog.provide('Blockly.Bubble');
 
+goog.require('Blockly.Scrollbar');
 goog.require('Blockly.Touch');
 goog.require('Blockly.utils');
 goog.require('Blockly.utils.Coordinate');
@@ -151,7 +149,7 @@ Blockly.Bubble.unbindDragEvents_ = function() {
  * @param {!Event} e Mouse up event.
  * @private
  */
-Blockly.Bubble.bubbleMouseUp_ = function(/*e*/) {
+Blockly.Bubble.bubbleMouseUp_ = function(/* e */) {
   Blockly.Touch.clearTouchIdentifier();
   Blockly.Bubble.unbindDragEvents_();
 };
@@ -206,7 +204,7 @@ Blockly.Bubble.prototype.autoLayout_ = true;
  * Create the bubble's DOM.
  * @param {!Element} content SVG content for the bubble.
  * @param {boolean} hasResize Add diagonal resize gripper if true.
- * @return {!Element} The bubble's SVG group.
+ * @return {!SVGElement} The bubble's SVG group.
  * @private
  */
 Blockly.Bubble.prototype.createDom_ = function(content, hasResize) {
@@ -276,7 +274,7 @@ Blockly.Bubble.prototype.createDom_ = function(content, hasResize) {
 
 /**
  * Return the root node of the bubble's SVG group.
- * @return {Element} The root SVG node of the bubble's group.
+ * @return {SVGElement} The root SVG node of the bubble's group.
  */
 Blockly.Bubble.prototype.getSvgRoot = function() {
   return this.bubbleGroup_;
@@ -288,7 +286,7 @@ Blockly.Bubble.prototype.getSvgRoot = function() {
  */
 Blockly.Bubble.prototype.setSvgId = function(id) {
   if (this.bubbleGroup_.dataset) {
-    this.bubbleGroup_.dataset.blockId = id;
+    this.bubbleGroup_.dataset['blockId'] = id;
   }
 };
 
@@ -523,7 +521,7 @@ Blockly.Bubble.prototype.getOptimalRelativeLeft_ = function(metrics) {
 
   if (this.workspace_.RTL) {
     // Bubble coordinates are flipped in RTL.
-    var bubbleRight =  this.anchorXY_.x - relativeLeft;
+    var bubbleRight = this.anchorXY_.x - relativeLeft;
     var bubbleLeft = bubbleRight - this.width_;
 
     var workspaceRight = metrics.viewLeft + metrics.viewWidth;
@@ -625,10 +623,10 @@ Blockly.Bubble.prototype.moveTo = function(x, y) {
 
 /**
  * Get the dimensions of this bubble.
- * @return {!Object} Object with width and height properties.
+ * @return {!Blockly.utils.Size} The height and width of the bubble.
  */
 Blockly.Bubble.prototype.getBubbleSize = function() {
-  return {width: this.width_, height: this.height_};
+  return new Blockly.utils.Size(this.width_, this.height_);
 };
 
 /**
@@ -657,13 +655,12 @@ Blockly.Bubble.prototype.setBubbleSize = function(width, height) {
           (height - doubleBorderWidth) + ')');
     }
   }
-  if (this.rendered_) {
-    if (this.autoLayout_) {
-      this.layoutBubble_();
-    }
-    this.positionBubble_();
-    this.renderArrow_();
+  if (this.autoLayout_) {
+    this.layoutBubble_();
   }
+  this.positionBubble_();
+  this.renderArrow_();
+
   // Allow the contents to resize.
   if (this.resizeCallback_) {
     this.resizeCallback_();

@@ -1,9 +1,6 @@
 /**
  * @license
- * Visual Blocks Editor
- *
- * Copyright 2018 Google Inc.
- * https://developers.google.com/blockly/
+ * Copyright 2018 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,6 +25,7 @@ goog.provide('Blockly.Events.Ui');
 
 goog.require('Blockly.Events');
 goog.require('Blockly.Events.Abstract');
+goog.require('Blockly.utils.object');
 
 
 /**
@@ -46,14 +44,14 @@ goog.require('Blockly.Events.Abstract');
 Blockly.Events.Ui = function(block, element, oldValue, newValue) {
   Blockly.Events.Ui.superClass_.constructor.call(this);
   this.blockId = block ? block.id : null;
-  this.workspaceId = block ? block.workspace.id : null;
+  this.workspaceId = block ? block.workspace.id : undefined;
   this.element = element;
   this.oldValue = oldValue;
   this.newValue = newValue;
   // UI events do not undo or redo.
   this.recordUndo = false;
 };
-goog.inherits(Blockly.Events.Ui, Blockly.Events.Abstract);
+Blockly.utils.object.inherits(Blockly.Events.Ui, Blockly.Events.Abstract);
 
 /**
  * Type of this event.

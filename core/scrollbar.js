@@ -1,9 +1,6 @@
 /**
  * @license
- * Visual Blocks Editor
- *
- * Copyright 2011 Google Inc.
- * https://developers.google.com/blockly/
+ * Copyright 2011 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -351,7 +348,10 @@ Blockly.Scrollbar.prototype.dispose = function() {
   this.outerSvg_ = null;
   this.svgGroup_ = null;
   this.svgBackground_ = null;
-  this.svgHandle_ = null;
+  if (this.svgHandle_) {
+    this.workspace_.getThemeManager().unsubscribe(this.svgHandle_);
+    this.svgHandle_ = null;
+  }
   this.workspace_ = null;
 };
 
@@ -625,6 +625,8 @@ Blockly.Scrollbar.prototype.createDom_ = function(opt_class) {
         'ry': radius
       },
       this.svgGroup_);
+  this.workspace_.getThemeManager().subscribe(this.svgHandle_, 'scrollbar', 'fill');
+  this.workspace_.getThemeManager().subscribe(this.svgHandle_, 'scrollbarOpacity', 'fill-opacity');
   Blockly.utils.dom.insertAfter(this.outerSvg_, this.workspace_.getParentSvg());
 };
 
@@ -791,7 +793,7 @@ Blockly.Scrollbar.prototype.onMouseUpHandle_ = function() {
 
 /**
  * Hide chaff and stop binding to mouseup and mousemove events.  Call this to
- * wrap up lose ends associated with the scrollbar.
+ * wrap up loose ends associated with the scrollbar.
  * @private
  */
 Blockly.Scrollbar.prototype.cleanUp_ = function() {

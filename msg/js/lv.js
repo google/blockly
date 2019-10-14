@@ -2,10 +2,6 @@
 
 'use strict';
 
-goog.provide('Blockly.Msg.lv');
-
-goog.require('Blockly.Msg');
-
 Blockly.Msg["ADD_COMMENT"] = "Pievienot komentāru";
 Blockly.Msg["CANNOT_DELETE_VARIABLE_PROCEDURE"] = "Can't delete the variable '%1' because it's part of the definition of the function '%2'";  // untranslated
 Blockly.Msg["CHANGE_VALUE_TITLE"] = "Mainīt vērtību:";
@@ -393,6 +389,7 @@ Blockly.Msg["TEXT_TRIM_OPERATOR_RIGHT"] = "Dzēst atstarpes no beigām";
 Blockly.Msg["TEXT_TRIM_TOOLTIP"] = "Atgriež teksta kopiju ar noņemtām atstarpēm vienā vai otrā galā.";
 Blockly.Msg["TODAY"] = "Šodiena";
 Blockly.Msg["UNDO"] = "Atsaukt";
+Blockly.Msg["UNNAMED_KEY"] = "unnamed";  // untranslated
 Blockly.Msg["VARIABLES_DEFAULT_NAME"] = "vienums";
 Blockly.Msg["VARIABLES_GET_CREATE_SET"] = "Izveidot piešķiršanu mainīgajam %1";
 Blockly.Msg["VARIABLES_GET_HELPURL"] = "https://github.com/google/blockly/wiki/Variables#get";  // untranslated

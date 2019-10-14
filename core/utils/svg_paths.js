@@ -1,9 +1,6 @@
 /**
  * @license
- * Visual Blocks Editor
- *
- * Copyright 2019 Google Inc.
- * https://developers.google.com/blockly/
+ * Copyright 2019 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -52,7 +49,7 @@ Blockly.utils.svgPaths.point = function(x, y) {
  * These coordinates are unitless and hence in the user coordinate system.
  * @param {string} command The command to use.
  *     Should be one of: c, C, s, S, q, Q.
- * @param {string} points  An array containing all of the points to pass to the
+ * @param {!Array.<string>} points  An array containing all of the points to pass to the
  *     curve command, in order.  The points are represented as strings of the
  *     format ' x, y '.
  * @return {string} A string defining one or more Bezier curves.  See the MDN

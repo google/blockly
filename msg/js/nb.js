@@ -2,10 +2,6 @@
 
 'use strict';
 
-goog.provide('Blockly.Msg.nb');
-
-goog.require('Blockly.Msg');
-
 Blockly.Msg["ADD_COMMENT"] = "Legg til kommentar";
 Blockly.Msg["CANNOT_DELETE_VARIABLE_PROCEDURE"] = "Kan ikke slette variabelen «%1» fordi den er del av definisjonen for funksjonen «%2»";
 Blockly.Msg["CHANGE_VALUE_TITLE"] = "Bytt verdi:";
@@ -393,6 +389,7 @@ Blockly.Msg["TEXT_TRIM_OPERATOR_RIGHT"] = "fjern mellomrom fra høyre side av";
 Blockly.Msg["TEXT_TRIM_TOOLTIP"] = "Returner en kopi av teksten med mellomrom fjernet fra en eller begge sidene.";
 Blockly.Msg["TODAY"] = "I dag";
 Blockly.Msg["UNDO"] = "Angre";
+Blockly.Msg["UNNAMED_KEY"] = "unnamed";  // untranslated
 Blockly.Msg["VARIABLES_DEFAULT_NAME"] = "element";
 Blockly.Msg["VARIABLES_GET_CREATE_SET"] = "Opprett 'sett %1'";
 Blockly.Msg["VARIABLES_GET_HELPURL"] = "https://github.com/google/blockly/wiki/Variables#get";  // untranslated

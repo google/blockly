@@ -19,10 +19,12 @@
 			"Teeed",
 			"InternerowyGołąb",
 			"Wojtas",
-			"Stojex"
+			"Stojex",
+			"Rail"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "element",
+	"UNNAMED_KEY": "bez nazwy",
 	"TODAY": "Dzisiaj",
 	"DUPLICATE_BLOCK": "Powiel",
 	"ADD_COMMENT": "Dodaj Komentarz",

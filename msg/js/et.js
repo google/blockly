@@ -2,10 +2,6 @@
 
 'use strict';
 
-goog.provide('Blockly.Msg.et');
-
-goog.require('Blockly.Msg');
-
 Blockly.Msg["ADD_COMMENT"] = "Lisa kommentaar";
 Blockly.Msg["CANNOT_DELETE_VARIABLE_PROCEDURE"] = "Muutujat '%1' ei saa kustutada, sest see on osa funktsiooni '%2' määratlusest";
 Blockly.Msg["CHANGE_VALUE_TITLE"] = "Muuda väärtust:";
@@ -393,6 +389,7 @@ Blockly.Msg["TEXT_TRIM_OPERATOR_RIGHT"] = "lõpust eemaldatud tühikutega";
 Blockly.Msg["TEXT_TRIM_TOOLTIP"] = "Tagastab koopia tekstist, millel on tühikud ühelt või mõlemalt poolt eemaldatud.";
 Blockly.Msg["TODAY"] = "Täna";
 Blockly.Msg["UNDO"] = "Võta tagasi";
+Blockly.Msg["UNNAMED_KEY"] = "unnamed";  // untranslated
 Blockly.Msg["VARIABLES_DEFAULT_NAME"] = "objekt";
 Blockly.Msg["VARIABLES_GET_CREATE_SET"] = "Tekita 'määra „%1“ väärtuseks' plokk";
 Blockly.Msg["VARIABLES_GET_HELPURL"] = "https://github.com/google/blockly/wiki/Variables#get";  // untranslated

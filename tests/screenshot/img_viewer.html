@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<!--
+@license
+Copyright 2019 Google LLC
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+ http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Image comparison</title>
+
+  <style>
+    html, body {
+      height: 100%;
+    }
+  </style>
+  <script type="text/javascript">
+    var showOld = false;
+    function start() {
+      if (sessionStorage) {
+        var text = sessionStorage.getItem('imgName');
+        if (text) {
+          document.getElementById('imgName').value = text;
+        }
+      } else {
+        // MSIE 11 does not support sessionStorage on file:// URLs.
+        logEvents(false);
+      }
+      openImage();
+    }
+    function openImage() {
+      var imgName = document.getElementById('imgName').value;
+      if (sessionStorage) {
+        sessionStorage.setItem('imgName', imgName);
+      }
+      var imgElem = document.getElementById('image');
+      if (showOld) {
+        imgElem.setAttribute('src', './outputs/old/' + imgName + '.png');
+        document.getElementById('versionName').innerHTML = 'Old';
+      } else {
+        imgElem.setAttribute('src', './outputs/new/' + imgName + '.png');
+        document.getElementById('versionName').innerHTML = 'New';
+      }
+    }
+
+    function showDiff() {
+      var imgName = document.getElementById('imgName').value;
+      var imgElem = document.getElementById('image');
+      imgElem.setAttribute('src', './outputs/diff/' + imgName + '.png');
+      document.getElementById('versionName').innerHTML = 'Diff';
+    }
+    function onImageClick() {
+      showOld = !showOld;
+      openImage();
+    }
+  </script>
+<body onload="start()">
+  <textarea id="imgName"></textarea>
+  <input type="button" value="open" onclick="openImage()">
+  <input type="button" value="show diff" onclick="showDiff()">
+
+  <h1 id="versionName"></h1>
+  <br>
+  <img id="image" onclick="onImageClick()">
+</body>

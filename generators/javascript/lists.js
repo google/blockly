@@ -1,9 +1,6 @@
 /**
  * @license
- * Visual Blocks Language
- *
- * Copyright 2012 Google Inc.
- * https://developers.google.com/blockly/
+ * Copyright 2012 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -354,7 +351,7 @@ Blockly.JavaScript['lists_sort'] = function(block) {
           '(type, direction) {',
        '  var compareFuncs = {',
        '    "NUMERIC": function(a, b) {',
-       '        return parseFloat(a) - parseFloat(b); },',
+       '        return Number(a) - Number(b); },',
        '    "TEXT": function(a, b) {',
        '        return a.toString() > b.toString() ? 1 : -1; },',
        '    "IGNORE_CASE": function(a, b) {',

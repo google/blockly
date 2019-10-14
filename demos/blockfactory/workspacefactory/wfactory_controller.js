@@ -1,9 +1,6 @@
 /**
  * @license
- * Blockly Demos: Block Factory
- *
- * Copyright 2016 Google Inc.
- * https://developers.google.com/blockly/
+ * Copyright 2016 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -340,8 +337,12 @@ WorkspaceFactoryController.prototype.exportXmlFile = function(exportMode) {
     // Unknown mode. Throw error.
     var msg = 'Unknown export mode: ' + exportMode;
     BlocklyDevTools.Analytics.onError(msg);
-    throw new Error(msg);
+    throw Error(msg);
   }
+
+  // Unpack self-closing tags.  These tags fail when embedded in HTML.
+  // <block name="foo"/> -> <block name="foo"></block>
+  configXml = configXml.replace(/<(\w+)([^<]*)\/>/g, '<$1$2></$1>');
 
   // Download file.
   var data = new Blob([configXml], {type: 'text/xml'});
@@ -391,8 +392,7 @@ WorkspaceFactoryController.prototype.printConfig = function() {
   // Capture any changes made by user before generating XML.
   this.saveStateFromWorkspace();
   // Print XML.
-  window.console.log(Blockly.Xml.domToPrettyText
-      (this.generator.generateToolboxXml()));
+  console.log(Blockly.Xml.domToPrettyText(this.generator.generateToolboxXml()));
 };
 
 /**
@@ -757,7 +757,7 @@ WorkspaceFactoryController.prototype.importFile = function(file, importMode) {
         BlocklyDevTools.Analytics.onImport('WorkspaceContents.xml');
       } else {
         // Throw error if invalid mode.
-        throw new Error('Unknown import mode: ' + importMode);
+        throw Error('Unknown import mode: ' + importMode);
       }
     } catch(e) {
       var msg = 'Cannot load XML from file.';
@@ -1179,19 +1179,19 @@ WorkspaceFactoryController.prototype.readOptions_ = function() {
     var startScaleValue =
         document.getElementById('zoomOption_startScale_number').value;
     zoom['startScale'] = typeof startScaleValue == 'string' ?
-        parseFloat(startScaleValue) : startScaleValue;
+        Number(startScaleValue) : startScaleValue;
     var maxScaleValue =
         document.getElementById('zoomOption_maxScale_number').value;
     zoom['maxScale'] = typeof maxScaleValue == 'string' ?
-        parseFloat(maxScaleValue) : maxScaleValue;
+        Number(maxScaleValue) : maxScaleValue;
     var minScaleValue =
         document.getElementById('zoomOption_minScale_number').value;
     zoom['minScale'] = typeof minScaleValue == 'string' ?
-        parseFloat(minScaleValue) : minScaleValue;
+        Number(minScaleValue) : minScaleValue;
     var scaleSpeedValue =
         document.getElementById('zoomOption_scaleSpeed_number').value;
     zoom['scaleSpeed'] = typeof scaleSpeedValue == 'string' ?
-        parseFloat(scaleSpeedValue) : scaleSpeedValue;
+        Number(scaleSpeedValue) : scaleSpeedValue;
     optionsObj['zoom'] = zoom;
   }
 

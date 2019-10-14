@@ -1,9 +1,6 @@
 /**
  * @license
- * Visual Blocks Editor
- *
- * Copyright 2015 Google Inc.
- * https://developers.google.com/blockly/
+ * Copyright 2015 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,9 +23,12 @@
 
 goog.provide('Blockly.FieldDate');
 
+goog.require('Blockly.Css');
 goog.require('Blockly.Events');
 goog.require('Blockly.Field');
+goog.require('Blockly.fieldRegistry');
 goog.require('Blockly.utils.dom');
+goog.require('Blockly.utils.object');
 goog.require('Blockly.utils.string');
 
 goog.require('goog.date');
@@ -50,13 +50,10 @@ goog.require('goog.ui.DatePicker');
  * @constructor
  */
 Blockly.FieldDate = function(opt_value, opt_validator) {
-  opt_value = this.doClassValidation_(opt_value);
-  if (!opt_value) {
-    opt_value = new goog.date.Date().toIsoString(true);
-  }
-  Blockly.FieldDate.superClass_.constructor.call(this, opt_value, opt_validator);
+  Blockly.FieldDate.superClass_.constructor.call(this,
+      opt_value || new goog.date.Date().toIsoString(true), opt_validator);
 };
-goog.inherits(Blockly.FieldDate, Blockly.Field);
+Blockly.utils.object.inherits(Blockly.FieldDate, Blockly.Field);
 
 /**
  * Construct a FieldDate from a JSON arg object.
@@ -73,7 +70,6 @@ Blockly.FieldDate.fromJson = function(options) {
  * Serializable fields are saved by the XML renderer, non-serializable fields
  * are not. Editable fields should also be serializable.
  * @type {boolean}
- * @const
  */
 Blockly.FieldDate.prototype.SERIALIZABLE = true;
 
@@ -100,20 +96,20 @@ Blockly.FieldDate.prototype.DROPDOWN_BACKGROUND_COLOUR = 'white';
 
 /**
  * Ensure that the input value is a valid date.
- * @param {string=} newValue The input value.
+ * @param {*=} opt_newValue The input value.
  * @return {?string} A valid date, or null if invalid.
  * @protected
  */
-Blockly.FieldDate.prototype.doClassValidation_ = function(newValue) {
-  if (!newValue) {
+Blockly.FieldDate.prototype.doClassValidation_ = function(opt_newValue) {
+  if (!opt_newValue) {
     return null;
   }
   // Check if the new value is parsable or not.
-  var date = goog.date.Date.fromIsoString(newValue);
-  if (!date || date.toIsoString(true) != newValue) {
+  var date = goog.date.Date.fromIsoString(opt_newValue);
+  if (!date || date.toIsoString(true) != opt_newValue) {
     return null;
   }
-  return newValue;
+  return opt_newValue;
 };
 
 /**
@@ -264,63 +260,96 @@ Blockly.FieldDate.loadLanguage_ = function() {
 /**
  * CSS for date picker.  See css.js for use.
  */
-Blockly.FieldDate.CSS = [
+Blockly.Css.register([
+  /* eslint-disable indent */
   '.blocklyDatePicker,',
   '.blocklyDatePicker th,',
   '.blocklyDatePicker td {',
-  '  font: 13px Arial, sans-serif;',
-  '  color: #3c4043;',
+    'font: 13px Arial, sans-serif;',
+    'color: #3c4043;',
   '}',
 
   '.blocklyDatePicker th,',
   '.blocklyDatePicker td {',
-  '  text-align: center;',
-  '  vertical-align: middle;',
+    'text-align: center;',
+    'vertical-align: middle;',
   '}',
 
   '.blocklyDatePicker .goog-date-picker-wday,',
   '.blocklyDatePicker .goog-date-picker-date {',
-  '  padding: 6px 6px;',
+    'padding: 6px 6px;',
   '}',
 
   '.blocklyDatePicker button {',
-  '  cursor: pointer;',
-  '  padding: 6px 6px;',
-  '  margin: 1px 0;',
-  '  border: 0;',
-  '  color: #3c4043;',
-  '  font-weight: bold;',
-  '  background: transparent;',
+    'cursor: pointer;',
+    'padding: 6px 6px;',
+    'margin: 1px 0;',
+    'border: 0;',
+    'color: #3c4043;',
+    'font-weight: bold;',
+    'background: transparent;',
   '}',
 
   '.blocklyDatePicker .goog-date-picker-previousMonth,',
   '.blocklyDatePicker .goog-date-picker-nextMonth {',
-  '  height: 24px;',
-  '  width: 24px;',
+    'height: 24px;',
+    'width: 24px;',
   '}',
 
   '.blocklyDatePicker .goog-date-picker-monthyear {',
-  '  font-weight: bold;',
+    'font-weight: bold;',
   '}',
 
   '.blocklyDatePicker .goog-date-picker-wday, ',
   '.blocklyDatePicker .goog-date-picker-other-month {',
-  '  color: #70757a;',
-  '  border-radius: 12px;',
+    'color: #70757a;',
+    'border-radius: 12px;',
   '}',
 
   '.blocklyDatePicker button,',
   '.blocklyDatePicker .goog-date-picker-date {',
-  '  cursor: pointer;',
-  '  background-color: rgb(218, 220, 224, 0);',
-  '  border-radius: 12px;',
-  '  transition: background-color,opacity 100ms linear;',
+    'cursor: pointer;',
+    'background-color: rgb(218, 220, 224, 0);',
+    'border-radius: 12px;',
+    'transition: background-color,opacity 100ms linear;',
   '}',
 
   '.blocklyDatePicker button:hover,',
   '.blocklyDatePicker .goog-date-picker-date:hover {',
-  '  background-color: rgb(218, 220, 224, .5);',
+    'background-color: rgb(218, 220, 224, .5);',
   '}'
-];
+  /* eslint-enable indent */
+]);
 
-Blockly.Field.register('field_date', Blockly.FieldDate);
+Blockly.fieldRegistry.register('field_date', Blockly.FieldDate);
+
+
+/**
+ * Back up original getMsg function.
+ * @type {!Function}
+ */
+goog.getMsgOrig = goog.getMsg;
+
+/**
+ * Gets a localized message.
+ * Overrides the default Closure function to check for a Blockly.Msg first.
+ * Used infrequently, only known case is TODAY button in date picker.
+ * @param {string} str Translatable string, places holders in the form {$foo}.
+ * @param {Object.<string, string>=} opt_values Maps place holder name to value.
+ * @return {string} Message with placeholders filled.
+ * @suppress {duplicate}
+ */
+goog.getMsg = function(str, opt_values) {
+  var key = goog.getMsg.blocklyMsgMap[str];
+  if (key) {
+    str = Blockly.Msg[key];
+  }
+  return goog.getMsgOrig(str, opt_values);
+};
+
+/**
+ * Mapping of Closure messages to Blockly.Msg names.
+ */
+goog.getMsg.blocklyMsgMap = {
+  'Today': 'TODAY'
+};

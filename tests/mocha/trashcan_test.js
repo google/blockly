@@ -1,9 +1,6 @@
 /**
  * @license
- * Visual Blocks Editor
- *
- * Copyright 2019 Google Inc.
- * https://developers.google.com/blockly/
+ * Copyright 2019 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,12 +16,16 @@
  */
 
 suite("Trashcan", function() {
+  var themeManager = new Blockly.ThemeManager(Blockly.Themes.Classic);
   var workspace = {
     addChangeListener: function(func) {
       this.listener = func;
     },
     triggerListener: function(event) {
       this.listener(event);
+    },
+    getThemeManager: function() {
+      return themeManager;
     },
     options: {
       maxTrashcanContents: Infinity

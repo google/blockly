@@ -1,9 +1,6 @@
 /**
  * @license
- * Visual Blocks Language
- *
- * Copyright 2016 Google Inc.
- * https://developers.google.com/blockly/
+ * Copyright 2016 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -116,8 +113,8 @@ Blockly.Lua['controls_for'] = function(block) {
   if (Blockly.isNumber(startVar) && Blockly.isNumber(endVar) &&
       Blockly.isNumber(increment)) {
     // All arguments are simple numbers.
-    var up = parseFloat(startVar) <= parseFloat(endVar);
-    var step = Math.abs(parseFloat(increment));
+    var up = Number(startVar) <= Number(endVar);
+    var step = Math.abs(Number(increment));
     incValue = (up ? '' : '-') + step;
   } else {
     code = '';

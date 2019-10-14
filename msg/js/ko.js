@@ -2,10 +2,6 @@
 
 'use strict';
 
-goog.provide('Blockly.Msg.ko');
-
-goog.require('Blockly.Msg');
-
 Blockly.Msg["ADD_COMMENT"] = "주석 추가";
 Blockly.Msg["CANNOT_DELETE_VARIABLE_PROCEDURE"] = "'%2' 함수 정의의 일부이기 때문에 '%1' 변수를 삭제할 수 없습니다";
 Blockly.Msg["CHANGE_VALUE_TITLE"] = "값 바꾸기:";
@@ -393,6 +389,7 @@ Blockly.Msg["TEXT_TRIM_OPERATOR_RIGHT"] = "오른쪽의 공백 문자 제거";
 Blockly.Msg["TEXT_TRIM_TOOLTIP"] = "문장의 왼쪽/오른쪽/양쪽에서 스페이스 문자를 제거해 돌려줍니다.";
 Blockly.Msg["TODAY"] = "오늘";
 Blockly.Msg["UNDO"] = "실행 취소";
+Blockly.Msg["UNNAMED_KEY"] = "unnamed";  // untranslated
 Blockly.Msg["VARIABLES_DEFAULT_NAME"] = "항목";
 Blockly.Msg["VARIABLES_GET_CREATE_SET"] = "'집합 %1' 생성";
 Blockly.Msg["VARIABLES_GET_HELPURL"] = "https://ko.wikipedia.org/wiki/%EB%B3%80%EC%88%98_(%EC%BB%B4%ED%93%A8%ED%84%B0_%EA%B3%BC%ED%95%99)";

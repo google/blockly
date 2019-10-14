@@ -1,9 +1,6 @@
 /**
  * @license
- * Visual Blocks Editor
- *
- * Copyright 2017 Google Inc.
- * https://developers.google.com/blockly/
+ * Copyright 2017 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,6 +25,7 @@
 goog.provide('Blockly.WorkspaceAudio');
 
 goog.require('Blockly.utils');
+goog.require('Blockly.utils.global');
 goog.require('Blockly.utils.userAgent');
 
 
@@ -112,8 +110,19 @@ Blockly.WorkspaceAudio.prototype.preload = function() {
   for (var name in this.SOUNDS_) {
     var sound = this.SOUNDS_[name];
     sound.volume = 0.01;
-    sound.play().catch(function() {});
-    sound.pause();
+    var playPromise = sound.play();
+    // Edge does not return a promise, so we need to check.
+    if (playPromise !== undefined) {
+      // If we don't wait for the play request to complete before calling pause()
+      // we will get an exception: (DOMException: The play() request was interrupted)
+      // See more: https://developers.google.com/web/updates/2017/06/play-request-was-interrupted
+      playPromise.then(sound.pause).catch(function() {
+        // Play without user interaction was prevented.
+      });
+    } else {
+      sound.pause();
+    }
+    
     // iOS can only process one sound at a time.  Trying to load more than one
     // corrupts the earlier ones.  Just load one and leave the others uncached.
     if (Blockly.utils.userAgent.IPAD || Blockly.utils.userAgent.IPHONE) {

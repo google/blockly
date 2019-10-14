@@ -2,15 +2,11 @@
 
 'use strict';
 
-goog.provide('Blockly.Msg.bg');
-
-goog.require('Blockly.Msg');
-
 Blockly.Msg["ADD_COMMENT"] = "Добави коментар";
 Blockly.Msg["CANNOT_DELETE_VARIABLE_PROCEDURE"] = "Променливата '%1' не може да бъде изтрита, защото е част от определението на функцията '%2'";
 Blockly.Msg["CHANGE_VALUE_TITLE"] = "Промени стойността:";
 Blockly.Msg["CLEAN_UP"] = "Премахни блокове";
-Blockly.Msg["COLLAPSED_WARNINGS_WARNING"] = "Collapsed blocks contain warnings.";  // untranslated
+Blockly.Msg["COLLAPSED_WARNINGS_WARNING"] = "Свитите блокове съдържат предупреждения.";
 Blockly.Msg["COLLAPSE_ALL"] = "Скрий блокове";
 Blockly.Msg["COLLAPSE_BLOCK"] = "Скрий блок";
 Blockly.Msg["COLOUR_BLEND_COLOUR1"] = "цвят 1";
@@ -207,9 +203,9 @@ Blockly.Msg["MATH_ARITHMETIC_TOOLTIP_DIVIDE"] = "Върни частното н�
 Blockly.Msg["MATH_ARITHMETIC_TOOLTIP_MINUS"] = "Върни разликата на двете числа.";
 Blockly.Msg["MATH_ARITHMETIC_TOOLTIP_MULTIPLY"] = "Върни произведението на двете числа.";
 Blockly.Msg["MATH_ARITHMETIC_TOOLTIP_POWER"] = "Върни първото число, повдигнато на степен на второто число.";
-Blockly.Msg["MATH_ATAN2_HELPURL"] = "https://en.wikipedia.org/wiki/Atan2";  // untranslated
-Blockly.Msg["MATH_ATAN2_TITLE"] = "atan2 of X:%1 Y:%2";  // untranslated
-Blockly.Msg["MATH_ATAN2_TOOLTIP"] = "Return the arctangent of point (X, Y) in degrees from -180 to 180.";  // untranslated
+Blockly.Msg["MATH_ATAN2_HELPURL"] = "https://en.wikipedia.org/wiki/Atan2";
+Blockly.Msg["MATH_ATAN2_TITLE"] = "atan2 от X:%1 Y:%2";
+Blockly.Msg["MATH_ATAN2_TOOLTIP"] = "Връща аркустангенс на точка (X, Y) в градуси от -180 до 180.";
 Blockly.Msg["MATH_CHANGE_HELPURL"] = "https://bg.wikipedia.org/wiki/Събиране";
 Blockly.Msg["MATH_CHANGE_TITLE"] = "промени %1 на %2";
 Blockly.Msg["MATH_CHANGE_TOOLTIP"] = "Добави число към променлива „%1“.";
@@ -393,6 +389,7 @@ Blockly.Msg["TEXT_TRIM_OPERATOR_RIGHT"] = "премахни интервалит
 Blockly.Msg["TEXT_TRIM_TOOLTIP"] = "Връща копие на текста с премахнати интервали от единия или двата края.";
 Blockly.Msg["TODAY"] = "Днес";
 Blockly.Msg["UNDO"] = "Отмяна";
+Blockly.Msg["UNNAMED_KEY"] = "без име";
 Blockly.Msg["VARIABLES_DEFAULT_NAME"] = "елемент";
 Blockly.Msg["VARIABLES_GET_CREATE_SET"] = "Създай „промени стойността на %1“";
 Blockly.Msg["VARIABLES_GET_HELPURL"] = "https://github.com/google/blockly/wiki/Variables#get";  // untranslated

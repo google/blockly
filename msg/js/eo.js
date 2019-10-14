@@ -2,10 +2,6 @@
 
 'use strict';
 
-goog.provide('Blockly.Msg.eo');
-
-goog.require('Blockly.Msg');
-
 Blockly.Msg["ADD_COMMENT"] = "Aldoni komenton";
 Blockly.Msg["CANNOT_DELETE_VARIABLE_PROCEDURE"] = "Ne povas forigi la variablon '%1' ĉar ĝi estas parto de la difino de la funkcio '%2'";
 Blockly.Msg["CHANGE_VALUE_TITLE"] = "Ŝangi valoron:";
@@ -393,6 +389,7 @@ Blockly.Msg["TEXT_TRIM_OPERATOR_RIGHT"] = "forigi spacetojn for de dekstra fino 
 Blockly.Msg["TEXT_TRIM_TOOLTIP"] = "Liveras kopion de teksto, de kies fino(j) spacetoj foriĝis.";
 Blockly.Msg["TODAY"] = "Hodiaŭ";
 Blockly.Msg["UNDO"] = "Malfari";
+Blockly.Msg["UNNAMED_KEY"] = "unnamed";  // untranslated
 Blockly.Msg["VARIABLES_DEFAULT_NAME"] = "elemento";
 Blockly.Msg["VARIABLES_GET_CREATE_SET"] = "Krei blokon 'difini variablon %1'";
 Blockly.Msg["VARIABLES_GET_HELPURL"] = "https://github.com/google/blockly/wiki/Variables#get";  // untranslated

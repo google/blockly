@@ -1,9 +1,6 @@
 /**
  * @license
- * Blockly Demos: Block Factory
- *
- * Copyright 2016 Google Inc.
- * https://developers.google.com/blockly/
+ * Copyright 2016 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -71,7 +68,7 @@ WorkspaceFactoryGenerator.prototype.generateToolboxXml = function() {
     // Toolbox has categories.
     // Assert that selected != null
     if (!this.model.getSelected()) {
-      throw new Error('Selected is null when the toolbox is empty.');
+      throw Error('Selected is null when the toolbox is empty.');
     }
 
     var xml = this.model.getSelectedXml();

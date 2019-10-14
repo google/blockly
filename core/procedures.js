@@ -1,9 +1,6 @@
 /**
  * @license
- * Visual Blocks Editor
- *
- * Copyright 2012 Google Inc.
- * https://developers.google.com/blockly/
+ * Copyright 2012 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -92,6 +89,8 @@ Blockly.Procedures.procTupleComparator_ = function(ta, tb) {
 
 /**
  * Ensure two identically-named procedures don't exist.
+ * Take the proposed procedure name, and return a legal name i.e. one that
+ * is not empty and doesn't collide with other procedures.
  * @param {string} name Proposed procedure name.
  * @param {!Blockly.Block} block Block to disambiguate.
  * @return {string} Non-colliding name.
@@ -101,6 +100,7 @@ Blockly.Procedures.findLegalName = function(name, block) {
     // Flyouts can have multiple procedures called 'do something'.
     return name;
   }
+  name = name || Blockly.Msg['UNNAMED_KEY'] || 'unnamed';
   while (!Blockly.Procedures.isLegalName_(name, block.workspace, block)) {
     // Collision with another procedure.
     var r = name.match(/^(.*?)(\d+)$/);
@@ -162,7 +162,6 @@ Blockly.Procedures.rename = function(name) {
   // Strip leading and trailing whitespace.  Beyond this, all names are legal.
   name = name.trim();
 
-  // Ensure two identically-named procedures don't exist.
   var legalName = Blockly.Procedures.findLegalName(name, this.getSourceBlock());
   var oldName = this.getValue();
   if (oldName != name && oldName != legalName) {

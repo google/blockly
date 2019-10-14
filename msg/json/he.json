@@ -50,6 +50,7 @@
 	"NEW_VARIABLE_TITLE": "שם המשתנה החדש:",
 	"VARIABLE_ALREADY_EXISTS": "קיים כבר משתנה בשם \"%1\".",
 	"VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE": "קיים כבר משתנה בשם \"%1\" מסוג אחר: \"%2\"",
+	"DELETE_VARIABLE_CONFIRMATION": "למחוק %1 שימושים במשתנה ‚%2’?",
 	"CANNOT_DELETE_VARIABLE_PROCEDURE": "אי אפשר למחוק את המשתנה \"%1\", מכיוון שהגדרת הפונקציה \"%2\" משתמשת בו.",
 	"DELETE_VARIABLE": "מחק את משתנה ה'%1'",
 	"COLOUR_PICKER_HELPURL": "http://he.wikipedia.org/wiki/%D7%A6%D7%91%D7%A2",

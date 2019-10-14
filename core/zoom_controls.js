@@ -1,9 +1,6 @@
 /**
  * @license
- * Visual Blocks Editor
- *
- * Copyright 2015 Google Inc.
- * https://developers.google.com/blockly/
+ * Copyright 2015 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,16 +23,22 @@
 
 goog.provide('Blockly.ZoomControls');
 
+goog.require('Blockly.Css');
+goog.require('Blockly.Scrollbar');
 goog.require('Blockly.Touch');
 goog.require('Blockly.utils.dom');
 
 
 /**
  * Class for a zoom controls.
- * @param {!Blockly.Workspace} workspace The workspace to sit in.
+ * @param {!Blockly.WorkspaceSvg} workspace The workspace to sit in.
  * @constructor
  */
 Blockly.ZoomControls = function(workspace) {
+  /**
+   * @type {!Blockly.WorkspaceSvg}
+   * @private
+   */
   this.workspace_ = workspace;
 };
 
@@ -69,7 +72,7 @@ Blockly.ZoomControls.prototype.MARGIN_SIDE_ = 20;
 
 /**
  * The SVG group containing the zoom controls.
- * @type {Element}
+ * @type {SVGElement}
  * @private
  */
 Blockly.ZoomControls.prototype.svgGroup_ = null;
@@ -90,7 +93,7 @@ Blockly.ZoomControls.prototype.top_ = 0;
 
 /**
  * Create the zoom controls.
- * @return {!Element} The zoom controls SVG group.
+ * @return {!SVGElement} The zoom controls SVG group.
  */
 Blockly.ZoomControls.prototype.createDom = function() {
   this.svgGroup_ =
@@ -129,9 +132,7 @@ Blockly.ZoomControls.prototype.init = function(verticalSpacing) {
 Blockly.ZoomControls.prototype.dispose = function() {
   if (this.svgGroup_) {
     Blockly.utils.dom.removeNode(this.svgGroup_);
-    this.svgGroup_ = null;
   }
-  this.workspace_ = null;
 };
 
 /**
@@ -330,11 +331,28 @@ Blockly.ZoomControls.prototype.createZoomResetSvg_ = function(rnd) {
     ws.setScale(ws.options.zoomOptions.startScale);
     ws.beginCanvasTransition();
     ws.scrollCenter();
-    setTimeout(function() {
-      ws.endCanvasTransition();
-    }, 500);
+    setTimeout(ws.endCanvasTransition.bind(ws), 500);
     Blockly.Touch.clearTouchIdentifier();  // Don't block future drags.
     e.stopPropagation();  // Don't start a workspace scroll.
     e.preventDefault();  // Stop double-clicking from selecting text.
   });
 };
+
+/**
+ * CSS for zoom controls.  See css.js for use.
+ */
+Blockly.Css.register([
+  /* eslint-disable indent */
+  '.blocklyZoom>image, .blocklyZoom>svg>image {',
+    'opacity: .4;',
+  '}',
+
+  '.blocklyZoom>image:hover, .blocklyZoom>svg>image:hover {',
+    'opacity: .6;',
+  '}',
+
+  '.blocklyZoom>image:active, .blocklyZoom>svg>image:active {',
+    'opacity: .8;',
+  '}'
+  /* eslint-enable indent */
+]);

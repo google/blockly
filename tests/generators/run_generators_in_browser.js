@@ -1,9 +1,6 @@
 /**
  * @license
- * Visual Blocks Editor
- *
- * Copyright 2018 Google Inc.
- * https://developers.google.com/blockly/
+ * Copyright 2018 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -57,6 +54,12 @@ async function runGeneratorsInBrowser() {
           browserName: 'firefox'
       }
   };
+  // Run in headless mode on Travis.
+  if (process.env.TRAVIS_CI) {
+    options.capabilities['moz:firefoxOptions'] = {
+      args: ['-headless']
+    };
+  }
 
   var url = 'file://' + __dirname + '/index.html';
   var prefix = 'tests/generators/tmp/generated';

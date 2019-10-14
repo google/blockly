@@ -1,9 +1,6 @@
 /**
  * @license
- * Visual Blocks Editor
- *
- * Copyright 2019 Google Inc.
- * https://developers.google.com/blockly/
+ * Copyright 2019 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,12 +16,6 @@
  */
 
 suite('XML', function() {
-  setup(function() {
-    this.workspace = new Blockly.Workspace();
-  });
-  teardown(function() {
-    this.workspace.dispose();
-  });
   var assertSimpleField = function(fieldDom, name, text) {
     assertEquals(text, fieldDom.textContent);
     assertEquals(name, fieldDom.getAttribute('name'));
@@ -38,7 +29,25 @@ suite('XML', function() {
     assertEquals(id, fieldDom.getAttribute('id'));
     assertEquals(text, fieldDom.textContent);
   };
+  setup(function() {
+    Blockly.defineBlocksWithJsonArray([
+      {
+        "type": "empty_block",
+        "message0": "",
+        "args0": []
+      },
+    ]);
+  });
+  teardown(function() {
+    delete Blockly.Blocks['empty_block'];
+  });
   suite('Serialization', function() {
+    setup(function() {
+      this.workspace = new Blockly.Workspace();
+    });
+    teardown(function() {
+      this.workspace.dispose();
+    });
     suite('Fields', function() {
       test('Angle', function() {
         Blockly.defineBlocksWithJsonArray([{
@@ -94,7 +103,11 @@ suite('XML', function() {
         assertSimpleField(resultFieldDom, 'COLOUR', '#000099');
         delete Blockly.Blocks['field_colour_test_block'];
       });
-      test('Date', function() {
+      /* If you want to run date tests add the date picker here:
+       * https://github.com/google/blockly/blob/master/core/blockly.js#L41
+       * before unskipping.
+       */
+      test.skip('Date', function() {
         Blockly.defineBlocksWithJsonArray([{
           "type": "field_date_test_block",
           "message0": "%1",
@@ -197,7 +210,6 @@ suite('XML', function() {
         var block = new Blockly.Block(this.workspace,
             'field_label_serializable_test_block');
         var resultFieldDom = Blockly.Xml.blockToDom(block).childNodes[0];
-        console.log(resultFieldDom);
         assertSimpleField(resultFieldDom, 'LABEL', 'default');
         delete Blockly.Blocks['field_label_serializable_test_block'];
       });
@@ -261,6 +273,14 @@ suite('XML', function() {
           var resultFieldDom = Blockly.Xml.blockToDom(block).childNodes[0];
           assertVariableField(resultFieldDom, 'VAR', null, 'id1', 'name1');
         });
+        test('Variable Typed', function() {
+          this.workspace.createVariable('name1', 'string', 'id1');
+          var block = new Blockly.Block(this.workspace,
+              'field_variable_test_block');
+          block.inputList[0].fieldRow[0].setValue('id1');
+          var resultFieldDom = Blockly.Xml.blockToDom(block).childNodes[0];
+          assertVariableField(resultFieldDom, 'VAR', 'string', 'id1', 'name1');
+        });
         test('Variable Default Case', function() {
           var cacheGenUid = Blockly.utils.genUid;
           Blockly.utils.genUid = function() {
@@ -285,8 +305,88 @@ suite('XML', function() {
         });
       });
     });
+    suite('Comments', function() {
+      suite('Headless', function() {
+        setup(function() {
+          this.block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
+              '<block type="empty_block"/>'
+          ), this.workspace);
+        });
+        test('Text', function() {
+          this.block.setCommentText('test text');
+          var xml = Blockly.Xml.blockToDom(this.block);
+          var commentXml = xml.firstChild;
+          chai.assert.equal(commentXml.tagName, 'comment');
+          chai.assert.equal(commentXml.innerHTML, 'test text');
+        });
+        test('No Text', function() {
+          var xml = Blockly.Xml.blockToDom(this.block);
+          chai.assert.isNull(xml.firstChild);
+        });
+        test('Empty Text', function() {
+          this.block.setCommentText('');
+          var xml = Blockly.Xml.blockToDom(this.block);
+          chai.assert.isNull(xml.firstChild);
+        });
+      });
+      suite('Rendered', function() {
+        setup(function() {
+          // Let the parent teardown dispose of it.
+          this.workspace = Blockly.inject('blocklyDiv', {comments: true});
+          this.block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
+              '<block type="empty_block"/>'
+          ), this.workspace);
+        });
+        test('Text', function() {
+          this.block.setCommentText('test text');
+          var xml = Blockly.Xml.blockToDom(this.block);
+          var commentXml = xml.firstChild;
+          chai.assert.equal(commentXml.tagName, 'comment');
+          chai.assert.equal(commentXml.innerHTML, 'test text');
+        });
+        test('No Text', function() {
+          var xml = Blockly.Xml.blockToDom(this.block);
+          chai.assert.isNull(xml.firstChild);
+        });
+        test('Empty Text', function() {
+          this.block.setCommentText('');
+          var xml = Blockly.Xml.blockToDom(this.block);
+          chai.assert.isNull(xml.firstChild);
+        });
+        test('Size', function() {
+          this.block.setCommentText('test text');
+          this.block.getCommentIcon().setBubbleSize(100, 200);
+          var xml = Blockly.Xml.blockToDom(this.block);
+          var commentXml = xml.firstChild;
+          chai.assert.equal(commentXml.tagName, 'comment');
+          chai.assert.equal(commentXml.getAttribute('w'), 100);
+          chai.assert.equal(commentXml.getAttribute('h'), 200);
+        });
+        test('Pinned True', function() {
+          this.block.setCommentText('test text');
+          this.block.getCommentIcon().setVisible(true);
+          var xml = Blockly.Xml.blockToDom(this.block);
+          var commentXml = xml.firstChild;
+          chai.assert.equal(commentXml.tagName, 'comment');
+          chai.assert.equal(commentXml.getAttribute('pinned'), 'true');
+        });
+        test('Pinned False', function() {
+          this.block.setCommentText('test text');
+          var xml = Blockly.Xml.blockToDom(this.block);
+          var commentXml = xml.firstChild;
+          chai.assert.equal(commentXml.tagName, 'comment');
+          chai.assert.equal(commentXml.getAttribute('pinned'), 'false');
+        });
+      });
+    });
   });
   suite('Deserialization', function() {
+    setup(function() {
+      this.workspace = new Blockly.Workspace();
+    });
+    teardown(function() {
+      this.workspace.dispose();
+    });
     suite('Dynamic Category Blocks', function() {
       test('Untyped Variables', function() {
         Blockly.defineBlocksWithJsonArray([{
@@ -418,6 +518,197 @@ suite('XML', function() {
           delete Blockly.Blocks['math_change'];
           delete Blockly.Blocks['math_number'];
         }
+      });
+    });
+    suite('Comments', function() {
+      suite('Headless', function() {
+        test('Text', function() {
+          var block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
+              '<block type="empty_block">' +
+              '  <comment>test text</comment>' +
+              '</block>'
+          ), this.workspace);
+          chai.assert.equal(block.getCommentText(), 'test text');
+        });
+        test('No Text', function() {
+          var block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
+              '<block type="empty_block">' +
+              '  <comment></comment>' +
+              '</block>'
+          ), this.workspace);
+          chai.assert.equal(block.getCommentText(), '');
+        });
+        test('Size', function() {
+          var block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
+              '<block type="empty_block">' +
+              '  <comment w="100" h="200">test text</comment>' +
+              '</block>'
+          ), this.workspace);
+          chai.assert.deepEqual(block.commentModel.size,
+              {width: 100, height: 200});
+        });
+        test('Pinned True', function() {
+          var block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
+              '<block type="empty_block">' +
+              '  <comment pinned="true">test text</comment>' +
+              '</block>'
+          ), this.workspace);
+          chai.assert.isTrue(block.commentModel.pinned);
+        });
+        test('Pinned False', function() {
+          var block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
+              '<block type="empty_block">' +
+              '  <comment pinned="false">test text</comment>' +
+              '</block>'
+          ), this.workspace);
+          chai.assert.isFalse(block.commentModel.pinned);
+        });
+        test('Pinned Undefined', function() {
+          var block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
+              '<block type="empty_block">' +
+              '  <comment>test text</comment>' +
+              '</block>'
+          ), this.workspace);
+          chai.assert.isFalse(block.commentModel.pinned);
+        });
+      });
+      suite('Rendered', function() {
+        setup(function() {
+          // Let the parent teardown dispose of it.
+          this.workspace = Blockly.inject('blocklyDiv', {comments: true});
+        });
+        test('Text', function() {
+          var block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
+              '<block type="empty_block">' +
+              '  <comment>test text</comment>' +
+              '</block>'
+          ), this.workspace);
+          chai.assert.equal(block.getCommentText(), 'test text');
+          chai.assert.isNotNull(block.getCommentIcon());
+        });
+        test('No Text', function() {
+          var block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
+              '<block type="empty_block">' +
+              '  <comment></comment>' +
+              '</block>'
+          ), this.workspace);
+          chai.assert.equal(block.getCommentText(), '');
+          chai.assert.isNotNull(block.getCommentIcon());
+        });
+        test('Size', function() {
+          var block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
+              '<block type="empty_block">' +
+              '  <comment w="100" h="200">test text</comment>' +
+              '</block>'
+          ), this.workspace);
+          chai.assert.deepEqual(block.commentModel.size,
+              {width: 100, height: 200});
+          chai.assert.isNotNull(block.getCommentIcon());
+          chai.assert.deepEqual(block.getCommentIcon().getBubbleSize(),
+              {width: 100, height: 200});
+        });
+        suite('Pinned', function() {
+          setup(function() {
+            this.clock = sinon.useFakeTimers();
+          });
+          teardown(function() {
+            this.clock.restore();
+          });
+          test('Pinned True', function() {
+            var block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
+                '<block type="empty_block">' +
+                '  <comment pinned="true">test text</comment>' +
+                '</block>'
+            ), this.workspace);
+            this.clock.tick(1);
+            chai.assert.isTrue(block.commentModel.pinned);
+            chai.assert.isNotNull(block.getCommentIcon());
+            chai.assert.isTrue(block.getCommentIcon().isVisible());
+          });
+          test('Pinned False', function() {
+            var block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
+                '<block type="empty_block">' +
+                '  <comment pinned="false">test text</comment>' +
+                '</block>'
+            ), this.workspace);
+            this.clock.tick(1);
+            chai.assert.isFalse(block.commentModel.pinned);
+            chai.assert.isNotNull(block.getCommentIcon());
+            chai.assert.isFalse(block.getCommentIcon().isVisible());
+          });
+          test('Pinned Undefined', function() {
+            var block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
+                '<block type="empty_block">' +
+                '  <comment>test text</comment>' +
+                '</block>'
+            ), this.workspace);
+            this.clock.tick(1);
+            chai.assert.isFalse(block.commentModel.pinned);
+            chai.assert.isNotNull(block.getCommentIcon());
+            chai.assert.isFalse(block.getCommentIcon().isVisible());
+          });
+        });
+      });
+    });
+  });
+  suite('Round Tripping', function() {
+    setup(function() {
+      var options = {
+        comments: true
+      };
+      this.renderedWorkspace = Blockly.inject('blocklyDiv', options);
+      this.headlessWorkspace = new Blockly.Workspace(options);
+    });
+    teardown(function() {
+      this.renderedWorkspace.dispose();
+      this.headlessWorkspace.dispose();
+    });
+    suite('Rendered -> XML -> Headless -> XML', function() {
+      setup(function() {
+        this.assertRoundTrip = function() {
+          var renderedXml = Blockly.Xml.workspaceToDom(this.renderedWorkspace);
+          Blockly.Xml.domToWorkspace(renderedXml, this.headlessWorkspace);
+          var headlessXml = Blockly.Xml.workspaceToDom(this.headlessWorkspace);
+
+          var renderedText = Blockly.Xml.domToText(renderedXml);
+          var headlessText = Blockly.Xml.domToText(headlessXml);
+
+          chai.assert.equal(headlessText, renderedText);
+        };
+      });
+      test('Comment', function() {
+        var block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
+            '<block type="empty_block"/>'
+        ), this.renderedWorkspace);
+        block.setCommentText('test text');
+        block.getCommentIcon().setBubbleSize(100, 100);
+        block.getCommentIcon().setVisible(true);
+
+        this.assertRoundTrip();
+      });
+    });
+    suite('Headless -> XML -> Rendered -> XML', function() {
+      setup(function() {
+        this.assertRoundTrip = function() {
+          var headlessXml = Blockly.Xml.workspaceToDom(this.headlessWorkspace);
+          Blockly.Xml.domToWorkspace(headlessXml, this.renderedWorkspace);
+          var renderedXml = Blockly.Xml.workspaceToDom(this.renderedWorkspace);
+
+          var renderedText = Blockly.Xml.domToText(renderedXml);
+          var headlessText = Blockly.Xml.domToText(headlessXml);
+
+          chai.assert.equal(renderedText, headlessText);
+        };
+      });
+      test('Comment', function() {
+        var block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
+            '<block type="empty_block"/>'
+        ), this.headlessWorkspace);
+        block.setCommentText('test text');
+        block.commentModel.size = new Blockly.utils.Size(100, 100);
+        block.commentModel.pinned = true;
+
+        this.assertRoundTrip();
       });
     });
   });

@@ -1,9 +1,6 @@
 /**
  * @license
- * Visual Blocks Editor
- *
- * Copyright 2019 Google Inc.
- * https://developers.google.com/blockly/
+ * Copyright 2019 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,7 +25,9 @@
 goog.provide('Blockly.FieldLabelSerializable');
 
 goog.require('Blockly.FieldLabel');
+goog.require('Blockly.fieldRegistry');
 goog.require('Blockly.utils');
+goog.require('Blockly.utils.object');
 
 
 /**
@@ -36,34 +35,37 @@ goog.require('Blockly.utils');
  * @param {*} opt_value The initial value of the field. Should cast to a
  *    string. Defaults to an empty string if null or undefined.
  * @param {string=} opt_class Optional CSS class for the field's text.
+ * @param {Object=} opt_config A map of options used to configure the field.
+ *    See the [field creation documentation]{@link https://developers.google.com/blockly/guides/create-custom-blocks/fields/built-in-fields/label-serializable#creation}
+ *    for a list of properties this parameter supports.
  * @extends {Blockly.FieldLabel}
  * @constructor
  *
  */
-Blockly.FieldLabelSerializable = function(opt_value, opt_class) {
-  Blockly.FieldLabelSerializable.superClass_.constructor.call(this, opt_value,
-      opt_class);
+Blockly.FieldLabelSerializable = function(opt_value, opt_class, opt_config) {
+  Blockly.FieldLabelSerializable.superClass_.constructor.call(
+      this, opt_value, opt_class, opt_config);
 };
-goog.inherits(Blockly.FieldLabelSerializable, Blockly.FieldLabel);
+Blockly.utils.object.inherits(Blockly.FieldLabelSerializable,
+    Blockly.FieldLabel);
 
 /**
  * Construct a FieldLabelSerializable from a JSON arg object,
  * dereferencing any string table references.
  * @param {!Object} options A JSON object with options (text, and class).
- * @returns {!Blockly.FieldLabelSerializable} The new field instance.
+ * @return {!Blockly.FieldLabelSerializable} The new field instance.
  * @package
  * @nocollapse
  */
 Blockly.FieldLabelSerializable.fromJson = function(options) {
   var text = Blockly.utils.replaceMessageReferences(options['text']);
-  return new Blockly.FieldLabelSerializable(text, options['class']);
+  return new Blockly.FieldLabelSerializable(text, undefined, options);
 };
 
 /**
  * Editable fields usually show some sort of UI indicating they are
  * editable. This field should not.
  * @type {boolean}
- * @public
  */
 Blockly.FieldLabelSerializable.prototype.EDITABLE = false;
 
@@ -71,9 +73,8 @@ Blockly.FieldLabelSerializable.prototype.EDITABLE = false;
  * Serializable fields are saved by the XML renderer, non-serializable fields
  * are not.  This field should be serialized, but only edited programmatically.
  * @type {boolean}
- * @public
  */
 Blockly.FieldLabelSerializable.prototype.SERIALIZABLE = true;
 
-Blockly.Field.register(
+Blockly.fieldRegistry.register(
     'field_label_serializable', Blockly.FieldLabelSerializable);

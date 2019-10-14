@@ -2,10 +2,6 @@
 
 'use strict';
 
-goog.provide('Blockly.Msg.ta');
-
-goog.require('Blockly.Msg');
-
 Blockly.Msg["ADD_COMMENT"] = "கருத்தை சேர்";
 Blockly.Msg["CANNOT_DELETE_VARIABLE_PROCEDURE"] = "Can't delete the variable '%1' because it's part of the definition of the function '%2'";  // untranslated
 Blockly.Msg["CHANGE_VALUE_TITLE"] = "மதிப்பை மாற்றவும்:";
@@ -393,6 +389,7 @@ Blockly.Msg["TEXT_TRIM_OPERATOR_RIGHT"] = "வலது பக்கத்தி
 Blockly.Msg["TEXT_TRIM_TOOLTIP"] = "உரை நகல் எடுத்து இடைவெளி எழுத்து நீக்கி பின்கொடு.";
 Blockly.Msg["TODAY"] = "இன்று";
 Blockly.Msg["UNDO"] = "Undo";  // untranslated
+Blockly.Msg["UNNAMED_KEY"] = "பெயரிடப்படாதது";
 Blockly.Msg["VARIABLES_DEFAULT_NAME"] = "உருப்படி";
 Blockly.Msg["VARIABLES_GET_CREATE_SET"] = "'%1 நியமி' உருவாக்கு";
 Blockly.Msg["VARIABLES_GET_HELPURL"] = "https://github.com/google/blockly/wiki/Variables#get";  // untranslated

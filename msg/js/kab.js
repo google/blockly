@@ -2,10 +2,6 @@
 
 'use strict';
 
-goog.provide('Blockly.Msg.kab');
-
-goog.require('Blockly.Msg');
-
 Blockly.Msg["ADD_COMMENT"] = "Rnu awennit";
 Blockly.Msg["CANNOT_DELETE_VARIABLE_PROCEDURE"] = "Ur izmir ara ad yekkes amutti '%1' acku yedda di tbadut n twuri '%2'";
 Blockly.Msg["CHANGE_VALUE_TITLE"] = "Beddel azal:";
@@ -27,7 +23,7 @@ Blockly.Msg["COLOUR_RANDOM_TOOLTIP"] = "Fren ini s wudem agacuran.";
 Blockly.Msg["COLOUR_RGB_BLUE"] = "anili";
 Blockly.Msg["COLOUR_RGB_GREEN"] = "azegzaw";
 Blockly.Msg["COLOUR_RGB_HELPURL"] = "https://www.december.com/html/spec/colorpercompact.html";  // untranslated
-Blockly.Msg["COLOUR_RGB_RED"] = "azeggwaɣ";
+Blockly.Msg["COLOUR_RGB_RED"] = "azeggaɣ";
 Blockly.Msg["COLOUR_RGB_TITLE"] = "ini s";
 Blockly.Msg["COLOUR_RGB_TOOLTIP"] = "Rnu ini s tnecta yettunefk s tesmekta n uzeggaɣ, azegzaw, akked unili. Yessefk akk azalen ad ilin gar 0 akked 100.";
 Blockly.Msg["CONTROLS_FLOW_STATEMENTS_HELPURL"] = "https://github.com/google/blockly/wiki/Loops#loop-termination-blocks";  // untranslated
@@ -393,6 +389,7 @@ Blockly.Msg["TEXT_TRIM_OPERATOR_RIGHT"] = "tukksa n isekkilen seg uyeffus";
 Blockly.Msg["TEXT_TRIM_TOOLTIP"] = "Ad d-yerr anɣel n uḍris s isekkilen ilmawen yettwakksen seg ixf neɣ i sin.";
 Blockly.Msg["TODAY"] = "Ass-a";
 Blockly.Msg["UNDO"] = "Err-d";
+Blockly.Msg["UNNAMED_KEY"] = "warisem";
 Blockly.Msg["VARIABLES_DEFAULT_NAME"] = "aferdis";
 Blockly.Msg["VARIABLES_GET_CREATE_SET"] = "Rnu 'sbadu %1'";
 Blockly.Msg["VARIABLES_GET_HELPURL"] = "https://github.com/google/blockly/wiki/Variables#get";  // untranslated

@@ -2,8 +2,7 @@
 
 # Generate .js files defining Blockly core and language messages.
 #
-# Copyright 2013 Google Inc.
-# https://developers.google.com/blockly/
+# Copyright 2013 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -123,10 +122,6 @@ def main():
             """// This file was automatically generated.  Do not modify.
 
 'use strict';
-
-goog.provide('Blockly.Msg.{0}');
-
-goog.require('Blockly.Msg');
 
 """.format(target_lang.replace('-', '.')))
         # For each key in the source language file, output the target value

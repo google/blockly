@@ -46,7 +46,7 @@ If you need more flexibility, you'll want to define your imports more carefully:
 import * as Blockly from 'blockly/core';
 ```
 
-#### Blockly build in blocks
+#### Blockly built in blocks
 
 ```js
 import 'blockly/blocks';
@@ -58,7 +58,7 @@ If your application needs to generate code from the Blockly blocks, you'll want 
 ```js
 import 'blockly/python';
 ```
-to include the Python generator, you can also import ``blockly/js``, ``blockly/php``, ``blockly/dart`` and ``blockly/lua``.
+to include the Python generator, you can also import ``blockly/javascript``, ``blockly/php``, ``blockly/dart`` and ``blockly/lua``.
 
 #### Blockly Languages
 

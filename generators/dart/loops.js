@@ -1,9 +1,6 @@
 /**
  * @license
- * Visual Blocks Language
- *
- * Copyright 2014 Google Inc.
- * https://developers.google.com/blockly/
+ * Copyright 2014 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -89,11 +86,11 @@ Blockly.Dart['controls_for'] = function(block) {
   if (Blockly.isNumber(argument0) && Blockly.isNumber(argument1) &&
       Blockly.isNumber(increment)) {
     // All arguments are simple numbers.
-    var up = parseFloat(argument0) <= parseFloat(argument1);
+    var up = Number(argument0) <= Number(argument1);
     code = 'for (' + variable0 + ' = ' + argument0 + '; ' +
         variable0 + (up ? ' <= ' : ' >= ') + argument1 + '; ' +
         variable0;
-    var step = Math.abs(parseFloat(increment));
+    var step = Math.abs(Number(increment));
     if (step == 1) {
       code += up ? '++' : '--';
     } else {

@@ -49,9 +49,6 @@ run_test_command () {
   fi
 }
 
-# Set up the environment (Chrome, Selenium, etc.)
-run_test_command "test_setup" "tests/scripts/test_setup.sh"
-
 # Lint the codebase.
 run_test_command "eslint" "eslint ."
 
@@ -66,6 +63,12 @@ run_test_command "node" "./node_modules/.bin/mocha tests/node --opts tests/node/
 
 # Run generator tests inside a browser and check the results.
 run_test_command "generators" "tests/scripts/run_generators.sh"
+
+# Generate TypeScript typings and ensure there are no errors.
+run_test_command "typings" "tests/scripts/compile_typings.sh"
+
+# Check the sizes of built files for unexpected growth.
+run_test_command "metadata" "tests/scripts/check_metadata.sh"
 
 # # Attempt advanced compilation of a Blockly app.
 # run_test_command "compile" "tests/compile/compile.sh"

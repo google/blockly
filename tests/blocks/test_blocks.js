@@ -1,9 +1,6 @@
 /**
  * @license
- * Blockly Tests
- *
- * Copyright 2017 Google Inc.
- * https://developers.google.com/blockly/
+ * Copyright 2017 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,6 +23,25 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     "type": "test_basic_empty",
     "message0": "",
     "args0": []
+  },
+  {
+    "type": "test_basic_stack",
+    "message0": "stack block",
+    "previousStatement": null,
+    "nextStatement": null,
+    "style": "math_blocks"
+  },
+  {
+    "type": "test_basic_row",
+    "message0": "row block %1",
+    "args0": [
+      {
+        "type": "input_value",
+        "name": "INPUT"
+      }
+    ],
+    "output": null,
+    "style": "math_blocks"
   },
   {
     "type": "test_basic_value_to_stack",
@@ -61,6 +77,52 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     "previousStatement": null,
     "nextStatement": null,
     "style": "math_blocks",
+  },
+  {
+    "type": "test_basic_tooltips",
+    "message0": "%1 %2 %3",
+    "args0": [
+      {
+        "type": "field_label",
+        "name": "NAME",
+        "text": "field tooltip",
+        "tooltip": "This is a JSON tooltip for the *field*."
+      },
+      {
+        "type": "input_dummy"
+      },
+      {
+        "type": "field_label",
+        "name": "NAME",
+        "text": "block tooltip"
+      }
+    ],
+    "tooltip": "This is a JSON tooltip for the *block*.",
+    "style": "math_blocks"
+  },
+  {
+    "type": "test_basic_javascript",
+    "message0": "function %1(%2) { %3 %4 return %5 }",
+    "args0": [
+      "foo",
+      "args",
+      {
+        "type": "input_dummy"
+      },
+      {
+        "type": "input_statement",
+        "name": "STACK"
+      },
+      {
+        "type": "input_value",
+        "check": "number",
+        "align": "right",
+        "name": "RETURN"
+      }
+    ],
+    "inputsInline": true,
+    "colour": 200,
+    "tooltip": "Hello world."
   },
   {
     "type": "test_dropdowns_long",
@@ -208,6 +270,19 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     "helpUrl": ""
   },
   {
+    "type": "test_fields_multilinetext",
+    "message0": "code %1",
+    "args0": [
+      {
+        "type": "field_multilinetext",
+        "name": "CODE",
+        "text": "default1\ndefault2"
+      }
+    ],
+    "style": "math_blocks",
+    "tooltip": "test tooltip"
+  },
+  {
     "type": "test_fields_checkbox",
     "message0": "checkbox %1",
     "args0": [
@@ -234,6 +309,26 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     "style": "math_blocks",
     "tooltip": "",
     "helpUrl": ""
+  },
+  {
+    "type": "test_fields_colour_options",
+    "message0": "colour options %1",
+    "args0": [
+      {
+        "type": "field_colour",
+        "name": "COLOUR",
+        "colour": "#ff4040",
+        "colourOptions":
+          ['#ff4040', '#ff8080', '#ffc0c0',
+            '#4040ff', '#8080ff', '#c0c0ff'],
+        "colourTitles":
+          ['dark pink', 'pink', 'light pink',
+            'dark blue', 'blue', 'light blue'],
+        "columns": 3
+      }
+    ],
+    "style": "math_blocks",
+    "tooltip": "test tooltip"
   },
   {
     "type": "test_fields_variable",
@@ -368,6 +463,104 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     "style": "math_blocks",
     "output": "Note",
     "tooltip": "A midi note."
+  },
+  {
+    "type": "test_angles_protractor",
+    "message0": "protractor %1",
+    "args0": [
+      {
+        "type": "field_angle",
+        "name": "FIELDNAME",
+        "angle": 0,
+        "mode": "protractor"
+      }
+    ],
+    "style": "math_blocks",
+    "tooltip": "test tooltip"
+  },
+  {
+    "type": "test_angles_compass",
+    "message0": "compass %1",
+    "args0": [
+      {
+        "type": "field_angle",
+        "name": "FIELDNAME",
+        "angle": 0,
+        "mode": "compass"
+      }
+    ],
+    "style": "math_blocks",
+    "tooltip": "test tooltip"
+  },
+  {
+    "type": "test_angles_clockwise",
+    "message0": "clockwise %1",
+    "args0": [
+      {
+        "type": "field_angle",
+        "name": "FIELDNAME",
+        "angle": 0,
+        "clockwise": true
+      }
+    ],
+    "style": "math_blocks",
+    "tooltip": "test tooltip"
+  },
+  {
+    "type": "test_angles_offset",
+    "message0": "offset 90 %1",
+    "args0": [
+      {
+        "type": "field_angle",
+        "name": "FIELDNAME",
+        "angle": 0,
+        "offset": 90
+      }
+    ],
+    "style": "math_blocks",
+    "tooltip": "test tooltip"
+  },
+  {
+    "type": "test_angles_wrap",
+    "message0": "wrap %1",
+    "args0": [
+      {
+        "type": "field_angle",
+        "name": "FIELDNAME",
+        "angle": 0,
+        "wrap": 180
+      }
+    ],
+    "style": "math_blocks",
+    "tooltip": "test tooltip"
+  },
+  {
+    "type": "test_angles_round_30",
+    "message0": "round 30 %1",
+    "args0": [
+      {
+        "type": "field_angle",
+        "name": "FIELDNAME",
+        "angle": 0,
+        "round": 30
+      }
+    ],
+    "style": "math_blocks",
+    "tooltip": "test tooltip"
+  },
+  {
+    "type": "test_angles_round_0",
+    "message0": "no round %1",
+    "args0": [
+      {
+        "type": "field_angle",
+        "name": "FIELDNAME",
+        "angle": 0,
+        "round": 0
+      }
+    ],
+    "style": "math_blocks",
+    "tooltip": "test tooltip"
   },
   {
     "type": "test_images_datauri",
@@ -903,55 +1096,6 @@ Blockly.Blocks['test_validators_colour_red_null'] = {
   }
 };
 
-Blockly.Blocks['test_validators_date_null'] = {
-  init: function() {
-    this.appendDummyInput()
-      .appendField("always null")
-      .appendField(new Blockly.FieldDate("2020-02-20", this.validate), "INPUT");
-    this.setColour(230);
-    this.setCommentText('All input validates to null (invalid). This means' +
-      ' the field value should not change.');
-  },
-
-  validate: function(newValue) {
-    // We should be able to expect validators to like their initial values.
-    if (newValue != '2020-02-20') {
-      return null;
-    }
-  }
-};
-Blockly.Blocks['test_validators_date_force_20s'] = {
-  init: function() {
-    this.appendDummyInput()
-      .appendField("force day 20s")
-      .appendField(new Blockly.FieldDate("2020-02-20", this.validate), "INPUT");
-    this.setColour(230);
-    this.setCommentText('The input\'s date will change to always be in the' +
-      ' 20s.');
-  },
-
-  validate: function(newValue) {
-    return newValue.substr(0, 8) + '2' + newValue.substr(9, 1);
-  }
-};
-Blockly.Blocks['test_validators_date_20s_null'] = {
-  init: function() {
-    this.appendDummyInput()
-      .appendField("not 20s -> null")
-      .appendField(new Blockly.FieldDate("2020-02-20", this.validate), "INPUT");
-    this.setColour(230);
-    this.setCommentText('If the input is not in the 20s, the input will' +
-      ' validate to null (invalid). Otherwise it will return the input value.');
-  },
-
-  validate: function(newValue) {
-    if (newValue.charAt(8) != '2') {
-      return null;
-    }
-    return newValue;
-  }
-};
-
 Blockly.Blocks['test_validators_dropdown_null'] = {
   init: function() {
     this.appendDummyInput()
@@ -1173,4 +1317,22 @@ Blockly.TestBlocks.removeDynamicDropdownOption_ = function() {
       }
     }
   })
+};
+
+Blockly.Blocks['test_dropdowns_dynamic_random'] = {
+  init: function() {
+    var dropdown = new Blockly.FieldDropdown(this.dynamicOptions);
+    this.appendDummyInput()
+      .appendField('dynamic random')
+      .appendField(dropdown, 'OPTIONS');
+  },
+
+  dynamicOptions: function() {
+    var random = Math.floor(Math.random() * 10) + 1;
+    var options = [];
+    for (var i = 0; i < random; i++) {
+      options.push([String(i), String(i)]);
+    }
+    return options;
+  }
 };

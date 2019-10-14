@@ -1,9 +1,6 @@
 /**
  * @license
- * Visual Blocks Language
- *
- * Copyright 2016 Google Inc.
- * https://developers.google.com/blockly/
+ * Copyright 2016 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -173,7 +170,7 @@ Blockly.Lua['unittest_adjustindex'] = function(block) {
       Blockly.Lua.ORDER_ADDITIVE) || '0';
   if (Blockly.isNumber(index)) {
     // If the index is a naked number, adjust it right now.
-    return [parseFloat(index) + 1, Blockly.Lua.ORDER_ATOMIC];
+    return [Number(index) + 1, Blockly.Lua.ORDER_ATOMIC];
   }
   // If the index is dynamic, adjust it in code.
   return [index + ' + 1', Blockly.Lua.ORDER_ATOMIC];

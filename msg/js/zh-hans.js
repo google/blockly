@@ -2,10 +2,6 @@
 
 'use strict';
 
-goog.provide('Blockly.Msg.zh.hans');
-
-goog.require('Blockly.Msg');
-
 Blockly.Msg["ADD_COMMENT"] = "添加注释";
 Blockly.Msg["CANNOT_DELETE_VARIABLE_PROCEDURE"] = "不能删除变量“%1”，因为它是函数“%2”定义的一部分";
 Blockly.Msg["CHANGE_VALUE_TITLE"] = "更改值：";
@@ -393,6 +389,7 @@ Blockly.Msg["TEXT_TRIM_OPERATOR_RIGHT"] = "消除其右侧的空白";
 Blockly.Msg["TEXT_TRIM_TOOLTIP"] = "从某一端或同时从两端删除多余的空白，并返回这段文字的一个副本。";
 Blockly.Msg["TODAY"] = "今天";
 Blockly.Msg["UNDO"] = "撤销";
+Blockly.Msg["UNNAMED_KEY"] = "匿名";
 Blockly.Msg["VARIABLES_DEFAULT_NAME"] = "项目";
 Blockly.Msg["VARIABLES_GET_CREATE_SET"] = "创建“设定%1”";
 Blockly.Msg["VARIABLES_GET_HELPURL"] = "https://github.com/google/blockly/wiki/Variables#get";  // untranslated

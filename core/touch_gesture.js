@@ -1,9 +1,6 @@
 /**
  * @license
- * Visual Blocks Editor
- *
- * Copyright 2017 Google Inc.
- * https://developers.google.com/blockly/
+ * Copyright 2017 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,6 +27,7 @@ goog.provide('Blockly.TouchGesture');
 goog.require('Blockly.Gesture');
 goog.require('Blockly.utils');
 goog.require('Blockly.utils.Coordinate');
+goog.require('Blockly.utils.object');
 
 
 /*
@@ -88,7 +86,7 @@ Blockly.TouchGesture = function(e, creatorWorkspace) {
    */
   this.onStartWrapper_ = null;
 };
-goog.inherits(Blockly.TouchGesture, Blockly.Gesture);
+Blockly.utils.object.inherits(Blockly.TouchGesture, Blockly.Gesture);
 
 /**
  * A multiplier used to convert the gesture scale to a zoom in delta.
@@ -127,13 +125,13 @@ Blockly.TouchGesture.prototype.doStart = function(e) {
 Blockly.TouchGesture.prototype.bindMouseEvents = function(e) {
   this.onStartWrapper_ = Blockly.bindEventWithChecks_(
       document, 'mousedown', null, this.handleStart.bind(this),
-      /*opt_noCaptureIdentifier*/ true);
+      /* opt_noCaptureIdentifier */ true);
   this.onMoveWrapper_ = Blockly.bindEventWithChecks_(
       document, 'mousemove', null, this.handleMove.bind(this),
-      /*opt_noCaptureIdentifier*/ true);
+      /* opt_noCaptureIdentifier */ true);
   this.onUpWrapper_ = Blockly.bindEventWithChecks_(
       document, 'mouseup', null, this.handleUp.bind(this),
-      /*opt_noCaptureIdentifier*/ true);
+      /* opt_noCaptureIdentifier */ true);
 
   e.preventDefault();
   e.stopPropagation();

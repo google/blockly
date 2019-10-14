@@ -1,9 +1,6 @@
 /**
  * @license
- * Visual Blocks Editor
- *
- * Copyright 2012 Google Inc.
- * https://developers.google.com/blockly/
+ * Copyright 2012 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,6 +33,7 @@ goog.require('Blockly.Events.FinishedLoading');
 goog.require('Blockly.Events.VarCreate');
 goog.require('Blockly.utils');
 goog.require('Blockly.utils.dom');
+goog.require('Blockly.utils.global');
 goog.require('Blockly.utils.xml');
 
 
@@ -162,14 +160,15 @@ Blockly.Xml.blockToDom = function(block, opt_noId) {
 
   var commentText = block.getCommentText();
   if (commentText) {
+    var size = block.commentModel.size;
+    var pinned = block.commentModel.pinned;
+
     var commentElement = Blockly.utils.xml.createElement('comment');
     commentElement.appendChild(Blockly.utils.xml.createTextNode(commentText));
-    if (typeof block.comment == 'object') {
-      commentElement.setAttribute('pinned', block.comment.isVisible());
-      var hw = block.comment.getBubbleSize();
-      commentElement.setAttribute('h', hw.height);
-      commentElement.setAttribute('w', hw.width);
-    }
+    commentElement.setAttribute('pinned', pinned);
+    commentElement.setAttribute('h', size.height);
+    commentElement.setAttribute('w', size.width);
+
     element.appendChild(commentElement);
   }
 
@@ -284,12 +283,25 @@ Blockly.Xml.cloneShadow_ = function(shadow, opt_noId) {
 
 /**
  * Converts a DOM structure into plain text.
- * Currently the text format is fairly ugly: all one line with no whitespace.
+ * Currently the text format is fairly ugly: all one line with no whitespace,
+ * unless the DOM itself has whitespace built-in.
  * @param {!Element} dom A tree of XML elements.
  * @return {string} Text representation.
  */
 Blockly.Xml.domToText = function(dom) {
-  return Blockly.utils.xml.domToText(dom);
+  var text = Blockly.utils.xml.domToText(dom);
+  // Replace line breaks in text content with '&#10;' to make them single line.
+  // E.g. <foo>hello\nworld</foo> -> <foo>hello&#10;world</foo>
+  // Do not replace line breaks between tags.
+  // E.g. ...</foo>\n</bar> is unchanged.
+  // Can't use global flag on regexp since backtracking is needed.
+  var regexp = /(<[^/](?:[^>]*[^/])?>[^<]*)\n([^<]*<\/)/;
+  var oldText;
+  do {
+    oldText = text;
+    text = text.replace(regexp, '$1&#10;$2');
+  } while (text != oldText);
+  return text;
 };
 
 /**
@@ -376,7 +388,7 @@ Blockly.Xml.domToWorkspace = function(xml, workspace) {
     width = workspace.getWidth();
   }
   var newBlockIds = [];  // A list of block IDs added by this call.
-  Blockly.Field.startCache();
+  Blockly.utils.dom.startTextWidthCache();
   // Safari 7.1.3 is known to provide node lists with extra references to
   // children beyond the lists' length.  Trust the length, do not use the
   // looping pattern of checking the index for an object.
@@ -414,9 +426,19 @@ Blockly.Xml.domToWorkspace = function(xml, workspace) {
         throw TypeError('Shadow block cannot be a top-level block.');
       } else if (name == 'comment') {
         if (workspace.rendered) {
-          Blockly.WorkspaceCommentSvg.fromXml(xmlChild, workspace, width);
+          if (!Blockly.WorkspaceCommentSvg) {
+            console.warn('Missing require for Blockly.WorkspaceCommentSvg, ' +
+                'ignoring workspace comment.');
+          } else {
+            Blockly.WorkspaceCommentSvg.fromXml(xmlChild, workspace, width);
+          }
         } else {
-          Blockly.WorkspaceComment.fromXml(xmlChild, workspace);
+          if (!Blockly.WorkspaceComment) {
+            console.warn('Missing require for Blockly.WorkspaceComment, ' +
+                'ignoring workspace comment.');
+          } else {
+            Blockly.WorkspaceComment.fromXml(xmlChild, workspace);
+          }
         }
       } else if (name == 'variables') {
         if (variablesFirst) {
@@ -433,7 +455,7 @@ Blockly.Xml.domToWorkspace = function(xml, workspace) {
     if (!existingGroup) {
       Blockly.Events.setGroup(false);
     }
-    Blockly.Field.stopCache();
+    Blockly.utils.dom.stopTextWidthCache();
   }
   // Re-enable workspace resizing.
   if (workspace.setResizesEnabled) {
@@ -479,7 +501,7 @@ Blockly.Xml.appendDomToWorkspace = function(xml, workspace) {
       if (blockXY.y < newY) {
         newY = blockXY.y;
       }
-      if (blockXY.x  < newX) {  // if we align also on x
+      if (blockXY.x < newX) {  // if we align also on x
         newX = blockXY.x;
       }
     }
@@ -510,7 +532,7 @@ Blockly.Xml.domToBlock = function(xmlBlock, workspace) {
     var swap = xmlBlock;
     // Closure Compiler complains here because the arguments are reversed.
     /** @suppress {checkTypes} */
-    xmlBlock = workspace;
+    xmlBlock = /** @type {!Element} */ (workspace);
     workspace = swap;
     console.warn('Deprecated call to Blockly.Xml.domToBlock, ' +
                  'swap the arguments.');
@@ -641,22 +663,26 @@ Blockly.Xml.domToBlockHeadless_ = function(xmlBlock, workspace) {
         }
         break;
       case 'comment':
-        block.setCommentText(xmlChild.textContent);
-        var visible = xmlChild.getAttribute('pinned');
-        if (visible && !block.isInFlyout) {
-          // Give the renderer a millisecond to render and position the block
-          // before positioning the comment bubble.
-          setTimeout(function() {
-            if (block.comment && block.comment.setVisible) {
-              block.comment.setVisible(visible == 'true');
-            }
-          }, 1);
+        if (!Blockly.Comment) {
+          console.warn('Missing require for Blockly.Comment, ' +
+              'ignoring block comment.');
+          break;
         }
-        var bubbleW = parseInt(xmlChild.getAttribute('w'), 10);
-        var bubbleH = parseInt(xmlChild.getAttribute('h'), 10);
-        if (!isNaN(bubbleW) && !isNaN(bubbleH) &&
-            block.comment && block.comment.setVisible) {
-          block.comment.setBubbleSize(bubbleW, bubbleH);
+        var text = xmlChild.textContent;
+        var pinned = xmlChild.getAttribute('pinned') == 'true';
+        var width = parseInt(xmlChild.getAttribute('w'), 10);
+        var height = parseInt(xmlChild.getAttribute('h'), 10);
+
+        block.setCommentText(text);
+        block.commentModel.pinned = pinned;
+        if (!isNaN(width) && !isNaN(height)) {
+          block.commentModel.size = new Blockly.utils.Size(width, height);
+        }
+
+        if (pinned && block.getCommentIcon && !block.isInFlyout) {
+          setTimeout(function() {
+            block.getCommentIcon().setVisible(true);
+          }, 1);
         }
         break;
       case 'data':
@@ -788,17 +814,3 @@ Blockly.Xml.deleteNext = function(xmlBlock) {
     }
   }
 };
-
-// Export symbols that would otherwise be renamed by Closure compiler.
-if (!Blockly.utils.global['Blockly']) {
-  Blockly.utils.global['Blockly'] = {};
-}
-if (!Blockly.utils.global['Blockly']['Xml']) {
-  Blockly.utils.global['Blockly']['Xml'] = {};
-}
-Blockly.utils.global['Blockly']['Xml']['domToText'] = Blockly.Xml.domToText;
-Blockly.utils.global['Blockly']['Xml']['domToWorkspace'] =
-    Blockly.Xml.domToWorkspace;
-Blockly.utils.global['Blockly']['Xml']['textToDom'] = Blockly.Xml.textToDom;
-Blockly.utils.global['Blockly']['Xml']['workspaceToDom'] =
-    Blockly.Xml.workspaceToDom;

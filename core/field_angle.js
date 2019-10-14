@@ -173,6 +173,7 @@ Blockly.FieldAngle.prototype.configure_ = function(config) {
     this.clockwise_ = clockwise;
   }
 
+  // If these are passed as null then we should leave them on the default.
   var offset = config['offset'];
   if (offset != null) {
     offset = Number(offset);

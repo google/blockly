@@ -52,7 +52,8 @@ Blockly.tree.TreeControl = function(toolbox, config) {
 
   /**
    * Currently selected item.
-   * @private {Blockly.tree.BaseNode}
+   * @type {Blockly.tree.BaseNode}
+   * @private
    */
   this.selectedItem_ = this;
 };

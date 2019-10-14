@@ -58,55 +58,81 @@ Blockly.tree.BaseNode = function(content, config) {
    */
   this.content_ = content;
 
-  /** @private {string} */
+  /**
+   * @type {string}
+   * @private
+   */
   this.iconClass_;
 
-  /** @private {string} */
+  /**
+   * @type {string}
+   * @private
+   */
   this.expandedIconClass_;
 
-  /** @protected {Blockly.tree.TreeControl} */
+  /**
+   * @type {Blockly.tree.TreeControl}
+   * @protected
+   */
   this.tree;
 
-  /** @private {Blockly.tree.BaseNode} */
+  /**
+   * @type {Blockly.tree.BaseNode}
+   * @private
+   */
   this.previousSibling_;
 
-  /** @private {Blockly.tree.BaseNode} */
+  /**
+   * @type {Blockly.tree.BaseNode}
+   * @private
+   */
   this.nextSibling_;
 
-  /** @private {Blockly.tree.BaseNode} */
+  /**
+   * @type {Blockly.tree.BaseNode}
+   * @private
+   */
   this.firstChild_;
 
-  /** @private {Blockly.tree.BaseNode} */
+  /**
+   * @type {Blockly.tree.BaseNode}
+   * @private
+   */
   this.lastChild_;
 
   /**
    * Whether the tree item is selected.
-   * @private {boolean}
+   * @type {boolean}
+   * @private
    */
   this.selected_ = false;
 
   /**
    * Whether the tree node is expanded.
-   * @private {boolean}
+   * @type {boolean}
+   * @private
    */
   this.expanded_ = false;
 
   /**
    * Tooltip for the tree item
-   * @private {?string}
+   * @type {?string}
+   * @private
    */
   this.toolTip_ = null;
 
   /**
    * Whether to allow user to collapse this node.
-   * @private {boolean}
+   * @type {boolean}
+   * @private
    */
   this.isUserCollapsible_ = true;
 
   /**
    * Nesting depth of this node; cached result of computeDepth_.
    * -1 if value has not been cached.
-   * @private {number}
+   * @type {number}
+   * @private
    */
   this.depth_ = -1;
 };

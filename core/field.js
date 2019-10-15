@@ -310,7 +310,7 @@ Blockly.Field.prototype.init = function() {
   if (!this.isVisible()) {
     this.fieldGroup_.style.display = 'none';
   }
-  var sourceBlockSvg = (/** @type {!Blockly.BlockSvg} **/ (this.sourceBlock_));
+  var sourceBlockSvg = /** @type {!Blockly.BlockSvg} **/ (this.sourceBlock_);
   sourceBlockSvg.getSvgRoot().appendChild(this.fieldGroup_);
   this.initView();
   this.updateEditable();

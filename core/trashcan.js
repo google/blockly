@@ -287,11 +287,6 @@ Blockly.Trashcan.prototype.init = function(verticalSpacing) {
     Blockly.utils.dom.insertAfter(this.flyout_.createDom('svg'),
         this.workspace_.getParentSvg());
     this.flyout_.init(this.workspace_);
-    this.flyout_.isBlockCreatable_ = function() {
-      // All blocks, including disabled ones, can be dragged from the
-      // trashcan flyout.
-      return true;
-    };
   }
 
   this.verticalSpacing_ = this.MARGIN_BOTTOM_ + verticalSpacing;
@@ -501,6 +496,7 @@ Blockly.Trashcan.prototype.cleanBlockXML_ = function(xml) {
       node.removeAttribute('x');
       node.removeAttribute('y');
       node.removeAttribute('id');
+      node.removeAttribute('disabled');
     }
 
     // Try to go down the tree

@@ -64,6 +64,26 @@ Blockly.FieldTextInput = function(opt_value, opt_validator, opt_config) {
   }
   Blockly.FieldTextInput.superClass_.constructor.call(this,
       opt_value, opt_validator, opt_config);
+
+  /**
+   * The HTML input element.
+   * @type {HTMLElement}
+   */
+  this.htmlInput_ = null;
+
+  /**
+   * Key down event data.
+   * @type {?Blockly.EventData}
+   * @private
+   */
+  this.onKeyDownWrapper_ = null;
+  
+  /**
+   * Key input event data.
+   * @type {?Blockly.EventData}
+   * @private
+   */
+  this.onKeyInputWrapper_ = null;
 };
 Blockly.utils.object.inherits(Blockly.FieldTextInput, Blockly.Field);
 
@@ -183,12 +203,13 @@ Blockly.FieldTextInput.prototype.render_ = function() {
     } else {
       this.resizeEditor_();
     }
+    var htmlInput = /** @type {!HTMLElement} */(this.htmlInput_);
     if (!this.isTextValid_) {
-      Blockly.utils.dom.addClass(this.htmlInput_, 'blocklyInvalidInput');
-      Blockly.utils.aria.setState(this.htmlInput_, 'invalid', true);
+      Blockly.utils.dom.addClass(htmlInput, 'blocklyInvalidInput');
+      Blockly.utils.aria.setState(htmlInput, 'invalid', true);
     } else {
-      Blockly.utils.dom.removeClass(this.htmlInput_, 'blocklyInvalidInput');
-      Blockly.utils.aria.setState(this.htmlInput_, 'invalid', false);
+      Blockly.utils.dom.removeClass(htmlInput, 'blocklyInvalidInput');
+      Blockly.utils.aria.setState(htmlInput, 'invalid', false);
     }
   }
 };
@@ -338,8 +359,12 @@ Blockly.FieldTextInput.prototype.bindInputEvents_ = function(htmlInput) {
  * @private
  */
 Blockly.FieldTextInput.prototype.unbindInputEvents_ = function() {
-  Blockly.unbindEvent_(this.onKeyDownWrapper_);
-  Blockly.unbindEvent_(this.onKeyInputWrapper_);
+  if (this.onKeyDownWrapper_) {
+    Blockly.unbindEvent_(this.onKeyDownWrapper_);
+  }
+  if (this.onKeyInputWrapper_) {
+    Blockly.unbindEvent_(this.onKeyInputWrapper_);
+  }
 };
 
 /**

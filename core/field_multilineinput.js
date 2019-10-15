@@ -58,6 +58,13 @@ Blockly.FieldMultilineInput = function(opt_value, opt_validator, opt_config) {
   }
   Blockly.FieldMultilineInput.superClass_.constructor.call(this,
       opt_value, opt_validator, opt_config);
+
+  /**
+   * The SVG group element that will contain a text element for each text row
+   *     when initialized.
+   * @type {SVGGElement}
+   */
+  this.textGroup_ = null;
 };
 Blockly.utils.object.inherits(Blockly.FieldMultilineInput,
     Blockly.FieldTextInput);
@@ -89,10 +96,11 @@ Blockly.FieldMultilineInput.fromJson = function(options) {
  */
 Blockly.FieldMultilineInput.prototype.initView = function() {
   this.createBorderRect_();
-  this.textGroup_ = Blockly.utils.dom.createSvgElement('g',
-      {
-        'class': 'blocklyEditableText',
-      }, this.fieldGroup_);
+  this.textGroup_ = /** @type {!SVGGElement} **/
+      (Blockly.utils.dom.createSvgElement('g',
+          {
+            'class': 'blocklyEditableText',
+          }, this.fieldGroup_));
 };
 
 /**
@@ -167,12 +175,13 @@ Blockly.FieldMultilineInput.prototype.render_ = function() {
     } else {
       this.resizeEditor_();
     }
+    var htmlInput = /** @type {!HTMLElement} */(this.htmlInput_);
     if (!this.isTextValid_) {
-      Blockly.utils.dom.addClass(this.htmlInput_, 'blocklyInvalidInput');
-      Blockly.utils.aria.setState(this.htmlInput_, 'invalid', true);
+      Blockly.utils.dom.addClass(htmlInput, 'blocklyInvalidInput');
+      Blockly.utils.aria.setState(htmlInput, 'invalid', true);
     } else {
-      Blockly.utils.dom.removeClass(this.htmlInput_, 'blocklyInvalidInput');
-      Blockly.utils.aria.setState(this.htmlInput_, 'invalid', false);
+      Blockly.utils.dom.removeClass(htmlInput, 'blocklyInvalidInput');
+      Blockly.utils.aria.setState(htmlInput, 'invalid', false);
     }
   }
 };
@@ -186,7 +195,7 @@ Blockly.FieldMultilineInput.prototype.updateSize_ = function() {
   var totalWidth = 0;
   var totalHeight = 0;
   for (var i = 0; i < nodes.length; i++) {
-    var tspan = nodes[i];
+    var tspan = /** @type {!Element} */ (nodes[i]);
     var textWidth = Blockly.utils.dom.getTextWidth(tspan);
     if (textWidth > totalWidth) {
       totalWidth = textWidth;

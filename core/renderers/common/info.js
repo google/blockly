@@ -457,9 +457,9 @@ Blockly.blockRendering.RenderInfo.prototype.getInRowSpacing_ = function(prev, ne
 /**
  * Figure out where the right edge of the block and right edge of statement inputs
  * should be placed.
- * TODO: More cleanup.
  * @protected
  */
+// TODO: More cleanup.
 Blockly.blockRendering.RenderInfo.prototype.computeBounds_ = function() {
   var widestStatementRowFields = 0;
   var blockWidth = 0;

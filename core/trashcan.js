@@ -497,6 +497,11 @@ Blockly.Trashcan.prototype.cleanBlockXML_ = function(xml) {
       node.removeAttribute('y');
       node.removeAttribute('id');
       node.removeAttribute('disabled');
+      if (node.nodeName == 'comment') {  // Future proof just in case.
+        node.removeAttribute('h');
+        node.removeAttribute('w');
+        node.removeAttribute('pinned');
+      }
     }
 
     // Try to go down the tree

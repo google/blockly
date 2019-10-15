@@ -256,7 +256,7 @@ Blockly.FieldImage.prototype.showEditor_ = function() {
 
 /**
  * Set the function that is called when this image  is clicked.
- * @param {?function(!Blockly.FieldImage):void} func The function that is called
+ * @param {?function(!Blockly.FieldImage)} func The function that is called
  *    when the image is clicked, or null to remove.
  */
 Blockly.FieldImage.prototype.setOnClickHandler = function(func) {

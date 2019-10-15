@@ -178,34 +178,34 @@ Blockly.BlockSvg.COLLAPSED_WARNING_ID = 'TEMP_COLLAPSED_WARNING_';
 // Leftover UI constants from block_render_svg.js.
 /**
  * Vertical space between elements.
- * TODO (#3142): Remove.
  * @const
  * @package
  */
+// TODO (#3142): Remove.
 Blockly.BlockSvg.SEP_SPACE_Y = 10;
 
 /**
  * Minimum height of a block.
- * TODO (#3142): Remove.
  * @const
  * @package
  */
+// TODO (#3142): Remove.
 Blockly.BlockSvg.MIN_BLOCK_Y = 25;
 
 /**
  * Width of horizontal puzzle tab.
- * TODO (#3142): Remove.
  * @const
  * @package
  */
+// TODO (#3142): Remove.
 Blockly.BlockSvg.TAB_WIDTH = 8;
 
 /**
  * Do blocks with no previous or output connections have a 'hat' on top?
- * TODO (#3142): Remove.
  * @const
  * @package
  */
+// TODO (#3142): Remove.
 Blockly.BlockSvg.START_HAT = false;
 
 /**

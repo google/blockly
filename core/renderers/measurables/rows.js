@@ -166,11 +166,11 @@ Blockly.blockRendering.Row.prototype.measure = function() {
 
 /**
  * Get the last input on this row, if it has one.
- * TODO: Consider moving this to InputRow, if possible.
  * @return {Blockly.blockRendering.InputConnection} The last input on the row,
  *     or null.
  * @package
  */
+// TODO: Consider moving this to InputRow, if possible.
 Blockly.blockRendering.Row.prototype.getLastInput = function() {
   for (var i = this.elements.length - 1, elem; (elem = this.elements[i]); i--) {
     if (Blockly.blockRendering.Types.isInput(elem)) {

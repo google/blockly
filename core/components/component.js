@@ -40,7 +40,8 @@ Blockly.Component = function() {
 
   /**
    * Whether the component is rendered right-to-left.
-   * @private {boolean}
+   * @type {boolean}
+   * @private
    */
   this.rightToLeft_ = Blockly.Component.defaultRightToLeft;
 
@@ -48,26 +49,30 @@ Blockly.Component = function() {
    * Unique ID of the component, lazily initialized in {@link
    * Blockly.Component#getId} if needed.  This property is strictly private and
    * must not be accessed directly outside of this class!
-   * @private {?string}
+   * @type {?string}
+   * @private
    */
   this.id_ = null;
 
   /**
    * Whether the component is in the document.
-   * @private {boolean}
+   * @type {boolean}
+   * @private
    */
   this.inDocument_ = false;
 
   /**
    * The DOM element for the component.
-   * @private {?Element}
+   * @type {?Element}
+   * @private
    */
   this.element_ = null;
 
   /**
    * Parent component to which events will be propagated.  This property is
    * strictly private and must not be accessed directly outside of this class!
-   * @private {?Blockly.Component}
+   * @type {?Blockly.Component}
+   * @private
    */
   this.parent_ = null;
 
@@ -75,7 +80,8 @@ Blockly.Component = function() {
    * Array of child components.
    * Must be kept in sync with `childIndex_`.  This property is strictly
    * private and must not be accessed directly outside of this class!
-   * @private {?Array.<?Blockly.Component>}
+   * @type {?Array.<?Blockly.Component>}
+   * @private
    */
   this.children_ = [];
 
@@ -85,7 +91,8 @@ Blockly.Component = function() {
    * Must be kept in sync with `children_`.  This property is strictly
    * private and must not be accessed directly outside of this class!
    *
-   * @private {?Object}
+   * @type {?Object}
+   * @private
    */
   this.childIndex_ = {};
 };

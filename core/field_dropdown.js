@@ -33,6 +33,7 @@ goog.require('Blockly.Menu');
 goog.require('Blockly.MenuItem');
 goog.require('Blockly.navigation');
 goog.require('Blockly.utils');
+goog.require('Blockly.utils.aria');
 goog.require('Blockly.utils.dom');
 goog.require('Blockly.utils.object');
 goog.require('Blockly.utils.Size');
@@ -251,7 +252,7 @@ Blockly.FieldDropdown.prototype.showEditor_ = function() {
 Blockly.FieldDropdown.prototype.dropdownCreate_ = function() {
   var menu = new Blockly.Menu();
   menu.setRightToLeft(this.sourceBlock_.RTL);
-  menu.setRole('listbox');
+  menu.setRole(Blockly.utils.aria.Role.LISTBOX);
 
   var options = this.getOptions(false);
   this.selectedMenuItem_ = null;
@@ -266,7 +267,7 @@ Blockly.FieldDropdown.prototype.dropdownCreate_ = function() {
       content = image;
     }
     var menuItem = new Blockly.MenuItem(content);
-    menuItem.setRole('option');
+    menuItem.setRole(Blockly.utils.aria.Role.OPTION);
     menuItem.setRightToLeft(this.sourceBlock_.RTL);
     menuItem.setValue(value);
     menuItem.setCheckable(true);

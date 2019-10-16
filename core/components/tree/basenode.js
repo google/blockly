@@ -188,10 +188,8 @@ Blockly.tree.BaseNode.prototype.initAccessibility = function() {
       label.id = this.getId() + '.label';
     }
 
-    Blockly.utils.aria.setRole(el,
-        Blockly.utils.aria.Role.TREEITEM);
-    Blockly.utils.aria.setState(el,
-        Blockly.utils.aria.State.SELECTED, false);
+    Blockly.utils.aria.setRole(el, Blockly.utils.aria.Role.TREEITEM);
+    Blockly.utils.aria.setState(el, Blockly.utils.aria.State.SELECTED, false);
     Blockly.utils.aria.setState(el,
         Blockly.utils.aria.State.LEVEL, this.getDepth());
     if (label) {

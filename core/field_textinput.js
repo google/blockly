@@ -77,7 +77,7 @@ Blockly.FieldTextInput = function(opt_value, opt_validator, opt_config) {
    * @private
    */
   this.onKeyDownWrapper_ = null;
-  
+
   /**
    * Key input event data.
    * @type {?Blockly.EventData}
@@ -206,10 +206,12 @@ Blockly.FieldTextInput.prototype.render_ = function() {
     var htmlInput = /** @type {!HTMLElement} */(this.htmlInput_);
     if (!this.isTextValid_) {
       Blockly.utils.dom.addClass(htmlInput, 'blocklyInvalidInput');
-      Blockly.utils.aria.setState(htmlInput, 'invalid', true);
+      Blockly.utils.aria.setState(htmlInput,
+          Blockly.utils.aria.State.INVALID, true);
     } else {
       Blockly.utils.dom.removeClass(htmlInput, 'blocklyInvalidInput');
-      Blockly.utils.aria.setState(htmlInput, 'invalid', false);
+      Blockly.utils.aria.setState(htmlInput,
+          Blockly.utils.aria.State.INVALID, false);
     }
   }
 };

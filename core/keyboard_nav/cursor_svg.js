@@ -119,18 +119,18 @@ Blockly.CursorSvg.BLOCK_PADDING = 2;
 Blockly.CursorSvg.HEIGHT_MULTIPLIER = 3 / 4;
 
 /**
- * Cursor color.
+ * Cursor colour.
  * @type {string}
  * @const
  */
-Blockly.CursorSvg.CURSOR_COLOR = '#cc0a0a';
+Blockly.CursorSvg.CURSOR_COLOUR = '#cc0a0a';
 
 /**
- * Immovable marker color.
+ * Immovable marker colour.
  * @type {string}
  * @const
  */
-Blockly.CursorSvg.MARKER_COLOR = '#4286f4';
+Blockly.CursorSvg.MARKER_COLOUR = '#4286f4';
 
 /**
  * The name of the CSS class for a cursor.
@@ -534,8 +534,8 @@ Blockly.CursorSvg.prototype.createCursorSvg_ = function() {
   </g>
   */
 
-  var colour = this.isMarker_ ? Blockly.CursorSvg.MARKER_COLOR :
-      Blockly.CursorSvg.CURSOR_COLOR;
+  var colour = this.isMarker_ ? Blockly.CursorSvg.MARKER_COLOUR :
+      Blockly.CursorSvg.CURSOR_COLOUR;
   this.cursorSvg_ = Blockly.utils.dom.createSvgElement('g',
       {
         'width': Blockly.CursorSvg.CURSOR_WIDTH,
@@ -599,7 +599,7 @@ Blockly.CursorSvg.prototype.createCursorSvg_ = function() {
       'attributeType': 'XML',
       'attributeName': 'fill',
       'dur': '1s',
-      'values': Blockly.CursorSvg.CURSOR_COLOR + ';transparent;transparent;',
+      'values': Blockly.CursorSvg.CURSOR_COLOUR + ';transparent;transparent;',
       'repeatCount': 'indefinite'
     };
     Blockly.utils.dom.createSvgElement('animate', properties,

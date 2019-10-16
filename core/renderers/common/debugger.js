@@ -175,7 +175,7 @@ Blockly.blockRendering.Debug.prototype.drawRenderedElem = function(elem, isRtl) 
 
 /**
  * Draw a circle at the location of the given connection.  Inputs and outputs
- * share the same colors, as do previous and next.  When positioned correctly
+ * share the same colours, as do previous and next.  When positioned correctly
  * a connected pair will look like a bullseye.
  * @param {Blockly.RenderedConnection} conn The connection to circle.
  * @package

@@ -107,18 +107,18 @@ Blockly.DropDownDiv.PADDING_Y = 16;
 Blockly.DropDownDiv.ANIMATION_TIME = 0.25;
 
 /**
- * The default dropdown div border color.
+ * The default dropdown div border colour.
  * @type {string}
  * @const
  */
-Blockly.DropDownDiv.DEFAULT_DROPDOWN_BORDER_COLOR = '#dadce0';
+Blockly.DropDownDiv.DEFAULT_DROPDOWN_BORDER_COLOUR = '#dadce0';
 
 /**
- * The default dropdown div color.
+ * The default dropdown div colour.
  * @type {string}
  * @const
  */
-Blockly.DropDownDiv.DEFAULT_DROPDOWN_COLOR = '#fff';
+Blockly.DropDownDiv.DEFAULT_DROPDOWN_COLOUR = '#fff';
 
 /**
  * Timer for animation out, to be cleared if we need to immediately hide
@@ -145,8 +145,8 @@ Blockly.DropDownDiv.createDom = function() {
   }
   var div = document.createElement('div');
   div.className = 'blocklyDropDownDiv';
-  div.style.backgroundColor = Blockly.DropDownDiv.DEFAULT_DROPDOWN_COLOR;
-  div.style.borderColor = Blockly.DropDownDiv.DEFAULT_DROPDOWN_BORDER_COLOR;
+  div.style.backgroundColor = Blockly.DropDownDiv.DEFAULT_DROPDOWN_COLOUR;
+  div.style.borderColor = Blockly.DropDownDiv.DEFAULT_DROPDOWN_BORDER_COLOUR;
   document.body.appendChild(div);
   Blockly.DropDownDiv.DIV_ = div;
 
@@ -626,8 +626,8 @@ Blockly.DropDownDiv.hideWithoutAnimation = function() {
   div.style.top = '';
   div.style.opacity = 0;
   div.style.display = 'none';
-  div.style.backgroundColor = Blockly.DropDownDiv.DEFAULT_DROPDOWN_COLOR;
-  div.style.borderColor = Blockly.DropDownDiv.DEFAULT_DROPDOWN_BORDER_COLOR;
+  div.style.backgroundColor = Blockly.DropDownDiv.DEFAULT_DROPDOWN_COLOUR;
+  div.style.borderColor = Blockly.DropDownDiv.DEFAULT_DROPDOWN_BORDER_COLOUR;
 
   if (Blockly.DropDownDiv.onHide_) {
     Blockly.DropDownDiv.onHide_();
@@ -663,7 +663,7 @@ Blockly.DropDownDiv.positionInternal_ = function(
   } else {
     Blockly.DropDownDiv.arrow_.style.display = 'none';
   }
-  
+
   var initialX = Math.floor(metrics.initialX);
   var initialY = Math.floor(metrics.initialY);
   var finalX = Math.floor(metrics.finalX);

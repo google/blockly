@@ -88,11 +88,11 @@ Blockly.utils.colour.rgbToHex = function(r, g, b) {
 
 /**
  * Converts a hex representation of a colour to RGB.
- * @param {string} hexColor Colour in '#ff0000' format.
+ * @param {string} hexColour Colour in '#ff0000' format.
  * @return {!Array.<number>} RGB representation of the colour.
  */
-Blockly.utils.colour.hexToRgb = function(hexColor) {
-  var rgb = parseInt(hexColor.substr(1), 16);
+Blockly.utils.colour.hexToRgb = function(hexColour) {
+  var rgb = parseInt(hexColour.substr(1), 16);
   var r = rgb >> 16;
   var g = (rgb >> 8) & 255;
   var b = rgb & 255;

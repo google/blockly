@@ -528,7 +528,7 @@ Blockly.FieldTextInput.prototype.getText_ = function() {
  * than the field's value. This should be coupled with an override of
  * `getValueFromEditorText_`.
  * @param {*} value The value stored in this field.
- * @returns {string} The text to show on the html input.
+ * @return {string} The text to show on the html input.
  * @protected
  */
 Blockly.FieldTextInput.prototype.getEditorText_ = function(value) {
@@ -542,7 +542,7 @@ Blockly.FieldTextInput.prototype.getEditorText_ = function(value) {
  * than the field's value. This should be coupled with an override of
  * `getEditorText_`.
  * @param {string} text Text received from the html input.
- * @returns {*} The value to store.
+ * @return {*} The value to store.
  * @protected
  */
 Blockly.FieldTextInput.prototype.getValueFromEditorText_ = function(text) {

@@ -280,7 +280,7 @@ Blockly.utils.object.inherits(Blockly.blockRendering.TopRow,
 /**
  * Returns whether or not the top row has a left square corner.
  * @param {!Blockly.BlockSvg} block The block whose top row this represents.
- * @returns {boolean} Whether or not the top row has a left square corner.
+ * @return {boolean} Whether or not the top row has a left square corner.
  */
 Blockly.blockRendering.TopRow.prototype.hasLeftSquareCorner = function(block) {
   var hasHat = block.hat ? block.hat === 'cap' : Blockly.BlockSvg.START_HAT;
@@ -372,7 +372,7 @@ Blockly.utils.object.inherits(Blockly.blockRendering.BottomRow,
 /**
  * Returns whether or not the bottom row has a left square corner.
  * @param {!Blockly.BlockSvg} block The block whose bottom row this represents.
- * @returns {boolean} Whether or not the bottom row has a left square corner.
+ * @return {boolean} Whether or not the bottom row has a left square corner.
  */
 Blockly.blockRendering.BottomRow.prototype.hasLeftSquareCorner = function(
     block) {

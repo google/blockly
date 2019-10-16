@@ -899,12 +899,12 @@ Blockly.BlockSvg.prototype.setDragging = function(adding) {
     var group = this.getSvgRoot();
     group.translate_ = '';
     group.skew_ = '';
-    Blockly.draggingConnections_ =
-        Blockly.draggingConnections_.concat(this.getConnections_(true));
+    Blockly.draggingConnections =
+        Blockly.draggingConnections.concat(this.getConnections_(true));
     Blockly.utils.dom.addClass(
         /** @type {!Element} */ (this.svgGroup_), 'blocklyDragging');
   } else {
-    Blockly.draggingConnections_ = [];
+    Blockly.draggingConnections = [];
     Blockly.utils.dom.removeClass(
         /** @type {!Element} */ (this.svgGroup_), 'blocklyDragging');
   }

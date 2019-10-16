@@ -81,9 +81,9 @@ Blockly.keyboardAccessibilityMode = false;
 /**
  * All of the connections on blocks that are currently being dragged.
  * @type {!Array.<!Blockly.Connection>}
- * @private
+ * @package
  */
-Blockly.draggingConnections_ = [];
+Blockly.draggingConnections = [];
 
 /**
  * Contents of the local clipboard.

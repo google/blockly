@@ -496,7 +496,7 @@ Blockly.Block.prototype.unplugFromStack_ = function(opt_healStack) {
  * Returns all connections originating from this block.
  * @param {boolean} _all If true, return all connections even hidden ones.
  * @return {!Array.<!Blockly.Connection>} Array of connections.
- * @private
+ * @package
  */
 Blockly.Block.prototype.getConnections_ = function(_all) {
   var myConnections = [];

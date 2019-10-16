@@ -42,10 +42,6 @@ goog.require('Blockly.utils.style');
  * @extends {Blockly.tree.BaseNode}
  */
 Blockly.tree.TreeControl = function(toolbox, config) {
-  /**
-   * @type {Blockly.Toolbox}
-   * @private
-   */
   this.toolbox_ = toolbox;
 
   Blockly.tree.BaseNode.call(this, '', config);

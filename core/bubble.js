@@ -147,10 +147,10 @@ Blockly.Bubble.unbindDragEvents_ = function() {
 
 /**
  * Handle a mouse-up event while dragging a bubble's border or resize handle.
- * @param {!Event} e Mouse up event.
+ * @param {!Event} _e Mouse up event.
  * @private
  */
-Blockly.Bubble.bubbleMouseUp_ = function(/* e */) {
+Blockly.Bubble.bubbleMouseUp_ = function(_e) {
   Blockly.Touch.clearTouchIdentifier();
   Blockly.Bubble.unbindDragEvents_();
 };

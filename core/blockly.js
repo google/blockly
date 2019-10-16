@@ -343,8 +343,8 @@ Blockly.hideChaff = function(opt_allowToolbox) {
     // For now the trashcan flyout always autocloses because it overlays the
     // trashcan UI (no trashcan to click to close it).
     if (workspace.trashcan &&
-      workspace.trashcan.getFlyout()) {
-      workspace.trashcan.getFlyout().hide();
+      workspace.trashcan.flyout) {
+      workspace.trashcan.flyout.hide();
     }
     var toolbox = workspace.getToolbox();
     if (toolbox &&

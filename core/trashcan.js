@@ -52,9 +52,9 @@ Blockly.Trashcan = function(workspace) {
   /**
    * The trashcan flyout.
    * @type {Blockly.Flyout}
-   * @private
+   * @package
    */
-  this.flyout_ = null;
+  this.flyout = null;
 
   if (this.workspace_.options.maxTrashcanContents <= 0) {
     return;
@@ -76,7 +76,7 @@ Blockly.Trashcan = function(workspace) {
     if (!Blockly.HorizontalFlyout) {
       throw Error('Missing require for Blockly.HorizontalFlyout');
     }
-    this.flyout_ = new Blockly.HorizontalFlyout(flyoutWorkspaceOptions);
+    this.flyout = new Blockly.HorizontalFlyout(flyoutWorkspaceOptions);
   } else {
     flyoutWorkspaceOptions.toolboxPosition =
       this.workspace_.toolboxPosition == Blockly.TOOLBOX_AT_RIGHT ?
@@ -84,7 +84,7 @@ Blockly.Trashcan = function(workspace) {
     if (!Blockly.VerticalFlyout) {
       throw Error('Missing require for Blockly.VerticalFlyout');
     }
-    this.flyout_ = new Blockly.VerticalFlyout(flyoutWorkspaceOptions);
+    this.flyout = new Blockly.VerticalFlyout(flyoutWorkspaceOptions);
   }
   this.workspace_.addChangeListener(this.onDelete_.bind(this));
 };
@@ -290,23 +290,14 @@ Blockly.Trashcan.prototype.createDom = function() {
  */
 Blockly.Trashcan.prototype.init = function(verticalSpacing) {
   if (this.workspace_.options.maxTrashcanContents > 0) {
-    Blockly.utils.dom.insertAfter(this.flyout_.createDom('svg'),
+    Blockly.utils.dom.insertAfter(this.flyout.createDom('svg'),
         this.workspace_.getParentSvg());
-    this.flyout_.init(this.workspace_);
+    this.flyout.init(this.workspace_);
   }
 
   this.verticalSpacing_ = this.MARGIN_BOTTOM_ + verticalSpacing;
   this.setOpen(false);
   return this.verticalSpacing_ + this.BODY_HEIGHT_ + this.LID_HEIGHT_;
-};
-
-/**
- * Get the trashcan flyout.
- * @return {Blockly.Flyout} The trashcan flyout.
- * @package
- */
-Blockly.Trashcan.prototype.getFlyout = function() {
-  return this.flyout_;
 };
 
 /**
@@ -441,7 +432,7 @@ Blockly.Trashcan.prototype.click = function() {
   for (var i = 0, text; text = this.contents_[i]; i++) {
     xml[i] = Blockly.Xml.textToDom(text);
   }
-  this.flyout_.show(xml);
+  this.flyout.show(xml);
 };
 
 /**

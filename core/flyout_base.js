@@ -434,7 +434,7 @@ Blockly.Flyout.prototype.hide = function() {
 
 /**
  * Show and populate the flyout.
- * @param {!Array|NodeList|string} xmlList List of blocks to show.
+ * @param {!Array|!NodeList|string} xmlList List of blocks to show.
  *     Variables and procedures have a custom set of blocks.
  */
 Blockly.Flyout.prototype.show = function(xmlList) {

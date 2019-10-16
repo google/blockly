@@ -878,9 +878,7 @@ Blockly.WorkspaceSvg.prototype.resizeContents = function() {
     return;
   }
   if (this.scrollbar) {
-    var metrics = this.getMetrics();
-    this.scrollbar.hScroll.resizeContentHorizontal(metrics);
-    this.scrollbar.vScroll.resizeContentVertical(metrics);
+    this.scrollbar.resize();
   }
   this.updateInverseScreenCTM();
 };

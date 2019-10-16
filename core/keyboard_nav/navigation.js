@@ -330,8 +330,8 @@ Blockly.navigation.modify_ = function() {
     markerLoc = /** @type {!Blockly.Connection} */ (markerLoc);
     return Blockly.navigation.connect_(cursorLoc, markerLoc);
   } else if (markerNode.isConnection() &&
-        (cursorType == Blockly.ASTNode.types.BLOCK ||
-        cursorType == Blockly.ASTNode.types.STACK)) {
+      (cursorType == Blockly.ASTNode.types.BLOCK ||
+      cursorType == Blockly.ASTNode.types.STACK)) {
     cursorLoc = /** @type {!Blockly.Block} */ (cursorLoc);
     markerLoc = /** @type {!Blockly.Connection} */ (markerLoc);
     return Blockly.navigation.insertBlock(cursorLoc, markerLoc);
@@ -374,7 +374,7 @@ Blockly.navigation.disconnectChild_ = function(movingConnection, destConnection)
  * @private
  */
 Blockly.navigation.moveAndConnect_ = function(movingConnection, destConnection) {
-  if (!movingConnection || ! destConnection) {
+  if (!movingConnection || !destConnection) {
     return false;
   }
   var movingBlock = movingConnection.getSourceBlock();
@@ -951,7 +951,8 @@ Blockly.navigation.ACTION_PREVIOUS = new Blockly.Action(
  * @type {!Blockly.Action}
  */
 Blockly.navigation.ACTION_OUT = new Blockly.Action(
-    Blockly.navigation.actionNames.OUT, 'Go to the parent of the current location.');
+    Blockly.navigation.actionNames.OUT,
+    'Go to the parent of the current location.');
 
 /**
  * The next action.
@@ -965,7 +966,8 @@ Blockly.navigation.ACTION_NEXT = new Blockly.Action(
  * @type {!Blockly.Action}
  */
 Blockly.navigation.ACTION_IN = new Blockly.Action(
-    Blockly.navigation.actionNames.IN, 'Go to the first child of the current location.');
+    Blockly.navigation.actionNames.IN,
+    'Go to the first child of the current location.');
 
 /**
  * The action to try to insert a block.
@@ -987,8 +989,8 @@ Blockly.navigation.ACTION_MARK = new Blockly.Action(
  * @type {!Blockly.Action}
  */
 Blockly.navigation.ACTION_DISCONNECT = new Blockly.Action(
-    Blockly.navigation.actionNames.DISCONNECT, 'Dicsonnect the block at the' +
-      'current location from its parent.');
+    Blockly.navigation.actionNames.DISCONNECT,
+    'Disconnect the block at the current location from its parent.');
 
 /**
  * The action to open the toolbox.
@@ -1002,14 +1004,16 @@ Blockly.navigation.ACTION_TOOLBOX = new Blockly.Action(
  * @type {!Blockly.Action}
  */
 Blockly.navigation.ACTION_EXIT = new Blockly.Action(
-    Blockly.navigation.actionNames.EXIT, 'Close the current modal, such as a toolbox or field editor.');
+    Blockly.navigation.actionNames.EXIT,
+    'Close the current modal, such as a toolbox or field editor.');
 
 /**
  * The action to toggle keyboard navigation mode on and off.
  * @type {!Blockly.Action}
  */
 Blockly.navigation.ACTION_TOGGLE_KEYBOARD_NAV = new Blockly.Action(
-    Blockly.navigation.actionNames.TOGGLE_KEYBOARD_NAV, 'Turns on and off keyboard navigation.');
+    Blockly.navigation.actionNames.TOGGLE_KEYBOARD_NAV,
+    'Turns on and off keyboard navigation.');
 
 /**
  * List of actions that can be performed in read only mode.

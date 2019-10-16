@@ -255,6 +255,7 @@ Blockly.Scrollbar.prototype.origin_ = new Blockly.utils.Coordinate(0, 0);
  * For a horizontal scrollbar this is the x coordinate of the mouse down event;
  * for a vertical scrollbar it's the y coordinate of the mouse down event.
  * @type {Blockly.utils.Coordinate}
+ * @private
  */
 Blockly.Scrollbar.prototype.startDragMouse_ = 0;
 
@@ -359,6 +360,7 @@ Blockly.Scrollbar.prototype.dispose = function() {
  * Set the length of the scrollbar's handle and change the SVG attribute
  * accordingly.
  * @param {number} newLength The new scrollbar handle length in CSS pixels.
+ * @private
  */
 Blockly.Scrollbar.prototype.setHandleLength_ = function(newLength) {
   this.handleLength_ = newLength;

@@ -126,6 +126,7 @@ Blockly.Bubble.onMouseMoveWrapper_ = null;
 /**
  * Function to call on resize of bubble.
  * @type {Function}
+ * @private
  */
 Blockly.Bubble.prototype.resizeCallback_ = null;
 
@@ -144,7 +145,7 @@ Blockly.Bubble.unbindDragEvents_ = function() {
   }
 };
 
-/*
+/**
  * Handle a mouse-up event while dragging a bubble's border or resize handle.
  * @param {!Event} e Mouse up event.
  * @private

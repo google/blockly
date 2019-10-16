@@ -331,9 +331,9 @@ Blockly.FieldAngle.prototype.dropdownCreate_ = function() {
   // a click handler on the drag surface to update the value if the surface
   // is clicked.
   this.clickSurfaceWrapper_ =
-      Blockly.bindEventWithChecks_(circle, 'click', this, this.onMouseMove, true, true);
+      Blockly.bindEventWithChecks_(circle, 'click', this, this.onMouseMove_, true, true);
   this.moveSurfaceWrapper_ =
-      Blockly.bindEventWithChecks_(circle, 'mousemove', this, this.onMouseMove, true, true);
+      Blockly.bindEventWithChecks_(circle, 'mousemove', this, this.onMouseMove_, true, true);
   return svg;
 };
 
@@ -367,8 +367,9 @@ Blockly.FieldAngle.prototype.hide_ = function() {
 /**
  * Set the angle to match the mouse's position.
  * @param {!Event} e Mouse move event.
+ * @protected
  */
-Blockly.FieldAngle.prototype.onMouseMove = function(e) {
+Blockly.FieldAngle.prototype.onMouseMove_ = function(e) {
   // Calculate angle.
   var bBox = this.gauge_.ownerSVGElement.getBoundingClientRect();
   var dx = e.clientX - bBox.left - Blockly.FieldAngle.HALF;

@@ -38,7 +38,7 @@ goog.require('Blockly.utils.Coordinate');
 goog.require('Blockly.WorkspaceDragger');
 
 
-/*
+/**
  * Note: In this file "start" refers to touchstart, mousedown, and pointerstart
  * events.  "End" refers to touchend, mouseup, and pointerend events.
  */
@@ -57,6 +57,7 @@ Blockly.Gesture = function(e, creatorWorkspace) {
    * The position of the mouse when the gesture started.  Units are CSS pixels,
    * with (0, 0) at the top left of the browser window (mouseEvent clientX/Y).
    * @type {Blockly.utils.Coordinate}
+   * @private
    */
   this.mouseDownXY_ = null;
 

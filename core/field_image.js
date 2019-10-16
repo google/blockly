@@ -247,6 +247,7 @@ Blockly.FieldImage.prototype.setAlt = function(alt) {
 /**
  * If field click is called, and click handler defined,
  * call the handler.
+ * @protected
  */
 Blockly.FieldImage.prototype.showEditor_ = function() {
   if (this.clickHandler_) {

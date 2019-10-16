@@ -30,7 +30,7 @@ goog.require('Blockly.utils.Coordinate');
 goog.require('Blockly.utils.object');
 
 
-/*
+/**
  * Note: In this file "start" refers to touchstart, mousedown, and pointerstart
  * events.  "End" refers to touchend, mouseup, and pointerend events.
  */

@@ -111,6 +111,7 @@ Blockly.Flyout = function(workspaceOptions) {
   /**
    * Width of output tab.
    * @type {number}
+   * @protected
    * @const
    */
   this.tabWidth_ = this.workspace_.getRenderer().getConstants().TAB_WIDTH;

@@ -1076,6 +1076,7 @@ Blockly.BlockSvg.prototype.updateColour = function() {
 /**
  * Sets the colour of the border.
  * Removes the light and dark paths if a border colour is defined.
+ * @private
  */
 Blockly.BlockSvg.prototype.setBorderColour_ = function() {
   var borderColours = this.getColourBorder();
@@ -1097,6 +1098,7 @@ Blockly.BlockSvg.prototype.setBorderColour_ = function() {
 /**
  * Sets the colour of shadow blocks.
  * @return {?string} The background colour of the block.
+ * @private
  */
 Blockly.BlockSvg.prototype.setShadowColour_ = function() {
   var shadowColour = this.getColourShadow();

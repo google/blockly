@@ -352,6 +352,7 @@ Blockly.CursorSvg.prototype.showCurrent_ = function() {
  * @param {number} width The width of the block.
  * @param {number} cursorOffset The extra padding for around the block.
  * @param {number} cursorHeight The height of the cursor.
+ * @private
  */
 Blockly.CursorSvg.prototype.positionBlock_ = function(width, cursorOffset, cursorHeight) {
   var cursorPath = Blockly.utils.svgPaths.moveBy(-1 * cursorOffset, cursorHeight) +

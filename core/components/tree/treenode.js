@@ -41,10 +41,6 @@ goog.require('Blockly.utils.KeyCodes');
  * @extends {Blockly.tree.BaseNode}
  */
 Blockly.tree.TreeNode = function(toolbox, content, config) {
-  /** 
-   * @type {Blockly.Toolbox}
-   * @private
-   */
   this.toolbox_ = toolbox;
   Blockly.tree.BaseNode.call(this, content, config);
 };

@@ -164,7 +164,7 @@ Blockly.MenuItem.prototype.getValue = function() {
 
 /**
  * Set the menu accessibility role.
- * @param {!Blockly.utils.aria.Role} roleName role name.
+ * @param {!Blockly.utils.aria.Role} roleName Role name.
  * @package
  */
 Blockly.MenuItem.prototype.setRole = function(roleName) {

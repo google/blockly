@@ -44,55 +44,6 @@ Blockly.utils.aria.ROLE_ATTRIBUTE_ = 'role';
  * @enum {string}
  */
 Blockly.utils.aria.Role = {
-  // ARIA role for an alert element that doesn't need to be explicitly closed.
-  //ALERT: 'alert',
-
-  // ARIA role for an alert dialog element that takes focus and must be closed.
-  //ALERTDIALOG: 'alertdialog',
-
-  // ARIA role for an application that implements its own keyboard navigation.
-  //APPLICATION: 'application',
-
-  // ARIA role for an article.
-  //ARTICLE: 'article',
-
-  // ARIA role for a banner containing mostly site content, not page content.
-  //BANNER: 'banner',
-
-  // ARIA role for a button element.
-  //BUTTON: 'button',
-
-  // ARIA role for a checkbox button element; use with the CHECKED state.
-  //CHECKBOX: 'checkbox',
-
-  // ARIA role for a column header of a table or grid.
-  //COLUMNHEADER: 'columnheader',
-
-  // ARIA role for a combo box element.
-  //COMBOBOX: 'combobox',
-
-  // ARIA role for a supporting section of the document.
-  //COMPLEMENTARY: 'complementary',
-
-  // ARIA role for a large perceivable region that contains information
-  // about the parent document.
-  //CONTENTINFO: 'contentinfo',
-
-  // ARIA role for a definition of a term or concept.
-  //DEFINITION: 'definition',
-
-  // ARIA role for a dialog, some descendant must take initial focus.
-  //DIALOG: 'dialog',
-
-  // ARIA role for a directory, like a table of contents.
-  //DIRECTORY: 'directory',
-
-  // ARIA role for a part of a page that's a document, not a web application.
-  //DOCUMENT: 'document',
-
-  // ARIA role for a landmark region logically considered one form.
-  //FORM: 'form',
-
   // ARIA role for an interactive control of tabular data.
   GRID: 'grid',
 
@@ -102,56 +53,17 @@ Blockly.utils.aria.Role = {
   // ARIA role for a group of related elements like tree item siblings.
   GROUP: 'group',
 
-  // ARIA role for a heading element.
-  //HEADING: 'heading',
-
-  // ARIA role for a container of elements that together comprise one image.
-  //IMG: 'img',
-
-  // ARIA role for a link.
-  //LINK: 'link',
-
-  // ARIA role for a list of non-interactive list items.
-  //LIST: 'list',
-
   // ARIA role for a listbox.
   LISTBOX: 'listbox',
 
-  // ARIA role for a list item.
-  //LISTITEM: 'listitem',
-
-  // ARIA role for a live region where new information is added.
-  //LOG: 'log',
-
-  // ARIA landmark role for the main content in a document. Use only once.
-  //MAIN: 'main',
-
-  // ARIA role for a live region of non-essential information that changes.
-  //MARQUEE: 'marquee',
-
-  // ARIA role for a mathematical expression.
-  //MATH: 'math',
-
   // ARIA role for a popup menu.
   MENU: 'menu',
-
-  // ARIA role for a menubar element containing menu elements.
-  //MENUBAR: 'menubar',
 
   // ARIA role for menu item elements.
   MENUITEM: 'menuitem',
 
   // ARIA role for a checkbox box element inside a menu.
   MENUITEMCHECKBOX: 'menuitemcheckbox',
-
-  // ARIA role for a radio button element inside a menu.
-  //MENUITEMRADIO: 'menuitemradio',
-
-  // ARIA landmark role for a collection of navigation links.
-  //NAVIGATION: 'navigation',
-
-  // ARIA role for a section ancillary to the main content.
-  //NOTE: 'note',
 
   // ARIA role for option items that are  children of combobox, listbox, menu,
   // radiogroup, or tree elements.
@@ -160,77 +72,11 @@ Blockly.utils.aria.Role = {
   // ARIA role for ignorable cosmetic elements with no semantic significance.
   PRESENTATION: 'presentation',
 
-  // ARIA role for a progress bar element.
-  //PROGRESSBAR: 'progressbar',
-
-  // ARIA role for a radio button element.
-  //RADIO: 'radio',
-
-  // ARIA role for a group of connected radio button elements.
-  //RADIOGROUP: 'radiogroup',
-
-  // ARIA role for an important region of the page.
-  //REGION: 'region',
-
   // ARIA role for a row of cells in a grid.
   ROW: 'row',
 
-  // ARIA role for a group of one or more rows in a grid.
-  //ROWGROUP: 'rowgroup',
-
-  // ARIA role for a row header of a table or grid.
-  //ROWHEADER: 'rowheader',
-
-  // ARIA role for a scrollbar element.
-  //SCROLLBAR: 'scrollbar',
-
-  // ARIA landmark role for a part of the page providing search functionality.
-  //SEARCH: 'search',
-
-  // ARIA role for a menu separator.
-  //SEPARATOR: 'separator',
-
-  // ARIA role for a slider.
-  //SLIDER: 'slider',
-
-  // ARIA role for a spin button.
-  //SPINBUTTON: 'spinbutton',
-
-  // ARIA role for a live region with advisory info less severe than an alert.
-  //STATUS: 'status',
-
-  // ARIA role for a tab button.
-  //TAB: 'tab',
-
-  // ARIA role for a table.
-  //TABLE: 'table',
-
-  // ARIA role for a tab bar (i.e. a list of tab buttons).
-  //TABLIST: 'tablist',
-
-  // ARIA role for a tab page (i.e. the element holding tab contents).
-  //TABPANEL: 'tabpanel',
-
-  // ARIA role for a textbox element.
-  //TEXTBOX: 'textbox',
-
-  // ARIA role for a textinfo element.
-  //TEXTINFO: 'textinfo',
-
-  // ARIA role for an element displaying elapsed time or time remaining.
-  //TIMER: 'timer',
-
-  // ARIA role for a toolbar element.
-  //TOOLBAR: 'toolbar',
-
-  // ARIA role for a tooltip element.
-  //TOOLTIP: 'tooltip',
-
   // ARIA role for a tree.
   TREE: 'tree',
-
-  // ARIA role for a grid whose rows can be expanded and collapsed like a tree.
-  //TREEGRID: 'treegrid',
 
   // ARIA role for a tree item that sometimes may be expanded or collapsed.
   TREEITEM: 'treeitem'
@@ -246,69 +92,14 @@ Blockly.utils.aria.State = {
   // for example the selected item in a list box. Value: ID of an element.
   ACTIVEDESCENDANT: 'activedescendant',
 
-  // ARIA property that, if true, indicates that all of a changed region should
-  // be presented, instead of only parts. Value: one of {true, false}.
-  //ATOMIC: 'atomic',
-
-  // ARIA property to specify that input completion is provided. Value:
-  // one of {'inline', 'list', 'both', 'none'}.
-  //AUTOCOMPLETE: 'autocomplete',
-
-  // ARIA state to indicate that an element and its subtree are being updated.
-  // Value: one of {true, false}.
-  //BUSY: 'busy',
-
-  // ARIA state for a checked item. Value: one of {'true', 'false', 'mixed',
-  // undefined}.
-  //CHECKED: 'checked',
-
   // ARIA property defines the total number of columns in a table, grid, or
   // treegrid.
   // Value: integer.
   COLCOUNT: 'colcount',
 
-  // ARIA state that defines an element's column index or position with respect
-  // to the total number of columns within a table, grid, or treegrid.
-  // Value: number.
-  //COLINDEX: 'colindex',
-
-  // ARIA property that identifies the element or elements whose contents or
-  // presence are controlled by this element.
-  // Value: space-separated IDs of other elements.
-  //CONTROLS: 'controls',
-
-  // ARIA property that identifies the element or elements that describe
-  // this element. Value: space-separated IDs of other elements.
-  //DESCRIBEDBY: 'describedby',
-
-  // ARIA state for a disabled item. Value: one of {true, false}.
-  //DISABLED: 'disabled',
-
-  // ARIA property that indicates what functions can be performed when a
-  // dragged object is released on the drop target.  Value: one of
-  // {'copy', 'move', 'link', 'execute', 'popup', 'none'}.
-  //DROPEFFECT: 'dropeffect',
-
   // ARIA state for setting whether the element like a tree node is expanded.
   // Value: one of {true, false, undefined}.
   EXPANDED: 'expanded',
-
-  // ARIA property that identifies the next element (or elements) in the
-  // recommended reading order of content. Value: space-separated ids of
-  // elements to flow to.
-  //FLOWTO: 'flowto',
-
-  // ARIA state that indicates an element's "grabbed" state in drag-and-drop.
-  // Value: one of {true, false, undefined}.
-  //GRABBED: 'grabbed',
-
-  // ARIA property indicating whether the element has a popup.
-  // Value: one of {true, false}.
-  //HASPOPUP: 'haspopup',
-
-  // ARIA state indicating that the element is not visible or perceivable
-  // to any user. Value: one of {true, false}.
-  //HIDDEN: 'hidden',
 
   // ARIA state indicating that the entered value does not conform. Value:
   // one of {false, true, 'grammar', 'spelling'}
@@ -326,59 +117,18 @@ Blockly.utils.aria.State = {
   // Value: integer.
   LEVEL: 'level',
 
-  // ARIA property indicating that an element will be updated, and
-  // describes the types of updates the user agents, assistive technologies,
-  // and user can expect from the live region. Value: one of {'off', 'polite',
-  // 'assertive'}.
-  //LIVE: 'live',
-
-  // ARIA property indicating whether a text box can accept multiline input.
-  // Value: one of {true, false}.
-  //MULTILINE: 'multiline',
-
-  // ARIA property indicating if the user may select more than one item.
-  // Value: one of {true, false}.
-  //MULTISELECTABLE: 'multiselectable',
-
   // ARIA property indicating if the element is horizontal or vertical.
   // Value: one of {'vertical', 'horizontal'}.
   ORIENTATION: 'orientation',
-
-  // ARIA property creating a visual, functional, or contextual parent/child
-  // relationship when the DOM hierarchy can't be used to represent it.
-  // Value: Space-separated IDs of elements.
-  //OWNS: 'owns',
 
   // ARIA property that defines an element's number of position in a list.
   // Value: integer.
   POSINSET: 'posinset',
 
-  // ARIA state for a pressed item.
-  // Value: one of {true, false, undefined, 'mixed'}.
-  //PRESSED: 'pressed',
-
-  // ARIA property indicating that an element is not editable.
-  // Value: one of {true, false}.
-  //READONLY: 'readonly',
-
-  // ARIA property indicating that change notifications within this subtree
-  // of a live region should be announced. Value: one of {'additions',
-  // 'removals', 'text', 'all', 'additions text'}.
-  //RELEVANT: 'relevant',
-
-  // ARIA property indicating that user input is required on this element
-  // before a form may be submitted. Value: one of {true, false}.
-  //REQUIRED: 'required',
-
   // ARIA property defines the total number of rows in a table, grid, or
   // treegrid.
   // Value: integer.
   ROWCOUNT: 'rowcount',
-
-  // ARIA state that defines an element's row index or position with respect
-  // to the total number of rows within a table, grid, or treegrid.
-  // Value: number.
-  //ROWINDEX: 'rowindex',
 
   // ARIA state for setting the currently selected item in the list.
   // Value: one of {true, false, undefined}.
@@ -387,22 +137,11 @@ Blockly.utils.aria.State = {
   // ARIA property defining the number of items in a list. Value: integer.
   SETSIZE: 'setsize',
 
-  // ARIA property indicating if items are sorted. Value: one of {'ascending',
-  // 'descending', 'none', 'other'}.
-  //SORT: 'sort',
-
   // ARIA property for slider maximum value. Value: number.
   VALUEMAX: 'valuemax',
 
   // ARIA property for slider minimum value. Value: number.
-  VALUEMIN: 'valuemin',
-
-  // ARIA property for slider active value. Value: number.
-  //VALUENOW: 'valuenow',
-
-  // ARIA property for slider active value represented as text.
-  // Value: string.
-  //VALUETEXT: 'valuetext'
+  VALUEMIN: 'valuemin'
 };
 
 /**

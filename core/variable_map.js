@@ -276,7 +276,7 @@ Blockly.VariableMap.prototype.deleteVariableInternal_ = function(variable,
   }
   try {
     for (var i = 0; i < uses.length; i++) {
-      uses[i].dispose(true, false);
+      uses[i].dispose(true);
     }
     this.deleteVariable(variable);
   } finally {

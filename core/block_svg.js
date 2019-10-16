@@ -577,7 +577,7 @@ Blockly.BlockSvg.prototype.snapToGrid = function() {
  * @return {!Blockly.utils.Rect} Object with coordinates of the bounding box.
  */
 Blockly.BlockSvg.prototype.getBoundingRectangle = function() {
-  var blockXY = this.getRelativeToSurfaceXY(this);
+  var blockXY = this.getRelativeToSurfaceXY();
   var tab = this.outputConnection ? Blockly.BlockSvg.TAB_WIDTH : 0;
   var blockBounds = this.getHeightWidth();
   var top = blockXY.y;
@@ -1513,7 +1513,7 @@ Blockly.BlockSvg.prototype.appendInput_ = function(type, name) {
  */
 Blockly.BlockSvg.prototype.waitToTrackConnections = function() {
   this.callTrackConnections_ = false;
-  var children = this.getChildren();
+  var children = this.getChildren(false);
   for (var i = 0, child; child = children[i]; i++) {
     child.waitToTrackConnections();
   }

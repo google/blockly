@@ -43,7 +43,8 @@ goog.require('Blockly.Xml');
 
 /**
  * Class for a flyout.
- * @param {!Object} workspaceOptions Dictionary of options for the workspace.
+ * @param {!Blockly.Options} workspaceOptions Dictionary of options for the
+ *     workspace.
  * @constructor
  */
 Blockly.Flyout = function(workspaceOptions) {
@@ -228,15 +229,17 @@ Blockly.Flyout.prototype.createDom = function(tagName) {
   this.svgBackground_ = Blockly.utils.dom.createSvgElement('path',
       {'class': 'blocklyFlyoutBackground'}, this.svgGroup_);
   this.svgGroup_.appendChild(this.workspace_.createDom());
-  this.workspace_.getThemeManager().subscribe(this.svgBackground_, 'flyout', 'fill');
-  this.workspace_.getThemeManager().subscribe(this.svgBackground_, 'flyoutOpacity', 'fill-opacity');
+  this.workspace_.getThemeManager().subscribe(
+      this.svgBackground_, 'flyout', 'fill');
+  this.workspace_.getThemeManager().subscribe(
+      this.svgBackground_, 'flyoutOpacity', 'fill-opacity');
   return this.svgGroup_;
 };
 
 /**
  * Initializes the flyout.
- * @param {!Blockly.Workspace} targetWorkspace The workspace in which to create
- *     new blocks.
+ * @param {!Blockly.WorkspaceSvg} targetWorkspace The workspace in which to
+ *     create new blocks.
  */
 Blockly.Flyout.prototype.init = function(targetWorkspace) {
   this.targetWorkspace_ = targetWorkspace;
@@ -265,7 +268,7 @@ Blockly.Flyout.prototype.init = function(targetWorkspace) {
       this.targetWorkspace_.getGesture.bind(this.targetWorkspace_);
 
   // Get variables from the main workspace rather than the target workspace.
-  this.workspace_.variableMap_ = this.targetWorkspace_.getVariableMap();
+  this.workspace_.setVariableMap(this.targetWorkspace_.getVariableMap());
 
   this.workspace_.createPotentialVariableMap();
 };
@@ -432,7 +435,7 @@ Blockly.Flyout.prototype.hide = function() {
 
 /**
  * Show and populate the flyout.
- * @param {!Array|string} xmlList List of blocks to show.
+ * @param {!Array|!NodeList|string} xmlList List of blocks to show.
  *     Variables and procedures have a custom set of blocks.
  */
 Blockly.Flyout.prototype.show = function(xmlList) {
@@ -575,6 +578,7 @@ Blockly.Flyout.prototype.clearOldBlocks_ = function() {
  * @param {!SVGElement} rect The invisible rectangle under the block that acts
  *     as a mat for that block.
  * @protected
+ * @suppress {deprecated} Suppress deprecated bindEvent_ call.
  */
 Blockly.Flyout.prototype.addBlockListeners_ = function(root, block, rect) {
   this.listeners_.push(Blockly.bindEventWithChecks_(root, 'mousedown', null,
@@ -788,8 +792,8 @@ Blockly.Flyout.prototype.isScrollable = function() {
 
 /**
  * Copy a block from the flyout to the workspace and position it correctly.
- * @param {!Blockly.Block} oldBlock The flyout block to copy.
- * @return {!Blockly.Block} The new block in the main workspace.
+ * @param {!Blockly.BlockSvg} oldBlock The flyout block to copy.
+ * @return {!Blockly.BlockSvg} The new block in the main workspace.
  * @private
  */
 Blockly.Flyout.prototype.placeNewBlock_ = function(oldBlock) {
@@ -807,7 +811,8 @@ Blockly.Flyout.prototype.placeNewBlock_ = function(oldBlock) {
 
   // Using domToBlock instead of domToWorkspace means that the new block will be
   // placed at position (0, 0) in main workspace units.
-  var block = Blockly.Xml.domToBlock(xml, targetWorkspace);
+  var block = /** @type {!Blockly.BlockSvg} */
+      (Blockly.Xml.domToBlock(xml, targetWorkspace));
   var svgRootNew = block.getSvgRoot();
   if (!svgRootNew) {
     throw Error('block is not rendered.');

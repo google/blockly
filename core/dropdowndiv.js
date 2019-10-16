@@ -259,11 +259,12 @@ Blockly.DropDownDiv.showPositionedByField = function(field,
  * @private
  */
 Blockly.DropDownDiv.getScaledBboxOfBlock_ = function(block) {
-  var bBox = block.getSvgRoot().getBBox();
+  var blockSvg = block.getSvgRoot();
+  var bBox = blockSvg.getBBox();
   var scale = block.workspace.scale;
   var scaledHeight = bBox.height * scale;
   var scaledWidth = bBox.width * scale;
-  var xy = Blockly.utils.style.getPageOffset(block.getSvgRoot());
+  var xy = Blockly.utils.style.getPageOffset(blockSvg);
   return new Blockly.utils.Rect(
       xy.y, xy.y + scaledHeight, xy.x, xy.x + scaledWidth);
 };

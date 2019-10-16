@@ -142,6 +142,12 @@ Blockly.BlockSvg = function(workspace, prototypeName, opt_id) {
 Blockly.utils.object.inherits(Blockly.BlockSvg, Blockly.Block);
 
 /**
+ * The name of the hook for Block ContextMenu items
+ * @type {string}
+ */
+Blockly.BlockSvg.CONTEXTMENU_HOOK = 'blockContextMenu';
+
+/**
  * Height of this block, not including any statement blocks above or below.
  * Height is in workspace units.
  */
@@ -755,87 +761,9 @@ Blockly.BlockSvg.prototype.generateContextMenu = function() {
   if (this.workspace.options.readOnly || !this.contextMenu) {
     return null;
   }
-  // Save the current block in a variable for use in closures.
-  var block = this;
-  var menuOptions = [];
 
-  if (!this.isInFlyout) {
-    if (this.isDeletable() && this.isMovable()) {
-      menuOptions.push(Blockly.ContextMenu.blockDuplicateOption(block));
-    }
-
-    if (this.workspace.options.comments && !this.collapsed_ &&
-        this.isEditable()) {
-      menuOptions.push(Blockly.ContextMenu.blockCommentOption(block));
-    }
-
-    if (this.isMovable()) {
-      if (!this.collapsed_) {
-        // Option to make block inline.
-        for (var i = 1; i < this.inputList.length; i++) {
-          if (this.inputList[i - 1].type != Blockly.NEXT_STATEMENT &&
-              this.inputList[i].type != Blockly.NEXT_STATEMENT) {
-            // Only display this option if there are two value or dummy inputs
-            // next to each other.
-            var inlineOption = {enabled: true};
-            var isInline = this.getInputsInline();
-            inlineOption.text = isInline ?
-                Blockly.Msg['EXTERNAL_INPUTS'] : Blockly.Msg['INLINE_INPUTS'];
-            inlineOption.callback = function() {
-              block.setInputsInline(!isInline);
-            };
-            menuOptions.push(inlineOption);
-            break;
-          }
-        }
-        // Option to collapse block
-        if (this.workspace.options.collapse) {
-          var collapseOption = {enabled: true};
-          collapseOption.text = Blockly.Msg['COLLAPSE_BLOCK'];
-          collapseOption.callback = function() {
-            block.setCollapsed(true);
-          };
-          menuOptions.push(collapseOption);
-        }
-      } else {
-        // Option to expand block.
-        if (this.workspace.options.collapse) {
-          var expandOption = {enabled: true};
-          expandOption.text = Blockly.Msg['EXPAND_BLOCK'];
-          expandOption.callback = function() {
-            block.setCollapsed(false);
-          };
-          menuOptions.push(expandOption);
-        }
-      }
-    }
-
-    if (this.workspace.options.disable && this.isEditable()) {
-      // Option to disable/enable block.
-      var disableOption = {
-        text: this.isEnabled() ?
-            Blockly.Msg['DISABLE_BLOCK'] : Blockly.Msg['ENABLE_BLOCK'],
-        enabled: !this.getInheritedDisabled(),
-        callback: function() {
-          var group = Blockly.Events.getGroup();
-          if (!group) {
-            Blockly.Events.setGroup(true);
-          }
-          block.setEnabled(!block.isEnabled());
-          if (!group) {
-            Blockly.Events.setGroup(false);
-          }
-        }
-      };
-      menuOptions.push(disableOption);
-    }
-
-    if (this.isDeletable()) {
-      menuOptions.push(Blockly.ContextMenu.blockDeleteOption(block));
-    }
-  }
-
-  menuOptions.push(Blockly.ContextMenu.blockHelpOption(block));
+  var menuOptions =
+      Blockly.ContextMenu.getOptionsFromPlugins(Blockly.BlockSvg.CONTEXTMENU_HOOK, this);
 
   // Allow the block to add or modify menuOptions.
   if (this.customContextMenu) {

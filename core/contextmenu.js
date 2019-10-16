@@ -32,6 +32,7 @@ goog.require('Blockly.Events.BlockCreate');
 goog.require('Blockly.Menu');
 goog.require('Blockly.MenuItem');
 goog.require('Blockly.Msg');
+goog.require('Blockly.Plugins');
 goog.require('Blockly.utils');
 goog.require('Blockly.utils.Coordinate');
 goog.require('Blockly.utils.dom');
@@ -198,6 +199,50 @@ Blockly.ContextMenu.callbackFactory = function(block, xml) {
     }
     newBlock.select();
   };
+};
+
+/**
+ * Create a plugin for a ContextMenu item
+ * @param {!string} hookName The name of the hook to
+ * @param {!Function} predicate A function that determines whether to display the menu option
+ * @param {!Function} optionFactory A function that create the menu option
+ * @return {Function} a PluginSpec factory function
+ */
+Blockly.ContextMenu.createPlugin = function(hookName, predicate, optionFactory) {
+  return function() {
+    var hooks = {};
+    hooks[hookName] = function(context) {
+      if (predicate(context)) {
+        return optionFactory(context);
+      }
+    };
+    return {
+      hooks: hooks
+    };
+  };
+};
+
+/**
+ * Get menu options from all plugin hooks of the given name
+ * @param {string} hookName The name of the plugin hook to fetch menu option factories from
+ * @param {Object} context The context of the menu, eg Block or Workspace
+ * @return {Array} menu options
+ */
+Blockly.ContextMenu.getOptionsFromPlugins = function(hookName, context) {
+  var menuOptions = [];
+
+  var menuOptionFactories = Blockly.Plugins.getHooks(hookName);
+
+  menuOptionFactories.forEach(function(factory) {
+    var result = factory(context);
+    if (Array.isArray(result)) {
+      menuOptions.push.apply(menuOptions, result);
+    } else if (result) {
+      menuOptions.push(result);
+    }
+  });
+
+  return menuOptions;
 };
 
 // Helper functions for creating context menu options.

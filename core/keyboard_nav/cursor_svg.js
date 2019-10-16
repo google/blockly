@@ -319,8 +319,8 @@ Blockly.CursorSvg.prototype.showWithStack_ = function(curNode) {
   var height = heightWidth.height + Blockly.CursorSvg.STACK_PADDING;
 
   // Shift the rectangle slightly to upper left so padding is equal on all sides.
-  var xPadding = -1 * Blockly.CursorSvg.STACK_PADDING / 2;
-  var yPadding = -1 * Blockly.CursorSvg.STACK_PADDING / 2;
+  var xPadding = -Blockly.CursorSvg.STACK_PADDING / 2;
+  var yPadding = -Blockly.CursorSvg.STACK_PADDING / 2;
 
   var x = xPadding;
   var y = yPadding;
@@ -354,8 +354,8 @@ Blockly.CursorSvg.prototype.showCurrent_ = function() {
  * @param {number} cursorHeight The height of the cursor.
  */
 Blockly.CursorSvg.prototype.positionBlock_ = function(width, cursorOffset, cursorHeight) {
-  var cursorPath = Blockly.utils.svgPaths.moveBy(-1 * cursorOffset, cursorHeight) +
-      Blockly.utils.svgPaths.lineOnAxis('V', -1 * cursorOffset) +
+  var cursorPath = Blockly.utils.svgPaths.moveBy(-cursorOffset, cursorHeight) +
+      Blockly.utils.svgPaths.lineOnAxis('V', -cursorOffset) +
       Blockly.utils.svgPaths.lineOnAxis('H', width + cursorOffset * 2) +
       Blockly.utils.svgPaths.lineOnAxis('V', cursorHeight);
   this.cursorBlock_.setAttribute('d', cursorPath);
@@ -375,7 +375,7 @@ Blockly.CursorSvg.prototype.positionInput_ = function(connection) {
   var x = connection.getOffsetInBlock().x;
   var y = connection.getOffsetInBlock().y;
 
-  var path = Blockly.utils.svgPaths.moveTo(0,0) +
+  var path = Blockly.utils.svgPaths.moveTo(0, 0) +
       this.constants_.PUZZLE_TAB.pathDown;
 
   this.cursorInput_.setAttribute('d', path);
@@ -408,7 +408,7 @@ Blockly.CursorSvg.prototype.positionLine_ = function(x, y, width) {
  */
 Blockly.CursorSvg.prototype.positionOutput_ = function(width, height) {
   var cursorPath = Blockly.utils.svgPaths.moveBy(width, 0) +
-    Blockly.utils.svgPaths.lineOnAxis('h', -1 * (width - this.constants_.PUZZLE_TAB.width)) +
+    Blockly.utils.svgPaths.lineOnAxis('h', -(width - this.constants_.PUZZLE_TAB.width)) +
     Blockly.utils.svgPaths.lineOnAxis('v', this.constants_.TAB_OFFSET_FROM_TOP) +
     this.constants_.PUZZLE_TAB.pathDown +
     Blockly.utils.svgPaths.lineOnAxis('V', height) +
@@ -430,8 +430,8 @@ Blockly.CursorSvg.prototype.positionOutput_ = function(width, height) {
  * @private
  */
 Blockly.CursorSvg.prototype.positionPrevious_ = function(width, cursorOffset, cursorHeight) {
-  var cursorPath = Blockly.utils.svgPaths.moveBy(-1 * cursorOffset, cursorHeight) +
-      Blockly.utils.svgPaths.lineOnAxis('V', -1 * cursorOffset) +
+  var cursorPath = Blockly.utils.svgPaths.moveBy(-cursorOffset, cursorHeight) +
+      Blockly.utils.svgPaths.lineOnAxis('V', -cursorOffset) +
       Blockly.utils.svgPaths.lineOnAxis('H', this.constants_.NOTCH_OFFSET_LEFT) +
       this.constants_.NOTCH.pathLeft +
       Blockly.utils.svgPaths.lineOnAxis('H', width + cursorOffset * 2) +
@@ -491,24 +491,24 @@ Blockly.CursorSvg.prototype.draw = function(curNode) {
     return;
   }
 
-  if (curNode.getType() === Blockly.ASTNode.types.BLOCK) {
+  if (curNode.getType() == Blockly.ASTNode.types.BLOCK) {
     var block = /** @type {Blockly.BlockSvg} */ (curNode.getLocation());
     this.showWithBlockPrevOutput_(block);
-  } else if (curNode.getType() === Blockly.ASTNode.types.OUTPUT) {
+  } else if (curNode.getType() == Blockly.ASTNode.types.OUTPUT) {
     var outputBlock = /** @type {Blockly.BlockSvg} */ (curNode.getLocation().getSourceBlock());
     this.showWithBlockPrevOutput_(outputBlock);
-  } else if (curNode.getLocation().type === Blockly.INPUT_VALUE) {
+  } else if (curNode.getLocation().type == Blockly.INPUT_VALUE) {
     this.showWithInput_(curNode);
-  } else if (curNode.getLocation().type === Blockly.NEXT_STATEMENT) {
+  } else if (curNode.getLocation().type == Blockly.NEXT_STATEMENT) {
     this.showWithNext_(curNode);
-  } else if (curNode.getType() === Blockly.ASTNode.types.PREVIOUS) {
+  } else if (curNode.getType() == Blockly.ASTNode.types.PREVIOUS) {
     var previousBlock = /** @type {Blockly.BlockSvg} */ (curNode.getLocation().getSourceBlock());
     this.showWithBlockPrevOutput_(previousBlock);
-  } else if (curNode.getType() === Blockly.ASTNode.types.FIELD) {
+  } else if (curNode.getType() == Blockly.ASTNode.types.FIELD) {
     this.showWithField_(curNode);
-  } else if (curNode.getType() === Blockly.ASTNode.types.WORKSPACE) {
+  } else if (curNode.getType() == Blockly.ASTNode.types.WORKSPACE) {
     this.showWithCoordinates_(curNode);
-  } else if (curNode.getType() === Blockly.ASTNode.types.STACK) {
+  } else if (curNode.getType() == Blockly.ASTNode.types.STACK) {
     this.showWithStack_(curNode);
   }
 
@@ -545,12 +545,12 @@ Blockly.CursorSvg.prototype.createCursorSvg_ = function() {
   // A horizontal line used to represent a workspace coordinate or next connection.
   this.cursorSvgLine_ = Blockly.utils.dom.createSvgElement('rect',
       {
-        'x': '0',
-        'y': '0',
+        'x': 0,
+        'y': 0,
         'fill': colour,
         'width': Blockly.CursorSvg.CURSOR_WIDTH,
         'height': Blockly.CursorSvg.CURSOR_HEIGHT,
-        'style': 'display: none;'
+        'style': 'display: none'
       },
       this.cursorSvg_);
 
@@ -558,10 +558,10 @@ Blockly.CursorSvg.prototype.createCursorSvg_ = function() {
   this.cursorSvgRect_ = Blockly.utils.dom.createSvgElement('rect',
       {
         'class': 'blocklyVerticalCursor',
-        'x': '0',
-        'y': '0',
-        'rx': '10', 'ry': '10',
-        'style': 'display: none;',
+        'x': 0,
+        'y': 0,
+        'rx': 10, 'ry': 10,
+        'style': 'display: none',
         'stroke': colour
       },
       this.cursorSvg_);
@@ -572,57 +572,42 @@ Blockly.CursorSvg.prototype.createCursorSvg_ = function() {
       {
         'width': Blockly.CursorSvg.CURSOR_WIDTH,
         'height': Blockly.CursorSvg.CURSOR_HEIGHT,
-        'transform':'',
-        'style':'display: none;',
+        'transform': '',
+        'style': 'display: none',
         'fill': colour
       },
       this.cursorSvg_);
 
-  // A path used to repreesent a previous connection and a block, an output
+  // A path used to represent a previous connection and a block, an output
   // connection and a block, or a block.
   this.cursorBlock_ = Blockly.utils.dom.createSvgElement(
       'path',
       {
         'width': Blockly.CursorSvg.CURSOR_WIDTH,
         'height': Blockly.CursorSvg.CURSOR_HEIGHT,
-        'transform':'',
-        'style':'display: none;',
+        'transform': '',
+        'style': 'display: none',
         'fill': 'none',
         'stroke': colour,
-        'stroke-width': '4'
+        'stroke-width': 4
       },
       this.cursorSvg_);
 
   // Markers and stack cursors don't blink.
   if (!this.isMarker_) {
-    Blockly.utils.dom.createSvgElement('animate',
-        {
-          'attributeType': 'XML',
-          'attributeName': 'fill',
-          'dur': '1s',
-          'values': Blockly.CursorSvg.CURSOR_COLOR + ';transparent;transparent;',
-          'repeatCount': 'indefinite'
-        },
+    var properties = {
+      'attributeType': 'XML',
+      'attributeName': 'fill',
+      'dur': '1s',
+      'values': Blockly.CursorSvg.CURSOR_COLOR + ';transparent;transparent;',
+      'repeatCount': 'indefinite'
+    };
+    Blockly.utils.dom.createSvgElement('animate', properties,
         this.cursorSvgLine_);
-
-    Blockly.utils.dom.createSvgElement('animate',
-        {
-          'attributeType': 'XML',
-          'attributeName': 'fill',
-          'dur': '1s',
-          'values': Blockly.CursorSvg.CURSOR_COLOR + ';transparent;transparent;',
-          'repeatCount': 'indefinite'
-        },
+    Blockly.utils.dom.createSvgElement('animate', properties,
         this.cursorInput_);
-
-    Blockly.utils.dom.createSvgElement('animate',
-        {
-          'attributeType': 'XML',
-          'attributeName': 'stroke',
-          'dur': '1s',
-          'values': Blockly.CursorSvg.CURSOR_COLOR + ';transparent;transparent;',
-          'repeatCount': 'indefinite'
-        },
+    properties['attributeName'] = 'stroke';
+    Blockly.utils.dom.createSvgElement('animate', properties,
         this.cursorBlock_);
   }
 

@@ -449,9 +449,9 @@ Blockly.Gesture.prototype.startDraggingBlock_ = function() {
 
 /**
  * Create a bubble dragger and start dragging the selected bubble.
- * TODO (fenichel): Possibly combine this and startDraggingBlock_.
  * @private
  */
+// TODO (fenichel): Possibly combine this and startDraggingBlock_.
 Blockly.Gesture.prototype.startDraggingBubble_ = function() {
   this.bubbleDragger_ = new Blockly.BubbleDragger(this.startBubble_,
       this.startWorkspace_);

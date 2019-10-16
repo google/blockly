@@ -25,6 +25,7 @@ goog.provide('Blockly.FieldNumber');
 
 goog.require('Blockly.fieldRegistry');
 goog.require('Blockly.FieldTextInput');
+goog.require('Blockly.utils.aria');
 goog.require('Blockly.utils.object');
 
 

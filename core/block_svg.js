@@ -187,34 +187,34 @@ Blockly.BlockSvg.COLLAPSED_WARNING_ID = 'TEMP_COLLAPSED_WARNING_';
 // Leftover UI constants from block_render_svg.js.
 /**
  * Vertical space between elements.
- * TODO (#3142): Remove.
  * @const
  * @package
  */
+// TODO (#3142): Remove.
 Blockly.BlockSvg.SEP_SPACE_Y = 10;
 
 /**
  * Minimum height of a block.
- * TODO (#3142): Remove.
  * @const
  * @package
  */
+// TODO (#3142): Remove.
 Blockly.BlockSvg.MIN_BLOCK_Y = 25;
 
 /**
  * Width of horizontal puzzle tab.
- * TODO (#3142): Remove.
  * @const
  * @package
  */
+// TODO (#3142): Remove.
 Blockly.BlockSvg.TAB_WIDTH = 8;
 
 /**
  * Do blocks with no previous or output connections have a 'hat' on top?
- * TODO (#3142): Remove.
  * @const
  * @package
  */
+// TODO (#3142): Remove.
 Blockly.BlockSvg.START_HAT = false;
 
 /**
@@ -1375,7 +1375,12 @@ Blockly.BlockSvg.prototype.bringToFront = function() {
   var block = this;
   do {
     var root = block.getSvgRoot();
-    root.parentNode.appendChild(root);
+    var parent = root.parentNode;
+    var childNodes = parent.childNodes;
+    // Avoid moving the block if it's already at the bottom.
+    if (childNodes[childNodes.length - 1] !== root) {
+      parent.appendChild(root);
+    }
     block = block.getParent();
   } while (block);
 };
@@ -1802,7 +1807,9 @@ Blockly.BlockSvg.prototype.getHeightWidth = function() {
   var nextBlock = this.getNextBlock();
   if (nextBlock) {
     var nextHeightWidth = nextBlock.getHeightWidth();
-    height += nextHeightWidth.height - 4;  // Height of tab.
+    var workspace = /** @type {!Blockly.WorkspaceSvg} */ (this.workspace);
+    var tabHeight = workspace.getRenderer().getConstants().NOTCH_HEIGHT;
+    height += nextHeightWidth.height - tabHeight;
     width = Math.max(width, nextHeightWidth.width);
   }
   return {height: height, width: width};

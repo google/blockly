@@ -71,8 +71,7 @@ def fail(message):
     raise Exception("Orphaned assert equals: " + message)
   unittestResults.append((False, "Fail.", message))
 
-"""Describe this function...
-"""
+# Describe this function...
 def test_if():
   global test_name, naked, proc_x, proc_y, func_x, func_y, func_a, n, ok, log, count, varToChange, rand, item, text, number_of_calls, list2, proc_z, func_z, x, proc_w, func_c, if2, i, loglist, changing_list, list_copy, unittestResults
   if False:
@@ -104,8 +103,7 @@ def test_if():
     fail('elseif 3')
   assertEquals(ok, True, 'elseif 4')
 
-"""Describe this function...
-"""
+# Describe this function...
 def test_ifelse():
   global test_name, naked, proc_x, proc_y, func_x, func_y, func_a, n, ok, log, count, varToChange, rand, item, text, number_of_calls, list2, proc_z, func_z, x, proc_w, func_c, if2, i, loglist, changing_list, list_copy, unittestResults
   ok = False
@@ -121,8 +119,7 @@ def test_ifelse():
     ok = True
   assertEquals(ok, True, 'ifelse false')
 
-"""Describe this function...
-"""
+# Describe this function...
 def test_equalities():
   global test_name, naked, proc_x, proc_y, func_x, func_y, func_a, n, ok, log, count, varToChange, rand, item, text, number_of_calls, list2, proc_z, func_z, x, proc_w, func_c, if2, i, loglist, changing_list, list_copy, unittestResults
   assertEquals(2 == 2, True, 'Equal yes')
@@ -138,8 +135,7 @@ def test_equalities():
   assertEquals(14 >= 14, True, 'Greater-equal yes')
   assertEquals(15 >= 16, False, 'Greater-equal no')
 
-"""Describe this function...
-"""
+# Describe this function...
 def test_and():
   global test_name, naked, proc_x, proc_y, func_x, func_y, func_a, n, ok, log, count, varToChange, rand, item, text, number_of_calls, list2, proc_z, func_z, x, proc_w, func_c, if2, i, loglist, changing_list, list_copy, unittestResults
   assertEquals(True and True, True, 'And true/true')
@@ -147,8 +143,7 @@ def test_and():
   assertEquals(True and False, False, 'And true/false')
   assertEquals(False and False, False, 'And false/false')
 
-"""Describe this function...
-"""
+# Describe this function...
 def test_or():
   global test_name, naked, proc_x, proc_y, func_x, func_y, func_a, n, ok, log, count, varToChange, rand, item, text, number_of_calls, list2, proc_z, func_z, x, proc_w, func_c, if2, i, loglist, changing_list, list_copy, unittestResults
   assertEquals(True or True, True, 'Or true/true')
@@ -156,15 +151,13 @@ def test_or():
   assertEquals(True or False, True, 'Or true/false')
   assertEquals(False or False, False, 'Or false/false')
 
-"""Describe this function...
-"""
+# Describe this function...
 def test_ternary():
   global test_name, naked, proc_x, proc_y, func_x, func_y, func_a, n, ok, log, count, varToChange, rand, item, text, number_of_calls, list2, proc_z, func_z, x, proc_w, func_c, if2, i, loglist, changing_list, list_copy, unittestResults
   assertEquals(42 if True else 99, 42, 'if true')
   assertEquals(42 if False else 99, 99, 'if true')
 
-"""Describe this function...
-"""
+# Describe this function...
 def test_foreach():
   global test_name, naked, proc_x, proc_y, func_x, func_y, func_a, n, ok, log, count, varToChange, rand, item, text, number_of_calls, list2, proc_z, func_z, x, proc_w, func_c, if2, i, loglist, changing_list, list_copy, unittestResults
   log = ''
@@ -172,8 +165,7 @@ def test_foreach():
     log = str(log) + str(x)
   assertEquals(log, 'abc', 'for loop')
 
-"""Describe this function...
-"""
+# Describe this function...
 def test_repeat():
   global test_name, naked, proc_x, proc_y, func_x, func_y, func_a, n, ok, log, count, varToChange, rand, item, text, number_of_calls, list2, proc_z, func_z, x, proc_w, func_c, if2, i, loglist, changing_list, list_copy, unittestResults
   count = 0
@@ -181,8 +173,7 @@ def test_repeat():
     count = (count if isinstance(count, Number) else 0) + 1
   assertEquals(count, 10, 'repeat 10')
 
-"""Describe this function...
-"""
+# Describe this function...
 def test_while():
   global test_name, naked, proc_x, proc_y, func_x, func_y, func_a, n, ok, log, count, varToChange, rand, item, text, number_of_calls, list2, proc_z, func_z, x, proc_w, func_c, if2, i, loglist, changing_list, list_copy, unittestResults
   while False:
@@ -198,8 +189,7 @@ def test_while():
     count = (count if isinstance(count, Number) else 0) + 1
   assertEquals(count, 10, 'until 10')
 
-"""Describe this function...
-"""
+# Describe this function...
 def test_repeat_ext():
   global test_name, naked, proc_x, proc_y, func_x, func_y, func_a, n, ok, log, count, varToChange, rand, item, text, number_of_calls, list2, proc_z, func_z, x, proc_w, func_c, if2, i, loglist, changing_list, list_copy, unittestResults
   count = 0
@@ -217,8 +207,7 @@ def downRange(start, stop, step):
     yield start
     start -= abs(step)
 
-"""Describe this function...
-"""
+# Describe this function...
 def test_count_by():
   global test_name, naked, proc_x, proc_y, func_x, func_y, func_a, n, ok, log, count, varToChange, rand, item, text, number_of_calls, list2, proc_z, func_z, x, proc_w, func_c, if2, i, loglist, changing_list, list_copy, unittestResults
   log = ''
@@ -254,8 +243,7 @@ def test_count_by():
     loglist.append(x)
   assertEquals(loglist, [5.5, 4.5, 3.5, 2.5, 1.5], 'count with floats')
 
-"""Describe this function...
-"""
+# Describe this function...
 def test_count_loops():
   global test_name, naked, proc_x, proc_y, func_x, func_y, func_a, n, ok, log, count, varToChange, rand, item, text, number_of_calls, list2, proc_z, func_z, x, proc_w, func_c, if2, i, loglist, changing_list, list_copy, unittestResults
   log = ''
@@ -279,8 +267,7 @@ def test_count_loops():
     loglist.append(x)
   assertEquals(loglist, [4, 3, 2, 1], 'count down non-trivial')
 
-"""Describe this function...
-"""
+# Describe this function...
 def test_continue():
   global test_name, naked, proc_x, proc_y, func_x, func_y, func_a, n, ok, log, count, varToChange, rand, item, text, number_of_calls, list2, proc_z, func_z, x, proc_w, func_c, if2, i, loglist, changing_list, list_copy, unittestResults
   log = ''
@@ -312,8 +299,7 @@ def test_continue():
     log = str(log) + str(x)
   assertEquals(log, 'abd', 'for continue')
 
-"""Describe this function...
-"""
+# Describe this function...
 def test_break():
   global test_name, naked, proc_x, proc_y, func_x, func_y, func_a, n, ok, log, count, varToChange, rand, item, text, number_of_calls, list2, proc_z, func_z, x, proc_w, func_c, if2, i, loglist, changing_list, list_copy, unittestResults
   count = 1
@@ -341,8 +327,7 @@ def test_break():
     log = str(log) + str(x)
   assertEquals(log, 'ab', 'for break')
 
-"""Tests the "single" block.
-"""
+# Tests the "single" block.
 def test_single():
   global test_name, naked, proc_x, proc_y, func_x, func_y, func_a, n, ok, log, count, varToChange, rand, item, text, number_of_calls, list2, proc_z, func_z, x, proc_w, func_c, if2, i, loglist, changing_list, list_copy, unittestResults
   assertEquals(math.sqrt(25), 5, 'sqrt')
@@ -353,9 +338,8 @@ def test_single():
   assertEquals(math.exp(2), 7.38905609893065, 'exp')
   assertEquals(math.pow(10,2), 100, 'power10')
 
-"""Tests the "arithmetic" block for all operations and checks
-parenthesis are properly generated for different orders.
-"""
+# Tests the "arithmetic" block for all operations and checks
+# parenthesis are properly generated for different orders.
 def test_arithmetic():
   global test_name, naked, proc_x, proc_y, func_x, func_y, func_a, n, ok, log, count, varToChange, rand, item, text, number_of_calls, list2, proc_z, func_z, x, proc_w, func_c, if2, i, loglist, changing_list, list_copy, unittestResults
   assertEquals(1 + 2, 3, 'add')
@@ -369,8 +353,7 @@ def test_arithmetic():
   assertEquals(10 ** 4, 10000, 'power')
   assertEquals(10 ** (0 + 4), 10000, 'power order')
 
-"""Tests the "trig" block.
-"""
+# Tests the "trig" block.
 def test_trig():
   global test_name, naked, proc_x, proc_y, func_x, func_y, func_a, n, ok, log, count, varToChange, rand, item, text, number_of_calls, list2, proc_z, func_z, x, proc_w, func_c, if2, i, loglist, changing_list, list_copy, unittestResults
   assertEquals(math.sin(90 / 180.0 * math.pi), 1, 'sin')
@@ -380,8 +363,7 @@ def test_trig():
   assertEquals(math.acos(1) / math.pi * 180, 0, 'acos')
   assertEquals(math.atan(1) / math.pi * 180, 45, 'atan')
 
-"""Tests the "constant" blocks.
-"""
+# Tests the "constant" blocks.
 def test_constant():
   global test_name, naked, proc_x, proc_y, func_x, func_y, func_a, n, ok, log, count, varToChange, rand, item, text, number_of_calls, list2, proc_z, func_z, x, proc_w, func_c, if2, i, loglist, changing_list, list_copy, unittestResults
   assertEquals(math.floor(math.pi * 1000), 3141, 'const pi')
@@ -410,8 +392,7 @@ def math_isPrime(n):
       return False
   return True
 
-"""Tests the "number property" blocks.
-"""
+# Tests the "number property" blocks.
 def test_number_properties():
   global test_name, naked, proc_x, proc_y, func_x, func_y, func_a, n, ok, log, count, varToChange, rand, item, text, number_of_calls, list2, proc_z, func_z, x, proc_w, func_c, if2, i, loglist, changing_list, list_copy, unittestResults
   assertEquals(42 % 2 == 0, True, 'even')
@@ -424,16 +405,14 @@ def test_number_properties():
   assertEquals(-42 < 0, True, 'negative')
   assertEquals(42 % 2 == 0, True, 'divisible')
 
-"""Tests the "round" block.
-"""
+# Tests the "round" block.
 def test_round():
   global test_name, naked, proc_x, proc_y, func_x, func_y, func_a, n, ok, log, count, varToChange, rand, item, text, number_of_calls, list2, proc_z, func_z, x, proc_w, func_c, if2, i, loglist, changing_list, list_copy, unittestResults
   assertEquals(round(42.42), 42, 'round')
   assertEquals(math.ceil(-42.42), -42, 'round up')
   assertEquals(math.floor(42.42), 42, 'round down')
 
-"""Tests the "change" block.
-"""
+# Tests the "change" block.
 def test_change():
   global test_name, naked, proc_x, proc_y, func_x, func_y, func_a, n, ok, log, count, varToChange, rand, item, text, number_of_calls, list2, proc_z, func_z, x, proc_w, func_c, if2, i, loglist, changing_list, list_copy, unittestResults
   varToChange = 100
@@ -485,8 +464,7 @@ def first_index(my_list, elem):
   except: index = 0
   return index
 
-"""Tests the "list operation" blocks.
-"""
+# Tests the "list operation" blocks.
 def test_operations_on_list():
   global test_name, naked, proc_x, proc_y, func_x, func_y, func_a, n, ok, log, count, varToChange, rand, item, text, number_of_calls, list2, proc_z, func_z, x, proc_w, func_c, if2, i, loglist, changing_list, list_copy, unittestResults
   assertEquals(sum([3, 4, 5]), 12, 'sum')
@@ -499,50 +477,43 @@ def test_operations_on_list():
   assertEquals(math_standard_deviation([3, 3, 3]), 0, 'standard dev')
   assertEquals(first_index([3, 4, 5], random.choice([3, 4, 5])) > 0, True, 'random')
 
-"""Tests the "mod" block.
-"""
+# Tests the "mod" block.
 def test_mod():
   global test_name, naked, proc_x, proc_y, func_x, func_y, func_a, n, ok, log, count, varToChange, rand, item, text, number_of_calls, list2, proc_z, func_z, x, proc_w, func_c, if2, i, loglist, changing_list, list_copy, unittestResults
   assertEquals(42 % 5, 2, 'mod')
 
-"""Tests the "constrain" block.
-"""
+# Tests the "constrain" block.
 def test_constraint():
   global test_name, naked, proc_x, proc_y, func_x, func_y, func_a, n, ok, log, count, varToChange, rand, item, text, number_of_calls, list2, proc_z, func_z, x, proc_w, func_c, if2, i, loglist, changing_list, list_copy, unittestResults
   assertEquals(min(max(100, 0), 42), 42, 'constraint')
 
-"""Tests the "random integer" block.
-"""
+# Tests the "random integer" block.
 def test_random_integer():
   global test_name, naked, proc_x, proc_y, func_x, func_y, func_a, n, ok, log, count, varToChange, rand, item, text, number_of_calls, list2, proc_z, func_z, x, proc_w, func_c, if2, i, loglist, changing_list, list_copy, unittestResults
   rand = random.randint(5, 10)
   assertEquals(rand >= 5 and rand <= 10, True, 'randRange')
   assertEquals(rand % 1 == 0, True, 'randInteger')
 
-"""Tests the "random fraction" block.
-"""
+# Tests the "random fraction" block.
 def test_random_fraction():
   global test_name, naked, proc_x, proc_y, func_x, func_y, func_a, n, ok, log, count, varToChange, rand, item, text, number_of_calls, list2, proc_z, func_z, x, proc_w, func_c, if2, i, loglist, changing_list, list_copy, unittestResults
   rand = random.random()
   assertEquals(rand >= 0 and rand <= 1, True, 'randFloat')
 
-"""Describe this function...
-"""
+# Describe this function...
 def test_atan2():
   global test_name, naked, proc_x, proc_y, func_x, func_y, func_a, n, ok, log, count, varToChange, rand, item, text, number_of_calls, list2, proc_z, func_z, x, proc_w, func_c, if2, i, loglist, changing_list, list_copy, unittestResults
   assertEquals(math.atan2(5, -5) / math.pi * 180, 135, 'atan2')
   assertEquals(math.atan2(-12, 0) / math.pi * 180, -90, 'atan2')
 
-"""Checks that the number of calls is one in order
-to confirm that a function was only called once.
-"""
+# Checks that the number of calls is one in order
+# to confirm that a function was only called once.
 def check_number_of_calls(test_name):
   global naked, proc_x, proc_y, func_x, func_y, func_a, n, ok, log, count, varToChange, rand, item, text, number_of_calls, list2, proc_z, func_z, x, proc_w, func_c, if2, i, loglist, changing_list, list_copy, unittestResults
   test_name = str(test_name) + 'number of calls'
   assertEquals(number_of_calls, 1, test_name)
 
-"""Tests the "create text with" block with varying number of inputs.
-"""
+# Tests the "create text with" block with varying number of inputs.
 def test_create_text():
   global test_name, naked, proc_x, proc_y, func_x, func_y, func_a, n, ok, log, count, varToChange, rand, item, text, number_of_calls, list2, proc_z, func_z, x, proc_w, func_c, if2, i, loglist, changing_list, list_copy, unittestResults
   assertEquals('', '', 'no text')
@@ -553,14 +524,12 @@ def test_create_text():
   assertEquals(''.join([str(x2) for x2 in [1, 2, 3]]), '123', 'create triple')
   assertEquals(''.join([str(x3) for x3 in [1, 0 if True else None, 'M']]), '10M', 'create order')
 
-"""Creates an empty string for use with the empty test.
-"""
+# Creates an empty string for use with the empty test.
 def get_empty():
   global test_name, naked, proc_x, proc_y, func_x, func_y, func_a, n, ok, log, count, varToChange, rand, item, text, number_of_calls, list2, proc_z, func_z, x, proc_w, func_c, if2, i, loglist, changing_list, list_copy, unittestResults
   return ''
 
-"""Tests the "is empty" block".
-"""
+# Tests the "is empty" block".
 def test_empty_text():
   global test_name, naked, proc_x, proc_y, func_x, func_y, func_a, n, ok, log, count, varToChange, rand, item, text, number_of_calls, list2, proc_z, func_z, x, proc_w, func_c, if2, i, loglist, changing_list, list_copy, unittestResults
   assertEquals(not len('Google'), False, 'not empty')
@@ -568,16 +537,14 @@ def test_empty_text():
   assertEquals(not len(get_empty()), True, 'empty complex')
   assertEquals(not len('' if True else None), True, 'empty order')
 
-"""Tests the "length" block.
-"""
+# Tests the "length" block.
 def test_text_length():
   global test_name, naked, proc_x, proc_y, func_x, func_y, func_a, n, ok, log, count, varToChange, rand, item, text, number_of_calls, list2, proc_z, func_z, x, proc_w, func_c, if2, i, loglist, changing_list, list_copy, unittestResults
   assertEquals(len(''), 0, 'zero length')
   assertEquals(len('Google'), 6, 'non-zero length')
   assertEquals(len('car' if True else None), 3, 'length order')
 
-"""Tests the "append text" block with different types of parameters.
-"""
+# Tests the "append text" block with different types of parameters.
 def test_append():
   global test_name, naked, proc_x, proc_y, func_x, func_y, func_a, n, ok, log, count, varToChange, rand, item, text, number_of_calls, list2, proc_z, func_z, x, proc_w, func_c, if2, i, loglist, changing_list, list_copy, unittestResults
   item = 'Miserable'
@@ -590,8 +557,7 @@ def test_append():
   item = str(item) + str('Positive' if True else None)
   assertEquals(item, 'Something Positive', 'append order')
 
-"""Tests the "find" block with a variable.
-"""
+# Tests the "find" block with a variable.
 def test_find_text_simple():
   global test_name, naked, proc_x, proc_y, func_x, func_y, func_a, n, ok, log, count, varToChange, rand, item, text, number_of_calls, list2, proc_z, func_z, x, proc_w, func_c, if2, i, loglist, changing_list, list_copy, unittestResults
   text = 'Banana'
@@ -599,15 +565,13 @@ def test_find_text_simple():
   assertEquals(text.rfind('an') + 1, 4, 'find last simple')
   assertEquals(text.find('Peel') + 1, 0, 'find none simple')
 
-"""Creates a string for use with the find test.
-"""
+# Creates a string for use with the find test.
 def get_fruit():
   global test_name, naked, proc_x, proc_y, func_x, func_y, func_a, n, ok, log, count, varToChange, rand, item, text, number_of_calls, list2, proc_z, func_z, x, proc_w, func_c, if2, i, loglist, changing_list, list_copy, unittestResults
   number_of_calls = (number_of_calls if isinstance(number_of_calls, Number) else 0) + 1
   return 'Banana'
 
-"""Tests the "find" block with a function call.
-"""
+# Tests the "find" block with a function call.
 def test_find_text_complex():
   global test_name, naked, proc_x, proc_y, func_x, func_y, func_a, n, ok, log, count, varToChange, rand, item, text, number_of_calls, list2, proc_z, func_z, x, proc_w, func_c, if2, i, loglist, changing_list, list_copy, unittestResults
   number_of_calls = 0
@@ -633,8 +597,7 @@ def text_random_letter(text):
   x = int(random.random() * len(text))
   return text[x];
 
-"""Tests the "get letter" block with a variable.
-"""
+# Tests the "get letter" block with a variable.
 def test_get_text_simple():
   global test_name, naked, proc_x, proc_y, func_x, func_y, func_a, n, ok, log, count, varToChange, rand, item, text, number_of_calls, list2, proc_z, func_z, x, proc_w, func_c, if2, i, loglist, changing_list, list_copy, unittestResults
   text = 'Blockly'
@@ -647,15 +610,13 @@ def test_get_text_simple():
   # The order for index for #-end is addition because this will catch errors in generators where most perform the operation ... - index.
   assertEquals(text[-int(0 + 3)], 'k', 'get #-end order simple')
 
-"""Creates a string for use with the get test.
-"""
+# Creates a string for use with the get test.
 def get_Blockly():
   global test_name, naked, proc_x, proc_y, func_x, func_y, func_a, n, ok, log, count, varToChange, rand, item, text, number_of_calls, list2, proc_z, func_z, x, proc_w, func_c, if2, i, loglist, changing_list, list_copy, unittestResults
   number_of_calls = (number_of_calls if isinstance(number_of_calls, Number) else 0) + 1
   return 'Blockly'
 
-"""Tests the "get letter" block with a function call.
-"""
+# Tests the "get letter" block with a function call.
 def test_get_text_complex():
   global test_name, naked, proc_x, proc_y, func_x, func_y, func_a, n, ok, log, count, varToChange, rand, item, text, number_of_calls, list2, proc_z, func_z, x, proc_w, func_c, if2, i, loglist, changing_list, list_copy, unittestResults
   text = 'Blockly'
@@ -691,15 +652,13 @@ def test_get_text_complex():
   assertEquals((get_Blockly() if True else None)[-int(0 + 3)], 'k', 'get #-end order complex')
   check_number_of_calls('get #-end order complex')
 
-"""Creates a string for use with the substring test.
-"""
+# Creates a string for use with the substring test.
 def get_numbers():
   global test_name, naked, proc_x, proc_y, func_x, func_y, func_a, n, ok, log, count, varToChange, rand, item, text, number_of_calls, list2, proc_z, func_z, x, proc_w, func_c, if2, i, loglist, changing_list, list_copy, unittestResults
   number_of_calls = (number_of_calls if isinstance(number_of_calls, Number) else 0) + 1
   return '123456789'
 
-"""Tests the "get substring" block with a variable.
-"""
+# Tests the "get substring" block with a variable.
 def test_substring_simple():
   global test_name, naked, proc_x, proc_y, func_x, func_y, func_a, n, ok, log, count, varToChange, rand, item, text, number_of_calls, list2, proc_z, func_z, x, proc_w, func_c, if2, i, loglist, changing_list, list_copy, unittestResults
   text = '123456789'
@@ -720,8 +679,7 @@ def test_substring_simple():
   # Checks that the whole string is properly retrieved even if the value for start and end is not a simple number. This is especially important in generators where substring uses [x:length - y] for # #-end.
   assertEquals(text[int((0 + 1) - 1) : -int((0 + 1) - 1) or sys.maxsize], '123456789', 'substring all with # #-end math simple')
 
-"""Tests the "get substring" block with a function call.
-"""
+# Tests the "get substring" block with a function call.
 def test_substring_complex():
   global test_name, naked, proc_x, proc_y, func_x, func_y, func_a, n, ok, log, count, varToChange, rand, item, text, number_of_calls, list2, proc_z, func_z, x, proc_w, func_c, if2, i, loglist, changing_list, list_copy, unittestResults
   number_of_calls = 0
@@ -769,8 +727,7 @@ def test_substring_complex():
   assertEquals(get_numbers()[int((0 + 1) - 1) : -int((0 + 1) - 1) or sys.maxsize], '123456789', 'substring all with # #-end math complex')
   check_number_of_calls('substring all with # #-end math complex')
 
-"""Tests the "change casing" block.
-"""
+# Tests the "change casing" block.
 def test_case():
   global test_name, naked, proc_x, proc_y, func_x, func_y, func_a, n, ok, log, count, varToChange, rand, item, text, number_of_calls, list2, proc_z, func_z, x, proc_w, func_c, if2, i, loglist, changing_list, list_copy, unittestResults
   text = 'Hello World'
@@ -783,8 +740,7 @@ def test_case():
   assertEquals(text.title(), 'Hello World', 'titlecase')
   assertEquals((text if True else None).title(), 'Hello World', 'titlecase order')
 
-"""Tests the "trim" block.
-"""
+# Tests the "trim" block.
 def test_trim():
   global test_name, naked, proc_x, proc_y, func_x, func_y, func_a, n, ok, log, count, varToChange, rand, item, text, number_of_calls, list2, proc_z, func_z, x, proc_w, func_c, if2, i, loglist, changing_list, list_copy, unittestResults
   text = '   abc def   '
@@ -795,8 +751,7 @@ def test_trim():
   assertEquals(text.rstrip(), '   abc def', 'trim right')
   assertEquals((text if True else None).rstrip(), '   abc def', 'trim right order')
 
-"""Tests the "trim" block.
-"""
+# Tests the "trim" block.
 def test_count_text():
   global test_name, naked, proc_x, proc_y, func_x, func_y, func_a, n, ok, log, count, varToChange, rand, item, text, number_of_calls, list2, proc_z, func_z, x, proc_w, func_c, if2, i, loglist, changing_list, list_copy, unittestResults
   text = 'woolloomooloo'
@@ -808,8 +763,7 @@ def test_count_text():
   assertEquals(text.count(''), 14, 'empty needle')
   assertEquals(''.count('chicken'), 0, 'empty source')
 
-"""Tests the "trim" block.
-"""
+# Tests the "trim" block.
 def test_text_reverse():
   global test_name, naked, proc_x, proc_y, func_x, func_y, func_a, n, ok, log, count, varToChange, rand, item, text, number_of_calls, list2, proc_z, func_z, x, proc_w, func_c, if2, i, loglist, changing_list, list_copy, unittestResults
   assertEquals(''[::-1], '', 'empty string')
@@ -817,8 +771,7 @@ def test_text_reverse():
   assertEquals('ab'[::-1], 'ba', 'len 2')
   assertEquals('woolloomooloo'[::-1], 'ooloomoolloow', 'longer')
 
-"""Tests the "trim" block.
-"""
+# Tests the "trim" block.
 def test_replace():
   global test_name, naked, proc_x, proc_y, func_x, func_y, func_a, n, ok, log, count, varToChange, rand, item, text, number_of_calls, list2, proc_z, func_z, x, proc_w, func_c, if2, i, loglist, changing_list, list_copy, unittestResults
   assertEquals('woolloomooloo'.replace('oo', '123'), 'w123ll123m123l123', 'replace all instances 1')
@@ -829,16 +782,14 @@ def test_replace():
   assertEquals('aaaaa'.replace('a', ''), '', 'empty replacement 3')
   assertEquals(''.replace('a', 'chicken'), '', 'empty source')
 
-"""Checks that the number of calls is one in order
-to confirm that a function was only called once.
-"""
+# Checks that the number of calls is one in order
+# to confirm that a function was only called once.
 def check_number_of_calls2(test_name):
   global naked, proc_x, proc_y, func_x, func_y, func_a, n, ok, log, count, varToChange, rand, item, text, number_of_calls, list2, proc_z, func_z, x, proc_w, func_c, if2, i, loglist, changing_list, list_copy, unittestResults
   test_name = str(test_name) + 'number of calls'
   assertEquals(number_of_calls, 1, test_name)
 
-"""Tests the "create list with" and "create empty list" blocks.
-"""
+# Tests the "create list with" and "create empty list" blocks.
 def test_create_lists():
   global test_name, naked, proc_x, proc_y, func_x, func_y, func_a, n, ok, log, count, varToChange, rand, item, text, number_of_calls, list2, proc_z, func_z, x, proc_w, func_c, if2, i, loglist, changing_list, list_copy, unittestResults
   assertEquals([], [], 'create empty')
@@ -846,14 +797,12 @@ def test_create_lists():
   assertEquals(['Eject'] * 3, ['Eject', 'Eject', 'Eject'], 'create repeated')
   assertEquals(['Eject'] * (0 + 3), ['Eject', 'Eject', 'Eject'], 'create repeated order')
 
-"""Creates an empty list for use with the empty test.
-"""
+# Creates an empty list for use with the empty test.
 def get_empty_list():
   global test_name, naked, proc_x, proc_y, func_x, func_y, func_a, n, ok, log, count, varToChange, rand, item, text, number_of_calls, list2, proc_z, func_z, x, proc_w, func_c, if2, i, loglist, changing_list, list_copy, unittestResults
   return []
 
-"""Tests the "is empty" block.
-"""
+# Tests the "is empty" block.
 def test_lists_empty():
   global test_name, naked, proc_x, proc_y, func_x, func_y, func_a, n, ok, log, count, varToChange, rand, item, text, number_of_calls, list2, proc_z, func_z, x, proc_w, func_c, if2, i, loglist, changing_list, list_copy, unittestResults
   assertEquals(not len([0]), False, 'not empty')
@@ -861,8 +810,7 @@ def test_lists_empty():
   assertEquals(not len(get_empty_list()), True, 'empty complex')
   assertEquals(not len([] if True else None), True, 'empty order')
 
-"""Tests the "length" block.
-"""
+# Tests the "length" block.
 def test_lists_length():
   global test_name, naked, proc_x, proc_y, func_x, func_y, func_a, n, ok, log, count, varToChange, rand, item, text, number_of_calls, list2, proc_z, func_z, x, proc_w, func_c, if2, i, loglist, changing_list, list_copy, unittestResults
   assertEquals(len([]), 0, 'zero length')
@@ -875,8 +823,7 @@ def last_index(my_list, elem):
   except: index = 0
   return index
 
-"""Tests the "find" block with a variable.
-"""
+# Tests the "find" block with a variable.
 def test_find_lists_simple():
   global test_name, naked, proc_x, proc_y, func_x, func_y, func_a, n, ok, log, count, varToChange, rand, item, text, number_of_calls, list2, proc_z, func_z, x, proc_w, func_c, if2, i, loglist, changing_list, list_copy, unittestResults
   list2 = ['Alice', 'Eve', 'Bob', 'Eve']
@@ -884,15 +831,13 @@ def test_find_lists_simple():
   assertEquals(last_index(list2, 'Eve'), 4, 'find last simple')
   assertEquals(first_index(list2, 'Dave'), 0, 'find none simple')
 
-"""Creates a list for use with the find test.
-"""
+# Creates a list for use with the find test.
 def get_names():
   global test_name, naked, proc_x, proc_y, func_x, func_y, func_a, n, ok, log, count, varToChange, rand, item, text, number_of_calls, list2, proc_z, func_z, x, proc_w, func_c, if2, i, loglist, changing_list, list_copy, unittestResults
   number_of_calls = (number_of_calls if isinstance(number_of_calls, Number) else 0) + 1
   return ['Alice', 'Eve', 'Bob', 'Eve']
 
-"""Tests the "find" block with a function call.
-"""
+# Tests the "find" block with a function call.
 def test_find_lists_complex():
   global test_name, naked, proc_x, proc_y, func_x, func_y, func_a, n, ok, log, count, varToChange, rand, item, text, number_of_calls, list2, proc_z, func_z, x, proc_w, func_c, if2, i, loglist, changing_list, list_copy, unittestResults
   number_of_calls = 0
@@ -914,8 +859,7 @@ def test_find_lists_complex():
   assertEquals(first_index(get_names() if True else None, 'Dave'), 0, 'find none order complex')
   check_number_of_calls('find none order complex')
 
-"""Tests the "get" block with a variable.
-"""
+# Tests the "get" block with a variable.
 def test_get_lists_simple():
   global test_name, naked, proc_x, proc_y, func_x, func_y, func_a, n, ok, log, count, varToChange, rand, item, text, number_of_calls, list2, proc_z, func_z, x, proc_w, func_c, if2, i, loglist, changing_list, list_copy, unittestResults
   list2 = ['Kirk', 'Spock', 'McCoy']
@@ -928,15 +872,13 @@ def test_get_lists_simple():
   # The order for index for #-end is addition because this will catch errors in generators where most perform the operation ... - index.
   assertEquals(list2[-int(0 + 3)], 'Kirk', 'get #-end order simple')
 
-"""Creates a list for use with the get test.
-"""
+# Creates a list for use with the get test.
 def get_star_wars():
   global test_name, naked, proc_x, proc_y, func_x, func_y, func_a, n, ok, log, count, varToChange, rand, item, text, number_of_calls, list2, proc_z, func_z, x, proc_w, func_c, if2, i, loglist, changing_list, list_copy, unittestResults
   number_of_calls = (number_of_calls if isinstance(number_of_calls, Number) else 0) + 1
   return ['Kirk', 'Spock', 'McCoy']
 
-"""Tests the "get" block with a function call.
-"""
+# Tests the "get" block with a function call.
 def test_get_lists_complex():
   global test_name, naked, proc_x, proc_y, func_x, func_y, func_a, n, ok, log, count, varToChange, rand, item, text, number_of_calls, list2, proc_z, func_z, x, proc_w, func_c, if2, i, loglist, changing_list, list_copy, unittestResults
   list2 = ['Kirk', 'Spock', 'McCoy']
@@ -976,8 +918,7 @@ def lists_remove_random_item(myList):
   x = int(random.random() * len(myList))
   return myList.pop(x)
 
-"""Tests the "get and remove" block.
-"""
+# Tests the "get and remove" block.
 def test_getRemove():
   global test_name, naked, proc_x, proc_y, func_x, func_y, func_a, n, ok, log, count, varToChange, rand, item, text, number_of_calls, list2, proc_z, func_z, x, proc_w, func_c, if2, i, loglist, changing_list, list_copy, unittestResults
   list2 = ['Kirk', 'Spock', 'McCoy']
@@ -1012,8 +953,7 @@ def test_getRemove():
   assertEquals((list2 if True else None).pop(-int(0 + 3)), 'Kirk', 'getremove #-end order')
   assertEquals(list2, ['Spock', 'McCoy'], 'getremove #-end order list')
 
-"""Tests the "remove" block.
-"""
+# Tests the "remove" block.
 def test_remove():
   global test_name, naked, proc_x, proc_y, func_x, func_y, func_a, n, ok, log, count, varToChange, rand, item, text, number_of_calls, list2, proc_z, func_z, x, proc_w, func_c, if2, i, loglist, changing_list, list_copy, unittestResults
   list2 = ['Kirk', 'Spock', 'McCoy']
@@ -1049,8 +989,7 @@ def test_remove():
   (list2 if True else None).pop(-int(0 + 3))
   assertEquals(list2, ['Spock', 'McCoy'], 'remove #-end order list')
 
-"""Tests the "set" block.
-"""
+# Tests the "set" block.
 def test_set():
   global test_name, naked, proc_x, proc_y, func_x, func_y, func_a, n, ok, log, count, varToChange, rand, item, text, number_of_calls, list2, proc_z, func_z, x, proc_w, func_c, if2, i, loglist, changing_list, list_copy, unittestResults
   list2 = ['Picard', 'Riker', 'Crusher']
@@ -1089,8 +1028,7 @@ def test_set():
   (list2 if True else None)[-int(0 + 2)] = 'Pulaski'
   assertEquals(list2, ['Picard', 'Pulaski', 'Crusher'], 'set #-end order list')
 
-"""Tests the "insert" block.
-"""
+# Tests the "insert" block.
 def test_insert():
   global test_name, naked, proc_x, proc_y, func_x, func_y, func_a, n, ok, log, count, varToChange, rand, item, text, number_of_calls, list2, proc_z, func_z, x, proc_w, func_c, if2, i, loglist, changing_list, list_copy, unittestResults
   list2 = ['Picard', 'Riker', 'Crusher']
@@ -1129,8 +1067,7 @@ def test_insert():
   (list2 if True else None).insert(-int(0 + 2), 'Data')
   assertEquals(list2, ['Picard', 'Data', 'Riker', 'Crusher'], 'insert #-end order list')
 
-"""Tests the "get sub-list" block with a variable.
-"""
+# Tests the "get sub-list" block with a variable.
 def test_sublist_simple():
   global test_name, naked, proc_x, proc_y, func_x, func_y, func_a, n, ok, log, count, varToChange, rand, item, text, number_of_calls, list2, proc_z, func_z, x, proc_w, func_c, if2, i, loglist, changing_list, list_copy, unittestResults
   list2 = ['Columbia', 'Challenger', 'Discovery', 'Atlantis', 'Endeavour']
@@ -1155,15 +1092,13 @@ def test_sublist_simple():
   # Checks that the whole list is properly retrieved even if the value for start and end is not a simple number. This is especially important in generators where sublist uses [x:length - y] for # #-end.
   assertEquals(list2[int((0 + 1) - 1) : -int((0 + 1) - 1) or sys.maxsize], list2, 'sublist all with # #-end math simple')
 
-"""Creates a list for use with the sublist test.
-"""
+# Creates a list for use with the sublist test.
 def get_space_shuttles():
   global test_name, naked, proc_x, proc_y, func_x, func_y, func_a, n, ok, log, count, varToChange, rand, item, text, number_of_calls, list2, proc_z, func_z, x, proc_w, func_c, if2, i, loglist, changing_list, list_copy, unittestResults
   number_of_calls = (number_of_calls if isinstance(number_of_calls, Number) else 0) + 1
   return ['Columbia', 'Challenger', 'Discovery', 'Atlantis', 'Endeavour']
 
-"""Tests the "get sub-list" block with a function call.
-"""
+# Tests the "get sub-list" block with a function call.
 def test_sublist_complex():
   global test_name, naked, proc_x, proc_y, func_x, func_y, func_a, n, ok, log, count, varToChange, rand, item, text, number_of_calls, list2, proc_z, func_z, x, proc_w, func_c, if2, i, loglist, changing_list, list_copy, unittestResults
   number_of_calls = 0
@@ -1211,16 +1146,14 @@ def test_sublist_complex():
   assertEquals(get_space_shuttles()[int((0 + 1) - 1) : -int((0 + 1) - 1) or sys.maxsize], list2, 'sublist all with # #-end math complex')
   check_number_of_calls('sublist all with # #-end math complex')
 
-"""Tests the "join" block.
-"""
+# Tests the "join" block.
 def test_join():
   global test_name, naked, proc_x, proc_y, func_x, func_y, func_a, n, ok, log, count, varToChange, rand, item, text, number_of_calls, list2, proc_z, func_z, x, proc_w, func_c, if2, i, loglist, changing_list, list_copy, unittestResults
   list2 = ['Vulcan', 'Klingon', 'Borg']
   assertEquals(','.join(list2), 'Vulcan,Klingon,Borg', 'join')
   assertEquals(','.join(list2 if True else None), 'Vulcan,Klingon,Borg', 'join order')
 
-"""Tests the "split" block.
-"""
+# Tests the "split" block.
 def test_split():
   global test_name, naked, proc_x, proc_y, func_x, func_y, func_a, n, ok, log, count, varToChange, rand, item, text, number_of_calls, list2, proc_z, func_z, x, proc_w, func_c, if2, i, loglist, changing_list, list_copy, unittestResults
   text = 'Vulcan,Klingon,Borg'
@@ -1242,32 +1175,28 @@ def lists_sort(my_list, type, reverse):
   list_cpy = list(my_list)
   return sorted(list_cpy, key=key_func, reverse=reverse)
 
-"""Tests the "alphabetic sort" block.
-"""
+# Tests the "alphabetic sort" block.
 def test_sort_alphabetic():
   global test_name, naked, proc_x, proc_y, func_x, func_y, func_a, n, ok, log, count, varToChange, rand, item, text, number_of_calls, list2, proc_z, func_z, x, proc_w, func_c, if2, i, loglist, changing_list, list_copy, unittestResults
   list2 = ['Vulcan', 'klingon', 'Borg']
   assertEquals(lists_sort(list2, "TEXT", False), ['Borg', 'Vulcan', 'klingon'], 'sort alphabetic ascending')
   assertEquals(lists_sort(list2 if True else None, "TEXT", False), ['Borg', 'Vulcan', 'klingon'], 'sort alphabetic ascending order')
 
-"""Tests the "alphabetic sort ignore case" block.
-"""
+# Tests the "alphabetic sort ignore case" block.
 def test_sort_ignoreCase():
   global test_name, naked, proc_x, proc_y, func_x, func_y, func_a, n, ok, log, count, varToChange, rand, item, text, number_of_calls, list2, proc_z, func_z, x, proc_w, func_c, if2, i, loglist, changing_list, list_copy, unittestResults
   list2 = ['Vulcan', 'klingon', 'Borg']
   assertEquals(lists_sort(list2, "IGNORE_CASE", False), ['Borg', 'klingon', 'Vulcan'], 'sort ignore case ascending')
   assertEquals(lists_sort(list2 if True else None, "IGNORE_CASE", False), ['Borg', 'klingon', 'Vulcan'], 'sort ignore case ascending order')
 
-"""Tests the "numeric sort" block.
-"""
+# Tests the "numeric sort" block.
 def test_sort_numeric():
   global test_name, naked, proc_x, proc_y, func_x, func_y, func_a, n, ok, log, count, varToChange, rand, item, text, number_of_calls, list2, proc_z, func_z, x, proc_w, func_c, if2, i, loglist, changing_list, list_copy, unittestResults
   list2 = [8, 18, -1]
   assertEquals(lists_sort(list2, "NUMERIC", True), [18, 8, -1], 'sort numeric descending')
   assertEquals(lists_sort(list2 if True else None, "NUMERIC", True), [18, 8, -1], 'sort numeric descending order')
 
-"""Tests the "list reverse" block.
-"""
+# Tests the "list reverse" block.
 def test_lists_reverse():
   global test_name, naked, proc_x, proc_y, func_x, func_y, func_a, n, ok, log, count, varToChange, rand, item, text, number_of_calls, list2, proc_z, func_z, x, proc_w, func_c, if2, i, loglist, changing_list, list_copy, unittestResults
   list2 = [8, 18, -1, 64]
@@ -1276,8 +1205,7 @@ def test_lists_reverse():
   list2 = []
   assertEquals(list(reversed(list2)), [], 'empty list')
 
-"""Describe this function...
-"""
+# Describe this function...
 def test_colour_picker():
   global test_name, naked, proc_x, proc_y, func_x, func_y, func_a, n, ok, log, count, varToChange, rand, item, text, number_of_calls, list2, proc_z, func_z, x, proc_w, func_c, if2, i, loglist, changing_list, list_copy, unittestResults
   assertEquals('#ff6600', '#ff6600', 'static colour')
@@ -1288,14 +1216,12 @@ def colour_rgb(r, g, b):
   b = round(min(100, max(0, b)) * 2.55)
   return '#%02x%02x%02x' % (r, g, b)
 
-"""Describe this function...
-"""
+# Describe this function...
 def test_rgb():
   global test_name, naked, proc_x, proc_y, func_x, func_y, func_a, n, ok, log, count, varToChange, rand, item, text, number_of_calls, list2, proc_z, func_z, x, proc_w, func_c, if2, i, loglist, changing_list, list_copy, unittestResults
   assertEquals(colour_rgb(100, 40, 0), '#ff6600', 'from rgb')
 
-"""Describe this function...
-"""
+# Describe this function...
 def test_colour_random():
   global test_name, naked, proc_x, proc_y, func_x, func_y, func_a, n, ok, log, count, varToChange, rand, item, text, number_of_calls, list2, proc_z, func_z, x, proc_w, func_c, if2, i, loglist, changing_list, list_copy, unittestResults
   for count4 in range(100):
@@ -1315,14 +1241,12 @@ def colour_blend(colour1, colour2, ratio):
   b = round(b1 * (1 - ratio) + b2 * ratio)
   return '#%02x%02x%02x' % (r, g, b)
 
-"""Describe this function...
-"""
+# Describe this function...
 def test_blend():
   global test_name, naked, proc_x, proc_y, func_x, func_y, func_a, n, ok, log, count, varToChange, rand, item, text, number_of_calls, list2, proc_z, func_z, x, proc_w, func_c, if2, i, loglist, changing_list, list_copy, unittestResults
   assertEquals(colour_blend('#ff0000', colour_rgb(100, 40, 0), 0.4), '#ff2900', 'blend')
 
-"""Describe this function...
-"""
+# Describe this function...
 def test_procedure():
   global test_name, naked, proc_x, proc_y, func_x, func_y, func_a, n, ok, log, count, varToChange, rand, item, text, number_of_calls, list2, proc_z, func_z, x, proc_w, func_c, if2, i, loglist, changing_list, list_copy, unittestResults
   procedure_1(8, 2)
@@ -1334,22 +1258,19 @@ def test_procedure():
   procedure_2(True)
   assertEquals(proc_w, False, 'procedure return')
 
-"""Describe this function...
-"""
+# Describe this function...
 def procedure_1(proc_x, proc_y):
   global test_name, naked, func_x, func_y, func_a, n, ok, log, count, varToChange, rand, item, text, number_of_calls, list2, proc_z, func_z, x, proc_w, func_c, if2, i, loglist, changing_list, list_copy, unittestResults
   proc_z = proc_x / proc_y
 
-"""Describe this function...
-"""
+# Describe this function...
 def procedure_2(proc_x):
   global test_name, naked, proc_y, func_x, func_y, func_a, n, ok, log, count, varToChange, rand, item, text, number_of_calls, list2, proc_z, func_z, x, proc_w, func_c, if2, i, loglist, changing_list, list_copy, unittestResults
   if proc_x:
     return
   proc_w = True
 
-"""Describe this function...
-"""
+# Describe this function...
 def test_function():
   global test_name, naked, proc_x, proc_y, func_x, func_y, func_a, n, ok, log, count, varToChange, rand, item, text, number_of_calls, list2, proc_z, func_z, x, proc_w, func_c, if2, i, loglist, changing_list, list_copy, unittestResults
   assertEquals(function_1(2, 3), -1, 'function with arguments')
@@ -1361,30 +1282,26 @@ def test_function():
   assertEquals(function_3(True), True, 'function return')
   assertEquals(function_3(False), False, 'function no return')
 
-"""Describe this function...
-"""
+# Describe this function...
 def function_1(func_x, func_y):
   global test_name, naked, proc_x, proc_y, func_a, n, ok, log, count, varToChange, rand, item, text, number_of_calls, list2, proc_z, func_z, x, proc_w, func_c, if2, i, loglist, changing_list, list_copy, unittestResults
   func_z = 'side effect'
   return func_x - func_y
 
-"""Describe this function...
-"""
+# Describe this function...
 def function_2(func_a):
   global test_name, naked, proc_x, proc_y, func_x, func_y, n, ok, log, count, varToChange, rand, item, text, number_of_calls, list2, proc_z, func_z, x, proc_w, func_c, if2, i, loglist, changing_list, list_copy, unittestResults
   func_a = (func_a if isinstance(func_a, Number) else 0) + 1
   return str(func_a) + str(func_c)
 
-"""Describe this function...
-"""
+# Describe this function...
 def function_3(func_a):
   global test_name, naked, proc_x, proc_y, func_x, func_y, n, ok, log, count, varToChange, rand, item, text, number_of_calls, list2, proc_z, func_z, x, proc_w, func_c, if2, i, loglist, changing_list, list_copy, unittestResults
   if func_a:
     return True
   return False
 
-"""Describe this function...
-"""
+# Describe this function...
 def recurse(n):
   global test_name, naked, proc_x, proc_y, func_x, func_y, func_a, ok, log, count, varToChange, rand, item, text, number_of_calls, list2, proc_z, func_z, x, proc_w, func_c, if2, i, loglist, changing_list, list_copy, unittestResults
   if n > 0:

@@ -170,6 +170,7 @@ Blockly.blockRendering.Row.prototype.measure = function() {
  *     or null.
  * @package
  */
+// TODO: Consider moving this to InputRow, if possible.
 Blockly.blockRendering.Row.prototype.getLastInput = function() {
   for (var i = this.elements.length - 1, elem; (elem = this.elements[i]); i--) {
     if (Blockly.blockRendering.Types.isInput(elem)) {

@@ -29,6 +29,7 @@ goog.require('Blockly.Css');
 goog.require('Blockly.DropDownDiv');
 goog.require('Blockly.FieldTextInput');
 goog.require('Blockly.utils');
+goog.require('Blockly.utils.aria');
 goog.require('Blockly.utils.Coordinate');
 goog.require('Blockly.utils.dom');
 goog.require('Blockly.utils.KeyCodes');
@@ -178,10 +179,12 @@ Blockly.FieldMultilineInput.prototype.render_ = function() {
     var htmlInput = /** @type {!HTMLElement} */(this.htmlInput_);
     if (!this.isTextValid_) {
       Blockly.utils.dom.addClass(htmlInput, 'blocklyInvalidInput');
-      Blockly.utils.aria.setState(htmlInput, 'invalid', true);
+      Blockly.utils.aria.setState(htmlInput,
+          Blockly.utils.aria.State.INVALID, true);
     } else {
       Blockly.utils.dom.removeClass(htmlInput, 'blocklyInvalidInput');
-      Blockly.utils.aria.setState(htmlInput, 'invalid', false);
+      Blockly.utils.aria.setState(htmlInput,
+          Blockly.utils.aria.State.INVALID, false);
     }
   }
 };

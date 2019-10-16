@@ -557,13 +557,12 @@ Blockly.FieldColour.prototype.dropdownCreate_ = function() {
   table.className = 'blocklyColourTable';
   table.tabIndex = 0;
   table.dir = 'ltr';
-  Blockly.utils.aria.setRole(table,
-      Blockly.utils.aria.Role.GRID);
-  Blockly.utils.aria.setState(table,
-      Blockly.utils.aria.State.EXPANDED, true);
-  Blockly.utils.aria.setState(table, 'rowcount',
+  Blockly.utils.aria.setRole(table, Blockly.utils.aria.Role.GRID);
+  Blockly.utils.aria.setState(table, Blockly.utils.aria.State.EXPANDED, true);
+  Blockly.utils.aria.setState(table, Blockly.utils.aria.State.ROWCOUNT,
       Math.floor(colours.length / columns));
-  Blockly.utils.aria.setState(table, 'colcount', columns);
+  Blockly.utils.aria.setState(table, Blockly.utils.aria.State.COLCOUNT,
+      columns);
   var row;
   for (var i = 0; i < colours.length; i++) {
     if (i % columns == 0) {

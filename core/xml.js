@@ -389,10 +389,6 @@ Blockly.Xml.domToWorkspace = function(xml, workspace) {
   }
   var newBlockIds = [];  // A list of block IDs added by this call.
   Blockly.utils.dom.startTextWidthCache();
-  // Safari 7.1.3 is known to provide node lists with extra references to
-  // children beyond the lists' length.  Trust the length, do not use the
-  // looping pattern of checking the index for an object.
-  var childCount = xml.childNodes.length;
   var existingGroup = Blockly.Events.getGroup();
   if (!existingGroup) {
     Blockly.Events.setGroup(true);
@@ -404,8 +400,7 @@ Blockly.Xml.domToWorkspace = function(xml, workspace) {
   }
   var variablesFirst = true;
   try {
-    for (var i = 0; i < childCount; i++) {
-      var xmlChild = xml.childNodes[i];
+    for (var i = 0, xmlChild; xmlChild = xml.childNodes[i]; i++) {
       var name = xmlChild.nodeName.toLowerCase();
       if (name == 'block' ||
           (name == 'shadow' && !Blockly.Events.recordUndo)) {

@@ -771,15 +771,25 @@ gulp.task('release', gulp.series(['build', 'typings', function() {
 // The default task builds Blockly.
 gulp.task('default', gulp.series(['build']));
 
+
+// Stash current state, check out the named branch, and sync with
+// google/blockly.
+function syncBranch(branchName) {
+  return function(done) {
+    execSync('git stash save -m "Stash for sync"', { stdio: 'inherit' });
+    execSync('git checkout ' + branchName, { stdio: 'inherit' });
+    execSync('git pull https://github.com/google/blockly.git ' + branchName,
+        { stdio: 'inherit' });
+    execSync('git push origin ' + branchName, { stdio: 'inherit' });
+    done();
+  }
+}
+
 // Stash current state, check out develop, and sync with google/blockly.
-gulp.task('git-sync-develop', function(done) {
-  execSync('git stash save -m "Stash for sync"', { stdio: 'inherit' });
-  execSync('git checkout develop', { stdio: 'inherit' });
-  execSync('git pull https://github.com/google/blockly.git develop',
-      { stdio: 'inherit' });
-  execSync('git push origin develop', { stdio: 'inherit' });
-  done();
-});
+gulp.task('git-sync-develop', syncBranch('develop'));
+
+// Stash current state, check out master, and sync with google/blockly.
+gulp.task('git-sync-master', syncBranch('master'));
 
 // Helper function: get a name for a rebuild branch. Format: rebuild_mm_dd_yyyy.
 function getRebuildBranchName() {

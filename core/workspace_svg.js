@@ -59,8 +59,10 @@ goog.require('Blockly.Xml');
 Blockly.WorkspaceSvg = function(options,
     opt_blockDragSurface, opt_wsDragSurface) {
   Blockly.WorkspaceSvg.superClass_.constructor.call(this, options);
+  /** @type {function():!Object} */
   this.getMetrics =
       options.getMetrics || Blockly.WorkspaceSvg.getTopLevelWorkspaceMetrics_;
+  /** @type {function(!Object)} */
   this.setMetrics =
       options.setMetrics || Blockly.WorkspaceSvg.setTopLevelWorkspaceMetrics_;
 
@@ -75,12 +77,12 @@ Blockly.WorkspaceSvg = function(options,
   }
 
   this.useWorkspaceDragSurface_ =
-      this.workspaceDragSurface_ && Blockly.utils.is3dSupported();
+      !!this.workspaceDragSurface_ && Blockly.utils.is3dSupported();
 
   /**
    * List of currently highlighted blocks.  Block highlighting is often used to
    * visually mark blocks currently being executed.
-   * @type !Array.<!Blockly.BlockSvg>
+   * @type {!Array.<!Blockly.BlockSvg>}
    * @private
    */
   this.highlightedBlocks_ = [];
@@ -566,7 +568,7 @@ Blockly.WorkspaceSvg.prototype.getSvgXY = function(element) {
  * @package
  */
 Blockly.WorkspaceSvg.prototype.getOriginOffsetInPixels = function() {
-  return Blockly.utils.getInjectionDivXY_(this.svgBlockCanvas_);
+  return Blockly.utils.getInjectionDivXY_(this.getCanvas());
 };
 
 /**
@@ -929,10 +931,10 @@ Blockly.WorkspaceSvg.prototype.updateScreenCalculationsIfScrolled =
 
 /**
  * Get the SVG element that forms the drawing surface.
- * @return {!SVGElement} SVG element.
+ * @return {!SVGGElement} SVG element.
  */
 Blockly.WorkspaceSvg.prototype.getCanvas = function() {
-  return this.svgBlockCanvas_;
+  return /** @type {!SVGGElement} */ (this.svgBlockCanvas_);
 };
 
 /**
@@ -940,7 +942,7 @@ Blockly.WorkspaceSvg.prototype.getCanvas = function() {
  * @return {!SVGGElement} SVG element.
  */
 Blockly.WorkspaceSvg.prototype.getBubbleCanvas = function() {
-  return this.svgBubbleCanvas_;
+  return /** @type {!SVGGElement} */ (this.svgBubbleCanvas_);
 };
 
 /**
@@ -1036,12 +1038,13 @@ Blockly.WorkspaceSvg.prototype.setupDragSurface = function() {
 
   // Figure out where we want to put the canvas back.  The order
   // in the is important because things are layered.
-  var previousElement = this.svgBlockCanvas_.previousSibling;
+  var previousElement =
+    /** @type {Element} */ (this.svgBlockCanvas_.previousSibling);
   var width = parseInt(this.getParentSvg().getAttribute('width'), 10);
   var height = parseInt(this.getParentSvg().getAttribute('height'), 10);
-  var coord = Blockly.utils.getRelativeXY(this.svgBlockCanvas_);
-  this.workspaceDragSurface_.setContentsAndShow(this.svgBlockCanvas_,
-      this.svgBubbleCanvas_, previousElement, width, height, this.scale);
+  var coord = Blockly.utils.getRelativeXY(this.getCanvas());
+  this.workspaceDragSurface_.setContentsAndShow(this.getCanvas(),
+      this.getBubbleCanvas(), previousElement, width, height, this.scale);
   this.workspaceDragSurface_.translateSurface(coord.x, coord.y);
 };
 
@@ -1326,10 +1329,10 @@ Blockly.WorkspaceSvg.prototype.deleteVariableById = function(id) {
  * Create a new variable with the given name.  Update the flyout to show the
  *     new variable immediately.
  * @param {string} name The new variable's name.
- * @param {string=} opt_type The type of the variable like 'int' or 'string'.
+ * @param {?string=} opt_type The type of the variable like 'int' or 'string'.
  *     Does not need to be unique. Field_variable can filter variables based on
  *     their type. This will default to '' which is a specific type.
- * @param {string=} opt_id The unique ID of the variable. This will default to
+ * @param {?string=} opt_id The unique ID of the variable. This will default to
  *     a UUID.
  * @return {Blockly.VariableModel} The newly created variable.
  * @package
@@ -1976,7 +1979,7 @@ Blockly.WorkspaceSvg.prototype.centerOnBlock = function(id) {
     return;
   }
 
-  var block = this.getBlockById(id);
+  var block = id ? this.getBlockById(id) : null;
   if (!block) {
     return;
   }
@@ -2362,6 +2365,17 @@ Blockly.WorkspaceSvg.setTopLevelWorkspaceMetrics_ = function(xyRatio) {
   var y = this.scrollY + metrics.absoluteTop;
   // We could call scroll here, but that has extra checks we don't need to do.
   this.translate(x, y);
+};
+
+/**
+ * Find the block on this workspace with the specified ID.
+ * @param {string} id ID of block to find.
+ * @return {Blockly.BlockSvg} The sought after block, or null if not found.
+ * @override
+ */
+Blockly.WorkspaceSvg.prototype.getBlockById = function(id) {
+  return /** @type {Blockly.BlockSvg} */ (
+    Blockly.WorkspaceSvg.superClass_.getBlockById.call(this, id));
 };
 
 /**

@@ -988,7 +988,7 @@ FactoryUtils.cleanXml = function(xml) {
   return newXml;
 };
 
-/*
+/**
  * Checks if a block has a variable field. Blocks with variable fields cannot
  * be shadow blocks.
  * @param {Blockly.Block} block The block to check if a variable field exists.

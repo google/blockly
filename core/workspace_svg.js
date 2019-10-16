@@ -143,6 +143,7 @@ Blockly.utils.object.inherits(Blockly.WorkspaceSvg, Blockly.Workspace);
  * A wrapper function called when a resize event occurs.
  * You can pass the result to `unbindEvent_`.
  * @type {Array.<!Array>}
+ * @private
  */
 Blockly.WorkspaceSvg.prototype.resizeHandlerWrapper_ = null;
 
@@ -1175,6 +1176,7 @@ Blockly.WorkspaceSvg.prototype.paste = function(xmlBlock) {
 /**
  * Paste the provided block onto the workspace.
  * @param {!Element} xmlBlock XML block element.
+ * @private
  */
 Blockly.WorkspaceSvg.prototype.pasteBlock_ = function(xmlBlock) {
   Blockly.Events.disable();

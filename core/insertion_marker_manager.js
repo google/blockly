@@ -352,6 +352,7 @@ Blockly.InsertionMarkerManager.prototype.shouldUpdatePreviews_ = function(
  *     in workspace units.
  * @return {!Object} An object containing a local connection, a closest
  *     connection, and a radius.
+ * @private
  */
 Blockly.InsertionMarkerManager.prototype.getCandidate_ = function(dxy) {
   var radius = this.getStartRadius_();
@@ -559,6 +560,7 @@ Blockly.InsertionMarkerManager.prototype.hidePreview_ = function() {
 
 /**
  * Add highlighting showing which block will be replaced.
+ * @private
  */
 Blockly.InsertionMarkerManager.prototype.highlightBlock_ = function() {
   var closest = this.closestConnection_;
@@ -576,6 +578,7 @@ Blockly.InsertionMarkerManager.prototype.highlightBlock_ = function() {
 
 /**
  * Get rid of the highlighting marking the block that will be replaced.
+ * @private
  */
 Blockly.InsertionMarkerManager.prototype.unhighlightBlock_ = function() {
   var closest = this.closestConnection_;

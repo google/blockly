@@ -531,6 +531,7 @@ Blockly.Toolbox.prototype.setColour_ = function(colourValue, childOut,
  * @param {string} styleName Name of the style.
  * @param {!Blockly.tree.TreeNode} childOut The child to set the hexColour on.
  * @param {string} categoryName Name of the toolbox category.
+ * @private
  */
 Blockly.Toolbox.prototype.setColourFromStyle_ = function(
     styleName, childOut, categoryName) {

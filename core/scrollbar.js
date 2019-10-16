@@ -630,7 +630,7 @@ Blockly.Scrollbar.prototype.createDom_ = function(opt_class) {
   this.workspace_.getThemeManager().subscribe(
       this.svgHandle_, 'scrollbarOpacity', 'fill-opacity');
   Blockly.utils.dom.insertAfter(this.outerSvg_,
-      this.workspace_.getRequiredParentSvg());
+      this.workspace_.getParentSvg());
 };
 
 /**
@@ -713,7 +713,7 @@ Blockly.Scrollbar.prototype.onMouseDownBar_ = function(e) {
     return;
   }
   var mouseXY = Blockly.utils.mouseToSvg(e,
-      this.workspace_.getRequiredParentSvg(),
+      this.workspace_.getParentSvg(),
       this.workspace_.getInverseScreenCTM());
   var mouseLocation = this.horizontal_ ? mouseXY.x : mouseXY.y;
 

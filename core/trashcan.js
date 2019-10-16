@@ -291,7 +291,7 @@ Blockly.Trashcan.prototype.createDom = function() {
 Blockly.Trashcan.prototype.init = function(verticalSpacing) {
   if (this.workspace_.options.maxTrashcanContents > 0) {
     Blockly.utils.dom.insertAfter(this.flyout_.createDom('svg'),
-        this.workspace_.getRequiredParentSvg());
+        this.workspace_.getParentSvg());
     this.flyout_.init(this.workspace_);
   }
 

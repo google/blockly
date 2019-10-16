@@ -56,7 +56,7 @@ Blockly.blockAnimations.disposeUiEffect = function(block) {
   clone.translateX_ = xy.x;
   clone.translateY_ = xy.y;
   clone.setAttribute('transform', 'translate(' + xy.x + ',' + xy.y + ')');
-  workspace.getRequiredParentSvg().appendChild(clone);
+  workspace.getParentSvg().appendChild(clone);
   clone.bBox_ = clone.getBBox();
   // Start the animation.
   Blockly.blockAnimations.disposeUiStep_(clone, workspace.RTL, new Date,
@@ -122,7 +122,7 @@ Blockly.blockAnimations.connectionUiEffect = function(block) {
         'stroke': '#888',
         'stroke-width': 10
       },
-      workspace.getRequiredParentSvg());
+      workspace.getParentSvg());
   // Start the animation.
   Blockly.blockAnimations.connectionUiStep_(ripple, new Date, scale);
 };

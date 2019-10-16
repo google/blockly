@@ -271,7 +271,7 @@ Blockly.TouchGesture.prototype.handleTouchMove = function(e) {
         gestureScale * Blockly.TouchGesture.ZOOM_OUT_MULTIPLIER;
       var workspace = this.startWorkspace_;
       var position = Blockly.utils.mouseToSvg(
-          e, workspace.getRequiredParentSvg(), workspace.getInverseScreenCTM());
+          e, workspace.getParentSvg(), workspace.getInverseScreenCTM());
       workspace.zoom(position.x, position.y, delta);
     }
     this.previousScale_ = scale;

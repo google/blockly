@@ -152,7 +152,7 @@ Blockly.Toolbox.prototype.lastCategory_ = null;
  */
 Blockly.Toolbox.prototype.init = function() {
   var workspace = this.workspace_;
-  var svg = this.workspace_.getRequiredParentSvg();
+  var svg = this.workspace_.getParentSvg();
 
   /**
    * HTML container for the Toolbox menu.
@@ -398,7 +398,7 @@ Blockly.Toolbox.prototype.position = function() {
     // Not initialized yet.
     return;
   }
-  var svgSize = Blockly.svgSize(this.workspace_.getRequiredParentSvg());
+  var svgSize = Blockly.svgSize(this.workspace_.getParentSvg());
   if (this.horizontalLayout_) {
     treeDiv.style.left = '0';
     treeDiv.style.height = 'auto';

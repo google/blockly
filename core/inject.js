@@ -390,7 +390,7 @@ Blockly.createMainWorkspace_ = function(svg, options, blockDragSurface,
  */
 Blockly.init_ = function(mainWorkspace) {
   var options = mainWorkspace.options;
-  var svg = mainWorkspace.getRequiredParentSvg();
+  var svg = mainWorkspace.getParentSvg();
 
   // Suppress the browser's context menu.
   Blockly.bindEventWithChecks_(

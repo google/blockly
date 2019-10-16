@@ -136,6 +136,13 @@ Blockly.WorkspaceSvg = function(options,
    * @private
    */
   this.renderer_ = Blockly.blockRendering.init(this.options.renderer || 'geras');
+
+  /**
+   * Cached parent SVG.
+   * @type {SVGElement}
+   * @private
+   */
+  this.cachedParentSvg_ = null;
 };
 Blockly.utils.object.inherits(Blockly.WorkspaceSvg, Blockly.Workspace);
 
@@ -491,7 +498,7 @@ Blockly.WorkspaceSvg.prototype.getInverseScreenCTM = function() {
   // Defer getting the screen CTM until we actually need it, this should
   // avoid forced reflows from any calls to updateInverseScreenCTM.
   if (this.inverseScreenCTMDirty_) {
-    var ctm = this.getRequiredParentSvg().getScreenCTM();
+    var ctm = this.getParentSvg().getScreenCTM();
     if (ctm) {
       this.inverseScreenCTM_ = ctm.inverse();
       this.inverseScreenCTMDirty_ = false;
@@ -545,7 +552,7 @@ Blockly.WorkspaceSvg.prototype.getSvgXY = function(element) {
     x += xy.x * scale;
     y += xy.y * scale;
     element = /** @type {!Element} */ (element.parentNode);
-  } while (element && element != this.getRequiredParentSvg());
+  } while (element && element != this.getParentSvg());
   return new Blockly.utils.Coordinate(x, y);
 };
 
@@ -564,7 +571,9 @@ Blockly.WorkspaceSvg.prototype.getOriginOffsetInPixels = function() {
 /**
  * Return the injection div that is a parent of this workspace.
  * Walks the DOM the first time it's called, then returns a cached value.
- * @return {Element} The first parent div with 'injectionDiv' in the name.
+ * Note: We assume this is only called after the workspace has been injectioned
+ * into the DOM.
+ * @return {!Element} The first parent div with 'injectionDiv' in the name.
  * @package
  */
 Blockly.WorkspaceSvg.prototype.getInjectionDiv = function() {
@@ -581,18 +590,7 @@ Blockly.WorkspaceSvg.prototype.getInjectionDiv = function() {
       element = /** @type {!Element} */ (element.parentNode);
     }
   }
-  return this.injectionDiv_;
-};
-
-
-/**
- * Return the injection div that is a parent of this workspace.
- * Walks the DOM the first time it's called, then returns a cached value.
- * @return {!Element} The first parent div with 'injectionDiv' in the name.
- * @package
- */
-Blockly.WorkspaceSvg.prototype.getRequiredInjectionDiv = function() {
-  return /** @type {!Element} */ (this.getInjectionDiv());
+  return /** @type {!Element} */ (this.injectionDiv_);
 };
 
 /**
@@ -744,7 +742,7 @@ Blockly.WorkspaceSvg.prototype.dispose = function() {
   if (!this.options.parentWorkspace) {
     // Top-most workspace.  Dispose of the div that the
     // SVG is injected into (i.e. injectionDiv).
-    var div = this.getRequiredParentSvg().parentNode;
+    var div = this.getParentSvg().parentNode;
     if (div) {
       Blockly.utils.dom.removeNode(div);
     }
@@ -946,29 +944,22 @@ Blockly.WorkspaceSvg.prototype.getBubbleCanvas = function() {
 
 /**
  * Get the SVG element that contains this workspace.
- * @return {SVGElement} SVG element.
- */
-Blockly.WorkspaceSvg.prototype.getParentSvg = function() {
-  if (this.cachedParentSvg_) {
-    return this.cachedParentSvg_;
-  }
-  var element = this.svgGroup_;
-  while (element) {
-    if (element.tagName == 'svg') {
-      this.cachedParentSvg_ = element;
-      return element;
-    }
-    element = /** @type {!SVGElement} */ (element.parentNode);
-  }
-  return null;
-};
-
-/**
- * Get the SVG element that contains this workspace.
+ * Note: We assume this is only called after the workspace has been injectioned
+ * into the DOM.
  * @return {!SVGElement} SVG element.
  */
-Blockly.WorkspaceSvg.prototype.getRequiredParentSvg = function() {
-  return /** @type {!SVGElement} */ (this.getParentSvg());
+Blockly.WorkspaceSvg.prototype.getParentSvg = function() {
+  if (!this.cachedParentSvg_) {
+    var element = this.svgGroup_;
+    while (element) {
+      if (element.tagName == 'svg') {
+        this.cachedParentSvg_ = element;
+        break;
+      }
+      element = /** @type {!SVGElement} */ (element.parentNode);
+    }
+  }
+  return /** @type {!SVGElement} */ (this.cachedParentSvg_);
 };
 
 /**
@@ -1045,8 +1036,8 @@ Blockly.WorkspaceSvg.prototype.setupDragSurface = function() {
   // Figure out where we want to put the canvas back.  The order
   // in the is important because things are layered.
   var previousElement = this.svgBlockCanvas_.previousSibling;
-  var width = parseInt(this.getRequiredParentSvg().getAttribute('width'), 10);
-  var height = parseInt(this.getRequiredParentSvg().getAttribute('height'), 10);
+  var width = parseInt(this.getParentSvg().getAttribute('width'), 10);
+  var height = parseInt(this.getParentSvg().getAttribute('height'), 10);
   var coord = Blockly.utils.getRelativeXY(this.svgBlockCanvas_);
   this.workspaceDragSurface_.setContentsAndShow(this.svgBlockCanvas_,
       this.svgBubbleCanvas_, previousElement, width, height, this.scale);
@@ -1091,7 +1082,7 @@ Blockly.WorkspaceSvg.prototype.setVisible = function(isVisible) {
     this.getFlyout().setContainerVisible(isVisible);
   }
 
-  this.getRequiredParentSvg().style.display = isVisible ? 'block' : 'none';
+  this.getParentSvg().style.display = isVisible ? 'block' : 'none';
   if (this.toolbox_) {
     // Currently does not support toolboxes in mutators.
     this.toolbox_.HtmlDiv.style.display = isVisible ? 'block' : 'none';
@@ -1404,7 +1395,7 @@ Blockly.WorkspaceSvg.prototype.onMouseDown_ = function(e) {
  */
 Blockly.WorkspaceSvg.prototype.startDrag = function(e, xy) {
   // Record the starting offset between the bubble's location and the mouse.
-  var point = Blockly.utils.mouseToSvg(e, this.getRequiredParentSvg(),
+  var point = Blockly.utils.mouseToSvg(e, this.getParentSvg(),
       this.getInverseScreenCTM());
   // Fix scale of mouse event.
   point.x /= this.scale;
@@ -1418,7 +1409,7 @@ Blockly.WorkspaceSvg.prototype.startDrag = function(e, xy) {
  * @return {!Blockly.utils.Coordinate} New location of object.
  */
 Blockly.WorkspaceSvg.prototype.moveDrag = function(e) {
-  var point = Blockly.utils.mouseToSvg(e, this.getRequiredParentSvg(),
+  var point = Blockly.utils.mouseToSvg(e, this.getParentSvg(),
       this.getInverseScreenCTM());
   // Fix scale of mouse event.
   point.x /= this.scale;
@@ -1500,7 +1491,7 @@ Blockly.WorkspaceSvg.prototype.onMouseWheel_ = function(e) {
     // button.
     var PIXELS_PER_ZOOM_STEP = 50;
     var delta = -scrollDelta.y / PIXELS_PER_ZOOM_STEP;
-    var position = Blockly.utils.mouseToSvg(e, this.getRequiredParentSvg(),
+    var position = Blockly.utils.mouseToSvg(e, this.getParentSvg(),
         this.getInverseScreenCTM());
     this.zoom(position.x, position.y, delta);
   } else {
@@ -1785,7 +1776,7 @@ Blockly.WorkspaceSvg.prototype.setBrowserFocus = function() {
   }
   try {
     // Focus the workspace SVG - this is for Chrome and Firefox.
-    this.getRequiredParentSvg().focus();
+    this.getParentSvg().focus();
   } catch (e) {
     // IE and Edge do not support focus on SVG elements. When that fails
     // above, get the injectionDiv (the workspace's parent) and focus that
@@ -1793,11 +1784,11 @@ Blockly.WorkspaceSvg.prototype.setBrowserFocus = function() {
     try {
       // In IE11, use setActive (which is IE only) so the page doesn't scroll
       // to the workspace gaining focus.
-      this.getRequiredParentSvg().parentNode.setActive();
+      this.getParentSvg().parentNode.setActive();
     } catch (e) {
       // setActive support was discontinued in Edge so when that fails, call
       // focus instead.
-      this.getRequiredParentSvg().parentNode.focus();
+      this.getParentSvg().parentNode.focus();
     }
   }
 };
@@ -1840,7 +1831,7 @@ Blockly.WorkspaceSvg.prototype.zoom = function(x, y, amount) {
   // canvas' space, so that they are in workspace units relative to the top
   // left of the visible portion of the workspace.
   var matrix = this.getCanvas().getCTM();
-  var center = this.getRequiredParentSvg().createSVGPoint();
+  var center = this.getParentSvg().createSVGPoint();
   center.x = x;
   center.y = y;
   center = center.matrixTransform(matrix.inverse());
@@ -2282,7 +2273,7 @@ Blockly.WorkspaceSvg.getTopLevelWorkspaceMetrics_ = function() {
 
   // Contains height and width in CSS pixels.
   // svgSize is equivalent to the size of the injectionDiv at this point.
-  var svgSize = Blockly.svgSize(this.getRequiredParentSvg());
+  var svgSize = Blockly.svgSize(this.getParentSvg());
   var viewSize = {height: svgSize.height, width: svgSize.width};
   if (this.toolbox_) {
     if (this.toolboxPosition == Blockly.TOOLBOX_AT_TOP ||

@@ -154,7 +154,7 @@ Blockly.svgResize = function(workspace) {
   while (mainWorkspace.options.parentWorkspace) {
     mainWorkspace = mainWorkspace.options.parentWorkspace;
   }
-  var svg = mainWorkspace.getRequiredParentSvg();
+  var svg = mainWorkspace.getParentSvg();
   var div = svg.parentNode;
   if (!div) {
     // Workspace deleted, or something.

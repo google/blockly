@@ -595,7 +595,7 @@ Blockly.utils.screenToWsCoordinates = function(ws, screenCoordinates) {
   var screenX = screenCoordinates.x;
   var screenY = screenCoordinates.y;
 
-  var injectionDiv = ws.getRequiredInjectionDiv();
+  var injectionDiv = ws.getInjectionDiv();
   // Bounding rect coordinates are in client coordinates, meaning that they
   // are in pixels relative to the upper left corner of the visible browser
   // window.  These coordinates change when you scroll the browser window.

@@ -571,7 +571,7 @@ Blockly.WorkspaceSvg.prototype.getOriginOffsetInPixels = function() {
 /**
  * Return the injection div that is a parent of this workspace.
  * Walks the DOM the first time it's called, then returns a cached value.
- * Note: We assume this is only called after the workspace has been injectioned
+ * Note: We assume this is only called after the workspace has been injected
  * into the DOM.
  * @return {!Element} The first parent div with 'injectionDiv' in the name.
  * @package
@@ -944,7 +944,7 @@ Blockly.WorkspaceSvg.prototype.getBubbleCanvas = function() {
 
 /**
  * Get the SVG element that contains this workspace.
- * Note: We assume this is only called after the workspace has been injectioned
+ * Note: We assume this is only called after the workspace has been injected
  * into the DOM.
  * @return {!SVGElement} SVG element.
  */

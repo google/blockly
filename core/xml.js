@@ -118,7 +118,7 @@ Blockly.Xml.fieldToDom_ = function(field) {
 
 /**
  * Encode all of a block's fields as XML and attach them to the given tree of
- * XML nodes.
+ * XML elements.
  * @param {!Blockly.Block} block A block with fields to be encoded.
  * @param {!Element} element The XML element to which the field DOM should be
  *     attached.
@@ -240,9 +240,9 @@ Blockly.Xml.blockToDom = function(block, opt_noId) {
 
 /**
  * Deeply clone the shadow's DOM so that changes don't back-wash to the block.
- * @param {!Node} shadow A tree of XML elements.
+ * @param {!Element} shadow A tree of XML elements.
  * @param {boolean=} opt_noId True if the encoder should skip the block ID.
- * @return {!Node} A tree of XML elements.
+ * @return {!Element} A tree of XML elements.
  * @private
  */
 Blockly.Xml.cloneShadow_ = function(shadow, opt_noId) {

@@ -95,3 +95,37 @@ Blockly.fieldRegistry.fromJson = function(options) {
   }
   return fieldClass.fromJson(options);
 };
+
+/**
+ * Allow plugins to register new field types.
+ * @param {string} stage The plugin lifecycle stage
+ * @param {!Object} pluginSpec The PluginSpec, potentially containing new field declarations
+ */
+Blockly.fieldRegistry.pluginListener = function(stage, pluginSpec) {
+  var fields = pluginSpec.hooks && pluginSpec.hooks.fields;
+  var type;
+  if (fields) {
+    switch (stage) {
+      case Blockly.Plugins.Lifecycle.REGISTERED:
+        for (type in fields) {
+          if (fields.hasOwnProperty(type)) {
+            Blockly.fieldRegistry.register(type, fields[type]);
+          }
+        }
+        break;
+
+      case Blockly.Plugins.Lifecycle.UNREGISTERED:
+        for (type in fields) {
+          if (fields.hasOwnProperty(type)) {
+            Blockly.fieldRegistry.unregister(type);
+          }
+        }
+        break;
+    }
+  }
+};
+
+/**
+ * Register a plugin lifecycle listener, that will register any new fields declared in a plugin.
+ */
+Blockly.Plugins.registerLifecycleListener(Blockly.fieldRegistry.pluginListener);

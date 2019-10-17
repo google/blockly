@@ -1,4 +1,3 @@
-
 Blockly.Plugins.register('block_menu_example', function() {
   return {
     init: function() {
@@ -44,3 +43,15 @@ Blockly.Plugins.register('aspect_example', function(Blockly) {
     ]
   };
 });
+
+Blockly.Plugins.register('field_example', function(Blockly) {
+  return {
+    hooks: {
+      fields: {
+        'field_angle2': Blockly.FieldAngle
+      }
+    }
+  };
+});
+
+console.log('Plugged in field:', Blockly.fieldRegistry.fromJson({ type: 'field_angle2', angle: 180 }));

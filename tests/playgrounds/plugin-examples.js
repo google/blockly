@@ -21,7 +21,7 @@ Blockly.Plugins.register('block_menu_example', function() {
   };
 });
 
-Blockly.Plugins.register('aspect_example', function() {
+Blockly.Plugins.register('aspect_example', function(Blockly) {
   return {
     init: function() {
       console.log('Registering aspect plugin example');

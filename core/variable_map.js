@@ -168,7 +168,7 @@ Blockly.VariableMap.prototype.renameVariableWithConflict_ = function(variable,
  *     their type. This will default to '' which is a specific type.
  * @param {?string=} opt_id The unique ID of the variable. This will default to
  *     a UUID.
- * @return {Blockly.VariableModel} The newly created variable.
+ * @return {!Blockly.VariableModel} The newly created variable.
  */
 Blockly.VariableMap.prototype.createVariable = function(name,
     opt_type, opt_id) {
@@ -248,7 +248,7 @@ Blockly.VariableMap.prototype.deleteVariableById = function(id) {
           replace('%2', variableName);
       Blockly.confirm(confirmText,
           function(ok) {
-            if (ok) {
+            if (ok && variable) {
               map.deleteVariableInternal_(variable, uses);
             }
           });
@@ -292,7 +292,7 @@ Blockly.VariableMap.prototype.deleteVariableInternal_ = function(variable,
  * Find the variable by the given name and type and return it.  Return null if
  *     it is not found.
  * @param {string} name The name to check for.
- * @param {string=} opt_type The type of the variable.  If not provided it
+ * @param {?string=} opt_type The type of the variable.  If not provided it
  *     defaults to the empty string, which is a specific type.
  * @return {Blockly.VariableModel} The variable with the given name, or null if
  *     it was not found.

@@ -253,9 +253,10 @@ Blockly.blockRendering.RenderInfo.prototype.createRows_ = function() {
  * @package
  */
 Blockly.blockRendering.RenderInfo.prototype.populateTopRow_ = function() {
-  var hasHat = this.block_.hat ?
-      this.block_.hat === 'cap' : Blockly.BlockSvg.START_HAT;
   var hasPrevious = !!this.block_.previousConnection;
+  var hasHat = (this.block_.hat ?
+    this.block_.hat === 'cap' : Blockly.BlockSvg.START_HAT) &&
+    !this.outputConnection && !hasPrevious;
   var leftSquareCorner = this.topRow.hasLeftSquareCorner(this.block_);
 
   if (leftSquareCorner) {

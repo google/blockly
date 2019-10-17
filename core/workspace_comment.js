@@ -254,7 +254,7 @@ Blockly.WorkspaceComment.prototype.setContent = function(content) {
 /**
  * Encode a comment subtree as XML with XY coordinates.
  * @param {boolean=} opt_noId True if the encoder should skip the comment ID.
- * @return {!Node} Tree of XML elements.
+ * @return {!Element} Tree of XML elements.
  * @package
  */
 Blockly.WorkspaceComment.prototype.toXmlWithXY = function(opt_noId) {
@@ -306,7 +306,7 @@ Blockly.WorkspaceComment.fireCreateEvent = function(comment) {
 
 /**
  * Decode an XML comment tag and create a comment on the workspace.
- * @param {!Node} xmlComment XML comment element.
+ * @param {!Element} xmlComment XML comment element.
  * @param {!Blockly.Workspace} workspace The workspace.
  * @return {!Blockly.WorkspaceComment} The created workspace comment.
  * @package

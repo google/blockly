@@ -800,6 +800,18 @@ function getRebuildBranchName() {
   return 'rebuild_' + mm + '_' + dd + '_' + yyyy;
 };
 
+// Helper function: get a name for a rebuild branch. Format: rebuild_month_yyyy.
+function getRCBranchName() {
+  var date = new Date();
+  var monthNames = [
+    'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+    'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
+  ];
+  var month = monthNames[date.getMonth()];
+  var yy = date.getFullYear().slice(-2);
+  return 'rc_' + month + '_' + yyyy;
+};
+
 // Recompile and push to origin.
 gulp.task('recompile', gulp.series([
     'git-sync-develop',
@@ -819,5 +831,19 @@ gulp.task('recompile', gulp.series([
       console.log('Next step: create a pull request against develop.');
       done();
     }
+  ])
+);
+
+// Create and push an RC branch.
+// Note that this pushes to google/blockly.
+gulp.task('git-create-rc', gulp.series([
+    'git-sync-develop',
+    function(done) {
+      var branchName = getRCBranchName();
+      execSync('git checkout -b ' + branchName, { stdio: 'inherit' });
+      execSync('git push https://github.com/google/blockly.git ' + branchName,
+          { stdio: 'inherit' });
+      done();
+    },
   ])
 );

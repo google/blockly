@@ -613,6 +613,16 @@ Blockly.Field.prototype.render_ = function() {
 };
 
 /**
+ * Show an editor when the field is clicked only if the field is clickable.
+ * @package
+ */
+Blockly.Field.prototype.showEditor = function() {
+  if (this.isClickable()) {
+    this.showEditor_();
+  }
+};
+
+/**
  * Updates the width of the field. Redirects to updateSize_().
  * @deprecated May 2019  Use Blockly.Field.updateSize_() to force an update
  * to the size of the field, or Blockly.utils.dom.getTextWidth() to

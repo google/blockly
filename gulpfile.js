@@ -804,7 +804,6 @@ function getRebuildBranchName() {
 gulp.task('recompile', gulp.series([
     'git-sync-develop',
     function(done) {
-      execSync('git stash save -m "Stash for rebuild"', { stdio: 'inherit' });
       var branchName = getRebuildBranchName();
       console.log('make-rebuild-branch: creating branch ' + branchName);
       execSync('git checkout -b ' + branchName, { stdio: 'inherit' });

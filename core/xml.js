@@ -41,7 +41,7 @@ goog.require('Blockly.utils.xml');
  * Encode a block tree as XML.
  * @param {!Blockly.Workspace} workspace The workspace containing blocks.
  * @param {boolean=} opt_noId True if the encoder should skip the block IDs.
- * @return {!Element} XML document.
+ * @return {!Node} XML document.
  */
 Blockly.Xml.workspaceToDom = function(workspace, opt_noId) {
   var xml = Blockly.utils.xml.createElement('xml');
@@ -65,7 +65,7 @@ Blockly.Xml.workspaceToDom = function(workspace, opt_noId) {
  * Encode a list of variables as XML.
  * @param {!Array.<!Blockly.VariableModel>} variableList List of all variable
  *     models.
- * @return {!Element} List of XML elements.
+ * @return {!Node} List of XML elements.
  */
 Blockly.Xml.variablesToDom = function(variableList) {
   var variables = Blockly.utils.xml.createElement('variables');
@@ -85,7 +85,7 @@ Blockly.Xml.variablesToDom = function(variableList) {
  * Encode a block subtree as XML with XY coordinates.
  * @param {!Blockly.Block} block The root block to encode.
  * @param {boolean=} opt_noId True if the encoder should skip the block ID.
- * @return {!Element} Tree of XML elements.
+ * @return {!Node} Tree of XML elements.
  */
 Blockly.Xml.blockToDomWithXY = function(block, opt_noId) {
   var width;  // Not used in LTR.
@@ -103,7 +103,7 @@ Blockly.Xml.blockToDomWithXY = function(block, opt_noId) {
 /**
  * Encode a field as XML.
  * @param {!Blockly.Field} field The field to encode.
- * @return {Element} XML element, or null if the field did not need to be
+ * @return {Node} XML element, or null if the field did not need to be
  *     serialized.
  * @private
  */
@@ -120,7 +120,7 @@ Blockly.Xml.fieldToDom_ = function(field) {
  * Encode all of a block's fields as XML and attach them to the given tree of
  * XML elements.
  * @param {!Blockly.Block} block A block with fields to be encoded.
- * @param {!Element} element The XML element to which the field DOM should be
+ * @param {!Node} element The XML element to which the field DOM should be
  *     attached.
  * @private
  */
@@ -139,7 +139,7 @@ Blockly.Xml.allFieldsToDom_ = function(block, element) {
  * Encode a block subtree as XML.
  * @param {!Blockly.Block} block The root block to encode.
  * @param {boolean=} opt_noId True if the encoder should skip the block ID.
- * @return {!Element} Tree of XML elements.
+ * @return {!Node} Tree of XML elements.
  */
 Blockly.Xml.blockToDom = function(block, opt_noId) {
   var element =
@@ -240,9 +240,9 @@ Blockly.Xml.blockToDom = function(block, opt_noId) {
 
 /**
  * Deeply clone the shadow's DOM so that changes don't back-wash to the block.
- * @param {!Element} shadow A tree of XML elements.
+ * @param {!Node} shadow A tree of XML elements.
  * @param {boolean=} opt_noId True if the encoder should skip the block ID.
- * @return {!Element} A tree of XML elements.
+ * @return {!Node} A tree of XML elements.
  * @private
  */
 Blockly.Xml.cloneShadow_ = function(shadow, opt_noId) {
@@ -285,7 +285,7 @@ Blockly.Xml.cloneShadow_ = function(shadow, opt_noId) {
  * Converts a DOM structure into plain text.
  * Currently the text format is fairly ugly: all one line with no whitespace,
  * unless the DOM itself has whitespace built-in.
- * @param {!Element} dom A tree of XML elements.
+ * @param {!Node} dom A tree of XML elements.
  * @return {string} Text representation.
  */
 Blockly.Xml.domToText = function(dom) {
@@ -306,7 +306,7 @@ Blockly.Xml.domToText = function(dom) {
 
 /**
  * Converts a DOM structure into properly indented text.
- * @param {!Element} dom A tree of XML elements.
+ * @param {!Node} dom A tree of XML elements.
  * @return {string} Text representation.
  */
 Blockly.Xml.domToPrettyText = function(dom) {
@@ -338,7 +338,7 @@ Blockly.Xml.domToPrettyText = function(dom) {
 /**
  * Converts an XML string into a DOM structure.
  * @param {string} text An XML string.
- * @return {!Element} A DOM object representing the singular child of the
+ * @return {!Node} A DOM object representing the singular child of the
  *     document element.
  * @throws if the text doesn't parse.
  */
@@ -354,7 +354,7 @@ Blockly.Xml.textToDom = function(text) {
 /**
  * Clear the given workspace then decode an XML DOM and
  * create blocks on the workspace.
- * @param {!Element} xml XML DOM.
+ * @param {!Node} xml XML DOM.
  * @param {!Blockly.Workspace} workspace The workspace.
  * @return {Array.<string>} An array containing new block ids.
  */
@@ -368,7 +368,7 @@ Blockly.Xml.clearWorkspaceAndLoadFromXml = function(xml, workspace) {
 
 /**
  * Decode an XML DOM and create blocks on the workspace.
- * @param {!Element} xml XML DOM.
+ * @param {!Node} xml XML DOM.
  * @param {!Blockly.Workspace} workspace The workspace.
  * @return {!Array.<string>} An array containing new block IDs.
  */
@@ -463,7 +463,7 @@ Blockly.Xml.domToWorkspace = function(xml, workspace) {
 /**
  * Decode an XML DOM and create blocks on the workspace. Position the new
  * blocks immediately below prior blocks, aligned by their starting edge.
- * @param {!Element} xml The XML DOM.
+ * @param {!Node} xml The XML DOM.
  * @param {!Blockly.Workspace} workspace The workspace to add to.
  * @return {Array.<string>} An array containing new block IDs.
  */
@@ -518,7 +518,7 @@ Blockly.Xml.appendDomToWorkspace = function(xml, workspace) {
 /**
  * Decode an XML block tag and create a block (and possibly sub blocks) on the
  * workspace.
- * @param {!Element} xmlBlock XML block element.
+ * @param {!Node} xmlBlock XML block element.
  * @param {!Blockly.Workspace} workspace The workspace.
  * @return {!Blockly.Block} The root block created.
  */
@@ -586,7 +586,7 @@ Blockly.Xml.domToBlock = function(xmlBlock, workspace) {
 
 /**
  * Decode an XML list of variables and add the variables to the workspace.
- * @param {!Element} xmlVariables List of XML variable elements.
+ * @param {!Node} xmlVariables List of XML variable elements.
  * @param {!Blockly.Workspace} workspace The workspace to which the variable
  *     should be added.
  */
@@ -606,7 +606,7 @@ Blockly.Xml.domToVariables = function(xmlVariables, workspace) {
 /**
  * Decode an XML block tag and create a block (and possibly sub blocks) on the
  * workspace.
- * @param {!Element} xmlBlock XML block element.
+ * @param {!Node} xmlBlock XML block element.
  * @param {!Blockly.Workspace} workspace The workspace.
  * @return {!Blockly.Block} The root block created.
  * @private
@@ -784,7 +784,7 @@ Blockly.Xml.domToBlockHeadless_ = function(xmlBlock, workspace) {
  * Decode an XML field tag and set the value of that field on the given block.
  * @param {!Blockly.Block} block The block that is currently being deserialized.
  * @param {string} fieldName The name of the field on the block.
- * @param {!Element} xml The field tag to decode.
+ * @param {!Node} xml The field tag to decode.
  * @private
  */
 Blockly.Xml.domToField_ = function(block, fieldName, xml) {
@@ -799,7 +799,7 @@ Blockly.Xml.domToField_ = function(block, fieldName, xml) {
 
 /**
  * Remove any 'next' block (statements in a stack).
- * @param {!Element} xmlBlock XML block element.
+ * @param {!Node} xmlBlock XML block element.
  */
 Blockly.Xml.deleteNext = function(xmlBlock) {
   for (var i = 0, child; child = xmlBlock.childNodes[i]; i++) {

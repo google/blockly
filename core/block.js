@@ -282,14 +282,14 @@ Blockly.Block.prototype.styleName_ = null;
 /**
  * An optional serialization method for defining how to serialize the
  * mutation state. This must be coupled with defining `domToMutation`.
- * @type {?function(...):!Element}
+ * @type {?function(...):!Node}
  */
 Blockly.Block.prototype.mutationToDom;
 
 /**
  * An optional deserialization method for defining how to deserialize the
  * mutation state. This must be coupled with defining `mutationToDom`.
- * @type {?function(!Element)}
+ * @type {?function(!Node)}
  */
 Blockly.Block.prototype.domToMutation;
 

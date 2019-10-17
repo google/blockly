@@ -47,7 +47,7 @@ Blockly.utils.xml.document = function() {
 /**
  * Create DOM element for XML.
  * @param {string} tagName Name of DOM element.
- * @return {!Element} New DOM element.
+ * @return {!Node} New DOM element.
  * @public
  */
 Blockly.utils.xml.createElement = function(tagName) {
@@ -80,7 +80,7 @@ Blockly.utils.xml.textToDomDocument = function(text) {
 /**
  * Converts a DOM structure into plain text.
  * Currently the text format is fairly ugly: all one line with no whitespace.
- * @param {!Element} dom A tree of XML elements.
+ * @param {!Node} dom A tree of XML elements.
  * @return {string} Text representation.
  * @public
  */

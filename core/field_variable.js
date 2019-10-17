@@ -155,7 +155,7 @@ Blockly.FieldVariable.prototype.initModel = function() {
 
 /**
  * Initialize this field based on the given XML.
- * @param {!Element} fieldElement The element containing information about the
+ * @param {!Node} fieldElement The element containing information about the
  *    variable field's state.
  */
 Blockly.FieldVariable.prototype.fromXml = function(fieldElement) {
@@ -182,9 +182,9 @@ Blockly.FieldVariable.prototype.fromXml = function(fieldElement) {
 
 /**
  * Serialize this field to XML.
- * @param {!Element} fieldElement The element to populate with info about the
+ * @param {!Node} fieldElement The element to populate with info about the
  *    field's state.
- * @return {!Element} The element containing info about the field's state.
+ * @return {!Node} The element containing info about the field's state.
  */
 Blockly.FieldVariable.prototype.toXml = function(fieldElement) {
   // Make sure the variable is initialized.

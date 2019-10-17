@@ -203,7 +203,6 @@ Blockly.BlockSvg.MIN_BLOCK_Y = 25;
 
 /**
  * Width of horizontal puzzle tab.
- * @const
  * @package
  */
 // TODO (#3142): Remove.

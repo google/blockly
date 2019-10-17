@@ -537,7 +537,7 @@ Blockly.WorkspaceCommentSvg.prototype.setAutoLayout = function() {
 
 /**
  * Decode an XML comment tag and create a rendered comment on the workspace.
- * @param {!Element} xmlComment XML comment element.
+ * @param {!Node} xmlComment XML comment element.
  * @param {!Blockly.Workspace} workspace The workspace.
  * @param {number=} opt_wsWidth The width of the workspace, which is used to
  *     position comments correctly in RTL.
@@ -577,7 +577,7 @@ Blockly.WorkspaceCommentSvg.fromXml = function(xmlComment, workspace,
 /**
  * Encode a comment subtree as XML with XY coordinates.
  * @param {boolean=} opt_noId True if the encoder should skip the comment ID.
- * @return {!Element} Tree of XML elements.
+ * @return {!Node} Tree of XML elements.
  * @package
  */
 Blockly.WorkspaceCommentSvg.prototype.toXmlWithXY = function(opt_noId) {

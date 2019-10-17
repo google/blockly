@@ -394,8 +394,8 @@ Blockly.Field.prototype.bindEvents_ = function() {
 /**
  * Sets the field's value based on the given XML element. Should only be
  * called by Blockly.Xml.
- * @param {!Element} fieldElement The element containing info about the
- *    field's state.
+ * @param {!Node} fieldElement The element containing info about the field's
+ *     state.
  * @package
  */
 Blockly.Field.prototype.fromXml = function(fieldElement) {
@@ -404,9 +404,9 @@ Blockly.Field.prototype.fromXml = function(fieldElement) {
 
 /**
  * Serializes this field's value to XML. Should only be called by Blockly.Xml.
- * @param {!Element} fieldElement The element to populate with info about the
+ * @param {!Node} fieldElement The element to populate with info about the
  *    field's state.
- * @return {!Element} The element containing info about the field's state.
+ * @return {!Node} The element containing info about the field's state.
  * @package
  */
 Blockly.Field.prototype.toXml = function(fieldElement) {

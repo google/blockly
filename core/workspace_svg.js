@@ -931,7 +931,7 @@ Blockly.WorkspaceSvg.prototype.updateScreenCalculationsIfScrolled =
 
 /**
  * Get the SVG element that forms the drawing surface.
- * @return {!SVGGElement} SVG element.
+ * @return {!SVGGElement} SVG group element.
  */
 Blockly.WorkspaceSvg.prototype.getCanvas = function() {
   return /** @type {!SVGGElement} */ (this.svgBlockCanvas_);
@@ -939,7 +939,7 @@ Blockly.WorkspaceSvg.prototype.getCanvas = function() {
 
 /**
  * Get the SVG element that forms the bubble surface.
- * @return {!SVGGElement} SVG element.
+ * @return {!SVGGElement} SVG group element.
  */
 Blockly.WorkspaceSvg.prototype.getBubbleCanvas = function() {
   return /** @type {!SVGGElement} */ (this.svgBubbleCanvas_);

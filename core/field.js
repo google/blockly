@@ -613,13 +613,11 @@ Blockly.Field.prototype.render_ = function() {
 };
 
 /**
- * Show an editor when the field is clicked only if the field is clickable.
+ * Show an editor when the field is clicked.
  * @package
  */
 Blockly.Field.prototype.showEditor = function() {
-  if (this.isClickable()) {
-    this.showEditor_();
-  }
+  this.showEditor_ && this.showEditor_();
 };
 
 /**

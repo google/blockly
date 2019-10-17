@@ -479,10 +479,10 @@ Blockly.Workspace.prototype.clear = function() {
       Blockly.Events.setGroup(true);
     }
     while (this.topBlocks_.length) {
-      this.topBlocks_[0].dispose();
+      this.topBlocks_[0].dispose(false);
     }
     while (this.topComments_.length) {
-      this.topComments_[this.topComments_.length - 1].dispose();
+      this.topComments_[this.topComments_.length - 1].dispose(false);
     }
     if (!existingGroup) {
       Blockly.Events.setGroup(false);
@@ -665,7 +665,7 @@ Blockly.Workspace.prototype.remainingCapacityOfType = function(type) {
     return Infinity;
   }
   return (this.options.maxInstances[type] || Infinity) -
-      this.getBlocksByType(type).length;
+      this.getBlocksByType(type, false).length;
 };
 
 /**

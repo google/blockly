@@ -942,7 +942,7 @@ Blockly.Blocks['procedures_callnoreturn'] = {
       var def = Blockly.Procedures.getDefinition(name, this.workspace);
       if (!def) {
         Blockly.Events.setGroup(event.group);
-        this.dispose(true, false);
+        this.dispose(true);
         Blockly.Events.setGroup(false);
       }
     } else if (event.type == Blockly.Events.CHANGE && event.element == 'disabled') {

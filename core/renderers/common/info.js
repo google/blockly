@@ -256,6 +256,7 @@ Blockly.blockRendering.RenderInfo.prototype.populateTopRow_ = function() {
   var hasHat = this.block_.hat ?
       this.block_.hat === 'cap' : Blockly.BlockSvg.START_HAT;
   var hasPrevious = !!this.block_.previousConnection;
+  var hasOutputConnection = !!this.outputConnection;
   var leftSquareCorner = this.topRow.hasLeftSquareCorner(this.block_);
 
   if (leftSquareCorner) {
@@ -266,7 +267,7 @@ Blockly.blockRendering.RenderInfo.prototype.populateTopRow_ = function() {
         new Blockly.blockRendering.RoundCorner(this.constants_));
   }
 
-  if (hasHat) {
+  if (hasHat && !hasOutputConnection) {
     var hat = new Blockly.blockRendering.Hat(this.constants_);
     this.topRow.elements.push(hat);
     this.topRow.capline = hat.ascenderHeight;

@@ -33,10 +33,18 @@ Blockly.Plugins.register('aspect_example', function(Blockly) {
         pointcut: [Blockly.WorkspaceSvg.prototype, 'createVariable'],
         advice: {
           before: function(name, opt_type) {
-            console.log('Creating a new variable:', name, ', of type:', opt_type);
+            console.log('BEFORE - Creating a new variable:', name, ', of type:', opt_type);
           },
           after: function(variableModel) {
-            console.log('New variable created:', variableModel);
+            console.log('AFTER - New variable created:', variableModel);
+          },
+          around: function(invoke, params) {
+            console.log('AROUND (pre-invoke)', params);
+            try {
+              return invoke.apply(this, params);
+            } finally {
+              console.log('AROUND (post-invoke)');
+            }
           }
         }
       }

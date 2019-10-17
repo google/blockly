@@ -187,6 +187,7 @@ Blockly.Plugins.addAspect_ = function(id, aspect) {
     target = function() {
       var this_ = this;
 
+      // Apply all 'before' advices
       var params = target._advices.reduce(function(paramsIn, advice) {
         if (advice.before) {
           var paramsOut = advice.before.apply(this_, paramsIn);
@@ -194,9 +195,20 @@ Blockly.Plugins.addAspect_ = function(id, aspect) {
         }
       }, arguments);
 
-      // TODO: Handle 'around' advice
-      var returned = target._original.apply(this_, params);
+      // Apply all 'around' advices
+      var invoke = target._advices.reduce(function(invokeIn, advice) {
+        if (advice.around) {
+          return function() {
+            return advice.around.call(this_, invokeIn, arguments);
+          };
+        } else {
+          return invokeIn;
+        }
+      }, target._original);
 
+      var returned = invoke.apply(this_, params);
+
+      // Apply all 'after' advices
       return target._advices.reduce(function(returnIn, advice) {
         if (advice.after) {
           var returnOut = advice.after.call(this_, returnIn);

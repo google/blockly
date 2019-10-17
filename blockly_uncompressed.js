@@ -87,7 +87,6 @@ goog.addDependency("../../core/names.js", ['Blockly.Names'], ['Blockly.Msg']);
 goog.addDependency("../../core/options.js", ['Blockly.Options'], ['Blockly.utils.userAgent', 'Blockly.Xml']);
 goog.addDependency("../../core/procedures.js", ['Blockly.Procedures'], ['Blockly.Blocks', 'Blockly.constants', 'Blockly.Events', 'Blockly.Events.BlockChange', 'Blockly.Field', 'Blockly.Msg', 'Blockly.Names', 'Blockly.utils.xml', 'Blockly.Workspace', 'Blockly.Xml']);
 goog.addDependency("../../core/rendered_connection.js", ['Blockly.RenderedConnection'], ['Blockly.Connection', 'Blockly.Events', 'Blockly.utils', 'Blockly.utils.Coordinate', 'Blockly.utils.dom', 'Blockly.utils.object']);
-goog.addDependency("../../core/renderers/common/block_paths.js", ['Blockly.Colourer'], []);
 goog.addDependency("../../core/renderers/common/block_rendering.js", ['Blockly.blockRendering'], ['Blockly.utils.object']);
 goog.addDependency("../../core/renderers/common/constants.js", ['Blockly.blockRendering.ConstantProvider'], ['Blockly.utils.svgPaths']);
 goog.addDependency("../../core/renderers/common/debugger.js", ['Blockly.blockRendering.Debug'], ['Blockly.blockRendering.BottomRow', 'Blockly.blockRendering.InputRow', 'Blockly.blockRendering.Measurable', 'Blockly.blockRendering.RenderInfo', 'Blockly.blockRendering.Row', 'Blockly.blockRendering.SpacerRow', 'Blockly.blockRendering.TopRow', 'Blockly.blockRendering.Types']);

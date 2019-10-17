@@ -249,12 +249,12 @@ Blockly.VariableMap.prototype.deleteVariableById = function(id) {
       Blockly.confirm(confirmText,
           function(ok) {
             if (ok && variable) {
-              map.deleteVariableInternal_(variable, uses);
+              map.deleteVariableInternal(variable, uses);
             }
           });
     } else {
       // No confirmation necessary for a single block.
-      map.deleteVariableInternal_(variable, uses);
+      map.deleteVariableInternal(variable, uses);
     }
   } else {
     console.warn("Can't delete non-existent variable: " + id);
@@ -266,9 +266,9 @@ Blockly.VariableMap.prototype.deleteVariableById = function(id) {
  * user for confirmation.
  * @param {!Blockly.VariableModel} variable Variable to delete.
  * @param {!Array.<!Blockly.Block>} uses An array of uses of the variable.
- * @private
+ * @package
  */
-Blockly.VariableMap.prototype.deleteVariableInternal_ = function(variable,
+Blockly.VariableMap.prototype.deleteVariableInternal = function(variable,
     uses) {
   var existingGroup = Blockly.Events.getGroup();
   if (!existingGroup) {

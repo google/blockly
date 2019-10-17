@@ -548,7 +548,7 @@ Blockly.Workspace.prototype.deleteVariableById = function(id) {
  * @private
  */
 Blockly.Workspace.prototype.deleteVariableInternal_ = function(variable, uses) {
-  this.variableMap_.deleteVariableInternal_(variable, uses);
+  this.variableMap_.deleteVariableInternal(variable, uses);
 };
 
 /**

@@ -232,7 +232,7 @@ Blockly.Field.prototype.getText_;
  *     clicked. Blockly will automatically set the field as clickable if this
  *     method is defined.
  * @return {void}
- * @protected
+ * @package
  */
 Blockly.Field.prototype.showEditor_;
 

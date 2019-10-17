@@ -252,22 +252,22 @@ Blockly.Comment.prototype.createEditableBubble_ = function() {
 /**
  * Show a non-editable bubble.
  * @private
+ * @suppress {checkTypes} Suppress `this` type mismatch.
  */
 Blockly.Comment.prototype.createNonEditableBubble_ = function() {
   // TODO (#2917): It would be great if the comment could support line breaks.
-  Blockly.Warning.prototype.createBubble.call(
-      /** @type {Blockly.Warning} */ (this));
+  Blockly.Warning.prototype.createBubble.call(this);
 };
 
 /**
  * Dispose of the bubble.
  * @private
+ * @suppress {checkTypes} Suppress `this` type mismatch.
  */
 Blockly.Comment.prototype.disposeBubble_ = function() {
   if (this.paragraphElement_) {
     // We're using the warning UI so we have to let it dispose.
-    Blockly.Warning.prototype.disposeBubble.call(
-        /** @type {Blockly.Warning} */ (this));
+    Blockly.Warning.prototype.disposeBubble.call(this);
     return;
   }
 

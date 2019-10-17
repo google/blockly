@@ -531,7 +531,7 @@ Blockly.WorkspaceSvg.prototype.isVisible = function() {
  * The origin (0,0) is the top-left corner of the Blockly SVG.
  * @param {!Element} element Element to find the coordinates of.
  * @return {!Blockly.utils.Coordinate} Object with .x and .y properties.
- * @private
+ * @package
  */
 Blockly.WorkspaceSvg.prototype.getSvgXY = function(element) {
   var x = 0;

@@ -439,6 +439,11 @@ function configureContextMenu(menuOptions) {
   menuOptions.push(screenshotOption);
 }
 
+function toggleStartHats() {
+  Blockly.BlockSvg.START_HAT = !Blockly.BlockSvg.START_HAT;
+  workspace.render();
+}
+
 function logger(e) {
   console.log(e);
 }
@@ -607,6 +612,10 @@ var spaghettiXml = [
       onchange="taChange();" onkeyup="taChange()"></textarea>
   </p>
 
+  <p>
+    Rendering: &nbsp;
+    <input type="button" value="Toggle hats" onclick="toggleStartHats()">
+  </p>
   <p>
     Stress test: &nbsp;
     <input type="button" value="Airstrike!" onclick="airstrike(100)">

@@ -195,7 +195,7 @@ Blockly.BlockDragger.prototype.startBlockDrag = function(currentDragDeltaXY,
 Blockly.BlockDragger.prototype.fireDragStartEvent_ = function() {
   var event = new Blockly.Events.Ui(this.draggingBlock_, 'dragStart',
       null, this.draggingBlock_.getDescendants(false));
-  Blockly.Events.fire(event)
+  Blockly.Events.fire(event);
 };
 
 /**

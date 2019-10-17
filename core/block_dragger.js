@@ -189,7 +189,7 @@ Blockly.BlockDragger.prototype.startBlockDrag = function(currentDragDeltaXY,
 };
 
 /**
- * Fire a ui event at the start of a block drag.
+ * Fire a UI event at the start of a block drag.
  * @private
  */
 Blockly.BlockDragger.prototype.fireDragStartEvent_ = function() {
@@ -266,7 +266,7 @@ Blockly.BlockDragger.prototype.endBlockDrag = function(e, currentDragDeltaXY) {
 };
 
 /**
- * Fire a ui event at the end of a block drag.
+ * Fire a UI event at the end of a block drag.
  * @private
  */
 Blockly.BlockDragger.prototype.fireDragEndEvent_ = function() {

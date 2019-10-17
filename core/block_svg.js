@@ -700,7 +700,7 @@ Blockly.BlockSvg.prototype.tab = function(start, forward) {
       parent.tab(this, forward);
     }
   } else if (target instanceof Blockly.Field) {
-    target.showEditor_();
+    target.showEditor();
   } else {
     target.tab(null, forward);
   }

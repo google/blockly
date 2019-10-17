@@ -232,7 +232,7 @@ Blockly.Field.prototype.getText_;
  *     clicked. Blockly will automatically set the field as clickable if this
  *     method is defined.
  * @return {void}
- * @package
+ * @protected
  */
 Blockly.Field.prototype.showEditor_;
 
@@ -609,6 +609,16 @@ Blockly.Field.prototype.render_ = function() {
   if (this.textContent_) {
     this.textContent_.nodeValue = this.getDisplayText_();
     this.updateSize_();
+  }
+};
+
+/**
+ * Show an editor when the field is clicked only if the field is clickable.
+ * @package
+ */
+Blockly.Field.prototype.showEditor = function() {
+  if (this.isClickable()) {
+    this.showEditor_();
   }
 };
 

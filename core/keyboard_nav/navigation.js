@@ -924,7 +924,7 @@ Blockly.navigation.handleEnterForWS_ = function() {
   var curNode = cursor.getCurNode();
   var nodeType = curNode.getType();
   if (nodeType == Blockly.ASTNode.types.FIELD) {
-    curNode.getLocation().showEditor_();
+    curNode.getLocation().showEditor();
   } else if (curNode.isConnection() ||
       nodeType == Blockly.ASTNode.types.WORKSPACE) {
     Blockly.navigation.markAtCursor_();

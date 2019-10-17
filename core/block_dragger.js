@@ -26,6 +26,7 @@ goog.provide('Blockly.BlockDragger');
 goog.require('Blockly.blockAnimations');
 goog.require('Blockly.Events');
 goog.require('Blockly.Events.BlockMove');
+goog.require('Blockly.Events.Ui');
 goog.require('Blockly.InsertionMarkerManager');
 goog.require('Blockly.utils.Coordinate');
 goog.require('Blockly.utils.dom');
@@ -147,6 +148,7 @@ Blockly.BlockDragger.prototype.startBlockDrag = function(currentDragDeltaXY,
   if (!Blockly.Events.getGroup()) {
     Blockly.Events.setGroup(true);
   }
+  this.fireDragStartEvent_();
 
   // Mutators don't have the same type of z-ordering as the normal workspace
   // during a drag.  They have to rely on the order of the blocks in the SVG.
@@ -187,6 +189,16 @@ Blockly.BlockDragger.prototype.startBlockDrag = function(currentDragDeltaXY,
 };
 
 /**
+ * Fire a ui event at the start of a block drag.
+ * @private
+ */
+Blockly.BlockDragger.prototype.fireDragStartEvent_ = function() {
+  var event = new Blockly.Events.Ui(this.draggingBlock_, 'dragStart',
+      null, this.draggingBlock_.getDescendants(false));
+  Blockly.Events.fire(event)
+};
+
+/**
  * Execute a step of block dragging, based on the given event.  Update the
  * display accordingly.
  * @param {!Event} e The most recent move event.
@@ -218,7 +230,8 @@ Blockly.BlockDragger.prototype.endBlockDrag = function(e, currentDragDeltaXY) {
   // Make sure internal state is fresh.
   this.dragBlock(e, currentDragDeltaXY);
   this.dragIconData_ = [];
-
+  this.fireDragEndEvent_();
+  
   Blockly.utils.dom.stopTextWidthCache();
 
   Blockly.blockAnimations.disconnectUiStop();
@@ -250,6 +263,16 @@ Blockly.BlockDragger.prototype.endBlockDrag = function(e, currentDragDeltaXY) {
     toolbox.removeStyle(style);
   }
   Blockly.Events.setGroup(false);
+};
+
+/**
+ * Fire a ui event at the end of a block drag.
+ * @private
+ */
+Blockly.BlockDragger.prototype.fireDragEndEvent_ = function() {
+  var event = new Blockly.Events.Ui(this.draggingBlock_, 'dragStop',
+      this.draggingBlock_.getDescendants(false), null);
+  Blockly.Events.fire(event);
 };
 
 /**

@@ -196,7 +196,7 @@ Blockly.Plugins.addAspect_ = function(id, aspect) {
       }, arguments);
 
       // Apply all 'around' advices
-      var invoke = target._advices.reduce(function(invokeIn, advice) {
+      var invoke = target._advices.reduceRight(function(invokeIn, advice) {
         if (advice.around) {
           return function() {
             return advice.around.call(this_, invokeIn, arguments);

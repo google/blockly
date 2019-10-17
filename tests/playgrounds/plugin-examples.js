@@ -52,6 +52,32 @@ Blockly.Plugins.register('aspect_example', function(Blockly) {
   };
 });
 
+Blockly.Plugins.register('aspect_example_2', function(Blockly) {
+  return {
+    aspects: [
+      {
+        pointcut: [Blockly.WorkspaceSvg.prototype, 'createVariable'],
+        advice: {
+          before: function() {
+            console.log('BEFORE 2');
+          },
+          after: function() {
+            console.log('AFTER 2');
+          },
+          around: function(invoke, params) {
+            console.log('AROUND 2 (pre-invoke)', params);
+            try {
+              return invoke.apply(this, params);
+            } finally {
+              console.log('AROUND 2 (post-invoke)');
+            }
+          }
+        }
+      }
+    ]
+  };
+});
+
 Blockly.Plugins.register('field_example', function(Blockly) {
   return {
     hooks: {

@@ -276,7 +276,7 @@ Blockly.DropDownDiv.getScaledBboxOfBlock_ = function(block) {
  * @private
  */
 Blockly.DropDownDiv.getScaledBboxOfField_ = function(field) {
-  var bBox = field.getScaledBBox_();
+  var bBox = field.getScaledBBox();
   return new Blockly.utils.Rect(
       bBox.top, bBox.bottom, bBox.left, bBox.right);
 };
@@ -700,7 +700,7 @@ Blockly.DropDownDiv.repositionForWindowResize = function() {
   // event and we want the dropdown div to stick around so users can type into
   // it.
   if (Blockly.DropDownDiv.owner_) {
-    var field = Blockly.DropDownDiv.owner_;
+    var field = /** @type {!Blockly.Field} */ (Blockly.DropDownDiv.owner_);
     var block = Blockly.DropDownDiv.owner_.getSourceBlock();
     var bBox = Blockly.DropDownDiv.positionToField_ ?
         Blockly.DropDownDiv.getScaledBboxOfField_(field) :

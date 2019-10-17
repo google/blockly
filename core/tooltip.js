@@ -78,6 +78,7 @@ Blockly.Tooltip.lastY_ = 0;
 
 /**
  * Current element being pointed at.
+ * @type {Element}
  * @private
  */
 Blockly.Tooltip.element_ = null;
@@ -85,6 +86,7 @@ Blockly.Tooltip.element_ = null;
 /**
  * Once a tooltip has opened for an element, that element is 'poisoned' and
  * cannot respawn a tooltip until the pointer moves over a different element.
+ * @type {Element}
  * @private
  */
 Blockly.Tooltip.poisonedElement_ = null;

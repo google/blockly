@@ -390,6 +390,9 @@ Blockly.Events.fromJson = function(json, workspace) {
     case Blockly.Events.COMMENT_DELETE:
       event = new Blockly.Events.CommentDelete(null);
       break;
+    case Blockly.Events.FINISHED_LOADING:
+      event = new Blockly.Events.FinishedLoading(null);
+      break;
     default:
       throw Error('Unknown event type.');
   }

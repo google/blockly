@@ -328,7 +328,7 @@ Blockly.Connection.prototype.canConnectToPrevious_ = function(candidate) {
   }
 
   // Don't let blocks try to connect to themselves or ones they nest.
-  if (Blockly.draggingConnections_.indexOf(candidate) != -1) {
+  if (Blockly.draggingConnections.indexOf(candidate) != -1) {
     return false;
   }
 
@@ -405,7 +405,7 @@ Blockly.Connection.prototype.isConnectionAllowed = function(candidate) {
   }
 
   // Don't let blocks try to connect to themselves or ones they nest.
-  if (Blockly.draggingConnections_.indexOf(candidate) != -1) {
+  if (Blockly.draggingConnections.indexOf(candidate) != -1) {
     return false;
   }
 

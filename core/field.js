@@ -670,9 +670,9 @@ Blockly.Field.prototype.getSize = function() {
  * scaling.
  * @return {!Object} An object with top, bottom, left, and right in pixels
  *     relative to the top left corner of the page (window coordinates).
- * @protected
+ * @package
  */
-Blockly.Field.prototype.getScaledBBox_ = function() {
+Blockly.Field.prototype.getScaledBBox = function() {
   var bBox = this.borderRect_.getBBox();
   var scaledHeight = bBox.height * this.sourceBlock_.workspace.scale;
   var scaledWidth = bBox.width * this.sourceBlock_.workspace.scale;

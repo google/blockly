@@ -220,7 +220,7 @@ Blockly.FieldMultilineInput.prototype.updateSize_ = function() {
  */
 Blockly.FieldMultilineInput.prototype.resizeEditor_ = function() {
   var div = Blockly.WidgetDiv.DIV;
-  var bBox = this.getScaledBBox_();
+  var bBox = this.getScaledBBox();
   div.style.width = bBox.right - bBox.left + 'px';
   div.style.height = bBox.bottom - bBox.top + 'px';
 

@@ -770,3 +770,54 @@ gulp.task('release', gulp.series(['build', 'typings', function() {
 
 // The default task builds Blockly.
 gulp.task('default', gulp.series(['build']));
+
+
+// Stash current state, check out the named branch, and sync with
+// google/blockly.
+function syncBranch(branchName) {
+  return function(done) {
+    execSync('git stash save -m "Stash for sync"', { stdio: 'inherit' });
+    execSync('git checkout ' + branchName, { stdio: 'inherit' });
+    execSync('git pull https://github.com/google/blockly.git ' + branchName,
+        { stdio: 'inherit' });
+    execSync('git push origin ' + branchName, { stdio: 'inherit' });
+    done();
+  }
+}
+
+// Stash current state, check out develop, and sync with google/blockly.
+gulp.task('git-sync-develop', syncBranch('develop'));
+
+// Stash current state, check out master, and sync with google/blockly.
+gulp.task('git-sync-master', syncBranch('master'));
+
+// Helper function: get a name for a rebuild branch. Format: rebuild_mm_dd_yyyy.
+function getRebuildBranchName() {
+  var date = new Date();
+  var mm = date.getMonth() + 1; // Month, 0-11
+  var dd = date.getDate(); // Day of the month, 1-31
+  var yyyy = date.getFullYear();
+  return 'rebuild_' + mm + '_' + dd + '_' + yyyy;
+};
+
+// Recompile and push to origin.
+gulp.task('recompile', gulp.series([
+    'git-sync-develop',
+    function(done) {
+      var branchName = getRebuildBranchName();
+      console.log('make-rebuild-branch: creating branch ' + branchName);
+      execSync('git checkout -b ' + branchName, { stdio: 'inherit' });
+      done();
+    },
+    'build',
+    function(done) {
+      console.log('push-rebuild-branch: committing rebuild');
+      execSync('git commit -am "Rebuild"', { stdio: 'inherit' });
+      var branchName = getRebuildBranchName();
+      execSync('git push origin ' + branchName, { stdio: 'inherit' });
+      console.log('Branch ' + branchName + ' pushed to GitHub.');
+      console.log('Next step: create a pull request against develop.');
+      done();
+    }
+  ])
+);

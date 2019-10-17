@@ -173,6 +173,7 @@ goog.provide('Blockly.Mutator');`;
 function buildGenerator(language, namespace) {
   var provides = `
 goog.provide('Blockly.Generator');
+goog.provide('Blockly.utils.global');
 goog.provide('Blockly.utils.string');`;
   return gulp.src([`generators/${language}.js`, `generators/${language}/*.js`], {base: './'})
     .pipe(stripApacheLicense())
@@ -185,7 +186,7 @@ goog.provide('Blockly.utils.string');`;
     }, argv.verbose))
     .pipe(gulp.replace('\'use strict\';', '\'use strict\';\n\n\n'))
     // Remove Blockly.Generator and Blockly.utils.string to be compatible with Blockly.
-    .pipe(gulp.replace(/var Blockly=\{[^;]*\};\s*Blockly.utils.string={};\n?/, ''))
+    .pipe(gulp.replace(/var Blockly=\{[^;]*\};\s*Blockly.utils.global={};\s*Blockly.utils.string={};\n?/, ''))
     .pipe(prependHeader())
     .pipe(gulp.dest('./'));
 };

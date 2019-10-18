@@ -800,16 +800,12 @@ function getRebuildBranchName() {
   return 'rebuild_' + mm + '_' + dd + '_' + yyyy;
 };
 
-// Helper function: get a name for a rebuild branch. Format: rebuild_month_yyyy.
+// Helper function: get a name for a rebuild branch. Format: rebuild_yyyy_mm.
 function getRCBranchName() {
   var date = new Date();
-  var monthNames = [
-    'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-    'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
-  ];
-  var month = monthNames[date.getMonth()];
-  var yy = date.getFullYear().slice(-2);
-  return 'rc_' + month + '_' + yyyy;
+  var mm = date.getMonth() + 1; // Month, 0-11
+  var yyyy = date.getFullYear();
+  return 'rc_' + yyyy + '_' + mm;
 };
 
 // Recompile and push to origin.

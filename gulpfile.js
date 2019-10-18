@@ -37,6 +37,7 @@ var closureCompiler = require('google-closure-compiler').gulp();
 var packageJson = require('./package.json');
 var argv = require('yargs').argv;
 
+const upstream_url = "https://github.com/google/blockly.git";
 
 ////////////////////////////////////////////////////////////
 //                        Build                           //
@@ -779,7 +780,7 @@ function syncBranch(branchName) {
   return function(done) {
     execSync('git stash save -m "Stash for sync"', { stdio: 'inherit' });
     execSync('git checkout ' + branchName, { stdio: 'inherit' });
-    execSync('git pull https://github.com/google/blockly.git ' + branchName,
+    execSync('git pull ' + upstream_url + ' ' + branchName,
         { stdio: 'inherit' });
     execSync('git push origin ' + branchName, { stdio: 'inherit' });
     done();
@@ -807,6 +808,15 @@ function getRCBranchName() {
   var mm = date.getMonth() + 1; // Month, 0-11
   var yyyy = date.getFullYear();
   return 'rc_' + yyyy + '_' + mm;
+};
+
+// Helper function: get a minor version number for the day.  Format: yyyymmdd.
+function getNewMinorVersionNumber() {
+  var date = new Date();
+  var mm = date.getMonth() + 1; // Month, 0-11
+  var dd = date.getDate(); // Day of the month, 1-31
+  var yyyy = date.getFullYear();
+  return yyyy + '' + mm + '' + dd;
 };
 
 // Recompile and push to origin.
@@ -838,9 +848,34 @@ gulp.task('git-create-rc', gulp.series([
     function(done) {
       var branchName = getRCBranchName();
       execSync('git checkout -b ' + branchName, { stdio: 'inherit' });
-      execSync('git push https://github.com/google/blockly.git ' + branchName,
+      execSync('git push ' + upstream_url + ' ' + branchName,
           { stdio: 'inherit' });
       done();
     },
+  ])
+);
+
+// See https://docs.npmjs.com/cli/version.
+gulp.task('preversion', gulp.series([
+    'git-sync-master',
+    function(done) {
+      // Create a branch named bump_version for the bump and rebuild.
+      execSync('git checkout -b bump_version', { stdio: 'inherit' });
+      done();
+    },
+  ])
+);
+
+// See https://docs.npmjs.com/cli/version
+gulp.task('postversion', gulp.series([
+  function(done) {
+      // Push both the branch and tag to google/blockly.
+      execSync('git push ' + upstream_url + ' bump_version',
+          { stdio: 'inherit' });
+      var tagName = 'v' + packageJson.version;
+      execSync('git push ' + upstream_url + ' ' + tagName,
+          { stdio: 'inherit' });
+      done();
+    }
   ])
 );

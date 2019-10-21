@@ -531,6 +531,9 @@ Blockly.blockRendering.RenderInfo.prototype.addAlignmentPadding_ = function(row,
   if (lastSpacer) {
     lastSpacer.width += missingSpace;
     row.width += missingSpace;
+    if (row.hasExternalInput || row.hasStatement) {
+      row.widthWithConnectedBlocks += missingSpace;
+    }
   }
 };
 

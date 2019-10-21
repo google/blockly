@@ -100,6 +100,13 @@ Blockly.BlockSvg = function(workspace, prototypeName, opt_id) {
   /** @type {!Blockly.WorkspaceSvg} */
   this.workspace = workspace;
 
+  /** @type {Blockly.RenderedConnection} */
+  this.outputConnection = null;
+  /** @type {Blockly.RenderedConnection} */
+  this.nextConnection = null;
+  /** @type {Blockly.RenderedConnection} */
+  this.previousConnection = null;
+
   /**
    * Whether to move the block to the drag surface when it is dragged.
    * True if it should move, false if it should be translated directly.
@@ -238,6 +245,13 @@ Blockly.BlockSvg.prototype.decompose;
  * @type {?function(!Blockly.BlockSvg)}
  */
 Blockly.BlockSvg.prototype.compose;
+
+/**
+ * An property used internally to reference the block's rendering debugger.
+ * @type {?Blockly.blockRendering.Debug}
+ * @package
+ */
+Blockly.BlockSvg.prototype.renderingDebugger;
 
 /**
  * Create and initialize the SVG representation of the block.

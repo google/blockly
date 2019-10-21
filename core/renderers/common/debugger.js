@@ -42,6 +42,7 @@ Blockly.blockRendering.Debug = function() {
   /**
    * An array of SVG elements that have been created by this object.
    * @type {Array.<!SVGElement>}
+   * @private
    */
   this.debugElements_ = [];
 
@@ -49,6 +50,7 @@ Blockly.blockRendering.Debug = function() {
    * The SVG root of the block that is being rendered.  Debug elements will
    * be attached to this root.
    * @type {SVGElement}
+   * @private
    */
   this.svgRoot_ = null;
 };
@@ -178,6 +180,8 @@ Blockly.blockRendering.Debug.prototype.drawRenderedElem = function(elem, isRtl) 
  * share the same colours, as do previous and next.  When positioned correctly
  * a connected pair will look like a bullseye.
  * @param {Blockly.RenderedConnection} conn The connection to circle.
+ * @suppress {visibility} Suppress visibility of conn.offsetInBlock_ since this
+ *     is a debug module.
  * @package
  */
 Blockly.blockRendering.Debug.prototype.drawConnection = function(conn) {
@@ -273,7 +277,7 @@ Blockly.blockRendering.Debug.prototype.drawRowWithElements = function(row, curso
   for (var i = 0, elem; (elem = row.elements[i]); i++) {
     if (Blockly.blockRendering.Types.isSpacer(elem)) {
       this.drawSpacerElem(
-          /** @type {Blockly.blockRendering.InRowSpacer} */ (elem),
+          /** @type {!Blockly.blockRendering.InRowSpacer} */ (elem),
           row.height, isRtl);
     } else {
       this.drawRenderedElem(elem, isRtl);

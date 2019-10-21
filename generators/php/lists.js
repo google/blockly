@@ -20,7 +20,7 @@
  * @author daarond@gmail.com (Daaron Dwyer)
  */
 
-/*
+/**
  * Lists in PHP are known to break when non-variables are passed into blocks
  * that require a list. PHP, unlike other languages, passes arrays as reference
  * value instead of value so we are unable to support it to the extent we can

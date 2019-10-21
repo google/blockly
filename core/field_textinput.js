@@ -64,6 +64,26 @@ Blockly.FieldTextInput = function(opt_value, opt_validator, opt_config) {
   }
   Blockly.FieldTextInput.superClass_.constructor.call(this,
       opt_value, opt_validator, opt_config);
+
+  /**
+   * The HTML input element.
+   * @type {HTMLElement}
+   */
+  this.htmlInput_ = null;
+
+  /**
+   * Key down event data.
+   * @type {?Blockly.EventData}
+   * @private
+   */
+  this.onKeyDownWrapper_ = null;
+
+  /**
+   * Key input event data.
+   * @type {?Blockly.EventData}
+   * @private
+   */
+  this.onKeyInputWrapper_ = null;
 };
 Blockly.utils.object.inherits(Blockly.FieldTextInput, Blockly.Field);
 
@@ -183,12 +203,15 @@ Blockly.FieldTextInput.prototype.render_ = function() {
     } else {
       this.resizeEditor_();
     }
+    var htmlInput = /** @type {!HTMLElement} */(this.htmlInput_);
     if (!this.isTextValid_) {
-      Blockly.utils.dom.addClass(this.htmlInput_, 'blocklyInvalidInput');
-      Blockly.utils.aria.setState(this.htmlInput_, 'invalid', true);
+      Blockly.utils.dom.addClass(htmlInput, 'blocklyInvalidInput');
+      Blockly.utils.aria.setState(htmlInput,
+          Blockly.utils.aria.State.INVALID, true);
     } else {
-      Blockly.utils.dom.removeClass(this.htmlInput_, 'blocklyInvalidInput');
-      Blockly.utils.aria.setState(this.htmlInput_, 'invalid', false);
+      Blockly.utils.dom.removeClass(htmlInput, 'blocklyInvalidInput');
+      Blockly.utils.aria.setState(htmlInput,
+          Blockly.utils.aria.State.INVALID, false);
     }
   }
 };
@@ -338,8 +361,12 @@ Blockly.FieldTextInput.prototype.bindInputEvents_ = function(htmlInput) {
  * @private
  */
 Blockly.FieldTextInput.prototype.unbindInputEvents_ = function() {
-  Blockly.unbindEvent_(this.onKeyDownWrapper_);
-  Blockly.unbindEvent_(this.onKeyInputWrapper_);
+  if (this.onKeyDownWrapper_) {
+    Blockly.unbindEvent_(this.onKeyDownWrapper_);
+  }
+  if (this.onKeyInputWrapper_) {
+    Blockly.unbindEvent_(this.onKeyInputWrapper_);
+  }
 };
 
 /**
@@ -409,7 +436,7 @@ Blockly.FieldTextInput.prototype.setEditorValue_ = function(newValue) {
  */
 Blockly.FieldTextInput.prototype.resizeEditor_ = function() {
   var div = Blockly.WidgetDiv.DIV;
-  var bBox = this.getScaledBBox_();
+  var bBox = this.getScaledBBox();
   div.style.width = bBox.right - bBox.left + 'px';
   div.style.height = bBox.bottom - bBox.top + 'px';
 
@@ -501,7 +528,7 @@ Blockly.FieldTextInput.prototype.getText_ = function() {
  * than the field's value. This should be coupled with an override of
  * `getValueFromEditorText_`.
  * @param {*} value The value stored in this field.
- * @returns {string} The text to show on the html input.
+ * @return {string} The text to show on the html input.
  * @protected
  */
 Blockly.FieldTextInput.prototype.getEditorText_ = function(value) {
@@ -515,7 +542,7 @@ Blockly.FieldTextInput.prototype.getEditorText_ = function(value) {
  * than the field's value. This should be coupled with an override of
  * `getEditorText_`.
  * @param {string} text Text received from the html input.
- * @returns {*} The value to store.
+ * @return {*} The value to store.
  * @protected
  */
 Blockly.FieldTextInput.prototype.getValueFromEditorText_ = function(text) {

@@ -38,18 +38,21 @@ Blockly.Theme = function(blockStyles, categoryStyles, opt_componentStyles) {
   /**
    * The block styles map.
    * @type {!Object.<string, Blockly.Theme.BlockStyle>}
+   * @private
    */
   this.blockStyles_ = blockStyles;
 
   /**
    * The category styles map.
    * @type {!Object.<string, Blockly.Theme.CategoryStyle>}
+   * @private
    */
   this.categoryStyles_ = categoryStyles;
 
   /**
    * The UI components styles map.
    * @type {!Object.<string, *>}
+   * @private
    */
   this.componentStyles_ = opt_componentStyles || Object.create(null);
 };

@@ -121,7 +121,7 @@ Blockly.Connection.prototype.connect_ = function(childConnection) {
     if (orphanBlock.isShadow()) {
       // Save the shadow block so that field values are preserved.
       shadowDom = Blockly.Xml.blockToDom(orphanBlock);
-      orphanBlock.dispose();
+      orphanBlock.dispose(false);
       orphanBlock = null;
     } else if (parentConnection.type == Blockly.INPUT_VALUE) {
       // Value connections.
@@ -212,7 +212,7 @@ Blockly.Connection.prototype.dispose = function() {
     var targetBlock = this.targetBlock();
     if (targetBlock.isShadow()) {
       // Destroy the attached shadow block & its children.
-      targetBlock.dispose();
+      targetBlock.dispose(false);
     } else {
       // Disconnect the attached normal block.
       targetBlock.unplug();
@@ -328,7 +328,7 @@ Blockly.Connection.prototype.canConnectToPrevious_ = function(candidate) {
   }
 
   // Don't let blocks try to connect to themselves or ones they nest.
-  if (Blockly.draggingConnections_.indexOf(candidate) != -1) {
+  if (Blockly.draggingConnections.indexOf(candidate) != -1) {
     return false;
   }
 
@@ -405,7 +405,7 @@ Blockly.Connection.prototype.isConnectionAllowed = function(candidate) {
   }
 
   // Don't let blocks try to connect to themselves or ones they nest.
-  if (Blockly.draggingConnections_.indexOf(candidate) != -1) {
+  if (Blockly.draggingConnections.indexOf(candidate) != -1) {
     return false;
   }
 

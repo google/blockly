@@ -30,6 +30,8 @@ goog.require('Blockly.blockRendering.PathObject');
 goog.require('Blockly.blockRendering.RenderInfo');
 goog.require('Blockly.CursorSvg');
 
+goog.requireType('Blockly.blockRendering.Debug');
+
 
 /**
  * The base class for a block renderer.
@@ -89,6 +91,7 @@ Blockly.blockRendering.Renderer.prototype.makeDrawer_ = function(block, info) {
 /**
  * Create a new instance of the renderer's debugger.
  * @return {!Blockly.blockRendering.Debug} The renderer debugger.
+ * @suppress {strictModuleDepCheck} Debug renderer only included in playground.
  * @protected
  */
 Blockly.blockRendering.Renderer.prototype.makeDebugger_ = function() {

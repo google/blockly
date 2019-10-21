@@ -71,7 +71,7 @@ BlockFactory.updateBlocksFlag = false;
 // TODO: Replace global state with parameter passed to functions.
 BlockFactory.updateBlocksFlagDelayed = false;
 
-/*
+/**
  * The starting XML for the Block Factory main workspace. Contains the
  * unmovable, undeletable factory_base block.
  */

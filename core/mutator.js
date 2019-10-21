@@ -141,7 +141,7 @@ Blockly.Mutator.prototype.createEditor_ = function() {
   } else {
     var quarkXml = null;
   }
-  var workspaceOptions = {
+  var workspaceOptions = /** @type {!Blockly.Options} */ ({
     // If you want to enable disabling, also remove the
     // event filter from workspaceChanged_ .
     disable: false,
@@ -156,7 +156,7 @@ Blockly.Mutator.prototype.createEditor_ = function() {
     getMetrics: this.getFlyoutMetrics_.bind(this),
     setMetrics: null,
     renderer: this.block_.workspace.options.renderer
-  };
+  });
   this.workspace_ = new Blockly.WorkspaceSvg(workspaceOptions);
   this.workspace_.isMutator = true;
   this.workspace_.addChangeListener(Blockly.Events.disableOrphans);
@@ -165,7 +165,7 @@ Blockly.Mutator.prototype.createEditor_ = function() {
   // a top level svg. Instead of handling scale themselves, mutators
   // inherit scale from the parent workspace.
   // To fix this, scale needs to be applied at a different level in the dom.
-  var flyoutSvg = this.workspace_.addFlyout_('g');
+  var flyoutSvg = this.workspace_.addFlyout('g');
   var background = this.workspace_.createDom('blocklyMutatorBackground');
 
   // Insert the flyout after the <rect> but before the block canvas so that
@@ -215,8 +215,9 @@ Blockly.Mutator.prototype.resizeBubble_ = function() {
     width = workspaceSize.width + workspaceSize.x;
   }
   var height = workspaceSize.height + doubleBorderWidth * 3;
-  if (this.workspace_.flyout_) {
-    var flyoutMetrics = this.workspace_.flyout_.getMetrics_();
+  var flyout = this.workspace_.getFlyout();
+  if (flyout) {
+    var flyoutMetrics = flyout.getMetrics_();
     height = Math.max(height, flyoutMetrics.contentHeight + 20);
   }
   width += doubleBorderWidth * 3;
@@ -260,9 +261,10 @@ Blockly.Mutator.prototype.setVisible = function(visible) {
     // Expose this mutator's block's ID on its top-level SVG group.
     this.bubble_.setSvgId(this.block_.id);
     var tree = this.workspace_.options.languageTree;
+    var flyout = this.workspace_.getFlyout();
     if (tree) {
-      this.workspace_.flyout_.init(this.workspace_);
-      this.workspace_.flyout_.show(tree.childNodes);
+      flyout.init(this.workspace_);
+      flyout.show(tree.childNodes);
     }
 
     this.rootBlock_ = this.block_.decompose(this.workspace_);
@@ -273,9 +275,9 @@ Blockly.Mutator.prototype.setVisible = function(visible) {
     // The root block should not be dragable or deletable.
     this.rootBlock_.setMovable(false);
     this.rootBlock_.setDeletable(false);
-    if (this.workspace_.flyout_) {
-      var margin = this.workspace_.flyout_.CORNER_RADIUS * 2;
-      var x = this.workspace_.getFlyout().getWidth() + margin;
+    if (flyout) {
+      var margin = flyout.CORNER_RADIUS * 2;
+      var x = flyout.getWidth() + margin;
     } else {
       var margin = 16;
       var x = margin;
@@ -427,7 +429,7 @@ Blockly.Mutator.prototype.updateBlockStyle = function() {
       block.setStyle(block.getStyleName());
     }
 
-    var flyoutBlocks = ws.flyout_.workspace_.getAllBlocks(false);
+    var flyoutBlocks = ws.getFlyout().workspace_.getAllBlocks(false);
     for (var i = 0; i < flyoutBlocks.length; i++) {
       var block = flyoutBlocks[i];
       block.setStyle(block.getStyleName());

@@ -67,7 +67,7 @@ Blockly.utils.style.getSize = function(element) {
 /**
  * Gets the height and width of an element when the display is not none.
  * @param {!Element} element Element to get size of.
- * @return {!goog.math.Size} Object with width/height properties.
+ * @return {!Blockly.utils.Size} Object with width/height properties.
  * @private
  */
 Blockly.utils.style.getSizeWithDisplay_ = function(element) {

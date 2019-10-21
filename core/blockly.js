@@ -81,9 +81,9 @@ Blockly.keyboardAccessibilityMode = false;
 /**
  * All of the connections on blocks that are currently being dragged.
  * @type {!Array.<!Blockly.Connection>}
- * @private
+ * @package
  */
-Blockly.draggingConnections_ = [];
+Blockly.draggingConnections = [];
 
 /**
  * Contents of the local clipboard.
@@ -114,8 +114,15 @@ Blockly.clipboardTypeCounts_ = null;
 Blockly.cache3dSupported_ = null;
 
 /**
+ * Blockly opaque event data used to unbind events when using
+ * `Blockly.bindEvent_` and `Blockly.bindEventWithChecks_`.
+ * @typedef {!Array.<!Array>}
+ */
+Blockly.EventData;
+
+/**
  * Returns the dimensions of the specified SVG image.
- * @param {!Element} svg SVG image.
+ * @param {!SVGElement} svg SVG image.
  * @return {!Object} Contains width and height properties.
  */
 Blockly.svgSize = function(svg) {
@@ -170,11 +177,11 @@ Blockly.svgResize = function(workspace) {
  * Handle a key-down on SVG drawing surface. Does nothing if the main workspace
  * is not visible.
  * @param {!Event} e Key down event.
- * @private
+ * @package
  */
 // TODO (https://github.com/google/blockly/issues/1998) handle cases where there
 // are multiple workspaces and non-main workspaces are able to accept input.
-Blockly.onKeyDown_ = function(e) {
+Blockly.onKeyDown = function(e) {
   var mainWorkspace = Blockly.mainWorkspace;
 
   if (Blockly.utils.isTargetInput(e) ||
@@ -262,7 +269,8 @@ Blockly.onKeyDown_ = function(e) {
   if (deleteBlock && !Blockly.selected.workspace.isFlyout) {
     Blockly.Events.setGroup(true);
     Blockly.hideChaff();
-    Blockly.selected.dispose(/* heal */ true, true);
+    var selected = /** @type {!Blockly.BlockSvg} */ (Blockly.selected);
+    selected.dispose(/* heal */ true, true);
     Blockly.Events.setGroup(false);
   }
 };
@@ -336,13 +344,13 @@ Blockly.hideChaff = function(opt_allowToolbox) {
     // For now the trashcan flyout always autocloses because it overlays the
     // trashcan UI (no trashcan to click to close it).
     if (workspace.trashcan &&
-      workspace.trashcan.flyout_) {
-      workspace.trashcan.flyout_.hide();
+      workspace.trashcan.flyout) {
+      workspace.trashcan.flyout.hide();
     }
     var toolbox = workspace.getToolbox();
     if (toolbox &&
-        toolbox.flyout_ &&
-        toolbox.flyout_.autoClose) {
+        toolbox.getFlyout() &&
+        toolbox.getFlyout().autoClose) {
       toolbox.clearSelection();
     }
   }
@@ -455,7 +463,7 @@ Blockly.defineBlocksWithJsonArray = function(jsonArray) {
  *     should prevent the default handler.  False by default.  If
  *     opt_noPreventDefault is provided, opt_noCaptureIdentifier must also be
  *     provided.
- * @return {!Array.<!Array>} Opaque data that can be passed to unbindEvent_.
+ * @return {!Blockly.EventData} Opaque data that can be passed to unbindEvent_.
  */
 Blockly.bindEventWithChecks_ = function(node, name, thisObject, func,
     opt_noCaptureIdentifier, opt_noPreventDefault) {
@@ -521,7 +529,7 @@ Blockly.bindEventWithChecks_ = function(node, name, thisObject, func,
  * @param {string} name Event name to listen to (e.g. 'mousedown').
  * @param {Object} thisObject The value of 'this' in the function.
  * @param {!Function} func Function to call when event is triggered.
- * @return {!Array.<!Array>} Opaque data that can be passed to unbindEvent_.
+ * @return {!Blockly.EventData} Opaque data that can be passed to unbindEvent_.
  */
 Blockly.bindEvent_ = function(node, name, thisObject, func) {
   var wrapFunc = function(e) {

@@ -46,7 +46,7 @@ Blockly.WorkspaceDragger = function(workspace) {
    * The scroll position of the workspace at the beginning of the drag.
    * Coordinate system: pixel coordinates.
    * @type {!Blockly.utils.Coordinate}
-   * @private
+   * @protected
    */
   this.startScrollXY_ = new Blockly.utils.Coordinate(
       workspace.scrollX, workspace.scrollY);

@@ -36,7 +36,7 @@ goog.require('Blockly.utils.object');
  * the block.
  * @param {!Blockly.blockRendering.ConstantProvider} constants The rendering
  *   constants provider.
- * @param {Blockly.RenderedConnection} connectionModel The connection object on
+ * @param {!Blockly.RenderedConnection} connectionModel The connection object on
  *     the block that this represents.
  * @package
  * @constructor

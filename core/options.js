@@ -154,14 +154,15 @@ Blockly.Options.prototype.parentWorkspace = null;
 
 /**
  * If set, sets the translation of the workspace to match the scrollbars.
+ * @return {void}
  */
-Blockly.Options.prototype.setMetrics = null;
+Blockly.Options.prototype.setMetrics;
 
 /**
  * Return an object with the metrics required to size the workspace.
- * @return {Object} Contains size and position metrics, or null.
+ * @return {!Object} Contains size and position metrics.
  */
-Blockly.Options.prototype.getMetrics = null;
+Blockly.Options.prototype.getMetrics;
 
 /**
  * Parse the user-specified move options, using reasonable defaults where

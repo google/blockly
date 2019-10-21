@@ -37,7 +37,7 @@ goog.require('Blockly.utils.object');
  *     information for.
  * @package
  * @constructor
- * @extends {Blockly.blockRendering.InputConnection}
+ * @extends {Blockly.blockRendering.InlineInput}
  */
 Blockly.geras.InlineInput = function(constants, input) {
   Blockly.geras.InlineInput.superClass_.constructor.call(
@@ -62,7 +62,7 @@ Blockly.utils.object.inherits(Blockly.geras.InlineInput,
  *     information for.
  * @package
  * @constructor
- * @extends {Blockly.blockRendering.InputConnection}
+ * @extends {Blockly.blockRendering.StatementInput}
  */
 Blockly.geras.StatementInput = function(constants, input) {
   Blockly.geras.StatementInput.superClass_.constructor.call(

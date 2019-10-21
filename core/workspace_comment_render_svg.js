@@ -325,7 +325,7 @@ Blockly.WorkspaceCommentSvg.prototype.unbindDragEvents_ = function() {
   }
 };
 
-/*
+/**
  * Handle a mouse-up event while dragging a comment's border or resize handle.
  * @param {!Event} e Mouse up event.
  * @private

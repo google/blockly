@@ -490,7 +490,7 @@ FactoryUtils.getFieldsJs_ = function(block) {
           var width = Number(block.getFieldValue('WIDTH'));
           var height = Number(block.getFieldValue('HEIGHT'));
           var alt = JSON.stringify(block.getFieldValue('ALT'));
-          var flipRtl = Json.stringify(block.getFieldValue('FLIP_RTL'));
+          var flipRtl = JSON.stringify(block.getFieldValue('FLIP_RTL'));
           fields.push('new Blockly.FieldImage(' +
               src + ', ' + width + ', ' + height +
               ', { alt: ' + alt + ', flipRtl: ' + flipRtl + ' })');
@@ -988,7 +988,7 @@ FactoryUtils.cleanXml = function(xml) {
   return newXml;
 };
 
-/*
+/**
  * Checks if a block has a variable field. Blocks with variable fields cannot
  * be shadow blocks.
  * @param {Blockly.Block} block The block to check if a variable field exists.

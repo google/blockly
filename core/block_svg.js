@@ -97,6 +97,16 @@ Blockly.BlockSvg = function(workspace, prototypeName, opt_id) {
   /** @type {boolean} */
   this.rendered = false;
 
+  /** @type {!Blockly.WorkspaceSvg} */
+  this.workspace = workspace;
+
+  /** @type {Blockly.RenderedConnection} */
+  this.outputConnection = null;
+  /** @type {Blockly.RenderedConnection} */
+  this.nextConnection = null;
+  /** @type {Blockly.RenderedConnection} */
+  this.previousConnection = null;
+
   /**
    * Whether to move the block to the drag surface when it is dragged.
    * True if it should move, false if it should be translated directly.
@@ -104,7 +114,7 @@ Blockly.BlockSvg = function(workspace, prototypeName, opt_id) {
    * @private
    */
   this.useDragSurface_ =
-      Blockly.utils.is3dSupported() && !!workspace.blockDragSurface_;
+      Blockly.utils.is3dSupported() && !!workspace.getBlockDragSurface();
 
   Blockly.Tooltip.bindMouseEvents(this.svgPath_);
   Blockly.BlockSvg.superClass_.constructor.call(this,
@@ -187,34 +197,33 @@ Blockly.BlockSvg.COLLAPSED_WARNING_ID = 'TEMP_COLLAPSED_WARNING_';
 // Leftover UI constants from block_render_svg.js.
 /**
  * Vertical space between elements.
- * TODO (#3142): Remove.
  * @const
  * @package
  */
+// TODO (#3142): Remove.
 Blockly.BlockSvg.SEP_SPACE_Y = 10;
 
 /**
  * Minimum height of a block.
- * TODO (#3142): Remove.
  * @const
  * @package
  */
+// TODO (#3142): Remove.
 Blockly.BlockSvg.MIN_BLOCK_Y = 25;
 
 /**
  * Width of horizontal puzzle tab.
- * TODO (#3142): Remove.
- * @const
  * @package
  */
+// TODO (#3142): Remove.
 Blockly.BlockSvg.TAB_WIDTH = 8;
 
 /**
  * Do blocks with no previous or output connections have a 'hat' on top?
- * TODO (#3142): Remove.
  * @const
  * @package
  */
+// TODO (#3142): Remove.
 Blockly.BlockSvg.START_HAT = false;
 
 /**
@@ -238,6 +247,13 @@ Blockly.BlockSvg.prototype.decompose;
 Blockly.BlockSvg.prototype.compose;
 
 /**
+ * An property used internally to reference the block's rendering debugger.
+ * @type {?Blockly.blockRendering.Debug}
+ * @package
+ */
+Blockly.BlockSvg.prototype.renderingDebugger;
+
+/**
  * Create and initialize the SVG representation of the block.
  * May be called more than once.
  */
@@ -254,14 +270,15 @@ Blockly.BlockSvg.prototype.initSvg = function() {
   }
   this.updateColour();
   this.updateMovable();
-  if (!this.workspace.options.readOnly && !this.eventsInit_) {
+  var svg = this.getSvgRoot();
+  if (!this.workspace.options.readOnly && !this.eventsInit_ && svg) {
     Blockly.bindEventWithChecks_(
-        this.getSvgRoot(), 'mousedown', this, this.onMouseDown_);
+        svg, 'mousedown', this, this.onMouseDown_);
   }
   this.eventsInit_ = true;
 
-  if (!this.getSvgRoot().parentNode) {
-    this.workspace.getCanvas().appendChild(this.getSvgRoot());
+  if (!svg.parentNode) {
+    this.workspace.getCanvas().appendChild(svg);
   }
 };
 
@@ -355,7 +372,7 @@ Blockly.BlockSvg.prototype.getIcons = function() {
 
 /**
  * Set parent of this block to be a new block or null.
- * @param {Blockly.BlockSvg} newParent New parent block.
+ * @param {Blockly.Block} newParent New parent block.
  * @override
  */
 Blockly.BlockSvg.prototype.setParent = function(newParent) {
@@ -405,7 +422,7 @@ Blockly.BlockSvg.prototype.getRelativeToSurfaceXY = function() {
   var y = 0;
 
   var dragSurfaceGroup = this.useDragSurface_ ?
-      this.workspace.blockDragSurface_.getGroup() : null;
+      this.workspace.getBlockDragSurface().getGroup() : null;
 
   var element = this.getSvgRoot();
   if (element) {
@@ -417,9 +434,9 @@ Blockly.BlockSvg.prototype.getRelativeToSurfaceXY = function() {
       // If this element is the current element on the drag surface, include
       // the translation of the drag surface itself.
       if (this.useDragSurface_ &&
-          this.workspace.blockDragSurface_.getCurrentBlock() == element) {
+          this.workspace.getBlockDragSurface().getCurrentBlock() == element) {
         var surfaceTranslation =
-            this.workspace.blockDragSurface_.getSurfaceTranslation();
+            this.workspace.getBlockDragSurface().getSurfaceTranslation();
         x += surfaceTranslation.x;
         y += surfaceTranslation.y;
       }
@@ -480,9 +497,12 @@ Blockly.BlockSvg.prototype.moveToDragSurface_ = function() {
   // This is in workspace coordinates.
   var xy = this.getRelativeToSurfaceXY();
   this.clearTransformAttributes_();
-  this.workspace.blockDragSurface_.translateSurface(xy.x, xy.y);
+  this.workspace.getBlockDragSurface().translateSurface(xy.x, xy.y);
   // Execute the move on the top-level SVG component
-  this.workspace.blockDragSurface_.setBlocksAndShow(this.getSvgRoot());
+  var svg = this.getSvgRoot();
+  if (svg) {
+    this.workspace.getBlockDragSurface().setBlocksAndShow(svg);
+  }
 };
 
 /**
@@ -508,7 +528,7 @@ Blockly.BlockSvg.prototype.moveOffDragSurface_ = function(newXY) {
   }
   // Translate to current position, turning off 3d.
   this.translate(newXY.x, newXY.y);
-  this.workspace.blockDragSurface_.clearAndHide(this.workspace.getCanvas());
+  this.workspace.getBlockDragSurface().clearAndHide(this.workspace.getCanvas());
 };
 
 /**
@@ -521,7 +541,7 @@ Blockly.BlockSvg.prototype.moveOffDragSurface_ = function(newXY) {
  */
 Blockly.BlockSvg.prototype.moveDuringDrag = function(newLoc) {
   if (this.useDragSurface_) {
-    this.workspace.blockDragSurface_.translateSurface(newLoc.x, newLoc.y);
+    this.workspace.getBlockDragSurface().translateSurface(newLoc.x, newLoc.y);
   } else {
     this.svgGroup_.translate_ = 'translate(' + newLoc.x + ',' + newLoc.y + ')';
     this.svgGroup_.setAttribute('transform',
@@ -577,7 +597,7 @@ Blockly.BlockSvg.prototype.snapToGrid = function() {
  * @return {!Blockly.utils.Rect} Object with coordinates of the bounding box.
  */
 Blockly.BlockSvg.prototype.getBoundingRectangle = function() {
-  var blockXY = this.getRelativeToSurfaceXY(this);
+  var blockXY = this.getRelativeToSurfaceXY();
   var tab = this.outputConnection ? Blockly.BlockSvg.TAB_WIDTH : 0;
   var blockBounds = this.getHeightWidth();
   var top = blockXY.y;
@@ -680,7 +700,7 @@ Blockly.BlockSvg.prototype.setCollapsed = function(collapsed) {
  */
 Blockly.BlockSvg.prototype.tab = function(start, forward) {
   var list = this.createTabList_();
-  var i = list.indexOf(start);
+  var i = start != null ? list.indexOf(start) : -1;
   if (i == -1) {
     // No start location, start at the beginning or end.
     i = forward ? -1 : list.length;
@@ -693,7 +713,7 @@ Blockly.BlockSvg.prototype.tab = function(start, forward) {
       parent.tab(this, forward);
     }
   } else if (target instanceof Blockly.Field) {
-    target.showEditor_();
+    target.showEditor();
   } else {
     target.tab(null, forward);
   }
@@ -701,7 +721,7 @@ Blockly.BlockSvg.prototype.tab = function(start, forward) {
 
 /**
  * Create an ordered list of all text fields and connected inputs.
- * @return {!Array.<!Blockly.FieldTextInput|!Blockly.Input>} The ordered list.
+ * @return {!Array.<!Blockly.Field|!Blockly.Block>} The ordered list.
  * @private
  */
 Blockly.BlockSvg.prototype.createTabList_ = function() {
@@ -899,12 +919,12 @@ Blockly.BlockSvg.prototype.setDragging = function(adding) {
     var group = this.getSvgRoot();
     group.translate_ = '';
     group.skew_ = '';
-    Blockly.draggingConnections_ =
-        Blockly.draggingConnections_.concat(this.getConnections_(true));
+    Blockly.draggingConnections =
+        Blockly.draggingConnections.concat(this.getConnections_(true));
     Blockly.utils.dom.addClass(
         /** @type {!Element} */ (this.svgGroup_), 'blocklyDragging');
   } else {
-    Blockly.draggingConnections_ = [];
+    Blockly.draggingConnections = [];
     Blockly.utils.dom.removeClass(
         /** @type {!Element} */ (this.svgGroup_), 'blocklyDragging');
   }
@@ -1033,7 +1053,7 @@ Blockly.BlockSvg.prototype.dispose = function(healStack, animate) {
   for (var i = 0; i < icons.length; i++) {
     icons[i].dispose();
   }
-  Blockly.BlockSvg.superClass_.dispose.call(this, healStack);
+  Blockly.BlockSvg.superClass_.dispose.call(this, !!healStack);
 
   Blockly.utils.dom.removeNode(this.svgGroup_);
   blockWorkspace.resizeContents();
@@ -1076,6 +1096,7 @@ Blockly.BlockSvg.prototype.updateColour = function() {
 /**
  * Sets the colour of the border.
  * Removes the light and dark paths if a border colour is defined.
+ * @private
  */
 Blockly.BlockSvg.prototype.setBorderColour_ = function() {
   var borderColours = this.getColourBorder();
@@ -1097,9 +1118,10 @@ Blockly.BlockSvg.prototype.setBorderColour_ = function() {
 /**
  * Sets the colour of shadow blocks.
  * @return {?string} The background colour of the block.
+ * @private
  */
 Blockly.BlockSvg.prototype.setShadowColour_ = function() {
-  var shadowColour = this.getColourShadow();
+  var shadowColour = this.getColourShadow() || '';
 
   this.svgPathLight_.style.display = 'none';
   this.svgPathDark_.setAttribute('fill', shadowColour);
@@ -1375,7 +1397,12 @@ Blockly.BlockSvg.prototype.bringToFront = function() {
   var block = this;
   do {
     var root = block.getSvgRoot();
-    root.parentNode.appendChild(root);
+    var parent = root.parentNode;
+    var childNodes = parent.childNodes;
+    // Avoid moving the block if it's already at the bottom.
+    if (childNodes[childNodes.length - 1] !== root) {
+      parent.appendChild(root);
+    }
     block = block.getParent();
   } while (block);
 };
@@ -1506,7 +1533,7 @@ Blockly.BlockSvg.prototype.appendInput_ = function(type, name) {
  */
 Blockly.BlockSvg.prototype.waitToTrackConnections = function() {
   this.callTrackConnections_ = false;
-  var children = this.getChildren();
+  var children = this.getChildren(false);
   for (var i = 0, child; child = children[i]; i++) {
     child.waitToTrackConnections();
   }
@@ -1802,7 +1829,9 @@ Blockly.BlockSvg.prototype.getHeightWidth = function() {
   var nextBlock = this.getNextBlock();
   if (nextBlock) {
     var nextHeightWidth = nextBlock.getHeightWidth();
-    height += nextHeightWidth.height - 4;  // Height of tab.
+    var workspace = /** @type {!Blockly.WorkspaceSvg} */ (this.workspace);
+    var tabHeight = workspace.getRenderer().getConstants().NOTCH_HEIGHT;
+    height += nextHeightWidth.height - tabHeight;
     width = Math.max(width, nextHeightWidth.width);
   }
   return {height: height, width: width};

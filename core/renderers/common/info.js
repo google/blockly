@@ -253,9 +253,10 @@ Blockly.blockRendering.RenderInfo.prototype.createRows_ = function() {
  * @package
  */
 Blockly.blockRendering.RenderInfo.prototype.populateTopRow_ = function() {
-  var hasHat = this.block_.hat ?
-      this.block_.hat === 'cap' : Blockly.BlockSvg.START_HAT;
   var hasPrevious = !!this.block_.previousConnection;
+  var hasHat = (this.block_.hat ?
+    this.block_.hat === 'cap' : Blockly.BlockSvg.START_HAT) &&
+    !this.outputConnection && !hasPrevious;
   var leftSquareCorner = this.topRow.hasLeftSquareCorner(this.block_);
 
   if (leftSquareCorner) {
@@ -459,6 +460,7 @@ Blockly.blockRendering.RenderInfo.prototype.getInRowSpacing_ = function(prev, ne
  * should be placed.
  * @protected
  */
+// TODO: More cleanup.
 Blockly.blockRendering.RenderInfo.prototype.computeBounds_ = function() {
   var widestStatementRowFields = 0;
   var blockWidth = 0;
@@ -529,6 +531,9 @@ Blockly.blockRendering.RenderInfo.prototype.addAlignmentPadding_ = function(row,
   if (lastSpacer) {
     lastSpacer.width += missingSpace;
     row.width += missingSpace;
+    if (row.hasExternalInput || row.hasStatement) {
+      row.widthWithConnectedBlocks += missingSpace;
+    }
   }
 };
 
@@ -652,7 +657,7 @@ Blockly.blockRendering.RenderInfo.prototype.getElemCenterline_ = function(row,
  * Record final position information on elements on the given row, for use in
  * drawing.  At minimum this records xPos and centerline on each element.
  * @param {!Blockly.blockRendering.Row} row The row containing the elements.
- * @private
+ * @protected
  */
 Blockly.blockRendering.RenderInfo.prototype.recordElemPositions_ = function(
     row) {

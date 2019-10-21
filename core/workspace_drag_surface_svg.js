@@ -121,7 +121,7 @@ Blockly.WorkspaceDragSurfaceSvg.prototype.translateSurface = function(x, y) {
  * @package
  */
 Blockly.WorkspaceDragSurfaceSvg.prototype.getSurfaceTranslation = function() {
-  return Blockly.utils.getRelativeXY(this.SVG_);
+  return Blockly.utils.getRelativeXY(/** @type {!SVGElement} */ (this.SVG_));
 };
 
 /**
@@ -136,8 +136,8 @@ Blockly.WorkspaceDragSurfaceSvg.prototype.clearAndHide = function(newSurface) {
     throw Error('Couldn\'t clear and hide the drag surface: missing ' +
         'new surface.');
   }
-  var blockCanvas = this.SVG_.childNodes[0];
-  var bubbleCanvas = this.SVG_.childNodes[1];
+  var blockCanvas = /** @type {!Element} */ (this.SVG_.childNodes[0]);
+  var bubbleCanvas = /** @type {!Element} */ (this.SVG_.childNodes[1]);
   if (!blockCanvas || !bubbleCanvas ||
       !Blockly.utils.dom.hasClass(blockCanvas, 'blocklyBlockCanvas') ||
       !Blockly.utils.dom.hasClass(bubbleCanvas, 'blocklyBubbleCanvas')) {

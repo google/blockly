@@ -31,13 +31,13 @@ goog.require('Blockly.Xml');
 
 /**
  * Class for a trash can.
- * @param {!Blockly.Workspace} workspace The workspace to sit in.
+ * @param {!Blockly.WorkspaceSvg} workspace The workspace to sit in.
  * @constructor
  */
 Blockly.Trashcan = function(workspace) {
   /**
    * The workspace the trashcan sits in.
-   * @type {!Blockly.Workspace}
+   * @type {!Blockly.WorkspaceSvg}
    * @private
    */
   this.workspace_ = workspace;
@@ -49,6 +49,12 @@ Blockly.Trashcan = function(workspace) {
    */
   this.contents_ = [];
 
+  /**
+   * The trashcan flyout.
+   * @type {Blockly.Flyout}
+   * @package
+   */
+  this.flyout = null;
 
   if (this.workspace_.options.maxTrashcanContents <= 0) {
     return;
@@ -70,7 +76,7 @@ Blockly.Trashcan = function(workspace) {
     if (!Blockly.HorizontalFlyout) {
       throw Error('Missing require for Blockly.HorizontalFlyout');
     }
-    this.flyout_ = new Blockly.HorizontalFlyout(flyoutWorkspaceOptions);
+    this.flyout = new Blockly.HorizontalFlyout(flyoutWorkspaceOptions);
   } else {
     flyoutWorkspaceOptions.toolboxPosition =
       this.workspace_.toolboxPosition == Blockly.TOOLBOX_AT_RIGHT ?
@@ -78,7 +84,7 @@ Blockly.Trashcan = function(workspace) {
     if (!Blockly.VerticalFlyout) {
       throw Error('Missing require for Blockly.VerticalFlyout');
     }
-    this.flyout_ = new Blockly.VerticalFlyout(flyoutWorkspaceOptions);
+    this.flyout = new Blockly.VerticalFlyout(flyoutWorkspaceOptions);
   }
   this.workspace_.addChangeListener(this.onDelete_.bind(this));
 };
@@ -284,14 +290,9 @@ Blockly.Trashcan.prototype.createDom = function() {
  */
 Blockly.Trashcan.prototype.init = function(verticalSpacing) {
   if (this.workspace_.options.maxTrashcanContents > 0) {
-    Blockly.utils.dom.insertAfter(this.flyout_.createDom('svg'),
+    Blockly.utils.dom.insertAfter(this.flyout.createDom('svg'),
         this.workspace_.getParentSvg());
-    this.flyout_.init(this.workspace_);
-    this.flyout_.isBlockCreatable_ = function() {
-      // All blocks, including disabled ones, can be dragged from the
-      // trashcan flyout.
-      return true;
-    };
+    this.flyout.init(this.workspace_);
   }
 
   this.verticalSpacing_ = this.MARGIN_BOTTOM_ + verticalSpacing;
@@ -431,7 +432,7 @@ Blockly.Trashcan.prototype.click = function() {
   for (var i = 0, text; text = this.contents_[i]; i++) {
     xml[i] = Blockly.Xml.textToDom(text);
   }
-  this.flyout_.show(xml);
+  this.flyout.show(xml);
 };
 
 /**
@@ -501,6 +502,12 @@ Blockly.Trashcan.prototype.cleanBlockXML_ = function(xml) {
       node.removeAttribute('x');
       node.removeAttribute('y');
       node.removeAttribute('id');
+      node.removeAttribute('disabled');
+      if (node.nodeName == 'comment') {  // Future proof just in case.
+        node.removeAttribute('h');
+        node.removeAttribute('w');
+        node.removeAttribute('pinned');
+      }
     }
 
     // Try to go down the tree

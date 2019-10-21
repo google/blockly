@@ -431,10 +431,12 @@ Blockly.Generator.prototype.init = function(_workspace) {
  * value blocks.
  * @param {!Blockly.Block} _block The current block.
  * @param {string} code The code created for this block.
+ * @param {boolean=} _opt_thisOnly True to generate code for only this
+ *     statement.
  * @return {string} Code with comments and subsequent blocks added.
- * @private
+ * @protected
  */
-Blockly.Generator.prototype.scrub_ = function(_block, code) {
+Blockly.Generator.prototype.scrub_ = function(_block, code, _opt_thisOnly) {
   // Optionally override
   return code;
 };

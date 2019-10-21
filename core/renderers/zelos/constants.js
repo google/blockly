@@ -96,9 +96,9 @@ Blockly.zelos.ConstantProvider.prototype.makeHexagonal = function() {
     var width = height / 2;
     var forward = up ? -1 : 1;
     var direction = right ? -1 : 1;
-
-    return Blockly.utils.svgPaths.lineTo(-1 * direction * width, forward * height / 2) +
-        Blockly.utils.svgPaths.lineTo(direction * width, forward * height / 2);
+    var dy = forward * height / 2;
+    return Blockly.utils.svgPaths.lineTo(-direction * width, dy) +
+        Blockly.utils.svgPaths.lineTo(direction * width, dy);
   }
 
   return {

@@ -280,7 +280,9 @@ Blockly.utils.dom.getTextWidth = function(textElement) {
 };
 
 /**
- * Gets the width of a text element, caching it in the process.
+ * Gets the width of a text element using a faster method than `getTextWidth`.
+ * This method requires that we know the text element's font family and size in
+ * advance. Similar to `getTextWidth`, we cache the width we compute.
  * @param {!Element} textElement An SVG 'text' element.
  * @param {string} fontSize The font size to use.
  * @param {string} fontFamily The font family to use.

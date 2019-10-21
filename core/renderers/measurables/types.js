@@ -28,7 +28,6 @@ goog.provide('Blockly.blockRendering.Types');
 /**
  * Types of rendering elements.
  * @enum {number}
- * @package
  */
 Blockly.blockRendering.Types = {
   NONE: 0, // None

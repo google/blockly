@@ -250,6 +250,28 @@ goog.require = function(namespace) {
   return null;
 };
 
+/**
+ * Requires a symbol for its type information. This is an indication to the
+ * compiler that the symbol may appear in type annotations, yet it is not
+ * referenced at runtime.
+ *
+ * When called within a goog.module or ES6 module file, the return value may be
+ * assigned to or destructured into a variable, but it may not be otherwise used
+ * in code outside of a type annotation.
+ *
+ * Note that all calls to goog.requireType will be stripped by the compiler.
+ *
+ * @param {string} namespace Namespace (as was given in goog.provide,
+ *     goog.module, or goog.declareModuleId) in the form
+ *     "goog.package.part".
+ * @return {?}
+ */
+goog.requireType = function(namespace) {
+  // Return an empty object so that single-level destructuring of the return
+  // value doesn't crash at runtime when using the debug loader. Multi-level
+  // destructuring isn't supported.
+  return {};
+};
 
 /**
  * Path for included scripts.

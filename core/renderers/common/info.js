@@ -654,7 +654,7 @@ Blockly.blockRendering.RenderInfo.prototype.getElemCenterline_ = function(row,
  * Record final position information on elements on the given row, for use in
  * drawing.  At minimum this records xPos and centerline on each element.
  * @param {!Blockly.blockRendering.Row} row The row containing the elements.
- * @private
+ * @protected
  */
 Blockly.blockRendering.RenderInfo.prototype.recordElemPositions_ = function(
     row) {

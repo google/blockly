@@ -810,15 +810,6 @@ function getRCBranchName() {
   return 'rc_' + yyyy + '_' + mm;
 };
 
-// Helper function: get a minor version number for the day.  Format: yyyymmdd.
-function getNewMinorVersionNumber() {
-  var date = new Date();
-  var mm = date.getMonth() + 1; // Month, 0-11
-  var dd = date.getDate(); // Day of the month, 1-31
-  var yyyy = date.getFullYear();
-  return yyyy + '' + mm + '' + dd;
-};
-
 // Recompile and push to origin.
 gulp.task('recompile', gulp.series([
     'git-sync-develop',

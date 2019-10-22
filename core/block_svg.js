@@ -1681,9 +1681,9 @@ Blockly.BlockSvg.prototype.scheduleSnapAndBump = function() {
  * The block to position is usually either the first block in a dragged stack or
  * an insertion marker.
  * @param {!Blockly.RenderedConnection} sourceConnection The connection on the
- *    moving block's stack.
+ *     moving block's stack.
  * @param {!Blockly.RenderedConnection} targetConnection The connection that
- *    should stay stationary as this block is positioned.
+ *     should stay stationary as this block is positioned.
  * @package
  */
 Blockly.BlockSvg.prototype.positionNearConnection = function(sourceConnection,

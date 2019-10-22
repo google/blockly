@@ -51,7 +51,7 @@ Blockly.Python['procedures_defreturn'] = function(block) {
   globals = globals.length ?
       Blockly.Python.INDENT + 'global ' + globals.join(', ') + '\n' : '';
   var funcName = Blockly.Python.variableDB_.getName(
-      block.getFieldValue('NAME'), Blockly.Procedures.NAME_TYPE);
+      block.getFieldValue('NAME'), Blockly.PROCEDURE_CATEGORY_NAME);
   var xfix1 = '';
   if (Blockly.Python.STATEMENT_PREFIX) {
     xfix1 += Blockly.Python.injectId(Blockly.Python.STATEMENT_PREFIX, block);
@@ -102,7 +102,7 @@ Blockly.Python['procedures_defnoreturn'] =
 Blockly.Python['procedures_callreturn'] = function(block) {
   // Call a procedure with a return value.
   var funcName = Blockly.Python.variableDB_.getName(block.getFieldValue('NAME'),
-      Blockly.Procedures.NAME_TYPE);
+      Blockly.PROCEDURE_CATEGORY_NAME);
   var args = [];
   for (var i = 0; i < block.arguments_.length; i++) {
     args[i] = Blockly.Python.valueToCode(block, 'ARG' + i,

@@ -53,7 +53,7 @@ Blockly.utils.object.mixin = function(target, source) {
  * @param {!Object} obj Object containing values.
  * @return {!Array} Array of values.
  */
-Blockly.utils.object.valuesShim = function(obj) {
+Blockly.utils.object.values = function(obj) {
   if (Object.values) {
     /* eslint-disable es5/no-es6-methods */
     return Object.values(obj);

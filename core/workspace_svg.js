@@ -62,7 +62,7 @@ Blockly.WorkspaceSvg = function(options,
   /** @type {function():!Object} */
   this.getMetrics =
       options.getMetrics || Blockly.WorkspaceSvg.getTopLevelWorkspaceMetrics_;
-  /** @type {function(!Object)} */
+  /** @type {function(!Object):void} */
   this.setMetrics =
       options.setMetrics || Blockly.WorkspaceSvg.setTopLevelWorkspaceMetrics_;
 
@@ -804,7 +804,7 @@ Blockly.WorkspaceSvg.prototype.addZoomControls = function() {
  * @package
  */
 Blockly.WorkspaceSvg.prototype.addFlyout = function(tagName) {
-  var workspaceOptions = {
+  var workspaceOptions = /** @type {!Blockly.Options} */ ({
     disabledPatternId: this.options.disabledPatternId,
     parentWorkspace: this,
     RTL: this.RTL,
@@ -812,7 +812,7 @@ Blockly.WorkspaceSvg.prototype.addFlyout = function(tagName) {
     horizontalLayout: this.horizontalLayout,
     toolboxPosition: this.options.toolboxPosition,
     renderer: this.options.renderer
-  };
+  });
   if (this.horizontalLayout) {
     if (!Blockly.HorizontalFlyout) {
       throw Error('Missing require for Blockly.HorizontalFlyout');

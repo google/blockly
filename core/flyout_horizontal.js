@@ -34,12 +34,14 @@ goog.require('Blockly.WidgetDiv');
 
 /**
  * Class for a flyout.
- * @param {!Object} workspaceOptions Dictionary of options for the workspace.
+ * @param {!Blockly.Options} workspaceOptions Dictionary of options for the
+ *     workspace.
  * @extends {Blockly.Flyout}
  * @constructor
  */
 Blockly.HorizontalFlyout = function(workspaceOptions) {
-  workspaceOptions.getMetrics = this.getMetrics_.bind(this);
+  workspaceOptions.getMetrics = /** @type {function():!Object} */ (
+    this.getMetrics_.bind(this));
   workspaceOptions.setMetrics = this.setMetrics_.bind(this);
 
   Blockly.HorizontalFlyout.superClass_.constructor.call(this, workspaceOptions);

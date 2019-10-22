@@ -43,7 +43,7 @@ goog.require('Blockly.WorkspaceSvg');
  * Inject a Blockly editor into the specified container element (usually a div).
  * @param {Element|string} container Containing element, or its ID,
  *     or a CSS selector.
- * @param {Object=} opt_options Optional dictionary of options.
+ * @param {Blockly.BlocklyOptions=} opt_options Optional dictionary of options.
  * @return {!Blockly.WorkspaceSvg} Newly created main workspace.
  */
 Blockly.inject = function(container, opt_options) {
@@ -57,7 +57,8 @@ Blockly.inject = function(container, opt_options) {
   if (!container || !Blockly.utils.dom.containsNode(document, container)) {
     throw Error('Error: container is not in current document.');
   }
-  var options = new Blockly.Options(opt_options || {});
+  var options = new Blockly.Options(opt_options ||
+    (/** @type {!Blockly.BlocklyOptions} */ ({})));
   var subContainer = document.createElement('div');
   subContainer.className = 'injectionDiv';
   container.appendChild(subContainer);

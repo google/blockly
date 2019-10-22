@@ -30,8 +30,8 @@ goog.require('Blockly.Xml');
 /**
  * Parse the user-specified options, using reasonable defaults where behaviour
  * is unspecified.
- * @param {!Object} options Dictionary of options.  Specification:
- *   https://developers.google.com/blockly/guides/get-started/web#configuration
+ * @param {!Blockly.BlocklyOptions} options Dictionary of options.
+ *     Specification: https://developers.google.com/blockly/guides/get-started/web#configuration
  * @constructor
  */
 Blockly.Options = function(options) {
@@ -147,6 +147,13 @@ Blockly.Options = function(options) {
 };
 
 /**
+ * Blockly options.
+ * This interface is further described in `typings/blockly-interfaces.d.ts`.
+ * @interface
+ */
+Blockly.BlocklyOptions = function() {};
+
+/**
  * The parent of the current workspace, or null if there is no parent workspace.
  * @type {Blockly.Workspace}
  */
@@ -154,6 +161,8 @@ Blockly.Options.prototype.parentWorkspace = null;
 
 /**
  * If set, sets the translation of the workspace to match the scrollbars.
+ * @param {!Object} xyRatio Contains an x and/or y property which is a float
+ *     between 0 and 1 specifying the degree of scrolling.
  * @return {void}
  */
 Blockly.Options.prototype.setMetrics;

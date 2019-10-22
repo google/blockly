@@ -409,7 +409,7 @@ Blockly.InsertionMarkerManager.prototype.shouldReplace_ = function() {
   if (local.type == Blockly.OUTPUT_VALUE) {
     // Insert the dragged block into the stack if possible.
     if (!closest.isConnected() ||
-      Blockly.Connection.lastConnectionInRow_(this.topBlock_,
+      Blockly.Connection.lastConnectionInRow(this.topBlock_,
           closest.targetConnection.getSourceBlock())) {
       return false; // Insert.
     }

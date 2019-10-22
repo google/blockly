@@ -290,6 +290,16 @@ Blockly.blockRendering.RenderInfo.prototype.populateTopRow_ = function() {
   } else {
     this.topRow.minHeight = this.constants_.MEDIUM_PADDING;
   }
+
+  var rightSquareCorner = this.topRow.hasRightSquareCorner(this.block_);
+
+  if (rightSquareCorner) {
+    this.topRow.elements.push(
+        new Blockly.blockRendering.SquareCorner(this.constants_, 'right'));
+  } else {
+    this.topRow.elements.push(
+        new Blockly.blockRendering.RoundCorner(this.constants_, 'right'));
+  }
 };
 
 /**
@@ -327,6 +337,16 @@ Blockly.blockRendering.RenderInfo.prototype.populateBottomRow_ = function() {
         this.constants_,
         /** @type {Blockly.RenderedConnection} */ (this.block_.nextConnection));
     this.bottomRow.elements.push(this.bottomRow.connection);
+  }
+
+  var rightSquareCorner = this.bottomRow.hasRightSquareCorner(this.block_);
+
+  if (rightSquareCorner) {
+    this.bottomRow.elements.push(
+        new Blockly.blockRendering.SquareCorner(this.constants_, 'right'));
+  } else {
+    this.bottomRow.elements.push(
+        new Blockly.blockRendering.RoundCorner(this.constants_, 'right'));
   }
 };
 

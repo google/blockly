@@ -91,44 +91,6 @@ Blockly.zelos.RenderInfo.prototype.getRenderer = function() {
 };
 
 /**
- * Create all non-spacer elements that belong on the top row.
- * @package
- * @override
- */
-Blockly.zelos.RenderInfo.prototype.populateTopRow_ = function() {
-  Blockly.zelos.RenderInfo.superClass_.populateTopRow_.call(this);
-
-  var rightSquareCorner = this.topRow.hasRightSquareCorner(this.block_);
-
-  if (rightSquareCorner) {
-    this.topRow.elements.push(
-        new Blockly.blockRendering.SquareCorner(this.constants_, 'right'));
-  } else {
-    this.topRow.elements.push(
-        new Blockly.blockRendering.RoundCorner(this.constants_, 'right'));
-  }
-};
-
-/**
- * Create all non-spacer elements that belong on the bottom row.
- * @package
- * @override
- */
-Blockly.zelos.RenderInfo.prototype.populateBottomRow_ = function() {
-  Blockly.zelos.RenderInfo.superClass_.populateBottomRow_.call(this);
-
-  var rightSquareCorner = this.bottomRow.hasRightSquareCorner(this.block_);
-
-  if (rightSquareCorner) {
-    this.bottomRow.elements.push(
-        new Blockly.blockRendering.SquareCorner(this.constants_, 'right'));
-  } else {
-    this.bottomRow.elements.push(
-        new Blockly.blockRendering.RoundCorner(this.constants_, 'right'));
-  }
-};
-
-/**
  * @override
  */
 Blockly.zelos.RenderInfo.prototype.getInRowSpacing_ = function(prev, next) {
@@ -175,10 +137,6 @@ Blockly.zelos.RenderInfo.prototype.getInRowSpacing_ = function(prev, next) {
     // Between rounded corner and the end of the row.
     if (Blockly.blockRendering.Types.isLeftRoundedCorner(prev)) {
       return this.constants_.MIN_BLOCK_WIDTH;
-    }
-    // Between a right rounded corner and the end of the row.
-    if (Blockly.blockRendering.Types.isRightRoundedCorner(prev)) {
-      return this.constants_.NO_PADDING;
     }
     // Between a jagged edge and the end of the row.
     if (Blockly.blockRendering.Types.isJaggedEdge(prev)) {

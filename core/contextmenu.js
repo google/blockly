@@ -300,6 +300,8 @@ Blockly.ContextMenu.blockCommentOption = function(block) {
  *     right-click originated.
  * @return {!Object} A menu option, containing text, enabled, and a callback.
  * @package
+ * @suppress {checkTypes} Suppress checks while workspace comments are not
+ *     bundled in.
  */
 Blockly.ContextMenu.commentDeleteOption = function(comment) {
   var deleteOption = {
@@ -320,6 +322,8 @@ Blockly.ContextMenu.commentDeleteOption = function(comment) {
  *     right-click originated.
  * @return {!Object} A menu option, containing text, enabled, and a callback.
  * @package
+ * @suppress {checkTypes} Suppress checks while workspace comments are not
+ *     bundled in.
  */
 Blockly.ContextMenu.commentDuplicateOption = function(comment) {
   var duplicateOption = {
@@ -339,6 +343,8 @@ Blockly.ContextMenu.commentDuplicateOption = function(comment) {
  * @param {!Event} e The right-click mouse event.
  * @return {!Object} A menu option, containing text, enabled, and a callback.
  * @package
+ * @suppress {strictModuleDepCheck,checkTypes} Suppress checks while workspace
+ *     comments are not bundled in.
  */
 Blockly.ContextMenu.workspaceCommentOption = function(ws, e) {
   if (!Blockly.WorkspaceCommentSvg) {

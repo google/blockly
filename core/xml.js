@@ -371,6 +371,8 @@ Blockly.Xml.clearWorkspaceAndLoadFromXml = function(xml, workspace) {
  * @param {!Element} xml XML DOM.
  * @param {!Blockly.Workspace} workspace The workspace.
  * @return {!Array.<string>} An array containing new block IDs.
+ * @suppress {strictModuleDepCheck} Suppress module check while workspace
+ *     comments are not bundled in.
  */
 Blockly.Xml.domToWorkspace = function(xml, workspace) {
   if (xml instanceof Blockly.Workspace) {

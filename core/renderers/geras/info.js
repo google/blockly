@@ -76,6 +76,28 @@ Blockly.geras.RenderInfo.prototype.getRenderer = function() {
 /**
  * @override
  */
+Blockly.geras.RenderInfo.prototype.populateBottomRow_ = function() {
+  Blockly.geras.RenderInfo.superClass_.populateBottomRow_.call(this);
+
+  var followsStatement =
+      this.block_.inputList.length &&
+      this.block_.inputList[this.block_.inputList.length - 1]
+          .type == Blockly.NEXT_STATEMENT;
+
+  // The minimum height of the bottom row is smaller in Geras than in other
+  // renderers, because the dark path adds a pixel.
+  // If one of the row's elements has a greater height this will be overwritten
+  // in the compute pass.
+  if (!followsStatement) {
+    this.bottomRow.minHeight =
+        this.constants_.MEDIUM_PADDING - this.constants_.DARK_PATH_OFFSET;
+  }
+
+};
+
+/**
+ * @override
+ */
 Blockly.geras.RenderInfo.prototype.addInput_ = function(input, activeRow) {
   // Non-dummy inputs have visual representations onscreen.
   if (this.isInline && input.type == Blockly.INPUT_VALUE) {

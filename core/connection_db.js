@@ -77,7 +77,7 @@ Blockly.ConnectionDB.prototype.findIndexOfConnection_ = function(conn, yPos) {
     return -1;
   }
 
-  var yPos = conn.y_;
+  yPos = conn.y_;
   // Walk forward and back on the y axis looking for the connection.
   var pointerMin = bestGuess;
   var pointerMax = bestGuess;

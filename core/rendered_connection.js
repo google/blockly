@@ -104,9 +104,9 @@ Blockly.RenderedConnection.prototype.distanceFrom = function(otherConnection) {
  * visually interfere with the specified connection.
  * @param {!Blockly.Connection} staticConnection The connection to move away
  *     from.
- * @private
+ * @package
  */
-Blockly.RenderedConnection.prototype.bumpAwayFrom_ = function(staticConnection) {
+Blockly.RenderedConnection.prototype.bumpAwayFrom = function(staticConnection) {
   if (this.sourceBlock_.workspace.isDragging()) {
     // Don't move blocks around while the user is doing the same.
     return;
@@ -203,9 +203,9 @@ Blockly.RenderedConnection.prototype.getOffsetInBlock = function() {
 
 /**
  * Move the blocks on either side of this connection right next to each other.
- * @private
+ * @package
  */
-Blockly.RenderedConnection.prototype.tighten_ = function() {
+Blockly.RenderedConnection.prototype.tighten = function() {
   var dx = this.targetConnection.x_ - this.x_;
   var dy = this.targetConnection.y_ - this.y_;
   if (dx != 0 || dy != 0) {
@@ -218,7 +218,7 @@ Blockly.RenderedConnection.prototype.tighten_ = function() {
     var xy = Blockly.utils.getRelativeXY(svgRoot);
     block.getSvgRoot().setAttribute('transform',
         'translate(' + (xy.x - dx) + ',' + (xy.y - dy) + ')');
-    block.moveConnections_(-dx, -dy);
+    block.moveConnections(-dx, -dy);
   }
 };
 
@@ -389,13 +389,13 @@ Blockly.RenderedConnection.prototype.isConnectionAllowed = function(candidate,
 
 /**
  * Behavior after a connection attempt fails.
- * @param {Blockly.Connection} otherConnection Connection that this connection
+ * @param {!Blockly.Connection} otherConnection Connection that this connection
  *     failed to connect to.
  * @package
  */
 Blockly.RenderedConnection.prototype.onFailedConnect = function(
     otherConnection) {
-  this.bumpAwayFrom_(otherConnection);
+  this.bumpAwayFrom(otherConnection);
 };
 
 
@@ -448,9 +448,9 @@ Blockly.RenderedConnection.prototype.respawnShadow_ = function() {
  * @param {number} maxLimit The maximum radius to another connection, in
  *     workspace units.
  * @return {!Array.<!Blockly.Connection>} List of connections.
- * @private
+ * @package
  */
-Blockly.RenderedConnection.prototype.neighbours_ = function(maxLimit) {
+Blockly.RenderedConnection.prototype.neighbours = function(maxLimit) {
   return this.dbOpposite_.getNeighbours(this, maxLimit);
 };
 
@@ -458,7 +458,7 @@ Blockly.RenderedConnection.prototype.neighbours_ = function(maxLimit) {
  * Connect two connections together.  This is the connection on the superior
  * block.  Rerender blocks as needed.
  * @param {!Blockly.Connection} childConnection Connection on inferior block.
- * @private
+ * @protected
  */
 Blockly.RenderedConnection.prototype.connect_ = function(childConnection) {
   Blockly.RenderedConnection.superClass_.connect_.call(this, childConnection);
@@ -489,11 +489,12 @@ Blockly.RenderedConnection.prototype.connect_ = function(childConnection) {
 
 /**
  * Function to be called when this connection's compatible types have changed.
- * @private
+ * @protected
  */
 Blockly.RenderedConnection.prototype.onCheckChanged_ = function() {
   // The new value type may not be compatible with the existing connection.
-  if (this.isConnected() && !this.checkType_(this.targetConnection)) {
+  if (this.isConnected() && (!this.targetConnection ||
+      !this.checkType(this.targetConnection))) {
     var child = this.isSuperior() ? this.targetBlock() : this.sourceBlock_;
     child.unplug();
     // Bump away.

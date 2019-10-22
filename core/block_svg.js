@@ -398,7 +398,7 @@ Blockly.BlockSvg.prototype.setParent = function(newParent) {
     newParent.getSvgRoot().appendChild(svgRoot);
     var newXY = this.getRelativeToSurfaceXY();
     // Move the connections to match the child's new position.
-    this.moveConnections_(newXY.x - oldXY.x, newXY.y - oldXY.y);
+    this.moveConnections(newXY.x - oldXY.x, newXY.y - oldXY.y);
   }
   // If we are losing a parent, we want to move our DOM element to the
   // root of the workspace.
@@ -462,7 +462,7 @@ Blockly.BlockSvg.prototype.moveBy = function(dx, dy) {
   }
   var xy = this.getRelativeToSurfaceXY();
   this.translate(xy.x + dx, xy.y + dy);
-  this.moveConnections_(dx, dy);
+  this.moveConnections(dx, dy);
   if (eventsEnabled) {
     event.recordNew();
     Blockly.Events.fire(event);
@@ -886,9 +886,9 @@ Blockly.BlockSvg.prototype.showContextMenu_ = function(e) {
  *     units.
  * @param {number} dy Vertical offset from current location, in workspace
  *     units.
- * @private
+ * @package
  */
-Blockly.BlockSvg.prototype.moveConnections_ = function(dx, dy) {
+Blockly.BlockSvg.prototype.moveConnections = function(dx, dy) {
   if (!this.rendered) {
     // Rendering is required to lay out the blocks.
     // This is probably an invisible block attached to a collapsed block.
@@ -905,7 +905,7 @@ Blockly.BlockSvg.prototype.moveConnections_ = function(dx, dy) {
 
   // Recurse through all blocks attached under this one.
   for (var i = 0; i < this.childBlocks_.length; i++) {
-    this.childBlocks_[i].moveConnections_(dx, dy);
+    this.childBlocks_[i].moveConnections(dx, dy);
   }
 };
 
@@ -1586,7 +1586,7 @@ Blockly.BlockSvg.prototype.startTrackingConnections = function() {
  * @param {boolean} all If true, return all connections even hidden ones.
  *     Otherwise, for a non-rendered block return an empty list, and for a
  *     collapsed block don't return inputs connections.
- * @return {!Array.<!Blockly.Connection>} Array of connections.
+ * @return {!Array.<!Blockly.RenderedConnection>} Array of connections.
  * @package
  */
 Blockly.BlockSvg.prototype.getConnections_ = function(all) {
@@ -1646,7 +1646,7 @@ Blockly.BlockSvg.prototype.bumpNeighbours = function() {
       connection.targetBlock().bumpNeighbours();
     }
 
-    var neighbours = connection.neighbours_(Blockly.SNAP_RADIUS);
+    var neighbours = connection.neighbours(Blockly.SNAP_RADIUS);
     for (var j = 0, otherConnection; otherConnection = neighbours[j]; j++) {
 
       // If both connections are connected, that's probably fine.  But if
@@ -1657,9 +1657,9 @@ Blockly.BlockSvg.prototype.bumpNeighbours = function() {
 
           // Always bump the inferior block.
           if (connection.isSuperior()) {
-            otherConnection.bumpAwayFrom_(connection);
+            otherConnection.bumpAwayFrom(connection);
           } else {
-            connection.bumpAwayFrom_(otherConnection);
+            connection.bumpAwayFrom(otherConnection);
           }
         }
       }
@@ -1767,7 +1767,7 @@ Blockly.BlockSvg.prototype.updateConnectionLocations_ = function() {
     if (conn) {
       conn.moveToOffset(blockTL);
       if (conn.isConnected()) {
-        conn.tighten_();
+        conn.tighten();
       }
     }
   }
@@ -1775,7 +1775,7 @@ Blockly.BlockSvg.prototype.updateConnectionLocations_ = function() {
   if (this.nextConnection) {
     this.nextConnection.moveToOffset(blockTL);
     if (this.nextConnection.isConnected()) {
-      this.nextConnection.tighten_();
+      this.nextConnection.tighten();
     }
   }
 };

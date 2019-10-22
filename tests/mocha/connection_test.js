@@ -168,31 +168,31 @@ suite('Connections', function() {
       this.con2 = new Blockly.Connection({}, Blockly.NEXT_STATEMENT);
     });
     test('No Types', function() {
-      chai.assert.isTrue(this.con1.checkType_(this.con2));
+      chai.assert.isTrue(this.con1.checkType((this.con2));
     });
     test('Same Type', function() {
       this.con1.setCheck('type1');
       this.con2.setCheck('type1');
-      chai.assert.isTrue(this.con1.checkType_(this.con2));
+      chai.assert.isTrue(this.con1.checkType((this.con2));
     });
     test('Same Types', function() {
       this.con1.setCheck(['type1', 'type2']);
       this.con2.setCheck(['type1', 'type2']);
-      chai.assert.isTrue(this.con1.checkType_(this.con2));
+      chai.assert.isTrue(this.con1.checkType((this.con2));
     });
     test('Single Same Type', function() {
       this.con1.setCheck(['type1', 'type2']);
       this.con2.setCheck(['type1', 'type3']);
-      chai.assert.isTrue(this.con1.checkType_(this.con2));
+      chai.assert.isTrue(this.con1.checkType((this.con2));
     });
     test('One Typed, One Promiscuous', function() {
       this.con1.setCheck('type1');
-      chai.assert.isTrue(this.con1.checkType_(this.con2));
+      chai.assert.isTrue(this.con1.checkType((this.con2));
     });
     test('No Compatible Types', function() {
       this.con1.setCheck('type1');
       this.con2.setCheck('type2');
-      chai.assert.isFalse(this.con1.checkType_(this.con2));
+      chai.assert.isFalse(this.con1.checkType((this.con2));
     });
   });
 });

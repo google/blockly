@@ -1680,10 +1680,11 @@ Blockly.BlockSvg.prototype.scheduleSnapAndBump = function() {
  * Position a block so that it doesn't move the target block when connected.
  * The block to position is usually either the first block in a dragged stack or
  * an insertion marker.
- * @param {!Blockly.Connection} sourceConnection The connection on the moving
- *     block's stack.
- * @param {!Blockly.Connection} targetConnection The connection that should stay
- *     stationary as this block is positioned.
+ * @param {!Blockly.RenderedConnection} sourceConnection The connection on the
+ *    moving block's stack.
+ * @param {!Blockly.RenderedConnection} targetConnection The connection that
+ *    should stay stationary as this block is positioned.
+ * @package
  */
 Blockly.BlockSvg.prototype.positionNearConnection = function(sourceConnection,
     targetConnection) {
@@ -1821,32 +1822,6 @@ Blockly.BlockSvg.prototype.getHeightWidth = function() {
     width = Math.max(width, nextHeightWidth.width);
   }
   return {height: height, width: width};
-};
-
-/**
- * Position a new block correctly, so that it doesn't move the existing block
- * when connected to it.
- * @param {!Blockly.Block} newBlock The block to position - either the first
- *     block in a dragged stack or an insertion marker.
- * @param {!Blockly.Connection} newConnection The connection on the new block's
- *     stack - either a connection on newBlock, or the last NEXT_STATEMENT
- *     connection on the stack if the stack's being dropped before another
- *     block.
- * @param {!Blockly.Connection} existingConnection The connection on the
- *     existing block, which newBlock should line up with.
- * @package
- */
-Blockly.BlockSvg.prototype.positionNewBlock = function(newBlock, newConnection,
-    existingConnection) {
-  // We only need to position the new block if it's before the existing one,
-  // otherwise its position is set by the previous block.
-  if (newConnection.type == Blockly.NEXT_STATEMENT ||
-      newConnection.type == Blockly.INPUT_VALUE) {
-    var dx = existingConnection.x_ - newConnection.x_;
-    var dy = existingConnection.y_ - newConnection.y_;
-
-    newBlock.moveBy(dx, dy);
-  }
 };
 
 /**

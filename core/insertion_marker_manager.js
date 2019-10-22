@@ -668,8 +668,8 @@ Blockly.InsertionMarkerManager.prototype.connectMarker_ = function() {
   imBlock.rendered = true;
   imBlock.getSvgRoot().setAttribute('visibility', 'visible');
 
-  // Position based on the calculated connection locations.
-  imBlock.positionNewBlock(imBlock, imConn, closest);
+  // Position so that the existing block doesn't move.
+  imBlock.positionNearConnection(imConn, closest);
 
   // Connect() also renders the insertion marker.
   imConn.connect(closest);

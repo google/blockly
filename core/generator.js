@@ -375,6 +375,28 @@ Blockly.Generator.prototype.addReservedWords = function(words) {
 Blockly.Generator.prototype.FUNCTION_NAME_PLACEHOLDER_ = '{leCUI8hutHZI4480Dc}';
 
 /**
+ * A dictionary of definitions to be printed before the code.
+ * @type {Object}
+ * @protected
+ */
+Blockly.Generator.prototype.definitions_;
+
+/**
+ * A dictionary mapping desired function names in definitions_ to actual
+ * function names (to avoid collisions with user functions).
+ * @type {Object}
+ * @protected
+ */
+Blockly.Generator.prototype.functionNames_;
+
+/**
+ * A database of variable names.
+ * @type {Blockly.Names}
+ * @protected
+ */
+Blockly.Generator.prototype.variableDB_;
+
+/**
  * Define a function to be included in the generated code.
  * The first time this is called with a given desiredName, the code is
  * saved and an actual name is generated.  Subsequent calls with the
@@ -394,7 +416,7 @@ Blockly.Generator.prototype.FUNCTION_NAME_PLACEHOLDER_ = '{leCUI8hutHZI4480Dc}';
 Blockly.Generator.prototype.provideFunction_ = function(desiredName, code) {
   if (!this.definitions_[desiredName]) {
     var functionName = this.variableDB_.getDistinctName(desiredName,
-        Blockly.Procedures.NAME_TYPE);
+        Blockly.PROCEDURE_CATEGORY_NAME);
     this.functionNames_[desiredName] = functionName;
     var codeText = code.join('\n').replace(
         this.FUNCTION_NAME_PLACEHOLDER_REGEXP_, functionName);

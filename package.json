@@ -48,6 +48,7 @@
     "chai": "^4.2.0",
     "concurrently": "^4.1.2",
     "eslint": "^5.13.0",
+    "eslint-plugin-es5": "^1.4.1",
     "fs": "0.0.1-security",
     "google-closure-compiler": "^20190618.0.0",
     "google-closure-library": "^20190618.0.0",

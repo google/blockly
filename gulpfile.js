@@ -88,6 +88,7 @@ function compile(compilerOptions, opt_verbose) {
   if (!compilerOptions) compilerOptions = {};
   compilerOptions.compilation_level = 'SIMPLE_OPTIMIZATIONS';
   compilerOptions.warning_level = opt_verbose ? 'VERBOSE' : 'DEFAULT';
+  compilerOptions.language_in = 'ECMASCRIPT5_STRICT';
   compilerOptions.language_out = 'ECMASCRIPT5_STRICT';
   compilerOptions.rewrite_polyfills = false;
   compilerOptions.hide_warnings_for = 'node_modules';

@@ -32,7 +32,6 @@ goog.require('Blockly.utils.dom');
  * An interface for a block's path object.
  * @param {!SVGElement} _root The root SVG element.
  * @interface
- * @package
  */
 Blockly.blockRendering.IPathObject = function(_root) {};
 

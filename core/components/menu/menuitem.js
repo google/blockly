@@ -95,8 +95,8 @@ Blockly.MenuItem.prototype.createDom = function() {
   Blockly.utils.aria.setRole(element, this.roleName_ || (this.checkable_ ?
       Blockly.utils.aria.Role.MENUITEMCHECKBOX :
       Blockly.utils.aria.Role.MENUITEM));
-  Blockly.utils.aria.setState(element,
-      Blockly.utils.aria.State.SELECTED, (this.checkable_ && this.checked_) || false);
+  Blockly.utils.aria.setState(element, Blockly.utils.aria.State.SELECTED,
+      (this.checkable_ && this.checked_) || false);
 };
 
 /**
@@ -164,7 +164,7 @@ Blockly.MenuItem.prototype.getValue = function() {
 
 /**
  * Set the menu accessibility role.
- * @param {!Blockly.utils.aria.Role|string} roleName role name.
+ * @param {!Blockly.utils.aria.Role} roleName Role name.
  * @package
  */
 Blockly.MenuItem.prototype.setRole = function(roleName) {

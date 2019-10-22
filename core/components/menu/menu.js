@@ -92,7 +92,7 @@ Blockly.Menu.prototype.blur = function() {
 
 /**
  * Set the menu accessibility role.
- * @param {!Blockly.utils.aria.Role|string} roleName role name.
+ * @param {!Blockly.utils.aria.Role} roleName role name.
  * @package
  */
 Blockly.Menu.prototype.setRole = function(roleName) {

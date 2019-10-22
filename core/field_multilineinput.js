@@ -29,6 +29,7 @@ goog.require('Blockly.Css');
 goog.require('Blockly.DropDownDiv');
 goog.require('Blockly.FieldTextInput');
 goog.require('Blockly.utils');
+goog.require('Blockly.utils.aria');
 goog.require('Blockly.utils.Coordinate');
 goog.require('Blockly.utils.dom');
 goog.require('Blockly.utils.KeyCodes');
@@ -58,6 +59,13 @@ Blockly.FieldMultilineInput = function(opt_value, opt_validator, opt_config) {
   }
   Blockly.FieldMultilineInput.superClass_.constructor.call(this,
       opt_value, opt_validator, opt_config);
+
+  /**
+   * The SVG group element that will contain a text element for each text row
+   *     when initialized.
+   * @type {SVGGElement}
+   */
+  this.textGroup_ = null;
 };
 Blockly.utils.object.inherits(Blockly.FieldMultilineInput,
     Blockly.FieldTextInput);
@@ -89,10 +97,11 @@ Blockly.FieldMultilineInput.fromJson = function(options) {
  */
 Blockly.FieldMultilineInput.prototype.initView = function() {
   this.createBorderRect_();
-  this.textGroup_ = Blockly.utils.dom.createSvgElement('g',
-      {
-        'class': 'blocklyEditableText',
-      }, this.fieldGroup_);
+  this.textGroup_ = /** @type {!SVGGElement} **/
+      (Blockly.utils.dom.createSvgElement('g',
+          {
+            'class': 'blocklyEditableText',
+          }, this.fieldGroup_));
 };
 
 /**
@@ -167,12 +176,15 @@ Blockly.FieldMultilineInput.prototype.render_ = function() {
     } else {
       this.resizeEditor_();
     }
+    var htmlInput = /** @type {!HTMLElement} */(this.htmlInput_);
     if (!this.isTextValid_) {
-      Blockly.utils.dom.addClass(this.htmlInput_, 'blocklyInvalidInput');
-      Blockly.utils.aria.setState(this.htmlInput_, 'invalid', true);
+      Blockly.utils.dom.addClass(htmlInput, 'blocklyInvalidInput');
+      Blockly.utils.aria.setState(htmlInput,
+          Blockly.utils.aria.State.INVALID, true);
     } else {
-      Blockly.utils.dom.removeClass(this.htmlInput_, 'blocklyInvalidInput');
-      Blockly.utils.aria.setState(this.htmlInput_, 'invalid', false);
+      Blockly.utils.dom.removeClass(htmlInput, 'blocklyInvalidInput');
+      Blockly.utils.aria.setState(htmlInput,
+          Blockly.utils.aria.State.INVALID, false);
     }
   }
 };
@@ -186,7 +198,7 @@ Blockly.FieldMultilineInput.prototype.updateSize_ = function() {
   var totalWidth = 0;
   var totalHeight = 0;
   for (var i = 0; i < nodes.length; i++) {
-    var tspan = nodes[i];
+    var tspan = /** @type {!Element} */ (nodes[i]);
     var textWidth = Blockly.utils.dom.getTextWidth(tspan);
     if (textWidth > totalWidth) {
       totalWidth = textWidth;
@@ -208,7 +220,7 @@ Blockly.FieldMultilineInput.prototype.updateSize_ = function() {
  */
 Blockly.FieldMultilineInput.prototype.resizeEditor_ = function() {
   var div = Blockly.WidgetDiv.DIV;
-  var bBox = this.getScaledBBox_();
+  var bBox = this.getScaledBBox();
   div.style.width = bBox.right - bBox.left + 'px';
   div.style.height = bBox.bottom - bBox.top + 'px';
 

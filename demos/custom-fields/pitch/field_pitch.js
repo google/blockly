@@ -173,7 +173,7 @@ CustomFields.FieldPitch.prototype.getText_ = function() {
 /**
  * Transform the provided value into a text to show in the HTML input.
  * @param {*} value The value stored in this field.
- * @returns {string} The text to show on the HTML input.
+ * @return {string} The text to show on the HTML input.
  */
 CustomFields.FieldPitch.prototype.getEditorText_ = function(value) {
   return this.valueToNote(value);
@@ -183,7 +183,7 @@ CustomFields.FieldPitch.prototype.getEditorText_ = function(value) {
  * Transform the text received from the HTML input (note) into a value
  * to store in this field.
  * @param {string} text Text received from the HTML input.
- * @returns {*} The value to store.
+ * @return {*} The value to store.
  */
 CustomFields.FieldPitch.prototype.getValueFromEditorText_ = function(text) {
   return this.noteToValue(text);

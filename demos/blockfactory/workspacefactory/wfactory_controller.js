@@ -917,7 +917,7 @@ WorkspaceFactoryController.prototype.clearAll = function() {
   this.updatePreview();
 };
 
-/*
+/**
  * Makes the currently selected block a user-generated shadow block. These
  * blocks are not made into real shadow blocks, but recorded in the model
  * and visually marked as shadow blocks, allowing the user to move and edit
@@ -1262,7 +1262,7 @@ WorkspaceFactoryController.prototype.importBlocks = function(file, format) {
   reader.readAsText(file);
 };
 
-/*
+/**
  * Updates the block library category in the toolbox workspace toolbox.
  * @param {!Element} categoryXml XML for the block library category.
  * @param {!Array.<string>} libBlockTypes Array of block types from the block
@@ -1323,7 +1323,7 @@ WorkspaceFactoryController.prototype.warnForUndefinedBlocks_ = function() {
   }
 };
 
-/*
+/**
  * Determines if a standard variable category is in the custom toolbox.
  * @return {boolean} True if a variables category is in use, false otherwise.
  */

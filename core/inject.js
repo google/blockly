@@ -41,10 +41,10 @@ goog.require('Blockly.WorkspaceSvg');
 
 /**
  * Inject a Blockly editor into the specified container element (usually a div).
- * @param {!Element|string} container Containing element, or its ID,
+ * @param {Element|string} container Containing element, or its ID,
  *     or a CSS selector.
  * @param {Object=} opt_options Optional dictionary of options.
- * @return {!Blockly.Workspace} Newly created main workspace.
+ * @return {!Blockly.WorkspaceSvg} Newly created main workspace.
  */
 Blockly.inject = function(container, opt_options) {
   Blockly.checkBlockColourConstants();
@@ -54,7 +54,7 @@ Blockly.inject = function(container, opt_options) {
         document.querySelector(container);
   }
   // Verify that the container is in document.
-  if (!Blockly.utils.dom.containsNode(document, container)) {
+  if (!container || !Blockly.utils.dom.containsNode(document, container)) {
     throw Error('Error: container is not in current document.');
   }
   var options = new Blockly.Options(opt_options || {});
@@ -206,7 +206,7 @@ Blockly.createDom_ = function(container, options) {
  *     for the blocks.
  * @param {!Blockly.WorkspaceDragSurfaceSvg} workspaceDragSurface Drag surface
  *     SVG for the workspace.
- * @return {!Blockly.Workspace} Newly created main workspace.
+ * @return {!Blockly.WorkspaceSvg} Newly created main workspace.
  * @private
  */
 Blockly.createMainWorkspace_ = function(svg, options, blockDragSurface,
@@ -219,7 +219,7 @@ Blockly.createMainWorkspace_ = function(svg, options, blockDragSurface,
 
   if (!options.hasCategories && options.languageTree) {
     // Add flyout as an <svg> that is a sibling of the workspace svg.
-    var flyout = mainWorkspace.addFlyout_('svg');
+    var flyout = mainWorkspace.addFlyout('svg');
     Blockly.utils.dom.insertAfter(flyout, svg);
   }
   if (options.hasTrashcan) {
@@ -385,7 +385,7 @@ Blockly.createMainWorkspace_ = function(svg, options, blockDragSurface,
 
 /**
  * Initialize Blockly with various handlers.
- * @param {!Blockly.Workspace} mainWorkspace Newly created main workspace.
+ * @param {!Blockly.WorkspaceSvg} mainWorkspace Newly created main workspace.
  * @private
  */
 Blockly.init_ = function(mainWorkspace) {
@@ -393,7 +393,8 @@ Blockly.init_ = function(mainWorkspace) {
   var svg = mainWorkspace.getParentSvg();
 
   // Suppress the browser's context menu.
-  Blockly.bindEventWithChecks_(svg.parentNode, 'contextmenu', null,
+  Blockly.bindEventWithChecks_(
+      /** @type {!Element} */ (svg.parentNode), 'contextmenu', null,
       function(e) {
         if (!Blockly.utils.isTargetInput(e)) {
           e.preventDefault();
@@ -411,13 +412,15 @@ Blockly.init_ = function(mainWorkspace) {
   Blockly.inject.bindDocumentEvents_();
 
   if (options.languageTree) {
-    if (mainWorkspace.getToolbox()) {
-      mainWorkspace.getToolbox().init(mainWorkspace);
-    } else if (mainWorkspace.flyout_) {
+    var toolbox = mainWorkspace.getToolbox();
+    var flyout = mainWorkspace.getFlyout(true);
+    if (toolbox) {
+      toolbox.init();
+    } else if (flyout) {
       // Build a fixed flyout with the root blocks.
-      mainWorkspace.flyout_.init(mainWorkspace);
-      mainWorkspace.flyout_.show(options.languageTree.childNodes);
-      mainWorkspace.flyout_.scrollToStart();
+      flyout.init(mainWorkspace);
+      flyout.show(options.languageTree.childNodes);
+      flyout.scrollToStart();
     }
   }
 
@@ -452,6 +455,7 @@ Blockly.init_ = function(mainWorkspace) {
  * Also, 'keydown' has to be on the whole document since the browser doesn't
  * understand a concept of focus on the SVG image.
  * @private
+ * @suppress {deprecated} Suppress deprecated bindEvent_ call.
  */
 Blockly.inject.bindDocumentEvents_ = function() {
   if (!Blockly.documentEventsBound_) {
@@ -463,7 +467,7 @@ Blockly.inject.bindDocumentEvents_ = function() {
         }
       }
     });
-    Blockly.bindEventWithChecks_(document, 'keydown', null, Blockly.onKeyDown_);
+    Blockly.bindEventWithChecks_(document, 'keydown', null, Blockly.onKeyDown);
     // longStop needs to run to stop the context menu from showing up.  It
     // should run regardless of what other touch event handlers have run.
     Blockly.bindEvent_(document, 'touchend', null, Blockly.longStop_);
@@ -473,7 +477,8 @@ Blockly.inject.bindDocumentEvents_ = function() {
       Blockly.bindEventWithChecks_(window, 'orientationchange', document,
           function() {
             // TODO (#397): Fix for multiple Blockly workspaces.
-            Blockly.svgResize(Blockly.getMainWorkspace());
+            Blockly.svgResize(/** @type {!Blockly.WorkspaceSvg} */
+                (Blockly.getMainWorkspace()));
           });
     }
   }

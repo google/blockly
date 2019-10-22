@@ -70,7 +70,7 @@ Blockly.zelos.TopRow.prototype.hasLeftSquareCorner = function(block) {
 /**
  * Returns whether or not the top row has a right square corner.
  * @param {!Blockly.BlockSvg} block The block whose top row this represents.
- * @returns {boolean} Whether or not the top row has a left square corner.
+ * @return {boolean} Whether or not the top row has a left square corner.
  */
 Blockly.zelos.TopRow.prototype.hasRightSquareCorner = function(block) {
   // Render a round corner unless the block has an output connection.
@@ -112,7 +112,7 @@ Blockly.zelos.BottomRow.prototype.hasLeftSquareCorner = function(block) {
 /**
  * Returns whether or not the bottom row has a right square corner.
  * @param {!Blockly.BlockSvg} block The block whose bottom row this represents.
- * @returns {boolean} Whether or not the bottom row has a left square corner.
+ * @return {boolean} Whether or not the bottom row has a left square corner.
  */
 Blockly.zelos.BottomRow.prototype.hasRightSquareCorner = function(block) {
   // Render a round corner unless the block has an output connection.

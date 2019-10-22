@@ -24,7 +24,7 @@
 goog.provide('Blockly.Events.FinishedLoading');
 
 goog.require('Blockly.Events');
-goog.require('Blockly.Events.Abstract');
+goog.require('Blockly.Events.Ui');
 goog.require('Blockly.utils.object');
 
 
@@ -46,7 +46,7 @@ Blockly.Events.FinishedLoading = function(workspace) {
   this.workspaceId = workspace.id;
 
   /**
-   * The event group id for the group this event belongs to. Groups define
+   * The event group ID for the group this event belongs to. Groups define
    * events that should be treated as an single action from the user's
    * perspective, and should be undone together.
    * @type {string}
@@ -57,7 +57,7 @@ Blockly.Events.FinishedLoading = function(workspace) {
   this.recordUndo = false;
 };
 Blockly.utils.object.inherits(Blockly.Events.FinishedLoading,
-    Blockly.Events.Abstract);
+    Blockly.Events.Ui);
 
 /**
  * Type of this event.

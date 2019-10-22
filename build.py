@@ -266,6 +266,7 @@ goog.provide('Blockly.Mutator');
     # with the compiler.
     params.append(("js_code", """
 goog.provide('Blockly.Generator');
+goog.provide('Blockly.utils.global');
 goog.provide('Blockly.utils.string');
 """))
     filenames = glob.glob(
@@ -280,7 +281,7 @@ goog.provide('Blockly.utils.string');
 
     # Remove Blockly.Generator and Blockly.utils.string to be compatible
     # with Blockly.
-    remove = r"var Blockly=\{[^;]*\};\s*Blockly.utils.string={};\n?"
+    remove = r"var Blockly=\{[^;]*\};\s*Blockly.utils.global={};\s*Blockly.utils.string={};\n?"
     self.do_compile(params, target_filename, filenames, remove)
 
   def do_compile(self, params, target_filename, filenames, remove):

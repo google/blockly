@@ -37,6 +37,7 @@ var closureCompiler = require('google-closure-compiler').gulp();
 var packageJson = require('./package.json');
 var argv = require('yargs').argv;
 
+const upstream_url = "https://github.com/google/blockly.git";
 
 ////////////////////////////////////////////////////////////
 //                        Build                           //
@@ -174,6 +175,7 @@ goog.provide('Blockly.Mutator');`;
 function buildGenerator(language, namespace) {
   var provides = `
 goog.provide('Blockly.Generator');
+goog.provide('Blockly.utils.global');
 goog.provide('Blockly.utils.string');`;
   return gulp.src([`generators/${language}.js`, `generators/${language}/*.js`], {base: './'})
     .pipe(stripApacheLicense())
@@ -186,7 +188,7 @@ goog.provide('Blockly.utils.string');`;
     }, argv.verbose))
     .pipe(gulp.replace('\'use strict\';', '\'use strict\';\n\n\n'))
     // Remove Blockly.Generator and Blockly.utils.string to be compatible with Blockly.
-    .pipe(gulp.replace(/var Blockly=\{[^;]*\};\s*Blockly.utils.string={};\n?/, ''))
+    .pipe(gulp.replace(/var Blockly=\{[^;]*\};\s*Blockly.utils.global={};\s*Blockly.utils.string={};\n?/, ''))
     .pipe(prependHeader())
     .pipe(gulp.dest('./'));
 };
@@ -771,3 +773,101 @@ gulp.task('release', gulp.series(['build', 'typings', function() {
 
 // The default task builds Blockly.
 gulp.task('default', gulp.series(['build']));
+
+
+// Stash current state, check out the named branch, and sync with
+// google/blockly.
+function syncBranch(branchName) {
+  return function(done) {
+    execSync('git stash save -m "Stash for sync"', { stdio: 'inherit' });
+    execSync('git checkout ' + branchName, { stdio: 'inherit' });
+    execSync('git pull ' + upstream_url + ' ' + branchName,
+        { stdio: 'inherit' });
+    execSync('git push origin ' + branchName, { stdio: 'inherit' });
+    done();
+  }
+}
+
+// Stash current state, check out develop, and sync with google/blockly.
+gulp.task('git-sync-develop', syncBranch('develop'));
+
+// Stash current state, check out master, and sync with google/blockly.
+gulp.task('git-sync-master', syncBranch('master'));
+
+// Helper function: get a name for a rebuild branch. Format: rebuild_mm_dd_yyyy.
+function getRebuildBranchName() {
+  var date = new Date();
+  var mm = date.getMonth() + 1; // Month, 0-11
+  var dd = date.getDate(); // Day of the month, 1-31
+  var yyyy = date.getFullYear();
+  return 'rebuild_' + mm + '_' + dd + '_' + yyyy;
+};
+
+// Helper function: get a name for a rebuild branch. Format: rebuild_yyyy_mm.
+function getRCBranchName() {
+  var date = new Date();
+  var mm = date.getMonth() + 1; // Month, 0-11
+  var yyyy = date.getFullYear();
+  return 'rc_' + yyyy + '_' + mm;
+};
+
+// Recompile and push to origin.
+gulp.task('recompile', gulp.series([
+    'git-sync-develop',
+    function(done) {
+      var branchName = getRebuildBranchName();
+      console.log('make-rebuild-branch: creating branch ' + branchName);
+      execSync('git checkout -b ' + branchName, { stdio: 'inherit' });
+      done();
+    },
+    'build',
+    function(done) {
+      console.log('push-rebuild-branch: committing rebuild');
+      execSync('git commit -am "Rebuild"', { stdio: 'inherit' });
+      var branchName = getRebuildBranchName();
+      execSync('git push origin ' + branchName, { stdio: 'inherit' });
+      console.log('Branch ' + branchName + ' pushed to GitHub.');
+      console.log('Next step: create a pull request against develop.');
+      done();
+    }
+  ])
+);
+
+// Create and push an RC branch.
+// Note that this pushes to google/blockly.
+gulp.task('git-create-rc', gulp.series([
+    'git-sync-develop',
+    function(done) {
+      var branchName = getRCBranchName();
+      execSync('git checkout -b ' + branchName, { stdio: 'inherit' });
+      execSync('git push ' + upstream_url + ' ' + branchName,
+          { stdio: 'inherit' });
+      done();
+    },
+  ])
+);
+
+// See https://docs.npmjs.com/cli/version.
+gulp.task('preversion', gulp.series([
+    'git-sync-master',
+    function(done) {
+      // Create a branch named bump_version for the bump and rebuild.
+      execSync('git checkout -b bump_version', { stdio: 'inherit' });
+      done();
+    },
+  ])
+);
+
+// See https://docs.npmjs.com/cli/version
+gulp.task('postversion', gulp.series([
+  function(done) {
+      // Push both the branch and tag to google/blockly.
+      execSync('git push ' + upstream_url + ' bump_version',
+          { stdio: 'inherit' });
+      var tagName = 'v' + packageJson.version;
+      execSync('git push ' + upstream_url + ' ' + tagName,
+          { stdio: 'inherit' });
+      done();
+    }
+  ])
+);

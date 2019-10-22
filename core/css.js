@@ -169,7 +169,7 @@ Blockly.Css.CONTENT = [
   '}',
 
   '.blocklyDropDownDiv {',
-    'position: fixed;',
+    'position: absolute;',
     'left: 0;',
     'top: 0;',
     'z-index: 1000;',

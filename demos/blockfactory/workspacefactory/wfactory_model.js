@@ -390,7 +390,7 @@ WorkspaceFactoryModel.prototype.setOptions = function(options) {
   this.options = options;
 };
 
-/*
+/**
  * Returns an array of all the block types currently being used in the toolbox
  * and the pre-loaded blocks. No duplicates.
  * TODO(evd2014): Move pushBlockTypesToList to FactoryUtils.

@@ -38,7 +38,7 @@ goog.require('Blockly.utils.Coordinate');
 goog.require('Blockly.WorkspaceDragger');
 
 
-/*
+/**
  * Note: In this file "start" refers to touchstart, mousedown, and pointerstart
  * events.  "End" refers to touchend, mouseup, and pointerend events.
  */
@@ -57,6 +57,7 @@ Blockly.Gesture = function(e, creatorWorkspace) {
    * The position of the mouse when the gesture started.  Units are CSS pixels,
    * with (0, 0) at the top left of the browser window (mouseEvent clientX/Y).
    * @type {Blockly.utils.Coordinate}
+   * @private
    */
   this.mouseDownXY_ = null;
 
@@ -314,6 +315,9 @@ Blockly.Gesture.prototype.updateDragDelta_ = function(currentXY) {
  * @private
  */
 Blockly.Gesture.prototype.updateIsDraggingFromFlyout_ = function() {
+  if (!this.targetBlock_) {
+    return false;
+  }
   if (!this.flyout_.isBlockCreatable_(this.targetBlock_)) {
     return false;
   }
@@ -446,9 +450,9 @@ Blockly.Gesture.prototype.startDraggingBlock_ = function() {
 
 /**
  * Create a bubble dragger and start dragging the selected bubble.
- * TODO (fenichel): Possibly combine this and startDraggingBlock_.
  * @private
  */
+// TODO (fenichel): Possibly combine this and startDraggingBlock_.
 Blockly.Gesture.prototype.startDraggingBubble_ = function() {
   this.bubbleDragger_ = new Blockly.BubbleDragger(this.startBubble_,
       this.startWorkspace_);
@@ -620,7 +624,7 @@ Blockly.Gesture.prototype.cancel = function() {
 Blockly.Gesture.prototype.handleRightClick = function(e) {
   if (this.targetBlock_) {
     this.bringBlockToFront_();
-    Blockly.hideChaff(this.flyout_);
+    Blockly.hideChaff(!!this.flyout_);
     this.targetBlock_.showContextMenu_(e);
   } else if (this.startBubble_) {
     this.startBubble_.showContextMenu_(e);
@@ -719,7 +723,7 @@ Blockly.Gesture.prototype.doBubbleClick_ = function() {
  * @private
  */
 Blockly.Gesture.prototype.doFieldClick_ = function() {
-  this.startField_.showEditor_();
+  this.startField_.showEditor();
   this.bringBlockToFront_();
 };
 

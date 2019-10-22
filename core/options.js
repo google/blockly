@@ -30,7 +30,7 @@ goog.require('Blockly.Xml');
 /**
  * Parse the user-specified options, using reasonable defaults where behaviour
  * is unspecified.
- * @param {!Blockly.WorkspaceOptions} options Dictionary of options.
+ * @param {!Blockly.BlocklyOptions} options Dictionary of options.
  *     Specification: https://developers.google.com/blockly/guides/get-started/web#configuration
  * @constructor
  */
@@ -147,11 +147,11 @@ Blockly.Options = function(options) {
 };
 
 /**
- * Blockly workspace options.
- * This list is further extended in `typings/blockly-interfaces.d.ts`.
+ * Blockly options.
+ * This interface is further described in `typings/blockly-interfaces.d.ts`.
  * @interface
  */
-Blockly.WorkspaceOptions = function() {};
+Blockly.BlocklyOptions = function() {};
 
 /**
  * The parent of the current workspace, or null if there is no parent workspace.

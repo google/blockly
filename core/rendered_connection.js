@@ -82,7 +82,7 @@ Blockly.utils.object.inherits(Blockly.RenderedConnection, Blockly.Connection);
 Blockly.RenderedConnection.prototype.dispose = function() {
   Blockly.RenderedConnection.superClass_.dispose.call(this);
   if (this.tracked_) {
-    this.db_.removeConnection(this, this.y_);
+    this.db_.removeConnection(this, this.y);
   }
 };
 
@@ -94,8 +94,8 @@ Blockly.RenderedConnection.prototype.dispose = function() {
  * @return {number} The distance between connections, in workspace units.
  */
 Blockly.RenderedConnection.prototype.distanceFrom = function(otherConnection) {
-  var xDiff = this.x_ - otherConnection.x_;
-  var yDiff = this.y_ - otherConnection.y_;
+  var xDiff = this.x - otherConnection.x;
+  var yDiff = this.y - otherConnection.y;
   return Math.sqrt(xDiff * xDiff + yDiff * yDiff);
 };
 
@@ -132,17 +132,17 @@ Blockly.RenderedConnection.prototype.bumpAwayFrom = function(staticConnection) {
   // Raise it to the top for extra visibility.
   var selected = Blockly.selected == rootBlock;
   selected || rootBlock.addSelect();
-  var dx = (staticConnection.x_ + Blockly.SNAP_RADIUS +
-      Math.floor(Math.random() * Blockly.BUMP_RANDOMNESS)) - this.x_;
-  var dy = (staticConnection.y_ + Blockly.SNAP_RADIUS +
-      Math.floor(Math.random() * Blockly.BUMP_RANDOMNESS)) - this.y_;
+  var dx = (staticConnection.x + Blockly.SNAP_RADIUS +
+      Math.floor(Math.random() * Blockly.BUMP_RANDOMNESS)) - this.x;
+  var dy = (staticConnection.y + Blockly.SNAP_RADIUS +
+      Math.floor(Math.random() * Blockly.BUMP_RANDOMNESS)) - this.y;
   if (reverse) {
     // When reversing a bump due to an uneditable block, bump up.
     dy = -dy;
   }
   if (rootBlock.RTL) {
-    dx = (staticConnection.x_ - Blockly.SNAP_RADIUS -
-      Math.floor(Math.random() * Blockly.BUMP_RANDOMNESS)) - this.x_;
+    dx = (staticConnection.x - Blockly.SNAP_RADIUS -
+      Math.floor(Math.random() * Blockly.BUMP_RANDOMNESS)) - this.x;
   }
   rootBlock.moveBy(dx, dy);
   selected || rootBlock.removeSelect();
@@ -155,11 +155,11 @@ Blockly.RenderedConnection.prototype.bumpAwayFrom = function(staticConnection) {
  */
 Blockly.RenderedConnection.prototype.moveTo = function(x, y) {
   if (this.tracked_) {
-    this.db_.removeConnection(this, this.y_);
+    this.db_.removeConnection(this, this.y);
     this.db_.addConnection(this, y);
   }
-  this.x_ = x;
-  this.y_ = y;
+  this.x = x;
+  this.y = y;
 };
 
 /**
@@ -168,7 +168,7 @@ Blockly.RenderedConnection.prototype.moveTo = function(x, y) {
  * @param {number} dy Change to y coordinate, in workspace units.
  */
 Blockly.RenderedConnection.prototype.moveBy = function(dx, dy) {
-  this.moveTo(this.x_ + dx, this.y_ + dy);
+  this.moveTo(this.x + dx, this.y + dy);
 };
 
 /**
@@ -206,8 +206,8 @@ Blockly.RenderedConnection.prototype.getOffsetInBlock = function() {
  * @package
  */
 Blockly.RenderedConnection.prototype.tighten = function() {
-  var dx = this.targetConnection.x_ - this.x_;
-  var dy = this.targetConnection.y_ - this.y_;
+  var dx = this.targetConnection.x - this.x;
+  var dy = this.targetConnection.y - this.y;
   if (dx != 0 || dy != 0) {
     var block = this.targetBlock();
     var svgRoot = block.getSvgRoot();
@@ -260,8 +260,8 @@ Blockly.RenderedConnection.prototype.highlight = function() {
         Blockly.utils.svgPaths.lineOnAxis('h', xLen);
   }
   var xy = this.sourceBlock_.getRelativeToSurfaceXY();
-  var x = this.x_ - xy.x;
-  var y = this.y_ - xy.y;
+  var x = this.x - xy.x;
+  var y = this.y - xy.y;
   Blockly.Connection.highlightedPath_ = Blockly.utils.dom.createSvgElement(
       'path',
       {
@@ -295,9 +295,9 @@ Blockly.RenderedConnection.prototype.setTracking = function(doTracking) {
     return;
   }
   if (doTracking) {
-    this.db_.addConnection(this, this.y_);
+    this.db_.addConnection(this, this.y);
   } else {
-    this.db_.removeConnection(this, this.y_);
+    this.db_.removeConnection(this, this.y);
   }
   this.tracked_ = doTracking;
 };

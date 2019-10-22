@@ -87,14 +87,14 @@ Blockly.Connection.prototype.shadowDom_ = null;
  * @type {number}
  * @package
  */
-Blockly.Connection.prototype.x_ = 0;
+Blockly.Connection.prototype.x = 0;
 
 /**
  * Vertical location of this connection.
  * @type {number}
  * @package
  */
-Blockly.Connection.prototype.y_ = 0;
+Blockly.Connection.prototype.y = 0;
 
 /**
  * Connect two connections together.  This is the connection on the superior

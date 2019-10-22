@@ -1706,8 +1706,8 @@ Blockly.BlockSvg.prototype.positionNearConnection = function(sourceConnection,
   // otherwise its position is set by the previous block.
   if (sourceConnection.type == Blockly.NEXT_STATEMENT ||
       sourceConnection.type == Blockly.INPUT_VALUE) {
-    var dx = targetConnection.x_ - sourceConnection.x_;
-    var dy = targetConnection.y_ - sourceConnection.y_;
+    var dx = targetConnection.x - sourceConnection.x;
+    var dy = targetConnection.y - sourceConnection.y;
 
     this.moveBy(dx, dy);
   }

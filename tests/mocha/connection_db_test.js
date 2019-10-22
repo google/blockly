@@ -22,8 +22,8 @@ suite('Connection Database', function() {
     this.assertOrder = function() {
       var length = this.database.connections_.length;
       for (var i = 1; i < length; i++) {
-        chai.assert.isAtMost(this.database.connections_[i - 1].y_,
-            this.database.connections_[i].y_);
+        chai.assert.isAtMost(this.database.connections_[i - 1].y,
+            this.database.connections_[i].y);
       }
     };
     this.createConnection = function(x, y, type, opt_database) {
@@ -33,8 +33,8 @@ suite('Connection Database', function() {
       workspace.connectionDBList[type] = opt_database || this.database;
       var connection = new Blockly.RenderedConnection(
           {workspace: workspace}, type);
-      connection.x_ = x;
-      connection.y_ = y;
+      connection.x = x;
+      connection.y = y;
       return connection;
     };
     this.createSimpleTestConnections = function() {
@@ -45,11 +45,11 @@ suite('Connection Database', function() {
     };
   });
   test('Add Connection', function() {
-    var y2 = {y_: 2};
-    var y4 = {y_: 4};
-    var y1 = {y_: 1};
-    var y3a = {y_: 3};
-    var y3b = {y_: 3};
+    var y2 = {y: 2};
+    var y4 = {y: 4};
+    var y1 = {y: 1};
+    var y3a = {y: 3};
+    var y3b = {y: 3};
 
     this.database.addConnection(y2, 2);
     chai.assert.sameOrderedMembers(
@@ -73,12 +73,12 @@ suite('Connection Database', function() {
 
   });
   test('Remove Connection', function() {
-    var y2 = {y_: 2};
-    var y4 = {y_: 4};
-    var y1 = {y_: 1};
-    var y3a = {y_: 3};
-    var y3b = {y_: 3};
-    var y3c = {y_: 3};
+    var y2 = {y: 2};
+    var y4 = {y: 4};
+    var y1 = {y: 1};
+    var y3a = {y: 3};
+    var y3b = {y: 3};
+    var y3c = {y: 3};
 
     this.database.addConnection(y2, 2);
     this.database.addConnection(y4, 4);

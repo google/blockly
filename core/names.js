@@ -116,7 +116,7 @@ Blockly.Names.prototype.getNameForUserVariable_ = function(id) {
  * @suppress {deprecated} Suppress deprecated Blockly.Variables.NAME_TYPE.
  */
 Blockly.Names.prototype.getName = function(name, type) {
-  if (type == Blockly.Variables.NAME_TYPE) {
+  if (type == Blockly.VARIABLE_CATEGORY_NAME) {
     var varName = this.getNameForUserVariable_(name);
     if (varName) {
       name = varName;
@@ -124,7 +124,7 @@ Blockly.Names.prototype.getName = function(name, type) {
   }
   var normalized = name.toLowerCase() + '_' + type;
 
-  var isVarType = type == Blockly.Variables.NAME_TYPE ||
+  var isVarType = type == Blockly.VARIABLE_CATEGORY_NAME ||
       type == Blockly.Names.DEVELOPER_VARIABLE_TYPE;
 
   var prefix = isVarType ? this.variablePrefix_ : '';
@@ -156,7 +156,7 @@ Blockly.Names.prototype.getDistinctName = function(name, type) {
   }
   safeName += i;
   this.dbReverse_[safeName] = true;
-  var isVarType = type == Blockly.Variables.NAME_TYPE ||
+  var isVarType = type == Blockly.VARIABLE_CATEGORY_NAME ||
       type == Blockly.Names.DEVELOPER_VARIABLE_TYPE;
   var prefix = isVarType ? this.variablePrefix_ : '';
   return prefix + safeName;

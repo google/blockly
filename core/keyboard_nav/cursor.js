@@ -31,7 +31,7 @@ goog.provide('Blockly.Cursor');
  * @constructor
  */
 Blockly.Cursor = function() {
-  /*
+  /**
    * The current location of the cursor.
    * @type {Blockly.ASTNode}
    * @private

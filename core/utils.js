@@ -121,7 +121,7 @@ Blockly.utils.getInjectionDivXY_ = function(element) {
     if ((' ' + classes + ' ').indexOf(' injectionDiv ') != -1) {
       break;
     }
-    element = element.parentNode;
+    element = /** @type {!Element} */ (element.parentNode);
   }
   return new Blockly.utils.Coordinate(x, y);
 };
@@ -190,6 +190,7 @@ Blockly.utils.mouseToSvg = function(e, svg, matrix) {
 Blockly.utils.getScrollDeltaPixels = function(e) {
   switch (e.deltaMode) {
     case 0x00:  // Pixel mode.
+    default:
       return {
         x: e.deltaX,
         y: e.deltaY
@@ -236,7 +237,7 @@ Blockly.utils.replaceMessageReferences = function(message) {
   var interpolatedResult = Blockly.utils.tokenizeInterpolation_(message, false);
   // When parseInterpolationTokens == false, interpolatedResult should be at
   // most length 1.
-  return interpolatedResult.length ? interpolatedResult[0] : '';
+  return interpolatedResult.length ? String(interpolatedResult[0]) : '';
 };
 
 /**

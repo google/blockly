@@ -41,8 +41,8 @@ goog.require('Blockly.WidgetDiv');
  * @constructor
  */
 Blockly.VerticalFlyout = function(workspaceOptions) {
-workspaceOptions.getMetrics = /** @type {function():!Object} */ (
-  this.getMetrics_.bind(this));
+  workspaceOptions.getMetrics = /** @type {function():!Object} */ (
+    this.getMetrics_.bind(this));
   workspaceOptions.setMetrics = this.setMetrics_.bind(this);
 
   Blockly.VerticalFlyout.superClass_.constructor.call(this, workspaceOptions);

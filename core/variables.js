@@ -500,10 +500,11 @@ Blockly.Variables.getOrCreateVariablePackage = function(workspace, id, opt_name,
  */
 Blockly.Variables.getVariable = function(workspace, id, opt_name, opt_type) {
   var potentialVariableMap = workspace.getPotentialVariableMap();
+  var variable = null;
   // Try to just get the variable, by ID if possible.
   if (id) {
     // Look in the real variable map before checking the potential variable map.
-    var variable = workspace.getVariableById(id);
+    variable = workspace.getVariableById(id);
     if (!variable && potentialVariableMap) {
       variable = potentialVariableMap.getVariableById(id);
     }
@@ -518,7 +519,7 @@ Blockly.Variables.getVariable = function(workspace, id, opt_name, opt_type) {
       throw Error('Tried to look up a variable by name without a type');
     }
     // Otherwise look up by name and type.
-    var variable = workspace.getVariable(opt_name, opt_type);
+    variable = workspace.getVariable(opt_name, opt_type);
     if (!variable && potentialVariableMap) {
       variable = potentialVariableMap.getVariable(opt_name, opt_type);
     }
@@ -547,10 +548,11 @@ Blockly.Variables.createVariable_ = function(workspace, id, opt_name,
   }
 
   // Create a potential variable if in the flyout.
+  var variable = null;
   if (potentialVariableMap) {
-    var variable = potentialVariableMap.createVariable(opt_name, opt_type, id);
+    variable = potentialVariableMap.createVariable(opt_name, opt_type, id);
   } else {  // In the main workspace, create a real variable.
-    var variable = workspace.createVariable(opt_name, opt_type, id);
+    variable = workspace.createVariable(opt_name, opt_type, id);
   }
   return variable;
 };

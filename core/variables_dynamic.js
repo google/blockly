@@ -33,15 +33,15 @@ goog.require('Blockly.VariableModel');
 
 Blockly.VariablesDynamic.onCreateVariableButtonClick_String = function(button) {
   Blockly.Variables.createVariableButtonHandler(button.getTargetWorkspace(),
-      null, 'String');
+      undefined, 'String');
 };
 Blockly.VariablesDynamic.onCreateVariableButtonClick_Number = function(button) {
   Blockly.Variables.createVariableButtonHandler(button.getTargetWorkspace(),
-      null, 'Number');
+      undefined, 'Number');
 };
 Blockly.VariablesDynamic.onCreateVariableButtonClick_Colour = function(button) {
   Blockly.Variables.createVariableButtonHandler(button.getTargetWorkspace(),
-      null, 'Colour');
+      undefined, 'Colour');
 };
 /**
  * Construct the elements (blocks and button) required by the flyout for the

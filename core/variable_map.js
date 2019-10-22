@@ -168,7 +168,7 @@ Blockly.VariableMap.prototype.renameVariableWithConflict_ = function(variable,
  *     their type. This will default to '' which is a specific type.
  * @param {?string=} opt_id The unique ID of the variable. This will default to
  *     a UUID.
- * @return {Blockly.VariableModel} The newly created variable.
+ * @return {!Blockly.VariableModel} The newly created variable.
  */
 Blockly.VariableMap.prototype.createVariable = function(name,
     opt_type, opt_id) {
@@ -248,13 +248,13 @@ Blockly.VariableMap.prototype.deleteVariableById = function(id) {
           replace('%2', variableName);
       Blockly.confirm(confirmText,
           function(ok) {
-            if (ok) {
-              map.deleteVariableInternal_(variable, uses);
+            if (ok && variable) {
+              map.deleteVariableInternal(variable, uses);
             }
           });
     } else {
       // No confirmation necessary for a single block.
-      map.deleteVariableInternal_(variable, uses);
+      map.deleteVariableInternal(variable, uses);
     }
   } else {
     console.warn("Can't delete non-existent variable: " + id);
@@ -266,9 +266,9 @@ Blockly.VariableMap.prototype.deleteVariableById = function(id) {
  * user for confirmation.
  * @param {!Blockly.VariableModel} variable Variable to delete.
  * @param {!Array.<!Blockly.Block>} uses An array of uses of the variable.
- * @private
+ * @package
  */
-Blockly.VariableMap.prototype.deleteVariableInternal_ = function(variable,
+Blockly.VariableMap.prototype.deleteVariableInternal = function(variable,
     uses) {
   var existingGroup = Blockly.Events.getGroup();
   if (!existingGroup) {
@@ -292,7 +292,7 @@ Blockly.VariableMap.prototype.deleteVariableInternal_ = function(variable,
  * Find the variable by the given name and type and return it.  Return null if
  *     it is not found.
  * @param {string} name The name to check for.
- * @param {string=} opt_type The type of the variable.  If not provided it
+ * @param {?string=} opt_type The type of the variable.  If not provided it
  *     defaults to the empty string, which is a specific type.
  * @return {Blockly.VariableModel} The variable with the given name, or null if
  *     it was not found.

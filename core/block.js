@@ -301,6 +301,14 @@ Blockly.Block.prototype.domToMutation;
 Blockly.Block.prototype.suppressPrefixSuffix;
 
 /**
+ * An optional property for declaring developer variables.  Return a list of
+ * variable names for use by generators.  Developer variables are never shown to
+ * the user, but are declared as global variables in the generated code.
+ * @type {?function():!Array.<string>}
+ */
+Blockly.Block.prototype.getDeveloperVariables;
+
+/**
  * Dispose of this block.
  * @param {boolean} healStack If true, then try to heal any gap by connecting
  *     the next statement with the previous statement.  Otherwise, dispose of

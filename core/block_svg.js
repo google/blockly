@@ -1616,7 +1616,7 @@ Blockly.BlockSvg.prototype.getConnections_ = function(all) {
  * Create a connection of the specified type.
  * @param {number} type The type of the connection to create.
  * @return {!Blockly.RenderedConnection} A new connection of the specified type.
- * @private
+ * @protected
  */
 Blockly.BlockSvg.prototype.makeConnection_ = function(type) {
   return new Blockly.RenderedConnection(this, type);

@@ -64,12 +64,20 @@ Blockly.RenderedConnection = function(source, type) {
    */
   this.offsetInBlock_ = new Blockly.utils.Coordinate(0, 0);
 
+  // TODO: This could be changed to an enum if you want.
   /**
    * Whether this connections is tracked in the database or not.
-   * @type {boolean}
+   *
+   * True indicates that this connection is in the database and currently
+   * tracking.
+   * False indicates that this connection is not in the database, and won't be
+   * unless someone calls setTracking(true).
+   * Null indicates that this connection is not in the database, but it will
+   * add itself the next time moveTo is called.
+   * @type {?boolean}
    * @private
    */
-  this.tracked_ = false;
+  this.tracked_ = null;
 };
 Blockly.utils.object.inherits(Blockly.RenderedConnection, Blockly.Connection);
 
@@ -174,7 +182,12 @@ Blockly.RenderedConnection.prototype.bumpAwayFrom = function(staticConnection) {
  * @param {number} y New absolute y coordinate, in workspace coordinates.
  */
 Blockly.RenderedConnection.prototype.moveTo = function(x, y) {
-  if (this.tracked_) {
+  // Null indicates that this connection should add itself to the DB for the
+  // first time.
+  if (this.tracked_ == null) {
+    this.tracked_ = true;
+    this.db_.addConnection(this, y);
+  } else if (this.tracked_) {
     this.db_.removeConnection(this, this.y);
     this.db_.addConnection(this, y);
   }
@@ -316,7 +329,7 @@ Blockly.RenderedConnection.prototype.setTracking = function(doTracking) {
   }
   if (doTracking) {
     this.db_.addConnection(this, this.y);
-  } else {
+  } else if (this.tracked_) {
     this.db_.removeConnection(this, this.y);
   }
   this.tracked_ = doTracking;

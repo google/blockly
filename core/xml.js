@@ -545,7 +545,7 @@ Blockly.Xml.domToBlock = function(xmlBlock, workspace) {
     var blocks = topBlock.getDescendants(false);
     if (workspace.rendered) {
       // Wait to track connections to speed up assembly.
-      topBlock.waitToTrackConnections();
+      topBlock.setConnectionTracking(false);
       // Render each block.
       for (var i = blocks.length - 1; i >= 0; i--) {
         blocks[i].initSvg();
@@ -557,7 +557,7 @@ Blockly.Xml.domToBlock = function(xmlBlock, workspace) {
       // blocks have rendered.
       setTimeout(function() {
         if (!topBlock.disposed) {
-          topBlock.startTrackingConnections();
+          topBlock.setConnectionTracking(true);
         }
       }, 1);
       topBlock.updateDisabled();

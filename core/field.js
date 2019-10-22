@@ -654,8 +654,8 @@ Blockly.Field.prototype.updateWidth = function() {
  */
 Blockly.Field.prototype.updateSize_ = function() {
   var textWidth = Blockly.utils.dom.getFastTextWidth(
-    /** @type {!SVGTextElement} */ (this.textElement_),
-    Blockly.Field.FONTSIZE, Blockly.Field.FONTFAMILY);
+      /** @type {!SVGTextElement} */ (this.textElement_),
+      Blockly.Field.FONTSIZE, Blockly.Field.FONTFAMILY);
   var totalWidth = textWidth;
   if (this.borderRect_) {
     totalWidth += Blockly.Field.X_PADDING;

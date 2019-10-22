@@ -254,7 +254,7 @@ Blockly.Scrollbar.prototype.origin_ = new Blockly.utils.Coordinate(0, 0);
  * Units are CSS pixels, with (0, 0) at the top left of the browser window.
  * For a horizontal scrollbar this is the x coordinate of the mouse down event;
  * for a vertical scrollbar it's the y coordinate of the mouse down event.
- * @type {Blockly.utils.Coordinate}
+ * @type {number}
  * @private
  */
 Blockly.Scrollbar.prototype.startDragMouse_ = 0;
@@ -306,9 +306,9 @@ if (Blockly.Touch.TOUCH_ENABLED) {
 }
 
 /**
- * @param {!Object} first An object containing computed measurements of a
+ * @param {Object} first An object containing computed measurements of a
  *    workspace.
- * @param {!Object} second Another object containing computed measurements of a
+ * @param {Object} second Another object containing computed measurements of a
  *    workspace.
  * @return {boolean} Whether the two sets of metrics are equivalent.
  * @private

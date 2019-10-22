@@ -87,6 +87,26 @@ Blockly.RenderedConnection.prototype.dispose = function() {
 };
 
 /**
+ * Get the source block for this connection.
+ * @return {!Blockly.BlockSvg} The source block.
+ * @override
+ */
+Blockly.RenderedConnection.prototype.getSourceBlock = function() {
+  return /** @type {!Blockly.BlockSvg} */ (
+    Blockly.RenderedConnection.superClass_.getSourceBlock.call(this));
+};
+
+/**
+ * Returns the block that this connection connects to.
+ * @return {Blockly.BlockSvg} The connected block or null if none is connected.
+ * @override
+ */
+Blockly.RenderedConnection.prototype.targetBlock = function() {
+  return /** @type {Blockly.BlockSvg} */ (
+    Blockly.RenderedConnection.superClass_.targetBlock.call(this));
+};
+
+/**
  * Returns the distance between this connection and another connection in
  * workspace units.
  * @param {!Blockly.Connection} otherConnection The other connection to measure

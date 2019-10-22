@@ -1613,6 +1613,35 @@ Blockly.BlockSvg.prototype.getConnections_ = function(all) {
 };
 
 /**
+ * Walks down a stack of blocks and finds the last next connection on the stack.
+ * @return {Blockly.RenderedConnection} The last next connection on the stack,
+ *     or null.
+ * @package
+ * @override
+ */
+Blockly.BlockSvg.prototype.lastConnectionInStack = function() {
+  return /** @type {Blockly.RenderedConnection} */ (
+    Blockly.BlockSvg.superClass_.lastConnectionInStack.call(this));
+};
+
+/**
+ * Find the connection on this block that corresponds to the given connection
+ * on the other block.
+ * Used to match connections between a block and its insertion marker.
+ * @param {!Blockly.Block} otherBlock The other block to match against.
+ * @param {!Blockly.Connection} conn The other connection to match.
+ * @return {Blockly.RenderedConnection} The matching connection on this block,
+ *     or null.
+ * @package
+ * @override
+ */
+Blockly.BlockSvg.prototype.getMatchingConnection = function(otherBlock, conn) {
+  return /** @type {Blockly.RenderedConnection} */ (
+    Blockly.BlockSvg.superClass_.getMatchingConnection.call(this,
+        otherBlock, conn));
+};
+
+/**
  * Create a connection of the specified type.
  * @param {number} type The type of the connection to create.
  * @return {!Blockly.RenderedConnection} A new connection of the specified type.
@@ -1711,6 +1740,27 @@ Blockly.BlockSvg.prototype.positionNearConnection = function(sourceConnection,
 
     this.moveBy(dx, dy);
   }
+};
+
+/**
+ * Return the parent block or null if this block is at the top level.
+ * @return {Blockly.BlockSvg} The block that holds the current block.
+ * @override
+ */
+Blockly.BlockSvg.prototype.getParent = function() {
+  return /** @type {!Blockly.BlockSvg} */ (
+    Blockly.BlockSvg.superClass_.getParent.call(this));
+};
+
+/**
+ * Return the top-most block in this block's tree.
+ * This will return itself if this block is at the top level.
+ * @return {!Blockly.BlockSvg} The root block.
+ * @override
+ */
+Blockly.BlockSvg.prototype.getRootBlock = function() {
+  return /** @type {!Blockly.BlockSvg} */ (
+    Blockly.BlockSvg.superClass_.getRootBlock.call(this));
 };
 
 /**

@@ -1579,9 +1579,9 @@ Blockly.WorkspaceSvg.prototype.cleanUp = function() {
 /**
  * Show the context menu for the workspace.
  * @param {!Event} e Mouse event.
- * @private
+ * @package
  */
-Blockly.WorkspaceSvg.prototype.showContextMenu_ = function(e) {
+Blockly.WorkspaceSvg.prototype.showContextMenu = function(e) {
   if (this.options.readOnly || this.isFlyout) {
     return;
   }

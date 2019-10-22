@@ -117,7 +117,7 @@ Blockly.Gesture = function(e, creatorWorkspace) {
    * to the gesture, which will need to be cleared at deletion.
    * This may be different from the start workspace.  For instance, a flyout is
    * a workspace, but its parent workspace manages gestures for it.
-   * @type {Blockly.WorkspaceSvg}
+   * @type {!Blockly.WorkspaceSvg}
    * @private
    */
   this.creatorWorkspace_ = creatorWorkspace;
@@ -288,7 +288,7 @@ Blockly.Gesture.prototype.updateFromEvent_ = function(e) {
  */
 Blockly.Gesture.prototype.updateDragDelta_ = function(currentXY) {
   this.currentDragDeltaXY_ = Blockly.utils.Coordinate.difference(currentXY,
-      this.mouseDownXY_);
+      /** @type {!Blockly.utils.Coordinate} */ (this.mouseDownXY_));
 
   if (!this.hasExceededDragRadius_) {
     var currentDragDelta = Blockly.utils.Coordinate.magnitude(
@@ -404,7 +404,8 @@ Blockly.Gesture.prototype.updateIsDraggingWorkspace_ = function() {
   if (this.flyout_) {
     this.workspaceDragger_ = new Blockly.FlyoutDragger(this.flyout_);
   } else {
-    this.workspaceDragger_ = new Blockly.WorkspaceDragger(this.startWorkspace_);
+    this.workspaceDragger_ = new Blockly.WorkspaceDragger(
+        /** @type {!Blockly.WorkspaceSvg} */ (this.startWorkspace_));
   }
 
   this.isDraggingWorkspace_ = true;
@@ -441,8 +442,9 @@ Blockly.Gesture.prototype.updateIsDragging_ = function() {
  * @private
  */
 Blockly.Gesture.prototype.startDraggingBlock_ = function() {
-  this.blockDragger_ = new Blockly.BlockDragger(this.targetBlock_,
-      this.startWorkspace_);
+  this.blockDragger_ = new Blockly.BlockDragger(
+      /** @type {!Blockly.BlockSvg} */ (this.targetBlock_),
+      /** @type {!Blockly.WorkspaceSvg} */ (this.startWorkspace_));
   this.blockDragger_.startBlockDrag(this.currentDragDeltaXY_, this.healStack_);
   this.blockDragger_.dragBlock(this.mostRecentEvent_,
       this.currentDragDeltaXY_);
@@ -454,8 +456,9 @@ Blockly.Gesture.prototype.startDraggingBlock_ = function() {
  */
 // TODO (fenichel): Possibly combine this and startDraggingBlock_.
 Blockly.Gesture.prototype.startDraggingBubble_ = function() {
-  this.bubbleDragger_ = new Blockly.BubbleDragger(this.startBubble_,
-      this.startWorkspace_);
+  this.bubbleDragger_ = new Blockly.BubbleDragger(
+      /** @type {!Blockly.Bubble} */ (this.startBubble_),
+      /** @type {!Blockly.WorkspaceSvg} */ (this.startWorkspace_));
   this.bubbleDragger_.startBubbleDrag();
   this.bubbleDragger_.dragBubble(this.mostRecentEvent_,
       this.currentDragDeltaXY_);
@@ -625,12 +628,12 @@ Blockly.Gesture.prototype.handleRightClick = function(e) {
   if (this.targetBlock_) {
     this.bringBlockToFront_();
     Blockly.hideChaff(!!this.flyout_);
-    this.targetBlock_.showContextMenu_(e);
+    this.targetBlock_.showContextMenu(e);
   } else if (this.startBubble_) {
-    this.startBubble_.showContextMenu_(e);
+    this.startBubble_.showContextMenu(e);
   } else if (this.startWorkspace_ && !this.flyout_) {
     Blockly.hideChaff();
-    this.startWorkspace_.showContextMenu_(e);
+    this.startWorkspace_.showContextMenu(e);
   }
 
   // TODO: Handle right-click on a bubble.
@@ -643,7 +646,7 @@ Blockly.Gesture.prototype.handleRightClick = function(e) {
 /**
  * Handle a mousedown/touchstart event on a workspace.
  * @param {!Event} e A mouse down or touch start event.
- * @param {!Blockly.Workspace} ws The workspace the event hit.
+ * @param {!Blockly.WorkspaceSvg} ws The workspace the event hit.
  * @package
  */
 Blockly.Gesture.prototype.handleWsStart = function(e, ws) {

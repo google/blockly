@@ -520,9 +520,9 @@ Blockly.BlockSvg.prototype.moveTo = function(xy) {
  * Does nothing if useDragSurface_ is false.
  * @param {!Blockly.utils.Coordinate} newXY The position the block should take on
  *     on the workspace canvas, in workspace coordinates.
- * @private
+ * @package
  */
-Blockly.BlockSvg.prototype.moveOffDragSurface_ = function(newXY) {
+Blockly.BlockSvg.prototype.moveOffDragSurface = function(newXY) {
   if (!this.useDragSurface_) {
     return;
   }
@@ -868,9 +868,9 @@ Blockly.BlockSvg.prototype.generateContextMenu = function() {
 /**
  * Show the context menu for this block.
  * @param {!Event} e Mouse event.
- * @private
+ * @package
  */
-Blockly.BlockSvg.prototype.showContextMenu_ = function(e) {
+Blockly.BlockSvg.prototype.showContextMenu = function(e) {
   var menuOptions = this.generateContextMenu();
 
   if (menuOptions && menuOptions.length) {

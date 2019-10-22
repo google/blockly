@@ -170,9 +170,9 @@ Blockly.WorkspaceCommentSvg.prototype.pathMouseDown_ = function(e) {
 /**
  * Show the context menu for this workspace comment.
  * @param {!Event} e Mouse event.
- * @private
+ * @package
  */
-Blockly.WorkspaceCommentSvg.prototype.showContextMenu_ = function(e) {
+Blockly.WorkspaceCommentSvg.prototype.showContextMenu = function(e) {
   if (this.workspace.options.readOnly) {
     return;
   }
@@ -368,7 +368,7 @@ Blockly.WorkspaceCommentSvg.prototype.moveToDragSurface_ = function() {
  *     on the workspace canvas, in workspace coordinates.
  * @private
  */
-Blockly.WorkspaceCommentSvg.prototype.moveOffDragSurface_ = function(newXY) {
+Blockly.WorkspaceCommentSvg.prototype.moveOffDragSurface = function(newXY) {
   if (!this.useDragSurface_) {
     return;
   }

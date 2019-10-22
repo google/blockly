@@ -235,8 +235,10 @@ Blockly.TouchGesture.prototype.handleTouchStart = function(e) {
   var pointers = Object.keys(this.cachedPoints_);
   // If two pointers are down, check for pinch gestures
   if (pointers.length == 2) {
-    var point0 = this.cachedPoints_[pointers[0]];
-    var point1 = this.cachedPoints_[pointers[1]];
+    var point0 = /** @type {!Blockly.utils.Coordinate} */ (
+      this.cachedPoints_[pointers[0]]);
+    var point1 = /** @type {!Blockly.utils.Coordinate} */ (
+      this.cachedPoints_[pointers[1]]);
     this.startDistance_ = Blockly.utils.Coordinate.distance(point0, point1);
     this.isMultiTouch_ = true;
     e.preventDefault();
@@ -258,8 +260,10 @@ Blockly.TouchGesture.prototype.handleTouchMove = function(e) {
   // If two pointers are down, check for pinch gestures
   if (pointers.length == 2) {
     // Calculate the distance between the two pointers
-    var point0 = this.cachedPoints_[pointers[0]];
-    var point1 = this.cachedPoints_[pointers[1]];
+    var point0 = /** @type {!Blockly.utils.Coordinate} */ (
+      this.cachedPoints_[pointers[0]]);
+    var point1 = /** @type {!Blockly.utils.Coordinate} */ (
+      this.cachedPoints_[pointers[1]]);
     var moveDistance = Blockly.utils.Coordinate.distance(point0, point1);
     var startDistance = this.startDistance_;
     var scale = this.touchScale_ = moveDistance / startDistance;

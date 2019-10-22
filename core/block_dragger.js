@@ -238,7 +238,7 @@ Blockly.BlockDragger.prototype.endBlockDrag = function(e, currentDragDeltaXY) {
 
   var delta = this.pixelsToWorkspaceUnits_(currentDragDeltaXY);
   var newLoc = Blockly.utils.Coordinate.sum(this.startXY_, delta);
-  this.draggingBlock_.moveOffDragSurface_(newLoc);
+  this.draggingBlock_.moveOffDragSurface(newLoc);
 
   var deleted = this.maybeDeleteBlock_();
   if (!deleted) {

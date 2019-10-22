@@ -20,6 +20,10 @@ suite('Blocks', function() {
     this.workspace = new Blockly.Workspace();
     Blockly.defineBlocksWithJsonArray([
       {
+        "type": "empty_block",
+        "message0": ""
+      },
+      {
         "type": "stack_block",
         "message0": "",
         "previousStatement": null,
@@ -962,6 +966,105 @@ suite('Blocks', function() {
         middleBlock.setCollapsed(false);
         chai.assert.equal(this.getPrevious().length, 3);
         chai.assert.equal(this.getNext().length, 6);
+      });
+    });
+    suite('Remove Connections Programmatically', function() {
+      test('Output', function() {
+        var block = this.workspace.newBlock('row_block');
+        block.initSvg();
+        block.render();
+
+        block.setOutput(false);
+
+        chai.assert.equal(this.getOutputs().length, 0);
+        chai.assert.equal(this.getInputs().length, 1);
+      });
+      test('Value', function() {
+        var block = this.workspace.newBlock('row_block');
+        block.initSvg();
+        block.render();
+
+        block.removeInput('INPUT');
+
+        chai.assert.equal(this.getOutputs().length, 1);
+        chai.assert.equal(this.getInputs().length, 0);
+      });
+      test('Previous', function() {
+        var block = this.workspace.newBlock('stack_block');
+        block.initSvg();
+        block.render();
+
+        block.setPreviousStatement(false);
+
+        chai.assert.equal(this.getPrevious().length, 0);
+        chai.assert.equal(this.getNext().length, 1);
+      });
+      test('Next', function() {
+        var block = this.workspace.newBlock('stack_block');
+        block.initSvg();
+        block.render();
+
+        block.setNextStatement(false);
+
+        chai.assert.equal(this.getPrevious().length, 1);
+        chai.assert.equal(this.getNext().length, 0);
+      });
+      test('Statement', function() {
+        var block = this.workspace.newBlock('statement_block');
+        block.initSvg();
+        block.render();
+
+        block.removeInput('STATEMENT');
+
+        chai.assert.equal(this.getPrevious().length, 1);
+        chai.assert.equal(this.getNext().length, 1);
+      });
+    });
+    suite('Add Connections Programmatically', function() {
+      test('Output', function() {
+        var block = this.workspace.newBlock('empty_block');
+        block.initSvg();
+        block.render();
+
+        block.setOutput(true);
+
+        chai.assert.equal(this.getOutputs().length, 1);
+      });
+      test('Value', function() {
+        var block = this.workspace.newBlock('empty_block');
+        block.initSvg();
+        block.render();
+
+        block.appendValueInput('INPUT');
+
+        chai.assert.equal(this.getInputs().length, 1);
+      });
+      test('Previous', function() {
+        var block = this.workspace.newBlock('empty_block');
+        block.initSvg();
+        block.render();
+
+        block.setPreviousStatement(true);
+
+        chai.assert.equal(this.getPrevious().length, 1);
+      });
+      test('Next', function() {
+        var block = this.workspace.newBlock('empty_block');
+        block.initSvg();
+        block.render();
+
+        block.setNextStatement(true);
+
+        chai.assert.equal(this.getNext().length, 1);
+      });
+      test('Statement', function() {
+        var block = this.workspace.newBlock('empty_block');
+        block.initSvg();
+        block.render();
+
+        block.appendStatementInput('STATEMENT');
+
+        chai.assert.equal(this.getNext().length, 1);
       });
     });
   });

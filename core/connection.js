@@ -629,9 +629,11 @@ Blockly.Connection.prototype.checkType = function(otherConnection) {
  * @param {!Blockly.Connection} otherConnection Connection to compare against.
  * @return {boolean} True if the connections share a type.
  * @private
- * @deprecated October 2019
+ * @deprecated October 2019, use connection.checkType instead.
  */
 Blockly.Connection.prototype.checkType_ = function(otherConnection) {
+  console.warn('Deprecated call to Blockly.Connection.prototype.checkType_, ' +
+  'use Blockly.Connection.prototype.checkType instead.');
   return this.checkType(otherConnection);
 };
 

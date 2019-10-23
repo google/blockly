@@ -132,7 +132,7 @@ Blockly.geras.Highlighter.prototype.drawJaggedEdge_ = function(row) {
 Blockly.geras.Highlighter.prototype.drawValueInput = function(row) {
   var input = row.getLastInput();
   if (this.RTL_) {
-    var belowTabHeight = row.height - input.connectionHeight;
+    var belowTabHeight = row.height - input.getConnectionHeight();
 
     this.steps_ +=
         Blockly.utils.svgPaths.moveTo(
@@ -239,7 +239,7 @@ Blockly.geras.Highlighter.prototype.drawInlineInput = function(input) {
   if (this.RTL_) {
     var aboveTabHeight = input.connectionOffsetY - offset;
     var belowTabHeight = input.height -
-        (input.connectionOffsetY + input.connectionHeight) + offset;
+        (input.connectionOffsetY + input.getConnectionHeight()) + offset;
 
     var startX = connectionRight - offset;
 

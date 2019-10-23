@@ -58,7 +58,7 @@ Blockly.utils.object.inherits(Blockly.blockRendering.Connection,
  * @return {boolean} True if the connection shape is dynamic.
  */
 Blockly.blockRendering.Connection.prototype.isDynamic = function() {
-  return this.shape.isDynamic;
+  return !!this.shape.isDynamic;
 };
 
 /**

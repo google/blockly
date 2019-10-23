@@ -624,6 +624,18 @@ Blockly.Connection.prototype.checkType = function(otherConnection) {
 };
 
 /**
+ * Is this connection compatible with another connection with respect to the
+ * value type system.  E.g. square_root("Hello") is not compatible.
+ * @param {!Blockly.Connection} otherConnection Connection to compare against.
+ * @return {boolean} True if the connections share a type.
+ * @private
+ * @deprecated October 2019
+ */
+Blockly.Connection.prototype.checkType_ = function(otherConnection) {
+  return this.checkType(otherConnection);
+};
+
+/**
  * Function to be called when this connection's compatible types have changed.
  * @protected
  */

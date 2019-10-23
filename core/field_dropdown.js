@@ -514,8 +514,9 @@ Blockly.FieldDropdown.prototype.renderSelectedImage_ = function(imageJson) {
   this.imageElement_.setAttribute('height', imageJson.height);
   this.imageElement_.setAttribute('width', imageJson.width);
 
-  var arrowWidth = Blockly.utils.dom.getTextWidth(
-      /** @type {!SVGTSpanElement} */ (this.arrow_));
+  var arrowWidth = Blockly.utils.dom.getFastTextWidth(
+      /** @type {!SVGTSpanElement} */ (this.arrow_),
+      Blockly.Field.FONTSIZE, Blockly.Field.FONTFAMILY);
 
   var imageHeight = Number(imageJson.height);
   var imageWidth = Number(imageJson.width);

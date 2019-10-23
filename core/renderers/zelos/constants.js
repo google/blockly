@@ -102,14 +102,12 @@ Blockly.zelos.ConstantProvider.prototype.makeHexagonal = function() {
   }
 
   return {
-    width: 0,
-    height: 0,
     isDynamic: true,
-    getHeight: function(elem) {
-      return elem.height;
+    width: function(height) {
+      return height / 2;
     },
-    getWidth: function(elem) {
-      return elem.height ? elem.height / 2 : 0;
+    height: function(height) {
+      return height;
     },
     pathDown: function(height) {
       return makeMainPath(height, false, false);
@@ -142,14 +140,12 @@ Blockly.zelos.ConstantProvider.prototype.makeRounded = function() {
   }
 
   return {
-    width: 0,
-    height: 0,
     isDynamic: true,
-    getHeight: function(elem) {
-      return elem.height;
+    width: function(height) {
+      return height / 2;
     },
-    getWidth: function(elem) {
-      return elem.height ? elem.height / 2 : 0;
+    height: function(height) {
+      return height;
     },
     pathDown: function(height) {
       return makeMainPath(height, false, false);

@@ -68,7 +68,7 @@ Blockly.blockRendering.Connection.prototype.isDynamic = function() {
  */
 Blockly.blockRendering.Connection.prototype.getConnectionWidth = function() {
   if (this.isDynamic()) {
-    return this.shape.getWidth(this);
+    return this.shape.width(this.height);
   }
   return this.shape.width;
 };
@@ -80,7 +80,7 @@ Blockly.blockRendering.Connection.prototype.getConnectionWidth = function() {
  */
 Blockly.blockRendering.Connection.prototype.getConnectionHeight = function() {
   if (this.isDynamic()) {
-    return this.shape.getHeight(this);
+    return this.shape.height(this.height);
   }
   return this.shape.height;
 };
@@ -100,8 +100,8 @@ Blockly.blockRendering.OutputConnection = function(constants, connectionModel) {
   Blockly.blockRendering.OutputConnection.superClass_.constructor.call(this,
       constants, connectionModel);
   this.type |= Blockly.blockRendering.Types.OUTPUT_CONNECTION;
-  this.height = this.shape.height;
-  this.width = this.shape.width;
+  this.height = this.getConnectionHeight();
+  this.width = this.getConnectionWidth();
   this.connectionOffsetY = this.constants_.TAB_OFFSET_FROM_TOP;
   this.startX = this.width;
 };
@@ -124,8 +124,8 @@ Blockly.blockRendering.PreviousConnection = function(
   Blockly.blockRendering.PreviousConnection.superClass_.constructor.call(this,
       constants, connectionModel);
   this.type |= Blockly.blockRendering.Types.PREVIOUS_CONNECTION;
-  this.height = this.shape.height;
-  this.width = this.shape.width;
+  this.height = this.getConnectionHeight();
+  this.width = this.getConnectionWidth();
 
 };
 Blockly.utils.object.inherits(Blockly.blockRendering.PreviousConnection,
@@ -146,8 +146,8 @@ Blockly.blockRendering.NextConnection = function(constants, connectionModel) {
   Blockly.blockRendering.NextConnection.superClass_.constructor.call(this,
       constants, connectionModel);
   this.type |= Blockly.blockRendering.Types.NEXT_CONNECTION;
-  this.height = this.shape.height;
-  this.width = this.shape.width;
+  this.height = this.getConnectionHeight();
+  this.width = this.getConnectionWidth();
 };
 Blockly.utils.object.inherits(Blockly.blockRendering.NextConnection,
     Blockly.blockRendering.Connection);

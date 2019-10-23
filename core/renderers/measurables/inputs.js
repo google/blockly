@@ -88,7 +88,7 @@ Blockly.blockRendering.InlineInput = function(constants, input) {
 
   if (!this.connectedBlock) {
     this.height = this.constants_.EMPTY_INLINE_INPUT_HEIGHT;
-    this.width = this.shape.width +
+    this.width = this.getConnectionWidth() +
         this.constants_.EMPTY_INLINE_INPUT_PADDING;
   } else {
     // We allow the dark path to show on the parent block so that the child
@@ -127,7 +127,7 @@ Blockly.blockRendering.StatementInput = function(constants, input) {
         this.connectedBlockHeight + this.constants_.STATEMENT_BOTTOM_SPACER;
   }
   this.width = this.constants_.NOTCH_OFFSET_LEFT +
-      this.shape.width;
+      this.getConnectionWidth();
 };
 Blockly.utils.object.inherits(Blockly.blockRendering.StatementInput,
     Blockly.blockRendering.InputConnection);
@@ -149,12 +149,12 @@ Blockly.blockRendering.ExternalValueInput = function(constants, input) {
   this.type |= Blockly.blockRendering.Types.EXTERNAL_VALUE_INPUT;
 
   if (!this.connectedBlock) {
-    this.height = this.shape.height;
+    this.height = this.getConnectionHeight();
   } else {
     this.height =
         this.connectedBlockHeight - 2 * this.constants_.TAB_OFFSET_FROM_TOP;
   }
-  this.width = this.shape.width +
+  this.width = this.getConnectionWidth() +
       this.constants_.EXTERNAL_VALUE_INPUT_PADDING;
 
   this.connectionOffsetY = this.constants_.TAB_OFFSET_FROM_TOP;

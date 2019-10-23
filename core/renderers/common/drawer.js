@@ -199,7 +199,7 @@ Blockly.blockRendering.Drawer.prototype.drawValueInput_ = function(row) {
 Blockly.blockRendering.Drawer.prototype.drawStatementInput_ = function(row) {
   var input = row.getLastInput();
   // Where to start drawing the notch, which is on the right side in LTR.
-  var x = input.xPos + input.notchOffset + input.shape.width;
+  var x = input.xPos + input.notchOffset + input.getConnectionWidth();
 
   var innerTopLeftCorner =
       input.shape.pathRight +

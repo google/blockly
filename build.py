@@ -202,6 +202,8 @@ class Gen_compressed(threading.Thread):
       if filename == "core/blockly.js":
         code = code.replace("Blockly.VERSION = 'uncompiled';",
                             "Blockly.VERSION = '%s';" % blocklyVersion)
+      # Strip out all requireType calls.
+      code = re.sub(r"goog.requireType(.*)", "", code)
       params.append(("js_code", code.encode("utf-8")))
       f.close()
 

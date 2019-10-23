@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2018 Google LLC
+ * Copyright 2019 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,8 +16,10 @@
  */
 
 /**
- * @fileoverview Classic theme.
- * Contains multi-coloured border to create shadow effect.
+ * @fileoverview Deuteranopia theme.
+ * A color palette for people that have deuteranopia(the inability to perceive
+ * green light). This can also be used for people that have protanopia(the
+ * inability to perceive red light).
  */
 'use strict';
 

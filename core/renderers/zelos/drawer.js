@@ -211,3 +211,35 @@ Blockly.zelos.Drawer.prototype.drawInlineInput_ = function(input) {
   // Don't draw an inline input.
   this.positionInlineInputConnection_(input);
 };
+
+/**
+ * @override
+ */
+Blockly.zelos.Drawer.prototype.drawStatementInput_ = function(row) {
+  var input = row.getLastInput();
+  // Where to start drawing the notch, which is on the right side in LTR.
+  var x = input.xPos + input.notchOffset + input.shape.width;
+
+  var innerTopLeftCorner =
+      input.shape.pathRight +
+      Blockly.utils.svgPaths.lineOnAxis('h',
+          -(input.notchOffset - this.constants_.INSIDE_CORNERS.width)) +
+      this.constants_.INSIDE_CORNERS.pathTop;
+
+  var innerHeight =
+      row.height - (2 * this.constants_.INSIDE_CORNERS.height);
+
+  var innerBottomLeftCorner =
+    this.constants_.INSIDE_CORNERS.pathBottom +
+    Blockly.utils.svgPaths.lineOnAxis('h',
+        (input.notchOffset - this.constants_.INSIDE_CORNERS.width)) +
+    input.shape.pathLeft;
+
+  this.outlinePath_ += Blockly.utils.svgPaths.lineOnAxis('H', x) +
+      innerTopLeftCorner +
+      Blockly.utils.svgPaths.lineOnAxis('v', innerHeight) +
+      innerBottomLeftCorner +
+      Blockly.utils.svgPaths.lineOnAxis('H', row.xPos + row.width);
+
+  this.positionStatementInputConnection_(row);
+};

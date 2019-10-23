@@ -307,7 +307,8 @@ Blockly.blockRendering.RenderInfo.prototype.populateBottomRow_ = function() {
   // This is the minimum height for the row. If one of its elements has a
   // greater height it will be overwritten in the compute pass.
   if (followsStatement) {
-    this.bottomRow.minHeight = this.constants_.LARGE_PADDING;
+    this.bottomRow.minHeight =
+      this.constants_.AFTER_STATEMENT_BOTTOM_ROW_MIN_HEIGHT;
   } else {
     this.bottomRow.minHeight = this.constants_.MEDIUM_PADDING;
   }

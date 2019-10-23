@@ -546,11 +546,7 @@ Blockly.blockRendering.RenderInfo.prototype.addAlignmentPadding_ = function(row,
 Blockly.blockRendering.RenderInfo.prototype.alignStatementRow_ = function(row) {
   var statementInput = row.getLastInput();
   var currentWidth = row.width - statementInput.width;
-  var desiredWidth = this.statementEdge - this.startX;
-  if (this.outputConnection) {
-    desiredWidth += this.outputConnection.width;
-  }
-  // Add padding before the statement input.
+  var desiredWidth = this.statementEdge;
   var missingSpace = desiredWidth - currentWidth;
   if (missingSpace) {
     this.addAlignmentPadding_(row, missingSpace);

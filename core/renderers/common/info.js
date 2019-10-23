@@ -309,7 +309,7 @@ Blockly.blockRendering.RenderInfo.prototype.populateBottomRow_ = function() {
   if (followsStatement) {
     this.bottomRow.minHeight = this.constants_.LARGE_PADDING;
   } else {
-    this.bottomRow.minHeight = this.constants_.MEDIUM_PADDING - 1;
+    this.bottomRow.minHeight = this.constants_.MEDIUM_PADDING;
   }
 
   var leftSquareCorner = this.bottomRow.hasLeftSquareCorner(this.block_);

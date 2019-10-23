@@ -88,5 +88,6 @@ goog.require('Blockly.geras.Renderer');
 // Classic is the default theme.
 goog.require('Blockly.Themes.Classic');
 goog.require('Blockly.Themes.Dark');
+goog.require('Blockly.Themes.Deuteranopia');
 goog.require('Blockly.Themes.HighContrast');
-goog.require('Blockly.Themes.Modern');
+goog.require('Blockly.Themes.Tritanopia');

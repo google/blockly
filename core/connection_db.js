@@ -77,11 +77,11 @@ Blockly.ConnectionDB.prototype.findIndexOfConnection_ = function(conn, yPos) {
     return -1;
   }
 
-  var yPos = conn.y_;
+  yPos = conn.y;
   // Walk forward and back on the y axis looking for the connection.
   var pointerMin = bestGuess;
   var pointerMax = bestGuess;
-  while (pointerMin >= 0 && this.connections_[pointerMin].y_ == yPos) {
+  while (pointerMin >= 0 && this.connections_[pointerMin].y == yPos) {
     if (this.connections_[pointerMin] == conn) {
       return pointerMin;
     }
@@ -89,7 +89,7 @@ Blockly.ConnectionDB.prototype.findIndexOfConnection_ = function(conn, yPos) {
   }
 
   while (pointerMax < this.connections_.length &&
-         this.connections_[pointerMax].y_ == yPos) {
+         this.connections_[pointerMax].y == yPos) {
     if (this.connections_[pointerMax] == conn) {
       return pointerMax;
     }
@@ -113,9 +113,9 @@ Blockly.ConnectionDB.prototype.calculateIndexForYPos_ = function(yPos) {
   var pointerMax = this.connections_.length;
   while (pointerMin < pointerMax) {
     var pointerMid = Math.floor((pointerMin + pointerMax) / 2);
-    if (this.connections_[pointerMid].y_ < yPos) {
+    if (this.connections_[pointerMid].y < yPos) {
       pointerMin = pointerMid + 1;
-    } else if (this.connections_[pointerMid].y_ > yPos) {
+    } else if (this.connections_[pointerMid].y > yPos) {
       pointerMax = pointerMid;
     } else {
       pointerMin = pointerMid;
@@ -149,15 +149,15 @@ Blockly.ConnectionDB.prototype.removeConnection = function(connection, yPos) {
  */
 Blockly.ConnectionDB.prototype.getNeighbours = function(connection, maxRadius) {
   var db = this.connections_;
-  var currentX = connection.x_;
-  var currentY = connection.y_;
+  var currentX = connection.x;
+  var currentY = connection.y;
 
   // Binary search to find the closest y location.
   var pointerMin = 0;
   var pointerMax = db.length - 2;
   var pointerMid = pointerMax;
   while (pointerMin < pointerMid) {
-    if (db[pointerMid].y_ < currentY) {
+    if (db[pointerMid].y < currentY) {
       pointerMin = pointerMid;
     } else {
       pointerMax = pointerMid;
@@ -175,8 +175,8 @@ Blockly.ConnectionDB.prototype.getNeighbours = function(connection, maxRadius) {
    *     the other connection is less than the allowed radius.
    */
   function checkConnection_(yIndex) {
-    var dx = currentX - db[yIndex].x_;
-    var dy = currentY - db[yIndex].y_;
+    var dx = currentX - db[yIndex].x;
+    var dy = currentY - db[yIndex].y;
     var r = Math.sqrt(dx * dx + dy * dy);
     if (r <= maxRadius) {
       neighbours.push(db[yIndex]);
@@ -209,7 +209,7 @@ Blockly.ConnectionDB.prototype.getNeighbours = function(connection, maxRadius) {
  * @private
  */
 Blockly.ConnectionDB.prototype.isInYRange_ = function(index, baseY, maxRadius) {
-  return (Math.abs(this.connections_[index].y_ - baseY) <= maxRadius);
+  return (Math.abs(this.connections_[index].y - baseY) <= maxRadius);
 };
 
 /**
@@ -232,16 +232,16 @@ Blockly.ConnectionDB.prototype.searchForClosest = function(conn, maxRadius,
   }
 
   // Stash the values of x and y from before the drag.
-  var baseY = conn.y_;
-  var baseX = conn.x_;
+  var baseY = conn.y;
+  var baseX = conn.x;
 
-  conn.x_ = baseX + dxy.x;
-  conn.y_ = baseY + dxy.y;
+  conn.x = baseX + dxy.x;
+  conn.y = baseY + dxy.y;
 
   // calculateIndexForYPos_ finds an index for insertion, which is always
   // after any block with the same y index.  We want to search both forward
   // and back, so search on both sides of the index.
-  var closestIndex = this.calculateIndexForYPos_(conn.y_);
+  var closestIndex = this.calculateIndexForYPos_(conn.y);
 
   var bestConnection = null;
   var bestRadius = maxRadius;
@@ -249,7 +249,7 @@ Blockly.ConnectionDB.prototype.searchForClosest = function(conn, maxRadius,
 
   // Walk forward and back on the y axis looking for the closest x,y point.
   var pointerMin = closestIndex - 1;
-  while (pointerMin >= 0 && this.isInYRange_(pointerMin, conn.y_, maxRadius)) {
+  while (pointerMin >= 0 && this.isInYRange_(pointerMin, conn.y, maxRadius)) {
     temp = this.connections_[pointerMin];
     if (conn.isConnectionAllowed(temp, bestRadius)) {
       bestConnection = temp;
@@ -260,7 +260,7 @@ Blockly.ConnectionDB.prototype.searchForClosest = function(conn, maxRadius,
 
   var pointerMax = closestIndex;
   while (pointerMax < this.connections_.length &&
-      this.isInYRange_(pointerMax, conn.y_, maxRadius)) {
+      this.isInYRange_(pointerMax, conn.y, maxRadius)) {
     temp = this.connections_[pointerMax];
     if (conn.isConnectionAllowed(temp, bestRadius)) {
       bestConnection = temp;
@@ -270,8 +270,8 @@ Blockly.ConnectionDB.prototype.searchForClosest = function(conn, maxRadius,
   }
 
   // Reset the values of x and y.
-  conn.x_ = baseX;
-  conn.y_ = baseY;
+  conn.x = baseX;
+  conn.y = baseY;
 
   // If there were no valid connections, bestConnection will be null.
   return {connection: bestConnection, radius: bestRadius};

@@ -324,8 +324,8 @@ Blockly.InsertionMarkerManager.prototype.shouldUpdatePreviews_ = function(
           this.localConnection_ == candidateLocal) {
         return false;
       }
-      var xDiff = this.localConnection_.x_ + dxy.x - this.closestConnection_.x_;
-      var yDiff = this.localConnection_.y_ + dxy.y - this.closestConnection_.y_;
+      var xDiff = this.localConnection_.x + dxy.x - this.closestConnection_.x;
+      var yDiff = this.localConnection_.y + dxy.y - this.closestConnection_.y;
       var curDistance = Math.sqrt(xDiff * xDiff + yDiff * yDiff);
       // Slightly prefer the existing preview over a new preview.
       return !(candidateClosest && radius > curDistance -
@@ -409,7 +409,7 @@ Blockly.InsertionMarkerManager.prototype.shouldReplace_ = function() {
   if (local.type == Blockly.OUTPUT_VALUE) {
     // Insert the dragged block into the stack if possible.
     if (!closest.isConnected() ||
-      Blockly.Connection.lastConnectionInRow_(this.topBlock_,
+      Blockly.Connection.lastConnectionInRow(this.topBlock_,
           closest.targetConnection.getSourceBlock())) {
       return false; // Insert.
     }

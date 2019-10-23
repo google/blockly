@@ -71,6 +71,7 @@
 // Custom requires for the playground.
 goog.require('Blockly.blockRendering.Debug');
 goog.require('Blockly.minimalist.Renderer');
+goog.require('Blockly.Themes.Modern');
 goog.require('Blockly.thrasos.Renderer');
 goog.require('Blockly.zelos.Renderer');
 </script>
@@ -320,12 +321,17 @@ function addRenderDebugOptionsCheckboxes() {
 
 function changeTheme() {
   var theme = document.getElementById('themeChanger');
-  if (theme.value === "modern") {
-    Blockly.getMainWorkspace().setTheme(Blockly.Themes.Modern);
-  } else if (theme.value === "dark") {
+
+  if (theme.value === "dark") {
     Blockly.getMainWorkspace().setTheme(Blockly.Themes.Dark);
   } else if (theme.value === "high_contrast") {
     Blockly.getMainWorkspace().setTheme(Blockly.Themes.HighContrast);
+  } else if (theme.value === "deuteranopia") {
+    Blockly.getMainWorkspace().setTheme(Blockly.Themes.Deuteranopia);
+  } else if (theme.value === "tritanopia") {
+    Blockly.getMainWorkspace().setTheme(Blockly.Themes.Tritanopia);
+  } else if (theme.value === "modern") {
+    Blockly.getMainWorkspace().setTheme(Blockly.Themes.Modern);
   } else {
     Blockly.getMainWorkspace().setTheme(Blockly.Themes.Classic);
   }
@@ -587,6 +593,8 @@ var spaghettiXml = [
     <option value="modern">Modern</option>
     <option value="dark">Dark</option>
     <option value="high_contrast">High Contrast</option>
+    <option value="deuteranopia">Deuteranopia/Protanopia</option>
+    <option value="tritanopia">Tritanopia</option>
   </select>
   <p>
     <input type="button" value="Export to XML" onclick="toXml()">

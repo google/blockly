@@ -91,3 +91,4 @@ goog.require('Blockly.Themes.Dark');
 goog.require('Blockly.Themes.Deuteranopia');
 goog.require('Blockly.Themes.HighContrast');
 goog.require('Blockly.Themes.Tritanopia');
+// goog.require('Blockly.Themes.Modern');

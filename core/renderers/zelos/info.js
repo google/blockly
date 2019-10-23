@@ -131,6 +131,20 @@ Blockly.zelos.RenderInfo.prototype.populateBottomRow_ = function() {
 /**
  * @override
  */
+Blockly.zelos.RenderInfo.prototype.computeBounds_ = function() {
+  Blockly.zelos.RenderInfo.superClass_.computeBounds_.call(this);
+
+  if (this.outputConnection && this.outputConnection.isDynamic()) {
+    // Add right connection width.
+    var rightConnectionWidth = this.outputConnection.getConnectionWidth();
+    this.width += rightConnectionWidth;
+    this.widthWithChildren += rightConnectionWidth;
+  }
+};
+
+/**
+ * @override
+ */
 Blockly.zelos.RenderInfo.prototype.getInRowSpacing_ = function(prev, next) {
   if (!prev || !next) {
     // No need for padding at the beginning or end of the row if the
@@ -356,17 +370,16 @@ Blockly.zelos.RenderInfo.prototype.finalize_ = function() {
     row.yPos = yCursor;
     yCursor += row.height;
   }
-  // Dynamic output connections depend on the height of the block. Adjust the
-  // height and width of the connection, and then adjust the startX and width of the
-  // block accordingly.
-  var outputConnectionWidth = 0;
-  if (this.outputConnection && !this.outputConnection.height) {
+
+  if (this.outputConnection && this.outputConnection.isDynamic()) {
+    // Dynamic output connections depend on the height of the block. Adjust the
+    // height of the connection.
     this.outputConnection.height = yCursor;
-    outputConnectionWidth = yCursor; // Twice the width to account for the right side.
-    this.outputConnection.width = outputConnectionWidth / 2;
+    this.outputConnection.width = this.outputConnection.getConnectionWidth();
+
+    // Recompute the bounds as we now know the output connection dimensions.
+    this.computeBounds_();
   }
-  this.startX += outputConnectionWidth / 2;
-  this.width += outputConnectionWidth;
 
   var widestRowWithConnectedBlocks = 0;
   for (var i = 0, row; (row = this.rows[i]); i++) {
@@ -377,7 +390,8 @@ Blockly.zelos.RenderInfo.prototype.finalize_ = function() {
     this.recordElemPositions_(row);
   }
 
-  this.widthWithChildren = widestRowWithConnectedBlocks + this.startX;
+  this.widthWithChildren = Math.max(this.widthWithChildren,
+      widestRowWithConnectedBlocks + this.startX);
 
   this.height = yCursor;
   this.startY = this.topRow.capline;

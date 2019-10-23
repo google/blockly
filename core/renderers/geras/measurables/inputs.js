@@ -25,8 +25,8 @@
 goog.provide('Blockly.geras.InlineInput');
 goog.provide('Blockly.geras.StatementInput');
 
-goog.require('Blockly.blockRendering.Connection');
 goog.require('Blockly.utils.object');
+
 
 /**
  * An object containing information about the space an inline input takes up

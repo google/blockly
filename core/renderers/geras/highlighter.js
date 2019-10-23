@@ -231,9 +231,9 @@ Blockly.geras.Highlighter.prototype.drawInlineInput = function(input) {
   var offset = this.highlightOffset_;
 
   // Relative to the block's left.
-  var connectionRight = input.xPos + input.connectionWidth;
+  var connectionRight = input.xPos + input.getConnectionWidth();
   var yPos = input.centerline - input.height / 2;
-  var bottomHighlightWidth = input.width - input.connectionWidth;
+  var bottomHighlightWidth = input.width - input.getConnectionWidth();
   var startY = yPos + offset;
 
   if (this.RTL_) {

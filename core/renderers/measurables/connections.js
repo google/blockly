@@ -53,6 +53,39 @@ Blockly.utils.object.inherits(Blockly.blockRendering.Connection,
     Blockly.blockRendering.Measurable);
 
 /**
+ * Whether or not the connection shape is dynamic. Dynamic shapes get their
+ * height from the block.
+ * @return {boolean} True if the connection shape is dynamic.
+ */
+Blockly.blockRendering.Connection.prototype.isDynamic = function() {
+  return this.shape.isDynamic;
+};
+
+/**
+ * Get the connection width. If the input has a dynamic shape, call the shape's
+ * `getWidth` method passing it the input object.
+ * @return {number} The connection width.
+ */
+Blockly.blockRendering.Connection.prototype.getConnectionWidth = function() {
+  if (this.isDynamic()) {
+    return this.shape.getWidth(this);
+  }
+  return this.shape.width;
+};
+
+/**
+ * Get the connection height. If the input has a dynamic shape, call the shape's
+ * `getHeight` method passing it the input object.
+ * @return {number} The connection height.
+ */
+Blockly.blockRendering.Connection.prototype.getConnectionHeight = function() {
+  if (this.isDynamic()) {
+    return this.shape.getHeight(this);
+  }
+  return this.shape.height;
+};
+
+/**
  * An object containing information about the space an output connection takes
  * up during rendering.
  * @param {!Blockly.blockRendering.ConstantProvider} constants The rendering
@@ -74,15 +107,6 @@ Blockly.blockRendering.OutputConnection = function(constants, connectionModel) {
 };
 Blockly.utils.object.inherits(Blockly.blockRendering.OutputConnection,
     Blockly.blockRendering.Connection);
-
-/**
- * Whether or not the connection shape is dynamic. Dynamic shapes get their
- * height from the block.
- * @return {boolean} True if the connection shape is dynamic.
- */
-Blockly.blockRendering.OutputConnection.prototype.isDynamic = function() {
-  return this.shape.isDynamic;
-};
 
 /**
  * An object containing information about the space a previous connection takes

@@ -179,14 +179,14 @@ Blockly.blockRendering.Drawer.prototype.drawValueInput_ = function(row) {
   var input = row.getLastInput();
   this.positionExternalValueConnection_(row);
 
-  var pathDown = (typeof input.shape.pathDown == "function") ?
-      input.shape.pathDown(input.height) :
-      input.shape.pathDown;
+  var pathDown = input.isDynamic() ?
+    input.shape.pathDown(input.height) : input.shape.pathDown;
 
   this.outlinePath_ +=
       Blockly.utils.svgPaths.lineOnAxis('H', input.xPos + input.width) +
       pathDown +
-      Blockly.utils.svgPaths.lineOnAxis('v', row.height - input.connectionHeight);
+      Blockly.utils.svgPaths.lineOnAxis('v', row.height -
+        input.getConnectionHeight());
 };
 
 
@@ -356,14 +356,15 @@ Blockly.blockRendering.Drawer.prototype.drawInlineInput_ = function(input) {
   var yPos = input.centerline - height / 2;
 
   var connectionTop = input.connectionOffsetY;
-  var connectionBottom = input.connectionHeight + connectionTop;
-  var connectionRight = input.xPos + input.connectionWidth;
+  var connectionBottom = input.getConnectionHeight() + connectionTop;
+  var connectionRight = input.xPos + input.getConnectionWidth();
 
   this.inlinePath_ += Blockly.utils.svgPaths.moveTo(connectionRight, yPos) +
       Blockly.utils.svgPaths.lineOnAxis('v', connectionTop) +
       input.shape.pathDown +
       Blockly.utils.svgPaths.lineOnAxis('v', height - connectionBottom) +
-      Blockly.utils.svgPaths.lineOnAxis('h', width - input.connectionWidth) +
+      Blockly.utils.svgPaths.lineOnAxis('h', width -
+        input.getConnectionWidth()) +
       Blockly.utils.svgPaths.lineOnAxis('v', -height) +
       'z';
 
@@ -383,7 +384,7 @@ Blockly.blockRendering.Drawer.prototype.positionInlineInputConnection_ = functio
   // Move the connection.
   if (input.connection) {
     // xPos already contains info about startX
-    var connX = input.xPos + input.connectionWidth;
+    var connX = input.xPos + input.getConnectionWidth();
     if (this.info_.RTL) {
       connX *= -1;
     }

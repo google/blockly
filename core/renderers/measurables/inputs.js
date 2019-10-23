@@ -98,8 +98,6 @@ Blockly.blockRendering.InlineInput = function(constants, input) {
   }
 
   this.connectionOffsetY = this.constants_.TAB_OFFSET_FROM_TOP;
-  this.connectionHeight = this.shape.height;
-  this.connectionWidth = this.shape.width;
 };
 Blockly.utils.object.inherits(Blockly.blockRendering.InlineInput,
     Blockly.blockRendering.InputConnection);
@@ -160,8 +158,6 @@ Blockly.blockRendering.ExternalValueInput = function(constants, input) {
       this.constants_.EXTERNAL_VALUE_INPUT_PADDING;
 
   this.connectionOffsetY = this.constants_.TAB_OFFSET_FROM_TOP;
-  this.connectionHeight = this.shape.height;
-  this.connectionWidth = this.shape.width;
 };
 Blockly.utils.object.inherits(Blockly.blockRendering.ExternalValueInput,
     Blockly.blockRendering.InputConnection);

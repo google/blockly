@@ -105,6 +105,12 @@ Blockly.zelos.ConstantProvider.prototype.makeHexagonal = function() {
     width: 0,
     height: 0,
     isDynamic: true,
+    getHeight: function(elem) {
+      return elem.height;
+    },
+    getWidth: function(elem) {
+      return elem.height ? elem.height / 2 : 0;
+    },
     pathDown: function(height) {
       return makeMainPath(height, false, false);
     },
@@ -139,6 +145,12 @@ Blockly.zelos.ConstantProvider.prototype.makeRounded = function() {
     width: 0,
     height: 0,
     isDynamic: true,
+    getHeight: function(elem) {
+      return elem.height;
+    },
+    getWidth: function(elem) {
+      return elem.height ? elem.height / 2 : 0;
+    },
     pathDown: function(height) {
       return makeMainPath(height, false, false);
     },

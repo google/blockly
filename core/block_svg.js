@@ -1521,7 +1521,7 @@ Blockly.BlockSvg.prototype.appendInput_ = function(type, name) {
  * Used by the deserializer to be more efficient. Setting a connection's
  * tracked_ value to false keeps it from adding itself to the db when it
  * gets its first moveTo call, saving expensive ops for later.
- * @param track If true, start tracking. If false, stop tracking.
+ * @param {boolean} track If true, start tracking. If false, stop tracking.
  * @package
  */
 Blockly.BlockSvg.prototype.setConnectionTracking = function(track) {

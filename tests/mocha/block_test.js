@@ -393,7 +393,7 @@ suite('Blocks', function() {
       test('Block Connected', function() {
         var blockB = this.workspace.newBlock('row_block');
         this.blockA.getInput('VALUE').connection
-          .connect(blockB.outputConnection);
+            .connect(blockB.outputConnection);
 
         this.blockA.removeInput('VALUE');
         chai.assert.isFalse(blockB.disposed);
@@ -403,7 +403,7 @@ suite('Blocks', function() {
         var blockB = this.workspace.newBlock('row_block');
         blockB.setShadow(true);
         this.blockA.getInput('VALUE').connection
-          .connect(blockB.outputConnection);
+            .connect(blockB.outputConnection);
 
         this.blockA.removeInput('VALUE');
         chai.assert.isTrue(blockB.disposed);
@@ -422,7 +422,7 @@ suite('Blocks', function() {
       test('Block Connected', function() {
         var blockB = this.workspace.newBlock('stack_block');
         this.blockA.getInput('STATEMENT').connection
-          .connect(blockB.previousConnection);
+            .connect(blockB.previousConnection);
 
         this.blockA.removeInput('STATEMENT');
         chai.assert.isFalse(blockB.disposed);
@@ -432,7 +432,7 @@ suite('Blocks', function() {
         var blockB = this.workspace.newBlock('stack_block');
         blockB.setShadow(true);
         this.blockA.getInput('STATEMENT').connection
-          .connect(blockB.previousConnection);
+            .connect(blockB.previousConnection);
 
         this.blockA.removeInput('STATEMENT');
         chai.assert.isTrue(blockB.disposed);

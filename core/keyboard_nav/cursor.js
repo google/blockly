@@ -78,9 +78,10 @@ Blockly.Cursor.prototype.getCurNode = function() {
  * @param {Blockly.ASTNode} newNode The new location of the cursor.
  */
 Blockly.Cursor.prototype.setCurNode = function(newNode) {
+  var oldNode = this.curNode_;
   this.curNode_ = newNode;
   if (this.drawer_) {
-    this.drawer_.draw(this.getCurNode());
+    this.drawer_.draw(oldNode, this.curNode_);
   }
 };
 

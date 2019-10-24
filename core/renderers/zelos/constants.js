@@ -262,52 +262,6 @@ Blockly.zelos.ConstantProvider.prototype.makeNotch = function() {
 };
 
 /**
- * @return {!Object} An object containing sizing and path information about
- *     outside corners.
- * @package
- */
-Blockly.zelos.ConstantProvider.prototype.makeOutsideCorners = function() {
-  var radius = this.CORNER_RADIUS;
-  /**
-   * SVG path for drawing the rounded top-left corner.
-   * @const
-   */
-  var topLeft =
-      Blockly.utils.svgPaths.moveBy(0, radius) +
-      Blockly.utils.svgPaths.arc('a', '0 0,1', radius,
-          Blockly.utils.svgPaths.point(radius, -radius));
-
-  /**
-   * SVG path for drawing the rounded top-right corner.
-   * @const
-   */
-  var topRight =
-      Blockly.utils.svgPaths.arc('a', '0 0,1', radius,
-          Blockly.utils.svgPaths.point(radius, radius));
-
-  /**
-   * SVG path for drawing the rounded bottom-left corner.
-   * @const
-   */
-  var bottomLeft = Blockly.utils.svgPaths.arc('a', '0 0,1', radius,
-      Blockly.utils.svgPaths.point(-radius, -radius));
-
-  /**
-   * SVG path for drawing the rounded bottom-right corner.
-   * @const
-   */
-  var bottomRight = Blockly.utils.svgPaths.arc('a', '0 0,1', radius,
-      Blockly.utils.svgPaths.point(-radius, radius));
-
-  return {
-    topLeft: topLeft,
-    topRight: topRight,
-    bottomRight: bottomRight,
-    bottomLeft: bottomLeft
-  };
-};
-
-/**
  * @override
  */
 Blockly.zelos.ConstantProvider.prototype.makeInsideCorners = function() {

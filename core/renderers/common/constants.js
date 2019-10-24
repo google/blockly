@@ -340,12 +340,34 @@ Blockly.blockRendering.ConstantProvider.prototype.makeOutsideCorners = function(
       Blockly.utils.svgPaths.arc('a', '0 0,1', radius,
           Blockly.utils.svgPaths.point(radius, -radius));
 
+  /**
+   * SVG path for drawing the rounded top-right corner.
+   * @const
+   */
+  var topRight =
+      Blockly.utils.svgPaths.arc('a', '0 0,1', radius,
+          Blockly.utils.svgPaths.point(radius, radius));
+
+  /**
+   * SVG path for drawing the rounded bottom-left corner.
+   * @const
+   */
   var bottomLeft = Blockly.utils.svgPaths.arc('a', '0 0,1', radius,
       Blockly.utils.svgPaths.point(-radius, -radius));
 
+  /**
+   * SVG path for drawing the rounded bottom-right corner.
+   * @const
+   */
+  var bottomRight = Blockly.utils.svgPaths.arc('a', '0 0,1', radius,
+      Blockly.utils.svgPaths.point(-radius, radius));
+
   return {
     topLeft: topLeft,
-    bottomLeft: bottomLeft
+    topRight: topRight,
+    bottomRight: bottomRight,
+    bottomLeft: bottomLeft,
+    rightHeight: radius
   };
 };
 

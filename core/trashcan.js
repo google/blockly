@@ -212,6 +212,7 @@ Blockly.Trashcan.prototype.top_ = 0;
 /**
  * Create the trash can elements.
  * @return {!SVGElement} The trash can's SVG group.
+ * @suppress {deprecated} Suppress deprecated bindEvent_ call.
  */
 Blockly.Trashcan.prototype.createDom = function() {
   /* Here's the markup that will be generated:

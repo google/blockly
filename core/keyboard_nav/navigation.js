@@ -336,7 +336,7 @@ Blockly.navigation.modify_ = function() {
     markerLoc = /** @type {!Blockly.Connection} */ (markerLoc);
     return Blockly.navigation.insertBlock(cursorLoc, markerLoc);
   } else if (markerType == Blockly.ASTNode.types.WORKSPACE) {
-    var block = cursorNode.getSourceBlock();
+    var block = cursorNode ? cursorNode.getSourceBlock() : null;
     return Blockly.navigation.moveBlockToWorkspace_(block, markerNode);
   }
   Blockly.navigation.warn_('Unexpected state in Blockly.navigation.modify_.');
@@ -620,7 +620,7 @@ Blockly.navigation.moveCursorOnBlockDelete = function(deletedBlock) {
   var cursor = workspace.getCursor();
   if (cursor) {
     var curNode = cursor.getCurNode();
-    var block = curNode.getSourceBlock();
+    var block = curNode ? curNode.getSourceBlock() : null;
 
     if (block === deletedBlock) {
       // If the block has a parent move the cursor to their connection point.
@@ -654,7 +654,7 @@ Blockly.navigation.moveCursorOnBlockMutation = function(mutatedBlock) {
   var cursor = Blockly.getMainWorkspace().getCursor();
   if (cursor) {
     var curNode = cursor.getCurNode();
-    var block = curNode.getSourceBlock();
+    var block = curNode ? curNode.getSourceBlock() : null;
 
     if (block === mutatedBlock) {
       cursor.setCurNode(Blockly.ASTNode.createBlockNode(block));

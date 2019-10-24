@@ -526,7 +526,7 @@ Blockly.CursorSvg.prototype.draw = function(oldNode, curNode) {
 /**
  * Fire event for the cursor or marker.
  * @param {Blockly.ASTNode} oldNode The old node the cursor used to be on.
- * @param {Blockly.ASTNode} curNode The new node the cursor is currently on.
+ * @param {!Blockly.ASTNode} curNode The new node the cursor is currently on.
  * @private
  */
 Blockly.CursorSvg.prototype.fireCursorEvent_ = function(oldNode, curNode) {

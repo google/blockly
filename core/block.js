@@ -63,7 +63,7 @@ Blockly.Block = function(workspace, prototypeName, opt_id) {
   /** @type {string} */
   this.id = (opt_id && !workspace.getBlockById(opt_id)) ?
       opt_id : Blockly.utils.genUid();
-  workspace.blockDB_[this.id] = this;
+  workspace.setBlockById(this.id, this);
   /** @type {Blockly.Connection} */
   this.outputConnection = null;
   /** @type {Blockly.Connection} */
@@ -342,7 +342,7 @@ Blockly.Block.prototype.dispose = function(healStack) {
       this.workspace.removeTopBlock(this);
       this.workspace.removeTypedBlock(this);
       // Remove from block database.
-      delete this.workspace.blockDB_[this.id];
+      this.workspace.removeBlockById(this.id);
       this.workspace = null;
     }
 

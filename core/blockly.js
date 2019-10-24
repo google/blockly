@@ -303,9 +303,9 @@ Blockly.copy_ = function(toCopy) {
  * Duplicate this block and its children, or a workspace comment.
  * @param {!Blockly.Block | !Blockly.WorkspaceComment} toDuplicate Block or
  *     Workspace Comment to be copied.
- * @private
+ * @package
  */
-Blockly.duplicate_ = function(toDuplicate) {
+Blockly.duplicate = function(toDuplicate) {
   // Save the clipboard.
   var clipboardXml = Blockly.clipboardXml_;
   var clipboardSource = Blockly.clipboardSource_;

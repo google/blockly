@@ -485,9 +485,9 @@ Blockly.BlockSvg.prototype.translate = function(x, y) {
  * Move this block to its workspace's drag surface, accounting for positioning.
  * Generally should be called at the same time as setDragging_(true).
  * Does nothing if useDragSurface_ is false.
- * @private
+ * @package
  */
-Blockly.BlockSvg.prototype.moveToDragSurface_ = function() {
+Blockly.BlockSvg.prototype.moveToDragSurface = function() {
   if (!this.useDragSurface_) {
     return;
   }
@@ -757,9 +757,9 @@ Blockly.BlockSvg.prototype.onMouseDown_ = function(e) {
 
 /**
  * Load the block's help page in a new window.
- * @private
+ * @package
  */
-Blockly.BlockSvg.prototype.showHelp_ = function() {
+Blockly.BlockSvg.prototype.showHelp = function() {
   var url = (typeof this.helpUrl == 'function') ? this.helpUrl() : this.helpUrl;
   if (url) {
     window.open(url);

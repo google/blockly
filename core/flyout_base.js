@@ -276,6 +276,7 @@ Blockly.Flyout.prototype.init = function(targetWorkspace) {
 /**
  * Dispose of this flyout.
  * Unlink from all DOM elements to prevent memory leaks.
+ * @suppress {checkTypes}
  */
 Blockly.Flyout.prototype.dispose = function() {
   this.hide();

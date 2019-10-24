@@ -313,6 +313,7 @@ Blockly.Block.prototype.getDeveloperVariables;
  * @param {boolean} healStack If true, then try to heal any gap by connecting
  *     the next statement with the previous statement.  Otherwise, dispose of
  *     all children of this block.
+ * @suppress {checkTypes}
  */
 Blockly.Block.prototype.dispose = function(healStack) {
   if (!this.workspace) {

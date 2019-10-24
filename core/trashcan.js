@@ -303,6 +303,7 @@ Blockly.Trashcan.prototype.init = function(verticalSpacing) {
 /**
  * Dispose of this trash can.
  * Unlink from all DOM elements to prevent memory leaks.
+ * @suppress {checkTypes}
  */
 Blockly.Trashcan.prototype.dispose = function() {
   if (this.svgGroup_) {

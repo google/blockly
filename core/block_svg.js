@@ -1009,6 +1009,7 @@ Blockly.BlockSvg.prototype.getSvgRoot = function() {
  *     the next statement with the previous statement.  Otherwise, dispose of
  *     all children of this block.
  * @param {boolean=} animate If true, show a disposal animation and sound.
+ * @suppress {checkTypes}
  */
 Blockly.BlockSvg.prototype.dispose = function(healStack, animate) {
   if (!this.workspace) {

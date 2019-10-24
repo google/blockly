@@ -113,8 +113,8 @@ Blockly.geras.RenderInfo.prototype.addInput_ = function(input, activeRow) {
         new Blockly.blockRendering.ExternalValueInput(this.constants_, input));
     activeRow.hasExternalInput = true;
   } else if (input.type == Blockly.DUMMY_INPUT) {
-    // Dummy inputs have no visual representation, but the information is still
-    // important.
+    activeRow.elements.push(
+        new Blockly.blockRendering.DummyInput(this.constants_, input));
     activeRow.hasDummyInput = true;
   }
 };

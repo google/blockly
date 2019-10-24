@@ -70,6 +70,15 @@ Blockly.zelos.ConstantProvider = function() {
    */
   this.TAB_OFFSET_FROM_TOP = 0;
 
+  /**
+   * @override
+   */
+  this.STATEMENT_BOTTOM_SPACER = -this.NOTCH_HEIGHT;
+
+  /**
+   * @override
+   */
+  this.AFTER_STATEMENT_BOTTOM_ROW_MIN_HEIGHT = this.LARGE_PADDING * 2;
 };
 Blockly.utils.object.inherits(Blockly.zelos.ConstantProvider,
     Blockly.blockRendering.ConstantProvider);

@@ -173,7 +173,7 @@ Blockly.BlockDragSurfaceSvg.prototype.translateSurface = function(x, y) {
  * @return {!Blockly.utils.Coordinate} Current translation of the surface.
  */
 Blockly.BlockDragSurfaceSvg.prototype.getSurfaceTranslation = function() {
-  var xy = Blockly.utils.getRelativeXY(this.SVG_);
+  var xy = Blockly.utils.getRelativeXY(/** @type {!SVGElement} */ (this.SVG_));
   return new Blockly.utils.Coordinate(xy.x / this.scale_, xy.y / this.scale_);
 };
 
@@ -189,11 +189,11 @@ Blockly.BlockDragSurfaceSvg.prototype.getGroup = function() {
 /**
  * Get the current blocks on the drag surface, if any (primarily
  * for BlockSvg.getRelativeToSurfaceXY).
- * @return {!Element|undefined} Drag surface block DOM element, or undefined
- * if no blocks exist.
+ * @return {Element} Drag surface block DOM element, or undefined if no blocks
+ * exist.
  */
 Blockly.BlockDragSurfaceSvg.prototype.getCurrentBlock = function() {
-  return this.dragGroup_.firstChild;
+  return /** @type {Element} */ (this.dragGroup_.firstChild);
 };
 
 /**

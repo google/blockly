@@ -87,7 +87,7 @@ Blockly.Extensions.registerMixin = function(name, mixinObj) {
  * @param {!Object} mixinObj The values to mix in.
  * @param {(function())=} opt_helperFn An optional function to apply after
  *     mixing in the object.
- * @param {Array.<string>=} opt_blockList A list of blocks to appear in the
+ * @param {!Array.<string>=} opt_blockList A list of blocks to appear in the
  *     flyout of the mutator dialog.
  * @throws {Error} if the mutation is invalid or can't be applied to the block.
  */
@@ -114,7 +114,7 @@ Blockly.Extensions.registerMutator = function(name, mixinObj, opt_helperFn,
       if (!Blockly.Mutator) {
         throw Error(errorPrefix + 'Missing require for Blockly.Mutator');
       }
-      this.setMutator(new Blockly.Mutator(opt_blockList));
+      this.setMutator(new Blockly.Mutator(opt_blockList || []));
     }
     // Mixin the object.
     this.mixin(mixinObj);
@@ -165,7 +165,8 @@ Blockly.Extensions.apply = function(name, block, isMutator) {
     var errorPrefix = 'Error after applying mutator "' + name + '": ';
     Blockly.Extensions.checkBlockHasMutatorProperties_(errorPrefix, block);
   } else {
-    if (!Blockly.Extensions.mutatorPropertiesMatch_(mutatorProperties, block)) {
+    if (!Blockly.Extensions.mutatorPropertiesMatch_(
+        /** @type {!Array.<Object>} */ (mutatorProperties), block)) {
       throw Error('Error when applying extension "' + name + '": ' +
           'mutation properties changed when applying a non-mutator extension.');
     }
@@ -359,7 +360,7 @@ Blockly.Extensions.buildTooltipForDropdown = function(dropdownName,
     }
 
     this.setTooltip(function() {
-      var value = this.getFieldValue(dropdownName);
+      var value = String(this.getFieldValue(dropdownName));
       var tooltip = lookupTable[value];
       if (tooltip == null) {
         if (blockTypesChecked.indexOf(this.type) == -1) {

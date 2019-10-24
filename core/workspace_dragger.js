@@ -55,6 +55,7 @@ Blockly.WorkspaceDragger = function(workspace) {
 /**
  * Sever all links from this object.
  * @package
+ * @suppress {checkTypes}
  */
 Blockly.WorkspaceDragger.prototype.dispose = function() {
   this.workspace_ = null;

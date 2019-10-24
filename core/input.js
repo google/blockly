@@ -258,6 +258,7 @@ Blockly.Input.prototype.init = function() {
 
 /**
  * Sever all links to this input.
+ * @suppress {checkTypes}
  */
 Blockly.Input.prototype.dispose = function() {
   for (var i = 0, field; field = this.fieldRow[i]; i++) {

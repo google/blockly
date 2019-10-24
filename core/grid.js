@@ -92,6 +92,7 @@ Blockly.Grid.prototype.scale_ = 1;
 /**
  * Dispose of this grid and unlink from the DOM.
  * @package
+ * @suppress {checkTypes}
  */
 Blockly.Grid.prototype.dispose = function() {
   this.gridPattern_ = null;

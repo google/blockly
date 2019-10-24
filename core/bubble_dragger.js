@@ -92,6 +92,7 @@ Blockly.BubbleDragger = function(bubble, workspace) {
 /**
  * Sever all links from this object.
  * @package
+ * @suppress {checkTypes}
  */
 Blockly.BubbleDragger.prototype.dispose = function() {
   this.draggingBubble_ = null;

@@ -680,6 +680,7 @@ Blockly.WorkspaceSvg.prototype.createDom = function(opt_backgroundClass) {
 /**
  * Dispose of this workspace.
  * Unlink from all DOM elements to prevent memory leaks.
+ * @suppress {checkTypes}
  */
 Blockly.WorkspaceSvg.prototype.dispose = function() {
   // Stop rerendering.

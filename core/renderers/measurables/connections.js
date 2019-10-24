@@ -53,39 +53,6 @@ Blockly.utils.object.inherits(Blockly.blockRendering.Connection,
     Blockly.blockRendering.Measurable);
 
 /**
- * Whether or not the connection shape is dynamic. Dynamic shapes get their
- * height from the block.
- * @return {boolean} True if the connection shape is dynamic.
- */
-Blockly.blockRendering.Connection.prototype.isDynamic = function() {
-  return !!this.shape.isDynamic;
-};
-
-/**
- * Get the connection width. If the input has a dynamic shape, call the shape's
- * `getWidth` method passing it the input object.
- * @return {number} The connection width.
- */
-Blockly.blockRendering.Connection.prototype.getConnectionWidth = function() {
-  if (this.isDynamic()) {
-    return this.shape.width(this.height);
-  }
-  return this.shape.width;
-};
-
-/**
- * Get the connection height. If the input has a dynamic shape, call the shape's
- * `getHeight` method passing it the input object.
- * @return {number} The connection height.
- */
-Blockly.blockRendering.Connection.prototype.getConnectionHeight = function() {
-  if (this.isDynamic()) {
-    return this.shape.height(this.height);
-  }
-  return this.shape.height;
-};
-
-/**
  * An object containing information about the space an output connection takes
  * up during rendering.
  * @param {!Blockly.blockRendering.ConstantProvider} constants The rendering
@@ -100,8 +67,9 @@ Blockly.blockRendering.OutputConnection = function(constants, connectionModel) {
   Blockly.blockRendering.OutputConnection.superClass_.constructor.call(this,
       constants, connectionModel);
   this.type |= Blockly.blockRendering.Types.OUTPUT_CONNECTION;
-  this.height = this.getConnectionHeight();
-  this.width = this.getConnectionWidth();
+  this.isDynamic = !!this.shape.isDynamic;
+  this.height = !this.isDynamic ? this.shape.height : 0;
+  this.width = !this.isDynamic ? this.shape.width : 0;
   this.connectionOffsetY = this.constants_.TAB_OFFSET_FROM_TOP;
   this.startX = this.width;
 };
@@ -124,8 +92,8 @@ Blockly.blockRendering.PreviousConnection = function(
   Blockly.blockRendering.PreviousConnection.superClass_.constructor.call(this,
       constants, connectionModel);
   this.type |= Blockly.blockRendering.Types.PREVIOUS_CONNECTION;
-  this.height = this.getConnectionHeight();
-  this.width = this.getConnectionWidth();
+  this.height = this.shape.height;
+  this.width = this.shape.width;
 
 };
 Blockly.utils.object.inherits(Blockly.blockRendering.PreviousConnection,
@@ -146,8 +114,8 @@ Blockly.blockRendering.NextConnection = function(constants, connectionModel) {
   Blockly.blockRendering.NextConnection.superClass_.constructor.call(this,
       constants, connectionModel);
   this.type |= Blockly.blockRendering.Types.NEXT_CONNECTION;
-  this.height = this.getConnectionHeight();
-  this.width = this.getConnectionWidth();
+  this.height = this.shape.height;
+  this.width = this.shape.width;
 };
 Blockly.utils.object.inherits(Blockly.blockRendering.NextConnection,
     Blockly.blockRendering.Connection);

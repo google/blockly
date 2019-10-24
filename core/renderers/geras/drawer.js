@@ -150,7 +150,7 @@ Blockly.geras.Drawer.prototype.positionInlineInputConnection_ = function(input) 
   // Move the connection.
   if (input.connection) {
     // xPos already contains info about startX
-    var connX = input.xPos + input.getConnectionWidth() +
+    var connX = input.xPos + input.connectionWidth +
         this.constants_.DARK_PATH_OFFSET;
     if (this.info_.RTL) {
       connX *= -1;

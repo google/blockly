@@ -258,6 +258,18 @@ Blockly.Field.prototype.EDITABLE = true;
 Blockly.Field.prototype.SERIALIZABLE = false;
 
 /**
+ * Point size of text.  Should match blocklyText's font-size in CSS.
+ * @const {string}
+ */
+Blockly.Field.FONTSIZE = 11;
+
+/**
+ * Text font family.  Should match blocklyText's font-family in CSS.
+ * @const {string}
+ */
+Blockly.Field.FONTFAMILY = 'sans-serif';
+
+/**
  * Process the configuration map passed to the field.
  * @param {!Object} config A map of options used to configure the field. See
  *    the individual field's documentation for a list of properties this
@@ -641,8 +653,9 @@ Blockly.Field.prototype.updateWidth = function() {
  * @protected
  */
 Blockly.Field.prototype.updateSize_ = function() {
-  var textWidth = Blockly.utils.dom.getTextWidth(
-      /** @type {!SVGTextElement} */ (this.textElement_));
+  var textWidth = Blockly.utils.dom.getFastTextWidth(
+      /** @type {!SVGTextElement} */ (this.textElement_),
+      Blockly.Field.FONTSIZE, Blockly.Field.FONTFAMILY);
   var totalWidth = textWidth;
   if (this.borderRect_) {
     totalWidth += Blockly.Field.X_PADDING;

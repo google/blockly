@@ -108,11 +108,6 @@ Blockly.FieldTextInput.fromJson = function(options) {
 Blockly.FieldTextInput.prototype.SERIALIZABLE = true;
 
 /**
- * Point size of text.  Should match blocklyText's font-size in CSS.
- */
-Blockly.FieldTextInput.FONTSIZE = 11;
-
-/**
  * Pixel size of input border radius.
  * Should match blocklyText's border-radius in CSS.
  */
@@ -291,7 +286,7 @@ Blockly.FieldTextInput.prototype.widgetCreate_ = function() {
   htmlInput.className = 'blocklyHtmlInput';
   htmlInput.setAttribute('spellcheck', this.spellcheck_);
   var fontSize =
-      (Blockly.FieldTextInput.FONTSIZE * this.workspace_.scale) + 'pt';
+      (Blockly.Field.FONTSIZE * this.workspace_.scale) + 'pt';
   div.style.fontSize = fontSize;
   htmlInput.style.fontSize = fontSize;
   var borderRadius =

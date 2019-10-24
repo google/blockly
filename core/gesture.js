@@ -509,7 +509,7 @@ Blockly.Gesture.prototype.doStart = function(e) {
   if ((e.type.toLowerCase() == 'touchstart' ||
       e.type.toLowerCase() == 'pointerdown') &&
        e.pointerType != 'mouse') {
-    Blockly.longStart_(e, this);
+    Blockly.longStart(e, this);
   }
 
   this.mouseDownXY_ = new Blockly.utils.Coordinate(e.clientX, e.clientY);

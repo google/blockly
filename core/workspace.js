@@ -794,6 +794,25 @@ Blockly.Workspace.prototype.getBlockById = function(id) {
 };
 
 /**
+ * Set a block on this workspace with the specified ID.
+ * @param {string} id ID of block to set.
+ * @param {Blockly.Block} block The block to set.
+ * @package
+ */
+Blockly.Workspace.prototype.setBlockById = function(id, block) {
+  this.blockDB_[id] = block;
+};
+
+/**
+ * Delete a block off this workspace with the specified ID.
+ * @param {string} id ID of block to delete.
+ * @package
+ */
+Blockly.Workspace.prototype.removeBlockById = function(id) {
+  delete this.blockDB_[id];
+};
+
+/**
  * Find the comment on this workspace with the specified ID.
  * @param {string} id ID of comment to find.
  * @return {Blockly.WorkspaceComment} The sought after comment, or null if not

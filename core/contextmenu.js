@@ -243,7 +243,7 @@ Blockly.ContextMenu.blockHelpOption = function(block) {
     enabled: !!url,
     text: Blockly.Msg['HELP'],
     callback: function() {
-      block.showHelp_();
+      block.showHelp();
     }
   };
   return helpOption;
@@ -261,7 +261,7 @@ Blockly.ContextMenu.blockDuplicateOption = function(block) {
     text: Blockly.Msg['DUPLICATE_BLOCK'],
     enabled: enabled,
     callback: function() {
-      Blockly.duplicate_(block);
+      Blockly.duplicate(block);
     }
   };
   return duplicateOption;
@@ -330,7 +330,7 @@ Blockly.ContextMenu.commentDuplicateOption = function(comment) {
     text: Blockly.Msg.DUPLICATE_COMMENT,
     enabled: true,
     callback: function() {
-      Blockly.duplicate_(comment);
+      Blockly.duplicate(comment);
     }
   };
   return duplicateOption;

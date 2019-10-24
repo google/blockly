@@ -343,9 +343,9 @@ Blockly.WorkspaceCommentSvg.prototype.translate = function(x, y) {
  * Move this comment to its workspace's drag surface, accounting for
  * positioning.  Generally should be called at the same time as
  * setDragging(true).  Does nothing if useDragSurface_ is false.
- * @private
+ * @package
  */
-Blockly.WorkspaceCommentSvg.prototype.moveToDragSurface_ = function() {
+Blockly.WorkspaceCommentSvg.prototype.moveToDragSurface = function() {
   if (!this.useDragSurface_) {
     return;
   }

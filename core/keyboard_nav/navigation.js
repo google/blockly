@@ -548,7 +548,7 @@ Blockly.navigation.disconnectBlocks_ = function() {
     return;
   }
   superiorConnection.disconnect();
-  inferiorConnection.bumpAwayFrom_(superiorConnection);
+  inferiorConnection.bumpAwayFrom(superiorConnection);
 
   var rootBlock = superiorConnection.getSourceBlock().getRootBlock();
   rootBlock.bringToFront();

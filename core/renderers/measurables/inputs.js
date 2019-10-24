@@ -152,7 +152,8 @@ Blockly.blockRendering.ExternalValueInput = function(constants, input) {
     this.height = this.getConnectionHeight();
   } else {
     this.height =
-        this.connectedBlockHeight - 2 * this.constants_.TAB_OFFSET_FROM_TOP;
+        this.connectedBlockHeight - this.constants_.TAB_OFFSET_FROM_TOP -
+        this.constants_.MEDIUM_PADDING;
   }
   this.width = this.getConnectionWidth() +
       this.constants_.EXTERNAL_VALUE_INPUT_PADDING;

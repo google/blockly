@@ -144,6 +144,9 @@ Blockly.blockRendering.Drawer.prototype.drawTop_ = function() {
     if (Blockly.blockRendering.Types.isLeftRoundedCorner(elem)) {
       this.outlinePath_ +=
           this.constants_.OUTSIDE_CORNERS.topLeft;
+    } else if (Blockly.blockRendering.Types.isRightRoundedCorner(elem)) {
+      this.outlinePath_ +=
+          this.constants_.OUTSIDE_CORNERS.topRight;
     } else if (Blockly.blockRendering.Types.isPreviousConnection(elem)) {
       this.outlinePath_ += elem.shape.pathLeft;
     } else if (Blockly.blockRendering.Types.isHat(elem)) {
@@ -242,20 +245,26 @@ Blockly.blockRendering.Drawer.prototype.drawBottom_ = function() {
   var elems = bottomRow.elements;
   this.positionNextConnection_();
 
-  this.outlinePath_ +=
-    Blockly.utils.svgPaths.lineOnAxis('V', bottomRow.baseline);
-
+  var rightCornerYOffset = 0;
+  var outlinePath = '';
   for (var i = elems.length - 1, elem; (elem = elems[i]); i--) {
     if (Blockly.blockRendering.Types.isNextConnection(elem)) {
-      this.outlinePath_ += elem.shape.pathRight;
+      outlinePath += elem.shape.pathRight;
     } else if (Blockly.blockRendering.Types.isLeftSquareCorner(elem)) {
-      this.outlinePath_ += Blockly.utils.svgPaths.lineOnAxis('H', bottomRow.xPos);
+      outlinePath += Blockly.utils.svgPaths.lineOnAxis('H', bottomRow.xPos);
     } else if (Blockly.blockRendering.Types.isLeftRoundedCorner(elem)) {
-      this.outlinePath_ += this.constants_.OUTSIDE_CORNERS.bottomLeft;
+      outlinePath += this.constants_.OUTSIDE_CORNERS.bottomLeft;
+    } else if (Blockly.blockRendering.Types.isRightRoundedCorner(elem)) {
+      outlinePath += this.constants_.OUTSIDE_CORNERS.bottomRight;
+      rightCornerYOffset = this.constants_.OUTSIDE_CORNERS.rightHeight;
     } else if (Blockly.blockRendering.Types.isSpacer(elem)) {
-      this.outlinePath_ += Blockly.utils.svgPaths.lineOnAxis('h', elem.width * -1);
+      outlinePath += Blockly.utils.svgPaths.lineOnAxis('h', elem.width * -1);
     }
   }
+
+  this.outlinePath_ += Blockly.utils.svgPaths.lineOnAxis('V',
+      bottomRow.baseline - rightCornerYOffset);
+  this.outlinePath_ += outlinePath;
 };
 
 /**

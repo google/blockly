@@ -292,6 +292,16 @@ Blockly.blockRendering.TopRow.prototype.hasLeftSquareCorner = function(block) {
 };
 
 /**
+ * Returns whether or not the top row has a right square corner.
+ * @param {!Blockly.BlockSvg} _block The block whose top row this represents.
+ * @return {boolean} Whether or not the top row has a right square corner.
+ */
+Blockly.blockRendering.TopRow.prototype.hasRightSquareCorner = function(
+    _block) {
+  return true;
+};
+
+/**
  * @override
  */
 Blockly.blockRendering.TopRow.prototype.measure = function() {
@@ -319,6 +329,13 @@ Blockly.blockRendering.TopRow.prototype.measure = function() {
  * @override
  */
 Blockly.blockRendering.TopRow.prototype.startsWithElemSpacer = function() {
+  return false;
+};
+
+/**
+ * @override
+ */
+Blockly.blockRendering.TopRow.prototype.endsWithElemSpacer = function() {
   return false;
 };
 
@@ -381,6 +398,16 @@ Blockly.blockRendering.BottomRow.prototype.hasLeftSquareCorner = function(
 };
 
 /**
+ * Returns whether or not the bottom row has a right square corner.
+ * @param {!Blockly.BlockSvg} _block The block whose bottom row this represents.
+ * @return {boolean} Whether or not the bottom row has a right square corner.
+ */
+Blockly.blockRendering.BottomRow.prototype.hasRightSquareCorner = function(
+    _block) {
+  return true;
+};
+
+/**
  * @override
  */
 Blockly.blockRendering.BottomRow.prototype.measure = function() {
@@ -409,6 +436,13 @@ Blockly.blockRendering.BottomRow.prototype.measure = function() {
  * @override
  */
 Blockly.blockRendering.BottomRow.prototype.startsWithElemSpacer = function() {
+  return false;
+};
+
+/**
+ * @override
+ */
+Blockly.blockRendering.BottomRow.prototype.endsWithElemSpacer = function() {
   return false;
 };
 

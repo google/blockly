@@ -441,7 +441,7 @@ Blockly.Block.prototype.unplugFromRow_ = function(opt_healStack) {
   // Disconnect the child block.
   childConnection.disconnect();
   // Connect child to the parent if possible, otherwise bump away.
-  if (childConnection.checkType_(parentConnection)) {
+  if (childConnection.checkType(parentConnection)) {
     parentConnection.connect(childConnection);
   } else {
     childConnection.onFailedConnect(parentConnection);
@@ -493,7 +493,7 @@ Blockly.Block.prototype.unplugFromStack_ = function(opt_healStack) {
     // Disconnect the next statement.
     var nextTarget = this.nextConnection.targetConnection;
     nextTarget.disconnect();
-    if (previousTarget && previousTarget.checkType_(nextTarget)) {
+    if (previousTarget && previousTarget.checkType(nextTarget)) {
       // Attach the next statement to the previous statement.
       previousTarget.connect(nextTarget);
     }
@@ -1880,7 +1880,7 @@ Blockly.Block.prototype.moveBy = function(dx, dy) {
  * Create a connection of the specified type.
  * @param {number} type The type of the connection to create.
  * @return {!Blockly.Connection} A new connection of the specified type.
- * @private
+ * @protected
  */
 Blockly.Block.prototype.makeConnection_ = function(type) {
   return new Blockly.Connection(this, type);

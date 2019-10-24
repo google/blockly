@@ -70,6 +70,15 @@ Blockly.zelos.ConstantProvider = function() {
    */
   this.TAB_OFFSET_FROM_TOP = 0;
 
+  /**
+   * @override
+   */
+  this.STATEMENT_BOTTOM_SPACER = -this.NOTCH_HEIGHT;
+
+  /**
+   * @override
+   */
+  this.AFTER_STATEMENT_BOTTOM_ROW_MIN_HEIGHT = this.LARGE_PADDING * 2;
 };
 Blockly.utils.object.inherits(Blockly.zelos.ConstantProvider,
     Blockly.blockRendering.ConstantProvider);
@@ -257,52 +266,6 @@ Blockly.zelos.ConstantProvider.prototype.makeNotch = function() {
     height: height,
     pathLeft: pathLeft,
     pathRight: pathRight
-  };
-};
-
-/**
- * @return {!Object} An object containing sizing and path information about
- *     outside corners.
- * @package
- */
-Blockly.zelos.ConstantProvider.prototype.makeOutsideCorners = function() {
-  var radius = this.CORNER_RADIUS;
-  /**
-   * SVG path for drawing the rounded top-left corner.
-   * @const
-   */
-  var topLeft =
-      Blockly.utils.svgPaths.moveBy(0, radius) +
-      Blockly.utils.svgPaths.arc('a', '0 0,1', radius,
-          Blockly.utils.svgPaths.point(radius, -radius));
-
-  /**
-   * SVG path for drawing the rounded top-right corner.
-   * @const
-   */
-  var topRight =
-      Blockly.utils.svgPaths.arc('a', '0 0,1', radius,
-          Blockly.utils.svgPaths.point(radius, radius));
-
-  /**
-   * SVG path for drawing the rounded bottom-left corner.
-   * @const
-   */
-  var bottomLeft = Blockly.utils.svgPaths.arc('a', '0 0,1', radius,
-      Blockly.utils.svgPaths.point(-radius, -radius));
-
-  /**
-   * SVG path for drawing the rounded bottom-right corner.
-   * @const
-   */
-  var bottomRight = Blockly.utils.svgPaths.arc('a', '0 0,1', radius,
-      Blockly.utils.svgPaths.point(-radius, radius));
-
-  return {
-    topLeft: topLeft,
-    topRight: topRight,
-    bottomRight: bottomRight,
-    bottomLeft: bottomLeft
   };
 };
 

@@ -62,71 +62,6 @@ Blockly.zelos.Drawer.prototype.drawOutline_ = function() {
 };
 
 /**
- * Add steps for the top corner of the block, taking into account
- * details such as hats and rounded corners.
- * @protected
- */
-Blockly.zelos.Drawer.prototype.drawTop_ = function() {
-  var topRow = this.info_.topRow;
-  var elements = topRow.elements;
-
-  this.positionPreviousConnection_();
-  this.outlinePath_ +=
-      Blockly.utils.svgPaths.moveBy(topRow.xPos, this.info_.startY);
-  for (var i = 0, elem; (elem = elements[i]); i++) {
-    if (Blockly.blockRendering.Types.isLeftRoundedCorner(elem)) {
-      this.outlinePath_ +=
-          this.constants_.OUTSIDE_CORNERS.topLeft;
-    } else if (Blockly.blockRendering.Types.isRightRoundedCorner(elem)) {
-      this.outlinePath_ +=
-          this.constants_.OUTSIDE_CORNERS.topRight;
-    } else if (Blockly.blockRendering.Types.isPreviousConnection(elem)) {
-      this.outlinePath_ += elem.shape.pathLeft;
-    } else if (Blockly.blockRendering.Types.isHat(elem)) {
-      this.outlinePath_ += this.constants_.START_HAT.path;
-    } else if (Blockly.blockRendering.Types.isSpacer(elem)) {
-      this.outlinePath_ += Blockly.utils.svgPaths.lineOnAxis('h', elem.width);
-    }
-    // No branch for a square corner because it's a no-op.
-  }
-  this.outlinePath_ += Blockly.utils.svgPaths.lineOnAxis('v', topRow.height);
-};
-
-
-/**
- * Add steps for the bottom edge of a block, possibly including a notch
- * for the next connection
- * @protected
- */
-Blockly.zelos.Drawer.prototype.drawBottom_ = function() {
-  var bottomRow = this.info_.bottomRow;
-  var elems = bottomRow.elements;
-  this.positionNextConnection_();
-
-  var rightCornerYOffset = 0;
-  var outlinePath = '';
-  for (var i = elems.length - 1, elem; (elem = elems[i]); i--) {
-    if (Blockly.blockRendering.Types.isNextConnection(elem)) {
-      outlinePath += elem.shape.pathRight;
-    } else if (Blockly.blockRendering.Types.isLeftSquareCorner(elem)) {
-      outlinePath += Blockly.utils.svgPaths.lineOnAxis('H', bottomRow.xPos);
-    } else if (Blockly.blockRendering.Types.isLeftRoundedCorner(elem)) {
-      outlinePath += this.constants_.OUTSIDE_CORNERS.bottomLeft;
-    } else if (Blockly.blockRendering.Types.isRightRoundedCorner(elem)) {
-      outlinePath += this.constants_.OUTSIDE_CORNERS.bottomRight;
-      rightCornerYOffset = this.constants_.INSIDE_CORNERS.rightHeight;
-    } else if (Blockly.blockRendering.Types.isSpacer(elem)) {
-      outlinePath += Blockly.utils.svgPaths.lineOnAxis('h', elem.width * -1);
-    }
-  }
-
-  this.outlinePath_ +=
-        Blockly.utils.svgPaths.lineOnAxis('V',
-            bottomRow.baseline - rightCornerYOffset);
-  this.outlinePath_ += outlinePath;
-};
-
-/**
  * Add steps for the right side of a row that does not have value or
  * statement input connections.
  * @param {!Blockly.blockRendering.Row} row The row to draw the
@@ -210,4 +145,36 @@ Blockly.zelos.Drawer.prototype.drawFlatBottom_ = function() {
 Blockly.zelos.Drawer.prototype.drawInlineInput_ = function(input) {
   // Don't draw an inline input.
   this.positionInlineInputConnection_(input);
+};
+
+/**
+ * @override
+ */
+Blockly.zelos.Drawer.prototype.drawStatementInput_ = function(row) {
+  var input = row.getLastInput();
+  // Where to start drawing the notch, which is on the right side in LTR.
+  var x = input.xPos + input.notchOffset + input.shape.width;
+
+  var innerTopLeftCorner =
+      input.shape.pathRight +
+      Blockly.utils.svgPaths.lineOnAxis('h',
+          -(input.notchOffset - this.constants_.INSIDE_CORNERS.width)) +
+      this.constants_.INSIDE_CORNERS.pathTop;
+
+  var innerHeight =
+      row.height - (2 * this.constants_.INSIDE_CORNERS.height);
+
+  var innerBottomLeftCorner =
+    this.constants_.INSIDE_CORNERS.pathBottom +
+    Blockly.utils.svgPaths.lineOnAxis('h',
+        (input.notchOffset - this.constants_.INSIDE_CORNERS.width)) +
+    input.shape.pathLeft;
+
+  this.outlinePath_ += Blockly.utils.svgPaths.lineOnAxis('H', x) +
+      innerTopLeftCorner +
+      Blockly.utils.svgPaths.lineOnAxis('v', innerHeight) +
+      innerBottomLeftCorner +
+      Blockly.utils.svgPaths.lineOnAxis('H', row.xPos + row.width);
+
+  this.positionStatementInputConnection_(row);
 };

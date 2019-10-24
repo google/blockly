@@ -74,6 +74,9 @@ Blockly.blockRendering.ConstantProvider = function() {
   this.STATEMENT_INPUT_PADDING_LEFT = 20;
   this.BETWEEN_STATEMENT_PADDING_Y = 4;
 
+  // The minimum height of the bottom row following a statement input.
+  this.AFTER_STATEMENT_BOTTOM_ROW_MIN_HEIGHT = this.LARGE_PADDING;
+
   // This is the max width of a bottom row that follows a statement input and
   // has inputs inline.
   this.MAX_BOTTOM_WIDTH = 66.5;
@@ -337,12 +340,34 @@ Blockly.blockRendering.ConstantProvider.prototype.makeOutsideCorners = function(
       Blockly.utils.svgPaths.arc('a', '0 0,1', radius,
           Blockly.utils.svgPaths.point(radius, -radius));
 
+  /**
+   * SVG path for drawing the rounded top-right corner.
+   * @const
+   */
+  var topRight =
+      Blockly.utils.svgPaths.arc('a', '0 0,1', radius,
+          Blockly.utils.svgPaths.point(radius, radius));
+
+  /**
+   * SVG path for drawing the rounded bottom-left corner.
+   * @const
+   */
   var bottomLeft = Blockly.utils.svgPaths.arc('a', '0 0,1', radius,
       Blockly.utils.svgPaths.point(-radius, -radius));
 
+  /**
+   * SVG path for drawing the rounded bottom-right corner.
+   * @const
+   */
+  var bottomRight = Blockly.utils.svgPaths.arc('a', '0 0,1', radius,
+      Blockly.utils.svgPaths.point(-radius, radius));
+
   return {
     topLeft: topLeft,
-    bottomLeft: bottomLeft
+    topRight: topRight,
+    bottomRight: bottomRight,
+    bottomLeft: bottomLeft,
+    rightHeight: radius
   };
 };
 

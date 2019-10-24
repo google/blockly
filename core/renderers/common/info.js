@@ -290,6 +290,16 @@ Blockly.blockRendering.RenderInfo.prototype.populateTopRow_ = function() {
   } else {
     this.topRow.minHeight = this.constants_.MEDIUM_PADDING;
   }
+
+  var rightSquareCorner = this.topRow.hasRightSquareCorner(this.block_);
+
+  if (rightSquareCorner) {
+    this.topRow.elements.push(
+        new Blockly.blockRendering.SquareCorner(this.constants_, 'right'));
+  } else {
+    this.topRow.elements.push(
+        new Blockly.blockRendering.RoundCorner(this.constants_, 'right'));
+  }
 };
 
 /**
@@ -307,9 +317,10 @@ Blockly.blockRendering.RenderInfo.prototype.populateBottomRow_ = function() {
   // This is the minimum height for the row. If one of its elements has a
   // greater height it will be overwritten in the compute pass.
   if (followsStatement) {
-    this.bottomRow.minHeight = this.constants_.LARGE_PADDING;
+    this.bottomRow.minHeight =
+      this.constants_.AFTER_STATEMENT_BOTTOM_ROW_MIN_HEIGHT;
   } else {
-    this.bottomRow.minHeight = this.constants_.MEDIUM_PADDING - 1;
+    this.bottomRow.minHeight = this.constants_.MEDIUM_PADDING;
   }
 
   var leftSquareCorner = this.bottomRow.hasLeftSquareCorner(this.block_);
@@ -327,6 +338,16 @@ Blockly.blockRendering.RenderInfo.prototype.populateBottomRow_ = function() {
         this.constants_,
         /** @type {Blockly.RenderedConnection} */ (this.block_.nextConnection));
     this.bottomRow.elements.push(this.bottomRow.connection);
+  }
+
+  var rightSquareCorner = this.bottomRow.hasRightSquareCorner(this.block_);
+
+  if (rightSquareCorner) {
+    this.bottomRow.elements.push(
+        new Blockly.blockRendering.SquareCorner(this.constants_, 'right'));
+  } else {
+    this.bottomRow.elements.push(
+        new Blockly.blockRendering.RoundCorner(this.constants_, 'right'));
   }
 };
 

@@ -275,9 +275,9 @@ Blockly.TouchGesture.prototype.handlePinch = function(e) {
   var pointers = Object.keys(this.cachedPoints_);
   // Calculate the distance between the two pointers
   var point0 = /** @type {!Blockly.utils.Coordinate} */ (
-      this.cachedPoints_[pointers[0]]);
+    this.cachedPoints_[pointers[0]]);
   var point1 = /** @type {!Blockly.utils.Coordinate} */ (
-      this.cachedPoints_[pointers[1]]);
+    this.cachedPoints_[pointers[1]]);
   var moveDistance = Blockly.utils.Coordinate.distance(point0, point1);
   var startDistance = this.startDistance_;
   this.touchScale_ = moveDistance / startDistance;

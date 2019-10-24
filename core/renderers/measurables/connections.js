@@ -81,8 +81,8 @@ Blockly.utils.object.inherits(Blockly.blockRendering.OutputConnection,
 
 /**
  * Sets properties that depend on the connection shape dimensions.
- * @param {number} height Height of the connection.
- * @param {number} width Width of the connection.
+ * @param {number} height Height of the connection shape.
+ * @param {number} width Width of the connection shape.
  */
 Blockly.blockRendering.OutputConnection.prototype.setShapeDimensions = function(
     height, width) {

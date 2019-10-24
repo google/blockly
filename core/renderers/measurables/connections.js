@@ -47,6 +47,7 @@ Blockly.blockRendering.Connection = function(constants, connectionModel) {
       constants);
   this.connectionModel = connectionModel;
   this.shape = this.constants_.shapeFor(connectionModel);
+  this.isDynamicShape = !!this.shape.isDynamic;
   this.type |= Blockly.blockRendering.Types.CONNECTION;
 };
 Blockly.utils.object.inherits(Blockly.blockRendering.Connection,
@@ -67,14 +68,28 @@ Blockly.blockRendering.OutputConnection = function(constants, connectionModel) {
   Blockly.blockRendering.OutputConnection.superClass_.constructor.call(this,
       constants, connectionModel);
   this.type |= Blockly.blockRendering.Types.OUTPUT_CONNECTION;
-  this.isDynamic = !!this.shape.isDynamic;
-  this.height = !this.isDynamic ? this.shape.height : 0;
-  this.width = !this.isDynamic ? this.shape.width : 0;
+
+  this.setShapeDimensions(
+    !this.isDynamicShape ? this.shape.height : 0,
+    !this.isDynamicShape ? this.shape.width : 0);
+
   this.connectionOffsetY = this.constants_.TAB_OFFSET_FROM_TOP;
-  this.startX = this.width;
 };
 Blockly.utils.object.inherits(Blockly.blockRendering.OutputConnection,
     Blockly.blockRendering.Connection);
+
+
+/**
+ * Sets properties that depend on the connection shape dimensions.
+ * @param {number} height Height of the connection.
+ * @param {number} width Width of the connection.
+ */
+Blockly.blockRendering.OutputConnection.prototype.setShapeDimensions = function(
+    height, width) {
+  this.height = height;
+  this.width = width;
+  this.startX = this.width;
+};
 
 /**
  * An object containing information about the space a previous connection takes

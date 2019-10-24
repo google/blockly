@@ -77,6 +77,11 @@ Blockly.zelos.RenderInfo = function(renderer, block) {
    * @override
    */
   this.bottomRow = new Blockly.zelos.BottomRow(this.constants_);
+
+  /**
+   * @override
+   */
+  this.isInline = true;
 };
 Blockly.utils.object.inherits(Blockly.zelos.RenderInfo,
     Blockly.blockRendering.RenderInfo);
@@ -96,7 +101,7 @@ Blockly.zelos.RenderInfo.prototype.getRenderer = function() {
 Blockly.zelos.RenderInfo.prototype.computeBounds_ = function() {
   Blockly.zelos.RenderInfo.superClass_.computeBounds_.call(this);
 
-  if (this.outputConnection && this.outputConnection.isDynamic) {
+  if (this.outputConnection && this.outputConnection.isDynamicShape) {
     // Add right connection width.
     var rightConnectionWidth = this.outputConnection.width;
     this.width += rightConnectionWidth;
@@ -111,7 +116,7 @@ Blockly.zelos.RenderInfo.prototype.getInRowSpacing_ = function(prev, next) {
   if (!prev || !next) {
     // No need for padding at the beginning or end of the row if the
     // output shape is dynamic.
-    if (this.outputConnection && this.outputConnection.isDynamic) {
+    if (this.outputConnection && this.outputConnection.isDynamicShape) {
       return this.constants_.NO_PADDING;
     }
   }
@@ -330,14 +335,12 @@ Blockly.zelos.RenderInfo.prototype.finalize_ = function() {
   }
   this.height = yCursor;
 
-  if (this.outputConnection && this.outputConnection.isDynamic) {
+  if (this.outputConnection && this.outputConnection.isDynamicShape) {
     // Dynamic output connections depend on the height of the block. Adjust the
     // height of the connection.
-    this.outputConnection.height =
-      this.outputConnection.shape.height(this.height);
-    this.outputConnection.width =
-      this.outputConnection.shape.width(this.height);
-    this.outputConnection.startX = this.outputConnection.width;
+    this.outputConnection.setShapeDimensions(
+        this.outputConnection.shape.height(this.height),
+        this.outputConnection.shape.width(this.height));
 
     // Recompute the bounds as we now know the output connection dimensions.
     this.computeBounds_();
@@ -348,9 +351,12 @@ Blockly.zelos.RenderInfo.prototype.finalize_ = function() {
     row.xPos = this.startX;
 
     for (var j = 0, elem; (elem = row.elements[j]); j++) {
-      if (Blockly.blockRendering.Types.isInlineInput(elem)) {
-        elem.setShapeDimensions(yCursor);
-        console.log('inline input');
+      if (Blockly.blockRendering.Types.isInlineInput(elem) ||
+        Blockly.blockRendering.Types.isExternalInput(elem)) {
+        if (elem.isDynamicShape) {
+          elem.setShapeDimensions(elem.shape.height(elem.height),
+              elem.shape.width(elem.height));
+        }
       }
     }
 

@@ -85,6 +85,14 @@ Blockly.TouchGesture = function(e, creatorWorkspace) {
    * @private
    */
   this.onStartWrapper_ = null;
+
+  /**
+   * Boolean for whether or not the workspace supports pinch-zoom.
+   * @type {boolean}
+   * @private
+   */
+  this.isPinchZoomEnabled_ = this.startWorkspace_.options.zoomOptions &&
+      this.startWorkspace_.options.zoomOptions.pinch;
 };
 Blockly.utils.object.inherits(Blockly.TouchGesture, Blockly.Gesture);
 
@@ -233,7 +241,7 @@ Blockly.TouchGesture.prototype.handleTouchStart = function(e) {
   // store the pointerId in the current list of pointers
   this.cachedPoints_[pointerId] = this.getTouchPoint(e);
   var pointers = Object.keys(this.cachedPoints_);
-  // If two pointers are down, check for pinch gestures
+  // If two pointers are down, store info
   if (pointers.length == 2) {
     var point0 = /** @type {!Blockly.utils.Coordinate} */ (
       this.cachedPoints_[pointers[0]]);
@@ -257,31 +265,42 @@ Blockly.TouchGesture.prototype.handleTouchMove = function(e) {
   this.cachedPoints_[pointerId] = this.getTouchPoint(e);
 
   var pointers = Object.keys(this.cachedPoints_);
-  // If two pointers are down, check for pinch gestures
-  if (pointers.length == 2) {
-    // Calculate the distance between the two pointers
-    var point0 = /** @type {!Blockly.utils.Coordinate} */ (
-      this.cachedPoints_[pointers[0]]);
-    var point1 = /** @type {!Blockly.utils.Coordinate} */ (
-      this.cachedPoints_[pointers[1]]);
-    var moveDistance = Blockly.utils.Coordinate.distance(point0, point1);
-    var startDistance = this.startDistance_;
-    var scale = this.touchScale_ = moveDistance / startDistance;
-
-    if (this.previousScale_ > 0 && this.previousScale_ < Infinity) {
-      var gestureScale = scale - this.previousScale_;
-      var delta = gestureScale > 0 ?
-        gestureScale * Blockly.TouchGesture.ZOOM_IN_MULTIPLIER :
-        gestureScale * Blockly.TouchGesture.ZOOM_OUT_MULTIPLIER;
-      var workspace = this.startWorkspace_;
-      var position = Blockly.utils.mouseToSvg(
-          e, workspace.getParentSvg(), workspace.getInverseScreenCTM());
-      workspace.zoom(position.x, position.y, delta);
-    }
-    this.previousScale_ = scale;
-    e.preventDefault();
+  if (this.isPinchZoomEnabled_ && pointers.length === 2) {
+    this.handlePinch_(e);
+  } else {
+    Blockly.TouchGesture.superClass_.handleMove.call(this, e);
   }
 };
+
+/**
+* Handle pinch zoom gesture.
+* @param {!Event} e A touch move, or pointer move event.
+* @private
+*/
+Blockly.TouchGesture.prototype.handlePinch_ = function(e) {
+  var pointers = Object.keys(this.cachedPoints_);
+  // Calculate the distance between the two pointers
+  var point0 = /** @type {!Blockly.utils.Coordinate} */ (
+    this.cachedPoints_[pointers[0]]);
+  var point1 = /** @type {!Blockly.utils.Coordinate} */ (
+    this.cachedPoints_[pointers[1]]);
+  var moveDistance = Blockly.utils.Coordinate.distance(point0, point1);
+  var scale = moveDistance / this.startDistance_;
+
+  if (this.previousScale_ > 0 && this.previousScale_ < Infinity) {
+    var gestureScale = scale - this.previousScale_;
+    var delta = gestureScale > 0 ?
+        gestureScale * Blockly.TouchGesture.ZOOM_IN_MULTIPLIER :
+        gestureScale * Blockly.TouchGesture.ZOOM_OUT_MULTIPLIER;
+    var workspace = this.startWorkspace_;
+    var position = Blockly.utils.mouseToSvg(
+        e, workspace.getParentSvg(), workspace.getInverseScreenCTM());
+    workspace.zoom(position.x, position.y, delta);
+  }
+  this.previousScale_ = this.touchScale_;
+  e.preventDefault();
+};
+
 
 /**
  * Handle a touch end or pointer end event and end the gesture.

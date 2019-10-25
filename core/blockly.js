@@ -522,9 +522,8 @@ Blockly.bindEventWithChecks_ = function(node, name, thisObject, func,
 /**
  * Bind an event to a function call.  Handles multitouch events by using the
  * coordinates of the first changed touch, and doesn't do any safety checks for
- * simultaneous event processing.
- * @deprecated in favor of bindEventWithChecks_, but preserved for external
- * users.
+ * simultaneous event processing.  In most cases prefer is to use
+ * `Blockly.bindEventWithChecks_`.
  * @param {!EventTarget} node Node upon which to listen.
  * @param {string} name Event name to listen to (e.g. 'mousedown').
  * @param {Object} thisObject The value of 'this' in the function.

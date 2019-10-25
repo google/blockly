@@ -578,7 +578,6 @@ Blockly.Flyout.prototype.clearOldBlocks_ = function() {
  * @param {!SVGElement} rect The invisible rectangle under the block that acts
  *     as a mat for that block.
  * @protected
- * @suppress {deprecated} Suppress deprecated bindEvent_ call.
  */
 Blockly.Flyout.prototype.addBlockListeners_ = function(root, block, rect) {
   this.listeners_.push(Blockly.bindEventWithChecks_(root, 'mousedown', null,

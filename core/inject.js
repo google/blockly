@@ -456,7 +456,6 @@ Blockly.init_ = function(mainWorkspace) {
  * Also, 'keydown' has to be on the whole document since the browser doesn't
  * understand a concept of focus on the SVG image.
  * @private
- * @suppress {deprecated} Suppress deprecated bindEvent_ call.
  */
 Blockly.inject.bindDocumentEvents_ = function() {
   if (!Blockly.documentEventsBound_) {

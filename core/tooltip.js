@@ -138,7 +138,6 @@ Blockly.Tooltip.createDom = function() {
 /**
  * Binds the required mouse events onto an SVG element.
  * @param {!Element} element SVG element onto which tooltip is to be bound.
- * @suppress {deprecated} Suppress deprecated bindEvent_ call.
  */
 Blockly.Tooltip.bindMouseEvents = function(element) {
   Blockly.bindEvent_(element, 'mouseover', null,

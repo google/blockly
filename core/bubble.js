@@ -328,7 +328,7 @@ Blockly.Bubble.prototype.isDeletable = function() {
  * @private
  */
 Blockly.Bubble.prototype.resizeMouseDown_ = function(e) {
-  this.promote_();
+  this.promote();
   Blockly.Bubble.unbindDragEvents_();
   if (Blockly.utils.isRightButton(e)) {
     // No right-click.
@@ -374,9 +374,9 @@ Blockly.Bubble.prototype.registerResizeEvent = function(callback) {
 /**
  * Move this bubble to the top of the stack.
  * @return {boolean} Whether or not the bubble has been moved.
- * @private
+ * @package
  */
-Blockly.Bubble.prototype.promote_ = function() {
+Blockly.Bubble.prototype.promote = function() {
   var svgGroup = this.bubbleGroup_.parentNode;
   if (svgGroup.lastChild !== this.bubbleGroup_) {
     svgGroup.appendChild(this.bubbleGroup_);

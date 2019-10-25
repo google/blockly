@@ -257,7 +257,8 @@ Blockly.Mutator.prototype.setVisible = function(visible) {
     // Create the bubble.
     this.bubble_ = new Blockly.Bubble(
         /** @type {!Blockly.WorkspaceSvg} */ (this.block_.workspace),
-        this.createEditor_(), this.block_.svgPath_, this.iconXY_, null, null);
+        this.createEditor_(), this.block_.pathObject.svgPath,
+        /** @type {!Blockly.utils.Coordinate} */ (this.iconXY_), null, null);
     // Expose this mutator's block's ID on its top-level SVG group.
     this.bubble_.setSvgId(this.block_.id);
     var tree = this.workspace_.options.languageTree;
@@ -289,9 +290,12 @@ Blockly.Mutator.prototype.setVisible = function(visible) {
     // Save the initial connections, then listen for further changes.
     if (this.block_.saveConnections) {
       var thisMutator = this;
-      this.block_.saveConnections(this.rootBlock_);
+      var mutatorBlock =
+        /** @type {{saveConnections: function(!Blockly.Block)}} */ (
+          this.block_);
+      mutatorBlock.saveConnections(this.rootBlock_);
       this.sourceListener_ = function() {
-        thisMutator.block_.saveConnections(thisMutator.rootBlock_);
+        mutatorBlock.saveConnections(thisMutator.rootBlock_);
       };
       this.block_.workspace.addChangeListener(this.sourceListener_);
     }

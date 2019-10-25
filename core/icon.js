@@ -174,8 +174,8 @@ Blockly.Icon.prototype.computeIconLocation = function() {
 
 /**
  * Returns the center of the block's icon relative to the surface.
- * @return {!Blockly.utils.Coordinate} Object with x and y properties in workspace
- *     coordinates.
+ * @return {Blockly.utils.Coordinate} Object with x and y properties in
+ *     workspace coordinates.
  */
 Blockly.Icon.prototype.getIconLocation = function() {
   return this.iconXY_;

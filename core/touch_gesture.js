@@ -266,7 +266,7 @@ Blockly.TouchGesture.prototype.handleTouchMove = function(e) {
 
   var pointers = Object.keys(this.cachedPoints_);
   if (this.isPinchZoomEnabled_ && pointers.length === 2) {
-    this.handlePinch(e);
+    this.handlePinch_(e);
   } else {
     Blockly.TouchGesture.superClass_.handleMove.call(this, e);
   }
@@ -275,9 +275,9 @@ Blockly.TouchGesture.prototype.handleTouchMove = function(e) {
 /**
 * Handle pinch zoom gesture.
 * @param {!Event} e A touch move, or pointer move event.
-* @package
+* @private
 */
-Blockly.TouchGesture.prototype.handlePinch = function(e) {
+Blockly.TouchGesture.prototype.handlePinch_ = function(e) {
   var pointers = Object.keys(this.cachedPoints_);
   // Calculate the distance between the two pointers
   var point0 = /** @type {!Blockly.utils.Coordinate} */ (
@@ -285,11 +285,10 @@ Blockly.TouchGesture.prototype.handlePinch = function(e) {
   var point1 = /** @type {!Blockly.utils.Coordinate} */ (
     this.cachedPoints_[pointers[1]]);
   var moveDistance = Blockly.utils.Coordinate.distance(point0, point1);
-  var startDistance = this.startDistance_;
-  this.touchScale_ = moveDistance / startDistance;
+  var scale = moveDistance / this.startDistance_;
 
   if (this.previousScale_ > 0 && this.previousScale_ < Infinity) {
-    var gestureScale = this.touchScale_ - this.previousScale_;
+    var gestureScale = scale - this.previousScale_;
     var delta = gestureScale > 0 ?
         gestureScale * Blockly.TouchGesture.ZOOM_IN_MULTIPLIER :
         gestureScale * Blockly.TouchGesture.ZOOM_OUT_MULTIPLIER;

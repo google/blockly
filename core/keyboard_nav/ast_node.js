@@ -471,6 +471,23 @@ Blockly.ASTNode.prototype.findFirstFieldOrInput_ = function(block) {
 };
 
 /**
+ * Finds the source block of the location of this node.
+ * @return {Blockly.Block} The source block of the location, or null if the node
+ * is of type workspace.
+ */
+Blockly.ASTNode.prototype.getSourceBlock = function() {
+  if (this.getType() === Blockly.ASTNode.types.BLOCK) {
+    return /** @type {Blockly.Block} */ (this.getLocation());
+  } else if (this.getType() === Blockly.ASTNode.types.STACK) {
+    return /** @type {Blockly.Block} */ (this.getLocation());
+  } else if (this.getType() === Blockly.ASTNode.types.WORKSPACE) {
+    return null;
+  } else {
+    return this.getLocation().getSourceBlock();
+  }
+};
+
+/**
  * Find the element to the right of the current element in the AST.
  * @return {Blockly.ASTNode} An AST node that wraps the next field, connection,
  *     block, or workspace. Or null if there is no node to the right.

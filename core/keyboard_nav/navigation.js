@@ -336,7 +336,7 @@ Blockly.navigation.modify_ = function() {
     markerLoc = /** @type {!Blockly.Connection} */ (markerLoc);
     return Blockly.navigation.insertBlock(cursorLoc, markerLoc);
   } else if (markerType == Blockly.ASTNode.types.WORKSPACE) {
-    var block = Blockly.navigation.getSourceBlock_(cursorNode);
+    var block = cursorNode ? cursorNode.getSourceBlock() : null;
     return Blockly.navigation.moveBlockToWorkspace_(block, markerNode);
   }
   Blockly.navigation.warn_('Unexpected state in Blockly.navigation.modify_.');
@@ -590,28 +590,6 @@ Blockly.navigation.setState = function(newState) {
 };
 
 /**
- * Finds the source block of the location on a given node.
- * @param {Blockly.ASTNode} node The node to find the source block on.
- * @return {Blockly.Block} The source block of the location on the given node,
- * or null if the node is of type workspace.
- * @private
- */
-Blockly.navigation.getSourceBlock_ = function(node) {
-  if (!node) {
-    return null;
-  }
-  if (node.getType() === Blockly.ASTNode.types.BLOCK) {
-    return /** @type {Blockly.Block} */ (node.getLocation());
-  } else if (node.getType() === Blockly.ASTNode.types.STACK) {
-    return /** @type {Blockly.Block} */ (node.getLocation());
-  } else if (node.getType() === Blockly.ASTNode.types.WORKSPACE) {
-    return null;
-  } else {
-    return node.getLocation().getSourceBlock();
-  }
-};
-
-/**
  * Gets the top node on a block.
  * This is either the previous connection, output connection or the block.
  * @param {!Blockly.Block} block The block to find the top most AST node on.
@@ -642,7 +620,7 @@ Blockly.navigation.moveCursorOnBlockDelete = function(deletedBlock) {
   var cursor = workspace.getCursor();
   if (cursor) {
     var curNode = cursor.getCurNode();
-    var block = Blockly.navigation.getSourceBlock_(curNode);
+    var block = curNode ? curNode.getSourceBlock() : null;
 
     if (block === deletedBlock) {
       // If the block has a parent move the cursor to their connection point.
@@ -676,7 +654,7 @@ Blockly.navigation.moveCursorOnBlockMutation = function(mutatedBlock) {
   var cursor = Blockly.getMainWorkspace().getCursor();
   if (cursor) {
     var curNode = cursor.getCurNode();
-    var block = Blockly.navigation.getSourceBlock_(curNode);
+    var block = curNode ? curNode.getSourceBlock() : null;
 
     if (block === mutatedBlock) {
       cursor.setCurNode(Blockly.ASTNode.createBlockNode(block));

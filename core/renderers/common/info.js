@@ -374,8 +374,8 @@ Blockly.blockRendering.RenderInfo.prototype.addInput_ = function(input, activeRo
         new Blockly.blockRendering.ExternalValueInput(this.constants_, input));
     activeRow.hasExternalInput = true;
   } else if (input.type == Blockly.DUMMY_INPUT) {
-    activeRow.elements.push(
-        new Blockly.blockRendering.DummyInput(this.constants_, input));
+    // Dummy inputs have no visual representation, but the information is still
+    // important.
     activeRow.hasDummyInput = true;
   }
 };

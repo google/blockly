@@ -71,27 +71,6 @@ Blockly.utils.object.inherits(Blockly.blockRendering.InputConnection,
     Blockly.blockRendering.Connection);
 
 /**
- * An object containing information about the space a dummy input takes up
- * during rendering
- * @param {!Blockly.blockRendering.ConstantProvider} constants The rendering
- *     constants provider.
- * @param {!Blockly.Input} input The inline input to measure and store
- *     information for.
- * @package
- * @constructor
- * @extends {Blockly.blockRendering.Measurable}
- */
-Blockly.blockRendering.DummyInput = function(constants, input) {
-  Blockly.blockRendering.DummyInput.superClass_.constructor.call(this,
-      constants);
-  this.type |= Blockly.blockRendering.Types.INPUT;
-  this.input = input;
-  this.align = input.align;
-};
-Blockly.utils.object.inherits(Blockly.blockRendering.DummyInput,
-    Blockly.blockRendering.Measurable);
-
-/**
  * An object containing information about the space an inline input takes up
  * during rendering
  * @param {!Blockly.blockRendering.ConstantProvider} constants The rendering

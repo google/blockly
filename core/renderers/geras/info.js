@@ -139,8 +139,9 @@ Blockly.geras.RenderInfo.prototype.getInRowSpacing_ = function(prev, next) {
     return this.constants_.LARGE_PADDING;
   }
 
-  // Spacing between a non-input and the end of the row.
-  if (!Blockly.blockRendering.Types.isInput(prev) && !next) {
+  // Spacing between a non-input and the end of the row or a dummy input.
+  if (!Blockly.blockRendering.Types.isInput(prev) && (!next ||
+      (next && Blockly.blockRendering.Types.isDummyInput(next)))) {
     // Between an editable field and the end of the row.
     if (Blockly.blockRendering.Types.isField(prev) && prev.isEditable) {
       return this.constants_.MEDIUM_PADDING;
@@ -176,6 +177,8 @@ Blockly.geras.RenderInfo.prototype.getInRowSpacing_ = function(prev, next) {
       return this.constants_.LARGE_PADDING;
     } else if (Blockly.blockRendering.Types.isStatementInput(prev)) {
       return this.constants_.NO_PADDING;
+    } else if (Blockly.blockRendering.Types.isDummyInput(prev)) {
+      return this.constants_.NO_PADDING;
     }
   }
 
@@ -195,6 +198,8 @@ Blockly.geras.RenderInfo.prototype.getInRowSpacing_ = function(prev, next) {
       } else if (Blockly.blockRendering.Types.isExternalInput(next)) {
         return this.constants_.MEDIUM_LARGE_PADDING;
       } else if (Blockly.blockRendering.Types.isStatementInput(next)) {
+        return this.constants_.LARGE_PADDING;
+      } else if (Blockly.blockRendering.Types.isDummyInput(next)) {
         return this.constants_.LARGE_PADDING;
       }
     }
@@ -259,6 +264,11 @@ Blockly.geras.RenderInfo.prototype.getInRowSpacing_ = function(prev, next) {
   // Spacing between anything and a jagged edge.
   if (next && Blockly.blockRendering.Types.isJaggedEdge(next)) {
     return this.constants_.LARGE_PADDING;
+  }
+
+  // Spacing between a dummy input and anything.
+  if (prev && Blockly.blockRendering.Types.isDummyInput(prev)) {
+    return this.constants_.NO_PADDING;
   }
 
   return this.constants_.MEDIUM_PADDING;

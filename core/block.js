@@ -1814,7 +1814,7 @@ Blockly.Block.prototype.getInputTargetBlock = function(name) {
 
 /**
  * Returns the comment on this block (or null if there is no comment).
- * @return {string} Block's comment.
+ * @return {?string} Block's comment.
  */
 Blockly.Block.prototype.getCommentText = function() {
   return this.commentModel.text;

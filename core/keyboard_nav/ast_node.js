@@ -293,7 +293,7 @@ Blockly.ASTNode.prototype.findNextForField_ = function() {
   var location = /** @type {!Blockly.Field} */ (this.location_);
   var input = location.getParentInput();
   var block = location.getSourceBlock();
-  var curIdx = block.inputList.indexOf(input);
+  var curIdx = block.inputList.indexOf(/** @type {!Blockly.Input} */ (input));
   var fieldIdx = input.fieldRow.indexOf(location) + 1;
   for (var i = curIdx, newInput; newInput = block.inputList[i]; i++) {
     var fieldRow = newInput.fieldRow;
@@ -347,7 +347,8 @@ Blockly.ASTNode.prototype.findPrevForField_ = function() {
   var location = /** @type {!Blockly.Field} */ (this.location_);
   var parentInput = location.getParentInput();
   var block = location.getSourceBlock();
-  var curIdx = block.inputList.indexOf(parentInput);
+  var curIdx = block.inputList.indexOf(
+      /** @type {!Blockly.Input} */ (parentInput));
   var fieldIdx = parentInput.fieldRow.indexOf(location) - 1;
   for (var i = curIdx, input; input = block.inputList[i]; i--) {
     if (input.connection && input !== parentInput) {

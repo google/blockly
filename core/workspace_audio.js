@@ -48,7 +48,6 @@ Blockly.WorkspaceAudio = function(parentWorkspace) {
   /**
    * Database of pre-loaded sounds.
    * @private
-   * @const
    */
   this.SOUNDS_ = Object.create(null);
 };

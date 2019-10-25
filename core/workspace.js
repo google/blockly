@@ -109,7 +109,7 @@ Blockly.Workspace = function(opt_options) {
    * A FieldVariable must always refer to a Blockly.VariableModel.  We reconcile
    * these by tracking "potential" variables in the flyout.  These variables
    * become real when references to them are dragged into the main workspace.
-   * @type {!Blockly.VariableMap}
+   * @type {Blockly.VariableMap}
    * @private
    */
   this.potentialVariableMap_ = null;
@@ -246,9 +246,11 @@ Blockly.Workspace.prototype.refreshTheme = function() {
 Blockly.Workspace.prototype.updateBlockStyles_ = function(blocks) {
   for (var i = 0, block; block = blocks[i]; i++) {
     var blockStyleName = block.getStyleName();
-    block.setStyle(blockStyleName);
-    if (block.mutator) {
-      block.mutator.updateBlockStyle(blockStyleName);
+    if (blockStyleName) {
+      block.setStyle(blockStyleName);
+      if (block.mutator) {
+        block.mutator.updateBlockStyle();
+      }
     }
   }
 };
@@ -861,7 +863,7 @@ Blockly.Workspace.prototype.createPotentialVariableMap = function() {
 
 /**
  * Return the map of all variables on the workspace.
- * @return {Blockly.VariableMap} The variable map.
+ * @return {!Blockly.VariableMap} The variable map.
  */
 Blockly.Workspace.prototype.getVariableMap = function() {
   return this.variableMap_;
@@ -869,7 +871,7 @@ Blockly.Workspace.prototype.getVariableMap = function() {
 
 /**
  * Set the map of all variables on the workspace.
- * @param {Blockly.VariableMap} variableMap The variable map.
+ * @param {!Blockly.VariableMap} variableMap The variable map.
  * @package
  */
 Blockly.Workspace.prototype.setVariableMap = function(variableMap) {

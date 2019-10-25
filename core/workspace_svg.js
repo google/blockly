@@ -531,7 +531,7 @@ Blockly.WorkspaceSvg.prototype.isVisible = function() {
  * Return the absolute coordinates of the top-left corner of this element,
  * scales that after canvas SVG element, if it's a descendant.
  * The origin (0,0) is the top-left corner of the Blockly SVG.
- * @param {!Element} element Element to find the coordinates of.
+ * @param {!SVGElement} element SVG element to find the coordinates of.
  * @return {!Blockly.utils.Coordinate} Object with .x and .y properties.
  * @package
  */
@@ -554,7 +554,7 @@ Blockly.WorkspaceSvg.prototype.getSvgXY = function(element) {
     }
     x += xy.x * scale;
     y += xy.y * scale;
-    element = /** @type {!Element} */ (element.parentNode);
+    element = /** @type {!SVGElement} */ (element.parentNode);
   } while (element && element != this.getParentSvg());
   return new Blockly.utils.Coordinate(x, y);
 };
@@ -1335,7 +1335,7 @@ Blockly.WorkspaceSvg.prototype.deleteVariableById = function(id) {
  *     their type. This will default to '' which is a specific type.
  * @param {?string=} opt_id The unique ID of the variable. This will default to
  *     a UUID.
- * @return {Blockly.VariableModel} The newly created variable.
+ * @return {!Blockly.VariableModel} The newly created variable.
  * @package
  */
 Blockly.WorkspaceSvg.prototype.createVariable = function(name,
@@ -1420,7 +1420,8 @@ Blockly.WorkspaceSvg.prototype.moveDrag = function(e) {
   // Fix scale of mouse event.
   point.x /= this.scale;
   point.y /= this.scale;
-  return Blockly.utils.Coordinate.sum(this.dragDeltaXY_, point);
+  return Blockly.utils.Coordinate.sum(
+      /** @type {!Blockly.utils.Coordinate} */ (this.dragDeltaXY_), point);
 };
 
 /**

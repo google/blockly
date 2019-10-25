@@ -60,6 +60,7 @@ Blockly.blockRendering.ConstantProvider = function() {
 
   this.EMPTY_BLOCK_SPACER_HEIGHT = 16;
 
+  this.DUMMY_INPUT_MIN_HEIGHT = this.TAB_HEIGHT;
   /**
    * Rounded corner radius.
    * @type {number}

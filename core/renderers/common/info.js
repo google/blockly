@@ -24,6 +24,7 @@
 goog.provide('Blockly.blockRendering.RenderInfo');
 
 goog.require('Blockly.blockRendering.BottomRow');
+goog.require('Blockly.blockRendering.DummyInput');
 goog.require('Blockly.blockRendering.ExternalValueInput');
 goog.require('Blockly.blockRendering.Hat');
 goog.require('Blockly.blockRendering.InlineInput');
@@ -374,8 +375,8 @@ Blockly.blockRendering.RenderInfo.prototype.addInput_ = function(input, activeRo
         new Blockly.blockRendering.ExternalValueInput(this.constants_, input));
     activeRow.hasExternalInput = true;
   } else if (input.type == Blockly.DUMMY_INPUT) {
-    // Dummy inputs have no visual representation, but the information is still
-    // important.
+    activeRow.elements.push(
+        new Blockly.blockRendering.DummyInput(this.constants_, input));
     activeRow.hasDummyInput = true;
   }
 };

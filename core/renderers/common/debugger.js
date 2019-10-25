@@ -185,7 +185,7 @@ Blockly.blockRendering.Debug.prototype.drawRenderedElem = function(elem, isRtl) 
  * @package
  */
 Blockly.blockRendering.Debug.prototype.drawConnection = function(conn) {
-  if (!Blockly.blockRendering.Debug.config.connections) {
+  if (!Blockly.blockRendering.Debug.config.connections || !conn) {
     return;
   }
 

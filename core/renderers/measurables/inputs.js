@@ -21,6 +21,7 @@
  * @author fenichel@google.com (Rachel Fenichel)
  */
 
+goog.provide('Blockly.blockRendering.DummyInput');
 goog.provide('Blockly.blockRendering.ExternalValueInput');
 goog.provide('Blockly.blockRendering.InlineInput');
 goog.provide('Blockly.blockRendering.InputConnection');
@@ -192,3 +193,28 @@ Blockly.blockRendering.ExternalValueInput.prototype.setShapeDimensions = functio
   this.connectionHeight = height;
   this.connectionWidth = width;
 };
+
+/**
+ * An object containing information about the space a dummy input takes up
+ * during rendering
+ * @param {!Blockly.blockRendering.ConstantProvider} constants The rendering
+ *     constants provider.
+ * @param {!Blockly.Input} input The inline input to measure and store
+ *     information for.
+ * @package
+ * @constructor
+ * @extends {Blockly.blockRendering.Measurable}
+ */
+Blockly.blockRendering.DummyInput = function(constants, input) {
+  Blockly.blockRendering.DummyInput.superClass_.constructor.call(this,
+      constants);
+  this.type |= Blockly.blockRendering.Types.INPUT |
+    Blockly.blockRendering.Types.DUMMY_INPUT;
+  this.input = input;
+  this.align = input.align;
+
+  this.width = 0;
+  this.height = this.constants_.DUMMY_INPUT_MIN_HEIGHT;
+};
+Blockly.utils.object.inherits(Blockly.blockRendering.DummyInput,
+    Blockly.blockRendering.Measurable);

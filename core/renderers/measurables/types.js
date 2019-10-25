@@ -189,8 +189,7 @@ Blockly.blockRendering.Types.isInlineInput = function(elem) {
 /**
  * Whether a measurable stores information about a dummy input.
  * @param {!Blockly.blockRendering.Measurable} elem The element to check.
- * @return {number} 1 if the object stores information about an
- *   dummy input.
+ * @return {number} 1 if the object stores information about a dummy input.
  * @package
  */
 Blockly.blockRendering.Types.isDummyInput = function(elem) {

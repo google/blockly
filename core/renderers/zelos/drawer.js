@@ -51,7 +51,7 @@ Blockly.utils.object.inherits(Blockly.zelos.Drawer,
  */
 Blockly.zelos.Drawer.prototype.drawOutline_ = function() {
   if (this.info_.outputConnection &&
-      this.info_.outputConnection.isDynamic()) {
+      this.info_.outputConnection.isDynamicShape) {
     this.drawFlatTop_();
     this.drawRightDynamicConnection_();
     this.drawFlatBottom_();

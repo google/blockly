@@ -515,7 +515,8 @@ Blockly.blockRendering.InputRow.prototype.measure = function() {
         connectedBlockWidths += elem.connectedBlockWidth;
       } else if (Blockly.blockRendering.Types.isExternalInput(elem) &&
           elem.connectedBlockWidth != 0) {
-        connectedBlockWidths += (elem.connectedBlockWidth - elem.connectionWidth);
+        connectedBlockWidths += (elem.connectedBlockWidth -
+          elem.connectionWidth);
       }
     }
     if (!(Blockly.blockRendering.Types.isSpacer(elem))) {

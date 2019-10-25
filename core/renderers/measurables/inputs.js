@@ -107,9 +107,26 @@ Blockly.blockRendering.InlineInput = function(constants, input) {
       constants, input);
   this.type |= Blockly.blockRendering.Types.INLINE_INPUT;
 
+  this.setShapeDimensions(
+    !this.isDynamicShape ? this.shape.height : 0,
+    !this.isDynamicShape ? this.shape.width : 0);
+
+  this.connectionOffsetY = this.constants_.TAB_OFFSET_FROM_TOP;
+};
+Blockly.utils.object.inherits(Blockly.blockRendering.InlineInput,
+    Blockly.blockRendering.InputConnection);
+
+
+/**
+ * Sets properties that depend on the connection shape dimensions.
+ * @param {number} height Height of the connection shape.
+ * @param {number} width Width of the connection shape.
+ */
+Blockly.blockRendering.InlineInput.prototype.setShapeDimensions = function(
+    height, width) {
   if (!this.connectedBlock) {
     this.height = this.constants_.EMPTY_INLINE_INPUT_HEIGHT;
-    this.width = this.shape.width +
+    this.width = width +
         this.constants_.EMPTY_INLINE_INPUT_PADDING;
   } else {
     // We allow the dark path to show on the parent block so that the child
@@ -117,13 +134,9 @@ Blockly.blockRendering.InlineInput = function(constants, input) {
     this.width = this.connectedBlockWidth;
     this.height = this.connectedBlockHeight;
   }
-
-  this.connectionOffsetY = this.constants_.TAB_OFFSET_FROM_TOP;
-  this.connectionHeight = this.shape.height;
-  this.connectionWidth = this.shape.width;
+  this.connectionHeight = height;
+  this.connectionWidth = width;
 };
-Blockly.utils.object.inherits(Blockly.blockRendering.InlineInput,
-    Blockly.blockRendering.InputConnection);
 
 /**
  * An object containing information about the space a statement input takes up
@@ -149,8 +162,7 @@ Blockly.blockRendering.StatementInput = function(constants, input) {
     this.height =
         this.connectedBlockHeight + this.constants_.STATEMENT_BOTTOM_SPACER;
   }
-  this.width = this.constants_.NOTCH_OFFSET_LEFT +
-      this.shape.width;
+  this.width = this.constants_.NOTCH_OFFSET_LEFT + this.shape.width;
 };
 Blockly.utils.object.inherits(Blockly.blockRendering.StatementInput,
     Blockly.blockRendering.InputConnection);
@@ -171,19 +183,33 @@ Blockly.blockRendering.ExternalValueInput = function(constants, input) {
       constants, input);
   this.type |= Blockly.blockRendering.Types.EXTERNAL_VALUE_INPUT;
 
+  this.setShapeDimensions(
+    !this.isDynamicShape ? this.shape.height : 0,
+    !this.isDynamicShape ? this.shape.width : 0);
+
+  this.connectionOffsetY = this.constants_.TAB_OFFSET_FROM_TOP;
+};
+Blockly.utils.object.inherits(Blockly.blockRendering.ExternalValueInput,
+    Blockly.blockRendering.InputConnection);
+
+
+/**
+ * Sets properties that depend on the connection shape dimensions.
+ * @param {number} height Height of the connection shape.
+ * @param {number} width Width of the connection shape.
+ */
+Blockly.blockRendering.ExternalValueInput.prototype.setShapeDimensions = function(
+    height, width) {
   if (!this.connectedBlock) {
-    this.height = this.shape.height;
+    this.height = height;
   } else {
     this.height =
         this.connectedBlockHeight - this.constants_.TAB_OFFSET_FROM_TOP -
         this.constants_.MEDIUM_PADDING;
   }
-  this.width = this.shape.width +
+  this.width = width +
       this.constants_.EXTERNAL_VALUE_INPUT_PADDING;
 
-  this.connectionOffsetY = this.constants_.TAB_OFFSET_FROM_TOP;
-  this.connectionHeight = this.shape.height;
-  this.connectionWidth = this.shape.width;
+  this.connectionHeight = height;
+  this.connectionWidth = width;
 };
-Blockly.utils.object.inherits(Blockly.blockRendering.ExternalValueInput,
-    Blockly.blockRendering.InputConnection);

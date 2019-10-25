@@ -77,6 +77,11 @@ Blockly.zelos.RenderInfo = function(renderer, block) {
    * @override
    */
   this.bottomRow = new Blockly.zelos.BottomRow(this.constants_);
+
+  /**
+   * @override
+   */
+  this.isInline = true;
 };
 Blockly.utils.object.inherits(Blockly.zelos.RenderInfo,
     Blockly.blockRendering.RenderInfo);
@@ -93,11 +98,25 @@ Blockly.zelos.RenderInfo.prototype.getRenderer = function() {
 /**
  * @override
  */
+Blockly.zelos.RenderInfo.prototype.computeBounds_ = function() {
+  Blockly.zelos.RenderInfo.superClass_.computeBounds_.call(this);
+
+  if (this.outputConnection && this.outputConnection.isDynamicShape) {
+    // Add right connection width.
+    var rightConnectionWidth = this.outputConnection.width;
+    this.width += rightConnectionWidth;
+    this.widthWithChildren += rightConnectionWidth;
+  }
+};
+
+/**
+ * @override
+ */
 Blockly.zelos.RenderInfo.prototype.getInRowSpacing_ = function(prev, next) {
   if (!prev || !next) {
     // No need for padding at the beginning or end of the row if the
     // output shape is dynamic.
-    if (this.outputConnection && this.outputConnection.isDynamic()) {
+    if (this.outputConnection && this.outputConnection.isDynamicShape) {
       return this.constants_.NO_PADDING;
     }
   }
@@ -314,30 +333,41 @@ Blockly.zelos.RenderInfo.prototype.finalize_ = function() {
     row.yPos = yCursor;
     yCursor += row.height;
   }
-  // Dynamic output connections depend on the height of the block. Adjust the
-  // height and width of the connection, and then adjust the startX and width of the
-  // block accordingly.
-  var outputConnectionWidth = 0;
-  if (this.outputConnection && !this.outputConnection.height) {
-    this.outputConnection.height = yCursor;
-    outputConnectionWidth = yCursor; // Twice the width to account for the right side.
-    this.outputConnection.width = outputConnectionWidth / 2;
+  this.height = yCursor;
+
+  if (this.outputConnection && this.outputConnection.isDynamicShape) {
+    // Dynamic output connections depend on the height of the block. Adjust the
+    // height of the connection.
+    this.outputConnection.setShapeDimensions(
+        this.outputConnection.shape.height(this.height),
+        this.outputConnection.shape.width(this.height));
+
+    // Recompute the bounds as we now know the output connection dimensions.
+    this.computeBounds_();
   }
-  this.startX += outputConnectionWidth / 2;
-  this.width += outputConnectionWidth;
 
   var widestRowWithConnectedBlocks = 0;
   for (var i = 0, row; (row = this.rows[i]); i++) {
     row.xPos = this.startX;
+
+    for (var j = 0, elem; (elem = row.elements[j]); j++) {
+      if (Blockly.blockRendering.Types.isInlineInput(elem) ||
+        Blockly.blockRendering.Types.isExternalInput(elem)) {
+        if (elem.isDynamicShape) {
+          elem.setShapeDimensions(elem.shape.height(elem.height),
+              elem.shape.width(elem.height));
+        }
+      }
+    }
 
     widestRowWithConnectedBlocks =
         Math.max(widestRowWithConnectedBlocks, row.widthWithConnectedBlocks);
     this.recordElemPositions_(row);
   }
 
-  this.widthWithChildren = widestRowWithConnectedBlocks + this.startX;
+  this.widthWithChildren = Math.max(this.widthWithChildren,
+      widestRowWithConnectedBlocks + this.startX);
 
-  this.height = yCursor;
   this.startY = this.topRow.capline;
-  this.bottomRow.baseline = yCursor - this.bottomRow.descenderHeight;
+  this.bottomRow.baseline = this.height - this.bottomRow.descenderHeight;
 };

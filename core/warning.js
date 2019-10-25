@@ -149,7 +149,7 @@ Blockly.Warning.prototype.createBubble = function() {
       textElement.setAttribute('x', maxWidth + Blockly.Bubble.BORDER_WIDTH);
     }
   }
-  this.updateColour();
+  this.applyColour();
 };
 
 /**

@@ -71,6 +71,14 @@ Blockly.BlockSvg = function(workspace, prototypeName, opt_id) {
   this.pathObject =
       workspace.getRenderer().makePathObject(this.svgGroup_);
 
+  /**
+   * [colourer description]
+   * @type {[type]}
+   * @package
+   */
+  this.colourer =
+      workspace.getRenderer().makeColourer(this, this.pathObject);
+
   // The next three paths are set only for backwards compatibility reasons.
   /**
    * The dark path of the block.
@@ -267,7 +275,7 @@ Blockly.BlockSvg.prototype.initSvg = function() {
   for (var i = 0; i < icons.length; i++) {
     icons[i].createIcon();
   }
-  this.updateColour();
+  this.applyColour();
   this.updateMovable();
   var svg = this.getSvgRoot();
   if (!this.workspace.options.readOnly && !this.eventsInit_ && svg) {
@@ -939,7 +947,7 @@ Blockly.BlockSvg.prototype.setEditable = function(editable) {
  */
 Blockly.BlockSvg.prototype.setShadow = function(shadow) {
   Blockly.BlockSvg.superClass_.setShadow.call(this, shadow);
-  this.updateColour();
+  this.applyColour();
 };
 
 /**
@@ -1033,67 +1041,28 @@ Blockly.BlockSvg.prototype.dispose = function(healStack, animate) {
 
 /**
  * Change the colour of a block.
+ * @package
  */
-Blockly.BlockSvg.prototype.updateColour = function() {
+Blockly.BlockSvg.prototype.applyColour = function() {
   if (!this.isEnabled()) {
     // Disabled blocks don't have colour.
     return;
   }
 
-  if (this.isShadow()) {
-    this.setShadowColour_();
-  } else {
-    this.setBorderColour_();
-    this.svgPath_.setAttribute('fill', this.getColour());
-  }
+  this.colourer.applyColour(this.isShadow());
 
   var icons = this.getIcons();
   for (var i = 0; i < icons.length; i++) {
-    icons[i].updateColour();
+    // TODO: Decide whether to make icon and field applyColour take in a
+    // colourer object.
+    icons[i].applyColour();
   }
 
   for (var x = 0, input; input = this.inputList[x]; x++) {
     for (var y = 0, field; field = input.fieldRow[y]; y++) {
-      field.updateColour();
+      field.applyColour();
     }
   }
-};
-
-/**
- * Sets the colour of the border.
- * Removes the light and dark paths if a border colour is defined.
- * @private
- */
-Blockly.BlockSvg.prototype.setBorderColour_ = function() {
-  var borderColours = this.getColourBorder();
-  if (borderColours.colourBorder) {
-    this.svgPathLight_.style.display = 'none';
-    this.svgPathDark_.style.display = 'none';
-
-    this.svgPath_.setAttribute('stroke', borderColours.colourBorder);
-  } else {
-    this.svgPathLight_.style.display = '';
-    this.svgPathDark_.style.display = '';
-    this.svgPath_.setAttribute('stroke', 'none');
-
-    this.svgPathLight_.setAttribute('stroke', borderColours.colourLight);
-    this.svgPathDark_.setAttribute('fill', borderColours.colourDark);
-  }
-};
-
-/**
- * Sets the colour of shadow blocks.
- * @return {?string} The background colour of the block.
- * @private
- */
-Blockly.BlockSvg.prototype.setShadowColour_ = function() {
-  var shadowColour = this.getColourShadow() || '';
-
-  this.svgPathLight_.style.display = 'none';
-  this.svgPathDark_.setAttribute('fill', shadowColour);
-  this.svgPath_.setAttribute('stroke', 'none');
-  this.svgPath_.setAttribute('fill', shadowColour);
-  return shadowColour;
 };
 
 /**
@@ -1111,7 +1080,7 @@ Blockly.BlockSvg.prototype.updateDisabled = function() {
     var removed = Blockly.utils.dom.removeClass(
         /** @type {!Element} */ (this.svgGroup_), 'blocklyDisabled');
     if (removed) {
-      this.updateColour();
+      this.applyColour();
     }
   }
   var children = this.getChildren(false);
@@ -1341,14 +1310,39 @@ Blockly.BlockSvg.prototype.setDeleteStyle = function(enable) {
 // block has been rendered.
 
 /**
+ * Get the colour of a block.
+ * @return {string} #RRGGBB string.
+ */
+Blockly.BlockSvg.prototype.getColour = function() {
+  return this.colourer.getColour();
+};
+
+/**
  * Change the colour of a block.
  * @param {number|string} colour HSV hue value, or #RRGGBB string.
  */
 Blockly.BlockSvg.prototype.setColour = function(colour) {
   Blockly.BlockSvg.superClass_.setColour.call(this, colour);
+  this.colourer.setColour(colour);
+  this.applyColour();
+};
 
-  if (this.rendered) {
-    this.updateColour();
+/**
+ * Set the style and colour values of a block.
+ * @param {string} blockStyleName Name of the block style
+ * @throws {Error} if the block style does not exist.
+ */
+Blockly.BlockSvg.prototype.setStyle = function(blockStyleName) {
+  var theme = this.workspace.getTheme();
+  var blockStyle = theme.getBlockStyle(blockStyleName);
+  this.styleName_ = blockStyleName;
+
+  if (blockStyle) {
+    this.hat = blockStyle.hat;
+    this.colourer.setFromStyle(blockStyle);
+    this.applyColour();
+  } else {
+    throw Error('Invalid style name: ' + blockStyleName);
   }
 };
 

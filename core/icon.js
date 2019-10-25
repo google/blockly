@@ -139,9 +139,9 @@ Blockly.Icon.prototype.iconClick_ = function(e) {
 /**
  * Change the colour of the associated bubble to match its block.
  */
-Blockly.Icon.prototype.updateColour = function() {
+Blockly.Icon.prototype.applyColour = function() {
   if (this.isVisible()) {
-    this.bubble_.setColour(this.block_.getColour());
+    this.bubble_.setColour(this.block_.colourer.getColour());
   }
 };
 

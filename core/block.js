@@ -905,61 +905,8 @@ Blockly.Block.prototype.setTooltip = function(newTip) {
  * @return {string} #RRGGBB string.
  */
 Blockly.Block.prototype.getColour = function() {
+  // TODO: Can we remove this?
   return this.colour_;
-};
-
-/**
- * Get the secondary colour of a block.
- * @return {?string} #RRGGBB string.
- */
-Blockly.Block.prototype.getColourSecondary = function() {
-  return this.colourSecondary_;
-};
-
-/**
- * Get the tertiary colour of a block.
- * @return {?string} #RRGGBB string.
- */
-Blockly.Block.prototype.getColourTertiary = function() {
-  return this.colourTertiary_;
-};
-
-/**
- * Get the shadow colour of a block.
- * @return {?string} #RRGGBB string.
- */
-Blockly.Block.prototype.getColourShadow = function() {
-  var colourSecondary = this.getColourSecondary();
-  if (colourSecondary) {
-    return colourSecondary;
-  }
-  return Blockly.utils.colour.blend('#fff', this.getColour(), 0.6);
-};
-
-/**
- * Get the border colour(s) of a block.
- * @return {{colourDark, colourLight, colourBorder}} An object containing
- *     colour values for the border(s) of the block. If the block is using a
- *     style the colourBorder will be defined and equal to the tertiary colour
- *     of the style (#RRGGBB string). Otherwise the colourDark and colourLight
- *     attributes will be defined (#RRGGBB strings).
- * @package
- */
-Blockly.Block.prototype.getColourBorder = function() {
-  var colourTertiary = this.getColourTertiary();
-  if (colourTertiary) {
-    return {
-      colourBorder: colourTertiary,
-      colourLight: null,
-      colourDark: null
-    };
-  }
-  var colour = this.getColour();
-  return {
-    colourBorder: null,
-    colourLight: Blockly.utils.colour.blend('#fff', colour, 0.3),
-    colourDark: Blockly.utils.colour.blend('#000', colour, 0.2)
-  };
 };
 
 /**
@@ -984,48 +931,20 @@ Blockly.Block.prototype.getHue = function() {
  *     or a message reference string pointing to one of those two values.
  */
 Blockly.Block.prototype.setColour = function(colour) {
-  var dereferenced = (typeof colour == 'string') ?
-      Blockly.utils.replaceMessageReferences(colour) : colour;
-
-  var hue = Number(dereferenced);
-  if (!isNaN(hue) && 0 <= hue && hue <= 360) {
-    this.hue_ = hue;
-    this.colour_ = Blockly.hueToHex(hue);
-  } else {
-    var hex = Blockly.utils.colour.parse(dereferenced);
-    if (hex) {
-      this.colour_ = hex;
-      // Only store hue if colour is set as a hue.
-      this.hue_ = null;
-    } else {
-      var errorMsg = 'Invalid colour: "' + dereferenced + '"';
-      if (colour != dereferenced) {
-        errorMsg += ' (from "' + colour + '")';
-      }
-      throw Error(errorMsg);
-    }
-  }
+  // Set colour just stores these as properties on the block, but never uses
+  // them again.
+  // TODO: see if we can just get rid of these properties on the block.
+  var parsed = Blockly.blockRendering.Colourer.parseColour(colour);
+  this.hue_ = parsed.hue;
+  this.colour_ = parsed.colour;
 };
 
 /**
  * Set the style and colour values of a block.
  * @param {string} blockStyleName Name of the block style
- * @throws {Error} if the block style does not exist.
  */
 Blockly.Block.prototype.setStyle = function(blockStyleName) {
-  var theme = this.workspace.getTheme();
-  var blockStyle = theme.getBlockStyle(blockStyleName);
   this.styleName_ = blockStyleName;
-
-  if (blockStyle) {
-    this.colourSecondary_ = blockStyle['colourSecondary'];
-    this.colourTertiary_ = blockStyle['colourTertiary'];
-    this.hat = blockStyle.hat;
-    // Set colour will trigger an updateColour() on a block_svg
-    this.setColour(blockStyle['colourPrimary']);
-  } else {
-    throw Error('Invalid style name: ' + blockStyleName);
-  }
 };
 
 /**

@@ -603,10 +603,10 @@ Blockly.Field.prototype.getSvgRoot = function() {
 
 /**
  * Updates the field to match the colour/style of the block. Should only be
- * called by BlockSvg.updateColour().
+ * called by BlockSvg.applyColour().
  * @package
  */
-Blockly.Field.prototype.updateColour = function() {
+Blockly.Field.prototype.applyColour = function() {
   // Non-abstract sub-classes may wish to implement this. See FieldDropdown.
 };
 

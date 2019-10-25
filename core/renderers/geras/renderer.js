@@ -26,6 +26,7 @@ goog.provide('Blockly.geras.Renderer');
 goog.require('Blockly.blockRendering');
 goog.require('Blockly.blockRendering.Renderer');
 goog.require('Blockly.geras.ConstantProvider');
+goog.require('Blockly.geras.Colourer');
 goog.require('Blockly.geras.Drawer');
 goog.require('Blockly.geras.HighlightConstantProvider');
 goog.require('Blockly.geras.PathObject');
@@ -104,6 +105,18 @@ Blockly.geras.Renderer.prototype.makeDrawer_ = function(block, info) {
  */
 Blockly.geras.Renderer.prototype.makePathObject = function(root) {
   return new Blockly.geras.PathObject(root);
+};
+
+/**
+ * Create a new instance of a renderer path object.
+ * @param {!Blockly.BlockSvg} block The root SVG element.
+ * @param {!Blockly.geras.IPathObject} pathObject [description]
+ * @return {!Blockly.geras.Colourer} The renderer path object.
+ * @package
+ */
+Blockly.geras.Renderer.prototype.makeColourer = function(block,
+    pathObject) {
+  return new Blockly.geras.Colourer(block, pathObject);
 };
 
 /**

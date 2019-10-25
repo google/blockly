@@ -468,13 +468,13 @@ Blockly.FieldDropdown.prototype.doValueUpdate_ = function(newValue) {
  * Updates the dropdown arrow to match the colour/style of the block.
  * @package
  */
-Blockly.FieldDropdown.prototype.updateColour = function() {
+Blockly.FieldDropdown.prototype.applyColour = function() {
   // Update arrow's colour.
   if (this.sourceBlock_ && this.arrow_) {
     if (this.sourceBlock_.isShadow()) {
-      this.arrow_.style.fill = this.sourceBlock_.getColourShadow();
+      this.arrow_.style.fill = this.sourceBlock_.colourer.getColourShadow();
     } else {
-      this.arrow_.style.fill = this.sourceBlock_.getColour();
+      this.arrow_.style.fill = this.sourceBlock_.colourer.getColour();
     }
   }
 };

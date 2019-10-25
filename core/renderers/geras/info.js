@@ -321,6 +321,9 @@ Blockly.geras.RenderInfo.prototype.getSpacerRowHeight_ = function(prev, next) {
   if (!prev.hasStatement && next.hasDummyInput) {
     return this.constants_.LARGE_PADDING;
   }
+  if (prev.hasDummyInput) {
+    return this.constants_.LARGE_PADDING;
+  }
   return this.constants_.MEDIUM_PADDING;
 };
 

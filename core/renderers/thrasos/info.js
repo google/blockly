@@ -257,7 +257,7 @@ Blockly.thrasos.RenderInfo.prototype.getSpacerRowHeight_ = function(
   if (prev.hasStatement && next.hasStatement) {
     return this.constants_.LARGE_PADDING;
   }
-  if (next.hasDummyInput) {
+  if (prev.hasDummyInput || next.hasDummyInput) {
     return this.constants_.LARGE_PADDING;
   }
   return this.constants_.MEDIUM_PADDING;

@@ -92,7 +92,7 @@ Blockly.TouchGesture = function(e, creatorWorkspace) {
    * @private
    */
   this.isPinchZoomEnabled_ = this.startWorkspace_.options.zoomOptions &&
-      this.startWorkspace_.options.zoomOptions.pinch
+      this.startWorkspace_.options.zoomOptions.pinch;
 };
 Blockly.utils.object.inherits(Blockly.TouchGesture, Blockly.Gesture);
 

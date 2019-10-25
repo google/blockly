@@ -85,6 +85,14 @@ Blockly.TouchGesture = function(e, creatorWorkspace) {
    * @private
    */
   this.onStartWrapper_ = null;
+
+  /**
+   * Boolean for whether or not the workspace supports pinch-zoom.
+   * @type {boolean}
+   * @private
+   */
+  this.isPinchZoomEnabled_ = this.startWorkspace_.options.zoomOptions &&
+      this.startWorkspace_.options.zoomOptions.pinch
 };
 Blockly.utils.object.inherits(Blockly.TouchGesture, Blockly.Gesture);
 
@@ -256,10 +264,8 @@ Blockly.TouchGesture.prototype.handleTouchMove = function(e) {
   // Update the cache
   this.cachedPoints_[pointerId] = this.getTouchPoint(e);
 
-  var workspace = this.startWorkspace_;
   var pointers = Object.keys(this.cachedPoints_);
-  if (workspace.options.zoomOptions && workspace.options.zoomOptions.pinch &&
-      pointers.length == 2) {
+  if (this.isPinchZoomEnabled_ && pointers.length === 2) {
     this.handlePinch(e);
   } else {
     Blockly.TouchGesture.superClass_.handleMove.call(this, e);

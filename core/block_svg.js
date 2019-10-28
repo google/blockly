@@ -1291,7 +1291,7 @@ Blockly.BlockSvg.prototype.setMutator = function(mutator) {
     this.mutator.dispose();
   }
   if (mutator) {
-    mutator.block_ = this;
+    mutator.setBlock(this);
     this.mutator = mutator;
     mutator.createIcon();
   }

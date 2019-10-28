@@ -81,6 +81,20 @@ Blockly.Bubble = function(workspace, content, shape, anchorXY,
           this.resizeGroup_, 'mousedown', this, this.resizeMouseDown_);
     }
   }
+
+  /**
+   * Method to call on resize of bubble.
+   * @type {?function()}
+   * @private
+   */
+  this.resizeCallback_ = null;
+
+  /**
+   * Method to call on move of bubble.
+   * @type {?function()}
+   * @private
+   */
+  this.moveCallback_ = null;
 };
 
 /**
@@ -122,13 +136,6 @@ Blockly.Bubble.onMouseUpWrapper_ = null;
  * @private
  */
 Blockly.Bubble.onMouseMoveWrapper_ = null;
-
-/**
- * Function to call on resize of bubble.
- * @type {Function}
- * @private
- */
-Blockly.Bubble.prototype.resizeCallback_ = null;
 
 /**
  * Stop binding to the global mouseup and mousemove events.
@@ -369,6 +376,14 @@ Blockly.Bubble.prototype.resizeMouseMove_ = function(e) {
  */
 Blockly.Bubble.prototype.registerResizeEvent = function(callback) {
   this.resizeCallback_ = callback;
+};
+
+/**
+ * Register a function as a callback event for when the bubble is moved.
+ * @param {!Function} callback The function to call on move.
+ */
+Blockly.Bubble.prototype.registerMoveEvent = function(callback) {
+  this.moveCallback_ = callback;
 };
 
 /**
@@ -618,6 +633,17 @@ Blockly.Bubble.prototype.positionBubble_ = function() {
  */
 Blockly.Bubble.prototype.moveTo = function(x, y) {
   this.bubbleGroup_.setAttribute('transform', 'translate(' + x + ',' + y + ')');
+};
+
+/**
+ * Triggers a move callback if one exists at the end of a drag.
+ * @param {boolean} adding True if adding, false if removing.
+ * @package
+ */
+Blockly.Bubble.prototype.setDragging = function(adding) {
+  if (!adding && this.moveCallback_) {
+    this.moveCallback_();
+  }
 };
 
 /**

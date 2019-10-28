@@ -60,4 +60,4 @@ Blockly.blockRendering.IPathObject.prototype.setColourFromStyle;
  * Flip the SVG paths in RTL.
  * @package
  */
-Blockly.geras.PathObject.prototype.flipRTL;
+Blockly.blockRendering.IPathObject.prototype.flipRTL;

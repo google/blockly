@@ -296,13 +296,13 @@ Blockly.Toolbox.prototype.handleAfterTreeSelected_ = function(
     if (this.lastCategory_ != newNode) {
       this.flyout_.scrollToStart();
     }
-    if (Blockly.keyboardAccessibilityMode) {
+    if (this.workspace_.keyboardAccessibilityMode) {
       Blockly.navigation.setState(Blockly.navigation.STATE_TOOLBOX);
     }
   } else {
     // Hide the flyout.
     this.flyout_.hide();
-    if (Blockly.keyboardAccessibilityMode &&
+    if (this.workspace_.keyboardAccessibilityMode &&
         !(newNode instanceof Blockly.Toolbox.TreeSeparator)) {
       Blockly.navigation.setState(Blockly.navigation.STATE_WS);
     }

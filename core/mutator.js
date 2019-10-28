@@ -378,7 +378,8 @@ Blockly.Mutator.prototype.workspaceChanged_ = function(e) {
       block.render();
     }
 
-    if (oldMutation != newMutation && Blockly.keyboardAccessibilityMode) {
+    if (oldMutation != newMutation &&
+        this.workspace_.keyboardAccessibilityMode) {
       Blockly.navigation.moveCursorOnBlockMutation(block);
     }
     // Don't update the bubble until the drag has ended, to avoid moving blocks

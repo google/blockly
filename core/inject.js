@@ -63,7 +63,7 @@ Blockly.inject = function(container, opt_options) {
   subContainer.className = 'injectionDiv';
   subContainer.tabIndex = 0;
   Blockly.utils.aria.setState(subContainer,
-      Blockly.utils.aria.State.LABEL, 'Blockly Workspace');
+      Blockly.utils.aria.State.LABEL, Blockly.Msg.WORKSPACE_ARIA_LABEL);
 
   container.appendChild(subContainer);
   var svg = Blockly.createDom_(subContainer, options);
@@ -82,13 +82,13 @@ Blockly.inject = function(container, opt_options) {
 
   Blockly.svgResize(workspace);
 
-  subContainer.onfocus = function() {
+  subContainer.addEventListener('focus', function() {
     Blockly.mainWorkspace = workspace;
-  };
+  });
 
-  subContainer.onblur = function() {
+  subContainer.addEventListener('blur', function() {
     Blockly.mainWorkspace = null;
-  };
+  });
 
   return workspace;
 };

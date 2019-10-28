@@ -60,6 +60,10 @@ Blockly.blockRendering.ConstantProvider = function() {
 
   this.EMPTY_BLOCK_SPACER_HEIGHT = 16;
 
+  /**
+   * The minimum height of a dummy input row.
+   * @type {number}
+   */
   this.DUMMY_INPUT_MIN_HEIGHT = this.TAB_HEIGHT;
 
   /**

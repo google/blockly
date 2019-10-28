@@ -252,7 +252,7 @@ Blockly.JavaScript['lists_setIndex'] = function(block) {
  * @param {string} listName Name of the list, used to calculate length.
  * @param {string} where The method of indexing, selected by dropdown in Blockly
  * @param {string=} opt_at The optional offset when indexing from start/end.
- * @return {string} Index expression.
+ * @return {string|undefined} Index expression.
  * @private
  */
 Blockly.JavaScript.lists.getIndex_ = function(listName, where, opt_at) {

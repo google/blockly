@@ -171,7 +171,7 @@ Blockly.JavaScript['text_charAt'] = function(block) {
  * @param {string} stringName Name of the string, used to calculate length.
  * @param {string} where The method of indexing, selected by dropdown in Blockly
  * @param {string=} opt_at The optional offset when indexing from start/end.
- * @return {string} Index expression.
+ * @return {string|undefined} Index expression.
  * @private
  */
 Blockly.JavaScript.text.getIndex_ = function(stringName, where, opt_at) {

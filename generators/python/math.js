@@ -76,7 +76,7 @@ Blockly.Python['math_single'] = function(block) {
   var arg;
   if (operator == 'NEG') {
     // Negation is a special case given its different operator precedence.
-    var code = Blockly.Python.valueToCode(block, 'NUM',
+    code = Blockly.Python.valueToCode(block, 'NUM',
         Blockly.Python.ORDER_UNARY_SIGN) || '0';
     return ['-' + code, Blockly.Python.ORDER_UNARY_SIGN];
   }

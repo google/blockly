@@ -41,21 +41,20 @@ Blockly.blockRendering.Types = {
   INPUT: 1 << 7, // Input
   INLINE_INPUT: 1 << 8, // Inline Input.
   STATEMENT_INPUT: 1 << 9, // Statement Input.
-  DUMMY_INPUT: 1 << 10, // Dummy Input.
-  CONNECTION: 1 << 11, // Connection.
-  PREVIOUS_CONNECTION: 1 << 12, // Previous Connection.
-  NEXT_CONNECTION: 1 << 13, // Next Connection.
-  OUTPUT_CONNECTION: 1 << 14, // Output Connection.
-  CORNER: 1 << 15, // Corner.
-  LEFT_SQUARE_CORNER: 1 << 16, // Square Corner.
-  LEFT_ROUND_CORNER: 1 << 17, // Round Corner.
-  RIGHT_SQUARE_CORNER: 1 << 18, // Right Square Corner.
-  RIGHT_ROUND_CORNER: 1 << 19, // Right Round Corner.
-  JAGGED_EDGE: 1 << 20, // Jagged Edge.
-  ROW: 1 << 21, // Row
-  TOP_ROW: 1 << 22, // Top Row.
-  BOTTOM_ROW: 1 << 23, // Bototm Row.
-  INPUT_ROW: 1 << 24, // Input Row.
+  CONNECTION: 1 << 10, // Connection.
+  PREVIOUS_CONNECTION: 1 << 11, // Previous Connection.
+  NEXT_CONNECTION: 1 << 12, // Next Connection.
+  OUTPUT_CONNECTION: 1 << 13, // Output Connection.
+  CORNER: 1 << 14, // Corner.
+  LEFT_SQUARE_CORNER: 1 << 15, // Square Corner.
+  LEFT_ROUND_CORNER: 1 << 16, // Round Corner.
+  RIGHT_SQUARE_CORNER: 1 << 17, // Right Square Corner.
+  RIGHT_ROUND_CORNER: 1 << 18, // Right Round Corner.
+  JAGGED_EDGE: 1 << 19, // Jagged Edge.
+  ROW: 1 << 20, // Row
+  TOP_ROW: 1 << 21, // Top Row.
+  BOTTOM_ROW: 1 << 22, // Bototm Row.
+  INPUT_ROW: 1 << 23, // Input Row.
 };
 
 /**
@@ -86,7 +85,7 @@ Blockly.blockRendering.Types.RIGHT_CORNER =
  * @type {number}
  * @private
  */
-Blockly.blockRendering.Types.nextTypeValue_ = 1 << 25;
+Blockly.blockRendering.Types.nextTypeValue_ = 1 << 24;
 
 /**
  * Get the enum flag value of an existing type or register a new type.
@@ -184,16 +183,6 @@ Blockly.blockRendering.Types.isExternalInput = function(elem) {
  */
 Blockly.blockRendering.Types.isInlineInput = function(elem) {
   return elem.type & Blockly.blockRendering.Types.INLINE_INPUT;
-};
-
-/**
- * Whether a measurable stores information about a dummy input.
- * @param {!Blockly.blockRendering.Measurable} elem The element to check.
- * @return {number} 1 if the object stores information about a dummy input.
- * @package
- */
-Blockly.blockRendering.Types.isDummyInput = function(elem) {
-  return elem.type & Blockly.blockRendering.Types.DUMMY_INPUT;
 };
 
 /**

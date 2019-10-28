@@ -24,7 +24,6 @@
 goog.provide('Blockly.blockRendering.RenderInfo');
 
 goog.require('Blockly.blockRendering.BottomRow');
-goog.require('Blockly.blockRendering.DummyInput');
 goog.require('Blockly.blockRendering.ExternalValueInput');
 goog.require('Blockly.blockRendering.Hat');
 goog.require('Blockly.blockRendering.InlineInput');
@@ -375,10 +374,11 @@ Blockly.blockRendering.RenderInfo.prototype.addInput_ = function(input, activeRo
         new Blockly.blockRendering.ExternalValueInput(this.constants_, input));
     activeRow.hasExternalInput = true;
   } else if (input.type == Blockly.DUMMY_INPUT) {
-    activeRow.elements.push(
-        new Blockly.blockRendering.DummyInput(this.constants_, input));
+    // Dummy inputs have no visual representation, but the information is still
+    // important.
     activeRow.hasDummyInput = true;
   }
+  activeRow.align = input.align;
 };
 
 /**
@@ -411,12 +411,6 @@ Blockly.blockRendering.RenderInfo.prototype.shouldStartNewRow_ = function(input,
  * @protected
  */
 Blockly.blockRendering.RenderInfo.prototype.addElemSpacing_ = function() {
-  var hasExternalInputs = false;
-  for (var i = 0, row; (row = this.rows[i]); i++) {
-    if (row.hasExternalInput) {
-      hasExternalInputs = true;
-    }
-  }
   for (var i = 0, row; (row = this.rows[i]); i++) {
     var oldElems = row.elements;
     row.elements = [];
@@ -429,12 +423,6 @@ Blockly.blockRendering.RenderInfo.prototype.addElemSpacing_ = function() {
     for (var e = 0; e < oldElems.length - 1; e++) {
       row.elements.push(oldElems[e]);
       var spacing = this.getInRowSpacing_(oldElems[e], oldElems[e + 1]);
-      // Add extra spacing to dummy inputs to account for a tab if any of the
-      // rows have an external input.
-      if (hasExternalInputs &&
-          Blockly.blockRendering.Types.isDummyInput(oldElems[e + 1])) {
-        spacing += this.constants_.TAB_WIDTH;
-      }
       row.elements.push(
           new Blockly.blockRendering.InRowSpacer(this.constants_, spacing));
     }
@@ -467,8 +455,6 @@ Blockly.blockRendering.RenderInfo.prototype.getInRowSpacing_ = function(prev, ne
       return this.constants_.LARGE_PADDING;
     } else if (Blockly.blockRendering.Types.isStatementInput(prev)) {
       return this.constants_.NO_PADDING;
-    } else if (Blockly.blockRendering.Types.isDummyInput(prev)) {
-      return this.constants_.NO_PADDING;
     }
   }
 
@@ -486,11 +472,6 @@ Blockly.blockRendering.RenderInfo.prototype.getInRowSpacing_ = function(prev, ne
       Blockly.blockRendering.Types.isNextConnection(next)) {
       return next.notchOffset - this.constants_.CORNER_RADIUS;
     }
-  }
-  
-  // Spacing between a dummy input and anything.
-  if (prev && Blockly.blockRendering.Types.isDummyInput(prev)) {
-    return this.constants_.NO_PADDING;
   }
 
   return this.constants_.MEDIUM_PADDING;

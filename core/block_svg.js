@@ -1322,7 +1322,7 @@ Blockly.BlockSvg.prototype.setStyle = function(blockStyleName) {
 
   if (blockStyle) {
     this.hat = blockStyle.hat;
-    this.pathObject.setFromStyle(blockStyle);
+    this.pathObject.setColourFromStyle(blockStyle);
     this.applyColour();
   } else {
     throw Error('Invalid style name: ' + blockStyleName);

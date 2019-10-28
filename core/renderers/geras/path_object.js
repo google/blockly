@@ -69,11 +69,35 @@ Blockly.geras.PathObject = function(root) {
       {'class': 'blocklyPathLight'}, this.svgRoot);
 
 
-  this.hue_;
-  this.primaryColour;
-  this.secondaryColour;
-  this.tertiaryColour;
-  this.darkColour;
+  /**
+   * Primary colour of the block in '#RRGGBB' format.
+   * @type {string}
+   * @package
+   */
+  this.primaryColour = '#000000';
+
+  /**
+   * Secondary colour of the block in '#RRGGBB' format.
+   * Used for the body of a shadow block in Geras.
+   * @type {string}
+   * @package
+   */
+  this.secondaryColour = '#000000';
+
+  /**
+   * Tertiary colour of the block in '#RRGGBB' format.
+   * Used for the light path (highlight) in Geras.
+   * @type {string}
+   * @package
+   */
+  this.tertiaryColour = '#000000';
+
+  /**
+   * The colour of the dark path on the block in '#RRGGBB' format.
+   * @type {string}
+   * @package
+   */
+  this.darkColour = '#000000';
 };
 Blockly.utils.object.inherits(Blockly.geras.PathObject,
     Blockly.blockRendering.PathObject);
@@ -126,9 +150,9 @@ Blockly.geras.PathObject.prototype.applyColour = function(isShadow) {
 /**
  * @override
  */
-Blockly.geras.PathObject.prototype.setColourFromTriplet = function(primary,
+Blockly.geras.PathObject.prototype.setColourFromTriplet_ = function(primary,
     secondary, tertiary) {
-  Blockly.geras.PathObject.superClass_.setColourFromTriplet.call(this, primary,
+  Blockly.geras.PathObject.superClass_.setColourFromTriplet_.call(this, primary,
       secondary, tertiary);
   this.darkColour = tertiary ||
       Blockly.utils.colour.blend('#000', primary, 0.2);

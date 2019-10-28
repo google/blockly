@@ -257,22 +257,6 @@ Blockly.Block.prototype.hue_ = null;
 Blockly.Block.prototype.colour_ = '#000000';
 
 /**
- * Secondary colour of the block.
- * Colour of shadow blocks.
- * @type {?string}
- * @private
- */
-Blockly.Block.prototype.colourSecondary_ = null;
-
-/**
- * Tertiary colour of the block.
- * Colour of the block's border.
- * @type {?string}
- * @private
- */
-Blockly.Block.prototype.colourTertiary_ = null;
-
-/**
  * Name of the block style.
  * @type {?string}
  * @private

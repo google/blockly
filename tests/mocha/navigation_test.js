@@ -349,7 +349,7 @@ suite('Navigation', function() {
       this.workspace = new Blockly.Workspace({readOnly: false});
       Blockly.user.keyMap.setKeyMap(Blockly.user.keyMap.createDefaultKeyMap());
       Blockly.mainWorkspace = this.workspace;
-      Blockly.keyboardAccessibilityMode = true;
+      Blockly.getMainWorkspace().keyboardAccessibilityMode = true;
       Blockly.navigation.currentState_ = Blockly.navigation.STATE_WS;
 
       this.mockEvent = {
@@ -407,24 +407,24 @@ suite('Navigation', function() {
     test('Toggle Action Off', function() {
       this.mockEvent.keyCode = 'Control75';
       sinon.spy(Blockly.navigation, 'onBlocklyAction');
-      Blockly.keyboardAccessibilityMode = true;
+      Blockly.getMainWorkspace().keyboardAccessibilityMode = true;
 
       var isHandled = Blockly.navigation.onKeyPress(this.mockEvent);
       chai.assert.isTrue(isHandled);
       chai.assert.isTrue(Blockly.navigation.onBlocklyAction.calledOnce);
-      chai.assert.isFalse(Blockly.keyboardAccessibilityMode);
+      chai.assert.isFalse(Blockly.getMainWorkspace().keyboardAccessibilityMode);
       Blockly.navigation.onBlocklyAction.restore();
     });
 
     test('Toggle Action On', function() {
       this.mockEvent.keyCode = 'Control75';
       sinon.stub(Blockly.navigation, 'focusWorkspace_');
-      Blockly.keyboardAccessibilityMode = false;
+      Blockly.getMainWorkspace().keyboardAccessibilityMode = false;
 
       var isHandled = Blockly.navigation.onKeyPress(this.mockEvent);
       chai.assert.isTrue(isHandled);
       chai.assert.isTrue(Blockly.navigation.focusWorkspace_.calledOnce);
-      chai.assert.isTrue(Blockly.keyboardAccessibilityMode);
+      chai.assert.isTrue(Blockly.getMainWorkspace().keyboardAccessibilityMode);
       Blockly.navigation.focusWorkspace_.restore();
       this.workspace.dispose();
     });
@@ -459,7 +459,7 @@ suite('Navigation', function() {
         this.workspace = new Blockly.Workspace({readOnly: true});
         this.workspace.setCursor(new Blockly.Cursor());
         Blockly.mainWorkspace = this.workspace;
-        Blockly.keyboardAccessibilityMode = true;
+        Blockly.getMainWorkspace().keyboardAccessibilityMode = true;
         Blockly.navigation.currentState_ = Blockly.navigation.STATE_WS;
 
         this.fieldBlock1 = this.workspace.newBlock('field_block');

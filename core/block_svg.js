@@ -1031,7 +1031,7 @@ Blockly.BlockSvg.prototype.dispose = function(healStack, animate) {
     Blockly.ContextMenu.hide();
   }
 
-  if (Blockly.keyboardAccessibilityMode) {
+  if (Blockly.getMainWorkspace().keyboardAccessibilityMode) {
     Blockly.navigation.moveCursorOnBlockDelete(this);
   }
 

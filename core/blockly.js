@@ -73,12 +73,6 @@ Blockly.selected = null;
 Blockly.cursor = null;
 
 /**
- * Whether or not we're currently in keyboard accessibility mode.
- * @type {boolean}
- */
-Blockly.keyboardAccessibilityMode = false;
-
-/**
  * All of the connections on blocks that are currently being dragged.
  * @type {!Array.<!Blockly.Connection>}
  * @package
@@ -183,6 +177,9 @@ Blockly.svgResize = function(workspace) {
 // are multiple workspaces and non-main workspaces are able to accept input.
 Blockly.onKeyDown = function(e) {
   var mainWorkspace = Blockly.mainWorkspace;
+  if (!mainWorkspace) {
+    return;
+  }
 
   if (Blockly.utils.isTargetInput(e) ||
       (mainWorkspace.rendered && !mainWorkspace.isVisible())) {

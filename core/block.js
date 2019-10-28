@@ -325,7 +325,8 @@ Blockly.Block.prototype.dispose = function(healStack) {
     this.workspace.removeChangeListener(this.onchangeWrapper_);
   }
 
-  if (Blockly.keyboardAccessibilityMode) {
+  if (Blockly.getMainWorkspace() &&
+      Blockly.getMainWorkspace().keyboardAccessibilityMode) {
     // No-op if this is called from the block_svg class.
     Blockly.navigation.moveCursorOnBlockDelete(this);
   }

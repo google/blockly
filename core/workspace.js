@@ -138,6 +138,13 @@ Blockly.Workspace = function(opt_options) {
       new Blockly.ThemeManager(this.options.theme || Blockly.Themes.Classic);
   
   this.themeManager_.subscribeWorkspace(this);
+
+  /**
+   * True if keyboard accessibility mode is on, false otherwise.
+   * @type {boolean}
+   * @package
+   */
+  this.keyboardAccessibilityMode = false;
 };
 
 /**

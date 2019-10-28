@@ -666,8 +666,8 @@ Blockly.navigation.moveCursorOnBlockMutation = function(mutatedBlock) {
  * Enable accessibility mode.
  */
 Blockly.navigation.enableKeyboardAccessibility = function() {
-  if (!Blockly.keyboardAccessibilityMode) {
-    Blockly.keyboardAccessibilityMode = true;
+  if (!Blockly.getMainWorkspace().keyboardAccessibilityMode) {
+    Blockly.getMainWorkspace().keyboardAccessibilityMode = true;
     Blockly.navigation.focusWorkspace_();
   }
 };
@@ -676,9 +676,9 @@ Blockly.navigation.enableKeyboardAccessibility = function() {
  * Disable accessibility mode.
  */
 Blockly.navigation.disableKeyboardAccessibility = function() {
-  if (Blockly.keyboardAccessibilityMode) {
+  if (Blockly.getMainWorkspace().keyboardAccessibilityMode) {
     var workspace = Blockly.getMainWorkspace();
-    Blockly.keyboardAccessibilityMode = false;
+    Blockly.getMainWorkspace().keyboardAccessibilityMode = false;
     workspace.getCursor().hide();
     workspace.getMarker().hide();
     if (Blockly.navigation.getFlyoutCursor_()) {
@@ -758,7 +758,7 @@ Blockly.navigation.onBlocklyAction = function(action) {
   var readOnly = Blockly.getMainWorkspace().options.readOnly;
   var actionHandled = false;
 
-  if (Blockly.keyboardAccessibilityMode) {
+  if (Blockly.getMainWorkspace().keyboardAccessibilityMode) {
     if (!readOnly) {
       actionHandled = Blockly.navigation.handleActions_(action);
     // If in readonly mode only handle valid actions.

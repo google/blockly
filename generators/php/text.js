@@ -68,7 +68,7 @@ Blockly.PHP['text_join'] = function(block) {
 Blockly.PHP['text_append'] = function(block) {
   // Append to a variable in place.
   var varName = Blockly.PHP.variableDB_.getName(
-      block.getFieldValue('VAR'), Blockly.Variables.NAME_TYPE);
+      block.getFieldValue('VAR'), Blockly.VARIABLE_CATEGORY_NAME);
   var value = Blockly.PHP.valueToCode(block, 'TEXT',
       Blockly.PHP.ORDER_ASSIGNMENT) || '\'\'';
   return varName + ' .= ' + value + ';\n';

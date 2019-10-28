@@ -161,7 +161,7 @@ Blockly.PHP.init = function(workspace) {
   var variables = Blockly.Variables.allUsedVarModels(workspace);
   for (var i = 0, variable; variable = variables[i]; i++) {
     defvars.push(Blockly.PHP.variableDB_.getName(variable.getId(),
-        Blockly.Variables.NAME_TYPE) + ';');
+        Blockly.VARIABLE_CATEGORY_NAME) + ';');
   }
 
   // Declare all of the variables.
@@ -248,7 +248,7 @@ Blockly.PHP.scrub_ = function(block, code, opt_thisOnly) {
       if (block.inputList[i].type == Blockly.INPUT_VALUE) {
         var childBlock = block.inputList[i].connection.targetBlock();
         if (childBlock) {
-          var comment = Blockly.PHP.allNestedComments(childBlock);
+          comment = Blockly.PHP.allNestedComments(childBlock);
           if (comment) {
             commentCode += Blockly.PHP.prefixLines(comment, '// ');
           }

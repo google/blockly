@@ -139,6 +139,7 @@ Blockly.Python.ORDER_OVERRIDES = [
 /**
  * Initialise the database of variable names.
  * @param {!Blockly.Workspace} workspace Workspace to generate code from.
+ * @this {Blockly.Generator}
  */
 Blockly.Python.init = function(workspace) {
   /**
@@ -172,7 +173,7 @@ Blockly.Python.init = function(workspace) {
   var variables = Blockly.Variables.allUsedVarModels(workspace);
   for (var i = 0; i < variables.length; i++) {
     defvars.push(Blockly.Python.variableDB_.getName(variables[i].getId(),
-        Blockly.Variables.NAME_TYPE) + ' = None');
+        Blockly.VARIABLE_CATEGORY_NAME) + ' = None');
   }
 
   Blockly.Python.definitions_['variables'] = defvars.join('\n');
@@ -276,7 +277,7 @@ Blockly.Python.scrub_ = function(block, code, opt_thisOnly) {
       if (block.inputList[i].type == Blockly.INPUT_VALUE) {
         var childBlock = block.inputList[i].connection.targetBlock();
         if (childBlock) {
-          var comment = Blockly.Python.allNestedComments(childBlock);
+          comment = Blockly.Python.allNestedComments(childBlock);
           if (comment) {
             commentCode += Blockly.Python.prefixLines(comment, '# ');
           }

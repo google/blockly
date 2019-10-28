@@ -186,7 +186,7 @@ Blockly.JavaScript['lists_setIndex'] = function(block) {
       return '';
     }
     var listVar = Blockly.JavaScript.variableDB_.getDistinctName(
-        'tmpList', Blockly.Variables.NAME_TYPE);
+        'tmpList', Blockly.VARIABLE_CATEGORY_NAME);
     var code = 'var ' + listVar + ' = ' + list + ';\n';
     list = listVar;
     return code;
@@ -232,7 +232,7 @@ Blockly.JavaScript['lists_setIndex'] = function(block) {
     case ('RANDOM'):
       var code = cacheList();
       var xVar = Blockly.JavaScript.variableDB_.getDistinctName(
-          'tmpX', Blockly.Variables.NAME_TYPE);
+          'tmpX', Blockly.VARIABLE_CATEGORY_NAME);
       code += 'var ' + xVar + ' = Math.floor(Math.random() * ' + list +
           '.length);\n';
       if (mode == 'SET') {

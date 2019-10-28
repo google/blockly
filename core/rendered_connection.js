@@ -64,7 +64,6 @@ Blockly.RenderedConnection = function(source, type) {
    */
   this.offsetInBlock_ = new Blockly.utils.Coordinate(0, 0);
 
-  // TODO: This could be changed to an enum if you want.
   /**
    * Whether this connections is tracked in the database or not.
    *
@@ -78,8 +77,34 @@ Blockly.RenderedConnection = function(source, type) {
    * @private
    */
   this.tracked_ = null;
+
+  /**
+   * Describes the state of this connection's tracked-ness.
+   * @type {Blockly.RenderedConnection.TrackedState}
+   * @private
+   */
+  this.trackedState_ = Blockly.RenderedConnection
+      .TrackedState.WAITING_TO_GO_IN_DATABASE;
 };
 Blockly.utils.object.inherits(Blockly.RenderedConnection, Blockly.Connection);
+
+/**
+ * Enum for different kinds of tracked states.
+ *
+ * WAITING_TO_GO_IN_DATABASE means that this connection will add itself to
+ * the db on the next moveTo call it receives.
+ *
+ * NOT_IN_DATABASE means that this connection will not add
+ * itself to the database until setTracking(true) is explicitly called.
+ *
+ * IN_DATABASE means that this connection is currently being tracked.
+ * @enum {?boolean}
+ */
+Blockly.RenderedConnection.TrackedState = {
+  WAITING_TO_GO_IN_DATABASE: null,
+  NOT_IN_DATABASE: false,
+  IN_DATABASE: true
+};
 
 /**
  * Dispose of this connection. Remove it from the database (if it is
@@ -89,7 +114,7 @@ Blockly.utils.object.inherits(Blockly.RenderedConnection, Blockly.Connection);
  */
 Blockly.RenderedConnection.prototype.dispose = function() {
   Blockly.RenderedConnection.superClass_.dispose.call(this);
-  if (this.tracked_) {
+  if (this.trackedState_ = Blockly.RenderedConnection.TrackedState.IN_DATABASE) {
     this.db_.removeConnection(this, this.y);
   }
 };
@@ -182,12 +207,12 @@ Blockly.RenderedConnection.prototype.bumpAwayFrom = function(staticConnection) {
  * @param {number} y New absolute y coordinate, in workspace coordinates.
  */
 Blockly.RenderedConnection.prototype.moveTo = function(x, y) {
-  // Null indicates that this connection should add itself to the DB for the
-  // first time.
-  if (this.tracked_ == null) {
-    this.tracked_ = true;
+  if (this.trackedState_ == Blockly.RenderedConnection
+      .TrackedState.WAITING_TO_GO_IN_DATABASE) {
+    this.trackedState_ = Blockly.RenderedConnection.TrackedState.IN_DATABASE;
     this.db_.addConnection(this, y);
-  } else if (this.tracked_) {
+  } else if (this.trackedState_ = Blockly.RenderedConnection
+      .TrackedState.IN_DATABASE) {
     this.db_.removeConnection(this, this.y);
     this.db_.addConnection(this, y);
   }
@@ -320,7 +345,11 @@ Blockly.RenderedConnection.prototype.unhighlight = function() {
  * @package
  */
 Blockly.RenderedConnection.prototype.setTracking = function(doTracking) {
-  if (doTracking == this.tracked_) {
+  // trackedState is technically a ?boolean, so this works.
+  if ((doTracking && this.trackedState_ ==
+      Blockly.RenderedConnection.TrackedState.IN_DATABASE) ||
+      (!doTracking && this.trackedState_ ==
+      Blockly.RenderedConnection.TrackedState.NOT_IN_DATABASE)) {
     return;
   }
   if (this.sourceBlock_.isInFlyout) {
@@ -329,10 +358,12 @@ Blockly.RenderedConnection.prototype.setTracking = function(doTracking) {
   }
   if (doTracking) {
     this.db_.addConnection(this, this.y);
-  } else if (this.tracked_) {
+    this.trackedState_ = Blockly.RenderedConnection.TrackedState.IN_DATABASE;
+  } else if (this.trackedState_ == Blockly.RenderedConnection
+      .TrackedState.IN_DATABASE) {
     this.db_.removeConnection(this, this.y);
+    this.trackedState_ = Blockly.RenderedConnection.TrackedState.NOT_IN_DATABASE;
   }
-  this.tracked_ = doTracking;
 };
 
 /**

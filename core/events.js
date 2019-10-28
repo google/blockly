@@ -391,7 +391,7 @@ Blockly.Events.fromJson = function(json, workspace) {
       event = new Blockly.Events.CommentDelete(null);
       break;
     case Blockly.Events.FINISHED_LOADING:
-      event = new Blockly.Events.FinishedLoading(null);
+      event = new Blockly.Events.FinishedLoading(workspace);
       break;
     default:
       throw Error('Unknown event type.');

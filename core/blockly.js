@@ -73,12 +73,6 @@ Blockly.selected = null;
 Blockly.cursor = null;
 
 /**
- * Whether or not we're currently in keyboard accessibility mode.
- * @type {boolean}
- */
-Blockly.keyboardAccessibilityMode = false;
-
-/**
  * All of the connections on blocks that are currently being dragged.
  * @type {!Array.<!Blockly.Connection>}
  * @package
@@ -183,6 +177,9 @@ Blockly.svgResize = function(workspace) {
 // are multiple workspaces and non-main workspaces are able to accept input.
 Blockly.onKeyDown = function(e) {
   var mainWorkspace = Blockly.mainWorkspace;
+  if (!mainWorkspace) {
+    return;
+  }
 
   if (Blockly.utils.isTargetInput(e) ||
       (mainWorkspace.rendered && !mainWorkspace.isVisible())) {
@@ -363,7 +360,7 @@ Blockly.hideChaff = function(opt_allowToolbox) {
  * @return {!Blockly.Workspace} The main workspace.
  */
 Blockly.getMainWorkspace = function() {
-  return Blockly.mainWorkspace;
+  return /** @type {!Blockly.Workspace} */ (Blockly.mainWorkspace);
 };
 
 /**
@@ -396,7 +393,7 @@ Blockly.confirm = function(message, callback) {
  * recommend testing mobile when overriding this.
  * @param {string} message The message to display to the user.
  * @param {string} defaultValue The value to initialize the prompt with.
- * @param {!function(string)} callback The callback for handling user response.
+ * @param {!function(?string)} callback The callback for handling user response.
  */
 Blockly.prompt = function(message, defaultValue, callback) {
   callback(prompt(message, defaultValue));
@@ -522,9 +519,8 @@ Blockly.bindEventWithChecks_ = function(node, name, thisObject, func,
 /**
  * Bind an event to a function call.  Handles multitouch events by using the
  * coordinates of the first changed touch, and doesn't do any safety checks for
- * simultaneous event processing.
- * @deprecated in favor of bindEventWithChecks_, but preserved for external
- * users.
+ * simultaneous event processing.  In most cases prefer is to use
+ * `Blockly.bindEventWithChecks_`.
  * @param {!EventTarget} node Node upon which to listen.
  * @param {string} name Event name to listen to (e.g. 'mousedown').
  * @param {Object} thisObject The value of 'this' in the function.

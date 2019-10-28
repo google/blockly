@@ -325,7 +325,7 @@ Blockly.Block.prototype.dispose = function(healStack) {
     this.workspace.removeChangeListener(this.onchangeWrapper_);
   }
 
-  if (Blockly.keyboardAccessibilityMode) {
+  if (this.workspace.keyboardAccessibilityMode) {
     // No-op if this is called from the block_svg class.
     Blockly.navigation.moveCursorOnBlockDelete(this);
   }
@@ -1814,7 +1814,7 @@ Blockly.Block.prototype.getInputTargetBlock = function(name) {
 
 /**
  * Returns the comment on this block (or null if there is no comment).
- * @return {string} Block's comment.
+ * @return {?string} Block's comment.
  */
 Blockly.Block.prototype.getCommentText = function() {
   return this.commentModel.text;

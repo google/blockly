@@ -37,7 +37,7 @@ Blockly.PHP['procedures_defreturn'] = function(block) {
     varName = variable.name;
     if (block.arguments_.indexOf(varName) == -1) {
       globals.push(Blockly.PHP.variableDB_.getName(varName,
-          Blockly.Variables.NAME_TYPE));
+          Blockly.VARIABLE_CATEGORY_NAME));
     }
   }
   // Add developer variables.
@@ -81,7 +81,7 @@ Blockly.PHP['procedures_defreturn'] = function(block) {
   var args = [];
   for (var i = 0; i < block.arguments_.length; i++) {
     args[i] = Blockly.PHP.variableDB_.getName(block.arguments_[i],
-        Blockly.Variables.NAME_TYPE);
+        Blockly.VARIABLE_CATEGORY_NAME);
   }
   var code = 'function ' + funcName + '(' + args.join(', ') + ') {\n' +
       globals + xfix1 + loopTrap + branch + xfix2 + returnValue + '}';

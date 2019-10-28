@@ -56,7 +56,7 @@ goog.require('Blockly.Warning');
 Blockly.BlockSvg = function(workspace, prototypeName, opt_id) {
   // Create core elements for the block.
   /**
-   * @type {SVGElement}
+   * @type {!SVGElement}
    * @private
    */
   this.svgGroup_ = Blockly.utils.dom.createSvgElement('g', {}, null);
@@ -440,7 +440,7 @@ Blockly.BlockSvg.prototype.getRelativeToSurfaceXY = function() {
         x += surfaceTranslation.x;
         y += surfaceTranslation.y;
       }
-      element = element.parentNode;
+      element = /** @type {!SVGElement} */ (element.parentNode);
     } while (element && element != this.workspace.getCanvas() &&
         element != dragSurfaceGroup);
   }
@@ -997,7 +997,7 @@ Blockly.BlockSvg.prototype.setInsertionMarker = function(insertionMarker) {
 
 /**
  * Return the root node of the SVG or null if none exists.
- * @return {SVGElement} The root SVG node (probably a group).
+ * @return {!SVGElement} The root SVG node (probably a group).
  */
 Blockly.BlockSvg.prototype.getSvgRoot = function() {
   return this.svgGroup_;
@@ -1031,7 +1031,7 @@ Blockly.BlockSvg.prototype.dispose = function(healStack, animate) {
     Blockly.ContextMenu.hide();
   }
 
-  if (Blockly.keyboardAccessibilityMode) {
+  if (this.workspace.keyboardAccessibilityMode) {
     Blockly.navigation.moveCursorOnBlockDelete(this);
   }
 

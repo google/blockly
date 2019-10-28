@@ -279,7 +279,7 @@ Blockly.ContextMenu.blockCommentOption = function(block) {
     enabled: !Blockly.utils.userAgent.IE
   };
   // If there's already a comment, add an option to delete it.
-  if (block.comment) {
+  if (block.getCommentIcon()) {
     commentOption.text = Blockly.Msg['REMOVE_COMMENT'];
     commentOption.callback = function() {
       block.setCommentText(null);

@@ -531,7 +531,7 @@ Blockly.WorkspaceSvg.prototype.isVisible = function() {
  * Return the absolute coordinates of the top-left corner of this element,
  * scales that after canvas SVG element, if it's a descendant.
  * The origin (0,0) is the top-left corner of the Blockly SVG.
- * @param {!Element} element Element to find the coordinates of.
+ * @param {!SVGElement} element SVG element to find the coordinates of.
  * @return {!Blockly.utils.Coordinate} Object with .x and .y properties.
  * @package
  */
@@ -554,7 +554,7 @@ Blockly.WorkspaceSvg.prototype.getSvgXY = function(element) {
     }
     x += xy.x * scale;
     y += xy.y * scale;
-    element = /** @type {!Element} */ (element.parentNode);
+    element = /** @type {!SVGElement} */ (element.parentNode);
   } while (element && element != this.getParentSvg());
   return new Blockly.utils.Coordinate(x, y);
 };
@@ -1198,7 +1198,7 @@ Blockly.WorkspaceSvg.prototype.pasteBlock_ = function(xmlBlock) {
 
     // Handle paste for keyboard navigation
     var markedNode = this.getMarker().getCurNode();
-    if (Blockly.keyboardAccessibilityMode && markedNode &&
+    if (this.keyboardAccessibilityMode && markedNode &&
         markedNode.isConnection()) {
       var markedLocation =
         /** @type {!Blockly.Connection} */ (markedNode.getLocation());
@@ -1335,7 +1335,7 @@ Blockly.WorkspaceSvg.prototype.deleteVariableById = function(id) {
  *     their type. This will default to '' which is a specific type.
  * @param {?string=} opt_id The unique ID of the variable. This will default to
  *     a UUID.
- * @return {Blockly.VariableModel} The newly created variable.
+ * @return {!Blockly.VariableModel} The newly created variable.
  * @package
  */
 Blockly.WorkspaceSvg.prototype.createVariable = function(name,
@@ -1420,7 +1420,8 @@ Blockly.WorkspaceSvg.prototype.moveDrag = function(e) {
   // Fix scale of mouse event.
   point.x /= this.scale;
   point.y /= this.scale;
-  return Blockly.utils.Coordinate.sum(this.dragDeltaXY_, point);
+  return Blockly.utils.Coordinate.sum(
+      /** @type {!Blockly.utils.Coordinate} */ (this.dragDeltaXY_), point);
 };
 
 /**
@@ -1451,7 +1452,8 @@ Blockly.WorkspaceSvg.prototype.isContentBounded = function() {
       (this.options.moveOptions && this.options.moveOptions.wheel) ||
       (this.options.moveOptions && this.options.moveOptions.drag) ||
       (this.options.zoomOptions && this.options.zoomOptions.controls) ||
-      (this.options.zoomOptions && this.options.zoomOptions.wheel);
+      (this.options.zoomOptions && this.options.zoomOptions.wheel) ||
+      (this.options.zoomOptions && this.options.zoomOptions.pinch);
 };
 
 /**
@@ -1459,8 +1461,8 @@ Blockly.WorkspaceSvg.prototype.isContentBounded = function() {
  *
  * This means the user can reposition the X Y coordinates of the workspace
  * through input. This can be through scrollbars, scroll wheel, dragging, or
- * through zooming with the scroll wheel (since the zoom is centered on the
- * mouse position). This does not include zooming with the zoom controls
+ * through zooming with the scroll wheel or pinch (since the zoom is centered on
+ * the mouse position). This does not include zooming with the zoom controls
  * since the X Y coordinates are decided programmatically.
  * @return {boolean} True if the workspace is movable, false otherwise.
  * @package
@@ -1469,7 +1471,8 @@ Blockly.WorkspaceSvg.prototype.isMovable = function() {
   return (this.options.moveOptions && this.options.moveOptions.scrollbars) ||
       (this.options.moveOptions && this.options.moveOptions.wheel) ||
       (this.options.moveOptions && this.options.moveOptions.drag) ||
-      (this.options.zoomOptions && this.options.zoomOptions.wheel);
+      (this.options.zoomOptions && this.options.zoomOptions.wheel) ||
+      (this.options.zoomOptions && this.options.zoomOptions.pinch);
 };
 
 /**
@@ -1812,12 +1815,6 @@ Blockly.WorkspaceSvg.prototype.setBrowserFocus = function() {
  *     amount values zoom in.
  */
 Blockly.WorkspaceSvg.prototype.zoom = function(x, y, amount) {
-  // TODO (#2782): Consider removing once pinch understands zoom configuration
-  // Mutators and flyouts don't support zooming, and pinch doesn't understand
-  // that.
-  if (this.isFlyout || this.isMutator) {
-    return;
-  }
   // Scale factor.
   var speed = this.options.zoomOptions.scaleSpeed;
   var scaleChange = Math.pow(speed, amount);

@@ -241,8 +241,9 @@ Blockly.Comment.prototype.createBubble_ = function() {
 Blockly.Comment.prototype.createEditableBubble_ = function() {
   this.bubble_ = new Blockly.Bubble(
       /** @type {!Blockly.WorkspaceSvg} */ (this.block_.workspace),
-      this.createEditor_(), this.block_.svgPath_,
-      this.iconXY_, this.model_.size.width, this.model_.size.height);
+      this.createEditor_(), this.block_.pathObject.svgPath,
+      /** @type {!Blockly.utils.Coordinate} */ (this.iconXY_),
+      this.model_.size.width, this.model_.size.height);
   // Expose this comment's block's ID on its top-level SVG group.
   this.bubble_.setSvgId(this.block_.id);
   this.bubble_.registerResizeEvent(this.onBubbleResize_.bind(this));
@@ -286,7 +287,7 @@ Blockly.Comment.prototype.disposeBubble_ = function() {
  * @private
  */
 Blockly.Comment.prototype.startEdit_ = function(_e) {
-  if (this.bubble_.promote_()) {
+  if (this.bubble_.promote()) {
     // Since the act of moving this node within the DOM causes a loss of focus,
     // we need to reapply the focus.
     this.textarea_.focus();

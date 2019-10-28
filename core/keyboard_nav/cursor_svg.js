@@ -483,10 +483,11 @@ Blockly.CursorSvg.prototype.hide = function() {
 
 /**
  * Update the cursor.
+ * @param {Blockly.ASTNode} oldNode The previous node the cursor was on or null.
  * @param {Blockly.ASTNode} curNode The node that we want to draw the cursor for.
  * @package
  */
-Blockly.CursorSvg.prototype.draw = function(curNode) {
+Blockly.CursorSvg.prototype.draw = function(oldNode, curNode) {
   if (!curNode) {
     this.hide();
     return;
@@ -513,11 +514,29 @@ Blockly.CursorSvg.prototype.draw = function(curNode) {
     this.showWithStack_(curNode);
   }
 
+  this.fireCursorEvent_(oldNode, curNode);
+
   // Ensures the cursor will be visible immediately after the move.
   var animate = this.currentCursorSvg.childNodes[0];
   if (animate !== undefined) {
     animate.beginElement && animate.beginElement();
   }
+};
+
+/**
+ * Fire event for the cursor or marker.
+ * @param {Blockly.ASTNode} oldNode The old node the cursor used to be on.
+ * @param {!Blockly.ASTNode} curNode The new node the cursor is currently on.
+ * @private
+ */
+Blockly.CursorSvg.prototype.fireCursorEvent_ = function(oldNode, curNode) {
+  var curBlock = curNode.getSourceBlock();
+  var eventType = this.isMarker_ ? 'markedNode' : 'cursorMove';
+  var event = new Blockly.Events.Ui(curBlock, eventType, oldNode, curNode);
+  if (curNode.getType() == Blockly.ASTNode.types.WORKSPACE) {
+    event.workspaceId = curNode.getLocation().id;
+  }
+  Blockly.Events.fire(event);
 };
 
 /**

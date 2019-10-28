@@ -61,6 +61,10 @@ Blockly.inject = function(container, opt_options) {
     (/** @type {!Blockly.BlocklyOptions} */ ({})));
   var subContainer = document.createElement('div');
   subContainer.className = 'injectionDiv';
+  subContainer.tabIndex = 0;
+  Blockly.utils.aria.setState(subContainer,
+      Blockly.utils.aria.State.LABEL, Blockly.Msg['WORKSPACE_ARIA_LABEL']);
+
   container.appendChild(subContainer);
   var svg = Blockly.createDom_(subContainer, options);
 
@@ -77,6 +81,14 @@ Blockly.inject = function(container, opt_options) {
   Blockly.mainWorkspace = workspace;
 
   Blockly.svgResize(workspace);
+
+  subContainer.addEventListener('focus', function() {
+    Blockly.mainWorkspace = workspace;
+  });
+
+  subContainer.addEventListener('blur', function() {
+    Blockly.mainWorkspace = null;
+  });
 
   return workspace;
 };
@@ -456,7 +468,6 @@ Blockly.init_ = function(mainWorkspace) {
  * Also, 'keydown' has to be on the whole document since the browser doesn't
  * understand a concept of focus on the SVG image.
  * @private
- * @suppress {deprecated} Suppress deprecated bindEvent_ call.
  */
 Blockly.inject.bindDocumentEvents_ = function() {
   if (!Blockly.documentEventsBound_) {

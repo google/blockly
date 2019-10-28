@@ -55,10 +55,10 @@ Blockly.TouchGesture = function(e, creatorWorkspace) {
 
   /**
    * A map of cached points used for tracking multi-touch gestures.
-   * @type {Object<number|string, Blockly.utils.Coordinate>}
+   * @type {!Object<number|string, Blockly.utils.Coordinate>}
    * @private
    */
-  this.cachedPoints_ = {};
+  this.cachedPoints_ = Object.create(null);
 
   /**
    * This is the ratio between the starting distance between the touch points
@@ -88,11 +88,10 @@ Blockly.TouchGesture = function(e, creatorWorkspace) {
 
   /**
    * Boolean for whether or not the workspace supports pinch-zoom.
-   * @type {boolean}
+   * @type {?boolean}
    * @private
    */
-  this.isPinchZoomEnabled_ = this.startWorkspace_.options.zoomOptions &&
-      this.startWorkspace_.options.zoomOptions.pinch;
+  this.isPinchZoomEnabled_ = null;
 };
 Blockly.utils.object.inherits(Blockly.TouchGesture, Blockly.Gesture);
 
@@ -115,6 +114,8 @@ Blockly.TouchGesture.ZOOM_OUT_MULTIPLIER = 6;
  * @package
  */
 Blockly.TouchGesture.prototype.doStart = function(e) {
+  this.isPinchZoomEnabled_ = this.startWorkspace_.options.zoomOptions &&
+      this.startWorkspace_.options.zoomOptions.pinch;
   Blockly.TouchGesture.superClass_.doStart.call(this, e);
   if (!this.isEnding_ && Blockly.Touch.isTouchEvent(e)) {
     this.handleTouchStart(e);
@@ -297,7 +298,7 @@ Blockly.TouchGesture.prototype.handlePinch_ = function(e) {
         e, workspace.getParentSvg(), workspace.getInverseScreenCTM());
     workspace.zoom(position.x, position.y, delta);
   }
-  this.previousScale_ = this.touchScale_;
+  this.previousScale_ = scale;
   e.preventDefault();
 };
 
@@ -313,7 +314,7 @@ Blockly.TouchGesture.prototype.handleTouchEnd = function(e) {
     delete this.cachedPoints_[pointerId];
   }
   if (Object.keys(this.cachedPoints_).length < 2) {
-    this.cachedPoints_ = {};
+    this.cachedPoints_ = Object.create(null);
     this.previousScale_ = 0;
   }
 };

@@ -28,8 +28,6 @@ goog.require('Blockly.blockRendering.Drawer');
 goog.require('Blockly.blockRendering.IPathObject');
 goog.require('Blockly.blockRendering.PathObject');
 goog.require('Blockly.blockRendering.RenderInfo');
-goog.require('Blockly.blockRendering.IColourer');
-goog.require('Blockly.blockRendering.Colourer');
 goog.require('Blockly.CursorSvg');
 
 goog.requireType('Blockly.blockRendering.Debug');
@@ -125,18 +123,6 @@ Blockly.blockRendering.Renderer.prototype.makeCursorDrawer = function(
  */
 Blockly.blockRendering.Renderer.prototype.makePathObject = function(root) {
   return new Blockly.blockRendering.PathObject(root);
-};
-
-/**
- * Create a new instance of a renderer path object.
- * @param {!Blockly.BlockSvg} block The root SVG element.
- * @param {!Blockly.blockRendering.IPathObject} pathObject [description]
- * @return {!Blockly.blockRendering.IColourer} The renderer path object.
- * @package
- */
-Blockly.blockRendering.Renderer.prototype.makeColourer = function(block,
-    pathObject) {
-  return new Blockly.blockRendering.Colourer(block, pathObject);
 };
 
 /**

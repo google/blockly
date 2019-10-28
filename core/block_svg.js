@@ -68,25 +68,9 @@ Blockly.BlockSvg = function(workspace, prototypeName, opt_id) {
    * @type {Blockly.blockRendering.IPathObject}
    * @package
    */
-  this.pathObject =
-      workspace.getRenderer().makePathObject(this.svgGroup_);
+  this.pathObject = workspace.getRenderer().makePathObject(this.svgGroup_);
 
-  /**
-   * [colourer description]
-   * @type {[type]}
-   * @package
-   */
-  this.colourer =
-      workspace.getRenderer().makeColourer(this, this.pathObject);
-
-  // The next three paths are set only for backwards compatibility reasons.
-  /**
-   * The dark path of the block.
-   * @type {SVGElement}
-   * @private
-   */
-  this.svgPathDark_ = this.pathObject.svgPathDark || null;
-
+  // The next two paths are set only for backwards compatibility reasons.
   /**
    * The primary path of the block.
    * @type {SVGElement}
@@ -1035,7 +1019,6 @@ Blockly.BlockSvg.prototype.dispose = function(healStack, animate) {
   this.svgGroup_ = null;
   this.svgPath_ = null;
   this.svgPathLight_ = null;
-  this.svgPathDark_ = null;
   Blockly.utils.dom.stopTextWidthCache();
 };
 
@@ -1049,7 +1032,7 @@ Blockly.BlockSvg.prototype.applyColour = function() {
     return;
   }
 
-  this.colourer.applyColour(this.isShadow());
+  this.pathObject.applyColour(this.isShadow());
 
   var icons = this.getIcons();
   for (var i = 0; i < icons.length; i++) {
@@ -1314,7 +1297,7 @@ Blockly.BlockSvg.prototype.setDeleteStyle = function(enable) {
  * @return {string} #RRGGBB string.
  */
 Blockly.BlockSvg.prototype.getColour = function() {
-  return this.colourer.getColour();
+  return this.pathObject.primaryColour;
 };
 
 /**
@@ -1323,7 +1306,7 @@ Blockly.BlockSvg.prototype.getColour = function() {
  */
 Blockly.BlockSvg.prototype.setColour = function(colour) {
   Blockly.BlockSvg.superClass_.setColour.call(this, colour);
-  this.colourer.setColour(colour);
+  this.pathObject.setColour(colour);
   this.applyColour();
 };
 
@@ -1339,7 +1322,7 @@ Blockly.BlockSvg.prototype.setStyle = function(blockStyleName) {
 
   if (blockStyle) {
     this.hat = blockStyle.hat;
-    this.colourer.setFromStyle(blockStyle);
+    this.pathObject.setFromStyle(blockStyle);
     this.applyColour();
   } else {
     throw Error('Invalid style name: ' + blockStyleName);

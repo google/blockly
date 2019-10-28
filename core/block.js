@@ -934,9 +934,9 @@ Blockly.Block.prototype.setColour = function(colour) {
   // Set colour just stores these as properties on the block, but never uses
   // them again.
   // TODO: see if we can just get rid of these properties on the block.
-  var parsed = Blockly.blockRendering.Colourer.parseColour(colour);
+  var parsed = Blockly.utils.colour.parseBlockColour(colour);
   this.hue_ = parsed.hue;
-  this.colour_ = parsed.colour;
+  this.colour_ = parsed.hex;
 };
 
 /**

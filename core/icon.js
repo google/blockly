@@ -141,7 +141,7 @@ Blockly.Icon.prototype.iconClick_ = function(e) {
  */
 Blockly.Icon.prototype.applyColour = function() {
   if (this.isVisible()) {
-    this.bubble_.setColour(this.block_.colourer.getColour());
+    this.bubble_.setColour(this.block_.pathObject.primaryColour);
   }
 };
 

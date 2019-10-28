@@ -74,6 +74,12 @@ Blockly.blockRendering.PathObject = function(root) {
   this.svgPathDark = Blockly.utils.dom.createSvgElement('path',
       {'class': 'blocklyPathDark', 'transform': 'translate(1,1)'},
       this.svgRoot);
+
+
+  this.hue_;
+  this.primaryColour;
+  this.secondaryColour;
+  this.tertiaryColour;
 };
 
 /**
@@ -94,4 +100,68 @@ Blockly.blockRendering.PathObject.prototype.setPaths = function(pathString) {
 Blockly.blockRendering.PathObject.prototype.flipRTL = function() {
   // Mirror the block's path.
   this.svgPath.setAttribute('transform', 'scale(-1 1)');
+};
+
+/**
+ * Apply the stored colours to the block's path, taking into account whether
+ * the paths belong to a shadow block.
+ * @param {boolean} isShadow True if the block is a shadow block.
+ * @package
+ */
+Blockly.blockRendering.PathObject.prototype.applyColour = function(isShadow) {
+  if (isShadow) {
+    this.svgPath.setAttribute('stroke', 'none');
+    this.svgPath.setAttribute('fill', this.secondaryColour);
+  } else {
+    this.svgPath.setAttribute('stroke', this.tertiaryColour);
+    this.svgPath.setAttribute('fill', this.primaryColour);
+  }
+};
+
+/**
+ * Update colour properties based on a triplet of colours.
+ * @param {string} primary The primary colour.
+ * @param {string} secondary The secondary colour, or null to have the colourer
+ *     generate it.
+ * @param {string} tertiary The tertiary colour, or null to have the colourer
+ *     generate it.
+ * @package
+ */
+Blockly.blockRendering.PathObject.prototype.setColourFromTriplet = function(
+    primary, secondary, tertiary) {
+  this.primaryColour = primary;
+  this.secondaryColour = secondary ||
+      Blockly.utils.colour.blend('#fff', primary, 0.6);
+  this.tertiaryColour = tertiary ||
+      Blockly.utils.colour.blend('#fff', primary, 0.3);
+};
+
+/**
+ * Update colour properties based on a single colour value.
+ * @param {number|string} colour HSV hue value (0 to 360), #RRGGBB string,
+ *     or a message reference string pointing to one of those two values.
+ */
+Blockly.blockRendering.PathObject.prototype.setColour = function(colour) {
+  var parsed = Blockly.utils.colour.parseBlockColour(colour);
+  if (parsed.hue) {
+    this.hue_ = parsed.hue;
+  }
+  this.setColourFromTriplet(parsed.hex, null, null);
+};
+
+/**
+ * Update colour properties based on a block style.
+ * @param {!Blockly.Theme.BlockStyle} blockStyle The block style to use.
+ * @package
+ */
+Blockly.blockRendering.PathObject.prototype.setFromStyle = function(
+    blockStyle) {
+  var parsed =
+      Blockly.utils.colour.parseBlockColour(blockStyle['colourPrimary']);
+  if (parsed.hue) {
+    this.hue_ = parsed.hue;
+  }
+  this.setColourFromTriplet(parsed.hex,
+      blockStyle['colourSecondary'],
+      blockStyle['colourTertiary']);
 };

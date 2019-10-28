@@ -351,7 +351,7 @@ Blockly.Generator.prototype.injectId = function(msg, block) {
 /**
  * Comma-separated list of reserved words.
  * @type {string}
- * @private
+ * @protected
  */
 Blockly.Generator.prototype.RESERVED_WORDS_ = '';
 
@@ -370,7 +370,7 @@ Blockly.Generator.prototype.addReservedWords = function(words) {
  * legitimately appear in a function definition (or comment), and it must
  * not confuse the regular expression parser.
  * @type {string}
- * @private
+ * @protected
  */
 Blockly.Generator.prototype.FUNCTION_NAME_PLACEHOLDER_ = '{leCUI8hutHZI4480Dc}';
 
@@ -411,7 +411,7 @@ Blockly.Generator.prototype.variableDB_;
  * @param {!Array.<string>} code A list of statements.  Use '  ' for indents.
  * @return {string} The actual name of the new function.  This may differ
  *     from desiredName if the former has already been taken by the user.
- * @private
+ * @protected
  */
 Blockly.Generator.prototype.provideFunction_ = function(desiredName, code) {
   if (!this.definitions_[desiredName]) {

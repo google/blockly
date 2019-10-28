@@ -43,7 +43,7 @@ Blockly.PHP['controls_repeat_ext'] = function(block) {
       'count', Blockly.VARIABLE_CATEGORY_NAME);
   var endVar = repeats;
   if (!repeats.match(/^\w+$/) && !Blockly.isNumber(repeats)) {
-    var endVar = Blockly.PHP.variableDB_.getDistinctName(
+    endVar = Blockly.PHP.variableDB_.getDistinctName(
         'repeat_end', Blockly.VARIABLE_CATEGORY_NAME);
     code += endVar + ' = ' + repeats + ';\n';
   }
@@ -108,7 +108,7 @@ Blockly.PHP['controls_for'] = function(block) {
     }
     var endVar = argument1;
     if (!argument1.match(/^\w+$/) && !Blockly.isNumber(argument1)) {
-      var endVar = Blockly.PHP.variableDB_.getDistinctName(
+      endVar = Blockly.PHP.variableDB_.getDistinctName(
           variable0 + '_end', Blockly.VARIABLE_CATEGORY_NAME);
       code += endVar + ' = ' + argument1 + ';\n';
     }

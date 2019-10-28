@@ -114,7 +114,7 @@ Blockly.Lua['lists_indexOf'] = function(block) {
  * @param {string} listName Name of the list, used to calculate length.
  * @param {string} where The method of indexing, selected by dropdown in Blockly
  * @param {string=} opt_at The optional offset when indexing from start/end.
- * @return {string} Index expression.
+ * @return {string|undefined} Index expression.
  * @private
  */
 Blockly.Lua.lists.getIndex_ = function(listName, where, opt_at) {
@@ -374,6 +374,6 @@ Blockly.Lua['lists_reverse'] = function(block) {
        '  end',
        '  return reversed',
        'end']);
-  var code = 'list_reverse(' + list + ')';
+  var code = functionName + '(' + list + ')';
   return [code, Blockly.Lua.ORDER_HIGH];
 };

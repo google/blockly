@@ -376,8 +376,11 @@ Blockly.blockRendering.RenderInfo.prototype.addInput_ = function(input, activeRo
   } else if (input.type == Blockly.DUMMY_INPUT) {
     // Dummy inputs have no visual representation, but the information is still
     // important.
+    activeRow.minHeight = Math.max(activeRow.minHeight,
+        this.constants_.DUMMY_INPUT_MIN_HEIGHT);
     activeRow.hasDummyInput = true;
   }
+  activeRow.align = input.align;
 };
 
 /**

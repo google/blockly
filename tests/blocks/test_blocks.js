@@ -32,6 +32,29 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     "style": "math_blocks"
   },
   {
+    "type": "test_basic_dummy",
+    "message0": "dummy input %1",
+    "args0": [
+      {
+        "type": "input_dummy"
+      }
+    ],
+    "style": "math_blocks"
+  },
+  {
+    "type": "test_basic_multiple_dummy",
+    "message0": "first dummy %1 second dummy %2",
+    "args0": [
+      {
+        "type": "input_dummy"
+      },
+      {
+        "type": "input_dummy"
+      }
+    ],
+    "style": "math_blocks"
+  },
+  {
     "type": "test_basic_row",
     "message0": "row block %1",
     "args0": [
@@ -123,6 +146,64 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     "inputsInline": true,
     "colour": 200,
     "tooltip": "Hello world."
+  },
+  {
+    "type": "test_align_dummy_right",
+    "message0": "text %1 long text %2",
+    "args0": [
+      {
+        "type": "input_dummy",
+        "align": "RIGHT",
+      },
+      {
+        "type": "input_dummy",
+        "align": "RIGHT",
+      },
+    ],
+    "style": "math_blocks"
+  },
+  {
+    "type": "test_align_all",
+    "message0": "text %1 long text %2 text %3 much longer text",
+    "args0": [
+      {
+        "type": "input_dummy",
+        "align": "LEFT",
+      },
+      {
+        "type": "input_dummy",
+        "align": "CENTRE",
+      },
+      {
+        "type": "input_dummy",
+        "align": "RIGHT",
+      },
+    ],
+    "style": "math_blocks"
+  },
+  {
+    "type": "test_align_with_external_input",
+    "message0": "text %1 long text %2 text %3 much longer text %4",
+    "args0": [
+      {
+        "type": "input_dummy",
+        "align": "RIGHT",
+      },
+      {
+        "type": "input_dummy",
+        "align": "CENTRE",
+      },
+      {
+        "type": "input_dummy",
+        "align": "LEFT",
+      },
+      {
+        "type": "input_value",
+        "name": "VALUE"
+      },
+    ],
+    "inputsInline": false,
+    "style": "math_blocks"
   },
   {
     "type": "test_dropdowns_long",

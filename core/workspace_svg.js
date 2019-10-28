@@ -1198,7 +1198,7 @@ Blockly.WorkspaceSvg.prototype.pasteBlock_ = function(xmlBlock) {
 
     // Handle paste for keyboard navigation
     var markedNode = this.getMarker().getCurNode();
-    if (Blockly.getMainWorkspace().keyboardAccessibilityMode && markedNode &&
+    if (this.keyboardAccessibilityMode && markedNode &&
         markedNode.isConnection()) {
       var markedLocation =
         /** @type {!Blockly.Connection} */ (markedNode.getLocation());

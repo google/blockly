@@ -63,7 +63,7 @@ Blockly.inject = function(container, opt_options) {
   subContainer.className = 'injectionDiv';
   subContainer.tabIndex = 0;
   Blockly.utils.aria.setState(subContainer,
-      Blockly.utils.aria.State.LABEL, Blockly.Msg.WORKSPACE_ARIA_LABEL);
+      Blockly.utils.aria.State.LABEL, Blockly.Msg['WORKSPACE_ARIA_LABEL']);
 
   container.appendChild(subContainer);
   var svg = Blockly.createDom_(subContainer, options);

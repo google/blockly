@@ -65,20 +65,6 @@ Blockly.RenderedConnection = function(source, type) {
   this.offsetInBlock_ = new Blockly.utils.Coordinate(0, 0);
 
   /**
-   * Whether this connections is tracked in the database or not.
-   *
-   * True indicates that this connection is in the database and currently
-   * tracking.
-   * False indicates that this connection is not in the database, and won't be
-   * unless someone calls setTracking(true).
-   * Null indicates that this connection is not in the database, but it will
-   * add itself the next time moveTo is called.
-   * @type {?boolean}
-   * @private
-   */
-  this.tracked_ = null;
-
-  /**
    * Describes the state of this connection's tracked-ness.
    * @type {Blockly.RenderedConnection.TrackedState}
    * @private

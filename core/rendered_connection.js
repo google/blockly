@@ -100,7 +100,8 @@ Blockly.RenderedConnection.TrackedState = {
  */
 Blockly.RenderedConnection.prototype.dispose = function() {
   Blockly.RenderedConnection.superClass_.dispose.call(this);
-  if (this.trackedState_ = Blockly.RenderedConnection.TrackedState.IN_DATABASE) {
+  if (this.trackedState_ == Blockly.RenderedConnection
+      .TrackedState.IN_DATABASE) {
     this.db_.removeConnection(this, this.y);
   }
 };
@@ -195,9 +196,9 @@ Blockly.RenderedConnection.prototype.bumpAwayFrom = function(staticConnection) {
 Blockly.RenderedConnection.prototype.moveTo = function(x, y) {
   if (this.trackedState_ == Blockly.RenderedConnection
       .TrackedState.WAITING_TO_GO_IN_DATABASE) {
-    this.trackedState_ = Blockly.RenderedConnection.TrackedState.IN_DATABASE;
     this.db_.addConnection(this, y);
-  } else if (this.trackedState_ = Blockly.RenderedConnection
+    this.trackedState_ = Blockly.RenderedConnection.TrackedState.IN_DATABASE;
+  } else if (this.trackedState_ == Blockly.RenderedConnection
       .TrackedState.IN_DATABASE) {
     this.db_.removeConnection(this, this.y);
     this.db_.addConnection(this, y);
@@ -331,7 +332,6 @@ Blockly.RenderedConnection.prototype.unhighlight = function() {
  * @package
  */
 Blockly.RenderedConnection.prototype.setTracking = function(doTracking) {
-  // trackedState is technically a ?boolean, so this works.
   if ((doTracking && this.trackedState_ ==
       Blockly.RenderedConnection.TrackedState.IN_DATABASE) ||
       (!doTracking && this.trackedState_ ==
@@ -345,11 +345,13 @@ Blockly.RenderedConnection.prototype.setTracking = function(doTracking) {
   if (doTracking) {
     this.db_.addConnection(this, this.y);
     this.trackedState_ = Blockly.RenderedConnection.TrackedState.IN_DATABASE;
-  } else if (this.trackedState_ == Blockly.RenderedConnection
+    return;
+  }
+  if (this.trackedState_ == Blockly.RenderedConnection
       .TrackedState.IN_DATABASE) {
     this.db_.removeConnection(this, this.y);
-    this.trackedState_ = Blockly.RenderedConnection.TrackedState.NOT_IN_DATABASE;
   }
+  this.trackedState_ = Blockly.RenderedConnection.TrackedState.NOT_IN_DATABASE;
 };
 
 /**

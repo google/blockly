@@ -26,6 +26,7 @@ goog.provide('Blockly.geras.PathObject');
 
 goog.require('Blockly.blockRendering.IPathObject');
 goog.require('Blockly.utils.dom');
+goog.require('Blockly.utils.object');
 
 
 /**

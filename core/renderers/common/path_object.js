@@ -129,9 +129,9 @@ Blockly.blockRendering.PathObject.prototype.applyColour = function(isShadow) {
 /**
  * Update colour properties based on a triplet of colours.
  * @param {string} primary The primary colour.
- * @param {string} secondary The secondary colour, or null to have the colourer
+ * @param {?string} secondary The secondary colour, or null to have the colourer
  *     generate it.
- * @param {string} tertiary The tertiary colour, or null to have the colourer
+ * @param {?string} tertiary The tertiary colour, or null to have the colourer
  *     generate it.
  * @protected
  */

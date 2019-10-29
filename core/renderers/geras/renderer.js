@@ -106,7 +106,6 @@ Blockly.geras.Renderer.prototype.makePathObject = function(root) {
   return new Blockly.geras.PathObject(root);
 };
 
-
 /**
  * Create a new instance of the renderer's highlight constant provider.
  * @return {!Blockly.geras.HighlightConstantProvider} The highlight constant

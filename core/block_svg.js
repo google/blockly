@@ -1289,14 +1289,30 @@ Blockly.BlockSvg.prototype.setDeleteStyle = function(enable) {
   }
 };
 
+
 // Overrides of functions on Blockly.Block that take into account whether the
 // block has been rendered.
-
 /**
  * Get the colour of a block.
  * @return {string} #RRGGBB string.
  */
 Blockly.BlockSvg.prototype.getColour = function() {
+  return this.pathObject.primaryColour;
+};
+
+/**
+ * Get the secondary colour of a block.
+ * @return {string} #RRGGBB string.
+ */
+Blockly.BlockSvg.prototype.getSecondaryColour = function() {
+  return this.pathObject.primaryColour;
+};
+
+/**
+ * Get the tertiary colour of a block.
+ * @return {string} #RRGGBB string.
+ */
+Blockly.BlockSvg.prototype.getTertiaryColour = function() {
   return this.pathObject.primaryColour;
 };
 

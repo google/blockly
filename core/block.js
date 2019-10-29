@@ -889,7 +889,6 @@ Blockly.Block.prototype.setTooltip = function(newTip) {
  * @return {string} #RRGGBB string.
  */
 Blockly.Block.prototype.getColour = function() {
-  // TODO: Can we remove this?
   return this.colour_;
 };
 
@@ -915,9 +914,6 @@ Blockly.Block.prototype.getHue = function() {
  *     or a message reference string pointing to one of those two values.
  */
 Blockly.Block.prototype.setColour = function(colour) {
-  // Set colour just stores these as properties on the block, but never uses
-  // them again.
-  // TODO: see if we can just get rid of these properties on the block.
   var parsed = Blockly.utils.colour.parseBlockColour(colour);
   this.hue_ = parsed.hue;
   this.colour_ = parsed.hex;

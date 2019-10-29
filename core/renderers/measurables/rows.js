@@ -158,7 +158,7 @@ Blockly.blockRendering.Row = function(constants) {
   /**
    * Alignment of the row.
    * @package
-   * @type {number}
+   * @type {?number}
    */
   this.align = null;
 };

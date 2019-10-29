@@ -1678,7 +1678,7 @@ Blockly.Block.prototype.interpolate_ = function(message, args, lastDummyAlign,
         if (element['align']) {
           var align = !!element['align'] && element['align'].toUpperCase();
           var alignment = alignmentLookup[align];
-          if (alignment != null) {
+          if (alignment != undefined) {
             input.setAlign(alignment);
           } else {
             console.warn(warningPrefix + 'Illegal align value: ',

@@ -380,7 +380,9 @@ Blockly.blockRendering.RenderInfo.prototype.addInput_ = function(input, activeRo
         this.constants_.DUMMY_INPUT_MIN_HEIGHT);
     activeRow.hasDummyInput = true;
   }
-  activeRow.align = input.align;
+  if (activeRow.align == null) {
+    activeRow.align = input.align;
+  }
 };
 
 /**

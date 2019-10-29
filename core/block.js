@@ -1454,7 +1454,7 @@ Blockly.Block.prototype.jsonInit = function(json) {
   var i = 0;
   while (json['message' + i] !== undefined) {
     this.interpolate_(json['message' + i], json['args' + i] || [],
-        json['lastDummyAlign' + i]);
+        json['lastDummyAlign' + i], warningPrefix);
     i++;
   }
 
@@ -1578,9 +1578,11 @@ Blockly.Block.prototype.mixin = function(mixinObj, opt_disableCheck) {
  * @param {!Array} args Array of arguments to be interpolated.
  * @param {string|undefined} lastDummyAlign If a dummy input is added at the
  *     end, how should it be aligned?
+ * @param {string} warningPrefix Warning prefix string identifying block.
  * @private
  */
-Blockly.Block.prototype.interpolate_ = function(message, args, lastDummyAlign) {
+Blockly.Block.prototype.interpolate_ = function(message, args, lastDummyAlign,
+    warningPrefix) {
   var tokens = Blockly.utils.tokenizeInterpolation(message);
   // Interpolate the arguments.  Build a list of elements.
   var indexDup = [];
@@ -1626,7 +1628,7 @@ Blockly.Block.prototype.interpolate_ = function(message, args, lastDummyAlign) {
     'LEFT': Blockly.ALIGN_LEFT,
     'RIGHT': Blockly.ALIGN_RIGHT,
     'CENTRE': Blockly.ALIGN_CENTRE,
-    'CENTRE': Blockly.ALIGN_CENTRE
+    'CENTER': Blockly.ALIGN_CENTRE
   };
   // Populate block with inputs and fields.
   var fieldStack = [];
@@ -1674,8 +1676,14 @@ Blockly.Block.prototype.interpolate_ = function(message, args, lastDummyAlign) {
           input.setCheck(element['check']);
         }
         if (element['align']) {
-          var alignment = !!element['align'] && element['align'].toUpperCase();
-          input.setAlign(alignmentLookup[alignment]);
+          var align = !!element['align'] && element['align'].toUpperCase();
+          var alignment = alignmentLookup[align];
+          if (alignment != null) {
+            input.setAlign(alignment);
+          } else {
+            console.warn(warningPrefix + 'Illegal align value: ',
+                element['align']);
+          }
         }
         for (var j = 0; j < fieldStack.length; j++) {
           input.appendField(fieldStack[j][0], fieldStack[j][1]);

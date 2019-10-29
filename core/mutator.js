@@ -64,7 +64,7 @@ Blockly.Mutator.prototype.workspaceHeight_ = 0;
 
 /**
  * Set the block this mutator is associated with.
- * @param {Blockly.BlockSvg} block The block to associated with.
+ * @param {Blockly.BlockSvg} block The block associated with this mutator.
  * @package
  */
 Blockly.Mutator.prototype.setBlock = function(block) {

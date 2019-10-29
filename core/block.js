@@ -1625,6 +1625,7 @@ Blockly.Block.prototype.interpolate_ = function(message, args, lastDummyAlign) {
   var alignmentLookup = {
     'LEFT': Blockly.ALIGN_LEFT,
     'RIGHT': Blockly.ALIGN_RIGHT,
+    'CENTRE': Blockly.ALIGN_CENTRE,
     'CENTRE': Blockly.ALIGN_CENTRE
   };
   // Populate block with inputs and fields.
@@ -1673,7 +1674,8 @@ Blockly.Block.prototype.interpolate_ = function(message, args, lastDummyAlign) {
           input.setCheck(element['check']);
         }
         if (element['align']) {
-          input.setAlign(alignmentLookup[element['align']]);
+          var alignment = !!element['align'] && element['align'].toUpperCase();
+          input.setAlign(alignmentLookup[alignment]);
         }
         for (var j = 0; j < fieldStack.length; j++) {
           input.appendField(fieldStack[j][0], fieldStack[j][1]);

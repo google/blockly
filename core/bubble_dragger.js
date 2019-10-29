@@ -267,6 +267,7 @@ Blockly.BubbleDragger.prototype.pixelsToWorkspaceUnits_ = function(pixelCoord) {
   }
   return result;
 };
+
 /**
  * Move the bubble onto the drag surface at the beginning of a drag.  Move the
  * drag surface to preserve the apparent location of the bubble.

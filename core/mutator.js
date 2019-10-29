@@ -63,6 +63,15 @@ Blockly.Mutator.prototype.workspaceWidth_ = 0;
 Blockly.Mutator.prototype.workspaceHeight_ = 0;
 
 /**
+ * Set the block this mutator is associated with.
+ * @param {Blockly.BlockSvg} block The block associated with this mutator.
+ * @package
+ */
+Blockly.Mutator.prototype.setBlock = function(block) {
+  this.block_ = block;
+};
+
+/**
  * Draw the mutator icon.
  * @param {!Element} group The icon group.
  * @private
@@ -243,6 +252,16 @@ Blockly.Mutator.prototype.resizeBubble_ = function() {
 };
 
 /**
+ * A method handler for when the bubble is moved.
+ * @private
+ */
+Blockly.Mutator.prototype.onBubbleMove_ = function() {
+  if (this.workspace_) {
+    this.workspace_.recordDeleteAreas();
+  }
+};
+
+/**
  * Show or hide the mutator bubble.
  * @param {boolean} visible True if the bubble should be visible.
  */
@@ -261,6 +280,7 @@ Blockly.Mutator.prototype.setVisible = function(visible) {
         /** @type {!Blockly.utils.Coordinate} */ (this.iconXY_), null, null);
     // Expose this mutator's block's ID on its top-level SVG group.
     this.bubble_.setSvgId(this.block_.id);
+    this.bubble_.registerMoveEvent(this.onBubbleMove_.bind(this));
     var tree = this.workspace_.options.languageTree;
     var flyout = this.workspace_.getFlyout();
     if (tree) {

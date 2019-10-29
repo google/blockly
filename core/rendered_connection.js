@@ -65,13 +65,31 @@ Blockly.RenderedConnection = function(source, type) {
   this.offsetInBlock_ = new Blockly.utils.Coordinate(0, 0);
 
   /**
-   * Whether this connections is tracked in the database or not.
-   * @type {boolean}
+   * Describes the state of this connection's tracked-ness.
+   * @type {Blockly.RenderedConnection.TrackedState}
    * @private
    */
-  this.tracked_ = false;
+  this.trackedState_ = Blockly.RenderedConnection.TrackedState.WILL_TRACK;
 };
 Blockly.utils.object.inherits(Blockly.RenderedConnection, Blockly.Connection);
+
+/**
+ * Enum for different kinds of tracked states.
+ *
+ * WILL_TRACK means that this connection will add itself to
+ * the db on the next moveTo call it receives.
+ *
+ * UNTRACKED means that this connection will not add
+ * itself to the database until setTracking(true) is explicitly called.
+ *
+ * TRACKED means that this connection is currently being tracked.
+ * @enum {number}
+ */
+Blockly.RenderedConnection.TrackedState = {
+  WILL_TRACK: -1,
+  UNTRACKED: 0,
+  TRACKED: 1
+};
 
 /**
  * Dispose of this connection. Remove it from the database (if it is
@@ -81,7 +99,7 @@ Blockly.utils.object.inherits(Blockly.RenderedConnection, Blockly.Connection);
  */
 Blockly.RenderedConnection.prototype.dispose = function() {
   Blockly.RenderedConnection.superClass_.dispose.call(this);
-  if (this.tracked_) {
+  if (this.trackedState_ == Blockly.RenderedConnection.TrackedState.TRACKED) {
     this.db_.removeConnection(this, this.y);
   }
 };
@@ -174,7 +192,11 @@ Blockly.RenderedConnection.prototype.bumpAwayFrom = function(staticConnection) {
  * @param {number} y New absolute y coordinate, in workspace coordinates.
  */
 Blockly.RenderedConnection.prototype.moveTo = function(x, y) {
-  if (this.tracked_) {
+  if (this.trackedState_ == Blockly.RenderedConnection.TrackedState.WILL_TRACK) {
+    this.db_.addConnection(this, y);
+    this.trackedState_ = Blockly.RenderedConnection.TrackedState.TRACKED;
+  } else if (this.trackedState_ == Blockly.RenderedConnection
+      .TrackedState.TRACKED) {
     this.db_.removeConnection(this, this.y);
     this.db_.addConnection(this, y);
   }
@@ -307,7 +329,10 @@ Blockly.RenderedConnection.prototype.unhighlight = function() {
  * @package
  */
 Blockly.RenderedConnection.prototype.setTracking = function(doTracking) {
-  if (doTracking == this.tracked_) {
+  if ((doTracking && this.trackedState_ ==
+      Blockly.RenderedConnection.TrackedState.TRACKED) ||
+      (!doTracking && this.trackedState_ ==
+      Blockly.RenderedConnection.TrackedState.UNTRACKED)) {
     return;
   }
   if (this.sourceBlock_.isInFlyout) {
@@ -316,10 +341,14 @@ Blockly.RenderedConnection.prototype.setTracking = function(doTracking) {
   }
   if (doTracking) {
     this.db_.addConnection(this, this.y);
-  } else {
+    this.trackedState_ = Blockly.RenderedConnection.TrackedState.TRACKED;
+    return;
+  }
+  if (this.trackedState_ == Blockly.RenderedConnection
+      .TrackedState.TRACKED) {
     this.db_.removeConnection(this, this.y);
   }
-  this.tracked_ = doTracking;
+  this.trackedState_ = Blockly.RenderedConnection.TrackedState.UNTRACKED;
 };
 
 /**

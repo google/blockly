@@ -202,10 +202,10 @@ Blockly.navigation.insertFromFlyout = function() {
   var newBlock = flyout.createBlock(curBlock);
   // Render to get the sizing right.
   newBlock.render();
-  // Connections are hidden when the block is first created.  Normally there's
-  // enough time for them to become unhidden in the user's mouse movements,
-  // but not here.
-  newBlock.startTrackingConnections();
+  // Connections are not tracked when the block is first created.  Normally
+  // there's enough time for them to become tracked in the user's mouse
+  // movements, but not here.
+  newBlock.setConnectionTracking(true);
   workspace.getCursor().setCurNode(
       Blockly.ASTNode.createBlockNode(newBlock));
   if (!Blockly.navigation.modify_()) {

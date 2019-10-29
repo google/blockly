@@ -140,14 +140,6 @@ Blockly.BlockSvg = function(workspace, prototypeName, opt_id) {
    * @private
    */
   this.markerSvg_ = null;
-
-  /**
-   * Should the block tell its connections to start tracking inside the render
-   * method?
-   * @type {boolean}
-   * @private
-   */
-  this.callTrackConnections_ = true;
 };
 Blockly.utils.object.inherits(Blockly.BlockSvg, Blockly.Block);
 
@@ -1525,58 +1517,45 @@ Blockly.BlockSvg.prototype.appendInput_ = function(type, name) {
 };
 
 /**
- * Tell the block to wait for an outside source to call
- * startTrackingConnections, rather than starting connection
- * tracking automatically.
+ * Sets whether this block's connections are tracked in the database or not.
  *
- * Also tells children of this block to wait.
+ * Used by the deserializer to be more efficient. Setting a connection's
+ * tracked_ value to false keeps it from adding itself to the db when it
+ * gets its first moveTo call, saving expensive ops for later.
+ * @param {boolean} track If true, start tracking. If false, stop tracking.
  * @package
  */
-Blockly.BlockSvg.prototype.waitToTrackConnections = function() {
-  this.callTrackConnections_ = false;
-  var children = this.getChildren(false);
-  for (var i = 0, child; child = children[i]; i++) {
-    child.waitToTrackConnections();
-  }
-};
-
-/**
- * Tell this block's connections to add themselves to the connection
- * database (i.e. start tracking).
- *
- * All following/next blocks will be told to start tracking. Inner blocks
- * (i.e. blocks attached to value/statement inputs) will be told to start
- * tracking if this block is not collapsed.
- * @package
- */
-Blockly.BlockSvg.prototype.startTrackingConnections = function() {
+Blockly.BlockSvg.prototype.setConnectionTracking = function(track) {
   if (this.previousConnection) {
-    this.previousConnection.setTracking(true);
+    this.previousConnection.setTracking(track);
   }
   if (this.outputConnection) {
-    this.outputConnection.setTracking(true);
+    this.outputConnection.setTracking(track);
   }
   if (this.nextConnection) {
-    this.nextConnection.setTracking(true);
+    this.nextConnection.setTracking(track);
     var child = this.nextConnection.targetBlock();
     if (child) {
-      child.startTrackingConnections();
+      child.setConnectionTracking(track);
     }
   }
 
   if (this.collapsed_) {
+    // When track is true, we don't want to start tracking collapsed
+    // connections. When track is false, we're already not tracking
+    // collapsed connections, so no need to update.
     return;
   }
 
   for (var i = 0; i < this.inputList.length; i++) {
     var conn = this.inputList[i].connection;
     if (conn) {
-      conn.setTracking(true);
+      conn.setTracking(track);
 
       // Pass tracking on down the chain.
       var block = conn.targetBlock();
       if (block) {
-        block.startTrackingConnections();
+        block.setConnectionTracking(track);
       }
     }
   }
@@ -1776,13 +1755,6 @@ Blockly.BlockSvg.prototype.render = function(opt_bubble) {
   (/** @type {!Blockly.WorkspaceSvg} */ (this.workspace)).getRenderer().render(this);
   // No matter how we rendered, connection locations should now be correct.
   this.updateConnectionLocations_();
-  // TODO: This should be handled inside a robust init method, because it would
-  //  make it a lot cleaner, but for now it's handled here for backwards
-  //  compatibility.
-  if (this.callTrackConnections_) {
-    this.startTrackingConnections();
-    this.callTrackConnections_ = false;
-  }
   if (opt_bubble !== false) {
     // Render all blocks above this one (propagate a reflow).
     var parentBlock = this.getParent();

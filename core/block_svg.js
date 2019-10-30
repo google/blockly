@@ -239,13 +239,6 @@ Blockly.BlockSvg.prototype.decompose;
 Blockly.BlockSvg.prototype.compose;
 
 /**
- * An optional boolean for determining whether or not the context menu is
- * shown on a block.
- * @type {?boolean}
- */
-Blockly.BlockSvg.prototype.contextMenu;
-
-/**
  * An optional method for defining custom block context menu items.
  * @type {?function(!Array.<!Object>)}
  */

@@ -547,7 +547,7 @@ Blockly.Constants.Math.LIST_MODES_MUTATOR_MIXIN = {
    */
   mutationToDom: function() {
     var container = Blockly.utils.xml.createElement('mutation');
-    container.setAttribute('op', this.getFieldValue('OP'));
+    container.setAttribute('op', String(this.getFieldValue('OP')));
     return container;
   },
   /**

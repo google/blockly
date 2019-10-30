@@ -48,13 +48,22 @@ Blockly.Procedures.NAME_TYPE = Blockly.PROCEDURE_CATEGORY_NAME;
 
 /**
  * Procedure block type.
- * @typedef {{
- *    getProcedureCall: function():string,
- *    renameProcedure: function(string,string),
- *    getProcedureDef: function():!Array
- * }}
+ * @extends {Blockly.BlockSvg}
+ * @constructor
  */
-Blockly.Procedures.ProcedureBlock;
+Blockly.Procedures.ProcedureBlock = function() {};
+/**
+ * @type {?function():string}
+ */
+Blockly.Procedures.ProcedureBlock.prototype.getProcedureCall;
+/**
+ * @type {?function(string,string)}
+ */
+Blockly.Procedures.ProcedureBlock.prototype.renameProcedure;
+/**
+ * @type {?function():!Array}
+ */
+Blockly.Procedures.ProcedureBlock.prototype.getProcedureDef;
 
 /**
  * Find all user-created procedure definitions in a workspace.

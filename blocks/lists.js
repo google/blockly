@@ -162,9 +162,9 @@ Blockly.Blocks['lists_create_with'] = {
   },
   /**
    * Populate the mutator's dialog with this block's components.
-   * @param {!Blockly.Workspace} workspace Mutator's workspace.
-   * @return {!Blockly.Block} Root block in mutator.
-   * @this {Blockly.Block}
+   * @param {!Blockly.WorkspaceSvg} workspace Mutator's workspace.
+   * @return {!Blockly.BlockSvg} Root block in mutator.
+   * @this {Blockly.BlockSvg}
    */
   decompose: function(workspace) {
     var containerBlock = workspace.newBlock('lists_create_with_container');
@@ -173,7 +173,8 @@ Blockly.Blocks['lists_create_with'] = {
     for (var i = 0; i < this.itemCount_; i++) {
       var itemBlock = workspace.newBlock('lists_create_with_item');
       itemBlock.initSvg();
-      connection.connect(itemBlock.previousConnection);
+      connection.connect(
+          /** @type {!Blockly.Connection} */ (itemBlock.previousConnection));
       connection = itemBlock.nextConnection;
     }
     return containerBlock;
@@ -314,7 +315,7 @@ Blockly.Blocks['lists_indexOf'] = {
 Blockly.Blocks['lists_getIndex'] = {
   /**
    * Block for getting element at index.
-   * @this {Blockly.Block}
+   * @this {Blockly.Constants.Lists.GetIndexBlock}
    */
   init: function() {
     var MODE =
@@ -412,7 +413,7 @@ Blockly.Blocks['lists_getIndex'] = {
    * Create XML to represent whether the block is a statement or a value.
    * Also represent whether there is an 'AT' input.
    * @return {Element} XML storage element.
-   * @this {Blockly.Block}
+   * @this {Blockly.Constants.Lists.GetIndexBlock}
    */
   mutationToDom: function() {
     var container = Blockly.utils.xml.createElement('mutation');
@@ -425,7 +426,7 @@ Blockly.Blocks['lists_getIndex'] = {
   /**
    * Parse XML to restore the 'AT' input.
    * @param {!Element} xmlElement XML storage element.
-   * @this {Blockly.Block}
+   * @this {Blockly.Constants.Lists.GetIndexBlock}
    */
   domToMutation: function(xmlElement) {
     // Note: Until January 2013 this block did not have mutations,
@@ -440,12 +441,12 @@ Blockly.Blocks['lists_getIndex'] = {
    * @param {boolean} newStatement True if the block should be a statement.
    *     False if the block should be a value.
    * @private
-   * @this {Blockly.Block}
+   * @this {Blockly.Constants.Lists.GetIndexBlock}
    */
   updateStatement_: function(newStatement) {
     var oldStatement = !this.outputConnection;
     if (newStatement != oldStatement) {
-      this.unplug(true, true);
+      this.unplug(true);
       if (newStatement) {
         this.setOutput(false);
         this.setPreviousStatement(true);
@@ -461,7 +462,7 @@ Blockly.Blocks['lists_getIndex'] = {
    * Create or delete an input for the numeric index.
    * @param {boolean} isAt True if the input should exist.
    * @private
-   * @this {Blockly.Block}
+   * @this {Blockly.Constants.Lists.GetIndexBlock}
    */
   updateAt_: function(isAt) {
     // Destroy old 'AT' and 'ORDINAL' inputs.
@@ -837,7 +838,7 @@ Blockly.Blocks['lists_split'] = {
       if (inputBlock) {
         inputConnection.disconnect();
         if (inputBlock.isShadow()) {
-          inputBlock.dispose();
+          inputBlock.dispose(false);
         } else {
           this.bumpNeighbours();
         }
@@ -858,7 +859,7 @@ Blockly.Blocks['lists_split'] = {
    */
   mutationToDom: function() {
     var container = Blockly.utils.xml.createElement('mutation');
-    container.setAttribute('mode', this.getFieldValue('MODE'));
+    container.setAttribute('mode', String(this.getFieldValue('MODE')));
     return container;
   },
   /**
@@ -870,3 +871,20 @@ Blockly.Blocks['lists_split'] = {
     this.updateType_(xmlElement.getAttribute('mode'));
   }
 };
+
+
+/**
+ * @extends {Blockly.BlockSvg}
+ * @constructor
+ */
+Blockly.Constants.Lists.GetIndexBlock = function() {};
+/**
+ * @type {?function(boolean)}
+ * @private
+ */
+Blockly.Constants.Lists.GetIndexBlock.prototype.updateAt_;
+/**
+ * @type {?function(boolean)}
+ * @private
+ */
+Blockly.Constants.Lists.GetIndexBlock.prototype.updateStatement_;

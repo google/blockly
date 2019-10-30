@@ -240,7 +240,7 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
 Blockly.Blocks['text_getSubstring'] = {
   /**
    * Block for getting substring.
-   * @this {Blockly.Block}
+   * @this {Blockly.Constants.Text.SubstringBlock}
    */
   init: function() {
     this['WHERE_OPTIONS_1'] = [
@@ -273,7 +273,7 @@ Blockly.Blocks['text_getSubstring'] = {
   /**
    * Create XML to represent whether there are 'AT' inputs.
    * @return {!Element} XML storage element.
-   * @this {Blockly.Block}
+   * @this {Blockly.Constants.Text.SubstringBlock}
    */
   mutationToDom: function() {
     var container = Blockly.utils.xml.createElement('mutation');
@@ -286,7 +286,7 @@ Blockly.Blocks['text_getSubstring'] = {
   /**
    * Parse XML to restore the 'AT' inputs.
    * @param {!Element} xmlElement XML storage element.
-   * @this {Blockly.Block}
+   * @this {Blockly.Constants.Text.SubstringBlock}
    */
   domToMutation: function(xmlElement) {
     var isAt1 = (xmlElement.getAttribute('at1') == 'true');
@@ -300,7 +300,7 @@ Blockly.Blocks['text_getSubstring'] = {
    * @param {number} n Specify first or second input (1 or 2).
    * @param {boolean} isAt True if the input should exist.
    * @private
-   * @this {Blockly.Block}
+   * @this {Blockly.Constants.Text.SubstringBlock}
    */
   updateAt_: function(n, isAt) {
     // Create or delete an input for the numeric index.
@@ -418,7 +418,7 @@ Blockly.Blocks['text_print'] = {
 Blockly.Blocks['text_prompt_ext'] = {
   /**
    * Block for prompt function (external message).
-   * @this {Blockly.Block}
+   * @this {Blockly.Constants.Text.PromptBlock}
    */
   init: function() {
     var TYPES = [
@@ -445,7 +445,7 @@ Blockly.Blocks['text_prompt_ext'] = {
    * Modify this block to have the correct output type.
    * @param {string} newOp Either 'TEXT' or 'NUMBER'.
    * @private
-   * @this {Blockly.Block}
+   * @this {Blockly.Constants.Text.PromptBlock}
    */
   updateType_: function(newOp) {
     this.outputConnection.setCheck(newOp == 'NUMBER' ? 'Number' : 'String');
@@ -453,17 +453,18 @@ Blockly.Blocks['text_prompt_ext'] = {
   /**
    * Create XML to represent the output type.
    * @return {!Element} XML storage element.
-   * @this {Blockly.Block}
+   * @this {Blockly.Constants.Text.PromptBlock}
    */
   mutationToDom: function() {
     var container = Blockly.utils.xml.createElement('mutation');
-    container.setAttribute('type', this.getFieldValue('TYPE'));
+    container.setAttribute('type',
+        /** @type {string} */ (this.getFieldValue('TYPE')));
     return container;
   },
   /**
    * Parse XML to restore the output type.
    * @param {!Element} xmlElement XML storage element.
-   * @this {Blockly.Block}
+   * @this {Blockly.Constants.Text.PromptBlock}
    */
   domToMutation: function(xmlElement) {
     this.updateType_(xmlElement.getAttribute('type'));
@@ -474,7 +475,7 @@ Blockly.Blocks['text_prompt'] = {
   /**
    * Block for prompt function (internal message).
    * The 'text_prompt_ext' block is preferred as it is more flexible.
-   * @this {Blockly.Block}
+   * @this {Blockly.Constants.Text.PromptBlock}
    */
   init: function() {
     this.mixin(Blockly.Constants.Text.QUOTE_IMAGE_MIXIN);
@@ -635,7 +636,7 @@ Blockly.Constants.Text.QUOTE_IMAGE_MIXIN = {
   /**
    * Inserts appropriate quote images before and after the named field.
    * @param {string} fieldName The name of the field to wrap with quotes.
-   * @this {Blockly.Block}
+   * @this {Blockly.Constants.Text.QuoteBlock}
    */
   quoteField_: function(fieldName) {
     for (var i = 0, input; input = this.inputList[i]; i++) {
@@ -656,7 +657,7 @@ Blockly.Constants.Text.QUOTE_IMAGE_MIXIN = {
    * @param {boolean} open If the image should be open quote (“ in LTR).
    *                       Otherwise, a closing quote is used (” in LTR).
    * @return {!Blockly.FieldImage} The new field.
-   * @this {Blockly.Block}
+   * @this {Blockly.Constants.Text.QuoteBlock}
    */
   newQuote_: function(open) {
     var isLeft = this.RTL ? !open : open;
@@ -673,7 +674,7 @@ Blockly.Constants.Text.QUOTE_IMAGE_MIXIN = {
 
 /**
  * Wraps TEXT field with images of double quote characters.
- * @this {Blockly.Block}
+ * @this {Blockly.Constants.Text.QuoteBlock}
  */
 Blockly.Constants.Text.TEXT_QUOTES_EXTENSION = function() {
   this.mixin(Blockly.Constants.Text.QUOTE_IMAGE_MIXIN);
@@ -708,9 +709,9 @@ Blockly.Constants.Text.TEXT_JOIN_MUTATOR_MIXIN = {
   },
   /**
    * Populate the mutator's dialog with this block's components.
-   * @param {!Blockly.Workspace} workspace Mutator's workspace.
-   * @return {!Blockly.Block} Root block in mutator.
-   * @this {Blockly.Block}
+   * @param {!Blockly.WorkspaceSvg} workspace Mutator's workspace.
+   * @return {!Blockly.BlockSvg} Root block in mutator.
+   * @this {Blockly.BlockSvg}
    */
   decompose: function(workspace) {
     var containerBlock = workspace.newBlock('text_create_join_container');
@@ -719,15 +720,16 @@ Blockly.Constants.Text.TEXT_JOIN_MUTATOR_MIXIN = {
     for (var i = 0; i < this.itemCount_; i++) {
       var itemBlock = workspace.newBlock('text_create_join_item');
       itemBlock.initSvg();
-      connection.connect(itemBlock.previousConnection);
+      connection.connect(
+          /** @type {!Blockly.Connection} */ (itemBlock.previousConnection));
       connection = itemBlock.nextConnection;
     }
     return containerBlock;
   },
   /**
    * Reconfigure this block based on the mutator dialog's components.
-   * @param {!Blockly.Block} containerBlock Root block in mutator.
-   * @this {Blockly.Block}
+   * @param {!Blockly.BlockSvg} containerBlock Root block in mutator.
+   * @this {Blockly.BlockSvg}
    */
   compose: function(containerBlock) {
     var itemBlock = containerBlock.getInputTargetBlock('STACK');
@@ -931,3 +933,60 @@ Blockly.Extensions.registerMutator('text_join_mutator',
 Blockly.Extensions.registerMutator('text_charAt_mutator',
     Blockly.Constants.Text.TEXT_CHARAT_MUTATOR_MIXIN,
     Blockly.Constants.Text.TEXT_CHARAT_EXTENSION);
+
+
+/**
+ * @extends {Blockly.BlockSvg}
+ * @constructor
+ */
+Blockly.Constants.Text.SubstringBlock = function() {};
+/**
+ * @type {?function(number,boolean)}
+ * @private
+ */
+Blockly.Constants.Text.SubstringBlock.prototype.updateAt_;
+
+/**
+ * @extends {Blockly.Constants.Text.QuoteBlock}
+ * @constructor
+ */
+Blockly.Constants.Text.PromptBlock = function() {};
+/**
+ * @type {?function(string)}
+ * @private
+ */
+Blockly.Constants.Text.PromptBlock.prototype.updateType_;
+
+/**
+ * @extends {Blockly.BlockSvg}
+ * @constructor
+ */
+Blockly.Constants.Text.QuoteBlock = function() {};
+/**
+ * @type {string}
+ */
+Blockly.Constants.Text.QuoteBlock.prototype.QUOTE_IMAGE_LEFT_DATAURI;
+/**
+ * @type {string}
+ */
+Blockly.Constants.Text.QuoteBlock.prototype.QUOTE_IMAGE_RIGHT_DATAURI;
+/**
+ * @type {number}
+ * @const
+ */
+Blockly.Constants.Text.QuoteBlock.prototype.QUOTE_IMAGE_WIDTH;
+/**
+ * @type {number}
+ * @const
+ */
+Blockly.Constants.Text.QuoteBlock.prototype.QUOTE_IMAGE_HEIGHT;
+/**
+ * @type {?function(string)}
+ * @private
+ */
+Blockly.Constants.Text.QuoteBlock.prototype.quoteField_;
+/**
+ * @type {?function(boolean):!Blockly.FieldImage}
+ * @private
+ */
+Blockly.Constants.Text.QuoteBlock.prototype.newQuote_;

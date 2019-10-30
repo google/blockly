@@ -315,7 +315,7 @@ Blockly.Constants.Logic.CONTROLS_IF_MUTATOR_MIXIN = {
   /**
    * Create XML to represent the number of else-if and else inputs.
    * @return {Element} XML storage element.
-   * @this {Blockly.Block}
+   * @this {Blockly.Constants.Logic.IfBlock}
    */
   mutationToDom: function() {
     if (!this.elseifCount_ && !this.elseCount_) {
@@ -333,7 +333,7 @@ Blockly.Constants.Logic.CONTROLS_IF_MUTATOR_MIXIN = {
   /**
    * Parse XML to restore the else-if and else inputs.
    * @param {!Element} xmlElement XML storage element.
-   * @this {Blockly.Block}
+   * @this {Blockly.Constants.Logic.IfBlock}
    */
   domToMutation: function(xmlElement) {
     this.elseifCount_ = parseInt(xmlElement.getAttribute('elseif'), 10) || 0;
@@ -342,9 +342,9 @@ Blockly.Constants.Logic.CONTROLS_IF_MUTATOR_MIXIN = {
   },
   /**
    * Populate the mutator's dialog with this block's components.
-   * @param {!Blockly.Workspace} workspace Mutator's workspace.
-   * @return {!Blockly.Block} Root block in mutator.
-   * @this {Blockly.Block}
+   * @param {!Blockly.WorkspaceSvg} workspace Mutator's workspace.
+   * @return {!Blockly.BlockSvg} Root block in mutator.
+   * @this {Blockly.Constants.Logic.IfBlock}
    */
   decompose: function(workspace) {
     var containerBlock = workspace.newBlock('controls_if_if');
@@ -353,20 +353,22 @@ Blockly.Constants.Logic.CONTROLS_IF_MUTATOR_MIXIN = {
     for (var i = 1; i <= this.elseifCount_; i++) {
       var elseifBlock = workspace.newBlock('controls_if_elseif');
       elseifBlock.initSvg();
-      connection.connect(elseifBlock.previousConnection);
+      connection.connect(
+          /** @type {!Blockly.Connection} */ (elseifBlock.previousConnection));
       connection = elseifBlock.nextConnection;
     }
     if (this.elseCount_) {
       var elseBlock = workspace.newBlock('controls_if_else');
       elseBlock.initSvg();
-      connection.connect(elseBlock.previousConnection);
+      connection.connect(
+          /** @type {!Blockly.Connection} */ (elseBlock.previousConnection));
     }
     return containerBlock;
   },
   /**
    * Reconfigure this block based on the mutator dialog's components.
-   * @param {!Blockly.Block} containerBlock Root block in mutator.
-   * @this {Blockly.Block}
+   * @param {!Blockly.BlockSvg} containerBlock Root block in mutator.
+   * @this {Blockly.Constants.Logic.IfBlock}
    */
   compose: function(containerBlock) {
     var clauseBlock = containerBlock.nextConnection.targetBlock();
@@ -401,7 +403,7 @@ Blockly.Constants.Logic.CONTROLS_IF_MUTATOR_MIXIN = {
   /**
    * Store pointers to any connected child blocks.
    * @param {!Blockly.Block} containerBlock Root block in mutator.
-   * @this {Blockly.Block}
+   * @this {Blockly.Constants.Logic.IfBlock}
    */
   saveConnections: function(containerBlock) {
     var clauseBlock = containerBlock.nextConnection.targetBlock();
@@ -431,7 +433,7 @@ Blockly.Constants.Logic.CONTROLS_IF_MUTATOR_MIXIN = {
   },
   /**
    * Reconstructs the block with all child blocks attached.
-   * @this {Blockly.Block}
+   * @this {Blockly.Constants.Logic.IfBlock}
    */
   rebuildShape_: function() {
     var valueConnections = [null];
@@ -451,11 +453,11 @@ Blockly.Constants.Logic.CONTROLS_IF_MUTATOR_MIXIN = {
     }
     this.updateShape_();
     this.reconnectChildBlocks_(valueConnections, statementConnections,
-        elseStatementConnection);
+        /** @type {?Blockly.RenderedConnection} */ (elseStatementConnection));
   },
   /**
    * Modify this block to have the correct number of inputs.
-   * @this {Blockly.Block}
+   * @this {Blockly.Constants.Logic.IfBlock}
    * @private
    */
   updateShape_: function() {
@@ -503,7 +505,7 @@ Blockly.Constants.Logic.CONTROLS_IF_MUTATOR_MIXIN = {
 };
 
 Blockly.Extensions.registerMutator('controls_if_mutator',
-    Blockly.Constants.Logic.CONTROLS_IF_MUTATOR_MIXIN, null,
+    Blockly.Constants.Logic.CONTROLS_IF_MUTATOR_MIXIN, undefined,
     ['controls_if_elseif', 'controls_if_else']);
 /**
  * "controls_if" extension function. Adds mutator, shape updating methods, and
@@ -554,7 +556,8 @@ Blockly.Constants.Logic.LOGIC_COMPARE_ONCHANGE_MIXIN = {
     var blockB = this.getInputTargetBlock('B');
     // Disconnect blocks that existed prior to this change if they don't match.
     if (blockA && blockB &&
-        !blockA.outputConnection.checkType(blockB.outputConnection)) {
+        !blockA.outputConnection.checkType(
+            /** @type {!Blockly.Connection} */ (blockB.outputConnection))) {
       // Mismatch between two inputs.  Revert the block connections,
       // bumping away the newly connected block(s).
       Blockly.Events.setGroup(e.group);
@@ -641,3 +644,26 @@ Blockly.Constants.Logic.LOGIC_TERNARY_ONCHANGE_MIXIN = {
 
 Blockly.Extensions.registerMixin('logic_ternary',
     Blockly.Constants.Logic.LOGIC_TERNARY_ONCHANGE_MIXIN);
+
+
+/**
+ * @extends {Blockly.BlockSvg}
+ * @constructor
+ */
+Blockly.Constants.Logic.IfBlock = function() {};
+/**
+ * @type {?function()}
+ * @private
+ */
+Blockly.Constants.Logic.IfBlock.prototype.updateShape_;
+/**
+ * @type {?function()}
+ * @private
+ */
+Blockly.Constants.Logic.IfBlock.prototype.rebuildShape_;
+/**
+ * @type {?function(!Array.<?Blockly.RenderedConnection>,
+ * !Array.<?Blockly.RenderedConnection>,?Blockly.RenderedConnection)}
+ * @private
+ */
+Blockly.Constants.Logic.IfBlock.prototype.reconnectChildBlocks_;

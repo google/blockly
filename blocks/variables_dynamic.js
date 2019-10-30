@@ -99,7 +99,7 @@ Blockly.Constants.VariablesDynamic.CUSTOM_CONTEXT_MENU_VARIABLE_GETTER_SETTER_MI
     if (!this.isInFlyout) {
       var opposite_type;
       var contextMenuMsg;
-      var id = this.getFieldValue('VAR');
+      var id = /** @type {string} */ (this.getFieldValue('VAR'));
       var variableModel = this.workspace.getVariableById(id);
       var varType = variableModel.type;
       if (this.type == 'variables_get_dynamic') {
@@ -126,13 +126,13 @@ Blockly.Constants.VariablesDynamic.CUSTOM_CONTEXT_MENU_VARIABLE_GETTER_SETTER_MI
       if (this.type == 'variables_get_dynamic' ||
        this.type == 'variables_get_reporter_dynamic') {
         var renameOption = {
-          text: Blockly.Msg.RENAME_VARIABLE,
+          text: Blockly.Msg['RENAME_VARIABLE'],
           enabled: true,
           callback: Blockly.Constants.Variables.RENAME_OPTION_CALLBACK_FACTORY(this)
         };
         var name = this.getField('VAR').getText();
         var deleteOption = {
-          text: Blockly.Msg.DELETE_VARIABLE.replace('%1', name),
+          text: Blockly.Msg['DELETE_VARIABLE'].replace('%1', name),
           enabled: true,
           callback: Blockly.Constants.Variables.DELETE_OPTION_CALLBACK_FACTORY(this)
         };
@@ -148,7 +148,7 @@ Blockly.Constants.VariablesDynamic.CUSTOM_CONTEXT_MENU_VARIABLE_GETTER_SETTER_MI
    * @this {Blockly.Block}
    */
   onchange: function(_e) {
-    var id = this.getFieldValue('VAR');
+    var id = /** @type {string} */ (this.getFieldValue('VAR'));
     var variableModel = Blockly.Variables.getVariable(this.workspace, id);
     if (this.type == 'variables_get_dynamic') {
       this.outputConnection.setCheck(variableModel.type);

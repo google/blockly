@@ -306,6 +306,8 @@ Blockly.utils.dom.getFastTextWidth = function(textElement,
     // Inject the canvas element used for computing text widths.
     var computeCanvas = document.createElement('canvas');
     computeCanvas.className = 'blocklyComputeCanvas';
+    computeCanvas.width = 0;
+    computeCanvas.height = 0;
     document.body.appendChild(computeCanvas);
 
     // Initialize the HTML canvas context and set the font.

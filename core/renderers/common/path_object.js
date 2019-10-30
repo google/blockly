@@ -63,9 +63,9 @@ Blockly.blockRendering.PathObject = function(root) {
   /**
    * The style object to use when colouring block paths.
    * @type {!Blockly.Theme.BlockStyle}
-   * @public
+   * @package
    */
-  this.style = Blockly.Theme.createBlockStyle('#0000000');
+  this.style = Blockly.Theme.createBlockStyle('#000000');
 };
 
 /**

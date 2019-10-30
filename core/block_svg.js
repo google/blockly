@@ -1043,8 +1043,6 @@ Blockly.BlockSvg.prototype.applyColour = function() {
 
   var icons = this.getIcons();
   for (var i = 0; i < icons.length; i++) {
-    // TODO: Decide whether to make icon and field applyColour take in a
-    // colourer object.
     icons[i].applyColour();
   }
 

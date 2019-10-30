@@ -38,12 +38,12 @@ goog.require('Blockly.utils.colour');
 Blockly.Theme = function(blockStyles, categoryStyles, opt_componentStyles) {
   /**
    * The block styles map.
-   * @type {!Object.<string, Blockly.Theme.BlockStyle>}
+   * @type {!Object.<string, !Blockly.Theme.BlockStyle>}
    * @private
    */
   this.blockStyles_ = {};
 
-  // Make sure all styles are valid before insterting them into the map.
+  // Make sure all styles are valid before inserting them into the map.
   this.setAllBlockStyles(blockStyles);
 
   /**
@@ -106,18 +106,14 @@ Blockly.Theme.prototype.getAllBlockStyles = function() {
  *     if no style with the given name was found.
  */
 Blockly.Theme.prototype.getBlockStyle = function(blockStyleName) {
-  var defaultStyle = Blockly.Theme.createBlockStyle('#000000');
-  if (blockStyleName == null) {
-    return defaultStyle;
-  }
-  return this.blockStyles_[blockStyleName] || defaultStyle;
+  return this.blockStyles_[blockStyleName || ''] ||
+      Blockly.Theme.createBlockStyle('#000000');
 };
 
 /**
  * Overrides or adds a style to the blockStyles map.
  * @param {string} blockStyleName The name of the block style.
  * @param {Blockly.Theme.BlockStyle} blockStyle The block style.
- * @package
  */
 Blockly.Theme.prototype.setBlockStyle = function(blockStyleName, blockStyle) {
   blockStyle = Blockly.Theme.validatedBlockStyle(blockStyle);
@@ -159,7 +155,7 @@ Blockly.Theme.createBlockStyle = function(colour) {
 /**
  * Get a full block style object based on the input style object.  Populate
  * any missing values.
- * @param {!Blockly.Theme.BlockStyle} blockStyle A full or partial block
+ * @param {Blockly.Theme.BlockStyle} blockStyle A full or partial block
  *     style object.
  * @return {!Blockly.Theme.BlockStyle} A full block style object, with all
  *     required properties populated.
@@ -168,11 +164,13 @@ Blockly.Theme.createBlockStyle = function(colour) {
 Blockly.Theme.validatedBlockStyle = function(blockStyle) {
   // Make a new object with all of the same properties.
   var valid = {};
-  Blockly.utils.object.mixin(valid, blockStyle);
+  if (blockStyle) {
+    Blockly.utils.object.mixin(valid, blockStyle);
+  }
 
   // Validate required properties.
   var parsedColour = Blockly.utils.colour.parseBlockColour(
-      valid.colourPrimary || '#000000');
+      valid.colourPrimary || '#000');
   valid.colourPrimary = parsedColour.hex;
   valid.colourSecondary = valid.colourSecondary ||
       Blockly.utils.colour.blend('#fff', valid.colourPrimary, 0.6) ||

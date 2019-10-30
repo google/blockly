@@ -219,7 +219,7 @@ Blockly.utils.colour.names = {
  *     or a message reference string pointing to one of those two values.
  * @return {{hue: ?number, hex: string}} An object containing the colour as
  *     a #RRGGBB string, and the hue if the input was an HSV hue value.
- * @throws {Error} If If the colour cannot be parsed.
+ * @throws {Error} If the colour cannot be parsed.
  */
 Blockly.utils.colour.parseBlockColour = function(colour) {
   var dereferenced = (typeof colour == 'string') ?

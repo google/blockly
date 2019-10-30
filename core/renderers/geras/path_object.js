@@ -25,6 +25,7 @@
 goog.provide('Blockly.geras.PathObject');
 
 goog.require('Blockly.blockRendering.IPathObject');
+goog.require('Blockly.Theme');
 goog.require('Blockly.utils.dom');
 goog.require('Blockly.utils.object');
 
@@ -73,14 +74,14 @@ Blockly.geras.PathObject = function(root) {
    * @type {string}
    * @package
    */
-  this.darkColour = '#000000';
+  this.colourDark = '#000000';
 
   /**
    * The style object to use when colouring block paths.
    * @type {!Blockly.Theme.BlockStyle}
-   * @public
+   * @package
    */
-  this.style = Blockly.Theme.createBlockStyle('#0000000');
+  this.style = Blockly.Theme.createBlockStyle('#000000');
 };
 
 /**

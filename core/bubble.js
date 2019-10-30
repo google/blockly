@@ -823,7 +823,9 @@ Blockly.Bubble.prototype.moveDuringDrag = function(dragSurface, newLoc) {
  */
 Blockly.Bubble.prototype.getRelativeToSurfaceXY = function() {
   return new Blockly.utils.Coordinate(
-      this.anchorXY_.x + this.relativeLeft_,
+      this.workspace_.RTL ?
+        -this.relativeLeft_ + this.anchorXY_.x - this.width_ :
+        this.anchorXY_.x + this.relativeLeft_,
       this.anchorXY_.y + this.relativeTop_);
 };
 

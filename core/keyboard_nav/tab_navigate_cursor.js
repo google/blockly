@@ -16,7 +16,8 @@
  */
 
 /**
- * @fileoverview The class representing a cursor that cursor.
+ * @fileoverview The class representing a cursor that is used to navigate
+ * between tab navigable fields.
  * @author samelh@google.com (Sam El-Husseini)
  */
 'use strict';
@@ -40,6 +41,7 @@ Blockly.utils.object.inherits(Blockly.TabNavigateCursor, Blockly.Cursor);
 
 
 /**
+ * Find the next node in the pre order traversal.
  * @override
  */
 Blockly.TabNavigateCursor.prototype.next = function() {
@@ -56,13 +58,7 @@ Blockly.TabNavigateCursor.prototype.next = function() {
 };
 
 /**
- * @override
- */
-Blockly.TabNavigateCursor.prototype.in = function() {
-  return this.next();
-};
-
-/**
+ * Find the previous node in the pre order traversal.
  * @override
  */
 Blockly.TabNavigateCursor.prototype.prev = function() {
@@ -76,13 +72,6 @@ Blockly.TabNavigateCursor.prototype.prev = function() {
     this.setCurNode(newNode);
   }
   return newNode;
-};
-
-/**
- * @override
- */
-Blockly.TabNavigateCursor.prototype.out = function() {
-  return this.prev();
 };
 
 /**

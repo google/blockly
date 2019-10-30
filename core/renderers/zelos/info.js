@@ -252,11 +252,7 @@ Blockly.zelos.RenderInfo.prototype.getInRowSpacing_ = function(prev, next) {
 };
 
 /**
- * Create a spacer row to go between prev and next, and set its size.
- * @param {?Blockly.blockRendering.Row} prev The previous row, or null.
- * @param {?Blockly.blockRendering.Row} next The next row, or null.
- * @return {!Blockly.blockRendering.SpacerRow} The newly created spacer row.
- * @protected
+ * @override
  */
 Blockly.zelos.RenderInfo.prototype.makeSpacerRow_ = function(prev, next) {
   var height = this.getSpacerRowHeight_(prev, next);

@@ -47,7 +47,7 @@ Blockly.blockRendering.Connection = function(constants, connectionModel) {
       constants);
   this.connectionModel = connectionModel;
   this.shape = this.constants_.shapeFor(connectionModel);
-  this.isDynamicShape = !!this.shape.isDynamic;
+  this.isDynamicShape = !!this.shape['isDynamic'];
   this.type |= Blockly.blockRendering.Types.CONNECTION;
 };
 Blockly.utils.object.inherits(Blockly.blockRendering.Connection,

@@ -32,6 +32,7 @@ goog.require('Blockly.Events.Ui');
 goog.require('Blockly.Events.BlockMove');
 goog.require('Blockly.Msg');
 goog.require('Blockly.RenderedConnection');
+goog.require('Blockly.TabNavigateCursor');
 goog.require('Blockly.Tooltip');
 goog.require('Blockly.Touch');
 goog.require('Blockly.utils');
@@ -693,52 +694,18 @@ Blockly.BlockSvg.prototype.setCollapsed = function(collapsed) {
 
 /**
  * Open the next (or previous) FieldTextInput.
- * @param {Blockly.Field|Blockly.Block} start Current location.
+ * @param {!Blockly.Field} start Current field.
  * @param {boolean} forward If true go forward, otherwise backward.
  */
 Blockly.BlockSvg.prototype.tab = function(start, forward) {
-  var list = this.createTabList_();
-  var i = start != null ? list.indexOf(start) : -1;
-  if (i == -1) {
-    // No start location, start at the beginning or end.
-    i = forward ? -1 : list.length;
-  }
-  var target = list[forward ? i + 1 : i - 1];
-  if (!target) {
-    // Ran off of list.
-    var parent = this.getParent();
-    if (parent) {
-      parent.tab(this, forward);
-    }
-  } else if (target instanceof Blockly.Field) {
-    target.showEditor();
-  } else {
-    target.tab(null, forward);
-  }
-};
+  var tabCursor = new Blockly.TabNavigateCursor();
+  tabCursor.setCurNode(Blockly.ASTNode.createFieldNode(start));
 
-/**
- * Create an ordered list of all text fields and connected inputs.
- * @return {!Array.<!Blockly.Field|!Blockly.Block>} The ordered list.
- * @private
- */
-Blockly.BlockSvg.prototype.createTabList_ = function() {
-  // This function need not be efficient since it runs once on a keypress.
-  var list = [];
-  for (var i = 0, input; input = this.inputList[i]; i++) {
-    for (var j = 0, field; field = input.fieldRow[j]; j++) {
-      if (field.isTabNavigable() && field.isVisible()) {
-        list.push(field);
-      }
-    }
-    if (input.connection) {
-      var block = input.connection.targetBlock();
-      if (block) {
-        list.push(block);
-      }
-    }
+  var nextNode = forward ? tabCursor.next() : tabCursor.prev();
+  if (nextNode) {
+    var nextField = /** @type {!Blockly.Field} */ (nextNode.getLocation());
+    nextField.showEditor();
   }
-  return list;
 };
 
 /**

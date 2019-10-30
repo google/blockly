@@ -472,9 +472,9 @@ Blockly.FieldDropdown.prototype.applyColour = function() {
   // Update arrow's colour.
   if (this.sourceBlock_ && this.arrow_) {
     if (this.sourceBlock_.isShadow()) {
-      this.arrow_.style.fill = this.sourceBlock_.getSecondaryColour();
+      this.arrow_.style.fill = this.sourceBlock_.style.colourSecondary;
     } else {
-      this.arrow_.style.fill = this.sourceBlock_.getColour();
+      this.arrow_.style.fill = this.sourceBlock_.style.colourPrimary;
     }
   }
 };

@@ -25,6 +25,8 @@
 
 goog.provide('Blockly.blockRendering.IPathObject');
 
+goog.requireType('Blockly.Theme');
+
 
 /**
  * An interface for a block's path object.
@@ -42,19 +44,11 @@ Blockly.blockRendering.IPathObject = function(_root) {};
 Blockly.blockRendering.IPathObject.prototype.applyColour;
 
 /**
- * Update colour properties based on a single colour value.
- * @param {number|string} colour HSV hue value (0 to 360), #RRGGBB string,
- *     or a message reference string pointing to one of those two values.
- * @package
- */
-Blockly.blockRendering.IPathObject.prototype.setColour;
-
-/**
- * Update colour properties based on a block style.
+ * Update the style.
  * @param {!Blockly.Theme.BlockStyle} blockStyle The block style to use.
  * @package
  */
-Blockly.blockRendering.IPathObject.prototype.setColourFromStyle;
+Blockly.blockRendering.IPathObject.prototype.setStyle;
 
 /**
  * Flip the SVG paths in RTL.

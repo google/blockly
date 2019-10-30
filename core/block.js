@@ -252,14 +252,14 @@ Blockly.Block.prototype.hue_ = null;
 /**
  * Colour of the block in '#RRGGBB' format.
  * @type {string}
- * @private
+ * @protected
  */
 Blockly.Block.prototype.colour_ = '#000000';
 
 /**
  * Name of the block style.
  * @type {?string}
- * @private
+ * @protected
  */
 Blockly.Block.prototype.styleName_ = null;
 

@@ -64,6 +64,13 @@ Blockly.BlockSvg = function(workspace, prototypeName, opt_id) {
   this.svgGroup_.translate_ = '';
 
   /**
+   * A block style object.
+   * @type {!Blockly.Theme.BlockStyle}
+   * @public
+   */
+  this.style = workspace.getTheme().getBlockStyle(null);
+
+  /**
    * The renderer's path object.
    * @type {Blockly.blockRendering.IPathObject}
    * @package
@@ -1297,23 +1304,7 @@ Blockly.BlockSvg.prototype.setDeleteStyle = function(enable) {
  * @return {string} #RRGGBB string.
  */
 Blockly.BlockSvg.prototype.getColour = function() {
-  return this.pathObject.primaryColour;
-};
-
-/**
- * Get the secondary colour of a block.
- * @return {string} #RRGGBB string.
- */
-Blockly.BlockSvg.prototype.getSecondaryColour = function() {
-  return this.pathObject.primaryColour;
-};
-
-/**
- * Get the tertiary colour of a block.
- * @return {string} #RRGGBB string.
- */
-Blockly.BlockSvg.prototype.getTertiaryColour = function() {
-  return this.pathObject.primaryColour;
+  return this.style.colourPrimary;
 };
 
 /**
@@ -1322,7 +1313,12 @@ Blockly.BlockSvg.prototype.getTertiaryColour = function() {
  */
 Blockly.BlockSvg.prototype.setColour = function(colour) {
   Blockly.BlockSvg.superClass_.setColour.call(this, colour);
-  this.pathObject.setColour(colour);
+  var styleObj = this.workspace.getTheme().getBlockStyleForColour(this.colour_);
+
+  this.pathObject.setStyle(styleObj.style);
+  this.style = styleObj.style;
+  this.styleName_ = styleObj.name;
+
   this.applyColour();
 };
 
@@ -1332,13 +1328,16 @@ Blockly.BlockSvg.prototype.setColour = function(colour) {
  * @throws {Error} if the block style does not exist.
  */
 Blockly.BlockSvg.prototype.setStyle = function(blockStyleName) {
-  var theme = this.workspace.getTheme();
-  var blockStyle = theme.getBlockStyle(blockStyleName);
+  var blockStyle = this.workspace.getTheme().getBlockStyle(blockStyleName);
   this.styleName_ = blockStyleName;
 
   if (blockStyle) {
     this.hat = blockStyle.hat;
-    this.pathObject.setColourFromStyle(blockStyle);
+    this.pathObject.setStyle(blockStyle);
+    // Set colour to match Block.
+    this.colour_ = blockStyle.colourPrimary;
+    this.style = blockStyle;
+
     this.applyColour();
   } else {
     throw Error('Invalid style name: ' + blockStyleName);

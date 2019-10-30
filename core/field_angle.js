@@ -269,8 +269,8 @@ Blockly.FieldAngle.prototype.showEditor_ = function() {
   var editor = this.dropdownCreate_();
   Blockly.DropDownDiv.getContentDiv().appendChild(editor);
 
-  Blockly.DropDownDiv.setColour(this.sourceBlock_.getColour(),
-      this.sourceBlock_.getTertiaryColour());
+  Blockly.DropDownDiv.setColour(this.sourceBlock_.style.colourPrimary,
+      this.sourceBlock_.style.colourTertiary);
 
   Blockly.DropDownDiv.showPositionedByField(
       this, this.dropdownDispose_.bind(this));

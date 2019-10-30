@@ -229,7 +229,8 @@ Blockly.utils.colour.parseBlockColour = function(colour) {
   if (!isNaN(hue) && 0 <= hue && hue <= 360) {
     return {
       hue: hue,
-      hex: Blockly.hueToHex(hue)
+      hex: Blockly.utils.colour.hsvToHex(hue, Blockly.HSV_SATURATION,
+          Blockly.HSV_VALUE * 255)
     };
   } else {
     var hex = Blockly.utils.colour.parse(dereferenced);

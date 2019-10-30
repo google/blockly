@@ -130,8 +130,8 @@ Blockly.FieldDate.prototype.render_ = function() {
  * @package
  */
 Blockly.FieldDate.prototype.applyColour = function() {
-  this.todayColour_ = this.sourceBlock_.getColour();
-  this.selectedColour_ = this.sourceBlock_.getSecondaryColour();
+  this.todayColour_ = this.sourceBlock_.style.colourPrimary;
+  this.selectedColour_ = this.sourceBlock_.style.colourSecondary;
   this.updateEditor_();
 };
 

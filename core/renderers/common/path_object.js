@@ -25,6 +25,7 @@
 goog.provide('Blockly.blockRendering.PathObject');
 
 goog.require('Blockly.blockRendering.IPathObject');
+goog.require('Blockly.Theme');
 goog.require('Blockly.utils.dom');
 
 
@@ -60,34 +61,11 @@ Blockly.blockRendering.PathObject = function(root) {
       {'class': 'blocklyPathLight'}, this.svgRoot);
 
   /**
-   * The dark path of the block.
-   * @type {SVGElement}
-   * @package
+   * The style object to use when colouring block paths.
+   * @type {!Blockly.Theme.BlockStyle}
+   * @public
    */
-  this.svgPathDark = Blockly.utils.dom.createSvgElement('path',
-      {'class': 'blocklyPathDark', 'transform': 'translate(1,1)'},
-      this.svgRoot);
-
-  /**
-   * Primary colour of the block in '#RRGGBB' format.
-   * @type {string}
-   * @package
-   */
-  this.primaryColour = '#000000';
-
-  /**
-   * Secondary colour of the block in '#RRGGBB' format.
-   * @type {string}
-   * @package
-   */
-  this.secondaryColour = '#000000';
-
-  /**
-   * Tertiary colour of the block in '#RRGGBB' format.
-   * @type {string}
-   * @package
-   */
-  this.tertiaryColour = '#000000';
+  this.style = Blockly.Theme.createBlockStyle('#0000000');
 };
 
 /**
@@ -98,7 +76,6 @@ Blockly.blockRendering.PathObject = function(root) {
 Blockly.blockRendering.PathObject.prototype.setPaths = function(pathString) {
   this.svgPath.setAttribute('d', pathString);
   this.svgPathLight.style.display = 'none';
-  this.svgPathDark.style.display = 'none';
 };
 
 /**
@@ -119,52 +96,18 @@ Blockly.blockRendering.PathObject.prototype.flipRTL = function() {
 Blockly.blockRendering.PathObject.prototype.applyColour = function(isShadow) {
   if (isShadow) {
     this.svgPath.setAttribute('stroke', 'none');
-    this.svgPath.setAttribute('fill', this.secondaryColour);
+    this.svgPath.setAttribute('fill', this.style.colourSecondary);
   } else {
-    this.svgPath.setAttribute('stroke', this.tertiaryColour);
-    this.svgPath.setAttribute('fill', this.primaryColour);
+    this.svgPath.setAttribute('stroke', this.style.colourTertiary);
+    this.svgPath.setAttribute('fill', this.style.colourPrimary);
   }
 };
 
 /**
- * Update colour properties based on a triplet of colours.
- * @param {string} primary The primary colour.
- * @param {?string} secondary The secondary colour, or null to have the colourer
- *     generate it.
- * @param {?string} tertiary The tertiary colour, or null to have the colourer
- *     generate it.
- * @protected
- */
-Blockly.blockRendering.PathObject.prototype.setColourFromTriplet_ = function(
-    primary, secondary, tertiary) {
-  this.primaryColour = primary;
-  this.secondaryColour = secondary ||
-      Blockly.utils.colour.blend('#fff', primary, 0.6);
-  this.tertiaryColour = tertiary ||
-      Blockly.utils.colour.blend('#fff', primary, 0.3);
-};
-
-/**
- * Update colour properties based on a single colour value.
- * @param {number|string} colour HSV hue value (0 to 360), #RRGGBB string,
- *     or a message reference string pointing to one of those two values.
- * @package
- */
-Blockly.blockRendering.PathObject.prototype.setColour = function(colour) {
-  var parsed = Blockly.utils.colour.parseBlockColour(colour);
-  this.setColourFromTriplet_(parsed.hex, null, null);
-};
-
-/**
- * Update colour properties based on a block style.
+ * Set the style.
  * @param {!Blockly.Theme.BlockStyle} blockStyle The block style to use.
  * @package
  */
-Blockly.blockRendering.PathObject.prototype.setColourFromStyle = function(
-    blockStyle) {
-  var parsed =
-      Blockly.utils.colour.parseBlockColour(blockStyle['colourPrimary']);
-  this.setColourFromTriplet_(parsed.hex,
-      blockStyle['colourSecondary'],
-      blockStyle['colourTertiary']);
+Blockly.blockRendering.PathObject.prototype.setStyle = function(blockStyle) {
+  this.style = blockStyle;
 };

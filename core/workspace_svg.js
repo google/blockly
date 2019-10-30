@@ -44,6 +44,8 @@ goog.require('Blockly.WorkspaceAudio');
 goog.require('Blockly.WorkspaceDragSurfaceSvg');
 goog.require('Blockly.Xml');
 
+goog.requireType('Blockly.blockRendering.Renderer');
+
 
 /**
  * Class for a workspace.  This is an onscreen area with optional trashcan,
@@ -1308,7 +1310,6 @@ Blockly.WorkspaceSvg.prototype.refreshToolboxSelection = function() {
  *     flyout to show the renamed variable immediately.
  * @param {string} id ID of the variable to rename.
  * @param {string} newName New variable name.
- * @package
  */
 Blockly.WorkspaceSvg.prototype.renameVariableById = function(id, newName) {
   Blockly.WorkspaceSvg.superClass_.renameVariableById.call(this, id, newName);
@@ -1319,7 +1320,6 @@ Blockly.WorkspaceSvg.prototype.renameVariableById = function(id, newName) {
  * Delete a variable by the passed in ID.   Update the flyout to show
  *     immediately that the variable is deleted.
  * @param {string} id ID of variable to delete.
- * @package
  */
 Blockly.WorkspaceSvg.prototype.deleteVariableById = function(id) {
   Blockly.WorkspaceSvg.superClass_.deleteVariableById.call(this, id);
@@ -1336,7 +1336,6 @@ Blockly.WorkspaceSvg.prototype.deleteVariableById = function(id) {
  * @param {?string=} opt_id The unique ID of the variable. This will default to
  *     a UUID.
  * @return {!Blockly.VariableModel} The newly created variable.
- * @package
  */
 Blockly.WorkspaceSvg.prototype.createVariable = function(name,
     opt_type, opt_id) {
@@ -1465,7 +1464,6 @@ Blockly.WorkspaceSvg.prototype.isContentBounded = function() {
  * the mouse position). This does not include zooming with the zoom controls
  * since the X Y coordinates are decided programmatically.
  * @return {boolean} True if the workspace is movable, false otherwise.
- * @package
  */
 Blockly.WorkspaceSvg.prototype.isMovable = function() {
   return (this.options.moveOptions && this.options.moveOptions.scrollbars) ||
@@ -2265,7 +2263,7 @@ Blockly.WorkspaceSvg.getContentDimensionsBounded_ = function(ws, svgSize) {
  * @return {!Object} Contains size and position metrics of a top level
  *   workspace.
  * @private
- * @this Blockly.WorkspaceSvg
+ * @this {Blockly.WorkspaceSvg}
  */
 Blockly.WorkspaceSvg.getTopLevelWorkspaceMetrics_ = function() {
 
@@ -2347,7 +2345,7 @@ Blockly.WorkspaceSvg.getTopLevelWorkspaceMetrics_ = function() {
  * @param {!Object} xyRatio Contains an x and/or y property which is a float
  *     between 0 and 1 specifying the degree of scrolling.
  * @private
- * @this Blockly.WorkspaceSvg
+ * @this {Blockly.WorkspaceSvg}
  */
 Blockly.WorkspaceSvg.setTopLevelWorkspaceMetrics_ = function(xyRatio) {
   var metrics = this.getMetrics();

@@ -259,7 +259,7 @@ Blockly.Field.prototype.SERIALIZABLE = false;
 
 /**
  * Point size of text.  Should match blocklyText's font-size in CSS.
- * @const {string}
+ * @const {number}
  */
 Blockly.Field.FONTSIZE = 11;
 

@@ -606,7 +606,6 @@ Blockly.Connection.prototype.targetBlock = function() {
  * value type system.  E.g. square_root("Hello") is not compatible.
  * @param {!Blockly.Connection} otherConnection Connection to compare against.
  * @return {boolean} True if the connections share a type.
- * @package
  */
 Blockly.Connection.prototype.checkType = function(otherConnection) {
   if (!this.check_ || !otherConnection.check_) {

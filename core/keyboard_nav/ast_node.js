@@ -23,6 +23,8 @@
 
 goog.provide('Blockly.ASTNode');
 
+goog.require('Blockly.utils.Coordinate');
+
 
 /**
  * Class for an AST node.

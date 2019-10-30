@@ -239,6 +239,12 @@ Blockly.BlockSvg.prototype.decompose;
 Blockly.BlockSvg.prototype.compose;
 
 /**
+ * An optional method for defining custom block context menu items.
+ * @type {?function(!Array.<!Object>)}
+ */
+Blockly.BlockSvg.prototype.customContextMenu;
+
+/**
  * An property used internally to reference the block's rendering debugger.
  * @type {?Blockly.blockRendering.Debug}
  * @package

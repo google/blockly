@@ -300,12 +300,10 @@ Blockly.ContextMenu.blockCommentOption = function(block) {
  *     right-click originated.
  * @return {!Object} A menu option, containing text, enabled, and a callback.
  * @package
- * @suppress {checkTypes} Suppress checks while workspace comments are not
- *     bundled in.
  */
 Blockly.ContextMenu.commentDeleteOption = function(comment) {
   var deleteOption = {
-    text: Blockly.Msg.REMOVE_COMMENT,
+    text: Blockly.Msg['REMOVE_COMMENT'],
     enabled: true,
     callback: function() {
       Blockly.Events.setGroup(true);
@@ -322,12 +320,10 @@ Blockly.ContextMenu.commentDeleteOption = function(comment) {
  *     right-click originated.
  * @return {!Object} A menu option, containing text, enabled, and a callback.
  * @package
- * @suppress {checkTypes} Suppress checks while workspace comments are not
- *     bundled in.
  */
 Blockly.ContextMenu.commentDuplicateOption = function(comment) {
   var duplicateOption = {
-    text: Blockly.Msg.DUPLICATE_COMMENT,
+    text: Blockly.Msg['DUPLICATE_COMMENT'],
     enabled: true,
     callback: function() {
       Blockly.duplicate(comment);
@@ -354,7 +350,7 @@ Blockly.ContextMenu.workspaceCommentOption = function(ws, e) {
   // location of the mouse event.
   var addWsComment = function() {
     var comment = new Blockly.WorkspaceCommentSvg(
-        ws, Blockly.Msg.WORKSPACE_COMMENT_DEFAULT_TEXT,
+        ws, Blockly.Msg['WORKSPACE_COMMENT_DEFAULT_TEXT'],
         Blockly.WorkspaceCommentSvg.DEFAULT_SIZE,
         Blockly.WorkspaceCommentSvg.DEFAULT_SIZE);
 
@@ -394,7 +390,7 @@ Blockly.ContextMenu.workspaceCommentOption = function(ws, e) {
     // that they won't be able to edit.
     enabled: !Blockly.utils.userAgent.IE
   };
-  wsCommentOption.text = Blockly.Msg.ADD_COMMENT;
+  wsCommentOption.text = Blockly.Msg['ADD_COMMENT'];
   wsCommentOption.callback = function() {
     addWsComment();
   };

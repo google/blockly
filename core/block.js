@@ -280,6 +280,20 @@ Blockly.Block.prototype.colourTertiary_ = null;
 Blockly.Block.prototype.styleName_ = null;
 
 /**
+ * An optional method called during initialization.
+ * @type {?function()}
+ */
+Blockly.Block.prototype.init;
+
+/**
+ * An optional callback method to use whenever the block's parent workspace
+ * changes. This is usually only called from the constructor, the block type
+ * initializer function, or an extension initializer function.
+ * @type {?function(Blockly.Events.Abstract)}
+ */
+Blockly.Block.prototype.onchange;
+
+/**
  * An optional serialization method for defining how to serialize the
  * mutation state. This must be coupled with defining `domToMutation`.
  * @type {?function(...):!Element}

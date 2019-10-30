@@ -66,7 +66,6 @@ Blockly.BlockSvg = function(workspace, prototypeName, opt_id) {
   /**
    * A block style object.
    * @type {!Blockly.Theme.BlockStyle}
-   * @public
    */
   this.style = workspace.getTheme().getBlockStyle(null);
 

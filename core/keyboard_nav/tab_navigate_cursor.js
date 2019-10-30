@@ -83,10 +83,13 @@ Blockly.TabNavigateCursor.prototype.prev = function() {
 Blockly.TabNavigateCursor.prototype.validNode_ = function(node) {
   var isValid = false;
   var type = node && node.getType();
-  var location = node && node.getLocation();
-  if (type == Blockly.ASTNode.types.FIELD && location.isTabNavigable() &&
-      (/** @type {!Blockly.Field} */ (location)).isClickable()) {
-    isValid = true;
+  if (node) {
+    var location = node.getLocation();
+    if (type == Blockly.ASTNode.types.FIELD &&
+        location && location.isTabNavigable() &&
+        (/** @type {!Blockly.Field} */ (location)).isClickable()) {
+      isValid = true;
+    }
   }
   return isValid;
 };

@@ -39,7 +39,6 @@ Blockly.TabNavigateCursor = function() {
 };
 Blockly.utils.object.inherits(Blockly.TabNavigateCursor, Blockly.Cursor);
 
-
 /**
  * Find the next node in the pre order traversal.
  * @override
@@ -67,7 +66,7 @@ Blockly.TabNavigateCursor.prototype.prev = function() {
     return null;
   }
   var newNode = this.getPreviousNode_(curNode);
-  
+
   if (newNode) {
     this.setCurNode(newNode);
   }
@@ -153,7 +152,6 @@ Blockly.TabNavigateCursor.prototype.getRightMostChild_ = function(node) {
     newNode = newNode.next();
   }
   return this.getRightMostChild_(newNode);
-
 };
 
 /**

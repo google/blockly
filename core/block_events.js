@@ -273,7 +273,7 @@ Blockly.Events.Create.prototype.run = function(forward) {
     xml.appendChild(this.xml);
     Blockly.Xml.domToWorkspace(xml, workspace);
   } else {
-    for (var i = 0, id; id = this.ids[i]; i++) {
+    for (var i = 0, id; (id = this.ids[i]); i++) {
       var block = workspace.getBlockById(id);
       if (block) {
         block.dispose(false);
@@ -349,7 +349,7 @@ Blockly.Events.Delete.prototype.fromJson = function(json) {
 Blockly.Events.Delete.prototype.run = function(forward) {
   var workspace = this.getEventWorkspace_();
   if (forward) {
-    for (var i = 0, id; id = this.ids[i]; i++) {
+    for (var i = 0, id; (id = this.ids[i]); i++) {
       var block = workspace.getBlockById(id);
       if (block) {
         block.dispose(false);

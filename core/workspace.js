@@ -136,7 +136,7 @@ Blockly.Workspace = function(opt_options) {
   this.themeManager_ = this.options.parentWorkspace ?
       this.options.parentWorkspace.getThemeManager() :
       new Blockly.ThemeManager(this.options.theme || Blockly.Themes.Classic);
-  
+
   this.themeManager_.subscribeWorkspace(this);
 
   /**
@@ -251,7 +251,7 @@ Blockly.Workspace.prototype.refreshTheme = function() {
  * @private
  */
 Blockly.Workspace.prototype.updateBlockStyles_ = function(blocks) {
-  for (var i = 0, block; block = blocks[i]; i++) {
+  for (var i = 0, block; (block = blocks[i]); i++) {
     var blockStyleName = block.getStyleName();
     if (blockStyleName) {
       block.setStyle(blockStyleName);
@@ -731,13 +731,13 @@ Blockly.Workspace.prototype.undo = function(redo) {
     events.push(inputStack.pop());
   }
   // Push these popped events on the opposite stack.
-  for (var i = 0, event; event = events[i]; i++) {
+  for (var i = 0, event; (event = events[i]); i++) {
     outputStack.push(event);
   }
   events = Blockly.Events.filter(events, redo);
   Blockly.Events.recordUndo = false;
   try {
-    for (var i = 0, event; event = events[i]; i++) {
+    for (var i = 0, event; (event = events[i]); i++) {
       event.run(redo);
     }
   } finally {
@@ -788,7 +788,7 @@ Blockly.Workspace.prototype.fireChangeListener = function(event) {
       this.undoStack_.shift();
     }
   }
-  for (var i = 0, func; func = this.listeners_[i]; i++) {
+  for (var i = 0, func; (func = this.listeners_[i]); i++) {
     func(event);
   }
 };
@@ -842,7 +842,7 @@ Blockly.Workspace.prototype.getCommentById = function(id) {
 Blockly.Workspace.prototype.allInputsFilled = function(
     opt_shadowBlocksAreFilled) {
   var blocks = this.getTopBlocks(false);
-  for (var i = 0, block; block = blocks[i]; i++) {
+  for (var i = 0, block; (block = blocks[i]); i++) {
     if (!block.allInputsFilled(opt_shadowBlocksAreFilled)) {
       return false;
     }

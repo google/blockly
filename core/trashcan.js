@@ -430,7 +430,7 @@ Blockly.Trashcan.prototype.click = function() {
   }
 
   var xml = [];
-  for (var i = 0, text; text = this.contents_[i]; i++) {
+  for (var i = 0, text; (text = this.contents_[i]); i++) {
     xml[i] = Blockly.Xml.textToDom(text);
   }
   this.flyout.show(xml);

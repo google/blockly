@@ -638,8 +638,8 @@ Blockly.Constants.Text.QUOTE_IMAGE_MIXIN = {
    * @this {Blockly.Block}
    */
   quoteField_: function(fieldName) {
-    for (var i = 0, input; input = this.inputList[i]; i++) {
-      for (var j = 0, field; field = input.fieldRow[j]; j++) {
+    for (var i = 0, input; (input = this.inputList[i]); i++) {
+      for (var j = 0, field; (field = input.fieldRow[j]); j++) {
         if (fieldName == field.name) {
           input.insertFieldAt(j, this.newQuote_(true));
           input.insertFieldAt(j + 2, this.newQuote_(false));

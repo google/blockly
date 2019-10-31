@@ -143,7 +143,7 @@ Blockly.Warning.prototype.createBubble = function() {
     // This cannot be done until the bubble is rendered on screen.
     var maxWidth = this.paragraphElement_.getBBox().width;
     for (var i = 0, textElement;
-      textElement = this.paragraphElement_.childNodes[i]; i++) {
+      (textElement = this.paragraphElement_.childNodes[i]); i++) {
 
       textElement.setAttribute('text-anchor', 'end');
       textElement.setAttribute('x', maxWidth + Blockly.Bubble.BORDER_WIDTH);

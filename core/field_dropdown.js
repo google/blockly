@@ -430,7 +430,7 @@ Blockly.FieldDropdown.prototype.getOptions = function(opt_useCache) {
 Blockly.FieldDropdown.prototype.doClassValidation_ = function(opt_newValue) {
   var isValueValid = false;
   var options = this.getOptions(true);
-  for (var i = 0, option; option = options[i]; i++) {
+  for (var i = 0, option; (option = options[i]); i++) {
     // Options are tuples of human-readable text and language-neutral values.
     if (option[1] == opt_newValue) {
       isValueValid = true;
@@ -457,7 +457,7 @@ Blockly.FieldDropdown.prototype.doClassValidation_ = function(opt_newValue) {
 Blockly.FieldDropdown.prototype.doValueUpdate_ = function(newValue) {
   Blockly.FieldDropdown.superClass_.doValueUpdate_.call(this, newValue);
   var options = this.getOptions(true);
-  for (var i = 0, option; option = options[i]; i++) {
+  for (var i = 0, option; (option = options[i]); i++) {
     if (option[1] == this.value_) {
       this.selectedIndex_ = i;
     }

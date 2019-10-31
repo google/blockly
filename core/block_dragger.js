@@ -120,7 +120,7 @@ Blockly.BlockDragger.initIconData_ = function(block) {
   // Build a list of icons that need to be moved and where they started.
   var dragIconData = [];
   var descendants = block.getDescendants(false);
-  for (var i = 0, descendant; descendant = descendants[i]; i++) {
+  for (var i = 0, descendant; (descendant = descendants[i]); i++) {
     var icons = descendant.getIcons();
     for (var j = 0; j < icons.length; j++) {
       var data = {

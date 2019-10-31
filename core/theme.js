@@ -205,6 +205,15 @@ Blockly.Theme.prototype.setCategoryStyle = function(categoryStyleName,
 };
 
 /**
+ * Gets a map of all the category style names.
+ * @return {!Object.<string, Blockly.Theme.CategoryStyle>} Map of category
+ *     styles.
+ */
+Blockly.Theme.prototype.getAllCategoryStyles = function() {
+  return this.categoryStyles_;
+};
+
+/**
  * Gets the style for a given Blockly UI component.  If the style value is a
  * string, we attempt to find the value of any named references.
  * @param {string} componentName The name of the component.

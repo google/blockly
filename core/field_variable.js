@@ -63,7 +63,8 @@ Blockly.FieldVariable = function(varName, opt_validator, opt_variableTypes,
   /**
    * An array of options for a dropdown list,
    * or a function which generates these options.
-   * @type {!function(this:Blockly.FieldVariable): !Array.<!Array>}
+   * @type {(!Array.<!Array>|
+   *    !function(this:Blockly.FieldDropdown): !Array.<!Array>)}
    * @protected
    */
   this.menuGenerator_ = Blockly.FieldVariable.dropdownCreate;

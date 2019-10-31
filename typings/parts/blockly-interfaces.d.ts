@@ -16,7 +16,7 @@ declare module Blockly {
     css?: boolean;
     oneBasedIndex?: boolean;
     media?: string;
-    theme?: Blockly.BlocklyTheme;
+    theme?: Blockly.Theme | BlocklyThemeOptions;
     move?: {
       scrollbars?: boolean;
       drag?: boolean;
@@ -38,9 +38,10 @@ declare module Blockly {
     };
   }
 
-  interface BlocklyTheme {
-    defaultBlockStyles?: {[blocks: string]: Blockly.Theme.BlockStyle;};
+  interface BlocklyThemeOptions {
+    blockStyles?: {[blocks: string]: Blockly.Theme.BlockStyle;};
     categoryStyles?: {[category: string]: Blockly.Theme.CategoryStyle;};
+    componentStyles?: {[component: string]: any;};
   }
 
   interface Metrics {

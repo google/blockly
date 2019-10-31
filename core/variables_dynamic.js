@@ -98,7 +98,7 @@ Blockly.VariablesDynamic.flyoutCategoryBlocks = function(workspace) {
     }
     if (Blockly.Blocks['variables_get_dynamic']) {
       variableModelList.sort(Blockly.VariableModel.compareByName);
-      for (var i = 0, variable; variable = variableModelList[i]; i++) {
+      for (var i = 0, variable; (variable = variableModelList[i]); i++) {
         var block = Blockly.utils.xml.createElement('block');
         block.setAttribute('type', 'variables_get_dynamic');
         block.setAttribute('gap', 8);

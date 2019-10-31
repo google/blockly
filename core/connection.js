@@ -496,15 +496,14 @@ Blockly.Connection.singleConnection_ = function(block, orphanBlock) {
  * @param {!Blockly.Block} startBlock The block on which to start the search.
  * @param {!Blockly.Block} orphanBlock The block that is looking for a home.
  * @return {Blockly.Connection} The suitable connection point on the chain
- *    of blocks, or null.
+ *     of blocks, or null.
  * @package
  */
 Blockly.Connection.lastConnectionInRow = function(startBlock, orphanBlock) {
   var newBlock = startBlock;
   var connection;
-  while (connection = Blockly.Connection.singleConnection_(
-      /** @type {!Blockly.Block} */ (newBlock), orphanBlock)) {
-    // '=' is intentional in line above.
+  while ((connection = Blockly.Connection.singleConnection_(
+      /** @type {!Blockly.Block} */ (newBlock), orphanBlock))) {
     newBlock = connection.targetBlock();
     if (!newBlock || newBlock.isShadow()) {
       return connection;

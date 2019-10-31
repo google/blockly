@@ -386,5 +386,6 @@
 	"PROCEDURES_IFRETURN_HELPURL": "http://c2.com/cgi/wiki?GuardClause",
 	"PROCEDURES_IFRETURN_WARNING": "Uyarı: Bu blok yalnızca bir fonksiyon tanımı içinde kullanılır.",
 	"WORKSPACE_COMMENT_DEFAULT_TEXT": "Bir şeyler söyle...",
+	"WORKSPACE_ARIA_LABEL": "Blockly Çalışma Alanı",
 	"COLLAPSED_WARNINGS_WARNING": "Daraltılmış bloklar uyarı içerir."
 }

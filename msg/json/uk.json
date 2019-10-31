@@ -25,7 +25,7 @@
 	"DELETE_BLOCK": "Видалити блок",
 	"DELETE_X_BLOCKS": "Видалити %1 блоків",
 	"DELETE_ALL_BLOCKS": "Вилучити всі блоки %1?",
-	"CLEAN_UP": "Вирівняти блоки",
+	"CLEAN_UP": "Очистити блоки",
 	"COLLAPSE_BLOCK": "Згорнути блок",
 	"COLLAPSE_ALL": "Згорнути блоки",
 	"EXPAND_BLOCK": "Розгорнути блок",
@@ -367,5 +367,6 @@
 	"PROCEDURES_IFRETURN_HELPURL": "http://c2.com/cgi/wiki?GuardClause",
 	"PROCEDURES_IFRETURN_WARNING": "Попередження: цей блок може використовуватися лише в межах визначення функції.",
 	"WORKSPACE_COMMENT_DEFAULT_TEXT": "Скажіть щось...",
+	"WORKSPACE_ARIA_LABEL": "Робоча область Blockly",
 	"COLLAPSED_WARNINGS_WARNING": "Звернуті блоки містять попередження."
 }

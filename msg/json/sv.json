@@ -372,5 +372,6 @@
 	"PROCEDURES_IFRETURN_HELPURL": "http://c2.com/cgi/wiki?GuardClause",
 	"PROCEDURES_IFRETURN_WARNING": "Varning: Detta block får användas endast i en funktionsdefinition.",
 	"WORKSPACE_COMMENT_DEFAULT_TEXT": "Säg någonting...",
+	"WORKSPACE_ARIA_LABEL": "Blocklys arbetsyta",
 	"COLLAPSED_WARNINGS_WARNING": "Hopfällda block innehåller varningar."
 }

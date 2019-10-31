@@ -15,7 +15,8 @@
 			"Deborahjay",
 			"נדב ס",
 			"Motife",
-			"Steeve815"
+			"Steeve815",
+			"דגש חזק"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "פריט",
@@ -313,5 +314,6 @@
 	"PROCEDURES_CREATE_DO": "ליצור '%1'",
 	"PROCEDURES_IFRETURN_TOOLTIP": "אם ערך נכון, אז להחזיר ערך שני.",
 	"PROCEDURES_IFRETURN_WARNING": "אזהרה: בלוק זה עשוי לשמש רק בתוך הגדרה של פונקציה.",
-	"WORKSPACE_COMMENT_DEFAULT_TEXT": "נא להזין הערה..."
+	"WORKSPACE_COMMENT_DEFAULT_TEXT": "נא להזין הערה...",
+	"WORKSPACE_ARIA_LABEL": "סביבת העבודה חסומה"
 }

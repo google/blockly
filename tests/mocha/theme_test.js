@@ -52,9 +52,10 @@ suite('Theme', function() {
   function createBlockStyles() {
     return {
       "styleOne": {
-        "colourPrimary": "colour1",
-        "colourSecondary":"colour2",
-        "colourTertiary":"colour3"
+        "colourPrimary": "#aaaaaa",
+        "colourSecondary": "#bbbbbb",
+        "colourTertiary": "#cccccc",
+        "hat": 'cap'
       }
     };
   }
@@ -62,14 +63,16 @@ suite('Theme', function() {
   function createMultipleBlockStyles() {
     return {
       "styleOne": {
-        "colourPrimary": "colour1",
-        "colourSecondary":"colour2",
-        "colourTertiary":"colour3"
+        "colourPrimary": "#aaaaaa",
+        "colourSecondary": "#bbbbbb",
+        "colourTertiary": "#cccccc",
+        "hat": 'cap'
       },
       "styleTwo": {
-        "colourPrimary": "colour1",
-        "colourSecondary":"colour2",
-        "colourTertiary":"colour3"
+        "colourPrimary": "#000000",
+        "colourSecondary": "#999999",
+        "colourTertiary": "#4d4d4d",
+        "hat": ''
       }
     };
   }
@@ -103,7 +106,7 @@ suite('Theme', function() {
   test('Set BlockStyle Update', function() {
     var theme = new Blockly.Theme(createBlockStyles());
     var blockStyle = createBlockStyles();
-    blockStyle.styleOne.colourPrimary = 'somethingElse';
+    blockStyle.styleOne.colourPrimary = '#00ff00';
 
     theme.setBlockStyle('styleOne', blockStyle.styleOne);
 
@@ -152,4 +155,120 @@ suite('Theme', function() {
     stub.restore();
   });
 
+  suite('Validate block styles', function() {
+    test('Null', function() {
+      var inputStyle = null;
+      var expectedOutput = {
+        "colourPrimary": "#000000",
+        "colourSecondary": "#999999",
+        "colourTertiary": "#4d4d4d",
+        "hat": ''
+      };
+      stringifyAndCompare(
+          Blockly.Theme.validatedBlockStyle(inputStyle), expectedOutput);
+    });
+
+    test('Empty', function() {
+      var inputStyle = {};
+      var expectedOutput = {
+        "colourPrimary": "#000000",
+        "colourSecondary": "#999999",
+        "colourTertiary": "#4d4d4d",
+        "hat": ''
+      };
+      stringifyAndCompare(
+          Blockly.Theme.validatedBlockStyle(inputStyle), expectedOutput);
+    });
+
+    test('Incomplete hex', function() {
+      var inputStyle = {
+        "colourPrimary": "#012345"
+      };
+      var expectedOutput = {
+        "colourPrimary": "#012345",
+        "colourSecondary": "#99a7b5",
+        "colourTertiary": "#4d657d",
+        "hat": ''
+      };
+      stringifyAndCompare(
+          Blockly.Theme.validatedBlockStyle(inputStyle), expectedOutput);
+    });
+
+    test('Complete hex', function() {
+      var inputStyle = {
+        "colourPrimary": "#aaaaaa",
+        "colourSecondary": "#bbbbbb",
+        "colourTertiary": "#cccccc",
+        "hat": 'cap'
+      };
+      var expectedOutput = {
+        "colourPrimary": "#aaaaaa",
+        "colourSecondary": "#bbbbbb",
+        "colourTertiary": "#cccccc",
+        "hat": 'cap'
+      };
+      stringifyAndCompare(
+          Blockly.Theme.validatedBlockStyle(inputStyle), expectedOutput);
+    });
+
+    test('Complete hue', function() {
+      var inputStyle = {
+        "colourPrimary": "20",
+        "colourSecondary": "40",
+        "colourTertiary": "60",
+      };
+      var expectedOutput = {
+        "colourPrimary": "#a5745b",
+        "colourSecondary": "#a58c5b",
+        "colourTertiary": "#a5a55b",
+        "hat": ''
+      };
+      stringifyAndCompare(
+          Blockly.Theme.validatedBlockStyle(inputStyle), expectedOutput);
+    });
+
+    test('Incomplete hue', function() {
+      var inputStyle = {
+        "colourPrimary": "20",
+      };
+      var expectedOutput = {
+        "colourPrimary": "#a5745b",
+        "colourSecondary": "#dbc7bd",
+        "colourTertiary": "#c09e8c",
+        "hat": ''
+      };
+      stringifyAndCompare(
+          Blockly.Theme.validatedBlockStyle(inputStyle), expectedOutput);
+    });
+
+    test('Complete css colour name', function() {
+      var inputStyle = {
+        "colourPrimary": "red",
+        "colourSecondary": "white",
+        "colourTertiary": "blue"
+      };
+      var expectedOutput = {
+        "colourPrimary": "#ff0000",
+        "colourSecondary": "#ffffff",
+        "colourTertiary": "#0000ff",
+        "hat": ''
+      };
+      stringifyAndCompare(
+          Blockly.Theme.validatedBlockStyle(inputStyle), expectedOutput);
+    });
+
+    test('Incomplete css colour name', function() {
+      var inputStyle = {
+        "colourPrimary": "black",
+      };
+      var expectedOutput = {
+        "colourPrimary": "#000000",
+        "colourSecondary": "#999999",
+        "colourTertiary": "#4d4d4d",
+        "hat": ''
+      };
+      stringifyAndCompare(
+          Blockly.Theme.validatedBlockStyle(inputStyle), expectedOutput);
+    });
+  });
 });

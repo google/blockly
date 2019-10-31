@@ -22,18 +22,12 @@
 
 'use strict';
 
-goog.provide('Blockly.blockRendering.IPathObject');
 goog.provide('Blockly.blockRendering.PathObject');
 
+goog.require('Blockly.blockRendering.IPathObject');
+goog.require('Blockly.Theme');
 goog.require('Blockly.utils.dom');
 
-
-/**
- * An interface for a block's path object.
- * @param {!SVGElement} _root The root SVG element.
- * @interface
- */
-Blockly.blockRendering.IPathObject = function(_root) {};
 
 /**
  * An object that handles creating and setting each of the SVG elements
@@ -67,13 +61,11 @@ Blockly.blockRendering.PathObject = function(root) {
       {'class': 'blocklyPathLight'}, this.svgRoot);
 
   /**
-   * The dark path of the block.
-   * @type {SVGElement}
+   * The style object to use when colouring block paths.
+   * @type {!Blockly.Theme.BlockStyle}
    * @package
    */
-  this.svgPathDark = Blockly.utils.dom.createSvgElement('path',
-      {'class': 'blocklyPathDark', 'transform': 'translate(1,1)'},
-      this.svgRoot);
+  this.style = Blockly.Theme.createBlockStyle('#000000');
 };
 
 /**
@@ -84,7 +76,6 @@ Blockly.blockRendering.PathObject = function(root) {
 Blockly.blockRendering.PathObject.prototype.setPaths = function(pathString) {
   this.svgPath.setAttribute('d', pathString);
   this.svgPathLight.style.display = 'none';
-  this.svgPathDark.style.display = 'none';
 };
 
 /**
@@ -94,4 +85,29 @@ Blockly.blockRendering.PathObject.prototype.setPaths = function(pathString) {
 Blockly.blockRendering.PathObject.prototype.flipRTL = function() {
   // Mirror the block's path.
   this.svgPath.setAttribute('transform', 'scale(-1 1)');
+};
+
+/**
+ * Apply the stored colours to the block's path, taking into account whether
+ * the paths belong to a shadow block.
+ * @param {boolean} isShadow True if the block is a shadow block.
+ * @package
+ */
+Blockly.blockRendering.PathObject.prototype.applyColour = function(isShadow) {
+  if (isShadow) {
+    this.svgPath.setAttribute('stroke', 'none');
+    this.svgPath.setAttribute('fill', this.style.colourSecondary);
+  } else {
+    this.svgPath.setAttribute('stroke', this.style.colourTertiary);
+    this.svgPath.setAttribute('fill', this.style.colourPrimary);
+  }
+};
+
+/**
+ * Set the style.
+ * @param {!Blockly.Theme.BlockStyle} blockStyle The block style to use.
+ * @package
+ */
+Blockly.blockRendering.PathObject.prototype.setStyle = function(blockStyle) {
+  this.style = blockStyle;
 };

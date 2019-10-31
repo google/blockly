@@ -322,7 +322,7 @@ Blockly.Mutator.prototype.setVisible = function(visible) {
     this.resizeBubble_();
     // When the mutator's workspace changes, update the source block.
     this.workspace_.addChangeListener(this.workspaceChanged_.bind(this));
-    this.updateColour();
+    this.applyColour();
   } else {
     // Dispose of the bubble.
     this.svgDialog_ = null;

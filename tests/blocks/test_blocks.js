@@ -29,7 +29,7 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     "message0": "stack block",
     "previousStatement": null,
     "nextStatement": null,
-    "style": "math_blocks"
+    "colour": "120"
   },
   {
     "type": "test_basic_dummy",

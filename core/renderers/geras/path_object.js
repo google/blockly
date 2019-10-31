@@ -25,7 +25,9 @@
 goog.provide('Blockly.geras.PathObject');
 
 goog.require('Blockly.blockRendering.IPathObject');
+goog.require('Blockly.Theme');
 goog.require('Blockly.utils.dom');
+goog.require('Blockly.utils.object');
 
 
 /**
@@ -66,6 +68,20 @@ Blockly.geras.PathObject = function(root) {
    */
   this.svgPathLight = Blockly.utils.dom.createSvgElement('path',
       {'class': 'blocklyPathLight'}, this.svgRoot);
+
+  /**
+   * The colour of the dark path on the block in '#RRGGBB' format.
+   * @type {string}
+   * @package
+   */
+  this.colourDark = '#000000';
+
+  /**
+   * The style object to use when colouring block paths.
+   * @type {!Blockly.Theme.BlockStyle}
+   * @package
+   */
+  this.style = Blockly.Theme.createBlockStyle('#000000');
 };
 
 /**
@@ -89,4 +105,37 @@ Blockly.geras.PathObject.prototype.flipRTL = function() {
   this.svgPath.setAttribute('transform', 'scale(-1 1)');
   this.svgPathLight.setAttribute('transform', 'scale(-1 1)');
   this.svgPathDark.setAttribute('transform', 'translate(1,1) scale(-1 1)');
+};
+
+/**
+ * Apply the stored colours to the block's path, taking into account whether
+ * the paths belong to a shadow block.
+ * @param {boolean} isShadow True if the block is a shadow block.
+ * @package
+ */
+Blockly.geras.PathObject.prototype.applyColour = function(isShadow) {
+  if (isShadow) {
+    this.svgPathLight.style.display = 'none';
+    this.svgPathDark.setAttribute('fill', this.style.colourSecondary);
+    this.svgPath.setAttribute('stroke', 'none');
+    this.svgPath.setAttribute('fill', this.style.colourSecondary);
+  } else {
+    this.svgPathLight.style.display = '';
+    this.svgPathDark.style.display = '';
+    this.svgPath.setAttribute('stroke', 'none');
+    this.svgPathLight.setAttribute('stroke', this.style.colourTertiary);
+    this.svgPathDark.setAttribute('fill', this.colourDark);
+    this.svgPath.setAttribute('fill', this.style.colourPrimary);
+  }
+};
+
+/**
+ * Set the style.
+ * @param {!Blockly.Theme.BlockStyle} blockStyle The block style to use.
+ * @package
+ */
+Blockly.geras.PathObject.prototype.setStyle = function(blockStyle) {
+  this.style = blockStyle;
+  this.colourDark =
+      Blockly.utils.colour.blend('#000', this.style.colourPrimary, 0.2);
 };

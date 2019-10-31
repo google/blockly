@@ -247,7 +247,7 @@ Blockly.Comment.prototype.createEditableBubble_ = function() {
   // Expose this comment's block's ID on its top-level SVG group.
   this.bubble_.setSvgId(this.block_.id);
   this.bubble_.registerResizeEvent(this.onBubbleResize_.bind(this));
-  this.updateColour();
+  this.applyColour();
 };
 
 /**

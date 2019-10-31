@@ -23,6 +23,8 @@
 
 goog.provide('Blockly.Options');
 
+goog.require('Blockly.Theme');
+goog.require('Blockly.Themes.Classic');
 goog.require('Blockly.utils.userAgent');
 goog.require('Blockly.Xml');
 
@@ -114,7 +116,6 @@ Blockly.Options = function(options) {
   } else {
     var oneBasedIndex = !!options['oneBasedIndex'];
   }
-  var theme = options['theme'];
   var keyMap = options['keyMap'] || Blockly.user.keyMap.createDefaultKeyMap();
 
   var renderer = options['renderer'] || 'geras';
@@ -141,7 +142,7 @@ Blockly.Options = function(options) {
   this.gridOptions = Blockly.Options.parseGridOptions_(options);
   this.zoomOptions = Blockly.Options.parseZoomOptions_(options);
   this.toolboxPosition = toolboxPosition;
-  this.theme = theme;
+  this.theme = Blockly.Options.parseThemeOptions_(options);
   this.keyMap = keyMap;
   this.renderer = renderer;
 };
@@ -271,6 +272,22 @@ Blockly.Options.parseGridOptions_ = function(options) {
   gridOptions.length = Number(grid['length']) || 1;
   gridOptions.snap = gridOptions.spacing > 0 && !!grid['snap'];
   return gridOptions;
+};
+
+/**
+ * Parse the user-specified theme options, using the classic theme as a default.
+ *   https://developers.google.com/blockly/guides/configure/web/themes
+ * @param {!Object} options Dictionary of options.
+ * @return {!Blockly.Theme} A Blockly Theme.
+ * @private
+ */
+Blockly.Options.parseThemeOptions_ = function(options) {
+  var theme = options['theme'] || Blockly.Themes.Classic;
+  if (theme instanceof Blockly.Theme) {
+    return /** @type {!Blockly.Theme} */ (theme);
+  }
+  return new Blockly.Theme(
+      theme['blockStyles'], theme['categoryStyles'], theme['componentStyles']);
 };
 
 /**

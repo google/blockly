@@ -163,7 +163,7 @@ Blockly.Theme.createBlockStyle = function(colour) {
  */
 Blockly.Theme.validatedBlockStyle = function(blockStyle) {
   // Make a new object with all of the same properties.
-  var valid = {};
+  var valid = /** @type {!Blockly.Theme.BlockStyle} */ ({});
   if (blockStyle) {
     Blockly.utils.object.mixin(valid, blockStyle);
   }
@@ -174,10 +174,12 @@ Blockly.Theme.validatedBlockStyle = function(blockStyle) {
   valid.colourPrimary = parsedColour.hex;
   valid.colourSecondary = valid.colourSecondary ?
       Blockly.utils.colour.parseBlockColour(valid.colourSecondary).hex :
-      Blockly.utils.colour.blend('#fff', valid.colourPrimary, 0.6);
+      Blockly.utils.colour.blend('#fff', valid.colourPrimary, 0.6) ||
+      valid.colourPrimary;
   valid.colourTertiary = valid.colourTertiary ?
       Blockly.utils.colour.parseBlockColour(valid.colourTertiary).hex :
-      Blockly.utils.colour.blend('#fff', valid.colourPrimary, 0.3);
+      Blockly.utils.colour.blend('#fff', valid.colourPrimary, 0.3) ||
+      valid.colourPrimary;
 
   valid.hat = valid.hat || '';
   return valid;

@@ -80,11 +80,70 @@ function prependHeader() {
 }
 
 /**
+ * Closure compiler warning groups used to treat warnings as errors.
+ */
+var JSCOMP_ERROR = [
+  'accessControls',
+  'ambiguousFunctionDecl',
+  'checkPrototypalTypes',
+  'checkRegExp',
+  'checkTypes',
+  'checkVars',
+  'conformanceViolations',
+  'const',
+  'constantProperty',
+  'deprecated',
+  'deprecatedAnnotations',
+  'duplicateMessage',
+  // 'es3',
+  'es5Strict',
+  'externsValidation',
+  'fileoverviewTags',
+  'functionParams',
+  'globalThis',
+  'internetExplorerChecks',
+  'invalidCasts',
+  'misplacedTypeAnnotation',
+  'missingGetCssName',
+  // 'missingOverride',
+  'missingPolyfill',
+  'missingProperties',
+  'missingProvide',
+  'missingRequire',
+  'missingReturn',
+  // 'missingSourcesWarnings',
+  'moduleLoad',
+  'msgDescriptions',
+  'newCheckTypes',
+  'nonStandardJsDocs',
+  // 'polymer',
+  // 'reportUnknownTypes',
+  // 'strictCheckTypes',
+  // 'strictMissingProperties',
+  'strictModuleDepCheck',
+  // 'strictPrimitiveOperators',
+  'suspiciousCode',
+  'typeInvalidation',
+  'undefinedNames',
+  'undefinedVars',
+  'underscore',
+  'unknownDefines',
+  'unusedLocalVariables',
+  // 'unusedPrivateMembers',
+  'useOfGoogBase',
+  'uselessCode',
+  'untranspilableFeatures',
+  'visibility'
+];
+
+/**
  * Helper method for calling the Closure compiler.
  * @param {*} compilerOptions
  * @param {boolean=} opt_verbose Optional option for verbose logging
+ * @param {boolean=} opt_warnings_as_error Optional option for treating warnings
+ *     as errors.
  */
-function compile(compilerOptions, opt_verbose) {
+function compile(compilerOptions, opt_verbose, opt_warnings_as_error) {
   if (!compilerOptions) compilerOptions = {};
   compilerOptions.compilation_level = 'SIMPLE_OPTIMIZATIONS';
   compilerOptions.warning_level = opt_verbose ? 'VERBOSE' : 'DEFAULT';
@@ -92,6 +151,7 @@ function compile(compilerOptions, opt_verbose) {
   compilerOptions.language_out = 'ECMASCRIPT5_STRICT';
   compilerOptions.rewrite_polyfills = false;
   compilerOptions.hide_warnings_for = 'node_modules';
+  if (opt_warnings_as_error) compilerOptions.jscomp_error = JSCOMP_ERROR;
 
   const platform = ['native', 'java', 'javascript'];
 
@@ -125,7 +185,7 @@ gulp.task('build-core', function () {
       js_output_file: 'blockly_compressed.js',
       externs: './externs/svg-externs.js',
       define: defines
-    }, argv.verbose))
+    }, argv.verbose, argv.strict))
     .pipe(prependHeader())
     .pipe(gulp.dest('./'));
 });
@@ -157,7 +217,7 @@ goog.provide('Blockly.Mutator');`;
     .pipe(compile({
       dependency_mode: 'NONE',
       js_output_file: 'blocks_compressed.js'
-    }, argv.verbose))
+    }, argv.verbose, argv.strict))
     .pipe(gulp.replace('\'use strict\';', '\'use strict\';\n\n\n'))
     // Remove Blockly.Blocks to be compatible with Blockly.
     .pipe(gulp.replace(/var Blockly=\{[^;]*\};\n?/, ''))
@@ -185,7 +245,7 @@ goog.provide('Blockly.utils.string');`;
     .pipe(compile({
       dependency_mode: 'NONE',
       js_output_file: `${language}_compressed.js`
-    }, argv.verbose))
+    }, argv.verbose, argv.strict))
     .pipe(gulp.replace('\'use strict\';', '\'use strict\';\n\n\n'))
     // Remove Blockly.Generator and Blockly.utils.string to be compatible with Blockly.
     .pipe(gulp.replace(/var Blockly=\{[^;]*\};\s*Blockly.utils.global={};\s*Blockly.utils.string={};\n?/, ''))
@@ -231,6 +291,96 @@ gulp.task('build-lua', function() {
  */
 gulp.task('build-dart', function() {
   return buildGenerator('dart', 'Dart');
+});
+
+/**
+ * This task builds Blockly's core files.
+ *     blockly_compressed.js
+ */
+gulp.task('build-bundle', function () {
+  return gulp.src([
+      'tests/compile/bundle-test.js',
+      'core/**/**/*.js',
+      'blocks/*.js',
+      'generators/**/**/*.js'
+    ], {base: './'})
+    // Directories in Blockly are used to group similar files together
+    // but are not used to limit access with @package, instead the
+    // method means something is internal to Blockly and not a public
+    // API.
+    // Flatten all files so they're in the same directory, but ensure that
+    // files with the same name don't conflict.
+    .pipe(gulp.rename(function (p) {
+      if (p.dirname.startsWith('core')) {
+        var dirname = p.dirname.replace(new RegExp(path.sep, "g"), "-");
+        p.dirname = "";
+        p.basename = dirname + "-" + p.basename;
+      }
+    }))
+    .pipe(stripApacheLicense())
+    .pipe(compile({
+      // compilation_level: 'ADVANCED_OPTIMIZATIONS',
+      dependency_mode: 'PRUNE',
+      entry_point: './tests/compile/bundle-test.js',
+      js_output_file: 'main_compressed.js',
+      // See github.com/google/closure-compiler/wiki/Warnings for descriptions.
+      jscomp_error: [
+        'accessControls',
+        'ambiguousFunctionDecl',
+        'checkPrototypalTypes',
+        'checkRegExp',
+        'checkTypes',
+        'checkVars',
+        'conformanceViolations',
+        'const',
+        'constantProperty',
+        'deprecated',
+        'deprecatedAnnotations',
+        'duplicateMessage',
+        // 'es3',
+        'es5Strict',
+        'externsValidation',
+        'fileoverviewTags',
+        'functionParams',
+        'globalThis',
+        'internetExplorerChecks',
+        'invalidCasts',
+        'misplacedTypeAnnotation',
+        'missingGetCssName',
+        // 'missingOverride',
+        'missingPolyfill',
+        'missingProperties',
+        'missingProvide',
+        'missingRequire',
+        'missingReturn',
+        // 'missingSourcesWarnings',
+        'moduleLoad',
+        'msgDescriptions',
+        'newCheckTypes',
+        'nonStandardJsDocs',
+        // 'polymer',
+        // 'reportUnknownTypes',
+        // 'strictCheckTypes',
+        // 'strictMissingProperties',
+        'strictModuleDepCheck',
+        // 'strictPrimitiveOperators',
+        'suspiciousCode',
+        'typeInvalidation',
+        'undefinedNames',
+        'undefinedVars',
+        'underscore',
+        'unknownDefines',
+        'unusedLocalVariables',
+        // 'unusedPrivateMembers',
+        'useOfGoogBase',
+        'uselessCode',
+        'untranspilableFeatures',
+        'visibility'
+      ],
+      externs: './externs/svg-externs.js'
+    }, true))
+    .pipe(prependHeader())
+    .pipe(gulp.dest('./tests/compile/'));
 });
 
 /**

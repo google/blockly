@@ -137,5 +137,6 @@ Blockly.geras.PathObject.prototype.applyColour = function(isShadow) {
 Blockly.geras.PathObject.prototype.setStyle = function(blockStyle) {
   this.style = blockStyle;
   this.colourDark =
-      Blockly.utils.colour.blend('#000', this.style.colourPrimary, 0.2);
+      Blockly.utils.colour.blend('#000', this.style.colourPrimary, 0.2) ||
+      this.colourDark;
 };

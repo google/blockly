@@ -570,8 +570,8 @@ Blockly.InsertionMarkerManager.prototype.highlightBlock_ = function() {
     closest.targetBlock().highlightForReplacement(true);
   } else if (local.type == Blockly.OUTPUT_VALUE) {
     this.highlightedBlock_ = closest.getSourceBlock();
-    // TODO: remove?
-    closest.getSourceBlock().highlightShapeForInput(closest, true);
+    // TODO: Bring this back for zelos rendering.
+    // closest.getSourceBlock().highlightShapeForInput(closest, true);
   }
   this.highlightingBlock_ = true;
 };
@@ -585,7 +585,8 @@ Blockly.InsertionMarkerManager.prototype.unhighlightBlock_ = function() {
   // If there's no block in place, but we're still connecting to a value input,
   // then we must have been highlighting an input shape.
   if (closest.type == Blockly.INPUT_VALUE && !closest.isConnected()) {
-    this.highlightedBlock_.highlightShapeForInput(closest, false);
+    // TODO: Bring this back for zelos rendering.
+    // this.highlightedBlock_.highlightShapeForInput(closest, false);
   } else {
     this.highlightedBlock_.highlightForReplacement(false);
   }

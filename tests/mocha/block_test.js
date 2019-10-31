@@ -1249,4 +1249,66 @@ suite('Blocks', function() {
       });
     });
   });
+
+  suite('Style', function() {
+    suite('Headless', function() {
+      setup(function() {
+        this.block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
+            '<block type="empty_block"/>'
+        ), this.workspace);
+      });
+      test('Set colour', function() {
+        this.block.setColour('20');
+        assertEquals(this.block.getColour(), '#a5745b');
+        assertEquals(this.block.colour_, this.block.getColour());
+        assertEquals(this.block.hue_, '20');
+      });
+      test('Set style', function() {
+        this.block.setStyle('styleOne');
+        assertEquals(this.block.getStyleName(), 'styleOne');
+        assertEquals(this.block.hue_, null);
+        // Calling setStyle does not update the colour on a headless block.
+        assertEquals(this.block.getColour(), '#000000');
+      });
+    });
+    suite('Rendered', function() {
+      setup(function() {
+        this.workspace = Blockly.inject('blocklyDiv', {});
+        this.block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
+            '<block type="empty_block"/>'
+        ), this.workspace);
+        this.workspace.setTheme(new Blockly.Theme({
+          "styleOne" : {
+            "colourPrimary": "#000000",
+            "colourSecondary": "#999999",
+            "colourTertiary": "#4d4d4d",
+            "hat": ''
+          }
+        }), {});
+      });
+      teardown(function() {
+        this.workspace.dispose();
+      });
+      test('Set colour hue', function() {
+        this.block.setColour('20');
+        assertEquals(this.block.getStyleName(), 'auto_#a5745b');
+        assertEquals(this.block.getColour(), '#a5745b');
+        assertEquals(this.block.colour_, this.block.getColour());
+        assertEquals(this.block.hue_, '20');
+      });
+      test('Set colour hex', function() {
+        this.block.setColour('#000000');
+        assertEquals(this.block.getStyleName(), 'auto_#000000');
+        assertEquals(this.block.getColour(), '#000000');
+        assertEquals(this.block.colour_, this.block.getColour());
+        assertEquals(this.block.hue_, null);
+      });
+      test('Set style', function() {
+        this.block.setStyle('styleOne');
+        assertEquals(this.block.getStyleName(), 'styleOne');
+        assertEquals(this.block.getColour(), '#000000');
+        assertEquals(this.block.colour_, this.block.getColour());
+      });
+    });
+  });
 });

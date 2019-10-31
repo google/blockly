@@ -253,28 +253,6 @@ function test_block_row_unplug_multi_inputs_child() {
   }
 }
 
-function test_set_style() {
-  blockTest_setUp();
-  var styleStub = {
-    getBlockStyle: function() {
-      return {
-        "colourPrimary": "#ffffff",
-        "colourSecondary": "#aabbcc",
-        "colourTertiary": "#ddeeff"
-      };
-    }
-  };
-  mockControl_ = setUpMockMethod(workspace, 'getTheme', null, [styleStub]);
-  var blockA = workspace.newBlock('row_block');
-  blockA.setStyle('styleOne');
-
-  assertEquals('#ffffff', blockA.colour_);
-  assertEquals('#aabbcc', blockA.colourSecondary_);
-  assertEquals('#ddeeff', blockA.colourTertiary_);
-
-  blockTest_tearDown();
-}
-
 function test_set_style_throw_exception() {
   blockTest_setUp();
   var styleStub = {

@@ -972,7 +972,7 @@ Blockly.Gesture.prototype.getInsertionMarkers = function() {
  */
 Blockly.Gesture.inProgress = function() {
   var workspaces = Blockly.Workspace.getAll();
-  for (var i = 0, workspace; workspace = workspaces[i]; i++) {
+  for (var i = 0, workspace; (workspace = workspaces[i]); i++) {
     if (workspace.currentGesture_) {
       return true;
     }

@@ -107,7 +107,7 @@ Blockly.Variables.ALL_DEVELOPER_VARS_WARNINGS_BY_BLOCK_TYPE_ = {};
 Blockly.Variables.allDeveloperVariables = function(workspace) {
   var blocks = workspace.getAllBlocks(false);
   var variableHash = Object.create(null);
-  for (var i = 0, block; block = blocks[i]; i++) {
+  for (var i = 0, block; (block = blocks[i]); i++) {
     var getDeveloperVariables = block.getDeveloperVariables;
     if (!getDeveloperVariables && block.getDeveloperVars) {
       // August 2018: getDeveloperVars() was deprecated and renamed
@@ -194,7 +194,7 @@ Blockly.Variables.flyoutCategoryBlocks = function(workspace) {
 
     if (Blockly.Blocks['variables_get']) {
       variableModelList.sort(Blockly.VariableModel.compareByName);
-      for (var i = 0, variable; variable = variableModelList[i]; i++) {
+      for (var i = 0, variable; (variable = variableModelList[i]); i++) {
         var block = Blockly.utils.xml.createElement('block');
         block.setAttribute('type', 'variables_get');
         block.setAttribute('gap', 8);
@@ -411,7 +411,7 @@ Blockly.Variables.nameUsedWithOtherType_ = function(name, type, workspace) {
   var allVariables = workspace.getVariableMap().getAllVariables();
 
   name = name.toLowerCase();
-  for (var i = 0, variable; variable = allVariables[i]; i++) {
+  for (var i = 0, variable; (variable = allVariables[i]); i++) {
     if (variable.name.toLowerCase() == name && variable.type != type) {
       return variable;
     }
@@ -432,7 +432,7 @@ Blockly.Variables.nameUsedWithAnyType_ = function(name, workspace) {
   var allVariables = workspace.getVariableMap().getAllVariables();
 
   name = name.toLowerCase();
-  for (var i = 0, variable; variable = allVariables[i]; i++) {
+  for (var i = 0, variable; (variable = allVariables[i]); i++) {
     if (variable.name.toLowerCase() == name) {
       return variable;
     }

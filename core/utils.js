@@ -574,7 +574,7 @@ Blockly.utils.getBlockTypeCounts = function(block, opt_stripFollowing) {
       descendants.splice(index, descendants.length - index);
     }
   }
-  for (var i = 0, checkBlock; checkBlock = descendants[i]; i++) {
+  for (var i = 0, checkBlock; (checkBlock = descendants[i]); i++) {
     if (typeCountsMap[checkBlock.type]) {
       typeCountsMap[checkBlock.type]++;
     } else {

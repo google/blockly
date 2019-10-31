@@ -749,7 +749,7 @@ Blockly.Connection.prototype.toString = function() {
     msg = 'Next Connection of ';
   } else {
     var parentInput = null;
-    for (var i = 0, input; input = block.inputList[i]; i++) {
+    for (var i = 0, input; (input = block.inputList[i]); i++) {
       if (input.connection == this) {
         parentInput = input;
         break;

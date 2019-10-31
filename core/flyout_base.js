@@ -422,7 +422,7 @@ Blockly.Flyout.prototype.hide = function() {
   }
   this.setVisible(false);
   // Delete all the event listeners.
-  for (var i = 0, listen; listen = this.listeners_[i]; i++) {
+  for (var i = 0, listen; (listen = this.listeners_[i]); i++) {
     Blockly.unbindEvent_(listen);
   }
   this.listeners_.length = 0;
@@ -466,7 +466,7 @@ Blockly.Flyout.prototype.show = function(xmlList) {
   var gaps = [];
   this.permanentlyDisabled_.length = 0;
   var default_gap = this.horizontalLayout_ ? this.GAP_X : this.GAP_Y;
-  for (var i = 0, xml; xml = xmlList[i]; i++) {
+  for (var i = 0, xml; (xml = xmlList[i]); i++) {
     if (!xml.tagName) {
       continue;
     }
@@ -517,7 +517,7 @@ Blockly.Flyout.prototype.show = function(xmlList) {
   // When the mouse is over the background, deselect all blocks.
   var deselectAll = function() {
     var topBlocks = this.workspace_.getTopBlocks(false);
-    for (var i = 0, block; block = topBlocks[i]; i++) {
+    for (var i = 0, block; (block = topBlocks[i]); i++) {
       block.removeSelect();
     }
   };
@@ -549,7 +549,7 @@ Blockly.Flyout.prototype.show = function(xmlList) {
 Blockly.Flyout.prototype.clearOldBlocks_ = function() {
   // Delete any blocks from a previous showing.
   var oldBlocks = this.workspace_.getTopBlocks(false);
-  for (var i = 0, block; block = oldBlocks[i]; i++) {
+  for (var i = 0, block; (block = oldBlocks[i]); i++) {
     if (block.workspace == this.workspace_) {
       block.dispose(false, false);
     }
@@ -563,7 +563,7 @@ Blockly.Flyout.prototype.clearOldBlocks_ = function() {
   }
   this.mats_.length = 0;
   // Delete any buttons from a previous showing.
-  for (var i = 0, button; button = this.buttons_[i]; i++) {
+  for (var i = 0, button; (button = this.buttons_[i]); i++) {
     button.dispose();
   }
   this.buttons_.length = 0;
@@ -756,7 +756,7 @@ Blockly.Flyout.prototype.moveRectToBlock_ = function(rect, block) {
  */
 Blockly.Flyout.prototype.filterForCapacity_ = function() {
   var blocks = this.workspace_.getTopBlocks(false);
-  for (var i = 0, block; block = blocks[i]; i++) {
+  for (var i = 0, block; (block = blocks[i]); i++) {
     if (this.permanentlyDisabled_.indexOf(block) == -1) {
       var enable = this.targetWorkspace_
           .isCapacityAvailable(Blockly.utils.getBlockTypeCounts(block));

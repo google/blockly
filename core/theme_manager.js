@@ -96,7 +96,7 @@ Blockly.ThemeManager.prototype.setTheme = function(theme) {
 
   // Refresh all registered Blockly UI components.
   for (var i = 0, keys = Object.keys(this.componentDB_),
-    key; key = keys[i]; i++) {
+    key; (key = keys[i]); i++) {
     for (var j = 0, component; (component = this.componentDB_[key][j]); j++) {
       var element = component.element;
       var propertyName = component.propertyName;

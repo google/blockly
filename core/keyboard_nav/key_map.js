@@ -104,7 +104,7 @@ Blockly.user.keyMap.getActionByKeyCode = function(keyCode) {
  */
 Blockly.user.keyMap.getKeyByAction = function(action) {
   var keys = Object.keys(Blockly.user.keyMap.map_);
-  for (var i = 0, key; key = keys[i]; i++) {
+  for (var i = 0, key; (key = keys[i]); i++) {
     if (Blockly.user.keyMap.map_[key].name === action.name) {
       return key;
     }
@@ -120,7 +120,7 @@ Blockly.user.keyMap.getKeyByAction = function(action) {
 Blockly.user.keyMap.serializeKeyEvent = function(e) {
   var modifiers = Blockly.utils.object.values(Blockly.user.keyMap.modifierKeys);
   var key = '';
-  for (var i = 0, keyName; keyName = modifiers[i]; i++) {
+  for (var i = 0, keyName; (keyName = modifiers[i]); i++) {
     if (e.getModifierState(keyName)) {
       key += keyName;
     }
@@ -139,7 +139,7 @@ Blockly.user.keyMap.serializeKeyEvent = function(e) {
 Blockly.user.keyMap.createSerializedKey = function(keyCode, modifiers) {
   var key = '';
   var validModifiers = Blockly.utils.object.values(Blockly.user.keyMap.modifierKeys);
-  for (var i = 0, keyName; keyName = modifiers[i]; i++) {
+  for (var i = 0, keyName; (keyName = modifiers[i]); i++) {
     if (validModifiers.indexOf(keyName) > -1) {
       key += keyName;
     } else {

@@ -61,8 +61,6 @@
         "space-infix-ops": ["error"],
         "_comment": "Blockly uses 'use strict' in files",
         "strict": ["off"],
-        "_comment": "Blockly often uses cond-assignment in loops",
-        "no-cond-assign": ["off"],
         "_comment": "Closure style allows redeclarations",
         "no-redeclare": ["off"],
         "valid-jsdoc": ["error", {"requireReturn": false}],

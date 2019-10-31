@@ -259,11 +259,11 @@ Blockly.VerticalFlyout.prototype.layout_ = function(contents, gaps) {
   var cursorX = this.RTL ? margin : margin + this.tabWidth_;
   var cursorY = margin;
 
-  for (var i = 0, item; item = contents[i]; i++) {
+  for (var i = 0, item; (item = contents[i]); i++) {
     if (item.type == 'block') {
       var block = item.block;
       var allBlocks = block.getDescendants(false);
-      for (var j = 0, child; child = allBlocks[j]; j++) {
+      for (var j = 0, child; (child = allBlocks[j]); j++) {
         // Mark blocks as being inside a flyout.  This is used to detect and
         // prevent the closure of the flyout if the user right-clicks on such a
         // block.
@@ -361,7 +361,7 @@ Blockly.VerticalFlyout.prototype.reflowInternal_ = function() {
   flyoutWidth += Blockly.Scrollbar.scrollbarThickness;
 
   if (this.width_ != flyoutWidth) {
-    for (var i = 0, block; block = blocks[i]; i++) {
+    for (var i = 0, block; (block = blocks[i]); i++) {
       if (this.RTL) {
         // With the flyoutWidth known, right-align the blocks.
         var oldX = block.getRelativeToSurfaceXY().x;

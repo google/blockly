@@ -269,9 +269,9 @@ Blockly.ASTNode.prototype.findNextForInput_ = function() {
   var parentInput = this.location_.getParentInput();
   var block = parentInput.getSourceBlock();
   var curIdx = block.inputList.indexOf(parentInput);
-  for (var i = curIdx + 1, input; input = block.inputList[i]; i++) {
+  for (var i = curIdx + 1, input; (input = block.inputList[i]); i++) {
     var fieldRow = input.fieldRow;
-    for (var j = 0, field; field = fieldRow[j]; j++) {
+    for (var j = 0, field; (field = fieldRow[j]); j++) {
       if (field.EDITABLE) {
         return Blockly.ASTNode.createFieldNode(field);
       }
@@ -297,7 +297,7 @@ Blockly.ASTNode.prototype.findNextForField_ = function() {
   var block = location.getSourceBlock();
   var curIdx = block.inputList.indexOf(/** @type {!Blockly.Input} */ (input));
   var fieldIdx = input.fieldRow.indexOf(location) + 1;
-  for (var i = curIdx, newInput; newInput = block.inputList[i]; i++) {
+  for (var i = curIdx, newInput; (newInput = block.inputList[i]); i++) {
     var fieldRow = newInput.fieldRow;
     while (fieldIdx < fieldRow.length) {
       if (fieldRow[fieldIdx].EDITABLE) {
@@ -325,12 +325,12 @@ Blockly.ASTNode.prototype.findPrevForInput_ = function() {
   var location = this.location_.getParentInput();
   var block = location.getSourceBlock();
   var curIdx = block.inputList.indexOf(location);
-  for (var i = curIdx, input; input = block.inputList[i]; i--) {
+  for (var i = curIdx, input; (input = block.inputList[i]); i--) {
     if (input.connection && input !== location) {
       return Blockly.ASTNode.createInputNode(input);
     }
     var fieldRow = input.fieldRow;
-    for (var j = fieldRow.length - 1, field; field = fieldRow[j]; j--) {
+    for (var j = fieldRow.length - 1, field; (field = fieldRow[j]); j--) {
       if (field.EDITABLE) {
         return Blockly.ASTNode.createFieldNode(field);
       }
@@ -352,7 +352,7 @@ Blockly.ASTNode.prototype.findPrevForField_ = function() {
   var curIdx = block.inputList.indexOf(
       /** @type {!Blockly.Input} */ (parentInput));
   var fieldIdx = parentInput.fieldRow.indexOf(location) - 1;
-  for (var i = curIdx, input; input = block.inputList[i]; i--) {
+  for (var i = curIdx, input; (input = block.inputList[i]); i--) {
     if (input.connection && input !== parentInput) {
       return Blockly.ASTNode.createInputNode(input);
     }
@@ -388,7 +388,7 @@ Blockly.ASTNode.prototype.navigateBetweenStacks_ = function(forward) {
   }
   var curRoot = curLocation.getRootBlock();
   var topBlocks = curRoot.workspace.getTopBlocks(true);
-  for (var i = 0, topBlock; topBlock = topBlocks[i]; i++) {
+  for (var i = 0, topBlock; (topBlock = topBlocks[i]); i++) {
     if (curRoot.id == topBlock.id) {
       var offset = forward ? 1 : -1;
       var resultIndex = i + offset;
@@ -459,9 +459,9 @@ Blockly.ASTNode.prototype.getOutAstNodeForBlock_ = function(block) {
  */
 Blockly.ASTNode.prototype.findFirstFieldOrInput_ = function(block) {
   var inputs = block.inputList;
-  for (var i = 0, input; input = inputs[i]; i++) {
+  for (var i = 0, input; (input = inputs[i]); i++) {
     var fieldRow = input.fieldRow;
-    for (var j = 0, field; field = fieldRow[j]; j++) {
+    for (var j = 0, field; (field = fieldRow[j]); j++) {
       if (field.EDITABLE) {
         return Blockly.ASTNode.createFieldNode(field);
       }

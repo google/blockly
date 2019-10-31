@@ -33,7 +33,7 @@ suite('Procedures', function() {
         ['procedures_defreturn', 'procedures_callreturn']
       ];
 
-      for (var i = 0, types; types = typesArray[i]; i++) {
+      for (var i = 0, types; (types = typesArray[i]); i++) {
         var context = Object.create(null);
         context.workspace = this.workspace;
         context.defType = types[0];
@@ -392,7 +392,7 @@ suite('Procedures', function() {
           // TODO: Update this for typed vars.
           var variables = this.workspace.getVariablesOfType('');
           var variableMap = this.workspace.getVariableMap();
-          for (var i = 0, variable; variable = variables[i]; i++) {
+          for (var i = 0, variable; (variable = variables[i]); i++) {
             variableMap.deleteVariable(variable);
           }
         }

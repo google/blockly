@@ -433,7 +433,7 @@ Blockly.Toolbox.prototype.position = function() {
 Blockly.Toolbox.prototype.syncTrees_ = function(treeIn, treeOut, pathToMedia) {
   var openNode = null;
   var lastElement = null;
-  for (var i = 0, childIn; childIn = treeIn.childNodes[i]; i++) {
+  for (var i = 0, childIn; (childIn = treeIn.childNodes[i]); i++) {
     if (!childIn.tagName) {
       // Skip over text.
       continue;
@@ -574,7 +574,7 @@ Blockly.Toolbox.prototype.updateColourFromTheme_ = function(opt_tree) {
   var tree = opt_tree || this.tree_;
   if (tree) {
     var children = tree.getChildren(false);
-    for (var i = 0, child; child = children[i]; i++) {
+    for (var i = 0, child; (child = children[i]); i++) {
       if (child.styleName) {
         this.setColourFromStyle_(child.styleName, child, '');
         this.addColour_();
@@ -621,7 +621,7 @@ Blockly.Toolbox.prototype.updateSelectedItemColour_ = function(tree) {
 Blockly.Toolbox.prototype.addColour_ = function(opt_tree) {
   var tree = opt_tree || this.tree_;
   var children = tree.getChildren(false);
-  for (var i = 0, child; child = children[i]; i++) {
+  for (var i = 0, child; (child = children[i]); i++) {
     var element = child.getRowElement();
     if (element) {
       if (this.hasColours_) {

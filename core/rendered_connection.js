@@ -216,8 +216,8 @@ Blockly.RenderedConnection.prototype.moveBy = function(dx, dy) {
 /**
  * Move this connection to the location given by its offset within the block and
  * the location of the block's top left corner.
- * @param {!Blockly.utils.Coordinate} blockTL The location of the top left corner
- *     of the block, in workspace coordinates.
+ * @param {!Blockly.utils.Coordinate} blockTL The location of the top left
+ *     corner of the block, in workspace coordinates.
  */
 Blockly.RenderedConnection.prototype.moveToOffset = function(blockTL) {
   this.moveTo(blockTL.x + this.offsetInBlock_.x,
@@ -344,8 +344,7 @@ Blockly.RenderedConnection.prototype.setTracking = function(doTracking) {
     this.trackedState_ = Blockly.RenderedConnection.TrackedState.TRACKED;
     return;
   }
-  if (this.trackedState_ == Blockly.RenderedConnection
-      .TrackedState.TRACKED) {
+  if (this.trackedState_ == Blockly.RenderedConnection.TrackedState.TRACKED) {
     this.db_.removeConnection(this, this.y);
   }
   this.trackedState_ = Blockly.RenderedConnection.TrackedState.UNTRACKED;

@@ -473,7 +473,7 @@ Blockly.inject.bindDocumentEvents_ = function() {
   if (!Blockly.documentEventsBound_) {
     Blockly.bindEventWithChecks_(document, 'scroll', null, function() {
       var workspaces = Blockly.Workspace.getAll();
-      for (var i = 0, workspace; workspace = workspaces[i]; i++) {
+      for (var i = 0, workspace; (workspace = workspaces[i]); i++) {
         if (workspace.updateInverseScreenCTM) {
           workspace.updateInverseScreenCTM();
         }

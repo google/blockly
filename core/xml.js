@@ -51,11 +51,11 @@ Blockly.Xml.workspaceToDom = function(workspace, opt_noId) {
     xml.appendChild(variablesElement);
   }
   var comments = workspace.getTopComments(true);
-  for (var i = 0, comment; comment = comments[i]; i++) {
+  for (var i = 0, comment; (comment = comments[i]); i++) {
     xml.appendChild(comment.toXmlWithXY(opt_noId));
   }
   var blocks = workspace.getTopBlocks(true);
-  for (var i = 0, block; block = blocks[i]; i++) {
+  for (var i = 0, block; (block = blocks[i]); i++) {
     xml.appendChild(Blockly.Xml.blockToDomWithXY(block, opt_noId));
   }
   return xml;
@@ -69,7 +69,7 @@ Blockly.Xml.workspaceToDom = function(workspace, opt_noId) {
  */
 Blockly.Xml.variablesToDom = function(variableList) {
   var variables = Blockly.utils.xml.createElement('variables');
-  for (var i = 0, variable; variable = variableList[i]; i++) {
+  for (var i = 0, variable; (variable = variableList[i]); i++) {
     var element = Blockly.utils.xml.createElement('variable');
     element.appendChild(Blockly.utils.xml.createTextNode(variable.name));
     if (variable.type) {
@@ -125,8 +125,8 @@ Blockly.Xml.fieldToDom_ = function(field) {
  * @private
  */
 Blockly.Xml.allFieldsToDom_ = function(block, element) {
-  for (var i = 0, input; input = block.inputList[i]; i++) {
-    for (var j = 0, field; field = input.fieldRow[j]; j++) {
+  for (var i = 0, input; (input = block.inputList[i]); i++) {
+    for (var j = 0, field; (field = input.fieldRow[j]); j++) {
       var fieldDom = Blockly.Xml.fieldToDom_(field);
       if (fieldDom) {
         element.appendChild(fieldDom);
@@ -178,7 +178,7 @@ Blockly.Xml.blockToDom = function(block, opt_noId) {
     element.appendChild(dataElement);
   }
 
-  for (var i = 0, input; input = block.inputList[i]; i++) {
+  for (var i = 0, input; (input = block.inputList[i]); i++) {
     var container;
     var empty = true;
     if (input.type == Blockly.DUMMY_INPUT) {
@@ -402,7 +402,7 @@ Blockly.Xml.domToWorkspace = function(xml, workspace) {
   }
   var variablesFirst = true;
   try {
-    for (var i = 0, xmlChild; xmlChild = xml.childNodes[i]; i++) {
+    for (var i = 0, xmlChild; (xmlChild = xml.childNodes[i]); i++) {
       var name = xmlChild.nodeName.toLowerCase();
       var xmlChildElement = /** @type {!Element} */ (xmlChild);
       if (name == 'block' ||
@@ -595,7 +595,7 @@ Blockly.Xml.domToBlock = function(xmlBlock, workspace) {
  *     should be added.
  */
 Blockly.Xml.domToVariables = function(xmlVariables, workspace) {
-  for (var i = 0, xmlChild; xmlChild = xmlVariables.childNodes[i]; i++) {
+  for (var i = 0, xmlChild; (xmlChild = xmlVariables.childNodes[i]); i++) {
     if (xmlChild.nodeType != Blockly.utils.dom.Node.ELEMENT_NODE) {
       continue;  // Skip text nodes.
     }
@@ -625,7 +625,7 @@ Blockly.Xml.domToBlockHeadless_ = function(xmlBlock, workspace) {
   block = workspace.newBlock(prototypeName, id);
 
   var blockChild = null;
-  for (var i = 0, xmlChild; xmlChild = xmlBlock.childNodes[i]; i++) {
+  for (var i = 0, xmlChild; (xmlChild = xmlBlock.childNodes[i]); i++) {
     if (xmlChild.nodeType == Blockly.utils.dom.Node.TEXT_NODE) {
       // Ignore any text at the <block> level.  It's all whitespace anyway.
       continue;
@@ -635,7 +635,7 @@ Blockly.Xml.domToBlockHeadless_ = function(xmlBlock, workspace) {
     // Find any enclosed blocks or shadows in this tag.
     var childBlockElement = null;
     var childShadowElement = null;
-    for (var j = 0, grandchild; grandchild = xmlChild.childNodes[j]; j++) {
+    for (var j = 0, grandchild; (grandchild = xmlChild.childNodes[j]); j++) {
       if (grandchild.nodeType == Blockly.utils.dom.Node.ELEMENT_NODE) {
         if (grandchild.nodeName.toLowerCase() == 'block') {
           childBlockElement = /** @type {!Element} */ (grandchild);
@@ -771,7 +771,7 @@ Blockly.Xml.domToBlockHeadless_ = function(xmlBlock, workspace) {
   if (xmlBlock.nodeName.toLowerCase() == 'shadow') {
     // Ensure all children are also shadows.
     var children = block.getChildren(false);
-    for (var i = 0, child; child = children[i]; i++) {
+    for (var i = 0, child; (child = children[i]); i++) {
       if (!child.isShadow()) {
         throw TypeError('Shadow block not allowed non-shadow child.');
       }
@@ -807,7 +807,7 @@ Blockly.Xml.domToField_ = function(block, fieldName, xml) {
  * @param {!Element} xmlBlock XML block element.
  */
 Blockly.Xml.deleteNext = function(xmlBlock) {
-  for (var i = 0, child; child = xmlBlock.childNodes[i]; i++) {
+  for (var i = 0, child; (child = xmlBlock.childNodes[i]); i++) {
     if (child.nodeName.toLowerCase() == 'next') {
       xmlBlock.removeChild(child);
       break;

@@ -34,7 +34,7 @@ Blockly.Themes.Deuteranopia = {};
 Blockly.Themes.Deuteranopia.defaultBlockStyles = {
   "colour_blocks": {
     "colourPrimary": "#f2a72c",
-    "colourSecondary": "#f1c170",
+    "colourSecondary": "#f1c172",
     "colourTertiary": "#da921c"
   },
   "list_blocks": {

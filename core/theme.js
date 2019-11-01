@@ -170,18 +170,18 @@ Blockly.Theme.validatedBlockStyle = function(blockStyle) {
 
   // Validate required properties.
   var parsedColour = Blockly.utils.colour.parseBlockColour(
-      valid.colourPrimary || '#000');
+      valid['colourPrimary'] || '#000');
   valid.colourPrimary = parsedColour.hex;
-  valid.colourSecondary = valid.colourSecondary ?
-      Blockly.utils.colour.parseBlockColour(valid.colourSecondary).hex :
+  valid.colourSecondary = valid['colourSecondary'] ?
+      Blockly.utils.colour.parseBlockColour(valid['colourSecondary']).hex :
       Blockly.utils.colour.blend('#fff', valid.colourPrimary, 0.6) ||
       valid.colourPrimary;
   valid.colourTertiary = valid.colourTertiary ?
-      Blockly.utils.colour.parseBlockColour(valid.colourTertiary).hex :
+      Blockly.utils.colour.parseBlockColour(valid['colourTertiary']).hex :
       Blockly.utils.colour.blend('#fff', valid.colourPrimary, 0.3) ||
       valid.colourPrimary;
 
-  valid.hat = valid.hat || '';
+  valid.hat = valid['hat'] || '';
   return valid;
 };
 

@@ -89,12 +89,13 @@ Blockly.utils.colour.rgbToHex = function(r, g, b) {
 };
 
 /**
- * Converts a hex representation of a colour to RGB.
- * @param {string} hexColour Colour in '#ff0000' format.
+ * Converts a colour to RGB.
+ * @param {string} colour String representing colour in any
+ *     colour format ('#ff0000', 'red', '0xff000', etc).
  * @return {!Array.<number>} RGB representation of the colour.
  */
-Blockly.utils.colour.hexToRgb = function(hexColour) {
-  var hex = Blockly.utils.colour.parse(hexColour);
+Blockly.utils.colour.hexToRgb = function(colour) {
+  var hex = Blockly.utils.colour.parse(colour);
   if (!hex) {
     return [0, 0, 0];
   }

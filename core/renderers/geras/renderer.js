@@ -103,7 +103,8 @@ Blockly.geras.Renderer.prototype.makeDrawer_ = function(block, info) {
  * @override
  */
 Blockly.geras.Renderer.prototype.makePathObject = function(root) {
-  return new Blockly.geras.PathObject(root);
+  return new Blockly.geras.PathObject(root,
+      /** @type {!Blockly.geras.ConstantProvider} */ (this.getConstants()));
 };
 
 /**

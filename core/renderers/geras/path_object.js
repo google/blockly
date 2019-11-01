@@ -24,7 +24,9 @@
 
 goog.provide('Blockly.geras.PathObject');
 
+goog.require('Blockly.blockRendering.ConstantProvider');
 goog.require('Blockly.blockRendering.IPathObject');
+goog.require('Blockly.geras.ConstantProvider');
 goog.require('Blockly.Theme');
 goog.require('Blockly.utils.dom');
 goog.require('Blockly.utils.object');
@@ -34,11 +36,19 @@ goog.require('Blockly.utils.object');
  * An object that handles creating and setting each of the SVG elements
  * used by the renderer.
  * @param {!SVGElement} root The root SVG element.
+ * @param {!Blockly.blockRendering.ConstantProvider} constants The renderer's
+ *     constants.
  * @constructor
  * @implements {Blockly.blockRendering.IPathObject}
  * @package
  */
-Blockly.geras.PathObject = function(root) {
+Blockly.geras.PathObject = function(root, constants) {
+  /**
+   * The renderer's constant provider.
+   * @type {!Blockly.geras.ConstantProvider}
+   */
+  this.constants_ = /** @type {!Blockly.geras.ConstantProvider} */ (constants);
+
   this.svgRoot = root;
 
   // The order of creation for these next three matters, because that
@@ -139,4 +149,34 @@ Blockly.geras.PathObject.prototype.setStyle = function(blockStyle) {
   this.colourDark =
       Blockly.utils.colour.blend('#000', this.style.colourPrimary, 0.2) ||
       this.colourDark;
+};
+
+/**
+ * Set whether the block shows a highlight or not.  Block highlighting is
+ * often used to visually mark blocks currently being executed.
+ * @param {boolean} highlighted True if highlighted.
+ */
+Blockly.geras.PathObject.prototype.setHighlighted = function(highlighted) {
+  if (highlighted) {
+    this.svgPath.setAttribute('filter',
+        'url(#' + this.constants_.embossFilterId + ')');
+    this.svgPathLight.style.display = 'none';
+  } else {
+    this.svgPath.setAttribute('filter', 'none');
+    this.svgPathLight.style.display = 'inline';
+  }
+};
+
+/**
+ * Set whether the block shows a disable pattern or not.
+ * @param {boolean} disabled True if disabled.
+ * @param {boolean} isShadow True if the block is a shadow block.
+ */
+Blockly.geras.PathObject.prototype.setDisabled = function(disabled, isShadow) {
+  if (disabled) {
+    this.svgPath.setAttribute('fill',
+        'url(#' + this.constants_.disabledPatternId + ')');
+  } else {
+    this.applyColour(isShadow);
+  }
 };

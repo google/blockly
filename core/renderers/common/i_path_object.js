@@ -25,15 +25,18 @@
 
 goog.provide('Blockly.blockRendering.IPathObject');
 
+goog.requireType('Blockly.blockRendering.ConstantProvider');
 goog.requireType('Blockly.Theme');
 
 
 /**
  * An interface for a block's path object.
  * @param {!SVGElement} _root The root SVG element.
+ * @param {!Blockly.blockRendering.ConstantProvider} _constants The renderer's
+ *     constants.
  * @interface
  */
-Blockly.blockRendering.IPathObject = function(_root) {};
+Blockly.blockRendering.IPathObject = function(_root, _constants) {};
 
 /**
  * Apply the stored colours to the block's path, taking into account whether
@@ -55,3 +58,17 @@ Blockly.blockRendering.IPathObject.prototype.setStyle;
  * @package
  */
 Blockly.blockRendering.IPathObject.prototype.flipRTL;
+
+/**
+ * Set whether the block shows a highlight or not.  Block highlighting is
+ * often used to visually mark blocks currently being executed.
+ * @param {boolean} highlighted True if highlighted.
+ */
+Blockly.blockRendering.IPathObject.prototype.setHighlighted;
+
+/**
+ * Set whether the block shows a disable pattern or not.
+ * @param {boolean} disabled True if disabled.
+ * @param {boolean} isShadow True if the block is a shadow block.
+ */
+Blockly.blockRendering.IPathObject.prototype.setDisabled;

@@ -26,6 +26,7 @@ suite('Navigation', function() {
   function createNavigationWorkspace(enableKeyboardNav) {
     var toolbox = document.getElementById('toolbox-categories');
     var workspace = Blockly.inject('blocklyDiv', {toolbox: toolbox});
+    Blockly.mainWorkspace = workspace;
     if (enableKeyboardNav) {
       Blockly.navigation.enableKeyboardAccessibility();
       Blockly.navigation.currentState_ = Blockly.navigation.STATE_WS;

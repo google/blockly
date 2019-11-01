@@ -31,6 +31,7 @@ suite('Insert/Modify', function() {
 
     var toolbox = document.getElementById('toolbox-connections');
     this.workspace = Blockly.inject('blocklyDiv', {toolbox: toolbox});
+    Blockly.mainWorkspace = this.workspace;
     Blockly.Xml.domToWorkspace(Blockly.Xml.textToDom(xmlText), this.workspace);
 
     this.stack_block_1 = this.workspace.getBlockById('stack_block_1');

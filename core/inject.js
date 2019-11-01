@@ -78,15 +78,14 @@ Blockly.inject = function(container, opt_options) {
   Blockly.user.keyMap.setKeyMap(options.keyMap);
 
   Blockly.init_(workspace);
-  Blockly.mainWorkspace = workspace;
 
   Blockly.svgResize(workspace);
 
-  subContainer.addEventListener('focus', function() {
+  subContainer.addEventListener('focusin', function() {
     Blockly.mainWorkspace = workspace;
   });
 
-  subContainer.addEventListener('blur', function() {
+  subContainer.addEventListener('focusout', function() {
     Blockly.mainWorkspace = null;
   });
 
@@ -127,7 +126,8 @@ Blockly.createDom_ = function(container, options) {
     'xmlns:html': Blockly.utils.dom.HTML_NS,
     'xmlns:xlink': Blockly.utils.dom.XLINK_NS,
     'version': '1.1',
-    'class': 'blocklySvg'
+    'class': 'blocklySvg',
+    'tabindex': '0'
   }, container);
   /*
   <defs>
@@ -246,7 +246,6 @@ Blockly.createMainWorkspace_ = function(svg, options, blockDragSurface,
 
   // A null translation will also apply the correct initial scale.
   mainWorkspace.translate(0, 0);
-  Blockly.mainWorkspace = mainWorkspace;
 
   if (!options.readOnly && !mainWorkspace.isMovable()) {
     // Helper function for the workspaceChanged callback.

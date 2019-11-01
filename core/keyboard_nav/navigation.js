@@ -780,16 +780,16 @@ Blockly.navigation.onBlocklyAction = function(action) {
  * @private
  */
 Blockly.navigation.handleActions_ = function(action) {
-  if (action.name === Blockly.navigation.actionNames.TOGGLE_KEYBOARD_NAV) {
+  if (action.name == Blockly.navigation.actionNames.TOOLBOX ||
+    Blockly.navigation.currentState_ == Blockly.navigation.STATE_TOOLBOX) {
+    return Blockly.navigation.toolboxOnAction_(action);
+  } else if (action.name == Blockly.navigation.actionNames.TOGGLE_KEYBOARD_NAV) {
     Blockly.navigation.disableKeyboardAccessibility();
     return true;
-  } if (Blockly.navigation.currentState_ === Blockly.navigation.STATE_WS) {
+  } if (Blockly.navigation.currentState_ == Blockly.navigation.STATE_WS) {
     return Blockly.navigation.workspaceOnAction_(action);
-  } else if (Blockly.navigation.currentState_ === Blockly.navigation.STATE_FLYOUT) {
+  } else if (Blockly.navigation.currentState_ == Blockly.navigation.STATE_FLYOUT) {
     return Blockly.navigation.flyoutOnAction_(action);
-  } else if (action.name === Blockly.navigation.actionNames.TOOLBOX ||
-        Blockly.navigation.currentState_ === Blockly.navigation.STATE_TOOLBOX) {
-    return Blockly.navigation.toolboxOnAction_(action);
   }
   return false;
 };

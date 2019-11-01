@@ -805,8 +805,7 @@ Blockly.navigation.flyoutOnAction_ = function(action) {
   var toolbox = workspace.getToolbox();
   var flyout = toolbox ? toolbox.flyout_ : workspace.getFlyout();
 
-  // TODO: Do I need to check if the flyout is null here.
-  if (flyout.onBlocklyAction(action)) {
+  if (flyout && flyout.onBlocklyAction(action)) {
     return true;
   }
 

@@ -108,7 +108,6 @@ Blockly.Cursor.prototype.onBlocklyAction = function(action) {
     return true;
   }
   switch (action.name) {
-    // TODO: should these be on Blockly Action instead of navigation?
     case Blockly.navigation.actionNames.PREVIOUS:
       this.prev();
       return true;

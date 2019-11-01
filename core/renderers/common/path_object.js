@@ -24,6 +24,7 @@
 
 goog.provide('Blockly.blockRendering.PathObject');
 
+goog.require('Blockly.blockRendering.ConstantProvider');
 goog.require('Blockly.blockRendering.IPathObject');
 goog.require('Blockly.Theme');
 goog.require('Blockly.utils.dom');
@@ -33,11 +34,18 @@ goog.require('Blockly.utils.dom');
  * An object that handles creating and setting each of the SVG elements
  * used by the renderer.
  * @param {!SVGElement} root The root SVG element.
+ * @param {!Blockly.blockRendering.ConstantProvider} constants The renderer's
+ *     constants.
  * @constructor
  * @implements {Blockly.blockRendering.IPathObject}
  * @package
  */
-Blockly.blockRendering.PathObject = function(root) {
+Blockly.blockRendering.PathObject = function(root, constants) {
+  /**
+   * The renderer's constant provider.
+   * @type {!Blockly.blockRendering.ConstantProvider}
+   */
+  this.constants_ = constants;
   this.svgRoot = root;
 
   /**
@@ -110,4 +118,34 @@ Blockly.blockRendering.PathObject.prototype.applyColour = function(isShadow) {
  */
 Blockly.blockRendering.PathObject.prototype.setStyle = function(blockStyle) {
   this.style = blockStyle;
+};
+
+/**
+ * Set whether the block shows a highlight or not.  Block highlighting is
+ * often used to visually mark blocks currently being executed.
+ * @param {boolean} highlighted True if highlighted.
+ */
+Blockly.blockRendering.PathObject.prototype.setHighlighted = function(
+    highlighted) {
+  if (highlighted) {
+    this.svgPath.setAttribute('filter',
+        'url(#' + this.constants_.embossFilterId + ')');
+  } else {
+    this.svgPath.setAttribute('filter', 'none');
+  }
+};
+
+/**
+ * Set whether the block shows a disable pattern or not.
+ * @param {boolean} disabled True if disabled.
+ * @param {boolean} isShadow True if the block is a shadow block.
+ */
+Blockly.blockRendering.PathObject.prototype.setDisabled = function(disabled,
+    isShadow) {
+  if (disabled) {
+    this.svgPath.setAttribute('fill',
+        'url(#' + this.constants_.disabledPatternId + ')');
+  } else {
+    this.applyColour(isShadow);
+  }
 };

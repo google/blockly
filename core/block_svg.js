@@ -76,23 +76,6 @@ Blockly.BlockSvg = function(workspace, prototypeName, opt_id) {
    */
   this.pathObject = workspace.getRenderer().makePathObject(this.svgGroup_);
 
-  // The next two paths are set only for backwards compatibility reasons.
-  /**
-   * The primary path of the block.
-   * @type {SVGElement}
-   * @private
-   */
-  this.svgPath_ = this.pathObject.svgPath || null;
-
-  /**
-   * The light path of the block.
-   * @type {SVGElement}
-   * @private
-   */
-  this.svgPathLight_ = this.pathObject.svgPathLight || null;
-
-  this.svgPath_.tooltip = this;
-
   /** @type {boolean} */
   this.rendered = false;
 
@@ -115,7 +98,9 @@ Blockly.BlockSvg = function(workspace, prototypeName, opt_id) {
   this.useDragSurface_ =
       Blockly.utils.is3dSupported() && !!workspace.getBlockDragSurface();
 
-  Blockly.Tooltip.bindMouseEvents(this.svgPath_);
+  var svgPath = this.pathObject.svgPath;
+  svgPath.tooltip = this;
+  Blockly.Tooltip.bindMouseEvents(svgPath);
   Blockly.BlockSvg.superClass_.constructor.call(this,
       workspace, prototypeName, opt_id);
 
@@ -1023,8 +1008,6 @@ Blockly.BlockSvg.prototype.dispose = function(healStack, animate) {
   blockWorkspace.resizeContents();
   // Sever JavaScript to DOM connections.
   this.svgGroup_ = null;
-  this.svgPath_ = null;
-  this.svgPathLight_ = null;
   Blockly.utils.dom.stopTextWidthCache();
 };
 
@@ -1060,15 +1043,13 @@ Blockly.BlockSvg.prototype.updateDisabled = function() {
     var added = Blockly.utils.dom.addClass(
         /** @type {!Element} */ (this.svgGroup_), 'blocklyDisabled');
     if (added) {
-      this.svgPath_.setAttribute('fill',
-          'url(#' +
-          this.workspace.getRenderer().getConstants().disabledPatternId + ')');
+      this.pathObject.setDisabled(true, this.isShadow());
     }
   } else {
     var removed = Blockly.utils.dom.removeClass(
         /** @type {!Element} */ (this.svgGroup_), 'blocklyDisabled');
     if (removed) {
-      this.applyColour();
+      this.pathObject.setDisabled(false, this.isShadow());
     }
   }
   var children = this.getChildren(false);
@@ -1252,15 +1233,7 @@ Blockly.BlockSvg.prototype.setHighlighted = function(highlighted) {
   if (!this.rendered) {
     return;
   }
-  if (highlighted) {
-    this.svgPath_.setAttribute('filter',
-        'url(#' +
-        this.workspace.getRenderer().getConstants().embossFilterId + ')');
-    this.svgPathLight_.style.display = 'none';
-  } else {
-    this.svgPath_.setAttribute('filter', 'none');
-    this.svgPathLight_.style.display = 'inline';
-  }
+  this.pathObject.setHighlighted(highlighted);
 };
 
 /**

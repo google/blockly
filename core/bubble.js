@@ -232,7 +232,8 @@ Blockly.Bubble.prototype.createDom_ = function(content, hasResize) {
   */
   this.bubbleGroup_ = Blockly.utils.dom.createSvgElement('g', {}, null);
   var filter =
-      {'filter': 'url(#' + this.workspace_.options.embossFilterId + ')'};
+      {'filter': 'url(#' +
+      this.workspace_.getRenderer().getConstants().embossFilterId + ')'};
   if (Blockly.utils.userAgent.JAVA_FX) {
     // Multiple reports that JavaFX can't handle filters.
     // https://github.com/google/blockly/issues/99
@@ -240,7 +241,8 @@ Blockly.Bubble.prototype.createDom_ = function(content, hasResize) {
   }
   var bubbleEmboss = Blockly.utils.dom.createSvgElement('g',
       filter, this.bubbleGroup_);
-  this.bubbleArrow_ = Blockly.utils.dom.createSvgElement('path', {}, bubbleEmboss);
+  this.bubbleArrow_ = Blockly.utils.dom.createSvgElement('path', {},
+      bubbleEmboss);
   this.bubbleBack_ = Blockly.utils.dom.createSvgElement('rect',
       {
         'class': 'blocklyDraggable',

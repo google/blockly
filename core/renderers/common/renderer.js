@@ -122,7 +122,9 @@ Blockly.blockRendering.Renderer.prototype.makeCursorDrawer = function(
  * @package
  */
 Blockly.blockRendering.Renderer.prototype.makePathObject = function(root) {
-  return new Blockly.blockRendering.PathObject(root);
+  return new Blockly.blockRendering.PathObject(root,
+      /** @type {!Blockly.blockRendering.ConstantProvider} */ (this.constants_));
+
 };
 
 /**

@@ -23,6 +23,7 @@
 
 goog.provide('Blockly.blockRendering.ConstantProvider');
 
+goog.require('Blockly.utils.dom');
 goog.require('Blockly.utils.svgPaths');
 
 
@@ -134,6 +135,34 @@ Blockly.blockRendering.ConstantProvider = function() {
    * @const
    */
   this.JAGGED_TEETH_WIDTH = 6;
+
+  /**
+   * The ID of the emboss filter, or the empty string if no filter is set.
+   * @type {string}
+   * @package
+   */
+  this.embossFilterId = '';
+
+  /**
+   * The <filter> element to use for highlighting, or null if not set.
+   * @type {SVGElement}
+   * @private
+   */
+  this.embossFilter_ = null;
+
+  /**
+   * The ID of the disabled pattern, or the empty string if no pattern is set.
+   * @type {string}
+   * @package
+   */
+  this.disabledPatternId = '';
+
+  /**
+   * The <pattern> element to use for disabled blocks, or null if not set.
+   * @type {SVGElement}
+   * @private
+   */
+  this.disabledPattern_ = null;
 };
 
 /**
@@ -178,6 +207,20 @@ Blockly.blockRendering.ConstantProvider.prototype.init = function() {
    * @type {!Object}
    */
   this.OUTSIDE_CORNERS = this.makeOutsideCorners();
+};
+
+/**
+ * Dispose of this constants provider.
+ * Delete all DOM elements that this provider created.
+ * @package
+ */
+Blockly.blockRendering.ConstantProvider.prototype.dispose = function() {
+  if (this.embossFilter_) {
+    Blockly.utils.dom.removeNode(this.embossFilter_);
+  }
+  if (this.disabledPattern_) {
+    Blockly.utils.dom.removeNode(this.disabledPattern_);
+  }
 };
 
 /**
@@ -463,6 +506,7 @@ Blockly.blockRendering.ConstantProvider.prototype.createDom = function(svg) {
         'k4': 0
       }, embossFilter);
   this.embossFilterId = embossFilter.id;
+  this.embossFilter_ = embossFilter;
 
   /*
     <pattern id="blocklyDisabledPattern837493" patternUnits="userSpaceOnUse"
@@ -483,4 +527,5 @@ Blockly.blockRendering.ConstantProvider.prototype.createDom = function(svg) {
   Blockly.utils.dom.createSvgElement('path',
       {'d': 'M 0 0 L 10 10 M 10 0 L 0 10', 'stroke': '#cc0'}, disabledPattern);
   this.disabledPatternId = disabledPattern.id;
+  this.disabledPattern_ = disabledPattern;
 };

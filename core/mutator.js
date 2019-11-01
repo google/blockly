@@ -154,7 +154,6 @@ Blockly.Mutator.prototype.createEditor_ = function() {
     // If you want to enable disabling, also remove the
     // event filter from workspaceChanged_ .
     disable: false,
-    disabledPatternId: this.block_.workspace.options.disabledPatternId,
     languageTree: quarkXml,
     parentWorkspace: this.block_.workspace,
     pathToMedia: this.block_.workspace.options.pathToMedia,

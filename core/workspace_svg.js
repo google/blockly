@@ -736,6 +736,8 @@ Blockly.WorkspaceSvg.prototype.dispose = function() {
     this.grid_ = null;
   }
 
+  this.renderer_.getConstants().dispose();
+
   if (this.themeManager_) {
     this.themeManager_.unsubscribe(this.svgBackground_);
   }
@@ -809,7 +811,6 @@ Blockly.WorkspaceSvg.prototype.addZoomControls = function() {
  */
 Blockly.WorkspaceSvg.prototype.addFlyout = function(tagName) {
   var workspaceOptions = /** @type {!Blockly.Options} */ ({
-    disabledPatternId: this.options.disabledPatternId,
     parentWorkspace: this,
     RTL: this.RTL,
     oneBasedIndex: this.options.oneBasedIndex,

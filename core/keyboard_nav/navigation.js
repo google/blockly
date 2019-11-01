@@ -783,20 +783,19 @@ Blockly.navigation.handleActions_ = function(action) {
   if (action.name === Blockly.navigation.actionNames.TOGGLE_KEYBOARD_NAV) {
     Blockly.navigation.disableKeyboardAccessibility();
     return true;
-  } else if (action.name === Blockly.navigation.actionNames.TOOLBOX) {
-    return Blockly.navigation.toolboxOnAction_(action);
-  } else if (Blockly.navigation.currentState_ === Blockly.navigation.STATE_WS) {
-    return Blockly.getMainWorkspace().getCursor().onBlocklyAction(action);
+  } if (Blockly.navigation.currentState_ === Blockly.navigation.STATE_WS) {
+    return Blockly.navigation.workspaceOnAction_(action);
   } else if (Blockly.navigation.currentState_ === Blockly.navigation.STATE_FLYOUT) {
     return Blockly.navigation.flyoutOnAction_(action);
-  } else if (Blockly.navigation.currentState_ === Blockly.navigation.STATE_TOOLBOX) {
+  } else if (action.name === Blockly.navigation.actionNames.TOOLBOX ||
+        Blockly.navigation.currentState_ === Blockly.navigation.STATE_TOOLBOX) {
     return Blockly.navigation.toolboxOnAction_(action);
   }
   return false;
 };
 
 /**
- * Provides default actions if the flyout does not handle the action.
+ * Handles the given action for the flyout.
  * @param {!Blockly.Action} action The action to handle.
  * @return {boolean} True if the action has been handled, false otherwise.
  * @private
@@ -827,7 +826,7 @@ Blockly.navigation.flyoutOnAction_ = function(action) {
 };
 
 /**
- * Provides default actions if the toolbox does not handle the action.
+ * Handles the given action for the toolbox.
  * @param {!Blockly.Action} action The action to handle.
  * @return {boolean} True if the action has been handled, false otherwise.
  * @private
@@ -840,7 +839,7 @@ Blockly.navigation.toolboxOnAction_ = function(action) {
   if (handled) {
     return true;
   }
-  // Provide default behavior for these actions
+
   if (action.name === Blockly.navigation.actionNames.TOOLBOX) {
     if (!workspace.getToolbox()) {
       Blockly.navigation.focusFlyout_();
@@ -856,6 +855,31 @@ Blockly.navigation.toolboxOnAction_ = function(action) {
     return true;
   }
   return false;
+};
+
+/**
+ * Handles the given action for the workspace.
+ * @param {!Blockly.Action} action The action to handle.
+ * @return {boolean} True if the action has been handled, false otherwise.
+ * @private
+ */
+Blockly.navigation.workspaceOnAction_ = function(action) {
+  if (Blockly.getMainWorkspace().getCursor().onBlocklyAction(action)) {
+    return true;
+  }
+  switch (action.name) {
+    case Blockly.navigation.actionNames.INSERT:
+      Blockly.navigation.modify_();
+      return true;
+    case Blockly.navigation.actionNames.MARK:
+      Blockly.navigation.handleEnterForWS_();
+      return true;
+    case Blockly.navigation.actionNames.DISCONNECT:
+      Blockly.navigation.disconnectBlocks_();
+      return true;
+    default:
+      return false;
+  }
 };
 
 /**

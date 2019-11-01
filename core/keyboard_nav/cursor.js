@@ -103,11 +103,12 @@ Blockly.Cursor.prototype.hide = function() {
  */
 Blockly.Cursor.prototype.onBlocklyAction = function(action) {
   // If we are on a field give it the option to handle the action
-  if (this.curNode_ && this.curNode_.getType() === Blockly.ASTNode.types.FIELD
-      && this.curNode_.getLocation().onBlocklyAction(action)) {
+  if (this.curNode_ && this.curNode_.getType() === Blockly.ASTNode.types.FIELD &&
+      this.curNode_.getLocation().onBlocklyAction(action)) {
     return true;
   }
   switch (action.name) {
+    // TODO: should these be on Blockly Action instead of navigation?
     case Blockly.navigation.actionNames.PREVIOUS:
       this.prev();
       return true;
@@ -119,16 +120,6 @@ Blockly.Cursor.prototype.onBlocklyAction = function(action) {
       return true;
     case Blockly.navigation.actionNames.IN:
       this.in();
-      return true;
-    case Blockly.navigation.actionNames.INSERT:
-      // Should these still be on navigation?
-      Blockly.navigation.modify_();
-      return true;
-    case Blockly.navigation.actionNames.MARK:
-      Blockly.navigation.handleEnterForWS_();
-      return true;
-    case Blockly.navigation.actionNames.DISCONNECT:
-      Blockly.navigation.disconnectBlocks_();
       return true;
     default:
       return false;

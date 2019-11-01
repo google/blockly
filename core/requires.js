@@ -62,6 +62,7 @@ goog.require('Blockly.ZoomControls');
 // None of these should be required when using advanced compilation since
 // individual block files should include the requirements they depend on.
 goog.require('Blockly.Mutator');
+goog.require('Blockly.Warning');
 goog.require('Blockly.FieldAngle');
 goog.require('Blockly.FieldCheckbox');
 goog.require('Blockly.FieldColour');

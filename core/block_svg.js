@@ -40,7 +40,6 @@ goog.require('Blockly.utils.Coordinate');
 goog.require('Blockly.utils.dom');
 goog.require('Blockly.utils.object');
 goog.require('Blockly.utils.Rect');
-goog.require('Blockly.Warning');
 
 
 /**
@@ -1107,7 +1106,7 @@ Blockly.BlockSvg.prototype.setCommentText = function(text) {
   }
   if (shouldHaveComment) {
     this.commentIcon_ = new Blockly.Comment(this);
-    this.comment = this.commentIcon_; // For backwards compatibility.
+    this.comment = this.commentIcon_;  // For backwards compatibility.
   } else {
     this.commentIcon_.dispose();
     this.commentIcon_ = null;
@@ -1127,6 +1126,9 @@ Blockly.BlockSvg.prototype.setCommentText = function(text) {
  *     maintain multiple warnings.
  */
 Blockly.BlockSvg.prototype.setWarningText = function(text, opt_id) {
+  if (!Blockly.Warning) {
+    throw Error('Missing require for Blockly.Warning');
+  }
   if (!this.warningTextDb_) {
     // Create a database of warning PIDs.
     // Only runs once per block (and only those with warnings).

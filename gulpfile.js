@@ -208,7 +208,8 @@ goog.provide('Blockly.FieldMultilineInput');
 goog.provide('Blockly.FieldNumber');
 goog.provide('Blockly.FieldTextInput');
 goog.provide('Blockly.FieldVariable');
-goog.provide('Blockly.Mutator');`;
+goog.provide('Blockly.Mutator');
+goog.provide('Blockly.Warning');`;
   return gulp.src('blocks/*.js', {base: './'})
     // Add Blockly.Blocks to be compatible with the compiler.
     .pipe(gulp.replace(`goog.provide('Blockly.Constants.Colour');`,

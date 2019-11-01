@@ -24,6 +24,7 @@
 
 goog.provide('Blockly.Cursor');
 
+goog.require('Blockly.navigation');
 
 /**
  * Class for a cursor.
@@ -91,6 +92,46 @@ Blockly.Cursor.prototype.setCurNode = function(newNode) {
 Blockly.Cursor.prototype.hide = function() {
   if (this.drawer_) {
     this.drawer_.hide();
+  }
+};
+
+/**
+ * Handles the given action.
+ * This is only triggered when keyboard navigation is enabled.
+ * @param {!Blockly.Action} action The action to be handled.
+ * @return {boolean} True if the action has been handled, false otherwise.
+ */
+Blockly.Cursor.prototype.onBlocklyAction = function(action) {
+  // If we are on a field give it the option to handle the action
+  if (this.curNode_ && this.curNode_.getType() === Blockly.ASTNode.types.FIELD
+      && this.curNode_.getLocation().onBlocklyAction(action)) {
+    return true;
+  }
+  switch (action.name) {
+    case Blockly.navigation.actionNames.PREVIOUS:
+      this.prev();
+      return true;
+    case Blockly.navigation.actionNames.OUT:
+      this.out();
+      return true;
+    case Blockly.navigation.actionNames.NEXT:
+      this.next();
+      return true;
+    case Blockly.navigation.actionNames.IN:
+      this.in();
+      return true;
+    case Blockly.navigation.actionNames.INSERT:
+      // Should these still be on navigation?
+      Blockly.navigation.modify_();
+      return true;
+    case Blockly.navigation.actionNames.MARK:
+      Blockly.navigation.handleEnterForWS_();
+      return true;
+    case Blockly.navigation.actionNames.DISCONNECT:
+      Blockly.navigation.disconnectBlocks_();
+      return true;
+    default:
+      return false;
   }
 };
 

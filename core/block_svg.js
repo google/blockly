@@ -1061,7 +1061,8 @@ Blockly.BlockSvg.prototype.updateDisabled = function() {
         /** @type {!Element} */ (this.svgGroup_), 'blocklyDisabled');
     if (added) {
       this.svgPath_.setAttribute('fill',
-          'url(#' + this.workspace.options.disabledPatternId + ')');
+          'url(#' +
+          this.workspace.getRenderer().getConstants().disabledPatternId + ')');
     }
   } else {
     var removed = Blockly.utils.dom.removeClass(
@@ -1253,7 +1254,8 @@ Blockly.BlockSvg.prototype.setHighlighted = function(highlighted) {
   }
   if (highlighted) {
     this.svgPath_.setAttribute('filter',
-        'url(#' + this.workspace.options.embossFilterId + ')');
+        'url(#' +
+        this.workspace.getRenderer().getConstants().embossFilterId + ')');
     this.svgPathLight_.style.display = 'none';
   } else {
     this.svgPath_.setAttribute('filter', 'none');

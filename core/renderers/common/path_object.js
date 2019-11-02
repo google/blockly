@@ -44,8 +44,10 @@ Blockly.blockRendering.PathObject = function(root, constants) {
   /**
    * The renderer's constant provider.
    * @type {!Blockly.blockRendering.ConstantProvider}
+   * @protected
    */
   this.constants_ = constants;
+
   this.svgRoot = root;
 
   /**
@@ -81,7 +83,7 @@ Blockly.blockRendering.PathObject = function(root, constants) {
  * @param {string} pathString The path.
  * @package
  */
-Blockly.blockRendering.PathObject.prototype.setPaths = function(pathString) {
+Blockly.blockRendering.PathObject.prototype.setPath = function(pathString) {
   this.svgPath.setAttribute('d', pathString);
   this.svgPathLight.style.display = 'none';
 };
@@ -147,5 +149,17 @@ Blockly.blockRendering.PathObject.prototype.setDisabled = function(disabled,
         'url(#' + this.constants_.disabledPatternId + ')');
   } else {
     this.applyColour(isShadow);
+  }
+};
+
+/**
+ * Set whether the block shows that it is selected or not.
+ * @param {boolean} selected True if selected.
+ */
+Blockly.blockRendering.PathObject.prototype.setSelected = function(selected) {
+  if (selected) {
+    Blockly.utils.dom.addClass(this.svgRoot, 'blocklySelected');
+  } else {
+    Blockly.utils.dom.removeClass(this.svgRoot, 'blocklySelected');
   }
 };

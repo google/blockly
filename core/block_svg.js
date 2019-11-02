@@ -1242,16 +1242,14 @@ Blockly.BlockSvg.prototype.setHighlighted = function(highlighted) {
  * Select this block.  Highlight it visually.
  */
 Blockly.BlockSvg.prototype.addSelect = function() {
-  Blockly.utils.dom.addClass(
-      /** @type {!Element} */ (this.svgGroup_), 'blocklySelected');
+  this.pathObject.setSelected(true);
 };
 
 /**
  * Unselect this block.  Remove its highlighting.
  */
 Blockly.BlockSvg.prototype.removeSelect = function() {
-  Blockly.utils.dom.removeClass(
-      /** @type {!Element} */ (this.svgGroup_), 'blocklySelected');
+  this.pathObject.setSelected(false);
 };
 
 /**

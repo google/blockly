@@ -159,7 +159,11 @@ Blockly.blockRendering.PathObject.prototype.setDisabled = function(disabled,
 Blockly.blockRendering.PathObject.prototype.setSelected = function(selected) {
   if (selected) {
     Blockly.utils.dom.addClass(this.svgRoot, 'blocklySelected');
+    this.svgPath.setAttribute('stroke', '#fc3');
+    this.svgPath.setAttribute('stroke-width', '3px');
   } else {
     Blockly.utils.dom.removeClass(this.svgRoot, 'blocklySelected');
+    this.svgPath.setAttribute('stroke', '');
+    this.svgPath.setAttribute('stroke-width', '');
   }
 };

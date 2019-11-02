@@ -74,14 +74,18 @@ Blockly.zelos.PathObject.prototype.setPath = function(pathString) {
  */
 Blockly.zelos.PathObject.prototype.setSelected = function(selected) {
   if (selected) {
+    Blockly.utils.dom.addClass(this.svgRoot, 'blocklySelected');
     this.svgPathSelected_ =
       /** @type {!SVGElement} */ (this.svgPath.cloneNode(true));
     this.svgPathSelected_.setAttribute('fill', 'none');
     this.svgPathSelected_.setAttribute('filter',
         'url(#' + this.constants_.highlightGlowFilterId + ')');
     this.svgRoot.appendChild(this.svgPathSelected_);
-  } else if (this.svgPathSelected_) {
-    this.svgRoot.removeChild(this.svgPathSelected_);
-    this.svgPathSelected_ = null;
+  } else {
+    Blockly.utils.dom.removeClass(this.svgRoot, 'blocklySelected');
+    if (this.svgPathSelected_) {
+      this.svgRoot.removeChild(this.svgPathSelected_);
+      this.svgPathSelected_ = null;
+    }
   }
 };

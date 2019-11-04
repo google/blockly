@@ -561,7 +561,7 @@ Blockly.Constants.Logic.LOGIC_COMPARE_ONCHANGE_MIXIN = {
       var prevA = this.prevBlocks_[0];
       if (prevA !== blockA) {
         blockA.unplug();
-        if (prevA && !prevA.isShadow()) {
+        if (prevA && !prevA.isDisposed() && !prevA.isShadow()) {
           // The shadow block is automatically replaced during unplug().
           this.getInput('A').connection.connect(prevA.outputConnection);
         }
@@ -569,7 +569,7 @@ Blockly.Constants.Logic.LOGIC_COMPARE_ONCHANGE_MIXIN = {
       var prevB = this.prevBlocks_[1];
       if (prevB !== blockB) {
         blockB.unplug();
-        if (prevB && !prevB.isShadow()) {
+        if (prevB && !prevB.isDisposed() && !prevB.isShadow()) {
           // The shadow block is automatically replaced during unplug().
           this.getInput('B').connection.connect(prevB.outputConnection);
         }

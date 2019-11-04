@@ -161,5 +161,6 @@
 	"PROCEDURES_DEFRETURN_RETURN": "назад",
 	"PROCEDURES_ALLOW_STATEMENTS": "дозволи тврдења",
 	"PROCEDURES_CALLNORETURN_HELPURL": "https://mk.wikipedia.org/wiki/Потпрограма",
-	"PROCEDURES_CREATE_DO": "Создај го '%1'"
+	"PROCEDURES_CREATE_DO": "Создај го '%1'",
+	"WORKSPACE_ARIA_LABEL": "Работен простор на Blockly"
 }

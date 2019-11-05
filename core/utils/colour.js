@@ -29,7 +29,6 @@
  */
 goog.provide('Blockly.utils.colour');
 
-goog.require('Blockly.constants');
 goog.require('Blockly.utils');
 
 

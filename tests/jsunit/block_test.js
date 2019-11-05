@@ -252,21 +252,3 @@ function test_block_row_unplug_multi_inputs_child() {
     blockTest_tearDown();
   }
 }
-
-function test_set_style_throw_exception() {
-  blockTest_setUp();
-  var styleStub = {
-    getBlockStyle: function() {
-      return null;
-    }
-  };
-  mockControl_ = setUpMockMethod(workspace, 'getTheme', null, [styleStub]);
-  var blockA = workspace.newBlock('row_block');
-  try {
-    blockA.setStyle('styleOne');
-  } catch (error) {
-    assertEquals(error.message, 'Invalid style name: styleOne');
-  } finally {
-    blockTest_tearDown();
-  }
-}

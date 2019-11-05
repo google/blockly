@@ -113,7 +113,7 @@ Blockly.geras.Renderer.prototype.makePathObject = function(root) {
  *     provider.
  * @protected
  */
-Blockly.blockRendering.Renderer.prototype.makeHighlightConstants_ = function() {
+Blockly.geras.Renderer.prototype.makeHighlightConstants_ = function() {
   return new Blockly.geras.HighlightConstantProvider(
       /** @type {!Blockly.blockRendering.ConstantProvider} */
       (this.getConstants()));

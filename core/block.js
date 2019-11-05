@@ -34,7 +34,6 @@ goog.require('Blockly.Extensions');
 goog.require('Blockly.Input');
 goog.require('Blockly.utils');
 goog.require('Blockly.utils.Coordinate');
-goog.require('Blockly.utils.colour');
 goog.require('Blockly.utils.object');
 goog.require('Blockly.fieldRegistry');
 goog.require('Blockly.utils.string');
@@ -914,7 +913,7 @@ Blockly.Block.prototype.getHue = function() {
  *     or a message reference string pointing to one of those two values.
  */
 Blockly.Block.prototype.setColour = function(colour) {
-  var parsed = Blockly.utils.colour.parseBlockColour(colour);
+  var parsed = Blockly.utils.parseBlockColour(colour);
   this.hue_ = parsed.hue;
   this.colour_ = parsed.hex;
 };

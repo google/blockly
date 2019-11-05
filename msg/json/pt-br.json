@@ -367,5 +367,6 @@
 	"PROCEDURES_IFRETURN_HELPURL": "http://c2.com/cgi/wiki?GuardClause",
 	"PROCEDURES_IFRETURN_WARNING": "Atenção: Este bloco só pode ser utilizado dentro da definição de uma função.",
 	"WORKSPACE_COMMENT_DEFAULT_TEXT": "Diz algo...",
+	"WORKSPACE_ARIA_LABEL": "Bloquear espaço de trabalho",
 	"COLLAPSED_WARNINGS_WARNING": "Bloqueios recolhidos contêm avisos."
 }

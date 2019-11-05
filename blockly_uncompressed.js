@@ -21,7 +21,7 @@ this.BLOCKLY_DIR = (function(root) {
 
 this.BLOCKLY_BOOT = function(root) {
   // Execute after Closure has loaded.
-goog.addDependency("../../core/block.js", ['Blockly.Block'], ['Blockly.Blocks', 'Blockly.Connection', 'Blockly.Events', 'Blockly.Events.BlockChange', 'Blockly.Events.BlockCreate', 'Blockly.Events.BlockDelete', 'Blockly.Events.BlockMove', 'Blockly.Extensions', 'Blockly.Input', 'Blockly.utils', 'Blockly.utils.Coordinate', 'Blockly.utils.colour', 'Blockly.utils.object', 'Blockly.fieldRegistry', 'Blockly.utils.string', 'Blockly.Workspace']);
+goog.addDependency("../../core/block.js", ['Blockly.Block'], ['Blockly.Blocks', 'Blockly.Connection', 'Blockly.Events', 'Blockly.Events.BlockChange', 'Blockly.Events.BlockCreate', 'Blockly.Events.BlockDelete', 'Blockly.Events.BlockMove', 'Blockly.Extensions', 'Blockly.Input', 'Blockly.utils', 'Blockly.utils.Coordinate', 'Blockly.utils.object', 'Blockly.fieldRegistry', 'Blockly.utils.string', 'Blockly.Workspace']);
 goog.addDependency("../../core/block_animations.js", ['Blockly.blockAnimations'], ['Blockly.utils.dom']);
 goog.addDependency("../../core/block_drag_surface.js", ['Blockly.BlockDragSurfaceSvg'], ['Blockly.utils', 'Blockly.utils.Coordinate', 'Blockly.utils.dom']);
 goog.addDependency("../../core/block_dragger.js", ['Blockly.BlockDragger'], ['Blockly.blockAnimations', 'Blockly.Events', 'Blockly.Events.BlockMove', 'Blockly.Events.Ui', 'Blockly.InsertionMarkerManager', 'Blockly.utils.Coordinate', 'Blockly.utils.dom']);
@@ -120,11 +120,11 @@ goog.addDependency("../../core/renderers/zelos/constants.js", ['Blockly.zelos.Co
 goog.addDependency("../../core/renderers/zelos/drawer.js", ['Blockly.zelos.Drawer'], ['Blockly.blockRendering.ConstantProvider', 'Blockly.blockRendering.Drawer', 'Blockly.blockRendering.Types', 'Blockly.utils.object', 'Blockly.zelos.RenderInfo']);
 goog.addDependency("../../core/renderers/zelos/info.js", ['Blockly.zelos', 'Blockly.zelos.RenderInfo'], ['Blockly.blockRendering.BottomRow', 'Blockly.blockRendering.ExternalValueInput', 'Blockly.blockRendering.InlineInput', 'Blockly.blockRendering.InputRow', 'Blockly.blockRendering.Measurable', 'Blockly.blockRendering.NextConnection', 'Blockly.blockRendering.OutputConnection', 'Blockly.blockRendering.PreviousConnection', 'Blockly.blockRendering.RenderInfo', 'Blockly.blockRendering.RoundCorner', 'Blockly.blockRendering.Row', 'Blockly.blockRendering.SquareCorner', 'Blockly.blockRendering.SpacerRow', 'Blockly.blockRendering.StatementInput', 'Blockly.blockRendering.TopRow', 'Blockly.blockRendering.Types', 'Blockly.utils.object', 'Blockly.zelos.AfterStatementSpacerRow', 'Blockly.zelos.BeforeStatementSpacerRow', 'Blockly.zelos.BottomRow', 'Blockly.zelos.TopRow']);
 goog.addDependency("../../core/renderers/zelos/measurables/rows.js", ['Blockly.zelos.BottomRow', 'Blockly.zelos.TopRow', 'Blockly.zelos.AfterStatementSpacerRow', 'Blockly.zelos.BeforeStatementSpacerRow'], ['Blockly.blockRendering.BottomRow', 'Blockly.blockRendering.TopRow', 'Blockly.blockRendering.SpacerRow', 'Blockly.utils.object']);
-goog.addDependency("../../core/renderers/zelos/path_object.js", ['Blockly.zelos.PathObject'], ['Blockly.blockRendering.PathObject', 'Blockly.zelos.ConstantProvider', 'Blockly.Theme', 'Blockly.utils.dom', 'Blockly.utils.object']);
+goog.addDependency("../../core/renderers/zelos/path_object.js", ['Blockly.zelos.PathObject'], ['Blockly.blockRendering.PathObject', 'Blockly.zelos.ConstantProvider', 'Blockly.utils.dom', 'Blockly.utils.object']);
 goog.addDependency("../../core/renderers/zelos/renderer.js", ['Blockly.zelos.Renderer'], ['Blockly.blockRendering', 'Blockly.blockRendering.Renderer', 'Blockly.utils.object', 'Blockly.zelos.ConstantProvider', 'Blockly.zelos.Drawer', 'Blockly.zelos.PathObject', 'Blockly.zelos.RenderInfo']);
 goog.addDependency("../../core/requires.js", ['Blockly.requires'], ['Blockly', 'Blockly.Comment', 'Blockly.HorizontalFlyout', 'Blockly.VerticalFlyout', 'Blockly.FlyoutButton', 'Blockly.Generator', 'Blockly.Toolbox', 'Blockly.Trashcan', 'Blockly.VariablesDynamic', 'Blockly.ZoomControls', 'Blockly.Mutator', 'Blockly.Warning', 'Blockly.FieldAngle', 'Blockly.FieldCheckbox', 'Blockly.FieldColour', 'Blockly.FieldDropdown', 'Blockly.FieldLabelSerializable', 'Blockly.FieldImage', 'Blockly.FieldTextInput', 'Blockly.FieldMultilineInput', 'Blockly.FieldNumber', 'Blockly.FieldVariable', 'Blockly.geras.Renderer', 'Blockly.thrasos.Renderer', 'Blockly.zelos.Renderer', 'Blockly.Themes.Classic', 'Blockly.Themes.Dark', 'Blockly.Themes.Deuteranopia', 'Blockly.Themes.HighContrast', 'Blockly.Themes.Tritanopia']);
 goog.addDependency("../../core/scrollbar.js", ['Blockly.Scrollbar', 'Blockly.ScrollbarPair'], ['Blockly.Touch', 'Blockly.utils', 'Blockly.utils.Coordinate', 'Blockly.utils.dom']);
-goog.addDependency("../../core/theme.js", ['Blockly.Theme'], ['Blockly.utils.colour']);
+goog.addDependency("../../core/theme.js", ['Blockly.Theme'], ['Blockly.utils', 'Blockly.utils.colour']);
 goog.addDependency("../../core/theme/classic.js", ['Blockly.Themes.Classic'], ['Blockly.Theme']);
 goog.addDependency("../../core/theme/dark.js", ['Blockly.Themes.Dark'], ['Blockly.Theme']);
 goog.addDependency("../../core/theme/deuteranopia.js", ['Blockly.Themes.Deuteranopia'], ['Blockly.Theme']);
@@ -139,9 +139,9 @@ goog.addDependency("../../core/touch_gesture.js", ['Blockly.TouchGesture'], ['Bl
 goog.addDependency("../../core/trashcan.js", ['Blockly.Trashcan'], ['Blockly.Scrollbar', 'Blockly.utils.dom', 'Blockly.utils.Rect', 'Blockly.Xml']);
 goog.addDependency("../../core/ui_events.js", ['Blockly.Events.Ui'], ['Blockly.Events', 'Blockly.Events.Abstract', 'Blockly.utils.object']);
 goog.addDependency("../../core/ui_menu_utils.js", ['Blockly.utils.uiMenu'], ['Blockly.utils.style']);
-goog.addDependency("../../core/utils.js", ['Blockly.utils'], ['Blockly.Msg', 'Blockly.utils.Coordinate', 'Blockly.utils.global', 'Blockly.utils.string', 'Blockly.utils.style', 'Blockly.utils.userAgent']);
+goog.addDependency("../../core/utils.js", ['Blockly.utils'], ['Blockly.Msg', 'Blockly.constants', 'Blockly.utils.colour', 'Blockly.utils.Coordinate', 'Blockly.utils.global', 'Blockly.utils.string', 'Blockly.utils.style', 'Blockly.utils.userAgent']);
 goog.addDependency("../../core/utils/aria.js", ['Blockly.utils.aria'], []);
-goog.addDependency("../../core/utils/colour.js", ['Blockly.utils.colour'], ['Blockly.constants', 'Blockly.utils']);
+goog.addDependency("../../core/utils/colour.js", ['Blockly.utils.colour'], []);
 goog.addDependency("../../core/utils/coordinate.js", ['Blockly.utils.Coordinate'], []);
 goog.addDependency("../../core/utils/dom.js", ['Blockly.utils.dom'], ['Blockly.utils.userAgent']);
 goog.addDependency("../../core/utils/global.js", ['Blockly.utils.global'], []);

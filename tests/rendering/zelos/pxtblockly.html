@@ -1,0 +1,40 @@
+<html>
+
+<head>
+  <script type="text/javascript" src="https://unpkg.com/pxt-blockly@2.1.12/blockly_compressed.js"></script>
+  <script type="text/javascript" src="https://unpkg.com/pxt-blockly@2.1.12/blocks_compressed.js"></script>
+  <script type="text/javascript" src="https://unpkg.com/pxt-blockly@2.1.12/msg/messages.js"></script>
+</head>
+
+<body>
+  <div id="blocklyDiv"></div>
+  <script>
+    var blocklyDiv = document.getElementById('blocklyDiv');
+    var workspace;
+    window.addEventListener('message', function (msg) {
+      var xml = msg.data;
+      try {
+        if (workspace) {
+          workspace.dispose();
+          blocklyDiv.innerHTML = '';
+        }
+      } catch {
+      }
+
+      workspace = Blockly.inject(blocklyDiv, {
+        move: {
+          scrollbars: true,
+          drag: true,
+          wheel: false,
+        },
+      });
+
+      try {
+        Blockly.Xml.domToWorkspace(Blockly.Xml.textToDom(xml), workspace);
+      } catch {
+      }
+    });
+  </script>
+</body>
+
+</html>

@@ -691,15 +691,20 @@ Blockly.Field.prototype.getSize = function() {
 /**
  * Returns the bounding box of the rendered field, accounting for workspace
  * scaling.
+ * @param {Element} container Containing element.
  * @return {!Object} An object with top, bottom, left, and right in pixels
- *     relative to the top left corner of the page (window coordinates).
+ *     relative to the container.
  * @package
  */
-Blockly.Field.prototype.getScaledBBox = function() {
+Blockly.Field.prototype.getScaledBBox = function(container) {
   var bBox = this.borderRect_.getBBox();
   var scaledHeight = bBox.height * this.sourceBlock_.workspace.scale;
   var scaledWidth = bBox.width * this.sourceBlock_.workspace.scale;
   var xy = this.getAbsoluteXY_();
+  // TODO: Move this to the widget and dropdown divs?
+  var containerOffset = Blockly.utils.style.getPageOffset(container);
+  xy.x = xy.x - containerOffset.x;
+  xy.y = xy.y - containerOffset.y;
   return {
     top: xy.y,
     bottom: xy.y + scaledHeight,

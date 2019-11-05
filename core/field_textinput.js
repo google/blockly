@@ -431,7 +431,7 @@ Blockly.FieldTextInput.prototype.setEditorValue_ = function(newValue) {
  */
 Blockly.FieldTextInput.prototype.resizeEditor_ = function() {
   var div = Blockly.WidgetDiv.DIV;
-  var bBox = this.getScaledBBox();
+  var bBox = this.getScaledBBox(Blockly.WidgetDiv.boundsElement_);
   div.style.width = bBox.right - bBox.left + 'px';
   div.style.height = bBox.bottom - bBox.top + 'px';
 

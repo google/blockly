@@ -137,9 +137,10 @@ Blockly.DropDownDiv.onHide_ = null;
 
 /**
  * Create and insert the DOM element for this div.
+ * @param {!Element} container Containing element.
  * @package
  */
-Blockly.DropDownDiv.createDom = function() {
+Blockly.DropDownDiv.createDom = function(container) {
   if (Blockly.DropDownDiv.DIV_) {
     return;  // Already created.
   }
@@ -147,7 +148,9 @@ Blockly.DropDownDiv.createDom = function() {
   div.className = 'blocklyDropDownDiv';
   div.style.backgroundColor = Blockly.DropDownDiv.DEFAULT_DROPDOWN_COLOUR;
   div.style.borderColor = Blockly.DropDownDiv.DEFAULT_DROPDOWN_BORDER_COLOUR;
-  document.body.appendChild(div);
+  Blockly.DropDownDiv.setBoundsElement(container);
+  container.appendChild(div);
+
   Blockly.DropDownDiv.DIV_ = div;
 
   var content = document.createElement('div');
@@ -265,6 +268,10 @@ Blockly.DropDownDiv.getScaledBboxOfBlock_ = function(block) {
   var scaledHeight = bBox.height * scale;
   var scaledWidth = bBox.width * scale;
   var xy = Blockly.utils.style.getPageOffset(blockSvg);
+  var containerOffset = Blockly.utils.style.getPageOffset(Blockly.DropDownDiv.boundsElement_);
+  xy.x = xy.x - containerOffset.x;
+  xy.y = xy.y - containerOffset.y;
+  // TODO: This should make the xy.y and xy.x relative instead of absolute.
   return new Blockly.utils.Rect(
       xy.y, xy.y + scaledHeight, xy.x, xy.x + scaledWidth);
 };
@@ -276,7 +283,7 @@ Blockly.DropDownDiv.getScaledBboxOfBlock_ = function(block) {
  * @private
  */
 Blockly.DropDownDiv.getScaledBboxOfField_ = function(field) {
-  var bBox = field.getScaledBBox();
+  var bBox = field.getScaledBBox(Blockly.DropDownDiv.boundsElement_);
   return new Blockly.utils.Rect(
       bBox.top, bBox.bottom, bBox.left, bBox.right);
 };
@@ -363,16 +370,13 @@ Blockly.DropDownDiv.show = function(owner, rtl, primaryX, primaryY,
  * @private
  */
 Blockly.DropDownDiv.getBoundsInfo_ = function() {
-  var boundPosition = Blockly.DropDownDiv.boundsElement_
-      .getBoundingClientRect();
   var boundSize = Blockly.utils.style.getSize(
       Blockly.DropDownDiv.boundsElement_);
-
   return {
-    left: boundPosition.left,
-    right: boundPosition.left + boundSize.width,
-    top: boundPosition.top,
-    bottom: boundPosition.top + boundSize.height,
+    left: 0,
+    right: boundSize.width,
+    top: 0,
+    bottom: boundSize.height,
     width: boundSize.width,
     height: boundSize.height
   };
@@ -635,7 +639,11 @@ Blockly.DropDownDiv.hideWithoutAnimation = function() {
     Blockly.DropDownDiv.onHide_ = null;
   }
   Blockly.DropDownDiv.clearContent();
+  if (Blockly.DropDownDiv.owner_) {
+    Blockly.DropDownDiv.owner_.getSourceBlock().workspace.markFocused();
+  }
   Blockly.DropDownDiv.owner_ = null;
+
 };
 
 /**

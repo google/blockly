@@ -17,7 +17,9 @@
 <body>
   <div id="blocklyDiv"></div>
   <script>
+    goog.require('Blockly.zelos.Renderer');
     Blockly.Field.FONTSIZE = 12;
+
     var blocklyDiv = document.getElementById('blocklyDiv');
     var workspace;
     window.addEventListener('message', function (msg) {

@@ -26,7 +26,6 @@ goog.provide('Blockly.zelos.PathObject');
 
 goog.require('Blockly.blockRendering.PathObject');
 goog.require('Blockly.zelos.ConstantProvider');
-goog.require('Blockly.Theme');
 goog.require('Blockly.utils.dom');
 goog.require('Blockly.utils.object');
 

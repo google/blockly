@@ -18,8 +18,7 @@
           workspace.dispose();
           blocklyDiv.innerHTML = '';
         }
-      } catch {
-      }
+      } catch { }
 
       workspace = Blockly.inject(blocklyDiv, {
         move: {
@@ -31,8 +30,7 @@
 
       try {
         Blockly.Xml.domToWorkspace(Blockly.Xml.textToDom(xml), workspace);
-      } catch {
-      }
+      } catch { }
     });
   </script>
 </body>

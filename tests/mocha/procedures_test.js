@@ -21,11 +21,6 @@ goog.require('Blockly.Msg');
 suite('Procedures', function() {
   setup(function() {
     this.workspace = new Blockly.Workspace();
-    this.workspace.setTheme(new Blockly.Theme({
-      "procedure_blocks": {
-        "colourPrimary": "290"
-      }
-    }));
 
     this.callForAllTypes = function(func, startName) {
       var typesArray = [
@@ -249,9 +244,7 @@ suite('Procedures', function() {
     });
     test('Multiple Workspaces', function() {
       this.callForAllTypes(function() {
-        var workspace = new Blockly.Workspace({
-          theme: this.workspace.getTheme()
-        });
+        var workspace = new Blockly.Workspace();
         var def2 = new Blockly.Block(workspace, this.defType);
         def2.setFieldValue('name', 'NAME');
         var caller2 = new Blockly.Block(workspace, this.callType);
@@ -293,9 +286,7 @@ suite('Procedures', function() {
     });
     test('Multiple Workspaces', function() {
       this.callForAllTypes(function() {
-        var workspace = new Blockly.Workspace({
-          theme: this.workspace.getTheme()
-        });
+        var workspace = new Blockly.Workspace();
         var def2 = new Blockly.Block(workspace, this.defType);
         def2.setFieldValue('name', 'NAME');
         var caller2 = new Blockly.Block(workspace, this.callType);

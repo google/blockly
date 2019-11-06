@@ -33,6 +33,8 @@ goog.require('Blockly.Gesture');
 goog.require('Blockly.Grid');
 goog.require('Blockly.Msg');
 goog.require('Blockly.Options');
+goog.require('Blockly.ThemeManager');
+goog.require('Blockly.Themes.Classic');
 goog.require('Blockly.TouchGesture');
 goog.require('Blockly.utils');
 goog.require('Blockly.utils.Coordinate');
@@ -135,6 +137,15 @@ Blockly.WorkspaceSvg = function(options,
   }
 
   /**
+   * Object in charge of storing and updating the workspace theme.
+   * @type {!Blockly.ThemeManager}
+   * @protected
+   */
+  this.themeManager_ = this.options.parentWorkspace ?
+      this.options.parentWorkspace.getThemeManager() :
+      new Blockly.ThemeManager(this.options.theme || Blockly.Themes.Classic);
+
+  /**
    * The block renderer used for rendering blocks on this workspace.
    * @type {!Blockly.blockRendering.Renderer}
    * @private
@@ -147,6 +158,8 @@ Blockly.WorkspaceSvg = function(options,
    * @private
    */
   this.cachedParentSvg_ = null;
+
+  this.themeManager_.subscribeWorkspace(this);
 };
 Blockly.utils.object.inherits(Blockly.WorkspaceSvg, Blockly.Workspace);
 
@@ -422,6 +435,76 @@ Blockly.WorkspaceSvg.prototype.inverseScreenCTMDirty_ = true;
  */
 Blockly.WorkspaceSvg.prototype.getRenderer = function() {
   return this.renderer_;
+};
+
+/**
+ * Get the theme manager for this workspace.
+ * @return {!Blockly.ThemeManager} The theme manager for this workspace.
+ * @package
+ */
+Blockly.WorkspaceSvg.prototype.getThemeManager = function() {
+  return this.themeManager_;
+};
+
+/**
+ * Get the workspace theme object.
+ * @return {!Blockly.Theme} The workspace theme object.
+ */
+Blockly.WorkspaceSvg.prototype.getTheme = function() {
+  return this.themeManager_.getTheme();
+};
+
+/**
+ * Set the workspace theme object.
+ * If no theme is passed, default to the `Blockly.Themes.Classic` theme.
+ * @param {Blockly.Theme} theme The workspace theme object.
+ */
+Blockly.WorkspaceSvg.prototype.setTheme = function(theme) {
+  if (!theme) {
+    theme = /** @type {!Blockly.Theme} */ (Blockly.Themes.Classic);
+  }
+  this.themeManager_.setTheme(theme);
+};
+
+/**
+ * Refresh all blocks on the workspace after a theme update.
+ * @package
+ */
+Blockly.WorkspaceSvg.prototype.refreshTheme = function() {
+  // Update all blocks in workspace that have a style name.
+  this.updateBlockStyles_(this.getAllBlocks(false).filter(
+      function(block) {
+        return block.getStyleName() !== undefined;
+      }
+  ));
+
+  // Update current toolbox selection.
+  this.refreshToolboxSelection();
+  if (this.toolbox_) {
+    this.toolbox_.updateColourFromTheme();
+  }
+
+  var event = new Blockly.Events.Ui(null, 'theme', null, null);
+  event.workspaceId = this.id;
+  Blockly.Events.fire(event);
+};
+
+/**
+ * Updates all the blocks with new style.
+ * @param {!Array.<!Blockly.Block>} blocks List of blocks to update the style
+ *     on.
+ * @private
+ */
+Blockly.WorkspaceSvg.prototype.updateBlockStyles_ = function(blocks) {
+  for (var i = 0, block; (block = blocks[i]); i++) {
+    var blockStyleName = block.getStyleName();
+    if (blockStyleName) {
+      block.setStyle(blockStyleName);
+      if (block.mutator) {
+        block.mutator.updateBlockStyle();
+      }
+    }
+  }
 };
 
 /**
@@ -718,11 +801,11 @@ Blockly.WorkspaceSvg.prototype.dispose = function() {
     this.zoomControls_ = null;
   }
 
-  if (this.marker_) {
+  if (this.marker_ && this.marker_.getDrawer()) {
     this.marker_.getDrawer().dispose();
   }
 
-  if (this.getCursor()) {
+  if (this.getCursor() && this.getCursor().getDrawer()) {
     this.getCursor().getDrawer().dispose();
   }
 
@@ -739,7 +822,12 @@ Blockly.WorkspaceSvg.prototype.dispose = function() {
   this.renderer_.getConstants().dispose();
 
   if (this.themeManager_) {
+    this.themeManager_.unsubscribeWorkspace(this);
     this.themeManager_.unsubscribe(this.svgBackground_);
+    if (!this.options.parentWorkspace) {
+      this.themeManager_.dispose();
+      this.themeManager_ = null;
+    }
   }
   Blockly.WorkspaceSvg.superClass_.dispose.call(this);
 
@@ -2555,17 +2643,3 @@ Blockly.WorkspaceSvg.prototype.getGrid = function() {
   return this.grid_;
 };
 
-/**
- * Refresh all blocks on the workspace, toolbox and flyout after a theme update.
- * @package
- * @override
- */
-Blockly.WorkspaceSvg.prototype.refreshTheme = function() {
-  Blockly.WorkspaceSvg.superClass_.refreshTheme.call(this);
-
-  // Update current toolbox selection.
-  this.refreshToolboxSelection();
-  if (this.toolbox_) {
-    this.toolbox_.updateColourFromTheme();
-  }
-};

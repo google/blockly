@@ -24,7 +24,7 @@
 
 goog.provide('Blockly.geras.PathObject');
 
-goog.require('Blockly.blockRendering.ConstantProvider');
+goog.require('Blockly.blockRendering.PathObject');
 goog.require('Blockly.geras.ConstantProvider');
 goog.require('Blockly.Theme');
 goog.require('Blockly.utils.dom');
@@ -161,5 +161,17 @@ Blockly.geras.PathObject.prototype.setHighlighted = function(highlighted) {
   } else {
     this.svgPath.setAttribute('filter', 'none');
     this.svgPathLight.style.display = 'inline';
+  }
+};
+
+/**
+ * @override
+ */
+Blockly.geras.PathObject.prototype.setDisabled = function(disabled, isShadow) {
+  if (disabled) {
+    this.svgPath.setAttribute('fill',
+        'url(#' + this.constants_.disabledPatternId + ')');
+  } else {
+    this.applyColour(isShadow);
   }
 };

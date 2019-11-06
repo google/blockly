@@ -22,11 +22,6 @@ suite('Procedures XML', function() {
   suite('Deserialization', function() {
     setup(function() {
       this.workspace = new Blockly.Workspace();
-      this.workspace.setTheme(new Blockly.Theme({
-        "procedure_blocks": {
-          "colourPrimary": "290"
-        }
-      }));
 
       this.callForAllTypes = function(func) {
         var typesArray = [

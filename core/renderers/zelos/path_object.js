@@ -26,6 +26,7 @@ goog.provide('Blockly.zelos.PathObject');
 
 goog.require('Blockly.blockRendering.PathObject');
 goog.require('Blockly.zelos.ConstantProvider');
+goog.require('Blockly.utils.dom');
 goog.require('Blockly.utils.object');
 
 
@@ -46,6 +47,43 @@ Blockly.zelos.PathObject = function(root, constants) {
    * @type {!Blockly.zelos.ConstantProvider}
    */
   this.constants_ = constants;
+
+  /**
+   * The selected path of the block.
+   * @type {SVGElement}
+   * @private
+   */
+  this.svgPathSelected_ = null;
 };
 Blockly.utils.object.inherits(Blockly.zelos.PathObject,
     Blockly.blockRendering.PathObject);
+
+/**
+ * @override
+ */
+Blockly.zelos.PathObject.prototype.setPath = function(pathString) {
+  Blockly.zelos.PathObject.superClass_.setPath.call(this, pathString);
+  if (this.svgPathSelected_) {
+    this.svgPathSelected_.setAttribute('d', pathString);
+  }
+};
+
+/**
+ * @override
+ */
+Blockly.zelos.PathObject.prototype.updateSelected = function(enable) {
+  this.setClass_('blocklySelected', enable);
+  if (enable) {
+    this.svgPathSelected_ =
+      /** @type {!SVGElement} */ (this.svgPath.cloneNode(true));
+    this.svgPathSelected_.setAttribute('fill', 'none');
+    this.svgPathSelected_.setAttribute('filter',
+        'url(#' + this.constants_.highlightGlowFilterId + ')');
+    this.svgRoot.appendChild(this.svgPathSelected_);
+  } else {
+    if (this.svgPathSelected_) {
+      this.svgRoot.removeChild(this.svgPathSelected_);
+      this.svgPathSelected_ = null;
+    }
+  }
+};

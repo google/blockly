@@ -61,7 +61,7 @@ Blockly.WidgetDiv.boundsElement_ = null;
 
 /**
  * Create the widget div and inject it onto the page.
- * @param {!Element} container The containing element.
+ * @param {!Node} container The containing element.
  */
 Blockly.WidgetDiv.createDom = function(container) {
   if (Blockly.WidgetDiv.DIV) {
@@ -105,8 +105,8 @@ Blockly.WidgetDiv.hide = function() {
     Blockly.WidgetDiv.dispose_ && Blockly.WidgetDiv.dispose_();
     Blockly.WidgetDiv.dispose_ = null;
     Blockly.WidgetDiv.DIV.innerHTML = '';
-    if (Blockly.DropDownDiv.owner_) {
-      Blockly.DropDownDiv.owner_.getSourceBlock().workspace.markFocused();
+    if (Blockly.WidgetDiv.owner_) {
+      Blockly.WidgetDiv.owner_.getSourceBlock().workspace.markFocused();
     }
   }
 };
@@ -187,10 +187,10 @@ Blockly.WidgetDiv.calculateX_ = function(anchorBBox, widgetSize, rtl) {
 
   if (rtl) {
     // Try to align the right side of the field and the right side of widget.
-    var rightAnchorRelative = anchorBBox.right - containerBBox.left;
+    var relativeRightAnchor = anchorBBox.right - containerBBox.left;
 
     // The left side of the widget positioned with the anchor.
-    var widgetLeft = rightAnchorRelative - widgetSize.width;
+    var widgetLeft = relativeRightAnchor - widgetSize.width;
 
     // If the left side of the widget is too far to the left go to the widget
     // size so it will stay on the screen.
@@ -198,12 +198,12 @@ Blockly.WidgetDiv.calculateX_ = function(anchorBBox, widgetSize, rtl) {
   } else {
 
     // The relative left position of the widget.
-    var anchorLeftRelative = anchorBBox.left - containerBBox.left;
+    var relativeLeftAnchor = anchorBBox.left - containerBBox.left;
 
     // The farthest point to the right without going off screen.
     var rightBoundary = containerBBox.width - widgetSize.width;
 
-    return Math.min(anchorLeftRelative, rightBoundary);
+    return Math.min(relativeLeftAnchor, rightBoundary);
   }
 };
 
@@ -222,7 +222,6 @@ Blockly.WidgetDiv.calculateY_ = function(anchorBBox, widgetSize) {
   var containerBBox = Blockly.WidgetDiv.boundsElement_.getBoundingClientRect();
 
   // Flip the widget vertically if off the bottom.
-  // TODO: Figure out what this piece is doing
   if (anchorBBox.bottom + widgetSize.height >= containerBBox.bottom) {
     // The bottom of the widget is at the top of the field.
     return anchorBBox.top - widgetSize.height;
@@ -232,4 +231,23 @@ Blockly.WidgetDiv.calculateY_ = function(anchorBBox, widgetSize) {
     // The top of the widget is at the bottom of the field.
     return anchorBBox.bottom;
   }
+};
+
+/**
+ * Get the scaled bounding box of a field relative to the widgets container.
+ * @param {!Blockly.Field} field The field.
+ * @return {!Blockly.utils.Rect} The scaled bounding box of the field.
+ * @package
+ */
+Blockly.WidgetDiv.getScaledBboxOfField = function(field) {
+  var bBox = field.getScaledBBox();
+  var containerOffset = Blockly.utils.style.getPageOffset(
+      Blockly.WidgetDiv.boundsElement_);
+
+  return new Blockly.utils.Rect(
+      bBox.top - containerOffset.y,
+      bBox.bottom - containerOffset.y,
+      bBox.left - containerOffset.x,
+      bBox.right - containerOffset.x
+  );
 };

@@ -137,7 +137,7 @@ Blockly.DropDownDiv.onHide_ = null;
 
 /**
  * Create and insert the DOM element for this div.
- * @param {!Element} container Containing element.
+ * @param {!Node} container Containing element.
  * @package
  */
 Blockly.DropDownDiv.createDom = function(container) {
@@ -231,7 +231,7 @@ Blockly.DropDownDiv.setColour = function(backgroundColour, borderColour) {
 Blockly.DropDownDiv.showPositionedByBlock = function(field, block,
     opt_onHide, opt_secondaryYOffset) {
   return Blockly.DropDownDiv.showPositionedByRect_(
-      Blockly.DropDownDiv.getScaledBboxOfBlock_(block),
+      Blockly.DropDownDiv.getRelativeScaledBboxOfBlock_(block),
       field, opt_onHide, opt_secondaryYOffset);
 };
 
@@ -251,7 +251,7 @@ Blockly.DropDownDiv.showPositionedByField = function(field,
     opt_onHide, opt_secondaryYOffset) {
   Blockly.DropDownDiv.positionToField_ = true;
   return Blockly.DropDownDiv.showPositionedByRect_(
-      Blockly.DropDownDiv.getScaledBboxOfField_(field),
+      Blockly.DropDownDiv.getRelativeScaledBboxOfField_(field),
       field, opt_onHide, opt_secondaryYOffset);
 };
 
@@ -261,31 +261,40 @@ Blockly.DropDownDiv.showPositionedByField = function(field,
  * @return {!Blockly.utils.Rect} The scaled bounding box of the block.
  * @private
  */
-Blockly.DropDownDiv.getScaledBboxOfBlock_ = function(block) {
+Blockly.DropDownDiv.getRelativeScaledBboxOfBlock_ = function(block) {
   var blockSvg = block.getSvgRoot();
   var bBox = blockSvg.getBBox();
   var scale = block.workspace.scale;
   var scaledHeight = bBox.height * scale;
   var scaledWidth = bBox.width * scale;
   var xy = Blockly.utils.style.getPageOffset(blockSvg);
-  var containerOffset = Blockly.utils.style.getPageOffset(Blockly.DropDownDiv.boundsElement_);
-  xy.x = xy.x - containerOffset.x;
-  xy.y = xy.y - containerOffset.y;
-  // TODO: This should make the xy.y and xy.x relative instead of absolute.
+  var containerOffset = Blockly.utils.style.getPageOffset(
+      /** @type {!Element} */ (Blockly.DropDownDiv.boundsElement_));
+
   return new Blockly.utils.Rect(
-      xy.y, xy.y + scaledHeight, xy.x, xy.x + scaledWidth);
+      xy.y - containerOffset.y,
+      xy.y + scaledHeight - containerOffset.y,
+      xy.x - containerOffset.x,
+      xy.x + scaledWidth - containerOffset.x);
 };
 
 /**
- * Get the scaled bounding box of a field.
+ * Get the scaled bounding box of a field relative to the dropdowns container.
  * @param {!Blockly.Field} field The field.
  * @return {!Blockly.utils.Rect} The scaled bounding box of the field.
  * @private
  */
-Blockly.DropDownDiv.getScaledBboxOfField_ = function(field) {
-  var bBox = field.getScaledBBox(Blockly.DropDownDiv.boundsElement_);
+Blockly.DropDownDiv.getRelativeScaledBboxOfField_ = function(field) {
+  var bBox = field.getScaledBBox();
+  var containerOffset = Blockly.utils.style.getPageOffset(
+      Blockly.DropDownDiv.boundsElement_);
+
   return new Blockly.utils.Rect(
-      bBox.top, bBox.bottom, bBox.left, bBox.right);
+      bBox.top - containerOffset.y,
+      bBox.bottom - containerOffset.y,
+      bBox.left - containerOffset.x,
+      bBox.right - containerOffset.x
+  );
 };
 
 /**
@@ -702,6 +711,7 @@ Blockly.DropDownDiv.positionInternal_ = function(
  * @package
  */
 Blockly.DropDownDiv.repositionForWindowResize = function() {
+  // TODO: Do we still need this? It doesn't look like it gets used.
   // This condition mainly catches the dropdown div when it is being used as a
   // dropdown.  It is important not to close it in this case because on Android,
   // when a field is focused, the soft keyboard opens triggering a window resize
@@ -711,8 +721,8 @@ Blockly.DropDownDiv.repositionForWindowResize = function() {
     var field = /** @type {!Blockly.Field} */ (Blockly.DropDownDiv.owner_);
     var block = Blockly.DropDownDiv.owner_.getSourceBlock();
     var bBox = Blockly.DropDownDiv.positionToField_ ?
-        Blockly.DropDownDiv.getScaledBboxOfField_(field) :
-        Blockly.DropDownDiv.getScaledBboxOfBlock_(block);
+        Blockly.DropDownDiv.getRelativeScaledBboxOfField_(field) :
+        Blockly.DropDownDiv.getRelativeScaledBboxOfBlock_(block);
     // If we can fit it, render below the block.
     var primaryX = bBox.left + (bBox.right - bBox.left) / 2;
     var primaryY = bBox.bottom;

@@ -322,17 +322,17 @@ function changeTheme() {
   var theme = document.getElementById('themeChanger');
 
   if (theme.value === "dark") {
-    Blockly.getMainWorkspace().setTheme(Blockly.Themes.Dark);
+    workspace.setTheme(Blockly.Themes.Dark);
   } else if (theme.value === "high_contrast") {
-    Blockly.getMainWorkspace().setTheme(Blockly.Themes.HighContrast);
+    workspace.setTheme(Blockly.Themes.HighContrast);
   } else if (theme.value === "deuteranopia") {
-    Blockly.getMainWorkspace().setTheme(Blockly.Themes.Deuteranopia);
+    workspace.setTheme(Blockly.Themes.Deuteranopia);
   } else if (theme.value === "tritanopia") {
-    Blockly.getMainWorkspace().setTheme(Blockly.Themes.Tritanopia);
+    workspace.setTheme(Blockly.Themes.Tritanopia);
   } else if (theme.value === "modern") {
-    Blockly.getMainWorkspace().setTheme(Blockly.Themes.Modern);
+    workspace.setTheme(Blockly.Themes.Modern);
   } else {
-    Blockly.getMainWorkspace().setTheme(Blockly.Themes.Classic);
+    workspace.setTheme(Blockly.Themes.Classic);
   }
 }
 

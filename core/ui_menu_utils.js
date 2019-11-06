@@ -58,7 +58,6 @@ Blockly.utils.uiMenu.getSize = function(menu) {
  * @package
  */
 Blockly.utils.uiMenu.adjustBBoxesForRTL = function(anchorBBox, menuSize) {
-  // TOOD: Make sure this doesn't mess anything else up.
   anchorBBox.left += menuSize.width;
   anchorBBox.right += menuSize.width;
 };

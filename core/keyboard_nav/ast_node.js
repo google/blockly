@@ -83,6 +83,12 @@ Blockly.ASTNode.types = {
 };
 
 /**
+ * True to navigate to all fields. False to only navigate to clickable fields.
+ * @type {boolean}
+ */
+Blockly.ASTNode.NAVIGATE_ALL_FIELDS = false;
+
+/**
  * The default y offset to use when moving the cursor from a stack to the
  * workspace.
  * @type {number}
@@ -272,7 +278,7 @@ Blockly.ASTNode.prototype.findNextForInput_ = function() {
   for (var i = curIdx + 1, input; (input = block.inputList[i]); i++) {
     var fieldRow = input.fieldRow;
     for (var j = 0, field; (field = fieldRow[j]); j++) {
-      if (field.EDITABLE) {
+      if (field.isClickable() || Blockly.ASTNode.NAVIGATE_ALL_FIELDS) {
         return Blockly.ASTNode.createFieldNode(field);
       }
     }
@@ -300,7 +306,7 @@ Blockly.ASTNode.prototype.findNextForField_ = function() {
   for (var i = curIdx, newInput; (newInput = block.inputList[i]); i++) {
     var fieldRow = newInput.fieldRow;
     while (fieldIdx < fieldRow.length) {
-      if (fieldRow[fieldIdx].EDITABLE) {
+      if (fieldRow[fieldIdx].isClickable() || Blockly.ASTNode.NAVIGATE_ALL_FIELDS) {
         return Blockly.ASTNode.createFieldNode(fieldRow[fieldIdx]);
       }
       fieldIdx++;
@@ -331,7 +337,7 @@ Blockly.ASTNode.prototype.findPrevForInput_ = function() {
     }
     var fieldRow = input.fieldRow;
     for (var j = fieldRow.length - 1, field; (field = fieldRow[j]); j--) {
-      if (field.EDITABLE) {
+      if (field.isClickable() || Blockly.ASTNode.NAVIGATE_ALL_FIELDS) {
         return Blockly.ASTNode.createFieldNode(field);
       }
     }
@@ -358,7 +364,7 @@ Blockly.ASTNode.prototype.findPrevForField_ = function() {
     }
     var fieldRow = input.fieldRow;
     while (fieldIdx > -1) {
-      if (fieldRow[fieldIdx].EDITABLE) {
+      if (fieldRow[fieldIdx].isClickable() || Blockly.ASTNode.NAVIGATE_ALL_FIELDS) {
         return Blockly.ASTNode.createFieldNode(fieldRow[fieldIdx]);
       }
       fieldIdx--;
@@ -462,7 +468,7 @@ Blockly.ASTNode.prototype.findFirstFieldOrInput_ = function(block) {
   for (var i = 0, input; (input = inputs[i]); i++) {
     var fieldRow = input.fieldRow;
     for (var j = 0, field; (field = fieldRow[j]); j++) {
-      if (field.EDITABLE) {
+      if (field.isClickable() || Blockly.ASTNode.NAVIGATE_ALL_FIELDS) {
         return Blockly.ASTNode.createFieldNode(field);
       }
     }

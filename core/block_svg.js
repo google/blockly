@@ -250,7 +250,7 @@ Blockly.BlockSvg.prototype.initSvg = function() {
     icons[i].createIcon();
   }
   this.applyColour();
-  this.updateMovable();
+  this.pathObject.updateMovable(this.isMovable());
   var svg = this.getSvgRoot();
   if (!this.workspace.options.readOnly && !this.eventsInit_ && svg) {
     Blockly.bindEventWithChecks_(
@@ -882,25 +882,12 @@ Blockly.BlockSvg.prototype.setDragging = function(adding) {
 };
 
 /**
- * Add or remove the UI indicating if this block is movable or not.
- */
-Blockly.BlockSvg.prototype.updateMovable = function() {
-  if (this.isMovable()) {
-    Blockly.utils.dom.addClass(
-        /** @type {!Element} */ (this.svgGroup_), 'blocklyDraggable');
-  } else {
-    Blockly.utils.dom.removeClass(
-        /** @type {!Element} */ (this.svgGroup_), 'blocklyDraggable');
-  }
-};
-
-/**
  * Set whether this block is movable or not.
  * @param {boolean} movable True if movable.
  */
 Blockly.BlockSvg.prototype.setMovable = function(movable) {
   Blockly.BlockSvg.superClass_.setMovable.call(this, movable);
-  this.updateMovable();
+  this.pathObject.updateMovable(movable);
 };
 
 /**
@@ -937,8 +924,7 @@ Blockly.BlockSvg.prototype.setInsertionMarker = function(insertionMarker) {
   this.isInsertionMarker_ = insertionMarker;
   if (this.isInsertionMarker_) {
     this.setColour(Blockly.INSERTION_MARKER_COLOUR);
-    Blockly.utils.dom.addClass(/** @type {!Element} */ (this.svgGroup_),
-        'blocklyInsertionMarker');
+    this.pathObject.updateInsertionMarker(true);
   }
 };
 
@@ -1038,19 +1024,8 @@ Blockly.BlockSvg.prototype.applyColour = function() {
  * Enable or disable a block.
  */
 Blockly.BlockSvg.prototype.updateDisabled = function() {
-  if (!this.isEnabled() || this.getInheritedDisabled()) {
-    var added = Blockly.utils.dom.addClass(
-        /** @type {!Element} */ (this.svgGroup_), 'blocklyDisabled');
-    if (added) {
-      this.pathObject.setDisabled(true, this.isShadow());
-    }
-  } else {
-    var removed = Blockly.utils.dom.removeClass(
-        /** @type {!Element} */ (this.svgGroup_), 'blocklyDisabled');
-    if (removed) {
-      this.pathObject.setDisabled(false, this.isShadow());
-    }
-  }
+  var isDisabled = !this.isEnabled() || this.getInheritedDisabled();
+  this.pathObject.updateDisabled(isDisabled, this.isShadow());
   var children = this.getChildren(false);
   for (var i = 0, child; (child = children[i]); i++) {
     child.updateDisabled();
@@ -1235,21 +1210,21 @@ Blockly.BlockSvg.prototype.setHighlighted = function(highlighted) {
   if (!this.rendered) {
     return;
   }
-  this.pathObject.setHighlighted(highlighted);
+  this.pathObject.updateHighlighted(highlighted);
 };
 
 /**
  * Select this block.  Highlight it visually.
  */
 Blockly.BlockSvg.prototype.addSelect = function() {
-  this.pathObject.setSelected(true);
+  this.pathObject.updateSelected(true);
 };
 
 /**
  * Unselect this block.  Remove its highlighting.
  */
 Blockly.BlockSvg.prototype.removeSelect = function() {
-  this.pathObject.setSelected(false);
+  this.pathObject.updateSelected(false);
 };
 
 /**
@@ -1259,13 +1234,7 @@ Blockly.BlockSvg.prototype.removeSelect = function() {
  * @package
  */
 Blockly.BlockSvg.prototype.setDeleteStyle = function(enable) {
-  if (enable) {
-    Blockly.utils.dom.addClass(/** @type {!Element} */ (this.svgGroup_),
-        'blocklyDraggingDelete');
-  } else {
-    Blockly.utils.dom.removeClass(/** @type {!Element} */ (this.svgGroup_),
-        'blocklyDraggingDelete');
-  }
+  this.pathObject.updateDraggingDelete(enable);
 };
 
 

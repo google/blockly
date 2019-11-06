@@ -153,7 +153,7 @@ Blockly.geras.PathObject.prototype.setStyle = function(blockStyle) {
 /**
  * @override
  */
-Blockly.geras.PathObject.prototype.setHighlighted = function(highlighted) {
+Blockly.geras.PathObject.prototype.updateHighlighted = function(highlighted) {
   if (highlighted) {
     this.svgPath.setAttribute('filter',
         'url(#' + this.constants_.embossFilterId + ')');
@@ -167,7 +167,8 @@ Blockly.geras.PathObject.prototype.setHighlighted = function(highlighted) {
 /**
  * @override
  */
-Blockly.geras.PathObject.prototype.setDisabled = function(disabled, isShadow) {
+Blockly.geras.PathObject.prototype.updateDisabled = function(
+    disabled, isShadow) {
   if (disabled) {
     this.svgPath.setAttribute('fill',
         'url(#' + this.constants_.disabledPatternId + ')');

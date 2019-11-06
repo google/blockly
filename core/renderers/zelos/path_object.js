@@ -71,7 +71,7 @@ Blockly.zelos.PathObject.prototype.setPath = function(pathString) {
 /**
  * @override
  */
-Blockly.zelos.PathObject.prototype.setSelected = function(selected) {
+Blockly.zelos.PathObject.prototype.updateSelected = function(selected) {
   if (selected) {
     Blockly.utils.dom.addClass(this.svgRoot, 'blocklySelected');
     this.svgPathSelected_ =

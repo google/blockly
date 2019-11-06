@@ -45,6 +45,13 @@ Blockly.zelos.Drawer = function(block, info) {
 Blockly.utils.object.inherits(Blockly.zelos.Drawer,
     Blockly.blockRendering.Drawer);
 
+/**
+ * @override
+ */
+Blockly.zelos.Drawer.prototype.draw = function() {
+  this.block_.pathObject.clearOutlines();
+  Blockly.zelos.Drawer.superClass_.draw.call(this);
+};
 
 /**
  * @override
@@ -143,8 +150,33 @@ Blockly.zelos.Drawer.prototype.drawFlatBottom_ = function() {
  * @override
  */
 Blockly.zelos.Drawer.prototype.drawInlineInput_ = function(input) {
-  // Don't draw an inline input.
   this.positionInlineInputConnection_(input);
+
+  var hasConnection = !!input.connection.targetConnection;
+  var isInsertionMarker = input.connection.getSourceBlock().isInsertionMarker();
+
+  var inputName = input.input.name;
+  if (!!hasConnection || isInsertionMarker) {
+    return;
+  }
+
+  var outline = this.block_.pathObject.createOutlinePath(inputName);
+
+  var width = input.width - input.connectionWidth;
+  var height = input.height;
+  var yPos = input.centerline - height / 2;
+
+  var connectionRight = input.xPos + input.connectionWidth;
+
+  var outlinePath = Blockly.utils.svgPaths.moveTo(connectionRight, yPos) +
+      Blockly.utils.svgPaths.lineOnAxis('h', width - input.connectionWidth) +
+      input.shape.pathRightDown(input.height) +
+      Blockly.utils.svgPaths.lineOnAxis('h', -(width - input.connectionWidth)) +
+      input.shape.pathUp(input.height) +
+      'z';
+
+  outline.setAttribute('d', outlinePath);
+  outline.setAttribute('fill', this.block_.pathObject.style.colourTertiary);
 };
 
 /**

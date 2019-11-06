@@ -82,6 +82,16 @@ Blockly.zelos.ConstantProvider = function() {
   this.AFTER_STATEMENT_BOTTOM_ROW_MIN_HEIGHT = this.LARGE_PADDING * 2;
 
   /**
+   * @override
+   */
+  this.EMPTY_INLINE_INPUT_PADDING = 4 * this.GRID_UNIT;
+
+  /**
+   * @override
+   */
+  this.EMPTY_INLINE_INPUT_HEIGHT = 8 * this.GRID_UNIT;
+
+  /**
    * The ID of the highlight glow filter, or the empty string if no filter is
    * set.
    * @type {string}
@@ -216,7 +226,7 @@ Blockly.zelos.ConstantProvider.prototype.shapeFor = function(
       if (checks && checks.indexOf('String') != -1) {
         return this.ROUNDED;
       }
-      return this.PUZZLE_TAB;
+      return this.ROUNDED;
     case Blockly.PREVIOUS_STATEMENT:
     case Blockly.NEXT_STATEMENT:
       return this.NOTCH;

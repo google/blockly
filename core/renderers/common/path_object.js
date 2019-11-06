@@ -44,6 +44,7 @@ Blockly.blockRendering.PathObject = function(root, constants) {
   /**
    * The renderer's constant provider.
    * @type {!Blockly.blockRendering.ConstantProvider}
+   * @protected
    */
   this.constants_ = constants;
 
@@ -122,13 +123,32 @@ Blockly.blockRendering.PathObject.prototype.setStyle = function(blockStyle) {
 };
 
 /**
+ * Add or remove the given CSS class on the path object's root SVG element.
+ * @param {string} className The name of the class to add or remove
+ * @param {boolean} add True if the class should be added.  False if it should
+ *     be removed.
+ * @protected
+ */
+Blockly.blockRendering.PathObject.prototype.setClass_ = function(
+    className, add) {
+  if (add) {
+    Blockly.utils.dom.addClass(/** @type {!Element} */ (this.svgRoot),
+        className);
+  } else {
+    Blockly.utils.dom.removeClass(/** @type {!Element} */ (this.svgRoot),
+        className);
+  }
+};
+
+/**
  * Set whether the block shows a highlight or not.  Block highlighting is
  * often used to visually mark blocks currently being executed.
- * @param {boolean} highlighted True if highlighted.
+ * @param {boolean} enable True if highlighted.
+ * @package
  */
-Blockly.blockRendering.PathObject.prototype.setHighlighted = function(
-    highlighted) {
-  if (highlighted) {
+Blockly.blockRendering.PathObject.prototype.updateHighlighted = function(
+    enable) {
+  if (enable) {
     this.svgPath.setAttribute('filter',
         'url(#' + this.constants_.embossFilterId + ')');
   } else {
@@ -140,13 +160,56 @@ Blockly.blockRendering.PathObject.prototype.setHighlighted = function(
  * Set whether the block shows a disable pattern or not.
  * @param {boolean} disabled True if disabled.
  * @param {boolean} isShadow True if the block is a shadow block.
+ * @package
  */
-Blockly.blockRendering.PathObject.prototype.setDisabled = function(disabled,
+Blockly.blockRendering.PathObject.prototype.updateDisabled = function(disabled,
     isShadow) {
+
+  this.setClass_('blocklyDisabled', disabled);
   if (disabled) {
     this.svgPath.setAttribute('fill',
         'url(#' + this.constants_.disabledPatternId + ')');
   } else {
     this.applyColour(isShadow);
   }
+};
+
+/**
+ * Add or remove styling showing that a block is selected.
+ * @param {boolean} enable True if selection is enabled, false otherwise.
+ * @package
+ */
+Blockly.blockRendering.PathObject.prototype.updateSelected = function(enable) {
+  this.setClass_('blocklySelected', enable);
+};
+
+/**
+ * Add or remove styling showing that a block is dragged over a delete area.
+ * @param {boolean} enable True if the block is being dragged over a delete
+ *     area, false otherwise.
+ * @package
+ */
+Blockly.blockRendering.PathObject.prototype.updateDraggingDelete = function(
+    enable) {
+  this.setClass_('blocklyDraggingDelete', enable);
+};
+
+/**
+ * Add or remove styling showing that a block is an insertion marker.
+ * @param {boolean} enable True if the block is an insertion marker, false
+ *     otherwise.
+ * @package
+ */
+Blockly.blockRendering.PathObject.prototype.updateInsertionMarker = function(
+    enable) {
+  this.setClass_('blocklyInsertionMarker', enable);
+};
+
+/**
+ * Add or remove styling showing that a block is movable.
+ * @param {boolean} enable True if the block is movable, false otherwise.
+ * @package
+ */
+Blockly.blockRendering.PathObject.prototype.updateMovable = function(enable) {
+  this.setClass_('blocklyDraggable', enable);
 };

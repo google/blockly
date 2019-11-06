@@ -70,12 +70,44 @@ Blockly.blockRendering.IPathObject.prototype.flipRTL;
  * Set whether the block shows a highlight or not.  Block highlighting is
  * often used to visually mark blocks currently being executed.
  * @param {boolean} highlighted True if highlighted.
+ * @package
  */
-Blockly.blockRendering.IPathObject.prototype.setHighlighted;
+Blockly.blockRendering.IPathObject.prototype.updateHighlighted;
 
 /**
  * Set whether the block shows a disable pattern or not.
  * @param {boolean} disabled True if disabled.
  * @param {boolean} isShadow True if the block is a shadow block.
+ * @package
  */
-Blockly.blockRendering.IPathObject.prototype.setDisabled;
+Blockly.blockRendering.IPathObject.prototype.updateDisabled;
+
+/**
+ * Add or remove styling showing that a block is selected.
+ * @param {boolean} enable True if selection is enabled, false otherwise.
+ * @package
+ */
+Blockly.blockRendering.IPathObject.prototype.updateSelected;
+
+/**
+ * Add or remove styling showing that a block is dragged over a delete area.
+ * @param {boolean} enable True if the block is being dragged over a delete
+ *     area, false otherwise.
+ * @package
+ */
+Blockly.blockRendering.IPathObject.prototype.updateDraggingDelete;
+
+/**
+ * Add or remove styling showing that a block is an insertion marker.
+ * @param {boolean} enable True if the block is an insertion marker, false
+ *     otherwise.
+ * @package
+ */
+Blockly.blockRendering.IPathObject.prototype.updateInsertionMarker;
+
+/**
+ * Add or remove styling showing that a block is movable.
+ * @param {boolean} enable True if the block is movable, false otherwise.
+ * @package
+ */
+Blockly.blockRendering.IPathObject.prototype.updateMovable;

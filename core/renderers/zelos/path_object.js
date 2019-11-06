@@ -71,9 +71,9 @@ Blockly.zelos.PathObject.prototype.setPath = function(pathString) {
 /**
  * @override
  */
-Blockly.zelos.PathObject.prototype.updateSelected = function(selected) {
-  if (selected) {
-    Blockly.utils.dom.addClass(this.svgRoot, 'blocklySelected');
+Blockly.zelos.PathObject.prototype.updateSelected = function(enable) {
+  this.setClass_('blocklySelected', enable);
+  if (enable) {
     this.svgPathSelected_ =
       /** @type {!SVGElement} */ (this.svgPath.cloneNode(true));
     this.svgPathSelected_.setAttribute('fill', 'none');
@@ -81,7 +81,6 @@ Blockly.zelos.PathObject.prototype.updateSelected = function(selected) {
         'url(#' + this.constants_.highlightGlowFilterId + ')');
     this.svgRoot.appendChild(this.svgPathSelected_);
   } else {
-    Blockly.utils.dom.removeClass(this.svgRoot, 'blocklySelected');
     if (this.svgPathSelected_) {
       this.svgRoot.removeChild(this.svgPathSelected_);
       this.svgPathSelected_ = null;

@@ -129,7 +129,7 @@ Blockly.blockRendering.PathObject.prototype.setStyle = function(blockStyle) {
  *     be removed.
  * @protected
  */
-Blockly.blockRendering.PathObject.prototype.setClass = function(
+Blockly.blockRendering.PathObject.prototype.setClass_ = function(
     className, add) {
   if (add) {
     Blockly.utils.dom.addClass(/** @type {!Element} */ (this.svgRoot),
@@ -165,7 +165,7 @@ Blockly.blockRendering.PathObject.prototype.updateHighlighted = function(
 Blockly.blockRendering.PathObject.prototype.updateDisabled = function(disabled,
     isShadow) {
 
-  this.setClass('blocklyDisabled', disabled);
+  this.setClass_('blocklyDisabled', disabled);
   if (disabled) {
     this.svgPath.setAttribute('fill',
         'url(#' + this.constants_.disabledPatternId + ')');
@@ -180,7 +180,7 @@ Blockly.blockRendering.PathObject.prototype.updateDisabled = function(disabled,
  * @package
  */
 Blockly.blockRendering.PathObject.prototype.updateSelected = function(enable) {
-  this.setClass('blocklySelected', enable);
+  this.setClass_('blocklySelected', enable);
 };
 
 /**
@@ -191,7 +191,7 @@ Blockly.blockRendering.PathObject.prototype.updateSelected = function(enable) {
  */
 Blockly.blockRendering.PathObject.prototype.updateDraggingDelete = function(
     enable) {
-  this.setClass('blocklyDraggingDelete', enable);
+  this.setClass_('blocklyDraggingDelete', enable);
 };
 
 /**
@@ -202,7 +202,7 @@ Blockly.blockRendering.PathObject.prototype.updateDraggingDelete = function(
  */
 Blockly.blockRendering.PathObject.prototype.updateInsertionMarker = function(
     enable) {
-  this.setClass('blocklyInsertionMarker', enable);
+  this.setClass_('blocklyInsertionMarker', enable);
 };
 
 /**
@@ -211,5 +211,5 @@ Blockly.blockRendering.PathObject.prototype.updateInsertionMarker = function(
  * @package
  */
 Blockly.blockRendering.PathObject.prototype.updateMovable = function(enable) {
-  this.setClass('blocklyDraggable', enable);
+  this.setClass_('blocklyDraggable', enable);
 };

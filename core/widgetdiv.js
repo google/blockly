@@ -61,7 +61,7 @@ Blockly.WidgetDiv.boundsElement_ = null;
 
 /**
  * Create the widget div and inject it onto the page.
- * @param {!Node} container The containing element.
+ * @param {!Element} container The containing element.
  */
 Blockly.WidgetDiv.createDom = function(container) {
   if (Blockly.WidgetDiv.DIV) {
@@ -242,7 +242,7 @@ Blockly.WidgetDiv.calculateY_ = function(anchorBBox, widgetSize) {
 Blockly.WidgetDiv.getScaledBboxOfField = function(field) {
   var bBox = field.getScaledBBox();
   var containerOffset = Blockly.utils.style.getPageOffset(
-      Blockly.WidgetDiv.boundsElement_);
+      /** @type {!Element} */ (Blockly.WidgetDiv.boundsElement_));
 
   return new Blockly.utils.Rect(
       bBox.top - containerOffset.y,

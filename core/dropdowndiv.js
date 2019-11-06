@@ -137,7 +137,7 @@ Blockly.DropDownDiv.onHide_ = null;
 
 /**
  * Create and insert the DOM element for this div.
- * @param {!Node} container Containing element.
+ * @param {!Element} container Containing element.
  * @package
  */
 Blockly.DropDownDiv.createDom = function(container) {
@@ -267,7 +267,7 @@ Blockly.DropDownDiv.getRelativeScaledBboxOfBlock_ = function(block) {
   var scale = block.workspace.scale;
   var scaledHeight = bBox.height * scale;
   var scaledWidth = bBox.width * scale;
-  var xy = Blockly.utils.style.getPageOffset(blockSvg);
+  var xy = Blockly.utils.style.getPageOffset(/** @type {!Element} */(blockSvg));
   var containerOffset = Blockly.utils.style.getPageOffset(
       /** @type {!Element} */ (Blockly.DropDownDiv.boundsElement_));
 
@@ -287,7 +287,7 @@ Blockly.DropDownDiv.getRelativeScaledBboxOfBlock_ = function(block) {
 Blockly.DropDownDiv.getRelativeScaledBboxOfField_ = function(field) {
   var bBox = field.getScaledBBox();
   var containerOffset = Blockly.utils.style.getPageOffset(
-      Blockly.DropDownDiv.boundsElement_);
+      /** @type {!Element} */ (Blockly.DropDownDiv.boundsElement_));
 
   return new Blockly.utils.Rect(
       bBox.top - containerOffset.y,
@@ -380,7 +380,7 @@ Blockly.DropDownDiv.show = function(owner, rtl, primaryX, primaryY,
  */
 Blockly.DropDownDiv.getBoundsInfo_ = function() {
   var boundSize = Blockly.utils.style.getSize(
-      Blockly.DropDownDiv.boundsElement_);
+      /** @type {!Element} */ (Blockly.DropDownDiv.boundsElement_));
   return {
     left: 0,
     right: boundSize.width,

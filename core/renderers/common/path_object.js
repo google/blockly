@@ -46,6 +46,7 @@ Blockly.blockRendering.PathObject = function(root, constants) {
    * @type {!Blockly.blockRendering.ConstantProvider}
    */
   this.constants_ = constants;
+
   this.svgRoot = root;
 
   /**
@@ -81,7 +82,7 @@ Blockly.blockRendering.PathObject = function(root, constants) {
  * @param {string} pathString The path.
  * @package
  */
-Blockly.blockRendering.PathObject.prototype.setPaths = function(pathString) {
+Blockly.blockRendering.PathObject.prototype.setPath = function(pathString) {
   this.svgPath.setAttribute('d', pathString);
   this.svgPathLight.style.display = 'none';
 };

@@ -61,6 +61,15 @@ Blockly.zelos.PathObject = function(root, constants) {
    * @private
    */
   this.outlines_ = {};
+
+  /**
+   * The set of outlines. This is used to keep track of all outlines that are
+   * used during a draw pass and remove the ones that were not at the end of the
+   * draw pass.
+   * @type {Object.<string>}
+   * @private
+   */
+  this.usedOutlines_ = null;
 };
 Blockly.utils.object.inherits(Blockly.zelos.PathObject,
     Blockly.blockRendering.PathObject);
@@ -96,21 +105,29 @@ Blockly.zelos.PathObject.prototype.updateSelected = function(enable) {
 };
 
 /**
- * Create's an outline path for the specified input.
- * @param {string} name The input name.
- * @return {!SVGElement} The SVG outline path.
- * @package
+ * @override
  */
-Blockly.zelos.PathObject.prototype.createOutlinePath = function(name) {
-  if (!this.outlines_[name]) {
-    this.outlines_[name] = Blockly.utils.dom.createSvgElement('path', {
-      'class': 'blocklyOutlinePath',
-      // IE doesn't like paths without the data definition, set empty default
-      'd': ''
-    },
-    this.svgRoot);
+Blockly.zelos.PathObject.prototype.beginDrawing = function() {
+  this.usedOutlines_ = {};
+  for (var i = 0, keys = Object.keys(this.outlines_),
+    key; (key = keys[i]); i++) {
+    this.usedOutlines_[key] = 1;
   }
-  return this.outlines_[name];
+};
+
+/**
+ * @override
+ */
+Blockly.zelos.PathObject.prototype.endDrawing = function() {
+  // Go through all remaining outlines that were not used this draw pass, and
+  // remove them.
+  if (this.usedOutlines_) {
+    for (var i = 0, keys = Object.keys(this.usedOutlines_),
+      key; (key = keys[i]); i++) {
+      this.removeOutlinePath_(key);
+    }
+  }
+  this.usedOutlines_ = null;
 };
 
 /**
@@ -121,20 +138,38 @@ Blockly.zelos.PathObject.prototype.createOutlinePath = function(name) {
  * @package
  */
 Blockly.zelos.PathObject.prototype.setOutlinePath = function(name, pathString) {
-  var outline = this.outlines_[name];
+  var outline = this.getOutlinePath_(name);
   outline.setAttribute('d', pathString);
   outline.setAttribute('fill', this.style.colourTertiary);
 };
 
+/**
+ * Create's an outline path for the specified input.
+ * @param {string} name The input name.
+ * @return {!SVGElement} The SVG outline path.
+ * @private
+ */
+Blockly.zelos.PathObject.prototype.getOutlinePath_ = function(name) {
+  if (!this.outlines_[name]) {
+    this.outlines_[name] = Blockly.utils.dom.createSvgElement('path', {
+      'class': 'blocklyOutlinePath',
+      // IE doesn't like paths without the data definition, set empty default
+      'd': ''
+    },
+    this.svgRoot);
+  }
+  if (this.usedOutlines_) {
+    delete this.usedOutlines_[name];
+  }
+  return this.outlines_[name];
+};
 
 /**
- * Remove all outline paths from the path object.
- * @package
+ * Remove an outline path that is associated with the specified input.
+ * @param {string} name The input name.
+ * @private
  */
-Blockly.zelos.PathObject.prototype.clearOutlines = function() {
-  for (var i = 0, keys = Object.keys(this.outlines_),
-    key; (key = keys[i]); i++) {
-    this.outlines_[key].parentNode.removeChild(this.outlines_[key]);
-    delete this.outlines_[key];
-  }
+Blockly.zelos.PathObject.prototype.removeOutlinePath_ = function(name) {
+  this.outlines_[name].parentNode.removeChild(this.outlines_[name]);
+  delete this.outlines_[name];
 };

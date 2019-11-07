@@ -68,6 +68,7 @@ Blockly.blockRendering.Drawer = function(block, info) {
  * @package
  */
 Blockly.blockRendering.Drawer.prototype.draw = function() {
+  this.block_.pathObject.beginDrawing();
   this.hideHiddenIcons_();
   this.drawOutline_();
   this.drawInternals_();
@@ -80,6 +81,7 @@ Blockly.blockRendering.Drawer.prototype.draw = function() {
     this.block_.renderingDebugger.drawDebug(this.block_, this.info_);
   }
   this.recordSizeOnBlock_();
+  this.block_.pathObject.endDrawing();
 };
 
 /**

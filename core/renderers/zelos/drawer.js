@@ -45,13 +45,6 @@ Blockly.zelos.Drawer = function(block, info) {
 Blockly.utils.object.inherits(Blockly.zelos.Drawer,
     Blockly.blockRendering.Drawer);
 
-/**
- * @override
- */
-Blockly.zelos.Drawer.prototype.draw = function() {
-  this.block_.pathObject.clearOutlines();
-  Blockly.zelos.Drawer.superClass_.draw.call(this);
-};
 
 /**
  * @override
@@ -152,15 +145,10 @@ Blockly.zelos.Drawer.prototype.drawFlatBottom_ = function() {
 Blockly.zelos.Drawer.prototype.drawInlineInput_ = function(input) {
   this.positionInlineInputConnection_(input);
 
-  var hasConnection = !!input.connection.targetConnection;
-  var isInsertionMarker = input.connection.getSourceBlock().isInsertionMarker();
-
   var inputName = input.input.name;
-  if (!!hasConnection || isInsertionMarker) {
+  if (input.connectedBlock || this.info_.isInsertionMarker) {
     return;
   }
-
-  this.block_.pathObject.createOutlinePath(inputName);
 
   var width = input.width - input.connectionWidth;
   var height = input.height;

@@ -170,13 +170,6 @@ Blockly.BlockSvg.INLINE = -1;
 Blockly.BlockSvg.COLLAPSED_WARNING_ID = 'TEMP_COLLAPSED_WARNING_';
 
 // Leftover UI constants from block_render_svg.js.
-/**
- * Vertical space between elements.
- * @const
- * @package
- */
-// TODO (#3142): Remove.
-Blockly.BlockSvg.SEP_SPACE_Y = 10;
 
 /**
  * Minimum height of a block.
@@ -185,13 +178,6 @@ Blockly.BlockSvg.SEP_SPACE_Y = 10;
  */
 // TODO (#3142): Remove.
 Blockly.BlockSvg.MIN_BLOCK_Y = 25;
-
-/**
- * Width of horizontal puzzle tab.
- * @package
- */
-// TODO (#3142): Remove.
-Blockly.BlockSvg.TAB_WIDTH = 8;
 
 /**
  * Do blocks with no previous or output connections have a 'hat' on top?
@@ -579,25 +565,17 @@ Blockly.BlockSvg.prototype.snapToGrid = function() {
  */
 Blockly.BlockSvg.prototype.getBoundingRectangle = function() {
   var blockXY = this.getRelativeToSurfaceXY();
-  var tab = this.outputConnection ? Blockly.BlockSvg.TAB_WIDTH : 0;
   var blockBounds = this.getHeightWidth();
-  var top = blockXY.y;
-  var bottom = blockXY.y + blockBounds.height;
   var left, right;
   if (this.RTL) {
-    // Width has the tab built into it already so subtract it here.
-    left = blockXY.x - (blockBounds.width - tab);
-    // Add the width of the tab/puzzle piece knob to the x coordinate
-    // since X is the corner of the rectangle, not the whole puzzle piece.
-    right = blockXY.x + tab;
+    left = blockXY.x - blockBounds.width;
+    right = blockXY.x;
   } else {
-    // Subtract the width of the tab/puzzle piece knob to the x coordinate
-    // since X is the corner of the rectangle, not the whole puzzle piece.
-    left = blockXY.x - tab;
-    // Width has the tab built into it already so subtract it here.
-    right = blockXY.x + blockBounds.width - tab;
+    left = blockXY.x;
+    right = blockXY.x + blockBounds.width;
   }
-  return new Blockly.utils.Rect(top, bottom, left, right);
+  return new Blockly.utils.Rect(
+      blockXY.y, blockXY.y + blockBounds.height, left, right);
 };
 
 /**

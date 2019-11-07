@@ -115,5 +115,5 @@ Blockly.Themes.Modern.categoryStyles = {
 
 // This style is still being fleshed out and may change.
 Blockly.Themes.Modern =
-    new Blockly.Theme(Blockly.Themes.Modern.defaultBlockStyles,
+    new Blockly.Theme('modern', Blockly.Themes.Modern.defaultBlockStyles,
         Blockly.Themes.Modern.categoryStyles);

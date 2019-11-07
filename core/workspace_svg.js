@@ -143,7 +143,8 @@ Blockly.WorkspaceSvg = function(options,
    */
   this.themeManager_ = this.options.parentWorkspace ?
       this.options.parentWorkspace.getThemeManager() :
-      new Blockly.ThemeManager(this.options.theme || Blockly.Themes.Classic);
+      new Blockly.ThemeManager(this,
+          this.options.theme || Blockly.Themes.Classic);
 
   /**
    * The block renderer used for rendering blocks on this workspace.

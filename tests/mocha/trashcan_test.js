@@ -16,7 +16,7 @@
  */
 
 suite("Trashcan", function() {
-  var themeManager = new Blockly.ThemeManager(Blockly.Themes.Classic);
+  var themeManager = new Blockly.ThemeManager(null, Blockly.Themes.Classic);
   var workspace = {
     addChangeListener: function(func) {
       this.listener = func;

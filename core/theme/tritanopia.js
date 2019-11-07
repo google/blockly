@@ -109,5 +109,6 @@ Blockly.Themes.Tritanopia.categoryStyles = {
 };
 
 Blockly.Themes.Tritanopia =
-    new Blockly.Theme(Blockly.Themes.Tritanopia.defaultBlockStyles,
+    new Blockly.Theme('tritanopia',
+        Blockly.Themes.Tritanopia.defaultBlockStyles,
         Blockly.Themes.Tritanopia.categoryStyles);

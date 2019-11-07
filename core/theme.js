@@ -28,6 +28,7 @@ goog.require('Blockly.utils.colour');
 
 /**
  * Class for a theme.
+ * @param {string} name Theme name.
  * @param {!Object.<string, Blockly.Theme.BlockStyle>} blockStyles A map from
  *     style names (strings) to objects with style attributes for blocks.
  * @param {!Object.<string, Blockly.Theme.CategoryStyle>} categoryStyles A map
@@ -37,7 +38,15 @@ goog.require('Blockly.utils.colour');
  *     names to style value.
  * @constructor
  */
-Blockly.Theme = function(blockStyles, categoryStyles, opt_componentStyles) {
+Blockly.Theme = function(name, blockStyles, categoryStyles,
+    opt_componentStyles) {
+
+  /**
+   * The theme name. This can be used to reference a specific theme in CSS.
+   * @type {string}
+   * @package
+   */
+  this.name = name;
   /**
    * The block styles map.
    * @type {!Object.<string, !Blockly.Theme.BlockStyle>}

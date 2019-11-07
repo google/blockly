@@ -23,6 +23,7 @@
 
 goog.provide('Blockly.Themes.Dark');
 
+goog.require('Blockly.Css');
 goog.require('Blockly.Theme');
 
 
@@ -115,7 +116,7 @@ Blockly.Themes.Dark.categoryStyles = {
 
 // This style is still being fleshed out and may change.
 Blockly.Themes.Dark =
-    new Blockly.Theme(Blockly.Themes.Dark.defaultBlockStyles,
+    new Blockly.Theme('dark', Blockly.Themes.Dark.defaultBlockStyles,
         Blockly.Themes.Dark.categoryStyles);
 
 Blockly.Themes.Dark.setComponentStyle('workspace', '#1e1e1e');
@@ -126,3 +127,14 @@ Blockly.Themes.Dark.setComponentStyle('flyoutText', '#ccc');
 Blockly.Themes.Dark.setComponentStyle('flyoutOpacity', 1);
 Blockly.Themes.Dark.setComponentStyle('scrollbar', '#797979');
 Blockly.Themes.Dark.setComponentStyle('scrollbarOpacity', 0.4);
+
+/**
+ * CSS for the dark theme.
+ */
+Blockly.Css.register([
+  /* eslint-disable indent */
+  '.dark .blocklyTreeRow:not(.blocklyTreeSelected):hover {',
+    'background-color: #2a2d2e;',
+  '}',
+  /* eslint-enable indent */
+]);

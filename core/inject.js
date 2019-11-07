@@ -163,6 +163,10 @@ Blockly.createMainWorkspace_ = function(svg, options, blockDragSurface,
   mainWorkspace.scale = options.zoomOptions.startScale;
   svg.appendChild(mainWorkspace.createDom('blocklyMainBackground'));
 
+  // Set the theme name on the injection div.
+  Blockly.utils.dom.addClass(mainWorkspace.getInjectionDiv(),
+      mainWorkspace.getTheme().name);
+
   if (!options.hasCategories && options.languageTree) {
     // Add flyout as an <svg> that is a sibling of the workspace svg.
     var flyout = mainWorkspace.addFlyout('svg');

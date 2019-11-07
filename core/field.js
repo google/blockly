@@ -692,7 +692,7 @@ Blockly.Field.prototype.getSize = function() {
  * Returns the bounding box of the rendered field, accounting for workspace
  * scaling.
  * @return {!Object} An object with top, bottom, left, and right in pixels
- *     relative to the container.
+ *     relative to the top left corner of the page (window coordinates).
  * @package
  */
 Blockly.Field.prototype.getScaledBBox = function() {

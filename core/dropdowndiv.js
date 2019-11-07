@@ -148,7 +148,6 @@ Blockly.DropDownDiv.createDom = function(container) {
   div.className = 'blocklyDropDownDiv';
   div.style.backgroundColor = Blockly.DropDownDiv.DEFAULT_DROPDOWN_COLOUR;
   div.style.borderColor = Blockly.DropDownDiv.DEFAULT_DROPDOWN_BORDER_COLOUR;
-  Blockly.DropDownDiv.setBoundsElement(container);
   container.appendChild(div);
 
   Blockly.DropDownDiv.DIV_ = div;
@@ -711,7 +710,6 @@ Blockly.DropDownDiv.positionInternal_ = function(
  * @package
  */
 Blockly.DropDownDiv.repositionForWindowResize = function() {
-  // TODO: Do we still need this? It doesn't look like it gets used.
   // This condition mainly catches the dropdown div when it is being used as a
   // dropdown.  It is important not to close it in this case because on Android,
   // when a field is focused, the soft keyboard opens triggering a window resize

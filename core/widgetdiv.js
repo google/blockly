@@ -159,8 +159,10 @@ Blockly.WidgetDiv.positionInternal_ = function(x, y, height) {
  */
 Blockly.WidgetDiv.positionWithAnchor = function(anchorBBox, widgetSize, rtl) {
 
-  var y = Blockly.WidgetDiv.calculateY_(anchorBBox, widgetSize);
-  var x = Blockly.WidgetDiv.calculateX_(anchorBBox, widgetSize, rtl);
+  var containerBBox = Blockly.WidgetDiv.boundsElement_.getBoundingClientRect();
+
+  var y = Blockly.WidgetDiv.calculateY_(containerBBox, anchorBBox, widgetSize);
+  var x = Blockly.WidgetDiv.calculateX_(containerBBox, anchorBBox, widgetSize, rtl);
 
   if (y < 0) {
     Blockly.WidgetDiv.positionInternal_(x, 0, widgetSize.height + y);
@@ -172,6 +174,8 @@ Blockly.WidgetDiv.positionWithAnchor = function(anchorBBox, widgetSize, rtl) {
 /**
  * Calculate an x position (in window coordinates) such that the widget will not
  * be offscreen on the right or left.
+ * @param {!Object} containerBBox The bounding rectangle of the widget divs
+ *     container.
  * @param {!Object} anchorBBox The bounding rectangle of the anchor, in window
  *     coordinates.
  * @param {Blockly.utils.Size} widgetSize The dimensions of the widget inside the
@@ -181,9 +185,7 @@ Blockly.WidgetDiv.positionWithAnchor = function(anchorBBox, widgetSize, rtl) {
  *     div, in window coordinates.
  * @private
  */
-Blockly.WidgetDiv.calculateX_ = function(anchorBBox, widgetSize, rtl) {
-
-  var containerBBox = Blockly.WidgetDiv.boundsElement_.getBoundingClientRect();
+Blockly.WidgetDiv.calculateX_ = function(containerBBox, anchorBBox, widgetSize, rtl) {
 
   if (rtl) {
     // Try to align the right side of the field and the right side of widget.
@@ -210,6 +212,8 @@ Blockly.WidgetDiv.calculateX_ = function(anchorBBox, widgetSize, rtl) {
 /**
  * Calculate a y position (in window coordinates) such that the widget will not
  * be offscreen on the top or bottom.
+ * @param {!Object} containerBBox The bounding rectangle of the widget divs
+ *     container.
  * @param {!Object} anchorBBox The bounding rectangle of the anchor, in window
  *     coordinates.
  * @param {Blockly.utils.Size} widgetSize The dimensions of the widget inside the
@@ -218,7 +222,7 @@ Blockly.WidgetDiv.calculateX_ = function(anchorBBox, widgetSize, rtl) {
  *     div, in window coordinates.
  * @private
  */
-Blockly.WidgetDiv.calculateY_ = function(anchorBBox, widgetSize) {
+Blockly.WidgetDiv.calculateY_ = function(containerBBox, anchorBBox, widgetSize) {
   var containerBBox = Blockly.WidgetDiv.boundsElement_.getBoundingClientRect();
 
   // Flip the widget vertically if off the bottom.

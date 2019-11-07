@@ -100,10 +100,12 @@ Blockly.ThemeManager.prototype.setTheme = function(theme) {
 
   // Set the theme name onto the injection div.
   var injectionDiv = this.workspace_.getInjectionDiv();
-  if (prevTheme) {
-    Blockly.utils.dom.removeClass(injectionDiv, prevTheme.name);
+  if (injectionDiv) {
+    if (prevTheme) {
+      Blockly.utils.dom.removeClass(injectionDiv, prevTheme.name);
+    }
+    Blockly.utils.dom.addClass(injectionDiv, this.theme_.name);
   }
-  Blockly.utils.dom.addClass(injectionDiv, this.theme_.name);
 
   // Refresh all subscribed workspaces.
   for (var i = 0, workspace; (workspace = this.subscribedWorkspaces_[i]); i++) {

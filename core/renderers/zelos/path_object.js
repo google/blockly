@@ -106,7 +106,8 @@ Blockly.zelos.PathObject.prototype.updateSelected = function(enable) {
 };
 
 /**
- * @override
+ * Method that's called when the drawer is about to draw the block.
+ * @package
  */
 Blockly.zelos.PathObject.prototype.beginDrawing = function() {
   this.remainingOutlines_ = {};
@@ -119,7 +120,8 @@ Blockly.zelos.PathObject.prototype.beginDrawing = function() {
 };
 
 /**
- * @override
+ * Method that's called when the drawer is done drawing.
+ * @package
  */
 Blockly.zelos.PathObject.prototype.endDrawing = function() {
   // Go through all remaining outlines that were not used this draw pass, and

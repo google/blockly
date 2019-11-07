@@ -221,18 +221,3 @@ Blockly.blockRendering.PathObject.prototype.updateMovable = function(enable) {
   this.setClass_('blocklyDraggable', enable);
 };
 
-/**
- * Method that's called when the drawer is about to draw the block.
- * @package
- */
-Blockly.blockRendering.PathObject.prototype.beginDrawing = function() {
-  // NOP
-};
-
-/**
- * Method that's called when the drawer is done drawing.
- * @package
- */
-Blockly.blockRendering.PathObject.prototype.endDrawing = function() {
-  // NOP
-};

@@ -29,6 +29,8 @@ goog.require('Blockly.blockRendering.Types');
 goog.require('Blockly.utils.object');
 goog.require('Blockly.zelos.RenderInfo');
 
+goog.requireType('Blockly.zelos.PathObject');
+
 
 /**
  * An object that draws a block based on the given rendering information.
@@ -45,6 +47,28 @@ Blockly.zelos.Drawer = function(block, info) {
 Blockly.utils.object.inherits(Blockly.zelos.Drawer,
     Blockly.blockRendering.Drawer);
 
+
+/**
+ * @override
+ */
+Blockly.zelos.Drawer.prototype.draw = function() {
+  var pathObject =
+    /** @type {!Blockly.zelos.PathObject} */ (this.block_.pathObject);
+  pathObject.beginDrawing();
+  this.hideHiddenIcons_();
+  this.drawOutline_();
+  this.drawInternals_();
+
+  pathObject.setPath(this.outlinePath_ + '\n' + this.inlinePath_);
+  if (this.info_.RTL) {
+    pathObject.flipRTL();
+  }
+  if (Blockly.blockRendering.useDebugger) {
+    this.block_.renderingDebugger.drawDebug(this.block_, this.info_);
+  }
+  this.recordSizeOnBlock_();
+  pathObject.endDrawing();
+};
 
 /**
  * @override
@@ -150,16 +174,16 @@ Blockly.zelos.Drawer.prototype.drawInlineInput_ = function(input) {
     return;
   }
 
-  var width = input.width - input.connectionWidth;
+  var width = input.width - (input.connectionWidth * 2);
   var height = input.height;
   var yPos = input.centerline - height / 2;
 
   var connectionRight = input.xPos + input.connectionWidth;
 
   var outlinePath = Blockly.utils.svgPaths.moveTo(connectionRight, yPos) +
-      Blockly.utils.svgPaths.lineOnAxis('h', width - input.connectionWidth) +
+      Blockly.utils.svgPaths.lineOnAxis('h', width) +
       input.shape.pathRightDown(input.height) +
-      Blockly.utils.svgPaths.lineOnAxis('h', -(width - input.connectionWidth)) +
+      Blockly.utils.svgPaths.lineOnAxis('h', -width) +
       input.shape.pathUp(input.height) +
       'z';
   this.block_.pathObject.setOutlinePath(inputName, outlinePath);

@@ -160,7 +160,7 @@ Blockly.zelos.Drawer.prototype.drawInlineInput_ = function(input) {
     return;
   }
 
-  var outline = this.block_.pathObject.createOutlinePath(inputName);
+  this.block_.pathObject.createOutlinePath(inputName);
 
   var width = input.width - input.connectionWidth;
   var height = input.height;
@@ -174,9 +174,7 @@ Blockly.zelos.Drawer.prototype.drawInlineInput_ = function(input) {
       Blockly.utils.svgPaths.lineOnAxis('h', -(width - input.connectionWidth)) +
       input.shape.pathUp(input.height) +
       'z';
-
-  outline.setAttribute('d', outlinePath);
-  outline.setAttribute('fill', this.block_.pathObject.style.colourTertiary);
+  this.block_.pathObject.setOutlinePath(inputName, outlinePath);
 };
 
 /**

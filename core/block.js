@@ -843,6 +843,14 @@ Blockly.Block.prototype.setEditable = function(editable) {
 };
 
 /**
+ * Returns if this block has been disposed of / deleted.
+ * @return {boolean} True if this block has been disposed of / deleted.
+ */
+Blockly.Block.prototype.isDisposed = function() {
+  return this.disposed;
+};
+
+/**
  * Find the connection on this block that corresponds to the given connection
  * on the other block.
  * Used to match connections between a block and its insertion marker.

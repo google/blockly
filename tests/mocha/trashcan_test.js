@@ -16,7 +16,6 @@
  */
 
 suite("Trashcan", function() {
-  var themeManager = new Blockly.ThemeManager(Blockly.Themes.Classic);
   var workspace = {
     addChangeListener: function(func) {
       this.listener = func;
@@ -24,12 +23,13 @@ suite("Trashcan", function() {
     triggerListener: function(event) {
       this.listener(event);
     },
-    getThemeManager: function() {
-      return themeManager;
-    },
     options: {
       maxTrashcanContents: Infinity
     }
+  };
+  var themeManager = new Blockly.ThemeManager(workspace, Blockly.Themes.Classic);
+  workspace.getThemeManager = function() {
+    return themeManager;
   };
   function sendDeleteEvent(xmlString) {
     var xml = Blockly.Xml.textToDom(

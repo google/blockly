@@ -1277,7 +1277,7 @@ suite('Blocks', function() {
         this.block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
             '<block type="empty_block"/>'
         ), this.workspace);
-        this.workspace.setTheme(new Blockly.Theme({
+        this.workspace.setTheme(new Blockly.Theme('test', {
           "styleOne" : {
             "colourPrimary": "#000000",
             "colourSecondary": "#999999",

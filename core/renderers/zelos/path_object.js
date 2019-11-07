@@ -63,13 +63,14 @@ Blockly.zelos.PathObject = function(root, constants) {
   this.outlines_ = {};
 
   /**
-   * The set of used outlines. This is used to keep track of all outlines that
-   * are used during a draw pass and remove the ones that were not at the end of
-   * the draw pass.
-   * @type {Object.<string>}
+   * A set used to determine which outlines were used during a draw pass.  The
+   * set is initialized with a reference to all the outlines in
+   * `this.outlines_`. Everytime we use an outline during the draw pass, the
+   * reference is removed from this set.
+   * @type {Object.<string, number>}
    * @private
    */
-  this.usedOutlines_ = null;
+  this.remainingOutlines_ = null;
 };
 Blockly.utils.object.inherits(Blockly.zelos.PathObject,
     Blockly.blockRendering.PathObject);
@@ -108,10 +109,12 @@ Blockly.zelos.PathObject.prototype.updateSelected = function(enable) {
  * @override
  */
 Blockly.zelos.PathObject.prototype.beginDrawing = function() {
-  this.usedOutlines_ = {};
+  this.remainingOutlines_ = {};
   for (var i = 0, keys = Object.keys(this.outlines_),
     key; (key = keys[i]); i++) {
-    this.usedOutlines_[key] = 1;
+    // The value set here isn't used anywhere, we are just using the
+    // object as a Set data structure.
+    this.remainingOutlines_[key] = 1;
   }
 };
 
@@ -121,13 +124,13 @@ Blockly.zelos.PathObject.prototype.beginDrawing = function() {
 Blockly.zelos.PathObject.prototype.endDrawing = function() {
   // Go through all remaining outlines that were not used this draw pass, and
   // remove them.
-  if (this.usedOutlines_) {
-    for (var i = 0, keys = Object.keys(this.usedOutlines_),
+  if (this.remainingOutlines_) {
+    for (var i = 0, keys = Object.keys(this.remainingOutlines_),
       key; (key = keys[i]); i++) {
       this.removeOutlinePath_(key);
     }
   }
-  this.usedOutlines_ = null;
+  this.remainingOutlines_ = null;
 };
 
 /**
@@ -158,8 +161,8 @@ Blockly.zelos.PathObject.prototype.getOutlinePath_ = function(name) {
     },
     this.svgRoot);
   }
-  if (this.usedOutlines_) {
-    delete this.usedOutlines_[name];
+  if (this.remainingOutlines_) {
+    delete this.remainingOutlines_[name];
   }
   return this.outlines_[name];
 };

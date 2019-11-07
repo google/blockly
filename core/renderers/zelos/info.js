@@ -182,9 +182,9 @@ Blockly.zelos.RenderInfo.prototype.getInRowSpacing_ = function(prev, next) {
     // Between an editable field and an input.
     if (prev.isEditable) {
       if (Blockly.blockRendering.Types.isInlineInput(next)) {
-        return this.constants_.SMALL_PADDING;
+        return this.constants_.MEDIUM_PADDING;
       } else if (Blockly.blockRendering.Types.isExternalInput(next)) {
-        return this.constants_.SMALL_PADDING;
+        return this.constants_.MEDIUM_PADDING;
       }
     } else {
       if (Blockly.blockRendering.Types.isInlineInput(next)) {
@@ -345,16 +345,6 @@ Blockly.zelos.RenderInfo.prototype.finalize_ = function() {
   var widestRowWithConnectedBlocks = 0;
   for (var i = 0, row; (row = this.rows[i]); i++) {
     row.xPos = this.startX;
-
-    for (var j = 0, elem; (elem = row.elements[j]); j++) {
-      if (Blockly.blockRendering.Types.isInlineInput(elem) ||
-        Blockly.blockRendering.Types.isExternalInput(elem)) {
-        if (elem.isDynamicShape) {
-          elem.setShapeDimensions(elem.shape.height(elem.height),
-              elem.shape.width(elem.height));
-        }
-      }
-    }
 
     widestRowWithConnectedBlocks =
         Math.max(widestRowWithConnectedBlocks, row.widthWithConnectedBlocks);

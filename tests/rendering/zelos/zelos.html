@@ -7,7 +7,7 @@
 
   <style>
     .blocklyText {
-      font: "Helvetica Neue", "Segoe UI", Helvetica, sans-serif;
+      font-family: "Helvetica Neue", "Segoe UI", Helvetica, sans-serif;
       font-weight: bold;
       font-size: 12pt;
     }
@@ -17,9 +17,12 @@
 <body>
   <div id="blocklyDiv"></div>
   <script>
+    goog.require('Blockly.blockRendering.Debug');
     goog.require('Blockly.zelos.Renderer');
     Blockly.Field.FONTSIZE = 12;
-
+    Blockly.Field.FONTWEIGHT = 'bold';
+    Blockly.Field.FONTFAMILY = 'Helvetica Neue';
+    // Blockly.blockRendering.startDebugger();
     var blocklyDiv = document.getElementById('blocklyDiv');
     var workspace;
     window.addEventListener('message', function (msg) {

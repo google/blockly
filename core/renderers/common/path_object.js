@@ -220,3 +220,4 @@ Blockly.blockRendering.PathObject.prototype.updateInsertionMarker = function(
 Blockly.blockRendering.PathObject.prototype.updateMovable = function(enable) {
   this.setClass_('blocklyDraggable', enable);
 };
+

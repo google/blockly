@@ -516,7 +516,8 @@ Blockly.FieldDropdown.prototype.renderSelectedImage_ = function(imageJson) {
 
   var arrowWidth = Blockly.utils.dom.getFastTextWidth(
       /** @type {!SVGTSpanElement} */ (this.arrow_),
-      Blockly.Field.FONTSIZE, Blockly.Field.FONTFAMILY);
+      Blockly.Field.FONTSIZE, Blockly.Field.FONTWEIGHT,
+      Blockly.Field.FONTFAMILY);
 
   var imageHeight = Number(imageJson.height);
   var imageWidth = Number(imageJson.width);
@@ -551,7 +552,8 @@ Blockly.FieldDropdown.prototype.renderSelectedText_ = function() {
   // Height and width include the border rect.
   this.size_.height = Blockly.Field.BORDER_RECT_DEFAULT_HEIGHT;
   this.size_.width = Blockly.utils.dom.getFastTextWidth(this.textElement_,
-      Blockly.Field.FONTSIZE, Blockly.Field.FONTFAMILY) +
+      Blockly.Field.FONTSIZE, Blockly.Field.FONTWEIGHT,
+      Blockly.Field.FONTFAMILY) +
       Blockly.Field.X_PADDING;
 };
 

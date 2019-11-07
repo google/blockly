@@ -285,11 +285,12 @@ Blockly.utils.dom.getTextWidth = function(textElement) {
  * advance. Similar to `getTextWidth`, we cache the width we compute.
  * @param {!Element} textElement An SVG 'text' element.
  * @param {number} fontSize The font size to use.
+ * @param {string} fontWeight The font weight to use.
  * @param {string} fontFamily The font family to use.
  * @return {number} Width of element.
  */
 Blockly.utils.dom.getFastTextWidth = function(textElement,
-    fontSize, fontFamily) {
+    fontSize, fontWeight, fontFamily) {
   var text = textElement.textContent;
   var key = text + '\n' + textElement.className.baseVal;
   var width;
@@ -314,7 +315,8 @@ Blockly.utils.dom.getFastTextWidth = function(textElement,
     Blockly.utils.dom.canvasContext_ = computeCanvas.getContext('2d');
   }
   // Set the desired font size and family.
-  Blockly.utils.dom.canvasContext_.font = fontSize + 'pt ' + fontFamily;
+  Blockly.utils.dom.canvasContext_.font =
+    fontWeight + ' ' + fontSize + 'pt ' + fontFamily;
 
   // Measure the text width using the helper canvas context.
   width = Blockly.utils.dom.canvasContext_.measureText(text).width;

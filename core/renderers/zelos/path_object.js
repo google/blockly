@@ -63,9 +63,9 @@ Blockly.zelos.PathObject = function(root, constants) {
   this.outlines_ = {};
 
   /**
-   * The set of outlines. This is used to keep track of all outlines that are
-   * used during a draw pass and remove the ones that were not at the end of the
-   * draw pass.
+   * The set of used outlines. This is used to keep track of all outlines that
+   * are used during a draw pass and remove the ones that were not at the end of
+   * the draw pass.
    * @type {Object.<string>}
    * @private
    */

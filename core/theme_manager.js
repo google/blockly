@@ -102,9 +102,9 @@ Blockly.ThemeManager.prototype.setTheme = function(theme) {
   var injectionDiv = this.workspace_.getInjectionDiv();
   if (injectionDiv) {
     if (prevTheme) {
-      Blockly.utils.dom.removeClass(injectionDiv, prevTheme.name);
+      Blockly.utils.dom.removeClass(injectionDiv, prevTheme.name + '-theme');
     }
-    Blockly.utils.dom.addClass(injectionDiv, this.theme_.name);
+    Blockly.utils.dom.addClass(injectionDiv, this.theme_.name + '-theme');
   }
 
   // Refresh all subscribed workspaces.

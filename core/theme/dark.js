@@ -133,7 +133,7 @@ Blockly.Themes.Dark.setComponentStyle('scrollbarOpacity', 0.4);
  */
 Blockly.Css.register([
   /* eslint-disable indent */
-  '.dark .blocklyTreeRow:not(.blocklyTreeSelected):hover {',
+  '.dark-theme .blocklyTreeRow:not(.blocklyTreeSelected):hover {',
     'background-color: #2a2d2e;',
   '}',
   /* eslint-enable indent */

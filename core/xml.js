@@ -476,13 +476,7 @@ Blockly.Xml.appendDomToWorkspace = function(xml, workspace) {
   // First check if we have a workspaceSvg, otherwise the blocks have no shape
   // and the position does not matter.
   if (workspace.hasOwnProperty('scale')) {
-    var savetab = Blockly.BlockSvg.TAB_WIDTH;
-    try {
-      Blockly.BlockSvg.TAB_WIDTH = 0;
-      bbox = workspace.getBlocksBoundingBox();
-    } finally {
-      Blockly.BlockSvg.TAB_WIDTH = savetab;
-    }
+    bbox = workspace.getBlocksBoundingBox();
   }
   // Load the new blocks into the workspace and get the IDs of the new blocks.
   var newBlockIds = Blockly.Xml.domToWorkspace(xml, workspace);
@@ -494,6 +488,7 @@ Blockly.Xml.appendDomToWorkspace = function(xml, workspace) {
     // Check position of the new blocks.
     var newX = Infinity;  // x of top corner
     var newY = Infinity;  // y of top corner
+    var ySeparation = 10;
     for (var i = 0; i < newBlockIds.length; i++) {
       var blockXY =
           workspace.getBlockById(newBlockIds[i]).getRelativeToSurfaceXY();
@@ -504,7 +499,7 @@ Blockly.Xml.appendDomToWorkspace = function(xml, workspace) {
         newX = blockXY.x;
       }
     }
-    offsetY = farY - newY + Blockly.BlockSvg.SEP_SPACE_Y;
+    offsetY = farY - newY + ySeparation;
     offsetX = topX - newX;
     // move the new blocks to append them at the bottom
     var width;  // Not used in LTR.

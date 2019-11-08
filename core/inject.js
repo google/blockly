@@ -311,7 +311,7 @@ Blockly.createMainWorkspace_ = function(svg, options, blockDragSurface,
             object.moveBy(deltaX, deltaY);
           }
           if (e) {
-            if (!e.group) {
+            if (!e.group && object) {
               console.log('WARNING: Moved object in bounds but there was no' +
                   ' event group. This may break undo.');
             }

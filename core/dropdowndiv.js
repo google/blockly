@@ -248,12 +248,9 @@ Blockly.DropDownDiv.prototype.showPositionedByRect_ = function(bBox, field,
     secondaryY += opt_secondaryYOffset;
   }
   var sourceBlock = field.getSourceBlock();
-  // Set bounds to workspace; show the drop-down.
-  Blockly.DropDownDiv.setBoundsElement(
-      sourceBlock.workspace.getParentSvg().parentNode);
-  return Blockly.DropDownDiv.show(
-      field, sourceBlock.RTL,
-      primaryX, primaryY, secondaryX, secondaryY, opt_onHide);
+  // Show the drop-down.
+  return this.show(field, sourceBlock.RTL, primaryX, primaryY, secondaryX,
+      secondaryY, opt_onHide);
 };
 
 
@@ -530,7 +527,7 @@ Blockly.DropDownDiv.prototype.positionInternal_ = function(
  * @return {boolean} True if the menu rendered at the primary origin point.
  * @package
  */
-Blockly.DropDownDiv.show = function(owner, rtl, primaryX, primaryY,
+Blockly.DropDownDiv.prototype.show = function(owner, rtl, primaryX, primaryY,
     secondaryX, secondaryY, opt_onHide) {
   var dropdown = Blockly.getMainWorkspace().dropdown;
   dropdown.owner_ = owner;
@@ -638,8 +635,7 @@ Blockly.DropDownDiv.showPositionedByField = function(field,
  * @return {boolean} True if visible.
  */
 Blockly.DropDownDiv.isVisible = function() {
-  var dropdown = Blockly.getMainWorkspace().dropdown;
-  return !!dropdown.owner_;
+  return !!Blockly.getMainWorkspace().dropdown.owner_;
 };
 
 /**
@@ -687,6 +683,9 @@ Blockly.DropDownDiv.hide = function() {
  * Hide the menu, without animation.
  */
 Blockly.DropDownDiv.hideWithoutAnimation = function() {
+  if (!Blockly.getMainWorkspace()) {
+    return;
+  }
   var dropdown = Blockly.getMainWorkspace().dropdown;
   if (!Blockly.DropDownDiv.isVisible()) {
     return;
@@ -711,10 +710,6 @@ Blockly.DropDownDiv.hideWithoutAnimation = function() {
     dropdown.onHide_ = null;
   }
   Blockly.DropDownDiv.clearContent();
-  if (dropdown.owner_) {
-    // TODO: DO we need this?
-    dropdown.owner_.getSourceBlock().workspace.markFocused();
-  }
   dropdown.owner_ = null;
 
 };

@@ -150,14 +150,14 @@ Blockly.WorkspaceSvg = function(options,
 
   /**
    * The dropdown div for this workspace.
-   * @type {Element}
+   * @type {Blockly.DropDownDiv}
    */
   this.dropdown = null;
 
 
   /**
    * The widget div for this workspace.
-   * @type {Element}
+   * @type {Blockly.WidgetDiv}
    */
   this.widget = null;
 };

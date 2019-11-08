@@ -31,10 +31,14 @@ goog.provide('Blockly.WidgetDiv');
 
 goog.require('Blockly.utils.style');
 
-
+/**
+ * Class for a widget div.
+ * @constructor
+ * @package
+ */
 Blockly.WidgetDiv = function() {
   /**
-   * The HTML container.  Set once by widget.createDom.
+   * The HTML container.  Set once by this.createDom.
    * @type {Element}
    */
   this.DIV = null;
@@ -227,7 +231,11 @@ Blockly.WidgetDiv.show = function(newOwner, rtl, dispose) {
  * Destroy the widget and hide the div.
  */
 Blockly.WidgetDiv.hide = function() {
-  var widget = Blockly.getMainWorkspace().widget;
+  var workspace = Blockly.getMainWorkspace();
+  if (!workspace) {
+    return;
+  }
+  var widget = workspace.widget;
   if (widget && widget.owner_) {
     widget.owner_ = null;
     widget.DIV.style.display = 'none';

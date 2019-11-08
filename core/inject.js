@@ -78,6 +78,9 @@ Blockly.inject = function(container, opt_options) {
   Blockly.user.keyMap.setKeyMap(options.keyMap);
 
   Blockly.init_(workspace);
+  if (!Blockly.mainWorkspace) {
+    Blockly.mainWorkspace = workspace;
+  }
 
   Blockly.svgResize(workspace);
 
@@ -242,6 +245,10 @@ Blockly.createMainWorkspace_ = function(svg, options, blockDragSurface,
 
   // A null translation will also apply the correct initial scale.
   mainWorkspace.translate(0, 0);
+
+  if (!Blockly.mainWorkspace) {
+    Blockly.mainWorkspace = mainWorkspace;
+  }
 
   if (!options.readOnly && !mainWorkspace.isMovable()) {
     // Helper function for the workspaceChanged callback.

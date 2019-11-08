@@ -103,8 +103,9 @@ Blockly.Cursor.prototype.hide = function() {
  */
 Blockly.Cursor.prototype.onBlocklyAction = function(action) {
   // If we are on a field give it the option to handle the action
-  if (this.curNode_ && this.curNode_.getType() === Blockly.ASTNode.types.FIELD &&
-      this.curNode_.getLocation().onBlocklyAction(action)) {
+  if (this.getCurNode() &&
+      this.getCurNode().getType() === Blockly.ASTNode.types.FIELD &&
+      this.getCurNode().getLocation().onBlocklyAction(action)) {
     return true;
   }
   switch (action.name) {
@@ -129,6 +130,7 @@ Blockly.Cursor.prototype.onBlocklyAction = function(action) {
  * Find the next connection, field, or block.
  * @return {Blockly.ASTNode} The next element, or null if the current node is
  *     not set or there is no next value.
+ * @protected
  */
 Blockly.Cursor.prototype.next = function() {
   var curNode = this.getCurNode();
@@ -153,6 +155,7 @@ Blockly.Cursor.prototype.next = function() {
  * Find the in connection or field.
  * @return {Blockly.ASTNode} The in element, or null if the current node is
  *     not set or there is no in value.
+ * @protected
  */
 Blockly.Cursor.prototype.in = function() {
   var curNode = this.getCurNode();
@@ -177,6 +180,7 @@ Blockly.Cursor.prototype.in = function() {
  * Find the previous connection, field, or block.
  * @return {Blockly.ASTNode} The previous element, or null if the current node
  *     is not set or there is no previous value.
+ * @protected
  */
 Blockly.Cursor.prototype.prev = function() {
   var curNode = this.getCurNode();
@@ -201,6 +205,7 @@ Blockly.Cursor.prototype.prev = function() {
  * Find the out connection, field, or block.
  * @return {Blockly.ASTNode} The out element, or null if the current node is
  *     not set or there is no out value.
+ * @protected
  */
 Blockly.Cursor.prototype.out = function() {
   var curNode = this.getCurNode();

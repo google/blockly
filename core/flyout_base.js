@@ -857,14 +857,5 @@ Blockly.Flyout.prototype.placeNewBlock_ = function(oldBlock) {
  */
 Blockly.Flyout.prototype.onBlocklyAction = function(action) {
   var cursor = this.workspace_.getCursor();
-  switch (action.name) {
-    case Blockly.navigation.actionNames.PREVIOUS:
-      cursor.prev();
-      return true;
-    case Blockly.navigation.actionNames.NEXT:
-      cursor.next();
-      return true;
-    default:
-      return false;
-  }
+  return cursor.onBlocklyAction(action);
 };

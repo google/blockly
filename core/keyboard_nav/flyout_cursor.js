@@ -47,13 +47,6 @@ Blockly.utils.object.inherits(Blockly.FlyoutCursor, Blockly.Cursor);
  * @override
  */
 Blockly.FlyoutCursor.prototype.onBlocklyAction = function(action) {
-  // If we are on a field give it the option to handle the action
-  if (this.getCurNode() &&
-      this.getCurNode().getType() === Blockly.ASTNode.types.FIELD &&
-      this.getCurNode().getLocation().onBlocklyAction(action)) {
-    return true;
-  }
-
   switch (action.name) {
     case Blockly.navigation.actionNames.PREVIOUS:
       this.prev();

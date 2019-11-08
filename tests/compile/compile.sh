@@ -78,6 +78,7 @@ COMPILATION_COMMAND="java -jar $COMPILER --js='$BLOCKLY_ROOT/tests/compile/main.
   --js='$BLOCKLY_ROOT/blocks/**.js' \
   --js='$BLOCKLY_ROOT/generators/**.js' \
   --generate_exports \
+  --externs $BLOCKLY_ROOT/externs/goog-externs.js \
   --externs $BLOCKLY_ROOT/externs/svg-externs.js \
   --compilation_level ADVANCED_OPTIMIZATIONS \
   --language_in ECMASCRIPT5_STRICT \

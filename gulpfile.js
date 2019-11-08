@@ -183,7 +183,7 @@ gulp.task('build-core', function () {
       dependency_mode: 'PRUNE',
       entry_point: './core-requires.js',
       js_output_file: 'blockly_compressed.js',
-      externs: './externs/svg-externs.js',
+      externs: ['./externs/svg-externs.js', './externs/goog-externs.js'],
       define: defines
     }, argv.verbose, argv.strict))
     .pipe(prependHeader())
@@ -217,6 +217,7 @@ goog.provide('Blockly.Warning');`;
     .pipe(stripApacheLicense())
     .pipe(compile({
       dependency_mode: 'NONE',
+      externs: ['./externs/goog-externs.js'],
       js_output_file: 'blocks_compressed.js'
     }, argv.verbose, argv.strict))
     .pipe(gulp.replace('\'use strict\';', '\'use strict\';\n\n\n'))
@@ -245,6 +246,7 @@ goog.provide('Blockly.utils.string');`;
       `${provides}goog.provide('Blockly.${namespace}');`))
     .pipe(compile({
       dependency_mode: 'NONE',
+      externs: ['./externs/goog-externs.js'],
       js_output_file: `${language}_compressed.js`
     }, argv.verbose, argv.strict))
     .pipe(gulp.replace('\'use strict\';', '\'use strict\';\n\n\n'))

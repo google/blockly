@@ -4,6 +4,7 @@
   <script type="text/javascript" src="https://unpkg.com/pxt-blockly@2.1.12/blockly_compressed.js"></script>
   <script type="text/javascript" src="https://unpkg.com/pxt-blockly@2.1.12/blocks_compressed.js"></script>
   <script type="text/javascript" src="https://unpkg.com/pxt-blockly@2.1.12/msg/messages.js"></script>
+  <script type="text/javascript" src="../../playgrounds/screenshot.js"></script>
 </head>
 
 <body>
@@ -12,7 +13,11 @@
     var blocklyDiv = document.getElementById('blocklyDiv');
     var workspace;
     window.addEventListener('message', function (msg) {
-      var xml = msg.data;
+      var data = msg.data;
+      if (data.type !== 'post') {
+        return;
+      }
+      var xml = data.xml;
       try {
         if (workspace) {
           workspace.dispose();
@@ -26,10 +31,22 @@
           drag: true,
           wheel: false,
         },
+        zoom: {
+          wheel: true,
+          startScale: 2,
+        }
       });
 
       try {
         Blockly.Xml.domToWorkspace(Blockly.Xml.textToDom(xml), workspace);
+        var topBlock = workspace.getTopBlocks()[0];
+        workspaceToSvg_(workspace, function (datauri) {
+          window.parent.postMessage({
+            type: 'svg',
+            from: 'pxtblockly',
+            text: datauri
+          }, '*');
+        });
       } catch { }
     });
   </script>

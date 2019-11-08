@@ -147,6 +147,19 @@ Blockly.WorkspaceSvg = function(options,
    * @private
    */
   this.cachedParentSvg_ = null;
+
+  /**
+   * The dropdown div for this workspace.
+   * @type {Element}
+   */
+  this.dropdown = null;
+
+
+  /**
+   * The widget div for this workspace.
+   * @type {Element}
+   */
+  this.widget = null;
 };
 Blockly.utils.object.inherits(Blockly.WorkspaceSvg, Blockly.Workspace);
 

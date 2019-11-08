@@ -24,6 +24,7 @@
 
 goog.provide('Blockly.Cursor');
 
+goog.require('Blockly.navigation');
 
 /**
  * Class for a cursor.
@@ -95,9 +96,41 @@ Blockly.Cursor.prototype.hide = function() {
 };
 
 /**
+ * Handles the given action.
+ * This is only triggered when keyboard navigation is enabled.
+ * @param {!Blockly.Action} action The action to be handled.
+ * @return {boolean} True if the action has been handled, false otherwise.
+ */
+Blockly.Cursor.prototype.onBlocklyAction = function(action) {
+  // If we are on a field give it the option to handle the action
+  if (this.getCurNode() &&
+      this.getCurNode().getType() === Blockly.ASTNode.types.FIELD &&
+      this.getCurNode().getLocation().onBlocklyAction(action)) {
+    return true;
+  }
+  switch (action.name) {
+    case Blockly.navigation.actionNames.PREVIOUS:
+      this.prev();
+      return true;
+    case Blockly.navigation.actionNames.OUT:
+      this.out();
+      return true;
+    case Blockly.navigation.actionNames.NEXT:
+      this.next();
+      return true;
+    case Blockly.navigation.actionNames.IN:
+      this.in();
+      return true;
+    default:
+      return false;
+  }
+};
+
+/**
  * Find the next connection, field, or block.
  * @return {Blockly.ASTNode} The next element, or null if the current node is
  *     not set or there is no next value.
+ * @protected
  */
 Blockly.Cursor.prototype.next = function() {
   var curNode = this.getCurNode();
@@ -122,6 +155,7 @@ Blockly.Cursor.prototype.next = function() {
  * Find the in connection or field.
  * @return {Blockly.ASTNode} The in element, or null if the current node is
  *     not set or there is no in value.
+ * @protected
  */
 Blockly.Cursor.prototype.in = function() {
   var curNode = this.getCurNode();
@@ -146,6 +180,7 @@ Blockly.Cursor.prototype.in = function() {
  * Find the previous connection, field, or block.
  * @return {Blockly.ASTNode} The previous element, or null if the current node
  *     is not set or there is no previous value.
+ * @protected
  */
 Blockly.Cursor.prototype.prev = function() {
   var curNode = this.getCurNode();
@@ -170,6 +205,7 @@ Blockly.Cursor.prototype.prev = function() {
  * Find the out connection, field, or block.
  * @return {Blockly.ASTNode} The out element, or null if the current node is
  *     not set or there is no out value.
+ * @protected
  */
 Blockly.Cursor.prototype.out = function() {
   var curNode = this.getCurNode();

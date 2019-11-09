@@ -710,6 +710,9 @@ Blockly.DropDownDiv.hideWithoutAnimation = function() {
     dropdown.onHide_ = null;
   }
   Blockly.DropDownDiv.clearContent();
+  if (dropdown.owner_) {
+    dropdown.owner_.getSourceBlock().workspace.markFocused();
+  }
   dropdown.owner_ = null;
 
 };

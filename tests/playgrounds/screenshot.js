@@ -54,8 +54,9 @@ function svgToPng_(data, width, height, callback) {
  * Create an SVG of the blocks on the workspace.
  * @param {!Blockly.WorkspaceSvg} workspace The workspace.
  * @param {!Function} callback Callback.
+ * @param {string=} customCss Custom CSS to append to the SVG.
  */
-function workspaceToSvg_(workspace, callback) {
+function workspaceToSvg_(workspace, callback, customCss) {
 
   // Go through all text areas and set their value.
   var textAreas = document.getElementsByTagName("textarea");
@@ -87,7 +88,7 @@ function workspaceToSvg_(workspace, callback) {
   var css = [].slice.call(document.head.querySelectorAll('style'))
       .filter(function(el) { return /\.blocklySvg/.test(el.innerText); })[0];
   var style = document.createElement('style');
-  style.innerHTML = css.innerText;
+  style.innerHTML = css.innerText + '\n' + customCss;
   svg.insertBefore(style, svg.firstChild);
 
   var svgAsXML = (new XMLSerializer).serializeToString(svg);

@@ -232,7 +232,7 @@ Blockly.WidgetDiv.show = function(newOwner, rtl, dispose) {
  */
 Blockly.WidgetDiv.hide = function() {
   var workspace = Blockly.getMainWorkspace();
-  if (!workspace) {
+  if (!workspace || !workspace.widget) {
     return;
   }
   var widget = workspace.widget;
@@ -263,7 +263,7 @@ Blockly.WidgetDiv.isVisible = function() {
  */
 Blockly.WidgetDiv.hideIfOwner = function(oldOwner) {
   var widget = Blockly.getMainWorkspace().widget;
-  if (widget.owner_ == oldOwner) {
+  if (widget && widget.owner_ == oldOwner) {
     Blockly.WidgetDiv.hide();
   }
 };

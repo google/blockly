@@ -269,7 +269,7 @@ Blockly.FieldTextInput.prototype.showInlineEditor_ = function(quietInput) {
   this.isBeingEdited_ = true;
 
   if (!quietInput) {
-    this.htmlInput_.focus();
+    this.htmlInput_.focus({preventScroll:true});
     this.htmlInput_.select();
   }
 };
@@ -349,6 +349,10 @@ Blockly.FieldTextInput.prototype.bindInputEvents_ = function(htmlInput) {
   this.onKeyInputWrapper_ =
       Blockly.bindEventWithChecks_(
           htmlInput, 'input', this, this.onHtmlInputChange_);
+  this.onBlurInputWrapper_ =
+  Blockly.bindEventWithChecks_(
+      htmlInput, 'blur', this, this.onHtmlInputBlur_);
+    
 };
 
 /**
@@ -361,6 +365,9 @@ Blockly.FieldTextInput.prototype.unbindInputEvents_ = function() {
   }
   if (this.onKeyInputWrapper_) {
     Blockly.unbindEvent_(this.onKeyInputWrapper_);
+  }
+  if (this.onBlurInputWrapper_) {
+    Blockly.unbindEvent_(this.onBlurInputWrapper_);
   }
 };
 
@@ -383,6 +390,16 @@ Blockly.FieldTextInput.prototype.onHtmlInputKeyDown_ = function(e) {
     this.sourceBlock_.tab(this, !e.shiftKey);
     e.preventDefault();
   }
+};
+
+/**
+ * Handle blur for the editor.
+ * @param {!Event} _e Focus event.
+ * @protected
+ */
+Blockly.FieldTextInput.prototype.onHtmlInputBlur_ = function(_e) {
+  Blockly.WidgetDiv.hide();
+  Blockly.DropDownDiv.hideWithoutAnimation();
 };
 
 /**

@@ -647,7 +647,7 @@ Blockly.DropDownDiv.isVisible = function() {
  */
 Blockly.DropDownDiv.hideIfOwner = function(owner, opt_withoutAnimation) {
   var dropdown = Blockly.getMainWorkspace().dropdown;
-  if (dropdown.owner_ === owner) {
+  if (dropdown && dropdown.owner_ === owner) {
     if (opt_withoutAnimation) {
       Blockly.DropDownDiv.hideWithoutAnimation();
     } else {
@@ -683,7 +683,7 @@ Blockly.DropDownDiv.hide = function() {
  * Hide the menu, without animation.
  */
 Blockly.DropDownDiv.hideWithoutAnimation = function() {
-  if (!Blockly.getMainWorkspace()) {
+  if (!Blockly.getMainWorkspace() || !Blockly.getMainWorkspace().dropdown) {
     return;
   }
   var dropdown = Blockly.getMainWorkspace().dropdown;
@@ -716,8 +716,6 @@ Blockly.DropDownDiv.hideWithoutAnimation = function() {
   dropdown.owner_ = null;
 
 };
-
-
 
 /**
  * Repositions the dropdownDiv on window resize. If it doesn't know how to

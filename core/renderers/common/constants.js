@@ -157,7 +157,6 @@ Blockly.blockRendering.ConstantProvider = function() {
    */
   this.FIELD_TEXT_FONTFAMILY = 'sans-serif';
 
-
   /**
    * The ID of the emboss filter, or the empty string if no filter is set.
    * @type {string}

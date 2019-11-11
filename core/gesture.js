@@ -483,12 +483,14 @@ Blockly.Gesture.prototype.doStart = function(e) {
     // dragged, the block was moved, the parent workspace zoomed, etc.
     this.startWorkspace_.resize();
   }
-  this.startWorkspace_.markFocused();
-  this.mostRecentEvent_ = e;
 
   // Hide chaff also hides the flyout, so don't do it if the click is in a
   // flyout.
   Blockly.hideChaff(!!this.flyout_);
+
+  this.startWorkspace_.markFocused();
+  this.mostRecentEvent_ = e;
+
   Blockly.Tooltip.block();
 
   if (this.targetBlock_) {

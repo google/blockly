@@ -73,7 +73,7 @@ Blockly.Menu.prototype.createDom = function() {
 Blockly.Menu.prototype.focus = function() {
   var el = this.getElement();
   if (el) {
-    el.focus();
+    el.focus({preventScroll:true});
     Blockly.utils.dom.addClass(el, 'focused');
   }
 };

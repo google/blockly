@@ -1874,7 +1874,7 @@ Blockly.WorkspaceSvg.prototype.setBrowserFocus = function() {
   }
   try {
     // Focus the workspace SVG - this is for Chrome and Firefox.
-    this.getParentSvg().focus();
+    this.getParentSvg().focus({preventScroll:true});
   } catch (e) {
     // IE and Edge do not support focus on SVG elements. When that fails
     // above, get the injectionDiv (the workspace's parent) and focus that
@@ -1886,7 +1886,7 @@ Blockly.WorkspaceSvg.prototype.setBrowserFocus = function() {
     } catch (e) {
       // setActive support was discontinued in Edge so when that fails, call
       // focus instead.
-      this.getParentSvg().parentNode.focus();
+      this.getParentSvg().parentNode.focus({preventScroll:true});
     }
   }
 };

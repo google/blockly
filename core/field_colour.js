@@ -334,7 +334,7 @@ Blockly.FieldColour.prototype.showEditor_ = function() {
       this, this.dropdownDispose_.bind(this));
 
   // Focus so we can start receiving keyboard events.
-  this.picker_.focus();
+  this.picker_.focus({preventScroll:true});
 };
 
 /**
@@ -487,7 +487,7 @@ Blockly.FieldColour.prototype.onMouseMove_ = function(e) {
  * @private
  */
 Blockly.FieldColour.prototype.onMouseEnter_ = function() {
-  this.picker_.focus();
+  this.picker_.focus({preventScroll:true});
 };
 
 /**

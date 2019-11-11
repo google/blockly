@@ -163,6 +163,13 @@ Blockly.blockRendering.ConstantProvider = function() {
    * @private
    */
   this.disabledPattern_ = null;
+
+  /**
+   * Whether text input and colour fields fill up the entire source block.
+   * @type {boolean}
+   * @package
+   */
+  this.FULL_BLOCK_FIELDS = false;
 };
 
 /**

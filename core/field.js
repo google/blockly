@@ -962,7 +962,7 @@ Blockly.Field.prototype.getClickTarget_ = function() {
  */
 Blockly.Field.prototype.getAbsoluteXY_ = function() {
   return Blockly.utils.style.getPageOffset(
-      /** @type {!SVGRectElement} */ (this.borderRect_));
+      /** @type {!SVGRectElement} */ (this.getClickTarget_()));
 };
 
 /**

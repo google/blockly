@@ -84,6 +84,13 @@ Blockly.FieldTextInput = function(opt_value, opt_validator, opt_config) {
    * @private
    */
   this.onKeyInputWrapper_ = null;
+
+  /**
+   * Whether the field should consider the whole parent block to be its click
+   * target.
+   * @type {boolean}
+   */
+  this.fullBlockClickTarget_ = false;
 };
 Blockly.utils.object.inherits(Blockly.FieldTextInput, Blockly.Field);
 
@@ -126,6 +133,50 @@ Blockly.FieldTextInput.prototype.configure_ = function(config) {
   if (typeof config['spellcheck'] == 'boolean') {
     this.spellcheck_ = config['spellcheck'];
   }
+};
+
+/**
+ * Create the block UI for this field.
+ * @package
+ */
+Blockly.FieldTextInput.prototype.initView = function() {
+  var renderer = this.sourceBlock_.workspace.getRenderer();
+  if (renderer.getConstants().FULL_BLOCK_FIELDS) {
+    // Step one: figure out if this is the only field on this block.
+    // Rendering is quite different in that case.
+    var nFields = 0;
+    var nConnections = 0;
+
+    // Count the number of fields, excluding text fields
+    for (var i = 0, input; (input = this.sourceBlock_.inputList[i]); i++) {
+      for (var j = 0, field; (field = input.fieldRow[j]); j++) {
+        if (!(field instanceof Blockly.FieldLabel)) {
+          nFields ++;
+        }
+      }
+      if (input.connection) {
+        nConnections++;
+      }
+    }
+    // The special case is when this is the only non-label field on the block
+    // and it has an output but no inputs.
+    this.fullBlockClickTarget_ =
+        nFields <= 1 && this.sourceBlock_.outputConnection && !nConnections;
+  } else {
+    this.fullBlockClickTarget_ = false;
+  }
+
+  if (this.fullBlockClickTarget_) {
+    // Don't create a border rect.
+    this.size_.height =
+        Math.max(this.size_.height, Blockly.Field.BORDER_RECT_DEFAULT_HEIGHT);
+    this.size_.width =
+        Math.max(this.size_.width, Blockly.Field.X_PADDING);
+    this.clickTarget_ = this.sourceBlock_.getSvgRoot();
+  } else {
+    this.createBorderRect_();
+  }
+  this.createTextElement_();
 };
 
 /**
@@ -297,6 +348,16 @@ Blockly.FieldTextInput.prototype.widgetCreate_ = function() {
   htmlInput.value = htmlInput.defaultValue = this.getEditorText_(this.value_);
   htmlInput.untypedDefaultValue_ = this.value_;
   htmlInput.oldValue_ = null;
+
+  if (this.fullBlockClickTarget_) {
+    var bBox = this.getScaledBBox();
+    var borderRadius = (bBox.bottom - bBox.top) / 2;
+    htmlInput.style.borderRadius = borderRadius + 'px';
+    // Pull stroke colour from the existing shadow block
+    var strokeColour = this.sourceBlock_.style.colourTertiary;
+    div.style.borderColor = strokeColour;
+  }
+
   if (Blockly.utils.userAgent.GECKO) {
     // In FF, ensure the browser reflows before resizing to avoid issue #2777.
     setTimeout(this.resizeEditor_.bind(this), 0);
@@ -542,6 +603,29 @@ Blockly.FieldTextInput.prototype.getEditorText_ = function(value) {
  */
 Blockly.FieldTextInput.prototype.getValueFromEditorText_ = function(text) {
   return text;
+};
+
+/**
+ * @override
+ */
+Blockly.FieldTextInput.prototype.getScaledBBox = function() {
+  if (this.fullBlockClickTarget_) {
+    var heightWidth = this.sourceBlock_.getHeightWidth();
+  } else {
+    var heightWidth = this.borderRect_.getBBox();
+  }
+
+  var scale = this.sourceBlock_.workspace.scale;
+  var xy = this.getAbsoluteXY_();
+  var scaledHeight = heightWidth.height * scale;
+  var scaledWidth = heightWidth.width * scale;
+
+  return {
+    top: xy.y,
+    bottom: xy.y + scaledHeight,
+    left: xy.x,
+    right: xy.x + scaledWidth
+  };
 };
 
 Blockly.fieldRegistry.register('field_input', Blockly.FieldTextInput);

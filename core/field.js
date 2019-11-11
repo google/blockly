@@ -292,7 +292,9 @@ Blockly.Field.prototype.setSourceBlock = function(block) {
     throw Error('Field already bound to a block.');
   }
   this.sourceBlock_ = block;
-  this.constants_ = block.workspace.getRenderer().getConstants();
+  if (block.workspace.rendered) {
+    this.constants_ = block.workspace.getRenderer().getConstants();
+  }
 };
 
 /**

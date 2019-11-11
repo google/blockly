@@ -130,6 +130,7 @@ Blockly.Field = function(value, opt_validator, opt_config) {
   this.mouseDownWrapper_ = null;
 
   /**
+   * Constants associated with the source block's renderer.
    * @type {Blockly.blockRendering.ConstantProvider}
    * @protected
    */

@@ -84,27 +84,27 @@ suite('Theme', function() {
   }
 
   test('Set All BlockStyles', function() {
-    var theme = new Blockly.Theme(createBlockStyles());
+    var theme = new Blockly.Theme('test', createBlockStyles());
     stringifyAndCompare(createBlockStyles(), theme.blockStyles_);
     theme.setAllBlockStyles(createMultipleBlockStyles());
     stringifyAndCompare(createMultipleBlockStyles(), theme.blockStyles_);
   });
 
   test('Get All BlockStyles', function() {
-    var theme = new Blockly.Theme(createMultipleBlockStyles());
+    var theme = new Blockly.Theme('test', createMultipleBlockStyles());
     var allBlocks = theme.getAllBlockStyles();
     stringifyAndCompare(createMultipleBlockStyles(), allBlocks);
   });
 
   test('Get BlockStyles', function() {
-    var theme = new Blockly.Theme(createBlockStyles());
+    var theme = new Blockly.Theme('test', createBlockStyles());
     var blockStyle = theme.getBlockStyle('styleOne');
 
     stringifyAndCompare(blockStyle, createBlockStyles().styleOne);
   });
 
   test('Set BlockStyle Update', function() {
-    var theme = new Blockly.Theme(createBlockStyles());
+    var theme = new Blockly.Theme('test', createBlockStyles());
     var blockStyle = createBlockStyles();
     blockStyle.styleOne.colourPrimary = '#00ff00';
 
@@ -114,7 +114,7 @@ suite('Theme', function() {
   });
 
   test('Set BlockStyle Add', function() {
-    var theme = new Blockly.Theme(createBlockStyles());
+    var theme = new Blockly.Theme('test', createBlockStyles());
     var blockStyle = createMultipleBlockStyles();
 
     theme.setBlockStyle('styleTwo', blockStyle.styleTwo);

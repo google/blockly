@@ -451,6 +451,12 @@ Blockly.blockRendering.RenderInfo.prototype.addElemSpacing_ = function() {
  * @protected
  */
 Blockly.blockRendering.RenderInfo.prototype.getInRowSpacing_ = function(prev, next) {
+  if (!prev) {
+    // Statement input padding.
+    if (next && Blockly.blockRendering.Types.isStatementInput(next)) {
+      return this.constants_.STATEMENT_INPUT_PADDING_LEFT;
+    }
+  }
   // Between inputs and the end of the row.
   if (prev && Blockly.blockRendering.Types.isInput(prev) && !next) {
     if (Blockly.blockRendering.Types.isExternalInput(prev)) {

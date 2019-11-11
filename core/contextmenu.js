@@ -89,7 +89,7 @@ Blockly.ContextMenu.populate_ = function(options, rtl) {
   */
   var menu = new Blockly.Menu();
   menu.setRightToLeft(rtl);
-  for (var i = 0, option; option = options[i]; i++) {
+  for (var i = 0, option; (option = options[i]); i++) {
     var menuItem = new Blockly.MenuItem(option.text);
     menuItem.setRightToLeft(rtl);
     menu.addChild(menuItem, true);

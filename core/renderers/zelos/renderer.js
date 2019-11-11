@@ -28,6 +28,7 @@ goog.require('Blockly.blockRendering.Renderer');
 goog.require('Blockly.utils.object');
 goog.require('Blockly.zelos.ConstantProvider');
 goog.require('Blockly.zelos.Drawer');
+goog.require('Blockly.zelos.PathObject');
 goog.require('Blockly.zelos.RenderInfo');
 
 
@@ -76,6 +77,18 @@ Blockly.zelos.Renderer.prototype.makeRenderInfo_ = function(block) {
 Blockly.zelos.Renderer.prototype.makeDrawer_ = function(block, info) {
   return new Blockly.zelos.Drawer(block,
       /** @type {!Blockly.zelos.RenderInfo} */ (info));
+};
+
+/**
+ * Create a new instance of a renderer path object.
+ * @param {!SVGElement} root The root SVG element.
+ * @return {!Blockly.zelos.PathObject} The renderer path object.
+ * @package
+ * @override
+ */
+Blockly.zelos.Renderer.prototype.makePathObject = function(root) {
+  return new Blockly.zelos.PathObject(root,
+      /** @type {!Blockly.zelos.ConstantProvider} */ (this.getConstants()));
 };
 
 Blockly.blockRendering.register('zelos', Blockly.zelos.Renderer);

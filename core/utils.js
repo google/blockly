@@ -30,6 +30,8 @@
 goog.provide('Blockly.utils');
 
 goog.require('Blockly.Msg');
+goog.require('Blockly.constants');
+goog.require('Blockly.utils.colour');
 goog.require('Blockly.utils.Coordinate');
 goog.require('Blockly.utils.global');
 goog.require('Blockly.utils.string');
@@ -574,7 +576,7 @@ Blockly.utils.getBlockTypeCounts = function(block, opt_stripFollowing) {
       descendants.splice(index, descendants.length - index);
     }
   }
-  for (var i = 0, checkBlock; checkBlock = descendants[i]; i++) {
+  for (var i = 0, checkBlock; (checkBlock = descendants[i]); i++) {
     if (typeCountsMap[checkBlock.type]) {
       typeCountsMap[checkBlock.type]++;
     } else {
@@ -618,4 +620,42 @@ Blockly.utils.screenToWsCoordinates = function(ws, screenCoordinates) {
   // The position in main workspace coordinates.
   var finalOffsetMainWs = finalOffsetPixels.scale(1 / ws.scale);
   return finalOffsetMainWs;
+};
+
+/**
+ * Parse a block colour from a number or string, as provided in a block
+ * definition.
+ * @param {number|string} colour HSV hue value (0 to 360), #RRGGBB string,
+ *     or a message reference string pointing to one of those two values.
+ * @return {{hue: ?number, hex: string}} An object containing the colour as
+ *     a #RRGGBB string, and the hue if the input was an HSV hue value.
+ * @throws {Error} If the colour cannot be parsed.
+ */
+Blockly.utils.parseBlockColour = function(colour) {
+  var dereferenced = (typeof colour == 'string') ?
+      Blockly.utils.replaceMessageReferences(colour) : colour;
+
+  var hue = Number(dereferenced);
+  if (!isNaN(hue) && 0 <= hue && hue <= 360) {
+    return {
+      hue: hue,
+      hex: Blockly.utils.colour.hsvToHex(hue, Blockly.HSV_SATURATION,
+          Blockly.HSV_VALUE * 255)
+    };
+  } else {
+    var hex = Blockly.utils.colour.parse(dereferenced);
+    if (hex) {
+      // Only store hue if colour is set as a hue.
+      return {
+        hue: null,
+        hex: hex
+      };
+    } else {
+      var errorMsg = 'Invalid colour: "' + dereferenced + '"';
+      if (colour != dereferenced) {
+        errorMsg += ' (from "' + colour + '")';
+      }
+      throw Error(errorMsg);
+    }
+  }
 };

@@ -72,7 +72,7 @@ Blockly.blockRendering.Drawer.prototype.draw = function() {
   this.drawOutline_();
   this.drawInternals_();
 
-  this.block_.pathObject.setPaths(this.outlinePath_ + '\n' + this.inlinePath_);
+  this.block_.pathObject.setPath(this.outlinePath_ + '\n' + this.inlinePath_);
   if (this.info_.RTL) {
     this.block_.pathObject.flipRTL();
   }

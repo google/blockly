@@ -22,10 +22,13 @@
 
 goog.provide('Blockly.Theme');
 
+goog.require('Blockly.utils');
 goog.require('Blockly.utils.colour');
+
 
 /**
  * Class for a theme.
+ * @param {string} name Theme name.
  * @param {!Object.<string, Blockly.Theme.BlockStyle>} blockStyles A map from
  *     style names (strings) to objects with style attributes for blocks.
  * @param {!Object.<string, Blockly.Theme.CategoryStyle>} categoryStyles A map
@@ -35,7 +38,15 @@ goog.require('Blockly.utils.colour');
  *     names to style value.
  * @constructor
  */
-Blockly.Theme = function(blockStyles, categoryStyles, opt_componentStyles) {
+Blockly.Theme = function(name, blockStyles, categoryStyles,
+    opt_componentStyles) {
+
+  /**
+   * The theme name. This can be used to reference a specific theme in CSS.
+   * @type {string}
+   * @package
+   */
+  this.name = name;
   /**
    * The block styles map.
    * @type {!Object.<string, !Blockly.Theme.BlockStyle>}
@@ -163,23 +174,25 @@ Blockly.Theme.createBlockStyle = function(colour) {
  */
 Blockly.Theme.validatedBlockStyle = function(blockStyle) {
   // Make a new object with all of the same properties.
-  var valid = {};
+  var valid = /** @type {!Blockly.Theme.BlockStyle} */ ({});
   if (blockStyle) {
     Blockly.utils.object.mixin(valid, blockStyle);
   }
 
   // Validate required properties.
-  var parsedColour = Blockly.utils.colour.parseBlockColour(
-      valid.colourPrimary || '#000');
+  var parsedColour = Blockly.utils.parseBlockColour(
+      valid['colourPrimary'] || '#000');
   valid.colourPrimary = parsedColour.hex;
-  valid.colourSecondary = valid.colourSecondary ?
-      Blockly.utils.colour.parseBlockColour(valid.colourSecondary).hex :
-      Blockly.utils.colour.blend('#fff', valid.colourPrimary, 0.6);
+  valid.colourSecondary = valid['colourSecondary'] ?
+      Blockly.utils.parseBlockColour(valid['colourSecondary']).hex :
+      Blockly.utils.colour.blend('#fff', valid.colourPrimary, 0.6) ||
+      valid.colourPrimary;
   valid.colourTertiary = valid.colourTertiary ?
-      Blockly.utils.colour.parseBlockColour(valid.colourTertiary).hex :
-      Blockly.utils.colour.blend('#fff', valid.colourPrimary, 0.3);
+      Blockly.utils.parseBlockColour(valid['colourTertiary']).hex :
+      Blockly.utils.colour.blend('#fff', valid.colourPrimary, 0.3) ||
+      valid.colourPrimary;
 
-  valid.hat = valid.hat || '';
+  valid.hat = valid['hat'] || '';
   return valid;
 };
 
@@ -200,6 +213,15 @@ Blockly.Theme.prototype.getCategoryStyle = function(categoryStyleName) {
 Blockly.Theme.prototype.setCategoryStyle = function(categoryStyleName,
     categoryStyle) {
   this.categoryStyles_[categoryStyleName] = categoryStyle;
+};
+
+/**
+ * Gets a map of all the category style names.
+ * @return {!Object.<string, Blockly.Theme.CategoryStyle>} Map of category
+ *     styles.
+ */
+Blockly.Theme.prototype.getAllCategoryStyles = function() {
+  return this.categoryStyles_;
 };
 
 /**

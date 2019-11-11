@@ -146,7 +146,7 @@ Blockly.FieldMultilineInput.prototype.getDisplayText_ = function() {
 Blockly.FieldMultilineInput.prototype.render_ = function() {
   // Remove all text group children.
   var currentChild;
-  while (currentChild = this.textGroup_.firstChild) {
+  while ((currentChild = this.textGroup_.firstChild)) {
     this.textGroup_.removeChild(currentChild);
   }
 

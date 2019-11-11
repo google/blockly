@@ -62,7 +62,6 @@ Blockly.Trashcan = function(workspace) {
   // Create flyout options.
   var flyoutWorkspaceOptions = /** @type {!Blockly.Options} */ ({
     scrollbars: true,
-    disabledPatternId: this.workspace_.options.disabledPatternId,
     parentWorkspace: this.workspace_,
     RTL: this.workspace_.RTL,
     oneBasedIndex: this.workspace_.options.oneBasedIndex,
@@ -430,7 +429,7 @@ Blockly.Trashcan.prototype.click = function() {
   }
 
   var xml = [];
-  for (var i = 0, text; text = this.contents_[i]; i++) {
+  for (var i = 0, text; (text = this.contents_[i]); i++) {
     xml[i] = Blockly.Xml.textToDom(text);
   }
   this.flyout.show(xml);

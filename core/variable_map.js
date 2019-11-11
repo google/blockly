@@ -208,7 +208,7 @@ Blockly.VariableMap.prototype.createVariable = function(name,
  */
 Blockly.VariableMap.prototype.deleteVariable = function(variable) {
   var variableList = this.variableMap_[variable.type];
-  for (var i = 0, tempVar; tempVar = variableList[i]; i++) {
+  for (var i = 0, tempVar; (tempVar = variableList[i]); i++) {
     if (tempVar.getId() == variable.getId()) {
       variableList.splice(i, 1);
       Blockly.Events.fire(new Blockly.Events.VarDelete(variable));
@@ -228,7 +228,7 @@ Blockly.VariableMap.prototype.deleteVariableById = function(id) {
     // Check whether this variable is a function parameter before deleting.
     var variableName = variable.name;
     var uses = this.getVariableUsesById(id);
-    for (var i = 0, block; block = uses[i]; i++) {
+    for (var i = 0, block; (block = uses[i]); i++) {
       if (block.type == 'procedures_defnoreturn' ||
         block.type == 'procedures_defreturn') {
         var procedureName = block.getFieldValue('NAME');
@@ -301,7 +301,7 @@ Blockly.VariableMap.prototype.getVariable = function(name, opt_type) {
   var type = opt_type || '';
   var list = this.variableMap_[type];
   if (list) {
-    for (var j = 0, variable; variable = list[j]; j++) {
+    for (var j = 0, variable; (variable = list[j]); j++) {
       if (Blockly.Names.equals(variable.name, name)) {
         return variable;
       }
@@ -320,7 +320,7 @@ Blockly.VariableMap.prototype.getVariableById = function(id) {
   var keys = Object.keys(this.variableMap_);
   for (var i = 0; i < keys.length; i++ ) {
     var key = keys[i];
-    for (var j = 0, variable; variable = this.variableMap_[key][j]; j++) {
+    for (var j = 0, variable; (variable = this.variableMap_[key][j]); j++) {
       if (variable.getId() == id) {
         return variable;
       }

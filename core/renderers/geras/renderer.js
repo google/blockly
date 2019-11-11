@@ -103,7 +103,8 @@ Blockly.geras.Renderer.prototype.makeDrawer_ = function(block, info) {
  * @override
  */
 Blockly.geras.Renderer.prototype.makePathObject = function(root) {
-  return new Blockly.geras.PathObject(root);
+  return new Blockly.geras.PathObject(root,
+      /** @type {!Blockly.geras.ConstantProvider} */ (this.getConstants()));
 };
 
 /**
@@ -112,7 +113,7 @@ Blockly.geras.Renderer.prototype.makePathObject = function(root) {
  *     provider.
  * @protected
  */
-Blockly.blockRendering.Renderer.prototype.makeHighlightConstants_ = function() {
+Blockly.geras.Renderer.prototype.makeHighlightConstants_ = function() {
   return new Blockly.geras.HighlightConstantProvider(
       /** @type {!Blockly.blockRendering.ConstantProvider} */
       (this.getConstants()));

@@ -30,6 +30,7 @@ goog.require('Blockly.FieldCheckbox');
 goog.require('Blockly.FieldLabel');
 goog.require('Blockly.FieldTextInput');
 goog.require('Blockly.Mutator');
+goog.require('Blockly.Warning');
 
 
 Blockly.Blocks['procedures_defnoreturn'] = {
@@ -139,7 +140,7 @@ Blockly.Blocks['procedures_defnoreturn'] = {
   domToMutation: function(xmlElement) {
     this.arguments_ = [];
     this.argumentVarModels_ = [];
-    for (var i = 0, childNode; childNode = xmlElement.childNodes[i]; i++) {
+    for (var i = 0, childNode; (childNode = xmlElement.childNodes[i]); i++) {
       if (childNode.nodeName.toLowerCase() == 'arg') {
         var varName = childNode.getAttribute('name');
         var varId = childNode.getAttribute('varid') || childNode.getAttribute('varId');
@@ -354,7 +355,7 @@ Blockly.Blocks['procedures_defnoreturn'] = {
     // Update the mutator's variables if the mutator is open.
     if (this.mutator && this.mutator.isVisible()) {
       var blocks = this.mutator.workspace_.getAllBlocks(false);
-      for (var i = 0, block; block = blocks[i]; i++) {
+      for (var i = 0, block; (block = blocks[i]); i++) {
         if (block.type == 'procedures_mutatorarg' &&
             Blockly.Names.equals(oldName, block.getFieldValue('NAME'))) {
           block.setFieldValue(newName, 'NAME');
@@ -859,7 +860,7 @@ Blockly.Blocks['procedures_callnoreturn'] = {
     this.renameProcedure(this.getProcedureCall(), name);
     var args = [];
     var paramIds = [];
-    for (var i = 0, childNode; childNode = xmlElement.childNodes[i]; i++) {
+    for (var i = 0, childNode; (childNode = xmlElement.childNodes[i]); i++) {
       if (childNode.nodeName.toLowerCase() == 'arg') {
         args.push(childNode.getAttribute('name'));
         paramIds.push(childNode.getAttribute('paramId'));

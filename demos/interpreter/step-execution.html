@@ -153,13 +153,12 @@
       // Add an API function for the alert() block, generated for "text_print" blocks.
       interpreter.setProperty(scope, 'alert',
           interpreter.createNativeFunction(function(text) {
-        text = text ? text.toString() : '';
+        text = arguments.length ? text : '';
         outputArea.value += '\n' + text;
       }));
 
       // Add an API function for the prompt() block.
       var wrapper = function(text) {
-        text = text ? text.toString() : '';
         return interpreter.createPrimitive(prompt(text));
       };
       interpreter.setProperty(scope, 'prompt',
@@ -167,7 +166,7 @@
 
       // Add an API function for highlighting blocks.
       var wrapper = function(id) {
-        id = id ? id.toString() : '';
+        id = String(id || '');
         return interpreter.createPrimitive(highlightBlock(id));
       };
       interpreter.setProperty(scope, 'highlightBlock',

@@ -21,11 +21,6 @@ goog.require('Blockly.Msg');
 suite('Procedures', function() {
   setup(function() {
     this.workspace = new Blockly.Workspace();
-    this.workspace.setTheme(new Blockly.Theme({
-      "procedure_blocks": {
-        "colourPrimary": "290"
-      }
-    }));
 
     this.callForAllTypes = function(func, startName) {
       var typesArray = [
@@ -33,7 +28,7 @@ suite('Procedures', function() {
         ['procedures_defreturn', 'procedures_callreturn']
       ];
 
-      for (var i = 0, types; types = typesArray[i]; i++) {
+      for (var i = 0, types; (types = typesArray[i]); i++) {
         var context = Object.create(null);
         context.workspace = this.workspace;
         context.defType = types[0];
@@ -249,9 +244,7 @@ suite('Procedures', function() {
     });
     test('Multiple Workspaces', function() {
       this.callForAllTypes(function() {
-        var workspace = new Blockly.Workspace({
-          theme: this.workspace.getTheme()
-        });
+        var workspace = new Blockly.Workspace();
         var def2 = new Blockly.Block(workspace, this.defType);
         def2.setFieldValue('name', 'NAME');
         var caller2 = new Blockly.Block(workspace, this.callType);
@@ -293,9 +286,7 @@ suite('Procedures', function() {
     });
     test('Multiple Workspaces', function() {
       this.callForAllTypes(function() {
-        var workspace = new Blockly.Workspace({
-          theme: this.workspace.getTheme()
-        });
+        var workspace = new Blockly.Workspace();
         var def2 = new Blockly.Block(workspace, this.defType);
         def2.setFieldValue('name', 'NAME');
         var caller2 = new Blockly.Block(workspace, this.callType);
@@ -392,7 +383,7 @@ suite('Procedures', function() {
           // TODO: Update this for typed vars.
           var variables = this.workspace.getVariablesOfType('');
           var variableMap = this.workspace.getVariableMap();
-          for (var i = 0, variable; variable = variables[i]; i++) {
+          for (var i = 0, variable; (variable = variables[i]); i++) {
             variableMap.deleteVariable(variable);
           }
         }

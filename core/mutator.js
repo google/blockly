@@ -142,7 +142,7 @@ Blockly.Mutator.prototype.createEditor_ = function() {
   // Convert the list of names into a list of XML objects for the flyout.
   if (this.quarkNames_.length) {
     var quarkXml = Blockly.utils.xml.createElement('xml');
-    for (var i = 0, quarkName; quarkName = this.quarkNames_[i]; i++) {
+    for (var i = 0, quarkName; (quarkName = this.quarkNames_[i]); i++) {
       var element = Blockly.utils.xml.createElement('block');
       element.setAttribute('type', quarkName);
       quarkXml.appendChild(element);
@@ -154,7 +154,6 @@ Blockly.Mutator.prototype.createEditor_ = function() {
     // If you want to enable disabling, also remove the
     // event filter from workspaceChanged_ .
     disable: false,
-    disabledPatternId: this.block_.workspace.options.disabledPatternId,
     languageTree: quarkXml,
     parentWorkspace: this.block_.workspace,
     pathToMedia: this.block_.workspace.options.pathToMedia,
@@ -290,7 +289,7 @@ Blockly.Mutator.prototype.setVisible = function(visible) {
 
     this.rootBlock_ = this.block_.decompose(this.workspace_);
     var blocks = this.rootBlock_.getDescendants(false);
-    for (var i = 0, child; child = blocks[i]; i++) {
+    for (var i = 0, child; (child = blocks[i]); i++) {
       child.render();
     }
     // The root block should not be dragable or deletable.
@@ -356,7 +355,7 @@ Blockly.Mutator.prototype.workspaceChanged_ = function(e) {
   if (!this.workspace_.isDragging()) {
     var blocks = this.workspace_.getTopBlocks(false);
     var MARGIN = 20;
-    for (var b = 0, block; block = blocks[b]; b++) {
+    for (var b = 0, block; (block = blocks[b]); b++) {
       var blockXY = block.getRelativeToSurfaceXY();
       var blockHW = block.getHeightWidth();
       if (blockXY.y + blockHW.height < MARGIN) {

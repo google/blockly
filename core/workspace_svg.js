@@ -33,6 +33,8 @@ goog.require('Blockly.Gesture');
 goog.require('Blockly.Grid');
 goog.require('Blockly.Msg');
 goog.require('Blockly.Options');
+goog.require('Blockly.ThemeManager');
+goog.require('Blockly.Themes.Classic');
 goog.require('Blockly.TouchGesture');
 goog.require('Blockly.utils');
 goog.require('Blockly.utils.Coordinate');
@@ -135,6 +137,16 @@ Blockly.WorkspaceSvg = function(options,
   }
 
   /**
+   * Object in charge of storing and updating the workspace theme.
+   * @type {!Blockly.ThemeManager}
+   * @protected
+   */
+  this.themeManager_ = this.options.parentWorkspace ?
+      this.options.parentWorkspace.getThemeManager() :
+      new Blockly.ThemeManager(this,
+          this.options.theme || Blockly.Themes.Classic);
+
+  /**
    * The block renderer used for rendering blocks on this workspace.
    * @type {!Blockly.blockRendering.Renderer}
    * @private
@@ -160,6 +172,8 @@ Blockly.WorkspaceSvg = function(options,
    * @type {Blockly.WidgetDiv}
    */
   this.widget = null;
+  
+  this.themeManager_.subscribeWorkspace(this);
 };
 Blockly.utils.object.inherits(Blockly.WorkspaceSvg, Blockly.Workspace);
 
@@ -438,6 +452,76 @@ Blockly.WorkspaceSvg.prototype.getRenderer = function() {
 };
 
 /**
+ * Get the theme manager for this workspace.
+ * @return {!Blockly.ThemeManager} The theme manager for this workspace.
+ * @package
+ */
+Blockly.WorkspaceSvg.prototype.getThemeManager = function() {
+  return this.themeManager_;
+};
+
+/**
+ * Get the workspace theme object.
+ * @return {!Blockly.Theme} The workspace theme object.
+ */
+Blockly.WorkspaceSvg.prototype.getTheme = function() {
+  return this.themeManager_.getTheme();
+};
+
+/**
+ * Set the workspace theme object.
+ * If no theme is passed, default to the `Blockly.Themes.Classic` theme.
+ * @param {Blockly.Theme} theme The workspace theme object.
+ */
+Blockly.WorkspaceSvg.prototype.setTheme = function(theme) {
+  if (!theme) {
+    theme = /** @type {!Blockly.Theme} */ (Blockly.Themes.Classic);
+  }
+  this.themeManager_.setTheme(theme);
+};
+
+/**
+ * Refresh all blocks on the workspace after a theme update.
+ * @package
+ */
+Blockly.WorkspaceSvg.prototype.refreshTheme = function() {
+  // Update all blocks in workspace that have a style name.
+  this.updateBlockStyles_(this.getAllBlocks(false).filter(
+      function(block) {
+        return block.getStyleName() !== undefined;
+      }
+  ));
+
+  // Update current toolbox selection.
+  this.refreshToolboxSelection();
+  if (this.toolbox_) {
+    this.toolbox_.updateColourFromTheme();
+  }
+
+  var event = new Blockly.Events.Ui(null, 'theme', null, null);
+  event.workspaceId = this.id;
+  Blockly.Events.fire(event);
+};
+
+/**
+ * Updates all the blocks with new style.
+ * @param {!Array.<!Blockly.Block>} blocks List of blocks to update the style
+ *     on.
+ * @private
+ */
+Blockly.WorkspaceSvg.prototype.updateBlockStyles_ = function(blocks) {
+  for (var i = 0, block; (block = blocks[i]); i++) {
+    var blockStyleName = block.getStyleName();
+    if (blockStyleName) {
+      block.setStyle(blockStyleName);
+      if (block.mutator) {
+        block.mutator.updateBlockStyle();
+      }
+    }
+  }
+};
+
+/**
  * Sets the cursor for use with keyboard navigation.
  *
  * @param {!Blockly.Cursor} cursor The cursor used to move around this workspace.
@@ -689,6 +773,7 @@ Blockly.WorkspaceSvg.prototype.createDom = function(opt_backgroundClass) {
   var svgMarker = this.marker_.getDrawer().createDom();
   this.svgGroup_.appendChild(svgMarker);
 
+  this.getRenderer().getConstants().createDom(this.svgGroup_);
   return this.svgGroup_;
 };
 
@@ -730,11 +815,11 @@ Blockly.WorkspaceSvg.prototype.dispose = function() {
     this.zoomControls_ = null;
   }
 
-  if (this.marker_) {
+  if (this.marker_ && this.marker_.getDrawer()) {
     this.marker_.getDrawer().dispose();
   }
 
-  if (this.getCursor()) {
+  if (this.getCursor() && this.getCursor().getDrawer()) {
     this.getCursor().getDrawer().dispose();
   }
 
@@ -748,8 +833,15 @@ Blockly.WorkspaceSvg.prototype.dispose = function() {
     this.grid_ = null;
   }
 
+  this.renderer_.getConstants().dispose();
+
   if (this.themeManager_) {
+    this.themeManager_.unsubscribeWorkspace(this);
     this.themeManager_.unsubscribe(this.svgBackground_);
+    if (!this.options.parentWorkspace) {
+      this.themeManager_.dispose();
+      this.themeManager_ = null;
+    }
   }
   Blockly.WorkspaceSvg.superClass_.dispose.call(this);
 
@@ -821,7 +913,6 @@ Blockly.WorkspaceSvg.prototype.addZoomControls = function() {
  */
 Blockly.WorkspaceSvg.prototype.addFlyout = function(tagName) {
   var workspaceOptions = /** @type {!Blockly.Options} */ ({
-    disabledPatternId: this.options.disabledPatternId,
     parentWorkspace: this,
     RTL: this.RTL,
     oneBasedIndex: this.options.oneBasedIndex,
@@ -1163,7 +1254,7 @@ Blockly.WorkspaceSvg.prototype.traceOn = function() {
 Blockly.WorkspaceSvg.prototype.highlightBlock = function(id, opt_state) {
   if (opt_state === undefined) {
     // Unhighlight all blocks.
-    for (var i = 0, block; block = this.highlightedBlocks_[i]; i++) {
+    for (var i = 0, block; (block = this.highlightedBlocks_[i]); i++) {
       block.setHighlighted(false);
     }
     this.highlightedBlocks_.length = 0;
@@ -1233,7 +1324,7 @@ Blockly.WorkspaceSvg.prototype.pasteBlock_ = function(xmlBlock) {
       do {
         var collide = false;
         var allBlocks = this.getAllBlocks(false);
-        for (var i = 0, otherBlock; otherBlock = allBlocks[i]; i++) {
+        for (var i = 0, otherBlock; (otherBlock = allBlocks[i]); i++) {
           var otherXY = otherBlock.getRelativeToSurfaceXY();
           if (Math.abs(blockX - otherXY.x) <= 1 &&
               Math.abs(blockY - otherXY.y) <= 1) {
@@ -1244,7 +1335,7 @@ Blockly.WorkspaceSvg.prototype.pasteBlock_ = function(xmlBlock) {
         if (!collide) {
           // Check for blocks in snap range to any of its connections.
           var connections = block.getConnections_(false);
-          for (var i = 0, connection; connection = connections[i]; i++) {
+          for (var i = 0, connection; (connection = connections[i]); i++) {
             var neighbour = connection.closest(Blockly.SNAP_RADIUS,
                 new Blockly.utils.Coordinate(blockX, blockY));
             if (neighbour.connection) {
@@ -1577,7 +1668,7 @@ Blockly.WorkspaceSvg.prototype.cleanUp = function() {
   Blockly.Events.setGroup(true);
   var topBlocks = this.getTopBlocks(true);
   var cursorY = 0;
-  for (var i = 0, block; block = topBlocks[i]; i++) {
+  for (var i = 0, block; (block = topBlocks[i]); i++) {
     if (!block.isMovable()) {
       continue;
     }
@@ -2566,17 +2657,3 @@ Blockly.WorkspaceSvg.prototype.getGrid = function() {
   return this.grid_;
 };
 
-/**
- * Refresh all blocks on the workspace, toolbox and flyout after a theme update.
- * @package
- * @override
- */
-Blockly.WorkspaceSvg.prototype.refreshTheme = function() {
-  Blockly.WorkspaceSvg.superClass_.refreshTheme.call(this);
-
-  // Update current toolbox selection.
-  this.refreshToolboxSelection();
-  if (this.toolbox_) {
-    this.toolbox_.updateColourFromTheme();
-  }
-};

@@ -110,5 +110,6 @@ Blockly.Themes.Deuteranopia.categoryStyles = {
 };
 
 Blockly.Themes.Deuteranopia =
-    new Blockly.Theme(Blockly.Themes.Deuteranopia.defaultBlockStyles,
+    new Blockly.Theme('deuteranopia',
+        Blockly.Themes.Deuteranopia.defaultBlockStyles,
         Blockly.Themes.Deuteranopia.categoryStyles);

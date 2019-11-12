@@ -88,7 +88,7 @@ Blockly.FieldTextInput = function(opt_value, opt_validator, opt_config) {
   /**
    * Whether the field should consider the whole parent block to be its click
    * target.
-   * @type {boolean}
+   * @type {?boolean}
    */
   this.fullBlockClickTarget_ = false;
 };
@@ -136,8 +136,7 @@ Blockly.FieldTextInput.prototype.configure_ = function(config) {
 };
 
 /**
- * Create the block UI for this field.
- * @package
+ * @override
  */
 Blockly.FieldTextInput.prototype.initView = function() {
   var renderer = this.sourceBlock_.workspace.getRenderer();
@@ -342,6 +341,16 @@ Blockly.FieldTextInput.prototype.widgetCreate_ = function() {
   htmlInput.style.fontSize = fontSize;
   var borderRadius =
       (Blockly.FieldTextInput.BORDERRADIUS * this.workspace_.scale) + 'px';
+
+  if (this.fullBlockClickTarget_) {
+    var bBox = this.getScaledBBox();
+    // Override border radius.
+    borderRadius = (bBox.bottom - bBox.top) / 2;
+    // Pull stroke colour from the existing shadow block
+    var strokeColour = this.sourceBlock_.style.colourTertiary;
+    div.style.borderColor = strokeColour;
+  }
+
   htmlInput.style.borderRadius = borderRadius;
   div.appendChild(htmlInput);
 
@@ -349,14 +358,6 @@ Blockly.FieldTextInput.prototype.widgetCreate_ = function() {
   htmlInput.untypedDefaultValue_ = this.value_;
   htmlInput.oldValue_ = null;
 
-  if (this.fullBlockClickTarget_) {
-    var bBox = this.getScaledBBox();
-    var borderRadius = (bBox.bottom - bBox.top) / 2;
-    htmlInput.style.borderRadius = borderRadius + 'px';
-    // Pull stroke colour from the existing shadow block
-    var strokeColour = this.sourceBlock_.style.colourTertiary;
-    div.style.borderColor = strokeColour;
-  }
 
   if (Blockly.utils.userAgent.GECKO) {
     // In FF, ensure the browser reflows before resizing to avoid issue #2777.

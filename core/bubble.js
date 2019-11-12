@@ -83,6 +83,7 @@ Blockly.Bubble = function(workspace, content, shape, anchorXY,
    * Describes whether this bubble has been disposed of (nodes and event
    * listeners removed from the page) or not.
    * @type {boolean}
+   * @package
    */
   this.disposed = false;
 

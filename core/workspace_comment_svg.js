@@ -49,6 +49,21 @@ goog.require('Blockly.WorkspaceComment');
  */
 Blockly.WorkspaceCommentSvg = function(workspace, content, height, width,
     opt_id) {
+
+  /**
+   * Mouse up event data.
+   * @type {?Blockly.EventData}
+   * @private
+   */
+  this.onMouseUpWrapper_ = null;
+
+  /**
+   * Mouse move event data.
+   * @type {?Blockly.EventData}
+   * @private
+   */
+  this.onMouseMoveWrapper_ = null;
+
   // Create core elements for the block.
   /**
    * @type {SVGElement}

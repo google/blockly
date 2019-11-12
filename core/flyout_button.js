@@ -87,6 +87,13 @@ Blockly.FlyoutButton = function(workspace, targetWorkspace, xml, isLabel) {
    * @private
    */
   this.cssClass_ = xml.getAttribute('web-class') || null;
+
+  /**
+   * Mouse up event data.
+   * @type {?Blockly.EventData}
+   * @private
+   */
+  this.onMouseUpWrapper_ = null;
 };
 
 /**
@@ -105,13 +112,6 @@ Blockly.FlyoutButton.prototype.width = 0;
  * @type {number}
  */
 Blockly.FlyoutButton.prototype.height = 0;
-
-/**
- * Opaque data that can be passed to Blockly.unbindEvent_.
- * @type {Array.<!Array>}
- * @private
- */
-Blockly.FlyoutButton.prototype.onMouseUpWrapper_ = null;
 
 /**
  * Create the button elements.

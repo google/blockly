@@ -81,7 +81,7 @@ Blockly.TouchGesture = function(e, creatorWorkspace) {
    * A handle to use to unbind the second touch start or pointer down listener
    * at the end of a drag.
    * Opaque data returned from Blockly.bindEventWithChecks_.
-   * @type {Array.<!Array>}
+   * @type {?Blockly.EventData}
    * @private
    */
   this.onStartWrapper_ = null;

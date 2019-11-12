@@ -24,6 +24,7 @@
 
 goog.provide('Blockly.Cursor');
 
+goog.require('Blockly.ASTNode');
 goog.require('Blockly.navigation');
 
 /**

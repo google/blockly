@@ -23,6 +23,7 @@
 
 goog.provide('Blockly.BlockSvg');
 
+goog.require('Blockly.ASTNode');
 goog.require('Blockly.Block');
 goog.require('Blockly.blockAnimations');
 goog.require('Blockly.blockRendering.IPathObject');
@@ -31,6 +32,7 @@ goog.require('Blockly.Events');
 goog.require('Blockly.Events.Ui');
 goog.require('Blockly.Events.BlockMove');
 goog.require('Blockly.Msg');
+goog.require('Blockly.navigation');
 goog.require('Blockly.RenderedConnection');
 goog.require('Blockly.TabNavigateCursor');
 goog.require('Blockly.Tooltip');

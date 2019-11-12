@@ -33,12 +33,6 @@ goog.require('Blockly.utils.style');
 
 
 /**
- * The HTML container.  Set once by Blockly.WidgetDiv.createDom.
- * @type {Element}
- */
-Blockly.WidgetDiv.DIV = null;
-
-/**
  * The object currently using this container.
  * @type {Object}
  * @private
@@ -55,14 +49,12 @@ Blockly.WidgetDiv.dispose_ = null;
 /**
  * Create the widget div and inject it onto the page.
  */
-Blockly.WidgetDiv.createDom = function() {
-  if (Blockly.WidgetDiv.DIV) {
-    return;  // Already created.
+Blockly.WidgetDiv.getDiv = function() {
+  var workspace = Blockly.getMainWorkspace();
+  if (workspace) {
+    return workspace.widgetDom;
   }
-  // Create an HTML container for popup overlays (e.g. editor widgets).
-  Blockly.WidgetDiv.DIV = document.createElement('div');
-  Blockly.WidgetDiv.DIV.className = 'blocklyWidgetDiv';
-  document.body.appendChild(Blockly.WidgetDiv.DIV);
+  return null;
 };
 
 /**
@@ -79,9 +71,10 @@ Blockly.WidgetDiv.show = function(newOwner, rtl, dispose) {
   // Temporarily move the widget to the top of the screen so that it does not
   // cause a scrollbar jump in Firefox when displayed.
   var xy = Blockly.utils.style.getViewportPageOffset();
-  Blockly.WidgetDiv.DIV.style.top = xy.y + 'px';
-  Blockly.WidgetDiv.DIV.style.direction = rtl ? 'rtl' : 'ltr';
-  Blockly.WidgetDiv.DIV.style.display = 'block';
+  var div = Blockly.WidgetDiv.getDiv();
+  div.style.top = xy.y + 'px';
+  div.style.direction = rtl ? 'rtl' : 'ltr';
+  div.style.display = 'block';
 };
 
 /**
@@ -89,13 +82,14 @@ Blockly.WidgetDiv.show = function(newOwner, rtl, dispose) {
  */
 Blockly.WidgetDiv.hide = function() {
   if (Blockly.WidgetDiv.owner_) {
+    var div = Blockly.WidgetDiv.getDiv();
     Blockly.WidgetDiv.owner_ = null;
-    Blockly.WidgetDiv.DIV.style.display = 'none';
-    Blockly.WidgetDiv.DIV.style.left = '';
-    Blockly.WidgetDiv.DIV.style.top = '';
+    div.style.display = 'none';
+    div.style.left = '';
+    div.style.top = '';
     Blockly.WidgetDiv.dispose_ && Blockly.WidgetDiv.dispose_();
     Blockly.WidgetDiv.dispose_ = null;
-    Blockly.WidgetDiv.DIV.innerHTML = '';
+    div.innerHTML = '';
   }
 };
 
@@ -127,9 +121,10 @@ Blockly.WidgetDiv.hideIfOwner = function(oldOwner) {
  * @private
  */
 Blockly.WidgetDiv.positionInternal_ = function(x, y, height) {
-  Blockly.WidgetDiv.DIV.style.left = x + 'px';
-  Blockly.WidgetDiv.DIV.style.top = y + 'px';
-  Blockly.WidgetDiv.DIV.style.height = height + 'px';
+  var div = Blockly.WidgetDiv.getDiv();
+  div.style.left = x + 'px';
+  div.style.top = y + 'px';
+  div.style.height = height + 'px';
 };
 
 /**
@@ -149,6 +144,9 @@ Blockly.WidgetDiv.positionInternal_ = function(x, y, height) {
  */
 Blockly.WidgetDiv.positionWithAnchor = function(viewportBBox, anchorBBox,
     widgetSize, rtl) {
+  var injectionDiv = Blockly.getMainWorkspace().getInjectionDiv();
+  var containerBBox = injectionDiv.getBoundingClientRect();
+
   var y = Blockly.WidgetDiv.calculateY_(viewportBBox, anchorBBox, widgetSize);
   var x = Blockly.WidgetDiv.calculateX_(viewportBBox, anchorBBox, widgetSize,
       rtl);

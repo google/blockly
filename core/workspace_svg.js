@@ -161,6 +161,28 @@ Blockly.WorkspaceSvg = function(options,
   this.cachedParentSvg_ = null;
 
   this.themeManager_.subscribeWorkspace(this);
+
+  /**
+   * @package
+   */
+  this.dropdownDom = null;
+
+  /**
+   * @package
+   */
+  this.dropdownArrowDom = null;
+
+  /**
+   * @package
+   */
+  this.dropdownContentDom = null;
+
+
+  /**
+   * @package
+   */
+  this.widgetDom = null;
+
 };
 Blockly.utils.object.inherits(Blockly.WorkspaceSvg, Blockly.Workspace);
 
@@ -762,6 +784,55 @@ Blockly.WorkspaceSvg.prototype.createDom = function(opt_backgroundClass) {
 
   this.getRenderer().getConstants().createDom(this.svgGroup_);
   return this.svgGroup_;
+};
+
+/**
+ * Create and insert the DOM element for this div.
+ * @package
+ */
+Blockly.WorkspaceSvg.prototype.createDropdownDom = function(injectionDiv) {
+  var div = document.createElement('div');
+  div.className = 'blocklyDropDownDiv';
+  div.style.backgroundColor = Blockly.DropDownDiv.DEFAULT_DROPDOWN_COLOUR;
+  div.style.borderColor = Blockly.DropDownDiv.DEFAULT_DROPDOWN_BORDER_COLOUR;
+  injectionDiv.appendChild(div);
+  this.dropdownDom = div;
+
+  var content = document.createElement('div');
+  content.className = 'blocklyDropDownContent';
+  div.appendChild(content);
+  this.dropdownContentDom = content;
+
+  var arrow = document.createElement('div');
+  arrow.className = 'blocklyDropDownArrow';
+  div.appendChild(arrow);
+  this.dropdownArrowDom = arrow;
+
+  div.style.opacity = 0;
+
+  // Transition animation for transform: translate() and opacity.
+  div.style.transition = 'transform ' +
+    Blockly.DropDownDiv.ANIMATION_TIME + 's, ' +
+    'opacity ' + Blockly.DropDownDiv.ANIMATION_TIME + 's';
+
+  // Handle focusin/out events to add a visual indicator when
+  // a child is focused or blurred.
+  div.addEventListener('focusin', function() {
+    Blockly.utils.dom.addClass(div, 'focused');
+  });
+  div.addEventListener('focusout', function() {
+    Blockly.utils.dom.removeClass(div, 'focused');
+  });
+};
+
+/**
+ * Create the widget div and inject it onto the page.
+ */
+Blockly.WorkspaceSvg.prototype.createWidgetDom = function(injectionDiv) {
+  // Create an HTML container for popup overlays (e.g. editor widgets).
+  this.widgetDom = document.createElement('div');
+  this.widgetDom.className = 'blocklyWidgetDiv';
+  injectionDiv.appendChild(this.widgetDom);
 };
 
 /**

@@ -77,6 +77,9 @@ Blockly.inject = function(container, opt_options) {
       workspaceDragSurface);
   Blockly.user.keyMap.setKeyMap(options.keyMap);
 
+  workspace.createDropdownDom(subContainer);
+  workspace.createWidgetDom(subContainer);
+
   Blockly.init_(workspace);
   Blockly.mainWorkspace = workspace;
 
@@ -329,8 +332,6 @@ Blockly.createMainWorkspace_ = function(svg, options, blockDragSurface,
 
   // The SVG is now fully assembled.
   Blockly.svgResize(mainWorkspace);
-  Blockly.WidgetDiv.createDom();
-  Blockly.DropDownDiv.createDom();
   Blockly.Tooltip.createDom();
   return mainWorkspace;
 };

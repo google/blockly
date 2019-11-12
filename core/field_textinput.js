@@ -280,7 +280,7 @@ Blockly.FieldTextInput.prototype.showInlineEditor_ = function(quietInput) {
  * @protected
  */
 Blockly.FieldTextInput.prototype.widgetCreate_ = function() {
-  var div = Blockly.WidgetDiv.DIV;
+  var div = Blockly.WidgetDiv.getDiv();
 
   var htmlInput = /** @type {HTMLInputElement} */ (document.createElement('input'));
   htmlInput.className = 'blocklyHtmlInput';
@@ -327,7 +327,7 @@ Blockly.FieldTextInput.prototype.widgetDispose_ = function() {
 
   // Actual disposal.
   this.unbindInputEvents_();
-  var style = Blockly.WidgetDiv.DIV.style;
+  var style = Blockly.WidgetDiv.getDiv().style;
   style.width = 'auto';
   style.height = 'auto';
   style.fontSize = '';
@@ -430,7 +430,7 @@ Blockly.FieldTextInput.prototype.setEditorValue_ = function(newValue) {
  * @protected
  */
 Blockly.FieldTextInput.prototype.resizeEditor_ = function() {
-  var div = Blockly.WidgetDiv.DIV;
+  var div = Blockly.WidgetDiv.getDiv();
   var bBox = this.getScaledBBox();
   div.style.width = bBox.right - bBox.left + 'px';
   div.style.height = bBox.bottom - bBox.top + 'px';
@@ -442,7 +442,7 @@ Blockly.FieldTextInput.prototype.resizeEditor_ = function() {
 
   // Shift by a few pixels to line up exactly.
   xy.y += 1;
-  if (Blockly.utils.userAgent.GECKO && Blockly.WidgetDiv.DIV.style.top) {
+  if (Blockly.utils.userAgent.GECKO && Blockly.WidgetDiv.getDiv().style.top) {
     // Firefox mis-reports the location of the border by a pixel
     // once the WidgetDiv is moved into position.
     xy.x -= 1;

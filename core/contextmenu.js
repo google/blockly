@@ -146,7 +146,7 @@ Blockly.ContextMenu.position_ = function(menu, e, rtl) {
  * @private
  */
 Blockly.ContextMenu.createWidget_ = function(menu) {
-  var div = Blockly.WidgetDiv.DIV;
+  var div = Blockly.WidgetDiv.getDiv();
   menu.render(div);
   var menuDom = menu.getElement();
   Blockly.utils.dom.addClass(

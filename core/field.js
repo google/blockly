@@ -703,16 +703,19 @@ Blockly.Field.prototype.getSize = function() {
  * @package
  */
 Blockly.Field.prototype.getScaledBBox = function() {
-  var bBox = this.borderRect_.getBBox();
+  var workspace = this.sourceBlock_.workspace;
+  var bBox = this.borderRect_.getBoundingClientRect();
   var scaledHeight = bBox.height * this.sourceBlock_.workspace.scale;
   var scaledWidth = bBox.width * this.sourceBlock_.workspace.scale;
-  var xy = this.getAbsoluteXY_();
-  return {
-    top: xy.y,
-    bottom: xy.y + scaledHeight,
-    left: xy.x,
-    right: xy.x + scaledWidth
-  };
+  var containerOffset = Blockly.utils.style.getPageOffset(
+      /** @type {!Element} */ (workspace.getInjectionDiv()));
+
+  return new Blockly.utils.Rect(
+      bBox.y - containerOffset.y,
+      bBox.y - containerOffset.y + scaledHeight,
+      bBox.x - containerOffset.x,
+      bBox.x - containerOffset.x + scaledWidth
+  );
 };
 
 /**

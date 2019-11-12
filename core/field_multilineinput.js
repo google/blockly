@@ -219,7 +219,7 @@ Blockly.FieldMultilineInput.prototype.updateSize_ = function() {
  * @protected
  */
 Blockly.FieldMultilineInput.prototype.resizeEditor_ = function() {
-  var div = Blockly.WidgetDiv.DIV;
+  var div = Blockly.WidgetDiv.getDiv();
   var bBox = this.getScaledBBox();
   div.style.width = bBox.right - bBox.left + 'px';
   div.style.height = bBox.bottom - bBox.top + 'px';
@@ -239,7 +239,7 @@ Blockly.FieldMultilineInput.prototype.resizeEditor_ = function() {
  * @protected
  */
 Blockly.FieldMultilineInput.prototype.widgetCreate_ = function() {
-  var div = Blockly.WidgetDiv.DIV;
+  var div = Blockly.WidgetDiv.getDiv();
   var scale = this.workspace_.scale;
 
   var htmlInput = /** @type {HTMLTextAreaElement} */ (document.createElement('textarea'));

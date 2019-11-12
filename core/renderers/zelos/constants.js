@@ -419,13 +419,13 @@ Blockly.zelos.ConstantProvider.prototype.createDom = function(svg) {
       },
       highlightGlowFilter);
   // Set all gaussian blur pixels to 1 opacity before applying flood
-  var componentTransfer = Blockly.utils.dom.createSvgElement(
+  var highlightComponentTransfer = Blockly.utils.dom.createSvgElement(
       'feComponentTransfer', {'result': 'outBlur'}, highlightGlowFilter);
   Blockly.utils.dom.createSvgElement('feFuncA',
       {
         'type': 'table', 'tableValues': '0 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1'
       },
-      componentTransfer);
+      highlightComponentTransfer);
   // Color the highlight
   Blockly.utils.dom.createSvgElement('feFlood',
       {
@@ -461,13 +461,13 @@ Blockly.zelos.ConstantProvider.prototype.createDom = function(svg) {
       },
       replacementGlowFilter);
   // Set all gaussian blur pixels to 1 opacity before applying flood
-  var componentTransfer = Blockly.utils.dom.createSvgElement(
+  var replacementComponentTransfer = Blockly.utils.dom.createSvgElement(
       'feComponentTransfer', {'result': 'outBlur'}, replacementGlowFilter);
   Blockly.utils.dom.createSvgElement('feFuncA',
       {
         'type': 'table', 'tableValues': '0 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1'
       },
-      componentTransfer);
+      replacementComponentTransfer);
   // Color the highlight
   Blockly.utils.dom.createSvgElement('feFlood',
       {

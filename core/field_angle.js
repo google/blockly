@@ -330,9 +330,11 @@ Blockly.FieldAngle.prototype.dropdownCreate_ = function() {
   // a click handler on the drag surface to update the value if the surface
   // is clicked.
   this.clickSurfaceWrapper_ =
-      Blockly.bindEventWithChecks_(circle, 'click', this, this.onMouseMove_, true, true);
+      Blockly.bindEventWithChecks_(circle, 'click', this, this.onMouseMove_,
+          true, true);
   this.moveSurfaceWrapper_ =
-      Blockly.bindEventWithChecks_(circle, 'mousemove', this, this.onMouseMove_, true, true);
+      Blockly.bindEventWithChecks_(circle, 'mousemove', this, this.onMouseMove_,
+          true, true);
   return svg;
 };
 
@@ -343,12 +345,15 @@ Blockly.FieldAngle.prototype.dropdownCreate_ = function() {
 Blockly.FieldAngle.prototype.dropdownDispose_ = function() {
   if (this.clickWrapper_) {
     Blockly.unbindEvent_(this.clickWrapper_);
+    this.clickWrapper_ = null;
   }
   if (this.clickSurfaceWrapper_) {
     Blockly.unbindEvent_(this.clickSurfaceWrapper_);
+    this.clickSurfaceWrapper_ = null;
   }
   if (this.moveSurfaceWrapper_) {
     Blockly.unbindEvent_(this.moveSurfaceWrapper_);
+    this.moveSurfaceWrapper_ = null;
   }
   this.gauge_ = null;
   this.line_ = null;

@@ -610,18 +610,23 @@ Blockly.FieldColour.prototype.dropdownCreate_ = function() {
 Blockly.FieldColour.prototype.dropdownDispose_ = function() {
   if (this.onClickWrapper_) {
     Blockly.unbindEvent_(this.onClickWrapper_);
+    this.onClickWrapper_ = null;
   }
   if (this.onMouseMoveWrapper_) {
     Blockly.unbindEvent_(this.onMouseMoveWrapper_);
+    this.onMouseMoveWrapper_ = null;
   }
   if (this.onMouseEnterWrapper_) {
     Blockly.unbindEvent_(this.onMouseEnterWrapper_);
+    this.onMouseEnterWrapper_ = null;
   }
   if (this.onMouseLeaveWrapper_) {
     Blockly.unbindEvent_(this.onMouseLeaveWrapper_);
+    this.onMouseLeaveWrapper_ = null;
   }
   if (this.onKeyDownWrapper_) {
     Blockly.unbindEvent_(this.onKeyDownWrapper_);
+    this.onKeyDownWrapper_ = null;
   }
   this.picker_ = null;
   this.highlightedIndex_ = null;

@@ -25,6 +25,7 @@ goog.provide('Blockly.Options');
 
 goog.require('Blockly.Theme');
 goog.require('Blockly.Themes.Classic');
+goog.require('Blockly.user.keyMap');
 goog.require('Blockly.utils.userAgent');
 goog.require('Blockly.Xml');
 

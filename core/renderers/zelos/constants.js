@@ -128,6 +128,11 @@ Blockly.zelos.ConstantProvider = function() {
   this.DUMMY_INPUT_MIN_HEIGHT = 6 * this.GRID_UNIT;
 
   /**
+   * @override
+   */
+  this.FULL_BLOCK_FIELDS = true;
+
+  /**
    * The ID of the highlight glow filter, or the empty string if no filter is
    * set.
    * @type {string}

@@ -24,6 +24,7 @@
 
 goog.provide('Blockly.Gesture');
 
+goog.require('Blockly.ASTNode');
 goog.require('Blockly.blockAnimations');
 goog.require('Blockly.BlockDragger');
 goog.require('Blockly.BubbleDragger');
@@ -31,6 +32,7 @@ goog.require('Blockly.constants');
 goog.require('Blockly.Events');
 goog.require('Blockly.Events.Ui');
 goog.require('Blockly.FlyoutDragger');
+goog.require('Blockly.navigation');
 goog.require('Blockly.Tooltip');
 goog.require('Blockly.Touch');
 goog.require('Blockly.utils');
@@ -162,7 +164,7 @@ Blockly.Gesture = function(e, creatorWorkspace) {
   /**
    * A handle to use to unbind a mouse move listener at the end of a drag.
    * Opaque data returned from Blockly.bindEventWithChecks_.
-   * @type {Array.<!Array>}
+   * @type {?Blockly.EventData}
    * @protected
    */
   this.onMoveWrapper_ = null;
@@ -170,7 +172,7 @@ Blockly.Gesture = function(e, creatorWorkspace) {
   /**
    * A handle to use to unbind a mouse up listener at the end of a drag.
    * Opaque data returned from Blockly.bindEventWithChecks_.
-   * @type {Array.<!Array>}
+   * @type {?Blockly.EventData}
    * @protected
    */
   this.onUpWrapper_ = null;

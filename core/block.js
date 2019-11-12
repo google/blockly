@@ -31,11 +31,12 @@ goog.require('Blockly.Events.BlockCreate');
 goog.require('Blockly.Events.BlockDelete');
 goog.require('Blockly.Events.BlockMove');
 goog.require('Blockly.Extensions');
+goog.require('Blockly.fieldRegistry');
 goog.require('Blockly.Input');
+goog.require('Blockly.navigation');
 goog.require('Blockly.utils');
 goog.require('Blockly.utils.Coordinate');
 goog.require('Blockly.utils.object');
-goog.require('Blockly.fieldRegistry');
 goog.require('Blockly.utils.string');
 goog.require('Blockly.Workspace');
 

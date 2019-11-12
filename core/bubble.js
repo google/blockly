@@ -79,6 +79,13 @@ Blockly.Bubble = function(workspace, content, shape, anchorXY,
    */
   this.onMouseDownResizeWrapper_ = null;
 
+  /**
+   * Describes whether this bubble has been disposed of (nodes and event
+   * listeners removed from the page) or not.
+   * @type {boolean}
+   */
+  this.disposed = false;
+
   var angle = Blockly.Bubble.ARROW_ANGLE;
   if (this.workspace_.RTL) {
     angle = -angle;
@@ -804,6 +811,7 @@ Blockly.Bubble.prototype.dispose = function() {
   }
   Blockly.Bubble.unbindDragEvents_();
   Blockly.utils.dom.removeNode(this.bubbleGroup_);
+  this.disposed = true;
 };
 
 /**

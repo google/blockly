@@ -796,24 +796,14 @@ Blockly.Bubble.prototype.setColour = function(hexColour) {
  * Dispose of this bubble.
  */
 Blockly.Bubble.prototype.dispose = function() {
-  Blockly.Bubble.unbindDragEvents_();
-  // Dispose of and unlink the bubble.
-  Blockly.utils.dom.removeNode(this.bubbleGroup_);
   if (this.onMouseDownBubbleWrapper_) {
     Blockly.unbindEvent_(this.onMouseDownBubbleWrapper_);
-    this.onMouseDownBubbleWrapper_ = null;
   }
   if (this.onMouseDownResizeWrapper_) {
     Blockly.unbindEvent_(this.onMouseDownResizeWrapper_);
-    this.onMouseDownResizeWrapper_ = null;
   }
-  this.bubbleGroup_ = null;
-  this.bubbleArrow_ = null;
-  this.bubbleBack_ = null;
-  this.resizeGroup_ = null;
-  this.workspace_ = null;
-  this.content_ = null;
-  this.shape_ = null;
+  Blockly.Bubble.unbindDragEvents_();
+  Blockly.utils.dom.removeNode(this.bubbleGroup_);
 };
 
 /**

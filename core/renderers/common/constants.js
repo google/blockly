@@ -25,6 +25,7 @@ goog.provide('Blockly.blockRendering.ConstantProvider');
 
 goog.require('Blockly.utils.dom');
 goog.require('Blockly.utils.svgPaths');
+goog.require('Blockly.utils.userAgent');
 
 
 /**
@@ -144,6 +145,14 @@ Blockly.blockRendering.ConstantProvider = function() {
   this.FIELD_TEXT_FONTSIZE = 11;
 
   /**
+   * Height of text. This is only used if `FIELD_TEXT_BASELINE_CENTER` is set to
+   * false.
+   * @type {number}
+   * @const
+   */
+  this.FIELD_TEXT_HEIGHT = 80;
+
+  /**
    * Text font weight.  Should match blocklyText's font-weight in CSS.
    * @type {string}
    * @const
@@ -156,6 +165,114 @@ Blockly.blockRendering.ConstantProvider = function() {
    * @const
    */
   this.FIELD_TEXT_FONTFAMILY = 'sans-serif';
+
+  /**
+   * A field's border rect corner radius.
+   * @type {number}
+   * @const
+   */
+  this.FIELD_BORDER_RECT_RADIUS = 4;
+
+  /**
+   * A field's border rect default height.
+   * @type {number}
+   * @const
+   */
+  this.FIELD_BORDER_RECT_HEIGHT = 16;
+
+  /**
+   * A field's border rect X padding.
+   * @type {number}
+   * @const
+   */
+  this.FIELD_BORDER_RECT_X_PADDING = 5;
+
+  /**
+   * A field's border rect Y padding.
+   * @type {number}
+   * @const
+   */
+  this.FIELD_BORDER_RECT_Y_PADDING = 3;
+
+  /**
+   * Height of text. This is only used if `FIELD_BASELINE_CENTER` is set to
+   * false.
+   * @type {number}
+   * @const
+   */
+  this.FIELD_TEXT_BASELINE_Y =
+      this.FIELD_BORDER_RECT_X_PADDING + this.FIELD_TEXT_HEIGHT;
+
+  /**
+   * A field's text element's dominant baseline.
+   * @type {boolean}
+   * @const
+   */
+  this.FIELD_TEXT_BASELINE_CENTER =
+      !Blockly.utils.userAgent.IE && !Blockly.utils.userAgent.EDGE;
+
+  /**
+   * A dropdown field's border rect height.
+   * @type {number}
+   * @const
+   */
+  this.FIELD_DROPDOWN_BORDER_RECT_HEIGHT = this.FIELD_BORDER_RECT_HEIGHT;
+
+  /**
+   * Whether or not a dropdown field uses a text or SVG arrow.
+   * @type {boolean}
+   * @const
+   */
+  this.FIELD_DROPDOWN_SVG_ARROW = false;
+
+  /**
+   * A dropdown field's SVG arrow size.
+   * @type {number}
+   * @const
+   */
+  this.FIELD_DROPDOWN_SVG_ARROW_SIZE = 12;
+
+  /**
+   * A dropdown field's SVG arrow padding.
+   * @type {number}
+   * @const
+   */
+  this.FIELD_DROPDOWN_SVG_ARROW_PADDING = 8;
+
+  /**
+   * A dropdown field's SVG arrow datauri.
+   * @type {string}
+   * @const
+   */
+  this.FIELD_DROPDOWN_SVG_ARROW_DATAURI = '';
+
+  /**
+   * A colour field's default width.
+   * @type {number}
+   * @const
+   */
+  this.FIELD_COLOUR_DEFAULT_WIDTH = 26;
+
+  /**
+   * A colour field's default height.
+   * @type {number}
+   * @const
+   */
+  this.FIELD_COLOUR_DEFAULT_HEIGHT = this.FIELD_BORDER_RECT_HEIGHT;
+
+  /**
+   * A checkbox field's X offset.
+   * @type {number}
+   * @const
+   */
+  this.FIELD_CHECKBOX_X_OFFSET = this.FIELD_BORDER_RECT_X_PADDING - 3;
+
+  /**
+   * A checkbox field's Y offset.
+   * @type {number}
+   * @const
+   */
+  this.FIELD_CHECKBOX_Y_OFFSET = 14;
 
   /**
    * The ID of the emboss filter, or the empty string if no filter is set.

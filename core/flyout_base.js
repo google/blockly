@@ -847,3 +847,15 @@ Blockly.Flyout.prototype.placeNewBlock_ = function(oldBlock) {
   block.moveBy(finalOffset.x, finalOffset.y);
   return block;
 };
+
+/**
+ * Handles the given action.
+ * This is only triggered when keyboard accessibility mode is enabled.
+ * @param {!Blockly.Action} action The action to be handled.
+ * @return {boolean} True if the flyout handled the action, false otherwise.
+ * @package
+ */
+Blockly.Flyout.prototype.onBlocklyAction = function(action) {
+  var cursor = this.workspace_.getCursor();
+  return cursor.onBlocklyAction(action);
+};

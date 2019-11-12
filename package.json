@@ -55,8 +55,8 @@
     "eslint": "^5.13.0",
     "eslint-plugin-es5": "^1.4.1",
     "fs": "0.0.1-security",
-    "google-closure-compiler": "^20190618.0.0",
-    "google-closure-library": "^20190618.0.0",
+    "google-closure-compiler": "^20191027.0.0",
+    "google-closure-deps": "20190121.0.0",
     "gulp": "^4.0.2",
     "gulp-concat": "^2.6.1",
     "gulp-insert": "^0.5.0",
@@ -71,6 +71,7 @@
     "pngjs": "^3.4.0",
     "selenium-standalone": "^6.16.0",
     "rimraf": "^2.6.3",
+    "through2": "^3.0.1",
     "typescript-closure-tools": "^0.0.7",
     "webdriverio": "^5.11.5",
     "yargs": "^14.0.0"

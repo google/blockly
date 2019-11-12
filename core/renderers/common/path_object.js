@@ -221,3 +221,15 @@ Blockly.blockRendering.PathObject.prototype.updateMovable = function(enable) {
   this.setClass_('blocklyDraggable', enable);
 };
 
+/**
+ * Add or remove styling that shows that if the dragging block is dropped, this
+ * block will be replaced.  If a shadow block, it will disappear.  Otherwise it
+ * will bump.
+ * @param {boolean} enable True if styling should be added.
+ * @package
+ */
+Blockly.blockRendering.PathObject.prototype.updateReplacementHighlight =
+    function(enable) {
+    /* eslint-disable indent */
+  this.setClass_('blocklyReplaceable', enable);
+}; /* eslint-enable indent */

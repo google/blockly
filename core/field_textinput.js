@@ -91,6 +91,13 @@ Blockly.FieldTextInput = function(opt_value, opt_validator, opt_config) {
    * @type {?boolean}
    */
   this.fullBlockClickTarget_ = false;
+
+  /**
+   * Blur input event data.
+   * @type {?Blockly.EventData}
+   * @private
+   */
+  this.onBlurInputWrapper_ = null;
 };
 Blockly.utils.object.inherits(Blockly.FieldTextInput, Blockly.Field);
 
@@ -319,7 +326,7 @@ Blockly.FieldTextInput.prototype.showInlineEditor_ = function(quietInput) {
   this.isBeingEdited_ = true;
 
   if (!quietInput) {
-    this.htmlInput_.focus();
+    this.htmlInput_.focus({preventScroll:true});
     this.htmlInput_.select();
   }
 };
@@ -336,7 +343,7 @@ Blockly.FieldTextInput.prototype.widgetCreate_ = function() {
   htmlInput.className = 'blocklyHtmlInput';
   htmlInput.setAttribute('spellcheck', this.spellcheck_);
   var fontSize =
-      (Blockly.Field.FONTSIZE * this.workspace_.scale) + 'pt';
+      (this.constants_.FIELD_TEXT_FONTSIZE * this.workspace_.scale) + 'pt';
   div.style.fontSize = fontSize;
   htmlInput.style.fontSize = fontSize;
   var borderRadius =
@@ -411,6 +418,9 @@ Blockly.FieldTextInput.prototype.bindInputEvents_ = function(htmlInput) {
   this.onKeyInputWrapper_ =
       Blockly.bindEventWithChecks_(
           htmlInput, 'input', this, this.onHtmlInputChange_);
+  this.onBlurInputWrapper_ =
+      Blockly.bindEventWithChecks_(
+          htmlInput, 'blur', this, this.onHtmlInputBlur_);
 };
 
 /**
@@ -420,9 +430,15 @@ Blockly.FieldTextInput.prototype.bindInputEvents_ = function(htmlInput) {
 Blockly.FieldTextInput.prototype.unbindInputEvents_ = function() {
   if (this.onKeyDownWrapper_) {
     Blockly.unbindEvent_(this.onKeyDownWrapper_);
+    this.onKeyDownWrapper_ = null;
   }
   if (this.onKeyInputWrapper_) {
     Blockly.unbindEvent_(this.onKeyInputWrapper_);
+    this.onKeyInputWrapper_ = null;
+  }
+  if (this.onBlurInputWrapper_) {
+    Blockly.unbindEvent_(this.onBlurInputWrapper_);
+    this.onBlurInputWrapper_ = null;
   }
 };
 
@@ -466,6 +482,16 @@ Blockly.FieldTextInput.prototype.onHtmlInputChange_ = function(_e) {
     this.forceRerender();
     Blockly.Events.setGroup(false);
   }
+};
+
+/**
+ * Handle blur for the editor.
+ * @param {!Event} _e Focus event.
+ * @protected
+ */
+Blockly.FieldTextInput.prototype.onHtmlInputBlur_ = function(_e) {
+  Blockly.WidgetDiv.hide();
+  Blockly.DropDownDiv.hideWithoutAnimation();
 };
 
 /**

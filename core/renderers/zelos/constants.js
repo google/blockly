@@ -44,6 +44,26 @@ Blockly.zelos.ConstantProvider = function() {
   /**
    * @override
    */
+  this.SMALL_PADDING = this.GRID_UNIT;
+
+  /**
+   * @override
+   */
+  this.MEDIUM_PADDING = 2 * this.GRID_UNIT;
+
+  /**
+   * @override
+   */
+  this.MEDIUM_LARGE_PADDING = 3 * this.GRID_UNIT;
+
+  /**
+   * @override
+   */
+  this.LARGE_PADDING = 4 * this.GRID_UNIT;
+
+  /**
+   * @override
+   */
   this.CORNER_RADIUS = 1 * this.GRID_UNIT;
 
   /**
@@ -77,9 +97,20 @@ Blockly.zelos.ConstantProvider = function() {
   this.STATEMENT_BOTTOM_SPACER = -this.NOTCH_HEIGHT;
 
   /**
+   * Minimum statement input spacer width.
+   * @type {number}
+   */
+  this.STATEMENT_INPUT_SPACER_MIN_WIDTH = 30 * this.GRID_UNIT;
+
+  /**
    * @override
    */
-  this.AFTER_STATEMENT_BOTTOM_ROW_MIN_HEIGHT = this.LARGE_PADDING * 2;
+  this.STATEMENT_INPUT_PADDING_LEFT = 4 * this.GRID_UNIT;
+
+  /**
+   * @override
+   */
+  this.AFTER_STATEMENT_BOTTOM_ROW_MIN_HEIGHT = 7 * this.GRID_UNIT;
 
   /**
    * @override
@@ -90,6 +121,11 @@ Blockly.zelos.ConstantProvider = function() {
    * @override
    */
   this.EMPTY_INLINE_INPUT_HEIGHT = 8 * this.GRID_UNIT;
+
+  /**
+   * @override
+   */
+  this.DUMMY_INPUT_MIN_HEIGHT = 6 * this.GRID_UNIT;
 
   /**
    * The ID of the highlight glow filter, or the empty string if no filter is

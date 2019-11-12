@@ -78,16 +78,14 @@ Blockly.inject = function(container, opt_options) {
   Blockly.user.keyMap.setKeyMap(options.keyMap);
 
   Blockly.init_(workspace);
+
+  // Keep focus on the first workspace so entering keyboard navigation looks correct.
   Blockly.mainWorkspace = workspace;
 
   Blockly.svgResize(workspace);
 
-  subContainer.addEventListener('focus', function() {
+  subContainer.addEventListener('focusin', function() {
     Blockly.mainWorkspace = workspace;
-  });
-
-  subContainer.addEventListener('blur', function() {
-    Blockly.mainWorkspace = null;
   });
 
   return workspace;
@@ -127,7 +125,8 @@ Blockly.createDom_ = function(container, options) {
     'xmlns:html': Blockly.utils.dom.HTML_NS,
     'xmlns:xlink': Blockly.utils.dom.XLINK_NS,
     'version': '1.1',
-    'class': 'blocklySvg'
+    'class': 'blocklySvg',
+    'tabindex': '0'
   }, container);
   /*
   <defs>
@@ -183,7 +182,6 @@ Blockly.createMainWorkspace_ = function(svg, options, blockDragSurface,
 
   // A null translation will also apply the correct initial scale.
   mainWorkspace.translate(0, 0);
-  Blockly.mainWorkspace = mainWorkspace;
 
   if (!options.readOnly && !mainWorkspace.isMovable()) {
     // Helper function for the workspaceChanged callback.
@@ -253,7 +251,9 @@ Blockly.createMainWorkspace_ = function(svg, options, blockDragSurface,
             case Blockly.Events.BLOCK_CREATE:
             case Blockly.Events.BLOCK_MOVE:
               var object = mainWorkspace.getBlockById(e.blockId);
-              object = object.getRootBlock();
+              if (object) {
+                object = object.getRootBlock();
+              }
               break;
             case Blockly.Events.COMMENT_CREATE:
             case Blockly.Events.COMMENT_MOVE:
@@ -311,7 +311,7 @@ Blockly.createMainWorkspace_ = function(svg, options, blockDragSurface,
             object.moveBy(deltaX, deltaY);
           }
           if (e) {
-            if (!e.group) {
+            if (!e.group && object) {
               console.log('WARNING: Moved object in bounds but there was no' +
                   ' event group. This may break undo.');
             }

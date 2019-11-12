@@ -40,6 +40,26 @@ Blockly.FlyoutCursor = function() {
 Blockly.utils.object.inherits(Blockly.FlyoutCursor, Blockly.Cursor);
 
 /**
+ * Handles the given action.
+ * This is only triggered when keyboard navigation is enabled.
+ * @param {!Blockly.Action} action The action to be handled.
+ * @return {boolean} True if the action has been handled, false otherwise.
+ * @override
+ */
+Blockly.FlyoutCursor.prototype.onBlocklyAction = function(action) {
+  switch (action.name) {
+    case Blockly.navigation.actionNames.PREVIOUS:
+      this.prev();
+      return true;
+    case Blockly.navigation.actionNames.NEXT:
+      this.next();
+      return true;
+    default:
+      return false;
+  }
+};
+
+/**
  * Find the next connection, field, or block.
  * @return {Blockly.ASTNode} The next element, or null if the current node is
  *     not set or there is no next value.

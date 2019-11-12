@@ -162,7 +162,7 @@ Blockly.Gesture = function(e, creatorWorkspace) {
   /**
    * A handle to use to unbind a mouse move listener at the end of a drag.
    * Opaque data returned from Blockly.bindEventWithChecks_.
-   * @type {Array.<!Array>}
+   * @type {?Blockly.EventData}
    * @protected
    */
   this.onMoveWrapper_ = null;
@@ -170,7 +170,7 @@ Blockly.Gesture = function(e, creatorWorkspace) {
   /**
    * A handle to use to unbind a mouse up listener at the end of a drag.
    * Opaque data returned from Blockly.bindEventWithChecks_.
-   * @type {Array.<!Array>}
+   * @type {?Blockly.EventData}
    * @protected
    */
   this.onUpWrapper_ = null;
@@ -483,12 +483,14 @@ Blockly.Gesture.prototype.doStart = function(e) {
     // dragged, the block was moved, the parent workspace zoomed, etc.
     this.startWorkspace_.resize();
   }
-  this.startWorkspace_.markFocused();
-  this.mostRecentEvent_ = e;
 
   // Hide chaff also hides the flyout, so don't do it if the click is in a
   // flyout.
   Blockly.hideChaff(!!this.flyout_);
+
+  this.startWorkspace_.markFocused();
+  this.mostRecentEvent_ = e;
+
   Blockly.Tooltip.block();
 
   if (this.targetBlock_) {

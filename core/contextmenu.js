@@ -166,6 +166,7 @@ Blockly.ContextMenu.hide = function() {
   Blockly.ContextMenu.currentBlock = null;
   if (Blockly.ContextMenu.eventWrapper_) {
     Blockly.unbindEvent_(Blockly.ContextMenu.eventWrapper_);
+    Blockly.ContextMenu.eventWrapper_ = null;
   }
 };
 

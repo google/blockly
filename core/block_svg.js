@@ -660,8 +660,12 @@ Blockly.BlockSvg.prototype.setCollapsed = function(collapsed) {
 Blockly.BlockSvg.prototype.tab = function(start, forward) {
   var tabCursor = new Blockly.TabNavigateCursor();
   tabCursor.setCurNode(Blockly.ASTNode.createFieldNode(start));
+  var action = forward ?
+      Blockly.navigation.ACTION_NEXT : Blockly.navigation.ACTION_PREVIOUS;
 
-  var nextNode = forward ? tabCursor.next() : tabCursor.prev();
+  tabCursor.onBlocklyAction(action);
+
+  var nextNode = tabCursor.getCurNode();
   if (nextNode) {
     var nextField = /** @type {!Blockly.Field} */ (nextNode.getLocation());
     nextField.showEditor();
@@ -1752,11 +1756,5 @@ Blockly.BlockSvg.prototype.getHeightWidth = function() {
  * @package
  */
 Blockly.BlockSvg.prototype.highlightForReplacement = function(add) {
-  if (add) {
-    Blockly.utils.dom.addClass(/** @type {!Element} */ (this.svgGroup_),
-        'blocklyReplaceable');
-  } else {
-    Blockly.utils.dom.removeClass(/** @type {!Element} */ (this.svgGroup_),
-        'blocklyReplaceable');
-  }
+  this.pathObject.updateReplacementHighlight(add);
 };

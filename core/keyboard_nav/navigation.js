@@ -749,8 +749,8 @@ Blockly.navigation.onKeyPress = function(e) {
 };
 
 /**
- * Execute any actions on the flyout, workspace, or toolbox that correspond to
- * the given action.
+ * Decides which actions to handle depending on keyboard navigation and readonly
+ * states.
  * @param {!Blockly.Action} action The current action.
  * @return {boolean} True if the action has been handled, false otherwise.
  */
@@ -775,91 +775,43 @@ Blockly.navigation.onBlocklyAction = function(action) {
 
 /**
  * Handles the action or dispatches to the appropriate action handler.
- * @param {!Blockly.Action} action The current action
+ * @param {!Blockly.Action} action The action to handle.
  * @return {boolean} True if the action has been handled, false otherwise.
  * @private
  */
 Blockly.navigation.handleActions_ = function(action) {
-  var workspace = Blockly.getMainWorkspace();
-  if (action.name === Blockly.navigation.actionNames.TOGGLE_KEYBOARD_NAV) {
+  if (action.name == Blockly.navigation.actionNames.TOOLBOX ||
+    Blockly.navigation.currentState_ == Blockly.navigation.STATE_TOOLBOX) {
+    return Blockly.navigation.toolboxOnAction_(action);
+  } else if (action.name == Blockly.navigation.actionNames.TOGGLE_KEYBOARD_NAV) {
     Blockly.navigation.disableKeyboardAccessibility();
     return true;
-  } else if (action.name === Blockly.navigation.actionNames.TOOLBOX) {
-    if (!workspace.getToolbox()) {
-      Blockly.navigation.focusFlyout_();
-    } else {
-      Blockly.navigation.focusToolbox_();
-    }
-    return true;
-  } else if (Blockly.navigation.currentState_ === Blockly.navigation.STATE_WS) {
-    var curNode = workspace.getCursor().getCurNode();
-    var actionHandled = false;
-    if (curNode && curNode.getType() === Blockly.ASTNode.types.FIELD) {
-      actionHandled = curNode.getLocation().onBlocklyAction(action);
-    }
-    if (!actionHandled) {
-      actionHandled = Blockly.navigation.workspaceOnAction_(action);
-    }
-    return actionHandled;
-  } else if (Blockly.navigation.currentState_ === Blockly.navigation.STATE_FLYOUT) {
+  } if (Blockly.navigation.currentState_ == Blockly.navigation.STATE_WS) {
+    return Blockly.navigation.workspaceOnAction_(action);
+  } else if (Blockly.navigation.currentState_ == Blockly.navigation.STATE_FLYOUT) {
     return Blockly.navigation.flyoutOnAction_(action);
-  } else if (Blockly.navigation.currentState_ === Blockly.navigation.STATE_TOOLBOX) {
-    return Blockly.navigation.toolboxOnAction_(action);
   }
   return false;
 };
 
 /**
- * Handle all actions performed on the workspace.
- * @param {!Blockly.Action} action The action to handle.
- * @return {boolean} True if the action has been handled, false otherwise.
- * @private
- */
-Blockly.navigation.workspaceOnAction_ = function(action) {
-  var workspace = Blockly.getMainWorkspace();
-  switch (action.name) {
-    case Blockly.navigation.actionNames.PREVIOUS:
-      workspace.getCursor().prev();
-      return true;
-    case Blockly.navigation.actionNames.OUT:
-      workspace.getCursor().out();
-      return true;
-    case Blockly.navigation.actionNames.NEXT:
-      workspace.getCursor().next();
-      return true;
-    case Blockly.navigation.actionNames.IN:
-      workspace.getCursor().in();
-      return true;
-    case Blockly.navigation.actionNames.INSERT:
-      Blockly.navigation.modify_();
-      return true;
-    case Blockly.navigation.actionNames.MARK:
-      Blockly.navigation.handleEnterForWS_();
-      return true;
-    case Blockly.navigation.actionNames.DISCONNECT:
-      Blockly.navigation.disconnectBlocks_();
-      return true;
-    default:
-      return false;
-  }
-};
-
-/**
- * Handle all actions performed on the flyout.
+ * Handles the given action for the flyout.
  * @param {!Blockly.Action} action The action to handle.
  * @return {boolean} True if the action has been handled, false otherwise.
  * @private
  */
 Blockly.navigation.flyoutOnAction_ = function(action) {
+  var workspace = Blockly.getMainWorkspace();
+  var toolbox = workspace.getToolbox();
+  var flyout = toolbox ? toolbox.flyout_ : workspace.getFlyout();
+
+  if (flyout && flyout.onBlocklyAction(action)) {
+    return true;
+  }
+
   switch (action.name) {
-    case Blockly.navigation.actionNames.PREVIOUS:
-      Blockly.navigation.getFlyoutCursor_().prev();
-      return true;
     case Blockly.navigation.actionNames.OUT:
       Blockly.navigation.focusToolbox_();
-      return true;
-    case Blockly.navigation.actionNames.NEXT:
-      Blockly.navigation.getFlyoutCursor_().next();
       return true;
     case Blockly.navigation.actionNames.MARK:
       Blockly.navigation.insertFromFlyout();
@@ -873,24 +825,60 @@ Blockly.navigation.flyoutOnAction_ = function(action) {
 };
 
 /**
- * Handle all actions performeed on the toolbox.
+ * Handles the given action for the toolbox.
  * @param {!Blockly.Action} action The action to handle.
  * @return {boolean} True if the action has been handled, false otherwise.
  * @private
  */
 Blockly.navigation.toolboxOnAction_ = function(action) {
-  if (action.name === Blockly.navigation.actionNames.EXIT) {
-    Blockly.navigation.focusWorkspace_();
-    return true;
-  }
-  var toolbox = Blockly.getMainWorkspace().getToolbox();
-  var handled = toolbox.onBlocklyAction(action);
-  if (!handled && action.name === Blockly.navigation.actionNames.IN) {
-    Blockly.navigation.focusFlyout_();
+  var workspace = Blockly.getMainWorkspace();
+  var toolbox = workspace.getToolbox();
+  var handled = toolbox ? toolbox.onBlocklyAction(action) : false;
+
+  if (handled) {
     return true;
   }
 
-  return handled;
+  if (action.name === Blockly.navigation.actionNames.TOOLBOX) {
+    if (!workspace.getToolbox()) {
+      Blockly.navigation.focusFlyout_();
+    } else {
+      Blockly.navigation.focusToolbox_();
+    }
+    return true;
+  } else if (action.name === Blockly.navigation.actionNames.IN) {
+    Blockly.navigation.focusFlyout_();
+    return true;
+  } else if (action.name === Blockly.navigation.actionNames.EXIT) {
+    Blockly.navigation.focusWorkspace_();
+    return true;
+  }
+  return false;
+};
+
+/**
+ * Handles the given action for the workspace.
+ * @param {!Blockly.Action} action The action to handle.
+ * @return {boolean} True if the action has been handled, false otherwise.
+ * @private
+ */
+Blockly.navigation.workspaceOnAction_ = function(action) {
+  if (Blockly.getMainWorkspace().getCursor().onBlocklyAction(action)) {
+    return true;
+  }
+  switch (action.name) {
+    case Blockly.navigation.actionNames.INSERT:
+      Blockly.navigation.modify_();
+      return true;
+    case Blockly.navigation.actionNames.MARK:
+      Blockly.navigation.handleEnterForWS_();
+      return true;
+    case Blockly.navigation.actionNames.DISCONNECT:
+      Blockly.navigation.disconnectBlocks_();
+      return true;
+    default:
+      return false;
+  }
 };
 
 /**

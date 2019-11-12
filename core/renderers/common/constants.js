@@ -158,6 +158,13 @@ Blockly.blockRendering.ConstantProvider = function() {
   this.FIELD_TEXT_FONTFAMILY = 'sans-serif';
 
   /**
+   * A field's border rect corner radius.
+   * @type {number}
+   * @const
+   */
+  this.FIELD_BORDER_RECT_RADIUS = 4;
+
+  /**
    * The ID of the emboss filter, or the empty string if no filter is set.
    * @type {string}
    * @package

@@ -360,8 +360,8 @@ Blockly.Field.prototype.createBorderRect_ = function() {
   this.borderRect_ = /** @type {!SVGRectElement} **/
       (Blockly.utils.dom.createSvgElement('rect',
           {
-            'rx': 4,
-            'ry': 4,
+            'rx': this.constants_.FIELD_BORDER_RECT_RADIUS,
+            'ry': this.constants_.FIELD_BORDER_RECT_RADIUS,
             'x': 0,
             'y': 0,
             'height': this.size_.height,

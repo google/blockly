@@ -141,6 +141,11 @@ Blockly.zelos.ConstantProvider = function() {
    * @private
    */
   this.highlightGlowFilter_ = null;
+
+  /**
+   * @override
+   */
+  this.FULL_BLOCK_FIELDS = true;
 };
 Blockly.utils.object.inherits(Blockly.zelos.ConstantProvider,
     Blockly.blockRendering.ConstantProvider);

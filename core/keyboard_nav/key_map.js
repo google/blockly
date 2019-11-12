@@ -24,6 +24,8 @@
 
 goog.provide('Blockly.user.keyMap');
 
+// TODO: Fix circular dependency.
+// goog.require('Blockly.navigation');
 goog.require('Blockly.utils.KeyCodes');
 goog.require('Blockly.utils.object');
 

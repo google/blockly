@@ -32,6 +32,7 @@ goog.require('Blockly.Events.BlockCreate');
 goog.require('Blockly.Gesture');
 goog.require('Blockly.Grid');
 goog.require('Blockly.Msg');
+goog.require('Blockly.navigation');
 goog.require('Blockly.Options');
 goog.require('Blockly.ThemeManager');
 goog.require('Blockly.Themes.Classic');
@@ -2643,4 +2644,3 @@ Blockly.WorkspaceSvg.prototype.getAudioManager = function() {
 Blockly.WorkspaceSvg.prototype.getGrid = function() {
   return this.grid_;
 };
-

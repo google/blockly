@@ -23,6 +23,7 @@
 
 goog.provide('Blockly.CursorSvg');
 
+goog.require('Blockly.ASTNode');
 goog.require('Blockly.Cursor');
 goog.require('Blockly.utils.object');
 

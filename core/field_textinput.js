@@ -362,9 +362,11 @@ Blockly.FieldTextInput.prototype.bindInputEvents_ = function(htmlInput) {
 Blockly.FieldTextInput.prototype.unbindInputEvents_ = function() {
   if (this.onKeyDownWrapper_) {
     Blockly.unbindEvent_(this.onKeyDownWrapper_);
+    this.onKeyDownWrapper_ = null;
   }
   if (this.onKeyInputWrapper_) {
     Blockly.unbindEvent_(this.onKeyInputWrapper_);
+    this.onKeyInputWrapper_ = null;
   }
   if (this.onBlurInputWrapper_) {
     Blockly.unbindEvent_(this.onBlurInputWrapper_);

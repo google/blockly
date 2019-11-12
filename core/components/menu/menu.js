@@ -44,6 +44,41 @@ Blockly.Menu = function() {
    * @private
    */
   this.highlightedIndex_ = -1;
+
+  /**
+   * Mouse over event data.
+   * @type {?Blockly.EventData}
+   * @private
+   */
+  this.mouseOverHandler_ = null;
+
+  /**
+   * Click event data.
+   * @type {?Blockly.EventData}
+   * @private
+   */
+  this.clickHandler_ = null;
+
+  /**
+   * Mouse enter event data.
+   * @type {?Blockly.EventData}
+   * @private
+   */
+  this.mouseEnterHandler_ = null;
+
+  /**
+   * Mouse leave event data.
+   * @type {?Blockly.EventData}
+   * @private
+   */
+  this.mouseLeaveHandler_ = null;
+
+  /**
+   * Key down event data.
+   * @type {?Blockly.EventData}
+   * @private
+   */
+  this.onKeyDownWrapper_ = null;
 };
 Blockly.utils.object.inherits(Blockly.Menu, Blockly.Component);
 
@@ -147,7 +182,6 @@ Blockly.Menu.prototype.attachEvents_ = function() {
       'mouseenter', this, this.handleMouseEnter_, true);
   this.mouseLeaveHandler_ = Blockly.bindEventWithChecks_(el,
       'mouseleave', this, this.handleMouseLeave_, true);
-
   this.onKeyDownWrapper_ = Blockly.bindEventWithChecks_(el,
       'keydown', this, this.handleKeyEvent);
 };
@@ -157,11 +191,26 @@ Blockly.Menu.prototype.attachEvents_ = function() {
  * @private
  */
 Blockly.Menu.prototype.detachEvents_ = function() {
-  Blockly.unbindEvent_(this.mouseOverHandler_);
-  Blockly.unbindEvent_(this.clickHandler_);
-  Blockly.unbindEvent_(this.mouseEnterHandler_);
-  Blockly.unbindEvent_(this.mouseLeaveHandler_);
-  Blockly.unbindEvent_(this.onKeyDownWrapper_);
+  if (this.mouseOverHandler_) {
+    Blockly.unbindEvent_(this.mouseOverHandler_);
+    this.mouseOverHandler_ = null;
+  }
+  if (this.clickHandler_) {
+    Blockly.unbindEvent_(this.clickHandler_);
+    this.clickHandler_ = null;
+  }
+  if (this.mouseEnterHandler_) {
+    Blockly.unbindEvent_(this.mouseEnterHandler_);
+    this.mouseEnterHandler_ = null;
+  }
+  if (this.mouseLeaveHandler_) {
+    Blockly.unbindEvent_(this.mouseLeaveHandler_);
+    this.mouseLeaveHandler_ = null;
+  }
+  if (this.onKeyDownWrapper_) {
+    Blockly.unbindEvent_(this.onKeyDownWrapper_);
+    this.onKeyDownWrapper_ = null;
+  }
 };
 
 // Child component management.

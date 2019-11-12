@@ -39,6 +39,20 @@ var CustomFields = CustomFields || {};
  */
 CustomFields.FieldPitch = function(text) {
   CustomFields.FieldPitch.superClass_.constructor.call(this, text);
+
+  /**
+   * Click event data.
+   * @type {?Blockly.EventData}
+   * @private
+   */
+  this.clickWrapper_ = null;
+
+  /**
+   * Move event data.
+   * @type {?Blockly.EventData}
+   * @private
+   */
+  this.moveWrapper_ = null;
 };
 Blockly.utils.object.inherits(CustomFields.FieldPitch, Blockly.FieldTextInput);
 
@@ -112,8 +126,15 @@ CustomFields.FieldPitch.prototype.dropdownCreate_ = function() {
  * @private
  */
 CustomFields.FieldPitch.prototype.dropdownDispose_ = function() {
-  Blockly.unbindEvent_(this.clickWrapper_);
-  Blockly.unbindEvent_(this.moveWrapper_);
+  if (this.clickWrapper_) {
+    Blockly.unbindEvent_(this.clickWrapper_);
+    this.clickWrapper_ = null;
+  }
+  if (this.moveWrapper_) {
+    Blockly.unbindEvent_(this.moveWrapper_);
+    this.moveWrapper_ = null;
+  }
+  this.imageElement_ = null;
 };
 
 /**

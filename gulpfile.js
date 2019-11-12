@@ -32,6 +32,7 @@ var path = require('path');
 var fs = require('fs');
 var rimraf = require('rimraf');
 var execSync = require('child_process').execSync;
+var through2 = require('through2');
 
 var closureCompiler = require('google-closure-compiler').gulp();
 var closureDeps = require('google-closure-deps');
@@ -342,46 +343,38 @@ if (this.IS_NODE_JS) {
 }
 `;
 
-  const walkSync = function(dir, filelist) {
-    const files = fs.readdirSync(dir);
-    filelist = filelist || [];
-    files.forEach(function(file) {
-      const filePath = path.join(dir, file);
-      if (fs.statSync(filePath).isDirectory()) {
-        filelist = walkSync(filePath, filelist);
-      }
-      else {
-        filelist.push(filePath);
-      }
+let deps = [];
+return gulp.src('core/**/**/*.js')
+  .pipe(through2.obj((file, _enc, cb) => {
+    const filePath = file.path;
+    deps.push(closureDeps.parser.parseFile(filePath).dependency);
+    cb();
+  }))
+  .on('end', () => {
+    const graph = new closureDeps.depGraph.Graph(deps);
+    let addDependency = [];
+    graph.depsByPath.forEach(dep => {
+      addDependency.push('goog.addDependency(' + [
+        '"' + path.relative('./closure/goog', dep.path) + '"',
+        '[' + dep.closureSymbols
+              .map(s => `'${s}'`).join(', ') + ']',
+        '[' + dep.imports
+              .map(i => i.symOrPath)
+              .filter(i => i !== 'goog')
+              .sort()
+              .map(i => `'${i}'`).join(', ') + ']',
+      ].join(', ') + ');');
     });
-    return filelist;
-  };
-  
-  const deps = walkSync('./core')
-    .map(filePath => closureDeps.parser.parseFile(filePath).dependency);
-  const graph = new closureDeps.depGraph.Graph(deps);
-  let addDependency = [];
-  graph.depsByPath.forEach(dep => {
-    addDependency.push('goog.addDependency(' + [
-      '"' + path.relative('./closure/goog', dep.path) + '"',
-      '[' + dep.closureSymbols
-            .map(s => `'${s}'`).join(', ') + ']',
-      '[' + dep.imports
-            .map(i => i.symOrPath)
-            .filter(i => i !== 'goog')
-            .sort()
-            .map(i => `'${i}'`).join(', ') + ']',
-    ].join(', ') + ');');
-  });
-  const requires = `
+    const requires = `
 goog.addDependency("base.js", [], []);
 
 // Load Blockly.
 goog.require('Blockly.requires')
 `;
-  fs.writeFileSync('blockly_uncompressed.js',
-    header + addDependency.join('\n') + requires + footer);
-  cb();
+    fs.writeFileSync('blockly_uncompressed.js',
+      header + addDependency.join('\n') + requires + footer);
+    cb();
+  });
 });
 
 /**

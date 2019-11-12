@@ -115,25 +115,23 @@ Blockly.ContextMenu.populate_ = function(options, rtl) {
  * @private
  */
 Blockly.ContextMenu.position_ = function(menu, e, rtl) {
-  // Record windowSize and scrollOffset before adding menu.
-  var viewportBBox = Blockly.utils.getViewportBBox();
   // This one is just a point, but we'll pretend that it's a rect so we can use
   // some helper functions.
   var anchorBBox = {
-    top: e.clientY + viewportBBox.top,
-    bottom: e.clientY + viewportBBox.top,
-    left: e.clientX + viewportBBox.left,
-    right: e.clientX + viewportBBox.left
+    top: e.clientY,
+    bottom: e.clientY,
+    left: e.clientX,
+    right: e.clientX
   };
 
   Blockly.ContextMenu.createWidget_(menu);
   var menuSize = Blockly.utils.uiMenu.getSize(menu);
 
   if (rtl) {
-    Blockly.utils.uiMenu.adjustBBoxesForRTL(viewportBBox, anchorBBox, menuSize);
+    Blockly.utils.uiMenu.adjustBBoxesForRTL(anchorBBox, menuSize);
   }
 
-  Blockly.WidgetDiv.positionWithAnchor(viewportBBox, anchorBBox, menuSize, rtl);
+  Blockly.WidgetDiv.positionWithAnchor(anchorBBox, menuSize, rtl);
   // Calling menuDom.focus() has to wait until after the menu has been placed
   // correctly.  Otherwise it will cause a page scroll to get the misplaced menu
   // in view.  See issue #1329.

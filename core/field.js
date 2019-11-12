@@ -691,23 +691,24 @@ Blockly.Field.prototype.getSize = function() {
 /**
  * Returns the bounding box of the rendered field, accounting for workspace
  * scaling.
- * @return {!Object} An object with top, bottom, left, and right in pixels
- *     relative to the top left corner of the page (window coordinates).
+ * @return {!Blockly.utils.Rect} A rectangle with coordinates relative to the
+ *     top left corner of the workspace injection div.
  * @package
  */
 Blockly.Field.prototype.getScaledBBox = function() {
   var workspace = this.sourceBlock_.workspace;
   var bBox = this.borderRect_.getBoundingClientRect();
+  var xy = this.getAbsoluteXY_();
   var scaledHeight = bBox.height * this.sourceBlock_.workspace.scale;
   var scaledWidth = bBox.width * this.sourceBlock_.workspace.scale;
   var containerOffset = Blockly.utils.style.getPageOffset(
       /** @type {!Element} */ (workspace.getInjectionDiv()));
 
   return new Blockly.utils.Rect(
-      bBox.y - containerOffset.y,
-      bBox.y - containerOffset.y + scaledHeight,
-      bBox.x - containerOffset.x,
-      bBox.x - containerOffset.x + scaledWidth
+      xy.y - containerOffset.y,
+      xy.y - containerOffset.y + scaledHeight,
+      xy.x - containerOffset.x,
+      xy.x - containerOffset.x + scaledWidth
   );
 };
 

@@ -244,8 +244,8 @@ Blockly.DropDownDiv.getScaledBboxOfBlock_ = function(block) {
   var scaledWidth = bBox.width * scale;
   var xy = Blockly.utils.style.getPageOffset(/** @type {!Element} */(blockSvg));
   var containerOffset = Blockly.utils.style.getPageOffset(
-      /** @type {!Element} */ (this.boundsElement_));
-
+      /** @type {!Element} */ (block.workspace.getInjectionDiv()));
+  
   return new Blockly.utils.Rect(
       xy.y - containerOffset.y,
       xy.y + scaledHeight - containerOffset.y,
@@ -261,16 +261,7 @@ Blockly.DropDownDiv.getScaledBboxOfBlock_ = function(block) {
  * @private
  */
 Blockly.DropDownDiv.getScaledBboxOfField_ = function(field) {
-  var bBox = field.getScaledBBox();
-  var containerOffset = Blockly.utils.style.getPageOffset(
-      /** @type {!Element} */ (this.boundsElement_));
-
-  return new Blockly.utils.Rect(
-      bBox.top - containerOffset.y,
-      bBox.bottom - containerOffset.y,
-      bBox.left - containerOffset.x,
-      bBox.right - containerOffset.x
-  );
+  return field.getScaledBBox();
 };
 
 /**
@@ -356,7 +347,7 @@ Blockly.DropDownDiv.show = function(owner, rtl, primaryX, primaryY,
  */
 Blockly.DropDownDiv.getBoundsInfo_ = function() {
   var boundSize = Blockly.utils.style.getSize(
-      Blockly.DropDownDiv.boundsElement_);
+      /** @type {!Element} */ (Blockly.DropDownDiv.boundsElement_));
 
   return {
     left: 0,
@@ -626,6 +617,8 @@ Blockly.DropDownDiv.hideWithoutAnimation = function() {
   }
   Blockly.DropDownDiv.clearContent();
   Blockly.DropDownDiv.owner_ = null;
+
+  Blockly.getMainWorkspace().markFocused();
 };
 
 /**

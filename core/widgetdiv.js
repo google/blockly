@@ -132,8 +132,6 @@ Blockly.WidgetDiv.positionInternal_ = function(x, y, height) {
  * The widget should be placed adjacent to but not overlapping the anchor
  * rectangle.  The preferred position is directly below and aligned to the left
  * (LTR) or right (RTL) side of the anchor.
- * @param {!Object} viewportBBox The bounding rectangle of the current viewport,
- *     in window coordinates.
  * @param {!Object} anchorBBox The bounding rectangle of the anchor, in window
  *     coordinates.
  * @param {!Blockly.utils.Size} widgetSize The size of the widget that is inside the
@@ -142,13 +140,12 @@ Blockly.WidgetDiv.positionInternal_ = function(x, y, height) {
  *     horizontal alignment.
  * @package
  */
-Blockly.WidgetDiv.positionWithAnchor = function(viewportBBox, anchorBBox,
-    widgetSize, rtl) {
+Blockly.WidgetDiv.positionWithAnchor = function(anchorBBox, widgetSize, rtl) {
   var injectionDiv = Blockly.getMainWorkspace().getInjectionDiv();
   var containerBBox = injectionDiv.getBoundingClientRect();
 
-  var y = Blockly.WidgetDiv.calculateY_(viewportBBox, anchorBBox, widgetSize);
-  var x = Blockly.WidgetDiv.calculateX_(viewportBBox, anchorBBox, widgetSize,
+  var y = Blockly.WidgetDiv.calculateY_(containerBBox, anchorBBox, widgetSize);
+  var x = Blockly.WidgetDiv.calculateX_(containerBBox, anchorBBox, widgetSize,
       rtl);
 
   if (y < 0) {
@@ -161,8 +158,7 @@ Blockly.WidgetDiv.positionWithAnchor = function(viewportBBox, anchorBBox,
 /**
  * Calculate an x position (in window coordinates) such that the widget will not
  * be offscreen on the right or left.
- * @param {!Object} viewportBBox The bounding rectangle of the current viewport,
- *     in window coordinates.
+ * @param {!DOMRect} containerBBox The bounding rectangle of the injection div.
  * @param {!Object} anchorBBox The bounding rectangle of the anchor, in window
  *     coordinates.
  * @param {Blockly.utils.Size} widgetSize The dimensions of the widget inside the
@@ -172,29 +168,34 @@ Blockly.WidgetDiv.positionWithAnchor = function(viewportBBox, anchorBBox,
  *     div, in window coordinates.
  * @private
  */
-Blockly.WidgetDiv.calculateX_ = function(viewportBBox, anchorBBox, widgetSize,
+Blockly.WidgetDiv.calculateX_ = function(containerBBox, anchorBBox, widgetSize,
     rtl) {
   if (rtl) {
     // Try to align the right side of the field and the right side of widget.
-    var widgetLeft = anchorBBox.right - widgetSize.width;
-    // Don't go offscreen left.
-    var x = Math.max(widgetLeft, viewportBBox.left);
-    // But really don't go offscreen right:
-    return Math.min(x, viewportBBox.right - widgetSize.width);
+    var relativeRightAnchor = anchorBBox.right - containerBBox.left;
+
+    // The left side of the widget positioned with the anchor.
+    var widgetLeft = relativeRightAnchor - widgetSize.width;
+
+    // If the left side of the widget is too far to the left go to the widget
+    // size so it will stay on the screen.
+    return Math.max(widgetLeft, widgetSize.width);
   } else {
-    // Try to align the left side of the field and the left side of widget.
-    // Don't go offscreen right.
-    var x = Math.min(anchorBBox.left, viewportBBox.right - widgetSize.width);
-    // But left is more important, because that's where the text is.
-    return Math.max(x, viewportBBox.left);
+
+    // The relative left position of the widget.
+    var relativeLeftAnchor = anchorBBox.left - containerBBox.left;
+
+    // The farthest point to the right without going off screen.
+    var rightBoundary = containerBBox.width - widgetSize.width;
+
+    return Math.min(relativeLeftAnchor, rightBoundary);
   }
 };
 
 /**
  * Calculate a y position (in window coordinates) such that the widget will not
  * be offscreen on the top or bottom.
- * @param {!Object} viewportBBox The bounding rectangle of the current viewport,
- *     in window coordinates.
+ * @param {!DOMRect} containerBBox The bounding rectangle of the injection div.
  * @param {!Object} anchorBBox The bounding rectangle of the anchor, in window
  *     coordinates.
  * @param {Blockly.utils.Size} widgetSize The dimensions of the widget inside the
@@ -203,15 +204,17 @@ Blockly.WidgetDiv.calculateX_ = function(viewportBBox, anchorBBox, widgetSize,
  *     div, in window coordinates.
  * @private
  */
-Blockly.WidgetDiv.calculateY_ = function(viewportBBox, anchorBBox, widgetSize) {
+Blockly.WidgetDiv.calculateY_ = function(containerBBox, anchorBBox, widgetSize) {
+  var relativeAnchorBottom = anchorBBox.bottom - containerBBox.top;
   // Flip the widget vertically if off the bottom.
-  if (anchorBBox.bottom + widgetSize.height >= viewportBBox.bottom) {
+  if (relativeAnchorBottom + widgetSize.height >= containerBBox.height) {
+    var relativeAnchorTop = anchorBBox.top - containerBBox.top;
     // The bottom of the widget is at the top of the field.
-    return anchorBBox.top - widgetSize.height;
+    return relativeAnchorTop - widgetSize.height;
     // The widget could go off the top of the window, but it would also go off
     // the bottom.  The window is just too small.
   } else {
     // The top of the widget is at the bottom of the field.
-    return anchorBBox.bottom;
+    return relativeAnchorBottom;
   }
 };

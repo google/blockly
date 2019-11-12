@@ -84,6 +84,13 @@ Blockly.FieldTextInput = function(opt_value, opt_validator, opt_config) {
    * @private
    */
   this.onKeyInputWrapper_ = null;
+
+  /**
+   * Blur input event data.
+   * @type {?Blockly.EventData}
+   * @private
+   */
+  this.onBlurInputWrapper_ = null;
 };
 Blockly.utils.object.inherits(Blockly.FieldTextInput, Blockly.Field);
 
@@ -349,7 +356,6 @@ Blockly.FieldTextInput.prototype.bindInputEvents_ = function(htmlInput) {
   this.onKeyInputWrapper_ =
       Blockly.bindEventWithChecks_(
           htmlInput, 'input', this, this.onHtmlInputChange_);
-
   this.onBlurInputWrapper_ =
       Blockly.bindEventWithChecks_(
           htmlInput, 'blur', this, this.onHtmlInputBlur_);
@@ -370,6 +376,7 @@ Blockly.FieldTextInput.prototype.unbindInputEvents_ = function() {
   }
   if (this.onBlurInputWrapper_) {
     Blockly.unbindEvent_(this.onBlurInputWrapper_);
+    this.onBlurInputWrapper_ = null;
   }
 };
 

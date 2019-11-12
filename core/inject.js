@@ -162,7 +162,9 @@ Blockly.createMainWorkspace_ = function(svg, options, blockDragSurface,
   mainWorkspace.scale = options.zoomOptions.startScale;
   svg.appendChild(mainWorkspace.createDom('blocklyMainBackground'));
 
-  // Set the theme name on the injection div.
+  // Set the theme name and renderer name onto the injection div.
+  Blockly.utils.dom.addClass(mainWorkspace.getInjectionDiv(),
+      (mainWorkspace.options.renderer || 'geras') + '-renderer');
   Blockly.utils.dom.addClass(mainWorkspace.getInjectionDiv(),
       mainWorkspace.getTheme().name + '-theme');
 

@@ -181,13 +181,6 @@ Blockly.blockRendering.PathObject.prototype.updateDisabled = function(disabled,
  */
 Blockly.blockRendering.PathObject.prototype.updateSelected = function(enable) {
   this.setClass_('blocklySelected', enable);
-  if (enable) {
-    this.svgPath.setAttribute('stroke', '#fc3');
-    this.svgPath.setAttribute('stroke-width', '3px');
-  } else {
-    this.svgPath.setAttribute('stroke', '');
-    this.svgPath.setAttribute('stroke-width', '');
-  }
 };
 
 /**

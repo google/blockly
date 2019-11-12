@@ -254,7 +254,12 @@ Blockly.Css.CONTENT = [
     'stroke-width: 1;',
   '}',
 
-  '.blocklySelected>.blocklyPathLight {',
+  '.injectionDiv:not(.zelos-renderer) .blocklySelected>.blocklyPath {',
+    'stroke: #fc3;',
+    'stroke-width: 3px;',
+  '}',
+
+  '.injectionDiv:not(.zelos-renderer) .blocklySelected>.blocklyPathLight {',
     'display: none;',
   '}',
 
@@ -320,12 +325,12 @@ Blockly.Css.CONTENT = [
     'stroke: none',
   '}',
 
-  '.blocklyReplaceable .blocklyPath {',
+  '.injectionDiv:not(.zelos-renderer) .blocklyReplaceable .blocklyPath {',
     'fill-opacity: .5;',
   '}',
 
-  '.blocklyReplaceable .blocklyPathLight,',
-  '.blocklyReplaceable .blocklyPathDark {',
+  '.injectionDiv:not(.zelos-renderer) .blocklyReplaceable .blocklyPathLight,',
+  '.injectionDiv:not(.zelos-renderer) .blocklyReplaceable .blocklyPathDark {',
     'display: none;',
   '}',
 

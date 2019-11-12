@@ -413,3 +413,21 @@ Blockly.Comment.prototype.dispose = function() {
   this.block_.comment = null;
   Blockly.Icon.prototype.dispose.call(this);
 };
+
+/**
+ * CSS for block comment.  See css.js for use.
+ */
+Blockly.Css.register([
+  /* eslint-disable indent */
+  '.blocklyCommentTextarea {',
+    'background-color: #fef49c;',
+    'border: 0;',
+    'outline: 0;',
+    'margin: 0;',
+    'padding: 3px;',
+    'resize: none;',
+    'display: block;',
+    'overflow: hidden;',
+  '}'
+  /* eslint-enable indent */
+]);

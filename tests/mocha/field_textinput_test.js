@@ -228,6 +228,11 @@ suite('Text Input Fields', function() {
               scale: 1
             }
           };
+          field.constants_ = {
+            FIELD_TEXT_FONTSIZE: 11,
+            FIELD_TEXT_FONTWEIGHT: 'normal',
+            FIELD_TEXT_FONTFAMILY: 'sans-serif'
+          };
           Blockly.WidgetDiv.DIV = document.createElement('div');
           this.stub = sinon.stub(field, 'resizeEditor_');
         };

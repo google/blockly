@@ -245,7 +245,7 @@ Blockly.FieldMultilineInput.prototype.widgetCreate_ = function() {
   var htmlInput = /** @type {HTMLTextAreaElement} */ (document.createElement('textarea'));
   htmlInput.className = 'blocklyHtmlInput blocklyHtmlTextAreaInput';
   htmlInput.setAttribute('spellcheck', this.spellcheck_);
-  var fontSize = (Blockly.Field.FONTSIZE * scale) + 'pt';
+  var fontSize = (this.constants_.FIELD_TEXT_FONTSIZE * scale) + 'pt';
   div.style.fontSize = fontSize;
   htmlInput.style.fontSize = fontSize;
   var borderRadius = (Blockly.FieldTextInput.BORDERRADIUS * scale) + 'px';

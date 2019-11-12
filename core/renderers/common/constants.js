@@ -137,6 +137,27 @@ Blockly.blockRendering.ConstantProvider = function() {
   this.JAGGED_TEETH_WIDTH = 6;
 
   /**
+   * Point size of text.  Should match blocklyText's font-size in CSS.
+   * @type {number}
+   * @const
+   */
+  this.FIELD_TEXT_FONTSIZE = 11;
+
+  /**
+   * Text font weight.  Should match blocklyText's font-weight in CSS.
+   * @type {string}
+   * @const
+   */
+  this.FIELD_TEXT_FONTWEIGHT = 'normal';
+
+  /**
+   * Text font family.  Should match blocklyText's font-family in CSS.
+   * @type {string}
+   * @const
+   */
+  this.FIELD_TEXT_FONTFAMILY = 'sans-serif';
+
+  /**
    * The ID of the emboss filter, or the empty string if no filter is set.
    * @type {string}
    * @package

@@ -1756,11 +1756,5 @@ Blockly.BlockSvg.prototype.getHeightWidth = function() {
  * @package
  */
 Blockly.BlockSvg.prototype.highlightForReplacement = function(add) {
-  if (add) {
-    Blockly.utils.dom.addClass(/** @type {!Element} */ (this.svgGroup_),
-        'blocklyReplaceable');
-  } else {
-    Blockly.utils.dom.removeClass(/** @type {!Element} */ (this.svgGroup_),
-        'blocklyReplaceable');
-  }
+  this.pathObject.updateReplacementHighlight(add);
 };

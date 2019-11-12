@@ -51,6 +51,34 @@ Blockly.Bubble = function(workspace, content, shape, anchorXY,
   this.content_ = content;
   this.shape_ = shape;
 
+  /**
+   * Method to call on resize of bubble.
+   * @type {?function()}
+   * @private
+   */
+  this.resizeCallback_ = null;
+
+  /**
+   * Method to call on move of bubble.
+   * @type {?function()}
+   * @private
+   */
+  this.moveCallback_ = null;
+
+  /**
+   * Mouse down on bubbleBack_ event data.
+   * @type {?Blockly.EventData}
+   * @private
+   */
+  this.onMouseDownBubbleWrapper_ = null;
+
+  /**
+   * Mouse down on resizeGroup_ event data.
+   * @type {?Blockly.EventData}
+   * @private
+   */
+  this.onMouseDownResizeWrapper_ = null;
+
   var angle = Blockly.Bubble.ARROW_ANGLE;
   if (this.workspace_.RTL) {
     angle = -angle;
@@ -72,29 +100,6 @@ Blockly.Bubble = function(workspace, content, shape, anchorXY,
   this.positionBubble_();
   this.renderArrow_();
   this.rendered_ = true;
-
-  if (!workspace.options.readOnly) {
-    Blockly.bindEventWithChecks_(
-        this.bubbleBack_, 'mousedown', this, this.bubbleMouseDown_);
-    if (this.resizeGroup_) {
-      Blockly.bindEventWithChecks_(
-          this.resizeGroup_, 'mousedown', this, this.resizeMouseDown_);
-    }
-  }
-
-  /**
-   * Method to call on resize of bubble.
-   * @type {?function()}
-   * @private
-   */
-  this.resizeCallback_ = null;
-
-  /**
-   * Method to call on move of bubble.
-   * @type {?function()}
-   * @private
-   */
-  this.moveCallback_ = null;
 };
 
 /**
@@ -124,15 +129,15 @@ Blockly.Bubble.ARROW_BEND = 4;
 Blockly.Bubble.ANCHOR_RADIUS = 8;
 
 /**
- * Wrapper function called when a mouseUp occurs during a drag operation.
- * @type {Array.<!Array>}
+ * Mouse up event data.
+ * @type {?Blockly.EventData}
  * @private
  */
 Blockly.Bubble.onMouseUpWrapper_ = null;
 
 /**
- * Wrapper function called when a mouseMove occurs during a drag operation.
- * @type {Array.<!Array>}
+ * Mouse move event data.
+ * @type {?Blockly.EventData}
  * @private
  */
 Blockly.Bubble.onMouseMoveWrapper_ = null;
@@ -277,6 +282,15 @@ Blockly.Bubble.prototype.createDom_ = function(content, hasResize) {
         }, this.resizeGroup_);
   } else {
     this.resizeGroup_ = null;
+  }
+
+  if (!this.workspace_.options.readOnly) {
+    this.onMouseDownBubbleWrapper_ = Blockly.bindEventWithChecks_(
+        this.bubbleBack_, 'mousedown', this, this.bubbleMouseDown_);
+    if (this.resizeGroup_) {
+      this.onMouseDownResizeWrapper_ = Blockly.bindEventWithChecks_(
+          this.resizeGroup_, 'mousedown', this, this.resizeMouseDown_);
+    }
   }
   this.bubbleGroup_.appendChild(content);
   return this.bubbleGroup_;
@@ -785,6 +799,14 @@ Blockly.Bubble.prototype.dispose = function() {
   Blockly.Bubble.unbindDragEvents_();
   // Dispose of and unlink the bubble.
   Blockly.utils.dom.removeNode(this.bubbleGroup_);
+  if (this.onMouseDownBubbleWrapper_) {
+    Blockly.unbindEvent_(this.onMouseDownBubbleWrapper_);
+    this.onMouseDownBubbleWrapper_ = null;
+  }
+  if (this.onMouseDownResizeWrapper_) {
+    Blockly.unbindEvent_(this.onMouseDownResizeWrapper_);
+    this.onMouseDownResizeWrapper_ = null;
+  }
   this.bubbleGroup_ = null;
   this.bubbleArrow_ = null;
   this.bubbleBack_ = null;

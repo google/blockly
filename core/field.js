@@ -129,6 +129,13 @@ Blockly.Field = function(value, opt_validator, opt_config) {
    */
   this.mouseDownWrapper_ = null;
 
+  /**
+   * Constants associated with the source block's renderer.
+   * @type {Blockly.blockRendering.ConstantProvider}
+   * @protected
+   */
+  this.constants_ = null;
+
   opt_config && this.configure_(opt_config);
   this.setValue(value);
   opt_validator && this.setValidator(opt_validator);
@@ -258,24 +265,6 @@ Blockly.Field.prototype.EDITABLE = true;
 Blockly.Field.prototype.SERIALIZABLE = false;
 
 /**
- * Point size of text.  Should match blocklyText's font-size in CSS.
- * @const {number}
- */
-Blockly.Field.FONTSIZE = 11;
-
-/**
- * Text font weight.  Should match blocklyText's font-weight in CSS.
- * @const {string}
- */
-Blockly.Field.FONTWEIGHT = 'normal';
-
-/**
- * Text font family.  Should match blocklyText's font-family in CSS.
- * @const {string}
- */
-Blockly.Field.FONTFAMILY = 'sans-serif';
-
-/**
  * Process the configuration map passed to the field.
  * @param {!Object} config A map of options used to configure the field. See
  *    the individual field's documentation for a list of properties this
@@ -303,6 +292,9 @@ Blockly.Field.prototype.setSourceBlock = function(block) {
     throw Error('Field already bound to a block.');
   }
   this.sourceBlock_ = block;
+  if (block.workspace.rendered) {
+    this.constants_ = block.workspace.getRenderer().getConstants();
+  }
 };
 
 /**
@@ -661,8 +653,9 @@ Blockly.Field.prototype.updateWidth = function() {
 Blockly.Field.prototype.updateSize_ = function() {
   var textWidth = Blockly.utils.dom.getFastTextWidth(
       /** @type {!SVGTextElement} */ (this.textElement_),
-      Blockly.Field.FONTSIZE, Blockly.Field.FONTWEIGHT,
-      Blockly.Field.FONTFAMILY);
+      this.constants_.FIELD_TEXT_FONTSIZE,
+      this.constants_.FIELD_TEXT_FONTWEIGHT,
+      this.constants_.FIELD_TEXT_FONTFAMILY);
   var totalWidth = textWidth;
   if (this.borderRect_) {
     totalWidth += Blockly.Field.X_PADDING;

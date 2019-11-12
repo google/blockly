@@ -111,3 +111,12 @@ Blockly.blockRendering.IPathObject.prototype.updateInsertionMarker;
  * @package
  */
 Blockly.blockRendering.IPathObject.prototype.updateMovable;
+
+/**
+ * Add or remove styling that shows that if the dragging block is dropped, this
+ * block will be replaced.  If a shadow block, it will disappear.  Otherwise it
+ * will bump.
+ * @param {boolean} enable True if styling should be added.
+ * @package
+ */
+Blockly.blockRendering.IPathObject.prototype.updateReplacementHighlight;

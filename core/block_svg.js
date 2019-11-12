@@ -1758,3 +1758,15 @@ Blockly.BlockSvg.prototype.getHeightWidth = function() {
 Blockly.BlockSvg.prototype.highlightForReplacement = function(add) {
   this.pathObject.updateReplacementHighlight(add);
 };
+
+/**
+ * Determine whether or not to highlight a connection.
+ * @param {Blockly.Connection} conn The connection on the input to determine
+ *     whether or not to highlight.
+ * @return {boolean} Whether or not to highlight the connection.
+ * @package
+ */
+Blockly.BlockSvg.prototype.shouldHighlightConnection = function(conn) {
+  return this.pathObject.shouldHighlightConnection(conn);
+};
+

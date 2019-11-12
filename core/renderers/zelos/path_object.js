@@ -120,6 +120,13 @@ Blockly.zelos.PathObject.prototype.updateReplacementHighlight = function(
 };
 
 /**
+ * @override
+ */
+Blockly.zelos.PathObject.prototype.shouldHighlightConnection = function(conn) {
+  return conn.type != Blockly.INPUT_VALUE && conn.type !== Blockly.OUTPUT_VALUE;
+};
+
+/**
  * Method that's called when the drawer is about to draw the block.
  * @package
  */

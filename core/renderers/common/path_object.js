@@ -58,18 +58,6 @@ Blockly.blockRendering.PathObject = function(root, constants) {
   this.svgPath = Blockly.utils.dom.createSvgElement('path',
       {'class': 'blocklyPath'}, this.svgRoot);
 
-  // The light and dark paths need to exist (for now) because there is colouring
-  // code in block_svg that depends on them.  But we will always set them to
-  // display: none, and eventually we want to remove them entirely.
-
-  /**
-   * The light path of the block.
-   * @type {SVGElement}
-   * @package
-   */
-  this.svgPathLight = Blockly.utils.dom.createSvgElement('path',
-      {'class': 'blocklyPathLight'}, this.svgRoot);
-
   /**
    * The style object to use when colouring block paths.
    * @type {!Blockly.Theme.BlockStyle}
@@ -85,7 +73,6 @@ Blockly.blockRendering.PathObject = function(root, constants) {
  */
 Blockly.blockRendering.PathObject.prototype.setPath = function(pathString) {
   this.svgPath.setAttribute('d', pathString);
-  this.svgPathLight.style.display = 'none';
 };
 
 /**

@@ -160,7 +160,6 @@ Blockly.blockRendering.ConstantProvider = function() {
   /**
    * A field's border rect corner radius.
    * @type {number}
-   * @const
    */
   this.FIELD_BORDER_RECT_RADIUS = 4;
 

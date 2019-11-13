@@ -128,6 +128,16 @@ Blockly.zelos.ConstantProvider = function() {
   this.DUMMY_INPUT_MIN_HEIGHT = 6 * this.GRID_UNIT;
 
   /**
+   * @override
+   */
+  this.WS_CURSOR_WIDTH = 20 * this.GRID_UNIT;
+
+  /**
+   * @override
+   */
+  this.CURSOR_COLOUR = '#ffa200';
+
+  /**
    * The ID of the highlight glow filter, or the empty string if no filter is
    * set.
    * @type {string}

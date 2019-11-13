@@ -150,7 +150,7 @@ Blockly.blockRendering.ConstantProvider = function() {
    * @type {number}
    * @const
    */
-  this.FIELD_TEXT_HEIGHT = 80;
+  this.FIELD_TEXT_HEIGHT = 8;
 
   /**
    * Text font weight.  Should match blocklyText's font-weight in CSS.

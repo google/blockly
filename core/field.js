@@ -344,17 +344,23 @@ Blockly.Field.prototype.createBorderRect_ = function() {
 Blockly.Field.prototype.createTextElement_ = function() {
   var xOffset = this.borderRect_ ?
     this.constants_.FIELD_BORDER_RECT_X_PADDING : 0;
+  this.size_.height = Math.max(this.size_.height,
+      this.constants_.FIELD_TEXT_BASELINE_CENTER ?
+          this.constants_.FIELD_TEXT_HEIGHT :
+          this.constants_.FIELD_TEXT_BASELINE_Y);
   this.textElement_ = /** @type {!SVGTextElement} **/
       (Blockly.utils.dom.createSvgElement('text',
           {
             'class': 'blocklyText',
-            // The y position is the baseline of the text.
-            'y': this.constants_.FIELD_TEXT_BASELINE_CENTER ?
-                this.size_.height / 2 : this.constants_.FIELD_TEXT_BASELINE_Y,
-            'dominant-baseline':
-                this.constants_.FIELD_TEXT_BASELINE_CENTER ? 'middle' : '',
+            'y': this.size_.height / 2,
             'x': xOffset
           }, this.fieldGroup_));
+  if (this.constants_.FIELD_TEXT_BASELINE_CENTER) {
+    this.textElement_.setAttribute('dominant-baseline', 'central');
+  } else {
+    this.textElement_.setAttribute('dy',
+        this.constants_.FIELD_TEXT_BASELINE_Y - this.size_.height / 2);
+  }
   this.textContent_ = document.createTextNode('');
   this.textElement_.appendChild(this.textContent_);
 };

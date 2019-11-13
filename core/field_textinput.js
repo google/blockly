@@ -147,8 +147,9 @@ Blockly.FieldTextInput.prototype.configure_ = function(config) {
  */
 Blockly.FieldTextInput.prototype.initView = function() {
   this.size_.height = Math.max(this.constants_.FIELD_BORDER_RECT_HEIGHT,
-      this.constants_.FIELD_TEXT_BASELINE_Y +
-      this.constants_.FIELD_BORDER_RECT_Y_PADDING);
+      this.constants_.FIELD_TEXT_BASELINE_CENTER ?
+      this.constants_.FIELD_TEXT_HEIGHT :
+      this.constants_.FIELD_TEXT_BASELINE_Y);
   if (this.constants_.FULL_BLOCK_FIELDS) {
     // Step one: figure out if this is the only field on this block.
     // Rendering is quite different in that case.

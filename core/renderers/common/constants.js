@@ -145,11 +145,10 @@ Blockly.blockRendering.ConstantProvider = function() {
   this.FIELD_TEXT_FONTSIZE = 11;
 
   /**
-   * Height of text. This is only used if `FIELD_TEXT_BASELINE_CENTER` is set to
-   * false.
+   * Height of text.
    * @type {number}
    */
-  this.FIELD_TEXT_HEIGHT = 8;
+  this.FIELD_TEXT_HEIGHT = 13;
 
   /**
    * Text font weight.  Should match blocklyText's font-weight in CSS.
@@ -190,12 +189,11 @@ Blockly.blockRendering.ConstantProvider = function() {
   this.FIELD_BORDER_RECT_Y_PADDING = 3;
 
   /**
-   * Height of text. This is only used if `FIELD_BASELINE_CENTER` is set to
-   * false.
+   * Field text baseline. This is only used if `FIELD_TEXT_BASELINE_CENTER` is
+   * set to false.
    * @type {number}
    */
-  this.FIELD_TEXT_BASELINE_Y =
-      this.FIELD_BORDER_RECT_X_PADDING + this.FIELD_TEXT_HEIGHT;
+  this.FIELD_TEXT_BASELINE_Y = 13;
 
   /**
    * A field's text element's dominant baseline.

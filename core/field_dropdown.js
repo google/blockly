@@ -555,16 +555,19 @@ Blockly.FieldDropdown.prototype.renderSelectedText_ = function() {
   // Height and width include the border rect.
   this.size_.height = Math.max(
       this.constants_.FIELD_DROPDOWN_BORDER_RECT_HEIGHT,
-      this.constants_.FIELD_TEXT_HEIGHT);
+      this.constants_.FIELD_TEXT_HEIGHT +
+      this.constants_.FIELD_BORDER_RECT_Y_PADDING * 2);
   this.size_.width = Blockly.utils.dom.getFastTextWidth(this.textElement_,
       this.constants_.FIELD_TEXT_FONTSIZE,
       this.constants_.FIELD_TEXT_FONTWEIGHT,
       this.constants_.FIELD_TEXT_FONTFAMILY) +
       this.constants_.FIELD_BORDER_RECT_X_PADDING * 2;
 
-  this.textElement_.setAttribute('y',
-      this.constants_.FIELD_TEXT_BASELINE_CENTER ?
-      this.size_.height / 2 : this.constants_.FIELD_TEXT_BASELINE_Y);
+  this.textElement_.setAttribute('y', this.size_.height / 2);
+  if (!this.constants_.FIELD_TEXT_BASELINE_CENTER) {
+    this.textElement_.setAttribute('dy',
+        this.constants_.FIELD_TEXT_BASELINE_Y - this.size_.height / 2);
+  }
 };
 
 /**

@@ -96,9 +96,6 @@ Blockly.FieldLabel.prototype.configure_ = function(config) {
  * @package
  */
 Blockly.FieldLabel.prototype.initView = function() {
-  this.size_.height = this.constants_.FIELD_TEXT_BASELINE_CENTER ?
-    this.constants_.FIELD_TEXT_HEIGHT :
-    this.constants_.FIELD_TEXT_BASELINE_Y;
   this.createTextElement_();
   if (this.class_) {
     Blockly.utils.dom.addClass(

@@ -138,6 +138,13 @@ Blockly.zelos.ConstantProvider = function() {
   this.CURSOR_COLOUR = '#ffa200';
 
   /**
+   * Radius of the cursor for input and output connections.
+   * @type {number}
+   * @package
+   */
+  this.CURSOR_RADIUS = 5;
+
+  /**
    * The ID of the highlight glow filter, or the empty string if no filter is
    * set.
    * @type {string}

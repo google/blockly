@@ -107,12 +107,12 @@ Blockly.blockRendering.Renderer.prototype.makeDebugger_ = function() {
  * @param {boolean=} opt_marker True if the cursor is a marker. A marker is used
  *     to save a location and is an immovable cursor. False or undefined if the
  *     cursor is not a marker.
- * @return {!Blockly.CursorSvg} The cursor drawer.
+ * @return {!Blockly.blockRendering.CursorSvg} The cursor drawer.
  * @package
  */
 Blockly.blockRendering.Renderer.prototype.makeCursorDrawer = function(
     workspace, opt_marker) {
-  return new Blockly.blockRendering.CursorSvg(workspace, this.constants_, opt_marker);
+  return new Blockly.blockRendering.CursorSvg(workspace, this.getConstants(), opt_marker);
 };
 
 /**

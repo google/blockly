@@ -1643,7 +1643,7 @@ Blockly.BlockSvg.prototype.render = function(opt_bubble) {
 
   if (this.pathObject.cursorSvg_ && this.workspace.getCursor().getDrawer()) {
     var cursor = this.workspace.getCursor();
-    cursor.setCurNode(cursor.getCurNode());
+    cursor.draw();
   }
 };
 

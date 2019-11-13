@@ -42,7 +42,7 @@ Blockly.Cursor = function() {
 
   /**
    * The object in charge of drawing the visual representation of the current node.
-   * @type {Blockly.CursorSvg}
+   * @type {Blockly.blockRendering.CursorSvg}
    * @private
    */
   this.drawer_ = null;
@@ -50,7 +50,7 @@ Blockly.Cursor = function() {
 
 /**
  * Sets the object in charge of drawing the cursor.
- * @param {Blockly.CursorSvg} drawer The object in charge of drawing the cursor.
+ * @param {Blockly.blockRendering.CursorSvg} drawer The object in charge of drawing the cursor.
  */
 Blockly.Cursor.prototype.setDrawer = function(drawer) {
   this.drawer_ = drawer;
@@ -58,7 +58,7 @@ Blockly.Cursor.prototype.setDrawer = function(drawer) {
 
 /**
  * Get the current drawer for the cursor.
- * @return {Blockly.CursorSvg} The object in charge of drawing the cursor.
+ * @return {Blockly.blockRendering.CursorSvg} The object in charge of drawing the cursor.
  */
 Blockly.Cursor.prototype.getDrawer = function() {
   return this.drawer_;
@@ -84,6 +84,16 @@ Blockly.Cursor.prototype.setCurNode = function(newNode) {
   this.curNode_ = newNode;
   if (this.drawer_) {
     this.drawer_.draw(oldNode, this.curNode_);
+  }
+};
+
+/**
+ * Re draw the current cursor.
+ * @package
+ */
+Blockly.Cursor.prototype.draw = function() {
+  if (this.drawer_) {
+    this.drawer_.draw(this.curNode_, this.curNode_);
   }
 };
 

@@ -551,8 +551,6 @@ Blockly.blockRendering.CursorSvg.prototype.createDomInternal_ = function() {
   // A horizontal line used to represent a workspace coordinate or next connection.
   this.cursorSvgLine_ = Blockly.utils.dom.createSvgElement('rect',
       {
-        'x': 0,
-        'y': 0,
         'fill': colour,
         'width': this.constants_.WS_CURSOR_WIDTH,
         'height': this.constants_.WS_CURSOR_HEIGHT,
@@ -564,8 +562,6 @@ Blockly.blockRendering.CursorSvg.prototype.createDomInternal_ = function() {
   this.cursorSvgRect_ = Blockly.utils.dom.createSvgElement('rect',
       {
         'class': 'blocklyVerticalCursor',
-        'x': 0,
-        'y': 0,
         'rx': 10, 'ry': 10,
         'style': 'display: none',
         'stroke': colour
@@ -573,11 +569,8 @@ Blockly.blockRendering.CursorSvg.prototype.createDomInternal_ = function() {
       this.cursorSvg_);
 
   // A filled in puzzle piece used to represent an input value.
-  this.cursorInput_ = Blockly.utils.dom.createSvgElement(
-      'path',
+  this.cursorInput_ = Blockly.utils.dom.createSvgElement('path',
       {
-        'width': this.constants_.WS_CURSOR_WIDTH,
-        'height': this.constants_.WS_CURSOR_HEIGHT,
         'transform': '',
         'style': 'display: none',
         'fill': colour
@@ -586,11 +579,8 @@ Blockly.blockRendering.CursorSvg.prototype.createDomInternal_ = function() {
 
   // A path used to represent a previous connection and a block, an output
   // connection and a block, or a block.
-  this.cursorBlock_ = Blockly.utils.dom.createSvgElement(
-      'path',
+  this.cursorBlock_ = Blockly.utils.dom.createSvgElement('path',
       {
-        'width': this.constants_.WS_CURSOR_WIDTH,
-        'height': this.constants_.WS_CURSOR_HEIGHT,
         'transform': '',
         'style': 'display: none',
         'fill': 'none',

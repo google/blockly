@@ -220,7 +220,7 @@ Blockly.Field.prototype.visible_ = true;
 /**
  * The element the click handler is bound to.
  * @type {Element}
- * @private
+ * @protected
  */
 Blockly.Field.prototype.clickTarget_ = null;
 
@@ -951,11 +951,11 @@ Blockly.Field.prototype.getClickTarget_ = function() {
  * Return the absolute coordinates of the top-left corner of this field.
  * The origin (0,0) is the top-left corner of the page body.
  * @return {!Blockly.utils.Coordinate} Object with .x and .y properties.
- * @private
+ * @protected
  */
 Blockly.Field.prototype.getAbsoluteXY_ = function() {
   return Blockly.utils.style.getPageOffset(
-      /** @type {!SVGRectElement} */ (this.borderRect_));
+      /** @type {!SVGRectElement} */ (this.getClickTarget_()));
 };
 
 /**

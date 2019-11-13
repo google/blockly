@@ -25,6 +25,7 @@
 goog.provide('Blockly.FlyoutCursor');
 
 goog.require('Blockly.Cursor');
+goog.require('Blockly.navigation');
 goog.require('Blockly.utils.object');
 
 

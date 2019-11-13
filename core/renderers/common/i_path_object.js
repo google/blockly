@@ -67,6 +67,22 @@ Blockly.blockRendering.IPathObject.prototype.setStyle;
 Blockly.blockRendering.IPathObject.prototype.flipRTL;
 
 /**
+ * Add the cursor svg to this block's svg group.
+ * @param {SVGElement} cursorSvg The svg root of the cursor to be added to the
+ *     block svg group.
+ * @package
+ */
+Blockly.blockRendering.IPathObject.prototype.setCursorSvg;
+
+/**
+ * Add the marker svg to this block's svg group.
+ * @param {SVGElement} markerSvg The svg root of the marker to be added to the
+ *     block svg group.
+ * @package
+ */
+Blockly.blockRendering.IPathObject.prototype.setMarkerSvg;
+
+/**
  * Set whether the block shows a highlight or not.  Block highlighting is
  * often used to visually mark blocks currently being executed.
  * @param {boolean} highlighted True if highlighted.

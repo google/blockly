@@ -226,6 +226,13 @@ Blockly.blockRendering.ConstantProvider = function() {
    * @const
    */
   this.BLOCK_PADDING = 2;
+  
+  /*
+   * Whether text input and colour fields fill up the entire source block.
+   * @type {boolean}
+   * @package
+   */
+  this.FULL_BLOCK_FIELDS = false;
 };
 
 /**

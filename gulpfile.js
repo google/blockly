@@ -32,8 +32,10 @@ var path = require('path');
 var fs = require('fs');
 var rimraf = require('rimraf');
 var execSync = require('child_process').execSync;
+var through2 = require('through2');
 
 var closureCompiler = require('google-closure-compiler').gulp();
+var closureDeps = require('google-closure-deps');
 var packageJson = require('./package.json');
 var argv = require('yargs').argv;
 
@@ -340,27 +342,37 @@ if (this.IS_NODE_JS) {
   document.write('<script>this.BLOCKLY_BOOT(this);</script>');
 }
 `;
-  const file = 'blockly_uncompressed.js';
-  // Run depswriter.py and which scans the core directory and writes out a ``goog.addDependency`` line for each file.
-  const cmd = `python ./node_modules/google-closure-library/closure/bin/build/depswriter.py \
-    --root_with_prefix="./core ../core" > ${file}`;
-  execSync(cmd, { stdio: 'inherit' });
 
-  const requires = `goog.addDependency("base.js", [], []);\n\n// Load Blockly.\ngoog.require('Blockly.requires')\n`;
+let deps = [];
+return gulp.src('core/**/**/*.js')
+  .pipe(through2.obj((file, _enc, cb) => {
+    deps.push(closureDeps.parser.parseFile(file.path).dependency);
+    cb(null);
+  }))
+  .on('end', () => {
+    const graph = new closureDeps.depGraph.Graph(deps);
+    let addDependency = [];
+    graph.depsByPath.forEach(dep => {
+      addDependency.push('goog.addDependency(' + [
+        '"' + path.relative('./closure/goog', dep.path) + '"',
+        '[' + dep.closureSymbols
+              .map(s => `'${s}'`).join(', ') + ']',
+        '[' + dep.imports
+              .map(i => i.symOrPath)
+              .filter(i => i !== 'goog')
+              .sort()
+              .map(i => `'${i}'`).join(', ') + ']',
+      ].join(', ') + ');');
+    });
+    const requires = `
+goog.addDependency("base.js", [], []);
 
-  return gulp.src(file)
-    // Remove comments so we're compatible with the build.py script
-    .pipe(gulp.replace(/\/\/.*\n/gm, ''))
-    // Replace quotes to be compatible with build.py
-    .pipe(gulp.replace(/\'(.*\.js)\'/gm, '"$1"'))
-    // Remove last parameter to be compatible with build.py
-    .pipe(gulp.replace(/, \{\}\);/gm, ');'))
-    // Find the Blockly directory name and replace it with a JS variable.
-    // This allows blockly_uncompressed.js to be compiled on one computer and be
-    // used on another, even if the directory name differs.
-    .pipe(gulp.replace(/\.\.\/core/gm, `../../core`))
-    .pipe(gulp.insert.wrap(header, requires + footer))
-    .pipe(gulp.dest('./'));
+// Load Blockly.
+goog.require('Blockly.requires')
+`;
+    fs.writeFileSync('blockly_uncompressed.js',
+      header + addDependency.join('\n') + requires + footer);
+  });
 });
 
 /**

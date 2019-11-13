@@ -58,24 +58,28 @@ Blockly.blockRendering.PathObject = function(root, constants) {
   this.svgPath = Blockly.utils.dom.createSvgElement('path',
       {'class': 'blocklyPath'}, this.svgRoot);
 
-  // The light and dark paths need to exist (for now) because there is colouring
-  // code in block_svg that depends on them.  But we will always set them to
-  // display: none, and eventually we want to remove them entirely.
-
-  /**
-   * The light path of the block.
-   * @type {SVGElement}
-   * @package
-   */
-  this.svgPathLight = Blockly.utils.dom.createSvgElement('path',
-      {'class': 'blocklyPathLight'}, this.svgRoot);
-
   /**
    * The style object to use when colouring block paths.
    * @type {!Blockly.Theme.BlockStyle}
    * @package
    */
   this.style = Blockly.Theme.createBlockStyle('#000000');
+
+  /**
+   * Holds the cursors svg element when the cursor is attached to the block.
+   * This is null if there is no cursor on the block.
+   * @type {SVGElement}
+   * @private
+   */
+  this.cursorSvg_ = null;
+
+  /**
+   * Holds the markers svg element when the marker is attached to the block.
+   * This is null if there is no marker on the block.
+   * @type {SVGElement}
+   * @private
+   */
+  this.markerSvg_ = null;
 };
 
 /**
@@ -85,7 +89,6 @@ Blockly.blockRendering.PathObject = function(root, constants) {
  */
 Blockly.blockRendering.PathObject.prototype.setPath = function(pathString) {
   this.svgPath.setAttribute('d', pathString);
-  this.svgPathLight.style.display = 'none';
 };
 
 /**
@@ -95,6 +98,42 @@ Blockly.blockRendering.PathObject.prototype.setPath = function(pathString) {
 Blockly.blockRendering.PathObject.prototype.flipRTL = function() {
   // Mirror the block's path.
   this.svgPath.setAttribute('transform', 'scale(-1 1)');
+};
+
+/**
+ * Add the cursor svg to this block's svg group.
+ * @param {SVGElement} cursorSvg The svg root of the cursor to be added to the
+ *     block svg group.
+ * @package
+ */
+Blockly.blockRendering.PathObject.prototype.setCursorSvg = function(cursorSvg) {
+  if (!cursorSvg) {
+    this.cursorSvg_ = null;
+    return;
+  }
+
+  this.svgRoot.appendChild(cursorSvg);
+  this.cursorSvg_ = cursorSvg;
+};
+
+/**
+ * Add the marker svg to this block's svg group.
+ * @param {SVGElement} markerSvg The svg root of the marker to be added to the
+ *     block svg group.
+ * @package
+ */
+Blockly.blockRendering.PathObject.prototype.setMarkerSvg = function(markerSvg) {
+  if (!markerSvg) {
+    this.markerSvg_ = null;
+    return;
+  }
+
+  if (this.cursorSvg_) {
+    this.svgRoot.insertBefore(markerSvg, this.cursorSvg_);
+  } else {
+    this.svgRoot.appendChild(markerSvg);
+  }
+  this.markerSvg_ = markerSvg;
 };
 
 /**

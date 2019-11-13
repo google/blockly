@@ -21,7 +21,11 @@
  */
 'use strict';
 
+
 goog.provide('Blockly.blockRendering.CursorSvg');
+
+goog.require('Blockly.ASTNode');
+
 
 /**
  * Class for a cursor.

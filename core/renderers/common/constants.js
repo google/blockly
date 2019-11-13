@@ -148,7 +148,6 @@ Blockly.blockRendering.ConstantProvider = function() {
    * Height of text. This is only used if `FIELD_TEXT_BASELINE_CENTER` is set to
    * false.
    * @type {number}
-   * @const
    */
   this.FIELD_TEXT_HEIGHT = 8;
 
@@ -169,28 +168,24 @@ Blockly.blockRendering.ConstantProvider = function() {
   /**
    * A field's border rect corner radius.
    * @type {number}
-   * @const
    */
   this.FIELD_BORDER_RECT_RADIUS = 4;
 
   /**
    * A field's border rect default height.
    * @type {number}
-   * @const
    */
   this.FIELD_BORDER_RECT_HEIGHT = 16;
 
   /**
    * A field's border rect X padding.
    * @type {number}
-   * @const
    */
   this.FIELD_BORDER_RECT_X_PADDING = 5;
 
   /**
    * A field's border rect Y padding.
    * @type {number}
-   * @const
    */
   this.FIELD_BORDER_RECT_Y_PADDING = 3;
 
@@ -198,7 +193,6 @@ Blockly.blockRendering.ConstantProvider = function() {
    * Height of text. This is only used if `FIELD_BASELINE_CENTER` is set to
    * false.
    * @type {number}
-   * @const
    */
   this.FIELD_TEXT_BASELINE_Y =
       this.FIELD_BORDER_RECT_X_PADDING + this.FIELD_TEXT_HEIGHT;
@@ -206,7 +200,6 @@ Blockly.blockRendering.ConstantProvider = function() {
   /**
    * A field's text element's dominant baseline.
    * @type {boolean}
-   * @const
    */
   this.FIELD_TEXT_BASELINE_CENTER =
       !Blockly.utils.userAgent.IE && !Blockly.utils.userAgent.EDGE;
@@ -214,35 +207,30 @@ Blockly.blockRendering.ConstantProvider = function() {
   /**
    * A dropdown field's border rect height.
    * @type {number}
-   * @const
    */
   this.FIELD_DROPDOWN_BORDER_RECT_HEIGHT = this.FIELD_BORDER_RECT_HEIGHT;
 
   /**
    * A colour field's default width.
    * @type {number}
-   * @const
    */
   this.FIELD_COLOUR_DEFAULT_WIDTH = 26;
 
   /**
    * A colour field's default height.
    * @type {number}
-   * @const
    */
   this.FIELD_COLOUR_DEFAULT_HEIGHT = this.FIELD_BORDER_RECT_HEIGHT;
 
   /**
    * A checkbox field's X offset.
    * @type {number}
-   * @const
    */
   this.FIELD_CHECKBOX_X_OFFSET = this.FIELD_BORDER_RECT_X_PADDING - 3;
 
   /**
    * A checkbox field's Y offset.
    * @type {number}
-   * @const
    */
   this.FIELD_CHECKBOX_Y_OFFSET = 14;
 

@@ -219,34 +219,6 @@ Blockly.blockRendering.ConstantProvider = function() {
   this.FIELD_DROPDOWN_BORDER_RECT_HEIGHT = this.FIELD_BORDER_RECT_HEIGHT;
 
   /**
-   * Whether or not a dropdown field uses a text or SVG arrow.
-   * @type {boolean}
-   * @const
-   */
-  this.FIELD_DROPDOWN_SVG_ARROW = false;
-
-  /**
-   * A dropdown field's SVG arrow size.
-   * @type {number}
-   * @const
-   */
-  this.FIELD_DROPDOWN_SVG_ARROW_SIZE = 12;
-
-  /**
-   * A dropdown field's SVG arrow padding.
-   * @type {number}
-   * @const
-   */
-  this.FIELD_DROPDOWN_SVG_ARROW_PADDING = 8;
-
-  /**
-   * A dropdown field's SVG arrow datauri.
-   * @type {string}
-   * @const
-   */
-  this.FIELD_DROPDOWN_SVG_ARROW_DATAURI = '';
-
-  /**
    * A colour field's default width.
    * @type {number}
    * @const

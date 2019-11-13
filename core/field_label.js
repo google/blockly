@@ -101,7 +101,8 @@ Blockly.FieldLabel.prototype.initView = function() {
     this.constants_.FIELD_TEXT_BASELINE_Y;
   this.createTextElement_();
   if (this.class_) {
-    Blockly.utils.dom.addClass(this.textElement_, this.class_);
+    Blockly.utils.dom.addClass(
+        /** @type {!SVGTextElement} */ (this.textElement_), this.class_);
   }
 };
 

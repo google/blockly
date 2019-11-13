@@ -1654,6 +1654,11 @@ Blockly.BlockSvg.prototype.render = function(opt_bubble) {
     }
   }
   Blockly.utils.dom.stopTextWidthCache();
+
+  if (this.cursorSvg_ && this.workspace.getCursor().getDrawer()) {
+    var cursor = this.workspace.getCursor();
+    cursor.setCurNode(cursor.getCurNode());
+  }
 };
 
 /**

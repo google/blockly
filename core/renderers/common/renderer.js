@@ -28,7 +28,7 @@ goog.require('Blockly.blockRendering.Drawer');
 goog.require('Blockly.blockRendering.IPathObject');
 goog.require('Blockly.blockRendering.PathObject');
 goog.require('Blockly.blockRendering.RenderInfo');
-goog.require('Blockly.CursorSvg');
+goog.require('Blockly.blockRendering.CursorSvg');
 
 goog.requireType('Blockly.blockRendering.Debug');
 
@@ -112,7 +112,7 @@ Blockly.blockRendering.Renderer.prototype.makeDebugger_ = function() {
  */
 Blockly.blockRendering.Renderer.prototype.makeCursorDrawer = function(
     workspace, opt_marker) {
-  return new Blockly.CursorSvg(workspace, opt_marker);
+  return new Blockly.blockRendering.CursorSvg(workspace, this.constants_, opt_marker);
 };
 
 /**

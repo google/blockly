@@ -184,6 +184,48 @@ Blockly.blockRendering.ConstantProvider = function() {
    * @private
    */
   this.disabledPattern_ = null;
+
+  /**
+   * Cursor colour.
+   * @type {string}
+   * @const
+   */
+  this.CURSOR_COLOUR = '#cc0a0a';
+
+  /**
+   * Immovable marker colour.
+   * @type {string}
+   * @const
+   */
+  this.MARKER_COLOUR = '#4286f4';
+
+  /**
+   * Width of the horizontal cursor.
+   * @type {number}
+   * @const
+   */
+  this.WS_CURSOR_WIDTH = 100;
+
+  /**
+   * Height of the horizontal cursor.
+   * @type {number}
+   * @const
+   */
+  this.WS_CURSOR_HEIGHT = 5;
+
+  /**
+   * Padding around a stack.
+   * @type {number}
+   * @const
+   */
+  this.STACK_PADDING = 10;
+
+  /**
+   * Padding around a block.
+   * @type {number}
+   * @const
+   */
+  this.BLOCK_PADDING = 2;
 };
 
 /**

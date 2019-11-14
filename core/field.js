@@ -917,7 +917,7 @@ Blockly.Field.prototype.setTooltip = function(newTip) {
  * to the SVG root of the field. When this element is
  * clicked on an editable field, the editor will open.
  * @return {!Element} Element to bind click handler to.
- * @private
+ * @protected
  */
 Blockly.Field.prototype.getClickTarget_ = function() {
   return this.clickTarget_ || this.getSvgRoot();

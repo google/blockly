@@ -120,12 +120,14 @@ Blockly.zelos.RenderInfo.prototype.getInRowSpacing_ = function(prev, next) {
       return this.constants_.NO_PADDING;
     }
   }
-  // Between inputs and the end of the row.
-  if (prev && Blockly.blockRendering.Types.isInput(prev) && !next) {
-    return this.constants_.MEDIUM_PADDING;
+  // Spacing between a rounded corner and a previous or next connection.
+  if (prev && Blockly.blockRendering.Types.isLeftRoundedCorner(prev) && next) {
+    if (Blockly.blockRendering.Types.isPreviousConnection(next) ||
+      Blockly.blockRendering.Types.isNextConnection(next)) {
+      return next.notchOffset - this.constants_.CORNER_RADIUS;
+    }
   }
-  return Blockly.zelos.RenderInfo.superClass_.getInRowSpacing_.call(
-      this, prev, next);
+  return this.constants_.MEDIUM_PADDING;
 };
 
 /**

@@ -1769,5 +1769,5 @@ Blockly.BlockSvg.prototype.highlightForReplacement = function(add) {
  * @package
  */
 Blockly.BlockSvg.prototype.shouldHighlightConnection = function(conn) {
-  return this.pathObject.shouldHighlightConnection(conn);
+  return this.workspace.getRenderer().shouldHighlightConnection(conn);
 };

@@ -259,7 +259,7 @@ Blockly.Css.CONTENT = [
     'stroke-width: 3px;',
   '}',
 
-  '.injectionDiv:not(.zelos-renderer) .blocklySelected>.blocklyPathLight {',
+  '.blocklySelected>.blocklyPathLight {',
     'display: none;',
   '}',
 

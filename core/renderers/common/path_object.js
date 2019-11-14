@@ -226,17 +226,3 @@ Blockly.blockRendering.PathObject.prototype.updateReplacementHighlight =
     /* eslint-disable indent */
   this.setClass_('blocklyReplaceable', enable);
 }; /* eslint-enable indent */
-
-/**
- * Determine whether or not to highlight a connection.
- * @param {Blockly.Connection} _conn The connection to determine whether or not
- *     to highlight.
- * @return {boolean} True if we should highlight the connection.
- * @package
- */
-Blockly.blockRendering.PathObject.prototype.shouldHighlightConnection =
-    function(_conn) {
-    /* eslint-disable indent */
-  return true;
-}; /* eslint-enable indent */
-

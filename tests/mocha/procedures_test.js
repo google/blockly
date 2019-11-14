@@ -38,9 +38,12 @@ suite('Procedures', function() {
         context.defBlock.setFieldValue(startName, 'NAME');
         context.callBlock = new Blockly.Block(this.workspace, context.callType);
         context.callBlock.setFieldValue(startName, 'NAME');
+        context.stub = sinon.stub(
+            context.defBlock.getField('NAME'), 'resizeEditor_');
         func.call(context);
         context.defBlock.dispose();
         context.callBlock.dispose();
+        context.stub.restore();
       }
     };
   });

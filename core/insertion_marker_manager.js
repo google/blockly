@@ -409,7 +409,7 @@ Blockly.InsertionMarkerManager.prototype.shouldReplace_ = function() {
   if (local.type == Blockly.OUTPUT_VALUE) {
     // Insert the dragged block into the stack if possible.
     if (closest &&
-        local.getSourceBlock()
+        this.workspace_.getRenderer()
             .shouldInsertDraggedBlock(this.topBlock_, closest)) {
       return false; // Insert.
     }
@@ -505,8 +505,8 @@ Blockly.InsertionMarkerManager.prototype.showPreview_ = function() {
   }
   // Also highlight the actual connection, as a nod to previous behaviour.
   if (this.closestConnection_ && this.closestConnection_.targetBlock() &&
-      this.closestConnection_.targetBlock()
-          .shouldHighlightConnection(this.closestConnection_)) {
+    this.workspace_.getRenderer()
+        .shouldHighlightConnection(this.closestConnection_)) {
     this.closestConnection_.highlight();
   }
 };
@@ -551,7 +551,7 @@ Blockly.InsertionMarkerManager.prototype.maybeHidePreview_ = function(candidate)
  */
 Blockly.InsertionMarkerManager.prototype.hidePreview_ = function() {
   if (this.closestConnection_ && this.closestConnection_.targetBlock() &&
-      this.closestConnection_.targetBlock()
+      this.workspace_.getRenderer()
           .shouldHighlightConnection(this.closestConnection_)) {
     this.closestConnection_.unhighlight();
   }

@@ -209,6 +209,12 @@ Blockly.blockRendering.ConstantProvider = function() {
   this.FIELD_DROPDOWN_BORDER_RECT_HEIGHT = this.FIELD_BORDER_RECT_HEIGHT;
 
   /**
+   * Whether or not a dropdown field uses a text or SVG arrow.
+   * @type {boolean}
+   */
+  this.FIELD_DROPDOWN_SVG_ARROW = false;
+
+  /**
    * A colour field's default width.
    * @type {number}
    */

@@ -31,9 +31,10 @@ goog.require('Blockly.Gesture');
 goog.require('Blockly.utils');
 goog.require('Blockly.utils.dom');
 goog.require('Blockly.utils.Size');
+goog.require('Blockly.utils.style');
 goog.require('Blockly.utils.userAgent');
 
-goog.require('Blockly.utils.style');
+goog.requireType('Blockly.blockRendering.ConstantProvider');
 
 
 /**
@@ -140,41 +141,6 @@ Blockly.Field = function(value, opt_validator, opt_config) {
   this.setValue(value);
   opt_validator && this.setValidator(opt_validator);
 };
-
-/**
- * The default height of the border rect on any field.
- * @type {number}
- * @package
- */
-Blockly.Field.BORDER_RECT_DEFAULT_HEIGHT = 16;
-
-/**
- * The default height of the text element on any field.
- * @type {number}
- * @package
- */
-Blockly.Field.TEXT_DEFAULT_HEIGHT = 12.5;
-
-/**
- * The padding added to the width by the border rect, if it exists.
- * @type {number}
- * @package
- */
-Blockly.Field.X_PADDING = 10;
-
-/**
- * The padding added to the height by the border rect, if it exists.
- * @type {number}
- * @package
- */
-Blockly.Field.Y_PADDING = 10;
-
-/**
- * The default offset between the left of the text element and the left of the
- * border rect, if the border rect exists.
- * @type {number}
- */
-Blockly.Field.DEFAULT_TEXT_OFFSET = Blockly.Field.X_PADDING / 2;
 
 /**
  * Name of field.  Unique within each block.
@@ -354,9 +320,9 @@ Blockly.Field.prototype.initModel = function() {
  */
 Blockly.Field.prototype.createBorderRect_ = function() {
   this.size_.height =
-      Math.max(this.size_.height, Blockly.Field.BORDER_RECT_DEFAULT_HEIGHT);
+      Math.max(this.size_.height, this.constants_.FIELD_BORDER_RECT_HEIGHT);
   this.size_.width =
-      Math.max(this.size_.width, Blockly.Field.X_PADDING);
+      Math.max(this.size_.width, this.constants_.FIELD_BORDER_RECT_X_PADDING * 2);
   this.borderRect_ = /** @type {!SVGRectElement} **/
       (Blockly.utils.dom.createSvgElement('rect',
           {
@@ -376,15 +342,25 @@ Blockly.Field.prototype.createBorderRect_ = function() {
  * @protected
  */
 Blockly.Field.prototype.createTextElement_ = function() {
-  var xOffset = this.borderRect_ ? Blockly.Field.DEFAULT_TEXT_OFFSET : 0;
+  var xOffset = this.borderRect_ ?
+    this.constants_.FIELD_BORDER_RECT_X_PADDING : 0;
+  this.size_.height = Math.max(this.size_.height,
+      this.constants_.FIELD_TEXT_BASELINE_CENTER ?
+          this.constants_.FIELD_TEXT_HEIGHT :
+          this.constants_.FIELD_TEXT_BASELINE_Y);
   this.textElement_ = /** @type {!SVGTextElement} **/
       (Blockly.utils.dom.createSvgElement('text',
           {
             'class': 'blocklyText',
-            // The y position is the baseline of the text.
-            'y': Blockly.Field.TEXT_DEFAULT_HEIGHT,
+            'y': this.size_.height / 2,
             'x': xOffset
           }, this.fieldGroup_));
+  if (this.constants_.FIELD_TEXT_BASELINE_CENTER) {
+    this.textElement_.setAttribute('dominant-baseline', 'central');
+  } else {
+    this.textElement_.setAttribute('dy',
+        this.constants_.FIELD_TEXT_BASELINE_Y - this.size_.height / 2);
+  }
   this.textContent_ = document.createTextNode('');
   this.textElement_.appendChild(this.textContent_);
 };
@@ -658,7 +634,7 @@ Blockly.Field.prototype.updateSize_ = function() {
       this.constants_.FIELD_TEXT_FONTFAMILY);
   var totalWidth = textWidth;
   if (this.borderRect_) {
-    totalWidth += Blockly.Field.X_PADDING;
+    totalWidth += this.constants_.FIELD_BORDER_RECT_X_PADDING * 2;
     this.borderRect_.setAttribute('width', totalWidth);
   }
   this.size_.width = totalWidth;

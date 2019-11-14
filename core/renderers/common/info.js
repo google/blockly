@@ -590,6 +590,7 @@ Blockly.blockRendering.RenderInfo.prototype.alignStatementRow_ = function(row) {
   var rightCornerWidth = this.constants_.INSIDE_CORNERS.rightWidth || 0;
   desiredWidth = this.width - this.startX - rightCornerWidth;
   statementInput.width += (desiredWidth - currentWidth);
+  statementInput.height = Math.max(statementInput.height, row.height);
   row.width += (desiredWidth - currentWidth);
   row.widthWithConnectedBlocks = Math.max(row.width,
       this.statementEdge + row.connectedBlockWidths);

@@ -88,6 +88,18 @@ Blockly.zelos.PathObject.prototype.setPath = function(pathString) {
 /**
  * @override
  */
+Blockly.zelos.PathObject.prototype.flipRTL = function() {
+  Blockly.zelos.PathObject.superClass_.flipRTL.call(this);
+  // Mirror each input outline path.
+  for (var i = 0, keys = Object.keys(this.outlines_),
+    key; (key = keys[i]); i++) {
+    this.outlines_[key].setAttribute('transform', 'scale(-1 1)');
+  }
+};
+
+/**
+ * @override
+ */
 Blockly.zelos.PathObject.prototype.updateSelected = function(enable) {
   this.setClass_('blocklySelected', enable);
   if (enable) {

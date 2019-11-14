@@ -133,6 +133,21 @@ Blockly.zelos.ConstantProvider = function() {
   this.FULL_BLOCK_FIELDS = true;
 
   /**
+   * @override
+   */
+  this.FIELD_BORDER_RECT_RADIUS = this.CORNER_RADIUS;
+
+  /**
+   * @override
+   */
+  this.FIELD_BORDER_RECT_X_PADDING = 2 * this.GRID_UNIT;
+
+  /**
+   * @override
+   */
+  this.FIELD_DROPDOWN_BORDER_RECT_HEIGHT = 8 * this.GRID_UNIT;
+
+  /**
    * The ID of the highlight glow filter, or the empty string if no filter is
    * set.
    * @type {string}

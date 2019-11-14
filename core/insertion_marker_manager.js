@@ -504,7 +504,9 @@ Blockly.InsertionMarkerManager.prototype.showPreview_ = function() {
     this.connectMarker_();
   }
   // Also highlight the actual connection, as a nod to previous behaviour.
-  if (this.closestConnection_) {
+  if (this.closestConnection_ && this.closestConnection_.targetBlock() &&
+      this.closestConnection_.targetBlock()
+          .shouldHighlightConnection(this.closestConnection_)) {
     this.closestConnection_.highlight();
   }
 };
@@ -548,7 +550,9 @@ Blockly.InsertionMarkerManager.prototype.maybeHidePreview_ = function(candidate)
  * @private
  */
 Blockly.InsertionMarkerManager.prototype.hidePreview_ = function() {
-  if (this.closestConnection_) {
+  if (this.closestConnection_ && this.closestConnection_.targetBlock() &&
+      this.closestConnection_.targetBlock()
+          .shouldHighlightConnection(this.closestConnection_)) {
     this.closestConnection_.unhighlight();
   }
   if (this.highlightingBlock_) {

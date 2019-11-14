@@ -152,13 +152,12 @@ Blockly.FieldMultilineInput.prototype.render_ = function() {
 
   // Add in text elements into the group.
   var lines = this.getDisplayText_().split('\n');
-  var yOffset = Blockly.Field.Y_PADDING / 2;
   var y = 0;
   for (var i = 0; i < lines.length; i++) {
     var span = Blockly.utils.dom.createSvgElement('text', {
       'class': 'blocklyText blocklyMultilineText',
-      x: Blockly.Field.DEFAULT_TEXT_OFFSET,
-      y: y + yOffset,
+      x: this.constants_.FIELD_BORDER_RECT_X_PADDING,
+      y: y + this.constants_.FIELD_BORDER_RECT_Y_PADDING,
       dy: Blockly.FieldMultilineInput.LINE_HEIGHT / 2
     }, this.textGroup_);
     span.appendChild(document.createTextNode(lines[i]));
@@ -206,7 +205,7 @@ Blockly.FieldMultilineInput.prototype.updateSize_ = function() {
     totalHeight += Blockly.FieldMultilineInput.LINE_HEIGHT;
   }
   if (this.borderRect_) {
-    totalWidth += Blockly.Field.X_PADDING;
+    totalWidth += this.constants_.FIELD_BORDER_RECT_X_PADDING * 2;
     this.borderRect_.setAttribute('width', totalWidth);
     this.borderRect_.setAttribute('height', totalHeight);
   }
@@ -250,7 +249,7 @@ Blockly.FieldMultilineInput.prototype.widgetCreate_ = function() {
   htmlInput.style.fontSize = fontSize;
   var borderRadius = (Blockly.FieldTextInput.BORDERRADIUS * scale) + 'px';
   htmlInput.style.borderRadius = borderRadius;
-  var padding = Blockly.Field.DEFAULT_TEXT_OFFSET * scale;
+  var padding = this.constants_.FIELD_BORDER_RECT_X_PADDING * scale;
   htmlInput.style.paddingLeft = padding + 'px';
   htmlInput.style.width = 'calc(100% - ' + padding + 'px)';
   htmlInput.style.lineHeight =

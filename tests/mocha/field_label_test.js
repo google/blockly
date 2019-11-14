@@ -27,12 +27,18 @@ suite('Label Fields', function() {
   }
   function assertHasClass(labelField, cssClass) {
     labelField.fieldGroup_ = Blockly.utils.dom.createSvgElement('g', {}, null);
+    labelField.constants_ = {
+      FIELD_TEXT_BASELINE_Y: 13
+    };
     labelField.initView();
     chai.assert.isTrue(Blockly.utils.dom.hasClass(
         labelField.textElement_, cssClass));
   }
   function assertDoesNotHaveClass(labelField, cssClass) {
     labelField.fieldGroup_ = Blockly.utils.dom.createSvgElement('g', {}, null);
+    labelField.constants_ = {
+      FIELD_TEXT_BASELINE_Y: 13
+    };
     labelField.initView();
     chai.assert.isFalse(Blockly.utils.dom.hasClass(
         labelField.textElement_, cssClass));
@@ -205,6 +211,9 @@ suite('Label Fields', function() {
       test('setClass', function() {
         var field = new Blockly.FieldLabel();
         field.fieldGroup_ = Blockly.utils.dom.createSvgElement('g', {}, null);
+        field.constants_ = {
+          FIELD_TEXT_BASELINE_Y: 13
+        };
         field.initView();
         field.setClass('testClass');
         // Don't call assertHasClass b/c we don't want to re-initialize.

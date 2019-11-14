@@ -60,14 +60,6 @@ Blockly.FieldLabel = function(opt_value, opt_class, opt_config) {
   if (!opt_config) {  // If the config was not passed use old configuration.
     this.class_ = opt_class || null;
   }
-
-  /**
-   * The size of the area rendered by the field.
-   * @type {Blockly.utils.Size}
-   * @protected
-   * @override
-   */
-  this.size_ = new Blockly.utils.Size(0, Blockly.Field.TEXT_DEFAULT_HEIGHT);
 };
 Blockly.utils.object.inherits(Blockly.FieldLabel, Blockly.Field);
 
@@ -105,10 +97,9 @@ Blockly.FieldLabel.prototype.configure_ = function(config) {
  */
 Blockly.FieldLabel.prototype.initView = function() {
   this.createTextElement_();
-  // The y attribute of an SVG text element is the baseline.
-  this.textElement_.setAttribute('y', this.size_.height);
   if (this.class_) {
-    Blockly.utils.dom.addClass(this.textElement_, this.class_);
+    Blockly.utils.dom.addClass(
+        /** @type {!SVGTextElement} */ (this.textElement_), this.class_);
   }
 };
 

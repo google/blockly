@@ -86,18 +86,18 @@ Blockly.FieldTextInput = function(opt_value, opt_validator, opt_config) {
   this.onKeyInputWrapper_ = null;
 
   /**
-   * Whether the field should consider the whole parent block to be its click
-   * target.
-   * @type {?boolean}
-   */
-  this.fullBlockClickTarget_ = false;
-
-  /**
    * Blur input event data.
    * @type {?Blockly.EventData}
    * @private
    */
   this.onBlurInputWrapper_ = null;
+
+  /**
+   * Whether the field should consider the whole parent block to be its click
+   * target.
+   * @type {?boolean}
+   */
+  this.fullBlockClickTarget_ = false;
 };
 Blockly.utils.object.inherits(Blockly.FieldTextInput, Blockly.Field);
 
@@ -146,8 +146,11 @@ Blockly.FieldTextInput.prototype.configure_ = function(config) {
  * @override
  */
 Blockly.FieldTextInput.prototype.initView = function() {
-  var renderer = this.sourceBlock_.workspace.getRenderer();
-  if (renderer.getConstants().FULL_BLOCK_FIELDS) {
+  this.size_.height = Math.max(this.constants_.FIELD_BORDER_RECT_HEIGHT,
+      this.constants_.FIELD_TEXT_BASELINE_CENTER ?
+      this.constants_.FIELD_TEXT_HEIGHT :
+      this.constants_.FIELD_TEXT_BASELINE_Y);
+  if (this.constants_.FULL_BLOCK_FIELDS) {
     // Step one: figure out if this is the only field on this block.
     // Rendering is quite different in that case.
     var nFields = 0;
@@ -173,16 +176,14 @@ Blockly.FieldTextInput.prototype.initView = function() {
   }
 
   if (this.fullBlockClickTarget_) {
-    // Don't create a border rect.
-    this.size_.height =
-        Math.max(this.size_.height, Blockly.Field.BORDER_RECT_DEFAULT_HEIGHT);
-    this.size_.width =
-        Math.max(this.size_.width, Blockly.Field.X_PADDING);
     this.clickTarget_ = this.sourceBlock_.getSvgRoot();
   } else {
     this.createBorderRect_();
   }
   this.createTextElement_();
+  if (this.constants_.FIELD_TEXT_BASELINE_CENTER) {
+    this.textElement_.setAttribute('dominant-baseline', 'central');
+  }
 };
 
 /**
@@ -352,7 +353,7 @@ Blockly.FieldTextInput.prototype.widgetCreate_ = function() {
   if (this.fullBlockClickTarget_) {
     var bBox = this.getScaledBBox();
     // Override border radius.
-    borderRadius = (bBox.bottom - bBox.top) / 2;
+    borderRadius = (bBox.bottom - bBox.top) / 2 + 'px';
     // Pull stroke colour from the existing shadow block
     var strokeColour = this.sourceBlock_.style.colourTertiary;
     div.style.borderColor = strokeColour;

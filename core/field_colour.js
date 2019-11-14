@@ -58,15 +58,6 @@ Blockly.FieldColour = function(opt_value, opt_validator, opt_config) {
       opt_validator, opt_config);
 
   /**
-   * The size of the area rendered by the field.
-   * @type {Blockly.utils.Size}
-   * @protected
-   * @override
-   */
-  this.size_ = new Blockly.utils.Size(Blockly.FieldColour.DEFAULT_WIDTH,
-      Blockly.FieldColour.DEFAULT_HEIGHT);
-
-  /**
    * The field's colour picker element.
    * @type {Element}
    * @private
@@ -127,22 +118,6 @@ Blockly.utils.object.inherits(Blockly.FieldColour, Blockly.Field);
 Blockly.FieldColour.fromJson = function(options) {
   return new Blockly.FieldColour(options['colour'], undefined, options);
 };
-
-/**
- * Default width of a colour field.
- * @type {number}
- * @private
- * @const
- */
-Blockly.FieldColour.DEFAULT_WIDTH = 26;
-
-/**
- * Default height of a colour field.
- * @type {number}
- * @private
- * @const
- */
-Blockly.FieldColour.DEFAULT_HEIGHT = Blockly.Field.BORDER_RECT_DEFAULT_HEIGHT;
 
 /**
  * Serializable fields are saved by the XML renderer, non-serializable fields
@@ -208,6 +183,9 @@ Blockly.FieldColour.prototype.configure_ = function(config) {
  * @package
  */
 Blockly.FieldColour.prototype.initView = function() {
+  this.size_ = new Blockly.utils.Size(
+      this.constants_.FIELD_COLOUR_DEFAULT_WIDTH,
+      this.constants_.FIELD_COLOUR_DEFAULT_HEIGHT);
   this.createBorderRect_();
   this.borderRect_.style['fillOpacity'] = '1';
   this.borderRect_.style.fill = this.value_;

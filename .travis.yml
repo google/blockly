@@ -4,6 +4,7 @@ dist: xenial
 node_js:
   - 8
   - 10
+  - 12
 addons:
   chrome: stable
   firefox: latest

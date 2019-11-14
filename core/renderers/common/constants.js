@@ -25,6 +25,7 @@ goog.provide('Blockly.blockRendering.ConstantProvider');
 
 goog.require('Blockly.utils.dom');
 goog.require('Blockly.utils.svgPaths');
+goog.require('Blockly.utils.userAgent');
 
 
 /**
@@ -144,6 +145,12 @@ Blockly.blockRendering.ConstantProvider = function() {
   this.FIELD_TEXT_FONTSIZE = 11;
 
   /**
+   * Height of text.
+   * @type {number}
+   */
+  this.FIELD_TEXT_HEIGHT = 13;
+
+  /**
    * Text font weight.  Should match blocklyText's font-weight in CSS.
    * @type {string}
    * @const
@@ -162,6 +169,68 @@ Blockly.blockRendering.ConstantProvider = function() {
    * @type {number}
    */
   this.FIELD_BORDER_RECT_RADIUS = 4;
+
+  /**
+   * A field's border rect default height.
+   * @type {number}
+   */
+  this.FIELD_BORDER_RECT_HEIGHT = 16;
+
+  /**
+   * A field's border rect X padding.
+   * @type {number}
+   */
+  this.FIELD_BORDER_RECT_X_PADDING = 5;
+
+  /**
+   * A field's border rect Y padding.
+   * @type {number}
+   */
+  this.FIELD_BORDER_RECT_Y_PADDING = 3;
+
+  /**
+   * Field text baseline. This is only used if `FIELD_TEXT_BASELINE_CENTER` is
+   * set to false.
+   * @type {number}
+   */
+  this.FIELD_TEXT_BASELINE_Y = 13;
+
+  /**
+   * A field's text element's dominant baseline.
+   * @type {boolean}
+   */
+  this.FIELD_TEXT_BASELINE_CENTER =
+      !Blockly.utils.userAgent.IE && !Blockly.utils.userAgent.EDGE;
+
+  /**
+   * A dropdown field's border rect height.
+   * @type {number}
+   */
+  this.FIELD_DROPDOWN_BORDER_RECT_HEIGHT = this.FIELD_BORDER_RECT_HEIGHT;
+
+  /**
+   * A colour field's default width.
+   * @type {number}
+   */
+  this.FIELD_COLOUR_DEFAULT_WIDTH = 26;
+
+  /**
+   * A colour field's default height.
+   * @type {number}
+   */
+  this.FIELD_COLOUR_DEFAULT_HEIGHT = this.FIELD_BORDER_RECT_HEIGHT;
+
+  /**
+   * A checkbox field's X offset.
+   * @type {number}
+   */
+  this.FIELD_CHECKBOX_X_OFFSET = this.FIELD_BORDER_RECT_X_PADDING - 3;
+
+  /**
+   * A checkbox field's Y offset.
+   * @type {number}
+   */
+  this.FIELD_CHECKBOX_Y_OFFSET = 14;
 
   /**
    * The ID of the emboss filter, or the empty string if no filter is set.

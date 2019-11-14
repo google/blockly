@@ -130,7 +130,22 @@ Blockly.zelos.ConstantProvider = function() {
   /**
    * @override
    */
+  this.FULL_BLOCK_FIELDS = true;
+
+  /**
+   * @override
+   */
   this.FIELD_BORDER_RECT_RADIUS = this.CORNER_RADIUS;
+
+  /**
+   * @override
+   */
+  this.FIELD_BORDER_RECT_X_PADDING = 2 * this.GRID_UNIT;
+
+  /**
+   * @override
+   */
+  this.FIELD_DROPDOWN_BORDER_RECT_HEIGHT = 8 * this.GRID_UNIT;
 
   /**
    * The ID of the highlight glow filter, or the empty string if no filter is
@@ -148,9 +163,19 @@ Blockly.zelos.ConstantProvider = function() {
   this.highlightGlowFilter_ = null;
 
   /**
-   * @override
+   * The ID of the highlight glow filter, or the empty string if no filter is
+   * set.
+   * @type {string}
+   * @package
    */
-  this.FULL_BLOCK_FIELDS = true;
+  this.replacementGlowFilterId = '';
+
+  /**
+   * The <filter> element to use for a higlight glow, or null if not set.
+   * @type {SVGElement}
+   * @private
+   */
+  this.replacementGlowFilter_ = null;
 };
 Blockly.utils.object.inherits(Blockly.zelos.ConstantProvider,
     Blockly.blockRendering.ConstantProvider);
@@ -414,13 +439,13 @@ Blockly.zelos.ConstantProvider.prototype.createDom = function(svg) {
       },
       highlightGlowFilter);
   // Set all gaussian blur pixels to 1 opacity before applying flood
-  var componentTransfer = Blockly.utils.dom.createSvgElement(
+  var highlightComponentTransfer = Blockly.utils.dom.createSvgElement(
       'feComponentTransfer', {'result': 'outBlur'}, highlightGlowFilter);
   Blockly.utils.dom.createSvgElement('feFuncA',
       {
         'type': 'table', 'tableValues': '0 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1'
       },
-      componentTransfer);
+      highlightComponentTransfer);
   // Color the highlight
   Blockly.utils.dom.createSvgElement('feFlood',
       {
@@ -437,4 +462,52 @@ Blockly.zelos.ConstantProvider.prototype.createDom = function(svg) {
       highlightGlowFilter);
   this.highlightGlowFilterId = highlightGlowFilter.id;
   this.highlightGlowFilter_ = highlightGlowFilter;
+
+  // Using a dilate distorts the block shape.
+  // Instead use a gaussian blur, and then set all alpha to 1 with a transfer.
+  var replacementGlowFilter = Blockly.utils.dom.createSvgElement('filter',
+      {
+        'id': 'blocklyReplacementGlowFilter' + rnd,
+        'height': '160%',
+        'width': '180%',
+        y: '-30%',
+        x: '-40%'
+      },
+      defs);
+  Blockly.utils.dom.createSvgElement('feGaussianBlur',
+      {
+        'in': 'SourceGraphic',
+        'stdDeviation': 2  // TODO: configure size in theme.
+      },
+      replacementGlowFilter);
+  // Set all gaussian blur pixels to 1 opacity before applying flood
+  var replacementComponentTransfer = Blockly.utils.dom.createSvgElement(
+      'feComponentTransfer', {'result': 'outBlur'}, replacementGlowFilter);
+  Blockly.utils.dom.createSvgElement('feFuncA',
+      {
+        'type': 'table', 'tableValues': '0 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1'
+      },
+      replacementComponentTransfer);
+  // Color the highlight
+  Blockly.utils.dom.createSvgElement('feFlood',
+      {
+        'flood-color': '#FFF200', // TODO: configure colour in theme.
+        'flood-opacity': 1,
+        'result': 'outColor'
+      },
+      replacementGlowFilter);
+  Blockly.utils.dom.createSvgElement('feComposite',
+      {
+        'in': 'outColor', 'in2': 'outBlur',
+        'operator': 'in', 'result': 'outGlow'
+      },
+      replacementGlowFilter);
+  Blockly.utils.dom.createSvgElement('feComposite',
+      {
+        'in': 'SourceGraphic', 'in2': 'outGlow',
+        'operator': 'over',
+      },
+      replacementGlowFilter);
+  this.replacementGlowFilterId = replacementGlowFilter.id;
+  this.replacementGlowFilter_ = replacementGlowFilter;
 };

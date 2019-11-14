@@ -193,7 +193,7 @@ Blockly.blockRendering.ConstantProvider = function() {
    * set to false.
    * @type {number}
    */
-  this.FIELD_TEXT_BASELINE_Y = 13;
+  this.FIELD_TEXT_BASELINE_Y = Blockly.utils.userAgent.GECKO ? 12 : 13.09;
 
   /**
    * A field's text element's dominant baseline.

@@ -360,7 +360,7 @@ Blockly.Css.CONTENT = [
     'fill: #000;',
   '}',
 
-  '.blocklyEditableText:hover>rect {',
+  '.blocklyEditableText:not(.editing):hover>rect {',
     'stroke: #fff;',
     'stroke-width: 2;',
   '}',
@@ -427,6 +427,7 @@ Blockly.Css.CONTENT = [
     'padding: 0;',
     'width: 100%;',
     'text-align: center;',
+    'display: block;',
   '}',
 
   /* Edge and IE introduce a close icon when the input value is longer than a

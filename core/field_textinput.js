@@ -248,14 +248,7 @@ Blockly.FieldTextInput.prototype.render_ = function() {
   // This logic is done in render_ rather than doValueInvalid_ or
   // doValueUpdate_ so that the code is more centralized.
   if (this.isBeingEdited_) {
-    if (this.sourceBlock_.RTL) {
-      // in RTL, we need to let the browser reflow before resizing
-      // in order to get the correct bounding box of the borderRect
-      // avoiding issue #2777.
-      setTimeout(this.resizeEditor_.bind(this), 0);
-    } else {
-      this.resizeEditor_();
-    }
+    this.resizeEditor_();
     var htmlInput = /** @type {!HTMLElement} */(this.htmlInput_);
     if (!this.isTextValid_) {
       Blockly.utils.dom.addClass(htmlInput, 'blocklyInvalidInput');
@@ -340,6 +333,8 @@ Blockly.FieldTextInput.prototype.showInlineEditor_ = function(quietInput) {
 Blockly.FieldTextInput.prototype.widgetCreate_ = function() {
   var div = Blockly.WidgetDiv.DIV;
 
+  Blockly.utils.dom.addClass(this.getClickTarget_(), 'editing');
+
   var htmlInput = /** @type {HTMLInputElement} */ (document.createElement('input'));
   htmlInput.className = 'blocklyHtmlInput';
   htmlInput.setAttribute('spellcheck', this.spellcheck_);
@@ -366,13 +361,7 @@ Blockly.FieldTextInput.prototype.widgetCreate_ = function() {
   htmlInput.untypedDefaultValue_ = this.value_;
   htmlInput.oldValue_ = null;
 
-
-  if (Blockly.utils.userAgent.GECKO) {
-    // In FF, ensure the browser reflows before resizing to avoid issue #2777.
-    setTimeout(this.resizeEditor_.bind(this), 0);
-  } else {
-    this.resizeEditor_();
-  }
+  this.resizeEditor_();
 
   this.bindInputEvents_(htmlInput);
 
@@ -402,6 +391,8 @@ Blockly.FieldTextInput.prototype.widgetDispose_ = function() {
   style.height = 'auto';
   style.fontSize = '';
   this.htmlInput_ = null;
+
+  Blockly.utils.dom.removeClass(this.getClickTarget_(), 'editing');
 };
 
 /**
@@ -481,6 +472,7 @@ Blockly.FieldTextInput.prototype.onHtmlInputChange_ = function(_e) {
     var value = this.getValueFromEditorText_(text);
     this.setValue(value);
     this.forceRerender();
+    this.resizeEditor_();
     Blockly.Events.setGroup(false);
   }
 };
@@ -529,17 +521,6 @@ Blockly.FieldTextInput.prototype.resizeEditor_ = function() {
   var x = this.sourceBlock_.RTL ? bBox.right - div.offsetWidth : bBox.left;
   var xy = new Blockly.utils.Coordinate(x, bBox.top);
 
-  // Shift by a few pixels to line up exactly.
-  xy.y += 1;
-  if (Blockly.utils.userAgent.GECKO && Blockly.WidgetDiv.DIV.style.top) {
-    // Firefox mis-reports the location of the border by a pixel
-    // once the WidgetDiv is moved into position.
-    xy.x -= 1;
-    xy.y -= 1;
-  }
-  if (Blockly.utils.userAgent.WEBKIT) {
-    xy.y -= 3;
-  }
   div.style.left = xy.x + 'px';
   div.style.top = xy.y + 'px';
 };
@@ -638,21 +619,15 @@ Blockly.FieldTextInput.prototype.getValueFromEditorText_ = function(text) {
  */
 Blockly.FieldTextInput.prototype.getScaledBBox = function() {
   if (this.fullBlockClickTarget_) {
-    var heightWidth = this.sourceBlock_.getHeightWidth();
+    var xy = this.getClickTarget_().getBoundingClientRect();
   } else {
-    var heightWidth = this.borderRect_.getBBox();
+    var xy = this.borderRect_.getBoundingClientRect();
   }
-
-  var scale = this.sourceBlock_.workspace.scale;
-  var xy = this.getAbsoluteXY_();
-  var scaledHeight = heightWidth.height * scale;
-  var scaledWidth = heightWidth.width * scale;
-
   return {
     top: xy.y,
-    bottom: xy.y + scaledHeight,
+    bottom: xy.y + xy.height,
     left: xy.x,
-    right: xy.x + scaledWidth
+    right: xy.x + xy.width
   };
 };
 

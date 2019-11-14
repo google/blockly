@@ -173,7 +173,7 @@ Blockly.blockRendering.CursorSvg.prototype.showWithBlockPrevOutput_ = function(b
   var width = block.width;
   var height = block.height;
   var cursorHeight = height * Blockly.blockRendering.CursorSvg.HEIGHT_MULTIPLIER;
-  var cursorOffset = this.constants_.BLOCK_PADDING;
+  var cursorOffset = this.constants_.CURSOR_BLOCK_PADDING;
 
   if (block.previousConnection) {
     this.positionPrevious_(width, cursorOffset, cursorHeight);
@@ -273,12 +273,12 @@ Blockly.blockRendering.CursorSvg.prototype.showWithStack_ = function(curNode) {
   var heightWidth = block.getHeightWidth();
 
   // Add padding so that being on a stack looks different than being on a block.
-  var width = heightWidth.width + this.constants_.STACK_PADDING;
-  var height = heightWidth.height + this.constants_.STACK_PADDING;
+  var width = heightWidth.width + this.constants_.CURSOR_STACK_PADDING;
+  var height = heightWidth.height + this.constants_.CURSOR_STACK_PADDING;
 
   // Shift the rectangle slightly to upper left so padding is equal on all sides.
-  var xPadding = -this.constants_.STACK_PADDING / 2;
-  var yPadding = -this.constants_.STACK_PADDING / 2;
+  var xPadding = -this.constants_.CURSOR_STACK_PADDING / 2;
+  var yPadding = -this.constants_.CURSOR_STACK_PADDING / 2;
 
   var x = xPadding;
   var y = yPadding;

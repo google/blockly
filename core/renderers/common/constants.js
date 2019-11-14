@@ -211,7 +211,6 @@ Blockly.blockRendering.ConstantProvider = function() {
   /**
    * Whether or not a dropdown field uses a text or SVG arrow.
    * @type {boolean}
-   * @const
    */
   this.FIELD_DROPDOWN_SVG_ARROW = false;
 

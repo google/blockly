@@ -220,8 +220,7 @@ Blockly.FieldDropdown.prototype.initView = function() {
  */
 Blockly.FieldDropdown.prototype.createTextArrow_ = function() {
   this.arrow_ = /** @type {!SVGTSpanElement} */
-      (Blockly.utils.dom.createSvgElement('tspan',
-          {}, this.textElement_));
+      (Blockly.utils.dom.createSvgElement('tspan', {}, this.textElement_));
   this.arrow_.appendChild(document.createTextNode(
       this.sourceBlock_.RTL ?
       Blockly.FieldDropdown.ARROW_CHAR + ' ' :
@@ -241,10 +240,9 @@ Blockly.FieldDropdown.prototype.createSVGArrow_ = function() {
   this.svgArrow_ = Blockly.utils.dom.createSvgElement('image', {
     'height': this.constants_.FIELD_DROPDOWN_SVG_ARROW_SIZE + 'px',
     'width': this.constants_.FIELD_DROPDOWN_SVG_ARROW_SIZE + 'px'
-  });
-  this.svgArrow_.setAttributeNS('http://www.w3.org/1999/xlink',
-      'xlink:href', this.constants_.FIELD_DROPDOWN_SVG_ARROW_DATAURI);
-  this.fieldGroup_.appendChild(this.svgArrow_);
+  }, this.fieldGroup_);
+  this.svgArrow_.setAttributeNS(Blockly.utils.dom.XLINK_NS, 'xlink:href',
+      this.constants_.FIELD_DROPDOWN_SVG_ARROW_DATAURI);
 };
 
 /**
@@ -601,7 +599,8 @@ Blockly.FieldDropdown.prototype.renderSelectedImage_ = function(imageJson) {
 Blockly.FieldDropdown.prototype.renderSelectedText_ = function() {
   // Retrieves the selected option to display through getText_.
   this.textContent_.nodeValue = this.getDisplayText_();
-  Blockly.utils.dom.addClass(this.textElement_, 'blocklyDropdownText');
+  Blockly.utils.dom.addClass(/** @type {!Element} */ (this.textElement_),
+      'blocklyDropdownText');
   this.textElement_.setAttribute('text-anchor', 'start');
 
   // Height and width include the border rect.

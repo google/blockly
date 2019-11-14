@@ -408,8 +408,9 @@ Blockly.InsertionMarkerManager.prototype.shouldReplace_ = function() {
   // Dragging a block over an existing block in an input.
   if (local.type == Blockly.OUTPUT_VALUE) {
     // Insert the dragged block into the stack if possible.
-    if (local.getSourceBlock().shouldInsertDraggedBlock(this.topBlock_,
-        closest)) {
+    if (closest &&
+        local.getSourceBlock()
+            .shouldInsertDraggedBlock(this.topBlock_, closest)) {
       return false; // Insert.
     }
     // Otherwise replace the existing block and bump it out.

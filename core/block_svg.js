@@ -1742,8 +1742,8 @@ Blockly.BlockSvg.prototype.shouldHighlightConnection = function(conn) {
 
 /**
  * Determine whether or not to insert a dragged block into a stack.
- * @param {Blockly.Block} block The target block.
- * @param {Blockly.Connection} conn The closest connection.
+ * @param {!Blockly.Block} block The target block.
+ * @param {!Blockly.Connection} conn The closest connection.
  * @return {boolean} True if we should insert the dragged block into the stack.
  * @package
  */

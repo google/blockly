@@ -154,8 +154,8 @@ Blockly.blockRendering.Renderer.prototype.shouldHighlightConnection =
 
 /**
  * Determine whether or not to insert a dragged block into a stack.
- * @param {Blockly.Block} block The target block.
- * @param {Blockly.Connection} conn The closest connection.
+ * @param {!Blockly.Block} block The target block.
+ * @param {!Blockly.Connection} conn The closest connection.
  * @return {boolean} True if we should insert the dragged block into the stack.
  * @package
  */
@@ -163,7 +163,7 @@ Blockly.blockRendering.Renderer.prototype.shouldInsertDraggedBlock =
     function(block, conn) {
     /* eslint-disable indent */
   return !conn.isConnected() ||
-    Blockly.Connection.lastConnectionInRow(block,
+    !!Blockly.Connection.lastConnectionInRow(block,
         conn.targetConnection.getSourceBlock());
 }; /* eslint-enable indent */
 

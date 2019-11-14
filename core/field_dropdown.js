@@ -569,7 +569,7 @@ Blockly.FieldDropdown.prototype.renderSelectedImage_ = function(imageJson) {
   var xPadding = this.constants_.FIELD_BORDER_RECT_X_PADDING;
   var arrowWidth = 0;
   if (this.svgArrow_) {
-    arrowWidth = this.positionSVGArrow_(xPadding, halfHeight -
+    arrowWidth = this.positionSVGArrow_(imageWidth + xPadding, halfHeight -
       this.constants_.FIELD_DROPDOWN_SVG_ARROW_SIZE / 2);
   } else {
     arrowWidth = Blockly.utils.dom.getFastTextWidth(

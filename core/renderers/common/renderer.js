@@ -140,6 +140,19 @@ Blockly.blockRendering.Renderer.prototype.getConstants = function() {
 };
 
 /**
+ * Determine whether or not to highlight a connection.
+ * @param {Blockly.Connection} _conn The connection to determine whether or not
+ *     to highlight.
+ * @return {boolean} True if we should highlight the connection.
+ * @package
+ */
+Blockly.blockRendering.Renderer.prototype.shouldHighlightConnection =
+    function(_conn) {
+    /* eslint-disable indent */
+  return true;
+}; /* eslint-enable indent */
+
+/**
  * Render the block.
  * @param {!Blockly.BlockSvg} block The block to render.
  * @package

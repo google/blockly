@@ -1739,3 +1739,25 @@ Blockly.BlockSvg.prototype.highlightForReplacement = function(add) {
 Blockly.BlockSvg.prototype.shouldHighlightConnection = function(conn) {
   return this.workspace.getRenderer().shouldHighlightConnection(conn);
 };
+
+/**
+ * Determine whether or not to insert a dragged block into a stack.
+ * @param {Blockly.Block} block The target block.
+ * @param {Blockly.Connection} conn The closest connection.
+ * @return {boolean} True if we should insert the dragged block into the stack.
+ * @package
+ */
+Blockly.BlockSvg.prototype.shouldInsertDraggedBlock = function(block, conn) {
+  return this.workspace.getRenderer().shouldInsertDraggedBlock(block, conn);
+};
+
+/**
+ * Visual effect to show that if the dragging block is dropped it will connect
+ * to this input.
+ * @param {Blockly.Connection} conn The connection on the input to highlight.
+ * @param {boolean} add True if highlighting should be added.
+ * @package
+ */
+Blockly.BlockSvg.prototype.highlightShapeForInput = function(conn, add) {
+  this.pathObject.updateShapeForInputHighlight(conn, add);
+};

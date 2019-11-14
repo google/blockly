@@ -218,14 +218,14 @@ Blockly.blockRendering.ConstantProvider = function() {
    * @type {number}
    * @package
    */
-  this.STACK_PADDING = 10;
+  this.CURSOR_STACK_PADDING = 10;
 
   /**
    * Padding around a block.
    * @type {number}
    * @package
    */
-  this.BLOCK_PADDING = 2;
+  this.CURSOR_BLOCK_PADDING = 2;
 
   /**
    * Stroke of the cursor.

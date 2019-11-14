@@ -88,7 +88,7 @@ Blockly.Cursor.prototype.setCurNode = function(newNode) {
 };
 
 /**
- * Re draw the current cursor.
+ * Redraw the current cursor.
  * @package
  */
 Blockly.Cursor.prototype.draw = function() {

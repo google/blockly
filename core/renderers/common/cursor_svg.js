@@ -350,7 +350,7 @@ Blockly.blockRendering.CursorSvg.prototype.positionInput_ = function(connection)
  * @param {number} x The new x, in workspace units.
  * @param {number} y The new y, in workspace units.
  * @param {number} width The new width, in workspace units.
- * @private
+ * @protected
  */
 Blockly.blockRendering.CursorSvg.prototype.positionLine_ = function(x, y, width) {
   this.cursorSvgLine_.setAttribute('x', x);
@@ -466,7 +466,7 @@ Blockly.blockRendering.CursorSvg.prototype.draw = function(oldNode, curNode) {
 
 
 /**
- * Depending on the type of hte curNode create the correct cursor svg.
+ * Update the cursor's visible state based on the type of curNode..
  * @param {Blockly.ASTNode} curNode The node that we want to draw the cursor for.
  * @protected
  */

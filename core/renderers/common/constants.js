@@ -82,8 +82,29 @@ Blockly.blockRendering.ConstantProvider = function() {
   this.STATEMENT_INPUT_PADDING_LEFT = 20;
   this.BETWEEN_STATEMENT_PADDING_Y = 4;
 
-  // The minimum height of the bottom row following a statement input.
-  this.AFTER_STATEMENT_BOTTOM_ROW_MIN_HEIGHT = this.LARGE_PADDING;
+  /**
+   * The top row's minimum height.
+   * @type {number}
+   */
+  this.TOP_ROW_MIN_HEIGHT = this.MEDIUM_PADDING;
+
+  /**
+   * The top row's minimum height if it precedes a statement.
+   * @type {number}
+   */
+  this.TOP_ROW_PRECEDES_STATEMENT_MIN_HEIGHT = this.LARGE_PADDING;
+
+  /**
+   * The bottom row's minimum height.
+   * @type {number}
+   */
+  this.BOTTOM_ROW_MIN_HEIGHT = this.MEDIUM_PADDING;
+
+  /**
+   * The bottom row's minimum height if it follows a statement input.
+   * @type {number}
+   */
+  this.BOTTOM_ROW_AFTER_STATEMENT_MIN_HEIGHT = this.LARGE_PADDING;
 
   // This is the max width of a bottom row that follows a statement input and
   // has inputs inline.

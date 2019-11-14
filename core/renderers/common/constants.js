@@ -261,6 +261,56 @@ Blockly.blockRendering.ConstantProvider = function() {
   this.disabledPattern_ = null;
 
   /**
+   * Cursor colour.
+   * @type {string}
+   * @package
+   */
+  this.CURSOR_COLOUR = '#cc0a0a';
+
+  /**
+   * Immovable marker colour.
+   * @type {string}
+   * @package
+   */
+  this.MARKER_COLOUR = '#4286f4';
+
+  /**
+   * Width of the horizontal cursor.
+   * @type {number}
+   * @package
+   */
+  this.CURSOR_WS_WIDTH = 100;
+
+  /**
+   * Height of the horizontal cursor.
+   * @type {number}
+   * @package
+   */
+  this.WS_CURSOR_HEIGHT = 5;
+
+  /**
+   * Padding around a stack.
+   * @type {number}
+   * @package
+   */
+  this.CURSOR_STACK_PADDING = 10;
+
+  /**
+   * Padding around a block.
+   * @type {number}
+   * @package
+   */
+  this.CURSOR_BLOCK_PADDING = 2;
+
+  /**
+   * Stroke of the cursor.
+   * @type {number}
+   * @package
+   */
+  this.CURSOR_STROKE_WIDTH = 4;
+
+  
+  /*
    * Whether text input and colour fields fill up the entire source block.
    * @type {boolean}
    * @package

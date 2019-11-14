@@ -30,6 +30,7 @@ goog.require('Blockly.zelos.ConstantProvider');
 goog.require('Blockly.zelos.Drawer');
 goog.require('Blockly.zelos.PathObject');
 goog.require('Blockly.zelos.RenderInfo');
+goog.require('Blockly.zelos.CursorSvg');
 
 
 /**
@@ -77,6 +78,21 @@ Blockly.zelos.Renderer.prototype.makeRenderInfo_ = function(block) {
 Blockly.zelos.Renderer.prototype.makeDrawer_ = function(block, info) {
   return new Blockly.zelos.Drawer(block,
       /** @type {!Blockly.zelos.RenderInfo} */ (info));
+};
+
+/**
+ * Create a new instance of the renderer's cursor drawer.
+ * @param {!Blockly.WorkspaceSvg} workspace The workspace the cursor belongs to.
+ * @param {boolean=} opt_marker True if the cursor is a marker. A marker is used
+ *     to save a location and is an immovable cursor. False or undefined if the
+ *     cursor is not a marker.
+ * @return {!Blockly.blockRendering.CursorSvg} The cursor drawer.
+ * @package
+ * @override
+ */
+Blockly.zelos.Renderer.prototype.makeCursorDrawer = function(
+    workspace, opt_marker) {
+  return new Blockly.zelos.CursorSvg(workspace, this.getConstants(), opt_marker);
 };
 
 /**

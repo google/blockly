@@ -130,6 +130,23 @@ Blockly.zelos.ConstantProvider = function() {
   /**
    * @override
    */
+  this.CURSOR_WS_WIDTH = 20 * this.GRID_UNIT;
+
+  /**
+   * @override
+   */
+  this.CURSOR_COLOUR = '#ffa200';
+
+  /**
+   * Radius of the cursor for input and output connections.
+   * @type {number}
+   * @package
+   */
+  this.CURSOR_RADIUS = 5;
+
+  /**
+   * @override
+   */
   this.FULL_BLOCK_FIELDS = true;
 
   /**

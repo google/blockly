@@ -38,7 +38,8 @@ goog.require('Blockly.blockRendering.CursorSvg');
  * @extends {Blockly.blockRendering.CursorSvg}
  */
 Blockly.zelos.CursorSvg = function(workspace, constants, opt_marker) {
-  Blockly.zelos.CursorSvg.superClass_.constructor.call(this, workspace, constants, opt_marker);
+  Blockly.zelos.CursorSvg.superClass_.constructor.call(
+      this, workspace, constants, opt_marker);
 };
 Blockly.utils.object.inherits(Blockly.zelos.CursorSvg,
     Blockly.blockRendering.CursorSvg);

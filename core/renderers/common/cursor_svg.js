@@ -68,7 +68,12 @@ Blockly.blockRendering.CursorSvg = function(workspace, constants, opt_marker) {
    * @protected
    */
   this.constants_ = constants;
-  
+
+  /**
+   * The current SVG element for the cursor.
+   * @type {Element}
+   */
+  this.currentCursorSvg = null;
 };
 
 /**
@@ -90,12 +95,6 @@ Blockly.blockRendering.CursorSvg.MARKER_CLASS = 'blocklyMarker';
  * @const
  */
 Blockly.blockRendering.CursorSvg.HEIGHT_MULTIPLIER = 3 / 4;
-
-/**
- * The current SVG element for the cursor.
- * @type {Element}
- */
-Blockly.blockRendering.CursorSvg.prototype.currentCursorSvg = null;
 
 /**
  * Return the root node of the SVG or null if none exists.
@@ -199,10 +198,10 @@ Blockly.blockRendering.CursorSvg.prototype.showWithCoordinates_ = function(curNo
   var y = wsCoordinate.y;
 
   if (this.workspace_.RTL) {
-    x -= this.constants_.WS_CURSOR_WIDTH;
+    x -= this.constants_.CURSOR_WS_WIDTH;
   }
 
-  this.positionLine_(x, y, this.constants_.WS_CURSOR_WIDTH);
+  this.positionLine_(x, y, this.constants_.CURSOR_WS_WIDTH);
   this.setParent_(this.workspace_);
   this.showCurrent_();
 };
@@ -544,7 +543,7 @@ Blockly.blockRendering.CursorSvg.prototype.createDomInternal_ = function() {
       this.constants_.CURSOR_COLOUR;
   this.cursorSvg_ = Blockly.utils.dom.createSvgElement('g',
       {
-        'width': this.constants_.WS_CURSOR_WIDTH,
+        'width': this.constants_.CURSOR_WS_WIDTH,
         'height': this.constants_.WS_CURSOR_HEIGHT
       }, this.svgGroup_);
 
@@ -552,7 +551,7 @@ Blockly.blockRendering.CursorSvg.prototype.createDomInternal_ = function() {
   this.cursorSvgLine_ = Blockly.utils.dom.createSvgElement('rect',
       {
         'fill': colour,
-        'width': this.constants_.WS_CURSOR_WIDTH,
+        'width': this.constants_.CURSOR_WS_WIDTH,
         'height': this.constants_.WS_CURSOR_HEIGHT,
         'style': 'display: none'
       },

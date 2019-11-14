@@ -279,7 +279,7 @@ Blockly.blockRendering.ConstantProvider = function() {
    * @type {number}
    * @package
    */
-  this.WS_CURSOR_WIDTH = 100;
+  this.CURSOR_WS_WIDTH = 100;
 
   /**
    * Height of the horizontal cursor.

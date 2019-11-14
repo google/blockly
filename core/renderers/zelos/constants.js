@@ -130,7 +130,7 @@ Blockly.zelos.ConstantProvider = function() {
   /**
    * @override
    */
-  this.WS_CURSOR_WIDTH = 20 * this.GRID_UNIT;
+  this.CURSOR_WS_WIDTH = 20 * this.GRID_UNIT;
 
   /**
    * @override

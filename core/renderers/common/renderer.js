@@ -24,11 +24,11 @@
 goog.provide('Blockly.blockRendering.Renderer');
 
 goog.require('Blockly.blockRendering.ConstantProvider');
+goog.require('Blockly.blockRendering.CursorSvg');
 goog.require('Blockly.blockRendering.Drawer');
 goog.require('Blockly.blockRendering.IPathObject');
 goog.require('Blockly.blockRendering.PathObject');
 goog.require('Blockly.blockRendering.RenderInfo');
-goog.require('Blockly.blockRendering.CursorSvg');
 
 goog.requireType('Blockly.blockRendering.Debug');
 

@@ -107,4 +107,11 @@ Blockly.zelos.Renderer.prototype.makePathObject = function(root) {
       /** @type {!Blockly.zelos.ConstantProvider} */ (this.getConstants()));
 };
 
+/**
+ * @override
+ */
+Blockly.zelos.Renderer.prototype.shouldHighlightConnection = function(conn) {
+  return conn.type != Blockly.INPUT_VALUE && conn.type !== Blockly.OUTPUT_VALUE;
+};
+
 Blockly.blockRendering.register('zelos', Blockly.zelos.Renderer);

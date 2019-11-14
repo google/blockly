@@ -525,19 +525,20 @@ Blockly.FieldDropdown.prototype.renderSelectedImage_ = function(imageJson) {
 
   // Height and width include the border rect.
   this.size_.height = imageHeight + Blockly.FieldDropdown.IMAGE_Y_PADDING;
-  this.size_.width = imageWidth + arrowWidth + Blockly.Field.X_PADDING;
+  var xPadding = this.constants_.FIELD_BORDER_RECT_X_PADDING;
+  this.size_.width = imageWidth + arrowWidth + xPadding * 2;
 
   if (this.sourceBlock_.RTL) {
-    var imageX = Blockly.Field.DEFAULT_TEXT_OFFSET + arrowWidth;
-    var arrowX = Blockly.Field.DEFAULT_TEXT_OFFSET - 1;
+    var imageX = xPadding + arrowWidth;
+    var arrowX = xPadding - 1;
     this.imageElement_.setAttribute('x', imageX);
     this.textElement_.setAttribute('x', arrowX);
   } else {
     var arrowX =
-        imageWidth + arrowWidth + Blockly.Field.DEFAULT_TEXT_OFFSET + 1;
+        imageWidth + arrowWidth + xPadding + 1;
     this.textElement_.setAttribute('text-anchor', 'end');
     this.textElement_.setAttribute('x', arrowX);
-    this.imageElement_.setAttribute('x', Blockly.Field.DEFAULT_TEXT_OFFSET);
+    this.imageElement_.setAttribute('x', xPadding);
   }
 };
 
@@ -549,14 +550,24 @@ Blockly.FieldDropdown.prototype.renderSelectedText_ = function() {
   // Retrieves the selected option to display through getText_.
   this.textContent_.nodeValue = this.getDisplayText_();
   this.textElement_.setAttribute('text-anchor', 'start');
-  this.textElement_.setAttribute('x', Blockly.Field.DEFAULT_TEXT_OFFSET);
+  this.textElement_.setAttribute('x',
+      this.constants_.FIELD_BORDER_RECT_X_PADDING);
   // Height and width include the border rect.
-  this.size_.height = Blockly.Field.BORDER_RECT_DEFAULT_HEIGHT;
+  this.size_.height = Math.max(
+      this.constants_.FIELD_DROPDOWN_BORDER_RECT_HEIGHT,
+      this.constants_.FIELD_TEXT_HEIGHT +
+      this.constants_.FIELD_BORDER_RECT_Y_PADDING * 2);
   this.size_.width = Blockly.utils.dom.getFastTextWidth(this.textElement_,
       this.constants_.FIELD_TEXT_FONTSIZE,
       this.constants_.FIELD_TEXT_FONTWEIGHT,
       this.constants_.FIELD_TEXT_FONTFAMILY) +
-      Blockly.Field.X_PADDING;
+      this.constants_.FIELD_BORDER_RECT_X_PADDING * 2;
+
+  this.textElement_.setAttribute('y', this.size_.height / 2);
+  if (!this.constants_.FIELD_TEXT_BASELINE_CENTER) {
+    this.textElement_.setAttribute('dy',
+        this.constants_.FIELD_TEXT_BASELINE_Y - this.size_.height / 2);
+  }
 };
 
 /**

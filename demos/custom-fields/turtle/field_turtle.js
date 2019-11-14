@@ -88,9 +88,6 @@ CustomFields.FieldTurtle.prototype.CURSOR = 'pointer';
 // May change if the turtle gets fancy enough.
 CustomFields.FieldTurtle.prototype.TEXT_OFFSET_X = 80;
 
-// Padding that the border rect adds around the turtle and its name.
-CustomFields.FieldTurtle.prototype.PADDING = Blockly.Field.X_PADDING;
-
 // These are the different options for our turtle. Being declared this way
 // means they are static, and not translatable. If you want to do something
 // similar, but make it translatable you should set up your options like a
@@ -320,8 +317,8 @@ CustomFields.FieldTurtle.prototype.updateSize_ = function() {
   var width = bbox.width;
   var height = bbox.height;
   if (this.borderRect_) {
-    width += this.PADDING;
-    height += this.PADDING;
+    width += this.constants_.FIELD_BORDER_RECT_X_PADDING * 2;
+    height += this.constants_.FIELD_BORDER_RECT_X_PADDING * 2;
     this.borderRect_.setAttribute('width', width);
     this.borderRect_.setAttribute('height', height);
   }

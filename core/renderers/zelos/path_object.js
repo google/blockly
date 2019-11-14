@@ -118,6 +118,20 @@ Blockly.zelos.PathObject.prototype.updateSelected = function(enable) {
 };
 
 /**
+ * @override
+ */
+Blockly.zelos.PathObject.prototype.updateReplacementHighlight = function(
+    enable) {
+  this.setClass_('blocklyReplaceable', enable);
+  if (enable) {
+    this.svgPath.setAttribute('filter',
+        'url(#' + this.constants_.replacementGlowFilterId + ')');
+  } else {
+    this.svgPath.removeAttribute('filter');
+  }
+};
+
+/**
  * Method that's called when the drawer is about to draw the block.
  * @package
  */

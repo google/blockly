@@ -112,6 +112,27 @@ Blockly.zelos.RenderInfo.prototype.computeBounds_ = function() {
 /**
  * @override
  */
+Blockly.zelos.RenderInfo.prototype.getInRowSpacing_ = function(prev, next) {
+  if (!prev || !next) {
+    // No need for padding at the beginning or end of the row if the
+    // output shape is dynamic.
+    if (this.outputConnection && this.outputConnection.isDynamicShape) {
+      return this.constants_.NO_PADDING;
+    }
+  }
+  // Spacing between a rounded corner and a previous or next connection.
+  if (prev && Blockly.blockRendering.Types.isLeftRoundedCorner(prev) && next) {
+    if (Blockly.blockRendering.Types.isPreviousConnection(next) ||
+      Blockly.blockRendering.Types.isNextConnection(next)) {
+      return next.notchOffset - this.constants_.CORNER_RADIUS;
+    }
+  }
+  return this.constants_.MEDIUM_PADDING;
+};
+
+/**
+ * @override
+ */
 Blockly.zelos.RenderInfo.prototype.makeSpacerRow_ = function(prev, next) {
   var height = this.getSpacerRowHeight_(prev, next);
   var width = this.getSpacerRowWidth_(prev, next);

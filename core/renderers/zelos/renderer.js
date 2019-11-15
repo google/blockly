@@ -120,14 +120,16 @@ Blockly.zelos.Renderer.prototype.shouldHighlightConnection = function(conn) {
  */
 Blockly.zelos.Renderer.prototype.getCSS_ = function() {
   var selector = '.' + this.name_ + '-renderer';
+  var constants =
+    /** @type {!Blockly.zelos.ConstantProvider} */ (this.constants_);
   return [
     /* eslint-disable indent */
     selector + ' .blocklyText {',
       'cursor: default;',
       'fill: #fff;',
-      'font-family: ' + this.constants_.FIELD_TEXT_FONTFAMILY + ';',
-      'font-size: ' + this.constants_.FIELD_TEXT_FONTSIZE + 'pt;',
-      'font-weight: ' + this.constants_.FIELD_TEXT_FONTWEIGHT + ';',
+      'font-family: ' + constants.FIELD_TEXT_FONTFAMILY + ';',
+      'font-size: ' + constants.FIELD_TEXT_FONTSIZE + 'pt;',
+      'font-weight: ' + constants.FIELD_TEXT_FONTWEIGHT + ';',
     '}',
 
     selector + ' .blocklyDropdownText {',

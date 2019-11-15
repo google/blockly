@@ -636,6 +636,8 @@ Blockly.DropDownDiv.hideWithoutAnimation = function() {
   }
   Blockly.DropDownDiv.clearContent();
   Blockly.DropDownDiv.owner_ = null;
+
+  Blockly.getMainWorkspace().markFocused();
 };
 
 /**

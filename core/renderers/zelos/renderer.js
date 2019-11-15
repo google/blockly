@@ -118,10 +118,8 @@ Blockly.zelos.Renderer.prototype.shouldHighlightConnection = function(conn) {
 /**
  * @override
  */
-Blockly.zelos.Renderer.prototype.getCSS_ = function() {
+Blockly.zelos.Renderer.prototype.getCSS_ = function(constants) {
   var selector = '.' + this.name_ + '-renderer';
-  var constants =
-    /** @type {!Blockly.zelos.ConstantProvider} */ (this.constants_);
   return [
     /* eslint-disable indent */
     selector + ' .blocklyText {',

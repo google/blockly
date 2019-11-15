@@ -505,8 +505,8 @@ Blockly.InsertionMarkerManager.prototype.showPreview_ = function() {
   }
   // Also highlight the actual connection, as a nod to previous behaviour.
   if (this.closestConnection_ && this.closestConnection_.targetBlock() &&
-    this.workspace_.getRenderer()
-        .shouldHighlightConnection(this.closestConnection_)) {
+      this.workspace_.getRenderer()
+          .shouldHighlightConnection(this.closestConnection_)) {
     this.closestConnection_.highlight();
   }
 };

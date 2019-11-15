@@ -161,10 +161,14 @@ suite('Text Input Fields', function() {
       this.textInputField.htmlInput_ = Object.create(null);
       this.textInputField.htmlInput_.oldValue_ = 'value';
       this.textInputField.htmlInput_.untypedDefaultValue_ = 'value';
+      this.stub = sinon.stub(this.textInputField, 'resizeEditor_');
     });
     teardown(function() {
       this.textInputField.setValidator(null);
       Blockly.FieldTextInput.htmlInput_ = null;
+      if (this.stub) {
+        this.stub.restore();
+      }
     });
     suite('Null Validator', function() {
       setup(function() {
@@ -233,6 +237,7 @@ suite('Text Input Fields', function() {
             FIELD_TEXT_FONTWEIGHT: 'normal',
             FIELD_TEXT_FONTFAMILY: 'sans-serif'
           };
+          field.clickTarget_ = document.createElement('div');
           Blockly.WidgetDiv.DIV = document.createElement('div');
           this.stub = sinon.stub(field, 'resizeEditor_');
         };

@@ -201,10 +201,14 @@ suite('Angle Fields', function() {
       this.angleField.htmlInput_ = Object.create(null);
       this.angleField.htmlInput_.oldValue_ = '1';
       this.angleField.htmlInput_.untypedDefaultValue_ = 1;
+      this.stub = sinon.stub(this.angleField, 'resizeEditor_');
     });
     teardown(function() {
       this.angleField.setValidator(null);
       this.angleField.htmlInput_ = null;
+      if (this.stub) {
+        this.stub.restore();
+      }
     });
     suite('Null Validator', function() {
       setup(function() {

@@ -329,10 +329,14 @@ suite('Number Fields', function() {
       this.numberField.htmlInput_ = Object.create(null);
       this.numberField.htmlInput_.oldValue_ = '1';
       this.numberField.htmlInput_.untypedDefaultValue_ = 1;
+      this.stub = sinon.stub(this.numberField, 'resizeEditor_');
     });
     teardown(function() {
       this.numberField.setValidator(null);
       this.numberField.htmlInput_ = null;
+      if (this.stub) {
+        this.stub.restore();
+      }
     });
     suite('Null Validator', function() {
       setup(function() {

@@ -125,9 +125,9 @@ Blockly.zelos.Renderer.prototype.getCSS_ = function() {
     selector + ' .blocklyText {',
       'cursor: default;',
       'fill: #fff;',
-      'font-family: sans-serif;',
-      'font-weight: bold;',
-      'font-size: 12pt;',
+      'font-family: ' + this.constants_.FIELD_TEXT_FONTFAMILY + ';',
+      'font-size: ' + this.constants_.FIELD_TEXT_FONTSIZE + 'pt;',
+      'font-weight: ' + this.constants_.FIELD_TEXT_FONTWEIGHT + ';',
     '}',
 
     selector + ' .blocklyDropdownText {',

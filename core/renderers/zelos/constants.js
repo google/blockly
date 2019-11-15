@@ -162,6 +162,16 @@ Blockly.zelos.ConstantProvider = function() {
   /**
    * @override
    */
+  this.FIELD_TEXT_FONTSIZE = 12;
+
+  /**
+   * @override
+   */
+  this.FIELD_TEXT_FONTWEIGHT = 'bold';
+
+  /**
+   * @override
+   */
   this.FIELD_BORDER_RECT_RADIUS = this.CORNER_RADIUS;
 
   /**

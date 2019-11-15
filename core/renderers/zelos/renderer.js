@@ -35,12 +35,13 @@ goog.require('Blockly.zelos.CursorSvg');
 
 /**
  * The zelos renderer.
+ * @param {string} name The renderer name.
  * @package
  * @constructor
  * @extends {Blockly.blockRendering.Renderer}
  */
-Blockly.zelos.Renderer = function() {
-  Blockly.zelos.Renderer.superClass_.constructor.call(this);
+Blockly.zelos.Renderer = function(name) {
+  Blockly.zelos.Renderer.superClass_.constructor.call(this, name);
 };
 Blockly.utils.object.inherits(Blockly.zelos.Renderer,
     Blockly.blockRendering.Renderer);
@@ -112,6 +113,28 @@ Blockly.zelos.Renderer.prototype.makePathObject = function(root) {
  */
 Blockly.zelos.Renderer.prototype.shouldHighlightConnection = function(conn) {
   return conn.type != Blockly.INPUT_VALUE && conn.type !== Blockly.OUTPUT_VALUE;
+};
+
+/**
+ * @override
+ */
+Blockly.zelos.Renderer.prototype.getCSS_ = function() {
+  var selector = '.' + this.name_ + '-renderer';
+  return [
+    /* eslint-disable indent */
+    selector + ' .blocklyText {',
+      'cursor: default;',
+      'fill: #fff;',
+      'font-family: sans-serif;',
+      'font-weight: bold;',
+      'font-size: 12pt;',
+    '}',
+
+    selector + ' .blocklyDropdownText {',
+      'fill: #fff !important;',
+    '}',
+    /* eslint-enable indent */
+  ];
 };
 
 Blockly.blockRendering.register('zelos', Blockly.zelos.Renderer);

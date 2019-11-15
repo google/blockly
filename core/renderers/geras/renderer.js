@@ -35,12 +35,13 @@ goog.require('Blockly.utils.object');
 
 /**
  * The geras renderer.
+ * @param {string} name The renderer name.
  * @package
  * @constructor
  * @extends {Blockly.blockRendering.Renderer}
  */
-Blockly.geras.Renderer = function() {
-  Blockly.geras.Renderer.superClass_.constructor.call(this);
+Blockly.geras.Renderer = function(name) {
+  Blockly.geras.Renderer.superClass_.constructor.call(this, name);
 
   /**
    * The renderer's highlight constant provider.

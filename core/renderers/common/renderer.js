@@ -35,10 +35,18 @@ goog.requireType('Blockly.blockRendering.Debug');
 
 /**
  * The base class for a block renderer.
+ * @param {string} name The renderer name.
  * @package
  * @constructor
  */
-Blockly.blockRendering.Renderer = function() {
+Blockly.blockRendering.Renderer = function(name) {
+
+  /**
+   * The renderer name.
+   * @type {string}
+   * @protected
+   */
+  this.name_ = name;
 
   /**
    * The renderer's constant provider.
@@ -55,6 +63,7 @@ Blockly.blockRendering.Renderer = function() {
 Blockly.blockRendering.Renderer.prototype.init = function() {
   this.constants_ = this.makeConstants_();
   this.constants_.init();
+  this.injectCSS_(this.getCSS_());
 };
 
 /**
@@ -137,6 +146,64 @@ Blockly.blockRendering.Renderer.prototype.getConstants = function() {
   return (
     /** @type {!Blockly.blockRendering.ConstantProvider} */
     (this.constants_));
+};
+
+/**
+ * Get any renderer specific CSS to inject when the renderer is initialized.
+ * @return {!Array.<string>} Array of CSS strings.
+ * @protected
+ */
+Blockly.blockRendering.Renderer.prototype.getCSS_ = function() {
+  var selector = '.' + this.name_ + '-renderer';
+  return [
+    /* eslint-disable indent */
+    selector + ' .blocklyText {',
+      'cursor: default;',
+      'fill: #fff;',
+      'font-family: sans-serif;',
+      'font-size: 11pt;',
+    '}',
+    selector + ' .blocklyNonEditableText>rect,',
+    selector + ' .blocklyEditableText>rect {',
+      'fill: #fff;',
+      'fill-opacity: .6;',
+    '}',
+
+    selector + ' .blocklyNonEditableText>text,',
+    selector + ' .blocklyEditableText>text {',
+      'fill: #000;',
+    '}',
+
+    selector + ' .blocklyEditableText:not(.editing):hover>rect {',
+      'stroke: #fff;',
+      'stroke-width: 2;',
+    '}',
+    selector + ' .blocklySelected>.blocklyPath {',
+      'stroke: #fc3;',
+      'stroke-width: 3px;',
+    '}',
+    /* eslint-enable indent */
+  ];
+};
+
+/**
+ * Get any renderer specific CSS to inject when the renderer is initialized.
+ * @param {!Array.<string>} cssArray Array of CSS strings.
+ * @private
+ */
+Blockly.blockRendering.Renderer.prototype.injectCSS_ = function(cssArray) {
+  var cssNodeId = 'blockly-renderer-style-' + this.name_;
+  if (document.getElementById(cssNodeId)) {
+    // Already injected.
+    return;
+  }
+  var text = cssArray.join('\n');
+  // Inject CSS tag at start of head.
+  var cssNode = document.createElement('style');
+  cssNode.id = cssNodeId;
+  var cssTextNode = document.createTextNode(text);
+  cssNode.appendChild(cssTextNode);
+  document.head.insertBefore(cssNode, document.head.firstChild);
 };
 
 /**

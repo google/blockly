@@ -265,3 +265,16 @@ Blockly.blockRendering.PathObject.prototype.updateReplacementHighlight =
     /* eslint-disable indent */
   this.setClass_('blocklyReplaceable', enable);
 }; /* eslint-enable indent */
+
+/**
+ * Add or remove styling that shows that if the dragging block is dropped, this
+ * block will be connected to the input.
+ * @param {Blockly.Connection} _conn The connection on the input to highlight.
+ * @param {boolean} _enable True if styling should be added.
+ * @package
+ */
+Blockly.blockRendering.PathObject.prototype.updateShapeForInputHighlight =
+    function(_conn, _enable) {
+    /* eslint-disable indent */
+  // NOP
+}; /* eslint-enable indent */

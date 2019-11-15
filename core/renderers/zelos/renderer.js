@@ -118,6 +118,14 @@ Blockly.zelos.Renderer.prototype.shouldHighlightConnection = function(conn) {
 /**
  * @override
  */
+Blockly.zelos.Renderer.prototype.shouldInsertDraggedBlock = function(_block,
+    _conn) {
+  return false;
+};
+
+/**
+ * @override
+ */
 Blockly.zelos.Renderer.prototype.getCSS_ = function(constants) {
   var selector = '.' + this.name_ + '-renderer';
   return [

@@ -97,6 +97,8 @@ Blockly.WidgetDiv.hide = function() {
     Blockly.WidgetDiv.dispose_ = null;
     Blockly.WidgetDiv.DIV.innerHTML = '';
   }
+
+  Blockly.getMainWorkspace().markFocused();
 };
 
 /**

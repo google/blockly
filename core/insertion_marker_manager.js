@@ -408,9 +408,9 @@ Blockly.InsertionMarkerManager.prototype.shouldReplace_ = function() {
   // Dragging a block over an existing block in an input.
   if (local.type == Blockly.OUTPUT_VALUE) {
     // Insert the dragged block into the stack if possible.
-    if (!closest.isConnected() ||
-      Blockly.Connection.lastConnectionInRow(this.topBlock_,
-          closest.targetConnection.getSourceBlock())) {
+    if (closest &&
+        this.workspace_.getRenderer()
+            .shouldInsertDraggedBlock(this.topBlock_, closest)) {
       return false; // Insert.
     }
     // Otherwise replace the existing block and bump it out.
@@ -505,7 +505,7 @@ Blockly.InsertionMarkerManager.prototype.showPreview_ = function() {
   }
   // Also highlight the actual connection, as a nod to previous behaviour.
   if (this.closestConnection_ && this.closestConnection_.targetBlock() &&
-      this.closestConnection_.targetBlock()
+      this.workspace_.getRenderer()
           .shouldHighlightConnection(this.closestConnection_)) {
     this.closestConnection_.highlight();
   }
@@ -551,7 +551,7 @@ Blockly.InsertionMarkerManager.prototype.maybeHidePreview_ = function(candidate)
  */
 Blockly.InsertionMarkerManager.prototype.hidePreview_ = function() {
   if (this.closestConnection_ && this.closestConnection_.targetBlock() &&
-      this.closestConnection_.targetBlock()
+      this.workspace_.getRenderer()
           .shouldHighlightConnection(this.closestConnection_)) {
     this.closestConnection_.unhighlight();
   }
@@ -574,8 +574,7 @@ Blockly.InsertionMarkerManager.prototype.highlightBlock_ = function() {
     closest.targetBlock().highlightForReplacement(true);
   } else if (local.type == Blockly.OUTPUT_VALUE) {
     this.highlightedBlock_ = closest.getSourceBlock();
-    // TODO: Bring this back for zelos rendering.
-    // closest.getSourceBlock().highlightShapeForInput(closest, true);
+    closest.getSourceBlock().highlightShapeForInput(closest, true);
   }
   this.highlightingBlock_ = true;
 };
@@ -589,8 +588,7 @@ Blockly.InsertionMarkerManager.prototype.unhighlightBlock_ = function() {
   // If there's no block in place, but we're still connecting to a value input,
   // then we must have been highlighting an input shape.
   if (closest.type == Blockly.INPUT_VALUE && !closest.isConnected()) {
-    // TODO: Bring this back for zelos rendering.
-    // this.highlightedBlock_.highlightShapeForInput(closest, false);
+    this.highlightedBlock_.highlightShapeForInput(closest, false);
   } else {
     this.highlightedBlock_.highlightForReplacement(false);
   }

@@ -1735,12 +1735,12 @@ Blockly.BlockSvg.prototype.highlightForReplacement = function(add) {
 };
 
 /**
- * Determine whether or not to highlight a connection.
- * @param {Blockly.Connection} conn The connection on the input to determine
- *     whether or not to highlight.
- * @return {boolean} Whether or not to highlight the connection.
+ * Visual effect to show that if the dragging block is dropped it will connect
+ * to this input.
+ * @param {Blockly.Connection} conn The connection on the input to highlight.
+ * @param {boolean} add True if highlighting should be added.
  * @package
  */
-Blockly.BlockSvg.prototype.shouldHighlightConnection = function(conn) {
-  return this.workspace.getRenderer().shouldHighlightConnection(conn);
+Blockly.BlockSvg.prototype.highlightShapeForInput = function(conn, add) {
+  this.pathObject.updateShapeForInputHighlight(conn, add);
 };

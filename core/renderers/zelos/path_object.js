@@ -132,6 +132,24 @@ Blockly.zelos.PathObject.prototype.updateReplacementHighlight = function(
 };
 
 /**
+ * @override
+ */
+Blockly.zelos.PathObject.prototype.updateShapeForInputHighlight = function(
+    conn, enable) {
+  var name = conn.getParentInput().name;
+  var outlinePath = this.getOutlinePath_(name);
+  if (!outlinePath) {
+    return;
+  }
+  if (enable) {
+    outlinePath.setAttribute('filter',
+        'url(#' + this.constants_.replacementGlowFilterId + ')');
+  } else {
+    outlinePath.removeAttribute('filter');
+  }
+};
+
+/**
  * Method that's called when the drawer is about to draw the block.
  * @package
  */

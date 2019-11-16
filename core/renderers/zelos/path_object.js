@@ -103,12 +103,14 @@ Blockly.zelos.PathObject.prototype.flipRTL = function() {
 Blockly.zelos.PathObject.prototype.updateSelected = function(enable) {
   this.setClass_('blocklySelected', enable);
   if (enable) {
-    this.svgPathSelected_ =
-      /** @type {!SVGElement} */ (this.svgPath.cloneNode(true));
-    this.svgPathSelected_.setAttribute('fill', 'none');
-    this.svgPathSelected_.setAttribute('filter',
-        'url(#' + this.constants_.highlightGlowFilterId + ')');
-    this.svgRoot.appendChild(this.svgPathSelected_);
+    if (!this.svgPathSelected_) {
+      this.svgPathSelected_ =
+        /** @type {!SVGElement} */ (this.svgPath.cloneNode(true));
+      this.svgPathSelected_.setAttribute('fill', 'none');
+      this.svgPathSelected_.setAttribute('filter',
+          'url(#' + this.constants_.highlightGlowFilterId + ')');
+      this.svgRoot.appendChild(this.svgPathSelected_);
+    }
   } else {
     if (this.svgPathSelected_) {
       this.svgRoot.removeChild(this.svgPathSelected_);

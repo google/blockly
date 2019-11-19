@@ -63,7 +63,7 @@ Blockly.blockRendering.Renderer = function(name) {
 Blockly.blockRendering.Renderer.prototype.init = function() {
   this.constants_ = this.makeConstants_();
   this.constants_.init();
-  this.injectCSS_(this.getCSS_(this.constants_));
+  this.injectCSS_(this.getCSS_());
 };
 
 /**
@@ -150,13 +150,12 @@ Blockly.blockRendering.Renderer.prototype.getConstants = function() {
 
 /**
  * Get any renderer specific CSS to inject when the renderer is initialized.
- * @param {!Blockly.blockRendering.ConstantProvider} constants The constant
- *     provider.
  * @return {!Array.<string>} Array of CSS strings.
  * @protected
  */
-Blockly.blockRendering.Renderer.prototype.getCSS_ = function(constants) {
+Blockly.blockRendering.Renderer.prototype.getCSS_ = function() {
   var selector = '.' + this.name_ + '-renderer';
+  var constants = this.getConstants();
   return [
     /* eslint-disable indent */
     selector + ' .blocklyText {',

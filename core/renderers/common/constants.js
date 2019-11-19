@@ -161,7 +161,6 @@ Blockly.blockRendering.ConstantProvider = function() {
   /**
    * Point size of text.  Should match blocklyText's font-size in CSS.
    * @type {number}
-   * @const
    */
   this.FIELD_TEXT_FONTSIZE = 11;
 
@@ -174,14 +173,12 @@ Blockly.blockRendering.ConstantProvider = function() {
   /**
    * Text font weight.  Should match blocklyText's font-weight in CSS.
    * @type {string}
-   * @const
    */
   this.FIELD_TEXT_FONTWEIGHT = 'normal';
 
   /**
    * Text font family.  Should match blocklyText's font-family in CSS.
    * @type {string}
-   * @const
    */
   this.FIELD_TEXT_FONTFAMILY = 'sans-serif';
 

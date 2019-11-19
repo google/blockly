@@ -80,15 +80,19 @@ function workspaceToSvg_(workspace, callback, customCss) {
   svg.setAttribute('viewBox',
       x + ' ' + y + ' ' + width + ' ' + height);
 
-  svg.setAttribute('class', 'blocklySvg');
+  svg.setAttribute('class', 'blocklySvg ' +
+    (workspace.options.renderer || 'geras') + '-renderer ' +
+    (workspace.getTheme ? workspace.getTheme().name + '-theme' : ''));
   svg.setAttribute('width', width);
   svg.setAttribute('height', height);
   svg.setAttribute("style", 'background-color: transparent');
 
   var css = [].slice.call(document.head.querySelectorAll('style'))
-      .filter(function(el) { return /\.blocklySvg/.test(el.innerText); })[0];
+      .filter(function(el) { return /\.blocklySvg/.test(el.innerText) ||
+        (el.id.indexOf('blockly-') === 0); }).map(function(el) {
+        return el.innerText; }).join('\n');
   var style = document.createElement('style');
-  style.innerHTML = css.innerText + '\n' + customCss;
+  style.innerHTML = css + '\n' + customCss;
   svg.insertBefore(style, svg.firstChild);
 
   var svgAsXML = (new XMLSerializer).serializeToString(svg);

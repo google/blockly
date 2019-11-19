@@ -77,6 +77,7 @@ Blockly.Css.inject = function(hasCss, pathToMedia) {
 
   // Inject CSS tag at start of head.
   var cssNode = document.createElement('style');
+  cssNode.id = 'blockly-common-style';
   var cssTextNode = document.createTextNode(text);
   cssNode.appendChild(cssTextNode);
   document.head.insertBefore(cssNode, document.head.firstChild);
@@ -254,11 +255,6 @@ Blockly.Css.CONTENT = [
     'stroke-width: 1;',
   '}',
 
-  '.injectionDiv:not(.zelos-renderer) .blocklySelected>.blocklyPath {',
-    'stroke: #fc3;',
-    'stroke-width: 3px;',
-  '}',
-
   '.blocklySelected>.blocklyPathLight {',
     'display: none;',
   '}',
@@ -334,35 +330,12 @@ Blockly.Css.CONTENT = [
     'display: none;',
   '}',
 
-  '.blocklyText {',
-    'cursor: default;',
-    'fill: #fff;',
-    'font-family: sans-serif;',
-    'font-size: 11pt;',
-  '}',
-
   '.blocklyMultilineText {',
     'font-family: monospace;',
   '}',
 
   '.blocklyNonEditableText>text {',
     'pointer-events: none;',
-  '}',
-
-  '.blocklyNonEditableText>rect,',
-  '.blocklyEditableText>rect {',
-    'fill: #fff;',
-    'fill-opacity: .6;',
-  '}',
-
-  '.blocklyNonEditableText>text,',
-  '.blocklyEditableText>text {',
-    'fill: #000;',
-  '}',
-
-  '.blocklyEditableText:not(.editing):hover>rect {',
-    'stroke: #fff;',
-    'stroke-width: 2;',
   '}',
 
   '.blocklyBubbleText {',

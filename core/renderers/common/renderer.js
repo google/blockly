@@ -44,9 +44,9 @@ Blockly.blockRendering.Renderer = function(name) {
   /**
    * The renderer name.
    * @type {string}
-   * @protected
+   * @package
    */
-  this.name_ = name;
+  this.name = name;
 
   /**
    * The renderer's constant provider.
@@ -154,10 +154,11 @@ Blockly.blockRendering.Renderer.prototype.getConstants = function() {
  * @protected
  */
 Blockly.blockRendering.Renderer.prototype.getCSS_ = function() {
-  var selector = '.' + this.name_ + '-renderer';
+  var selector = '.' + this.name + '-renderer';
   var constants = this.getConstants();
   return [
     /* eslint-disable indent */
+    // Fields.
     selector + ' .blocklyText {',
       'cursor: default;',
       'fill: #fff;',
@@ -171,30 +172,38 @@ Blockly.blockRendering.Renderer.prototype.getCSS_ = function() {
       'fill-opacity: .6;',
       'stroke: none;',
     '}',
-
     selector + ' .blocklyNonEditableText>text,',
     selector + ' .blocklyEditableText>text {',
       'fill: #000;',
     '}',
 
+    // Editable field hover.
     selector + ' .blocklyEditableText:not(.editing):hover>rect {',
       'stroke: #fff;',
       'stroke-width: 2;',
     '}',
 
+    // Text field input.
+    selector + ' .blocklyHtmlInput {',
+      'font-family: ' + constants.FIELD_TEXT_FONTFAMILY + ';',
+      'font-weight: ' + constants.FIELD_TEXT_FONTWEIGHT + ';',
+    '}',
+
+    // Selection highlight.
     selector + ' .blocklySelected>.blocklyPath {',
       'stroke: #fc3;',
       'stroke-width: 3px;',
     '}',
 
+    // Connection highlight.
     selector + ' .blocklyHighlightedConnectionPath {',
       'stroke: #fc3;',
     '}',
 
+    // Replacable highlight.
     selector + ' .blocklyReplaceable .blocklyPath {',
       'fill-opacity: .5;',
     '}',
-
     selector + ' .blocklyReplaceable .blocklyPathLight,',
     selector + ' .blocklyReplaceable .blocklyPathDark {',
       'display: none;',
@@ -209,7 +218,7 @@ Blockly.blockRendering.Renderer.prototype.getCSS_ = function() {
  * @private
  */
 Blockly.blockRendering.Renderer.prototype.injectCSS_ = function(cssArray) {
-  var cssNodeId = 'blockly-renderer-style-' + this.name_;
+  var cssNodeId = 'blockly-renderer-style-' + this.name;
   if (document.getElementById(cssNodeId)) {
     // Already injected.
     return;

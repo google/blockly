@@ -40,13 +40,6 @@ Blockly.DropDownDiv = function() {
 };
 
 /**
- * The div element. Set once by Blockly.DropDownDiv.createDom.
- * @type {Element}
- * @private
- */
-Blockly.DropDownDiv.DIV_ = null;
-
-/**
  * Drop-downs will appear within the bounds of this element if possible.
  * Set in Blockly.DropDownDiv.setBoundsElement.
  * @type {Element}
@@ -136,6 +129,20 @@ Blockly.DropDownDiv.animateOutTimer_ = null;
 Blockly.DropDownDiv.onHide_ = null;
 
 /**
+ * A class name representing the current owner's workspace renderer.
+ * @type {?string}
+ * @private
+ */
+Blockly.DropDownDiv.rendererClassName_ = null;
+
+/**
+ * A class name representing the current owner's workspace theme.
+ * @type {?string}
+ * @private
+ */
+Blockly.DropDownDiv.themeClassName_ = null;
+
+/**
  * Create and insert the DOM element for this div.
  * @package
  */
@@ -148,16 +155,31 @@ Blockly.DropDownDiv.createDom = function() {
   div.style.backgroundColor = Blockly.DropDownDiv.DEFAULT_DROPDOWN_COLOUR;
   div.style.borderColor = Blockly.DropDownDiv.DEFAULT_DROPDOWN_BORDER_COLOUR;
   document.body.appendChild(div);
+  /**
+   * The div element.
+   * @type {!Element}
+   * @private
+   */
   Blockly.DropDownDiv.DIV_ = div;
 
   var content = document.createElement('div');
   content.className = 'blocklyDropDownContent';
   div.appendChild(content);
+  /**
+   * The content element.
+   * @type {!Element}
+   * @private
+   */
   Blockly.DropDownDiv.content_ = content;
 
   var arrow = document.createElement('div');
   arrow.className = 'blocklyDropDownArrow';
   div.appendChild(arrow);
+  /**
+   * The arrow element.
+   * @type {!Element}
+   * @private
+   */
   Blockly.DropDownDiv.arrow_ = arrow;
 
   Blockly.DropDownDiv.DIV_.style.opacity = 0;
@@ -341,7 +363,15 @@ Blockly.DropDownDiv.show = function(owner, rtl, primaryX, primaryY,
   Blockly.DropDownDiv.owner_ = owner;
   Blockly.DropDownDiv.onHide_ = opt_onHide || null;
   // Set direction.
-  Blockly.DropDownDiv.DIV_.style.direction = rtl ? 'rtl' : 'ltr';
+  var div = Blockly.DropDownDiv.DIV_;
+  div.style.direction = rtl ? 'rtl' : 'ltr';
+
+  Blockly.DropDownDiv.rendererClassName_ =
+      Blockly.getMainWorkspace().getRenderer().name + '-renderer';
+  Blockly.DropDownDiv.themeClassName_ =
+      Blockly.getMainWorkspace().getTheme().name + '-theme';
+  Blockly.utils.dom.addClass(div, Blockly.DropDownDiv.rendererClassName_);
+  Blockly.utils.dom.addClass(div, Blockly.DropDownDiv.themeClassName_);
 
   // When we change `translate` multiple times in close succession,
   // Chrome may choose to wait and apply them all at once.
@@ -637,6 +667,14 @@ Blockly.DropDownDiv.hideWithoutAnimation = function() {
   Blockly.DropDownDiv.clearContent();
   Blockly.DropDownDiv.owner_ = null;
 
+  if (Blockly.DropDownDiv.rendererClassName_) {
+    Blockly.utils.dom.removeClass(div, Blockly.DropDownDiv.rendererClassName_);
+    Blockly.DropDownDiv.rendererClassName_ = null;
+  }
+  if (Blockly.DropDownDiv.themeClassName_) {
+    Blockly.utils.dom.removeClass(div, Blockly.DropDownDiv.themeClassName_);
+    Blockly.DropDownDiv.themeClassName_ = null;
+  }
   Blockly.getMainWorkspace().markFocused();
 };
 

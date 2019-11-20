@@ -44,9 +44,9 @@ Blockly.blockRendering.Renderer = function(name) {
   /**
    * The renderer name.
    * @type {string}
-   * @protected
+   * @package
    */
-  this.name_ = name;
+  this.name = name;
 
   /**
    * The renderer's constant provider.
@@ -154,7 +154,7 @@ Blockly.blockRendering.Renderer.prototype.getConstants = function() {
  * @protected
  */
 Blockly.blockRendering.Renderer.prototype.getCSS_ = function() {
-  var selector = '.' + this.name_ + '-renderer';
+  var selector = '.' + this.name + '-renderer';
   var constants = this.getConstants();
   return [
     /* eslint-disable indent */
@@ -184,6 +184,11 @@ Blockly.blockRendering.Renderer.prototype.getCSS_ = function() {
       'stroke: #fc3;',
       'stroke-width: 3px;',
     '}',
+
+    selector + ' .blocklyHtmlInput {',
+      'font-family: ' + constants.FIELD_TEXT_FONTFAMILY + ';',
+      'font-weight: ' + constants.FIELD_TEXT_FONTWEIGHT + ';',
+    '}',
     /* eslint-enable indent */
   ];
 };
@@ -194,7 +199,7 @@ Blockly.blockRendering.Renderer.prototype.getCSS_ = function() {
  * @private
  */
 Blockly.blockRendering.Renderer.prototype.injectCSS_ = function(cssArray) {
-  var cssNodeId = 'blockly-renderer-style-' + this.name_;
+  var cssNodeId = 'blockly-renderer-style-' + this.name;
   if (document.getElementById(cssNodeId)) {
     // Already injected.
     return;

@@ -127,7 +127,7 @@ Blockly.zelos.Renderer.prototype.shouldInsertDraggedBlock = function(_block,
  * @override
  */
 Blockly.zelos.Renderer.prototype.getCSS_ = function() {
-  var selector = '.' + this.name_ + '-renderer';
+  var selector = '.' + this.name + '-renderer';
   var constants = this.getConstants();
   return [
     /* eslint-disable indent */
@@ -141,6 +141,11 @@ Blockly.zelos.Renderer.prototype.getCSS_ = function() {
 
     selector + ' .blocklyDropdownText {',
       'fill: #fff !important;',
+    '}',
+
+    selector + ' .blocklyHtmlInput {',
+      'font-family: ' + constants.FIELD_TEXT_FONTFAMILY + ';',
+      'font-weight: ' + constants.FIELD_TEXT_FONTWEIGHT + ';',
     '}',
     /* eslint-enable indent */
   ];

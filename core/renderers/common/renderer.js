@@ -169,6 +169,7 @@ Blockly.blockRendering.Renderer.prototype.getCSS_ = function() {
     selector + ' .blocklyEditableText>rect {',
       'fill: #fff;',
       'fill-opacity: .6;',
+      'stroke: none;',
     '}',
 
     selector + ' .blocklyNonEditableText>text,',

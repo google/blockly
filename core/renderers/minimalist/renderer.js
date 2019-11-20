@@ -32,12 +32,13 @@ goog.require('Blockly.minimalist.RenderInfo');
 
 /**
  * The minimalist renderer.
+ * @param {string} name The renderer name.
  * @package
  * @constructor
  * @extends {Blockly.blockRendering.Renderer}
  */
-Blockly.minimalist.Renderer = function() {
-  Blockly.minimalist.Renderer.superClass_.constructor.call(this);
+Blockly.minimalist.Renderer = function(name) {
+  Blockly.minimalist.Renderer.superClass_.constructor.call(this, name);
 };
 Blockly.utils.object.inherits(Blockly.minimalist.Renderer,
     Blockly.blockRendering.Renderer);

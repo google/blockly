@@ -227,10 +227,14 @@ suite('Text Input Fields', function() {
     suite('Spellcheck', function() {
       setup(function() {
         this.prepField = function(field) {
+          var workspace = {
+            scale: 1,
+            getRenderer: function() { return {}; },
+            getTheme: function() { return {}; },
+            markFocused: function() {}
+          };
           field.sourceBlock_ = {
-            workspace: {
-              scale: 1
-            }
+            workspace: workspace
           };
           field.constants_ = {
             FIELD_TEXT_FONTSIZE: 11,
@@ -238,6 +242,7 @@ suite('Text Input Fields', function() {
             FIELD_TEXT_FONTFAMILY: 'sans-serif'
           };
           field.clickTarget_ = document.createElement('div');
+          Blockly.mainWorkspace = workspace;
           Blockly.WidgetDiv.DIV = document.createElement('div');
           this.stub = sinon.stub(field, 'resizeEditor_');
         };

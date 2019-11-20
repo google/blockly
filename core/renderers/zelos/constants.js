@@ -516,7 +516,7 @@ Blockly.zelos.ConstantProvider.prototype.createDom = function(svg) {
   // Color the highlight
   Blockly.utils.dom.createSvgElement('feFlood',
       {
-        'flood-color': '#FFF200', // TODO: configure colour in theme.
+        'flood-color': '#fff200', // TODO: configure colour in theme.
         'flood-opacity': 1,
         'result': 'outColor'
       },
@@ -558,7 +558,7 @@ Blockly.zelos.ConstantProvider.prototype.createDom = function(svg) {
   // Color the highlight
   Blockly.utils.dom.createSvgElement('feFlood',
       {
-        'flood-color': '#FFF200', // TODO: configure colour in theme.
+        'flood-color': '#fff200', // TODO: configure colour in theme.
         'flood-opacity': 1,
         'result': 'outColor'
       },

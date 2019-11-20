@@ -180,9 +180,23 @@ Blockly.blockRendering.Renderer.prototype.getCSS_ = function() {
       'stroke: #fff;',
       'stroke-width: 2;',
     '}',
+
     selector + ' .blocklySelected>.blocklyPath {',
       'stroke: #fc3;',
       'stroke-width: 3px;',
+    '}',
+
+    selector + ' .blocklyHighlightedConnectionPath {',
+      'stroke: #fc3;',
+    '}',
+
+    selector + ' .blocklyReplaceable .blocklyPath {',
+      'fill-opacity: .5;',
+    '}',
+
+    selector + ' .blocklyReplaceable .blocklyPathLight,',
+    selector + ' .blocklyReplaceable .blocklyPathDark {',
+      'display: none;',
     '}',
     /* eslint-enable indent */
   ];

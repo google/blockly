@@ -321,15 +321,6 @@ Blockly.Css.CONTENT = [
     'stroke: none',
   '}',
 
-  '.injectionDiv:not(.zelos-renderer) .blocklyReplaceable .blocklyPath {',
-    'fill-opacity: .5;',
-  '}',
-
-  '.injectionDiv:not(.zelos-renderer) .blocklyReplaceable .blocklyPathLight,',
-  '.injectionDiv:not(.zelos-renderer) .blocklyReplaceable .blocklyPathDark {',
-    'display: none;',
-  '}',
-
   '.blocklyMultilineText {',
     'font-family: monospace;',
   '}',

@@ -139,6 +139,16 @@ Blockly.zelos.Renderer.prototype.getCSS_ = function() {
       'font-weight: ' + constants.FIELD_TEXT_FONTWEIGHT + ';',
     '}',
 
+    selector + ' .blocklyEditableText:not(.editing):hover>rect ,',
+    selector + ' .blocklyEditableText:not(.editing):hover>.blocklyPath {',
+      'stroke: #fff;',
+      'stroke-width: 2;',
+    '}',
+
+    selector + ' .blocklyHighlightedConnectionPath {',
+      'stroke: #fff200;',
+    '}',
+
     selector + ' .blocklyDropdownText {',
       'fill: #fff !important;',
     '}',

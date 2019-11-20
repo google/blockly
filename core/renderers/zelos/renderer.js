@@ -131,6 +131,7 @@ Blockly.zelos.Renderer.prototype.getCSS_ = function() {
   var constants = this.getConstants();
   return [
     /* eslint-disable indent */
+    // Fields.
     selector + ' .blocklyText {',
       'cursor: default;',
       'fill: #fff;',
@@ -139,13 +140,27 @@ Blockly.zelos.Renderer.prototype.getCSS_ = function() {
       'font-weight: ' + constants.FIELD_TEXT_FONTWEIGHT + ';',
     '}',
 
+    // Editable field hover.
+    selector + ' .blocklyEditableText:not(.editing):hover>rect ,',
+    selector + ' .blocklyEditableText:not(.editing):hover>.blocklyPath {',
+      'stroke: #fff;',
+      'stroke-width: 2;',
+    '}',
+
+    // Text field input.
+    selector + ' .blocklyHtmlInput {',
+      'font-family: ' + constants.FIELD_TEXT_FONTFAMILY + ';',
+      'font-weight: ' + constants.FIELD_TEXT_FONTWEIGHT + ';',
+    '}',
+  
+    // Dropdown field.
     selector + ' .blocklyDropdownText {',
       'fill: #fff !important;',
     '}',
 
-    selector + ' .blocklyHtmlInput {',
-      'font-family: ' + constants.FIELD_TEXT_FONTFAMILY + ';',
-      'font-weight: ' + constants.FIELD_TEXT_FONTWEIGHT + ';',
+    // Connection highlight.
+    selector + ' .blocklyHighlightedConnectionPath {',
+      'stroke: #fff200;',
     '}',
     /* eslint-enable indent */
   ];

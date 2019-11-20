@@ -158,6 +158,7 @@ Blockly.blockRendering.Renderer.prototype.getCSS_ = function() {
   var constants = this.getConstants();
   return [
     /* eslint-disable indent */
+    // Fields.
     selector + ' .blocklyText {',
       'cursor: default;',
       'fill: #fff;',
@@ -169,25 +170,43 @@ Blockly.blockRendering.Renderer.prototype.getCSS_ = function() {
     selector + ' .blocklyEditableText>rect {',
       'fill: #fff;',
       'fill-opacity: .6;',
+      'stroke: none;',
     '}',
-
     selector + ' .blocklyNonEditableText>text,',
     selector + ' .blocklyEditableText>text {',
       'fill: #000;',
     '}',
 
+    // Editable field hover.
     selector + ' .blocklyEditableText:not(.editing):hover>rect {',
       'stroke: #fff;',
       'stroke-width: 2;',
     '}',
+
+    // Text field input.
+    selector + ' .blocklyHtmlInput {',
+      'font-family: ' + constants.FIELD_TEXT_FONTFAMILY + ';',
+      'font-weight: ' + constants.FIELD_TEXT_FONTWEIGHT + ';',
+    '}',
+
+    // Selection highlight.
     selector + ' .blocklySelected>.blocklyPath {',
       'stroke: #fc3;',
       'stroke-width: 3px;',
     '}',
 
-    selector + ' .blocklyHtmlInput {',
-      'font-family: ' + constants.FIELD_TEXT_FONTFAMILY + ';',
-      'font-weight: ' + constants.FIELD_TEXT_FONTWEIGHT + ';',
+    // Connection highlight.
+    selector + ' .blocklyHighlightedConnectionPath {',
+      'stroke: #fc3;',
+    '}',
+
+    // Replacable highlight.
+    selector + ' .blocklyReplaceable .blocklyPath {',
+      'fill-opacity: .5;',
+    '}',
+    selector + ' .blocklyReplaceable .blocklyPathLight,',
+    selector + ' .blocklyReplaceable .blocklyPathDark {',
+      'display: none;',
     '}',
     /* eslint-enable indent */
   ];

@@ -186,9 +186,24 @@ Blockly.FieldColour.prototype.initView = function() {
   this.size_ = new Blockly.utils.Size(
       this.constants_.FIELD_COLOUR_DEFAULT_WIDTH,
       this.constants_.FIELD_COLOUR_DEFAULT_HEIGHT);
-  this.createBorderRect_();
-  this.borderRect_.style['fillOpacity'] = '1';
-  this.borderRect_.style.fill = this.value_;
+  if (!this.constants_.FIELD_COLOUR_FULL_BLOCK) {
+    this.createBorderRect_();
+    this.borderRect_.style['fillOpacity'] = '1';
+  } else {
+    this.clickTarget_ = this.sourceBlock_.getSvgRoot();
+  }
+};
+
+/**
+ * @override
+ */
+Blockly.FieldColour.prototype.applyColour = function() {
+  if (!this.constants_.FIELD_COLOUR_FULL_BLOCK) {
+    this.borderRect_.style.fill = this.getValue();
+  } else {
+    this.sourceBlock_.pathObject.svgPath.setAttribute('fill', this.getValue());
+    this.sourceBlock_.pathObject.svgPath.setAttribute('stroke', '#fff');
+  }
 };
 
 /**
@@ -214,6 +229,9 @@ Blockly.FieldColour.prototype.doValueUpdate_ = function(newValue) {
   this.value_ = newValue;
   if (this.borderRect_) {
     this.borderRect_.style.fill = newValue;
+  } else if (this.sourceBlock_) {
+    this.sourceBlock_.pathObject.svgPath.setAttribute('fill', newValue);
+    this.sourceBlock_.pathObject.svgPath.setAttribute('stroke', '#fff');
   }
 };
 

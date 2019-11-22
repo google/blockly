@@ -969,8 +969,8 @@ Blockly.BlockSvg.prototype.dispose = function(healStack, animate) {
  * @package
  */
 Blockly.BlockSvg.prototype.applyColour = function() {
-  if (!this.isEnabled()) {
-    // Disabled blocks don't have colour.
+  if (!this.isEnabled() || !this.rendered) {
+    // Disabled blocks and non-rendered blocks don't have colour.
     return;
   }
 

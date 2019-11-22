@@ -40,44 +40,10 @@ Blockly.TabNavigateCursor = function() {
 Blockly.utils.object.inherits(Blockly.TabNavigateCursor, Blockly.BasicCursor);
 
 /**
- * Find the next node in the pre order traversal.
- * @override
- */
-Blockly.TabNavigateCursor.prototype.next = function() {
-  var curNode = this.getCurNode();
-  if (!curNode) {
-    return null;
-  }
-  var newNode = this.getNextNode_(curNode, this.validNode_);
-
-  if (newNode) {
-    this.setCurNode(newNode);
-  }
-  return newNode;
-};
-
-/**
- * Find the previous node in the pre order traversal.
- * @override
- */
-Blockly.TabNavigateCursor.prototype.prev = function() {
-  var curNode = this.getCurNode();
-  if (!curNode) {
-    return null;
-  }
-  var newNode = this.getPreviousNode_(curNode, this.validNode_);
-
-  if (newNode) {
-    this.setCurNode(newNode);
-  }
-  return newNode;
-};
-
-/**
  * Skip all nodes except for tab navigable fields.
  * @param {Blockly.ASTNode} node The AST node to check whether it is valid.
  * @return {boolean} True if the node should be visited, false otherwise.
- * @private
+ * @override
  */
 Blockly.TabNavigateCursor.prototype.validNode_ = function(node) {
   var isValid = false;

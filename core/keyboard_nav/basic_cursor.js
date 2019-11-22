@@ -163,7 +163,7 @@ Blockly.BasicCursor.prototype.getPreviousNode_ = function(node, isValid) {
  * skips output, stack and workspace nodes.
  * @param {Blockly.ASTNode} node The AST node to check whether it is valid.
  * @return {boolean} True if the node should be visited, false otherwise.
- * @private
+ * @protected
  */
 Blockly.BasicCursor.prototype.validNode_ = function(node) {
   var isValid = false;

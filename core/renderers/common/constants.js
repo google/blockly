@@ -233,6 +233,13 @@ Blockly.blockRendering.ConstantProvider = function() {
   this.FIELD_DROPDOWN_SVG_ARROW = false;
 
   /**
+   * Whether or not the colour field should display its colour value on the
+   * entire block.
+   * @type {boolean}
+   */
+  this.FIELD_COLOUR_FULL_BLOCK = false;
+
+  /**
    * A colour field's default width.
    * @type {number}
    */

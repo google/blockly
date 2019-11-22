@@ -157,6 +157,14 @@ Blockly.zelos.Renderer.prototype.getCSS_ = function() {
     selector + ' .blocklyDropdownText {',
       'fill: #fff !important;',
     '}',
+    // Widget and Dropdown Div
+    selector + '.blocklyWidgetDiv .goog-menuitem,',
+    selector + '.blocklyDropDownDiv .goog-menuitem {',
+      'font-family: ' + constants.FIELD_TEXT_FONTFAMILY + ';',
+    '}',
+    selector + '.blocklyDropDownDiv .goog-menuitem-content {',
+      'color: #fff;',
+    '}',
 
     // Connection highlight.
     selector + ' .blocklyHighlightedConnectionPath {',

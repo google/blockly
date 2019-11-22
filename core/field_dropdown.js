@@ -256,6 +256,14 @@ Blockly.FieldDropdown.prototype.showEditor_ = function() {
   Blockly.utils.dom.addClass(
       /** @type {!Element} */ (this.menu_.getElement()), 'blocklyDropdownMenu');
 
+  if (this.constants_.FIELD_DROPDOWN_COLOURED_DIV) {
+    var primaryColour = (this.sourceBlock_.isShadow()) ?
+        this.sourceBlock_.getParent().getColour() :
+        this.sourceBlock_.getColour();
+    Blockly.DropDownDiv.setColour(primaryColour,
+        this.sourceBlock_.style.colourTertiary);
+  }
+
   Blockly.DropDownDiv.showPositionedByField(
       this, this.dropdownDispose_.bind(this));
 

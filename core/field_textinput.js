@@ -648,6 +648,8 @@ Blockly.FieldTextInput.prototype.getScaledBBox = function() {
     }
   } else {
     var xy = this.borderRect_.getBoundingClientRect();
+    var scaledWidth = xy.width;
+    var scaledHeight = xy.height;
   }
   return {
     top: xy.y,

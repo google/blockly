@@ -115,7 +115,7 @@ Blockly.zelos.ConstantProvider = function() {
    * Minimum statement input spacer width.
    * @type {number}
    */
-  this.STATEMENT_INPUT_SPACER_MIN_WIDTH = 30 * this.GRID_UNIT;
+  this.STATEMENT_INPUT_SPACER_MIN_WIDTH = 34.5 * this.GRID_UNIT;
 
   /**
    * @override

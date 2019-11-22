@@ -135,10 +135,12 @@ Blockly.Themes.Dark.setComponentStyle('scrollbarOpacity', 0.4);
   var selector = '.dark-theme';
   Blockly.Css.register([
     /* eslint-disable indent */
+    // Toolbox hover
     selector + ' .blocklyTreeRow:not(.blocklyTreeSelected):hover {',
       'background-color: #2a2d2e;',
     '}',
-    selector + '.blocklyWidgetDiv .goog-menu ,',
+    // Dropdown and Widget div.
+    selector + '.blocklyWidgetDiv .goog-menu, ',
     selector + '.blocklyDropDownDiv {',
       'background-color: #3c3c3c;',
     '}',

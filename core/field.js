@@ -675,13 +675,13 @@ Blockly.Field.prototype.getSize = function() {
 Blockly.Field.prototype.getScaledBBox = function() {
   var bBox = this.borderRect_.getBBox();
   var xy = this.getAbsoluteXY_();
-  xy.height = bBox.height * this.sourceBlock_.workspace.scale;
-  xy.width = bBox.width * this.sourceBlock_.workspace.scale;
+  var scaledWidth = bBox.width * this.sourceBlock_.workspace.scale;
+  var scaledHeight = bBox.height * this.sourceBlock_.workspace.scale;
   return {
     top: xy.y,
-    bottom: xy.y + xy.height,
+    bottom: xy.y + scaledHeight,
     left: xy.x,
-    right: xy.x + xy.width
+    right: xy.x + scaledWidth
   };
 };
 

@@ -331,31 +331,29 @@ Blockly.FieldTextInput.prototype.widgetCreate_ = function() {
   var htmlInput = /** @type {HTMLInputElement} */ (document.createElement('input'));
   htmlInput.className = 'blocklyHtmlInput';
   htmlInput.setAttribute('spellcheck', this.spellcheck_);
+  var scale = this.workspace_.scale;
   var fontSize =
-      (this.constants_.FIELD_TEXT_FONTSIZE * this.workspace_.scale) + 'pt';
+      (this.constants_.FIELD_TEXT_FONTSIZE * scale) + 'pt';
   div.style.fontSize = fontSize;
   htmlInput.style.fontSize = fontSize;
   var borderRadius =
-      (Blockly.FieldTextInput.BORDERRADIUS * this.workspace_.scale) + 'px';
+      (Blockly.FieldTextInput.BORDERRADIUS * scale) + 'px';
 
   if (this.fullBlockClickTarget_) {
     var bBox = this.getScaledBBox();
-    var borderWidth = this.workspace_.scale;
-    
+
     // Override border radius.
-    var borderRadius = (bBox.bottom - bBox.top) / 2 + 'px';
+    borderRadius = (bBox.bottom - bBox.top) / 2 + 'px';
     // Pull stroke colour from the existing shadow block
     var strokeColour = this.sourceBlock_.getParent() ?
       this.sourceBlock_.getParent().style.colourTertiary :
       this.sourceBlock_.style.colourTertiary;
-    htmlInput.style.borderWidth = borderWidth + 'px';
-    htmlInput.style.borderStyle = 'solid';
-    htmlInput.style.borderColor = strokeColour;
+    htmlInput.style.border = (1 * scale) + 'px solid ' + strokeColour;
     div.style.borderRadius = borderRadius;
     div.style.transition = 'box-shadow 0.25s ease 0s';
     if (this.constants_.FIELD_TEXTINPUT_BOX_SHADOW) {
       div.style.boxShadow = 'rgba(255, 255, 255, 0.3) 0px 0px 0px ' +
-          4 * this.workspace_.scale + 'px';
+          4 * scale + 'px';
     }
   }
   htmlInput.style.borderRadius = borderRadius;
@@ -632,30 +630,30 @@ Blockly.FieldTextInput.prototype.getScaledBBox = function() {
     var bBox = this.sourceBlock_.getHeightWidth();
     var scale = this.sourceBlock_.workspace.scale;
     var xy = this.getAbsoluteXY_();
-    xy.height = bBox.height * scale;
-    xy.width = bBox.width * scale;
+    var scaledWidth = bBox.width * scale;
+    var scaledHeight = bBox.height * scale;
 
     if (Blockly.utils.userAgent.GECKO) {
       xy.x += 1.5 * scale;
       xy.y += 1.5 * scale;
-      xy.width += 1 * scale;
-      xy.height += 1 * scale;
+      scaledWidth += 1 * scale;
+      scaledHeight += 1 * scale;
     } else {
       if (!Blockly.utils.userAgent.EDGE && !Blockly.utils.userAgent.IE) {
         xy.x -= 0.5 * scale;
         xy.y -= 0.5 * scale;
       }
-      xy.width += 1 * scale;
-      xy.height += 1 * scale;
+      scaledWidth += 1 * scale;
+      scaledHeight += 1 * scale;
     }
   } else {
     var xy = this.borderRect_.getBoundingClientRect();
   }
   return {
     top: xy.y,
-    bottom: xy.y + xy.height,
+    bottom: xy.y + scaledHeight,
     left: xy.x,
-    right: xy.x + xy.width
+    right: xy.x + scaledWidth
   };
 };
 

@@ -139,10 +139,18 @@ Blockly.zelos.Renderer.prototype.getCSS_ = function() {
       'font-size: ' + constants.FIELD_TEXT_FONTSIZE + 'pt;',
       'font-weight: ' + constants.FIELD_TEXT_FONTWEIGHT + ';',
     '}',
+    selector + ' .blocklyNonEditableText>text,',
+    selector + ' .blocklyEditableText>text,',
+    selector + ' .blocklyNonEditableText>g>text,',
+    selector + ' .blocklyEditableText>g>text {',
+      'fill: #575E75;',
+    '}',
 
     // Editable field hover.
-    selector + ' .blocklyEditableText:not(.editing):hover>rect ,',
-    selector + ' .blocklyEditableText:not(.editing):hover>.blocklyPath {',
+    selector + ' .blocklyDraggable:not(.blocklyDisabled)',
+    ' .blocklyEditableText:not(.editing):hover>rect ,',
+    selector + ' .blocklyDraggable:not(.blocklyDisabled)',
+    ' .blocklyEditableText:not(.editing):hover>.blocklyPath {',
       'stroke: #fff;',
       'stroke-width: 2;',
     '}',
@@ -151,6 +159,7 @@ Blockly.zelos.Renderer.prototype.getCSS_ = function() {
     selector + ' .blocklyHtmlInput {',
       'font-family: ' + constants.FIELD_TEXT_FONTFAMILY + ';',
       'font-weight: ' + constants.FIELD_TEXT_FONTWEIGHT + ';',
+      'color: #575E75;',
     '}',
   
     // Dropdown field.

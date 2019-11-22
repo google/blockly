@@ -131,10 +131,30 @@ Blockly.Themes.Dark.setComponentStyle('scrollbarOpacity', 0.4);
 /**
  * CSS for the dark theme.
  */
-Blockly.Css.register([
-  /* eslint-disable indent */
-  '.dark-theme .blocklyTreeRow:not(.blocklyTreeSelected):hover {',
-    'background-color: #2a2d2e;',
-  '}',
-  /* eslint-enable indent */
-]);
+(function() {
+  var selector = '.dark-theme';
+  Blockly.Css.register([
+    /* eslint-disable indent */
+    selector + ' .blocklyTreeRow:not(.blocklyTreeSelected):hover {',
+      'background-color: #2a2d2e;',
+    '}',
+    selector + '.blocklyWidgetDiv .goog-menu ,',
+    selector + '.blocklyDropDownDiv {',
+      'background-color: #3c3c3c;',
+    '}',
+    selector + '.blocklyDropDownDiv {',
+      'border-color: #565656;',
+    '}',
+    selector + '.blocklyWidgetDiv .goog-menuitem-content, ',
+    selector + '.blocklyDropDownDiv .goog-menuitem-content {',
+      'color: #f0f0f0;',
+    '}',
+    selector + '.blocklyWidgetDiv .goog-menuitem-disabled',
+    ' .goog-menuitem-content,',
+    selector + '.blocklyDropDownDiv .goog-menuitem-disabled',
+    ' .goog-menuitem-content {',
+      'color: #8a8a8a !important;',
+    '}',
+    /* eslint-enable indent */
+  ]);
+})();

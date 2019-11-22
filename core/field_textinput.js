@@ -626,8 +626,7 @@ Blockly.FieldTextInput.prototype.getValueFromEditorText_ = function(text) {
  */
 Blockly.FieldTextInput.prototype.getScaledBBox = function() {
   if (!this.borderRect_) {
-    // Browsers are inconsistent in what they return for getBoundingClientRect.
-    // ie:
+    // Browsers are inconsistent in what they return for a bounding box.
     // - Webkit / Blink: fill-box / object bounding box
     // - Gecko / Triden / EdgeHTML: stroke-box
     var bBox = this.sourceBlock_.getHeightWidth();

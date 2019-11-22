@@ -31,7 +31,7 @@
  * This will allow the user to get to all nodes in the AST by hitting next or
  * previous.
  * @constructor
- * @extends {Blockly.LineCursor}
+ * @extends {Blockly.BasicCursor}
  */
 Blockly.LineCursor = function() {
   Blockly.LineCursor.superClass_.constructor.call(this);
@@ -50,13 +50,13 @@ Blockly.LineCursor.prototype.next = function() {
   if (!curNode) {
     return null;
   }
-  var newNode = this.getNextNode_(curNode, this.validNode_);
+  var newNode = this.getNextNode_(curNode, this.validLineNode_);
 
   // Skip the input or next value if there is a connected block.
   if (newNode && (newNode.getType() == Blockly.ASTNode.types.INPUT ||
       newNode.getType() == Blockly.ASTNode.types.NEXT) &&
       newNode.getLocation().targetBlock()) {
-    newNode = this.getNextNode_(newNode, this.validNode_);
+    newNode = this.getNextNode_(newNode, this.validLineNode_);
   }
   if (newNode) {
     this.setCurNode(newNode);
@@ -76,7 +76,7 @@ Blockly.LineCursor.prototype.in = function() {
   if (!curNode) {
     return null;
   }
-  var newNode = this.getNextNode_(curNode, this.validInNode_);
+  var newNode = this.getNextNode_(curNode, this.validInLineNode_);
 
   if (newNode) {
     this.setCurNode(newNode);
@@ -95,12 +95,12 @@ Blockly.LineCursor.prototype.prev = function() {
   if (!curNode) {
     return null;
   }
-  var newNode = this.getPreviousNode_(curNode, this.validNode_);
+  var newNode = this.getPreviousNode_(curNode, this.validLineNode_);
   
   if (newNode && (newNode.getType() == Blockly.ASTNode.types.INPUT ||
     newNode.getType() == Blockly.ASTNode.types.NEXT) &&
     newNode.getLocation().targetBlock()) {
-    newNode = this.getPreviousNode_(newNode, this.validNode_);
+    newNode = this.getPreviousNode_(newNode, this.validLineNode_);
   }
 
   if (newNode) {
@@ -121,7 +121,7 @@ Blockly.LineCursor.prototype.out = function() {
   if (!curNode) {
     return null;
   }
-  var newNode = this.getPreviousNode_(curNode, this.validInNode_);
+  var newNode = this.getPreviousNode_(curNode, this.validInLineNode_);
 
   if (newNode) {
     this.setCurNode(newNode);
@@ -131,13 +131,13 @@ Blockly.LineCursor.prototype.out = function() {
 };
 
 /**
- * Decides what nodes to traverse and which ones to skip. Currently, it
- * skips output, stack and workspace nodes.
+ * Meant to traverse by lines of code. This is blocks, statement inputs and
+ * next connections.
  * @param {Blockly.ASTNode} node The AST node to check whether it is valid.
  * @return {boolean} True if the node should be visited, false otherwise.
  * @private
  */
-Blockly.LineCursor.prototype.validNode_ = function(node) {
+Blockly.LineCursor.prototype.validLineNode_ = function(node) {
   if (!node) {
     return false;
   }
@@ -158,9 +158,12 @@ Blockly.LineCursor.prototype.validNode_ = function(node) {
 };
 
 /**
- * 
+ * Meant to traverse within a block. These are fields and input values.
+ * @param {Blockly.ASTNode} node The AST node to check whether it is valid.
+ * @return {boolean} True if the node should be visited, false otherwise.
+ * @private
  */
-Blockly.LineCursor.prototype.validInNode_ = function(node) {
+Blockly.LineCursor.prototype.validInLineNode_ = function(node) {
   if (!node) {
     return false;
   }

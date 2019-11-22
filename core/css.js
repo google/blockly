@@ -391,6 +391,7 @@ Blockly.Css.CONTENT = [
     'width: 100%;',
     'text-align: center;',
     'display: block;',
+    'box-sizing: border-box;',
   '}',
 
   /* Edge and IE introduce a close icon when the input value is longer than a

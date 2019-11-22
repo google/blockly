@@ -51,6 +51,8 @@ goog.require('Blockly.utils.global');
   // Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.44
   //     (KHTML, like Gecko) JavaFX/8.0 Safari/537.44
   Blockly.utils.userAgent.JAVA_FX = has('JavaFX');
+  Blockly.utils.userAgent.CHROME = (has('Chrome') || has('CriOS')) &&
+        !Blockly.utils.userAgent.EDGE;
 
   // Engines.  Logic from:
   // https://github.com/google/closure-library/blob/master/closure/goog/labs/useragent/engine.js

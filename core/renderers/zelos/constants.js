@@ -172,12 +172,40 @@ Blockly.zelos.ConstantProvider = function() {
   /**
    * @override
    */
+  this.FIELD_TEXT_FONTFAMILY =
+      '"Helvetica Neue", "Segoe UI", Helvetica, sans-serif';
+
+  /**
+   * @override
+   */
+  this.FIELD_TEXT_HEIGHT = 13.1;
+
+  /**
+   * Used by positioning text on IE and Edge as they don't support
+   * dominant-baseline:center.
+   * @override
+   */
+  this.FIELD_TEXT_BASELINE_Y = 13.1;
+
+  /**
+   * @override
+   */
   this.FIELD_BORDER_RECT_RADIUS = this.CORNER_RADIUS;
 
   /**
    * @override
    */
   this.FIELD_BORDER_RECT_X_PADDING = 2 * this.GRID_UNIT;
+  
+  /**
+   * @override
+   */
+  this.FIELD_BORDER_RECT_Y_PADDING = 1 * this.GRID_UNIT;
+
+  /**
+   * @override
+   */
+  this.FIELD_BORDER_RECT_HEIGHT = 8 * this.GRID_UNIT;
 
   /**
    * @override
@@ -213,6 +241,16 @@ Blockly.zelos.ConstantProvider = function() {
     'lhMS40MywxLjQzLDAsMCwxLTEtLjQyTDEuNDIsMy40NWExLjQ0LDEuNDQsMCwwLDEsMC0yYz' +
     'AuNTYtLjU2LDkuMzEtMC41Niw5Ljg3LDBhMS40NCwxLjQ0LDAsMCwxLDAsMkw3LjM3LDcuMz' +
     'dBMS40MywxLjQzLDAsMCwxLDYuMzYsNy43OVoiIGZpbGw9IiNmZmYiLz48L3N2Zz4=';
+
+  /**
+   * @override
+   */
+  this.FIELD_TEXTINPUT_BOX_SHADOW = true;
+
+  /**
+   * @override
+   */
+  this.FIELD_TEXT_Y_OFFSET = Blockly.utils.userAgent.CHROME ? -.45 : 0;
 
   /**
    * @override

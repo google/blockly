@@ -146,10 +146,6 @@ Blockly.FieldTextInput.prototype.configure_ = function(config) {
  * @override
  */
 Blockly.FieldTextInput.prototype.initView = function() {
-  this.size_.height = Math.max(this.constants_.FIELD_BORDER_RECT_HEIGHT,
-      this.constants_.FIELD_TEXT_BASELINE_CENTER ?
-      this.constants_.FIELD_TEXT_HEIGHT :
-      this.constants_.FIELD_TEXT_BASELINE_Y);
   if (this.constants_.FULL_BLOCK_FIELDS) {
     // Step one: figure out if this is the only field on this block.
     // Rendering is quite different in that case.
@@ -181,9 +177,6 @@ Blockly.FieldTextInput.prototype.initView = function() {
     this.createBorderRect_();
   }
   this.createTextElement_();
-  if (this.constants_.FIELD_TEXT_BASELINE_CENTER) {
-    this.textElement_.setAttribute('dominant-baseline', 'central');
-  }
 };
 
 /**
@@ -347,14 +340,26 @@ Blockly.FieldTextInput.prototype.widgetCreate_ = function() {
 
   if (this.fullBlockClickTarget_) {
     var bBox = this.getScaledBBox();
+    var borderWidth = this.workspace_.scale;
+    
     // Override border radius.
-    borderRadius = (bBox.bottom - bBox.top) / 2 + 'px';
+    var borderRadius = (bBox.bottom - bBox.top) / 2 + 'px';
     // Pull stroke colour from the existing shadow block
-    var strokeColour = this.sourceBlock_.style.colourTertiary;
-    div.style.borderColor = strokeColour;
+    var strokeColour = this.sourceBlock_.getParent() ?
+      this.sourceBlock_.getParent().style.colourTertiary :
+      this.sourceBlock_.style.colourTertiary;
+    htmlInput.style.borderWidth = borderWidth + 'px';
+    htmlInput.style.borderStyle = 'solid';
+    htmlInput.style.borderColor = strokeColour;
+    div.style.borderRadius = borderRadius;
+    div.style.transition = 'box-shadow 0.25s ease 0s';
+    if (this.constants_.FIELD_TEXTINPUT_BOX_SHADOW) {
+      div.style.boxShadow = 'rgba(255, 255, 255, 0.3) 0px 0px 0px ' +
+          4 * this.workspace_.scale + 'px';
+    }
   }
-
   htmlInput.style.borderRadius = borderRadius;
+
   div.appendChild(htmlInput);
 
   htmlInput.value = htmlInput.defaultValue = this.getEditorText_(this.value_);
@@ -390,6 +395,8 @@ Blockly.FieldTextInput.prototype.widgetDispose_ = function() {
   style.width = 'auto';
   style.height = 'auto';
   style.fontSize = '';
+  style.transition = '';
+  style.boxShadow = '';
   this.htmlInput_ = null;
 
   Blockly.utils.dom.removeClass(this.getClickTarget_(), 'editing');
@@ -618,8 +625,30 @@ Blockly.FieldTextInput.prototype.getValueFromEditorText_ = function(text) {
  * @override
  */
 Blockly.FieldTextInput.prototype.getScaledBBox = function() {
-  if (this.fullBlockClickTarget_) {
-    var xy = this.getClickTarget_().getBoundingClientRect();
+  if (!this.borderRect_) {
+    // Browsers are inconsistent in what they return for getBoundingClientRect.
+    // ie:
+    // - Webkit / Blink: fill-box / object bounding box
+    // - Gecko / Triden / EdgeHTML: stroke-box
+    var bBox = this.sourceBlock_.getHeightWidth();
+    var scale = this.sourceBlock_.workspace.scale;
+    var xy = this.getAbsoluteXY_();
+    xy.height = bBox.height * scale;
+    xy.width = bBox.width * scale;
+
+    if (Blockly.utils.userAgent.GECKO) {
+      xy.x += 1.5 * scale;
+      xy.y += 1.5 * scale;
+      xy.width += 1 * scale;
+      xy.height += 1 * scale;
+    } else {
+      if (!Blockly.utils.userAgent.EDGE && !Blockly.utils.userAgent.IE) {
+        xy.x -= 0.5 * scale;
+        xy.y -= 0.5 * scale;
+      }
+      xy.width += 1 * scale;
+      xy.height += 1 * scale;
+    }
   } else {
     var xy = this.borderRect_.getBoundingClientRect();
   }

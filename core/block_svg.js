@@ -359,6 +359,8 @@ Blockly.BlockSvg.prototype.setParent = function(newParent) {
     this.workspace.getCanvas().appendChild(svgRoot);
     this.translate(oldXY.x, oldXY.y);
   }
+
+  this.applyColour();
 };
 
 /**
@@ -974,7 +976,7 @@ Blockly.BlockSvg.prototype.applyColour = function() {
     return;
   }
 
-  this.pathObject.applyColour(this.isShadow());
+  this.pathObject.applyColour(this.isShadow(), this.getParent());
 
   var icons = this.getIcons();
   for (var i = 0; i < icons.length; i++) {
@@ -998,6 +1000,8 @@ Blockly.BlockSvg.prototype.updateDisabled = function() {
   for (var i = 0, child; (child = children[i]); i++) {
     child.updateDisabled();
   }
+
+  this.applyColour();
 };
 
 /**
@@ -1321,6 +1325,9 @@ Blockly.BlockSvg.prototype.setOutput = function(newBoolean, opt_check) {
     this.render();
     this.bumpNeighbours();
   }
+};
+
+Blockly.BlockSvg.prototype.setOutputShape = function() {
 };
 
 /**

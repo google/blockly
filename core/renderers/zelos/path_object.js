@@ -88,12 +88,48 @@ Blockly.zelos.PathObject.prototype.setPath = function(pathString) {
 /**
  * @override
  */
+Blockly.zelos.PathObject.prototype.applyColour = function(isShadow, parent) {
+  if (isShadow) {
+    if (parent) {
+      this.svgPath.setAttribute('stroke', parent.style.colourTertiary);
+      this.svgPath.setAttribute('fill', this.style.colourSecondary);
+    }
+  } else {
+    this.svgPath.setAttribute('stroke', this.style.colourTertiary);
+    this.svgPath.setAttribute('fill', this.style.colourPrimary);
+  }
+
+  // Apply colour to outlines.
+  for (var i = 0, keys = Object.keys(this.outlines_),
+    key; (key = keys[i]); i++) {
+    this.outlines_[key].setAttribute('fill', this.style.colourTertiary);
+  }
+};
+
+/**
+ * @override
+ */
 Blockly.zelos.PathObject.prototype.flipRTL = function() {
   Blockly.zelos.PathObject.superClass_.flipRTL.call(this);
   // Mirror each input outline path.
   for (var i = 0, keys = Object.keys(this.outlines_),
     key; (key = keys[i]); i++) {
     this.outlines_[key].setAttribute('transform', 'scale(-1 1)');
+  }
+};
+
+/**
+ * @override
+ */
+Blockly.zelos.PathObject.prototype.updateDisabled = function(
+    disabled) {
+  Blockly.zelos.PathObject.superClass_.updateDisabled.call(this, disabled);
+  for (var i = 0, keys = Object.keys(this.outlines_),
+    key; (key = keys[i]); i++) {
+    if (disabled) {
+      this.outlines_[key].setAttribute('fill',
+          'url(#' + this.constants_.disabledPatternId + ')');
+    }
   }
 };
 

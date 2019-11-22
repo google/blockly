@@ -198,18 +198,14 @@ Blockly.blockRendering.PathObject.prototype.updateHighlighted = function(
 /**
  * Set whether the block shows a disable pattern or not.
  * @param {boolean} disabled True if disabled.
- * @param {boolean} isShadow True if the block is a shadow block.
  * @package
  */
-Blockly.blockRendering.PathObject.prototype.updateDisabled = function(disabled,
-    isShadow) {
-
+Blockly.blockRendering.PathObject.prototype.updateDisabled = function(
+    disabled) {
   this.setClass_('blocklyDisabled', disabled);
   if (disabled) {
     this.svgPath.setAttribute('fill',
         'url(#' + this.constants_.disabledPatternId + ')');
-  } else {
-    this.applyColour(isShadow);
   }
 };
 

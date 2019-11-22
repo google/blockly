@@ -331,7 +331,8 @@ Blockly.Field.prototype.createBorderRect_ = function() {
             'x': 0,
             'y': 0,
             'height': this.size_.height,
-            'width': this.size_.width
+            'width': this.size_.width,
+            'class': 'blocklyFieldBorderRect'
           }, this.fieldGroup_));
 };
 

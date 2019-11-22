@@ -83,7 +83,7 @@ Blockly.FieldVariable = function(varName, opt_validator, opt_variableTypes,
    * @protected
    * @override
    */
-  this.size_ = new Blockly.utils.Size(0, Blockly.BlockSvg.MIN_BLOCK_Y);
+  this.size_ = new Blockly.utils.Size(0, 0);
 
   opt_config && this.configure_(opt_config);
   opt_validator && this.setValidator(opt_validator);
@@ -152,6 +152,15 @@ Blockly.FieldVariable.prototype.initModel = function() {
   Blockly.Events.disable();
   this.setValue(variable.getId());
   Blockly.Events.enable();
+};
+
+/**
+ * @override
+ */
+Blockly.FieldVariable.prototype.shouldAddBorderRect_ = function() {
+  return Blockly.FieldVariable.superClass_.shouldAddBorderRect_.call(this) &&
+    (!this.constants_.FULL_BLOCK_FIELDS ||
+    this.sourceBlock_.type != 'variables_get');
 };
 
 /**

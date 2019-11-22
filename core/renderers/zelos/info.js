@@ -216,6 +216,45 @@ Blockly.zelos.RenderInfo.prototype.finalize_ = function() {
   }
   this.height = yCursor;
 
+  var recomputeBounds = false;
+  var firstInputRow = null;
+  for (var i = 0, row; (row = this.rows[i]); i++) {
+    // Bump up all non-text fields in the first row to a min x position.
+    if (this.topRow.hasPreviousConnection && !firstInputRow &&
+        Blockly.blockRendering.Types.isInputRow(row)) {
+      firstInputRow = row;
+      var minXPos = this.constants_.NOTCH_OFFSET_LEFT +
+          this.constants_.NOTCH_WIDTH;
+      var xCursor = row.xPos;
+      var prevSpacer = null;
+      for (var j = 0, elem; (elem = row.elements[j]); j++) {
+        if (Blockly.blockRendering.Types.isSpacer(elem)) {
+          prevSpacer = elem;
+        }
+        if (Blockly.blockRendering.Types.isField(elem) ||
+            Blockly.blockRendering.Types.isInput(elem)) {
+          if (xCursor < minXPos &&
+              !(Blockly.blockRendering.Types.isField(elem) &&
+              elem.field instanceof Blockly.FieldLabel)) {
+            var difference = minXPos - xCursor;
+            if (prevSpacer) {
+              prevSpacer.width += difference;
+              row.width += difference;
+              row.widthWithConnectedBlocks += difference;
+              recomputeBounds = true;
+            }
+          }
+        }
+        xCursor += elem.width;
+      }
+    }
+  }
+
+  if (recomputeBounds) {
+    this.computeBounds_();
+    this.alignRowElements_();
+  }
+
   if (this.outputConnection && this.outputConnection.isDynamicShape) {
     // Dynamic output connections depend on the height of the block. Adjust the
     // height of the connection.

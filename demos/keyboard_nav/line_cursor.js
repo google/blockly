@@ -16,8 +16,11 @@
  */
 
 /**
- * @fileoverview The class representing a basic cursor.
- * Used to demo switching between different cursors.
+ * @fileoverview The class representing a line cursor.
+ * A line cursor traverses the blocks as if they were
+ * lines of code in a text editor. 
+ * Previous and next go up and down lines. In and out go
+ * through the elements in a line.
  * @author aschmiedt@google.com (Abby Schmiedt)
  */
 'use strict';

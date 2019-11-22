@@ -157,6 +157,9 @@ Blockly.zelos.Renderer.prototype.getCSS_ = function() {
     selector + ' .blocklyDropdownText {',
       'fill: #fff !important;',
     '}',
+    selector + ' .blocklyDisabled .blocklyFieldBorderRect {',
+      'fill-opacity: 0.1 !important;',
+    '}',
 
     // Connection highlight.
     selector + ' .blocklyHighlightedConnectionPath {',

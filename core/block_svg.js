@@ -646,13 +646,14 @@ Blockly.BlockSvg.prototype.setCollapsed = function(collapsed) {
 Blockly.BlockSvg.prototype.tab = function(start, forward) {
   var tabCursor = new Blockly.TabNavigateCursor();
   tabCursor.setCurNode(Blockly.ASTNode.createFieldNode(start));
+  var currentNode = tabCursor.getCurNode();
   var action = forward ?
       Blockly.navigation.ACTION_NEXT : Blockly.navigation.ACTION_PREVIOUS;
 
   tabCursor.onBlocklyAction(action);
 
   var nextNode = tabCursor.getCurNode();
-  if (nextNode) {
+  if (nextNode && nextNode !== currentNode) {
     var nextField = /** @type {!Blockly.Field} */ (nextNode.getLocation());
     nextField.showEditor();
   }

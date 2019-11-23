@@ -1327,9 +1327,6 @@ Blockly.BlockSvg.prototype.setOutput = function(newBoolean, opt_check) {
   }
 };
 
-Blockly.BlockSvg.prototype.setOutputShape = function() {
-};
-
 /**
  * Set whether value inputs are arranged horizontally or vertically.
  * @param {boolean} newBoolean True if inputs are horizontal.

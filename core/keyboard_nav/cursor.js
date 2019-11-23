@@ -121,13 +121,17 @@ Blockly.Cursor.prototype.onBlocklyAction = function(action) {
   }
   switch (action.name) {
     case Blockly.navigation.actionNames.PREVIOUS:
-      return !!this.prev();
+      this.prev();
+      return true;
     case Blockly.navigation.actionNames.OUT:
-      return !!this.out();
+      this.out();
+      return true;
     case Blockly.navigation.actionNames.NEXT:
-      return !!this.next();
+      this.next();
+      return true;
     case Blockly.navigation.actionNames.IN:
-      return !!this.in();
+      this.in();
+      return true;
     default:
       return false;
   }

@@ -649,12 +649,12 @@ Blockly.BlockSvg.prototype.tab = function(start, forward) {
   var action = forward ?
       Blockly.navigation.ACTION_NEXT : Blockly.navigation.ACTION_PREVIOUS;
 
-  tabCursor.onBlocklyAction(action);
-
-  var nextNode = tabCursor.getCurNode();
-  if (nextNode) {
-    var nextField = /** @type {!Blockly.Field} */ (nextNode.getLocation());
-    nextField.showEditor();
+  if (tabCursor.onBlocklyAction(action)) {
+    var nextNode = tabCursor.getCurNode();
+    if (nextNode) {
+      var nextField = /** @type {!Blockly.Field} */ (nextNode.getLocation());
+      nextField.showEditor();
+    }
   }
 };
 

@@ -98,6 +98,19 @@ Blockly.zelos.RenderInfo.prototype.getRenderer = function() {
 /**
  * @override
  */
+Blockly.blockRendering.RenderInfo.prototype.measure = function() {
+  this.createRows_();
+  this.addElemSpacing_();
+  this.addRowSpacing_();
+  this.adjustXPosition_();
+  this.computeBounds_();
+  this.alignRowElements_();
+  this.finalize_();
+};
+
+/**
+ * @override
+ */
 Blockly.zelos.RenderInfo.prototype.computeBounds_ = function() {
   Blockly.zelos.RenderInfo.superClass_.computeBounds_.call(this);
 
@@ -203,25 +216,17 @@ Blockly.zelos.RenderInfo.prototype.addAlignmentPadding_ = function(row,
 };
 
 /**
- * @override
+ * Adjust the x position of fields to bump all non-label fields in the first row
+ * past the notch position.
+ * @protected
  */
-Blockly.zelos.RenderInfo.prototype.finalize_ = function() {
-  // Performance note: this could be combined with the draw pass, if the time
-  // that this takes is excessive.  But it shouldn't be, because it only
-  // accesses and sets properties that already exist on the objects.
-  var yCursor = 0;
-  for (var i = 0, row; (row = this.rows[i]); i++) {
-    row.yPos = yCursor;
-    yCursor += row.height;
+Blockly.zelos.RenderInfo.prototype.adjustXPosition_ = function() {
+  if (!this.topRow.hasPreviousConnection) {
+    return;
   }
-  this.height = yCursor;
-
-  var recomputeBounds = false;
   var firstInputRow = null;
   for (var i = 0, row; (row = this.rows[i]); i++) {
-    // Bump up all non-text fields in the first row to a min x position.
-    if (this.topRow.hasPreviousConnection && !firstInputRow &&
-        Blockly.blockRendering.Types.isInputRow(row)) {
+    if (!firstInputRow && Blockly.blockRendering.Types.isInputRow(row)) {
       firstInputRow = row;
       var minXPos = this.constants_.NOTCH_OFFSET_LEFT +
           this.constants_.NOTCH_WIDTH;
@@ -239,9 +244,6 @@ Blockly.zelos.RenderInfo.prototype.finalize_ = function() {
             var difference = minXPos - xCursor;
             if (prevSpacer) {
               prevSpacer.width += difference;
-              row.width += difference;
-              row.widthWithConnectedBlocks += difference;
-              recomputeBounds = true;
             }
           }
         }
@@ -249,11 +251,21 @@ Blockly.zelos.RenderInfo.prototype.finalize_ = function() {
       }
     }
   }
+};
 
-  if (recomputeBounds) {
-    this.computeBounds_();
-    this.alignRowElements_();
+/**
+ * @override
+ */
+Blockly.zelos.RenderInfo.prototype.finalize_ = function() {
+  // Performance note: this could be combined with the draw pass, if the time
+  // that this takes is excessive.  But it shouldn't be, because it only
+  // accesses and sets properties that already exist on the objects.
+  var yCursor = 0;
+  for (var i = 0, row; (row = this.rows[i]); i++) {
+    row.yPos = yCursor;
+    yCursor += row.height;
   }
+  this.height = yCursor;
 
   if (this.outputConnection && this.outputConnection.isDynamicShape) {
     // Dynamic output connections depend on the height of the block. Adjust the

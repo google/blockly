@@ -130,6 +130,9 @@ Blockly.Themes.Dark.setComponentStyle('scrollbarOpacity', 0.4);
 
 /**
  * CSS for the dark theme.
+ * This registers CSS that is specific to this theme. It does so by prepending a
+ * ``.dark-theme`` selector before every CSS rule that we wish to override by
+ * this theme.
  */
 (function() {
   var selector = '.dark-theme';

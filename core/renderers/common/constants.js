@@ -168,7 +168,7 @@ Blockly.blockRendering.ConstantProvider = function() {
    * Height of text.
    * @type {number}
    */
-  this.FIELD_TEXT_HEIGHT = 13;
+  this.FIELD_TEXT_HEIGHT = 16;
 
   /**
    * Text font weight.  Should match blocklyText's font-weight in CSS.
@@ -207,11 +207,17 @@ Blockly.blockRendering.ConstantProvider = function() {
   this.FIELD_BORDER_RECT_Y_PADDING = 3;
 
   /**
-   * Field text baseline. This is only used if `FIELD_TEXT_BASELINE_CENTER` is
-   * set to false.
+   * Field text baseline.
+   * This is only used if `FIELD_TEXT_BASELINE_CENTER` is false.
    * @type {number}
    */
   this.FIELD_TEXT_BASELINE_Y = Blockly.utils.userAgent.GECKO ? 12 : 13.09;
+
+  /**
+   * An text offset adjusting the Y position of text after positioning.
+   * @type {number}
+   */
+  this.FIELD_TEXT_Y_OFFSET = 0;
 
   /**
    * A field's text element's dominant baseline.
@@ -231,6 +237,13 @@ Blockly.blockRendering.ConstantProvider = function() {
    * @type {boolean}
    */
   this.FIELD_DROPDOWN_SVG_ARROW = false;
+
+  /**
+   * Whether or not to show a box shadow around the widget div. This is only a
+   * feature of full block fields.
+   * @type {boolean}
+   */
+  this.FIELD_TEXTINPUT_BOX_SHADOW = false;
 
   /**
    * Whether or not the colour field should display its colour value on the

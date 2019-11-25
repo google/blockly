@@ -88,17 +88,13 @@ Blockly.zelos.PathObject.prototype.setPath = function(pathString) {
 /**
  * @override
  */
-Blockly.zelos.PathObject.prototype.applyColour = function(isShadow, parent) {
-  if (isShadow) {
-    if (parent) {
-      this.svgPath.setAttribute('stroke', parent.style.colourTertiary);
-      this.svgPath.setAttribute('fill', this.style.colourSecondary);
-    }
-  } else {
-    this.svgPath.setAttribute('stroke', this.style.colourTertiary);
-    this.svgPath.setAttribute('fill', this.style.colourPrimary);
+Blockly.zelos.PathObject.prototype.applyColour = function(block) {
+  Blockly.zelos.PathObject.superClass_.applyColour.call(this, block);
+  // Set shadow stroke colour.
+  if (block.isShadow() && block.getParent()) {
+    this.svgPath.setAttribute('stroke', block.getParent().style.colourTertiary);
   }
-
+  
   // Apply colour to outlines.
   for (var i = 0, keys = Object.keys(this.outlines_),
     key; (key = keys[i]); i++) {
@@ -121,9 +117,9 @@ Blockly.zelos.PathObject.prototype.flipRTL = function() {
 /**
  * @override
  */
-Blockly.zelos.PathObject.prototype.updateDisabled = function(
+Blockly.zelos.PathObject.prototype.updateDisabled_ = function(
     disabled) {
-  Blockly.zelos.PathObject.superClass_.updateDisabled.call(this, disabled);
+  Blockly.zelos.PathObject.superClass_.updateDisabled_.call(this, disabled);
   for (var i = 0, keys = Object.keys(this.outlines_),
     key; (key = keys[i]); i++) {
     if (disabled) {

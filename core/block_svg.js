@@ -972,12 +972,10 @@ Blockly.BlockSvg.prototype.dispose = function(healStack, animate) {
  * @package
  */
 Blockly.BlockSvg.prototype.applyColour = function() {
-  if (!this.isEnabled() || !this.rendered) {
-    // Disabled blocks and non-rendered blocks don't have colour.
+  if (!this.rendered) {
     return;
   }
-
-  this.pathObject.applyColour(this.isShadow(), this.getParent());
+  this.pathObject.applyColour(this);
 
   var icons = this.getIcons();
   for (var i = 0; i < icons.length; i++) {
@@ -995,14 +993,11 @@ Blockly.BlockSvg.prototype.applyColour = function() {
  * Enable or disable a block.
  */
 Blockly.BlockSvg.prototype.updateDisabled = function() {
-  var isDisabled = !this.isEnabled() || this.getInheritedDisabled();
-  this.pathObject.updateDisabled(isDisabled, this.isShadow());
   var children = this.getChildren(false);
+  this.applyColour();
   for (var i = 0, child; (child = children[i]); i++) {
     child.updateDisabled();
   }
-
-  this.applyColour();
 };
 
 /**

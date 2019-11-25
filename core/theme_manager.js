@@ -122,6 +122,8 @@ Blockly.ThemeManager.prototype.setTheme = function(theme) {
       element.style[propertyName] = style || '';
     }
   }
+
+  Blockly.hideChaff();
 };
 
 /**

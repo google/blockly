@@ -359,6 +359,8 @@ Blockly.BlockSvg.prototype.setParent = function(newParent) {
     this.workspace.getCanvas().appendChild(svgRoot);
     this.translate(oldXY.x, oldXY.y);
   }
+
+  this.applyColour();
 };
 
 /**
@@ -646,13 +648,14 @@ Blockly.BlockSvg.prototype.setCollapsed = function(collapsed) {
 Blockly.BlockSvg.prototype.tab = function(start, forward) {
   var tabCursor = new Blockly.TabNavigateCursor();
   tabCursor.setCurNode(Blockly.ASTNode.createFieldNode(start));
+  var currentNode = tabCursor.getCurNode();
   var action = forward ?
       Blockly.navigation.ACTION_NEXT : Blockly.navigation.ACTION_PREVIOUS;
 
   tabCursor.onBlocklyAction(action);
 
   var nextNode = tabCursor.getCurNode();
-  if (nextNode) {
+  if (nextNode && nextNode !== currentNode) {
     var nextField = /** @type {!Blockly.Field} */ (nextNode.getLocation());
     nextField.showEditor();
   }
@@ -969,12 +972,11 @@ Blockly.BlockSvg.prototype.dispose = function(healStack, animate) {
  * @package
  */
 Blockly.BlockSvg.prototype.applyColour = function() {
-  if (!this.isEnabled() || !this.rendered) {
-    // Disabled blocks and non-rendered blocks don't have colour.
+  if (!this.rendered) {
+    // Non-rendered blocks don't have colour.
     return;
   }
-
-  this.pathObject.applyColour(this.isShadow());
+  this.pathObject.applyColour(this);
 
   var icons = this.getIcons();
   for (var i = 0; i < icons.length; i++) {
@@ -992,9 +994,8 @@ Blockly.BlockSvg.prototype.applyColour = function() {
  * Enable or disable a block.
  */
 Blockly.BlockSvg.prototype.updateDisabled = function() {
-  var isDisabled = !this.isEnabled() || this.getInheritedDisabled();
-  this.pathObject.updateDisabled(isDisabled, this.isShadow());
   var children = this.getChildren(false);
+  this.applyColour();
   for (var i = 0, child; (child = children[i]); i++) {
     child.updateDisabled();
   }

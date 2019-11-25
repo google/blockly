@@ -176,6 +176,8 @@ Blockly.Css.CONTENT = [
     'z-index: 1000;',
     'display: none;',
     'border: 1px solid;',
+    'border-color: #dadce0;',
+    'background-color: #fff;',
     'border-radius: 2px;',
     'padding: 4px;',
     'box-shadow: 0px 0px 3px 1px rgba(0,0,0,.3);',

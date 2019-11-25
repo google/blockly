@@ -136,6 +136,7 @@ suite('Theme', function() {
     blockA.styleName_ = 'styleOne';
 
     var stub = sinon.stub(Blockly, "getMainWorkspace").returns(workspace);
+    var hideStub = sinon.stub(Blockly, "hideChaff");
 
     workspace.setTheme(blockStyles);
 
@@ -153,6 +154,7 @@ suite('Theme', function() {
     undefineThemeTestBlocks();
 
     stub.restore();
+    hideStub.restore();
   });
 
   suite('Validate block styles', function() {

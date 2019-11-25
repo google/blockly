@@ -115,7 +115,7 @@ Blockly.zelos.ConstantProvider = function() {
    * Minimum statement input spacer width.
    * @type {number}
    */
-  this.STATEMENT_INPUT_SPACER_MIN_WIDTH = 30 * this.GRID_UNIT;
+  this.STATEMENT_INPUT_SPACER_MIN_WIDTH = 34.5 * this.GRID_UNIT;
 
   /**
    * @override
@@ -213,6 +213,21 @@ Blockly.zelos.ConstantProvider = function() {
     'lhMS40MywxLjQzLDAsMCwxLTEtLjQyTDEuNDIsMy40NWExLjQ0LDEuNDQsMCwwLDEsMC0yYz' +
     'AuNTYtLjU2LDkuMzEtMC41Niw5Ljg3LDBhMS40NCwxLjQ0LDAsMCwxLDAsMkw3LjM3LDcuMz' +
     'dBMS40MywxLjQzLDAsMCwxLDYuMzYsNy43OVoiIGZpbGw9IiNmZmYiLz48L3N2Zz4=';
+
+  /**
+   * @override
+   */
+  this.FIELD_COLOUR_FULL_BLOCK = true;
+
+  /**
+   * @override
+   */
+  this.FIELD_COLOUR_DEFAULT_WIDTH = 2 * this.GRID_UNIT;
+
+  /**
+   * @override
+   */
+  this.FIELD_COLOUR_DEFAULT_HEIGHT = 4 * this.GRID_UNIT;
 
   /**
    * The ID of the highlight glow filter, or the empty string if no filter is

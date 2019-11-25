@@ -120,6 +120,12 @@ Blockly.zelos.RenderInfo.prototype.getInRowSpacing_ = function(prev, next) {
       return this.constants_.NO_PADDING;
     }
   }
+  if (!prev) {
+    // Statement input padding.
+    if (next && Blockly.blockRendering.Types.isStatementInput(next)) {
+      return this.constants_.STATEMENT_INPUT_PADDING_LEFT;
+    }
+  }
   // Spacing between a rounded corner and a previous or next connection.
   if (prev && Blockly.blockRendering.Types.isLeftRoundedCorner(prev) && next) {
     if (Blockly.blockRendering.Types.isPreviousConnection(next) ||
@@ -141,13 +147,13 @@ Blockly.zelos.RenderInfo.prototype.makeSpacerRow_ = function(prev, next) {
         new Blockly.zelos.BeforeStatementSpacerRow(
             this.constants_,
             Math.max(height, this.constants_.INSIDE_CORNERS.rightHeight || 0),
-            width);
+            Math.max(width, this.constants_.STATEMENT_INPUT_SPACER_MIN_WIDTH));
   } else if (Blockly.blockRendering.Types.isInputRow(prev) && prev.hasStatement) {
     var spacer =
         new Blockly.zelos.AfterStatementSpacerRow(
             this.constants_,
             Math.max(height, this.constants_.INSIDE_CORNERS.rightHeight || 0),
-            width);
+            Math.max(width, this.constants_.STATEMENT_INPUT_SPACER_MIN_WIDTH));
   } else {
     var spacer = new Blockly.blockRendering.SpacerRow(
         this.constants_, height, width);

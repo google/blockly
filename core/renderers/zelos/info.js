@@ -98,7 +98,8 @@ Blockly.zelos.RenderInfo.prototype.getRenderer = function() {
 /**
  * @override
  */
-Blockly.blockRendering.RenderInfo.prototype.measure = function() {
+Blockly.zelos.RenderInfo.prototype.measure = function() {
+  // Modifing parent measure method to add `adjustXPosition_`.
   this.createRows_();
   this.addElemSpacing_();
   this.addRowSpacing_();
@@ -217,38 +218,36 @@ Blockly.zelos.RenderInfo.prototype.addAlignmentPadding_ = function(row,
 
 /**
  * Adjust the x position of fields to bump all non-label fields in the first row
- * past the notch position.
+ * past the notch position.  This must be called before ``computeBounds`` is
+ * called.
  * @protected
  */
 Blockly.zelos.RenderInfo.prototype.adjustXPosition_ = function() {
   if (!this.topRow.hasPreviousConnection) {
     return;
   }
-  var firstInputRow = null;
+  var minXPos = this.constants_.NOTCH_OFFSET_LEFT +
+      this.constants_.NOTCH_WIDTH;
   for (var i = 0, row; (row = this.rows[i]); i++) {
-    if (!firstInputRow && Blockly.blockRendering.Types.isInputRow(row)) {
-      firstInputRow = row;
-      var minXPos = this.constants_.NOTCH_OFFSET_LEFT +
-          this.constants_.NOTCH_WIDTH;
+    if (Blockly.blockRendering.Types.isInputRow(row)) {
       var xCursor = row.xPos;
       var prevSpacer = null;
       for (var j = 0, elem; (elem = row.elements[j]); j++) {
         if (Blockly.blockRendering.Types.isSpacer(elem)) {
           prevSpacer = elem;
         }
-        if (Blockly.blockRendering.Types.isField(elem) ||
-            Blockly.blockRendering.Types.isInput(elem)) {
+        if (prevSpacer && (Blockly.blockRendering.Types.isField(elem) ||
+            Blockly.blockRendering.Types.isInput(elem))) {
           if (xCursor < minXPos &&
               !(Blockly.blockRendering.Types.isField(elem) &&
               elem.field instanceof Blockly.FieldLabel)) {
             var difference = minXPos - xCursor;
-            if (prevSpacer) {
-              prevSpacer.width += difference;
-            }
+            prevSpacer.width += difference;
           }
         }
         xCursor += elem.width;
       }
+      return;
     }
   }
 };

@@ -34,30 +34,86 @@ goog.require('Blockly.utils.userAgent');
  * @package
  */
 Blockly.blockRendering.ConstantProvider = function() {
+
+  /**
+   * The size of an empty spacer.
+   * @type {number}
+   */
   this.NO_PADDING = 0;
+
+  /**
+   * The size of small padding.
+   * @type {number}
+   */
   this.SMALL_PADDING = 3;
+
+  /**
+   * The size of medium padding.
+   * @type {number}
+   */
   this.MEDIUM_PADDING = 5;
+
+  /**
+   * The size of medium-large padding.
+   * @type {number}
+   */
   this.MEDIUM_LARGE_PADDING = 8;
+
+  /**
+   * The size of large padding.
+   * @type {number}
+   */
   this.LARGE_PADDING = 10;
 
-  // Offset from the top of the row for placing fields on inline input rows
-  // and statement input rows.
-  // Matches existing rendering (in 2019).
+  /**
+   * Offset from the top of the row for placing fields on inline input rows
+   * and statement input rows.
+   * Matches existing rendering (in 2019).
+   * @type {number}
+   */
   this.TALL_INPUT_FIELD_OFFSET_Y = this.MEDIUM_PADDING;
 
+  /**
+   * The height of the puzzle tab used for input and output connections.
+   * @type {number}
+   */
   this.TAB_HEIGHT = 15;
 
+  /**
+   * The offset from the top of the block at which a puzzle tab is positioned.
+   * @type {number}
+   */
   this.TAB_OFFSET_FROM_TOP = 5;
 
+  /**
+   * Vertical overlap of the puzzle tab, used to make it look more like a puzzle
+   * piece.
+   * @type {number}
+   */
   this.TAB_VERTICAL_OVERLAP = 2.5;
 
+  /**
+   * The width of the puzzle tab used for input and output connections.
+   * @type {number}
+   */
   this.TAB_WIDTH = 8;
 
+  /**
+   * The width of the notch used for previous and next connections.
+   * @type {number}
+   */
   this.NOTCH_WIDTH = 15;
+
+  /**
+   * The height of the notch used for previous and next connections.
+   * @type {number}
+   */
   this.NOTCH_HEIGHT = 4;
 
-  // This is the minimum width of a block measuring from the end of a rounded
-  // corner
+  /**
+   * The minimum width of the block.
+   * @type {number}
+   */
   this.MIN_BLOCK_WIDTH = 12;
 
   this.EMPTY_BLOCK_SPACER_HEIGHT = 16;
@@ -74,12 +130,20 @@ Blockly.blockRendering.ConstantProvider = function() {
    */
   this.CORNER_RADIUS = 8;
 
-  // Offset from the left side of a block or the inside of a statement input to
-  // the left side of the notch.
+  /**
+   * Offset from the left side of a block or the inside of a statement input to
+   * the left side of the notch.
+   * @type {number}
+   */
   this.NOTCH_OFFSET_LEFT = 15;
 
   this.STATEMENT_BOTTOM_SPACER = 0;
   this.STATEMENT_INPUT_PADDING_LEFT = 20;
+
+  /**
+   * Vertical padding between consecutive statement inputs.
+   * @type {number}
+   */
   this.BETWEEN_STATEMENT_PADDING_Y = 4;
 
   /**
@@ -106,20 +170,21 @@ Blockly.blockRendering.ConstantProvider = function() {
    */
   this.BOTTOM_ROW_AFTER_STATEMENT_MIN_HEIGHT = this.LARGE_PADDING;
 
-  // This is the max width of a bottom row that follows a statement input and
-  // has inputs inline.
+  /**
+   * The maximum width of a bottom row that follows a statement input and has
+   * inputs inline.
+   * @type {number}
+   */
   this.MAX_BOTTOM_WIDTH = 66.5;
 
   /**
    * Height of the top hat.
-   * @const
    * @private
    */
   this.START_HAT_HEIGHT = 15;
 
   /**
    * Width of the top hat.
-   * @const
    * @private
    */
   this.START_HAT_WIDTH = 100;
@@ -130,6 +195,10 @@ Blockly.blockRendering.ConstantProvider = function() {
 
   this.EMPTY_INLINE_INPUT_PADDING = 14.5;
 
+  /**
+   * The height of an empty inline input.
+   * @type {[type]}
+   */
   this.EMPTY_INLINE_INPUT_HEIGHT = this.TAB_HEIGHT + 11;
 
   this.EXTERNAL_VALUE_INPUT_PADDING = 2;
@@ -139,7 +208,6 @@ Blockly.blockRendering.ConstantProvider = function() {
    * varies slightly depending on whether the block has external or inline inputs.
    * In the new rendering this is consistent.  It seems unlikely that the old
    * behaviour was intentional.
-   * @const
    * @type {number}
    */
   this.EMPTY_STATEMENT_INPUT_HEIGHT = this.MIN_BLOCK_HEIGHT;
@@ -159,7 +227,7 @@ Blockly.blockRendering.ConstantProvider = function() {
   this.JAGGED_TEETH_WIDTH = 6;
 
   /**
-   * Point size of text.  Should match blocklyText's font-size in CSS.
+   * Point size of text.
    * @type {number}
    */
   this.FIELD_TEXT_FONTSIZE = 11;
@@ -171,13 +239,13 @@ Blockly.blockRendering.ConstantProvider = function() {
   this.FIELD_TEXT_HEIGHT = 13;
 
   /**
-   * Text font weight.  Should match blocklyText's font-weight in CSS.
+   * Text font weight.
    * @type {string}
    */
   this.FIELD_TEXT_FONTWEIGHT = 'normal';
 
   /**
-   * Text font family.  Should match blocklyText's font-family in CSS.
+   * Text font family.
    * @type {string}
    */
   this.FIELD_TEXT_FONTFAMILY = 'sans-serif';
@@ -340,7 +408,7 @@ Blockly.blockRendering.ConstantProvider = function() {
    */
   this.CURSOR_STROKE_WIDTH = 4;
 
-  
+
   /*
    * Whether text input and colour fields fill up the entire source block.
    * @type {boolean}

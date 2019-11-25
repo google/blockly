@@ -48,7 +48,7 @@ Blockly.blockRendering.IPathObject.prototype.setPath;
 /**
  * Apply the stored colours to the block's path, taking into account whether
  * the paths belong to a shadow block.
- * @param {boolean} isShadow True if the block is a shadow block.
+ * @param {!Blockly.Block} block The source block.
  * @package
  */
 Blockly.blockRendering.IPathObject.prototype.applyColour;
@@ -89,14 +89,6 @@ Blockly.blockRendering.IPathObject.prototype.setMarkerSvg;
  * @package
  */
 Blockly.blockRendering.IPathObject.prototype.updateHighlighted;
-
-/**
- * Set whether the block shows a disable pattern or not.
- * @param {boolean} disabled True if disabled.
- * @param {boolean} isShadow True if the block is a shadow block.
- * @package
- */
-Blockly.blockRendering.IPathObject.prototype.updateDisabled;
 
 /**
  * Add or remove styling showing that a block is selected.

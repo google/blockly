@@ -973,6 +973,7 @@ Blockly.BlockSvg.prototype.dispose = function(healStack, animate) {
  */
 Blockly.BlockSvg.prototype.applyColour = function() {
   if (!this.rendered) {
+    // Non-rendered blocks don't have colour.
     return;
   }
   this.pathObject.applyColour(this);

@@ -124,20 +124,15 @@ Blockly.geras.PathObject.prototype.flipRTL = function() {
 /**
  * @override
  */
-Blockly.geras.PathObject.prototype.applyColour = function(isShadow) {
-  if (isShadow) {
-    this.svgPathLight.style.display = 'none';
-    this.svgPathDark.setAttribute('fill', this.style.colourSecondary);
-    this.svgPath.setAttribute('stroke', 'none');
-    this.svgPath.setAttribute('fill', this.style.colourSecondary);
-  } else {
-    this.svgPathLight.style.display = '';
-    this.svgPathDark.style.display = '';
-    this.svgPath.setAttribute('stroke', 'none');
-    this.svgPathLight.setAttribute('stroke', this.style.colourTertiary);
-    this.svgPathDark.setAttribute('fill', this.colourDark);
-    this.svgPath.setAttribute('fill', this.style.colourPrimary);
-  }
+Blockly.geras.PathObject.prototype.applyColour = function(block) {
+  this.svgPathLight.style.display = '';
+  this.svgPathDark.style.display = '';
+  this.svgPathLight.setAttribute('stroke', this.style.colourTertiary);
+  this.svgPathDark.setAttribute('fill', this.colourDark);
+
+  Blockly.geras.PathObject.superClass_.applyColour.call(this, block);
+  
+  this.svgPath.setAttribute('stroke', 'none');
 };
 
 /**
@@ -167,12 +162,21 @@ Blockly.geras.PathObject.prototype.updateHighlighted = function(highlighted) {
 /**
  * @override
  */
-Blockly.geras.PathObject.prototype.updateDisabled = function(
-    disabled, isShadow) {
+Blockly.geras.PathObject.prototype.updateShadow_ = function(shadow) {
+  if (shadow) {
+    this.svgPathLight.style.display = 'none';
+    this.svgPathDark.setAttribute('fill', this.style.colourSecondary);
+    this.svgPath.setAttribute('stroke', 'none');
+    this.svgPath.setAttribute('fill', this.style.colourSecondary);
+  }
+};
+
+/**
+ * @override
+ */
+Blockly.geras.PathObject.prototype.updateDisabled_ = function(disabled) {
+  Blockly.geras.PathObject.superClass_.updateDisabled_.call(this, disabled);
   if (disabled) {
-    this.svgPath.setAttribute('fill',
-        'url(#' + this.constants_.disabledPatternId + ')');
-  } else {
-    this.applyColour(isShadow);
+    this.svgPath.setAttribute('stroke', 'none');
   }
 };

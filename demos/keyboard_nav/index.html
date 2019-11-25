@@ -7,7 +7,7 @@
   <script src="../../blocks_compressed.js"></script>
   <script src="../../javascript_compressed.js"></script>
   <script src="../../msg/js/en.js"></script>
-  <script src="basic_cursor.js"></script>
+  <script src="line_cursor.js"></script>
   <style>
     body {
       background-color: #fff;
@@ -88,6 +88,7 @@
     <select id="cursorChanger" name="cursor" onchange="changeCursor(this.value)">
       <option value="default">Default Cursor</option>
       <option value="basic">Basic Cursor</option>
+      <option value="line">Line Cursor</option>
     </select>
 
     <button onclick="preOrderDemo()">Start Pre-order Demo</button>
@@ -290,8 +291,13 @@
       var oldCurNode = Blockly.getMainWorkspace().getCursor().getCurNode();
 
       if (cursorType === "basic") {
+        Blockly.ASTNode.NAVIGATE_ALL_FIELDS = false;
         Blockly.getMainWorkspace().setCursor(new Blockly.BasicCursor());
+      } else if (cursorType === "line") {
+        Blockly.ASTNode.NAVIGATE_ALL_FIELDS = true;
+        Blockly.getMainWorkspace().setCursor(new Blockly.LineCursor());
       } else {
+        Blockly.ASTNode.NAVIGATE_ALL_FIELDS = false;
         Blockly.getMainWorkspace().setCursor(new Blockly.Cursor());
       }
       if (oldCurNode) {

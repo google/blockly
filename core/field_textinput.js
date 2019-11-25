@@ -239,6 +239,22 @@ Blockly.FieldTextInput.prototype.doValueUpdate_ = function(newValue) {
 };
 
 /**
+ * Updates text field to match the colour/style of the block.
+ * @package
+ */
+Blockly.FieldTextInput.prototype.applyColour = function() {
+  if (this.sourceBlock_ && this.constants_.FULL_BLOCK_FIELDS) {
+    if (this.sourceBlock_.isShadow()) {
+      this.sourceBlock_.pathObject.svgPath.setAttribute('fill', '#fff');
+    } else if (this.borderRect_) {
+      this.borderRect_.setAttribute('stroke',
+          this.sourceBlock_.style.colourTertiary);
+      this.borderRect_.setAttribute('fill', '#fff');
+    }
+  }
+};
+
+/**
  * Updates the colour of the htmlInput given the current validity of the
  * field's value.
  * @protected

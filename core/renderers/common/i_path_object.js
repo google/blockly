@@ -48,7 +48,7 @@ Blockly.blockRendering.IPathObject.prototype.setPath;
 /**
  * Apply the stored colours to the block's path, taking into account whether
  * the paths belong to a shadow block.
- * @param {!Blockly.Block} block The block.
+ * @param {!Blockly.Block} block The source block.
  * @package
  */
 Blockly.blockRendering.IPathObject.prototype.applyColour;

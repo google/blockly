@@ -139,7 +139,7 @@ Blockly.blockRendering.PathObject.prototype.setMarkerSvg = function(markerSvg) {
 /**
  * Apply the stored colours to the block's path, taking into account whether
  * the paths belong to a shadow block.
- * @param {!Blockly.Block} block The block.
+ * @param {!Blockly.Block} block The source block.
  * @package
  */
 Blockly.blockRendering.PathObject.prototype.applyColour = function(block) {

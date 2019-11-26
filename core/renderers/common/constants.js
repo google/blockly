@@ -197,7 +197,7 @@ Blockly.blockRendering.ConstantProvider = function() {
 
   /**
    * The height of an empty inline input.
-   * @type {[type]}
+   * @type {number}
    */
   this.EMPTY_INLINE_INPUT_HEIGHT = this.TAB_HEIGHT + 11;
 

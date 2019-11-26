@@ -413,7 +413,10 @@ Blockly.InsertionMarkerManager.prototype.shouldReplace_ = function() {
   var local = this.localConnection_;
 
   // Dragging a block over an existing block in an input.
-  if (local.type == Blockly.OUTPUT_VALUE) {
+  if (
+    local.type == Blockly.OUTPUT_VALUE ||
+    local.type == Blockly.PREVIOUS_STATEMENT
+      ) {
     // Insert the dragged block into the stack if possible.
     if (!closest.isConnected() ||
       Blockly.Connection.lastConnectionInRow_(this.topBlock_,

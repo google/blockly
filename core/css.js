@@ -592,8 +592,8 @@ Blockly.Css.CONTENT = [
 
   '.blocklyWidgetDiv .goog-menuitem-content,',
   '.blocklyDropDownDiv .goog-menuitem-content {',
-    'font-size: 13px;',
     'font-family: Arial, sans-serif;',
+    'font-size: 13px;',
   '}',
 
   '.blocklyWidgetDiv .goog-menuitem-content {',

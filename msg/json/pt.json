@@ -379,6 +379,6 @@
 	"PROCEDURES_IFRETURN_TOOLTIP": "se o valor é verdadeiro, então retorna um segundo valor.",
 	"PROCEDURES_IFRETURN_WARNING": "Aviso: Este bloco só pode ser utilizado dentro da definição de uma função.",
 	"WORKSPACE_COMMENT_DEFAULT_TEXT": "Diz algo...",
-	"WORKSPACE_ARIA_LABEL": "\"Blockly\" no Espaço de Trabalho",
+	"WORKSPACE_ARIA_LABEL": "Espaço de trabalho de Blockly",
 	"COLLAPSED_WARNINGS_WARNING": "Os blocos ocultados contêm avisos."
 }

@@ -118,7 +118,6 @@ Blockly.Warning.textToDom_ = function(text) {
  * @param {boolean} visible True if the bubble should be visible.
  */
 Blockly.Warning.prototype.setVisible = function(visible) {
-  console.log(Blockly.Warning.prototype);
   if (visible == this.isVisible()) {
     return;
   }

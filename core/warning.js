@@ -156,7 +156,7 @@ Blockly.Warning.prototype.createBubble = function() {
     }
   }
   this.applyColour();
-  this.makeBubbleDraggable_();
+  this.makeParagrahDraggable_();
 };
 
 /**
@@ -173,24 +173,24 @@ Blockly.Warning.prototype.disposeBubble = function() {
 };
 
 /**
- * Make the warning bubble draggable
+ * Allow the bubble to be dragged from the warning paragraph
  * @private
  */
-Blockly.Warning.prototype.makeBubbleDraggable_ = function() {
+Blockly.Warning.prototype.makeParagrahDraggable_ = function() {
   if (!this.block_.workspace.options.readOnly) {
     Blockly.bindEventWithChecks_(
-        this.paragraphElement_, 'mousedown', this, this.bubbleMouseDown_);
+        this.paragraphElement_, 'mousedown', this, this.paragraphMouseDown_);
   }
 };
 
 /**
- * Handle a mouse-down on a warning bubble.
+ * Handle a mouse-down event on the warning paragraph.
  * @param {!Event} e Mouse down event.
  * @private
  */
-Blockly.Warning.prototype.bubbleMouseDown_ = function(e) {
+Blockly.Warning.prototype.paragraphMouseDown_ = function(e) {
   var gesture = this.block_.workspace.getGesture(e);
-  if (gesture && this.bubble_ !== null) {
+  if (gesture) {
     gesture.handleBubbleStart(e, this.bubble_);
   }
 };

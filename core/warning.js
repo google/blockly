@@ -190,7 +190,7 @@ Blockly.Warning.prototype.makeParagrahDraggable_ = function() {
  */
 Blockly.Warning.prototype.paragraphMouseDown_ = function(e) {
   var gesture = this.block_.workspace.getGesture(e);
-  if (gesture) {
+  if (gesture && this.bubble_ !== null) {
     gesture.handleBubbleStart(e, this.bubble_);
   }
 };

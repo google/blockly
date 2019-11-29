@@ -484,6 +484,18 @@ Blockly.WorkspaceCommentSvg.prototype.setMovable = function(movable) {
 };
 
 /**
+ * Set whether this comment is readOnly or not.
+ * @param {boolean} readOnly True if readOnly.
+ * @package
+ */
+Blockly.WorkspaceCommentSvg.prototype.setReadOnly = function(readOnly) {
+  Blockly.WorkspaceCommentSvg.superClass_.setReadOnly.call(this, readOnly);
+  if (this.textarea_) {
+    this.textarea_.readOnly = readOnly;
+  }
+};
+
+/**
  * Recursively adds or removes the dragging class to this node and its children.
  * @param {boolean} adding True if adding, false if removing.
  * @package

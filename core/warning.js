@@ -99,8 +99,14 @@ Blockly.Warning.textToDom_ = function(text) {
       );
   var lines = text.split('\n');
   for (var i = 0; i < lines.length; i++) {
-    var tspanElement = Blockly.utils.dom.createSvgElement('tspan',
-        {'dy': '1em', 'x': Blockly.Bubble.BORDER_WIDTH}, paragraph);
+    var tspanElement = Blockly.utils.dom.createSvgElement(
+        'tspan',
+        {
+          'class': 'blocklyDraggable',
+          'dy': '1em', 
+          'x': Blockly.Bubble.BORDER_WIDTH
+        }, 
+        paragraph);
     var textNode = document.createTextNode(lines[i]);
     tspanElement.appendChild(textNode);
   }
@@ -150,6 +156,7 @@ Blockly.Warning.prototype.createBubble = function() {
     }
   }
   this.applyColour();
+  this.makeBubbleDraggable_();
 };
 
 /**
@@ -163,6 +170,29 @@ Blockly.Warning.prototype.disposeBubble = function() {
   this.bubble_ = null;
   this.body_ = null;
   this.paragraphElement_ = null;
+};
+
+/**
+ * Make the warning bubble draggable
+ * @private
+ */
+Blockly.Warning.prototype.makeBubbleDraggable_ = function() {
+  if (!this.block_.workspace.options.readOnly) {
+    Blockly.bindEventWithChecks_(
+      this.paragraphElement_, 'mousedown', this, this.bubbleMouseDown_);
+  }
+};
+
+/**
+ * Handle a mouse-down on a warning bubble.
+ * @param {!Event} e Mouse down event.
+ * @private
+ */
+Blockly.Warning.prototype.bubbleMouseDown_ = function(e) {
+  var gesture = this.block_.workspace.getGesture(e);
+  if (gesture && this.bubble_ !== null) {
+    gesture.handleBubbleStart(e, this.bubble_);
+  }
 };
 
 /**

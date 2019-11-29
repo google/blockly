@@ -103,9 +103,9 @@ Blockly.Warning.textToDom_ = function(text) {
         'tspan',
         {
           'class': 'blocklyDraggable',
-          'dy': '1em', 
+          'dy': '1em',
           'x': Blockly.Bubble.BORDER_WIDTH
-        }, 
+        },
         paragraph);
     var textNode = document.createTextNode(lines[i]);
     tspanElement.appendChild(textNode);
@@ -179,7 +179,7 @@ Blockly.Warning.prototype.disposeBubble = function() {
 Blockly.Warning.prototype.makeBubbleDraggable_ = function() {
   if (!this.block_.workspace.options.readOnly) {
     Blockly.bindEventWithChecks_(
-      this.paragraphElement_, 'mousedown', this, this.bubbleMouseDown_);
+        this.paragraphElement_, 'mousedown', this, this.bubbleMouseDown_);
   }
 };
 

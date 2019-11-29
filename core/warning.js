@@ -118,6 +118,7 @@ Blockly.Warning.textToDom_ = function(text) {
  * @param {boolean} visible True if the bubble should be visible.
  */
 Blockly.Warning.prototype.setVisible = function(visible) {
+  console.log(Blockly.Warning.prototype);
   if (visible == this.isVisible()) {
     return;
   }
@@ -156,7 +157,12 @@ Blockly.Warning.prototype.createBubble = function() {
     }
   }
   this.applyColour();
-  this.makeParagrahDraggable_();
+
+  // Allow the bubble to be dragged from the warning paragraph
+  if (!this.block_.workspace.options.readOnly) {
+    Blockly.bindEventWithChecks_(
+        this.paragraphElement_, 'mousedown', this, this.paragraphMouseDown_);
+  }
 };
 
 /**
@@ -170,17 +176,6 @@ Blockly.Warning.prototype.disposeBubble = function() {
   this.bubble_ = null;
   this.body_ = null;
   this.paragraphElement_ = null;
-};
-
-/**
- * Allow the bubble to be dragged from the warning paragraph
- * @private
- */
-Blockly.Warning.prototype.makeParagrahDraggable_ = function() {
-  if (!this.block_.workspace.options.readOnly) {
-    Blockly.bindEventWithChecks_(
-        this.paragraphElement_, 'mousedown', this, this.paragraphMouseDown_);
-  }
 };
 
 /**

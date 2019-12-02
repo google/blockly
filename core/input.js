@@ -34,9 +34,11 @@ goog.require('Blockly.FieldLabel');
  *     input again.
  * @param {!Blockly.Block} block The block containing this input.
  * @param {Blockly.Connection} connection Optional connection for this input.
+ * @param {?Object.<string, *>=} opt_extras Extra information about the input.
+ *     - style: Rendering style hint (undefined or {@see Blockly.INDENTED_VALUE})
  * @constructor
  */
-Blockly.Input = function(type, name, block, connection) {
+Blockly.Input = function(type, name, block, connection, opt_extras) {
   if (type != Blockly.DUMMY_INPUT && !name) {
     throw Error('Value inputs and statement inputs must have non-empty name.');
   }
@@ -53,6 +55,8 @@ Blockly.Input = function(type, name, block, connection) {
   this.connection = connection;
   /** @type {!Array.<!Blockly.Field>} */
   this.fieldRow = [];
+  /** @type {!Object.<string, *>}  */
+  this.extraInfo = opt_extras || {};
 };
 
 /**

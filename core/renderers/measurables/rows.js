@@ -119,6 +119,13 @@ Blockly.blockRendering.Row = function(constants) {
   this.hasExternalInput = false;
 
   /**
+   * Whether the row has any indented inputs.
+   * @package
+   * @type {boolean}
+   */
+  this.hasIndentedInput = false;
+
+  /**
    * Whether the row has any statement inputs.
    * @package
    * @type {boolean}
@@ -161,6 +168,16 @@ Blockly.blockRendering.Row = function(constants) {
    * @type {?number}
    */
   this.align = null;
+};
+
+/**
+ * Returns whether the row should be treated like a statement during the
+ * measuring pass.
+ * @return {boolean} true if the row should measure like a statement input,
+ *     otherwise false.
+ */
+Blockly.blockRendering.Row.prototype.isStatementLike = function() {
+  return this.hasStatement || this.hasIndentedInput;
 };
 
 /**

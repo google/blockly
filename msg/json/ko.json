@@ -291,7 +291,7 @@
 	"TEXT_REPLACE_HELPURL": "https://github.com/google/blockly/wiki/Text#replacing-substrings",
 	"TEXT_REVERSE_MESSAGE0": "%1 뒤집기",
 	"TEXT_REVERSE_HELPURL": "https://github.com/google/blockly/wiki/Text#reversing-text",
-	"TEXT_REVERSE_TOOLTIP": "텍스트 안에 있는 캐릭터의 순서를 뒤집는다.",
+	"TEXT_REVERSE_TOOLTIP": "텍스트 안의 문자의 순서를 반전시킵니다.",
 	"LISTS_CREATE_EMPTY_HELPURL": "https://github.com/google/blockly/wiki/Lists#create-empty-list",
 	"LISTS_CREATE_EMPTY_TITLE": "빈 리스트 생성",
 	"LISTS_CREATE_EMPTY_TOOLTIP": "데이터 레코드가 없는, 길이가 0인 목록을 반환합니다.",

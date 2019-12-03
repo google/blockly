@@ -418,6 +418,7 @@ Blockly.Toolbox.prototype.syncTrees_ = function(treeIn, treeOut, pathToMedia, sh
           }
         }
         break;
+        //TODO: Move LABEL as its own case, so the BKY_ prefix can be escaped and localized.
       case 'SHADOW':
       case 'LABEL':
       case 'BUTTON':

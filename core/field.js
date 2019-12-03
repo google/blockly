@@ -673,10 +673,34 @@ Blockly.Field.prototype.getSize = function() {
  * @package
  */
 Blockly.Field.prototype.getScaledBBox = function() {
-  var bBox = this.borderRect_.getBBox();
-  var xy = this.getAbsoluteXY_();
-  var scaledWidth = bBox.width * this.sourceBlock_.workspace.scale;
-  var scaledHeight = bBox.height * this.sourceBlock_.workspace.scale;
+  if (!this.borderRect_) {
+    // Browsers are inconsistent in what they return for a bounding box.
+    // - Webkit / Blink: fill-box / object bounding box
+    // - Gecko / Triden / EdgeHTML: stroke-box
+    var bBox = this.sourceBlock_.getHeightWidth();
+    var scale = this.sourceBlock_.workspace.scale;
+    var xy = this.getAbsoluteXY_();
+    var scaledWidth = bBox.width * scale;
+    var scaledHeight = bBox.height * scale;
+
+    if (Blockly.utils.userAgent.GECKO) {
+      xy.x += 1.5 * scale;
+      xy.y += 1.5 * scale;
+      scaledWidth += 1 * scale;
+      scaledHeight += 1 * scale;
+    } else {
+      if (!Blockly.utils.userAgent.EDGE && !Blockly.utils.userAgent.IE) {
+        xy.x -= 0.5 * scale;
+        xy.y -= 0.5 * scale;
+      }
+      scaledWidth += 1 * scale;
+      scaledHeight += 1 * scale;
+    }
+  } else {
+    var xy = this.borderRect_.getBoundingClientRect();
+    var scaledWidth = xy.width;
+    var scaledHeight = xy.height;
+  }
   return {
     top: xy.y,
     bottom: xy.y + scaledHeight,

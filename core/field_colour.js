@@ -199,7 +199,9 @@ Blockly.FieldColour.prototype.initView = function() {
  */
 Blockly.FieldColour.prototype.applyColour = function() {
   if (!this.constants_.FIELD_COLOUR_FULL_BLOCK) {
-    this.borderRect_.style.fill = this.getValue();
+    if (this.borderRect_) {
+      this.borderRect_.style.fill = this.getValue();
+    }
   } else {
     this.sourceBlock_.pathObject.svgPath.setAttribute('fill', this.getValue());
     this.sourceBlock_.pathObject.svgPath.setAttribute('stroke', '#fff');

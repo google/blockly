@@ -636,3 +636,62 @@ Blockly.zelos.ConstantProvider.prototype.createDom = function(svg) {
   this.replacementGlowFilterId = replacementGlowFilter.id;
   this.replacementGlowFilter_ = replacementGlowFilter;
 };
+
+/**
+ * @override
+ */
+Blockly.zelos.ConstantProvider.prototype.getCSS = function(name) {
+  var selector = '.' + name + '-renderer';
+  return [
+    /* eslint-disable indent */
+    // Fields.
+    selector + ' .blocklyText {',
+      'cursor: default;',
+      'fill: #fff;',
+      'font-family: ' + this.FIELD_TEXT_FONTFAMILY + ';',
+      'font-size: ' + this.FIELD_TEXT_FONTSIZE + 'pt;',
+      'font-weight: ' + this.FIELD_TEXT_FONTWEIGHT + ';',
+    '}',
+    selector + ' .blocklyNonEditableText>text,',
+    selector + ' .blocklyEditableText>text,',
+    selector + ' .blocklyNonEditableText>g>text,',
+    selector + ' .blocklyEditableText>g>text {',
+      'fill: #575E75;',
+    '}',
+
+    // Editable field hover.
+    selector + ' .blocklyDraggable:not(.blocklyDisabled)',
+    ' .blocklyEditableText:not(.editing):hover>rect ,',
+    selector + ' .blocklyDraggable:not(.blocklyDisabled)',
+    ' .blocklyEditableText:not(.editing):hover>.blocklyPath {',
+      'stroke: #fff;',
+      'stroke-width: 2;',
+    '}',
+
+    // Text field input.
+    selector + ' .blocklyHtmlInput {',
+      'font-family: ' + this.FIELD_TEXT_FONTFAMILY + ';',
+      'font-weight: ' + this.FIELD_TEXT_FONTWEIGHT + ';',
+      'color: #575E75;',
+    '}',
+  
+    // Dropdown field.
+    selector + ' .blocklyDropdownText {',
+      'fill: #fff !important;',
+    '}',
+    // Widget and Dropdown Div
+    selector + '.blocklyWidgetDiv .goog-menuitem,',
+    selector + '.blocklyDropDownDiv .goog-menuitem {',
+      'font-family: ' + this.FIELD_TEXT_FONTFAMILY + ';',
+    '}',
+    selector + '.blocklyDropDownDiv .goog-menuitem-content {',
+      'color: #fff;',
+    '}',
+
+    // Connection highlight.
+    selector + ' .blocklyHighlightedConnectionPath {',
+      'stroke: #fff200;',
+    '}',
+    /* eslint-enable indent */
+  ];
+};

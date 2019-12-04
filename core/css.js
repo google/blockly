@@ -677,5 +677,9 @@ Blockly.Css.CONTENT = [
     'width: 0;',
     'height: 0;',
   '}',
+
+  '.blocklyNoPointerEvents {',
+    'pointer-events: none;',
+  '}',
   /* eslint-enable indent */
 ];

@@ -92,21 +92,15 @@ Blockly.Warning.textToDom_ = function(text) {
       (Blockly.utils.dom.createSvgElement(
           'text',
           {
-            'class': 'blocklyText blocklyBubbleText',
+            'class': 'blocklyText blocklyBubbleText blocklyNoPointerEvents',
             'y': Blockly.Bubble.BORDER_WIDTH
           },
           null)
       );
   var lines = text.split('\n');
   for (var i = 0; i < lines.length; i++) {
-    var tspanElement = Blockly.utils.dom.createSvgElement(
-        'tspan',
-        {
-          'class': 'blocklyDraggable',
-          'dy': '1em',
-          'x': Blockly.Bubble.BORDER_WIDTH
-        },
-        paragraph);
+    var tspanElement = Blockly.utils.dom.createSvgElement('tspan',
+        {'dy': '1em', 'x': Blockly.Bubble.BORDER_WIDTH}, paragraph);
     var textNode = document.createTextNode(lines[i]);
     tspanElement.appendChild(textNode);
   }
@@ -156,12 +150,6 @@ Blockly.Warning.prototype.createBubble = function() {
     }
   }
   this.applyColour();
-
-  // Allow the bubble to be dragged from the warning paragraph
-  if (!this.block_.workspace.options.readOnly) {
-    Blockly.bindEventWithChecks_(
-        this.paragraphElement_, 'mousedown', this, this.paragraphMouseDown_);
-  }
 };
 
 /**
@@ -175,18 +163,6 @@ Blockly.Warning.prototype.disposeBubble = function() {
   this.bubble_ = null;
   this.body_ = null;
   this.paragraphElement_ = null;
-};
-
-/**
- * Handle a mouse-down event on the warning paragraph.
- * @param {!Event} e Mouse down event.
- * @private
- */
-Blockly.Warning.prototype.paragraphMouseDown_ = function(e) {
-  var gesture = this.block_.workspace.getGesture(e);
-  if (gesture && this.bubble_ !== null) {
-    gesture.handleBubbleStart(e, this.bubble_);
-  }
 };
 
 /**

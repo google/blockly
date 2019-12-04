@@ -45,7 +45,7 @@ Blockly.blockRendering.MarkerSvg = function(workspace, constants, marker) {
 
   /**
    * The marker to draw.
-   * @type {Blockly.Marker}
+   * @type {!Blockly.Marker}
    * @private
    */
   this.marker_ = marker;
@@ -504,7 +504,7 @@ Blockly.blockRendering.MarkerSvg.prototype.showAtLocation_ = function(curNode) {
  */
 Blockly.blockRendering.MarkerSvg.prototype.firemarkerEvent_ = function(oldNode, curNode) {
   var curBlock = curNode.getSourceBlock();
-  var eventType = this.isCursor() ? 'cursorMove' : 'markerNode';
+  var eventType = this.isCursor() ? 'cursorMove' : 'markerMove';
   var event = new Blockly.Events.Ui(curBlock, eventType, oldNode, curNode);
   if (curNode.getType() == Blockly.ASTNode.types.WORKSPACE) {
     event.workspaceId = curNode.getLocation().id;

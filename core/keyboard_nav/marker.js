@@ -16,8 +16,8 @@
  */
 
 /**
- * @fileoverview The class representing a cursor.
- * Used primarily for keyboard navigation.
+ * @fileoverview The class representing a marker.
+ * Used primarily for keyboard navigation to show a marked location.
  * @author aschmiedt@google.com (Abby Schmiedt)
  */
 'use strict';
@@ -42,7 +42,7 @@ Blockly.Marker = function() {
   this.colour = null;
 
   /**
-   * The current location of the cursor.
+   * The current location of the marker.
    * @type {Blockly.ASTNode}
    * @private
    */
@@ -63,24 +63,26 @@ Blockly.Marker = function() {
 };
 
 /**
- * Sets the object in charge of drawing the cursor.
- * @param {Blockly.blockRendering.MarkerSvg} drawer The object in charge of drawing the cursor.
+ * Sets the object in charge of drawing the marker.
+ * @param {Blockly.blockRendering.MarkerSvg} drawer The object in charge of
+ *     drawing the marker.
  */
 Blockly.Marker.prototype.setDrawer = function(drawer) {
   this.drawer_ = drawer;
 };
 
 /**
- * Get the current drawer for the cursor.
- * @return {Blockly.blockRendering.MarkerSvg} The object in charge of drawing the cursor.
+ * Get the current drawer for the marker.
+ * @return {Blockly.blockRendering.MarkerSvg} The object in charge of drawing
+ *     the marker.
  */
 Blockly.Marker.prototype.getDrawer = function() {
   return this.drawer_;
 };
 
 /**
- * Gets the current location of the cursor.
- * @return {Blockly.ASTNode} The current field, connection, or block the cursor
+ * Gets the current location of the marker.
+ * @return {Blockly.ASTNode} The current field, connection, or block the marker
  *     is on.
  */
 Blockly.Marker.prototype.getCurNode = function() {
@@ -88,10 +90,10 @@ Blockly.Marker.prototype.getCurNode = function() {
 };
 
 /**
- * Set the location of the cursor and call the update method.
+ * Set the location of the marker and call the update method.
  * Setting isStack to true will only work if the newLocation is the top most
  * output or previous connection on a stack.
- * @param {Blockly.ASTNode} newNode The new location of the cursor.
+ * @param {Blockly.ASTNode} newNode The new location of the marker.
  */
 Blockly.Marker.prototype.setCurNode = function(newNode) {
   var oldNode = this.curNode_;
@@ -102,7 +104,7 @@ Blockly.Marker.prototype.setCurNode = function(newNode) {
 };
 
 /**
- * Redraw the current cursor.
+ * Redraw the current marker.
  * @package
  */
 Blockly.Marker.prototype.draw = function() {
@@ -112,7 +114,7 @@ Blockly.Marker.prototype.draw = function() {
 };
 
 /**
- * Hide the cursor SVG.
+ * Hide the marker SVG.
  */
 Blockly.Marker.prototype.hide = function() {
   if (this.drawer_) {

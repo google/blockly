@@ -63,7 +63,7 @@ Blockly.blockRendering.Renderer = function(name) {
 Blockly.blockRendering.Renderer.prototype.init = function() {
   this.constants_ = this.makeConstants_();
   this.constants_.init();
-  this.injectCSS_(this.getCSS_());
+  this.injectCSS_(this.constants_.getCSS(this.name));
 };
 
 /**
@@ -146,70 +146,6 @@ Blockly.blockRendering.Renderer.prototype.getConstants = function() {
   return (
     /** @type {!Blockly.blockRendering.ConstantProvider} */
     (this.constants_));
-};
-
-/**
- * Get any renderer specific CSS to inject when the renderer is initialized.
- * @return {!Array.<string>} Array of CSS strings.
- * @protected
- */
-Blockly.blockRendering.Renderer.prototype.getCSS_ = function() {
-  var selector = '.' + this.name + '-renderer';
-  var constants = this.getConstants();
-  return [
-    /* eslint-disable indent */
-    // Fields.
-    selector + ' .blocklyText {',
-      'cursor: default;',
-      'fill: #fff;',
-      'font-family: ' + constants.FIELD_TEXT_FONTFAMILY + ';',
-      'font-size: ' + constants.FIELD_TEXT_FONTSIZE + 'pt;',
-      'font-weight: ' + constants.FIELD_TEXT_FONTWEIGHT + ';',
-    '}',
-    selector + ' .blocklyNonEditableText>rect,',
-    selector + ' .blocklyEditableText>rect {',
-      'fill: #fff;',
-      'fill-opacity: .6;',
-      'stroke: none;',
-    '}',
-    selector + ' .blocklyNonEditableText>text,',
-    selector + ' .blocklyEditableText>text {',
-      'fill: #000;',
-    '}',
-
-    // Editable field hover.
-    selector + ' .blocklyEditableText:not(.editing):hover>rect {',
-      'stroke: #fff;',
-      'stroke-width: 2;',
-    '}',
-
-    // Text field input.
-    selector + ' .blocklyHtmlInput {',
-      'font-family: ' + constants.FIELD_TEXT_FONTFAMILY + ';',
-      'font-weight: ' + constants.FIELD_TEXT_FONTWEIGHT + ';',
-    '}',
-
-    // Selection highlight.
-    selector + ' .blocklySelected>.blocklyPath {',
-      'stroke: #fc3;',
-      'stroke-width: 3px;',
-    '}',
-
-    // Connection highlight.
-    selector + ' .blocklyHighlightedConnectionPath {',
-      'stroke: #fc3;',
-    '}',
-
-    // Replacable highlight.
-    selector + ' .blocklyReplaceable .blocklyPath {',
-      'fill-opacity: .5;',
-    '}',
-    selector + ' .blocklyReplaceable .blocklyPathLight,',
-    selector + ' .blocklyReplaceable .blocklyPathDark {',
-      'display: none;',
-    '}',
-    /* eslint-enable indent */
-  ];
 };
 
 /**

@@ -92,7 +92,7 @@ Blockly.Warning.textToDom_ = function(text) {
       (Blockly.utils.dom.createSvgElement(
           'text',
           {
-            'class': 'blocklyText blocklyBubbleText',
+            'class': 'blocklyText blocklyBubbleText blocklyNoPointerEvents',
             'y': Blockly.Bubble.BORDER_WIDTH
           },
           null)

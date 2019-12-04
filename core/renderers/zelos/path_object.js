@@ -34,13 +34,16 @@ goog.require('Blockly.utils.object');
  * An object that handles creating and setting each of the SVG elements
  * used by the renderer.
  * @param {!SVGElement} root The root SVG element.
+ * @param {!Blockly.Theme.BlockStyle} style The style object to use for
+ *     colouring.
  * @param {!Blockly.zelos.ConstantProvider} constants The renderer's constants.
  * @constructor
  * @extends {Blockly.blockRendering.PathObject}
  * @package
  */
-Blockly.zelos.PathObject = function(root, constants) {
-  Blockly.zelos.PathObject.superClass_.constructor.call(this, root, constants);
+Blockly.zelos.PathObject = function(root, style, constants) {
+  Blockly.zelos.PathObject.superClass_.constructor.call(this, root, style,
+      constants);
 
   /**
    * The renderer's constant provider.

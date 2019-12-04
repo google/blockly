@@ -34,13 +34,15 @@ goog.require('Blockly.utils.dom');
  * An object that handles creating and setting each of the SVG elements
  * used by the renderer.
  * @param {!SVGElement} root The root SVG element.
+ * @param {!Blockly.Theme.BlockStyle} style The style object to use for
+ *     colouring.
  * @param {!Blockly.blockRendering.ConstantProvider} constants The renderer's
  *     constants.
  * @constructor
  * @implements {Blockly.blockRendering.IPathObject}
  * @package
  */
-Blockly.blockRendering.PathObject = function(root, constants) {
+Blockly.blockRendering.PathObject = function(root, style, constants) {
   /**
    * The renderer's constant provider.
    * @type {!Blockly.blockRendering.ConstantProvider}
@@ -60,10 +62,10 @@ Blockly.blockRendering.PathObject = function(root, constants) {
 
   /**
    * The style object to use when colouring block paths.
-   * @type {!Blockly.Theme.BlockStyle}
+   * @type {Blockly.Theme.BlockStyle}
    * @package
    */
-  this.style = Blockly.Theme.createBlockStyle('#000000');
+  this.style = style;
 
   /**
    * Holds the cursors svg element when the cursor is attached to the block.

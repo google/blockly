@@ -118,7 +118,7 @@ Blockly.Theme.prototype.getAllBlockStyles = function() {
  */
 Blockly.Theme.prototype.getBlockStyle = function(blockStyleName) {
   return this.blockStyles_[blockStyleName || ''] ||
-      Blockly.Theme.createBlockStyle('#000000');
+      this.createBlockStyle_('#000000');
 };
 
 /**
@@ -127,7 +127,7 @@ Blockly.Theme.prototype.getBlockStyle = function(blockStyleName) {
  * @param {Blockly.Theme.BlockStyle} blockStyle The block style.
  */
 Blockly.Theme.prototype.setBlockStyle = function(blockStyleName, blockStyle) {
-  blockStyle = Blockly.Theme.validatedBlockStyle(blockStyle);
+  blockStyle = this.validatedBlockStyle_(blockStyle);
   this.blockStyles_[blockStyleName] = blockStyle;
 };
 
@@ -142,7 +142,7 @@ Blockly.Theme.prototype.setBlockStyle = function(blockStyleName, blockStyle) {
 Blockly.Theme.prototype.getBlockStyleForColour = function(colour) {
   var name = 'auto_' + colour;
   if (!this.blockStyles_[name]) {
-    this.blockStyles_[name] = Blockly.Theme.createBlockStyle(colour);
+    this.blockStyles_[name] = this.createBlockStyle_(colour);
   }
   return {style: this.blockStyles_[name], name: name};
 };
@@ -152,27 +152,28 @@ Blockly.Theme.prototype.getBlockStyleForColour = function(colour) {
  * @param {string} colour #RRGGBB colour string.
  * @return {!Blockly.Theme.BlockStyle} A populated block style based on the
  *     given colour.
- * @package
+ * @protected
  */
-Blockly.Theme.createBlockStyle = function(colour) {
-  return {
-    colourPrimary: colour,
-    colourSecondary: Blockly.utils.colour.blend('#fff', colour, 0.6) || colour,
-    colourTertiary: Blockly.utils.colour.blend('#fff', colour, 0.3) || colour,
-    hat: ''
-  };
+Blockly.Theme.prototype.createBlockStyle_ = function(colour) {
+  return this.validatedBlockStyle_({
+    colourPrimary: colour
+  });
 };
 
 /**
  * Get a full block style object based on the input style object.  Populate
  * any missing values.
- * @param {Blockly.Theme.BlockStyle} blockStyle A full or partial block
- *     style object.
+ * @param {{
+ *     colourPrimary:string,
+ *     colourSecondary:(string|undefined),
+ *     colourTertiary:(string|undefined),
+ *     hat:(string|undefined)
+ * }} blockStyle A full or partial block style object.
  * @return {!Blockly.Theme.BlockStyle} A full block style object, with all
  *     required properties populated.
- * @package
+ * @protected
  */
-Blockly.Theme.validatedBlockStyle = function(blockStyle) {
+Blockly.Theme.prototype.validatedBlockStyle_ = function(blockStyle) {
   // Make a new object with all of the same properties.
   var valid = /** @type {!Blockly.Theme.BlockStyle} */ ({});
   if (blockStyle) {
@@ -185,15 +186,33 @@ Blockly.Theme.validatedBlockStyle = function(blockStyle) {
   valid.colourPrimary = parsedColour.hex;
   valid.colourSecondary = valid['colourSecondary'] ?
       Blockly.utils.parseBlockColour(valid['colourSecondary']).hex :
-      Blockly.utils.colour.blend('#fff', valid.colourPrimary, 0.6) ||
-      valid.colourPrimary;
+      this.generateSecondaryColour_(valid.colourPrimary);
   valid.colourTertiary = valid.colourTertiary ?
       Blockly.utils.parseBlockColour(valid['colourTertiary']).hex :
-      Blockly.utils.colour.blend('#fff', valid.colourPrimary, 0.3) ||
-      valid.colourPrimary;
+      this.generateTertiaryColour_(valid.colourPrimary);
 
   valid.hat = valid['hat'] || '';
   return valid;
+};
+
+/**
+ * Generate a secondary colour from the passed in primary colour.
+ * @param {string} colour Primary colour.
+ * @return {string} The generated secondary colour.
+ * @protected
+ */
+Blockly.Theme.prototype.generateSecondaryColour_ = function(colour) {
+  return Blockly.utils.colour.blend('#fff', colour, 0.6) || colour;
+};
+
+/**
+ * Generate a tertiary colour from the passed in primary colour.
+ * @param {string} colour Primary colour.
+ * @return {string} The generated tertiary colour.
+ * @protected
+ */
+Blockly.Theme.prototype.generateTertiaryColour_ = function(colour) {
+  return Blockly.utils.colour.blend('#fff', colour, 0.3) || colour;
 };
 
 /**

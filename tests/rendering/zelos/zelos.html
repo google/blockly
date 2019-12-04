@@ -32,7 +32,11 @@
   <script>
     goog.require('Blockly.blockRendering.Debug');
     goog.require('Blockly.zelos.Renderer');
+    goog.require('Blockly.zelos.Themes.Classic');
     // Blockly.blockRendering.startDebugger();
+
+    Blockly.BlockSvg.prototype.setOutputShape = function() { };
+
     var blocklyDiv = document.getElementById('blocklyDiv');
     var workspace;
     window.addEventListener('message', function (msg) {
@@ -45,6 +49,7 @@
         if (workspace) {
           workspace.dispose();
           blocklyDiv.innerHTML = '';
+          window.parent.focus();
         }
       } catch { }
 
@@ -55,6 +60,7 @@
           drag: true,
           wheel: false,
         },
+        theme: Blockly.zelos.Themes.Classic,
         zoom: {
           wheel: true,
           startScale: 2,

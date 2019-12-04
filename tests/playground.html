@@ -72,6 +72,8 @@
 goog.require('Blockly.blockRendering.Debug');
 goog.require('Blockly.minimalist.Renderer');
 goog.require('Blockly.Themes.Modern');
+goog.require('Blockly.zelos.Themes.Classic');
+goog.require('Blockly.zelos.Themes.Modern');
 goog.require('Blockly.thrasos.Renderer');
 goog.require('Blockly.zelos.Renderer');
 </script>
@@ -331,6 +333,10 @@ function changeTheme() {
     Blockly.getMainWorkspace().setTheme(Blockly.Themes.Tritanopia);
   } else if (theme.value === "modern") {
     Blockly.getMainWorkspace().setTheme(Blockly.Themes.Modern);
+  } else if (theme.value === "zelosclassic") {
+    Blockly.getMainWorkspace().setTheme(Blockly.zelos.Themes.Classic);
+  } else if (theme.value === "zelosmodern") {
+    Blockly.getMainWorkspace().setTheme(Blockly.zelos.Themes.Modern);
   } else {
     Blockly.getMainWorkspace().setTheme(Blockly.Themes.Classic);
   }
@@ -594,6 +600,8 @@ var spaghettiXml = [
     <option value="high_contrast">High Contrast</option>
     <option value="deuteranopia">Deuteranopia/Protanopia</option>
     <option value="tritanopia">Tritanopia</option>
+    <option value="zelosclassic">Zelos Classic</option>
+    <option value="zelosmodern">Zelos Modern</option>
   </select>
   <p>
     <input type="button" value="Export to XML" onclick="toXml()">

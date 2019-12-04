@@ -158,6 +158,10 @@ suite('Theme', function() {
   });
 
   suite('Validate block styles', function() {
+    setup(function() {
+      this.theme = new Blockly.Theme('test', createBlockStyles());
+    });
+
     test('Null', function() {
       var inputStyle = null;
       var expectedOutput = {
@@ -167,7 +171,7 @@ suite('Theme', function() {
         "hat": ''
       };
       stringifyAndCompare(
-          Blockly.Theme.validatedBlockStyle(inputStyle), expectedOutput);
+          this.theme.validatedBlockStyle_(inputStyle), expectedOutput);
     });
 
     test('Empty', function() {
@@ -179,7 +183,7 @@ suite('Theme', function() {
         "hat": ''
       };
       stringifyAndCompare(
-          Blockly.Theme.validatedBlockStyle(inputStyle), expectedOutput);
+          this.theme.validatedBlockStyle_(inputStyle), expectedOutput);
     });
 
     test('Incomplete hex', function() {
@@ -193,7 +197,7 @@ suite('Theme', function() {
         "hat": ''
       };
       stringifyAndCompare(
-          Blockly.Theme.validatedBlockStyle(inputStyle), expectedOutput);
+          this.theme.validatedBlockStyle_(inputStyle), expectedOutput);
     });
 
     test('Complete hex', function() {
@@ -210,7 +214,7 @@ suite('Theme', function() {
         "hat": 'cap'
       };
       stringifyAndCompare(
-          Blockly.Theme.validatedBlockStyle(inputStyle), expectedOutput);
+          this.theme.validatedBlockStyle_(inputStyle), expectedOutput);
     });
 
     test('Complete hue', function() {
@@ -226,7 +230,7 @@ suite('Theme', function() {
         "hat": ''
       };
       stringifyAndCompare(
-          Blockly.Theme.validatedBlockStyle(inputStyle), expectedOutput);
+          this.theme.validatedBlockStyle_(inputStyle), expectedOutput);
     });
 
     test('Incomplete hue', function() {
@@ -240,7 +244,7 @@ suite('Theme', function() {
         "hat": ''
       };
       stringifyAndCompare(
-          Blockly.Theme.validatedBlockStyle(inputStyle), expectedOutput);
+          this.theme.validatedBlockStyle_(inputStyle), expectedOutput);
     });
 
     test('Complete css colour name', function() {
@@ -256,7 +260,7 @@ suite('Theme', function() {
         "hat": ''
       };
       stringifyAndCompare(
-          Blockly.Theme.validatedBlockStyle(inputStyle), expectedOutput);
+          this.theme.validatedBlockStyle_(inputStyle), expectedOutput);
     });
 
     test('Incomplete css colour name', function() {
@@ -270,7 +274,7 @@ suite('Theme', function() {
         "hat": ''
       };
       stringifyAndCompare(
-          Blockly.Theme.validatedBlockStyle(inputStyle), expectedOutput);
+          this.theme.validatedBlockStyle_(inputStyle), expectedOutput);
     });
   });
 });

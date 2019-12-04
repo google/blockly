@@ -75,7 +75,8 @@ Blockly.BlockSvg = function(workspace, prototypeName, opt_id) {
    * @type {Blockly.blockRendering.IPathObject}
    * @package
    */
-  this.pathObject = workspace.getRenderer().makePathObject(this.svgGroup_);
+  this.pathObject = workspace.getRenderer().makePathObject(
+      this.svgGroup_, this.style);
 
   /** @type {boolean} */
   this.rendered = false;

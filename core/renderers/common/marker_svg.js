@@ -82,7 +82,7 @@ Blockly.blockRendering.MarkerSvg = function(workspace, constants, marker) {
 };
 
 /**
- * The name of the CSS class for a marker.
+ * The name of the CSS class for a cursor.
  * @const {string}
  */
 Blockly.blockRendering.MarkerSvg.CURSOR_CLASS = 'blocklyCursor';

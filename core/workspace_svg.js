@@ -751,8 +751,13 @@ Blockly.WorkspaceSvg.prototype.createDom = function(opt_backgroundClass) {
   }
   this.recordDeleteAreas();
 
-  this.setCursor(this.cursor_);
-  this.setMarker(this.marker_);
+  this.cursor_.setDrawer(this.getRenderer().makeMarkerDrawer(this, this.cursor_));
+  var svgCursor = this.cursor_.getDrawer().createDom();
+  this.svgGroup_.appendChild(svgCursor);
+
+  this.marker_.setDrawer(this.getRenderer().makeMarkerDrawer(this, this.marker_));
+  var svgMarker = this.marker_.getDrawer().createDom();
+  this.svgGroup_.appendChild(svgMarker);
 
   this.getRenderer().getConstants().createDom(this.svgGroup_);
   return this.svgGroup_;

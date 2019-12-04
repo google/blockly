@@ -24,118 +24,28 @@
 
 goog.provide('Blockly.Cursor');
 
+goog.require('Blockly.Action');
 goog.require('Blockly.ASTNode');
+goog.require('Blockly.Marker');
 goog.require('Blockly.navigation');
+goog.require('Blockly.utils.object');
+
 
 /**
  * Class for a cursor.
  * A cursor controls how a user navigates the Blockly AST.
  * @constructor
+ * @extends {Blockly.Marker}
  */
 Blockly.Cursor = function() {
-  /**
-   * The current location of the cursor.
-   * @type {Blockly.ASTNode}
-   * @private
-   */
-  this.curNode_ = null;
+  Blockly.Cursor.superClass_.constructor.call(this);
 
   /**
-   * The object in charge of drawing the visual representation of the current node.
-   * @type {Blockly.blockRendering.CursorSvg}
-   * @private
+   * @override
    */
-  this.drawer_ = null;
+  this.type = 'cursor';
 };
-
-/**
- * Sets the object in charge of drawing the cursor.
- * @param {Blockly.blockRendering.CursorSvg} drawer The object in charge of drawing the cursor.
- */
-Blockly.Cursor.prototype.setDrawer = function(drawer) {
-  this.drawer_ = drawer;
-};
-
-/**
- * Get the current drawer for the cursor.
- * @return {Blockly.blockRendering.CursorSvg} The object in charge of drawing the cursor.
- */
-Blockly.Cursor.prototype.getDrawer = function() {
-  return this.drawer_;
-};
-
-/**
- * Gets the current location of the cursor.
- * @return {Blockly.ASTNode} The current field, connection, or block the cursor
- *     is on.
- */
-Blockly.Cursor.prototype.getCurNode = function() {
-  return this.curNode_;
-};
-
-/**
- * Set the location of the cursor and call the update method.
- * Setting isStack to true will only work if the newLocation is the top most
- * output or previous connection on a stack.
- * @param {Blockly.ASTNode} newNode The new location of the cursor.
- */
-Blockly.Cursor.prototype.setCurNode = function(newNode) {
-  var oldNode = this.curNode_;
-  this.curNode_ = newNode;
-  if (this.drawer_) {
-    this.drawer_.draw(oldNode, this.curNode_);
-  }
-};
-
-/**
- * Redraw the current cursor.
- * @package
- */
-Blockly.Cursor.prototype.draw = function() {
-  if (this.drawer_) {
-    this.drawer_.draw(this.curNode_, this.curNode_);
-  }
-};
-
-/**
- * Hide the cursor SVG.
- */
-Blockly.Cursor.prototype.hide = function() {
-  if (this.drawer_) {
-    this.drawer_.hide();
-  }
-};
-
-/**
- * Handles the given action.
- * This is only triggered when keyboard navigation is enabled.
- * @param {!Blockly.Action} action The action to be handled.
- * @return {boolean} True if the action has been handled, false otherwise.
- */
-Blockly.Cursor.prototype.onBlocklyAction = function(action) {
-  // If we are on a field give it the option to handle the action
-  if (this.getCurNode() &&
-      this.getCurNode().getType() === Blockly.ASTNode.types.FIELD &&
-      this.getCurNode().getLocation().onBlocklyAction(action)) {
-    return true;
-  }
-  switch (action.name) {
-    case Blockly.navigation.actionNames.PREVIOUS:
-      this.prev();
-      return true;
-    case Blockly.navigation.actionNames.OUT:
-      this.out();
-      return true;
-    case Blockly.navigation.actionNames.NEXT:
-      this.next();
-      return true;
-    case Blockly.navigation.actionNames.IN:
-      this.in();
-      return true;
-    default:
-      return false;
-  }
-};
+Blockly.utils.object.inherits(Blockly.Cursor, Blockly.Marker);
 
 /**
  * Find the next connection, field, or block.
@@ -233,4 +143,35 @@ Blockly.Cursor.prototype.out = function() {
     this.setCurNode(newNode);
   }
   return newNode;
+};
+
+/**
+ * Handles the given action.
+ * This is only triggered when keyboard navigation is enabled.
+ * @param {!Blockly.Action} action The action to be handled.
+ * @return {boolean} True if the action has been handled, false otherwise.
+ */
+Blockly.Cursor.prototype.onBlocklyAction = function(action) {
+  // If we are on a field give it the option to handle the action
+  if (this.getCurNode() &&
+      this.getCurNode().getType() === Blockly.ASTNode.types.FIELD &&
+      this.getCurNode().getLocation().onBlocklyAction(action)) {
+    return true;
+  }
+  switch (action.name) {
+    case Blockly.navigation.actionNames.PREVIOUS:
+      this.prev();
+      return true;
+    case Blockly.navigation.actionNames.OUT:
+      this.out();
+      return true;
+    case Blockly.navigation.actionNames.NEXT:
+      this.next();
+      return true;
+    case Blockly.navigation.actionNames.IN:
+      this.in();
+      return true;
+    default:
+      return false;
+  }
 };

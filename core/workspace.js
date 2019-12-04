@@ -24,7 +24,7 @@
 goog.provide('Blockly.Workspace');
 
 goog.require('Blockly.Cursor');
-goog.require('Blockly.MarkerCursor');
+goog.require('Blockly.Marker');
 goog.require('Blockly.Events');
 goog.require('Blockly.utils');
 goog.require('Blockly.utils.math');
@@ -121,10 +121,10 @@ Blockly.Workspace = function(opt_options) {
 
   /**
    * The marker used to mark a location for keyboard navigation.
-   * @type {!Blockly.MarkerCursor}
+   * @type {!Blockly.Marker}
    * @protected
    */
-  this.marker_ = new Blockly.MarkerCursor();
+  this.marker_ = new Blockly.Marker();
 
   /**
    * True if keyboard accessibility mode is on, false otherwise.
@@ -171,7 +171,7 @@ Blockly.Workspace.prototype.setCursor = function(cursor) {
 
 /**
  * Sets the marker for keyboard navigation.
- * @param {!Blockly.MarkerCursor} marker The marker used to mark a location for
+ * @param {!Blockly.Marker} marker The marker used to mark a location for
  *     keyboard navigation.
  */
 Blockly.Workspace.prototype.setMarker = function(marker) {
@@ -188,7 +188,8 @@ Blockly.Workspace.prototype.getCursor = function() {
 
 /**
  * Get the marker used to mark a location for keyboard navigation.
- * @return {Blockly.MarkerCursor} the marker for this workspace.
+ * @return {Blockly.Marker} The marker used to mark a location for keyboard
+ *     navigation.
  */
 Blockly.Workspace.prototype.getMarker = function() {
   return this.marker_;

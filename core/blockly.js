@@ -67,12 +67,6 @@ Blockly.mainWorkspace = null;
 Blockly.selected = null;
 
 /**
- * Current cursor.
- * @type {Blockly.Cursor}
- */
-Blockly.cursor = null;
-
-/**
  * All of the connections on blocks that are currently being dragged.
  * @type {!Array.<!Blockly.Connection>}
  * @package

@@ -150,8 +150,8 @@ Blockly.Theme.prototype.getBlockStyleForColour = function(colour) {
 /**
  * Create a block style object based on the given colour.
  * @param {string} colour #RRGGBB colour string.
- * @return {!Blockly.Theme.BlockStyle} A populated block style based on the
- *     given colour.
+ * @return {!Blockly.Theme.BlockStyle} A fully populated block style based on
+ *     the given colour.
  * @protected
  */
 Blockly.Theme.prototype.createBlockStyle_ = function(colour) {

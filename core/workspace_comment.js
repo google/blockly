@@ -99,7 +99,7 @@ Blockly.WorkspaceComment = function(workspace, content, height, width, opt_id) {
    * @type {boolean}
    * @private
    */
-  this.readOnly_ = false;
+  this.editable_ = true;
 
   /**
    * @protected
@@ -236,22 +236,20 @@ Blockly.WorkspaceComment.prototype.setMovable = function(movable) {
 };
 
 /**
- * Get whether this comment is readOnly or not.
- * @return {boolean} True if readOnly.
- * @package
+ * Get whether this comment is editable or not.
+ * @return {boolean} True if editable.
  */
-Blockly.WorkspaceComment.prototype.isReadOnly = function() {
-  return this.readOnly_ ||
-      (this.workspace && this.workspace.options.readOnly);
+Blockly.WorkspaceComment.prototype.isEditable = function() {
+  return this.editable_ &&
+      !(this.workspace && this.workspace.options.readOnly);
 };
 
 /**
- * Set whether this comment is readOnly or not.
- * @param {boolean} readOnly True if readOnly.
- * @package
+ * Set whether this comment is editable or not.
+ * @param {boolean} editable True if editable.
  */
-Blockly.WorkspaceComment.prototype.setReadOnly = function(readOnly) {
-  this.readOnly_ = readOnly;
+Blockly.WorkspaceComment.prototype.setEditable = function(editable) {
+  this.editable_ = editable;
 };
 
 /**

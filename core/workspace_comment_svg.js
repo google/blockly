@@ -484,14 +484,14 @@ Blockly.WorkspaceCommentSvg.prototype.setMovable = function(movable) {
 };
 
 /**
- * Set whether this comment is readOnly or not.
- * @param {boolean} readOnly True if readOnly.
+ * Set whether this comment is editable or not.
+ * @param {boolean} editable True if editable.
  * @package
  */
-Blockly.WorkspaceCommentSvg.prototype.setReadOnly = function(readOnly) {
-  Blockly.WorkspaceCommentSvg.superClass_.setReadOnly.call(this, readOnly);
+Blockly.WorkspaceCommentSvg.prototype.setEditable = function(editable) {
+  Blockly.WorkspaceCommentSvg.superClass_.setEditable.call(this, editable);
   if (this.textarea_) {
-    this.textarea_.readOnly = readOnly;
+    this.textarea_.readOnly = !editable;
   }
 };
 

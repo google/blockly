@@ -30,7 +30,7 @@ goog.require('Blockly.Events.BlockCreate');
 goog.require('Blockly.Events.VarCreate');
 goog.require('Blockly.FlyoutCursor');
 goog.require('Blockly.Gesture');
-goog.require('Blockly.MarkerCursor');
+goog.require('Blockly.Marker');
 goog.require('Blockly.Scrollbar');
 goog.require('Blockly.Tooltip');
 goog.require('Blockly.Touch');
@@ -58,7 +58,7 @@ Blockly.Flyout = function(workspaceOptions) {
   this.workspace_ = new Blockly.WorkspaceSvg(workspaceOptions);
   this.workspace_.isFlyout = true;
   this.workspace_.setCursor(new Blockly.FlyoutCursor());
-  this.workspace_.setMarker(new Blockly.MarkerCursor());
+  this.workspace_.setMarker(new Blockly.Marker());
 
   /**
    * Is RTL vs LTR.

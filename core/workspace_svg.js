@@ -511,7 +511,6 @@ Blockly.WorkspaceSvg.prototype.updateBlockStyles_ = function(blocks) {
 
 /**
  * Sets the cursor for use with keyboard navigation.
- *
  * @param {!Blockly.Cursor} cursor The cursor used to move around this workspace.
  * @override
  */
@@ -520,14 +519,13 @@ Blockly.WorkspaceSvg.prototype.setCursor = function(cursor) {
     this.cursor_.getDrawer().dispose();
   }
   this.cursor_ = cursor;
-  this.cursor_.setDrawer(this.getRenderer().makeCursorDrawer(this, false));
+  this.cursor_.setDrawer(this.getRenderer().makeMarkerDrawer(this, this.cursor_));
   this.setCursorSvg(this.cursor_.getDrawer().createDom());
 };
 
 /**
  * Sets the marker for use with keyboard navigation.
- * @param {!Blockly.MarkerCursor} marker The immovable cursor used to mark a
- *     location on the workspace.
+ * @param {!Blockly.Marker} marker Used to save a location in the Blockly AST.
  * @override
  */
 Blockly.WorkspaceSvg.prototype.setMarker = function(marker) {
@@ -535,7 +533,7 @@ Blockly.WorkspaceSvg.prototype.setMarker = function(marker) {
     this.marker_.getDrawer().dispose();
   }
   this.marker_ = marker;
-  this.marker_.setDrawer(this.getRenderer().makeCursorDrawer(this, true));
+  this.marker_.setDrawer(this.getRenderer().makeMarkerDrawer(this, this.marker_));
   this.setMarkerSvg(this.marker_.getDrawer().createDom());
 };
 
@@ -753,11 +751,11 @@ Blockly.WorkspaceSvg.prototype.createDom = function(opt_backgroundClass) {
   }
   this.recordDeleteAreas();
 
-  this.cursor_.setDrawer(this.getRenderer().makeCursorDrawer(this, false));
+  this.cursor_.setDrawer(this.getRenderer().makeMarkerDrawer(this, this.cursor_));
   var svgCursor = this.cursor_.getDrawer().createDom();
   this.svgGroup_.appendChild(svgCursor);
 
-  this.marker_.setDrawer(this.getRenderer().makeCursorDrawer(this, true));
+  this.marker_.setDrawer(this.getRenderer().makeMarkerDrawer(this, this.marker_));
   var svgMarker = this.marker_.getDrawer().createDom();
   this.svgGroup_.appendChild(svgMarker);
 

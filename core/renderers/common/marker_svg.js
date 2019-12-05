@@ -16,46 +16,42 @@
  */
 
 /**
- * @fileoverview Methods for graphically rendering a cursor as SVG.
+ * @fileoverview Methods for graphically rendering a marker as SVG.
  * @author samelh@microsoft.com (Sam El-Husseini)
  */
 'use strict';
 
 
-goog.provide('Blockly.blockRendering.CursorSvg');
+goog.provide('Blockly.blockRendering.MarkerSvg');
 
 goog.require('Blockly.ASTNode');
 
 
 /**
- * Class for a cursor.
- * @param {!Blockly.WorkspaceSvg} workspace The workspace the cursor belongs to.
+ * Class for a marker.
+ * @param {!Blockly.WorkspaceSvg} workspace The workspace the marker belongs to.
  * @param {!Blockly.blockRendering.ConstantProvider} constants The constants for
  *     the renderer.
-  * @param {boolean=} opt_marker True if the cursor is a marker. A marker is used
- *     to save a location and is an immovable cursor. False or undefined if the
- *     cursor is not a marker.
+ * @param {!Blockly.Marker} marker The marker to draw.
  * @constructor
  */
-Blockly.blockRendering.CursorSvg = function(workspace, constants, opt_marker) {
+Blockly.blockRendering.MarkerSvg = function(workspace, constants, marker) {
   /**
-   * The workspace the cursor belongs to.
+   * The workspace the marker belongs to.
    * @type {!Blockly.WorkspaceSvg}
    * @private
    */
   this.workspace_ = workspace;
 
   /**
-   * True if the cursor should be drawn as a marker, false otherwise.
-   * A marker is drawn as a solid blue line, while the cursor is drawns as a
-   * flashing red one.
-   * @type {boolean}
+   * The marker to draw.
+   * @type {!Blockly.Marker}
    * @private
    */
-  this.isMarker_ = !!opt_marker;
+  this.marker_ = marker;
 
   /**
-   * The workspace, field, or block that the cursor SVG element should be
+   * The workspace, field, or block that the marker SVG element should be
    * attached to.
    * @type {Blockly.WorkspaceSvg|Blockly.Field|Blockly.BlockSvg}
    * @private
@@ -63,66 +59,74 @@ Blockly.blockRendering.CursorSvg = function(workspace, constants, opt_marker) {
   this.parent_ = null;
 
   /**
-   * The constants necessary to draw the cursor.
+   * The constants necessary to draw the marker.
    * @type {Blockly.blockRendering.ConstantProvider}
    * @protected
    */
   this.constants_ = constants;
 
   /**
-   * The current SVG element for the cursor.
+   * The current SVG element for the marker.
    * @type {Element}
    */
-  this.currentCursorSvg = null;
+  this.currentMarkerSvg = null;
+
+  var defaultColour = this.isCursor() ? this.constants_.CURSOR_COLOUR :
+      this.constants_.MARKER_COLOUR;
+
+  /**
+   * The colour of the marker.
+   * @type {string}
+   */
+  this.colour_ = marker.colour || defaultColour;
 };
 
 /**
  * The name of the CSS class for a cursor.
  * @const {string}
  */
-Blockly.blockRendering.CursorSvg.CURSOR_CLASS = 'blocklyCursor';
+Blockly.blockRendering.MarkerSvg.CURSOR_CLASS = 'blocklyCursor';
 
 /**
  * The name of the CSS class for a marker.
  * @const {string}
  */
-Blockly.blockRendering.CursorSvg.MARKER_CLASS = 'blocklyMarker';
+Blockly.blockRendering.MarkerSvg.MARKER_CLASS = 'blocklyMarker';
 
 /**
- * What we multiply the height by to get the height of the cursor.
+ * What we multiply the height by to get the height of the marker.
  * Only used for the block and block connections.
  * @type {number}
  * @const
  */
-Blockly.blockRendering.CursorSvg.HEIGHT_MULTIPLIER = 3 / 4;
+Blockly.blockRendering.MarkerSvg.HEIGHT_MULTIPLIER = 3 / 4;
 
 /**
  * Return the root node of the SVG or null if none exists.
  * @return {SVGElement} The root SVG node.
  */
-Blockly.blockRendering.CursorSvg.prototype.getSvgRoot = function() {
+Blockly.blockRendering.MarkerSvg.prototype.getSvgRoot = function() {
   return this.svgGroup_;
 };
 
 /**
- * True if the cursor should be drawn as a marker, false otherwise.
- * A marker is drawn as a solid blue line, while the cursor is drawns as a
- * flashing red one.
- * @return {boolean} The root SVG node.
+ * True if the marker should be drawn as a cursor, false otherwise.
+ * A cursor is drawn as a flashing line. A marker is drawn as a solid line.
+ * @return {boolean} True if the marker is a cursor, false otherwise.
  */
-Blockly.blockRendering.CursorSvg.prototype.isMarker = function() {
-  return this.isMarker_;
+Blockly.blockRendering.MarkerSvg.prototype.isCursor = function() {
+  return this.marker_.type == 'cursor';
 };
 
 /**
- * Create the DOM element for the cursor.
- * @return {!SVGElement} The cursor controls SVG group.
+ * Create the DOM element for the marker.
+ * @return {!SVGElement} The marker controls SVG group.
  * @package
  */
-Blockly.blockRendering.CursorSvg.prototype.createDom = function() {
-  var className = this.isMarker() ?
-      Blockly.blockRendering.CursorSvg.MARKER_CLASS :
-      Blockly.blockRendering.CursorSvg.CURSOR_CLASS;
+Blockly.blockRendering.MarkerSvg.prototype.createDom = function() {
+  var className = this.isCursor() ?
+      Blockly.blockRendering.MarkerSvg.CURSOR_CLASS :
+      Blockly.blockRendering.MarkerSvg.MARKER_CLASS;
 
   this.svgGroup_ =
       Blockly.utils.dom.createSvgElement('g', {
@@ -134,14 +138,14 @@ Blockly.blockRendering.CursorSvg.prototype.createDom = function() {
 };
 
 /**
- * Attaches the SVG root of the cursor to the SVG group of the parent.
+ * Attaches the SVG root of the marker to the SVG group of the parent.
  * @param {!Blockly.WorkspaceSvg|!Blockly.Field|!Blockly.BlockSvg} newParent
- *    The workspace, field, or block that the cursor SVG element should be
+ *    The workspace, field, or block that the marker SVG element should be
  *    attached to.
  * @protected
  */
-Blockly.blockRendering.CursorSvg.prototype.setParent_ = function(newParent) {
-  if (this.isMarker_) {
+Blockly.blockRendering.MarkerSvg.prototype.setParent_ = function(newParent) {
+  if (!this.isCursor()) {
     if (this.parent_) {
       this.parent_.setMarkerSvg(null);
     }
@@ -160,26 +164,26 @@ Blockly.blockRendering.CursorSvg.prototype.setParent_ = function(newParent) {
  **************************/
 
 /**
- * Show the cursor as a combination of the previous connection and block,
+ * Show the marker as a combination of the previous connection and block,
  * the output connection and block, or just the block.
- * @param {Blockly.BlockSvg} block The block the cursor is currently on.
+ * @param {Blockly.BlockSvg} block The block the marker is currently on.
  * @protected
  */
-Blockly.blockRendering.CursorSvg.prototype.showWithBlockPrevOutput_ = function(block) {
+Blockly.blockRendering.MarkerSvg.prototype.showWithBlockPrevOutput_ = function(block) {
   if (!block) {
     return;
   }
   var width = block.width;
   var height = block.height;
-  var cursorHeight = height * Blockly.blockRendering.CursorSvg.HEIGHT_MULTIPLIER;
-  var cursorOffset = this.constants_.CURSOR_BLOCK_PADDING;
+  var markerHeight = height * Blockly.blockRendering.MarkerSvg.HEIGHT_MULTIPLIER;
+  var markerOffset = this.constants_.CURSOR_BLOCK_PADDING;
 
   if (block.previousConnection) {
-    this.positionPrevious_(width, cursorOffset, cursorHeight);
+    this.positionPrevious_(width, markerOffset, markerHeight);
   } else if (block.outputConnection) {
     this.positionOutput_(width, height);
   } else {
-    this.positionBlock_(width, cursorOffset, cursorHeight);
+    this.positionBlock_(width, markerOffset, markerHeight);
   }
 
   this.setParent_(block);
@@ -189,10 +193,10 @@ Blockly.blockRendering.CursorSvg.prototype.showWithBlockPrevOutput_ = function(b
 /**
  * Show the visual representation of a workspace coordinate.
  * This is a horizontal line.
- * @param {!Blockly.ASTNode} curNode The node that we want to draw the cursor for.
+ * @param {!Blockly.ASTNode} curNode The node that we want to draw the marker for.
  * @protected
  */
-Blockly.blockRendering.CursorSvg.prototype.showWithCoordinates_ = function(curNode) {
+Blockly.blockRendering.MarkerSvg.prototype.showWithCoordinates_ = function(curNode) {
   var wsCoordinate = curNode.getWsCoordinate();
   var x = wsCoordinate.x;
   var y = wsCoordinate.y;
@@ -209,10 +213,10 @@ Blockly.blockRendering.CursorSvg.prototype.showWithCoordinates_ = function(curNo
 /**
  * Show the visual representation of a field.
  * This is a box around the field.
- * @param {!Blockly.ASTNode} curNode The node that we want to draw the cursor for.
+ * @param {!Blockly.ASTNode} curNode The node that we want to draw the marker for.
  * @protected
  */
-Blockly.blockRendering.CursorSvg.prototype.showWithField_ = function(curNode) {
+Blockly.blockRendering.MarkerSvg.prototype.showWithField_ = function(curNode) {
   var field = /** @type {Blockly.Field} */ (curNode.getLocation());
   var width = field.getSize().width;
   var height = field.getSize().height;
@@ -225,10 +229,10 @@ Blockly.blockRendering.CursorSvg.prototype.showWithField_ = function(curNode) {
 /**
  * Show the visual representation of an input.
  * This is a puzzle piece.
- * @param {!Blockly.ASTNode} curNode The node that we want to draw the cursor for.
+ * @param {!Blockly.ASTNode} curNode The node that we want to draw the marker for.
  * @protected
  */
-Blockly.blockRendering.CursorSvg.prototype.showWithInput_ = function(curNode) {
+Blockly.blockRendering.MarkerSvg.prototype.showWithInput_ = function(curNode) {
   var connection = /** @type {Blockly.Connection} */
       (curNode.getLocation());
   var sourceBlock = /** @type {!Blockly.BlockSvg} */ (connection.getSourceBlock());
@@ -242,10 +246,10 @@ Blockly.blockRendering.CursorSvg.prototype.showWithInput_ = function(curNode) {
 /**
  * Show the visual representation of a next connection.
  * This is a horizontal line.
- * @param {!Blockly.ASTNode} curNode The node that we want to draw the cursor for.
+ * @param {!Blockly.ASTNode} curNode The node that we want to draw the marker for.
  * @protected
  */
-Blockly.blockRendering.CursorSvg.prototype.showWithNext_ = function(curNode) {
+Blockly.blockRendering.MarkerSvg.prototype.showWithNext_ = function(curNode) {
   var connection = curNode.getLocation();
   var targetBlock = /** @type {Blockly.BlockSvg} */ (connection.getSourceBlock());
   var x = 0;
@@ -262,10 +266,10 @@ Blockly.blockRendering.CursorSvg.prototype.showWithNext_ = function(curNode) {
 /**
  * Show the visual representation of a stack.
  * This is a box with extra padding around the entire stack of blocks.
- * @param {!Blockly.ASTNode} curNode The node that we want to draw the cursor for.
+ * @param {!Blockly.ASTNode} curNode The node that we want to draw the marker for.
  * @protected
  */
-Blockly.blockRendering.CursorSvg.prototype.showWithStack_ = function(curNode) {
+Blockly.blockRendering.MarkerSvg.prototype.showWithStack_ = function(curNode) {
   var block = /** @type {Blockly.BlockSvg} */ (curNode.getLocation());
 
   // Gets the height and width of entire stack.
@@ -291,12 +295,12 @@ Blockly.blockRendering.CursorSvg.prototype.showWithStack_ = function(curNode) {
 };
 
 /**
- * Show the current cursor.
+ * Show the current marker.
  * @protected
  */
-Blockly.blockRendering.CursorSvg.prototype.showCurrent_ = function() {
+Blockly.blockRendering.MarkerSvg.prototype.showCurrent_ = function() {
   this.hide();
-  this.currentCursorSvg.style.display = '';
+  this.currentMarkerSvg.style.display = '';
 };
 
 /**************************
@@ -304,107 +308,107 @@ Blockly.blockRendering.CursorSvg.prototype.showCurrent_ = function() {
  **************************/
 
 /**
- * Position the cursor for a block.
+ * Position the marker for a block.
  * Displays an outline of the top half of a rectangle around a block.
  * @param {number} width The width of the block.
- * @param {number} cursorOffset The extra padding for around the block.
- * @param {number} cursorHeight The height of the cursor.
+ * @param {number} markerOffset The extra padding for around the block.
+ * @param {number} markerHeight The height of the marker.
  * @private
  */
-Blockly.blockRendering.CursorSvg.prototype.positionBlock_ = function(
-    width, cursorOffset, cursorHeight) {
-  var cursorPath = Blockly.utils.svgPaths.moveBy(-cursorOffset, cursorHeight) +
-      Blockly.utils.svgPaths.lineOnAxis('V', -cursorOffset) +
-      Blockly.utils.svgPaths.lineOnAxis('H', width + cursorOffset * 2) +
-      Blockly.utils.svgPaths.lineOnAxis('V', cursorHeight);
-  this.cursorBlock_.setAttribute('d', cursorPath);
+Blockly.blockRendering.MarkerSvg.prototype.positionBlock_ = function(
+    width, markerOffset, markerHeight) {
+  var markerPath = Blockly.utils.svgPaths.moveBy(-markerOffset, markerHeight) +
+      Blockly.utils.svgPaths.lineOnAxis('V', -markerOffset) +
+      Blockly.utils.svgPaths.lineOnAxis('H', width + markerOffset * 2) +
+      Blockly.utils.svgPaths.lineOnAxis('V', markerHeight);
+  this.markerBlock_.setAttribute('d', markerPath);
   if (this.workspace_.RTL) {
-    this.flipRtl_(this.cursorBlock_);
+    this.flipRtl_(this.markerBlock_);
   }
-  this.currentCursorSvg = this.cursorBlock_;
+  this.currentMarkerSvg = this.markerBlock_;
 };
 
 /**
- * Position the cursor for an input connection.
+ * Position the marker for an input connection.
  * Displays a filled in puzzle piece.
- * @param {!Blockly.Connection} connection The connection to position cursor around.
+ * @param {!Blockly.Connection} connection The connection to position marker around.
  * @private
  */
-Blockly.blockRendering.CursorSvg.prototype.positionInput_ = function(connection) {
+Blockly.blockRendering.MarkerSvg.prototype.positionInput_ = function(connection) {
   var x = connection.getOffsetInBlock().x;
   var y = connection.getOffsetInBlock().y;
 
   var path = Blockly.utils.svgPaths.moveTo(0, 0) +
       this.constants_.PUZZLE_TAB.pathDown;
 
-  this.cursorInput_.setAttribute('d', path);
-  this.cursorInput_.setAttribute('transform',
+  this.markerInput_.setAttribute('d', path);
+  this.markerInput_.setAttribute('transform',
       'translate(' + x + ',' + y + ')' + (this.workspace_.RTL ? ' scale(-1 1)' : ''));
-  this.currentCursorSvg = this.cursorInput_;
+  this.currentMarkerSvg = this.markerInput_;
 };
 
 /**
- * Move and show the cursor at the specified coordinate in workspace units.
+ * Move and show the marker at the specified coordinate in workspace units.
  * Displays a horizontal line.
  * @param {number} x The new x, in workspace units.
  * @param {number} y The new y, in workspace units.
  * @param {number} width The new width, in workspace units.
  * @protected
  */
-Blockly.blockRendering.CursorSvg.prototype.positionLine_ = function(x, y, width) {
-  this.cursorSvgLine_.setAttribute('x', x);
-  this.cursorSvgLine_.setAttribute('y', y);
-  this.cursorSvgLine_.setAttribute('width', width);
-  this.currentCursorSvg = this.cursorSvgLine_;
+Blockly.blockRendering.MarkerSvg.prototype.positionLine_ = function(x, y, width) {
+  this.markerSvgLine_.setAttribute('x', x);
+  this.markerSvgLine_.setAttribute('y', y);
+  this.markerSvgLine_.setAttribute('width', width);
+  this.currentMarkerSvg = this.markerSvgLine_;
 };
 
 /**
- * Position the cursor for an output connection.
+ * Position the marker for an output connection.
  * Displays a puzzle outline and the top and bottom path.
  * @param {number} width The width of the block.
  * @param {number} height The height of the block.
  * @private
  */
-Blockly.blockRendering.CursorSvg.prototype.positionOutput_ = function(width, height) {
-  var cursorPath = Blockly.utils.svgPaths.moveBy(width, 0) +
+Blockly.blockRendering.MarkerSvg.prototype.positionOutput_ = function(width, height) {
+  var markerPath = Blockly.utils.svgPaths.moveBy(width, 0) +
     Blockly.utils.svgPaths.lineOnAxis('h', -(width - this.constants_.PUZZLE_TAB.width)) +
     Blockly.utils.svgPaths.lineOnAxis('v', this.constants_.TAB_OFFSET_FROM_TOP) +
     this.constants_.PUZZLE_TAB.pathDown +
     Blockly.utils.svgPaths.lineOnAxis('V', height) +
     Blockly.utils.svgPaths.lineOnAxis('H', width);
-  this.cursorBlock_.setAttribute('d', cursorPath);
+  this.markerBlock_.setAttribute('d', markerPath);
   if (this.workspace_.RTL) {
-    this.flipRtl_(this.cursorBlock_);
+    this.flipRtl_(this.markerBlock_);
   }
-  this.currentCursorSvg = this.cursorBlock_;
+  this.currentMarkerSvg = this.markerBlock_;
 };
 
 /**
- * Position the cursor for a previous connection.
+ * Position the marker for a previous connection.
  * Displays a half rectangle with a notch in the top to represent the previous
  * connection.
  * @param {number} width The width of the block.
- * @param {number} cursorOffset The offset of the cursor from around the block.
- * @param {number} cursorHeight The height of the cursor.
+ * @param {number} markerOffset The offset of the marker from around the block.
+ * @param {number} markerHeight The height of the marker.
  * @private
  */
-Blockly.blockRendering.CursorSvg.prototype.positionPrevious_ = function(
-    width, cursorOffset, cursorHeight) {
-  var cursorPath = Blockly.utils.svgPaths.moveBy(-cursorOffset, cursorHeight) +
-      Blockly.utils.svgPaths.lineOnAxis('V', -cursorOffset) +
+Blockly.blockRendering.MarkerSvg.prototype.positionPrevious_ = function(
+    width, markerOffset, markerHeight) {
+  var markerPath = Blockly.utils.svgPaths.moveBy(-markerOffset, markerHeight) +
+      Blockly.utils.svgPaths.lineOnAxis('V', -markerOffset) +
       Blockly.utils.svgPaths.lineOnAxis('H', this.constants_.NOTCH_OFFSET_LEFT) +
       this.constants_.NOTCH.pathLeft +
-      Blockly.utils.svgPaths.lineOnAxis('H', width + cursorOffset * 2) +
-      Blockly.utils.svgPaths.lineOnAxis('V', cursorHeight);
-  this.cursorBlock_.setAttribute('d', cursorPath);
+      Blockly.utils.svgPaths.lineOnAxis('H', width + markerOffset * 2) +
+      Blockly.utils.svgPaths.lineOnAxis('V', markerHeight);
+  this.markerBlock_.setAttribute('d', markerPath);
   if (this.workspace_.RTL) {
-    this.flipRtl_(this.cursorBlock_);
+    this.flipRtl_(this.markerBlock_);
   }
-  this.currentCursorSvg = this.cursorBlock_;
+  this.currentMarkerSvg = this.markerBlock_;
 };
 
 /**
- * Move and show the cursor at the specified coordinate in workspace units.
+ * Move and show the marker at the specified coordinate in workspace units.
  * Displays a filled in rectangle.
  * @param {number} x The new x, in workspace units.
  * @param {number} y The new y, in workspace units.
@@ -412,41 +416,41 @@ Blockly.blockRendering.CursorSvg.prototype.positionPrevious_ = function(
  * @param {number} height The new height, in workspace units.
  * @protected
  */
-Blockly.blockRendering.CursorSvg.prototype.positionRect_ = function(x, y, width, height) {
-  this.cursorSvgRect_.setAttribute('x', x);
-  this.cursorSvgRect_.setAttribute('y', y);
-  this.cursorSvgRect_.setAttribute('width', width);
-  this.cursorSvgRect_.setAttribute('height', height);
-  this.currentCursorSvg = this.cursorSvgRect_;
+Blockly.blockRendering.MarkerSvg.prototype.positionRect_ = function(x, y, width, height) {
+  this.markerSvgRect_.setAttribute('x', x);
+  this.markerSvgRect_.setAttribute('y', y);
+  this.markerSvgRect_.setAttribute('width', width);
+  this.markerSvgRect_.setAttribute('height', height);
+  this.currentMarkerSvg = this.markerSvgRect_;
 };
 
 /**
  * Flip the SVG paths in RTL.
- * @param {!SVGElement} cursor The cursor that we want to flip.
+ * @param {!SVGElement} markerSvg The marker that we want to flip.
  * @private
  */
-Blockly.blockRendering.CursorSvg.prototype.flipRtl_ = function(cursor) {
-  cursor.setAttribute('transform', 'scale(-1 1)');
+Blockly.blockRendering.MarkerSvg.prototype.flipRtl_ = function(markerSvg) {
+  markerSvg.setAttribute('transform', 'scale(-1 1)');
 };
 
 /**
- * Hide the cursor.
+ * Hide the marker.
  * @package
  */
-Blockly.blockRendering.CursorSvg.prototype.hide = function() {
-  this.cursorSvgLine_.style.display = 'none';
-  this.cursorSvgRect_.style.display = 'none';
-  this.cursorInput_.style.display = 'none';
-  this.cursorBlock_.style.display = 'none';
+Blockly.blockRendering.MarkerSvg.prototype.hide = function() {
+  this.markerSvgLine_.style.display = 'none';
+  this.markerSvgRect_.style.display = 'none';
+  this.markerInput_.style.display = 'none';
+  this.markerBlock_.style.display = 'none';
 };
 
 /**
- * Update the cursor.
- * @param {Blockly.ASTNode} oldNode The previous node the cursor was on or null.
- * @param {Blockly.ASTNode} curNode The node that we want to draw the cursor for.
+ * Update the marker.
+ * @param {Blockly.ASTNode} oldNode The previous node the marker was on or null.
+ * @param {Blockly.ASTNode} curNode The node that we want to draw the marker for.
  * @package
  */
-Blockly.blockRendering.CursorSvg.prototype.draw = function(oldNode, curNode) {
+Blockly.blockRendering.MarkerSvg.prototype.draw = function(oldNode, curNode) {
   if (!curNode) {
     this.hide();
     return;
@@ -454,10 +458,10 @@ Blockly.blockRendering.CursorSvg.prototype.draw = function(oldNode, curNode) {
 
   this.showAtLocation_(curNode);
 
-  this.fireCursorEvent_(oldNode, curNode);
+  this.firemarkerEvent_(oldNode, curNode);
 
-  // Ensures the cursor will be visible immediately after the move.
-  var animate = this.currentCursorSvg.childNodes[0];
+  // Ensures the marker will be visible immediately after the move.
+  var animate = this.currentMarkerSvg.childNodes[0];
   if (animate !== undefined) {
     animate.beginElement && animate.beginElement();
   }
@@ -465,11 +469,11 @@ Blockly.blockRendering.CursorSvg.prototype.draw = function(oldNode, curNode) {
 
 
 /**
- * Update the cursor's visible state based on the type of curNode..
- * @param {Blockly.ASTNode} curNode The node that we want to draw the cursor for.
+ * Update the marker's visible state based on the type of curNode..
+ * @param {Blockly.ASTNode} curNode The node that we want to draw the marker for.
  * @protected
  */
-Blockly.blockRendering.CursorSvg.prototype.showAtLocation_ = function(curNode) {
+Blockly.blockRendering.MarkerSvg.prototype.showAtLocation_ = function(curNode) {
   if (curNode.getType() == Blockly.ASTNode.types.BLOCK) {
     var block = /** @type {Blockly.BlockSvg} */ (curNode.getLocation());
     this.showWithBlockPrevOutput_(block);
@@ -493,14 +497,14 @@ Blockly.blockRendering.CursorSvg.prototype.showAtLocation_ = function(curNode) {
 };
 
 /**
- * Fire event for the cursor or marker.
- * @param {Blockly.ASTNode} oldNode The old node the cursor used to be on.
- * @param {!Blockly.ASTNode} curNode The new node the cursor is currently on.
+ * Fire event for the marker or marker.
+ * @param {Blockly.ASTNode} oldNode The old node the marker used to be on.
+ * @param {!Blockly.ASTNode} curNode The new node the marker is currently on.
  * @private
  */
-Blockly.blockRendering.CursorSvg.prototype.fireCursorEvent_ = function(oldNode, curNode) {
+Blockly.blockRendering.MarkerSvg.prototype.firemarkerEvent_ = function(oldNode, curNode) {
   var curBlock = curNode.getSourceBlock();
-  var eventType = this.isMarker_ ? 'markedNode' : 'cursorMove';
+  var eventType = this.isCursor() ? 'cursorMove' : 'markerMove';
   var event = new Blockly.Events.Ui(curBlock, eventType, oldNode, curNode);
   if (curNode.getType() == Blockly.ASTNode.types.WORKSPACE) {
     event.workspaceId = curNode.getLocation().id;
@@ -509,27 +513,27 @@ Blockly.blockRendering.CursorSvg.prototype.fireCursorEvent_ = function(oldNode, 
 };
 
 /**
- * Get the properties to make a cursor blink.
- * @return {!Object} The object holding attributes to make the cursor blink.
+ * Get the properties to make a marker blink.
+ * @return {!Object} The object holding attributes to make the marker blink.
  * @protected
  */
-Blockly.blockRendering.CursorSvg.prototype.getBlinkProperties_ = function() {
+Blockly.blockRendering.MarkerSvg.prototype.getBlinkProperties_ = function() {
   return {
     'attributeType': 'XML',
     'attributeName': 'fill',
     'dur': '1s',
-    'values': this.constants_.CURSOR_COLOUR + ';transparent;transparent;',
+    'values': this.colour_ + ';transparent;transparent;',
     'repeatCount': 'indefinite'
   };
 };
 
 
 /**
- * Create the cursor SVG.
+ * Create the marker SVG.
  * @return {Element} The SVG node created.
  * @protected
  */
-Blockly.blockRendering.CursorSvg.prototype.createDomInternal_ = function() {
+Blockly.blockRendering.MarkerSvg.prototype.createDomInternal_ = function() {
   /* This markup will be generated and added to the .svgGroup_:
   <g>
     <rect width="100" height="5">
@@ -539,75 +543,73 @@ Blockly.blockRendering.CursorSvg.prototype.createDomInternal_ = function() {
   </g>
   */
 
-  var colour = this.isMarker_ ? this.constants_.MARKER_COLOUR :
-      this.constants_.CURSOR_COLOUR;
-  this.cursorSvg_ = Blockly.utils.dom.createSvgElement('g',
+  this.markerSvg_ = Blockly.utils.dom.createSvgElement('g',
       {
         'width': this.constants_.CURSOR_WS_WIDTH,
         'height': this.constants_.WS_CURSOR_HEIGHT
       }, this.svgGroup_);
 
   // A horizontal line used to represent a workspace coordinate or next connection.
-  this.cursorSvgLine_ = Blockly.utils.dom.createSvgElement('rect',
+  this.markerSvgLine_ = Blockly.utils.dom.createSvgElement('rect',
       {
-        'fill': colour,
+        'fill': this.colour_,
         'width': this.constants_.CURSOR_WS_WIDTH,
         'height': this.constants_.WS_CURSOR_HEIGHT,
         'style': 'display: none'
       },
-      this.cursorSvg_);
+      this.markerSvg_);
 
   // A filled in rectangle used to represent a stack.
-  this.cursorSvgRect_ = Blockly.utils.dom.createSvgElement('rect',
+  this.markerSvgRect_ = Blockly.utils.dom.createSvgElement('rect',
       {
-        'class': 'blocklyVerticalCursor',
+        'class': 'blocklyVerticalMarker',
         'rx': 10, 'ry': 10,
         'style': 'display: none',
-        'stroke': colour
+        'stroke': this.colour_
       },
-      this.cursorSvg_);
+      this.markerSvg_);
 
   // A filled in puzzle piece used to represent an input value.
-  this.cursorInput_ = Blockly.utils.dom.createSvgElement('path',
+  this.markerInput_ = Blockly.utils.dom.createSvgElement('path',
       {
         'transform': '',
         'style': 'display: none',
-        'fill': colour
+        'fill': this.colour_
       },
-      this.cursorSvg_);
+      this.markerSvg_);
 
   // A path used to represent a previous connection and a block, an output
   // connection and a block, or a block.
-  this.cursorBlock_ = Blockly.utils.dom.createSvgElement('path',
+  this.markerBlock_ = Blockly.utils.dom.createSvgElement('path',
       {
         'transform': '',
         'style': 'display: none',
         'fill': 'none',
-        'stroke': colour,
+        'stroke': this.colour_,
         'stroke-width': this.constants_.CURSOR_STROKE_WIDTH
       },
-      this.cursorSvg_);
+      this.markerSvg_);
 
-  // Markers and stack cursors don't blink.
-  if (!this.isMarker_) {
+  // Markers and stack markers don't blink.
+  if (this.isCursor()) {
     var blinkProperties = this.getBlinkProperties_();
     Blockly.utils.dom.createSvgElement('animate', this.getBlinkProperties_(),
-        this.cursorSvgLine_);
+        this.markerSvgLine_);
     Blockly.utils.dom.createSvgElement('animate', blinkProperties,
-        this.cursorInput_);
+        this.markerInput_);
     blinkProperties['attributeName'] = 'stroke';
     Blockly.utils.dom.createSvgElement('animate', blinkProperties,
-        this.cursorBlock_);
+        this.markerBlock_);
   }
 
-  return this.cursorSvg_;
+  return this.markerSvg_;
 };
 
 /**
- * Dispose of this cursor.
+ * Dispose of this marker.
  * @package
  */
-Blockly.blockRendering.CursorSvg.prototype.dispose = function() {
+Blockly.blockRendering.MarkerSvg.prototype.dispose = function() {
   if (this.svgGroup_) {
     Blockly.utils.dom.removeNode(this.svgGroup_);
   }

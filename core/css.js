@@ -485,7 +485,7 @@ Blockly.Css.CONTENT = [
     'padding-right: 28px;',
   '}',
 
-  '.blocklyVerticalCursor {',
+  '.blocklyVerticalMarker {',
     'stroke-width: 3px;',
     'fill: rgba(255,255,255,.5);',
   '}',
@@ -676,6 +676,10 @@ Blockly.Css.CONTENT = [
     'position: absolute;',
     'width: 0;',
     'height: 0;',
+  '}',
+
+  '.blocklyNoPointerEvents {',
+    'pointer-events: none;',
   '}',
   /* eslint-enable indent */
 ];

@@ -45,6 +45,7 @@ goog.require('Blockly.utils.object');
 goog.require('Blockly.zelos.AfterStatementSpacerRow');
 goog.require('Blockly.zelos.BeforeStatementSpacerRow');
 goog.require('Blockly.zelos.BottomRow');
+goog.require('Blockly.zelos.RightConnectionShape');
 goog.require('Blockly.zelos.TopRow');
 
 
@@ -107,20 +108,6 @@ Blockly.zelos.RenderInfo.prototype.measure = function() {
   this.computeBounds_();
   this.alignRowElements_();
   this.finalize_();
-};
-
-/**
- * @override
- */
-Blockly.zelos.RenderInfo.prototype.computeBounds_ = function() {
-  Blockly.zelos.RenderInfo.superClass_.computeBounds_.call(this);
-
-  if (this.outputConnection && this.outputConnection.isDynamicShape) {
-    // Add right connection width.
-    var rightConnectionWidth = this.outputConnection.width;
-    this.width += rightConnectionWidth;
-    this.widthWithChildren += rightConnectionWidth;
-  }
 };
 
 /**
@@ -253,42 +240,51 @@ Blockly.zelos.RenderInfo.prototype.adjustXPosition_ = function() {
 };
 
 /**
- * @override
+ * Finalize the output connection info.  In particular set the height of the
+ * output connection to match that of the block.  For the right side, add a
+ * right connection shape element and have it match the dimensions of the
+ * output connection.
+ * @protected
  */
-Blockly.zelos.RenderInfo.prototype.finalize_ = function() {
-  // Performance note: this could be combined with the draw pass, if the time
-  // that this takes is excessive.  But it shouldn't be, because it only
-  // accesses and sets properties that already exist on the objects.
+Blockly.zelos.RenderInfo.prototype.finalizeOutputConnection_ = function() {
   var yCursor = 0;
+  var firstInpurRow = null;
+  // Determine the block height.
   for (var i = 0, row; (row = this.rows[i]); i++) {
     row.yPos = yCursor;
     yCursor += row.height;
+    if (!firstInpurRow && Blockly.blockRendering.Types.isInputRow(row)) {
+      firstInpurRow = row;
+    }
   }
-  this.height = yCursor;
-
   if (this.outputConnection && this.outputConnection.isDynamicShape) {
     // Dynamic output connections depend on the height of the block. Adjust the
     // height of the connection.
-    this.outputConnection.setShapeDimensions(
-        this.outputConnection.shape.height(this.height),
-        this.outputConnection.shape.width(this.height));
+    var connectionHeight = this.outputConnection.shape.height(yCursor);
+    var connectionWidth = this.outputConnection.shape.width(yCursor);
 
-    // Recompute the bounds as we now know the output connection dimensions.
-    this.computeBounds_();
+    this.outputConnection.height = connectionHeight;
+    this.outputConnection.width = connectionWidth;
+    this.outputConnection.startX = connectionWidth;
+
+    var rightConnection =
+        new Blockly.zelos.RightConnectionShape(this.constants_);
+    rightConnection.height = connectionHeight;
+    rightConnection.width = connectionWidth;
+    firstInpurRow.elements.push(rightConnection);
+    firstInpurRow.width += connectionWidth;
+    firstInpurRow.widthWithConnectedBlocks += connectionWidth;
+
+    this.startX = connectionWidth;
+    this.width += connectionWidth * 2;
+    this.widthWithChildren += connectionWidth * 2;
   }
+};
 
-  var widestRowWithConnectedBlocks = 0;
-  for (var i = 0, row; (row = this.rows[i]); i++) {
-    row.xPos = this.startX;
-
-    widestRowWithConnectedBlocks =
-        Math.max(widestRowWithConnectedBlocks, row.widthWithConnectedBlocks);
-    this.recordElemPositions_(row);
-  }
-
-  this.widthWithChildren = Math.max(this.widthWithChildren,
-      widestRowWithConnectedBlocks + this.startX);
-
-  this.startY = this.topRow.capline;
-  this.bottomRow.baseline = this.height - this.bottomRow.descenderHeight;
+/**
+ * @override
+ */
+Blockly.zelos.RenderInfo.prototype.finalize_ = function() {
+  this.finalizeOutputConnection_();
+  Blockly.zelos.RenderInfo.superClass_.finalize_.call(this);
 };

@@ -50,13 +50,13 @@ Blockly.utils.object.inherits(Blockly.zelos.Theme, Blockly.Theme);
 /**
  * @override
  */
-Blockly.Theme.prototype.generateSecondaryColour_ = function(colour) {
+Blockly.zelos.Theme.prototype.generateSecondaryColour_ = function(colour) {
   return Blockly.utils.colour.blend('#000', colour, 0.15) || colour;
 };
 
 /**
  * @override
  */
-Blockly.Theme.prototype.generateTertiaryColour_ = function(colour) {
+Blockly.zelos.Theme.prototype.generateTertiaryColour_ = function(colour) {
   return Blockly.utils.colour.blend('#000', colour, 0.25) || colour;
 };

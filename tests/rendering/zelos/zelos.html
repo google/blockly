@@ -32,7 +32,12 @@
   <script>
     goog.require('Blockly.blockRendering.Debug');
     goog.require('Blockly.zelos.Renderer');
+    goog.require('Blockly.zelos.Themes.Classic');
     // Blockly.blockRendering.startDebugger();
+
+    // This stub is a workaround in order to load pxt-blockly blocks, as they
+    // rely on a setOutputShape method on the block.
+    Blockly.BlockSvg.prototype.setOutputShape = function() { };
 
     var blocklyDiv = document.getElementById('blocklyDiv');
     var workspace;
@@ -46,6 +51,7 @@
         if (workspace) {
           workspace.dispose();
           blocklyDiv.innerHTML = '';
+          window.parent.focus();
         }
       } catch { }
 
@@ -56,6 +62,7 @@
           drag: true,
           wheel: false,
         },
+        theme: Blockly.zelos.Themes.Classic,
         zoom: {
           wheel: true,
           startScale: 2,

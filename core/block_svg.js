@@ -68,14 +68,15 @@ Blockly.BlockSvg = function(workspace, prototypeName, opt_id) {
    * A block style object.
    * @type {!Blockly.Theme.BlockStyle}
    */
-  this.style = workspace.getTheme().getBlockStyle(null);
+  this.style = workspace.getRenderer().getConstants().getBlockStyle(null);
 
   /**
    * The renderer's path object.
    * @type {Blockly.blockRendering.IPathObject}
    * @package
    */
-  this.pathObject = workspace.getRenderer().makePathObject(this.svgGroup_);
+  this.pathObject = workspace.getRenderer().makePathObject(
+      this.svgGroup_, this.style);
 
   /** @type {boolean} */
   this.rendered = false;
@@ -1219,7 +1220,8 @@ Blockly.BlockSvg.prototype.getColour = function() {
  */
 Blockly.BlockSvg.prototype.setColour = function(colour) {
   Blockly.BlockSvg.superClass_.setColour.call(this, colour);
-  var styleObj = this.workspace.getTheme().getBlockStyleForColour(this.colour_);
+  var styleObj = this.workspace.getRenderer().getConstants()
+      .getBlockStyleForColour(this.colour_);
 
   this.pathObject.setStyle(styleObj.style);
   this.style = styleObj.style;
@@ -1234,7 +1236,8 @@ Blockly.BlockSvg.prototype.setColour = function(colour) {
  * @throws {Error} if the block style does not exist.
  */
 Blockly.BlockSvg.prototype.setStyle = function(blockStyleName) {
-  var blockStyle = this.workspace.getTheme().getBlockStyle(blockStyleName);
+  var blockStyle = this.workspace.getRenderer()
+      .getConstants().getBlockStyle(blockStyleName);
   this.styleName_ = blockStyleName;
 
   if (blockStyle) {

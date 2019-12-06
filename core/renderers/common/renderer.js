@@ -126,11 +126,14 @@ Blockly.blockRendering.Renderer.prototype.makeMarkerDrawer = function(
 /**
  * Create a new instance of a renderer path object.
  * @param {!SVGElement} root The root SVG element.
+ * @param {!Blockly.Theme.BlockStyle} style The style object to use for
+ *     colouring.
  * @return {!Blockly.blockRendering.IPathObject} The renderer path object.
  * @package
  */
-Blockly.blockRendering.Renderer.prototype.makePathObject = function(root) {
-  return new Blockly.blockRendering.PathObject(root,
+Blockly.blockRendering.Renderer.prototype.makePathObject = function(root,
+    style) {
+  return new Blockly.blockRendering.PathObject(root, style,
       /** @type {!Blockly.blockRendering.ConstantProvider} */ (this.constants_));
 
 };

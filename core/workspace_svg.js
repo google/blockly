@@ -162,6 +162,7 @@ Blockly.WorkspaceSvg = function(options,
   this.cachedParentSvg_ = null;
 
   this.themeManager_.subscribeWorkspace(this);
+  this.renderer_.getConstants().refreshTheme(this.getTheme());
 };
 Blockly.utils.object.inherits(Blockly.WorkspaceSvg, Blockly.Workspace);
 
@@ -473,6 +474,8 @@ Blockly.WorkspaceSvg.prototype.setTheme = function(theme) {
  * @package
  */
 Blockly.WorkspaceSvg.prototype.refreshTheme = function() {
+  this.getRenderer().getConstants().refreshTheme(this.getTheme());
+
   // Update all blocks in workspace that have a style name.
   this.updateBlockStyles_(this.getAllBlocks(false).filter(
       function(block) {

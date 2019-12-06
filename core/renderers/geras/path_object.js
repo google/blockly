@@ -35,12 +35,14 @@ goog.require('Blockly.utils.object');
  * An object that handles creating and setting each of the SVG elements
  * used by the renderer.
  * @param {!SVGElement} root The root SVG element.
+ * @param {!Blockly.Theme.BlockStyle} style The style object to use for
+ *     colouring.
  * @param {!Blockly.geras.ConstantProvider} constants The renderer's constants.
  * @constructor
  * @extends {Blockly.blockRendering.PathObject}
  * @package
  */
-Blockly.geras.PathObject = function(root, constants) {
+Blockly.geras.PathObject = function(root, style, constants) {
   /**
    * The renderer's constant provider.
    * @type {!Blockly.geras.ConstantProvider}
@@ -89,7 +91,7 @@ Blockly.geras.PathObject = function(root, constants) {
    * @type {!Blockly.Theme.BlockStyle}
    * @package
    */
-  this.style = Blockly.Theme.createBlockStyle('#000000');
+  this.style = style;
 };
 Blockly.utils.object.inherits(Blockly.geras.PathObject,
     Blockly.blockRendering.PathObject);

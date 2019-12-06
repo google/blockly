@@ -72,6 +72,7 @@
 goog.require('Blockly.blockRendering.Debug');
 goog.require('Blockly.minimalist.Renderer');
 goog.require('Blockly.Themes.Modern');
+goog.require('Blockly.Themes.Zelos');
 goog.require('Blockly.thrasos.Renderer');
 goog.require('Blockly.zelos.Renderer');
 </script>
@@ -194,7 +195,8 @@ function addToolboxButtonCallbacks() {
   };
   var setRandomStyle = function(button) {
     var blocks = button.workspace_.getAllBlocks(false);
-    var styles = Object.keys(workspace.getTheme().getAllBlockStyles());
+    var styles =
+        Object.keys(workspace.getRenderer().getConstants().blockStyles);
     styles.splice(styles.indexOf(blocks[0].getStyleName()), 1);
     var style = styles[Math.floor(Math.random() * styles.length)];
     for(var i = 0, block; block = blocks[i]; i++) {
@@ -331,6 +333,8 @@ function changeTheme() {
     Blockly.getMainWorkspace().setTheme(Blockly.Themes.Tritanopia);
   } else if (theme.value === "modern") {
     Blockly.getMainWorkspace().setTheme(Blockly.Themes.Modern);
+  } else if (theme.value === "zelos") {
+    Blockly.getMainWorkspace().setTheme(Blockly.Themes.Zelos);
   } else {
     Blockly.getMainWorkspace().setTheme(Blockly.Themes.Classic);
   }
@@ -594,6 +598,7 @@ var spaghettiXml = [
     <option value="high_contrast">High Contrast</option>
     <option value="deuteranopia">Deuteranopia/Protanopia</option>
     <option value="tritanopia">Tritanopia</option>
+    <option value="zelos">Zelos</option>
   </select>
   <p>
     <input type="button" value="Export to XML" onclick="toXml()">

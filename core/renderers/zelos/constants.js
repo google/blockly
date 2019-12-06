@@ -539,6 +539,22 @@ Blockly.zelos.ConstantProvider.prototype.makeInsideCorners = function() {
 /**
  * @override
  */
+Blockly.zelos.ConstantProvider.prototype.generateSecondaryColour_ = function(
+    colour) {
+  return Blockly.utils.colour.blend('#000', colour, 0.15) || colour;
+};
+
+/**
+ * @override
+ */
+Blockly.zelos.ConstantProvider.prototype.generateTertiaryColour_ = function(
+    colour) {
+  return Blockly.utils.colour.blend('#000', colour, 0.25) || colour;
+};
+
+/**
+ * @override
+ */
 Blockly.zelos.ConstantProvider.prototype.createDom = function(svg) {
   Blockly.zelos.ConstantProvider.superClass_.createDom.call(this, svg);
   /*

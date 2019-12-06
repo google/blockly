@@ -86,7 +86,7 @@ Blockly.zelos.RenderInfo = function(renderer, block) {
 
   /**
    * An object with rendering information about the right connection shape.
-   * @type {!Blockly.zelos.RightConnectionShape}
+   * @type {Blockly.zelos.RightConnectionShape}
    */
   this.rightSide = this.outputConnection ?
       new Blockly.zelos.RightConnectionShape(this.constants_) : null;

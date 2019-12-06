@@ -430,13 +430,21 @@ Blockly.blockRendering.ConstantProvider = function() {
    */
   this.CURSOR_STROKE_WIDTH = 4;
 
-
-  /*
+  /**
    * Whether text input and colour fields fill up the entire source block.
    * @type {boolean}
    * @package
    */
   this.FULL_BLOCK_FIELDS = false;
+
+  /**
+   * Enum for connection shapes.
+   * @enum {number}
+   */
+  this.SHAPES = {
+    PUZZLE: 1,
+    NOTCH: 2
+  };
 };
 
 /**
@@ -717,6 +725,7 @@ Blockly.blockRendering.ConstantProvider.prototype.makePuzzleTab = function() {
   var pathDown = makeMainPath(false);
 
   return {
+    type: this.SHAPES.PUZZLE,
     width: width,
     height: height,
     pathDown: pathDown,
@@ -746,6 +755,7 @@ Blockly.blockRendering.ConstantProvider.prototype.makeNotch = function() {
   var pathRight = makeMainPath(-1);
 
   return {
+    type: this.SHAPES.NOTCH,
     width: width,
     height: height,
     pathLeft: pathLeft,

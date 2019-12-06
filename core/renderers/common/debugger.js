@@ -121,6 +121,11 @@ Blockly.blockRendering.Debug.prototype.drawSpacerElem = function(elem, rowHeight
     return;
   }
 
+  // Don't render elements with negative spacing.
+  if (elem.width < 0) {
+    return;
+  }
+
   var xPos = elem.xPos;
   if (isRtl) {
     xPos = -(xPos + elem.width);

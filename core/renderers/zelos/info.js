@@ -83,6 +83,13 @@ Blockly.zelos.RenderInfo = function(renderer, block) {
    * @override
    */
   this.isInline = true;
+
+  /**
+   * An object with rendering information about the right connection shape.
+   * @type {!Blockly.zelos.RightConnectionShape}
+   */
+  this.rightSide = this.outputConnection ?
+      new Blockly.zelos.RightConnectionShape(this.constants_) : null;
 };
 Blockly.utils.object.inherits(Blockly.zelos.RenderInfo,
     Blockly.blockRendering.RenderInfo);
@@ -254,14 +261,10 @@ Blockly.zelos.RenderInfo.prototype.adjustXPosition_ = function() {
  */
 Blockly.zelos.RenderInfo.prototype.finalizeOutputConnection_ = function() {
   var yCursor = 0;
-  var firstInpurRow = null;
   // Determine the block height.
   for (var i = 0, row; (row = this.rows[i]); i++) {
     row.yPos = yCursor;
     yCursor += row.height;
-    if (!firstInpurRow && Blockly.blockRendering.Types.isInputRow(row)) {
-      firstInpurRow = row;
-    }
   }
   if (this.outputConnection && this.outputConnection.isDynamicShape) {
     // Dynamic output connections depend on the height of the block. Adjust the
@@ -273,13 +276,11 @@ Blockly.zelos.RenderInfo.prototype.finalizeOutputConnection_ = function() {
     this.outputConnection.width = connectionWidth;
     this.outputConnection.startX = connectionWidth;
 
-    var rightConnection =
-        new Blockly.zelos.RightConnectionShape(this.constants_);
-    rightConnection.height = connectionHeight;
-    rightConnection.width = connectionWidth;
-    firstInpurRow.elements.push(rightConnection);
-    firstInpurRow.width += connectionWidth;
-    firstInpurRow.widthWithConnectedBlocks += connectionWidth;
+    // Adjust right side measurable.
+    this.rightSide.height = connectionHeight;
+    this.rightSide.width = connectionWidth;
+    this.rightSide.centerline = connectionHeight / 2;
+    this.rightSide.xPos = this.width + connectionWidth;
 
     this.startX = connectionWidth;
     this.width += connectionWidth * 2;

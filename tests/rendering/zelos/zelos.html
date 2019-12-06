@@ -34,9 +34,6 @@
     goog.require('Blockly.zelos.Renderer');
     // Blockly.blockRendering.startDebugger();
 
-    Blockly.BlockSvg.prototype.setOutputShape = function() {
-    };
-
     var blocklyDiv = document.getElementById('blocklyDiv');
     var workspace;
     window.addEventListener('message', function (msg) {
@@ -49,7 +46,6 @@
         if (workspace) {
           workspace.dispose();
           blocklyDiv.innerHTML = '';
-          window.parent.focus();
         }
       } catch { }
 

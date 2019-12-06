@@ -364,6 +364,9 @@ Blockly.blockRendering.Debug.prototype.drawDebug = function(block, info) {
   if (block.outputConnection) {
     this.drawConnection(block.outputConnection);
   }
+  if (info.rightSide) {
+    this.drawRenderedElem(info.rightSide, info.RTL);
+  }
 
   this.drawBoundingBox(info);
 };

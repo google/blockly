@@ -160,8 +160,7 @@ Blockly.zelos.ConstantProvider = function() {
   this.CURSOR_RADIUS = 5;
 
   /**
-   * Enum for shapes.
-   * @enum {number}
+   * @override
    */
   this.SHAPES = {
     HEXAGONAL: 1,
@@ -177,7 +176,7 @@ Blockly.zelos.ConstantProvider = function() {
    * When a block with the outer shape contains an input block with the inner
    * shape on its left or right edge, the block elements are aligned such that
    * the padding specified is reached.
-   * @pacakge
+   * @package
    */
   this.SHAPE_IN_SHAPE_PADDING = {
     1: { // Outer shape: hexagon.

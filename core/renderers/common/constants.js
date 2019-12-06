@@ -437,7 +437,7 @@ Blockly.blockRendering.ConstantProvider = function() {
   this.FULL_BLOCK_FIELDS = false;
 
   /**
-   * Enum for shapes.
+   * Enum for connection shapes.
    * @enum {number}
    */
   this.SHAPES = {

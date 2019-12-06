@@ -123,7 +123,6 @@ Blockly.blockRendering.Debug.prototype.drawSpacerElem = function(elem, rowHeight
 
   var width = Math.abs(elem.width);
   var isNegativeSpacing = elem.width < 0;
-
   var xPos = isNegativeSpacing ? elem.xPos - width : elem.xPos;
   if (isRtl) {
     xPos = -(xPos + width);

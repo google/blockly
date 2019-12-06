@@ -73,8 +73,8 @@ Blockly.zelos.PathObject = function(root, constants) {
   this.remainingOutlines_ = null;
 
   /**
-   * The type of block's output connection shape.  This is updated when a block
-   * with an output connection is drawn.
+   * The type of block's output connection shape.  This is set when a block with
+   * an output connection is drawn.
    * @package
    */
   this.outputShapeType = null;

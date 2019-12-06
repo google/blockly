@@ -366,6 +366,11 @@ Blockly.zelos.RenderInfo.prototype.getNegativeSpacing_ = function(elem) {
     return connectionWidth -
         this.constants_.SHAPE_IN_SHAPE_PADDING[outerShape][innerShape];
   } else if (Blockly.blockRendering.Types.isField(elem)) {
+    // Special case for text inputs.
+    if (outerShape == constants.SHAPES.ROUND &&
+        elem.field instanceof Blockly.FieldTextInput) {
+      return connectionWidth - (2.75 * constants.GRID_UNIT);
+    }
     return connectionWidth -
         this.constants_.SHAPE_IN_SHAPE_PADDING[outerShape][0];
   } else if (Blockly.blockRendering.Types.isIcon(elem)) {

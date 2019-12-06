@@ -187,7 +187,7 @@ Blockly.zelos.ConstantProvider = function() {
       3: 5 * this.GRID_UNIT // Square in hexagon.
     },
     2: { // Outer shape: round.
-      0: 2.5 * this.GRID_UNIT, // Field in round.
+      0: 3 * this.GRID_UNIT, // Field in round.
       1: 3 * this.GRID_UNIT, // Hexagon in round.
       2: 1 * this.GRID_UNIT, // Round in round.
       3: 2 * this.GRID_UNIT // Square in round.

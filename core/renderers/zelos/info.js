@@ -313,6 +313,8 @@ Blockly.zelos.RenderInfo.prototype.finalizeAlignment_ = function() {
     var minBlockWidth = this.constants_.MIN_BLOCK_WIDTH +
         this.outputConnection.width * 2;
     if (this.width - totalNegativeSpacing < minBlockWidth) {
+      // Maintain a minimum block width, split negative spacing between left
+      // and right edge.
       totalNegativeSpacing = this.width - minBlockWidth;
       row.getFirstSpacer().width = -totalNegativeSpacing / 2;
       row.getLastSpacer().width = -totalNegativeSpacing / 2;

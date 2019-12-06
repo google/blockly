@@ -160,6 +160,7 @@ Blockly.zelos.ConstantProvider = function() {
   this.CURSOR_RADIUS = 5;
 
   /**
+   * @enum {number}
    * @override
    */
   this.SHAPES = {

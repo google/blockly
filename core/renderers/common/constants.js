@@ -428,8 +428,7 @@ Blockly.blockRendering.ConstantProvider = function() {
    */
   this.CURSOR_STROKE_WIDTH = 4;
 
-
-  /*
+  /**
    * Whether text input and colour fields fill up the entire source block.
    * @type {boolean}
    * @package

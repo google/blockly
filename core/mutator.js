@@ -374,6 +374,7 @@ Blockly.Mutator.prototype.workspaceChanged_ = function(e) {
     var oldMutation = oldMutationDom && Blockly.Xml.domToText(oldMutationDom);
     // Allow the source block to rebuild itself.
     block.compose(this.rootBlock_);
+    block.initSvg();
     block.render();
     var newMutationDom = block.mutationToDom();
     var newMutation = newMutationDom && Blockly.Xml.domToText(newMutationDom);

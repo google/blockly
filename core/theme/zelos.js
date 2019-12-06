@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2019 Google LLC
+ * Copyright 2018 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,20 +16,19 @@
  */
 
 /**
- * @fileoverview Modern zelos theme.
+ * @fileoverview Zelos theme.
  */
 'use strict';
 
-goog.provide('Blockly.zelos.Themes.Modern');
+goog.provide('Blockly.Themes.Zelos');
 
-goog.require('Blockly.Themes.Modern');
-goog.require('Blockly.zelos.Theme');
+goog.require('Blockly.Theme');
 
 
 // Temporary holding object.
-Blockly.zelos.Themes.Modern = {};
+Blockly.Themes.Zelos = {};
 
-Blockly.zelos.Themes.Modern.defaultBlockStyles = {
+Blockly.Themes.Zelos.defaultBlockStyles = {
   "colour_blocks": {
     "colourPrimary": "#CF63CF",
     "colourSecondary": "#C94FC9",
@@ -83,7 +82,7 @@ Blockly.zelos.Themes.Modern.defaultBlockStyles = {
   }
 };
 
-Blockly.zelos.Themes.Modern.categoryStyles = {
+Blockly.Themes.Zelos.categoryStyles = {
   "colour_category": {
     "colour": "#CF63CF"
   },
@@ -113,7 +112,6 @@ Blockly.zelos.Themes.Modern.categoryStyles = {
   }
 };
 
-Blockly.zelos.Themes.Modern =
-    new Blockly.zelos.Theme('zelosmodern',
-        Blockly.zelos.Themes.Modern.defaultBlockStyles,
-        Blockly.zelos.Themes.Modern.categoryStyles);
+Blockly.Themes.Zelos =
+    new Blockly.Theme('zelos', Blockly.Themes.Zelos.defaultBlockStyles,
+        Blockly.Themes.Zelos.categoryStyles);

@@ -553,7 +553,7 @@ Blockly.Toolbox.prototype.setColourFromStyle_ = function(
   childOut.styleName = styleName;
   var theme = this.workspace_.getTheme();
   if (styleName && theme) {
-    var style = theme.getCategoryStyle(styleName);
+    var style = theme.categoryStyles[styleName];
     if (style && style.colour) {
       this.setColour_(style.colour, childOut, categoryName);
     } else {

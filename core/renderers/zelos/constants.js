@@ -160,6 +160,47 @@ Blockly.zelos.ConstantProvider = function() {
   this.CURSOR_RADIUS = 5;
 
   /**
+   * Enum for shapes.
+   * @enum {number}
+   */
+  this.SHAPES = {
+    HEXAGONAL: 1,
+    ROUND: 2,
+    SQUARE: 3,
+    PUZZLE: 4,
+    NOTCH: 5
+  };
+
+  /**
+   * Map of output/input shapes and the amount they should cause a block to be
+   * padded. Outer key is the outer shape, inner key is the inner shape.
+   * When a block with the outer shape contains an input block with the inner
+   * shape on its left or right edge, the block elements are aligned such that
+   * the padding specified is reached.
+   * @pacakge
+   */
+  this.SHAPE_IN_SHAPE_PADDING = {
+    1: { // Outer shape: hexagon.
+      0: 5 * this.GRID_UNIT, // Field in hexagon.
+      1: 2 * this.GRID_UNIT, // Hexagon in hexagon.
+      2: 5 * this.GRID_UNIT, // Round in hexagon.
+      3: 5 * this.GRID_UNIT // Square in hexagon.
+    },
+    2: { // Outer shape: round.
+      0: 2.5 * this.GRID_UNIT, // Field in round.
+      1: 3 * this.GRID_UNIT, // Hexagon in round.
+      2: 1 * this.GRID_UNIT, // Round in round.
+      3: 2 * this.GRID_UNIT // Square in round.
+    },
+    3: { // Outer shape: square.
+      0: 2 * this.GRID_UNIT, // Field in square.
+      1: 2 * this.GRID_UNIT, // Hexagon in square.
+      2: 2 * this.GRID_UNIT, // Round in square.
+      3: 2 * this.GRID_UNIT // Square in square.
+    }
+  };
+
+  /**
    * @override
    */
   this.FULL_BLOCK_FIELDS = true;
@@ -348,6 +389,7 @@ Blockly.zelos.ConstantProvider.prototype.makeHexagonal = function() {
   }
 
   return {
+    type: this.SHAPES.HEXAGONAL,
     isDynamic: true,
     width: function(height) {
       return height / 2;
@@ -386,6 +428,7 @@ Blockly.zelos.ConstantProvider.prototype.makeRounded = function() {
   }
 
   return {
+    type: this.SHAPES.ROUND,
     isDynamic: true,
     width: function(height) {
       return height / 2;
@@ -499,6 +542,7 @@ Blockly.zelos.ConstantProvider.prototype.makeNotch = function() {
   var pathRight = makeMainPath(-1);
 
   return {
+    type: this.SHAPES.NOTCH,
     width: width,
     height: height,
     pathLeft: pathLeft,

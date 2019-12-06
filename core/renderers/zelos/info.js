@@ -253,39 +253,123 @@ Blockly.zelos.RenderInfo.prototype.adjustXPosition_ = function() {
 };
 
 /**
- * Finalize the output connection info.  In particular set the height of the
+ * Finalize the output connection info.  In particular, set the height of the
  * output connection to match that of the block.  For the right side, add a
  * right connection shape element and have it match the dimensions of the
  * output connection.
  * @protected
  */
 Blockly.zelos.RenderInfo.prototype.finalizeOutputConnection_ = function() {
+  // Dynamic output connections depend on the height of the block.
+  if (!this.outputConnection || !this.outputConnection.isDynamicShape) {
+    return;
+  }
   var yCursor = 0;
   // Determine the block height.
   for (var i = 0, row; (row = this.rows[i]); i++) {
     row.yPos = yCursor;
     yCursor += row.height;
   }
-  if (this.outputConnection && this.outputConnection.isDynamicShape) {
-    // Dynamic output connections depend on the height of the block. Adjust the
-    // height of the connection.
-    var connectionHeight = this.outputConnection.shape.height(yCursor);
-    var connectionWidth = this.outputConnection.shape.width(yCursor);
 
-    this.outputConnection.height = connectionHeight;
-    this.outputConnection.width = connectionWidth;
-    this.outputConnection.startX = connectionWidth;
+  // Adjust the height of the output connection.
+  var connectionHeight = this.outputConnection.shape.height(yCursor);
+  var connectionWidth = this.outputConnection.shape.width(yCursor);
 
-    // Adjust right side measurable.
-    this.rightSide.height = connectionHeight;
-    this.rightSide.width = connectionWidth;
-    this.rightSide.centerline = connectionHeight / 2;
-    this.rightSide.xPos = this.width + connectionWidth;
+  this.outputConnection.height = connectionHeight;
+  this.outputConnection.width = connectionWidth;
+  this.outputConnection.startX = connectionWidth;
 
-    this.startX = connectionWidth;
-    this.width += connectionWidth * 2;
-    this.widthWithChildren += connectionWidth * 2;
+  // Adjust right side measurable.
+  this.rightSide.height = connectionHeight;
+  this.rightSide.width = connectionWidth;
+  this.rightSide.centerline = connectionHeight / 2;
+  this.rightSide.xPos = this.width + connectionWidth;
+
+  this.startX = connectionWidth;
+  this.width += connectionWidth * 2;
+  this.widthWithChildren += connectionWidth * 2;
+};
+
+/**
+ * Finalize alignment of elements on the block.  In particular, reduce the
+ * implicit spacing created by the left and right output connection shapes by
+ * adding setting negative spacing onto the leftmost and rightmost spacers.
+ * @protected
+ */
+Blockly.zelos.RenderInfo.prototype.finalizeAlignment_ = function() {
+  if (!this.outputConnection) {
+    return;
   }
+  var totalNegativeSpacing = 0;
+  for (var i = 0, row; (row = this.rows[i]); i++) {
+    if (!Blockly.blockRendering.Types.isInputRow(row)) {
+      continue;
+    }
+    var firstElem = row.elements[1];
+    var lastElem = row.elements[row.elements.length - 2];
+    var leftNegPadding = this.getNegativeSpacing_(firstElem);
+    var rightNegPadding = this.getNegativeSpacing_(lastElem);
+    totalNegativeSpacing = leftNegPadding + rightNegPadding;
+    var minBlockWidth = this.constants_.MIN_BLOCK_WIDTH +
+        this.outputConnection.width * 2;
+    if (this.width - totalNegativeSpacing < minBlockWidth) {
+      totalNegativeSpacing = this.width - minBlockWidth;
+      row.getFirstSpacer().width = -totalNegativeSpacing / 2;
+      row.getLastSpacer().width = -totalNegativeSpacing / 2;
+    } else {
+      row.getFirstSpacer().width = -leftNegPadding;
+      row.getLastSpacer().width = -rightNegPadding;
+    }
+  }
+  if (totalNegativeSpacing) {
+    this.width -= totalNegativeSpacing;
+    this.widthWithChildren -= totalNegativeSpacing;
+    this.rightSide.xPos -= totalNegativeSpacing;
+    for (var i = 0, row; (row = this.rows[i]); i++) {
+      if (Blockly.blockRendering.Types.isTopRow(row) ||
+          Blockly.blockRendering.Types.isBottomRow(row)) {
+        row.elements[1].width -= totalNegativeSpacing;
+      }
+      row.width -= totalNegativeSpacing;
+      row.widthWithConnectedBlocks -= totalNegativeSpacing;
+    }
+  }
+};
+
+/**
+ * Calculate the spacing to reduce the left and right edges by based on the
+ * outer and inner connection shape.
+ * @param {Blockly.blockRendering.Measurable} elem The first or last element on
+ *     a block.
+ * @return {number} The amount of spacing to reduce the first or last spacer.
+ * @protected
+ */
+Blockly.zelos.RenderInfo.prototype.getNegativeSpacing_ = function(elem) {
+  if (!elem) {
+    return 0;
+  }
+  var connectionWidth = this.outputConnection.width;
+  var outerShape = this.outputConnection.shape.type;
+  var constants =
+    /** @type {!Blockly.zelos.ConstantProvider} */ (this.constants_);
+  if (Blockly.blockRendering.Types.isInlineInput(elem)) {
+    var innerShape = elem.connectedBlock ?
+        elem.connectedBlock.pathObject.outputShapeType :
+        elem.shape.type;
+    // Special case for hexagonal output.
+    if (outerShape == constants.SHAPES.HEXAGONAL &&
+        outerShape != innerShape) {
+      return 0;
+    }
+    return connectionWidth -
+        this.constants_.SHAPE_IN_SHAPE_PADDING[outerShape][innerShape];
+  } else if (Blockly.blockRendering.Types.isField(elem)) {
+    return connectionWidth -
+        this.constants_.SHAPE_IN_SHAPE_PADDING[outerShape][0];
+  } else if (Blockly.blockRendering.Types.isIcon(elem)) {
+    return this.constants_.SMALL_PADDING;
+  }
+  return 0;
 };
 
 /**
@@ -293,5 +377,6 @@ Blockly.zelos.RenderInfo.prototype.finalizeOutputConnection_ = function() {
  */
 Blockly.zelos.RenderInfo.prototype.finalize_ = function() {
   this.finalizeOutputConnection_();
+  this.finalizeAlignment_();
   Blockly.zelos.RenderInfo.superClass_.finalize_.call(this);
 };

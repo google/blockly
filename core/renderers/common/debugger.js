@@ -121,6 +121,10 @@ Blockly.blockRendering.Debug.prototype.drawSpacerElem = function(elem, rowHeight
     return;
   }
 
+  if (elem.width <= 0) {
+    return;
+  }
+
   var xPos = elem.xPos;
   if (isRtl) {
     xPos = -(xPos + elem.width);

@@ -237,12 +237,12 @@ Blockly.FieldTextInput.prototype.doValueUpdate_ = function(newValue) {
  */
 Blockly.FieldTextInput.prototype.applyColour = function() {
   if (this.sourceBlock_ && this.constants_.FULL_BLOCK_FIELDS) {
-    if (this.sourceBlock_.isShadow()) {
-      this.sourceBlock_.pathObject.svgPath.setAttribute('fill', '#fff');
-    } else if (this.borderRect_) {
+    if (this.borderRect_) {
       this.borderRect_.setAttribute('stroke',
           this.sourceBlock_.style.colourTertiary);
       this.borderRect_.setAttribute('fill', '#fff');
+    } else if (this.sourceBlock_.isShadow()) {
+      this.sourceBlock_.pathObject.svgPath.setAttribute('fill', '#fff');
     }
   }
 };

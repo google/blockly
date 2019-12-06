@@ -68,7 +68,8 @@ Blockly.zelos.Drawer.prototype.draw = function() {
   }
   this.recordSizeOnBlock_();
   if (this.info_.outputConnection) {
-    // Store the output connection shape type for parent blocks to use.
+    // Store the output connection shape type for parent blocks to use during
+    // rendering.
     pathObject.outputShapeType = this.info_.outputConnection.shape.type;
   }
   pathObject.endDrawing();

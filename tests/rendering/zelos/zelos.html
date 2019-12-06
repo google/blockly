@@ -35,6 +35,8 @@
     goog.require('Blockly.zelos.Themes.Classic');
     // Blockly.blockRendering.startDebugger();
 
+    // This stub is a workaround in order to load pxt-blockly blocks, as they
+    // rely on a setOutputShape method on the block.
     Blockly.BlockSvg.prototype.setOutputShape = function() { };
 
     var blocklyDiv = document.getElementById('blocklyDiv');

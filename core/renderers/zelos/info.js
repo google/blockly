@@ -45,6 +45,7 @@ goog.require('Blockly.utils.object');
 goog.require('Blockly.zelos.AfterStatementSpacerRow');
 goog.require('Blockly.zelos.BeforeStatementSpacerRow');
 goog.require('Blockly.zelos.BottomRow');
+goog.require('Blockly.zelos.ExternalValueInput');
 goog.require('Blockly.zelos.RightConnectionShape');
 goog.require('Blockly.zelos.TopRow');
 
@@ -82,7 +83,7 @@ Blockly.zelos.RenderInfo = function(renderer, block) {
   /**
    * @override
    */
-  this.isInline = true;
+  this.isInline = this.outputConnection ? this.isInline : true;
 
   /**
    * An object with rendering information about the right connection shape.
@@ -116,6 +117,36 @@ Blockly.zelos.RenderInfo.prototype.measure = function() {
   this.alignRowElements_();
   this.finalize_();
 };
+
+/**
+ * @override
+ */
+Blockly.zelos.RenderInfo.prototype.addInput_ = function(input, activeRow) {
+  // Non-dummy inputs have visual representations onscreen.
+  if (this.isInline && input.type == Blockly.INPUT_VALUE) {
+    activeRow.elements.push(
+        new Blockly.blockRendering.InlineInput(this.constants_, input));
+    activeRow.hasInlineInput = true;
+  } else if (input.type == Blockly.NEXT_STATEMENT) {
+    activeRow.elements.push(
+        new Blockly.blockRendering.StatementInput(this.constants_, input));
+    activeRow.hasStatement = true;
+  } else if (input.type == Blockly.INPUT_VALUE) {
+    activeRow.elements.push(
+        new Blockly.zelos.ExternalValueInput(this.constants_, input));
+    activeRow.hasExternalInput = true;
+  } else if (input.type == Blockly.DUMMY_INPUT) {
+    // Dummy inputs have no visual representation, but the information is still
+    // important.
+    activeRow.minHeight = Math.max(activeRow.minHeight,
+        this.constants_.DUMMY_INPUT_MIN_HEIGHT);
+    activeRow.hasDummyInput = true;
+  }
+  if (activeRow.align == null) {
+    activeRow.align = input.align;
+  }
+};
+
 
 /**
  * @override

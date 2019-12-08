@@ -486,7 +486,6 @@ Blockly.WorkspaceCommentSvg.prototype.setMovable = function(movable) {
 /**
  * Set whether this comment is editable or not.
  * @param {boolean} editable True if editable.
- * @package
  */
 Blockly.WorkspaceCommentSvg.prototype.setEditable = function(editable) {
   Blockly.WorkspaceCommentSvg.superClass_.setEditable.call(this, editable);

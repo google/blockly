@@ -366,7 +366,7 @@ Blockly.Blocks['procedures_defnoreturn'] = {
       callback: function() {
         var xml = Blockly.Xml.blockToDom(block, true);
         console.log(xml);
-        Fable.TopMenu.saveCodeElectron("Function", xml);
+        Fable.Domain.Platform.Electron.saveProject("Function", xml);
       }
     }
 

@@ -391,11 +391,18 @@ Blockly.getMainWorkspace = function() {
  * @param {string} message The message to display to the user.
  * @param {function()=} opt_callback The callback when the alert is dismissed.
  */
-Blockly.alert = function(message, opt_callback) {
-  window.alert(message);
-  if (opt_callback) {
-    opt_callback();
-  }
+// Blockly.alert = function(message, opt_callback) {
+//   window.alert(message);
+//   if (opt_callback) {
+//     opt_callback();
+//   }
+// };
+
+Blockly.alert = function(message, callback) {
+  console.log('Alert: ' + message);
+  Fable.View.Workspace.CustomDialog.show('Alert', message, {
+      onCancel: callback
+  });
 };
 
 /**
@@ -404,9 +411,23 @@ Blockly.alert = function(message, opt_callback) {
  * @param {string} message The message to display to the user.
  * @param {!function(boolean)} callback The callback for handling user response.
  */
+// Blockly.confirm = function(message, callback) {
+//   callback(window.confirm(message));
+// };
 Blockly.confirm = function(message, callback) {
-  callback(window.confirm(message));
+  console.log('Confirm: ' + message);
+  Fable.View.Workspace.CustomDialog.show('Confirm', message, {
+      showOkay: true,
+      onOkay: function() {
+          callback(true);
+      },
+      showCancel: true,
+      onCancel: function() {
+          callback(false);
+      }
+  });
 };
+
 
 /**
  * Wrapper to window.prompt() that app developers may override to provide
@@ -417,8 +438,23 @@ Blockly.confirm = function(message, callback) {
  * @param {string} defaultValue The value to initialize the prompt with.
  * @param {!function(string)} callback The callback for handling user response.
  */
+// Blockly.prompt = function(message, defaultValue, callback) {
+//   callback(window.prompt(message, defaultValue));
+// };
+
 Blockly.prompt = function(message, defaultValue, callback) {
-  callback(window.prompt(message, defaultValue));
+  Fable.View.Workspace.CustomDialog.show('Prompt', message, {
+      showInput: true,
+      showOkay: true,
+      onOkay: function() {
+          callback(Fable.View.Workspace.CustomDialog.inputField.value)
+      },
+      showCancel: true,
+      onCancel: function() {
+          callback(null)
+      }
+  });
+  Fable.View.Workspace.CustomDialog.inputField.value = defaultValue;
 };
 
 /**

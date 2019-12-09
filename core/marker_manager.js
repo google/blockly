@@ -29,7 +29,7 @@ goog.require('Blockly.Cursor');
 
 /**
  * Class to manage the multiple markers on a workspace.
- * @param {Blockly.Workspace} workspace The workspace for the marker manager.
+ * @param {!Blockly.WorkspaceSvg} workspace The workspace for the marker manager.
  * @constructor
  * @package
  */
@@ -42,13 +42,13 @@ Blockly.MarkerManager = function(workspace){
 
   /**
    * The svg element of the cursor.
-   * @type {Blockly.SVGElement}
+   * @type {SVGElement}
    */
   this.cursorSvg_ = null;
 
   /**
    * The list of markers for the workspace.
-   * @type {Array.<Blockly.Marker>}
+   * @type {!Object<string, !Blockly.Marker>}
    */
   this.markers_ = {};
 
@@ -67,21 +67,27 @@ Blockly.MarkerManager = function(workspace){
  */
 Blockly.MarkerManager.prototype.registerMarker = function(id, marker) {
   if (this.markers_[id]) {
-    // Dispose of the old marker and the old marker drawer.
-    // TODO: Do something if the marker id already exists.
+    this.unregisterMarker(id);
   }
-  marker.setDrawer(this.workspace_.getRenderer().makeMarkerDrawer(this, marker));
+  marker.setDrawer(this.workspace_.getRenderer()
+      .makeMarkerDrawer(this.workspace_, marker));
   this.setMarkerSvg(marker.getDrawer().createDom());
   this.markers_[id] = marker;
 };
 
 /**
- * Unregister the marker by removiing it from the list of markers.
- * @param {Blockly.Marker} marker The marker to unregister.
+ * Unregister the marker by removing it from the map of markers.
+ * @param {string} id The id of the marker to unregister.
  */
-Blockly.MarkerManager.prototype.unregisterMarker = function(marker) {
-  // Remove marker from list and dispose of it.
-  // If it is a cursor then don't do anything???
+Blockly.MarkerManager.prototype.unregisterMarker = function(id) {
+  var marker = this.markers_[id];
+  if (marker) {
+    marker.dispose();
+    delete this.markers_[id];
+  } else {
+    throw Error('Marker with id ' + id + ' does not exist. Can only unregister' +
+        'markers that exist.');
+  }
 };
 
 /**
@@ -94,7 +100,8 @@ Blockly.MarkerManager.prototype.setCursor = function(cursor) {
   }
   this.cursor_ = cursor;
   if (this.cursor_) {
-    var drawer = this.workspace_.getRenderer().makeMarkerDrawer(this, cursor);
+    var drawer = this.workspace_.getRenderer()
+        .makeMarkerDrawer(this.workspace_, this.cursor_);
     this.cursor_.setDrawer(drawer);
     this.setCursorSvg(this.cursor_.getDrawer().createDom());
   }
@@ -128,7 +135,6 @@ Blockly.MarkerManager.prototype.setMarkerSvg = function(markerSvg) {
     return;
   }
 
-  // TODO: Do I need this?
   if (this.workspace_.getBlockCanvas()) {
     if (this.cursorSvg_) {
       this.workspace_.getBlockCanvas().insertBefore(markerSvg, this.cursorSvg_);
@@ -136,17 +142,6 @@ Blockly.MarkerManager.prototype.setMarkerSvg = function(markerSvg) {
       this.workspace_.getBlockCanvas().appendChild(markerSvg);
     }
   }
-};
-
-/**
- * Dispose of the marker manager.
- * Go through and delete all markers associated with this marker manager.
- * @package
- */
-Blockly.MarkerManager.prototype.dispose = function() {
-  // TODO: Go through all the markers on the marker manager and remove
-  this.markers_ = null;
-  this.cursor_ = null;
 };
 
 /**
@@ -165,4 +160,20 @@ Blockly.MarkerManager.prototype.getCursor = function() {
  */
 Blockly.MarkerManager.prototype.getMarker = function(id) {
   return this.markers_[id];
+};
+
+/**
+ * Dispose of the marker manager.
+ * Go through and delete all markers associated with this marker manager.
+ * @suppress {checkTypes}
+ * @package
+ */
+Blockly.MarkerManager.prototype.dispose = function() {
+  var markerIds = Object.keys(this.markers_);
+  for (var i = 0, markerId; markerId = markerIds[i]; i++) {
+    this.unregisterMarker(markerId);
+  }
+  this.markers_ = null;
+  this.cursor_.dispose();
+  this.cursor_ = null;
 };

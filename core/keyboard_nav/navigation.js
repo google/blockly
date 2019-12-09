@@ -88,7 +88,7 @@ Blockly.navigation.actionNames = {
 
 /**
  * The name of the local marker reserved for internal use.
- * @param {string}
+ * @type {string}
  */
 Blockly.navigation.markerName = 'local_marker_1';
 

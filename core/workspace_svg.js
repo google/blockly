@@ -462,7 +462,7 @@ Blockly.WorkspaceSvg.prototype.getMarker = function(id) {
 
 /**
  * The cursor for this workspace.
- * @return {!Blockly.Cursor} The cursor for the workspace.
+ * @return {Blockly.Cursor} The cursor for the workspace.
  */
 Blockly.WorkspaceSvg.prototype.getCursor = function() {
   return this.markerManager_.getCursor();
@@ -652,7 +652,7 @@ Blockly.WorkspaceSvg.prototype.getInjectionDiv = function() {
 
 /**
  * Get the svg block canvas for the workspace.
- * @return {!SVGElement} The svg group for the workspace.
+ * @return {SVGElement} The svg group for the workspace.
  * @package
  */
 Blockly.WorkspaceSvg.prototype.getBlockCanvas = function() {
@@ -730,7 +730,8 @@ Blockly.WorkspaceSvg.prototype.createDom = function(opt_backgroundClass) {
   this.recordDeleteAreas();
 
   this.markerManager_.setCursor(new Blockly.Cursor());
-  this.markerManager_.registerMarker('local_marker_1', new Blockly.Marker());
+  this.markerManager_.registerMarker(Blockly.navigation.markerName,
+      new Blockly.Marker());
 
   this.getRenderer().getConstants().createDom(this.svgGroup_);
   return this.svgGroup_;
@@ -774,14 +775,6 @@ Blockly.WorkspaceSvg.prototype.dispose = function() {
     this.zoomControls_ = null;
   }
 
-  if (this.marker_ && this.marker_.getDrawer()) {
-    this.marker_.getDrawer().dispose();
-  }
-
-  if (this.getCursor() && this.getCursor().getDrawer()) {
-    this.getCursor().getDrawer().dispose();
-  }
-
   if (this.audioManager_) {
     this.audioManager_.dispose();
     this.audioManager_ = null;
@@ -802,6 +795,12 @@ Blockly.WorkspaceSvg.prototype.dispose = function() {
       this.themeManager_ = null;
     }
   }
+
+  if (this.markerManager_) {
+    this.markerManager_.dispose();
+    this.markerManager_ = null;
+  }
+
   Blockly.WorkspaceSvg.superClass_.dispose.call(this);
 
   this.connectionDBList = null;
@@ -1262,7 +1261,7 @@ Blockly.WorkspaceSvg.prototype.pasteBlock_ = function(xmlBlock) {
     var block = Blockly.Xml.domToBlock(xmlBlock, this);
 
     // Handle paste for keyboard navigation
-    var markedNode = this.getMarker().getCurNode();
+    var markedNode = this.getMarker(Blockly.navigation.markerName).getCurNode();
     if (this.keyboardAccessibilityMode && markedNode &&
         markedNode.isConnection()) {
       var markedLocation =

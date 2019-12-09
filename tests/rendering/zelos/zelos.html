@@ -32,7 +32,6 @@
   <script>
     goog.require('Blockly.blockRendering.Debug');
     goog.require('Blockly.zelos.Renderer');
-    goog.require('Blockly.zelos.Themes.Classic');
     // Blockly.blockRendering.startDebugger();
 
     // This stub is a workaround in order to load pxt-blockly blocks, as they
@@ -62,7 +61,6 @@
           drag: true,
           wheel: false,
         },
-        theme: Blockly.zelos.Themes.Classic,
         zoom: {
           wheel: true,
           startScale: 2,
@@ -73,19 +71,30 @@
       constants.FIELD_TEXT_FONTWEIGHT = 'bold';
       constants.FIELD_TEXT_FONTFAMILY = 'Helvetica Neue';
 
-      try {
-        Blockly.Xml.domToWorkspace(Blockly.Xml.textToDom(xml), workspace);
-        var topBlock = workspace.getTopBlocks()[0];
-        workspaceToSvg_(workspace, function (datauri) {
-          window.parent.postMessage({
-            type: 'svg',
-            from: 'zelos',
-            text: datauri
-          }, '*');
-        }, document.getElementById('blocklycss').innerText);
-      } catch (err) {
-        console.error(err);
+      Blockly.Xml.domToWorkspace(Blockly.Xml.textToDom(xml), workspace);
+
+      function postChange() {
+        try {
+          var topBlock = workspace.getTopBlocks()[0];
+          workspaceToSvg_(workspace, function (datauri) {
+            window.parent.postMessage({
+              type: 'svg',
+              from: 'zelos',
+              text: datauri
+            }, '*');
+          }, document.getElementById('blocklycss').innerText);
+        } catch (err) {
+          console.error(err);
+        }
       }
+
+      workspace.addChangeListener(function(e) {
+        if (e.type != 'ui') {
+          postChange();
+        }
+      });
+
+      postChange();
     });
   </script>
 </body>

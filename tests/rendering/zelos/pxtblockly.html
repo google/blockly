@@ -37,17 +37,28 @@
         }
       });
 
-      try {
-        Blockly.Xml.domToWorkspace(Blockly.Xml.textToDom(xml), workspace);
-        var topBlock = workspace.getTopBlocks()[0];
-        workspaceToSvg_(workspace, function (datauri) {
-          window.parent.postMessage({
-            type: 'svg',
-            from: 'pxtblockly',
-            text: datauri
-          }, '*');
-        });
-      } catch { }
+      Blockly.Xml.domToWorkspace(Blockly.Xml.textToDom(xml), workspace);
+
+      function postChange() {
+        try {
+          var topBlock = workspace.getTopBlocks()[0];
+          workspaceToSvg_(workspace, function (datauri) {
+            window.parent.postMessage({
+              type: 'svg',
+              from: 'pxtblockly',
+              text: datauri
+            }, '*');
+          });
+        } catch { }
+      }
+
+      workspace.addChangeListener(function(e) {
+        if (e.type != 'ui') {
+          postChange();
+        }
+      });
+
+      postChange();
     });
   </script>
 </body>

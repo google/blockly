@@ -322,12 +322,13 @@ Blockly.zelos.RenderInfo.prototype.finalizeOutputConnection_ = function() {
 };
 
 /**
- * Finalize alignment of elements on the block.  In particular, reduce the
- * implicit spacing created by the left and right output connection shapes by
- * adding setting negative spacing onto the leftmost and rightmost spacers.
+ * Finalize horizontal alignment of elements on the block.  In particular,
+ * reduce the implicit spacing created by the left and right output connection
+ * shapes by adding setting negative spacing onto the leftmost and rightmost
+ * spacers.
  * @protected
  */
-Blockly.zelos.RenderInfo.prototype.finalizeAlignment_ = function() {
+Blockly.zelos.RenderInfo.prototype.finalizeHorizontalAlignment_ = function() {
   if (!this.outputConnection) {
     return;
   }
@@ -411,10 +412,45 @@ Blockly.zelos.RenderInfo.prototype.getNegativeSpacing_ = function(elem) {
 };
 
 /**
+ * Finalize vertical alignment of rows on a block.  In particular, reduce the
+ * implicit spacing when a non-shadow block is connected to any of an input
+ * row's inline inputs.
+ * @protected
+ */
+Blockly.zelos.RenderInfo.prototype.finalizeVerticalAlignment_ = function() {
+  if (this.outputConnection) {
+    return;
+  }
+  for (var i = 2; i < this.rows.length - 1; i += 2) {
+    var prevSpacer = this.rows[i - 1];
+    var row = this.rows[i];
+    var nextSpacer = this.rows[i + 1];
+    
+    if (Blockly.blockRendering.Types.isInputRow(row)) {
+      // Determine if the input row has non-shadow connected blocks.
+      var hasNonShadowConnectedBlocks = false;
+      for (var j = 0, elem; (elem = row.elements[j]); j++) {
+        if (Blockly.blockRendering.Types.isInlineInput(elem) &&
+            elem.connectedBlock && !elem.connectedBlock.isShadow()) {
+          hasNonShadowConnectedBlocks = true;
+          break;
+        }
+      }
+      if (hasNonShadowConnectedBlocks) {
+        // Reduce the previous and next spacer's height.
+        prevSpacer.height -= this.constants_.GRID_UNIT;
+        nextSpacer.height -= this.constants_.GRID_UNIT;
+      }
+    }
+  }
+};
+
+/**
  * @override
  */
 Blockly.zelos.RenderInfo.prototype.finalize_ = function() {
   this.finalizeOutputConnection_();
-  this.finalizeAlignment_();
+  this.finalizeHorizontalAlignment_();
+  this.finalizeVerticalAlignment_();
   Blockly.zelos.RenderInfo.superClass_.finalize_.call(this);
 };

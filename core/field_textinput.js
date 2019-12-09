@@ -154,10 +154,8 @@ Blockly.FieldTextInput.prototype.initView = function() {
 
     // Count the number of fields, excluding text fields
     for (var i = 0, input; (input = this.sourceBlock_.inputList[i]); i++) {
-      for (var j = 0, field; (field = input.fieldRow[j]); j++) {
-        if (!(field instanceof Blockly.FieldLabel)) {
-          nFields ++;
-        }
+      for (var j = 0; (input.fieldRow[j]); j++) {
+        nFields ++;
       }
       if (input.connection) {
         nConnections++;

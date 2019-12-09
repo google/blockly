@@ -484,6 +484,17 @@ Blockly.WorkspaceCommentSvg.prototype.setMovable = function(movable) {
 };
 
 /**
+ * Set whether this comment is editable or not.
+ * @param {boolean} editable True if editable.
+ */
+Blockly.WorkspaceCommentSvg.prototype.setEditable = function(editable) {
+  Blockly.WorkspaceCommentSvg.superClass_.setEditable.call(this, editable);
+  if (this.textarea_) {
+    this.textarea_.readOnly = !editable;
+  }
+};
+
+/**
  * Recursively adds or removes the dragging class to this node and its children.
  * @param {boolean} adding True if adding, false if removing.
  * @package

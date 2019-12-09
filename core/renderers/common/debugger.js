@@ -94,14 +94,20 @@ Blockly.blockRendering.Debug.prototype.drawSpacerRow = function(row, cursorY, is
     return;
   }
 
+  var height = Math.abs(row.height);
+  var isNegativeSpacing = row.height < 0;
+  if (isNegativeSpacing) {
+    cursorY -= height;
+  }
+
   this.debugElements_.push(Blockly.utils.dom.createSvgElement('rect',
       {
         'class': 'rowSpacerRect blockRenderDebug',
         'x': isRtl ? -(row.xPos + row.width) : row.xPos,
         'y': cursorY,
         'width': row.width,
-        'height': row.height,
-        'stroke': 'blue',
+        'height': height,
+        'stroke': isNegativeSpacing ? 'black' : 'blue',
         'fill': 'blue',
         'fill-opacity': '0.5',
         'stroke-width': '1px'

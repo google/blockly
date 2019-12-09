@@ -121,14 +121,11 @@ Blockly.blockRendering.Debug.prototype.drawSpacerElem = function(elem, rowHeight
     return;
   }
 
-  // Don't render elements with negative spacing.
-  if (elem.width < 0) {
-    return;
-  }
-
-  var xPos = elem.xPos;
+  var width = Math.abs(elem.width);
+  var isNegativeSpacing = elem.width < 0;
+  var xPos = isNegativeSpacing ? elem.xPos - width : elem.xPos;
   if (isRtl) {
-    xPos = -(xPos + elem.width);
+    xPos = -(xPos + width);
   }
   var yPos = elem.centerline - elem.height / 2;
   this.debugElements_.push(Blockly.utils.dom.createSvgElement('rect',
@@ -136,10 +133,10 @@ Blockly.blockRendering.Debug.prototype.drawSpacerElem = function(elem, rowHeight
         'class': 'elemSpacerRect blockRenderDebug',
         'x': xPos,
         'y': yPos,
-        'width': elem.width,
+        'width': width,
         'height': elem.height,
         'stroke': 'pink',
-        'fill': 'pink',
+        'fill': isNegativeSpacing ? 'black' : 'pink',
         'fill-opacity': '0.5',
         'stroke-width': '1px'
       },

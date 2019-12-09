@@ -109,20 +109,10 @@ Blockly.WorkspaceSvg = function(options,
       new Blockly.Grid(options.gridPattern, options.gridOptions) : null;
 
   /**
-   * Holds the cursors svg element when the cursor is attached to the workspace.
-   * This is null if there is no cursor on the workspace.
-   * @type {SVGElement}
-   * @private
+   * Manager in charge of markers and cursors.
+   * @type {!Blockly.MarkerManager}
    */
-  this.cursorSvg_ = null;
-
-  /**
-   * Holds the markers svg element when the marker is attached to the workspace.
-   * This is null if there is no marker on the workspace.
-   * @type {SVGElement}
-   * @private
-   */
-  this.markerSvg_ = null;
+  this.markerManager_ = new Blockly.MarkerManager(this);
 
   if (Blockly.Variables && Blockly.Variables.flyoutCategory) {
     this.registerToolboxCategoryCallback(Blockly.VARIABLE_CATEGORY_NAME,
@@ -432,6 +422,53 @@ Blockly.WorkspaceSvg.prototype.inverseScreenCTM_ = null;
 Blockly.WorkspaceSvg.prototype.inverseScreenCTMDirty_ = true;
 
 /**
+ * The marker manager for this workspace.
+ * @return {Blockly.MarkerManager} The marker manager.
+ */
+Blockly.WorkspaceSvg.prototype.getMarkerManager = function() {
+  return this.markerManager_;
+};
+
+/**
+ * Add the cursor svg to this workspaces svg group.
+ * @param {SVGElement} cursorSvg The svg root of the cursor to be added to the
+ *     workspace svg group.
+ * @package
+ */
+Blockly.WorkspaceSvg.prototype.setCursorSvg = function(cursorSvg) {
+  this.markerManager_.setCursorSvg(cursorSvg);
+};
+
+/**
+ * Add the marker svg to this workspaces svg group.
+ * @param {SVGElement} markerSvg The svg root of the marker to be added to the
+ *     workspace svg group.
+ * @package
+ */
+Blockly.WorkspaceSvg.prototype.setMarkerSvg = function(markerSvg) {
+  this.markerManager_.setMarkerSvg(markerSvg);
+};
+
+/**
+ * Get the marker with the given id.
+ * @param {string} id The id of the marker.
+ * @return {Blockly.Marker} The marker with the given id or null if no marker
+ *     with the given id exists.
+ * @package
+ */
+Blockly.WorkspaceSvg.prototype.getMarker = function(id) {
+  return this.markerManager_.getMarker(id);
+};
+
+/**
+ * The cursor for this workspace.
+ * @return {!Blockly.Cursor} The cursor for the workspace.
+ */
+Blockly.WorkspaceSvg.prototype.getCursor = function() {
+  return this.markerManager_.getCursor();
+};
+
+/**
  * Get the block renderer attached to this workspace.
  * @return {!Blockly.blockRendering.Renderer} The renderer attached to this workspace.
  */
@@ -506,74 +543,6 @@ Blockly.WorkspaceSvg.prototype.updateBlockStyles_ = function(blocks) {
         block.mutator.updateBlockStyle();
       }
     }
-  }
-};
-
-/**
- * Sets the cursor for use with keyboard navigation.
- * @param {!Blockly.Cursor} cursor The cursor used to move around this workspace.
- * @override
- */
-Blockly.WorkspaceSvg.prototype.setCursor = function(cursor) {
-  if (this.cursor_.getDrawer()) {
-    this.cursor_.getDrawer().dispose();
-  }
-  this.cursor_ = cursor;
-  this.cursor_.setDrawer(this.getRenderer().makeMarkerDrawer(this, this.cursor_));
-  this.setCursorSvg(this.cursor_.getDrawer().createDom());
-};
-
-/**
- * Sets the marker for use with keyboard navigation.
- * @param {!Blockly.Marker} marker Used to save a location in the Blockly AST.
- * @override
- */
-Blockly.WorkspaceSvg.prototype.setMarker = function(marker) {
-  if (this.marker_.getDrawer()) {
-    this.marker_.getDrawer().dispose();
-  }
-  this.marker_ = marker;
-  this.marker_.setDrawer(this.getRenderer().makeMarkerDrawer(this, this.marker_));
-  this.setMarkerSvg(this.marker_.getDrawer().createDom());
-};
-
-/**
- * Add the cursor svg to this workspaces svg group.
- * @param {SVGElement} cursorSvg The svg root of the cursor to be added to the
- *     workspace svg group.
- * @package
- */
-Blockly.WorkspaceSvg.prototype.setCursorSvg = function(cursorSvg) {
-  if (!cursorSvg) {
-    this.cursorSvg_ = null;
-    return;
-  }
-
-  if (this.svgBlockCanvas_) {
-    this.svgBlockCanvas_.appendChild(cursorSvg);
-    this.cursorSvg_ = cursorSvg;
-  }
-};
-
-/**
- * Add the marker svg to this workspaces svg group.
- * @param {SVGElement} markerSvg The svg root of the marker to be added to the
- *     workspace svg group.
- * @package
- */
-Blockly.WorkspaceSvg.prototype.setMarkerSvg = function(markerSvg) {
-  if (!markerSvg) {
-    this.markerSvg_ = null;
-    return;
-  }
-
-  if (this.svgBlockCanvas_) {
-    if (this.cursorSvg_) {
-      this.svgBlockCanvas_.insertBefore(markerSvg, this.cursorSvg_);
-    } else {
-      this.svgBlockCanvas_.appendChild(markerSvg);
-    }
-    this.markerSvg_ = markerSvg;
   }
 };
 
@@ -682,6 +651,15 @@ Blockly.WorkspaceSvg.prototype.getInjectionDiv = function() {
 };
 
 /**
+ * Get the svg block canvas for the workspace.
+ * @return {!SVGElement} The svg group for the workspace.
+ * @package
+ */
+Blockly.WorkspaceSvg.prototype.getBlockCanvas = function() {
+  return this.svgBlockCanvas_;
+};
+
+/**
  * Save resize handler data so we can delete it later in dispose.
  * @param {!Array.<!Array>} handler Data that can be passed to unbindEvent_.
  */
@@ -751,13 +729,8 @@ Blockly.WorkspaceSvg.prototype.createDom = function(opt_backgroundClass) {
   }
   this.recordDeleteAreas();
 
-  this.cursor_.setDrawer(this.getRenderer().makeMarkerDrawer(this, this.cursor_));
-  var svgCursor = this.cursor_.getDrawer().createDom();
-  this.svgGroup_.appendChild(svgCursor);
-
-  this.marker_.setDrawer(this.getRenderer().makeMarkerDrawer(this, this.marker_));
-  var svgMarker = this.marker_.getDrawer().createDom();
-  this.svgGroup_.appendChild(svgMarker);
+  this.markerManager_.setCursor(new Blockly.Cursor());
+  this.markerManager_.registerMarker('local_marker_1', new Blockly.Marker());
 
   this.getRenderer().getConstants().createDom(this.svgGroup_);
   return this.svgGroup_;

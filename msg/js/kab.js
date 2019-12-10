@@ -2,15 +2,11 @@
 
 'use strict';
 
-goog.provide('Blockly.Msg.kab');
-
-goog.require('Blockly.Msg');
-
 Blockly.Msg["ADD_COMMENT"] = "Rnu awennit";
 Blockly.Msg["CANNOT_DELETE_VARIABLE_PROCEDURE"] = "Ur izmir ara ad yekkes amutti '%1' acku yedda di tbadut n twuri '%2'";
 Blockly.Msg["CHANGE_VALUE_TITLE"] = "Beddel azal:";
 Blockly.Msg["CLEAN_UP"] = "Sfeḍ iḥedran";
-Blockly.Msg["COLLAPSED_WARNINGS_WARNING"] = "Collapsed blocks contain warnings.";  // untranslated
+Blockly.Msg["COLLAPSED_WARNINGS_WARNING"] = "Iḥedran yettin gebren ilɣa.";
 Blockly.Msg["COLLAPSE_ALL"] = "Fneẓ iḥedran";
 Blockly.Msg["COLLAPSE_BLOCK"] = "Fneẓ iḥder";
 Blockly.Msg["COLOUR_BLEND_COLOUR1"] = "ini 1";
@@ -27,7 +23,7 @@ Blockly.Msg["COLOUR_RANDOM_TOOLTIP"] = "Fren ini s wudem agacuran.";
 Blockly.Msg["COLOUR_RGB_BLUE"] = "anili";
 Blockly.Msg["COLOUR_RGB_GREEN"] = "azegzaw";
 Blockly.Msg["COLOUR_RGB_HELPURL"] = "https://www.december.com/html/spec/colorpercompact.html";  // untranslated
-Blockly.Msg["COLOUR_RGB_RED"] = "azeggwaɣ";
+Blockly.Msg["COLOUR_RGB_RED"] = "azeggaɣ";
 Blockly.Msg["COLOUR_RGB_TITLE"] = "ini s";
 Blockly.Msg["COLOUR_RGB_TOOLTIP"] = "Rnu ini s tnecta yettunefk s tesmekta n uzeggaɣ, azegzaw, akked unili. Yessefk akk azalen ad ilin gar 0 akked 100.";
 Blockly.Msg["CONTROLS_FLOW_STATEMENTS_HELPURL"] = "https://github.com/google/blockly/wiki/Loops#loop-termination-blocks";  // untranslated
@@ -207,9 +203,9 @@ Blockly.Msg["MATH_ARITHMETIC_TOOLTIP_DIVIDE"] = "Ad d-yerr aful n sin n imḍane
 Blockly.Msg["MATH_ARITHMETIC_TOOLTIP_MINUS"] = "Ad d-yerr tmernit n sin n imiḍanen.";
 Blockly.Msg["MATH_ARITHMETIC_TOOLTIP_MULTIPLY"] = "Ad d-yerr tukksa gar sin n imiḍanen.";
 Blockly.Msg["MATH_ARITHMETIC_TOOLTIP_POWER"] = "Ad d-yerr amḍan amezwaru uzmir wis sin.";
-Blockly.Msg["MATH_ATAN2_HELPURL"] = "https://en.wikipedia.org/wiki/Atan2";  // untranslated
-Blockly.Msg["MATH_ATAN2_TITLE"] = "atan2 of X:%1 Y:%2";  // untranslated
-Blockly.Msg["MATH_ATAN2_TOOLTIP"] = "Return the arctangent of point (X, Y) in degrees from -180 to 180.";  // untranslated
+Blockly.Msg["MATH_ATAN2_HELPURL"] = "https://kab.wikipedia.org/wiki/Atan2";
+Blockly.Msg["MATH_ATAN2_TITLE"] = "atan2 seg X:%1 Y:%2";
+Blockly.Msg["MATH_ATAN2_TOOLTIP"] = "Ad d-yerr arctangent n waggaz (X, Y) s tfesniwin deg -180 ɣer 180.";
 Blockly.Msg["MATH_CHANGE_HELPURL"] = "https://en.wikipedia.org/wiki/Programming_idiom#Incrementing_a_counter";
 Blockly.Msg["MATH_CHANGE_TITLE"] = "snifel %1 s %2";
 Blockly.Msg["MATH_CHANGE_TOOLTIP"] = "Rnu amḍan i umutti '%1'.";
@@ -393,6 +389,7 @@ Blockly.Msg["TEXT_TRIM_OPERATOR_RIGHT"] = "tukksa n isekkilen seg uyeffus";
 Blockly.Msg["TEXT_TRIM_TOOLTIP"] = "Ad d-yerr anɣel n uḍris s isekkilen ilmawen yettwakksen seg ixf neɣ i sin.";
 Blockly.Msg["TODAY"] = "Ass-a";
 Blockly.Msg["UNDO"] = "Err-d";
+Blockly.Msg["UNNAMED_KEY"] = "warisem";
 Blockly.Msg["VARIABLES_DEFAULT_NAME"] = "aferdis";
 Blockly.Msg["VARIABLES_GET_CREATE_SET"] = "Rnu 'sbadu %1'";
 Blockly.Msg["VARIABLES_GET_HELPURL"] = "https://github.com/google/blockly/wiki/Variables#get";  // untranslated

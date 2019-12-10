@@ -2,15 +2,11 @@
 
 'use strict';
 
-goog.provide('Blockly.Msg.ia');
-
-goog.require('Blockly.Msg');
-
 Blockly.Msg["ADD_COMMENT"] = "Adder commento";
 Blockly.Msg["CANNOT_DELETE_VARIABLE_PROCEDURE"] = "Impossibile deler le variabile '%1' perque illo face parte del definition del function '%2'";
 Blockly.Msg["CHANGE_VALUE_TITLE"] = "Cambiar valor:";
 Blockly.Msg["CLEAN_UP"] = "Rangiar le blocos";
-Blockly.Msg["COLLAPSED_WARNINGS_WARNING"] = "Collapsed blocks contain warnings.";  // untranslated
+Blockly.Msg["COLLAPSED_WARNINGS_WARNING"] = "Blocos plicate contine advertimentos.";
 Blockly.Msg["COLLAPSE_ALL"] = "Plicar blocos";
 Blockly.Msg["COLLAPSE_BLOCK"] = "Plicar bloco";
 Blockly.Msg["COLOUR_BLEND_COLOUR1"] = "color 1";
@@ -208,8 +204,8 @@ Blockly.Msg["MATH_ARITHMETIC_TOOLTIP_MINUS"] = "Retornar le differentia del duo 
 Blockly.Msg["MATH_ARITHMETIC_TOOLTIP_MULTIPLY"] = "Retornar le producto del duo numeros.";
 Blockly.Msg["MATH_ARITHMETIC_TOOLTIP_POWER"] = "Retornar le prime numero elevate al potentia del secunde numero.";
 Blockly.Msg["MATH_ATAN2_HELPURL"] = "https://en.wikipedia.org/wiki/Atan2";  // untranslated
-Blockly.Msg["MATH_ATAN2_TITLE"] = "atan2 of X:%1 Y:%2";  // untranslated
-Blockly.Msg["MATH_ATAN2_TOOLTIP"] = "Return the arctangent of point (X, Y) in degrees from -180 to 180.";  // untranslated
+Blockly.Msg["MATH_ATAN2_TITLE"] = "atan2 de X:%1 Y:%2";
+Blockly.Msg["MATH_ATAN2_TOOLTIP"] = "Retornar le arco tangente del puncto (X, Y) in grados de -180 a 180.";
 Blockly.Msg["MATH_CHANGE_HELPURL"] = "https://en.wikipedia.org/wiki/Programming_idiom#Incrementing_a_counter";  // untranslated
 Blockly.Msg["MATH_CHANGE_TITLE"] = "cambiar %1 per %2";
 Blockly.Msg["MATH_CHANGE_TOOLTIP"] = "Adder un numero al variabile '%1'.";
@@ -393,6 +389,7 @@ Blockly.Msg["TEXT_TRIM_OPERATOR_RIGHT"] = "remover spatios del dextre latere de"
 Blockly.Msg["TEXT_TRIM_TOOLTIP"] = "Retornar un copia del texto con spatios eliminate de un extremitate o ambes.";
 Blockly.Msg["TODAY"] = "Hodie";
 Blockly.Msg["UNDO"] = "Disfacer";
+Blockly.Msg["UNNAMED_KEY"] = "unnamed";  // untranslated
 Blockly.Msg["VARIABLES_DEFAULT_NAME"] = "cosa";
 Blockly.Msg["VARIABLES_GET_CREATE_SET"] = "Crea 'mitter %1'";
 Blockly.Msg["VARIABLES_GET_HELPURL"] = "https://github.com/google/blockly/wiki/Variables#get";  // untranslated

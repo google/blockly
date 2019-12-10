@@ -2,10 +2,6 @@
 
 'use strict';
 
-goog.provide('Blockly.Msg.nb');
-
-goog.require('Blockly.Msg');
-
 Blockly.Msg["ADD_COMMENT"] = "Legg til kommentar";
 Blockly.Msg["CANNOT_DELETE_VARIABLE_PROCEDURE"] = "Kan ikke slette variabelen «%1» fordi den er del av definisjonen for funksjonen «%2»";
 Blockly.Msg["CHANGE_VALUE_TITLE"] = "Bytt verdi:";
@@ -207,8 +203,8 @@ Blockly.Msg["MATH_ARITHMETIC_TOOLTIP_DIVIDE"] = "Returner kvotienten av to tall.
 Blockly.Msg["MATH_ARITHMETIC_TOOLTIP_MINUS"] = "Returner differansen mellom to tall.";
 Blockly.Msg["MATH_ARITHMETIC_TOOLTIP_MULTIPLY"] = "Returner produktet av to tall.";
 Blockly.Msg["MATH_ARITHMETIC_TOOLTIP_POWER"] = "Returner det første tallet opphøyd i den andre tallet.";
-Blockly.Msg["MATH_ATAN2_HELPURL"] = "https://en.wikipedia.org/wiki/Atan2";  // untranslated
-Blockly.Msg["MATH_ATAN2_TITLE"] = "atan2 of X:%1 Y:%2";  // untranslated
+Blockly.Msg["MATH_ATAN2_HELPURL"] = "https://en.wikipedia.org/wiki/Atan2";
+Blockly.Msg["MATH_ATAN2_TITLE"] = "atan2 av X:%1 Y:%2";
 Blockly.Msg["MATH_ATAN2_TOOLTIP"] = "Return the arctangent of point (X, Y) in degrees from -180 to 180.";  // untranslated
 Blockly.Msg["MATH_CHANGE_HELPURL"] = "https://en.wikipedia.org/wiki/Programming_idiom#Incrementing_a_counter";
 Blockly.Msg["MATH_CHANGE_TITLE"] = "endre %1 ved %2";
@@ -393,6 +389,7 @@ Blockly.Msg["TEXT_TRIM_OPERATOR_RIGHT"] = "fjern mellomrom fra høyre side av";
 Blockly.Msg["TEXT_TRIM_TOOLTIP"] = "Returner en kopi av teksten med mellomrom fjernet fra en eller begge sidene.";
 Blockly.Msg["TODAY"] = "I dag";
 Blockly.Msg["UNDO"] = "Angre";
+Blockly.Msg["UNNAMED_KEY"] = "unnamed";  // untranslated
 Blockly.Msg["VARIABLES_DEFAULT_NAME"] = "element";
 Blockly.Msg["VARIABLES_GET_CREATE_SET"] = "Opprett 'sett %1'";
 Blockly.Msg["VARIABLES_GET_HELPURL"] = "https://github.com/google/blockly/wiki/Variables#get";  // untranslated

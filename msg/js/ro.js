@@ -2,15 +2,11 @@
 
 'use strict';
 
-goog.provide('Blockly.Msg.ro');
-
-goog.require('Blockly.Msg');
-
 Blockly.Msg["ADD_COMMENT"] = "Adaugă un comentariu";
 Blockly.Msg["CANNOT_DELETE_VARIABLE_PROCEDURE"] = "Nu se poate șterge variabila '%1' deoarece face parte din definiția funcției '%2'";
 Blockly.Msg["CHANGE_VALUE_TITLE"] = "Schimbaţi valoarea:";
 Blockly.Msg["CLEAN_UP"] = "Curăță blocări";
-Blockly.Msg["COLLAPSED_WARNINGS_WARNING"] = "Collapsed blocks contain warnings.";  // untranslated
+Blockly.Msg["COLLAPSED_WARNINGS_WARNING"] = "Blocurile blocate conțin avertismente.";
 Blockly.Msg["COLLAPSE_ALL"] = "Restrange blocurile";
 Blockly.Msg["COLLAPSE_BLOCK"] = "Restrange blocul";
 Blockly.Msg["COLOUR_BLEND_COLOUR1"] = "culoare 1";
@@ -393,6 +389,7 @@ Blockly.Msg["TEXT_TRIM_OPERATOR_RIGHT"] = "taie spațiile din partea dreaptă a"
 Blockly.Msg["TEXT_TRIM_TOOLTIP"] = "Returnează o copie a textului fără spațiile de la unul sau ambele capete.";
 Blockly.Msg["TODAY"] = "Astăzi";
 Blockly.Msg["UNDO"] = "Anulează";
+Blockly.Msg["UNNAMED_KEY"] = "unnamed";  // untranslated
 Blockly.Msg["VARIABLES_DEFAULT_NAME"] = "element";
 Blockly.Msg["VARIABLES_GET_CREATE_SET"] = "Crează 'set %1'";
 Blockly.Msg["VARIABLES_GET_HELPURL"] = "https://github.com/google/blockly/wiki/Variables#get";  // untranslated

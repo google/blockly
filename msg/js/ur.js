@@ -2,10 +2,6 @@
 
 'use strict';
 
-goog.provide('Blockly.Msg.ur');
-
-goog.require('Blockly.Msg');
-
 Blockly.Msg["ADD_COMMENT"] = "کمنٹ کریں";
 Blockly.Msg["CANNOT_DELETE_VARIABLE_PROCEDURE"] = "متغیر '٪ 1' کو حذف نہیں کر سکتا کیونکہ یہ فنکشن کی تعریف کا حصہ ہے '٪ 2'";
 Blockly.Msg["CHANGE_VALUE_TITLE"] = "ویلیو تبدیل کریں:";
@@ -393,6 +389,7 @@ Blockly.Msg["TEXT_TRIM_OPERATOR_RIGHT"] = "trim spaces from right side of";  // 
 Blockly.Msg["TEXT_TRIM_TOOLTIP"] = "Return a copy of the text with spaces removed from one or both ends.";  // untranslated
 Blockly.Msg["TODAY"] = "آج";
 Blockly.Msg["UNDO"] = "کیا ہوا کام کینسل کرے";
+Blockly.Msg["UNNAMED_KEY"] = "unnamed";  // untranslated
 Blockly.Msg["VARIABLES_DEFAULT_NAME"] = "آئٹم";
 Blockly.Msg["VARIABLES_GET_CREATE_SET"] = "Create 'set %1'";  // untranslated
 Blockly.Msg["VARIABLES_GET_HELPURL"] = "https://github.com/google/blockly/wiki/Variables#get";  // untranslated

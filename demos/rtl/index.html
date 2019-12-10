@@ -41,7 +41,7 @@
 
   <div id="blocklyDiv"></div>
 
-  <xml id="toolbox" style="display: none">
+  <xml xmlns="https://developers.google.com/blockly/xml" id="toolbox" style="display: none">
     <category name="منطق" colour="%{BKY_LOGIC_HUE}">
       <block type="controls_if"></block>
       <block type="logic_compare"></block>
@@ -168,8 +168,8 @@
     </category>
   </xml>
 
-  <xml id="startBlocks" style="display: none">
-    <block type="controls_if" inline="false" x="-100" y="50">
+  <xml xmlns="https://developers.google.com/blockly/xml" id="startBlocks" style="display: none">
+    <block type="controls_if" inline="false" x="50" y="50">
       <value name="IF0">
         <block type="logic_compare" inline="true">
           <field name="OP">LT</field>

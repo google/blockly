@@ -1,9 +1,6 @@
 /**
  * @license
- * Visual Blocks Language
- *
- * Copyright 2014 Google Inc.
- * https://developers.google.com/blockly/
+ * Copyright 2014 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,6 +24,7 @@
 goog.provide('Blockly.Dart');
 
 goog.require('Blockly.Generator');
+goog.require('Blockly.utils.string');
 
 
 /**
@@ -183,6 +181,20 @@ Blockly.Dart.quote_ = function(string) {
 };
 
 /**
+ * Encode a string as a properly escaped multiline Dart string, complete with
+ * quotes.
+ * @param {string} string Text to encode.
+ * @return {string} Dart string.
+ * @private
+ */
+Blockly.Dart.multiline_quote_ = function(string) {
+  // Can't use goog.string.quote since $ must also be escaped.
+  string = string.replace(/'''/g, '\\\'\\\'\\\'');
+  return '\'\'\'' + string + '\'\'\'';
+};
+
+
+/**
  * Common tasks for generating Dart from blocks.
  * Handles comments for the specified block and any connected value blocks.
  * Calls any statements following this block.
@@ -198,8 +210,9 @@ Blockly.Dart.scrub_ = function(block, code, opt_thisOnly) {
   if (!block.outputConnection || !block.outputConnection.targetConnection) {
     // Collect comment for this block.
     var comment = block.getCommentText();
-    comment = Blockly.utils.wrap(comment, Blockly.Dart.COMMENT_WRAP - 3);
     if (comment) {
+      comment = Blockly.utils.string.wrap(comment,
+          Blockly.Dart.COMMENT_WRAP - 3);
       if (block.getProcedureDef) {
         // Use documentation comment for function comments.
         commentCode += Blockly.Dart.prefixLines(comment + '\n', '/// ');

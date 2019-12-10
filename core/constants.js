@@ -1,9 +1,6 @@
 /**
  * @license
- * Visual Blocks Editor
- *
- * Copyright 2016 Google Inc.
- * https://developers.google.com/blockly/
+ * Copyright 2016 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -128,18 +125,6 @@ Blockly.SPRITE = {
 };
 
 // Constants below this point are not intended to be changed.
-
-/**
- * Required name space for SVG elements.
- * @const
- */
-Blockly.SVG_NS = 'http://www.w3.org/2000/svg';
-
-/**
- * Required name space for HTML elements.
- * @const
- */
-Blockly.HTML_NS = 'http://www.w3.org/1999/xhtml';
 
 /**
  * ENUM for a right-facing value input.  E.g. 'set item to' or 'return'.

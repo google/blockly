@@ -69,9 +69,7 @@ function unittest_fail(message) {
   unittestResults.push([false, "Fail.", message]);
 }
 
-/**
- * Describe this function...
- */
+// Describe this function...
 function test_if() {
   if (false) {
     unittest_fail('if false');
@@ -108,9 +106,7 @@ function test_if() {
   assertEquals(ok, true, 'elseif 4');
 }
 
-/**
- * Describe this function...
- */
+// Describe this function...
 function test_ifelse() {
   ok = false;
   if (true) {
@@ -128,9 +124,7 @@ function test_ifelse() {
   assertEquals(ok, true, 'ifelse false');
 }
 
-/**
- * Describe this function...
- */
+// Describe this function...
 function test_equalities() {
   assertEquals(2 == 2, true, 'Equal yes');
   assertEquals(3 == 4, false, 'Equal no');
@@ -146,9 +140,7 @@ function test_equalities() {
   assertEquals(15 >= 16, false, 'Greater-equal no');
 }
 
-/**
- * Describe this function...
- */
+// Describe this function...
 function test_and() {
   assertEquals(true && true, true, 'And true/true');
   assertEquals(false && true, false, 'And false/true');
@@ -156,9 +148,7 @@ function test_and() {
   assertEquals(false && false, false, 'And false/false');
 }
 
-/**
- * Describe this function...
- */
+// Describe this function...
 function test_or() {
   assertEquals(true || true, true, 'Or true/true');
   assertEquals(false || true, true, 'Or false/true');
@@ -166,17 +156,13 @@ function test_or() {
   assertEquals(false || false, false, 'Or false/false');
 }
 
-/**
- * Describe this function...
- */
+// Describe this function...
 function test_ternary() {
   assertEquals(true ? 42 : 99, 42, 'if true');
   assertEquals(false ? 42 : 99, 99, 'if true');
 }
 
-/**
- * Describe this function...
- */
+// Describe this function...
 function test_foreach() {
   log = '';
   var x_list = ['a', 'b', 'c'];
@@ -187,9 +173,7 @@ function test_foreach() {
   assertEquals(log, 'abc', 'for loop');
 }
 
-/**
- * Describe this function...
- */
+// Describe this function...
 function test_repeat() {
   count = 0;
   for (var count2 = 0; count2 < 10; count2++) {
@@ -198,9 +182,7 @@ function test_repeat() {
   assertEquals(count, 10, 'repeat 10');
 }
 
-/**
- * Describe this function...
- */
+// Describe this function...
 function test_while() {
   while (false) {
     unittest_fail('while 0');
@@ -220,9 +202,7 @@ function test_while() {
   assertEquals(count, 10, 'until 10');
 }
 
-/**
- * Describe this function...
- */
+// Describe this function...
 function test_repeat_ext() {
   count = 0;
   for (var count3 = 0; count3 < 10; count3++) {
@@ -231,9 +211,7 @@ function test_repeat_ext() {
   assertEquals(count, 10, 'repeat 10');
 }
 
-/**
- * Describe this function...
- */
+// Describe this function...
 function test_count_by() {
   log = '';
   for (x = 1; x <= 8; x += 2) {
@@ -285,9 +263,7 @@ function test_count_by() {
   assertEquals(loglist, [5.5, 4.5, 3.5, 2.5, 1.5], 'count with floats');
 }
 
-/**
- * Describe this function...
- */
+// Describe this function...
 function test_count_loops() {
   log = '';
   for (x = 1; x <= 8; x++) {
@@ -323,9 +299,7 @@ function test_count_loops() {
   assertEquals(loglist, [4, 3, 2, 1], 'count down non-trivial');
 }
 
-/**
- * Describe this function...
- */
+// Describe this function...
 function test_continue() {
   log = '';
   count = 0;
@@ -367,9 +341,7 @@ function test_continue() {
   assertEquals(log, 'abd', 'for continue');
 }
 
-/**
- * Describe this function...
- */
+// Describe this function...
 function test_break() {
   count = 1;
   while (count != 10) {
@@ -407,9 +379,7 @@ function test_break() {
   assertEquals(log, 'ab', 'for break');
 }
 
-/**
- * Tests the "single" block.
- */
+// Tests the "single" block.
 function test_single() {
   assertEquals(Math.sqrt(25), 5, 'sqrt');
   assertEquals(Math.abs(-25), 25, 'abs');
@@ -420,10 +390,8 @@ function test_single() {
   assertEquals(Math.pow(10,2), 100, 'power10');
 }
 
-/**
- * Tests the "arithmetic" block for all operations and checks
- * parenthesis are properly generated for different orders.
- */
+// Tests the "arithmetic" block for all operations and checks
+// parenthesis are properly generated for different orders.
 function test_arithmetic() {
   assertEquals(1 + 2, 3, 'add');
   assertEquals(1 - 2, -1, 'subtract');
@@ -437,9 +405,7 @@ function test_arithmetic() {
   assertEquals(Math.pow(10, 0 + 4), 10000, 'power order');
 }
 
-/**
- * Tests the "trig" block.
- */
+// Tests the "trig" block.
 function test_trig() {
   assertEquals(Math.sin(90 / 180 * Math.PI), 1, 'sin');
   assertEquals(Math.cos(180 / 180 * Math.PI), -1, 'cos');
@@ -449,9 +415,7 @@ function test_trig() {
   assertEquals(Math.atan(1) / Math.PI * 180, 45, 'atan');
 }
 
-/**
- * Tests the "constant" blocks.
- */
+// Tests the "constant" blocks.
 function test_constant() {
   assertEquals(Math.floor(Math.PI * 1000), 3141, 'const pi');
   assertEquals(Math.floor(Math.E * 1000), 2718, 'const e');
@@ -480,9 +444,7 @@ function mathIsPrime(n) {
   return true;
 }
 
-/**
- * Tests the "number property" blocks.
- */
+// Tests the "number property" blocks.
 function test_number_properties() {
   assertEquals(42 % 2 == 0, true, 'even');
   assertEquals(42.1 % 2 == 1, false, 'odd');
@@ -495,18 +457,14 @@ function test_number_properties() {
   assertEquals(42 % 2 == 0, true, 'divisible');
 }
 
-/**
- * Tests the "round" block.
- */
+// Tests the "round" block.
 function test_round() {
   assertEquals(Math.round(42.42), 42, 'round');
   assertEquals(Math.ceil(-42.42), -42, 'round up');
   assertEquals(Math.floor(42.42), 42, 'round down');
 }
 
-/**
- * Tests the "change" block.
- */
+// Tests the "change" block.
 function test_change() {
   varToChange = 100;
   varToChange = (typeof varToChange == 'number' ? varToChange : 0) + 42;
@@ -574,9 +532,7 @@ function mathRandomList(list) {
   return list[x];
 }
 
-/**
- * Tests the "list operation" blocks.
- */
+// Tests the "list operation" blocks.
 function test_operations_on_list() {
   assertEquals([3, 4, 5].reduce(function(x, y) {return x + y;}), 12, 'sum');
   assertEquals(Math.min.apply(null, [3, 4, 5]), 3, 'min');
@@ -589,16 +545,12 @@ function test_operations_on_list() {
   assertEquals([3, 4, 5].indexOf(mathRandomList([3, 4, 5])) + 1 > 0, true, 'random');
 }
 
-/**
- * Tests the "mod" block.
- */
+// Tests the "mod" block.
 function test_mod() {
   assertEquals(42 % 5, 2, 'mod');
 }
 
-/**
- * Tests the "constrain" block.
- */
+// Tests the "constrain" block.
 function test_constraint() {
   assertEquals(Math.min(Math.max(100, 0), 42), 42, 'constraint');
 }
@@ -613,43 +565,33 @@ function mathRandomInt(a, b) {
   return Math.floor(Math.random() * (b - a + 1) + a);
 }
 
-/**
- * Tests the "random integer" block.
- */
+// Tests the "random integer" block.
 function test_random_integer() {
   rand = mathRandomInt(5, 10);
   assertEquals(rand >= 5 && rand <= 10, true, 'randRange');
   assertEquals(rand % 1 == 0, true, 'randInteger');
 }
 
-/**
- * Tests the "random fraction" block.
- */
+// Tests the "random fraction" block.
 function test_random_fraction() {
   rand = Math.random();
   assertEquals(rand >= 0 && rand <= 1, true, 'randFloat');
 }
 
-/**
- * Describe this function...
- */
+// Describe this function...
 function test_atan2() {
   assertEquals(Math.atan2(5, -5) / Math.PI * 180, 135, 'atan2');
   assertEquals(Math.atan2(-12, 0) / Math.PI * 180, -90, 'atan2');
 }
 
-/**
- * Checks that the number of calls is one in order
- * to confirm that a function was only called once.
- */
+// Checks that the number of calls is one in order
+// to confirm that a function was only called once.
 function check_number_of_calls(test_name) {
   test_name += 'number of calls';
   assertEquals(number_of_calls, 1, test_name);
 }
 
-/**
- * Tests the "create text with" block with varying number of inputs.
- */
+// Tests the "create text with" block with varying number of inputs.
 function test_create_text() {
   assertEquals('', '', 'no text');
   assertEquals('Hello', 'Hello', 'create single');
@@ -660,16 +602,12 @@ function test_create_text() {
   assertEquals([1,true ? 0 : null,'M'].join(''), '10M', 'create order');
 }
 
-/**
- * Creates an empty string for use with the empty test.
- */
+// Creates an empty string for use with the empty test.
 function get_empty() {
   return '';
 }
 
-/**
- * Tests the "is empty" block".
- */
+// Tests the "is empty" block".
 function test_empty_text() {
   assertEquals(!'Google'.length, false, 'not empty');
   assertEquals(!''.length, true, 'empty');
@@ -677,18 +615,14 @@ function test_empty_text() {
   assertEquals(!(true ? '' : null).length, true, 'empty order');
 }
 
-/**
- * Tests the "length" block.
- */
+// Tests the "length" block.
 function test_text_length() {
   assertEquals(''.length, 0, 'zero length');
   assertEquals('Google'.length, 6, 'non-zero length');
   assertEquals((true ? 'car' : null).length, 3, 'length order');
 }
 
-/**
- * Tests the "append text" block with different types of parameters.
- */
+// Tests the "append text" block with different types of parameters.
 function test_append() {
   item = 'Miserable';
   item += 'Failure';
@@ -701,9 +635,7 @@ function test_append() {
   assertEquals(item, 'Something Positive', 'append order');
 }
 
-/**
- * Tests the "find" block with a variable.
- */
+// Tests the "find" block with a variable.
 function test_find_text_simple() {
   text = 'Banana';
   assertEquals(text.indexOf('an') + 1, 2, 'find first simple');
@@ -711,17 +643,13 @@ function test_find_text_simple() {
   assertEquals(text.indexOf('Peel') + 1, 0, 'find none simple');
 }
 
-/**
- * Creates a string for use with the find test.
- */
+// Creates a string for use with the find test.
 function get_fruit() {
   number_of_calls = (typeof number_of_calls == 'number' ? number_of_calls : 0) + 1;
   return 'Banana';
 }
 
-/**
- * Tests the "find" block with a function call.
- */
+// Tests the "find" block with a function call.
 function test_find_text_complex() {
   number_of_calls = 0;
   assertEquals(get_fruit().indexOf('an') + 1, 2, 'find first complex');
@@ -748,9 +676,7 @@ function textRandomLetter(text) {
   return text[x];
 }
 
-/**
- * Tests the "get letter" block with a variable.
- */
+// Tests the "get letter" block with a variable.
 function test_get_text_simple() {
   text = 'Blockly';
   assertEquals(text.charAt(0), 'B', 'get first simple');
@@ -763,17 +689,13 @@ function test_get_text_simple() {
   assertEquals(text.slice((-(0 + 3))).charAt(0), 'k', 'get #-end order simple');
 }
 
-/**
- * Creates a string for use with the get test.
- */
+// Creates a string for use with the get test.
 function get_Blockly() {
   number_of_calls = (typeof number_of_calls == 'number' ? number_of_calls : 0) + 1;
   return 'Blockly';
 }
 
-/**
- * Tests the "get letter" block with a function call.
- */
+// Tests the "get letter" block with a function call.
 function test_get_text_complex() {
   text = 'Blockly';
   number_of_calls = 0;
@@ -809,17 +731,13 @@ function test_get_text_complex() {
   check_number_of_calls('get #-end order complex');
 }
 
-/**
- * Creates a string for use with the substring test.
- */
+// Creates a string for use with the substring test.
 function get_numbers() {
   number_of_calls = (typeof number_of_calls == 'number' ? number_of_calls : 0) + 1;
   return '123456789';
 }
 
-/**
- * Tests the "get substring" block with a variable.
- */
+// Tests the "get substring" block with a variable.
 function test_substring_simple() {
   text = '123456789';
   assertEquals(text.slice(1, 3), '23', 'substring # simple');
@@ -876,9 +794,7 @@ function subsequenceFromEndLast(sequence, at1) {
   return sequence.slice(start, end);
 }
 
-/**
- * Tests the "get substring" block with a function call.
- */
+// Tests the "get substring" block with a function call.
 function test_substring_complex() {
   number_of_calls = 0;
   assertEquals(get_numbers().slice(1, 3), '23', 'substring # complex');
@@ -931,9 +847,7 @@ function textToTitleCase(str) {
       function(txt) {return txt[0].toUpperCase() + txt.substring(1).toLowerCase();});
 }
 
-/**
- * Tests the "change casing" block.
- */
+// Tests the "change casing" block.
 function test_case() {
   text = 'Hello World';
   assertEquals(text.toUpperCase(), 'HELLO WORLD', 'uppercase');
@@ -946,9 +860,7 @@ function test_case() {
   assertEquals(textToTitleCase(true ? text : null), 'Hello World', 'titlecase order');
 }
 
-/**
- * Tests the "trim" block.
- */
+// Tests the "trim" block.
 function test_trim() {
   text = '   abc def   ';
   assertEquals(text.trim(), 'abc def', 'trim both');
@@ -967,9 +879,7 @@ function textCount(haystack, needle) {
   }
 }
 
-/**
- * Tests the "trim" block.
- */
+// Tests the "trim" block.
 function test_count_text() {
   text = 'woolloomooloo';
   assertEquals(textCount(text, 'o'), 8, 'len 1');
@@ -981,9 +891,7 @@ function test_count_text() {
   assertEquals(textCount('', 'chicken'), 0, 'empty source');
 }
 
-/**
- * Tests the "trim" block.
- */
+// Tests the "trim" block.
 function test_text_reverse() {
   assertEquals(''.split('').reverse().join(''), '', 'empty string');
   assertEquals('a'.split('').reverse().join(''), 'a', 'len 1');
@@ -997,9 +905,7 @@ function textReplace(haystack, needle, replacement) {
   return haystack.replace(new RegExp(needle, 'g'), replacement);
 }
 
-/**
- * Tests the "trim" block.
- */
+// Tests the "trim" block.
 function test_replace() {
   assertEquals(textReplace('woolloomooloo', 'oo', '123'), 'w123ll123m123l123', 'replace all instances 1');
   assertEquals(textReplace('woolloomooloo', '.oo', 'X'), 'woolloomooloo', 'literal string replacement');
@@ -1010,10 +916,8 @@ function test_replace() {
   assertEquals(textReplace('', 'a', 'chicken'), '', 'empty source');
 }
 
-/**
- * Checks that the number of calls is one in order
- * to confirm that a function was only called once.
- */
+// Checks that the number of calls is one in order
+// to confirm that a function was only called once.
 function check_number_of_calls2(test_name) {
   test_name += 'number of calls';
   assertEquals(number_of_calls, 1, test_name);
@@ -1027,9 +931,7 @@ function listsRepeat(value, n) {
   return array;
 }
 
-/**
- * Tests the "create list with" and "create empty list" blocks.
- */
+// Tests the "create list with" and "create empty list" blocks.
 function test_create_lists() {
   assertEquals([], [], 'create empty');
   assertEquals([true, 'love'], [true, 'love'], 'create items');
@@ -1037,16 +939,12 @@ function test_create_lists() {
   assertEquals(listsRepeat('Eject', 0 + 3), ['Eject', 'Eject', 'Eject'], 'create repeated order');
 }
 
-/**
- * Creates an empty list for use with the empty test.
- */
+// Creates an empty list for use with the empty test.
 function get_empty_list() {
   return [];
 }
 
-/**
- * Tests the "is empty" block.
- */
+// Tests the "is empty" block.
 function test_lists_empty() {
   assertEquals(![0].length, false, 'not empty');
   assertEquals(![].length, true, 'empty');
@@ -1054,9 +952,7 @@ function test_lists_empty() {
   assertEquals(!(true ? [] : null).length, true, 'empty order');
 }
 
-/**
- * Tests the "length" block.
- */
+// Tests the "length" block.
 function test_lists_length() {
   assertEquals([].length, 0, 'zero length');
   assertEquals(['cat'].length, 1, 'one length');
@@ -1064,9 +960,7 @@ function test_lists_length() {
   assertEquals((true ? ['cat', true] : null).length, 2, 'two length order');
 }
 
-/**
- * Tests the "find" block with a variable.
- */
+// Tests the "find" block with a variable.
 function test_find_lists_simple() {
   list = ['Alice', 'Eve', 'Bob', 'Eve'];
   assertEquals(list.indexOf('Eve') + 1, 2, 'find first simple');
@@ -1074,17 +968,13 @@ function test_find_lists_simple() {
   assertEquals(list.indexOf('Dave') + 1, 0, 'find none simple');
 }
 
-/**
- * Creates a list for use with the find test.
- */
+// Creates a list for use with the find test.
 function get_names() {
   number_of_calls = (typeof number_of_calls == 'number' ? number_of_calls : 0) + 1;
   return ['Alice', 'Eve', 'Bob', 'Eve'];
 }
 
-/**
- * Tests the "find" block with a function call.
- */
+// Tests the "find" block with a function call.
 function test_find_lists_complex() {
   number_of_calls = 0;
   assertEquals(get_names().indexOf('Eve') + 1, 2, 'find first complex');
@@ -1115,9 +1005,7 @@ function listsGetRandomItem(list, remove) {
   }
 }
 
-/**
- * Tests the "get" block with a variable.
- */
+// Tests the "get" block with a variable.
 function test_get_lists_simple() {
   list = ['Kirk', 'Spock', 'McCoy'];
   assertEquals(list[0], 'Kirk', 'get first simple');
@@ -1130,17 +1018,13 @@ function test_get_lists_simple() {
   assertEquals(list.slice((-(0 + 3)))[0], 'Kirk', 'get #-end order simple');
 }
 
-/**
- * Creates a list for use with the get test.
- */
+// Creates a list for use with the get test.
 function get_star_wars() {
   number_of_calls = (typeof number_of_calls == 'number' ? number_of_calls : 0) + 1;
   return ['Kirk', 'Spock', 'McCoy'];
 }
 
-/**
- * Tests the "get" block with a function call.
- */
+// Tests the "get" block with a function call.
 function test_get_lists_complex() {
   list = ['Kirk', 'Spock', 'McCoy'];
   number_of_calls = 0;
@@ -1176,9 +1060,7 @@ function test_get_lists_complex() {
   check_number_of_calls('get #-end order complex');
 }
 
-/**
- * Tests the "get and remove" block.
- */
+// Tests the "get and remove" block.
 function test_getRemove() {
   list = ['Kirk', 'Spock', 'McCoy'];
   assertEquals(list.shift(), 'Kirk', 'getremove first');
@@ -1213,9 +1095,7 @@ function test_getRemove() {
   assertEquals(list, ['Spock', 'McCoy'], 'getremove #-end order list');
 }
 
-/**
- * Tests the "remove" block.
- */
+// Tests the "remove" block.
 function test_remove() {
   list = ['Kirk', 'Spock', 'McCoy'];
   list.shift();
@@ -1249,9 +1129,7 @@ function test_remove() {
   (true ? list : null).splice((-(0 + 3)), 1);assertEquals(list, ['Spock', 'McCoy'], 'remove #-end order list');
 }
 
-/**
- * Tests the "set" block.
- */
+// Tests the "set" block.
 function test_set() {
   list = ['Picard', 'Riker', 'Crusher'];
   list[0] = 'Jean-Luc';
@@ -1292,9 +1170,7 @@ function test_set() {
   assertEquals(list, ['Picard', 'Pulaski', 'Crusher'], 'set #-end order list');
 }
 
-/**
- * Tests the "insert" block.
- */
+// Tests the "insert" block.
 function test_insert() {
   list = ['Picard', 'Riker', 'Crusher'];
   list.unshift('Data');
@@ -1334,9 +1210,7 @@ function test_insert() {
   assertEquals(list, ['Picard', 'Data', 'Riker', 'Crusher'], 'insert #-end order list');
 }
 
-/**
- * Tests the "get sub-list" block with a variable.
- */
+// Tests the "get sub-list" block with a variable.
 function test_sublist_simple() {
   list = ['Columbia', 'Challenger', 'Discovery', 'Atlantis', 'Endeavour'];
   assertEquals(list.slice(1, 3), ['Challenger', 'Discovery'], 'sublist # simple');
@@ -1361,17 +1235,13 @@ function test_sublist_simple() {
   assertEquals(list.slice(((0 + 1) - 1), list.length - ((0 + 1) - 1)), list, 'sublist all with # #-end math simple');
 }
 
-/**
- * Creates a list for use with the sublist test.
- */
+// Creates a list for use with the sublist test.
 function get_space_shuttles() {
   number_of_calls = (typeof number_of_calls == 'number' ? number_of_calls : 0) + 1;
   return ['Columbia', 'Challenger', 'Discovery', 'Atlantis', 'Endeavour'];
 }
 
-/**
- * Tests the "get sub-list" block with a function call.
- */
+// Tests the "get sub-list" block with a function call.
 function test_sublist_complex() {
   number_of_calls = 0;
   assertEquals(get_space_shuttles().slice(1, 3), ['Challenger', 'Discovery'], 'sublist # start complex');
@@ -1419,18 +1289,14 @@ function test_sublist_complex() {
   check_number_of_calls('sublist all with # #-end math complex');
 }
 
-/**
- * Tests the "join" block.
- */
+// Tests the "join" block.
 function test_join() {
   list = ['Vulcan', 'Klingon', 'Borg'];
   assertEquals(list.join(','), 'Vulcan,Klingon,Borg', 'join');
   assertEquals((true ? list : null).join(','), 'Vulcan,Klingon,Borg', 'join order');
 }
 
-/**
- * Tests the "split" block.
- */
+// Tests the "split" block.
 function test_split() {
   text = 'Vulcan,Klingon,Borg';
   assertEquals(text.split(','), ['Vulcan', 'Klingon', 'Borg'], 'split');
@@ -1440,7 +1306,7 @@ function test_split() {
 function listsGetSortCompare(type, direction) {
   var compareFuncs = {
     "NUMERIC": function(a, b) {
-        return parseFloat(a) - parseFloat(b); },
+        return Number(a) - Number(b); },
     "TEXT": function(a, b) {
         return a.toString() > b.toString() ? 1 : -1; },
     "IGNORE_CASE": function(a, b) {
@@ -1450,36 +1316,28 @@ function listsGetSortCompare(type, direction) {
   return function(a, b) { return compare(a, b) * direction; }
 }
 
-/**
- * Tests the "alphabetic sort" block.
- */
+// Tests the "alphabetic sort" block.
 function test_sort_alphabetic() {
   list = ['Vulcan', 'klingon', 'Borg'];
   assertEquals(list.slice().sort(listsGetSortCompare("TEXT", 1)), ['Borg', 'Vulcan', 'klingon'], 'sort alphabetic ascending');
   assertEquals((true ? list : null).slice().sort(listsGetSortCompare("TEXT", 1)), ['Borg', 'Vulcan', 'klingon'], 'sort alphabetic ascending order');
 }
 
-/**
- * Tests the "alphabetic sort ignore case" block.
- */
+// Tests the "alphabetic sort ignore case" block.
 function test_sort_ignoreCase() {
   list = ['Vulcan', 'klingon', 'Borg'];
   assertEquals(list.slice().sort(listsGetSortCompare("IGNORE_CASE", 1)), ['Borg', 'klingon', 'Vulcan'], 'sort ignore case ascending');
   assertEquals((true ? list : null).slice().sort(listsGetSortCompare("IGNORE_CASE", 1)), ['Borg', 'klingon', 'Vulcan'], 'sort ignore case ascending order');
 }
 
-/**
- * Tests the "numeric sort" block.
- */
+// Tests the "numeric sort" block.
 function test_sort_numeric() {
   list = [8, 18, -1];
   assertEquals(list.slice().sort(listsGetSortCompare("NUMERIC", -1)), [18, 8, -1], 'sort numeric descending');
   assertEquals((true ? list : null).slice().sort(listsGetSortCompare("NUMERIC", -1)), [18, 8, -1], 'sort numeric descending order');
 }
 
-/**
- * Tests the "list reverse" block.
- */
+// Tests the "list reverse" block.
 function test_lists_reverse() {
   list = [8, 18, -1, 64];
   assertEquals(list.slice().reverse(), [64, -1, 18, 8], 'reverse a copy');
@@ -1488,9 +1346,7 @@ function test_lists_reverse() {
   assertEquals(list.slice().reverse(), [], 'empty list');
 }
 
-/**
- * Describe this function...
- */
+// Describe this function...
 function test_colour_picker() {
   assertEquals('#ff6600', '#ff6600', 'static colour');
 }
@@ -1505,9 +1361,7 @@ function colourRgb(r, g, b) {
   return '#' + r + g + b;
 }
 
-/**
- * Describe this function...
- */
+// Describe this function...
 function test_rgb() {
   assertEquals(colourRgb(100, 40, 0), '#ff6600', 'from rgb');
 }
@@ -1517,9 +1371,7 @@ function colourRandom() {
   return '#' + ('00000' + num.toString(16)).substr(-6);
 }
 
-/**
- * Describe this function...
- */
+// Describe this function...
 function test_colour_random() {
   for (var count4 = 0; count4 < 100; count4++) {
     item = colourRandom();
@@ -1548,16 +1400,12 @@ function colourBlend(c1, c2, ratio) {
   return '#' + r + g + b;
 }
 
-/**
- * Describe this function...
- */
+// Describe this function...
 function test_blend() {
   assertEquals(colourBlend('#ff0000', colourRgb(100, 40, 0), 0.4), '#ff2900', 'blend');
 }
 
-/**
- * Describe this function...
- */
+// Describe this function...
 function test_procedure() {
   procedure_1(8, 2);
   assertEquals(proc_z, 4, 'procedure with global');
@@ -1569,16 +1417,12 @@ function test_procedure() {
   assertEquals(proc_w, false, 'procedure return');
 }
 
-/**
- * Describe this function...
- */
+// Describe this function...
 function procedure_1(proc_x, proc_y) {
   proc_z = proc_x / proc_y;
 }
 
-/**
- * Describe this function...
- */
+// Describe this function...
 function procedure_2(proc_x) {
   if (proc_x) {
     return;
@@ -1586,9 +1430,7 @@ function procedure_2(proc_x) {
   proc_w = true;
 }
 
-/**
- * Describe this function...
- */
+// Describe this function...
 function test_function() {
   assertEquals(function_1(2, 3), -1, 'function with arguments');
   assertEquals(func_z, 'side effect', 'function with side effect');
@@ -1600,25 +1442,19 @@ function test_function() {
   assertEquals(function_3(false), false, 'function no return');
 }
 
-/**
- * Describe this function...
- */
+// Describe this function...
 function function_1(func_x, func_y) {
   func_z = 'side effect';
   return func_x - func_y;
 }
 
-/**
- * Describe this function...
- */
+// Describe this function...
 function function_2(func_a) {
   func_a = (typeof func_a == 'number' ? func_a : 0) + 1;
   return String(func_a) + String(func_c);
 }
 
-/**
- * Describe this function...
- */
+// Describe this function...
 function function_3(func_a) {
   if (func_a) {
     return true;
@@ -1626,9 +1462,7 @@ function function_3(func_a) {
   return false;
 }
 
-/**
- * Describe this function...
- */
+// Describe this function...
 function recurse(n) {
   if (n > 0) {
     text = [recurse(n - 1),n,recurse(n - 1)].join('');

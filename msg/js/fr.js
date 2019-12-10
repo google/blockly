@@ -2,10 +2,6 @@
 
 'use strict';
 
-goog.provide('Blockly.Msg.fr');
-
-goog.require('Blockly.Msg');
-
 Blockly.Msg["ADD_COMMENT"] = "Ajouter un commentaire";
 Blockly.Msg["CANNOT_DELETE_VARIABLE_PROCEDURE"] = "Impossible de supprimer la variable '%1' parce qu’elle fait partie de la définition de la fonction '%2'";
 Blockly.Msg["CHANGE_VALUE_TITLE"] = "Modifier la valeur :";
@@ -180,7 +176,7 @@ Blockly.Msg["LOGIC_BOOLEAN_TRUE"] = "vrai";
 Blockly.Msg["LOGIC_COMPARE_HELPURL"] = "https://fr.wikipedia.org/wiki/In%C3%A9galit%C3%A9_(math%C3%A9matiques)";
 Blockly.Msg["LOGIC_COMPARE_TOOLTIP_EQ"] = "Renvoyer vrai si les deux entrées sont égales.";
 Blockly.Msg["LOGIC_COMPARE_TOOLTIP_GT"] = "Renvoyer vrai si la première entrée est plus grande que la seconde.";
-Blockly.Msg["LOGIC_COMPARE_TOOLTIP_GTE"] = "Renvoyer vrai si la première entrée est plus grande ou égale à la seconde.";
+Blockly.Msg["LOGIC_COMPARE_TOOLTIP_GTE"] = "Renvoyer true si la première entrée est supérieure ou égale à la seconde.";
 Blockly.Msg["LOGIC_COMPARE_TOOLTIP_LT"] = "Renvoyer vrai si la première entrée est plus petite que la seconde.";
 Blockly.Msg["LOGIC_COMPARE_TOOLTIP_LTE"] = "Renvoyer vrai si la première entrée est plus petite ou égale à la seconde.";
 Blockly.Msg["LOGIC_COMPARE_TOOLTIP_NEQ"] = "Renvoyer vrai si les deux entrées sont différentes.";
@@ -201,7 +197,7 @@ Blockly.Msg["LOGIC_TERNARY_IF_FALSE"] = "si faux";
 Blockly.Msg["LOGIC_TERNARY_IF_TRUE"] = "si vrai";
 Blockly.Msg["LOGIC_TERNARY_TOOLTIP"] = "Vérifier la condition dans 'test'. Si elle est vraie, renvoie la valeur 'si vrai' ; sinon renvoie la valeur 'si faux'.";
 Blockly.Msg["MATH_ADDITION_SYMBOL"] = "+";  // untranslated
-Blockly.Msg["MATH_ARITHMETIC_HELPURL"] = "https://fr.wikipedia.org/wiki/Arithmetique";
+Blockly.Msg["MATH_ARITHMETIC_HELPURL"] = "https://fr.wikipedia.org/wiki/Arithm%C3%A9tique";
 Blockly.Msg["MATH_ARITHMETIC_TOOLTIP_ADD"] = "Renvoie la somme des deux nombres.";
 Blockly.Msg["MATH_ARITHMETIC_TOOLTIP_DIVIDE"] = "Renvoie le quotient des deux nombres.";
 Blockly.Msg["MATH_ARITHMETIC_TOOLTIP_MINUS"] = "Renvoie la différence des deux nombres.";
@@ -262,7 +258,7 @@ Blockly.Msg["MATH_ROUND_OPERATOR_ROUND"] = "arrondir";
 Blockly.Msg["MATH_ROUND_OPERATOR_ROUNDDOWN"] = "arrondir par défaut";
 Blockly.Msg["MATH_ROUND_OPERATOR_ROUNDUP"] = "arrondir par excès";
 Blockly.Msg["MATH_ROUND_TOOLTIP"] = "Arrondir un nombre au-dessus ou au-dessous.";
-Blockly.Msg["MATH_SINGLE_HELPURL"] = "https://fr.wikipedia.org/wiki/Racine_carree";
+Blockly.Msg["MATH_SINGLE_HELPURL"] = "https://fr.wikipedia.org/wiki/Racine_carr%C3%A9e";
 Blockly.Msg["MATH_SINGLE_OP_ABSOLUTE"] = "valeur absolue";
 Blockly.Msg["MATH_SINGLE_OP_ROOT"] = "racine carrée";
 Blockly.Msg["MATH_SINGLE_TOOLTIP_ABS"] = "Renvoie la valeur absolue d’un nombre.";
@@ -290,7 +286,7 @@ Blockly.Msg["NEW_COLOUR_VARIABLE"] = "Créer une variable couleur…";
 Blockly.Msg["NEW_NUMBER_VARIABLE"] = "Créer une variable nombre…";
 Blockly.Msg["NEW_STRING_VARIABLE"] = "Créer une variable chaîne…";
 Blockly.Msg["NEW_VARIABLE"] = "Créer une variable...";
-Blockly.Msg["NEW_VARIABLE_TITLE"] = "Le nom de la nouvelle variable :";
+Blockly.Msg["NEW_VARIABLE_TITLE"] = "Nom de la nouvelle variable :";
 Blockly.Msg["NEW_VARIABLE_TYPE_TITLE"] = "Nouveau type de variable :";
 Blockly.Msg["ORDINAL_NUMBER_SUFFIX"] = "";  // untranslated
 Blockly.Msg["PROCEDURES_ALLOW_STATEMENTS"] = "autoriser les ordres";
@@ -393,6 +389,7 @@ Blockly.Msg["TEXT_TRIM_OPERATOR_RIGHT"] = "supprimer les espaces du côté droit
 Blockly.Msg["TEXT_TRIM_TOOLTIP"] = "Renvoyer une copie du texte avec les espaces supprimés d’un bout ou des deux.";
 Blockly.Msg["TODAY"] = "Aujourd'hui";
 Blockly.Msg["UNDO"] = "Annuler";
+Blockly.Msg["UNNAMED_KEY"] = "non nommé";
 Blockly.Msg["VARIABLES_DEFAULT_NAME"] = "élément";
 Blockly.Msg["VARIABLES_GET_CREATE_SET"] = "Créer 'fixer %1'";
 Blockly.Msg["VARIABLES_GET_HELPURL"] = "https://github.com/google/blockly/wiki/Variables#get";  // untranslated

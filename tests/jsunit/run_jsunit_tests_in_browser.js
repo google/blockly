@@ -1,9 +1,6 @@
 /**
  * @license
- * Visual Blocks Editor
- *
- * Copyright 2018 Google Inc.
- * https://developers.google.com/blockly/
+ * Copyright 2018 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,86 +20,65 @@
  */
 var webdriverio = require('webdriverio');
 
+module.exports = runJsUnitTestsInBrowser;
+
 /**
  * Runs the JsUnit tests in this directory in Chrome. It uses webdriverio to
  * launch Chrome and load index.html. Outputs a summary of the test results
  * to the console.
- * @return the Thenable managing the processing of the browser tests.
+ * @return 0 on success, 1 on failure.
  */
-function runJsUnitTestsInBrowser() {
+async function runJsUnitTestsInBrowser() {
   var options = {
-      desiredCapabilities: {
+      capabilities: {
           browserName: 'chrome'
       }
   };
+  // Run in headless mode on Travis.
+  if (process.env.TRAVIS_CI) {
+    options.capabilities['goog:chromeOptions'] = {
+      args: ['--headless', '--no-sandbox', '--disable-dev-shm-usage']
+    };
+  }
 
   var url = 'file://' + __dirname + '/index.html';
   console.log('Starting webdriverio...');
-  return webdriverio
-      .remote(options)
-      .init()
-      .then(function() {
-        console.log('Initialized.\nLoading url: ' + url);
-      })
-      .url(url)
-      .then(function() {
-        console.log('Loaded.\nPausing to allow processing.');
-      })
-      .pause(5000) //TODO: change pause to waitunitl
-      .then(function() {
-        console.log('Retrieving results...');
-      })
-      .getHTML('#closureTestRunnerLog')
-      .then(function(result) {
-        // call js to parse html
-        var regex = /[\d]+\spassed,\s([\d]+)\sfailed./i;
-        var numOfFailure = regex.exec(result)[1];
-        var regex2 = /Unit Tests for Blockly .*]/;
-        var testStatus = regex2.exec(result)[0];
-        console.log('============Blockly Unit Test Summary=================');
-        console.log(testStatus);
-        var regex3 = /\d+ passed,\s\d+ failed/;
-        var detail = regex3.exec(result)[0];
-        console.log(detail);
-        console.log('============Blockly Unit Test Summary=================');
-        if (parseInt(numOfFailure) !== 0) {
-          console.log(result);
-          process.exit(1);
-        }
-      })
-      .catch(function(e) {
-        console.error('Error: ', e);
+  const browser = await webdriverio.remote(options);
+  console.log('Initialized.\nLoading url: ' + url);
+  await browser.url(url);
 
-        if (require.main === module) {
-          // .catch() doesn't seem to work in the calling code,
-          // even if the error is rethrown. To ensure the script
-          // exit code is non-zero, shutdown the process here.
-          process.exit(1);
-        }
+  await browser.waitUntil(async () => {
+    var elem = await browser.$('#failureCount');
+    var text = await elem.getAttribute('tests_failed');
+    return text != 'unset';
+  }, 6000);
 
-        // WARNING: Catching this outside of runJsUnitTestsInBrowser() is not
-        // working. However, killing the process doesn't seem good, either.
-        throw e;
-      });
+  const elem = await browser.$('#failureCount');
+  const numOfFailure = await elem.getAttribute('tests_failed');
+
+  console.log('============Blockly Unit Test Summary=================');
+  console.log(numOfFailure);
+  console.log(numOfFailure + ' tests failed');
+  console.log('============Blockly Unit Test Summary=================');
+  if (parseInt(numOfFailure) !== 0) {
+    await browser.deleteSession();
+    return 1;
+  }
+  await browser.deleteSession();
+  return 0;
 }
 
-module.exports = runJsUnitTestsInBrowser;
-
 if (require.main === module) {
-  try {
-    runJsUnitTestsInBrowser()
-    .catch(function(e) {
-      // TODO: Never called during errors. Fix.
-      console.error('Error: ' + e);
-      process.exit(1);
-    })
-    .endAll()
-    .then(function() {
-      console.log('JSUnit tests completed');
-      process.exit(0);
-    });
-  } catch(e) {
-    console.error('Uncaught error: ', e);
+  runJsUnitTestsInBrowser().catch(e => {
+    console.error(e);
     process.exit(1);
-  }
+  }).then(function(result) {
+    if (result) {
+      console.log('JSUnit tests failed');
+      process.exit(1);
+    } else {
+      console.log('JSUnit tests passed');
+      process.exit(0);
+    }
+  });
 }

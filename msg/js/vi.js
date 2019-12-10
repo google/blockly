@@ -2,15 +2,11 @@
 
 'use strict';
 
-goog.provide('Blockly.Msg.vi');
-
-goog.require('Blockly.Msg');
-
 Blockly.Msg["ADD_COMMENT"] = "Thêm Chú Giải";
 Blockly.Msg["CANNOT_DELETE_VARIABLE_PROCEDURE"] = "Không thể xóa giá trị '%1' vì nó được bao gồm trong định nghĩa của chức năng '%2'";
 Blockly.Msg["CHANGE_VALUE_TITLE"] = "Thay giá trị thành:";
 Blockly.Msg["CLEAN_UP"] = "Sắp xếp lại các khối";
-Blockly.Msg["COLLAPSED_WARNINGS_WARNING"] = "Collapsed blocks contain warnings.";  // untranslated
+Blockly.Msg["COLLAPSED_WARNINGS_WARNING"] = "Các khối bị sập có chứa cảnh báo.";
 Blockly.Msg["COLLAPSE_ALL"] = "Thu Nhỏ Mọi Mảnh";
 Blockly.Msg["COLLAPSE_BLOCK"] = "Thu Nhỏ Mảnh";
 Blockly.Msg["COLOUR_BLEND_COLOUR1"] = "màu 1";
@@ -393,6 +389,7 @@ Blockly.Msg["TEXT_TRIM_OPERATOR_RIGHT"] = "cắt các không gian từ bên ph�
 Blockly.Msg["TEXT_TRIM_TOOLTIP"] = "Hoàn trả bản sao của văn bản sau khi xóa khoảng trắng từ một hoặc hai bên.";
 Blockly.Msg["TODAY"] = "Hôm nay";
 Blockly.Msg["UNDO"] = "Hoàn tác";
+Blockly.Msg["UNNAMED_KEY"] = "unnamed";  // untranslated
 Blockly.Msg["VARIABLES_DEFAULT_NAME"] = "vật";
 Blockly.Msg["VARIABLES_GET_CREATE_SET"] = "Tạo mảnh \"đặt vào %1\"";
 Blockly.Msg["VARIABLES_GET_HELPURL"] = "https://github.com/google/blockly/wiki/Variables#get";  // untranslated

@@ -2,10 +2,6 @@
 
 'use strict';
 
-goog.provide('Blockly.Msg.diq');
-
-goog.require('Blockly.Msg');
-
 Blockly.Msg["ADD_COMMENT"] = "Tefsir cı ke";
 Blockly.Msg["CANNOT_DELETE_VARIABLE_PROCEDURE"] = "Can't delete the variable '%1' because it's part of the definition of the function '%2'";  // untranslated
 Blockly.Msg["CHANGE_VALUE_TITLE"] = "Erci bıvurne:";
@@ -145,8 +141,8 @@ Blockly.Msg["LISTS_REPEAT_HELPURL"] = "https://github.com/google/blockly/wiki/Li
 Blockly.Msg["LISTS_REPEAT_TITLE"] = "create list with item %1 repeated %2 times";  // untranslated
 Blockly.Msg["LISTS_REPEAT_TOOLTIP"] = "Creates a list consisting of the given value repeated the specified number of times.";  // untranslated
 Blockly.Msg["LISTS_REVERSE_HELPURL"] = "https://github.com/google/blockly/wiki/Lists#reversing-a-list";  // untranslated
-Blockly.Msg["LISTS_REVERSE_MESSAGE0"] = "reverse %1";  // untranslated
-Blockly.Msg["LISTS_REVERSE_TOOLTIP"] = "Reverse a copy of a list.";  // untranslated
+Blockly.Msg["LISTS_REVERSE_MESSAGE0"] = "%1 dimlaşt kerê";
+Blockly.Msg["LISTS_REVERSE_TOOLTIP"] = "Yew kopyaya yew lista dimlaşt kerê.";
 Blockly.Msg["LISTS_SET_INDEX_HELPURL"] = "https://github.com/google/blockly/wiki/Lists#in-list--set";  // untranslated
 Blockly.Msg["LISTS_SET_INDEX_INPUT_TO"] = "zey";
 Blockly.Msg["LISTS_SET_INDEX_INSERT"] = "De fi";
@@ -310,7 +306,7 @@ Blockly.Msg["PROCEDURES_DEFNORETURN_TOOLTIP"] = "Yew fonksiyono çap nêdate vı
 Blockly.Msg["PROCEDURES_DEFRETURN_HELPURL"] = "https://en.wikipedia.org/wiki/Subroutine";  // untranslated
 Blockly.Msg["PROCEDURES_DEFRETURN_RETURN"] = "peyser biya";
 Blockly.Msg["PROCEDURES_DEFRETURN_TOOLTIP"] = "Yew fonksiyono çap daye vırazeno";
-Blockly.Msg["PROCEDURES_DEF_DUPLICATE_WARNING"] = "Warning: This function has duplicate parameters.";  // untranslated
+Blockly.Msg["PROCEDURES_DEF_DUPLICATE_WARNING"] = "Tembe: Nê fonksiyoni de parametreyê dıleti estê.";
 Blockly.Msg["PROCEDURES_HIGHLIGHT_DEF"] = "Highlight function definition";  // untranslated
 Blockly.Msg["PROCEDURES_IFRETURN_HELPURL"] = "http://c2.com/cgi/wiki?GuardClause";  // untranslated
 Blockly.Msg["PROCEDURES_IFRETURN_TOOLTIP"] = "If a value is true, then return a second value.";  // untranslated
@@ -393,11 +389,12 @@ Blockly.Msg["TEXT_TRIM_OPERATOR_RIGHT"] = "trim spaces from right side of";  // 
 Blockly.Msg["TEXT_TRIM_TOOLTIP"] = "Return a copy of the text with spaces removed from one or both ends.";  // untranslated
 Blockly.Msg["TODAY"] = "Ewro";
 Blockly.Msg["UNDO"] = "Peyser bıgê";
+Blockly.Msg["UNNAMED_KEY"] = "bêname";
 Blockly.Msg["VARIABLES_DEFAULT_NAME"] = "unsur";
 Blockly.Msg["VARIABLES_GET_CREATE_SET"] = "'%1 bınuse' vıraze";
 Blockly.Msg["VARIABLES_GET_HELPURL"] = "https://github.com/google/blockly/wiki/Variables#get";  // untranslated
 Blockly.Msg["VARIABLES_GET_TOOLTIP"] = "Returns the value of this variable.";  // untranslated
-Blockly.Msg["VARIABLES_SET"] = "set %1 to %2";  // untranslated
+Blockly.Msg["VARIABLES_SET"] = "%1 ra %2 rê eyar kerê";
 Blockly.Msg["VARIABLES_SET_CREATE_GET"] = "'%1 bıwane' vıraze";
 Blockly.Msg["VARIABLES_SET_HELPURL"] = "https://github.com/google/blockly/wiki/Variables#set";  // untranslated
 Blockly.Msg["VARIABLES_SET_TOOLTIP"] = "Sets this variable to be equal to the input.";  // untranslated

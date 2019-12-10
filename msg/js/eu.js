@@ -2,10 +2,6 @@
 
 'use strict';
 
-goog.provide('Blockly.Msg.eu');
-
-goog.require('Blockly.Msg');
-
 Blockly.Msg["ADD_COMMENT"] = "Iruzkina gehitu";
 Blockly.Msg["CANNOT_DELETE_VARIABLE_PROCEDURE"] = "Ezin da '%1' aldagaia ezabatu '%2' funtzioaren definizioaren zati delako.";
 Blockly.Msg["CHANGE_VALUE_TITLE"] = "Aldatu balioa:";
@@ -393,6 +389,7 @@ Blockly.Msg["TEXT_TRIM_OPERATOR_RIGHT"] = "trim spaces from right side of";  // 
 Blockly.Msg["TEXT_TRIM_TOOLTIP"] = "Return a copy of the text with spaces removed from one or both ends.";  // untranslated
 Blockly.Msg["TODAY"] = "Gaur";
 Blockly.Msg["UNDO"] = "Desegin";
+Blockly.Msg["UNNAMED_KEY"] = "unnamed";  // untranslated
 Blockly.Msg["VARIABLES_DEFAULT_NAME"] = "Elementua";
 Blockly.Msg["VARIABLES_GET_CREATE_SET"] = "Create 'set %1'";  // untranslated
 Blockly.Msg["VARIABLES_GET_HELPURL"] = "https://github.com/google/blockly/wiki/Variables#get";  // untranslated

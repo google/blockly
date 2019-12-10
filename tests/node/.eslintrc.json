@@ -1,0 +1,14 @@
+{
+    "parserOptions": {
+        "ecmaVersion": 6
+    },
+    "env": {
+        "browser": false,
+        "mocha": true
+    },
+    "globals": {
+        "console": true,
+        "require": true
+    },
+    "extends": "../../.eslintrc.json"
+}

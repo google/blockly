@@ -1,9 +1,6 @@
 /**
  * @license
- * Visual Blocks Language
- *
- * Copyright 2012 Google Inc.
- * https://developers.google.com/blockly/
+ * Copyright 2012 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,6 +24,7 @@
 goog.provide('Blockly.JavaScript');
 
 goog.require('Blockly.Generator');
+goog.require('Blockly.utils.string');
 
 
 /**
@@ -102,7 +100,7 @@ Blockly.JavaScript.ORDER_LOGICAL_AND = 13;     // &&
 Blockly.JavaScript.ORDER_LOGICAL_OR = 14;      // ||
 Blockly.JavaScript.ORDER_CONDITIONAL = 15;     // ?:
 Blockly.JavaScript.ORDER_ASSIGNMENT = 16;      // = += -= **= *= /= %= <<= >>= ...
-Blockly.JavaScript.ORDER_YIELD = 17;         // yield
+Blockly.JavaScript.ORDER_YIELD = 17;           // yield
 Blockly.JavaScript.ORDER_COMMA = 18;           // ,
 Blockly.JavaScript.ORDER_NONE = 99;            // (...)
 
@@ -224,6 +222,20 @@ Blockly.JavaScript.quote_ = function(string) {
 };
 
 /**
+ * Encode a string as a properly escaped multiline JavaScript string, complete
+ * with quotes.
+ * @param {string} string Text to encode.
+ * @return {string} JavaScript string.
+ * @private
+ */
+Blockly.JavaScript.multiline_quote_ = function(string) {
+  // Can't use goog.string.quote since Google's style guide recommends
+  // JS string literals use single quotes.
+  var lines = string.split(/\n/g).map(Blockly.JavaScript.quote_);
+  return lines.join(' + \'\\n\' +\n');
+};
+
+/**
  * Common tasks for generating JavaScript from blocks.
  * Handles comments for the specified block and any connected value blocks.
  * Calls any statements following this block.
@@ -239,16 +251,10 @@ Blockly.JavaScript.scrub_ = function(block, code, opt_thisOnly) {
   if (!block.outputConnection || !block.outputConnection.targetConnection) {
     // Collect comment for this block.
     var comment = block.getCommentText();
-    comment = Blockly.utils.wrap(comment, Blockly.JavaScript.COMMENT_WRAP - 3);
     if (comment) {
-      if (block.getProcedureDef) {
-        // Use a comment block for function comments.
-        commentCode += '/**\n' +
-                       Blockly.JavaScript.prefixLines(comment + '\n', ' * ') +
-                       ' */\n';
-      } else {
-        commentCode += Blockly.JavaScript.prefixLines(comment + '\n', '// ');
-      }
+      comment = Blockly.utils.string.wrap(comment,
+          Blockly.JavaScript.COMMENT_WRAP - 3);
+      commentCode += Blockly.JavaScript.prefixLines(comment + '\n', '// ');
     }
     // Collect comments for all value arguments.
     // Don't collect comments for nested statements.
@@ -302,7 +308,7 @@ Blockly.JavaScript.getAdjusted = function(block, atId, opt_delta, opt_negate,
 
   if (Blockly.isNumber(at)) {
     // If the index is a naked number, adjust it right now.
-    at = parseFloat(at) + delta;
+    at = Number(at) + delta;
     if (opt_negate) {
       at = -at;
     }

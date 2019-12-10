@@ -2,10 +2,6 @@
 
 'use strict';
 
-goog.provide('Blockly.Msg.zh.hant');
-
-goog.require('Blockly.Msg');
-
 Blockly.Msg["ADD_COMMENT"] = "加入註解";
 Blockly.Msg["CANNOT_DELETE_VARIABLE_PROCEDURE"] = "無法刪除變數「%1」，因為這是功能「%2」定義的一部份內容";
 Blockly.Msg["CHANGE_VALUE_TITLE"] = "修改值：";
@@ -393,6 +389,7 @@ Blockly.Msg["TEXT_TRIM_OPERATOR_RIGHT"] = "消除右側空格";
 Blockly.Msg["TEXT_TRIM_TOOLTIP"] = "複製這段文字，同時刪除兩端多餘的空格。";
 Blockly.Msg["TODAY"] = "今天";
 Blockly.Msg["UNDO"] = "還原";
+Blockly.Msg["UNNAMED_KEY"] = "未命名";
 Blockly.Msg["VARIABLES_DEFAULT_NAME"] = "項目";
 Blockly.Msg["VARIABLES_GET_CREATE_SET"] = "建立「賦值 %1」";
 Blockly.Msg["VARIABLES_GET_HELPURL"] = "https://github.com/google/blockly/wiki/Variables#get";  // untranslated

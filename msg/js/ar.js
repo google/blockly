@@ -2,10 +2,6 @@
 
 'use strict';
 
-goog.provide('Blockly.Msg.ar');
-
-goog.require('Blockly.Msg');
-
 Blockly.Msg["ADD_COMMENT"] = "أضف تعليقًا";
 Blockly.Msg["CANNOT_DELETE_VARIABLE_PROCEDURE"] = "لايمكن حذف متغير \"%1\" بسبب انه جزء من الدالة \"%2\"";
 Blockly.Msg["CHANGE_VALUE_TITLE"] = "تغيير قيمة:";
@@ -393,6 +389,7 @@ Blockly.Msg["TEXT_TRIM_OPERATOR_RIGHT"] = "إزالة الفراغات من ال
 Blockly.Msg["TEXT_TRIM_TOOLTIP"] = "يرجع نسخة من النص مع حذف من أحد أو كلا الفراغات من أطرافه.";
 Blockly.Msg["TODAY"] = "اليوم";
 Blockly.Msg["UNDO"] = "رجوع";
+Blockly.Msg["UNNAMED_KEY"] = "غير مسمى";
 Blockly.Msg["VARIABLES_DEFAULT_NAME"] = "البند";
 Blockly.Msg["VARIABLES_GET_CREATE_SET"] = "انشئ 'التعيين %1'";
 Blockly.Msg["VARIABLES_GET_HELPURL"] = "https://github.com/google/blockly/wiki/Variables#get";  // untranslated

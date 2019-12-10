@@ -2,10 +2,6 @@
 
 'use strict';
 
-goog.provide('Blockly.Msg.de');
-
-goog.require('Blockly.Msg');
-
 Blockly.Msg["ADD_COMMENT"] = "Kommentar hinzufügen";
 Blockly.Msg["CANNOT_DELETE_VARIABLE_PROCEDURE"] = "Die Variable „%1“ kann nicht gelöscht werden, da sie Teil der Definition der Funktion „%2“ ist.";
 Blockly.Msg["CHANGE_VALUE_TITLE"] = "Wert ändern:";
@@ -15,7 +11,7 @@ Blockly.Msg["COLLAPSE_ALL"] = "Alle Bausteine zusammenfalten";
 Blockly.Msg["COLLAPSE_BLOCK"] = "Baustein zusammenfalten";
 Blockly.Msg["COLOUR_BLEND_COLOUR1"] = "Farbe 1";
 Blockly.Msg["COLOUR_BLEND_COLOUR2"] = "und Farbe 2";
-Blockly.Msg["COLOUR_BLEND_HELPURL"] = "http://meyerweb.com/eric/tools/color-blend/";
+Blockly.Msg["COLOUR_BLEND_HELPURL"] = "https://meyerweb.com/eric/tools/color-blend/#:::rgbp";
 Blockly.Msg["COLOUR_BLEND_RATIO"] = "im Verhältnis";
 Blockly.Msg["COLOUR_BLEND_TITLE"] = "mische";
 Blockly.Msg["COLOUR_BLEND_TOOLTIP"] = "Vermischt 2 Farben mit konfigurierbarem Farbverhältnis (0.0 - 1.0).";
@@ -26,7 +22,7 @@ Blockly.Msg["COLOUR_RANDOM_TITLE"] = "zufällige Farbe";
 Blockly.Msg["COLOUR_RANDOM_TOOLTIP"] = "Erzeugt eine Farbe nach dem Zufallsprinzip.";
 Blockly.Msg["COLOUR_RGB_BLUE"] = "blau";
 Blockly.Msg["COLOUR_RGB_GREEN"] = "grün";
-Blockly.Msg["COLOUR_RGB_HELPURL"] = "https://de.wikipedia.org/wiki/RGB-Farbraum";
+Blockly.Msg["COLOUR_RGB_HELPURL"] = "https://www.december.com/html/spec/colorpercompact.html";
 Blockly.Msg["COLOUR_RGB_RED"] = "rot";
 Blockly.Msg["COLOUR_RGB_TITLE"] = "Farbe aus";
 Blockly.Msg["COLOUR_RGB_TOOLTIP"] = "Erzeugt eine Farbe mit selbst definierten Rot-, Grün- und Blauwerten. Alle Werte müssen zwischen 0 und 100 liegen.";
@@ -393,6 +389,7 @@ Blockly.Msg["TEXT_TRIM_OPERATOR_RIGHT"] = "entferne Leerzeichen vom Ende (rechts
 Blockly.Msg["TEXT_TRIM_TOOLTIP"] = "Entfernt Leerzeichen vom Anfang und / oder Ende eines Textes.";
 Blockly.Msg["TODAY"] = "Heute";
 Blockly.Msg["UNDO"] = "Rückgängig";
+Blockly.Msg["UNNAMED_KEY"] = "unnamed";  // untranslated
 Blockly.Msg["VARIABLES_DEFAULT_NAME"] = "Element";
 Blockly.Msg["VARIABLES_GET_CREATE_SET"] = "Erzeuge \"Schreibe %1\"";
 Blockly.Msg["VARIABLES_GET_HELPURL"] = "https://de.wikipedia.org/wiki/Variable_%28Programmierung%29";

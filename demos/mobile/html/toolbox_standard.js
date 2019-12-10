@@ -5,7 +5,7 @@ var BLOCKLY_TOOLBOX_XML = BLOCKLY_TOOLBOX_XML || Object.create(null);
 BLOCKLY_TOOLBOX_XML['standard'] =
 // From XML string/file, replace ^\s?(\s*)?(<.*>)$ with \+$1'$2'
 // Tweak first and last line.
-'<xml>'
+'<xml xmlns="https://developers.google.com/blockly/xml">'
 + '<category name="Logic" colour="%{BKY_LOGIC_HUE}">'
 +   '<block type="controls_if"></block>'
 +   '<block type="logic_compare"></block>'

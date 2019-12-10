@@ -2,10 +2,6 @@
 
 'use strict';
 
-goog.provide('Blockly.Msg.ko');
-
-goog.require('Blockly.Msg');
-
 Blockly.Msg["ADD_COMMENT"] = "주석 추가";
 Blockly.Msg["CANNOT_DELETE_VARIABLE_PROCEDURE"] = "'%2' 함수 정의의 일부이기 때문에 '%1' 변수를 삭제할 수 없습니다";
 Blockly.Msg["CHANGE_VALUE_TITLE"] = "값 바꾸기:";
@@ -341,8 +337,8 @@ Blockly.Msg["TEXT_CHARAT_TAIL"] = "";
 Blockly.Msg["TEXT_CHARAT_TITLE"] = "텍스트 %1 %2에서";
 Blockly.Msg["TEXT_CHARAT_TOOLTIP"] = "특정 번째 위치에서, 문자를 얻어내 돌려줍니다.";
 Blockly.Msg["TEXT_COUNT_HELPURL"] = "https://github.com/google/blockly/wiki/Text#counting-substrings";
-Blockly.Msg["TEXT_COUNT_MESSAGE0"] = "count %1 in %2";  // untranslated
-Blockly.Msg["TEXT_COUNT_TOOLTIP"] = "Count how many times some text occurs within some other text.";  // untranslated
+Blockly.Msg["TEXT_COUNT_MESSAGE0"] = "%2에서 %1 숫자 세기";
+Blockly.Msg["TEXT_COUNT_TOOLTIP"] = "다른 어떤 텍스트에서 어떤 텍스트가 나타난 횟수를 셉니다.";
 Blockly.Msg["TEXT_CREATE_JOIN_ITEM_TOOLTIP"] = "텍스트에 항목을 추가합니다.";
 Blockly.Msg["TEXT_CREATE_JOIN_TITLE_JOIN"] = "가입";
 Blockly.Msg["TEXT_CREATE_JOIN_TOOLTIP"] = "섹션을 추가, 제거하거나 순서를 변경하여 이 텍스트 블럭을 재구성합니다.";
@@ -379,7 +375,7 @@ Blockly.Msg["TEXT_PROMPT_TOOLTIP_TEXT"] = "문장에 대해 사용자의 입력�
 Blockly.Msg["TEXT_PROMPT_TYPE_NUMBER"] = "메시지를 활용해 수 입력";
 Blockly.Msg["TEXT_PROMPT_TYPE_TEXT"] = "메시지를 활용해 문장 입력";
 Blockly.Msg["TEXT_REPLACE_HELPURL"] = "https://github.com/google/blockly/wiki/Text#replacing-substrings";
-Blockly.Msg["TEXT_REPLACE_MESSAGE0"] = "replace %1 with %2 in %3";  // untranslated
+Blockly.Msg["TEXT_REPLACE_MESSAGE0"] = "%3에서 %2을(를) %1(으)로 바꾸기";
 Blockly.Msg["TEXT_REPLACE_TOOLTIP"] = "Replace all occurances of some text within some other text.";  // untranslated
 Blockly.Msg["TEXT_REVERSE_HELPURL"] = "https://github.com/google/blockly/wiki/Text#reversing-text";
 Blockly.Msg["TEXT_REVERSE_MESSAGE0"] = "reverse %1";  // untranslated
@@ -393,6 +389,7 @@ Blockly.Msg["TEXT_TRIM_OPERATOR_RIGHT"] = "오른쪽의 공백 문자 제거";
 Blockly.Msg["TEXT_TRIM_TOOLTIP"] = "문장의 왼쪽/오른쪽/양쪽에서 스페이스 문자를 제거해 돌려줍니다.";
 Blockly.Msg["TODAY"] = "오늘";
 Blockly.Msg["UNDO"] = "실행 취소";
+Blockly.Msg["UNNAMED_KEY"] = "unnamed";  // untranslated
 Blockly.Msg["VARIABLES_DEFAULT_NAME"] = "항목";
 Blockly.Msg["VARIABLES_GET_CREATE_SET"] = "'집합 %1' 생성";
 Blockly.Msg["VARIABLES_GET_HELPURL"] = "https://ko.wikipedia.org/wiki/%EB%B3%80%EC%88%98_(%EC%BB%B4%ED%93%A8%ED%84%B0_%EA%B3%BC%ED%95%99)";

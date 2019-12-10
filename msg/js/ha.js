@@ -2,10 +2,6 @@
 
 'use strict';
 
-goog.provide('Blockly.Msg.ha');
-
-goog.require('Blockly.Msg');
-
 Blockly.Msg["ADD_COMMENT"] = "Daɗa Sharhi";
 Blockly.Msg["CANNOT_DELETE_VARIABLE_PROCEDURE"] = "An kasa goge siffa '%1' sabo da tana daga sashi na bayanin aikin '%2'";
 Blockly.Msg["CHANGE_VALUE_TITLE"] = "Canza kima:";
@@ -393,6 +389,7 @@ Blockly.Msg["TEXT_TRIM_OPERATOR_RIGHT"] = "datse sarari daga ɓangaren dama na";
 Blockly.Msg["TEXT_TRIM_TOOLTIP"] = "Dawo da kwafin rubutu tare da sauran sarari da aka cire daga ƙarshe ɗaya ko biyu.";
 Blockly.Msg["TODAY"] = "Yau";
 Blockly.Msg["UNDO"] = "Fasa";
+Blockly.Msg["UNNAMED_KEY"] = "unnamed";  // untranslated
 Blockly.Msg["VARIABLES_DEFAULT_NAME"] = "waniabu";
 Blockly.Msg["VARIABLES_GET_CREATE_SET"] = "Ƙirƙiri 'set %1'";
 Blockly.Msg["VARIABLES_GET_HELPURL"] = "https://github.com/google/blockly/wiki/Variables#get";  // untranslated

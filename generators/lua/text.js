@@ -1,9 +1,6 @@
 /**
  * @license
- * Visual Blocks Language
- *
- * Copyright 2016 Google Inc.
- * https://developers.google.com/blockly/
+ * Copyright 2016 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,6 +29,12 @@ goog.require('Blockly.Lua');
 Blockly.Lua['text'] = function(block) {
   // Text value.
   var code = Blockly.Lua.quote_(block.getFieldValue('TEXT'));
+  return [code, Blockly.Lua.ORDER_ATOMIC];
+};
+
+Blockly.Lua['text_multiline'] = function(block) {
+  // Text value.
+  var code = Blockly.Lua.multiline_quote_(block.getFieldValue('TEXT'));
   return [code, Blockly.Lua.ORDER_ATOMIC];
 };
 

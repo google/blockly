@@ -2,10 +2,6 @@
 
 'use strict';
 
-goog.provide('Blockly.Msg.id');
-
-goog.require('Blockly.Msg');
-
 Blockly.Msg["ADD_COMMENT"] = "Tambahkan Komentar";
 Blockly.Msg["CANNOT_DELETE_VARIABLE_PROCEDURE"] = "Can't delete the variable '%1' because it's part of the definition of the function '%2'";  // untranslated
 Blockly.Msg["CHANGE_VALUE_TITLE"] = "Ubah nilai:";
@@ -393,6 +389,7 @@ Blockly.Msg["TEXT_TRIM_OPERATOR_RIGHT"] = "pangkas ruang dari sisi kanan";
 Blockly.Msg["TEXT_TRIM_TOOLTIP"] = "Kembali salinan teks dengan spasi dihapus dari satu atau kedua ujungnya.";
 Blockly.Msg["TODAY"] = "Hari ini";
 Blockly.Msg["UNDO"] = "Urungkan";
+Blockly.Msg["UNNAMED_KEY"] = "unnamed";  // untranslated
 Blockly.Msg["VARIABLES_DEFAULT_NAME"] = "item";
 Blockly.Msg["VARIABLES_GET_CREATE_SET"] = "Buat 'set %1'";
 Blockly.Msg["VARIABLES_GET_HELPURL"] = "https://github.com/google/blockly/wiki/Variables#get";  // untranslated

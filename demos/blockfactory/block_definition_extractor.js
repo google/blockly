@@ -39,10 +39,8 @@ var BlockDefinitionExtractor = BlockDefinitionExtractor || Object.create(null);
  *     workspace.
  */
 BlockDefinitionExtractor.buildBlockFactoryWorkspace = function(block) {
-  var workspaceXml = document.createElement('xml');
-  workspaceXml.append(
-      BlockDefinitionExtractor.factoryBase_(block, block.type));
-
+  var workspaceXml = Blockly.utils.xml.createElement('xml');
+  workspaceXml.append(BlockDefinitionExtractor.factoryBase_(block, block.type));
   return workspaceXml;
 };
 
@@ -51,14 +49,14 @@ BlockDefinitionExtractor.buildBlockFactoryWorkspace = function(block) {
  * inner text.
  *
  * @param {string} name New element tag name.
- * @param {Map<String,String>} opt_attrs Optional list of attributes.
- * @param {string?} opt_text Optional inner text.
+ * @param {!Object.<string, string>=} opt_attrs Optional list of attributes.
+ * @param {string=} opt_text Optional inner text.
  * @return {!Element} The newly created element.
  * @private
  */
 BlockDefinitionExtractor.newDomElement_ = function(name, opt_attrs, opt_text) {
   // Avoid createDom(..)'s attributes argument for being too HTML specific.
-  var elem = document.createElement(name);
+  var elem = Blockly.utils.xml.createElement(name);
   if (opt_attrs) {
     for (var key in opt_attrs) {
       elem.setAttribute(key, opt_attrs[key]);
@@ -325,7 +323,7 @@ BlockDefinitionExtractor.input_ = function(input, align) {
 
 /**
  * Constructs a sequence <block> elements representing the field definition.
- * @param {Array<Blockly.Field>} fieldRow A list of fields in a Blockly.Input.
+ * @param {Array.<Blockly.Field>} fieldRow A list of fields in a Blockly.Input.
  * @return {Element} The fist <block> element of the sequence
  *     (and the root of the constructed DOM).
  * @private
@@ -478,7 +476,7 @@ BlockDefinitionExtractor.buildFieldDropdown_ = function(dropdown) {
   } else if (Array.isArray(menuGenerator)) {
     var options = menuGenerator;
   } else {
-    throw new Error('Unrecognized type of menuGenerator: ' + menuGenerator);
+    throw Error('Unrecognized type of menuGenerator: ' + menuGenerator);
   }
 
   var fieldDropdown = BlockDefinitionExtractor.newDomElement_(
@@ -602,7 +600,7 @@ BlockDefinitionExtractor.buildFieldImage_ =
 /**
  * Creates a <block> element a group of allowed connection constraint types.
  *
- * @param {Array<string>} types List of type names in this group.
+ * @param {Array.<string>} types List of type names in this group.
  * @return {Element} The <block> element representing the group, with child
  *     types attached.
  * @private

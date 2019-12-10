@@ -1,9 +1,6 @@
 /**
  * @license
- * Visual Blocks Language
- *
- * Copyright 2015 Google Inc.
- * https://developers.google.com/blockly/
+ * Copyright 2015 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,18 +30,31 @@ Blockly.PHP['controls_if'] = function(block) {
   // If/elseif/else condition.
   var n = 0;
   var code = '', branchCode, conditionCode;
+  if (Blockly.PHP.STATEMENT_PREFIX) {
+    // Automatic prefix insertion is switched off for this block.  Add manually.
+    code += Blockly.PHP.injectId(Blockly.PHP.STATEMENT_PREFIX, block);
+  }
   do {
     conditionCode = Blockly.PHP.valueToCode(block, 'IF' + n,
-      Blockly.PHP.ORDER_NONE) || 'false';
+        Blockly.PHP.ORDER_NONE) || 'false';
     branchCode = Blockly.PHP.statementToCode(block, 'DO' + n);
+    if (Blockly.PHP.STATEMENT_SUFFIX) {
+      branchCode = Blockly.PHP.prefixLines(
+          Blockly.PHP.injectId(Blockly.PHP.STATEMENT_SUFFIX, block),
+          Blockly.PHP.INDENT) + branchCode;
+    }
     code += (n > 0 ? ' else ' : '') +
         'if (' + conditionCode + ') {\n' + branchCode + '}';
-
     ++n;
   } while (block.getInput('IF' + n));
 
-  if (block.getInput('ELSE')) {
+  if (block.getInput('ELSE') || Blockly.PHP.STATEMENT_SUFFIX) {
     branchCode = Blockly.PHP.statementToCode(block, 'ELSE');
+    if (Blockly.PHP.STATEMENT_SUFFIX) {
+      branchCode = Blockly.PHP.prefixLines(
+          Blockly.PHP.injectId(Blockly.PHP.STATEMENT_SUFFIX, block),
+          Blockly.PHP.INDENT) + branchCode;
+    }
     code += ' else {\n' + branchCode + '}';
   }
   return code + '\n';

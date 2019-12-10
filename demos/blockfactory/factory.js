@@ -1,9 +1,6 @@
 /**
  * @license
- * Blockly Demos: Block Factory
- *
- * Copyright 2016 Google Inc.
- * https://developers.google.com/blockly/
+ * Copyright 2016 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -78,8 +75,9 @@ BlockFactory.updateBlocksFlagDelayed = false;
  * The starting XML for the Block Factory main workspace. Contains the
  * unmovable, undeletable factory_base block.
  */
-BlockFactory.STARTER_BLOCK_XML_TEXT = '<xml><block type="factory_base" ' +
-    'deletable="false" movable="false">' +
+BlockFactory.STARTER_BLOCK_XML_TEXT =
+    '<xml xmlns="https://developers.google.com/blockly/xml">' +
+    '<block type="factory_base" deletable="false" movable="false">' +
     '<value name="TOOLTIP">' +
     '<block type="text" deletable="false" movable="false">' +
     '<field name="TEXT"></field></block></value>' +

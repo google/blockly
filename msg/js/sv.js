@@ -2,10 +2,6 @@
 
 'use strict';
 
-goog.provide('Blockly.Msg.sv');
-
-goog.require('Blockly.Msg');
-
 Blockly.Msg["ADD_COMMENT"] = "Lägg till kommentar";
 Blockly.Msg["CANNOT_DELETE_VARIABLE_PROCEDURE"] = "Kan inte radera variabeln '%1' eftersom den är en del av definition för funktionen '%2'";
 Blockly.Msg["CHANGE_VALUE_TITLE"] = "Ändra värde:";
@@ -41,7 +37,7 @@ Blockly.Msg["CONTROLS_FOREACH_TITLE"] = "för varje föremål %1 i listan %2";
 Blockly.Msg["CONTROLS_FOREACH_TOOLTIP"] = "För varje objekt i en lista, ange variabeln '%1' till objektet, och utför sedan några kommandon.";
 Blockly.Msg["CONTROLS_FOR_HELPURL"] = "https://github.com/google/blockly/wiki/Loops#count-with";  // untranslated
 Blockly.Msg["CONTROLS_FOR_TITLE"] = "räkna med %1 från %2 till %3 med %4";
-Blockly.Msg["CONTROLS_FOR_TOOLTIP"] = "Låt variabeln \"%1\" ta värden från starttalet till sluttalet, beräknat med det angivna intervallet, och utför de angivna blocken.";
+Blockly.Msg["CONTROLS_FOR_TOOLTIP"] = "Låt variabeln \"%1\" anta värden från starttalet till sluttalet, beräknat med det angivna intervallet, och utför de angivna blocken.";
 Blockly.Msg["CONTROLS_IF_ELSEIF_TOOLTIP"] = "Lägg till ett villkor blocket \"om\".";
 Blockly.Msg["CONTROLS_IF_ELSE_TOOLTIP"] = "Lägg till ett sista villkor som täcker alla alternativ som är kvar för \"if\"-blocket.";
 Blockly.Msg["CONTROLS_IF_HELPURL"] = "https://github.com/google/blockly/wiki/IfElse";  // untranslated
@@ -50,7 +46,7 @@ Blockly.Msg["CONTROLS_IF_MSG_ELSE"] = "annars";
 Blockly.Msg["CONTROLS_IF_MSG_ELSEIF"] = "annars om";
 Blockly.Msg["CONTROLS_IF_MSG_IF"] = "om";
 Blockly.Msg["CONTROLS_IF_TOOLTIP_1"] = "Om ett värde är sant, utför några kommandon.";
-Blockly.Msg["CONTROLS_IF_TOOLTIP_2"] = "Om värdet är sant, utför det första kommandoblocket. Annars utför det andra kommandoblocket.";
+Blockly.Msg["CONTROLS_IF_TOOLTIP_2"] = "Om värdet är sant, utför det första kommandoblocket. Utför annars det andra kommandoblocket.";
 Blockly.Msg["CONTROLS_IF_TOOLTIP_3"] = "Om det första värdet är sant, utför det första kommandoblocket. Annars, om det andra värdet är sant, utför det andra kommandoblocket.";
 Blockly.Msg["CONTROLS_IF_TOOLTIP_4"] = "Om det första värdet är sant, utför det första kommandoblocket. Annars, om det andra värdet är sant, utför det andra kommandoblocket. Om ingen av värdena är sanna, utför det sista kommandoblocket.";
 Blockly.Msg["CONTROLS_REPEAT_HELPURL"] = "https://en.wikipedia.org/wiki/For_loop";
@@ -59,7 +55,7 @@ Blockly.Msg["CONTROLS_REPEAT_TITLE"] = "upprepa %1 gånger";
 Blockly.Msg["CONTROLS_REPEAT_TOOLTIP"] = "Utför några kommandon flera gånger.";
 Blockly.Msg["CONTROLS_WHILEUNTIL_HELPURL"] = "https://github.com/google/blockly/wiki/Loops#repeat";  // untranslated
 Blockly.Msg["CONTROLS_WHILEUNTIL_OPERATOR_UNTIL"] = "upprepa tills";
-Blockly.Msg["CONTROLS_WHILEUNTIL_OPERATOR_WHILE"] = "upprepa medan";
+Blockly.Msg["CONTROLS_WHILEUNTIL_OPERATOR_WHILE"] = "upprepa så länge";
 Blockly.Msg["CONTROLS_WHILEUNTIL_TOOLTIP_UNTIL"] = "Medan ett värde är falskt, utför några kommandon.";
 Blockly.Msg["CONTROLS_WHILEUNTIL_TOOLTIP_WHILE"] = "Medan ett värde är sant, utför några kommandon.";
 Blockly.Msg["DELETE_ALL_BLOCKS"] = "Radera alla %1 block?";
@@ -393,6 +389,7 @@ Blockly.Msg["TEXT_TRIM_OPERATOR_RIGHT"] = "ta bort mellanrum från högra sidan 
 Blockly.Msg["TEXT_TRIM_TOOLTIP"] = "Returnerar en kopia av texten med borttagna mellanrum från en eller båda ändar.";
 Blockly.Msg["TODAY"] = "Idag";
 Blockly.Msg["UNDO"] = "Ångra";
+Blockly.Msg["UNNAMED_KEY"] = "namnlös";
 Blockly.Msg["VARIABLES_DEFAULT_NAME"] = "föremål";
 Blockly.Msg["VARIABLES_GET_CREATE_SET"] = "Skapa \"välj %1\"";
 Blockly.Msg["VARIABLES_GET_HELPURL"] = "https://github.com/google/blockly/wiki/Variables#get";  // untranslated
@@ -401,7 +398,7 @@ Blockly.Msg["VARIABLES_SET"] = "ange %1 till %2";
 Blockly.Msg["VARIABLES_SET_CREATE_GET"] = "Skapa 'hämta %1'";
 Blockly.Msg["VARIABLES_SET_HELPURL"] = "https://github.com/google/blockly/wiki/Variables#set";  // untranslated
 Blockly.Msg["VARIABLES_SET_TOOLTIP"] = "Gör så att den här variabeln blir lika med inputen.";
-Blockly.Msg["VARIABLE_ALREADY_EXISTS"] = "En variabel som heter \"%1\" finns redan.";
+Blockly.Msg["VARIABLE_ALREADY_EXISTS"] = "En variabel med namn \"%1\" finns redan.";
 Blockly.Msg["VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE"] = "En variabel med namnet \"%1\" finns redan för en annan typ: \"%2\".";
 Blockly.Msg["WORKSPACE_COMMENT_DEFAULT_TEXT"] = "Säg någonting...";
 Blockly.Msg["CONTROLS_FOREACH_INPUT_DO"] = Blockly.Msg["CONTROLS_REPEAT_INPUT_DO"];

@@ -581,8 +581,8 @@ Blockly.navigation.disconnectBlocks_ = function() {
  * @private
  */
 Blockly.navigation.markAtCursor_ = function() {
-  var workspace = Blockly.getMainWorkspace();
-  Blockly.navigation.getMarker().setCurNode(workspace.getCursor().getCurNode());
+  Blockly.navigation.getMarker().setCurNode(
+      Blockly.getMainWorkspace().getCursor().getCurNode());
 };
 
 /**

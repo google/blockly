@@ -48,6 +48,12 @@ Tested on:
   * Version [e.g. 22]
 -->
 
+### Documentation
+
+<!-- TODO: Does any documentation need to be created or updated because of this PR?
+  -        If so please explain.
+  -->
+
 ### Additional Information
 
 <!-- Anything else we should know? -->

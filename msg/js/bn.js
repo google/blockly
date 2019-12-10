@@ -2,10 +2,6 @@
 
 'use strict';
 
-goog.provide('Blockly.Msg.bn');
-
-goog.require('Blockly.Msg');
-
 Blockly.Msg["ADD_COMMENT"] = "মন্তব্য যোগ করুন";
 Blockly.Msg["CANNOT_DELETE_VARIABLE_PROCEDURE"] = "'%1' চলক অপসারণ করা যাবে না কারণ এটি '%2' কার্যপ্রণালীর সংজ্ঞার অংশ";
 Blockly.Msg["CHANGE_VALUE_TITLE"] = "মান পরিবর্তন করুন:";
@@ -393,6 +389,7 @@ Blockly.Msg["TEXT_TRIM_OPERATOR_RIGHT"] = "ডানপাশ থেকে খ�
 Blockly.Msg["TEXT_TRIM_TOOLTIP"] = "Return a copy of the text with spaces removed from one or both ends.";  // untranslated
 Blockly.Msg["TODAY"] = "আজ";
 Blockly.Msg["UNDO"] = "পূর্বাবস্থা";
+Blockly.Msg["UNNAMED_KEY"] = "নামহীন";
 Blockly.Msg["VARIABLES_DEFAULT_NAME"] = "পদ";
 Blockly.Msg["VARIABLES_GET_CREATE_SET"] = "Create 'set %1'";  // untranslated
 Blockly.Msg["VARIABLES_GET_HELPURL"] = "https://github.com/google/blockly/wiki/Variables#get";  // untranslated

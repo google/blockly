@@ -1,9 +1,6 @@
 /**
  * @license
- * Visual Blocks Editor
- *
- * Copyright 2017 Google Inc.
- * https://developers.google.com/blockly/
+ * Copyright 2017 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,11 +21,6 @@
  */
 'use strict';
 
-goog.require('goog.events.EventHandler');
-goog.require('goog.testing');
-goog.require('goog.testing.events');
-goog.require('goog.testing.MockControl');
-
 
 var workspace;
 var mockControl_;
@@ -45,13 +37,14 @@ function temporary_fireEvent(event) {
 function undoRedoTest_setUp() {
   defineGetVarBlock();
   workspace = new Blockly.Workspace();
-  mockControl_ = new goog.testing.MockControl();
   Blockly.Events.fire = temporary_fireEvent;
 }
 
 function undoRedoTest_tearDown() {
   undefineGetVarBlock();
-  mockControl_.$tearDown();
+  if (mockControl_) {
+    mockControl_.restore();
+  }
   workspace.dispose();
   Blockly.Events.fire = savedFireFunc;
 }

@@ -2,10 +2,6 @@
 
 'use strict';
 
-goog.provide('Blockly.Msg.pms');
-
-goog.require('Blockly.Msg');
-
 Blockly.Msg["ADD_COMMENT"] = "Gionté un coment";
 Blockly.Msg["CANNOT_DELETE_VARIABLE_PROCEDURE"] = "As peul nen eliminesse la variàbil '%1' përchè a l'é part ëd la definission dla fonsion '%2'";
 Blockly.Msg["CHANGE_VALUE_TITLE"] = "Modifiché ël valor:";
@@ -393,6 +389,7 @@ Blockly.Msg["TEXT_TRIM_OPERATOR_RIGHT"] = "gavé jë spassi da la banda drita ë
 Blockly.Msg["TEXT_TRIM_TOOLTIP"] = "A smon na còpia dël test con jë spassi gavà da n'estremità o da tute doe.";
 Blockly.Msg["TODAY"] = "Ancheuj";
 Blockly.Msg["UNDO"] = "Anulé";
+Blockly.Msg["UNNAMED_KEY"] = "anònim";
 Blockly.Msg["VARIABLES_DEFAULT_NAME"] = "element";
 Blockly.Msg["VARIABLES_GET_CREATE_SET"] = "Creé 'fissé %1'";
 Blockly.Msg["VARIABLES_GET_HELPURL"] = "https://github.com/google/blockly/wiki/Variables#get";  // untranslated

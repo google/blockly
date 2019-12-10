@@ -1,9 +1,6 @@
 /**
  * @license
- * Visual Blocks Editor
- *
- * Copyright 2013 Google Inc.
- * https://developers.google.com/blockly/
+ * Copyright 2013 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,33 +27,16 @@
  */
 goog.provide('Blockly.Msg');
 
+goog.require('Blockly.utils.global');
+
 
 /**
- * Back up original getMsg function.
- * @type {!Function}
+ * Exported so that if Blockly is compiled with ADVANCED_COMPILATION,
+ * the Blockly.Msg object exists for message files included in script tags.
  */
-goog.getMsgOrig = goog.getMsg;
-
-/**
- * Gets a localized message.
- * Overrides the default Closure function to check for a Blockly.Msg first.
- * Used infrequently, only known case is TODAY button in date picker.
- * @param {string} str Translatable string, places holders in the form {$foo}.
- * @param {Object.<string, string>=} opt_values Maps place holder name to value.
- * @return {string} Message with placeholders filled.
- * @suppress {duplicate}
- */
-goog.getMsg = function(str, opt_values) {
-  var key = goog.getMsg.blocklyMsgMap[str];
-  if (key) {
-    str = Blockly.Msg[key];
-  }
-  return goog.getMsgOrig(str, opt_values);
-};
-
-/**
- * Mapping of Closure messages to Blockly.Msg names.
- */
-goog.getMsg.blocklyMsgMap = {
-  'Today': 'TODAY'
-};
+if (!Blockly.utils.global['Blockly']) {
+  Blockly.utils.global['Blockly'] = {};
+}
+if (!Blockly.utils.global['Blockly']['Msg']) {
+  Blockly.utils.global['Blockly']['Msg'] = Blockly.Msg;
+}

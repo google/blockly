@@ -2,10 +2,6 @@
 
 'use strict';
 
-goog.provide('Blockly.Msg.mnw');
-
-goog.require('Blockly.Msg');
-
 Blockly.Msg["ADD_COMMENT"] = "စုတ် လညာတ်";
 Blockly.Msg["CANNOT_DELETE_VARIABLE_PROCEDURE"] = "မပြံင်လှာဲ '%1' ဂှ် ဇိုတ်ပလီု ဟွံဂွံ၊ ဟိုတ်နူ ဍေဟ်ဂှ် ဆက်စပ်ဒၟံင် ကုဝှင်ရှေန် '%2'";
 Blockly.Msg["CHANGE_VALUE_TITLE"] = "သၠာဲ ဍာ်ဒကေဝ်";
@@ -393,6 +389,7 @@ Blockly.Msg["TEXT_TRIM_OPERATOR_RIGHT"] = "trim spaces from right side of";  // 
 Blockly.Msg["TEXT_TRIM_TOOLTIP"] = "Return a copy of the text with spaces removed from one or both ends.";  // untranslated
 Blockly.Msg["TODAY"] = "တ္ၚဲဏအ်";
 Blockly.Msg["UNDO"] = "ဟွံပ";
+Blockly.Msg["UNNAMED_KEY"] = "unnamed";  // untranslated
 Blockly.Msg["VARIABLES_DEFAULT_NAME"] = "ဒကုတ်";
 Blockly.Msg["VARIABLES_GET_CREATE_SET"] = "Create 'set %1'";  // untranslated
 Blockly.Msg["VARIABLES_GET_HELPURL"] = "https://github.com/google/blockly/wiki/Variables#get";  // untranslated

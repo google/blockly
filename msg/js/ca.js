@@ -2,10 +2,6 @@
 
 'use strict';
 
-goog.provide('Blockly.Msg.ca');
-
-goog.require('Blockly.Msg');
-
 Blockly.Msg["ADD_COMMENT"] = "Afegeix un comentari";
 Blockly.Msg["CANNOT_DELETE_VARIABLE_PROCEDURE"] = "No podem esborrar la variable '%1' perquè forma part de la definició de la funció '%2'";
 Blockly.Msg["CHANGE_VALUE_TITLE"] = "Canvia valor:";
@@ -393,6 +389,7 @@ Blockly.Msg["TEXT_TRIM_OPERATOR_RIGHT"] = "retalla espais de la dreta de";
 Blockly.Msg["TEXT_TRIM_TOOLTIP"] = "Retorna una còpia del text on s'han esborrat els espais d'un o dels dos extrems.";
 Blockly.Msg["TODAY"] = "Avui";
 Blockly.Msg["UNDO"] = "Desfer";
+Blockly.Msg["UNNAMED_KEY"] = "unnamed";  // untranslated
 Blockly.Msg["VARIABLES_DEFAULT_NAME"] = "element";
 Blockly.Msg["VARIABLES_GET_CREATE_SET"] = "Crea 'modifica %1'";
 Blockly.Msg["VARIABLES_GET_HELPURL"] = "https://github.com/google/blockly/wiki/Variables#get";  // untranslated

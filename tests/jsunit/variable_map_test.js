@@ -1,9 +1,6 @@
 /**
  * @license
- * Blockly Tests
- *
- * Copyright 2017 Google Inc.
- * https://developers.google.com/blockly/
+ * Copyright 2017 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,9 +21,6 @@
  */
 'use strict';
 
-goog.require('goog.testing');
-goog.require('goog.testing.MockControl');
-
 var variable_map;
 var mockControl_;
 var workspace;
@@ -34,12 +28,13 @@ var workspace;
 function variableMapTest_setUp() {
   workspace = new Blockly.Workspace();
   variable_map = new Blockly.VariableMap(workspace);
-  mockControl_ = new goog.testing.MockControl();
 }
 
 function variableMapTest_tearDown() {
   workspace.dispose();
-  mockControl_.$tearDown();
+  if (mockControl_) {
+    mockControl_.restore();
+  }
   variable_map = null;
 }
 
@@ -153,7 +148,7 @@ function test_createVariableNullAndUndefinedType() {
 
 function test_createVariableNullId() {
   variableMapTest_setUp();
-  setUpMockMethod(mockControl_, Blockly.utils, 'genUid', null, ['1', '2']);
+  mockControl_ = setUpMockMethod(Blockly.utils, 'genUid', null, ['1', '2']);
   try {
     variable_map.createVariable('name1', 'type1', null);
     checkVariableValues(variable_map, 'name1', 'type1', '1');
@@ -164,7 +159,7 @@ function test_createVariableNullId() {
 
 function test_createVariableUndefinedId() {
   variableMapTest_setUp();
-  setUpMockMethod(mockControl_, Blockly.utils, 'genUid', null, ['1', '2']);
+  mockControl_ = setUpMockMethod(Blockly.utils, 'genUid', null, ['1', '2']);
   try {
     variable_map.createVariable('name1', 'type1', undefined);
     checkVariableValues(variable_map, 'name1', 'type1', '1');

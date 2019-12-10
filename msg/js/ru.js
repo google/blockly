@@ -2,10 +2,6 @@
 
 'use strict';
 
-goog.provide('Blockly.Msg.ru');
-
-goog.require('Blockly.Msg');
-
 Blockly.Msg["ADD_COMMENT"] = "Добавить комментарий";
 Blockly.Msg["CANNOT_DELETE_VARIABLE_PROCEDURE"] = "Невозможно удалить переменную '%1', поскольку она является частью определения функции '%2'";
 Blockly.Msg["CHANGE_VALUE_TITLE"] = "Измените значение:";
@@ -393,6 +389,7 @@ Blockly.Msg["TEXT_TRIM_OPERATOR_RIGHT"] = "обрезать пробелы сп�
 Blockly.Msg["TEXT_TRIM_TOOLTIP"] = "Возвращает копию текста с пробелами, удалёнными с одного или обоих концов.";
 Blockly.Msg["TODAY"] = "Сегодня";
 Blockly.Msg["UNDO"] = "Отменить";
+Blockly.Msg["UNNAMED_KEY"] = "без названия";
 Blockly.Msg["VARIABLES_DEFAULT_NAME"] = "элемент";
 Blockly.Msg["VARIABLES_GET_CREATE_SET"] = "Создать блок \"присвоить\" для %1";
 Blockly.Msg["VARIABLES_GET_HELPURL"] = "https://github.com/google/blockly/wiki/Variables#get";  // untranslated

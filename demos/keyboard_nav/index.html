@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Blockly Demo: Keyboard Navigation</title>
+  <script src="../../blockly_compressed.js"></script>
+  <script src="../../blocks_compressed.js"></script>
+  <script src="../../javascript_compressed.js"></script>
+  <script src="../../msg/js/en.js"></script>
+  <script src="basic_cursor.js"></script>
+  <style>
+    body {
+      background-color: #fff;
+      font-family: sans-serif;
+    }
+
+    h1 {
+      font-weight: normal;
+      font-size: 140%;
+    }
+    .wrapper {
+      display: flex;
+    }
+    #keyboard_nav {
+      background-color: #ededed;
+      border: 1px solid black;
+      padding: 1em;
+    }
+    #keyboard_announce {
+      font-size: 1.5em;
+      font-weight: 500;
+      text-align: center;
+    }
+    #keyboard_mappings {
+      font-size: 1.3em;
+      font-weight: 400;
+    }
+    label {
+      margin-right: .5em;
+      min-width: 100px;
+    }
+    div[data-actionname] {
+      display: flex;
+      width: 100%;
+    }
+    select {
+      font-size: .8em;
+    }
+  </style>
+</head>
+<body>
+  <h1><a href="https://developers.google.com/blockly/">Blockly</a> &gt;
+    <a href="../index.html">Demos</a> &gt; Keyboard Navigation</h1>
+
+  <p>Keyboard Navigation is our first step towards an accessible Blockly.<br />
+  You can enter accessibility mode by <b>shift clicking anywhere on the
+  workspace or on a block</b>. <br />Some basic commands for moving around are below.
+  More complete documentation is still in progress.<br /><br />
+    <b>Workspace Navigation</b><br />
+    W: Previous block/field/input at the same level<br />
+    A: Up one level (Field (or input) -> Block -> Input (or field) -> Block ->
+    Stack -> Workspace)<br />
+    S: Next block/field/input at the same level<br />
+    D: Down one level (Workspace -> Stack -> Block -> Input (or field) -> Block
+     -> Field (or input))<br />
+    T: Will open the toolbox. Once in there you can moving around using the WASD keys. And insert a block by hitting Enter<br />
+    X: While on a connection hit X to disconnect the block after the cursor<br /><br />
+
+  <b>Pre Order Traversal</b><br />
+  Feel free to just play around in accessibility mode or hit the button below to see the demo.
+  The demo uses <a href="https://en.wikipedia.org/wiki/Tree_traversal#Pre-order_(NLR)">preorder tree traversal</a>
+  as an alternative way to navigate the blocks,
+  connections, and fields on the workspace.<br /><br />
+
+  <!-- TODO: Update when we add keyboard navigation to site -->
+  <!-- <p>&rarr; More info on <a href="">Keyboard Navigation</a>.</p> -->
+
+  <b>Cursor</b><br />
+  The cursor controls how the user navigates the blocks, inputs, fields and connections on a workspace.
+  This demo shows two different cursors:<br />
+  <b>Default Cursor:</b> Allow the user to go to the previous, next, in or out location.<br />
+  <b>Basic Cursor:</b> Using the pre order traversal allows the user to go to the next and previous location.
+  </p>
+
+  <p>
+    <label for="accessibilityModeCheck">Enable Accessibility Mode:</label>
+    <input type="checkbox" onclick="toggleAccessibilityMode(this.checked)" id="accessibilityModeCheck">
+    <select id="cursorChanger" name="cursor" onchange="changeCursor(this.value)">
+      <option value="default">Default Cursor</option>
+      <option value="basic">Basic Cursor</option>
+    </select>
+
+    <button onclick="preOrderDemo()">Start Pre-order Demo</button>
+    <button onclick="stopDemo()">Stop Pre-order Demo</button>
+    <label for="displayKeyMappings">Open Key Mappings:</label>
+    <input type="checkbox" onclick="toggleDisplayKeyMappings(this.checked)" id="displayKeyMappings">
+  </p>
+
+  <div class="wrapper">
+    <div id="blocklyDiv" style="height: 480px; width: 600px;"></div>
+    <div id="keyboard_nav" style="display:none">
+      <p id="keyboard_announce" aria-live="assertive">Set key mappings below</p>
+      <form id="keyboard_mappings"></form>
+    </div>    
+  </div>
+
+  <xml xmlns="https://developers.google.com/blockly/xml" id="toolbox" style="display: none">
+    <category name="Logic" colour="%{BKY_LOGIC_HUE}">
+      <block type="controls_if"></block>
+      <block type="logic_compare"></block>
+      <block type="logic_operation"></block>
+      <block type="logic_negate"></block>
+      <block type="logic_boolean"></block>
+    </category>
+    <category name="Loops" colour="%{BKY_LOOPS_HUE}">
+      <block type="controls_repeat_ext">
+        <value name="TIMES">
+          <block type="math_number">
+            <field name="NUM">10</field>
+          </block>
+        </value>
+      </block>
+      <block type="controls_whileUntil"></block>
+    </category>
+    <category name="Math" colour="%{BKY_MATH_HUE}">
+      <block type="math_number">
+        <field name="NUM">123</field>
+      </block>
+      <block type="math_arithmetic"></block>
+      <block type="math_single"></block>
+    </category>
+    <category name="Text" colour="%{BKY_TEXTS_HUE}">
+      <block type="text"></block>
+      <block type="text_length"></block>
+      <block type="text_print"></block>
+    </category>
+  </xml>
+
+  <xml xmlns="https://developers.google.com/blockly/xml" id="startBlocks" style="display: none">
+    <variables>
+      <variable id="~GNXm@Z(wclI]t3zTf.g">list</variable>
+      <variable id="8]s[S+Gy+%k7HoFup])m">item</variable>
+    </variables>
+    <block type="controls_if" x="37" y="162">
+      <value name="IF0">
+        <block type="logic_compare">
+          <field name="OP">EQ</field>
+          <value name="A">
+            <block type="math_arithmetic">
+              <field name="OP">ADD</field>
+              <value name="A">
+                <shadow type="math_number">
+                  <field name="NUM">1</field>
+                </shadow>
+              </value>
+              <value name="B">
+                <shadow type="math_number">
+                  <field name="NUM">1</field>
+                </shadow>
+              </value>
+            </block>
+          </value>
+          <value name="B">
+            <block type="math_single">
+              <field name="OP">ROOT</field>
+              <value name="NUM">
+                <shadow type="math_number">
+                  <field name="NUM">9</field>
+                </shadow>
+                <block type="math_number">
+                  <field name="NUM">123</field>
+                </block>
+              </value>
+            </block>
+          </value>
+        </block>
+      </value>
+      <statement name="DO0">
+        <block type="lists_setIndex">
+          <mutation at="true"></mutation>
+          <field name="MODE">SET</field>
+          <field name="WHERE">FROM_START</field>
+          <value name="LIST">
+            <block type="variables_get">
+              <field name="VAR" id="~GNXm@Z(wclI]t3zTf.g">list</field>
+            </block>
+          </value>
+          <next>
+            <block type="text_append">
+              <field name="VAR" id="8]s[S+Gy+%k7HoFup])m">item</field>
+              <value name="TEXT">
+                <shadow type="text">
+                  <field name="TEXT"></field>
+                </shadow>
+              </value>
+            </block>
+          </next>
+        </block>
+      </statement>
+      <next>
+        <block type="controls_repeat_ext">
+          <value name="TIMES">
+            <shadow type="math_number">
+              <field name="NUM">10</field>
+            </shadow>
+          </value>
+        </block>
+      </next>
+    </block>
+  </xml>
+
+  <script>
+    var demoWorkspace = Blockly.inject('blocklyDiv',
+        {media: '../../media/',
+         toolbox: document.getElementById('toolbox')});
+    Blockly.Xml.domToWorkspace(document.getElementById('startBlocks'),
+                               demoWorkspace);
+    var timeout;
+
+    var actions = [
+      Blockly.navigation.ACTION_PREVIOUS,
+      Blockly.navigation.ACTION_OUT,
+      Blockly.navigation.ACTION_NEXT,
+      Blockly.navigation.ACTION_IN,
+      Blockly.navigation.ACTION_INSERT,
+      Blockly.navigation.ACTION_MARK,
+      Blockly.navigation.ACTION_DISCONNECT,
+      Blockly.navigation.ACTION_TOOLBOX,
+      Blockly.navigation.ACTION_EXIT
+    ];
+    createKeyMappingList(actions);
+
+    /**
+     * Shows the next node in the tree traversal every second.
+     * @package
+     */
+    function demo() {
+      var doNext = function() {
+        var node = Blockly.getMainWorkspace().getCursor().next();
+        if (node) {
+          timeout = setTimeout(doNext, 1000);
+        }
+      }
+      doNext();
+    }
+
+    /**
+     * Stop the running demo.
+     * @package
+     */
+    function stopDemo() {
+      clearTimeout(timeout);
+      document.getElementById('accessibilityModeCheck').disabled = false;
+    };
+
+    /**
+     * Sets up accessibility mode and change the cursor to basic cursor so that
+     * the demo can successfully run.
+     * @package
+     */
+    function preOrderDemo() {
+      changeCursor('basic');
+      document.getElementById('accessibilityModeCheck').disabled = true;
+      setTimeout(demo, 1000);
+    }
+
+    /**
+     * Turn on/off accessibility mode depending on the state.
+     * @param {boolean} state True to turn on accessibility mode, false otherwise.
+     * @package
+     */
+    function toggleAccessibilityMode(state) {
+      if (state) {
+        Blockly.navigation.enableKeyboardAccessibility();
+      } else {
+        Blockly.navigation.disableKeyboardAccessibility();
+      }
+    }
+
+    /**
+     * Change the type of the cursor and set to the location of the old cursor.
+     * Changing the cursor changes how a user navigates the blocks on the workspace.
+     * @param {string} cursorType The type of the cursor.
+     * @package
+     */
+    function changeCursor(cursorType) {
+      Blockly.navigation.enableKeyboardAccessibility();
+      document.getElementById('accessibilityModeCheck').checked = true;
+      document.getElementById('cursorChanger').value = cursorType;
+      var oldCurNode = Blockly.getMainWorkspace().getCursor().getCurNode();
+
+      if (cursorType === "basic") {
+        Blockly.getMainWorkspace().setCursor(new Blockly.BasicCursor());
+      } else {
+        Blockly.getMainWorkspace().setCursor(new Blockly.Cursor());
+      }
+      if (oldCurNode) {
+        Blockly.getMainWorkspace().getCursor().setCurNode(oldCurNode);
+      }
+      document.activeElement.blur();
+    }
+
+    // Start key mapping demo functions
+
+    /**
+     * Save the current key map in session storage.
+     * @package
+     */
+    function saveKeyMap() {
+      var currentMap = Blockly.user.keyMap.getKeyMap();
+      if (sessionStorage) {
+        sessionStorage.setItem('keyMap', JSON.stringify(currentMap));
+      }
+    }
+
+    /**
+     * Set the key map to the map from session storage.
+     * @package
+     */
+    function restoreKeyMap() {
+      var defaultMap = Blockly.user.keyMap.map_;
+      var stringifiedMap = sessionStorage.getItem('keyMap');
+      var restoredMap = {};
+      if (sessionStorage && stringifiedMap) {
+        var keyMap = JSON.parse(stringifiedMap);
+        var keys = Object.keys(keyMap);
+        for (var i = 0, key; key = keys[i]; i++) {
+          restoredMap[key] = Object.assign(new Blockly.Action, keyMap[key]);
+        }
+        Blockly.user.keyMap.setKeyMap(restoredMap);
+      }
+    }
+
+    /**
+     * Given the three dropdowns create the serialized key that will be stored
+     * in the key map.
+     * @param {Array.<Element>} selectDivs The three dropdown divs that display
+     *     the key combination.
+     * @package
+     */
+    function serializeKey(selectDivs) {
+      var modifiers = Blockly.utils.object.values(Blockly.user.keyMap.modifierKeys);
+      var newModifiers = [];
+      var newKeyCode = '';
+      var keyValue = selectDivs[2].value;
+
+      // Get the new modifiers from the first two dropdowns.
+      for (var i = 0; i < 2; i++) {
+        var selectDiv = selectDivs[i];
+        var key = selectDiv.value;
+        if (key !== 'None') {
+          newModifiers.push(key);
+        }
+      }
+      // Get the key code from the last dropdown.
+      if (keyValue !== 'None') {
+        if (keyValue === 'Escape') {
+          newKeyCode = Blockly.utils.KeyCodes.ESC;
+        } else if (keyValue === 'Enter') {
+          newKeyCode = Blockly.utils.KeyCodes.ENTER;
+        } else {
+          newKeyCode = keyValue.toUpperCase().charCodeAt(0);
+        }
+      }
+      return Blockly.user.keyMap.createSerializedKey(newKeyCode, newModifiers);
+    }
+
+    /**
+     * Set all dropdowns for that action to none.
+     * We clear dropdowns when a user chooses the same key combination for a
+     * second action.
+     * @param {Blockly.Action} action The action that we want to clear the
+     *     dropdowns for.
+     * @package
+     */
+    function clearDropdown(action) {
+      var actionDiv = document.querySelectorAll('[data-actionname='+ action.name +']')[0];
+      var selectDivs = actionDiv.getElementsByTagName('select');
+      for (var i = 0, selectDiv; selectDiv = selectDivs[i]; i++) {
+        selectDiv.value = 'None';
+      }
+    }
+
+    /**
+     * Given the three dropdowns create a human readable string so the screen reader
+     * can read it out.
+     * @param {Array.<Element>} selectDivs The three dropdown divs that display
+     *     the key combination.
+     * @package
+     */
+    function getReadableKey(selectDivs) {
+      var readableKey = '';
+
+      for (var i = 0, selectDiv; selectDiv = selectDivs[i]; i++) {
+        if (selectDiv.value !== 'None') {
+          readableKey += selectDiv.value + ' ';
+        }
+      }
+      return readableKey;
+    }
+
+    /**
+     * Update the key in the key map when the user selects a new value in one of the
+     * dropdowns.
+     * @param {Event} e The event dispatched from changing a dropdown.
+     * @package
+     */
+    function updateKey(e) {
+      var keyboardAnnouncerText = '';
+      var actionDiv = e.srcElement.parentElement;
+      var action = actionDiv.action;
+      var selectDivs = actionDiv.getElementsByTagName('select');
+      var key = serializeKey(selectDivs);
+      var oldAction = Blockly.user.keyMap.getActionByKeyCode(key);
+
+      if (oldAction) {
+        keyboardAnnouncerText += oldAction.name + ' action key was overwritten. \n';
+        clearDropdown(oldAction);
+      }
+      keyboardAnnouncerText += action.name + ' key was set to ' + getReadableKey(selectDivs);
+      document.getElementById('keyboard_announce').innerText = keyboardAnnouncerText;
+      Blockly.user.keyMap.setActionForKey(key, action);
+      saveKeyMap();
+      document.activeElement.blur();
+    }
+
+    /**
+     * Set the key to be the correct value from the key map.
+     * @param {string} actionKey The serialized key for a given action.
+     * @param {Element} keyDropdown The dropdown that displays the primary key.
+     * @package
+     */
+    function setKeyDropdown(actionKey, keyDropdown) {
+      // Strip off any modifier to just get the key code.
+      var keyCode = actionKey.match(/\d+/)[0];
+      var keyValue = String.fromCharCode(keyCode);
+      if (parseInt(keyCode) === Blockly.utils.KeyCodes.ESC) {
+          keyValue = 'Escape';
+      } else if (parseInt(keyCode) === Blockly.utils.KeyCodes.ENTER) {
+        keyValue = 'Enter';
+      }
+      keyDropdown.value = keyValue;
+    }
+
+    /**
+     * Set the modifiers to be the correct value from the key map.
+     * @param {string} actionKey The key code holding the modifiers and key.
+     * @param {Array.<Element>} modifierDropdowns A list of dropdowns for
+     *     the modifier values.
+     * @package
+     */
+    function setModifiers(actionKey, modifierDropdowns) {
+      var modifiers = Blockly.utils.object.values(Blockly.user.keyMap.modifierKeys);
+      for (var i = 0; i < 2; i++) {
+        var modifierDropdown = modifierDropdowns[i];
+        for (var j = 0, modifier; modifier = modifiers[j]; j++) {
+          if (actionKey.indexOf(modifier) > -1) {
+            modifierDropdown.value = modifier;
+            actionKey = actionKey.replace(modifier, '');
+            break;
+          }
+        }
+      }
+    }
+
+    /**
+     * Set the dropdowns to display the correct combination of modifiers and
+     * keys for the action key.
+     * @param {Blockly.Action} action The Blockly action.
+     * @param {Element} actionDiv The div holding the dropdowns and label for the
+     *     given action.
+     * @param {string} actionKey The key corresponding to the given action.
+     * @package
+     */
+    function setDropdowns(action, actionDiv, actionKey) {
+      var selectDivs = actionDiv.getElementsByTagName('select');
+      if (actionKey) {
+        setModifiers(actionKey, selectDivs);
+        setKeyDropdown(actionKey, selectDivs[selectDivs.length - 1]);
+      } else {
+        clearDropdown(action);
+      }
+    }
+
+    /**
+     * Create a dropdown with the given list of possible keys.
+     * @param {Blockly.Action} action The Blockly action.
+     * @param {Element} actionDiv The div holding the dropdowns and labels for
+     *     a given action.
+     * @param {Array.<string>} keys The list of keys to add to the dropdown.
+     * @package
+     */
+    function createDropdown(action, actionDiv, keys) {
+      var select = document.createElement('select');
+      select.addEventListener('change', updateKey);
+      select.setAttribute('aria-labelledby', action.name + '_label');
+      for (var i = 0, key; key = keys[i]; i++) {
+        select.options.add(new Option(key, key));
+      }
+      actionDiv.appendChild(select);
+    }
+
+    /**
+     * Create two dropdowns that display possible modifiers and a single dropdown
+     * displaying a list of keys.
+     * @param {Blockly.Action} action The Blockly action.
+     * @param {string} actionKey The key corresponding to the given action.
+     * @param {Element} actionDiv The div holding the dropdowns and label for the
+     *     given action.
+     * @package
+     */
+    function createDropdowns(action, actionKey, actionDiv) {
+      var modifiers = ['None'].concat(Blockly.utils.object.values(Blockly.user.keyMap.modifierKeys));
+      var keys = ['None', 'Enter', 'Escape'].concat("ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890".split(''));
+      createDropdown(action, actionDiv, modifiers);
+      createDropdown(action, actionDiv, modifiers);
+      createDropdown(action, actionDiv, keys);
+      setDropdowns(action, actionDiv, actionKey);
+    }
+
+    /**
+     * For each action create a row of 3 dropdowns and an action label. Update
+     * the dropdowns to reflect the value in the key map.
+     * @param {Array.<Blockly.Action>} actions List of blockly actions.
+     * @package
+     */
+    function createKeyMappingList(actions) {
+      // Update the key map to reflect the key map saved in session storage.
+      restoreKeyMap();
+      var keyMapDiv = document.getElementById('keyboard_mappings');
+      for (var i = 0, action; action = actions[i]; i++) {
+        var actionDiv = document.createElement('div');
+        actionDiv.setAttribute('data-actionname', action.name);
+        actionDiv.action = action;
+
+        var labelDiv = document.createElement('label');
+        labelDiv.innerText = action.name;
+        labelDiv.setAttribute('id', action.name + '_label');
+
+        actionDiv.appendChild(labelDiv);
+        keyMapDiv.appendChild(actionDiv);
+
+        var actionKey = Blockly.user.keyMap.getKeyByAction(action);
+        createDropdowns(action, actionKey, actionDiv);
+      }
+    }
+
+    /**
+     * Hide/show the key map panel.
+     * @param {boolean} state The state of the checkbox. True if checked, false
+     *     otherwise.
+     * @package
+     */
+    function toggleDisplayKeyMappings(state) {
+      if (state) {
+        document.getElementById('keyboard_nav').style.display = 'block';
+      } else {
+        document.getElementById('keyboard_nav').style.display = 'none';
+      }
+    }
+    // End key mapping demo functions
+
+  </script>
+
+</body>
+</html>

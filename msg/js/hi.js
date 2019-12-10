@@ -2,10 +2,6 @@
 
 'use strict';
 
-goog.provide('Blockly.Msg.hi');
-
-goog.require('Blockly.Msg');
-
 Blockly.Msg["ADD_COMMENT"] = "टिप्पणी छोड़ें";
 Blockly.Msg["CANNOT_DELETE_VARIABLE_PROCEDURE"] = "चर '%1' को नहीं हटा सकता क्योंकि यह फ़ंक्शन '%2' की परिभाषा का हिस्सा है";
 Blockly.Msg["CHANGE_VALUE_TITLE"] = "मान परिवर्तित करें:";
@@ -393,6 +389,7 @@ Blockly.Msg["TEXT_TRIM_OPERATOR_RIGHT"] = "रिक्त स्थान क�
 Blockly.Msg["TEXT_TRIM_TOOLTIP"] = "एक या दोनों सिरों से हटाए गए रिक्त स्थान के साथ पाठ की एक प्रति लौटाएं।";
 Blockly.Msg["TODAY"] = "आज";
 Blockly.Msg["UNDO"] = "पूर्ववत करें";
+Blockly.Msg["UNNAMED_KEY"] = "अज्ञात";
 Blockly.Msg["VARIABLES_DEFAULT_NAME"] = "वस्तु";
 Blockly.Msg["VARIABLES_GET_CREATE_SET"] = "सेट '%1' बनाएँ";
 Blockly.Msg["VARIABLES_GET_HELPURL"] = "https://github.com/google/blockly/wiki/Variables#get";  // untranslated

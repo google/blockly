@@ -1,9 +1,6 @@
 /**
  * @license
- * Visual Blocks Language
- *
- * Copyright 2012 Google Inc.
- * https://developers.google.com/blockly/
+ * Copyright 2012 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,7 +28,7 @@ goog.require('Blockly.JavaScript');
 
 Blockly.JavaScript['colour_picker'] = function(block) {
   // Colour picker.
-  var code = '\'' + block.getFieldValue('COLOUR') + '\'';
+  var code = Blockly.JavaScript.quote_(block.getFieldValue('COLOUR'));
   return [code, Blockly.JavaScript.ORDER_ATOMIC];
 };
 

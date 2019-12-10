@@ -1,0 +1,3 @@
+<xml xmlns="https://developers.google.com/blockly/xml">
+  <block type="test_numbers_whole_bounded"></block>
+</xml>

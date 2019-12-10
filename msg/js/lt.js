@@ -2,10 +2,6 @@
 
 'use strict';
 
-goog.provide('Blockly.Msg.lt');
-
-goog.require('Blockly.Msg');
-
 Blockly.Msg["ADD_COMMENT"] = "Palikti komentarą";
 Blockly.Msg["CANNOT_DELETE_VARIABLE_PROCEDURE"] = "Negalima ištrinti kintamojo '%1', nes jis yra dalis funkcijos '%2'";
 Blockly.Msg["CHANGE_VALUE_TITLE"] = "Keisti reikšmę:";
@@ -393,6 +389,7 @@ Blockly.Msg["TEXT_TRIM_OPERATOR_RIGHT"] = "išvalyk tarpus pabaigoje";
 Blockly.Msg["TEXT_TRIM_TOOLTIP"] = "Grąžina teksto kopiją, pašalinus tarpus iš vieno ar abiejų kraštų.";
 Blockly.Msg["TODAY"] = "Šiandien";
 Blockly.Msg["UNDO"] = "Anuliuoti";
+Blockly.Msg["UNNAMED_KEY"] = "unnamed";  // untranslated
 Blockly.Msg["VARIABLES_DEFAULT_NAME"] = "elementas";
 Blockly.Msg["VARIABLES_GET_CREATE_SET"] = "Sukurk \"priskirk %1\"";
 Blockly.Msg["VARIABLES_GET_HELPURL"] = "https://github.com/google/blockly/wiki/Variables#get";  // untranslated

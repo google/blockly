@@ -2,10 +2,6 @@
 
 'use strict';
 
-goog.provide('Blockly.Msg.sk');
-
-goog.require('Blockly.Msg');
-
 Blockly.Msg["ADD_COMMENT"] = "Pridať komentár";
 Blockly.Msg["CANNOT_DELETE_VARIABLE_PROCEDURE"] = "Nie je možné zmazať premennú „%1“, pretože je súčasťou definície funkcie „%2“";
 Blockly.Msg["CHANGE_VALUE_TITLE"] = "Zmeniť hodnotu:";
@@ -393,6 +389,7 @@ Blockly.Msg["TEXT_TRIM_OPERATOR_RIGHT"] = "odstráň medzery z pravej strany";
 Blockly.Msg["TEXT_TRIM_TOOLTIP"] = "Vráť kópiu textu bez medzier na jednom alebo oboch koncoch.";
 Blockly.Msg["TODAY"] = "Dnes";
 Blockly.Msg["UNDO"] = "Späť";
+Blockly.Msg["UNNAMED_KEY"] = "unnamed";  // untranslated
 Blockly.Msg["VARIABLES_DEFAULT_NAME"] = "prvok";
 Blockly.Msg["VARIABLES_GET_CREATE_SET"] = "Vytvoriť \"nastaviť %1\"";
 Blockly.Msg["VARIABLES_GET_HELPURL"] = "https://github.com/google/blockly/wiki/Variables#get";  // untranslated

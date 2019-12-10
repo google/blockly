@@ -1,9 +1,6 @@
 /**
  * @license
- * Visual Blocks Editor
- *
- * Copyright 2012 Google Inc.
- * https://developers.google.com/blockly/
+ * Copyright 2012 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,8 +29,12 @@
 goog.provide('Blockly.Blocks.math');  // Deprecated
 goog.provide('Blockly.Constants.Math');
 
-goog.require('Blockly.Blocks');
 goog.require('Blockly');
+goog.require('Blockly.Blocks');
+goog.require('Blockly.FieldDropdown');
+goog.require('Blockly.FieldLabel');
+goog.require('Blockly.FieldNumber');
+goog.require('Blockly.FieldVariable');
 
 
 /**
@@ -457,10 +458,10 @@ Blockly.Constants.Math.IS_DIVISIBLEBY_MUTATOR_MIXIN = {
   /**
    * Create XML to represent whether the 'divisorInput' should be present.
    * @return {Element} XML storage element.
-   * @this Blockly.Block
+   * @this {Blockly.Block}
    */
   mutationToDom: function() {
-    var container = document.createElement('mutation');
+    var container = Blockly.utils.xml.createElement('mutation');
     var divisorInput = (this.getFieldValue('PROPERTY') == 'DIVISIBLE_BY');
     container.setAttribute('divisor_input', divisorInput);
     return container;
@@ -468,7 +469,7 @@ Blockly.Constants.Math.IS_DIVISIBLEBY_MUTATOR_MIXIN = {
   /**
    * Parse XML to restore the 'divisorInput'.
    * @param {!Element} xmlElement XML storage element.
-   * @this Blockly.Block
+   * @this {Blockly.Block}
    */
   domToMutation: function(xmlElement) {
     var divisorInput = (xmlElement.getAttribute('divisor_input') == 'true');
@@ -478,7 +479,7 @@ Blockly.Constants.Math.IS_DIVISIBLEBY_MUTATOR_MIXIN = {
    * Modify this block to have (or not have) an input for 'is divisible by'.
    * @param {boolean} divisorInput True if this block has a divisor input.
    * @private
-   * @this Blockly.Block
+   * @this {Blockly.Block}
    */
   updateShape_: function(divisorInput) {
     // Add or remove a Value Input.
@@ -498,13 +499,13 @@ Blockly.Constants.Math.IS_DIVISIBLEBY_MUTATOR_MIXIN = {
  * 'math_is_divisibleby_mutator' extension to the 'math_property' block that
  * can update the block shape (add/remove divisor input) based on whether
  * property is "divisble by".
- * @this Blockly.Block
+ * @this {Blockly.Block}
  * @package
  */
 Blockly.Constants.Math.IS_DIVISIBLE_MUTATOR_EXTENSION = function() {
   this.getField('PROPERTY').setValidator(function(option) {
     var divisorInput = (option == 'DIVISIBLE_BY');
-    this.sourceBlock_.updateShape_(divisorInput);
+    this.getSourceBlock().updateShape_(divisorInput);
   });
 };
 
@@ -530,7 +531,7 @@ Blockly.Constants.Math.LIST_MODES_MUTATOR_MIXIN = {
    * Modify this block to have the correct output type.
    * @param {string} newOp Either 'MODE' or some op than returns a number.
    * @private
-   * @this Blockly.Block
+   * @this {Blockly.Block}
    */
   updateType_: function(newOp) {
     if (newOp == 'MODE') {
@@ -542,17 +543,17 @@ Blockly.Constants.Math.LIST_MODES_MUTATOR_MIXIN = {
   /**
    * Create XML to represent the output type.
    * @return {Element} XML storage element.
-   * @this Blockly.Block
+   * @this {Blockly.Block}
    */
   mutationToDom: function() {
-    var container = document.createElement('mutation');
+    var container = Blockly.utils.xml.createElement('mutation');
     container.setAttribute('op', this.getFieldValue('OP'));
     return container;
   },
   /**
    * Parse XML to restore the output type.
    * @param {!Element} xmlElement XML storage element.
-   * @this Blockly.Block
+   * @this {Blockly.Block}
    */
   domToMutation: function(xmlElement) {
     this.updateType_(xmlElement.getAttribute('op'));
@@ -562,7 +563,7 @@ Blockly.Constants.Math.LIST_MODES_MUTATOR_MIXIN = {
 /**
  * Extension to 'math_on_list' blocks that allows support of
  * modes operation (outputs a list of numbers).
- * @this Blockly.Block
+ * @this {Blockly.Block}
  * @package
  */
 Blockly.Constants.Math.LIST_MODES_MUTATOR_EXTENSION = function() {

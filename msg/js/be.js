@@ -2,10 +2,6 @@
 
 'use strict';
 
-goog.provide('Blockly.Msg.be');
-
-goog.require('Blockly.Msg');
-
 Blockly.Msg["ADD_COMMENT"] = "Дадаць каментарый";
 Blockly.Msg["CANNOT_DELETE_VARIABLE_PROCEDURE"] = "Немагчыма выдаліць пераменную '%1', паколькі яна з'яўляецца часткай вызначэння функцыі '%2'";
 Blockly.Msg["CHANGE_VALUE_TITLE"] = "Змяніць значэння:";
@@ -393,6 +389,7 @@ Blockly.Msg["TEXT_TRIM_OPERATOR_RIGHT"] = "абрэзаць прагалы сп�
 Blockly.Msg["TEXT_TRIM_TOOLTIP"] = "Вяртае копію тэксту з прагаламі, выдаленымі з аднаго або абодвух канцоў.";
 Blockly.Msg["TODAY"] = "Сёння";
 Blockly.Msg["UNDO"] = "Адкаціць";
+Blockly.Msg["UNNAMED_KEY"] = "unnamed";  // untranslated
 Blockly.Msg["VARIABLES_DEFAULT_NAME"] = "элемент";
 Blockly.Msg["VARIABLES_GET_CREATE_SET"] = "Стварыць блок \"прысабечыць\" для %1";
 Blockly.Msg["VARIABLES_GET_HELPURL"] = "https://github.com/google/blockly/wiki/Variables#get";  // untranslated

@@ -1,8 +1,6 @@
 /**
- * Blockly Demos: Block Factory Blocks
- *
- * Copyright 2012 Google Inc.
- * https://developers.google.com/blockly/
+
+ * Copyright 2012 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -46,9 +44,9 @@ Blockly.Blocks['factory_base'] = {
         ['↑ top connection', 'TOP'],
         ['↓ bottom connection', 'BOTTOM']],
         function(option) {
-          this.sourceBlock_.updateShape_(option);
+          this.getSourceBlock().updateShape_(option);
           // Connect a shadow block to this new input.
-          this.sourceBlock_.spawnOutputShadow_(option);
+          this.getSourceBlock().spawnOutputShadow_(option);
         });
     this.appendDummyInput()
         .appendField(dropdown, 'CONNECTIONS');
@@ -67,7 +65,7 @@ Blockly.Blocks['factory_base'] = {
         'https://developers.google.com/blockly/guides/create-custom-blocks/block-factory');
   },
   mutationToDom: function() {
-    var container = document.createElement('mutation');
+    var container = Blockly.utils.xml.createElement('mutation');
     container.setAttribute('connections', this.getFieldValue('CONNECTIONS'));
     return container;
   },
@@ -244,13 +242,33 @@ Blockly.Blocks['field_static'] = {
   // Text value.
   init: function() {
     this.setColour(160);
-    this.appendDummyInput()
+    this.appendDummyInput('FIRST')
         .appendField('text')
         .appendField(new Blockly.FieldTextInput(''), 'TEXT');
     this.setPreviousStatement(true, 'Field');
     this.setNextStatement(true, 'Field');
     this.setTooltip('Static text that serves as a label.');
     this.setHelpUrl('https://www.youtube.com/watch?v=s2_xaEvcVI0#t=88');
+  },
+};
+
+Blockly.Blocks['field_label_serializable'] = {
+  // Text value that is saved to XML.
+  init: function() {
+    this.setColour(160);
+    this.appendDummyInput('FIRST')
+        .appendField('text')
+        .appendField(new Blockly.FieldTextInput(''), 'TEXT')
+        .appendField(',')
+        .appendField(new Blockly.FieldTextInput('NAME'), 'FIELDNAME');
+    this.setPreviousStatement(true, 'Field');
+    this.setNextStatement(true, 'Field');
+    this.setTooltip('Static text that serves as a label, and is saved to' +
+      ' XML. Use only if you want to modify this label at runtime.');
+    this.setHelpUrl('https://www.youtube.com/watch?v=s2_xaEvcVI0#t=88');
+  },
+  onchange: function() {
+    fieldNameCheck(this);
   }
 };
 
@@ -336,7 +354,7 @@ Blockly.Blocks['field_dropdown'] = {
   },
   mutationToDom: function(workspace) {
     // Create XML to represent menu options.
-    var container = document.createElement('mutation');
+    var container = Blockly.utils.xml.createElement('mutation');
     container.setAttribute('options', JSON.stringify(this.optionList_));
     return container;
   },
@@ -628,7 +646,7 @@ Blockly.Blocks['type_group'] = {
   },
   mutationToDom: function(workspace) {
     // Create XML to represent a group of types.
-    var container = document.createElement('mutation');
+    var container = Blockly.utils.xml.createElement('mutation');
     container.setAttribute('types', this.typeCount_);
     return container;
   },
@@ -843,11 +861,11 @@ Blockly.Blocks['colour_hue'] = {
     // Update the current block's colour to match.
     var hue = parseInt(text, 10);
     if (!isNaN(hue)) {
-      this.sourceBlock_.setColour(hue);
+      this.getSourceBlock().setColour(hue);
     }
   },
   mutationToDom: function(workspace) {
-    var container = document.createElement('mutation');
+    var container = Blockly.utils.xml.createElement('mutation');
     container.setAttribute('colour', this.getColour());
     return container;
   },

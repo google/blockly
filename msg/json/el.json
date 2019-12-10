@@ -16,7 +16,8 @@
 			"Themelis",
 			"KATRINE1992",
 			"Vicng",
-			"Nikosgranturismogt"
+			"Nikosgranturismogt",
+			"Sarri.greek"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "αντικείμενο",
@@ -43,7 +44,7 @@
 	"CHANGE_VALUE_TITLE": "Άλλαξε την τιμή:",
 	"RENAME_VARIABLE": "Μετονόμασε τη μεταβλητή...",
 	"RENAME_VARIABLE_TITLE": "Μετονόμασε όλες τις μεταβλητές «%1» σε:",
-	"NEW_VARIABLE": "Δημιουργείστε μεταβλητή",
+	"NEW_VARIABLE": "Δημιουργήστε μεταβλητή",
 	"NEW_STRING_VARIABLE": "Δημιουργία μεταβλητή συμβολοσειράς...",
 	"NEW_NUMBER_VARIABLE": "Δημιουργία μεταβλητής αριθμού...",
 	"NEW_COLOUR_VARIABLE": "Δημιουργία μεταβλητής χρώματος...",
@@ -53,7 +54,7 @@
 	"VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE": "Μια μεταβλητή με όνομα '%1' υπάρχει πάντα για έναν άλλο τύπο: '%2'.",
 	"DELETE_VARIABLE_CONFIRMATION": "Θέλετε να διαγράψετε το %1 που χρησιμοποιείτε της μεταβλητής '%2'?",
 	"CANNOT_DELETE_VARIABLE_PROCEDURE": "Δεν μπορώ να διαγράψω την μεταβλητή '%1' διότι είναι μέρος του ορισμού της λειτουργίας '%2'",
-	"DELETE_VARIABLE": "Διαγράψετε την μεταβλητή '%1'",
+	"DELETE_VARIABLE": "Διαγράψτε την μεταβλητή '%1'",
 	"COLOUR_PICKER_HELPURL": "https://el.wikipedia.org/wiki/%CE%A7%CF%81%CF%8E%CE%BC%CE%B1",
 	"COLOUR_PICKER_TOOLTIP": "Επιτρέπει επιλογή χρώματος από την παλέτα.",
 	"COLOUR_RANDOM_TITLE": "τυχαίο χρώμα",
@@ -374,5 +375,6 @@
 	"PROCEDURES_CREATE_DO": "Δημιούργησε «%1»",
 	"PROCEDURES_IFRETURN_TOOLTIP": "Αν μια τιμή είναι αληθής, τότε επιστρέφει τη δεύτερη τιμή.",
 	"PROCEDURES_IFRETURN_WARNING": "Προειδοποίηση: Αυτό το μπλοκ μπορεί να χρησιμοποιηθεί μόνο στον ορισμό μιας συνάρτησης.",
-	"WORKSPACE_COMMENT_DEFAULT_TEXT": "Πείτε κάτι..."
+	"WORKSPACE_COMMENT_DEFAULT_TEXT": "Πείτε κάτι...",
+	"COLLAPSED_WARNINGS_WARNING": "Υπάρχουν προειδοποιήσεις για συμπτυγμένα μπλοκ."
 }

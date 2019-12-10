@@ -2,10 +2,6 @@
 
 'use strict';
 
-goog.provide('Blockly.Msg.pl');
-
-goog.require('Blockly.Msg');
-
 Blockly.Msg["ADD_COMMENT"] = "Dodaj Komentarz";
 Blockly.Msg["CANNOT_DELETE_VARIABLE_PROCEDURE"] = "Nie można usunąć zmiennej '%1', ponieważ jest częścią definicji funkcji '%2'";
 Blockly.Msg["CHANGE_VALUE_TITLE"] = "Zmień wartość:";
@@ -393,6 +389,7 @@ Blockly.Msg["TEXT_TRIM_OPERATOR_RIGHT"] = "usuń spacje z prawej strony";
 Blockly.Msg["TEXT_TRIM_TOOLTIP"] = "Zwraca kopię tekstu z usuniętymi spacjami z jednego lub z obu końców tekstu.";
 Blockly.Msg["TODAY"] = "Dzisiaj";
 Blockly.Msg["UNDO"] = "Cofnij";
+Blockly.Msg["UNNAMED_KEY"] = "bez nazwy";
 Blockly.Msg["VARIABLES_DEFAULT_NAME"] = "element";
 Blockly.Msg["VARIABLES_GET_CREATE_SET"] = "Utwórz klocek 'ustaw %1'";
 Blockly.Msg["VARIABLES_GET_HELPURL"] = "https://github.com/google/blockly/wiki/Variables#get";  // untranslated

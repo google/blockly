@@ -1,8 +1,6 @@
 /**
- * Blockly Demos: Block Factory Blocks
- *
- * Copyright 2012 Google Inc.
- * https://developers.google.com/blockly/
+ * @license
+ * Copyright 2012 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -61,7 +59,7 @@ Blockly.Blocks['factory_base'] = {
         'https://developers.google.com/blockly/guides/create-custom-blocks/block-factory');
   },
   mutationToDom: function() {
-    var container = document.createElement('mutation');
+    var container = Blockly.utils.xml.createElement('mutation');
     container.setAttribute('connections', this.getFieldValue('CONNECTIONS'));
     return container;
   },
@@ -329,7 +327,7 @@ Blockly.Blocks['field_dropdown'] = {
   },
   mutationToDom: function(workspace) {
     // Create XML to represent menu options.
-    var container = document.createElement('mutation');
+    var container = Blockly.utils.xml.createElement('mutation');
     container.setAttribute('options', this.optionCount_);
     return container;
   },
@@ -547,7 +545,7 @@ Blockly.Blocks['type_group'] = {
   },
   mutationToDom: function(workspace) {
     // Create XML to represent a group of types.
-    var container = document.createElement('mutation');
+    var container = Blockly.utils.xml.createElement('mutation');
     container.setAttribute('types', this.typeCount_);
     return container;
   },
@@ -766,7 +764,7 @@ Blockly.Blocks['colour_hue'] = {
     }
   },
   mutationToDom: function(workspace) {
-    var container = document.createElement('mutation');
+    var container = Blockly.utils.xml.createElement('mutation');
     container.setAttribute('colour', this.getColour());
     return container;
   },

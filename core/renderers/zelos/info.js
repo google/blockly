@@ -338,8 +338,8 @@ Blockly.zelos.RenderInfo.prototype.finalizeHorizontalAlignment_ = function() {
     }
     var firstElem = row.elements[1];
     var lastElem = row.elements[row.elements.length - 2];
-    var leftNegPadding = -this.getNegativeSpacing_(firstElem);
-    var rightNegPadding = -this.getNegativeSpacing_(lastElem);
+    var leftNegPadding = this.getNegativeSpacing_(firstElem);
+    var rightNegPadding = this.getNegativeSpacing_(lastElem);
     totalNegativeSpacing = Math.abs(leftNegPadding) + Math.abs(rightNegPadding);
     var minBlockWidth = this.constants_.MIN_BLOCK_WIDTH +
         this.outputConnection.width * 2;
@@ -347,14 +347,14 @@ Blockly.zelos.RenderInfo.prototype.finalizeHorizontalAlignment_ = function() {
       // Maintain a minimum block width, split negative spacing between left
       // and right edge.
       totalNegativeSpacing = this.width - minBlockWidth;
-      leftNegPadding = -totalNegativeSpacing / 2;
-      rightNegPadding = -totalNegativeSpacing / 2;
+      leftNegPadding = totalNegativeSpacing / 2;
+      rightNegPadding = totalNegativeSpacing / 2;
     }
-    // Add a negative spacer on the start and the end of the block.
+    // Add a negative spacer on the start and end of the block.
     row.elements.unshift(new Blockly.blockRendering.InRowSpacer(this.constants_,
-        leftNegPadding));
+        -leftNegPadding));
     row.elements.push(new Blockly.blockRendering.InRowSpacer(this.constants_,
-        rightNegPadding));
+        -rightNegPadding));
   }
   if (totalNegativeSpacing) {
     this.width -= totalNegativeSpacing;

@@ -330,7 +330,7 @@ suite('Navigation', function() {
           Blockly.ASTNode.createConnectionNode(this.basicBlock.previousConnection));
       this.mockEvent.keyCode = Blockly.utils.KeyCodes.ENTER;
       chai.assert.isTrue(Blockly.navigation.onKeyPress(this.mockEvent));
-      var markedNode = this.workspace.getMarker(Blockly.navigation.markerName).getCurNode();
+      var markedNode = this.workspace.getMarker(Blockly.navigation.MARKER_NAME).getCurNode();
       chai.assert.equal(markedNode.getLocation(), this.basicBlock.previousConnection);
       chai.assert.equal(Blockly.navigation.currentState_,
           Blockly.navigation.STATE_WS);
@@ -543,7 +543,7 @@ suite('Navigation', function() {
     test('Insert from flyout with a valid connection marked', function() {
       var previousConnection = this.basicBlock.previousConnection;
       var prevNode = Blockly.ASTNode.createConnectionNode(previousConnection);
-      this.workspace.getMarker(Blockly.navigation.markerName).setCurNode(prevNode);
+      this.workspace.getMarker(Blockly.navigation.MARKER_NAME).setCurNode(prevNode);
 
       Blockly.navigation.focusToolbox_();
       Blockly.navigation.focusFlyout_();
@@ -575,7 +575,7 @@ suite('Navigation', function() {
 
     test('Connect two blocks that are on the workspace', function() {
       var targetNode = Blockly.ASTNode.createConnectionNode(this.basicBlock.previousConnection);
-      this.workspace.getMarker(Blockly.navigation.markerName).setCurNode(targetNode);
+      this.workspace.getMarker(Blockly.navigation.MARKER_NAME).setCurNode(targetNode);
 
       var sourceNode = Blockly.ASTNode.createConnectionNode(this.basicBlock2.nextConnection);
       this.workspace.getCursor().setCurNode(sourceNode);

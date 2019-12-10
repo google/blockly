@@ -31,6 +31,7 @@ goog.require('Blockly.Events');
 goog.require('Blockly.Events.BlockCreate');
 goog.require('Blockly.Gesture');
 goog.require('Blockly.Grid');
+goog.require('Blockly.MarkerManager');
 goog.require('Blockly.Msg');
 goog.require('Blockly.navigation');
 goog.require('Blockly.Options');
@@ -111,6 +112,7 @@ Blockly.WorkspaceSvg = function(options,
   /**
    * Manager in charge of markers and cursors.
    * @type {!Blockly.MarkerManager}
+   * @private
    */
   this.markerManager_ = new Blockly.MarkerManager(this);
 
@@ -736,7 +738,7 @@ Blockly.WorkspaceSvg.prototype.createDom = function(opt_backgroundClass) {
   this.recordDeleteAreas();
 
   this.markerManager_.setCursor(new Blockly.Cursor());
-  this.markerManager_.registerMarker(Blockly.navigation.markerName,
+  this.markerManager_.registerMarker(Blockly.navigation.MARKER_NAME,
       new Blockly.Marker());
 
   this.getRenderer().getConstants().createDom(this.svgGroup_);
@@ -1267,7 +1269,7 @@ Blockly.WorkspaceSvg.prototype.pasteBlock_ = function(xmlBlock) {
     var block = Blockly.Xml.domToBlock(xmlBlock, this);
 
     // Handle paste for keyboard navigation
-    var markedNode = this.getMarker(Blockly.navigation.markerName).getCurNode();
+    var markedNode = this.getMarker(Blockly.navigation.MARKER_NAME).getCurNode();
     if (this.keyboardAccessibilityMode && markedNode &&
         markedNode.isConnection()) {
       var markedLocation =

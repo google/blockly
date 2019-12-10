@@ -23,8 +23,8 @@
 
 goog.provide('Blockly.MarkerManager');
 
-goog.require('Blockly.Marker');
 goog.require('Blockly.Cursor');
+goog.require('Blockly.Marker');
 
 
 /**
@@ -37,18 +37,21 @@ Blockly.MarkerManager = function(workspace){
   /**
    * The cursor.
    * @type {Blockly.Cursor}
+   * @private
    */
   this.cursor_ = null;
 
   /**
    * The cursor's svg element.
    * @type {SVGElement}
+   * @private
    */
   this.cursorSvg_ = null;
 
   /**
    * The map of markers for the workspace.
    * @type {!Object<string, !Blockly.Marker>}
+   * @private
    */
   this.markers_ = {};
 
@@ -109,7 +112,7 @@ Blockly.MarkerManager.prototype.getMarker = function(id) {
 };
 
 /**
- * Sets the cursor and initialized the drawer for use with keyboard navigation.
+ * Sets the cursor and initializes the drawer for use with keyboard navigation.
  * @param {Blockly.Cursor} cursor The cursor used to move around this workspace.
  */
 Blockly.MarkerManager.prototype.setCursor = function(cursor) {

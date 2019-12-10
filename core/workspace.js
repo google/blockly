@@ -148,24 +148,6 @@ Blockly.Workspace.prototype.MAX_UNDO = 1024;
 Blockly.Workspace.prototype.connectionDBList = null;
 
 /**
- * Sets the cursor for keyboard navigation.
- * @param {!Blockly.Cursor} cursor The cursor used to navigate around the Blockly
- *     AST for keyboard navigation.
- */
-Blockly.Workspace.prototype.setCursor = function(cursor) {
-  this.cursor_ = cursor;
-};
-
-/**
- * Sets the marker for keyboard navigation.
- * @param {!Blockly.Marker} marker The marker used to mark a location for
- *     keyboard navigation.
- */
-Blockly.Workspace.prototype.setMarker = function(marker) {
-  this.marker_ = marker;
-};
-
-/**
  * Dispose of this workspace.
  * Unlink from all DOM elements to prevent memory leaks.
  * @suppress {checkTypes}

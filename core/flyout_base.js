@@ -57,8 +57,6 @@ Blockly.Flyout = function(workspaceOptions) {
    */
   this.workspace_ = new Blockly.WorkspaceSvg(workspaceOptions);
   this.workspace_.isFlyout = true;
-  this.workspace_.setCursor(new Blockly.FlyoutCursor());
-  this.workspace_.setMarker(new Blockly.Marker());
 
   /**
    * Is RTL vs LTR.
@@ -233,6 +231,7 @@ Blockly.Flyout.prototype.createDom = function(tagName) {
       this.svgBackground_, 'flyout', 'fill');
   this.workspace_.getThemeManager().subscribe(
       this.svgBackground_, 'flyoutOpacity', 'fill-opacity');
+  this.workspace_.getMarkerManager().setCursor(new Blockly.FlyoutCursor());
   return this.svgGroup_;
 };
 

@@ -457,7 +457,10 @@ Blockly.WorkspaceSvg.prototype.setMarkerSvg = function(markerSvg) {
  * @package
  */
 Blockly.WorkspaceSvg.prototype.getMarker = function(id) {
-  return this.markerManager_.getMarker(id);
+  if (this.markerManager_) {
+    return this.markerManager_.getMarker(id);
+  }
+  return null;
 };
 
 /**
@@ -465,7 +468,10 @@ Blockly.WorkspaceSvg.prototype.getMarker = function(id) {
  * @return {Blockly.Cursor} The cursor for the workspace.
  */
 Blockly.WorkspaceSvg.prototype.getCursor = function() {
-  return this.markerManager_.getCursor();
+  if (this.markerManager_) {
+    return this.markerManager_.getCursor();
+  }
+  return null;
 };
 
 /**

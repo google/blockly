@@ -212,6 +212,8 @@ Blockly.FieldDropdown.prototype.initView = function() {
   } else {
     this.createTextArrow_();
   }
+
+  Blockly.utils.dom.addClass(this.borderRect_, 'blocklyDropdownRect');
 };
 
 /**
@@ -515,8 +517,7 @@ Blockly.FieldDropdown.prototype.applyColour = function() {
       this.borderRect_.setAttribute('fill',
           this.sourceBlock_.style.colourTertiary);
     } else {
-      this.borderRect_.setAttribute('fill',
-          this.sourceBlock_.style.colourPrimary);
+      this.borderRect_.setAttribute('fill', 'transparent');
     }
   }
   // Update arrow's colour.

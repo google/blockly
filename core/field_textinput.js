@@ -238,9 +238,9 @@ Blockly.FieldTextInput.prototype.applyColour = function() {
     if (this.borderRect_) {
       this.borderRect_.setAttribute('stroke',
           this.sourceBlock_.style.colourTertiary);
-      this.borderRect_.setAttribute('fill', '#fff');
-    } else if (this.sourceBlock_.isShadow()) {
-      this.sourceBlock_.pathObject.svgPath.setAttribute('fill', '#fff');
+    } else {
+      this.sourceBlock_.pathObject.svgPath.setAttribute('fill',
+          this.constants_.FULL_BLOCK_FIELD_COLOUR);
     }
   }
 };

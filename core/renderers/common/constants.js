@@ -438,6 +438,13 @@ Blockly.blockRendering.ConstantProvider = function() {
   this.FULL_BLOCK_FIELDS = false;
 
   /**
+   * The backing colour of full block fields.
+   * @type {boolean}
+   * @package
+   */
+  this.FULL_BLOCK_FIELD_COLOUR = '#fff';
+
+  /**
    * Enum for connection shapes.
    * @enum {number}
    */

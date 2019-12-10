@@ -367,6 +367,14 @@ Blockly.blockRendering.ConstantProvider = function() {
   this.FIELD_CHECKBOX_DEFAULT_WIDTH = 15;
 
   /**
+   * A random identifier used to ensure a unique ID is used for each
+   * filter/pattern for the case of multiple Blockly instances on a page.
+   * @type {string}
+   * @protected
+   */
+  this.randomIdentifier_ = String(Math.random()).substring(2);
+
+  /**
    * The ID of the emboss filter, or the empty string if no filter is set.
    * @type {string}
    * @package
@@ -879,10 +887,6 @@ Blockly.blockRendering.ConstantProvider.prototype.createDom = function(svg) {
   </defs>
   */
   var defs = Blockly.utils.dom.createSvgElement('defs', {}, svg);
-  // Each filter/pattern needs a unique ID for the case of multiple Blockly
-  // instances on a page.  Browser behaviour becomes undefined otherwise.
-  // https://neil.fraser.name/news/2015/11/01/
-  var rnd = String(Math.random()).substring(2);
   /*
     <filter id="blocklyEmbossFilter837493">
       <feGaussianBlur in="SourceAlpha" stdDeviation="1" result="blur" />
@@ -898,7 +902,7 @@ Blockly.blockRendering.ConstantProvider.prototype.createDom = function(svg) {
     </filter>
   */
   var embossFilter = Blockly.utils.dom.createSvgElement('filter',
-      {'id': 'blocklyEmbossFilter' + rnd}, defs);
+      {'id': 'blocklyEmbossFilter' + this.randomIdentifier_}, defs);
   Blockly.utils.dom.createSvgElement('feGaussianBlur',
       {'in': 'SourceAlpha', 'stdDeviation': 1, 'result': 'blur'}, embossFilter);
   var feSpecularLighting = Blockly.utils.dom.createSvgElement('feSpecularLighting',
@@ -942,7 +946,7 @@ Blockly.blockRendering.ConstantProvider.prototype.createDom = function(svg) {
   */
   var disabledPattern = Blockly.utils.dom.createSvgElement('pattern',
       {
-        'id': 'blocklyDisabledPattern' + rnd,
+        'id': 'blocklyDisabledPattern' + this.randomIdentifier_,
         'patternUnits': 'userSpaceOnUse',
         'width': 10,
         'height': 10
@@ -956,12 +960,34 @@ Blockly.blockRendering.ConstantProvider.prototype.createDom = function(svg) {
 };
 
 /**
+ * Inject renderer specific CSS into the page.
+ * @param {string} name Name of the renderer.
+ * @package
+ */
+Blockly.blockRendering.ConstantProvider.prototype.injectCSS = function(
+    name) {
+  var cssArray = this.getCSS_(name);
+  var cssNodeId = 'blockly-renderer-style-' + name;
+  if (document.getElementById(cssNodeId)) {
+    // Already injected.
+    return;
+  }
+  var text = cssArray.join('\n');
+  // Inject CSS tag at start of head.
+  var cssNode = document.createElement('style');
+  cssNode.id = cssNodeId;
+  var cssTextNode = document.createTextNode(text);
+  cssNode.appendChild(cssTextNode);
+  document.head.insertBefore(cssNode, document.head.firstChild);
+};
+
+/**
  * Get any renderer specific CSS to inject when the renderer is initialized.
  * @param {string} name Name of the renderer.
  * @return {!Array.<string>} Array of CSS strings.
- * @package
+ * @protected
  */
-Blockly.blockRendering.ConstantProvider.prototype.getCSS = function(name) {
+Blockly.blockRendering.ConstantProvider.prototype.getCSS_ = function(name) {
   var selector = '.' + name + '-renderer';
   return [
     /* eslint-disable indent */

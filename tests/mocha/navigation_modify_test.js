@@ -54,7 +54,7 @@ suite('Insert/Modify', function() {
     // TODO: Marked connection or cursor connection is already connected.
     suite('Marker on next', function() {
       setup(function() {
-        this.workspace.getMarker().setCurNode(
+        this.workspace.getMarker(Blockly.navigation.MARKER_NAME).setCurNode(
             Blockly.ASTNode.createConnectionNode(
                 this.stack_block_1.nextConnection));
       });
@@ -98,7 +98,7 @@ suite('Insert/Modify', function() {
 
     suite('Marker on previous', function() {
       setup(function() {
-        this.workspace.getMarker().setCurNode(
+        this.workspace.getMarker(Blockly.navigation.MARKER_NAME).setCurNode(
             Blockly.ASTNode.createConnectionNode(
                 this.stack_block_1.previousConnection));
       });
@@ -141,7 +141,7 @@ suite('Insert/Modify', function() {
 
     suite('Marker on value input', function() {
       setup(function() {
-        this.workspace.getMarker().setCurNode(
+        this.workspace.getMarker(Blockly.navigation.MARKER_NAME).setCurNode(
             Blockly.ASTNode.createConnectionNode(
                 this.row_block_1.inputList[0].connection));
       });
@@ -182,7 +182,7 @@ suite('Insert/Modify', function() {
         this.statement_block_1.inputList[0].connection.connect(
             this.stack_block_1.previousConnection);
         this.stack_block_1.nextConnection.connect(this.stack_block_2.previousConnection);
-        this.workspace.getMarker().setCurNode(
+        this.workspace.getMarker(Blockly.navigation.MARKER_NAME).setCurNode(
             Blockly.ASTNode.createInputNode(
                 this.statement_block_1.inputList[0]));
       });
@@ -213,7 +213,7 @@ suite('Insert/Modify', function() {
 
     suite('Marker on output', function() {
       setup(function() {
-        this.workspace.getMarker().setCurNode(
+        this.workspace.getMarker(Blockly.navigation.MARKER_NAME).setCurNode(
             Blockly.ASTNode.createConnectionNode(
                 this.row_block_1.outputConnection));
       });
@@ -249,7 +249,8 @@ suite('Insert/Modify', function() {
 
   suite('Marked Workspace', function() {
     setup(function() {
-      this.workspace.getMarker().setCurNode(
+      this.workspace.getMarker(Blockly.navigation.MARKER_NAME).drawer_ = null;
+      this.workspace.getMarker(Blockly.navigation.MARKER_NAME).setCurNode(
           Blockly.ASTNode.createWorkspaceNode(
               this.workspace, new Blockly.utils.Coordinate(100, 200)));
     });
@@ -344,7 +345,7 @@ suite('Insert/Modify', function() {
       // These tests are using a stack block, but do not depend on the type of
       // the block.
       setup(function() {
-        this.workspace.getMarker().setCurNode(
+        this.workspace.getMarker(Blockly.navigation.MARKER_NAME).setCurNode(
             Blockly.ASTNode.createBlockNode(
                 this.stack_block_1));
       });
@@ -358,7 +359,7 @@ suite('Insert/Modify', function() {
     });
     suite('Marked stack block', function() {
       setup(function() {
-        this.workspace.getMarker().setCurNode(
+        this.workspace.getMarker(Blockly.navigation.MARKER_NAME).setCurNode(
             Blockly.ASTNode.createBlockNode(
                 this.stack_block_1));
       });
@@ -389,7 +390,7 @@ suite('Insert/Modify', function() {
     });
     suite('Marked row block', function() {
       setup(function() {
-        this.workspace.getMarker().setCurNode(
+        this.workspace.getMarker(Blockly.navigation.MARKER_NAME).setCurNode(
             Blockly.ASTNode.createBlockNode(
                 this.row_block_1));
       });

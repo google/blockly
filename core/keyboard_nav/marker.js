@@ -122,3 +122,12 @@ Blockly.Marker.prototype.hide = function() {
   }
 };
 
+/**
+ * Dispose of this marker.
+ */
+Blockly.Marker.prototype.dispose = function() {
+  if (this.getDrawer()) {
+    this.getDrawer().dispose();
+  }
+};
+

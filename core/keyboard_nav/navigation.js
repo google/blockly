@@ -86,9 +86,24 @@ Blockly.navigation.actionNames = {
   TOGGLE_KEYBOARD_NAV: 'toggle_keyboard_nav'
 };
 
+/**
+ * The name of the marker reserved for internal use.
+ * @type {string}
+ * @const
+ */
+Blockly.navigation.MARKER_NAME = 'local_marker_1';
+
 /** ****** */
 /** Focus  */
 /** ****** */
+
+/**
+ * Get the local marker.
+ * @return {!Blockly.Marker} The local marker for the main workspace.
+ */
+Blockly.navigation.getMarker = function() {
+  return Blockly.getMainWorkspace().getMarker(Blockly.navigation.MARKER_NAME);
+};
 
 /**
  * If a toolbox exists, set the navigation state to toolbox and select the first
@@ -103,7 +118,7 @@ Blockly.navigation.focusToolbox_ = function() {
     Blockly.navigation.currentState_ = Blockly.navigation.STATE_TOOLBOX;
     Blockly.navigation.resetFlyout_(false /* shouldHide */);
 
-    if (!workspace.getMarker().getCurNode()) {
+    if (!Blockly.navigation.getMarker().getCurNode()) {
       Blockly.navigation.markAtCursor_();
     }
     toolbox.selectFirstCategory();
@@ -121,7 +136,7 @@ Blockly.navigation.focusFlyout_ = function() {
   var toolbox = workspace.getToolbox();
   var flyout = toolbox ? toolbox.flyout_ : workspace.getFlyout();
 
-  if (!workspace.getMarker().getCurNode()) {
+  if (!Blockly.navigation.getMarker().getCurNode()) {
     Blockly.navigation.markAtCursor_();
   }
 
@@ -242,7 +257,7 @@ Blockly.navigation.resetFlyout_ = function(shouldHide) {
  * @private
  */
 Blockly.navigation.modifyWarn_ = function() {
-  var markerNode = Blockly.getMainWorkspace().getMarker().getCurNode();
+  var markerNode = Blockly.navigation.getMarker().getCurNode();
   var cursorNode = Blockly.getMainWorkspace().getCursor().getCurNode();
 
   if (!markerNode) {
@@ -313,7 +328,7 @@ Blockly.navigation.moveBlockToWorkspace_ = function(block, wsNode) {
  * @private
  */
 Blockly.navigation.modify_ = function() {
-  var markerNode = Blockly.getMainWorkspace().getMarker().getCurNode();
+  var markerNode = Blockly.navigation.getMarker().getCurNode();
   var cursorNode = Blockly.getMainWorkspace().getCursor().getCurNode();
   if (!Blockly.navigation.modifyWarn_()) {
     return false;
@@ -566,8 +581,8 @@ Blockly.navigation.disconnectBlocks_ = function() {
  * @private
  */
 Blockly.navigation.markAtCursor_ = function() {
-  var workspace = Blockly.getMainWorkspace();
-  workspace.getMarker().setCurNode(workspace.getCursor().getCurNode());
+  Blockly.navigation.getMarker().setCurNode(
+      Blockly.getMainWorkspace().getCursor().getCurNode());
 };
 
 /**
@@ -575,9 +590,9 @@ Blockly.navigation.markAtCursor_ = function() {
  * @private
  */
 Blockly.navigation.removeMark_ = function() {
-  var workspace = Blockly.getMainWorkspace();
-  workspace.getMarker().setCurNode(null);
-  workspace.getMarker().hide();
+  var marker = Blockly.navigation.getMarker();
+  marker.setCurNode(null);
+  marker.hide();
 };
 
 /**
@@ -680,7 +695,7 @@ Blockly.navigation.disableKeyboardAccessibility = function() {
     var workspace = Blockly.getMainWorkspace();
     Blockly.getMainWorkspace().keyboardAccessibilityMode = false;
     workspace.getCursor().hide();
-    workspace.getMarker().hide();
+    Blockly.navigation.getMarker().hide();
     if (Blockly.navigation.getFlyoutCursor_()) {
       Blockly.navigation.getFlyoutCursor_().hide();
     }

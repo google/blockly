@@ -217,6 +217,9 @@ Blockly.FieldDropdown.prototype.initView = function() {
   } else {
     this.createTextArrow_();
   }
+
+  Blockly.utils.dom.addClass(/** @type {!SVGRectElement} */ (this.borderRect_),
+      'blocklyDropdownRect');
 };
 
 /**
@@ -270,6 +273,14 @@ Blockly.FieldDropdown.prototype.showEditor_ = function() {
   this.menu_.render(Blockly.DropDownDiv.getContentDiv());
   Blockly.utils.dom.addClass(
       /** @type {!Element} */ (this.menu_.getElement()), 'blocklyDropdownMenu');
+
+  if (this.constants_.FIELD_DROPDOWN_COLOURED_DIV) {
+    var primaryColour = (this.sourceBlock_.isShadow()) ?
+        this.sourceBlock_.getParent().getColour() :
+        this.sourceBlock_.getColour();
+    Blockly.DropDownDiv.setColour(primaryColour,
+        this.sourceBlock_.style.colourTertiary);
+  }
 
   Blockly.DropDownDiv.showPositionedByField(
       this, this.dropdownDispose_.bind(this));
@@ -522,8 +533,7 @@ Blockly.FieldDropdown.prototype.applyColour = function() {
       this.borderRect_.setAttribute('fill',
           this.sourceBlock_.style.colourTertiary);
     } else {
-      this.borderRect_.setAttribute('fill',
-          this.sourceBlock_.style.colourPrimary);
+      this.borderRect_.setAttribute('fill', 'transparent');
     }
   }
   // Update arrow's colour.

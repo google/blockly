@@ -62,8 +62,7 @@ suite('Cursor', function() {
       "helpUrl": ""
     }
     ]);
-    this.workspace = new Blockly.Workspace();
-    this.workspace.setCursor(new Blockly.Cursor());
+    this.workspace = Blockly.inject('blocklyDiv', {});
     this.cursor = this.workspace.getCursor();
     var blockA = this.workspace.newBlock('input_statement');
     var blockB = this.workspace.newBlock('input_statement');
@@ -74,7 +73,7 @@ suite('Cursor', function() {
     blockA.nextConnection.connect(blockB.previousConnection);
     blockA.inputList[0].connection.connect(blockE.outputConnection);
     blockB.inputList[1].connection.connect(blockC.previousConnection);
-
+    this.cursor.drawer_ = null;
     this.blocks = {
       A: blockA,
       B: blockB,

@@ -130,11 +130,36 @@ Blockly.Themes.Dark.setComponentStyle('scrollbarOpacity', 0.4);
 
 /**
  * CSS for the dark theme.
+ * This registers CSS that is specific to this theme. It does so by prepending a
+ * ``.dark-theme`` selector before every CSS rule that we wish to override by
+ * this theme.
  */
-Blockly.Css.register([
-  /* eslint-disable indent */
-  '.dark-theme .blocklyTreeRow:not(.blocklyTreeSelected):hover {',
-    'background-color: #2a2d2e;',
-  '}',
-  /* eslint-enable indent */
-]);
+(function() {
+  var selector = '.dark-theme';
+  Blockly.Css.register([
+    /* eslint-disable indent */
+    // Toolbox hover
+    selector + ' .blocklyTreeRow:not(.blocklyTreeSelected):hover {',
+      'background-color: #2a2d2e;',
+    '}',
+    // Dropdown and Widget div.
+    selector + '.blocklyWidgetDiv .goog-menu, ',
+    selector + '.blocklyDropDownDiv {',
+      'background-color: #3c3c3c;',
+    '}',
+    selector + '.blocklyDropDownDiv {',
+      'border-color: #565656;',
+    '}',
+    selector + '.blocklyWidgetDiv .goog-menuitem-content, ',
+    selector + '.blocklyDropDownDiv .goog-menuitem-content {',
+      'color: #f0f0f0;',
+    '}',
+    selector + '.blocklyWidgetDiv .goog-menuitem-disabled',
+    ' .goog-menuitem-content,',
+    selector + '.blocklyDropDownDiv .goog-menuitem-disabled',
+    ' .goog-menuitem-content {',
+      'color: #8a8a8a !important;',
+    '}',
+    /* eslint-enable indent */
+  ]);
+})();

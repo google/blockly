@@ -100,20 +100,6 @@ Blockly.DropDownDiv.PADDING_Y = 16;
 Blockly.DropDownDiv.ANIMATION_TIME = 0.25;
 
 /**
- * The default dropdown div border colour.
- * @type {string}
- * @const
- */
-Blockly.DropDownDiv.DEFAULT_DROPDOWN_BORDER_COLOUR = '#dadce0';
-
-/**
- * The default dropdown div colour.
- * @type {string}
- * @const
- */
-Blockly.DropDownDiv.DEFAULT_DROPDOWN_COLOUR = '#fff';
-
-/**
  * Timer for animation out, to be cleared if we need to immediately hide
  * without disrupting new shows.
  * @type {?number}
@@ -152,8 +138,6 @@ Blockly.DropDownDiv.createDom = function() {
   }
   var div = document.createElement('div');
   div.className = 'blocklyDropDownDiv';
-  div.style.backgroundColor = Blockly.DropDownDiv.DEFAULT_DROPDOWN_COLOUR;
-  div.style.borderColor = Blockly.DropDownDiv.DEFAULT_DROPDOWN_BORDER_COLOUR;
   document.body.appendChild(div);
   /**
    * The div element.
@@ -657,8 +641,8 @@ Blockly.DropDownDiv.hideWithoutAnimation = function() {
   div.style.top = '';
   div.style.opacity = 0;
   div.style.display = 'none';
-  div.style.backgroundColor = Blockly.DropDownDiv.DEFAULT_DROPDOWN_COLOUR;
-  div.style.borderColor = Blockly.DropDownDiv.DEFAULT_DROPDOWN_BORDER_COLOUR;
+  div.style.backgroundColor = '';
+  div.style.borderColor = '';
 
   if (Blockly.DropDownDiv.onHide_) {
     Blockly.DropDownDiv.onHide_();

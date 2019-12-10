@@ -69,27 +69,15 @@ Blockly.blockRendering.OutputConnection = function(constants, connectionModel) {
       constants, connectionModel);
   this.type |= Blockly.blockRendering.Types.OUTPUT_CONNECTION;
 
-  this.setShapeDimensions(
-    !this.isDynamicShape ? this.shape.height : 0,
-    !this.isDynamicShape ? this.shape.width : 0);
+  this.height = !this.isDynamicShape ? this.shape.height : 0;
+  this.width = !this.isDynamicShape ? this.shape.width : 0;
+  this.startX = this.width;
 
   this.connectionOffsetY = this.constants_.TAB_OFFSET_FROM_TOP;
 };
 Blockly.utils.object.inherits(Blockly.blockRendering.OutputConnection,
     Blockly.blockRendering.Connection);
 
-
-/**
- * Sets properties that depend on the connection shape dimensions.
- * @param {number} height Height of the connection shape.
- * @param {number} width Width of the connection shape.
- */
-Blockly.blockRendering.OutputConnection.prototype.setShapeDimensions = function(
-    height, width) {
-  this.height = height;
-  this.width = width;
-  this.startX = this.width;
-};
 
 /**
  * An object containing information about the space a previous connection takes

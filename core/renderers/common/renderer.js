@@ -24,7 +24,7 @@
 goog.provide('Blockly.blockRendering.Renderer');
 
 goog.require('Blockly.blockRendering.ConstantProvider');
-goog.require('Blockly.blockRendering.CursorSvg');
+goog.require('Blockly.blockRendering.MarkerSvg');
 goog.require('Blockly.blockRendering.Drawer');
 goog.require('Blockly.blockRendering.IPathObject');
 goog.require('Blockly.blockRendering.PathObject');
@@ -63,7 +63,6 @@ Blockly.blockRendering.Renderer = function(name) {
 Blockly.blockRendering.Renderer.prototype.init = function() {
   this.constants_ = this.makeConstants_();
   this.constants_.init();
-  this.injectCSS_(this.getCSS_());
 };
 
 /**
@@ -111,27 +110,29 @@ Blockly.blockRendering.Renderer.prototype.makeDebugger_ = function() {
 };
 
 /**
- * Create a new instance of the renderer's cursor drawer.
- * @param {!Blockly.WorkspaceSvg} workspace The workspace the cursor belongs to.
- * @param {boolean=} opt_marker True if the cursor is a marker. A marker is used
- *     to save a location and is an immovable cursor. False or undefined if the
- *     cursor is not a marker.
- * @return {!Blockly.blockRendering.CursorSvg} The cursor drawer.
+ * Create a new instance of the renderer's marker drawer.
+ * @param {!Blockly.WorkspaceSvg} workspace The workspace the marker belongs to.
+ * @param {!Blockly.Marker} marker The marker.
+ * @return {!Blockly.blockRendering.MarkerSvg} The object in charge of drawing
+ *     the marker.
  * @package
  */
-Blockly.blockRendering.Renderer.prototype.makeCursorDrawer = function(
-    workspace, opt_marker) {
-  return new Blockly.blockRendering.CursorSvg(workspace, this.getConstants(), opt_marker);
+Blockly.blockRendering.Renderer.prototype.makeMarkerDrawer = function(
+    workspace, marker) {
+  return new Blockly.blockRendering.MarkerSvg(workspace, this.getConstants(), marker);
 };
 
 /**
  * Create a new instance of a renderer path object.
  * @param {!SVGElement} root The root SVG element.
+ * @param {!Blockly.Theme.BlockStyle} style The style object to use for
+ *     colouring.
  * @return {!Blockly.blockRendering.IPathObject} The renderer path object.
  * @package
  */
-Blockly.blockRendering.Renderer.prototype.makePathObject = function(root) {
-  return new Blockly.blockRendering.PathObject(root,
+Blockly.blockRendering.Renderer.prototype.makePathObject = function(root,
+    style) {
+  return new Blockly.blockRendering.PathObject(root, style,
       /** @type {!Blockly.blockRendering.ConstantProvider} */ (this.constants_));
 
 };
@@ -146,90 +147,6 @@ Blockly.blockRendering.Renderer.prototype.getConstants = function() {
   return (
     /** @type {!Blockly.blockRendering.ConstantProvider} */
     (this.constants_));
-};
-
-/**
- * Get any renderer specific CSS to inject when the renderer is initialized.
- * @return {!Array.<string>} Array of CSS strings.
- * @protected
- */
-Blockly.blockRendering.Renderer.prototype.getCSS_ = function() {
-  var selector = '.' + this.name + '-renderer';
-  var constants = this.getConstants();
-  return [
-    /* eslint-disable indent */
-    // Fields.
-    selector + ' .blocklyText {',
-      'cursor: default;',
-      'fill: #fff;',
-      'font-family: ' + constants.FIELD_TEXT_FONTFAMILY + ';',
-      'font-size: ' + constants.FIELD_TEXT_FONTSIZE + 'pt;',
-      'font-weight: ' + constants.FIELD_TEXT_FONTWEIGHT + ';',
-    '}',
-    selector + ' .blocklyNonEditableText>rect,',
-    selector + ' .blocklyEditableText>rect {',
-      'fill: #fff;',
-      'fill-opacity: .6;',
-      'stroke: none;',
-    '}',
-    selector + ' .blocklyNonEditableText>text,',
-    selector + ' .blocklyEditableText>text {',
-      'fill: #000;',
-    '}',
-
-    // Editable field hover.
-    selector + ' .blocklyEditableText:not(.editing):hover>rect {',
-      'stroke: #fff;',
-      'stroke-width: 2;',
-    '}',
-
-    // Text field input.
-    selector + ' .blocklyHtmlInput {',
-      'font-family: ' + constants.FIELD_TEXT_FONTFAMILY + ';',
-      'font-weight: ' + constants.FIELD_TEXT_FONTWEIGHT + ';',
-    '}',
-
-    // Selection highlight.
-    selector + ' .blocklySelected>.blocklyPath {',
-      'stroke: #fc3;',
-      'stroke-width: 3px;',
-    '}',
-
-    // Connection highlight.
-    selector + ' .blocklyHighlightedConnectionPath {',
-      'stroke: #fc3;',
-    '}',
-
-    // Replacable highlight.
-    selector + ' .blocklyReplaceable .blocklyPath {',
-      'fill-opacity: .5;',
-    '}',
-    selector + ' .blocklyReplaceable .blocklyPathLight,',
-    selector + ' .blocklyReplaceable .blocklyPathDark {',
-      'display: none;',
-    '}',
-    /* eslint-enable indent */
-  ];
-};
-
-/**
- * Get any renderer specific CSS to inject when the renderer is initialized.
- * @param {!Array.<string>} cssArray Array of CSS strings.
- * @private
- */
-Blockly.blockRendering.Renderer.prototype.injectCSS_ = function(cssArray) {
-  var cssNodeId = 'blockly-renderer-style-' + this.name;
-  if (document.getElementById(cssNodeId)) {
-    // Already injected.
-    return;
-  }
-  var text = cssArray.join('\n');
-  // Inject CSS tag at start of head.
-  var cssNode = document.createElement('style');
-  cssNode.id = cssNodeId;
-  var cssTextNode = document.createTextNode(text);
-  cssNode.appendChild(cssTextNode);
-  document.head.insertBefore(cssNode, document.head.firstChild);
 };
 
 /**

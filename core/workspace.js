@@ -24,7 +24,7 @@
 goog.provide('Blockly.Workspace');
 
 goog.require('Blockly.Cursor');
-goog.require('Blockly.MarkerCursor');
+goog.require('Blockly.Marker');
 goog.require('Blockly.Events');
 goog.require('Blockly.utils');
 goog.require('Blockly.utils.math');
@@ -113,20 +113,6 @@ Blockly.Workspace = function(opt_options) {
   this.potentialVariableMap_ = null;
 
   /**
-   * The cursor used to navigate around the AST for keyboard navigation.
-   * @type {!Blockly.Cursor}
-   * @protected
-   */
-  this.cursor_ = new Blockly.Cursor();
-
-  /**
-   * The marker used to mark a location for keyboard navigation.
-   * @type {!Blockly.MarkerCursor}
-   * @protected
-   */
-  this.marker_ = new Blockly.MarkerCursor();
-
-  /**
    * True if keyboard accessibility mode is on, false otherwise.
    * @type {boolean}
    * @package
@@ -159,40 +145,6 @@ Blockly.Workspace.prototype.MAX_UNDO = 1024;
  * @type {Array.<!Blockly.ConnectionDB>}
  */
 Blockly.Workspace.prototype.connectionDBList = null;
-
-/**
- * Sets the cursor for keyboard navigation.
- * @param {!Blockly.Cursor} cursor The cursor used to navigate around the Blockly
- *     AST for keyboard navigation.
- */
-Blockly.Workspace.prototype.setCursor = function(cursor) {
-  this.cursor_ = cursor;
-};
-
-/**
- * Sets the marker for keyboard navigation.
- * @param {!Blockly.MarkerCursor} marker The marker used to mark a location for
- *     keyboard navigation.
- */
-Blockly.Workspace.prototype.setMarker = function(marker) {
-  this.marker_ = marker;
-};
-
-/**
- * Get the cursor used to navigate around the AST for keyboard navigation.
- * @return {Blockly.Cursor} The cursor for this workspace.
- */
-Blockly.Workspace.prototype.getCursor = function() {
-  return this.cursor_;
-};
-
-/**
- * Get the marker used to mark a location for keyboard navigation.
- * @return {Blockly.MarkerCursor} the marker for this workspace.
- */
-Blockly.Workspace.prototype.getMarker = function() {
-  return this.marker_;
-};
 
 /**
  * Dispose of this workspace.

@@ -33,6 +33,11 @@
     goog.require('Blockly.blockRendering.Debug');
     goog.require('Blockly.zelos.Renderer');
     // Blockly.blockRendering.startDebugger();
+
+    // This stub is a workaround in order to load pxt-blockly blocks, as they
+    // rely on a setOutputShape method on the block.
+    Blockly.BlockSvg.prototype.setOutputShape = function() { };
+
     var blocklyDiv = document.getElementById('blocklyDiv');
     var workspace;
     window.addEventListener('message', function (msg) {
@@ -45,6 +50,7 @@
         if (workspace) {
           workspace.dispose();
           blocklyDiv.innerHTML = '';
+          window.parent.focus();
         }
       } catch { }
 
@@ -65,19 +71,30 @@
       constants.FIELD_TEXT_FONTWEIGHT = 'bold';
       constants.FIELD_TEXT_FONTFAMILY = 'Helvetica Neue';
 
-      try {
-        Blockly.Xml.domToWorkspace(Blockly.Xml.textToDom(xml), workspace);
-        var topBlock = workspace.getTopBlocks()[0];
-        workspaceToSvg_(workspace, function (datauri) {
-          window.parent.postMessage({
-            type: 'svg',
-            from: 'zelos',
-            text: datauri
-          }, '*');
-        }, document.getElementById('blocklycss').innerText);
-      } catch (err) {
-        console.error(err);
+      Blockly.Xml.domToWorkspace(Blockly.Xml.textToDom(xml), workspace);
+
+      function postChange() {
+        try {
+          var topBlock = workspace.getTopBlocks()[0];
+          workspaceToSvg_(workspace, function (datauri) {
+            window.parent.postMessage({
+              type: 'svg',
+              from: 'zelos',
+              text: datauri
+            }, '*');
+          }, document.getElementById('blocklycss').innerText);
+        } catch (err) {
+          console.error(err);
+        }
       }
+
+      workspace.addChangeListener(function(e) {
+        if (e.type != 'ui') {
+          postChange();
+        }
+      });
+
+      postChange();
     });
   </script>
 </body>

@@ -332,7 +332,7 @@ Blockly.Field.prototype.createBorderRect_ = function() {
             'y': 0,
             'height': this.size_.height,
             'width': this.size_.width,
-            'class': 'blocklyFieldBorderRect'
+            'class': 'blocklyFieldRect'
           }, this.fieldGroup_));
 };
 
@@ -345,22 +345,23 @@ Blockly.Field.prototype.createBorderRect_ = function() {
 Blockly.Field.prototype.createTextElement_ = function() {
   var xOffset = this.borderRect_ ?
     this.constants_.FIELD_BORDER_RECT_X_PADDING : 0;
-  this.size_.height = Math.max(this.size_.height,
-      this.constants_.FIELD_TEXT_BASELINE_CENTER ?
-          this.constants_.FIELD_TEXT_HEIGHT :
-          this.constants_.FIELD_TEXT_BASELINE_Y);
+  var baselineCenter = this.constants_.FIELD_TEXT_BASELINE_CENTER;
+  var baselineY = this.constants_.FIELD_TEXT_BASELINE_Y;
+  this.size_.height = Math.max(this.size_.height, baselineCenter ?
+      this.constants_.FIELD_TEXT_HEIGHT : baselineY);
+  if (this.size_.height > this.constants_.FIELD_TEXT_HEIGHT) {
+    baselineY += (this.size_.height - baselineY) / 2;
+  }
   this.textElement_ = /** @type {!SVGTextElement} **/
       (Blockly.utils.dom.createSvgElement('text',
           {
             'class': 'blocklyText',
-            'y': this.size_.height / 2,
+            'y': baselineCenter ? this.size_.height / 2 : baselineY,
+            'dy': this.constants_.FIELD_TEXT_Y_OFFSET,
             'x': xOffset
           }, this.fieldGroup_));
-  if (this.constants_.FIELD_TEXT_BASELINE_CENTER) {
+  if (baselineCenter) {
     this.textElement_.setAttribute('dominant-baseline', 'central');
-  } else {
-    this.textElement_.setAttribute('dy',
-        this.constants_.FIELD_TEXT_BASELINE_Y - this.size_.height / 2);
   }
   this.textContent_ = document.createTextNode('');
   this.textElement_.appendChild(this.textContent_);
@@ -422,7 +423,7 @@ Blockly.Field.prototype.dispose = function() {
  * Add or remove the UI indicating if this field is editable or not.
  */
 Blockly.Field.prototype.updateEditable = function() {
-  var group = this.getClickTarget_();
+  var group = this.fieldGroup_;
   if (!this.EDITABLE || !group) {
     return;
   }
@@ -673,10 +674,34 @@ Blockly.Field.prototype.getSize = function() {
  * @package
  */
 Blockly.Field.prototype.getScaledBBox = function() {
-  var bBox = this.borderRect_.getBBox();
-  var scaledHeight = bBox.height * this.sourceBlock_.workspace.scale;
-  var scaledWidth = bBox.width * this.sourceBlock_.workspace.scale;
-  var xy = this.getAbsoluteXY_();
+  if (!this.borderRect_) {
+    // Browsers are inconsistent in what they return for a bounding box.
+    // - Webkit / Blink: fill-box / object bounding box
+    // - Gecko / Triden / EdgeHTML: stroke-box
+    var bBox = this.sourceBlock_.getHeightWidth();
+    var scale = this.sourceBlock_.workspace.scale;
+    var xy = this.getAbsoluteXY_();
+    var scaledWidth = bBox.width * scale;
+    var scaledHeight = bBox.height * scale;
+
+    if (Blockly.utils.userAgent.GECKO) {
+      xy.x += 1.5 * scale;
+      xy.y += 1.5 * scale;
+      scaledWidth += 1 * scale;
+      scaledHeight += 1 * scale;
+    } else {
+      if (!Blockly.utils.userAgent.EDGE && !Blockly.utils.userAgent.IE) {
+        xy.x -= 0.5 * scale;
+        xy.y -= 0.5 * scale;
+      }
+      scaledWidth += 1 * scale;
+      scaledHeight += 1 * scale;
+    }
+  } else {
+    var xy = this.borderRect_.getBoundingClientRect();
+    var scaledWidth = xy.width;
+    var scaledHeight = xy.height;
+  }
   return {
     top: xy.y,
     bottom: xy.y + scaledHeight,

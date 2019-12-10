@@ -176,6 +176,8 @@ Blockly.Css.CONTENT = [
     'z-index: 1000;',
     'display: none;',
     'border: 1px solid;',
+    'border-color: #dadce0;',
+    'background-color: #fff;',
     'border-radius: 2px;',
     'padding: 4px;',
     'box-shadow: 0px 0px 3px 1px rgba(0,0,0,.3);',
@@ -391,6 +393,7 @@ Blockly.Css.CONTENT = [
     'width: 100%;',
     'text-align: center;',
     'display: block;',
+    'box-sizing: border-box;',
   '}',
 
   /* Edge and IE introduce a close icon when the input value is longer than a
@@ -482,7 +485,7 @@ Blockly.Css.CONTENT = [
     'padding-right: 28px;',
   '}',
 
-  '.blocklyVerticalCursor {',
+  '.blocklyVerticalMarker {',
     'stroke-width: 3px;',
     'fill: rgba(255,255,255,.5);',
   '}',
@@ -592,7 +595,8 @@ Blockly.Css.CONTENT = [
 
   '.blocklyWidgetDiv .goog-menuitem-content,',
   '.blocklyDropDownDiv .goog-menuitem-content {',
-    'font: normal 13px Arial, sans-serif;',
+    'font-family: Arial, sans-serif;',
+    'font-size: 13px;',
   '}',
 
   '.blocklyWidgetDiv .goog-menuitem-content {',
@@ -672,6 +676,10 @@ Blockly.Css.CONTENT = [
     'position: absolute;',
     'width: 0;',
     'height: 0;',
+  '}',
+
+  '.blocklyNoPointerEvents {',
+    'pointer-events: none;',
   '}',
   /* eslint-enable indent */
 ];

@@ -84,6 +84,11 @@ Blockly.zelos.ConstantProvider = function() {
   /**
    * @override
    */
+  this.MIN_BLOCK_WIDTH = 2 * this.GRID_UNIT;
+
+  /**
+   * @override
+   */
   this.MIN_BLOCK_HEIGHT = 12 * this.GRID_UNIT;
 
   /**
@@ -115,7 +120,7 @@ Blockly.zelos.ConstantProvider = function() {
    * Minimum statement input spacer width.
    * @type {number}
    */
-  this.STATEMENT_INPUT_SPACER_MIN_WIDTH = 34.5 * this.GRID_UNIT;
+  this.STATEMENT_INPUT_SPACER_MIN_WIDTH = 40 * this.GRID_UNIT;
 
   /**
    * @override
@@ -155,6 +160,47 @@ Blockly.zelos.ConstantProvider = function() {
   this.CURSOR_RADIUS = 5;
 
   /**
+   * @enum {number}
+   * @override
+   */
+  this.SHAPES = {
+    HEXAGONAL: 1,
+    ROUND: 2,
+    SQUARE: 3,
+    PUZZLE: 4,
+    NOTCH: 5
+  };
+
+  /**
+   * Map of output/input shapes and the amount they should cause a block to be
+   * padded. Outer key is the outer shape, inner key is the inner shape.
+   * When a block with the outer shape contains an input block with the inner
+   * shape on its left or right edge, the block elements are aligned such that
+   * the padding specified is reached.
+   * @package
+   */
+  this.SHAPE_IN_SHAPE_PADDING = {
+    1: { // Outer shape: hexagon.
+      0: 5 * this.GRID_UNIT, // Field in hexagon.
+      1: 2 * this.GRID_UNIT, // Hexagon in hexagon.
+      2: 5 * this.GRID_UNIT, // Round in hexagon.
+      3: 5 * this.GRID_UNIT  // Square in hexagon.
+    },
+    2: { // Outer shape: round.
+      0: 3 * this.GRID_UNIT, // Field in round.
+      1: 3 * this.GRID_UNIT, // Hexagon in round.
+      2: 1 * this.GRID_UNIT, // Round in round.
+      3: 2 * this.GRID_UNIT  // Square in round.
+    },
+    3: { // Outer shape: square.
+      0: 2 * this.GRID_UNIT, // Field in square.
+      1: 2 * this.GRID_UNIT, // Hexagon in square.
+      2: 2 * this.GRID_UNIT, // Round in square.
+      3: 2 * this.GRID_UNIT  // Square in square.
+    }
+  };
+
+  /**
    * @override
    */
   this.FULL_BLOCK_FIELDS = true;
@@ -172,17 +218,50 @@ Blockly.zelos.ConstantProvider = function() {
   /**
    * @override
    */
+  this.FIELD_TEXT_FONTFAMILY =
+      '"Helvetica Neue", "Segoe UI", Helvetica, sans-serif';
+
+  /**
+   * @override
+   */
+  this.FIELD_TEXT_HEIGHT = 13.1;
+
+  /**
+   * Used by positioning text on IE and Edge as they don't support
+   * dominant-baseline:center.
+   * @override
+   */
+  this.FIELD_TEXT_BASELINE_Y = 13.1;
+
+  /**
+   * @override
+   */
   this.FIELD_BORDER_RECT_RADIUS = this.CORNER_RADIUS;
 
   /**
    * @override
    */
   this.FIELD_BORDER_RECT_X_PADDING = 2 * this.GRID_UNIT;
+  
+  /**
+   * @override
+   */
+  this.FIELD_BORDER_RECT_Y_PADDING = 1 * this.GRID_UNIT;
+
+  /**
+   * @override
+   */
+  this.FIELD_BORDER_RECT_HEIGHT = 8 * this.GRID_UNIT;
 
   /**
    * @override
    */
   this.FIELD_DROPDOWN_BORDER_RECT_HEIGHT = 8 * this.GRID_UNIT;
+
+  /**
+   * @override
+   */
+  this.FIELD_DROPDOWN_COLOURED_DIV = true;
 
   /**
    * @override
@@ -217,6 +296,16 @@ Blockly.zelos.ConstantProvider = function() {
   /**
    * @override
    */
+  this.FIELD_TEXTINPUT_BOX_SHADOW = true;
+
+  /**
+   * @override
+   */
+  this.FIELD_TEXT_Y_OFFSET = Blockly.utils.userAgent.CHROME ? -.45 : 0;
+
+  /**
+   * @override
+   */
   this.FIELD_COLOUR_FULL_BLOCK = true;
 
   /**
@@ -228,6 +317,21 @@ Blockly.zelos.ConstantProvider = function() {
    * @override
    */
   this.FIELD_COLOUR_DEFAULT_HEIGHT = 4 * this.GRID_UNIT;
+
+  /**
+   * @override
+   */
+  this.FIELD_CHECKBOX_X_OFFSET = this.FIELD_BORDER_RECT_X_PADDING - 3;
+
+  /**
+   * @override
+   */
+  this.FIELD_CHECKBOX_Y_OFFSET = 22;
+
+  /**
+   * @override
+   */
+  this.FIELD_CHECKBOX_DEFAULT_WIDTH = 6 * this.GRID_UNIT;
 
   /**
    * The ID of the highlight glow filter, or the empty string if no filter is
@@ -300,6 +404,7 @@ Blockly.zelos.ConstantProvider.prototype.makeHexagonal = function() {
   }
 
   return {
+    type: this.SHAPES.HEXAGONAL,
     isDynamic: true,
     width: function(height) {
       return height / 2;
@@ -338,6 +443,7 @@ Blockly.zelos.ConstantProvider.prototype.makeRounded = function() {
   }
 
   return {
+    type: this.SHAPES.ROUND,
     isDynamic: true,
     width: function(height) {
       return height / 2;
@@ -451,6 +557,7 @@ Blockly.zelos.ConstantProvider.prototype.makeNotch = function() {
   var pathRight = makeMainPath(-1);
 
   return {
+    type: this.SHAPES.NOTCH,
     width: width,
     height: height,
     pathLeft: pathLeft,
@@ -491,6 +598,22 @@ Blockly.zelos.ConstantProvider.prototype.makeInsideCorners = function() {
 /**
  * @override
  */
+Blockly.zelos.ConstantProvider.prototype.generateSecondaryColour_ = function(
+    colour) {
+  return Blockly.utils.colour.blend('#000', colour, 0.15) || colour;
+};
+
+/**
+ * @override
+ */
+Blockly.zelos.ConstantProvider.prototype.generateTertiaryColour_ = function(
+    colour) {
+  return Blockly.utils.colour.blend('#000', colour, 0.25) || colour;
+};
+
+/**
+ * @override
+ */
 Blockly.zelos.ConstantProvider.prototype.createDom = function(svg) {
   Blockly.zelos.ConstantProvider.superClass_.createDom.call(this, svg);
   /*
@@ -499,15 +622,11 @@ Blockly.zelos.ConstantProvider.prototype.createDom = function(svg) {
   </defs>
   */
   var defs = Blockly.utils.dom.createSvgElement('defs', {}, svg);
-  // Each filter/pattern needs a unique ID for the case of multiple Blockly
-  // instances on a page.  Browser behaviour becomes undefined otherwise.
-  // https://neil.fraser.name/news/2015/11/01/
-  var rnd = String(Math.random()).substring(2);
   // Using a dilate distorts the block shape.
   // Instead use a gaussian blur, and then set all alpha to 1 with a transfer.
   var highlightGlowFilter = Blockly.utils.dom.createSvgElement('filter',
       {
-        'id': 'blocklyHighlightGlowFilter' + rnd,
+        'id': 'blocklyHighlightGlowFilter' + this.randomIdentifier_,
         'height': '160%',
         'width': '180%',
         y: '-30%',
@@ -549,7 +668,7 @@ Blockly.zelos.ConstantProvider.prototype.createDom = function(svg) {
   // Instead use a gaussian blur, and then set all alpha to 1 with a transfer.
   var replacementGlowFilter = Blockly.utils.dom.createSvgElement('filter',
       {
-        'id': 'blocklyReplacementGlowFilter' + rnd,
+        'id': 'blocklyReplacementGlowFilter' + this.randomIdentifier_,
         'height': '160%',
         'width': '180%',
         y: '-30%',
@@ -592,4 +711,72 @@ Blockly.zelos.ConstantProvider.prototype.createDom = function(svg) {
       replacementGlowFilter);
   this.replacementGlowFilterId = replacementGlowFilter.id;
   this.replacementGlowFilter_ = replacementGlowFilter;
+};
+
+/**
+ * @override
+ */
+Blockly.zelos.ConstantProvider.prototype.getCSS_ = function(name) {
+  var selector = '.' + name + '-renderer';
+  return [
+    /* eslint-disable indent */
+    // Fields.
+    selector + ' .blocklyText {',
+      'cursor: default;',
+      'fill: #fff;',
+      'font-family: ' + this.FIELD_TEXT_FONTFAMILY + ';',
+      'font-size: ' + this.FIELD_TEXT_FONTSIZE + 'pt;',
+      'font-weight: ' + this.FIELD_TEXT_FONTWEIGHT + ';',
+    '}',
+    selector + ' .blocklyNonEditableText>rect:not(.blocklyDropdownRect),',
+    selector + ' .blocklyEditableText>rect:not(.blocklyDropdownRect) {',
+      'fill: ' + this.FIELD_BORDER_RECT_COLOUR + ';',
+    '}',
+    selector + ' .blocklyNonEditableText>text,',
+    selector + ' .blocklyEditableText>text,',
+    selector + ' .blocklyNonEditableText>g>text,',
+    selector + ' .blocklyEditableText>g>text {',
+      'fill: #575E75;',
+    '}',
+
+    // Editable field hover.
+    selector + ' .blocklyDraggable:not(.blocklyDisabled)',
+    ' .blocklyEditableText:not(.editing):hover>rect ,',
+    selector + ' .blocklyDraggable:not(.blocklyDisabled)',
+    ' .blocklyEditableText:not(.editing):hover>.blocklyPath {',
+      'stroke: #fff;',
+      'stroke-width: 2;',
+    '}',
+
+    // Text field input.
+    selector + ' .blocklyHtmlInput {',
+      'font-family: ' + this.FIELD_TEXT_FONTFAMILY + ';',
+      'font-weight: ' + this.FIELD_TEXT_FONTWEIGHT + ';',
+      'color: #575E75;',
+    '}',
+  
+    // Dropdown field.
+    selector + ' .blocklyDropdownText {',
+      'fill: #fff !important;',
+    '}',
+    // Widget and Dropdown Div
+    selector + '.blocklyWidgetDiv .goog-menuitem,',
+    selector + '.blocklyDropDownDiv .goog-menuitem {',
+      'font-family: ' + this.FIELD_TEXT_FONTFAMILY + ';',
+    '}',
+    selector + '.blocklyDropDownDiv .goog-menuitem-content {',
+      'color: #fff;',
+    '}',
+
+    // Connection highlight.
+    selector + ' .blocklyHighlightedConnectionPath {',
+      'stroke: #fff200;',
+    '}',
+
+    // Disabled outline paths.
+    selector + ' .blocklyDisabled > .blocklyOutlinePath {',
+      'fill: url(#blocklyDisabledPattern' + this.randomIdentifier_ + ')',
+    '}',
+    /* eslint-enable indent */
+  ];
 };

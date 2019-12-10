@@ -68,14 +68,15 @@ Blockly.BlockSvg = function(workspace, prototypeName, opt_id) {
    * A block style object.
    * @type {!Blockly.Theme.BlockStyle}
    */
-  this.style = workspace.getTheme().getBlockStyle(null);
+  this.style = workspace.getRenderer().getConstants().getBlockStyle(null);
 
   /**
    * The renderer's path object.
    * @type {Blockly.blockRendering.IPathObject}
    * @package
    */
-  this.pathObject = workspace.getRenderer().makePathObject(this.svgGroup_);
+  this.pathObject = workspace.getRenderer().makePathObject(
+      this.svgGroup_, this.style);
 
   /** @type {boolean} */
   this.rendered = false;
@@ -359,6 +360,8 @@ Blockly.BlockSvg.prototype.setParent = function(newParent) {
     this.workspace.getCanvas().appendChild(svgRoot);
     this.translate(oldXY.x, oldXY.y);
   }
+
+  this.applyColour();
 };
 
 /**
@@ -646,13 +649,14 @@ Blockly.BlockSvg.prototype.setCollapsed = function(collapsed) {
 Blockly.BlockSvg.prototype.tab = function(start, forward) {
   var tabCursor = new Blockly.TabNavigateCursor();
   tabCursor.setCurNode(Blockly.ASTNode.createFieldNode(start));
+  var currentNode = tabCursor.getCurNode();
   var action = forward ?
       Blockly.navigation.ACTION_NEXT : Blockly.navigation.ACTION_PREVIOUS;
 
   tabCursor.onBlocklyAction(action);
 
   var nextNode = tabCursor.getCurNode();
-  if (nextNode) {
+  if (nextNode && nextNode !== currentNode) {
     var nextField = /** @type {!Blockly.Field} */ (nextNode.getLocation());
     nextField.showEditor();
   }
@@ -969,12 +973,7 @@ Blockly.BlockSvg.prototype.dispose = function(healStack, animate) {
  * @package
  */
 Blockly.BlockSvg.prototype.applyColour = function() {
-  if (!this.isEnabled() || !this.rendered) {
-    // Disabled blocks and non-rendered blocks don't have colour.
-    return;
-  }
-
-  this.pathObject.applyColour(this.isShadow());
+  this.pathObject.applyColour(this);
 
   var icons = this.getIcons();
   for (var i = 0; i < icons.length; i++) {
@@ -992,9 +991,8 @@ Blockly.BlockSvg.prototype.applyColour = function() {
  * Enable or disable a block.
  */
 Blockly.BlockSvg.prototype.updateDisabled = function() {
-  var isDisabled = !this.isEnabled() || this.getInheritedDisabled();
-  this.pathObject.updateDisabled(isDisabled, this.isShadow());
   var children = this.getChildren(false);
+  this.applyColour();
   for (var i = 0, child; (child = children[i]); i++) {
     child.updateDisabled();
   }
@@ -1222,7 +1220,8 @@ Blockly.BlockSvg.prototype.getColour = function() {
  */
 Blockly.BlockSvg.prototype.setColour = function(colour) {
   Blockly.BlockSvg.superClass_.setColour.call(this, colour);
-  var styleObj = this.workspace.getTheme().getBlockStyleForColour(this.colour_);
+  var styleObj = this.workspace.getRenderer().getConstants()
+      .getBlockStyleForColour(this.colour_);
 
   this.pathObject.setStyle(styleObj.style);
   this.style = styleObj.style;
@@ -1237,7 +1236,8 @@ Blockly.BlockSvg.prototype.setColour = function(colour) {
  * @throws {Error} if the block style does not exist.
  */
 Blockly.BlockSvg.prototype.setStyle = function(blockStyleName) {
-  var blockStyle = this.workspace.getTheme().getBlockStyle(blockStyleName);
+  var blockStyle = this.workspace.getRenderer()
+      .getConstants().getBlockStyle(blockStyleName);
   this.styleName_ = blockStyleName;
 
   if (blockStyle) {

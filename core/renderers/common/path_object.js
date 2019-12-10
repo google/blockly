@@ -34,13 +34,15 @@ goog.require('Blockly.utils.dom');
  * An object that handles creating and setting each of the SVG elements
  * used by the renderer.
  * @param {!SVGElement} root The root SVG element.
+ * @param {!Blockly.Theme.BlockStyle} style The style object to use for
+ *     colouring.
  * @param {!Blockly.blockRendering.ConstantProvider} constants The renderer's
  *     constants.
  * @constructor
  * @implements {Blockly.blockRendering.IPathObject}
  * @package
  */
-Blockly.blockRendering.PathObject = function(root, constants) {
+Blockly.blockRendering.PathObject = function(root, style, constants) {
   /**
    * The renderer's constant provider.
    * @type {!Blockly.blockRendering.ConstantProvider}
@@ -63,7 +65,7 @@ Blockly.blockRendering.PathObject = function(root, constants) {
    * @type {!Blockly.Theme.BlockStyle}
    * @package
    */
-  this.style = Blockly.Theme.createBlockStyle('#000000');
+  this.style = style;
 
   /**
    * Holds the cursors svg element when the cursor is attached to the block.
@@ -139,17 +141,15 @@ Blockly.blockRendering.PathObject.prototype.setMarkerSvg = function(markerSvg) {
 /**
  * Apply the stored colours to the block's path, taking into account whether
  * the paths belong to a shadow block.
- * @param {boolean} isShadow True if the block is a shadow block.
+ * @param {!Blockly.Block} block The source block.
  * @package
  */
-Blockly.blockRendering.PathObject.prototype.applyColour = function(isShadow) {
-  if (isShadow) {
-    this.svgPath.setAttribute('stroke', 'none');
-    this.svgPath.setAttribute('fill', this.style.colourSecondary);
-  } else {
-    this.svgPath.setAttribute('stroke', this.style.colourTertiary);
-    this.svgPath.setAttribute('fill', this.style.colourPrimary);
-  }
+Blockly.blockRendering.PathObject.prototype.applyColour = function(block) {
+  this.svgPath.setAttribute('stroke', this.style.colourTertiary);
+  this.svgPath.setAttribute('fill', this.style.colourPrimary);
+
+  this.updateShadow_(block.isShadow());
+  this.updateDisabled_(!block.isEnabled() || block.getInheritedDisabled());
 };
 
 /**
@@ -196,20 +196,28 @@ Blockly.blockRendering.PathObject.prototype.updateHighlighted = function(
 };
 
 /**
- * Set whether the block shows a disable pattern or not.
- * @param {boolean} disabled True if disabled.
- * @param {boolean} isShadow True if the block is a shadow block.
- * @package
+ * Updates the look of the block to reflect a shadow state.
+ * @param {boolean} shadow True if the block is a shadow block.
+ * @protected
  */
-Blockly.blockRendering.PathObject.prototype.updateDisabled = function(disabled,
-    isShadow) {
+Blockly.blockRendering.PathObject.prototype.updateShadow_ = function(shadow) {
+  if (shadow) {
+    this.svgPath.setAttribute('stroke', 'none');
+    this.svgPath.setAttribute('fill', this.style.colourSecondary);
+  }
+};
 
+/**
+ * Updates the look of the block to reflect a disabled state.
+ * @param {boolean} disabled True if disabled.
+ * @protected
+ */
+Blockly.blockRendering.PathObject.prototype.updateDisabled_ = function(
+    disabled) {
   this.setClass_('blocklyDisabled', disabled);
   if (disabled) {
     this.svgPath.setAttribute('fill',
         'url(#' + this.constants_.disabledPatternId + ')');
-  } else {
-    this.applyColour(isShadow);
   }
 };
 

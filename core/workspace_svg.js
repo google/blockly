@@ -31,6 +31,7 @@ goog.require('Blockly.Events');
 goog.require('Blockly.Events.BlockCreate');
 goog.require('Blockly.Gesture');
 goog.require('Blockly.Grid');
+goog.require('Blockly.MarkerManager');
 goog.require('Blockly.Msg');
 goog.require('Blockly.navigation');
 goog.require('Blockly.Options');
@@ -109,20 +110,11 @@ Blockly.WorkspaceSvg = function(options,
       new Blockly.Grid(options.gridPattern, options.gridOptions) : null;
 
   /**
-   * Holds the cursors svg element when the cursor is attached to the workspace.
-   * This is null if there is no cursor on the workspace.
-   * @type {SVGElement}
+   * Manager in charge of markers and cursors.
+   * @type {!Blockly.MarkerManager}
    * @private
    */
-  this.cursorSvg_ = null;
-
-  /**
-   * Holds the markers svg element when the marker is attached to the workspace.
-   * This is null if there is no marker on the workspace.
-   * @type {SVGElement}
-   * @private
-   */
-  this.markerSvg_ = null;
+  this.markerManager_ = new Blockly.MarkerManager(this);
 
   if (Blockly.Variables && Blockly.Variables.flyoutCategory) {
     this.registerToolboxCategoryCallback(Blockly.VARIABLE_CATEGORY_NAME,
@@ -162,6 +154,7 @@ Blockly.WorkspaceSvg = function(options,
   this.cachedParentSvg_ = null;
 
   this.themeManager_.subscribeWorkspace(this);
+  this.renderer_.getConstants().refreshTheme(this.getTheme());
 };
 Blockly.utils.object.inherits(Blockly.WorkspaceSvg, Blockly.Workspace);
 
@@ -432,6 +425,59 @@ Blockly.WorkspaceSvg.prototype.inverseScreenCTM_ = null;
 Blockly.WorkspaceSvg.prototype.inverseScreenCTMDirty_ = true;
 
 /**
+ * Get the marker manager for this workspace.
+ * @return {Blockly.MarkerManager} The marker manager.
+ */
+Blockly.WorkspaceSvg.prototype.getMarkerManager = function() {
+  return this.markerManager_;
+};
+
+/**
+ * Add the cursor svg to this workspaces svg group.
+ * @param {SVGElement} cursorSvg The svg root of the cursor to be added to the
+ *     workspace svg group.
+ * @package
+ */
+Blockly.WorkspaceSvg.prototype.setCursorSvg = function(cursorSvg) {
+  this.markerManager_.setCursorSvg(cursorSvg);
+};
+
+/**
+ * Add the marker svg to this workspaces svg group.
+ * @param {SVGElement} markerSvg The svg root of the marker to be added to the
+ *     workspace svg group.
+ * @package
+ */
+Blockly.WorkspaceSvg.prototype.setMarkerSvg = function(markerSvg) {
+  this.markerManager_.setMarkerSvg(markerSvg);
+};
+
+/**
+ * Get the marker with the given id.
+ * @param {string} id The id of the marker.
+ * @return {Blockly.Marker} The marker with the given id or null if no marker
+ *     with the given id exists.
+ * @package
+ */
+Blockly.WorkspaceSvg.prototype.getMarker = function(id) {
+  if (this.markerManager_) {
+    return this.markerManager_.getMarker(id);
+  }
+  return null;
+};
+
+/**
+ * The cursor for this workspace.
+ * @return {Blockly.Cursor} The cursor for the workspace.
+ */
+Blockly.WorkspaceSvg.prototype.getCursor = function() {
+  if (this.markerManager_) {
+    return this.markerManager_.getCursor();
+  }
+  return null;
+};
+
+/**
  * Get the block renderer attached to this workspace.
  * @return {!Blockly.blockRendering.Renderer} The renderer attached to this workspace.
  */
@@ -473,6 +519,8 @@ Blockly.WorkspaceSvg.prototype.setTheme = function(theme) {
  * @package
  */
 Blockly.WorkspaceSvg.prototype.refreshTheme = function() {
+  this.getRenderer().getConstants().refreshTheme(this.getTheme());
+
   // Update all blocks in workspace that have a style name.
   this.updateBlockStyles_(this.getAllBlocks(false).filter(
       function(block) {
@@ -506,76 +554,6 @@ Blockly.WorkspaceSvg.prototype.updateBlockStyles_ = function(blocks) {
         block.mutator.updateBlockStyle();
       }
     }
-  }
-};
-
-/**
- * Sets the cursor for use with keyboard navigation.
- *
- * @param {!Blockly.Cursor} cursor The cursor used to move around this workspace.
- * @override
- */
-Blockly.WorkspaceSvg.prototype.setCursor = function(cursor) {
-  if (this.cursor_.getDrawer()) {
-    this.cursor_.getDrawer().dispose();
-  }
-  this.cursor_ = cursor;
-  this.cursor_.setDrawer(this.getRenderer().makeCursorDrawer(this, false));
-  this.setCursorSvg(this.cursor_.getDrawer().createDom());
-};
-
-/**
- * Sets the marker for use with keyboard navigation.
- * @param {!Blockly.MarkerCursor} marker The immovable cursor used to mark a
- *     location on the workspace.
- * @override
- */
-Blockly.WorkspaceSvg.prototype.setMarker = function(marker) {
-  if (this.marker_.getDrawer()) {
-    this.marker_.getDrawer().dispose();
-  }
-  this.marker_ = marker;
-  this.marker_.setDrawer(this.getRenderer().makeCursorDrawer(this, true));
-  this.setMarkerSvg(this.marker_.getDrawer().createDom());
-};
-
-/**
- * Add the cursor svg to this workspaces svg group.
- * @param {SVGElement} cursorSvg The svg root of the cursor to be added to the
- *     workspace svg group.
- * @package
- */
-Blockly.WorkspaceSvg.prototype.setCursorSvg = function(cursorSvg) {
-  if (!cursorSvg) {
-    this.cursorSvg_ = null;
-    return;
-  }
-
-  if (this.svgBlockCanvas_) {
-    this.svgBlockCanvas_.appendChild(cursorSvg);
-    this.cursorSvg_ = cursorSvg;
-  }
-};
-
-/**
- * Add the marker svg to this workspaces svg group.
- * @param {SVGElement} markerSvg The svg root of the marker to be added to the
- *     workspace svg group.
- * @package
- */
-Blockly.WorkspaceSvg.prototype.setMarkerSvg = function(markerSvg) {
-  if (!markerSvg) {
-    this.markerSvg_ = null;
-    return;
-  }
-
-  if (this.svgBlockCanvas_) {
-    if (this.cursorSvg_) {
-      this.svgBlockCanvas_.insertBefore(markerSvg, this.cursorSvg_);
-    } else {
-      this.svgBlockCanvas_.appendChild(markerSvg);
-    }
-    this.markerSvg_ = markerSvg;
   }
 };
 
@@ -684,6 +662,15 @@ Blockly.WorkspaceSvg.prototype.getInjectionDiv = function() {
 };
 
 /**
+ * Get the svg block canvas for the workspace.
+ * @return {SVGElement} The svg group for the workspace.
+ * @package
+ */
+Blockly.WorkspaceSvg.prototype.getBlockCanvas = function() {
+  return this.svgBlockCanvas_;
+};
+
+/**
  * Save resize handler data so we can delete it later in dispose.
  * @param {!Array.<!Array>} handler Data that can be passed to unbindEvent_.
  */
@@ -753,15 +740,13 @@ Blockly.WorkspaceSvg.prototype.createDom = function(opt_backgroundClass) {
   }
   this.recordDeleteAreas();
 
-  this.cursor_.setDrawer(this.getRenderer().makeCursorDrawer(this, false));
-  var svgCursor = this.cursor_.getDrawer().createDom();
-  this.svgGroup_.appendChild(svgCursor);
+  this.markerManager_.setCursor(new Blockly.Cursor());
+  this.markerManager_.registerMarker(Blockly.navigation.MARKER_NAME,
+      new Blockly.Marker());
 
-  this.marker_.setDrawer(this.getRenderer().makeCursorDrawer(this, true));
-  var svgMarker = this.marker_.getDrawer().createDom();
-  this.svgGroup_.appendChild(svgMarker);
-
-  this.getRenderer().getConstants().createDom(this.svgGroup_);
+  var constants = this.getRenderer().getConstants();
+  constants.injectCSS(this.getRenderer().name);
+  constants.createDom(this.svgGroup_);
   return this.svgGroup_;
 };
 
@@ -803,14 +788,6 @@ Blockly.WorkspaceSvg.prototype.dispose = function() {
     this.zoomControls_ = null;
   }
 
-  if (this.marker_ && this.marker_.getDrawer()) {
-    this.marker_.getDrawer().dispose();
-  }
-
-  if (this.getCursor() && this.getCursor().getDrawer()) {
-    this.getCursor().getDrawer().dispose();
-  }
-
   if (this.audioManager_) {
     this.audioManager_.dispose();
     this.audioManager_ = null;
@@ -831,6 +808,12 @@ Blockly.WorkspaceSvg.prototype.dispose = function() {
       this.themeManager_ = null;
     }
   }
+
+  if (this.markerManager_) {
+    this.markerManager_.dispose();
+    this.markerManager_ = null;
+  }
+
   Blockly.WorkspaceSvg.superClass_.dispose.call(this);
 
   this.connectionDBList = null;
@@ -1291,7 +1274,7 @@ Blockly.WorkspaceSvg.prototype.pasteBlock_ = function(xmlBlock) {
     var block = Blockly.Xml.domToBlock(xmlBlock, this);
 
     // Handle paste for keyboard navigation
-    var markedNode = this.getMarker().getCurNode();
+    var markedNode = this.getMarker(Blockly.navigation.MARKER_NAME).getCurNode();
     if (this.keyboardAccessibilityMode && markedNode &&
         markedNode.isConnection()) {
       var markedLocation =

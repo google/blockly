@@ -99,12 +99,14 @@ Blockly.geras.Renderer.prototype.makeDrawer_ = function(block, info) {
 /**
  * Create a new instance of a renderer path object.
  * @param {!SVGElement} root The root SVG element.
+ * @param {!Blockly.Theme.BlockStyle} style The style object to use for
+ *     colouring.
  * @return {!Blockly.geras.PathObject} The renderer path object.
  * @package
  * @override
  */
-Blockly.geras.Renderer.prototype.makePathObject = function(root) {
-  return new Blockly.geras.PathObject(root,
+Blockly.geras.Renderer.prototype.makePathObject = function(root, style) {
+  return new Blockly.geras.PathObject(root, style,
       /** @type {!Blockly.geras.ConstantProvider} */ (this.getConstants()));
 };
 

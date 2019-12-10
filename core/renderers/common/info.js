@@ -728,7 +728,8 @@ Blockly.blockRendering.RenderInfo.prototype.finalize_ = function() {
     this.recordElemPositions_(row);
   }
 
-  this.widthWithChildren = widestRowWithConnectedBlocks + this.startX;
+  this.widthWithChildren = Math.max(this.widthWithChildren,
+      widestRowWithConnectedBlocks + this.startX);
 
   this.height = yCursor;
   this.startY = this.topRow.capline;

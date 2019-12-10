@@ -34,13 +34,16 @@ goog.require('Blockly.utils.object');
  * An object that handles creating and setting each of the SVG elements
  * used by the renderer.
  * @param {!SVGElement} root The root SVG element.
+ * @param {!Blockly.Theme.BlockStyle} style The style object to use for
+ *     colouring.
  * @param {!Blockly.zelos.ConstantProvider} constants The renderer's constants.
  * @constructor
  * @extends {Blockly.blockRendering.PathObject}
  * @package
  */
-Blockly.zelos.PathObject = function(root, constants) {
-  Blockly.zelos.PathObject.superClass_.constructor.call(this, root, constants);
+Blockly.zelos.PathObject = function(root, style, constants) {
+  Blockly.zelos.PathObject.superClass_.constructor.call(this, root, style,
+      constants);
 
   /**
    * The renderer's constant provider.
@@ -71,6 +74,13 @@ Blockly.zelos.PathObject = function(root, constants) {
    * @private
    */
   this.remainingOutlines_ = null;
+
+  /**
+   * The type of block's output connection shape.  This is set when a block with
+   * an output connection is drawn.
+   * @package
+   */
+  this.outputShapeType = null;
 };
 Blockly.utils.object.inherits(Blockly.zelos.PathObject,
     Blockly.blockRendering.PathObject);
@@ -82,6 +92,17 @@ Blockly.zelos.PathObject.prototype.setPath = function(pathString) {
   Blockly.zelos.PathObject.superClass_.setPath.call(this, pathString);
   if (this.svgPathSelected_) {
     this.svgPathSelected_.setAttribute('d', pathString);
+  }
+};
+
+/**
+ * @override
+ */
+Blockly.zelos.PathObject.prototype.applyColour = function(block) {
+  Blockly.zelos.PathObject.superClass_.applyColour.call(this, block);
+  // Set shadow stroke colour.
+  if (block.isShadow() && block.getParent()) {
+    this.svgPath.setAttribute('stroke', block.getParent().style.colourTertiary);
   }
 };
 

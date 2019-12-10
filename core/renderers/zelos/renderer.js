@@ -30,7 +30,7 @@ goog.require('Blockly.zelos.ConstantProvider');
 goog.require('Blockly.zelos.Drawer');
 goog.require('Blockly.zelos.PathObject');
 goog.require('Blockly.zelos.RenderInfo');
-goog.require('Blockly.zelos.CursorSvg');
+goog.require('Blockly.zelos.MarkerSvg');
 
 
 /**
@@ -84,27 +84,28 @@ Blockly.zelos.Renderer.prototype.makeDrawer_ = function(block, info) {
 /**
  * Create a new instance of the renderer's cursor drawer.
  * @param {!Blockly.WorkspaceSvg} workspace The workspace the cursor belongs to.
- * @param {boolean=} opt_marker True if the cursor is a marker. A marker is used
- *     to save a location and is an immovable cursor. False or undefined if the
- *     cursor is not a marker.
- * @return {!Blockly.blockRendering.CursorSvg} The cursor drawer.
+ * @param {!Blockly.Marker} marker The marker.
+ * @return {!Blockly.blockRendering.MarkerSvg} The object in charge of drawing
+ *     the marker.
  * @package
  * @override
  */
-Blockly.zelos.Renderer.prototype.makeCursorDrawer = function(
-    workspace, opt_marker) {
-  return new Blockly.zelos.CursorSvg(workspace, this.getConstants(), opt_marker);
+Blockly.zelos.Renderer.prototype.makeMarkerDrawer = function(
+    workspace, marker) {
+  return new Blockly.zelos.MarkerSvg(workspace, this.getConstants(), marker);
 };
 
 /**
  * Create a new instance of a renderer path object.
  * @param {!SVGElement} root The root SVG element.
+ * @param {!Blockly.Theme.BlockStyle} style The style object to use for
+ *     colouring.
  * @return {!Blockly.zelos.PathObject} The renderer path object.
  * @package
  * @override
  */
-Blockly.zelos.Renderer.prototype.makePathObject = function(root) {
-  return new Blockly.zelos.PathObject(root,
+Blockly.zelos.Renderer.prototype.makePathObject = function(root, style) {
+  return new Blockly.zelos.PathObject(root, style,
       /** @type {!Blockly.zelos.ConstantProvider} */ (this.getConstants()));
 };
 
@@ -121,52 +122,6 @@ Blockly.zelos.Renderer.prototype.shouldHighlightConnection = function(conn) {
 Blockly.zelos.Renderer.prototype.shouldInsertDraggedBlock = function(_block,
     _conn) {
   return false;
-};
-
-/**
- * @override
- */
-Blockly.zelos.Renderer.prototype.getCSS_ = function() {
-  var selector = '.' + this.name + '-renderer';
-  var constants = this.getConstants();
-  return [
-    /* eslint-disable indent */
-    // Fields.
-    selector + ' .blocklyText {',
-      'cursor: default;',
-      'fill: #fff;',
-      'font-family: ' + constants.FIELD_TEXT_FONTFAMILY + ';',
-      'font-size: ' + constants.FIELD_TEXT_FONTSIZE + 'pt;',
-      'font-weight: ' + constants.FIELD_TEXT_FONTWEIGHT + ';',
-    '}',
-
-    // Editable field hover.
-    selector + ' .blocklyEditableText:not(.editing):hover>rect ,',
-    selector + ' .blocklyEditableText:not(.editing):hover>.blocklyPath {',
-      'stroke: #fff;',
-      'stroke-width: 2;',
-    '}',
-
-    // Text field input.
-    selector + ' .blocklyHtmlInput {',
-      'font-family: ' + constants.FIELD_TEXT_FONTFAMILY + ';',
-      'font-weight: ' + constants.FIELD_TEXT_FONTWEIGHT + ';',
-    '}',
-  
-    // Dropdown field.
-    selector + ' .blocklyDropdownText {',
-      'fill: #fff !important;',
-    '}',
-    selector + ' .blocklyDisabled .blocklyFieldBorderRect {',
-      'fill-opacity: 0.1 !important;',
-    '}',
-
-    // Connection highlight.
-    selector + ' .blocklyHighlightedConnectionPath {',
-      'stroke: #fff200;',
-    '}',
-    /* eslint-enable indent */
-  ];
 };
 
 Blockly.blockRendering.register('zelos', Blockly.zelos.Renderer);

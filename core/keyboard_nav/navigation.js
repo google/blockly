@@ -87,7 +87,7 @@ Blockly.navigation.actionNames = {
 };
 
 /**
- * The name of the local marker reserved for internal use.
+ * The name of the marker reserved for internal use.
  * @type {string}
  */
 Blockly.navigation.markerName = 'local_marker_1';
@@ -98,7 +98,7 @@ Blockly.navigation.markerName = 'local_marker_1';
 
 /**
  * Get the local marker.
- * @return {!Blockly.Marker} THe local marker for the given workspace.
+ * @return {!Blockly.Marker} The local marker for the main workspace.
  */
 Blockly.navigation.getMarker = function() {
   return Blockly.getMainWorkspace().getMarker(Blockly.navigation.markerName);

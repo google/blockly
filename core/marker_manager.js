@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2014 Google LLC
+ * Copyright 2019 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,8 +16,8 @@
  */
 
 /**
- * @fileoverview Object representing a workspace rendered as SVG.
- * @author fraser@google.com (Neil Fraser)
+ * @fileoverview Object in charge of managing markers and the cursor.
+ * @author aschmiedt@google.com (Abby Schmiedt)
  */
 'use strict';
 
@@ -28,7 +28,7 @@ goog.require('Blockly.Cursor');
 
 
 /**
- * Class to manage the multiple markers on a workspace.
+ * Class to manage the multiple markers and the cursor on a workspace.
  * @param {!Blockly.WorkspaceSvg} workspace The workspace for the marker manager.
  * @constructor
  * @package
@@ -41,13 +41,13 @@ Blockly.MarkerManager = function(workspace){
   this.cursor_ = null;
 
   /**
-   * The svg element of the cursor.
+   * The cursor's svg element.
    * @type {SVGElement}
    */
   this.cursorSvg_ = null;
 
   /**
-   * The list of markers for the workspace.
+   * The map of markers for the workspace.
    * @type {!Object<string, !Blockly.Marker>}
    */
   this.markers_ = {};
@@ -61,7 +61,7 @@ Blockly.MarkerManager = function(workspace){
 };
 
 /**
- * Register the marker by adding it to the list of markers.
+ * Register the marker by adding it to the map of markers.
  * @param {string} id A unique identifier for the marker.
  * @param {!Blockly.Marker} marker The marker to register.
  */
@@ -91,7 +91,25 @@ Blockly.MarkerManager.prototype.unregisterMarker = function(id) {
 };
 
 /**
- * Sets the cursor for use with keyboard navigation.
+ * Get the cursor for the workspace.
+ * @return {Blockly.Cursor} The cursor for this workspace.
+ */
+Blockly.MarkerManager.prototype.getCursor = function() {
+  return this.cursor_;
+};
+
+/**
+ * Get a single marker that corresponds to the given id.
+ * @param {string} id A unique identifier for the marker.
+ * @return {Blockly.Marker} The marker that corresponds to the given id, or null
+ *     if none exists.
+ */
+Blockly.MarkerManager.prototype.getMarker = function(id) {
+  return this.markers_[id];
+};
+
+/**
+ * Sets the cursor and initialized the drawer for use with keyboard navigation.
  * @param {Blockly.Cursor} cursor The cursor used to move around this workspace.
  */
 Blockly.MarkerManager.prototype.setCursor = function(cursor) {
@@ -108,7 +126,7 @@ Blockly.MarkerManager.prototype.setCursor = function(cursor) {
 };
 
 /**
- * Add the cursor svg to this workspaces svg group.
+ * Add the cursor svg to this workspace svg group.
  * @param {SVGElement} cursorSvg The svg root of the cursor to be added to the
  *     workspace svg group.
  * @package
@@ -145,24 +163,6 @@ Blockly.MarkerManager.prototype.setMarkerSvg = function(markerSvg) {
 };
 
 /**
- * Get the cursor for the workspace.
- * @return {Blockly.Cursor} The cursor for this workspace.
- */
-Blockly.MarkerManager.prototype.getCursor = function() {
-  return this.cursor_;
-};
-
-/**
- * Get a single marker that corresponds to the given id.
- * @param {string} id A unique identifier for the marker.
- * @return {Blockly.Marker} The marker that corresponds to the given id, or null
- *     if none exists.
- */
-Blockly.MarkerManager.prototype.getMarker = function(id) {
-  return this.markers_[id];
-};
-
-/**
  * Dispose of the marker manager.
  * Go through and delete all markers associated with this marker manager.
  * @suppress {checkTypes}
@@ -170,7 +170,7 @@ Blockly.MarkerManager.prototype.getMarker = function(id) {
  */
 Blockly.MarkerManager.prototype.dispose = function() {
   var markerIds = Object.keys(this.markers_);
-  for (var i = 0, markerId; markerId = markerIds[i]; i++) {
+  for (var i = 0, markerId; (markerId = markerIds[i]); i++) {
     this.unregisterMarker(markerId);
   }
   this.markers_ = null;

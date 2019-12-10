@@ -422,7 +422,7 @@ Blockly.WorkspaceSvg.prototype.inverseScreenCTM_ = null;
 Blockly.WorkspaceSvg.prototype.inverseScreenCTMDirty_ = true;
 
 /**
- * The marker manager for this workspace.
+ * Get the marker manager for this workspace.
  * @return {Blockly.MarkerManager} The marker manager.
  */
 Blockly.WorkspaceSvg.prototype.getMarkerManager = function() {

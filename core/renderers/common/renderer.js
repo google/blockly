@@ -63,7 +63,6 @@ Blockly.blockRendering.Renderer = function(name) {
 Blockly.blockRendering.Renderer.prototype.init = function() {
   this.constants_ = this.makeConstants_();
   this.constants_.init();
-  this.injectCSS_(this.constants_.getCSS(this.name));
 };
 
 /**
@@ -148,26 +147,6 @@ Blockly.blockRendering.Renderer.prototype.getConstants = function() {
   return (
     /** @type {!Blockly.blockRendering.ConstantProvider} */
     (this.constants_));
-};
-
-/**
- * Get any renderer specific CSS to inject when the renderer is initialized.
- * @param {!Array.<string>} cssArray Array of CSS strings.
- * @private
- */
-Blockly.blockRendering.Renderer.prototype.injectCSS_ = function(cssArray) {
-  var cssNodeId = 'blockly-renderer-style-' + this.name;
-  if (document.getElementById(cssNodeId)) {
-    // Already injected.
-    return;
-  }
-  var text = cssArray.join('\n');
-  // Inject CSS tag at start of head.
-  var cssNode = document.createElement('style');
-  cssNode.id = cssNodeId;
-  var cssTextNode = document.createTextNode(text);
-  cssNode.appendChild(cssTextNode);
-  document.head.insertBefore(cssNode, document.head.firstChild);
 };
 
 /**

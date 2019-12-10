@@ -121,23 +121,6 @@ Blockly.zelos.PathObject.prototype.flipRTL = function() {
 /**
  * @override
  */
-Blockly.zelos.PathObject.prototype.updateDisabled_ = function(
-    disabled) {
-  Blockly.zelos.PathObject.superClass_.updateDisabled_.call(this, disabled);
-  for (var i = 0, keys = Object.keys(this.outlines_),
-    key; (key = keys[i]); i++) {
-    if (disabled) {
-      this.outlines_[key].setAttribute('fill',
-          'url(#' + this.constants_.disabledPatternId + ')');
-    } else {
-      this.outlines_[key].setAttribute('fill', this.style.colourTertiary);
-    }
-  }
-};
-
-/**
- * @override
- */
 Blockly.zelos.PathObject.prototype.updateSelected = function(enable) {
   this.setClass_('blocklySelected', enable);
   if (enable) {
@@ -229,6 +212,7 @@ Blockly.zelos.PathObject.prototype.endDrawing = function() {
 Blockly.zelos.PathObject.prototype.setOutlinePath = function(name, pathString) {
   var outline = this.getOutlinePath_(name);
   outline.setAttribute('d', pathString);
+  outline.setAttribute('fill', this.style.colourTertiary);
 };
 
 /**

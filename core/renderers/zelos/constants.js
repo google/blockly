@@ -622,15 +622,11 @@ Blockly.zelos.ConstantProvider.prototype.createDom = function(svg) {
   </defs>
   */
   var defs = Blockly.utils.dom.createSvgElement('defs', {}, svg);
-  // Each filter/pattern needs a unique ID for the case of multiple Blockly
-  // instances on a page.  Browser behaviour becomes undefined otherwise.
-  // https://neil.fraser.name/news/2015/11/01/
-  var rnd = String(Math.random()).substring(2);
   // Using a dilate distorts the block shape.
   // Instead use a gaussian blur, and then set all alpha to 1 with a transfer.
   var highlightGlowFilter = Blockly.utils.dom.createSvgElement('filter',
       {
-        'id': 'blocklyHighlightGlowFilter' + rnd,
+        'id': 'blocklyHighlightGlowFilter' + this.randomIdentifier_,
         'height': '160%',
         'width': '180%',
         y: '-30%',
@@ -672,7 +668,7 @@ Blockly.zelos.ConstantProvider.prototype.createDom = function(svg) {
   // Instead use a gaussian blur, and then set all alpha to 1 with a transfer.
   var replacementGlowFilter = Blockly.utils.dom.createSvgElement('filter',
       {
-        'id': 'blocklyReplacementGlowFilter' + rnd,
+        'id': 'blocklyReplacementGlowFilter' + this.randomIdentifier_,
         'height': '160%',
         'width': '180%',
         y: '-30%',
@@ -720,7 +716,7 @@ Blockly.zelos.ConstantProvider.prototype.createDom = function(svg) {
 /**
  * @override
  */
-Blockly.zelos.ConstantProvider.prototype.getCSS = function(name) {
+Blockly.zelos.ConstantProvider.prototype.getCSS_ = function(name) {
   var selector = '.' + name + '-renderer';
   return [
     /* eslint-disable indent */
@@ -775,6 +771,11 @@ Blockly.zelos.ConstantProvider.prototype.getCSS = function(name) {
     // Connection highlight.
     selector + ' .blocklyHighlightedConnectionPath {',
       'stroke: #fff200;',
+    '}',
+
+    // Disabled outline paths.
+    selector + ' .blocklyDisabled > .blocklyOutlinePath {',
+      'fill: url(#blocklyDisabledPattern' + this.randomIdentifier_ + ')',
     '}',
     /* eslint-enable indent */
   ];

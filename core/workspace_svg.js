@@ -744,7 +744,9 @@ Blockly.WorkspaceSvg.prototype.createDom = function(opt_backgroundClass) {
   this.markerManager_.registerMarker(Blockly.navigation.MARKER_NAME,
       new Blockly.Marker());
 
-  this.getRenderer().getConstants().createDom(this.svgGroup_);
+  var constants = this.getRenderer().getConstants();
+  constants.injectCSS(this.getRenderer().name);
+  constants.createDom(this.svgGroup_);
   return this.svgGroup_;
 };
 

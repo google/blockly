@@ -387,7 +387,7 @@ Blockly.zelos.RenderInfo.prototype.getNegativeSpacing_ = function(elem) {
   var outerShape = this.outputConnection.shape.type;
   var constants =
     /** @type {!Blockly.zelos.ConstantProvider} */ (this.constants_);
-  if (this.isMultiRow && this.activeRowNum > 1) {
+  if (this.isMultiRow && this.activeRowNum_ > 1) {
     // Multi-row reporter blocks need extra padding.
     var radius = this.height / 2;
     var topPadding = this.constants_.SMALL_PADDING;

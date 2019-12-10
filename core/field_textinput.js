@@ -240,7 +240,7 @@ Blockly.FieldTextInput.prototype.applyColour = function() {
           this.sourceBlock_.style.colourTertiary);
     } else {
       this.sourceBlock_.pathObject.svgPath.setAttribute('fill',
-          this.constants_.FULL_BLOCK_FIELD_COLOUR);
+          this.constants_.FIELD_BORDER_RECT_COLOUR);
     }
   }
 };

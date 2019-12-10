@@ -277,6 +277,13 @@ Blockly.blockRendering.ConstantProvider = function() {
   this.FIELD_BORDER_RECT_Y_PADDING = 3;
 
   /**
+   * The backing colour of a field's border rect.
+   * @type {string}
+   * @package
+   */
+  this.FIELD_BORDER_RECT_COLOUR = '#fff';
+
+  /**
    * Field text baseline.
    * This is only used if `FIELD_TEXT_BASELINE_CENTER` is false.
    * @type {number}
@@ -436,13 +443,6 @@ Blockly.blockRendering.ConstantProvider = function() {
    * @package
    */
   this.FULL_BLOCK_FIELDS = false;
-
-  /**
-   * The backing colour of full block fields.
-   * @type {boolean}
-   * @package
-   */
-  this.FULL_BLOCK_FIELD_COLOUR = '#fff';
 
   /**
    * Enum for connection shapes.
@@ -969,7 +969,7 @@ Blockly.blockRendering.ConstantProvider.prototype.getCSS = function(name) {
     '}',
     selector + ' .blocklyNonEditableText>rect,',
     selector + ' .blocklyEditableText>rect {',
-      'fill: #fff;',
+      'fill: ' + this.FIELD_BORDER_RECT_COLOUR + ';',
       'fill-opacity: .6;',
       'stroke: none;',
     '}',

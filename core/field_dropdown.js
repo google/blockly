@@ -213,7 +213,8 @@ Blockly.FieldDropdown.prototype.initView = function() {
     this.createTextArrow_();
   }
 
-  Blockly.utils.dom.addClass(this.borderRect_, 'blocklyDropdownRect');
+  Blockly.utils.dom.addClass(/** @type {!SVGRectElement} */ (this.borderRect_),
+      'blocklyDropdownRect');
 };
 
 /**

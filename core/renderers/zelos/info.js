@@ -83,7 +83,14 @@ Blockly.zelos.RenderInfo = function(renderer, block) {
   /**
    * @override
    */
-  this.isInline = this.outputConnection ? this.isInline : true;
+  this.isInline = true;
+
+  /**
+   * Whether the block should be rendered as a multi-line block, either because
+   * it's not inline or because it has been collapsed.
+   * @type {boolean}
+   */
+  this.isMultiRow = !block.getInputsInline() || block.isCollapsed();
 
   /**
    * An object with rendering information about the right connection shape.
@@ -121,32 +128,24 @@ Blockly.zelos.RenderInfo.prototype.measure = function() {
 /**
  * @override
  */
-Blockly.zelos.RenderInfo.prototype.addInput_ = function(input, activeRow) {
-  // Non-dummy inputs have visual representations onscreen.
-  if (this.isInline && input.type == Blockly.INPUT_VALUE) {
-    activeRow.elements.push(
-        new Blockly.blockRendering.InlineInput(this.constants_, input));
-    activeRow.hasInlineInput = true;
-  } else if (input.type == Blockly.NEXT_STATEMENT) {
-    activeRow.elements.push(
-        new Blockly.blockRendering.StatementInput(this.constants_, input));
-    activeRow.hasStatement = true;
-  } else if (input.type == Blockly.INPUT_VALUE) {
-    activeRow.elements.push(
-        new Blockly.zelos.ExternalValueInput(this.constants_, input));
-    activeRow.hasExternalInput = true;
-  } else if (input.type == Blockly.DUMMY_INPUT) {
-    // Dummy inputs have no visual representation, but the information is still
-    // important.
-    activeRow.minHeight = Math.max(activeRow.minHeight,
-        this.constants_.DUMMY_INPUT_MIN_HEIGHT);
-    activeRow.hasDummyInput = true;
+Blockly.zelos.RenderInfo.prototype.shouldStartNewRow_ = function(input,
+    lastInput) {
+  // If this is the first input, just add to the existing row.
+  // That row is either empty or has some icons in it.
+  if (!lastInput) {
+    return false;
   }
-  if (activeRow.align == null) {
-    activeRow.align = input.align;
+  // A statement input or an input following one always gets a new row.
+  if (input.type == Blockly.NEXT_STATEMENT ||
+      lastInput.type == Blockly.NEXT_STATEMENT) {
+    return true;
   }
+  // Value and dummy inputs get new row if inputs are not inlined.
+  if (input.type == Blockly.INPUT_VALUE || input.type == Blockly.DUMMY_INPUT) {
+    return !this.isInline || this.isMultiRow;
+  }
+  return false;
 };
-
 
 /**
  * @override
@@ -301,6 +300,7 @@ Blockly.zelos.RenderInfo.prototype.finalizeOutputConnection_ = function() {
     row.yPos = yCursor;
     yCursor += row.height;
   }
+  this.height = yCursor;
 
   // Adjust the height of the output connection.
   var connectionHeight = this.outputConnection.shape.height(yCursor);
@@ -339,21 +339,23 @@ Blockly.zelos.RenderInfo.prototype.finalizeHorizontalAlignment_ = function() {
     }
     var firstElem = row.elements[1];
     var lastElem = row.elements[row.elements.length - 2];
-    var leftNegPadding = this.getNegativeSpacing_(firstElem);
-    var rightNegPadding = this.getNegativeSpacing_(lastElem);
-    totalNegativeSpacing = leftNegPadding + rightNegPadding;
+    var leftNegPadding = -this.getNegativeSpacing_(firstElem);
+    var rightNegPadding = -this.getNegativeSpacing_(lastElem);
+    totalNegativeSpacing = Math.abs(leftNegPadding) + Math.abs(rightNegPadding);
     var minBlockWidth = this.constants_.MIN_BLOCK_WIDTH +
         this.outputConnection.width * 2;
     if (this.width - totalNegativeSpacing < minBlockWidth) {
       // Maintain a minimum block width, split negative spacing between left
       // and right edge.
       totalNegativeSpacing = this.width - minBlockWidth;
-      row.getFirstSpacer().width = -totalNegativeSpacing / 2;
-      row.getLastSpacer().width = -totalNegativeSpacing / 2;
-    } else {
-      row.getFirstSpacer().width = -leftNegPadding;
-      row.getLastSpacer().width = -rightNegPadding;
+      leftNegPadding = -totalNegativeSpacing / 2;
+      rightNegPadding = -totalNegativeSpacing / 2;
     }
+    // Add a negative spacer on the start and the end of the block.
+    row.elements.unshift(new Blockly.blockRendering.InRowSpacer(this.constants_,
+        leftNegPadding));
+    row.elements.push(new Blockly.blockRendering.InRowSpacer(this.constants_,
+        rightNegPadding));
   }
   if (totalNegativeSpacing) {
     this.width -= totalNegativeSpacing;
@@ -386,6 +388,14 @@ Blockly.zelos.RenderInfo.prototype.getNegativeSpacing_ = function(elem) {
   var outerShape = this.outputConnection.shape.type;
   var constants =
     /** @type {!Blockly.zelos.ConstantProvider} */ (this.constants_);
+  if (this.isMultiRow && this.activeRowNum > 1) {
+    // Multi-row reporter blocks need extra padding.
+    var radius = this.height / 2;
+    var topPadding = this.constants_.SMALL_PADDING;
+    var roundPad = radius *
+      (1 - Math.sin(Math.acos((radius - topPadding) / radius)));
+    return connectionWidth - roundPad;
+  }
   if (Blockly.blockRendering.Types.isInlineInput(elem)) {
     var innerShape = elem.connectedBlock ?
         elem.connectedBlock.pathObject.outputShapeType :

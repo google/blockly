@@ -319,6 +319,21 @@ Blockly.zelos.ConstantProvider = function() {
   this.FIELD_COLOUR_DEFAULT_HEIGHT = 4 * this.GRID_UNIT;
 
   /**
+   * @override
+   */
+  this.FIELD_CHECKBOX_X_OFFSET = this.FIELD_BORDER_RECT_X_PADDING - 3;
+
+  /**
+   * @override
+   */
+  this.FIELD_CHECKBOX_Y_OFFSET = 22;
+
+  /**
+   * @override
+   */
+  this.FIELD_CHECKBOX_DEFAULT_WIDTH = 6 * this.GRID_UNIT;
+
+  /**
    * The ID of the highlight glow filter, or the empty string if no filter is
    * set.
    * @type {string}

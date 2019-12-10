@@ -361,6 +361,12 @@ Blockly.blockRendering.ConstantProvider = function() {
   this.FIELD_CHECKBOX_Y_OFFSET = 14;
 
   /**
+   * A checkbox field's default width.
+   * @type {number}
+   */
+  this.FIELD_CHECKBOX_DEFAULT_WIDTH = 15;
+
+  /**
    * The ID of the emboss filter, or the empty string if no filter is set.
    * @type {string}
    * @package

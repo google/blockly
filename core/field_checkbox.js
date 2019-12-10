@@ -60,9 +60,6 @@ Blockly.FieldCheckbox = function(opt_value, opt_validator, opt_config) {
   }
   Blockly.FieldCheckbox.superClass_.constructor.call(
       this, opt_value, opt_validator, opt_config);
-
-  this.size_.width = Blockly.FieldCheckbox.WIDTH;
-
 };
 Blockly.utils.object.inherits(Blockly.FieldCheckbox, Blockly.Field);
 
@@ -76,13 +73,6 @@ Blockly.utils.object.inherits(Blockly.FieldCheckbox, Blockly.Field);
 Blockly.FieldCheckbox.fromJson = function(options) {
   return new Blockly.FieldCheckbox(options['checked'], undefined, options);
 };
-
-/**
- * The width of a checkbox field.
- * @type {number}
- * @const
- */
-Blockly.FieldCheckbox.WIDTH = 15;
 
 /**
  * Default character for the checkmark.
@@ -129,6 +119,7 @@ Blockly.FieldCheckbox.prototype.configure_ = function(config) {
  * @package
  */
 Blockly.FieldCheckbox.prototype.initView = function() {
+  this.size_.width = this.constants_.FIELD_CHECKBOX_DEFAULT_WIDTH;
   Blockly.FieldCheckbox.superClass_.initView.call(this);
 
   this.textElement_.setAttribute('x', this.constants_.FIELD_CHECKBOX_X_OFFSET);

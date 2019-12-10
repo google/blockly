@@ -388,12 +388,17 @@ Blockly.zelos.RenderInfo.prototype.getNegativeSpacing_ = function(elem) {
   var constants =
     /** @type {!Blockly.zelos.ConstantProvider} */ (this.constants_);
   if (this.isMultiRow && this.activeRowNum_ > 1) {
-    // Multi-row reporter blocks need extra padding.
-    var radius = this.height / 2;
-    var topPadding = this.constants_.SMALL_PADDING;
-    var roundPad = radius *
-      (1 - Math.sin(Math.acos((radius - topPadding) / radius)));
-    return connectionWidth - roundPad;
+    switch (outerShape) {
+      case constants.SHAPES.ROUND:
+        // Special case for multi-row round reporter blocks.
+        var radius = this.height / 2;
+        var topPadding = this.constants_.SMALL_PADDING;
+        var roundPadding = radius *
+          (1 - Math.sin(Math.acos((radius - topPadding) / radius)));
+        return connectionWidth - roundPadding;
+      default:
+        return 0;
+    }
   }
   if (Blockly.blockRendering.Types.isInlineInput(elem)) {
     var innerShape = elem.connectedBlock ?

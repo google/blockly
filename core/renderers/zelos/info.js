@@ -340,7 +340,7 @@ Blockly.zelos.RenderInfo.prototype.finalizeHorizontalAlignment_ = function() {
     var lastElem = row.elements[row.elements.length - 2];
     var leftNegPadding = this.getNegativeSpacing_(firstElem);
     var rightNegPadding = this.getNegativeSpacing_(lastElem);
-    totalNegativeSpacing = Math.abs(leftNegPadding) + Math.abs(rightNegPadding);
+    totalNegativeSpacing = leftNegPadding + rightNegPadding;
     var minBlockWidth = this.constants_.MIN_BLOCK_WIDTH +
         this.outputConnection.width * 2;
     if (this.width - totalNegativeSpacing < minBlockWidth) {

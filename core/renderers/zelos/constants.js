@@ -319,6 +319,21 @@ Blockly.zelos.ConstantProvider = function() {
   this.FIELD_COLOUR_DEFAULT_HEIGHT = 4 * this.GRID_UNIT;
 
   /**
+   * @override
+   */
+  this.FIELD_CHECKBOX_X_OFFSET = this.FIELD_BORDER_RECT_X_PADDING - 3;
+
+  /**
+   * @override
+   */
+  this.FIELD_CHECKBOX_Y_OFFSET = 22;
+
+  /**
+   * @override
+   */
+  this.FIELD_CHECKBOX_DEFAULT_WIDTH = 6 * this.GRID_UNIT;
+
+  /**
    * The ID of the highlight glow filter, or the empty string if no filter is
    * set.
    * @type {string}
@@ -716,6 +731,10 @@ Blockly.zelos.ConstantProvider.prototype.getCSS = function(name) {
       'font-family: ' + this.FIELD_TEXT_FONTFAMILY + ';',
       'font-size: ' + this.FIELD_TEXT_FONTSIZE + 'pt;',
       'font-weight: ' + this.FIELD_TEXT_FONTWEIGHT + ';',
+    '}',
+    selector + ' .blocklyNonEditableText>rect:not(.blocklyDropdownRect),',
+    selector + ' .blocklyEditableText>rect:not(.blocklyDropdownRect) {',
+      'fill: ' + this.FIELD_BORDER_RECT_COLOUR + ';',
     '}',
     selector + ' .blocklyNonEditableText>text,',
     selector + ' .blocklyEditableText>text,',

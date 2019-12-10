@@ -104,12 +104,6 @@ Blockly.zelos.PathObject.prototype.applyColour = function(block) {
   if (block.isShadow() && block.getParent()) {
     this.svgPath.setAttribute('stroke', block.getParent().style.colourTertiary);
   }
-  
-  // Apply colour to outlines.
-  for (var i = 0, keys = Object.keys(this.outlines_),
-    key; (key = keys[i]); i++) {
-    this.outlines_[key].setAttribute('fill', this.style.colourTertiary);
-  }
 };
 
 /**
@@ -135,6 +129,8 @@ Blockly.zelos.PathObject.prototype.updateDisabled_ = function(
     if (disabled) {
       this.outlines_[key].setAttribute('fill',
           'url(#' + this.constants_.disabledPatternId + ')');
+    } else {
+      this.outlines_[key].setAttribute('fill', this.style.colourTertiary);
     }
   }
 };
@@ -233,7 +229,6 @@ Blockly.zelos.PathObject.prototype.endDrawing = function() {
 Blockly.zelos.PathObject.prototype.setOutlinePath = function(name, pathString) {
   var outline = this.getOutlinePath_(name);
   outline.setAttribute('d', pathString);
-  outline.setAttribute('fill', this.style.colourTertiary);
 };
 
 /**

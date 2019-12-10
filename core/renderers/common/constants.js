@@ -277,6 +277,13 @@ Blockly.blockRendering.ConstantProvider = function() {
   this.FIELD_BORDER_RECT_Y_PADDING = 3;
 
   /**
+   * The backing colour of a field's border rect.
+   * @type {string}
+   * @package
+   */
+  this.FIELD_BORDER_RECT_COLOUR = '#fff';
+
+  /**
    * Field text baseline.
    * This is only used if `FIELD_TEXT_BASELINE_CENTER` is false.
    * @type {number}
@@ -352,6 +359,12 @@ Blockly.blockRendering.ConstantProvider = function() {
    * @type {number}
    */
   this.FIELD_CHECKBOX_Y_OFFSET = 14;
+
+  /**
+   * A checkbox field's default width.
+   * @type {number}
+   */
+  this.FIELD_CHECKBOX_DEFAULT_WIDTH = 15;
 
   /**
    * The ID of the emboss filter, or the empty string if no filter is set.
@@ -962,7 +975,7 @@ Blockly.blockRendering.ConstantProvider.prototype.getCSS = function(name) {
     '}',
     selector + ' .blocklyNonEditableText>rect,',
     selector + ' .blocklyEditableText>rect {',
-      'fill: #fff;',
+      'fill: ' + this.FIELD_BORDER_RECT_COLOUR + ';',
       'fill-opacity: .6;',
       'stroke: none;',
     '}',

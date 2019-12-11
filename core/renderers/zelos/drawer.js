@@ -98,13 +98,13 @@ Blockly.zelos.Drawer.prototype.drawOutline_ = function() {
  * @protected
  */
 Blockly.zelos.Drawer.prototype.drawRightSideRow_ = function(row) {
-  if (row.type & Blockly.blockRendering.Types.getType('BEFORE_STATEMENT_SPACER_ROW')) {
+  if (row.precedesStatement) {
     var remainingHeight = row.height - this.constants_.INSIDE_CORNERS.rightWidth;
     this.outlinePath_ +=
         (remainingHeight > 0 ?
             Blockly.utils.svgPaths.lineOnAxis('V', row.yPos + remainingHeight) : '') +
         this.constants_.INSIDE_CORNERS.pathTopRight;
-  } else if (row.type & Blockly.blockRendering.Types.getType('AFTER_STATEMENT_SPACER_ROW')) {
+  } else if (row.followsStatement) {
     var remainingHeight = row.height - this.constants_.INSIDE_CORNERS.rightWidth;
     this.outlinePath_ +=
         this.constants_.INSIDE_CORNERS.pathBottomRight +

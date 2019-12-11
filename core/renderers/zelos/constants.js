@@ -104,12 +104,17 @@ Blockly.zelos.ConstantProvider = function() {
   /**
    * @override
    */
+  this.TOP_ROW_PRECEDES_STATEMENT_MIN_HEIGHT = this.LARGE_PADDING;
+
+  /**
+   * @override
+   */
   this.BOTTOM_ROW_MIN_HEIGHT = this.GRID_UNIT;
 
   /**
    * @override
    */
-  this.BOTTOM_ROW_AFTER_STATEMENT_MIN_HEIGHT = 7 * this.GRID_UNIT;
+  this.BOTTOM_ROW_AFTER_STATEMENT_MIN_HEIGHT = 6 * this.GRID_UNIT;
 
   /**
    * @override

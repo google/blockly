@@ -649,7 +649,8 @@ Blockly.FieldDropdown.changeRecentModuleColors = function(activeIDsDict, recentI
           child.children[0].className = "goog-menuitem-content";
       }
     }
-  };
+  }
+};
 
 /**
  * Close the dropdown menu if this input is being deleted.

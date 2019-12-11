@@ -200,23 +200,6 @@ Blockly.zelos.RenderInfo.prototype.getSpacerRowHeight_ = function(
 };
 
 /**
- * Modify the given row to add the given amount of padding around its fields.
- * The exact location of the padding is based on the alignment property of the
- * last input in the field.
- * @param {Blockly.blockRendering.Row} row The row to add padding to.
- * @param {number} missingSpace How much padding to add.
- * @protected
- */
-Blockly.zelos.RenderInfo.prototype.addAlignmentPadding_ = function(row,
-    missingSpace) {
-  var lastSpacer = row.getLastSpacer();
-  if (lastSpacer) {
-    lastSpacer.width += missingSpace;
-    row.width += missingSpace;
-  }
-};
-
-/**
  * Adjust the x position of fields to bump all non-label fields in the first row
  * past the notch position.  This must be called before ``computeBounds`` is
  * called.

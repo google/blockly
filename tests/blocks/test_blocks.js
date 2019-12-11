@@ -149,7 +149,7 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
   },
   {
     "type": "test_align_dummy_right",
-    "message0": "text %1 long text %2",
+    "message0": "text right %1 long text right %2",
     "args0": [
       {
         "type": "input_dummy",
@@ -164,7 +164,7 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
   },
   {
     "type": "test_align_all",
-    "message0": "text %1 long text %2 text %3 much longer text",
+    "message0": "text %1 long text left %2 text centre %3 much longer text right",
     "args0": [
       {
         "type": "input_dummy",
@@ -183,7 +183,7 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
   },
   {
     "type": "test_align_with_external_input",
-    "message0": "text %1 long text %2 text %3 much longer text %4",
+    "message0": "text right %1 long text centre %2 text left %3 much longer text %4",
     "args0": [
       {
         "type": "input_dummy",

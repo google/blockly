@@ -67,7 +67,7 @@ goog.inherits(Blockly.FieldVariable, Blockly.FieldDropdown);
  * dereferencing any string table references.
  * @param {!Object} options A JSON object with options (variable,
  *                          variableTypes, and defaultType).
- * @returns {!Blockly.FieldVariable} The new field instance.
+ * @return {!Blockly.FieldVariable} The new field instance.
  * @package
  * @nocollapse
  */
@@ -160,7 +160,7 @@ Blockly.FieldVariable.prototype.getText = function() {
  * Get the variable model for the selected variable.
  * Not guaranteed to be in the variable map on the workspace (e.g. if accessed
  * after the variable has been deleted).
- * @return {?Blockly.VariableModel} the selected variable, or null if none was
+ * @return {Blockly.VariableModel} The selected variable, or null if none was
  *     selected.
  * @package
  */

@@ -55,8 +55,8 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
       }
     ],
     "output": "Colour",
-    "colour": "%{BKY_COLOUR_HUE}",
     "helpUrl": "%{BKY_COLOUR_PICKER_HELPURL}",
+    "style": "colour_blocks",
     "tooltip": "%{BKY_COLOUR_PICKER_TOOLTIP}",
     "extensions": ["parent_tooltip_when_inline"]
   },
@@ -66,8 +66,8 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     "type": "colour_random",
     "message0": "%{BKY_COLOUR_RANDOM_TITLE}",
     "output": "Colour",
-    "colour": "%{BKY_COLOUR_HUE}",
     "helpUrl": "%{BKY_COLOUR_RANDOM_HELPURL}",
+    "style": "colour_blocks",
     "tooltip": "%{BKY_COLOUR_RANDOM_TOOLTIP}"
   },
 
@@ -96,8 +96,8 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
       }
     ],
     "output": "Colour",
-    "colour": "%{BKY_COLOUR_HUE}",
     "helpUrl": "%{BKY_COLOUR_RGB_HELPURL}",
+    "style": "colour_blocks",
     "tooltip": "%{BKY_COLOUR_RGB_TOOLTIP}"
   },
 
@@ -127,8 +127,8 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
       }
     ],
     "output": "Colour",
-    "colour": "%{BKY_COLOUR_HUE}",
     "helpUrl": "%{BKY_COLOUR_BLEND_HELPURL}",
+    "style": "colour_blocks",
     "tooltip": "%{BKY_COLOUR_BLEND_TOOLTIP}"
   }
 ]);  // END JSON EXTRACT (Do not delete this comment.)

@@ -9,7 +9,8 @@
 			"Visem",
 			"Piramidion",
 			"SimondR",
-			"Movses"
+			"Movses",
+			"Gzhegozh"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "елемент",
@@ -364,5 +365,6 @@
 	"PROCEDURES_IFRETURN_TOOLTIP": "Якщо значення істинне, то повернути друге значення.",
 	"PROCEDURES_IFRETURN_HELPURL": "http://c2.com/cgi/wiki?GuardClause",
 	"PROCEDURES_IFRETURN_WARNING": "Попередження: цей блок може використовуватися лише в межах визначення функції.",
-	"WORKSPACE_COMMENT_DEFAULT_TEXT": "Скажіть щось..."
+	"WORKSPACE_COMMENT_DEFAULT_TEXT": "Скажіть щось...",
+	"COLLAPSED_WARNINGS_WARNING": "Звернуті блоки містять попередження."
 }

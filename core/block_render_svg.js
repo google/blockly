@@ -365,7 +365,7 @@ Blockly.BlockSvg.prototype.render = function(opt_bubble) {
   //Add some margin (aka spacing) to each line, based on WHICH line it is (ex. line 1 will get a bit of space added at the top, the last line will get some space added to the bottom, etc)
   inputRows = this.renderComputeSpacing_(inputRows);
 
-  if (inputRows) {
+  if (inputRows && inputRows.length > 0) {
     for (var i = 0; i < icons.length; i++) {
       icons[i].moveVertical(inputRows[0].alignmentHeight);
     }
@@ -433,21 +433,31 @@ Blockly.BlockSvg.prototype.renderFields_ = function(fieldList,
         }
     }
 
+    var translateX;
+    var scale = '';
     if (this.RTL) {
       cursorX -= field.renderSep + field.renderWidth;
-      root.setAttribute('transform',
-          'translate(' + cursorX + ',' + yPos + ')');
+      translateX = cursorX;
+
       if (field.renderWidth) {
         cursorX -= Blockly.BlockSvg.SEP_SPACE_X;
       }
     } else {
-      root.setAttribute('transform',
-          'translate(' + (cursorX + field.renderSep) + ',' + yPos + ')');
+      translateX = cursorX + field.renderSep;
       if (field.renderWidth) {
         cursorX += field.renderSep + field.renderWidth +
             Blockly.BlockSvg.SEP_SPACE_X;
       }
     }
+    if (this.RTL &&
+        field instanceof  Blockly.FieldImage &&
+        field.getFlipRtl()) {
+      scale = 'scale(-1 1)';
+      translateX += field.renderWidth;
+    }
+    root.setAttribute('transform',
+        'translate(' + translateX + ',' + yPos + ')' + scale);
+
     // Fields are invisible on insertion marker.  They still have to be rendered
     // so that the block can be sized correctly.
     if (this.isInsertionMarker()) {
@@ -690,6 +700,9 @@ Blockly.BlockSvg.prototype.renderDraw_ = function(iconWidth, inputRows) {
     this.squareTopLeftCorner_ = true;
     this.squareBottomLeftCorner_ = true;
   } else {
+    var renderCap = this.hat ? this.hat === 'cap' :
+      Blockly.BlockSvg.START_HAT;
+
     this.squareTopLeftCorner_ = false;
     this.squareBottomLeftCorner_ = false;
     // If this block is in the middle of a stack, square the corners.
@@ -698,7 +711,7 @@ Blockly.BlockSvg.prototype.renderDraw_ = function(iconWidth, inputRows) {
       if (prevBlock && prevBlock.getNextBlock() == this) {
         this.squareTopLeftCorner_ = true;
       }
-    } else if (Blockly.BlockSvg.START_HAT) {
+    } else if (renderCap) {
       // No output or previous connection.
       this.squareTopLeftCorner_ = true;
       this.startHat_ = true;
@@ -953,8 +966,12 @@ Blockly.BlockSvg.prototype.renderDrawLeft_ = function(pathObject, inputRows) {
 
   //SHAPE: This will calculate the vertical middle of the first row, so the "puzzle" piece can be centered there.
   //SHAPE: On blocks with multiple lines, it will still render the "puzzle" piece in the middle of the first row. Reason - it's very ugly otherwise.
-  //TODO: Maybe, just maybe check if a "first" line exist. Even though it always should.
-  this.firstRowHeight = inputRows[0].height;
+  if (inputRows.length > 0) {
+    this.firstRowHeight = inputRows[0].height;
+  }
+  else {
+    this.firstRowHeight = 25;
+  }
 
   if (this.outputConnection) {
     //SHAPE: 15 is hardcoded because the entire svg path of the "puzzle" piece is also hardcoded and has 15 in it.

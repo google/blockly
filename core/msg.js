@@ -43,7 +43,7 @@ goog.getMsgOrig = goog.getMsg;
  * Used infrequently, only known case is TODAY button in date picker.
  * @param {string} str Translatable string, places holders in the form {$foo}.
  * @param {Object.<string, string>=} opt_values Maps place holder name to value.
- * @return {string} message with placeholders filled.
+ * @return {string} Message with placeholders filled.
  * @suppress {duplicate}
  */
 goog.getMsg = function(str, opt_values) {

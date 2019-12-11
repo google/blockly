@@ -27,7 +27,7 @@
 goog.provide('Blockly.BlockDragger');
 
 goog.require('Blockly.BlockAnimations');
-goog.require('Blockly.DraggedConnectionManager');
+goog.require('Blockly.InsertionMarkerManager');
 goog.require('Blockly.Events.BlockMove');
 
 goog.require('goog.math.Coordinate');
@@ -57,10 +57,10 @@ Blockly.BlockDragger = function(block, workspace) {
 
   /**
    * Object that keeps track of connections on dragged blocks.
-   * @type {!Blockly.DraggedConnectionManager}
+   * @type {!Blockly.InsertionMarkerManager}
    * @private
    */
-  this.draggedConnectionManager_ = new Blockly.DraggedConnectionManager(
+  this.draggedConnectionManager_ = new Blockly.InsertionMarkerManager(
       this.draggingBlock_);
 
   /**
@@ -272,7 +272,7 @@ Blockly.BlockDragger.prototype.fireMoveEvent_ = function() {
 /**
  * Shut the trash can and, if necessary, delete the dragging block.
  * Should be called at the end of a block drag.
- * @return {boolean} whether the block was deleted.
+ * @return {boolean} Whether the block was deleted.
  * @private
  */
 Blockly.BlockDragger.prototype.maybeDeleteBlock_ = function() {
@@ -350,4 +350,20 @@ Blockly.BlockDragger.prototype.dragIcons_ = function(dxy) {
     var data = this.dragIconData_[i];
     data.icon.setIconLocation(goog.math.Coordinate.sum(data.location, dxy));
   }
+};
+
+/**
+ * Get a list of the insertion markers that currently exist.  Drags have 0, 1,
+ * or 2 insertion markers.
+ * @return {!Array.<!Blockly.BlockSvg>} A possibly empty list of insertion
+ *     marker blocks.
+ * @package
+ */
+Blockly.BlockDragger.prototype.getInsertionMarkers = function() {
+  // No insertion markers with the old style of dragged connection managers.
+  if (this.draggedConnectionManager_ &&
+      this.draggedConnectionManager_.getInsertionMarkers) {
+    return this.draggedConnectionManager_.getInsertionMarkers();
+  }
+  return [];
 };

@@ -6,7 +6,8 @@
 			"Hiperpobla",
 			"Jaumeortola",
 			"Fitoschido",
-			"Quel.soler"
+			"Quel.soler",
+			"Micobu"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "element",
@@ -289,6 +290,8 @@
 	"LISTS_GET_SUBLIST_END_FROM_END": "fins # des del final",
 	"LISTS_GET_SUBLIST_END_LAST": "fins l'últim",
 	"LISTS_GET_SUBLIST_TOOLTIP": "Crea una còpia de la part especificada d'una llista.",
+	"LISTS_SORT_TYPE_TEXT": "alfabètic",
+	"LISTS_SPLIT_WITH_DELIMITER": "amb delimitador",
 	"VARIABLES_GET_TOOLTIP": "Retorna el valor d'aquesta variable.",
 	"VARIABLES_GET_CREATE_SET": "Crea 'modifica %1'",
 	"VARIABLES_SET": "modifica %1 a %2",
@@ -299,6 +302,7 @@
 	"PROCEDURES_BEFORE_PARAMS": "amb:",
 	"PROCEDURES_CALL_BEFORE_PARAMS": "amb:",
 	"PROCEDURES_DEFNORETURN_TOOLTIP": "Crea una funció sense sortida.",
+	"PROCEDURES_DEFNORETURN_COMMENT": "Descriure aquesta funció...",
 	"PROCEDURES_DEFRETURN_RETURN": "retorna",
 	"PROCEDURES_DEFRETURN_TOOLTIP": "Crea una funció amb una sortida.",
 	"PROCEDURES_ALLOW_STATEMENTS": "permetre declaracions",
@@ -314,5 +318,6 @@
 	"PROCEDURES_HIGHLIGHT_DEF": "Iluminar la definició de la funció",
 	"PROCEDURES_CREATE_DO": "Crear '%1'",
 	"PROCEDURES_IFRETURN_TOOLTIP": "Si el valor és cert, llavors retorna un segon valor.",
-	"PROCEDURES_IFRETURN_WARNING": "Advertència: Aquest bloc només es pot utilitzar dins de la definició d'una funció."
+	"PROCEDURES_IFRETURN_WARNING": "Advertència: Aquest bloc només es pot utilitzar dins de la definició d'una funció.",
+	"WORKSPACE_COMMENT_DEFAULT_TEXT": "Digues alguna cosa..."
 }

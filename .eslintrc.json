@@ -33,7 +33,8 @@
                 "code": 100,
                 "tabWidth": 4,
                 "ignoreStrings": true,
-                "ignoreRegExpLiterals": true
+                "ignoreRegExpLiterals": true,
+                "ignoreUrls": true
             }
         ],
         "no-trailing-spaces": ["error", { "skipBlankLines": true }],

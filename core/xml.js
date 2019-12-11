@@ -31,6 +31,7 @@
 goog.provide('Blockly.Xml');
 
 goog.require('Blockly.Events.BlockCreate');
+goog.require('Blockly.Events.FinishedLoading');
 goog.require('Blockly.Events.VarCreate');
 goog.require('Blockly.Xml.utils');
 
@@ -99,7 +100,7 @@ Blockly.Xml.blockToDomWithXY = function(block, opt_noId) {
 /**
  * Encode a variable field as XML.
  * @param {!Blockly.FieldVariable} field The field to encode.
- * @return {?Element} XML element, or null if the field did not need to be
+ * @return {Element} XML element, or null if the field did not need to be
  *     serialized.
  * @private
  */
@@ -134,7 +135,7 @@ Blockly.Xml.fieldToDomVariable_ = function(field) {
 /**
  * Encode a field as XML.
  * @param {!Blockly.Field} field The field to encode.
- * @return {?Element} XML element, or null if the field did not need to be
+ * @return {Element} XML element, or null if the field did not need to be
  *     serialized.
  * @private
  */
@@ -467,6 +468,7 @@ Blockly.Xml.domToWorkspace = function(xml, workspace) {
   if (workspace.setResizesEnabled) {
     workspace.setResizesEnabled(true);
   }
+  Blockly.Events.fire(new Blockly.Events.FinishedLoading(workspace));
   return newBlockIds;
 };
 

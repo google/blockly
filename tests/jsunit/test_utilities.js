@@ -33,6 +33,10 @@ goog.require('goog.testing');
  */
 var savedFireFunc = Blockly.Events.fire;
 
+// Asserts must be disabled or else errors can't be shown when running on
+// file:// URLs.
+goog.asserts.ENABLE_ASSERTS = false;
+
 /**
  * A helper function to replace Blockly.Events.fire in tests.
  */

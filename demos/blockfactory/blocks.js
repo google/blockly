@@ -603,7 +603,9 @@ Blockly.Blocks['field_image'] = {
         .appendField('height')
         .appendField(new Blockly.FieldNumber('15', 0, NaN, 1), 'HEIGHT')
         .appendField('alt text')
-        .appendField(new Blockly.FieldTextInput('*'), 'ALT');
+        .appendField(new Blockly.FieldTextInput('*'), 'ALT')
+        .appendField('flip RTL')
+        .appendField(new Blockly.FieldCheckbox('false'), 'FLIP_RTL');
     this.setPreviousStatement(true, 'Field');
     this.setNextStatement(true, 'Field');
     this.setTooltip('Static image (JPEG, PNG, GIF, SVG, BMP).\n' +

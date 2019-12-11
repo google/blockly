@@ -53,10 +53,12 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
       "value": 0
     }],
     "output": "Number",
-    "colour": "%{BKY_MATH_HUE}",
     "helpUrl": "%{BKY_MATH_NUMBER_HELPURL}",
+    "style": "math_blocks",
     "tooltip": "%{BKY_MATH_NUMBER_TOOLTIP}",
-    "extensions": ["parent_tooltip_when_inline"]
+    "extensions": ["parent_tooltip_when_inline"],
+    "search_keywords": [
+    ]
   },
 
   // Block for basic arithmetic operator.
@@ -88,9 +90,16 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     ],
     "inputsInline": true,
     "output": "Number",
-    "colour": "%{BKY_MATH_HUE}",
+    "style": "math_blocks",
     "helpUrl": "%{BKY_MATH_ARITHMETIC_HELPURL}",
-    "extensions": ["math_op_tooltip"]
+    "extensions": ["math_op_tooltip"],
+    "search_keywords": [
+        "%{BKY_MATH_ADDITION_SYMBOL}",
+        "%{BKY_MATH_SUBTRACTION_SYMBOL}",
+        "%{BKY_MATH_MULTIPLICATION_SYMBOL}",
+        "%{BKY_MATH_DIVISION_SYMBOL}",
+        "%{BKY_MATH_POWER_SYMBOL}",
+    ]
   },
 
   // Block for advanced math operators with single operand.
@@ -118,9 +127,18 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
       }
     ],
     "output": "Number",
-    "colour": "%{BKY_MATH_HUE}",
+    "style": "math_blocks",
     "helpUrl": "%{BKY_MATH_SINGLE_HELPURL}",
-    "extensions": ["math_op_tooltip"]
+    "extensions": ["math_op_tooltip"],
+    "search_keywords": [
+        "%{BKY_MATH_SINGLE_OP_ROOT}",
+        "%{BKY_MATH_SINGLE_OP_ABSOLUTE}",
+        "-",
+        "ln",
+        "log10",
+        "e^",
+        "10^"
+    ]
   },
 
   // Block for trigonometry operators.
@@ -147,9 +165,17 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
       }
     ],
     "output": "Number",
-    "colour": "%{BKY_MATH_HUE}",
+    "style": "math_blocks",
     "helpUrl": "%{BKY_MATH_TRIG_HELPURL}",
-    "extensions": ["math_op_tooltip"]
+    "extensions": ["math_op_tooltip"],
+    "search_keywords": [
+        "%{BKY_MATH_TRIG_SIN}",
+        "%{BKY_MATH_TRIG_COS}",
+        "%{BKY_MATH_TRIG_TAN}",
+        "%{BKY_MATH_TRIG_ASIN}",
+        "%{BKY_MATH_TRIG_ACOS}",
+        "%{BKY_MATH_TRIG_ATAN}",
+    ]
   },
 
   // Block for constants: PI, E, the Golden Ratio, sqrt(2), 1/sqrt(2), INFINITY.
@@ -171,9 +197,17 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
       }
     ],
     "output": "Number",
-    "colour": "%{BKY_MATH_HUE}",
+    "style": "math_blocks",
     "tooltip": "%{BKY_MATH_CONSTANT_TOOLTIP}",
-    "helpUrl": "%{BKY_MATH_CONSTANT_HELPURL}"
+    "helpUrl": "%{BKY_MATH_CONSTANT_HELPURL}",
+    "search_keywords": [
+        "\u03c0",
+        "e",
+        "\u03c6",
+        "sqrt(2)",
+        "sqrt(\u00bd)",
+        "\u221e"
+    ]
   },
 
   // Block for checking if a number is even, odd, prime, whole, positive,
@@ -203,9 +237,18 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     ],
     "inputsInline": true,
     "output": "Boolean",
-    "colour": "%{BKY_MATH_HUE}",
+    "style": "math_blocks",
     "tooltip": "%{BKY_MATH_IS_TOOLTIP}",
-    "mutator": "math_is_divisibleby_mutator"
+    "mutator": "math_is_divisibleby_mutator",
+    "search_keywords": [
+        "%{BKY_MATH_IS_EVEN}",
+        "%{BKY_MATH_IS_ODD}",
+        "%{BKY_MATH_IS_PRIME}",
+        "%{BKY_MATH_IS_WHOLE}",
+        "%{BKY_MATH_IS_POSITIVE}",
+        "%{BKY_MATH_IS_NEGATIVE}",
+        "%{BKY_MATH_IS_DIVISIBLE_BY}"
+    ]
   },
 
   // Block for adding to a variable in place.
@@ -226,9 +269,12 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     ],
     "previousStatement": null,
     "nextStatement": null,
-    "colour": "%{BKY_VARIABLES_HUE}",
+    "style": "variable_blocks",
     "helpUrl": "%{BKY_MATH_CHANGE_HELPURL}",
-    "extensions": ["math_change_tooltip"]
+    "extensions": ["math_change_tooltip"],
+    "search_keywords": [
+        "%{BKY_MATH_CHANGE_TITLE}"
+    ]
   },
 
   // Block for rounding functions.
@@ -252,9 +298,14 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
       }
     ],
     "output": "Number",
-    "colour": "%{BKY_MATH_HUE}",
+    "style": "math_blocks",
     "helpUrl": "%{BKY_MATH_ROUND_HELPURL}",
-    "tooltip": "%{BKY_MATH_ROUND_TOOLTIP}"
+    "tooltip": "%{BKY_MATH_ROUND_TOOLTIP}",
+    "search_keywords": [
+        "%{BKY_MATH_ROUND_OPERATOR_ROUND}",
+        "%{BKY_MATH_ROUND_OPERATOR_ROUNDUP}",
+        "%{BKY_MATH_ROUND_OPERATOR_ROUNDDOWN}"
+    ]
   },
 
   // Block for evaluating a list of numbers to return sum, average, min, max,
@@ -284,10 +335,20 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
       }
     ],
     "output": "Number",
-    "colour": "%{BKY_MATH_HUE}",
+    "style": "math_blocks",
     "helpUrl": "%{BKY_MATH_ONLIST_HELPURL}",
     "mutator": "math_modes_of_list_mutator",
-    "extensions": ["math_op_tooltip"]
+    "extensions": ["math_op_tooltip"],
+    "search_keywords": [
+        "%{BKY_MATH_ONLIST_OPERATOR_SUM}",
+        "%{BKY_MATH_ONLIST_OPERATOR_MIN}",
+        "%{BKY_MATH_ONLIST_OPERATOR_MAX}",
+        "%{BKY_MATH_ONLIST_OPERATOR_AVERAGE}",
+        "%{BKY_MATH_ONLIST_OPERATOR_MEDIAN}",
+        "%{BKY_MATH_ONLIST_OPERATOR_MODE}",
+        "%{BKY_MATH_ONLIST_OPERATOR_STD_DEV}",
+        "%{BKY_MATH_ONLIST_OPERATOR_RANDOM}",
+    ]
   },
 
   // Block for remainder of a division.
@@ -308,9 +369,12 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     ],
     "inputsInline": true,
     "output": "Number",
-    "colour": "%{BKY_MATH_HUE}",
+    "style": "math_blocks",
     "tooltip": "%{BKY_MATH_MODULO_TOOLTIP}",
-    "helpUrl": "%{BKY_MATH_MODULO_HELPURL}"
+    "helpUrl": "%{BKY_MATH_MODULO_HELPURL}",
+    "search_keywords": [
+        "%{BKY_MATH_MODULO_TITLE}"
+    ]
   },
 
   // Block for constraining a number between two limits.
@@ -336,9 +400,12 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     ],
     "inputsInline": true,
     "output": "Number",
-    "colour": "%{BKY_MATH_HUE}",
+    "style": "math_blocks",
     "tooltip": "%{BKY_MATH_CONSTRAIN_TOOLTIP}",
-    "helpUrl": "%{BKY_MATH_CONSTRAIN_HELPURL}"
+    "helpUrl": "%{BKY_MATH_CONSTRAIN_HELPURL}",
+    "search_keywords": [
+        "%{BKY_MATH_CONSTRAIN_TITLE}"
+    ]
   },
 
   // Block for random integer between [X] and [Y].
@@ -359,9 +426,12 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     ],
     "inputsInline": true,
     "output": "Number",
-    "colour": "%{BKY_MATH_HUE}",
+    "style": "math_blocks",
     "tooltip": "%{BKY_MATH_RANDOM_INT_TOOLTIP}",
-    "helpUrl": "%{BKY_MATH_RANDOM_INT_HELPURL}"
+    "helpUrl": "%{BKY_MATH_RANDOM_INT_HELPURL}",
+    "search_keywords": [
+        "%{BKY_MATH_RANDOM_INT_TITLE}"
+    ]
   },
 
   // Block for random integer between [X] and [Y].
@@ -369,9 +439,12 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     "type": "math_random_float",
     "message0": "%{BKY_MATH_RANDOM_FLOAT_TITLE_RANDOM}",
     "output": "Number",
-    "colour": "%{BKY_MATH_HUE}",
+    "style": "math_blocks",
     "tooltip": "%{BKY_MATH_RANDOM_FLOAT_TOOLTIP}",
-    "helpUrl": "%{BKY_MATH_RANDOM_FLOAT_HELPURL}"
+    "helpUrl": "%{BKY_MATH_RANDOM_FLOAT_HELPURL}",
+    "search_keywords": [
+        "%{BKY_MATH_RANDOM_FLOAT_TITLE_RANDOM}"
+    ]
   },
 
   // Block for calculating atan2 of [X] and [Y].
@@ -392,9 +465,12 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     ],
     "inputsInline": true,
     "output": "Number",
-    "colour": "%{BKY_MATH_HUE}",
+    "style": "math_blocks",
     "tooltip": "%{BKY_MATH_ATAN2_TOOLTIP}",
-    "helpUrl": "%{BKY_MATH_ATAN2_HELPURL}"
+    "helpUrl": "%{BKY_MATH_ATAN2_HELPURL}",
+    "search_keywords": [
+        "%{BKY_MATH_ATAN2_TITLE}"
+    ]
   }
 ]);  // END JSON EXTRACT (Do not delete this comment.)
 

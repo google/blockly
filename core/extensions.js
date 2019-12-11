@@ -252,7 +252,7 @@ Blockly.Extensions.checkBlockHasMutatorProperties_ = function(errorPrefix,
 /**
  * Get a list of values of mutator properties on the given block.
  * @param {!Blockly.Block} block The block to inspect.
- * @return {!Array.<Object>} a list with all of the defined properties, which
+ * @return {!Array.<Object>} A list with all of the defined properties, which
  *     should be functions, but may be anything other than undefined.
  * @private
  */
@@ -385,7 +385,7 @@ Blockly.Extensions.checkDropdownOptionsInTable_ = function(block, dropdownName,
       var optionKey = options[i][1];  // label, then value
       if (lookupTable[optionKey] == null) {
         console.warn('No tooltip mapping for value ' + optionKey +
-          ' of field ' + dropdownName + ' of block type ' + block.type);
+           ' of field ' + dropdownName + ' of block type ' + block.type);
       }
     }
   }
@@ -398,7 +398,7 @@ Blockly.Extensions.checkDropdownOptionsInTable_ = function(block, dropdownName,
  * @param {string} msgTemplate The template form to of the message text, with
  *     %1 placeholder.
  * @param {string} fieldName The field with the replacement text.
- * @returns {Function} The extension function.
+ * @return {Function} The extension function.
  */
 Blockly.Extensions.buildTooltipWithFieldText = function(msgTemplate,
     fieldName) {

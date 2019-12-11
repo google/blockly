@@ -362,5 +362,6 @@
 	"PROCEDURES_IFRETURN_TOOLTIP": "Si une valeur est vraie, alors renvoyer une seconde valeur.",
 	"PROCEDURES_IFRETURN_HELPURL": "http://c2.com/cgi/wiki?GuardClause",
 	"PROCEDURES_IFRETURN_WARNING": "Attention : Ce bloc pourrait n’être utilisé que dans une définition de fonction.",
-	"WORKSPACE_COMMENT_DEFAULT_TEXT": "Dire quelque chose…"
+	"WORKSPACE_COMMENT_DEFAULT_TEXT": "Dire quelque chose…",
+	"COLLAPSED_WARNINGS_WARNING": "Les blocs repliés contiennent des avertissements."
 }

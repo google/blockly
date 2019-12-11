@@ -206,7 +206,7 @@ Blockly.TouchGesture.prototype.handleUp = function(e) {
 
 /**
  * Whether this gesture is part of a multi-touch gesture.
- * @return {boolean} whether this gesture is part of a multi-touch gesture.
+ * @return {boolean} Whether this gesture is part of a multi-touch gesture.
  * @package
  */
 Blockly.TouchGesture.prototype.isMultiTouch = function() {
@@ -301,7 +301,7 @@ Blockly.TouchGesture.prototype.handleTouchEnd = function(e) {
 /**
  * Helper function returning the current touch point coordinate.
  * @param {!Event} e A touch or pointer event.
- * @return {goog.math.Coordinate} the current touch point coordinate
+ * @return {goog.math.Coordinate} The current touch point coordinate
  * @package
  */
 Blockly.TouchGesture.prototype.getTouchPoint = function(e) {

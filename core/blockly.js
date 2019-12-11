@@ -117,6 +117,13 @@ Blockly.clipboardTypeCounts_ = null;
 Blockly.cache3dSupported_ = null;
 
 /**
+ * Holds all Blockly style attributes.
+ * @type {Blockly.Theme}
+ * @private
+ */
+Blockly.theme_ = null;
+
+/**
  * Convert a hue (HSV model) into an RGB hex triplet.
  * @param {number} hue Hue on a colour wheel (0-360).
  * @return {string} RGB code, e.g. '#5ba65b'.
@@ -189,8 +196,8 @@ Blockly.svgResize = function(workspace) {
 // are multiple workspaces and non-main workspaces are able to accept input.
 Blockly.onKeyDown_ = function(e) {
   var workspace = Blockly.mainWorkspace;
-  if (workspace.options.readOnly || Blockly.utils.isTargetInput(e)
-      || (workspace.rendered && !workspace.isVisible())) {
+  if (workspace.options.readOnly || Blockly.utils.isTargetInput(e) ||
+      (workspace.rendered && !workspace.isVisible())) {
     // No key actions on readonly workspaces.
     // When focused on an HTML text input widget, don't trap any keys.
     // Ignore keypresses on rendered workspaces that have been explicitly
@@ -208,7 +215,7 @@ Blockly.onKeyDown_ = function(e) {
     // data loss.
     e.preventDefault();
     // Don't delete while dragging.  Jeez.
-    if (workspace.isDragging()) {
+    if (Blockly.Gesture.inProgress()) {
       return;
     }
     if (Blockly.selected && Blockly.selected.isDeletable()) {
@@ -216,7 +223,7 @@ Blockly.onKeyDown_ = function(e) {
     }
   } else if (e.altKey || e.ctrlKey || e.metaKey) {
     // Don't use meta keys during drags.
-    if (workspace.isDragging()) {
+    if (Blockly.Gesture.inProgress()) {
       return;
     }
     if (Blockly.selected &&
@@ -255,6 +262,12 @@ Blockly.onKeyDown_ = function(e) {
       // 'z' for undo 'Z' is for redo.
       Blockly.hideChaff();
       workspace.undo(e.shiftKey);
+    }
+    else if (e.keyCode == 70) {
+      // 'f' for focusing the workspace search,
+      // 'F' for focusing the toolbox search
+      // Both need to be triggered with the Ctrl/Cmd key - Ctrl + F, Ctrl + Shift + F
+      workspace.focusSearch(e.shiftKey);
     }
   }
   // Common code for delete and cut.
@@ -330,8 +343,15 @@ Blockly.onContextMenu_ = function(e) {
 Blockly.hideChaff = function(opt_allowToolbox) {
   Blockly.Tooltip.hide();
   Blockly.WidgetDiv.hide();
+  Blockly.DropDownDiv.hideWithoutAnimation();
+  // For now the trashcan flyout always autocloses because it overlays the
+  // trashcan UI (no trashcan to click to close it)
+  var workspace = Blockly.getMainWorkspace();
+  if (workspace.trashcan &&
+      workspace.trashcan.flyout_) {
+    workspace.trashcan.flyout_.hide();
+  }
   if (!opt_allowToolbox) {
-    var workspace = Blockly.getMainWorkspace();
     if (workspace.toolbox_ &&
         workspace.toolbox_.flyout_ &&
         workspace.toolbox_.flyout_.autoClose) {
@@ -371,11 +391,18 @@ Blockly.getMainWorkspace = function() {
  * @param {string} message The message to display to the user.
  * @param {function()=} opt_callback The callback when the alert is dismissed.
  */
-Blockly.alert = function(message, opt_callback) {
-  window.alert(message);
-  if (opt_callback) {
-    opt_callback();
-  }
+// Blockly.alert = function(message, opt_callback) {
+//   window.alert(message);
+//   if (opt_callback) {
+//     opt_callback();
+//   }
+// };
+
+Blockly.alert = function(message, callback) {
+  console.log('Alert: ' + message);
+  Fable.View.Workspace.CustomDialog.show('Alert', message, {
+      onCancel: callback
+  });
 };
 
 /**
@@ -384,9 +411,23 @@ Blockly.alert = function(message, opt_callback) {
  * @param {string} message The message to display to the user.
  * @param {!function(boolean)} callback The callback for handling user response.
  */
+// Blockly.confirm = function(message, callback) {
+//   callback(window.confirm(message));
+// };
 Blockly.confirm = function(message, callback) {
-  callback(window.confirm(message));
+  console.log('Confirm: ' + message);
+  Fable.View.Workspace.CustomDialog.show('Confirm', message, {
+      showOkay: true,
+      onOkay: function() {
+          callback(true);
+      },
+      showCancel: true,
+      onCancel: function() {
+          callback(false);
+      }
+  });
 };
+
 
 /**
  * Wrapper to window.prompt() that app developers may override to provide
@@ -397,8 +438,23 @@ Blockly.confirm = function(message, callback) {
  * @param {string} defaultValue The value to initialize the prompt with.
  * @param {!function(string)} callback The callback for handling user response.
  */
+// Blockly.prompt = function(message, defaultValue, callback) {
+//   callback(window.prompt(message, defaultValue));
+// };
+
 Blockly.prompt = function(message, defaultValue, callback) {
-  callback(window.prompt(message, defaultValue));
+  Fable.View.Workspace.CustomDialog.show('Prompt', message, {
+      showInput: true,
+      showOkay: true,
+      onOkay: function() {
+          callback(Fable.View.Workspace.CustomDialog.inputField.value)
+      },
+      showCancel: true,
+      onCancel: function() {
+          callback(null)
+      }
+  });
+  Fable.View.Workspace.CustomDialog.inputField.value = defaultValue;
 };
 
 /**
@@ -412,6 +468,21 @@ Blockly.prompt = function(message, defaultValue, callback) {
 Blockly.jsonInitFactory_ = function(jsonDef) {
   return function() {
     this.jsonInit(jsonDef);
+  };
+};
+
+/**
+ * Helper function for defining a block's associated keywords from JSON. The 
+ * resulting function will send a list of keywords to the Search handler.
+ * 
+ * @param {!String} type The Type ID of the block
+ * @param {!Array<String>} keyword_list The list of keywords that this block can be found with
+ * @return {function()} A function that calls the Search handler and gives it the list of keywords
+ * @private
+ */
+Blockly.evaluateSearchJson_ = function(type, keyword_list) {
+  return function() {
+      Blockly.Search.preprocessSearchKeywords(type, keyword_list);
   };
 };
 
@@ -440,7 +511,8 @@ Blockly.defineBlocksWithJsonArray = function(jsonArray) {
               ' overwrites prior definition of "' + typename + '".');
         }
         Blockly.Blocks[typename] = {
-          init: Blockly.jsonInitFactory_(elem)
+          init: Blockly.jsonInitFactory_(elem),
+          ensureSearchKeywords: Blockly.evaluateSearchJson_(elem["type"], elem["search_keywords"]),
         };
       }
     }
@@ -457,7 +529,7 @@ Blockly.defineBlocksWithJsonArray = function(jsonArray) {
  * @param {!Function} func Function to call when event is triggered.
  * @param {boolean=} opt_noCaptureIdentifier True if triggering on this event
  *     should not block execution of other event handlers on this touch or
- *     other simultaneous touches.
+ *     other simultaneous touches.  False by default.
  * @param {boolean=} opt_noPreventDefault True if triggering on this event
  *     should prevent the default handler.  False by default.  If
  *     opt_noPreventDefault is provided, opt_noCaptureIdentifier must also be
@@ -671,13 +743,75 @@ Blockly.checkBlockColourConstant_ = function(
   }
 };
 
-// IE9 does not have a console.  Create a stub to stop errors.
-if (!goog.global['console']) {
-  goog.global['console'] = {
-    'log': function() {},
-    'warn': function() {}
-  };
-}
+
+/**
+ * Sets the theme for Blockly and refreshes all blocks in the toolbox and
+ * workspace.
+ * @param {!Blockly.Theme} theme Theme for Blockly.
+ */
+Blockly.setTheme = function(theme) {
+  this.theme_ = theme;
+  var ws = Blockly.getMainWorkspace();
+
+  if (ws) {
+    this.refreshTheme_(ws);
+  }
+};
+
+/**
+ * Refresh the theme for all items on the workspace.
+ * @param {!Blockly.Workspace} ws Blockly workspace to refresh theme on.
+ * @private
+ */
+Blockly.refreshTheme_ = function(ws) {
+  // Update all blocks in workspace that have a style name.
+  this.updateBlockStyles_(ws.getAllBlocks().filter(
+      function(block){
+        return block.getStyleName() !== undefined;
+      }
+  ));
+
+  // Update blocks in the flyout.
+  if (!ws.toolbox_ && ws.flyout_ && ws.flyout_.workspace_) {
+    this.updateBlockStyles_(ws.flyout_.workspace_.getAllBlocks());
+  } else {
+    ws.refreshToolboxSelection();
+  }
+
+  // Update colours on the categories.
+  if (ws.toolbox_) {
+    ws.toolbox_.updateColourFromTheme();
+  }
+
+  var event = new Blockly.Events.Ui(null, 'theme');
+  event.workspaceId = ws.id;
+  Blockly.Events.fire(event);
+};
+
+/**
+ * Updates all the blocks with new style.
+ * @param {!Array.<!Blockly.Block>} blocks List of blocks to update the style
+ * on.
+ * @private
+ */
+Blockly.updateBlockStyles_ = function(blocks) {
+  for (var i = 0, block; block = blocks[i]; i++) {
+    var blockStyleName = block.getStyleName();
+
+    block.setStyle(blockStyleName);
+    if (block.mutator) {
+      block.mutator.updateBlockStyle(blockStyleName);
+    }
+  }
+};
+
+/**
+ * Gets the theme.
+ * @return {Blockly.Theme} Theme for Blockly.
+ */
+Blockly.getTheme = function() {
+  return this.theme_;
+};
 
 // Export symbols that would otherwise be renamed by Closure compiler.
 if (!goog.global['Blockly']) {

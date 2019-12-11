@@ -34,7 +34,7 @@ goog.require('Blockly.utils');
  * Class for a variable model.
  * Holds information for the variable including name, ID, and type.
  * @param {!Blockly.Workspace} workspace The variable's workspace.
- * @param {!string} name The name of the variable. This must be unique across
+ * @param {string} name The name of the variable. This must be unique across
  *     variables and procedures.
  * @param {string=} opt_type The type of the variable like 'int' or 'string'.
  *     Does not need to be unique. Field_variable can filter variables based on
@@ -81,7 +81,7 @@ Blockly.VariableModel = function(workspace, name, opt_type, opt_id) {
 };
 
 /**
- * @return {!string} The ID for the variable.
+ * @return {string} The ID for the variable.
  */
 Blockly.VariableModel.prototype.getId = function() {
   return this.id_;

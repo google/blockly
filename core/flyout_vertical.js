@@ -149,13 +149,35 @@ Blockly.VerticalFlyout.prototype.position = function() {
   var edgeHeight = targetWorkspaceMetrics.viewHeight - 2 * this.CORNER_RADIUS;
   this.setBackgroundPath_(edgeWidth, edgeHeight);
 
-  var y = targetWorkspaceMetrics.absoluteTop;
-  var x = targetWorkspaceMetrics.absoluteLeft;
-  if (this.toolboxPosition_ == Blockly.TOOLBOX_AT_RIGHT) {
-    x += (targetWorkspaceMetrics.viewWidth - this.width_);
-    // Save the location of the left edge of the flyout, for use when Firefox
-    // gets the bounding client rect wrong.
-    this.leftEdge_ = x;
+  // Y is always 0 since this is a vertical flyout.
+  var y = 0;
+  // If this flyout is the toolbox flyout.
+  if (this.targetWorkspace_.toolboxPosition == this.toolboxPosition_) {
+    // If there is a category toolbox.
+    if (targetWorkspaceMetrics.toolboxWidth) {
+      if (this.toolboxPosition_ == Blockly.TOOLBOX_AT_LEFT) {
+        var x = targetWorkspaceMetrics.toolboxWidth;
+      } else {
+        var x = targetWorkspaceMetrics.viewWidth - this.width_;
+      }
+    } else {
+      if (this.toolboxPosition_ == Blockly.TOOLBOX_AT_LEFT) {
+        var x = 0;
+      } else {
+        var x = targetWorkspaceMetrics.viewWidth;
+      }
+    }
+  } else {
+    if (this.toolboxPosition_ == Blockly.TOOLBOX_AT_LEFT) {
+      var x = 0;
+    } else {
+      // Because the anchor point of the flyout is on the left, but we want
+      // to align the right edge of the flyout with the right edge of the
+      // blocklyDiv, we calculate the full width of the div minus the width
+      // of the flyout.
+      var x = targetWorkspaceMetrics.viewWidth
+          + targetWorkspaceMetrics.absoluteLeft - this.width_;
+    }
   }
   this.positionAt_(this.width_, this.height_, x, y);
 };
@@ -207,16 +229,11 @@ Blockly.VerticalFlyout.prototype.scrollToStart = function() {
  * @private
  */
 Blockly.VerticalFlyout.prototype.wheel_ = function(e) {
-  var delta = e.deltaY;
+  var scrollDelta = Blockly.utils.getScrollDeltaPixels(e);
 
-  if (delta) {
-    // Firefox's mouse wheel deltas are a tenth that of Chrome/Safari.
-    // DeltaMode is 1 for a mouse wheel, but not for a trackpad scroll event
-    if (goog.userAgent.GECKO && (e.deltaMode === 1)) {
-      delta *= 10;
-    }
+  if (scrollDelta.y) {
     var metrics = this.getMetrics_();
-    var pos = (metrics.viewTop - metrics.contentTop) + delta;
+    var pos = (metrics.viewTop - metrics.contentTop) + scrollDelta.y;
     var limit = metrics.contentHeight - metrics.viewHeight;
     pos = Math.min(pos, limit);
     pos = Math.max(pos, 0);
@@ -277,7 +294,7 @@ Blockly.VerticalFlyout.prototype.layout_ = function(contents, gaps) {
  * determine if a new block should be created or if the flyout should scroll.
  * @param {!goog.math.Coordinate} currentDragDeltaXY How far the pointer has
  *     moved from the position at mouse down, in pixel units.
- * @return {boolean} true if the drag is toward the workspace.
+ * @return {boolean} True if the drag is toward the workspace.
  * @package
  */
 Blockly.VerticalFlyout.prototype.isDragTowardWorkspace = function(
@@ -392,8 +409,6 @@ Blockly.VerticalFlyout.prototype.reflowInternal_ = function() {
     }
     // Record the width for .getMetrics_ and .position.
     this.width_ = flyoutWidth;
-    // Call this since it is possible the trash and zoom buttons need
-    // to move. e.g. on a bottom positioned flyout when zoom is clicked.
-    this.targetWorkspace_.resize();
+    this.position();
   }
 };

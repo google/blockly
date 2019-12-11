@@ -38,7 +38,10 @@ goog.require('goog.events.BrowserFeature');
 goog.require('goog.html.SafeHtml');
 goog.require('goog.html.SafeStyle');
 goog.require('goog.math.Rect');
+goog.require('goog.structs.Set');
+goog.require('goog.structs.Trie');
 goog.require('goog.style');
+goog.require('goog.ui.LabelInput');
 goog.require('goog.ui.tree.TreeControl');
 goog.require('goog.ui.tree.TreeNode');
 
@@ -56,6 +59,12 @@ Blockly.Toolbox = function(workspace) {
    * @private
    */
   this.workspace_ = workspace;
+
+  /**
+   * @type {!Blockly.Search}
+   * @private
+   */
+  this.search_ = this.workspace_.search_;
 
   /**
    * Is RTL vs LTR.
@@ -178,7 +187,8 @@ Blockly.Toolbox.prototype.init = function() {
     RTL: workspace.RTL,
     oneBasedIndex: workspace.options.oneBasedIndex,
     horizontalLayout: workspace.horizontalLayout,
-    toolboxPosition: workspace.options.toolboxPosition
+    toolboxPosition: workspace.options.toolboxPosition,
+    isToolbox: true
   };
   /**
    * @type {!Blockly.Flyout}
@@ -190,6 +200,9 @@ Blockly.Toolbox.prototype.init = function() {
   } else {
     this.flyout_ = new Blockly.VerticalFlyout(workspaceOptions);
   }
+
+  this.search_ = this.flyout_.workspace_.search_;
+
   // Insert the flyout after the workspace.
   Blockly.utils.insertAfter(this.flyout_.createDom('svg'),
       this.workspace_.getParentSvg());
@@ -283,9 +296,28 @@ Blockly.Toolbox.prototype.populate_ = function(newTree) {
   this.tree_.removeChildren();  // Delete any existing content.
   this.tree_.blocks = [];
   this.hasColours_ = false;
-  var openNode =
-    this.syncTrees_(newTree, this.tree_, this.workspace_.options.pathToMedia);
 
+  this.shouldPopulateSearch_ = false;
+
+  //Determine whether the Toolbox will have any search logic in it.
+  //It will have it if the toolbox has a search XML element in it.
+  for (var child in newTree.childNodes) { 
+      if(newTree.childNodes[child].tagName == "search") {
+          this.shouldPopulateSearch_ = true;
+          break;
+      }
+  }
+
+  //If there will be any search logic, clear the current trie (useful when changing Toolboxes - Simple/Advanced)
+  if (this.shouldPopulateSearch_) {
+    this.search_.clearAll();
+  }
+
+  var openNode =
+    this.syncTrees_(newTree, this.tree_, this.workspace_.options.pathToMedia, this.shouldPopulateSearch_);
+  
+  // this.populateTrie_();
+  
   if (this.tree_.blocks.length) {
     throw Error('Toolbox cannot have both blocks and categories ' +
         'in the root level.');
@@ -302,10 +334,11 @@ Blockly.Toolbox.prototype.populate_ = function(newTree) {
  * @param {!Blockly.Toolbox.TreeControl} treeOut The TreeContorol object built
  *     from treeIn.
  * @param {string} pathToMedia The path to the Blockly media directory.
+ * @param {!Boolean} shouldAddToSearchTrie True if any blocks in the XML should be added to the Search handler.
  * @return {Node} Tree node to open at startup (or null).
  * @private
  */
-Blockly.Toolbox.prototype.syncTrees_ = function(treeIn, treeOut, pathToMedia) {
+Blockly.Toolbox.prototype.syncTrees_ = function(treeIn, treeOut, pathToMedia, shouldAddToSearchTrie) {
   var openNode = null;
   var lastElement = null;
   for (var i = 0, childIn; childIn = treeIn.childNodes[i]; i++) {
@@ -326,31 +359,33 @@ Blockly.Toolbox.prototype.syncTrees_ = function(treeIn, treeOut, pathToMedia) {
         if (custom) {
           // Variables and procedures are special dynamic categories.
           childOut.blocks = custom;
+
+          //TODO: Add the custom category blocks to the Search Trie.
+          // if (shouldAddToSearchTrie) {
+          //   var blocksFunction = this.workspace_.getToolboxCategoryCallback("PROCEDURE");
         } else {
-          var newOpenNode = this.syncTrees_(childIn, childOut, pathToMedia);
+          //Skip the most used category. TODO: Move to the if (custom) above once the most_used_rewrite is merged.
+          var isNotMostUsed = (shouldAddToSearchTrie && (childIn.getAttribute('name') != Blockly.Msg.MOST_USED));
+
+          var newOpenNode = this.syncTrees_(childIn, childOut, pathToMedia, isNotMostUsed);
           if (newOpenNode) {
             openNode = newOpenNode;
           }
         }
-        // Decode the colour for any potential message references
-        // (eg. `%{BKY_MATH_HUE}`).
-        var colour = Blockly.utils.replaceMessageReferences(
-            childIn.getAttribute('colour'));
-        if (colour === null || colour === '') {
-          // No attribute. No colour.
-          childOut.hexColour = '';
-        } else if (/^#[0-9a-fA-F]{6}$/.test(colour)) {
-          childOut.hexColour = colour;
-          this.hasColours_ = true;
-        } else if (typeof colour === 'number' ||
-            (typeof colour === 'string' && !isNaN(Number(colour)))) {
-          childOut.hexColour = Blockly.hueToRgb(Number(colour));
-          this.hasColours_ = true;
-        } else {
+
+        var styleName = childIn.getAttribute('categorystyle');
+        var colour = childIn.getAttribute('colour');
+
+        if (colour && styleName) {
           childOut.hexColour = '';
           console.warn('Toolbox category "' + categoryName +
-              '" has unrecognized colour attribute: ' + colour);
+              '" can not have both a style and a colour');
+        } else if (styleName) {
+          this.setColourFromStyle_(styleName, childOut, categoryName);
+        } else {
+          this.setColour_(colour, childOut, categoryName);
         }
+
         if (childIn.getAttribute('expanded') == 'true') {
           if (childOut.blocks.length) {
             // This is a category that directly contains blocks.
@@ -383,17 +418,132 @@ Blockly.Toolbox.prototype.syncTrees_ = function(treeIn, treeOut, pathToMedia) {
           }
         }
         break;
-      case 'BLOCK':
+        //TODO: Move LABEL as its own case, so the BKY_ prefix can be escaped and localized.
       case 'SHADOW':
       case 'LABEL':
       case 'BUTTON':
         treeOut.blocks.push(childIn);
         lastElement = childIn;
         break;
+      case 'BLOCK':
+        //If the toolbox will have a search handler, add the block to the handler
+        if (shouldAddToSearchTrie) {
+          var block_type = childIn.getAttribute('type');
+          this.search_.onBlockAdded(block_type, childIn);
+        }
+
+        //Add the block to the category as usual
+        treeOut.blocks.push(childIn);
+        lastElement = childIn;
+        break;
+      case 'SEARCH':
+        //Initialzie the Search handler and place a GUI button in the list of categories (left sidebar)
+        var treeSearch = new Blockly.Toolbox.TreeSearch(this, this.search_);
+        //TODO: Move hex colour to the toolbox's XML
+        treeSearch.hexColour = '#144bb2';
+        treeOut.add(treeSearch);
+        lastElement = childIn;
+        break;
     }
   }
   return openNode;
 };
+
+/**
+ * Sets the colour on the category.
+ * @param {number|string} colourValue HSV hue value (0 to 360), #RRGGBB string,
+ *     or a message reference string pointing to one of those two values.
+ * @param {Blockly.Toolbox.TreeNode} childOut The child to set the hexColour on.
+ * @param {string} categoryName Name of the toolbox category.
+ * @private
+ */
+Blockly.Toolbox.prototype.setColour_ = function(colourValue, childOut, categoryName){
+  // Decode the colour for any potential message references
+  // (eg. `%{BKY_MATH_HUE}`).
+  var colour = Blockly.utils.replaceMessageReferences(colourValue);
+  if (colour === null || colour === '') {
+    // No attribute. No colour.
+    childOut.hexColour = '';
+  } else if (/^#[0-9a-fA-F]{6}$/.test(colour)) {
+    childOut.hexColour = colour;
+    this.hasColours_ = true;
+  } else if (typeof colour === 'number' ||
+      (typeof colour === 'string' && !isNaN(Number(colour)))) {
+    childOut.hexColour = Blockly.hueToRgb(Number(colour));
+    this.hasColours_ = true;
+  } else {
+    childOut.hexColour = '';
+    console.warn('Toolbox category "' + categoryName +
+        '" has unrecognized colour attribute: ' + colour);
+  }
+};
+
+/**
+ * Retrieves and sets the colour for the category using the style name.
+ * The category colour is set from the colour style attribute.
+ * @param {string} styleName Name of the style.
+ * @param {!Blockly.Toolbox.TreeNode} childOut The child to set the hexColour on.
+ * @param {string} categoryName Name of the toolbox category.
+ */
+Blockly.Toolbox.prototype.setColourFromStyle_ = function(
+    styleName, childOut, categoryName){
+  childOut.styleName = styleName;
+  if (styleName && Blockly.getTheme()) {
+    var style = Blockly.getTheme().getCategoryStyle(styleName);
+    if (style && style.colour) {
+      this.setColour_(style.colour, childOut, categoryName);
+    } else {
+      console.warn('Style "' + styleName + '" must exist and contain a colour value');
+    }
+  }
+};
+
+/**
+ * Recursively updates all the category colours using the category style name.
+ * @param {Blockly.Toolbox.TreeNode=} opt_tree Starting point of tree.
+ *     Defaults to the root node.
+ * @private
+ */
+Blockly.Toolbox.prototype.updateColourFromTheme_ = function(opt_tree) {
+  var tree = opt_tree || this.tree_;
+  if (tree) {
+    var children = tree.getChildren(false);
+    for (var i = 0, child; child = children[i]; i++) {
+      if (child.styleName) {
+        this.setColourFromStyle_(child.styleName, child, '');
+        this.addColour_();
+      }
+      this.updateColourFromTheme_(child);
+    }
+  }
+};
+
+/**
+ * Updates the category colours and background colour of selected categories.
+ */
+Blockly.Toolbox.prototype.updateColourFromTheme = function() {
+  var tree = this.tree_;
+  if (tree) {
+    this.updateColourFromTheme_(tree);
+    this.updateSelectedItemColour_(tree);
+  }
+};
+
+/**
+ * Updates the background colour of the selected category.
+ * @param {!Blockly.Toolbox.TreeNode} tree Starting point of tree.
+ *     Defaults to the root node.
+ * @private
+ */
+Blockly.Toolbox.prototype.updateSelectedItemColour_ = function(tree) {
+  var selectedItem = tree.selectedItem_;
+  if (selectedItem) {
+    var hexColour = selectedItem.hexColour || '#57e';
+    selectedItem.getRowElement().style.backgroundColor = hexColour;
+    tree.toolbox_.addColour_(selectedItem);
+  }
+};
+
 
 /**
  * Recursively add colours to this toolbox.
@@ -550,8 +700,7 @@ Blockly.Toolbox.TreeControl.prototype.handleTouchEvent_ = function(e) {
 Blockly.Toolbox.TreeControl.prototype.createNode = function(opt_html) {
   var html = opt_html ?
       goog.html.SafeHtml.htmlEscape(opt_html) : goog.html.SafeHtml.EMPTY;
-  return new Blockly.Toolbox.TreeNode(this.toolbox_, html,
-      this.getConfig(), this.getDomHelper());
+  return new Blockly.Toolbox.TreeNode(this.toolbox_, html, this.getConfig());
 };
 
 /**
@@ -601,15 +750,14 @@ Blockly.Toolbox.TreeControl.prototype.setSelectedItem = function(node) {
  * A single node in the tree, customized for Blockly's UI.
  * @param {Blockly.Toolbox} toolbox The parent toolbox for this tree.
  * @param {!goog.html.SafeHtml} html The HTML content of the node label.
- * @param {Object=} opt_config The configuration for the tree. See
- *    goog.ui.tree.TreeControl.DefaultConfig. If not specified, a default config
- *    will be used.
- * @param {goog.dom.DomHelper=} opt_domHelper Optional DOM helper.
+ * @param {Object|undefined} config The configuration for the tree.
+ *    See goog.ui.tree.TreeControl.DefaultConfig.
+ *    If not specified, a default config will be used.
  * @constructor
  * @extends {goog.ui.tree.TreeNode}
  */
-Blockly.Toolbox.TreeNode = function(toolbox, html, opt_config, opt_domHelper) {
-  goog.ui.tree.TreeNode.call(this, html, opt_config, opt_domHelper);
+Blockly.Toolbox.TreeNode = function(toolbox, html, config) {
+  goog.ui.tree.TreeNode.call(this, html, config);
   if (toolbox) {
     var resize = function() {
       // Even though the div hasn't changed size, the visible workspace
@@ -696,11 +844,140 @@ Blockly.Toolbox.TreeNode.prototype.onKeyDown = function(e) {
   return Blockly.Toolbox.TreeNode.superClass_.onKeyDown.call(this, e);
 };
 
+ /**
+ * Event handler for clicking on the search bar in the Toolbox.
+ * Sets focus to the search field in the toolbox, so the user can search.
+ */
+Blockly.Toolbox.prototype.focusSearchField = function() {
+  //Close any other opened categories
+  this.tree_.setSelectedItem(null);
+
+  //Find the search bar and focus it
+  var children = this.tree_.getChildren();
+  for (var i = 0; i < children.length; i++) {
+    var child = children[i];
+    if (child.focusSearchField) {
+      child.focusSearchField();
+      return;
+    }
+    else {
+      child.blur();
+    }
+  }
+};
+
+/**
+ * A GUI element that acts as a search field in the Toolbox tree.
+ * @constructor
+ * @extends {Blockly.Toolbox.TreeNode}
+ */
+Blockly.Toolbox.TreeSearch = function(toolbox, search) {
+  this.toolbox_ = toolbox;
+  this.search_ = search;
+
+  //TODO: Localization for the placeholder
+  var searchField = goog.html.SafeHtml.create(
+    'input', 
+    {
+      id: 'blockSearchInput', 
+      type: "search", 
+      placeholder: "Search"
+    });
+
+   Blockly.Toolbox.TreeNode.call(this, toolbox, searchField,
+      Blockly.Toolbox.TreeSearch.CONFIG_);
+};
+goog.inherits(Blockly.Toolbox.TreeSearch, Blockly.Toolbox.TreeNode);
+
+ /**
+ * Configuration constants for tree typeahead search field.
+ * @type {Object.<string,*>}
+ * @const
+ * @private
+ */
+Blockly.Toolbox.TreeSearch.CONFIG_ = {
+  cssTreeRow: 'blocklyTreeSearch'
+};
+
+ /**
+ * Event handler for when the user focuses on the search bar. Initializes all the
+ * required event listeners for actually carrying out the search.
+ */
+Blockly.Toolbox.TreeSearch.prototype.enterDocument = function() {
+  Blockly.Toolbox.TreeNode.prototype.enterDocument.call(this);
+
+   var toolbox = this.toolbox_;
+   var search = this.search_;
+
+  var searchField = this.getElement().getElementsByTagName('input')[0];
+  this.searchField_ = searchField;
+
+  //Do nothing if a click or keydown events happen
+  goog.events.listen(searchField, ['click', 'keydown'], function (e) {
+    e.stopPropagation();
+  });
+  
+  //Execute a search on a keyup event
+  goog.events.listen(searchField, 'keyup', function (e) {
+    //Clear the search and hide the flyout, also unfocus the search box (when pressing Escape)
+    if (e.keyCode == 27) {
+      toolbox.flyout_.hide();
+      this.blur();
+      return;
+    }
+    
+    //Initalize the list that will hold all results
+    var matchingBlocks = [];
+
+    //Preprocess the user's search input by trimming, lowercasing and splitting by whitespace
+    var searchTerms = e.target.value.trim().toLowerCase().split(/\s+/);
+
+    //Filter out all empty strings from the search list
+    if (searchTerms.length > 0) {
+      searchTerms = goog.array.filter(searchTerms, function (term) {
+        return term.length > 0;
+      });
+
+      if (searchTerms.length > 0) {
+        matchingBlocks = search.blocksMatchingSearchTerms(searchTerms);
+      }
+    }
+
+    //Create a label for the search results category
+    var label = Blockly.Xml.utils.createElement('label');
+    label.setAttribute('web-class', 'subcategoryClass');
+
+    //Set the text inside the label based on the search results
+    //TODO: Localizaiton
+    if (matchingBlocks.length > 0) {
+      label.setAttribute('text', 'Search results:');
+
+    }
+    else {
+      label.setAttribute('text', 'No results found');
+    }
+
+    //Add the label to the flyout of results. Put it in the beginning.
+    matchingBlocks.splice(0, 0, label);
+
+    //Show the resulting XML in the flyout
+    toolbox.flyout_.show(matchingBlocks);
+    toolbox.flyout_.scrollToStart();
+  });
+};
+
+ /**
+ * Event handler for focusing the search bar inside the Toolbox.
+ */
+Blockly.Toolbox.TreeSearch.prototype.focusSearchField = function() {
+  this.searchField_.focus();
+}; 
+
 /**
  * A blank separator node in the tree.
- * @param {Object=} config The configuration for the tree. See
- *    goog.ui.tree.TreeControl.DefaultConfig. If not specified, a default config
- *    will be used.
+ * @param {Object|undefined} config The configuration for the tree.
+ *    See goog.ui.tree.TreeControl.DefaultConfig
+ *    If not specified, a default config will be used.
  * @constructor
  * @extends {Blockly.Toolbox.TreeNode}
  */

@@ -22,9 +22,14 @@
  * @fileoverview Tests for Blockly.Block
  * @author fenichel@google.com (Rachel Fenichel)
  */
+
+goog.require('goog.testing');
+goog.require('goog.testing.MockControl');
+
 'use strict';
 
 var workspace;
+var mockControl_;
 
 function defineTestBlocks() {
   Blockly.defineBlocksWithJsonArray([{
@@ -53,6 +58,7 @@ function undefineTestBlocks() {
 
 function blockTest_setUp() {
   defineTestBlocks();
+  mockControl_ = new goog.testing.MockControl();
   workspace = new Blockly.Workspace();
 }
 
@@ -232,7 +238,7 @@ function test_block_row_unplug_multi_inputs_middle() {
 
     // Middle block has multiple inputs.
     blocks.B.unplug(true);
-    assertUnpluggedNoheal(blocks);
+    assertUnpluggedHealed(blocks);
   } finally {
     blockTest_tearDown();
   }
@@ -249,6 +255,46 @@ function test_block_row_unplug_multi_inputs_child() {
     blocks.B.unplug(true);
     assertUnpluggedHealed(blocks);
   } finally {
+    blockTest_tearDown();
+  }
+}
+
+function test_set_style() {
+  blockTest_setUp();
+  var styleStub = {
+    getBlockStyle: function() {
+      return{
+        "colourPrimary": "#FFFFFF",
+        "colourSecondary":"#AABBCC",
+        "colourTertiary":"#DDEEFF"
+      }
+    }
+  };
+  setUpMockMethod(mockControl_, Blockly, 'getTheme', null, [styleStub]);
+  var blockA = workspace.newBlock('row_block');
+  blockA.setStyle('styleOne');
+
+  assertEquals(blockA.colour_, '#FFFFFF');
+  assertEquals(blockA.colourSecondary_, '#AABBCC');
+  assertEquals(blockA.colourTertiary_, '#DDEEFF');
+
+  blockTest_tearDown();
+}
+
+function test_set_style_throw_exception() {
+  blockTest_setUp();
+  var styleStub = {
+    getBlockStyle: function() {
+      return null;
+    }
+  };
+  setUpMockMethod(mockControl_, Blockly, 'getTheme', null, [styleStub]);
+  var blockA = workspace.newBlock('row_block');
+  try {
+    blockA.setStyle('styleOne');
+  }catch(error) {
+    assertEquals(error.message, "Invalid style name: styleOne");
+  }finally {
     blockTest_tearDown();
   }
 }

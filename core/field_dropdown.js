@@ -34,6 +34,7 @@ goog.require('Blockly.utils.uiMenu');
 
 goog.require('goog.events');
 goog.require('goog.ui.Menu');
+goog.require('goog.ui.FilteredMenu');
 goog.require('goog.ui.MenuItem');
 goog.require('goog.userAgent');
 
@@ -50,10 +51,13 @@ goog.require('goog.userAgent');
  * @extends {Blockly.Field}
  * @constructor
  */
-Blockly.FieldDropdown = function(menuGenerator, opt_validator) {
+Blockly.FieldDropdown = function(menuGenerator, opt_validator, shouldAllowSearch = false) {
   if (typeof menuGenerator != 'function') {
     Blockly.FieldDropdown.validateOptions_(menuGenerator);
   }
+  
+  this.shouldAllowSearch_ = shouldAllowSearch;
+
   this.menuGenerator_ = menuGenerator;
 
   this.trimOptions_();
@@ -68,7 +72,7 @@ goog.inherits(Blockly.FieldDropdown, Blockly.Field);
 /**
  * Construct a FieldDropdown from a JSON arg object.f
  * @param {!Object} options A JSON object with options (options).
- * @returns {!Blockly.FieldDropdown} The new field instance.
+ * @return {!Blockly.FieldDropdown} The new field instance.
  * @package
  * @nocollapse
  */
@@ -174,7 +178,13 @@ Blockly.FieldDropdown.prototype.addActionListener_ = function(menu) {
  * @private
  */
 Blockly.FieldDropdown.prototype.createMenu_ = function() {
-  var menu = new goog.ui.Menu();
+  if (this.shouldAllowSearch_) {
+    var menu = new goog.ui.FilteredMenu();
+  }
+  else {
+    var menu = new goog.ui.Menu();
+  }
+  
   menu.setRightToLeft(this.sourceBlock_.RTL);
   var options = this.getOptions();
   for (var i = 0; i < options.length; i++) {
@@ -194,6 +204,30 @@ Blockly.FieldDropdown.prototype.createMenu_ = function() {
     menu.addChild(menuItem, true);
     menuItem.setChecked(value == this.value_);
   }
+
+  
+  if (menu.filterInput_) {
+    menu.filterInput_.setAttribute('placeholder', 'Search');
+    menu.filterInput_.setAttribute('id', 'dropdownSearchInput');
+
+    var clr = this.sourceBlock_.colour_;
+    var style = "#dropdownSearchInput { border-bottom: 2px solid " + clr + "; }";
+    style = style + "#dropdownSearchInput:focus { background-color: " + clr + "; }";
+    
+    if (!this.styleTag_) {
+        this.styleTag_ = document.createElement('style');
+    }
+
+    if (this.styleTag_.styleSheet) {
+        this.styleTag_.styleSheet.cssText = style;
+    }
+    else {
+        this.styleTag_.appendChild(document.createTextNode(style));
+    }
+    
+    document.getElementsByTagName('head')[0].appendChild(this.styleTag_);
+  }
+  
   return menu;
 };
 
@@ -249,7 +283,7 @@ Blockly.FieldDropdown.prototype.createWidget_ = function(menu) {
  * the size of the checkmark that is displayed next to the currently selected
  * item. This means that the item text will be positioned directly under the
  * field text, rather than offset slightly.
- * @returns {!Object} The bounding rectangle of the anchor, in window
+ * @return {!Object} The bounding rectangle of the anchor, in window
  *     coordinates.
  * @private
  */
@@ -397,8 +431,8 @@ Blockly.FieldDropdown.prototype.getValue = function() {
  * @param {string} newValue New value to set.
  */
 Blockly.FieldDropdown.prototype.setValue = function(newValue) {
-  if (newValue === null || newValue === this.value_) {
-    return;  // No change if null.
+  if (newValue === null || (newValue === this.value_ && this.text_)) {
+    return;  // No change if null and text_ was initialized.
   }
   if (this.sourceBlock_ && Blockly.Events.isEnabled()) {
     Blockly.Events.fire(new Blockly.Events.BlockChange(
@@ -576,15 +610,16 @@ Blockly.FieldDropdown.changeRecentModuleColors = function(activeIDsDict, recentI
    //TODO: As new module types show up, add them in this list
   var listOfModuleTypes = ["Hub", "Dongle", "Joint", "Spin", "Face"];
 
-  for (key in listOfModuleTypes) {
+   for (let key in listOfModuleTypes) {
     var moduleType = listOfModuleTypes[key];
 
-    //Go through all the active modules of type "moduleType" and add them to the "global" list above
+     //Go through all the active modules of type "moduleType" and add them to the "global" list above
     if (activeIDsDict && moduleType in activeIDsDict) {
       for (var activeModule in activeIDsDict[moduleType]) {
         listOfActiveModules.push(activeIDsDict[moduleType][activeModule][0]);
       }
     }
+
     //Do the same for the recent modules
     if (recentIDsDict && moduleType in recentIDsDict) {
       for (var recentModule in recentIDsDict[moduleType]) {
@@ -597,22 +632,21 @@ Blockly.FieldDropdown.changeRecentModuleColors = function(activeIDsDict, recentI
     var child = mainChild.children[i];
     var innerText = child.innerText;
     if (innerText != undefined) {
-      // remove space at the end of module name
+      // remove that fun fun empty space
       innerText = innerText.trim();
-        if (innerText != 'Hub') {
-          //uppercase for the Face module but not the Hub / Dongle
-          innerText = innerText.toUpperCase();
-        } 
+      if (innerText != 'Hub') {
+        //uppercase for the Face module but not the Hub / Dongle
+        innerText = innerText.toUpperCase();
+      } 
 
-        //Search in the active and recent lists. If the option is inside the recent list, but not in the active list, grey it out.
-        //Otherwise, un-grey it out.
-        if (!(listOfActiveModules.includes(innerText)) &&
-            (listOfRecentModules.includes(innerText))) {
-              child.children[0].className = "goog-menuitem-content recent-module";
-        }
-        else if (child.children[0].className === "goog-menuitem-content recent-module") {
+      //Search in the active and recent lists. If the option is inside the recent list, but not in the active list, grey it out.
+      //Otherwise, un-grey it out.
+      if (!(listOfActiveModules.includes(innerText)) &&
+          (listOfRecentModules.includes(innerText))) {
+                      child.children[0].className = "goog-menuitem-content recent-module";
+      }
+      else if (child.children[0].className === "goog-menuitem-content recent-module") {
           child.children[0].className = "goog-menuitem-content";
-        }
       }
     }
   };

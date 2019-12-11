@@ -26,6 +26,7 @@
 
 goog.provide('Blockly.FieldTextInput');
 
+goog.require('Blockly.DropDownDiv');
 goog.require('Blockly.Field');
 goog.require('Blockly.Msg');
 goog.require('Blockly.utils');
@@ -55,7 +56,7 @@ goog.inherits(Blockly.FieldTextInput, Blockly.Field);
  * dereferencing any string table references.
  * @param {!Object} options A JSON object with options (text, class, and
  *                          spellcheck).
- * @returns {!Blockly.FieldTextInput} The new field instance.
+ * @return {!Blockly.FieldTextInput} The new field instance.
  * @package
  * @nocollapse
  */
@@ -260,11 +261,14 @@ Blockly.FieldTextInput.prototype.onHtmlInputKeyDown_ = function(e) {
   var tabKey = 9, enterKey = 13, escKey = 27;
   if (e.keyCode == enterKey) {
     Blockly.WidgetDiv.hide();
+    Blockly.DropDownDiv.hideIfOwner(this);
   } else if (e.keyCode == escKey) {
     htmlInput.value = htmlInput.defaultValue;
     Blockly.WidgetDiv.hide();
+    Blockly.DropDownDiv.hideIfOwner(this);
   } else if (e.keyCode == tabKey) {
     Blockly.WidgetDiv.hide();
+    Blockly.DropDownDiv.hideIfOwner(this);
     this.sourceBlock_.tab(this, !e.shiftKey);
     e.preventDefault();
   }

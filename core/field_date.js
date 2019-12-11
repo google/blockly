@@ -61,7 +61,7 @@ goog.inherits(Blockly.FieldDate, Blockly.Field);
 /**
  * Construct a FieldDate from a JSON arg object.
  * @param {!Object} options A JSON object with options (date).
- * @returns {!Blockly.FieldDate} The new field instance.
+ * @return {!Blockly.FieldDate} The new field instance.
  * @package
  * @nocollapse
  */

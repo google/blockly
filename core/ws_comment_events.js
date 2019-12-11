@@ -306,7 +306,7 @@ Blockly.Events.CommentMove = function(comment) {
   /**
    * The comment that is being moved.  Will be cleared after recording the new
    * location.
-   * @type {?Blockly.WorkspaceComment}
+   * @type {Blockly.WorkspaceComment}
    */
   this.comment_ = comment;
 

@@ -1,14 +1,14 @@
 language: node_js
-matrix:
-  include:
-    - os: linux
-      dist: trusty
-      node_js: stable
-      sudo: required
-      addons:
-        apt:
-          packages:
-          - google-chrome-stable
+os: linux
+dist: trusty
+node_js:
+  - 8
+  - 10
+sudo: required
+addons:
+  apt:
+    packages:
+    - google-chrome-stable
     # TODO (#2114): reenable osx build.
     # - os: osx
     #   node_js: stable

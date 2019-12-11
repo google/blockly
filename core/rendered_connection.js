@@ -106,7 +106,8 @@ Blockly.RenderedConnection.prototype.bumpAwayFrom_ = function(staticConnection) 
     dy = -dy;
   }
   if (rootBlock.RTL) {
-    dx = -dx;
+    dx = (staticConnection.x_ - Blockly.SNAP_RADIUS -
+      Math.floor(Math.random() * Blockly.BUMP_RANDOMNESS)) - this.x_;
   }
   rootBlock.moveBy(dx, dy);
   selected || rootBlock.removeSelect();

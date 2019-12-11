@@ -50,7 +50,7 @@ goog.inherits(Blockly.FieldCheckbox, Blockly.Field);
 /**
  * Construct a FieldCheckbox from a JSON arg object.
  * @param {!Object} options A JSON object with options (checked).
- * @returns {!Blockly.FieldCheckbox} The new field instance.
+ * @return {!Blockly.FieldCheckbox} The new field instance.
  * @package
  * @nocollapse
  */

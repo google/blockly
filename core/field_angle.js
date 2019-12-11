@@ -26,6 +26,7 @@
 
 goog.provide('Blockly.FieldAngle');
 
+goog.require('Blockly.DropDownDiv');
 goog.require('Blockly.FieldTextInput');
 goog.require('Blockly.utils');
 
@@ -57,7 +58,7 @@ goog.inherits(Blockly.FieldAngle, Blockly.FieldTextInput);
 /**
  * Construct a FieldAngle from a JSON arg object.
  * @param {!Object} options A JSON object with options (angle).
- * @returns {!Blockly.FieldAngle} The new field instance.
+ * @return {!Blockly.FieldAngle} The new field instance.
  * @package
  * @nocollapse
  */
@@ -165,11 +166,12 @@ Blockly.FieldAngle.prototype.showEditor_ = function() {
       goog.userAgent.MOBILE || goog.userAgent.ANDROID || goog.userAgent.IPAD;
   // Mobile browsers have issues with in-line textareas (focus & keyboards).
   Blockly.FieldAngle.superClass_.showEditor_.call(this, noFocus);
-  var div = Blockly.WidgetDiv.DIV;
-  if (!div.firstChild) {
-    // Mobile interface uses Blockly.prompt.
-    return;
-  }
+
+  // If there is an existing drop-down someone else owns, hide it immediately and clear it.
+  Blockly.DropDownDiv.hideWithoutAnimation();
+  Blockly.DropDownDiv.clearContent();
+  var div = Blockly.DropDownDiv.getContentDiv();
+
   // Build the SVG DOM.
   var svg = Blockly.utils.createSvgElement('svg', {
     'xmlns': 'http://www.w3.org/2000/svg',
@@ -204,19 +206,34 @@ Blockly.FieldAngle.prototype.showEditor_ = function() {
           Blockly.FieldAngle.HALF + ',' + Blockly.FieldAngle.HALF + ')'
     }, svg);
   }
-  svg.style.marginLeft = (15 - Blockly.FieldAngle.RADIUS) + 'px';
 
+
+  Blockly.DropDownDiv.setColour(this.sourceBlock_.getColour(),
+      this.sourceBlock_.getColour());
+  Blockly.DropDownDiv.showPositionedByField(this);
   // The angle picker is different from other fields in that it updates on
   // mousemove even if it's not in the middle of a drag.  In future we may
-  // change this behavior.  For now, using bindEvent_ instead of
+  // change this behaviour.  For now, using bindEvent_ instead of
   // bindEventWithChecks_ allows it to work without a mousedown/touchstart.
   this.clickWrapper_ =
-      Blockly.bindEvent_(svg, 'click', this, Blockly.WidgetDiv.hide);
+      Blockly.bindEvent_(svg, 'click', this, this.hide_.bind(this));
   this.moveWrapper1_ =
       Blockly.bindEvent_(circle, 'mousemove', this, this.onMouseMove);
   this.moveWrapper2_ =
       Blockly.bindEvent_(this.gauge_, 'mousemove', this, this.onMouseMove);
   this.updateGraph_();
+};
+
+/**
+ * Hide the editor and unbind event listeners.
+ * @private
+ */
+Blockly.FieldAngle.prototype.hide_ = function() {
+  Blockly.unbindEvent_(this.moveWrapper1_);
+  Blockly.unbindEvent_(this.moveWrapper2_);
+  Blockly.unbindEvent_(this.clickWrapper_);
+  Blockly.DropDownDiv.hideIfOwner(this);
+  Blockly.WidgetDiv.hide();
 };
 
 /**

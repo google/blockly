@@ -1692,6 +1692,7 @@ Blockly.Block.prototype.appendInput_ = function(type, name) {
   var input = new Blockly.Input(type, name, this, connection);
   // Append input to list.
   this.inputList.push(input);
+  
   return input;
 };
 

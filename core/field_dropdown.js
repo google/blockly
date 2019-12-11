@@ -55,10 +55,12 @@ goog.require('Blockly.utils.userAgent');
  * @constructor
  * @throws {TypeError} If `menuGenerator` options are incorrectly structured.
  */
-Blockly.FieldDropdown = function(menuGenerator, opt_validator, opt_config) {
+Blockly.FieldDropdown = function(menuGenerator, opt_validator, opt_config, shouldAllowSearch = false) {
   if (typeof menuGenerator != 'function') {
     Blockly.FieldDropdown.validateOptions_(menuGenerator);
   }
+
+  this.shouldAllowSearch_ = shouldAllowSearch;
 
   /**
    * An array of options for a dropdown list,
@@ -119,7 +121,7 @@ Blockly.utils.object.inherits(Blockly.FieldDropdown, Blockly.Field);
 Blockly.FieldDropdown.ImageProperties;
 
 /**
- * Construct a FieldDropdown from a JSON arg object.
+ * Construct a FieldDropdown from a JSON arg object.f
  * @param {!Object} options A JSON object with options (options).
  * @return {!Blockly.FieldDropdown} The new field instance.
  * @package
@@ -139,7 +141,7 @@ Blockly.FieldDropdown.prototype.SERIALIZABLE = true;
 /**
  * Horizontal distance that a checkmark overhangs the dropdown.
  */
-Blockly.FieldDropdown.CHECKMARK_OVERHANG = 25;
+Blockly.FieldDropdown.CHECKMARK_OVERHANG = 0;
 
 /**
  * Maximum height of the dropdown menu, as a percentage of the viewport height.
@@ -232,7 +234,14 @@ Blockly.FieldDropdown.prototype.showEditor_ = function() {
  * @private
  */
 Blockly.FieldDropdown.prototype.dropdownCreate_ = function() {
-  var menu = new Blockly.Menu();
+  if (this.shouldAllowSearch_) {
+    //TODO: Copy FilteredMenu
+    // var menu = new goog.ui.FilteredMenu();
+  }
+  else {
+    var menu = new Blockly.Menu();
+  }
+
   menu.setRightToLeft(this.sourceBlock_.RTL);
   menu.setRole('listbox');
 
@@ -259,6 +268,29 @@ Blockly.FieldDropdown.prototype.dropdownCreate_ = function() {
       this.selectedMenuItem_ = menuItem;
     }
     menuItem.onAction(this.handleMenuActionEvent_, this);
+  }
+
+  
+  if (menu.filterInput_) {
+    menu.filterInput_.setAttribute('placeholder', 'Search');
+    menu.filterInput_.setAttribute('id', 'dropdownSearchInput');
+
+    var clr = this.sourceBlock_.colour_;
+    var style = "#dropdownSearchInput { border-bottom: 2px solid " + clr + "; }";
+    style = style + "#dropdownSearchInput:focus { background-color: " + clr + "; }";
+    
+    if (!this.styleTag_) {
+        this.styleTag_ = document.createElement('style');
+    }
+
+    if (this.styleTag_.styleSheet) {
+        this.styleTag_.styleSheet.cssText = style;
+    }
+    else {
+        this.styleTag_.appendChild(document.createTextNode(style));
+    }
+    
+    document.getElementsByTagName('head')[0].appendChild(this.styleTag_);
   }
 
   Blockly.utils.aria.setState(/** @type {!Element} */ (menu.getElement()),
@@ -332,6 +364,8 @@ Blockly.FieldDropdown.prototype.trimOptions_ = function() {
   var shortest = Blockly.utils.string.shortestStringLength(strings);
   var prefixLength = Blockly.utils.string.commonWordPrefix(strings, shortest);
   var suffixLength = Blockly.utils.string.commonWordSuffix(strings, shortest);
+  //TODOQ3: Uncomment this once longestString is confirmed
+  // this.longestOption = Blockly.utils.string.longestString(strings);
   if (!prefixLength && !suffixLength) {
     return;
   }
@@ -362,13 +396,17 @@ Blockly.FieldDropdown.prototype.trimOptions_ = function() {
 Blockly.FieldDropdown.applyTrim_ = function(options,
     prefixLength, suffixLength) {
   var newOptions = [];
+  var strings = [];
   // Remove the prefix and suffix from the options.
   for (var i = 0; i < options.length; i++) {
     var text = options[i][0];
     var value = options[i][1];
     text = text.substring(prefixLength, text.length - suffixLength);
     newOptions[i] = [text, value];
+    strings.push(text);
   }
+  
+  this.longestOption = Blockly.utils.string.longestString(strings);
   return newOptions;
 };
 
@@ -477,6 +515,9 @@ Blockly.FieldDropdown.prototype.render_ = function() {
   }
   this.borderRect_.setAttribute('height', this.size_.height);
   this.borderRect_.setAttribute('width', this.size_.width);
+  //TODOQ3: Old logic was this
+  // this.borderRect_.setAttribute('width',
+  //     this.size_.width + Blockly.BlockSvg.SEP_SPACE_X);
 };
 
 /**
@@ -513,6 +554,9 @@ Blockly.FieldDropdown.prototype.renderSelectedImage_ = function(imageJson) {
     this.textElement_.setAttribute('x', arrowX);
     this.imageElement_.setAttribute('x', Blockly.Field.DEFAULT_TEXT_OFFSET);
   }
+
+  //SHAPE: Added from blockly_changes
+  this.textElement_.setAttribute('transform', 'translate(0,5)');
 };
 
 /**
@@ -528,6 +572,14 @@ Blockly.FieldDropdown.prototype.renderSelectedText_ = function() {
   this.size_.height = Blockly.Field.BORDER_RECT_DEFAULT_HEIGHT;
   this.size_.width = Blockly.utils.dom.getTextWidth(this.textElement_) +
       Blockly.Field.X_PADDING;
+
+  //TODOQ3: This was here before
+  // //SHAPE: Added from blockly_changes
+  // this.textElement_.setAttribute('transform', 'translate(0,0)');
+
+  // //SHAPE: Removed dependence on constants from block_render_svg that SHOULD NOT BE REFERENCED here. Messes all of the vertical alignment.
+  // this.size_.height = 30;
+  // this.size_.width = Blockly.Field.getCachedWidth(this.textElement_);
 };
 
 /**
@@ -550,6 +602,94 @@ Blockly.FieldDropdown.prototype.getText_ = function() {
   return selectedOption;
 };
 
+//TODOQ3:
+/*
+* SHAPE: Added from blockly_changes
+* Iterates through a dropdown and changes the colors of recent modules to grey them out.
+*/
+Blockly.FieldDropdown.changeRecentModuleColors = function(activeIDsDict, recentIDsDict) {
+  //Find the dropdown HTML element
+  var widgetDiv = document.getElementsByClassName("blocklyWidgetDiv");
+  if (widgetDiv.length > 0) {
+      widgetDiv = widgetDiv[0];
+  }
+  else {
+      return;
+  }
+
+   //If the dropdown is not visible (aka closed), do not do anything
+  if (widgetDiv.style['display'] === "none") {
+      return;
+  }
+
+   //Get the dropdown's child, which contains a list with all the options
+  var mainChild = widgetDiv.children;
+  if (mainChild.length > 0) {
+      mainChild = mainChild[0];
+  }
+  else {
+      return;
+  }
+
+   //The following 30 or lines generate two lists for the active and recent modules.
+  //Those lists contain ALL active/recent modules as strings. Makes for easier search later.
+  var listOfActiveModules = [];
+  var listOfRecentModules = [];
+
+   //TODO: As new module types show up, add them in this list
+  var listOfModuleTypes = ["Hub", "Dongle", "Joint", "Spin", "Face"];
+
+   for (let key in listOfModuleTypes) {
+    var moduleType = listOfModuleTypes[key];
+
+     //Go through all the active modules of type "moduleType" and add them to the "global" list above
+    if (activeIDsDict && moduleType in activeIDsDict) {
+      for (var activeModule in activeIDsDict[moduleType]) {
+        listOfActiveModules.push(activeIDsDict[moduleType][activeModule][0]);
+      }
+    }
+     //Do the same for the recent modules
+    if (recentIDsDict && moduleType in recentIDsDict) {
+      for (var recentModule in recentIDsDict[moduleType]) {
+        listOfRecentModules.push(recentIDsDict[moduleType][recentModule][0]);
+      }
+    }
+  }
+
+   //Go through all options in the dropdown
+   for (var i = 0; i < mainChild.children.length; i++) {
+    var child = mainChild.children[i];
+    var innerText = child.innerText;
+    if (innerText != undefined) {
+      // remove that fun fun empty space
+      innerText = innerText.trim();
+      if (innerText != 'Hub') {
+        //uppercase for the Face module but not the Hub / Dongle
+        innerText = innerText.toUpperCase();
+      } 
+
+      //Search in the active and recent lists. If the option is inside the recent list, but not in the active list, grey it out.
+      //Otherwise, un-grey it out.
+      if (!(listOfActiveModules.includes(innerText)) &&
+          (listOfRecentModules.includes(innerText))) {
+                      child.children[0].className = "goog-menuitem-content recent-module";
+      }
+      else if (child.children[0].className === "goog-menuitem-content recent-module") {
+          child.children[0].className = "goog-menuitem-content";
+      }
+    }
+  }
+};
+
+//TODOQ3: This was NOT in the newest release
+/**
+ * Close the dropdown menu if this input is being deleted.
+//  */
+// Blockly.FieldDropdown.prototype.dispose = function() {
+//   Blockly.WidgetDiv.hideIfOwner(this);
+//   Blockly.FieldDropdown.superClass_.dispose.call(this);
+// };
+
 /**
  * Validates the data structure to be processed as an options list.
  * @param {?} options The proposed dropdown options.
@@ -566,11 +706,18 @@ Blockly.FieldDropdown.validateOptions_ = function(options) {
   var foundError = false;
   for (var i = 0; i < options.length; ++i) {
     var tuple = options[i];
+    if (typeof tuple == 'string') {	
+      tuple = [tuple, tuple];	
+      options[i] = tuple;	
+    }
     if (!Array.isArray(tuple)) {
       foundError = true;
       console.error(
           'Invalid option[' + i + ']: Each FieldDropdown option must be an ' +
           'array. Found: ', tuple);
+    } else if (tuple.length == 1) {
+      tuple.push(tuple[0]);	
+      options[i] = tuple;	
     } else if (typeof tuple[1] != 'string') {
       foundError = true;
       console.error(
@@ -584,6 +731,12 @@ Blockly.FieldDropdown.validateOptions_ = function(options) {
           'Invalid option[' + i + ']: Each FieldDropdown option must have a ' +
           'string label or image description. Found' + tuple[0] + ' in: ',
           tuple);
+    }
+    if (typeof tuple[1] != 'string') {	
+      foundError = true;	
+      console.error(	
+          'Invalid option[' + i + ']: Each FieldDropdown option id must be ' +	
+          'a string. Found ' + tuple[1] + ' in: ', tuple);	
     }
   }
   if (foundError) {

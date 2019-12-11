@@ -78,6 +78,10 @@ Blockly.Field = function(value, opt_validator, opt_config) {
    */
   this.size_ = new Blockly.utils.Size(0, 0);
 
+  //TODOQ3: See this.size_ above
+  // //SHAPE: Removed dependence of height. It should NOT reference constants in other objects unless extremely necessary.
+  // this.size_ = new goog.math.Size(0, 25);
+
   /**
    * Holds the cursors svg element when the cursor is attached to the field.
    * This is null if there is no cursor on the field.
@@ -318,6 +322,15 @@ Blockly.Field.prototype.createBorderRect_ = function() {
       }, this.fieldGroup_);
 };
 
+  //TODOQ3: See above
+  //       'height': 25
+  //       //SHAPE: Last param added from blockly_changes
+  //     }, this.fieldGroup_, this.sourceBlock_.workspace);
+  // /** @type {!Element} */
+  // this.textElement_ = Blockly.utils.dom.createSvgElement('text',
+  //     {'class': 'blocklyText', 'y': this.size_.height - 7.5},
+  //     this.fieldGroup_);
+
 /**
  * Create a field text element. Not to be overridden by subclasses. Instead
  * modify the result of the function inside initView, or create a separate
@@ -555,6 +568,28 @@ Blockly.Field.prototype.getSvgRoot = function() {
 Blockly.Field.prototype.updateColour = function() {
   // Non-abstract sub-classes may wish to implement this. See FieldDropdown.
 };
+
+//TODOQ3: This is removed in newest Blockly
+// Blockly.Field.prototype.updateWidth = function() {
+//   var width = Blockly.Field.getCachedWidth(this.textElement_);
+  
+//   var textX = -1;
+
+//   //Make sure that the width of the text field is at least 16 pixels (otherwise its fugly) 
+//   if (width < 16) {
+//     //Also, recalculate how much the text should be pushed (because it's smaller and would not be centered)
+//     textX = (16 - width) / 2;
+//     width = 16;
+//   } 
+
+//   this.textElement_.setAttribute("x", textX);
+  
+//   if (this.borderRect_) {
+//     this.borderRect_.setAttribute('width',
+//         width + Blockly.BlockSvg.SEP_SPACE_X);
+//   }
+//   this.size_.width = width;
+// };
 
 /**
  * Used by getSize() to move/resize any DOM elements, and get the new size.

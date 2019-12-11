@@ -12853,7 +12853,7 @@ declare module Blockly.utils.style {
      * @param {boolean=} opt_center Whether to center the element in the container.
      *     Defaults to false.
      * @return {!Blockly.utils.Coordinate} The new scroll position of the container,
-     *     in form of goog.math.Coordinate(scrollLeft, scrollTop).
+     *     in form of Blockly.utils.Coordinate(scrollLeft, scrollTop).
      */
     function getContainerOffsetToScrollInto(element: Element, container: Element, opt_center?: boolean): Blockly.utils.Coordinate;
 }

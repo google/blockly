@@ -1019,14 +1019,19 @@ Blockly.BlockSvg.prototype.dispose = function(healStack, animate) {
     }
     this.warningTextDb_ = null;
   }
+  
+  // var deleteEvent;
+  // if (Blockly.Events.isEnabled()) {
+  //   deleteEvent = new Blockly.Events.BlockDelete(this);
+  // }
 
   var icons = this.getIcons();
   for (var i = 0; i < icons.length; i++) {
     icons[i].dispose();
   }
-  if (Blockly.Events.isEnabled() && deleteEvent) {
-    Blockly.Events.fire(deleteEvent);
-  }
+  // if (Blockly.Events.isEnabled() && deleteEvent) {
+  //   Blockly.Events.fire(deleteEvent);
+  // }
 
   Blockly.utils.dom.removeNode(this.svgGroup_);
   blockWorkspace.resizeContents();

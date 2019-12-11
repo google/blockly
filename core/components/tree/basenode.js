@@ -667,7 +667,13 @@ Blockly.tree.BaseNode.prototype.getRowDom = function() {
       this.getPixelIndent_() + 'px';
 
   row.appendChild(this.getIconDom());
-  row.appendChild(this.getLabelDom());
+
+  if (this.content_ instanceof HTMLElement) {
+    row.appendChild(this.content_);
+  }
+  else {
+    row.appendChild(this.getLabelDom());
+  }
 
   return row;
 };

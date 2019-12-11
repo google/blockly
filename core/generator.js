@@ -101,7 +101,13 @@ Blockly.Generator.prototype.workspaceToCode = function(workspace) {
   var code = [];
   this.init(workspace);
   var blocks = workspace.getTopBlocks(true);
-  for (var i = 0, block; block = blocks[i]; i++) {
+  for (var x = 0, block; block = blocks[x]; x++) {
+
+    //TODOQ3: This is a bugfix we made. See if it's still needed.
+    // if (block.isInsertionMarker_) {
+    //   continue;
+    // }
+    
     var line = this.blockToCode(block);
     if (Array.isArray(line)) {
       // Value blocks return tuples of code and operator order.

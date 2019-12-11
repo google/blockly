@@ -63,15 +63,20 @@ goog.require('Blockly.ZoomControls');
 // individual block files should include the requirements they depend on.
 goog.require('Blockly.Mutator');
 goog.require('Blockly.FieldAngle');
+goog.require('Blockly.FieldJointAngle');
 goog.require('Blockly.FieldCheckbox');
+goog.require('Blockly.FieldBoolean');
 goog.require('Blockly.FieldColour');
 goog.require('Blockly.FieldDropdown');
+goog.require('Blockly.FieldLabel');
 goog.require('Blockly.FieldLabelSerializable');
 goog.require('Blockly.FieldImage');
 goog.require('Blockly.FieldTextInput');
 goog.require('Blockly.FieldMultilineInput');
 goog.require('Blockly.FieldNumber');
 goog.require('Blockly.FieldVariable');
+goog.require('Blockly.ButtonInput');
+goog.require('Blockly.AsciiInput');
 
 
 // Blockly Renderers.

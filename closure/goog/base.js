@@ -46,7 +46,7 @@ var goog = goog || {};
  * @suppress {undefinedVars} self won't be referenced unless `this` is falsy.
  * @type {!Global}
  */
-goog.global =
+Blockly.utils.global =
     // Check `this` first for backwards compatibility.
     // Valid unless running as an ES module or in a function wrapper called
     //   without setting `this` properly.
@@ -67,7 +67,7 @@ goog.global =
  */
 goog.exportPath_ = function(name) {
   var parts = name.split('.');
-  var cur = goog.global;
+  var cur = Blockly.utils.global;
 
   // Internet Explorer exhibits strange behavior when throwing errors from
   // methods externed in this manner.  See the testExportSymbolExceptions in
@@ -172,12 +172,12 @@ goog.implicitNamespaces_ = {};
  *
  * @param {string} name The fully qualified name.
  * @param {Object=} opt_obj The object within which to look; default is
- *     |goog.global|.
+ *     |Blockly.utils.global|.
  * @return {?} The value (object or primitive) or, if not found, null.
  */
 goog.getObjectByName = function(name, opt_obj) {
   var parts = name.split('.');
-  var cur = opt_obj || goog.global;
+  var cur = opt_obj || Blockly.utils.global;
   for (var i = 0; i < parts.length; i++) {
     cur = cur[parts[i]];
     if (!goog.isDefAndNotNull(cur)) {
@@ -312,7 +312,7 @@ goog.isDefAndNotNull = function(val) {
  */
 goog.findBasePath_ = function() {
   /** @type {!Document} */
-  var doc = goog.global.document;
+  var doc = Blockly.utils.global.document;
   // If we have a currentScript available, use it exclusively.
   var currentScript = doc.currentScript;
   if (currentScript) {
@@ -463,7 +463,7 @@ goog.Dependency = function(path, requires) {
 
 /**
  * Map of script ready / state change callbacks. Old IE cannot handle putting
- * these properties on goog.global.
+ * these properties on Blockly.utils.global.
  *
  * @private @const {!Object<string, function(?):undefined>}
  */
@@ -480,7 +480,7 @@ goog.Dependency.callbackMap_ = {};
  */
 goog.Dependency.prototype.load = function() {
   /** @type {!HTMLDocument} */
-  var doc = goog.global.document;
+  var doc = Blockly.utils.global.document;
   doc.write('<script src="' + this.path + '" type="text/javascript"><' +
       '/script>');
 };

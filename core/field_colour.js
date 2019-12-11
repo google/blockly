@@ -81,10 +81,12 @@ Blockly.FieldColour.fromJson = function(options) {
 
 /**
  * Default width of a colour field.
+ * SHAPE: 10 more pixels are added due to the use of Blockly.BlockSvg.SEP_SPACE_X in field.js
  * @type {number}
  * @private
  * @const
  */
+//TODOQ3: Before it was 15, let's test it
 Blockly.FieldColour.DEFAULT_WIDTH = 26;
 
 /**
@@ -93,6 +95,7 @@ Blockly.FieldColour.DEFAULT_WIDTH = 26;
  * @private
  * @const
  */
+//TODOQ3: It was 25
 Blockly.FieldColour.DEFAULT_HEIGHT = Blockly.Field.BORDER_RECT_DEFAULT_HEIGHT;
 
 /**

@@ -283,6 +283,7 @@ def ResolveDependencies(require, search_hash, result_list, seen_list):
       for the dependency->dependent ordering.
   """
   if require not in search_hash:
+    print(require)
     raise Exception('Missing provider for (%s)' % require)
 
   dep = search_hash[require]

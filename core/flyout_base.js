@@ -839,5 +839,14 @@ Blockly.Flyout.prototype.placeNewBlock_ = function(oldBlock) {
   finalOffset.scale(1 / targetWorkspace.scale);
 
   block.moveBy(finalOffset.x, finalOffset.y);
+
+  //SHAPE: Added from blockly_changes
+  try {
+    incrementCounter(oldBlock);
+  }
+  catch {
+    console.log("Couldn't increment the counter for this block.");
+  }
+  
   return block;
 };

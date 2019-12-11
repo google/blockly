@@ -253,7 +253,7 @@ Blockly.utils.style.scrollIntoContainerView = function(
  * @param {boolean=} opt_center Whether to center the element in the container.
  *     Defaults to false.
  * @return {!Blockly.utils.Coordinate} The new scroll position of the container,
- *     in form of goog.math.Coordinate(scrollLeft, scrollTop).
+ *     in form of Blockly.utils.Coordinate(scrollLeft, scrollTop).
  */
 Blockly.utils.style.getContainerOffsetToScrollInto = function(
     element, container, opt_center) {

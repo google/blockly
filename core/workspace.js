@@ -31,7 +31,7 @@ goog.require('Blockly.Themes.Classic');
 goog.require('Blockly.utils');
 goog.require('Blockly.utils.math');
 goog.require('Blockly.VariableMap');
-
+goog.require('Blockly.SearchWorkspace');
 
 /**
  * Class for a workspace.  This is a data structure that contains blocks.
@@ -138,6 +138,16 @@ Blockly.Workspace = function(opt_options) {
       new Blockly.ThemeManager(this.options.theme || Blockly.Themes.Classic);
   
   this.themeManager_.subscribeWorkspace(this);
+
+  //Instantiate the search handlers
+  //SearchWorkspace is the handler for the blocks added to a workspace. Created when the initial workspace is created.
+  //Search is the default handler. Used in the toolbox search, since that has no special GUI (uses the toolbox GUI)
+  if (!opt_options.parentWorkspace) {
+    this.search_ = new Blockly.SearchWorkspace(this);
+  }
+  else if (opt_options.isToolbox) {
+    this.search_ = new Blockly.Search(this);
+  }
 };
 
 /**

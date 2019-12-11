@@ -70,8 +70,8 @@ goog.inherits = function(childCtor, parentCtor) {
 
 
 // Just enough browser detection for this file.
-if (!goog.userAgent) {
-  goog.userAgent = (function() {
+if (!Blockly.utils.userAgent) {
+  Blockly.utils.userAgent = (function() {
     var userAgent = "";
     if ("undefined" !== typeof navigator && navigator
         && "string" == typeof navigator.userAgent) {
@@ -248,9 +248,9 @@ if (!goog.format) {
      * @private
      */
     WORD_BREAK:
-        goog.userAgent.WEBKIT ? '<wbr></wbr>' :
-        goog.userAgent.OPERA ? '&shy;' :
-        goog.userAgent.IE ? '&#8203;' :
+        Blockly.utils.userAgent.WEBKIT ? '<wbr></wbr>' :
+        Blockly.utils.userAgent.OPERA ? '&shy;' :
+        Blockly.utils.userAgent.IE ? '&#8203;' :
         '<wbr>'
   };
 }
@@ -578,7 +578,7 @@ goog.string.StringBuffer = function(opt_a1, var_args) {
    * @type {string|Array}
    * @private
    */
-  this.buffer_ = goog.userAgent.jscript.HAS_JSCRIPT ? [] : '';
+  this.buffer_ = Blockly.utils.userAgent.jscript.HAS_JSCRIPT ? [] : '';
 
   if (opt_a1 != null) {
     this.append.apply(this, arguments);
@@ -607,7 +607,7 @@ goog.string.StringBuffer.prototype.bufferLength_ = 0;
  */
 goog.string.StringBuffer.prototype.append = function(a1, opt_a2, var_args) {
 
-  if (goog.userAgent.jscript.HAS_JSCRIPT) {
+  if (Blockly.utils.userAgent.jscript.HAS_JSCRIPT) {
     if (opt_a2 == null) {  // no second argument (note: undefined == null)
       // Array assignment is 2x faster than Array push. Also, use a1
       // directly to avoid arguments instantiation, another 2x improvement.
@@ -638,7 +638,7 @@ goog.string.StringBuffer.prototype.append = function(a1, opt_a2, var_args) {
  */
 goog.string.StringBuffer.prototype.clear = function() {
 
-  if (goog.userAgent.jscript.HAS_JSCRIPT) {
+  if (Blockly.utils.userAgent.jscript.HAS_JSCRIPT) {
      this.buffer_.length = 0;  // reuse array to avoid creating new object
      this.bufferLength_ = 0;
 
@@ -655,7 +655,7 @@ goog.string.StringBuffer.prototype.clear = function() {
  */
 goog.string.StringBuffer.prototype.toString = function() {
 
-  if (goog.userAgent.jscript.HAS_JSCRIPT) {
+  if (Blockly.utils.userAgent.jscript.HAS_JSCRIPT) {
     var str = this.buffer_.join('');
     // Given a string with the entire contents, simplify the StringBuilder by
     // setting its contents to only be this string, rather than many fragments.

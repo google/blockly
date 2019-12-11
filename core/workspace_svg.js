@@ -1234,6 +1234,9 @@ Blockly.WorkspaceSvg.prototype.pasteBlock_ = function(xmlBlock) {
       } while (collide);
       block.moveBy(blockX, blockY);
     }
+
+    //SHAPE: Added from blockly_changes
+    incrementCounter(block);
   } finally {
     Blockly.Events.enable();
   }
@@ -1735,6 +1738,22 @@ Blockly.WorkspaceSvg.prototype.updateToolbox = function(tree) {
     }
     this.options.languageTree = tree;
     this.flyout_.show(tree.childNodes);
+  }
+};
+
+/**
+ * Set focus to the search field of the toolbox, if it exists.
+ */
+Blockly.WorkspaceSvg.prototype.focusSearch = function(shouldFocusToolbox) {
+  if (shouldFocusToolbox) {
+    if (this.toolbox_) {
+      this.toolbox_.focusSearchField();
+    }
+  }
+  else {
+    if (this.search_) {
+      this.search_.focusSearchField();
+    }
   }
 };
 

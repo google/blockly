@@ -54,7 +54,10 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     "output": "Array",
     "style": "list_blocks",
     "tooltip": "%{BKY_LISTS_CREATE_EMPTY_TOOLTIP}",
-    "helpUrl": "%{BKY_LISTS_CREATE_EMPTY_HELPURL}"
+    "helpUrl": "%{BKY_LISTS_CREATE_EMPTY_HELPURL}",
+    "search_keywords": [
+        "%{BKY_LISTS_CREATE_EMPTY_TITLE}"
+    ]
   },
   // Block for creating a list with one element repeated.
   {
@@ -74,7 +77,10 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     "output": "Array",
     "style": "list_blocks",
     "tooltip": "%{BKY_LISTS_REPEAT_TOOLTIP}",
-    "helpUrl": "%{BKY_LISTS_REPEAT_HELPURL}"
+    "helpUrl": "%{BKY_LISTS_REPEAT_HELPURL}",
+    "search_keywords": [
+        "%{BKY_LISTS_REPEAT_TITLE}"
+    ]
   },
   // Block for reversing a list.
   {
@@ -91,7 +97,10 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     "inputsInline": true,
     "style": "list_blocks",
     "tooltip": "%{BKY_LISTS_REVERSE_TOOLTIP}",
-    "helpUrl": "%{BKY_LISTS_REVERSE_HELPURL}"
+    "helpUrl": "%{BKY_LISTS_REVERSE_HELPURL}",
+    "search_keywords": [
+        "%{BKY_LISTS_REVERSE_MESSAGE0}"
+    ]
   },
   // Block for checking if a list is empty
   {
@@ -107,7 +116,10 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     "output": "Boolean",
     "style": "list_blocks",
     "tooltip": "%{BKY_LISTS_ISEMPTY_TOOLTIP}",
-    "helpUrl": "%{BKY_LISTS_ISEMPTY_HELPURL}"
+    "helpUrl": "%{BKY_LISTS_ISEMPTY_HELPURL}",
+    "search_keywords": [
+        "%{BKY_LISTS_ISEMPTY_TITLE}"
+    ]
   },
   // Block for getting the list length
   {
@@ -123,7 +135,10 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     "output": "Number",
     "style": "list_blocks",
     "tooltip": "%{BKY_LISTS_LENGTH_TOOLTIP}",
-    "helpUrl": "%{BKY_LISTS_LENGTH_HELPURL}"
+    "helpUrl": "%{BKY_LISTS_LENGTH_HELPURL}",
+    "search_keywords": [
+        "%{BKY_LISTS_LENGTH_TITLE}"
+    ]
   }
 ]);  // END JSON EXTRACT (Do not delete this comment.)
 
@@ -140,6 +155,16 @@ Blockly.Blocks['lists_create_with'] = {
     this.setOutput(true, 'Array');
     this.setMutator(new Blockly.Mutator(['lists_create_with_item']));
     this.setTooltip(Blockly.Msg['LISTS_CREATE_WITH_TOOLTIP']);
+    this.child_disconnected_ = [];      //SHAPE: References to disconnected block children.
+    this.add_shadow = false;            //SHAPE: Flag to control the addition of a shadow block on new 'item'.
+  },
+  ensureSearchKeywords: function() {
+       var keywords = [
+           Blockly.Msg.LISTS_CREATE_EMPTY_TITLE,
+           Blockly.Msg.LISTS_CREATE_WITH_INPUT_WITH
+       ];
+
+       Blockly.Search.preprocessSearchKeywords("lists_create_with", keywords);
   },
   /**
    * Create XML to represent list inputs.
@@ -195,16 +220,26 @@ Blockly.Blocks['lists_create_with'] = {
     // Disconnect any children that don't belong.
     for (var i = 0; i < this.itemCount_; i++) {
       var connection = this.getInput('ADD' + i).connection.targetConnection;
-      if (connection && connections.indexOf(connection) == -1) {
-        connection.disconnect();
-      }
+        if (connection && connections.indexOf(connection) == -1) {
+          //SHAPE: When a child is about to be disconnected, save the reference of the block
+          //that was attached to the input.
+          this.child_disconnected_.push(this.getInput('ADD' + i).connection.targetBlock());
+          
+          connection.disconnect();
+        }
     }
+    //SHAPE: Set flag to true if a new item was added to the list (from mutator bubble).
+    this.add_shadow = connections.length > this.itemCount_;
+
     this.itemCount_ = connections.length;
     this.updateShape_();
-    // Reconnect any child blocks.
+    //SHAPE: Reconnect any child blocks.
     for (var i = 0; i < this.itemCount_; i++) {
       Blockly.Mutator.reconnect(connections[i], this, 'ADD' + i);
     }
+
+    //SHAPE: Call method to add shadow math block if conditions are met.
+    this.connectShadowBlock_();
   },
   /**
    * Store pointers to any connected child blocks.
@@ -243,10 +278,40 @@ Blockly.Blocks['lists_create_with'] = {
         }
       }
     }
+    var j = 0;
     // Remove deleted inputs.
     while (this.getInput('ADD' + i)) {
+      //SHAPE: Delete a disconnected block ONLY if it is a shadow block.
+      if (this.child_disconnected_[j] && this.child_disconnected_[j].isShadow()) {
+          this.child_disconnected_[j].dispose(true, true);
+      }
       this.removeInput('ADD' + i);
       i++;
+      j++;      //SHAPE: Iterator for the disconnected children.
+    }
+    //SHAPE: Reset array.
+    this.child_disconnected_ = [];
+  },
+  /**
+   * Connects a shadow math block with a random integer to a
+   * new input.
+   * @private
+   * @this Blockly.Block
+   * @author ShapeRoboticsApS
+   */
+  connectShadowBlock_: function() {
+    if (this.add_shadow) {
+      // Spawn a new shadow math block.
+      var shadow_child = workspace.newBlock('math_number');
+      var random_int = 0; //Math.floor(Math.random() * 11);
+      shadow_child.setFieldValue(random_int, 'NUM');
+      shadow_child.setShadow(true);
+      shadow_child.initSvg();
+      shadow_child.render();
+      // Connect shadow block to last input.
+      var shadow_child_connection = shadow_child.outputConnection;
+      var parent_connection = this.getInput('ADD' + (this.itemCount_ - 1)).connection;
+      parent_connection.connect(shadow_child_connection);
     }
   }
 };
@@ -263,6 +328,13 @@ Blockly.Blocks['lists_create_with_container'] = {
     this.appendStatementInput('STACK');
     this.setTooltip(Blockly.Msg['LISTS_CREATE_WITH_CONTAINER_TOOLTIP']);
     this.contextMenu = false;
+  },
+  ensureSearchKeywords: function() {
+      var keywords = [
+          Blockly.Msg.LISTS_CREATE_WITH_CONTAINER_TITLE_ADD
+      ];
+
+      Blockly.Search.preprocessSearchKeywords("lists_create_with_container", keywords);
   }
 };
 
@@ -279,6 +351,13 @@ Blockly.Blocks['lists_create_with_item'] = {
     this.setNextStatement(true);
     this.setTooltip(Blockly.Msg['LISTS_CREATE_WITH_ITEM_TOOLTIP']);
     this.contextMenu = false;
+  },
+  ensureSearchKeywords: function() {
+      var keywords = [
+          Blockly.Msg.LISTS_CREATE_WITH_ITEM_TITLE
+      ];
+
+      Blockly.Search.preprocessSearchKeywords("lists_create_with_item", keywords);
   }
 };
 
@@ -308,6 +387,15 @@ Blockly.Blocks['lists_indexOf'] = {
       return Blockly.Msg['LISTS_INDEX_OF_TOOLTIP'].replace('%1',
           thisBlock.workspace.options.oneBasedIndex ? '0' : '-1');
     });
+  },
+  ensureSearchKeywords: function() {
+      var keywords = [
+          Blockly.Msg.LISTS_INDEX_OF_FIRST,
+          Blockly.Msg.LISTS_INDEX_OF_LAST,
+          Blockly.Msg.LISTS_INDEX_OF_INPUT_IN_LIST
+      ];
+
+      Blockly.Search.preprocessSearchKeywords("lists_indexOf", keywords);
   }
 };
 
@@ -407,6 +495,22 @@ Blockly.Blocks['lists_getIndex'] = {
       }
       return tooltip;
     });
+  },
+  ensureSearchKeywords: function() {
+      var keywords = [
+          Blockly.Msg.LISTS_GET_INDEX_GET,
+          Blockly.Msg.LISTS_GET_INDEX_GET_REMOVE,
+          Blockly.Msg.LISTS_GET_INDEX_REMOVE,
+          Blockly.Msg.LISTS_GET_INDEX_FROM_START,
+          Blockly.Msg.LISTS_GET_INDEX_FROM_END,
+          Blockly.Msg.LISTS_GET_INDEX_FIRST,
+          Blockly.Msg.LISTS_GET_INDEX_LAST,
+          Blockly.Msg.LISTS_GET_INDEX_RANDOM,
+          Blockly.Msg.LISTS_GET_INDEX_INPUT_IN_LIST,
+          Blockly.Msg.LISTS_GET_INDEX_TAIL,
+      ];
+
+      Blockly.Search.preprocessSearchKeywords("lists_getIndex", keywords);
   },
   /**
    * Create XML to represent whether the block is a statement or a value.
@@ -573,6 +677,21 @@ Blockly.Blocks['lists_setIndex'] = {
       return tooltip;
     });
   },
+  ensureSearchKeywords: function() {
+      var keywords = [
+          Blockly.Msg.LISTS_SET_INDEX_SET,
+          Blockly.Msg.LISTS_SET_INDEX_INSERT,
+          Blockly.Msg.LISTS_GET_INDEX_FROM_START,
+          Blockly.Msg.LISTS_GET_INDEX_FROM_END,
+          Blockly.Msg.LISTS_GET_INDEX_FIRST,
+          Blockly.Msg.LISTS_GET_INDEX_LAST,
+          Blockly.Msg.LISTS_GET_INDEX_RANDOM,
+          Blockly.Msg.LISTS_SET_INDEX_INPUT_IN_LIST,
+          Blockly.Msg.LISTS_SET_INDEX_INPUT_TO
+      ];
+
+      Blockly.Search.preprocessSearchKeywords("lists_setIndex", keywords);
+  },
   /**
    * Create XML to represent whether there is an 'AT' input.
    * @return {Element} XML storage element.
@@ -670,6 +789,20 @@ Blockly.Blocks['lists_getSublist'] = {
     this.updateAt_(1, true);
     this.updateAt_(2, true);
     this.setTooltip(Blockly.Msg['LISTS_GET_SUBLIST_TOOLTIP']);
+  },
+  ensureSearchKeywords: function() {
+      var keywords = [
+          Blockly.Msg.LISTS_GET_SUBLIST_START_FROM_START,
+          Blockly.Msg.LISTS_GET_SUBLIST_START_FROM_END,
+          Blockly.Msg.LISTS_GET_SUBLIST_START_FIRST,
+          Blockly.Msg.LISTS_GET_SUBLIST_END_FROM_START,
+          Blockly.Msg.LISTS_GET_SUBLIST_END_FROM_END,
+          Blockly.Msg.LISTS_GET_SUBLIST_END_LAST,
+          Blockly.Msg.LISTS_GET_SUBLIST_INPUT_IN_LIST,
+          Blockly.Msg.LISTS_GET_SUBLIST_TAIL,
+      ];
+
+      Blockly.Search.preprocessSearchKeywords("lists_getSublist", keywords);
   },
   /**
    * Create XML to represent whether there are 'AT' inputs.
@@ -783,6 +916,18 @@ Blockly.Blocks['lists_sort'] = {
       "tooltip": Blockly.Msg['LISTS_SORT_TOOLTIP'],
       "helpUrl": Blockly.Msg['LISTS_SORT_HELPURL']
     });
+  },
+  ensureSearchKeywords: function() {
+      var keywords = [
+          Blockly.Msg.LISTS_SORT_TITLE,
+          Blockly.Msg.LISTS_SORT_TYPE_NUMERIC,
+          Blockly.Msg.LISTS_SORT_TYPE_TEXT,
+          Blockly.Msg.LISTS_SORT_TYPE_IGNORECASE,
+          Blockly.Msg.LISTS_SORT_ORDER_ASCENDING,
+          Blockly.Msg.LISTS_SORT_ORDER_DESCENDING,
+      ];
+
+      Blockly.Search.preprocessSearchKeywords("lists_sort", keywords);
   }
 };
 
@@ -821,6 +966,14 @@ Blockly.Blocks['lists_split'] = {
       }
       throw Error('Unknown mode: ' + mode);
     });
+  },
+  ensureSearchKeywords: function() {
+      var keywords = [
+          Blockly.Msg.LISTS_SPLIT_LIST_FROM_TEXT,
+          Blockly.Msg.LISTS_SPLIT_TEXT_FROM_LIST,
+          Blockly.Msg.LISTS_SPLIT_WITH_DELIMITER,
+      ];
+      Blockly.Search.preprocessSearchKeywords("lists_split", keywords);
   },
   /**
    * Modify this block to have the correct input and output types.

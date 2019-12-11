@@ -68,6 +68,10 @@ Blockly.FieldLabel = function(opt_value, opt_class, opt_config) {
    * @override
    */
   this.size_ = new Blockly.utils.Size(0, Blockly.Field.TEXT_DEFAULT_HEIGHT);
+
+  //TODOQ3: This was in our old logic
+  // // SHAPE: Changed hardcoded size to represent our font's actual size better.
+  // this.size_ = new goog.math.Size(0, 15);
 };
 Blockly.utils.object.inherits(Blockly.FieldLabel, Blockly.Field);
 
@@ -97,6 +101,32 @@ Blockly.FieldLabel.prototype.EDITABLE = false;
 Blockly.FieldLabel.prototype.configure_ = function(config) {
   Blockly.FieldLabel.superClass_.configure_.call(this, config);
   this.class_ = config['class'];
+// //TODOQ3: This was in our old logic
+// Blockly.FieldLabel.prototype.init = function() {
+//   if (this.textElement_) {
+//     // Text has already been initialized once.
+//     return;
+//   }
+//   // Build the DOM.
+//   this.textElement_ = Blockly.utils.dom.createSvgElement('text',
+//       {'class': 'blocklyText', 'y': this.size_.height - 2}, null);
+//   if (this.class_) {
+//     Blockly.utils.dom.addClass(this.textElement_, this.class_);
+//   }
+//   if (!this.visible_) {
+//     this.textElement_.style.display = 'none';
+//   }
+//   this.sourceBlock_.getSvgRoot().appendChild(this.textElement_);
+
+//   if (this.tooltip_) {
+//     this.textElement_.tooltip = this.tooltip_;
+//   } else {
+//     // Configure the field to be transparent with respect to tooltips.
+//     this.textElement_.tooltip = this.sourceBlock_;
+//   }
+//   Blockly.Tooltip.bindMouseEvents(this.textElement_);
+//   // Force a render.
+//   this.render_();
 };
 
 /**

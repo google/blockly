@@ -256,6 +256,12 @@ Blockly.onKeyDown_ = function(e) {
       Blockly.hideChaff();
       mainWorkspace.undo(e.shiftKey);
     }
+    else if (e.keyCode == 70) {
+      // 'f' for focusing the workspace search,
+      // 'F' for focusing the toolbox search
+      // Both need to be triggered with the Ctrl/Cmd key - Ctrl + F, Ctrl + Shift + F
+      workspace.focusSearch(e.shiftKey);
+    }
   }
   // Common code for delete and cut.
   // Don't delete in the flyout.
@@ -363,11 +369,11 @@ Blockly.getMainWorkspace = function() {
  * @param {string} message The message to display to the user.
  * @param {function()=} opt_callback The callback when the alert is dismissed.
  */
-Blockly.alert = function(message, opt_callback) {
-  alert(message);
-  if (opt_callback) {
-    opt_callback();
-  }
+Blockly.alert = function(message, callback) {
+  console.log('Alert: ' + message);
+  Fable.View.Workspace.CustomDialog.show('Alert', message, {
+      onCancel: callback
+  });
 };
 
 /**
@@ -377,8 +383,19 @@ Blockly.alert = function(message, opt_callback) {
  * @param {!function(boolean)} callback The callback for handling user response.
  */
 Blockly.confirm = function(message, callback) {
-  callback(confirm(message));
+  console.log('Confirm: ' + message);
+  Fable.View.Workspace.CustomDialog.show('Confirm', message, {
+      showOkay: true,
+      onOkay: function() {
+          callback(true);
+      },
+      showCancel: true,
+      onCancel: function() {
+          callback(false);
+      }
+  });
 };
+
 
 /**
  * Wrapper to window.prompt() that app developers may override to provide
@@ -390,7 +407,18 @@ Blockly.confirm = function(message, callback) {
  * @param {!function(string)} callback The callback for handling user response.
  */
 Blockly.prompt = function(message, defaultValue, callback) {
-  callback(prompt(message, defaultValue));
+  Fable.View.Workspace.CustomDialog.show('Prompt', message, {
+      showInput: true,
+      showOkay: true,
+      onOkay: function() {
+          callback(Fable.View.Workspace.CustomDialog.inputField.value)
+      },
+      showCancel: true,
+      onCancel: function() {
+          callback(null)
+      }
+  });
+  Fable.View.Workspace.CustomDialog.inputField.value = defaultValue;
 };
 
 /**
@@ -404,6 +432,21 @@ Blockly.prompt = function(message, defaultValue, callback) {
 Blockly.jsonInitFactory_ = function(jsonDef) {
   return function() {
     this.jsonInit(jsonDef);
+  };
+};
+
+/**
+ * Helper function for defining a block's associated keywords from JSON. The 
+ * resulting function will send a list of keywords to the Search handler.
+ * 
+ * @param {!String} type The Type ID of the block
+ * @param {!Array<String>} keyword_list The list of keywords that this block can be found with
+ * @return {function()} A function that calls the Search handler and gives it the list of keywords
+ * @private
+ */
+Blockly.evaluateSearchJson_ = function(type, keyword_list) {
+  return function() {
+      Blockly.Search.preprocessSearchKeywords(type, keyword_list);
   };
 };
 
@@ -432,7 +475,8 @@ Blockly.defineBlocksWithJsonArray = function(jsonArray) {
               ' overwrites prior definition of "' + typename + '".');
         }
         Blockly.Blocks[typename] = {
-          init: Blockly.jsonInitFactory_(elem)
+          init: Blockly.jsonInitFactory_(elem),
+          ensureSearchKeywords: Blockly.evaluateSearchJson_(elem["type"], elem["search_keywords"]),
         };
       }
     }

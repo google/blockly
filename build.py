@@ -176,6 +176,7 @@ class Gen_compressed(threading.Thread):
 
   def gen_core(self):
     target_filename = "blockly_compressed.js"
+    beautified_filename = "blockly_compressed_new.js"
     # Define the parameters for the POST request.
     params = [
         ("compilation_level", "SIMPLE_OPTIMIZATIONS"),
@@ -205,10 +206,11 @@ class Gen_compressed(threading.Thread):
       params.append(("js_code", code.encode("utf-8")))
       f.close()
 
-    self.do_compile(params, target_filename, filenames, "")
+    self.do_compile(params, target_filename, filenames, "", beautified_filename)
 
   def gen_blocks(self):
     target_filename = "blocks_compressed.js"
+    beautified_filename = "blocks_compressed_new.js"
     # Define the parameters for the POST request.
     params = [
         ("compilation_level", "SIMPLE_OPTIMIZATIONS"),
@@ -225,15 +227,20 @@ class Gen_compressed(threading.Thread):
 goog.provide('Blockly');
 goog.provide('Blockly.Blocks');
 goog.provide('Blockly.Comment');
+goog.provide('Blockly.FieldAngle');
+goog.provide('Blockly.FieldJointAngle');
 goog.provide('Blockly.FieldCheckbox');
 goog.provide('Blockly.FieldColour');
 goog.provide('Blockly.FieldDropdown');
+goog.provide('Blockly.FieldBoolean');
 goog.provide('Blockly.FieldImage');
 goog.provide('Blockly.FieldLabel');
 goog.provide('Blockly.FieldMultilineInput');
 goog.provide('Blockly.FieldNumber');
 goog.provide('Blockly.FieldTextInput');
 goog.provide('Blockly.FieldVariable');
+goog.provide('Blockly.ButtonInput');
+goog.provide('Blockly.AsciiInput');
 goog.provide('Blockly.Mutator');
 """))
     # Read in all the source files.
@@ -246,7 +253,7 @@ goog.provide('Blockly.Mutator');
 
     # Remove Blockly, Blockly.Blocks and all fields to be compatible with Blockly.
     remove = r"var Blockly=\{[^;]*\};\n?"
-    self.do_compile(params, target_filename, filenames, remove)
+    self.do_compile(params, target_filename, filenames, remove, beautified_filename)
 
   def gen_generator(self, language):
     target_filename = language + "_compressed.js"
@@ -283,7 +290,7 @@ goog.provide('Blockly.utils.string');
     remove = r"var Blockly=\{[^;]*\};\s*Blockly.utils.string={};\n?"
     self.do_compile(params, target_filename, filenames, remove)
 
-  def do_compile(self, params, target_filename, filenames, remove):
+  def do_compile(self, params, target_filename, filenames, remove, beautified_filename = None):
     # Send the request to Google.
     headers = {"Content-type": "application/x-www-form-urlencoded"}
     conn = httplib.HTTPSConnection("closure-compiler.appspot.com")
@@ -349,10 +356,20 @@ goog.provide('Blockly.utils.string');
       stats = json_data["statistics"]
       original_b = stats["originalSize"]
       compressed_b = stats["compressedSize"]
+
       if original_b > 0 and compressed_b > 0:
         f = open(target_filename, "w")
         f.write(code)
         f.close()
+
+        if (beautified_filename != None):
+          import jsbeautifier 
+          beautified_code = jsbeautifier.beautify(code)
+          f_new = open(beautified_filename, "w")
+          f_new.write(beautified_code)
+          f_new.close()
+          print("SUCCESS:", beautified_filename)
+
 
         original_kb = int(original_b / 1024 + 0.5)
         compressed_kb = int(compressed_b / 1024 + 0.5)

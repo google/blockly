@@ -379,7 +379,7 @@ Blockly.zelos.ConstantProvider.prototype.init = function() {
   this.HEXAGONAL = this.makeHexagonal();
   this.ROUNDED = this.makeRounded();
 
-  this.STATEMENT_INPUT_NOTCH_OFFSET += this.INNER_CORNERS.rightWidth;
+  this.STATEMENT_INPUT_NOTCH_OFFSET += this.INSIDE_CORNERS.rightWidth;
 };
 
 /**

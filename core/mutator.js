@@ -372,15 +372,10 @@ Blockly.Mutator.prototype.workspaceChanged_ = function(e) {
     var block = this.block_;
     var oldMutationDom = block.mutationToDom();
     var oldMutation = oldMutationDom && Blockly.Xml.domToText(oldMutationDom);
-    // Switch off rendering while the source block is rebuilt.
-    var savedRendered = block.rendered;
-    block.rendered = false;
     // Allow the source block to rebuild itself.
     block.compose(this.rootBlock_);
-    // Restore rendering and show the changes.
-    block.rendered = savedRendered;
-    // Mutation may have added some elements that need initializing.
     block.initSvg();
+    block.render();
     var newMutationDom = block.mutationToDom();
     var newMutation = newMutationDom && Blockly.Xml.domToText(newMutationDom);
     if (oldMutation != newMutation) {
@@ -393,9 +388,6 @@ Blockly.Mutator.prototype.workspaceChanged_ = function(e) {
         block.bumpNeighbours();
         Blockly.Events.setGroup(false);
       }, Blockly.BUMP_DELAY);
-    }
-    if (block.rendered) {
-      block.render();
     }
 
     if (oldMutation != newMutation &&

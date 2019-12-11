@@ -628,6 +628,9 @@ Blockly.blockRendering.RenderInfo.prototype.makeSpacerRow_ = function(prev, next
   if (prev.hasStatement) {
     spacer.followsStatement = true;
   }
+  if (next.hasStatement) {
+    spacer.precedesStatement = true;
+  }
   return spacer;
 };
 

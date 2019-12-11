@@ -98,18 +98,18 @@ Blockly.zelos.Drawer.prototype.drawOutline_ = function() {
  * @protected
  */
 Blockly.zelos.Drawer.prototype.drawRightSideRow_ = function(row) {
-  if (row.precedesStatement) {
-    var remainingHeight = row.height - this.constants_.INSIDE_CORNERS.rightWidth;
+  if (row.precedesStatement || row.followsStatement) {
+    var cornerHeight = this.constants_.INSIDE_CORNERS.rightHeight;
+    var remainingHeight = row.height -
+        (row.precedesStatement ? cornerHeight : 0);
     this.outlinePath_ +=
+        (row.followsStatement ?
+            this.constants_.INSIDE_CORNERS.pathBottomRight : '') +
         (remainingHeight > 0 ?
-            Blockly.utils.svgPaths.lineOnAxis('V', row.yPos + remainingHeight) : '') +
-        this.constants_.INSIDE_CORNERS.pathTopRight;
-  } else if (row.followsStatement) {
-    var remainingHeight = row.height - this.constants_.INSIDE_CORNERS.rightWidth;
-    this.outlinePath_ +=
-        this.constants_.INSIDE_CORNERS.pathBottomRight +
-        (remainingHeight > 0 ?
-            Blockly.utils.svgPaths.lineOnAxis('V', row.yPos + row.height) : '');
+            Blockly.utils.svgPaths
+                .lineOnAxis('V', row.yPos + remainingHeight) : '') +
+        (row.precedesStatement ?
+            this.constants_.INSIDE_CORNERS.pathTopRight : '');
   } else {
     this.outlinePath_ +=
         Blockly.utils.svgPaths.lineOnAxis('V', row.yPos + row.height);

@@ -159,14 +159,17 @@ Blockly.zelos.RenderInfo.prototype.getSpacerRowHeight_ = function(
     }
     return this.constants_.NO_PADDING;
   }
-  if (Blockly.blockRendering.Types.isInputRow(prev) && prev.hasStatement) {
-    return Math.max(this.constants_.MEDIUM_PADDING,
-        Math.max(this.constants_.NOTCH_HEIGHT,
-            this.constants_.NOTCH_HEIGHT.rightHeight || 0));
-  }
-  if (Blockly.blockRendering.Types.isInputRow(next) && next.hasStatement) {
-    return Math.max(this.constants_.MEDIUM_PADDING,
-        this.constants_.NOTCH_HEIGHT.rightHeight || 0);
+  var precedesStatement =
+      Blockly.blockRendering.Types.isInputRow(prev) && prev.hasStatement;
+  var followsStatement =
+      Blockly.blockRendering.Types.isInputRow(next) && next.hasStatement;
+  if (precedesStatement || followsStatement) {
+    var cornerHeight = this.constants_.INSIDE_CORNERS.rightHeight || 0;
+    var height = Math.max(this.constants_.MEDIUM_PADDING,
+        Math.max(this.constants_.NOTCH_HEIGHT, cornerHeight));
+    return precedesStatement && followsStatement ?
+        Math.max(height,
+            cornerHeight * 2 + this.constants_.DUMMY_INPUT_MIN_HEIGHT) : height;
   }
   if ((Blockly.blockRendering.Types.isBottomRow(next))) {
     if (!this.outputConnection) {

@@ -418,9 +418,16 @@ Blockly.Toolbox.prototype.syncTrees_ = function(treeIn, treeOut, pathToMedia, sh
           }
         }
         break;
-        //TODO: Move LABEL as its own case, so the BKY_ prefix can be escaped and localized.
-      case 'SHADOW':
       case 'LABEL':
+        // Decode the label name for any potential message references
+        // (eg. `%{BKY_CATEGORY_NAME_LOGIC}`).
+        let labelText = Blockly.utils.replaceMessageReferences(
+          childIn.getAttribute('text'));
+        childIn.setAttribute('text', labelText);
+        treeOut.blocks.push(childIn);
+        lastElement = childIn;
+        break;
+      case 'SHADOW':
       case 'BUTTON':
         treeOut.blocks.push(childIn);
         lastElement = childIn;

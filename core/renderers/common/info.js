@@ -139,11 +139,11 @@ Blockly.blockRendering.RenderInfo = function(renderer, block) {
   this.rows = [];
 
   /**
-   * The number of active rows on a block.
+   * The total number of input rows added onto the block.
    * @type {number}
    * @protected
    */
-  this.activeRowNum_ = 1;
+  this.inputRowNum_ = 1;
 
   /**
    * An array of measurable objects containing hidden icons.
@@ -231,7 +231,7 @@ Blockly.blockRendering.RenderInfo.prototype.createRows_ = function() {
       // Finish this row and create a new one.
       this.rows.push(activeRow);
       activeRow = new Blockly.blockRendering.InputRow(this.constants_);
-      this.activeRowNum_ ++;
+      this.inputRowNum_ ++;
     }
 
     // All of the fields in an input go on the same row.

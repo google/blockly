@@ -387,7 +387,7 @@ Blockly.zelos.RenderInfo.prototype.getNegativeSpacing_ = function(elem) {
   var outerShape = this.outputConnection.shape.type;
   var constants =
     /** @type {!Blockly.zelos.ConstantProvider} */ (this.constants_);
-  if (this.isMultiRow && this.activeRowNum_ > 1) {
+  if (this.isMultiRow && this.inputRowNum_ > 1) {
     switch (outerShape) {
       case constants.SHAPES.ROUND:
         // Special case for multi-row round reporter blocks.

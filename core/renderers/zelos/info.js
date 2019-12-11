@@ -398,9 +398,12 @@ Blockly.zelos.RenderInfo.prototype.finalizeVerticalAlignment_ = function() {
     if (Blockly.blockRendering.Types.isInputRow(row)) {
       // Determine if the input row has non-shadow connected blocks.
       var hasNonShadowConnectedBlocks = false;
+      var MIN_VERTICAL_TIGHTNESTING_HEIGHT = 40;
       for (var j = 0, elem; (elem = row.elements[j]); j++) {
         if (Blockly.blockRendering.Types.isInlineInput(elem) &&
-            elem.connectedBlock && !elem.connectedBlock.isShadow()) {
+            elem.connectedBlock && !elem.connectedBlock.isShadow() &&
+            elem.connectedBlock.getHeightWidth().height >=
+                MIN_VERTICAL_TIGHTNESTING_HEIGHT) {
           hasNonShadowConnectedBlocks = true;
           break;
         }

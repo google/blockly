@@ -185,10 +185,8 @@ Blockly.zelos.RenderInfo.prototype.getSpacerRowHeight_ = function(
  */
 Blockly.zelos.RenderInfo.prototype.getSpacerRowWidth_ = function(prev, next) {
   var width = this.width - this.startX;
-  if (Blockly.blockRendering.Types.isInputRow(prev) && prev.hasStatement) {
-    return Math.max(width, this.constants_.STATEMENT_INPUT_SPACER_MIN_WIDTH);
-  }
-  if (Blockly.blockRendering.Types.isInputRow(next) && next.hasStatement) {
+  if ((Blockly.blockRendering.Types.isInputRow(prev) && prev.hasStatement) ||
+      (Blockly.blockRendering.Types.isInputRow(next) && next.hasStatement)) {
     return Math.max(width, this.constants_.STATEMENT_INPUT_SPACER_MIN_WIDTH);
   }
   return width;

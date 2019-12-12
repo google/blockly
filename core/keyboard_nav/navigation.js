@@ -45,20 +45,29 @@ Blockly.navigation.loggingCallback = null;
 /**
  * State indicating focus is currently on the flyout.
  * @type {number}
+ * @const
  */
 Blockly.navigation.STATE_FLYOUT = 1;
 
 /**
  * State indicating focus is currently on the workspace.
  * @type {number}
+ * @const
  */
 Blockly.navigation.STATE_WS = 2;
 
 /**
  * State indicating focus is currently on the toolbox.
  * @type {number}
+ * @const
  */
 Blockly.navigation.STATE_TOOLBOX = 3;
+
+/**
+ * The distance to move the cursor on the workspace.
+ * @type {number}
+ */
+Blockly.navigation.WS_MOVE_DISTANCE = 40;
 
 /**
  * The current state the user is in.
@@ -83,7 +92,11 @@ Blockly.navigation.actionNames = {
   DISCONNECT: 'disconnect',
   TOOLBOX: 'toolbox',
   EXIT: 'exit',
-  TOGGLE_KEYBOARD_NAV: 'toggle_keyboard_nav'
+  TOGGLE_KEYBOARD_NAV: 'toggle_keyboard_nav',
+  MOVE_WS_UP: 'move_ws_up',
+  MOVE_WS_DOWN: 'move_ws_down',
+  MOVE_WS_LEFT: 'move_ws_left',
+  MOVE_WS_RIGHT: 'move_ws_right'
 };
 
 /**
@@ -108,7 +121,6 @@ Blockly.navigation.getMarker = function() {
 /**
  * If a toolbox exists, set the navigation state to toolbox and select the first
  * category in the toolbox.
- * category.
  * @private
  */
 Blockly.navigation.focusToolbox_ = function() {
@@ -872,6 +884,32 @@ Blockly.navigation.toolboxOnAction_ = function(action) {
 };
 
 /**
+ * Move the workspace cursor in the given direction.
+ * @param {number} xDirection -1 to move cursor left 1 to move cursor right.
+ * @param {number} yDirection -1 to move cursor up 1 to move cursor down.
+ * @return {boolean} True if the current node is a workspace, false otherwise.
+ * @private
+ */
+Blockly.navigation.moveWSCursor_ = function(xDirection, yDirection) {
+  var cursor = Blockly.getMainWorkspace().getCursor();
+  var curNode = Blockly.getMainWorkspace().getCursor().getCurNode();
+
+  if (curNode.getType() !== Blockly.ASTNode.types.WORKSPACE) {
+    return false;
+  }
+
+  var wsCoord = curNode.getWsCoordinate();
+  var newX = xDirection * Blockly.navigation.WS_MOVE_DISTANCE + wsCoord.x;
+  var newY = yDirection * Blockly.navigation.WS_MOVE_DISTANCE + wsCoord.y;
+
+  var newCoord = new Blockly.utils.Coordinate(newX, newY);
+  var newWSAST = Blockly.ASTNode.createWorkspaceNode(
+      Blockly.getMainWorkspace(), newCoord);
+  cursor.setCurNode(newWSAST);
+  return true;
+};
+
+/**
  * Handles the given action for the workspace.
  * @param {!Blockly.Action} action The action to handle.
  * @return {boolean} True if the action has been handled, false otherwise.
@@ -891,6 +929,14 @@ Blockly.navigation.workspaceOnAction_ = function(action) {
     case Blockly.navigation.actionNames.DISCONNECT:
       Blockly.navigation.disconnectBlocks_();
       return true;
+    case Blockly.navigation.actionNames.MOVE_WS_UP:
+      return Blockly.navigation.moveWSCursor_(0, -1);
+    case Blockly.navigation.actionNames.MOVE_WS_DOWN:
+      return Blockly.navigation.moveWSCursor_(0, 1);
+    case Blockly.navigation.actionNames.MOVE_WS_LEFT:
+      return Blockly.navigation.moveWSCursor_(-1, 0);
+    case Blockly.navigation.actionNames.MOVE_WS_RIGHT:
+      return Blockly.navigation.moveWSCursor_(1, 0);
     default:
       return false;
   }
@@ -995,6 +1041,39 @@ Blockly.navigation.ACTION_EXIT = new Blockly.Action(
 Blockly.navigation.ACTION_TOGGLE_KEYBOARD_NAV = new Blockly.Action(
     Blockly.navigation.actionNames.TOGGLE_KEYBOARD_NAV,
     'Turns on and off keyboard navigation.');
+
+/**
+ * The action to move the cursor to the keft on a worksapce.
+ * @type {!Blockly.Action}
+ */
+Blockly.navigation.ACTION_MOVE_WS_LEFT = new Blockly.Action(
+    Blockly.navigation.actionNames.MOVE_WS_LEFT,
+    'Turns on and off keyboard navigation.');
+
+/**
+ * The action to move the cursor to the right on a worksapce.
+ * @type {!Blockly.Action}
+ */
+Blockly.navigation.ACTION_MOVE_WS_RIGHT = new Blockly.Action(
+    Blockly.navigation.actionNames.MOVE_WS_RIGHT,
+    'Turns on and off keyboard navigation.');
+
+/**
+ * The action to move the cursor up on a worksapce.
+ * @type {!Blockly.Action}
+ */
+Blockly.navigation.ACTION_MOVE_WS_UP = new Blockly.Action(
+    Blockly.navigation.actionNames.MOVE_WS_UP,
+    'Moves the cursor to the .');
+
+/**
+ * The action to move the cursor down on a worksapce.
+ * @type {!Blockly.Action}
+ */
+Blockly.navigation.ACTION_MOVE_WS_DOWN = new Blockly.Action(
+    Blockly.navigation.actionNames.MOVE_WS_DOWN,
+    'Turns on and off keyboard navigation.');
+
 
 /**
  * List of actions that can be performed in read only mode.

@@ -161,6 +161,14 @@ Blockly.user.keyMap.createDefaultKeyMap = function() {
   var map = {};
   var controlK = Blockly.user.keyMap.createSerializedKey(
       Blockly.utils.KeyCodes.K, [Blockly.user.keyMap.modifierKeys.CONTROL]);
+  var shiftW = Blockly.user.keyMap.createSerializedKey(
+      Blockly.utils.KeyCodes.W, [Blockly.user.keyMap.modifierKeys.SHIFT]);
+  var shiftA = Blockly.user.keyMap.createSerializedKey(
+      Blockly.utils.KeyCodes.A, [Blockly.user.keyMap.modifierKeys.SHIFT]);
+  var shiftS = Blockly.user.keyMap.createSerializedKey(
+      Blockly.utils.KeyCodes.S, [Blockly.user.keyMap.modifierKeys.SHIFT]);
+  var shiftD = Blockly.user.keyMap.createSerializedKey(
+      Blockly.utils.KeyCodes.D, [Blockly.user.keyMap.modifierKeys.SHIFT]);
 
   map[Blockly.utils.KeyCodes.W] = Blockly.navigation.ACTION_PREVIOUS;
   map[Blockly.utils.KeyCodes.A] = Blockly.navigation.ACTION_OUT;
@@ -173,5 +181,9 @@ Blockly.user.keyMap.createDefaultKeyMap = function() {
   map[Blockly.utils.KeyCodes.E] = Blockly.navigation.ACTION_EXIT;
   map[Blockly.utils.KeyCodes.ESC] = Blockly.navigation.ACTION_EXIT;
   map[controlK] = Blockly.navigation.ACTION_TOGGLE_KEYBOARD_NAV;
+  map[shiftW] = Blockly.navigation.ACTION_MOVE_WS_UP;
+  map[shiftA] = Blockly.navigation.ACTION_MOVE_WS_LEFT;
+  map[shiftS] = Blockly.navigation.ACTION_MOVE_WS_DOWN;
+  map[shiftD] = Blockly.navigation.ACTION_MOVE_WS_RIGHT;
   return map;
 };

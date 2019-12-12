@@ -202,7 +202,6 @@ Blockly.Search.prototype.clearAll = function() {
   this.blockTrie_ = new goog.structs.Trie;
 };
 
-
 /**
  * Static method that preprocesses all of a specific block's associated keywords
  * and puts them in a list. Ensures the elements of the list are single words, trimmed from any
@@ -242,5 +241,19 @@ Blockly.Search.preprocessSearchKeywords = function(block_type, keyword_list) {
               Blockly.Blocks[block_type].SearchKeywords.push(text);
           }
       }
+  }
+};
+
+Blockly.Search.onLanguageChange = function () {
+  let keys = Object.keys(Blockly.Blocks);
+
+  if (keys.length > 0) {
+    for (let i = 0; i < keys.length; i++) {
+      let singleKey = keys[i];
+
+      if (Blockly.Blocks[singleKey].SearchKeywords) {
+        Blockly.Blocks[singleKey].SearchKeywords.length = 0;
+      }
+    }
   }
 };

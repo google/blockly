@@ -111,6 +111,8 @@ Blockly.FieldJointAngle.WRAP = 180;
  */
 Blockly.FieldJointAngle.RADIUS = Blockly.FieldJointAngle.HALF;
 
+Blockly.FieldJointAngle.MIN_MAX = { min: -90, max: 90 };
+
 /**
  * Adds degree symbol and recalculates width.
  * Saves the computed width in a property.
@@ -262,6 +264,10 @@ Blockly.FieldJointAngle.prototype.onMouseMove = function(e) {
     angle = Math.round(angle / Blockly.FieldJointAngle.ROUND) *
         Blockly.FieldJointAngle.ROUND;
   }
+
+  angle = Math.max(angle, Blockly.FieldJointAngle.MIN_MAX[0]);
+  angle = Math.min(angle, Blockly.FieldJointAngle.MIN_MAX[1]);
+
   angle = this.callValidator(angle);
   Blockly.FieldTextInput.htmlInput_.value = angle;
   this.setValue(angle);

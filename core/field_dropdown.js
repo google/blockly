@@ -178,7 +178,9 @@ Blockly.FieldDropdown.prototype.addActionListener_ = function(menu) {
  * @private
  */
 Blockly.FieldDropdown.prototype.createMenu_ = function() {
-  if (this.shouldAllowSearch_) {
+  var options = this.getOptions();
+
+  if (this.shouldAllowSearch_ && options.length > 2) {
     var menu = new goog.ui.FilteredMenu();
   }
   else {
@@ -186,7 +188,6 @@ Blockly.FieldDropdown.prototype.createMenu_ = function() {
   }
   
   menu.setRightToLeft(this.sourceBlock_.RTL);
-  var options = this.getOptions();
   for (var i = 0; i < options.length; i++) {
     var content = options[i][0]; // Human-readable text or image.
     var value = options[i][1];   // Language-neutral value.
@@ -228,6 +229,9 @@ Blockly.FieldDropdown.prototype.createMenu_ = function() {
     document.getElementsByTagName('head')[0].appendChild(this.styleTag_);
   }
   
+  //Scroll to the top of the thing
+  menu.scrollTop = 0;
+
   return menu;
 };
 
@@ -262,6 +266,9 @@ Blockly.FieldDropdown.prototype.positionMenu_ = function(menu) {
   // correctly.  Otherwise it will cause a page scroll to get the misplaced menu
   // in view.  See issue #1329.
   menu.getElement().focus();
+
+  //Scroll to the top of the menu.
+  menu.getElement().scrollTop = 0;
 };
 
 /**

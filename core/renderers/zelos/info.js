@@ -42,8 +42,6 @@ goog.require('Blockly.blockRendering.StatementInput');
 goog.require('Blockly.blockRendering.TopRow');
 goog.require('Blockly.blockRendering.Types');
 goog.require('Blockly.utils.object');
-goog.require('Blockly.zelos.AfterStatementSpacerRow');
-goog.require('Blockly.zelos.BeforeStatementSpacerRow');
 goog.require('Blockly.zelos.BottomRow');
 goog.require('Blockly.zelos.RightConnectionShape');
 goog.require('Blockly.zelos.TopRow');
@@ -176,35 +174,6 @@ Blockly.zelos.RenderInfo.prototype.getInRowSpacing_ = function(prev, next) {
 /**
  * @override
  */
-Blockly.zelos.RenderInfo.prototype.makeSpacerRow_ = function(prev, next) {
-  var height = this.getSpacerRowHeight_(prev, next);
-  var width = this.getSpacerRowWidth_(prev, next);
-  if (Blockly.blockRendering.Types.isInputRow(next) && next.hasStatement) {
-    var spacer =
-        new Blockly.zelos.BeforeStatementSpacerRow(
-            this.constants_,
-            Math.max(height, this.constants_.INSIDE_CORNERS.rightHeight || 0),
-            Math.max(width, this.constants_.STATEMENT_INPUT_SPACER_MIN_WIDTH));
-  } else if (Blockly.blockRendering.Types.isInputRow(prev) && prev.hasStatement) {
-    var spacer =
-        new Blockly.zelos.AfterStatementSpacerRow(
-            this.constants_,
-            Math.max(height, this.constants_.INSIDE_CORNERS.rightHeight || 0),
-            Math.max(width, this.constants_.STATEMENT_INPUT_SPACER_MIN_WIDTH));
-  } else {
-    var spacer = new Blockly.blockRendering.SpacerRow(
-        this.constants_, height, width);
-  }
-  if (prev.hasStatement) {
-    spacer.followsStatement = true;
-  }
-  return spacer;
-};
-
-
-/**
- * @override
- */
 Blockly.zelos.RenderInfo.prototype.getSpacerRowHeight_ = function(
     prev, next) {
   // If we have an empty block add a spacer to increase the height.
@@ -219,6 +188,18 @@ Blockly.zelos.RenderInfo.prototype.getSpacerRowHeight_ = function(
     }
     return this.constants_.NO_PADDING;
   }
+  var precedesStatement =
+      Blockly.blockRendering.Types.isInputRow(prev) && prev.hasStatement;
+  var followsStatement =
+      Blockly.blockRendering.Types.isInputRow(next) && next.hasStatement;
+  if (precedesStatement || followsStatement) {
+    var cornerHeight = this.constants_.INSIDE_CORNERS.rightHeight || 0;
+    var height = Math.max(this.constants_.MEDIUM_PADDING,
+        Math.max(this.constants_.NOTCH_HEIGHT, cornerHeight));
+    return precedesStatement && followsStatement ?
+        Math.max(height,
+            cornerHeight * 2 + this.constants_.DUMMY_INPUT_MIN_HEIGHT) : height;
+  }
   if ((Blockly.blockRendering.Types.isBottomRow(next))) {
     if (!this.outputConnection) {
       return this.constants_.SMALL_PADDING;
@@ -226,6 +207,18 @@ Blockly.zelos.RenderInfo.prototype.getSpacerRowHeight_ = function(
     return this.constants_.NO_PADDING;
   }
   return this.constants_.MEDIUM_PADDING;
+};
+
+/**
+ * @override
+ */
+Blockly.zelos.RenderInfo.prototype.getSpacerRowWidth_ = function(prev, next) {
+  var width = this.width - this.startX;
+  if ((Blockly.blockRendering.Types.isInputRow(prev) && prev.hasStatement) ||
+      (Blockly.blockRendering.Types.isInputRow(next) && next.hasStatement)) {
+    return Math.max(width, this.constants_.STATEMENT_INPUT_SPACER_MIN_WIDTH);
+  }
+  return width;
 };
 
 /**

@@ -835,7 +835,7 @@ Blockly.Flyout.prototype.placeNewBlock_ = function(oldBlock) {
 
   //SHAPE: Added from blockly_changes
   try {
-    incrementCounter(oldBlock);
+    Blockly.MostUsed.incrementCounter(oldBlock);
   }
   catch {
     console.log("Couldn't increment the counter for this block.");

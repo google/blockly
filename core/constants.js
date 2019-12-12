@@ -293,6 +293,14 @@ Blockly.VARIABLE_DYNAMIC_CATEGORY_NAME = 'VARIABLE_DYNAMIC';
 Blockly.PROCEDURE_CATEGORY_NAME = 'PROCEDURE';
 
 /**
+ * String for use in the "custom" attribute of a category in toolbox XML.
+ * This string indicates that the category should be dynamically populated with
+ * the most used blocks.
+ * @const {string}
+ */
+Blockly.MOST_USED_CATEGORY_NAME = 'MOST_USED_CUSTOM';
+
+/**
  * String for use in the dropdown created in field_variable.
  * This string indicates that this option in the dropdown is 'Rename
  * variable...' and if selected, should trigger the prompt to rename a variable.

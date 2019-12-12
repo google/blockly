@@ -139,6 +139,13 @@ Blockly.blockRendering.RenderInfo = function(renderer, block) {
   this.rows = [];
 
   /**
+   * The total number of input rows added onto the block.
+   * @type {number}
+   * @protected
+   */
+  this.inputRowNum_ = 1;
+
+  /**
    * An array of measurable objects containing hidden icons.
    * @type {!Array.<!Blockly.blockRendering.Icon>}
    */
@@ -224,6 +231,7 @@ Blockly.blockRendering.RenderInfo.prototype.createRows_ = function() {
       // Finish this row and create a new one.
       this.rows.push(activeRow);
       activeRow = new Blockly.blockRendering.InputRow(this.constants_);
+      this.inputRowNum_ ++;
     }
 
     // All of the fields in an input go on the same row.
@@ -560,14 +568,28 @@ Blockly.blockRendering.RenderInfo.prototype.alignRowElements_ = function() {
  */
 Blockly.blockRendering.RenderInfo.prototype.addAlignmentPadding_ = function(row,
     missingSpace) {
+  var firstSpacer = row.getFirstSpacer();
   var lastSpacer = row.getLastSpacer();
-  if (lastSpacer) {
-    lastSpacer.width += missingSpace;
-    row.width += missingSpace;
-    if (row.hasExternalInput || row.hasStatement) {
-      row.widthWithConnectedBlocks += missingSpace;
-    }
+  if (row.hasExternalInput || row.hasStatement) {
+    row.widthWithConnectedBlocks += missingSpace;
   }
+  
+  // Decide where the extra padding goes.
+  if (row.align == Blockly.ALIGN_LEFT) {
+    // Add padding to the end of the row.
+    lastSpacer.width += missingSpace;
+  } else if (row.align == Blockly.ALIGN_CENTRE) {
+    // Split the padding between the beginning and end of the row.
+    firstSpacer.width += missingSpace / 2;
+    lastSpacer.width += missingSpace / 2;
+  } else if (row.align == Blockly.ALIGN_RIGHT) {
+    // Add padding at the beginning of the row.
+    firstSpacer.width += missingSpace;
+  } else {
+    // Default to left-aligning.
+    lastSpacer.width += missingSpace;
+  }
+  row.width += missingSpace;
 };
 
 /**

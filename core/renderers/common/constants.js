@@ -139,6 +139,13 @@ Blockly.blockRendering.ConstantProvider = function() {
    */
   this.NOTCH_OFFSET_LEFT = 15;
 
+  /**
+   * Additional offset added to the statement input's width to account for the
+   * notch.
+   * @type {number}
+   */
+  this.STATEMENT_INPUT_NOTCH_OFFSET = this.NOTCH_OFFSET_LEFT;
+
   this.STATEMENT_BOTTOM_SPACER = 0;
   this.STATEMENT_INPUT_PADDING_LEFT = 20;
 

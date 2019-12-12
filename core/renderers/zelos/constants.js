@@ -80,6 +80,11 @@ Blockly.zelos.ConstantProvider = function() {
    * @override
    */
   this.NOTCH_OFFSET_LEFT = 3 * this.GRID_UNIT;
+  
+  /**
+   * @override
+   */
+  this.STATEMENT_INPUT_NOTCH_OFFSET = this.NOTCH_OFFSET_LEFT;
 
   /**
    * @override
@@ -378,6 +383,8 @@ Blockly.zelos.ConstantProvider.prototype.init = function() {
   Blockly.zelos.ConstantProvider.superClass_.init.call(this);
   this.HEXAGONAL = this.makeHexagonal();
   this.ROUNDED = this.makeRounded();
+
+  this.STATEMENT_INPUT_NOTCH_OFFSET += this.INSIDE_CORNERS.rightWidth;
 };
 
 /**

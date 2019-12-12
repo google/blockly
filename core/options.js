@@ -270,7 +270,8 @@ Blockly.Options.parseGridOptions_ = function(options) {
   var gridOptions = {};
   gridOptions.spacing = Number(grid['spacing']) || 0;
   gridOptions.colour = grid['colour'] || '#888';
-  gridOptions.length = Number(grid['length']) || 1;
+  gridOptions.length =
+      (grid['length'] === undefined) ? 1 : Number(grid['length']);
   gridOptions.snap = gridOptions.spacing > 0 && !!grid['snap'];
   return gridOptions;
 };

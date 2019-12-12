@@ -35,6 +35,7 @@ goog.provide('Blockly.utils.colour');
  * .parse('red') -> '#ff0000'
  * .parse('#f00') -> '#ff0000'
  * .parse('#ff0000') -> '#ff0000'
+ * .parse('0xff0000') -> '#ff0000'
  * .parse('rgb(255, 0, 0)') -> '#ff0000'
  * @param {string|number} str Colour in some CSS format.
  * @return {?string} A string containing a hex representation of the colour,
@@ -47,7 +48,8 @@ Blockly.utils.colour.parse = function(str) {
     // e.g. 'red'
     return hex;
   }
-  hex = str[0] == '#' ? str : '#' + str;
+  hex = str.substring(0, 2) == '0x' ? '#' + str.substring(2) : str;
+  hex = hex[0] == '#' ? hex : '#' + hex;
   if (/^#[0-9a-f]{6}$/.test(hex)) {
     // e.g. '#00ff88'
     return hex;
@@ -85,12 +87,18 @@ Blockly.utils.colour.rgbToHex = function(r, g, b) {
 };
 
 /**
- * Converts a hex representation of a colour to RGB.
- * @param {string} hexColour Colour in '#ff0000' format.
+ * Converts a colour to RGB.
+ * @param {string} colour String representing colour in any
+ *     colour format ('#ff0000', 'red', '0xff000', etc).
  * @return {!Array.<number>} RGB representation of the colour.
  */
-Blockly.utils.colour.hexToRgb = function(hexColour) {
-  var rgb = parseInt(hexColour.substr(1), 16);
+Blockly.utils.colour.hexToRgb = function(colour) {
+  var hex = Blockly.utils.colour.parse(colour);
+  if (!hex) {
+    return [0, 0, 0];
+  }
+
+  var rgb = parseInt(hex.substr(1), 16);
   var r = rgb >> 16;
   var g = (rgb >> 8) & 255;
   var b = rgb & 255;

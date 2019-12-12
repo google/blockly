@@ -132,7 +132,7 @@ Blockly.blockRendering.StatementInput = function(constants, input) {
     this.height =
         this.connectedBlockHeight + this.constants_.STATEMENT_BOTTOM_SPACER;
   }
-  this.width = this.constants_.NOTCH_OFFSET_LEFT + this.shape.width;
+  this.width = this.constants_.STATEMENT_INPUT_NOTCH_OFFSET + this.shape.width;
 };
 Blockly.utils.object.inherits(Blockly.blockRendering.StatementInput,
     Blockly.blockRendering.InputConnection);

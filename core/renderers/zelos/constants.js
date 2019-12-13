@@ -424,6 +424,12 @@ Blockly.zelos.ConstantProvider.prototype.makeHexagonal = function() {
     height: function(height) {
       return height;
     },
+    connectionOffsetY: function(connectionHeight) {
+      return connectionHeight / 2;
+    },
+    connectionOffsetX: function(connectionWidth) {
+      return - connectionWidth;
+    },
     pathDown: function(height) {
       return makeMainPath(height, false, false);
     },
@@ -462,6 +468,12 @@ Blockly.zelos.ConstantProvider.prototype.makeRounded = function() {
     },
     height: function(height) {
       return height;
+    },
+    connectionOffsetY: function(connectionHeight) {
+      return connectionHeight / 2;
+    },
+    connectionOffsetX: function(connectionWidth) {
+      return - connectionWidth;
     },
     pathDown: function(height) {
       return makeMainPath(height, false, false);

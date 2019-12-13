@@ -396,7 +396,8 @@ Blockly.blockRendering.Drawer.prototype.positionInlineInputConnection_ = functio
     if (this.info_.RTL) {
       connX *= -1;
     }
-    input.connection.setOffsetInBlock(connX, yPos + input.connectionOffsetY);
+    input.connection.setOffsetInBlock(connX + input.connectionOffsetX,
+        yPos + input.connectionOffsetY);
   }
 };
 
@@ -473,7 +474,8 @@ Blockly.blockRendering.Drawer.prototype.positionOutputConnection_ = function() {
   if (this.info_.outputConnection) {
     var x = this.info_.startX;
     var connX = this.info_.RTL ? -x : x;
-    this.block_.outputConnection.setOffsetInBlock(connX,
-        this.info_.outputConnection.connectionOffsetY);
+    this.block_.outputConnection.setOffsetInBlock(connX +
+        this.info_.outputConnection.connectionOffsetX,
+    this.info_.outputConnection.connectionOffsetY);
   }
 };

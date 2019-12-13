@@ -224,8 +224,7 @@ Blockly.zelos.RenderInfo.prototype.getSpacerRowWidth_ = function(prev, next) {
 /**
  * @override
  */
-Blockly.zelos.RenderInfo.prototype.getElemCenterline_ = function(row,
-    elem) {
+Blockly.zelos.RenderInfo.prototype.getElemCenterline_ = function(row, elem) {
   if (row.hasStatement) {
     return row.yPos + this.constants_.EMPTY_STATEMENT_INPUT_HEIGHT / 2;
   }

@@ -99,6 +99,11 @@ Blockly.zelos.ConstantProvider = function() {
   /**
    * @override
    */
+  this.EMPTY_STATEMENT_INPUT_HEIGHT = 6 * this.GRID_UNIT;
+
+  /**
+   * @override
+   */
   this.TAB_OFFSET_FROM_TOP = 0;
 
   /**

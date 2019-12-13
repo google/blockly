@@ -222,6 +222,18 @@ Blockly.zelos.RenderInfo.prototype.getSpacerRowWidth_ = function(prev, next) {
 };
 
 /**
+ * @override
+ */
+Blockly.zelos.RenderInfo.prototype.getElemCenterline_ = function(row,
+    elem) {
+  if (row.hasStatement) {
+    return row.yPos + this.constants_.EMPTY_STATEMENT_INPUT_HEIGHT / 2;
+  }
+  return Blockly.zelos.RenderInfo.superClass_.getElemCenterline_.call(this,
+      row, elem);
+};
+
+/**
  * Adjust the x position of fields to bump all non-label fields in the first row
  * past the notch position.  This must be called before ``computeBounds`` is
  * called.

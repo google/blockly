@@ -284,8 +284,10 @@ Blockly.zelos.RenderInfo.prototype.finalizeOutputConnection_ = function() {
   this.outputConnection.height = connectionHeight;
   this.outputConnection.width = connectionWidth;
   this.outputConnection.startX = connectionWidth;
-  this.outputConnection.connectionOffsetX = -connectionWidth;
-  this.outputConnection.connectionOffsetY = connectionHeight / 2;
+  this.outputConnection.connectionOffsetY =
+      this.outputConnection.shape.connectionOffsetY(connectionHeight);
+  this.outputConnection.connectionOffsetX =
+      this.outputConnection.shape.connectionOffsetX(connectionWidth);
 
   // Adjust right side measurable.
   this.rightSide.height = connectionHeight;

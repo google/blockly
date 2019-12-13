@@ -127,6 +127,12 @@ Blockly.blockRendering.ConstantProvider = function() {
   this.DUMMY_INPUT_MIN_HEIGHT = this.TAB_HEIGHT;
 
   /**
+   * The minimum height of a dummy input row in a shadow block.
+   * @type {number}
+   */
+  this.DUMMY_INPUT_SHADOW_MIN_HEIGHT = this.TAB_HEIGHT;
+
+  /**
    * Rounded corner radius.
    * @type {number}
    */

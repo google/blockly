@@ -170,6 +170,16 @@ Blockly.zelos.ConstantProvider = function() {
   this.CURSOR_RADIUS = 5;
 
   /**
+   * @override
+   */
+  this.JAGGED_TEETH_HEIGHT = 0;
+
+  /**
+   * @override
+   */
+  this.JAGGED_TEETH_WIDTH = 0;
+
+  /**
    * @enum {number}
    * @override
    */

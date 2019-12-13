@@ -673,9 +673,9 @@ Blockly.blockRendering.ConstantProvider.prototype.makeJaggedTeeth = function() {
   var mainPath =
       Blockly.utils.svgPaths.line(
           [
-            Blockly.utils.svgPaths.point(6, 3),
-            Blockly.utils.svgPaths.point(-12, 6),
-            Blockly.utils.svgPaths.point(6, 3)
+            Blockly.utils.svgPaths.point(width, height / 4),
+            Blockly.utils.svgPaths.point(-width * 2, height / 2),
+            Blockly.utils.svgPaths.point(width, height / 4)
           ]);
   return {
     height: height,

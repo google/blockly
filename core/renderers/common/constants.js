@@ -225,13 +225,13 @@ Blockly.blockRendering.ConstantProvider = function() {
 
   /**
    * Height of SVG path for jagged teeth at the end of collapsed blocks.
-   * @const
+   * @type {number}
    */
   this.JAGGED_TEETH_HEIGHT = 12;
 
   /**
    * Width of SVG path for jagged teeth at the end of collapsed blocks.
-   * @const
+   * @type {number}
    */
   this.JAGGED_TEETH_WIDTH = 6;
 

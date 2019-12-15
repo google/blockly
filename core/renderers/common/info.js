@@ -386,6 +386,8 @@ Blockly.blockRendering.RenderInfo.prototype.addInput_ = function(input, activeRo
     // Dummy inputs have no visual representation, but the information is still
     // important.
     activeRow.minHeight = Math.max(activeRow.minHeight,
+        input.getSourceBlock() && input.getSourceBlock().isShadow() ?
+        this.constants_.DUMMY_INPUT_SHADOW_MIN_HEIGHT :
         this.constants_.DUMMY_INPUT_MIN_HEIGHT);
     activeRow.hasDummyInput = true;
   }

@@ -150,7 +150,12 @@ Blockly.zelos.ConstantProvider = function() {
   /**
    * @override
    */
-  this.DUMMY_INPUT_MIN_HEIGHT = 6 * this.GRID_UNIT;
+  this.DUMMY_INPUT_MIN_HEIGHT = 8 * this.GRID_UNIT;
+
+  /**
+   * @override
+   */
+  this.DUMMY_INPUT_SHADOW_MIN_HEIGHT = 6 * this.GRID_UNIT;
 
   /**
    * @override
@@ -218,7 +223,7 @@ Blockly.zelos.ConstantProvider = function() {
   /**
    * @override
    */
-  this.FIELD_TEXT_FONTSIZE = 12;
+  this.FIELD_TEXT_FONTSIZE = 3 * this.GRID_UNIT;
 
   /**
    * @override
@@ -283,7 +288,7 @@ Blockly.zelos.ConstantProvider = function() {
    * @type {number}
    * @const
    */
-  this.FIELD_DROPDOWN_SVG_ARROW_SIZE = 12;
+  this.FIELD_DROPDOWN_SVG_ARROW_SIZE = 3 * this.GRID_UNIT;
 
   /**
    * A dropdown field's SVG arrow datauri.

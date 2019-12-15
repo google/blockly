@@ -198,8 +198,8 @@ gulp.task('build-core', function () {
  */
 gulp.task('build-blocks', function () {
   // Add provides used throughout blocks/ in order to be compatible with the
-  // compiler.  All provides added to this list must be removed from the
-  // compiled result using the regex remove steps below.
+  // compiler.  Anything added to this list must be removed from the compiled
+  // result using the remove regex steps below.
   const provides = `
 goog.provide('Blockly');
 goog.provide('Blockly.Blocks');

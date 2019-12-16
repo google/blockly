@@ -231,13 +231,13 @@ Blockly.blockRendering.ConstantProvider = function() {
 
   /**
    * Height of SVG path for jagged teeth at the end of collapsed blocks.
-   * @const
+   * @type {number}
    */
   this.JAGGED_TEETH_HEIGHT = 12;
 
   /**
    * Width of SVG path for jagged teeth at the end of collapsed blocks.
-   * @const
+   * @type {number}
    */
   this.JAGGED_TEETH_WIDTH = 6;
 
@@ -679,9 +679,9 @@ Blockly.blockRendering.ConstantProvider.prototype.makeJaggedTeeth = function() {
   var mainPath =
       Blockly.utils.svgPaths.line(
           [
-            Blockly.utils.svgPaths.point(6, 3),
-            Blockly.utils.svgPaths.point(-12, 6),
-            Blockly.utils.svgPaths.point(6, 3)
+            Blockly.utils.svgPaths.point(width, height / 4),
+            Blockly.utils.svgPaths.point(-width * 2, height / 2),
+            Blockly.utils.svgPaths.point(width, height / 4)
           ]);
   return {
     height: height,

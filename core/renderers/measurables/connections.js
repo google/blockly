@@ -74,6 +74,7 @@ Blockly.blockRendering.OutputConnection = function(constants, connectionModel) {
   this.startX = this.width;
 
   this.connectionOffsetY = this.constants_.TAB_OFFSET_FROM_TOP;
+  this.connectionOffsetX = 0;
 };
 Blockly.utils.object.inherits(Blockly.blockRendering.OutputConnection,
     Blockly.blockRendering.Connection);

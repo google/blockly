@@ -94,10 +94,10 @@ Blockly.navigation.actionNames = {
   TOOLBOX: 'toolbox',
   EXIT: 'exit',
   TOGGLE_KEYBOARD_NAV: 'toggle_keyboard_nav',
-  MOVE_WS_CURSOR_UP: 'move_ws_cursor_up',
-  MOVE_WS_CURSOR_DOWN: 'move_ws_cursor_down',
-  MOVE_WS_CURSOR_LEFT: 'move_ws_cursor_left',
-  MOVE_WS_CURSOR_RIGHT: 'move_ws_cursor_right'
+  MOVE_WS_CURSOR_UP: 'move workspace cursor up',
+  MOVE_WS_CURSOR_DOWN: 'move workspace cursor down',
+  MOVE_WS_CURSOR_LEFT: 'move workspace cursor left',
+  MOVE_WS_CURSOR_RIGHT: 'move workspace cursor right'
 };
 
 /**

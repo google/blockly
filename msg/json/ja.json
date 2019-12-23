@@ -17,6 +17,7 @@
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "項目",
+	"UNNAMED_KEY": "名前なし",
 	"TODAY": "今日",
 	"DUPLICATE_BLOCK": "複製",
 	"ADD_COMMENT": "コメントを追加",
@@ -376,5 +377,6 @@
 	"PROCEDURES_CREATE_DO": "'%1' を作成",
 	"PROCEDURES_IFRETURN_TOOLTIP": "1番目の値が true の場合、2番目の値を返します。",
 	"PROCEDURES_IFRETURN_WARNING": "警告: このブロックは、関数定義内でのみ使用できます。",
-	"WORKSPACE_COMMENT_DEFAULT_TEXT": "ここへ入力"
+	"WORKSPACE_COMMENT_DEFAULT_TEXT": "ここへ入力",
+	"WORKSPACE_ARIA_LABEL": "Blocklyワークスペース"
 }

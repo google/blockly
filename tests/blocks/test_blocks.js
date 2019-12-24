@@ -206,6 +206,369 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     "style": "math_blocks"
   },
   {
+    "type": "test_connections_row_input",
+    "message0": "%1",
+    "args0": [
+      {
+        "type": "input_value",
+        "name": "NAME",
+      }
+    ],
+    "colour": '#aaaaaa',
+    "tooltip": "No Checks\n" +
+        "Can connect to any output connection."
+  },
+  {
+    "type": "test_connections_row_blue",
+    "message0": "%1",
+    "args0": [
+      {
+        "type": "input_value",
+        "name": "NAME",
+        "check": "greenRel"
+      }
+    ],
+    "output": "noneOut",
+    "colour": 230,
+    "tooltip": "Output: noneOut\n" +
+        "Input: greenRel\n" +
+        "Input connection can accept yellow blocks but not red blocks."
+  },
+  {
+    "type": "test_connections_row_yellow",
+    "message0": "%1",
+    "args0": [
+      {
+        "type": "input_value",
+        "name": "NAME",
+        "check": [
+          "orangeRel",
+          "yellowRel"
+        ]
+      }
+    ],
+    "output": [
+      "yellowRel",
+      "greenRel"
+    ],
+    "colour": 60,
+    "tooltip": "Output: yellowRel, greenRel\n" +
+        "Input: yellowRel, orangeRel\n" +
+        "Output can connect to yellow blocks and blue blocks, but not red blocks.\n" +
+        "Input can connect to yellow blocks and red blocks, but not blue blocks."
+  },
+  {
+    "type": "test_connections_row_red",
+    "message0": "%1",
+    "args0": [
+      {
+        "type": "input_value",
+        "name": "NAME",
+        "check": "noneIn"
+      }
+    ],
+    "output": "orangeRel",
+    "colour": 0,
+    "tooltip": "Output: orangeRel\n" +
+        "Input: noneIn\n" +
+        "Output can connect to yellow blocks, but not blue blocks."
+  },
+  {
+    "type": "test_connections_row_output",
+    "message0": "",
+    "output": null,
+    "colour": '#aaaaaa',
+    "tooltip": "No Checks\n" +
+        "Can connect to any input connection."
+  },
+  {
+    "type": "test_connections_multivalue_1valid",
+    "message0": "none %1 both %2",
+    "args0": [
+      {
+        "type": "input_value",
+        "name": "NAME1",
+        "align": "RIGHT",
+        "check": "noneIn"
+      },
+      {
+        "type": "input_value",
+        "name": "NAME2",
+        "align": "RIGHT",
+        "check": [
+          "yellowRel",
+          "orangeRel"
+        ]
+      }
+    ],
+    "output": [
+      "yellowRel",
+      "greenRel"
+    ],
+    "colour": 60,
+    "tooltip": "Output: yellowRel, greenRel\n" +
+        "Input Top: noneIn\n" +
+        "Input Bottom: yellowRel, orangeRel\n" +
+        "Output can connect to yellow blocks and blue blocks, but not red blocks.\n" +
+        "Top Input can connect to nothing, except grey blocks.\n" +
+        "Bottom Input can connect to yellow blocks and red blocks, but not blue" +
+        " blocks."
+  },
+  {
+    "type": "test_connections_multivalue_2valid",
+    "message0": "both %1 both %2",
+    "args0": [
+      {
+        "type": "input_value",
+        "name": "NAME1",
+        "align": "RIGHT",
+        "check": [
+          "yellowRel",
+          "orangeRel"
+        ]
+      },
+      {
+        "type": "input_value",
+        "name": "NAME2",
+        "align": "RIGHT",
+        "check": [
+          "yellowRel",
+          "orangeRel"
+        ]
+      }
+    ],
+    "output": [
+      "yellowRel",
+      "greenRel"
+    ],
+    "colour": 60,
+    "tooltip": "Output: yellowRel, greenRel\n" +
+        "Input Top:  yellowRel, orangeRel\n" +
+        "Input Bottom: yellowRel, orangeRel\n" +
+        "Output can connect to yellow blocks and blue blocks, but not red blocks.\n" +
+        "Top Input can connect to yellow blocks and red blocks, but not blue" +
+        " blocks.\n" +
+        "Bottom Input can connect to yellow blocks and red blocks, but not blue" +
+        " blocks."
+  },
+  {
+    "type": "test_connections_stack_next",
+    "message0": "",
+    "nextStatement": null,
+    "colour": '#aaaaaa',
+    "tooltip": "No Checks\n" +
+        "Can connect to any previous connection."
+  },
+  {
+    "type": "test_connections_stack_blue",
+    "message0": "",
+    "previousStatement": "nonePrev",
+    "nextStatement": "greenRel",
+    "colour": 230,
+    "tooltip": "Prev: nonePrev\n" +
+        "Next: greenRel\n" +
+        "Next connection can accept yellow blocks but not red blocks."
+  },
+  {
+    "type": "test_connections_stack_yellow",
+    "message0": "",
+    "previousStatement": [
+      "greenRel",
+      "yellowRel"
+    ],
+    "nextStatement": [
+      "yellowRel",
+      "orangeRel"
+    ],
+    "colour": 60,
+    "tooltip": "Prev: yellowRel, greenRel\n" +
+        "Next: yellowRel, orangeRel\n" +
+        "Prev can connect to yellow blocks and blue blocks, but not red blocks.\n" +
+        "Next can connect to yellow blocks and red blocks, but not blue blocks."
+  },
+  {
+    "type": "test_connections_stack_red",
+    "message0": "",
+    "previousStatement": "orangeRel",
+    "nextStatement": "noneNext",
+    "colour": 0,
+    "tooltip": "Prev: orangeRel\n" +
+        "Next: noneNext\n" +
+        "Prev can connect to yellow blocks, but not blue blocks."
+  },
+  {
+    "type": "test_connections_stack_prev",
+    "message0": "",
+    "previousStatement": null,
+    "colour": '#aaaaaa',
+    "tooltip": "No Checks\n" +
+        "Can connect to any input connection."
+  },
+  {
+    "type": "test_connections_statement_blue",
+    "message0": "%1",
+    "args0": [
+      {
+        "type": "input_statement",
+        "name": "NAME",
+        "check": "greenRel"
+      }
+    ],
+    "previousStatement": "nonePrev",
+    "nextStatement": "greenRel",
+    "colour": 230,
+    "tooltip": "Prev: nonePrev\n" +
+        "Next: greenRel\n" +
+        "Statement: greenRel\n" +
+        "Next connection can accept yellow blocks but not red blocks.\n" +
+        "Statement connection can accept yellow blocks but not red blocks."
+  },
+  {
+    "type": "test_connections_statement_yellow",
+    "message0": "%1",
+    "args0": [
+      {
+        "type": "input_statement",
+        "name": "NAME",
+        "check":  [
+          "yellowRel",
+          "orangeRel"
+        ]
+      }
+    ],
+    "previousStatement": [
+      "greenRel",
+      "yellowRel"
+    ],
+    "nextStatement": [
+      "yellowRel",
+      "orangeRel"
+    ],
+    "colour": 60,
+    "tooltip": "Prev: yellowRel, greenRel\n" +
+        "Next: yellowRel, orangeRel\n" +
+        "Statement: orangeRel\n" +
+        "Prev can connect to yellow blocks and blue blocks, but not red" +
+        " blocks.\n" +
+        "Next can connect to yellow blocks and red blocks, but not blue" +
+        " blocks.\n" +
+        "Statement connection can accept yellow blocks and red blocks but not" +
+        " blue blocks.\n"
+  },
+  {
+    "type": "test_connections_statement_red",
+    "message0": "%1",
+    "args0": [
+      {
+        "type": "input_statement",
+        "name": "NAME",
+        "check": "noneNext"
+      }
+    ],
+    "previousStatement": "orangeRel",
+    "nextStatement": "noneNext",
+    "colour": 0,
+    "tooltip": "Prev: orangeRel\n" +
+        "Next: noneNext\n" +
+        "Statement: noneNext\n" +
+        "Prev connection can accept yellow blocks but not blue blocks.\n" +
+        "Statement connection accepts none."
+  },
+  {
+    "type": "test_connections_statement_nonext",
+    "message0": "%1",
+    "args0": [
+      {
+        "type": "input_statement",
+        "name": "NAME",
+        "check":  [
+          "yellowRel",
+          "orangeRel"
+        ]
+      }
+    ],
+    "previousStatement": [
+      "greenRel",
+      "yellowRel"
+    ],
+    "colour": 60,
+    "tooltip": "Prev: yellowRel, greenRel\n" +
+        "Next: yellowRel, orangeRel\n" +
+        "Statement: orangeRel\n" +
+        "Prev can connect to yellow blocks and blue blocks, but not red" +
+        " blocks.\n" +
+        "Statement connection can accept yellow blocks and red blocks but not" +
+        " blue blocks.\n"
+  },
+  {
+    "type": "test_connections_multistatement_1valid",
+    "message0": "none %1 both %2",
+    "args0": [
+      {
+        "type": "input_statement",
+        "name": "NAME",
+        "check": "noneNext"
+      },
+      {
+        "type": "input_statement",
+        "name": "NAME",
+        "check":  [
+          "yellowRel",
+          "orangeRel"
+        ]
+      }
+    ],
+    "previousStatement": [
+      "greenRel",
+      "yellowRel"
+    ],
+    "colour": 60,
+    "tooltip": "Prev: yellowRel, greenRel\n" +
+        "Next: yellowRel, orangeRel\n" +
+        "Statement: orangeRel\n" +
+        "Prev can connect to yellow blocks and blue blocks, but not red" +
+        " blocks.\n" +
+        "Top Statement cannot connect to anything, except grey blocks.\n" +
+        "Bottom Statement connection can accept yellow blocks and red blocks" +
+        " but not blue blocks.\n"
+  },
+  {
+    "type": "test_connections_multistatement_2valid",
+    "message0": "both %1 both %2",
+    "args0": [
+      {
+        "type": "input_statement",
+        "name": "NAME",
+        "check": [
+          "yellowRel",
+          "orangeRel"
+        ]
+      },
+      {
+        "type": "input_statement",
+        "name": "NAME",
+        "check": [
+          "yellowRel",
+          "orangeRel"
+        ]
+      }
+    ],
+    "previousStatement": [
+      "greenRel",
+      "yellowRel"
+    ],
+    "colour": 60,
+    "tooltip": "Prev: yellowRel, greenRel\n" +
+        "Next: yellowRel, orangeRel\n" +
+        "Statement: orangeRel\n" +
+        "Prev can connect to yellow blocks and blue blocks, but not red" +
+        " blocks.\n" +
+        "Top Statement connection can accept yellow blocks and red blocks but" +
+        " not blue blocks.\n" +
+        "Bottom Statement connection can accept yellow blocks and red blocks" +
+        " but not blue blocks.\n"
+  },
+  {
     "type": "test_dropdowns_long",
     "message0": "long: %1",
     "args0": [

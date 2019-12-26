@@ -187,13 +187,31 @@ Blockly.blockRendering.Renderer.prototype.topHasPlaceForConnectedBlock =
     return !!Blockly.Connection.lastConnectionInRow(topBlock, connected);
   };
 
+Blockly.blockRendering.Renderer.prototype.orphanCanConnectAtEnd =
+    function(topBlock, orphanBlock, localType) {
+      var orphanConnection = null;
+      var lastConnection = null;
+      if (localType == Blockly.OUTPUT_VALUE) {  // We are replacing an output.
+        orphanConnection = orphanBlock.outputConnection;
+        lastConnection = topBlock.getLastConnectionInRow();
+      } else {  // We are replacing a previous.
+        orphanConnection = orphanBlock.previousConnection;
+        lastConnection = topBlock.getLastConnectionInStack();
+      }
+
+      if (!lastConnection) {
+        return false;
+      }
+      return orphanConnection.checkType(lastConnection);
+    };
+
 Blockly.blockRendering.Renderer.prototype.getConnectionPreviewMethod =
     function(closest, local, topBlock) {
-
       if (local.type == Blockly.OUTPUT_VALUE ||
           local.type == Blockly.PREVIOUS_STATEMENT) {
-        if (!closest.isConnected() || this.topHasPlaceForConnectedBlock(
-            topBlock, closest.targetBlock())) {
+        if (!closest.isConnected() ||
+            this.orphanCanConnectAtEnd(
+                topBlock, closest.targetBlock(), local.type)) {
           return Blockly.InsertionMarkerManager.PREVIEW_TYPE.INSERTION_MARKER;
         }
         return Blockly.InsertionMarkerManager.PREVIEW_TYPE.REPLACEMENT_FADE;

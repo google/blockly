@@ -626,6 +626,33 @@ Blockly.Block.prototype.getFirstStatementConnection = function() {
   return null;
 };
 
+Blockly.Block.prototype.getLastConnectionInRow = function() {
+  var block = this;
+  while (block.inputList.length == 1 &&
+      block.inputList[0].type == Blockly.INPUT_VALUE) {
+    var connection = block.inputList[0].connection;
+    var newBlock = connection.targetBlock();
+    if (!newBlock || newBlock.isShadow()) {
+      return connection;
+    }
+    block = newBlock;
+  }
+  return null;
+};
+
+Blockly.Block.prototype.getLastConnectionInStack = function() {
+  var block = this;
+  while (block.nextConnection) {
+    var connection = block.nextConnection;
+    var newBlock = connection.targetBlock();
+    if (!newBlock || newBlock.isShadow()) {
+      return connection;
+    }
+    block = newBlock;
+  }
+  return null;
+};
+
 /**
  * Return the top-most block in this block's tree.
  * This will return itself if this block is at the top level.

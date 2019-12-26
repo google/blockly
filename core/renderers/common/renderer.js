@@ -184,7 +184,8 @@ Blockly.blockRendering.Renderer.prototype.orphanCanConnectAtEnd =
         // TODO:  I don't think this function necessarily has the correct logic,
         //  but for now it is being kept for behavioral backwards-compat.
         lastConnection = Blockly.Connection
-            .lastConnectionInRow(/** @type {!Blockly.Block} **/ topBlock, orphanBlock);
+            .lastConnectionInRow(
+                /** @type {!Blockly.Block} **/ (topBlock), orphanBlock);
       } else {  // We are replacing a previous.
         orphanConnection = orphanBlock.previousConnection;
         // TODO: This lives on the block while lastConnectionInRow lives on
@@ -215,7 +216,9 @@ Blockly.blockRendering.Renderer.prototype.getConnectionPreviewMethod =
           local.type == Blockly.PREVIOUS_STATEMENT) {
         if (!closest.isConnected() ||
             this.orphanCanConnectAtEnd(
-                topBlock, closest.targetBlock(), local.type)) {
+                topBlock,
+                /** @type {!Blockly.BlockSvg} */ (closest.targetBlock()),
+                local.type)) {
           return Blockly.InsertionMarkerManager.PREVIEW_TYPE.INSERTION_MARKER;
         }
         return Blockly.InsertionMarkerManager.PREVIEW_TYPE.REPLACEMENT_FADE;

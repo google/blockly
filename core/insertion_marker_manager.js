@@ -469,7 +469,9 @@ Blockly.InsertionMarkerManager.prototype.showPreview_ = function() {
   var closest = this.closestConnection_;
   var renderer = this.workspace_.getRenderer();
   var method = renderer.getConnectionPreviewMethod(
-      closest, this.localConnection_, this.topBlock_);
+      /** @type {!Blockly.RenderedConnection} */ (closest),
+      /** @type {!Blockly.RenderedConnection} */ (this.localConnection_),
+      this.topBlock_);
 
   switch (method) {
     case Blockly.InsertionMarkerManager.PREVIEW_TYPE.INPUT_OUTLINE:

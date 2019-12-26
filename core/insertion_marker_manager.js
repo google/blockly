@@ -140,6 +140,11 @@ Blockly.InsertionMarkerManager = function(block) {
   this.availableConnections_ = this.initAvailableConnections_();
 };
 
+/**
+ * An enum describing different kinds of previews the InsertionMarkerManager
+ * could display.
+ * @enum {number}
+ */
 Blockly.InsertionMarkerManager.PREVIEW_TYPE = {
   INSERTION_MARKER: 0,
   INPUT_OUTLINE: 1,
@@ -537,6 +542,11 @@ Blockly.InsertionMarkerManager.prototype.hidePreview_ = function() {
   }
 };
 
+/**
+ * Shows an insertion marker connected to the appropriate blocks (based on
+ * manager state).
+ * @private
+ */
 Blockly.InsertionMarkerManager.prototype.showInsertionMarker_ = function() {
   var local = this.localConnection_;
   var closest = this.closestConnection_;
@@ -568,6 +578,11 @@ Blockly.InsertionMarkerManager.prototype.showInsertionMarker_ = function() {
   this.markerConnection_ = imConn;
 };
 
+/**
+ * Disconnects and hides the current insertion marker. Should return the blocks
+ * to their original state.
+ * @private
+ */
 Blockly.InsertionMarkerManager.prototype.hideInsertionMarker_ = function() {
   if (!this.markerConnection_) {
     console.log('No insertion marker connection to disconnect');
@@ -615,22 +630,39 @@ Blockly.InsertionMarkerManager.prototype.hideInsertionMarker_ = function() {
   imBlock.getSvgRoot().setAttribute('visibility', 'hidden');
 };
 
+/**
+ * Shows an outline around the input the closest connection belongs to.
+ * @private
+ */
 Blockly.InsertionMarkerManager.prototype.showInsertionInputOutline_ = function() {
   var closest = this.closestConnection_;
   this.highlightedBlock_ = closest.getSourceBlock();
   this.highlightedBlock_.highlightShapeForInput(closest, true);
 };
 
+/**
+ * Hides any visible input outlines.
+ * @private
+ */
 Blockly.InsertionMarkerManager.prototype.hideInsertionInputOutline_ = function() {
   this.highlightedBlock_.highlightShapeForInput(this.closestConnection_, false);
   this.highlightedBlock_ = null;
 };
 
+/**
+ * Shows a replacement fade affect on the closest connection's target block
+ * (the block that is currently connected to it).
+ * @private
+ */
 Blockly.InsertionMarkerManager.prototype.showReplacementFade_ = function() {
   this.fadedBlock_ = this.closestConnection_.targetBlock();
   this.fadedBlock_.fadeForReplacement(true);
 };
 
+/**
+ * Hides/Removes any visible fade affects.
+ * @private
+ */
 Blockly.InsertionMarkerManager.prototype.hideReplacementFade_ = function() {
   this.fadedBlock_.fadeForReplacement(false);
   this.fadedBlock_ = null;

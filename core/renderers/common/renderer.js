@@ -163,43 +163,33 @@ Blockly.blockRendering.Renderer.prototype.shouldHighlightConnection =
 }; /* eslint-enable indent */
 
 /**
- * Determine whether or not to insert a dragged block into a stack.
- * @param {!Blockly.Block} block The target block.
- * @param {!Blockly.Connection} conn The closest connection.
- * @return {boolean} True if we should insert the dragged block into the stack.
+ * Checks if an orphaned block can connect to the "end" of the topBlock's
+ * block-clump. If the clump is a row the end is the last input. If the clump
+ * is a stack, the end is the last next connection. If the clump is neither,
+ * then this returns false.
+ * @param {Blockly.BlockSvg} topBlock The top block of the block clump we want to try and
+ *     connect to.
+ * @param {Blockly.BlockSvg} orphanBlock The orphan block that wants to find
+ *     a home.
+ * @param {number} localType The type of the connection being dragged.
+ * @return {boolean} Whether there is a home for the orphan or not.
  * @package
  */
-Blockly.blockRendering.Renderer.prototype.shouldInsertDraggedBlock =
-    function(block, conn) {
-    /* eslint-disable indent */
-  return !conn.isConnected() ||
-    !!Blockly.Connection.lastConnectionInRow(block,
-        conn.targetConnection.getSourceBlock());
-}; /* eslint-enable indent */
-
-Blockly.blockRendering.Renderer.prototype.topHasPlaceForConnectedBlock =
-  function(topBlock, connected) {
-    // TODO: There a multitude of problems with this function
-    //  * The name is confusing, which is why I wrapped it.
-    //  * I don't think handles stack/statement blocks correctly.
-    //  * It has no unit tests associated with it.
-    //  * I'm not even sure if it has the desired behavior for this situation.
-    return !!Blockly.Connection.lastConnectionInRow(topBlock, connected);
-  };
-
 Blockly.blockRendering.Renderer.prototype.orphanCanConnectAtEnd =
     function(topBlock, orphanBlock, localType) {
       var orphanConnection = null;
       var lastConnection = null;
       if (localType == Blockly.OUTPUT_VALUE) {  // We are replacing an output.
         orphanConnection = orphanBlock.outputConnection;
-        // I don't think this function necessarily has the correct logic, but
-        // for now it is being kept for behavioral backwards-compat.
+        // TODO:  I don't think this function necessarily has the correct logic,
+        //  but for now it is being kept for behavioral backwards-compat.
         lastConnection = Blockly.Connection
             .lastConnectionInRow(topBlock, orphanBlock);
       } else {  // We are replacing a previous.
         orphanConnection = orphanBlock.previousConnection;
-        lastConnection = topBlock.getLastConnectionInStack();
+        // TODO: This lives on the block while lastConnectionInRow lives on
+        //  on the connection. Something is fishy.
+        lastConnection = topBlock.lastConnectionInStack();
       }
 
       if (!lastConnection) {
@@ -208,6 +198,17 @@ Blockly.blockRendering.Renderer.prototype.orphanCanConnectAtEnd =
       return orphanConnection.checkType(lastConnection);
     };
 
+/**
+ * Chooses a connection preview method based on the available connection, the
+ * current dragged connection, and the block being dragged.
+ * @param {Blockly.RenderedConnection} closest The available connection.
+ * @param {Blockly.RenderedConnection} local The connection currently being
+ *     dragged.
+ * @param {Blockly.BlockSvg} topBlock The block currently being dragged.
+ * @return {Blockly.InsertionMarkerManager.PREVIEW_TYPE} The preview type
+ *     to display.
+ * @package
+ */
 Blockly.blockRendering.Renderer.prototype.getConnectionPreviewMethod =
     function(closest, local, topBlock) {
       if (local.type == Blockly.OUTPUT_VALUE ||

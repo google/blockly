@@ -119,11 +119,6 @@ Blockly.zelos.Renderer.prototype.shouldHighlightConnection = function(conn) {
 /**
  * @override
  */
-Blockly.zelos.Renderer.prototype.shouldInsertDraggedBlock = function(_block,
-    _conn) {
-  return false;
-};
-
 Blockly.zelos.Renderer.prototype.getConnectionPreviewMethod =
     function(closest, local, topBlock) {
       if (local.type == Blockly.OUTPUT_VALUE) {

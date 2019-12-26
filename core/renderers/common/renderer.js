@@ -167,9 +167,9 @@ Blockly.blockRendering.Renderer.prototype.shouldHighlightConnection =
  * block-clump. If the clump is a row the end is the last input. If the clump
  * is a stack, the end is the last next connection. If the clump is neither,
  * then this returns false.
- * @param {Blockly.BlockSvg} topBlock The top block of the block clump we want to try and
+ * @param {!Blockly.BlockSvg} topBlock The top block of the block clump we want to try and
  *     connect to.
- * @param {Blockly.BlockSvg} orphanBlock The orphan block that wants to find
+ * @param {!Blockly.BlockSvg} orphanBlock The orphan block that wants to find
  *     a home.
  * @param {number} localType The type of the connection being dragged.
  * @return {boolean} Whether there is a home for the orphan or not.
@@ -184,7 +184,7 @@ Blockly.blockRendering.Renderer.prototype.orphanCanConnectAtEnd =
         // TODO:  I don't think this function necessarily has the correct logic,
         //  but for now it is being kept for behavioral backwards-compat.
         lastConnection = Blockly.Connection
-            .lastConnectionInRow(topBlock, orphanBlock);
+            .lastConnectionInRow(/** @type {!Blockly.Block} **/ topBlock, orphanBlock);
       } else {  // We are replacing a previous.
         orphanConnection = orphanBlock.previousConnection;
         // TODO: This lives on the block while lastConnectionInRow lives on
@@ -201,11 +201,11 @@ Blockly.blockRendering.Renderer.prototype.orphanCanConnectAtEnd =
 /**
  * Chooses a connection preview method based on the available connection, the
  * current dragged connection, and the block being dragged.
- * @param {Blockly.RenderedConnection} closest The available connection.
- * @param {Blockly.RenderedConnection} local The connection currently being
+ * @param {!Blockly.RenderedConnection} closest The available connection.
+ * @param {!Blockly.RenderedConnection} local The connection currently being
  *     dragged.
- * @param {Blockly.BlockSvg} topBlock The block currently being dragged.
- * @return {Blockly.InsertionMarkerManager.PREVIEW_TYPE} The preview type
+ * @param {!Blockly.BlockSvg} topBlock The block currently being dragged.
+ * @return {!Blockly.InsertionMarkerManager.PREVIEW_TYPE} The preview type
  *     to display.
  * @package
  */

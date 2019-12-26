@@ -177,6 +177,11 @@ Blockly.blockRendering.Renderer.prototype.shouldInsertDraggedBlock =
         conn.targetConnection.getSourceBlock());
 }; /* eslint-enable indent */
 
+Blockly.blockRendering.Renderer.prototype.getConnectionPreviewMethod =
+    function(closest, local) {
+
+    };
+
 /**
  * Render the block.
  * @param {!Blockly.BlockSvg} block The block to render.

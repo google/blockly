@@ -141,6 +141,12 @@ Blockly.InsertionMarkerManager = function(block) {
   this.availableConnections_ = this.initAvailableConnections_();
 };
 
+Blockly.InsertionMarkerManager.PREVIEW_TYPE = {
+  INSERTION_MARKER: 0,
+  INPUT_OUTLINE: 1,
+  REPLACEMENT_FADE: 2,
+};
+
 /**
  * Sever all links from this object.
  * @package
@@ -681,6 +687,30 @@ Blockly.InsertionMarkerManager.prototype.connectMarker_ = function() {
   }
 
   this.markerConnection_ = imConn;
+};
+
+Blockly.InsertionMarkerManager.prototype.showInsertionMarker = function() {
+
+};
+
+Blockly.InsertionMarkerManager.prototype.hideInsertionMarker = function() {
+
+};
+
+Blockly.InsertionMarkerManager.prototype.showInsertionInputOutline = function() {
+
+};
+
+Blockly.InsertionMarkerManager.prototype.hideInsertionInputOutline = function() {
+
+};
+
+Blockly.InsertionMarkerManager.prototype.showReplacementFade = function() {
+
+};
+
+Blockly.InsertionMarkerManager.prototype.hideReplacementFade = function() {
+
 };
 
 /**

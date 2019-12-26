@@ -622,7 +622,7 @@ Blockly.InsertionMarkerManager.prototype.showInsertionInputOutline_ = function()
 };
 
 Blockly.InsertionMarkerManager.prototype.hideInsertionInputOutline_ = function() {
-  this.highlightedBlock_.highlightShapeForInput(false);
+  this.highlightedBlock_.highlightShapeForInput(this.closestConnection_, false);
   this.highlightedBlock_ = null;
 };
 

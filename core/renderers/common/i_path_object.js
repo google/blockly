@@ -127,4 +127,4 @@ Blockly.blockRendering.IPathObject.prototype.updateMovable;
  * @param {boolean} enable True if styling should be added.
  * @package
  */
-Blockly.blockRendering.IPathObject.prototype.updateReplacementHighlight;
+Blockly.blockRendering.IPathObject.prototype.updateReplacementFade;

@@ -1730,8 +1730,8 @@ Blockly.BlockSvg.prototype.getHeightWidth = function() {
  * @param {boolean} add True if highlighting should be added.
  * @package
  */
-Blockly.BlockSvg.prototype.highlightForReplacement = function(add) {
-  this.pathObject.updateReplacementHighlight(add);
+Blockly.BlockSvg.prototype.fadeForReplacement = function(add) {
+  this.pathObject.updateReplacementFade(add);
 };
 
 /**

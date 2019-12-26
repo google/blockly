@@ -401,48 +401,6 @@ Blockly.InsertionMarkerManager.prototype.getStartRadius_ = function() {
 };
 
 /**
- * Whether ending the drag would replace a block or insert a block.
- * @return {boolean} True if dropping the block immediately would replace
- *     another block.  False if dropping the block immediately would result in
- *     the block being inserted in a block stack.
- * @private
- */
-Blockly.InsertionMarkerManager.prototype.shouldReplace_ = function() {
-  var closest = this.closestConnection_;
-  var local = this.localConnection_;
-
-  // Dragging a block over an existing block in an input.
-  if (local.type == Blockly.OUTPUT_VALUE) {
-    // Insert the dragged block into the stack if possible.
-    if (closest &&
-        this.workspace_.getRenderer()
-            .shouldInsertDraggedBlock(this.topBlock_, closest)) {
-      return false; // Insert.
-    }
-    // Otherwise replace the existing block and bump it out.
-    return true; // Replace.
-  }
-
-  // Connecting to a statement input of c-block is an insertion, even if that
-  // c-block is terminal (e.g. forever).
-  if (local == local.getSourceBlock().getFirstStatementConnection()) {
-    return false; // Insert.
-  }
-
-  // Dragging a terminal block over another (connected) terminal block will
-  // replace, not insert.
-  var isTerminalBlock = !this.topBlock_.nextConnection;
-  var isConnectedTerminal = isTerminalBlock &&
-      local.type == Blockly.PREVIOUS_STATEMENT && closest.isConnected();
-  if (isConnectedTerminal) {
-    return true; // Replace.
-  }
-
-  // Otherwise it's an insertion.
-  return false;
-};
-
-/**
  * Whether ending the drag would delete the block.
  * @param {!Object} candidate An object containing a local connection, a closest
  *     connection, and a radius.
@@ -504,16 +462,26 @@ Blockly.InsertionMarkerManager.prototype.maybeShowPreview_ = function(candidate)
  * @private
  */
 Blockly.InsertionMarkerManager.prototype.showPreview_ = function() {
-  if (this.shouldReplace_()) {
-    this.highlightBlock_();
-  } else {  // Should insert
-    this.connectMarker_();
+  var closest = this.closestConnection_;
+  var renderer = this.workspace_.getRenderer();
+  var method = renderer.getConnectionPreviewMethod(
+      closest, this.localConnection_, this.topBlock_);
+
+  switch (method) {
+    case Blockly.InsertionMarkerManager.PREVIEW_TYPE.INPUT_OUTLINE:
+      this.showInsertionInputOutline();
+      break;
+    case Blockly.InsertionMarkerManager.PREVIEW_TYPE.INSERTION_MARKER:
+      this.showInsertionMarker();
+      break;
+    case Blockly.InsertionMarkerManager.PREVIEW_TYPE.REPLACEMENT_FADE:
+      this.showReplacementFade();
+      break;
   }
-  // Also highlight the actual connection, as a nod to previous behaviour.
-  if (this.closestConnection_ && this.closestConnection_.targetBlock() &&
-      this.workspace_.getRenderer()
-          .shouldHighlightConnection(this.closestConnection_)) {
-    this.closestConnection_.highlight();
+
+  // Optionally highlight the actual connection, as a nod to previous behaviour.
+  if (closest && renderer.shouldHighlightConnection(closest)) {
+    closest.highlight();
   }
 };
 

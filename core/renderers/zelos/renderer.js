@@ -124,8 +124,8 @@ Blockly.zelos.Renderer.prototype.shouldInsertDraggedBlock = function(_block,
   return false;
 };
 
-Blockly.blockRendering.Renderer.prototype.getConnectionPreviewMethod =
-    function(closest, local) {
+Blockly.zelos.Renderer.prototype.getConnectionPreviewMethod =
+    function(closest, local, topBlock) {
 
     };
 

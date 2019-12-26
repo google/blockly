@@ -177,9 +177,29 @@ Blockly.blockRendering.Renderer.prototype.shouldInsertDraggedBlock =
         conn.targetConnection.getSourceBlock());
 }; /* eslint-enable indent */
 
-Blockly.blockRendering.Renderer.prototype.getConnectionPreviewMethod =
-    function(closest, local) {
+Blockly.blockRendering.Renderer.prototype.topHasPlaceForConnectedBlock =
+  function(topBlock, connected) {
+    // TODO: There a multitude of problems with this function
+    //  * The name is confusing, which is why I wrapped it.
+    //  * I don't think handles stack/statement blocks correctly.
+    //  * It has no unit tests associated with it.
+    //  * I'm not even sure if it has the desired behavior for this situation.
+    return !!Blockly.Connection.lastConnectionInRow(topBlock, connected);
+  };
 
+Blockly.blockRendering.Renderer.prototype.getConnectionPreviewMethod =
+    function(closest, local, topBlock) {
+
+      if (local.type == Blockly.OUTPUT_VALUE ||
+          local.type == Blockly.PREVIOUS_STATEMENT) {
+        if (!closest.isConnected() || this.topHasPlaceForConnectedBlock(
+            topBlock, closest.targetBlock())) {
+          return Blockly.InsertionMarkerManager.PREVIEW_TYPE.INSERTION_MARKER;
+        }
+        return Blockly.InsertionMarkerManager.PREVIEW_TYPE.REPLACEMENT_FADE;
+      }
+
+      return Blockly.InsertionMarkerManager.PREVIEW_TYPE.INSERTION_MARKER;
     };
 
 /**

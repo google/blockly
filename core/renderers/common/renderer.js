@@ -193,7 +193,10 @@ Blockly.blockRendering.Renderer.prototype.orphanCanConnectAtEnd =
       var lastConnection = null;
       if (localType == Blockly.OUTPUT_VALUE) {  // We are replacing an output.
         orphanConnection = orphanBlock.outputConnection;
-        lastConnection = topBlock.getLastConnectionInRow();
+        // I don't think this function necessarily has the correct logic, but
+        // for now it is being kept for behavioral backwards-compat.
+        lastConnection = Blockly.Connection
+            .lastConnectionInRow(topBlock, orphanBlock);
       } else {  // We are replacing a previous.
         orphanConnection = orphanBlock.previousConnection;
         lastConnection = topBlock.getLastConnectionInStack();

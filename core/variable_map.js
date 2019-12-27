@@ -384,6 +384,14 @@ Blockly.VariableMap.prototype.getAllVariables = function() {
   return all_variables;
 };
 
+Blockly.VariableMap.prototype.getAllVariableNames = function() {
+  var allNames = [];
+  for (var key in this.variableMap_) {
+    allNames.push(this.variableMap_[key].name);
+  }
+  return allNames;
+};
+
 /**
  * Find all the uses of a named variable.
  * @param {string} id ID of the variable to find.

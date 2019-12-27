@@ -46,6 +46,8 @@ goog.require('Blockly.Xml');
  */
 Blockly.Procedures.NAME_TYPE = Blockly.PROCEDURE_CATEGORY_NAME;
 
+Blockly.Procedures.DEFAULT_ARG = 'x';
+
 /**
  * Procedure block type.
  * @typedef {{
@@ -269,6 +271,55 @@ Blockly.Procedures.flyoutCategory = function(workspace) {
   populateProcedures(tuple[0], 'procedures_callnoreturn');
   populateProcedures(tuple[1], 'procedures_callreturn');
   return xmlList;
+};
+
+Blockly.Procedures.updateMutatorFlyout = function(workspace) {
+  var usedNames = [];
+  var blocks = workspace.getBlocksByType('procedures_mutatorarg');
+  for (var i = 0, block; (block = blocks[i]); i++) {
+    usedNames.push(block.getFieldValue('NAME'));
+  }
+
+  var xml = Blockly.utils.xml.createElement('xml');
+  var argBlock = Blockly.utils.xml.createElement('block');
+  argBlock.setAttribute('type', 'procedures_mutatorarg');
+  var nameField = Blockly.utils.xml.createElement('field');
+  nameField.setAttribute('name', 'NAME');
+  var argValue = Blockly.Variables.generateUniqueNameFromOptions(
+      Blockly.Procedures.DEFAULT_ARG, usedNames);
+  var fieldContent = Blockly.utils.xml.createTextNode(argValue);
+
+  nameField.appendChild(fieldContent);
+  argBlock.appendChild(nameField);
+  xml.appendChild(argBlock);
+
+  workspace.updateToolbox(xml);
+};
+
+Blockly.Procedures.mutatorOpenListener = function(e) {
+  if (e.type != Blockly.Events.UI || e.element != 'mutatorOpen' ||
+      !e.newValue) {
+    return;
+  }
+  var block = Blockly.Workspace.getById(e.workspaceId)
+      .getBlockById(e.blockId);
+  var type = block.type;
+  if (type != 'procedures_defnoreturn' && type != 'procedures_defreturn') {
+    return;
+  }
+  var workspace = block.mutator.getWorkspace();
+  Blockly.Procedures.updateMutatorFlyout(workspace);
+  workspace.addChangeListener(Blockly.Procedures.mutatorChangeListener);
+};
+
+Blockly.Procedures.mutatorChangeListener = function(e) {
+  if (e.type != Blockly.Events.BLOCK_CREATE &&
+      e.type != Blockly.Events.BLOCK_DELETE &&
+      e.type != Blockly.Events.BLOCK_CHANGE) {
+    return;
+  }
+  var workspace = Blockly.Workspace.getById(e.workspaceId);
+  Blockly.Procedures.updateMutatorFlyout(workspace);
 };
 
 /**

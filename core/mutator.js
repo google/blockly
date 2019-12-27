@@ -72,6 +72,10 @@ Blockly.Mutator.prototype.setBlock = function(block) {
   this.block_ = block;
 };
 
+Blockly.Mutator.prototype.getWorkspace = function() {
+  return this.workspace_;
+};
+
 /**
  * Draw the mutator icon.
  * @param {!Element} group The icon group.

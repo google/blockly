@@ -501,6 +501,10 @@ Blockly.Workspace.prototype.getAllVariables = function() {
   return this.variableMap_.getAllVariables();
 };
 
+Blockly.Workspace.prototype.getAllVariableNames = function() {
+  return this.variableMap_.getAllVariableNames();
+};
+
 /* End functions that are just pass-throughs to the variable map. */
 
 /**

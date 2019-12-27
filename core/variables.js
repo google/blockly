@@ -217,12 +217,20 @@ Blockly.Variables.VAR_LETTER_OPTIONS = 'ijkmnopqrstuvwxyzabcdefgh';  // No 'l'.
  * @return {string} New variable name.
  */
 Blockly.Variables.generateUniqueName = function(workspace) {
-  Blockly.Variables.generateUniqueNameFromOptions(
+  return Blockly.Variables.generateUniqueNameFromOptions(
       Blockly.Variables.VAR_LETTER_OPTIONS.charAt(0),
       workspace.getAllVariableNames()
   );
 };
 
+/**
+ * Returns a unique name that is not present in the usedNames array. This
+ * will try to generate single letter names in the range a -> z (skip l). It
+ * will start with the character passed to startChar.
+ * @param {string} startChar The character to start the search at.
+ * @param {!Array<string>} usedNames A list of all of the used names.
+ * @return {string} A unique name that is not present in the usedNames array.
+ */
 Blockly.Variables.generateUniqueNameFromOptions = function(startChar, usedNames) {
   if (!usedNames.length) {
     return startChar;

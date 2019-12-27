@@ -46,6 +46,10 @@ goog.require('Blockly.Xml');
  */
 Blockly.Procedures.NAME_TYPE = Blockly.PROCEDURE_CATEGORY_NAME;
 
+/**
+ * The default argument for a procedures_mutatorarg block.
+ * @type {string}
+ */
 Blockly.Procedures.DEFAULT_ARG = 'x';
 
 /**
@@ -273,6 +277,13 @@ Blockly.Procedures.flyoutCategory = function(workspace) {
   return xmlList;
 };
 
+/**
+ * Updates the procedure mutator's flyout so that the arg block is not a
+ * duplicate of another arg.
+ * @param {!Blockly.Workspace} workspace The procedure mutator's workspace. This
+ *     workspace's flyout is what is being updated.
+ * @package
+ */
 Blockly.Procedures.updateMutatorFlyout = function(workspace) {
   var usedNames = [];
   var blocks = workspace.getBlocksByType('procedures_mutatorarg');
@@ -296,6 +307,12 @@ Blockly.Procedures.updateMutatorFlyout = function(workspace) {
   workspace.updateToolbox(xml);
 };
 
+/**
+ * Listens for when a procedure mutator is opened. Then it triggers a flyout
+ * update and adds a mutator change listener to the mutator workspace.
+ * @param {!Blockly.Event} e The event that triggered this listener.
+ * @package
+ */
 Blockly.Procedures.mutatorOpenListener = function(e) {
   if (e.type != Blockly.Events.UI || e.element != 'mutatorOpen' ||
       !e.newValue) {
@@ -312,6 +329,12 @@ Blockly.Procedures.mutatorOpenListener = function(e) {
   workspace.addChangeListener(Blockly.Procedures.mutatorChangeListener);
 };
 
+/**
+ * Listens for changes in a procedure mutator and triggers flyout updates when
+ * necessary.
+ * @param {!Blockly.Event} e The event that triggered this listener.
+ * @package
+ */
 Blockly.Procedures.mutatorChangeListener = function(e) {
   if (e.type != Blockly.Events.BLOCK_CREATE &&
       e.type != Blockly.Events.BLOCK_DELETE &&

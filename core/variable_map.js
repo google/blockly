@@ -391,7 +391,10 @@ Blockly.VariableMap.prototype.getAllVariables = function() {
 Blockly.VariableMap.prototype.getAllVariableNames = function() {
   var allNames = [];
   for (var key in this.variableMap_) {
-    allNames.push(this.variableMap_[key].name);
+    var variables = this.variableMap_[key];
+    for (var i = 0, variable; (variable = variables[i]); i++) {
+      allNames.push(variable.name);
+    }
   }
   return allNames;
 };

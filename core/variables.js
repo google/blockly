@@ -67,11 +67,11 @@ Blockly.Variables.allUsedVarModels = function(ws) {
     }
   }
   // Flatten the hash into a list.
-  var VariableList = [];
+  var variableList = [];
   for (var id in variableHash) {
-    VariableList.push(variableHash[id]);
+    variableList.push(variableHash[id]);
   }
-  return VariableList;
+  return variableList;
 };
 
 /**

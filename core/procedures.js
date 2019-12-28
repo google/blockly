@@ -286,7 +286,7 @@ Blockly.Procedures.flyoutCategory = function(workspace) {
  */
 Blockly.Procedures.updateMutatorFlyout = function(workspace) {
   var usedNames = [];
-  var blocks = workspace.getBlocksByType('procedures_mutatorarg');
+  var blocks = workspace.getBlocksByType('procedures_mutatorarg', false);
   for (var i = 0, block; (block = blocks[i]); i++) {
     usedNames.push(block.getFieldValue('NAME'));
   }
@@ -310,7 +310,7 @@ Blockly.Procedures.updateMutatorFlyout = function(workspace) {
 /**
  * Listens for when a procedure mutator is opened. Then it triggers a flyout
  * update and adds a mutator change listener to the mutator workspace.
- * @param {!Blockly.Event} e The event that triggered this listener.
+ * @param {!Blockly.Events.Abstract} e The event that triggered this listener.
  * @package
  */
 Blockly.Procedures.mutatorOpenListener = function(e) {
@@ -332,7 +332,7 @@ Blockly.Procedures.mutatorOpenListener = function(e) {
 /**
  * Listens for changes in a procedure mutator and triggers flyout updates when
  * necessary.
- * @param {!Blockly.Event} e The event that triggered this listener.
+ * @param {!Blockly.Events.Abstract} e The event that triggered this listener.
  * @package
  */
 Blockly.Procedures.mutatorChangeListener = function(e) {
@@ -341,7 +341,8 @@ Blockly.Procedures.mutatorChangeListener = function(e) {
       e.type != Blockly.Events.BLOCK_CHANGE) {
     return;
   }
-  var workspace = Blockly.Workspace.getById(e.workspaceId);
+  var workspace = /** @type {!Blockly.WorkspaceSvg} */
+      (Blockly.Workspace.getById(e.workspaceId));
   Blockly.Procedures.updateMutatorFlyout(workspace);
 };
 

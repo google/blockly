@@ -318,7 +318,8 @@ Blockly.Procedures.mutatorOpenListener = function(e) {
       !e.newValue) {
     return;
   }
-  var block = Blockly.Workspace.getById(e.workspaceId)
+  var workspaceId = /** @type {string} */ (e.workspaceId);
+  var block = Blockly.Workspace.getById(workspaceId)
       .getBlockById(e.blockId);
   var type = block.type;
   if (type != 'procedures_defnoreturn' && type != 'procedures_defreturn') {
@@ -341,8 +342,9 @@ Blockly.Procedures.mutatorChangeListener = function(e) {
       e.type != Blockly.Events.BLOCK_CHANGE) {
     return;
   }
+  var workspaceId = /** @type {string} */ (e.workspaceId);
   var workspace = /** @type {!Blockly.WorkspaceSvg} */
-      (Blockly.Workspace.getById(e.workspaceId));
+      (Blockly.Workspace.getById(workspaceId));
   Blockly.Procedures.updateMutatorFlyout(workspace);
 };
 

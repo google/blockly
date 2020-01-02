@@ -90,8 +90,8 @@ suite('Gesture', function() {
     };
     var ws = Blockly.inject('blocklyDiv', {});
     var gesture = new Blockly.Gesture(this.e, ws);
-    assertFalse(Blockly.getMainWorkspace().keyboardAccessibilityMode);
+    assertFalse(ws.keyboardAccessibilityMode);
     gesture.doWorkspaceClick_(event);
-    assertTrue(Blockly.getMainWorkspace().keyboardAccessibilityMode);
+    assertTrue(ws.keyboardAccessibilityMode);
   });
 });

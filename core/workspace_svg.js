@@ -155,6 +155,13 @@ Blockly.WorkspaceSvg = function(options,
 
   this.themeManager_.subscribeWorkspace(this);
   this.renderer_.getConstants().refreshTheme(this.getTheme());
+
+  /**
+   * True if keyboard accessibility mode is on, false otherwise.
+   * @type {boolean}
+   * @package
+   */
+  this.keyboardAccessibilityMode = false;
 };
 Blockly.utils.object.inherits(Blockly.WorkspaceSvg, Blockly.Workspace);
 

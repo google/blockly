@@ -635,7 +635,9 @@ Blockly.FieldDropdown.prototype.renderSelectedText_ = function() {
   this.textElement_.setAttribute('y', halfHeight);
   if (!this.constants_.FIELD_TEXT_BASELINE_CENTER) {
     this.textElement_.setAttribute('dy',
-        this.constants_.FIELD_TEXT_BASELINE_Y - halfHeight);
+        this.constants_.FIELD_TEXT_BASELINE_Y -
+        this.constants_.FIELD_TEXT_HEIGHT / 2 +
+        this.constants_.FIELD_TEXT_Y_OFFSET);
   }
 };
 

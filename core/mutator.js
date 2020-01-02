@@ -376,6 +376,10 @@ Blockly.Mutator.prototype.workspaceChanged_ = function(e) {
     block.compose(this.rootBlock_);
     block.initSvg();
     block.render();
+
+    if (Blockly.getMainWorkspace().keyboardAccessibilityMode) {
+      Blockly.navigation.moveCursorOnBlockMutation(block);
+    }
     var newMutationDom = block.mutationToDom();
     var newMutation = newMutationDom && Blockly.Xml.domToText(newMutationDom);
     if (oldMutation != newMutation) {
@@ -390,10 +394,6 @@ Blockly.Mutator.prototype.workspaceChanged_ = function(e) {
       }, Blockly.BUMP_DELAY);
     }
 
-    if (oldMutation != newMutation &&
-        this.workspace_.keyboardAccessibilityMode) {
-      Blockly.navigation.moveCursorOnBlockMutation(block);
-    }
     // Don't update the bubble until the drag has ended, to avoid moving blocks
     // under the cursor.
     if (!this.workspace_.isDragging()) {

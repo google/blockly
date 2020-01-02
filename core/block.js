@@ -323,11 +323,6 @@ Blockly.Block.prototype.dispose = function(healStack) {
     this.workspace.removeChangeListener(this.onchangeWrapper_);
   }
 
-  if (this.workspace.keyboardAccessibilityMode) {
-    // No-op if this is called from the block_svg class.
-    Blockly.navigation.moveCursorOnBlockDelete(this);
-  }
-
   this.unplug(healStack);
   if (Blockly.Events.isEnabled()) {
     Blockly.Events.fire(new Blockly.Events.BlockDelete(this));

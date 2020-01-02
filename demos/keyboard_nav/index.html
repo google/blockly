@@ -329,7 +329,7 @@
      * @package
      */
     function restoreKeyMap() {
-      var defaultMap = Blockly.user.keyMap.map_;
+      var defaultMap = Blockly.user.keyMap.getKeyMap();
       var stringifiedMap = sessionStorage.getItem('keyMap');
       var restoredMap = {};
       if (sessionStorage && stringifiedMap) {

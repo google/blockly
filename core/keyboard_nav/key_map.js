@@ -52,7 +52,6 @@ Blockly.user.keyMap.modifierKeys = {
  * @param {string} keyCode The key code serialized by the serializeKeyEvent.
  * @param {!Blockly.Action} action The action to be executed when the keys
  *     corresponding to the serialized key code is pressed.
- * @package
  */
 Blockly.user.keyMap.setActionForKey = function(keyCode, action) {
   var oldKey = Blockly.user.keyMap.getKeyByAction(action);
@@ -60,6 +59,7 @@ Blockly.user.keyMap.setActionForKey = function(keyCode, action) {
   if (oldKey) {
     delete Blockly.user.keyMap.map_[oldKey];
   }
+  // TODO: Add the logic here to set the key code properly.
   Blockly.user.keyMap.map_[keyCode] = action;
 };
 
@@ -77,7 +77,6 @@ Blockly.user.keyMap.setKeyMap = function(keyMap) {
  * Gets the current key map.
  * @return {Object<string,Blockly.Action>} The object holding the key to
  *     action mapping.
- * @package
  */
 Blockly.user.keyMap.getKeyMap = function() {
   var map = {};
@@ -90,7 +89,6 @@ Blockly.user.keyMap.getKeyMap = function() {
  * @param {string} keyCode The serialized key code.
  * @return {Blockly.Action|undefined} The action holding the function to
  *     call when the given keyCode is used or undefined if no action exists.
- * @package
  */
 Blockly.user.keyMap.getActionByKeyCode = function(keyCode) {
   return Blockly.user.keyMap.map_[keyCode];
@@ -102,7 +100,6 @@ Blockly.user.keyMap.getActionByKeyCode = function(keyCode) {
  *     the key.
  * @return {?string} The serialized key or null if the action does not have
  *     a key mapping.
- * @package
  */
 Blockly.user.keyMap.getKeyByAction = function(action) {
   var keys = Object.keys(Blockly.user.keyMap.map_);
@@ -160,7 +157,8 @@ Blockly.user.keyMap.createSerializedKey = function(keyCode, modifiers) {
 Blockly.user.keyMap.createDefaultKeyMap = function() {
   var map = {};
   var controlK = Blockly.user.keyMap.createSerializedKey(
-      Blockly.utils.KeyCodes.K, [Blockly.user.keyMap.modifierKeys.CONTROL]);
+      Blockly.utils.KeyCodes.K, [Blockly.user.keyMap.modifierKeys.SHIFT,
+        Blockly.user.keyMap.modifierKeys.CONTROL]);
   var shiftW = Blockly.user.keyMap.createSerializedKey(
       Blockly.utils.KeyCodes.W, [Blockly.user.keyMap.modifierKeys.SHIFT]);
   var shiftA = Blockly.user.keyMap.createSerializedKey(

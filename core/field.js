@@ -698,9 +698,10 @@ Blockly.Field.prototype.getScaledBBox = function() {
       scaledHeight += 1 * scale;
     }
   } else {
-    var xy = this.borderRect_.getBoundingClientRect();
-    var scaledWidth = xy.width;
-    var scaledHeight = xy.height;
+    var bBox = this.borderRect_.getBoundingClientRect();
+    var xy = Blockly.utils.style.getPageOffset(this.borderRect_);
+    var scaledWidth = bBox.width;
+    var scaledHeight = bBox.height;
   }
   return {
     top: xy.y,

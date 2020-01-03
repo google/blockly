@@ -378,9 +378,9 @@ Blockly.DropDownDiv.show = function(owner, rtl, primaryX, primaryY,
  */
 Blockly.DropDownDiv.getBoundsInfo_ = function() {
   var boundPosition = Blockly.utils.style.getPageOffset(
-      Blockly.DropDownDiv.boundsElement_);
+      /** @type {!Element} */ (Blockly.DropDownDiv.boundsElement_));
   var boundSize = Blockly.utils.style.getSize(
-      Blockly.DropDownDiv.boundsElement_);
+      /** @type {!Element} */ (Blockly.DropDownDiv.boundsElement_));
 
   return {
     left: boundPosition.x,

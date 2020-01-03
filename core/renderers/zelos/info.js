@@ -233,6 +233,47 @@ Blockly.zelos.RenderInfo.prototype.getElemCenterline_ = function(row, elem) {
 };
 
 /**
+ * @override
+ */
+Blockly.zelos.RenderInfo.prototype.addInput_ = function(input, activeRow) {
+  // If we have two dummy inputs on the same row, one aligned left and the other
+  // right, keep track of the right aligned dummy input so we can add padding
+  // later.
+  if (input.type == Blockly.DUMMY_INPUT && activeRow.hasDummyInput &&
+      activeRow.align == Blockly.ALIGN_LEFT &&
+      input.align == Blockly.ALIGN_RIGHT) {
+    activeRow.rightAlignedDummyInput = input;
+  }
+  Blockly.zelos.RenderInfo.superClass_.addInput_.call(this, input, activeRow);
+};
+
+/**
+ * @override
+ */
+Blockly.zelos.RenderInfo.prototype.addAlignmentPadding_ = function(row,
+    missingSpace) {
+  if (row.rightAlignedDummyInput) {
+    var alignmentDivider;
+    for (var i = 0, elem; (elem = row.elements[i]); i++) {
+      if (Blockly.blockRendering.Types.isSpacer(elem)) {
+        alignmentDivider = elem;
+      }
+      if (Blockly.blockRendering.Types.isField(elem) &&
+        elem.parentInput == row.rightAlignedDummyInput) {
+        break;
+      }
+    }
+    if (alignmentDivider) {
+      alignmentDivider.width += missingSpace;
+      row.width += missingSpace;
+      return;
+    }
+  }
+  Blockly.zelos.RenderInfo.superClass_.addAlignmentPadding_.call(this, row,
+      missingSpace);
+};
+
+/**
  * Adjust the x position of fields to bump all non-label fields in the first row
  * past the notch position.  This must be called before ``computeBounds`` is
  * called.

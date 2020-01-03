@@ -239,31 +239,45 @@ Blockly.zelos.RenderInfo.prototype.getElemCenterline_ = function(row, elem) {
  * @protected
  */
 Blockly.zelos.RenderInfo.prototype.adjustXPosition_ = function() {
-  if (!this.topRow.hasPreviousConnection) {
-    return;
-  }
-  var minXPos = this.constants_.NOTCH_OFFSET_LEFT +
+  var notchTotalWidth = this.constants_.NOTCH_OFFSET_LEFT +
       this.constants_.NOTCH_WIDTH;
-  for (var i = 0, row; (row = this.rows[i]); i++) {
-    if (Blockly.blockRendering.Types.isInputRow(row)) {
+  var minXPos = notchTotalWidth;
+  // Run through every input row on the block and only apply bump logic to the
+  // first input row (if the block has prev connection) and every input row that
+  // has a prev and next notch.
+  for (var i = 2; i < this.rows.length - 1; i += 2) {
+    var prevSpacer = this.rows[i - 1];
+    var row = this.rows[i];
+    var nextSpacer = this.rows[i + 1];
+
+    var hasPrevNotch = i == 2 ?
+        !!this.topRow.hasPreviousConnection : !!prevSpacer.followsStatement;
+    var hasNextNotch = i + 2 >= this.rows.length - 1 ?
+        !!this.bottomRow.hasNextConnection : !!nextSpacer.precedesStatement;
+
+    if (Blockly.blockRendering.Types.isInputRow(row) && row.hasStatement) {
+      row.measure();
+      minXPos = row.width - row.getLastInput().width + notchTotalWidth;
+    } else if (hasPrevNotch && (i == 2 || hasNextNotch) &&
+        Blockly.blockRendering.Types.isInputRow(row) && !row.hasStatement) {
       var xCursor = row.xPos;
-      var prevSpacer = null;
+      var prevInRowSpacer = null;
       for (var j = 0, elem; (elem = row.elements[j]); j++) {
         if (Blockly.blockRendering.Types.isSpacer(elem)) {
-          prevSpacer = elem;
+          prevInRowSpacer = elem;
         }
-        if (prevSpacer && (Blockly.blockRendering.Types.isField(elem) ||
+        if (prevInRowSpacer && (Blockly.blockRendering.Types.isField(elem) ||
             Blockly.blockRendering.Types.isInput(elem))) {
           if (xCursor < minXPos &&
               !(Blockly.blockRendering.Types.isField(elem) &&
-              elem.field instanceof Blockly.FieldLabel)) {
+              (elem.field instanceof Blockly.FieldLabel ||
+              elem.field instanceof Blockly.FieldImage))) {
             var difference = minXPos - xCursor;
-            prevSpacer.width += difference;
+            prevInRowSpacer.width += difference;
           }
         }
         xCursor += elem.width;
       }
-      return;
     }
   }
 };
@@ -426,12 +440,21 @@ Blockly.zelos.RenderInfo.prototype.finalizeVerticalAlignment_ = function() {
   if (this.outputConnection) {
     return;
   }
+  // Run through every input row on the block and only apply tight nesting logic
+  // to input rows that have a prev and next notch.
   for (var i = 2; i < this.rows.length - 1; i += 2) {
     var prevSpacer = this.rows[i - 1];
     var row = this.rows[i];
     var nextSpacer = this.rows[i + 1];
+
+    var hasPrevNotch = i == 2 ?
+        !!this.topRow.hasPreviousConnection : !!prevSpacer.followsStatement;
+    var hasNextNotch = i + 2 >= this.rows.length - 1 ?
+        !!this.bottomRow.hasNextConnection : !!nextSpacer.precedesStatement;
     
-    if (Blockly.blockRendering.Types.isInputRow(row)) {
+    // Apply tight-nesting if we have both a prev and next notch.
+    if (hasPrevNotch && hasNextNotch &&
+        Blockly.blockRendering.Types.isInputRow(row)) {
       // Determine if the input row has non-shadow connected blocks.
       var hasNonShadowConnectedBlocks = false;
       var MIN_VERTICAL_TIGHTNESTING_HEIGHT = 40;
@@ -449,6 +472,9 @@ Blockly.zelos.RenderInfo.prototype.finalizeVerticalAlignment_ = function() {
         prevSpacer.height -= this.constants_.GRID_UNIT;
         nextSpacer.height -= this.constants_.GRID_UNIT;
       }
+    } else if (hasPrevNotch && !hasNextNotch) {
+      // Add a small padding so the notch doesn't interfere with inputs/fields.
+      prevSpacer.height += this.constants_.SMALL_PADDING;
     }
   }
 };

@@ -33,6 +33,7 @@ goog.require('Blockly.utils.object');
 /**
  * Holds the serialized key to key action mapping.
  * @type {!Object<string, Blockly.Action>}
+ * @private
  */
 Blockly.user.keyMap.map_ = {};
 
@@ -66,7 +67,6 @@ Blockly.user.keyMap.setActionForKey = function(keyCode, action) {
  * Creates a new key map.
  * @param {!Object<string, Blockly.Action>} keyMap The object holding the key
  *     to action mapping.
- * @package
  */
 Blockly.user.keyMap.setKeyMap = function(keyMap) {
   Blockly.user.keyMap.map_ = keyMap;
@@ -114,6 +114,7 @@ Blockly.user.keyMap.getKeyByAction = function(action) {
  * Serialize the key event.
  * @param {!Event} e A key up event holding the key code.
  * @return {string} A string containing the serialized key event.
+ * @package
  */
 Blockly.user.keyMap.serializeKeyEvent = function(e) {
   var modifiers = Blockly.utils.object.values(Blockly.user.keyMap.modifierKeys);

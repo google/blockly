@@ -59,7 +59,6 @@ Blockly.user.keyMap.setActionForKey = function(keyCode, action) {
   if (oldKey) {
     delete Blockly.user.keyMap.map_[oldKey];
   }
-  // TODO: Add the logic here to set the key code properly.
   Blockly.user.keyMap.map_[keyCode] = action;
 };
 
@@ -129,6 +128,21 @@ Blockly.user.keyMap.serializeKeyEvent = function(e) {
 };
 
 /**
+ * Checks whether any of the given modifiers are not valid.
+ * @param {!Array.<string>} modifiers List of modifiers to be used with the key.
+ * @param {!Array.<string>} validModifiers List of modifiers we support.
+ * @throws {Error} if the modifier is not in the valid modifiers list.
+ * @private
+ */
+Blockly.user.keyMap.checkModifiers_ = function(modifiers, validModifiers) {
+  for (var i = 0, modifier; (modifier = modifiers[i]); i++) {
+    if (validModifiers.indexOf(modifier) < 0) {
+      throw Error(modifier + ' is not a valid modifier key.');
+    }
+  }
+};
+
+/**
  * Create the serialized key code that will be used in the key map.
  * @param {number} keyCode Number code representing the key.
  * @param {!Array.<string>} modifiers List of modifiers to be used with the key.
@@ -138,11 +152,10 @@ Blockly.user.keyMap.serializeKeyEvent = function(e) {
 Blockly.user.keyMap.createSerializedKey = function(keyCode, modifiers) {
   var key = '';
   var validModifiers = Blockly.utils.object.values(Blockly.user.keyMap.modifierKeys);
-  for (var i = 0, keyName; (keyName = modifiers[i]); i++) {
-    if (validModifiers.indexOf(keyName) > -1) {
-      key += keyName;
-    } else {
-      throw Error(keyName + ' is not a valid modifier key.');
+  Blockly.user.keyMap.checkModifiers_(modifiers, validModifiers);
+  for (var i = 0, validModifier; (validModifier = validModifiers[i]); i++) {
+    if (modifiers.indexOf(validModifier) > -1) {
+      key += validModifier;
     }
   }
   key += keyCode;
@@ -157,8 +170,8 @@ Blockly.user.keyMap.createSerializedKey = function(keyCode, modifiers) {
 Blockly.user.keyMap.createDefaultKeyMap = function() {
   var map = {};
   var controlK = Blockly.user.keyMap.createSerializedKey(
-      Blockly.utils.KeyCodes.K, [Blockly.user.keyMap.modifierKeys.SHIFT,
-        Blockly.user.keyMap.modifierKeys.CONTROL]);
+      Blockly.utils.KeyCodes.K, [Blockly.user.keyMap.modifierKeys.CONTROL,
+        Blockly.user.keyMap.modifierKeys.SHIFT]);
   var shiftW = Blockly.user.keyMap.createSerializedKey(
       Blockly.utils.KeyCodes.W, [Blockly.user.keyMap.modifierKeys.SHIFT]);
   var shiftA = Blockly.user.keyMap.createSerializedKey(

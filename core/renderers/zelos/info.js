@@ -246,6 +246,7 @@ Blockly.zelos.RenderInfo.prototype.adjustXPosition_ = function() {
     var prevSpacer = this.rows[i - 1];
     var row = this.rows[i];
     var nextSpacer = this.rows[i + 1];
+
     var hasPrevNotch = i == 2 ?
         !!this.topRow.hasPreviousConnection : !!prevSpacer.followsStatement;
     var hasNextNotch = i + 2 >= this.rows.length - 1 ?

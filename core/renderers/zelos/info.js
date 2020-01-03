@@ -242,6 +242,9 @@ Blockly.zelos.RenderInfo.prototype.adjustXPosition_ = function() {
   var notchTotalWidth = this.constants_.NOTCH_OFFSET_LEFT +
       this.constants_.NOTCH_WIDTH;
   var minXPos = notchTotalWidth;
+  // Run through every input row on the block and only apply bump logic to the
+  // first input row (if the block has prev connection) and every input row that
+  // has a prev and next notch.
   for (var i = 2; i < this.rows.length - 1; i += 2) {
     var prevSpacer = this.rows[i - 1];
     var row = this.rows[i];
@@ -437,6 +440,8 @@ Blockly.zelos.RenderInfo.prototype.finalizeVerticalAlignment_ = function() {
   if (this.outputConnection) {
     return;
   }
+  // Run through every input row on the block and only apply tight nesting logic
+  // to input rows that have a prev and next notch.
   for (var i = 2; i < this.rows.length - 1; i += 2) {
     var prevSpacer = this.rows[i - 1];
     var row = this.rows[i];

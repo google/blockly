@@ -422,7 +422,7 @@ suite('Navigation', function() {
     });
 
     test('Toggle Action Off', function() {
-      this.mockEvent.keyCode = 'Control75';
+      this.mockEvent.keyCode = 'ShiftControl75';
       sinon.spy(Blockly.navigation, 'onBlocklyAction');
       Blockly.getMainWorkspace().keyboardAccessibilityMode = true;
 
@@ -434,7 +434,7 @@ suite('Navigation', function() {
     });
 
     test('Toggle Action On', function() {
-      this.mockEvent.keyCode = 'Control75';
+      this.mockEvent.keyCode = 'ShiftControl75';
       sinon.stub(Blockly.navigation, 'focusWorkspace_');
       Blockly.getMainWorkspace().keyboardAccessibilityMode = false;
 

@@ -684,7 +684,8 @@ Blockly.DropDownDiv.positionInternal_ = function(
     Blockly.DropDownDiv.arrow_.style.transform = 'translate(' +
         metrics.arrowX + 'px,' + metrics.arrowY + 'px) rotate(45deg)';
     Blockly.DropDownDiv.arrow_.setAttribute('class', metrics.arrowAtTop ?
-        'blocklyDropDownArrow arrowTop' : 'blocklyDropDownArrow arrowBottom');
+        'blocklyDropDownArrow blocklyArrowTop' :
+        'blocklyDropDownArrow blocklyArrowBottom');
   } else {
     Blockly.DropDownDiv.arrow_.style.display = 'none';
   }

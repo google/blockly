@@ -216,14 +216,14 @@ Blockly.Css.CONTENT = [
     'cursor: pointer;',
   '}',
 
-  '.arrowTop {',
+  '.blocklyArrowTop {',
     'border-top: 1px solid;',
     'border-left: 1px solid;',
     'border-top-left-radius: 4px;',
     'border-color: inherit;',
   '}',
 
-  '.arrowBottom {',
+  '.blocklyArrowBottom {',
     'border-bottom: 1px solid;',
     'border-right: 1px solid;',
     'border-bottom-right-radius: 4px;',

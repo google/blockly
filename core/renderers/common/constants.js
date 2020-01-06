@@ -323,6 +323,13 @@ Blockly.blockRendering.ConstantProvider = function() {
   this.FIELD_DROPDOWN_BORDER_RECT_HEIGHT = this.FIELD_BORDER_RECT_HEIGHT;
 
   /**
+   * Whether or not a dropdown field should add a border rect when in a shadow
+   * block.
+   * @type {boolean}
+   */
+  this.FIELD_DROPDOWN_NO_BORDER_RECT_SHADOW = false;
+
+  /**
    * Whether or not a dropdown field's div should be coloured to match the
    * block colours.
    * @type {boolean}

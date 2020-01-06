@@ -229,8 +229,9 @@ Blockly.FieldDropdown.prototype.initView = function() {
  * @protected
  */
 Blockly.FieldDropdown.prototype.shouldAddBorderRect_ = function() {
-  return !this.constants_.FULL_BLOCK_FIELDS ||
-    (this.constants_.FULL_BLOCK_FIELDS && !this.sourceBlock_.isShadow());
+  return !this.constants_.FIELD_DROPDOWN_NO_BORDER_RECT_SHADOW ||
+      (this.constants_.FIELD_DROPDOWN_NO_BORDER_RECT_SHADOW &&
+          !this.sourceBlock_.isShadow());
 };
 
 /**

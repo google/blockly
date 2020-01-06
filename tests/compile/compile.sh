@@ -83,7 +83,7 @@ COMPILATION_COMMAND="java -jar $COMPILER --js='$BLOCKLY_ROOT/tests/compile/main.
   --compilation_level ADVANCED_OPTIMIZATIONS \
   --language_in ECMASCRIPT5_STRICT \
   --language_out ECMASCRIPT5_STRICT \
-  --dependency_mode=STRICT --entry_point=Main \
+  --dependency_mode=PRUNE --entry_point=Main \
   --js_output_file $BLOCKLY_ROOT/tests/compile/main_compressed.js"
 echo "$COMPILATION_COMMAND"
 $COMPILATION_COMMAND

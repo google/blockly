@@ -513,7 +513,7 @@ Blockly.zelos.RenderInfo.prototype.finalizeVerticalAlignment_ = function() {
         prevSpacer.height -= this.constants_.GRID_UNIT;
         nextSpacer.height -= this.constants_.GRID_UNIT;
       }
-    } else if (hasPrevNotch && !hasNextNotch) {
+    } else if (i !== 2 && hasPrevNotch && !hasNextNotch) {
       // Add a small padding so the notch doesn't interfere with inputs/fields.
       prevSpacer.height += this.constants_.SMALL_PADDING;
     }

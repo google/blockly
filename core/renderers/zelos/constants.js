@@ -291,6 +291,11 @@ Blockly.zelos.ConstantProvider = function() {
   /**
    * @override
    */
+  this.FIELD_DROPDOWN_NO_BORDER_RECT_SHADOW = true;
+
+  /**
+   * @override
+   */
   this.FIELD_DROPDOWN_COLOURED_DIV = true;
 
   /**

@@ -83,7 +83,7 @@ Blockly.FieldVariable = function(varName, opt_validator, opt_variableTypes,
    * @protected
    * @override
    */
-  this.size_ = new Blockly.utils.Size(0, Blockly.BlockSvg.MIN_BLOCK_Y);
+  this.size_ = new Blockly.utils.Size(0, 0);
 
   opt_config && this.configure_(opt_config);
   opt_validator && this.setValidator(opt_validator);
@@ -149,6 +149,15 @@ Blockly.FieldVariable.prototype.initModel = function() {
 
   // Don't call setValue because we don't want to cause a rerender.
   this.doValueUpdate_(variable.getId());
+};
+
+/**
+ * @override
+ */
+Blockly.FieldVariable.prototype.shouldAddBorderRect_ = function() {
+  return Blockly.FieldVariable.superClass_.shouldAddBorderRect_.call(this) &&
+    (!this.constants_.FIELD_DROPDOWN_NO_BORDER_RECT_SHADOW ||
+        this.sourceBlock_.type != 'variables_get');
 };
 
 /**

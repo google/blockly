@@ -159,14 +159,6 @@ Blockly.BlockSvg.COLLAPSED_WARNING_ID = 'TEMP_COLLAPSED_WARNING_';
 // Leftover UI constants from block_render_svg.js.
 
 /**
- * Minimum height of a block.
- * @const
- * @package
- */
-// TODO (#3142): Remove.
-Blockly.BlockSvg.MIN_BLOCK_Y = 25;
-
-/**
  * Do blocks with no previous or output connections have a 'hat' on top?
  * @const
  * @package

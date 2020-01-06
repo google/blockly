@@ -452,8 +452,11 @@ Blockly.Bubble.prototype.layoutBubble_ = function() {
   var optimalTop = this.getOptimalRelativeTop_(metrics);
   var bbox = this.shape_.getBBox();
 
-  var topPosition = {x: optimalLeft,
-    y: -this.height_ - Blockly.BlockSvg.MIN_BLOCK_Y};
+  var topPosition = {
+    x: optimalLeft,
+    y: -this.height_ -
+        this.workspace_.getRenderer().getConstants().MIN_BLOCK_HEIGHT
+  };
   var startPosition = {x: -this.width_ - 30, y: optimalTop};
   var endPosition = {x: bbox.width, y: optimalTop};
   var bottomPosition = {x: optimalLeft, y: bbox.height};

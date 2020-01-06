@@ -160,7 +160,8 @@ Blockly.FlyoutButton.prototype.createDom = function() {
   svgText.textContent = text;
   if (this.isLabel_) {
     this.svgText_ = svgText;
-    this.workspace_.getThemeManager().subscribe(this.svgText_, 'flyoutText', 'fill');
+    this.workspace_.getThemeManager().subscribe(this.svgText_,
+        'flyoutForegroundColour', 'fill');
   }
 
   this.width = Blockly.utils.dom.getTextWidth(svgText);

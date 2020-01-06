@@ -228,7 +228,7 @@ Blockly.Flyout.prototype.createDom = function(tagName) {
       {'class': 'blocklyFlyoutBackground'}, this.svgGroup_);
   this.svgGroup_.appendChild(this.workspace_.createDom());
   this.workspace_.getThemeManager().subscribe(
-      this.svgBackground_, 'flyout', 'fill');
+      this.svgBackground_, 'flyoutBackgroundColour', 'fill');
   this.workspace_.getThemeManager().subscribe(
       this.svgBackground_, 'flyoutOpacity', 'fill-opacity');
   this.workspace_.getMarkerManager().setCursor(new Blockly.FlyoutCursor());

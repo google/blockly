@@ -119,13 +119,13 @@ Blockly.Themes.Dark =
     new Blockly.Theme('dark', Blockly.Themes.Dark.defaultBlockStyles,
         Blockly.Themes.Dark.categoryStyles);
 
-Blockly.Themes.Dark.setComponentStyle('workspace', '#1e1e1e');
-Blockly.Themes.Dark.setComponentStyle('toolbox', '#333');
-Blockly.Themes.Dark.setComponentStyle('toolboxText', '#fff');
-Blockly.Themes.Dark.setComponentStyle('flyout', '#252526');
-Blockly.Themes.Dark.setComponentStyle('flyoutText', '#ccc');
+Blockly.Themes.Dark.setComponentStyle('workspaceBackgroundColour', '#1e1e1e');
+Blockly.Themes.Dark.setComponentStyle('toolboxBackgroundColour', '#333');
+Blockly.Themes.Dark.setComponentStyle('toolboxForegroundColour', '#fff');
+Blockly.Themes.Dark.setComponentStyle('flyoutBackgroundColour', '#252526');
+Blockly.Themes.Dark.setComponentStyle('flyoutForegroundColour', '#ccc');
 Blockly.Themes.Dark.setComponentStyle('flyoutOpacity', 1);
-Blockly.Themes.Dark.setComponentStyle('scrollbar', '#797979');
+Blockly.Themes.Dark.setComponentStyle('scrollbarColour', '#797979');
 Blockly.Themes.Dark.setComponentStyle('scrollbarOpacity', 0.4);
 
 /**

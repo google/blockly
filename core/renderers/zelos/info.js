@@ -197,8 +197,7 @@ Blockly.zelos.RenderInfo.prototype.getSpacerRowHeight_ = function(
     var height = Math.max(this.constants_.MEDIUM_PADDING,
         Math.max(this.constants_.NOTCH_HEIGHT, cornerHeight));
     return precedesStatement && followsStatement ?
-        Math.max(height,
-            cornerHeight * 2 + this.constants_.DUMMY_INPUT_MIN_HEIGHT) : height;
+        Math.max(height, this.constants_.DUMMY_INPUT_MIN_HEIGHT) : height;
   }
   if ((Blockly.blockRendering.Types.isBottomRow(next))) {
     if (!this.outputConnection) {

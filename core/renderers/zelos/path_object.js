@@ -104,6 +104,12 @@ Blockly.zelos.PathObject.prototype.applyColour = function(block) {
   if (block.isShadow() && block.getParent()) {
     this.svgPath.setAttribute('stroke', block.getParent().style.colourTertiary);
   }
+
+  // Apply colour to outlines.
+  for (var i = 0, keys = Object.keys(this.outlines_),
+    key; (key = keys[i]); i++) {
+    this.outlines_[key].setAttribute('fill', this.style.colourTertiary);
+  }
 };
 
 /**

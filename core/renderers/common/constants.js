@@ -127,6 +127,12 @@ Blockly.blockRendering.ConstantProvider = function() {
   this.DUMMY_INPUT_MIN_HEIGHT = this.TAB_HEIGHT;
 
   /**
+   * The minimum height of a dummy input row in a shadow block.
+   * @type {number}
+   */
+  this.DUMMY_INPUT_SHADOW_MIN_HEIGHT = this.TAB_HEIGHT;
+
+  /**
    * Rounded corner radius.
    * @type {number}
    */
@@ -138,6 +144,13 @@ Blockly.blockRendering.ConstantProvider = function() {
    * @type {number}
    */
   this.NOTCH_OFFSET_LEFT = 15;
+
+  /**
+   * Additional offset added to the statement input's width to account for the
+   * notch.
+   * @type {number}
+   */
+  this.STATEMENT_INPUT_NOTCH_OFFSET = this.NOTCH_OFFSET_LEFT;
 
   this.STATEMENT_BOTTOM_SPACER = 0;
   this.STATEMENT_INPUT_PADDING_LEFT = 20;
@@ -218,13 +231,13 @@ Blockly.blockRendering.ConstantProvider = function() {
 
   /**
    * Height of SVG path for jagged teeth at the end of collapsed blocks.
-   * @const
+   * @type {number}
    */
   this.JAGGED_TEETH_HEIGHT = 12;
 
   /**
    * Width of SVG path for jagged teeth at the end of collapsed blocks.
-   * @const
+   * @type {number}
    */
   this.JAGGED_TEETH_WIDTH = 6;
 
@@ -666,9 +679,9 @@ Blockly.blockRendering.ConstantProvider.prototype.makeJaggedTeeth = function() {
   var mainPath =
       Blockly.utils.svgPaths.line(
           [
-            Blockly.utils.svgPaths.point(6, 3),
-            Blockly.utils.svgPaths.point(-12, 6),
-            Blockly.utils.svgPaths.point(6, 3)
+            Blockly.utils.svgPaths.point(width, height / 4),
+            Blockly.utils.svgPaths.point(-width * 2, height / 2),
+            Blockly.utils.svgPaths.point(width, height / 4)
           ]);
   return {
     height: height,

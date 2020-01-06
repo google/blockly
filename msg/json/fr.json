@@ -16,7 +16,8 @@
 			"Zarisi",
 			"Alacabe",
 			"Pititnatole",
-			"Verdy p"
+			"Verdy p",
+			"Thibaut120094"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "élément",
@@ -71,7 +72,7 @@
 	"COLOUR_BLEND_COLOUR2": "couleur 2",
 	"COLOUR_BLEND_RATIO": "taux",
 	"COLOUR_BLEND_TOOLTIP": "Mélange deux couleurs dans une proportion donnée (de 0.0 à 1.0).",
-	"CONTROLS_REPEAT_HELPURL": "http://fr.wikipedia.org/wiki/Boucle_for",
+	"CONTROLS_REPEAT_HELPURL": "https://fr.wikipedia.org/wiki/Boucle_for",
 	"CONTROLS_REPEAT_TITLE": "répéter %1 fois",
 	"CONTROLS_REPEAT_INPUT_DO": "faire",
 	"CONTROLS_REPEAT_TOOLTIP": "Exécuter des instructions plusieurs fois.",
@@ -161,7 +162,7 @@
 	"MATH_TRIG_TOOLTIP_ACOS": "Renvoie l’arccosinus d’un nombre.",
 	"MATH_TRIG_TOOLTIP_ATAN": "Renvoie l’arctangente d’un nombre.",
 	"MATH_CONSTANT_HELPURL": "https://fr.wikipedia.org/wiki/Table_de_constantes_math%C3%A9matiques",
-	"MATH_CONSTANT_TOOLTIP": "Renvoie une des constantes courantes : π = 3,14159... (pi) ; <em>e</em> = 2,71828... ; φ = (1+√5)/2 = 1,61803…  (nombre d’or) ; √2 = 1,41421... ; √(½) = 0,70710… ; ou ∞ (infini).",
+	"MATH_CONSTANT_TOOLTIP": "Renvoie une des constantes courantes : π (3.141…), e (2.718…), φ (1.618…), sqrt(2) (1.414…), sqrt(½) (0.707…), ou ∞ (infini).",
 	"MATH_IS_EVEN": "est pair",
 	"MATH_IS_ODD": "est impair",
 	"MATH_IS_PRIME": "est premier",

@@ -97,13 +97,18 @@ Blockly.blockRendering.InlineInput = function(constants, input) {
     this.height = this.connectedBlockHeight;
   }
 
-  this.connectionHeight = this.shape.height;
+  this.connectionHeight = !this.isDynamicShape ? this.shape.height :
+      this.shape.height(this.height);
   this.connectionWidth = !this.isDynamicShape ? this.shape.width :
-    this.shape.width(this.height);
+      this.shape.width(this.height);
   if (!this.connectedBlock) {
     this.width += this.connectionWidth * (this.isDynamicShape ? 2 : 1);
   }
-  this.connectionOffsetY = this.constants_.TAB_OFFSET_FROM_TOP;
+  this.connectionOffsetY = this.isDynamicShape ?
+      this.shape.connectionOffsetY(this.connectionHeight) :
+      this.constants_.TAB_OFFSET_FROM_TOP;
+  this.connectionOffsetX = this.isDynamicShape ?
+      this.shape.connectionOffsetX(this.connectionWidth) : 0;
 };
 Blockly.utils.object.inherits(Blockly.blockRendering.InlineInput,
     Blockly.blockRendering.InputConnection);
@@ -132,7 +137,7 @@ Blockly.blockRendering.StatementInput = function(constants, input) {
     this.height =
         this.connectedBlockHeight + this.constants_.STATEMENT_BOTTOM_SPACER;
   }
-  this.width = this.constants_.NOTCH_OFFSET_LEFT + this.shape.width;
+  this.width = this.constants_.STATEMENT_INPUT_NOTCH_OFFSET + this.shape.width;
 };
 Blockly.utils.object.inherits(Blockly.blockRendering.StatementInput,
     Blockly.blockRendering.InputConnection);

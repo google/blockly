@@ -399,5 +399,6 @@
 	"PROCEDURES_IFRETURN_HELPURL": "http://c2.com/cgi/wiki?GuardClause",
 	"PROCEDURES_IFRETURN_WARNING": "Waarschuwing: dit blok mag alleen gebruikt worden binnen de definitie van een functie.",
 	"WORKSPACE_COMMENT_DEFAULT_TEXT": "Zeg iets...",
+	"WORKSPACE_ARIA_LABEL": "Blockly werkruimte",
 	"COLLAPSED_WARNINGS_WARNING": "Samengevouwen blokken bevatten waarschuwingen."
 }

@@ -197,6 +197,9 @@ gulp.task('build-core', function () {
  *     blocks_compressed.js
  */
 gulp.task('build-blocks', function () {
+  // Add provides used throughout blocks/ in order to be compatible with the
+  // compiler.  Anything added to this list must be removed from the compiled
+  // result using the remove regex steps below.
   const provides = `
 goog.provide('Blockly');
 goog.provide('Blockly.Blocks');
@@ -227,6 +230,8 @@ goog.provide('Blockly.Warning');`;
     .pipe(gulp.replace(/var Blockly=\{[^;]*\};\n?/, ''))
     // Remove Blockly Fields to be compatible with Blockly.
     .pipe(gulp.replace(/Blockly\.Field[^=\(]+=\{[^;]*\};/g, ''))
+    // Remove Blockly Warning, Comment & Mutator to be compatible with Blockly.
+    .pipe(gulp.replace(/Blockly\.(Comment|Warning|Mutator)=\{[^;]*\};/g, ''))
     .pipe(prependHeader())
     .pipe(gulp.dest('./'));
 });

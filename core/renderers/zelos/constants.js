@@ -80,6 +80,11 @@ Blockly.zelos.ConstantProvider = function() {
    * @override
    */
   this.NOTCH_OFFSET_LEFT = 3 * this.GRID_UNIT;
+  
+  /**
+   * @override
+   */
+  this.STATEMENT_INPUT_NOTCH_OFFSET = this.NOTCH_OFFSET_LEFT;
 
   /**
    * @override
@@ -94,6 +99,11 @@ Blockly.zelos.ConstantProvider = function() {
   /**
    * @override
    */
+  this.EMPTY_STATEMENT_INPUT_HEIGHT = 6 * this.GRID_UNIT;
+
+  /**
+   * @override
+   */
   this.TAB_OFFSET_FROM_TOP = 0;
 
   /**
@@ -104,12 +114,17 @@ Blockly.zelos.ConstantProvider = function() {
   /**
    * @override
    */
+  this.TOP_ROW_PRECEDES_STATEMENT_MIN_HEIGHT = this.LARGE_PADDING;
+
+  /**
+   * @override
+   */
   this.BOTTOM_ROW_MIN_HEIGHT = this.GRID_UNIT;
 
   /**
    * @override
    */
-  this.BOTTOM_ROW_AFTER_STATEMENT_MIN_HEIGHT = 7 * this.GRID_UNIT;
+  this.BOTTOM_ROW_AFTER_STATEMENT_MIN_HEIGHT = 6 * this.GRID_UNIT;
 
   /**
    * @override
@@ -140,7 +155,12 @@ Blockly.zelos.ConstantProvider = function() {
   /**
    * @override
    */
-  this.DUMMY_INPUT_MIN_HEIGHT = 6 * this.GRID_UNIT;
+  this.DUMMY_INPUT_MIN_HEIGHT = 8 * this.GRID_UNIT;
+
+  /**
+   * @override
+   */
+  this.DUMMY_INPUT_SHADOW_MIN_HEIGHT = 6 * this.GRID_UNIT;
 
   /**
    * @override
@@ -158,6 +178,16 @@ Blockly.zelos.ConstantProvider = function() {
    * @package
    */
   this.CURSOR_RADIUS = 5;
+
+  /**
+   * @override
+   */
+  this.JAGGED_TEETH_HEIGHT = 0;
+
+  /**
+   * @override
+   */
+  this.JAGGED_TEETH_WIDTH = 0;
 
   /**
    * @enum {number}
@@ -208,7 +238,7 @@ Blockly.zelos.ConstantProvider = function() {
   /**
    * @override
    */
-  this.FIELD_TEXT_FONTSIZE = 12;
+  this.FIELD_TEXT_FONTSIZE = 3 * this.GRID_UNIT;
 
   /**
    * @override
@@ -273,7 +303,7 @@ Blockly.zelos.ConstantProvider = function() {
    * @type {number}
    * @const
    */
-  this.FIELD_DROPDOWN_SVG_ARROW_SIZE = 12;
+  this.FIELD_DROPDOWN_SVG_ARROW_SIZE = 3 * this.GRID_UNIT;
 
   /**
    * A dropdown field's SVG arrow datauri.
@@ -373,6 +403,8 @@ Blockly.zelos.ConstantProvider.prototype.init = function() {
   Blockly.zelos.ConstantProvider.superClass_.init.call(this);
   this.HEXAGONAL = this.makeHexagonal();
   this.ROUNDED = this.makeRounded();
+
+  this.STATEMENT_INPUT_NOTCH_OFFSET += this.INSIDE_CORNERS.rightWidth;
 };
 
 /**
@@ -412,6 +444,12 @@ Blockly.zelos.ConstantProvider.prototype.makeHexagonal = function() {
     height: function(height) {
       return height;
     },
+    connectionOffsetY: function(connectionHeight) {
+      return connectionHeight / 2;
+    },
+    connectionOffsetX: function(connectionWidth) {
+      return - connectionWidth;
+    },
     pathDown: function(height) {
       return makeMainPath(height, false, false);
     },
@@ -450,6 +488,12 @@ Blockly.zelos.ConstantProvider.prototype.makeRounded = function() {
     },
     height: function(height) {
       return height;
+    },
+    connectionOffsetY: function(connectionHeight) {
+      return connectionHeight / 2;
+    },
+    connectionOffsetX: function(connectionWidth) {
+      return - connectionWidth;
     },
     pathDown: function(height) {
       return makeMainPath(height, false, false);

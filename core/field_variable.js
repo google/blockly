@@ -147,11 +147,8 @@ Blockly.FieldVariable.prototype.initModel = function() {
       this.sourceBlock_.workspace, null,
       this.defaultVariableName, this.defaultType_);
 
-  // Don't fire a change event for this setValue.  It would have null as the
-  // old value, which is not valid.
-  Blockly.Events.disable();
-  this.setValue(variable.getId());
-  Blockly.Events.enable();
+  // Don't call setValue because we don't want to cause a rerender.
+  this.doValueUpdate_(variable.getId());
 };
 
 /**

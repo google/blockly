@@ -89,9 +89,10 @@ suite('Gesture', function() {
 
     };
     var ws = Blockly.inject('blocklyDiv', {});
-    var gesture = new Blockly.Gesture(this.e, ws);
-    assertFalse(Blockly.getMainWorkspace().keyboardAccessibilityMode);
+    ws.keyboardAccessibilityMode = true;
+    var gesture = new Blockly.Gesture(event, ws);
     gesture.doWorkspaceClick_(event);
-    assertTrue(Blockly.getMainWorkspace().keyboardAccessibilityMode);
+    var cursor = ws.getCursor();
+    assertEquals(cursor.getCurNode().getType(), Blockly.ASTNode.types.WORKSPACE);
   });
 });

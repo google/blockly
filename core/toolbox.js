@@ -163,8 +163,9 @@ Blockly.Toolbox.prototype.init = function() {
   this.HtmlDiv.setAttribute('dir', workspace.RTL ? 'RTL' : 'LTR');
   svg.parentNode.insertBefore(this.HtmlDiv, svg);
   var themeManager = workspace.getThemeManager();
-  themeManager.subscribe(this.HtmlDiv, 'toolbox', 'background-color');
-  themeManager.subscribe(this.HtmlDiv, 'toolboxText', 'color');
+  themeManager.subscribe(this.HtmlDiv, 'toolboxBackgroundColour',
+      'background-color');
+  themeManager.subscribe(this.HtmlDiv, 'toolboxForegroundColour', 'color');
 
   // Clicking on toolbox closes popups.
   Blockly.bindEventWithChecks_(this.HtmlDiv, 'mousedown', this,

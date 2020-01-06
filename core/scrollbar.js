@@ -628,7 +628,7 @@ Blockly.Scrollbar.prototype.createDom_ = function(opt_class) {
       },
       this.svgGroup_);
   this.workspace_.getThemeManager().subscribe(
-      this.svgHandle_, 'scrollbar', 'fill');
+      this.svgHandle_, 'scrollbarColour', 'fill');
   this.workspace_.getThemeManager().subscribe(
       this.svgHandle_, 'scrollbarOpacity', 'fill-opacity');
   Blockly.utils.dom.insertAfter(this.outerSvg_,

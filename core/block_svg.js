@@ -156,16 +156,6 @@ Blockly.BlockSvg.INLINE = -1;
  */
 Blockly.BlockSvg.COLLAPSED_WARNING_ID = 'TEMP_COLLAPSED_WARNING_';
 
-// Leftover UI constants from block_render_svg.js.
-
-/**
- * Do blocks with no previous or output connections have a 'hat' on top?
- * @const
- * @package
- */
-// TODO (#3142): Remove.
-Blockly.BlockSvg.START_HAT = false;
-
 /**
  * An optional method called when a mutator dialog is first opened.
  * This function must create and initialize a top-level block for the mutator

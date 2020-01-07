@@ -127,6 +127,12 @@ Blockly.Block = function(workspace, prototypeName, opt_id) {
   this.collapsed_ = false;
 
   /**
+   * @type {?number}
+   * @protected
+   */
+  this.outputShape_ = null;
+
+  /**
    * A string representing the comment attached to this block.
    * @type {string|Blockly.Comment}
    * @deprecated August 2019. Use getCommentText instead.
@@ -1200,6 +1206,22 @@ Blockly.Block.prototype.getInputsInline = function() {
 };
 
 /**
+ * Set the block's output shape.
+ * @param {?number} outputShape Value representing an output shape.
+ */
+Blockly.Block.prototype.setOutputShape = function(outputShape) {
+  this.outputShape_ = outputShape;
+};
+
+/**
+ * Get the block's output shape.
+ * @return {?number} Value representing output shape if one exists.
+ */
+Blockly.Block.prototype.getOutputShape = function() {
+  return this.outputShape_;
+};
+
+/**
  * Set whether the block is disabled or not.
  * @param {boolean} disabled True if disabled.
  * @deprecated May 2019
@@ -1380,6 +1402,9 @@ Blockly.Block.prototype.jsonInit = function(json) {
   // Set output and previous/next connections.
   if (json['output'] !== undefined) {
     this.setOutput(true, json['output']);
+  }
+  if (json['outputShape'] !== undefined) {
+    this.setOutputShape(json['outputShape']);
   }
   if (json['previousStatement'] !== undefined) {
     this.setPreviousStatement(true, json['previousStatement']);

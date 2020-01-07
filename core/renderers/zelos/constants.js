@@ -408,6 +408,7 @@ Blockly.zelos.ConstantProvider.prototype.init = function() {
   Blockly.zelos.ConstantProvider.superClass_.init.call(this);
   this.HEXAGONAL = this.makeHexagonal();
   this.ROUNDED = this.makeRounded();
+  this.SQUARED = this.makeSquared();
 
   this.STATEMENT_INPUT_NOTCH_OFFSET += this.INSIDE_CORNERS.rightWidth;
 };
@@ -516,14 +517,76 @@ Blockly.zelos.ConstantProvider.prototype.makeRounded = function() {
 };
 
 /**
+ * @return {!Object} An object containing sizing and path information about
+ *     a squared shape for connections.
+ * @package
+ */
+Blockly.zelos.ConstantProvider.prototype.makeSquared = function() {
+  var radius = this.CORNER_RADIUS;
+
+  // The 'up' and 'down' versions of the paths are the same, but the Y sign
+  // flips.  Forward and back are the signs to use to move the cursor in the
+  // direction that the path is being drawn.
+  function makeMainPath(height, up, right) {
+    var innerHeight = height - radius * 2;
+    return Blockly.utils.svgPaths.arc('a', '0 0,1', radius,
+        Blockly.utils.svgPaths.point((up ? -1 : 1) * radius, (up ? -1 : 1) * radius)) +
+      Blockly.utils.svgPaths.lineOnAxis('v', (right ? 1 : -1) * innerHeight) +
+      Blockly.utils.svgPaths.arc('a', '0 0,1', radius,
+          Blockly.utils.svgPaths.point((up ? 1 : -1) * radius, (up ? -1 : 1) * radius));
+  }
+
+  return {
+    type: this.SHAPES.SQUARE,
+    isDynamic: true,
+    width: function(_height) {
+      return radius;
+    },
+    height: function(height) {
+      return height;
+    },
+    connectionOffsetY: function(connectionHeight) {
+      return connectionHeight / 2;
+    },
+    connectionOffsetX: function(connectionWidth) {
+      return - connectionWidth;
+    },
+    pathDown: function(height) {
+      return makeMainPath(height, false, false);
+    },
+    pathUp: function(height) {
+      return makeMainPath(height, true, false);
+    },
+    pathRightDown: function(height) {
+      return makeMainPath(height, false, true);
+    },
+    pathRightUp: function(height) {
+      return makeMainPath(height, false, true);
+    },
+  };
+};
+
+/**
  * @override
  */
 Blockly.zelos.ConstantProvider.prototype.shapeFor = function(
     connection) {
   var checks = connection.getCheck();
+  if (!checks && connection.targetConnection) {
+    checks = connection.targetConnection.getCheck();
+  }
   switch (connection.type) {
     case Blockly.INPUT_VALUE:
     case Blockly.OUTPUT_VALUE:
+      var outputShape = connection.getSourceBlock().getOutputShape();
+      // If the block has an ouput shape set, use that instead.
+      if (outputShape != null) {
+        switch (outputShape) {
+          case this.SHAPES.HEXAGONAL: return this.HEXAGONAL;
+          case this.SHAPES.ROUNDED: return this.ROUNDED;
+          case this.SHAPES.SQUARE: return this.SQUARED;
+        }
+      }
       // Includes doesn't work in IE.
       if (checks && checks.indexOf('Boolean') != -1) {
         return this.HEXAGONAL;

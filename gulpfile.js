@@ -171,8 +171,8 @@ gulp.task('build-core', function (cb) {
     // If you require the google closure library, you can include it in your
     // build by running:
     //     gulp build-core --closure-library
-    // You will need to include the "google-closure-library" in your list of
-    // devDependencies.
+    // You will also need to include the "google-closure-library" in your list
+    // of devDependencies.
     console.log('Including the google-closure-library in your build.');
     if (!fs.existsSync('./node_modules/google-closure-library')) {
       throw Error('You must add the google-closure-library to your ' +

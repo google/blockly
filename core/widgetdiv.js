@@ -87,11 +87,7 @@ Blockly.WidgetDiv.show = function(newOwner, rtl, dispose) {
   Blockly.WidgetDiv.hide();
   Blockly.WidgetDiv.owner_ = newOwner;
   Blockly.WidgetDiv.dispose_ = dispose;
-  // Temporarily move the widget to the top of the screen so that it does not
-  // cause a scrollbar jump in Firefox when displayed.
-  var xy = Blockly.utils.style.getViewportPageOffset();
   var div = Blockly.WidgetDiv.DIV;
-  div.style.top = xy.y + 'px';
   div.style.direction = rtl ? 'rtl' : 'ltr';
   div.style.display = 'block';
   Blockly.WidgetDiv.rendererClassName_ =

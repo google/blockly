@@ -354,7 +354,7 @@ Blockly.HorizontalFlyout.prototype.getClientRect = function() {
     var height = flyoutRect.height;
     return new Blockly.utils.Rect(-BIG_NUM, top + height, -BIG_NUM, BIG_NUM);
   } else {  // Bottom.
-    return new Blockly.utils.Rect(top, -BIG_NUM, -BIG_NUM, BIG_NUM);
+    return new Blockly.utils.Rect(top, BIG_NUM, -BIG_NUM, BIG_NUM);
   }
 };
 

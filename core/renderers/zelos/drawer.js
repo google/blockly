@@ -98,10 +98,14 @@ Blockly.zelos.Drawer.prototype.drawOutline_ = function() {
  * @protected
  */
 Blockly.zelos.Drawer.prototype.drawRightSideRow_ = function(row) {
+  if (row.height <= 0) {
+    return;
+  }
   if (row.precedesStatement || row.followsStatement) {
     var cornerHeight = this.constants_.INSIDE_CORNERS.rightHeight;
     var remainingHeight = row.height -
-        (row.precedesStatement ? cornerHeight : 0);
+        (row.precedesStatement ? cornerHeight : 0) -
+        (row.followsStatement ? cornerHeight : 0);
     this.outlinePath_ +=
         (row.followsStatement ?
             this.constants_.INSIDE_CORNERS.pathBottomRight : '') +

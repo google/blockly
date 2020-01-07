@@ -497,6 +497,7 @@ Blockly.zelos.RenderInfo.prototype.finalizeVerticalAlignment_ = function() {
         Blockly.blockRendering.Types.isInputRow(row)) {
       // Determine if the input row has non-shadow connected blocks.
       var hasNonShadowConnectedBlocks = false;
+      var hasSingleTextOrImageField = null;
       var MIN_VERTICAL_TIGHTNESTING_HEIGHT = 40;
       for (var j = 0, elem; (elem = row.elements[j]); j++) {
         if (Blockly.blockRendering.Types.isInlineInput(elem) &&
@@ -505,12 +506,21 @@ Blockly.zelos.RenderInfo.prototype.finalizeVerticalAlignment_ = function() {
                 MIN_VERTICAL_TIGHTNESTING_HEIGHT) {
           hasNonShadowConnectedBlocks = true;
           break;
+        } else if (Blockly.blockRendering.Types.isField(elem) &&
+            (elem.field instanceof Blockly.FieldLabel ||
+            elem.field instanceof Blockly.FieldImage)) {
+          hasSingleTextOrImageField =
+              hasSingleTextOrImageField == null ? true : false;
         }
       }
+      // Reduce the previous and next spacer's height.
       if (hasNonShadowConnectedBlocks) {
-        // Reduce the previous and next spacer's height.
-        prevSpacer.height -= this.constants_.GRID_UNIT;
-        nextSpacer.height -= this.constants_.GRID_UNIT;
+        prevSpacer.height -= this.constants_.SMALL_PADDING;
+        nextSpacer.height -= this.constants_.SMALL_PADDING;
+      } else if (i != 2 && hasSingleTextOrImageField) {
+        prevSpacer.height -= this.constants_.SMALL_PADDING;
+        nextSpacer.height -= this.constants_.SMALL_PADDING;
+        row.height -= this.constants_.MEDIUM_PADDING;
       }
     } else if (i != 2 && hasPrevNotch && !hasNextNotch) {
       // Add a small padding so the notch doesn't interfere with inputs/fields.

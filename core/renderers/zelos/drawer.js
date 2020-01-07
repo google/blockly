@@ -219,7 +219,7 @@ Blockly.zelos.Drawer.prototype.drawStatementInput_ = function(row) {
     this.constants_.INSIDE_CORNERS.pathBottom +
     Blockly.utils.svgPaths.lineOnAxis('h',
         (input.notchOffset - this.constants_.INSIDE_CORNERS.width)) +
-    input.shape.pathLeft;
+    (input.bottomNextConnection ? '' : input.shape.pathLeft);
 
   this.outlinePath_ += Blockly.utils.svgPaths.lineOnAxis('H', x) +
       innerTopLeftCorner +

@@ -583,7 +583,7 @@ Blockly.zelos.ConstantProvider.prototype.shapeFor = function(
       if (outputShape != null) {
         switch (outputShape) {
           case this.SHAPES.HEXAGONAL: return this.HEXAGONAL;
-          case this.SHAPES.ROUNDED: return this.ROUNDED;
+          case this.SHAPES.ROUND: return this.ROUNDED;
           case this.SHAPES.SQUARE: return this.SQUARED;
         }
       }

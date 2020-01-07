@@ -282,9 +282,9 @@ Blockly.Procedures.flyoutCategory = function(workspace) {
  * duplicate of another arg.
  * @param {!Blockly.Workspace} workspace The procedure mutator's workspace. This
  *     workspace's flyout is what is being updated.
- * @package
+ * @private
  */
-Blockly.Procedures.updateMutatorFlyout = function(workspace) {
+Blockly.Procedures.updateMutatorFlyout_ = function(workspace) {
   var usedNames = [];
   var blocks = workspace.getBlocksByType('procedures_mutatorarg', false);
   for (var i = 0, block; (block = blocks[i]); i++) {
@@ -326,17 +326,17 @@ Blockly.Procedures.mutatorOpenListener = function(e) {
     return;
   }
   var workspace = block.mutator.getWorkspace();
-  Blockly.Procedures.updateMutatorFlyout(workspace);
-  workspace.addChangeListener(Blockly.Procedures.mutatorChangeListener);
+  Blockly.Procedures.updateMutatorFlyout_(workspace);
+  workspace.addChangeListener(Blockly.Procedures.mutatorChangeListener_);
 };
 
 /**
  * Listens for changes in a procedure mutator and triggers flyout updates when
  * necessary.
  * @param {!Blockly.Events.Abstract} e The event that triggered this listener.
- * @package
+ * @private
  */
-Blockly.Procedures.mutatorChangeListener = function(e) {
+Blockly.Procedures.mutatorChangeListener_ = function(e) {
   if (e.type != Blockly.Events.BLOCK_CREATE &&
       e.type != Blockly.Events.BLOCK_DELETE &&
       e.type != Blockly.Events.BLOCK_CHANGE) {
@@ -345,7 +345,7 @@ Blockly.Procedures.mutatorChangeListener = function(e) {
   var workspaceId = /** @type {string} */ (e.workspaceId);
   var workspace = /** @type {!Blockly.WorkspaceSvg} */
       (Blockly.Workspace.getById(workspaceId));
-  Blockly.Procedures.updateMutatorFlyout(workspace);
+  Blockly.Procedures.updateMutatorFlyout_(workspace);
 };
 
 /**

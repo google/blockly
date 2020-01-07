@@ -206,6 +206,8 @@ Blockly.Variables.flyoutCategoryBlocks = function(workspace) {
   return xmlList;
 };
 
+Blockly.Variables.VAR_LETTER_OPTIONS = 'ijkmnopqrstuvwxyzabcdefgh';  // No 'l'.
+
 /**
  * Return a new variable name that is not yet being used. This will try to
  * generate single letter variable names in the range 'i' to 'z' to start with.
@@ -215,44 +217,51 @@ Blockly.Variables.flyoutCategoryBlocks = function(workspace) {
  * @return {string} New variable name.
  */
 Blockly.Variables.generateUniqueName = function(workspace) {
-  var variableList = workspace.getAllVariables();
-  var newName = '';
-  if (variableList.length) {
-    var nameSuffix = 1;
-    var letters = 'ijkmnopqrstuvwxyzabcdefgh';  // No 'l'.
-    var letterIndex = 0;
-    var potName = letters.charAt(letterIndex);
-    while (!newName) {
-      var inUse = false;
-      for (var i = 0; i < variableList.length; i++) {
-        if (variableList[i].name.toLowerCase() == potName) {
-          // This potential name is already used.
-          inUse = true;
-          break;
-        }
-      }
-      if (inUse) {
-        // Try the next potential name.
-        letterIndex++;
-        if (letterIndex == letters.length) {
-          // Reached the end of the character sequence so back to 'i'.
-          // a new suffix.
-          letterIndex = 0;
-          nameSuffix++;
-        }
-        potName = letters.charAt(letterIndex);
-        if (nameSuffix > 1) {
-          potName += nameSuffix;
-        }
-      } else {
-        // We can use the current potential name.
-        newName = potName;
+  return Blockly.Variables.generateUniqueNameFromOptions(
+      Blockly.Variables.VAR_LETTER_OPTIONS.charAt(0),
+      workspace.getAllVariableNames()
+  );
+};
+
+/**
+ * Returns a unique name that is not present in the usedNames array. This
+ * will try to generate single letter names in the range a -> z (skip l). It
+ * will start with the character passed to startChar.
+ * @param {string} startChar The character to start the search at.
+ * @param {!Array<string>} usedNames A list of all of the used names.
+ * @return {string} A unique name that is not present in the usedNames array.
+ */
+Blockly.Variables.generateUniqueNameFromOptions = function(startChar, usedNames) {
+  if (!usedNames.length) {
+    return startChar;
+  }
+
+  var letters = Blockly.Variables.VAR_LETTER_OPTIONS;
+  var suffix = '';
+  var letterIndex = letters.indexOf(startChar);
+  var potName = startChar;
+
+  // eslint-disable-next-line no-constant-condition
+  while (true) {
+    var inUse = false;
+    for (var i = 0; i < usedNames.length; i++) {
+      if (usedNames[i].toLowerCase() == potName) {
+        inUse = true;
+        break;
       }
     }
-  } else {
-    newName = 'i';
+    if (!inUse) {
+      return potName;
+    }
+
+    letterIndex++;
+    if (letterIndex == letters.length) {
+      // Reached the end of the character sequence so back to 'i'.
+      letterIndex = 0;
+      suffix = Number(suffix) + 1;
+    }
+    potName = letters.charAt(letterIndex) + suffix;
   }
-  return newName;
 };
 
 /**

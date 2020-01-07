@@ -492,6 +492,14 @@ Blockly.Workspace.prototype.getAllVariables = function() {
   return this.variableMap_.getAllVariables();
 };
 
+/**
+ * Returns all variable names of all types.
+ * @return {!Array<string>} List of all variable names of all types.
+ */
+Blockly.Workspace.prototype.getAllVariableNames = function() {
+  return this.variableMap_.getAllVariableNames();
+};
+
 /* End functions that are just pass-throughs to the variable map. */
 
 /**

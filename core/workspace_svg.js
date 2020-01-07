@@ -127,6 +127,7 @@ Blockly.WorkspaceSvg = function(options,
   if (Blockly.Procedures && Blockly.Procedures.flyoutCategory) {
     this.registerToolboxCategoryCallback(Blockly.PROCEDURE_CATEGORY_NAME,
         Blockly.Procedures.flyoutCategory);
+    this.addChangeListener(Blockly.Procedures.mutatorOpenListener);
   }
 
   /**

@@ -648,16 +648,16 @@ Blockly.FieldDropdown.changeRecentModuleColors = function(activeIDsDict, recentI
         listOfActiveModules.push(activeIDsDict[moduleType][activeModule][0]);
       }
     }
-     //Do the same for the recent modules
+
+    //Do the same for the recent modules
     if (recentIDsDict && moduleType in recentIDsDict) {
       for (var recentModule in recentIDsDict[moduleType]) {
         listOfRecentModules.push(recentIDsDict[moduleType][recentModule][0]);
       }
     }
   }
-
-   //Go through all options in the dropdown
-   for (var i = 0; i < mainChild.children.length; i++) {
+  //Go through all options in the dropdown
+  for (var i = 0; i < mainChild.children.length; i++) {
     var child = mainChild.children[i];
     var innerText = child.innerText;
     if (innerText != undefined) {

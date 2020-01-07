@@ -390,7 +390,11 @@ goog.addDependency("base.js", [], []);
 goog.require('Blockly.requires')
 `;
     fs.writeFileSync('blockly_uncompressed.js',
-      header + addDependency.join('\n') + requires + footer);
+      header +
+      addDependency.sort((a, b) =>
+          a.localeCompare(b, undefined, {sensitivity: 'base'})).join('\n') +
+      requires +
+      footer);
   });
 });
 

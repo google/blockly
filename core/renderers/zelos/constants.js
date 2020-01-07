@@ -533,10 +533,10 @@ Blockly.zelos.ConstantProvider.prototype.makeSquared = function() {
 
   // The main path for the squared connection shape is made out of two corners
   // and a single line in-between (a and v). These are defined in relative
-  // positions and require the hight of the block.
+  // positions and require the height of the block.
   // The 'left' and 'right' versions of the paths are the same, but the Y sign
   // flips.  The 'up' and 'down' versions of the path determine where the corner
-  // point is placed and in-turn how the direction of the corners.
+  // point is placed and in-turn the direction of the corners.
   function makeMainPath(height, up, right) {
     var innerHeight = height - radius * 2;
     return Blockly.utils.svgPaths.arc('a', '0 0,1', radius,

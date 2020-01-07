@@ -562,7 +562,8 @@ Blockly.FieldDropdown.prototype.render_ = function() {
   var selectedOption = this.selectedIndex_ >= 0 &&
       options[this.selectedIndex_][0];
   if (selectedOption && typeof selectedOption == 'object') {
-    this.renderSelectedImage_(selectedOption);
+    this.renderSelectedImage_(
+        /** @type {!Blockly.FieldDropdown.ImageProperties} */ (selectedOption));
   } else {
     this.renderSelectedText_();
   }

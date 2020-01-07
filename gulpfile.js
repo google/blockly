@@ -83,10 +83,11 @@ function prependHeader() {
 
 /**
  * Closure compiler warning groups used to treat warnings as errors.
+ * For a full list of closure compiler groups, consult:
+ * https://github.com/google/closure-compiler/blob/master/src/com/google/javascript/jscomp/DiagnosticGroups.java#L113
  */
 var JSCOMP_ERROR = [
   'accessControls',
-  'ambiguousFunctionDecl',
   'checkPrototypalTypes',
   'checkRegExp',
   'checkTypes',
@@ -97,13 +98,10 @@ var JSCOMP_ERROR = [
   'deprecated',
   'deprecatedAnnotations',
   'duplicateMessage',
-  // 'es3',
   'es5Strict',
   'externsValidation',
-  'fileoverviewTags',
   'functionParams',
   'globalThis',
-  'internetExplorerChecks',
   'invalidCasts',
   'misplacedTypeAnnotation',
   'missingGetCssName',
@@ -116,7 +114,6 @@ var JSCOMP_ERROR = [
   // 'missingSourcesWarnings',
   'moduleLoad',
   'msgDescriptions',
-  'newCheckTypes',
   'nonStandardJsDocs',
   // 'polymer',
   // 'reportUnknownTypes',
@@ -146,14 +143,17 @@ var JSCOMP_ERROR = [
  *     as errors.
  */
 function compile(compilerOptions, opt_verbose, opt_warnings_as_error) {
-  if (!compilerOptions) compilerOptions = {};
+  compilerOptions = compilerOptions || {};
   compilerOptions.compilation_level = 'SIMPLE_OPTIMIZATIONS';
   compilerOptions.warning_level = opt_verbose ? 'VERBOSE' : 'DEFAULT';
-  compilerOptions.language_in = 'ECMASCRIPT5_STRICT';
+  compilerOptions.language_in =
+    compilerOptions.language_in || 'ECMASCRIPT5_STRICT';
   compilerOptions.language_out = 'ECMASCRIPT5_STRICT';
   compilerOptions.rewrite_polyfills = false;
   compilerOptions.hide_warnings_for = 'node_modules';
-  if (opt_warnings_as_error) compilerOptions.jscomp_error = JSCOMP_ERROR;
+  if (opt_warnings_as_error) {
+    compilerOptions.jscomp_error = JSCOMP_ERROR;
+  }
 
   const platform = ['native', 'java', 'javascript'];
 
@@ -164,11 +164,23 @@ function compile(compilerOptions, opt_verbose, opt_warnings_as_error) {
  * This task builds Blockly's core files.
  *     blockly_compressed.js
  */
-gulp.task('build-core', function () {
+gulp.task('build-core', function (cb) {
   const defines = 'Blockly.VERSION="' + packageJson.version + '"';
-  return gulp.src([
-      'core/**/**/*.js'
-    ], {base: './'})
+  const srcs = ['core/**/**/*.js'];
+  if (argv.closureLibrary) {
+    // If you require the google closure library, you can include it in your
+    // build by running:
+    //     gulp build-core --closure-library
+    // You will need to include the "google-closure-library" in your list of
+    // devDependencies.
+    console.log('Including the google-closure-library in your build.');
+    if (!fs.existsSync('./node_modules/google-closure-library')) {
+      throw Error('You must add the google-closure-library to your ' +
+        'devDependencies in package.json, and run `npm install`.');
+    }
+    srcs.push('./node_modules/google-closure-library/closure/goog/**/*.js');
+  }
+  return gulp.src(srcs, {base: './'})
     // Directories in Blockly are used to group similar files together
     // but are not used to limit access with @package, instead the
     // method means something is internal to Blockly and not a public
@@ -186,7 +198,9 @@ gulp.task('build-core', function () {
       entry_point: './core-requires.js',
       js_output_file: 'blockly_compressed.js',
       externs: ['./externs/svg-externs.js', './externs/goog-externs.js'],
-      define: defines
+      define: defines,
+      language_in:
+        argv.closureLibrary ? 'ECMASCRIPT_2015' : 'ECMASCRIPT5_STRICT'
     }, argv.verbose, argv.strict))
     .pipe(prependHeader())
     .pipe(gulp.dest('./'));
@@ -351,7 +365,7 @@ if (this.IS_NODE_JS) {
 let deps = [];
 return gulp.src('core/**/**/*.js')
   .pipe(through2.obj((file, _enc, cb) => {
-    deps.push(closureDeps.parser.parseFile(file.path).dependency);
+    deps.push(closureDeps.parser.parseFile(file.path).dependencies[0]);
     cb(null);
   }))
   .on('end', () => {

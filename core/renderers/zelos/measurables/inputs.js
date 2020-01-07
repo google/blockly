@@ -50,7 +50,7 @@ Blockly.zelos.StatementInput = function(constants, input) {
     }
     if (!block.nextConnection) {
       this.height = this.connectedBlockHeight;
-      this.bottomNextConnection = true;
+      this.connectedBottomNextConnection = true;
     }
   }
 };

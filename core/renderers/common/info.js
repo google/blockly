@@ -754,6 +754,13 @@ Blockly.blockRendering.RenderInfo.prototype.finalize_ = function() {
         Math.max(widestRowWithConnectedBlocks, row.widthWithConnectedBlocks);
     this.recordElemPositions_(row);
   }
+  if (this.outputConnection && this.block_.nextConnection &&
+      this.block_.nextConnection.targetBlock()) {
+    // Include width of connected block in value to stack width measurement.
+    widestRowWithConnectedBlocks =
+        Math.max(widestRowWithConnectedBlocks,
+            this.block_.nextConnection.targetBlock().getHeightWidth().width);
+  }
 
   this.widthWithChildren = Math.max(this.widthWithChildren,
       widestRowWithConnectedBlocks + this.startX);

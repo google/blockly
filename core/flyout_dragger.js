@@ -1,9 +1,6 @@
 /**
  * @license
- * Visual Blocks Editor
- *
- * Copyright 2017 Google Inc.
- * https://developers.google.com/blockly/
+ * Copyright 2017 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,6 +23,7 @@
 
 goog.provide('Blockly.FlyoutDragger');
 
+goog.require('Blockly.utils.object');
 goog.require('Blockly.WorkspaceDragger');
 
 
@@ -36,6 +34,7 @@ goog.require('Blockly.WorkspaceDragger');
  * and how to do translations based on that.  This simply passes the right
  * commands based on events.
  * @param {!Blockly.Flyout} flyout The flyout to drag.
+ * @extends {Blockly.WorkspaceDragger}
  * @constructor
  */
 Blockly.FlyoutDragger = function(flyout) {
@@ -59,22 +58,28 @@ Blockly.FlyoutDragger = function(flyout) {
    */
   this.horizontalLayout_ = flyout.horizontalLayout_;
 };
-goog.inherits(Blockly.FlyoutDragger, Blockly.WorkspaceDragger);
+Blockly.utils.object.inherits(Blockly.FlyoutDragger, Blockly.WorkspaceDragger);
 
 /**
- * Move the appropriate scrollbar to drag the flyout.
- * Since flyouts only scroll in one direction at a time, this will discard one
- * of the calculated values.
- * x and y are in pixels.
- * @param {number} x The new x position to move the scrollbar to.
- * @param {number} y The new y position to move the scrollbar to.
- * @private
+ * Move the flyout based on the most recent mouse movements.
+ * @param {!Blockly.utils.Coordinate} currentDragDeltaXY How far the pointer has
+ *     moved from the position at the start of the drag, in pixel coordinates.
+ * @package
  */
-Blockly.FlyoutDragger.prototype.updateScroll_ = function(x, y) {
-  // Move the scrollbar and the flyout will scroll automatically.
+Blockly.FlyoutDragger.prototype.drag = function(currentDragDeltaXY) {
+  // startScrollXY_ is assigned by the superclass.
+  var newXY = Blockly.utils.Coordinate.sum(this.startScrollXY_,
+      currentDragDeltaXY);
+
+  // We can't call workspace.scroll because the flyout's workspace doesn't own
+  // it's own scrollbars. This is because (as of 2.20190722.1) the
+  // workspace's scrollbar property must be a scrollbar pair, rather than a
+  // single scrollbar.
+  // Instead we'll just expect setting the scrollbar to update the scroll of
+  // the workspace as well.
   if (this.horizontalLayout_) {
-    this.scrollbar_.set(x);
+    this.scrollbar_.set(-newXY.x);
   } else {
-    this.scrollbar_.set(y);
+    this.scrollbar_.set(-newXY.y);
   }
 };

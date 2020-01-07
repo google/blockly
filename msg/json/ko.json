@@ -13,7 +13,8 @@
 			"Jerrykim306",
 			"Onebone",
 			"JeonHK",
-			"Liuxinyu970226"
+			"Liuxinyu970226",
+			"Peurocs4"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "항목",
@@ -281,7 +282,10 @@
 	"TEXT_PROMPT_TYPE_NUMBER": "메시지를 활용해 수 입력",
 	"TEXT_PROMPT_TOOLTIP_NUMBER": "수에 대해 사용자의 입력을 받습니다.",
 	"TEXT_PROMPT_TOOLTIP_TEXT": "문장에 대해 사용자의 입력을 받습니다.",
+	"TEXT_COUNT_MESSAGE0": "%2에서 %1 숫자 세기",
 	"TEXT_COUNT_HELPURL": "https://github.com/google/blockly/wiki/Text#counting-substrings",
+	"TEXT_COUNT_TOOLTIP": "다른 어떤 텍스트에서 어떤 텍스트가 나타난 횟수를 셉니다.",
+	"TEXT_REPLACE_MESSAGE0": "%3에서 %2을(를) %1(으)로 바꾸기",
 	"TEXT_REPLACE_HELPURL": "https://github.com/google/blockly/wiki/Text#replacing-substrings",
 	"TEXT_REVERSE_HELPURL": "https://github.com/google/blockly/wiki/Text#reversing-text",
 	"LISTS_CREATE_EMPTY_HELPURL": "https://github.com/google/blockly/wiki/Lists#create-empty-list",

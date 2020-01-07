@@ -1,9 +1,6 @@
 /**
  * @license
- * Visual Blocks Language
- *
- * Copyright 2015 Google Inc.
- * https://developers.google.com/blockly/
+ * Copyright 2015 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,7 +28,7 @@ goog.require('Blockly.PHP');
 
 Blockly.PHP['math_number'] = function(block) {
   // Numeric value.
-  var code = parseFloat(block.getFieldValue('NUM'));
+  var code = Number(block.getFieldValue('NUM'));
   var order = code >= 0 ? Blockly.PHP.ORDER_ATOMIC :
               Blockly.PHP.ORDER_UNARY_NEGATION;
   if (code == Infinity) {
@@ -188,7 +185,7 @@ Blockly.PHP['math_number_property'] = function(block) {
          '  return true;',
          '}']);
     code = functionName + '(' + number_to_check + ')';
-    return [code, Blockly.JavaScript.ORDER_FUNCTION_CALL];
+    return [code, Blockly.PHP.ORDER_FUNCTION_CALL];
   }
   switch (dropdown_property) {
     case 'EVEN':

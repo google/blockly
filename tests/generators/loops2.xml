@@ -1,4 +1,4 @@
-<xml xmlns="http://www.w3.org/1999/xhtml">
+<xml xmlns="https://developers.google.com/blockly/xml">
   <block type="unittest_main" x="66" y="-2">
     <field name="SUITE_NAME">Loops 2</field>
     <statement name="DO">

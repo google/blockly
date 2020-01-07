@@ -12,6 +12,7 @@
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "елемент",
+	"UNNAMED_KEY": "без име",
 	"TODAY": "Днес",
 	"DUPLICATE_BLOCK": "Копирай",
 	"ADD_COMMENT": "Добави коментар",
@@ -192,6 +193,9 @@
 	"MATH_RANDOM_FLOAT_HELPURL": "https://bg.wikipedia.org/wiki/Генератор_на_случайни_числа",
 	"MATH_RANDOM_FLOAT_TITLE_RANDOM": "случайно дробно число",
 	"MATH_RANDOM_FLOAT_TOOLTIP": "Върни случайно дробно число между 0.0 (включително) и 1.0 (без да го включва)",
+	"MATH_ATAN2_HELPURL": "https://en.wikipedia.org/wiki/Atan2",
+	"MATH_ATAN2_TITLE": "atan2 от X:%1 Y:%2",
+	"MATH_ATAN2_TOOLTIP": "Връща аркустангенс на точка (X, Y) в градуси от -180 до 180.",
 	"TEXT_TEXT_HELPURL": "https://bg.wikipedia.org/wiki/Низ",
 	"TEXT_TEXT_TOOLTIP": "Буква, дума или ред",
 	"TEXT_JOIN_TITLE_CREATEWITH": "създай текст с",
@@ -347,5 +351,6 @@
 	"PROCEDURES_IFRETURN_TOOLTIP": "Ако стойността е вярна, върни втората стойност.",
 	"PROCEDURES_IFRETURN_HELPURL": "http://c2.com/cgi/wiki?GuardClause",
 	"PROCEDURES_IFRETURN_WARNING": "Предупреждение: Този блок може да се използва само във функция.",
-	"WORKSPACE_COMMENT_DEFAULT_TEXT": "Коментирайте нещо..."
+	"WORKSPACE_COMMENT_DEFAULT_TEXT": "Коментирайте нещо...",
+	"COLLAPSED_WARNINGS_WARNING": "Свитите блокове съдържат предупреждения."
 }

@@ -1,5 +1,24 @@
-/* exported assertEquals, assertTrue, assertFalse, assertNull, assertNotNull,
-   isEqualArrays, assertUndefined, assertNotUndefined */
+/**
+ * @license
+ * Copyright 2019 Google LLC
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/* exported assertEquals, assertNotEquals, assertArrayEquals, assertTrue, assertFalse,
+   assertNull, assertNotNull, assertNotNullNorUndefined, assert,
+   isEqualArrays, assertUndefined, assertNotUndefined,
+   defineRowBlock, defineStackBlock, defineStatementBlock */
 function _argumentsIncludeComments(expectedNumberOfNonCommentArgs, args) {
   return args.length == expectedNumberOfNonCommentArgs + 1;
 }
@@ -21,7 +40,7 @@ function _nonCommentArg(desiredNonCommentArgIndex, expectedNumberOfNonCommentArg
 function _validateArguments(expectedNumberOfNonCommentArgs, args) {
   if (!( args.length == expectedNumberOfNonCommentArgs ||
       (args.length == expectedNumberOfNonCommentArgs + 1 && (typeof(args[0]) == 'string') || args[0] == null))) {
-    throw new Error('Incorrect arguments passed to assert function');
+    throw Error('Incorrect arguments passed to assert function');
   }
 }
 /**
@@ -36,6 +55,17 @@ function assertEquals() {
 }
 
 /**
+ * Converts from JSUnit assertNotEquals to chai.assert.notEquals.
+ */
+function assertNotEquals() {
+  _validateArguments(2, arguments);
+  var var1 = _nonCommentArg(1, 2, arguments);
+  var var2 = _nonCommentArg(2, 2, arguments);
+  var comment = _commentArg(2, arguments);
+  chai.assert.notEqual(var1, var2, comment);
+}
+
+/**
  * Converts from JSUnit assertTrue to chai.assert.isTrue.
  */
 function assertTrue() {
@@ -43,7 +73,7 @@ function assertTrue() {
   var commentArg = _commentArg(1, arguments);
   var booleanValue = _nonCommentArg(1, 1, arguments);
   if (typeof(booleanValue) != 'boolean') {
-    throw new Error('Bad argument to assertTrue(boolean)');
+    throw Error('Bad argument to assertTrue(boolean)');
   }
 
   chai.assert.isTrue(booleanValue, commentArg);
@@ -58,7 +88,7 @@ function assertFalse() {
   var booleanValue = _nonCommentArg(1, 1, arguments);
 
   if (typeof(booleanValue) != 'boolean') {
-    throw new Error('Bad argument to assertFalse(boolean)');
+    throw Error('Bad argument to assertFalse(boolean)');
   }
 
   chai.assert.isNotTrue(booleanValue, commentArg);
@@ -79,6 +109,14 @@ function assertNotNull() {
   var commentArg = _commentArg(1, arguments);
   var val = _nonCommentArg(1, 1, arguments);
   chai.assert.isNotNull(val, commentArg);
+}
+
+function assertNotNullNorUndefined() {
+  assertNotNull(arguments);
+}
+
+function assert() {
+  chai.assert(arguments);
 }
 
 /**
@@ -104,5 +142,53 @@ function assertNotUndefined() {
   _validateArguments(1, arguments);
   var commentArg = _commentArg(1, arguments);
   var val = _nonCommentArg(1, 1, arguments);
-  chai.assert.isNotUndefined(val, commentArg);
+  chai.assert.isDefined(val, commentArg);
+}
+
+function assertArrayEquals() {
+  _validateArguments(2, arguments);
+  var var1 = _nonCommentArg(1, 2, arguments);
+  var var2 = _nonCommentArg(2, 2, arguments);
+  isEqualArrays(var1, var2);
+}
+
+function defineStackBlock() {
+  Blockly.defineBlocksWithJsonArray([{
+    "type": "stack_block",
+    "message0": "",
+    "previousStatement": null,
+    "nextStatement": null
+  }]);
+}
+
+function defineRowBlock() {
+  Blockly.defineBlocksWithJsonArray([{
+    "type": "row_block",
+    "message0": "%1",
+    "args0": [
+      {
+        "type": "input_value",
+        "name": "INPUT"
+      }
+    ],
+    "output": null
+  }]);
+}
+
+function defineStatementBlock() {
+  Blockly.defineBlocksWithJsonArray([{
+    "type": "statement_block",
+    "message0": "%1",
+    "args0": [
+      {
+        "type": "input_statement",
+        "name": "NAME"
+      }
+    ],
+    "previousStatement": null,
+    "nextStatement": null,
+    "colour": 230,
+    "tooltip": "",
+    "helpUrl": ""
+  }]);
 }

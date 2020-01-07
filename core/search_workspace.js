@@ -132,7 +132,7 @@ Blockly.SearchWorkspace = function(workspace) {
   //   thisObj.onBlur(event);
   // });
 };
-goog.inherits(Blockly.SearchWorkspace, Blockly.Search);
+Blockly.utils.object.inherits(Blockly.SearchWorkspace, Blockly.Search);
 
 //Old way of handling the workspace changes. Might have to re-add it if we change the logic too dramatically.
 // Blockly.SearchWorkspace.prototype.onNewWorkspaceEvent = function(event) {

@@ -29,6 +29,7 @@
 	"NEW_VARIABLE": "متغیر بݨاؤ۔۔۔",
 	"NEW_VARIABLE_TITLE": "نواں متغیر ناں:",
 	"VARIABLE_ALREADY_EXISTS": "'%1' نامی متغیر پہلے موجود ہے۔",
+	"COLOUR_PICKER_HELPURL": "https://en.wikipedia.org/wiki/Color",
 	"COLOUR_RANDOM_TITLE": "بنا ترتيب رنگ",
 	"COLOUR_RGB_TITLE": "نال رن٘گ",
 	"COLOUR_RGB_RED": "رتا",
@@ -96,6 +97,7 @@
 	"LISTS_GET_INDEX_LAST": "چھیکڑی",
 	"LISTS_GET_INDEX_RANDOM": "پُٹھے سِدھے",
 	"LISTS_SET_INDEX_SET": "سیٹ",
+	"LISTS_SET_INDEX_INSERT": "تے درج کرو",
 	"LISTS_SET_INDEX_INPUT_TO": "بطور",
 	"LISTS_SORT_TITLE": "سارٹ کرو%1%2%3",
 	"LISTS_SORT_ORDER_ASCENDING": "چڑھدا ہویا",
@@ -105,5 +107,6 @@
 	"PROCEDURES_DEFNORETURN_TITLE": "کوں",
 	"PROCEDURES_BEFORE_PARAMS": "نال:",
 	"PROCEDURES_CALL_BEFORE_PARAMS": "نال:",
-	"PROCEDURES_DEFRETURN_RETURN": "واپس آ ونڄو"
+	"PROCEDURES_DEFRETURN_RETURN": "واپس آ ونڄو",
+	"PROCEDURES_MUTATORARG_TITLE": "ان پُٹ ناں:"
 }

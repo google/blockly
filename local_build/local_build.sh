@@ -3,8 +3,7 @@
 # Locally build and compress the core Blockly files into a single JavaScript
 # file.
 #
-# Copyright 2018 Google Inc.
-# https://developers.google.com/blockly/
+# Copyright 2018 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -51,8 +50,8 @@ if [[ ${PWD##*/} != $EXPECTED_PWD ]]; then
 fi
 
 # Find the Closure Compiler.
-if [ -f "$(npm root)/google-closure-compiler/compiler.jar" ]; then
-  COMPILER="$(npm root)/google-closure-compiler/compiler.jar"
+if [ -f "$(npm root)/google-closure-compiler-java/compiler.jar" ]; then
+  COMPILER="$(npm root)/google-closure-compiler-java/compiler.jar"
 elif [ -f closure-compiler*.jar ]; then
   COMPILER="closure-compiler*.jar"
   # TODO: Check whether multiple files were found.
@@ -68,8 +67,6 @@ rm local_blockly_compressed.js 2> /dev/null
 echo Compiling Blockly core...
 java -jar $COMPILER \
   --js='../core/**.js' \
-  --js='../../closure-library/closure/goog/**.js' \
-  --js='../../closure-library/third_party/closure/goog/**.js' \
   --generate_exports \
   --warning_level='DEFAULT' \
   --compilation_level SIMPLE_OPTIMIZATIONS \
@@ -96,12 +93,10 @@ echo -e "'use strict';\ngoog.provide('Blockly');goog.provide('Blockly.Blocks');"
 cat ../blocks/*.js| grep -v "^'use strict';" >> temp.js
 java -jar $COMPILER \
   --js='temp.js' \
-  --js='../../closure-library/closure/goog/**.js' \
-  --js='../../closure-library/third_party/closure/goog/**.js' \
   --generate_exports \
   --warning_level='DEFAULT' \
   --compilation_level SIMPLE_OPTIMIZATIONS \
-  --dependency_mode=STRICT \
+  --dependency_mode=PRUNE \
   --entry_point=Blockly \
   --js_output_file local_blocks_compressed.js
 rm temp.js 2> /dev/null

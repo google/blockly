@@ -28,10 +28,7 @@ goog.provide('Blockly.ButtonInput');
 
 goog.require('Blockly.Field');
 goog.require('Blockly.Msg');
-goog.require('goog.asserts');
-goog.require('goog.dom');
-goog.require('goog.dom.TagName');
-goog.require('goog.userAgent');
+goog.require('Blockly.utils.userAgent');
 
 
 /**
@@ -49,7 +46,7 @@ Blockly.ButtonInput = function (text, opt_validator) {
     Blockly.ButtonInput.superClass_.constructor.call(this, text,
         opt_validator);
 };
-goog.inherits(Blockly.ButtonInput, Blockly.Field);
+Blockly.utils.object.inherits(Blockly.ButtonInput, Blockly.Field);
 
 Blockly.ButtonInput.FONTSIZE = 11;                  //Point size of text. Should match blocklyText's font-size in CSS.
 Blockly.ButtonInput.MIN_WIDTH = 50;
@@ -109,7 +106,7 @@ Blockly.ButtonInput.prototype.setValue = function (newValue) {
     newValue = Blockly.Field.prototype.setValue.call(this, newValue);
 
     //Update the text field
-    this.setText(this.KEY_CODE);
+    // this.setValue(this.KEY_CODE);
 };
 
 /**
@@ -228,7 +225,7 @@ Blockly.ButtonInput.prototype.resizeInput_ = function() {
       tempWidth = Blockly.ButtonInput.WIDGET_MIN_WIDTH;
     }
 
-    this.size_ = new goog.math.Size(tempWidth, this.size_.height);
+    this.size_ = new Blockly.utils.Size(tempWidth, this.size_.height);
   }
 
   if (this.borderRect_ != undefined) {
@@ -275,8 +272,8 @@ Blockly.ButtonInput.prototype.showEditor_ = function (opt_quietInput) {
 
   var div = Blockly.WidgetDiv.DIV;
   // Create the input.
-  var htmlInput =
-    goog.dom.createDom(goog.dom.TagName.INPUT, 'blocklyHtmlButtonInput');
+  var htmlInput = document.createElement('input');
+  htmlInput.setAttribute('class', 'blocklyHtmlButtonInput');
   var fontSize =
     (Blockly.ButtonInput.FONTSIZE * this.workspace_.scale) + 'pt';
   div.style.fontSize = fontSize;
@@ -494,15 +491,17 @@ Blockly.ButtonInput.prototype.keyDisplayParser_ = function (key_object) {
  */
 Blockly.ButtonInput.prototype.validate_ = function () {
   var valid = true;
-  goog.asserts.assertObject(Blockly.ButtonInput.htmlInput_);
-  var htmlInput = Blockly.ButtonInput.htmlInput_;
-  if (this.sourceBlock_) {
-    valid = this.callValidator(htmlInput.value);
-  }
-  if (valid === null) {
-    Blockly.utils.addClass(htmlInput, 'blocklyInvalidInput');
-  } else {
-    Blockly.utils.removeClass(htmlInput, 'blocklyInvalidInput');
+
+  if (typeof Blockly.ButtonInput.htmlInput_ == 'object' && Blockly.ButtonInput.htmlInput_ != null) {
+    var htmlInput = Blockly.ButtonInput.htmlInput_;
+    if (this.sourceBlock_) {
+      valid = this.callValidator(htmlInput.value);
+    }
+    if (valid === null) {
+      Blockly.utils.dom.addClass(htmlInput, 'blocklyInvalidInput');
+    } else {
+      Blockly.utils.dom.removeClass(htmlInput, 'blocklyInvalidInput');
+    }
   }
 };
 
@@ -519,17 +518,17 @@ Blockly.ButtonInput.prototype.resizeEditor_ = function() {
   // In RTL mode block fields and LTR input fields the left edge moves,
   // whereas the right edge is fixed.  Reposition the editor.
   var x = this.sourceBlock_.RTL ? bBox.right - div.offsetWidth : bBox.left;
-  var xy = new goog.math.Coordinate(x, bBox.top);
+  var xy = new Blockly.utils.Coordinate(x, bBox.top);
 
   // Shift by a few pixels to line up exactly.
   xy.y += 3;
-  if (goog.userAgent.GECKO && Blockly.WidgetDiv.DIV.style.top) {
+  if (Blockly.utils.userAgent.GECKO && Blockly.WidgetDiv.DIV.style.top) {
     // Firefox mis-reports the location of the border by a pixel
     // once the WidgetDiv is moved into position.
     xy.x -= 1;
     xy.y -= 1;
   }
-  if (goog.userAgent.WEBKIT) {
+  if (Blockly.utils.userAgent.WEBKIT) {
     xy.y -= 3;
   }
   div.style.left = xy.x + 'px';
@@ -547,7 +546,7 @@ Blockly.ButtonInput.prototype.widgetDispose_ = function () {
   var thisField = this;
   return function () {
     Blockly.ButtonInput.WIDGET_MIN_WIDTH = 0;
-    thisField.setText(thisField.KEY_CODE);
+    thisField.setValue(thisField.KEY_CODE);
     thisField.validate_();
     thisField.resizeInput_();
     thisField.sourceBlock_.rendered && thisField.sourceBlock_.render();
@@ -570,4 +569,4 @@ Blockly.ButtonInput.prototype.widgetDispose_ = function () {
   };
 };
 
-Blockly.Field.register('button_input', Blockly.ButtonInput);
+Blockly.fieldRegistry.register('button_input', Blockly.ButtonInput);

@@ -1,9 +1,6 @@
 /**
  * @license
- * Visual Blocks Editor
- *
- * Copyright 2017 Google Inc.
- * https://developers.google.com/blockly/
+ * Copyright 2017 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,7 +23,7 @@
 
 goog.provide('Blockly.WorkspaceDragger');
 
-goog.require('goog.math.Coordinate');
+goog.require('Blockly.utils.Coordinate');
 
 
 /**
@@ -48,10 +45,10 @@ Blockly.WorkspaceDragger = function(workspace) {
   /**
    * The scroll position of the workspace at the beginning of the drag.
    * Coordinate system: pixel coordinates.
-   * @type {!goog.math.Coordinate}
+   * @type {!Blockly.utils.Coordinate}
    * @private
    */
-  this.startScrollXY_ = new goog.math.Coordinate(
+  this.startScrollXY_ = new Blockly.utils.Coordinate(
       workspace.scrollX, workspace.scrollY);
 };
 
@@ -76,7 +73,7 @@ Blockly.WorkspaceDragger.prototype.startDrag = function() {
 
 /**
  * Finish dragging the workspace and put everything back where it belongs.
- * @param {!goog.math.Coordinate} currentDragDeltaXY How far the pointer has
+ * @param {!Blockly.utils.Coordinate} currentDragDeltaXY How far the pointer has
  *     moved from the position at the start of the drag, in pixel coordinates.
  * @package
  */
@@ -88,11 +85,11 @@ Blockly.WorkspaceDragger.prototype.endDrag = function(currentDragDeltaXY) {
 
 /**
  * Move the workspace based on the most recent mouse movements.
- * @param {!goog.math.Coordinate} currentDragDeltaXY How far the pointer has
+ * @param {!Blockly.utils.Coordinate} currentDragDeltaXY How far the pointer has
  *     moved from the position at the start of the drag, in pixel coordinates.
  * @package
  */
 Blockly.WorkspaceDragger.prototype.drag = function(currentDragDeltaXY) {
-  var newXY = goog.math.Coordinate.sum(this.startScrollXY_, currentDragDeltaXY);
+  var newXY = Blockly.utils.Coordinate.sum(this.startScrollXY_, currentDragDeltaXY);
   this.workspace_.scroll(newXY.x, newXY.y);
 };

@@ -182,6 +182,8 @@
 	"MATH_RANDOM_INT_TOOLTIP": "Retornar un numero integre aleatori inter le duo limites specificate, incluse.",
 	"MATH_RANDOM_FLOAT_TITLE_RANDOM": "fraction aleatori",
 	"MATH_RANDOM_FLOAT_TOOLTIP": "Retornar un fraction aleatori inter 0.0 (incluse) e 1.0 (excluse).",
+	"MATH_ATAN2_TITLE": "atan2 de X:%1 Y:%2",
+	"MATH_ATAN2_TOOLTIP": "Retornar le arco tangente del puncto (X, Y) in grados de -180 a 180.",
 	"TEXT_TEXT_TOOLTIP": "Un littera, parola o linea de texto.",
 	"TEXT_JOIN_TITLE_CREATEWITH": "crear texto con",
 	"TEXT_JOIN_TOOLTIP": "Crear un pecia de texto uniente un certe numero de elementos.",
@@ -328,5 +330,6 @@
 	"PROCEDURES_CREATE_DO": "Crear '%1'",
 	"PROCEDURES_IFRETURN_TOOLTIP": "Si un valor es ver, alora retornar un secunde valor.",
 	"PROCEDURES_IFRETURN_WARNING": "Attention: Iste bloco pote solmente esser usate in le definition de un function.",
-	"WORKSPACE_COMMENT_DEFAULT_TEXT": "Dice qualcosa..."
+	"WORKSPACE_COMMENT_DEFAULT_TEXT": "Dice qualcosa...",
+	"COLLAPSED_WARNINGS_WARNING": "Blocos plicate contine advertimentos."
 }

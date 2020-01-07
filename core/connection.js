@@ -1,9 +1,6 @@
 /**
  * @license
- * Visual Blocks Editor
- *
- * Copyright 2011 Google Inc.
- * https://developers.google.com/blockly/
+ * Copyright 2011 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,6 +23,7 @@
 
 goog.provide('Blockly.Connection');
 
+goog.require('Blockly.Events');
 goog.require('Blockly.Events.BlockMove');
 goog.require('Blockly.Xml');
 
@@ -44,13 +42,6 @@ Blockly.Connection = function(source, type) {
   this.sourceBlock_ = source;
   /** @type {number} */
   this.type = type;
-  // Shortcut for the databases for this connection's workspace.
-  if (source.workspace.connectionDBList) {
-    this.db_ = source.workspace.connectionDBList[type];
-    this.dbOpposite_ =
-        source.workspace.connectionDBList[Blockly.OPPOSITE_TYPE[type]];
-    this.hidden_ = !this.db_;
-  }
 };
 
 /**
@@ -69,6 +60,13 @@ Blockly.Connection.REASON_SHADOW_PARENT = 6;
  * @type {Blockly.Connection}
  */
 Blockly.Connection.prototype.targetConnection = null;
+
+/**
+ * Has this connection been disposed of?
+ * @type {boolean}
+ * @package
+ */
+Blockly.Connection.prototype.disposed = false;
 
 /**
  * List of compatible value types.  Null if all types are compatible.
@@ -97,35 +95,6 @@ Blockly.Connection.prototype.x_ = 0;
  * @protected
  */
 Blockly.Connection.prototype.y_ = 0;
-
-/**
- * Has this connection been added to the connection database?
- * @type {boolean}
- * @protected
- */
-Blockly.Connection.prototype.inDB_ = false;
-
-/**
- * Connection database for connections of this type on the current workspace.
- * @type {Blockly.ConnectionDB}
- * @protected
- */
-Blockly.Connection.prototype.db_ = null;
-
-/**
- * Connection database for connections compatible with this type on the
- * current workspace.
- * @type {Blockly.ConnectionDB}
- * @protected
- */
-Blockly.Connection.prototype.dbOpposite_ = null;
-
-/**
- * Whether this connections is hidden (not tracked in a database) or not.
- * @type {boolean}
- * @protected
- */
-Blockly.Connection.prototype.hidden_ = null;
 
 /**
  * Connect two connections together.  This is the connection on the superior
@@ -204,9 +173,9 @@ Blockly.Connection.prototype.connect_ = function(childConnection) {
           if (orphanBlock.workspace && !orphanBlock.getParent()) {
             Blockly.Events.setGroup(group);
             if (orphanBlock.outputConnection) {
-              orphanBlock.outputConnection.bumpAwayFrom_(parentConnection);
+              orphanBlock.outputConnection.onFailedConnect(parentConnection);
             } else if (orphanBlock.previousConnection) {
-              orphanBlock.previousConnection.bumpAwayFrom_(parentConnection);
+              orphanBlock.previousConnection.onFailedConnect(parentConnection);
             }
             Blockly.Events.setGroup(false);
           }
@@ -232,17 +201,26 @@ Blockly.Connection.prototype.connect_ = function(childConnection) {
 };
 
 /**
- * Sever all links to this connection (not including from the source object).
+ * Dispose of this connection. Deal with connected blocks and remove this
+ * connection from the database.
+ * @package
  */
 Blockly.Connection.prototype.dispose = function() {
+
+  // isConnected returns true for shadows and non-shadows.
   if (this.isConnected()) {
-    throw Error('Disconnect connection before disposing of it.');
+    this.setShadowDom(null);
+    var targetBlock = this.targetBlock();
+    if (targetBlock.isShadow()) {
+      // Destroy the attached shadow block & its children.
+      targetBlock.dispose();
+    } else {
+      // Disconnect the attached normal block.
+      targetBlock.unplug();
+    }
   }
-  if (this.inDB_) {
-    this.db_.removeConnection_(this);
-  }
-  this.db_ = null;
-  this.dbOpposite_ = null;
+
+  this.disposed = true;
 };
 
 /**
@@ -436,6 +414,16 @@ Blockly.Connection.prototype.isConnectionAllowed = function(candidate) {
 };
 
 /**
+ * Behavior after a connection attempt fails.
+ * @param {Blockly.Connection} _otherConnection Connection that this connection
+ *     failed to connect to.
+ * @package
+ */
+Blockly.Connection.prototype.onFailedConnect = function(_otherConnection) {
+  // NOP
+};
+
+/**
  * Connect this connection to another connection.
  * @param {!Blockly.Connection} otherConnection Connection to connect to.
  */
@@ -445,6 +433,10 @@ Blockly.Connection.prototype.connect = function(otherConnection) {
     return;
   }
   this.checkConnection_(otherConnection);
+  var eventGroup = Blockly.Events.getGroup();
+  if (!eventGroup) {
+    Blockly.Events.setGroup(true);
+  }
   // Determine which block is superior (higher in the source stack).
   if (this.isSuperior()) {
     // Superior block.
@@ -452,6 +444,9 @@ Blockly.Connection.prototype.connect = function(otherConnection) {
   } else {
     // Inferior block.
     otherConnection.connect_(this);
+  }
+  if (!eventGroup) {
+    Blockly.Events.setGroup(false);
   }
 };
 
@@ -542,8 +537,16 @@ Blockly.Connection.prototype.disconnect = function() {
     childBlock = this.sourceBlock_;
     parentConnection = otherConnection;
   }
+
+  var eventGroup = Blockly.Events.getGroup();
+  if (!eventGroup) {
+    Blockly.Events.setGroup(true);
+  }
   this.disconnectInternal_(parentBlock, childBlock);
   parentConnection.respawnShadow_();
+  if (!eventGroup) {
+    Blockly.Events.setGroup(false);
+  }
 };
 
 /**
@@ -635,8 +638,8 @@ Blockly.Connection.prototype.onCheckChanged_ = function() {
 
 /**
  * Change a connection's compatibility.
- * @param {*} check Compatible value type or list of value types.
- *     Null if all types are compatible.
+ * @param {string|!Array<string>} check Compatible value type or list of value
+ *    types. Null if all types are compatible.
  * @return {!Blockly.Connection} The connection being modified
  *     (to allow chaining).
  */
@@ -656,8 +659,8 @@ Blockly.Connection.prototype.setCheck = function(check) {
 
 /**
  * Get a connection's compatibility.
- * @return {Array} List of compatible value types.  Null if
- *     all types are compatible.
+ * @return {Array} List of compatible value types.
+ *     Null if all types are compatible.
  * @public
  */
 Blockly.Connection.prototype.getCheck = function() {
@@ -688,12 +691,31 @@ Blockly.Connection.prototype.getShadowDom = function() {
  * and always return an empty list (the default).
  * {@link Blockly.RenderedConnection} overrides this behavior with a list
  * computed from the rendered positioning.
- * @param {number} maxLimit The maximum radius to another connection.
+ * @param {number} _maxLimit The maximum radius to another connection.
  * @return {!Array.<!Blockly.Connection>} List of connections.
  * @private
  */
-Blockly.Connection.prototype.neighbours_ = function(/* maxLimit */) {
+Blockly.Connection.prototype.neighbours_ = function(_maxLimit) {
   return [];
+};
+
+/**
+ * Get the parent input of a connection.
+ * @return {Blockly.Input} The input that the connection belongs to or null if
+ *     no parent exists.
+ * @package
+ */
+Blockly.Connection.prototype.getParentInput = function() {
+  var parentInput = null;
+  var block = this.sourceBlock_;
+  var inputs = block.inputList;
+  for (var idx = 0; idx < block.inputList.length; idx++) {
+    if (inputs[idx].connection === this) {
+      parentInput = inputs[idx];
+      break;
+    }
+  }
+  return parentInput;
 };
 
 /**

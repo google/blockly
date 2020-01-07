@@ -28,10 +28,8 @@
 
 goog.provide('Blockly.Search');
 
-goog.require('goog.structs.Set');
-goog.require('goog.structs.Trie');
-// goog.require('goog.ui.LabelInput');
-// goog.require('goog.ui.tree.TreeNode');
+goog.require('Blockly.Set');
+goog.require('Blockly.Trie');
 
  /**
  * Initializes the search handler.
@@ -42,7 +40,7 @@ Blockly.Search = function(workspace) {
   this.workspace_ = workspace;
 
   //Initializes a trie. The trie is the way blocks are stored for quick search results.
-  this.blockTrie_ = new goog.structs.Trie;
+  this.blockTrie_ = new Blockly.Trie;
 };
 
 /**
@@ -177,7 +175,7 @@ Blockly.Search.prototype.blocksMatchingSearchTerms = function(terms) {
     }
 
     //Get a set with all of the results for that word
-    var matchSet = new goog.structs.Set(this.blocksMatchingSearchTerm(terms[i]));
+    var matchSet = new Blockly.Set(this.blocksMatchingSearchTerm(terms[i]));
 
     //Intersect the results with previous results (if any)
     if (intersectingMatches) {
@@ -199,7 +197,7 @@ Blockly.Search.prototype.blocksMatchingSearchTerms = function(terms) {
 Blockly.Search.prototype.clearAll = function() {
   delete this.blockTrie_;
 
-  this.blockTrie_ = new goog.structs.Trie;
+  this.blockTrie_ = new Blockly.Trie;
 };
 
 

@@ -46,7 +46,7 @@ Blockly.FieldBoolean = function(state, opt_validator) {
   // Set the initial state.
   this.setValue(state);
 };
-goog.inherits(Blockly.FieldBoolean, Blockly.Field);
+Blockly.utils.object.inherits(Blockly.FieldBoolean, Blockly.Field);
 
 /**
  * Construct a FieldBoolean from a JSON arg object.
@@ -77,10 +77,10 @@ Blockly.FieldBoolean.prototype.init = function() {
     return;
   }
   // Build the DOM.
-  this.fieldGroup_ = Blockly.utils.createSvgElement('g', {}, null);
+  this.fieldGroup_ = Blockly.utils.dom.createSvgElement('g', {}, null);
 
   //Only initialize the path, don't actually draw until the text is inserted and its width can be calculated.
-  this.borderPath_ = Blockly.utils.createSvgElement('path',
+  this.borderPath_ = Blockly.utils.dom.createSvgElement('path',
       {
         'd': 'm 0,0',
         'x': -Blockly.BlockSvg.SEP_SPACE_X / 2,
@@ -89,7 +89,7 @@ Blockly.FieldBoolean.prototype.init = function() {
       }, this.fieldGroup_, this.sourceBlock_.workspace);
   
   /** @type {!Element} */
-  this.textElement_ = Blockly.utils.createSvgElement('text',
+  this.textElement_ = Blockly.utils.dom.createSvgElement('text',
       {'class': 'blocklyText', 'y': this.size_.height - 7.5},
       this.fieldGroup_);
 
@@ -100,8 +100,8 @@ Blockly.FieldBoolean.prototype.init = function() {
           this.fieldGroup_, 'mousedown', this, this.onMouseDown_);
           
   this.fieldGroup_.style.cursor = this.CURSOR;
-  Blockly.utils.addClass(this.fieldGroup_, 'blocklyEditableText');
-  Blockly.utils.removeClass(this.fieldGroup_, 'blocklyNonEditableText');
+  Blockly.utils.dom.addClass(this.fieldGroup_, 'blocklyEditableText');
+  Blockly.utils.dom.removeClass(this.fieldGroup_, 'blocklyNonEditableText');
 
   // this.resizeField_();
 };
@@ -256,4 +256,4 @@ Blockly.FieldBoolean.prototype.showEditor_ = function() {
   }
 };
 
-Blockly.Field.register('field_boolean', Blockly.FieldBoolean);
+Blockly.fieldRegistry.register('field_boolean', Blockly.FieldBoolean);

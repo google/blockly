@@ -1,9 +1,6 @@
 /**
  * @license
- * Visual Blocks Editor
- *
- * Copyright 2018 Google Inc.
- * https://developers.google.com/blockly/
+ * Copyright 2018 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,10 +29,11 @@ goog.provide('Blockly.Events.CommentMove');
 
 goog.require('Blockly.Events');
 goog.require('Blockly.Events.Abstract');
-goog.require('Blockly.Xml');
-goog.require('Blockly.Xml.utils');
-
-goog.require('goog.math.Coordinate');
+goog.require('Blockly.utils.Coordinate');
+goog.require('Blockly.utils.object');
+goog.require('Blockly.utils.xml');
+// TODO: Fix recursive dependency.
+// goog.require('Blockly.Xml');
 
 
 /**
@@ -64,7 +62,7 @@ Blockly.Events.CommentBase = function(comment) {
    * perspective, and should be undone together.
    * @type {string}
    */
-  this.group = Blockly.Events.group_;
+  this.group = Blockly.Events.getGroup();
 
   /**
    * Sets whether the event should be added to the undo stack.
@@ -72,19 +70,15 @@ Blockly.Events.CommentBase = function(comment) {
    */
   this.recordUndo = Blockly.Events.recordUndo;
 };
-goog.inherits(Blockly.Events.CommentBase, Blockly.Events.Abstract);
+Blockly.utils.object.inherits(Blockly.Events.CommentBase,
+    Blockly.Events.Abstract);
 
 /**
  * Encode the event as JSON.
  * @return {!Object} JSON representation.
  */
 Blockly.Events.CommentBase.prototype.toJson = function() {
-  var json = {
-    'type': this.type
-  };
-  if (this.group) {
-    json['group'] = this.group;
-  }
+  var json = Blockly.Events.CommentBase.superClass_.toJson.call(this);
   if (this.commentId) {
     json['commentId'] = this.commentId;
   }
@@ -96,8 +90,8 @@ Blockly.Events.CommentBase.prototype.toJson = function() {
  * @param {!Object} json JSON representation.
  */
 Blockly.Events.CommentBase.prototype.fromJson = function(json) {
+  Blockly.Events.CommentBase.superClass_.fromJson.call(this, json);
   this.commentId = json['commentId'];
-  this.group = json['group'];
 };
 
 /**
@@ -117,7 +111,8 @@ Blockly.Events.CommentChange = function(comment, oldContents, newContents) {
   this.oldContents_ = oldContents;
   this.newContents_ = newContents;
 };
-goog.inherits(Blockly.Events.CommentChange, Blockly.Events.CommentBase);
+Blockly.utils.object.inherits(Blockly.Events.CommentChange,
+    Blockly.Events.CommentBase);
 
 /**
  * Type of this event.
@@ -183,7 +178,8 @@ Blockly.Events.CommentCreate = function(comment) {
 
   this.xml = comment.toXmlWithXY();
 };
-goog.inherits(Blockly.Events.CommentCreate, Blockly.Events.CommentBase);
+Blockly.utils.object.inherits(Blockly.Events.CommentCreate,
+    Blockly.Events.CommentBase);
 
 /**
  * Type of this event.
@@ -208,7 +204,7 @@ Blockly.Events.CommentCreate.prototype.toJson = function() {
  */
 Blockly.Events.CommentCreate.prototype.fromJson = function(json) {
   Blockly.Events.CommentCreate.superClass_.fromJson.call(this, json);
-  this.xml = Blockly.Xml.textToDom('<xml>' + json['xml'] + '</xml>').firstChild;
+  this.xml = Blockly.Xml.textToDom(json['xml']);
 };
 
 /**
@@ -228,7 +224,7 @@ Blockly.Events.CommentCreate.prototype.run = function(forward) {
 Blockly.Events.CommentCreateDeleteHelper = function(event, create) {
   var workspace = event.getEventWorkspace_();
   if (create) {
-    var xml = Blockly.Xml.utils.createElement('xml');
+    var xml = Blockly.utils.xml.createElement('xml');
     xml.appendChild(event.xml);
     Blockly.Xml.domToWorkspace(xml, workspace);
   } else {
@@ -256,7 +252,8 @@ Blockly.Events.CommentDelete = function(comment) {
 
   this.xml = comment.toXmlWithXY();
 };
-goog.inherits(Blockly.Events.CommentDelete, Blockly.Events.CommentBase);
+Blockly.utils.object.inherits(Blockly.Events.CommentDelete,
+    Blockly.Events.CommentBase);
 
 /**
  * Type of this event.
@@ -312,17 +309,18 @@ Blockly.Events.CommentMove = function(comment) {
 
   /**
    * The location before the move, in workspace coordinates.
-   * @type {!goog.math.Coordinate}
+   * @type {!Blockly.utils.Coordinate}
    */
   this.oldCoordinate_ = comment.getXY();
 
   /**
    * The location after the move, in workspace coordinates.
-   * @type {!goog.math.Coordinate}
+   * @type {Blockly.utils.Coordinate}
    */
   this.newCoordinate_ = null;
 };
-goog.inherits(Blockly.Events.CommentMove, Blockly.Events.CommentBase);
+Blockly.utils.object.inherits(Blockly.Events.CommentMove,
+    Blockly.Events.CommentBase);
 
 /**
  * Record the comment's new location.  Called after the move.  Can only be
@@ -346,8 +344,8 @@ Blockly.Events.CommentMove.prototype.type = Blockly.Events.COMMENT_MOVE;
 /**
  * Override the location before the move.  Use this if you don't create the
  * event until the end of the move, but you know the original location.
- * @param {!goog.math.Coordinate} xy The location before the move, in workspace
- *     coordinates.
+ * @param {!Blockly.utils.Coordinate} xy The location before the move,
+ *     in workspace coordinates.
  */
 Blockly.Events.CommentMove.prototype.setOldCoordinate = function(xy) {
   this.oldCoordinate_ = xy;
@@ -377,7 +375,7 @@ Blockly.Events.CommentMove.prototype.fromJson = function(json) {
   if (json['newCoordinate']) {
     var xy = json['newCoordinate'].split(',');
     this.newCoordinate_ =
-        new goog.math.Coordinate(parseFloat(xy[0]), parseFloat(xy[1]));
+        new Blockly.utils.Coordinate(Number(xy[0]), Number(xy[1]));
   }
 };
 
@@ -386,7 +384,8 @@ Blockly.Events.CommentMove.prototype.fromJson = function(json) {
  * @return {boolean} False if something changed.
  */
 Blockly.Events.CommentMove.prototype.isNull = function() {
-  return goog.math.Coordinate.equals(this.oldCoordinate_, this.newCoordinate_);
+  return Blockly.utils.Coordinate.equals(this.oldCoordinate_,
+      this.newCoordinate_);
 };
 
 /**

@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<!--
+@license
+Copyright 2019 Google LLC
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+ http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+<html>
+<head>
+<meta charset="utf-8">
+<title>Blockly Playground: New rendering</title>
+<script src="../../blockly_uncompressed.js"></script>
+<script src="../../msg/messages.js"></script>
+<script src="../../blocks/logic.js"></script>
+<script src="../../blocks/loops.js"></script>
+<script src="../../blocks/math.js"></script>
+<script src="../../blocks/text.js"></script>
+<script src="../../blocks/lists.js"></script>
+<script src="../../blocks/colour.js"></script>
+<script src="../../blocks/variables.js"></script>
+<script src="../../blocks/variables_dynamic.js"></script>
+<script src="../../blocks/procedures.js"></script>
+<script src="../blocks/test_blocks.js"></script>
+
+<style>
+html, body {
+  height: 100%;
+}
+body {
+  background-color: #fff;
+  font-family: sans-serif;
+  overflow: hidden;
+}
+h1 {
+  font-weight: normal;
+  font-size: 140%;
+}
+#blocklyDiv {
+  height: 100%;
+  width: 100%;
+}
+#importExport {
+  font-family: monospace;
+}
+
+.ioLabel>.blocklyFlyoutLabelText {
+  font-style: italic;
+}
+.blockRenderDebug {
+  display: none;
+}
+
+.rowRenderingRect {
+  stroke: black;
+  fill: none;
+  stroke-width: 1px;
+}
+
+.elemRenderingRect {
+  stroke: red;
+  fill: none;
+  stroke-width: 1px;
+}
+
+.rowSpacerRect {
+  stroke: blue;
+  fill-opacity: 0.5;
+  fill: blue;
+  stroke-width: 1px;
+}
+
+.elemSpacerRect {
+  stroke: pink;
+  fill-opacity: 0.5;
+  fill: pink;
+  stroke-width: 1px;
+}
+
+.connectionRenderingDot {
+  display: none;
+}
+
+.blockBoundingBox {
+  stroke: black;
+  stroke-dasharray: 5,5;
+  fill: none;
+  stroke-width: 1px;
+}
+</style>
+</head>
+<body onload="start()">
+
+  <div id="blocklyDiv"></div>
+</body>
+</html>

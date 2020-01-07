@@ -1,9 +1,6 @@
 /**
  * @license
- * Visual Blocks Editor
- *
- * Copyright 2016 Google Inc.
- * https://developers.google.com/blockly/
+ * Copyright 2016 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -198,6 +195,9 @@ Blockly.Events.fireNow_ = function() {
   var queue = Blockly.Events.filter(Blockly.Events.FIRE_QUEUE_, true);
   Blockly.Events.FIRE_QUEUE_.length = 0;
   for (var i = 0, event; event = queue[i]; i++) {
+    if (!event.workspaceId) {
+      continue;
+    }
     var workspace = Blockly.Workspace.getById(event.workspaceId);
     if (workspace) {
       workspace.fireChangeListener(event);
@@ -333,9 +333,9 @@ Blockly.Events.setGroup = function(state) {
  * Compute a list of the IDs of the specified block and all its descendants.
  * @param {!Blockly.Block} block The root block.
  * @return {!Array.<string>} List of block IDs.
- * @private
+ * @package
  */
-Blockly.Events.getDescendantIds_ = function(block) {
+Blockly.Events.getDescendantIds = function(block) {
   var ids = [];
   var descendants = block.getDescendants(false);
   for (var i = 0, descendant; descendant = descendants[i]; i++) {
@@ -376,13 +376,13 @@ Blockly.Events.fromJson = function(json, workspace) {
       event = new Blockly.Events.VarRename(null, '');
       break;
     case Blockly.Events.UI:
-      event = new Blockly.Events.Ui(null);
+      event = new Blockly.Events.Ui(null, '', '', '');
       break;
     case Blockly.Events.COMMENT_CREATE:
       event = new Blockly.Events.CommentCreate(null);
       break;
     case Blockly.Events.COMMENT_CHANGE:
-      event = new Blockly.Events.CommentChange(null);
+      event = new Blockly.Events.CommentChange(null, '', '');
       break;
     case Blockly.Events.COMMENT_MOVE:
       event = new Blockly.Events.CommentMove(null);
@@ -402,24 +402,28 @@ Blockly.Events.fromJson = function(json, workspace) {
  * Enable/disable a block depending on whether it is properly connected.
  * Use this on applications where all blocks should be connected to a top block.
  * Recommend setting the 'disable' option to 'false' in the config so that
- * users don't try to reenable disabled orphan blocks.
+ * users don't try to re-enable disabled orphan blocks.
  * @param {!Blockly.Events.Abstract} event Custom data for event.
  */
 Blockly.Events.disableOrphans = function(event) {
   if (event.type == Blockly.Events.MOVE ||
       event.type == Blockly.Events.CREATE) {
+    if (!event.workspaceId) {
+      return;
+    }
     var workspace = Blockly.Workspace.getById(event.workspaceId);
     var block = workspace.getBlockById(event.blockId);
     if (block) {
-      if (block.getParent() && !block.getParent().disabled) {
+      var parent = block.getParent();
+      if (parent && parent.isEnabled()) {
         var children = block.getDescendants(false);
         for (var i = 0, child; child = children[i]; i++) {
-          child.setDisabled(false);
+          child.setEnabled(true);
         }
       } else if ((block.outputConnection || block.previousConnection) &&
                  !workspace.isDragging()) {
         do {
-          block.setDisabled(true);
+          block.setEnabled(false);
           block = block.getNextBlock();
         } while (block);
       }

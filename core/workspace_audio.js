@@ -1,9 +1,6 @@
 /**
  * @license
- * Visual Blocks Editor
- *
- * Copyright 2017 Google Inc.
- * https://developers.google.com/blockly/
+ * Copyright 2017 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,7 +24,9 @@
 
 goog.provide('Blockly.WorkspaceAudio');
 
-goog.require('goog.userAgent');
+goog.require('Blockly.utils');
+goog.require('Blockly.utils.global');
+goog.require('Blockly.utils.userAgent');
 
 
 /**
@@ -82,7 +81,7 @@ Blockly.WorkspaceAudio.prototype.load = function(filenames, name) {
     return;
   }
   try {
-    var audioTest = new window['Audio']();
+    var audioTest = new Blockly.utils.global['Audio']();
   } catch (e) {
     // No browser support for Audio.
     // IE can throw an error even if the Audio object exists.
@@ -94,7 +93,7 @@ Blockly.WorkspaceAudio.prototype.load = function(filenames, name) {
     var ext = filename.match(/\.(\w+)$/);
     if (ext && audioTest.canPlayType('audio/' + ext[1])) {
       // Found an audio format we can play.
-      sound = new window['Audio'](filename);
+      sound = new Blockly.utils.global['Audio'](filename);
       break;
     }
   }
@@ -111,11 +110,22 @@ Blockly.WorkspaceAudio.prototype.preload = function() {
   for (var name in this.SOUNDS_) {
     var sound = this.SOUNDS_[name];
     sound.volume = 0.01;
-    sound.play().catch(function() {});
-    sound.pause();
+    var playPromise = sound.play();
+    // Edge does not return a promise, so we need to check.
+    if (playPromise !== undefined) {
+      // If we don't wait for the play request to complete before calling pause()
+      // we will get an exception: (DOMException: The play() request was interrupted)
+      // See more: https://developers.google.com/web/updates/2017/06/play-request-was-interrupted
+      playPromise.then(sound.pause).catch(function() {
+        // Play without user interaction was prevented.
+      });
+    } else {
+      sound.pause();
+    }
+    
     // iOS can only process one sound at a time.  Trying to load more than one
     // corrupts the earlier ones.  Just load one and leave the others uncached.
-    if (goog.userAgent.IPAD || goog.userAgent.IPHONE) {
+    if (Blockly.utils.userAgent.IPAD || Blockly.utils.userAgent.IPHONE) {
       break;
     }
   }
@@ -138,11 +148,9 @@ Blockly.WorkspaceAudio.prototype.play = function(name, opt_volume) {
     }
     this.lastSound_ = now;
     var mySound;
-    var ie9 = goog.userAgent.DOCUMENT_MODE &&
-              goog.userAgent.DOCUMENT_MODE === 9;
-    if (ie9 || goog.userAgent.IPAD || goog.userAgent.ANDROID) {
-      // Creating a new audio node causes lag in IE9, Android and iPad. Android
-      // and IE9 refetch the file from the server, iPad uses a singleton audio
+    if (Blockly.utils.userAgent.IPAD || Blockly.utils.userAgent.ANDROID) {
+      // Creating a new audio node causes lag in Android and iPad.  Android
+      // refetches the file from the server, iPad uses a singleton audio
       // node which must be deleted and recreated for each new audio tag.
       mySound = sound;
     } else {

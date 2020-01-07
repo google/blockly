@@ -28,10 +28,8 @@ goog.provide('Blockly.AsciiInput');
 
 goog.require('Blockly.Field');
 goog.require('Blockly.Msg');
-goog.require('goog.asserts');
-goog.require('goog.dom');
-goog.require('goog.dom.TagName');
-goog.require('goog.userAgent');
+goog.require('Blockly.utils.userAgent');
+goog.require('Blockly.utils.Size');
 
 
 /**
@@ -49,7 +47,7 @@ Blockly.AsciiInput = function (text, opt_validator) {
     Blockly.AsciiInput.superClass_.constructor.call(this, text,
         opt_validator);
 };
-goog.inherits(Blockly.AsciiInput, Blockly.Field);
+Blockly.utils.object.inherits(Blockly.AsciiInput, Blockly.Field);
 
 Blockly.AsciiInput.FONTSIZE = 11;                  //Point size of text. Should match blocklyText's font-size in CSS.
 Blockly.AsciiInput.MIN_WIDTH = 50;
@@ -109,7 +107,7 @@ Blockly.AsciiInput.prototype.setValue = function (newValue) {
     newValue = Blockly.Field.prototype.setValue.call(this, newValue);
 
     //Update the text field
-    this.setText(this.KEY_CODE);
+    // this.setValue(this.KEY_CODE);
 };
 
 /**
@@ -216,7 +214,7 @@ Blockly.AsciiInput.prototype.resizeInput_ = function() {
       tempWidth = Blockly.AsciiInput.WIDGET_MIN_WIDTH;
     }
 
-    this.size_ = new goog.math.Size(tempWidth, this.size_.height);
+    this.size_ = new Blockly.utils.Size(tempWidth, this.size_.height);
   }
 
   if (this.borderRect_ != undefined) {
@@ -263,8 +261,8 @@ Blockly.AsciiInput.prototype.showEditor_ = function (opt_quietInput) {
 
   var div = Blockly.WidgetDiv.DIV;
   // Create the input.
-  var htmlInput =
-    goog.dom.createDom(goog.dom.TagName.INPUT, 'blocklyHtmlButtonInput');
+  var htmlInput = document.createElement("input");
+  htmlInput.setAttribute("id", "blocklyHtmlButtonInput");
   var fontSize =
     (Blockly.AsciiInput.FONTSIZE * this.workspace_.scale) + 'pt';
   div.style.fontSize = fontSize;
@@ -484,15 +482,17 @@ Blockly.AsciiInput.prototype.keyDisplayParser_ = function (key_object) {
  */
 Blockly.AsciiInput.prototype.validate_ = function () {
   var valid = true;
-  goog.asserts.assertObject(Blockly.AsciiInput.htmlInput_);
-  var htmlInput = Blockly.AsciiInput.htmlInput_;
-  if (this.sourceBlock_) {
-    valid = this.callValidator(htmlInput.value);
-  }
-  if (valid === null) {
-    Blockly.utils.addClass(htmlInput, 'blocklyInvalidInput');
-  } else {
-    Blockly.utils.removeClass(htmlInput, 'blocklyInvalidInput');
+
+  if (typeof Blockly.AsciiInput.htmlInput_ == 'object' && Blockly.AsciiInput.htmlInput_ != null) {
+    var htmlInput = Blockly.AsciiInput.htmlInput_;
+    if (this.sourceBlock_) {
+      valid = this.callValidator(htmlInput.value);
+    }
+    if (valid === null) {
+      Blockly.utils.dom.addClass(htmlInput, 'blocklyInvalidInput');
+    } else {
+      Blockly.utils.dom.removeClass(htmlInput, 'blocklyInvalidInput');
+    }
   }
 };
 
@@ -509,17 +509,17 @@ Blockly.AsciiInput.prototype.resizeEditor_ = function() {
   // In RTL mode block fields and LTR input fields the left edge moves,
   // whereas the right edge is fixed.  Reposition the editor.
   var x = this.sourceBlock_.RTL ? bBox.right - div.offsetWidth : bBox.left;
-  var xy = new goog.math.Coordinate(x, bBox.top);
+  var xy = new Blockly.utils.Coordinate(x, bBox.top);
 
   // Shift by a few pixels to line up exactly.
   xy.y += 3;
-  if (goog.userAgent.GECKO && Blockly.WidgetDiv.DIV.style.top) {
+  if (Blockly.utils.userAgent.GECKO && Blockly.WidgetDiv.DIV.style.top) {
     // Firefox mis-reports the location of the border by a pixel
     // once the WidgetDiv is moved into position.
     xy.x -= 1;
     xy.y -= 1;
   }
-  if (goog.userAgent.WEBKIT) {
+  if (Blockly.utils.userAgent.WEBKIT) {
     xy.y -= 3;
   }
   div.style.left = xy.x + 'px';
@@ -537,7 +537,7 @@ Blockly.AsciiInput.prototype.widgetDispose_ = function () {
   var thisField = this;
   return function () {
     Blockly.AsciiInput.WIDGET_MIN_WIDTH = 0;
-    thisField.setText(thisField.KEY_CODE);
+    thisField.setValue(thisField.KEY_CODE);
     thisField.validate_();
     thisField.resizeInput_();
     thisField.sourceBlock_.rendered && thisField.sourceBlock_.render();
@@ -560,4 +560,4 @@ Blockly.AsciiInput.prototype.widgetDispose_ = function () {
   };
 };
 
-Blockly.Field.register('ascii_input', Blockly.AsciiInput);
+Blockly.fieldRegistry.register('ascii_input', Blockly.AsciiInput);

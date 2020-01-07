@@ -2,8 +2,7 @@
 
 # Generate .js files defining Blockly core and language messages.
 #
-# Copyright 2013 Google Inc.
-# https://developers.google.com/blockly/
+# Copyright 2013 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -37,7 +36,7 @@ def string_is_ascii(s):
 
 def load_constants(filename):
   """Read in constants file, which must be output in every language."""
-  constant_defs = read_json_file(filename);
+  constant_defs = read_json_file(filename)
   constants_text = '\n'
   for key in constant_defs:
     value = constant_defs[key]
@@ -123,10 +122,6 @@ def main():
             """// This file was automatically generated.  Do not modify.
 
 'use strict';
-
-goog.provide('Blockly.Msg.{0}');
-
-goog.require('Blockly.Msg');
 
 """.format(target_lang.replace('-', '.')))
         # For each key in the source language file, output the target value

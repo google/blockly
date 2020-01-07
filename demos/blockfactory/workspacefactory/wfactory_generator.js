@@ -1,9 +1,6 @@
 /**
  * @license
- * Blockly Demos: Block Factory
- *
- * Copyright 2016 Google Inc.
- * https://developers.google.com/blockly/
+ * Copyright 2016 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -59,9 +56,9 @@ WorkspaceFactoryGenerator = function(model) {
  */
 WorkspaceFactoryGenerator.prototype.generateToolboxXml = function() {
   // Create DOM for XML.
-  var xmlDom = document.createElement('xml');
+  var xmlDom = Blockly.utils.xml.createElement('xml');
   xmlDom.id = 'toolbox';
-  xmlDom.style.display = 'none';
+  xmlDom.setAttribute('style', 'display: none');
 
   if (!this.model.hasElements()) {
     // Toolbox has no categories. Use XML directly from workspace.
@@ -71,7 +68,7 @@ WorkspaceFactoryGenerator.prototype.generateToolboxXml = function() {
     // Toolbox has categories.
     // Assert that selected != null
     if (!this.model.getSelected()) {
-      throw new Error('Selected is null when the toolbox is empty.');
+      throw Error('Selected is null when the toolbox is empty.');
     }
 
     var xml = this.model.getSelectedXml();
@@ -85,10 +82,10 @@ WorkspaceFactoryGenerator.prototype.generateToolboxXml = function() {
       var element = toolboxList[i];
       if (element.type == ListElement.TYPE_SEPARATOR) {
         // If the next element is a separator.
-        var nextElement = document.createElement('sep');
+        var nextElement = Blockly.utils.xml.createElement('sep');
       } else if (element.type == ListElement.TYPE_CATEGORY) {
         // If the next element is a category.
-        var nextElement = document.createElement('category');
+        var nextElement = Blockly.utils.xml.createElement('category');
         nextElement.setAttribute('name', element.name);
         // Add a colour attribute if one exists.
         if (element.color != null) {
@@ -125,10 +122,10 @@ WorkspaceFactoryGenerator.prototype.generateWorkspaceXml = function() {
   this.setShadowBlocksInHiddenWorkspace_();
 
   // Generate XML and set attributes.
-  var generatedXml = Blockly.Xml.workspaceToDom(this.hiddenWorkspace);
-  generatedXml.setAttribute('id', 'workspaceBlocks');
-  generatedXml.setAttribute('style', 'display:none');
-  return generatedXml;
+  var xmlDom = Blockly.Xml.workspaceToDom(this.hiddenWorkspace);
+  xmlDom.id = 'workspaceBlocks';
+  xmlDom.setAttribute('style', 'display: none');
+  return xmlDom;
 };
 
 /**

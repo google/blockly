@@ -1,9 +1,6 @@
 /**
  * @license
- * Visual Blocks Editor
- *
- * Copyright 2016 Google Inc.
- * https://developers.google.com/blockly/
+ * Copyright 2016 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,14 +24,16 @@
 goog.provide('Blockly.RenderedConnection');
 
 goog.require('Blockly.Connection');
+goog.require('Blockly.Events');
 goog.require('Blockly.utils');
-
-goog.require('goog.math.Coordinate');
+goog.require('Blockly.utils.Coordinate');
+goog.require('Blockly.utils.dom');
+goog.require('Blockly.utils.object');
 
 
 /**
  * Class for a connection between blocks that may be rendered on screen.
- * @param {!Blockly.Block} source The block establishing this connection.
+ * @param {!Blockly.BlockSvg} source The block establishing this connection.
  * @param {number} type The type of the connection.
  * @extends {Blockly.Connection}
  * @constructor
@@ -43,13 +42,53 @@ Blockly.RenderedConnection = function(source, type) {
   Blockly.RenderedConnection.superClass_.constructor.call(this, source, type);
 
   /**
-   * Workspace units, (0, 0) is top left of block.
-   * @type {!goog.math.Coordinate}
+   * Connection database for connections of this type on the current workspace.
+   * @const {!Blockly.ConnectionDB}
    * @private
    */
-  this.offsetInBlock_ = new goog.math.Coordinate(0, 0);
+  this.db_ = source.workspace.connectionDBList[type];
+
+  /**
+   * Connection database for connections compatible with this type on the
+   * current workspace.
+   * @const {!Blockly.ConnectionDB}
+   * @private
+   */
+  this.dbOpposite_ = source.workspace
+      .connectionDBList[Blockly.OPPOSITE_TYPE[type]];
+
+  /**
+   * Workspace units, (0, 0) is top left of block.
+   * @type {!Blockly.utils.Coordinate}
+   * @private
+   */
+  this.offsetInBlock_ = new Blockly.utils.Coordinate(0, 0);
+
+  /**
+   * Has this connection been added to the connection database?
+   * @type {boolean}
+   * @private
+   */
+  this.inDB_ = false;
+
+  /**
+   * Whether this connections is hidden (not tracked in a database) or not.
+   * @type {boolean}
+   * @private
+   */
+  this.hidden_ = !this.db_;
 };
-goog.inherits(Blockly.RenderedConnection, Blockly.Connection);
+Blockly.utils.object.inherits(Blockly.RenderedConnection, Blockly.Connection);
+
+/**
+ * @override
+ */
+Blockly.RenderedConnection.prototype.dispose = function() {
+  Blockly.RenderedConnection.superClass_.dispose.call(this);
+  if (this.inDB_) {
+    this.db_.removeConnection_(this);
+  }
+};
 
 /**
  * Returns the distance between this connection and another connection in
@@ -143,7 +182,7 @@ Blockly.RenderedConnection.prototype.moveBy = function(dx, dy) {
 /**
  * Move this connection to the location given by its offset within the block and
  * the location of the block's top left corner.
- * @param {!goog.math.Coordinate} blockTL The location of the top left corner
+ * @param {!Blockly.utils.Coordinate} blockTL The location of the top left corner
  *     of the block, in workspace coordinates.
  */
 Blockly.RenderedConnection.prototype.moveToOffset = function(blockTL) {
@@ -162,13 +201,23 @@ Blockly.RenderedConnection.prototype.setOffsetInBlock = function(x, y) {
 };
 
 /**
- * Registers the margins of a block, so the highlight 
- * (yellow line around block when clickedo on) can also be aligned vertically.
+ * Get the offset of this connection relative to the top left of its block.
+ * @return {!Blockly.utils.Coordinate} The offset of the connection.
+ * @package
  */
-Blockly.RenderedConnection.prototype.addHighlightMargin = function(top, bottom) {
-  this.topMargin = top;
-  this.bottomMargin = bottom;
+Blockly.RenderedConnection.prototype.getOffsetInBlock = function() {
+  return this.offsetInBlock_;
 };
+
+//TODOQ3: This is ours.
+// /*
+//  * Registers the margins of a block, so the highlight 
+//  * (yellow line around block when clickedo on) can also be aligned vertically.
+//  */
+// Blockly.RenderedConnection.prototype.addHighlightMargin = function(top, bottom) {
+//   this.topMargin = top;
+//   this.bottomMargin = bottom;
+// };
 
 /**
  * Move the blocks on either side of this connection right next to each other.
@@ -195,7 +244,7 @@ Blockly.RenderedConnection.prototype.tighten_ = function() {
  * Find the closest compatible connection to this connection.
  * All parameters are in workspace units.
  * @param {number} maxLimit The maximum radius to another connection.
- * @param {!goog.math.Coordinate} dxy Offset between this connection's location
+ * @param {!Blockly.utils.Coordinate} dxy Offset between this connection's location
  *     in the database and the current location (as a result of dragging).
  * @return {!{connection: ?Blockly.Connection, radius: number}} Contains two
  *     properties: 'connection' which is either another connection or null,
@@ -210,21 +259,37 @@ Blockly.RenderedConnection.prototype.closest = function(maxLimit, dxy) {
  */
 Blockly.RenderedConnection.prototype.highlight = function() {
   var steps;
+  var sourceBlockSvg = /** @type {!Blockly.BlockSvg} */ (this.sourceBlock_);
+  var renderingConstants =
+    sourceBlockSvg.workspace.getRenderer().getConstants();
   if (this.type == Blockly.INPUT_VALUE || this.type == Blockly.OUTPUT_VALUE) {
-    //If the block has top/bottom margins registered, add that to the SVG path of the highlight.
-    if (this.topMargin && this.bottomMargin) {
-      steps = 'm 0,0 ' + 'v ' + this.topMargin + ' ' + Blockly.BlockSvg.TAB_PATH_DOWN + ' v ' + this.bottomMargin;
-    }
-    else {
-      steps = 'm 0,0 ' + Blockly.BlockSvg.TAB_PATH_DOWN + ' v 7.5'; // OR 5 instead of 7.5, according to Google <<<<<<<<<<<<<<
-    }
+    // Vertical line, puzzle tab, vertical line.
+    var yLen = 5;
+    steps = Blockly.utils.svgPaths.moveBy(0, -yLen) +
+        Blockly.utils.svgPaths.lineOnAxis('v', yLen) +
+        renderingConstants.PUZZLE_TAB.pathDown +
+        Blockly.utils.svgPaths.lineOnAxis('v', yLen);
+    
+    //TODOQ3: This is ours.
+    // //If the block has top/bottom margins registered, add that to the SVG path of the highlight.
+    // if (this.topMargin && this.bottomMargin) {
+    //   steps = 'm 0,0 ' + 'v ' + this.topMargin + ' ' + Blockly.BlockSvg.TAB_PATH_DOWN + ' v ' + this.bottomMargin;
+    // }
+    // else {
+    //   steps = 'm 0,0 ' + Blockly.BlockSvg.TAB_PATH_DOWN + ' v 7.5'; // OR 5 instead of 7.5, according to Google <<<<<<<<<<<<<<
+    // }
   } else {
-    steps = 'm -20,0 h 5 ' + Blockly.BlockSvg.NOTCH_PATH_LEFT + ' h 5';
+    var xLen = 5;
+    // Horizontal line, notch, horizontal line.
+    steps = Blockly.utils.svgPaths.moveBy(-xLen, 0) +
+        Blockly.utils.svgPaths.lineOnAxis('h', xLen) +
+        renderingConstants.NOTCH.pathLeft +
+        Blockly.utils.svgPaths.lineOnAxis('h', xLen);
   }
   var xy = this.sourceBlock_.getRelativeToSurfaceXY();
   var x = this.x_ - xy.x;
   var y = this.y_ - xy.y;
-  Blockly.Connection.highlightedPath_ = Blockly.utils.createSvgElement(
+  Blockly.Connection.highlightedPath_ = Blockly.utils.dom.createSvgElement(
       'path',
       {
         'class': 'blocklyHighlightedConnectionPath',
@@ -280,7 +345,7 @@ Blockly.RenderedConnection.prototype.unhideAll = function() {
  * Remove the highlighting around this connection.
  */
 Blockly.RenderedConnection.prototype.unhighlight = function() {
-  Blockly.utils.removeNode(Blockly.Connection.highlightedPath_);
+  Blockly.utils.dom.removeNode(Blockly.Connection.highlightedPath_);
   delete Blockly.Connection.highlightedPath_;
 };
 
@@ -325,7 +390,7 @@ Blockly.RenderedConnection.prototype.hideAll = function() {
 /**
  * Check if the two connections can be dragged to connect to each other.
  * @param {!Blockly.Connection} candidate A nearby connection to check.
- * @param {number} maxRadius The maximum radius allowed for connections, in
+ * @param {number=} maxRadius The maximum radius allowed for connections, in
  *     workspace units.
  * @return {boolean} True if the connection is allowed, false otherwise.
  */
@@ -338,6 +403,18 @@ Blockly.RenderedConnection.prototype.isConnectionAllowed = function(candidate,
   return Blockly.RenderedConnection.superClass_.isConnectionAllowed.call(this,
       candidate);
 };
+
+/**
+ * Behavior after a connection attempt fails.
+ * @param {Blockly.Connection} otherConnection Connection that this connection
+ *     failed to connect to.
+ * @package
+ */
+Blockly.RenderedConnection.prototype.onFailedConnect = function(
+    otherConnection) {
+  this.bumpAwayFrom_(otherConnection);
+};
+
 
 /**
  * Disconnect two blocks that are connected by this connection.
@@ -437,6 +514,6 @@ Blockly.RenderedConnection.prototype.onCheckChanged_ = function() {
     var child = this.isSuperior() ? this.targetBlock() : this.sourceBlock_;
     child.unplug();
     // Bump away.
-    this.sourceBlock_.bumpNeighbours_();
+    this.sourceBlock_.bumpNeighbours();
   }
 };

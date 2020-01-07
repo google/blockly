@@ -404,7 +404,7 @@ Blockly.geras.RenderInfo.prototype.finalize_ = function() {
     this.recordElemPositions_(row);
   }
   if (this.outputConnection && this.block_.nextConnection &&
-      this.block_.nextConnection.targetBlock()) {
+      this.block_.nextConnection.isConnected()) {
     // Include width of connected block in value to stack width measurement.
     widestRowWithConnectedBlocks =
         Math.max(widestRowWithConnectedBlocks,

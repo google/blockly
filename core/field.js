@@ -76,11 +76,7 @@ Blockly.Field = function(value, opt_validator, opt_config) {
    * @type {!Blockly.utils.Size}
    * @protected
    */
-  this.size_ = new Blockly.utils.Size(0, 0);
-
-  //TODOQ3: See this.size_ above
-  // //SHAPE: Removed dependence of height. It should NOT reference constants in other objects unless extremely necessary.
-  // this.size_ = new goog.math.Size(0, 25);
+  this.size_ = new Blockly.utils.Size(0, 25);
 
   /**
    * Holds the cursors svg element when the cursor is attached to the field.
@@ -108,14 +104,15 @@ Blockly.Field = function(value, opt_validator, opt_config) {
  * @type {number}
  * @package
  */
-Blockly.Field.BORDER_RECT_DEFAULT_HEIGHT = 16;
+Blockly.Field.BORDER_RECT_DEFAULT_HEIGHT = 25;
 
 /**
  * The default height of the text element on any field.
  * @type {number}
  * @package
  */
-Blockly.Field.TEXT_DEFAULT_HEIGHT = 12.5;
+Blockly.Field.TEXT_DEFAULT_HEIGHT = 25;
+Blockly.Field.TEXT_DEFAULT_HEIGHT_POS = 18;
 
 /**
  * The padding added to the width by the border rect, if it exists.
@@ -316,7 +313,7 @@ Blockly.Field.prototype.createBorderRect_ = function() {
         'rx': 4,
         'ry': 4,
         'x': 0,
-        'y': 0,
+        'y': -2,
         'height': this.size_.height,
         'width': this.size_.width
       }, this.fieldGroup_);
@@ -343,7 +340,7 @@ Blockly.Field.prototype.createTextElement_ = function() {
       {
         'class': 'blocklyText',
         // The y position is the baseline of the text.
-        'y': Blockly.Field.TEXT_DEFAULT_HEIGHT,
+        'y': Blockly.Field.TEXT_DEFAULT_HEIGHT_POS,
         'x': xOffset
       }, this.fieldGroup_);
   this.textContent_ = document.createTextNode('');
@@ -625,12 +622,27 @@ Blockly.Field.prototype.updateWidth = function() {
  */
 Blockly.Field.prototype.updateSize_ = function() {
   var textWidth = Blockly.utils.dom.getTextWidth(this.textElement_);
+
+  var textX = -1;
+
+  // Make sure that the width of the text field is at least 16 pixels (otherwise its fugly) 
+  if (textWidth < 16) {
+    // Also, recalculate how much the text should be pushed (because it's smaller and would not be centered)
+    textX = (16 - textWidth) / 2;
+    textWidth = 16;
+  }
+
   var totalWidth = textWidth;
   if (this.borderRect_) {
     totalWidth += Blockly.Field.X_PADDING;
     this.borderRect_.setAttribute('width', totalWidth);
   }
   this.size_.width = totalWidth;
+
+
+  var xOffset = this.borderRect_ ? Blockly.Field.DEFAULT_TEXT_OFFSET : 0;
+  textX = textX + xOffset;
+  this.textElement_.setAttribute('x', textX);
 };
 
 /**

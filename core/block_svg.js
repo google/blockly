@@ -1032,6 +1032,8 @@ Blockly.BlockSvg.prototype.dispose = function(healStack, animate) {
   // if (Blockly.Events.isEnabled() && deleteEvent) {
   //   Blockly.Events.fire(deleteEvent);
   // }
+  
+  Blockly.BlockSvg.superClass_.dispose.call(this, healStack);
 
   Blockly.utils.dom.removeNode(this.svgGroup_);
   blockWorkspace.resizeContents();
@@ -1110,18 +1112,20 @@ Blockly.BlockSvg.prototype.setShadowColour_ = function() {
  * Enable or disable a block.
  */
 Blockly.BlockSvg.prototype.updateDisabled = function() {
-  if (!this.isEnabled() || this.getInheritedDisabled()) {
-    var added = Blockly.utils.dom.addClass(
-        /** @type {!Element} */ (this.svgGroup_), 'blocklyDisabled');
-    if (added) {
-      this.svgPath_.setAttribute('fill',
-          'url(#' + this.workspace.options.disabledPatternId + ')');
-    }
-  } else {
-    var removed = Blockly.utils.dom.removeClass(
-        /** @type {!Element} */ (this.svgGroup_), 'blocklyDisabled');
-    if (removed) {
-      this.updateColour();
+  if (this.svgPath_) {
+    if (!this.isEnabled() || this.getInheritedDisabled()) {
+      var added = Blockly.utils.dom.addClass(
+          /** @type {!Element} */ (this.svgGroup_), 'blocklyDisabled');
+      if (added) {
+        this.svgPath_.setAttribute('fill',
+            'url(#' + this.workspace.options.disabledPatternId + ')');
+      }
+    } else {
+      var removed = Blockly.utils.dom.removeClass(
+          /** @type {!Element} */ (this.svgGroup_), 'blocklyDisabled');
+      if (removed) {
+        this.updateColour();
+      }
     }
   }
   var children = this.getChildren(false);

@@ -52,6 +52,7 @@ Blockly.blockRendering.ConstantProvider = function() {
   this.TAB_WIDTH = 8;
 
   this.NOTCH_WIDTH = 15;
+  this.NOTCH_INNER_WIDTH = 3;
   this.NOTCH_HEIGHT = 4;
 
   // This is the minimum width of a block measuring from the end of a rounded
@@ -284,7 +285,7 @@ Blockly.blockRendering.ConstantProvider.prototype.makePuzzleTab = function() {
 Blockly.blockRendering.ConstantProvider.prototype.makeNotch = function() {
   var width = this.NOTCH_WIDTH;
   var height = this.NOTCH_HEIGHT;
-  var innerWidth = 3;
+  var innerWidth = this.NOTCH_INNER_WIDTH;
   var outerWidth = (width - innerWidth) / 2;
   function makeMainPath(dir) {
     return Blockly.utils.svgPaths.line(

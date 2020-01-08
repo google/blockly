@@ -251,21 +251,21 @@ Blockly.FieldAngle.prototype.showEditor_ = function() {
    * @return {!SVGElement} The newly created angle picker.
    * @private
    */
-  Blockly.FieldJointAngle.prototype.dropdownCreate_ = function() {
+  Blockly.FieldAngle.prototype.dropdownCreate_ = function() {
     var svg = Blockly.utils.dom.createSvgElement('svg', {
       'xmlns': Blockly.utils.dom.SVG_NS,
       'xmlns:html': Blockly.utils.dom.HTML_NS,
       'xmlns:xlink': Blockly.utils.dom.XLINK_NS,
       'version': '1.1',
-      'height': (Blockly.FieldJointAngle.HALF + 1) + 'px',
-      'width': (Blockly.FieldJointAngle.HALF * 2) + 'px',
+      'height': (Blockly.FieldAngle.HALF + 1) + 'px',
+      'width': (Blockly.FieldAngle.HALF * 2) + 'px',
       'style': 'touch-action: none'
     }, null);
     var circle = Blockly.utils.dom.createSvgElement('path', {
-      'd': 'M ' + Blockly.FieldJointAngle.HALF + ',' + Blockly.FieldJointAngle.HALF + 
-      ' l ' + (Blockly.FieldJointAngle.HALF) + ',0' + 
-      ' A ' + (Blockly.FieldJointAngle.HALF) + ',' + (Blockly.FieldJointAngle.HALF) + 
-      ' 0 0 0 0,' + Blockly.FieldJointAngle.HALF + ' z',
+      'd': 'M ' + Blockly.FieldAngle.HALF + ',' + Blockly.FieldAngle.HALF + 
+      ' l ' + (Blockly.FieldAngle.HALF) + ',0' + 
+      ' A ' + (Blockly.FieldAngle.HALF) + ',' + (Blockly.FieldAngle.HALF) + 
+      ' 0 0 0 0,' + Blockly.FieldAngle.HALF + ' z',
       'class': 'blocklyAngleCircle'
     }, svg);
     this.gauge_ = Blockly.utils.dom.createSvgElement('path', {
@@ -273,31 +273,31 @@ Blockly.FieldAngle.prototype.showEditor_ = function() {
       'transform': 'rotate(270,50,50)'
     }, svg);
     this.line_ = Blockly.utils.dom.createSvgElement('line', {
-      'x1': Blockly.FieldJointAngle.HALF,
-      'y1': Blockly.FieldJointAngle.HALF,
+      'x1': Blockly.FieldAngle.HALF,
+      'y1': Blockly.FieldAngle.HALF,
       'class': 'blocklyAngleLine',
       'transform': 'rotate(270,50,50)'
     }, svg);
     // Draw markers around the edge.
     for (var angle = 195; angle < 360; angle += 15) {
       Blockly.utils.dom.createSvgElement('line', {
-        'x1': Blockly.FieldJointAngle.HALF + Blockly.FieldJointAngle.RADIUS,
-        'y1': Blockly.FieldJointAngle.HALF,
-        'x2': Blockly.FieldJointAngle.HALF + Blockly.FieldJointAngle.RADIUS -
+        'x1': Blockly.FieldAngle.HALF + Blockly.FieldAngle.RADIUS,
+        'y1': Blockly.FieldAngle.HALF,
+        'x2': Blockly.FieldAngle.HALF + Blockly.FieldAngle.RADIUS -
             (angle % 45 == 0 ? 10 : 5),
-        'y2': Blockly.FieldJointAngle.HALF,
+        'y2': Blockly.FieldAngle.HALF,
         'class': 'blocklyAngleMarks',
         'transform': 'rotate(' + angle + ',' +
-            Blockly.FieldJointAngle.HALF + ',' + Blockly.FieldJointAngle.HALF + ')'
+            Blockly.FieldAngle.HALF + ',' + Blockly.FieldAngle.HALF + ')'
       }, svg);
     }
     Blockly.utils.dom.createSvgElement('line', {
         'x1': 0,
-        'y1': Blockly.FieldJointAngle.HALF,
-        'x2': Blockly.FieldJointAngle.RADIUS*2,
-        'y2': Blockly.FieldJointAngle.HALF,
+        'y1': Blockly.FieldAngle.HALF,
+        'x2': Blockly.FieldAngle.RADIUS*2,
+        'y2': Blockly.FieldAngle.HALF,
         'class': 'blocklyAngleMarks',
-        'transform': 'rotate(0,' + Blockly.FieldJointAngle.HALF + ',' + Blockly.FieldJointAngle.HALF + ')'
+        'transform': 'rotate(0,' + Blockly.FieldAngle.HALF + ',' + Blockly.FieldAngle.HALF + ')'
       }, svg);
   
   
@@ -323,7 +323,7 @@ Blockly.FieldAngle.prototype.showEditor_ = function() {
    * Dispose of events belonging to the angle editor.
    * @private
    */
-  Blockly.FieldJointAngle.prototype.dropdownDispose_ = function() {
+  Blockly.FieldAngle.prototype.dropdownDispose_ = function() {
     Blockly.unbindEvent_(this.clickWrapper_);
     Blockly.unbindEvent_(this.clickSurfaceWrapper_);
     Blockly.unbindEvent_(this.moveSurfaceWrapper_);
@@ -333,7 +333,7 @@ Blockly.FieldAngle.prototype.showEditor_ = function() {
    * Hide the editor.
    * @private
    */
-  Blockly.FieldJointAngle.prototype.hide_ = function() {
+  Blockly.FieldAngle.prototype.hide_ = function() {
     Blockly.DropDownDiv.hideIfOwner(this);
     Blockly.WidgetDiv.hide();
   };
@@ -342,11 +342,11 @@ Blockly.FieldAngle.prototype.showEditor_ = function() {
    * Set the angle to match the mouse's position.
    * @param {!Event} e Mouse move event.
    */
-  Blockly.FieldJointAngle.prototype.onMouseMove = function(e) {
+  Blockly.FieldAngle.prototype.onMouseMove = function(e) {
     // Calculate angle.
     var bBox = this.gauge_.ownerSVGElement.getBoundingClientRect();
-    var dx = e.clientX - bBox.left - Blockly.FieldJointAngle.HALF;
-    var dy = e.clientY - bBox.top - Blockly.FieldJointAngle.HALF;
+    var dx = e.clientX - bBox.left - Blockly.FieldAngle.HALF;
+    var dy = e.clientY - bBox.top - Blockly.FieldAngle.HALF;
     var angle = Math.atan(-dy / dx);
     if (isNaN(angle)) {
       // This shouldn't happen, but let's not let this error propagate further.
@@ -377,7 +377,7 @@ Blockly.FieldAngle.prototype.showEditor_ = function() {
    * @param {number} angle New angle.
    * @private
    */
-  Blockly.FieldJointAngle.prototype.displayMouseOrKeyboardValue_ = function(angle) {
+  Blockly.FieldAngle.prototype.displayMouseOrKeyboardValue_ = function(angle) {
     if (this.round_) {
       angle = Math.round(angle / this.round_) * this.round_;
     }
@@ -391,7 +391,7 @@ Blockly.FieldAngle.prototype.showEditor_ = function() {
    * Redraw the graph with the current angle.
    * @private
    */
-  Blockly.FieldJointAngle.prototype.updateGraph_ = function() {
+  Blockly.FieldAngle.prototype.updateGraph_ = function() {
     if (!this.gauge_) {
       return;
     }
@@ -399,26 +399,26 @@ Blockly.FieldAngle.prototype.showEditor_ = function() {
     var angleDegrees = Number(this.getText()) + (2 * this.offset_);
     angleDegrees %= 360;
     var angleRadians = Blockly.utils.math.toRadians(angleDegrees);
-    var path = ['M ', Blockly.FieldJointAngle.HALF, ',', Blockly.FieldJointAngle.HALF];
-    var x2 = Blockly.FieldJointAngle.HALF;
-    var y2 = Blockly.FieldJointAngle.HALF;
+    var path = ['M ', Blockly.FieldAngle.HALF, ',', Blockly.FieldAngle.HALF];
+    var x2 = Blockly.FieldAngle.HALF;
+    var y2 = Blockly.FieldAngle.HALF;
     if (!isNaN(angleRadians)) {
       var clockwiseFlag = Number(this.clockwise_);
       var angle1 = Blockly.utils.math.toRadians(this.offset_);
-      var x1 = Math.cos(angle1) * Blockly.FieldJointAngle.RADIUS;
-      var y1 = Math.sin(angle1) * -Blockly.FieldJointAngle.RADIUS;
+      var x1 = Math.cos(angle1) * Blockly.FieldAngle.RADIUS;
+      var y1 = Math.sin(angle1) * -Blockly.FieldAngle.RADIUS;
       if (clockwiseFlag) {
         angleRadians = 2 * angle1 - angleRadians;
       }
-      x2 += Math.cos(angleRadians) * Blockly.FieldJointAngle.RADIUS;
-      y2 -= Math.sin(angleRadians) * Blockly.FieldJointAngle.RADIUS;
+      x2 += Math.cos(angleRadians) * Blockly.FieldAngle.RADIUS;
+      y2 -= Math.sin(angleRadians) * Blockly.FieldAngle.RADIUS;
       // Don't ask how the flag calculations work.  They just do.
       var largeFlag = Math.abs(Math.floor((angleRadians - angle1) / Math.PI) % 2);
       if (clockwiseFlag) {
         largeFlag = 1 - largeFlag;
       }
       path.push(' l ', x1, ',', y1,
-          ' A ', Blockly.FieldJointAngle.RADIUS, ',', Blockly.FieldJointAngle.RADIUS,
+          ' A ', Blockly.FieldAngle.RADIUS, ',', Blockly.FieldAngle.RADIUS,
           ' 0 ', largeFlag, ' ', clockwiseFlag, ' ', x2, ',', y2, ' z');
     }
     this.gauge_.setAttribute('d', path.join(''));

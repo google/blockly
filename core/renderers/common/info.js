@@ -197,6 +197,9 @@ Blockly.blockRendering.RenderInfo.prototype.measure = function() {
  */
 Blockly.blockRendering.RenderInfo.prototype.createRows_ = function() {
   this.populateTopRow_();
+  // Bottom row has to be defined before any other computations are done. But it is added to the list AFTER all other rows.
+  this.populateBottomRow_();
+
   this.rows.push(this.topRow);
   var activeRow = new Blockly.blockRendering.InputRow(this.constants_);
 
@@ -244,7 +247,6 @@ Blockly.blockRendering.RenderInfo.prototype.createRows_ = function() {
   if (activeRow.elements.length || activeRow.hasDummyInput) {
     this.rows.push(activeRow);
   }
-  this.populateBottomRow_();
   this.rows.push(this.bottomRow);
 };
 

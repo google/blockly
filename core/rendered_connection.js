@@ -77,6 +77,13 @@ Blockly.RenderedConnection = function(source, type) {
    * @private
    */
   this.hidden_ = !this.db_;
+
+  /**
+   * Adds a VISUAL offset to the verticality of the connection so the Fable renderer can show it in the middle.
+   * @type {number}
+   * @private
+   */
+  this.puzzlePieceOffset = 0;
 };
 Blockly.utils.object.inherits(Blockly.RenderedConnection, Blockly.Connection);
 
@@ -201,6 +208,15 @@ Blockly.RenderedConnection.prototype.setOffsetInBlock = function(x, y) {
 };
 
 /**
+ * SHAPE ROBOTICS.
+ * Adds a vertical offset to the rendered connection so the Fable renderer can show
+ * the yellow highlighter in the vertical middle of the block.
+ */
+Blockly.RenderedConnection.prototype.setPuzzlePieceVerticalOffset = function (height) {
+  this.puzzlePieceOffset = height / 2;
+};
+
+/**
  * Get the offset of this connection relative to the top left of its block.
  * @return {!Blockly.utils.Coordinate} The offset of the connection.
  * @package
@@ -264,7 +280,7 @@ Blockly.RenderedConnection.prototype.highlight = function() {
     sourceBlockSvg.workspace.getRenderer().getConstants();
   if (this.type == Blockly.INPUT_VALUE || this.type == Blockly.OUTPUT_VALUE) {
     // Vertical line, puzzle tab, vertical line.
-    var yLen = 5;
+    var yLen = 5 + this.puzzlePieceOffset;
     steps = Blockly.utils.svgPaths.moveBy(0, -yLen) +
         Blockly.utils.svgPaths.lineOnAxis('v', yLen) +
         renderingConstants.PUZZLE_TAB.pathDown +

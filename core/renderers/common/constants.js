@@ -193,6 +193,13 @@ Blockly.blockRendering.ConstantProvider = function() {
   this.MAX_BOTTOM_WIDTH = 66.5;
 
   /**
+   * Whether to add a 'hat' on top of all blocks with no previous or output
+   * connections. Can be overridden by 'hat' property on Theme.BlockStyle.
+   * @type {boolean}
+   */
+  this.ADD_START_HATS = false;
+
+  /**
    * Height of the top hat.
    * @private
    */

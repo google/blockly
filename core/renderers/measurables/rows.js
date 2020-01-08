@@ -290,7 +290,7 @@ Blockly.utils.object.inherits(Blockly.blockRendering.TopRow,
  * @return {boolean} Whether or not the top row has a left square corner.
  */
 Blockly.blockRendering.TopRow.prototype.hasLeftSquareCorner = function(block) {
-  var hasHat = (typeof this.block_.hat !== 'undefined' ?
+  var hasHat = (typeof block.hat !== 'undefined' ?
       block.hat === 'cap' : this.constants_.ADD_START_HATS) &&
       !block.outputConnection && !block.previousConnection;
   var prevBlock = block.getPreviousBlock();

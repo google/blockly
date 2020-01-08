@@ -38,13 +38,6 @@ goog.require('Blockly.utils.userAgent');
 Blockly.blockRendering.ConstantProvider = function() {
 
   /**
-   * Whether to add a 'hat' on top of all blocks with no previous or output
-   * connections. Can be overridden by 'hat' property on Theme.BlockStyle.
-   * @type {boolean}
-   */
-  this.ADD_START_HATS = false;
-
-  /**
    * The size of an empty spacer.
    * @type {number}
    */
@@ -198,6 +191,13 @@ Blockly.blockRendering.ConstantProvider = function() {
    * @type {number}
    */
   this.MAX_BOTTOM_WIDTH = 66.5;
+
+  /**
+   * Whether to add a 'hat' on top of all blocks with no previous or output
+   * connections. Can be overridden by 'hat' property on Theme.BlockStyle.
+   * @type {boolean}
+   */
+  this.ADD_START_HATS = false;
 
   /**
    * Height of the top hat.

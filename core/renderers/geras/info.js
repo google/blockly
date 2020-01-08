@@ -83,6 +83,7 @@ Blockly.geras.RenderInfo.prototype.populateBottomRow_ = function() {
       this.block_.inputList.length &&
       this.block_.inputList[this.block_.inputList.length - 1]
           .type == Blockly.NEXT_STATEMENT;
+  this.bottomRow.hasFixedWidth = followsStatement && this.block_.getInputsInline();
 
   // The minimum height of the bottom row is smaller in Geras than in other
   // renderers, because the dark path adds a pixel.
@@ -337,6 +338,41 @@ Blockly.geras.RenderInfo.prototype.getSpacerRowHeight_ = function(prev, next) {
     return this.constants_.LARGE_PADDING;
   }
   return this.constants_.MEDIUM_PADDING;
+};
+
+/**
+ * @override
+ */
+Blockly.geras.RenderInfo.prototype.alignRowElements_ = function() {
+  for (var i = 0, row; (row = this.rows[i]); i++) {
+    if (row.hasStatement) {
+      var statementInput = row.getLastInput();
+      var currentWidth = row.width - statementInput.width;
+      var desiredWidth = this.statementEdge - this.startX;
+    } else {
+      var currentWidth = row.width;
+      var desiredWidth = this.width - this.startX;
+      if (Blockly.blockRendering.Types.isBottomRow(row) && row.hasFixedWidth) {
+        desiredWidth = this.constants_.MAX_BOTTOM_WIDTH;
+      }
+    }
+    var missingSpace = desiredWidth - currentWidth;
+    if (missingSpace) {
+      this.addAlignmentPadding_(row, missingSpace);
+    }
+  }
+};
+
+/**
+ * @override
+ */
+Blockly.geras.RenderInfo.prototype.getSpacerRowWidth_ = function(prev, next) {
+  // The width of the spacer before the bottom row should be the same as the
+  // bottom row.
+  if (Blockly.blockRendering.Types.isBottomRow(next) && next.hasFixedWidth) {
+    return next.width;
+  }
+  return this.width - this.startX;
 };
 
 /**

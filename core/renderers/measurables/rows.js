@@ -390,6 +390,12 @@ Blockly.blockRendering.BottomRow = function(constants) {
    * @type {number}
    */
   this.baseline = 0;
+
+  /**
+   * True if the width of this row does not depend on its contents.
+   * @type {boolean}
+   */
+  this.hasFixedWidth = false;
 };
 Blockly.utils.object.inherits(Blockly.blockRendering.BottomRow,
     Blockly.blockRendering.Row);

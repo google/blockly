@@ -191,9 +191,9 @@ Blockly.blockRendering.RenderInfo.prototype.getRenderer = function() {
 Blockly.blockRendering.RenderInfo.prototype.measure = function() {
   this.createRows_();
   this.addElemSpacing_();
-  this.addRowSpacing_();
   this.computeBounds_();
   this.alignRowElements_();
+  this.addRowSpacing_();
   this.finalize_();
 };
 

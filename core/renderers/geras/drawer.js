@@ -105,7 +105,25 @@ Blockly.geras.Drawer.prototype.drawValueInput_ = function(row) {
 Blockly.geras.Drawer.prototype.drawStatementInput_ = function(row) {
   this.highlighter_.drawStatementInput(row);
 
-  Blockly.geras.Drawer.superClass_.drawStatementInput_.call(this, row);
+  var input = row.getLastInput();
+  // Where to start drawing the notch, which is on the right side in LTR.
+  var x = input.xPos + input.notchOffset + input.shape.width;
+
+  var innerTopLeftCorner =
+      input.shape.pathRight +
+      Blockly.utils.svgPaths.lineOnAxis('h',
+          -(input.notchOffset - this.constants_.INSIDE_CORNERS.width)) +
+      this.constants_.INSIDE_CORNERS.pathTop;
+
+  var innerHeight =
+      row.height - (2 * this.constants_.INSIDE_CORNERS.height);
+
+  this.outlinePath_ += Blockly.utils.svgPaths.lineOnAxis('H', x) +
+      innerTopLeftCorner +
+      Blockly.utils.svgPaths.lineOnAxis('v', innerHeight) +
+      this.constants_.INSIDE_CORNERS.pathBottom;
+
+  this.positionStatementInputConnection_(row);
 };
 
 /**
@@ -113,7 +131,9 @@ Blockly.geras.Drawer.prototype.drawStatementInput_ = function(row) {
  */
 Blockly.geras.Drawer.prototype.drawRightSideRow_ = function(row) {
   this.highlighter_.drawRightSideRow(row);
-  Blockly.geras.Drawer.superClass_.drawRightSideRow_.call(this, row);
+  this.outlinePath_ +=
+      Blockly.utils.svgPaths.lineOnAxis('H', row.xPos + row.width) +
+      Blockly.utils.svgPaths.lineOnAxis('V', row.yPos + row.height);
 };
 
 /**

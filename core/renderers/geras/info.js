@@ -83,7 +83,7 @@ Blockly.geras.RenderInfo.prototype.populateBottomRow_ = function() {
       this.block_.inputList.length &&
       this.block_.inputList[this.block_.inputList.length - 1]
           .type == Blockly.NEXT_STATEMENT;
-  this.bottomRow.hasFixedWidth = followsStatement && this.block_.getInputsInline();
+  this.bottomRow.hasFixedWidth = !!followsStatement && this.block_.getInputsInline();
 
   // The minimum height of the bottom row is smaller in Geras than in other
   // renderers, because the dark path adds a pixel.

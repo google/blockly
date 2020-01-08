@@ -299,7 +299,7 @@ Blockly.blockRendering.Drawer.prototype.drawInternals_ = function() {
           Blockly.blockRendering.Types.isField(elem)) {
         this.layoutField_(
             /** @type {!Blockly.blockRendering.Field|!Blockly.blockRendering.Icon} */
-            (elem), row.height);
+            (elem));
       }
     }
   }
@@ -311,7 +311,7 @@ Blockly.blockRendering.Drawer.prototype.drawInternals_ = function() {
  *     The rendering information for the field or icon.
  * @protected
  */
-Blockly.blockRendering.Drawer.prototype.layoutField_ = function(fieldInfo, rowHeight) {
+Blockly.blockRendering.Drawer.prototype.layoutField_ = function(fieldInfo) {
   if (Blockly.blockRendering.Types.isField(fieldInfo)) {
     var svgGroup = fieldInfo.field.getSvgRoot();
   } else if (Blockly.blockRendering.Types.isIcon(fieldInfo)) {
@@ -330,7 +330,7 @@ Blockly.blockRendering.Drawer.prototype.layoutField_ = function(fieldInfo, rowHe
   }
   if (Blockly.blockRendering.Types.isIcon(fieldInfo)) {
     svgGroup.setAttribute('display', 'block');
-    svgGroup.setAttribute('transform', 'translate(' + xPos + ',' + (yPos + ((rowHeight - fieldInfo.height) / 2)) + ')');
+    svgGroup.setAttribute('transform', 'translate(' + xPos + ',' + (yPos + 2.5) + ')');
     fieldInfo.icon.computeIconLocation();
   } else {
     svgGroup.setAttribute(

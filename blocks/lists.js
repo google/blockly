@@ -302,7 +302,7 @@ Blockly.Blocks['lists_create_with'] = {
   connectShadowBlock_: function() {
     if (this.add_shadow) {
       // Spawn a new shadow math block.
-      var shadow_child = workspace.newBlock('math_number');
+      var shadow_child = this.workspace.newBlock('math_number');
       var random_int = 0; //Math.floor(Math.random() * 11);
       shadow_child.setFieldValue(random_int, 'NUM');
       shadow_child.setShadow(true);

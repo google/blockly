@@ -40,7 +40,7 @@ Blockly.fable.ConstantProvider = function () {
   // path, but translated down one and right one.
   this.DARK_PATH_OFFSET = 1;
 
-  this.TAB_HEIGHT = 22.5;
+  // this.TAB_HEIGHT = 15;
 
   // VERTICAL(!) Margin (empty space) that is added to the top and bottom of each block.
   // Added before the first line of a block and after the last line of it.

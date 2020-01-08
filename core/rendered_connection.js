@@ -304,7 +304,7 @@ Blockly.RenderedConnection.prototype.highlight = function() {
   }
   var xy = this.sourceBlock_.getRelativeToSurfaceXY();
   var x = this.x_ - xy.x;
-  var y = this.y_ - xy.y;
+  var y = this.y_ - xy.y + this.puzzlePieceOffset;
   Blockly.Connection.highlightedPath_ = Blockly.utils.dom.createSvgElement(
       'path',
       {

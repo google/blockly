@@ -128,10 +128,9 @@ Blockly.fable.Drawer.prototype.drawValueInput_ = function (row) {
   if (rowHeight === 0) {
     rowHeight = row.height;
   }
-  
+
   this.highlighter_.drawValueInput(row, rowHeight);
   this.drawValueInputInner_(row, rowHeight);
-  Blockly.fable.Drawer.superClass_.drawValueInput_.call(this, row);
 };
 
 /**
@@ -265,7 +264,7 @@ Blockly.fable.Drawer.prototype.positionInlineInputConnection_ = function (input)
       connX, yPos + input.connectionOffsetY +
         this.constants_.DARK_PATH_OFFSET);
     var puzzlePieceOffset = (input.height - input.shape.height) / 2;
-    // input.connection.setPuzzlePieceVerticalOffset(puzzlePieceOffset);
+    input.connection.setPuzzlePieceVerticalOffset(puzzlePieceOffset);
   }
 };
 
@@ -297,7 +296,7 @@ Blockly.fable.Drawer.prototype.positionExternalValueConnection_ = function (row,
     if (this.info_.RTL) {
       connX *= -1;
     }
-    var heightAdded = this.info_.topRow.height + ((input.height - input.shape.height) / 2);
+    var heightAdded = this.info_.topRow.height + ((rowHeight - input.shape.height) / 2);
     input.connection.setOffsetInBlock(connX, row.yPos);
     input.connection.setPuzzlePieceVerticalOffset(heightAdded);
   }

@@ -168,7 +168,7 @@ Blockly.geras.Highlighter.prototype.drawStatementInput = function(row) {
 
 Blockly.geras.Highlighter.prototype.drawRightSideRow = function(row) {
   var rightEdge = row.xPos + row.width - this.highlightOffset_;
-  if (row.followsStatement) {
+  if (row.hasStatement) {
     this.steps_ += Blockly.utils.svgPaths.lineOnAxis('H', rightEdge);
   }
   if (this.RTL_) {

@@ -60,6 +60,13 @@ goog.require('Blockly.utils.object');
  */
 Blockly.geras.RenderInfo = function(renderer, block) {
   Blockly.geras.RenderInfo.superClass_.constructor.call(this, renderer, block);
+
+  /**
+   * Whether or not the block has a statement input.
+   * @type {boolean}
+   * @protected
+   */
+  this.hasStatementInput_ = false;
 };
 Blockly.utils.object.inherits(Blockly.geras.RenderInfo,
     Blockly.blockRendering.RenderInfo);
@@ -108,6 +115,7 @@ Blockly.geras.RenderInfo.prototype.addInput_ = function(input, activeRow) {
     activeRow.elements.push(
         new Blockly.geras.StatementInput(this.constants_, input));
     activeRow.hasStatement = true;
+    this.hasStatementInput_ = true;
   } else if (input.type == Blockly.INPUT_VALUE) {
     activeRow.elements.push(
         new Blockly.blockRendering.ExternalValueInput(this.constants_, input));
@@ -374,6 +382,19 @@ Blockly.geras.RenderInfo.prototype.getElemCenterline_ = function(row, elem) {
     result += (row.height / 2);
   }
   return result;
+};
+
+/**
+ * @override
+ */
+Blockly.geras.RenderInfo.prototype.getDesiredRowWidth_ = function(
+    row) {
+  if (this.isInline && (row.hasStatement || (row == this.bottomRow &&
+      this.hasStatementInput_))) {
+    return this.constants_.MAX_BOTTOM_WIDTH + this.startX;
+  }
+  return Blockly.geras.RenderInfo.superClass_.getDesiredRowWidth_.call(this,
+      row);
 };
 
 /**

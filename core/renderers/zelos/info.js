@@ -144,6 +144,19 @@ Blockly.zelos.RenderInfo.prototype.shouldStartNewRow_ = function(input,
   return false;
 };
 
+
+/**
+ * @override
+ */
+Blockly.zelos.RenderInfo.prototype.getDesiredRowWidth_ = function(row) {
+  if (row.hasStatement) {
+    var rightCornerWidth = this.constants_.INSIDE_CORNERS.rightWidth || 0;
+    return this.width - this.startX - rightCornerWidth;
+  }
+  return Blockly.zelos.RenderInfo.superClass_.getDesiredRowWidth_.call(this,
+      row);
+};
+
 /**
  * @override
  */

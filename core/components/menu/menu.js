@@ -52,7 +52,7 @@ Blockly.utils.object.inherits(Blockly.Menu, Blockly.Component);
  * Creates the menu DOM.
  * @override
  */
-Blockly.Menu.prototype.createDom = function() {
+Blockly.Menu.prototype.createDom = function () {
   var element = document.createElement('div');
   element.id = this.getId();
   this.setElementInternal(element);
@@ -63,7 +63,7 @@ Blockly.Menu.prototype.createDom = function() {
 
   // Initialize ARIA role.
   Blockly.utils.aria.setRole(element,
-      this.roleName_ || Blockly.utils.aria.Role.MENU);
+    this.roleName_ || Blockly.utils.aria.Role.MENU);
 };
 
 /**

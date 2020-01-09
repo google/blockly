@@ -31,6 +31,7 @@ goog.require('Blockly.Field');
 goog.require('Blockly.fieldRegistry');
 goog.require('Blockly.Menu');
 goog.require('Blockly.MenuItem');
+goog.require('Blockly.FilteredMenu');
 goog.require('Blockly.navigation');
 goog.require('Blockly.utils');
 goog.require('Blockly.utils.dom');
@@ -236,7 +237,7 @@ Blockly.FieldDropdown.prototype.showEditor_ = function() {
 Blockly.FieldDropdown.prototype.dropdownCreate_ = function() {
   if (this.shouldAllowSearch_) {
     //TODO: Copy FilteredMenu
-    // var menu = new goog.ui.FilteredMenu();
+    var menu = new goog.ui.FilteredMenu();
   }
   else {
     var menu = new Blockly.Menu();

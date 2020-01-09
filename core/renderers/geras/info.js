@@ -403,6 +403,15 @@ Blockly.geras.RenderInfo.prototype.finalize_ = function() {
     }
     this.recordElemPositions_(row);
   }
+  if (this.outputConnection && this.block_.nextConnection &&
+      this.block_.nextConnection.isConnected()) {
+    // Include width of connected block in value to stack width measurement.
+    widestRowWithConnectedBlocks =
+        Math.max(widestRowWithConnectedBlocks,
+            this.block_.nextConnection.targetBlock().getHeightWidth().width -
+            this.constants_.DARK_PATH_OFFSET);
+  }
+
   this.bottomRow.baseline = yCursor - this.bottomRow.descenderHeight;
 
   // The dark (lowlight) adds to the size of the block in both x and y.

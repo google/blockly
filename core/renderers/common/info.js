@@ -262,8 +262,8 @@ Blockly.blockRendering.RenderInfo.prototype.createRows_ = function() {
  */
 Blockly.blockRendering.RenderInfo.prototype.populateTopRow_ = function() {
   var hasPrevious = !!this.block_.previousConnection;
-  var hasHat = (this.block_.hat ?
-    this.block_.hat === 'cap' : Blockly.BlockSvg.START_HAT) &&
+  var hasHat = (typeof this.block_.hat !== 'undefined' ?
+    this.block_.hat === 'cap' : this.constants_.ADD_START_HATS) &&
     !this.outputConnection && !hasPrevious;
   var leftSquareCorner = this.topRow.hasLeftSquareCorner(this.block_);
 
@@ -753,6 +753,13 @@ Blockly.blockRendering.RenderInfo.prototype.finalize_ = function() {
     widestRowWithConnectedBlocks =
         Math.max(widestRowWithConnectedBlocks, row.widthWithConnectedBlocks);
     this.recordElemPositions_(row);
+  }
+  if (this.outputConnection && this.block_.nextConnection &&
+      this.block_.nextConnection.isConnected()) {
+    // Include width of connected block in value to stack width measurement.
+    widestRowWithConnectedBlocks =
+        Math.max(widestRowWithConnectedBlocks,
+            this.block_.nextConnection.targetBlock().getHeightWidth().width);
   }
 
   this.widthWithChildren = Math.max(this.widthWithChildren,

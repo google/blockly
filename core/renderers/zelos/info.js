@@ -529,12 +529,15 @@ Blockly.zelos.RenderInfo.prototype.finalizeVerticalAlignment_ = function() {
             elem.connectedBlock.getHeightWidth().height >=
                 MIN_VERTICAL_TIGHTNESTING_HEIGHT) {
           hasNonShadowConnectedBlocks = true;
+          hasSingleTextOrImageField = false;
           break;
         } else if (Blockly.blockRendering.Types.isField(elem) &&
             (elem.field instanceof Blockly.FieldLabel ||
             elem.field instanceof Blockly.FieldImage)) {
           hasSingleTextOrImageField =
               hasSingleTextOrImageField == null ? true : false;
+        } else if (!Blockly.blockRendering.Types.isSpacer(elem)) {
+          hasSingleTextOrImageField = false;
         }
       }
       // Reduce the previous and next spacer's height.

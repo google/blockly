@@ -449,10 +449,9 @@ Blockly.Menu.prototype.handleClick_ = function(e) {
     var newCoords = new Blockly.utils.Coordinate(e.clientX, e.clientY);
     if (Blockly.utils.Coordinate.distance(oldCoords, newCoords) < 1) {
       // This menu was opened by a mousedown and we're handling the consequent
-      // mouseup. The coords haven't changed, meaning this was a simple click,
-      // not a click and drag. Don't do the usual behavior because the menu
-      // just popped up under the mouse and the user didn't mean to activate
-      // this item.
+      // click event. The coords haven't changed, meaning this was the same
+      // opening event. Don't do the usual behavior because the menu just popped
+      // up under the mouse and the user didn't mean to activate this item.
       return;
     }
   }

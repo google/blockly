@@ -1,9 +1,6 @@
 /**
  * @license
- * Visual Blocks Editor
- *
- * Copyright 2012 Google Inc.
- * https://developers.google.com/blockly/
+ * Copyright 2012 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,240 +16,292 @@
  */
 
 /**
- * @fileoverview Checkbox field.  Checked or not checked.
- * @author fraser@google.com (Neil Fraser)
+ * @fileoverview Boolean field.  Checked or not checked. Started as a copy of FieldCheckbox
+ * @author ivan@shaperobotics.com (Ivan Mladenov)
  */
 'use strict';
 
 goog.provide('Blockly.FieldBoolean');
 
+goog.require('Blockly.Events');
+goog.require('Blockly.Events.BlockChange');
 goog.require('Blockly.Field');
-goog.require('Blockly.utils');
-
+goog.require('Blockly.fieldRegistry');
+goog.require('Blockly.utils.dom');
+goog.require('Blockly.utils.object');
+goog.require('Blockly.utils.Size');
 
 /**
  * Class for a checkbox field.
- * @param {string} state The initial state of the field ('TRUE' or 'FALSE').
- * @param {Function=} opt_validator A function that is executed when a new
- *     option is selected.  Its sole argument is the new checkbox state.  If
- *     it returns a value, this becomes the new checkbox state, unless the
- *     value is null, in which case the change is aborted.
+ * @param {string|boolean=} optValue The initial value of the field. Should
+ *    either be 'TRUE', 'FALSE' or a boolean. Defaults to 'FALSE'.
+ * @param {Function=} optValidator  A function that is called to validate
+ *    changes to the field's value. Takes in a value ('TRUE' or 'FALSE') &
+ *    returns a validated value ('TRUE' or 'FALSE'), or null to abort the
+ *    change.
+ * @param {Object=} optConfig A map of options used to configure the field.
+ *    See the [field creation documentation]{@link https://developers.google.com/blockly/guides/create-custom-blocks/fields/built-in-fields/checkbox#creation}
+ *    for a list of properties this parameter supports.
  * @extends {Blockly.Field}
  * @constructor
  */
-Blockly.FieldBoolean = function(state, opt_validator) {
-  var text = this.state_ ? Blockly.Msg['LOGIC_BOOLEAN_TRUE'] : Blockly.Msg['LOGIC_BOOLEAN_FALSE'];
-  Blockly.FieldBoolean.superClass_.constructor.call(this, text, opt_validator);
-  // Set the initial state.
-  this.setValue(state);
+Blockly.FieldBoolean = function (optValue, optValidator, optConfig) {
+  /**
+   * Character for the check mark. Used to apply a different check mark
+   * character to individual fields.
+   * @type {?string}
+   * @private
+   */
+  if (!optValue) {
+    optValue = 'FALSE';
+  }
+  Blockly.FieldBoolean.superClass_.constructor.call(
+    this, optValue, optValidator, optConfig);
+
+  this.size_.width = Blockly.FieldBoolean.WIDTH;
 };
 Blockly.utils.object.inherits(Blockly.FieldBoolean, Blockly.Field);
 
 /**
  * Construct a FieldBoolean from a JSON arg object.
  * @param {!Object} options A JSON object with options (checked).
- * @returns {!Blockly.FieldBoolean} The new field instance.
+ * @return {!Blockly.FieldBoolean} The new field instance.
  * @package
  * @nocollapse
  */
-Blockly.FieldBoolean.fromJson = function(options) {
-  return new Blockly.FieldBoolean(options['checked'] ? 'TRUE' : 'FALSE');
+Blockly.FieldBoolean.fromJson = function (options) {
+  return new Blockly.FieldBoolean(options.checked, undefined, options);
 };
+
+/**
+ * Used to correctly position the check mark.
+ * @type {number}
+ * @const
+ */
+Blockly.FieldBoolean.CHECK_X_OFFSET = Blockly.Field.DEFAULT_TEXT_OFFSET;
+
+/**
+ * Used to correctly position the check mark.
+ * @type {number}
+ * @const
+ */
+Blockly.FieldBoolean.CHECK_Y_OFFSET = 17.5;
+
+/**
+ * Serializable fields are saved by the XML renderer, non-serializable fields
+ * are not. Editable fields should also be serializable.
+ * @type {boolean}
+ */
+Blockly.FieldBoolean.prototype.SERIALIZABLE = true;
 
 /**
  * Mouse cursor style when over the hotspot that initiates editability.
  */
 Blockly.FieldBoolean.prototype.CURSOR = 'default';
 
-Blockly.FieldBoolean.prototype.MIN_WIDTH = 40;
+Blockly.FieldBoolean.WIDTH = 40;
 
-Blockly.FieldBoolean.prototype.ADDED_PADDING  = 10;
+Blockly.FieldBoolean.ADDED_PADDING = 20;
+
+Blockly.FieldBoolean.SEP_SPACE_X = 10;
 
 /**
- * Install this checkbox on a block.
+ * Used to tell if the field needs to be rendered the next time the block is
+ * rendered. Checkbox fields are statically sized, and only need to be
+ * rendered at initialization.
+ * @type {boolean}
+ * @protected
  */
-Blockly.FieldBoolean.prototype.init = function() {
+Blockly.FieldBoolean.prototype.isDirty_ = false;
+
+/**
+ * Configure the field based on the given map of options.
+ * @param {!Object} config A map of options to configure the field based on.
+ * @private
+ */
+Blockly.FieldBoolean.prototype.configure_ = function (config) {
+  Blockly.FieldBoolean.superClass_.configure_.call(this, config);
+  if (config.checkCharacter) {
+    this.checkChar_ = config.checkCharacter;
+  }
+};
+
+Blockly.FieldBoolean.prototype.init = function () {
   if (this.fieldGroup_) {
     // Field has already been initialized once.
     return;
   }
-  // Build the DOM.
   this.fieldGroup_ = Blockly.utils.dom.createSvgElement('g', {}, null);
-
-  //Only initialize the path, don't actually draw until the text is inserted and its width can be calculated.
-  this.borderPath_ = Blockly.utils.dom.createSvgElement('path',
-      {
-        'd': 'm 0,0',
-        'x': -Blockly.BlockSvg.SEP_SPACE_X / 2,
-        'y': 0,
-        //SHAPE: Last param added from blockly_changes
-      }, this.fieldGroup_, this.sourceBlock_.workspace);
-  
-  /** @type {!Element} */
-  this.textElement_ = Blockly.utils.dom.createSvgElement('text',
-      {'class': 'blocklyText', 'y': this.size_.height - 7.5},
-      this.fieldGroup_);
-
-  Blockly.Field.prototype.updateEditable.call(this);
+  if (!this.isVisible()) {
+    this.fieldGroup_.style.display = 'none';
+  }
   this.sourceBlock_.getSvgRoot().appendChild(this.fieldGroup_);
-  this.mouseDownWrapper_ =
-      Blockly.bindEventWithChecks_(
-          this.fieldGroup_, 'mousedown', this, this.onMouseDown_);
-          
-  this.fieldGroup_.style.cursor = this.CURSOR;
-  Blockly.utils.dom.addClass(this.fieldGroup_, 'blocklyEditableText');
-  Blockly.utils.dom.removeClass(this.fieldGroup_, 'blocklyNonEditableText');
-
-  // this.resizeField_();
+  this.initView();
+  this.updateEditable();
+  this.setTooltip(this.tooltip_);
+  this.bindEvents_();
+  this.initModel();
 };
 
 /**
- * Return 'TRUE' if the checkbox is checked, 'FALSE' otherwise.
- * @return {string} Current state.
+ * Create the block UI for this checkbox.
+ * @package
  */
-Blockly.FieldBoolean.prototype.getValue = function() {
-  return String(this.state_).toUpperCase();
+Blockly.FieldBoolean.prototype.initView = function () {
+  this.size_.height =
+      Math.max(this.size_.height, Blockly.Field.BORDER_RECT_DEFAULT_HEIGHT);
+  this.size_.width =
+      Math.max(this.size_.width, Blockly.FieldBoolean.WIDTH);
+
+  // Only initialize the path, don't actually draw until the text is inserted and its width can be calculated.
+  this.borderRect_ = Blockly.utils.dom.createSvgElement('path',
+    {
+      x: -Blockly.FieldBoolean.SEP_SPACE_X / 2,
+      y: -2,
+      height: this.size_.height,
+      width: this.size_.width
+    }, this.fieldGroup_);
+
+  var xOffset = this.borderRect_ ? Blockly.Field.DEFAULT_TEXT_OFFSET : 0;
+  this.textElement_ = Blockly.utils.dom.createSvgElement('text',
+    {
+      class: 'blocklyText',
+      // The y position is the baseline of the text.
+      y: Blockly.Field.TEXT_DEFAULT_HEIGHT_POS,
+      x: xOffset
+    }, this.fieldGroup_);
+  this.textContent_ = document.createTextNode('');
+  this.textElement_.appendChild(this.textContent_);
+
+  this.textElement_.setAttribute('x', Blockly.FieldBoolean.CHECK_X_OFFSET);
+  this.textElement_.setAttribute('y', Blockly.FieldBoolean.CHECK_Y_OFFSET);
+  Blockly.utils.dom.addClass(this.textElement_, 'blocklyText');
+
+  this.doValueUpdate_(this.value_);
 };
 
 /**
- * Returns the height and width of the field.
- * @return {!goog.math.Size} Height and width.
+ * Toggle the state of the checkbox on click.
+ * @protected
  */
-Blockly.FieldBoolean.prototype.getSize = function() {
-  if (!this.size_.width) {
-    this.render_();
+Blockly.FieldBoolean.prototype.showEditor_ = function () {
+  this.setValue(!this.value_);
+};
+
+/**
+ * Ensure that the input value is valid ('TRUE' or 'FALSE').
+ * @param {*=} optNewValue The input value.
+ * @return {?string} A valid value ('TRUE' or 'FALSE), or null if invalid.
+ * @protected
+ */
+Blockly.FieldBoolean.prototype.doClassValidation_ = function (optNewValue) {
+  if (optNewValue === true || optNewValue === 'TRUE') {
+    return 'TRUE';
   }
-  return this.size_;
+  if (optNewValue === false || optNewValue === 'FALSE') {
+    return 'FALSE';
+  }
+  return null;
 };
 
-
 /**
- * Updates thw width of the field. This calls getCachedWidth which won't cache
- * the approximated width on IE/Edge when `getComputedTextLength` fails. Once
- * it eventually does succeed, the result will be cached.
+ * Update the value of the field, and update the checkElement.
+ * @param {*} newValue The value to be saved. The default validator guarantees
+ * that this is a either 'TRUE' or 'FALSE'.
+ * @protected
  */
-Blockly.FieldBoolean.prototype.updateWidth = function() {
-  var textWidth = Blockly.Field.getCachedWidth(this.textElement_);
+Blockly.FieldBoolean.prototype.doValueUpdate_ = function (newValue) {
+  const oldVal = this.value_;
+  this.value_ = this.convertValueToBool_(newValue);
 
-  var tempWidth = textWidth + this.ADDED_PADDING;
-
-  if (tempWidth < this.MIN_WIDTH) {
-    tempWidth = this.MIN_WIDTH;
+  if (this.sourceBlock_ && Blockly.Events.isEnabled()) {
+    Blockly.Events.fire(new Blockly.Events.BlockChange(
+      this.sourceBlock_, 'field', this.name, oldVal, this.value_));
   }
 
-  this.textElement_.setAttribute("x", (tempWidth - textWidth) / 2);
+  // Update visual.
+  if (this.textElement_) {
+    this.textContent_.nodeValue = this.value_ ? Blockly.Msg.LOGIC_BOOLEAN_TRUE : Blockly.Msg.LOGIC_BOOLEAN_FALSE;
+    this.updateSize_();
+    // this.isDirty_ = true;
+  }
+};
 
-  if (this.borderPath_) {
+Blockly.FieldBoolean.prototype.updateSize_ = function() {
+  var textWidth = Blockly.utils.dom.getTextWidth(this.textElement_);
+
+  if (textWidth === 0) {
+    textWidth = 8 * this.textElement_.textContent.length;
+  }
+
+  var tempWidth = textWidth + Blockly.FieldBoolean.ADDED_PADDING;
+
+  if (tempWidth < Blockly.FieldBoolean.WIDTH) {
+    tempWidth = Blockly.FieldBoolean.WIDTH;
+  }
+
+  this.textElement_.setAttribute('x', (tempWidth - textWidth) / 2);
+
+  if (this.borderRect_) {
     var padding = tempWidth / 2;
     var diagonalLength = ((this.size_.height - 5) / 2);
-    var newPath = "m 0,0 H " + (textWidth / 2) + 
-                  " l " + diagonalLength + "," + diagonalLength + " v 5 " + 
-                  " l " + (-diagonalLength) + "," + diagonalLength +
-                  " H " + (-textWidth/2) + 
-                  " l " + (-diagonalLength) + "," + (-diagonalLength) + " v -5 " +
-                  " l " + diagonalLength + "," + (-diagonalLength) + " z";
-    this.borderPath_.setAttribute("d", newPath);
-    this.borderPath_.setAttribute("transform", "translate(" + padding + ",0)");
+    var newPath = 'm 0,0 H ' + (textWidth / 2) +
+                ' l ' + diagonalLength + ',' + diagonalLength + ' v 5 ' +
+                ' l ' + (-diagonalLength) + ',' + diagonalLength +
+                ' H ' + (-textWidth / 2) +
+                ' l ' + (-diagonalLength) + ',' + (-diagonalLength) + ' v -5 ' +
+                ' l ' + diagonalLength + ',' + (-diagonalLength) + ' z';
+    this.borderRect_.setAttribute('d', newPath);
+    this.borderRect_.setAttribute('transform', 'translate(' + padding + ',0)');
+    this.borderRect_.setAttribute('width', textWidth);
   }
-  
+
   // if (this.borderRect_) {
   //   this.borderRect_.setAttribute('width',
   //       width + Blockly.BlockSvg.SEP_SPACE_X);
   // }
-  this.size_.width = textWidth + this.ADDED_PADDING;
+  this.size_.width = textWidth + Blockly.FieldBoolean.ADDED_PADDING;
 };
 
 /**
- * Set the checkbox to be checked if newBool is 'TRUE' or true,
- * unchecks otherwise.
- * @param {string|boolean} newBool New state.
+ * Get the value of this field, either 'TRUE' or 'FALSE'.
+ * @return {string} The value of this field.
  */
-Blockly.FieldBoolean.prototype.setValue = function(newBool) {
-  var newState = (typeof newBool == 'string') ?
-      (newBool.toUpperCase() == 'TRUE') : !!newBool;
-  if (this.state_ !== newState) {
-    
-    if (this.sourceBlock_ && Blockly.Events.isEnabled()) {
-      Blockly.Events.fire(new Blockly.Events.BlockChange(
-          this.sourceBlock_, 'field', this.name, this.state_, newState));
-    }
-
-    this.state_ = newState;
-
-    var newText = this.state_ ? Blockly.Msg['LOGIC_BOOLEAN_TRUE'] : Blockly.Msg['LOGIC_BOOLEAN_FALSE'];
-    Blockly.Field.prototype.setText.call(this, newText);
-    // this.resizeField_();
-  }
+Blockly.FieldBoolean.prototype.getValue = function () {
+  return this.value_ ? 'TRUE' : 'FALSE';
 };
 
-// Blockly.FieldBoolean.prototype.resizeField_ = function() {
-//   // if (!this.borderPath_ || !this.textElement_) {
-//   //   var thisField = this;
-    
-//   //   setTimeout(function() {
-//   //     thisField.resizeField_();
-//   //   }, 50);
-
-//   //   return;
-//   // }
-
-//   var tempWidth = 0;
-//   var textWidth = 0;
-
-//   try {
-//     textWidth = this.textElement_.getComputedTextLength();
-//   } catch (e) {
-//     // In other cases where we fail to geth the computed text. Instead, use an
-//     // approximation and do not cache the result. At some later point in time
-//     // when the block is inserted into the visible DOM, this method will be
-//     // called again and, at that point in time, will not throw an exception.
-//     textWidth = this.text_.length * 8;
-//   }
-
-//   tempWidth = textWidth + this.ADDED_PADDING;
-
-//   if (tempWidth < this.MIN_WIDTH) {
-//     tempWidth = this.MIN_WIDTH;
-//   }
-
-//   this.size_ = new goog.math.Size(tempWidth, this.size_.height);
-
-//   if (this.borderPath_) {
-//     var padding = tempWidth / 2;
-//     var diagonalLength = ((this.size_.height - 5) / 2);
-//     var newPath = "m 0,0 H " + (textWidth / 2) + 
-//                   " l " + diagonalLength + "," + diagonalLength + " v 5 " + 
-//                   " l " + (-diagonalLength) + "," + diagonalLength +
-//                   " H " + (-textWidth/2) + 
-//                   " l " + (-diagonalLength) + "," + (-diagonalLength) + " v -5 " +
-//                   " l " + diagonalLength + "," + (-diagonalLength) + " z";
-//     this.borderPath_.setAttribute("d", newPath);
-//     this.borderPath_.setAttribute("transform", "translate(" + padding + ",0)");
-//   }
-
-//   if (this.textElement_) {
-//     //The -4 accounts for the rx property of the surrounding rect (used for rounding of the box). Check Blockly.Field.
-//     var newX = ((tempWidth - textWidth) / 2);
-//     this.textElement_.setAttribute("x", newX);
-//   }
-
-//   if (this.sourceBlock_) {
-//     this.sourceBlock_.rendered && this.sourceBlock_.render();
-//   }
-// };
+/**
+ * Get the boolean value of this field.
+ * @return {boolean} The boolean value of this field.
+ */
+Blockly.FieldBoolean.prototype.getValueBoolean = function () {
+  return /** @type {boolean} */ (this.value_);
+};
 
 /**
- * Toggle the state of the checkbox.
+ * Get the text of this field. Used when the block is collapsed.
+ * @return {string} Text representing the value of this field
+ *    ('true' or 'false').
+ */
+Blockly.FieldBoolean.prototype.getText = function () {
+  return String(this.convertValueToBool_(this.value_));
+};
+
+/**
+ * Convert a value into a pure boolean.
+ *
+ * Converts 'TRUE' to true and 'FALSE' to false correctly, everything else
+ * is cast to a boolean.
+ * @param {*} value The value to convert.
+ * @return {boolean} The converted value.
  * @private
  */
-Blockly.FieldBoolean.prototype.showEditor_ = function() {
-  var newState = !this.state_;
-  if (this.sourceBlock_) {
-    // Call any validation function, and allow it to override.
-    newState = this.callValidator(newState);
-  }
-  if (newState !== null) {
-    this.setValue(String(newState).toUpperCase());
+Blockly.FieldBoolean.prototype.convertValueToBool_ = function (value) {
+  if (typeof value === 'string') {
+    return value === 'TRUE';
+  } else {
+    return !!value;
   }
 };
 

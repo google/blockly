@@ -1443,6 +1443,11 @@ var spaghettiXml = [
   the standard predefined blocks, and so test alternative block rendering
   code paths. -->
   <xml xmlns="https://developers.google.com/blockly/xml" id="toolbox-test-blocks" style="display: none">
+    <category name="Align">
+      <block type="test_align_dummy_right"></block>
+      <block type="test_align_all"></block>
+      <block type="test_align_with_external_input"></block>
+    </category>
     <category name="Basic">
       <block type="test_basic_empty"></block>
       <block type="test_basic_empty_with_mutator"></block>
@@ -1456,10 +1461,73 @@ var spaghettiXml = [
       <block type="test_basic_tooltips"></block>
       <block type="test_basic_javascript"></block>
     </category>
-    <category name="Align">
-      <block type="test_align_dummy_right"></block>
-      <block type="test_align_all"></block>
-      <block type="test_align_with_external_input"></block>
+    <category name="Connections">
+      <category name="Row">
+        <label text="blocks have"></label>
+        <sep gap="-1"></sep>
+        <label text="tooltips"></label>
+
+        <button text="insert" callbackkey="insertConnectionRows"></button>
+        <sep gap="7"></sep>
+        <block type="test_connections_row_input"></block>
+        <sep gap="7"></sep>
+        <block type="test_connections_row_blue"></block>
+        <sep gap="7"></sep>
+        <block type="test_connections_row_yellow"></block>
+        <sep gap="7"></sep>
+        <block type="test_connections_row_red"></block>
+        <sep gap="7"></sep>
+        <block type="test_connections_row_output"></block>
+        <block type="test_connections_row_yellow">
+          <value name="NAME">
+            <block type="test_connections_row_yellow" movable="false"></block>
+          </value>
+        </block>
+        <sep gap="7"></sep>
+        <block type="test_connections_multivalue_1valid"></block>
+        <sep gap="7"></sep>
+        <block type="test_connections_multivalue_2valid"></block>
+      </category>
+      <category name="Stack">
+        <label text="blocks have"></label>
+        <sep gap="-1"></sep>
+        <label text="tooltips"></label>
+
+        <button text="insert" callbackkey="insertConnectionStacks"></button>
+        <sep gap="7"></sep>
+        <block type="test_connections_stack_next"></block>
+        <sep gap="7"></sep>
+        <block type="test_connections_stack_blue"></block>
+        <sep gap="7"></sep>
+        <block type="test_connections_stack_yellow"></block>
+        <sep gap="7"></sep>
+        <block type="test_connections_stack_red"></block>
+        <sep gap="7"></sep>
+        <block type="test_connections_stack_prev"></block>
+        <block type="test_connections_stack_yellow">
+          <next>
+            <block type="test_connections_stack_yellow" movable="false"></block>
+          </next>
+        </block>
+      </category>
+      <category name="Statement">
+        <label text="blocks have"></label>
+        <sep gap="-1"></sep>
+        <label text="tooltips"></label>
+
+        <button text="insert" callbackkey="insertConnectionStatements"></button>
+        <sep gap="7"></sep>
+        <block type="test_connections_statement_blue"></block>
+        <sep gap="7"></sep>
+        <block type="test_connections_statement_yellow"></block>
+        <sep gap="7"></sep>
+        <block type="test_connections_statement_red"></block>
+        <block type="test_connections_statement_nonext"></block>
+        <sep gap="7"></sep>
+        <block type="test_connections_multistatement_1valid"></block>
+        <sep gap="7"></sep>
+        <block type="test_connections_multistatement_2valid"></block>
+      </category>
     </category>
     <category name="Drag">
       <label text="Drag each to the workspace"></label>
@@ -1541,44 +1609,6 @@ var spaghettiXml = [
           </block>
         </statement>
       </block>
-    </category>
-    <category name="Mutators">
-      <label text="logic_compare"></label>
-      <block type="logic_compare">
-        <value name="A">
-          <shadow type="math_number">
-            <field name="NUM">10</field>
-          </shadow>
-        </value>
-        <value name="B">
-          <shadow type="math_number">
-            <field name="NUM">10</field>
-          </shadow>
-        </value>
-      </block>
-      <block type="logic_compare">
-        <value name="A">
-          <block type="math_number">
-            <field name="NUM">10</field>
-          </block>
-        </value>
-        <value name="B">
-          <block type="math_number">
-            <field name="NUM">10</field>
-          </block>
-        </value>
-      </block>
-    </category>
-    <category name="Style">
-      <label text="Hats"></label>
-      <block type="test_style_hat"></block>
-      <label text="Colour"></label>
-      <block type="test_style_hex1"></block>
-      <block type="test_style_hex2"></block>
-      <block type="test_style_hex3"></block>
-      <block type="test_style_no_colour"></block>
-      <block type="test_style_hex4"></block>
-      <block type="test_style_hex5"></block>
     </category>
     <category name="Fields">
       <category name="Defaults">
@@ -1721,73 +1751,43 @@ var spaghettiXml = [
         <block type="test_validators_variable_1s_null"></block>
       </category>
     </category>
-    <category name="Connections">
-      <category name="Row">
-        <label text="blocks have"></label>
-        <sep gap="0"></sep>
-        <label text="tooltips"></label>
-
-        <button text="insert" callbackkey="insertConnectionRows"></button>
-        <sep gap="8"></sep>
-        <block type="test_connections_row_input"></block>
-        <sep gap="8"></sep>
-        <block type="test_connections_row_blue"></block>
-        <sep gap="8"></sep>
-        <block type="test_connections_row_yellow"></block>
-        <sep gap="8"></sep>
-        <block type="test_connections_row_red"></block>
-        <sep gap="8"></sep>
-        <block type="test_connections_row_output"></block>
-        <block type="test_connections_row_yellow">
-          <value name="NAME">
-            <block type="test_connections_row_yellow" movable="false"></block>
-          </value>
-        </block>
-        <sep gap="8"></sep>
-        <block type="test_connections_multivalue_1valid"></block>
-        <sep gap="8"></sep>
-        <block type="test_connections_multivalue_2valid"></block>
-      </category>
-      <category name="Stack">
-        <label text="blocks have"></label>
-        <sep gap="0"></sep>
-        <label text="tooltips"></label>
-
-        <button text="insert" callbackkey="insertConnectionStacks"></button>
-        <sep gap="8"></sep>
-        <block type="test_connections_stack_next"></block>
-        <sep gap="8"></sep>
-        <block type="test_connections_stack_blue"></block>
-        <sep gap="8"></sep>
-        <block type="test_connections_stack_yellow"></block>
-        <sep gap="8"></sep>
-        <block type="test_connections_stack_red"></block>
-        <sep gap="8"></sep>
-        <block type="test_connections_stack_prev"></block>
-        <block type="test_connections_stack_yellow">
-          <next>
-            <block type="test_connections_stack_yellow" movable="false"></block>
-          </next>
-        </block>
-      </category>
-      <category name="Statement">
-        <label text="blocks have"></label>
-        <sep gap="0"></sep>
-        <label text="tooltips"></label>
-
-        <button text="insert" callbackkey="insertConnectionStatements"></button>
-        <sep gap="8"></sep>
-        <block type="test_connections_statement_blue"></block>
-        <sep gap="8"></sep>
-        <block type="test_connections_statement_yellow"></block>
-        <sep gap="8"></sep>
-        <block type="test_connections_statement_red"></block>
-        <block type="test_connections_statement_nonext"></block>
-        <sep gap="8"></sep>
-        <block type="test_connections_multistatement_1valid"></block>
-        <sep gap="8"></sep>
-        <block type="test_connections_multistatement_2valid"></block>
-      </category>
+    <category name="Mutators">
+      <label text="logic_compare"></label>
+      <block type="logic_compare">
+        <value name="A">
+          <shadow type="math_number">
+            <field name="NUM">10</field>
+          </shadow>
+        </value>
+        <value name="B">
+          <shadow type="math_number">
+            <field name="NUM">10</field>
+          </shadow>
+        </value>
+      </block>
+      <block type="logic_compare">
+        <value name="A">
+          <block type="math_number">
+            <field name="NUM">10</field>
+          </block>
+        </value>
+        <value name="B">
+          <block type="math_number">
+            <field name="NUM">10</field>
+          </block>
+        </value>
+      </block>
+    </category>
+    <category name="Style">
+      <label text="Hats"></label>
+      <block type="test_style_hat"></block>
+      <label text="Colour"></label>
+      <block type="test_style_hex1"></block>
+      <block type="test_style_hex2"></block>
+      <block type="test_style_hex3"></block>
+      <block type="test_style_no_colour"></block>
+      <block type="test_style_hex4"></block>
+      <block type="test_style_hex5"></block>
     </category>
   </xml>
 </body>

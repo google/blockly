@@ -38,12 +38,12 @@ goog.require('Blockly.blockRendering.RoundCorner');
 goog.require('Blockly.blockRendering.Row');
 goog.require('Blockly.blockRendering.SquareCorner');
 goog.require('Blockly.blockRendering.SpacerRow');
-goog.require('Blockly.blockRendering.StatementInput');
 goog.require('Blockly.blockRendering.TopRow');
 goog.require('Blockly.blockRendering.Types');
 goog.require('Blockly.utils.object');
 goog.require('Blockly.zelos.BottomRow');
 goog.require('Blockly.zelos.RightConnectionShape');
+goog.require('Blockly.zelos.StatementInput');
 goog.require('Blockly.zelos.TopRow');
 
 
@@ -243,7 +243,31 @@ Blockly.zelos.RenderInfo.prototype.addInput_ = function(input, activeRow) {
       input.align == Blockly.ALIGN_RIGHT) {
     activeRow.rightAlignedDummyInput = input;
   }
-  Blockly.zelos.RenderInfo.superClass_.addInput_.call(this, input, activeRow);
+  // Non-dummy inputs have visual representations onscreen.
+  if (this.isInline && input.type == Blockly.INPUT_VALUE) {
+    activeRow.elements.push(
+        new Blockly.blockRendering.InlineInput(this.constants_, input));
+    activeRow.hasInlineInput = true;
+  } else if (input.type == Blockly.NEXT_STATEMENT) {
+    activeRow.elements.push(
+        new Blockly.zelos.StatementInput(this.constants_, input));
+    activeRow.hasStatement = true;
+  } else if (input.type == Blockly.INPUT_VALUE) {
+    activeRow.elements.push(
+        new Blockly.blockRendering.ExternalValueInput(this.constants_, input));
+    activeRow.hasExternalInput = true;
+  } else if (input.type == Blockly.DUMMY_INPUT) {
+    // Dummy inputs have no visual representation, but the information is still
+    // important.
+    activeRow.minHeight = Math.max(activeRow.minHeight,
+        input.getSourceBlock() && input.getSourceBlock().isShadow() ?
+        this.constants_.DUMMY_INPUT_SHADOW_MIN_HEIGHT :
+        this.constants_.DUMMY_INPUT_MIN_HEIGHT);
+    activeRow.hasDummyInput = true;
+  }
+  if (activeRow.align == null) {
+    activeRow.align = input.align;
+  }
 };
 
 /**

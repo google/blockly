@@ -179,7 +179,7 @@ Blockly.blockRendering.Debug.prototype.drawRenderedElem = function(elem, isRtl) 
 
   if (Blockly.blockRendering.Types.isInput(elem) &&
       Blockly.blockRendering.Debug.config.connections) {
-    this.drawConnection(elem.model);
+    this.drawConnection(elem.connectionModel);
   }
 };
 

@@ -731,7 +731,7 @@ Blockly.Gesture.prototype.doBubbleClick_ = function() {
  * @private
  */
 Blockly.Gesture.prototype.doFieldClick_ = function() {
-  this.startField_.showEditor();
+  this.startField_.showEditor(this.mostRecentEvent_);
   this.bringBlockToFront_();
 };
 

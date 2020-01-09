@@ -204,6 +204,8 @@ Blockly.Field.prototype.getText_;
  * An optional method that can be defined to show an editor when the field is
  *     clicked. Blockly will automatically set the field as clickable if this
  *     method is defined.
+ * @param {Event=} opt_e Optional mouse event that triggered the field to open,
+ *     or undefined if triggered programatically.
  * @return {void}
  * @protected
  */
@@ -602,11 +604,13 @@ Blockly.Field.prototype.render_ = function() {
 
 /**
  * Show an editor when the field is clicked only if the field is clickable.
+ * @param {Event=} opt_e Optional mouse event that triggered the field to open,
+ *     or undefined if triggered programatically.
  * @package
  */
-Blockly.Field.prototype.showEditor = function() {
+Blockly.Field.prototype.showEditor = function(opt_e) {
   if (this.isClickable()) {
-    this.showEditor_();
+    this.showEditor_(opt_e);
   }
 };
 

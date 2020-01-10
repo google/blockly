@@ -61,10 +61,6 @@ Blockly.blockRendering.InputConnection = function(constants, input) {
     this.connectedBlockHeight = 0;
   }
 
-  // TODO (#3186): change references to connectionModel, since that's on
-  // Connection.
-  this.connection =
-    /** @type {!Blockly.RenderedConnection} */ (input.connection);
   this.connectionOffsetX = 0;
   this.connectionOffsetY = 0;
 };

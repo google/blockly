@@ -151,14 +151,14 @@ Blockly.geras.Drawer.prototype.drawInlineInput_ = function(input) {
 Blockly.geras.Drawer.prototype.positionInlineInputConnection_ = function(input) {
   var yPos = input.centerline - input.height / 2;
   // Move the connection.
-  if (input.connection) {
+  if (input.connectionModel) {
     // xPos already contains info about startX
     var connX = input.xPos + input.connectionWidth +
         this.constants_.DARK_PATH_OFFSET;
     if (this.info_.RTL) {
       connX *= -1;
     }
-    input.connection.setOffsetInBlock(
+    input.connectionModel.setOffsetInBlock(
         connX, yPos + input.connectionOffsetY +
         this.constants_.DARK_PATH_OFFSET);
   }
@@ -169,14 +169,14 @@ Blockly.geras.Drawer.prototype.positionInlineInputConnection_ = function(input) 
  */
 Blockly.geras.Drawer.prototype.positionStatementInputConnection_ = function(row) {
   var input = row.getLastInput();
-  if (input.connection) {
+  if (input.connectionModel) {
     var connX = row.xPos + row.statementEdge + input.notchOffset;
     if (this.info_.RTL) {
       connX *= -1;
     } else {
       connX += this.constants_.DARK_PATH_OFFSET;
     }
-    input.connection.setOffsetInBlock(connX,
+    input.connectionModel.setOffsetInBlock(connX,
         row.yPos + this.constants_.DARK_PATH_OFFSET);
   }
 };
@@ -186,13 +186,13 @@ Blockly.geras.Drawer.prototype.positionStatementInputConnection_ = function(row)
  */
 Blockly.geras.Drawer.prototype.positionExternalValueConnection_ = function(row) {
   var input = row.getLastInput();
-  if (input.connection) {
+  if (input.connectionModel) {
     var connX = row.xPos + row.width +
         this.constants_.DARK_PATH_OFFSET;
     if (this.info_.RTL) {
       connX *= -1;
     }
-    input.connection.setOffsetInBlock(connX, row.yPos);
+    input.connectionModel.setOffsetInBlock(connX, row.yPos);
   }
 };
 

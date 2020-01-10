@@ -51,7 +51,7 @@ Blockly.geras.ConstantProvider = function() {
    * inputs inline.
    * @type {number}
    */
-  this.MAX_INLINE_WIDTH = 30;
+  this.MAX_BOTTOM_WIDTH = 30;
 };
 Blockly.utils.object.inherits(Blockly.geras.ConstantProvider,
     Blockly.blockRendering.ConstantProvider);

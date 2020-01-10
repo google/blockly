@@ -440,7 +440,7 @@ Blockly.geras.RenderInfo.prototype.getDesiredRowWidth_ = function(
     row) {
   // Limit the width of a statement row when a block is inline.
   if (this.isInline && row.hasStatement) {
-    return this.statementEdge + this.constants_.MAX_INLINE_WIDTH + this.startX;
+    return this.statementEdge + this.constants_.MAX_BOTTOM_WIDTH + this.startX;
   }
   return Blockly.geras.RenderInfo.superClass_.getDesiredRowWidth_.call(this,
       row);

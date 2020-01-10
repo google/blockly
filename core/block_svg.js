@@ -1123,6 +1123,11 @@ Blockly.BlockSvg.prototype.setMutator = function(mutator) {
     this.mutator = mutator;
     mutator.createIcon();
   }
+  if (this.rendered) {
+    this.render();
+    // Adding or removing a mutator icon will cause the block to change shape.
+    this.bumpNeighbours();
+  }
 };
 
 /**

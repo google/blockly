@@ -233,7 +233,7 @@ Blockly.blockRendering.MarkerSvg.prototype.showWithField_ = function(curNode) {
  * @protected
  */
 Blockly.blockRendering.MarkerSvg.prototype.showWithInput_ = function(curNode) {
-  var connection = /** @type {Blockly.Connection} */
+  var connection = /** @type {Blockly.RenderedConnection} */
       (curNode.getLocation());
   var sourceBlock = /** @type {!Blockly.BlockSvg} */ (connection.getSourceBlock());
 
@@ -331,7 +331,7 @@ Blockly.blockRendering.MarkerSvg.prototype.positionBlock_ = function(
 /**
  * Position the marker for an input connection.
  * Displays a filled in puzzle piece.
- * @param {!Blockly.Connection} connection The connection to position marker around.
+ * @param {!Blockly.RenderedConnection} connection The connection to position marker around.
  * @private
  */
 Blockly.blockRendering.MarkerSvg.prototype.positionInput_ = function(connection) {
@@ -339,7 +339,7 @@ Blockly.blockRendering.MarkerSvg.prototype.positionInput_ = function(connection)
   var y = connection.getOffsetInBlock().y;
 
   var path = Blockly.utils.svgPaths.moveTo(0, 0) +
-      this.constants_.PUZZLE_TAB.pathDown;
+      this.constants_.shapeFor(connection).pathDown;
 
   this.markerInput_.setAttribute('d', path);
   this.markerInput_.setAttribute('transform',

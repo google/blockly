@@ -60,13 +60,6 @@ goog.require('Blockly.utils.object');
  */
 Blockly.geras.RenderInfo = function(renderer, block) {
   Blockly.geras.RenderInfo.superClass_.constructor.call(this, renderer, block);
-
-  /**
-   * Whether or not the block has a statement input.
-   * @type {boolean}
-   * @protected
-   */
-  this.hasStatementInput_ = false;
 };
 Blockly.utils.object.inherits(Blockly.geras.RenderInfo,
     Blockly.blockRendering.RenderInfo);
@@ -115,7 +108,6 @@ Blockly.geras.RenderInfo.prototype.addInput_ = function(input, activeRow) {
     activeRow.elements.push(
         new Blockly.geras.StatementInput(this.constants_, input));
     activeRow.hasStatement = true;
-    this.hasStatementInput_ = true;
   } else if (input.type == Blockly.INPUT_VALUE) {
     activeRow.elements.push(
         new Blockly.blockRendering.ExternalValueInput(this.constants_, input));

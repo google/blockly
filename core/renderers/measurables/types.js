@@ -134,7 +134,8 @@ Blockly.blockRendering.Types.isIcon = function(elem) {
 
 /**
  * Whether a measurable stores information about a spacer.
- * @param {!Blockly.blockRendering.Measurable} elem The element to check.
+ * @param {!Blockly.blockRendering.Measurable|!Blockly.blockRendering.Row} elem
+ *     The element to check.
  * @return {number} 1 if the object stores information about a spacer.
  * @package
  */

@@ -191,8 +191,8 @@ Blockly.blockRendering.RenderInfo.prototype.getRenderer = function() {
 Blockly.blockRendering.RenderInfo.prototype.measure = function() {
   this.createRows_();
   this.addElemSpacing_();
-  this.addRowSpacing_();
   this.computeBounds_();
+  this.addRowSpacing_();
   this.alignRowElements_();
   this.finalize_();
 };
@@ -553,7 +553,7 @@ Blockly.blockRendering.RenderInfo.prototype.alignRowElements_ = function() {
       var currentWidth = row.width;
       var desiredWidth = this.getDesiredRowWidth_(row);
       var missingSpace = desiredWidth - currentWidth;
-      if (missingSpace) {
+      if (missingSpace > 0) {
         this.addAlignmentPadding_(row, missingSpace);
       }
     }
@@ -617,7 +617,7 @@ Blockly.blockRendering.RenderInfo.prototype.alignStatementRow_ = function(row) {
   var desiredWidth = this.statementEdge;
   // Add padding before the statement input.
   var missingSpace = desiredWidth - currentWidth;
-  if (missingSpace) {
+  if (missingSpace > 0) {
     this.addAlignmentPadding_(row, missingSpace);
   }
   // Also widen the statement input to reach to the right side of the

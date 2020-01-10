@@ -186,13 +186,6 @@ Blockly.blockRendering.ConstantProvider = function() {
   this.BOTTOM_ROW_AFTER_STATEMENT_MIN_HEIGHT = this.LARGE_PADDING;
 
   /**
-   * The maximum width of a bottom row that follows a statement input and has
-   * inputs inline.
-   * @type {number}
-   */
-  this.MAX_BOTTOM_WIDTH = 66.5;
-
-  /**
    * Whether to add a 'hat' on top of all blocks with no previous or output
    * connections. Can be overridden by 'hat' property on Theme.BlockStyle.
    * @type {boolean}

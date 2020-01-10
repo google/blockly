@@ -387,11 +387,59 @@ Blockly.geras.RenderInfo.prototype.getElemCenterline_ = function(row, elem) {
 /**
  * @override
  */
+Blockly.geras.RenderInfo.prototype.alignRowElements_ = function() {
+  if (!this.isInline) {
+    Blockly.geras.RenderInfo.superClass_.alignRowElements_.call(this);
+    return;
+  }
+
+  // Walk up each row from the bottom, keeping track of the right input edge.
+  var nextRightEdge = 0;
+  var prevInput = null;
+  for (var i = this.rows.length - 1, row; (row = this.rows[i]); i--) {
+    row.nextRightEdge = nextRightEdge;
+    if (Blockly.blockRendering.Types.isInputRow(row)) {
+      if (row.hasStatement) {
+        this.alignStatementRow_(
+            /** @type {!Blockly.blockRendering.InputRow} */ (row));
+      }
+      if (prevInput && prevInput.hasStatement && row.width < prevInput.width) {
+        row.nextRightEdge = prevInput.width;
+      } else {
+        nextRightEdge = row.width;
+      }
+      prevInput = row;
+    }
+  }
+  // Walk down each row from the top, comparing the prev and next right input
+  // edges and setting the desired width to the max of the two.
+  var prevRightEdge = 0;
+  for (var i = 0, row; (row = this.rows[i]); i++) {
+    if (row.hasStatement) {
+      prevRightEdge = this.getDesiredRowWidth_(row);
+    } else if (Blockly.blockRendering.Types.isSpacer(row)) {
+      // Set the spacer row to the max of the prev or next input width.
+      row.width = Math.max(prevRightEdge, row.nextRightEdge);
+    } else {
+      var currentWidth = row.width;
+      var desiredWidth = Math.max(prevRightEdge, row.nextRightEdge);
+      var missingSpace = desiredWidth - currentWidth;
+      if (missingSpace > 0) {
+        this.addAlignmentPadding_(row, missingSpace);
+      }
+      prevRightEdge = row.width;
+    }
+  }
+};
+
+/**
+ * @override
+ */
 Blockly.geras.RenderInfo.prototype.getDesiredRowWidth_ = function(
     row) {
-  if (this.isInline && (row.hasStatement || (row == this.bottomRow &&
-      this.hasStatementInput_))) {
-    return this.constants_.MAX_BOTTOM_WIDTH + this.startX;
+  // Limit the width of a statement row when a block is inline.
+  if (this.isInline && row.hasStatement) {
+    return this.statementEdge + this.constants_.MAX_INLINE_WIDTH + this.startX;
   }
   return Blockly.geras.RenderInfo.superClass_.getDesiredRowWidth_.call(this,
       row);

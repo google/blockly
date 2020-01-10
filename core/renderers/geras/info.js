@@ -127,7 +127,8 @@ Blockly.geras.RenderInfo.prototype.addInput_ = function(input, activeRow) {
         this.constants_.DUMMY_INPUT_MIN_HEIGHT);
     activeRow.hasDummyInput = true;
   }
-  if (activeRow.align == null) {
+  // Ignore row alignment if inline.
+  if (!this.isInline && activeRow.align == null) {
     activeRow.align = input.align;
   }
 };

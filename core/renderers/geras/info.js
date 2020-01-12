@@ -182,7 +182,7 @@ Blockly.geras.RenderInfo.prototype.getInRowSpacing_ = function(prev, next) {
     return this.constants_.LARGE_PADDING;
   }
 
-  // Spacing between a non-input and the end of the row.
+  // Spacing between a non-input and the end of the row or a statement input.
   if (!Blockly.blockRendering.Types.isInput(prev) && (!next ||
       Blockly.blockRendering.Types.isStatementInput(next))) {
     // Between an editable field and the end of the row.

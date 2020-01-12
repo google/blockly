@@ -282,7 +282,12 @@ Blockly.blockRendering.Debug.prototype.drawRenderedRow = function(row, cursorY, 
  * @package
  */
 Blockly.blockRendering.Debug.prototype.drawRowWithElements = function(row, cursorY, isRtl) {
-  for (var i = 0, elem; (elem = row.elements[i]); i++) {
+  for (var i = 0, l = row.elements.length; i < l; i++) {
+    var elem = row.elements[i];
+    if (!elem) {
+      console.warn('A row has an undefined or null element.', row, elem);
+      continue;
+    }
     if (Blockly.blockRendering.Types.isSpacer(elem)) {
       this.drawSpacerElem(
           /** @type {!Blockly.blockRendering.InRowSpacer} */ (elem),

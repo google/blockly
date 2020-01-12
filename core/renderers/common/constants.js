@@ -634,7 +634,7 @@ Blockly.blockRendering.ConstantProvider.prototype.validatedBlockStyle_ =
   valid['colourSecondary'] = valid['colourSecondary'] ?
       Blockly.utils.parseBlockColour(valid['colourSecondary']).hex :
       this.generateSecondaryColour_(valid.colourPrimary);
-  valid['colourTertiary'] = valid['colourTertiary'] ?
+  valid['colourTertiary'] = valid.colourTertiary ?
       Blockly.utils.parseBlockColour(valid['colourTertiary']).hex :
       this.generateTertiaryColour_(valid.colourPrimary);
 

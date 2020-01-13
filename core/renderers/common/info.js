@@ -554,13 +554,24 @@ Blockly.blockRendering.RenderInfo.prototype.alignRowElements_ = function() {
           /** @type {!Blockly.blockRendering.InputRow} */ (row));
     } else {
       var currentWidth = row.width;
-      var desiredWidth = this.width - this.startX;
+      var desiredWidth = this.getDesiredRowWidth_(row);
       var missingSpace = desiredWidth - currentWidth;
-      if (missingSpace) {
+      if (missingSpace > 0) {
         this.addAlignmentPadding_(row, missingSpace);
       }
     }
   }
+};
+
+/**
+ * Calculate the desired width of an input row.
+ * @param {!Blockly.blockRendering.Row} _row The input row.
+ * @return {number} The desired width of the input row.
+ * @protected
+ */
+Blockly.blockRendering.RenderInfo.prototype.getDesiredRowWidth_ = function(
+    _row) {
+  return this.width - this.startX;
 };
 
 /**
@@ -609,14 +620,13 @@ Blockly.blockRendering.RenderInfo.prototype.alignStatementRow_ = function(row) {
   var desiredWidth = this.statementEdge;
   // Add padding before the statement input.
   var missingSpace = desiredWidth - currentWidth;
-  if (missingSpace) {
+  if (missingSpace > 0) {
     this.addAlignmentPadding_(row, missingSpace);
   }
   // Also widen the statement input to reach to the right side of the
   // block. Note that this does not add padding.
   currentWidth = row.width;
-  var rightCornerWidth = this.constants_.INSIDE_CORNERS.rightWidth || 0;
-  desiredWidth = this.width - this.startX - rightCornerWidth;
+  desiredWidth = this.getDesiredRowWidth_(row);
   statementInput.width += (desiredWidth - currentWidth);
   statementInput.height = Math.max(statementInput.height, row.height);
   row.width += (desiredWidth - currentWidth);

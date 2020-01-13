@@ -45,6 +45,13 @@ Blockly.geras.ConstantProvider = function() {
   // The dark/shadow path in classic rendering is the same as the normal block
   // path, but translated down one and right one.
   this.DARK_PATH_OFFSET = 1;
+
+  /**
+   * The maximum width of a bottom row that follows a statement input and has
+   * inputs inline.
+   * @type {number}
+   */
+  this.MAX_BOTTOM_WIDTH = 30;
 };
 Blockly.utils.object.inherits(Blockly.geras.ConstantProvider,
     Blockly.blockRendering.ConstantProvider);

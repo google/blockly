@@ -113,7 +113,10 @@ Blockly.geras.Drawer.prototype.drawStatementInput_ = function(row) {
  */
 Blockly.geras.Drawer.prototype.drawRightSideRow_ = function(row) {
   this.highlighter_.drawRightSideRow(row);
-  Blockly.geras.Drawer.superClass_.drawRightSideRow_.call(this, row);
+
+  this.outlinePath_ +=
+      Blockly.utils.svgPaths.lineOnAxis('H', row.xPos + row.width) +
+      Blockly.utils.svgPaths.lineOnAxis('V', row.yPos + row.height);
 };
 
 /**

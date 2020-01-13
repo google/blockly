@@ -529,47 +529,44 @@ Blockly.zelos.RenderInfo.prototype.finalizeVerticalAlignment_ = function() {
     var row = this.rows[i];
     var nextSpacer = this.rows[i + 1];
 
-    var hasPrevNotch = i == 2 ?
+    var firstRow = i == 2;
+    var hasPrevNotch = firstRow ?
         !!this.topRow.hasPreviousConnection : !!prevSpacer.followsStatement;
     var hasNextNotch = i + 2 >= this.rows.length - 1 ?
         !!this.bottomRow.hasNextConnection : !!nextSpacer.precedesStatement;
-    
-    // Apply tight-nesting if we have both a prev and next notch.
-    if (hasPrevNotch && hasNextNotch &&
-        Blockly.blockRendering.Types.isInputRow(row)) {
-      // Determine if the input row has non-shadow connected blocks.
-      var hasNonShadowConnectedBlocks = false;
-      var hasSingleTextOrImageField = null;
-      var MIN_VERTICAL_TIGHTNESTING_HEIGHT = 40;
-      for (var j = 0, elem; (elem = row.elements[j]); j++) {
-        if (Blockly.blockRendering.Types.isInlineInput(elem) &&
-            elem.connectedBlock && !elem.connectedBlock.isShadow() &&
-            elem.connectedBlock.getHeightWidth().height >=
-                MIN_VERTICAL_TIGHTNESTING_HEIGHT) {
-          hasNonShadowConnectedBlocks = true;
-          hasSingleTextOrImageField = false;
-          break;
-        } else if (Blockly.blockRendering.Types.isField(elem) &&
-            (elem.field instanceof Blockly.FieldLabel ||
-            elem.field instanceof Blockly.FieldImage)) {
-          hasSingleTextOrImageField =
-              hasSingleTextOrImageField == null ? true : false;
-        } else if (!Blockly.blockRendering.Types.isSpacer(elem)) {
-          hasSingleTextOrImageField = false;
-        }
-      }
-      // Reduce the previous and next spacer's height.
-      if (hasNonShadowConnectedBlocks) {
-        prevSpacer.height -= this.constants_.SMALL_PADDING;
-        nextSpacer.height -= this.constants_.SMALL_PADDING;
-      } else if (i != 2 && hasSingleTextOrImageField) {
+
+    if (hasPrevNotch) {
+      var hasSingleTextOrImageField = row.elements.length == 3 &&
+          (row.elements[1].field instanceof Blockly.FieldLabel ||
+              row.elements[1].field instanceof Blockly.FieldImage);
+      if (!firstRow && hasSingleTextOrImageField) {
+        // Remove some padding if we have a single image or text field.
         prevSpacer.height -= this.constants_.SMALL_PADDING;
         nextSpacer.height -= this.constants_.SMALL_PADDING;
         row.height -= this.constants_.MEDIUM_PADDING;
+      } else if (!firstRow && !hasNextNotch) {
+        // Add a small padding so the notch doesn't clash with inputs/fields.
+        prevSpacer.height += this.constants_.SMALL_PADDING;
+      } else if (hasNextNotch) {
+        // Determine if the input row has non-shadow connected blocks.
+        var hasNonShadowConnectedBlocks = false;
+        var MIN_VERTICAL_TIGHTNESTING_HEIGHT = 40;
+        for (var j = 0, elem; (elem = row.elements[j]); j++) {
+          if (Blockly.blockRendering.Types.isInlineInput(elem) &&
+              elem.connectedBlock && !elem.connectedBlock.isShadow() &&
+              elem.connectedBlock.getHeightWidth().height >=
+                  MIN_VERTICAL_TIGHTNESTING_HEIGHT) {
+            hasNonShadowConnectedBlocks = true;
+            break;
+          }
+        }
+        // Apply tight-nesting if we have both a prev and next notch and the
+        // block has non-shadow connected blocks.
+        if (hasNonShadowConnectedBlocks) {
+          prevSpacer.height -= this.constants_.SMALL_PADDING;
+          nextSpacer.height -= this.constants_.SMALL_PADDING;
+        }
       }
-    } else if (i != 2 && hasPrevNotch && !hasNextNotch) {
-      // Add a small padding so the notch doesn't interfere with inputs/fields.
-      prevSpacer.height += this.constants_.SMALL_PADDING;
     }
   }
 };

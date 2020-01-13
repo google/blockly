@@ -386,7 +386,8 @@ Blockly.geras.RenderInfo.prototype.alignRowElements_ = function() {
     return;
   }
 
-  // Walk up each row from the bottom, keeping track of the right input edge.
+  // Walk backgrounds through rows on the block, keeping track of the right
+  // input edge.
   var nextRightEdge = 0;
   var prevInput = null;
   for (var i = this.rows.length - 1, row; (row = this.rows[i]); i--) {

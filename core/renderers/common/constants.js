@@ -194,13 +194,13 @@ Blockly.blockRendering.ConstantProvider = function() {
 
   /**
    * Height of the top hat.
-   * @private
+   * @type {number}
    */
   this.START_HAT_HEIGHT = 15;
 
   /**
    * Width of the top hat.
-   * @private
+   * @type {number}
    */
   this.START_HAT_WIDTH = 100;
 

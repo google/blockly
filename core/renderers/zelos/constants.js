@@ -308,7 +308,7 @@ Blockly.zelos.ConstantProvider = function() {
    * @type {number}
    * @const
    */
-  this.FIELD_DROPDOWN_SVG_PADDING = this.FIELD_BORDER_RECT_X_PADDING;
+  this.FIELD_DROPDOWN_SVG_ARROW_PADDING = this.FIELD_BORDER_RECT_X_PADDING;
 
   /**
    * A dropdown field's SVG arrow size.

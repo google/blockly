@@ -682,7 +682,7 @@ Blockly.FieldDropdown.prototype.positionSVGArrow_ = function(x, y) {
   if (!this.svgArrow_) {
     return 0;
   }
-  var padding = this.constants_.FIELD_DROPDOWN_SVG_PADDING;
+  var padding = this.constants_.FIELD_DROPDOWN_SVG_ARROW_PADDING;
   var svgArrowSize = this.constants_.FIELD_DROPDOWN_SVG_ARROW_SIZE;
   var arrowX = this.sourceBlock_.RTL ? padding : x + padding;
   this.svgArrow_.setAttribute('transform',

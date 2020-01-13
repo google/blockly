@@ -181,6 +181,11 @@ Blockly.zelos.RenderInfo.prototype.getInRowSpacing_ = function(prev, next) {
       return next.notchOffset - this.constants_.CORNER_RADIUS;
     }
   }
+  // Spacing between a square corner and a hat.
+  if (prev && Blockly.blockRendering.Types.isLeftSquareCorner(prev) && next &&
+      Blockly.blockRendering.Types.isHat(next)) {
+    return this.constants_.NO_PADDING;
+  }
   return this.constants_.MEDIUM_PADDING;
 };
 

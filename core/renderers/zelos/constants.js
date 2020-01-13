@@ -190,6 +190,16 @@ Blockly.zelos.ConstantProvider = function() {
   this.JAGGED_TEETH_WIDTH = 0;
 
   /**
+   * @override
+   */
+  this.START_HAT_HEIGHT = 22;
+
+  /**
+   * @override
+   */
+  this.START_HAT_WIDTH = 96;
+
+  /**
    * @enum {number}
    * @override
    */
@@ -421,6 +431,27 @@ Blockly.zelos.ConstantProvider.prototype.dispose = function() {
   if (this.highlightGlowFilter_) {
     Blockly.utils.dom.removeNode(this.highlightGlowFilter_);
   }
+};
+
+/**
+ * @override
+ */
+Blockly.zelos.ConstantProvider.prototype.makeStartHat = function() {
+  var height = this.START_HAT_HEIGHT;
+  var width = this.START_HAT_WIDTH;
+
+  var mainPath =
+      Blockly.utils.svgPaths.curve('c',
+          [
+            Blockly.utils.svgPaths.point(25, -height),
+            Blockly.utils.svgPaths.point(71, -height),
+            Blockly.utils.svgPaths.point(width, 0)
+          ]);
+  return {
+    height: height,
+    width: width,
+    path: mainPath
+  };
 };
 
 /**

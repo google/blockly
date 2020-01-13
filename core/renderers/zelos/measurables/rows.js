@@ -62,7 +62,10 @@ Blockly.zelos.TopRow.prototype.endsWithElemSpacer = function() {
  * @override
  */
 Blockly.zelos.TopRow.prototype.hasLeftSquareCorner = function(block) {
-  return !!block.outputConnection;
+  var hasHat = (typeof block.hat !== 'undefined' ?
+      block.hat === 'cap' : this.constants_.ADD_START_HATS) &&
+      !block.outputConnection && !block.previousConnection;
+  return !!block.outputConnection || hasHat;
 };
 
 /**

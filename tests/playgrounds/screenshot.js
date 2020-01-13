@@ -65,10 +65,10 @@ function workspaceToSvg_(workspace, callback, customCss) {
   }
 
   var bBox = workspace.getBlocksBoundingBox();
-  var x = bBox.left;
-  var y = bBox.top;
-  var width = bBox.right - x;
-  var height = bBox.bottom - y;
+  var x = bBox.x || bBox.left;
+  var y = bBox.y || bBox.top;
+  var width = bBox.width || bBox.right - x;
+  var height = bBox.height || bBox.bottom - y;
 
   var blockCanvas = workspace.getCanvas();
   var clone = blockCanvas.cloneNode(true);

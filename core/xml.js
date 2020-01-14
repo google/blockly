@@ -603,12 +603,13 @@ Blockly.Xml.domToVariables = function(xmlVariables, workspace) {
     var id = xmlChild.getAttribute('id');
     var name = '';
     for (var i = 0; i < xmlChild.childNodes.length; i++) {
-      if (xmlChild.childNodes[i].nodeType === Node.TEXT_NODE)
+      if (xmlChild.childNodes[i].nodeType === Node.TEXT_NODE) {
         name += xmlChild.childNodes[i].textContent;
+      }
     }
     var variable = workspace.createVariable(name.trim(), type, id);
-    var data_xml_array = xmlChild.getElementsByTagName("data");
-    variable.data = data_xml_array.length ? data_xml_array[0].textContent : null;
+    var dataXmlArray = xmlChild.getElementsByTagName('data');
+    variable.data = dataXmlArray.length ? dataXmlArray[0].textContent : null;
   }
 };
 

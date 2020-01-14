@@ -38,12 +38,12 @@ goog.require('Blockly.blockRendering.RoundCorner');
 goog.require('Blockly.blockRendering.Row');
 goog.require('Blockly.blockRendering.SquareCorner');
 goog.require('Blockly.blockRendering.SpacerRow');
-goog.require('Blockly.blockRendering.StatementInput');
 goog.require('Blockly.blockRendering.TopRow');
 goog.require('Blockly.blockRendering.Types');
 goog.require('Blockly.utils.object');
 goog.require('Blockly.zelos.BottomRow');
 goog.require('Blockly.zelos.RightConnectionShape');
+goog.require('Blockly.zelos.StatementInput');
 goog.require('Blockly.zelos.TopRow');
 
 
@@ -144,6 +144,19 @@ Blockly.zelos.RenderInfo.prototype.shouldStartNewRow_ = function(input,
   return false;
 };
 
+
+/**
+ * @override
+ */
+Blockly.zelos.RenderInfo.prototype.getDesiredRowWidth_ = function(row) {
+  if (row.hasStatement) {
+    var rightCornerWidth = this.constants_.INSIDE_CORNERS.rightWidth || 0;
+    return this.width - this.startX - rightCornerWidth;
+  }
+  return Blockly.zelos.RenderInfo.superClass_.getDesiredRowWidth_.call(this,
+      row);
+};
+
 /**
  * @override
  */
@@ -168,6 +181,11 @@ Blockly.zelos.RenderInfo.prototype.getInRowSpacing_ = function(prev, next) {
       return next.notchOffset - this.constants_.CORNER_RADIUS;
     }
   }
+  // Spacing between a square corner and a hat.
+  if (prev && Blockly.blockRendering.Types.isLeftSquareCorner(prev) && next &&
+      Blockly.blockRendering.Types.isHat(next)) {
+    return this.constants_.NO_PADDING;
+  }
   return this.constants_.MEDIUM_PADDING;
 };
 
@@ -181,16 +199,9 @@ Blockly.zelos.RenderInfo.prototype.getSpacerRowHeight_ = function(
       Blockly.blockRendering.Types.isBottomRow(next)) {
     return this.constants_.EMPTY_BLOCK_SPACER_HEIGHT;
   }
-  // Top and bottom rows act as a spacer so we don't need any extra padding.
-  if ((Blockly.blockRendering.Types.isTopRow(prev))) {
-    if (!prev.hasPreviousConnection && !this.outputConnection) {
-      return this.constants_.SMALL_PADDING;
-    }
-    return this.constants_.NO_PADDING;
-  }
-  var precedesStatement =
-      Blockly.blockRendering.Types.isInputRow(prev) && prev.hasStatement;
   var followsStatement =
+      Blockly.blockRendering.Types.isInputRow(prev) && prev.hasStatement;
+  var precedesStatement =
       Blockly.blockRendering.Types.isInputRow(next) && next.hasStatement;
   if (precedesStatement || followsStatement) {
     var cornerHeight = this.constants_.INSIDE_CORNERS.rightHeight || 0;
@@ -198,6 +209,13 @@ Blockly.zelos.RenderInfo.prototype.getSpacerRowHeight_ = function(
         Math.max(this.constants_.NOTCH_HEIGHT, cornerHeight));
     return precedesStatement && followsStatement ?
         Math.max(height, this.constants_.DUMMY_INPUT_MIN_HEIGHT) : height;
+  }
+  // Top and bottom rows act as a spacer so we don't need any extra padding.
+  if ((Blockly.blockRendering.Types.isTopRow(prev))) {
+    if (!prev.hasPreviousConnection && !this.outputConnection) {
+      return this.constants_.SMALL_PADDING;
+    }
+    return this.constants_.NO_PADDING;
   }
   if ((Blockly.blockRendering.Types.isBottomRow(next))) {
     if (!this.outputConnection) {
@@ -224,7 +242,7 @@ Blockly.zelos.RenderInfo.prototype.getSpacerRowWidth_ = function(prev, next) {
  * @override
  */
 Blockly.zelos.RenderInfo.prototype.getElemCenterline_ = function(row, elem) {
-  if (row.hasStatement) {
+  if (row.hasStatement && !Blockly.blockRendering.Types.isSpacer(elem)) {
     return row.yPos + this.constants_.EMPTY_STATEMENT_INPUT_HEIGHT / 2;
   }
   return Blockly.zelos.RenderInfo.superClass_.getElemCenterline_.call(this,
@@ -243,7 +261,31 @@ Blockly.zelos.RenderInfo.prototype.addInput_ = function(input, activeRow) {
       input.align == Blockly.ALIGN_RIGHT) {
     activeRow.rightAlignedDummyInput = input;
   }
-  Blockly.zelos.RenderInfo.superClass_.addInput_.call(this, input, activeRow);
+  // Non-dummy inputs have visual representations onscreen.
+  if (this.isInline && input.type == Blockly.INPUT_VALUE) {
+    activeRow.elements.push(
+        new Blockly.blockRendering.InlineInput(this.constants_, input));
+    activeRow.hasInlineInput = true;
+  } else if (input.type == Blockly.NEXT_STATEMENT) {
+    activeRow.elements.push(
+        new Blockly.zelos.StatementInput(this.constants_, input));
+    activeRow.hasStatement = true;
+  } else if (input.type == Blockly.INPUT_VALUE) {
+    activeRow.elements.push(
+        new Blockly.blockRendering.ExternalValueInput(this.constants_, input));
+    activeRow.hasExternalInput = true;
+  } else if (input.type == Blockly.DUMMY_INPUT) {
+    // Dummy inputs have no visual representation, but the information is still
+    // important.
+    activeRow.minHeight = Math.max(activeRow.minHeight,
+        input.getSourceBlock() && input.getSourceBlock().isShadow() ?
+        this.constants_.DUMMY_INPUT_SHADOW_MIN_HEIGHT :
+        this.constants_.DUMMY_INPUT_MIN_HEIGHT);
+    activeRow.hasDummyInput = true;
+  }
+  if (activeRow.align == null) {
+    activeRow.align = input.align;
+  }
 };
 
 /**
@@ -487,34 +529,44 @@ Blockly.zelos.RenderInfo.prototype.finalizeVerticalAlignment_ = function() {
     var row = this.rows[i];
     var nextSpacer = this.rows[i + 1];
 
-    var hasPrevNotch = i == 2 ?
+    var firstRow = i == 2;
+    var hasPrevNotch = firstRow ?
         !!this.topRow.hasPreviousConnection : !!prevSpacer.followsStatement;
     var hasNextNotch = i + 2 >= this.rows.length - 1 ?
         !!this.bottomRow.hasNextConnection : !!nextSpacer.precedesStatement;
-    
-    // Apply tight-nesting if we have both a prev and next notch.
-    if (hasPrevNotch && hasNextNotch &&
-        Blockly.blockRendering.Types.isInputRow(row)) {
-      // Determine if the input row has non-shadow connected blocks.
-      var hasNonShadowConnectedBlocks = false;
-      var MIN_VERTICAL_TIGHTNESTING_HEIGHT = 40;
-      for (var j = 0, elem; (elem = row.elements[j]); j++) {
-        if (Blockly.blockRendering.Types.isInlineInput(elem) &&
-            elem.connectedBlock && !elem.connectedBlock.isShadow() &&
-            elem.connectedBlock.getHeightWidth().height >=
-                MIN_VERTICAL_TIGHTNESTING_HEIGHT) {
-          hasNonShadowConnectedBlocks = true;
-          break;
+
+    if (hasPrevNotch) {
+      var hasSingleTextOrImageField = row.elements.length == 3 &&
+          (row.elements[1].field instanceof Blockly.FieldLabel ||
+              row.elements[1].field instanceof Blockly.FieldImage);
+      if (!firstRow && hasSingleTextOrImageField) {
+        // Remove some padding if we have a single image or text field.
+        prevSpacer.height -= this.constants_.SMALL_PADDING;
+        nextSpacer.height -= this.constants_.SMALL_PADDING;
+        row.height -= this.constants_.MEDIUM_PADDING;
+      } else if (!firstRow && !hasNextNotch) {
+        // Add a small padding so the notch doesn't clash with inputs/fields.
+        prevSpacer.height += this.constants_.SMALL_PADDING;
+      } else if (hasNextNotch) {
+        // Determine if the input row has non-shadow connected blocks.
+        var hasNonShadowConnectedBlocks = false;
+        var MIN_VERTICAL_TIGHTNESTING_HEIGHT = 40;
+        for (var j = 0, elem; (elem = row.elements[j]); j++) {
+          if (Blockly.blockRendering.Types.isInlineInput(elem) &&
+              elem.connectedBlock && !elem.connectedBlock.isShadow() &&
+              elem.connectedBlock.getHeightWidth().height >=
+                  MIN_VERTICAL_TIGHTNESTING_HEIGHT) {
+            hasNonShadowConnectedBlocks = true;
+            break;
+          }
+        }
+        // Apply tight-nesting if we have both a prev and next notch and the
+        // block has non-shadow connected blocks.
+        if (hasNonShadowConnectedBlocks) {
+          prevSpacer.height -= this.constants_.SMALL_PADDING;
+          nextSpacer.height -= this.constants_.SMALL_PADDING;
         }
       }
-      if (hasNonShadowConnectedBlocks) {
-        // Reduce the previous and next spacer's height.
-        prevSpacer.height -= this.constants_.GRID_UNIT;
-        nextSpacer.height -= this.constants_.GRID_UNIT;
-      }
-    } else if (i != 2 && hasPrevNotch && !hasNextNotch) {
-      // Add a small padding so the notch doesn't interfere with inputs/fields.
-      prevSpacer.height += this.constants_.SMALL_PADDING;
     }
   }
 };

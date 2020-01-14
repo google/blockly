@@ -179,9 +179,11 @@ Blockly.blockRendering.MarkerSvg.prototype.showWithBlockPrevOutput_ = function(b
   var markerOffset = this.constants_.CURSOR_BLOCK_PADDING;
 
   if (block.previousConnection) {
-    this.positionPrevious_(width, markerOffset, markerHeight);
+    var connectionShape = this.constants_.shapeFor(block.previousConnection);
+    this.positionPrevious_(width, markerOffset, markerHeight, connectionShape);
   } else if (block.outputConnection) {
-    this.positionOutput_(width, height);
+    var connectionShape = this.constants_.shapeFor(block.outputConnection);
+    this.positionOutput_(width, height, connectionShape);
   } else {
     this.positionBlock_(width, markerOffset, markerHeight);
   }
@@ -233,7 +235,7 @@ Blockly.blockRendering.MarkerSvg.prototype.showWithField_ = function(curNode) {
  * @protected
  */
 Blockly.blockRendering.MarkerSvg.prototype.showWithInput_ = function(curNode) {
-  var connection = /** @type {Blockly.Connection} */
+  var connection = /** @type {Blockly.RenderedConnection} */
       (curNode.getLocation());
   var sourceBlock = /** @type {!Blockly.BlockSvg} */ (connection.getSourceBlock());
 
@@ -331,7 +333,7 @@ Blockly.blockRendering.MarkerSvg.prototype.positionBlock_ = function(
 /**
  * Position the marker for an input connection.
  * Displays a filled in puzzle piece.
- * @param {!Blockly.Connection} connection The connection to position marker around.
+ * @param {!Blockly.RenderedConnection} connection The connection to position marker around.
  * @private
  */
 Blockly.blockRendering.MarkerSvg.prototype.positionInput_ = function(connection) {
@@ -339,7 +341,7 @@ Blockly.blockRendering.MarkerSvg.prototype.positionInput_ = function(connection)
   var y = connection.getOffsetInBlock().y;
 
   var path = Blockly.utils.svgPaths.moveTo(0, 0) +
-      this.constants_.PUZZLE_TAB.pathDown;
+      this.constants_.shapeFor(connection).pathDown;
 
   this.markerInput_.setAttribute('d', path);
   this.markerInput_.setAttribute('transform',
@@ -367,15 +369,19 @@ Blockly.blockRendering.MarkerSvg.prototype.positionLine_ = function(x, y, width)
  * Displays a puzzle outline and the top and bottom path.
  * @param {number} width The width of the block.
  * @param {number} height The height of the block.
+ * @param {!Object} connectionShape The shape object for the connection.
  * @private
  */
-Blockly.blockRendering.MarkerSvg.prototype.positionOutput_ = function(width, height) {
+Blockly.blockRendering.MarkerSvg.prototype.positionOutput_ = function(
+    width, height, connectionShape) {
   var markerPath = Blockly.utils.svgPaths.moveBy(width, 0) +
-    Blockly.utils.svgPaths.lineOnAxis('h', -(width - this.constants_.PUZZLE_TAB.width)) +
-    Blockly.utils.svgPaths.lineOnAxis('v', this.constants_.TAB_OFFSET_FROM_TOP) +
-    this.constants_.PUZZLE_TAB.pathDown +
-    Blockly.utils.svgPaths.lineOnAxis('V', height) +
-    Blockly.utils.svgPaths.lineOnAxis('H', width);
+      Blockly.utils.svgPaths.lineOnAxis(
+          'h', -(width - connectionShape.width)) +
+      Blockly.utils.svgPaths.lineOnAxis(
+          'v', this.constants_.TAB_OFFSET_FROM_TOP) +
+      connectionShape.pathDown +
+      Blockly.utils.svgPaths.lineOnAxis('V', height) +
+      Blockly.utils.svgPaths.lineOnAxis('H', width);
   this.markerBlock_.setAttribute('d', markerPath);
   if (this.workspace_.RTL) {
     this.flipRtl_(this.markerBlock_);
@@ -390,15 +396,18 @@ Blockly.blockRendering.MarkerSvg.prototype.positionOutput_ = function(width, hei
  * @param {number} width The width of the block.
  * @param {number} markerOffset The offset of the marker from around the block.
  * @param {number} markerHeight The height of the marker.
+ * @param {!Object} connectionShape The shape object for the connection.
  * @private
  */
 Blockly.blockRendering.MarkerSvg.prototype.positionPrevious_ = function(
-    width, markerOffset, markerHeight) {
+    width, markerOffset, markerHeight, connectionShape) {
   var markerPath = Blockly.utils.svgPaths.moveBy(-markerOffset, markerHeight) +
       Blockly.utils.svgPaths.lineOnAxis('V', -markerOffset) +
-      Blockly.utils.svgPaths.lineOnAxis('H', this.constants_.NOTCH_OFFSET_LEFT) +
-      this.constants_.NOTCH.pathLeft +
-      Blockly.utils.svgPaths.lineOnAxis('H', width + markerOffset * 2) +
+      Blockly.utils.svgPaths.lineOnAxis(
+          'H', this.constants_.NOTCH_OFFSET_LEFT) +
+      connectionShape.pathLeft +
+      Blockly.utils.svgPaths.lineOnAxis(
+          'H', width + markerOffset * 2) +
       Blockly.utils.svgPaths.lineOnAxis('V', markerHeight);
   this.markerBlock_.setAttribute('d', markerPath);
   if (this.workspace_.RTL) {

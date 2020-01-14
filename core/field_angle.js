@@ -256,15 +256,17 @@ Blockly.FieldAngle.prototype.render_ = function() {
 
 /**
  * Create and show the angle field's editor.
+ * @param {Event=} opt_e Optional mouse event that triggered the field to open,
+ *     or undefined if triggered programatically.
  * @private
  */
-Blockly.FieldAngle.prototype.showEditor_ = function() {
+Blockly.FieldAngle.prototype.showEditor_ = function(opt_e) {
   // Mobile browsers have issues with in-line textareas (focus & keyboards).
   var noFocus =
       Blockly.utils.userAgent.MOBILE ||
       Blockly.utils.userAgent.ANDROID ||
       Blockly.utils.userAgent.IPAD;
-  Blockly.FieldAngle.superClass_.showEditor_.call(this, noFocus);
+  Blockly.FieldAngle.superClass_.showEditor_.call(this, opt_e, noFocus);
 
   var editor = this.dropdownCreate_();
   Blockly.DropDownDiv.getContentDiv().appendChild(editor);

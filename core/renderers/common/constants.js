@@ -186,21 +186,21 @@ Blockly.blockRendering.ConstantProvider = function() {
   this.BOTTOM_ROW_AFTER_STATEMENT_MIN_HEIGHT = this.LARGE_PADDING;
 
   /**
-   * The maximum width of a bottom row that follows a statement input and has
-   * inputs inline.
-   * @type {number}
+   * Whether to add a 'hat' on top of all blocks with no previous or output
+   * connections. Can be overridden by 'hat' property on Theme.BlockStyle.
+   * @type {boolean}
    */
-  this.MAX_BOTTOM_WIDTH = 66.5;
+  this.ADD_START_HATS = false;
 
   /**
    * Height of the top hat.
-   * @private
+   * @type {number}
    */
   this.START_HAT_HEIGHT = 15;
 
   /**
    * Width of the top hat.
-   * @private
+   * @type {number}
    */
   this.START_HAT_WIDTH = 100;
 
@@ -593,7 +593,7 @@ Blockly.blockRendering.ConstantProvider.prototype.getBlockStyle = function(
 Blockly.blockRendering.ConstantProvider.prototype.createBlockStyle_ = function(
     colour) {
   return this.validatedBlockStyle_({
-    colourPrimary: colour
+    'colourPrimary': colour
   });
 };
 
@@ -619,7 +619,6 @@ Blockly.blockRendering.ConstantProvider.prototype.validatedBlockStyle_ =
   if (blockStyle) {
     Blockly.utils.object.mixin(valid, blockStyle);
   }
-
   // Validate required properties.
   var parsedColour = Blockly.utils.parseBlockColour(
       valid['colourPrimary'] || '#000');
@@ -627,7 +626,7 @@ Blockly.blockRendering.ConstantProvider.prototype.validatedBlockStyle_ =
   valid.colourSecondary = valid['colourSecondary'] ?
       Blockly.utils.parseBlockColour(valid['colourSecondary']).hex :
       this.generateSecondaryColour_(valid.colourPrimary);
-  valid.colourTertiary = valid.colourTertiary ?
+  valid.colourTertiary = valid['colourTertiary'] ?
       Blockly.utils.parseBlockColour(valid['colourTertiary']).hex :
       this.generateTertiaryColour_(valid.colourPrimary);
 

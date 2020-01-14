@@ -483,71 +483,6 @@ Blockly.Blocks['procedures_mutatorcontainer'] = {
     this.setTooltip(Blockly.Msg['PROCEDURES_MUTATORCONTAINER_TOOLTIP']);
     this.contextMenu = false;
   },
-
-  // TODO: Move this to a validator on the arg blocks, that way it can be
-  //  tested.
-  /**
-   * This will create & delete variables and in dialogs workspace to ensure
-   * that when a new block is dragged out it will have a unique parameter name.
-   * @param {!Blockly.Events.Abstract} event Change event.
-   * @this {Blockly.Block}
-   */
-  onchange: function(event) {
-    if (!this.workspace || this.workspace.isFlyout ||
-        (event.type != Blockly.Events.BLOCK_DELETE && event.type != Blockly.Events.BLOCK_CREATE)) {
-      return;
-    }
-    var blocks = this.workspace.getAllBlocks(false);
-    var allVariables = this.workspace.getAllVariables();
-    if (event.type == Blockly.Events.BLOCK_DELETE) {
-      var variableNamesToKeep = [];
-      for (var i = 0; i < blocks.length; i += 1) {
-        if (blocks[i].getFieldValue('NAME')) {
-          variableNamesToKeep.push(blocks[i].getFieldValue('NAME'));
-        }
-      }
-      for (var k = 0; k < allVariables.length; k += 1) {
-        if (variableNamesToKeep.indexOf(allVariables[k].name) == -1) {
-          this.workspace.deleteVariableById(allVariables[k].getId());
-        }
-      }
-      return;
-    }
-
-    if (event.type != Blockly.Events.BLOCK_CREATE) {
-      return;
-    }
-
-    var block = this.workspace.getBlockById(event.blockId);
-    // This is to handle the one none variable block
-    // Happens when all the blocks are regenerated
-    if (!block.getField('NAME')) {
-      return;
-    }
-    var varName = block.getFieldValue('NAME');
-    var variable = this.workspace.getVariable(varName);
-
-    if (!variable) {
-      // This means the parameter name is not in use and we can create the variable.
-      variable = this.workspace.createVariable(varName);
-    }
-    // If the blocks are connected we don't have to check duplicate variables
-    // This only happens if the dialog box is open
-    if (block.previousConnection.isConnected() || block.nextConnection.isConnected()) {
-      return;
-    }
-
-    for (var j = 0; j < blocks.length; j += 1) {
-      // filter block that was created
-      if (block.id != blocks[j].id && blocks[j].getFieldValue('NAME') == variable.name) {
-        // generate new name and set name field
-        varName = Blockly.Variables.generateUniqueName(this.workspace);
-        variable = this.workspace.createVariable(varName);
-        block.setFieldValue(variable.name, 'NAME');
-        return;
-      }
-    }
-  }
 };
 
 Blockly.Blocks['procedures_mutatorarg'] = {
@@ -556,7 +491,8 @@ Blockly.Blocks['procedures_mutatorarg'] = {
    * @this {Blockly.Block}
    */
   init: function() {
-    var field = new Blockly.FieldTextInput('x', this.validator_);
+    var field = new Blockly.FieldTextInput(
+        Blockly.Procedures.DEFAULT_ARG, this.validator_);
     // Hack: override showEditor to do just a little bit more work.
     // We don't have a good place to hook into the start of a text edit.
     field.oldShowEditorFn_ = field.showEditor_;
@@ -603,7 +539,9 @@ Blockly.Blocks['procedures_mutatorarg'] = {
     }
 
     // Prevents duplicate parameter names in functions
-    var blocks = sourceBlock.workspace.getAllBlocks(false);
+    var workspace = sourceBlock.workspace.targetWorkspace ||
+        sourceBlock.workspace;
+    var blocks = workspace.getAllBlocks(false);
     for (var i = 0; i < blocks.length; i++) {
       if (blocks[i].id == this.getSourceBlock().id) {
         continue;
@@ -611,6 +549,12 @@ Blockly.Blocks['procedures_mutatorarg'] = {
       if (blocks[i].getFieldValue('NAME') == varName) {
         return null;
       }
+    }
+
+    // Don't create variables for arg blocks that
+    // only exist in the mutator's flyout.
+    if (sourceBlock.isInFlyout) {
+      return varName;
     }
 
     var model = outerWs.getVariable(varName, '');
@@ -626,6 +570,7 @@ Blockly.Blocks['procedures_mutatorarg'] = {
     }
     return varName;
   },
+
   /**
    * Called when focusing away from the text field.
    * Deletes all variables that were created as the user typed their intended

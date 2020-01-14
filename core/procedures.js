@@ -47,6 +47,12 @@ goog.require('Blockly.Xml');
 Blockly.Procedures.NAME_TYPE = Blockly.PROCEDURE_CATEGORY_NAME;
 
 /**
+ * The default argument for a procedures_mutatorarg block.
+ * @type {string}
+ */
+Blockly.Procedures.DEFAULT_ARG = 'x';
+
+/**
  * Procedure block type.
  * @typedef {{
  *    getProcedureCall: function():string,
@@ -269,6 +275,77 @@ Blockly.Procedures.flyoutCategory = function(workspace) {
   populateProcedures(tuple[0], 'procedures_callnoreturn');
   populateProcedures(tuple[1], 'procedures_callreturn');
   return xmlList;
+};
+
+/**
+ * Updates the procedure mutator's flyout so that the arg block is not a
+ * duplicate of another arg.
+ * @param {!Blockly.Workspace} workspace The procedure mutator's workspace. This
+ *     workspace's flyout is what is being updated.
+ * @private
+ */
+Blockly.Procedures.updateMutatorFlyout_ = function(workspace) {
+  var usedNames = [];
+  var blocks = workspace.getBlocksByType('procedures_mutatorarg', false);
+  for (var i = 0, block; (block = blocks[i]); i++) {
+    usedNames.push(block.getFieldValue('NAME'));
+  }
+
+  var xml = Blockly.utils.xml.createElement('xml');
+  var argBlock = Blockly.utils.xml.createElement('block');
+  argBlock.setAttribute('type', 'procedures_mutatorarg');
+  var nameField = Blockly.utils.xml.createElement('field');
+  nameField.setAttribute('name', 'NAME');
+  var argValue = Blockly.Variables.generateUniqueNameFromOptions(
+      Blockly.Procedures.DEFAULT_ARG, usedNames);
+  var fieldContent = Blockly.utils.xml.createTextNode(argValue);
+
+  nameField.appendChild(fieldContent);
+  argBlock.appendChild(nameField);
+  xml.appendChild(argBlock);
+
+  workspace.updateToolbox(xml);
+};
+
+/**
+ * Listens for when a procedure mutator is opened. Then it triggers a flyout
+ * update and adds a mutator change listener to the mutator workspace.
+ * @param {!Blockly.Events.Abstract} e The event that triggered this listener.
+ * @package
+ */
+Blockly.Procedures.mutatorOpenListener = function(e) {
+  if (e.type != Blockly.Events.UI || e.element != 'mutatorOpen' ||
+      !e.newValue) {
+    return;
+  }
+  var workspaceId = /** @type {string} */ (e.workspaceId);
+  var block = Blockly.Workspace.getById(workspaceId)
+      .getBlockById(e.blockId);
+  var type = block.type;
+  if (type != 'procedures_defnoreturn' && type != 'procedures_defreturn') {
+    return;
+  }
+  var workspace = block.mutator.getWorkspace();
+  Blockly.Procedures.updateMutatorFlyout_(workspace);
+  workspace.addChangeListener(Blockly.Procedures.mutatorChangeListener_);
+};
+
+/**
+ * Listens for changes in a procedure mutator and triggers flyout updates when
+ * necessary.
+ * @param {!Blockly.Events.Abstract} e The event that triggered this listener.
+ * @private
+ */
+Blockly.Procedures.mutatorChangeListener_ = function(e) {
+  if (e.type != Blockly.Events.BLOCK_CREATE &&
+      e.type != Blockly.Events.BLOCK_DELETE &&
+      e.type != Blockly.Events.BLOCK_CHANGE) {
+    return;
+  }
+  var workspaceId = /** @type {string} */ (e.workspaceId);
+  var workspace = /** @type {!Blockly.WorkspaceSvg} */
+      (Blockly.Workspace.getById(workspaceId));
+  Blockly.Procedures.updateMutatorFlyout_(workspace);
 };
 
 /**

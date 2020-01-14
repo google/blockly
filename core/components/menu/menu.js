@@ -25,6 +25,7 @@ goog.provide('Blockly.Menu');
 
 goog.require('Blockly.Component');
 goog.require('Blockly.utils.aria');
+goog.require('Blockly.utils.Coordinate');
 goog.require('Blockly.utils.dom');
 goog.require('Blockly.utils.object');
 
@@ -36,6 +37,15 @@ goog.require('Blockly.utils.object');
  */
 Blockly.Menu = function() {
   Blockly.Component.call(this);
+
+  /**
+   * Coordinates of the mousedown event that caused this menu to open. Used to
+   * prevent the consequent mouseup event due to a simple click from activating
+   * a menu item immediately.
+   * @type {?Blockly.utils.Coordinate}
+   * @package
+   */
+  this.openingCoords = null;
 
   /**
    * This is the element that we will listen to the real focus events on.
@@ -432,6 +442,20 @@ Blockly.Menu.prototype.handleMouseOver_ = function(e) {
  * @private
  */
 Blockly.Menu.prototype.handleClick_ = function(e) {
+  var oldCoords = this.openingCoords;
+  // Clear out the saved opening coords immediately so they're not used twice.
+  this.openingCoords = null;
+  if (oldCoords && typeof e.clientX === 'number') {
+    var newCoords = new Blockly.utils.Coordinate(e.clientX, e.clientY);
+    if (Blockly.utils.Coordinate.distance(oldCoords, newCoords) < 1) {
+      // This menu was opened by a mousedown and we're handling the consequent
+      // click event. The coords haven't changed, meaning this was the same
+      // opening event. Don't do the usual behavior because the menu just popped
+      // up under the mouse and the user didn't mean to activate this item.
+      return;
+    }
+  }
+
   var menuItem = this.getMenuItem(/** @type {Node} */ (e.target));
 
   if (menuItem && menuItem.handleClick(e)) {

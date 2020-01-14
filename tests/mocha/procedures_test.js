@@ -398,24 +398,6 @@ suite('Procedures', function() {
             clearVariables.call(this);
           }, 'name');
         });
-        // TODO: Reenable the following two once arg name validation has been
-        //  moved to the arg blocks.
-        test.skip('Add Identical Arg', function() {
-          this.callForAllTypes(function() {
-            var args = ['x', 'x'];
-            createMutator.call(this, args);
-            assertArgs.call(this, ['x', 'i']);
-            clearVariables.call(this);
-          });
-        });
-        test.skip('Add Identical (except case) Arg', function() {
-          this.callForAllTypes(function() {
-            var args = ['x', 'X'];
-            createMutator.call(this, args);
-            assertArgs.call(this, ['x', 'i']);
-            clearVariables.call(this);
-          });
-        });
         test('Multiple Args', function() {
           this.callForAllTypes(function() {
             var args = ['arg1', 'arg2', 'arg3'];

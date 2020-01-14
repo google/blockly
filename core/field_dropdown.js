@@ -34,6 +34,7 @@ goog.require('Blockly.MenuItem');
 goog.require('Blockly.navigation');
 goog.require('Blockly.utils');
 goog.require('Blockly.utils.aria');
+goog.require('Blockly.utils.Coordinate');
 goog.require('Blockly.utils.dom');
 goog.require('Blockly.utils.object');
 goog.require('Blockly.utils.Size');
@@ -267,10 +268,18 @@ Blockly.FieldDropdown.prototype.createSVGArrow_ = function() {
 
 /**
  * Create a dropdown menu under the text.
+ * @param {Event=} opt_e Optional mouse event that triggered the field to open,
+ *     or undefined if triggered programatically.
  * @private
  */
-Blockly.FieldDropdown.prototype.showEditor_ = function() {
+Blockly.FieldDropdown.prototype.showEditor_ = function(opt_e) {
   this.menu_ = this.dropdownCreate_();
+  if (opt_e && typeof opt_e.clientX === 'number') {
+    this.menu_.openingCoords =
+        new Blockly.utils.Coordinate(opt_e.clientX, opt_e.clientY);
+  } else {
+    this.menu_.openingCoords = null;
+  }
   // Element gets created in render.
   this.menu_.render(Blockly.DropDownDiv.getContentDiv());
   Blockly.utils.dom.addClass(

@@ -73,6 +73,16 @@ Blockly.Mutator.prototype.setBlock = function(block) {
 };
 
 /**
+ * Returns the workspace inside this mutator icon's bubble.
+ * @return {Blockly.WorkspaceSvg} The workspace inside this mutator icon's
+ *     bubble.
+ * @package
+ */
+Blockly.Mutator.prototype.getWorkspace = function() {
+  return this.workspace_;
+};
+
+/**
  * Draw the mutator icon.
  * @param {!Element} group The icon group.
  * @private

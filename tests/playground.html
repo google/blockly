@@ -251,13 +251,13 @@ function addToolboxButtonCallbacks() {
   };
 
   workspace.registerButtonCallback(
-    'addVariables', addVariables);
+      'addVariables', addVariables);
   workspace.registerButtonCallback(
-    'changeImage', changeImage);
+      'changeImage', changeImage);
   workspace.registerButtonCallback(
-    'addAllBlocksToWorkspace', addAllBlocksToWorkspace);
+      'addAllBlocksToWorkspace', addAllBlocksToWorkspace);
   workspace.registerButtonCallback(
-    'setInput', setInput);
+      'setInput', setInput);
   workspace.registerButtonCallback(
       'setRandomStyle', setRandomStyle);
   workspace.registerButtonCallback(
@@ -269,9 +269,16 @@ function addToolboxButtonCallbacks() {
   workspace.registerButtonCallback(
       'randomizeLabelText', randomizeLabelText);
   workspace.registerButtonCallback(
-      'addDynamicOption', Blockly.TestBlocks.addDynamicDropdownOption_);
+      'addDynamicOption', Blockly.TestBlocks.addDynamicDropdownOption);
   workspace.registerButtonCallback(
-      'removeDynamicOption', Blockly.TestBlocks.removeDynamicDropdownOption_);
+      'removeDynamicOption', Blockly.TestBlocks.removeDynamicDropdownOption);
+  workspace.registerButtonCallback(
+      'insertConnectionRows', Blockly.TestBlocks.insertConnectionRows);
+  workspace.registerButtonCallback(
+      'insertConnectionStacks', Blockly.TestBlocks.insertConnectionStacks);
+  workspace.registerButtonCallback(
+      'insertConnectionStatements',
+          Blockly.TestBlocks.insertConnectionStatements);
 }
 
 function setRenderDebugOptionCheckboxState(overrideOptions) {
@@ -1361,6 +1368,11 @@ var spaghettiXml = [
   the standard predefined blocks, and so test alternative block rendering
   code paths. -->
   <xml xmlns="https://developers.google.com/blockly/xml" id="toolbox-test-blocks" style="display: none">
+    <category name="Align">
+      <block type="test_align_dummy_right"></block>
+      <block type="test_align_all"></block>
+      <block type="test_align_with_external_input"></block>
+    </category>
     <category name="Basic">
       <block type="test_basic_empty"></block>
       <block type="test_basic_empty_with_mutator"></block>
@@ -1374,10 +1386,73 @@ var spaghettiXml = [
       <block type="test_basic_tooltips"></block>
       <block type="test_basic_javascript"></block>
     </category>
-    <category name="Align">
-      <block type="test_align_dummy_right"></block>
-      <block type="test_align_all"></block>
-      <block type="test_align_with_external_input"></block>
+    <category name="Connections" expanded="true">
+      <category name="Row">
+        <label text="blocks have"></label>
+        <sep gap="-1"></sep>
+        <label text="tooltips"></label>
+
+        <button text="insert" callbackkey="insertConnectionRows"></button>
+        <sep gap="7"></sep>
+        <block type="test_connections_row_input"></block>
+        <sep gap="7"></sep>
+        <block type="test_connections_row_blue"></block>
+        <sep gap="7"></sep>
+        <block type="test_connections_row_yellow"></block>
+        <sep gap="7"></sep>
+        <block type="test_connections_row_red"></block>
+        <sep gap="7"></sep>
+        <block type="test_connections_row_output"></block>
+        <block type="test_connections_row_yellow">
+          <value name="NAME">
+            <block type="test_connections_row_yellow" movable="false"></block>
+          </value>
+        </block>
+        <sep gap="7"></sep>
+        <block type="test_connections_multivalue_1valid"></block>
+        <sep gap="7"></sep>
+        <block type="test_connections_multivalue_2valid"></block>
+      </category>
+      <category name="Stack">
+        <label text="blocks have"></label>
+        <sep gap="-1"></sep>
+        <label text="tooltips"></label>
+
+        <button text="insert" callbackkey="insertConnectionStacks"></button>
+        <sep gap="7"></sep>
+        <block type="test_connections_stack_next"></block>
+        <sep gap="7"></sep>
+        <block type="test_connections_stack_blue"></block>
+        <sep gap="7"></sep>
+        <block type="test_connections_stack_yellow"></block>
+        <sep gap="7"></sep>
+        <block type="test_connections_stack_red"></block>
+        <sep gap="7"></sep>
+        <block type="test_connections_stack_prev"></block>
+        <block type="test_connections_stack_yellow">
+          <next>
+            <block type="test_connections_stack_yellow" movable="false"></block>
+          </next>
+        </block>
+      </category>
+      <category name="Statement">
+        <label text="blocks have"></label>
+        <sep gap="-1"></sep>
+        <label text="tooltips"></label>
+
+        <button text="insert" callbackkey="insertConnectionStatements"></button>
+        <sep gap="7"></sep>
+        <block type="test_connections_statement_blue"></block>
+        <sep gap="7"></sep>
+        <block type="test_connections_statement_yellow"></block>
+        <sep gap="7"></sep>
+        <block type="test_connections_statement_red"></block>
+        <block type="test_connections_statement_nonext"></block>
+        <sep gap="7"></sep>
+        <block type="test_connections_multistatement_1valid"></block>
+        <sep gap="7"></sep>
+        <block type="test_connections_multistatement_2valid"></block>
+      </category>
     </category>
     <category name="Drag">
       <label text="Drag each to the workspace"></label>

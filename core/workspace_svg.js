@@ -127,6 +127,7 @@ Blockly.WorkspaceSvg = function(options,
   if (Blockly.Procedures && Blockly.Procedures.flyoutCategory) {
     this.registerToolboxCategoryCallback(Blockly.PROCEDURE_CATEGORY_NAME,
         Blockly.Procedures.flyoutCategory);
+    this.addChangeListener(Blockly.Procedures.mutatorOpenListener);
   }
 
   /**
@@ -1655,7 +1656,8 @@ Blockly.WorkspaceSvg.prototype.cleanUp = function() {
     block.moveBy(-xy.x, cursorY - xy.y);
     block.snapToGrid();
     cursorY = block.getRelativeToSurfaceXY().y +
-        block.getHeightWidth().height + Blockly.BlockSvg.MIN_BLOCK_Y;
+        block.getHeightWidth().height +
+        this.renderer_.getConstants().MIN_BLOCK_HEIGHT;
   }
   Blockly.Events.setGroup(false);
   this.setResizesEnabled(true);

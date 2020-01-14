@@ -390,13 +390,13 @@ Blockly.blockRendering.Drawer.prototype.drawInlineInput_ = function(input) {
 Blockly.blockRendering.Drawer.prototype.positionInlineInputConnection_ = function(input) {
   var yPos = input.centerline - input.height / 2;
   // Move the connection.
-  if (input.connection) {
+  if (input.connectionModel) {
     // xPos already contains info about startX
     var connX = input.xPos + input.connectionWidth + input.connectionOffsetX;
     if (this.info_.RTL) {
       connX *= -1;
     }
-    input.connection.setOffsetInBlock(connX,
+    input.connectionModel.setOffsetInBlock(connX,
         yPos + input.connectionOffsetY);
   }
 };
@@ -410,12 +410,12 @@ Blockly.blockRendering.Drawer.prototype.positionInlineInputConnection_ = functio
  */
 Blockly.blockRendering.Drawer.prototype.positionStatementInputConnection_ = function(row) {
   var input = row.getLastInput();
-  if (input.connection) {
+  if (input.connectionModel) {
     var connX = row.xPos + row.statementEdge + input.notchOffset;
     if (this.info_.RTL) {
       connX *= -1;
     }
-    input.connection.setOffsetInBlock(connX, row.yPos);
+    input.connectionModel.setOffsetInBlock(connX, row.yPos);
   }
 };
 
@@ -428,12 +428,12 @@ Blockly.blockRendering.Drawer.prototype.positionStatementInputConnection_ = func
  */
 Blockly.blockRendering.Drawer.prototype.positionExternalValueConnection_ = function(row) {
   var input = row.getLastInput();
-  if (input.connection) {
+  if (input.connectionModel) {
     var connX = row.xPos + row.width;
     if (this.info_.RTL) {
       connX *= -1;
     }
-    input.connection.setOffsetInBlock(connX, row.yPos);
+    input.connectionModel.setOffsetInBlock(connX, row.yPos);
   }
 };
 

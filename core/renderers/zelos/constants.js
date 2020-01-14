@@ -190,6 +190,16 @@ Blockly.zelos.ConstantProvider = function() {
   this.JAGGED_TEETH_WIDTH = 0;
 
   /**
+   * @override
+   */
+  this.START_HAT_HEIGHT = 22;
+
+  /**
+   * @override
+   */
+  this.START_HAT_WIDTH = 96;
+
+  /**
    * @enum {number}
    * @override
    */
@@ -408,6 +418,7 @@ Blockly.zelos.ConstantProvider.prototype.init = function() {
   Blockly.zelos.ConstantProvider.superClass_.init.call(this);
   this.HEXAGONAL = this.makeHexagonal();
   this.ROUNDED = this.makeRounded();
+  this.SQUARED = this.makeSquared();
 
   this.STATEMENT_INPUT_NOTCH_OFFSET += this.INSIDE_CORNERS.rightWidth;
 };
@@ -423,14 +434,38 @@ Blockly.zelos.ConstantProvider.prototype.dispose = function() {
 };
 
 /**
+ * @override
+ */
+Blockly.zelos.ConstantProvider.prototype.makeStartHat = function() {
+  var height = this.START_HAT_HEIGHT;
+  var width = this.START_HAT_WIDTH;
+
+  var mainPath =
+      Blockly.utils.svgPaths.curve('c',
+          [
+            Blockly.utils.svgPaths.point(25, -height),
+            Blockly.utils.svgPaths.point(71, -height),
+            Blockly.utils.svgPaths.point(width, 0)
+          ]);
+  return {
+    height: height,
+    width: width,
+    path: mainPath
+  };
+};
+
+/**
+ * Create sizing and path information about a hexagonal shape.
  * @return {!Object} An object containing sizing and path information about
  *     a hexagonal shape for connections.
  * @package
  */
 Blockly.zelos.ConstantProvider.prototype.makeHexagonal = function() {
+  // The main path for the hexagonal connection shape is made out of two lines.
+  // The lines are defined with relative positons and require the block height.
   // The 'up' and 'down' versions of the paths are the same, but the Y sign
-  // flips.  Forward and back are the signs to use to move the cursor in the
-  // direction that the path is being drawn.
+  // flips.  The 'left' and 'right' versions of the path are also the same, but
+  // the X sign flips.
   function makeMainPath(height, up, right) {
     var width = height / 2;
     var forward = up ? -1 : 1;
@@ -471,14 +506,17 @@ Blockly.zelos.ConstantProvider.prototype.makeHexagonal = function() {
 };
 
 /**
+ * Create sizing and path information about a rounded shape.
  * @return {!Object} An object containing sizing and path information about
  *     a rounded shape for connections.
  * @package
  */
 Blockly.zelos.ConstantProvider.prototype.makeRounded = function() {
+  // The main path for the rounded connection shape is made out of a single arc.
+  // The arc is defined with relative positions and requires the block height.
   // The 'up' and 'down' versions of the paths are the same, but the Y sign
-  // flips.  Forward and back are the signs to use to move the cursor in the
-  // direction that the path is being drawn.
+  // flips.  The 'up' and 'right' versions of the path flip the sweep-flag
+  // which moves the arc at negative angles.
   function makeMainPath(height, up, right) {
     var edgeWidth = height / 2;
     return Blockly.utils.svgPaths.arc('a', '0 0 ' + (up || right ? 1 : 0), edgeWidth,
@@ -516,14 +554,80 @@ Blockly.zelos.ConstantProvider.prototype.makeRounded = function() {
 };
 
 /**
+ * Create sizing and path information about a squared shape.
+ * @return {!Object} An object containing sizing and path information about
+ *     a squared shape for connections.
+ * @package
+ */
+Blockly.zelos.ConstantProvider.prototype.makeSquared = function() {
+  var radius = this.CORNER_RADIUS;
+
+  // The main path for the squared connection shape is made out of two corners
+  // and a single line in-between (a and v). These are defined in relative
+  // positions and require the height of the block.
+  // The 'left' and 'right' versions of the paths are the same, but the Y sign
+  // flips.  The 'up' and 'down' versions of the path determine where the corner
+  // point is placed and in-turn the direction of the corners.
+  function makeMainPath(height, up, right) {
+    var innerHeight = height - radius * 2;
+    return Blockly.utils.svgPaths.arc('a', '0 0,1', radius,
+        Blockly.utils.svgPaths.point((up ? -1 : 1) * radius, (up ? -1 : 1) * radius)) +
+      Blockly.utils.svgPaths.lineOnAxis('v', (right ? 1 : -1) * innerHeight) +
+      Blockly.utils.svgPaths.arc('a', '0 0,1', radius,
+          Blockly.utils.svgPaths.point((up ? 1 : -1) * radius, (up ? -1 : 1) * radius));
+  }
+
+  return {
+    type: this.SHAPES.SQUARE,
+    isDynamic: true,
+    width: function(_height) {
+      return radius;
+    },
+    height: function(height) {
+      return height;
+    },
+    connectionOffsetY: function(connectionHeight) {
+      return connectionHeight / 2;
+    },
+    connectionOffsetX: function(connectionWidth) {
+      return - connectionWidth;
+    },
+    pathDown: function(height) {
+      return makeMainPath(height, false, false);
+    },
+    pathUp: function(height) {
+      return makeMainPath(height, true, false);
+    },
+    pathRightDown: function(height) {
+      return makeMainPath(height, false, true);
+    },
+    pathRightUp: function(height) {
+      return makeMainPath(height, false, true);
+    },
+  };
+};
+
+/**
  * @override
  */
 Blockly.zelos.ConstantProvider.prototype.shapeFor = function(
     connection) {
   var checks = connection.getCheck();
+  if (!checks && connection.targetConnection) {
+    checks = connection.targetConnection.getCheck();
+  }
   switch (connection.type) {
     case Blockly.INPUT_VALUE:
     case Blockly.OUTPUT_VALUE:
+      var outputShape = connection.getSourceBlock().getOutputShape();
+      // If the block has an ouput shape set, use that instead.
+      if (outputShape != null) {
+        switch (outputShape) {
+          case this.SHAPES.HEXAGONAL: return this.HEXAGONAL;
+          case this.SHAPES.ROUND: return this.ROUNDED;
+          case this.SHAPES.SQUARE: return this.SQUARED;
+        }
+      }
       // Includes doesn't work in IE.
       if (checks && checks.indexOf('Boolean') != -1) {
         return this.HEXAGONAL;

@@ -262,8 +262,8 @@ Blockly.blockRendering.RenderInfo.prototype.createRows_ = function() {
  */
 Blockly.blockRendering.RenderInfo.prototype.populateTopRow_ = function() {
   var hasPrevious = !!this.block_.previousConnection;
-  var hasHat = (this.block_.hat ?
-    this.block_.hat === 'cap' : Blockly.BlockSvg.START_HAT) &&
+  var hasHat = (typeof this.block_.hat !== 'undefined' ?
+    this.block_.hat === 'cap' : this.constants_.ADD_START_HATS) &&
     !this.outputConnection && !hasPrevious;
   var leftSquareCorner = this.topRow.hasLeftSquareCorner(this.block_);
 
@@ -435,6 +435,9 @@ Blockly.blockRendering.RenderInfo.prototype.addElemSpacing_ = function() {
       row.elements.push(new Blockly.blockRendering.InRowSpacer(
           this.constants_, this.getInRowSpacing_(null, oldElems[0])));
     }
+    if (!oldElems.length) {
+      continue;
+    }
     for (var e = 0; e < oldElems.length - 1; e++) {
       row.elements.push(oldElems[e]);
       var spacing = this.getInRowSpacing_(oldElems[e], oldElems[e + 1]);
@@ -551,13 +554,24 @@ Blockly.blockRendering.RenderInfo.prototype.alignRowElements_ = function() {
           /** @type {!Blockly.blockRendering.InputRow} */ (row));
     } else {
       var currentWidth = row.width;
-      var desiredWidth = this.width - this.startX;
+      var desiredWidth = this.getDesiredRowWidth_(row);
       var missingSpace = desiredWidth - currentWidth;
-      if (missingSpace) {
+      if (missingSpace > 0) {
         this.addAlignmentPadding_(row, missingSpace);
       }
     }
   }
+};
+
+/**
+ * Calculate the desired width of an input row.
+ * @param {!Blockly.blockRendering.Row} _row The input row.
+ * @return {number} The desired width of the input row.
+ * @protected
+ */
+Blockly.blockRendering.RenderInfo.prototype.getDesiredRowWidth_ = function(
+    _row) {
+  return this.width - this.startX;
 };
 
 /**
@@ -606,14 +620,13 @@ Blockly.blockRendering.RenderInfo.prototype.alignStatementRow_ = function(row) {
   var desiredWidth = this.statementEdge;
   // Add padding before the statement input.
   var missingSpace = desiredWidth - currentWidth;
-  if (missingSpace) {
+  if (missingSpace > 0) {
     this.addAlignmentPadding_(row, missingSpace);
   }
   // Also widen the statement input to reach to the right side of the
   // block. Note that this does not add padding.
   currentWidth = row.width;
-  var rightCornerWidth = this.constants_.INSIDE_CORNERS.rightWidth || 0;
-  desiredWidth = this.width - this.startX - rightCornerWidth;
+  desiredWidth = this.getDesiredRowWidth_(row);
   statementInput.width += (desiredWidth - currentWidth);
   statementInput.height = Math.max(statementInput.height, row.height);
   row.width += (desiredWidth - currentWidth);
@@ -753,6 +766,13 @@ Blockly.blockRendering.RenderInfo.prototype.finalize_ = function() {
     widestRowWithConnectedBlocks =
         Math.max(widestRowWithConnectedBlocks, row.widthWithConnectedBlocks);
     this.recordElemPositions_(row);
+  }
+  if (this.outputConnection && this.block_.nextConnection &&
+      this.block_.nextConnection.isConnected()) {
+    // Include width of connected block in value to stack width measurement.
+    widestRowWithConnectedBlocks =
+        Math.max(widestRowWithConnectedBlocks,
+            this.block_.nextConnection.targetBlock().getHeightWidth().width);
   }
 
   this.widthWithChildren = Math.max(this.widthWithChildren,

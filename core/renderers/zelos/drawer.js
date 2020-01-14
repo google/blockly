@@ -98,6 +98,9 @@ Blockly.zelos.Drawer.prototype.drawOutline_ = function() {
  * @protected
  */
 Blockly.zelos.Drawer.prototype.drawRightSideRow_ = function(row) {
+  if (row.height <= 0) {
+    return;
+  }
   if (row.precedesStatement || row.followsStatement) {
     var cornerHeight = this.constants_.INSIDE_CORNERS.rightHeight;
     var remainingHeight = row.height -
@@ -215,7 +218,7 @@ Blockly.zelos.Drawer.prototype.drawStatementInput_ = function(row) {
     this.constants_.INSIDE_CORNERS.pathBottom +
     Blockly.utils.svgPaths.lineOnAxis('h',
         (input.notchOffset - this.constants_.INSIDE_CORNERS.width)) +
-    input.shape.pathLeft;
+    (input.connectedBottomNextConnection ? '' : input.shape.pathLeft);
 
   this.outlinePath_ += Blockly.utils.svgPaths.lineOnAxis('H', x) +
       innerTopLeftCorner +

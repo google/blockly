@@ -67,6 +67,13 @@ Blockly.VariableModel = function(workspace, name, opt_type, opt_id) {
   this.type = opt_type || '';
 
   /**
+   * Optional text data that round-trips between variables and XML.
+   * Has no effect. May be used by 3rd parties for meta information.
+   * @type {?string}
+   */
+  this.data = null;
+  
+  /**
    * A unique id for the variable. This should be defined at creation and
    * not change, even if the name changes. In most cases this should be a
    * UUID.

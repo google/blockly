@@ -76,6 +76,11 @@ Blockly.Xml.variablesToDom = function(variableList) {
       element.setAttribute('type', variable.type);
     }
     element.id = variable.getId();
+    if (variable.data) {
+      var dataElement = Blockly.utils.xml.createElement('data');
+      dataElement.appendChild(Blockly.utils.xml.createTextNode(variable.data));
+      element.appendChild(dataElement);
+    }
     variables.appendChild(element);
   }
   return variables;
@@ -596,9 +601,14 @@ Blockly.Xml.domToVariables = function(xmlVariables, workspace) {
     }
     var type = xmlChild.getAttribute('type');
     var id = xmlChild.getAttribute('id');
-    var name = xmlChild.textContent;
-
-    workspace.createVariable(name, type, id);
+    var name = '';
+    for (var i = 0; i < xmlChild.childNodes.length; i++) {
+      if (xmlChild.childNodes[i].nodeType === Node.TEXT_NODE)
+        name += xmlChild.childNodes[i].textContent;
+    }
+    var variable = workspace.createVariable(name.trim(), type, id);
+    var data_xml_array = xmlChild.getElementsByTagName("data");
+    variable.data = data_xml_array.length ? data_xml_array[0].textContent : null;
   }
 };
 

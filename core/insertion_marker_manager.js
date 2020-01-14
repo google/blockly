@@ -558,7 +558,7 @@ Blockly.InsertionMarkerManager.prototype.showInsertionMarker_ = function() {
   var imConn = imBlock.getMatchingConnection(local.getSourceBlock(), local);
 
   if (imConn == this.markerConnection_) {
-    throw Error('Made it to connectMarker_ even though the marker isn\'t ' +
+    throw Error('Made it to showInsertionMarker_ even though the marker isn\'t ' +
         'changing');
   }
 

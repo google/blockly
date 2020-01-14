@@ -248,13 +248,13 @@ Blockly.InsertionMarkerManager.prototype.createMarkerBlock_ = function(sourceBlo
   try {
     var result = this.workspace_.newBlock(imType);
     result.setInsertionMarker(true);
-    result.setCollapsed(sourceBlock.isCollapsed());
     if (sourceBlock.mutationToDom) {
       var oldMutationDom = sourceBlock.mutationToDom();
       if (oldMutationDom) {
         result.domToMutation(oldMutationDom);
       }
     }
+    result.setCollapsed(sourceBlock.isCollapsed());
     // Copy field values from the other block.  These values may impact the
     // rendered size of the insertion marker.  Note that we do not care about
     // child blocks here.

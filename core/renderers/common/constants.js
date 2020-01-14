@@ -340,7 +340,7 @@ Blockly.blockRendering.ConstantProvider = function() {
    * Whether or not a dropdown field uses a text or SVG arrow.
    * @type {boolean}
    */
-  this.FIELD_DROPDOWN_SVG_ARROW = true;
+  this.FIELD_DROPDOWN_SVG_ARROW = false;
 
   /**
    * A dropdown field's SVG arrow padding.

@@ -602,15 +602,17 @@ Blockly.Xml.domToVariables = function(xmlVariables, workspace) {
     var type = xmlChild.getAttribute('type');
     var id = xmlChild.getAttribute('id');
     var name = '';
+    var data = null;
     for (var i = 0; i < xmlChild.childNodes.length; i++) {
-      if (xmlChild.childNodes[i].nodeType === Node.TEXT_NODE) {
-        name += xmlChild.childNodes[i].textContent;
+      if (xmlChild.childNodes[i].nodeType == Blockly.utils.dom.Node.TEXT_NODE) {
+        name = name+xmlChild.childNodes[i].textContent;
+      } else if (xmlChild.childNodes[i].nodeName == 'data') {
+        data = xmlChild.childNodes[i].textContent;
       }
     }
     var variable = workspace.createVariable(name.trim(), type, id);
-    var dataXmlArray = xmlChild.getElementsByTagName('data');
-    variable.data = dataXmlArray.length ? dataXmlArray[0].textContent : null;
-  }
+    variable.data = data;
+    }
 };
 
 /**

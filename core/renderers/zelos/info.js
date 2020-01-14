@@ -199,16 +199,9 @@ Blockly.zelos.RenderInfo.prototype.getSpacerRowHeight_ = function(
       Blockly.blockRendering.Types.isBottomRow(next)) {
     return this.constants_.EMPTY_BLOCK_SPACER_HEIGHT;
   }
-  // Top and bottom rows act as a spacer so we don't need any extra padding.
-  if ((Blockly.blockRendering.Types.isTopRow(prev))) {
-    if (!prev.hasPreviousConnection && !this.outputConnection) {
-      return this.constants_.SMALL_PADDING;
-    }
-    return this.constants_.NO_PADDING;
-  }
-  var precedesStatement =
-      Blockly.blockRendering.Types.isInputRow(prev) && prev.hasStatement;
   var followsStatement =
+      Blockly.blockRendering.Types.isInputRow(prev) && prev.hasStatement;
+  var precedesStatement =
       Blockly.blockRendering.Types.isInputRow(next) && next.hasStatement;
   if (precedesStatement || followsStatement) {
     var cornerHeight = this.constants_.INSIDE_CORNERS.rightHeight || 0;
@@ -216,6 +209,13 @@ Blockly.zelos.RenderInfo.prototype.getSpacerRowHeight_ = function(
         Math.max(this.constants_.NOTCH_HEIGHT, cornerHeight));
     return precedesStatement && followsStatement ?
         Math.max(height, this.constants_.DUMMY_INPUT_MIN_HEIGHT) : height;
+  }
+  // Top and bottom rows act as a spacer so we don't need any extra padding.
+  if ((Blockly.blockRendering.Types.isTopRow(prev))) {
+    if (!prev.hasPreviousConnection && !this.outputConnection) {
+      return this.constants_.SMALL_PADDING;
+    }
+    return this.constants_.NO_PADDING;
   }
   if ((Blockly.blockRendering.Types.isBottomRow(next))) {
     if (!this.outputConnection) {

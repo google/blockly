@@ -41,7 +41,7 @@ Blockly.Workspace = function(opt_options) {
   this.id = Blockly.utils.genUid();
   Blockly.Workspace.WorkspaceDB_[this.id] = this;
   /** @type {!Blockly.Options} */
-  this.options = new Blockly.Options(opt_options || {});
+  this.options = opt_options || new Blockly.Options({});
   /** @type {boolean} */
   this.RTL = !!this.options.RTL;
   /** @type {boolean} */

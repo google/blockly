@@ -307,7 +307,7 @@ Blockly.SearchWorkspace.prototype.executeSearchOnKeyUp = function(e) {
   var searchTerms = search.lastSearchValue_.trim().toLowerCase().split(/\s+/);
 
   //Remove those elements of the search terms that are empty (so no empty strings are in the search)
-  searchTerms = goog.array.filter(searchTerms, function (term) {
+  searchTerms = Blockly.Toolbox.TreeSearch.filter(searchTerms, function (term) {
     return term.length > 0;
   });
 

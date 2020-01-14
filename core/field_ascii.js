@@ -173,11 +173,11 @@ Blockly.AsciiInput.prototype.convertKeyToCode = function () {
 };
 
 Blockly.AsciiInput.prototype.updateSize_ = function () {
-  if (this.sourceBlock_ &&
-      this.sourceBlock_.workspace.isFlyout &&
-      this.sourceBlock_.workspace.isFlyout) {
-    return;
-  }
+  // if (this.sourceBlock_ &&
+  //     this.sourceBlock_.workspace.isFlyout &&
+  //     this.sourceBlock_.workspace.isFlyout) {
+  //   return;
+  // }
 
   var textWidth = 0;
   var tempWidth = 0;

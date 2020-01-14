@@ -122,7 +122,7 @@ Blockly.FieldAngle.HALF = 100 / 2;
  * increase. Angle increases clockwise (true) or counterclockwise (false).
  * @const {boolean}
  */
-Blockly.FieldAngle.CLOCKWISE = true;
+Blockly.FieldAngle.CLOCKWISE = false;
 
 /**
  * The default offset of 0 degrees (and all angles). Always offsets in the
@@ -130,14 +130,14 @@ Blockly.FieldAngle.CLOCKWISE = true;
  * Usually either 0 (0 = right) or 90 (0 = up).
  * @const {number}
  */
-Blockly.FieldAngle.OFFSET = 90;
+Blockly.FieldAngle.OFFSET = 0;
 
 /**
  * The default maximum angle to allow before wrapping.
  * Usually either 360 (for 0 to 359.9) or 180 (for -179.9 to 180).
  * @const {number}
  */
-Blockly.FieldAngle.WRAP = 180;
+Blockly.FieldAngle.WRAP = 360;
 
 /**
  * Radius of protractor circle.  Slightly smaller than protractor size since
@@ -257,29 +257,26 @@ Blockly.FieldAngle.prototype.showEditor_ = function() {
       'xmlns:html': Blockly.utils.dom.HTML_NS,
       'xmlns:xlink': Blockly.utils.dom.XLINK_NS,
       'version': '1.1',
-      'height': (Blockly.FieldAngle.HALF + 1) + 'px',
+      'height': (Blockly.FieldAngle.HALF * 2) + 'px',
       'width': (Blockly.FieldAngle.HALF * 2) + 'px',
       'style': 'touch-action: none'
     }, null);
-    var circle = Blockly.utils.dom.createSvgElement('path', {
-      'd': 'M ' + Blockly.FieldAngle.HALF + ',' + Blockly.FieldAngle.HALF + 
-      ' l ' + (Blockly.FieldAngle.HALF) + ',0' + 
-      ' A ' + (Blockly.FieldAngle.HALF) + ',' + (Blockly.FieldAngle.HALF) + 
-      ' 0 0 0 0,' + Blockly.FieldAngle.HALF + ' z',
+    var circle = Blockly.utils.dom.createSvgElement('circle', {
+      'cx': Blockly.FieldAngle.HALF, 
+      'cy': Blockly.FieldAngle.HALF,
+      'r': Blockly.FieldAngle.RADIUS,
       'class': 'blocklyAngleCircle'
     }, svg);
     this.gauge_ = Blockly.utils.dom.createSvgElement('path', {
-      'class': 'blocklyAngleGauge', 
-      'transform': 'rotate(270,50,50)'
+      'class': 'blocklyAngleGauge'
     }, svg);
     this.line_ = Blockly.utils.dom.createSvgElement('line', {
       'x1': Blockly.FieldAngle.HALF,
       'y1': Blockly.FieldAngle.HALF,
-      'class': 'blocklyAngleLine',
-      'transform': 'rotate(270,50,50)'
+      'class': 'blocklyAngleLine'
     }, svg);
     // Draw markers around the edge.
-    for (var angle = 195; angle < 360; angle += 15) {
+    for (var angle = 0; angle < 360; angle += 15) {
       Blockly.utils.dom.createSvgElement('line', {
         'x1': Blockly.FieldAngle.HALF + Blockly.FieldAngle.RADIUS,
         'y1': Blockly.FieldAngle.HALF,
@@ -291,15 +288,6 @@ Blockly.FieldAngle.prototype.showEditor_ = function() {
             Blockly.FieldAngle.HALF + ',' + Blockly.FieldAngle.HALF + ')'
       }, svg);
     }
-    Blockly.utils.dom.createSvgElement('line', {
-        'x1': 0,
-        'y1': Blockly.FieldAngle.HALF,
-        'x2': Blockly.FieldAngle.RADIUS*2,
-        'y2': Blockly.FieldAngle.HALF,
-        'class': 'blocklyAngleMarks',
-        'transform': 'rotate(0,' + Blockly.FieldAngle.HALF + ',' + Blockly.FieldAngle.HALF + ')'
-      }, svg);
-  
   
     Blockly.DropDownDiv.setColour(this.sourceBlock_.getColour(),
         this.sourceBlock_.getColour());
@@ -396,7 +384,7 @@ Blockly.FieldAngle.prototype.showEditor_ = function() {
       return;
     }
     // Always display the input (i.e. getText) even if it is invalid.
-    var angleDegrees = Number(this.getText()) + (2 * this.offset_);
+    var angleDegrees = Number(this.getText()) + (this.offset_);
     angleDegrees %= 360;
     var angleRadians = Blockly.utils.math.toRadians(angleDegrees);
     var path = ['M ', Blockly.FieldAngle.HALF, ',', Blockly.FieldAngle.HALF];

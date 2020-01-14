@@ -56,7 +56,7 @@ goog.require('Blockly.utils.userAgent');
  * @constructor
  * @throws {TypeError} If `menuGenerator` options are incorrectly structured.
  */
-Blockly.FieldDropdown = function(menuGenerator, opt_validator, opt_config, shouldAllowSearch = false) {
+Blockly.FieldDropdown = function(menuGenerator, opt_validator, shouldAllowSearch, opt_config) {
   if (typeof menuGenerator != 'function') {
     Blockly.FieldDropdown.validateOptions_(menuGenerator);
   }
@@ -236,8 +236,7 @@ Blockly.FieldDropdown.prototype.showEditor_ = function() {
  */
 Blockly.FieldDropdown.prototype.dropdownCreate_ = function() {
   if (this.shouldAllowSearch_) {
-    //TODO: Copy FilteredMenu
-    var menu = new goog.ui.FilteredMenu();
+    var menu = new Blockly.FilteredMenu();
   }
   else {
     var menu = new Blockly.Menu();
@@ -258,6 +257,11 @@ Blockly.FieldDropdown.prototype.dropdownCreate_ = function() {
       image.alt = content['alt'] || '';
       content = image;
     }
+
+    if (typeof content === 'string' && content === '') {
+      continue;
+    }
+
     var menuItem = new Blockly.MenuItem(content);
     menuItem.setRole('option');
     menuItem.setRightToLeft(this.sourceBlock_.RTL);
@@ -277,21 +281,7 @@ Blockly.FieldDropdown.prototype.dropdownCreate_ = function() {
     menu.filterInput_.setAttribute('id', 'dropdownSearchInput');
 
     var clr = this.sourceBlock_.colour_;
-    var style = "#dropdownSearchInput { border-bottom: 2px solid " + clr + "; }";
-    style = style + "#dropdownSearchInput:focus { background-color: " + clr + "; }";
-    
-    if (!this.styleTag_) {
-        this.styleTag_ = document.createElement('style');
-    }
-
-    if (this.styleTag_.styleSheet) {
-        this.styleTag_.styleSheet.cssText = style;
-    }
-    else {
-        this.styleTag_.appendChild(document.createTextNode(style));
-    }
-    
-    document.getElementsByTagName('head')[0].appendChild(this.styleTag_);
+    menu.filterInput_.style = 'border-bottom: 2px solid ' + clr + ';';
   }
 
   Blockly.utils.aria.setState(/** @type {!Element} */ (menu.getElement()),
@@ -449,7 +439,8 @@ Blockly.FieldDropdown.prototype.doClassValidation_ = function(opt_newValue) {
   var options = this.getOptions(true);
   for (var i = 0, option; option = options[i]; i++) {
     // Options are tuples of human-readable text and language-neutral values.
-    if (option[1] == opt_newValue) {
+    if ((option.length === 1 && option[0] === opt_newValue) || 
+        (option[1] == opt_newValue)) {
       isValueValid = true;
       break;
     }
@@ -475,7 +466,8 @@ Blockly.FieldDropdown.prototype.doValueUpdate_ = function(newValue) {
   Blockly.FieldDropdown.superClass_.doValueUpdate_.call(this, newValue);
   var options = this.getOptions(true);
   for (var i = 0, option; option = options[i]; i++) {
-    if (option[1] == this.value_) {
+    if ((option.length === 1 && option[0] === this.value_) || 
+        (option[1] == this.value_)) {
       this.selectedIndex_ = i;
     }
   }
@@ -681,15 +673,6 @@ Blockly.FieldDropdown.changeRecentModuleColors = function(activeIDsDict, recentI
     }
   }
 };
-
-//TODOQ3: This was NOT in the newest release
-/**
- * Close the dropdown menu if this input is being deleted.
-//  */
-// Blockly.FieldDropdown.prototype.dispose = function() {
-//   Blockly.WidgetDiv.hideIfOwner(this);
-//   Blockly.FieldDropdown.superClass_.dispose.call(this);
-// };
 
 /**
  * Validates the data structure to be processed as an options list.

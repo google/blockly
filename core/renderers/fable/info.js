@@ -387,9 +387,19 @@ Blockly.fable.RenderInfo.prototype.getElemCenterline_ = function (row, elem) {
   if (Blockly.blockRendering.Types.isField(elem) ||
       Blockly.blockRendering.Types.isIcon(elem)) {
     result += (elem.height / 2);
-    if ((row.hasInlineInput || row.hasStatement) &&
+    if ((row.hasInlineInput || row.hasStatement || row.hasExternalInput) &&
         elem.height + this.constants_.TALL_INPUT_FIELD_OFFSET_Y <= row.height) {
-      result += this.constants_.TALL_INPUT_FIELD_OFFSET_Y;
+      if (row.hasExternalInput) {
+        for (let i = 0; i < row.elements.length; i++) {
+          const rowElem = row.elements[i];
+          if (Blockly.blockRendering.Types.isExternalInput(rowElem) &&
+                    rowElem.connectedBlock) {
+            result += ((rowElem.connectedBlock.firstRowHeight - elem.height) / 2);
+          }
+        }
+      } else {
+        result += ((row.height - elem.height) / 2);
+      }
     }
   } else if (Blockly.blockRendering.Types.isInlineInput(elem)) {
     result += elem.height / 2;
@@ -408,6 +418,10 @@ Blockly.fable.RenderInfo.prototype.finalize_ = function () {
   // accesses and sets properties that already exist on the objects.
   var widestRowWithConnectedBlocks = 0;
   var yCursor = 0;
+
+  var firstRowHeight = 0;
+  var hasAddedARow = false;
+
   for (var i = 0, row; (row = this.rows[i]); i++) {
     row.yPos = yCursor;
     row.xPos = this.startX;
@@ -424,6 +438,12 @@ Blockly.fable.RenderInfo.prototype.finalize_ = function () {
       this.bottomRow.height += diff;
       yCursor += diff;
     }
+
+    if (Blockly.blockRendering.Types.isInputRow(row) && !hasAddedARow) {
+      firstRowHeight += row.height;
+      hasAddedARow = true;
+    }
+
     this.recordElemPositions_(row);
   }
   this.bottomRow.baseline = yCursor - this.bottomRow.descenderHeight;
@@ -434,4 +454,5 @@ Blockly.fable.RenderInfo.prototype.finalize_ = function () {
   this.width += this.constants_.DARK_PATH_OFFSET;
   this.height = yCursor + this.constants_.DARK_PATH_OFFSET;
   this.startY = this.topRow.capline;
+  this.block_.firstRowHeight = firstRowHeight;
 };

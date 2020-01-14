@@ -117,12 +117,15 @@ Blockly.fable.Drawer.prototype.drawValueInput_ = function (row) {
   for (let i = 0; i < row.elements.length; i++) {
     const elem = row.elements[i];
 
-    if (Blockly.blockRendering.Types.isExternalInput(elem) ||
-            Blockly.blockRendering.Types.isInRowSpacer(elem)) {
+    if (Blockly.blockRendering.Types.isInRowSpacer(elem)) {
       continue;
+    } else if (Blockly.blockRendering.Types.isExternalInput(elem)) {
+      if (elem.connectedBlock && elem.connectedBlock.firstRowHeight) {
+        rowHeight = Math.max(rowHeight, elem.connectedBlock.firstRowHeight);
+      }
+    } else {
+      rowHeight = Math.max(rowHeight, elem.height);
     }
-
-    rowHeight = Math.max(rowHeight, elem.height);
   }
 
   if (rowHeight === 0) {
@@ -296,7 +299,7 @@ Blockly.fable.Drawer.prototype.positionExternalValueConnection_ = function (row,
     if (this.info_.RTL) {
       connX *= -1;
     }
-    var heightAdded = this.info_.topRow.height + ((rowHeight - input.shape.height) / 2);
+    var heightAdded = this.info_.topRow.height + this.info_.bottomRow.height + ((rowHeight - input.shape.height) / 2);
     input.connection.setOffsetInBlock(connX, row.yPos);
     input.connection.setPuzzlePieceVerticalOffset(heightAdded);
   }

@@ -486,6 +486,12 @@ Blockly.blockRendering.InputRow.prototype.measure = function() {
     }
     if (!(Blockly.blockRendering.Types.isSpacer(elem))) {
       this.height = Math.max(this.height, elem.height);
+
+      if ((Blockly.blockRendering.Types.isExternalInput(elem) || 
+            Blockly.blockRendering.Types.isInlineInput(elem)) &&
+            elem.connectedBlock) {
+        this.calculatedHeight = elem.connectedBlock.firstRowHeight;
+      }
     }
   }
   this.connectedBlockWidths = connectedBlockWidths;

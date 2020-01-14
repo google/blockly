@@ -723,11 +723,10 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
         "text": "default"
       }
     ],
-    "style": "math_blocks",
+    "style": "textInput",
     "tooltip": "",
     "helpUrl": "",
-    "output": "String",
-    "style": "textInput"
+    "output": "String"
   },
   {
     "type": "test_fields_multilinetext",

@@ -28,6 +28,7 @@ goog.require('Blockly.Events.VarDelete');
 goog.require('Blockly.Events.VarRename');
 goog.require('Blockly.Msg');
 goog.require('Blockly.utils');
+goog.require('Blockly.utils.object');
 
 
 /**

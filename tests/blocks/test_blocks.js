@@ -1731,7 +1731,7 @@ Blockly.Blocks['test_dropdowns_dynamic'] = {
 /**
  * An array of options for the dynamic dropdown.
  * @type {!Array<!Array>}
- * @package
+ * @private
  */
 Blockly.TestBlocks.dynamicDropdownOptions_ = [];
 
@@ -1740,7 +1740,7 @@ Blockly.TestBlocks.dynamicDropdownOptions_ = [];
  * the user for an option to add.
  * @package
  */
-Blockly.TestBlocks.addDynamicDropdownOption_ = function() {
+Blockly.TestBlocks.addDynamicDropdownOption = function() {
   Blockly.prompt('Add an option?',
       'option '  + Blockly.TestBlocks.dynamicDropdownOptions_.length,
       function(text) {
@@ -1761,7 +1761,7 @@ Blockly.TestBlocks.addDynamicDropdownOption_ = function() {
  * same name.
  * @package
  */
-Blockly.TestBlocks.removeDynamicDropdownOption_ = function() {
+Blockly.TestBlocks.removeDynamicDropdownOption = function() {
   var defaultText = Blockly.TestBlocks.dynamicDropdownOptions_[0] ?
       Blockly.TestBlocks.dynamicDropdownOptions_[0][0] : '';
   Blockly.prompt('Remove an option?', defaultText, function(text) {
@@ -1795,4 +1795,98 @@ Blockly.Blocks['test_dropdowns_dynamic_random'] = {
     }
     return options;
   }
+};
+
+/**
+ * Handles "insert" button in the connection row test category. This will insert
+ * a group of test blocks connected in a row.
+ * @package
+ */
+Blockly.TestBlocks.insertConnectionRows = function(button) {
+  var workspace = button.getTargetWorkspace();
+  Blockly.Xml.domToWorkspace(Blockly.Xml.textToDom(
+      '<xml xmlns="https://developers.google.com/blockly/xml">\n' +
+      '  <block type="test_connections_row_input">\n' +
+      '    <value name="NAME">\n' +
+      '      <block type="test_connections_row_blue">\n' +
+      '        <value name="NAME">\n' +
+      '          <block type="test_connections_row_yellow">\n' +
+      '            <value name="NAME">\n' +
+      '              <block type="test_connections_row_yellow">\n' +
+      '                <value name="NAME">\n' +
+      '                  <block type="test_connections_row_red">\n' +
+      '                    <value name="NAME">\n' +
+      '                      <block type="test_connections_row_output"/>\n' +
+      '                    </value>\n' +
+      '                  </block>\n' +
+      '                </value>\n' +
+      '              </block>\n' +
+      '            </value>\n' +
+      '          </block>\n' +
+      '        </value>\n' +
+      '      </block>\n' +
+      '    </value>\n' +
+      '  </block>\n' +
+      '</xml>'
+  ), workspace)
+};
+
+/**
+ * Handles "insert" button in the connection stack test category. This will
+ * insert a group of test blocks connected in a stack.
+ * @package
+ */
+Blockly.TestBlocks.insertConnectionStacks = function(button) {
+  var workspace = button.getTargetWorkspace();
+  Blockly.Xml.domToWorkspace(Blockly.Xml.textToDom(
+      '<xml xmlns="https://developers.google.com/blockly/xml">\n' +
+      '  <block type="test_connections_stack_next">\n' +
+      '    <next>\n' +
+      '      <block type="test_connections_stack_blue">\n' +
+      '        <next>\n' +
+      '          <block type="test_connections_stack_yellow">\n' +
+      '            <next>\n' +
+      '              <block type="test_connections_stack_yellow">\n' +
+      '                <next>\n' +
+      '                  <block type="test_connections_stack_red">\n' +
+      '                    <next>\n' +
+      '                      <block type="test_connections_stack_prev"/>\n' +
+      '                    </next>\n' +
+      '                  </block>\n' +
+      '                </next>\n' +
+      '              </block>\n' +
+      '            </next>\n' +
+      '          </block>\n' +
+      '        </next>\n' +
+      '      </block>\n' +
+      '    </next>\n' +
+      '  </block>\n' +
+      '</xml>'
+  ), workspace);
+};
+
+/**
+ * Handles "insert" button in the connection statement test category. This will
+ * insert a group of test blocks connected as statements.
+ * @package
+ */
+Blockly.TestBlocks.insertConnectionStatements = function(button) {
+  var workspace = button.getTargetWorkspace();
+  Blockly.Xml.domToWorkspace(Blockly.Xml.textToDom(
+      '<xml xmlns="https://developers.google.com/blockly/xml">\n' +
+      '  <block type="test_connections_statement_blue">\n' +
+      '    <statement name="NAME">\n' +
+      '      <block type="test_connections_statement_yellow">\n' +
+      '        <statement name="NAME">\n' +
+      '          <block type="test_connections_statement_yellow">\n' +
+      '            <statement name="NAME">\n' +
+      '              <block type="test_connections_statement_red"/>\n' +
+      '            </statement>\n' +
+      '          </block>\n' +
+      '        </statement>\n' +
+      '      </block>\n' +
+      '    </statement>\n' +
+      '  </block>\n' +
+      '</xml>'
+  ), workspace);
 };

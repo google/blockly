@@ -603,11 +603,11 @@ Blockly.Xml.domToVariables = function(xmlVariables, workspace) {
     var id = xmlChild.getAttribute('id');
     var name = '';
     var data = null;
-    for (var i = 0; i < xmlChild.childNodes.length; i++) {
-      if (xmlChild.childNodes[i].nodeType == Blockly.utils.dom.Node.TEXT_NODE) {
-        name = name+xmlChild.childNodes[i].textContent;
-      } else if (xmlChild.childNodes[i].nodeName == 'data') {
-        data = xmlChild.childNodes[i].textContent;
+    for (var i = 0,xmlVariableChild; xmlVariableChild=xmlChild.childNodes[i]; i++) {
+      if (xmlVariableChild.nodeType == Blockly.utils.dom.Node.TEXT_NODE) {
+        name = name+xmlVariableChild.textContent;
+      } else if (xmlVariableChild.nodeName == 'data') {
+        data = xmlVariableChild.textContent;
       }
     }
     var variable = workspace.createVariable(name.trim(), type, id);

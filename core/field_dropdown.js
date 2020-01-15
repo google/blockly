@@ -79,6 +79,13 @@ Blockly.FieldDropdown = function(menuGenerator, opt_validator, opt_config) {
   this.generatedOptions_ = null;
 
   /**
+   * Whether or not we should re-generate dynamic options.
+   * @type {boolean}
+   * @private
+   */
+  this.isOptionListDirty_ = true;
+
+  /**
    * The currently selected index. The field is initialized with the
    * first option selected.
    * @type {number}
@@ -87,7 +94,7 @@ Blockly.FieldDropdown = function(menuGenerator, opt_validator, opt_config) {
   this.selectedIndex_ = 0;
 
   this.trimOptions_();
-  var firstTuple = this.getOptions(false)[0];
+  var firstTuple = this.getOptions()[0];
 
   // Call parent's constructor.
   Blockly.FieldDropdown.superClass_.constructor.call(
@@ -321,7 +328,7 @@ Blockly.FieldDropdown.prototype.dropdownCreate_ = function() {
   menu.setRightToLeft(this.sourceBlock_.RTL);
   menu.setRole(Blockly.utils.aria.Role.LISTBOX);
 
-  var options = this.getOptions(false);
+  var options = this.getOptions();
   this.selectedMenuItem_ = null;
   for (var i = 0; i < options.length; i++) {
     var content = options[i][0]; // Human-readable text or image.
@@ -471,17 +478,24 @@ Blockly.FieldDropdown.prototype.isOptionListDynamic = function() {
 };
 
 /**
+ * Set a dynamic option list as dirty so that we can re-generate the options the
+ * next time `getOptions` is called.
+ */
+Blockly.FieldDropdown.prototype.setOptionListDirty = function() {
+  this.isOptionListDirty_ = true;
+};
+
+/**
  * Return a list of the options for this dropdown.
- * @param {boolean=} opt_useCache For dynamic options, whether or not to use the
- *     cached options or to re-generate them.
  * @return {!Array.<!Array>} A non-empty array of option tuples:
  *     (human-readable text or image, language-neutral name).
  * @throws {TypeError} If generated options are incorrectly structured.
  */
-Blockly.FieldDropdown.prototype.getOptions = function(opt_useCache) {
+Blockly.FieldDropdown.prototype.getOptions = function() {
   if (this.isOptionListDynamic()) {
-    if (!this.generatedOptions_ || !opt_useCache) {
+    if (!this.generatedOptions_ || this.isOptionListDirty_) {
       this.generatedOptions_ = this.menuGenerator_.call(this);
+      this.isOptionListDirty_ = false;
       Blockly.FieldDropdown.validateOptions_(this.generatedOptions_);
     }
     return this.generatedOptions_;
@@ -497,7 +511,7 @@ Blockly.FieldDropdown.prototype.getOptions = function(opt_useCache) {
  */
 Blockly.FieldDropdown.prototype.doClassValidation_ = function(opt_newValue) {
   var isValueValid = false;
-  var options = this.getOptions(true);
+  var options = this.getOptions();
   for (var i = 0, option; (option = options[i]); i++) {
     // Options are tuples of human-readable text and language-neutral values.
     if (option[1] == opt_newValue) {
@@ -524,7 +538,7 @@ Blockly.FieldDropdown.prototype.doClassValidation_ = function(opt_newValue) {
  */
 Blockly.FieldDropdown.prototype.doValueUpdate_ = function(newValue) {
   Blockly.FieldDropdown.superClass_.doValueUpdate_.call(this, newValue);
-  var options = this.getOptions(true);
+  var options = this.getOptions();
   for (var i = 0, option; (option = options[i]); i++) {
     if (option[1] == this.value_) {
       this.selectedIndex_ = i;
@@ -567,7 +581,7 @@ Blockly.FieldDropdown.prototype.render_ = function() {
   this.imageElement_.style.display = 'none';
 
   // Show correct element.
-  var options = this.getOptions(true);
+  var options = this.getOptions();
   var selectedOption = this.selectedIndex_ >= 0 &&
       options[this.selectedIndex_][0];
   if (selectedOption && typeof selectedOption == 'object') {
@@ -703,7 +717,7 @@ Blockly.FieldDropdown.prototype.getText_ = function() {
   if (this.selectedIndex_ < 0) {
     return null;
   }
-  var options = this.getOptions(true);
+  var options = this.getOptions();
   var selectedOption = options[this.selectedIndex_][0];
   if (typeof selectedOption == 'object') {
     return selectedOption['alt'];

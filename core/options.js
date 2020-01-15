@@ -157,9 +157,9 @@ Blockly.BlocklyOptions = function() {};
 
 /**
  * The SVG element for the grid pattern.
- * @type {SVGElement}
+ * @type {!SVGElement}
  */
-Blockly.Options.prototype.gridPattern = null;
+Blockly.Options.prototype.gridPattern;
 
 /**
  * The parent of the current workspace, or null if there is no parent workspace.

@@ -657,7 +657,8 @@ suite('XML', function() {
         comments: true
       };
       this.renderedWorkspace = Blockly.inject('blocklyDiv', options);
-      this.headlessWorkspace = new Blockly.Workspace(options);
+      this.headlessWorkspace =
+          new Blockly.Workspace(new Blockly.Options(options));
     });
     teardown(function() {
       this.renderedWorkspace.dispose();

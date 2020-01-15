@@ -487,7 +487,7 @@ Blockly.Xml.appendDomToWorkspace = function(xml, workspace) {
     var topX = workspace.RTL ? bbox.right : bbox.left;  // x of bounding box
     // Check position of the new blocks.
     var newLeftX = Infinity;  // x of top left corner
-    var newRightX = -Infinity;  // x of top rigth corner
+    var newRightX = -Infinity;  // x of top right corner
     var newY = Infinity;  // y of top corner
     var ySeparation = 10;
     for (var i = 0; i < newBlockIds.length; i++) {

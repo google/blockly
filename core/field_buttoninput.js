@@ -116,6 +116,8 @@ Blockly.ButtonInput.prototype.setValue = function (newValue) {
     }
   }
 
+  const oldValue = this.value_;
+
   // Save the KEY
   this.KEY_CODE = newValue;
 
@@ -131,6 +133,10 @@ Blockly.ButtonInput.prototype.setValue = function (newValue) {
   newValue = Blockly.Field.prototype.setValue.call(this, newValue);
 
   this.updateSize_();
+
+  this.value_ = this.KEY_CODE;
+  Blockly.Events.fire(new Blockly.Events.BlockChange(
+    this.sourceBlock_, 'field', this.name, oldValue, this.value_));
 };
 
 /**

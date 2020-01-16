@@ -146,7 +146,9 @@ Blockly.Xml.blockToDom = function(block, opt_noId) {
       Blockly.utils.xml.createElement(block.isShadow() ? 'shadow' : 'block');
   element.setAttribute('type', block.type);
   if (!opt_noId) {
-    element.id = block.id;
+    // It's important to use setAttribute here otherwise IE11 won't serialize
+    // the block's id when domToText is called.
+    element.setAttribute('id', block.id);
   }
   if (block.mutationToDom) {
     // Custom data for an advanced block.

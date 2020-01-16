@@ -87,11 +87,7 @@ Blockly.Options = function(options) {
     horizontalLayout = false;
   }
   var toolboxAtStart = options['toolboxPosition'];
-  if (toolboxAtStart === 'end') {
-    toolboxAtStart = false;
-  } else {
-    toolboxAtStart = true;
-  }
+  toolboxAtStart = toolboxAtStart !== 'end';
 
   if (horizontalLayout) {
     var toolboxPosition = toolboxAtStart ?

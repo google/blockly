@@ -128,6 +128,12 @@ Blockly.WorkspaceSvg = function(options,
     this.registerToolboxCategoryCallback(Blockly.PROCEDURE_CATEGORY_NAME,
         Blockly.Procedures.flyoutCategory);
   }
+  if (Blockly.MostUsed && Blockly.MostUsed.flyoutCategory) {
+    Blockly.MostUsed.init();
+
+    this.registerToolboxCategoryCallback(Blockly.MOST_USED_CATEGORY_NAME,
+      Blockly.MostUsed.flyoutCategory);
+  }
 
   /**
    * The block renderer used for rendering blocks on this workspace.
@@ -1235,8 +1241,8 @@ Blockly.WorkspaceSvg.prototype.pasteBlock_ = function(xmlBlock) {
       block.moveBy(blockX, blockY);
     }
 
-    //SHAPE: Added from blockly_changes
-    incrementCounter(block);
+    // //SHAPE: Added from blockly_changes
+    // Blockly.MostUsed.incrementCounter(block);
   } finally {
     Blockly.Events.enable();
   }

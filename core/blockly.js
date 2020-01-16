@@ -34,6 +34,8 @@ goog.require('Blockly.inject');
 goog.require('Blockly.navigation');
 goog.require('Blockly.Procedures');
 goog.require('Blockly.Tooltip');
+goog.require('Blockly.MostUsed');
+goog.require('Blockly.Toolbox');
 goog.require('Blockly.Touch');
 goog.require('Blockly.utils');
 goog.require('Blockly.utils.colour');

@@ -235,7 +235,9 @@ Blockly.FieldDropdown.prototype.showEditor_ = function() {
  * @private
  */
 Blockly.FieldDropdown.prototype.dropdownCreate_ = function() {
-  if (this.shouldAllowSearch_) {
+  var options = this.getOptions(false);
+
+  if (this.shouldAllowSearch_ && options.length > 2) {
     var menu = new Blockly.FilteredMenu();
   }
   else {
@@ -245,7 +247,6 @@ Blockly.FieldDropdown.prototype.dropdownCreate_ = function() {
   menu.setRightToLeft(this.sourceBlock_.RTL);
   menu.setRole('listbox');
 
-  var options = this.getOptions(false);
   this.selectedMenuItem_ = null;
   for (var i = 0; i < options.length; i++) {
     var content = options[i][0]; // Human-readable text or image.

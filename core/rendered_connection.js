@@ -513,6 +513,9 @@ Blockly.RenderedConnection.prototype.connect_ = function(childConnection) {
       // Rendering a child will render its parent.
       childBlock.render();
     } else {
+      //SHAPE: fable_angle changes shape, so rerendering is necessary.
+      childBlock.render();
+
       // Child block does not change shape.  Rendering the parent node will
       // move its connected children into position.
       parentBlock.render();

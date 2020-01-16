@@ -486,9 +486,10 @@ Blockly.Xml.appendDomToWorkspace = function(xml, workspace) {
     var offsetY = 0;  // offset to add to y of the new block
     var offsetX = 0;
     var farY = bbox.bottom;  // bottom position
-    var topX = bbox.left;  // x of bounding box
+    var topX = workspace.RTL ? bbox.right : bbox.left;  // x of bounding box
     // Check position of the new blocks.
-    var newX = Infinity;  // x of top corner
+    var newLeftX = Infinity;  // x of top left corner
+    var newRightX = -Infinity;  // x of top right corner
     var newY = Infinity;  // y of top corner
     var ySeparation = 10;
     for (var i = 0; i < newBlockIds.length; i++) {
@@ -497,20 +498,18 @@ Blockly.Xml.appendDomToWorkspace = function(xml, workspace) {
       if (blockXY.y < newY) {
         newY = blockXY.y;
       }
-      if (blockXY.x < newX) {  // if we align also on x
-        newX = blockXY.x;
+      if (blockXY.x < newLeftX) {  // if we left align also on x
+        newLeftX = blockXY.x;
+      }
+      if (blockXY.x > newRightX) {  // if we right align also on x
+        newRightX = blockXY.x;
       }
     }
     offsetY = farY - newY + ySeparation;
-    offsetX = topX - newX;
-    // move the new blocks to append them at the bottom
-    var width;  // Not used in LTR.
-    if (workspace.RTL) {
-      width = workspace.getWidth();
-    }
+    offsetX = workspace.RTL ? topX - newRightX : topX - newLeftX;
     for (var i = 0; i < newBlockIds.length; i++) {
       var block = workspace.getBlockById(newBlockIds[i]);
-      block.moveBy(workspace.RTL ? width - offsetX : offsetX, offsetY);
+      block.moveBy(offsetX, offsetY);
     }
   }
   return newBlockIds;

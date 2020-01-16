@@ -5,7 +5,7 @@
 Blockly.Msg["ADD_COMMENT"] = "Додати коментар";
 Blockly.Msg["CANNOT_DELETE_VARIABLE_PROCEDURE"] = "Неможливо видалити змінну '%1', тому що це частина визначення функції '%2'";
 Blockly.Msg["CHANGE_VALUE_TITLE"] = "Змінити значення:";
-Blockly.Msg["CLEAN_UP"] = "Вирівняти блоки";
+Blockly.Msg["CLEAN_UP"] = "Очистити блоки";
 Blockly.Msg["COLLAPSED_WARNINGS_WARNING"] = "Звернуті блоки містять попередження.";
 Blockly.Msg["COLLAPSE_ALL"] = "Згорнути блоки";
 Blockly.Msg["COLLAPSE_BLOCK"] = "Згорнути блок";
@@ -400,6 +400,7 @@ Blockly.Msg["VARIABLES_SET_HELPURL"] = "https://github.com/google/blockly/wiki/V
 Blockly.Msg["VARIABLES_SET_TOOLTIP"] = "Задає цю змінну рівною входу.";
 Blockly.Msg["VARIABLE_ALREADY_EXISTS"] = "Змінна з назвою '%1' вже існує.";
 Blockly.Msg["VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE"] = "Змінна з назвою '%1' вже існує в іншому типі: '%2'.";
+Blockly.Msg["WORKSPACE_ARIA_LABEL"] = "Робоча область Blockly";
 Blockly.Msg["WORKSPACE_COMMENT_DEFAULT_TEXT"] = "Скажіть щось...";
 Blockly.Msg["CONTROLS_FOREACH_INPUT_DO"] = Blockly.Msg["CONTROLS_REPEAT_INPUT_DO"];
 Blockly.Msg["CONTROLS_FOR_INPUT_DO"] = Blockly.Msg["CONTROLS_REPEAT_INPUT_DO"];

@@ -400,6 +400,7 @@ Blockly.Msg["VARIABLES_SET_HELPURL"] = "https://github.com/google/blockly/wiki/V
 Blockly.Msg["VARIABLES_SET_TOOLTIP"] = "Sets this variable to be equal to the input.";  // untranslated
 Blockly.Msg["VARIABLE_ALREADY_EXISTS"] = "ئىسم مەۋجۇت “%1” ئۆزگەرگۈچى";
 Blockly.Msg["VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE"] = "ئىسىملىك“%1” ئۆزگەرگۈچى مىقدار مەۋجۇت بولۇپ تۇرىدۇ ، لېكىن يەنە بىر ئۆزگەرگۈچى مىقدار تىپى بولۇش سۈپىتى بىلەن “%2” مەۋجۇت .";
+Blockly.Msg["WORKSPACE_ARIA_LABEL"] = "Blockly Workspace";  // untranslated
 Blockly.Msg["WORKSPACE_COMMENT_DEFAULT_TEXT"] = "Say something...";  // untranslated
 Blockly.Msg["CONTROLS_FOREACH_INPUT_DO"] = Blockly.Msg["CONTROLS_REPEAT_INPUT_DO"];
 Blockly.Msg["CONTROLS_FOR_INPUT_DO"] = Blockly.Msg["CONTROLS_REPEAT_INPUT_DO"];

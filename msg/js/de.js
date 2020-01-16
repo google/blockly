@@ -400,6 +400,7 @@ Blockly.Msg["VARIABLES_SET_HELPURL"] = "https://de.wikipedia.org/wiki/Variable_%
 Blockly.Msg["VARIABLES_SET_TOOLTIP"] = "Setzt den Wert einer Variable.";
 Blockly.Msg["VARIABLE_ALREADY_EXISTS"] = "Eine Variable namens „%1“ ist bereits vorhanden.";
 Blockly.Msg["VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE"] = "Eine Variable namens „%1“ ist bereits für einen anderen Typ vorhanden: „%2“.";
+Blockly.Msg["WORKSPACE_ARIA_LABEL"] = "Blockly Workspace";  // untranslated
 Blockly.Msg["WORKSPACE_COMMENT_DEFAULT_TEXT"] = "Teile etwas mit…";
 Blockly.Msg["CONTROLS_FOREACH_INPUT_DO"] = Blockly.Msg["CONTROLS_REPEAT_INPUT_DO"];
 Blockly.Msg["CONTROLS_FOR_INPUT_DO"] = Blockly.Msg["CONTROLS_REPEAT_INPUT_DO"];

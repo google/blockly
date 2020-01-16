@@ -400,6 +400,7 @@ Blockly.Msg["VARIABLES_SET_HELPURL"] = "https://github.com/google/blockly/wiki/V
 Blockly.Msg["VARIABLES_SET_TOOLTIP"] = "تعيين هذا المتغير لتكون مساوية للقيمة المدخلة.";
 Blockly.Msg["VARIABLE_ALREADY_EXISTS"] = "المتغير '%1' موجود بالفعل";
 Blockly.Msg["VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE"] = "متغير بأسم '%1' معرف من نوع اخر : '%2'.";
+Blockly.Msg["WORKSPACE_ARIA_LABEL"] = "مساحة عمل بلوكلي";
 Blockly.Msg["WORKSPACE_COMMENT_DEFAULT_TEXT"] = "قل شيئا...";
 Blockly.Msg["CONTROLS_FOREACH_INPUT_DO"] = Blockly.Msg["CONTROLS_REPEAT_INPUT_DO"];
 Blockly.Msg["CONTROLS_FOR_INPUT_DO"] = Blockly.Msg["CONTROLS_REPEAT_INPUT_DO"];

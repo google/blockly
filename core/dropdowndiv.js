@@ -333,6 +333,19 @@ Blockly.DropDownDiv.show = function(owner, rtl, primaryX, primaryY,
   Blockly.DropDownDiv.positionInternal_(
       metrics.initialX, metrics.initialY,
       metrics.finalX, metrics.finalY);
+
+  // SHAPE: Added from blockly_changes
+  // When showing (aka opening) the dropdown, wait for 100 ms and modify the colors of recent modules.
+  setTimeout(function () {
+    Blockly.FieldDropdown.changeRecentModuleColors(Fable.Data.Modules.activeModules, Fable.Data.Modules.recentModules);
+  }, 100);
+
+  // SHAPE: Added from blockly_changes
+  // After opening the dropdown, check the recent module colors every 1000 ms for changes.
+  Blockly.DropDownDiv.intervalID = setInterval(function () {
+    Blockly.FieldDropdown.changeRecentModuleColors(Fable.Data.Modules.activeModules, Fable.Data.Modules.recentModules);
+  }, 1000);
+
   return metrics.arrowAtTop;
 };
 
@@ -578,6 +591,13 @@ Blockly.DropDownDiv.hide = function() {
   if (Blockly.DropDownDiv.onHide_) {
     Blockly.DropDownDiv.onHide_();
     Blockly.DropDownDiv.onHide_ = null;
+  }
+
+  // SHAPE: Added from blockly_changes
+  // Stop the iterative execution of the changeRecentModuleColors function, if the dropdown was just opened. See Blockly.DropDownDiv.show overload in this file.
+  if (Blockly.DropDownDiv.intervalID > 0) {
+    clearInterval(Blockly.DropDownDiv.intervalID);
+    Blockly.DropDownDiv.intervalID = -1;
   }
 };
 

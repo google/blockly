@@ -596,80 +596,89 @@ Blockly.FieldDropdown.prototype.getText_ = function() {
   return selectedOption;
 };
 
-//TODOQ3:
 /*
 * SHAPE: Added from blockly_changes
 * Iterates through a dropdown and changes the colors of recent modules to grey them out.
 */
-Blockly.FieldDropdown.changeRecentModuleColors = function(activeIDsDict, recentIDsDict) {
-  //Find the dropdown HTML element
-  var widgetDiv = document.getElementsByClassName("blocklyWidgetDiv");
-  if (widgetDiv.length > 0) {
-      widgetDiv = widgetDiv[0];
-  }
-  else {
-      return;
-  }
-
-   //If the dropdown is not visible (aka closed), do not do anything
-  if (widgetDiv.style['display'] === "none") {
-      return;
+Blockly.FieldDropdown.changeRecentModuleColors = function (activeIDsDict, recentIDsDict) {
+  // Find the dropdown HTML element
+  var dropdownDiv = document.getElementsByClassName('blocklyDropDownDiv');
+  if (dropdownDiv.length > 0) {
+    dropdownDiv = dropdownDiv[0];
+  } else {
+    return;
   }
 
-   //Get the dropdown's child, which contains a list with all the options
-  var mainChild = widgetDiv.children;
+  // If the dropdown is not visible (aka closed), do not do anything
+  if (dropdownDiv.style['display'] === 'none') {
+    return;
+  }
+
+  // Get the dropdown's child, which contains a list with all the options
+  var mainChild = dropdownDiv.children;
   if (mainChild.length > 0) {
-      mainChild = mainChild[0];
-  }
-  else {
-      return;
+    mainChild = mainChild[0];
+  } else {
+    return;
   }
 
-   //The following 30 or lines generate two lists for the active and recent modules.
-  //Those lists contain ALL active/recent modules as strings. Makes for easier search later.
+  if (mainChild.children.length > 0) {
+    mainChild = mainChild.children[0];
+  } else {
+    return;
+  }
+
+  // The following 30 or lines generate two lists for the active and recent modules.
+  // Those lists contain ALL active/recent modules as strings. Makes for easier search later.
   var listOfActiveModules = [];
   var listOfRecentModules = [];
 
-   //TODO: As new module types show up, add them in this list
-  var listOfModuleTypes = ["Hub", "Dongle", "Joint", "Spin", "Face"];
+  // TODO: As new module types show up, add them in this list
+  var listOfModuleTypes = ['Hub', 'Dongle', 'Joint', 'Spin', 'Face'];
 
-   for (let key in listOfModuleTypes) {
+  for (let key in listOfModuleTypes) {
     var moduleType = listOfModuleTypes[key];
 
-     //Go through all the active modules of type "moduleType" and add them to the "global" list above
+    // Go through all the active modules of type "moduleType" and add them to the "global" list above
     if (activeIDsDict && moduleType in activeIDsDict) {
       for (var activeModule in activeIDsDict[moduleType]) {
         listOfActiveModules.push(activeIDsDict[moduleType][activeModule][0]);
       }
     }
 
-    //Do the same for the recent modules
+    // Do the same for the recent modules
     if (recentIDsDict && moduleType in recentIDsDict) {
       for (var recentModule in recentIDsDict[moduleType]) {
         listOfRecentModules.push(recentIDsDict[moduleType][recentModule][0]);
       }
     }
   }
-  //Go through all options in the dropdown
+
+  // Go through all options in the dropdown
   for (var i = 0; i < mainChild.children.length; i++) {
     var child = mainChild.children[i];
     var innerText = child.innerText;
-    if (innerText != undefined) {
+    if (innerText) {
       // remove that fun fun empty space
       innerText = innerText.trim();
-      if (innerText != 'Hub') {
-        //uppercase for the Face module but not the Hub / Dongle
-        innerText = innerText.toUpperCase();
-      } 
 
-      //Search in the active and recent lists. If the option is inside the recent list, but not in the active list, grey it out.
-      //Otherwise, un-grey it out.
+      // Fix for a super weird bug where the spacebar at the end is replaced with /u0003 (End of Text) char.
+      if (innerText.length === 4 && innerText.charCodeAt(innerText[3]) === 3) {
+        innerText = innerText.substr(0, 3);
+      }
+
+      if (innerText !== 'Hub') {
+        // uppercase for the Face module but not the Hub / Dongle
+        innerText = innerText.toUpperCase();
+      }
+
+      // Search in the active and recent lists. If the option is inside the recent list, but not in the active list, grey it out.
+      // Otherwise, un-grey it out.
       if (!(listOfActiveModules.includes(innerText)) &&
           (listOfRecentModules.includes(innerText))) {
-                      child.children[0].className = "goog-menuitem-content recent-module";
-      }
-      else if (child.children[0].className === "goog-menuitem-content recent-module") {
-          child.children[0].className = "goog-menuitem-content";
+        child.children[0].className = 'goog-menuitem-content recent-module';
+      } else if (child.children[0].className === 'goog-menuitem-content recent-module') {
+        child.children[0].className = 'goog-menuitem-content';
       }
     }
   }

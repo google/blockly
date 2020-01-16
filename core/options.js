@@ -155,7 +155,7 @@ Blockly.Options = function(options) {
    * workspace.
    * @type {Blockly.Workspace}
    */
-  this.parentWorkspace = null
+  this.parentWorkspace = null;
 };
 
 /**

@@ -400,6 +400,7 @@ Blockly.Msg["VARIABLES_SET_HELPURL"] = "https://github.com/google/blockly/wiki/V
 Blockly.Msg["VARIABLES_SET_TOOLTIP"] = "Ad yesbadu amutti-agi akken ad yegdu azal n unekcam.";
 Blockly.Msg["VARIABLE_ALREADY_EXISTS"] = "Amutti s yisem '%1' yella yakan.";
 Blockly.Msg["VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE"] = "Amutti s yisem '%1' yella yakan i wanaw-nniḍen: '%2'.";
+Blockly.Msg["WORKSPACE_ARIA_LABEL"] = "Blockly Workspace";  // untranslated
 Blockly.Msg["WORKSPACE_COMMENT_DEFAULT_TEXT"] = "Ini kra...";
 Blockly.Msg["CONTROLS_FOREACH_INPUT_DO"] = Blockly.Msg["CONTROLS_REPEAT_INPUT_DO"];
 Blockly.Msg["CONTROLS_FOR_INPUT_DO"] = Blockly.Msg["CONTROLS_REPEAT_INPUT_DO"];

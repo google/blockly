@@ -400,6 +400,7 @@ Blockly.Msg["VARIABLES_SET_HELPURL"] = "https://github.com/google/blockly/wiki/V
 Blockly.Msg["VARIABLES_SET_TOOLTIP"] = "Gör så att den här variabeln blir lika med inputen.";
 Blockly.Msg["VARIABLE_ALREADY_EXISTS"] = "En variabel med namn \"%1\" finns redan.";
 Blockly.Msg["VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE"] = "En variabel med namnet \"%1\" finns redan för en annan typ: \"%2\".";
+Blockly.Msg["WORKSPACE_ARIA_LABEL"] = "Blocklys arbetsyta";
 Blockly.Msg["WORKSPACE_COMMENT_DEFAULT_TEXT"] = "Säg någonting...";
 Blockly.Msg["CONTROLS_FOREACH_INPUT_DO"] = Blockly.Msg["CONTROLS_REPEAT_INPUT_DO"];
 Blockly.Msg["CONTROLS_FOR_INPUT_DO"] = Blockly.Msg["CONTROLS_REPEAT_INPUT_DO"];

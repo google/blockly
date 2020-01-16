@@ -400,6 +400,7 @@ Blockly.Msg["VARIABLES_SET_HELPURL"] = "https://github.com/google/blockly/wiki/V
 Blockly.Msg["VARIABLES_SET_TOOLTIP"] = "設定此變數，好和輸入結果相等。";
 Blockly.Msg["VARIABLE_ALREADY_EXISTS"] = "已存在變數「%1」。";
 Blockly.Msg["VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE"] = "已存在名為「%1」，且用於其它類型「%2」的變數。";
+Blockly.Msg["WORKSPACE_ARIA_LABEL"] = "Blockly工作區";
 Blockly.Msg["WORKSPACE_COMMENT_DEFAULT_TEXT"] = "來說些事情...";
 Blockly.Msg["CONTROLS_FOREACH_INPUT_DO"] = Blockly.Msg["CONTROLS_REPEAT_INPUT_DO"];
 Blockly.Msg["CONTROLS_FOR_INPUT_DO"] = Blockly.Msg["CONTROLS_REPEAT_INPUT_DO"];

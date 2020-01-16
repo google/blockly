@@ -400,6 +400,7 @@ Blockly.Msg["VARIABLES_SET_HELPURL"] = "https://github.com/google/blockly/wiki/V
 Blockly.Msg["VARIABLES_SET_TOOLTIP"] = "Đặt giá trị của biến này thành...";
 Blockly.Msg["VARIABLE_ALREADY_EXISTS"] = "Một biến có tên '%1' đã tồn tại.";
 Blockly.Msg["VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE"] = "Giá trị '%1' đã tồn tại dưới dạng: '%2'.";
+Blockly.Msg["WORKSPACE_ARIA_LABEL"] = "Blockly Workspace";  // untranslated
 Blockly.Msg["WORKSPACE_COMMENT_DEFAULT_TEXT"] = "Hãy nói gì đó...";
 Blockly.Msg["CONTROLS_FOREACH_INPUT_DO"] = Blockly.Msg["CONTROLS_REPEAT_INPUT_DO"];
 Blockly.Msg["CONTROLS_FOR_INPUT_DO"] = Blockly.Msg["CONTROLS_REPEAT_INPUT_DO"];

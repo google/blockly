@@ -1,9 +1,6 @@
 /**
  * @license
- * Visual Blocks Editor
- *
- * Copyright 2012 Google Inc.
- * https://developers.google.com/blockly/
+ * Copyright 2012 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,6 +22,8 @@
 'use strict';
 
 goog.provide('Blockly.Names');
+
+goog.require('Blockly.Msg');
 
 
 /**
@@ -114,6 +113,7 @@ Blockly.Names.prototype.getNameForUserVariable_ = function(id) {
  * @param {string} type The type of entity in Blockly
  *     ('VARIABLE', 'PROCEDURE', 'BUILTIN', etc...).
  * @return {string} An entity name that is legal in the exported language.
+ * @suppress {deprecated} Suppress deprecated Blockly.Variables.NAME_TYPE.
  */
 Blockly.Names.prototype.getName = function(name, type) {
   if (type == Blockly.Variables.NAME_TYPE) {
@@ -172,7 +172,7 @@ Blockly.Names.prototype.getDistinctName = function(name, type) {
  */
 Blockly.Names.prototype.safeName_ = function(name) {
   if (!name) {
-    name = 'unnamed';
+    name = Blockly.Msg['UNNAMED_KEY'] || 'unnamed';
   } else {
     // Unfortunately names in non-latin characters will look like
     // _E9_9F_B3_E4_B9_90 which is pretty meaningless.

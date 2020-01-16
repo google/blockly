@@ -1,9 +1,6 @@
 /**
  * @license
- * Visual Blocks Language
- *
- * Copyright 2015 Google Inc.
- * https://developers.google.com/blockly/
+ * Copyright 2015 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,6 +29,12 @@ goog.require('Blockly.PHP');
 Blockly.PHP['text'] = function(block) {
   // Text value.
   var code = Blockly.PHP.quote_(block.getFieldValue('TEXT'));
+  return [code, Blockly.PHP.ORDER_ATOMIC];
+};
+
+Blockly.PHP['text_multiline'] = function(block) {
+  // Text value.
+  var code = Blockly.PHP.multiline_quote_(block.getFieldValue('TEXT'));
   return [code, Blockly.PHP.ORDER_ATOMIC];
 };
 
@@ -174,7 +177,7 @@ Blockly.PHP['text_getSubstring'] = function(block) {
          '    $at1 = strlen($text) - 1 - $at1;',
          '  } else if ($where1 == \'FIRST\') {',
          '    $at1 = 0;',
-         '  } else if ($where1 != \'FROM_START\'){',
+         '  } else if ($where1 != \'FROM_START\') {',
          '    throw new Exception(\'Unhandled option (text_get_substring).\');',
          '  }',
          '  $length = 0;',

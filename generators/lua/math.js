@@ -1,9 +1,6 @@
 /**
  * @license
- * Visual Blocks Language
- *
- * Copyright 2016 Google Inc.
- * https://developers.google.com/blockly/
+ * Copyright 2016 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,7 +28,7 @@ goog.require('Blockly.Lua');
 
 Blockly.Lua['math_number'] = function(block) {
   // Numeric value.
-  var code = parseFloat(block.getFieldValue('NUM'));
+  var code = Number(block.getFieldValue('NUM'));
   var order = code < 0 ? Blockly.Lua.ORDER_UNARY :
               Blockly.Lua.ORDER_ATOMIC;
   return [code, order];

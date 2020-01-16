@@ -1,9 +1,6 @@
 /**
  * @license
- * Visual Blocks Editor
- *
- * Copyright 2018 Google Inc.
- * https://developers.google.com/blockly/
+ * Copyright 2018 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,10 +31,10 @@ function makeMockWs(scale, x, y, width, height) {
   return {
     getBlocksBoundingBox: function() {
       return {
-        width: width,
-        height: height,
-        x: x,
-        y: y
+        top: y,
+        bottom: y + height,
+        left: x,
+        right: x + width
       }
     },
     scale: scale

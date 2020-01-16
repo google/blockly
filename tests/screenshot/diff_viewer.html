@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<!--
+@license
+Copyright 2019 Google LLC
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+ http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+<html>
+<head>
+<meta charset="utf-8">
+<title>Diff Viewer</title>
+<script src="outputs/test_output.js"></script>
+<script>
+'use strict';
+function start() {
+
+  var test_list = results.tests;
+
+  var table = document.getElementById('results_table');
+
+  for (var i = 0, test; test = test_list[i]; i++) {
+    addTest(table, test);
+  }
+}
+
+function addTest(table, test) {
+  var row = table.insertRow(-1);
+  var className = 'tableRow';
+  if (test.state == 'failed') {
+    className += ' failedTest'
+  } else {
+    className += ' passedTest';
+  }
+  row.className = className;
+  var cell1 = row.insertCell(0);
+  cell1.innerHTML = test.title;
+  var displayed = (test.state == "failed")
+  cell1.displayed = displayed;
+  cell1.className = 'testName';
+  var cell2 = addImageCell(row, test.title, 'old', displayed);
+  var cell3 = addImageCell(row, test.title, 'new', displayed);
+  var cell4 = addImageCell(row, test.title, 'diff', displayed);
+
+  cell1.onclick = function() {
+    var display = !cell1.displayed;
+    cell1.displayed = display;
+    setVisibility(cell2, display);
+    setVisibility(cell3, display);
+    setVisibility(cell4, display);
+  }
+
+}
+
+function setVisibility(cell, displayed) {
+  var img = cell.firstChild;
+  if (displayed) {
+    img.className = '';
+  } else {
+    img.className = 'hidden';
+  }
+}
+function addImageCell(row, name, dir, displayed) {
+  var cell = row.insertCell();
+  cell.className = 'imageCell';
+  var img = document.createElement('img');
+  img.src = 'outputs/' + dir + '/' + name + '.png';
+  cell.appendChild(img);
+  if (!displayed) {
+    img.className = 'hidden';
+  }
+  return cell;
+}
+</script>
+
+<style>
+.imageCell {
+  width: 30%;
+  overflow: hidden
+}
+.hidden {
+  display: none;
+}
+.testName {
+  cursor: pointer;
+}
+.failedTest .testName {
+  background: lightgrey;
+}
+.passedTest .testName {
+  background: forestgreen;
+}
+td {
+  border: 1px solid black;
+}
+th {
+  border: 1px solid black;
+}
+
+table {
+  width: 100%;
+  table-layout: fixed;
+  border-collapse: collapse;
+  border: 1px solid black;
+}
+
+</style>
+</head>
+<body onload="start()">
+  <div>
+    <table id="results_table">
+      <tr>
+        <th style="width:100px">Test name</th>
+        <th>Old</th>
+        <th>New</th>
+        <th>Diff</th>
+      </tr>
+  </div>
+</body>
+</html>

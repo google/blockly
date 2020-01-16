@@ -1,9 +1,6 @@
 /**
  * @license
- * Visual Blocks Editor
- *
- * Copyright 2017 Google Inc.
- * https://developers.google.com/blockly/
+ * Copyright 2017 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -51,8 +48,8 @@ function test_extension() {
       this.extendedWithAfter = true;
     });
 
-    assert(goog.isFunction(Blockly.Extensions.ALL_['extensions_test_before']));
-    assert(goog.isFunction(Blockly.Extensions.ALL_['extensions_test_after']));
+    assert(typeof Blockly.Extensions.ALL_['extensions_test_before'] == 'function');
+    assert(typeof Blockly.Extensions.ALL_['extensions_test_after'] == 'function');
     assertEquals(0, numCallsToBefore);
     assertEquals(0, numCallsToAfter);
 
@@ -165,7 +162,7 @@ function test_parent_tooltip_when_inline() {
     block = new Blockly.Block(workspace, 'test_parent_tooltip_when_inline');
 
     // Tooltip is dynamic after extension initialization.
-    assert(goog.isFunction(block.tooltip));
+    assert(typeof block.tooltip == 'function');
     assertEquals(block.tooltip(), defaultTooltip);
 
     // Tooltip is normal before connected to parent.
@@ -210,7 +207,7 @@ function test_mixin_extension() {
 
     // Extension defined before the block type is defined.
     Blockly.Extensions.registerMixin('mixin_test', TEST_MIXIN);
-    assert(goog.isFunction(Blockly.Extensions.ALL_['mixin_test']));
+    assert(typeof Blockly.Extensions.ALL_['mixin_test'] == 'function');
 
     Blockly.defineBlocksWithJsonArray([{
       "type": "test_block_mixin",
@@ -243,7 +240,7 @@ function test_bad_mixin_overwrites_local_value() {
 
     // Extension defined before the block type is defined.
     Blockly.Extensions.registerMixin('mixin_bad_inputList', TEST_MIXIN_BAD_INPUTLIST);
-    assert(goog.isFunction(Blockly.Extensions.ALL_['mixin_bad_inputList']));
+    assert(typeof Blockly.Extensions.ALL_['mixin_bad_inputList'] == 'function');
 
     Blockly.defineBlocksWithJsonArray([{
       "type": "test_block_bad_inputList",
@@ -280,7 +277,7 @@ function test_bad_mixin_overwrites_prototype() {
 
     // Extension defined before the block type is defined.
     Blockly.Extensions.registerMixin('mixin_bad_colour_', TEST_MIXIN_BAD_COLOUR);
-    assert(goog.isFunction(Blockly.Extensions.ALL_['mixin_bad_colour_']));
+    assert(typeof Blockly.Extensions.ALL_['mixin_bad_colour_'] == 'function');
 
     Blockly.defineBlocksWithJsonArray([{
       "type": "test_block_bad_colour",

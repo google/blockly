@@ -132,7 +132,7 @@ Blockly.SearchWorkspace = function(workspace) {
   //   thisObj.onBlur(event);
   // });
 };
-goog.inherits(Blockly.SearchWorkspace, Blockly.Search);
+Blockly.utils.object.inherits(Blockly.SearchWorkspace, Blockly.Search);
 
 //Old way of handling the workspace changes. Might have to re-add it if we change the logic too dramatically.
 // Blockly.SearchWorkspace.prototype.onNewWorkspaceEvent = function(event) {
@@ -307,7 +307,7 @@ Blockly.SearchWorkspace.prototype.executeSearchOnKeyUp = function(e) {
   var searchTerms = search.lastSearchValue_.trim().toLowerCase().split(/\s+/);
 
   //Remove those elements of the search terms that are empty (so no empty strings are in the search)
-  searchTerms = goog.array.filter(searchTerms, function (term) {
+  searchTerms = Blockly.Toolbox.TreeSearch.filter(searchTerms, function (term) {
     return term.length > 0;
   });
 

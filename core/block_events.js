@@ -1,9 +1,6 @@
 /**
  * @license
- * Visual Blocks Editor
- *
- * Copyright 2018 Google Inc.
- * https://developers.google.com/blockly/
+ * Copyright 2018 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,9 +33,11 @@ goog.provide('Blockly.Events.Move');  // Deprecated.
 
 goog.require('Blockly.Events');
 goog.require('Blockly.Events.Abstract');
-goog.require('Blockly.Xml.utils');
-
-goog.require('goog.math.Coordinate');
+goog.require('Blockly.utils.Coordinate');
+goog.require('Blockly.utils.object');
+goog.require('Blockly.utils.xml');
+// TODO: Fix recursive dependency.
+// goog.require('Blockly.Xml');
 
 
 /**
@@ -57,7 +56,8 @@ Blockly.Events.BlockBase = function(block) {
   this.blockId = block.id;
   this.workspaceId = block.workspace.id;
 };
-goog.inherits(Blockly.Events.BlockBase, Blockly.Events.Abstract);
+Blockly.utils.object.inherits(Blockly.Events.BlockBase,
+    Blockly.Events.Abstract);
 
 /**
  * Encode the event as JSON.
@@ -74,7 +74,7 @@ Blockly.Events.BlockBase.prototype.toJson = function() {
  * @param {!Object} json JSON representation.
  */
 Blockly.Events.BlockBase.prototype.fromJson = function(json) {
-  Blockly.Events.BlockBase.superClass_.toJson.call(this);
+  Blockly.Events.BlockBase.superClass_.fromJson.call(this, json);
   this.blockId = json['blockId'];
 };
 
@@ -98,7 +98,7 @@ Blockly.Events.Change = function(block, element, name, oldValue, newValue) {
   this.oldValue = oldValue;
   this.newValue = newValue;
 };
-goog.inherits(Blockly.Events.Change, Blockly.Events.BlockBase);
+Blockly.utils.object.inherits(Blockly.Events.Change, Blockly.Events.BlockBase);
 
 /**
  * Class for a block change event.
@@ -171,25 +171,22 @@ Blockly.Events.Change.prototype.run = function(forward) {
     case 'field':
       var field = block.getField(this.name);
       if (field) {
-        // Run the validator for any side-effects it may have.
-        // The validator's opinion on validity is ignored.
-        field.callValidator(value);
         field.setValue(value);
       } else {
         console.warn("Can't set non-existent field: " + this.name);
       }
       break;
     case 'comment':
-      block.setCommentText(value || null);
+      block.setCommentText(/** @type {string} */ (value) || null);
       break;
     case 'collapsed':
-      block.setCollapsed(value);
+      block.setCollapsed(!!value);
       break;
     case 'disabled':
-      block.setDisabled(value);
+      block.setEnabled(!value);
       break;
     case 'inline':
-      block.setInputsInline(value);
+      block.setInputsInline(!!value);
       break;
     case 'mutation':
       var oldMutation = '';
@@ -198,9 +195,8 @@ Blockly.Events.Change.prototype.run = function(forward) {
         oldMutation = oldMutationDom && Blockly.Xml.domToText(oldMutationDom);
       }
       if (block.domToMutation) {
-        value = value || '<mutation></mutation>';
-        var dom = Blockly.Xml.textToDom('<xml>' + value + '</xml>');
-        block.domToMutation(dom.firstChild);
+        var dom = Blockly.Xml.textToDom(/** @type {string} */ (value) || '<mutation/>');
+        block.domToMutation(dom);
       }
       Blockly.Events.fire(new Blockly.Events.Change(
           block, 'mutation', null, oldMutation, value));
@@ -227,9 +223,9 @@ Blockly.Events.Create = function(block) {
   } else {
     this.xml = Blockly.Xml.blockToDom(block);
   }
-  this.ids = Blockly.Events.getDescendantIds_(block);
+  this.ids = Blockly.Events.getDescendantIds(block);
 };
-goog.inherits(Blockly.Events.Create, Blockly.Events.BlockBase);
+Blockly.utils.object.inherits(Blockly.Events.Create, Blockly.Events.BlockBase);
 
 /**
  * Class for a block creation event.
@@ -262,7 +258,7 @@ Blockly.Events.Create.prototype.toJson = function() {
  */
 Blockly.Events.Create.prototype.fromJson = function(json) {
   Blockly.Events.Create.superClass_.fromJson.call(this, json);
-  this.xml = Blockly.Xml.textToDom('<xml>' + json['xml'] + '</xml>').firstChild;
+  this.xml = Blockly.Xml.textToDom(json['xml']);
   this.ids = json['ids'];
 };
 
@@ -273,14 +269,14 @@ Blockly.Events.Create.prototype.fromJson = function(json) {
 Blockly.Events.Create.prototype.run = function(forward) {
   var workspace = this.getEventWorkspace_();
   if (forward) {
-    var xml = Blockly.Xml.utils.createElement('xml');
+    var xml = Blockly.utils.xml.createElement('xml');
     xml.appendChild(this.xml);
     Blockly.Xml.domToWorkspace(xml, workspace);
   } else {
     for (var i = 0, id; id = this.ids[i]; i++) {
       var block = workspace.getBlockById(id);
       if (block) {
-        block.dispose(false, false);
+        block.dispose(false);
       } else if (id == this.blockId) {
         // Only complain about root-level block.
         console.warn("Can't uncreate non-existent block: " + id);
@@ -309,9 +305,9 @@ Blockly.Events.Delete = function(block) {
   } else {
     this.oldXml = Blockly.Xml.blockToDom(block);
   }
-  this.ids = Blockly.Events.getDescendantIds_(block);
+  this.ids = Blockly.Events.getDescendantIds(block);
 };
-goog.inherits(Blockly.Events.Delete, Blockly.Events.BlockBase);
+Blockly.utils.object.inherits(Blockly.Events.Delete, Blockly.Events.BlockBase);
 
 /**
  * Class for a block deletion event.
@@ -356,14 +352,14 @@ Blockly.Events.Delete.prototype.run = function(forward) {
     for (var i = 0, id; id = this.ids[i]; i++) {
       var block = workspace.getBlockById(id);
       if (block) {
-        block.dispose(false, false);
+        block.dispose(false);
       } else if (id == this.blockId) {
         // Only complain about root-level block.
         console.warn("Can't delete non-existent block: " + id);
       }
     }
   } else {
-    var xml = Blockly.Xml.utils.createElement('xml');
+    var xml = Blockly.utils.xml.createElement('xml');
     xml.appendChild(this.oldXml);
     Blockly.Xml.domToWorkspace(xml, workspace);
   }
@@ -385,7 +381,7 @@ Blockly.Events.Move = function(block) {
   this.oldInputName = location.inputName;
   this.oldCoordinate = location.coordinate;
 };
-goog.inherits(Blockly.Events.Move, Blockly.Events.BlockBase);
+Blockly.utils.object.inherits(Blockly.Events.Move, Blockly.Events.BlockBase);
 
 /**
  * Class for a block move event.  Created before the move.
@@ -431,7 +427,7 @@ Blockly.Events.Move.prototype.fromJson = function(json) {
   if (json['newCoordinate']) {
     var xy = json['newCoordinate'].split(',');
     this.newCoordinate =
-        new goog.math.Coordinate(parseFloat(xy[0]), parseFloat(xy[1]));
+        new Blockly.utils.Coordinate(Number(xy[0]), Number(xy[1]));
   }
 };
 
@@ -452,7 +448,7 @@ Blockly.Events.Move.prototype.recordNew = function() {
  * @private
  */
 Blockly.Events.Move.prototype.currentLocation_ = function() {
-  var workspace = Blockly.Workspace.getById(this.workspaceId);
+  var workspace = this.getEventWorkspace_();
   var block = workspace.getBlockById(this.blockId);
   var location = {};
   var parent = block.getParent();
@@ -475,7 +471,7 @@ Blockly.Events.Move.prototype.currentLocation_ = function() {
 Blockly.Events.Move.prototype.isNull = function() {
   return this.oldParentId == this.newParentId &&
       this.oldInputName == this.newInputName &&
-      goog.math.Coordinate.equals(this.oldCoordinate, this.newCoordinate);
+      Blockly.utils.Coordinate.equals(this.oldCoordinate, this.newCoordinate);
 };
 
 /**

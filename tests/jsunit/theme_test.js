@@ -1,9 +1,6 @@
 /**
  * @license
- * Visual Blocks Editor
- *
- * Copyright 2018 Google Inc.
- * https://developers.google.com/blockly/
+ * Copyright 2018 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -129,12 +126,12 @@ function test_setTheme() {
   };
   blockA.styleName_ = 'styleOne';
 
-  setUpMockMethod(mockControl_, Blockly, 'getMainWorkspace', null, [workspace]);
+  var mockControl_ = setUpMockMethod(Blockly, 'getMainWorkspace', null, [workspace]);
 
-  Blockly.setTheme(blockStyles);
+  workspace.setTheme(blockStyles);
 
   //Checks that the theme was set correctly on Blockly namespace
-  stringifyAndCompare(Blockly.getTheme(), blockStyles);
+  stringifyAndCompare(workspace.getTheme(), blockStyles);
 
   //Checks that the setTheme function was called on the block
   assertEquals(blockA.getStyleName(), 'styleTwo');
@@ -145,6 +142,8 @@ function test_setTheme() {
   assertEquals(Blockly.Events.FIRE_QUEUE_.pop().element, 'theme');
 
   undefineThemeTestBlocks();
+
+  mockControl_.restore();
 }
 
 function stringifyAndCompare(val1, val2) {

@@ -1,9 +1,6 @@
 /**
  * @license
- * Blockly Tests
- *
- * Copyright 2017 Google Inc.
- * https://developers.google.com/blockly/
+ * Copyright 2017 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -49,6 +46,7 @@ function test_gestureIsField_ClickInWorkspace() {
   var block = new Blockly.Block(workspace);
   var field = new Blockly.Field();
   field.setSourceBlock(block);
+  field.showEditor_ = function() {};
   var gesture = new Blockly.Gesture(e, workspace);
   gesture.setStartField(field);
 
@@ -64,6 +62,7 @@ function gestureIsFieldClick_InFlyoutHelper(flyout, expectedResult){
   var block = new Blockly.Block(workspace);
   var field = new Blockly.Field();
   field.setSourceBlock(block);
+  field.showEditor_ = function() {};
   // Create gesture from the flyout
   var gesture = new Blockly.Gesture(e, workspace.flyout_);
   // Populate gesture with click start information

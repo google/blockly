@@ -1,9 +1,6 @@
 /**
  * @license
- * Visual Blocks Language
- *
- * Copyright 2015 Google Inc.
- * https://developers.google.com/blockly/
+ * Copyright 2015 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,6 +24,7 @@
 goog.provide('Blockly.PHP');
 
 goog.require('Blockly.Generator');
+goog.require('Blockly.utils.string');
 
 
 /**
@@ -213,6 +211,17 @@ Blockly.PHP.quote_ = function(string) {
 };
 
 /**
+ * Encode a string as a properly escaped multiline PHP string, complete with
+ * quotes.
+ * @param {string} string Text to encode.
+ * @return {string} PHP string.
+ * @private
+ */
+Blockly.PHP.multiline_quote_ = function(string) {
+  return '<<<EOT\n' + string + '\nEOT';
+};
+
+/**
  * Common tasks for generating PHP from blocks.
  * Handles comments for the specified block and any connected value blocks.
  * Calls any statements following this block.
@@ -228,8 +237,9 @@ Blockly.PHP.scrub_ = function(block, code, opt_thisOnly) {
   if (!block.outputConnection || !block.outputConnection.targetConnection) {
     // Collect comment for this block.
     var comment = block.getCommentText();
-    comment = Blockly.utils.wrap(comment, Blockly.PHP.COMMENT_WRAP - 3);
     if (comment) {
+      comment = Blockly.utils.string.wrap(comment,
+          Blockly.PHP.COMMENT_WRAP - 3);
       commentCode += Blockly.PHP.prefixLines(comment, '// ') + '\n';
     }
     // Collect comments for all value arguments.
@@ -284,7 +294,7 @@ Blockly.PHP.getAdjusted = function(block, atId, opt_delta, opt_negate,
 
   if (Blockly.isNumber(at)) {
     // If the index is a naked number, adjust it right now.
-    at = parseFloat(at) + delta;
+    at = Number(at) + delta;
     if (opt_negate) {
       at = -at;
     }

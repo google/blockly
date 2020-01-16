@@ -28,46 +28,42 @@ goog.provide('Blockly.ButtonInput');
 
 goog.require('Blockly.Field');
 goog.require('Blockly.Msg');
-goog.require('goog.asserts');
-goog.require('goog.dom');
-goog.require('goog.dom.TagName');
-goog.require('goog.userAgent');
-
+goog.require('Blockly.utils.userAgent');
 
 /**
  * Class for an editable text field.
- * 
+ *
  * @param {string}      text            The initial content of the field.
- * @param {Function=}   opt_validator   An optional function that is called  to validate any constraints
+ * @param {Function=}   optValidator   An optional function that is called  to validate any constraints
  *                                      on what the user entered.  Takes the new text as an argument and
  *                                      returns either the accepted text, a replacement text, or null to
  *                                      abort the change.
  * @extends {Blockly.Field}
  * @constructor
  */
-Blockly.ButtonInput = function (text, opt_validator) {
-    Blockly.ButtonInput.superClass_.constructor.call(this, text,
-        opt_validator);
+Blockly.ButtonInput = function (text, optValidator) {
+  Blockly.ButtonInput.superClass_.constructor.call(this, text,
+    optValidator);
 };
-goog.inherits(Blockly.ButtonInput, Blockly.Field);
+Blockly.utils.object.inherits(Blockly.ButtonInput, Blockly.Field);
 
-Blockly.ButtonInput.FONTSIZE = 11;                  //Point size of text. Should match blocklyText's font-size in CSS.
+Blockly.ButtonInput.FONTSIZE = 11; // Point size of text. Should match blocklyText's font-size in CSS.
 Blockly.ButtonInput.MIN_WIDTH = 50;
 Blockly.ButtonInput.WIDGET_MIN_WIDTH = 0;
 
-Blockly.ButtonInput.prototype.CURSOR = 'button';    //Mouse cursor style when over the hotspot that initiates the editor.
+Blockly.ButtonInput.prototype.CURSOR = 'button'; // Mouse cursor style when over the hotspot that initiates the editor.
 Blockly.ButtonInput.prototype.isSpecial = true;
 
-Blockly.ButtonInput.prototype.KEY_CODE = "KEYCODE_SPACEBAR";
+Blockly.ButtonInput.prototype.KEY_CODE = 'KEYCODE_SPACEBAR';
 Blockly.ButtonInput.prototype.LOCALIZED_KEY = Blockly.Msg.SPACEBAR;
-Blockly.ButtonInput.prototype.PYTHON_KEY = "Space";
+Blockly.ButtonInput.prototype.PYTHON_KEY = 'Space';
 
 /**
  * Close the input widget if this input is being deleted.
  */
 Blockly.ButtonInput.prototype.dispose = function () {
-    Blockly.WidgetDiv.hideIfOwner(this);
-    Blockly.ButtonInput.superClass_.dispose.call(this);
+  Blockly.WidgetDiv.hideIfOwner(this);
+  Blockly.ButtonInput.superClass_.dispose.call(this);
 };
 
 /**
@@ -79,10 +75,26 @@ Blockly.ButtonInput.prototype.dispose = function () {
  * @package
  * @nocollapse
  */
-Blockly.ButtonInput.fromJson = function(options) {
-  var text = Blockly.utils.replaceMessageReferences(options['text']);
-  var field = new Blockly.ButtonInput(text, options['class']);
+Blockly.ButtonInput.fromJson = function (options) {
+  var text = Blockly.utils.replaceMessageReferences(options.text);
+  var field = new Blockly.ButtonInput(text, options.class);
   return field;
+};
+
+/**
+* Serializable fields are saved by the XML renderer, non-serializable fields
+* are not. Editable fields should also be serializable.
+* @type {boolean}
+*/
+Blockly.ButtonInput.prototype.SERIALIZABLE = true;
+
+/**
+ * Create the block UI for this checkbox.
+ * @package
+ */
+Blockly.ButtonInput.prototype.initView = function() {
+  Blockly.ButtonInput.superClass_.initView.call(this);
+  this.updateSize_();
 };
 
 /**
@@ -92,24 +104,39 @@ Blockly.ButtonInput.fromJson = function(options) {
  */
 Blockly.ButtonInput.prototype.setValue = function (newValue) {
   // console.log(newValue);
-    if (newValue === null) {
-        return;  // No change if null.
+  if (newValue === null) {
+    return; // No change if null.
+  }
+  if (this.sourceBlock_) {
+    var validated = this.callValidator(newValue);
+    // If the new value is invalid, validation returns null.
+    // In this case we still want to display the illegal result.
+    if (validated !== null) {
+      newValue = validated;
     }
-    if (this.sourceBlock_) {
-        var validated = this.callValidator(newValue);
-        // If the new value is invalid, validation returns null.
-        // In this case we still want to display the illegal result.
-        if (validated !== null) {
-          newValue = validated;
-        }
-    }
-    
-    //Save the KEY
-    this.KEY_CODE = newValue;
-    newValue = Blockly.Field.prototype.setValue.call(this, newValue);
+  }
 
-    //Update the text field
-    this.setText(this.KEY_CODE);
+  const oldValue = this.value_;
+
+  // Save the KEY
+  this.KEY_CODE = newValue;
+
+  // Convert the user-visible text based on the KEY
+  var newText = this.getDisplayText_();
+
+  newText = String(newText);
+
+  if (this.textElement_) {
+    this.textContent_.nodeValue = newText;
+  }
+
+  newValue = Blockly.Field.prototype.setValue.call(this, newValue);
+
+  this.updateSize_();
+
+  this.value_ = this.KEY_CODE;
+  Blockly.Events.fire(new Blockly.Events.BlockChange(
+    this.sourceBlock_, 'field', this.name, oldValue, this.value_));
 };
 
 /**
@@ -118,52 +145,25 @@ Blockly.ButtonInput.prototype.setValue = function (newValue) {
  * are not translated to the language chosen by the user,
  * but remain in english.
  */
-Blockly.ButtonInput.prototype.getValue = function() {
-  //Retrieve the stored KEY (used for caching)
+Blockly.ButtonInput.prototype.getValue = function () {
+  // Retrieve the stored KEY (used for caching)
   return this.KEY_CODE;
 };
 
-/**
- * Set the text in this field and fire a change event.
- * @param {*} newText New text.
- */
-Blockly.ButtonInput.prototype.setText = function (newText) {
-    if (newText === null) {
-        // No change if null.
-        return;
-    }
-    
-    //Convert the user-visible text based on the KEY
-    newText = this.convertText(newText);
-
-    newText = String(newText);
-    if (newText === this.text_) {
-        // No change.
-        return;
-    }
-    if (this.sourceBlock_ && Blockly.Events.isEnabled()) {
-        Blockly.Events.fire(new Blockly.Events.Change(
-        this.sourceBlock_, 'field', this.name, this.text_, newText));
-    }
-
-    Blockly.Field.prototype.setText.call(this, newText);
-    this.resizeInput_();
-};
-
-Blockly.ButtonInput.prototype.convertText = function() {
+Blockly.ButtonInput.prototype.getDisplayText_ = function () {
   switch (this.KEY_CODE) {
-    case "KEYCODE_SPACEBAR":
+    case 'KEYCODE_SPACEBAR':
       return Blockly.Msg.SPACEBAR;
-    case "KEYCODE_UP":
+    case 'KEYCODE_UP':
       return Blockly.Msg.UP;
-    case "KEYCODE_DOWN":
+    case 'KEYCODE_DOWN':
       return Blockly.Msg.DOWN;
-    case "KEYCODE_LEFT":
+    case 'KEYCODE_LEFT':
       return Blockly.Msg.LEFT;
-    case "KEYCODE_RIGHT":
+    case 'KEYCODE_RIGHT':
       return Blockly.Msg.RIGHT;
     default:
-      //Lowercase this so caps lock doesn't affect things
+      // Lowercase this so caps lock doesn't affect things
       return this.KEY_CODE.toLowerCase();
   }
 };
@@ -172,49 +172,48 @@ Blockly.ButtonInput.prototype.convertText = function() {
  * Get the text from this field.
  * @return {string} Current text.
  */
-Blockly.ButtonInput.prototype.convertKeyToCode = function() {
-    switch (this.KEY_CODE) {
-      case "KEYCODE_SPACEBAR":
-        return "spacebar";
-      case "KEYCODE_UP":
-        return "up";
-      case "KEYCODE_DOWN":
-        return "down";
-      case "KEYCODE_LEFT":
-        return "left";
-      case "KEYCODE_RIGHT":
-        return "right";
-      default:
-        //Lowercase this so caps lock doesn't affect things
-        return this.KEY_CODE.toLowerCase();
-    }
+Blockly.ButtonInput.prototype.convertKeyToCode = function () {
+  switch (this.KEY_CODE) {
+    case 'KEYCODE_SPACEBAR':
+      return 'spacebar';
+    case 'KEYCODE_UP':
+      return 'up';
+    case 'KEYCODE_DOWN':
+      return 'down';
+    case 'KEYCODE_LEFT':
+      return 'left';
+    case 'KEYCODE_RIGHT':
+      return 'right';
+    default:
+      // Lowercase this so caps lock doesn't affect things
+      return this.KEY_CODE.toLowerCase();
+  }
 };
 
-Blockly.ButtonInput.prototype.resizeInput_ = function() {
-  if (this.sourceBlock_ != undefined && 
-      this.sourceBlock_.workspace.isFlyout != undefined &&
-      this.sourceBlock_.workspace.isFlyout) {
-        return;
-  }
+Blockly.ButtonInput.prototype.updateSize_ = function () {
+  // if (this.sourceBlock_ &&
+  //     this.sourceBlock_.workspace.isFlyout &&
+  //     this.sourceBlock_.workspace.isFlyout) {
+  //   return;
+  // }
 
   var textWidth = 0;
   var tempWidth = 0;
 
-  if (this.size_ != undefined) {
-    // if (this.size_.width == Blockly.ButtonInput.MIN_WIDTH) {
-    //   return;
-    // }
-
-
+  if (this.size_ !== undefined) {
     try {
-        textWidth = this.textElement_.getComputedTextLength();
+      textWidth = Blockly.utils.dom.getTextWidth(this.textElement_);
+
+      if (textWidth === 0 && this.textContent_) {
+        textWidth = this.textContent_.nodeValue.length * 8;
+      }
     } catch (e) {
       // In other cases where we fail to geth the computed text. Instead, use an
       // approximation and do not cache the result. At some later point in time
       // when the block is inserted into the visible DOM, this method will be
       // called again and, at that point in time, will not throw an exception.
-      if (this.text_) {
-        textWidth = this.text_.length * 8;
+      if (this.textContent_) {
+        textWidth = this.textContent_.nodeValue.length * 8;
       }
     }
 
@@ -228,64 +227,45 @@ Blockly.ButtonInput.prototype.resizeInput_ = function() {
       tempWidth = Blockly.ButtonInput.WIDGET_MIN_WIDTH;
     }
 
-    this.size_ = new goog.math.Size(tempWidth, this.size_.height);
+    this.size_ = new Blockly.utils.Size(tempWidth + 5, this.size_.height);
   }
 
-  if (this.borderRect_ != undefined) {
-    this.borderRect_.setAttribute("width", tempWidth);
+  if (this.borderRect_) {
+    this.borderRect_.setAttribute('width', tempWidth);
   }
 
-  if (this.textElement_ != undefined) {
-    //The -4 accounts for the rx property of the surrounding rect (used for rounding of the box). Check Blockly.Field.
-    var newX = ((tempWidth - textWidth) / 2) - 5;
-    this.textElement_.setAttribute("x", newX);
+  if (this.textElement_) {
+    // The -4 accounts for the rx property of the surrounding rect (used for rounding of the box). Check Blockly.Field.
+    var newX = ((tempWidth - textWidth) / 2);
+    this.textElement_.setAttribute('x', newX);
   }
-
-  if (this.sourceBlock_ != undefined) {
-    this.sourceBlock_.rendered && this.sourceBlock_.render();
-  }
-
-  // if (this.borderRect_ == undefined || this.textElement_ == undefined) {
-  //     var thisField = this;
-  //     var intervalId = -1;
-  //     intervalId = setInterval(function() {
-  //       if ((thisField.borderRect_ != undefined) && 
-  //           (thisField.textElement_ != undefined) && 
-  //           (thisField.sourceBlock_ != undefined)) {
-  //             thisField.resizeInput_();
-  //             clearInterval(intervalId);
-  //       }
-  //     }, 100);
-  // }
 };
 
 /**
  * Show the inline free-text editor on top of the text.
- * @param {boolean=} opt_quietInput True if editor should be created without
+ * @param {boolean=} optQuietInput True if editor should be created without
  *     focus.  Defaults to false.
  * @private
  */
-Blockly.ButtonInput.prototype.showEditor_ = function (opt_quietInput) {
-  // this.LOCALIZED_KEY = this.text_;
-
+Blockly.ButtonInput.prototype.showEditor_ = function (optQuietInput) {
   this.workspace_ = this.sourceBlock_.workspace;
-  var quietInput = opt_quietInput || false;
+  var quietInput = optQuietInput || false;
 
   Blockly.WidgetDiv.show(this, this.sourceBlock_.RTL, this.widgetDispose_());
 
   var div = Blockly.WidgetDiv.DIV;
   // Create the input.
-  var htmlInput =
-    goog.dom.createDom(goog.dom.TagName.INPUT, 'blocklyHtmlButtonInput');
+  var htmlInput = document.createElement('input');
+  htmlInput.setAttribute('class', 'blocklyHtmlButtonInput');
   var fontSize =
     (Blockly.ButtonInput.FONTSIZE * this.workspace_.scale) + 'pt';
   div.style.fontSize = fontSize;
   htmlInput.style.fontSize = fontSize;
   var bBox = this.fieldGroup_.getBBox();
   htmlInput.placeholder = Blockly.Msg.PRESS_ANY_KEY;
-  Blockly.ButtonInput.WIDGET_MIN_WIDTH = (htmlInput.placeholder.length * 8); 
+  Blockly.ButtonInput.WIDGET_MIN_WIDTH = (htmlInput.placeholder.length * 8);
   htmlInput.style.width = (Blockly.ButtonInput.WIDGET_MIN_WIDTH * this.workspace_.scale) + 'px';
-  //Remove 6 as there is 2 pixels of padding and 4 pixels of border
+  // Remove 6 as there is 2 pixels of padding and 4 pixels of border
   htmlInput.style.height = ((bBox.height * this.workspace_.scale) - 6) + 'px';
 
   /** @type {!HTMLInputElement} */
@@ -314,178 +294,181 @@ Blockly.ButtonInput.prototype.showEditor_ = function (opt_quietInput) {
  */
 Blockly.ButtonInput.prototype.onHtmlInputKeyDown_ = function (e) {
   var isKeyPressSuccessful = true;
-  
-  var escKey = 27;
-  
-  //Check if the pressed key is Escape (for closing the widget)
-  if (e.keyCode != escKey) {
-    //"Parse" the key by getting the local version of it (and disregarging Shift, Control, etc)
+
+  if (e.keyCode !== Blockly.utils.KeyCodes.ESC) {
+    // "Parse" the key by getting the local version of it (and disregarging Shift, Control, etc)
     isKeyPressSuccessful = this.keyDisplayParser_(e);
   }
 
-  //If the key parsed susccessfully, hide the widget
-  //Otherwise, show the "invalid key pressed" animation
+  // If the key parsed susccessfully, hide the widget
+  // Otherwise, show the "invalid key pressed" animation
   if (isKeyPressSuccessful) {
+    this.setValue(this.KEY_CODE);
     Blockly.WidgetDiv.hide();
-    this.resizeInput_();
-  }
-  else {
+    this.updateSize_();
+  } else {
+    if (e.keyCode === Blockly.utils.KeyCodes.TAB) {
+      e.preventDefault();
+    }
     this.onInvalidButtonPressed_();
   }
+
+  this.forceRerender();
 };
 
 /**
  * Changes the placeholder text of the widget from
- * "Press any key" to "Invalid key pressed" and proceeds to 
+ * "Press any key" to "Invalid key pressed" and proceeds to
  * start a flashing animation.
  */
-Blockly.ButtonInput.prototype.onInvalidButtonPressed_ = function() {
-  //Get the widget and all HTML children of it
+Blockly.ButtonInput.prototype.onInvalidButtonPressed_ = function () {
+  // Get the widget and all HTML children of it
   var div = Blockly.WidgetDiv.DIV;
   var children = div.children;
 
   div.blur();
 
-  //Find the child of the widget that has the text input block in it
+  // Find the child of the widget that has the text input block in it
   for (var i = 0; i < children.length; i++) {
-    if (children[i].className == "blocklyHtmlButtonInput") { //|| 
-        // children[i].className == "blocklyHtmlButtonInput button-input-error-1" || 
-        // children[i].className == "blocklyHtmlButtonInput button-input-error-2") {
+    if (children[i].className === 'blocklyHtmlButtonInput') { // ||
+      // children[i].className == "blocklyHtmlButtonInput button-input-error-1" ||
+      // children[i].className == "blocklyHtmlButtonInput button-input-error-2") {
 
-        //Change the placeholder text of the input element  
-        children[i].placeholder = Blockly.Msg.INVALID_KEY_PRESSED;
-        //Make sure "dead" keys on Mac are ignored (annoying keys that have to pressed twice)
-        children[i].value = "";
+      // Change the placeholder text of the input element
+      children[i].placeholder = Blockly.Msg.INVALID_KEY_PRESSED;
+      // Make sure "dead" keys on Mac are ignored (annoying keys that have to pressed twice)
+      children[i].value = '';
 
-        // children[i].blur();
-        Blockly.ButtonInput.WIDGET_MIN_WIDTH = (children[i].placeholder.length * 8); 
-        children[i].style.width = (Blockly.ButtonInput.WIDGET_MIN_WIDTH * this.sourceBlock_.workspace.scale) + 'px';
-        this.resizeInput_();
+      // children[i].blur();
+      Blockly.ButtonInput.WIDGET_MIN_WIDTH = (children[i].placeholder.length * 8);
+      children[i].style.width = (Blockly.ButtonInput.WIDGET_MIN_WIDTH * this.sourceBlock_.workspace.scale) + 'px';
+      this.updateSize_();
 
-        //Change the class so the animation starts triggering
-        children[i].className = "blocklyHtmlButtonInput button-input-error-1";
+      // Change the class so the animation starts triggering
+      children[i].className = 'blocklyHtmlButtonInput button-input-error-1';
 
-        //Focus the widget so user presses are still registered in the onHtmlInputKeyDown_ event
-        children[i].focus();
-        children[i].select();
+      // Focus the widget so user presses are still registered in the onHtmlInputKeyDown_ event
+      children[i].focus();
+      children[i].select();
 
-        //After 300 ms, change the class again (triggers the flashing effect)
-        setTimeout(this.changePlaceholderAnimation_(children[i], 0), 300);
+      // After 300 ms, change the class again (triggers the flashing effect)
+      setTimeout(this.changePlaceholderAnimation_(children[i], 0), 300);
     }
   }
-}
+
+
+  this.forceRerender();
+};
 
 /**
  * Switches the class of the widget so a flashing effect is achieved.
  * After 6 loops, triggers the end animation, which slowly switches back to
  * the "Press any key" placeholder.
  */
-Blockly.ButtonInput.prototype.changePlaceholderAnimation_ = function(elem, count) {
-  //Switch the class between error-1 and error-2
-  if (elem.className == "blocklyHtmlButtonInput button-input-error-1") {
-    elem.className = "blocklyHtmlButtonInput button-input-error-2";
-  }
-  else {
-    elem.className = "blocklyHtmlButtonInput button-input-error-1";
+Blockly.ButtonInput.prototype.changePlaceholderAnimation_ = function (elem, count) {
+  // Switch the class between error-1 and error-2
+  if (elem.className === 'blocklyHtmlButtonInput button-input-error-1') {
+    elem.className = 'blocklyHtmlButtonInput button-input-error-2';
+  } else {
+    elem.className = 'blocklyHtmlButtonInput button-input-error-1';
   }
 
-  //Make sure "dead" keys on Mac are ignored (annoying keys that have to pressed twice)
-  elem.value = "";
+  // Make sure "dead" keys on Mac are ignored (annoying keys that have to pressed twice)
+  elem.value = '';
 
-  //Focus the widget so user presses are still registered in the onHtmlInputKeyDown_ event
+  // Focus the widget so user presses are still registered in the onHtmlInputKeyDown_ event
   elem.focus();
   elem.select();
 
-  //Check the lifetime of the animation
-  //under 5 loops - continue animation
-  //at 5 loops - slowly go to red color
-  //at 6 loops - go to end of animation
+  // Check the lifetime of the animation
+  // under 5 loops - continue animation
+  // at 5 loops - slowly go to red color
+  // at 6 loops - go to end of animation
   if (count < 5) {
     count = count + 1;
     setTimeout(this.changePlaceholderAnimation_.bind(this, elem, count), 500);
-  }
-  else if (count == 5) {
+  } else if (count === 5) {
     count = count + 1;
     setTimeout(this.changePlaceholderAnimation_.bind(this, elem, count), 2000);
-  }
-  else {
+  } else {
     setTimeout(this.onResetPlaceholder_.bind(this, elem), 500);
   }
+
+  this.forceRerender();
 };
 
 /**
  * Restores the placeholder of the widget to say "Press any key".
  * Done after the "invalid key pressed" animation finishes.
  */
-Blockly.ButtonInput.prototype.onResetPlaceholder_ = function(elem) {
-    //Return to the original class name
-    elem.className = "blocklyHtmlButtonInput";
-    //Change the label
-    elem.placeholder = Blockly.Msg.PRESS_ANY_KEY;
+Blockly.ButtonInput.prototype.onResetPlaceholder_ = function (elem) {
+  // Return to the original class name
+  elem.className = 'blocklyHtmlButtonInput';
+  // Change the label
+  elem.placeholder = Blockly.Msg.PRESS_ANY_KEY;
 
-    //Only update the min width if the widget is still active!
-    if (Blockly.ButtonInput.WIDGET_MIN_WIDTH > 0) {
-      Blockly.ButtonInput.WIDGET_MIN_WIDTH = (elem.placeholder.length * 8); 
-      elem.style.width = (Blockly.ButtonInput.WIDGET_MIN_WIDTH * this.sourceBlock_.workspace.scale) + 'px';
-      this.resizeInput_();
-    }
-    
-    //Make sure it's selected so the user key presses will still be registered in the onHtmlInputKeyDown_ event
-    elem.focus();
-    elem.select();
+  // Only update the min width if the widget is still active!
+  if (Blockly.ButtonInput.WIDGET_MIN_WIDTH > 0) {
+    Blockly.ButtonInput.WIDGET_MIN_WIDTH = (elem.placeholder.length * 8);
+    elem.style.width = (Blockly.ButtonInput.WIDGET_MIN_WIDTH * this.sourceBlock_.workspace.scale) + 'px';
+    this.updateSize_();
+  }
+
+  // Make sure it's selected so the user key presses will still be registered in the onHtmlInputKeyDown_ event
+  elem.focus();
+  elem.select();
+
+  this.forceRerender();
 };
-
 
 /**
  * Parses the key code (integer) into the proper string. This allows for translations of the
  * 'special' keys like space bar and the arrow pad.
- * 
- * @param {Object} key_object   keyEvent object
+ *
+ * @param {Object} keyObject   keyEvent object
  * @private
- * 
+ *
  * @returns {String} A translated string of the special keys.
  */
-Blockly.ButtonInput.prototype.keyDisplayParser_ = function (key_object) {
-    console.log(key_object);
+Blockly.ButtonInput.prototype.keyDisplayParser_ = function (keyObject) {
+  const keyCode = keyObject.keyCode;
 
-    let key_code = key_object.keyCode;
+  // Generate both the localized key and the equivallent that will be used for the python code
+  let keyCodeForCache = keyObject.key;
 
-    //Generate both the localized key and the equivallent that will be used for the python code
-    let key_code_for_cache = key_object.key;
+  // Parse special keys (spacebar and 4 arrow keys)
+  // Also parse every other key
+  // If it's a special key (more than 1 character in it - ex. "Shift" has 5 chars), key is marked as invalid
+  switch (keyCode) {
+    case 32:
+      keyCodeForCache = 'KEYCODE_SPACEBAR';
+      break;
+    case 37:
+      keyCodeForCache = 'KEYCODE_LEFT';
+      break;
+    case 38:
+      keyCodeForCache = 'KEYCODE_UP';
+      break;
+    case 39:
+      keyCodeForCache = 'KEYCODE_RIGHT';
+      break;
+    case 40:
+      keyCodeForCache = 'KEYCODE_DOWN';
+      break;
+    default:
+      keyCodeForCache = keyObject.key;
 
-    //Parse special keys (spacebar and 4 arrow keys)
-    //Also parse every other key
-    //If it's a special key (more than 1 character in it - ex. "Shift" has 5 chars), key is marked as invalid
-    switch(key_code) {
-        case 32:
-            key_code_for_cache = "KEYCODE_SPACEBAR";
-            break;
-        case 37:
-            key_code_for_cache = "KEYCODE_LEFT";
-            break;
-        case 38:
-            key_code_for_cache = "KEYCODE_UP";
-            break;
-        case 39:
-            key_code_for_cache = "KEYCODE_RIGHT";
-            break;
-        case 40:
-            key_code_for_cache = "KEYCODE_DOWN";
-            break;
-        default:
-            key_code_for_cache = key_object.key;
+      // If the pressed key is not a char, it is a special key (ex. Shift, Ctrl). Ignore those.
+      if (keyCodeForCache.length > 1) {
+        return false;
+      }
+      break;
+  }
 
-            //If the pressed key is not a char, it is a special key (ex. Shift, Ctrl). Ignore those.
-            if (key_code_for_cache.length > 1) {
-              return false;
-            }
-            break;
-    }
+  this.KEY_CODE = keyCodeForCache;
 
-    this.KEY_CODE = key_code_for_cache;
-
-    return true;
-}
+  return true;
+};
 
 /**
  * Check to see if the contents of the editor validates.
@@ -494,15 +477,17 @@ Blockly.ButtonInput.prototype.keyDisplayParser_ = function (key_object) {
  */
 Blockly.ButtonInput.prototype.validate_ = function () {
   var valid = true;
-  goog.asserts.assertObject(Blockly.ButtonInput.htmlInput_);
-  var htmlInput = Blockly.ButtonInput.htmlInput_;
-  if (this.sourceBlock_) {
-    valid = this.callValidator(htmlInput.value);
-  }
-  if (valid === null) {
-    Blockly.utils.addClass(htmlInput, 'blocklyInvalidInput');
-  } else {
-    Blockly.utils.removeClass(htmlInput, 'blocklyInvalidInput');
+
+  if (typeof Blockly.ButtonInput.htmlInput_ === 'object' && Blockly.ButtonInput.htmlInput_ != null) {
+    var htmlInput = Blockly.ButtonInput.htmlInput_;
+    if (this.sourceBlock_) {
+      valid = this.callValidator(htmlInput.value);
+    }
+    if (valid === null) {
+      Blockly.utils.dom.addClass(htmlInput, 'blocklyInvalidInput');
+    } else {
+      Blockly.utils.dom.removeClass(htmlInput, 'blocklyInvalidInput');
+    }
   }
 };
 
@@ -510,7 +495,7 @@ Blockly.ButtonInput.prototype.validate_ = function () {
  * Resize the editor and the underlying block to fit the text.
  * @protected
  */
-Blockly.ButtonInput.prototype.resizeEditor_ = function() {
+Blockly.ButtonInput.prototype.resizeEditor_ = function () {
   var div = Blockly.WidgetDiv.DIV;
   var bBox = this.getScaledBBox_();
   div.style.width = bBox.right - bBox.left + 'px';
@@ -519,22 +504,24 @@ Blockly.ButtonInput.prototype.resizeEditor_ = function() {
   // In RTL mode block fields and LTR input fields the left edge moves,
   // whereas the right edge is fixed.  Reposition the editor.
   var x = this.sourceBlock_.RTL ? bBox.right - div.offsetWidth : bBox.left;
-  var xy = new goog.math.Coordinate(x, bBox.top);
+  var xy = new Blockly.utils.Coordinate(x, bBox.top);
 
   // Shift by a few pixels to line up exactly.
   xy.y += 3;
-  if (goog.userAgent.GECKO && Blockly.WidgetDiv.DIV.style.top) {
+  if (Blockly.utils.userAgent.GECKO && Blockly.WidgetDiv.DIV.style.top) {
     // Firefox mis-reports the location of the border by a pixel
     // once the WidgetDiv is moved into position.
     xy.x -= 1;
     xy.y -= 1;
   }
-  if (goog.userAgent.WEBKIT) {
+  if (Blockly.utils.userAgent.WEBKIT) {
     xy.y -= 3;
   }
   div.style.left = xy.x + 'px';
   div.style.top = xy.y + 'px';
-  this.resizeInput_();
+  this.updateSize_();
+
+  this.forceRerender();
 };
 
 /**
@@ -547,16 +534,16 @@ Blockly.ButtonInput.prototype.widgetDispose_ = function () {
   var thisField = this;
   return function () {
     Blockly.ButtonInput.WIDGET_MIN_WIDTH = 0;
-    thisField.setText(thisField.KEY_CODE);
+    thisField.setValue(thisField.KEY_CODE);
     thisField.validate_();
-    thisField.resizeInput_();
+    thisField.updateSize_();
     thisField.sourceBlock_.rendered && thisField.sourceBlock_.render();
     var htmlInput = Blockly.ButtonInput.htmlInput_;
 
     if (htmlInput != null) {
       Blockly.unbindEvent_(htmlInput.onKeyDownWrapper_);
       thisField.workspace_.removeChangeListener(
-          htmlInput.onWorkspaceChangeWrapper_);
+        htmlInput.onWorkspaceChangeWrapper_);
     }
 
     Blockly.ButtonInput.htmlInput_ = null;
@@ -570,4 +557,4 @@ Blockly.ButtonInput.prototype.widgetDispose_ = function () {
   };
 };
 
-Blockly.Field.register('button_input', Blockly.ButtonInput);
+Blockly.fieldRegistry.register('button_input', Blockly.ButtonInput);

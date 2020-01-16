@@ -1,9 +1,6 @@
 /**
  * @license
- * Visual Blocks Language
- *
- * Copyright 2012 Google Inc.
- * https://developers.google.com/blockly/
+ * Copyright 2012 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,6 +29,15 @@ goog.require('Blockly.JavaScript');
 Blockly.JavaScript['text'] = function(block) {
   // Text value.
   var code = Blockly.JavaScript.quote_(block.getFieldValue('TEXT'));
+  return [code, Blockly.JavaScript.ORDER_ATOMIC];
+};
+
+Blockly.JavaScript['text_multiline'] = function(block) {
+  // Text value.
+  var code = Blockly.JavaScript.multiline_quote_(block.getFieldValue('TEXT'));
+  if (code.includes('\n')) {
+      code = '(' + code + ')'
+  }
   return [code, Blockly.JavaScript.ORDER_ATOMIC];
 };
 
@@ -316,7 +322,7 @@ Blockly.JavaScript['text_prompt_ext'] = function(block) {
   var code = 'window.prompt(' + msg + ')';
   var toNumber = block.getFieldValue('TYPE') == 'NUMBER';
   if (toNumber) {
-    code = 'parseFloat(' + code + ')';
+    code = 'Number(' + code + ')';
   }
   return [code, Blockly.JavaScript.ORDER_FUNCTION_CALL];
 };

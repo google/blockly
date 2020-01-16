@@ -142,7 +142,7 @@ h1 {
     </tr>
   </table>
 
-  <xml id="toolbox-simple" style="display: none">
+  <xml xmlns="https://developers.google.com/blockly/xml" id="toolbox-simple" style="display: none">
     <block type="controls_if"></block>
     <block type="logic_compare"></block>
     <!-- <block type="control_repeat"></block> -->
@@ -161,8 +161,8 @@ h1 {
     <block type="logic_ternary"></block>
   </xml>
 
-  <xml id="toolbox-categories" style="display: none">
-    <category name="Logic" colour="%{BKY_LOGIC_HUE}">
+  <xml xmlns="https://developers.google.com/blockly/xml" id="toolbox-categories" style="display: none">
+    <category name="Logic" categorystyle="logic_category">
       <block type="controls_if"></block>
       <block type="logic_compare"></block>
       <block type="logic_operation"></block>
@@ -171,7 +171,7 @@ h1 {
       <block type="logic_null" disabled="true"></block>
       <block type="logic_ternary"></block>
     </category>
-    <category name="Loops" colour="%{BKY_LOOPS_HUE}">
+    <category name="Loops" categorystyle="loop_category">
       <block type="controls_repeat_ext">
         <value name="TIMES">
           <shadow type="math_number">
@@ -201,7 +201,7 @@ h1 {
       <block type="controls_forEach"></block>
       <block type="controls_flow_statements"></block>
     </category>
-    <category name="Math" colour="%{BKY_MATH_HUE}">
+    <category name="Math" categorystyle="math_category">
       <block type="math_number" gap="32">
         <field name="NUM">123</field>
       </block>
@@ -302,8 +302,9 @@ h1 {
         </value>
       </block>
     </category>
-    <category name="Text" colour="%{BKY_TEXTS_HUE}">
+    <category name="Text" categorystyle="text_category">
       <block type="text"></block>
+      <block type="text_multiline"></block>
       <block type="text_join"></block>
       <block type="text_append">
         <value name="TEXT">
@@ -379,7 +380,7 @@ h1 {
         </value>
       </block>
     </category>
-    <category name="Lists" colour="%{BKY_LISTS_HUE}">
+    <category name="Lists" categorystyle="list_category">
       <block type="lists_create_with">
         <mutation items="0"></mutation>
       </block>
@@ -430,7 +431,7 @@ h1 {
       </block>
       <block type="lists_sort"></block>
     </category>
-    <category name="Colour" colour="%{BKY_COLOUR_HUE}">
+    <category name="Colour" categorystyle="colour_category">
       <block type="colour_picker"></block>
       <block type="colour_random"></block>
       <block type="colour_rgb">
@@ -469,8 +470,8 @@ h1 {
       </block>
     </category>
     <sep></sep>
-    <category name="Variables" colour="%{BKY_VARIABLES_HUE}" custom="VARIABLE"></category>
-    <category name="Functions" colour="%{BKY_PROCEDURES_HUE}" custom="PROCEDURE"></category>
+    <category name="Variables" categorystyle="variable_category" custom="VARIABLE"></category>
+    <category name="Functions" categorystyle="procedure_category" custom="PROCEDURE"></category>
   </xml>
 </body>
 </html>

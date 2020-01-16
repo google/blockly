@@ -1,0 +1,644 @@
+/**
+ * @license
+ * Copyright 2019 Google LLC
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/**
+ * @fileoverview The class representing an AST node.
+ * Used to traverse the Blockly AST.
+ */
+'use strict';
+
+goog.provide('Blockly.ASTNode');
+
+
+/**
+ * Class for an AST node.
+ * It is recommended that you use one of the createNode methods instead of
+ * creating a node directly.
+ * @param {string} type The type of the location.
+ *     Must be in Bockly.ASTNode.types.
+ * @param {Blockly.Block|Blockly.Connection|Blockly.Field|Blockly.Workspace}
+ *     location The position in the AST.
+ * @param {!Object=} opt_params Optional dictionary of options.
+ * @constructor
+ */
+Blockly.ASTNode = function(type, location, opt_params) {
+  if (!location) {
+    throw Error('Cannot create a node without a location.');
+  }
+
+  /**
+   * The type of the location.
+   * One of Blockly.ASTNode.types
+   * @type {string}
+   * @private
+   */
+  this.type_ = type;
+
+  /**
+   * Whether the location points to a connection.
+   * @type {boolean}
+   * @private
+   */
+  this.isConnection_ = Blockly.ASTNode.isConnectionType_(type);
+
+  /**
+   * The location of the AST node.
+   * @type {!(Blockly.Block|Blockly.Connection|Blockly.Field|Blockly.Workspace)}
+   * @private
+   */
+  this.location_ = location;
+
+  this.processParams_(opt_params || null);
+};
+
+/**
+ * Object holding different types for an AST node.
+ * @enum {string}
+ */
+Blockly.ASTNode.types = {
+  FIELD: 'field',
+  BLOCK: 'block',
+  INPUT: 'input',
+  OUTPUT: 'output',
+  NEXT: 'next',
+  PREVIOUS: 'previous',
+  STACK: 'stack',
+  WORKSPACE: 'workspace'
+};
+
+/**
+ * The default y offset to use when moving the cursor from a stack to the
+ * workspace.
+ * @type {number}
+ * @private
+ */
+Blockly.ASTNode.DEFAULT_OFFSET_Y = -20;
+
+/**
+ * Whether an AST node of the given type points to a connection.
+ * @param {string} type The type to check.  One of Blockly.ASTNode.types.
+ * @return {boolean} True if a node of the given type points to a connection.
+ * @private
+ */
+Blockly.ASTNode.isConnectionType_ = function(type) {
+  switch (type) {
+    case Blockly.ASTNode.types.PREVIOUS:
+    case Blockly.ASTNode.types.NEXT:
+    case Blockly.ASTNode.types.INPUT:
+    case Blockly.ASTNode.types.OUTPUT:
+      return true;
+  }
+  return false;
+};
+
+/**
+ * Create an AST node pointing to a field.
+ * @param {!Blockly.Field} field The location of the AST node.
+ * @return {!Blockly.ASTNode} An AST node pointing to a field.
+ */
+Blockly.ASTNode.createFieldNode = function(field) {
+  return new Blockly.ASTNode(Blockly.ASTNode.types.FIELD, field);
+};
+
+/**
+ * Creates an AST node pointing to a connection. If the connection has a parent
+ * input then create an AST node of type input that will hold the connection.
+ * @param {Blockly.Connection} connection This is the connection the node will
+ *     point to.
+ * @return {Blockly.ASTNode} An AST node pointing to a connection.
+ */
+Blockly.ASTNode.createConnectionNode = function(connection) {
+  if (!connection) {
+    return null;
+  }
+  if (connection.type == Blockly.INPUT_VALUE) {
+    return Blockly.ASTNode.createInputNode(connection.getParentInput());
+  } else if (connection.type == Blockly.NEXT_STATEMENT &&
+      connection.getParentInput()) {
+    return Blockly.ASTNode.createInputNode(connection.getParentInput());
+  } else if (connection.type == Blockly.NEXT_STATEMENT) {
+    return new Blockly.ASTNode(Blockly.ASTNode.types.NEXT, connection);
+  } else if (connection.type == Blockly.OUTPUT_VALUE) {
+    return new Blockly.ASTNode(Blockly.ASTNode.types.OUTPUT, connection);
+  } else if (connection.type == Blockly.PREVIOUS_STATEMENT) {
+    return new Blockly.ASTNode(Blockly.ASTNode.types.PREVIOUS, connection);
+  }
+  return null;
+};
+
+/**
+ * Creates an AST node pointing to an input. Stores the input connection as the
+ *     location.
+ * @param {Blockly.Input} input The input used to create an AST node.
+ * @return {!Blockly.ASTNode} An AST node pointing to a input.
+ */
+Blockly.ASTNode.createInputNode = function(input) {
+  if (!input) {
+    return null;
+  }
+  return new Blockly.ASTNode(Blockly.ASTNode.types.INPUT, input.connection);
+};
+
+/**
+ * Creates an AST node pointing to a block.
+ * @param {!Blockly.Block} block The block used to create an AST node.
+ * @return {!Blockly.ASTNode} An AST node pointing to a block.
+ */
+Blockly.ASTNode.createBlockNode = function(block) {
+  return new Blockly.ASTNode(Blockly.ASTNode.types.BLOCK, block);
+};
+
+/**
+ * Create an AST node of type stack. A stack, represented by its top block, is
+ *     the set of all blocks connected to a top block, including the top block.
+ * @param {!Blockly.Block} topBlock A top block has no parent and can be found
+ *     in the list returned by workspace.getTopBlocks().
+ * @return {!Blockly.ASTNode} An AST node of type stack that points to the top
+ *     block on the stack.
+ */
+Blockly.ASTNode.createStackNode = function(topBlock) {
+  return new Blockly.ASTNode(Blockly.ASTNode.types.STACK, topBlock);
+};
+
+/**
+ * Creates an AST node pointing to a workspace.
+ * @param {!Blockly.Workspace} workspace The workspace that we are on.
+ * @param {Blockly.utils.Coordinate} wsCoordinate The position on the workspace
+ *     for this node.
+ * @return {!Blockly.ASTNode} An AST node pointing to a workspace and a position
+ *     on the workspace.
+ */
+Blockly.ASTNode.createWorkspaceNode = function(workspace, wsCoordinate) {
+  var params = {
+    wsCoordinate: wsCoordinate
+  };
+  return new Blockly.ASTNode(
+      Blockly.ASTNode.types.WORKSPACE, workspace, params);
+};
+
+/**
+ * Parse the optional parameters.
+ * @param {Object} params The user specified parameters.
+ * @private
+ */
+Blockly.ASTNode.prototype.processParams_ = function(params) {
+  if (!params) {
+    return;
+  }
+  if (params.wsCoordinate) {
+    this.wsCoordinate_ = params.wsCoordinate;
+  }
+};
+
+/**
+ * Gets the value pointed to by this node.
+ * It is the callers responsibility to check the node type to figure out what
+ * type of object they get back from this.
+ * @return {!(Blockly.Field|Blockly.Connection|Blockly.Block|Blockly.Workspace)}
+ * The current field, connection, workspace, or block the cursor is on.
+ */
+Blockly.ASTNode.prototype.getLocation = function() {
+  return this.location_;
+};
+
+/**
+ * The type of the current location.
+ * One of Blockly.ASTNode.types
+ * @return {string} The type of the location.
+ */
+Blockly.ASTNode.prototype.getType = function() {
+  return this.type_;
+};
+
+/**
+ * The coordinate on the workspace.
+ * @return {Blockly.utils.Coordinate} The workspace coordinate or null if the
+ *     location is not a workspace.
+ */
+Blockly.ASTNode.prototype.getWsCoordinate = function() {
+  return this.wsCoordinate_;
+};
+
+/**
+ * Whether the node points to a connection.
+ * @return {boolean} [description]
+ * @package
+ */
+Blockly.ASTNode.prototype.isConnection = function() {
+  return this.isConnection_;
+};
+
+/**
+ * Get either the previous editable field, or get the first editable field for
+ * the given input.
+ * @param {!(Blockly.Field|Blockly.Connection)} location The current location of
+ *     the cursor, which must be a field or connection.
+ * @param {!Blockly.Input} parentInput The parentInput of the field.
+ * @param {boolean=} opt_last If true find the last editable field otherwise get
+ *     the previous field.
+ * @return {Blockly.ASTNode} The AST node holding the previous or last field or
+ *     null if no previous field exists.
+ * @private
+ */
+Blockly.ASTNode.prototype.findPreviousEditableField_ = function(location,
+    parentInput, opt_last) {
+  var fieldRow = parentInput.fieldRow;
+  var fieldIdx = fieldRow.indexOf(location);
+  var previousField = null;
+  var startIdx = (opt_last ? fieldRow.length : fieldIdx) - 1;
+  for (var i = startIdx, field; field = fieldRow[i]; i--) {
+    if (field.EDITABLE) {
+      previousField = field;
+      return Blockly.ASTNode.createFieldNode(previousField);
+    }
+  }
+  return null;
+};
+
+/**
+ * Given an input find the next editable field or an input with a non null
+ * connection in the same block. The current location must be an input
+ * connection.
+ * @return {Blockly.ASTNode} The AST node holding the next field or connection
+ *     or null if there is no editable field or input connection after the given
+ *     input.
+ * @private
+ */
+Blockly.ASTNode.prototype.findNextForInput_ = function() {
+  var parentInput = this.location_.getParentInput();
+  var block = parentInput.getSourceBlock();
+  var curIdx = block.inputList.indexOf(parentInput);
+  for (var i = curIdx + 1, input; input = block.inputList[i]; i++) {
+    var fieldRow = input.fieldRow;
+    for (var j = 0, field; field = fieldRow[j]; j++) {
+      if (field.EDITABLE) {
+        return Blockly.ASTNode.createFieldNode(field);
+      }
+    }
+    if (input.connection) {
+      return Blockly.ASTNode.createInputNode(input);
+    }
+  }
+  return null;
+};
+
+/**
+ * Given a field find the next editable field or an input with a non null
+ * connection in the same block. The current location must be a field.
+ * @return {Blockly.ASTNode} The AST node pointing to the next field or
+ *     connection or null if there is no editable field or input connection
+ *     after the given input.
+ * @private
+ */
+Blockly.ASTNode.prototype.findNextForField_ = function() {
+  var location = this.location_;
+  var input = location.getParentInput();
+  var block = location.getSourceBlock();
+  var curIdx = block.inputList.indexOf(input);
+  var fieldIdx = input.fieldRow.indexOf(location) + 1;
+  for (var i = curIdx, newInput; newInput = block.inputList[i]; i++) {
+    var fieldRow = newInput.fieldRow;
+    while (fieldIdx < fieldRow.length) {
+      if (fieldRow[fieldIdx].EDITABLE) {
+        return Blockly.ASTNode.createFieldNode(fieldRow[fieldIdx]);
+      }
+      fieldIdx++;
+    }
+    fieldIdx = 0;
+    if (newInput.connection) {
+      return Blockly.ASTNode.createInputNode(newInput);
+    }
+  }
+  return null;
+};
+
+/**
+ * Given an input find the previous editable field or an input with a non null
+ * connection in the same block. The current location must be an input
+ * connection.
+ * @return {Blockly.ASTNode} The AST node holding the previous field or
+ *     connection.
+ * @private
+ */
+Blockly.ASTNode.prototype.findPrevForInput_ = function() {
+  var location = this.location_.getParentInput();
+  var block = location.getSourceBlock();
+  var curIdx = block.inputList.indexOf(location);
+  for (var i = curIdx, input; input = block.inputList[i]; i--) {
+    if (input.connection && input !== location) {
+      return Blockly.ASTNode.createInputNode(input);
+    }
+    var fieldRow = input.fieldRow;
+    for (var j = fieldRow.length - 1, field; field = fieldRow[j]; j--) {
+      if (field.EDITABLE) {
+        return Blockly.ASTNode.createFieldNode(field);
+      }
+    }
+  }
+  return null;
+};
+
+/**
+ * Given a field find the previous editable field or an input with a non null
+ * connection in the same block. The current location must be a field.
+ * @return {Blockly.ASTNode} The AST node holding the previous input or field.
+ * @private
+ */
+Blockly.ASTNode.prototype.findPrevForField_ = function() {
+  var location = this.location_;
+  var parentInput = location.getParentInput();
+  var block = location.getSourceBlock();
+  var curIdx = block.inputList.indexOf(parentInput);
+  var fieldIdx = parentInput.fieldRow.indexOf(location) - 1;
+  for (var i = curIdx, input; input = block.inputList[i]; i--) {
+    if (input.connection && input !== parentInput) {
+      return Blockly.ASTNode.createInputNode(input);
+    }
+    var fieldRow = input.fieldRow;
+    while (fieldIdx > -1) {
+      if (fieldRow[fieldIdx].EDITABLE) {
+        return Blockly.ASTNode.createFieldNode(fieldRow[fieldIdx]);
+      }
+      fieldIdx--;
+    }
+    // Reset the fieldIdx to the length of the field row of the previous input.
+    if (i - 1 >= 0) {
+      fieldIdx = block.inputList[i - 1].fieldRow.length - 1;
+    }
+  }
+  return null;
+};
+
+/**
+ * Navigate between stacks of blocks on the workspace.
+ * @param {boolean} forward True to go forward. False to go backwards.
+ * @return {Blockly.ASTNode} The first block of the next stack or null if there
+ * are no blocks on the workspace.
+ * @private
+ */
+Blockly.ASTNode.prototype.navigateBetweenStacks_ = function(forward) {
+  var curLocation = this.getLocation();
+  if (!(curLocation instanceof Blockly.Block)) {
+    curLocation = curLocation.getSourceBlock();
+  }
+  if (!curLocation || !curLocation.workspace) {
+    return null;
+  }
+  var curRoot = curLocation.getRootBlock();
+  var topBlocks = curRoot.workspace.getTopBlocks(true);
+  for (var i = 0, topBlock; topBlock = topBlocks[i]; i++) {
+    if (curRoot.id == topBlock.id) {
+      var offset = forward ? 1 : -1;
+      var resultIndex = i + offset;
+      if (resultIndex == -1 || resultIndex == topBlocks.length) {
+        return null;
+      }
+      return Blockly.ASTNode.createStackNode(topBlocks[resultIndex]);
+    }
+  }
+  throw Error('Couldn\'t find ' + (forward ? 'next' : 'previous') + ' stack?!');
+};
+
+/**
+ * Finds the top most AST node for a given block.
+ * This is either the previous connection, output connection or block depending
+ * on what kind of connections the block has.
+ * @param {!Blockly.Block} block The block that we want to find the top
+ *     connection on.
+ * @return {!Blockly.ASTNode} The AST node containing the top connection.
+ * @private
+ */
+Blockly.ASTNode.prototype.findTopASTNodeForBlock_ = function(block) {
+  var topConnection = block.previousConnection || block.outputConnection;
+  if (topConnection) {
+    return Blockly.ASTNode.createConnectionNode(topConnection);
+  } else {
+    return Blockly.ASTNode.createBlockNode(block);
+  }
+};
+
+/**
+ * Get the AST node pointing to the input that the block is nested under or if
+ * the block is not nested then get the stack AST node.
+ * @param {Blockly.Block} block The source block of the current location.
+ * @return {Blockly.ASTNode} The AST node pointing to the input connection or
+ *     the top block of the stack this block is in.
+ * @private
+ */
+Blockly.ASTNode.prototype.getOutAstNodeForBlock_ = function(block) {
+  if (!block) {
+    return null;
+  }
+  var topBlock;
+  // If the block doesn't have a previous connection then it is the top of the
+  // substack.
+  topBlock = block.getTopStackBlock();
+  var topConnection = topBlock.previousConnection || topBlock.outputConnection;
+  // If the top connection has a parentInput, create an AST node pointing to
+  // that input.
+  if (topConnection && topConnection.targetConnection &&
+      topConnection.targetConnection.getParentInput()) {
+    return Blockly.ASTNode.createInputNode(
+        topConnection.targetConnection.getParentInput());
+  } else {
+    // Go to stack level if you are not underneath an input.
+    return Blockly.ASTNode.createStackNode(topBlock);
+  }
+};
+
+/**
+ * Find the first editable field or input with a connection on a given block.
+ * @param {!Blockly.Block} block The source block of the current location.
+ * @return {Blockly.ASTNode} An AST node pointing to the first field or input.
+ * Null if there are no editable fields or inputs with connections on the block.
+ * @private
+ */
+Blockly.ASTNode.prototype.findFirstFieldOrInput_ = function(block) {
+  var inputs = block.inputList;
+  for (var i = 0, input; input = inputs[i]; i++) {
+    var fieldRow = input.fieldRow;
+    for (var j = 0, field; field = fieldRow[j]; j++) {
+      if (field.EDITABLE) {
+        return Blockly.ASTNode.createFieldNode(field);
+      }
+    }
+    if (input.connection) {
+      return Blockly.ASTNode.createInputNode(input);
+    }
+  }
+  return null;
+};
+
+/**
+ * Find the element to the right of the current element in the AST.
+ * @return {Blockly.ASTNode} An AST node that wraps the next field, connection,
+ *     block, or workspace. Or null if there is no node to the right.
+ */
+Blockly.ASTNode.prototype.next = function() {
+  switch (this.type_) {
+    case Blockly.ASTNode.types.STACK:
+      return this.navigateBetweenStacks_(true);
+
+    case Blockly.ASTNode.types.OUTPUT:
+      return Blockly.ASTNode.createBlockNode(this.location_.getSourceBlock());
+
+    case Blockly.ASTNode.types.FIELD:
+      return this.findNextForField_();
+
+    case Blockly.ASTNode.types.INPUT:
+      return this.findNextForInput_();
+
+    case Blockly.ASTNode.types.BLOCK:
+      var nextConnection = this.location_.nextConnection;
+      if (nextConnection) {
+        return Blockly.ASTNode.createConnectionNode(nextConnection);
+      }
+      break;
+
+    case Blockly.ASTNode.types.PREVIOUS:
+      return Blockly.ASTNode.createBlockNode(this.location_.getSourceBlock());
+
+    case Blockly.ASTNode.types.NEXT:
+      var targetConnection = this.location_.targetConnection;
+      if (targetConnection) {
+        return Blockly.ASTNode.createConnectionNode(targetConnection);
+      }
+      break;
+  }
+
+  return null;
+};
+
+/**
+ * Find the element one level below and all the way to the left of the current
+ * location.
+ * @return {Blockly.ASTNode} An AST node that wraps the next field, connection,
+ * workspace, or block. Or null if there is nothing below this node.
+ */
+Blockly.ASTNode.prototype.in = function() {
+  switch (this.type_) {
+    case Blockly.ASTNode.types.WORKSPACE:
+      var topBlocks = this.location_.getTopBlocks(true);
+      if (topBlocks.length > 0) {
+        return Blockly.ASTNode.createStackNode(topBlocks[0]);
+      }
+      break;
+
+    case Blockly.ASTNode.types.STACK:
+      var block = /** @type {!Blockly.Block} */ (this.location_);
+      return this.findTopASTNodeForBlock_(block);
+
+    case Blockly.ASTNode.types.BLOCK:
+      var block = /** @type {!Blockly.Block} */ (this.location_);
+      return this.findFirstFieldOrInput_(this.location_);
+
+    case Blockly.ASTNode.types.INPUT:
+      var targetConnection = this.location_.targetConnection;
+      if (targetConnection) {
+        return Blockly.ASTNode.createConnectionNode(targetConnection);
+      }
+      break;
+  }
+
+  return null;
+};
+
+/**
+ * Find the element to the left of the current element in the AST.
+ * @return {Blockly.ASTNode} An AST node that wraps the previous field,
+ * connection, workspace or block. Or null if no node exists to the left.
+ * null.
+ */
+Blockly.ASTNode.prototype.prev = function() {
+  switch (this.type_) {
+    case Blockly.ASTNode.types.STACK:
+      return this.navigateBetweenStacks_(false);
+
+    case Blockly.ASTNode.types.OUTPUT:
+      return null;
+
+    case Blockly.ASTNode.types.FIELD:
+      return this.findPrevForField_();
+
+    case Blockly.ASTNode.types.INPUT:
+      return this.findPrevForInput_();
+
+    case Blockly.ASTNode.types.BLOCK:
+      var prevConnection = this.location_.previousConnection;
+      var outputConnection = this.location_.outputConnection;
+      var topConnection = prevConnection || outputConnection;
+      if (topConnection) {
+        return Blockly.ASTNode.createConnectionNode(topConnection);
+      }
+      break;
+
+    case Blockly.ASTNode.types.PREVIOUS:
+      var targetConnection = this.location_.targetConnection;
+      if (targetConnection && !targetConnection.getParentInput()) {
+        return Blockly.ASTNode.createConnectionNode(targetConnection);
+      }
+      break;
+
+    case Blockly.ASTNode.types.NEXT:
+      return Blockly.ASTNode.createBlockNode(this.location_.getSourceBlock());
+  }
+
+  return null;
+};
+
+/**
+ * Find the next element that is one position above and all the way to the left
+ * of the current location.
+ * @return {Blockly.ASTNode} An AST node that wraps the next field, connection,
+ *     workspace or block. Or null if we are at the workspace level.
+ */
+Blockly.ASTNode.prototype.out = function() {
+  switch (this.type_) {
+    case Blockly.ASTNode.types.STACK:
+      var blockPos = this.location_.getRelativeToSurfaceXY();
+      // TODO: Make sure this is in the bounds of the workspace.
+      var wsCoordinate = new Blockly.utils.Coordinate(
+          blockPos.x, blockPos.y + Blockly.ASTNode.DEFAULT_OFFSET_Y);
+      return Blockly.ASTNode.createWorkspaceNode(
+          this.location_.workspace, wsCoordinate);
+
+    case Blockly.ASTNode.types.OUTPUT:
+      var target = this.location_.targetConnection;
+      if (target) {
+        return Blockly.ASTNode.createConnectionNode(target);
+      }
+      return Blockly.ASTNode.createStackNode(this.location_.getSourceBlock());
+
+    case Blockly.ASTNode.types.FIELD:
+      return Blockly.ASTNode.createBlockNode(this.location_.getSourceBlock());
+
+    case Blockly.ASTNode.types.INPUT:
+      return Blockly.ASTNode.createBlockNode(this.location_.getSourceBlock());
+
+    case Blockly.ASTNode.types.BLOCK:
+      var block = /** @type {!Blockly.Block} */ (this.location_);
+      return this.getOutAstNodeForBlock_(block);
+
+    case Blockly.ASTNode.types.PREVIOUS:
+      return this.getOutAstNodeForBlock_(this.location_.getSourceBlock());
+
+    case Blockly.ASTNode.types.NEXT:
+      return this.getOutAstNodeForBlock_(this.location_.getSourceBlock());
+  }
+
+  return null;
+};

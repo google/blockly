@@ -13,8 +13,11 @@
         "assertFalse": true,
         "isEqualArrays": true,
         "assertUndefined": true,
-        "assertNotUndefined": true
+        "assertNotUndefined": true,
+        "defineStackBlock": true,
+        "defineRowBlock": true,
+        "defineStatementBlock": true
 
     },
-    "extends": "eslint:recommended"
+    "extends": "../../.eslintrc.json"
 }

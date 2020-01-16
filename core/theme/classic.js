@@ -1,9 +1,6 @@
 /**
  * @license
- * Visual Blocks Editor
- *
- * Copyright 2018 Google Inc.
- * https://developers.google.com/blockly/
+ * Copyright 2018 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,16 +17,19 @@
 
 /**
  * @fileoverview Classic theme.
- * Contains multi colored border to create shadow effect.
+ * Contains multi-coloured border to create shadow effect.
  */
-
 'use strict';
 
 goog.provide('Blockly.Themes.Classic');
 
 goog.require('Blockly.Theme');
 
-var defaultBlockStyles = {
+
+// Temporary holding object.
+Blockly.Themes.Classic = {};
+
+Blockly.Themes.Classic.defaultBlockStyles = {
   "data_blocks":{
     "colourPrimary": "#ef476e"
   },
@@ -66,16 +66,16 @@ var defaultBlockStyles = {
   "variable_blocks": {
     "colourPrimary": "#ae3998"
   },
-  "variable_dynamic_blocks":{
-    "colourPrimary": "#ae3998"
+  "variable_dynamic_blocks": {
+    "colourPrimary": "310"
   },
-  "hat_blocks":{
-    "colourPrimary":"#ae3998",
-    "hat":"cap"
+  "hat_blocks": {
+    "colourPrimary": "330",
+    "hat": "cap"
   }
 };
 
-var categoryStyles = {
+Blockly.Themes.Classic.categoryStyles = {
   "data_category":{
     "colourPrimary": "#ef476e"
   },
@@ -117,4 +117,6 @@ var categoryStyles = {
   },
 };
 
-Blockly.Themes.Classic = new Blockly.Theme(defaultBlockStyles, categoryStyles);
+Blockly.Themes.Classic =
+    new Blockly.Theme(Blockly.Themes.Classic.defaultBlockStyles,
+        Blockly.Themes.Classic.categoryStyles);

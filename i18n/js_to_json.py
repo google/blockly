@@ -2,8 +2,7 @@
 
 # Gives the translation status of the specified apps and languages.
 #
-# Copyright 2013 Google Inc.
-# https://developers.google.com/blockly/
+# Copyright 2013 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -17,7 +16,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Extracts messages from .js files into .json files for translation.
+"""Extracts messages from messages.js file into .json files for translation.
 
 Specifically, lines with the following formats are extracted:
 

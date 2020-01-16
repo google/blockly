@@ -1,9 +1,6 @@
 /**
  * @license
- * Visual Blocks Language
- *
- * Copyright 2012 Google Inc.
- * https://developers.google.com/blockly/
+ * Copyright 2012 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,6 +29,12 @@ goog.require('Blockly.Python');
 Blockly.Python['text'] = function(block) {
   // Text value.
   var code = Blockly.Python.quote_(block.getFieldValue('TEXT'));
+  return [code, Blockly.Python.ORDER_ATOMIC];
+};
+
+Blockly.Python['text_multiline'] = function(block) {
+  // Text value.
+  var code = Blockly.Python.multiline_quote_(block.getFieldValue('TEXT'));
   return [code, Blockly.Python.ORDER_ATOMIC];
 };
 

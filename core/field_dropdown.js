@@ -78,20 +78,19 @@ Blockly.FieldDropdown = function(menuGenerator, opt_validator, opt_config) {
    */
   this.generatedOptions_ = null;
 
+  this.trimOptions_();
+
   /**
-   * The currently selected index. The field is initialized with the
+   * The currently selected option. The field is initialized with the
    * first option selected.
-   * @type {number}
+   * @type {!Object}
    * @private
    */
-  this.selectedIndex_ = 0;
-
-  this.trimOptions_();
-  var firstTuple = this.getOptions(false)[0];
+  this.selectedOption_ = this.getOptions(false)[0];
 
   // Call parent's constructor.
   Blockly.FieldDropdown.superClass_.constructor.call(
-      this, firstTuple[1], opt_validator, opt_config);
+      this, this.selectedOption_[1], opt_validator, opt_config);
 
   /**
    * A reference to the currently selected menu item.
@@ -527,7 +526,7 @@ Blockly.FieldDropdown.prototype.doValueUpdate_ = function(newValue) {
   var options = this.getOptions(true);
   for (var i = 0, option; (option = options[i]); i++) {
     if (option[1] == this.value_) {
-      this.selectedIndex_ = i;
+      this.selectedOption_ = option;
     }
   }
 };
@@ -567,12 +566,10 @@ Blockly.FieldDropdown.prototype.render_ = function() {
   this.imageElement_.style.display = 'none';
 
   // Show correct element.
-  var options = this.getOptions(true);
-  var selectedOption = this.selectedIndex_ >= 0 &&
-      options[this.selectedIndex_][0];
-  if (selectedOption && typeof selectedOption == 'object') {
+  var option = this.selectedOption_ && this.selectedOption_[0];
+  if (option && typeof option == 'object') {
     this.renderSelectedImage_(
-        /** @type {!Blockly.FieldDropdown.ImageProperties} */ (selectedOption));
+        /** @type {!Blockly.FieldDropdown.ImageProperties} */ (option));
   } else {
     this.renderSelectedText_();
   }
@@ -700,15 +697,14 @@ Blockly.FieldDropdown.prototype.positionSVGArrow_ = function(x, y) {
  * @override
  */
 Blockly.FieldDropdown.prototype.getText_ = function() {
-  if (this.selectedIndex_ < 0) {
+  if (!this.selectedOption_) {
     return null;
   }
-  var options = this.getOptions(true);
-  var selectedOption = options[this.selectedIndex_][0];
-  if (typeof selectedOption == 'object') {
-    return selectedOption['alt'];
+  var option = this.selectedOption_[0];
+  if (typeof option == 'object') {
+    return option['alt'];
   }
-  return selectedOption;
+  return option;
 };
 
 /**

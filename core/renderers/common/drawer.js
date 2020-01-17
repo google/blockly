@@ -461,8 +461,7 @@ Blockly.blockRendering.Drawer.prototype.positionNextConnection_ = function() {
     var connInfo = bottomRow.connection;
     var x = connInfo.xPos; // Already contains info about startX
     var connX = (this.info_.RTL ? -x : x);
-    connInfo.connectionModel.setOffsetInBlock(
-        connX, (connInfo.centerline - connInfo.height / 2));
+    connInfo.connectionModel.setOffsetInBlock(connX, bottomRow.baseline);
   }
 };
 

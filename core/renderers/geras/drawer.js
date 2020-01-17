@@ -211,7 +211,6 @@ Blockly.geras.Drawer.prototype.positionNextConnection_ = function() {
     var connX = (this.info_.RTL ? -x : x) +
         (this.constants_.DARK_PATH_OFFSET / 2);
     connInfo.connectionModel.setOffsetInBlock(
-        connX, (connInfo.centerline - connInfo.height / 2) +
-        this.constants_.DARK_PATH_OFFSET);
+        connX, bottomRow.baseline + this.constants_.DARK_PATH_OFFSET);
   }
 };

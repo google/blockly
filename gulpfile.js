@@ -468,14 +468,8 @@ gulp.task('build-core', gulp.parallel(
  *     msg/json/*.js
  */
 gulp.task('build', gulp.parallel(
-  'build-compressed',
-  'build-blocks',
-  'build-javascript',
-  'build-python',
-  'build-php',
-  'build-lua',
-  'build-dart',
-  'build-uncompressed',
+  'build-core',
+  'build-generators',
   'build-langfiles'
 ));
 

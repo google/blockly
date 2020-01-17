@@ -161,24 +161,25 @@ Blockly.createMainWorkspace_ = function(svg, options, blockDragSurface,
   options.parentWorkspace = null;
   var mainWorkspace =
       new Blockly.WorkspaceSvg(options, blockDragSurface, workspaceDragSurface);
-  mainWorkspace.scale = options.zoomOptions.startScale;
+  var wsOptions = mainWorkspace.options;
+  mainWorkspace.scale = wsOptions.zoomOptions.startScale;
   svg.appendChild(mainWorkspace.createDom('blocklyMainBackground'));
 
   // Set the theme name and renderer name onto the injection div.
   Blockly.utils.dom.addClass(mainWorkspace.getInjectionDiv(),
-      (mainWorkspace.options.renderer || 'geras') + '-renderer');
+      (wsOptions.renderer || 'geras') + '-renderer');
   Blockly.utils.dom.addClass(mainWorkspace.getInjectionDiv(),
       mainWorkspace.getTheme().name + '-theme');
 
-  if (!options.hasCategories && options.languageTree) {
+  if (!wsOptions.hasCategories && wsOptions.languageTree) {
     // Add flyout as an <svg> that is a sibling of the workspace svg.
     var flyout = mainWorkspace.addFlyout('svg');
     Blockly.utils.dom.insertAfter(flyout, svg);
   }
-  if (options.hasTrashcan) {
+  if (wsOptions.hasTrashcan) {
     mainWorkspace.addTrashcan();
   }
-  if (options.zoomOptions && options.zoomOptions.controls) {
+  if (wsOptions.zoomOptions && wsOptions.zoomOptions.controls) {
     mainWorkspace.addZoomControls();
   }
   // Register the workspace svg as a UI component.
@@ -188,7 +189,7 @@ Blockly.createMainWorkspace_ = function(svg, options, blockDragSurface,
   // A null translation will also apply the correct initial scale.
   mainWorkspace.translate(0, 0);
 
-  if (!options.readOnly && !mainWorkspace.isMovable()) {
+  if (!wsOptions.readOnly && !mainWorkspace.isMovable()) {
     // Helper function for the workspaceChanged callback.
     // TODO (#2300): Move metrics math back to the WorkspaceSvg.
     var getWorkspaceMetrics = function() {

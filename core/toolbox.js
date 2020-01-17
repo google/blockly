@@ -179,14 +179,16 @@ Blockly.Toolbox.prototype.init = function() {
         }
         Blockly.Touch.clearTouchIdentifier();  // Don't block future drags.
       }, /* opt_noCaptureIdentifier */ false, /* opt_noPreventDefault */ true);
-  var workspaceOptions = /** @type {!Blockly.Options} */ ({
-    parentWorkspace: workspace,
-    RTL: workspace.RTL,
-    oneBasedIndex: workspace.options.oneBasedIndex,
-    horizontalLayout: workspace.horizontalLayout,
-    toolboxPosition: workspace.options.toolboxPosition,
-    renderer: workspace.options.renderer
-  });
+  var workspaceOptions = new Blockly.Options(
+      /** @type {!Blockly.BlocklyOptions} */
+      ({
+        parentWorkspace: workspace,
+        RTL: workspace.RTL,
+        oneBasedIndex: workspace.options.oneBasedIndex,
+        horizontalLayout: workspace.horizontalLayout,
+        toolboxPosition: workspace.options.toolboxPosition,
+        renderer: workspace.options.renderer
+      }));
   if (workspace.horizontalLayout) {
     if (!Blockly.HorizontalFlyout) {
       throw Error('Missing require for Blockly.HorizontalFlyout');

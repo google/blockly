@@ -146,7 +146,7 @@ Blockly.Options = function(options) {
   /**
    * The SVG element for the grid pattern.
    * Created during injection.
-   * @type {!SVGElement|undefined}
+   * @type {!SVGElement}
    */
   this.gridPattern = undefined;
 

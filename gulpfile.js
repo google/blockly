@@ -164,13 +164,13 @@ function compile(compilerOptions, opt_verbose, opt_warnings_as_error) {
  * This task builds Blockly's core files.
  *     blockly_compressed.js
  */
-gulp.task('build-core', function (cb) {
+gulp.task('build-compressed', function (cb) {
   const defines = 'Blockly.VERSION="' + packageJson.version + '"';
   const srcs = ['core/**/**/*.js'];
   if (argv.closureLibrary) {
     // If you require the google closure library, you can include it in your
     // build by running:
-    //     gulp build-core --closure-library
+    //     gulp build-compressed --closure-library
     // You will also need to include the "google-closure-library" in your list
     // of devDependencies.
     console.log('Including the google-closure-library in your build.');
@@ -318,6 +318,22 @@ gulp.task('build-dart', function() {
 });
 
 /**
+ * This tasks builds all the generators:
+ *     javascript_compressed.js
+ *     python_compressed.js
+ *     php_compressed.js
+ *     lua_compressed.js
+ *     dart_compressed.js
+ */
+gulp.task('build-generators', gulp.parallel(
+  'build-javascript',
+  'build-python',
+  'build-php',
+  'build-lua',
+  'build-dart'
+));
+
+/**
  * This task builds Blockly's uncompressed file.
  *     blockly_uncompressed.js
  */
@@ -428,6 +444,18 @@ gulp.task('build-langfiles', function(done) {
 });
 
 /**
+ * This tasks builds Blockly's core files:
+ *     blockly_compressed.js
+ *     blocks_compressed.js
+ *     blockly_uncompressed.js
+ */
+gulp.task('build-core', gulp.parallel(
+  'build-compressed',
+  'build-blocks',
+  'build-uncompressed'
+));
+
+/**
  * This task builds all of Blockly:
  *     blockly_compressed.js
  *     blocks_compressed.js
@@ -441,13 +469,7 @@ gulp.task('build-langfiles', function(done) {
  */
 gulp.task('build', gulp.parallel(
   'build-core',
-  'build-blocks',
-  'build-javascript',
-  'build-python',
-  'build-php',
-  'build-lua',
-  'build-dart',
-  'build-uncompressed',
+  'build-generators',
   'build-langfiles'
 ));
 

@@ -76,7 +76,7 @@ goog.require('Blockly.FieldVariable');
 
 // If you'd like to include the date field in your build, you will also need to
 // include the closure library as a build dependency.  You can do so by running:
-//     gulp build-core --closure-library
+//     gulp build-compressed --closure-library
 // Be sure to also include "google-closure-library" to your list of
 // devDependencies.
 // goog.require('Blockly.FieldDate');

@@ -161,21 +161,23 @@ Blockly.Mutator.prototype.createEditor_ = function() {
   } else {
     var quarkXml = null;
   }
-  var workspaceOptions = new Blockly.Options({
-    // If you want to enable disabling, also remove the
-    // event filter from workspaceChanged_ .
-    disable: false,
-    languageTree: quarkXml,
-    parentWorkspace: this.block_.workspace,
-    pathToMedia: this.block_.workspace.options.pathToMedia,
-    RTL: this.block_.RTL,
-    toolboxPosition: this.block_.RTL ? Blockly.TOOLBOX_AT_RIGHT :
-        Blockly.TOOLBOX_AT_LEFT,
-    horizontalLayout: false,
-    getMetrics: this.getFlyoutMetrics_.bind(this),
-    setMetrics: null,
-    renderer: this.block_.workspace.options.renderer
-  });
+  var workspaceOptions =  new Blockly.Options(
+      /** @type {Blockly.BlocklyOptions} */
+      ({
+        // If you want to enable disabling, also remove the
+        // event filter from workspaceChanged_ .
+        disable: false,
+        languageTree: quarkXml,
+        parentWorkspace: this.block_.workspace,
+        pathToMedia: this.block_.workspace.options.pathToMedia,
+        RTL: this.block_.RTL,
+        toolboxPosition: this.block_.RTL ? Blockly.TOOLBOX_AT_RIGHT :
+            Blockly.TOOLBOX_AT_LEFT,
+        horizontalLayout: false,
+        getMetrics: this.getFlyoutMetrics_.bind(this),
+        setMetrics: null,
+        renderer: this.block_.workspace.options.renderer
+      }));
   this.workspace_ = new Blockly.WorkspaceSvg(workspaceOptions);
   this.workspace_.isMutator = true;
   this.workspace_.addChangeListener(Blockly.Events.disableOrphans);

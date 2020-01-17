@@ -892,14 +892,16 @@ Blockly.WorkspaceSvg.prototype.addZoomControls = function() {
  * @package
  */
 Blockly.WorkspaceSvg.prototype.addFlyout = function(tagName) {
-  var workspaceOptions = new Blockly.Options({
-    parentWorkspace: this,
-    RTL: this.RTL,
-    oneBasedIndex: this.options.oneBasedIndex,
-    horizontalLayout: this.horizontalLayout,
-    toolboxPosition: this.options.toolboxPosition,
-    renderer: this.options.renderer
-  });
+  var workspaceOptions = new Blockly.Options(
+      /** @type {Blockly.BlocklyOptions} */
+      ({
+        parentWorkspace: this,
+        RTL: this.RTL,
+        oneBasedIndex: this.options.oneBasedIndex,
+        horizontalLayout: this.horizontalLayout,
+        toolboxPosition: this.options.toolboxPosition,
+        renderer: this.options.renderer
+      }));
   if (this.horizontalLayout) {
     if (!Blockly.HorizontalFlyout) {
       throw Error('Missing require for Blockly.HorizontalFlyout');

@@ -161,7 +161,7 @@ Blockly.Mutator.prototype.createEditor_ = function() {
   } else {
     var quarkXml = null;
   }
-  var workspaceOptions =  new Blockly.Options(
+  var workspaceOptions = new Blockly.Options(
       /** @type {Blockly.BlocklyOptions} */
       ({
         // If you want to enable disabling, also remove the

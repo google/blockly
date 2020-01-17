@@ -162,7 +162,7 @@ Blockly.Mutator.prototype.createEditor_ = function() {
     var quarkXml = null;
   }
   var workspaceOptions = new Blockly.Options(
-      /** @type {Blockly.BlocklyOptions} */
+      /** @type {!Blockly.BlocklyOptions} */
       ({
         // If you want to enable disabling, also remove the
         // event filter from workspaceChanged_ .

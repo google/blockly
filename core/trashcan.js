@@ -61,7 +61,7 @@ Blockly.Trashcan = function(workspace) {
   }
   // Create flyout options.
   var flyoutWorkspaceOptions = new Blockly.Options(
-      /** @type {Blockly.BlocklyOptions} */
+      /** @type {!Blockly.BlocklyOptions} */
       ({
         scrollbars: true,
         parentWorkspace: this.workspace_,

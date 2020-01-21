@@ -895,12 +895,12 @@ Blockly.WorkspaceSvg.prototype.addFlyout = function(tagName) {
   var workspaceOptions = new Blockly.Options(
       /** @type {!Blockly.BlocklyOptions} */
       ({
-        parentWorkspace: this,
-        RTL: this.RTL,
-        oneBasedIndex: this.options.oneBasedIndex,
-        horizontalLayout: this.horizontalLayout,
-        toolboxPosition: this.options.toolboxPosition,
-        renderer: this.options.renderer
+        'parentWorkspace': this,
+        'rtl': this.RTL,
+        'oneBasedIndex': this.options.oneBasedIndex,
+        'horizontalLayout': this.horizontalLayout,
+        'toolboxPosition': this.options.toolboxPosition,
+        'renderer': this.options.renderer
       }));
   if (this.horizontalLayout) {
     if (!Blockly.HorizontalFlyout) {

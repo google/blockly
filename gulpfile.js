@@ -953,7 +953,7 @@ function getRCBranchName() {
 };
 
 // Recompile and push to origin.
-gulp.task('release', gulp.series([
+gulp.task('git-recompile', gulp.series([
     'git-sync-develop',
     function(done) {
       var branchName = getRebuildBranchName();

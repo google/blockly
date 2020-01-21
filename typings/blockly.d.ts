@@ -13601,282 +13601,6 @@ declare module Blockly.utils.xml {
 }
 
 
-declare module Blockly {
-
-    class Menu extends Menu__Class { }
-    /** Fake class which should be extended to avoid inheriting static properties */
-    class Menu__Class extends Blockly.Component__Class  { 
-    
-            /**
-             * A basic menu class.
-             * @constructor
-             * @extends {Blockly.Component}
-             */
-            constructor();
-    
-            /**
-             * Coordinates of the mousedown event that caused this menu to open. Used to
-             * prevent the consequent mouseup event due to a simple click from activating
-             * a menu item immediately.
-             * @type {?Blockly.utils.Coordinate}
-             * @package
-             */
-            openingCoords: Blockly.utils.Coordinate;
-    
-            /**
-             * Focus the menu element.
-             * @package
-             */
-            focus(): void;
-    
-            /**
-             * Blur the menu element.
-             * @package
-             */
-            blur(): void;
-    
-            /**
-             * Set the menu accessibility role.
-             * @param {!Blockly.utils.aria.Role} roleName role name.
-             * @package
-             */
-            setRole(roleName: Blockly.utils.aria.Role): void;
-    
-            /**
-             * Returns the child menuitem that owns the given DOM node, or null if no such
-             * menuitem is found.
-             * @param {Node} node DOM node whose owner is to be returned.
-             * @return {?Blockly.MenuItem} menuitem for which the DOM node belongs to.
-             * @protected
-             */
-            getMenuItem(node: Node): Blockly.MenuItem;
-    
-            /**
-             * Unhighlight the current highlighted item.
-             * @protected
-             */
-            unhighlightCurrent(): void;
-    
-            /**
-             * Clears the currently highlighted item.
-             * @protected
-             */
-            clearHighlighted(): void;
-    
-            /**
-             * Returns the currently highlighted item (if any).
-             * @return {?Blockly.Component} Highlighted item (null if none).
-             * @protected
-             */
-            getHighlighted(): Blockly.Component;
-    
-            /**
-             * Highlights the item at the given 0-based index (if any). If another item
-             * was previously highlighted, it is un-highlighted.
-             * @param {number} index Index of item to highlight (-1 removes the current
-             *     highlight).
-             * @protected
-             */
-            setHighlightedIndex(index: number): void;
-    
-            /**
-             * Highlights the given item if it exists and is a child of the container;
-             * otherwise un-highlights the currently highlighted item.
-             * @param {Blockly.MenuItem} item Item to highlight.
-             * @protected
-             */
-            setHighlighted(item: Blockly.MenuItem): void;
-    
-            /**
-             * Highlights the next highlightable item (or the first if nothing is currently
-             * highlighted).
-             * @package
-             */
-            highlightNext(): void;
-    
-            /**
-             * Highlights the previous highlightable item (or the last if nothing is
-             * currently highlighted).
-             * @package
-             */
-            highlightPrevious(): void;
-    
-            /**
-             * Helper function that manages the details of moving the highlight among
-             * child menuitems in response to keyboard events.
-             * @param {function(this: Blockly.Component, number, number) : number} fn
-             *     Function that accepts the current and maximum indices, and returns the
-             *     next index to check.
-             * @param {number} startIndex Start index.
-             * @return {boolean} Whether the highlight has changed.
-             * @protected
-             */
-            highlightHelper(fn: { (_0: number, _1: number): number }, startIndex: number): boolean;
-    
-            /**
-             * Returns whether the given item can be highlighted.
-             * @param {Blockly.MenuItem} item The item to check.
-             * @return {boolean} Whether the item can be highlighted.
-             * @protected
-             */
-            canHighlightItem(item: Blockly.MenuItem): boolean;
-    
-            /**
-             * Attempts to handle a keyboard event, if the menuitem is enabled, by calling
-             * {@link handleKeyEventInternal}.  Considered protected; should only be used
-             * within this package and by subclasses.
-             * @param {Event} e Key event to handle.
-             * @return {boolean} Whether the key event was handled.
-             * @protected
-             */
-            handleKeyEvent(e: Event): boolean;
-    
-            /**
-             * Attempts to handle a keyboard event; returns true if the event was handled,
-             * false otherwise.  If the container is enabled, and a child is highlighted,
-             * calls the child menuitem's `handleKeyEvent` method to give the menuitem
-             * a chance to handle the event first.
-             * @param {Event} e Key event to handle.
-             * @return {boolean} Whether the event was handled by the container (or one of
-             *     its children).
-             * @protected
-             */
-            handleKeyEventInternal(e: Event): boolean;
-    } 
-    
-}
-
-
-declare module Blockly {
-
-    class MenuItem extends MenuItem__Class { }
-    /** Fake class which should be extended to avoid inheriting static properties */
-    class MenuItem__Class extends Blockly.Component__Class  { 
-    
-            /**
-             * Class representing an item in a menu.
-             *
-             * @param {string} content Text caption to display as the content of
-             *     the item.
-             * @param {string=} opt_value Data/model associated with the menu item.
-             * @constructor
-             * @extends {Blockly.Component}
-             */
-            constructor(content: string, opt_value?: string);
-    
-            /**
-             * @return {Element} The HTML element for the checkbox.
-             * @protected
-             */
-            getCheckboxDom(): Element;
-    
-            /**
-             * @return {!Element} The HTML for the content.
-             * @protected
-             */
-            getContentDom(): Element;
-    
-            /**
-             * @return {!Element} The HTML for the content wrapper.
-             * @protected
-             */
-            getContentWrapperDom(): Element;
-    
-            /**
-             * Sets the content associated with the menu item.
-             * @param {string} content Text caption to set as the
-             *    menuitem's contents.
-             * @protected
-             */
-            setContentInternal(content: string): void;
-    
-            /**
-             * Sets the value associated with the menu item.
-             * @param {*} value Value to be associated with the menu item.
-             * @package
-             */
-            setValue(value: any): void;
-    
-            /**
-             * Gets the value associated with the menu item.
-             * @return {*} value Value associated with the menu item.
-             * @package
-             */
-            getValue(): any;
-    
-            /**
-             * Set the menu accessibility role.
-             * @param {!Blockly.utils.aria.Role} roleName Role name.
-             * @package
-             */
-            setRole(roleName: Blockly.utils.aria.Role): void;
-    
-            /**
-             * Sets the menu item to be checkable or not. Set to true for menu items
-             * that represent checkable options.
-             * @param {boolean} checkable Whether the menu item is checkable.
-             * @package
-             */
-            setCheckable(checkable: boolean): void;
-    
-            /**
-             * Checks or unchecks the component.
-             * @param {boolean} checked Whether to check or uncheck the component.
-             * @package
-             */
-            setChecked(checked: boolean): void;
-    
-            /**
-             * Highlights or unhighlights the component.
-             * @param {boolean} highlight Whether to highlight or unhighlight the component.
-             * @package
-             */
-            setHighlighted(highlight: boolean): void;
-    
-            /**
-             * Returns true if the menu item is enabled, false otherwise.
-             * @return {boolean} Whether the menu item is enabled.
-             * @package
-             */
-            isEnabled(): boolean;
-    
-            /**
-             * Enables or disables the menu item.
-             * @param {boolean} enabled Whether to enable or disable the menu item.
-             * @package
-             */
-            setEnabled(enabled: boolean): void;
-    
-            /**
-             * Handles click events. If the component is enabled, trigger
-             * the action associated with this menu item.
-             * @param {Event} _e Mouse event to handle.
-             * @package
-             */
-            handleClick(_e: Event): void;
-    
-            /**
-             * Performs the appropriate action when the menu item is activated
-             * by the user.
-             * @protected
-             */
-            performActionInternal(): void;
-    
-            /**
-             * Set the handler that's triggered when the menu item is activated
-             * by the user. If `opt_obj` is provided, it will be used as the
-             * 'this' object in the function when called.
-             * @param {function(this:T,!Blockly.MenuItem):?} fn The handler.
-             * @param {T=} opt_obj Used as the 'this' object in f when called.
-             * @template T
-             * @package
-             */
-            onAction<T>(fn: { (_0: Blockly.MenuItem): any }, opt_obj?: T): void;
-    } 
-    
-}
-
-
 declare module Blockly.tree {
 
     class BaseNode extends BaseNode__Class { }
@@ -14388,6 +14112,282 @@ declare module Blockly.tree {
              * @package
              */
             onSizeChanged(fn: { (): any }): void;
+    } 
+    
+}
+
+
+declare module Blockly {
+
+    class Menu extends Menu__Class { }
+    /** Fake class which should be extended to avoid inheriting static properties */
+    class Menu__Class extends Blockly.Component__Class  { 
+    
+            /**
+             * A basic menu class.
+             * @constructor
+             * @extends {Blockly.Component}
+             */
+            constructor();
+    
+            /**
+             * Coordinates of the mousedown event that caused this menu to open. Used to
+             * prevent the consequent mouseup event due to a simple click from activating
+             * a menu item immediately.
+             * @type {?Blockly.utils.Coordinate}
+             * @package
+             */
+            openingCoords: Blockly.utils.Coordinate;
+    
+            /**
+             * Focus the menu element.
+             * @package
+             */
+            focus(): void;
+    
+            /**
+             * Blur the menu element.
+             * @package
+             */
+            blur(): void;
+    
+            /**
+             * Set the menu accessibility role.
+             * @param {!Blockly.utils.aria.Role} roleName role name.
+             * @package
+             */
+            setRole(roleName: Blockly.utils.aria.Role): void;
+    
+            /**
+             * Returns the child menuitem that owns the given DOM node, or null if no such
+             * menuitem is found.
+             * @param {Node} node DOM node whose owner is to be returned.
+             * @return {?Blockly.MenuItem} menuitem for which the DOM node belongs to.
+             * @protected
+             */
+            getMenuItem(node: Node): Blockly.MenuItem;
+    
+            /**
+             * Unhighlight the current highlighted item.
+             * @protected
+             */
+            unhighlightCurrent(): void;
+    
+            /**
+             * Clears the currently highlighted item.
+             * @protected
+             */
+            clearHighlighted(): void;
+    
+            /**
+             * Returns the currently highlighted item (if any).
+             * @return {?Blockly.Component} Highlighted item (null if none).
+             * @protected
+             */
+            getHighlighted(): Blockly.Component;
+    
+            /**
+             * Highlights the item at the given 0-based index (if any). If another item
+             * was previously highlighted, it is un-highlighted.
+             * @param {number} index Index of item to highlight (-1 removes the current
+             *     highlight).
+             * @protected
+             */
+            setHighlightedIndex(index: number): void;
+    
+            /**
+             * Highlights the given item if it exists and is a child of the container;
+             * otherwise un-highlights the currently highlighted item.
+             * @param {Blockly.MenuItem} item Item to highlight.
+             * @protected
+             */
+            setHighlighted(item: Blockly.MenuItem): void;
+    
+            /**
+             * Highlights the next highlightable item (or the first if nothing is currently
+             * highlighted).
+             * @package
+             */
+            highlightNext(): void;
+    
+            /**
+             * Highlights the previous highlightable item (or the last if nothing is
+             * currently highlighted).
+             * @package
+             */
+            highlightPrevious(): void;
+    
+            /**
+             * Helper function that manages the details of moving the highlight among
+             * child menuitems in response to keyboard events.
+             * @param {function(this: Blockly.Component, number, number) : number} fn
+             *     Function that accepts the current and maximum indices, and returns the
+             *     next index to check.
+             * @param {number} startIndex Start index.
+             * @return {boolean} Whether the highlight has changed.
+             * @protected
+             */
+            highlightHelper(fn: { (_0: number, _1: number): number }, startIndex: number): boolean;
+    
+            /**
+             * Returns whether the given item can be highlighted.
+             * @param {Blockly.MenuItem} item The item to check.
+             * @return {boolean} Whether the item can be highlighted.
+             * @protected
+             */
+            canHighlightItem(item: Blockly.MenuItem): boolean;
+    
+            /**
+             * Attempts to handle a keyboard event, if the menuitem is enabled, by calling
+             * {@link handleKeyEventInternal}.  Considered protected; should only be used
+             * within this package and by subclasses.
+             * @param {Event} e Key event to handle.
+             * @return {boolean} Whether the key event was handled.
+             * @protected
+             */
+            handleKeyEvent(e: Event): boolean;
+    
+            /**
+             * Attempts to handle a keyboard event; returns true if the event was handled,
+             * false otherwise.  If the container is enabled, and a child is highlighted,
+             * calls the child menuitem's `handleKeyEvent` method to give the menuitem
+             * a chance to handle the event first.
+             * @param {Event} e Key event to handle.
+             * @return {boolean} Whether the event was handled by the container (or one of
+             *     its children).
+             * @protected
+             */
+            handleKeyEventInternal(e: Event): boolean;
+    } 
+    
+}
+
+
+declare module Blockly {
+
+    class MenuItem extends MenuItem__Class { }
+    /** Fake class which should be extended to avoid inheriting static properties */
+    class MenuItem__Class extends Blockly.Component__Class  { 
+    
+            /**
+             * Class representing an item in a menu.
+             *
+             * @param {string} content Text caption to display as the content of
+             *     the item.
+             * @param {string=} opt_value Data/model associated with the menu item.
+             * @constructor
+             * @extends {Blockly.Component}
+             */
+            constructor(content: string, opt_value?: string);
+    
+            /**
+             * @return {Element} The HTML element for the checkbox.
+             * @protected
+             */
+            getCheckboxDom(): Element;
+    
+            /**
+             * @return {!Element} The HTML for the content.
+             * @protected
+             */
+            getContentDom(): Element;
+    
+            /**
+             * @return {!Element} The HTML for the content wrapper.
+             * @protected
+             */
+            getContentWrapperDom(): Element;
+    
+            /**
+             * Sets the content associated with the menu item.
+             * @param {string} content Text caption to set as the
+             *    menuitem's contents.
+             * @protected
+             */
+            setContentInternal(content: string): void;
+    
+            /**
+             * Sets the value associated with the menu item.
+             * @param {*} value Value to be associated with the menu item.
+             * @package
+             */
+            setValue(value: any): void;
+    
+            /**
+             * Gets the value associated with the menu item.
+             * @return {*} value Value associated with the menu item.
+             * @package
+             */
+            getValue(): any;
+    
+            /**
+             * Set the menu accessibility role.
+             * @param {!Blockly.utils.aria.Role} roleName Role name.
+             * @package
+             */
+            setRole(roleName: Blockly.utils.aria.Role): void;
+    
+            /**
+             * Sets the menu item to be checkable or not. Set to true for menu items
+             * that represent checkable options.
+             * @param {boolean} checkable Whether the menu item is checkable.
+             * @package
+             */
+            setCheckable(checkable: boolean): void;
+    
+            /**
+             * Checks or unchecks the component.
+             * @param {boolean} checked Whether to check or uncheck the component.
+             * @package
+             */
+            setChecked(checked: boolean): void;
+    
+            /**
+             * Highlights or unhighlights the component.
+             * @param {boolean} highlight Whether to highlight or unhighlight the component.
+             * @package
+             */
+            setHighlighted(highlight: boolean): void;
+    
+            /**
+             * Returns true if the menu item is enabled, false otherwise.
+             * @return {boolean} Whether the menu item is enabled.
+             * @package
+             */
+            isEnabled(): boolean;
+    
+            /**
+             * Enables or disables the menu item.
+             * @param {boolean} enabled Whether to enable or disable the menu item.
+             * @package
+             */
+            setEnabled(enabled: boolean): void;
+    
+            /**
+             * Handles click events. If the component is enabled, trigger
+             * the action associated with this menu item.
+             * @param {Event} _e Mouse event to handle.
+             * @package
+             */
+            handleClick(_e: Event): void;
+    
+            /**
+             * Performs the appropriate action when the menu item is activated
+             * by the user.
+             * @protected
+             */
+            performActionInternal(): void;
+    
+            /**
+             * Set the handler that's triggered when the menu item is activated
+             * by the user. If `opt_obj` is provided, it will be used as the
+             * 'this' object in the function when called.
+             * @param {function(this:T,!Blockly.MenuItem):?} fn The handler.
+             * @param {T=} opt_obj Used as the 'this' object in f when called.
+             * @template T
+             * @package
+             */
+            onAction<T>(fn: { (_0: Blockly.MenuItem): any }, opt_obj?: T): void;
     } 
     
 }

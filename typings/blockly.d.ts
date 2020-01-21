@@ -7299,7 +7299,15 @@ declare module Blockly {
             hasScrollbars: any /*missing*/;
     
             /**
-             * The parent of the current workspace, or null if there is no parent workspace.
+             * The SVG element for the grid pattern.
+             * Created during injection.
+             * @type {!SVGElement}
+             */
+            gridPattern: SVGElement;
+    
+            /**
+             * The parent of the current workspace, or null if there is no parent
+             * workspace.
              * @type {Blockly.Workspace}
              */
             parentWorkspace: Blockly.Workspace;

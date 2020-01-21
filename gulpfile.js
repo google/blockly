@@ -973,6 +973,7 @@ gulp.task('recompile', gulp.series([
       done();
     },
     'build',
+    'typings',
     function(done) {
       console.log('push-rebuild-branch: committing rebuild');
       execSync('git commit -am "Rebuild"', { stdio: 'inherit' });

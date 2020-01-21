@@ -1,6 +1,6 @@
 {
   "name": "blockly",
-  "version": "3.20200123.0-develop",
+  "version": "3.20191014.0-develop",
   "description": "Blockly is a library for building visual programming editors.",
   "keywords": [
     "blockly"
@@ -32,7 +32,8 @@
     "postversion": "gulp postversion",
     "prepare": "npm run package",
     "preversion": "gulp preversion",
-    "release": "gulp release",
+    "prerelease": "gulp git-recompile",
+    "release": "gulp git-create-rc",
     "test": "concurrently 'npm run test:prepare' 'sleep 5 && npm run test:run'",
     "test:prepare": "npm run test:setupselenium && npm run test:startselenium",
     "test:run": "tests/run_all_tests.sh",

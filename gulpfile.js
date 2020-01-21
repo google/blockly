@@ -912,18 +912,6 @@ gulp.task('package', gulp.parallel(
   'package-dts'
   ));
 
-// The release task prepares Blockly for an npm release.
-// It rebuilds the Blockly compressed files and updates the TypeScript
-// typings, and then packages all the npm release files into the /dist directory
-gulp.task('release', gulp.series(['build', 'typings', function(cb) {
-  // Clean directory if exists
-  if (fs.existsSync(packageDistribution)) {
-    rimraf.sync(packageDistribution);
-  }
-  fs.mkdirSync(packageDistribution);
-  cb();
-}, 'package']));
-
 // The default task builds Blockly.
 gulp.task('default', gulp.series(['build']));
 
@@ -965,7 +953,7 @@ function getRCBranchName() {
 };
 
 // Recompile and push to origin.
-gulp.task('recompile', gulp.series([
+gulp.task('git-recompile', gulp.series([
     'git-sync-develop',
     function(done) {
       var branchName = getRebuildBranchName();

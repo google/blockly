@@ -309,7 +309,7 @@ goog.provide('Blockly.utils.string');
     def file_lookup(name):
       if not name.startswith("Input_"):
         return "???"
-      n = int(name[6:]) - 1
+      n = int(name[6:])
       return filenames[n]
 
     if "serverErrors" in json_data:

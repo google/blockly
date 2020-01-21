@@ -32,6 +32,7 @@
     "postversion": "gulp postversion",
     "prepare": "npm run package",
     "preversion": "gulp preversion",
+    "prerelease": "gulp git-recompile",
     "release": "gulp git-create-rc",
     "test": "concurrently 'npm run test:prepare' 'sleep 5 && npm run test:run'",
     "test:prepare": "npm run test:setupselenium && npm run test:startselenium",

@@ -182,13 +182,14 @@ Blockly.Toolbox.prototype.init = function() {
   var workspaceOptions = new Blockly.Options(
       /** @type {!Blockly.BlocklyOptions} */
       ({
-        parentWorkspace: workspace,
-        RTL: workspace.RTL,
-        oneBasedIndex: workspace.options.oneBasedIndex,
-        horizontalLayout: workspace.horizontalLayout,
-        toolboxPosition: workspace.options.toolboxPosition,
-        renderer: workspace.options.renderer
+        'parentWorkspace': workspace,
+        'rtl': workspace.RTL,
+        'oneBasedIndex': workspace.options.oneBasedIndex,
+        'horizontalLayout': workspace.horizontalLayout,
+        'toolboxPosition': workspace.options.toolboxPosition,
+        'renderer': workspace.options.renderer
       }));
+  
   if (workspace.horizontalLayout) {
     if (!Blockly.HorizontalFlyout) {
       throw Error('Missing require for Blockly.HorizontalFlyout');

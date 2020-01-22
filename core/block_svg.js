@@ -237,6 +237,7 @@ Blockly.BlockSvg.prototype.getColourTertiary = function() {
 /**
  * Get the shadow colour of a block.
  * @return {?string} #RRGGBB string.
+ * @deprecated Use style.colourSecondary. (2020 January 21)
  */
 Blockly.BlockSvg.prototype.getColourShadow = function() {
   return this.getColourSecondary();

@@ -337,10 +337,8 @@ CustomFields.FieldTurtle.prototype.showEditor_ = function() {
 
   // These allow us to have the editor match the block's colour.
   var fillColour = this.sourceBlock_.getColour();
-  // This is technically a package function, meaning it could change.
-  var borderColours = this.sourceBlock_.getColourBorder();
-  var borderColour = borderColours.colourBorder || borderColours.colourDark;
-  Blockly.DropDownDiv.setColour(fillColour, borderColour);
+  Blockly.DropDownDiv.setColour(fillColour,
+      this.sourceBlock_.style.colourTertiary);
 
   // Always pass the dropdown div a dispose function so that you can clean
   // up event listeners when the editor closes.
@@ -483,9 +481,8 @@ CustomFields.FieldTurtle.prototype.updateColour = function() {
   var fillColour = isShadow  ?
       this.sourceBlock_.getColourShadow() : this.sourceBlock_.getColour();
   // This is technically a package function, meaning it could change.
-  var borderColours = this.sourceBlock_.getColourBorder();
   var borderColour = isShadow ? fillColour :
-      borderColours.colourBorder || borderColours.colourDark;
+      this.sourceBlock_.style.colourTertiary;
 
   var child = this.turtleGroup_.firstChild;
   while(child) {

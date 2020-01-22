@@ -359,7 +359,7 @@ Blockly.zelos.ConstantProvider = function() {
   this.FIELD_CHECKBOX_DEFAULT_WIDTH = 6 * this.GRID_UNIT;
 
   /**
-   * The ID of the highlight glow filter, or the empty string if no filter is
+   * The ID of the selected glow filter, or the empty string if no filter is
    * set.
    * @type {string}
    * @package
@@ -367,7 +367,7 @@ Blockly.zelos.ConstantProvider = function() {
   this.selectedGlowFilterId = '';
 
   /**
-   * The <filter> element to use for a higlight glow, or null if not set.
+   * The <filter> element to use for a selected glow, or null if not set.
    * @type {SVGElement}
    * @private
    */

@@ -855,7 +855,6 @@ Blockly.zelos.ConstantProvider.prototype.getCSS_ = function(name) {
     /* eslint-disable indent */
     // Fields.
     selector + ' .blocklyText {',
-      'cursor: default;',
       'fill: #fff;',
       'font-family: ' + this.FIELD_TEXT_FONTFAMILY + ';',
       'font-size: ' + this.FIELD_TEXT_FONTSIZE + 'pt;',

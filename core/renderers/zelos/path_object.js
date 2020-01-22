@@ -135,7 +135,7 @@ Blockly.zelos.PathObject.prototype.updateSelected = function(enable) {
         /** @type {!SVGElement} */ (this.svgPath.cloneNode(true));
       this.svgPathSelected_.setAttribute('fill', 'none');
       this.svgPathSelected_.setAttribute('filter',
-          'url(#' + this.constants_.highlightGlowFilterId + ')');
+          'url(#' + this.constants_.selectedGlowFilterId + ')');
       this.svgRoot.appendChild(this.svgPathSelected_);
     }
   } else {

@@ -340,6 +340,10 @@ Blockly.Css.CONTENT = [
     'z-index: 20;',
   '}',
 
+  '.blocklyText text {',
+    'cursor: default;',
+  '}',
+
   /*
     Don't allow users to select text.  It gets annoying when trying to
     drag a block and selected text moves instead.

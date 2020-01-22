@@ -219,6 +219,48 @@ Blockly.BlockSvg.prototype.initSvg = function() {
 };
 
 /**
+ * Get the secondary colour of a block.
+ * @return {?string} #RRGGBB string.
+ */
+Blockly.BlockSvg.prototype.getColourSecondary = function() {
+  return this.style.colourSecondary;
+};
+
+/**
+ * Get the tertiary colour of a block.
+ * @return {?string} #RRGGBB string.
+ */
+Blockly.BlockSvg.prototype.getColourTertiary = function() {
+  return this.style.colourTertiary;
+};
+
+/**
+ * Get the shadow colour of a block.
+ * @return {?string} #RRGGBB string.
+ */
+Blockly.BlockSvg.prototype.getColourShadow = function() {
+  return this.getColourSecondary();
+};
+
+/**
+ * Get the border colour(s) of a block.
+ * @return {{colourDark, colourLight, colourBorder}} An object containing
+ *     colour values for the border(s) of the block. If the block is using a
+ *     style the colourBorder will be defined and equal to the tertiary colour
+ *     of the style (#RRGGBB string). Otherwise the colourDark and colourLight
+ *     attributes will be defined (#RRGGBB strings).
+ * @deprecated Use style.colourTertiary. (2020 January 21)
+ */
+Blockly.BlockSvg.prototype.getColourBorder = function() {
+  var colourTertiary = this.getColourTertiary();
+  return {
+    colourBorder: colourTertiary,
+    colourLight: null,
+    colourDark: null
+  };
+};
+
+/**
  * Select this block.  Highlight it visually.
  */
 Blockly.BlockSvg.prototype.select = function() {

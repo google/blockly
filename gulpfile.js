@@ -161,16 +161,13 @@ function compile(compilerOptions, opt_verbose, opt_warnings_as_error) {
 }
 
 /**
- * This task builds Blockly's core files.
- *     blockly_compressed.js
+ * Helper method for possibly adding the closure library into a sources array.
+ * @param {Array.<string>} srcs 
  */
-gulp.task('build-compressed', function (cb) {
-  const defines = 'Blockly.VERSION="' + packageJson.version + '"';
-  const srcs = ['core/**/**/*.js'];
+function maybeAddClosureLibrary(srcs) {
   if (argv.closureLibrary) {
     // If you require the google closure library, you can include it in your
-    // build by running:
-    //     gulp build-compressed --closure-library
+    // build by adding the --closure-library flag.
     // You will also need to include the "google-closure-library" in your list
     // of devDependencies.
     console.log('Including the google-closure-library in your build.');
@@ -178,9 +175,18 @@ gulp.task('build-compressed', function (cb) {
       throw Error('You must add the google-closure-library to your ' +
         'devDependencies in package.json, and run `npm install`.');
     }
-    srcs.push('./node_modules/google-closure-library/closure/goog/**/*.js');
+    srcs.push('./node_modules/google-closure-library/closure/goog/**/**/*.js');
   }
-  return gulp.src(srcs, {base: './'})
+  return srcs;
+}
+
+/**
+ * This task builds Blockly's core files.
+ *     blockly_compressed.js
+ */
+gulp.task('build-compressed', function (cb) {
+  const defines = 'Blockly.VERSION="' + packageJson.version + '"';
+  return gulp.src(maybeAddClosureLibrary(['core/**/**/*.js']), {base: './'})
     // Directories in Blockly are used to group similar files together
     // but are not used to limit access with @package, instead the
     // method means something is internal to Blockly and not a public
@@ -229,7 +235,7 @@ goog.provide('Blockly.FieldTextInput');
 goog.provide('Blockly.FieldVariable');
 goog.provide('Blockly.Mutator');
 goog.provide('Blockly.Warning');`;
-  return gulp.src('blocks/*.js', {base: './'})
+  return gulp.src(maybeAddClosureLibrary(['blocks/*.js']), {base: './'})
     // Add Blockly.Blocks to be compatible with the compiler.
     .pipe(gulp.replace(`goog.provide('Blockly.Constants.Colour');`,
       `${provides}goog.provide('Blockly.Constants.Colour');`))
@@ -382,21 +388,7 @@ if (this.IS_NODE_JS) {
 `;
 
 let deps = [];
-const srcs = ['core/**/**/*.js'];
-if (argv.closureLibrary) {
-  // If you require the google closure library, you can include it in your
-  // build by running:
-  //     gulp build-uncompressed --closure-library
-  // You will also need to include the "google-closure-library" in your list
-  // of devDependencies.
-  console.log('Including the google-closure-library in your build.');
-  if (!fs.existsSync('./node_modules/google-closure-library')) {
-    throw Error('You must add the google-closure-library to your ' +
-      'devDependencies in package.json, and run `npm install`.');
-  }
-  srcs.push('./node_modules/google-closure-library/closure/goog/**/**/*.js');
-}
-return gulp.src(srcs)
+return gulp.src(maybeAddClosureLibrary(['core/**/**/*.js']))
   .pipe(through2.obj((file, _enc, cb) => {
     const result = closureDeps.parser.parseFile(file.path);
     for (const dep of result.dependencies) {

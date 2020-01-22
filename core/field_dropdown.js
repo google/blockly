@@ -288,8 +288,10 @@ Blockly.FieldDropdown.prototype.showEditor_ = function(opt_e) {
     var primaryColour = (this.sourceBlock_.isShadow()) ?
         this.sourceBlock_.getParent().getColour() :
         this.sourceBlock_.getColour();
-    Blockly.DropDownDiv.setColour(primaryColour,
-        this.sourceBlock_.style.colourTertiary);
+    var borderColour = (this.sourceBlock_.isShadow()) ?
+        this.sourceBlock_.getParent().style.colourTertiary :
+        this.sourceBlock_.style.colourTertiary;
+    Blockly.DropDownDiv.setColour(primaryColour, borderColour);
   }
 
   Blockly.DropDownDiv.showPositionedByField(
@@ -680,12 +682,14 @@ Blockly.FieldDropdown.prototype.positionSVGArrow_ = function(x, y) {
   if (!this.svgArrow_) {
     return 0;
   }
-  var padding = this.constants_.FIELD_DROPDOWN_SVG_ARROW_PADDING;
+  var hasBorder = !!this.borderRect_;
+  var xPadding = hasBorder ? this.constants_.FIELD_BORDER_RECT_X_PADDING : 0;
+  var textPadding = this.constants_.FIELD_DROPDOWN_SVG_ARROW_PADDING;
   var svgArrowSize = this.constants_.FIELD_DROPDOWN_SVG_ARROW_SIZE;
-  var arrowX = this.sourceBlock_.RTL ? padding : x + padding;
+  var arrowX = this.sourceBlock_.RTL ? xPadding : x + textPadding;
   this.svgArrow_.setAttribute('transform',
       'translate(' + arrowX + ',' + y + ')');
-  return svgArrowSize + padding;
+  return svgArrowSize + textPadding;
 };
 
 /**

@@ -464,11 +464,19 @@ Blockly.Toolbox.prototype.syncTrees_ = function(treeIn, treeOut, pathToMedia, sh
           // Variables and procedures are special dynamic categories.
           childOut.blocks = custom;
 
-          //TODO: Add the custom category blocks to the Search Trie.
-          // if (shouldAddToSearchTrie) {
-          //   var blocksFunction = this.workspace_.getToolboxCategoryCallback("PROCEDURE");
+          if (custom !== 'MOST_USED_CUSTOM' && shouldAddToSearchTrie) {
+            var blocksFunction = this.workspace_.getToolboxCategoryCallback(custom);
+            var blocksArr = blocksFunction(this.workspace_);
+
+            for (let i = 0; i < blocksArr.length; i++) {
+              if (blocksArr[i].nodeName === 'block') {
+                var type = blocksArr[i].getAttribute('type');
+                this.search_.onBlockAdded(type, Blockly.utils.xml.domToText(blocksArr[i]));
+              }
+            }
+          }
         } else {
-          //Skip the most used category. TOD  O: Move to the if (custom) above once the most_used_rewrite is merged.
+          // Skip the most used category. TODO: Move to the if (custom) above once the most_used_rewrite is merged.
           var isNotMostUsed = (shouldAddToSearchTrie && (childIn.getAttribute('name') != Blockly.Msg.MOST_USED));
 
           var newOpenNode = this.syncTrees_(childIn, childOut, pathToMedia, isNotMostUsed);

@@ -60,6 +60,14 @@ Blockly.Blocks['procedures_defnoreturn'] = {
     this.setStatements_(true);
     this.statementConnection_ = null;
   },
+  ensureSearchKeywords: function () {
+    var keywords = [
+      Blockly.Msg.PROCEDURES_DEFNORETURN_TITLE,
+      Blockly.Msg.FABLE_SEARCH_KEYWORD_FUNCTION
+    ];
+
+    Blockly.Search.preprocessSearchKeywords('procedures_defnoreturn', keywords);
+  },
   /**
    * Add or remove the statement block from this function definition.
    * @param {boolean} hasStatements True if a statement block is needed.
@@ -389,7 +397,8 @@ Blockly.Blocks['procedures_defnoreturn'] = {
       }
     }
 
-    options.push(exportOption);
+    // TODO: Reenable
+    // options.push(exportOption);
 
     //Get the local storage for stored functions
     let storedFunctionsDict;
@@ -443,7 +452,8 @@ Blockly.Blocks['procedures_defnoreturn'] = {
       }
     };
 
-    options.push(savingOption);
+    // TODO: Reenable
+    // options.push(savingOption);
 
     //Add "Delete function forever" option
     //TODO: Localization
@@ -456,7 +466,8 @@ Blockly.Blocks['procedures_defnoreturn'] = {
       }
     }
 
-    options.push(deleteOption);
+    // TODO: Reenable
+    // options.push(deleteOption);
 
 
     // Add option to create caller.
@@ -526,6 +537,15 @@ Blockly.Blocks['procedures_defreturn'] = {
     this.argumentVarModels_ = [];
     this.setStatements_(true);
     this.statementConnection_ = null;
+  },
+  ensureSearchKeywords: function () {
+    var keywords = [
+      Blockly.Msg.PROCEDURES_DEFRETURN_TITLE,
+      Blockly.Msg.PROCEDURES_DEFRETURN_RETURN,
+      Blockly.Msg.FABLE_SEARCH_KEYWORD_FUNCTION
+    ];
+
+    Blockly.Search.preprocessSearchKeywords('procedures_defreturn', keywords);
   },
   setStatements_: Blockly.Blocks['procedures_defnoreturn'].setStatements_,
   updateParams_: Blockly.Blocks['procedures_defnoreturn'].updateParams_,
@@ -1131,6 +1151,15 @@ Blockly.Blocks['procedures_ifreturn'] = {
     this.setTooltip(Blockly.Msg['PROCEDURES_IFRETURN_TOOLTIP']);
     this.setHelpUrl(Blockly.Msg['PROCEDURES_IFRETURN_HELPURL']);
     this.hasReturnValue_ = true;
+  },
+  ensureSearchKeywords: function () {
+    var keywords = [
+      Blockly.Msg.CONTROLS_IF_MSG_IF,
+      Blockly.Msg.PROCEDURES_DEFRETURN_RETURN,
+      Blockly.Msg.FABLE_SEARCH_KEYWORD_FUNCTION
+    ];
+
+    Blockly.Search.preprocessSearchKeywords('procedures_ifreturn', keywords);
   },
   /**
    * Create XML to represent whether this block has a return value.

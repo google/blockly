@@ -58,12 +58,15 @@ Blockly.fable.Drawer.prototype.draw = function () {
     for (let i = 0; i < this.info_.rows.length; i++) {
       const row = this.info_.rows[i];
 
-      tabBottom += row.height;
-
       if (Blockly.blockRendering.Types.isTopOrBottomRow(row)) {
-        tabBottom += row.height;
+        tabBottom += (2 * row.height);
       }
       if (Blockly.blockRendering.Types.isInputRow(row)) {
+        if (row.calculatedHeight) {
+          tabBottom += row.calculatedHeight;
+        } else {
+          tabBottom += row.height;
+        }
         break;
       }
     }
@@ -233,19 +236,25 @@ Blockly.fable.Drawer.prototype.drawInlineInput_ = function (input) {
 Blockly.fable.Drawer.prototype.drawInlineInputInner_ = function (input) {
   var width = input.width;
   var height = input.height;
+  var firstRowHeight = input.height;
+  if (input.connectedBlock && input.connectedBlock.firstRowHeight) {
+    // SHAPE: Hardcoded value that adds top/bottom margins
+    firstRowHeight = input.connectedBlock.firstRowHeight + 11;
+  }
+
   var yPos = input.centerline - height / 2;
 
-  var connectionTop = ((height - input.connectionHeight) / 2);
+  var connectionTop = ((firstRowHeight - input.connectionHeight) / 2);
   var connectionBottom = input.connectionHeight + connectionTop;
   var connectionRight = input.xPos + input.connectionWidth;
 
   this.inlinePath_ += Blockly.utils.svgPaths.moveTo(connectionRight, yPos) +
-        Blockly.utils.svgPaths.lineOnAxis('v', connectionTop) +
-        input.shape.pathDown +
-        Blockly.utils.svgPaths.lineOnAxis('v', height - connectionBottom) +
-        Blockly.utils.svgPaths.lineOnAxis('h', width - input.connectionWidth) +
-        Blockly.utils.svgPaths.lineOnAxis('v', -height) +
-        'z';
+          Blockly.utils.svgPaths.lineOnAxis('v', connectionTop) +
+          input.shape.pathDown +
+          Blockly.utils.svgPaths.lineOnAxis('v', height - connectionBottom) +
+          Blockly.utils.svgPaths.lineOnAxis('h', width - input.connectionWidth) +
+          Blockly.utils.svgPaths.lineOnAxis('v', -height) +
+          'z';
 
   this.positionInlineInputConnection_(input);
 };
@@ -266,7 +275,7 @@ Blockly.fable.Drawer.prototype.positionInlineInputConnection_ = function (input)
     input.connection.setOffsetInBlock(
       connX, yPos + input.connectionOffsetY +
         this.constants_.DARK_PATH_OFFSET);
-    var puzzlePieceOffset = (input.height - input.shape.height) / 2;
+    var puzzlePieceOffset = (input.height - this.constants_.MIN_BLOCK_Y);
     input.connection.setPuzzlePieceVerticalOffset(puzzlePieceOffset);
   }
 };
@@ -290,7 +299,7 @@ Blockly.fable.Drawer.prototype.positionStatementInputConnection_ = function (row
 
 /**
  * @override
- */
+*/
 Blockly.fable.Drawer.prototype.positionExternalValueConnection_ = function (row, rowHeight) {
   var input = row.getLastInput();
   if (input.connection) {
@@ -299,7 +308,12 @@ Blockly.fable.Drawer.prototype.positionExternalValueConnection_ = function (row,
     if (this.info_.RTL) {
       connX *= -1;
     }
-    var heightAdded = this.info_.topRow.height + this.info_.bottomRow.height + ((rowHeight - input.shape.height) / 2);
+
+    var heightAdded = (input.height - this.constants_.MIN_BLOCK_Y);
+    if (input.connectedBlockHeight) {
+      heightAdded = (input.connectedBlockHeight - this.constants_.MIN_BLOCK_Y);
+    }
+
     input.connection.setOffsetInBlock(connX, row.yPos);
     input.connection.setPuzzlePieceVerticalOffset(heightAdded);
   }

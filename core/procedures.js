@@ -184,9 +184,8 @@ Blockly.Procedures.rename = function(name) {
 Blockly.Procedures.flyoutCategory = function(workspace) {
   var xmlList = [];
 
-  //TODO: Localization
   //Add a label to the top of the category
-  var toAdd = '<xml><label text="Function definition" web-class="subcategoryClass"></label></xml>';
+  var toAdd = '<xml><label text="' + Blockly.Msg.LABEL_PROCEDURE_DEFINITION + '" web-class="subcategoryClass"></label></xml>';
 
   toAdd = Blockly.Xml.textToDom(toAdd);
   var label = toAdd.firstChild;
@@ -278,8 +277,7 @@ Blockly.Procedures.flyoutCategory = function(workspace) {
 
     //If there are any stored functions, add a label
     if (storedFunctionsDict && Object.keys(storedFunctionsDict).length > 0) {
-      //TODO: Localization
-      var toAdd = '<xml><sep gap="32"></sep><label text="Stored functions" web-class="subcategoryClass"></label></xml>';
+      var toAdd = '<xml><sep gap="32"></sep><label text="' + Blockly.Msg.LABEL_PROCEDURE_STORED + '" web-class="subcategoryClass"></label></xml>';
 
       toAdd = Blockly.Xml.textToDom(toAdd);
       var gap = toAdd.firstChild;
@@ -300,8 +298,7 @@ Blockly.Procedures.flyoutCategory = function(workspace) {
 
   //If there are ANY functions added to the Blockly workspace, add a label
   if (tuple[0].length > 0 || tuple[1].length > 0) {
-    //TODO: Localization
-    var toAdd = '<xml><sep gap="32"></sep><label text="Function execution" web-class="subcategoryClass"></label></xml>';
+    var toAdd = '<xml><sep gap="32"></sep><label text="' + Blockly.Msg.LABEL_PROCEDURE_EXECUTION + '" web-class="subcategoryClass"></label></xml>';
 
     toAdd = Blockly.Xml.textToDom(toAdd);
     var gap = toAdd.firstChild;

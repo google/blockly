@@ -56,12 +56,14 @@ goog.require('Blockly.utils.userAgent');
  * @constructor
  * @throws {TypeError} If `menuGenerator` options are incorrectly structured.
  */
-Blockly.FieldDropdown = function(menuGenerator, opt_validator, shouldAllowSearch, opt_config) {
+Blockly.FieldDropdown = function(menuGenerator, opt_validator, opt_config) {
   if (typeof menuGenerator != 'function') {
     Blockly.FieldDropdown.validateOptions_(menuGenerator);
   }
 
-  this.shouldAllowSearch_ = shouldAllowSearch;
+  // Default options
+  this.shouldAllowSearch_ = false;
+  this.maxLength = -1;
 
   /**
    * An array of options for a dropdown list,
@@ -178,6 +180,14 @@ Blockly.FieldDropdown.ARROW_CHAR =
  */
 Blockly.FieldDropdown.prototype.CURSOR = 'default';
 
+Blockly.FieldDropdown.prototype.setShouldAllowSearch = function (shouldAllowSearch) {
+  this.shouldAllowSearch_ = shouldAllowSearch;
+};
+
+Blockly.FieldDropdown.prototype.setOptionsMaxLength = function (maxLength) {
+  this.maxLength = maxLength;
+};
+
 /**
  * Create the block UI for this dropdown.
  * @package
@@ -246,6 +256,8 @@ Blockly.FieldDropdown.prototype.dropdownCreate_ = function() {
 
   menu.setRightToLeft(this.sourceBlock_.RTL);
   menu.setRole('listbox');
+
+  options = this.trimMaxLengthOptions_(options);
 
   this.selectedMenuItem_ = null;
   for (var i = 0; i < options.length; i++) {
@@ -356,8 +368,7 @@ Blockly.FieldDropdown.prototype.trimOptions_ = function() {
   var shortest = Blockly.utils.string.shortestStringLength(strings);
   var prefixLength = Blockly.utils.string.commonWordPrefix(strings, shortest);
   var suffixLength = Blockly.utils.string.commonWordSuffix(strings, shortest);
-  //TODOQ3: Uncomment this once longestString is confirmed
-  // this.longestOption = Blockly.utils.string.longestString(strings);
+  
   if (!prefixLength && !suffixLength) {
     return;
   }
@@ -408,6 +419,36 @@ Blockly.FieldDropdown.applyTrim_ = function(options,
  */
 Blockly.FieldDropdown.prototype.isOptionListDynamic = function() {
   return typeof this.menuGenerator_ == 'function';
+};
+
+Blockly.FieldDropdown.prototype.trimMaxLengthOptions_ = function(options) {
+  if (this.maxLength <= 0) {
+    return options;
+  }
+
+  if (!Array.isArray(options)) {
+    return options;
+  }
+
+  var strings = [];
+
+  for (var i = 0; i < options.length; i++) {
+    var content = options[i][0]; // Human-readable text or image.
+    if (typeof content === 'object') {
+      continue;
+    }
+
+    if (typeof content === 'string' && content.length > this.maxLength) {
+      content = content.substring(0, this.maxLength) + "…";
+    }
+
+    options[i][0] = content;
+    strings.push(content);
+  }
+
+  this.longestOption = Blockly.utils.string.longestString(strings);
+
+  return options;
 };
 
 /**
@@ -674,11 +715,13 @@ Blockly.FieldDropdown.changeRecentModuleColors = function (activeIDsDict, recent
 
       // Search in the active and recent lists. If the option is inside the recent list, but not in the active list, grey it out.
       // Otherwise, un-grey it out.
-      if (!(listOfActiveModules.includes(innerText)) &&
-          (listOfRecentModules.includes(innerText))) {
-        child.children[0].className = 'goog-menuitem-content recent-module';
-      } else if (child.children[0].className === 'goog-menuitem-content recent-module') {
-        child.children[0].className = 'goog-menuitem-content';
+      if (child.children.length > 0) {
+        if (!(listOfActiveModules.includes(innerText)) &&
+            (listOfRecentModules.includes(innerText))) {
+          child.children[0].className = 'goog-menuitem-content recent-module';
+        } else if (child.children[0].className === 'goog-menuitem-content recent-module') {
+          child.children[0].className = 'goog-menuitem-content';
+        }
       }
     }
   }

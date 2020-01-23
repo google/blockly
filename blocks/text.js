@@ -54,6 +54,9 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     "style": "text_blocks",
     "helpUrl": "%{BKY_TEXT_TEXT_HELPURL}",
     "tooltip": "%{BKY_TEXT_TEXT_TOOLTIP}",
+    "search_keywords": [
+      "%{BKY_FABLE_SEARCH_KEYWORD_TEXT}"
+    ],
     "extensions": [
       "text_quotes",
       "parent_tooltip_when_inline"
@@ -252,7 +255,10 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     "colour": "#8c1bb5",
     "tooltip": "",
     "helpUrl": "",
-    "inputsInline": true
+    "inputsInline": true,
+    "search_keywords": [
+      "%{BKY_FABLE_SEARCH_KEYWORD_TEXT}"
+    ]
   }
 ]);  // END JSON EXTRACT (Do not delete this comment.)
 

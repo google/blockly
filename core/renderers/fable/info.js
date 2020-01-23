@@ -100,6 +100,7 @@ Blockly.fable.RenderInfo.prototype.addInput_ = function (input, activeRow) {
               (input.fieldRow[i].imageElement_.height.animVal && input.fieldRow[i].imageElement_.height.animVal.value > 20) ||
               (input.fieldRow[i].imageElement_.height > 20)) {
             hasLargeImage = true;
+            input.hasLargeImage = true;
             break;
           }
         }
@@ -384,8 +385,12 @@ Blockly.fable.RenderInfo.prototype.getElemCenterline_ = function (row, elem) {
   }
 
   var result = row.yPos;
-  if (Blockly.blockRendering.Types.isField(elem) ||
-      Blockly.blockRendering.Types.isIcon(elem)) {
+  if (Blockly.blockRendering.Types.isIcon(elem)) {
+    result += (elem.height / 2);
+    if (this.topRow.minHeight === this.constants_.Y_MARGIN_TOP_WITH_IMAGE) {
+      result += ((this.topRow.minHeight - this.constants_.Y_MARGIN_TOP) / 2);
+    }
+  } else if (Blockly.blockRendering.Types.isField(elem)) {
     result += (elem.height / 2);
     if ((row.hasInlineInput || row.hasStatement || row.hasExternalInput) &&
         elem.height + this.constants_.TALL_INPUT_FIELD_OFFSET_Y <= row.height) {
@@ -402,7 +407,7 @@ Blockly.fable.RenderInfo.prototype.getElemCenterline_ = function (row, elem) {
       }
     }
   } else if (Blockly.blockRendering.Types.isInlineInput(elem)) {
-    result += elem.height / 2;
+    result += (row.height / 2);
   } else {
     result += (row.height / 2);
   }
@@ -440,7 +445,11 @@ Blockly.fable.RenderInfo.prototype.finalize_ = function () {
     }
 
     if (Blockly.blockRendering.Types.isInputRow(row) && !hasAddedARow) {
-      firstRowHeight += row.height;
+      if (row.calculatedHeight) {
+        firstRowHeight += row.calculatedHeight;
+      } else {
+        firstRowHeight += row.height;
+      }
       hasAddedARow = true;
     }
 
@@ -454,5 +463,11 @@ Blockly.fable.RenderInfo.prototype.finalize_ = function () {
   this.width += this.constants_.DARK_PATH_OFFSET;
   this.height = yCursor + this.constants_.DARK_PATH_OFFSET;
   this.startY = this.topRow.capline;
+
+  if (this.topRow.minHeight === this.constants_.Y_MARGIN_TOP_WITH_IMAGE &&
+    this.topRow.minHeight > this.constants_.Y_MARGIN_TOP) {
+    firstRowHeight += (2 * (this.constants_.Y_MARGIN_TOP_WITH_IMAGE - this.constants_.Y_MARGIN_TOP));
+  }
+
   this.block_.firstRowHeight = firstRowHeight;
 };

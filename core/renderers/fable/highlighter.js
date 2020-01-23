@@ -235,6 +235,9 @@ Blockly.fable.Highlighter.prototype.drawInlineInput = function (input) {
   var bottomHighlightWidth = input.width - input.connectionWidth;
   var startY = yPos + offset;
   var verticalOffset = (input.height - input.shape.height) / 2;
+  if (input.connectedBlock && input.connectedBlock.firstRowHeight) {
+    verticalOffset = ((input.connectedBlock.firstRowHeight + 11) - input.shape.height) / 2;
+  }
 
   if (this.RTL_) {
     // TODO: Check if this is different when the inline input is populated.

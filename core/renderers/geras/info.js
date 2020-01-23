@@ -303,7 +303,7 @@ Blockly.geras.RenderInfo.prototype.getInRowSpacing_ = function(prev, next) {
   // Spacing between two fields of the same editability.
   if (Blockly.blockRendering.Types.isField(prev) &&
       next && Blockly.blockRendering.Types.isField(next) &&
-      ((/** @type Blockly.blockRendering.Field */ (prev)).isEditable ===
+      ((/** @type Blockly.blockRendering.Field */ (prev)).isEditable ==
           (/** @type Blockly.blockRendering.Field */ (next)).isEditable)) {
     return this.constants_.LARGE_PADDING;
   }

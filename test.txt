@@ -1,0 +1,8 @@
+Executing compile.sh from /Users/aschmiedt/workspace/blockly
+Found npm google-closure-compiler:
+  /Users/aschmiedt/workspace/blockly/node_modules/google-closure-compiler-java/compiler.jar
+└── google-closure-compiler@20190618.0.0 
+Compiling Blockly...
+java -jar /Users/aschmiedt/workspace/blockly/node_modules/google-closure-compiler-java/compiler.jar --js='./tests/compile/main.js'   --js='./temp_core/**.js'   --js='./blocks/**.js'   --js='./generators/**.js'   --js='./msg/js/**.js'   --generate_exports   --externs ./externs/svg-externs.js   --compilation_level ADVANCED_OPTIMIZATIONS   --dependency_mode=STRICT --entry_point=Main   --js_output_file ./tests/compile/main_compressed.js
+Compiler exit code: 0
+Compilation SUCCESS.

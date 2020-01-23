@@ -164,8 +164,11 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
   },
   {
     "type": "test_align_all",
-    "message0": "text %1 long text left %2 text centre %3 much longer text right",
+    "message0": "text %1 long text left %2 text centre %3 much longer text right %4",
     "args0": [
+      {
+        "type": "input_dummy",
+      },
       {
         "type": "input_dummy",
         "align": "LEFT",

@@ -25,6 +25,7 @@
 goog.provide('Blockly.FlyoutCursor');
 
 goog.require('Blockly.Cursor');
+goog.require('Blockly.navigation');
 goog.require('Blockly.utils.object');
 
 
@@ -38,6 +39,26 @@ Blockly.FlyoutCursor = function() {
   Blockly.FlyoutCursor.superClass_.constructor.call(this);
 };
 Blockly.utils.object.inherits(Blockly.FlyoutCursor, Blockly.Cursor);
+
+/**
+ * Handles the given action.
+ * This is only triggered when keyboard navigation is enabled.
+ * @param {!Blockly.Action} action The action to be handled.
+ * @return {boolean} True if the action has been handled, false otherwise.
+ * @override
+ */
+Blockly.FlyoutCursor.prototype.onBlocklyAction = function(action) {
+  switch (action.name) {
+    case Blockly.navigation.actionNames.PREVIOUS:
+      this.prev();
+      return true;
+    case Blockly.navigation.actionNames.NEXT:
+      this.next();
+      return true;
+    default:
+      return false;
+  }
+};
 
 /**
  * Find the next connection, field, or block.

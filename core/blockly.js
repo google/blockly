@@ -67,23 +67,11 @@ Blockly.mainWorkspace = null;
 Blockly.selected = null;
 
 /**
- * Current cursor.
- * @type {Blockly.Cursor}
- */
-Blockly.cursor = null;
-
-/**
- * Whether or not we're currently in keyboard accessibility mode.
- * @type {boolean}
- */
-Blockly.keyboardAccessibilityMode = false;
-
-/**
  * All of the connections on blocks that are currently being dragged.
  * @type {!Array.<!Blockly.Connection>}
- * @private
+ * @package
  */
-Blockly.draggingConnections_ = [];
+Blockly.draggingConnections = [];
 
 /**
  * Contents of the local clipboard.
@@ -114,8 +102,15 @@ Blockly.clipboardTypeCounts_ = null;
 Blockly.cache3dSupported_ = null;
 
 /**
+ * Blockly opaque event data used to unbind events when using
+ * `Blockly.bindEvent_` and `Blockly.bindEventWithChecks_`.
+ * @typedef {!Array.<!Array>}
+ */
+Blockly.EventData;
+
+/**
  * Returns the dimensions of the specified SVG image.
- * @param {!Element} svg SVG image.
+ * @param {!SVGElement} svg SVG image.
  * @return {!Object} Contains width and height properties.
  */
 Blockly.svgSize = function(svg) {
@@ -170,12 +165,15 @@ Blockly.svgResize = function(workspace) {
  * Handle a key-down on SVG drawing surface. Does nothing if the main workspace
  * is not visible.
  * @param {!Event} e Key down event.
- * @private
+ * @package
  */
 // TODO (https://github.com/google/blockly/issues/1998) handle cases where there
 // are multiple workspaces and non-main workspaces are able to accept input.
-Blockly.onKeyDown_ = function(e) {
+Blockly.onKeyDown = function(e) {
   var mainWorkspace = Blockly.mainWorkspace;
+  if (!mainWorkspace) {
+    return;
+  }
 
   if (Blockly.utils.isTargetInput(e) ||
       (mainWorkspace.rendered && !mainWorkspace.isVisible())) {
@@ -262,7 +260,8 @@ Blockly.onKeyDown_ = function(e) {
   if (deleteBlock && !Blockly.selected.workspace.isFlyout) {
     Blockly.Events.setGroup(true);
     Blockly.hideChaff();
-    Blockly.selected.dispose(/* heal */ true, true);
+    var selected = /** @type {!Blockly.BlockSvg} */ (Blockly.selected);
+    selected.dispose(/* heal */ true, true);
     Blockly.Events.setGroup(false);
   }
 };
@@ -295,9 +294,9 @@ Blockly.copy_ = function(toCopy) {
  * Duplicate this block and its children, or a workspace comment.
  * @param {!Blockly.Block | !Blockly.WorkspaceComment} toDuplicate Block or
  *     Workspace Comment to be copied.
- * @private
+ * @package
  */
-Blockly.duplicate_ = function(toDuplicate) {
+Blockly.duplicate = function(toDuplicate) {
   // Save the clipboard.
   var clipboardXml = Blockly.clipboardXml_;
   var clipboardSource = Blockly.clipboardSource_;
@@ -336,13 +335,14 @@ Blockly.hideChaff = function(opt_allowToolbox) {
     // For now the trashcan flyout always autocloses because it overlays the
     // trashcan UI (no trashcan to click to close it).
     if (workspace.trashcan &&
-      workspace.trashcan.flyout_) {
-      workspace.trashcan.flyout_.hide();
+      workspace.trashcan.flyout) {
+      workspace.trashcan.flyout.hide();
     }
-    if (workspace.toolbox_ &&
-        workspace.toolbox_.flyout_ &&
-        workspace.toolbox_.flyout_.autoClose) {
-      workspace.toolbox_.clearSelection();
+    var toolbox = workspace.getToolbox();
+    if (toolbox &&
+        toolbox.getFlyout() &&
+        toolbox.getFlyout().autoClose) {
+      toolbox.clearSelection();
     }
   }
 };
@@ -354,7 +354,7 @@ Blockly.hideChaff = function(opt_allowToolbox) {
  * @return {!Blockly.Workspace} The main workspace.
  */
 Blockly.getMainWorkspace = function() {
-  return Blockly.mainWorkspace;
+  return /** @type {!Blockly.Workspace} */ (Blockly.mainWorkspace);
 };
 
 /**
@@ -387,7 +387,7 @@ Blockly.confirm = function(message, callback) {
  * recommend testing mobile when overriding this.
  * @param {string} message The message to display to the user.
  * @param {string} defaultValue The value to initialize the prompt with.
- * @param {!function(string)} callback The callback for handling user response.
+ * @param {!function(?string)} callback The callback for handling user response.
  */
 Blockly.prompt = function(message, defaultValue, callback) {
   callback(prompt(message, defaultValue));
@@ -454,7 +454,7 @@ Blockly.defineBlocksWithJsonArray = function(jsonArray) {
  *     should prevent the default handler.  False by default.  If
  *     opt_noPreventDefault is provided, opt_noCaptureIdentifier must also be
  *     provided.
- * @return {!Array.<!Array>} Opaque data that can be passed to unbindEvent_.
+ * @return {!Blockly.EventData} Opaque data that can be passed to unbindEvent_.
  */
 Blockly.bindEventWithChecks_ = function(node, name, thisObject, func,
     opt_noCaptureIdentifier, opt_noPreventDefault) {
@@ -464,7 +464,7 @@ Blockly.bindEventWithChecks_ = function(node, name, thisObject, func,
     // Handle each touch point separately.  If the event was a mouse event, this
     // will hand back an array with one element, which we're fine handling.
     var events = Blockly.Touch.splitEventByTouches(e);
-    for (var i = 0, event; event = events[i]; i++) {
+    for (var i = 0, event; (event = events[i]); i++) {
       if (captureIdentifier && !Blockly.Touch.shouldHandleEvent(event)) {
         continue;
       }
@@ -481,7 +481,7 @@ Blockly.bindEventWithChecks_ = function(node, name, thisObject, func,
   var bindData = [];
   if (Blockly.utils.global['PointerEvent'] &&
       (name in Blockly.Touch.TOUCH_MAP)) {
-    for (var i = 0, type; type = Blockly.Touch.TOUCH_MAP[name][i]; i++) {
+    for (var i = 0, type; (type = Blockly.Touch.TOUCH_MAP[name][i]); i++) {
       node.addEventListener(type, wrapFunc, false);
       bindData.push([node, type, wrapFunc]);
     }
@@ -500,7 +500,7 @@ Blockly.bindEventWithChecks_ = function(node, name, thisObject, func,
           e.preventDefault();
         }
       };
-      for (var i = 0, type; type = Blockly.Touch.TOUCH_MAP[name][i]; i++) {
+      for (var i = 0, type; (type = Blockly.Touch.TOUCH_MAP[name][i]); i++) {
         node.addEventListener(type, touchWrapFunc, false);
         bindData.push([node, type, touchWrapFunc]);
       }
@@ -513,14 +513,13 @@ Blockly.bindEventWithChecks_ = function(node, name, thisObject, func,
 /**
  * Bind an event to a function call.  Handles multitouch events by using the
  * coordinates of the first changed touch, and doesn't do any safety checks for
- * simultaneous event processing.
- * @deprecated in favor of bindEventWithChecks_, but preserved for external
- * users.
+ * simultaneous event processing.  In most cases prefer is to use
+ * `Blockly.bindEventWithChecks_`.
  * @param {!EventTarget} node Node upon which to listen.
  * @param {string} name Event name to listen to (e.g. 'mousedown').
  * @param {Object} thisObject The value of 'this' in the function.
  * @param {!Function} func Function to call when event is triggered.
- * @return {!Array.<!Array>} Opaque data that can be passed to unbindEvent_.
+ * @return {!Blockly.EventData} Opaque data that can be passed to unbindEvent_.
  */
 Blockly.bindEvent_ = function(node, name, thisObject, func) {
   var wrapFunc = function(e) {
@@ -534,7 +533,7 @@ Blockly.bindEvent_ = function(node, name, thisObject, func) {
   var bindData = [];
   if (Blockly.utils.global['PointerEvent'] &&
       (name in Blockly.Touch.TOUCH_MAP)) {
-    for (var i = 0, type; type = Blockly.Touch.TOUCH_MAP[name][i]; i++) {
+    for (var i = 0, type; (type = Blockly.Touch.TOUCH_MAP[name][i]); i++) {
       node.addEventListener(type, wrapFunc, false);
       bindData.push([node, type, wrapFunc]);
     }
@@ -557,7 +556,7 @@ Blockly.bindEvent_ = function(node, name, thisObject, func) {
         // Stop the browser from scrolling/zooming the page.
         e.preventDefault();
       };
-      for (var i = 0, type; type = Blockly.Touch.TOUCH_MAP[name][i]; i++) {
+      for (var i = 0, type; (type = Blockly.Touch.TOUCH_MAP[name][i]); i++) {
         node.addEventListener(type, touchWrapFunc, false);
         bindData.push([node, type, touchWrapFunc]);
       }

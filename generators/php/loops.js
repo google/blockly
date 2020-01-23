@@ -40,11 +40,11 @@ Blockly.PHP['controls_repeat_ext'] = function(block) {
   branch = Blockly.PHP.addLoopTrap(branch, block);
   var code = '';
   var loopVar = Blockly.PHP.variableDB_.getDistinctName(
-      'count', Blockly.Variables.NAME_TYPE);
+      'count', Blockly.VARIABLE_CATEGORY_NAME);
   var endVar = repeats;
   if (!repeats.match(/^\w+$/) && !Blockly.isNumber(repeats)) {
-    var endVar = Blockly.PHP.variableDB_.getDistinctName(
-        'repeat_end', Blockly.Variables.NAME_TYPE);
+    endVar = Blockly.PHP.variableDB_.getDistinctName(
+        'repeat_end', Blockly.VARIABLE_CATEGORY_NAME);
     code += endVar + ' = ' + repeats + ';\n';
   }
   code += 'for (' + loopVar + ' = 0; ' +
@@ -73,7 +73,7 @@ Blockly.PHP['controls_whileUntil'] = function(block) {
 Blockly.PHP['controls_for'] = function(block) {
   // For loop.
   var variable0 = Blockly.PHP.variableDB_.getName(
-      block.getFieldValue('VAR'), Blockly.Variables.NAME_TYPE);
+      block.getFieldValue('VAR'), Blockly.VARIABLE_CATEGORY_NAME);
   var argument0 = Blockly.PHP.valueToCode(block, 'FROM',
       Blockly.PHP.ORDER_ASSIGNMENT) || '0';
   var argument1 = Blockly.PHP.valueToCode(block, 'TO',
@@ -103,19 +103,19 @@ Blockly.PHP['controls_for'] = function(block) {
     var startVar = argument0;
     if (!argument0.match(/^\w+$/) && !Blockly.isNumber(argument0)) {
       startVar = Blockly.PHP.variableDB_.getDistinctName(
-          variable0 + '_start', Blockly.Variables.NAME_TYPE);
+          variable0 + '_start', Blockly.VARIABLE_CATEGORY_NAME);
       code += startVar + ' = ' + argument0 + ';\n';
     }
     var endVar = argument1;
     if (!argument1.match(/^\w+$/) && !Blockly.isNumber(argument1)) {
-      var endVar = Blockly.PHP.variableDB_.getDistinctName(
-          variable0 + '_end', Blockly.Variables.NAME_TYPE);
+      endVar = Blockly.PHP.variableDB_.getDistinctName(
+          variable0 + '_end', Blockly.VARIABLE_CATEGORY_NAME);
       code += endVar + ' = ' + argument1 + ';\n';
     }
     // Determine loop direction at start, in case one of the bounds
     // changes during loop execution.
     var incVar = Blockly.PHP.variableDB_.getDistinctName(
-        variable0 + '_inc', Blockly.Variables.NAME_TYPE);
+        variable0 + '_inc', Blockly.VARIABLE_CATEGORY_NAME);
     code += incVar + ' = ';
     if (Blockly.isNumber(increment)) {
       code += Math.abs(increment) + ';\n';
@@ -138,7 +138,7 @@ Blockly.PHP['controls_for'] = function(block) {
 Blockly.PHP['controls_forEach'] = function(block) {
   // For each loop.
   var variable0 = Blockly.PHP.variableDB_.getName(
-      block.getFieldValue('VAR'), Blockly.Variables.NAME_TYPE);
+      block.getFieldValue('VAR'), Blockly.VARIABLE_CATEGORY_NAME);
   var argument0 = Blockly.PHP.valueToCode(block, 'LIST',
       Blockly.PHP.ORDER_ASSIGNMENT) || '[]';
   var branch = Blockly.PHP.statementToCode(block, 'DO');

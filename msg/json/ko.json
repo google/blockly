@@ -14,10 +14,12 @@
 			"Onebone",
 			"JeonHK",
 			"Liuxinyu970226",
-			"Peurocs4"
+			"Peurocs4",
+			"Gongsoonyee"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "항목",
+	"UNNAMED_KEY": "이름이 없는",
 	"TODAY": "오늘",
 	"DUPLICATE_BLOCK": "복제",
 	"ADD_COMMENT": "주석 추가",
@@ -287,7 +289,9 @@
 	"TEXT_COUNT_TOOLTIP": "다른 어떤 텍스트에서 어떤 텍스트가 나타난 횟수를 셉니다.",
 	"TEXT_REPLACE_MESSAGE0": "%3에서 %2을(를) %1(으)로 바꾸기",
 	"TEXT_REPLACE_HELPURL": "https://github.com/google/blockly/wiki/Text#replacing-substrings",
+	"TEXT_REVERSE_MESSAGE0": "%1 뒤집기",
 	"TEXT_REVERSE_HELPURL": "https://github.com/google/blockly/wiki/Text#reversing-text",
+	"TEXT_REVERSE_TOOLTIP": "텍스트 안의 문자의 순서를 반전시킵니다.",
 	"LISTS_CREATE_EMPTY_HELPURL": "https://github.com/google/blockly/wiki/Lists#create-empty-list",
 	"LISTS_CREATE_EMPTY_TITLE": "빈 리스트 생성",
 	"LISTS_CREATE_EMPTY_TOOLTIP": "데이터 레코드가 없는, 길이가 0인 목록을 반환합니다.",

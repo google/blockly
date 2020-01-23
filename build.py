@@ -202,6 +202,8 @@ class Gen_compressed(threading.Thread):
       if filename == "core/blockly.js":
         code = code.replace("Blockly.VERSION = 'uncompiled';",
                             "Blockly.VERSION = '%s';" % blocklyVersion)
+      # Strip out all requireType calls.
+      code = re.sub(r"goog.requireType(.*)", "", code)
       params.append(("js_code", code.encode("utf-8")))
       f.close()
 
@@ -235,6 +237,7 @@ goog.provide('Blockly.FieldNumber');
 goog.provide('Blockly.FieldTextInput');
 goog.provide('Blockly.FieldVariable');
 goog.provide('Blockly.Mutator');
+goog.provide('Blockly.Warning');
 """))
     # Read in all the source files.
     filenames = glob.glob(os.path.join("blocks", "*.js"))
@@ -266,6 +269,7 @@ goog.provide('Blockly.Mutator');
     # with the compiler.
     params.append(("js_code", """
 goog.provide('Blockly.Generator');
+goog.provide('Blockly.utils.global');
 goog.provide('Blockly.utils.string');
 """))
     filenames = glob.glob(
@@ -280,7 +284,7 @@ goog.provide('Blockly.utils.string');
 
     # Remove Blockly.Generator and Blockly.utils.string to be compatible
     # with Blockly.
-    remove = r"var Blockly=\{[^;]*\};\s*Blockly.utils.string={};\n?"
+    remove = r"var Blockly=\{[^;]*\};\s*Blockly.utils.global={};\s*Blockly.utils.string={};\n?"
     self.do_compile(params, target_filename, filenames, remove)
 
   def do_compile(self, params, target_filename, filenames, remove):

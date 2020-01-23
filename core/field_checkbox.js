@@ -60,9 +60,6 @@ Blockly.FieldCheckbox = function(opt_value, opt_validator, opt_config) {
   }
   Blockly.FieldCheckbox.superClass_.constructor.call(
       this, opt_value, opt_validator, opt_config);
-
-  this.size_.width = Blockly.FieldCheckbox.WIDTH;
-
 };
 Blockly.utils.object.inherits(Blockly.FieldCheckbox, Blockly.Field);
 
@@ -78,32 +75,11 @@ Blockly.FieldCheckbox.fromJson = function(options) {
 };
 
 /**
- * The width of a checkbox field.
- * @type {number}
- * @const
- */
-Blockly.FieldCheckbox.WIDTH = 15;
-
-/**
  * Default character for the checkmark.
  * @type {string}
  * @const
  */
 Blockly.FieldCheckbox.CHECK_CHAR = '\u2713';
-
-/**
- * Used to correctly position the check mark.
- * @type {number}
- * @const
- */
-Blockly.FieldCheckbox.CHECK_X_OFFSET = Blockly.Field.DEFAULT_TEXT_OFFSET - 3;
-
-/**
- * Used to correctly position the check mark.
- * @type {number}
- * @const
- */
-Blockly.FieldCheckbox.CHECK_Y_OFFSET = 14;
 
 /**
  * Serializable fields are saved by the XML renderer, non-serializable fields
@@ -143,10 +119,12 @@ Blockly.FieldCheckbox.prototype.configure_ = function(config) {
  * @package
  */
 Blockly.FieldCheckbox.prototype.initView = function() {
+  this.size_.width = this.constants_.FIELD_CHECKBOX_DEFAULT_WIDTH;
   Blockly.FieldCheckbox.superClass_.initView.call(this);
 
-  this.textElement_.setAttribute('x', Blockly.FieldCheckbox.CHECK_X_OFFSET);
-  this.textElement_.setAttribute('y', Blockly.FieldCheckbox.CHECK_Y_OFFSET);
+  this.textElement_.setAttribute('x', this.constants_.FIELD_CHECKBOX_X_OFFSET);
+  this.textElement_.setAttribute('y', this.constants_.FIELD_CHECKBOX_Y_OFFSET);
+  this.textElement_.removeAttribute('dominant-baseline');
   Blockly.utils.dom.addClass(this.textElement_, 'blocklyCheckbox');
 
   this.textContent_.nodeValue =

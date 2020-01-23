@@ -400,6 +400,7 @@ Blockly.Msg["VARIABLES_SET_HELPURL"] = "https://github.com/google/blockly/wiki/V
 Blockly.Msg["VARIABLES_SET_TOOLTIP"] = "Fissé costa variàbil ugual al valor d'imission.";
 Blockly.Msg["VARIABLE_ALREADY_EXISTS"] = "Na variàbil con ël nòm '%1' a esist già.";
 Blockly.Msg["VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE"] = "Na variàbil ciamà '%1' a esist già për n'àutra sòrt: '%2'.";
+Blockly.Msg["WORKSPACE_ARIA_LABEL"] = "Spassi ëd travaj ëd Blockly";
 Blockly.Msg["WORKSPACE_COMMENT_DEFAULT_TEXT"] = "Dì cheicòs...";
 Blockly.Msg["CONTROLS_FOREACH_INPUT_DO"] = Blockly.Msg["CONTROLS_REPEAT_INPUT_DO"];
 Blockly.Msg["CONTROLS_FOR_INPUT_DO"] = Blockly.Msg["CONTROLS_REPEAT_INPUT_DO"];

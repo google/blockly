@@ -208,7 +208,7 @@ Blockly.Lua['math_change'] = function(block) {
   var argument0 = Blockly.Lua.valueToCode(block, 'DELTA',
       Blockly.Lua.ORDER_ADDITIVE) || '0';
   var varName = Blockly.Lua.variableDB_.getName(
-      block.getFieldValue('VAR'), Blockly.Variables.NAME_TYPE);
+      block.getFieldValue('VAR'), Blockly.VARIABLE_CATEGORY_NAME);
   return varName + ' = ' + varName + ' + ' + argument0 + '\n';
 };
 

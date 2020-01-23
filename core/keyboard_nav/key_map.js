@@ -24,13 +24,16 @@
 
 goog.provide('Blockly.user.keyMap');
 
+// TODO: Fix circular dependency.
+// goog.require('Blockly.navigation');
 goog.require('Blockly.utils.KeyCodes');
 goog.require('Blockly.utils.object');
 
 
 /**
  * Holds the serialized key to key action mapping.
- * @type {Object<string, Blockly.Action>}
+ * @type {!Object<string, Blockly.Action>}
+ * @private
  */
 Blockly.user.keyMap.map_ = {};
 
@@ -50,7 +53,6 @@ Blockly.user.keyMap.modifierKeys = {
  * @param {string} keyCode The key code serialized by the serializeKeyEvent.
  * @param {!Blockly.Action} action The action to be executed when the keys
  *     corresponding to the serialized key code is pressed.
- * @package
  */
 Blockly.user.keyMap.setActionForKey = function(keyCode, action) {
   var oldKey = Blockly.user.keyMap.getKeyByAction(action);
@@ -63,9 +65,8 @@ Blockly.user.keyMap.setActionForKey = function(keyCode, action) {
 
 /**
  * Creates a new key map.
- * @param {Object<string, Blockly.Action>} keyMap The object holding the key
+ * @param {!Object<string, Blockly.Action>} keyMap The object holding the key
  *     to action mapping.
- * @package
  */
 Blockly.user.keyMap.setKeyMap = function(keyMap) {
   Blockly.user.keyMap.map_ = keyMap;
@@ -75,7 +76,6 @@ Blockly.user.keyMap.setKeyMap = function(keyMap) {
  * Gets the current key map.
  * @return {Object<string,Blockly.Action>} The object holding the key to
  *     action mapping.
- * @package
  */
 Blockly.user.keyMap.getKeyMap = function() {
   var map = {};
@@ -88,7 +88,6 @@ Blockly.user.keyMap.getKeyMap = function() {
  * @param {string} keyCode The serialized key code.
  * @return {Blockly.Action|undefined} The action holding the function to
  *     call when the given keyCode is used or undefined if no action exists.
- * @package
  */
 Blockly.user.keyMap.getActionByKeyCode = function(keyCode) {
   return Blockly.user.keyMap.map_[keyCode];
@@ -100,11 +99,10 @@ Blockly.user.keyMap.getActionByKeyCode = function(keyCode) {
  *     the key.
  * @return {?string} The serialized key or null if the action does not have
  *     a key mapping.
- * @package
  */
 Blockly.user.keyMap.getKeyByAction = function(action) {
   var keys = Object.keys(Blockly.user.keyMap.map_);
-  for (var i = 0, key; key = keys[i]; i++) {
+  for (var i = 0, key; (key = keys[i]); i++) {
     if (Blockly.user.keyMap.map_[key].name === action.name) {
       return key;
     }
@@ -116,17 +114,33 @@ Blockly.user.keyMap.getKeyByAction = function(action) {
  * Serialize the key event.
  * @param {!Event} e A key up event holding the key code.
  * @return {string} A string containing the serialized key event.
+ * @package
  */
 Blockly.user.keyMap.serializeKeyEvent = function(e) {
   var modifiers = Blockly.utils.object.values(Blockly.user.keyMap.modifierKeys);
   var key = '';
-  for (var i = 0, keyName; keyName = modifiers[i]; i++) {
+  for (var i = 0, keyName; (keyName = modifiers[i]); i++) {
     if (e.getModifierState(keyName)) {
       key += keyName;
     }
   }
   key += e.keyCode;
   return key;
+};
+
+/**
+ * Checks whether any of the given modifiers are not valid.
+ * @param {!Array.<string>} modifiers List of modifiers to be used with the key.
+ * @param {!Array.<string>} validModifiers List of modifiers we support.
+ * @throws {Error} if the modifier is not in the valid modifiers list.
+ * @private
+ */
+Blockly.user.keyMap.checkModifiers_ = function(modifiers, validModifiers) {
+  for (var i = 0, modifier; (modifier = modifiers[i]); i++) {
+    if (validModifiers.indexOf(modifier) < 0) {
+      throw Error(modifier + ' is not a valid modifier key.');
+    }
+  }
 };
 
 /**
@@ -139,11 +153,10 @@ Blockly.user.keyMap.serializeKeyEvent = function(e) {
 Blockly.user.keyMap.createSerializedKey = function(keyCode, modifiers) {
   var key = '';
   var validModifiers = Blockly.utils.object.values(Blockly.user.keyMap.modifierKeys);
-  for (var i = 0, keyName; keyName = modifiers[i]; i++) {
-    if (validModifiers.indexOf(keyName) > -1) {
-      key += keyName;
-    } else {
-      throw Error(keyName + ' is not a valid modifier key.');
+  Blockly.user.keyMap.checkModifiers_(modifiers, validModifiers);
+  for (var i = 0, validModifier; (validModifier = validModifiers[i]); i++) {
+    if (modifiers.indexOf(validModifier) > -1) {
+      key += validModifier;
     }
   }
   key += keyCode;
@@ -158,7 +171,16 @@ Blockly.user.keyMap.createSerializedKey = function(keyCode, modifiers) {
 Blockly.user.keyMap.createDefaultKeyMap = function() {
   var map = {};
   var controlK = Blockly.user.keyMap.createSerializedKey(
-      Blockly.utils.KeyCodes.K, [Blockly.user.keyMap.modifierKeys.CONTROL]);
+      Blockly.utils.KeyCodes.K, [Blockly.user.keyMap.modifierKeys.CONTROL,
+        Blockly.user.keyMap.modifierKeys.SHIFT]);
+  var shiftW = Blockly.user.keyMap.createSerializedKey(
+      Blockly.utils.KeyCodes.W, [Blockly.user.keyMap.modifierKeys.SHIFT]);
+  var shiftA = Blockly.user.keyMap.createSerializedKey(
+      Blockly.utils.KeyCodes.A, [Blockly.user.keyMap.modifierKeys.SHIFT]);
+  var shiftS = Blockly.user.keyMap.createSerializedKey(
+      Blockly.utils.KeyCodes.S, [Blockly.user.keyMap.modifierKeys.SHIFT]);
+  var shiftD = Blockly.user.keyMap.createSerializedKey(
+      Blockly.utils.KeyCodes.D, [Blockly.user.keyMap.modifierKeys.SHIFT]);
 
   map[Blockly.utils.KeyCodes.W] = Blockly.navigation.ACTION_PREVIOUS;
   map[Blockly.utils.KeyCodes.A] = Blockly.navigation.ACTION_OUT;
@@ -171,5 +193,9 @@ Blockly.user.keyMap.createDefaultKeyMap = function() {
   map[Blockly.utils.KeyCodes.E] = Blockly.navigation.ACTION_EXIT;
   map[Blockly.utils.KeyCodes.ESC] = Blockly.navigation.ACTION_EXIT;
   map[controlK] = Blockly.navigation.ACTION_TOGGLE_KEYBOARD_NAV;
+  map[shiftW] = Blockly.navigation.ACTION_MOVE_WS_CURSOR_UP;
+  map[shiftA] = Blockly.navigation.ACTION_MOVE_WS_CURSOR_LEFT;
+  map[shiftS] = Blockly.navigation.ACTION_MOVE_WS_CURSOR_DOWN;
+  map[shiftD] = Blockly.navigation.ACTION_MOVE_WS_CURSOR_RIGHT;
   return map;
 };

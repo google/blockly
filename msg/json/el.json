@@ -21,6 +21,7 @@
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "αντικείμενο",
+	"UNNAMED_KEY": "χωρίς όνομα",
 	"TODAY": "Σήμερα",
 	"DUPLICATE_BLOCK": "Διπλότυπο",
 	"ADD_COMMENT": "Πρόσθεσε Το Σχόλιο",
@@ -376,5 +377,6 @@
 	"PROCEDURES_IFRETURN_TOOLTIP": "Αν μια τιμή είναι αληθής, τότε επιστρέφει τη δεύτερη τιμή.",
 	"PROCEDURES_IFRETURN_WARNING": "Προειδοποίηση: Αυτό το μπλοκ μπορεί να χρησιμοποιηθεί μόνο στον ορισμό μιας συνάρτησης.",
 	"WORKSPACE_COMMENT_DEFAULT_TEXT": "Πείτε κάτι...",
+	"WORKSPACE_ARIA_LABEL": "Χώρος εργασίας Blockly",
 	"COLLAPSED_WARNINGS_WARNING": "Υπάρχουν προειδοποιήσεις για συμπτυγμένα μπλοκ."
 }

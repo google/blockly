@@ -25,6 +25,7 @@ goog.provide('Blockly.Menu');
 
 goog.require('Blockly.Component');
 goog.require('Blockly.utils.aria');
+goog.require('Blockly.utils.Coordinate');
 goog.require('Blockly.utils.dom');
 goog.require('Blockly.utils.object');
 
@@ -38,12 +39,56 @@ Blockly.Menu = function() {
   Blockly.Component.call(this);
 
   /**
+   * Coordinates of the mousedown event that caused this menu to open. Used to
+   * prevent the consequent mouseup event due to a simple click from activating
+   * a menu item immediately.
+   * @type {?Blockly.utils.Coordinate}
+   * @package
+   */
+  this.openingCoords = null;
+
+  /**
    * This is the element that we will listen to the real focus events on.
    * A value of -1 means no menuitem is highlighted.
    * @type {number}
    * @private
    */
   this.highlightedIndex_ = -1;
+
+  /**
+   * Mouse over event data.
+   * @type {?Blockly.EventData}
+   * @private
+   */
+  this.mouseOverHandler_ = null;
+
+  /**
+   * Click event data.
+   * @type {?Blockly.EventData}
+   * @private
+   */
+  this.clickHandler_ = null;
+
+  /**
+   * Mouse enter event data.
+   * @type {?Blockly.EventData}
+   * @private
+   */
+  this.mouseEnterHandler_ = null;
+
+  /**
+   * Mouse leave event data.
+   * @type {?Blockly.EventData}
+   * @private
+   */
+  this.mouseLeaveHandler_ = null;
+
+  /**
+   * Key down event data.
+   * @type {?Blockly.EventData}
+   * @private
+   */
+  this.onKeyDownWrapper_ = null;
 };
 Blockly.utils.object.inherits(Blockly.Menu, Blockly.Component);
 
@@ -73,7 +118,7 @@ Blockly.Menu.prototype.createDom = function() {
 Blockly.Menu.prototype.focus = function() {
   var el = this.getElement();
   if (el) {
-    el.focus();
+    el.focus({preventScroll:true});
     Blockly.utils.dom.addClass(el, 'focused');
   }
 };
@@ -92,7 +137,7 @@ Blockly.Menu.prototype.blur = function() {
 
 /**
  * Set the menu accessibility role.
- * @param {!Blockly.utils.aria.Role|string} roleName role name.
+ * @param {!Blockly.utils.aria.Role} roleName role name.
  * @package
  */
 Blockly.Menu.prototype.setRole = function(roleName) {
@@ -147,7 +192,6 @@ Blockly.Menu.prototype.attachEvents_ = function() {
       'mouseenter', this, this.handleMouseEnter_, true);
   this.mouseLeaveHandler_ = Blockly.bindEventWithChecks_(el,
       'mouseleave', this, this.handleMouseLeave_, true);
-
   this.onKeyDownWrapper_ = Blockly.bindEventWithChecks_(el,
       'keydown', this, this.handleKeyEvent);
 };
@@ -157,11 +201,26 @@ Blockly.Menu.prototype.attachEvents_ = function() {
  * @private
  */
 Blockly.Menu.prototype.detachEvents_ = function() {
-  Blockly.unbindEvent_(this.mouseOverHandler_);
-  Blockly.unbindEvent_(this.clickHandler_);
-  Blockly.unbindEvent_(this.mouseEnterHandler_);
-  Blockly.unbindEvent_(this.mouseLeaveHandler_);
-  Blockly.unbindEvent_(this.onKeyDownWrapper_);
+  if (this.mouseOverHandler_) {
+    Blockly.unbindEvent_(this.mouseOverHandler_);
+    this.mouseOverHandler_ = null;
+  }
+  if (this.clickHandler_) {
+    Blockly.unbindEvent_(this.clickHandler_);
+    this.clickHandler_ = null;
+  }
+  if (this.mouseEnterHandler_) {
+    Blockly.unbindEvent_(this.mouseEnterHandler_);
+    this.mouseEnterHandler_ = null;
+  }
+  if (this.mouseLeaveHandler_) {
+    Blockly.unbindEvent_(this.mouseLeaveHandler_);
+    this.mouseLeaveHandler_ = null;
+  }
+  if (this.onKeyDownWrapper_) {
+    Blockly.unbindEvent_(this.onKeyDownWrapper_);
+    this.onKeyDownWrapper_ = null;
+  }
 };
 
 // Child component management.
@@ -383,6 +442,20 @@ Blockly.Menu.prototype.handleMouseOver_ = function(e) {
  * @private
  */
 Blockly.Menu.prototype.handleClick_ = function(e) {
+  var oldCoords = this.openingCoords;
+  // Clear out the saved opening coords immediately so they're not used twice.
+  this.openingCoords = null;
+  if (oldCoords && typeof e.clientX === 'number') {
+    var newCoords = new Blockly.utils.Coordinate(e.clientX, e.clientY);
+    if (Blockly.utils.Coordinate.distance(oldCoords, newCoords) < 1) {
+      // This menu was opened by a mousedown and we're handling the consequent
+      // click event. The coords haven't changed, meaning this was the same
+      // opening event. Don't do the usual behavior because the menu just popped
+      // up under the mouse and the user didn't mean to activate this item.
+      return;
+    }
+  }
+
   var menuItem = this.getMenuItem(/** @type {Node} */ (e.target));
 
   if (menuItem && menuItem.handleClick(e)) {

@@ -92,7 +92,7 @@ Blockly.JavaScript['text_join'] = function(block) {
 Blockly.JavaScript['text_append'] = function(block) {
   // Append to a variable in place.
   var varName = Blockly.JavaScript.variableDB_.getName(
-      block.getFieldValue('VAR'), Blockly.Variables.NAME_TYPE);
+      block.getFieldValue('VAR'), Blockly.VARIABLE_CATEGORY_NAME);
   var value = Blockly.JavaScript.valueToCode(block, 'TEXT',
       Blockly.JavaScript.ORDER_NONE) || '\'\'';
   return varName + ' += ' + Blockly.JavaScript.text.forceString_(value) + ';\n';
@@ -171,7 +171,7 @@ Blockly.JavaScript['text_charAt'] = function(block) {
  * @param {string} stringName Name of the string, used to calculate length.
  * @param {string} where The method of indexing, selected by dropdown in Blockly
  * @param {string=} opt_at The optional offset when indexing from start/end.
- * @return {string} Index expression.
+ * @return {string|undefined} Index expression.
  * @private
  */
 Blockly.JavaScript.text.getIndex_ = function(stringName, where, opt_at) {

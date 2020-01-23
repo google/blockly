@@ -47,6 +47,22 @@ goog.require('Blockly.Xml');
 Blockly.Procedures.NAME_TYPE = Blockly.PROCEDURE_CATEGORY_NAME;
 
 /**
+ * The default argument for a procedures_mutatorarg block.
+ * @type {string}
+ */
+Blockly.Procedures.DEFAULT_ARG = 'x';
+
+/**
+ * Procedure block type.
+ * @typedef {{
+ *    getProcedureCall: function():string,
+ *    renameProcedure: function(string,string),
+ *    getProcedureDef: function():!Array
+ * }}
+ */
+Blockly.Procedures.ProcedureBlock;
+
+/**
  * Find all user-created procedure definitions in a workspace.
  * @param {!Blockly.Workspace} root Root workspace.
  * @return {!Array.<!Array.<!Array>>} Pair of arrays, the
@@ -60,7 +76,9 @@ Blockly.Procedures.allProcedures = function(root) {
   var proceduresNoReturn = [];
   for (var i = 0; i < blocks.length; i++) {
     if (blocks[i].getProcedureDef) {
-      var tuple = blocks[i].getProcedureDef();
+      var procedureBlock = /** @type {!Blockly.Procedures.ProcedureBlock} */ (
+        blocks[i]);
+      var tuple = procedureBlock.getProcedureDef();
       if (tuple) {
         if (tuple[2]) {
           proceduresReturn.push(tuple);
@@ -143,7 +161,9 @@ Blockly.Procedures.isNameUsed = function(name, workspace, opt_exclude) {
       continue;
     }
     if (blocks[i].getProcedureDef) {
-      var procName = blocks[i].getProcedureDef();
+      var procedureBlock = /** @type {!Blockly.Procedures.ProcedureBlock} */ (
+        blocks[i]);
+      var procName = procedureBlock.getProcedureDef();
       if (Blockly.Names.equals(procName[0], name)) {
         return true;
       }
@@ -162,14 +182,18 @@ Blockly.Procedures.rename = function(name) {
   // Strip leading and trailing whitespace.  Beyond this, all names are legal.
   name = name.trim();
 
-  var legalName = Blockly.Procedures.findLegalName(name, this.getSourceBlock());
+  var legalName = Blockly.Procedures.findLegalName(name,
+      /** @type {!Blockly.Block} */ (this.getSourceBlock()));
   var oldName = this.getValue();
   if (oldName != name && oldName != legalName) {
     // Rename any callers.
     var blocks = this.getSourceBlock().workspace.getAllBlocks(false);
     for (var i = 0; i < blocks.length; i++) {
       if (blocks[i].renameProcedure) {
-        blocks[i].renameProcedure(oldName, legalName);
+        var procedureBlock = /** @type {!Blockly.Procedures.ProcedureBlock} */ (
+          blocks[i]);
+        procedureBlock.renameProcedure(
+            /** @type {string} */ (oldName), legalName);
       }
     }
   }
@@ -254,6 +278,77 @@ Blockly.Procedures.flyoutCategory = function(workspace) {
 };
 
 /**
+ * Updates the procedure mutator's flyout so that the arg block is not a
+ * duplicate of another arg.
+ * @param {!Blockly.Workspace} workspace The procedure mutator's workspace. This
+ *     workspace's flyout is what is being updated.
+ * @private
+ */
+Blockly.Procedures.updateMutatorFlyout_ = function(workspace) {
+  var usedNames = [];
+  var blocks = workspace.getBlocksByType('procedures_mutatorarg', false);
+  for (var i = 0, block; (block = blocks[i]); i++) {
+    usedNames.push(block.getFieldValue('NAME'));
+  }
+
+  var xml = Blockly.utils.xml.createElement('xml');
+  var argBlock = Blockly.utils.xml.createElement('block');
+  argBlock.setAttribute('type', 'procedures_mutatorarg');
+  var nameField = Blockly.utils.xml.createElement('field');
+  nameField.setAttribute('name', 'NAME');
+  var argValue = Blockly.Variables.generateUniqueNameFromOptions(
+      Blockly.Procedures.DEFAULT_ARG, usedNames);
+  var fieldContent = Blockly.utils.xml.createTextNode(argValue);
+
+  nameField.appendChild(fieldContent);
+  argBlock.appendChild(nameField);
+  xml.appendChild(argBlock);
+
+  workspace.updateToolbox(xml);
+};
+
+/**
+ * Listens for when a procedure mutator is opened. Then it triggers a flyout
+ * update and adds a mutator change listener to the mutator workspace.
+ * @param {!Blockly.Events.Abstract} e The event that triggered this listener.
+ * @package
+ */
+Blockly.Procedures.mutatorOpenListener = function(e) {
+  if (e.type != Blockly.Events.UI || e.element != 'mutatorOpen' ||
+      !e.newValue) {
+    return;
+  }
+  var workspaceId = /** @type {string} */ (e.workspaceId);
+  var block = Blockly.Workspace.getById(workspaceId)
+      .getBlockById(e.blockId);
+  var type = block.type;
+  if (type != 'procedures_defnoreturn' && type != 'procedures_defreturn') {
+    return;
+  }
+  var workspace = block.mutator.getWorkspace();
+  Blockly.Procedures.updateMutatorFlyout_(workspace);
+  workspace.addChangeListener(Blockly.Procedures.mutatorChangeListener_);
+};
+
+/**
+ * Listens for changes in a procedure mutator and triggers flyout updates when
+ * necessary.
+ * @param {!Blockly.Events.Abstract} e The event that triggered this listener.
+ * @private
+ */
+Blockly.Procedures.mutatorChangeListener_ = function(e) {
+  if (e.type != Blockly.Events.BLOCK_CREATE &&
+      e.type != Blockly.Events.BLOCK_DELETE &&
+      e.type != Blockly.Events.BLOCK_CHANGE) {
+    return;
+  }
+  var workspaceId = /** @type {string} */ (e.workspaceId);
+  var workspace = /** @type {!Blockly.WorkspaceSvg} */
+      (Blockly.Workspace.getById(workspaceId));
+  Blockly.Procedures.updateMutatorFlyout_(workspace);
+};
+
+/**
  * Find all the callers of a named procedure.
  * @param {string} name Name of procedure.
  * @param {!Blockly.Workspace} workspace The workspace to find callers in.
@@ -265,7 +360,9 @@ Blockly.Procedures.getCallers = function(name, workspace) {
   // Iterate through every block and check the name.
   for (var i = 0; i < blocks.length; i++) {
     if (blocks[i].getProcedureCall) {
-      var procName = blocks[i].getProcedureCall();
+      var procedureBlock = /** @type {!Blockly.Procedures.ProcedureBlock} */ (
+        blocks[i]);
+      var procName = procedureBlock.getProcedureCall();
       // Procedure name may be null if the block is only half-built.
       if (procName && Blockly.Names.equals(procName, name)) {
         callers.push(blocks[i]);
@@ -282,10 +379,12 @@ Blockly.Procedures.getCallers = function(name, workspace) {
  */
 Blockly.Procedures.mutateCallers = function(defBlock) {
   var oldRecordUndo = Blockly.Events.recordUndo;
-  var name = defBlock.getProcedureDef()[0];
+  var procedureBlock = /** @type {!Blockly.Procedures.ProcedureBlock} */ (
+    defBlock);
+  var name = procedureBlock.getProcedureDef()[0];
   var xmlElement = defBlock.mutationToDom(true);
   var callers = Blockly.Procedures.getCallers(name, defBlock.workspace);
-  for (var i = 0, caller; caller = callers[i]; i++) {
+  for (var i = 0, caller; (caller = callers[i]); i++) {
     var oldMutationDom = caller.mutationToDom();
     var oldMutation = oldMutationDom && Blockly.Xml.domToText(oldMutationDom);
     caller.domToMutation(xmlElement);
@@ -314,7 +413,9 @@ Blockly.Procedures.getDefinition = function(name, workspace) {
   var blocks = workspace.getTopBlocks(false);
   for (var i = 0; i < blocks.length; i++) {
     if (blocks[i].getProcedureDef) {
-      var tuple = blocks[i].getProcedureDef();
+      var procedureBlock = /** @type {!Blockly.Procedures.ProcedureBlock} */ (
+        blocks[i]);
+      var tuple = procedureBlock.getProcedureDef();
       if (tuple && Blockly.Names.equals(tuple[0], name)) {
         return blocks[i];
       }

@@ -129,9 +129,9 @@ Blockly.FieldDate.prototype.render_ = function() {
  * Updates the field's colours to match those of the block.
  * @package
  */
-Blockly.FieldDate.prototype.updateColour = function() {
-  this.todayColour_ = this.sourceBlock_.getColour();
-  this.selectedColour_ = this.sourceBlock_.getColourShadow();
+Blockly.FieldDate.prototype.applyColour = function() {
+  this.todayColour_ = this.sourceBlock_.style.colourPrimary;
+  this.selectedColour_ = this.sourceBlock_.style.colourSecondary;
   this.updateEditor_();
 };
 

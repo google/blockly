@@ -92,7 +92,7 @@ Blockly.Warning.textToDom_ = function(text) {
       (Blockly.utils.dom.createSvgElement(
           'text',
           {
-            'class': 'blocklyText blocklyBubbleText',
+            'class': 'blocklyText blocklyBubbleText blocklyNoPointerEvents',
             'y': Blockly.Bubble.BORDER_WIDTH
           },
           null)
@@ -134,7 +134,8 @@ Blockly.Warning.prototype.createBubble = function() {
   this.paragraphElement_ = Blockly.Warning.textToDom_(this.getText());
   this.bubble_ = new Blockly.Bubble(
       /** @type {!Blockly.WorkspaceSvg} */ (this.block_.workspace),
-      this.paragraphElement_, this.block_.svgPath_, this.iconXY_, null, null);
+      this.paragraphElement_, this.block_.pathObject.svgPath,
+      /** @type {!Blockly.utils.Coordinate} */ (this.iconXY_), null, null);
   // Expose this warning's block's ID on its top-level SVG group.
   this.bubble_.setSvgId(this.block_.id);
   if (this.block_.RTL) {
@@ -142,13 +143,13 @@ Blockly.Warning.prototype.createBubble = function() {
     // This cannot be done until the bubble is rendered on screen.
     var maxWidth = this.paragraphElement_.getBBox().width;
     for (var i = 0, textElement;
-      textElement = this.paragraphElement_.childNodes[i]; i++) {
+      (textElement = this.paragraphElement_.childNodes[i]); i++) {
 
       textElement.setAttribute('text-anchor', 'end');
       textElement.setAttribute('x', maxWidth + Blockly.Bubble.BORDER_WIDTH);
     }
   }
-  this.updateColour();
+  this.applyColour();
 };
 
 /**
@@ -171,7 +172,7 @@ Blockly.Warning.prototype.disposeBubble = function() {
  */
 
 Blockly.Warning.prototype.bodyFocus_ = function(_e) {
-  this.bubble_.promote_();
+  this.bubble_.promote();
 };
 
 /**

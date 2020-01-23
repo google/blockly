@@ -30,12 +30,13 @@ goog.require('Blockly.utils.object');
 
 /**
  * The thrasos renderer.
+ * @param {string} name The renderer name.
  * @package
  * @constructor
  * @extends {Blockly.blockRendering.Renderer}
  */
-Blockly.thrasos.Renderer = function() {
-  Blockly.thrasos.Renderer.superClass_.constructor.call(this);
+Blockly.thrasos.Renderer = function(name) {
+  Blockly.thrasos.Renderer.superClass_.constructor.call(this, name);
 };
 Blockly.utils.object.inherits(Blockly.thrasos.Renderer,
     Blockly.blockRendering.Renderer);

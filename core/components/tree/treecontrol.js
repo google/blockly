@@ -44,6 +44,34 @@ goog.require('Blockly.utils.style');
 Blockly.tree.TreeControl = function(toolbox, config) {
   this.toolbox_ = toolbox;
 
+  /**
+   * Focus event data.
+   * @type {?Blockly.EventData}
+   * @private
+   */
+  this.onFocusWrapper_ = null;
+
+  /**
+   * Blur event data.
+   * @type {?Blockly.EventData}
+   * @private
+   */
+  this.onBlurWrapper_ = null;
+
+  /**
+   * Click event data.
+   * @type {?Blockly.EventData}
+   * @private
+   */
+  this.onClickWrapper_ = null;
+
+  /**
+   * Key down event data.
+   * @type {?Blockly.EventData}
+   * @private
+   */
+  this.onKeydownWrapper_ = null;
+
   Blockly.tree.BaseNode.call(this, '', config);
 
   // The root is open and selected by default.
@@ -263,7 +291,6 @@ Blockly.tree.TreeControl.prototype.exitDocument = function() {
 /**
  * Adds the event listeners to the tree.
  * @private
- * @suppress {deprecated} Suppress deprecated bindEvent_ call.
  */
 Blockly.tree.TreeControl.prototype.attachEvents_ = function() {
   var el = this.getElement();
@@ -273,10 +300,8 @@ Blockly.tree.TreeControl.prototype.attachEvents_ = function() {
       'focus', this, this.handleFocus_);
   this.onBlurWrapper_ = Blockly.bindEvent_(el,
       'blur', this, this.handleBlur_);
-
   this.onClickWrapper_ = Blockly.bindEventWithChecks_(el,
       'click', this, this.handleMouseEvent_);
-
   this.onKeydownWrapper_ = Blockly.bindEvent_(el,
       'keydown', this, this.handleKeyEvent_);
 };
@@ -286,10 +311,22 @@ Blockly.tree.TreeControl.prototype.attachEvents_ = function() {
  * @private
  */
 Blockly.tree.TreeControl.prototype.detachEvents_ = function() {
-  Blockly.unbindEvent_(this.onFocusWrapper_);
-  Blockly.unbindEvent_(this.onBlurWrapper_);
-  Blockly.unbindEvent_(this.onClickWrapper_);
-  Blockly.unbindEvent_(this.onKeydownWrapper_);
+  if (this.onFocusWrapper_) {
+    Blockly.unbindEvent_(this.onFocusWrapper_);
+    this.onFocusWrapper_ = null;
+  }
+  if (this.onBlurWrapper_) {
+    Blockly.unbindEvent_(this.onBlurWrapper_);
+    this.onBlurWrapper_ = null;
+  }
+  if (this.onClickWrapper_) {
+    Blockly.unbindEvent_(this.onClickWrapper_);
+    this.onClickWrapper_ = null;
+  }
+  if (this.onKeydownWrapper_) {
+    Blockly.unbindEvent_(this.onKeydownWrapper_);
+    this.onKeydownWrapper_ = null;
+  }
 };
 
 /**

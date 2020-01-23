@@ -7,7 +7,7 @@
   <script src="../../blocks_compressed.js"></script>
   <script src="../../javascript_compressed.js"></script>
   <script src="../../msg/js/en.js"></script>
-  <script src="basic_cursor.js"></script>
+  <script src="line_cursor.js"></script>
   <style>
     body {
       background-color: #fff;
@@ -88,6 +88,7 @@
     <select id="cursorChanger" name="cursor" onchange="changeCursor(this.value)">
       <option value="default">Default Cursor</option>
       <option value="basic">Basic Cursor</option>
+      <option value="line">Line Cursor</option>
     </select>
 
     <button onclick="preOrderDemo()">Start Pre-order Demo</button>
@@ -226,7 +227,11 @@
       Blockly.navigation.ACTION_MARK,
       Blockly.navigation.ACTION_DISCONNECT,
       Blockly.navigation.ACTION_TOOLBOX,
-      Blockly.navigation.ACTION_EXIT
+      Blockly.navigation.ACTION_EXIT,
+      Blockly.navigation.ACTION_MOVE_WS_CURSOR_UP,
+      Blockly.navigation.ACTION_MOVE_WS_CURSOR_LEFT,
+      Blockly.navigation.ACTION_MOVE_WS_CURSOR_DOWN,
+      Blockly.navigation.ACTION_MOVE_WS_CURSOR_RIGHT
     ];
     createKeyMappingList(actions);
 
@@ -236,8 +241,9 @@
      */
     function demo() {
       var doNext = function() {
-        var node = Blockly.getMainWorkspace().getCursor().next();
-        if (node) {
+        var markerManager = Blockly.getMainWorkspace().getMarkerManager();
+        var nextNode = markerManager.getCursor().next();
+        if (nextNode) {
           timeout = setTimeout(doNext, 1000);
         }
       }
@@ -287,15 +293,20 @@
       Blockly.navigation.enableKeyboardAccessibility();
       document.getElementById('accessibilityModeCheck').checked = true;
       document.getElementById('cursorChanger').value = cursorType;
-      var oldCurNode = Blockly.getMainWorkspace().getCursor().getCurNode();
-
+      var markerManager = Blockly.getMainWorkspace().getMarkerManager();
+      var oldCurNode = markerManager.getCursor().getCurNode();
       if (cursorType === "basic") {
-        Blockly.getMainWorkspace().setCursor(new Blockly.BasicCursor());
+        Blockly.ASTNode.NAVIGATE_ALL_FIELDS = false;
+        markerManager.setCursor(new Blockly.BasicCursor());
+      } else if (cursorType === "line") {
+        Blockly.ASTNode.NAVIGATE_ALL_FIELDS = true;
+        markerManager.setCursor(new Blockly.LineCursor());
       } else {
-        Blockly.getMainWorkspace().setCursor(new Blockly.Cursor());
+        Blockly.ASTNode.NAVIGATE_ALL_FIELDS = false;
+        markerManager.setCursor(new Blockly.Cursor());
       }
       if (oldCurNode) {
-        Blockly.getMainWorkspace().getCursor().setCurNode(oldCurNode);
+        markerManager.getCursor().setCurNode(oldCurNode);
       }
       document.activeElement.blur();
     }
@@ -318,7 +329,7 @@
      * @package
      */
     function restoreKeyMap() {
-      var defaultMap = Blockly.user.keyMap.map_;
+      var defaultMap = Blockly.user.keyMap.getKeyMap();
       var stringifiedMap = sessionStorage.getItem('keyMap');
       var restoredMap = {};
       if (sessionStorage && stringifiedMap) {

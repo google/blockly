@@ -89,8 +89,9 @@
       }
 
       function setRandomStyle() {
-        var blocks = workspace.getAllBlocks();
-        var styles = Object.keys(workspace.getTheme().getAllBlockStyles());
+        var blocks = workspace.getAllBlocks(false);
+        var styles =
+            Object.keys(workspace.getRenderer().getConstants().blockStyles);
         styles.splice(styles.indexOf(blocks[0].getStyleName()), 1);
         var style = styles[Math.floor(Math.random() * styles.length)];
         for(var i = 0, block; block = blocks[i]; i++) {
@@ -99,14 +100,14 @@
       }
 
       function toggleShadow() {
-        var blocks = workspace.getAllBlocks();
+        var blocks = workspace.getAllBlocks(false);
         for(var i = 0, block; block = blocks[i]; i++) {
           block.setShadow(!block.isShadow());
         }
       }
 
       function toggleEnabled() {
-        var blocks = workspace.getAllBlocks();
+        var blocks = workspace.getAllBlocks(false);
         for(var i = 0, block; block = blocks[i]; i++) {
           block.setEnabled(!block.isEnabled());
         }
@@ -114,7 +115,7 @@
 
       function toggleEditable() {
         Blockly.hideChaff();
-        var blocks = workspace.getAllBlocks();
+        var blocks = workspace.getAllBlocks(false);
         for(var i = 0, block; block = blocks[i]; i++) {
           block.setEditable(!block.isEditable());
         }
@@ -122,7 +123,7 @@
 
       function toggleCollapsed() {
         Blockly.hideChaff();
-        var blocks = workspace.getAllBlocks();
+        var blocks = workspace.getAllBlocks(false);
         for(var i = 0, block; block = blocks[i]; i++) {
           block.setCollapsed(!block.isCollapsed());
         }

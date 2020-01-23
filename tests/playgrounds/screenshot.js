@@ -54,8 +54,9 @@ function svgToPng_(data, width, height, callback) {
  * Create an SVG of the blocks on the workspace.
  * @param {!Blockly.WorkspaceSvg} workspace The workspace.
  * @param {!Function} callback Callback.
+ * @param {string=} customCss Custom CSS to append to the SVG.
  */
-function workspaceToSvg_(workspace, callback) {
+function workspaceToSvg_(workspace, callback, customCss) {
 
   // Go through all text areas and set their value.
   var textAreas = document.getElementsByTagName("textarea");
@@ -64,10 +65,10 @@ function workspaceToSvg_(workspace, callback) {
   }
 
   var bBox = workspace.getBlocksBoundingBox();
-  var x = bBox.left;
-  var y = bBox.top;
-  var width = bBox.right - x;
-  var height = bBox.bottom - y;
+  var x = bBox.x || bBox.left;
+  var y = bBox.y || bBox.top;
+  var width = bBox.width || bBox.right - x;
+  var height = bBox.height || bBox.bottom - y;
 
   var blockCanvas = workspace.getCanvas();
   var clone = blockCanvas.cloneNode(true);
@@ -79,15 +80,19 @@ function workspaceToSvg_(workspace, callback) {
   svg.setAttribute('viewBox',
       x + ' ' + y + ' ' + width + ' ' + height);
 
-  svg.setAttribute('class', 'blocklySvg');
+  svg.setAttribute('class', 'blocklySvg ' +
+    (workspace.options.renderer || 'geras') + '-renderer ' +
+    (workspace.getTheme ? workspace.getTheme().name + '-theme' : ''));
   svg.setAttribute('width', width);
   svg.setAttribute('height', height);
   svg.setAttribute("style", 'background-color: transparent');
 
   var css = [].slice.call(document.head.querySelectorAll('style'))
-      .filter(function(el) { return /\.blocklySvg/.test(el.innerText); })[0];
+      .filter(function(el) { return /\.blocklySvg/.test(el.innerText) ||
+        (el.id.indexOf('blockly-') === 0); }).map(function(el) {
+        return el.innerText; }).join('\n');
   var style = document.createElement('style');
-  style.innerHTML = css.innerText;
+  style.innerHTML = css + '\n' + customCss;
   svg.insertBefore(style, svg.firstChild);
 
   var svgAsXML = (new XMLSerializer).serializeToString(svg);

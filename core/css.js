@@ -77,6 +77,7 @@ Blockly.Css.inject = function(hasCss, pathToMedia) {
 
   // Inject CSS tag at start of head.
   var cssNode = document.createElement('style');
+  cssNode.id = 'blockly-common-style';
   var cssTextNode = document.createTextNode(text);
   cssNode.appendChild(cssTextNode);
   document.head.insertBefore(cssNode, document.head.firstChild);
@@ -169,12 +170,14 @@ Blockly.Css.CONTENT = [
   '}',
 
   '.blocklyDropDownDiv {',
-    'position: fixed;',
+    'position: absolute;',
     'left: 0;',
     'top: 0;',
     'z-index: 1000;',
     'display: none;',
     'border: 1px solid;',
+    'border-color: #dadce0;',
+    'background-color: #fff;',
     'border-radius: 2px;',
     'padding: 4px;',
     'box-shadow: 0px 0px 3px 1px rgba(0,0,0,.3);',
@@ -213,14 +216,14 @@ Blockly.Css.CONTENT = [
     'cursor: pointer;',
   '}',
 
-  '.arrowTop {',
+  '.blocklyArrowTop {',
     'border-top: 1px solid;',
     'border-left: 1px solid;',
     'border-top-left-radius: 4px;',
     'border-color: inherit;',
   '}',
 
-  '.arrowBottom {',
+  '.blocklyArrowBottom {',
     'border-bottom: 1px solid;',
     'border-right: 1px solid;',
     'border-bottom-right-radius: 4px;',
@@ -252,11 +255,6 @@ Blockly.Css.CONTENT = [
     'fill: none;',
     'stroke-linecap: round;',
     'stroke-width: 1;',
-  '}',
-
-  '.blocklySelected>.blocklyPath {',
-    'stroke: #fc3;',
-    'stroke-width: 3px;',
   '}',
 
   '.blocklySelected>.blocklyPathLight {',
@@ -325,44 +323,12 @@ Blockly.Css.CONTENT = [
     'stroke: none',
   '}',
 
-  '.blocklyReplaceable .blocklyPath {',
-    'fill-opacity: .5;',
-  '}',
-
-  '.blocklyReplaceable .blocklyPathLight,',
-  '.blocklyReplaceable .blocklyPathDark {',
-    'display: none;',
-  '}',
-
-  '.blocklyText {',
-    'cursor: default;',
-    'fill: #fff;',
-    'font-family: sans-serif;',
-    'font-size: 11pt;',
-  '}',
-
   '.blocklyMultilineText {',
     'font-family: monospace;',
   '}',
 
   '.blocklyNonEditableText>text {',
     'pointer-events: none;',
-  '}',
-
-  '.blocklyNonEditableText>rect,',
-  '.blocklyEditableText>rect {',
-    'fill: #fff;',
-    'fill-opacity: .6;',
-  '}',
-
-  '.blocklyNonEditableText>text,',
-  '.blocklyEditableText>text {',
-    'fill: #000;',
-  '}',
-
-  '.blocklyEditableText:hover>rect {',
-    'stroke: #fff;',
-    'stroke-width: 2;',
   '}',
 
   '.blocklyBubbleText {',
@@ -372,6 +338,10 @@ Blockly.Css.CONTENT = [
   '.blocklyFlyout {',
     'position: absolute;',
     'z-index: 20;',
+  '}',
+
+  '.blocklyText text {',
+    'cursor: default;',
   '}',
 
   /*
@@ -417,86 +387,17 @@ Blockly.Css.CONTENT = [
     'padding: 0;',
   '}',
 
-  '.blocklyCommentForeignObject {',
-    'position: relative;',
-    'z-index: 0;',
-  '}',
-
-  '.blocklyCommentRect {',
-    'fill: #E7DE8E;',
-    'stroke: #bcA903;',
-    'stroke-width: 1px',
-  '}',
-
-  '.blocklyCommentTarget {',
-    'fill: transparent;',
-    'stroke: #bcA903;',
-  '}',
-
-  '.blocklyCommentTargetFocused {',
-    'fill: none;',
-  '}',
-
-  '.blocklyCommentHandleTarget {',
-    'fill: none;',
-  '}',
-
-  '.blocklyCommentHandleTargetFocused {',
-    'fill: transparent;',
-  '}',
-
-  '.blocklyFocused>.blocklyCommentRect {',
-    'fill: #B9B272;',
-    'stroke: #B9B272;',
-  '}',
-
-  '.blocklySelected>.blocklyCommentTarget {',
-    'stroke: #fc3;',
-    'stroke-width: 3px;',
-  '}',
-
-
-  '.blocklyCommentTextarea {',
-    'background-color: #fef49c;',
-    'border: 0;',
-    'outline: 0;',
-    'margin: 0;',
-    'padding: 3px;',
-    'resize: none;',
-    'display: block;',
-    'overflow: hidden;',
-  '}',
-
-  '.blocklyCommentDeleteIcon {',
-    'cursor: pointer;',
-    'fill: #000;',
-    'display: none',
-  '}',
-
-  '.blocklySelected > .blocklyCommentDeleteIcon {',
-    'display: block',
-  '}',
-
-  '.blocklyDeleteIconShape {',
-    'fill: #000;',
-    'stroke: #000;',
-    'stroke-width: 1px;',
-  '}',
-
-  '.blocklyDeleteIconShape.blocklyDeleteIconHighlighted {',
-    'stroke: #fc3;',
-  '}',
-
   '.blocklyHtmlInput {',
     'border: none;',
     'border-radius: 4px;',
-    'font-family: sans-serif;',
     'height: 100%;',
     'margin: 0;',
     'outline: none;',
     'padding: 0;',
     'width: 100%;',
     'text-align: center;',
+    'display: block;',
+    'box-sizing: border-box;',
   '}',
 
   /* Edge and IE introduce a close icon when the input value is longer than a
@@ -588,7 +489,7 @@ Blockly.Css.CONTENT = [
     'padding-right: 28px;',
   '}',
 
-  '.blocklyVerticalCursor {',
+  '.blocklyVerticalMarker {',
     'stroke-width: 3px;',
     'fill: rgba(255,255,255,.5);',
   '}',
@@ -698,7 +599,8 @@ Blockly.Css.CONTENT = [
 
   '.blocklyWidgetDiv .goog-menuitem-content,',
   '.blocklyDropDownDiv .goog-menuitem-content {',
-    'font: normal 13px Arial, sans-serif;',
+    'font-family: Arial, sans-serif;',
+    'font-size: 13px;',
   '}',
 
   '.blocklyWidgetDiv .goog-menuitem-content {',
@@ -772,6 +674,16 @@ Blockly.Css.CONTENT = [
   '.blocklyDropDownDiv .goog-menuitem-rtl .goog-menuitem-icon {',
     'float: right;',
     'margin-right: -24px;',
-  '}'
+  '}',
+
+  '.blocklyComputeCanvas {',
+    'position: absolute;',
+    'width: 0;',
+    'height: 0;',
+  '}',
+
+  '.blocklyNoPointerEvents {',
+    'pointer-events: none;',
+  '}',
   /* eslint-enable indent */
 ];

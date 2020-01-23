@@ -442,7 +442,7 @@ suite('XML', function() {
         this.workspace.createVariable('name1', '', 'id1');
         var blocksArray = Blockly.Variables.flyoutCategoryBlocks(this.workspace);
         try {
-          for (var i = 0, xml; xml = blocksArray[i]; i++) {
+          for (var i = 0, xml; (xml = blocksArray[i]); i++) {
             Blockly.Xml.domToBlock(xml, this.workspace);
           }
         } finally {
@@ -509,7 +509,7 @@ suite('XML', function() {
         var blocksArray = Blockly.VariablesDynamic
             .flyoutCategoryBlocks(this.workspace);
         try {
-          for (var i = 0, xml; xml = blocksArray[i]; i++) {
+          for (var i = 0, xml; (xml = blocksArray[i]); i++) {
             Blockly.Xml.domToBlock(xml, this.workspace);
           }
         } finally {
@@ -657,7 +657,8 @@ suite('XML', function() {
         comments: true
       };
       this.renderedWorkspace = Blockly.inject('blocklyDiv', options);
-      this.headlessWorkspace = new Blockly.Workspace(options);
+      this.headlessWorkspace =
+          new Blockly.Workspace(new Blockly.Options(options));
     });
     teardown(function() {
       this.renderedWorkspace.dispose();

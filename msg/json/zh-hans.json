@@ -18,7 +18,8 @@
 			"佛壁灯",
 			"Htq110219891",
 			"Ambeta",
-			"A Chinese Wikipedian"
+			"A Chinese Wikipedian",
+			"沈澄心"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "项目",
@@ -376,5 +377,6 @@
 	"PROCEDURES_IFRETURN_HELPURL": "http://c2.com/cgi/wiki?GuardClause",
 	"PROCEDURES_IFRETURN_WARNING": "警告：这个块只能在函数内部使用。",
 	"WORKSPACE_COMMENT_DEFAULT_TEXT": "说点什么...",
+	"WORKSPACE_ARIA_LABEL": "Blockly工作区",
 	"COLLAPSED_WARNINGS_WARNING": "已收起的信息块内包含警告。"
 }

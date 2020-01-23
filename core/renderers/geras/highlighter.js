@@ -237,7 +237,6 @@ Blockly.geras.Highlighter.prototype.drawInlineInput = function(input) {
   var startY = yPos + offset;
 
   if (this.RTL_) {
-    // TODO: Check if this is different when the inline input is populated.
     var aboveTabHeight = input.connectionOffsetY - offset;
     var belowTabHeight = input.height -
         (input.connectionOffsetY + input.connectionHeight) + offset;

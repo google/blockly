@@ -8,10 +8,12 @@
 			"Obsuser",
 			"Acamicamacaraca",
 			"BadDog",
-			"Милан Јелисавчић"
+			"Милан Јелисавчић",
+			"Zoranzoki21"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "ставка",
+	"UNNAMED_KEY": "неименовано",
 	"TODAY": "Данас",
 	"DUPLICATE_BLOCK": "Дуплирај",
 	"ADD_COMMENT": "Додај коментар",
@@ -375,5 +377,7 @@
 	"PROCEDURES_CREATE_DO": "Направи „%1”",
 	"PROCEDURES_IFRETURN_TOOLTIP": "Ако је прва вредност тачна, враћа другу вредност.",
 	"PROCEDURES_IFRETURN_WARNING": "Упозорење: Овај блок се може користити једино унутар дефиниције функције.",
-	"WORKSPACE_COMMENT_DEFAULT_TEXT": "Кажите нешто…"
+	"WORKSPACE_COMMENT_DEFAULT_TEXT": "Кажите нешто…",
+	"WORKSPACE_ARIA_LABEL": "Блоклијев радни простор",
+	"COLLAPSED_WARNINGS_WARNING": "Срушени блокови садрже упозорења."
 }

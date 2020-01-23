@@ -76,6 +76,28 @@ Blockly.geras.RenderInfo.prototype.getRenderer = function() {
 /**
  * @override
  */
+Blockly.geras.RenderInfo.prototype.populateBottomRow_ = function() {
+  Blockly.geras.RenderInfo.superClass_.populateBottomRow_.call(this);
+
+  var followsStatement =
+      this.block_.inputList.length &&
+      this.block_.inputList[this.block_.inputList.length - 1]
+          .type == Blockly.NEXT_STATEMENT;
+
+  // The minimum height of the bottom row is smaller in Geras than in other
+  // renderers, because the dark path adds a pixel.
+  // If one of the row's elements has a greater height this will be overwritten
+  // in the compute pass.
+  if (!followsStatement) {
+    this.bottomRow.minHeight =
+        this.constants_.MEDIUM_PADDING - this.constants_.DARK_PATH_OFFSET;
+  }
+
+};
+
+/**
+ * @override
+ */
 Blockly.geras.RenderInfo.prototype.addInput_ = function(input, activeRow) {
   // Non-dummy inputs have visual representations onscreen.
   if (this.isInline && input.type == Blockly.INPUT_VALUE) {
@@ -97,7 +119,10 @@ Blockly.geras.RenderInfo.prototype.addInput_ = function(input, activeRow) {
         this.constants_.DUMMY_INPUT_MIN_HEIGHT);
     activeRow.hasDummyInput = true;
   }
-  activeRow.align = input.align;
+  // Ignore row alignment if inline.
+  if (!this.isInline && activeRow.align == null) {
+    activeRow.align = input.align;
+  }
 };
 
 /**
@@ -118,6 +143,9 @@ Blockly.geras.RenderInfo.prototype.addElemSpacing_ = function() {
       // There's a spacer before the first element in the row.
       row.elements.push(new Blockly.blockRendering.InRowSpacer(
           this.constants_, this.getInRowSpacing_(null, oldElems[0])));
+    }
+    if (!oldElems.length) {
+      continue;
     }
     for (var e = 0; e < oldElems.length - 1; e++) {
       row.elements.push(oldElems[e]);
@@ -144,7 +172,8 @@ Blockly.geras.RenderInfo.prototype.addElemSpacing_ = function() {
 Blockly.geras.RenderInfo.prototype.getInRowSpacing_ = function(prev, next) {
   if (!prev) {
     // Between an editable field and the beginning of the row.
-    if (next && Blockly.blockRendering.Types.isField(next) && next.isEditable) {
+    if (next && Blockly.blockRendering.Types.isField(next) &&
+        (/** @type Blockly.blockRendering.Field */ (next)).isEditable) {
       return this.constants_.MEDIUM_PADDING;
     }
     // Inline input at the beginning of the row.
@@ -158,10 +187,12 @@ Blockly.geras.RenderInfo.prototype.getInRowSpacing_ = function(prev, next) {
     return this.constants_.LARGE_PADDING;
   }
 
-  // Spacing between a non-input and the end of the row.
-  if (!Blockly.blockRendering.Types.isInput(prev) && !next) {
+  // Spacing between a non-input and the end of the row or a statement input.
+  if (!Blockly.blockRendering.Types.isInput(prev) && (!next ||
+      Blockly.blockRendering.Types.isStatementInput(next))) {
     // Between an editable field and the end of the row.
-    if (Blockly.blockRendering.Types.isField(prev) && prev.isEditable) {
+    if (Blockly.blockRendering.Types.isField(prev) &&
+        (/** @type Blockly.blockRendering.Field */ (prev)).isEditable) {
       return this.constants_.MEDIUM_PADDING;
     }
     // Padding at the end of an icon-only row to make the block shape clearer.
@@ -202,7 +233,8 @@ Blockly.geras.RenderInfo.prototype.getInRowSpacing_ = function(prev, next) {
   if (!Blockly.blockRendering.Types.isInput(prev) &&
       next && Blockly.blockRendering.Types.isInput(next)) {
     // Between an editable field and an input.
-    if (prev.isEditable) {
+    if (Blockly.blockRendering.Types.isField(prev) &&
+        (/** @type Blockly.blockRendering.Field */ (prev)).isEditable) {
       if (Blockly.blockRendering.Types.isInlineInput(next)) {
         return this.constants_.SMALL_PADDING;
       } else if (Blockly.blockRendering.Types.isExternalInput(next)) {
@@ -228,9 +260,9 @@ Blockly.geras.RenderInfo.prototype.getInRowSpacing_ = function(prev, next) {
 
   // Spacing between an inline input and a field.
   if (Blockly.blockRendering.Types.isInlineInput(prev) &&
-      next && !Blockly.blockRendering.Types.isInput(next)) {
+      next && Blockly.blockRendering.Types.isField(next)) {
     // Editable field after inline input.
-    if (next.isEditable) {
+    if ((/** @type Blockly.blockRendering.Field */ (next)).isEditable) {
       return this.constants_.MEDIUM_PADDING;
     } else {
       // Noneditable field after inline input.
@@ -269,9 +301,10 @@ Blockly.geras.RenderInfo.prototype.getInRowSpacing_ = function(prev, next) {
   }
 
   // Spacing between two fields of the same editability.
-  if (!Blockly.blockRendering.Types.isInput(prev) &&
-      next && !Blockly.blockRendering.Types.isInput(next) &&
-      (prev.isEditable == next.isEditable)) {
+  if (Blockly.blockRendering.Types.isField(prev) &&
+      next && Blockly.blockRendering.Types.isField(next) &&
+      ((/** @type Blockly.blockRendering.Field */ (prev)).isEditable ==
+          (/** @type Blockly.blockRendering.Field */ (next)).isEditable)) {
     return this.constants_.LARGE_PADDING;
   }
 
@@ -281,34 +314,6 @@ Blockly.geras.RenderInfo.prototype.getInRowSpacing_ = function(prev, next) {
   }
 
   return this.constants_.MEDIUM_PADDING;
-};
-
-/**
- * @override
- */
-Blockly.geras.RenderInfo.prototype.addAlignmentPadding_ = function(row, missingSpace) {
-  var firstSpacer = row.getFirstSpacer();
-  var lastSpacer = row.getLastSpacer();
-  if (row.hasExternalInput || row.hasStatement) {
-    row.widthWithConnectedBlocks += missingSpace;
-  }
-
-  // Decide where the extra padding goes.
-  if (row.align == Blockly.ALIGN_LEFT) {
-    // Add padding to the end of the row.
-    lastSpacer.width += missingSpace;
-  } else if (row.align == Blockly.ALIGN_CENTRE) {
-    // Split the padding between the beginning and end of the row.
-    firstSpacer.width += missingSpace / 2;
-    lastSpacer.width += missingSpace / 2;
-  } else if (row.align == Blockly.ALIGN_RIGHT) {
-    // Add padding at the beginning of the row.
-    firstSpacer.width += missingSpace;
-  } else {
-    // Default to left-aligning.
-    lastSpacer.width += missingSpace;
-  }
-  row.width += missingSpace;
 };
 
 /**
@@ -383,6 +388,68 @@ Blockly.geras.RenderInfo.prototype.getElemCenterline_ = function(row, elem) {
 /**
  * @override
  */
+Blockly.geras.RenderInfo.prototype.alignRowElements_ = function() {
+  if (!this.isInline) {
+    Blockly.geras.RenderInfo.superClass_.alignRowElements_.call(this);
+    return;
+  }
+
+  // Walk backgrounds through rows on the block, keeping track of the right
+  // input edge.
+  var nextRightEdge = 0;
+  var prevInput = null;
+  for (var i = this.rows.length - 1, row; (row = this.rows[i]); i--) {
+    row.nextRightEdge = nextRightEdge;
+    if (Blockly.blockRendering.Types.isInputRow(row)) {
+      if (row.hasStatement) {
+        this.alignStatementRow_(
+            /** @type {!Blockly.blockRendering.InputRow} */ (row));
+      }
+      if (prevInput && prevInput.hasStatement && row.width < prevInput.width) {
+        row.nextRightEdge = prevInput.width;
+      } else {
+        nextRightEdge = row.width;
+      }
+      prevInput = row;
+    }
+  }
+  // Walk down each row from the top, comparing the prev and next right input
+  // edges and setting the desired width to the max of the two.
+  var prevRightEdge = 0;
+  for (var i = 0, row; (row = this.rows[i]); i++) {
+    if (row.hasStatement) {
+      prevRightEdge = this.getDesiredRowWidth_(row);
+    } else if (Blockly.blockRendering.Types.isSpacer(row)) {
+      // Set the spacer row to the max of the prev or next input width.
+      row.width = Math.max(prevRightEdge, row.nextRightEdge);
+    } else {
+      var currentWidth = row.width;
+      var desiredWidth = Math.max(prevRightEdge, row.nextRightEdge);
+      var missingSpace = desiredWidth - currentWidth;
+      if (missingSpace > 0) {
+        this.addAlignmentPadding_(row, missingSpace);
+      }
+      prevRightEdge = row.width;
+    }
+  }
+};
+
+/**
+ * @override
+ */
+Blockly.geras.RenderInfo.prototype.getDesiredRowWidth_ = function(
+    row) {
+  // Limit the width of a statement row when a block is inline.
+  if (this.isInline && row.hasStatement) {
+    return this.statementEdge + this.constants_.MAX_BOTTOM_WIDTH + this.startX;
+  }
+  return Blockly.geras.RenderInfo.superClass_.getDesiredRowWidth_.call(this,
+      row);
+};
+
+/**
+ * @override
+ */
 Blockly.geras.RenderInfo.prototype.finalize_ = function() {
   // Performance note: this could be combined with the draw pass, if the time
   // that this takes is excessive.  But it shouldn't be, because it only
@@ -407,6 +474,15 @@ Blockly.geras.RenderInfo.prototype.finalize_ = function() {
     }
     this.recordElemPositions_(row);
   }
+  if (this.outputConnection && this.block_.nextConnection &&
+      this.block_.nextConnection.isConnected()) {
+    // Include width of connected block in value to stack width measurement.
+    widestRowWithConnectedBlocks =
+        Math.max(widestRowWithConnectedBlocks,
+            this.block_.nextConnection.targetBlock().getHeightWidth().width -
+            this.constants_.DARK_PATH_OFFSET);
+  }
+
   this.bottomRow.baseline = yCursor - this.bottomRow.descenderHeight;
 
   // The dark (lowlight) adds to the size of the block in both x and y.

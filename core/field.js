@@ -31,9 +31,10 @@ goog.require('Blockly.Gesture');
 goog.require('Blockly.utils');
 goog.require('Blockly.utils.dom');
 goog.require('Blockly.utils.Size');
+goog.require('Blockly.utils.style');
 goog.require('Blockly.utils.userAgent');
 
-goog.require('Blockly.utils.style');
+goog.requireType('Blockly.blockRendering.ConstantProvider');
 
 
 /**
@@ -94,45 +95,52 @@ Blockly.Field = function(value, opt_validator, opt_config) {
    */
   this.markerSvg_ = null;
 
+  /**
+   * The rendered field's SVG group element.
+   * @type {SVGGElement}
+   * @protected
+   */
+  this.fieldGroup_ = null;
+
+  /**
+   * The rendered field's SVG border element.
+   * @type {SVGRectElement}
+   * @protected
+   */
+  this.borderRect_ = null;
+
+  /**
+   * The rendered field's SVG text element.
+   * @type {SVGTextElement}
+   * @protected
+   */
+  this.textElement_ = null;
+
+  /**
+   * The rendered field's text content element.
+   * @type {Text}
+   * @protected
+   */
+  this.textContent_ = null;
+
+  /**
+   * Mouse down event listener data.
+   * @type {?Blockly.EventData}
+   * @private
+   */
+  this.mouseDownWrapper_ = null;
+
+  /**
+   * Constants associated with the source block's renderer.
+   * @type {Blockly.blockRendering.ConstantProvider}
+   * @protected
+   */
+  this.constants_ = null;
+
   opt_config && this.configure_(opt_config);
   this.setValue(value);
   opt_validator && this.setValidator(opt_validator);
 };
-
-/**
- * The default height of the border rect on any field.
- * @type {number}
- * @package
- */
-Blockly.Field.BORDER_RECT_DEFAULT_HEIGHT = 16;
-
-/**
- * The default height of the text element on any field.
- * @type {number}
- * @package
- */
-Blockly.Field.TEXT_DEFAULT_HEIGHT = 12.5;
-
-/**
- * The padding added to the width by the border rect, if it exists.
- * @type {number}
- * @package
- */
-Blockly.Field.X_PADDING = 10;
-
-/**
- * The padding added to the height by the border rect, if it exists.
- * @type {number}
- * @package
- */
-Blockly.Field.Y_PADDING = 10;
-
-/**
- * The default offset between the left of the text element and the left of the
- * border rect, if the border rect exists.
- * @type {number}
- */
-Blockly.Field.DEFAULT_TEXT_OFFSET = Blockly.Field.X_PADDING / 2;
 
 /**
  * Name of field.  Unique within each block.
@@ -178,7 +186,7 @@ Blockly.Field.prototype.visible_ = true;
 /**
  * The element the click handler is bound to.
  * @type {Element}
- * @private
+ * @protected
  */
 Blockly.Field.prototype.clickTarget_ = null;
 
@@ -186,10 +194,22 @@ Blockly.Field.prototype.clickTarget_ = null;
  * A developer hook to override the returned text of this field.
  * Override if the text representation of the value of this field
  * is not just a string cast of its value.
+ * Return null to resort to a string cast.
  * @return {?string} Current text. Return null to resort to a string cast.
  * @protected
  */
 Blockly.Field.prototype.getText_;
+
+/**
+ * An optional method that can be defined to show an editor when the field is
+ *     clicked. Blockly will automatically set the field as clickable if this
+ *     method is defined.
+ * @param {Event=} opt_e Optional mouse event that triggered the field to open,
+ *     or undefined if triggered programatically.
+ * @return {void}
+ * @protected
+ */
+Blockly.Field.prototype.showEditor_;
 
 /**
  * Non-breaking space.
@@ -240,6 +260,9 @@ Blockly.Field.prototype.setSourceBlock = function(block) {
     throw Error('Field already bound to a block.');
   }
   this.sourceBlock_ = block;
+  if (block.workspace.rendered) {
+    this.constants_ = block.workspace.getRenderer().getConstants();
+  }
 };
 
 /**
@@ -260,11 +283,13 @@ Blockly.Field.prototype.init = function() {
     // Field has already been initialized once.
     return;
   }
-  this.fieldGroup_ = Blockly.utils.dom.createSvgElement('g', {}, null);
+  this.fieldGroup_ = /** @type {!SVGGElement} **/
+      (Blockly.utils.dom.createSvgElement('g', {}, null));
   if (!this.isVisible()) {
     this.fieldGroup_.style.display = 'none';
   }
-  this.sourceBlock_.getSvgRoot().appendChild(this.fieldGroup_);
+  var sourceBlockSvg = /** @type {!Blockly.BlockSvg} **/ (this.sourceBlock_);
+  sourceBlockSvg.getSvgRoot().appendChild(this.fieldGroup_);
   this.initView();
   this.updateEditable();
   this.setTooltip(this.tooltip_);
@@ -297,18 +322,20 @@ Blockly.Field.prototype.initModel = function() {
  */
 Blockly.Field.prototype.createBorderRect_ = function() {
   this.size_.height =
-      Math.max(this.size_.height, Blockly.Field.BORDER_RECT_DEFAULT_HEIGHT);
+      Math.max(this.size_.height, this.constants_.FIELD_BORDER_RECT_HEIGHT);
   this.size_.width =
-      Math.max(this.size_.width, Blockly.Field.X_PADDING);
-  this.borderRect_ = Blockly.utils.dom.createSvgElement('rect',
-      {
-        'rx': 4,
-        'ry': 4,
-        'x': 0,
-        'y': 0,
-        'height': this.size_.height,
-        'width': this.size_.width
-      }, this.fieldGroup_);
+      Math.max(this.size_.width, this.constants_.FIELD_BORDER_RECT_X_PADDING * 2);
+  this.borderRect_ = /** @type {!SVGRectElement} **/
+      (Blockly.utils.dom.createSvgElement('rect',
+          {
+            'rx': this.constants_.FIELD_BORDER_RECT_RADIUS,
+            'ry': this.constants_.FIELD_BORDER_RECT_RADIUS,
+            'x': 0,
+            'y': 0,
+            'height': this.size_.height,
+            'width': this.size_.width,
+            'class': 'blocklyFieldRect'
+          }, this.fieldGroup_));
 };
 
 /**
@@ -318,14 +345,26 @@ Blockly.Field.prototype.createBorderRect_ = function() {
  * @protected
  */
 Blockly.Field.prototype.createTextElement_ = function() {
-  var xOffset = this.borderRect_ ? Blockly.Field.DEFAULT_TEXT_OFFSET : 0;
-  this.textElement_ = Blockly.utils.dom.createSvgElement('text',
-      {
-        'class': 'blocklyText',
-        // The y position is the baseline of the text.
-        'y': Blockly.Field.TEXT_DEFAULT_HEIGHT,
-        'x': xOffset
-      }, this.fieldGroup_);
+  var xOffset = this.borderRect_ ?
+    this.constants_.FIELD_BORDER_RECT_X_PADDING : 0;
+  var baselineCenter = this.constants_.FIELD_TEXT_BASELINE_CENTER;
+  var baselineY = this.constants_.FIELD_TEXT_BASELINE_Y;
+  this.size_.height = Math.max(this.size_.height, baselineCenter ?
+      this.constants_.FIELD_TEXT_HEIGHT : baselineY);
+  if (this.size_.height > this.constants_.FIELD_TEXT_HEIGHT) {
+    baselineY += (this.size_.height - baselineY) / 2;
+  }
+  this.textElement_ = /** @type {!SVGTextElement} **/
+      (Blockly.utils.dom.createSvgElement('text',
+          {
+            'class': 'blocklyText',
+            'y': baselineCenter ? this.size_.height / 2 : baselineY,
+            'dy': this.constants_.FIELD_TEXT_Y_OFFSET,
+            'x': xOffset
+          }, this.fieldGroup_));
+  if (baselineCenter) {
+    this.textElement_.setAttribute('dominant-baseline', 'central');
+  }
   this.textContent_ = document.createTextNode('');
   this.textElement_.appendChild(this.textContent_);
 };
@@ -386,7 +425,7 @@ Blockly.Field.prototype.dispose = function() {
  * Add or remove the UI indicating if this field is editable or not.
  */
 Blockly.Field.prototype.updateEditable = function() {
-  var group = this.getClickTarget_();
+  var group = this.fieldGroup_;
   if (!this.EDITABLE || !group) {
     return;
   }
@@ -534,18 +573,18 @@ Blockly.Field.prototype.callValidator = function(text) {
 /**
  * Gets the group element for this editable field.
  * Used for measuring the size and for positioning.
- * @return {!SVGElement} The group element.
+ * @return {!SVGGElement} The group element.
  */
 Blockly.Field.prototype.getSvgRoot = function() {
-  return /** @type {!SVGElement} */ (this.fieldGroup_);
+  return /** @type {!SVGGElement} */ (this.fieldGroup_);
 };
 
 /**
  * Updates the field to match the colour/style of the block. Should only be
- * called by BlockSvg.updateColour().
+ * called by BlockSvg.applyColour().
  * @package
  */
-Blockly.Field.prototype.updateColour = function() {
+Blockly.Field.prototype.applyColour = function() {
   // Non-abstract sub-classes may wish to implement this. See FieldDropdown.
 };
 
@@ -560,6 +599,18 @@ Blockly.Field.prototype.render_ = function() {
   if (this.textContent_) {
     this.textContent_.nodeValue = this.getDisplayText_();
     this.updateSize_();
+  }
+};
+
+/**
+ * Show an editor when the field is clicked only if the field is clickable.
+ * @param {Event=} opt_e Optional mouse event that triggered the field to open,
+ *     or undefined if triggered programatically.
+ * @package
+ */
+Blockly.Field.prototype.showEditor = function(opt_e) {
+  if (this.isClickable()) {
+    this.showEditor_(opt_e);
   }
 };
 
@@ -582,10 +633,14 @@ Blockly.Field.prototype.updateWidth = function() {
  * @protected
  */
 Blockly.Field.prototype.updateSize_ = function() {
-  var textWidth = Blockly.utils.dom.getTextWidth(this.textElement_);
+  var textWidth = Blockly.utils.dom.getFastTextWidth(
+      /** @type {!SVGTextElement} */ (this.textElement_),
+      this.constants_.FIELD_TEXT_FONTSIZE,
+      this.constants_.FIELD_TEXT_FONTWEIGHT,
+      this.constants_.FIELD_TEXT_FONTFAMILY);
   var totalWidth = textWidth;
   if (this.borderRect_) {
-    totalWidth += Blockly.Field.X_PADDING;
+    totalWidth += this.constants_.FIELD_BORDER_RECT_X_PADDING * 2;
     this.borderRect_.setAttribute('width', totalWidth);
   }
   this.size_.width = totalWidth;
@@ -620,13 +675,38 @@ Blockly.Field.prototype.getSize = function() {
  * scaling.
  * @return {!Object} An object with top, bottom, left, and right in pixels
  *     relative to the top left corner of the page (window coordinates).
- * @protected
+ * @package
  */
-Blockly.Field.prototype.getScaledBBox_ = function() {
-  var bBox = this.borderRect_.getBBox();
-  var scaledHeight = bBox.height * this.sourceBlock_.workspace.scale;
-  var scaledWidth = bBox.width * this.sourceBlock_.workspace.scale;
-  var xy = this.getAbsoluteXY_();
+Blockly.Field.prototype.getScaledBBox = function() {
+  if (!this.borderRect_) {
+    // Browsers are inconsistent in what they return for a bounding box.
+    // - Webkit / Blink: fill-box / object bounding box
+    // - Gecko / Triden / EdgeHTML: stroke-box
+    var bBox = this.sourceBlock_.getHeightWidth();
+    var scale = this.sourceBlock_.workspace.scale;
+    var xy = this.getAbsoluteXY_();
+    var scaledWidth = bBox.width * scale;
+    var scaledHeight = bBox.height * scale;
+
+    if (Blockly.utils.userAgent.GECKO) {
+      xy.x += 1.5 * scale;
+      xy.y += 1.5 * scale;
+      scaledWidth += 1 * scale;
+      scaledHeight += 1 * scale;
+    } else {
+      if (!Blockly.utils.userAgent.EDGE && !Blockly.utils.userAgent.IE) {
+        xy.x -= 0.5 * scale;
+        xy.y -= 0.5 * scale;
+      }
+      scaledWidth += 1 * scale;
+      scaledHeight += 1 * scale;
+    }
+  } else {
+    var bBox = this.borderRect_.getBoundingClientRect();
+    var xy = Blockly.utils.style.getPageOffset(this.borderRect_);
+    var scaledWidth = bBox.width;
+    var scaledHeight = bBox.height;
+  }
   return {
     top: xy.y,
     bottom: xy.y + scaledHeight,
@@ -868,7 +948,7 @@ Blockly.Field.prototype.setTooltip = function(newTip) {
  * to the SVG root of the field. When this element is
  * clicked on an editable field, the editor will open.
  * @return {!Element} Element to bind click handler to.
- * @private
+ * @protected
  */
 Blockly.Field.prototype.getClickTarget_ = function() {
   return this.clickTarget_ || this.getSvgRoot();
@@ -878,10 +958,11 @@ Blockly.Field.prototype.getClickTarget_ = function() {
  * Return the absolute coordinates of the top-left corner of this field.
  * The origin (0,0) is the top-left corner of the page body.
  * @return {!Blockly.utils.Coordinate} Object with .x and .y properties.
- * @private
+ * @protected
  */
 Blockly.Field.prototype.getAbsoluteXY_ = function() {
-  return Blockly.utils.style.getPageOffset(this.borderRect_);
+  return Blockly.utils.style.getPageOffset(
+      /** @type {!SVGRectElement} */ (this.getClickTarget_()));
 };
 
 /**

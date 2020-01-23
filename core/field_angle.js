@@ -83,6 +83,39 @@ Blockly.FieldAngle = function(opt_value, opt_validator, opt_config) {
 
   Blockly.FieldAngle.superClass_.constructor.call(
       this, opt_value || 0, opt_validator, opt_config);
+
+  /**
+   * The angle picker's gauge path depending on the value.
+   * @type {SVGElement}
+   */
+  this.gauge_ = null;
+
+  /**
+   * The angle picker's line drawn representing the value's angle.
+   * @type {SVGElement}
+   */
+  this.line_ = null;
+
+  /**
+   * Wrapper click event data.
+   * @type {?Blockly.EventData}
+   * @private
+   */
+  this.clickWrapper_ = null;
+
+  /**
+   * Surface click event data.
+   * @type {?Blockly.EventData}
+   * @private
+   */
+  this.clickSurfaceWrapper_ = null;
+
+  /**
+   * Surface mouse move event data.
+   * @type {?Blockly.EventData}
+   * @private
+   */
+  this.moveSurfaceWrapper_ = null;
 };
 Blockly.utils.object.inherits(Blockly.FieldAngle, Blockly.FieldTextInput);
 
@@ -173,6 +206,7 @@ Blockly.FieldAngle.prototype.configure_ = function(config) {
     this.clockwise_ = clockwise;
   }
 
+  // If these are passed as null then we should leave them on the default.
   var offset = config['offset'];
   if (offset != null) {
     offset = Number(offset);
@@ -222,22 +256,23 @@ Blockly.FieldAngle.prototype.render_ = function() {
 
 /**
  * Create and show the angle field's editor.
+ * @param {Event=} opt_e Optional mouse event that triggered the field to open,
+ *     or undefined if triggered programatically.
  * @private
  */
-Blockly.FieldAngle.prototype.showEditor_ = function() {
+Blockly.FieldAngle.prototype.showEditor_ = function(opt_e) {
   // Mobile browsers have issues with in-line textareas (focus & keyboards).
   var noFocus =
       Blockly.utils.userAgent.MOBILE ||
       Blockly.utils.userAgent.ANDROID ||
       Blockly.utils.userAgent.IPAD;
-  Blockly.FieldAngle.superClass_.showEditor_.call(this, noFocus);
+  Blockly.FieldAngle.superClass_.showEditor_.call(this, opt_e, noFocus);
 
   var editor = this.dropdownCreate_();
   Blockly.DropDownDiv.getContentDiv().appendChild(editor);
 
-  var border = this.sourceBlock_.getColourBorder();
-  border = border.colourBorder || border.colourLight;
-  Blockly.DropDownDiv.setColour(this.sourceBlock_.getColour(), border);
+  Blockly.DropDownDiv.setColour(this.sourceBlock_.style.colourPrimary,
+      this.sourceBlock_.style.colourTertiary);
 
   Blockly.DropDownDiv.showPositionedByField(
       this, this.dropdownDispose_.bind(this));
@@ -297,20 +332,33 @@ Blockly.FieldAngle.prototype.dropdownCreate_ = function() {
   // a click handler on the drag surface to update the value if the surface
   // is clicked.
   this.clickSurfaceWrapper_ =
-      Blockly.bindEventWithChecks_(circle, 'click', this, this.onMouseMove, true, true);
+      Blockly.bindEventWithChecks_(circle, 'click', this, this.onMouseMove_,
+          true, true);
   this.moveSurfaceWrapper_ =
-      Blockly.bindEventWithChecks_(circle, 'mousemove', this, this.onMouseMove, true, true);
+      Blockly.bindEventWithChecks_(circle, 'mousemove', this, this.onMouseMove_,
+          true, true);
   return svg;
 };
 
 /**
- * Dispose of events belonging to the angle editor.
+ * Disposes of events and dom-references belonging to the angle editor.
  * @private
  */
 Blockly.FieldAngle.prototype.dropdownDispose_ = function() {
-  Blockly.unbindEvent_(this.clickWrapper_);
-  Blockly.unbindEvent_(this.clickSurfaceWrapper_);
-  Blockly.unbindEvent_(this.moveSurfaceWrapper_);
+  if (this.clickWrapper_) {
+    Blockly.unbindEvent_(this.clickWrapper_);
+    this.clickWrapper_ = null;
+  }
+  if (this.clickSurfaceWrapper_) {
+    Blockly.unbindEvent_(this.clickSurfaceWrapper_);
+    this.clickSurfaceWrapper_ = null;
+  }
+  if (this.moveSurfaceWrapper_) {
+    Blockly.unbindEvent_(this.moveSurfaceWrapper_);
+    this.moveSurfaceWrapper_ = null;
+  }
+  this.gauge_ = null;
+  this.line_ = null;
 };
 
 /**
@@ -325,8 +373,9 @@ Blockly.FieldAngle.prototype.hide_ = function() {
 /**
  * Set the angle to match the mouse's position.
  * @param {!Event} e Mouse move event.
+ * @protected
  */
-Blockly.FieldAngle.prototype.onMouseMove = function(e) {
+Blockly.FieldAngle.prototype.onMouseMove_ = function(e) {
   // Calculate angle.
   var bBox = this.gauge_.ownerSVGElement.getBoundingClientRect();
   var dx = e.clientX - bBox.left - Blockly.FieldAngle.HALF;

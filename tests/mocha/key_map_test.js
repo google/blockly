@@ -80,5 +80,25 @@ suite('Key Map Tests', function() {
     var serializedKey = Blockly.user.keyMap.serializeKeyEvent(mockEvent);
     assertEquals(serializedKey, '65');
   });
+
+  test('Test modifiers in reverse order', function() {
+    var testKey = Blockly.user.keyMap.createSerializedKey(
+        Blockly.utils.KeyCodes.K, [Blockly.user.keyMap.modifierKeys.CONTROL,
+          Blockly.user.keyMap.modifierKeys.SHIFT]);
+    Blockly.user.keyMap.setActionForKey(testKey, new Blockly.Action('test', '', null));
+    var action = Blockly.user.keyMap.getActionByKeyCode('ShiftControl75');
+    assertNotNull(action);
+    assertEquals(action.name, 'test');
+  });
+
+  test('Test report invalid modifiers', function() {
+    var shouldThrow = function() {
+      Blockly.user.keyMap.createSerializedKey(Blockly.utils.KeyCodes.K, ['s',
+        Blockly.user.keyMap.modifierKeys.SHIFT]);
+    };
+    chai.assert.throws(shouldThrow, Error, 's is not a valid modifier key.');
+  });
+
+
   teardown(function() {});
 });

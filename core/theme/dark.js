@@ -23,6 +23,7 @@
 
 goog.provide('Blockly.Themes.Dark');
 
+goog.require('Blockly.Css');
 goog.require('Blockly.Theme');
 
 
@@ -115,14 +116,50 @@ Blockly.Themes.Dark.categoryStyles = {
 
 // This style is still being fleshed out and may change.
 Blockly.Themes.Dark =
-    new Blockly.Theme(Blockly.Themes.Dark.defaultBlockStyles,
+    new Blockly.Theme('dark', Blockly.Themes.Dark.defaultBlockStyles,
         Blockly.Themes.Dark.categoryStyles);
 
-Blockly.Themes.Dark.setComponentStyle('workspace', '#1e1e1e');
-Blockly.Themes.Dark.setComponentStyle('toolbox', '#333');
-Blockly.Themes.Dark.setComponentStyle('toolboxText', '#fff');
-Blockly.Themes.Dark.setComponentStyle('flyout', '#252526');
-Blockly.Themes.Dark.setComponentStyle('flyoutText', '#ccc');
+Blockly.Themes.Dark.setComponentStyle('workspaceBackgroundColour', '#1e1e1e');
+Blockly.Themes.Dark.setComponentStyle('toolboxBackgroundColour', '#333');
+Blockly.Themes.Dark.setComponentStyle('toolboxForegroundColour', '#fff');
+Blockly.Themes.Dark.setComponentStyle('flyoutBackgroundColour', '#252526');
+Blockly.Themes.Dark.setComponentStyle('flyoutForegroundColour', '#ccc');
 Blockly.Themes.Dark.setComponentStyle('flyoutOpacity', 1);
-Blockly.Themes.Dark.setComponentStyle('scrollbar', '#797979');
+Blockly.Themes.Dark.setComponentStyle('scrollbarColour', '#797979');
 Blockly.Themes.Dark.setComponentStyle('scrollbarOpacity', 0.4);
+
+/**
+ * CSS for the dark theme.
+ * This registers CSS that is specific to this theme. It does so by prepending a
+ * ``.dark-theme`` selector before every CSS rule that we wish to override by
+ * this theme.
+ */
+(function() {
+  var selector = '.dark-theme';
+  Blockly.Css.register([
+    /* eslint-disable indent */
+    // Toolbox hover
+    selector + ' .blocklyTreeRow:not(.blocklyTreeSelected):hover {',
+      'background-color: #2a2d2e;',
+    '}',
+    // Dropdown and Widget div.
+    selector + '.blocklyWidgetDiv .goog-menu, ',
+    selector + '.blocklyDropDownDiv {',
+      'background-color: #3c3c3c;',
+    '}',
+    selector + '.blocklyDropDownDiv {',
+      'border-color: #565656;',
+    '}',
+    selector + '.blocklyWidgetDiv .goog-menuitem-content, ',
+    selector + '.blocklyDropDownDiv .goog-menuitem-content {',
+      'color: #f0f0f0;',
+    '}',
+    selector + '.blocklyWidgetDiv .goog-menuitem-disabled',
+    ' .goog-menuitem-content,',
+    selector + '.blocklyDropDownDiv .goog-menuitem-disabled',
+    ' .goog-menuitem-content {',
+      'color: #8a8a8a !important;',
+    '}',
+    /* eslint-enable indent */
+  ]);
+})();

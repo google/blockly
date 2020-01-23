@@ -33,15 +33,15 @@ goog.require('Blockly.VariableModel');
 
 Blockly.VariablesDynamic.onCreateVariableButtonClick_String = function(button) {
   Blockly.Variables.createVariableButtonHandler(button.getTargetWorkspace(),
-      null, 'String');
+      undefined, 'String');
 };
 Blockly.VariablesDynamic.onCreateVariableButtonClick_Number = function(button) {
   Blockly.Variables.createVariableButtonHandler(button.getTargetWorkspace(),
-      null, 'Number');
+      undefined, 'Number');
 };
 Blockly.VariablesDynamic.onCreateVariableButtonClick_Colour = function(button) {
   Blockly.Variables.createVariableButtonHandler(button.getTargetWorkspace(),
-      null, 'Colour');
+      undefined, 'Colour');
 };
 /**
  * Construct the elements (blocks and button) required by the flyout for the
@@ -98,7 +98,7 @@ Blockly.VariablesDynamic.flyoutCategoryBlocks = function(workspace) {
     }
     if (Blockly.Blocks['variables_get_dynamic']) {
       variableModelList.sort(Blockly.VariableModel.compareByName);
-      for (var i = 0, variable; variable = variableModelList[i]; i++) {
+      for (var i = 0, variable; (variable = variableModelList[i]); i++) {
         var block = Blockly.utils.xml.createElement('block');
         block.setAttribute('type', 'variables_get_dynamic');
         block.setAttribute('gap', 8);

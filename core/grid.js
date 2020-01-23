@@ -64,14 +64,15 @@ Blockly.Grid = function(pattern, options) {
    * @type {SVGElement}
    * @private
    */
-  this.line1_ = pattern.firstChild;
+  this.line1_ = /** @type {SVGElement} */ (pattern.firstChild);
 
   /**
    * The vertical grid line, if it exists.
    * @type {SVGElement}
    * @private
    */
-  this.line2_ = this.line1_ && this.line1_.nextSibling;
+  this.line2_ = this.line1_ &&
+    (/** @type {SVGElement} */ (this.line1_.nextSibling));
 
   /**
    * Whether blocks should snap to the grid.
@@ -92,6 +93,7 @@ Blockly.Grid.prototype.scale_ = 1;
 /**
  * Dispose of this grid and unlink from the DOM.
  * @package
+ * @suppress {checkTypes}
  */
 Blockly.Grid.prototype.dispose = function() {
   this.gridPattern_ = null;
@@ -153,7 +155,7 @@ Blockly.Grid.prototype.update = function(scale) {
 /**
  * Set the attributes on one of the lines in the grid.  Use this to update the
  * length and stroke width of the grid lines.
- * @param {!SVGElement} line Which line to update.
+ * @param {SVGElement} line Which line to update.
  * @param {number} width The new stroke size (in px).
  * @param {number} x1 The new x start position of the line (in px).
  * @param {number} x2 The new x end position of the line (in px).

@@ -361,5 +361,6 @@
 	"PROCEDURES_IFRETURN_HELPURL": "http://c2.com/cgi/wiki?GuardClause",
 	"PROCEDURES_IFRETURN_WARNING": "Предупреждение: Этот блок может использоваться только внутри определения функции.",
 	"WORKSPACE_COMMENT_DEFAULT_TEXT": "Напишите здесь что-нибудь...",
+	"WORKSPACE_ARIA_LABEL": "Рабочая область Blockly",
 	"COLLAPSED_WARNINGS_WARNING": "Свёрнутые блоки содержат предупреждения."
 }

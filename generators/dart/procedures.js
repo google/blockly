@@ -29,7 +29,7 @@ goog.require('Blockly.Dart');
 Blockly.Dart['procedures_defreturn'] = function(block) {
   // Define a procedure with a return value.
   var funcName = Blockly.Dart.variableDB_.getName(block.getFieldValue('NAME'),
-      Blockly.Procedures.NAME_TYPE);
+      Blockly.PROCEDURE_CATEGORY_NAME);
   var xfix1 = '';
   if (Blockly.Dart.STATEMENT_PREFIX) {
     xfix1 += Blockly.Dart.injectId(Blockly.Dart.STATEMENT_PREFIX, block);
@@ -61,7 +61,7 @@ Blockly.Dart['procedures_defreturn'] = function(block) {
   var args = [];
   for (var i = 0; i < block.arguments_.length; i++) {
     args[i] = Blockly.Dart.variableDB_.getName(block.arguments_[i],
-        Blockly.Variables.NAME_TYPE);
+        Blockly.VARIABLE_CATEGORY_NAME);
   }
   var code = returnType + ' ' + funcName + '(' + args.join(', ') + ') {\n' +
       xfix1 + loopTrap + branch + xfix2 + returnValue + '}';
@@ -78,7 +78,7 @@ Blockly.Dart['procedures_defnoreturn'] = Blockly.Dart['procedures_defreturn'];
 Blockly.Dart['procedures_callreturn'] = function(block) {
   // Call a procedure with a return value.
   var funcName = Blockly.Dart.variableDB_.getName(block.getFieldValue('NAME'),
-      Blockly.Procedures.NAME_TYPE);
+      Blockly.PROCEDURE_CATEGORY_NAME);
   var args = [];
   for (var i = 0; i < block.arguments_.length; i++) {
     args[i] = Blockly.Dart.valueToCode(block, 'ARG' + i,

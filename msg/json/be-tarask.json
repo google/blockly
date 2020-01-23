@@ -3,10 +3,12 @@
 		"authors": [
 			"Renessaince",
 			"Jim-by",
-			"Red Winged Duck"
+			"Red Winged Duck",
+			"Nerogaf"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "аб’ект",
+	"UNNAMED_KEY": "безназоўны",
 	"TODAY": "Сёньня",
 	"DUPLICATE_BLOCK": "Капіяваць",
 	"ADD_COMMENT": "Дадаць камэнтар",
@@ -346,5 +348,6 @@
 	"PROCEDURES_IFRETURN_HELPURL": "http://c2.com/cgi/wiki?GuardClause",
 	"PROCEDURES_IFRETURN_WARNING": "Папярэджаньне: гэты блёк можа выкарыстоўвацца толькі ў вызначанай функцыі.",
 	"WORKSPACE_COMMENT_DEFAULT_TEXT": "Напішыце што-небудзь…",
+	"WORKSPACE_ARIA_LABEL": "Працоўная прастора Blockly",
 	"COLLAPSED_WARNINGS_WARNING": "Згорнутыя блёкі ўтрымліваюць папярэджаньні."
 }

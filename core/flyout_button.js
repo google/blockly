@@ -87,6 +87,13 @@ Blockly.FlyoutButton = function(workspace, targetWorkspace, xml, isLabel) {
    * @private
    */
   this.cssClass_ = xml.getAttribute('web-class') || null;
+
+  /**
+   * Mouse up event data.
+   * @type {?Blockly.EventData}
+   * @private
+   */
+  this.onMouseUpWrapper_ = null;
 };
 
 /**
@@ -105,13 +112,6 @@ Blockly.FlyoutButton.prototype.width = 0;
  * @type {number}
  */
 Blockly.FlyoutButton.prototype.height = 0;
-
-/**
- * Opaque data that can be passed to Blockly.unbindEvent_.
- * @type {Array.<!Array>}
- * @private
- */
-Blockly.FlyoutButton.prototype.onMouseUpWrapper_ = null;
 
 /**
  * Create the button elements.
@@ -152,10 +152,16 @@ Blockly.FlyoutButton.prototype.createDom = function() {
         'text-anchor': 'middle'
       },
       this.svgGroup_);
-  svgText.textContent = Blockly.utils.replaceMessageReferences(this.text_);
+  var text = Blockly.utils.replaceMessageReferences(this.text_);
+  if (this.workspace_.RTL) {
+    // Force text to be RTL by adding an RLM.
+    text += '\u200F';
+  }
+  svgText.textContent = text;
   if (this.isLabel_) {
     this.svgText_ = svgText;
-    this.workspace_.getThemeManager().subscribe(this.svgText_, 'flyoutText', 'fill');
+    this.workspace_.getThemeManager().subscribe(this.svgText_,
+        'flyoutForegroundColour', 'fill');
   }
 
   this.width = Blockly.utils.dom.getTextWidth(svgText);

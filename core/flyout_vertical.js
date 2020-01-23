@@ -35,12 +35,14 @@ goog.require('Blockly.WidgetDiv');
 
 /**
  * Class for a flyout.
- * @param {!Object} workspaceOptions Dictionary of options for the workspace.
+ * @param {!Blockly.Options} workspaceOptions Dictionary of options for the
+ *     workspace.
  * @extends {Blockly.Flyout}
  * @constructor
  */
 Blockly.VerticalFlyout = function(workspaceOptions) {
-  workspaceOptions.getMetrics = this.getMetrics_.bind(this);
+  workspaceOptions.getMetrics = /** @type {function():!Object} */ (
+    this.getMetrics_.bind(this));
   workspaceOptions.setMetrics = this.setMetrics_.bind(this);
 
   Blockly.VerticalFlyout.superClass_.constructor.call(this, workspaceOptions);
@@ -257,11 +259,11 @@ Blockly.VerticalFlyout.prototype.layout_ = function(contents, gaps) {
   var cursorX = this.RTL ? margin : margin + this.tabWidth_;
   var cursorY = margin;
 
-  for (var i = 0, item; item = contents[i]; i++) {
+  for (var i = 0, item; (item = contents[i]); i++) {
     if (item.type == 'block') {
       var block = item.block;
       var allBlocks = block.getDescendants(false);
-      for (var j = 0, child; child = allBlocks[j]; j++) {
+      for (var j = 0, child; (child = allBlocks[j]); j++) {
         // Mark blocks as being inside a flyout.  This is used to detect and
         // prevent the closure of the flyout if the user right-clicks on such a
         // block.
@@ -331,30 +333,6 @@ Blockly.VerticalFlyout.prototype.getClientRect = function() {
     var width = flyoutRect.width;
     return new Blockly.utils.Rect(-BIG_NUM, BIG_NUM, -BIG_NUM, left + width);
   } else {  // Right
-    // Firefox sometimes reports the wrong value for the client rect.
-    // See https://github.com/google/blockly/issues/1425 and
-    // https://bugzilla.mozilla.org/show_bug.cgi?id=1066435
-    if (Blockly.utils.userAgent.GECKO &&
-        this.targetWorkspace_ && this.targetWorkspace_.isMutator) {
-      // The position of the left side of the mutator workspace in pixels
-      // relative to the window origin.
-      var targetWsLeftPixels =
-          this.targetWorkspace_.svgGroup_.getBoundingClientRect().x;
-      // The client rect is in pixels relative to the window origin.  When the
-      // browser gets the wrong value it reports that the flyout left is the
-      // same as the mutator workspace left.
-      // We know that in a mutator workspace with the flyout on the right, the
-      // visible area of the workspace should be more than ten pixels wide.  If
-      // the browser reports that the flyout is within ten pixels of the left
-      // side of the workspace, ignore it and manually calculate the value.
-      if (Math.abs(targetWsLeftPixels - left) < 10) {
-        // If we're in a mutator, its scale is always 1, purely because of some
-        // oddities in our rendering optimizations.  The actual scale is the
-        // same as the scale on the parent workspace.
-        var scale = this.targetWorkspace_.options.parentWorkspace.scale;
-        left += this.leftEdge_ * scale;
-      }
-    }
     return new Blockly.utils.Rect(-BIG_NUM, BIG_NUM, left, BIG_NUM);
   }
 };
@@ -383,7 +361,7 @@ Blockly.VerticalFlyout.prototype.reflowInternal_ = function() {
   flyoutWidth += Blockly.Scrollbar.scrollbarThickness;
 
   if (this.width_ != flyoutWidth) {
-    for (var i = 0, block; block = blocks[i]; i++) {
+    for (var i = 0, block; (block = blocks[i]); i++) {
       if (this.RTL) {
         // With the flyoutWidth known, right-align the blocks.
         var oldX = block.getRelativeToSurfaceXY().x;

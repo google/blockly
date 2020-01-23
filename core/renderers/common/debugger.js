@@ -42,6 +42,7 @@ Blockly.blockRendering.Debug = function() {
   /**
    * An array of SVG elements that have been created by this object.
    * @type {Array.<!SVGElement>}
+   * @private
    */
   this.debugElements_ = [];
 
@@ -49,6 +50,7 @@ Blockly.blockRendering.Debug = function() {
    * The SVG root of the block that is being rendered.  Debug elements will
    * be attached to this root.
    * @type {SVGElement}
+   * @private
    */
   this.svgRoot_ = null;
 };
@@ -92,14 +94,20 @@ Blockly.blockRendering.Debug.prototype.drawSpacerRow = function(row, cursorY, is
     return;
   }
 
+  var height = Math.abs(row.height);
+  var isNegativeSpacing = row.height < 0;
+  if (isNegativeSpacing) {
+    cursorY -= height;
+  }
+
   this.debugElements_.push(Blockly.utils.dom.createSvgElement('rect',
       {
         'class': 'rowSpacerRect blockRenderDebug',
         'x': isRtl ? -(row.xPos + row.width) : row.xPos,
         'y': cursorY,
         'width': row.width,
-        'height': row.height,
-        'stroke': 'blue',
+        'height': height,
+        'stroke': isNegativeSpacing ? 'black' : 'blue',
         'fill': 'blue',
         'fill-opacity': '0.5',
         'stroke-width': '1px'
@@ -119,9 +127,11 @@ Blockly.blockRendering.Debug.prototype.drawSpacerElem = function(elem, rowHeight
     return;
   }
 
-  var xPos = elem.xPos;
+  var width = Math.abs(elem.width);
+  var isNegativeSpacing = elem.width < 0;
+  var xPos = isNegativeSpacing ? elem.xPos - width : elem.xPos;
   if (isRtl) {
-    xPos = -(xPos + elem.width);
+    xPos = -(xPos + width);
   }
   var yPos = elem.centerline - elem.height / 2;
   this.debugElements_.push(Blockly.utils.dom.createSvgElement('rect',
@@ -129,10 +139,10 @@ Blockly.blockRendering.Debug.prototype.drawSpacerElem = function(elem, rowHeight
         'class': 'elemSpacerRect blockRenderDebug',
         'x': xPos,
         'y': yPos,
-        'width': elem.width,
+        'width': width,
         'height': elem.height,
         'stroke': 'pink',
-        'fill': 'pink',
+        'fill': isNegativeSpacing ? 'black' : 'pink',
         'fill-opacity': '0.5',
         'stroke-width': '1px'
       },
@@ -169,15 +179,17 @@ Blockly.blockRendering.Debug.prototype.drawRenderedElem = function(elem, isRtl) 
 
   if (Blockly.blockRendering.Types.isInput(elem) &&
       Blockly.blockRendering.Debug.config.connections) {
-    this.drawConnection(elem.connection);
+    this.drawConnection(elem.connectionModel);
   }
 };
 
 /**
  * Draw a circle at the location of the given connection.  Inputs and outputs
- * share the same colors, as do previous and next.  When positioned correctly
+ * share the same colours, as do previous and next.  When positioned correctly
  * a connected pair will look like a bullseye.
  * @param {Blockly.RenderedConnection} conn The connection to circle.
+ * @suppress {visibility} Suppress visibility of conn.offsetInBlock_ since this
+ *     is a debug module.
  * @package
  */
 Blockly.blockRendering.Debug.prototype.drawConnection = function(conn) {
@@ -270,10 +282,15 @@ Blockly.blockRendering.Debug.prototype.drawRenderedRow = function(row, cursorY, 
  * @package
  */
 Blockly.blockRendering.Debug.prototype.drawRowWithElements = function(row, cursorY, isRtl) {
-  for (var i = 0, elem; (elem = row.elements[i]); i++) {
+  for (var i = 0, l = row.elements.length; i < l; i++) {
+    var elem = row.elements[i];
+    if (!elem) {
+      console.warn('A row has an undefined or null element.', row, elem);
+      continue;
+    }
     if (Blockly.blockRendering.Types.isSpacer(elem)) {
       this.drawSpacerElem(
-          /** @type {Blockly.blockRendering.InRowSpacer} */ (elem),
+          /** @type {!Blockly.blockRendering.InRowSpacer} */ (elem),
           row.height, isRtl);
     } else {
       this.drawRenderedElem(elem, isRtl);
@@ -359,6 +376,9 @@ Blockly.blockRendering.Debug.prototype.drawDebug = function(block, info) {
   }
   if (block.outputConnection) {
     this.drawConnection(block.outputConnection);
+  }
+  if (info.rightSide) {
+    this.drawRenderedElem(info.rightSide, info.RTL);
   }
 
   this.drawBoundingBox(info);

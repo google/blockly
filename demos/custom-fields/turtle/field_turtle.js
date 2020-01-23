@@ -88,9 +88,6 @@ CustomFields.FieldTurtle.prototype.CURSOR = 'pointer';
 // May change if the turtle gets fancy enough.
 CustomFields.FieldTurtle.prototype.TEXT_OFFSET_X = 80;
 
-// Padding that the border rect adds around the turtle and its name.
-CustomFields.FieldTurtle.prototype.PADDING = Blockly.Field.X_PADDING;
-
 // These are the different options for our turtle. Being declared this way
 // means they are static, and not translatable. If you want to do something
 // similar, but make it translatable you should set up your options like a
@@ -320,8 +317,8 @@ CustomFields.FieldTurtle.prototype.updateSize_ = function() {
   var width = bbox.width;
   var height = bbox.height;
   if (this.borderRect_) {
-    width += this.PADDING;
-    height += this.PADDING;
+    width += this.constants_.FIELD_BORDER_RECT_X_PADDING * 2;
+    height += this.constants_.FIELD_BORDER_RECT_X_PADDING * 2;
     this.borderRect_.setAttribute('width', width);
     this.borderRect_.setAttribute('height', height);
   }
@@ -340,10 +337,8 @@ CustomFields.FieldTurtle.prototype.showEditor_ = function() {
 
   // These allow us to have the editor match the block's colour.
   var fillColour = this.sourceBlock_.getColour();
-  // This is technically a package function, meaning it could change.
-  var borderColours = this.sourceBlock_.getColourBorder();
-  var borderColour = borderColours.colourBorder || borderColours.colourDark;
-  Blockly.DropDownDiv.setColour(fillColour, borderColour);
+  Blockly.DropDownDiv.setColour(fillColour,
+      this.sourceBlock_.style.colourTertiary);
 
   // Always pass the dropdown div a dispose function so that you can clean
   // up event listeners when the editor closes.
@@ -476,8 +471,8 @@ CustomFields.FieldTurtle.prototype.dropdownDispose_ = function() {
 };
 
 // Updates the field's colour based on the colour of the block. Called by
-// block.updateColour.
-CustomFields.FieldTurtle.prototype.updateColour = function() {
+// block.applyColour.
+CustomFields.FieldTurtle.prototype.applyColour = function() {
   if (!this.sourceBlock_) {
     return;
   }
@@ -486,27 +481,28 @@ CustomFields.FieldTurtle.prototype.updateColour = function() {
   var fillColour = isShadow  ?
       this.sourceBlock_.getColourShadow() : this.sourceBlock_.getColour();
   // This is technically a package function, meaning it could change.
-  var borderColours = this.sourceBlock_.getColourBorder();
   var borderColour = isShadow ? fillColour :
-      borderColours.colourBorder || borderColours.colourDark;
+      this.sourceBlock_.style.colourTertiary;
 
-  var child = this.turtleGroup_.firstChild;
-  while(child) {
-    // If it is a text node, continue.
-    if (child.nodeType == 3) {
-      child = child.nextSibling;
-      continue;
-    }
-    // Or if it is a non-turtle node, continue.
-    var className = child.getAttribute('class');
-    if (!className || className.indexOf('turtleBody') == -1) {
-      child = child.nextSibling;
-      continue;
-    }
+  if (this.turtleGroup_) {
+    var child = this.turtleGroup_.firstChild;
+    while(child) {
+      // If it is a text node, continue.
+      if (child.nodeType == 3) {
+        child = child.nextSibling;
+        continue;
+      }
+      // Or if it is a non-turtle node, continue.
+      var className = child.getAttribute('class');
+      if (!className || className.indexOf('turtleBody') == -1) {
+        child = child.nextSibling;
+        continue;
+      }
 
-    child.style.fill = fillColour;
-    child.style.stroke = borderColour;
-    child = child.nextSibling;
+      child.style.fill = fillColour;
+      child.style.stroke = borderColour;
+      child = child.nextSibling;
+    }
   }
 };
 

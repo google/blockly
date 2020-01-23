@@ -107,7 +107,7 @@ Blockly.Variables.ALL_DEVELOPER_VARS_WARNINGS_BY_BLOCK_TYPE_ = {};
 Blockly.Variables.allDeveloperVariables = function(workspace) {
   var blocks = workspace.getAllBlocks(false);
   var variableHash = Object.create(null);
-  for (var i = 0, block; block = blocks[i]; i++) {
+  for (var i = 0, block; (block = blocks[i]); i++) {
     var getDeveloperVariables = block.getDeveloperVariables;
     if (!getDeveloperVariables && block.getDeveloperVars) {
       // August 2018: getDeveloperVars() was deprecated and renamed
@@ -194,7 +194,7 @@ Blockly.Variables.flyoutCategoryBlocks = function(workspace) {
 
     if (Blockly.Blocks['variables_get']) {
       variableModelList.sort(Blockly.VariableModel.compareByName);
-      for (var i = 0, variable; variable = variableModelList[i]; i++) {
+      for (var i = 0, variable; (variable = variableModelList[i]); i++) {
         var block = Blockly.utils.xml.createElement('block');
         block.setAttribute('type', 'variables_get');
         block.setAttribute('gap', 8);
@@ -206,6 +206,8 @@ Blockly.Variables.flyoutCategoryBlocks = function(workspace) {
   return xmlList;
 };
 
+Blockly.Variables.VAR_LETTER_OPTIONS = 'ijkmnopqrstuvwxyzabcdefgh';  // No 'l'.
+
 /**
  * Return a new variable name that is not yet being used. This will try to
  * generate single letter variable names in the range 'i' to 'z' to start with.
@@ -215,44 +217,51 @@ Blockly.Variables.flyoutCategoryBlocks = function(workspace) {
  * @return {string} New variable name.
  */
 Blockly.Variables.generateUniqueName = function(workspace) {
-  var variableList = workspace.getAllVariables();
-  var newName = '';
-  if (variableList.length) {
-    var nameSuffix = 1;
-    var letters = 'ijkmnopqrstuvwxyzabcdefgh';  // No 'l'.
-    var letterIndex = 0;
-    var potName = letters.charAt(letterIndex);
-    while (!newName) {
-      var inUse = false;
-      for (var i = 0; i < variableList.length; i++) {
-        if (variableList[i].name.toLowerCase() == potName) {
-          // This potential name is already used.
-          inUse = true;
-          break;
-        }
-      }
-      if (inUse) {
-        // Try the next potential name.
-        letterIndex++;
-        if (letterIndex == letters.length) {
-          // Reached the end of the character sequence so back to 'i'.
-          // a new suffix.
-          letterIndex = 0;
-          nameSuffix++;
-        }
-        potName = letters.charAt(letterIndex);
-        if (nameSuffix > 1) {
-          potName += nameSuffix;
-        }
-      } else {
-        // We can use the current potential name.
-        newName = potName;
+  return Blockly.Variables.generateUniqueNameFromOptions(
+      Blockly.Variables.VAR_LETTER_OPTIONS.charAt(0),
+      workspace.getAllVariableNames()
+  );
+};
+
+/**
+ * Returns a unique name that is not present in the usedNames array. This
+ * will try to generate single letter names in the range a -> z (skip l). It
+ * will start with the character passed to startChar.
+ * @param {string} startChar The character to start the search at.
+ * @param {!Array<string>} usedNames A list of all of the used names.
+ * @return {string} A unique name that is not present in the usedNames array.
+ */
+Blockly.Variables.generateUniqueNameFromOptions = function(startChar, usedNames) {
+  if (!usedNames.length) {
+    return startChar;
+  }
+
+  var letters = Blockly.Variables.VAR_LETTER_OPTIONS;
+  var suffix = '';
+  var letterIndex = letters.indexOf(startChar);
+  var potName = startChar;
+
+  // eslint-disable-next-line no-constant-condition
+  while (true) {
+    var inUse = false;
+    for (var i = 0; i < usedNames.length; i++) {
+      if (usedNames[i].toLowerCase() == potName) {
+        inUse = true;
+        break;
       }
     }
-  } else {
-    newName = 'i';
+    if (!inUse) {
+      return potName;
+    }
+
+    letterIndex++;
+    if (letterIndex == letters.length) {
+      // Reached the end of the character sequence so back to 'i'.
+      letterIndex = 0;
+      suffix = Number(suffix) + 1;
+    }
+    potName = letters.charAt(letterIndex) + suffix;
   }
-  return newName;
 };
 
 /**
@@ -283,14 +292,13 @@ Blockly.Variables.createVariableButtonHandler = function(
             var existing =
                 Blockly.Variables.nameUsedWithAnyType_(text, workspace);
             if (existing) {
-              var lowerCase = text.toLowerCase();
               if (existing.type == type) {
                 var msg = Blockly.Msg['VARIABLE_ALREADY_EXISTS'].replace(
-                    '%1', lowerCase);
+                    '%1', existing.name);
               } else {
                 var msg =
                     Blockly.Msg['VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE'];
-                msg = msg.replace('%1', lowerCase).replace('%2', existing.type);
+                msg = msg.replace('%1', existing.name).replace('%2', existing.type);
               }
               Blockly.alert(msg,
                   function() {
@@ -351,7 +359,7 @@ Blockly.Variables.renameVariable = function(workspace, variable,
                 variable.type, workspace);
             if (existing) {
               var msg = Blockly.Msg['VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE']
-                  .replace('%1', newName.toLowerCase())
+                  .replace('%1', existing.name)
                   .replace('%2', existing.type);
               Blockly.alert(msg,
                   function() {
@@ -412,7 +420,7 @@ Blockly.Variables.nameUsedWithOtherType_ = function(name, type, workspace) {
   var allVariables = workspace.getVariableMap().getAllVariables();
 
   name = name.toLowerCase();
-  for (var i = 0, variable; variable = allVariables[i]; i++) {
+  for (var i = 0, variable; (variable = allVariables[i]); i++) {
     if (variable.name.toLowerCase() == name && variable.type != type) {
       return variable;
     }
@@ -433,7 +441,7 @@ Blockly.Variables.nameUsedWithAnyType_ = function(name, workspace) {
   var allVariables = workspace.getVariableMap().getAllVariables();
 
   name = name.toLowerCase();
-  for (var i = 0, variable; variable = allVariables[i]; i++) {
+  for (var i = 0, variable; (variable = allVariables[i]); i++) {
     if (variable.name.toLowerCase() == name) {
       return variable;
     }
@@ -501,10 +509,11 @@ Blockly.Variables.getOrCreateVariablePackage = function(workspace, id, opt_name,
  */
 Blockly.Variables.getVariable = function(workspace, id, opt_name, opt_type) {
   var potentialVariableMap = workspace.getPotentialVariableMap();
+  var variable = null;
   // Try to just get the variable, by ID if possible.
   if (id) {
     // Look in the real variable map before checking the potential variable map.
-    var variable = workspace.getVariableById(id);
+    variable = workspace.getVariableById(id);
     if (!variable && potentialVariableMap) {
       variable = potentialVariableMap.getVariableById(id);
     }
@@ -519,7 +528,7 @@ Blockly.Variables.getVariable = function(workspace, id, opt_name, opt_type) {
       throw Error('Tried to look up a variable by name without a type');
     }
     // Otherwise look up by name and type.
-    var variable = workspace.getVariable(opt_name, opt_type);
+    variable = workspace.getVariable(opt_name, opt_type);
     if (!variable && potentialVariableMap) {
       variable = potentialVariableMap.getVariable(opt_name, opt_type);
     }
@@ -548,10 +557,11 @@ Blockly.Variables.createVariable_ = function(workspace, id, opt_name,
   }
 
   // Create a potential variable if in the flyout.
+  var variable = null;
   if (potentialVariableMap) {
-    var variable = potentialVariableMap.createVariable(opt_name, opt_type, id);
+    variable = potentialVariableMap.createVariable(opt_name, opt_type, id);
   } else {  // In the main workspace, create a real variable.
-    var variable = workspace.createVariable(opt_name, opt_type, id);
+    variable = workspace.createVariable(opt_name, opt_type, id);
   }
   return variable;
 };

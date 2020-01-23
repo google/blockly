@@ -180,6 +180,15 @@ Code.changeLanguage = function() {
 };
 
 /**
+ * Changes the output language by clicking the tab matching
+ * the selected language in the codeMenu.
+ */
+Code.changeCodingLanguage = function() {
+  var codeMenu = document.getElementById('code_menu');
+  Code.tabClick(codeMenu.options[codeMenu.selectedIndex].value);
+}
+
+/**
  * Bind a function to a button's click event.
  * On touch enabled browsers, ontouchend is treated as equivalent to onclick.
  * @param {!Element|string} el Button element or ID thereof.
@@ -238,6 +247,14 @@ Code.LANG = Code.getLang();
  */
 Code.TABS_ = ['blocks', 'javascript', 'php', 'python', 'dart', 'lua', 'xml'];
 
+/**
+ * List of tab names with casing, for display in the UI.
+ * @private
+ */
+Code.TABS_DISPLAY_ = [
+  'Blocks', 'JavaScript', 'PHP', 'Python', 'Dart', 'Lua', 'XML',
+];
+
 Code.selected = 'blocks';
 
 /**
@@ -246,7 +263,7 @@ Code.selected = 'blocks';
  */
 Code.tabClick = function(clickedName) {
   // If the XML tab was open, save and render the content.
-  if (document.getElementById('tab_xml').className == 'tabon') {
+  if (document.getElementById('tab_xml').classList.contains('tabon')) {
     var xmlTextarea = document.getElementById('content_xml');
     var xmlText = xmlTextarea.value;
     var xmlDom = null;
@@ -266,25 +283,42 @@ Code.tabClick = function(clickedName) {
     }
   }
 
-  if (document.getElementById('tab_blocks').className == 'tabon') {
+  if (document.getElementById('tab_blocks').classList.contains('tabon')) {
     Code.workspace.setVisible(false);
   }
   // Deselect all tabs and hide all panes.
   for (var i = 0; i < Code.TABS_.length; i++) {
     var name = Code.TABS_[i];
-    document.getElementById('tab_' + name).className = 'taboff';
+    var tab = document.getElementById('tab_' + name);
+    tab.classList.add('taboff');
+    tab.classList.remove('tabon');
     document.getElementById('content_' + name).style.visibility = 'hidden';
   }
 
   // Select the active tab.
   Code.selected = clickedName;
-  document.getElementById('tab_' + clickedName).className = 'tabon';
+  var selectedTab = document.getElementById('tab_' + clickedName);
+  selectedTab.classList.remove('taboff');
+  selectedTab.classList.add('tabon');
   // Show the selected pane.
   document.getElementById('content_' + clickedName).style.visibility =
       'visible';
   Code.renderContent();
+  // The code menu tab is on if the blocks tab is off.
+  var codeMenuTab = document.getElementById('tab_code');
   if (clickedName == 'blocks') {
     Code.workspace.setVisible(true);
+    codeMenuTab.className = 'taboff';
+  } else {
+    codeMenuTab.className = 'tabon';
+  }
+  // Sync the menu's value with the clicked tab value if needed.
+  var codeMenu = document.getElementById('code_menu');
+  for (var i = 0; i < codeMenu.options.length; i++) {
+    if (codeMenu.options[i].value == clickedName) {
+      codeMenu.selectedIndex = i;
+      break;
+    }
   }
   Blockly.svgResize(Code.workspace);
 };
@@ -379,9 +413,9 @@ Code.init = function() {
       el.style.width = (2 * bBox.width - el.offsetWidth) + 'px';
     }
     // Make the 'Blocks' tab line up with the toolbox.
-    if (Code.workspace && Code.workspace.toolbox_.width) {
+    if (Code.workspace && Code.workspace.getToolbox().width) {
       document.getElementById('tab_blocks').style.minWidth =
-          (Code.workspace.toolbox_.width - 38) + 'px';
+          (Code.workspace.getToolbox().width - 38) + 'px';
           // Account for the 19 pixel margin and on each side.
     }
   };
@@ -455,6 +489,14 @@ Code.init = function() {
     Code.bindClick('tab_' + name,
         function(name_) {return function() {Code.tabClick(name_);};}(name));
   }
+  Code.bindClick('tab_code', function(e) {
+    if (e.target !== document.getElementById('tab_code')) {
+      // Prevent clicks on child codeMenu from triggering a tab click.
+      return;
+    }
+    Code.changeCodingLanguage();
+  });
+
   onresize();
   Blockly.svgResize(Code.workspace);
 
@@ -496,6 +538,14 @@ Code.initLanguage = function() {
     languageMenu.options.add(option);
   }
   languageMenu.addEventListener('change', Code.changeLanguage, true);
+
+  // Populate the coding language selection menu.
+  var codeMenu = document.getElementById('code_menu');
+  codeMenu.options.length = 0;
+  for (var i = 1; i < Code.TABS_.length; i++) {
+    codeMenu.options.add(new Option(Code.TABS_DISPLAY_[i], Code.TABS_[i]));
+  }
+  codeMenu.addEventListener('change', Code.changeCodingLanguage);
 
   // Inject language strings.
   document.title += ' ' + MSG['title'];

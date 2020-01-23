@@ -15,7 +15,8 @@
 			"Deborahjay",
 			"נדב ס",
 			"Motife",
-			"Steeve815"
+			"Steeve815",
+			"דגש חזק"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "פריט",
@@ -158,6 +159,7 @@
 	"MATH_TRIG_TOOLTIP_COS": "החזרת הקוסינוס של מעלה (לא רדיאן).",
 	"MATH_TRIG_TOOLTIP_TAN": "החזרת הטנגס של מעלה (לא רדיאן).",
 	"MATH_CONSTANT_HELPURL": "https://he.wikipedia.org/wiki/קבוע_מתמטי",
+	"MATH_CONSTANT_TOOLTIP": "החזרת אחד מהקבועים המקובלים: π (3.141…),‏ e (2.718…),‏ φ (1.618…),‏ sqrt(2) (1.414…),‏ sqrt(½) (0.707…)‏ או ∞ (אינסוף).",
 	"MATH_IS_EVEN": "זוגי",
 	"MATH_IS_ODD": "אי-זוגי",
 	"MATH_IS_PRIME": "ראשוני",
@@ -313,5 +315,6 @@
 	"PROCEDURES_CREATE_DO": "ליצור '%1'",
 	"PROCEDURES_IFRETURN_TOOLTIP": "אם ערך נכון, אז להחזיר ערך שני.",
 	"PROCEDURES_IFRETURN_WARNING": "אזהרה: בלוק זה עשוי לשמש רק בתוך הגדרה של פונקציה.",
-	"WORKSPACE_COMMENT_DEFAULT_TEXT": "נא להזין הערה..."
+	"WORKSPACE_COMMENT_DEFAULT_TEXT": "נא להזין הערה...",
+	"WORKSPACE_ARIA_LABEL": "סביבת העבודה חסומה"
 }

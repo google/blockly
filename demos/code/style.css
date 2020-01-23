@@ -99,6 +99,9 @@ td.tabmax {
 html[dir=rtl] td.tabmax {
   text-align: left;
 }
+#tab_code {
+  display: none;
+}
 
 table {
   border-collapse: collapse;
@@ -161,4 +164,13 @@ button {
 }
 .run {
   background-position: -42px 0px;
+}
+
+@media (max-width: 710px) {
+  .tab_collapse {
+    display: none;
+  }
+  #tab_code {
+    display: table-cell;
+  }
 }

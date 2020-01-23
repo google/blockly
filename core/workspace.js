@@ -23,11 +23,8 @@
 
 goog.provide('Blockly.Workspace');
 
-goog.require('Blockly.Cursor');
-goog.require('Blockly.MarkerCursor');
 goog.require('Blockly.Events');
-goog.require('Blockly.ThemeManager');
-goog.require('Blockly.Themes.Classic');
+goog.require('Blockly.Options');
 goog.require('Blockly.utils');
 goog.require('Blockly.utils.math');
 goog.require('Blockly.VariableMap');
@@ -44,7 +41,8 @@ Blockly.Workspace = function(opt_options) {
   this.id = Blockly.utils.genUid();
   Blockly.Workspace.WorkspaceDB_[this.id] = this;
   /** @type {!Blockly.Options} */
-  this.options = opt_options || {};
+  this.options = opt_options ||
+      new Blockly.Options(/** @type {!Blockly.BlocklyOptions} */ ({}));
   /** @type {boolean} */
   this.RTL = !!this.options.RTL;
   /** @type {boolean} */
@@ -109,35 +107,10 @@ Blockly.Workspace = function(opt_options) {
    * A FieldVariable must always refer to a Blockly.VariableModel.  We reconcile
    * these by tracking "potential" variables in the flyout.  These variables
    * become real when references to them are dragged into the main workspace.
-   * @type {!Blockly.VariableMap}
+   * @type {Blockly.VariableMap}
    * @private
    */
   this.potentialVariableMap_ = null;
-
-  /**
-   * The cursor used to navigate around the AST for keyboard navigation.
-   * @type {!Blockly.Cursor}
-   * @protected
-   */
-  this.cursor_ = new Blockly.Cursor();
-
-  /**
-   * The marker used to mark a location for keyboard navigation.
-   * @type {!Blockly.MarkerCursor}
-   * @protected
-   */
-  this.marker_ = new Blockly.MarkerCursor();
-
-  /**
-   * Object in charge of storing and updating the workspace theme.
-   * @type {!Blockly.ThemeManager}
-   * @protected
-   */
-  this.themeManager_ = this.options.parentWorkspace ?
-      this.options.parentWorkspace.getThemeManager() :
-      new Blockly.ThemeManager(this.options.theme || Blockly.Themes.Classic);
-  
-  this.themeManager_.subscribeWorkspace(this);
 };
 
 /**
@@ -167,93 +140,6 @@ Blockly.Workspace.prototype.MAX_UNDO = 1024;
 Blockly.Workspace.prototype.connectionDBList = null;
 
 /**
- * Sets the cursor for keyboard navigation.
- * @param {Blockly.Cursor} cursor The cursor used to navigate around the Blockly
- *     AST for keyboard navigation.
- */
-Blockly.Workspace.prototype.setCursor = function(cursor) {
-  this.cursor_ = cursor;
-};
-
-/**
- * Sets the marker for keyboard navigation.
- * @param {Blockly.MarkerCursor} marker The marker used to mark a location for
- *     keyboard navigation.
- */
-Blockly.Workspace.prototype.setMarker = function(marker) {
-  this.marker_ = marker;
-};
-
-/**
- * Get the cursor used to navigate around the AST for keyboard navigation.
- * @return {Blockly.Cursor} The cursor for this workspace.
- */
-Blockly.Workspace.prototype.getCursor = function() {
-  return this.cursor_;
-};
-
-/**
- * Get the marker used to mark a location for keyboard navigation.
- * @return {Blockly.MarkerCursor} the marker for this workspace.
- */
-Blockly.Workspace.prototype.getMarker = function() {
-  return this.marker_;
-};
-
-/**
- * Get the workspace theme object.
- * @return {!Blockly.Theme} The workspace theme object.
- */
-Blockly.Workspace.prototype.getTheme = function() {
-  return this.themeManager_.getTheme();
-};
-
-/**
- * Set the workspace theme object.
- * If no theme is passed, default to the `Blockly.Themes.Classic` theme.
- * @param {Blockly.Theme} theme The workspace theme object.
- */
-Blockly.Workspace.prototype.setTheme = function(theme) {
-  if (!theme) {
-    theme = /** @type {!Blockly.Theme} */ (Blockly.Themes.Classic);
-  }
-  this.themeManager_.setTheme(theme);
-};
-
-/**
- * Refresh all blocks on the workspace after a theme update.
- * @package
- */
-Blockly.Workspace.prototype.refreshTheme = function() {
-  // Update all blocks in workspace that have a style name.
-  this.updateBlockStyles_(this.getAllBlocks().filter(
-      function(block) {
-        return block.getStyleName() !== undefined;
-      }
-  ));
-
-  var event = new Blockly.Events.Ui(null, 'theme', null, null);
-  event.workspaceId = this.id;
-  Blockly.Events.fire(event);
-};
-
-/**
- * Updates all the blocks with new style.
- * @param {!Array.<!Blockly.Block>} blocks List of blocks to update the style
- *     on.
- * @private
- */
-Blockly.Workspace.prototype.updateBlockStyles_ = function(blocks) {
-  for (var i = 0, block; block = blocks[i]; i++) {
-    var blockStyleName = block.getStyleName();
-    block.setStyle(blockStyleName);
-    if (block.mutator) {
-      block.mutator.updateBlockStyle(blockStyleName);
-    }
-  }
-};
-
-/**
  * Dispose of this workspace.
  * Unlink from all DOM elements to prevent memory leaks.
  * @suppress {checkTypes}
@@ -263,15 +149,6 @@ Blockly.Workspace.prototype.dispose = function() {
   this.clear();
   // Remove from workspace database.
   delete Blockly.Workspace.WorkspaceDB_[this.id];
-
-  if (this.themeManager_) {
-    this.themeManager_.unsubscribeWorkspace(this);
-    this.themeManager_.unsubscribe(this.svgBackground_);
-    if (!this.options.parentWorkspace) {
-      this.themeManager_.dispose();
-      this.themeManager_ = null;
-    }
-  }
 };
 
 /**
@@ -479,10 +356,10 @@ Blockly.Workspace.prototype.clear = function() {
       Blockly.Events.setGroup(true);
     }
     while (this.topBlocks_.length) {
-      this.topBlocks_[0].dispose();
+      this.topBlocks_[0].dispose(false);
     }
     while (this.topComments_.length) {
-      this.topComments_[this.topComments_.length - 1].dispose();
+      this.topComments_[this.topComments_.length - 1].dispose(false);
     }
     if (!existingGroup) {
       Blockly.Events.setGroup(false);
@@ -516,7 +393,7 @@ Blockly.Workspace.prototype.renameVariableById = function(id, newName) {
  *     their type. This will default to '' which is a specific type.
  * @param {?string=} opt_id The unique ID of the variable. This will default to
  *     a UUID.
- * @return {Blockly.VariableModel} The newly created variable.
+ * @return {!Blockly.VariableModel} The newly created variable.
  */
 Blockly.Workspace.prototype.createVariable = function(name, opt_type, opt_id) {
   return this.variableMap_.createVariable(name, opt_type, opt_id);
@@ -548,7 +425,7 @@ Blockly.Workspace.prototype.deleteVariableById = function(id) {
  * @private
  */
 Blockly.Workspace.prototype.deleteVariableInternal_ = function(variable, uses) {
-  this.variableMap_.deleteVariableInternal_(variable, uses);
+  this.variableMap_.deleteVariableInternal(variable, uses);
 };
 
 /**
@@ -593,7 +470,7 @@ Blockly.Workspace.prototype.getVariableById = function(id) {
  * Find the variable with the specified type. If type is null, return list of
  *     variables with empty string type.
  * @param {?string} type Type of the variables to find.
- * @return {Array.<Blockly.VariableModel>} The sought after variables of the
+ * @return {!Array.<!Blockly.VariableModel>} The sought after variables of the
  *     passed in type. An empty array if none are found.
  */
 Blockly.Workspace.prototype.getVariablesOfType = function(type) {
@@ -615,6 +492,14 @@ Blockly.Workspace.prototype.getVariableTypes = function() {
  */
 Blockly.Workspace.prototype.getAllVariables = function() {
   return this.variableMap_.getAllVariables();
+};
+
+/**
+ * Returns all variable names of all types.
+ * @return {!Array<string>} List of all variable names of all types.
+ */
+Blockly.Workspace.prototype.getAllVariableNames = function() {
+  return this.variableMap_.getAllVariableNames();
 };
 
 /* End functions that are just pass-throughs to the variable map. */
@@ -651,7 +536,7 @@ Blockly.Workspace.prototype.remainingCapacity = function() {
     return Infinity;
   }
 
-  return this.options.maxBlocks - this.getAllBlocks().length;
+  return this.options.maxBlocks - this.getAllBlocks(false).length;
 };
 
 /**
@@ -665,7 +550,7 @@ Blockly.Workspace.prototype.remainingCapacityOfType = function(type) {
     return Infinity;
   }
   return (this.options.maxInstances[type] || Infinity) -
-      this.getBlocksByType(type).length;
+      this.getBlocksByType(type, false).length;
 };
 
 /**
@@ -722,13 +607,13 @@ Blockly.Workspace.prototype.undo = function(redo) {
     events.push(inputStack.pop());
   }
   // Push these popped events on the opposite stack.
-  for (var i = 0, event; event = events[i]; i++) {
+  for (var i = 0, event; (event = events[i]); i++) {
     outputStack.push(event);
   }
   events = Blockly.Events.filter(events, redo);
   Blockly.Events.recordUndo = false;
   try {
-    for (var i = 0, event; event = events[i]; i++) {
+    for (var i = 0, event; (event = events[i]); i++) {
       event.run(redo);
     }
   } finally {
@@ -779,7 +664,7 @@ Blockly.Workspace.prototype.fireChangeListener = function(event) {
       this.undoStack_.shift();
     }
   }
-  for (var i = 0, func; func = this.listeners_[i]; i++) {
+  for (var i = 0, func; (func = this.listeners_[i]); i++) {
     func(event);
   }
 };
@@ -791,6 +676,25 @@ Blockly.Workspace.prototype.fireChangeListener = function(event) {
  */
 Blockly.Workspace.prototype.getBlockById = function(id) {
   return this.blockDB_[id] || null;
+};
+
+/**
+ * Set a block on this workspace with the specified ID.
+ * @param {string} id ID of block to set.
+ * @param {Blockly.Block} block The block to set.
+ * @package
+ */
+Blockly.Workspace.prototype.setBlockById = function(id, block) {
+  this.blockDB_[id] = block;
+};
+
+/**
+ * Delete a block off this workspace with the specified ID.
+ * @param {string} id ID of block to delete.
+ * @package
+ */
+Blockly.Workspace.prototype.removeBlockById = function(id) {
+  delete this.blockDB_[id];
 };
 
 /**
@@ -814,7 +718,7 @@ Blockly.Workspace.prototype.getCommentById = function(id) {
 Blockly.Workspace.prototype.allInputsFilled = function(
     opt_shadowBlocksAreFilled) {
   var blocks = this.getTopBlocks(false);
-  for (var i = 0, block; block = blocks[i]; i++) {
+  for (var i = 0, block; (block = blocks[i]); i++) {
     if (!block.allInputsFilled(opt_shadowBlocksAreFilled)) {
       return false;
     }
@@ -842,10 +746,19 @@ Blockly.Workspace.prototype.createPotentialVariableMap = function() {
 
 /**
  * Return the map of all variables on the workspace.
- * @return {Blockly.VariableMap} The variable map.
+ * @return {!Blockly.VariableMap} The variable map.
  */
 Blockly.Workspace.prototype.getVariableMap = function() {
   return this.variableMap_;
+};
+
+/**
+ * Set the map of all variables on the workspace.
+ * @param {!Blockly.VariableMap} variableMap The variable map.
+ * @package
+ */
+Blockly.Workspace.prototype.setVariableMap = function(variableMap) {
+  this.variableMap_ = variableMap;
 };
 
 /**
@@ -873,13 +786,4 @@ Blockly.Workspace.getAll = function() {
     workspaces.push(Blockly.Workspace.WorkspaceDB_[workspaceId]);
   }
   return workspaces;
-};
-
-/**
- * Get the theme manager for this workspace.
- * @return {!Blockly.ThemeManager} The theme manager for this workspace.
- * @package
- */
-Blockly.Workspace.prototype.getThemeManager = function() {
-  return this.themeManager_;
 };

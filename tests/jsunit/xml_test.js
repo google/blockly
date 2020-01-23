@@ -142,7 +142,7 @@ function test_domToWorkspace_BackwardCompatibility() {
         '  </block>' +
         '</xml>');
     Blockly.Xml.domToWorkspace(dom, workspace);
-    assertEquals('Block count', 1, workspace.getAllBlocks().length);
+    assertEquals('Block count', 1, workspace.getAllBlocks(false).length);
     checkVariableValues(workspace, 'name1', '', '1');
   } finally {
     xmlTest_tearDownWithMockBlocks();
@@ -165,7 +165,7 @@ function test_domToWorkspace_VariablesAtTop() {
         '  </block>' +
         '</xml>');
     Blockly.Xml.domToWorkspace(dom, workspace);
-    assertEquals('Block count', 1, workspace.getAllBlocks().length);
+    assertEquals('Block count', 1, workspace.getAllBlocks(false).length);
     checkVariableValues(workspace, 'name1', 'type1', 'id1');
     checkVariableValues(workspace, 'name2', 'type2', 'id2');
     checkVariableValues(workspace, 'name3', '', 'id3');
@@ -268,9 +268,9 @@ function test_appendDomToWorkspace() {
         '</xml>');
     workspace = new Blockly.Workspace();
     Blockly.Xml.appendDomToWorkspace(dom, workspace);
-    assertEquals('Block count', 1, workspace.getAllBlocks().length);
+    assertEquals('Block count', 1, workspace.getAllBlocks(false).length);
     var newBlockIds = Blockly.Xml.appendDomToWorkspace(dom, workspace);
-    assertEquals('Block count', 2, workspace.getAllBlocks().length);
+    assertEquals('Block count', 2, workspace.getAllBlocks(false).length);
     assertEquals('Number of new block ids',1,newBlockIds.length);
   } finally {
     delete Blockly.Blocks.test_block;

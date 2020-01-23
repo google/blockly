@@ -25,6 +25,7 @@ goog.provide('Blockly.FieldNumber');
 
 goog.require('Blockly.fieldRegistry');
 goog.require('Blockly.FieldTextInput');
+goog.require('Blockly.utils.aria');
 goog.require('Blockly.utils.object');
 
 
@@ -274,6 +275,8 @@ Blockly.FieldNumber.prototype.doClassValidation_ = function(opt_newValue) {
   newValue = newValue.replace(/O/ig, '0');
   // Strip out thousands separators.
   newValue = newValue.replace(/,/g, '');
+  // Ignore case of 'Infinity'.
+  newValue = newValue.replace(/infinity/i, 'Infinity');
 
   // Clean up number.
   var n = Number(newValue || 0);

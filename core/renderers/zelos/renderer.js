@@ -28,17 +28,20 @@ goog.require('Blockly.blockRendering.Renderer');
 goog.require('Blockly.utils.object');
 goog.require('Blockly.zelos.ConstantProvider');
 goog.require('Blockly.zelos.Drawer');
+goog.require('Blockly.zelos.PathObject');
 goog.require('Blockly.zelos.RenderInfo');
+goog.require('Blockly.zelos.MarkerSvg');
 
 
 /**
  * The zelos renderer.
+ * @param {string} name The renderer name.
  * @package
  * @constructor
  * @extends {Blockly.blockRendering.Renderer}
  */
-Blockly.zelos.Renderer = function() {
-  Blockly.zelos.Renderer.superClass_.constructor.call(this);
+Blockly.zelos.Renderer = function(name) {
+  Blockly.zelos.Renderer.superClass_.constructor.call(this, name);
 };
 Blockly.utils.object.inherits(Blockly.zelos.Renderer,
     Blockly.blockRendering.Renderer);
@@ -76,6 +79,49 @@ Blockly.zelos.Renderer.prototype.makeRenderInfo_ = function(block) {
 Blockly.zelos.Renderer.prototype.makeDrawer_ = function(block, info) {
   return new Blockly.zelos.Drawer(block,
       /** @type {!Blockly.zelos.RenderInfo} */ (info));
+};
+
+/**
+ * Create a new instance of the renderer's cursor drawer.
+ * @param {!Blockly.WorkspaceSvg} workspace The workspace the cursor belongs to.
+ * @param {!Blockly.Marker} marker The marker.
+ * @return {!Blockly.blockRendering.MarkerSvg} The object in charge of drawing
+ *     the marker.
+ * @package
+ * @override
+ */
+Blockly.zelos.Renderer.prototype.makeMarkerDrawer = function(
+    workspace, marker) {
+  return new Blockly.zelos.MarkerSvg(workspace, this.getConstants(), marker);
+};
+
+/**
+ * Create a new instance of a renderer path object.
+ * @param {!SVGElement} root The root SVG element.
+ * @param {!Blockly.Theme.BlockStyle} style The style object to use for
+ *     colouring.
+ * @return {!Blockly.zelos.PathObject} The renderer path object.
+ * @package
+ * @override
+ */
+Blockly.zelos.Renderer.prototype.makePathObject = function(root, style) {
+  return new Blockly.zelos.PathObject(root, style,
+      /** @type {!Blockly.zelos.ConstantProvider} */ (this.getConstants()));
+};
+
+/**
+ * @override
+ */
+Blockly.zelos.Renderer.prototype.shouldHighlightConnection = function(conn) {
+  return conn.type != Blockly.INPUT_VALUE && conn.type !== Blockly.OUTPUT_VALUE;
+};
+
+/**
+ * @override
+ */
+Blockly.zelos.Renderer.prototype.shouldInsertDraggedBlock = function(_block,
+    _conn) {
+  return false;
 };
 
 Blockly.blockRendering.register('zelos', Blockly.zelos.Renderer);

@@ -92,9 +92,9 @@ Blockly.longPid_ = 0;
  * if the touch event terminates early.
  * @param {!Event} e Touch start event.
  * @param {Blockly.Gesture} gesture The gesture that triggered this longStart.
- * @private
+ * @package
  */
-Blockly.longStart_ = function(e, gesture) {
+Blockly.longStart = function(e, gesture) {
   Blockly.longStop_();
   // Punt on multitouch events.
   if (e.changedTouches && e.changedTouches.length != 1) {

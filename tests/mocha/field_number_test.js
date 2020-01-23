@@ -247,11 +247,10 @@ suite('Number Fields', function() {
           numberField.setValue(123.456);
           assertValue(numberField, 123);
         });
-        test('null', function() {
+        test('Null', function() {
           var numberField = new Blockly.FieldNumber
               .fromJson({ precision: null});
-          numberField.setValue(123.456);
-          assertValue(numberField, 123.456);
+          assertEquals(numberField.getPrecision(), 0);
         });
       });
       suite('Min', function() {
@@ -282,11 +281,10 @@ suite('Number Fields', function() {
           numberField.setValue(20);
           assertValue(numberField, 20);
         });
-        test('null', function() {
+        test('Null', function() {
           var numberField = new Blockly.FieldNumber
               .fromJson({ min: null});
-          numberField.setValue(-20);
-          assertValue(numberField, -20);
+          assertEquals(numberField.getMin(), -Infinity);
         });
       });
       suite('Max', function() {
@@ -320,8 +318,7 @@ suite('Number Fields', function() {
         test('null', function() {
           var numberField = new Blockly.FieldNumber
               .fromJson({ max: null});
-          numberField.setValue(20);
-          assertValue(numberField, 20);
+          assertEquals(numberField.getMax(), Infinity);
         });
       });
     });
@@ -332,10 +329,14 @@ suite('Number Fields', function() {
       this.numberField.htmlInput_ = Object.create(null);
       this.numberField.htmlInput_.oldValue_ = '1';
       this.numberField.htmlInput_.untypedDefaultValue_ = 1;
+      this.stub = sinon.stub(this.numberField, 'resizeEditor_');
     });
     teardown(function() {
       this.numberField.setValidator(null);
       this.numberField.htmlInput_ = null;
+      if (this.stub) {
+        this.stub.restore();
+      }
     });
     suite('Null Validator', function() {
       setup(function() {

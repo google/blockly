@@ -339,7 +339,7 @@ Blockly.Component.prototype.exitDocument = function() {
 /**
  * Disposes of the object. If the object hasn't already been disposed of, calls
  * {@link #disposeInternal}.
- * @protected
+ * @package
  */
 Blockly.Component.prototype.dispose = function() {
   if (!this.disposed_) {

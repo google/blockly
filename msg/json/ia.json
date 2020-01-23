@@ -259,8 +259,8 @@
 	"LISTS_GET_INDEX_FIRST": "prime",
 	"LISTS_GET_INDEX_LAST": "ultime",
 	"LISTS_GET_INDEX_RANDOM": "aleatori",
-	"LISTS_INDEX_FROM_START_TOOLTIP": "№ %1 es le prime elemento.",
-	"LISTS_INDEX_FROM_END_TOOLTIP": "№ %1 es le ultime elemento.",
+	"LISTS_INDEX_FROM_START_TOOLTIP": "%1 es le prime elemento.",
+	"LISTS_INDEX_FROM_END_TOOLTIP": "%1 es le ultime elemento.",
 	"LISTS_GET_INDEX_TOOLTIP_GET_FROM": "Retorna le elemento presente al position specificate in un lista.",
 	"LISTS_GET_INDEX_TOOLTIP_GET_FIRST": "Retorna le prime elemento in un lista.",
 	"LISTS_GET_INDEX_TOOLTIP_GET_LAST": "Retorna le ultime elemento in un lista.",
@@ -331,5 +331,6 @@
 	"PROCEDURES_IFRETURN_TOOLTIP": "Si un valor es ver, alora retornar un secunde valor.",
 	"PROCEDURES_IFRETURN_WARNING": "Attention: Iste bloco pote solmente esser usate in le definition de un function.",
 	"WORKSPACE_COMMENT_DEFAULT_TEXT": "Dice qualcosa...",
+	"WORKSPACE_ARIA_LABEL": "Spatio de travalio de Blockly",
 	"COLLAPSED_WARNINGS_WARNING": "Blocos plicate contine advertimentos."
 }

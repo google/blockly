@@ -167,7 +167,7 @@ async function genSingleScreenshot(browser, dir, test_name, isCollapsed, isInser
     var xml = Blockly.Xml.textToDom(xml_text);
     Blockly.Xml.domToWorkspace(xml, workspace);
     if (isCollapsed || isInsertionMarker || inlineInputs || externalInputs) {
-      var blocks = workspace.getAllBlocks();
+      var blocks = workspace.getAllBlocks(false);
       for (var i = 0, block; block = blocks[i]; i++) {
         block.setCollapsed(isCollapsed);
         block.setInsertionMarker(isInsertionMarker);

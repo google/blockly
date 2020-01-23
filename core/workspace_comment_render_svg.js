@@ -160,6 +160,7 @@ Blockly.WorkspaceCommentSvg.prototype.createEditor_ = function() {
   var textarea = document.createElementNS(Blockly.utils.dom.HTML_NS, 'textarea');
   textarea.className = 'blocklyCommentTextarea';
   textarea.setAttribute('dir', this.RTL ? 'RTL' : 'LTR');
+  textarea.readOnly = !this.isEditable();
   body.appendChild(textarea);
   this.textarea_ = textarea;
   this.foreignObject_.appendChild(body);
@@ -325,7 +326,7 @@ Blockly.WorkspaceCommentSvg.prototype.unbindDragEvents_ = function() {
   }
 };
 
-/*
+/**
  * Handle a mouse-up event while dragging a comment's border or resize handle.
  * @param {!Event} e Mouse up event.
  * @private

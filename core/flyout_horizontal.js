@@ -34,12 +34,14 @@ goog.require('Blockly.WidgetDiv');
 
 /**
  * Class for a flyout.
- * @param {!Object} workspaceOptions Dictionary of options for the workspace.
+ * @param {!Blockly.Options} workspaceOptions Dictionary of options for the
+ *     workspace.
  * @extends {Blockly.Flyout}
  * @constructor
  */
 Blockly.HorizontalFlyout = function(workspaceOptions) {
-  workspaceOptions.getMetrics = this.getMetrics_.bind(this);
+  workspaceOptions.getMetrics = /** @type {function():!Object} */ (
+    this.getMetrics_.bind(this));
   workspaceOptions.setMetrics = this.setMetrics_.bind(this);
 
   Blockly.HorizontalFlyout.superClass_.constructor.call(this, workspaceOptions);
@@ -203,7 +205,7 @@ Blockly.HorizontalFlyout.prototype.setBackgroundPath_ = function(width,
     // Bottom.
     path.push('a', this.CORNER_RADIUS, this.CORNER_RADIUS, 0, 0, 1,
         -this.CORNER_RADIUS, this.CORNER_RADIUS);
-    path.push('h', -1 * width);
+    path.push('h', -width);
     // Left.
     path.push('a', this.CORNER_RADIUS, this.CORNER_RADIUS, 0, 0, 1,
         -this.CORNER_RADIUS, -this.CORNER_RADIUS);
@@ -352,7 +354,7 @@ Blockly.HorizontalFlyout.prototype.getClientRect = function() {
     var height = flyoutRect.height;
     return new Blockly.utils.Rect(-BIG_NUM, top + height, -BIG_NUM, BIG_NUM);
   } else {  // Bottom.
-    return new Blockly.utils.Rect(top, -BIG_NUM, -BIG_NUM, BIG_NUM);
+    return new Blockly.utils.Rect(top, BIG_NUM, -BIG_NUM, BIG_NUM);
   }
 };
 

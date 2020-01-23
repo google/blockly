@@ -114,7 +114,7 @@ Blockly.Lua['lists_indexOf'] = function(block) {
  * @param {string} listName Name of the list, used to calculate length.
  * @param {string} where The method of indexing, selected by dropdown in Blockly
  * @param {string=} opt_at The optional offset when indexing from start/end.
- * @return {string} Index expression.
+ * @return {string|undefined} Index expression.
  * @private
  */
 Blockly.Lua.lists.getIndex_ = function(listName, where, opt_at) {
@@ -151,7 +151,7 @@ Blockly.Lua['lists_getIndex'] = function(block) {
           Blockly.Lua.ORDER_NONE;
       var at = Blockly.Lua.valueToCode(block, 'AT', atOrder) || '1';
       var listVar = Blockly.Lua.variableDB_.getDistinctName(
-          'tmp_list', Blockly.Variables.NAME_TYPE);
+          'tmp_list', Blockly.VARIABLE_CATEGORY_NAME);
       at = getIndex_(listVar, where, at);
       var code = listVar + ' = ' + list + '\n' +
           'table.remove(' + listVar + ', ' + at + ')\n';
@@ -230,7 +230,7 @@ Blockly.Lua['lists_setIndex'] = function(block) {
     // `list` is an expression, so we may not evaluate it more than once.
     // We can use multiple statements.
     var listVar = Blockly.Lua.variableDB_.getDistinctName(
-        'tmp_list', Blockly.Variables.NAME_TYPE);
+        'tmp_list', Blockly.VARIABLE_CATEGORY_NAME);
     code = listVar + ' = ' + list + '\n';
     list = listVar;
   }
@@ -374,6 +374,6 @@ Blockly.Lua['lists_reverse'] = function(block) {
        '  end',
        '  return reversed',
        'end']);
-  var code = 'list_reverse(' + list + ')';
+  var code = functionName + '(' + list + ')';
   return [code, Blockly.Lua.ORDER_HIGH];
 };

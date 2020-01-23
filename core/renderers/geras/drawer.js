@@ -26,10 +26,11 @@ goog.provide('Blockly.geras.Drawer');
 goog.require('Blockly.blockRendering.ConstantProvider');
 goog.require('Blockly.blockRendering.Drawer');
 goog.require('Blockly.geras.Highlighter');
-goog.require('Blockly.geras.PathObject');
 goog.require('Blockly.geras.RenderInfo');
 goog.require('Blockly.utils.object');
 goog.require('Blockly.utils.svgPaths');
+
+goog.requireType('Blockly.geras.PathObject');
 
 
 /**
@@ -57,10 +58,12 @@ Blockly.geras.Drawer.prototype.draw = function() {
   this.drawOutline_();
   this.drawInternals_();
 
-  this.block_.pathObject.setPaths(this.outlinePath_ + '\n' + this.inlinePath_,
-      this.highlighter_.getPath());
+  var pathObject =
+    /** @type {!Blockly.geras.PathObject} */ (this.block_.pathObject);
+  pathObject.setPath(this.outlinePath_ + '\n' + this.inlinePath_);
+  pathObject.setHighlightPath(this.highlighter_.getPath());
   if (this.info_.RTL) {
-    this.block_.pathObject.flipRTL();
+    pathObject.flipRTL();
   }
   if (Blockly.blockRendering.useDebugger) {
     this.block_.renderingDebugger.drawDebug(this.block_, this.info_);
@@ -110,7 +113,10 @@ Blockly.geras.Drawer.prototype.drawStatementInput_ = function(row) {
  */
 Blockly.geras.Drawer.prototype.drawRightSideRow_ = function(row) {
   this.highlighter_.drawRightSideRow(row);
-  Blockly.geras.Drawer.superClass_.drawRightSideRow_.call(this, row);
+
+  this.outlinePath_ +=
+      Blockly.utils.svgPaths.lineOnAxis('H', row.xPos + row.width) +
+      Blockly.utils.svgPaths.lineOnAxis('V', row.yPos + row.height);
 };
 
 /**
@@ -148,14 +154,14 @@ Blockly.geras.Drawer.prototype.drawInlineInput_ = function(input) {
 Blockly.geras.Drawer.prototype.positionInlineInputConnection_ = function(input) {
   var yPos = input.centerline - input.height / 2;
   // Move the connection.
-  if (input.connection) {
+  if (input.connectionModel) {
     // xPos already contains info about startX
     var connX = input.xPos + input.connectionWidth +
         this.constants_.DARK_PATH_OFFSET;
     if (this.info_.RTL) {
       connX *= -1;
     }
-    input.connection.setOffsetInBlock(
+    input.connectionModel.setOffsetInBlock(
         connX, yPos + input.connectionOffsetY +
         this.constants_.DARK_PATH_OFFSET);
   }
@@ -166,14 +172,14 @@ Blockly.geras.Drawer.prototype.positionInlineInputConnection_ = function(input) 
  */
 Blockly.geras.Drawer.prototype.positionStatementInputConnection_ = function(row) {
   var input = row.getLastInput();
-  if (input.connection) {
+  if (input.connectionModel) {
     var connX = row.xPos + row.statementEdge + input.notchOffset;
     if (this.info_.RTL) {
       connX *= -1;
     } else {
       connX += this.constants_.DARK_PATH_OFFSET;
     }
-    input.connection.setOffsetInBlock(connX,
+    input.connectionModel.setOffsetInBlock(connX,
         row.yPos + this.constants_.DARK_PATH_OFFSET);
   }
 };
@@ -183,13 +189,13 @@ Blockly.geras.Drawer.prototype.positionStatementInputConnection_ = function(row)
  */
 Blockly.geras.Drawer.prototype.positionExternalValueConnection_ = function(row) {
   var input = row.getLastInput();
-  if (input.connection) {
+  if (input.connectionModel) {
     var connX = row.xPos + row.width +
         this.constants_.DARK_PATH_OFFSET;
     if (this.info_.RTL) {
       connX *= -1;
     }
-    input.connection.setOffsetInBlock(connX, row.yPos);
+    input.connectionModel.setOffsetInBlock(connX, row.yPos);
   }
 };
 
@@ -205,7 +211,6 @@ Blockly.geras.Drawer.prototype.positionNextConnection_ = function() {
     var connX = (this.info_.RTL ? -x : x) +
         (this.constants_.DARK_PATH_OFFSET / 2);
     connInfo.connectionModel.setOffsetInBlock(
-        connX, (connInfo.centerline - connInfo.height / 2) +
-        this.constants_.DARK_PATH_OFFSET);
+        connX, bottomRow.baseline + this.constants_.DARK_PATH_OFFSET);
   }
 };

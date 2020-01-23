@@ -28,6 +28,7 @@ goog.require('Blockly.Events.VarDelete');
 goog.require('Blockly.Events.VarRename');
 goog.require('Blockly.Msg');
 goog.require('Blockly.utils');
+goog.require('Blockly.utils.object');
 
 
 /**
@@ -168,7 +169,7 @@ Blockly.VariableMap.prototype.renameVariableWithConflict_ = function(variable,
  *     their type. This will default to '' which is a specific type.
  * @param {?string=} opt_id The unique ID of the variable. This will default to
  *     a UUID.
- * @return {Blockly.VariableModel} The newly created variable.
+ * @return {!Blockly.VariableModel} The newly created variable.
  */
 Blockly.VariableMap.prototype.createVariable = function(name,
     opt_type, opt_id) {
@@ -208,7 +209,7 @@ Blockly.VariableMap.prototype.createVariable = function(name,
  */
 Blockly.VariableMap.prototype.deleteVariable = function(variable) {
   var variableList = this.variableMap_[variable.type];
-  for (var i = 0, tempVar; tempVar = variableList[i]; i++) {
+  for (var i = 0, tempVar; (tempVar = variableList[i]); i++) {
     if (tempVar.getId() == variable.getId()) {
       variableList.splice(i, 1);
       Blockly.Events.fire(new Blockly.Events.VarDelete(variable));
@@ -228,7 +229,7 @@ Blockly.VariableMap.prototype.deleteVariableById = function(id) {
     // Check whether this variable is a function parameter before deleting.
     var variableName = variable.name;
     var uses = this.getVariableUsesById(id);
-    for (var i = 0, block; block = uses[i]; i++) {
+    for (var i = 0, block; (block = uses[i]); i++) {
       if (block.type == 'procedures_defnoreturn' ||
         block.type == 'procedures_defreturn') {
         var procedureName = block.getFieldValue('NAME');
@@ -248,13 +249,13 @@ Blockly.VariableMap.prototype.deleteVariableById = function(id) {
           replace('%2', variableName);
       Blockly.confirm(confirmText,
           function(ok) {
-            if (ok) {
-              map.deleteVariableInternal_(variable, uses);
+            if (ok && variable) {
+              map.deleteVariableInternal(variable, uses);
             }
           });
     } else {
       // No confirmation necessary for a single block.
-      map.deleteVariableInternal_(variable, uses);
+      map.deleteVariableInternal(variable, uses);
     }
   } else {
     console.warn("Can't delete non-existent variable: " + id);
@@ -266,9 +267,9 @@ Blockly.VariableMap.prototype.deleteVariableById = function(id) {
  * user for confirmation.
  * @param {!Blockly.VariableModel} variable Variable to delete.
  * @param {!Array.<!Blockly.Block>} uses An array of uses of the variable.
- * @private
+ * @package
  */
-Blockly.VariableMap.prototype.deleteVariableInternal_ = function(variable,
+Blockly.VariableMap.prototype.deleteVariableInternal = function(variable,
     uses) {
   var existingGroup = Blockly.Events.getGroup();
   if (!existingGroup) {
@@ -276,7 +277,7 @@ Blockly.VariableMap.prototype.deleteVariableInternal_ = function(variable,
   }
   try {
     for (var i = 0; i < uses.length; i++) {
-      uses[i].dispose(true, false);
+      uses[i].dispose(true);
     }
     this.deleteVariable(variable);
   } finally {
@@ -292,7 +293,7 @@ Blockly.VariableMap.prototype.deleteVariableInternal_ = function(variable,
  * Find the variable by the given name and type and return it.  Return null if
  *     it is not found.
  * @param {string} name The name to check for.
- * @param {string=} opt_type The type of the variable.  If not provided it
+ * @param {?string=} opt_type The type of the variable.  If not provided it
  *     defaults to the empty string, which is a specific type.
  * @return {Blockly.VariableModel} The variable with the given name, or null if
  *     it was not found.
@@ -301,7 +302,7 @@ Blockly.VariableMap.prototype.getVariable = function(name, opt_type) {
   var type = opt_type || '';
   var list = this.variableMap_[type];
   if (list) {
-    for (var j = 0, variable; variable = list[j]; j++) {
+    for (var j = 0, variable; (variable = list[j]); j++) {
       if (Blockly.Names.equals(variable.name, name)) {
         return variable;
       }
@@ -320,7 +321,7 @@ Blockly.VariableMap.prototype.getVariableById = function(id) {
   var keys = Object.keys(this.variableMap_);
   for (var i = 0; i < keys.length; i++ ) {
     var key = keys[i];
-    for (var j = 0, variable; variable = this.variableMap_[key][j]; j++) {
+    for (var j = 0, variable; (variable = this.variableMap_[key][j]); j++) {
       if (variable.getId() == id) {
         return variable;
       }
@@ -355,11 +356,13 @@ Blockly.VariableMap.prototype.getVariablesOfType = function(type) {
  * @package
  */
 Blockly.VariableMap.prototype.getVariableTypes = function(ws) {
-  var potentialTypes = [];
+  var variableMap = {};
+  Blockly.utils.object.mixin(variableMap, this.variableMap_);
   if (ws && ws.getPotentialVariableMap()) {
-    potentialTypes = Object.keys(ws.getPotentialVariableMap().variableMap_);
+    Blockly.utils.object.mixin(variableMap,
+        ws.getPotentialVariableMap().variableMap_);
   }
-  var types = Object.keys(this.variableMap_).concat(potentialTypes);
+  var types = Object.keys(variableMap);
   var hasEmpty = false;
   for (var i = 0; i < types.length; i++) {
     if (types[i] == '') {
@@ -382,6 +385,21 @@ Blockly.VariableMap.prototype.getAllVariables = function() {
     all_variables = all_variables.concat(this.variableMap_[key]);
   }
   return all_variables;
+};
+
+/**
+ * Returns all of the variable names of all types.
+ * @return {!Array<string>} All of the variable names of all types.
+ */
+Blockly.VariableMap.prototype.getAllVariableNames = function() {
+  var allNames = [];
+  for (var key in this.variableMap_) {
+    var variables = this.variableMap_[key];
+    for (var i = 0, variable; (variable = variables[i]); i++) {
+      allNames.push(variable.name);
+    }
+  }
+  return allNames;
 };
 
 /**

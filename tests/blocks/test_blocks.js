@@ -1337,6 +1337,20 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
   }
 ]);  // END JSON EXTRACT (Do not delete this comment.)
 
+Blockly.Blocks['test_images_clickhandler'] = {
+  init: function() {
+    this.appendDummyInput()
+      .appendField("Image click handler")
+      .appendField(new Blockly.FieldImage(
+        "https://blockly-demo.appspot.com/static/tests/media/a.png", 32, 32,
+        "image with click handlder", this.onClick_), "IMAGE");
+    this.setStyle('text_blocks');
+  },
+  onClick_: function() {
+    alert('Image clicked');
+  }
+};
+
 Blockly.Blocks['test_validators_text_null'] = {
   init: function() {
     this.appendDummyInput()

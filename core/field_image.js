@@ -191,6 +191,10 @@ Blockly.FieldImage.prototype.initView = function() {
           this.fieldGroup_));
   this.imageElement_.setAttributeNS(Blockly.utils.dom.XLINK_NS,
       'xlink:href', /** @type {string} */ (this.value_));
+
+  if (this.clickHandler_) {
+    this.imageElement_.style.cursor = 'pointer';
+  }
 };
 
 /**

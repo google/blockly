@@ -899,9 +899,9 @@ Blockly.WorkspaceSvg.prototype.addFlyout = function(tagName) {
         'rtl': this.RTL,
         'oneBasedIndex': this.options.oneBasedIndex,
         'horizontalLayout': this.horizontalLayout,
-        'toolboxPosition': this.options.toolboxPosition,
         'renderer': this.options.renderer
       }));
+  workspaceOptions.toolboxPosition = this.options.toolboxPosition;
   if (this.horizontalLayout) {
     if (!Blockly.HorizontalFlyout) {
       throw Error('Missing require for Blockly.HorizontalFlyout');

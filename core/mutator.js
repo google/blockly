@@ -170,11 +170,11 @@ Blockly.Mutator.prototype.createEditor_ = function() {
         'parentWorkspace': this.block_.workspace,
         'media': this.block_.workspace.options.pathToMedia,
         'rtl': this.block_.RTL,
-        'toolboxPosition': this.block_.RTL ? Blockly.TOOLBOX_AT_RIGHT :
-            Blockly.TOOLBOX_AT_LEFT,
         'horizontalLayout': false,
         'renderer': this.block_.workspace.options.renderer
       }));
+  workspaceOptions.toolboxPosition = this.block_.RTL ? Blockly.TOOLBOX_AT_RIGHT :
+      Blockly.TOOLBOX_AT_LEFT;
   workspaceOptions.languageTree = quarkXml;
   workspaceOptions.getMetrics = this.getFlyoutMetrics_.bind(this);
   this.workspace_ = new Blockly.WorkspaceSvg(workspaceOptions);

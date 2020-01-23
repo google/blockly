@@ -186,9 +186,9 @@ Blockly.Toolbox.prototype.init = function() {
         'rtl': workspace.RTL,
         'oneBasedIndex': workspace.options.oneBasedIndex,
         'horizontalLayout': workspace.horizontalLayout,
-        'toolboxPosition': workspace.options.toolboxPosition,
         'renderer': workspace.options.renderer
       }));
+  workspaceOptions.toolboxPosition = workspace.options.toolboxPosition;
   
   if (workspace.horizontalLayout) {
     if (!Blockly.HorizontalFlyout) {

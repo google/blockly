@@ -91,7 +91,7 @@ Blockly.utils.object.inherits(Blockly.blockRendering.JaggedEdge,
 Blockly.blockRendering.Field = function(constants, field, parentInput) {
   Blockly.blockRendering.Field.superClass_.constructor.call(this, constants);
   this.field = field;
-  this.isEditable = field.isCurrentlyEditable();
+  this.isEditable = field.EDITABLE;
   this.flipRtl = field.getFlipRtl();
   this.type |= Blockly.blockRendering.Types.FIELD;
 

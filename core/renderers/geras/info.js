@@ -173,7 +173,7 @@ Blockly.geras.RenderInfo.prototype.getInRowSpacing_ = function(prev, next) {
   if (!prev) {
     // Between an editable field and the beginning of the row.
     if (next && Blockly.blockRendering.Types.isField(next) &&
-        (/** @type Blockly.blockRendering.Field */ next).field.EDITABLE) {
+        (/** @type Blockly.blockRendering.Field */ (next)).field.EDITABLE) {
       return this.constants_.MEDIUM_PADDING;
     }
     // Inline input at the beginning of the row.
@@ -192,7 +192,7 @@ Blockly.geras.RenderInfo.prototype.getInRowSpacing_ = function(prev, next) {
       Blockly.blockRendering.Types.isStatementInput(next))) {
     // Between an editable field and the end of the row.
     if (Blockly.blockRendering.Types.isField(prev) &&
-        (/** @type Blockly.blockRendering.Field */ prev).field.EDITABLE) {
+        (/** @type Blockly.blockRendering.Field */ (prev)).field.EDITABLE) {
       return this.constants_.MEDIUM_PADDING;
     }
     // Padding at the end of an icon-only row to make the block shape clearer.
@@ -234,7 +234,7 @@ Blockly.geras.RenderInfo.prototype.getInRowSpacing_ = function(prev, next) {
       next && Blockly.blockRendering.Types.isInput(next)) {
     // Between an editable field and an input.
     if (Blockly.blockRendering.Types.isField(prev) &&
-        (/** @type Blockly.blockRendering.Field */ prev).field.EDITABLE) {
+        (/** @type Blockly.blockRendering.Field */ (prev)).field.EDITABLE) {
       if (Blockly.blockRendering.Types.isInlineInput(next)) {
         return this.constants_.SMALL_PADDING;
       } else if (Blockly.blockRendering.Types.isExternalInput(next)) {
@@ -262,7 +262,7 @@ Blockly.geras.RenderInfo.prototype.getInRowSpacing_ = function(prev, next) {
   if (Blockly.blockRendering.Types.isInlineInput(prev) &&
       next && Blockly.blockRendering.Types.isField(next)) {
     // Editable field after inline input.
-    if ((/** @type Blockly.blockRendering.Field */ next).field.EDITABLE) {
+    if ((/** @type Blockly.blockRendering.Field */ (next)).field.EDITABLE) {
       return this.constants_.MEDIUM_PADDING;
     } else {
       // Noneditable field after inline input.
@@ -303,8 +303,8 @@ Blockly.geras.RenderInfo.prototype.getInRowSpacing_ = function(prev, next) {
   // Spacing between two fields of the same editability.
   if (Blockly.blockRendering.Types.isField(prev) &&
       next && Blockly.blockRendering.Types.isField(next) &&
-      ((/** @type Blockly.blockRendering.Field */ prev).field.EDITABLE ===
-          (/** @type Blockly.blockRendering.Field */ next).field.EDITABLE)) {
+      ((/** @type Blockly.blockRendering.Field */ (prev)).field.EDITABLE ===
+          (/** @type Blockly.blockRendering.Field */ (next)).field.EDITABLE)) {
     return this.constants_.LARGE_PADDING;
   }
 

@@ -53,7 +53,7 @@
   width: 100%;
 }
 
-.blocklyNonEditableText text,
-.blocklyEditableText text {
+.blocklySvg .blocklyNonEditableText text,
+.blocklySvg .blocklyEditableText text {
   fill: #000;
 }

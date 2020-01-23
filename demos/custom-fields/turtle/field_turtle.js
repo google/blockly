@@ -471,8 +471,8 @@ CustomFields.FieldTurtle.prototype.dropdownDispose_ = function() {
 };
 
 // Updates the field's colour based on the colour of the block. Called by
-// block.updateColour.
-CustomFields.FieldTurtle.prototype.updateColour = function() {
+// block.applyColour.
+CustomFields.FieldTurtle.prototype.applyColour = function() {
   if (!this.sourceBlock_) {
     return;
   }
@@ -484,23 +484,25 @@ CustomFields.FieldTurtle.prototype.updateColour = function() {
   var borderColour = isShadow ? fillColour :
       this.sourceBlock_.style.colourTertiary;
 
-  var child = this.turtleGroup_.firstChild;
-  while(child) {
-    // If it is a text node, continue.
-    if (child.nodeType == 3) {
-      child = child.nextSibling;
-      continue;
-    }
-    // Or if it is a non-turtle node, continue.
-    var className = child.getAttribute('class');
-    if (!className || className.indexOf('turtleBody') == -1) {
-      child = child.nextSibling;
-      continue;
-    }
+  if (this.turtleGroup_) {
+    var child = this.turtleGroup_.firstChild;
+    while(child) {
+      // If it is a text node, continue.
+      if (child.nodeType == 3) {
+        child = child.nextSibling;
+        continue;
+      }
+      // Or if it is a non-turtle node, continue.
+      var className = child.getAttribute('class');
+      if (!className || className.indexOf('turtleBody') == -1) {
+        child = child.nextSibling;
+        continue;
+      }
 
-    child.style.fill = fillColour;
-    child.style.stroke = borderColour;
-    child = child.nextSibling;
+      child.style.fill = fillColour;
+      child.style.stroke = borderColour;
+      child = child.nextSibling;
+    }
   }
 };
 

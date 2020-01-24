@@ -867,9 +867,15 @@ gulp.task('package-media', function() {
 /**
  * This task copies the package.json file into the distribution directory.
  */
-gulp.task('package-json', function() {
-  return gulp.src('./package.json')
-    .pipe(gulp.dest(`${packageDistribution}`))
+gulp.task('package-json', function(cb) {
+  const json = Object.assign({}, packageJson);
+  delete json['scripts'];
+  if (!fs.existsSync(packageDistribution)) {
+    fs.mkdirSync(packageDistribution);
+  }
+  fs.writeFileSync(`${packageDistribution}/package.json`,
+      JSON.stringify(json, null, 2));
+  cb();
 });
 
 /**

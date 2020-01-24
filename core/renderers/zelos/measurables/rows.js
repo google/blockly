@@ -62,7 +62,7 @@ Blockly.zelos.TopRow.prototype.endsWithElemSpacer = function() {
  * @override
  */
 Blockly.zelos.TopRow.prototype.hasLeftSquareCorner = function(block) {
-  var hasHat = (typeof block.hat !== 'undefined' ?
+  var hasHat = (block.hat ?
       block.hat === 'cap' : this.constants_.ADD_START_HATS) &&
       !block.outputConnection && !block.previousConnection;
   return !!block.outputConnection || hasHat;

@@ -898,7 +898,7 @@ Blockly.Blocks['procedures_callnoreturn'] = {
         // in most cases the old group should be ''
         var oldGroup = Blockly.Events.getGroup();
         if (oldGroup) {
-          // This should only be possible programatically and may indicate a problem
+          // This should only be possible programmatically and may indicate a problem
           // with event grouping. If you see this message please investigate. If the
           // use ends up being valid we may need to reorder events in the undo stack.
           console.log('Saw an existing group while responding to a definition change');

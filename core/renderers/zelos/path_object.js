@@ -149,7 +149,7 @@ Blockly.zelos.PathObject.prototype.updateSelected = function(enable) {
 /**
  * @override
  */
-Blockly.zelos.PathObject.prototype.updateReplacementHighlight = function(
+Blockly.zelos.PathObject.prototype.updateReplacementFade = function(
     enable) {
   this.setClass_('blocklyReplaceable', enable);
   if (enable) {

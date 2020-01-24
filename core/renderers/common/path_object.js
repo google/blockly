@@ -268,7 +268,7 @@ Blockly.blockRendering.PathObject.prototype.updateMovable = function(enable) {
  * @param {boolean} enable True if styling should be added.
  * @package
  */
-Blockly.blockRendering.PathObject.prototype.updateReplacementHighlight =
+Blockly.blockRendering.PathObject.prototype.updateReplacementFade =
     function(enable) {
     /* eslint-disable indent */
   this.setClass_('blocklyReplaceable', enable);

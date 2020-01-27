@@ -340,10 +340,6 @@ WorkspaceFactoryController.prototype.exportXmlFile = function(exportMode) {
     throw Error(msg);
   }
 
-  // Unpack self-closing tags.  These tags fail when embedded in HTML.
-  // <block name="foo"/> -> <block name="foo"></block>
-  configXml = configXml.replace(/<(\w+)([^<]*)\/>/g, '<$1$2></$1>');
-
   // Download file.
   var data = new Blob([configXml], {type: 'text/xml'});
   this.view.createAndDownloadFile(fileName, data);

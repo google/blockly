@@ -303,7 +303,9 @@ Blockly.Xml.domToText = function(dom) {
     oldText = text;
     text = text.replace(regexp, '$1&#10;$2');
   } while (text != oldText);
-  return text;
+  // Unpack self-closing tags.  These tags fail when embedded in HTML.
+  // <block name="foo"/> -> <block name="foo"></block>
+  return text.replace(/<(\w+)([^<]*)\/>/g, '<$1$2></$1>');
 };
 
 /**

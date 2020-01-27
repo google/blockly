@@ -160,7 +160,8 @@ Blockly.Options = function(options) {
 
 /**
  * Blockly options.
- * This interface is further described in `typings/blockly-interfaces.d.ts`.
+ * This interface is further described in
+ * `typings/parts/blockly-interfaces.d.ts`.
  * @interface
  */
 Blockly.BlocklyOptions = function() {};

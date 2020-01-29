@@ -80,7 +80,7 @@ Blockly.zelos.ConstantProvider = function() {
    * @override
    */
   this.NOTCH_OFFSET_LEFT = 3 * this.GRID_UNIT;
-  
+
   /**
    * @override
    */
@@ -248,41 +248,13 @@ Blockly.zelos.ConstantProvider = function() {
   /**
    * @override
    */
-  this.FIELD_TEXT_FONTSIZE = 3 * this.GRID_UNIT;
-
-  /**
-   * @override
-   */
-  this.FIELD_TEXT_FONTWEIGHT = 'bold';
-
-  /**
-   * @override
-   */
-  this.FIELD_TEXT_FONTFAMILY =
-      '"Helvetica Neue", "Segoe UI", Helvetica, sans-serif';
-
-  /**
-   * @override
-   */
-  this.FIELD_TEXT_HEIGHT = 13.1;
-
-  /**
-   * Used by positioning text on IE and Edge as they don't support
-   * dominant-baseline:center.
-   * @override
-   */
-  this.FIELD_TEXT_BASELINE_Y = 13.1;
-
-  /**
-   * @override
-   */
   this.FIELD_BORDER_RECT_RADIUS = this.CORNER_RADIUS;
 
   /**
    * @override
    */
   this.FIELD_BORDER_RECT_X_PADDING = 2 * this.GRID_UNIT;
-  
+
   /**
    * @override
    */
@@ -387,6 +359,8 @@ Blockly.zelos.ConstantProvider = function() {
    * @private
    */
   this.replacementGlowFilter_ = null;
+
+  this.setTextConstants_();
 };
 Blockly.utils.object.inherits(Blockly.zelos.ConstantProvider,
     Blockly.blockRendering.ConstantProvider);
@@ -411,6 +385,21 @@ Blockly.zelos.ConstantProvider.prototype.dispose = function() {
   if (this.selectedGlowFilter_) {
     Blockly.utils.dom.removeNode(this.selectedGlowFilter_);
   }
+};
+
+/**
+ * @override
+ */
+Blockly.zelos.ConstantProvider.prototype.getTextConstants_ = function() {
+  var constants =
+      Blockly.zelos.ConstantProvider.superClass_.getTextConstants_.call(this);
+
+  constants.baselineY = 13.1;
+  constants.height = 13.1;
+  constants.fontSize = 3 * this.GRID_UNIT;
+  constants.weight = 'bold';
+  constants.family = '"Helvetica Neue", "Segoe UI", Helvetica, sans-serif';
+  return constants;
 };
 
 /**
@@ -886,7 +875,7 @@ Blockly.zelos.ConstantProvider.prototype.getCSS_ = function(name) {
       'font-weight: ' + this.FIELD_TEXT_FONTWEIGHT + ';',
       'color: #575E75;',
     '}',
-  
+
     // Dropdown field.
     selector + ' .blocklyDropdownText {',
       'fill: #fff !important;',

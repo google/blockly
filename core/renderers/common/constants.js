@@ -242,30 +242,6 @@ Blockly.blockRendering.ConstantProvider = function() {
   this.JAGGED_TEETH_WIDTH = 6;
 
   /**
-   * Point size of text.
-   * @type {number}
-   */
-  this.FIELD_TEXT_FONTSIZE = 11;
-
-  /**
-   * Height of text.
-   * @type {number}
-   */
-  this.FIELD_TEXT_HEIGHT = 16;
-
-  /**
-   * Text font weight.
-   * @type {string}
-   */
-  this.FIELD_TEXT_FONTWEIGHT = 'normal';
-
-  /**
-   * Text font family.
-   * @type {string}
-   */
-  this.FIELD_TEXT_FONTFAMILY = 'sans-serif';
-
-  /**
    * A field's border rect corner radius.
    * @type {number}
    */
@@ -295,26 +271,6 @@ Blockly.blockRendering.ConstantProvider = function() {
    * @package
    */
   this.FIELD_BORDER_RECT_COLOUR = '#fff';
-
-  /**
-   * Field text baseline.
-   * This is only used if `FIELD_TEXT_BASELINE_CENTER` is false.
-   * @type {number}
-   */
-  this.FIELD_TEXT_BASELINE_Y = Blockly.utils.userAgent.GECKO ? 12 : 13.09;
-
-  /**
-   * An text offset adjusting the Y position of text after positioning.
-   * @type {number}
-   */
-  this.FIELD_TEXT_Y_OFFSET = 0;
-
-  /**
-   * A field's text element's dominant baseline.
-   * @type {boolean}
-   */
-  this.FIELD_TEXT_BASELINE_CENTER =
-      !Blockly.utils.userAgent.IE && !Blockly.utils.userAgent.EDGE;
 
   /**
    * A dropdown field's border rect height.
@@ -515,6 +471,8 @@ Blockly.blockRendering.ConstantProvider = function() {
     PUZZLE: 1,
     NOTCH: 2
   };
+
+  this.setTextConstants_();
 };
 
 /**
@@ -701,6 +659,87 @@ Blockly.blockRendering.ConstantProvider.prototype.dispose = function() {
     Blockly.utils.dom.removeNode(this.disabledPattern_);
   }
 };
+
+/**
+ * Get constants related to text sizing for fields.  All values must be
+ * provided.
+ * In general, changing one of these constants means you should change all of
+ * them.
+ * @return {{
+ *  fontSize: number,
+ *  height: number,
+ *  weight: string,
+ *  family: string,
+ *  baselineY: number,
+ *  baselineCenter: boolean,
+ *  yOffset: number
+ * }} An object containing information about text sizing for fields.
+ * @protected
+ */
+Blockly.blockRendering.ConstantProvider.prototype.getTextConstants_ = function() {
+  return {
+    fontSize: 11,
+    height: 16,
+    weight: 'normal',
+    family: 'sans-serif',
+    baselineY: Blockly.utils.userAgent.GECKO ? 12 : 13.09,
+    baselineCenter:
+        !Blockly.utils.userAgent.IE && !Blockly.utils.userAgent.EDGE,
+    yOffset: 0
+  };
+};
+
+/**
+ * Set constants related to text sizing for fields.  Values come from
+ * getTextConstants_, with default values set if properties are missing.
+ * @protected
+ */
+Blockly.blockRendering.ConstantProvider.prototype.setTextConstants_ = function() {
+  var constants = this.getTextConstants_();
+  /**
+   * Point size of text.
+   * @type {number}
+   */
+  this.FIELD_TEXT_FONTSIZE = constants.fontSize;
+
+  /**
+   * Height of text.
+   * @type {number}
+   */
+  this.FIELD_TEXT_HEIGHT = constants.height;
+
+  /**
+   * Text font weight.
+   * @type {string}
+   */
+  this.FIELD_TEXT_FONTWEIGHT = constants.weight;
+
+  /**
+   * Text font family.
+   * @type {string}
+   */
+  this.FIELD_TEXT_FONTFAMILY = constants.family;
+
+  /**
+   * Field text baseline.
+   * This is only used if `FIELD_TEXT_BASELINE_CENTER` is false.
+   * @type {number}
+   */
+  this.FIELD_TEXT_BASELINE_Y = constants.baselineY;
+
+  /**
+   * A field's text element's dominant baseline.
+   * @type {boolean}
+   */
+  this.FIELD_TEXT_BASELINE_CENTER = constants.baselineCenter;
+
+  /**
+   * An text offset adjusting the Y position of text after positioning.
+   * @type {number}
+   */
+  this.FIELD_TEXT_Y_OFFSET = constants.yOffset;
+};
+
 
 /**
  * @return {!Object} An object containing sizing and path information about

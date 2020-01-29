@@ -37,35 +37,7 @@ goog.require('Blockly.utils.userAgent');
  */
 Blockly.blockRendering.ConstantProvider = function() {
 
-  /**
-   * The size of an empty spacer.
-   * @type {number}
-   */
-  this.NO_PADDING = 0;
-
-  /**
-   * The size of small padding.
-   * @type {number}
-   */
-  this.SMALL_PADDING = 3;
-
-  /**
-   * The size of medium padding.
-   * @type {number}
-   */
-  this.MEDIUM_PADDING = 5;
-
-  /**
-   * The size of medium-large padding.
-   * @type {number}
-   */
-  this.MEDIUM_LARGE_PADDING = 8;
-
-  /**
-   * The size of large padding.
-   * @type {number}
-   */
-  this.LARGE_PADDING = 10;
+  this.setPaddingConstants_();
 
   /**
    * Offset from the top of the row for placing fields on inline input rows
@@ -700,6 +672,66 @@ Blockly.blockRendering.ConstantProvider.prototype.dispose = function() {
   if (this.disabledPattern_) {
     Blockly.utils.dom.removeNode(this.disabledPattern_);
   }
+};
+
+/**
+ * Get constants related to padding sizes.  All values must be provided.
+ * @return {{
+ *  noPadding: number,
+ *  smallPadding: number,
+ *  mediumPadding: number,
+ *  mediumLargePadding: number,
+ *  largePadding: number,
+ * }} An object containing information about padding sizes.
+ * @protected
+ */
+Blockly.blockRendering.ConstantProvider.prototype.getPaddingConstants_ = function() {
+  return {
+    noPadding: 0,
+    smallPadding: 3,
+    mediumPadding: 5,
+    mediumLargePadding: 8,
+    largePadding: 10
+  };
+};
+
+/**
+ * Set constants related to padding sizes.  Values come from
+ * getPaddingConstants_.
+ * @protected
+ */
+Blockly.blockRendering.ConstantProvider.prototype.setPaddingConstants_ = function() {
+  var constants = this.getPaddingConstants_();
+
+  /**
+   * The size of an empty spacer.
+   * @type {number}
+   */
+  this.NO_PADDING = constants.noPadding;
+
+  /**
+   * The size of small padding.
+   * @type {number}
+   */
+  this.SMALL_PADDING = constants.smallPadding;
+
+  /**
+   * The size of medium padding.
+   * @type {number}
+   */
+  this.MEDIUM_PADDING = constants.mediumPadding;
+
+  /**
+   * The size of medium-large padding.
+   * @type {number}
+   */
+  this.MEDIUM_LARGE_PADDING = constants.mediumLargePadding;
+
+  /**
+   * The size of large padding.
+   * @type {number}
+   */
+  this.LARGE_PADDING = constants.largePadding;
 };
 
 /**

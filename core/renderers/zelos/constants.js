@@ -41,25 +41,7 @@ Blockly.zelos.ConstantProvider = function() {
 
   this.GRID_UNIT = 4;
 
-  /**
-   * @override
-   */
-  this.SMALL_PADDING = this.GRID_UNIT;
-
-  /**
-   * @override
-   */
-  this.MEDIUM_PADDING = 2 * this.GRID_UNIT;
-
-  /**
-   * @override
-   */
-  this.MEDIUM_LARGE_PADDING = 3 * this.GRID_UNIT;
-
-  /**
-   * @override
-   */
-  this.LARGE_PADDING = 4 * this.GRID_UNIT;
+  this.setPaddingConstants_();
 
   /**
    * @override
@@ -80,7 +62,7 @@ Blockly.zelos.ConstantProvider = function() {
    * @override
    */
   this.NOTCH_OFFSET_LEFT = 3 * this.GRID_UNIT;
-  
+
   /**
    * @override
    */
@@ -282,7 +264,7 @@ Blockly.zelos.ConstantProvider = function() {
    * @override
    */
   this.FIELD_BORDER_RECT_X_PADDING = 2 * this.GRID_UNIT;
-  
+
   /**
    * @override
    */
@@ -411,6 +393,24 @@ Blockly.zelos.ConstantProvider.prototype.dispose = function() {
   if (this.selectedGlowFilter_) {
     Blockly.utils.dom.removeNode(this.selectedGlowFilter_);
   }
+};
+
+/**
+ * @override
+ */
+Blockly.zelos.ConstantProvider.prototype.getPaddingConstants_ = function() {
+  var gridUnit = this.GRID_UNIT;
+  if (!gridUnit) {
+    return Blockly.zelos.ConstantProvider.superClass_.getPaddingConstants_.call(
+        this);
+  }
+  return {
+    noPadding: 0,
+    smallPadding: gridUnit,
+    mediumPadding: 2 * gridUnit,
+    mediumLargePadding: 3 * gridUnit,
+    largePadding: 4 * gridUnit
+  };
 };
 
 /**
@@ -886,7 +886,7 @@ Blockly.zelos.ConstantProvider.prototype.getCSS_ = function(name) {
       'font-weight: ' + this.FIELD_TEXT_FONTWEIGHT + ';',
       'color: #575E75;',
     '}',
-  
+
     // Dropdown field.
     selector + ' .blocklyDropdownText {',
       'fill: #fff !important;',

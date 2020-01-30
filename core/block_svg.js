@@ -1672,7 +1672,7 @@ Blockly.BlockSvg.prototype.render = function(opt_bubble) {
   Blockly.utils.dom.stopTextWidthCache();
 
   var cursor = this.workspace.getCursor();
-  if (this.pathObject.cursorSvg_) {
+  if (Blockly.navigation.keyboardAccessibilityMode && this.pathObject.cursorSvg_) {
     cursor.draw();
   }
 };

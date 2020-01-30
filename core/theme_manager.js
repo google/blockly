@@ -90,11 +90,6 @@ Blockly.ThemeManager.prototype.getTheme = function() {
  * @package
  */
 Blockly.ThemeManager.prototype.setTheme = function(theme) {
-  if (this.theme_ === theme) {
-    // No change.
-    return;
-  }
-
   var prevTheme = this.theme_;
   this.theme_ = theme;
 

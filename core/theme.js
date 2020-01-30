@@ -51,14 +51,12 @@ Blockly.Theme = function(name, blockStyles, categoryStyles,
   /**
    * The block styles map.
    * @type {!Object.<string, !Blockly.Theme.BlockStyle>}
-   * @package
    */
   this.blockStyles = blockStyles;
 
   /**
    * The category styles map.
    * @type {!Object.<string, Blockly.Theme.CategoryStyle>}
-   * @package
    */
   this.categoryStyles = categoryStyles;
 

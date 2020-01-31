@@ -431,6 +431,8 @@ Blockly.Menu.prototype.handleMouseOver_ = function(e) {
 
       this.unhighlightCurrent();
       this.setHighlighted(menuItem);
+    } else {
+      this.unhighlightCurrent();
     }
   }
 };

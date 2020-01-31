@@ -118,3 +118,94 @@ Blockly.Themes.HighContrast =
     new Blockly.Theme('highcontrast',
         Blockly.Themes.HighContrast.defaultBlockStyles,
         Blockly.Themes.HighContrast.categoryStyles);
+
+Blockly.Themes.HighContrast.setComponentStyle('workspaceBackgroundColour', '#000');
+Blockly.Themes.HighContrast.setComponentStyle('toolboxBackgroundColour', '#000');
+Blockly.Themes.HighContrast.setComponentStyle('toolboxForegroundColour', '#fff');
+Blockly.Themes.HighContrast.setComponentStyle('flyoutBackgroundColour', '#000');
+Blockly.Themes.HighContrast.setComponentStyle('flyoutForegroundColour', '#fff');
+Blockly.Themes.HighContrast.setComponentStyle('flyoutOpacity', 1);
+Blockly.Themes.HighContrast.setComponentStyle('scrollbarColour', 'rgba(111, 195, 223)');
+Blockly.Themes.HighContrast.setComponentStyle('scrollbarOpacity', 0.6);
+
+/**
+ * CSS for the dark theme.
+ * This registers CSS that is specific to this theme. It does so by prepending a
+ * ``.dark-theme`` selector before every CSS rule that we wish to override by
+ * this theme.
+ */
+(function() {
+  var selector = '.highcontrast-theme';
+  Blockly.Css.register([
+    /* eslint-disable indent */
+    selector + '.injectionDiv {',
+      'border: 1px solid rgb(111, 195, 223);',
+    '}',
+    // Toolbox
+    selector + ' .blocklyToolboxDiv {',
+      'border-right: 1px solid rgb(111, 195, 223);',
+    '}',
+    selector + ' .blocklyTreeRow.blocklyTreeSelected {',
+      'background-color: #000 !important;',
+      'outline: 1px dotted #f38518;',
+      'outline-offset: -1px;',
+    '}',
+    selector + ' .blocklyTreeRow:not(.blocklyTreeSelected):hover {',
+      'background-color: #000;',
+      'outline: 1px dashed #f38518;',
+      'outline-offset: -1px;',
+    '}',
+    // Flyout
+    selector + ' .blocklyFlyoutButton {',
+      'fill: #000;',
+    '}',
+    selector + ' .blocklyFlyoutBackground {',
+      'stroke: rgb(111, 195, 223);',
+    '}',
+    selector + ' .blocklyFlyoutButtonShadow {',
+      'fill: transparent;',
+    '}',
+    selector + ' .blocklyFlyoutButtonBackground {',
+      'stroke: rgb(111, 195, 223);',
+    '}',
+    // Insertion Marker
+    selector + ' .blocklyInsertionMarker>.blocklyPath,',
+    selector + ' .blocklyInsertionMarker>.blocklyPathLight,',
+    selector + ' .blocklyInsertionMarker>.blocklyPathDark {',
+      'fill: #fff;',
+      'fill-opacity: .5;',
+    '}',
+    
+    // Zoom / Trash
+    selector + ' .blocklyZoom>image, ',
+    selector + ' .blocklyZoom>svg>image {',
+      'opacity: 1;',
+    '}',
+    selector + ' .blocklyTrash  {',
+      'opacity: 1 !important;',
+    '}',
+    // Dropdown and Widget div.
+    selector + '.blocklyWidgetDiv .goog-menu,',
+    selector + '.blocklyDropDownDiv {',
+      'background-color: #000;',
+    '}',
+    selector + '.blocklyWidgetDiv > .blocklyContextMenu {',
+      'border-color: rgb(111, 195, 223);',
+    '}',
+    selector + '.blocklyDropDownDiv {',
+      'border-color: rgb(111, 195, 223);',
+    '}',
+    selector + '.blocklyWidgetDiv .goog-menuitem-content,',
+    selector + '.blocklyDropDownDiv .goog-menuitem-content {',
+      'color: #fff;',
+    '}',
+    selector + '.blocklyWidgetDiv .goog-menuitem-disabled',
+    ' .goog-menuitem-content,',
+    selector + '.blocklyDropDownDiv .goog-menuitem-disabled',
+    ' .goog-menuitem-content {',
+      'opacity: .4;',
+    '}',
+    /* eslint-enable indent */
+  ]);
+})();
+        

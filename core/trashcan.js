@@ -348,6 +348,29 @@ Blockly.Trashcan.prototype.dispose = function() {
 };
 
 /**
+ * Returns true if the trashcan contents-flyout is currently open.
+ * @return {boolean} True if the trashcan contents-flyout is currently open.
+ */
+Blockly.Trashcan.prototype.contentsIsOpen = function() {
+  return this.flyout.isVisible();
+};
+
+/**
+ * Empties the trashcan's contents. If the contents-flyout is currently open
+ * it will be closed.
+ */
+Blockly.Trashcan.prototype.emptyContents = function() {
+  if (!this.contents_.length) {
+    return;
+  }
+  this.contents_.length = 0;
+  this.setMinOpenness_(0);
+  if (this.contentsIsOpen()) {
+    this.flyout.hide();
+  }
+};
+
+/**
  * Position the trashcan.
  * It is positioned in the opposite corner to the corner the
  * categories/toolbox starts at.

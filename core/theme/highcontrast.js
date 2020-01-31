@@ -125,7 +125,7 @@ Blockly.Themes.HighContrast.setComponentStyle('toolboxForegroundColour', '#fff')
 Blockly.Themes.HighContrast.setComponentStyle('flyoutBackgroundColour', '#000');
 Blockly.Themes.HighContrast.setComponentStyle('flyoutForegroundColour', '#fff');
 Blockly.Themes.HighContrast.setComponentStyle('flyoutOpacity', 1);
-Blockly.Themes.HighContrast.setComponentStyle('scrollbarColour', 'rgba(111, 195, 223)');
+Blockly.Themes.HighContrast.setComponentStyle('scrollbarColour', '#6fc3df');
 Blockly.Themes.HighContrast.setComponentStyle('scrollbarOpacity', 0.6);
 
 /**
@@ -139,11 +139,11 @@ Blockly.Themes.HighContrast.setComponentStyle('scrollbarOpacity', 0.6);
   Blockly.Css.register([
     /* eslint-disable indent */
     selector + '.injectionDiv {',
-      'border: 1px solid rgb(111, 195, 223);',
+      'border: 1px solid #6fc3df;',
     '}',
     // Toolbox
     selector + ' .blocklyToolboxDiv {',
-      'border-right: 1px solid rgb(111, 195, 223);',
+      'border-right: 1px solid #6fc3df;',
     '}',
     selector + ' .blocklyTreeRow.blocklyTreeSelected {',
       'background-color: #000 !important;',
@@ -160,13 +160,13 @@ Blockly.Themes.HighContrast.setComponentStyle('scrollbarOpacity', 0.6);
       'fill: #000;',
     '}',
     selector + ' .blocklyFlyoutBackground {',
-      'stroke: rgb(111, 195, 223);',
+      'stroke: #6fc3df;',
     '}',
     selector + ' .blocklyFlyoutButtonShadow {',
       'fill: transparent;',
     '}',
     selector + ' .blocklyFlyoutButtonBackground {',
-      'stroke: rgb(111, 195, 223);',
+      'stroke: #6fc3df;',
     '}',
     // Insertion Marker
     selector + ' .blocklyInsertionMarker>.blocklyPath,',
@@ -190,10 +190,10 @@ Blockly.Themes.HighContrast.setComponentStyle('scrollbarOpacity', 0.6);
       'background-color: #000;',
     '}',
     selector + '.blocklyWidgetDiv > .blocklyContextMenu {',
-      'border-color: rgb(111, 195, 223);',
+      'border-color: #6fc3df;',
     '}',
     selector + '.blocklyDropDownDiv {',
-      'border-color: rgb(111, 195, 223);',
+      'border-color: #6fc3df;',
     '}',
     selector + '.blocklyWidgetDiv .goog-menuitem-content,',
     selector + '.blocklyDropDownDiv .goog-menuitem-content {',
@@ -208,4 +208,3 @@ Blockly.Themes.HighContrast.setComponentStyle('scrollbarOpacity', 0.6);
     /* eslint-enable indent */
   ]);
 })();
-        

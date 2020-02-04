@@ -14,14 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
-import cgi
 import storage
-from google.cloud import ndb
-
-
-# Datastore model.
-class Grid(ndb.Model):
-  data = ndb.StringProperty(required=True)
 
 
 # Route to requested handler.

@@ -26,6 +26,12 @@ from random import randint
 from google.cloud import ndb
 
 
+class Xml(ndb.Model):
+  # A row in the database.
+  xml_hash = ndb.IntegerProperty()
+  xml_content = ndb.TextProperty()
+
+
 def keyGen():
   # Generate a random string of length KEY_LEN.
   KEY_LEN = 6
@@ -33,10 +39,6 @@ def keyGen():
   max_index = len(CHARS) - 1
   return "".join([CHARS[randint(0, max_index)] for x in range(KEY_LEN)])
 
-class Xml(ndb.Model):
-  # A row in the database.
-  xml_hash = ndb.IntegerProperty()
-  xml_content = ndb.TextProperty()
 
 def xmlToKey(xml_content):
   # Store XML and return a generated key.
@@ -61,6 +63,7 @@ def xmlToKey(xml_content):
       row.put()
   return xml_key
 
+
 def keyToXml(key_provided):
   # Retrieve stored XML based on the provided key.
   # Normalize the string.
@@ -74,6 +77,7 @@ def keyToXml(key_provided):
   else:
     xml = result.xml_content
   return xml
+
 
 def app(environ, start_response):
   forms = cgi.FieldStorage(fp=environ['wsgi.input'], environ=environ)

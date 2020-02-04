@@ -21,7 +21,7 @@ import storage
 def app(environ, start_response):
   if environ["PATH_INFO"] == "/":
     return redirect(environ, start_response)
-  if environ["PATH_INFO"] == "/storage.py":
+  if environ["PATH_INFO"] == "/storage":
     return storage.app(environ, start_response)
   start_response("404 Not Found", [])
   return [b"Page not found."]

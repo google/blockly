@@ -90,6 +90,12 @@ Blockly.zelos.RenderInfo = function(renderer, block) {
   this.isMultiRow = !block.getInputsInline() || block.isCollapsed();
 
   /**
+   * Whether or not the block has a statement input in one of its rows.
+   * @type {boolean}
+   */
+  this.hasStatementInput = false;
+
+  /**
    * An object with rendering information about the right connection shape.
    * @type {Blockly.zelos.RightConnectionShape}
    */
@@ -164,7 +170,8 @@ Blockly.zelos.RenderInfo.prototype.getInRowSpacing_ = function(prev, next) {
   if (!prev || !next) {
     // No need for padding at the beginning or end of the row if the
     // output shape is dynamic.
-    if (this.outputConnection && this.outputConnection.isDynamicShape) {
+    if (this.outputConnection && this.outputConnection.isDynamicShape &&
+        !this.hasStatementInput) {
       return this.constants_.NO_PADDING;
     }
   }
@@ -270,6 +277,7 @@ Blockly.zelos.RenderInfo.prototype.addInput_ = function(input, activeRow) {
     activeRow.elements.push(
         new Blockly.zelos.StatementInput(this.constants_, input));
     activeRow.hasStatement = true;
+    this.hasStatementInput = true;
   } else if (input.type == Blockly.INPUT_VALUE) {
     activeRow.elements.push(
         new Blockly.blockRendering.ExternalValueInput(this.constants_, input));
@@ -397,10 +405,12 @@ Blockly.zelos.RenderInfo.prototype.finalizeOutputConnection_ = function() {
       this.outputConnection.shape.connectionOffsetX(connectionWidth);
 
   // Adjust right side measurable.
-  this.rightSide.height = connectionHeight;
-  this.rightSide.width = connectionWidth;
-  this.rightSide.centerline = connectionHeight / 2;
-  this.rightSide.xPos = this.width + connectionWidth;
+  if (!this.hasStatementInput) {
+    this.rightSide.height = connectionHeight;
+    this.rightSide.width = connectionWidth;
+    this.rightSide.centerline = connectionHeight / 2;
+    this.rightSide.xPos = this.width + connectionWidth;
+  }
 
   this.startX = connectionWidth;
   this.width += connectionWidth * 2;
@@ -415,7 +425,7 @@ Blockly.zelos.RenderInfo.prototype.finalizeOutputConnection_ = function() {
  * @protected
  */
 Blockly.zelos.RenderInfo.prototype.finalizeHorizontalAlignment_ = function() {
-  if (!this.outputConnection) {
+  if (!this.outputConnection || this.hasStatementInput) {
     return;
   }
   var totalNegativeSpacing = 0;
@@ -474,14 +484,15 @@ Blockly.zelos.RenderInfo.prototype.getNegativeSpacing_ = function(elem) {
   var outerShape = this.outputConnection.shape.type;
   var constants =
     /** @type {!Blockly.zelos.ConstantProvider} */ (this.constants_);
-  if (this.isMultiRow && this.inputRowNum_ > 1) {
+  if (this.isMultiRow && this.inputRows.length > 1) {
     switch (outerShape) {
       case constants.SHAPES.ROUND:
         // Special case for multi-row round reporter blocks.
-        var radius = this.height / 2;
+        var maxWidth = this.constants_.MAX_DYNAMIC_CONNECTION_SHAPE_WIDTH;
+        var width = this.height / 2 > maxWidth ? maxWidth : this.height / 2;
         var topPadding = this.constants_.SMALL_PADDING;
-        var roundPadding = radius *
-          (1 - Math.sin(Math.acos((radius - topPadding) / radius)));
+        var roundPadding = width *
+          (1 - Math.sin(Math.acos((width - topPadding) / width)));
         return connectionWidth - roundPadding;
       default:
         return 0;

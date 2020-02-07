@@ -358,6 +358,13 @@ Blockly.zelos.ConstantProvider = function() {
    */
   this.FIELD_CHECKBOX_DEFAULT_WIDTH = 6 * this.GRID_UNIT;
 
+
+  /**
+   * The maximum width of a dynamic connection shape.
+   * @type {number}
+   */
+  this.MAX_DYNAMIC_CONNECTION_SHAPE_WIDTH = 12 * this.GRID_UNIT;
+
   /**
    * The ID of the selected glow filter, or the empty string if no filter is
    * set.
@@ -441,13 +448,16 @@ Blockly.zelos.ConstantProvider.prototype.makeStartHat = function() {
  * @package
  */
 Blockly.zelos.ConstantProvider.prototype.makeHexagonal = function() {
+  var maxWidth = this.MAX_DYNAMIC_CONNECTION_SHAPE_WIDTH;
+
   // The main path for the hexagonal connection shape is made out of two lines.
   // The lines are defined with relative positons and require the block height.
   // The 'up' and 'down' versions of the paths are the same, but the Y sign
   // flips.  The 'left' and 'right' versions of the path are also the same, but
   // the X sign flips.
   function makeMainPath(height, up, right) {
-    var width = height / 2;
+    var halfHeight = height / 2;
+    var width = halfHeight > maxWidth ? maxWidth : halfHeight;
     var forward = up ? -1 : 1;
     var direction = right ? -1 : 1;
     var dy = forward * height / 2;
@@ -459,7 +469,8 @@ Blockly.zelos.ConstantProvider.prototype.makeHexagonal = function() {
     type: this.SHAPES.HEXAGONAL,
     isDynamic: true,
     width: function(height) {
-      return height / 2;
+      var halfHeight = height / 2;
+      return halfHeight > maxWidth ? maxWidth : halfHeight;
     },
     height: function(height) {
       return height;
@@ -492,22 +503,34 @@ Blockly.zelos.ConstantProvider.prototype.makeHexagonal = function() {
  * @package
  */
 Blockly.zelos.ConstantProvider.prototype.makeRounded = function() {
-  // The main path for the rounded connection shape is made out of a single arc.
-  // The arc is defined with relative positions and requires the block height.
+  var maxWidth = this.MAX_DYNAMIC_CONNECTION_SHAPE_WIDTH;
+  var maxHeight = maxWidth * 2;
+
+  // The main path for the rounded connection shape is made out of two arcs and
+  // a line that joins them.  The arcs are defined with relative positions.
+  // Usually, the height of the block is split between the two arcs. In the case
+  // where the height of the block exceeds the maximum height, a line is drawn
+  // in between the two arcs.
   // The 'up' and 'down' versions of the paths are the same, but the Y sign
   // flips.  The 'up' and 'right' versions of the path flip the sweep-flag
   // which moves the arc at negative angles.
-  function makeMainPath(height, up, right) {
-    var edgeWidth = height / 2;
-    return Blockly.utils.svgPaths.arc('a', '0 0 ' + (up || right ? 1 : 0), edgeWidth,
-        Blockly.utils.svgPaths.point(0, (up ? -1 : 1) * edgeWidth * 2));
+  function makeMainPath(blockHeight, up, right) {
+    var remainingHeight = blockHeight > maxHeight ? blockHeight - maxHeight : 0;
+    var height = blockHeight > maxHeight ? maxHeight : blockHeight;
+    var radius = height / 2;
+    return Blockly.utils.svgPaths.arc('a', '0 0,1', radius,
+        Blockly.utils.svgPaths.point((up ? -1 : 1) * radius, (up ? -1 : 1) * radius)) +
+      Blockly.utils.svgPaths.lineOnAxis('v', (right ? 1 : -1) * remainingHeight) +
+      Blockly.utils.svgPaths.arc('a', '0 0,1', radius,
+          Blockly.utils.svgPaths.point((up ? 1 : -1) * radius, (up ? -1 : 1) * radius));
   }
 
   return {
     type: this.SHAPES.ROUND,
     isDynamic: true,
     width: function(height) {
-      return height / 2;
+      var halfHeight = height / 2;
+      return halfHeight > maxWidth ? maxWidth : halfHeight;
     },
     height: function(height) {
       return height;

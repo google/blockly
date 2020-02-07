@@ -139,11 +139,10 @@ Blockly.blockRendering.RenderInfo = function(renderer, block) {
   this.rows = [];
 
   /**
-   * The total number of input rows added onto the block.
-   * @type {number}
-   * @protected
+   * An array of input rows on the block.
+   * @type {!Array.<!Blockly.blockRendering.InputRow>}
    */
-  this.inputRowNum_ = 1;
+  this.inputRows = [];
 
   /**
    * An array of measurable objects containing hidden icons.
@@ -206,6 +205,7 @@ Blockly.blockRendering.RenderInfo.prototype.createRows_ = function() {
   this.populateTopRow_();
   this.rows.push(this.topRow);
   var activeRow = new Blockly.blockRendering.InputRow(this.constants_);
+  this.inputRows.push(activeRow);
 
   // Icons always go on the first row, before anything else.
   var icons = this.block_.getIcons();
@@ -231,7 +231,7 @@ Blockly.blockRendering.RenderInfo.prototype.createRows_ = function() {
       // Finish this row and create a new one.
       this.rows.push(activeRow);
       activeRow = new Blockly.blockRendering.InputRow(this.constants_);
-      this.inputRowNum_ ++;
+      this.inputRows.push(activeRow);
     }
 
     // All of the fields in an input go on the same row.

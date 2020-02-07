@@ -109,7 +109,7 @@ Blockly.zelos.ConstantProvider = function() {
   /**
    * @override
    */
-  this.TOP_ROW_MIN_HEIGHT = this.GRID_UNIT;
+  this.TOP_ROW_MIN_HEIGHT = this.CORNER_RADIUS;
 
   /**
    * @override
@@ -119,7 +119,7 @@ Blockly.zelos.ConstantProvider = function() {
   /**
    * @override
    */
-  this.BOTTOM_ROW_MIN_HEIGHT = this.GRID_UNIT;
+  this.BOTTOM_ROW_MIN_HEIGHT = this.CORNER_RADIUS;
 
   /**
    * @override

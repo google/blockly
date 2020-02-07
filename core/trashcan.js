@@ -92,56 +92,56 @@ Blockly.Trashcan = function(workspace) {
 
 /**
  * Width of both the trash can and lid images.
- * @type {number}
+ * @const {number}
  * @private
  */
 Blockly.Trashcan.prototype.WIDTH_ = 47;
 
 /**
  * Height of the trashcan image (minus lid).
- * @type {number}
+ * @const {number}
  * @private
  */
 Blockly.Trashcan.prototype.BODY_HEIGHT_ = 44;
 
 /**
  * Height of the lid image.
- * @type {number}
+ * @const {number}
  * @private
  */
 Blockly.Trashcan.prototype.LID_HEIGHT_ = 16;
 
 /**
  * Distance between trashcan and bottom edge of workspace.
- * @type {number}
+ * @const {number}
  * @private
  */
 Blockly.Trashcan.prototype.MARGIN_BOTTOM_ = 20;
 
 /**
  * Distance between trashcan and right edge of workspace.
- * @type {number}
+ * @const {number}
  * @private
  */
 Blockly.Trashcan.prototype.MARGIN_SIDE_ = 20;
 
 /**
  * Extent of hotspot on all sides beyond the size of the image.
- * @type {number}
+ * @const {number}
  * @private
  */
 Blockly.Trashcan.prototype.MARGIN_HOTSPOT_ = 10;
 
 /**
  * Location of trashcan in sprite image.
- * @type {number}
+ * @const {number}
  * @private
  */
 Blockly.Trashcan.prototype.SPRITE_LEFT_ = 0;
 
 /**
  * Location of trashcan in sprite image.
- * @type {number}
+ * @const {number}
  * @private
  */
 Blockly.Trashcan.prototype.SPRITE_TOP_ = 32;
@@ -149,41 +149,46 @@ Blockly.Trashcan.prototype.SPRITE_TOP_ = 32;
 /**
  * The openness of the lid when the trashcan contains blocks.
  *    (0.0 = closed, 1.0 = open)
- * @type {number}
+ * @const {number}
  * @private
  */
-Blockly.Trashcan.prototype.HAS_BLOCKS_LID_ANGLE = 0.1;
+Blockly.Trashcan.prototype.HAS_BLOCKS_LID_ANGLE_ = 0.1;
 
 /**
  * The length of the open/close animation in milliseconds.
- * @type {number}
+ * @const {number}
+ * @private
  */
-Blockly.Trashcan.ANIMATION_LENGTH = 80;
+Blockly.Trashcan.ANIMATION_LENGTH_ = 80;
 
 /**
  * The number of frames in the animation.
- * @type {number}
+ * @const {number}
+ * @private
  */
-Blockly.Trashcan.ANIMATION_FRAMES = 4;
+Blockly.Trashcan.ANIMATION_FRAMES_ = 4;
 
 /**
  * The minimum (resting) opacity of the trashcan and lid.
- * @type {number}
+ * @const {number}
+ * @private
  */
-Blockly.Trashcan.OPACITY_MIN = 0.4;
+Blockly.Trashcan.OPACITY_MIN_ = 0.4;
 
 /**
  * The maximum (hovered) opacity of the trashcan and lid.
- * @type {number}
+ * @const {number}
+ * @private
  */
-Blockly.Trashcan.OPACITY_MAX = 0.8;
+Blockly.Trashcan.OPACITY_MAX_ = 0.8;
 
 /**
  * The maximum angle the trashcan lid can opens to. At the end of the open
  * animation the lid will be open to this angle.
- * @type {number}
+ * @const {number}
+ * @private
  */
-Blockly.Trashcan.MAX_LID_ANGLE = 45;
+Blockly.Trashcan.MAX_LID_ANGLE_ = 45;
 
 /**
  * Current open/close state of the lid.
@@ -443,23 +448,23 @@ Blockly.Trashcan.prototype.setOpen = function(state) {
  * @private
  */
 Blockly.Trashcan.prototype.animateLid_ = function() {
-  var frames = Blockly.Trashcan.ANIMATION_FRAMES;
+  var frames = Blockly.Trashcan.ANIMATION_FRAMES_;
 
   var delta = 1 / (frames + 1);
   this.lidOpen_ += this.isOpen ? delta : -delta;
   this.lidOpen_ = Math.min(Math.max(this.lidOpen_, this.minOpenness_), 1);
 
-  this.setLidAngle_(this.lidOpen_ * Blockly.Trashcan.MAX_LID_ANGLE);
+  this.setLidAngle_(this.lidOpen_ * Blockly.Trashcan.MAX_LID_ANGLE_);
 
-  var minOpacity = Blockly.Trashcan.OPACITY_MIN;
-  var maxOpacity = Blockly.Trashcan.OPACITY_MAX;
+  var minOpacity = Blockly.Trashcan.OPACITY_MIN_;
+  var maxOpacity = Blockly.Trashcan.OPACITY_MAX_;
   // Linear interpolation between min and max.
   var opacity = minOpacity + this.lidOpen_ * (maxOpacity - minOpacity);
   this.svgGroup_.style.opacity = opacity;
 
   if (this.lidOpen_ > this.minOpenness_ && this.lidOpen_ < 1) {
     this.lidTask_ = setTimeout(this.animateLid_.bind(this),
-        Blockly.Trashcan.ANIMATION_LENGTH / frames);
+        Blockly.Trashcan.ANIMATION_LENGTH_ / frames);
   }
 };
 
@@ -487,7 +492,7 @@ Blockly.Trashcan.prototype.setLidAngle_ = function(lidAngle) {
 Blockly.Trashcan.prototype.setMinOpenness_ = function(newMin) {
   this.minOpenness_ = newMin;
   if (!this.isOpen) {
-    this.setLidAngle_(newMin * Blockly.Trashcan.MAX_LID_ANGLE);
+    this.setLidAngle_(newMin * Blockly.Trashcan.MAX_LID_ANGLE_);
   }
 };
 
@@ -556,7 +561,7 @@ Blockly.Trashcan.prototype.onDelete_ = function(event) {
       this.contents_.pop();
     }
 
-    this.setMinOpenness_(this.HAS_BLOCKS_LID_ANGLE);
+    this.setMinOpenness_(this.HAS_BLOCKS_LID_ANGLE_);
   }
 };
 

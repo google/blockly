@@ -51,12 +51,14 @@ Blockly.Theme = function(name, blockStyles, categoryStyles,
   /**
    * The block styles map.
    * @type {!Object.<string, !Blockly.Theme.BlockStyle>}
+   * @package
    */
   this.blockStyles = blockStyles;
 
   /**
    * The category styles map.
    * @type {!Object.<string, Blockly.Theme.CategoryStyle>}
+   * @package
    */
   this.categoryStyles = categoryStyles;
 
@@ -86,6 +88,25 @@ Blockly.Theme.BlockStyle;
   *          }}
   */
 Blockly.Theme.CategoryStyle;
+
+/**
+ * Overrides or adds a style to the blockStyles map.
+ * @param {string} blockStyleName The name of the block style.
+ * @param {Blockly.Theme.BlockStyle} blockStyle The block style.
+*/
+Blockly.Theme.prototype.setBlockStyle = function(blockStyleName, blockStyle) {
+  this.blockStyles[blockStyleName] = blockStyle;
+};
+
+/**
+ * Overrides or adds a style to the categoryStyles map.
+ * @param {string} categoryStyleName The name of the category style.
+ * @param {Blockly.Theme.CategoryStyle} categoryStyle The category style.
+*/
+Blockly.Theme.prototype.setCategoryStyle = function(categoryStyleName,
+    categoryStyle) {
+  this.categoryStyles[categoryStyleName] = categoryStyle;
+};
 
 /**
  * Gets the style for a given Blockly UI component.  If the style value is a

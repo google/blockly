@@ -506,8 +506,11 @@ Blockly.zelos.ConstantProvider.prototype.makeRounded = function() {
   var maxWidth = this.MAX_DYNAMIC_CONNECTION_SHAPE_WIDTH;
   var maxHeight = maxWidth * 2;
 
-  // The main path for the rounded connection shape is made out of a single arc.
-  // The arc is defined with relative positions and requires the block height.
+  // The main path for the rounded connection shape is made out of two arcs and
+  // a line that joins them.  The arcs are defined with relative positions.
+  // Usually, the height of the block is split between the two arcs. In the case
+  // where the height of the block exceeds the maximum height, a line is drawn
+  // in between the two arcs.
   // The 'up' and 'down' versions of the paths are the same, but the Y sign
   // flips.  The 'up' and 'right' versions of the path flip the sweep-flag
   // which moves the arc at negative angles.

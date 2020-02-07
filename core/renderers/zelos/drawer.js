@@ -80,13 +80,26 @@ Blockly.zelos.Drawer.prototype.draw = function() {
  */
 Blockly.zelos.Drawer.prototype.drawOutline_ = function() {
   if (this.info_.outputConnection &&
-      this.info_.outputConnection.isDynamicShape) {
+      this.info_.outputConnection.isDynamicShape &&
+      !this.info_.hasStatementInput) {
     this.drawFlatTop_();
     this.drawRightDynamicConnection_();
     this.drawFlatBottom_();
     this.drawLeftDynamicConnection_();
   } else {
     Blockly.zelos.Drawer.superClass_.drawOutline_.call(this);
+  }
+};
+
+/**
+ * @override
+ */
+Blockly.zelos.Drawer.prototype.drawLeft_ = function() {
+  if (this.info_.outputConnection &&
+      this.info_.outputConnection.isDynamicShape) {
+    this.drawLeftDynamicConnection_();
+  } else {
+    Blockly.zelos.Drawer.superClass_.drawLeft_.call(this);
   }
 };
 

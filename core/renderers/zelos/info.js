@@ -90,6 +90,12 @@ Blockly.zelos.RenderInfo = function(renderer, block) {
   this.isMultiRow = !block.getInputsInline() || block.isCollapsed();
 
   /**
+   * Whether or not the block has a statement input in one of its rows.
+   * @type {boolean}
+   */
+  this.hasStatementInput = false;
+
+  /**
    * An object with rendering information about the right connection shape.
    * @type {Blockly.zelos.RightConnectionShape}
    */
@@ -271,6 +277,7 @@ Blockly.zelos.RenderInfo.prototype.addInput_ = function(input, activeRow) {
     activeRow.elements.push(
         new Blockly.zelos.StatementInput(this.constants_, input));
     activeRow.hasStatement = true;
+    this.hasStatementInput = true;
   } else if (input.type == Blockly.INPUT_VALUE) {
     activeRow.elements.push(
         new Blockly.blockRendering.ExternalValueInput(this.constants_, input));
@@ -418,7 +425,7 @@ Blockly.zelos.RenderInfo.prototype.finalizeOutputConnection_ = function() {
  * @protected
  */
 Blockly.zelos.RenderInfo.prototype.finalizeHorizontalAlignment_ = function() {
-  if (!this.outputConnection) {
+  if (!this.outputConnection || this.hasStatementInput) {
     return;
   }
   var totalNegativeSpacing = 0;

@@ -72,8 +72,8 @@ Blockly.zelos.TopRow.prototype.hasLeftSquareCorner = function(block) {
  * Render a round corner unless the block has an output connection.
  * @override
  */
-Blockly.zelos.TopRow.prototype.hasRightSquareCorner = function(block) {
-  return !!block.outputConnection;
+Blockly.zelos.TopRow.prototype.hasRightSquareCorner = function(_block) {
+  return false;
 };
 
 /**
@@ -112,6 +112,6 @@ Blockly.zelos.BottomRow.prototype.hasLeftSquareCorner = function(block) {
  * Render a round corner unless the block has an output connection.
  * @override
  */
-Blockly.zelos.BottomRow.prototype.hasRightSquareCorner = function(block) {
-  return !!block.outputConnection;
+Blockly.zelos.BottomRow.prototype.hasRightSquareCorner = function(_block) {
+  return false;
 };

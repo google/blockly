@@ -212,21 +212,28 @@ Blockly.zelos.RenderInfo.prototype.getSpacerRowHeight_ = function(
       Blockly.blockRendering.Types.isInputRow(next) && next.hasStatement;
   if (precedesStatement || followsStatement) {
     var cornerHeight = this.constants_.INSIDE_CORNERS.rightHeight || 0;
-    var height = Math.max(this.constants_.MEDIUM_PADDING,
-        Math.max(this.constants_.NOTCH_HEIGHT, cornerHeight));
+    var height = Math.max(this.constants_.NOTCH_HEIGHT, cornerHeight);
     return precedesStatement && followsStatement ?
         Math.max(height, this.constants_.DUMMY_INPUT_MIN_HEIGHT) : height;
   }
   // Top and bottom rows act as a spacer so we don't need any extra padding.
   if ((Blockly.blockRendering.Types.isTopRow(prev))) {
-    if (!prev.hasPreviousConnection && !this.outputConnection) {
-      return this.constants_.SMALL_PADDING;
+    if (!prev.hasPreviousConnection &&
+        (!this.outputConnection || this.hasStatementInput)) {
+      return Math.abs(this.constants_.NOTCH_HEIGHT -
+          this.constants_.CORNER_RADIUS);
     }
     return this.constants_.NO_PADDING;
   }
   if ((Blockly.blockRendering.Types.isBottomRow(next))) {
     if (!this.outputConnection) {
-      return this.constants_.SMALL_PADDING;
+      var topHeight = Math.max(this.topRow.minHeight,
+          Math.max(this.constants_.NOTCH_HEIGHT,
+              this.constants_.CORNER_RADIUS)) - this.constants_.CORNER_RADIUS;
+      return topHeight;
+    } else if (!next.hasNextConnection && this.hasStatementInput) {
+      return Math.abs(this.constants_.NOTCH_HEIGHT -
+          this.constants_.CORNER_RADIUS);
     }
     return this.constants_.NO_PADDING;
   }

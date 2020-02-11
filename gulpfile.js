@@ -1,18 +1,7 @@
 /**
  * @license
  * Copyright 2018 Google LLC
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 /**
@@ -49,18 +38,7 @@ const licenseRegex = `\\/\\*\\*
  \\* @license
  \\* (Copyright \\d+ (Google LLC|Massachusetts Institute of Technology))
 ( \\* All rights reserved.
-)? \\*
- \\* Licensed under the Apache License, Version 2.0 \\(the "License"\\);
- \\* you may not use this file except in compliance with the License.
- \\* You may obtain a copy of the License at
- \\*
- \\*   http://www.apache.org/licenses/LICENSE-2.0
- \\*
- \\* Unless required by applicable law or agreed to in writing, software
- \\* distributed under the License is distributed on an "AS IS" BASIS,
- \\* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- \\* See the License for the specific language governing permissions and
- \\* limitations under the License.
+)? \\* SPDX-License-Identifier: Apache-2.0
  \\*\\/`;
 
 /**
@@ -161,12 +139,12 @@ function compile(compilerOptions, opt_verbose, opt_warnings_as_error) {
 }
 
 /**
- * Helper method for possibly adding the closure library into a sources array.
- * @param {Array.<string>} srcs 
+ * Helper method for possibly adding the Closure library into a sources array.
+ * @param {Array.<string>} srcs
  */
 function maybeAddClosureLibrary(srcs) {
   if (argv.closureLibrary) {
-    // If you require the google closure library, you can include it in your
+    // If you require Google's Closure library, you can include it in your
     // build by adding the --closure-library flag.
     // You will also need to include the "google-closure-library" in your list
     // of devDependencies.

@@ -100,14 +100,19 @@ Blockly.Generator.prototype.workspaceToCode = function(workspace) {
   }
   var code = [];
   this.init(workspace);
+  // Create a set that will hold all used Fable modules
+  this.fableModulesUsed_ = new Set();
+
   var blocks = workspace.getTopBlocks(true);
   for (var x = 0, block; block = blocks[x]; x++) {
 
-    //TODOQ3: This is a bugfix we made. See if it's still needed.
-    // if (block.isInsertionMarker_) {
-    //   continue;
-    // }
-    
+    // Skip the "insertion marker" block.
+    // This means that the action of dragging a new block into the workspace will
+    // not produce TWO copies of that block in the generated code
+    if (block.isInsertionMarker_) {
+      continue;
+    }
+
     var line = this.blockToCode(block);
     if (Array.isArray(line)) {
       // Value blocks return tuples of code and operator order.
@@ -129,14 +134,41 @@ Blockly.Generator.prototype.workspaceToCode = function(workspace) {
       code.push(line);
     }
   }
-  code = code.join('\n');  // Blank line between each section.
+
+  code = code.join('\n'); // Blank line between each section.
   code = this.finish(code);
   // Final scrubbing of whitespace.
   code = code.replace(/^\s+\n/, '');
   code = code.replace(/\n\s+$/, '\n');
   code = code.replace(/[ \t]+\n/g, '\n');
-  return code;
+
+  var result = {};
+  result.code = code;
+  result.modules = Array.from(this.fableModulesUsed_);
+
+  delete this.fableModulesUsed_;
+
+  return result;
 };
+
+// /**
+//  * Extracts the fable modules that are referenced in the current workspace.
+//  * 
+//  * @returns {String} A comma-separated list of modules.
+//  */
+// Blockly.Generator.prototype.getModulesUsed = function () {
+//   const usedModules = Array.from(this.fableModulesUsed_);
+//   let modulesString = '';
+//   for (var i in usedModules) {
+//     modulesString = modulesString + usedModules[i] + ',';
+//   }
+
+//   if (modulesString.length > 0) {
+//     modulesString = modulesString.substring(0, modulesString.length - 1);
+//   }
+
+//   return modulesString;
+// };
 
 // The following are some helpful functions which can be used by multiple
 // languages.

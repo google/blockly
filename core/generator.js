@@ -151,25 +151,6 @@ Blockly.Generator.prototype.workspaceToCode = function(workspace) {
   return result;
 };
 
-// /**
-//  * Extracts the fable modules that are referenced in the current workspace.
-//  * 
-//  * @returns {String} A comma-separated list of modules.
-//  */
-// Blockly.Generator.prototype.getModulesUsed = function () {
-//   const usedModules = Array.from(this.fableModulesUsed_);
-//   let modulesString = '';
-//   for (var i in usedModules) {
-//     modulesString = modulesString + usedModules[i] + ',';
-//   }
-
-//   if (modulesString.length > 0) {
-//     modulesString = modulesString.substring(0, modulesString.length - 1);
-//   }
-
-//   return modulesString;
-// };
-
 // The following are some helpful functions which can be used by multiple
 // languages.
 

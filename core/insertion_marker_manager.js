@@ -13,6 +13,7 @@
 goog.provide('Blockly.InsertionMarkerManager');
 
 goog.require('Blockly.blockAnimations');
+goog.require('Blockly.connUtils');
 goog.require('Blockly.Events');
 
 

@@ -87,7 +87,7 @@ Blockly.connUtils.getLastCompatibleRowConnection = function(block, orphanBlock) 
  * @returns {Blockly.Connection} The last next connection in the stack, or null.
  * @package
  */
-Blockly.conUtils.getLastStackConnection = function(block) {
+Blockly.connUtils.getLastStackConnection = function(block) {
   var connection;
   while ((connection = block.nextConnection)) {
     block = connection.targetBlock();

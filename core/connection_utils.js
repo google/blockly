@@ -57,11 +57,12 @@ Blockly.connUtils.getSingleCompatibleRowConnection =
  */
 Blockly.connUtils.getLastCompatibleRowConnection = function(block, orphanBlock) {
   var compatibleConnection;
+  var castBlock = /** @type {!Blockly.Block} **/ (block);
   var getConnection = Blockly.connUtils.getSingleCompatibleRowConnection;
 
-  while ((compatibleConnection = getConnection(block, orphanBlock))) {
-    block = compatibleConnection.targetBlock();
-    if (!block || block.isShadow()) {
+  while ((compatibleConnection = getConnection(castBlock, orphanBlock))) {
+    castBlock = compatibleConnection.targetBlock();
+    if (!castBlock || castBlock.isShadow()) {
       return compatibleConnection;
     }
   }
@@ -78,9 +79,10 @@ Blockly.connUtils.getLastCompatibleRowConnection = function(block, orphanBlock) 
  */
 Blockly.connUtils.getLastStackConnection = function(block) {
   var connection;
-  while ((connection = block.nextConnection)) {
-    block = connection.targetBlock();
-    if (!block || block.isShadow()) {
+  var castBlock = /** @type {!Blockly.Block} **/ (block);
+  while ((connection = castBlock.nextConnection)) {
+    castBlock = connection.targetBlock();
+    if (!castBlock || castBlock.isShadow()) {
       return connection;
     }
   }

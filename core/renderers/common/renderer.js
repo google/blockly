@@ -180,7 +180,7 @@ Blockly.blockRendering.Renderer.prototype.orphanCanConnectAtEnd =
       } else {
         orphanConnection = orphanBlock.previousConnection;
         lastConnection = Blockly.connUtils.getLastStackConnection(topBlock);
-        return orphanConnection.checkType(lastConnection);
+        return !!lastConnection && orphanConnection.checkType(lastConnection);
       }
     };
 

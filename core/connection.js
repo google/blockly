@@ -121,7 +121,7 @@ Blockly.Connection.prototype.connect_ = function(childConnection) {
       // Attempt to reattach the orphan at the end of the newly inserted
       // block.  Since this block may be a row, walk down to the end
       // or to the first (and only) shadow block.
-      var connection = Blockly.Connection.lastConnectionInRow(
+      var connection = Blockly.connUtils.getLastCompatibleRowConnection(
           childBlock, orphanBlock);
       if (connection) {
         orphanBlock.outputConnection.connect(connection);
@@ -179,8 +179,11 @@ Blockly.Connection.prototype.connect_ = function(childConnection) {
   if (Blockly.Events.isEnabled()) {
     event = new Blockly.Events.BlockMove(childBlock);
   }
+
   // Establish the connections.
-  Blockly.Connection.connectReciprocally_(parentConnection, childConnection);
+  parentConnection.targetConnection = childConnection;
+  childConnection.targetConnection = parentConnection;
+
   // Demote the inferior block so that one is a child of the superior one.
   childBlock.setParent(parentBlock);
   if (event) {
@@ -439,20 +442,6 @@ Blockly.Connection.prototype.connect = function(otherConnection) {
 };
 
 /**
- * Update two connections to target each other.
- * @param {Blockly.Connection} first The first connection to update.
- * @param {Blockly.Connection} second The second connection to update.
- * @private
- */
-Blockly.Connection.connectReciprocally_ = function(first, second) {
-  if (!first || !second) {
-    throw Error('Cannot connect null connections.');
-  }
-  first.targetConnection = second;
-  second.targetConnection = first;
-};
-
-/**
  * Does the given block have one and only one connection point that will accept
  * an orphaned block?
  * @param {!Blockly.Block} block The superior block.
@@ -474,31 +463,6 @@ Blockly.Connection.singleConnection_ = function(block, orphanBlock) {
     }
   }
   return connection;
-};
-
-/**
- * Walks down a row a blocks, at each stage checking if there are any
- * connections that will accept the orphaned block.  If at any point there
- * are zero or multiple eligible connections, returns null.  Otherwise
- * returns the only input on the last block in the chain.
- * Terminates early for shadow blocks.
- * @param {!Blockly.Block} startBlock The block on which to start the search.
- * @param {!Blockly.Block} orphanBlock The block that is looking for a home.
- * @return {Blockly.Connection} The suitable connection point on the chain
- *     of blocks, or null.
- * @package
- */
-Blockly.Connection.lastConnectionInRow = function(startBlock, orphanBlock) {
-  var newBlock = startBlock;
-  var connection;
-  while ((connection = Blockly.Connection.singleConnection_(
-      /** @type {!Blockly.Block} */ (newBlock), orphanBlock))) {
-    newBlock = connection.targetBlock();
-    if (!newBlock || newBlock.isShadow()) {
-      return connection;
-    }
-  }
-  return null;
 };
 
 /**

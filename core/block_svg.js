@@ -1486,18 +1486,6 @@ Blockly.BlockSvg.prototype.getConnections_ = function(all) {
 };
 
 /**
- * Walks down a stack of blocks and finds the last next connection on the stack.
- * @return {Blockly.RenderedConnection} The last next connection on the stack,
- *     or null.
- * @package
- * @override
- */
-Blockly.BlockSvg.prototype.lastConnectionInStack = function() {
-  return /** @type {Blockly.RenderedConnection} */ (
-    Blockly.BlockSvg.superClass_.lastConnectionInStack.call(this));
-};
-
-/**
  * Find the connection on this block that corresponds to the given connection
  * on the other block.
  * Used to match connections between a block and its insertion marker.

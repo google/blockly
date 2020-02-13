@@ -288,7 +288,7 @@ Blockly.InsertionMarkerManager.prototype.createMarkerBlock_ = function(sourceBlo
 Blockly.InsertionMarkerManager.prototype.initAvailableConnections_ = function() {
   var available = this.topBlock_.getConnections_(false);
   // Also check the last connection on this stack
-  var lastOnStack = this.topBlock_.lastConnectionInStack();
+  var lastOnStack = Blockly.connUtils.getLastStackConnection(this.topBlock_);
   if (lastOnStack && lastOnStack != this.topBlock_.nextConnection) {
     available.push(lastOnStack);
     this.lastOnStack_ = lastOnStack;

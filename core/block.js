@@ -515,25 +515,6 @@ Blockly.Block.prototype.getConnections_ = function(_all) {
 };
 
 /**
- * Walks down a stack of blocks and finds the last next connection on the stack.
- * @return {Blockly.Connection} The last next connection on the stack, or null.
- * @package
- */
-Blockly.Block.prototype.lastConnectionInStack = function() {
-  var nextConnection = this.nextConnection;
-  while (nextConnection) {
-    var nextBlock = nextConnection.targetBlock();
-    if (!nextBlock) {
-      // Found a next connection with nothing on the other side.
-      return nextConnection;
-    }
-    nextConnection = nextBlock.nextConnection;
-  }
-  // Ran out of next connections.
-  return null;
-};
-
-/**
  * Bump unconnected blocks out of alignment.  Two blocks which aren't actually
  * connected should not coincidentally line up on screen.
  */
@@ -676,7 +657,9 @@ Blockly.Block.prototype.getChildren = function(ordered) {
 
 /**
  * Set parent of this block to be a new block or null.
- * @param {Blockly.Block} newParent New parent block.
+ * This does not actually connect the blocks.
+ * @param {Blockly.Block} newParent New parent block or null to remove the
+ *     parent.
  */
 Blockly.Block.prototype.setParent = function(newParent) {
   if (newParent == this.parentBlock_) {

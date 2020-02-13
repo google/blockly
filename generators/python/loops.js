@@ -222,3 +222,28 @@ Blockly.Python['controls_flow_statements'] = function(block) {
   }
   throw Error('Unknown flow statement.');
 };
+
+Blockly.Python.fable_wait = function (block) {
+  var waitValue = Blockly.Python.valueToCode(block, 'WAIT', Blockly.Python.ORDER_NONE) || '0';
+  var code = 'api.wait(' + waitValue + ')\n';
+
+  return code;
+};
+
+Blockly.Python.controls_whileForever = function (block) {
+  var branch = Blockly.Python.statementToCode(block, 'DO');
+  branch = Blockly.Python.addLoopTrap(branch, block.id) || Blockly.Python.PASS;
+  return 'while True:\n' + branch;
+};
+
+Blockly.Python.controls_stopApp = function (block) {
+  return 'api.stopProgram()\n';
+};
+
+Blockly.Python.fable_wait_until = function (block) {
+  const conditionCode = Blockly.Python.valueToCode(block, 'WAIT', Blockly.Python.ORDER_NONE) || 'False';
+  const passCode = Blockly.Python.addLoopTrap(Blockly.Python.PASS, block.id) || Blockly.Python.PASS;
+  const code = 'while not ' + conditionCode + ':\n' + passCode;
+
+  return code;
+};

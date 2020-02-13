@@ -81,3 +81,63 @@ Blockly.Python['colour_blend'] = function(block) {
   var code = functionName + '(' + colour1 + ', ' + colour2 + ', ' + ratio + ')';
   return [code, Blockly.Python.ORDER_FUNCTION_CALL];
 };
+
+Blockly.Python.colour_picker = function (block) {
+  var order = Blockly.Python.ORDER_ATOMIC;
+  var hexcolor = block.getFieldValue('COLOUR');
+  // /5 is a hack to get better colors, fix in firmware
+  var r = parseInt(hexcolor.substring(1, 3), 16);
+  var g = parseInt(hexcolor.substring(3, 5), 16);
+  var b = parseInt(hexcolor.substring(5, 7), 16);
+
+  // Map the color between 0 and 100
+  r = Math.round(r * 100 / 255);
+  g = Math.round(g * 100 / 255);
+  b = Math.round(b * 100 / 255);
+
+  var code = '[' + r + ', ' + g + ', ' + b + ']';
+
+  return [code, order];
+};
+
+Blockly.Python.random_color = function (block) {
+  Blockly.Python.definitions_.import_random = 'import random';
+
+  return ['[random.randint(0, 100), random.randint(0, 100), random.randint(0, 100)]', Blockly.Python.ORDER_FUNCTION_CALL];
+};
+
+Blockly.Python.custom_color = function (block) {
+  var order = Blockly.Python.ORDER_ATOMIC;
+  // Every color function (IN PYTHON!) is clamped manually.
+  var red = Blockly.Python.valueToCode(block, 'RED', Blockly.Python.ORDER_NONE) || '0';
+  var green = Blockly.Python.valueToCode(block, 'GREEN', Blockly.Python.ORDER_NONE) || '0';
+  var blue = Blockly.Python.valueToCode(block, 'BLUE', Blockly.Python.ORDER_NONE) || '0';
+  // var code = '[' + red + ', ' + green + ', ' + blue + ']';
+  var code = 'api.customColor(' + red + ', ' + green + ', ' + blue + ')';
+
+  return [code, order];
+};
+
+Blockly.Python.custom_color_blend = function (block) {
+  var order = Blockly.Python.ORDER_ATOMIC;
+  var color1 = Blockly.Python.valueToCode(block, 'FIRST', Blockly.Python.ORDER_NONE) || '[0, 0, 0]';
+  var color2 = Blockly.Python.valueToCode(block, 'SECOND', Blockly.Python.ORDER_NONE) || '[0, 0, 0]';
+  var ratio = Blockly.Python.valueToCode(block, 'RATIO', Blockly.Python.ORDER_NONE) || 0;
+  var code = 'api.blendColors(' + color1 + ', ' + color2 + ', ' + ratio + ')';
+
+  return [code, order];
+};
+
+Blockly.Python.color_distance = function (block) {
+  const color1 = Blockly.Python.valueToCode(block, 'FIRST', Blockly.Python.ORDER_NONE) || '[0, 0, 0]';
+  const color2 = Blockly.Python.valueToCode(block, 'SECOND', Blockly.Python.ORDER_NONE) || '[0, 0, 0]';
+  const code = 'api.getColorDistance(' + color1 + ', ' + color2 + ')';
+  return [code, Blockly.Python.ORDER_ATOMIC];
+};
+
+Blockly.Python.color_channel = function (block) {
+  const channel = block.getFieldValue('COLOR_CHANNEL');
+  const color = Blockly.Python.valueToCode(block, 'COLOR', Blockly.Python.ORDER_NONE) || '[0, 0, 0]';
+  const code = 'api.getColorChannel(\'' + channel + '\', ' + color + ')';
+  return [code, Blockly.Python.ORDER_ATOMIC];
+};

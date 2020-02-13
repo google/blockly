@@ -394,3 +394,35 @@ Blockly.Python['math_atan2'] = function(block) {
   return ['math.atan2(' + argument1 + ', ' + argument0 + ') / math.pi * 180',
       Blockly.Python.ORDER_MULTIPLICATIVE];
 };
+
+Blockly.Python.math_min_max = function (block) {
+  const order = Blockly.Python.ORDER_ATOMIC;
+  const operand = block.getFieldValue('MIN_MAX');
+  const num1 = Blockly.Python.valueToCode(block, 'NUM_1', Blockly.Python.ORDER_NONE) || 'None';
+  const num2 = Blockly.Python.valueToCode(block, 'NUM_2', Blockly.Python.ORDER_NONE) || 'None';
+  let result = '';
+
+  if (operand === 'min') {
+    // result = Math.min(num1, num2);
+    result = 'min(' + num1 + ', ' + num2 + ')';
+  } else {
+    // result = Math.max(num1, num2);
+    result = 'max(' + num1 + ', ' + num2 + ')';
+  }
+
+  return [result, order];
+};
+
+Blockly.Python.fable_angle = function (block) {
+  var order = Blockly.Python.ORDER_ATOMIC;
+  var num = block.getFieldValue('ANGLE');
+
+  return [num, order];
+};
+
+Blockly.Python.fable_joint_angle = function (block) {
+  var order = Blockly.Python.ORDER_ATOMIC;
+  var num = block.getFieldValue('ANGLE');
+
+  return [num, order];
+};

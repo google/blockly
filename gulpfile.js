@@ -162,7 +162,7 @@ function maybeAddClosureLibrary(srcs) {
  * This task builds Blockly's core files.
  *     blockly_compressed.js
  */
-gulp.task('build-compressed', function (cb) {
+function buildCompressed(cb) {
   const defines = 'Blockly.VERSION="' + packageJson.version + '"';
   return gulp.src(maybeAddClosureLibrary(['core/**/**/*.js']), {base: './'})
     // Directories in Blockly are used to group similar files together
@@ -188,13 +188,13 @@ gulp.task('build-compressed', function (cb) {
     }, argv.verbose, argv.strict))
     .pipe(prependHeader())
     .pipe(gulp.dest('./'));
-});
+};
 
 /**
  * This task builds the Blockly's built in blocks.
  *     blocks_compressed.js
  */
-gulp.task('build-blocks', function () {
+function buildBlocks() {
   // Add provides used throughout blocks/ in order to be compatible with the
   // compiler.  Anything added to this list must be removed from the compiled
   // result using the remove regex steps below.
@@ -232,7 +232,7 @@ goog.provide('Blockly.Warning');`;
     .pipe(gulp.replace(/Blockly\.(Comment|Warning|Mutator)=\{[^;]*\};/g, ''))
     .pipe(prependHeader())
     .pipe(gulp.dest('./'));
-});
+};
 
 /**
  * A helper method for building a Blockly code generator.
@@ -265,41 +265,41 @@ goog.provide('Blockly.utils.string');`;
  * This task builds the javascript generator.
  *     javascript_compressed.js
  */
-gulp.task('build-javascript', function() {
+function buildJavascript() {
   return buildGenerator('javascript', 'JavaScript');
-});
+};
 
 /**
  * This task builds the python generator.
  *     python_compressed.js
  */
-gulp.task('build-python', function() {
+function buildPython() {
   return buildGenerator('python', 'Python');
-});
+};
 
 /**
  * This task builds the php generator.
  *     php_compressed.js
  */
-gulp.task('build-php', function() {
+function buildPHP() {
   return buildGenerator('php', 'PHP');
-});
+};
 
 /**
  * This task builds the lua generator.
  *     lua_compressed.js
  */
-gulp.task('build-lua', function() {
+function buildLua() {
   return buildGenerator('lua', 'Lua');
-});
+};
 
 /**
  * This task builds the dart generator:
  *     dart_compressed.js
  */
-gulp.task('build-dart', function() {
+function buildDart() {
   return buildGenerator('dart', 'Dart');
-});
+};
 
 /**
  * This tasks builds all the generators:
@@ -309,19 +309,19 @@ gulp.task('build-dart', function() {
  *     lua_compressed.js
  *     dart_compressed.js
  */
-gulp.task('build-generators', gulp.parallel(
-  'build-javascript',
-  'build-python',
-  'build-php',
-  'build-lua',
-  'build-dart'
-));
+const buildGenerators = gulp.parallel(
+  buildJavascript,
+  buildPython,
+  buildPHP,
+  buildLua,
+  buildDart
+);
 
 /**
  * This task builds Blockly's uncompressed file.
  *     blockly_uncompressed.js
  */
-gulp.task('build-uncompressed', function() {
+function buildUncompressed() {
   const closurePath = argv.closureLibrary ?
     'node_modules/google-closure-library/closure/goog' :
     'closure/goog';
@@ -394,13 +394,13 @@ goog.require('Blockly.requires')
       requires +
       footer);
   });
-});
+};
 
 /**
  * This task builds Blockly's lang files.
  *     msg/*.js
  */
-gulp.task('build-langfiles', function(done) {
+function buildLangfiles(done) {
   // Run js_to_json.py
   const jsToJsonCmd = `python ./i18n/js_to_json.py \
 --input_file ${path.join('msg', 'messages.js')} \
@@ -423,7 +423,7 @@ gulp.task('build-langfiles', function(done) {
     execSync(createMessagesCmd, { stdio: 'inherit' });
 
   done();
-});
+};
 
 /**
  * This tasks builds Blockly's core files:
@@ -431,11 +431,11 @@ gulp.task('build-langfiles', function(done) {
  *     blocks_compressed.js
  *     blockly_uncompressed.js
  */
-gulp.task('build-core', gulp.parallel(
-  'build-compressed',
-  'build-blocks',
-  'build-uncompressed'
-));
+const buildCore = gulp.parallel(
+  buildCompressed,
+  buildBlocks,
+  buildUncompressed
+);
 
 /**
  * This task builds all of Blockly:
@@ -449,11 +449,11 @@ gulp.task('build-core', gulp.parallel(
  *     blockly_uncompressed.js
  *     msg/json/*.js
  */
-gulp.task('build', gulp.parallel(
-  'build-core',
-  'build-generators',
-  'build-langfiles'
-));
+const build = gulp.parallel(
+  buildCore,
+  buildGenerators,
+  buildLangfiles
+);
 
 ////////////////////////////////////////////////////////////
 //                        Typings                         //
@@ -464,7 +464,7 @@ gulp.task('build', gulp.parallel(
 // the script also pulls in a number of part files from typings/parts.
 // This includes the header (incl License), additional useful interfaces
 // including Blockly Options and Google Closure typings.
-gulp.task('typings', function (cb) {
+function typings() {
   const tmpDir = './typings/tmp';
   const blocklySrcs = [
     "core/",
@@ -526,7 +526,7 @@ gulp.task('typings', function (cb) {
         rimraf.sync(tmpDir);
       }
     });
-});
+};
 
 ////////////////////////////////////////////////////////////
 //                  NPM packaging tasks                   //
@@ -567,19 +567,19 @@ function packageCommonJS(namespace, dependencies) {
  * This task wraps blockly_compressed.js into a UMD module.
  * @example import 'blockly/blockly';
  */
-gulp.task('package-blockly', function() {
+function packageBlockly() {
   return gulp.src('blockly_compressed.js')
     .pipe(packageUMD('Blockly', []))
     .pipe(gulp.rename('blockly.js'))
     .pipe(gulp.dest(packageDistribution));
-});
+};
 
 /**
  * This task wraps blocks_compressed.js into a CommonJS module for Node.js.
  * This is an equivelant task to package-blockly but for Node.js.
  * @example import 'blockly/blockly-node';
  */
-gulp.task('package-blockly-node', function() {
+function packageBlocklyNode() {
   // Override textToDomDocument, providing a Node.js alternative to DOMParser.
   return gulp.src('blockly_compressed.js')
     .pipe(gulp.insert.append(`
@@ -595,13 +595,13 @@ gulp.task('package-blockly-node', function() {
     .pipe(packageCommonJS('Blockly', []))
     .pipe(gulp.rename('blockly-node.js'))
     .pipe(gulp.dest(packageDistribution));
-})
+};
 
 /**
  * This task wraps blocks_compressed.js into a UMD module.
  * @example import 'blockly/blocks';
  */
-gulp.task('package-blocks', function() {
+function packageBlocks() {
   return gulp.src('blocks_compressed.js')
     .pipe(gulp.insert.prepend(`
     Blockly.Blocks={};`))
@@ -612,7 +612,7 @@ gulp.task('package-blocks', function() {
       }]))
     .pipe(gulp.rename('blocks.js'))
     .pipe(gulp.dest(packageDistribution));
-});
+};
 
 /**
  * This task wraps package/index.js into a UMD module.
@@ -620,7 +620,7 @@ gulp.task('package-blocks', function() {
  * and the Browser entry point for AMD environments.
  * @example import * as Blockly from 'blockly';
  */
-gulp.task('package-index', function() {
+function packageIndex() {
   return gulp.src('package/index.js')
     .pipe(packageUMD('Blockly', [{
         name: 'Blockly',
@@ -629,7 +629,7 @@ gulp.task('package-index', function() {
       }]))
     .pipe(gulp.rename('index.js'))
     .pipe(gulp.dest(packageDistribution));
-});
+};
 
 /**
  * This task wraps package/browser/index.js into a UMD module.
@@ -640,7 +640,7 @@ gulp.task('package-index', function() {
  * built by package-node in browser environments.
  * @example import * as Blockly from 'blockly/browser';
  */
-gulp.task('package-browser', function() {
+function packageBrowser() {
   return gulp.src('package/browser/index.js')
     .pipe(packageUMD('Blockly', [{
         name: 'Blockly',
@@ -661,7 +661,7 @@ gulp.task('package-browser', function() {
       }]))
     .pipe(gulp.rename('browser.js'))
     .pipe(gulp.dest(packageDistribution));
-});
+};
 
 /**
  * This task wraps package/browser/core.js into a UMD module.
@@ -671,7 +671,7 @@ gulp.task('package-browser', function() {
  * built by package-node-core in browser environments.
  * @example import * as Blockly from 'blockly/core';
  */
-gulp.task('package-core', function() {
+function packageCore() {
   return gulp.src('package/browser/core.js')
     .pipe(packageUMD('Blockly', [{
         name: 'Blockly',
@@ -680,7 +680,7 @@ gulp.task('package-core', function() {
       }]))
     .pipe(gulp.rename('core-browser.js'))
     .pipe(gulp.dest(packageDistribution));
-});
+};
 
 /**
  * This task wraps package/node/index.js into a CommonJS module for Node.js.
@@ -690,7 +690,7 @@ gulp.task('package-core', function() {
  * built by package-browser in browser environments.
  * @example import * as Blockly from 'blockly/node';
  */
-gulp.task('package-node', function() {
+function packageNode() {
   return gulp.src('package/node/index.js')
     .pipe(packageCommonJS('Blockly', [{
         name: 'Blockly',
@@ -719,7 +719,7 @@ gulp.task('package-node', function() {
       }]))
     .pipe(gulp.rename('node.js'))
     .pipe(gulp.dest(packageDistribution));
-});
+};
 
 /**
  * This task wraps package/node/core.js into a CommonJS module for Node.js.
@@ -729,7 +729,7 @@ gulp.task('package-node', function() {
  * built by package-core in browser environments.
  * @example import * as Blockly from 'blockly/core';
  */
-gulp.task('package-node-core', function() {
+function packageNodeCore() {
   return gulp.src('package/node/core.js')
     .pipe(packageCommonJS('Blockly', [{
         name: 'Blockly',
@@ -738,7 +738,7 @@ gulp.task('package-node-core', function() {
       }]))
     .pipe(gulp.rename('core.js'))
     .pipe(gulp.dest(packageDistribution));
-});
+};
 
 /**
  * A helper method for packaging a Blockly code generator into a UMD module.
@@ -761,47 +761,47 @@ function packageGenerator(file, rename, generator) {
  * This task wraps javascript_compressed.js into a UMD module.
  * @example import 'blockly/javascript';
  */
-gulp.task('package-javascript', function() {
+function packageJavascript() {
   return packageGenerator('javascript_compressed.js', 'javascript.js', 'Blockly.JavaScript');
-});
+};
 
 /**
  * This task wraps python_compressed.js into a UMD module.
  * @example import 'blockly/python';
  */
-gulp.task('package-python', function() {
+function packagePython() {
   return packageGenerator('python_compressed.js', 'python.js', 'Blockly.Python');
-});
+};
 
 /**
  * This task wraps lua_compressed.js into a UMD module.
  * @example import 'blockly/lua';
  */
-gulp.task('package-lua', function() {
+function packageLua() {
   return packageGenerator('lua_compressed.js', 'lua.js', 'Blockly.Lua');
-});
+};
 
 /**
  * This task wraps dart_compressed.js into a UMD module.
  * @example import 'blockly/dart';
  */
-gulp.task('package-dart', function() {
+function packageDart() {
   return packageGenerator('dart_compressed.js', 'dart.js', 'Blockly.Dart');
-});
+};
 
 /**
  * This task wraps php_compressed.js into a UMD module.
  * @example import 'blockly/php';
  */
-gulp.task('package-php', function() {
+function packagePHP() {
   return packageGenerator('php_compressed.js', 'php.js', 'Blockly.PHP');
-});
+};
 
 /**
  * This task wraps each of the msg/js/* files into a UMD module.
  * @example import * as En from 'blockly/msg/en';
  */
-gulp.task('package-locales', function() {
+function packageLocales() {
   // Remove references to goog.provide and goog.require.
   return gulp.src('msg/js/*.js')
       .pipe(gulp.replace(/goog\.[^\n]+/g, ''))
@@ -813,7 +813,7 @@ gulp.task('package-locales', function() {
           cjs: '../core',
         }]))
       .pipe(gulp.dest(`${packageDistribution}/msg`));
-});
+};
 
 /**
  * This task creates a UMD bundle of Blockly which includes the Blockly
@@ -821,7 +821,7 @@ gulp.task('package-locales', function() {
  * English localization files.
  * @example <script src="https://unpkg.com/blockly/blockly.min.js"></script>
  */
-gulp.task('package-umd-bundle', function() {
+function packageUMDBundle() {
   var srcs = [
     'blockly_compressed.js',
     'msg/js/en.js',
@@ -832,20 +832,20 @@ gulp.task('package-umd-bundle', function() {
     .pipe(gulp.concat('blockly.min.js'))
     .pipe(packageUMD('Blockly', []))
     .pipe(gulp.dest(`${packageDistribution}`))
-});
+};
 
 /**
  * This task copies all the media/* files into the distribution directory.
  */
-gulp.task('package-media', function() {
+function packageMedia() {
   return gulp.src('./media/*')
     .pipe(gulp.dest(`${packageDistribution}/media`));
-});
+};
 
 /**
  * This task copies the package.json file into the distribution directory.
  */
-gulp.task('package-json', function(cb) {
+function packageJSON(cb) {
   const json = Object.assign({}, packageJson);
   delete json['scripts'];
   if (!fs.existsSync(packageDistribution)) {
@@ -854,55 +854,51 @@ gulp.task('package-json', function(cb) {
   fs.writeFileSync(`${packageDistribution}/package.json`,
       JSON.stringify(json, null, 2));
   cb();
-});
+};
 
 /**
  * This task copies the package/README.md file into the distribution directory.
  * This file is what developers will see at https://www.npmjs.com/package/blockly.
  */
-gulp.task('package-readme', function() {
+function packageReadme() {
   return gulp.src('./package/README.md')
-    .pipe(gulp.dest(`${packageDistribution}`))
-});
+    .pipe(gulp.dest(`${packageDistribution}`));
+};
 
 /**
  * This task copies the typings/blockly.d.ts TypeScript definition file into the
  * distribution directory.
  * The bundled declaration file is referenced in package.json in the types property.
  */
-gulp.task('package-dts', function() {
+function packageDTS() {
   return gulp.src('./typings/blockly.d.ts')
-    .pipe(gulp.dest(`${packageDistribution}`))
-});
+    .pipe(gulp.dest(`${packageDistribution}`));
+};
 
 /**
  * This task prepares the NPM distribution files under the /dist directory.
  */
-gulp.task('package', gulp.parallel(
-  'package-index',
-  'package-browser',
-  'package-node',
-  'package-core',
-  'package-node-core',
-  'package-blockly',
-  'package-blockly-node',
-  'package-blocks',
-  'package-javascript',
-  'package-python',
-  'package-lua',
-  'package-dart',
-  'package-php',
-  'package-locales',
-  'package-media',
-  'package-umd-bundle',
-  'package-json',
-  'package-readme',
-  'package-dts'
-  ));
-
-// The default task builds Blockly.
-gulp.task('default', gulp.series(['build']));
-
+const package = gulp.parallel(
+  packageIndex,
+  packageBrowser,
+  packageNode,
+  packageCore,
+  packageNodeCore,
+  packageBlockly,
+  packageBlocklyNode,
+  packageBlocks,
+  packageJavascript,
+  packagePython,
+  packageLua,
+  packageDart,
+  packagePHP,
+  packageLocales,
+  packageMedia,
+  packageUMDBundle,
+  packageJSON,
+  packageReadme,
+  packageDTS
+);
 
 // Stash current state, check out the named branch, and sync with
 // google/blockly.
@@ -918,10 +914,14 @@ function syncBranch(branchName) {
 }
 
 // Stash current state, check out develop, and sync with google/blockly.
-gulp.task('git-sync-develop', syncBranch('develop'));
+function syncDevelop() {
+  return syncBranch('develop');
+};
 
 // Stash current state, check out master, and sync with google/blockly.
-gulp.task('git-sync-master', syncBranch('master'));
+function syncMaster() {
+  return syncBranch('master');
+};
 
 // Helper function: get a name for a rebuild branch. Format: rebuild_mm_dd_yyyy.
 function getRebuildBranchName() {
@@ -941,65 +941,77 @@ function getRCBranchName() {
 };
 
 // Recompile and push to origin.
-gulp.task('git-recompile', gulp.series([
-    'git-sync-develop',
-    function(done) {
-      var branchName = getRebuildBranchName();
-      console.log('make-rebuild-branch: creating branch ' + branchName);
-      execSync('git checkout -b ' + branchName, { stdio: 'inherit' });
-      done();
-    },
-    'build',
-    'typings',
-    function(done) {
-      console.log('push-rebuild-branch: committing rebuild');
-      execSync('git commit -am "Rebuild"', { stdio: 'inherit' });
-      var branchName = getRebuildBranchName();
-      execSync('git push origin ' + branchName, { stdio: 'inherit' });
-      console.log('Branch ' + branchName + ' pushed to GitHub.');
-      console.log('Next step: create a pull request against develop.');
-      done();
+const recompile = gulp.series(
+  syncDevelop,
+  function(done) {
+    var branchName = getRebuildBranchName();
+    console.log('make-rebuild-branch: creating branch ' + branchName);
+    execSync('git checkout -b ' + branchName, { stdio: 'inherit' });
+    done();
+  },
+  build,
+  typings,
+  function(done) {
+    console.log('push-rebuild-branch: committing rebuild');
+    execSync('git commit -am "Rebuild"', { stdio: 'inherit' });
+    var branchName = getRebuildBranchName();
+    execSync('git push origin ' + branchName, { stdio: 'inherit' });
+    console.log('Branch ' + branchName + ' pushed to GitHub.');
+    console.log('Next step: create a pull request against develop.');
+    done();
     }
-  ])
 );
 
 // Create and push an RC branch.
 // Note that this pushes to google/blockly.
-gulp.task('git-create-rc', gulp.series([
-    'git-sync-develop',
-    function(done) {
-      var branchName = getRCBranchName();
-      execSync('git checkout -b ' + branchName, { stdio: 'inherit' });
-      execSync('git push ' + upstream_url + ' ' + branchName,
-          { stdio: 'inherit' });
-      execSync('git checkout -b gh-pages');
-      execSync('git push ' + upstream_url + ' gh-pages');
-      done();
-    },
-  ])
+const createRC = gulp.series(
+  syncDevelop,
+  function(done) {
+    var branchName = getRCBranchName();
+    execSync('git checkout -b ' + branchName, { stdio: 'inherit' });
+    execSync('git push ' + upstream_url + ' ' + branchName,
+        { stdio: 'inherit' });
+    execSync('git checkout -b gh-pages');
+    execSync('git push ' + upstream_url + ' gh-pages');
+    done();
+  },
 );
 
 // See https://docs.npmjs.com/cli/version.
-gulp.task('preversion', gulp.series([
-    'git-sync-master',
-    function(done) {
-      // Create a branch named bump_version for the bump and rebuild.
-      execSync('git checkout -b bump_version', { stdio: 'inherit' });
-      done();
-    },
-  ])
+const preversion = gulp.series(
+  syncMaster,
+  function(done) {
+    // Create a branch named bump_version for the bump and rebuild.
+    execSync('git checkout -b bump_version', { stdio: 'inherit' });
+    done();
+  },
 );
 
 // See https://docs.npmjs.com/cli/version
-gulp.task('postversion', gulp.series([
-  function(done) {
-      // Push both the branch and tag to google/blockly.
-      execSync('git push ' + upstream_url + ' bump_version',
-          { stdio: 'inherit' });
-      var tagName = 'v' + packageJson.version;
-      execSync('git push ' + upstream_url + ' ' + tagName,
-          { stdio: 'inherit' });
-      done();
-    }
-  ])
-);
+function postversion(done) {
+  // Push both the branch and tag to google/blockly.
+  execSync('git push ' + upstream_url + ' bump_version',
+      { stdio: 'inherit' });
+  var tagName = 'v' + packageJson.version;
+  execSync('git push ' + upstream_url + ' ' + tagName,
+      { stdio: 'inherit' });
+  done();
+};
+
+module.exports = {
+  default: build,
+  build: build,
+  buildCore: buildCore,
+  buildBlocks: buildBlocks,
+  buildLangfiles: buildLangfiles,
+  buildUncompressed: buildUncompressed,
+  buildCompressed: buildCompressed,
+  buildGenerators: buildGenerators,
+  gitSyncDevelop: syncDevelop,
+  gitSyncMaster: syncMaster,
+  preversion: preversion,
+  postversion: postversion,
+  gitCreateRC: createRC,
+  gitRecompile: recompile,
+  typings: typings
+};

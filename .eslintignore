@@ -16,3 +16,4 @@ gulpfile.js
 /appengine/*
 /externs/*
 /closure/*
+/scripts/gulpfiles/*

@@ -317,6 +317,14 @@ Blockly.utils.dom.getFastTextWidth = function(textElement,
   return width;
 };
 
+/**
+ * TODO
+ * @param {string} text Text to measure the font dimensions of.
+ * @param {number} fontSize The font size to use.
+ * @param {string} fontWeight The font weight to use.
+ * @param {string} fontFamily The font family to use.
+ * @return {Object} TODO
+ */
 Blockly.utils.dom.measureFontDimensions = function(text, fontSize, fontWeight,
     fontFamily) {
   var span = document.createElement('span');

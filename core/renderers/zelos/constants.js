@@ -259,7 +259,7 @@ Blockly.zelos.ConstantProvider = function() {
   /**
    * @override
    */
-  this.FIELD_BORDER_RECT_Y_PADDING = 1 * this.GRID_UNIT;
+  this.FIELD_BORDER_RECT_Y_PADDING = 1.625 * this.GRID_UNIT;
 
   /**
    * @override
@@ -372,9 +372,7 @@ Blockly.utils.object.inherits(Blockly.zelos.ConstantProvider,
     Blockly.blockRendering.ConstantProvider);
 
 /**
- * Get an object representing the default font styles specified by the renderer.
- * @return {!Blockly.Theme.FontStyle} A theme font style.
- * @protected
+ * @override
  */
 Blockly.zelos.ConstantProvider.prototype.getDefaultFontStyle_ = function() {
   var fontStyle =
@@ -383,6 +381,18 @@ Blockly.zelos.ConstantProvider.prototype.getDefaultFontStyle_ = function() {
   fontStyle['size'] = 3 * this.GRID_UNIT;
   fontStyle['family'] = '"Helvetica Neue", "Segoe UI", Helvetica, sans-serif';
   return fontStyle;
+};
+
+/**
+ * @override
+ */
+Blockly.zelos.ConstantProvider.prototype.setFontConstants_ = function(theme) {
+  Blockly.zelos.ConstantProvider.superClass_.setFontConstants_.call(this,
+      theme);
+
+  this.FIELD_BORDER_RECT_HEIGHT = this.FIELD_TEXT_HEIGHT +
+      this.FIELD_BORDER_RECT_Y_PADDING * 2;
+  this.FIELD_DROPDOWN_BORDER_RECT_HEIGHT = this.FIELD_BORDER_RECT_HEIGHT;
 };
 
 /**

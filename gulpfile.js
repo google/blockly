@@ -1013,5 +1013,6 @@ module.exports = {
   postversion: postversion,
   gitCreateRC: createRC,
   gitRecompile: recompile,
-  typings: typings
+  typings: typings,
+  package: package
 };

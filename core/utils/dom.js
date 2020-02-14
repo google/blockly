@@ -305,7 +305,7 @@ Blockly.utils.dom.getFastTextWidth = function(textElement,
   }
   // Set the desired font size and family.
   Blockly.utils.dom.canvasContext_.font =
-    fontWeight + ' ' + fontSize + 'pt ' + fontFamily;
+      fontWeight + ' ' + fontSize + ' ' + fontFamily;
 
   // Measure the text width using the helper canvas context.
   width = Blockly.utils.dom.canvasContext_.measureText(text).width;
@@ -315,4 +315,33 @@ Blockly.utils.dom.getFastTextWidth = function(textElement,
     Blockly.utils.dom.cacheWidths_[key] = width;
   }
   return width;
+};
+
+Blockly.utils.dom.measureFontDimensions = function(text, fontSize, fontWeight,
+    fontFamily) {
+  var span = document.createElement('span');
+  span.style.font = fontWeight + ' ' + fontSize + ' ' + fontFamily;
+  span.textContent = text;
+
+  var block = document.createElement('div');
+  block.setAttribute('style',
+      'display: inline-block; width: 1px; height: 0px;');
+  
+  var div = document.createElement('div');
+  div.appendChild(span);
+  div.appendChild(block);
+
+  document.body.appendChild(div);
+
+  try {
+    var result = {};
+    block.style.verticalAlign = 'baseline';
+    result.ascent = block.offsetTop - span.offsetTop;
+    block.style.verticalAlign = 'bottom';
+    result.height = block.offsetTop - span.offsetTop;
+    result.descent = result.height - result.ascent;
+  } finally {
+    document.body.removeChild(div);
+  }
+  return result;
 };

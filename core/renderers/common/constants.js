@@ -27,6 +27,12 @@ goog.require('Blockly.utils.userAgent');
 Blockly.blockRendering.ConstantProvider = function() {
 
   /**
+   * A placeholder value for constants that are dynamically set.
+   * @type {number}
+   */
+  this.DYNAMICALLY_SET = -1;
+
+  /**
    * The size of an empty spacer.
    * @type {number}
    */
@@ -240,19 +246,19 @@ Blockly.blockRendering.ConstantProvider = function() {
    * Height of text.
    * @type {number}
    */
-  this.FIELD_TEXT_HEIGHT = 16;
+  this.FIELD_TEXT_HEIGHT = this.DYNAMICALLY_SET;
 
   /**
    * Text font weight.
    * @type {string}
    */
-  this.FIELD_TEXT_FONTWEIGHT = 'normal';
+  this.FIELD_TEXT_FONTWEIGHT = '';
 
   /**
    * Text font family.
    * @type {string}
    */
-  this.FIELD_TEXT_FONTFAMILY = 'sans-serif';
+  this.FIELD_TEXT_FONTFAMILY = '';
 
   /**
    * A field's border rect corner radius.
@@ -441,6 +447,13 @@ Blockly.blockRendering.ConstantProvider = function() {
   this.disabledPattern_ = null;
 
   /**
+   * The <style> element to use for injecting renderer specific CSS.
+   * @type {HTMLStyleElement}
+   * @private
+   */
+  this.cssNode_ = null;
+
+  /**
    * Cursor colour.
    * @type {string}
    * @package
@@ -508,9 +521,13 @@ Blockly.blockRendering.ConstantProvider = function() {
 
 /**
  * Initialize shape objects based on the constants set in the constructor.
+ * @param {!Blockly.Theme} theme The workspace theme object.
  * @package
  */
-Blockly.blockRendering.ConstantProvider.prototype.init = function() {
+Blockly.blockRendering.ConstantProvider.prototype.init = function(theme) {
+
+  this.setTheme_(theme);
+  this.setDynamicConstants_(theme);
 
   /**
    * An object containing sizing and path information about collapsed block
@@ -553,9 +570,9 @@ Blockly.blockRendering.ConstantProvider.prototype.init = function() {
 /**
  * Refresh constants properties that depend on the theme.
  * @param {!Blockly.Theme} theme The current workspace theme.
- * @package
+ * @protected
  */
-Blockly.blockRendering.ConstantProvider.prototype.refreshTheme = function(
+Blockly.blockRendering.ConstantProvider.prototype.setTheme_ = function(
     theme) {
 
   /**
@@ -569,6 +586,56 @@ Blockly.blockRendering.ConstantProvider.prototype.refreshTheme = function(
   for (var key in blockStyles) {
     this.blockStyles[key] = this.validatedBlockStyle_(blockStyles[key]);
   }
+};
+
+/**
+ * Set dynamic constants that depent on other values or theme properties.
+ * @param {!Blockly.Theme} theme The current workspace theme.
+ * @protected
+ */
+Blockly.blockRendering.ConstantProvider.prototype.setDynamicConstants_ =
+    function(theme) {
+    /* eslint-disable indent */
+  this.setFontConstants_(theme);
+};
+
+/**
+ * Get an object representing the default font styles specified by the renderer.
+ * @return {!Blockly.Theme.FontStyle} A theme font style.
+ * @protected
+ */
+Blockly.blockRendering.ConstantProvider.prototype.getDefaultFontStyle_ =
+    function() {
+    /* eslint-disable indent */
+  return {
+    'weight': 'normal',
+    'size': 11,
+    'family': 'sans-serif'
+  };
+};
+
+/**
+ * Set constants related to fonts.
+ * @param {!Blockly.Theme} theme The current workspace theme.
+ * @protected
+ */
+Blockly.blockRendering.ConstantProvider.prototype.setFontConstants_ = function(
+    theme) {
+  var defaultFontStyle = this.getDefaultFontStyle_();
+
+  this.FIELD_TEXT_FONTFAMILY = theme.fontStyle['family'] != undefined ?
+      theme.fontStyle['family'] : defaultFontStyle['family'];
+  this.FIELD_TEXT_FONTWEIGHT = theme.fontStyle['weight'] != undefined ?
+      theme.fontStyle['weight'] : defaultFontStyle['weight'];
+  this.FIELD_TEXT_FONTSIZE = theme.fontStyle['size'] != undefined ?
+      theme.fontStyle['size'] : defaultFontStyle['size'];
+
+  var fontDimensions = Blockly.utils.dom.measureFontDimensions('Hg',
+      this.FIELD_TEXT_FONTSIZE + 'pt',
+      this.FIELD_TEXT_FONTWEIGHT,
+      this.FIELD_TEXT_FONTFAMILY);
+  this.FIELD_TEXT_HEIGHT = fontDimensions.height;
+  this.FIELD_TEXT_BASELINE_Y = fontDimensions.ascent;
 };
 
 /**
@@ -688,6 +755,9 @@ Blockly.blockRendering.ConstantProvider.prototype.dispose = function() {
   }
   if (this.disabledPattern_) {
     Blockly.utils.dom.removeNode(this.disabledPattern_);
+  }
+  if (this.cssNode_) {
+    Blockly.utils.dom.removeNode(this.cssNode_);
   }
 };
 
@@ -915,9 +985,13 @@ Blockly.blockRendering.ConstantProvider.prototype.shapeFor = function(
 /**
  * Create any DOM elements that this renderer needs (filters, patterns, etc).
  * @param {!SVGElement} svg The root of the workspace's SVG.
+ * @param {string} rendererName Name of the renderer.
+ * @param {!Blockly.Theme} _theme The current workspace theme.
  * @package
  */
-Blockly.blockRendering.ConstantProvider.prototype.createDom = function(svg) {
+Blockly.blockRendering.ConstantProvider.prototype.createDom = function(svg,
+    rendererName, _theme) {
+  this.injectCSS_(rendererName);
   /*
   <defs>
     ... filters go here ...
@@ -1001,7 +1075,7 @@ Blockly.blockRendering.ConstantProvider.prototype.createDom = function(svg) {
  * @param {string} name Name of the renderer.
  * @package
  */
-Blockly.blockRendering.ConstantProvider.prototype.injectCSS = function(
+Blockly.blockRendering.ConstantProvider.prototype.injectCSS_ = function(
     name) {
   var cssArray = this.getCSS_(name);
   var cssNodeId = 'blockly-renderer-style-' + name;
@@ -1016,6 +1090,7 @@ Blockly.blockRendering.ConstantProvider.prototype.injectCSS = function(
   var cssTextNode = document.createTextNode(text);
   cssNode.appendChild(cssTextNode);
   document.head.insertBefore(cssNode, document.head.firstChild);
+  this.cssNode_ = cssNode;
 };
 
 /**

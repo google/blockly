@@ -153,9 +153,14 @@ Blockly.FlyoutButton.prototype.createDom = function() {
         'flyoutForegroundColour', 'fill');
   }
 
-  this.width = Blockly.utils.dom.getTextWidth(svgText);
-  this.height = 20;  // Can't compute it :(
-
+  var fontSize = Blockly.utils.style.getComputedStyle(svgText, 'fontSize');
+  var fontWeight = Blockly.utils.style.getComputedStyle(svgText, 'fontWeight');
+  var fontFamily = Blockly.utils.style.getComputedStyle(svgText, 'fontFamily');
+  this.width = Blockly.utils.dom.getFastTextWidth(svgText, fontSize, fontWeight,
+      fontFamily);
+  this.height = Blockly.utils.dom.measureFontDimensions(text, fontSize,
+      fontWeight, fontFamily).height;
+  
   if (!this.isLabel_) {
     this.width += 2 * Blockly.FlyoutButton.MARGIN;
     shadow.setAttribute('width', this.width);

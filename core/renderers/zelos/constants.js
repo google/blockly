@@ -237,22 +237,6 @@ Blockly.zelos.ConstantProvider = function() {
   /**
    * @override
    */
-  this.FIELD_TEXT_FONTSIZE = 3 * this.GRID_UNIT;
-
-  /**
-   * @override
-   */
-  this.FIELD_TEXT_FONTWEIGHT = 'bold';
-
-  /**
-   * @override
-   */
-  this.FIELD_TEXT_FONTFAMILY =
-      '"Helvetica Neue", "Segoe UI", Helvetica, sans-serif';
-
-  /**
-   * @override
-   */
   this.FIELD_TEXT_HEIGHT = 13.1;
 
   /**
@@ -388,10 +372,24 @@ Blockly.utils.object.inherits(Blockly.zelos.ConstantProvider,
     Blockly.blockRendering.ConstantProvider);
 
 /**
+ * Get an object representing the default font styles specified by the renderer.
+ * @return {!Blockly.Theme.FontStyle} A theme font style.
+ * @protected
+ */
+Blockly.zelos.ConstantProvider.prototype.getDefaultFontStyle_ = function() {
+  var fontStyle =
+      Blockly.zelos.ConstantProvider.superClass_.getDefaultFontStyle_.call(this);
+  fontStyle['weight'] = 'bold';
+  fontStyle['size'] = 3 * this.GRID_UNIT;
+  fontStyle['family'] = '"Helvetica Neue", "Segoe UI", Helvetica, sans-serif';
+  return fontStyle;
+};
+
+/**
  * @override
  */
-Blockly.zelos.ConstantProvider.prototype.init = function() {
-  Blockly.zelos.ConstantProvider.superClass_.init.call(this);
+Blockly.zelos.ConstantProvider.prototype.init = function(theme) {
+  Blockly.zelos.ConstantProvider.superClass_.init.call(this, theme);
   this.HEXAGONAL = this.makeHexagonal();
   this.ROUNDED = this.makeRounded();
   this.SQUARED = this.makeSquared();
@@ -759,8 +757,10 @@ Blockly.zelos.ConstantProvider.prototype.generateTertiaryColour_ = function(
 /**
  * @override
  */
-Blockly.zelos.ConstantProvider.prototype.createDom = function(svg) {
-  Blockly.zelos.ConstantProvider.superClass_.createDom.call(this, svg);
+Blockly.zelos.ConstantProvider.prototype.createDom = function(svg, rendererName,
+    theme) {
+  Blockly.zelos.ConstantProvider.superClass_.createDom.call(this, svg,
+      rendererName, theme);
   /*
   <defs>
     ... filters go here ...

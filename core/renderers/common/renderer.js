@@ -48,11 +48,25 @@ Blockly.blockRendering.Renderer = function(name) {
 
 /**
  * Initialize the renderer.
+ * @param {!Blockly.Theme} theme The workspace theme object.
  * @package
  */
-Blockly.blockRendering.Renderer.prototype.init = function() {
+Blockly.blockRendering.Renderer.prototype.init = function(theme) {
   this.constants_ = this.makeConstants_();
-  this.constants_.init();
+  this.constants_.init(theme);
+};
+
+/**
+ * Refresh the renderer after a theme change.
+ * @param {!SVGElement} svg The root of the workspace's SVG.
+ * @param {!Blockly.Theme} theme The workspace theme object.
+ * @package
+ */
+Blockly.blockRendering.Renderer.prototype.refresh = function(svg, theme) {
+  var constants = this.getConstants();
+  constants.dispose();
+  constants.init(theme);
+  constants.createDom(svg, this.name, theme);
 };
 
 /**

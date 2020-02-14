@@ -592,6 +592,12 @@ Blockly.Css.CONTENT = [
     'font-size: 13px;',
   '}',
 
+  // REMOVE
+  '.blocklyFlyoutButton .blocklyText {',
+    'font-family: Arial, sans-serif;',
+    'font-size: 40px;',
+  '}',
+
   '.blocklyWidgetDiv .goog-menuitem-content {',
     'color: #000;',
   '}',

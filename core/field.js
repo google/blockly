@@ -310,19 +310,11 @@ Blockly.Field.prototype.initModel = function() {
  * @protected
  */
 Blockly.Field.prototype.createBorderRect_ = function() {
-  this.size_.height =
-      Math.max(this.size_.height, this.constants_.FIELD_BORDER_RECT_HEIGHT);
-  this.size_.width =
-      Math.max(this.size_.width, this.constants_.FIELD_BORDER_RECT_X_PADDING * 2);
   this.borderRect_ = /** @type {!SVGRectElement} **/
       (Blockly.utils.dom.createSvgElement('rect',
           {
-            'rx': this.constants_.FIELD_BORDER_RECT_RADIUS,
-            'ry': this.constants_.FIELD_BORDER_RECT_RADIUS,
             'x': 0,
             'y': 0,
-            'height': this.size_.height,
-            'width': this.size_.width,
             'class': 'blocklyFieldRect'
           }, this.fieldGroup_));
 };
@@ -334,26 +326,12 @@ Blockly.Field.prototype.createBorderRect_ = function() {
  * @protected
  */
 Blockly.Field.prototype.createTextElement_ = function() {
-  var xOffset = this.borderRect_ ?
-    this.constants_.FIELD_BORDER_RECT_X_PADDING : 0;
-  var baselineCenter = this.constants_.FIELD_TEXT_BASELINE_CENTER;
-  var baselineY = this.constants_.FIELD_TEXT_BASELINE_Y;
-  this.size_.height = Math.max(this.size_.height, baselineCenter ?
-      this.constants_.FIELD_TEXT_HEIGHT : baselineY);
-  if (this.size_.height > this.constants_.FIELD_TEXT_HEIGHT) {
-    baselineY += (this.size_.height - baselineY) / 2;
-  }
   this.textElement_ = /** @type {!SVGTextElement} **/
       (Blockly.utils.dom.createSvgElement('text',
           {
             'class': 'blocklyText',
-            'y': baselineCenter ? this.size_.height / 2 : baselineY,
             'dy': this.constants_.FIELD_TEXT_Y_OFFSET,
-            'x': xOffset
           }, this.fieldGroup_));
-  if (baselineCenter) {
-    this.textElement_.setAttribute('dominant-baseline', 'central');
-  }
   this.textContent_ = document.createTextNode('');
   this.textElement_.appendChild(this.textContent_);
 };
@@ -588,6 +566,8 @@ Blockly.Field.prototype.render_ = function() {
   if (this.textContent_) {
     this.textContent_.nodeValue = this.getDisplayText_();
     this.updateSize_();
+    this.updateTextElement_();
+    this.updateBorderRect_();
   }
 };
 
@@ -622,18 +602,58 @@ Blockly.Field.prototype.updateWidth = function() {
  * @protected
  */
 Blockly.Field.prototype.updateSize_ = function() {
+  var constants = this.constants_;
   var textWidth = Blockly.utils.dom.getFastTextWidth(
       /** @type {!SVGTextElement} */ (this.textElement_),
-      this.constants_.FIELD_TEXT_FONTSIZE,
-      this.constants_.FIELD_TEXT_FONTWEIGHT,
-      this.constants_.FIELD_TEXT_FONTFAMILY);
-  var totalWidth = textWidth;
-  if (this.borderRect_) {
-    totalWidth += this.constants_.FIELD_BORDER_RECT_X_PADDING * 2;
-    this.borderRect_.setAttribute('width', totalWidth);
+      constants.FIELD_TEXT_FONTSIZE + 'pt',
+      constants.FIELD_TEXT_FONTWEIGHT,
+      constants.FIELD_TEXT_FONTFAMILY);
+  var xOffset = this.borderRect_ ? constants.FIELD_BORDER_RECT_X_PADDING : 0;
+  var totalWidth = textWidth + xOffset * 2;
+  var baselineCenter = constants.FIELD_TEXT_BASELINE_CENTER;
+  var baselineY = constants.FIELD_TEXT_BASELINE_Y;
+  var totalHeight = baselineCenter ? constants.FIELD_TEXT_HEIGHT : baselineY;
+  if (totalHeight > constants.FIELD_TEXT_HEIGHT) {
+    baselineY += (totalHeight - baselineY) / 2;
   }
+  this.textElement_.setAttribute('x', xOffset);
+  this.textElement_.setAttribute('y', baselineCenter ?
+      totalHeight / 2 : baselineY);
+  this.textElement_.setAttribute('dy', constants.FIELD_TEXT_Y_OFFSET);
+  if (baselineCenter) {
+    this.textElement_.setAttribute('dominant-baseline', 'central');
+  }
+  if (this.borderRect_) {
+    totalHeight =
+        Math.max(totalHeight, this.constants_.FIELD_BORDER_RECT_HEIGHT);
+  }
+  this.size_.height = totalHeight;
   this.size_.width = totalWidth;
 };
+
+/**
+ * TODO
+ * @protected
+ */
+Blockly.Field.prototype.updateTextElement_ = function() {
+  
+};
+
+/**
+ * TODO
+ * @protected
+ */
+Blockly.Field.prototype.updateBorderRect_ = function() {
+  if (this.borderRect_) {
+    this.borderRect_.setAttribute('width', this.size_.width);
+    this.borderRect_.setAttribute('height', this.size_.height);
+    this.borderRect_.setAttribute('rx',
+        this.constants_.FIELD_BORDER_RECT_RADIUS);
+    this.borderRect_.setAttribute('ry',
+        this.constants_.FIELD_BORDER_RECT_RADIUS);
+  }
+};
+
 
 /**
  * Returns the height and width of the field.

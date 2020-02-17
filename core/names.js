@@ -174,10 +174,15 @@ Blockly.Names.prototype.safeName_ = function(name) {
   if (!name) {
     name = Blockly.Msg['UNNAMED_KEY'] || 'unnamed';
   } else {
-    // Unfortunately names in non-latin characters will look like
-    // _E9_9F_B3_E4_B9_90 which is pretty meaningless.
-    // https://github.com/google/blockly/issues/1654
-    name = encodeURI(name.replace(/ /g, '_')).replace(/[^\w]/g, '_');
+    // Transliterate non-latin charactes.
+    // Replace spaces with underscores
+    // Replace everything that's not a word with underscores
+    if (transliterate) {
+      name = transliterate(name.replace(/ /g, '_')).replace(/[^\w]/g, '_');
+    } else {
+      name = name.replace(/ /g, '_').replace(/[^\w]/g, '_');
+    }
+
     // Most languages don't allow names with leading numbers.
     if ('0123456789'.indexOf(name[0]) != -1) {
       name = 'my_' + name;

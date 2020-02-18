@@ -653,9 +653,12 @@ Blockly.Workspace.prototype.fireChangeListener = function(event) {
       this.undoStack_.shift();
     }
   }
+  var group = Blockly.Events.getGroup();
+  Blockly.Events.setGroup(event.group);
   for (var i = 0, func; (func = this.listeners_[i]); i++) {
     func(event);
   }
+  Blockly.Events.setGroup(group);
 };
 
 /**

@@ -1967,9 +1967,9 @@ Blockly.Block.prototype.appendDynamicIDInput = function (requestedModuleTypes, m
 
       // Add the active/recent modules
       for (let i = 0; i < moduleList.length; i++) {
-        if (moduleList[i] === 'FACE') {
+        if (moduleList[i][0] === 'FACE') {
           // console.log('Index=' + i + ' gives ModuleID=' + moduleList[i]);
-          moduleList[i] = ['Face'];
+          moduleList[i][0] = 'Face';
         }
 
         result.push([moduleList[i][0]]);

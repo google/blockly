@@ -620,7 +620,6 @@ Blockly.Field.prototype.updateSize_ = function() {
       constants.FIELD_TEXT_FONTWEIGHT,
       constants.FIELD_TEXT_FONTFAMILY);
   var xOffset = this.borderRect_ ? constants.FIELD_BORDER_RECT_X_PADDING : 0;
-  var yOffset = this.borderRect_ ? constants.FIELD_BORDER_RECT_Y_PADDING : 0;
   var totalWidth = textWidth + xOffset * 2;
   var baselineCenter = constants.FIELD_TEXT_BASELINE_CENTER;
   var baselineY = constants.FIELD_TEXT_BASELINE_Y;
@@ -629,26 +628,34 @@ Blockly.Field.prototype.updateSize_ = function() {
     totalHeight =
         Math.max(totalHeight, this.constants_.FIELD_BORDER_RECT_HEIGHT);
   }
-  if (totalHeight > constants.FIELD_TEXT_HEIGHT) {
-    baselineY += (totalHeight - baselineY) / 2;
-  }
-  this.textElement_.setAttribute('x', xOffset);
-  this.textElement_.setAttribute('y', baselineCenter ?
-      totalHeight / 2 : baselineY - yOffset);
   this.size_.height = totalHeight;
   this.size_.width = totalWidth;
 };
 
 /**
- * TODO
+ * Updates a field's text element after a size change.
  * @protected
  */
 Blockly.Field.prototype.updateTextElement_ = function() {
-  
+  if (!this.textElement_) {
+    return;
+  }
+  var constants = this.constants_;
+  var xOffset = this.borderRect_ ? constants.FIELD_BORDER_RECT_X_PADDING : 0;
+  var yOffset = this.borderRect_ ? constants.FIELD_BORDER_RECT_Y_PADDING : 0;
+  var baselineCenter = constants.FIELD_TEXT_BASELINE_CENTER;
+  var baselineY = constants.FIELD_TEXT_BASELINE_Y;
+  var height = this.size_.height;
+  if (height > constants.FIELD_TEXT_HEIGHT) {
+    baselineY += (height - baselineY) / 2;
+  }
+  this.textElement_.setAttribute('x', xOffset);
+  this.textElement_.setAttribute('y', baselineCenter ?
+      height / 2 : baselineY);
 };
 
 /**
- * TODO
+ * Updates a field's border rect after a size change.
  * @protected
  */
 Blockly.Field.prototype.updateBorderRect_ = function() {

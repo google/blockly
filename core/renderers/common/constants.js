@@ -630,7 +630,7 @@ Blockly.blockRendering.ConstantProvider.prototype.setFontConstants_ = function(
       this.FIELD_TEXT_FONTFAMILY);
 
   this.FIELD_TEXT_HEIGHT = fontDimensions.height;
-  this.FIELD_TEXT_BASELINE_Y = Math.max(13.09, fontDimensions.height - fontDimensions.descent);
+  this.FIELD_TEXT_BASELINE_Y = fontDimensions.height - fontDimensions.descent;
 };
 
 /**

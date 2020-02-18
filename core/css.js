@@ -592,7 +592,7 @@ Blockly.Css.CONTENT = [
     'font-size: 13px;',
   '}',
 
-  // REMOVE
+  // TODO(samelh): Remove
   '.blocklyFlyoutButton .blocklyText {',
     'font-family: Arial, sans-serif;',
     'font-size: 40px;',

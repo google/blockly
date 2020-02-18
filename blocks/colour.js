@@ -31,15 +31,199 @@ goog.provide('Blockly.Constants.Colour');
 
 goog.require('Blockly');
 goog.require('Blockly.Blocks');
+goog.require('Blockly.Blocks.Definitions');
 goog.require('Blockly.FieldColour');
 goog.require('Blockly.FieldLabel');
-
 
 /**
  * Unused constant for the common HSV hue for all blocks in this category.
  * @deprecated Use Blockly.Msg['COLOUR_HUE']. (2018 April 5)
  */
 Blockly.Constants.Colour.HUE = 20;
+
+Blockly.Blocks.colour_picker = {
+  /**
+     * Block to display and pick colors from a table.
+     */
+  init: function () {
+    // Inputs:
+    var colour = new Blockly.FieldColour('#ffff00');
+
+    colour.setColours(Blockly.FieldColour.COLOURS);
+
+    colour.setColumns(7);
+
+    this.appendDummyInput()
+      .appendField(colour, 'COLOUR');
+
+    // Properties:
+    this.setStyle(Blockly.Blocks.Definitions.colorsStyle);
+    this.setTooltip(Blockly.Msg.COLOUR_PICKER_TOOLTIP);
+    this.setOutput(true, ['Colour', 'Array']);
+    this.setHelpUrl(Blockly.Msg.COLOUR_PICKER_HELPURL);
+  },
+  ensureSearchKeywords: function () {
+    // TODO:
+    var keywords = [
+      Blockly.Msg.FABLE_CAMERA_TAKE_PICTURE,
+      '%{BKY_COLORS}'
+    ];
+
+    Blockly.Search.preprocessSearchKeywords('colour_picker', keywords);
+  }
+};
+
+Blockly.Blocks.color_channel = {
+  /**
+     *
+     * @this Blockly.Block
+     */
+  init: function () {
+    // Inputs:
+    var rgbChannels = [[Blockly.Msg.RED, 'R'],
+      [Blockly.Msg.GREEN, 'G'],
+      [Blockly.Msg.BLUE, 'B']];
+
+    this.appendDummyInput()
+      .appendField(Blockly.Msg.FABLE_GET_COLOR_CHANNEL);
+
+    this.appendDummyInput()
+      .appendField(new Blockly.FieldDropdown(rgbChannels), 'COLOR_CHANNEL');
+
+    this.appendDummyInput()
+      .appendField(Blockly.Msg.FABLE_GET_COLOR_CHANNEL_FROM);
+
+    this.appendValueInput('COLOR')
+      .setCheck('Colour');
+
+    // Properties:
+    this.setStyle(Blockly.Blocks.Definitions.colorsStyle);
+    this.setTooltip(Blockly.Msg.FABLE_GET_COLOR_CHANNEL_TOOLTIP);
+    this.setOutput(true, 'Number');
+    this.setInputsInline(true);
+    this.setHelpUrl(Blockly.Msg.COLOUR_PICKER_HELPURL);
+  },
+  ensureSearchKeywords: function () {
+    var keywords = [
+      Blockly.Msg.FABLE_GET_COLOR_CHANNEL,
+      Blockly.Msg.FABLE_GET_COLOR_CHANNEL_FROM,
+      Blockly.Msg.RED,
+      Blockly.Msg.GREEN,
+      Blockly.Msg.BLUE,
+      '%{BKY_COLORS}'
+    ];
+
+    Blockly.Search.preprocessSearchKeywords('color_channel', keywords);
+  }
+};
+
+Blockly.Blocks.custom_color_blend = {
+  /**
+     * Block that blends between two colors by having a specified ratio between the two.
+     * For example, blending red and blue should give purple (if the ratio is 50/50).
+     * @this Blockly.Block
+     */
+  init: function () {
+    // Inputs:
+    this.appendDummyInput()
+      .appendField(Blockly.Msg.FABLE_CUSTOM_COLOR_BLEND);
+
+    this.appendValueInput('FIRST')
+      .setCheck('Colour');
+
+    this.appendValueInput('SECOND')
+      .setCheck('Colour');
+
+    this.appendValueInput('RATIO')
+      .appendField(Blockly.Msg.FABLE_COLOR_RATIO)
+      .setCheck('Number');
+    // .appendField(new Blockly.FieldNumber('50', 0, 100), 'RATIO');
+
+    // Properties:
+    this.setStyle(Blockly.Blocks.Definitions.colorsStyle);
+    this.setTooltip(Blockly.Msg.FABLE_COLOR_BLEND_TOOLTIP);
+    this.setOutput(true, ['Colour', 'Array']);
+    this.setInputsInline(true);
+    this.setHelpUrl(Blockly.Msg.COLOUR_PICKER_HELPURL);
+  },
+  ensureSearchKeywords: function () {
+    var keywords = [
+      Blockly.Msg.FABLE_CUSTOM_COLOR_BLEND,
+      Blockly.Msg.FABLE_COLOR_RATIO,
+      '%{BKY_COLORS}'
+    ];
+
+    Blockly.Search.preprocessSearchKeywords('custom_color_blend', keywords);
+  }
+};
+
+Blockly.Blocks.random_color = {
+  /**
+     * Block that generates a random color, or rather an array with 3 random numbers from 0 to 255.
+     * @this Blockly.Block
+     */
+  init: function () {
+    // Inputs:
+    this.appendDummyInput()
+      .appendField(Blockly.Msg.FABLE_RANDOM_COLOR);
+
+    // Properties:
+    this.setStyle(Blockly.Blocks.Definitions.colorsStyle);
+    this.setTooltip(Blockly.Msg.FABLE_RANDOM_COLOR_TOOLTIP);
+    this.setOutput(true, ['Colour', 'Array']);
+    this.setHelpUrl(Blockly.Msg.COLOUR_PICKER_HELPURL);
+  },
+  ensureSearchKeywords: function () {
+    var keywords = [
+      Blockly.Msg.FABLE_RANDOM_COLOR,
+      '%{BKY_COLORS}'
+    ];
+
+    Blockly.Search.preprocessSearchKeywords('random_color', keywords);
+  }
+};
+
+Blockly.Blocks.custom_color = {
+  /**
+     * Block that generates a 'custom' color by having users input 3 numbers from 0 to 255.
+     * @this Blockly.Block
+     */
+  init: function () {
+    // Inputs:
+    this.appendDummyInput()
+      .appendField(Blockly.Msg.FABLE_CUSTOM_COLOR);
+
+    this.appendValueInput('RED')
+      .appendField(Blockly.Msg.RED + ':')
+      .setCheck('Number');
+
+    this.appendValueInput('GREEN')
+      .appendField(Blockly.Msg.GREEN + ':')
+      .setCheck('Number');
+
+    this.appendValueInput('BLUE')
+      .appendField(Blockly.Msg.BLUE + ':')
+      .setCheck('Number');
+
+    // Properties:
+    this.setStyle(Blockly.Blocks.Definitions.colorsStyle);
+    this.setTooltip(Blockly.Msg.FABLE_CUSTOM_COLOR_TOOLTIP);
+    this.setOutput(true, ['Colour', 'Array']);
+    this.setInputsInline(true);
+    this.setHelpUrl(Blockly.Msg.COLOUR_PICKER_HELPURL);
+  },
+  ensureSearchKeywords: function () {
+    var keywords = [
+      Blockly.Msg.FABLE_CUSTOM_COLOR,
+      Blockly.Msg.RED,
+      Blockly.Msg.GREEN,
+      Blockly.Msg.BLUE,
+      '%{BKY_COLORS}'
+    ];
+
+    Blockly.Search.preprocessSearchKeywords('custom_color', keywords);
+  }
+};
 
 Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
   // Block for colour picker.

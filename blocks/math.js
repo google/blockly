@@ -31,17 +31,187 @@ goog.provide('Blockly.Constants.Math');
 
 goog.require('Blockly');
 goog.require('Blockly.Blocks');
+goog.require('Blockly.Blocks.Definitions');
 goog.require('Blockly.FieldDropdown');
 goog.require('Blockly.FieldLabel');
 goog.require('Blockly.FieldNumber');
 goog.require('Blockly.FieldVariable');
-
 
 /**
  * Unused constant for the common HSV hue for all blocks in this category.
  * @deprecated Use Blockly.Msg['MATH_HUE']. (2018 April 5)
  */
 Blockly.Constants.Math.HUE = 230;
+
+Blockly.Blocks.fable_angle = {
+  /**
+     * Block for setting angle
+     * @this Blockly.Block
+     */
+  init: function () {
+    // Inputs:
+    this.appendDummyInput('normalAngleType')
+      .appendField(Blockly.Msg.FABLE_ANGLE)
+      .appendField(new Blockly.FieldAngle(0), 'ANGLE');
+
+    // Properties:
+    this.setStyle(Blockly.Blocks.Definitions.mathStyle);
+    this.setOutput(true, 'Number');
+    this.setInputsInline(true);
+    this.fullModeEnabled_ = true;
+  },
+  onchange: function (event) {
+    // If a global event happens that doesn't affect this block, skip the event
+    if (!event.blockId) {
+      return;
+    }
+
+    // Ensure that either A) the angle block was moved into a new parent block, or
+    // B) the block was created into a parenting block
+    // In both of these cases, make sure to convert to a normal or to a joint block depending on the parent.
+    if (event.blockId === this.id &&
+        event.type === Blockly.Events.MOVE &&
+        (event.newParentId || event.oldParentId)) {
+      this.updateShape_();
+    } else if (event.type === Blockly.Events.CREATE &&
+               event.ids.includes(this.id)) {
+      this.updateShape_();
+    }
+  },
+  // Contains a list of all blocks that trigger a change into a joint block
+  jointBlocks: [
+    'fable_set_module_motor_positions',
+    'fable_set_module_motor_pos_speed',
+    'fable_set_module_motor_position'
+  ],
+  // Changes the block to a joint or a normal 360 angle depending on its parent
+  updateShape_: function () {
+    // If there is a parent block, check if it's a joint block
+    if (this.parentBlock_ && this.fullModeEnabled_) {
+      const parentType = this.parentBlock_.type;
+
+      // If the parent block is a joint block, update the insides of this.
+      if (this.jointBlocks.includes(parentType)) {
+        // Get the current angle and clamp its value
+        let val = parseInt(this.getFieldValue('ANGLE'));
+        if (val > 90) {
+          if (val < 270) {
+            val = 90;
+          } else {
+            val = val - 360;
+          }
+        }
+
+        // Add a joint angle picker
+        this.appendDummyInput('jointAngleType')
+          .appendField(Blockly.Msg.FABLE_ANGLE)
+          .appendField(new Blockly.FieldJointAngle(val), 'ANGLE');
+
+        // And remove the current 360 picker
+        this.removeInput('normalAngleType');
+
+        // Raise a flag
+        this.fullModeEnabled_ = false;
+      }
+    } else if (!this.fullModeEnabled_) {
+      // If there is no parent block (or the flag has been raised), change back to 360 block
+      // Get the current angle and clamp its value
+      let val = parseInt(this.getFieldValue('ANGLE'));
+      if (val < 0) {
+        val = val + 360;
+      }
+
+      // Add a normal 360 degree picker
+      this.appendDummyInput('normalAngleType')
+        .appendField(Blockly.Msg.FABLE_ANGLE)
+        .appendField(new Blockly.FieldAngle(val), 'ANGLE');
+
+      // Remove the joint angle picker
+      this.removeInput('jointAngleType');
+
+      // Raise a flag
+      this.fullModeEnabled_ = true;
+    }
+  },
+  ensureSearchKeywords: function () {
+    var keywords = [
+      Blockly.Msg.FABLE_ANGLE,
+      '%{BKY_MATH}',
+      '%{BKY_LABEL_TRIGONOMETRY}'
+    ];
+
+    Blockly.Search.preprocessSearchKeywords('fable_angle', keywords);
+  }
+};
+
+Blockly.Blocks.fable_joint_angle = {
+  /**
+     * Block for setting angle
+     * @this Blockly.Block
+     */
+  init: function () {
+    // Inputs:
+    this.appendDummyInput()
+      .appendField(Blockly.Msg.FABLE_ANGLE)
+      .appendField(new Blockly.FieldJointAngle(0), 'ANGLE');
+
+    // Properties:
+    this.setStyle(Blockly.Blocks.Definitions.mathStyle);
+    this.setOutput(true, 'Number');
+    this.setInputsInline(true);
+  },
+  ensureSearchKeywords: function () {
+    var keywords = [
+      Blockly.Msg.FABLE_ANGLE,
+      '%{BKY_MATH}',
+      '%{BKY_LABEL_TRIGONOMETRY}'
+    ];
+
+    Blockly.Search.preprocessSearchKeywords('fable_joint_angle', keywords);
+  }
+};
+
+Blockly.Blocks.math_min_max = {
+  /**
+     * Block for getting the max/min between two numbers.
+     * @this Blockly.Block
+     */
+  init: function () {
+    // Inputs:
+    this.appendDummyInput()
+      .appendField(Blockly.Msg.FABLE_MATH_GET)
+      .appendField(new Blockly.FieldDropdown([[Blockly.Msg.FABLE_MATH_MIN, 'min'],
+        [Blockly.Msg.FABLE_MATH_MAX, 'max']]), 'MIN_MAX')
+      .appendField(Blockly.Msg.FABLE_MATH_BETWEEN);
+
+    this.appendValueInput('NUM_1')
+      .setCheck('Number');
+
+    this.appendValueInput('NUM_2')
+      .setCheck('Number');
+
+    // Properties:
+    this.setStyle(Blockly.Blocks.Definitions.mathStyle);
+    this.setTooltip(Blockly.Msg.FABLE_MIN_MAX_TOOLTIP);
+    this.setOutput(true, 'Number');
+    this.setPreviousStatement(false);
+    this.setNextStatement(false);
+    this.setInputsInline(true);
+    this.setHelpUrl('http://www.example.com/');
+  },
+  ensureSearchKeywords: function () {
+    var keywords = [
+      Blockly.Msg.FABLE_MATH_GET,
+      Blockly.Msg.FABLE_MATH_BETWEEN,
+      Blockly.Msg.FABLE_MATH_MIN,
+      Blockly.Msg.FABLE_MATH_MAX,
+      '%{BKY_MATH}',
+      '%{BKY_LABEL_MATH_FUNCTION}'
+    ];
+
+    Blockly.Search.preprocessSearchKeywords('math_min_max', keywords);
+  }
+};
 
 Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
   // Block for numeric value.

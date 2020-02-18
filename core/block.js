@@ -865,7 +865,8 @@ Blockly.Block.prototype.getMatchingConnection = function(otherBlock, conn) {
  *     returns a URL.  Null for no help.
  */
 Blockly.Block.prototype.setHelpUrl = function(url) {
-  this.helpUrl = url;
+  // this.helpUrl = url;
+  //TODO: Uncomment this and 
 };
 
 /**
@@ -1930,4 +1931,358 @@ Blockly.Block.prototype.toDevString = function() {
     msg += ' (id="' + this.id + '")';
   }
   return msg;
+};
+
+/**
+ * Gets module ID's and appends them to a block input.
+ * It will first list currently active modules, then any recent modules that are not active (if any).
+ * Example usage: appendDynamicIDInput(['Joint', 'Face'], ['Hub'], ['#']) will return a dropdown with
+ * all active joints and face modules, and will add the Hub in the beginning, and a custom # in the end.
+ *
+ * @param {Array<String>} requestedModuleTypes          An array of all module types that must be included.
+ * @param {Array<String>} mandatoryComponentsPrefix     An array of all special module types that must be placed first.
+ * @param {Array<String>} mandatoryComponentsPostfix    An array of all special module types that must be placed last.
+ */
+Blockly.Block.prototype.appendDynamicIDInput = function (requestedModuleTypes, mandatoryComponentsPrefix, mandatoryComponentsPostfix) {
+  // Create a dropdown in the block, with an option for every active/recent module of the requested types
+  this.appendDummyInput().appendField(new Blockly.FieldDropdown(
+
+    function dynamicOptions () {
+      var moduleList = Fable.Domain.Global.Modules.getDropdownModules(requestedModuleTypes);
+      var result = [];
+
+      // Add the 'mandatory' components that are put before the active/recent modules (ex. Hub)
+      for (let i = 0; i < mandatoryComponentsPrefix.length; i++) {
+        result.push(mandatoryComponentsPrefix[i]);
+      }
+
+      // Sort active from passive modules, then sort alphabetically the two subsets
+      moduleList.sort(function (a, b) {
+        if (a[1] === true && b[1] === false) { return -1; }
+        if (a[1] === false && b[1] === true) { return 1; }
+        if (a[0] < b[0]) { return -1; }
+        if (a[0] > b[0]) { return 1; }
+        return 0;
+      });
+
+      // Add the active/recent modules
+      for (let i = 0; i < moduleList.length; i++) {
+        if (moduleList[i] === 'FACE') {
+          // console.log('Index=' + i + ' gives ModuleID=' + moduleList[i]);
+          moduleList[i] = ['Face'];
+        }
+
+        result.push([moduleList[i][0]]);
+      }
+
+      // Add the 'mandatory' components that should be last in the dropdown (ex. '#')
+      for (let i = 0; i < mandatoryComponentsPostfix.length; i++) {
+        result.push(mandatoryComponentsPostfix[i]);
+      }
+
+      return result;
+    },
+    function (option) {
+      var inputID = (option === '#');
+      this.sourceBlock_.updateShape_(inputID);
+    }
+  ), 'ID');
+
+  // Special case for # input. Since it should change from just a dropdown to a dropdown with string input.
+  this.updateShape_ = function (inputID) {
+    var inputExists = this.getInput('#');
+    if (inputID) {
+      if (!inputExists) {
+        this.appendValueInput('#').setCheck('String');
+      }
+    } else if (inputExists) {
+      this.removeInput('#');
+    }
+  };
+
+  /**
+    * Create XML to represent whether the 'divisorInput' should be present.
+    * @return {Element} XML storage element.
+    * @this Blockly.Block
+    */
+  this.mutationToDom = function () {
+    var container = document.createElement('mutation');
+    var idInput = (this.getFieldValue('ID') === '#');
+    container.setAttribute('id_input', idInput);
+    return container;
+  };
+
+  /**
+    * Parse XML to restore the 'divisorInput'.
+    * @param {!Element} xmlElement XML storage element.
+    * @this Blockly.Block
+    */
+  this.domToMutation = function (xmlElement) {
+    var idInput = (xmlElement.getAttribute('id_input') === 'true');
+    this.updateShape_(idInput);
+  };
+};
+
+/**
+ * Populates a dropdown with file names from a target directory.
+ * The dropdown makes a call to @function getMediaFiles, which sends a request to the back-end to
+ * retrieve the file names of a specified type.
+ *
+ * @param {String}  fileType   File types to populate the dropdown with.
+ */
+Blockly.Block.prototype.appendDynamicFileInput = function (fileType, allow_input = false, from_feed = false) {
+  // Set the field name of the dropdown based on the file type.
+  var fieldName = '';
+
+  if (fileType === 'sound') {
+    fieldName = 'SOUNDFILE';
+  }
+  if (fileType === 'image') {
+    fieldName = 'IMAGEFILE';
+  }
+
+  const dynamicFileDropdown = new Blockly.FieldDropdown(
+    function dynamicOptions () {
+      if (fileType === 'sound') {
+        return Fable.Domain.Workspace.Blockly.DynamicDropdown.getSoundFiles();
+      } else if (fileType === 'image') {
+        return Fable.Domain.Workspace.Blockly.DynamicDropdown.getImageFiles();
+      } else {
+        return [['#']];
+      }
+    },
+    function (option) {
+      var inputID = (option === '#');
+      this.sourceBlock_.updateShape_(inputID);
+    });
+
+  dynamicFileDropdown.setShouldAllowSearch(true);
+  dynamicFileDropdown.setOptionsMaxLength(25);
+
+  this.appendDummyInput()
+    .appendField(dynamicFileDropdown, fieldName);
+
+  this.updateShape_ = function (inputID) {
+    var inputExists = this.getInput('#');
+    if (inputID) {
+      if (!inputExists) {
+        this.appendValueInput('#').setCheck('Image');
+      }
+    } else if (inputExists) {
+      this.removeInput('#');
+    }
+  };
+
+  /**
+    * Create XML to represent whether the 'divisorInput' should be present.
+    * @return {Element} XML storage element.
+    * @this Blockly.Block
+    */
+  this.mutationToDom = function () {
+    var container = document.createElement('mutation');
+    var idInput = (this.getFieldValue(fieldName) === '#');
+    container.setAttribute('id_input', idInput);
+    return container;
+  };
+
+  /**
+    * Parse XML to restore the 'divisorInput'.
+    * @param {!Element} xmlElement XML storage element.
+    * @this Blockly.Block
+    */
+  this.domToMutation = function (xmlElement) {
+    var idInput = (xmlElement.getAttribute('id_input') === 'true');
+    this.updateShape_(idInput);
+  };
+};
+
+/**
+ * Adds an Value Input to a block (mutates the block) if an option (trigger) is selected.
+ * When a trigger option is selected in the dropdown, an Value Input is append to the block. The first
+ * four arguments are required to trigger the mutation in the block, while the last one is optional and
+ * defines extra mutations.
+ *
+ * @param {Array<String>} fixedOptions  Options to display in the dropwdown.
+ * @param {String} mutationOption       Option that will trigger the mutation.
+ * @param {String} mutantInputID        Name of the added ValueInput; used to get input's value.
+ * @param {String} mutantInputType      Type of the input allow (e.g. Number, String, Custom).
+ *
+ * @param {Object} inputOptions                 Optional arguments to further customize the mutation.
+ * @param {String} inputOptions.insertBefore    Input which will follow the appended ValueInput.
+ * @param {String} inputOptions.addBlock        Type of block that will be spawned inside the ValueInput.
+ *                                              The addBlock must output values of type <mutantInputType>.
+ * @param {Object} inputOptions.blockFields     Dictionary defining pairs <String>fieldName: <String>defaultValue.
+ */
+Blockly.Block.prototype.appendDrowdownWithMutation = function (fixedOptions,
+  mutationOption,
+  mutantInputID,
+  mutantInputType,
+  mutantInputLabel,
+  inputOptions) {
+  // Create a dropdown in the block with fixedOptions.
+  this.appendDummyInput().appendField(new Blockly.FieldDropdown(
+    function setOptions () {
+      if (!Array.isArray(fixedOptions) || fixedOptions.lenght === 0) {
+        throw TypeError('Expected an array.');
+      }
+      return fixedOptions;
+    },
+    function (option) {
+      var shouldMutate = false;
+      if (Array.isArray(mutationOption)) {
+        shouldMutate = mutationOption.includes(option);
+      } else {
+        shouldMutate = (option === mutationOption);
+      }
+
+      // console.log('Mutate? -> ' + shouldMutate);
+      this.sourceBlock_.mutateBlock(shouldMutate);
+    }
+  ), 'DROPDOWN_SELECTION');
+
+  // Mutate the block if the trigger option was selected. The mutation adds a value input
+  // by default. More options can be defined.
+  this.mutateBlock = function (shouldMutate, skipChild = false) {
+    var inputExists = this.getInput(mutantInputID);
+    if (shouldMutate) {
+      // Add the ValueInput if it hasn't been added.
+      if (!inputExists) {
+        this.appendValueInput(mutantInputID)
+          .appendField(mutantInputLabel)
+          .setCheck(mutantInputType);
+        // Check optional arguments for the Value Input.
+        if (inputOptions) {
+          // Inserts the dynamic ValueInput before a specified existent input.
+          if (inputOptions.insertBefore) {
+            this.moveInputBefore(mutantInputID, inputOptions.insertBefore);
+          }
+          // Creates and connects a block to the Value Input.
+          if (!skipChild && inputOptions.addBlock) {
+            var addedBlock = this.workspace.newBlock(inputOptions.addBlock);
+            addedBlock.initSvg();
+            // Customizes fields of the block.
+            if (inputOptions.blockFields) {
+              for (const fieldName of Object.keys(inputOptions.blockFields)) {
+                addedBlock.setFieldValue(inputOptions.blockFields[fieldName], fieldName);
+              }
+            }
+            // addedBlock.setFieldValue(50, 'NUM');
+            // Render block and connect it to the Value Input.
+            addedBlock.render();
+            var mathConnection = addedBlock.outputConnection;
+            var mutatedConnection = this.getInput(mutantInputID).connection;
+            mutatedConnection.connect(mathConnection);
+          }
+        }
+      }
+    } else if (inputExists) {
+      // Dispose the added block if exists.
+      if (inputOptions) {
+        if (inputOptions.addBlock) {
+          var mutationChildBlock = this.getInputTargetBlock(mutantInputID);
+          if (mutationChildBlock !== undefined && mutationChildBlock.type === inputOptions.addBlock) {
+            mutationChildBlock.dispose();
+          }
+        }
+      }
+      // Remove added Value Input when the option trigger is not selected.
+      this.removeInput(mutantInputID);
+    }
+  };
+
+  /**
+    * Creates a reference to the mutation logic. It is used when blocks are loaded
+    * form an XML.
+    * @return {Element} XML storage element.
+    * @this Blockly.Block
+    */
+  this.mutationToDom = function () {
+    var container = document.createElement('mutation');
+    var selectedOption = this.getFieldValue('DROPDOWN_SELECTION');
+    var hasMutated;
+    if (Array.isArray(mutationOption)) {
+      hasMutated = mutationOption.includes(selectedOption);
+    } else {
+      hasMutated = (selectedOption === mutationOption);
+    }
+
+    var childMutant = this.getInputTargetBlock(mutantInputID);
+    var hadChild = false;
+    if (childMutant) {
+      hadChild = true;
+    }
+
+    container.setAttribute('dropdown_mutation', hasMutated);
+    container.setAttribute('has_mutant_child', hadChild);
+
+    return container;
+  };
+
+  /**
+    * Parses the mutation flag and triggers the mutation in the block.
+    * @param {!Element} xmlElement  XML storage element.
+    * @this Blockly.Block
+    */
+  this.domToMutation = function (xmlElement) {
+    var hasMutated = (xmlElement.getAttribute('dropdown_mutation') === 'true');
+    var hadMutantChild = (xmlElement.getAttribute('has_mutant_child') === 'true');
+    this.mutateBlock(hasMutated, hadMutantChild);
+  };
+};
+
+Blockly.Block.prototype.getDynamicIDFieldString = function () {
+  var id = this.getFieldValue('ID');
+  if (id === '#') {
+    // TODO: This will crash for any other prog language
+    id = Blockly.Python.valueToCode(this, '#', Blockly.Python.ORDER_NONE) || '\'None\'';
+  } else if (id === '') {
+    id = '\'None\'';
+  } else {
+    id = '\'' + id + '\'';
+  }
+
+  if (id !== '\'None\'') {
+    Blockly.Python.fableModulesUsed_.add(id);
+  }
+
+  return id;
+};
+
+Blockly.Block.prototype.getMutatedDropdownValue = function (mutatedOption, mutationID) {
+  var selection = this.getFieldValue('DROPDOWN_SELECTION');
+  var mutatedValue = null;
+  // Check if the selected option is a mutation option.
+  var fromMutation = false;
+  if (Array.isArray(mutatedOption)) {
+    fromMutation = mutatedOption.includes(selection);
+  } else {
+    fromMutation = (selection === mutatedOption);
+  }
+
+  // Read the option.
+  if (fromMutation) {
+    mutatedValue = Blockly.Python.valueToCode(this, mutationID, Blockly.Python.ORDER_NONE) || '\'None\'';
+  } else if (selection === '') {
+    selection = '\'None\'';
+  }
+
+  return [selection, mutatedValue];
+};
+
+Blockly.Block.prototype.getDynamicMediaFieldInput = function (mediaType) {
+  var fieldName = '';
+  if (mediaType === 'image') {
+    fieldName = 'IMAGEFILE';
+  }
+
+  var fileName = this.getFieldValue(fieldName);
+  if (fileName === '#') {
+    fileName = Blockly.Python.valueToCode(this, '#', Blockly.Python.ORDER_NONE) || '\'None\'';
+  } else if (fileName === '') {
+    fileName = '\'None\'';
+  } else {
+    fileName = '"' + fileName + '"';
+  }
+
+  return fileName;
 };

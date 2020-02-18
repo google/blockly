@@ -302,3 +302,10 @@ Blockly.Python['text_reverse'] = function(block) {
   var code = text + '[::-1]';
   return [code, Blockly.Python.ORDER_MEMBER];
 };
+
+Blockly.Python.fable_text_join = function (block) {
+  var firstText = Blockly.Python.valueToCode(block, 'FIRSTTEXT', Blockly.Python.ORDER_ATOMIC) || '\'\'';
+  var secondText = Blockly.Python.valueToCode(block, 'SECONDTEXT', Blockly.Python.ORDER_ATOMIC) || '\'\'';
+  var result = 'str(' + firstText + ') + \' \' + str(' + secondText + ')';
+  return [result, Blockly.Python.ORDER_ATOMIC];
+};

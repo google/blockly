@@ -122,7 +122,7 @@ Blockly.FieldAngle.HALF = 100 / 2;
  * increase. Angle increases clockwise (true) or counterclockwise (false).
  * @const {boolean}
  */
-Blockly.FieldAngle.CLOCKWISE = false;
+Blockly.FieldAngle.CLOCKWISE = true;
 
 /**
  * The default offset of 0 degrees (and all angles). Always offsets in the
@@ -130,7 +130,7 @@ Blockly.FieldAngle.CLOCKWISE = false;
  * Usually either 0 (0 = right) or 90 (0 = up).
  * @const {number}
  */
-Blockly.FieldAngle.OFFSET = 0;
+Blockly.FieldAngle.OFFSET = 90;
 
 /**
  * The default maximum angle to allow before wrapping.

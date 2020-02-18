@@ -31,17 +31,150 @@ goog.provide('Blockly.Constants.Loops');
 
 goog.require('Blockly');
 goog.require('Blockly.Blocks');
+goog.require('Blockly.Blocks.Definitions');
 goog.require('Blockly.FieldDropdown');
 goog.require('Blockly.FieldLabel');
 goog.require('Blockly.FieldNumber');
 goog.require('Blockly.FieldVariable');
-
 
 /**
  * Unused constant for the common HSV hue for all blocks in this category.
  * @deprecated Use Blockly.Msg['LOOPS_HUE']. (2018 April 5)
  */
 Blockly.Constants.Loops.HUE = 120;
+
+Blockly.Blocks.controls_whileForever = {
+  /**
+     * Block for 'repeat forever' loop.
+     * @this Blockly.Block
+     */
+  init: function () {
+    this.setStyle(Blockly.Blocks.Definitions.loopsStyle);
+
+    this.appendDummyInput()
+      .appendField(Blockly.Msg.FABLE_WHILE_FOREVER);
+
+    this.appendStatementInput('DO')
+      .appendField(Blockly.Msg.CONTROLS_WHILEUNTIL_INPUT_DO);
+
+    this.setPreviousStatement(true);
+    this.setNextStatement(true);
+    this.setTooltip(Blockly.Msg.FABLE_WHILE_FOREVER_TOOLTIP);
+    this.setHelpUrl(Blockly.Msg.CONTROLS_WHILEUNTIL_HELPURL);
+  },
+  ensureSearchKeywords: function () {
+    var keywords = [
+      Blockly.Msg.FABLE_WHILE_FOREVER,
+      Blockly.Msg.CONTROLS_WHILEUNTIL_INPUT_DO,
+      '%{BKY_LOOPS}',
+      '%{BKY_LABEL_LOOPS}'
+    ];
+
+    Blockly.Search.preprocessSearchKeywords('controls_whileForever', keywords);
+  }
+};
+
+Blockly.Blocks.controls_stopApp = {
+  /**
+     * Block for 'stop code' block.
+     * @this Blockly.Block
+     */
+  init: function () {
+    this.setStyle(Blockly.Blocks.Definitions.loopsStyle);
+
+    this.appendDummyInput()
+      .appendField(Blockly.Msg.FABLE_STOP_PROGRAM);
+
+    this.setPreviousStatement(true);
+
+    // This block should not have blocks after it, as those would be useless
+    this.setNextStatement(false);
+    this.setTooltip(Blockly.Msg.FABLE_STOP_PROGRAM_TOOLTIP);
+    this.setHelpUrl(Blockly.Msg.CONTROLS_WHILEUNTIL_HELPURL);
+  },
+  ensureSearchKeywords: function () {
+    var keywords = [
+      Blockly.Msg.FABLE_STOP_PROGRAM,
+      '%{BKY_LOOPS}',
+      '%{BKY_LABEL_LOOPS}'
+    ];
+
+    Blockly.Search.preprocessSearchKeywords('controls_stopApp', keywords);
+  }
+};
+
+Blockly.Blocks.fable_wait = {
+  /**
+     * Block for wait in seconds.
+     * @this Blockly.Block
+     */
+  init: function () {
+    // Inputs:
+    var image = new Blockly.FieldImage(
+      Blockly.Blocks.Definitions.waitIcon,
+      Blockly.Blocks.Definitions.iconSize,
+      Blockly.Blocks.Definitions.iconSize, '*');
+    this.appendDummyInput()
+      .appendField(image);
+
+    this.appendValueInput('WAIT')
+      .appendField(Blockly.Msg.FABLE_WAIT_TIME);
+
+    // Properties:
+    this.setStyle(Blockly.Blocks.Definitions.loopsStyle);
+    this.setTooltip(Blockly.Msg.FABLE_WAIT_TIME_TOOLTIP);
+    this.setPreviousStatement(true);
+    this.setNextStatement(true);
+    this.setInputsInline(true);
+    this.setHelpUrl('http://www.example.com/');
+  },
+  ensureSearchKeywords: function () {
+    var keywords = [
+      Blockly.Msg.FABLE_WAIT_TIME,
+      '%{BKY_LOOPS}',
+      '%{BKY_LABEL_TIME_CONTROL}'
+    ];
+
+    Blockly.Search.preprocessSearchKeywords('fable_wait', keywords);
+  }
+};
+
+Blockly.Blocks.fable_wait_until = {
+  /**
+     *
+     * @this Blockly.Block
+     */
+  init: function () {
+    // Inputs:
+    var image = new Blockly.FieldImage(
+      Blockly.Blocks.Definitions.waitIcon,
+      Blockly.Blocks.Definitions.iconSize,
+      Blockly.Blocks.Definitions.iconSize, '*');
+    this.appendDummyInput()
+      .appendField(image);
+
+    this.appendValueInput('WAIT')
+      .appendField(Blockly.Msg.FABLE_WAIT_UNTIL)
+      .setCheck('Boolean');
+
+    // Properties:
+    this.setStyle(Blockly.Blocks.Definitions.loopsStyle);
+    this.setTooltip(Blockly.Msg.FABLE_WAIT_UNTIL_TOOLTIP);
+    this.setPreviousStatement(true);
+    this.setNextStatement(true);
+    this.setInputsInline(true);
+    this.setHelpUrl('http://www.example.com/');
+  },
+  ensureSearchKeywords: function () {
+    var keywords = [
+      Blockly.Msg.FABLE_WAIT_UNTIL,
+      '%{BKY_LOOPS}',
+      '%{BKY_LABEL_TIME_CONTROL}'
+    ];
+
+    Blockly.Search.preprocessSearchKeywords('fable_wait_until', keywords);
+  }
+};
 
 Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
   // Block for repeat n times (external number).

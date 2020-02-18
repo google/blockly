@@ -611,9 +611,7 @@ Blockly.Field.prototype.updateSize_ = function() {
       constants.FIELD_TEXT_FONTFAMILY);
   var xOffset = this.borderRect_ ? constants.FIELD_BORDER_RECT_X_PADDING : 0;
   var totalWidth = textWidth + xOffset * 2;
-  var totalHeight = constants.FIELD_TEXT_BASELINE_CENTER ?
-      constants.FIELD_TEXT_HEIGHT :
-      constants.FIELD_TEXT_ASCENT;
+  var totalHeight = constants.FIELD_TEXT_HEIGHT;
   if (this.borderRect_) {
     totalHeight = Math.max(totalHeight, constants.FIELD_BORDER_RECT_HEIGHT);
   }

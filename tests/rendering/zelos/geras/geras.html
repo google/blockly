@@ -1,0 +1,74 @@
+<html>
+
+<head>
+  <script type="text/javascript" src="../../../../blockly_uncompressed.js"></script>
+  <script type="text/javascript" src="../../../../blocks_compressed.js"></script>
+  <script type="text/javascript" src="../../../../msg/messages.js"></script>
+  <script type="text/javascript" src="../../../playgrounds/screenshot.js"></script>
+</head>
+
+<body>
+  <div id="blocklyDiv"></div>
+  <script>
+    goog.require('Blockly.blockRendering.Debug');
+    goog.require('Blockly.geras.Renderer');
+    // Blockly.blockRendering.startDebugger();
+
+    var blocklyDiv = document.getElementById('blocklyDiv');
+    var workspace;
+    window.addEventListener('message', function (msg) {
+      var data = msg.data;
+      if (data.type !== 'post') {
+        return;
+      }
+      var xml = data.xml;
+      try {
+        if (workspace) {
+          workspace.dispose();
+          blocklyDiv.innerHTML = '';
+          window.parent.focus();
+        }
+      } catch { }
+
+      workspace = Blockly.inject(blocklyDiv, {
+        renderer: 'geras',
+        move: {
+          scrollbars: true,
+          drag: true,
+          wheel: false,
+        },
+        zoom: {
+          wheel: true,
+          startScale: 2,
+        }
+      });
+
+      Blockly.Xml.domToWorkspace(Blockly.Xml.textToDom(xml), workspace);
+
+      function postChange() {
+        try {
+          var topBlock = workspace.getTopBlocks()[0];
+          workspaceToSvg_(workspace, function (datauri) {
+            window.parent.postMessage({
+              type: 'svg',
+              from: 'geras',
+              text: datauri
+            }, '*');
+          });
+        } catch (err) {
+          console.error(err);
+        }
+      }
+
+      workspace.addChangeListener(function(e) {
+        if (e.type != 'ui') {
+          postChange();
+        }
+      });
+
+      postChange();
+    });
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,78 @@
+<html>
+
+<head>
+  <script type="text/javascript" src="https://20190722-dot-blockly-demo.appspot.com/static/blockly_compressed.js"></script>
+  <script type="text/javascript" src="../../../../blocks_compressed.js"></script>
+  <script type="text/javascript" src="../../../../msg/messages.js"></script>
+  <script type="text/javascript" src="../../../playgrounds/screenshot.js"></script>
+</head>
+
+<body>
+  <div id="blocklyDiv"></div>
+  <script>
+
+    var oldGetBlocksBoundingBox = Blockly.WorkspaceSvg.prototype.getBlocksBoundingBox;
+    Blockly.WorkspaceSvg.prototype.getBlocksBoundingBox = function() {
+      var bbox = oldGetBlocksBoundingBox.call(this);
+      return {
+        top: bbox.top,
+        bottom: bbox.bottom,
+        left: bbox.left,
+        right: bbox.right + 1
+      }
+    };
+
+    var blocklyDiv = document.getElementById('blocklyDiv');
+    var workspace;
+    window.addEventListener('message', function (msg) {
+      var data = msg.data;
+      if (data.type !== 'post') {
+        return;
+      }
+      var xml = data.xml;
+      try {
+        if (workspace) {
+          workspace.dispose();
+          blocklyDiv.innerHTML = '';
+        }
+      } catch { }
+
+      workspace = Blockly.inject(blocklyDiv, {
+        move: {
+          scrollbars: true,
+          drag: true,
+          wheel: false,
+        },
+        zoom: {
+          wheel: true,
+          startScale: 2,
+        }
+      });
+
+      Blockly.Xml.domToWorkspace(Blockly.Xml.textToDom(xml), workspace);
+
+      function postChange() {
+        try {
+          var topBlock = workspace.getTopBlocks()[0];
+          workspaceToSvg_(workspace, function (datauri) {
+            window.parent.postMessage({
+              type: 'svg',
+              from: 'oldrenderer',
+              text: datauri
+            }, '*');
+          });
+        } catch { }
+      }
+
+      workspace.addChangeListener(function(e) {
+        if (e.type != 'ui') {
+          postChange();
+        }
+      });
+
+      postChange();
+    });
+  </script>
+</body>
+
+</html>

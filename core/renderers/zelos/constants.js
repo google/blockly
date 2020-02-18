@@ -237,18 +237,6 @@ Blockly.zelos.ConstantProvider = function() {
   /**
    * @override
    */
-  this.FIELD_TEXT_HEIGHT = 13.1;
-
-  /**
-   * Used by positioning text on IE and Edge as they don't support
-   * dominant-baseline:center.
-   * @override
-   */
-  this.FIELD_TEXT_BASELINE_Y = 13.1;
-
-  /**
-   * @override
-   */
   this.FIELD_BORDER_RECT_RADIUS = this.CORNER_RADIUS;
 
   /**
@@ -295,11 +283,6 @@ Blockly.zelos.ConstantProvider = function() {
    * @override
    */
   this.FIELD_TEXTINPUT_BOX_SHADOW = true;
-
-  /**
-   * @override
-   */
-  this.FIELD_TEXT_Y_OFFSET = Blockly.utils.userAgent.CHROME ? -.45 : 0;
 
   /**
    * @override
@@ -404,7 +387,8 @@ Blockly.zelos.ConstantProvider.prototype.init = function(theme) {
   this.ROUNDED = this.makeRounded();
   this.SQUARED = this.makeSquared();
 
-  this.STATEMENT_INPUT_NOTCH_OFFSET += this.INSIDE_CORNERS.rightWidth;
+  this.STATEMENT_INPUT_NOTCH_OFFSET = this.NOTCH_OFFSET_LEFT +
+      this.INSIDE_CORNERS.rightWidth;
 };
 
 /**

@@ -299,12 +299,6 @@ Blockly.blockRendering.ConstantProvider = function() {
   this.FIELD_TEXT_BASELINE_Y = Blockly.utils.userAgent.GECKO ? 12 : 13.09;
 
   /**
-   * An text offset adjusting the Y position of text after positioning.
-   * @type {number}
-   */
-  this.FIELD_TEXT_Y_OFFSET = 0;
-
-  /**
    * A field's text element's dominant baseline.
    * @type {boolean}
    */
@@ -634,8 +628,9 @@ Blockly.blockRendering.ConstantProvider.prototype.setFontConstants_ = function(
       this.FIELD_TEXT_FONTSIZE + 'pt',
       this.FIELD_TEXT_FONTWEIGHT,
       this.FIELD_TEXT_FONTFAMILY);
+
   this.FIELD_TEXT_HEIGHT = fontDimensions.height;
-  this.FIELD_TEXT_BASELINE_Y = fontDimensions.ascent;
+  this.FIELD_TEXT_BASELINE_Y = Math.max(13.09, fontDimensions.height - fontDimensions.descent);
 };
 
 /**

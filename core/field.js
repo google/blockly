@@ -310,11 +310,19 @@ Blockly.Field.prototype.initModel = function() {
  * @protected
  */
 Blockly.Field.prototype.createBorderRect_ = function() {
+  this.size_.height = Math.max(this.size_.height,
+      this.constants_.FIELD_BORDER_RECT_HEIGHT);
+  this.size_.width = Math.max(this.size_.width,
+      this.constants_.FIELD_BORDER_RECT_X_PADDING * 2);
   this.borderRect_ = /** @type {!SVGRectElement} **/
       (Blockly.utils.dom.createSvgElement('rect',
           {
+            'rx': this.constants_.FIELD_BORDER_RECT_RADIUS,
+            'ry': this.constants_.FIELD_BORDER_RECT_RADIUS,
             'x': 0,
             'y': 0,
+            'height': this.size_.height,
+            'width': this.size_.width,
             'class': 'blocklyFieldRect'
           }, this.fieldGroup_));
 };
@@ -330,7 +338,7 @@ Blockly.Field.prototype.createTextElement_ = function() {
       (Blockly.utils.dom.createSvgElement('text',
           {
             'class': 'blocklyText',
-            'dy': this.constants_.FIELD_TEXT_Y_OFFSET,
+            // 'dy': this.constants_.FIELD_TEXT_Y_OFFSET,
           }, this.fieldGroup_));
   if (this.constants_.FIELD_TEXT_BASELINE_CENTER) {
     this.textElement_.setAttribute('dominant-baseline', 'central');
@@ -612,6 +620,7 @@ Blockly.Field.prototype.updateSize_ = function() {
       constants.FIELD_TEXT_FONTWEIGHT,
       constants.FIELD_TEXT_FONTFAMILY);
   var xOffset = this.borderRect_ ? constants.FIELD_BORDER_RECT_X_PADDING : 0;
+  var yOffset = this.borderRect_ ? constants.FIELD_BORDER_RECT_Y_PADDING : 0;
   var totalWidth = textWidth + xOffset * 2;
   var baselineCenter = constants.FIELD_TEXT_BASELINE_CENTER;
   var baselineY = constants.FIELD_TEXT_BASELINE_Y;
@@ -625,8 +634,7 @@ Blockly.Field.prototype.updateSize_ = function() {
   }
   this.textElement_.setAttribute('x', xOffset);
   this.textElement_.setAttribute('y', baselineCenter ?
-      totalHeight / 2 : baselineY);
-  this.textElement_.setAttribute('dy', constants.FIELD_TEXT_Y_OFFSET);
+      totalHeight / 2 : baselineY - yOffset);
   this.size_.height = totalHeight;
   this.size_.width = totalWidth;
 };

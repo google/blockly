@@ -640,6 +640,7 @@ Blockly.FieldDropdown.prototype.renderSelectedText_ = function() {
       this.constants_.FIELD_TEXT_FONTWEIGHT,
       this.constants_.FIELD_TEXT_FONTFAMILY);
   var xPadding = hasBorder ? this.constants_.FIELD_BORDER_RECT_X_PADDING : 0;
+  var yPadding = hasBorder ? this.constants_.FIELD_BORDER_RECT_Y_PADDING : 0;
   var arrowWidth = 0;
   if (this.svgArrow_) {
     arrowWidth = this.positionSVGArrow_(textWidth + xPadding, halfHeight -
@@ -649,13 +650,18 @@ Blockly.FieldDropdown.prototype.renderSelectedText_ = function() {
 
   this.textElement_.setAttribute('x', this.sourceBlock_.RTL ?
       this.size_.width - textWidth - xPadding : xPadding);
-  this.textElement_.setAttribute('y', halfHeight);
-  if (!this.constants_.FIELD_TEXT_BASELINE_CENTER) {
-    this.textElement_.setAttribute('dy',
-        this.constants_.FIELD_TEXT_BASELINE_Y -
-        this.constants_.FIELD_TEXT_HEIGHT / 2 +
-        this.constants_.FIELD_TEXT_Y_OFFSET);
+  if (this.constants_.FIELD_TEXT_BASELINE_CENTER) {
+    this.textElement_.setAttribute('y', halfHeight);
+  } else {
+    this.textElement_.setAttribute('y', halfHeight +
+      this.constants_.FIELD_TEXT_BASELINE_Y -
+      this.constants_.FIELD_TEXT_HEIGHT / 2);
   }
+  // this.textElement_.setAttribute('y', halfHeight);
+  // if (!this.constants_.FIELD_TEXT_BASELINE_CENTER) {
+  //   this.textElement_.setAttribute('dy', -halfHeight +
+  //       this.constants_.FIELD_TEXT_BASELINE_Y);
+  // }
 };
 
 /**

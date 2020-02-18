@@ -336,6 +336,7 @@ Blockly.utils.dom.measureFontDimensions = function(text, fontSize, fontWeight,
       'display: inline-block; width: 1px; height: 0px;');
   
   var div = document.createElement('div');
+  div.style.display = 'inline-block';
   div.appendChild(span);
   div.appendChild(block);
 

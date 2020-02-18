@@ -569,8 +569,6 @@ Blockly.Field.prototype.render_ = function() {
   if (this.textContent_) {
     this.textContent_.nodeValue = this.getDisplayText_();
     this.updateSize_();
-    this.updateTextElement_();
-    this.updateBorderRect_();
   }
 };
 
@@ -621,36 +619,34 @@ Blockly.Field.prototype.updateSize_ = function() {
   }
   this.size_.height = totalHeight;
   this.size_.width = totalWidth;
+
+  this.positionTextElement_(xOffset);
+  this.positionBorderRect_();
 };
 
 /**
- * Updates a field's text element after a size change.
+ * Position a field's text element after a size change.
+ * @param {number} xOffset x offset to use when positioning the text element.
  * @protected
  */
-Blockly.Field.prototype.updateTextElement_ = function() {
+Blockly.Field.prototype.positionTextElement_ = function(xOffset) {
   if (!this.textElement_) {
     return;
   }
   var constants = this.constants_;
-  var xPadding = this.borderRect_ ? constants.FIELD_BORDER_RECT_X_PADDING : 0;
-  var textWidth = Blockly.utils.dom.getFastTextWidth(this.textElement_,
-      this.constants_.FIELD_TEXT_FONTSIZE + 'pt',
-      this.constants_.FIELD_TEXT_FONTWEIGHT,
-      this.constants_.FIELD_TEXT_FONTFAMILY);
   var halfHeight = this.size_.height / 2;
 
-  this.textElement_.setAttribute('x', this.sourceBlock_.RTL ?
-      this.size_.width - textWidth - xPadding : xPadding);
+  this.textElement_.setAttribute('x', xOffset);
   this.textElement_.setAttribute('y', constants.FIELD_TEXT_BASELINE_CENTER ?
       halfHeight : halfHeight - constants.FIELD_TEXT_HEIGHT / 2 +
       constants.FIELD_TEXT_ASCENT);
 };
 
 /**
- * Updates a field's border rect after a size change.
+ * Position a field's border rect after a size change.
  * @protected
  */
-Blockly.Field.prototype.updateBorderRect_ = function() {
+Blockly.Field.prototype.positionBorderRect_ = function() {
   if (this.borderRect_) {
     this.borderRect_.setAttribute('width', this.size_.width);
     this.borderRect_.setAttribute('height', this.size_.height);

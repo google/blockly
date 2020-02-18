@@ -310,19 +310,11 @@ Blockly.Field.prototype.initModel = function() {
  * @protected
  */
 Blockly.Field.prototype.createBorderRect_ = function() {
-  this.size_.height = Math.max(this.size_.height,
-      this.constants_.FIELD_BORDER_RECT_HEIGHT);
-  this.size_.width = Math.max(this.size_.width,
-      this.constants_.FIELD_BORDER_RECT_X_PADDING * 2);
   this.borderRect_ = /** @type {!SVGRectElement} **/
       (Blockly.utils.dom.createSvgElement('rect',
           {
-            'rx': this.constants_.FIELD_BORDER_RECT_RADIUS,
-            'ry': this.constants_.FIELD_BORDER_RECT_RADIUS,
             'x': 0,
             'y': 0,
-            'height': this.size_.height,
-            'width': this.size_.width,
             'class': 'blocklyFieldRect'
           }, this.fieldGroup_));
 };
@@ -621,12 +613,11 @@ Blockly.Field.prototype.updateSize_ = function() {
       constants.FIELD_TEXT_FONTFAMILY);
   var xOffset = this.borderRect_ ? constants.FIELD_BORDER_RECT_X_PADDING : 0;
   var totalWidth = textWidth + xOffset * 2;
-  var baselineCenter = constants.FIELD_TEXT_BASELINE_CENTER;
-  var baselineY = constants.FIELD_TEXT_BASELINE_Y;
-  var totalHeight = baselineCenter ? constants.FIELD_TEXT_HEIGHT : baselineY;
+  var totalHeight = constants.FIELD_TEXT_BASELINE_CENTER ?
+      constants.FIELD_TEXT_HEIGHT :
+      constants.FIELD_TEXT_ASCENT;
   if (this.borderRect_) {
-    totalHeight =
-        Math.max(totalHeight, this.constants_.FIELD_BORDER_RECT_HEIGHT);
+    totalHeight = Math.max(totalHeight, constants.FIELD_BORDER_RECT_HEIGHT);
   }
   this.size_.height = totalHeight;
   this.size_.width = totalWidth;
@@ -641,17 +632,18 @@ Blockly.Field.prototype.updateTextElement_ = function() {
     return;
   }
   var constants = this.constants_;
-  var xOffset = this.borderRect_ ? constants.FIELD_BORDER_RECT_X_PADDING : 0;
-  var yOffset = this.borderRect_ ? constants.FIELD_BORDER_RECT_Y_PADDING : 0;
-  var baselineCenter = constants.FIELD_TEXT_BASELINE_CENTER;
-  var baselineY = constants.FIELD_TEXT_BASELINE_Y;
-  var height = this.size_.height;
-  if (height > constants.FIELD_TEXT_HEIGHT) {
-    baselineY += (height - baselineY) / 2;
-  }
-  this.textElement_.setAttribute('x', xOffset);
-  this.textElement_.setAttribute('y', baselineCenter ?
-      height / 2 : baselineY);
+  var xPadding = this.borderRect_ ? constants.FIELD_BORDER_RECT_X_PADDING : 0;
+  var textWidth = Blockly.utils.dom.getFastTextWidth(this.textElement_,
+      this.constants_.FIELD_TEXT_FONTSIZE + 'pt',
+      this.constants_.FIELD_TEXT_FONTWEIGHT,
+      this.constants_.FIELD_TEXT_FONTFAMILY);
+  var halfHeight = this.size_.height / 2;
+
+  this.textElement_.setAttribute('x', this.sourceBlock_.RTL ?
+      this.size_.width - textWidth - xPadding : xPadding);
+  this.textElement_.setAttribute('y', constants.FIELD_TEXT_BASELINE_CENTER ?
+      halfHeight : halfHeight - constants.FIELD_TEXT_HEIGHT / 2 +
+      constants.FIELD_TEXT_ASCENT);
 };
 
 /**

@@ -248,6 +248,19 @@ Blockly.blockRendering.ConstantProvider = function() {
    */
   this.FIELD_TEXT_HEIGHT = this.DYNAMICALLY_SET;
 
+
+  /**
+   * Ascent height of text.
+   * @type {number}
+   */
+  this.FIELD_TEXT_ASCENT = this.DYNAMICALLY_SET;
+
+  /**
+   * Descent height of text.
+   * @type {number}
+   */
+  this.FIELD_TEXT_DESCENT = this.DYNAMICALLY_SET;
+
   /**
    * Text font weight.
    * @type {string}
@@ -290,13 +303,6 @@ Blockly.blockRendering.ConstantProvider = function() {
    * @package
    */
   this.FIELD_BORDER_RECT_COLOUR = '#fff';
-
-  /**
-   * Field text baseline.
-   * This is only used if `FIELD_TEXT_BASELINE_CENTER` is false.
-   * @type {number}
-   */
-  this.FIELD_TEXT_BASELINE_Y = Blockly.utils.userAgent.GECKO ? 12 : 13.09;
 
   /**
    * A field's text element's dominant baseline.
@@ -630,7 +636,8 @@ Blockly.blockRendering.ConstantProvider.prototype.setFontConstants_ = function(
       this.FIELD_TEXT_FONTFAMILY);
 
   this.FIELD_TEXT_HEIGHT = fontDimensions.height;
-  this.FIELD_TEXT_BASELINE_Y = fontDimensions.height - fontDimensions.descent;
+  this.FIELD_TEXT_ASCENT = fontDimensions.ascent;
+  this.FIELD_TEXT_DESCENT = fontDimensions.descent;
 };
 
 /**

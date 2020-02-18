@@ -428,9 +428,17 @@ Blockly.Trashcan.prototype.click = function() {
   }
 
   var xml = [];
+
   for (var i = 0, text; text = this.contents_[i]; i++) {
     xml[i] = Blockly.Xml.textToDom(text);
   }
+
+  // Construct a label for the top of the flyout
+  var toAdd = '<label text="' + Blockly.Msg.LABEL_TRASH_CAN + '" web-class="subcategoryClass"></label>';
+
+  // Add it to the front of the xml
+  xml.unshift(Blockly.Xml.textToDom(toAdd));
+
   this.flyout_.show(xml);
 };
 

@@ -114,6 +114,15 @@ Blockly.Flyout = function(workspaceOptions) {
    * @const
    */
   this.tabWidth_ = this.workspace_.getRenderer().getConstants().TAB_WIDTH;
+
+  /**
+   * Elements that can overlay with the flyout.
+   * Will be used to calculate the maximum size of the flyout.
+   */
+  this.widthCalcElements_ = {
+    mainToolbox: document.getElementsByClassName('blocklyToolboxDiv')[0],
+    rightSidebar: document.getElementById('right_content')
+  };
 };
 
 /**
@@ -384,6 +393,41 @@ Blockly.Flyout.prototype.updateDisplay_ = function() {
  * @protected
  */
 Blockly.Flyout.prototype.positionAt_ = function(width, height, x, y) {
+  let maxWidth = window.innerWidth;
+  let minLeftTransform = 0;
+
+  if (!this.widthCalcElements_.mainToolbox) {
+    try {
+      this.widthCalcElements_.mainToolbox = document.getElementsByClassName('blocklyToolboxDiv')[0];
+      maxWidth = maxWidth - this.widthCalcElements_.mainToolbox.offsetWidth;
+      minLeftTransform = this.widthCalcElements_.mainToolbox.offsetWidth;
+    } catch (e) {
+      console.log('Cannot find the main toolbox element for flyout positioning!');
+    }
+  } else {
+    maxWidth = maxWidth - this.widthCalcElements_.mainToolbox.offsetWidth;
+    minLeftTransform = this.widthCalcElements_.mainToolbox.offsetWidth;
+  }
+
+  if (!this.widthCalcElements_.rightSidebar) {
+    try {
+      this.widthCalcElements_.rightSidebar = document.getElementById('right_content');
+      maxWidth = maxWidth - this.widthCalcElements_.rightSidebar.offsetWidth;
+    } catch (e) {
+      console.log('Cannot find the right sidebar element for flyout positioning!');
+    }
+  } else {
+    maxWidth = maxWidth - this.widthCalcElements_.rightSidebar.offsetWidth;
+  }
+
+  if (!Blockly.mainWorkspace.RTL) {
+    width = Math.min(width, maxWidth);
+    x = Math.max(x, minLeftTransform);
+  } else {
+    // TODO: Add the flyout offset calculation once we start adding RTL languages
+    // Probably width = Math.max, x = Math.min
+  }
+
   this.svgGroup_.setAttribute("width", width);
   this.svgGroup_.setAttribute("height", height);
   if (this.svgGroup_.tagName == 'svg') {
@@ -436,6 +480,19 @@ Blockly.Flyout.prototype.hide = function() {
  */
 Blockly.Flyout.prototype.show = function(xmlList) {
   this.workspace_.setResizesEnabled(false);
+
+  var workspace = Blockly.getMainWorkspace();
+  if (workspace.trashcan &&
+      workspace.trashcan.flyout_ &&
+      this !== workspace.trashcan.flyout_) {
+    workspace.trashcan.flyout_.hide();
+  }
+  if (workspace.toolbox_ &&
+      workspace.toolbox_.flyout_ &&
+      this !== workspace.toolbox_.flyout_) {
+    workspace.toolbox_.clearSelection();
+  }
+
   this.hide();
   this.clearOldBlocks_();
 

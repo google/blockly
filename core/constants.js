@@ -107,13 +107,13 @@ Blockly.DRAG_STACK = true;
  * The richness of block colours, regardless of the hue.
  * Must be in the range of 0 (inclusive) to 1 (exclusive).
  */
-Blockly.HSV_SATURATION = 1;
+Blockly.HSV_SATURATION = 1; // SHAPE: 0.9 in our old versions
 
 /**
  * The intensity of block colours, regardless of the hue.
  * Must be in the range of 0 (inclusive) to 1 (exclusive).
  */
-Blockly.HSV_VALUE = 1;
+Blockly.HSV_VALUE = 1; // SHAPE: 0.7 in our old versions
 
 /**
  * Sprited icons and images.

@@ -43,31 +43,31 @@
 
 /** @type {string} */
 /// {{Notranslate}} Hue value for all logic blocks.
-Blockly.Msg.LOGIC_HUE = '210';
+Blockly.Msg.LOGIC_HUE = '#0894c5';
 /** @type {string} */
 /// {{Notranslate}} Hue value for all loop blocks.
-Blockly.Msg.LOOPS_HUE = '120';
+Blockly.Msg.LOOPS_HUE = '#2aab53';
 /** @type {string} */
 /// {{Notranslate}} Hue value for all math blocks.
-Blockly.Msg.MATH_HUE = '230';
+Blockly.Msg.MATH_HUE = '#1d53ba';
 /** @type {string} */
 /// {{Notranslate}} Hue value for all text blocks.
-Blockly.Msg.TEXTS_HUE = '160';
+Blockly.Msg.TEXTS_HUE = '#8c1bb5';
 /** @type {string} */
 /// {{Notranslate}} Hue value for all list blocks.
-Blockly.Msg.LISTS_HUE = '260';
+Blockly.Msg.LISTS_HUE = '#613f93';
 /** @type {string} */
 /// {{Notranslate}} Hue value for all colour blocks.
-Blockly.Msg.COLOUR_HUE = '20';
+Blockly.Msg.COLOUR_HUE = '#7ed136';
 /** @type {string} */
 /// {{Notranslate}} Hue value for all variable blocks.
-Blockly.Msg.VARIABLES_HUE = '330';
+Blockly.Msg.VARIABLES_HUE = '#ae3998';
 /** @type {string} */
 /// {{Notranslate}} Hue value for all variable dynamic blocks.
-Blockly.Msg.VARIABLES_DYNAMIC_HUE = '310';
+Blockly.Msg.VARIABLES_DYNAMIC_HUE = '#ae3998';
 /** @type {string} */
 /// {{Notranslate}} Hue value for all procedure blocks.
-Blockly.Msg.PROCEDURES_HUE = '290';
+Blockly.Msg.PROCEDURES_HUE = '#fbc23d';
 
 /** @type {string} */
 /// default name - A simple, general default name for a variable, preferably short.

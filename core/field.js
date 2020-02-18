@@ -330,7 +330,6 @@ Blockly.Field.prototype.createTextElement_ = function() {
       (Blockly.utils.dom.createSvgElement('text',
           {
             'class': 'blocklyText',
-            // 'dy': this.constants_.FIELD_TEXT_Y_OFFSET,
           }, this.fieldGroup_));
   if (this.constants_.FIELD_TEXT_BASELINE_CENTER) {
     this.textElement_.setAttribute('dominant-baseline', 'central');

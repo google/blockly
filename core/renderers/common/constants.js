@@ -641,7 +641,9 @@ Blockly.blockRendering.ConstantProvider.prototype.getBlockStyleForColour =
 Blockly.blockRendering.ConstantProvider.prototype.getBlockStyle = function(
     blockStyleName) {
   return this.blockStyles[blockStyleName || ''] ||
-      this.createBlockStyle_('#000000');
+      (blockStyleName && blockStyleName.indexOf('auto_') == 0 ?
+        this.getBlockStyleForColour(blockStyleName.substring(5)).style :
+        this.createBlockStyle_('#000000'));
 };
 
 /**

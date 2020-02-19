@@ -327,24 +327,23 @@ Blockly.Constants.Loops.CONTROL_FLOW_IN_LOOP_CHECK_MIXIN = {
   /**
    * Called whenever anything on the workspace changes.
    * Add warning if this flow block is not nested inside a loop.
-   * @param {!Blockly.Events.Abstract} _e Change event.
+   * @param {!Blockly.Events.Abstract} e Change event.
    * @this {Blockly.Block}
    */
-  onchange: function(_e) {
-    if (!this.workspace.isDragging || this.workspace.isDragging()) {
+  onchange: function(e) {
+    if (!this.workspace.isDragging || this.workspace.isDragging() ||
+        e.type != Blockly.Events.BLOCK_MOVE || e.blockId != this.id) {
       return;  // Don't change state at the start of a drag.
     }
-    if (Blockly.Constants.Loops.CONTROL_FLOW_IN_LOOP_CHECK_MIXIN
-        .getSurroundLoop(this)) {
-      this.setWarningText(null);
-      if (!this.isInFlyout) {
-        this.setEnabled(true);
-      }
-    } else {
-      this.setWarningText(Blockly.Msg['CONTROLS_FLOW_STATEMENTS_WARNING']);
-      if (!this.isInFlyout && !this.getInheritedDisabled()) {
-        this.setEnabled(false);
-      }
+    var enabled = Blockly.Constants.Loops.CONTROL_FLOW_IN_LOOP_CHECK_MIXIN
+        .getSurroundLoop(this);
+    this.setWarningText(enabled ? null :
+        Blockly.Msg['CONTROLS_FLOW_STATEMENTS_WARNING']);
+    if (!this.isInFlyout) {
+      var group = Blockly.Events.getGroup();
+      Blockly.Events.setGroup(e.group);
+      this.setEnabled(enabled);
+      Blockly.Events.setGroup(group);
     }
   }
 };

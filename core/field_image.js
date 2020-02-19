@@ -145,6 +145,15 @@ Blockly.FieldImage.Y_PADDING = 1;
 Blockly.FieldImage.prototype.EDITABLE = false;
 
 /**
+ * Used to tell if the field needs to be rendered the next time the block is
+ * rendered. Image fields are statically sized, and only need to be
+ * rendered at initialization.
+ * @type {boolean}
+ * @protected
+ */
+Blockly.FieldImage.prototype.isDirty_ = false;
+
+/**
  * Configure the field based on the given map of options.
  * @param {!Object} config A map of options to configure the field based on.
  * @private

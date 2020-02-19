@@ -386,6 +386,12 @@ Blockly.blockRendering.ConstantProvider = function() {
   this.FIELD_COLOUR_DEFAULT_HEIGHT = this.FIELD_BORDER_RECT_HEIGHT;
 
   /**
+   * A checkbox field's X offset.
+   * @type {number}
+   */
+  this.FIELD_CHECKBOX_X_OFFSET = this.FIELD_BORDER_RECT_X_PADDING - 3;
+
+  /**
    * A random identifier used to ensure a unique ID is used for each
    * filter/pattern for the case of multiple Blockly instances on a page.
    * @type {string}

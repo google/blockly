@@ -101,10 +101,18 @@ Blockly.FieldCheckbox.prototype.configure_ = function(config) {
 Blockly.FieldCheckbox.prototype.initView = function() {
   Blockly.FieldCheckbox.superClass_.initView.call(this);
 
-  this.textElement_.removeAttribute('dominant-baseline');
   Blockly.utils.dom.addClass(this.textElement_, 'blocklyCheckbox');
-
   this.textElement_.style.display = this.value_ ? 'block' : 'none';
+};
+
+/**
+ * @override
+ */
+Blockly.Field.prototype.render_ = function() {
+  if (this.textContent_) {
+    this.textContent_.nodeValue = this.getDisplayText_();
+  }
+  this.updateSize_(this.constants_.FIELD_CHECKBOX_X_OFFSET);
 };
 
 /**

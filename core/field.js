@@ -568,7 +568,9 @@ Blockly.Field.prototype.render_ = function() {
   if (this.textContent_) {
     this.textContent_.nodeValue = this.getDisplayText_();
   }
-  this.updateSize_();
+  var margin =
+      this.borderRect_ ? this.constants_.FIELD_BORDER_RECT_X_PADDING : 0;
+  this.updateSize_(margin);
 };
 
 /**
@@ -599,12 +601,12 @@ Blockly.Field.prototype.updateWidth = function() {
 
 /**
  * Updates the size of the field based on the text.
+ * @param {number} margin margin to use when positioning the text element.
  * @protected
  */
-Blockly.Field.prototype.updateSize_ = function() {
+Blockly.Field.prototype.updateSize_ = function(margin) {
   var constants = this.constants_;
-  var xOffset = this.borderRect_ ? constants.FIELD_BORDER_RECT_X_PADDING : 0;
-  var totalWidth = xOffset * 2;
+  var totalWidth = margin * 2;
   var totalHeight = constants.FIELD_TEXT_HEIGHT;
 
   if (this.textElement_) {
@@ -621,23 +623,23 @@ Blockly.Field.prototype.updateSize_ = function() {
   this.size_.height = totalHeight;
   this.size_.width = totalWidth;
 
-  this.positionTextElement_(xOffset);
+  this.positionTextElement_(margin);
   this.positionBorderRect_();
 };
 
 /**
  * Position a field's text element after a size change.
- * @param {number} xOffset x offset to use when positioning the text element.
+ * @param {number} margin margin to use when positioning the text element.
  * @protected
  */
-Blockly.Field.prototype.positionTextElement_ = function(xOffset) {
+Blockly.Field.prototype.positionTextElement_ = function(margin) {
   if (!this.textElement_) {
     return;
   }
   var constants = this.constants_;
   var halfHeight = this.size_.height / 2;
 
-  this.textElement_.setAttribute('x', xOffset);
+  this.textElement_.setAttribute('x', margin);
   this.textElement_.setAttribute('y', constants.FIELD_TEXT_BASELINE_CENTER ?
       halfHeight : halfHeight - constants.FIELD_TEXT_HEIGHT / 2 +
       constants.FIELD_TEXT_BASELINE);

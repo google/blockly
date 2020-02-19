@@ -568,9 +568,7 @@ Blockly.Field.prototype.render_ = function() {
   if (this.textContent_) {
     this.textContent_.nodeValue = this.getDisplayText_();
   }
-  var margin =
-      this.borderRect_ ? this.constants_.FIELD_BORDER_RECT_X_PADDING : 0;
-  this.updateSize_(margin);
+  this.updateSize_();
 };
 
 /**
@@ -601,12 +599,14 @@ Blockly.Field.prototype.updateWidth = function() {
 
 /**
  * Updates the size of the field based on the text.
- * @param {number} margin margin to use when positioning the text element.
+ * @param {number=} opt_margin margin to use when positioning the text element.
  * @protected
  */
-Blockly.Field.prototype.updateSize_ = function(margin) {
+Blockly.Field.prototype.updateSize_ = function(opt_margin) {
   var constants = this.constants_;
-  var totalWidth = margin * 2;
+  var xOffset = opt_margin != undefined ? opt_margin :
+      (this.borderRect_ ? this.constants_.FIELD_BORDER_RECT_X_PADDING : 0);
+  var totalWidth = xOffset * 2;
   var totalHeight = constants.FIELD_TEXT_HEIGHT;
 
   if (this.textElement_) {
@@ -623,23 +623,25 @@ Blockly.Field.prototype.updateSize_ = function(margin) {
   this.size_.height = totalHeight;
   this.size_.width = totalWidth;
 
-  this.positionTextElement_(margin);
+  this.positionTextElement_(xOffset, textWidth);
   this.positionBorderRect_();
 };
 
 /**
  * Position a field's text element after a size change.
- * @param {number} margin margin to use when positioning the text element.
+ * @param {number} xOffset x offset to use when positioning the text element.
+ * @param {number} contentWidth The content width.
  * @protected
  */
-Blockly.Field.prototype.positionTextElement_ = function(margin) {
+Blockly.Field.prototype.positionTextElement_ = function(xOffset, contentWidth) {
   if (!this.textElement_) {
     return;
   }
   var constants = this.constants_;
   var halfHeight = this.size_.height / 2;
 
-  this.textElement_.setAttribute('x', margin);
+  this.textElement_.setAttribute('x', this.sourceBlock_.RTL ?
+      this.size_.width - contentWidth - xOffset : xOffset);
   this.textElement_.setAttribute('y', constants.FIELD_TEXT_BASELINE_CENTER ?
       halfHeight : halfHeight - constants.FIELD_TEXT_HEIGHT / 2 +
       constants.FIELD_TEXT_BASELINE);

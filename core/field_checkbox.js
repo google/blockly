@@ -101,14 +101,15 @@ Blockly.FieldCheckbox.prototype.configure_ = function(config) {
 Blockly.FieldCheckbox.prototype.initView = function() {
   Blockly.FieldCheckbox.superClass_.initView.call(this);
 
-  Blockly.utils.dom.addClass(this.textElement_, 'blocklyCheckbox');
+  Blockly.utils.dom.addClass(
+      /** @type {!SVGTextElement} **/ (this.textElement_), 'blocklyCheckbox');
   this.textElement_.style.display = this.value_ ? 'block' : 'none';
 };
 
 /**
  * @override
  */
-Blockly.Field.prototype.render_ = function() {
+Blockly.FieldCheckbox.prototype.render_ = function() {
   if (this.textContent_) {
     this.textContent_.nodeValue = this.getDisplayText_();
   }

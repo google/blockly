@@ -163,6 +163,23 @@ Blockly.blockRendering.Debug.prototype.drawRenderedElem = function(elem, isRtl) 
           'stroke-width': '1px'
         },
         this.svgRoot_));
+
+    if (Blockly.blockRendering.Types.isField(elem) &&
+        elem.field instanceof Blockly.FieldLabel) {
+      var baseline = elem.constants_.FIELD_TEXT_BASELINE;
+      this.debugElements_.push(Blockly.utils.dom.createSvgElement('rect',
+          {
+            'class': 'rowRenderingRect blockRenderDebug',
+            'x': xPos,
+            'y': yPos + baseline,
+            'width': elem.width,
+            'height': '0.1px',
+            'stroke': 'red',
+            'fill': 'none',
+            'stroke-width': '0.5px'
+          },
+          this.svgRoot_));
+    }
   }
 
 

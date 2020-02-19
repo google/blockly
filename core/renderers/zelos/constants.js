@@ -230,6 +230,12 @@ Blockly.zelos.ConstantProvider = function() {
   };
 
   /**
+   * Flyout button font size, in point size.
+   * @type {number}
+   */
+  this.FLYOUT_BUTTON_FONTSIZE = 4 * this.GRID_UNIT;
+
+  /**
    * @override
    */
   this.FULL_BLOCK_FIELDS = true;
@@ -898,6 +904,12 @@ Blockly.zelos.ConstantProvider.prototype.getCSS_ = function(name) {
     // Disabled outline paths.
     selector + ' .blocklyDisabled > .blocklyOutlinePath {',
       'fill: url(#blocklyDisabledPattern' + this.randomIdentifier_ + ')',
+    '}',
+
+    // Flyout button.
+    selector + ' .blocklyFlyoutButton .blocklyText {',
+      'font-family: ' + this.FIELD_TEXT_FONTFAMILY + ';',
+      'font-size: ' + this.FLYOUT_BUTTON_FONTSIZE + 'pt;',
     '}',
     /* eslint-enable indent */
   ];

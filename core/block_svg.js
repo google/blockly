@@ -1180,7 +1180,7 @@ Blockly.BlockSvg.prototype.setDisabled = function(disabled) {
 Blockly.BlockSvg.prototype.setEnabled = function(enabled) {
   if (this.isEnabled() != enabled) {
     Blockly.BlockSvg.superClass_.setEnabled.call(this, enabled);
-    if (this.rendered) {
+    if (this.rendered && !this.getInheritedDisabled()) {
       this.updateDisabled();
     }
   }

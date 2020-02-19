@@ -110,7 +110,7 @@ Blockly.blockRendering.Renderer.prototype.makeDebugger_ = function() {
   if (!Blockly.blockRendering.Debug) {
     throw Error('Missing require for Blockly.blockRendering.Debug');
   }
-  return new Blockly.blockRendering.Debug();
+  return new Blockly.blockRendering.Debug(this.getConstants());
 };
 
 /**

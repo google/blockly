@@ -60,10 +60,10 @@ Blockly.Theme = function(name, blockStyles, categoryStyles,
 
   /**
    * The font style.
-   * @type {!Blockly.Theme.FontStyle}
+   * @type {?Blockly.Theme.FontStyle}
    * @package
    */
-  this.fontStyle = Object.create(null);
+  this.fontStyle = null;
 };
 
 /**
@@ -116,10 +116,10 @@ Blockly.Theme.prototype.setCategoryStyle = function(categoryStyleName,
 
 /**
  * Configure a theme's font style.
- * @param {Blockly.Theme.FontStyle} fontStyle The font style.
+ * @param {?Object} fontStyle The font style.
 */
 Blockly.Theme.prototype.setFontStyle = function(fontStyle) {
-  this.fontStyle = fontStyle;
+  this.fontStyle = /** @type {Blockly.Theme.FontStyle} */ (fontStyle);
 };
 
 /**

@@ -24,10 +24,12 @@ goog.require('Blockly.blockRendering.Types');
 
 /**
  * An object that renders rectangles and dots for debugging rendering code.
+ * @param {!Blockly.blockRendering.ConstantProvider} constants The renderer's
+ *     constants.
  * @package
  * @constructor
  */
-Blockly.blockRendering.Debug = function() {
+Blockly.blockRendering.Debug = function(constants) {
   /**
    * An array of SVG elements that have been created by this object.
    * @type {Array.<!SVGElement>}
@@ -42,6 +44,13 @@ Blockly.blockRendering.Debug = function() {
    * @private
    */
   this.svgRoot_ = null;
+
+  /**
+   * The renderer's constant provider.
+   * @type {!Blockly.blockRendering.ConstantProvider}
+   * @private
+   */
+  this.constants_ = constants;
 };
 
 /**
@@ -166,7 +175,7 @@ Blockly.blockRendering.Debug.prototype.drawRenderedElem = function(elem, isRtl) 
 
     if (Blockly.blockRendering.Types.isField(elem) &&
         elem.field instanceof Blockly.FieldLabel) {
-      var baseline = elem.constants_.FIELD_TEXT_BASELINE;
+      var baseline = this.constants_.FIELD_TEXT_BASELINE;
       this.debugElements_.push(Blockly.utils.dom.createSvgElement('rect',
           {
             'class': 'rowRenderingRect blockRenderDebug',

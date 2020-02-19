@@ -598,11 +598,14 @@ Blockly.blockRendering.ConstantProvider.prototype.setFontConstants_ = function(
     theme) {
   var defaultFontStyle = this.getDefaultFontStyle_();
 
-  this.FIELD_TEXT_FONTFAMILY = theme.fontStyle['family'] != undefined ?
+  this.FIELD_TEXT_FONTFAMILY =
+      theme.fontStyle && theme.fontStyle['family'] != undefined ?
       theme.fontStyle['family'] : defaultFontStyle['family'];
-  this.FIELD_TEXT_FONTWEIGHT = theme.fontStyle['weight'] != undefined ?
+  this.FIELD_TEXT_FONTWEIGHT =
+      theme.fontStyle && theme.fontStyle['weight'] != undefined ?
       theme.fontStyle['weight'] : defaultFontStyle['weight'];
-  this.FIELD_TEXT_FONTSIZE = theme.fontStyle['size'] != undefined ?
+  this.FIELD_TEXT_FONTSIZE =
+      theme.fontStyle && theme.fontStyle['size'] != undefined ?
       theme.fontStyle['size'] : defaultFontStyle['size'];
 
   var fontMetrics = Blockly.utils.dom.measureFontMetrics('Hg',
@@ -1063,7 +1066,8 @@ Blockly.blockRendering.ConstantProvider.prototype.injectCSS_ = function(
   }
   var text = cssArray.join('\n');
   // Inject CSS tag at start of head.
-  var cssNode = document.createElement('style');
+  var cssNode =
+    /** @type {!HTMLStyleElement} */ (document.createElement('style'));
   cssNode.id = cssNodeId;
   var cssTextNode = document.createTextNode(text);
   cssNode.appendChild(cssTextNode);

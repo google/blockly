@@ -515,7 +515,9 @@ Blockly.WorkspaceSvg.prototype.setTheme = function(theme) {
  * @package
  */
 Blockly.WorkspaceSvg.prototype.refreshTheme = function() {
-  this.getRenderer().refresh(this.svgGroup_, this.getTheme());
+  if (this.svgGroup_) {
+    this.getRenderer().refresh(this.svgGroup_, this.getTheme());
+  }
 
   // Update all blocks in workspace that have a style name.
   this.updateBlockStyles_(this.getAllBlocks(false).filter(

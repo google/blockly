@@ -609,12 +609,13 @@ Blockly.Field.prototype.updateSize_ = function(opt_margin) {
   var totalWidth = xOffset * 2;
   var totalHeight = constants.FIELD_TEXT_HEIGHT;
 
+  var contentWidth = 0;
   if (this.textElement_) {
-    var textWidth = Blockly.utils.dom.getFastTextWidth(this.textElement_,
+    contentWidth = Blockly.utils.dom.getFastTextWidth(this.textElement_,
         constants.FIELD_TEXT_FONTSIZE + 'pt',
         constants.FIELD_TEXT_FONTWEIGHT,
         constants.FIELD_TEXT_FONTFAMILY);
-    totalWidth += textWidth;
+    totalWidth += contentWidth;
   }
   if (this.borderRect_) {
     totalHeight = Math.max(totalHeight, constants.FIELD_BORDER_RECT_HEIGHT);
@@ -623,7 +624,7 @@ Blockly.Field.prototype.updateSize_ = function(opt_margin) {
   this.size_.height = totalHeight;
   this.size_.width = totalWidth;
 
-  this.positionTextElement_(xOffset, textWidth);
+  this.positionTextElement_(xOffset, contentWidth);
   this.positionBorderRect_();
 };
 

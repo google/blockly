@@ -158,11 +158,13 @@ Blockly.FlyoutButton.prototype.createDom = function() {
   var fontFamily = Blockly.utils.style.getComputedStyle(svgText, 'fontFamily');
   this.width = Blockly.utils.dom.getFastTextWidth(svgText, fontSize, fontWeight,
       fontFamily);
-  this.height = Blockly.utils.dom.measureFontMetrics(text, fontSize, fontWeight,
-      fontFamily).height;
+  var fontMetrics = Blockly.utils.dom.measureFontMetrics(text, fontSize,
+      fontWeight, fontFamily);
+  this.height = fontMetrics.height;
   
   if (!this.isLabel_) {
     this.width += 2 * Blockly.FlyoutButton.MARGIN;
+    this.height += 2 * Blockly.FlyoutButton.MARGIN;
     shadow.setAttribute('width', this.width);
     shadow.setAttribute('height', this.height);
   }
@@ -170,7 +172,8 @@ Blockly.FlyoutButton.prototype.createDom = function() {
   rect.setAttribute('height', this.height);
 
   svgText.setAttribute('x', this.width / 2);
-  svgText.setAttribute('y', this.height - Blockly.FlyoutButton.MARGIN);
+  svgText.setAttribute('y', this.height / 2 - fontMetrics.height / 2 +
+      fontMetrics.baseline);
 
   this.updateTransform_();
 

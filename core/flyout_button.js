@@ -86,9 +86,14 @@ Blockly.FlyoutButton = function(workspace, targetWorkspace, xml, isLabel) {
 };
 
 /**
- * The margin around the text in the button.
+ * The horizontal margin around the text in the button.
  */
-Blockly.FlyoutButton.MARGIN = 5;
+Blockly.FlyoutButton.MARGIN_X = 5;
+
+/**
+ * The vertical margin around the text in the button.
+ */
+Blockly.FlyoutButton.MARGIN_Y = 2;
 
 /**
  * The width of the button's rect.
@@ -163,8 +168,8 @@ Blockly.FlyoutButton.prototype.createDom = function() {
   this.height = fontMetrics.height;
   
   if (!this.isLabel_) {
-    this.width += 2 * Blockly.FlyoutButton.MARGIN;
-    this.height += 2 * Blockly.FlyoutButton.MARGIN;
+    this.width += 2 * Blockly.FlyoutButton.MARGIN_X;
+    this.height += 2 * Blockly.FlyoutButton.MARGIN_Y;
     shadow.setAttribute('width', this.width);
     shadow.setAttribute('height', this.height);
   }

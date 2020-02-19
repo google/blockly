@@ -169,6 +169,7 @@ suite('Checkbox Fields', function() {
           FIELD_CHECKBOX_Y_OFFSET: 2
         };
         field.initView();
+        field.render_();
         chai.assert(field.textContent_.nodeValue, char);
       }
       test('Constant', function() {

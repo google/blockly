@@ -300,22 +300,6 @@ Blockly.zelos.ConstantProvider = function() {
   this.FIELD_COLOUR_DEFAULT_HEIGHT = 4 * this.GRID_UNIT;
 
   /**
-   * @override
-   */
-  this.FIELD_CHECKBOX_X_OFFSET = this.FIELD_BORDER_RECT_X_PADDING - 3;
-
-  /**
-   * @override
-   */
-  this.FIELD_CHECKBOX_Y_OFFSET = 22;
-
-  /**
-   * @override
-   */
-  this.FIELD_CHECKBOX_DEFAULT_WIDTH = 6 * this.GRID_UNIT;
-
-
-  /**
    * The maximum width of a dynamic connection shape.
    * @type {number}
    */

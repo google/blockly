@@ -83,15 +83,6 @@ Blockly.FieldCheckbox.prototype.SERIALIZABLE = true;
 Blockly.FieldCheckbox.prototype.CURSOR = 'default';
 
 /**
- * Used to tell if the field needs to be rendered the next time the block is
- * rendered. Checkbox fields are statically sized, and only need to be
- * rendered at initialization.
- * @type {boolean}
- * @protected
- */
-Blockly.FieldCheckbox.prototype.isDirty_ = false;
-
-/**
  * Configure the field based on the given map of options.
  * @param {!Object} config A map of options to configure the field based on.
  * @private
@@ -108,17 +99,19 @@ Blockly.FieldCheckbox.prototype.configure_ = function(config) {
  * @package
  */
 Blockly.FieldCheckbox.prototype.initView = function() {
-  this.size_.width = this.constants_.FIELD_CHECKBOX_DEFAULT_WIDTH;
   Blockly.FieldCheckbox.superClass_.initView.call(this);
 
-  this.textElement_.setAttribute('x', this.constants_.FIELD_CHECKBOX_X_OFFSET);
-  this.textElement_.setAttribute('y', this.constants_.FIELD_CHECKBOX_Y_OFFSET);
   this.textElement_.removeAttribute('dominant-baseline');
   Blockly.utils.dom.addClass(this.textElement_, 'blocklyCheckbox');
 
-  this.textContent_.nodeValue =
-      this.checkChar_ || Blockly.FieldCheckbox.CHECK_CHAR;
   this.textElement_.style.display = this.value_ ? 'block' : 'none';
+};
+
+/**
+ * @override
+ */
+Blockly.FieldCheckbox.prototype.getDisplayText_ = function() {
+  return this.checkChar_ || Blockly.FieldCheckbox.CHECK_CHAR;
 };
 
 /**

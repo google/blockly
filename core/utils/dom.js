@@ -318,16 +318,18 @@ Blockly.utils.dom.getFastTextWidth = function(textElement,
 };
 
 /**
- * TODO
+ * Measure a font's metrics. The height and baseline values.
  * @param {string} text Text to measure the font dimensions of.
  * @param {number} fontSize The font size to use.
  * @param {string} fontWeight The font weight to use.
  * @param {string} fontFamily The font family to use.
- * @return {Object} TODO
+ * @return {{height: number, baseline: number}} Font measurements.
  */
-Blockly.utils.dom.measureFontDimensions = function(text, fontSize, fontWeight,
+Blockly.utils.dom.measureFontMetrics = function(text, fontSize, fontWeight,
     fontFamily) {
+
   var span = document.createElement('span');
+  span.setAttribute('style', 'display: inline-block;');
   span.style.font = fontWeight + ' ' + fontSize + ' ' + fontFamily;
   span.textContent = text;
 
@@ -336,19 +338,17 @@ Blockly.utils.dom.measureFontDimensions = function(text, fontSize, fontWeight,
       'display: inline-block; width: 1px; height: 0px;');
   
   var div = document.createElement('div');
-  div.style.display = 'inline-block';
+  div.setAttribute('style', 'line-height: 0;');
   div.appendChild(span);
   div.appendChild(block);
 
   document.body.appendChild(div);
-
   try {
     var result = {};
     block.style.verticalAlign = 'baseline';
-    result.ascent = block.offsetTop - span.offsetTop;
+    result.baseline = block.offsetTop - span.offsetTop;
     block.style.verticalAlign = 'bottom';
     result.height = block.offsetTop - span.offsetTop;
-    result.descent = result.height - result.ascent;
   } finally {
     document.body.removeChild(div);
   }

@@ -901,6 +901,7 @@ Blockly.WorkspaceSvg.prototype.addFlyout = function(tagName) {
     this.flyout_ = new Blockly.VerticalFlyout(workspaceOptions);
   }
   this.flyout_.autoClose = false;
+  this.flyout_.getWorkspace().setVisible(true);
 
   // Return the element so that callers can place it in their desired
   // spot in the DOM.  For example, mutator flyouts do not go in the same place
@@ -1147,6 +1148,10 @@ Blockly.WorkspaceSvg.prototype.getWidth = function() {
  * @param {boolean} isVisible True if workspace should be visible.
  */
 Blockly.WorkspaceSvg.prototype.setVisible = function(isVisible) {
+  this.isVisible_ = isVisible;
+  if (!this.svgGroup_) {
+    return;
+  }
 
   // Tell the scrollbar whether its container is visible so it can
   // tell when to hide itself.
@@ -1179,7 +1184,6 @@ Blockly.WorkspaceSvg.prototype.setVisible = function(isVisible) {
   } else {
     Blockly.hideChaff(true);
   }
-  this.isVisible_ = isVisible;
 };
 
 /**

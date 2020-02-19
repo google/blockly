@@ -121,15 +121,6 @@ Blockly.FieldColour.prototype.SERIALIZABLE = true;
 Blockly.FieldColour.prototype.CURSOR = 'default';
 
 /**
- * Used to tell if the field needs to be rendered the next time the block is
- * rendered. Colour fields are statically sized, and only need to be
- * rendered at initialization.
- * @type {boolean}
- * @protected
- */
-Blockly.FieldColour.prototype.isDirty_ = false;
-
-/**
  * Array of colours used by this field.  If null, use the global list.
  * @type {Array.<string>}
  * @private
@@ -172,15 +163,22 @@ Blockly.FieldColour.prototype.configure_ = function(config) {
  * @package
  */
 Blockly.FieldColour.prototype.initView = function() {
-  this.size_ = new Blockly.utils.Size(
-      this.constants_.FIELD_COLOUR_DEFAULT_WIDTH,
-      this.constants_.FIELD_COLOUR_DEFAULT_HEIGHT);
   if (!this.constants_.FIELD_COLOUR_FULL_BLOCK) {
     this.createBorderRect_();
     this.borderRect_.style['fillOpacity'] = '1';
   } else {
     this.clickTarget_ = this.sourceBlock_.getSvgRoot();
   }
+};
+
+/**
+ * @override
+ */
+Blockly.FieldColour.prototype.updateSize_ = function() {
+  this.size_ = new Blockly.utils.Size(
+      this.constants_.FIELD_COLOUR_DEFAULT_WIDTH,
+      this.constants_.FIELD_COLOUR_DEFAULT_HEIGHT);
+  this.positionBorderRect_();
 };
 
 /**

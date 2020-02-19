@@ -248,18 +248,11 @@ Blockly.blockRendering.ConstantProvider = function() {
    */
   this.FIELD_TEXT_HEIGHT = this.DYNAMICALLY_SET;
 
-
   /**
-   * Ascent height of text.
+   * Text baseline.
    * @type {number}
    */
-  this.FIELD_TEXT_ASCENT = this.DYNAMICALLY_SET;
-
-  /**
-   * Descent height of text.
-   * @type {number}
-   */
-  this.FIELD_TEXT_DESCENT = this.DYNAMICALLY_SET;
+  this.FIELD_TEXT_BASELINE = this.DYNAMICALLY_SET;
 
   /**
    * Text font weight.
@@ -391,24 +384,6 @@ Blockly.blockRendering.ConstantProvider = function() {
    * @type {number}
    */
   this.FIELD_COLOUR_DEFAULT_HEIGHT = this.FIELD_BORDER_RECT_HEIGHT;
-
-  /**
-   * A checkbox field's X offset.
-   * @type {number}
-   */
-  this.FIELD_CHECKBOX_X_OFFSET = this.FIELD_BORDER_RECT_X_PADDING - 3;
-
-  /**
-   * A checkbox field's Y offset.
-   * @type {number}
-   */
-  this.FIELD_CHECKBOX_Y_OFFSET = 14;
-
-  /**
-   * A checkbox field's default width.
-   * @type {number}
-   */
-  this.FIELD_CHECKBOX_DEFAULT_WIDTH = 15;
 
   /**
    * A random identifier used to ensure a unique ID is used for each
@@ -630,14 +605,13 @@ Blockly.blockRendering.ConstantProvider.prototype.setFontConstants_ = function(
   this.FIELD_TEXT_FONTSIZE = theme.fontStyle['size'] != undefined ?
       theme.fontStyle['size'] : defaultFontStyle['size'];
 
-  var fontDimensions = Blockly.utils.dom.measureFontDimensions('Hg',
+  var fontMetrics = Blockly.utils.dom.measureFontMetrics('Hg',
       this.FIELD_TEXT_FONTSIZE + 'pt',
       this.FIELD_TEXT_FONTWEIGHT,
       this.FIELD_TEXT_FONTFAMILY);
 
-  this.FIELD_TEXT_HEIGHT = fontDimensions.height;
-  this.FIELD_TEXT_ASCENT = fontDimensions.ascent;
-  this.FIELD_TEXT_DESCENT = fontDimensions.descent;
+  this.FIELD_TEXT_HEIGHT = fontMetrics.height;
+  this.FIELD_TEXT_BASELINE = fontMetrics.baseline;
 };
 
 /**

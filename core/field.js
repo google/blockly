@@ -567,8 +567,8 @@ Blockly.Field.prototype.applyColour = function() {
 Blockly.Field.prototype.render_ = function() {
   if (this.textContent_) {
     this.textContent_.nodeValue = this.getDisplayText_();
-    this.updateSize_();
   }
+  this.updateSize_();
 };
 
 /**
@@ -603,17 +603,21 @@ Blockly.Field.prototype.updateWidth = function() {
  */
 Blockly.Field.prototype.updateSize_ = function() {
   var constants = this.constants_;
-  var textWidth = Blockly.utils.dom.getFastTextWidth(
-      /** @type {!SVGTextElement} */ (this.textElement_),
-      constants.FIELD_TEXT_FONTSIZE + 'pt',
-      constants.FIELD_TEXT_FONTWEIGHT,
-      constants.FIELD_TEXT_FONTFAMILY);
   var xOffset = this.borderRect_ ? constants.FIELD_BORDER_RECT_X_PADDING : 0;
-  var totalWidth = textWidth + xOffset * 2;
+  var totalWidth = xOffset * 2;
   var totalHeight = constants.FIELD_TEXT_HEIGHT;
+
+  if (this.textElement_) {
+    var textWidth = Blockly.utils.dom.getFastTextWidth(this.textElement_,
+        constants.FIELD_TEXT_FONTSIZE + 'pt',
+        constants.FIELD_TEXT_FONTWEIGHT,
+        constants.FIELD_TEXT_FONTFAMILY);
+    totalWidth += textWidth;
+  }
   if (this.borderRect_) {
     totalHeight = Math.max(totalHeight, constants.FIELD_BORDER_RECT_HEIGHT);
   }
+
   this.size_.height = totalHeight;
   this.size_.width = totalWidth;
 
@@ -636,7 +640,7 @@ Blockly.Field.prototype.positionTextElement_ = function(xOffset) {
   this.textElement_.setAttribute('x', xOffset);
   this.textElement_.setAttribute('y', constants.FIELD_TEXT_BASELINE_CENTER ?
       halfHeight : halfHeight - constants.FIELD_TEXT_HEIGHT / 2 +
-      constants.FIELD_TEXT_ASCENT);
+      constants.FIELD_TEXT_BASELINE);
 };
 
 /**
@@ -644,14 +648,15 @@ Blockly.Field.prototype.positionTextElement_ = function(xOffset) {
  * @protected
  */
 Blockly.Field.prototype.positionBorderRect_ = function() {
-  if (this.borderRect_) {
-    this.borderRect_.setAttribute('width', this.size_.width);
-    this.borderRect_.setAttribute('height', this.size_.height);
-    this.borderRect_.setAttribute('rx',
-        this.constants_.FIELD_BORDER_RECT_RADIUS);
-    this.borderRect_.setAttribute('ry',
-        this.constants_.FIELD_BORDER_RECT_RADIUS);
+  if (!this.borderRect_) {
+    return;
   }
+  this.borderRect_.setAttribute('width', this.size_.width);
+  this.borderRect_.setAttribute('height', this.size_.height);
+  this.borderRect_.setAttribute('rx',
+      this.constants_.FIELD_BORDER_RECT_RADIUS);
+  this.borderRect_.setAttribute('ry',
+      this.constants_.FIELD_BORDER_RECT_RADIUS);
 };
 
 

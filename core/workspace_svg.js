@@ -2082,31 +2082,26 @@ Blockly.WorkspaceSvg.prototype.centerOnBlock = function(id) {
   // Workspace scale, used to convert from workspace coordinates to pixels.
   var scale = this.scale;
 
-  // Center in pixels.  0, 0 is at the workspace origin.  These numbers may
-  // be negative.
+  // Center of block in pixels, relative to workspace origin (center 0,0).
+  // Scrolling to here would put the block in the top-left corner of the
+  // visible workspace.
   var pixelX = blockCenterX * scale;
   var pixelY = blockCenterY * scale;
 
   var metrics = this.getMetrics();
-
-  // Scrolling to here would put the block in the top-left corner of the
-  // visible workspace.
-  var scrollToBlockX = pixelX - metrics.contentLeft;
-  var scrollToBlockY = pixelY - metrics.contentTop;
 
   // viewHeight and viewWidth are in pixels.
   var halfViewWidth = metrics.viewWidth / 2;
   var halfViewHeight = metrics.viewHeight / 2;
 
   // Put the block in the center of the visible workspace instead.
-  var scrollToCenterX = scrollToBlockX - halfViewWidth;
-  var scrollToCenterY = scrollToBlockY - halfViewHeight;
+  var scrollToCenterX = pixelX - halfViewWidth;
+  var scrollToCenterY = pixelY - halfViewHeight;
 
   // Convert from workspace directions to canvas directions.
-  var x = -scrollToCenterX - metrics.contentLeft;
-  var y = -scrollToCenterY - metrics.contentTop;
+  var x = -scrollToCenterX;
+  var y = -scrollToCenterY;
 
-  Blockly.hideChaff();
   this.scroll(x, y);
 };
 

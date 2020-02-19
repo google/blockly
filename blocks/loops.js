@@ -331,9 +331,13 @@ Blockly.Constants.Loops.CONTROL_FLOW_IN_LOOP_CHECK_MIXIN = {
    * @this {Blockly.Block}
    */
   onchange: function(e) {
+    // Don't change state if:
+    //   * It's at the start of a drag.
+    //   * It's not a move event.
+    //   * Or the moving block is not this block.
     if (!this.workspace.isDragging || this.workspace.isDragging() ||
         e.type != Blockly.Events.BLOCK_MOVE || e.blockId != this.id) {
-      return;  // Don't change state at the start of a drag.
+      return;
     }
     var enabled = Blockly.Constants.Loops.CONTROL_FLOW_IN_LOOP_CHECK_MIXIN
         .getSurroundLoop(this);
@@ -341,6 +345,7 @@ Blockly.Constants.Loops.CONTROL_FLOW_IN_LOOP_CHECK_MIXIN = {
         Blockly.Msg['CONTROLS_FLOW_STATEMENTS_WARNING']);
     if (!this.isInFlyout) {
       var group = Blockly.Events.getGroup();
+      // Makes it so the move and the disable event get undone together.
       Blockly.Events.setGroup(e.group);
       this.setEnabled(enabled);
       Blockly.Events.setGroup(group);

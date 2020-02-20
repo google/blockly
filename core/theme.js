@@ -61,7 +61,6 @@ Blockly.Theme = function(name, blockStyles, categoryStyles,
   /**
    * The font style.
    * @type {?Blockly.Theme.FontStyle}
-   * @package
    */
   this.fontStyle = null;
 };
@@ -86,11 +85,11 @@ Blockly.Theme.BlockStyle;
 Blockly.Theme.CategoryStyle;
 
 /**
- * A category style.
+ * A font style.
  * @typedef {{
- *            family:string,
- *            weight:string,
- *            size:number
+ *            family:string?,
+ *            weight:string?,
+ *            size:number?
  *          }}
  */
 Blockly.Theme.FontStyle;
@@ -116,10 +115,10 @@ Blockly.Theme.prototype.setCategoryStyle = function(categoryStyleName,
 
 /**
  * Configure a theme's font style.
- * @param {?Object} fontStyle The font style.
+ * @param {Blockly.Theme.FontStyle} fontStyle The font style.
 */
 Blockly.Theme.prototype.setFontStyle = function(fontStyle) {
-  this.fontStyle = /** @type {Blockly.Theme.FontStyle} */ (fontStyle);
+  this.fontStyle = fontStyle;
 };
 
 /**

@@ -578,6 +578,7 @@ Blockly.blockRendering.ConstantProvider.prototype.setDynamicConstants_ =
     function(theme) {
     /* eslint-disable indent */
   this.setFontConstants_(theme);
+  /* eslint-enable indent */
 };
 
 /**
@@ -593,6 +594,7 @@ Blockly.blockRendering.ConstantProvider.prototype.getDefaultFontStyle_ =
     'size': 11,
     'family': 'sans-serif'
   };
+  /* eslint-enable indent */
 };
 
 /**
@@ -1060,7 +1062,7 @@ Blockly.blockRendering.ConstantProvider.prototype.createDom = function(svg,
 /**
  * Inject renderer specific CSS into the page.
  * @param {string} name Name of the renderer.
- * @package
+ * @protected
  */
 Blockly.blockRendering.ConstantProvider.prototype.injectCSS_ = function(
     name) {

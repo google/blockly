@@ -27,10 +27,16 @@ goog.require('Blockly.utils.userAgent');
 Blockly.blockRendering.ConstantProvider = function() {
 
   /**
-   * A placeholder value for constants that are dynamically set.
+   * A placeholder value for number constants that are dynamically set.
    * @type {number}
    */
   this.DYNAMICALLY_SET = -1;
+
+  /**
+   * A placeholder value for string constants that are dynamically set.
+   * @type {string}
+   */
+  this.DYNAMICALLY_SET_STRING = '';
 
   /**
    * The size of an empty spacer.
@@ -237,34 +243,39 @@ Blockly.blockRendering.ConstantProvider = function() {
   this.JAGGED_TEETH_WIDTH = 6;
 
   /**
-   * Point size of text.
+   * Point size of text.  This constant is dynamically set in
+   * ``setFontConstants_`` to the size of the font used by the renderer/theme.
    * @type {number}
    */
-  this.FIELD_TEXT_FONTSIZE = 11;
+  this.FIELD_TEXT_FONTSIZE = this.DYNAMICALLY_SET;
 
   /**
-   * Height of text.
+   * Height of text.  This constant is dynamically set in ``setFontConstants_``
+   * to be the height of the text based on the font used.
    * @type {number}
    */
   this.FIELD_TEXT_HEIGHT = this.DYNAMICALLY_SET;
 
   /**
-   * Text baseline.
+   * Text baseline.  This constant is dynamically set in ``setFontConstants_``
+   * to be the baseline of the text based on the font used.
    * @type {number}
    */
   this.FIELD_TEXT_BASELINE = this.DYNAMICALLY_SET;
 
   /**
-   * Text font weight.
+   * Text font weight.  This constant is dynamically set in
+   * ``setFontConstants_`` to the weight of the font used by the renderer/theme.
    * @type {string}
    */
-  this.FIELD_TEXT_FONTWEIGHT = '';
+  this.FIELD_TEXT_FONTWEIGHT = this.DYNAMICALLY_SET_STRING;
 
   /**
-   * Text font family.
+   * Text font family.  This constant is dynamically set in
+   * ``setFontConstants_`` to the family of the font used by the renderer/theme.
    * @type {string}
    */
-  this.FIELD_TEXT_FONTFAMILY = '';
+  this.FIELD_TEXT_FONTFAMILY = this.DYNAMICALLY_SET_STRING;
 
   /**
    * A field's border rect corner radius.

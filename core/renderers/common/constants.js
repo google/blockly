@@ -575,15 +575,15 @@ Blockly.blockRendering.ConstantProvider.prototype.setTheme = function(
     this.blockStyles[key] = this.validatedBlockStyle_(blockStyles[key]);
   }
 
-  this.setDynamicConstants_(theme);
+  this.setDynamicProperties_(theme);
 };
 
 /**
- * Sets dynamic constants that depent on other values or theme properties.
+ * Sets dynamic properties that depent on other values or theme properties.
  * @param {!Blockly.Theme} theme The current workspace theme.
  * @protected
  */
-Blockly.blockRendering.ConstantProvider.prototype.setDynamicConstants_ =
+Blockly.blockRendering.ConstantProvider.prototype.setDynamicProperties_ =
     function(theme) {
     /* eslint-disable indent */
   this.setFontConstants_(theme);

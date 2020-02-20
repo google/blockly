@@ -87,19 +87,8 @@ Blockly.blockRendering.init = function(name) {
   if (!Blockly.blockRendering.rendererMap_[name]) {
     throw Error('Renderer not registered: ', name);
   }
-  /**
-   * Wrap the renderer constructor into a temporary constructor
-   * function so the closure compiler treats it as a constructor.
-   * @param {string} name The renderer name.
-   * @constructor
-   * @extends {Blockly.blockRendering.Renderer}
-   */
-  var rendererCtor = function(name) {
-    rendererCtor.superClass_.constructor.call(this, name);
-  };
-  Blockly.utils.object.inherits(rendererCtor,
-      Blockly.blockRendering.rendererMap_[name]);
-  var renderer = new rendererCtor(name);
+  var renderer = (/** @type {!Blockly.blockRendering.Renderer} */ (
+    new Blockly.blockRendering.rendererMap_[name](name)));
   renderer.init();
   return renderer;
 };

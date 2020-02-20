@@ -571,7 +571,7 @@ Blockly.blockRendering.ConstantProvider.prototype.setTheme_ = function(
 };
 
 /**
- * Set dynamic constants that depent on other values or theme properties.
+ * Sets dynamic constants that depent on other values or theme properties.
  * @param {!Blockly.Theme} theme The current workspace theme.
  * @protected
  */

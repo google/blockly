@@ -29,14 +29,16 @@ Blockly.blockRendering.ConstantProvider = function() {
   /**
    * A placeholder value for number constants that are dynamically set.
    * @type {number}
+   * @protected
    */
-  this.DYNAMICALLY_SET = -1;
+  this.DYNAMICALLY_SET_ = -1;
 
   /**
    * A placeholder value for string constants that are dynamically set.
    * @type {string}
+   * @protected
    */
-  this.DYNAMICALLY_SET_STRING = '';
+  this.DYNAMICALLY_SET_STRING_ = '';
 
   /**
    * The size of an empty spacer.
@@ -247,35 +249,35 @@ Blockly.blockRendering.ConstantProvider = function() {
    * ``setFontConstants_`` to the size of the font used by the renderer/theme.
    * @type {number}
    */
-  this.FIELD_TEXT_FONTSIZE = this.DYNAMICALLY_SET;
+  this.FIELD_TEXT_FONTSIZE = this.DYNAMICALLY_SET_;
 
   /**
    * Height of text.  This constant is dynamically set in ``setFontConstants_``
    * to be the height of the text based on the font used.
    * @type {number}
    */
-  this.FIELD_TEXT_HEIGHT = this.DYNAMICALLY_SET;
+  this.FIELD_TEXT_HEIGHT = this.DYNAMICALLY_SET_;
 
   /**
    * Text baseline.  This constant is dynamically set in ``setFontConstants_``
    * to be the baseline of the text based on the font used.
    * @type {number}
    */
-  this.FIELD_TEXT_BASELINE = this.DYNAMICALLY_SET;
+  this.FIELD_TEXT_BASELINE = this.DYNAMICALLY_SET_;
 
   /**
    * Text font weight.  This constant is dynamically set in
    * ``setFontConstants_`` to the weight of the font used by the renderer/theme.
    * @type {string}
    */
-  this.FIELD_TEXT_FONTWEIGHT = this.DYNAMICALLY_SET_STRING;
+  this.FIELD_TEXT_FONTWEIGHT = this.DYNAMICALLY_SET_STRING_;
 
   /**
    * Text font family.  This constant is dynamically set in
    * ``setFontConstants_`` to the family of the font used by the renderer/theme.
    * @type {string}
    */
-  this.FIELD_TEXT_FONTFAMILY = this.DYNAMICALLY_SET_STRING;
+  this.FIELD_TEXT_FONTFAMILY = this.DYNAMICALLY_SET_STRING_;
 
   /**
    * A field's border rect corner radius.

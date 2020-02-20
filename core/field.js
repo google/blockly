@@ -317,9 +317,9 @@ Blockly.Field.prototype.createBorderRect_ = function() {
             'ry': this.constants_.FIELD_BORDER_RECT_RADIUS,
             'x': 0,
             'y': 0,
-            'class': 'blocklyFieldRect',
             'height': this.size_.height,
             'width': this.size_.width,
+            'class': 'blocklyFieldRect'
           }, this.fieldGroup_));
 };
 

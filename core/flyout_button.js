@@ -161,8 +161,8 @@ Blockly.FlyoutButton.prototype.createDom = function() {
   var fontSize = Blockly.utils.style.getComputedStyle(svgText, 'fontSize');
   var fontWeight = Blockly.utils.style.getComputedStyle(svgText, 'fontWeight');
   var fontFamily = Blockly.utils.style.getComputedStyle(svgText, 'fontFamily');
-  this.width = Blockly.utils.dom.getFastTextWidth(svgText, fontSize, fontWeight,
-      fontFamily);
+  this.width = Blockly.utils.dom.getFastTextWidthWithSizeString(svgText,
+      fontSize, fontWeight, fontFamily);
   var fontMetrics = Blockly.utils.dom.measureFontMetrics(text, fontSize,
       fontWeight, fontFamily);
   this.height = fontMetrics.height;

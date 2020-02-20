@@ -273,12 +273,30 @@ Blockly.utils.dom.getTextWidth = function(textElement) {
  * This method requires that we know the text element's font family and size in
  * advance. Similar to `getTextWidth`, we cache the width we compute.
  * @param {!Element} textElement An SVG 'text' element.
- * @param {string} fontSize The font size to use.
+ * @param {number} fontSize The font size to use.
  * @param {string} fontWeight The font weight to use.
  * @param {string} fontFamily The font family to use.
  * @return {number} Width of element.
  */
 Blockly.utils.dom.getFastTextWidth = function(textElement,
+    fontSize, fontWeight, fontFamily) {
+  return Blockly.utils.dom.getFastTextWidthWithSizeString(textElement,
+      fontSize + 'pt', fontWeight, fontFamily);
+};
+
+/**
+ * Gets the width of a text element using a faster method than `getTextWidth`.
+ * This method requires that we know the text element's font family and size in
+ * advance. Similar to `getTextWidth`, we cache the width we compute.
+ * This method is similar to ``getFastTextWidth`` but expects the font size
+ * parameter to be a string.
+ * @param {!Element} textElement An SVG 'text' element.
+ * @param {string} fontSize The font size to use.
+ * @param {string} fontWeight The font weight to use.
+ * @param {string} fontFamily The font family to use.
+ * @return {number} Width of element.
+ */
+Blockly.utils.dom.getFastTextWidthWithSizeString = function(textElement,
     fontSize, fontWeight, fontFamily) {
   var text = textElement.textContent;
   var key = text + '\n' + textElement.className.baseVal;

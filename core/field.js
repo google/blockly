@@ -612,7 +612,7 @@ Blockly.Field.prototype.updateSize_ = function(opt_margin) {
   var contentWidth = 0;
   if (this.textElement_) {
     contentWidth = Blockly.utils.dom.getFastTextWidth(this.textElement_,
-        constants.FIELD_TEXT_FONTSIZE + 'pt',
+        constants.FIELD_TEXT_FONTSIZE,
         constants.FIELD_TEXT_FONTWEIGHT,
         constants.FIELD_TEXT_FONTFAMILY);
     totalWidth += contentWidth;

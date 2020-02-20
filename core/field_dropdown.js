@@ -597,7 +597,7 @@ Blockly.FieldDropdown.prototype.renderSelectedImage_ = function(imageJson) {
   } else {
     arrowWidth = Blockly.utils.dom.getFastTextWidth(
         /** @type {!SVGTSpanElement} */ (this.arrow_),
-        this.constants_.FIELD_TEXT_FONTSIZE + 'pt',
+        this.constants_.FIELD_TEXT_FONTSIZE,
         this.constants_.FIELD_TEXT_FONTWEIGHT,
         this.constants_.FIELD_TEXT_FONTFAMILY);
   }
@@ -635,7 +635,7 @@ Blockly.FieldDropdown.prototype.renderSelectedText_ = function() {
       hasBorder ? this.constants_.FIELD_DROPDOWN_BORDER_RECT_HEIGHT : 0,
       this.constants_.FIELD_TEXT_HEIGHT);
   var textWidth = Blockly.utils.dom.getFastTextWidth(this.textElement_,
-      this.constants_.FIELD_TEXT_FONTSIZE + 'pt',
+      this.constants_.FIELD_TEXT_FONTSIZE,
       this.constants_.FIELD_TEXT_FONTWEIGHT,
       this.constants_.FIELD_TEXT_FONTFAMILY);
   var xPadding = hasBorder ? this.constants_.FIELD_BORDER_RECT_X_PADDING : 0;

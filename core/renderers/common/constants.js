@@ -508,7 +508,6 @@ Blockly.blockRendering.ConstantProvider = function() {
 Blockly.blockRendering.ConstantProvider.prototype.init = function(theme) {
 
   this.setTheme_(theme);
-  this.setDynamicConstants_(theme);
 
   /**
    * An object containing sizing and path information about collapsed block
@@ -567,6 +566,8 @@ Blockly.blockRendering.ConstantProvider.prototype.setTheme_ = function(
   for (var key in blockStyles) {
     this.blockStyles[key] = this.validatedBlockStyle_(blockStyles[key]);
   }
+
+  this.setDynamicConstants_(theme);
 };
 
 /**

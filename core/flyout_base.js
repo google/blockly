@@ -393,39 +393,41 @@ Blockly.Flyout.prototype.updateDisplay_ = function() {
  * @protected
  */
 Blockly.Flyout.prototype.positionAt_ = function(width, height, x, y) {
-  let maxWidth = window.innerWidth;
-  let minLeftTransform = 0;
+  if (this.targetWorkspace_ == Blockly.mainWorkspace) {
+    let maxWidth = window.innerWidth;
+    let minLeftTransform = 0;
 
-  if (!this.widthCalcElements_.mainToolbox) {
-    try {
-      this.widthCalcElements_.mainToolbox = document.getElementsByClassName('blocklyToolboxDiv')[0];
+    if (!this.widthCalcElements_.mainToolbox) {
+      try {
+        this.widthCalcElements_.mainToolbox = document.getElementsByClassName('blocklyToolboxDiv')[0];
+        maxWidth = maxWidth - this.widthCalcElements_.mainToolbox.offsetWidth;
+        minLeftTransform = this.widthCalcElements_.mainToolbox.offsetWidth;
+      } catch (e) {
+        console.log('Cannot find the main toolbox element for flyout positioning!');
+      }
+    } else {
       maxWidth = maxWidth - this.widthCalcElements_.mainToolbox.offsetWidth;
       minLeftTransform = this.widthCalcElements_.mainToolbox.offsetWidth;
-    } catch (e) {
-      console.log('Cannot find the main toolbox element for flyout positioning!');
     }
-  } else {
-    maxWidth = maxWidth - this.widthCalcElements_.mainToolbox.offsetWidth;
-    minLeftTransform = this.widthCalcElements_.mainToolbox.offsetWidth;
-  }
 
-  if (!this.widthCalcElements_.rightSidebar) {
-    try {
-      this.widthCalcElements_.rightSidebar = document.getElementById('right_content');
+    if (!this.widthCalcElements_.rightSidebar) {
+      try {
+        this.widthCalcElements_.rightSidebar = document.getElementById('right_content');
+        maxWidth = maxWidth - this.widthCalcElements_.rightSidebar.offsetWidth;
+      } catch (e) {
+        console.log('Cannot find the right sidebar element for flyout positioning!');
+      }
+    } else {
       maxWidth = maxWidth - this.widthCalcElements_.rightSidebar.offsetWidth;
-    } catch (e) {
-      console.log('Cannot find the right sidebar element for flyout positioning!');
     }
-  } else {
-    maxWidth = maxWidth - this.widthCalcElements_.rightSidebar.offsetWidth;
-  }
 
-  if (!Blockly.mainWorkspace.RTL) {
-    width = Math.min(width, maxWidth);
-    x = Math.max(x, minLeftTransform);
-  } else {
-    // TODO: Add the flyout offset calculation once we start adding RTL languages
-    // Probably width = Math.max, x = Math.min
+    if (!Blockly.mainWorkspace.RTL) {
+      width = Math.min(width, maxWidth);
+      x = Math.max(x, minLeftTransform);
+    } else {
+      // TODO: Add the flyout offset calculation once we start adding RTL languages
+      // Probably width = Math.max, x = Math.min
+    }
   }
 
   this.svgGroup_.setAttribute("width", width);

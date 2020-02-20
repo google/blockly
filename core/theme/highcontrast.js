@@ -109,7 +109,7 @@ Blockly.Themes.HighContrast =
         Blockly.Themes.HighContrast.categoryStyles);
 
 Blockly.Themes.HighContrast.setFontStyle({
-  'font': null,
-  'weight': null,
+  'family': null, // Use default font-family
+  'weight': null, // Use default font-weight
   'size': 16
 });

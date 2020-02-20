@@ -313,9 +313,13 @@ Blockly.Field.prototype.createBorderRect_ = function() {
   this.borderRect_ = /** @type {!SVGRectElement} **/
       (Blockly.utils.dom.createSvgElement('rect',
           {
+            'rx': this.constants_.FIELD_BORDER_RECT_RADIUS,
+            'ry': this.constants_.FIELD_BORDER_RECT_RADIUS,
             'x': 0,
             'y': 0,
-            'class': 'blocklyFieldRect'
+            'class': 'blocklyFieldRect',
+            'height': this.size_.height,
+            'width': this.size_.width,
           }, this.fieldGroup_));
 };
 

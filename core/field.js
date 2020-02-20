@@ -629,7 +629,8 @@ Blockly.Field.prototype.updateSize_ = function(opt_margin) {
 };
 
 /**
- * Position a field's text element after a size change.
+ * Position a field's text element after a size change.  This handles both LTR
+ * and RTL positioning.
  * @param {number} xOffset x offset to use when positioning the text element.
  * @param {number} contentWidth The content width.
  * @protected

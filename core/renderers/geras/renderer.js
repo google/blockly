@@ -51,7 +51,7 @@ Blockly.utils.object.inherits(Blockly.geras.Renderer,
 Blockly.geras.Renderer.prototype.init = function(theme) {
   Blockly.geras.Renderer.superClass_.init.call(this, theme);
   this.highlightConstants_ = this.makeHighlightConstants_();
-  this.highlightConstants_.init(theme);
+  this.highlightConstants_.init();
 };
 
 /**
@@ -59,7 +59,7 @@ Blockly.geras.Renderer.prototype.init = function(theme) {
  */
 Blockly.geras.Renderer.prototype.refresh = function(svg, theme) {
   Blockly.geras.Renderer.superClass_.refresh.call(this, svg, theme);
-  this.getHighlightConstants().init(theme);
+  this.getHighlightConstants().init();
 };
 
 /**

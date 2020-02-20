@@ -53,7 +53,8 @@ Blockly.blockRendering.Renderer = function(name) {
  */
 Blockly.blockRendering.Renderer.prototype.init = function(theme) {
   this.constants_ = this.makeConstants_();
-  this.constants_.init(theme);
+  this.constants_.setTheme(theme);
+  this.constants_.init();
 };
 
 /**
@@ -65,8 +66,9 @@ Blockly.blockRendering.Renderer.prototype.init = function(theme) {
 Blockly.blockRendering.Renderer.prototype.refresh = function(svg, theme) {
   var constants = this.getConstants();
   constants.dispose();
-  constants.init(theme);
-  constants.createDom(svg, this.name, theme);
+  constants.setTheme(theme);
+  constants.init();
+  constants.createDom(svg, this.name);
 };
 
 /**

@@ -230,12 +230,6 @@ Blockly.zelos.ConstantProvider = function() {
   };
 
   /**
-   * Flyout button font size, in point size.
-   * @type {number}
-   */
-  this.FLYOUT_BUTTON_FONTSIZE = 4 * this.GRID_UNIT;
-
-  /**
    * @override
    */
   this.FULL_BLOCK_FIELDS = true;
@@ -376,8 +370,8 @@ Blockly.zelos.ConstantProvider.prototype.setFontConstants_ = function(theme) {
 /**
  * @override
  */
-Blockly.zelos.ConstantProvider.prototype.init = function(theme) {
-  Blockly.zelos.ConstantProvider.superClass_.init.call(this, theme);
+Blockly.zelos.ConstantProvider.prototype.init = function() {
+  Blockly.zelos.ConstantProvider.superClass_.init.call(this);
   this.HEXAGONAL = this.makeHexagonal();
   this.ROUNDED = this.makeRounded();
   this.SQUARED = this.makeSquared();
@@ -746,10 +740,10 @@ Blockly.zelos.ConstantProvider.prototype.generateTertiaryColour_ = function(
 /**
  * @override
  */
-Blockly.zelos.ConstantProvider.prototype.createDom = function(svg, rendererName,
-    theme) {
+Blockly.zelos.ConstantProvider.prototype.createDom = function(svg,
+    rendererName) {
   Blockly.zelos.ConstantProvider.superClass_.createDom.call(this, svg,
-      rendererName, theme);
+      rendererName);
   /*
   <defs>
     ... filters go here ...
@@ -909,12 +903,6 @@ Blockly.zelos.ConstantProvider.prototype.getCSS_ = function(name) {
     // Disabled outline paths.
     selector + ' .blocklyDisabled > .blocklyOutlinePath {',
       'fill: url(#blocklyDisabledPattern' + this.randomIdentifier_ + ')',
-    '}',
-
-    // Flyout button.
-    selector + ' .blocklyFlyoutButton .blocklyText {',
-      'font-family: ' + this.FIELD_TEXT_FONTFAMILY + ';',
-      'font-size: ' + this.FLYOUT_BUTTON_FONTSIZE + 'pt;',
     '}',
     /* eslint-enable indent */
   ];

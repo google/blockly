@@ -513,12 +513,9 @@ Blockly.blockRendering.ConstantProvider = function() {
 
 /**
  * Initialize shape objects based on the constants set in the constructor.
- * @param {!Blockly.Theme} theme The workspace theme object.
  * @package
  */
-Blockly.blockRendering.ConstantProvider.prototype.init = function(theme) {
-
-  this.setTheme_(theme);
+Blockly.blockRendering.ConstantProvider.prototype.init = function() {
 
   /**
    * An object containing sizing and path information about collapsed block
@@ -561,9 +558,9 @@ Blockly.blockRendering.ConstantProvider.prototype.init = function(theme) {
 /**
  * Refresh constants properties that depend on the theme.
  * @param {!Blockly.Theme} theme The current workspace theme.
- * @protected
+ * @package
  */
-Blockly.blockRendering.ConstantProvider.prototype.setTheme_ = function(
+Blockly.blockRendering.ConstantProvider.prototype.setTheme = function(
     theme) {
 
   /**
@@ -985,11 +982,10 @@ Blockly.blockRendering.ConstantProvider.prototype.shapeFor = function(
  * Create any DOM elements that this renderer needs (filters, patterns, etc).
  * @param {!SVGElement} svg The root of the workspace's SVG.
  * @param {string} rendererName Name of the renderer.
- * @param {!Blockly.Theme} _theme The current workspace theme.
  * @package
  */
 Blockly.blockRendering.ConstantProvider.prototype.createDom = function(svg,
-    rendererName, _theme) {
+    rendererName) {
   this.injectCSS_(rendererName);
   /*
   <defs>

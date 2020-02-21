@@ -82,7 +82,7 @@ Blockly.zelos.RenderInfo = function(renderer, block) {
    * Whether or not the block has a statement input in one of its rows.
    * @type {boolean}
    */
-  this.hasStatementInput = block.hasStatementInput;
+  this.hasStatementInput = block.statementInputs > 0;
 
   /**
    * An object with rendering information about the right connection shape.

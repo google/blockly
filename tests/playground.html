@@ -69,12 +69,17 @@
 
 <script>
 // Custom requires for the playground.
+
+// Rendering.
 goog.require('Blockly.blockRendering.Debug');
 goog.require('Blockly.minimalist.Renderer');
 goog.require('Blockly.Themes.Modern');
 goog.require('Blockly.Themes.Zelos');
 goog.require('Blockly.thrasos.Renderer');
 goog.require('Blockly.zelos.Renderer');
+
+// Other.
+goog.require('Blockly.WorkspaceCommentSvg');
 </script>
 <script>
 'use strict';
@@ -465,6 +470,21 @@ function configureContextMenu(menuOptions) {
     }
   };
   menuOptions.push(screenshotOption);
+
+  // Adds a default-sized workspace comment to the workspace.
+  var workspaceCommentOption = {
+    text: "Add a Comment",
+    enabled: true,
+    callback: function() {
+      var xml = Blockly.Xml.textToDom(
+        '<xml>' +
+          '<comment>Test</comment>' +
+        '</xml>'
+      );
+      Blockly.Xml.appendDomToWorkspace(xml, workspace);
+    }
+  }
+  menuOptions.push(workspaceCommentOption);
 }
 
 function logger(e) {

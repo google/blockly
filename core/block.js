@@ -170,6 +170,13 @@ Blockly.Block = function(workspace, prototypeName, opt_id) {
    */
   this.hat = undefined;
 
+  /**
+   * A count of statement inputs on the block.
+   * @type {number}
+   * @package
+   */
+  this.statementInputCount = 0;
+
   // Copy the type-specific functions and data from the prototype.
   if (prototypeName) {
     /** @type {string} */
@@ -1635,6 +1642,9 @@ Blockly.Block.prototype.appendInput_ = function(type, name) {
   if (type == Blockly.INPUT_VALUE || type == Blockly.NEXT_STATEMENT) {
     connection = this.makeConnection_(type);
   }
+  if (type == Blockly.NEXT_STATEMENT) {
+    this.statementInputCount++;
+  }
   var input = new Blockly.Input(type, name, this, connection);
   // Append input to list.
   this.inputList.push(input);
@@ -1712,6 +1722,9 @@ Blockly.Block.prototype.moveNumberedInputBefore = function(
 Blockly.Block.prototype.removeInput = function(name, opt_quiet) {
   for (var i = 0, input; (input = this.inputList[i]); i++) {
     if (input.name == name) {
+      if (input.type == Blockly.NEXT_STATEMENT) {
+        this.statementInputCount--;
+      }
       input.dispose();
       this.inputList.splice(i, 1);
       return;

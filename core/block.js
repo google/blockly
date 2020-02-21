@@ -175,7 +175,7 @@ Blockly.Block = function(workspace, prototypeName, opt_id) {
    * @type {number}
    * @package
    */
-  this.statementInputs = 0;
+  this.statementInputCount = 0;
 
   // Copy the type-specific functions and data from the prototype.
   if (prototypeName) {
@@ -1643,7 +1643,7 @@ Blockly.Block.prototype.appendInput_ = function(type, name) {
     connection = this.makeConnection_(type);
   }
   if (type == Blockly.NEXT_STATEMENT) {
-    this.statementInputs++;
+    this.statementInputCount++;
   }
   var input = new Blockly.Input(type, name, this, connection);
   // Append input to list.
@@ -1722,7 +1722,7 @@ Blockly.Block.prototype.moveNumberedInputBefore = function(
 Blockly.Block.prototype.removeInput = function(name, opt_quiet) {
   for (var i = 0, input; (input = this.inputList[i]); i++) {
     if (input.type == Blockly.NEXT_STATEMENT) {
-      this.statementInputs--;
+      this.statementInputCount--;
     }
     if (input.name == name) {
       input.dispose();

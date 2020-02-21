@@ -26,7 +26,7 @@ const upstream_url = "https://github.com/google/blockly.git";
 const blocklyRoot = '../../';
 
 // The destination path where all the NPM distribution files will go.
-const packageDistribution = blocklyRoot + 'dist';
+const packageDistribution = 'dist';
 
 
 /**

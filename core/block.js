@@ -59,6 +59,8 @@ Blockly.Block = function(workspace, prototypeName, opt_id) {
   this.nextConnection = null;
   /** @type {Blockly.Connection} */
   this.previousConnection = null;
+  /** @type {boolean} */
+  this.hasStatementInput = false;
   /** @type {!Array.<!Blockly.Input>} */
   this.inputList = [];
   /** @type {boolean|undefined} */
@@ -1634,6 +1636,9 @@ Blockly.Block.prototype.appendInput_ = function(type, name) {
   var connection = null;
   if (type == Blockly.INPUT_VALUE || type == Blockly.NEXT_STATEMENT) {
     connection = this.makeConnection_(type);
+  }
+  if (type == Blockly.NEXT_STATEMENT) {
+    this.hasStatementInput = true;
   }
   var input = new Blockly.Input(type, name, this, connection);
   // Append input to list.

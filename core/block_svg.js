@@ -1180,7 +1180,7 @@ Blockly.BlockSvg.prototype.setDisabled = function(disabled) {
 Blockly.BlockSvg.prototype.setEnabled = function(enabled) {
   if (this.isEnabled() != enabled) {
     Blockly.BlockSvg.superClass_.setEnabled.call(this, enabled);
-    if (this.rendered) {
+    if (this.rendered && !this.getInheritedDisabled()) {
       this.updateDisabled();
     }
   }
@@ -1661,7 +1661,7 @@ Blockly.BlockSvg.prototype.render = function(opt_bubble) {
   Blockly.utils.dom.stopTextWidthCache();
 
   var cursor = this.workspace.getCursor();
-  if (Blockly.navigation.keyboardAccessibilityMode && this.pathObject.cursorSvg_) {
+  if (this.workspace.keyboardAccessibilityMode && this.pathObject.cursorSvg_) {
     cursor.draw();
   }
 };

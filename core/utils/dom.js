@@ -280,6 +280,24 @@ Blockly.utils.dom.getTextWidth = function(textElement) {
  */
 Blockly.utils.dom.getFastTextWidth = function(textElement,
     fontSize, fontWeight, fontFamily) {
+  return Blockly.utils.dom.getFastTextWidthWithSizeString(textElement,
+      fontSize + 'pt', fontWeight, fontFamily);
+};
+
+/**
+ * Gets the width of a text element using a faster method than `getTextWidth`.
+ * This method requires that we know the text element's font family and size in
+ * advance. Similar to `getTextWidth`, we cache the width we compute.
+ * This method is similar to ``getFastTextWidth`` but expects the font size
+ * parameter to be a string.
+ * @param {!Element} textElement An SVG 'text' element.
+ * @param {string} fontSize The font size to use.
+ * @param {string} fontWeight The font weight to use.
+ * @param {string} fontFamily The font family to use.
+ * @return {number} Width of element.
+ */
+Blockly.utils.dom.getFastTextWidthWithSizeString = function(textElement,
+    fontSize, fontWeight, fontFamily) {
   var text = textElement.textContent;
   var key = text + '\n' + textElement.className.baseVal;
   var width;
@@ -305,7 +323,7 @@ Blockly.utils.dom.getFastTextWidth = function(textElement,
   }
   // Set the desired font size and family.
   Blockly.utils.dom.canvasContext_.font =
-    fontWeight + ' ' + fontSize + 'pt ' + fontFamily;
+      fontWeight + ' ' + fontSize + ' ' + fontFamily;
 
   // Measure the text width using the helper canvas context.
   width = Blockly.utils.dom.canvasContext_.measureText(text).width;
@@ -315,4 +333,42 @@ Blockly.utils.dom.getFastTextWidth = function(textElement,
     Blockly.utils.dom.cacheWidths_[key] = width;
   }
   return width;
+};
+
+/**
+ * Measure a font's metrics. The height and baseline values.
+ * @param {string} text Text to measure the font dimensions of.
+ * @param {string} fontSize The font size to use.
+ * @param {string} fontWeight The font weight to use.
+ * @param {string} fontFamily The font family to use.
+ * @return {{height: number, baseline: number}} Font measurements.
+ */
+Blockly.utils.dom.measureFontMetrics = function(text, fontSize, fontWeight,
+    fontFamily) {
+
+  var span = document.createElement('span');
+  span.setAttribute('style', 'display: inline-block;');
+  span.style.font = fontWeight + ' ' + fontSize + ' ' + fontFamily;
+  span.textContent = text;
+
+  var block = document.createElement('div');
+  block.setAttribute('style',
+      'display: inline-block; width: 1px; height: 0px;');
+  
+  var div = document.createElement('div');
+  div.setAttribute('style', 'line-height: 0;');
+  div.appendChild(span);
+  div.appendChild(block);
+
+  document.body.appendChild(div);
+  try {
+    var result = {};
+    block.style.verticalAlign = 'baseline';
+    result.baseline = block.offsetTop - span.offsetTop;
+    block.style.verticalAlign = 'bottom';
+    result.height = block.offsetTop - span.offsetTop;
+  } finally {
+    document.body.removeChild(div);
+  }
+  return result;
 };

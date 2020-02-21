@@ -564,10 +564,8 @@ Blockly.FieldDropdown.prototype.render_ = function() {
   } else {
     this.renderSelectedText_();
   }
-  if (this.borderRect_) {
-    this.borderRect_.setAttribute('height', this.size_.height);
-    this.borderRect_.setAttribute('width', this.size_.width);
-  }
+
+  this.positionBorderRect_();
 };
 
 /**
@@ -588,14 +586,13 @@ Blockly.FieldDropdown.prototype.renderSelectedImage_ = function(imageJson) {
 
   // Height and width include the border rect.
   var hasBorder = !!this.borderRect_;
-  this.size_.height = Math.max(
+  var height = Math.max(
       hasBorder ? this.constants_.FIELD_DROPDOWN_BORDER_RECT_HEIGHT : 0,
       imageHeight + Blockly.FieldDropdown.IMAGE_Y_PADDING);
-  var halfHeight = this.size_.height / 2;
   var xPadding = hasBorder ? this.constants_.FIELD_BORDER_RECT_X_PADDING : 0;
   var arrowWidth = 0;
   if (this.svgArrow_) {
-    arrowWidth = this.positionSVGArrow_(imageWidth + xPadding, halfHeight -
+    arrowWidth = this.positionSVGArrow_(imageWidth + xPadding, height / 2 -
       this.constants_.FIELD_DROPDOWN_SVG_ARROW_SIZE / 2);
   } else {
     arrowWidth = Blockly.utils.dom.getFastTextWidth(
@@ -605,19 +602,20 @@ Blockly.FieldDropdown.prototype.renderSelectedImage_ = function(imageJson) {
         this.constants_.FIELD_TEXT_FONTFAMILY);
   }
   this.size_.width = imageWidth + arrowWidth + xPadding * 2;
+  this.size_.height = height;
 
+  var arrowX = 0;
   if (this.sourceBlock_.RTL) {
     var imageX = xPadding + arrowWidth;
-    var arrowX = xPadding - 1;
     this.imageElement_.setAttribute('x', imageX);
-    this.textElement_.setAttribute('x', arrowX);
   } else {
-    var arrowX = imageWidth + arrowWidth + xPadding + 1;
+    arrowX = imageWidth + arrowWidth;
     this.textElement_.setAttribute('text-anchor', 'end');
-    this.textElement_.setAttribute('x', arrowX);
     this.imageElement_.setAttribute('x', xPadding);
   }
-  this.imageElement_.setAttribute('y', halfHeight - imageHeight / 2);
+  this.imageElement_.setAttribute('y', height / 2 - imageHeight / 2);
+
+  this.positionTextElement_(arrowX + xPadding, imageWidth + arrowWidth);
 };
 
 /**
@@ -633,10 +631,9 @@ Blockly.FieldDropdown.prototype.renderSelectedText_ = function() {
 
   // Height and width include the border rect.
   var hasBorder = !!this.borderRect_;
-  this.size_.height = Math.max(
+  var height = Math.max(
       hasBorder ? this.constants_.FIELD_DROPDOWN_BORDER_RECT_HEIGHT : 0,
       this.constants_.FIELD_TEXT_HEIGHT);
-  var halfHeight = this.size_.height / 2;
   var textWidth = Blockly.utils.dom.getFastTextWidth(this.textElement_,
       this.constants_.FIELD_TEXT_FONTSIZE,
       this.constants_.FIELD_TEXT_FONTWEIGHT,
@@ -644,20 +641,13 @@ Blockly.FieldDropdown.prototype.renderSelectedText_ = function() {
   var xPadding = hasBorder ? this.constants_.FIELD_BORDER_RECT_X_PADDING : 0;
   var arrowWidth = 0;
   if (this.svgArrow_) {
-    arrowWidth = this.positionSVGArrow_(textWidth + xPadding, halfHeight -
+    arrowWidth = this.positionSVGArrow_(textWidth + xPadding, height / 2 -
         this.constants_.FIELD_DROPDOWN_SVG_ARROW_SIZE / 2);
   }
   this.size_.width = textWidth + arrowWidth + xPadding * 2;
+  this.size_.height = height;
 
-  this.textElement_.setAttribute('x', this.sourceBlock_.RTL ?
-      this.size_.width - textWidth - xPadding : xPadding);
-  this.textElement_.setAttribute('y', halfHeight);
-  if (!this.constants_.FIELD_TEXT_BASELINE_CENTER) {
-    this.textElement_.setAttribute('dy',
-        this.constants_.FIELD_TEXT_BASELINE_Y -
-        this.constants_.FIELD_TEXT_HEIGHT / 2 +
-        this.constants_.FIELD_TEXT_Y_OFFSET);
-  }
+  this.positionTextElement_(xPadding, textWidth);
 };
 
 /**

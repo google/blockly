@@ -27,6 +27,20 @@ goog.require('Blockly.utils.userAgent');
 Blockly.blockRendering.ConstantProvider = function() {
 
   /**
+   * A placeholder value for number constants that are dynamically set.
+   * @type {number}
+   * @protected
+   */
+  this.DYNAMICALLY_SET_ = -1;
+
+  /**
+   * A placeholder value for string constants that are dynamically set.
+   * @type {string}
+   * @protected
+   */
+  this.DYNAMICALLY_SET_STRING_ = '';
+
+  /**
    * The size of an empty spacer.
    * @type {number}
    */
@@ -231,28 +245,39 @@ Blockly.blockRendering.ConstantProvider = function() {
   this.JAGGED_TEETH_WIDTH = 6;
 
   /**
-   * Point size of text.
+   * Point size of text.  This constant is dynamically set in
+   * ``setFontConstants_`` to the size of the font used by the renderer/theme.
    * @type {number}
    */
-  this.FIELD_TEXT_FONTSIZE = 11;
+  this.FIELD_TEXT_FONTSIZE = this.DYNAMICALLY_SET_;
 
   /**
-   * Height of text.
+   * Height of text.  This constant is dynamically set in ``setFontConstants_``
+   * to be the height of the text based on the font used.
    * @type {number}
    */
-  this.FIELD_TEXT_HEIGHT = 16;
+  this.FIELD_TEXT_HEIGHT = this.DYNAMICALLY_SET_;
 
   /**
-   * Text font weight.
-   * @type {string}
+   * Text baseline.  This constant is dynamically set in ``setFontConstants_``
+   * to be the baseline of the text based on the font used.
+   * @type {number}
    */
-  this.FIELD_TEXT_FONTWEIGHT = 'normal';
+  this.FIELD_TEXT_BASELINE = this.DYNAMICALLY_SET_;
 
   /**
-   * Text font family.
+   * Text font weight.  This constant is dynamically set in
+   * ``setFontConstants_`` to the weight of the font used by the renderer/theme.
    * @type {string}
    */
-  this.FIELD_TEXT_FONTFAMILY = 'sans-serif';
+  this.FIELD_TEXT_FONTWEIGHT = this.DYNAMICALLY_SET_STRING_;
+
+  /**
+   * Text font family.  This constant is dynamically set in
+   * ``setFontConstants_`` to the family of the font used by the renderer/theme.
+   * @type {string}
+   */
+  this.FIELD_TEXT_FONTFAMILY = this.DYNAMICALLY_SET_STRING_;
 
   /**
    * A field's border rect corner radius.
@@ -284,19 +309,6 @@ Blockly.blockRendering.ConstantProvider = function() {
    * @package
    */
   this.FIELD_BORDER_RECT_COLOUR = '#fff';
-
-  /**
-   * Field text baseline.
-   * This is only used if `FIELD_TEXT_BASELINE_CENTER` is false.
-   * @type {number}
-   */
-  this.FIELD_TEXT_BASELINE_Y = Blockly.utils.userAgent.GECKO ? 12 : 13.09;
-
-  /**
-   * An text offset adjusting the Y position of text after positioning.
-   * @type {number}
-   */
-  this.FIELD_TEXT_Y_OFFSET = 0;
 
   /**
    * A field's text element's dominant baseline.
@@ -393,18 +405,6 @@ Blockly.blockRendering.ConstantProvider = function() {
   this.FIELD_CHECKBOX_X_OFFSET = this.FIELD_BORDER_RECT_X_PADDING - 3;
 
   /**
-   * A checkbox field's Y offset.
-   * @type {number}
-   */
-  this.FIELD_CHECKBOX_Y_OFFSET = 14;
-
-  /**
-   * A checkbox field's default width.
-   * @type {number}
-   */
-  this.FIELD_CHECKBOX_DEFAULT_WIDTH = 15;
-
-  /**
    * A random identifier used to ensure a unique ID is used for each
    * filter/pattern for the case of multiple Blockly instances on a page.
    * @type {string}
@@ -439,6 +439,13 @@ Blockly.blockRendering.ConstantProvider = function() {
    * @private
    */
   this.disabledPattern_ = null;
+
+  /**
+   * The <style> element to use for injecting renderer specific CSS.
+   * @type {HTMLStyleElement}
+   * @private
+   */
+  this.cssNode_ = null;
 
   /**
    * Cursor colour.
@@ -555,7 +562,7 @@ Blockly.blockRendering.ConstantProvider.prototype.init = function() {
  * @param {!Blockly.Theme} theme The current workspace theme.
  * @package
  */
-Blockly.blockRendering.ConstantProvider.prototype.refreshTheme = function(
+Blockly.blockRendering.ConstantProvider.prototype.setTheme = function(
     theme) {
 
   /**
@@ -569,6 +576,62 @@ Blockly.blockRendering.ConstantProvider.prototype.refreshTheme = function(
   for (var key in blockStyles) {
     this.blockStyles[key] = this.validatedBlockStyle_(blockStyles[key]);
   }
+
+  this.setDynamicProperties_(theme);
+};
+
+/**
+ * Sets dynamic properties that depent on other values or theme properties.
+ * @param {!Blockly.Theme} theme The current workspace theme.
+ * @protected
+ */
+Blockly.blockRendering.ConstantProvider.prototype.setDynamicProperties_ =
+    function(theme) {
+    /* eslint-disable indent */
+  this.setFontConstants_(theme);
+}; /* eslint-enable indent */
+
+/**
+ * Get an object representing the default font styles specified by the renderer.
+ * @return {!Blockly.Theme.FontStyle} A theme font style.
+ * @protected
+ */
+Blockly.blockRendering.ConstantProvider.prototype.getDefaultFontStyle_ =
+    function() {
+    /* eslint-disable indent */
+  return {
+    'weight': 'normal',
+    'size': 11,
+    'family': 'sans-serif'
+  };
+}; /* eslint-enable indent */
+
+/**
+ * Set constants related to fonts.
+ * @param {!Blockly.Theme} theme The current workspace theme.
+ * @protected
+ */
+Blockly.blockRendering.ConstantProvider.prototype.setFontConstants_ = function(
+    theme) {
+  var defaultFontStyle = this.getDefaultFontStyle_();
+
+  this.FIELD_TEXT_FONTFAMILY =
+      theme.fontStyle && theme.fontStyle['family'] != undefined ?
+      theme.fontStyle['family'] : defaultFontStyle['family'];
+  this.FIELD_TEXT_FONTWEIGHT =
+      theme.fontStyle && theme.fontStyle['weight'] != undefined ?
+      theme.fontStyle['weight'] : defaultFontStyle['weight'];
+  this.FIELD_TEXT_FONTSIZE =
+      theme.fontStyle && theme.fontStyle['size'] != undefined ?
+      theme.fontStyle['size'] : defaultFontStyle['size'];
+
+  var fontMetrics = Blockly.utils.dom.measureFontMetrics('Hg',
+      this.FIELD_TEXT_FONTSIZE + 'pt',
+      this.FIELD_TEXT_FONTWEIGHT,
+      this.FIELD_TEXT_FONTFAMILY);
+
+  this.FIELD_TEXT_HEIGHT = fontMetrics.height;
+  this.FIELD_TEXT_BASELINE = fontMetrics.baseline;
 };
 
 /**
@@ -598,7 +661,9 @@ Blockly.blockRendering.ConstantProvider.prototype.getBlockStyleForColour =
 Blockly.blockRendering.ConstantProvider.prototype.getBlockStyle = function(
     blockStyleName) {
   return this.blockStyles[blockStyleName || ''] ||
-      this.createBlockStyle_('#000000');
+      (blockStyleName && blockStyleName.indexOf('auto_') == 0 ?
+        this.getBlockStyleForColour(blockStyleName.substring(5)).style :
+        this.createBlockStyle_('#000000'));
 };
 
 /**
@@ -688,6 +753,9 @@ Blockly.blockRendering.ConstantProvider.prototype.dispose = function() {
   }
   if (this.disabledPattern_) {
     Blockly.utils.dom.removeNode(this.disabledPattern_);
+  }
+  if (this.cssNode_) {
+    Blockly.utils.dom.removeNode(this.cssNode_);
   }
 };
 
@@ -915,9 +983,12 @@ Blockly.blockRendering.ConstantProvider.prototype.shapeFor = function(
 /**
  * Create any DOM elements that this renderer needs (filters, patterns, etc).
  * @param {!SVGElement} svg The root of the workspace's SVG.
+ * @param {string} rendererName Name of the renderer.
  * @package
  */
-Blockly.blockRendering.ConstantProvider.prototype.createDom = function(svg) {
+Blockly.blockRendering.ConstantProvider.prototype.createDom = function(svg,
+    rendererName) {
+  this.injectCSS_(rendererName);
   /*
   <defs>
     ... filters go here ...
@@ -999,9 +1070,9 @@ Blockly.blockRendering.ConstantProvider.prototype.createDom = function(svg) {
 /**
  * Inject renderer specific CSS into the page.
  * @param {string} name Name of the renderer.
- * @package
+ * @protected
  */
-Blockly.blockRendering.ConstantProvider.prototype.injectCSS = function(
+Blockly.blockRendering.ConstantProvider.prototype.injectCSS_ = function(
     name) {
   var cssArray = this.getCSS_(name);
   var cssNodeId = 'blockly-renderer-style-' + name;
@@ -1011,11 +1082,13 @@ Blockly.blockRendering.ConstantProvider.prototype.injectCSS = function(
   }
   var text = cssArray.join('\n');
   // Inject CSS tag at start of head.
-  var cssNode = document.createElement('style');
+  var cssNode =
+    /** @type {!HTMLStyleElement} */ (document.createElement('style'));
   cssNode.id = cssNodeId;
   var cssTextNode = document.createTextNode(text);
   cssNode.appendChild(cssTextNode);
   document.head.insertBefore(cssNode, document.head.firstChild);
+  this.cssNode_ = cssNode;
 };
 
 /**

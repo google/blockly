@@ -79,16 +79,17 @@ Blockly.blockRendering.stopDebugger = function() {
 /**
  * Initialize anything needed for rendering (constants, etc).
  * @param {!string} name Name of the renderer to initialize.
+ * @param {!Blockly.Theme} theme The workspace theme object.
  * @return {!Blockly.blockRendering.Renderer} The new instance of a renderer.
  *     Already initialized.
  * @package
  */
-Blockly.blockRendering.init = function(name) {
+Blockly.blockRendering.init = function(name, theme) {
   if (!Blockly.blockRendering.rendererMap_[name]) {
     throw Error('Renderer not registered: ', name);
   }
   var renderer = (/** @type {!Blockly.blockRendering.Renderer} */ (
     new Blockly.blockRendering.rendererMap_[name](name)));
-  renderer.init();
+  renderer.init(theme);
   return renderer;
 };

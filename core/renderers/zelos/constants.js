@@ -237,34 +237,6 @@ Blockly.zelos.ConstantProvider = function() {
   /**
    * @override
    */
-  this.FIELD_TEXT_FONTSIZE = 3 * this.GRID_UNIT;
-
-  /**
-   * @override
-   */
-  this.FIELD_TEXT_FONTWEIGHT = 'bold';
-
-  /**
-   * @override
-   */
-  this.FIELD_TEXT_FONTFAMILY =
-      '"Helvetica Neue", "Segoe UI", Helvetica, sans-serif';
-
-  /**
-   * @override
-   */
-  this.FIELD_TEXT_HEIGHT = 13.1;
-
-  /**
-   * Used by positioning text on IE and Edge as they don't support
-   * dominant-baseline:center.
-   * @override
-   */
-  this.FIELD_TEXT_BASELINE_Y = 13.1;
-
-  /**
-   * @override
-   */
   this.FIELD_BORDER_RECT_RADIUS = this.CORNER_RADIUS;
 
   /**
@@ -275,7 +247,7 @@ Blockly.zelos.ConstantProvider = function() {
   /**
    * @override
    */
-  this.FIELD_BORDER_RECT_Y_PADDING = 1 * this.GRID_UNIT;
+  this.FIELD_BORDER_RECT_Y_PADDING = 1.625 * this.GRID_UNIT;
 
   /**
    * @override
@@ -315,11 +287,6 @@ Blockly.zelos.ConstantProvider = function() {
   /**
    * @override
    */
-  this.FIELD_TEXT_Y_OFFSET = Blockly.utils.userAgent.CHROME ? -.45 : 0;
-
-  /**
-   * @override
-   */
   this.FIELD_COLOUR_FULL_BLOCK = true;
 
   /**
@@ -335,18 +302,7 @@ Blockly.zelos.ConstantProvider = function() {
   /**
    * @override
    */
-  this.FIELD_CHECKBOX_X_OFFSET = this.FIELD_BORDER_RECT_X_PADDING - 3;
-
-  /**
-   * @override
-   */
-  this.FIELD_CHECKBOX_Y_OFFSET = 22;
-
-  /**
-   * @override
-   */
-  this.FIELD_CHECKBOX_DEFAULT_WIDTH = 6 * this.GRID_UNIT;
-
+  this.FIELD_CHECKBOX_X_OFFSET = 1 * this.GRID_UNIT;
 
   /**
    * The maximum width of a dynamic connection shape.
@@ -390,13 +346,38 @@ Blockly.utils.object.inherits(Blockly.zelos.ConstantProvider,
 /**
  * @override
  */
+Blockly.zelos.ConstantProvider.prototype.getDefaultFontStyle_ = function() {
+  var fontStyle =
+      Blockly.zelos.ConstantProvider.superClass_.getDefaultFontStyle_.call(this);
+  fontStyle['weight'] = 'bold';
+  fontStyle['size'] = 3 * this.GRID_UNIT;
+  fontStyle['family'] = '"Helvetica Neue", "Segoe UI", Helvetica, sans-serif';
+  return fontStyle;
+};
+
+/**
+ * @override
+ */
+Blockly.zelos.ConstantProvider.prototype.setFontConstants_ = function(theme) {
+  Blockly.zelos.ConstantProvider.superClass_.setFontConstants_.call(this,
+      theme);
+
+  this.FIELD_BORDER_RECT_HEIGHT = this.FIELD_TEXT_HEIGHT +
+      this.FIELD_BORDER_RECT_Y_PADDING * 2;
+  this.FIELD_DROPDOWN_BORDER_RECT_HEIGHT = this.FIELD_BORDER_RECT_HEIGHT;
+};
+
+/**
+ * @override
+ */
 Blockly.zelos.ConstantProvider.prototype.init = function() {
   Blockly.zelos.ConstantProvider.superClass_.init.call(this);
   this.HEXAGONAL = this.makeHexagonal();
   this.ROUNDED = this.makeRounded();
   this.SQUARED = this.makeSquared();
 
-  this.STATEMENT_INPUT_NOTCH_OFFSET += this.INSIDE_CORNERS.rightWidth;
+  this.STATEMENT_INPUT_NOTCH_OFFSET = this.NOTCH_OFFSET_LEFT +
+      this.INSIDE_CORNERS.rightWidth;
 };
 
 /**
@@ -759,8 +740,10 @@ Blockly.zelos.ConstantProvider.prototype.generateTertiaryColour_ = function(
 /**
  * @override
  */
-Blockly.zelos.ConstantProvider.prototype.createDom = function(svg) {
-  Blockly.zelos.ConstantProvider.superClass_.createDom.call(this, svg);
+Blockly.zelos.ConstantProvider.prototype.createDom = function(svg,
+    rendererName) {
+  Blockly.zelos.ConstantProvider.superClass_.createDom.call(this, svg,
+      rendererName);
   /*
   <defs>
     ... filters go here ...

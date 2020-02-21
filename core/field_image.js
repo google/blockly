@@ -187,6 +187,13 @@ Blockly.FieldImage.prototype.initView = function() {
 };
 
 /**
+ * @override
+ */
+Blockly.FieldImage.prototype.updateSize_ = function() {
+  // NOP
+};
+
+/**
  * Ensure that the input value (the source URL) is a string.
  * @param {*=} opt_newValue The input value.
  * @return {?string} A string, or null if invalid.

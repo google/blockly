@@ -46,6 +46,8 @@ Blockly.Flyout = function(workspaceOptions) {
    */
   this.workspace_ = new Blockly.WorkspaceSvg(workspaceOptions);
   this.workspace_.isFlyout = true;
+  // Keep the workspace visibility consistent with the flyout's visibility.
+  this.workspace_.setVisible(this.isVisible_);
 
   /**
    * Is RTL vs LTR.

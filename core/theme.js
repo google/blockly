@@ -57,26 +57,42 @@ Blockly.Theme = function(name, blockStyles, categoryStyles,
    * @private
    */
   this.componentStyles_ = opt_componentStyles || Object.create(null);
+
+  /**
+   * The font style.
+   * @type {?Blockly.Theme.FontStyle}
+   */
+  this.fontStyle = null;
 };
 
 /**
  * A block style.
  * @typedef {{
-  *            colourPrimary:string,
-  *            colourSecondary:string,
-  *            colourTertiary:string,
-  *            hat:string
-  *          }}
-  */
+ *            colourPrimary:string,
+ *            colourSecondary:string,
+ *            colourTertiary:string,
+ *            hat:string
+ *          }}
+ */
 Blockly.Theme.BlockStyle;
 
 /**
  * A category style.
  * @typedef {{
-  *            colour:string
-  *          }}
-  */
+ *            colour:string
+ *          }}
+ */
 Blockly.Theme.CategoryStyle;
+
+/**
+ * A font style.
+ * @typedef {{
+ *            family:string?,
+ *            weight:string?,
+ *            size:number?
+ *          }}
+ */
+Blockly.Theme.FontStyle;
 
 /**
  * Overrides or adds a style to the blockStyles map.
@@ -95,6 +111,14 @@ Blockly.Theme.prototype.setBlockStyle = function(blockStyleName, blockStyle) {
 Blockly.Theme.prototype.setCategoryStyle = function(categoryStyleName,
     categoryStyle) {
   this.categoryStyles[categoryStyleName] = categoryStyle;
+};
+
+/**
+ * Configure a theme's font style.
+ * @param {Blockly.Theme.FontStyle} fontStyle The font style.
+*/
+Blockly.Theme.prototype.setFontStyle = function(fontStyle) {
+  this.fontStyle = fontStyle;
 };
 
 /**

@@ -46,6 +46,14 @@ Blockly.geras.HighlightConstantProvider = function(constants) {
    */
   this.START_POINT = Blockly.utils.svgPaths.moveBy(this.OFFSET, this.OFFSET);
 
+};
+
+/**
+ * Initialize shape objects based on the constants set in the constructor.
+ * @package
+ */
+Blockly.geras.HighlightConstantProvider.prototype.init = function() {
+  
   /**
    * An object containing sizing and path information about inside corner
    * highlights.

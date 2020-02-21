@@ -128,13 +128,15 @@ Blockly.WorkspaceSvg = function(options,
       this.options.parentWorkspace.getThemeManager() :
       new Blockly.ThemeManager(this,
           this.options.theme || Blockly.Themes.Classic);
+  this.themeManager_.subscribeWorkspace(this);
 
   /**
    * The block renderer used for rendering blocks on this workspace.
    * @type {!Blockly.blockRendering.Renderer}
    * @private
    */
-  this.renderer_ = Blockly.blockRendering.init(this.options.renderer || 'geras');
+  this.renderer_ = Blockly.blockRendering.init(this.options.renderer || 'geras',
+      this.getTheme());
 
   /**
    * Cached parent SVG.
@@ -142,9 +144,6 @@ Blockly.WorkspaceSvg = function(options,
    * @private
    */
   this.cachedParentSvg_ = null;
-
-  this.themeManager_.subscribeWorkspace(this);
-  this.renderer_.getConstants().refreshTheme(this.getTheme());
 
   /**
    * True if keyboard accessibility mode is on, false otherwise.
@@ -516,7 +515,9 @@ Blockly.WorkspaceSvg.prototype.setTheme = function(theme) {
  * @package
  */
 Blockly.WorkspaceSvg.prototype.refreshTheme = function() {
-  this.getRenderer().getConstants().refreshTheme(this.getTheme());
+  if (this.svgGroup_) {
+    this.getRenderer().refresh(this.svgGroup_, this.getTheme());
+  }
 
   // Update all blocks in workspace that have a style name.
   this.updateBlockStyles_(this.getAllBlocks(false).filter(
@@ -743,8 +744,7 @@ Blockly.WorkspaceSvg.prototype.createDom = function(opt_backgroundClass) {
       new Blockly.Marker());
 
   var constants = this.getRenderer().getConstants();
-  constants.injectCSS(this.getRenderer().name);
-  constants.createDom(this.svgGroup_);
+  constants.createDom(this.svgGroup_, this.getRenderer().name);
   return this.svgGroup_;
 };
 
@@ -903,6 +903,7 @@ Blockly.WorkspaceSvg.prototype.addFlyout = function(tagName) {
     this.flyout_ = new Blockly.VerticalFlyout(workspaceOptions);
   }
   this.flyout_.autoClose = false;
+  this.flyout_.getWorkspace().setVisible(true);
 
   // Return the element so that callers can place it in their desired
   // spot in the DOM.  For example, mutator flyouts do not go in the same place
@@ -1149,6 +1150,10 @@ Blockly.WorkspaceSvg.prototype.getWidth = function() {
  * @param {boolean} isVisible True if workspace should be visible.
  */
 Blockly.WorkspaceSvg.prototype.setVisible = function(isVisible) {
+  this.isVisible_ = isVisible;
+  if (!this.svgGroup_) {
+    return;
+  }
 
   // Tell the scrollbar whether its container is visible so it can
   // tell when to hide itself.
@@ -1181,7 +1186,6 @@ Blockly.WorkspaceSvg.prototype.setVisible = function(isVisible) {
   } else {
     Blockly.hideChaff(true);
   }
-  this.isVisible_ = isVisible;
 };
 
 /**

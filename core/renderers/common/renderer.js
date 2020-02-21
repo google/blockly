@@ -48,11 +48,27 @@ Blockly.blockRendering.Renderer = function(name) {
 
 /**
  * Initialize the renderer.
+ * @param {!Blockly.Theme} theme The workspace theme object.
  * @package
  */
-Blockly.blockRendering.Renderer.prototype.init = function() {
+Blockly.blockRendering.Renderer.prototype.init = function(theme) {
   this.constants_ = this.makeConstants_();
+  this.constants_.setTheme(theme);
   this.constants_.init();
+};
+
+/**
+ * Refresh the renderer after a theme change.
+ * @param {!SVGElement} svg The root of the workspace's SVG.
+ * @param {!Blockly.Theme} theme The workspace theme object.
+ * @package
+ */
+Blockly.blockRendering.Renderer.prototype.refresh = function(svg, theme) {
+  var constants = this.getConstants();
+  constants.dispose();
+  constants.setTheme(theme);
+  constants.init();
+  constants.createDom(svg, this.name);
 };
 
 /**
@@ -96,7 +112,7 @@ Blockly.blockRendering.Renderer.prototype.makeDebugger_ = function() {
   if (!Blockly.blockRendering.Debug) {
     throw Error('Missing require for Blockly.blockRendering.Debug');
   }
-  return new Blockly.blockRendering.Debug();
+  return new Blockly.blockRendering.Debug(this.getConstants());
 };
 
 /**

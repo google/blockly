@@ -63,9 +63,7 @@ Blockly.Blocks.colour_picker = {
     this.setHelpUrl(Blockly.Msg.COLOUR_PICKER_HELPURL);
   },
   ensureSearchKeywords: function () {
-    // TODO:
     var keywords = [
-      Blockly.Msg.FABLE_CAMERA_TAKE_PICTURE,
       '%{BKY_COLORS}'
     ];
 
@@ -227,22 +225,22 @@ Blockly.Blocks.custom_color = {
 
 Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
   // Block for colour picker.
-  {
-    "type": "colour_picker",
-    "message0": "%1",
-    "args0": [
-      {
-        "type": "field_colour",
-        "name": "COLOUR",
-        "colour": "#ff0000"
-      }
-    ],
-    "output": "Colour",
-    "helpUrl": "%{BKY_COLOUR_PICKER_HELPURL}",
-    "style": "colour_blocks",
-    "tooltip": "%{BKY_COLOUR_PICKER_TOOLTIP}",
-    "extensions": ["parent_tooltip_when_inline"]
-  },
+  // {
+  //   "type": "colour_picker",
+  //   "message0": "%1",
+  //   "args0": [
+  //     {
+  //       "type": "field_colour",
+  //       "name": "COLOUR",
+  //       "colour": "#ff0000"
+  //     }
+  //   ],
+  //   "output": "Colour",
+  //   "helpUrl": "%{BKY_COLOUR_PICKER_HELPURL}",
+  //   "style": "colour_blocks",
+  //   "tooltip": "%{BKY_COLOUR_PICKER_TOOLTIP}",
+  //   "extensions": ["parent_tooltip_when_inline"]
+  // },
 
   // Block for random colour.
   {

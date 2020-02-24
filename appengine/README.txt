@@ -19,10 +19,10 @@ blockly/
  |- storage.js
  |- storage.py
  `- static/
-     |- blocks/
-     |- core/
+     |- blocks/  (Optional)
+     |- core/  (Optional)
      |- demos/
-     |- generators/
+     |- generators/  (Optional)
      |- media/
      |- msg/
      |- tests/  (Optional)
@@ -35,8 +35,12 @@ blockly/
      |- php_compressed.js
      `- python_compressed.js
 
+The entries marked "Optional" are only needed if one wishes to serve Blockly
+in an uncompressed state.  This is useful for testing, but production should
+always use compressed.
+
 Go to https://appengine.google.com/ and create your App Engine application.
-Modify the 'PROJECT' name in 'deploy' to your App Engine application name.
+Modify the 'PROJECT' name in the 'deploy' file to your App Engine application name.
 
 Finally, upload this directory structure to your App Engine account,
-wait a minute, then go to http://YOURAPPNAME.appspot.com/
+then go to http://YOURAPPNAME.appspot.com/

@@ -95,6 +95,10 @@ Blockly.fable.RenderInfo.prototype.addInput_ = function (input, activeRow) {
     let hasLargeImage = false;
     if (input && input.fieldRow && input.fieldRow.length) {
       for (let i = 0; i < input.fieldRow.length; i++) {
+        if (input.fieldRow[i] instanceof Blockly.FieldDropdown) {
+          activeRow.hasDropdown = true;
+        }
+
         if (input.fieldRow[i].imageElement_ && input.fieldRow[i].imageElement_.height) {
           if ((input.fieldRow[i].imageElement_.height.baseVal && input.fieldRow[i].imageElement_.height.baseVal.value > 20) ||
               (input.fieldRow[i].imageElement_.height.animVal && input.fieldRow[i].imageElement_.height.animVal.value > 20) ||
@@ -387,12 +391,33 @@ Blockly.fable.RenderInfo.prototype.getElemCenterline_ = function (row, elem) {
   var result = row.yPos;
   if (Blockly.blockRendering.Types.isIcon(elem)) {
     result += (elem.height / 2);
-    if (this.topRow.minHeight === this.constants_.Y_MARGIN_TOP_WITH_IMAGE) {
-      result += ((this.topRow.minHeight - this.constants_.Y_MARGIN_TOP) / 2);
+    //   if (this.topRow.minHeight === this.constants_.Y_MARGIN_TOP_WITH_IMAGE) {
+    //     result += ((this.topRow.minHeight - this.constants_.Y_MARGIN_TOP) / 2);
+    //   }
+
+    if ((row.hasInlineInput || row.hasStatement || row.hasExternalInput) &&
+        elem.height + this.constants_.TALL_INPUT_FIELD_OFFSET_Y <= row.height) {
+      if (row.hasExternalInput) {
+        for (let i = 0; i < row.elements.length; i++) {
+          const rowElem = row.elements[i];
+          if (Blockly.blockRendering.Types.isExternalInput(rowElem) &&
+                    rowElem.connectedBlock) {
+            result += ((rowElem.connectedBlock.firstRowHeight - elem.height) / 2);
+            if ((rowElem.connectedBlock.firstRowHeight - elem.height) > 5) {
+              result -= row.yPos;
+            } else {
+              result -= (row.yPos / 2);
+            }
+          }
+        }
+      } else {
+        result += ((row.height - elem.height) / 2);
+        result -= 2.5;
+      }
     }
   } else if (Blockly.blockRendering.Types.isField(elem)) {
     result += (elem.height / 2);
-    if ((row.hasInlineInput || row.hasStatement || row.hasExternalInput) &&
+    if ((row.hasInlineInput || row.hasStatement || row.hasExternalInput || row.hasDropdown) &&
         elem.height + this.constants_.TALL_INPUT_FIELD_OFFSET_Y <= row.height) {
       if (row.hasExternalInput) {
         for (let i = 0; i < row.elements.length; i++) {

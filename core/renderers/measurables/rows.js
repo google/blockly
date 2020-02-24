@@ -489,10 +489,10 @@ Blockly.blockRendering.InputRow.prototype.measure = function () {
       if (Blockly.blockRendering.Types.isInlineInput(elem) &&
               elem.connectedBlock) {
         // SHAPE: Hardcoded value
-        this.calculatedHeight = elem.connectedBlock.firstRowHeight + 11;
+        this.calculatedHeight = Math.max(this.calculatedHeight, elem.connectedBlock.firstRowHeight + 11);
       } else if (Blockly.blockRendering.Types.isExternalInput(elem) &&
                  elem.connectedBlock) {
-        this.calculatedHeight = elem.connectedBlock.firstRowHeight;
+        this.calculatedHeight = Math.max(this.calculatedHeight, elem.connectedBlock.firstRowHeight);
       }
     }
   }

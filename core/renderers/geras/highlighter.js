@@ -110,11 +110,10 @@ Blockly.geras.Highlighter.prototype.drawTopCorner = function(row) {
 
 Blockly.geras.Highlighter.prototype.drawJaggedEdge_ = function(row) {
   if (this.info_.RTL) {
-    this.steps_ += Blockly.utils.svgPaths.lineOnAxis('H', row.width - this.highlightOffset_);
-    this.steps_ += this.jaggedTeethPaths_.pathLeft;
     var remainder =
         row.height - this.jaggedTeethPaths_.height - this.highlightOffset_;
-    this.steps_ += Blockly.utils.svgPaths.lineOnAxis('v', remainder);
+    this.steps_ += this.jaggedTeethPaths_.pathLeft +
+        Blockly.utils.svgPaths.lineOnAxis('v', remainder);
   }
 };
 

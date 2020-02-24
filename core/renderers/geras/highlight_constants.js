@@ -53,7 +53,7 @@ Blockly.geras.HighlightConstantProvider = function(constants) {
  * @package
  */
 Blockly.geras.HighlightConstantProvider.prototype.init = function() {
-  
+
   /**
    * An object containing sizing and path information about inside corner
    * highlights.
@@ -273,7 +273,9 @@ Blockly.geras.HighlightConstantProvider.prototype.makeJaggedTeeth = function() {
       Blockly.utils.svgPaths.moveBy(-10.2, 6.8) +
       Blockly.utils.svgPaths.lineTo(5.1, 2.6);
   return {
-    pathLeft: pathLeft
+    pathLeft: pathLeft,
+    height: 12,
+    width: 10.2
   };
 };
 

@@ -130,9 +130,7 @@ Blockly.FieldCheckbox.prototype.getDisplayText_ = function() {
  */
 Blockly.FieldCheckbox.prototype.setCheckCharacter = function(character) {
   this.checkChar_ = character;
-  if (this.textContent_) {
-    this.textContent_.nodeValue = character || Blockly.FieldCheckbox.CHECK_CHAR;
-  }
+  this.forceRerender();
 };
 
 /**

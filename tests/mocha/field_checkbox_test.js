@@ -165,7 +165,10 @@ suite('Checkbox Fields', function() {
       function assertCharacter(field, char) {
         field.fieldGroup_ = Blockly.utils.dom.createSvgElement('g', {}, null);
         field.sourceBlock_ = {
-          RTL: false
+          RTL: false,
+          rendered: true,
+          render: function() { field.render_(); },
+          bumpNeighbours: function() {}
         };
         field.constants_ = {
           FIELD_CHECKBOX_X_OFFSET: 2,

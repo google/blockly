@@ -531,11 +531,14 @@ Blockly.Blocks['procedures_mutatorarg'] = {
     var workspace = sourceBlock.workspace.targetWorkspace ||
         sourceBlock.workspace;
     var blocks = workspace.getAllBlocks(false);
+    var caselessName = varName.toLowerCase();
     for (var i = 0; i < blocks.length; i++) {
       if (blocks[i].id == this.getSourceBlock().id) {
         continue;
       }
-      if (blocks[i].getFieldValue('NAME') == varName) {
+      // Other blocks values may not be set yet when this is loaded.
+      var otherVar = blocks[i].getFieldValue('NAME');
+      if (otherVar && otherVar.toLowerCase() == caselessName) {
         return null;
       }
     }

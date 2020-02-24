@@ -95,6 +95,10 @@ Blockly.fable.RenderInfo.prototype.addInput_ = function (input, activeRow) {
     let hasLargeImage = false;
     if (input && input.fieldRow && input.fieldRow.length) {
       for (let i = 0; i < input.fieldRow.length; i++) {
+        if (input.fieldRow[i] instanceof Blockly.FieldDropdown) {
+          activeRow.hasDropdown = true;
+        }
+
         if (input.fieldRow[i].imageElement_ && input.fieldRow[i].imageElement_.height) {
           if ((input.fieldRow[i].imageElement_.height.baseVal && input.fieldRow[i].imageElement_.height.baseVal.value > 20) ||
               (input.fieldRow[i].imageElement_.height.animVal && input.fieldRow[i].imageElement_.height.animVal.value > 20) ||
@@ -413,7 +417,7 @@ Blockly.fable.RenderInfo.prototype.getElemCenterline_ = function (row, elem) {
     }
   } else if (Blockly.blockRendering.Types.isField(elem)) {
     result += (elem.height / 2);
-    if ((row.hasInlineInput || row.hasStatement || row.hasExternalInput) &&
+    if ((row.hasInlineInput || row.hasStatement || row.hasExternalInput || row.hasDropdown) &&
         elem.height + this.constants_.TALL_INPUT_FIELD_OFFSET_Y <= row.height) {
       if (row.hasExternalInput) {
         for (let i = 0; i < row.elements.length; i++) {

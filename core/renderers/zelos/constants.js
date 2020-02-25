@@ -413,15 +413,19 @@ Blockly.zelos.ConstantProvider.prototype.setTheme = function(theme) {
   this.SELECTED_GLOW_COLOUR =
       theme.getComponentStyle('selectedGlowColour') ||
       this.SELECTED_GLOW_COLOUR;
+  var selectedGlowSize =
+      Number(theme.getComponentStyle('selectedGlowSize'));
   this.SELECTED_GLOW_SIZE =
-      theme.getComponentStyle('selectedGlowSize') ||
-      this.SELECTED_GLOW_SIZE;
+      selectedGlowSize && !isNaN(selectedGlowSize) ?
+      selectedGlowSize : this.SELECTED_GLOW_SIZE;
   this.REPLACEMENT_GLOW_COLOUR =
       theme.getComponentStyle('replacementGlowColour') ||
       this.REPLACEMENT_GLOW_COLOUR;
+  var replacementGlowSize =
+      Number(theme.getComponentStyle('replacementGlowSize'));
   this.REPLACEMENT_GLOW_SIZE =
-      theme.getComponentStyle('replacementGlowSize') ||
-      this.REPLACEMENT_GLOW_SIZE;
+      replacementGlowSize && !isNaN(replacementGlowSize) ?
+      replacementGlowSize : this.REPLACEMENT_GLOW_SIZE;
 };
 
 /**

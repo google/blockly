@@ -311,6 +311,30 @@ Blockly.zelos.ConstantProvider = function() {
   this.MAX_DYNAMIC_CONNECTION_SHAPE_WIDTH = 12 * this.GRID_UNIT;
 
   /**
+   * The selected glow colour.
+   * @type {string}
+   */
+  this.SELECTED_GLOW_COLOUR = '#fff200';
+
+  /**
+   * The size of the selected glow.
+   * @type {number}
+   */
+  this.SELECTED_GLOW_SIZE = 0.5;
+
+  /**
+   * The replacement glow colour.
+   * @type {string}
+   */
+  this.REPLACEMENT_GLOW_COLOUR = '#fff200';
+
+  /**
+   * The size of the selected glow.
+   * @type {number}
+   */
+  this.REPLACEMENT_GLOW_SIZE = 2;
+
+  /**
    * The ID of the selected glow filter, or the empty string if no filter is
    * set.
    * @type {string}
@@ -383,10 +407,37 @@ Blockly.zelos.ConstantProvider.prototype.init = function() {
 /**
  * @override
  */
+Blockly.zelos.ConstantProvider.prototype.setTheme = function(theme) {
+  Blockly.zelos.ConstantProvider.superClass_.setTheme.call(this, theme);
+
+  this.SELECTED_GLOW_COLOUR =
+      theme.getComponentStyle('selectedGlowColour') ||
+      this.SELECTED_GLOW_COLOUR;
+  var selectedGlowSize =
+      Number(theme.getComponentStyle('selectedGlowSize'));
+  this.SELECTED_GLOW_SIZE =
+      selectedGlowSize && !isNaN(selectedGlowSize) ?
+      selectedGlowSize : this.SELECTED_GLOW_SIZE;
+  this.REPLACEMENT_GLOW_COLOUR =
+      theme.getComponentStyle('replacementGlowColour') ||
+      this.REPLACEMENT_GLOW_COLOUR;
+  var replacementGlowSize =
+      Number(theme.getComponentStyle('replacementGlowSize'));
+  this.REPLACEMENT_GLOW_SIZE =
+      replacementGlowSize && !isNaN(replacementGlowSize) ?
+      replacementGlowSize : this.REPLACEMENT_GLOW_SIZE;
+};
+
+/**
+ * @override
+ */
 Blockly.zelos.ConstantProvider.prototype.dispose = function() {
   Blockly.zelos.ConstantProvider.superClass_.dispose.call(this);
   if (this.selectedGlowFilter_) {
     Blockly.utils.dom.removeNode(this.selectedGlowFilter_);
+  }
+  if (this.replacementGlowFilter_) {
+    Blockly.utils.dom.removeNode(this.replacementGlowFilter_);
   }
 };
 
@@ -764,7 +815,7 @@ Blockly.zelos.ConstantProvider.prototype.createDom = function(svg,
   Blockly.utils.dom.createSvgElement('feGaussianBlur',
       {
         'in': 'SourceGraphic',
-        'stdDeviation': 0.5  // TODO: configure size in theme.
+        'stdDeviation': this.SELECTED_GLOW_SIZE
       },
       selectedGlowFilter);
   // Set all gaussian blur pixels to 1 opacity before applying flood
@@ -778,7 +829,7 @@ Blockly.zelos.ConstantProvider.prototype.createDom = function(svg,
   // Color the highlight
   Blockly.utils.dom.createSvgElement('feFlood',
       {
-        'flood-color': '#fff200', // TODO: configure colour in theme.
+        'flood-color': this.SELECTED_GLOW_COLOUR,
         'flood-opacity': 1,
         'result': 'outColor'
       },
@@ -806,7 +857,7 @@ Blockly.zelos.ConstantProvider.prototype.createDom = function(svg,
   Blockly.utils.dom.createSvgElement('feGaussianBlur',
       {
         'in': 'SourceGraphic',
-        'stdDeviation': 2  // TODO: configure size in theme.
+        'stdDeviation': this.REPLACEMENT_GLOW_SIZE
       },
       replacementGlowFilter);
   // Set all gaussian blur pixels to 1 opacity before applying flood
@@ -820,7 +871,7 @@ Blockly.zelos.ConstantProvider.prototype.createDom = function(svg,
   // Color the highlight
   Blockly.utils.dom.createSvgElement('feFlood',
       {
-        'flood-color': '#fff200', // TODO: configure colour in theme.
+        'flood-color': this.REPLACEMENT_GLOW_COLOUR,
         'flood-opacity': 1,
         'result': 'outColor'
       },
@@ -897,7 +948,7 @@ Blockly.zelos.ConstantProvider.prototype.getCSS_ = function(name) {
 
     // Connection highlight.
     selector + ' .blocklyHighlightedConnectionPath {',
-      'stroke: #fff200;',
+      'stroke: ' + this.SELECTED_GLOW_COLOUR + ';',
     '}',
 
     // Disabled outline paths.

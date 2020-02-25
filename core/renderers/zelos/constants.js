@@ -318,6 +318,7 @@ Blockly.zelos.ConstantProvider = function() {
 
   /**
    * The size of the selected glow.
+   * @type {number}
    */
   this.SELECTED_GLOW_SIZE = 0.5;
 
@@ -329,6 +330,7 @@ Blockly.zelos.ConstantProvider = function() {
 
   /**
    * The size of the selected glow.
+   * @type {number}
    */
   this.REPLACEMENT_GLOW_SIZE = 2;
 
@@ -408,18 +410,18 @@ Blockly.zelos.ConstantProvider.prototype.init = function() {
 Blockly.zelos.ConstantProvider.prototype.setTheme = function(theme) {
   Blockly.zelos.ConstantProvider.superClass_.setTheme.call(this, theme);
 
-  var selectedGlowColour = theme.getComponentStyle('selectedGlowColour');
-  this.SELECTED_GLOW_COLOUR = selectedGlowColour != null ?
-      selectedGlowColour : this.SELECTED_GLOW_COLOUR;
-  var selectedGlowSize = theme.getComponentStyle('selectedGlowSize');
-  this.SELECTED_GLOW_SIZE = selectedGlowSize != null ?
-      selectedGlowSize : this.SELECTED_GLOW_SIZE;
-  var replacementGlowColour = theme.getComponentStyle('replacementGlowColour');
-  this.REPLACEMENT_GLOW_COLOUR = replacementGlowColour != null ?
-      replacementGlowColour : this.REPLACEMENT_GLOW_COLOUR;
-  var replacementGlowSize = theme.getComponentStyle('replacementGlowSize');
-  this.REPLACEMENT_GLOW_SIZE = replacementGlowSize != null ?
-      replacementGlowSize : this.REPLACEMENT_GLOW_SIZE;
+  this.SELECTED_GLOW_COLOUR =
+      theme.getComponentStyle('selectedGlowColour') ||
+      this.SELECTED_GLOW_COLOUR;
+  this.SELECTED_GLOW_SIZE =
+      theme.getComponentStyle('selectedGlowSize') ||
+      this.SELECTED_GLOW_SIZE;
+  this.REPLACEMENT_GLOW_COLOUR =
+      theme.getComponentStyle('replacementGlowColour') ||
+      this.REPLACEMENT_GLOW_COLOUR;
+  this.REPLACEMENT_GLOW_SIZE =
+      theme.getComponentStyle('replacementGlowSize') ||
+      this.REPLACEMENT_GLOW_SIZE;
 };
 
 /**

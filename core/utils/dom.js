@@ -347,25 +347,25 @@ Blockly.utils.dom.measureFontMetrics = function(text, fontSize, fontWeight,
     fontFamily) {
 
   var span = document.createElement('span');
-  span.setAttribute('style', 'display: inline-block;');
   span.style.font = fontWeight + ' ' + fontSize + ' ' + fontFamily;
   span.textContent = text;
 
   var block = document.createElement('div');
-  block.setAttribute('style',
-      'display: inline-block; width: 1px; height: 0px;');
-  
+  block.style.width = '1px';
+  block.style.height = '0px';
+  block.className = 'blockStyle';
+
   var div = document.createElement('div');
-  div.setAttribute('style', 'line-height: 0;');
+  div.setAttribute('style', 'position: fixed; top: 0; left: 0; display: flex;');
   div.appendChild(span);
   div.appendChild(block);
 
   document.body.appendChild(div);
   try {
     var result = {};
-    block.style.verticalAlign = 'baseline';
+    div.style.alignItems = 'baseline';
     result.baseline = block.offsetTop - span.offsetTop;
-    block.style.verticalAlign = 'bottom';
+    div.style.alignItems = 'flex-end';
     result.height = block.offsetTop - span.offsetTop;
   } finally {
     document.body.removeChild(div);

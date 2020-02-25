@@ -80,6 +80,7 @@ goog.require('Blockly.zelos.Renderer');
 
 // Other.
 goog.require('Blockly.WorkspaceCommentSvg');
+goog.require('Blockly.WorkspaceCommentSvg.render');
 </script>
 <script>
 'use strict';
@@ -461,7 +462,7 @@ function toggleAccessibilityMode(state) {
   }
 }
 
-function configureContextMenu(menuOptions) {
+function configureContextMenu(menuOptions, e) {
   var screenshotOption = {
     text: 'Download Screenshot',
     enabled: workspace.getTopBlocks().length,
@@ -472,19 +473,7 @@ function configureContextMenu(menuOptions) {
   menuOptions.push(screenshotOption);
 
   // Adds a default-sized workspace comment to the workspace.
-  var workspaceCommentOption = {
-    text: "Add a Comment",
-    enabled: true,
-    callback: function() {
-      var xml = Blockly.Xml.textToDom(
-        '<xml>' +
-          '<comment>Test</comment>' +
-        '</xml>'
-      );
-      Blockly.Xml.appendDomToWorkspace(xml, workspace);
-    }
-  }
-  menuOptions.push(workspaceCommentOption);
+  menuOptions.push(Blockly.ContextMenu.workspaceCommentOption(workspace, e));
 }
 
 function logger(e) {

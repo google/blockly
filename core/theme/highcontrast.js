@@ -108,6 +108,10 @@ Blockly.Themes.HighContrast =
         Blockly.Themes.HighContrast.defaultBlockStyles,
         Blockly.Themes.HighContrast.categoryStyles);
 
+Blockly.Themes.HighContrast.setComponentStyle('selectedGlowColour', '#000000');
+Blockly.Themes.HighContrast.setComponentStyle('selectedGlowSize', 1);
+Blockly.Themes.HighContrast.setComponentStyle('replacementGlowColour', '#000000');
+
 Blockly.Themes.HighContrast.setFontStyle({
   'family': null, // Use default font-family
   'weight': null, // Use default font-weight

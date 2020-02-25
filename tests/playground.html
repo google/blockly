@@ -69,12 +69,18 @@
 
 <script>
 // Custom requires for the playground.
+
+// Rendering.
 goog.require('Blockly.blockRendering.Debug');
 goog.require('Blockly.minimalist.Renderer');
 goog.require('Blockly.Themes.Modern');
 goog.require('Blockly.Themes.Zelos');
 goog.require('Blockly.thrasos.Renderer');
 goog.require('Blockly.zelos.Renderer');
+
+// Other.
+goog.require('Blockly.WorkspaceCommentSvg');
+goog.require('Blockly.WorkspaceCommentSvg.render');
 </script>
 <script>
 'use strict';
@@ -456,7 +462,7 @@ function toggleAccessibilityMode(state) {
   }
 }
 
-function configureContextMenu(menuOptions) {
+function configureContextMenu(menuOptions, e) {
   var screenshotOption = {
     text: 'Download Screenshot',
     enabled: workspace.getTopBlocks().length,
@@ -465,6 +471,9 @@ function configureContextMenu(menuOptions) {
     }
   };
   menuOptions.push(screenshotOption);
+
+  // Adds a default-sized workspace comment to the workspace.
+  menuOptions.push(Blockly.ContextMenu.workspaceCommentOption(workspace, e));
 }
 
 function logger(e) {

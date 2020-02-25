@@ -828,7 +828,7 @@ Blockly.utils.object.inherits(Blockly.Toolbox.TreeSearch, Blockly.tree.TreeNode)
  * @private
  */
 Blockly.Toolbox.TreeSearch.CONFIG_ = {
-  cssTreeRow: 'blocklyTreeSearch'
+  cssTreeRow: 'blocklyTreeSearch blocklyTreeRow'
 };
 
  /**

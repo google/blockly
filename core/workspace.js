@@ -28,6 +28,7 @@ goog.require('Blockly.Options');
 goog.require('Blockly.utils');
 goog.require('Blockly.utils.math');
 goog.require('Blockly.VariableMap');
+goog.require('Blockly.ModuleManager');
 
 
 /**
@@ -99,6 +100,15 @@ Blockly.Workspace = function(opt_options) {
    * @private
    */
   this.variableMap_ = new Blockly.VariableMap(this);
+
+
+  /**
+   * A map from module type to list of module names.  The lists contain all
+   * of the named modules in the workspace.
+   * @type {!Blockly.ModuleManager}
+   * @private
+   */
+  this.moduleManager_ = new Blockly.ModuleManager(this);
 
   /**
    * Blocks in the flyout can refer to variables that don't exist in the main
@@ -346,7 +356,7 @@ Blockly.Workspace.prototype.getAllBlocks = function(ordered) {
 };
 
 /**
- * Dispose of all blocks and comments in workspace.
+ * Dispose of all modules, blocks and comments in workspace.
  */
 Blockly.Workspace.prototype.clear = function() {
   this.isClearing = true;
@@ -355,6 +365,9 @@ Blockly.Workspace.prototype.clear = function() {
     if (!existingGroup) {
       Blockly.Events.setGroup(true);
     }
+
+    this.moduleManager_.clear();
+
     while (this.topBlocks_.length) {
       this.topBlocks_[0].dispose(false);
     }
@@ -502,7 +515,15 @@ Blockly.Workspace.prototype.getAllVariableNames = function() {
   return this.variableMap_.getAllVariableNames();
 };
 
-/* End functions that are just pass-throughs to the variable map. */
+/**
+ * Return module manager.
+ * @return {Blockly.ModuleManager} The module manager.
+ */
+Blockly.Workspace.prototype.getModuleManager = function() {
+  return this.moduleManager_;
+};
+
+/* End functions that are just pass-throughs to the module map. */
 
 /**
  * Returns the horizontal offset of the workspace.

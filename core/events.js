@@ -117,6 +117,31 @@ Blockly.Events.VAR_DELETE = 'var_delete';
 Blockly.Events.VAR_RENAME = 'var_rename';
 
 /**
+ * Name of event that creates a module.
+ * @const
+ */
+Blockly.Events.MODULE_CREATE = 'module_create';
+
+/**
+ * Name of event that deletes a module.
+ * @const
+ */
+Blockly.Events.MODULE_DELETE = 'module_delete';
+
+/**
+ * Name of event that activate a module.
+ * @const
+ */
+Blockly.Events.MODULE_ACTIVATE = 'module_activate';
+
+/**
+ * Name of event that renames a module.
+ * @const
+ */
+Blockly.Events.MODULE_RENAME = 'module_rename';
+
+
+/**
  * Name of event that records a UI change.
  * @const
  */
@@ -374,6 +399,18 @@ Blockly.Events.fromJson = function(json, workspace) {
       break;
     case Blockly.Events.VAR_RENAME:
       event = new Blockly.Events.VarRename(null, '');
+      break;
+    case Blockly.Events.MODULE_CREATE:
+      event = new Blockly.Events.ModuleCreate(null);
+      break;
+    case Blockly.Events.MODULE_DELETE:
+      event = new Blockly.Events.ModuleDelete(null);
+      break;
+    case Blockly.Events.MODULE_ACTIVATE:
+      event = new Blockly.Events.ModuleActivate(null, null);
+      break;
+    case Blockly.Events.MODULE_RENAME:
+      event = new Blockly.Events.ModuleRename(null, '');
       break;
     case Blockly.Events.UI:
       event = new Blockly.Events.Ui(null, '', '', '');

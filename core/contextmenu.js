@@ -182,6 +182,8 @@ Blockly.ContextMenu.callbackFactory = function(block, xml) {
     Blockly.Events.disable();
     try {
       var newBlock = Blockly.Xml.domToBlock(xml, block.workspace);
+      // Remove module from block
+      newBlock.removeAttribute('module');
       // Move the new block next to the old block.
       var xy = block.getRelativeToSurfaceXY();
       if (block.RTL) {

@@ -933,6 +933,10 @@ Blockly.Blocks['procedures_callnoreturn'] = {
     option.callback = function() {
       var def = Blockly.Procedures.getDefinition(name, workspace);
       if (def) {
+        if (!def.InActiveModule()) {
+          workspace.getModuleManager().activateModule(workspace.getModuleManager().getModuleById(def.getModuleId()));
+          def = workspace.getBlockById(def.id);
+        }
         workspace.centerOnBlock(def.id);
         def.select();
       }

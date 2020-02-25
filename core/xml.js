@@ -45,6 +45,12 @@ goog.require('Blockly.utils.xml');
  */
 Blockly.Xml.workspaceToDom = function(workspace, opt_noId) {
   var xml = Blockly.utils.xml.createElement('xml');
+
+  var modulesElement = Blockly.Xml.modulesToDom(workspace.getModuleManager().getAllModules());
+  if (modulesElement.hasChildNodes()) {
+    xml.appendChild(modulesElement);
+  }
+  
   var variablesElement = Blockly.Xml.variablesToDom(
       Blockly.Variables.allUsedVarModels(workspace));
   if (variablesElement.hasChildNodes()) {
@@ -79,6 +85,24 @@ Blockly.Xml.variablesToDom = function(variableList) {
     variables.appendChild(element);
   }
   return variables;
+};
+
+/**
+ * Encode a list of modules as XML.
+ * @param {!Array.<!Blockly.ModuleModel>} moduleList List of all module
+ *     models.
+ * @return {!Element} Tree of XML elements.
+ */
+Blockly.Xml.modulesToDom = function(moduleList) {
+  var modules = Blockly.utils.xml.createElement('modules');
+
+  for (var i = 0, module; (module = moduleList[i]); i++) {
+    var element = Blockly.utils.xml.createElement('module');
+    element.appendChild(Blockly.utils.xml.createTextNode(module.name));
+    element.id = module.getId();
+    modules.appendChild(element);
+  }
+  return modules;
 };
 
 /**
@@ -150,6 +174,8 @@ Blockly.Xml.blockToDom = function(block, opt_noId) {
     // the block's id when domToText is called.
     element.setAttribute('id', block.id);
   }
+  element.setAttribute('module', block.getModuleId());
+
   if (block.mutationToDom) {
     // Custom data for an advanced block.
     var mutation = block.mutationToDom();
@@ -403,6 +429,7 @@ Blockly.Xml.domToWorkspace = function(xml, workspace) {
     workspace.setResizesEnabled(false);
   }
   var variablesFirst = true;
+  var modulesFirst = true;
   try {
     for (var i = 0, xmlChild; (xmlChild = xml.childNodes[i]); i++) {
       var name = xmlChild.nodeName.toLowerCase();
@@ -421,7 +448,9 @@ Blockly.Xml.domToWorkspace = function(xml, workspace) {
         if (!isNaN(blockX) && !isNaN(blockY)) {
           block.moveBy(workspace.RTL ? width - blockX : blockX, blockY);
         }
+
         variablesFirst = false;
+        modulesFirst = false;
       } else if (name == 'shadow') {
         throw TypeError('Shadow block cannot be a top-level block.');
       } else if (name == 'comment') {
@@ -450,6 +479,14 @@ Blockly.Xml.domToWorkspace = function(xml, workspace) {
               'another location.');
         }
         variablesFirst = false;
+      } else if (name === 'modules') {
+        if (!modulesFirst) {
+          throw Error('\'modules\' tag must exist once before block and ' +
+            'shadow tag elements in the workspace XML, but it was found in ' +
+            'another location.');
+        }
+        Blockly.Xml.domToModules(xmlChildElement, workspace);
+        modulesFirst = false;
       }
     }
   } finally {
@@ -458,6 +495,11 @@ Blockly.Xml.domToWorkspace = function(xml, workspace) {
     }
     Blockly.utils.dom.stopTextWidthCache();
   }
+
+  if (workspace instanceof Blockly.WorkspaceSvg) {
+    workspace.getModuleBar().render();
+  }
+
   // Re-enable workspace resizing.
   if (workspace.setResizesEnabled) {
     workspace.setResizesEnabled(true);
@@ -539,7 +581,7 @@ Blockly.Xml.domToBlock = function(xmlBlock, workspace) {
     var topBlock = Blockly.Xml.domToBlockHeadless_(xmlBlock, workspace);
     // Generate list of all blocks.
     var blocks = topBlock.getDescendants(false);
-    if (workspace.rendered) {
+    if (workspace.rendered && topBlock.InActiveModule()) {
       // Wait to track connections to speed up assembly.
       topBlock.setConnectionTracking(false);
       // Render each block.
@@ -604,6 +646,22 @@ Blockly.Xml.domToVariables = function(xmlVariables, workspace) {
 };
 
 /**
+ * Decode an XML list of modules and add the module to the workspace.
+ * @param {!Element} xmlModules List of XML module elements.
+ * @param {!Blockly.Workspace} workspace The workspace to which the variable
+ *     should be added.
+ */
+Blockly.Xml.domToModules = function(xmlModules, workspace) {
+  for (var i = 0, xmlChild; (xmlChild = xmlModules.childNodes[i]); i++) {
+    if (xmlChild.nodeType !== Blockly.utils.dom.Node.ELEMENT_NODE) {
+      continue;  // Skip text nodes.
+    }
+
+    workspace.getModuleManager().createModule(xmlChild.textContent, xmlChild.getAttribute('id'));
+  }
+};
+
+/**
  * Decode an XML block tag and create a block (and possibly sub blocks) on the
  * workspace.
  * @param {!Element} xmlBlock XML block element.
@@ -619,6 +677,10 @@ Blockly.Xml.domToBlockHeadless_ = function(xmlBlock, workspace) {
   }
   var id = xmlBlock.getAttribute('id');
   block = workspace.newBlock(prototypeName, id);
+
+  if (xmlBlock.hasAttribute('module')) {
+    block.moduleId_ = xmlBlock.getAttribute('module');
+  }
 
   var blockChild = null;
   for (var i = 0, xmlChild; (xmlChild = xmlBlock.childNodes[i]); i++) {
@@ -652,7 +714,7 @@ Blockly.Xml.domToBlockHeadless_ = function(xmlBlock, workspace) {
         // Custom data for an advanced block.
         if (block.domToMutation) {
           block.domToMutation(xmlChildElement);
-          if (block.initSvg) {
+          if (block.initSvg && block.workspace.rendered && block.InActiveModule()) {
             // Mutation may have added some elements that need initializing.
             block.initSvg();
           }
@@ -664,6 +726,7 @@ Blockly.Xml.domToBlockHeadless_ = function(xmlBlock, workspace) {
               'ignoring block comment.');
           break;
         }
+
         var text = xmlChildElement.textContent;
         var pinned = xmlChildElement.getAttribute('pinned') == 'true';
         var width = parseInt(xmlChildElement.getAttribute('w'), 10);
@@ -675,7 +738,7 @@ Blockly.Xml.domToBlockHeadless_ = function(xmlBlock, workspace) {
           block.commentModel.size = new Blockly.utils.Size(width, height);
         }
 
-        if (pinned && block.getCommentIcon && !block.isInFlyout) {
+        if (pinned && block.getCommentIcon && !block.isInFlyout && block.workspace.rendered && block.InActiveModule()) {
           setTimeout(function() {
             block.getCommentIcon().setVisible(true);
           }, 1);

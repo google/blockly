@@ -9,6 +9,7 @@
       <xs:choice>
         <xs:sequence>
           <xs:element ref="variables" minOccurs="0"/>
+          <xs:element ref="modules" minOccurs="0"/>
           <xs:element ref="comment" minOccurs="0" maxOccurs="unbounded"/>
           <xs:element ref="block" minOccurs="0" maxOccurs="unbounded"/>
         </xs:sequence>
@@ -74,6 +75,25 @@
       </xs:simpleContent>
     </xs:complexType>
   </xs:element>
+    
+  <xs:element name="modules">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="module" maxOccurs="unbounded"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="module">
+    <xs:complexType>
+      <xs:simpleContent>
+        <xs:extension base="xs:NCName">
+          <xs:attribute name="id" use="required"/>
+        </xs:extension>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
+    
 
   <xs:complexType name="blockType">
     <xs:sequence>
@@ -89,6 +109,7 @@
     </xs:sequence>
     <xs:attribute name="type" use="required" type="xs:NCName"/>
     <xs:attribute name="id"/>
+    <xs:attribute name="module"/>
     <xs:attribute name="inline" type="xs:boolean"/>
     <xs:attribute name="collapsed" type="xs:boolean"/>
     <xs:attribute name="disabled" type="xs:boolean"/>

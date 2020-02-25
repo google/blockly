@@ -140,6 +140,33 @@ Blockly.Msg.UNDO = 'Undo';
 /// context menu - Undo the previous undo action.\n{{Identical|Redo}}
 Blockly.Msg.REDO = 'Redo';
 
+// Module renaming.
+/** @type {string} */
+/// button hint - Hint on the button used to launch the module renaming dialogue.
+Blockly.Msg.RENAME_MODULE = 'Rename module';
+/** @type {string} */
+/// prompt - Prompts the user to enter the new name for a module.
+Blockly.Msg.RENAME_MODULE_TITLE = 'Rename module to:';
+
+// Module creation
+/** @type {string} */
+/// button hint - Hint on the button used to launch the module creation dialogue.
+Blockly.Msg.NEW_MODULE = 'Create module';
+/** @type {string} */
+/// prompt - Prompts the user to enter the name for a new module.
+Blockly.Msg.NEW_MODULE_TITLE = 'New module name:';
+/** @type {string} */
+/// alert - Tells the user that they can't delete a module because it's last module.
+Blockly.Msg.LAST_MODULE_DELETE_RESTRICTION = 'Can\'t delete the last module.';
+
+// Module deletion.
+/** @type {string} */
+/// confirm -  Ask the user to confirm their deletion a module.
+Blockly.Msg.DELETE_MODULE_CONFIRMATION = 'Delete module "%1" and all it\'s blocks?';
+/** @type {string} */
+/// button hint - Hint on the button used to launch the module deletion.
+Blockly.Msg.DELETE_MODULE = 'Delete module';
+
 // Variable renaming.
 /** @type {string} */
 /// prompt - This message is only seen in the Opera browser.  With most browsers, users can edit numeric values in blocks by just clicking and typing.  Opera does not allows this, so we have to open a new window and prompt users with this message to chanage a value.

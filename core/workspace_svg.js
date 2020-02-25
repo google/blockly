@@ -332,6 +332,13 @@ Blockly.WorkspaceSvg.prototype.flyout_ = null;
 Blockly.WorkspaceSvg.prototype.toolbox_ = null;
 
 /**
+ * Module bar fot this workspace.
+ * @type {Blockly.ModuleBar}
+ * @private
+ */
+Blockly.WorkspaceSvg.prototype.moduleBar_ = null;
+
+/**
  * The current gesture in progress on this workspace, if any.
  * @type {Blockly.TouchGesture}
  * @private
@@ -541,6 +548,9 @@ Blockly.WorkspaceSvg.prototype.refreshTheme = function() {
   if (this.toolbox_) {
     this.toolbox_.updateColourFromTheme();
   }
+  if (this.moduleBar_) {
+    this.moduleBar_.updateColourFromTheme();
+  }
 
   var event = new Blockly.Events.Ui(null, 'theme', null, null);
   event.workspaceId = this.id;
@@ -744,6 +754,10 @@ Blockly.WorkspaceSvg.prototype.createDom = function(opt_backgroundClass) {
     }
     this.toolbox_ = new Blockly.Toolbox(this);
   }
+
+  this.moduleBar_ = new Blockly.ModuleBar(this);
+
+
   if (this.grid_) {
     this.grid_.update(this.scale);
   }
@@ -779,6 +793,10 @@ Blockly.WorkspaceSvg.prototype.dispose = function() {
   if (this.toolbox_) {
     this.toolbox_.dispose();
     this.toolbox_ = null;
+  }
+  if (this.moduleBar_) {
+    this.moduleBar_.dispose();
+    this.moduleBar_ = null;
   }
   if (this.flyout_) {
     this.flyout_.dispose();
@@ -946,6 +964,15 @@ Blockly.WorkspaceSvg.prototype.getFlyout = function(opt_own) {
  */
 Blockly.WorkspaceSvg.prototype.getToolbox = function() {
   return this.toolbox_;
+};
+
+/**
+ * Getter for the moduleBar associated with this workspace, if one exists.
+ * @return {Blockly.ModuleBar} The moduleBar on this workspace.
+ * @package
+ */
+Blockly.WorkspaceSvg.prototype.getModuleBar = function() {
+  return this.moduleBar_;
 };
 
 /**
@@ -1160,7 +1187,6 @@ Blockly.WorkspaceSvg.prototype.getWidth = function() {
  * @param {boolean} isVisible True if workspace should be visible.
  */
 Blockly.WorkspaceSvg.prototype.setVisible = function(isVisible) {
-
   // Tell the scrollbar whether its container is visible so it can
   // tell when to hide itself.
   if (this.scrollbar) {
@@ -1178,6 +1204,11 @@ Blockly.WorkspaceSvg.prototype.setVisible = function(isVisible) {
     // Currently does not support toolboxes in mutators.
     this.toolbox_.HtmlDiv.style.display = isVisible ? 'block' : 'none';
   }
+
+  if (this.moduleBar_) {
+    this.moduleBar_.setContainerVisible(isVisible);
+  }
+
   if (isVisible) {
     var blocks = this.getAllBlocks(false);
     // Tell each block on the workspace to mark its fields as dirty.
@@ -1282,6 +1313,9 @@ Blockly.WorkspaceSvg.prototype.paste = function(xmlBlock) {
 Blockly.WorkspaceSvg.prototype.pasteBlock_ = function(xmlBlock) {
   Blockly.Events.disable();
   try {
+    // Remove module from xml
+    xmlBlock.removeAttribute('module');
+
     var block = Blockly.Xml.domToBlock(xmlBlock, this);
 
     // Handle paste for keyboard navigation
@@ -2067,6 +2101,11 @@ Blockly.WorkspaceSvg.prototype.centerOnBlock = function(id) {
     return;
   }
 
+  // Skip center on block from another module
+  if (!block.InActiveModule()) {
+    return;
+  }
+
   // XY is in workspace coordinates.
   var xy = block.getRelativeToSurfaceXY();
   // Height/width is in workspace units.
@@ -2353,7 +2392,6 @@ Blockly.WorkspaceSvg.getContentDimensionsBounded_ = function(ws, svgSize) {
  * @this {Blockly.WorkspaceSvg}
  */
 Blockly.WorkspaceSvg.getTopLevelWorkspaceMetrics_ = function() {
-
   var toolboxDimensions =
       Blockly.WorkspaceSvg.getDimensionsPx_(this.toolbox_);
   var flyoutDimensions =
@@ -2363,6 +2401,7 @@ Blockly.WorkspaceSvg.getTopLevelWorkspaceMetrics_ = function() {
   // svgSize is equivalent to the size of the injectionDiv at this point.
   var svgSize = Blockly.svgSize(this.getParentSvg());
   var viewSize = {height: svgSize.height, width: svgSize.width};
+
   if (this.toolbox_) {
     if (this.toolboxPosition == Blockly.TOOLBOX_AT_TOP ||
         this.toolboxPosition == Blockly.TOOLBOX_AT_BOTTOM) {

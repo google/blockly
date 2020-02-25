@@ -273,6 +273,11 @@ Blockly.BlockSvg.prototype.select = function() {
   if (Blockly.selected == this) {
     return;
   }
+  // Skip select block from another module
+  if (!this.InActiveModule()) {
+    return;
+  }
+
   var oldId = null;
   if (Blockly.selected) {
     oldId = Blockly.selected.id;

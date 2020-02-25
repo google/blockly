@@ -284,6 +284,9 @@ Blockly.copy_ = function(toCopy) {
     xml.setAttribute('x', toCopy.RTL ? -xy.x : xy.x);
     xml.setAttribute('y', xy.y);
   }
+  // Remove current module from xml
+  xml.removeAttribute('module');
+
   Blockly.clipboardXml_ = xml;
   Blockly.clipboardSource_ = toCopy.workspace;
   Blockly.clipboardTypeCounts_ = toCopy.isComment ? null :

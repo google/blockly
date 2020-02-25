@@ -74,6 +74,13 @@ Blockly.Block = function(workspace, prototypeName, opt_id) {
   this.inputList = [];
   /** @type {boolean|undefined} */
   this.inputsInline = undefined;
+
+  /**
+   * @type {string}
+   * @private
+   * */
+  this.moduleId_ = workspace.getModuleManager().getActiveModule().getId();
+
   /**
    * @type {boolean}
    * @private
@@ -498,6 +505,34 @@ Blockly.Block.prototype.unplugFromStack_ = function(opt_healStack) {
       previousTarget.connect(nextTarget);
     }
   }
+};
+
+
+/**
+ * Returns module id for this block.
+ * @return string
+ * @package
+ */
+Blockly.Block.prototype.getModuleId = function() {
+  return this.moduleId_;
+};
+
+/**
+ * Returns is this block in active module.
+ * @return string
+ * @package
+ */
+Blockly.Block.prototype.InActiveModule = function() {
+  return this.moduleId_ === this.workspace.getModuleManager().getActiveModule().getId();
+};
+
+/**
+ * Set module module id for this block.
+ * @param {string} moduleId module id.
+ * @package
+ */
+Blockly.Block.prototype.setModuleId = function(moduleId) {
+  return this.moduleId_ = moduleId;
 };
 
 /**

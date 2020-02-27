@@ -91,16 +91,19 @@ Blockly.WidgetDiv.show = function(newOwner, rtl, dispose) {
  * Destroy the widget and hide the div.
  */
 Blockly.WidgetDiv.hide = function() {
-  var div = Blockly.WidgetDiv.DIV;
-  if (Blockly.WidgetDiv.owner_) {
-    Blockly.WidgetDiv.owner_ = null;
-    div.style.display = 'none';
-    div.style.left = '';
-    div.style.top = '';
-    Blockly.WidgetDiv.dispose_ && Blockly.WidgetDiv.dispose_();
-    Blockly.WidgetDiv.dispose_ = null;
-    div.innerHTML = '';
+  if (!Blockly.WidgetDiv.isVisible()) {
+    return;
   }
+  Blockly.WidgetDiv.owner_ = null;
+
+  var div = Blockly.WidgetDiv.DIV;
+  div.style.display = 'none';
+  div.style.left = '';
+  div.style.top = '';
+  Blockly.WidgetDiv.dispose_ && Blockly.WidgetDiv.dispose_();
+  Blockly.WidgetDiv.dispose_ = null;
+  div.innerHTML = '';
+
   if (Blockly.WidgetDiv.rendererClassName_) {
     Blockly.utils.dom.removeClass(div, Blockly.WidgetDiv.rendererClassName_);
     Blockly.WidgetDiv.rendererClassName_ = null;

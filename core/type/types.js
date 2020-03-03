@@ -169,6 +169,131 @@ Blockly.Types.getValidTypeArray = function() {
 };
 
 /**
+ * VITTAWARNING _ added to get type for variables top declaration
+ */
+
+/**
+ * Method used several times in the function getChildBlockType() and in arduino_uncompressed.js file
+ * @param {Blockly.Type.typeId}
+ * @return {Blockly.Type}
+ */
+Blockly.Types.getValidTypeWithId = function(typeId) {
+  switch (typeId) {
+      case Blockly.Types.CHARACTER.typeId:
+          return Blockly.Types.CHARACTER;
+      case Blockly.Types.TEXT.typeId:
+          return Blockly.Types.TEXT;
+      case "String":
+          return Blockly.Types.TEXT;
+      case Blockly.Types.BOOLEAN.typeId:
+          return Blockly.Types.BOOLEAN;
+      case Blockly.Types.SHORT_NUMBER.typeId:
+          return Blockly.Types.SHORT_NUMBER;
+      case Blockly.Types.NUMBER.typeId:
+          return Blockly.Types.NUMBER;
+      case Blockly.Types.LARGE_NUMBER.typeId:
+          return Blockly.Types.LARGE_NUMBER;
+      case Blockly.Types.DECIMAL.typeId:
+          return Blockly.Types.DECIMAL;
+      case Blockly.Types.ARRAY.typeId:
+          return Blockly.Types.ARRAY;
+      case Blockly.Types.NULL.typeId:
+          return Blockly.Types.NULL;
+      case Blockly.Types.UNDEF.typeId:
+          return Blockly.Types.UNDEF;
+      default:
+          return Blockly.Types.CHILD_BLOCK_MISSING;
+  }
+};
+Blockly.Types.getChildEntryType = function(a) {
+  var b = Blockly.Types.CHILD_BLOCK_MISSING;
+  if(a) {
+      if (a.outputConnection) {
+          // if child is a "normal" block
+          if(a.outputConnection.check_) b = a.outputConnection.check_[0];
+          // if child is a 'variable'
+          else if(a.type == 'variables_get'){
+              for (let block of Object.entries(a.workspace.blockDB_)) {
+                  if(block[1].inputList[0].fieldRow[1]){
+                      if(block[1].inputList[0].fieldRow[1].text_ == a.inputList[0].fieldRow[0].text_ && block[1].type == 'variables_set'){
+                          b = Blockly.Types.getChildBlockType(block[1]).typeId;
+                      }
+                  }
+              }
+          
+          }else if (a.type == 'math_number') b = a.getBlockType().typeId;
+      }
+  }
+  return b;
+};
+
+// Enable to update type of variable in the top of the Arduino code (the list of variables in workspace)
+Blockly.Types.getChildBlockType = function(a) {
+  if(!a.inputList[0].connection.targetBlock()){
+      return Blockly.Types.CHILD_BLOCK_MISSING;
+  // GET TYPE OF THE CALL RETURN PROCEDURES
+  }else if(a.inputList[0].connection.targetBlock().type == 'procedures_callreturn'){
+      for (let key of Object.entries(a.workspace.blockDB_)) {
+          if(key[1].inputList[0].fieldRow[1]){
+              if((key[1].inputList[0].fieldRow[1].text_ == a.inputList[0].connection.targetBlock().inputList[0].fieldRow[0].text_) && (key[1].type == 'procedures_defreturn')){
+                  if(key[1].childBlocks_){
+                      let typeCheck = Blockly.Types.NULL.typeId;
+                      key[1].childBlocks_.forEach(child =>{
+                          typeCheck = Blockly.Types.getChildEntryType(child);
+                      });
+                      return Blockly.Types.getValidTypeWithId(typeCheck);
+                  }
+              }
+          }
+      }
+  // GET TYPE OF THE LOGIC TERNARY RETURN
+  }else if(a.inputList[0].connection.targetBlock().type == 'logic_ternary') {
+      let typeCheck = Blockly.Types.CHILD_BLOCK_MISSING;
+      if (a.inputList[0].connection.targetBlock().childBlocks_.length == 3) {
+          var trueReturn = a.inputList[0].connection.targetBlock().childBlocks_[1];
+          var falseReturn = a.inputList[0].connection.targetBlock().childBlocks_[2];
+          if (trueReturn && falseReturn) {
+              typeCheck = Blockly.Types.getChildEntryType(trueReturn);
+          }
+      }
+      return Blockly.Types.getValidTypeWithId(typeCheck);
+  // GET TYPE OF THE LIST ENTRY IN LIST GET INDEX
+  }else if(a.inputList[0].connection.targetBlock().type == 'lists_getIndex') {
+      let typeCheck = Blockly.Types.CHILD_BLOCK_MISSING;
+      let varList = a.inputList[0].connection.targetBlock().childBlocks_[0];
+      if (varList) {
+          if (varList.outputConnection) {
+              for (let block of Object.entries(a.workspace.blockDB_)) {
+                  if(block[1].inputList[0].fieldRow[1]){
+                      if(block[1].inputList[0].fieldRow[1].text_ == varList.inputList[0].fieldRow[0].text_ && block[1].type == 'variables_set'){
+                          if (block[1].inputList[0].connection.targetBlock()) {
+                              var firstEntryList = block[1].inputList[0].connection.targetBlock().childBlocks_[0];
+                              typeCheck = Blockly.Types.getChildEntryType(firstEntryList);
+                          }
+                      }
+                  }
+              }
+          }
+      }
+      return Blockly.Types.getValidTypeWithId(typeCheck);
+  // GET TYPE OF THE VARIABLES_SET TARGET BLOCK WITH THE GET BLOCK TYPE METHOD
+  }else if(a.inputList[0].connection.targetBlock().getBlockType){
+      for (var b = a; b && void 0 === b.getBlockType && 0 < b.inputList.length;) b = b.inputList[0].connection.targetBlock();
+      return b === a ? Blockly.Types.CHILD_BLOCK_MISSING : null === b ? Blockly.Types.CHILD_BLOCK_MISSING : b.getBlockType ? b.getBlockType() : Blockly.Types.NULL
+  // GET TYPE OF THE VARIABLES_SET TARGET BLOCK WITH THE OUTPUTCONNECTION VALUE
+  }else if(a.inputList[0].connection.targetBlock()){
+      let currentChildBlockType = a.inputList[0].connection.targetBlock().outputConnection.check_[0];
+      return Blockly.Types.getValidTypeWithId(currentChildBlockType);
+  }else{
+      return Blockly.Types.CHILD_BLOCK_MISSING;
+  }
+};
+
+/**
+ * END VITTAWARNING
+ */
+
+/**
  * Navigates through child blocks of the argument block to get this block type.
  * @param {!Blockly.Block} block Block to navigate through children.
  * @return {Blockly.Type} Type of the input block.

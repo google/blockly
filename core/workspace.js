@@ -181,6 +181,16 @@ Blockly.Workspace.SCAN_ANGLE = 3;
  * @private
  */
 Blockly.Workspace.prototype.sortObjects_ = function(a, b) {
+  // Order by module
+  if (a.getModuleOrder && b.getModuleOrder) {
+    var aOrder = a.getModuleOrder();
+    var bOrder = b.getModuleOrder();
+
+    if (aOrder !== bOrder) {
+      return aOrder - bOrder;
+    }
+  }
+
   var aXY = a.getRelativeToSurfaceXY();
   var bXY = b.getRelativeToSurfaceXY();
   return (aXY.y + Blockly.Workspace.prototype.sortObjects_.offset * aXY.x) -

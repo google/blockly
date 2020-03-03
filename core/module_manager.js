@@ -272,6 +272,20 @@ Blockly.ModuleManager.prototype.getModuleById = function(id) {
 };
 
 /**
+ * Get module order by ID.
+ * @param {string} id The ID to check for.
+ * @return {int} The module order.
+ */
+Blockly.ModuleManager.prototype.getModuleOrder = function(id) {
+  for (var i = 0; i < this.moduleMap_.length; i++) {
+    if (this.moduleMap_[i].getId() === id) {
+      return i;
+    }
+  }
+  return 0;
+};
+
+/**
  * Return all modules of all types.
  * @return {!Array.<!Blockly.ModuleModel>} List of module models.
  */

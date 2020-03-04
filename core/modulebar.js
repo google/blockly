@@ -73,6 +73,10 @@ Blockly.ModuleBar.prototype.init = function() {
   this.htmlContainer_.className = 'blocklyModuleBarContainer blocklyNonSelectable';
   injectionContainer.parentNode.insertBefore(this.htmlContainer_, injectionContainer);
 
+  if (this.workspace_.RTL) {
+    this.htmlContainer_.setAttribute('dir', 'rtl');
+  }
+
   this.attachEvents_();
 
   // TODO: theme settings
@@ -102,6 +106,7 @@ Blockly.ModuleBar.prototype.render = function() {
     var link = document.createElement('a');
 
     var name = document.createElement('span');
+    name.className = 'blocklyModuleName';
     name.appendChild(Blockly.utils.xml.createTextNode(modules[i].name));
     link.appendChild(name);
 
@@ -109,17 +114,10 @@ Blockly.ModuleBar.prototype.render = function() {
     if (modules[i].getId() === this.workspace_.getModuleManager().getActiveModule().getId()) {
       link.className = 'blocklyModuleBarLink blocklyModuleBarLinkActive';
 
-      var renameIcon = document.createElement('span');
-      renameIcon.className = 'blocklyModuleBarTabIcon blocklyModuleBarTabRenameIcon';
-      renameIcon.setAttribute('role', 'rename-module-control');
-      renameIcon.setAttribute('title', Blockly.Msg['RENAME_MODULE']);
-      link.appendChild(renameIcon);
-
-      var deleteIcon = document.createElement('span');
-      deleteIcon.className = 'blocklyModuleBarTabIcon blocklyModuleBarTabDeleteIcon';
-      deleteIcon.setAttribute('role', 'delete-module-control');
-      deleteIcon.setAttribute('title', Blockly.Msg['DELETE_MODULE']);
-      link.appendChild(deleteIcon);
+      var menuIcon = document.createElement('span');
+      menuIcon.className = 'blocklyModuleBarTabIcon blocklyModuleBarTabMenuIcon';
+      menuIcon.setAttribute('role', 'module-menu-control');
+      link.appendChild(menuIcon);
     } else {
       link.className = 'blocklyModuleBarLink';
     }
@@ -130,22 +128,22 @@ Blockly.ModuleBar.prototype.render = function() {
   }
 
   // create tab
-  var tab = document.createElement('li');
-  tab.className = 'blocklyModuleBarTab blocklyModuleBarTabCreate';
-  tab.setAttribute('role', 'create-module-control');
-  tab.setAttribute('title', Blockly.Msg['NEW_MODULE']);
+  var newTab = document.createElement('li');
+  newTab.className = 'blocklyModuleBarTab blocklyModuleBarTabCreate';
+  newTab.setAttribute('role', 'create-module-control');
+  newTab.setAttribute('title', Blockly.Msg['NEW_MODULE']);
 
-  var link =  document.createElement('a');
-  link.className = 'blocklyModuleBarLink';
-  link.setAttribute('role', 'create-module-control');
+  var newLink =  document.createElement('a');
+  newLink.className = 'blocklyModuleBarLink';
+  newLink.setAttribute('role', 'create-module-control');
 
   var createIcon = document.createElement('span');
   createIcon.className = 'blocklyModuleBarTabIcon blocklyModuleBarTabCreateIcon';
   createIcon.setAttribute('role', 'create-module-control');
 
-  link.appendChild(createIcon);
-  tab.appendChild(link);
-  this.htmlContainer_.appendChild(tab);
+  newLink.appendChild(createIcon);
+  newTab.appendChild(newLink);
+  this.htmlContainer_.appendChild(newTab);
 };
 
 /**
@@ -186,15 +184,39 @@ Blockly.ModuleBar.prototype.handleMouseEvent_ = function(e) {
   var role = e.target.getAttribute('role');
 
   switch (role) {
+    case 'module-menu-control':
+      return this.handleShowModuleMenu_(e);
     case 'create-module-control':
-      return this.createModuleControlHandler_();
-    case 'rename-module-control':
-      return this.renameModuleControlHandler_();
-    case 'delete-module-control':
-      return this.deleteModuleControlHandler_();
+      return this.handleCreateModule_();
   }
 
-  return this.activateModuleControlHandler_(e);
+  return this.handleActivateModule_(e);
+};
+
+
+/**
+ * Activate module control handler.
+ * @private
+ */
+Blockly.ModuleBar.prototype.handleShowModuleMenu_ = function(e) {
+  var menuOptions = [
+    {
+      text: Blockly.Msg['RENAME_MODULE'],
+      enabled: true,
+      callback: () => {
+        this.handleRenameModule_();
+      }
+    },
+    {
+      text: Blockly.Msg['DELETE_MODULE'],
+      enabled: true,
+      callback: () => {
+        this.handleDeleteModule_();
+      }
+    }
+  ];
+
+  Blockly.ContextMenu.show(e, menuOptions, this.workspace_.RTL);
 };
 
 /**
@@ -202,7 +224,7 @@ Blockly.ModuleBar.prototype.handleMouseEvent_ = function(e) {
  * @param {!Event} e The browser event.
  * @private
  */
-Blockly.ModuleBar.prototype.activateModuleControlHandler_ = function(e) {
+Blockly.ModuleBar.prototype.handleActivateModule_ = function(e) {
   var module = this.getModuleFromEvent_(e);
   if (module) {
     this.workspace_.getModuleManager().activateModule(module);
@@ -237,7 +259,7 @@ Blockly.ModuleBar.prototype.getModuleFromEvent_ = function(e) {
  * Create module control handler.
  * @private
  */
-Blockly.ModuleBar.prototype.createModuleControlHandler_ = function() {
+Blockly.ModuleBar.prototype.handleCreateModule_ = function() {
   var workspace = this.workspace_;
 
   Blockly.prompt(Blockly.Msg['NEW_MODULE_TITLE'], '', function(moduleName) {
@@ -264,7 +286,7 @@ Blockly.ModuleBar.prototype.createModuleControlHandler_ = function() {
  * Rename module control handler.
  * @private
  */
-Blockly.ModuleBar.prototype.renameModuleControlHandler_ = function() {
+Blockly.ModuleBar.prototype.handleRenameModule_ = function() {
   var workspace = this.workspace_;
   var activeModule =  workspace.getModuleManager().getActiveModule();
 
@@ -284,7 +306,7 @@ Blockly.ModuleBar.prototype.renameModuleControlHandler_ = function() {
  * Delete module control handler.
  * @private
  */
-Blockly.ModuleBar.prototype.deleteModuleControlHandler_ = function() {
+Blockly.ModuleBar.prototype.handleDeleteModule_ = function() {
   var workspace = this.workspace_;
   var activeModule =  workspace.getModuleManager().getActiveModule();
 
@@ -335,25 +357,26 @@ Blockly.Css.register([
     'margin: 0;',
   '}',
 
-  '.blocklyModuleBarTab {',
-
-  '}',
-
   '.blocklyModuleBarLink {',
     'display: block;',
-    'padding: .5rem 1rem;',
+    'padding: 5px;',
     'text-decoration: none;',
     'border-top: 1px solid transparent;',
     'border-left: 1px solid transparent;',
     'border-right: 1px solid transparent;',
-    'border-top-left-radius: .7rem;',
-    'border-top-right-radius: .7rem;',
+    'border-top-left-radius: 8px;',
+    'border-top-right-radius: 8px;',
     'font-family: sans-serif;',
     'font-size: 16px;',
   '}',
 
+  '.blocklyModuleName {',
+    'margin: 0px 5px;',
+  '}',
+
   '.blocklyModuleBarLinkActive {',
     'background-color: #ddd;',
+    'cursor: grab;',
     'border-color: #ddd;',
   '}',
 
@@ -362,27 +385,25 @@ Blockly.Css.register([
     'border-color: #e4e4e4;',
   '}',
 
-  '.blocklyModuleBarTabRenameIcon {',
-    'background:  url(\'data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4NTktMSI/Pg0KPCEtLSBHZW5lcmF0b3I6IEFkb2JlIElsbHVzdHJhdG9yIDE5LjAuMCwgU1ZHIEV4cG9ydCBQbHVnLUluIC4gU1ZHIFZlcnNpb246IDYuMDAgQnVpbGQgMCkgIC0tPg0KPHN2ZyB2ZXJzaW9uPSIxLjEiIGlkPSJDYXBhXzEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHg9IjBweCIgeT0iMHB4Ig0KCSB2aWV3Qm94PSIwIDAgMzgzLjk0NyAzODMuOTQ3IiBzdHlsZT0iZW5hYmxlLWJhY2tncm91bmQ6bmV3IDAgMCAzODMuOTQ3IDM4My45NDc7IiB4bWw6c3BhY2U9InByZXNlcnZlIj4NCjxnPg0KCTxnPg0KCQk8Zz4NCgkJCTxwb2x5Z29uIHBvaW50cz0iMCwzMDMuOTQ3IDAsMzgzLjk0NyA4MCwzODMuOTQ3IDMxNi4wNTMsMTQ3Ljg5MyAyMzYuMDUzLDY3Ljg5MyAJCQkiLz4NCgkJCTxwYXRoIGQ9Ik0zNzcuNzA3LDU2LjA1M0wzMjcuODkzLDYuMjRjLTguMzItOC4zMi0yMS44NjctOC4zMi0zMC4xODcsMGwtMzkuMDQsMzkuMDRsODAsODBsMzkuMDQtMzkuMDQNCgkJCQlDMzg2LjAyNyw3Ny45MiwzODYuMDI3LDY0LjM3MywzNzcuNzA3LDU2LjA1M3oiLz4NCgkJPC9nPg0KCTwvZz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjwvc3ZnPg0K\');',
-  '}',
-
-  '.blocklyModuleBarTabDeleteIcon {',
-    'background:  url(\'data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4NTktMSI/Pg0KPCEtLSBHZW5lcmF0b3I6IEFkb2JlIElsbHVzdHJhdG9yIDE5LjAuMCwgU1ZHIEV4cG9ydCBQbHVnLUluIC4gU1ZHIFZlcnNpb246IDYuMDAgQnVpbGQgMCkgIC0tPg0KPHN2ZyB2ZXJzaW9uPSIxLjEiIGlkPSJDYXBhXzEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHg9IjBweCIgeT0iMHB4Ig0KCSB2aWV3Qm94PSIwIDAgMjk4LjY2NyAyOTguNjY3IiBzdHlsZT0iZW5hYmxlLWJhY2tncm91bmQ6bmV3IDAgMCAyOTguNjY3IDI5OC42Njc7IiB4bWw6c3BhY2U9InByZXNlcnZlIj4NCjxnPg0KCTxnPg0KCQk8cG9seWdvbiBwb2ludHM9IjI5OC42NjcsMzAuMTg3IDI2OC40OCwwIDE0OS4zMzMsMTE5LjE0NyAzMC4xODcsMCAwLDMwLjE4NyAxMTkuMTQ3LDE0OS4zMzMgMCwyNjguNDggMzAuMTg3LDI5OC42NjcgDQoJCQkxNDkuMzMzLDE3OS41MiAyNjguNDgsMjk4LjY2NyAyOTguNjY3LDI2OC40OCAxNzkuNTIsMTQ5LjMzMyAJCSIvPg0KCTwvZz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjwvc3ZnPg0K\');',
+  '.blocklyModuleBarTabMenuIcon {',
+    'background-image: url("data:image/svg+xml,%3C%3Fxml version=\'1.0\' encoding=\'iso-8859-1\'%3F%3E%3C!DOCTYPE svg PUBLIC \'-//W3C//DTD SVG 1.1//EN\' \'http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd\'%3E%3Csvg version=\'1.1\' id=\'Capa_1\' xmlns=\'http://www.w3.org/2000/svg\' xmlns:xlink=\'http://www.w3.org/1999/xlink\' x=\'0px\' y=\'0px\' width=\'255px\' height=\'255px\' viewBox=\'0 0 255 255\' style=\'enable-background:new 0 0 255 255;\' xml:space=\'preserve\'%3E%3Cg%3E%3Cg id=\'arrow-drop-down\'%3E%3Cpolygon points=\'0,63.75 127.5,191.25 255,63.75 \'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E%0A");',
   '}',
 
   '.blocklyModuleBarTabCreateIcon {',
     'background: url(\'data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4NTktMSI/Pg0KPCEtLSBHZW5lcmF0b3I6IEFkb2JlIElsbHVzdHJhdG9yIDE2LjAuMCwgU1ZHIEV4cG9ydCBQbHVnLUluIC4gU1ZHIFZlcnNpb246IDYuMDAgQnVpbGQgMCkgIC0tPg0KPCFET0NUWVBFIHN2ZyBQVUJMSUMgIi0vL1czQy8vRFREIFNWRyAxLjEvL0VOIiAiaHR0cDovL3d3dy53My5vcmcvR3JhcGhpY3MvU1ZHLzEuMS9EVEQvc3ZnMTEuZHRkIj4NCjxzdmcgdmVyc2lvbj0iMS4xIiBpZD0iQ2FwYV8xIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB4PSIwcHgiIHk9IjBweCINCgkgd2lkdGg9IjM1N3B4IiBoZWlnaHQ9IjM1N3B4IiB2aWV3Qm94PSIwIDAgMzU3IDM1NyIgc3R5bGU9ImVuYWJsZS1iYWNrZ3JvdW5kOm5ldyAwIDAgMzU3IDM1NzsiIHhtbDpzcGFjZT0icHJlc2VydmUiPg0KPGc+DQoJPGcgaWQ9ImFkZCI+DQoJCTxwYXRoIGQ9Ik0zNTcsMjA0SDIwNHYxNTNoLTUxVjIwNEgwdi01MWgxNTNWMGg1MXYxNTNoMTUzVjIwNHoiLz4NCgk8L2c+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8L3N2Zz4NCg==\');',
-    'margin: 0px !important;',
+    'width: 15px;',
+    'height: 15px;',
   '}',
 
   '.blocklyModuleBarTabIcon {',
     'opacity: 0.5;',
+    'cursor: default;',
     'background-repeat: no-repeat;',
     'background-size: contain;',
     'display: inline-block;',
-    'width: 12px;',
-    'height: 12px;',
-    'margin-left: 12px;',
+    'width: 13px;',
+    'height: 13px;',
+    'margin: 0px 2px;',
   '}',
 
   '.blocklyModuleBarTabIcon:hover {',

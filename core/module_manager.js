@@ -229,6 +229,8 @@ Blockly.ModuleManager.prototype.activateModule = function(module) {
     return;
   }
 
+  Blockly.ContextMenu.hide();
+
   var previousActive = this.getActiveModule();
 
   var existingGroup = Blockly.Events.getGroup();

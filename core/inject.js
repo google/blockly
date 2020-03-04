@@ -399,6 +399,11 @@ Blockly.init_ = function(mainWorkspace) {
   if (options.hasSounds) {
     Blockly.inject.loadSounds_(options.pathToMedia, mainWorkspace);
   }
+
+  // Load the sounds.
+  if (options.hasField) {
+    Blockly.inject.loadFields_(options.pathToMedia, mainWorkspace);
+  }
 };
 
 /**

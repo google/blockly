@@ -35,8 +35,9 @@ goog.require('Blockly.FieldImage');
  */
 plusMinus.FieldMinus = function(opt_args) {
   this.args_ = opt_args;
+  var pathToMedia = Blockly.getMainWorkspace.options['media'] || "media/";
   return plusMinus.FieldMinus.superClass_.constructor.call(
-    this, '../../media/minus.png', 15, 15, '+');
+    this, pathToMedia + 'minus.png', 15, 15, '+');
 };
 Blockly.utils.object.inherits(plusMinus.FieldMinus, Blockly.FieldImage);
 

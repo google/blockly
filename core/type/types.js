@@ -72,10 +72,7 @@ Blockly.Types.LARGE_NUMBER = new Blockly.Type({
 Blockly.Types.DECIMAL = new Blockly.Type({
   typeId: 'Decimal',
   typeMsgName: 'ARD_TYPE_DECIMAL',
-  compatibleTypes: [Blockly.Types.BOOLEAN,
-                    Blockly.Types.SHORT_NUMBER,
-                    Blockly.Types.NUMBER,
-                    Blockly.Types.LARGE_NUMBER]
+  compatibleTypes: []    // Circular dependencies, add after all declarations
 });
 
 /** Array/List of items. */
@@ -128,6 +125,11 @@ Blockly.Types.LARGE_NUMBER.addCompatibleTypes([
     Blockly.Types.NUMBER,
     Blockly.Types.DECIMAL]);
 
+Blockly.Types.DECIMAL.addCompatibleTypes([
+    Blockly.Types.BOOLEAN,
+    Blockly.Types.SHORT_NUMBER,
+    Blockly.Types.NUMBER,
+    Blockly.Types.LARGE_NUMBER]);
 
 /**
  * Adds another type to the Blockly.Types collection.
@@ -169,13 +171,13 @@ Blockly.Types.getValidTypeArray = function() {
 };
 
 /**
- * VITTAWARNING _ added to get type for variables top declaration
+ * VITTAWARNING _ added to get type of variables
  */
 
 /**
- * Method used several times in the function getChildBlockType() and in arduino_uncompressed.js file
- * @param {Blockly.Type.typeId}
- * @return {Blockly.Type}
+ * Return type when typeId is given. It is used for input check.
+ * @param {String} typeId
+ * @return {Blockly.Type} type
  */
 Blockly.Types.getValidTypeWithId=function(typeId) {
   switch (typeId) {
@@ -303,6 +305,10 @@ Blockly.Types.getChildBlockType = function(currentBlock) {
       return Blockly.Types.CHILD_BLOCK_MISSING;
   }
 };
+
+/**
+ * END VITTAWARNING
+ */
 
 /**
  * Regular expressions to identify an integer.

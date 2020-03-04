@@ -441,7 +441,7 @@ Blockly.Toolbox.prototype.position = function() {
  * @return {Blockly.tree.BaseNode} Tree node to open at startup (or null).
  * @private
  */
-Blockly.Toolbox.prototype.syncTrees_ = function(treeIn, treeOut, pathToMedia, shouldAddToSearchTrie) {
+Blockly.Toolbox.prototype.syncTrees_ = function (treeIn, treeOut, pathToMedia, shouldAddToSearchTrie) {
   var openNode = null;
   var lastElement = null;
   for (var i = 0, childIn; childIn = treeIn.childNodes[i]; i++) {
@@ -477,7 +477,7 @@ Blockly.Toolbox.prototype.syncTrees_ = function(treeIn, treeOut, pathToMedia, sh
           }
         } else {
           // Skip the most used category. TODO: Move to the if (custom) above once the most_used_rewrite is merged.
-          var isNotMostUsed = (shouldAddToSearchTrie && (childIn.getAttribute('name') != Blockly.Msg.MOST_USED));
+          var isNotMostUsed = (shouldAddToSearchTrie && (childIn.getAttribute('name') !== Blockly.Msg.MOST_USED));
 
           var newOpenNode = this.syncTrees_(childIn, childOut, pathToMedia, isNotMostUsed);
           if (newOpenNode) {
@@ -554,9 +554,9 @@ Blockly.Toolbox.prototype.syncTrees_ = function(treeIn, treeOut, pathToMedia, sh
         lastElement = childIn;
         break;
       case 'SEARCH':
-        //Initialzie the Search handler and place a GUI button in the list of categories (left sidebar)
+        // Initialzie the Search handler and place a GUI button in the list of categories (left sidebar)
         var treeSearch = new Blockly.Toolbox.TreeSearch(this, this.search_);
-        //TODO: Move hex colour to the toolbox's XML
+        // TODO: Move hex colour to the toolbox's XML
         treeSearch.hexColour = '#144bb2';
         treeOut.add(treeSearch);
         lastElement = childIn;
@@ -779,23 +779,22 @@ Blockly.Toolbox.prototype.selectFirstCategory = function() {
   }
 };
 
- /**
+/**
  * Event handler for clicking on the search bar in the Toolbox.
  * Sets focus to the search field in the toolbox, so the user can search.
  */
-Blockly.Toolbox.prototype.focusSearchField = function() {
-  //Close any other opened categories
+Blockly.Toolbox.prototype.focusSearchField = function () {
+  // Close any other opened categories
   this.tree_.setSelectedItem(null);
 
-  //Find the search bar and focus it
+  // Find the search bar and focus it
   var children = this.tree_.getChildren();
   for (var i = 0; i < children.length; i++) {
     var child = children[i];
     if (child.focusSearchField) {
       child.focusSearchField();
       return;
-    }
-    else {
+    } else {
       child.blur();
     }
   }
@@ -806,12 +805,12 @@ Blockly.Toolbox.prototype.focusSearchField = function() {
  * @constructor
  * @extends {Blockly.tree.TreeNode}
  */
-Blockly.Toolbox.TreeSearch = function(toolbox, search) {
+Blockly.Toolbox.TreeSearch = function (toolbox, search) {
   this.toolbox_ = toolbox;
   this.search_ = search;
 
-  //TODO: Localization for the placeholder
-  let searchField = document.createElement('input');
+  // TODO: Localization for the placeholder
+  const searchField = document.createElement('input');
   searchField.setAttribute('id', 'blockSearchInput');
   searchField.setAttribute('type', 'search');
   searchField.setAttribute('placeholder', 'Search');
@@ -821,7 +820,7 @@ Blockly.Toolbox.TreeSearch = function(toolbox, search) {
 };
 Blockly.utils.object.inherits(Blockly.Toolbox.TreeSearch, Blockly.tree.TreeNode);
 
- /**
+/**
  * Configuration constants for tree typeahead search field.
  * @type {Object.<string,*>}
  * @const
@@ -831,7 +830,7 @@ Blockly.Toolbox.TreeSearch.CONFIG_ = {
   cssTreeRow: 'blocklyTreeSearch blocklyTreeRow'
 };
 
- /**
+/**
  * Event handler for when the user focuses on the search bar. Initializes all the
  * required event listeners for actually carrying out the search.
  */

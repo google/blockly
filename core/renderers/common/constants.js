@@ -1120,7 +1120,7 @@ Blockly.blockRendering.ConstantProvider.prototype.createDom = function(svg,
         debugFilter);
     this.debugFilterId = debugFilter.id;
     this.debugFilter_ = debugFilter;
-    }
+  }
 };
 
 /**

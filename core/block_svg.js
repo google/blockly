@@ -1645,9 +1645,8 @@ Blockly.BlockSvg.prototype.getRootBlock = function() {
 Blockly.BlockSvg.prototype.render = function(opt_bubble) {
   Blockly.utils.dom.startTextWidthCache();
   this.rendered = true;
-  var renderer =
-    (/** @type {!Blockly.WorkspaceSvg} */ (this.workspace)).getRenderer();
-  renderer.render(this);
+  (/** @type {!Blockly.WorkspaceSvg} */ (this.workspace))
+      .getRenderer().render(this);
   // No matter how we rendered, connection locations should now be correct.
   this.updateConnectionLocations_();
   if (opt_bubble !== false) {

@@ -746,7 +746,6 @@ Blockly.WorkspaceSvg.prototype.createDom = function(opt_backgroundClass) {
 
   var constants = this.getRenderer().getConstants();
   constants.createDom(this.svgGroup_, this.getRenderer().name);
-  
   return this.svgGroup_;
 };
 

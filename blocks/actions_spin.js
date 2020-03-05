@@ -56,16 +56,19 @@ Blockly.Blocks.fable_set_speed_simple = {
   },
   ensureSearchKeywords: function () {
     var keywords = [
-      Blockly.Msg.FABLE_SPIN_SET_DRIVE_FORWARD,
-      Blockly.Msg.FABLE_SPIN_SET_DRIVE_BACKWARD,
-      Blockly.Msg.FABLE_SPIN_SET_DRIVE_STOP,
-      Blockly.Msg.LEFT,
-      Blockly.Msg.RIGHT,
       '%{BKY_OUTPUT}',
       '%{BKY_LABEL_SPIN}'
     ];
 
-    Blockly.Search.preprocessSearchKeywords('fable_set_speed_simple', keywords);
+    var toolboxKeywords = [
+      Blockly.Msg.FABLE_SPIN_SET_DRIVE_FORWARD,
+      Blockly.Msg.FABLE_SPIN_SET_DRIVE_BACKWARD,
+      Blockly.Msg.FABLE_SPIN_SET_DRIVE_STOP,
+      Blockly.Msg.LEFT,
+      Blockly.Msg.RIGHT
+    ];
+
+    Blockly.Search.preprocessSearchKeywords('fable_set_speed_simple', keywords, toolboxKeywords);
   }
 };
 
@@ -114,7 +117,11 @@ Blockly.Blocks.fable_spin_set_speed = {
       '%{BKY_LABEL_SPIN}'
     ];
 
-    Blockly.Search.preprocessSearchKeywords('fable_spin_set_speed', keywords);
+    var toolboxKeywords = [
+
+    ];
+
+    Blockly.Search.preprocessSearchKeywords('fable_spin_set_speed', keywords, toolboxKeywords);
   }
 };
 
@@ -162,15 +169,18 @@ Blockly.Blocks.fable_spin_drive = {
   ensureSearchKeywords: function () {
     var keywords = [
       Blockly.Msg.FABLE_SPIN_SET_DRIVE,
-      Blockly.Msg.METERS,
-      Blockly.Msg.CENTIMETERS,
-      Blockly.Msg.FEET,
-      Blockly.Msg.INCHES,
       '%{BKY_OUTPUT}',
       '%{BKY_LABEL_SPIN}'
     ];
 
-    Blockly.Search.preprocessSearchKeywords('fable_spin_drive', keywords);
+    var toolboxKeywords = [
+      Blockly.Msg.METERS,
+      Blockly.Msg.CENTIMETERS,
+      Blockly.Msg.FEET,
+      Blockly.Msg.INCHES
+    ];
+
+    Blockly.Search.preprocessSearchKeywords('fable_spin_drive', keywords, toolboxKeywords);
   }
 };
 
@@ -225,15 +235,18 @@ Blockly.Blocks.fable_spin_drive_with_speed = {
     var keywords = [
       Blockly.Msg.FABLE_SPIN_SET_DRIVE,
       Blockly.Msg.FABLE_WITH_SPEED,
-      Blockly.Msg.METERS,
-      Blockly.Msg.CENTIMETERS,
-      Blockly.Msg.FEET,
-      Blockly.Msg.INCHES,
       '%{BKY_OUTPUT}',
       '%{BKY_LABEL_SPIN}'
     ];
 
-    Blockly.Search.preprocessSearchKeywords('fable_spin_drive_with_speed', keywords);
+    var toolboxKeywords = [
+      Blockly.Msg.METERS,
+      Blockly.Msg.CENTIMETERS,
+      Blockly.Msg.FEET,
+      Blockly.Msg.INCHES
+    ];
+
+    Blockly.Search.preprocessSearchKeywords('fable_spin_drive_with_speed', keywords, toolboxKeywords);
   }
 };
 
@@ -280,14 +293,17 @@ Blockly.Blocks.fable_spin_spin = {
   ensureSearchKeywords: function () {
     var keywords = [
       Blockly.Msg.FABLE_SPIN_SET_SPIN,
-      Blockly.Msg.TIMES,
-      Blockly.Msg.DEGREES,
-      Blockly.Msg.RADIANS,
       '%{BKY_OUTPUT}',
       '%{BKY_LABEL_SPIN}'
     ];
 
-    Blockly.Search.preprocessSearchKeywords('fable_spin_spin', keywords);
+    var toolboxKeywords = [
+      Blockly.Msg.TIMES,
+      Blockly.Msg.DEGREES,
+      Blockly.Msg.RADIANS
+    ];
+
+    Blockly.Search.preprocessSearchKeywords('fable_spin_spin', keywords, toolboxKeywords);
   }
 };
 
@@ -341,14 +357,17 @@ Blockly.Blocks.fable_spin_spin_with_speed = {
     var keywords = [
       Blockly.Msg.FABLE_SPIN_SET_SPIN,
       Blockly.Msg.FABLE_WITH_SPEED,
-      Blockly.Msg.TIMES,
-      Blockly.Msg.DEGREES,
-      Blockly.Msg.RADIANS,
       '%{BKY_OUTPUT}',
       '%{BKY_LABEL_SPIN}'
     ];
 
-    Blockly.Search.preprocessSearchKeywords('fable_spin_spin_with_speed', keywords);
+    var toolboxKeywords = [
+      Blockly.Msg.TIMES,
+      Blockly.Msg.DEGREES,
+      Blockly.Msg.RADIANS
+    ];
+
+    Blockly.Search.preprocessSearchKeywords('fable_spin_spin_with_speed', keywords, toolboxKeywords);
   }
 };
 
@@ -390,14 +409,17 @@ Blockly.Blocks.fable_spin_headlights = {
   ensureSearchKeywords: function () {
     var keywords = [
       Blockly.Msg.FABLE_SPIN_SET_HEADLIGHTS,
-      Blockly.Msg.FABLE_SPIN_HEADLIGHTS_TURN_ON,
-      Blockly.Msg.FABLE_SPIN_HEADLIGHTS_TURN_OFF,
-      Blockly.Msg.FABLE_SPIN_HEADLIGHTS_TOGGLE,
       '%{BKY_OUTPUT}',
       '%{BKY_LABEL_SPIN}'
     ];
 
-    Blockly.Search.preprocessSearchKeywords('fable_spin_headlights', keywords);
+    var toolboxKeywords = [
+      Blockly.Msg.FABLE_SPIN_HEADLIGHTS_TURN_ON,
+      Blockly.Msg.FABLE_SPIN_HEADLIGHTS_TURN_OFF,
+      Blockly.Msg.FABLE_SPIN_HEADLIGHTS_TOGGLE
+    ];
+
+    Blockly.Search.preprocessSearchKeywords('fable_spin_headlights', keywords, toolboxKeywords);
   }
 };
 
@@ -437,7 +459,15 @@ Blockly.Blocks.fable_spin_set_ir_message = {
       '%{BKY_LABEL_SPIN}'
     ];
 
-    Blockly.Search.preprocessSearchKeywords('fable_spin_set_ir_message', keywords);
+    var toolboxKeywords = [
+      Blockly.Msg.SPACEBAR,
+      Blockly.Msg.UP,
+      Blockly.Msg.DOWN,
+      Blockly.Msg.LEFT,
+      Blockly.Msg.RIGHT
+    ];
+
+    Blockly.Search.preprocessSearchKeywords('fable_spin_set_ir_message', keywords, toolboxKeywords);
   }
 };
 
@@ -479,13 +509,16 @@ Blockly.Blocks.fable_spin_reset_encoder = {
   ensureSearchKeywords: function () {
     var keywords = [
       Blockly.Msg.FABLE_SPIN_RESET_ENCODER,
-      Blockly.Msg.FABLE_SPIN_MOTOR_A,
-      Blockly.Msg.FABLE_SPIN_MOTOR_B,
-      Blockly.Msg.FABLE_SPIN_BOTH_MOTORS,
       '%{BKY_OUTPUT}',
       '%{BKY_LABEL_SERVO}'
     ];
 
-    Blockly.Search.preprocessSearchKeywords('fable_spin_reset_encoder', keywords);
+    var toolboxKeywords = [
+      Blockly.Msg.FABLE_SPIN_MOTOR_A,
+      Blockly.Msg.FABLE_SPIN_MOTOR_B,
+      Blockly.Msg.FABLE_SPIN_BOTH_MOTORS
+    ];
+
+    Blockly.Search.preprocessSearchKeywords('fable_spin_reset_encoder', keywords, toolboxKeywords);
   }
 };

@@ -52,7 +52,11 @@ Blockly.Blocks.fable_imshow = {
       '%{BKY_LABEL_IMAGES}'
     ];
 
-    Blockly.Search.preprocessSearchKeywords('fable_imshow', keywords);
+    var toolboxKeywords = [
+      Blockly.Msg.FABLE_IMAGE_READ
+    ];
+
+    Blockly.Search.preprocessSearchKeywords('fable_imshow', keywords, toolboxKeywords);
   }
 };
 
@@ -89,7 +93,11 @@ Blockly.Blocks.fable_imread = {
       '%{BKY_LABEL_IMAGES}'
     ];
 
-    Blockly.Search.preprocessSearchKeywords('fable_imread', keywords);
+    var toolboxKeywords = [
+    
+    ];
+
+    Blockly.Search.preprocessSearchKeywords('fable_imread', keywords, toolboxKeywords);
   }
 };
 
@@ -138,6 +146,11 @@ Blockly.Blocks.fable_imfilter = {
   ensureSearchKeywords: function () {
     var keywords = [
       Blockly.Msg.FABLE_IMAGE_FILTER,
+      '%{BKY_VISION}',
+      '%{BKY_LABEL_IMAGES}'
+    ];
+
+    var toolboxKeywords = [
       Blockly.Msg.FABLE_IMAGE_FILTER_GRAYSCALE,
       'hsv',
       Blockly.Msg.FABLE_IMAGE_FILTER_CANNY,
@@ -145,12 +158,10 @@ Blockly.Blocks.fable_imfilter = {
       Blockly.Msg.FABLE_IMAGE_FILTER_BINARY,
       Blockly.Msg.FABLE_IMAGE_FILTER_ADAPTIVETH,
       Blockly.Msg.FABLE_IMAGE_FILTER_CARTOON,
-      Blockly.Msg.FABLE_IMAGE_FILTER_SENSITIVITY,
-      '%{BKY_VISION}',
-      '%{BKY_LABEL_IMAGES}'
+      Blockly.Msg.FABLE_IMAGE_FILTER_SENSITIVITY
     ];
 
-    Blockly.Search.preprocessSearchKeywords('fable_imfilter', keywords);
+    Blockly.Search.preprocessSearchKeywords('fable_imfilter', keywords, toolboxKeywords);
   }
 };
 
@@ -193,6 +204,11 @@ Blockly.Blocks.fable_imsave = {
       '%{BKY_LABEL_IMAGES}'
     ];
 
-    Blockly.Search.preprocessSearchKeywords('fable_imsave', keywords);
+    var toolboxKeywords = [
+      'my_image',
+      Blockly.Msg.FABLE_IMAGE_READ
+    ];
+
+    Blockly.Search.preprocessSearchKeywords('fable_imsave', keywords, toolboxKeywords);
   }
 };

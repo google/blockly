@@ -60,7 +60,13 @@ Blockly.Blocks.fable_make_plot = {
       '%{BKY_LABEL_TIME_SERIES}'
     ];
 
-    Blockly.Search.preprocessSearchKeywords('fable_make_plot', keywords);
+    var toolboxKeywords = [
+      Blockly.Msg.BLUE,
+      Blockly.Msg.ORANGE,
+      Blockly.Msg.BROWN
+    ];
+
+    Blockly.Search.preprocessSearchKeywords('fable_make_plot', keywords, toolboxKeywords);
   }
 };
 
@@ -112,7 +118,15 @@ Blockly.Blocks.fable_make_plot_xy = {
       '%{BKY_LABEL_CARTESIAN}'
     ];
 
-    Blockly.Search.preprocessSearchKeywords('fable_make_plot_xy', keywords);
+    var toolboxKeywords = [
+      'X',
+      'Y',
+      Blockly.Msg.BLUE,
+      Blockly.Msg.ORANGE,
+      Blockly.Msg.BROWN
+    ];
+
+    Blockly.Search.preprocessSearchKeywords('fable_make_plot_xy', keywords, toolboxKeywords);
   }
 };
 
@@ -164,7 +178,15 @@ Blockly.Blocks.fable_make_scatter_plot = {
       '%{BKY_LABEL_SCATTER}'
     ];
 
-    Blockly.Search.preprocessSearchKeywords('fable_make_scatter_plot', keywords);
+    var toolboxKeywords = [
+      'X',
+      'Y',
+      Blockly.Msg.BLUE,
+      Blockly.Msg.ORANGE,
+      Blockly.Msg.BROWN
+    ];
+
+    Blockly.Search.preprocessSearchKeywords('fable_make_scatter_plot', keywords, toolboxKeywords);
   }
 };
 
@@ -208,6 +230,10 @@ Blockly.Blocks.fable_log = {
       '%{BKY_LABEL_FILE_LOGGING}'
     ];
 
-    Blockly.Search.preprocessSearchKeywords('fable_log', keywords);
+    var toolboxKeywords = [
+      'Fable-log.csv'
+    ];
+
+    Blockly.Search.preprocessSearchKeywords('fable_log', keywords, toolboxKeywords);
   }
 };

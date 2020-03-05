@@ -93,14 +93,21 @@ Blockly.Blocks.fable_spin_get_sensor = {
   ensureSearchKeywords: function () {
     var keywords = [
       Blockly.Msg.FABLE_SPIN_GET_SENSOR,
-      Blockly.Msg.FABLE_SPIN_SENSOR_PROXIMITY,
-      Blockly.Msg.FABLE_SPIN_SENSOR_COLOR,
-      Blockly.Msg.FABLE_SPIN_SENSOR_AMBIENT, Blockly.Msg.FABLE_SPIN_SENSOR_DIRECTED,
       '%{BKY_INPUT}',
       '%{BKY_LABEL_SPIN}'
     ];
 
-    Blockly.Search.preprocessSearchKeywords('fable_spin_get_sensor', keywords);
+    var toolboxKeywords = [
+      Blockly.Msg.FABLE_SPIN_SENSOR_PROXIMITY,
+      Blockly.Msg.FABLE_SPIN_SENSOR_COLOR,
+      Blockly.Msg.FABLE_SPIN_SENSOR_AMBIENT,
+      Blockly.Msg.FABLE_SPIN_SENSOR_DIRECTED,
+      '1',
+      '2',
+      '3'
+    ];
+
+    Blockly.Search.preprocessSearchKeywords('fable_spin_get_sensor', keywords, toolboxKeywords);
   }
 };
 
@@ -146,7 +153,11 @@ Blockly.Blocks.fable_spin_obstacle_detected = {
       '%{BKY_LABEL_SPIN}'
     ];
 
-    Blockly.Search.preprocessSearchKeywords('fable_spin_obstacle_detected', keywords);
+    var toolboxKeywords = [
+
+    ];
+
+    Blockly.Search.preprocessSearchKeywords('fable_spin_obstacle_detected', keywords, toolboxKeywords);
   }
 };
 
@@ -198,7 +209,11 @@ Blockly.Blocks.fable_spin_color_found = {
       '%{BKY_LABEL_SPIN}'
     ];
 
-    Blockly.Search.preprocessSearchKeywords('fable_spin_color_found', keywords);
+    var toolboxKeywords = [
+
+    ];
+
+    Blockly.Search.preprocessSearchKeywords('fable_spin_color_found', keywords, toolboxKeywords);
   }
 };
 
@@ -245,16 +260,19 @@ Blockly.Blocks.fable_spin_motor_moving = {
   ensureSearchKeywords: function () {
     var keywords = [
       Blockly.Msg.FABLE_SPIN_CHECK_IF,
-      Blockly.Msg.FABLE_SPIN_NO_MOTORS,
-      Blockly.Msg.FABLE_SPIN_ANY_MOTORS,
-      Blockly.Msg.FABLE_SPIN_BOTH_MOTORS,
-      Blockly.Msg.FABLE_SPIN_MOTOR_A,
-      Blockly.Msg.FABLE_SPIN_MOTOR_B,
       '%{BKY_INPUT}',
       '%{BKY_LABEL_SPIN}'
     ];
 
-    Blockly.Search.preprocessSearchKeywords('fable_spin_motor_moving', keywords);
+    var toolboxKeywords = [
+      Blockly.Msg.FABLE_SPIN_NO_MOTORS,
+      Blockly.Msg.FABLE_SPIN_ANY_MOTORS,
+      Blockly.Msg.FABLE_SPIN_BOTH_MOTORS,
+      Blockly.Msg.FABLE_SPIN_MOTOR_A,
+      Blockly.Msg.FABLE_SPIN_MOTOR_B
+    ];
+
+    Blockly.Search.preprocessSearchKeywords('fable_spin_motor_moving', keywords, toolboxKeywords);
   }
 };
 
@@ -299,17 +317,20 @@ Blockly.Blocks.fable_spin_get_motor = {
   ensureSearchKeywords: function () {
     var keywords = [
       Blockly.Msg.FABLE_SPIN_GET_SENSOR,
+      '%{BKY_INPUT}',
+      '%{BKY_LABEL_SPIN}'
+    ];
+
+    var toolboxKeywords = [
       Blockly.Msg.FABLE_SPIN_GET_ANGLE_A,
       Blockly.Msg.FABLE_SPIN_GET_ANGLE_B,
       Blockly.Msg.FABLE_SPIN_GET_ROUNDS_A,
       Blockly.Msg.FABLE_SPIN_GET_ROUNDS_B,
       Blockly.Msg.FABLE_SPIN_GET_SPEED_A,
-      Blockly.Msg.FABLE_SPIN_GET_SPEED_B,
-      '%{BKY_INPUT}',
-      '%{BKY_LABEL_SPIN}'
+      Blockly.Msg.FABLE_SPIN_GET_SPEED_B
     ];
 
-    Blockly.Search.preprocessSearchKeywords('fable_spin_get_motor', keywords);
+    Blockly.Search.preprocessSearchKeywords('fable_spin_get_motor', keywords, toolboxKeywords);
   }
 };
 
@@ -353,15 +374,18 @@ Blockly.Blocks.fable_spin_has_reached_target = {
   ensureSearchKeywords: function () {
     var keywords = [
       Blockly.Msg.FABLE_SPIN_HAS_REACHED_TARGET,
-      Blockly.Msg.FABLE_SPIN_BOTH_MOTORS,
-      Blockly.Msg.FABLE_SPIN_ANY_MOTORS,
-      Blockly.Msg.FABLE_SPIN_MOTOR_A,
-      Blockly.Msg.FABLE_SPIN_MOTOR_B,
       '%{BKY_INPUT}',
       '%{BKY_LABEL_SPIN}'
     ];
 
-    Blockly.Search.preprocessSearchKeywords('fable_spin_has_reached_target', keywords);
+    var toolboxKeywords = [
+      Blockly.Msg.FABLE_SPIN_BOTH_MOTORS,
+      Blockly.Msg.FABLE_SPIN_ANY_MOTORS,
+      Blockly.Msg.FABLE_SPIN_MOTOR_A,
+      Blockly.Msg.FABLE_SPIN_MOTOR_B
+    ];
+
+    Blockly.Search.preprocessSearchKeywords('fable_spin_has_reached_target', keywords, toolboxKeywords);
   }
 };
 
@@ -400,6 +424,14 @@ Blockly.Blocks.fable_spin_get_ir_message = {
       '%{BKY_LABEL_SPIN}'
     ];
 
-    Blockly.Search.preprocessSearchKeywords('fable_spin_get_ir_message', keywords);
+    var toolboxKeywords = [
+      Blockly.Msg.SPACEBAR,
+      Blockly.Msg.UP,
+      Blockly.Msg.DOWN,
+      Blockly.Msg.LEFT,
+      Blockly.Msg.RIGHT
+    ];
+
+    Blockly.Search.preprocessSearchKeywords('fable_spin_get_ir_message', keywords, toolboxKeywords);
   }
 };

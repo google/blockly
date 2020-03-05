@@ -57,6 +57,7 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     "search_keywords": [
       "%{BKY_FABLE_SEARCH_KEYWORD_TEXT}"
     ],
+    "search_toolbox_keywords": [],
     "extensions": [
       "text_quotes",
       "parent_tooltip_when_inline"
@@ -258,7 +259,8 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     "inputsInline": true,
     "search_keywords": [
       "%{BKY_FABLE_SEARCH_KEYWORD_TEXT}"
-    ]
+    ],
+    "search_toolbox_keywords": []
   }
 ]);  // END JSON EXTRACT (Do not delete this comment.)
 

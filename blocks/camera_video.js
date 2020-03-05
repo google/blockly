@@ -67,6 +67,11 @@ Blockly.Blocks.fable_video_filter = {
   ensureSearchKeywords: function () {
     var keywords = [
       Blockly.Msg.FABLE_VIDEO_FILTER,
+      '%{BKY_VISION}',
+      '%{BKY_LABEL_VIDEO}'
+    ];
+
+    var toolboxKeywords = [
       Blockly.Msg.FABLE_IMAGE_FILTER_FLIP,
       Blockly.Msg.FABLE_IMAGE_FILTER_GRAYSCALE,
       Blockly.Msg.FABLE_IMAGE_FILTER_HSV,
@@ -81,12 +86,10 @@ Blockly.Blocks.fable_video_filter = {
       Blockly.Msg.FABLE_IMAGE_FILTER_SKETCH,
       Blockly.Msg.FABLE_IMAGE_FILTER_SKETCH_COLOR,
       Blockly.Msg.FABLE_IMAGE_FILTER_STYLISH,
-      Blockly.Msg.FABLE_IMAGE_FILTER_SENSITIVITY,
-      '%{BKY_VISION}',
-      '%{BKY_LABEL_VIDEO}'
+      Blockly.Msg.FABLE_IMAGE_FILTER_SENSITIVITY
     ];
 
-    Blockly.Search.preprocessSearchKeywords('fable_video_filter', keywords);
+    Blockly.Search.preprocessSearchKeywords('fable_video_filter', keywords, toolboxKeywords);
   }
 };
 
@@ -122,7 +125,11 @@ Blockly.Blocks.fable_clear_video_filters = {
       '%{BKY_LABEL_VIDEO}'
     ];
 
-    Blockly.Search.preprocessSearchKeywords('fable_clear_video_filters', keywords);
+    var toolboxKeywords = [
+
+    ];
+
+    Blockly.Search.preprocessSearchKeywords('fable_clear_video_filters', keywords, toolboxKeywords);
   }
 };
 
@@ -178,7 +185,11 @@ Blockly.Blocks.fable_draw_circle = {
       '%{BKY_LABEL_VIDEO}'
     ];
 
-    Blockly.Search.preprocessSearchKeywords('fable_draw_circle', keywords);
+    var toolboxKeywords = [
+      '%{BKY_COLORS}'
+    ];
+
+    Blockly.Search.preprocessSearchKeywords('fable_draw_circle', keywords, toolboxKeywords);
   }
 };
 
@@ -238,7 +249,11 @@ Blockly.Blocks.fable_draw_rect = {
       '%{BKY_LABEL_VIDEO}'
     ];
 
-    Blockly.Search.preprocessSearchKeywords('fable_draw_rect', keywords);
+    var toolboxKeywords = [
+      '%{BKY_COLORS}'
+    ];
+
+    Blockly.Search.preprocessSearchKeywords('fable_draw_rect', keywords, toolboxKeywords);
   }
 };
 
@@ -292,6 +307,12 @@ Blockly.Blocks.fable_draw_text = {
       '%{BKY_LABEL_VIDEO}'
     ];
 
-    Blockly.Search.preprocessSearchKeywords('fable_draw_text', keywords);
+    var toolboxKeywords = [
+      Blockly.Msg.FABLE_VIDEO_DRAW_COLOR,
+      '%{BKY_FABLE_SEARCH_KEYWORD_TEXT}',
+      '%{BKY_COLORS}'
+    ];
+
+    Blockly.Search.preprocessSearchKeywords('fable_draw_text', keywords, toolboxKeywords);
   }
 };

@@ -55,7 +55,11 @@ Blockly.Blocks.fable_set_module_rgb = {
       '%{BKY_LABEL_COMMON}'
     ];
 
-    Blockly.Search.preprocessSearchKeywords('fable_set_module_rgb', keywords);
+    var toolboxKeywords = [
+      '%{BKY_COLORS}'
+    ];
+
+    Blockly.Search.preprocessSearchKeywords('fable_set_module_rgb', keywords, toolboxKeywords);
   }
 };
 
@@ -95,7 +99,11 @@ Blockly.Blocks.fable_set_channel_color = {
       '%{BKY_LABEL_COMMON}'
     ];
 
-    Blockly.Search.preprocessSearchKeywords('fable_set_channel_color', keywords);
+    var toolboxKeywords = [
+
+    ];
+
+    Blockly.Search.preprocessSearchKeywords('fable_set_channel_color', keywords, toolboxKeywords);
   }
 };
 
@@ -136,7 +144,11 @@ Blockly.Blocks.fable_speak = {
       Blockly.Msg.FABLE_SPEAK
     ];
 
-    Blockly.Search.preprocessSearchKeywords('fable_speak', keywords);
+    var toolboxKeywords = [
+      '%{BKY_FABLE_SEARCH_KEYWORD_TEXT}'
+    ];
+
+    Blockly.Search.preprocessSearchKeywords('fable_speak', keywords, toolboxKeywords);
   }
 };
 
@@ -183,6 +195,12 @@ Blockly.Blocks.fable_speak_lang = {
   ensureSearchKeywords: function () {
     var keywords = [
       Blockly.Msg.FABLE_SPEAK,
+      '%{BKY_OUTPUT}',
+      '%{BKY_LABEL_COMMON}'
+    ];
+
+    var toolboxKeywords = [
+      '%{BKY_FABLE_SEARCH_KEYWORD_TEXT}',
       Blockly.Msg.LANG_EN,
       Blockly.Msg.LANG_DA,
       Blockly.Msg.LANG_FR,
@@ -190,12 +208,10 @@ Blockly.Blocks.fable_speak_lang = {
       Blockly.Msg.LANG_NL,
       Blockly.Msg.LANG_IT,
       Blockly.Msg.LANG_DE,
-      Blockly.Msg.LANG_RU,
-      '%{BKY_OUTPUT}',
-      '%{BKY_LABEL_COMMON}'
+      Blockly.Msg.LANG_RU
     ];
 
-    Blockly.Search.preprocessSearchKeywords('fable_speak_lang', keywords);
+    Blockly.Search.preprocessSearchKeywords('fable_speak_lang', keywords, toolboxKeywords);
   }
 };
 
@@ -249,6 +265,11 @@ Blockly.Blocks.fable_play_sound = {
   ensureSearchKeywords: function () {
     var keywords = [
       Blockly.Msg.FABLE_PLAY_SOUND,
+      '%{BKY_OUTPUT}',
+      '%{BKY_LABEL_COMMON}'
+    ];
+
+    var toolboxKeywords = [
       Blockly.Msg.SOUND_ANGRY,
       'boing',
       Blockly.Msg.SOUND_BUZZ,
@@ -262,12 +283,10 @@ Blockly.Blocks.fable_play_sound = {
       Blockly.Msg.SOUND_RUNNING,
       Blockly.Msg.SOUND_THEEND,
       Blockly.Msg.SOUND_TWIRLY,
-      Blockly.Msg.SOUND_WOOF,
-      '%{BKY_OUTPUT}',
-      '%{BKY_LABEL_COMMON}'
+      Blockly.Msg.SOUND_WOOF
     ];
 
-    Blockly.Search.preprocessSearchKeywords('fable_play_sound', keywords);
+    Blockly.Search.preprocessSearchKeywords('fable_play_sound', keywords, toolboxKeywords);
   }
 };
 
@@ -303,7 +322,11 @@ Blockly.Blocks.fable_play_custom_sound = {
       '%{BKY_LABEL_COMMON}'
     ];
 
-    Blockly.Search.preprocessSearchKeywords('fable_play_custom_sound', keywords);
+    var toolboxKeywords = [
+
+    ];
+
+    Blockly.Search.preprocessSearchKeywords('fable_play_custom_sound', keywords, toolboxKeywords);
   }
 };
 
@@ -344,6 +367,11 @@ Blockly.Blocks.fable_play_note = {
   ensureSearchKeywords: function () {
     var keywords = [
       Blockly.Msg.FABLE_PLAY_NOTE,
+      '%{BKY_OUTPUT}',
+      '%{BKY_LABEL_COMMON}'
+    ];
+
+    var toolboxKeywords = [
       Blockly.Msg.FABLE_NOTE_C,
       Blockly.Msg.FABLE_NOTE_D,
       Blockly.Msg.FABLE_NOTE_E,
@@ -351,11 +379,9 @@ Blockly.Blocks.fable_play_note = {
       Blockly.Msg.FABLE_NOTE_G,
       Blockly.Msg.FABLE_NOTE_A,
       Blockly.Msg.FABLE_NOTE_B,
-      Blockly.Msg.FABLE_NOTE_C_HIGH,
-      '%{BKY_OUTPUT}',
-      '%{BKY_LABEL_COMMON}'
+      Blockly.Msg.FABLE_NOTE_C_HIGH
     ];
 
-    Blockly.Search.preprocessSearchKeywords('fable_play_note', keywords);
+    Blockly.Search.preprocessSearchKeywords('fable_play_note', keywords, toolboxKeywords);
   }
 };

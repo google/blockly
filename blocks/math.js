@@ -140,7 +140,9 @@ Blockly.Blocks.fable_angle = {
       '%{BKY_LABEL_TRIGONOMETRY}'
     ];
 
-    Blockly.Search.preprocessSearchKeywords('fable_angle', keywords);
+    var toolboxKeywords = [];
+
+    Blockly.Search.preprocessSearchKeywords('fable_angle', keywords, toolboxKeywords);
   }
 };
 
@@ -167,7 +169,9 @@ Blockly.Blocks.fable_joint_angle = {
       '%{BKY_LABEL_TRIGONOMETRY}'
     ];
 
-    Blockly.Search.preprocessSearchKeywords('fable_joint_angle', keywords);
+    var toolboxKeywords = [];
+
+    Blockly.Search.preprocessSearchKeywords('fable_joint_angle', keywords, toolboxKeywords);
   }
 };
 
@@ -203,13 +207,16 @@ Blockly.Blocks.math_min_max = {
     var keywords = [
       Blockly.Msg.FABLE_MATH_GET,
       Blockly.Msg.FABLE_MATH_BETWEEN,
-      Blockly.Msg.FABLE_MATH_MIN,
-      Blockly.Msg.FABLE_MATH_MAX,
       '%{BKY_MATH}',
       '%{BKY_LABEL_MATH_FUNCTION}'
     ];
 
-    Blockly.Search.preprocessSearchKeywords('math_min_max', keywords);
+    var toolboxKeywords = [
+      Blockly.Msg.FABLE_MATH_MIN,
+      Blockly.Msg.FABLE_MATH_MAX
+    ];
+
+    Blockly.Search.preprocessSearchKeywords('math_min_max', keywords, toolboxKeywords);
   }
 };
 
@@ -229,7 +236,10 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     "tooltip": "%{BKY_MATH_NUMBER_TOOLTIP}",
     "extensions": ["parent_tooltip_when_inline"],
     "search_keywords": [
-    ]
+      "%{BKY_MATH}",
+      "%{BKY_LABEL_ARITHMETICS}"
+    ],
+    "search_toolbox_keywords": []
   },
 
   // Block for basic arithmetic operator.
@@ -265,11 +275,15 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     "helpUrl": "%{BKY_MATH_ARITHMETIC_HELPURL}",
     "extensions": ["math_op_tooltip"],
     "search_keywords": [
-        "%{BKY_MATH_ADDITION_SYMBOL}",
-        "%{BKY_MATH_SUBTRACTION_SYMBOL}",
-        "%{BKY_MATH_MULTIPLICATION_SYMBOL}",
-        "%{BKY_MATH_DIVISION_SYMBOL}",
-        "%{BKY_MATH_POWER_SYMBOL}",
+        "%{BKY_MATH}",
+        "%{BKY_LABEL_ARITHMETICS}"
+    ],
+    "search_toolbox_keywords": [
+      "%{BKY_MATH_ADDITION_SYMBOL}",
+      "%{BKY_MATH_SUBTRACTION_SYMBOL}",
+      "%{BKY_MATH_MULTIPLICATION_SYMBOL}",
+      "%{BKY_MATH_DIVISION_SYMBOL}",
+      "%{BKY_MATH_POWER_SYMBOL}"
     ]
   },
 
@@ -302,13 +316,17 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     "helpUrl": "%{BKY_MATH_SINGLE_HELPURL}",
     "extensions": ["math_op_tooltip"],
     "search_keywords": [
-        "%{BKY_MATH_SINGLE_OP_ROOT}",
-        "%{BKY_MATH_SINGLE_OP_ABSOLUTE}",
-        "-",
-        "ln",
-        "log10",
-        "e^",
-        "10^"
+      "%{BKY_MATH}",
+      "%{BKY_LABEL_ARITHMETICS}"
+    ],
+    "search_toolbox_keywords": [
+      "%{BKY_MATH_SINGLE_OP_ROOT}",
+      "%{BKY_MATH_SINGLE_OP_ABSOLUTE}",
+      "-",
+      "ln",
+      "log10",
+      "e^",
+      "10^"
     ]
   },
 
@@ -340,12 +358,16 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     "helpUrl": "%{BKY_MATH_TRIG_HELPURL}",
     "extensions": ["math_op_tooltip"],
     "search_keywords": [
-        "%{BKY_MATH_TRIG_SIN}",
-        "%{BKY_MATH_TRIG_COS}",
-        "%{BKY_MATH_TRIG_TAN}",
-        "%{BKY_MATH_TRIG_ASIN}",
-        "%{BKY_MATH_TRIG_ACOS}",
-        "%{BKY_MATH_TRIG_ATAN}",
+        "%{BKY_MATH}",
+        "%{BKY_LABEL_TRIGONOMETRY}"
+    ],
+    "search_toolbox_keywords": [
+      "%{BKY_MATH_TRIG_SIN}",
+      "%{BKY_MATH_TRIG_COS}",
+      "%{BKY_MATH_TRIG_TAN}",
+      "%{BKY_MATH_TRIG_ASIN}",
+      "%{BKY_MATH_TRIG_ACOS}",
+      "%{BKY_MATH_TRIG_ATAN}"
     ]
   },
 
@@ -372,12 +394,16 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     "tooltip": "%{BKY_MATH_CONSTANT_TOOLTIP}",
     "helpUrl": "%{BKY_MATH_CONSTANT_HELPURL}",
     "search_keywords": [
-        "\u03c0",
-        "e",
-        "\u03c6",
-        "sqrt(2)",
-        "sqrt(\u00bd)",
-        "\u221e"
+        "%{BKY_MATH}",
+        "%{BKY_LABEL_TRIGONOMETRY}"
+    ],
+    "search_toolbox_keywords": [
+      "\u03c0",
+      "e",
+      "\u03c6",
+      "sqrt(2)",
+      "sqrt(\u00bd)",
+      "\u221e"
     ]
   },
 
@@ -412,13 +438,17 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     "tooltip": "%{BKY_MATH_IS_TOOLTIP}",
     "mutator": "math_is_divisibleby_mutator",
     "search_keywords": [
-        "%{BKY_MATH_IS_EVEN}",
-        "%{BKY_MATH_IS_ODD}",
-        "%{BKY_MATH_IS_PRIME}",
-        "%{BKY_MATH_IS_WHOLE}",
-        "%{BKY_MATH_IS_POSITIVE}",
-        "%{BKY_MATH_IS_NEGATIVE}",
-        "%{BKY_MATH_IS_DIVISIBLE_BY}"
+        "%{BKY_MATH}",
+        "%{BKY_LABEL_MATH_FUNCTION}"
+    ],
+    "search_toolbox_keywords": [
+      "%{BKY_MATH_IS_EVEN}",
+      "%{BKY_MATH_IS_ODD}",
+      "%{BKY_MATH_IS_PRIME}",
+      "%{BKY_MATH_IS_WHOLE}",
+      "%{BKY_MATH_IS_POSITIVE}",
+      "%{BKY_MATH_IS_NEGATIVE}",
+      "%{BKY_MATH_IS_DIVISIBLE_BY}"
     ]
   },
 
@@ -444,8 +474,11 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     "helpUrl": "%{BKY_MATH_CHANGE_HELPURL}",
     "extensions": ["math_change_tooltip"],
     "search_keywords": [
-        "%{BKY_MATH_CHANGE_TITLE}"
-    ]
+        "%{BKY_MATH_CHANGE_TITLE}",
+        "%{BKY_MATH}",
+        "%{BKY_LABEL_MATH_FUNCTION}"
+    ],
+    "search_toolbox_keywords": []
   },
 
   // Block for rounding functions.
@@ -473,9 +506,13 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     "helpUrl": "%{BKY_MATH_ROUND_HELPURL}",
     "tooltip": "%{BKY_MATH_ROUND_TOOLTIP}",
     "search_keywords": [
-        "%{BKY_MATH_ROUND_OPERATOR_ROUND}",
-        "%{BKY_MATH_ROUND_OPERATOR_ROUNDUP}",
-        "%{BKY_MATH_ROUND_OPERATOR_ROUNDDOWN}"
+        "%{BKY_MATH}",
+        "%{BKY_LABEL_MATH_FUNCTION}"
+    ],
+    "search_toolbox_keywords": [
+      "%{BKY_MATH_ROUND_OPERATOR_ROUND}",
+      "%{BKY_MATH_ROUND_OPERATOR_ROUNDUP}",
+      "%{BKY_MATH_ROUND_OPERATOR_ROUNDDOWN}"
     ]
   },
 
@@ -511,14 +548,18 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     "mutator": "math_modes_of_list_mutator",
     "extensions": ["math_op_tooltip"],
     "search_keywords": [
-        "%{BKY_MATH_ONLIST_OPERATOR_SUM}",
-        "%{BKY_MATH_ONLIST_OPERATOR_MIN}",
-        "%{BKY_MATH_ONLIST_OPERATOR_MAX}",
-        "%{BKY_MATH_ONLIST_OPERATOR_AVERAGE}",
-        "%{BKY_MATH_ONLIST_OPERATOR_MEDIAN}",
-        "%{BKY_MATH_ONLIST_OPERATOR_MODE}",
-        "%{BKY_MATH_ONLIST_OPERATOR_STD_DEV}",
-        "%{BKY_MATH_ONLIST_OPERATOR_RANDOM}",
+        "%{BKY_MATH}",
+        "%{BKY_LABEL_MATH_FUNCTION}"
+    ],
+    "search_toolbox_keywords": [
+      "%{BKY_MATH_ONLIST_OPERATOR_SUM}",
+      "%{BKY_MATH_ONLIST_OPERATOR_MIN}",
+      "%{BKY_MATH_ONLIST_OPERATOR_MAX}",
+      "%{BKY_MATH_ONLIST_OPERATOR_AVERAGE}",
+      "%{BKY_MATH_ONLIST_OPERATOR_MEDIAN}",
+      "%{BKY_MATH_ONLIST_OPERATOR_MODE}",
+      "%{BKY_MATH_ONLIST_OPERATOR_STD_DEV}",
+      "%{BKY_MATH_ONLIST_OPERATOR_RANDOM}"
     ]
   },
 
@@ -544,8 +585,11 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     "tooltip": "%{BKY_MATH_MODULO_TOOLTIP}",
     "helpUrl": "%{BKY_MATH_MODULO_HELPURL}",
     "search_keywords": [
-        "%{BKY_MATH_MODULO_TITLE}"
-    ]
+        "%{BKY_MATH_MODULO_TITLE}",
+        "%{BKY_MATH}",
+        "%{BKY_LABEL_MATH_FUNCTION}"
+    ],
+    "search_toolbox_keywords": []
   },
 
   // Block for constraining a number between two limits.
@@ -575,8 +619,11 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     "tooltip": "%{BKY_MATH_CONSTRAIN_TOOLTIP}",
     "helpUrl": "%{BKY_MATH_CONSTRAIN_HELPURL}",
     "search_keywords": [
-        "%{BKY_MATH_CONSTRAIN_TITLE}"
-    ]
+        "%{BKY_MATH_CONSTRAIN_TITLE}",
+        "%{BKY_MATH}",
+        "%{BKY_LABEL_MATH_FUNCTION}"
+    ],
+    "search_toolbox_keywords": []
   },
 
   // Block for random integer between [X] and [Y].
@@ -601,8 +648,11 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     "tooltip": "%{BKY_MATH_RANDOM_INT_TOOLTIP}",
     "helpUrl": "%{BKY_MATH_RANDOM_INT_HELPURL}",
     "search_keywords": [
-        "%{BKY_MATH_RANDOM_INT_TITLE}"
-    ]
+        "%{BKY_MATH_RANDOM_INT_TITLE}",
+        "%{BKY_MATH}",
+        "%{BKY_LABEL_MATH_FUNCTION}"
+    ],
+    "search_toolbox_keywords": []
   },
 
   // Block for random integer between [X] and [Y].
@@ -614,8 +664,11 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     "tooltip": "%{BKY_MATH_RANDOM_FLOAT_TOOLTIP}",
     "helpUrl": "%{BKY_MATH_RANDOM_FLOAT_HELPURL}",
     "search_keywords": [
-        "%{BKY_MATH_RANDOM_FLOAT_TITLE_RANDOM}"
-    ]
+        "%{BKY_MATH_RANDOM_FLOAT_TITLE_RANDOM}",
+        "%{BKY_MATH}",
+        "%{BKY_LABEL_MATH_FUNCTION}"
+    ],
+    "search_toolbox_keywords": []
   },
 
   // Block for calculating atan2 of [X] and [Y].
@@ -640,8 +693,11 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     "tooltip": "%{BKY_MATH_ATAN2_TOOLTIP}",
     "helpUrl": "%{BKY_MATH_ATAN2_HELPURL}",
     "search_keywords": [
-        "%{BKY_MATH_ATAN2_TITLE}"
-    ]
+        "%{BKY_MATH_ATAN2_TITLE}",
+        "%{BKY_MATH}",
+        "%{BKY_LABEL_MATH_FUNCTION}"
+    ],
+    "search_toolbox_keywords": []
   }
 ]);  // END JSON EXTRACT (Do not delete this comment.)
 

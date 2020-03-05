@@ -69,6 +69,46 @@ Blockly.blockRendering.Debug.config = {
 };
 
 /**
+ * Create any DOM elements that this debugger needs (filters, patterns, etc).
+ * @param {!SVGElement} svg The root of the workspace's SVG.
+ * @package
+ */
+Blockly.blockRendering.Debug.createDom = function(svg) {
+  var defs = Blockly.utils.dom.createSvgElement('defs', {}, svg);
+  var debugFilter = Blockly.utils.dom.createSvgElement('filter',
+      {
+        'id': 'blocklyDebugFilter',
+        'height': '160%',
+        'width': '180%',
+        y: '-30%',
+        x: '-40%'
+      },
+      defs);
+  // Set all gaussian blur pixels to 1 opacity before applying flood
+  var selectedComponentTransfer = Blockly.utils.dom.createSvgElement(
+      'feComponentTransfer', {'result': 'outBlur'}, debugFilter);
+  Blockly.utils.dom.createSvgElement('feFuncA',
+      {
+        'type': 'table', 'tableValues': '0 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1'
+      },
+      selectedComponentTransfer);
+  // Color the highlight
+  Blockly.utils.dom.createSvgElement('feFlood',
+      {
+        'flood-color': '#ff0000',
+        'flood-opacity': 0.5,
+        'result': 'outColor'
+      },
+      debugFilter);
+  Blockly.utils.dom.createSvgElement('feComposite',
+      {
+        'in': 'outColor', 'in2': 'outBlur',
+        'operator': 'in', 'result': 'outGlow'
+      },
+      debugFilter);
+};
+
+/**
  * Remove all elements the this object created on the last pass.
  * @package
  */

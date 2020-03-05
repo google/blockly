@@ -288,6 +288,9 @@ function addToolboxButtonCallbacks() {
 }
 
 function setRenderDebugOptionCheckboxState(overrideOptions) {
+  if (!Blockly.blockRendering.Debug) {
+    return;
+  }
   Blockly.blockRendering.Debug.config = overrideOptions || {};
   if (!overrideOptions) {
     return;
@@ -303,6 +306,9 @@ function setRenderDebugOptionCheckboxState(overrideOptions) {
 }
 
 function updateRenderDebugOptions(e) {
+  if (!Blockly.blockRendering.Debug) {
+    return;
+  }
   var target = e.target;
   var optionName = target.getAttribute('data-optionName');
   var config = Blockly.blockRendering.Debug.config;
@@ -313,6 +319,9 @@ function updateRenderDebugOptions(e) {
 }
 
 function addRenderDebugOptionsCheckboxes() {
+  if (!Blockly.blockRendering.Debug) {
+    return;
+  }
   var renderDebugConfig = Blockly.blockRendering.Debug.config;
   var renderDebugOptionsListEl = document.getElementById('renderDebugOptions');
   var optionNames = Object.keys(renderDebugConfig);
@@ -438,6 +447,9 @@ function logEvents(state) {
 }
 
 function toggleRenderingDebug(state) {
+  if (!Blockly.blockRendering.Debug) {
+    return;
+  }
   var checkbox = document.getElementById('blockRenderDebugCheck');
   checkbox.checked = state;
   if (sessionStorage) {

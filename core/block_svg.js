@@ -1645,7 +1645,9 @@ Blockly.BlockSvg.prototype.getRootBlock = function() {
 Blockly.BlockSvg.prototype.render = function(opt_bubble) {
   Blockly.utils.dom.startTextWidthCache();
   this.rendered = true;
-  (/** @type {!Blockly.WorkspaceSvg} */ (this.workspace)).getRenderer().render(this);
+  var renderer =
+    (/** @type {!Blockly.WorkspaceSvg} */ (this.workspace)).getRenderer();
+  renderer.render(this);
   // No matter how we rendered, connection locations should now be correct.
   this.updateConnectionLocations_();
   if (opt_bubble !== false) {
@@ -1668,7 +1670,8 @@ Blockly.BlockSvg.prototype.render = function(opt_bubble) {
   // Flash red if the debugger is turned on.
   if (Blockly.blockRendering.useDebugger) {
     var svgPath = this.pathObject.svgPath;
-    svgPath.setAttribute('filter', 'url(#blocklyDebugFilter)');
+    svgPath.setAttribute('filter',
+        'url(#' + renderer.getConstants().debugFilterId + ')');
     setTimeout(function() {
       svgPath.setAttribute('filter', '');
     }, 100);

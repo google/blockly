@@ -18,6 +18,8 @@ goog.require('Blockly.utils.dom');
 goog.require('Blockly.utils.svgPaths');
 goog.require('Blockly.utils.userAgent');
 
+goog.requireType('Blockly.blockRendering.Debug');
+
 
 /**
  * An object that provides constants for rendering blocks.
@@ -441,6 +443,20 @@ Blockly.blockRendering.ConstantProvider = function() {
   this.disabledPattern_ = null;
 
   /**
+   * The ID of the debug filter, or the empty string if no pattern is set.
+   * @type {string}
+   * @package
+   */
+  this.debugFilterId = '';
+
+  /**
+   * The <filter> element to use for a debug highlight, or null if not set.
+   * @type {SVGElement}
+   * @private
+   */
+  this.debugFilter_ = null;
+
+  /**
    * The <style> element to use for injecting renderer specific CSS.
    * @type {HTMLStyleElement}
    * @private
@@ -754,6 +770,9 @@ Blockly.blockRendering.ConstantProvider.prototype.dispose = function() {
   if (this.disabledPattern_) {
     Blockly.utils.dom.removeNode(this.disabledPattern_);
   }
+  if (this.debugFilter_) {
+    Blockly.utils.dom.removeNode(this.debugFilter_);
+  }
   if (this.cssNode_) {
     Blockly.utils.dom.removeNode(this.cssNode_);
   }
@@ -984,6 +1003,7 @@ Blockly.blockRendering.ConstantProvider.prototype.shapeFor = function(
  * Create any DOM elements that this renderer needs (filters, patterns, etc).
  * @param {!SVGElement} svg The root of the workspace's SVG.
  * @param {string} rendererName Name of the renderer.
+ * @suppress {strictModuleDepCheck} Debug renderer only included in playground.
  * @package
  */
 Blockly.blockRendering.ConstantProvider.prototype.createDom = function(svg,
@@ -1065,6 +1085,42 @@ Blockly.blockRendering.ConstantProvider.prototype.createDom = function(svg,
       {'d': 'M 0 0 L 10 10 M 10 0 L 0 10', 'stroke': '#cc0'}, disabledPattern);
   this.disabledPatternId = disabledPattern.id;
   this.disabledPattern_ = disabledPattern;
+
+  if (Blockly.blockRendering.Debug) {
+    var debugFilter = Blockly.utils.dom.createSvgElement('filter',
+        {
+          'id': 'blocklyDebugFilter' + this.randomIdentifier_,
+          'height': '160%',
+          'width': '180%',
+          y: '-30%',
+          x: '-40%'
+        },
+        defs);
+    // Set all gaussian blur pixels to 1 opacity before applying flood
+    var debugComponentTransfer = Blockly.utils.dom.createSvgElement(
+        'feComponentTransfer', {'result': 'outBlur'}, debugFilter);
+    Blockly.utils.dom.createSvgElement('feFuncA',
+        {
+          'type': 'table', 'tableValues': '0 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1'
+        },
+        debugComponentTransfer);
+    // Color the highlight
+    Blockly.utils.dom.createSvgElement('feFlood',
+        {
+          'flood-color': '#ff0000',
+          'flood-opacity': 0.5,
+          'result': 'outColor'
+        },
+        debugFilter);
+    Blockly.utils.dom.createSvgElement('feComposite',
+        {
+          'in': 'outColor', 'in2': 'outBlur',
+          'operator': 'in', 'result': 'outGlow'
+        },
+        debugFilter);
+    this.debugFilterId = debugFilter.id;
+    this.debugFilter_ = debugFilter;
+    }
 };
 
 /**

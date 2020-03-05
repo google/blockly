@@ -371,7 +371,7 @@ Blockly.Procedures.mutateCallers = function(defBlock) {
   var procedureBlock = /** @type {!Blockly.Procedures.ProcedureBlock} */ (
     defBlock);
   var name = procedureBlock.getProcedureDef()[0];
-  var xmlElement = defBlock.mutationToDom(true);
+  var xmlElement = defBlock.mutationToDom();
   var callers = Blockly.Procedures.getCallers(name, defBlock.workspace);
   for (var i = 0, caller; (caller = callers[i]); i++) {
     var oldMutationDom = caller.mutationToDom();

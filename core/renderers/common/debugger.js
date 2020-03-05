@@ -65,7 +65,8 @@ Blockly.blockRendering.Debug.config = {
   elems: true,
   connections: true,
   blockBounds: true,
-  connectedBlockBounds: true
+  connectedBlockBounds: true,
+  render: true
 };
 
 /**
@@ -397,4 +398,23 @@ Blockly.blockRendering.Debug.prototype.drawDebug = function(block, info) {
   }
 
   this.drawBoundingBox(info);
+
+  this.drawRender(block.pathObject.svgPath);
+};
+
+
+/**
+ * Show a debug filter to highlight that a block has been rendered.
+ * @param {!SVGElement} svgPath The block's svg path.
+ * @package
+ */
+Blockly.blockRendering.Debug.prototype.drawRender = function(svgPath) {
+  if (!Blockly.blockRendering.Debug.config.render) {
+    return;
+  }
+  svgPath.setAttribute('filter',
+      'url(#' + this.constants_.debugFilterId + ')');
+  setTimeout(function() {
+    svgPath.setAttribute('filter', '');
+  }, 100);
 };

@@ -61,6 +61,7 @@ Blockly.Theme = function(name, blockStyles, categoryStyles,
   /**
    * The font style.
    * @type {?Blockly.Theme.FontStyle}
+   * @package
    */
   this.fontStyle = null;
 
@@ -68,6 +69,7 @@ Blockly.Theme = function(name, blockStyles, categoryStyles,
    * Whether or not to add a 'hat' on top of all blocks with no previous or
    * output connections.
    * @type {?boolean}
+   * @package
    */
   this.startHats = null;
 };

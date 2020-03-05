@@ -1666,16 +1666,6 @@ Blockly.BlockSvg.prototype.render = function(opt_bubble) {
   if (this.workspace.keyboardAccessibilityMode && this.pathObject.cursorSvg_) {
     cursor.draw();
   }
-
-  // Flash red if the debugger is turned on.
-  if (Blockly.blockRendering.useDebugger) {
-    var svgPath = this.pathObject.svgPath;
-    svgPath.setAttribute('filter',
-        'url(#' + renderer.getConstants().debugFilterId + ')');
-    setTimeout(function() {
-      svgPath.setAttribute('filter', '');
-    }, 100);
-  }
 };
 
 /**

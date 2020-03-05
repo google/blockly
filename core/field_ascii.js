@@ -150,8 +150,12 @@ Blockly.AsciiInput.prototype.getValue = function () {
   return this.KEY_CODE;
 };
 
-Blockly.AsciiInput.prototype.getDisplayText_ = function () {
-  var stored = this.KEY_CODE.split('    ');
+Blockly.AsciiInput.prototype.getDisplayText_ = function (optValue) {
+  if (!optValue) {
+    var optValue = this.KEY_CODE;
+  }
+
+  var stored = optValue.split('    ');
   switch (stored[0]) {
     case 'KEYCODE_SPACEBAR':
       return Blockly.Msg.SPACEBAR;

@@ -26,7 +26,7 @@
  */
 'use strict';
 
-goog.provide('Blockly.SearchWorkspace');
+goog.provide('Blockly.WorkspaceSearch');
 
 goog.require('Blockly.Search');
 
@@ -35,12 +35,18 @@ goog.require('Blockly.Search');
  *
  * @param {!Blockly.Workspace} workspace The workspace in which to create the button callback.
  */
-Blockly.SearchWorkspace = function (workspace) {
+Blockly.WorkspaceSearch = function (workspace) {
   // Initialize the search handler
-  Blockly.SearchWorkspace.superClass_.constructor.call(
+  Blockly.WorkspaceSearch.superClass_.constructor.call(
     this, workspace);
 
   var thisObj = this;
+
+  // Add a workspace change listener (so blocks get added/removed to a trie when
+  // the user adds/removes them to/from the workspace)
+  this.workspace_.addChangeListener(function (event) {
+    thisObj.onNewWorkspaceEvent(event);
+  });
 
   // Get the GUI elements
   this.searchMenu_ = document.getElementById('workspaceSearchDiv');
@@ -57,12 +63,6 @@ Blockly.SearchWorkspace = function (workspace) {
   this.resultsNumberHolder_.style.minWidth = '0px';
   this.resultsNumberHolder_.style.maxWidth = '0px';
   this.buttonsHolder_.style.maxWidth = '0px';
-
-  // Add a workspace change listener (so blocks get added/removed to a trie when
-  // the user adds/removes them to/from the workspace)
-  this.workspace_.addChangeListener(function (event) {
-    thisObj.onNewWorkspaceEvent(event);
-  });
 
   // Add more event listeners
   this.searchInput_.addEventListener('keydown', function (event) {
@@ -124,40 +124,96 @@ Blockly.SearchWorkspace = function (workspace) {
     event.preventDefault();
     thisObj.showNextResult(false);
   });
-
-  // closeButton.addEventListener("click", function(event) {
-  //   event.preventDefault();
-  //   thisObj.searchInput_.blur();
-  //   thisObj.onBlur(event);
-  // });
 };
-Blockly.utils.object.inherits(Blockly.SearchWorkspace, Blockly.Search);
+Blockly.utils.object.inherits(Blockly.WorkspaceSearch, Blockly.Search);
 
-// Old way of handling the workspace changes. Might have to re-add it if we change the logic too dramatically.
-// Blockly.SearchWorkspace.prototype.onNewWorkspaceEvent = function(event) {
-//   if (event.type == Blockly.Events.CREATE) {
-//     for (var i = 0; i < event.ids.length; i++) {
-//       var id = event.ids[i];
-//       var block = this.workspace_.getBlockById(id);
+/**
+ * Adds a new block to the toolbox search handler's trie.
+ * Extends the logic of its parent class (@see search.js) by including all "dropdown" options to the search.
+ *
+ * @param {!String} type The type ID of the block, e.g. "fable_play_sound".
+ * @param {!String} val The block itself. Similar to addToTrie, will either be XML or the unique block ID.
+ */
+Blockly.WorkspaceSearch.prototype.onBlockAdded = function (type, val) {
+  Blockly.WorkspaceSearch.superClass_.onBlockAdded.call(this, type, val);
 
-//       if (block) {
-//         this.onBlockAdded(block.type, block.id);
-//       }
-//     }
-//   }
-//   else if (event.type == Blockly.Events.DELETE) {
-//     Blockly.Events.disable();
+  // Iterate through the block's dynamic inputs
+  // FieldDropdown / FieldTextInput / FieldBoolean / ButtonInput / AsciiInput / FieldAngle / FieldJointAngle
+  // TODO: Add any other types that we end up creating
+  const block = this.workspace_.getBlockById(val);
 
-//     // for (var i = 0; i < event.ids.length; i++) {
-//     var block = Blockly.Xml.domToBlockHeadless_(event.oldXml, this.workspace_);
-//     if (block) {
-//       this.onBlockRemoved(block.type, block.id);
-//       block.dispose();
-//     }
+  if (!block) {
+    console.warn('Cannot find newly created block with ID ' + val);
+    return;
+  }
 
-//     Blockly.Events.enable();
-//   }
-// };
+  var dynamicKeywords = this.generateDynamicKeywords_(block);
+
+  // See if the block has been initialized before
+  if (!this.blocksAdded_[val]) {
+    this.blocksAdded_[val] = [];
+  }
+
+  for (var i = 0; i < dynamicKeywords.length; i++) {
+    // Clean the string (trim, lowercase, etc). Then split by whitespace.
+    // Please ignore the linter on the regex
+    const splitText = dynamicKeywords[i].trim().toLowerCase().replace(/[`~!@#$%^&*()_|+\-=?;:'",.<>\{\}\[\]\\\/]/gi, '').split(' ');
+
+    // Go through the single words of the element after splitting it.
+    for (let j = 0; j < splitText.length; j++) {
+      const text = splitText[j];
+
+      // Add the keyword to the block's keywords
+      if (text && text !== '') {
+        // Add a keyword to the search trie
+        this.addToTrie(text, val);
+
+        // Add the reverse information as well, i.e. add the keyword to the block's list of keywords
+        this.blocksAdded_[val].push(text);
+      }
+    }
+  }
+};
+
+Blockly.WorkspaceSearch.prototype.generateDynamicKeywords_ = function (block) {
+  var dynamicKeywords = [];
+
+  for (var i = 0; i < block.inputList.length; i++) {
+    var input = block.inputList[i];
+
+    for (var j = 0; j < input.fieldRow.length; j++) {
+      var field = input.fieldRow[j];
+
+      if (field instanceof Blockly.FieldDropdown) {
+        var selectedDropdown;
+        if (field.menuGenerator_ && typeof field.menuGenerator_ !== 'function') {
+          selectedDropdown = field.menuGenerator_[field.selectedIndex_];
+        } else if (field.generatedOptions_) {
+          selectedDropdown = field.generatedOptions_[field.selectedIndex_];
+        }
+
+        if (selectedDropdown[0] && typeof selectedDropdown[0] === 'string') {
+          dynamicKeywords.push(selectedDropdown[0].toString());
+        }
+        if (selectedDropdown[1]) {
+          dynamicKeywords.push(selectedDropdown[1].toString());
+        }
+      } else if (field instanceof Blockly.FieldTextInput ||
+                 field instanceof Blockly.FieldAngle ||
+                 field instanceof Blockly.FieldJointAngle) {
+        dynamicKeywords.push(field.value_.toString());
+      } else if (field instanceof Blockly.ButtonInput ||
+                 field instanceof Blockly.AsciiInput) {
+        dynamicKeywords.push(field.getDisplayText_());
+      } else if (field instanceof Blockly.FieldBoolean) {
+        dynamicKeywords.push(field.value_.toString());
+        dynamicKeywords.push(field.value_ ? Blockly.Msg.LOGIC_BOOLEAN_TRUE : Blockly.Msg.LOGIC_BOOLEAN_FALSE);
+      }
+    }
+  }
+
+  return dynamicKeywords;
+};
 
 /**
  * Event handler for whenever the Blockly workspace changes.
@@ -166,7 +222,7 @@ Blockly.utils.object.inherits(Blockly.SearchWorkspace, Blockly.Search);
  *
  * @param {!Blockly.Event} event The Blockly event that got fired because of something changing in Blockly.
  */
-Blockly.SearchWorkspace.prototype.onNewWorkspaceEvent = function (event) {
+Blockly.WorkspaceSearch.prototype.onNewWorkspaceEvent = function (event) {
   var i;
   var blockData;
 
@@ -196,6 +252,96 @@ Blockly.SearchWorkspace.prototype.onNewWorkspaceEvent = function (event) {
         this.onBlockRemoved(blockData[0], blockData[1]);
       }
     }
+  } else if (event.type === Blockly.Events.CHANGE && event.element === 'field') {
+    var blockInfo = this.workspace_.getBlockById(event.blockId);
+    var changedField = blockInfo.getField(event.name);
+    var toAdd = [];
+    var toRemove = [];
+
+    if (changedField instanceof Blockly.FieldDropdown) {
+      var dropdownOptions;
+      if (changedField.menuGenerator_ && typeof changedField.menuGenerator_ !== 'function') {
+        dropdownOptions = changedField.menuGenerator_;
+      } else if (changedField.generatedOptions_) {
+        dropdownOptions = changedField.generatedOptions_;
+      }
+
+      for (var i = 0; i < dropdownOptions.length; i++) {
+        var dropdown = dropdownOptions[i];
+        if (dropdown[1]) {
+          if (dropdown[1] === event.oldValue) {
+            if (typeof dropdown[0] === 'string') {
+              toRemove.push(dropdown[0]);
+            }
+            toRemove.push(dropdown[1]);
+          } else if (dropdown[1] === event.newValue) {
+            if (typeof dropdown[0] === 'string') {
+              toAdd.push(dropdown[0]);
+            }
+            toAdd.push(dropdown[1]);
+          }
+        }
+      }
+    } else if (changedField instanceof Blockly.FieldBoolean) {
+      toAdd.push(event.newValue.toString());
+      toAdd.push(event.newValue ? Blockly.Msg.LOGIC_BOOLEAN_TRUE : Blockly.Msg.LOGIC_BOOLEAN_FALSE);
+      toRemove.push((!event.newValue).toString());
+      toRemove.push(!event.newValue ? Blockly.Msg.LOGIC_BOOLEAN_TRUE : Blockly.Msg.LOGIC_BOOLEAN_FALSE);
+    } else if (changedField instanceof Blockly.ButtonInput ||
+               changedField instanceof Blockly.AsciiInput) {
+      toAdd.push(changedField.getDisplayText_());
+      toRemove.push(changedField.getDisplayText_(event.oldValue));
+    } else if (changedField instanceof Blockly.FieldTextInput ||
+              changedField instanceof Blockly.FieldAngle ||
+              changedField instanceof Blockly.FieldJointAngle) {
+      toAdd.push(event.newValue.toString());
+      toRemove.push(event.oldValue.toString());
+    }
+
+    var j;
+    for (j = 0; j < toRemove.length; j++) {
+      const splitText = toRemove[j].trim().toLowerCase().replace(/[`~!@#$%^&*()_|+\-=?;:'",.<>\{\}\[\]\\\/]/gi, '').split(' ');
+
+      // Go through the single words of the element after splitting it.
+      for (let k = 0; k < splitText.length; k++) {
+        const text = splitText[k];
+
+        // Remove the keyword from the block's keywords
+        if (text && text !== '') {
+          // Remove a keyword from the search trie
+          this.removeFromTrie(text, event.blockId);
+
+          // Remove the reverse information as well, i.e. remove the keyword from the block's list of keywords
+          for (let l = 0; l < this.blocksAdded_[event.blockId].length; l++) {
+            if (this.blocksAdded_[event.blockId][l] === text) {
+              this.blocksAdded_[event.blockId] = this.blocksAdded_[event.blockId].splice(l, 1);
+              l--;
+            }
+          }
+        }
+      }
+    }
+
+    for (j = 0; j < toAdd.length; j++) {
+      const splitText = toAdd[j].trim().toLowerCase().replace(/[`~!@#$%^&*()_|+\-=?;:'",.<>\{\}\[\]\\\/]/gi, '').split(' ');
+      // Go through the single words of the element after splitting it.
+      for (let k = 0; k < splitText.length; k++) {
+        const text = splitText[k];
+
+        // Add the keyword to the block's keywords
+        if (text && text !== '') {
+          // Add a keyword to the search trie
+          this.addToTrie(text, event.blockId);
+
+          // Add the reverse information as well, i.e. add the keyword to the block's list of keywords
+          this.blocksAdded_[event.blockId].push(text);
+        }
+      }
+    }
+
+    console.log(changedField);
+    console.log(event.oldValue);
+    console.log(event.newValue);
   }
 };
 
@@ -208,7 +354,7 @@ Blockly.SearchWorkspace.prototype.onNewWorkspaceEvent = function (event) {
  *
  * @param {!String} xmlBlock XML of the block. Provided by the Blockly event.
  */
-Blockly.SearchWorkspace.prototype.decodeXmlBlocks = function (xmlBlock) {
+Blockly.WorkspaceSearch.prototype.decodeXmlBlocks = function (xmlBlock) {
   var allBlocks = [];
 
   var nodeName = xmlBlock.nodeName;
@@ -277,7 +423,7 @@ Blockly.SearchWorkspace.prototype.decodeXmlBlocks = function (xmlBlock) {
  * Event handler for executing a search. Happens upon the user adding a new character (or removing one, as well).
  *
  */
-Blockly.SearchWorkspace.prototype.executeSearchOnKeyUp = function (e) {
+Blockly.WorkspaceSearch.prototype.executeSearchOnKeyUp = function (e) {
   var search = this;
 
   // If the user pressed Escape, clear the search and unfocus the search box.
@@ -353,7 +499,7 @@ Blockly.SearchWorkspace.prototype.executeSearchOnKeyUp = function (e) {
  *
  * @param {!Boolean} direction If true, will show next result. If false, will show previous result.
  */
-Blockly.SearchWorkspace.prototype.showNextResult = function (direction) {
+Blockly.WorkspaceSearch.prototype.showNextResult = function (direction) {
   var search = this;
 
   // If no results were found, do not hightlight anything. Unhighlight any previously highlighted blocks
@@ -400,7 +546,7 @@ Blockly.SearchWorkspace.prototype.showNextResult = function (direction) {
  * Event handler for whenever the user moves out of the search bar.
  * Unhighlights all blocks and starts the shrinking animation of the search bar.
  */
-Blockly.SearchWorkspace.prototype.onBlur = function (e) {
+Blockly.WorkspaceSearch.prototype.onBlur = function (e) {
   var search = this;
   search.workspace_.highlightBlock('');
 
@@ -424,7 +570,7 @@ Blockly.SearchWorkspace.prototype.onBlur = function (e) {
  * Event handler for focusing the search bar in the top menu bar.
  * Starts the expand animation of the bar and focuses it so the user can type in it.
  */
-Blockly.SearchWorkspace.prototype.focusSearchField = function () {
+Blockly.WorkspaceSearch.prototype.focusSearchField = function () {
   // this.searchMenu_.style.visibility = "visible";
   this.resultsNumberHolder_.style.minWidth = '50px';
   this.resultsNumberHolder_.style.maxWidth = '50px';

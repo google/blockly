@@ -121,7 +121,7 @@ Blockly.Flyout = function(workspaceOptions) {
    */
   this.widthCalcElements_ = {
     mainToolbox: document.getElementsByClassName('blocklyToolboxDiv')[0],
-    rightSidebar: document.getElementById('right_content')
+    rightSidebar: document.getElementById('rightside-bar')
   };
 };
 
@@ -412,7 +412,7 @@ Blockly.Flyout.prototype.positionAt_ = function(width, height, x, y) {
 
     if (!this.widthCalcElements_.rightSidebar) {
       try {
-        this.widthCalcElements_.rightSidebar = document.getElementById('right_content');
+        this.widthCalcElements_.rightSidebar = document.getElementById('rightside-bar');
         maxWidth = maxWidth - this.widthCalcElements_.rightSidebar.offsetWidth;
       } catch (e) {
         console.log('Cannot find the right sidebar element for flyout positioning!');

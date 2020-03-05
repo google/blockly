@@ -150,8 +150,12 @@ Blockly.ButtonInput.prototype.getValue = function () {
   return this.KEY_CODE;
 };
 
-Blockly.ButtonInput.prototype.getDisplayText_ = function () {
-  switch (this.KEY_CODE) {
+Blockly.ButtonInput.prototype.getDisplayText_ = function (optValue) {
+  if (!optValue) {
+    var optValue = this.KEY_CODE;
+  }
+
+  switch (optValue) {
     case 'KEYCODE_SPACEBAR':
       return Blockly.Msg.SPACEBAR;
     case 'KEYCODE_UP':
@@ -164,7 +168,7 @@ Blockly.ButtonInput.prototype.getDisplayText_ = function () {
       return Blockly.Msg.RIGHT;
     default:
       // Lowercase this so caps lock doesn't affect things
-      return this.KEY_CODE.toLowerCase();
+      return optValue.toLowerCase();
   }
 };
 

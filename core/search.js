@@ -41,6 +41,9 @@ Blockly.Search = function (workspace) {
 
   // Initializes a trie. The trie is the way blocks are stored for quick search results.
   this.blockTrie_ = new Blockly.Trie();
+
+  // Initialize a key-value dictionary which holds the block-keyword connection in reverse to the trie. This is used for easier de-registering of blocks in onBlockRemoved
+  this.blocksAdded_ = {};
 };
 
 /**
@@ -94,11 +97,20 @@ Blockly.Search.prototype.onBlockAdded = function (type, val) {
     Blockly.Blocks[type].ensureSearchKeywords();
 
     // If there are any keywords, add them to the trie. Otherwise, warn in the console.
-    if (Blockly.Blocks[type].SearchKeywords) {
-      var keys = Blockly.Blocks[type].SearchKeywords;
+    if (Blockly.Blocks[type].StaticSearchKeywords) {
+      var keys = Blockly.Blocks[type].StaticSearchKeywords;
+
+      // See if the block has been initialized before
+      if (!this.blocksAdded_[val]) {
+        this.blocksAdded_[val] = [];
+      }
 
       for (var j = 0; j < keys.length; j++) {
+        // Add a keyword to the search trie
         this.addToTrie(keys[j], val);
+
+        // Add the reverse information as well, i.e. add the keyword to the block's list of keywords
+        this.blocksAdded_[val].push(keys[j]);
       }
     } else {
       console.warn('Keywords not found for block ' + type);
@@ -116,12 +128,15 @@ Blockly.Search.prototype.onBlockAdded = function (type, val) {
  */
 Blockly.Search.prototype.onBlockRemoved = function (type, val) {
   // If the block has any keywords, get them and remove all of their references to the block from the trie
-  if (Blockly.Blocks[type].SearchKeywords) {
-    var keys = Blockly.Blocks[type].SearchKeywords;
+  if (this.blocksAdded_[val]) {
+    var keys = this.blocksAdded_[val];
 
     for (var j = 0; j < keys.length; j++) {
       this.removeFromTrie(keys[j], val);
     }
+
+    // Reset the list of keywords for this block
+    delete this.blocksAdded_[val];
   }
 };
 
@@ -203,17 +218,29 @@ Blockly.Search.prototype.clearAll = function () {
  * exess whitespaces and other symbols.
  *
  * @param {!String} blockType The block's type ID, e.g. "fable_play_sound".
- * @param {!Array<String>} keywordList A list of all strings associated with the
+ * @param {!Array<String>} staticKeywords A list of all strings associated with the
  * block. Might have multiple words in a single element.
+ * @param {!Array<String>} extraToolboxKeywords A list of extra strings that will be added to the toolbox search words.
+ * These are for example, shadow blocks attached to the toolbox block, and all dropdown options.
  */
-Blockly.Search.preprocessSearchKeywords = function (blockType, keywordList) {
+Blockly.Search.preprocessSearchKeywords = function (blockType, staticKeywords, extraToolboxKeywords) {
   // If the list is already initialized, we are done here
-  if (Blockly.Blocks[blockType].SearchKeywords && Blockly.Blocks[blockType].SearchKeywords.length > 0) {
+  if (!Blockly.Blocks[blockType].StaticSearchKeywords || Blockly.Blocks[blockType].StaticSearchKeywords.length === 0) {
+    Blockly.Blocks[blockType].StaticSearchKeywords = [];
+    Blockly.Search.initStaticKeywords(staticKeywords, Blockly.Blocks[blockType].StaticSearchKeywords);
+  }
+
+  if (!extraToolboxKeywords) {
     return;
   }
 
-  Blockly.Blocks[blockType].SearchKeywords = [];
+  if (!Blockly.Blocks[blockType].StaticToolboxSearchKeywords || Blockly.Blocks[blockType].StaticToolboxSearchKeywords.length === 0) {
+    Blockly.Blocks[blockType].StaticToolboxSearchKeywords = [];
+    Blockly.Search.initStaticKeywords(extraToolboxKeywords, Blockly.Blocks[blockType].StaticToolboxSearchKeywords);
+  }
+};
 
+Blockly.Search.initStaticKeywords = function (keywordList, arrayToUse) {
   // Go through the provided list of words/sentences
   for (let i = 0; i < keywordList.length; i++) {
     // Try to decode a string. Used for the blocks that are defined in JSON (e.g. blocks/lists.js), where strings are defined in a different way - the "%{BKY_" prefix. Will not decode the string if the prefix isn't there.
@@ -234,7 +261,7 @@ Blockly.Search.preprocessSearchKeywords = function (blockType, keywordList) {
 
       // Add the keyword to the block's keywords
       if (text && text !== '') {
-        Blockly.Blocks[blockType].SearchKeywords.push(text);
+        arrayToUse.push(text);
       }
     }
   }
@@ -247,8 +274,12 @@ Blockly.Search.onLanguageChange = function () {
     for (let i = 0; i < keys.length; i++) {
       const singleKey = keys[i];
 
-      if (Blockly.Blocks[singleKey].SearchKeywords) {
-        Blockly.Blocks[singleKey].SearchKeywords.length = 0;
+      if (Blockly.Blocks[singleKey].StaticSearchKeywords) {
+        Blockly.Blocks[singleKey].StaticSearchKeywords.length = 0;
+      }
+
+      if (Blockly.Blocks[singleKey].StaticToolboxSearchKeywords) {
+        Blockly.Blocks[singleKey].StaticToolboxSearchKeywords.length = 0;
       }
     }
   }

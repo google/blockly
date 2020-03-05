@@ -254,6 +254,7 @@ Blockly.InsertionMarkerManager.prototype.createMarkerBlock_ = function(sourceBlo
       }
     }
     result.setCollapsed(sourceBlock.isCollapsed());
+    result.setInputsInline(sourceBlock.getInputsInline());
     // Copy field values from the other block.  These values may impact the
     // rendered size of the insertion marker.  Note that we do not care about
     // child blocks here.

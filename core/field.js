@@ -852,7 +852,10 @@ Blockly.Field.prototype.setValue = function(newValue) {
     return;
   }
 
-  if (this.sourceBlock_ && Blockly.Events.isEnabled()) {
+  if (this.sourceBlock_ &&
+      !this.sourceBlock_.disposed &&
+      Blockly.Events.isEnabled()
+  ) {
     Blockly.Events.fire(new Blockly.Events.BlockChange(
         this.sourceBlock_, 'field', this.name || null, oldValue, newValue));
   }

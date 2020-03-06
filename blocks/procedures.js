@@ -299,7 +299,7 @@ Blockly.Blocks['procedures_defnoreturn'] = {
 
     // Should always be false, because this is triggered
     // by an edit inside of the mutator.
-    if (!this.mutator || !this.mutator.isVisible) {
+    if (!this.mutator || !this.mutator.isVisible()) {
       return;
     }
 
@@ -308,7 +308,8 @@ Blockly.Blocks['procedures_defnoreturn'] = {
     var argXml = this.createArgXml_(newName, newId);
     var newBlock = Blockly.Xml.domToBlock(argXml, mutatorWorkspace);
     // Connect new on top of old.
-    oldBlock.previousConnection.connect(newBlock.nextConnection);
+    oldBlock.previousConnection.targetConnection
+        .connect(newBlock.previousConnection);
     oldBlock.dispose(true);
   },
 
@@ -325,13 +326,16 @@ Blockly.Blocks['procedures_defnoreturn'] = {
     if (index == -1) {
       return;  // Not on this block.
     }
-    var varName = variable.name;
-    if (name == this.arguments[index]) {
-      console.log('true');
+    this.arguments_[index] = variable.name;  // Must be updated before display.
+    this.updateParams_();  // Might be updated by compose, but just in case.
+
+    if (!this.mutator || !this.mutator.isVisible()) {
       return;
     }
-    this.arguments_[index] = varName;  // Must be updated before display.
 
+    var mutatorWorkspace = this.mutator.workspace_;
+    var block = mutatorWorkspace.getBlockById(variable.getId());
+    block.setFieldValue(variable.name, 'NAME');
   },
 
   createArgXml_: function(varName, varId) {
@@ -347,27 +351,6 @@ Blockly.Blocks['procedures_defnoreturn'] = {
     return xml;
   },
 
-  /**
-   * Update the display to reflect a newly renamed argument.
-   * @param {string} oldName The old display name of the argument.
-   * @param {string} newName The new display name of the argument.
-   * @private
-   * @this {Blockly.Block}
-   */
-  displayRenamedVar_: function(oldName, newName) {
-    this.updateParams_();
-    if (!this.mutator || !this.mutator.isVisible) {
-      return;
-    }
-
-    var blocks = this.mutator.workspace_.getAllBlocks(false);
-    for (var i = 0, block; (block = blocks[i]); i++) {
-      if (block.type == 'procedures_mutatorarg' &&
-          Blockly.Names.equals(oldName, block.getFieldValue('NAME'))) {
-        block.setFieldValue(newName, 'NAME');
-      }
-    }
-  },
   /**
    * Add custom menu options to this block's context menu.
    * @param {!Array} options List of menu options to add to.
@@ -467,7 +450,6 @@ Blockly.Blocks['procedures_defreturn'] = {
   getVarModels: Blockly.Blocks['procedures_defnoreturn'].getVarModels,
   renameVarById: Blockly.Blocks['procedures_defnoreturn'].renameVarById,
   updateVarName: Blockly.Blocks['procedures_defnoreturn'].updateVarName,
-  displayRenamedVar_: Blockly.Blocks['procedures_defnoreturn'].displayRenamedVar_,
   customContextMenu: Blockly.Blocks['procedures_defnoreturn'].customContextMenu,
   callType_: 'procedures_callreturn'
 };
@@ -751,7 +733,39 @@ Blockly.Blocks['procedures_callnoreturn'] = {
     return this.argumentVarModels_;
   },
 
+  /**
+   * Notification that a variable was renamed to the same name as an existing
+   * variable. These variables are coalescing into a single variable with the
+   * ID of the variable that was already using the name.
+   * @param {string} oldId The ID of the variable that was renamed.
+   * @param {string} newId The ID of the variable that was already using
+   *     the name.
+   */
+  renameVarById: function(oldId, newId) {
+    var index = this.varIds_.indexOf(oldId);
+    if (index == -1) {
+      return;  // Not on this block.
+    }
 
+    var newVar = this.workspace.getVariableById(newId);
+    var newName = newVar.name;
+    this.setFieldValue(newName, 'ARGNAME' + index);
+
+    this.varIds_[index] = newId;
+    this.arguments_[index] = newName;
+    this.argumentVarModels_[index] = newVar;
+  },
+
+  updateVarName: function(variable) {
+    var id = variable.getId();
+    var index = this.varIds_.indexOf(id);
+    if (index == -1) {
+      return;  // Not on this block.
+    }
+    var name = variable.name;
+    this.setFieldValue(name, 'ARGNAME' + index);
+    this.arguments_[index] = name;
+  },
 
   /**
    * Procedure calls cannot exist without the corresponding procedure

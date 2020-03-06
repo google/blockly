@@ -65,6 +65,7 @@
 <script src="../blocks/variables_dynamic.js"></script>
 <script src="../blocks/procedures.js"></script>
 <script src="blocks/test_blocks.js"></script>
+<script src="themes/test_themes.js"></script>
 <script src="./playgrounds/screenshot.js"></script>
 
 <script>
@@ -151,6 +152,7 @@ function start() {
   workspace.configureContextMenu = configureContextMenu;
   addToolboxButtonCallbacks();
   addRenderDebugOptionsCheckboxes();
+  populateTestThemes();
   // Restore previously displayed text.
   if (sessionStorage) {
     var text = sessionStorage.getItem('textarea');
@@ -358,7 +360,12 @@ function changeTheme() {
   } else if (theme.value === "zelos") {
     Blockly.getMainWorkspace().setTheme(Blockly.Themes.Zelos);
   } else {
-    Blockly.getMainWorkspace().setTheme(Blockly.Themes.Classic);
+    var testTheme = getTestTheme(theme.value);
+    if (testTheme) {
+      Blockly.getMainWorkspace().setTheme(testTheme);
+    } else {
+      Blockly.getMainWorkspace().setTheme(Blockly.Themes.Classic);
+    }
   }
 }
 

@@ -61,8 +61,17 @@ Blockly.Theme = function(name, blockStyles, categoryStyles,
   /**
    * The font style.
    * @type {?Blockly.Theme.FontStyle}
+   * @package
    */
   this.fontStyle = null;
+
+  /**
+   * Whether or not to add a 'hat' on top of all blocks with no previous or
+   * output connections.
+   * @type {?boolean}
+   * @package
+   */
+  this.startHats = null;
 };
 
 /**
@@ -119,6 +128,15 @@ Blockly.Theme.prototype.setCategoryStyle = function(categoryStyleName,
 */
 Blockly.Theme.prototype.setFontStyle = function(fontStyle) {
   this.fontStyle = fontStyle;
+};
+
+/**
+ * Configure a theme's start hats.
+ * @param {boolean} startHats True if the theme enables start hats, false
+ *     otherwise.
+*/
+Blockly.Theme.prototype.setStartHats = function(startHats) {
+  this.startHats = startHats;
 };
 
 /**

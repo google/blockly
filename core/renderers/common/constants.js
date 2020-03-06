@@ -43,6 +43,13 @@ Blockly.blockRendering.ConstantProvider = function() {
   this.DYNAMICALLY_SET_STRING_ = '';
 
   /**
+   * A placeholder value for boolean constants that are dynamically set.
+   * @type {boolean}
+   * @protected
+   */
+  this.DYNAMICALLY_SET_BOOLEAN_ = false;
+
+  /**
    * The size of an empty spacer.
    * @type {number}
    */
@@ -195,7 +202,7 @@ Blockly.blockRendering.ConstantProvider = function() {
    * connections. Can be overridden by 'hat' property on Theme.BlockStyle.
    * @type {boolean}
    */
-  this.ADD_START_HATS = false;
+  this.ADD_START_HATS = this.DYNAMICALLY_SET_BOOLEAN_;
 
   /**
    * Height of the top hat.
@@ -605,6 +612,8 @@ Blockly.blockRendering.ConstantProvider.prototype.setDynamicProperties_ =
     function(theme) {
     /* eslint-disable indent */
   this.setFontConstants_(theme);
+
+  this.ADD_START_HATS = theme.startHats != null ? theme.startHats : false;
 }; /* eslint-enable indent */
 
 /**

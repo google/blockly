@@ -407,8 +407,10 @@ Blockly.zelos.ConstantProvider.prototype.init = function() {
 /**
  * @override
  */
-Blockly.zelos.ConstantProvider.prototype.setTheme = function(theme) {
-  Blockly.zelos.ConstantProvider.superClass_.setTheme.call(this, theme);
+Blockly.zelos.ConstantProvider.prototype.setDynamicProperties_ = function(
+    theme) {
+  Blockly.zelos.ConstantProvider.superClass_.setDynamicProperties_.call(this,
+      theme);
 
   this.SELECTED_GLOW_COLOUR =
       theme.getComponentStyle('selectedGlowColour') ||

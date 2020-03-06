@@ -30,7 +30,7 @@ Blockly.Component = function() {
   /**
    * Whether the component is rendered right-to-left.
    * @type {boolean}
-   * @private
+   * @protected
    */
   this.rightToLeft_ = Blockly.Component.defaultRightToLeft;
 
@@ -494,17 +494,6 @@ Blockly.Component.prototype.addChildAt = function(child, index, opt_render) {
  */
 Blockly.Component.prototype.getContentElement = function() {
   return this.element_;
-};
-
-/**
- * Returns true if the component is rendered right-to-left, false otherwise.
- * The first time this function is invoked, the right-to-left rendering property
- * is set if it has not been already.
- * @return {boolean} Whether the control is rendered right-to-left.
- * @protected
- */
-Blockly.Component.prototype.isRightToLeft = function() {
-  return this.rightToLeft_;
 };
 
 /**

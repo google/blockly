@@ -45,7 +45,7 @@ suite('Navigation', function() {
         }
       };
 
-      this.firstCategory_ = this.workspace.getToolbox().tree_.firstChild_;
+      this.firstCategory_ = this.workspace.getToolbox().tree_.getChildAt(0);
       this.secondCategory_ = this.firstCategory_.getNextShownNode();
     });
 
@@ -248,7 +248,7 @@ suite('Navigation', function() {
       }]);
       this.workspace = createNavigationWorkspace(true);
       this.basicBlock = this.workspace.newBlock('basic_block');
-      this.firstCategory_ = this.workspace.getToolbox().tree_.firstChild_;
+      this.firstCategory_ = this.workspace.getToolbox().tree_.getChildAt(0);
       this.mockEvent = {
         getModifierState: function() {
           return false;

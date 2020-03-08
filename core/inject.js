@@ -394,15 +394,9 @@ Blockly.init_ = function(mainWorkspace) {
   } else {
     mainWorkspace.setMetrics({x: 0.5, y: 0.5});
   }
-
   // Load the sounds.
   if (options.hasSounds) {
     Blockly.inject.loadSounds_(options.pathToMedia, mainWorkspace);
-  }
-
-  // Load the sounds.
-  if (options.hasField) {
-    Blockly.inject.loadFields_(options.pathToMedia, mainWorkspace);
   }
 };
 

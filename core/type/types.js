@@ -18,7 +18,7 @@
 /**
  * @fileoverview Blockly Types declarations and helper functions to identify
  * types.
- * @author @carlosperate (Carlos Pereira Atencio)
+ * @author @carlosperate (Carlos Pereira Atencio) modified by Vittascience.com
  */
 'use strict';
 
@@ -174,10 +174,6 @@ Blockly.Types.getValidTypeArray = function() {
 };
 
 /**
- * VITTAWARNING _ added to get type of variables
- */
-
-/**
 * Return type defined in BLocklys.Types with the typeId
 * @param {String} typeId
 * @return {Blockly.Type} type
@@ -214,10 +210,6 @@ Blockly.Types.getChildBlockType = function(child) {
       return Blockly.Types.CHILD_BLOCK_MISSING;
   }
 };
-
-/**
- * END VITTAWARNING
- */
 
 /**
  * Regular expressions to identify an integer.

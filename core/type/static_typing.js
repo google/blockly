@@ -19,7 +19,7 @@
  * @fileoverview Object that defines static objects and methods to assign
  * Blockly types to Blockly blocks. These can then be converted to language
  * specific types in each language generator.
- * @author @carlosperate (Carlos Pereira Atencio)
+ * @author @carlosperate (Carlos Pereira Atencio) modified by Vittascience.com
  */
 'use strict';
 

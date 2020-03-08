@@ -177,10 +177,6 @@ Blockly.Variables.flyoutCategoryBlocks = function(workspace) {
       xmlList.push(block);
     }
 
-    /**
-     * VITTAWARNING - dynamic blocks added in variable category
-     **/
-
     // Addition of the variables_increment block in the xml variable category
     if (Blockly.Blocks['variables_increment']) {
       var block = Blockly.utils.xml.createElement('block');
@@ -196,6 +192,7 @@ Blockly.Variables.flyoutCategoryBlocks = function(workspace) {
       block.appendChild(value);
       xmlList.push(block);
     }
+
     // Addition of the variables_set_type block in the xml variable category
     if (Blockly.Blocks['variables_set']) {
       var block = Blockly.utils.xml.createElement('block');
@@ -209,10 +206,6 @@ Blockly.Variables.flyoutCategoryBlocks = function(workspace) {
       block.appendChild(value);
       xmlList.push(block);
     }
-
-    /**
-     * END VITTAWARNING
-     **/
 
     // Addition of the variables_get block in the xml variable category for all variables
     if (Blockly.Blocks['variables_get']) {

@@ -290,10 +290,6 @@ Blockly.Tooltip.show_ = function() {
   // Get the new text.
   var tip = Blockly.Tooltip.element_.tooltip;
 
-  /**
-   * VITTAWARNING - add image in tooltip
-   */
-
   // Check if tooltip is array
   if (tip.length != 0) {
     // use SEPARATOR to get image path separatly
@@ -305,10 +301,6 @@ Blockly.Tooltip.show_ = function() {
         tip = tipSlitted.join(Blockly.Tooltip.SEP)
     }
   }
-
-  /**
-   * END VITTAWARNING
-   */
 
   while (typeof tip == 'function') {
     tip = tip();

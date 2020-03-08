@@ -34,6 +34,10 @@ goog.provide('Blockly.Tooltip');
 
 goog.require('Blockly.utils.string');
 
+/**
+ * It's the separator for module tooltip.
+ */
+Blockly.Tooltip.SEP = "&&SEPARATOR&&";
 
 /**
  * Is a tooltip currently showing?
@@ -285,6 +289,19 @@ Blockly.Tooltip.show_ = function() {
   Blockly.Tooltip.DIV.innerHTML = '';
   // Get the new text.
   var tip = Blockly.Tooltip.element_.tooltip;
+
+  // Check if tooltip is array
+  if (tip.length != 0) {
+    // use SEPARATOR to get image path separatly
+    let tipSlitted = tip.split(Blockly.Tooltip.SEP);
+    if (tipSlitted.length > 1) {
+        // Set HTML image 
+        Blockly.Tooltip.DIV.innerHTML = "<div style='text-align: center'> <img height='145' src=" + tipSlitted[0] + ">";
+        tipSlitted.splice(0, 1)
+        tip = tipSlitted.join(Blockly.Tooltip.SEP)
+    }
+  }
+
   while (typeof tip == 'function') {
     tip = tip();
   }

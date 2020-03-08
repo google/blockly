@@ -171,17 +171,18 @@ Blockly.Variables.flyoutCategoryBlocks = function(workspace) {
     if (Blockly.Blocks['variables_set']) {
       var block = Blockly.utils.xml.createElement('block');
       block.setAttribute('type', 'variables_set');
-      block.setAttribute('gap', Blockly.Blocks['math_change'] ? 8 : 24);
+      block.setAttribute('gap', Blockly.Blocks['variables_increment'] ? 8 : 24);
       block.appendChild(
           Blockly.Variables.generateVariableFieldDom(mostRecentVariable));
       xmlList.push(block);
     }
-    if (Blockly.Blocks['math_change']) {
+
+    // Addition of the variables_increment block in the xml variable category
+    if (Blockly.Blocks['variables_increment']) {
       var block = Blockly.utils.xml.createElement('block');
-      block.setAttribute('type', 'math_change');
+      block.setAttribute('type', 'variables_increment');
       block.setAttribute('gap', Blockly.Blocks['variables_get'] ? 20 : 8);
-      block.appendChild(
-          Blockly.Variables.generateVariableFieldDom(mostRecentVariable));
+      block.appendChild(Blockly.Variables.generateVariableFieldDom(mostRecentVariable));
       var value = Blockly.Xml.textToDom(
           '<value name="DELTA">' +
           '<shadow type="math_number">' +
@@ -192,6 +193,21 @@ Blockly.Variables.flyoutCategoryBlocks = function(workspace) {
       xmlList.push(block);
     }
 
+    // Addition of the variables_set_type block in the xml variable category
+    if (Blockly.Blocks['variables_set']) {
+      var block = Blockly.utils.xml.createElement('block');
+      block.setAttribute('type', 'variables_set');
+      block.setAttribute('gap', Blockly.Blocks['variables_get'] ? 24 : 8);
+      block.appendChild(Blockly.Variables.generateVariableFieldDom(mostRecentVariable));
+      var value = Blockly.Xml.textToDom(
+          '<value name="VALUE">' +
+          '<block type="variables_set_type"></block>' +
+          '</value>');
+      block.appendChild(value);
+      xmlList.push(block);
+    }
+
+    // Addition of the variables_get block in the xml variable category for all variables
     if (Blockly.Blocks['variables_get']) {
       variableModelList.sort(Blockly.VariableModel.compareByName);
       for (var i = 0, variable; (variable = variableModelList[i]); i++) {

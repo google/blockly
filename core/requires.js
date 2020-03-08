@@ -42,6 +42,10 @@ goog.require('Blockly.FlyoutButton');
 // Should not be required when using advanced compilation since
 // individual generator files should already have this require.
 goog.require('Blockly.Generator');
+// Static typing is needed for typed variables
+goog.require('Blockly.Type');
+goog.require('Blockly.Types');
+goog.require('Blockly.StaticTyping');
 // If the toolbox does not have categories and only has a simple flyout, then
 // 'Blockly.Toolbox' is not needed.
 goog.require('Blockly.Toolbox');
@@ -73,7 +77,8 @@ goog.require('Blockly.FieldTextInput');
 goog.require('Blockly.FieldMultilineInput');
 goog.require('Blockly.FieldNumber');
 goog.require('Blockly.FieldVariable');
-
+goog.require('plusMinus.FieldMinus');
+goog.require('plusMinus.FieldPlus');
 // If you'd like to include the date field in your build, you will also need to
 // include the closure library as a build dependency.  You can do so by running:
 //     gulp build-compressed --closure-library
@@ -94,9 +99,9 @@ goog.require('Blockly.zelos.Renderer');
 
 // Blockly Themes.
 // Classic is the default theme.
-goog.require('Blockly.Themes.Classic');
-goog.require('Blockly.Themes.Dark');
-goog.require('Blockly.Themes.Deuteranopia');
-goog.require('Blockly.Themes.HighContrast');
-goog.require('Blockly.Themes.Tritanopia');
-// goog.require('Blockly.Themes.Modern');
+//goog.require('Blockly.Themes.Classic');
+//goog.require('Blockly.Themes.Dark');
+//goog.require('Blockly.Themes.Deuteranopia');
+//goog.require('Blockly.Themes.HighContrast');
+//goog.require('Blockly.Themes.Tritanopia');
+//goog.require('Blockly.Themes.Modern');

@@ -111,7 +111,6 @@ Blockly.Types.NUMBER.addCompatibleTypes([
     Blockly.Types.BOOLEAN,
     Blockly.Types.SHORT_NUMBER,
     Blockly.Types.LARGE_NUMBER,
-    Blockly.Types.DECIMAL
 ]);
 
 Blockly.Types.SHORT_NUMBER.addCompatibleTypes([
@@ -191,16 +190,13 @@ Blockly.Types.getTypeWithId = function(id) {
 };
 
 /**
-* Return name of first variable from block 'variables_get' or 'variables_set'
+* Return name of first variable from block containing field variables
 * @param {Blockly.Block} block
+* @param {int} row
 * @return {String} varName
 */
-Blockly.Types.getVariableNameByBlock = function(block) {
-  if (block.type == 'variables_get') 
-      return block.inputList[0].fieldRow[0].variable_.name
-  if (block.type == 'variables_set') 
-      return block.inputList[0].fieldRow[1].variable_.name
-  throw  "Invalid input block to get name of first variable \n\t at Blockly.Types.getVariableNameByBlock()"
+Blockly.Types.getFieldVariableNameByBlock = function(block, row) {
+      return block.inputList[0].fieldRow[row].variable_.name;
 };
   
 /**
@@ -209,13 +205,11 @@ Blockly.Types.getVariableNameByBlock = function(block) {
 * @return {Blockly.Type}
 */
 Blockly.Types.getChildBlockType = function(child) {
-  if (child.type == 'variables_set') {
-      return child.getVarType();
+  if (child.outputConnection && child.outputConnection.check_) {
+    var typeCheck = child.outputConnection.check_[0];
+    return Blockly.Types.getTypeWithId(typeCheck);
   } else if (child.getBlockType) {
       return child.getBlockType();
-  } else if (child.outputConnection && child.outputConnection.check_) {
-      var typeCheck = child.outputConnection.check_[0];
-      return Blockly.Types.getTypeWithId(typeCheck);
   } else {
       return Blockly.Types.CHILD_BLOCK_MISSING;
   }

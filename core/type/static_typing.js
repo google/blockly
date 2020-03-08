@@ -37,6 +37,8 @@ goog.require('Blockly.Workspace');
 Blockly.StaticTyping = function() {
   this.varTypeDict = Object.create(null);
   this.pendingVarTypeDict = Object.create(null);
+  this.functionVars = Object.create(null);
+  this.listVars = Object.create(null);
 };
 
 /**
@@ -77,6 +79,61 @@ Blockly.StaticTyping.prototype.collectVarsWithTypes = function(workspace) {
     }
   }
   return this.varTypeDict;
+};
+
+/**
+ * Navigates through all the statement blocks, collecting all variables and
+ * indicates the function in case its a function arg, else return null.
+ * @param {Blockly.Workspace} workspace Blockly Workspace to collect variables.
+ * @return {Object{ String: Blockly.Type, } Associative array with the variable
+ *     names as the keys and the function name as the values.
+ */
+Blockly.StaticTyping.prototype.collectFunctionVars = function(workspace) {
+  this.functionVars = Object.create(null);
+  var blocks = Blockly.StaticTyping.getAllStatementsOrdered(workspace);
+  for (var i = 0; i < blocks.length; i++) {
+      var blockVarAndTypes = Blockly.StaticTyping.getBlockVars(blocks[i]);
+      for (var j = 0; j < blockVarAndTypes.length; j++) {
+          var variableId = blockVarAndTypes[j][0];
+          if (blocks[i].type=='procedures_defreturn') {
+              var funcName = blocks[i].inputList[0].fieldRow[2].value_;
+              this.functionVars[variableId] = funcName
+          }
+          else this.functionVars[variableId] = null
+      }
+  }
+  return this.functionVars
+};
+
+/**
+ * Navigates through all the statement blocks, collecting all variables and
+ * indicates the list in case its a list variable, else return null.
+ * @param {Blockly.Workspace} workspace Blockly Workspace to collect variables.
+ * @return {Object{ String: Blockly.Type, } Associative array with the variable
+ *     names as the keys and the list name as the values.
+ */
+Blockly.StaticTyping.prototype.collectListsId = function(workspace) {
+  this.listVars = Object.create(null);
+  var blocks = Blockly.StaticTyping.getAllStatementsOrdered(workspace);
+  for (var i = 0; i < blocks.length; i++) {
+    var blockVarAndTypes = Blockly.StaticTyping.getBlockVars(blocks[i]);
+    for (var j = 0; j < blockVarAndTypes.length; j++) {
+        var variableId = blockVarAndTypes[j][0];
+        if (blocks[i].type=='variables_set') {
+            var variableName = workspace.getVariableById(variableId ).name;
+            var child = blocks[i].childBlocks_[0];
+            var listName = Blockly.Types.getFieldVariableNameByBlock(blocks[i], 1);
+            if (listName == variableName) {
+                if (child && (child.type == 'lists_create_with' || child.type == 'lists_repeat')) {
+                    this.listVars[variableId] = listName;
+                }
+                else this.listVars[variableId] = null
+            }            
+        }
+        else this.listVars[variableId] = null
+    }
+  }
+  return this.listVars
 };
 
 /**
@@ -209,12 +266,13 @@ Blockly.StaticTyping.prototype.setBlockTypeWarning =
     // User still has to attach a block to this variable or its first
     // declaration, so for now do not display any warning
     block.setWarningText(null, warningLabel);
-  } else if ((this.varTypeDict[varName] !== blockType) &&
-             (blockType !== Blockly.Types.UNDEF)) {
-    block.setWarningText('The variable ' + varName + ' has been first ' +
-        'assigned to the "' + this.varTypeDict[varName].typeName + '" type\n' +
-        'and this block tries to assign the type "' + blockType.typeName + '"!',
-        warningLabel);
+  } else if (blockType !== Blockly.Types.UNDEF) {
+      if (this.varTypeDict[varName] !== blockType) {
+        block.setWarningText('The variable ' + varName + ' has been first ' +
+            'assigned to the "' + this.varTypeDict[varName].typeName + '" type\n' +
+            'and this block tries to assign the type "' + blockType.typeName + '"!',
+            warningLabel);
+      }
   } else {
     block.setWarningText(null, warningLabel);
   }

@@ -148,7 +148,6 @@ Blockly.WorkspaceSvg = function(options,
   /**
    * True if keyboard accessibility mode is on, false otherwise.
    * @type {boolean}
-   * @package
    */
   this.keyboardAccessibilityMode = false;
 };

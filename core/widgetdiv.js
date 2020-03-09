@@ -1,18 +1,7 @@
 /**
  * @license
  * Copyright 2013 Google LLC
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 /**
@@ -102,16 +91,19 @@ Blockly.WidgetDiv.show = function(newOwner, rtl, dispose) {
  * Destroy the widget and hide the div.
  */
 Blockly.WidgetDiv.hide = function() {
-  var div = Blockly.WidgetDiv.DIV;
-  if (Blockly.WidgetDiv.owner_) {
-    Blockly.WidgetDiv.owner_ = null;
-    div.style.display = 'none';
-    div.style.left = '';
-    div.style.top = '';
-    Blockly.WidgetDiv.dispose_ && Blockly.WidgetDiv.dispose_();
-    Blockly.WidgetDiv.dispose_ = null;
-    div.innerHTML = '';
+  if (!Blockly.WidgetDiv.isVisible()) {
+    return;
   }
+  Blockly.WidgetDiv.owner_ = null;
+
+  var div = Blockly.WidgetDiv.DIV;
+  div.style.display = 'none';
+  div.style.left = '';
+  div.style.top = '';
+  Blockly.WidgetDiv.dispose_ && Blockly.WidgetDiv.dispose_();
+  Blockly.WidgetDiv.dispose_ = null;
+  div.innerHTML = '';
+
   if (Blockly.WidgetDiv.rendererClassName_) {
     Blockly.utils.dom.removeClass(div, Blockly.WidgetDiv.rendererClassName_);
     Blockly.WidgetDiv.rendererClassName_ = null;

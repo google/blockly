@@ -1,18 +1,7 @@
 /**
  * @license
  * Copyright 2019 Google LLC
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 /**
@@ -56,6 +45,14 @@ Blockly.geras.HighlightConstantProvider = function(constants) {
    * @type {string}
    */
   this.START_POINT = Blockly.utils.svgPaths.moveBy(this.OFFSET, this.OFFSET);
+
+};
+
+/**
+ * Initialize shape objects based on the constants set in the constructor.
+ * @package
+ */
+Blockly.geras.HighlightConstantProvider.prototype.init = function() {
 
   /**
    * An object containing sizing and path information about inside corner
@@ -276,7 +273,9 @@ Blockly.geras.HighlightConstantProvider.prototype.makeJaggedTeeth = function() {
       Blockly.utils.svgPaths.moveBy(-10.2, 6.8) +
       Blockly.utils.svgPaths.lineTo(5.1, 2.6);
   return {
-    pathLeft: pathLeft
+    pathLeft: pathLeft,
+    height: 12,
+    width: 10.2
   };
 };
 

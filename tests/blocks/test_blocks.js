@@ -1,18 +1,7 @@
 /**
  * @license
  * Copyright 2017 Google LLC
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * SPDX-License-Identifier: Apache-2.0
  */
 'use strict';
 
@@ -1339,6 +1328,20 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     "colour": "#AAAAAA"
   }
 ]);  // END JSON EXTRACT (Do not delete this comment.)
+
+Blockly.Blocks['test_images_clickhandler'] = {
+  init: function() {
+    this.appendDummyInput()
+      .appendField("Image click handler")
+      .appendField(new Blockly.FieldImage(
+        "https://blockly-demo.appspot.com/static/tests/media/a.png", 32, 32,
+        "image with click handlder", this.onClick_), "IMAGE");
+    this.setStyle('text_blocks');
+  },
+  onClick_: function() {
+    alert('Image clicked');
+  }
+};
 
 Blockly.Blocks['test_validators_text_null'] = {
   init: function() {

@@ -1,18 +1,7 @@
 /**
  * @license
  * Copyright 2014 Google LLC
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 /**
@@ -139,13 +128,15 @@ Blockly.WorkspaceSvg = function(options,
       this.options.parentWorkspace.getThemeManager() :
       new Blockly.ThemeManager(this,
           this.options.theme || Blockly.Themes.Classic);
+  this.themeManager_.subscribeWorkspace(this);
 
   /**
    * The block renderer used for rendering blocks on this workspace.
    * @type {!Blockly.blockRendering.Renderer}
    * @private
    */
-  this.renderer_ = Blockly.blockRendering.init(this.options.renderer || 'geras');
+  this.renderer_ = Blockly.blockRendering.init(this.options.renderer || 'geras',
+      this.getTheme());
 
   /**
    * Cached parent SVG.
@@ -153,9 +144,6 @@ Blockly.WorkspaceSvg = function(options,
    * @private
    */
   this.cachedParentSvg_ = null;
-
-  this.themeManager_.subscribeWorkspace(this);
-  this.renderer_.getConstants().refreshTheme(this.getTheme());
 
   /**
    * True if keyboard accessibility mode is on, false otherwise.
@@ -407,6 +395,7 @@ Blockly.WorkspaceSvg.prototype.toolboxCategoryCallbacks_ = {};
  * Developers may define this function to add custom menu options to the
  * workspace's context menu or edit the workspace-created set of menu options.
  * @param {!Array.<!Object>} options List of menu options to add to.
+ * @param {!Event} e The right-click event that triggered the context menu.
  */
 Blockly.WorkspaceSvg.prototype.configureContextMenu;
 
@@ -527,7 +516,9 @@ Blockly.WorkspaceSvg.prototype.setTheme = function(theme) {
  * @package
  */
 Blockly.WorkspaceSvg.prototype.refreshTheme = function() {
-  this.getRenderer().getConstants().refreshTheme(this.getTheme());
+  if (this.svgGroup_) {
+    this.getRenderer().refresh(this.svgGroup_, this.getTheme());
+  }
 
   // Update all blocks in workspace that have a style name.
   this.updateBlockStyles_(this.getAllBlocks(false).filter(
@@ -754,8 +745,7 @@ Blockly.WorkspaceSvg.prototype.createDom = function(opt_backgroundClass) {
       new Blockly.Marker());
 
   var constants = this.getRenderer().getConstants();
-  constants.injectCSS(this.getRenderer().name);
-  constants.createDom(this.svgGroup_);
+  constants.createDom(this.svgGroup_, this.getRenderer().name);
   return this.svgGroup_;
 };
 
@@ -914,6 +904,7 @@ Blockly.WorkspaceSvg.prototype.addFlyout = function(tagName) {
     this.flyout_ = new Blockly.VerticalFlyout(workspaceOptions);
   }
   this.flyout_.autoClose = false;
+  this.flyout_.getWorkspace().setVisible(true);
 
   // Return the element so that callers can place it in their desired
   // spot in the DOM.  For example, mutator flyouts do not go in the same place
@@ -1160,6 +1151,10 @@ Blockly.WorkspaceSvg.prototype.getWidth = function() {
  * @param {boolean} isVisible True if workspace should be visible.
  */
 Blockly.WorkspaceSvg.prototype.setVisible = function(isVisible) {
+  this.isVisible_ = isVisible;
+  if (!this.svgGroup_) {
+    return;
+  }
 
   // Tell the scrollbar whether its container is visible so it can
   // tell when to hide itself.
@@ -1192,7 +1187,6 @@ Blockly.WorkspaceSvg.prototype.setVisible = function(isVisible) {
   } else {
     Blockly.hideChaff(true);
   }
-  this.isVisible_ = isVisible;
 };
 
 /**
@@ -1807,7 +1801,7 @@ Blockly.WorkspaceSvg.prototype.showContextMenu = function(e) {
 
   // Allow the developer to add or modify menuOptions.
   if (this.configureContextMenu) {
-    this.configureContextMenu(menuOptions);
+    this.configureContextMenu(menuOptions, e);
   }
 
   Blockly.ContextMenu.show(e, menuOptions, this.RTL);
@@ -2082,31 +2076,26 @@ Blockly.WorkspaceSvg.prototype.centerOnBlock = function(id) {
   // Workspace scale, used to convert from workspace coordinates to pixels.
   var scale = this.scale;
 
-  // Center in pixels.  0, 0 is at the workspace origin.  These numbers may
-  // be negative.
+  // Center of block in pixels, relative to workspace origin (center 0,0).
+  // Scrolling to here would put the block in the top-left corner of the
+  // visible workspace.
   var pixelX = blockCenterX * scale;
   var pixelY = blockCenterY * scale;
 
   var metrics = this.getMetrics();
-
-  // Scrolling to here would put the block in the top-left corner of the
-  // visible workspace.
-  var scrollToBlockX = pixelX - metrics.contentLeft;
-  var scrollToBlockY = pixelY - metrics.contentTop;
 
   // viewHeight and viewWidth are in pixels.
   var halfViewWidth = metrics.viewWidth / 2;
   var halfViewHeight = metrics.viewHeight / 2;
 
   // Put the block in the center of the visible workspace instead.
-  var scrollToCenterX = scrollToBlockX - halfViewWidth;
-  var scrollToCenterY = scrollToBlockY - halfViewHeight;
+  var scrollToCenterX = pixelX - halfViewWidth;
+  var scrollToCenterY = pixelY - halfViewHeight;
 
   // Convert from workspace directions to canvas directions.
-  var x = -scrollToCenterX - metrics.contentLeft;
-  var y = -scrollToCenterY - metrics.contentTop;
+  var x = -scrollToCenterX;
+  var y = -scrollToCenterY;
 
-  Blockly.hideChaff();
   this.scroll(x, y);
 };
 

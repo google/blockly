@@ -1,0 +1,16 @@
+#!/bin/bash
+
+# Script to deploy on GAE.
+
+APP=./app.yaml
+if ! [ -f $APP ] ; then
+   echo $APP not found 1>&2
+   exit 1
+fi
+
+PROJECT=blockly-demo
+VERSION=37
+
+echo 'Beginning deployment...'
+gcloud app deploy --project $PROJECT --version $VERSION --no-promote
+echo 'Deployment finished.'

@@ -1,18 +1,7 @@
 /**
  * @license
  * Copyright 2018 Google LLC
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 /**
@@ -68,26 +57,87 @@ Blockly.Theme = function(name, blockStyles, categoryStyles,
    * @private
    */
   this.componentStyles_ = opt_componentStyles || Object.create(null);
+
+  /**
+   * The font style.
+   * @type {?Blockly.Theme.FontStyle}
+   * @package
+   */
+  this.fontStyle = null;
+
+  /**
+   * Whether or not to add a 'hat' on top of all blocks with no previous or
+   * output connections.
+   * @type {?boolean}
+   * @package
+   */
+  this.startHats = null;
 };
 
 /**
  * A block style.
  * @typedef {{
-  *            colourPrimary:string,
-  *            colourSecondary:string,
-  *            colourTertiary:string,
-  *            hat:string
-  *          }}
-  */
+ *            colourPrimary:string,
+ *            colourSecondary:string,
+ *            colourTertiary:string,
+ *            hat:string
+ *          }}
+ */
 Blockly.Theme.BlockStyle;
 
 /**
  * A category style.
  * @typedef {{
-  *            colour:string
-  *          }}
-  */
+ *            colour:string
+ *          }}
+ */
 Blockly.Theme.CategoryStyle;
+
+/**
+ * A font style.
+ * @typedef {{
+ *            family:string?,
+ *            weight:string?,
+ *            size:number?
+ *          }}
+ */
+Blockly.Theme.FontStyle;
+
+/**
+ * Overrides or adds a style to the blockStyles map.
+ * @param {string} blockStyleName The name of the block style.
+ * @param {Blockly.Theme.BlockStyle} blockStyle The block style.
+*/
+Blockly.Theme.prototype.setBlockStyle = function(blockStyleName, blockStyle) {
+  this.blockStyles[blockStyleName] = blockStyle;
+};
+
+/**
+ * Overrides or adds a style to the categoryStyles map.
+ * @param {string} categoryStyleName The name of the category style.
+ * @param {Blockly.Theme.CategoryStyle} categoryStyle The category style.
+*/
+Blockly.Theme.prototype.setCategoryStyle = function(categoryStyleName,
+    categoryStyle) {
+  this.categoryStyles[categoryStyleName] = categoryStyle;
+};
+
+/**
+ * Configure a theme's font style.
+ * @param {Blockly.Theme.FontStyle} fontStyle The font style.
+*/
+Blockly.Theme.prototype.setFontStyle = function(fontStyle) {
+  this.fontStyle = fontStyle;
+};
+
+/**
+ * Configure a theme's start hats.
+ * @param {boolean} startHats True if the theme enables start hats, false
+ *     otherwise.
+*/
+Blockly.Theme.prototype.setStartHats = function(startHats) {
+  this.startHats = startHats;
+};
 
 /**
  * Gets the style for a given Blockly UI component.  If the style value is a

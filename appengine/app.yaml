@@ -1,8 +1,4 @@
-application: blockly-demo
-version: 20191014
-runtime: python27
-api_version: 1
-threadsafe: no
+runtime: python37
 
 handlers:
 # Redirect obsolete URLs.
@@ -19,29 +15,15 @@ handlers:
   static_files: redirect.html
   upload: redirect.html
 
-
-# Storage API.
-- url: /storage
-  script: storage.py
-  secure: always
-- url: /storage\.js
-  static_files: storage.js
-  upload: storage\.js
-  secure: always
-
 # Blockly files.
 - url: /static
   static_dir: static
   secure: always
 
-# Closure library for uncompressed Blockly.
-- url: /closure-library
-  static_dir: closure-library
-  secure: always
-
-# Redirect for root directory.
-- url: /
-  script: index_redirect.py
+# Storage API.
+- url: /storage\.js
+  static_files: storage.js
+  upload: storage\.js
   secure: always
 
 # Favicon.
@@ -64,24 +46,8 @@ handlers:
   upload: robots\.txt
   secure: always
 
-
-skip_files:
-# App Engine default patterns.
-- ^(.*/)?#.*#$
-- ^(.*/)?.*~$
-- ^(.*/)?.*\.py[co]$
-- ^(.*/)?.*/RCS/.*$
-- ^(.*/)?\..*$
-# Custom skip patterns.
-- ^static/appengine/.*$
-- ^static/demos/plane/soy/.+\.jar$
-- ^static/demos/plane/template.soy$
-- ^static/demos/plane/xlf/.*$
-- ^static/i18n/.*$
-- ^static/msg/json/.*$
-- ^.+\.soy$
-- ^closure-library/.*_test.html$
-- ^closure-library/.*_test.js$
-- ^closure-library/closure/bin/.*$
-- ^closure-library/doc/.*$
-- ^closure-library/scripts/.*$
+# Dynamic content.
+- url: /.*
+  script: auto
+  secure: always
+  

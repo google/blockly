@@ -1,18 +1,7 @@
 /**
  * @license
  * Copyright 2012 Google LLC
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 /**
@@ -205,7 +194,7 @@ Blockly.Field.prototype.getText_;
  *     clicked. Blockly will automatically set the field as clickable if this
  *     method is defined.
  * @param {Event=} opt_e Optional mouse event that triggered the field to open,
- *     or undefined if triggered programatically.
+ *     or undefined if triggered programmatically.
  * @return {void}
  * @protected
  */
@@ -321,10 +310,6 @@ Blockly.Field.prototype.initModel = function() {
  * @protected
  */
 Blockly.Field.prototype.createBorderRect_ = function() {
-  this.size_.height =
-      Math.max(this.size_.height, this.constants_.FIELD_BORDER_RECT_HEIGHT);
-  this.size_.width =
-      Math.max(this.size_.width, this.constants_.FIELD_BORDER_RECT_X_PADDING * 2);
   this.borderRect_ = /** @type {!SVGRectElement} **/
       (Blockly.utils.dom.createSvgElement('rect',
           {
@@ -345,24 +330,12 @@ Blockly.Field.prototype.createBorderRect_ = function() {
  * @protected
  */
 Blockly.Field.prototype.createTextElement_ = function() {
-  var xOffset = this.borderRect_ ?
-    this.constants_.FIELD_BORDER_RECT_X_PADDING : 0;
-  var baselineCenter = this.constants_.FIELD_TEXT_BASELINE_CENTER;
-  var baselineY = this.constants_.FIELD_TEXT_BASELINE_Y;
-  this.size_.height = Math.max(this.size_.height, baselineCenter ?
-      this.constants_.FIELD_TEXT_HEIGHT : baselineY);
-  if (this.size_.height > this.constants_.FIELD_TEXT_HEIGHT) {
-    baselineY += (this.size_.height - baselineY) / 2;
-  }
   this.textElement_ = /** @type {!SVGTextElement} **/
       (Blockly.utils.dom.createSvgElement('text',
           {
             'class': 'blocklyText',
-            'y': baselineCenter ? this.size_.height / 2 : baselineY,
-            'dy': this.constants_.FIELD_TEXT_Y_OFFSET,
-            'x': xOffset
           }, this.fieldGroup_));
-  if (baselineCenter) {
+  if (this.constants_.FIELD_TEXT_BASELINE_CENTER) {
     this.textElement_.setAttribute('dominant-baseline', 'central');
   }
   this.textContent_ = document.createTextNode('');
@@ -598,14 +571,14 @@ Blockly.Field.prototype.applyColour = function() {
 Blockly.Field.prototype.render_ = function() {
   if (this.textContent_) {
     this.textContent_.nodeValue = this.getDisplayText_();
-    this.updateSize_();
   }
+  this.updateSize_();
 };
 
 /**
  * Show an editor when the field is clicked only if the field is clickable.
  * @param {Event=} opt_e Optional mouse event that triggered the field to open,
- *     or undefined if triggered programatically.
+ *     or undefined if triggered programmatically.
  * @package
  */
 Blockly.Field.prototype.showEditor = function(opt_e) {
@@ -630,21 +603,72 @@ Blockly.Field.prototype.updateWidth = function() {
 
 /**
  * Updates the size of the field based on the text.
+ * @param {number=} opt_margin margin to use when positioning the text element.
  * @protected
  */
-Blockly.Field.prototype.updateSize_ = function() {
-  var textWidth = Blockly.utils.dom.getFastTextWidth(
-      /** @type {!SVGTextElement} */ (this.textElement_),
-      this.constants_.FIELD_TEXT_FONTSIZE,
-      this.constants_.FIELD_TEXT_FONTWEIGHT,
-      this.constants_.FIELD_TEXT_FONTFAMILY);
-  var totalWidth = textWidth;
-  if (this.borderRect_) {
-    totalWidth += this.constants_.FIELD_BORDER_RECT_X_PADDING * 2;
-    this.borderRect_.setAttribute('width', totalWidth);
+Blockly.Field.prototype.updateSize_ = function(opt_margin) {
+  var constants = this.constants_;
+  var xOffset = opt_margin != undefined ? opt_margin :
+      (this.borderRect_ ? this.constants_.FIELD_BORDER_RECT_X_PADDING : 0);
+  var totalWidth = xOffset * 2;
+  var totalHeight = constants.FIELD_TEXT_HEIGHT;
+
+  var contentWidth = 0;
+  if (this.textElement_) {
+    contentWidth = Blockly.utils.dom.getFastTextWidth(this.textElement_,
+        constants.FIELD_TEXT_FONTSIZE,
+        constants.FIELD_TEXT_FONTWEIGHT,
+        constants.FIELD_TEXT_FONTFAMILY);
+    totalWidth += contentWidth;
   }
+  if (this.borderRect_) {
+    totalHeight = Math.max(totalHeight, constants.FIELD_BORDER_RECT_HEIGHT);
+  }
+
+  this.size_.height = totalHeight;
   this.size_.width = totalWidth;
+
+  this.positionTextElement_(xOffset, contentWidth);
+  this.positionBorderRect_();
 };
+
+/**
+ * Position a field's text element after a size change.  This handles both LTR
+ * and RTL positioning.
+ * @param {number} xOffset x offset to use when positioning the text element.
+ * @param {number} contentWidth The content width.
+ * @protected
+ */
+Blockly.Field.prototype.positionTextElement_ = function(xOffset, contentWidth) {
+  if (!this.textElement_) {
+    return;
+  }
+  var constants = this.constants_;
+  var halfHeight = this.size_.height / 2;
+
+  this.textElement_.setAttribute('x', this.sourceBlock_.RTL ?
+      this.size_.width - contentWidth - xOffset : xOffset);
+  this.textElement_.setAttribute('y', constants.FIELD_TEXT_BASELINE_CENTER ?
+      halfHeight : halfHeight - constants.FIELD_TEXT_HEIGHT / 2 +
+      constants.FIELD_TEXT_BASELINE);
+};
+
+/**
+ * Position a field's border rect after a size change.
+ * @protected
+ */
+Blockly.Field.prototype.positionBorderRect_ = function() {
+  if (!this.borderRect_) {
+    return;
+  }
+  this.borderRect_.setAttribute('width', this.size_.width);
+  this.borderRect_.setAttribute('height', this.size_.height);
+  this.borderRect_.setAttribute('rx',
+      this.constants_.FIELD_BORDER_RECT_RADIUS);
+  this.borderRect_.setAttribute('ry',
+      this.constants_.FIELD_BORDER_RECT_RADIUS);
+};
+
 
 /**
  * Returns the height and width of the field.

@@ -1,18 +1,7 @@
 /**
  * @license
  * Copyright 2019 Google LLC
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 /**
@@ -29,6 +18,8 @@ goog.require('Blockly.utils.dom');
 goog.require('Blockly.utils.svgPaths');
 goog.require('Blockly.utils.userAgent');
 
+goog.requireType('Blockly.blockRendering.Debug');
+
 
 /**
  * An object that provides constants for rendering blocks.
@@ -36,6 +27,27 @@ goog.require('Blockly.utils.userAgent');
  * @package
  */
 Blockly.blockRendering.ConstantProvider = function() {
+
+  /**
+   * A placeholder value for number constants that are dynamically set.
+   * @type {number}
+   * @protected
+   */
+  this.DYNAMICALLY_SET_ = -1;
+
+  /**
+   * A placeholder value for string constants that are dynamically set.
+   * @type {string}
+   * @protected
+   */
+  this.DYNAMICALLY_SET_STRING_ = '';
+
+  /**
+   * A placeholder value for boolean constants that are dynamically set.
+   * @type {boolean}
+   * @protected
+   */
+  this.DYNAMICALLY_SET_BOOLEAN_ = false;
 
   /**
    * The size of an empty spacer.
@@ -190,7 +202,7 @@ Blockly.blockRendering.ConstantProvider = function() {
    * connections. Can be overridden by 'hat' property on Theme.BlockStyle.
    * @type {boolean}
    */
-  this.ADD_START_HATS = false;
+  this.ADD_START_HATS = this.DYNAMICALLY_SET_BOOLEAN_;
 
   /**
    * Height of the top hat.
@@ -242,28 +254,39 @@ Blockly.blockRendering.ConstantProvider = function() {
   this.JAGGED_TEETH_WIDTH = 6;
 
   /**
-   * Point size of text.
+   * Point size of text.  This constant is dynamically set in
+   * ``setFontConstants_`` to the size of the font used by the renderer/theme.
    * @type {number}
    */
-  this.FIELD_TEXT_FONTSIZE = 11;
+  this.FIELD_TEXT_FONTSIZE = this.DYNAMICALLY_SET_;
 
   /**
-   * Height of text.
+   * Height of text.  This constant is dynamically set in ``setFontConstants_``
+   * to be the height of the text based on the font used.
    * @type {number}
    */
-  this.FIELD_TEXT_HEIGHT = 16;
+  this.FIELD_TEXT_HEIGHT = this.DYNAMICALLY_SET_;
 
   /**
-   * Text font weight.
-   * @type {string}
+   * Text baseline.  This constant is dynamically set in ``setFontConstants_``
+   * to be the baseline of the text based on the font used.
+   * @type {number}
    */
-  this.FIELD_TEXT_FONTWEIGHT = 'normal';
+  this.FIELD_TEXT_BASELINE = this.DYNAMICALLY_SET_;
 
   /**
-   * Text font family.
+   * Text font weight.  This constant is dynamically set in
+   * ``setFontConstants_`` to the weight of the font used by the renderer/theme.
    * @type {string}
    */
-  this.FIELD_TEXT_FONTFAMILY = 'sans-serif';
+  this.FIELD_TEXT_FONTWEIGHT = this.DYNAMICALLY_SET_STRING_;
+
+  /**
+   * Text font family.  This constant is dynamically set in
+   * ``setFontConstants_`` to the family of the font used by the renderer/theme.
+   * @type {string}
+   */
+  this.FIELD_TEXT_FONTFAMILY = this.DYNAMICALLY_SET_STRING_;
 
   /**
    * A field's border rect corner radius.
@@ -295,19 +318,6 @@ Blockly.blockRendering.ConstantProvider = function() {
    * @package
    */
   this.FIELD_BORDER_RECT_COLOUR = '#fff';
-
-  /**
-   * Field text baseline.
-   * This is only used if `FIELD_TEXT_BASELINE_CENTER` is false.
-   * @type {number}
-   */
-  this.FIELD_TEXT_BASELINE_Y = Blockly.utils.userAgent.GECKO ? 12 : 13.09;
-
-  /**
-   * An text offset adjusting the Y position of text after positioning.
-   * @type {number}
-   */
-  this.FIELD_TEXT_Y_OFFSET = 0;
 
   /**
    * A field's text element's dominant baseline.
@@ -404,18 +414,6 @@ Blockly.blockRendering.ConstantProvider = function() {
   this.FIELD_CHECKBOX_X_OFFSET = this.FIELD_BORDER_RECT_X_PADDING - 3;
 
   /**
-   * A checkbox field's Y offset.
-   * @type {number}
-   */
-  this.FIELD_CHECKBOX_Y_OFFSET = 14;
-
-  /**
-   * A checkbox field's default width.
-   * @type {number}
-   */
-  this.FIELD_CHECKBOX_DEFAULT_WIDTH = 15;
-
-  /**
    * A random identifier used to ensure a unique ID is used for each
    * filter/pattern for the case of multiple Blockly instances on a page.
    * @type {string}
@@ -450,6 +448,27 @@ Blockly.blockRendering.ConstantProvider = function() {
    * @private
    */
   this.disabledPattern_ = null;
+
+  /**
+   * The ID of the debug filter, or the empty string if no pattern is set.
+   * @type {string}
+   * @package
+   */
+  this.debugFilterId = '';
+
+  /**
+   * The <filter> element to use for a debug highlight, or null if not set.
+   * @type {SVGElement}
+   * @private
+   */
+  this.debugFilter_ = null;
+
+  /**
+   * The <style> element to use for injecting renderer specific CSS.
+   * @type {HTMLStyleElement}
+   * @private
+   */
+  this.cssNode_ = null;
 
   /**
    * Cursor colour.
@@ -566,7 +585,7 @@ Blockly.blockRendering.ConstantProvider.prototype.init = function() {
  * @param {!Blockly.Theme} theme The current workspace theme.
  * @package
  */
-Blockly.blockRendering.ConstantProvider.prototype.refreshTheme = function(
+Blockly.blockRendering.ConstantProvider.prototype.setTheme = function(
     theme) {
 
   /**
@@ -580,6 +599,64 @@ Blockly.blockRendering.ConstantProvider.prototype.refreshTheme = function(
   for (var key in blockStyles) {
     this.blockStyles[key] = this.validatedBlockStyle_(blockStyles[key]);
   }
+
+  this.setDynamicProperties_(theme);
+};
+
+/**
+ * Sets dynamic properties that depent on other values or theme properties.
+ * @param {!Blockly.Theme} theme The current workspace theme.
+ * @protected
+ */
+Blockly.blockRendering.ConstantProvider.prototype.setDynamicProperties_ =
+    function(theme) {
+    /* eslint-disable indent */
+  this.setFontConstants_(theme);
+
+  this.ADD_START_HATS = theme.startHats != null ? theme.startHats : false;
+}; /* eslint-enable indent */
+
+/**
+ * Get an object representing the default font styles specified by the renderer.
+ * @return {!Blockly.Theme.FontStyle} A theme font style.
+ * @protected
+ */
+Blockly.blockRendering.ConstantProvider.prototype.getDefaultFontStyle_ =
+    function() {
+    /* eslint-disable indent */
+  return {
+    'weight': 'normal',
+    'size': 11,
+    'family': 'sans-serif'
+  };
+}; /* eslint-enable indent */
+
+/**
+ * Set constants related to fonts.
+ * @param {!Blockly.Theme} theme The current workspace theme.
+ * @protected
+ */
+Blockly.blockRendering.ConstantProvider.prototype.setFontConstants_ = function(
+    theme) {
+  var defaultFontStyle = this.getDefaultFontStyle_();
+
+  this.FIELD_TEXT_FONTFAMILY =
+      theme.fontStyle && theme.fontStyle['family'] != undefined ?
+      theme.fontStyle['family'] : defaultFontStyle['family'];
+  this.FIELD_TEXT_FONTWEIGHT =
+      theme.fontStyle && theme.fontStyle['weight'] != undefined ?
+      theme.fontStyle['weight'] : defaultFontStyle['weight'];
+  this.FIELD_TEXT_FONTSIZE =
+      theme.fontStyle && theme.fontStyle['size'] != undefined ?
+      theme.fontStyle['size'] : defaultFontStyle['size'];
+
+  var fontMetrics = Blockly.utils.dom.measureFontMetrics('Hg',
+      this.FIELD_TEXT_FONTSIZE + 'pt',
+      this.FIELD_TEXT_FONTWEIGHT,
+      this.FIELD_TEXT_FONTFAMILY);
+
+  this.FIELD_TEXT_HEIGHT = fontMetrics.height;
+  this.FIELD_TEXT_BASELINE = fontMetrics.baseline;
 };
 
 /**
@@ -609,7 +686,9 @@ Blockly.blockRendering.ConstantProvider.prototype.getBlockStyleForColour =
 Blockly.blockRendering.ConstantProvider.prototype.getBlockStyle = function(
     blockStyleName) {
   return this.blockStyles[blockStyleName || ''] ||
-      this.createBlockStyle_('#000000');
+      (blockStyleName && blockStyleName.indexOf('auto_') == 0 ?
+        this.getBlockStyleForColour(blockStyleName.substring(5)).style :
+        this.createBlockStyle_('#000000'));
 };
 
 /**
@@ -699,6 +778,12 @@ Blockly.blockRendering.ConstantProvider.prototype.dispose = function() {
   }
   if (this.disabledPattern_) {
     Blockly.utils.dom.removeNode(this.disabledPattern_);
+  }
+  if (this.debugFilter_) {
+    Blockly.utils.dom.removeNode(this.debugFilter_);
+  }
+  if (this.cssNode_) {
+    Blockly.utils.dom.removeNode(this.cssNode_);
   }
 };
 
@@ -926,9 +1011,13 @@ Blockly.blockRendering.ConstantProvider.prototype.shapeFor = function(
 /**
  * Create any DOM elements that this renderer needs (filters, patterns, etc).
  * @param {!SVGElement} svg The root of the workspace's SVG.
+ * @param {string} rendererName Name of the renderer.
+ * @suppress {strictModuleDepCheck} Debug renderer only included in playground.
  * @package
  */
-Blockly.blockRendering.ConstantProvider.prototype.createDom = function(svg) {
+Blockly.blockRendering.ConstantProvider.prototype.createDom = function(svg,
+    rendererName) {
+  this.injectCSS_(rendererName);
   /*
   <defs>
     ... filters go here ...
@@ -1005,14 +1094,50 @@ Blockly.blockRendering.ConstantProvider.prototype.createDom = function(svg) {
       {'d': 'M 0 0 L 10 10 M 10 0 L 0 10', 'stroke': '#cc0'}, disabledPattern);
   this.disabledPatternId = disabledPattern.id;
   this.disabledPattern_ = disabledPattern;
+
+  if (Blockly.blockRendering.Debug) {
+    var debugFilter = Blockly.utils.dom.createSvgElement('filter',
+        {
+          'id': 'blocklyDebugFilter' + this.randomIdentifier_,
+          'height': '160%',
+          'width': '180%',
+          y: '-30%',
+          x: '-40%'
+        },
+        defs);
+    // Set all gaussian blur pixels to 1 opacity before applying flood
+    var debugComponentTransfer = Blockly.utils.dom.createSvgElement(
+        'feComponentTransfer', {'result': 'outBlur'}, debugFilter);
+    Blockly.utils.dom.createSvgElement('feFuncA',
+        {
+          'type': 'table', 'tableValues': '0 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1'
+        },
+        debugComponentTransfer);
+    // Color the highlight
+    Blockly.utils.dom.createSvgElement('feFlood',
+        {
+          'flood-color': '#ff0000',
+          'flood-opacity': 0.5,
+          'result': 'outColor'
+        },
+        debugFilter);
+    Blockly.utils.dom.createSvgElement('feComposite',
+        {
+          'in': 'outColor', 'in2': 'outBlur',
+          'operator': 'in', 'result': 'outGlow'
+        },
+        debugFilter);
+    this.debugFilterId = debugFilter.id;
+    this.debugFilter_ = debugFilter;
+  }
 };
 
 /**
  * Inject renderer specific CSS into the page.
  * @param {string} name Name of the renderer.
- * @package
+ * @protected
  */
-Blockly.blockRendering.ConstantProvider.prototype.injectCSS = function(
+Blockly.blockRendering.ConstantProvider.prototype.injectCSS_ = function(
     name) {
   var cssArray = this.getCSS_(name);
   var cssNodeId = 'blockly-renderer-style-' + name;
@@ -1022,11 +1147,13 @@ Blockly.blockRendering.ConstantProvider.prototype.injectCSS = function(
   }
   var text = cssArray.join('\n');
   // Inject CSS tag at start of head.
-  var cssNode = document.createElement('style');
+  var cssNode =
+    /** @type {!HTMLStyleElement} */ (document.createElement('style'));
   cssNode.id = cssNodeId;
   var cssTextNode = document.createTextNode(text);
   cssNode.appendChild(cssTextNode);
   document.head.insertBefore(cssNode, document.head.firstChild);
+  this.cssNode_ = cssNode;
 };
 
 /**

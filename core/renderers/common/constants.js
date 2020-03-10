@@ -1139,7 +1139,8 @@ Blockly.blockRendering.ConstantProvider.prototype.injectCSS_ = function(
     name) {
   var cssArray = this.getCSS_(name);
   var cssNodeId = 'blockly-renderer-style-' + name;
-  this.cssNode_ = document.getElementById(cssNodeId);
+  this.cssNode_ =
+    /** @type {!HTMLStyleElement} */ (document.getElementById(cssNodeId));
   if (this.cssNode_) {
     // Already injected.
     return;

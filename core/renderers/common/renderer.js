@@ -68,7 +68,7 @@ Blockly.blockRendering.Renderer.prototype.refresh = function(svg, theme) {
   constants.dispose();
   constants.setTheme(theme);
   constants.init();
-  constants.createDom(svg, this.name);
+  constants.createDom(svg, this.name + '-' + theme.name);
 };
 
 /**

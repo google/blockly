@@ -782,9 +782,6 @@ Blockly.blockRendering.ConstantProvider.prototype.dispose = function() {
   if (this.debugFilter_) {
     Blockly.utils.dom.removeNode(this.debugFilter_);
   }
-  if (this.cssNode_) {
-    Blockly.utils.dom.removeNode(this.cssNode_);
-  }
 };
 
 /**
@@ -1011,13 +1008,13 @@ Blockly.blockRendering.ConstantProvider.prototype.shapeFor = function(
 /**
  * Create any DOM elements that this renderer needs (filters, patterns, etc).
  * @param {!SVGElement} svg The root of the workspace's SVG.
- * @param {string} rendererName Name of the renderer.
+ * @param {string} name The renderer and theme name combo.
  * @suppress {strictModuleDepCheck} Debug renderer only included in playground.
  * @package
  */
 Blockly.blockRendering.ConstantProvider.prototype.createDom = function(svg,
-    rendererName) {
-  this.injectCSS_(rendererName);
+    name) {
+  this.injectCSS_(name);
   /*
   <defs>
     ... filters go here ...
@@ -1134,14 +1131,15 @@ Blockly.blockRendering.ConstantProvider.prototype.createDom = function(svg,
 
 /**
  * Inject renderer specific CSS into the page.
- * @param {string} name Name of the renderer.
+ * @param {string} name The renderer and theme name combo.
  * @protected
  */
 Blockly.blockRendering.ConstantProvider.prototype.injectCSS_ = function(
     name) {
   var cssArray = this.getCSS_(name);
   var cssNodeId = 'blockly-renderer-style-' + name;
-  if (document.getElementById(cssNodeId)) {
+  this.cssNode_ = document.getElementById(cssNodeId);
+  if (this.cssNode_) {
     // Already injected.
     return;
   }

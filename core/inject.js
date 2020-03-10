@@ -155,10 +155,12 @@ Blockly.createMainWorkspace_ = function(svg, options, blockDragSurface,
   svg.appendChild(mainWorkspace.createDom('blocklyMainBackground'));
 
   // Set the theme name and renderer name onto the injection div.
+  var rendererName = mainWorkspace.getRenderer().name;
+  var themeName = mainWorkspace.getTheme().name;
   Blockly.utils.dom.addClass(mainWorkspace.getInjectionDiv(),
-      (wsOptions.renderer || 'geras') + '-renderer');
+      rendererName + '-' + themeName + '-renderer');
   Blockly.utils.dom.addClass(mainWorkspace.getInjectionDiv(),
-      mainWorkspace.getTheme().name + '-theme');
+      themeName + '-theme');
 
   if (!wsOptions.hasCategories && wsOptions.languageTree) {
     // Add flyout as an <svg> that is a sibling of the workspace svg.

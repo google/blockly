@@ -794,9 +794,9 @@ Blockly.zelos.ConstantProvider.prototype.generateTertiaryColour_ = function(
  * @override
  */
 Blockly.zelos.ConstantProvider.prototype.createDom = function(svg,
-    rendererName) {
+    name) {
   Blockly.zelos.ConstantProvider.superClass_.createDom.call(this, svg,
-      rendererName);
+      name);
   /*
   <defs>
     ... filters go here ...

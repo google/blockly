@@ -620,7 +620,8 @@ Blockly.blockRendering.ConstantProvider.prototype.setDynamicProperties_ =
     /* eslint-disable indent */
   this.setFontConstants_(theme);
 
-  this.ADD_START_HATS = theme.startHats != null ? theme.startHats : false;
+  this.ADD_START_HATS = theme.startHats != null ? theme.startHats :
+      this.ADD_START_HATS;
 }; /* eslint-enable indent */
 
 /**

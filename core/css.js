@@ -320,10 +320,6 @@ Blockly.Css.CONTENT = [
     'pointer-events: none;',
   '}',
 
-  '.blocklyBubbleText {',
-    'fill: #000;',
-  '}',
-
   '.blocklyFlyout {',
     'position: absolute;',
     'z-index: 20;',

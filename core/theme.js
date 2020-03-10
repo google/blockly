@@ -40,24 +40,28 @@ Blockly.Theme = function(name, opt_blockStyles, opt_categoryStyles,
   /**
    * The block styles map.
    * @type {!Object.<string, !Blockly.Theme.BlockStyle>}
+   * @pacakge
    */
   this.blockStyles = opt_blockStyles || Object.create(null);
 
   /**
    * The category styles map.
    * @type {!Object.<string, Blockly.Theme.CategoryStyle>}
+   * @pacakge
    */
   this.categoryStyles = opt_categoryStyles || Object.create(null);
 
   /**
    * The UI components styles map.
    * @type {!Object.<string, *>}
+   * @pacakge
    */
   this.componentStyles = opt_componentStyles || Object.create(null);
 
   /**
    * The font style.
    * @type {Blockly.Theme.FontStyle}
+   * @pacakge
    */
   this.fontStyle = /** @type {Blockly.Theme.FontStyle} */ (Object.create(null));
 
@@ -65,6 +69,7 @@ Blockly.Theme = function(name, opt_blockStyles, opt_categoryStyles,
    * Whether or not to add a 'hat' on top of all blocks with no previous or
    * output connections.
    * @type {boolean}
+   * @pacakge
    */
   this.startHats = false;
 };
@@ -118,23 +123,6 @@ Blockly.Theme.prototype.setCategoryStyle = function(categoryStyleName,
 };
 
 /**
- * Configure a theme's font style.
- * @param {Blockly.Theme.FontStyle} fontStyle The font style.
-*/
-Blockly.Theme.prototype.setFontStyle = function(fontStyle) {
-  this.fontStyle = fontStyle;
-};
-
-/**
- * Configure a theme's start hats.
- * @param {boolean} startHats True if the theme enables start hats, false
- *     otherwise.
-*/
-Blockly.Theme.prototype.setStartHats = function(startHats) {
-  this.startHats = startHats;
-};
-
-/**
  * Gets the style for a given Blockly UI component.  If the style value is a
  * string, we attempt to find the value of any named references.
  * @param {string} componentName The name of the component.
@@ -160,9 +148,26 @@ Blockly.Theme.prototype.setComponentStyle = function(componentName,
 };
 
 /**
+ * Configure a theme's font style.
+ * @param {Blockly.Theme.FontStyle} fontStyle The font style.
+*/
+Blockly.Theme.prototype.setFontStyle = function(fontStyle) {
+  this.fontStyle = fontStyle;
+};
+
+/**
+ * Configure a theme's start hats.
+ * @param {boolean} startHats True if the theme enables start hats, false
+ *     otherwise.
+*/
+Blockly.Theme.prototype.setStartHats = function(startHats) {
+  this.startHats = startHats;
+};
+
+/**
  * Define a new Blockly theme.
  * @param {string} name The name of the theme.
- * @param {Object} themeObj An object containing theme properties.
+ * @param {!Object} themeObj An object containing theme properties.
  * @return {!Blockly.Theme} A new Blockly theme.
 */
 Blockly.Theme.defineTheme = function(name, themeObj) {

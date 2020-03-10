@@ -237,6 +237,22 @@ Blockly.zelos.ConstantProvider = function() {
   /**
    * @override
    */
+  this.FIELD_TEXT_FONTSIZE = 3 * this.GRID_UNIT;
+
+  /**
+   * @override
+   */
+  this.FIELD_TEXT_FONTWEIGHT = 'bold';
+
+  /**
+   * @override
+   */
+  this.FIELD_TEXT_FONTFAMILY =
+    '"Helvetica Neue", "Segoe UI", Helvetica, sans-serif';
+
+  /**
+   * @override
+   */
   this.FIELD_BORDER_RECT_RADIUS = this.CORNER_RADIUS;
 
   /**
@@ -366,18 +382,6 @@ Blockly.zelos.ConstantProvider = function() {
 };
 Blockly.utils.object.inherits(Blockly.zelos.ConstantProvider,
     Blockly.blockRendering.ConstantProvider);
-
-/**
- * @override
- */
-Blockly.zelos.ConstantProvider.prototype.getDefaultFontStyle_ = function() {
-  var fontStyle =
-      Blockly.zelos.ConstantProvider.superClass_.getDefaultFontStyle_.call(this);
-  fontStyle['weight'] = 'bold';
-  fontStyle['size'] = 3 * this.GRID_UNIT;
-  fontStyle['family'] = '"Helvetica Neue", "Segoe UI", Helvetica, sans-serif';
-  return fontStyle;
-};
 
 /**
  * @override

@@ -29,27 +29,6 @@ goog.requireType('Blockly.blockRendering.Debug');
 Blockly.blockRendering.ConstantProvider = function() {
 
   /**
-   * A placeholder value for number constants that are dynamically set.
-   * @type {number}
-   * @protected
-   */
-  this.DYNAMICALLY_SET_ = -1;
-
-  /**
-   * A placeholder value for string constants that are dynamically set.
-   * @type {string}
-   * @protected
-   */
-  this.DYNAMICALLY_SET_STRING_ = '';
-
-  /**
-   * A placeholder value for boolean constants that are dynamically set.
-   * @type {boolean}
-   * @protected
-   */
-  this.DYNAMICALLY_SET_BOOLEAN_ = false;
-
-  /**
    * The size of an empty spacer.
    * @type {number}
    */
@@ -202,7 +181,7 @@ Blockly.blockRendering.ConstantProvider = function() {
    * connections. Can be overridden by 'hat' property on Theme.BlockStyle.
    * @type {boolean}
    */
-  this.ADD_START_HATS = this.DYNAMICALLY_SET_BOOLEAN_;
+  this.ADD_START_HATS = false;
 
   /**
    * Height of the top hat.
@@ -254,39 +233,36 @@ Blockly.blockRendering.ConstantProvider = function() {
   this.JAGGED_TEETH_WIDTH = 6;
 
   /**
-   * Point size of text.  This constant is dynamically set in
-   * ``setFontConstants_`` to the size of the font used by the renderer/theme.
+   * Point size of text.
    * @type {number}
    */
-  this.FIELD_TEXT_FONTSIZE = this.DYNAMICALLY_SET_;
+  this.FIELD_TEXT_FONTSIZE = 11;
+
+  /**
+   * Text font weight.
+   * @type {string}
+   */
+  this.FIELD_TEXT_FONTWEIGHT = 'normal';
+
+  /**
+   * Text font family.
+   * @type {string}
+   */
+  this.FIELD_TEXT_FONTFAMILY = 'sans-serif';
 
   /**
    * Height of text.  This constant is dynamically set in ``setFontConstants_``
    * to be the height of the text based on the font used.
    * @type {number}
    */
-  this.FIELD_TEXT_HEIGHT = this.DYNAMICALLY_SET_;
-
+  this.FIELD_TEXT_HEIGHT = -1; // Dynamically set
+  
   /**
    * Text baseline.  This constant is dynamically set in ``setFontConstants_``
    * to be the baseline of the text based on the font used.
    * @type {number}
    */
-  this.FIELD_TEXT_BASELINE = this.DYNAMICALLY_SET_;
-
-  /**
-   * Text font weight.  This constant is dynamically set in
-   * ``setFontConstants_`` to the weight of the font used by the renderer/theme.
-   * @type {string}
-   */
-  this.FIELD_TEXT_FONTWEIGHT = this.DYNAMICALLY_SET_STRING_;
-
-  /**
-   * Text font family.  This constant is dynamically set in
-   * ``setFontConstants_`` to the family of the font used by the renderer/theme.
-   * @type {string}
-   */
-  this.FIELD_TEXT_FONTFAMILY = this.DYNAMICALLY_SET_STRING_;
+  this.FIELD_TEXT_BASELINE = -1; // Dynamically set
 
   /**
    * A field's border rect corner radius.
@@ -625,38 +601,21 @@ Blockly.blockRendering.ConstantProvider.prototype.setDynamicProperties_ =
 }; /* eslint-enable indent */
 
 /**
- * Get an object representing the default font styles specified by the renderer.
- * @return {!Blockly.Theme.FontStyle} A theme font style.
- * @protected
- */
-Blockly.blockRendering.ConstantProvider.prototype.getDefaultFontStyle_ =
-    function() {
-    /* eslint-disable indent */
-  return {
-    'weight': 'normal',
-    'size': 11,
-    'family': 'sans-serif'
-  };
-}; /* eslint-enable indent */
-
-/**
  * Set constants related to fonts.
  * @param {!Blockly.Theme} theme The current workspace theme.
  * @protected
  */
 Blockly.blockRendering.ConstantProvider.prototype.setFontConstants_ = function(
     theme) {
-  var defaultFontStyle = this.getDefaultFontStyle_();
-
   this.FIELD_TEXT_FONTFAMILY =
       theme.fontStyle && theme.fontStyle['family'] != undefined ?
-      theme.fontStyle['family'] : defaultFontStyle['family'];
+      theme.fontStyle['family'] : this.FIELD_TEXT_FONTFAMILY;
   this.FIELD_TEXT_FONTWEIGHT =
       theme.fontStyle && theme.fontStyle['weight'] != undefined ?
-      theme.fontStyle['weight'] : defaultFontStyle['weight'];
+      theme.fontStyle['weight'] : this.FIELD_TEXT_FONTWEIGHT;
   this.FIELD_TEXT_FONTSIZE =
       theme.fontStyle && theme.fontStyle['size'] != undefined ?
-      theme.fontStyle['size'] : defaultFontStyle['size'];
+      theme.fontStyle['size'] : this.FIELD_TEXT_FONTSIZE;
 
   var fontMetrics = Blockly.utils.dom.measureFontMetrics('Hg',
       this.FIELD_TEXT_FONTSIZE + 'pt',

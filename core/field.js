@@ -119,6 +119,13 @@ Blockly.Field = function(value, opt_validator, opt_config) {
    */
   this.mouseDownWrapper_ = null;
 
+  /**
+   * Constants associated with the source block's renderer.
+   * @type {Blockly.blockRendering.ConstantProvider}
+   * @protected
+   */
+  this.constants_ = null;
+
   opt_config && this.configure_(opt_config);
   this.setValue(value);
   opt_validator && this.setValidator(opt_validator);
@@ -246,17 +253,15 @@ Blockly.Field.prototype.setSourceBlock = function(block) {
 
 /**
  * Get the renderer constant provider.
- * @return {!Blockly.blockRendering.ConstantProvider} The renderer constant
+ * @return {?Blockly.blockRendering.ConstantProvider} The renderer constant
  *     provider.
  */
 Blockly.Field.prototype.getConstants = function() {
-  if (!this.sourceBlock_) {
-    throw Error('Unable to get renderer constants, source block not set.');
+  if (!this.constants_ && this.sourceBlock_ && this.sourceBlock_.workspace &&
+      this.sourceBlock_.workspace.rendered) {
+    this.constants_ = this.sourceBlock_.workspace.getRenderer().getConstants();
   }
-  if (!this.sourceBlock_.workspace.rendered) {
-    throw Error('Unable to get renderer constants, workspace not rendered.');
-  }
-  return this.sourceBlock_.workspace.getRenderer().getConstants();
+  return this.constants_;
 };
 
 /**
@@ -687,6 +692,7 @@ Blockly.Field.prototype.getSize = function() {
   }
 
   if (this.isDirty_) {
+    this.constants_ = null;
     this.render_();
     this.isDirty_ = false;
   } else if (this.visible_ && this.size_.width == 0) {

@@ -13,65 +13,60 @@ goog.provide('Blockly.Theme');
 
 goog.require('Blockly.utils');
 goog.require('Blockly.utils.colour');
+goog.require('Blockly.utils.object');
 
 
 /**
  * Class for a theme.
  * @param {string} name Theme name.
- * @param {!Object.<string, Blockly.Theme.BlockStyle>} blockStyles A map from
- *     style names (strings) to objects with style attributes for blocks.
- * @param {!Object.<string, Blockly.Theme.CategoryStyle>} categoryStyles A map
- *     from style names (strings) to objects with style attributes for
+ * @param {!Object.<string, Blockly.Theme.BlockStyle>=} opt_blockStyles A map
+ *     from style names (strings) to objects with style attributes for blocks.
+ * @param {!Object.<string, Blockly.Theme.CategoryStyle>=} opt_categoryStyles A
+ *     map from style names (strings) to objects with style attributes for
  *     categories.
  * @param {!Object.<string, *>=} opt_componentStyles A map of Blockly component
  *     names to style value.
  * @constructor
  */
-Blockly.Theme = function(name, blockStyles, categoryStyles,
+Blockly.Theme = function(name, opt_blockStyles, opt_categoryStyles,
     opt_componentStyles) {
 
   /**
    * The theme name. This can be used to reference a specific theme in CSS.
    * @type {string}
-   * @package
    */
   this.name = name;
 
   /**
    * The block styles map.
    * @type {!Object.<string, !Blockly.Theme.BlockStyle>}
-   * @package
    */
-  this.blockStyles = blockStyles;
+  this.blockStyles = opt_blockStyles || Object.create(null);;
 
   /**
    * The category styles map.
    * @type {!Object.<string, Blockly.Theme.CategoryStyle>}
-   * @package
    */
-  this.categoryStyles = categoryStyles;
+  this.categoryStyles = opt_categoryStyles || Object.create(null);
 
   /**
    * The UI components styles map.
    * @type {!Object.<string, *>}
-   * @private
    */
-  this.componentStyles_ = opt_componentStyles || Object.create(null);
+  this.componentStyles = opt_componentStyles || Object.create(null);
 
   /**
    * The font style.
-   * @type {?Blockly.Theme.FontStyle}
-   * @package
+   * @type {Blockly.Theme.FontStyle}
    */
-  this.fontStyle = null;
+  this.fontStyle = /** @type {Blockly.Theme.FontStyle} */ (Object.create(null));
 
   /**
    * Whether or not to add a 'hat' on top of all blocks with no previous or
    * output connections.
-   * @type {?boolean}
-   * @package
+   * @type {boolean}
    */
-  this.startHats = null;
+  this.startHats = false;
 };
 
 /**
@@ -146,7 +141,7 @@ Blockly.Theme.prototype.setStartHats = function(startHats) {
  * @return {?string} The style value.
  */
 Blockly.Theme.prototype.getComponentStyle = function(componentName) {
-  var style = this.componentStyles_[componentName];
+  var style = this.componentStyles[componentName];
   if (style && typeof propertyValue == 'string' &&
       this.getComponentStyle(/** @type {string} */ (style))) {
     return this.getComponentStyle(/** @type {string} */ (style));
@@ -161,5 +156,32 @@ Blockly.Theme.prototype.getComponentStyle = function(componentName) {
 */
 Blockly.Theme.prototype.setComponentStyle = function(componentName,
     styleValue) {
-  this.componentStyles_[componentName] = styleValue;
+  this.componentStyles[componentName] = styleValue;
+};
+
+/**
+ * Define a new Blockly theme.
+ * @param {string} name The name of the theme.
+ * @param {Object} themeObj An object containing theme properties.
+ * @return {!Blockly.Theme} A new Blockly theme.
+*/
+Blockly.Theme.defineTheme = function(name, themeObj) {
+  var theme = new Blockly.Theme(name);
+  var base = themeObj['base'];
+  if (base && base instanceof Blockly.Theme) {
+    Blockly.utils.object.deepMerge(theme, base);
+  }
+  
+  Blockly.utils.object.deepMerge(theme.blockStyles,
+      themeObj['blockStyles']);
+  Blockly.utils.object.deepMerge(theme.categoryStyles,
+      themeObj['categoryStyles']);
+  Blockly.utils.object.deepMerge(theme.componentStyles,
+      themeObj['componentStyles']);
+  Blockly.utils.object.deepMerge(theme.fontStyle,
+      themeObj['fontStyle']);
+  if (themeObj['startHats'] != null) {
+    theme.startHats = themeObj['startHats'];
+  }
+  return theme;
 };

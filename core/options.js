@@ -282,8 +282,7 @@ Blockly.Options.parseThemeOptions_ = function(options) {
   if (theme instanceof Blockly.Theme) {
     return /** @type {!Blockly.Theme} */ (theme);
   }
-  return new Blockly.Theme('builtin',
-      theme['blockStyles'], theme['categoryStyles'], theme['componentStyles']);
+  return Blockly.Theme.defineTheme('builtin', theme);
 };
 
 /**

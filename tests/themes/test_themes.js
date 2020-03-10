@@ -11,15 +11,17 @@ goog.provide('Blockly.TestThemes');
 /**
  * A theme with classic colours but enables start hats.
  */
-Blockly.Themes.TestHats = new Blockly.Theme('testhats',
-    Blockly.Themes.Classic.blockStyles, Blockly.Themes.Classic.categoryStyles);
+Blockly.Themes.TestHats = Blockly.Theme.defineTheme('testhats', {
+  'base': Blockly.Themes.Classic
+});
 Blockly.Themes.TestHats.setStartHats(true);
 
 /**
  * A theme with classic colours but a different font.
  */
-Blockly.Themes.TestFont = new Blockly.Theme('testfont',
-    Blockly.Themes.Classic.blockStyles, Blockly.Themes.Classic.categoryStyles);
+Blockly.Themes.TestFont = Blockly.Theme.defineTheme('testfont', {
+  'base': Blockly.Themes.Classic
+});
 Blockly.Themes.TestFont.setFontStyle({
   'family': '"Times New Roman", Times, serif',
   'weight': null, // Use default font-weight

@@ -48,13 +48,17 @@ Blockly.blockRendering.Renderer = function(name) {
 
 /**
  * Initialize the renderer.
- * @param {!Blockly.Options} options Dictionary of workspace options.
  * @param {!Blockly.Theme} theme The workspace theme object.
+ * @param {Object=} opt_rendererOverrides Rendering constant overrides.
  * @package
  */
-Blockly.blockRendering.Renderer.prototype.init = function(options, theme) {
+Blockly.blockRendering.Renderer.prototype.init = function(theme,
+    opt_rendererOverrides) {
   this.constants_ = this.makeConstants_();
-  Blockly.utils.object.mixin(this.constants_, options.rendererConstants);
+  if (opt_rendererOverrides) {
+    this.constants_.overrides = opt_rendererOverrides;
+    Blockly.utils.object.mixin(this.constants_, opt_rendererOverrides);
+  }
   this.constants_.setTheme(theme);
   this.constants_.init();
 };
@@ -62,18 +66,14 @@ Blockly.blockRendering.Renderer.prototype.init = function(options, theme) {
 /**
  * Refresh the renderer after a theme change.
  * @param {!SVGElement} svg The root of the workspace's SVG.
- * @param {!Blockly.Options} options Dictionary of workspace options.
  * @param {!Blockly.Theme} theme The workspace theme object.
  * @package
  */
-Blockly.blockRendering.Renderer.prototype.refresh = function(svg, options,
-    theme) {
-  var constants = this.getConstants();
-  Blockly.utils.object.mixin(this.constants_, options.rendererConstants);
-  constants.dispose();
-  constants.setTheme(theme);
-  constants.init();
-  constants.createDom(svg, this.name);
+Blockly.blockRendering.Renderer.prototype.refresh = function(svg, theme) {
+  var previousConstants = this.getConstants();
+  previousConstants.dispose();
+  this.init(theme, previousConstants.overrides);
+  this.getConstants().createDom(svg, this.name);
 };
 
 /**

@@ -534,6 +534,13 @@ Blockly.blockRendering.ConstantProvider = function() {
     PUZZLE: 1,
     NOTCH: 2
   };
+
+  /**
+   * Rendering constant overrides, passed in through options.
+   * @type {?Object}
+   * @package
+   */
+  this.overrides = null;
 };
 
 /**

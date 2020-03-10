@@ -131,7 +131,7 @@ Blockly.Options = function(options) {
   this.theme = Blockly.Options.parseThemeOptions_(options);
   this.keyMap = keyMap;
   this.renderer = renderer;
-  this.rendererConstants = options['rendererConstants'];
+  this.rendererOverrides = options['rendererOverrides'];
 
   /**
    * The SVG element for the grid pattern.

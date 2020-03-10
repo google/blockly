@@ -161,7 +161,7 @@ Blockly.Mutator.prototype.createEditor_ = function() {
         'rtl': this.block_.RTL,
         'horizontalLayout': false,
         'renderer': this.block_.workspace.options.renderer,
-        'rendererConstants': this.block_.workspace.options.rendererConstants
+        'rendererOverrides': this.block_.workspace.options.rendererOverrides
       }));
   workspaceOptions.toolboxPosition = this.block_.RTL ? Blockly.TOOLBOX_AT_RIGHT :
       Blockly.TOOLBOX_AT_LEFT;

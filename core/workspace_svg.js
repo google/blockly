@@ -136,7 +136,7 @@ Blockly.WorkspaceSvg = function(options,
    * @private
    */
   this.renderer_ = Blockly.blockRendering.init(this.options.renderer || 'geras',
-      options, this.getTheme());
+      this.getTheme(), this.options.rendererOverrides);
 
   /**
    * Cached parent SVG.
@@ -516,7 +516,7 @@ Blockly.WorkspaceSvg.prototype.setTheme = function(theme) {
  */
 Blockly.WorkspaceSvg.prototype.refreshTheme = function() {
   if (this.svgGroup_) {
-    this.getRenderer().refresh(this.svgGroup_, this.options, this.getTheme());
+    this.getRenderer().refresh(this.svgGroup_, this.getTheme());
   }
 
   // Update all blocks in workspace that have a style name.
@@ -889,7 +889,7 @@ Blockly.WorkspaceSvg.prototype.addFlyout = function(tagName) {
         'oneBasedIndex': this.options.oneBasedIndex,
         'horizontalLayout': this.horizontalLayout,
         'renderer': this.options.renderer,
-        'rendererConstants': this.options.rendererConstants
+        'rendererOverrides': this.options.rendererOverrides
       }));
   workspaceOptions.toolboxPosition = this.options.toolboxPosition;
   if (this.horizontalLayout) {

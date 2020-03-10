@@ -48,8 +48,10 @@ Blockly.utils.object.inherits(Blockly.geras.Renderer,
  * @package
  * @override
  */
-Blockly.geras.Renderer.prototype.init = function(options, theme) {
-  Blockly.geras.Renderer.superClass_.init.call(this, options, theme);
+Blockly.geras.Renderer.prototype.init = function(theme,
+    opt_rendererOverrides) {
+  Blockly.geras.Renderer.superClass_.init.call(this, theme,
+      opt_rendererOverrides);
   this.highlightConstants_ = this.makeHighlightConstants_();
   this.highlightConstants_.init();
 };

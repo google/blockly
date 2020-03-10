@@ -1184,6 +1184,11 @@ Blockly.blockRendering.ConstantProvider.prototype.getCSS_ = function(name) {
       'fill: #000;',
     '}',
 
+    // Bubbles.
+    selector + ' .blocklyText.blocklyBubbleText {',
+      'fill: #000;',
+    '}',
+
     // Editable field hover.
     selector + ' .blocklyEditableText:not(.editing):hover>rect {',
       'stroke: #fff;',

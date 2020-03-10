@@ -919,6 +919,11 @@ Blockly.zelos.ConstantProvider.prototype.getCSS_ = function(name) {
       'fill: #575E75;',
     '}',
 
+    // Bubbles.
+    selector + ' .blocklyText.blocklyBubbleText {',
+      'fill: #575E75;',
+    '}',
+
     // Editable field hover.
     selector + ' .blocklyDraggable:not(.blocklyDisabled)',
     ' .blocklyEditableText:not(.editing):hover>rect ,',

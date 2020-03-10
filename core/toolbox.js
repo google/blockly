@@ -780,7 +780,7 @@ Blockly.Css.register([
   '}',
 
   '.blocklyTreeRow:not(.blocklyTreeSelected):hover {',
-    'background-color: #e4e4e4;',
+    'background-color: rgba(255, 255, 255, 0.2);',
   '}',
 
   '.blocklyTreeSeparator {',

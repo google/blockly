@@ -40,28 +40,28 @@ Blockly.Theme = function(name, opt_blockStyles, opt_categoryStyles,
   /**
    * The block styles map.
    * @type {!Object.<string, !Blockly.Theme.BlockStyle>}
-   * @pacakge
+   * @package
    */
   this.blockStyles = opt_blockStyles || Object.create(null);
 
   /**
    * The category styles map.
    * @type {!Object.<string, Blockly.Theme.CategoryStyle>}
-   * @pacakge
+   * @package
    */
   this.categoryStyles = opt_categoryStyles || Object.create(null);
 
   /**
    * The UI components styles map.
    * @type {!Object.<string, *>}
-   * @pacakge
+   * @package
    */
   this.componentStyles = opt_componentStyles || Object.create(null);
 
   /**
    * The font style.
    * @type {Blockly.Theme.FontStyle}
-   * @pacakge
+   * @package
    */
   this.fontStyle = /** @type {Blockly.Theme.FontStyle} */ (Object.create(null));
 
@@ -69,7 +69,7 @@ Blockly.Theme = function(name, opt_blockStyles, opt_categoryStyles,
    * Whether or not to add a 'hat' on top of all blocks with no previous or
    * output connections.
    * @type {boolean}
-   * @pacakge
+   * @package
    */
   this.startHats = false;
 };

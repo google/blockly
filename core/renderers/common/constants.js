@@ -782,6 +782,7 @@ Blockly.blockRendering.ConstantProvider.prototype.dispose = function() {
   if (this.debugFilter_) {
     Blockly.utils.dom.removeNode(this.debugFilter_);
   }
+  this.cssNode_ = null;
 };
 
 /**

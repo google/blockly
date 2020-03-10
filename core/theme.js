@@ -41,7 +41,7 @@ Blockly.Theme = function(name, opt_blockStyles, opt_categoryStyles,
    * The block styles map.
    * @type {!Object.<string, !Blockly.Theme.BlockStyle>}
    */
-  this.blockStyles = opt_blockStyles || Object.create(null);;
+  this.blockStyles = opt_blockStyles || Object.create(null);
 
   /**
    * The category styles map.

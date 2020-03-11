@@ -25,5 +25,8 @@ Blockly.Themes.Dark = Blockly.Theme.defineTheme('dark', {
     'flyoutOpacity': 1,
     'scrollbarColour': '#797979',
     'scrollbarOpacity': 0.4
+  },
+  'accessibilityStyle': {
+    'cursorColour': '#d0d0d0'
   }
 });

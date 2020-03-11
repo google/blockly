@@ -60,17 +60,17 @@ Blockly.blockRendering.PathObject = function(root, style, constants) {
    * Holds the cursors svg element when the cursor is attached to the block.
    * This is null if there is no cursor on the block.
    * @type {SVGElement}
-   * @private
+   * @package
    */
-  this.cursorSvg_ = null;
+  this.cursorSvg = null;
 
   /**
    * Holds the markers svg element when the marker is attached to the block.
    * This is null if there is no marker on the block.
    * @type {SVGElement}
-   * @private
+   * @package
    */
-  this.markerSvg_ = null;
+  this.markerSvg = null;
 };
 
 /**
@@ -99,12 +99,12 @@ Blockly.blockRendering.PathObject.prototype.flipRTL = function() {
  */
 Blockly.blockRendering.PathObject.prototype.setCursorSvg = function(cursorSvg) {
   if (!cursorSvg) {
-    this.cursorSvg_ = null;
+    this.cursorSvg = null;
     return;
   }
 
   this.svgRoot.appendChild(cursorSvg);
-  this.cursorSvg_ = cursorSvg;
+  this.cursorSvg = cursorSvg;
 };
 
 /**
@@ -115,16 +115,16 @@ Blockly.blockRendering.PathObject.prototype.setCursorSvg = function(cursorSvg) {
  */
 Blockly.blockRendering.PathObject.prototype.setMarkerSvg = function(markerSvg) {
   if (!markerSvg) {
-    this.markerSvg_ = null;
+    this.markerSvg = null;
     return;
   }
 
-  if (this.cursorSvg_) {
-    this.svgRoot.insertBefore(markerSvg, this.cursorSvg_);
+  if (this.cursorSvg) {
+    this.svgRoot.insertBefore(markerSvg, this.cursorSvg);
   } else {
     this.svgRoot.appendChild(markerSvg);
   }
-  this.markerSvg_ = markerSvg;
+  this.markerSvg = markerSvg;
 };
 
 /**

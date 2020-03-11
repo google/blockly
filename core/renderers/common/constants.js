@@ -612,6 +612,7 @@ Blockly.blockRendering.ConstantProvider.prototype.setDynamicProperties_ =
     function(theme) {
     /* eslint-disable indent */
   this.setFontConstants_(theme);
+  this.setAccessibilityConstants_(theme);
 
   this.ADD_START_HATS = theme.startHats != null ? theme.startHats : false;
 }; /* eslint-enable indent */
@@ -658,6 +659,22 @@ Blockly.blockRendering.ConstantProvider.prototype.setFontConstants_ = function(
   this.FIELD_TEXT_HEIGHT = fontMetrics.height;
   this.FIELD_TEXT_BASELINE = fontMetrics.baseline;
 };
+
+/**
+ * Set constants related to accessibility.
+ * @param {!Blockly.Theme} theme The current workspace theme.
+ * @protected
+ */
+Blockly.blockRendering.ConstantProvider.prototype.setAccessibilityConstants_ =
+    function(theme) {
+    /* eslint-disable indent */
+  if (theme.accessibilityStyle) {
+    this.CURSOR_COLOUR = theme.accessibilityStyle['cursorColour'] != undefined ?
+      theme.accessibilityStyle['cursorColour'] : this.CURSOR_COLOUR;
+    this.MARKER_COLOUR = theme.accessibilityStyle['markerColour'] != undefined ?
+      theme.accessibilityStyle['markerColour'] : this.CURSOR_COLOUR;
+  }
+}; /* eslint-enable indent */
 
 /**
  * Get or create a block style based on a single colour value.  Generate a name

@@ -123,6 +123,7 @@ Blockly.blockRendering.MarkerSvg.prototype.createDom = function() {
       }, null);
 
   this.createDomInternal_();
+  this.applyColour_();
   return this.svgGroup_;
 };
 
@@ -454,6 +455,13 @@ Blockly.blockRendering.MarkerSvg.prototype.draw = function(oldNode, curNode) {
     return;
   }
 
+  this.constants_ = this.workspace_.getRenderer().getConstants();
+
+  var defaultColour = this.isCursor() ? this.constants_.CURSOR_COLOUR :
+    this.constants_.MARKER_COLOUR;
+  this.colour_ = this.marker_.colour || defaultColour;
+  this.applyColour_();
+
   this.showAtLocation_(curNode);
 
   this.firemarkerEvent_(oldNode, curNode);
@@ -550,7 +558,6 @@ Blockly.blockRendering.MarkerSvg.prototype.createDomInternal_ = function() {
   // A horizontal line used to represent a workspace coordinate or next connection.
   this.markerSvgLine_ = Blockly.utils.dom.createSvgElement('rect',
       {
-        'fill': this.colour_,
         'width': this.constants_.CURSOR_WS_WIDTH,
         'height': this.constants_.WS_CURSOR_HEIGHT,
         'style': 'display: none'
@@ -562,8 +569,7 @@ Blockly.blockRendering.MarkerSvg.prototype.createDomInternal_ = function() {
       {
         'class': 'blocklyVerticalMarker',
         'rx': 10, 'ry': 10,
-        'style': 'display: none',
-        'stroke': this.colour_
+        'style': 'display: none'
       },
       this.markerSvg_);
 
@@ -571,8 +577,7 @@ Blockly.blockRendering.MarkerSvg.prototype.createDomInternal_ = function() {
   this.markerInput_ = Blockly.utils.dom.createSvgElement('path',
       {
         'transform': '',
-        'style': 'display: none',
-        'fill': this.colour_
+        'style': 'display: none'
       },
       this.markerSvg_);
 
@@ -583,7 +588,6 @@ Blockly.blockRendering.MarkerSvg.prototype.createDomInternal_ = function() {
         'transform': '',
         'style': 'display: none',
         'fill': 'none',
-        'stroke': this.colour_,
         'stroke-width': this.constants_.CURSOR_STROKE_WIDTH
       },
       this.markerSvg_);
@@ -591,7 +595,7 @@ Blockly.blockRendering.MarkerSvg.prototype.createDomInternal_ = function() {
   // Markers and stack markers don't blink.
   if (this.isCursor()) {
     var blinkProperties = this.getBlinkProperties_();
-    Blockly.utils.dom.createSvgElement('animate', this.getBlinkProperties_(),
+    Blockly.utils.dom.createSvgElement('animate', blinkProperties,
         this.markerSvgLine_);
     Blockly.utils.dom.createSvgElement('animate', blinkProperties,
         this.markerInput_);
@@ -601,6 +605,24 @@ Blockly.blockRendering.MarkerSvg.prototype.createDomInternal_ = function() {
   }
 
   return this.markerSvg_;
+};
+
+/**
+ * Apply the marker's colour.
+ * @protected
+ */
+Blockly.blockRendering.MarkerSvg.prototype.applyColour_ = function() {
+  this.markerSvgLine_.setAttribute('fill', this.colour_);
+  this.markerSvgRect_.setAttribute('stroke', this.colour_);
+  this.markerInput_.setAttribute('fill', this.colour_);
+  this.markerBlock_.setAttribute('stroke', this.colour_);
+
+  if (this.isCursor()) {
+    var values = this.colour_ + ';transparent;transparent;';
+    this.markerSvgLine_.firstChild.setAttribute('values', values);
+    this.markerInput_.firstChild.setAttribute('values', values);
+    this.markerBlock_.firstChild.setAttribute('values', values);
+  }
 };
 
 /**

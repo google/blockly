@@ -119,8 +119,6 @@ Blockly.zelos.MarkerSvg.prototype.createDomInternal_ = function() {
   this.markerCircle_ = Blockly.utils.dom.createSvgElement('circle', {
     'r': this.constants_.CURSOR_RADIUS,
     'style': 'display: none',
-    'fill': this.colour_,
-    'stroke': this.colour_,
     'stroke-width': this.constants_.CURSOR_STROKE_WIDTH
   },
   this.markerSvg_);
@@ -135,3 +133,17 @@ Blockly.zelos.MarkerSvg.prototype.createDomInternal_ = function() {
   return this.markerSvg_;
 };
 
+/**
+ * @override
+ */
+Blockly.zelos.MarkerSvg.prototype.applyColour_ = function() {
+  Blockly.zelos.MarkerSvg.superClass_.applyColour_.call(this);
+
+  this.markerCircle_.setAttribute('fill', this.colour_);
+  this.markerCircle_.setAttribute('stroke', this.colour_);
+
+  if (this.isCursor()) {
+    var values = this.colour_ + ';transparent;transparent;';
+    this.markerCircle_.firstChild.setAttribute('values', values);
+  }
+};

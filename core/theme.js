@@ -72,6 +72,13 @@ Blockly.Theme = function(name, opt_blockStyles, opt_categoryStyles,
    * @package
    */
   this.startHats = false;
+
+  /**
+   * The accessibility style.
+   * @type {?Blockly.Theme.AccessibilityStyle}
+   * @package
+   */
+  this.accessibilityStyle = null;
 };
 
 /**
@@ -102,6 +109,15 @@ Blockly.Theme.CategoryStyle;
  *          }}
  */
 Blockly.Theme.FontStyle;
+
+/**
+ * An Accessibility style.
+ * @typedef {{
+ *            markerColour:string?,
+ *            cursorColour:string?
+ *          }}
+ */
+Blockly.Theme.AccessibilityStyle;
 
 /**
  * Overrides or adds a style to the blockStyles map.
@@ -165,6 +181,15 @@ Blockly.Theme.prototype.setStartHats = function(startHats) {
 };
 
 /**
+ * Configure a theme's accessibility style.
+ * @param {Blockly.Theme.AccessibilityStyle} accessibilityStyle The
+ *     accessibility style.
+*/
+Blockly.Theme.prototype.setAccessibilityStyle = function(accessibilityStyle) {
+  this.accessibilityStyle = accessibilityStyle;
+};
+
+/**
  * Define a new Blockly theme.
  * @param {string} name The name of the theme.
  * @param {!Object} themeObj An object containing theme properties.
@@ -188,5 +213,7 @@ Blockly.Theme.defineTheme = function(name, themeObj) {
   if (themeObj['startHats'] != null) {
     theme.startHats = themeObj['startHats'];
   }
+  Blockly.utils.object.deepMerge(theme.accessibilityStyle,
+      themeObj['accessibilityStyle']);
   return theme;
 };

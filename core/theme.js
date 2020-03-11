@@ -60,7 +60,7 @@ Blockly.Theme = function(name, opt_blockStyles, opt_categoryStyles,
 
   /**
    * The font style.
-   * @type {Blockly.Theme.FontStyle}
+   * @type {!Blockly.Theme.FontStyle}
    * @package
    */
   this.fontStyle = /** @type {Blockly.Theme.FontStyle} */ (Object.create(null));
@@ -68,17 +68,18 @@ Blockly.Theme = function(name, opt_blockStyles, opt_categoryStyles,
   /**
    * Whether or not to add a 'hat' on top of all blocks with no previous or
    * output connections.
-   * @type {boolean}
+   * @type {?boolean}
    * @package
    */
-  this.startHats = false;
+  this.startHats = null;
 
   /**
    * The accessibility style.
-   * @type {?Blockly.Theme.AccessibilityStyle}
+   * @type {!Blockly.Theme.AccessibilityStyle}
    * @package
    */
-  this.accessibilityStyle = null;
+  this.accessibilityStyle =
+    /** @type {Blockly.Theme.AccessibilityStyle} */ (Object.create(null));
 };
 
 /**

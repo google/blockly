@@ -156,9 +156,9 @@ Blockly.MarkerManager.prototype.setMarkerSvg = function(markerSvg) {
 
 /**
  * Redraw the attached cursor svg if needed.
- * @protected
+ * @package
  */
-Blockly.MarkerManager.prototype.updateAccessibility_ = function() {
+Blockly.MarkerManager.prototype.updateAccessibility = function() {
   if (this.workspace_.keyboardAccessibilityMode && this.cursorSvg_) {
     this.workspace_.getCursor().draw();
   }

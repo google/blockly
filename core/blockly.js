@@ -258,12 +258,6 @@ Blockly.onKeyDown_ = function(e) {
       Blockly.hideChaff();
       mainWorkspace.undo(e.shiftKey);
     }
-    else if (e.keyCode == 70) {
-      // 'f' for focusing the workspace search,
-      // 'F' for focusing the toolbox search
-      // Both need to be triggered with the Ctrl/Cmd key - Ctrl + F, Ctrl + Shift + F
-      workspace.focusSearch(e.shiftKey);
-    }
   }
   // Common code for delete and cut.
   // Don't delete in the flyout.
@@ -351,6 +345,10 @@ Blockly.hideChaff = function(opt_allowToolbox) {
         workspace.toolbox_.flyout_ &&
         workspace.toolbox_.flyout_.autoClose) {
       workspace.toolbox_.clearSelection();
+    }
+    if (workspace.toolboxSearch_ &&
+        workspace.toolboxSearch_.flyout_) {
+      workspace.toolboxSearch_.flyout_.hide();
     }
   }
 };

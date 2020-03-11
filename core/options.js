@@ -145,6 +145,9 @@ Blockly.Options = function(options) {
   this.theme = theme;
   this.keyMap = keyMap;
   this.renderer = renderer;
+
+  this.hasToolboxSearch = options['hasToolboxSearch'] || false;
+  this.hasWorkspaceSearch = options['hasWorkspaceSearch'] || false;
 };
 
 /**

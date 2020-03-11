@@ -561,7 +561,7 @@ Blockly.FilteredMenu.prototype.handleSearchKeyUp = function (e) {
   var searchTerms = newSearchVal.trim().toLowerCase().split(/\s+/);
 
   // Remove those elements of the search terms that are empty (so no empty strings are in the search)
-  searchTerms = Blockly.Toolbox.TreeSearch.filter(searchTerms, function (term) {
+  searchTerms = Blockly.Search.filter(searchTerms, function (term) {
     return term.length > 0;
   });
 

@@ -201,6 +201,25 @@ Blockly.Search.prototype.blocksMatchingSearchTerms = function (terms) {
   return intersectingMatches.getValues();
 };
 
+Blockly.Search.prototype.runSearch = function (inputValue) {
+  // Prepare the contents of the search by trimming, lowercasing and splitting by whitespace
+  var searchTerms = inputValue.trim().toLowerCase().split(/\s+/);
+
+  // Remove those elements of the search terms that are empty (so no empty strings are in the search)
+  searchTerms = Blockly.Search.filter(searchTerms, function (term) {
+    return term.length > 0;
+  });
+
+  // Temporary list for results
+  var matchingBlockIds = [];
+
+  if (searchTerms.length > 0) {
+    matchingBlockIds = this.blocksMatchingSearchTerms(searchTerms);
+  }
+
+  return matchingBlockIds;
+};
+
 /**
  * Clears the Search handler's trie and reinitializes it.
  *
@@ -210,6 +229,23 @@ Blockly.Search.prototype.clearAll = function () {
   delete this.blockTrie_;
 
   this.blockTrie_ = new Blockly.Trie();
+};
+
+// Filters out empty spaces. Stolen from Closure's goog.array.filter so we can remove it completely.
+Blockly.Search.filter = function (arr, f, optObj) {
+  var l = arr.length; // must be fixed during loop... see docs
+  var res = [];
+  var resLength = 0;
+  var arr2 = (typeof arr === 'string') ? arr.split(' ') : arr;
+  for (var i = 0; i < l; i++) {
+    if (i in arr2) {
+      var val = arr2[i]; // in case f mutates arr2
+      if (f.call(optObj, val, i, arr)) {
+        res[resLength++] = val;
+      }
+    }
+  }
+  return res;
 };
 
 /**

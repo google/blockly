@@ -47,83 +47,6 @@ Blockly.WorkspaceSearch = function (workspace) {
   this.workspace_.addChangeListener(function (event) {
     thisObj.onNewWorkspaceEvent(event);
   });
-
-  // Get the GUI elements
-  this.searchMenu_ = document.getElementById('workspaceSearchDiv');
-
-  this.searchInput_ = document.getElementById('workspaceSearchInput');
-
-  this.resultsNumberHolder_ = document.getElementById('resultsCount');
-
-  this.buttonsHolder_ = document.getElementById('buttonsHolder');
-  this.prevButton_ = document.getElementById('prevWorkspaceHolder');
-  this.nextButton_ = document.getElementById('nextWorkspaceHolder');
-
-  // Set some styling (for an expanding animation)
-  this.resultsNumberHolder_.style.minWidth = '0px';
-  this.resultsNumberHolder_.style.maxWidth = '0px';
-  this.buttonsHolder_.style.maxWidth = '0px';
-
-  // Add more event listeners
-  this.searchInput_.addEventListener('keydown', function (event) {
-    event.stopPropagation();
-  });
-
-  this.searchInput_.addEventListener('click', function (event) {
-    event.stopPropagation();
-
-    // Change the styling to trigger the expanding animation
-    thisObj.resultsNumberHolder_.style.minWidth = '50px';
-    thisObj.resultsNumberHolder_.style.maxWidth = '50px';
-    thisObj.buttonsHolder_.style.maxWidth = '140px';
-  });
-
-  // Add an event listener for when the user clicks outside the search bar
-  this.searchInput_.addEventListener('blur', function (event) {
-    // Specifically check for the search bar's children elements. Do NOT blur if those are clicked.
-    if (event.relatedTarget &&
-      ((event.relatedTarget.id && event.relatedTarget.id === 'workspaceSearchDiv') ||
-      (event.relatedTarget.id && event.relatedTarget.id === 'resultsCount') ||
-      (event.relatedTarget.id && event.relatedTarget.id === 'prevWorkspaceHolder') ||
-      (event.relatedTarget.id && event.relatedTarget.id === 'nextWorkspaceHolder') ||
-      (event.relatedTarget.id && event.relatedTarget.id === 'closeWorkspaceHolder'))) {
-      event.stopPropagation();
-      thisObj.focusSearchField();
-      return;
-    }
-
-    thisObj.lastSearchValue_ = '';
-    thisObj.onBlur(event);
-  });
-
-  this.searchInput_.addEventListener('search', function (event) {
-    event.preventDefault();
-
-    if (thisObj.searchInput_.value.length === 0) {
-      thisObj.lastSearchValue_ = '';
-      thisObj.searchInput_.blur();
-      thisObj.onBlur(event);
-    }
-
-    // thisObj.executeSearchOnKeyUp(event, thisObj);
-  });
-
-  // Execute the search on a keyup event
-  this.searchInput_.addEventListener('keyup', function (event) {
-    thisObj.executeSearchOnKeyUp(event, thisObj);
-  });
-
-  // Event listener for clicking the "next" button. Will try to show the next result, if one exists.
-  this.nextButton_.addEventListener('click', function (event) {
-    event.preventDefault();
-    thisObj.showNextResult(true);
-  });
-
-  // Event listener for clicking the "previous" button. Will try to show the previous result, if one exists.
-  this.prevButton_.addEventListener('click', function (event) {
-    event.preventDefault();
-    thisObj.showNextResult(false);
-  });
 };
 Blockly.utils.object.inherits(Blockly.WorkspaceSearch, Blockly.Search);
 
@@ -419,53 +342,11 @@ Blockly.WorkspaceSearch.prototype.decodeXmlBlocks = function (xmlBlock) {
   return allBlocks;
 };
 
-/**
- * Event handler for executing a search. Happens upon the user adding a new character (or removing one, as well).
- *
- */
-Blockly.WorkspaceSearch.prototype.executeSearchOnKeyUp = function (e) {
-  var search = this;
-
-  // If the user pressed Escape, clear the search and unfocus the search box.
-  if (e.keyCode === 27) {
-    search.lastSearchValue_ = '';
-    search.searchInput_.blur();
-    search.onBlur(e);
-    return;
-  } else if (e.keyCode === 13) {
-    // If the user pressed Enter, show the next result (or previous when Shift + Enter)
-    search.showNextResult(!e.shiftKey);
-    return;
-  }
-
-  // Get the text inside the search bar
-  const searchBarValue = e.target.value;
-
-  // Do NOT continue with the search if nothing changed in the text inside the search bar
-  if (search.lastSearchValue_ && searchBarValue === search.lastSearchValue_) {
-    return;
-  }
-
-  // Save the user's saved text
-  search.lastSearchValue_ = searchBarValue;
-
-  // Prepare the contents of the search by trimming, lowercasing and splitting by whitespace
-  var searchTerms = search.lastSearchValue_.trim().toLowerCase().split(/\s+/);
-
-  // Remove those elements of the search terms that are empty (so no empty strings are in the search)
-  searchTerms = Blockly.Toolbox.TreeSearch.filter(searchTerms, function (term) {
-    return term.length > 0;
-  });
+Blockly.WorkspaceSearch.prototype.runSearch = function (inputVal) {
+  var matchingBlockIds = Blockly.WorkspaceSearch.superClass_.runSearch.call(this, inputVal);
 
   // Initialize a list that will hold the results
-  search.finalResults_ = [];
-
-  // Temporary list for results
-  var matchingBlockIds = [];
-
-  if (searchTerms.length > 0) {
-    matchingBlockIds = search.blocksMatchingSearchTerms(searchTerms);
-  }
+  var finalResults = [];
 
   if (matchingBlockIds.length > 0) {
     var counter = 0;
@@ -473,108 +354,20 @@ Blockly.WorkspaceSearch.prototype.executeSearchOnKeyUp = function (e) {
     // Go through the temporary results
     while (counter < matchingBlockIds.length) {
       // Search for the block inside the workspace
-      var block = search.workspace_.getBlockById(matchingBlockIds[counter]);
+      var block = this.workspace_.getBlockById(matchingBlockIds[counter]);
 
       // Only add the block if it is found (could be that the workspace has hidden blocks inside it?)
       if (block) {
-        search.finalResults_.push(block);
+        finalResults.push(block);
       }
 
       counter++;
     }
+
+    // Sort the final results by the sortObjects_ function. It uses the physical
+    // location of blocks so blocks on top of other blocks are always first.
+    finalResults.sort(Blockly.Workspace.prototype.sortObjects_);
   }
 
-  // Sort the final results by the sortObjects_ function. It uses the physical
-  // location of blocks so blocks on top of other blocks are always first.
-  search.finalResults_.sort(Blockly.Workspace.prototype.sortObjects_);
-
-  // Show the first result, if possible
-  search.currentIndex = -1;
-  search.showNextResult(true);
-};
-
-/**
- * Hightlights the next (or previous) result from a search.
- * Unhighlights the previously shown result.
- *
- * @param {!Boolean} direction If true, will show next result. If false, will show previous result.
- */
-Blockly.WorkspaceSearch.prototype.showNextResult = function (direction) {
-  var search = this;
-
-  // If no results were found, do not hightlight anything. Unhighlight any previously highlighted blocks
-  if (search.finalResults_.length === 0) {
-    search.workspace_.highlightBlock('');
-    if (search.currentResult) {
-      search.currentResult.unselect();
-    }
-    search.resultsNumberHolder_.innerHTML = '0/0';
-    // search.nextButton_.disabled = true;
-    // search.prevButton_.disabled = true;
-    return;
-  }
-
-  // search.nextButton_.disabled = false;
-  // search.prevButton_.disabled = false;
-
-  // Determine whether the next or previous block will be shown
-  if (direction) {
-    search.currentIndex++;
-  } else {
-    search.currentIndex--;
-  }
-
-  // Wrap around to the start (or end) of the results if
-  // "next" if pressed after the last block was shown
-  if (search.finalResults_.length <= search.currentIndex) {
-    search.currentIndex = 0;
-  } else if (search.currentIndex < 0) {
-    search.currentIndex = search.finalResults_.length - 1;
-  }
-
-  // Show the number of results
-  search.resultsNumberHolder_.innerHTML = (search.currentIndex + 1) + '/' + (search.finalResults_.length);
-
-  // Hightlight the block (and move the workspace to show it in the center)
-  search.currentResult = search.finalResults_[search.currentIndex];
-  search.currentResult.select();
-  search.workspace_.centerOnBlock(search.currentResult.id);
-  search.workspace_.highlightBlock(search.currentResult.id);
-};
-
-/**
- * Event handler for whenever the user moves out of the search bar.
- * Unhighlights all blocks and starts the shrinking animation of the search bar.
- */
-Blockly.WorkspaceSearch.prototype.onBlur = function (e) {
-  var search = this;
-  search.workspace_.highlightBlock('');
-
-  if (search.currentResult) {
-    search.currentResult.unselect();
-  }
-
-  search.searchInput_.value = '';
-
-  search.resultsNumberHolder_.innerHTML = '';
-
-  // search.searchMenu_.style.visibility = "hidden";
-  search.resultsNumberHolder_.style.minWidth = '0px';
-  search.resultsNumberHolder_.style.maxWidth = '0px';
-  search.buttonsHolder_.style.maxWidth = '0px';
-
-  search.finalResults_ = [];
-};
-
-/**
- * Event handler for focusing the search bar in the top menu bar.
- * Starts the expand animation of the bar and focuses it so the user can type in it.
- */
-Blockly.WorkspaceSearch.prototype.focusSearchField = function () {
-  // this.searchMenu_.style.visibility = "visible";
-  this.resultsNumberHolder_.style.minWidth = '50px';
-  this.resultsNumberHolder_.style.maxWidth = '50px';
-  this.buttonsHolder_.style.maxWidth = '140px';
-
-  this.searchInput_.focus();
+  return finalResults;
 };

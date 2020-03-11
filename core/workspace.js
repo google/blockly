@@ -139,15 +139,6 @@ Blockly.Workspace = function(opt_options) {
       new Blockly.ThemeManager(this.options.theme || Blockly.Themes.Classic);
   
   this.themeManager_.subscribeWorkspace(this);
-
-  // Instantiate the search handlers
-  // WorkspaceSearch is the handler for the blocks added to a workspace. Created when the initial workspace is created.
-  // ToolboxSearch is the handler for searching in the toolbox.
-  if (!opt_options.parentWorkspace) {
-    this.search_ = new Blockly.WorkspaceSearch(this);
-  } else if (opt_options.isToolbox) {
-    this.search_ = new Blockly.ToolboxSearch(this);
-  }
 };
 
 /**

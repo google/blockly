@@ -121,7 +121,8 @@ Blockly.Flyout = function(workspaceOptions) {
    */
   this.widthCalcElements_ = {
     mainToolbox: document.getElementsByClassName('blocklyToolboxDiv')[0],
-    rightSidebar: document.getElementById('rightside-bar')
+    rightSidebar: document.getElementById('rightside-bar'),
+    extraSpacing: 100
   };
 };
 
@@ -421,6 +422,15 @@ Blockly.Flyout.prototype.positionAt_ = function(width, height, x, y) {
       maxWidth = maxWidth - this.widthCalcElements_.rightSidebar.offsetWidth;
     }
 
+    if (this.widthCalcElements_.extraSpacing) {
+      maxWidth = maxWidth - this.widthCalcElements_.extraSpacing;
+
+      // If based on the right, push out minLeftTransform
+      if (this.toolboxPosition_ === Blockly.TOOLBOX_AT_RIGHT) {
+        minLeftTransform = minLeftTransform + this.widthCalcElements_.extraSpacing;
+      }
+    }
+
     if (!Blockly.mainWorkspace.RTL) {
       width = Math.min(width, maxWidth);
       x = Math.max(x, minLeftTransform);
@@ -446,7 +456,11 @@ Blockly.Flyout.prototype.positionAt_ = function(width, height, x, y) {
   if (this.scrollbar_) {
     // Set the scrollbars origin to be the top left of the flyout.
     this.scrollbar_.setOrigin(x, y);
-    this.scrollbar_.resize();
+
+    var metrics = this.getMetrics_();
+    metrics.viewWidth = width - 2;
+    this.scrollbar_.resize(metrics);
+
     // Set the position again so that if the metrics were the same (and the
     // resize failed) our position is still updated.
     this.scrollbar_.setPosition_(
@@ -493,6 +507,11 @@ Blockly.Flyout.prototype.show = function(xmlList) {
       workspace.toolbox_.flyout_ &&
       this !== workspace.toolbox_.flyout_) {
     workspace.toolbox_.clearSelection();
+  }
+  if (workspace.toolboxSearch_ &&
+    workspace.toolboxSearch_.flyout_ &&
+    this !== workspace.toolboxSearch_.flyout_) {
+    workspace.toolboxSearch_.flyout_.hide();
   }
 
   this.hide();

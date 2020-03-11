@@ -395,7 +395,7 @@ Blockly.blockRendering.ConstantProvider = function() {
    * @type {string}
    * @protected
    */
-  this.randomIdentifier_ = String(Math.random()).substring(2);
+  this.randomIdentifier = String(Math.random()).substring(2);
 
   /**
    * The ID of the emboss filter, or the empty string if no filter is set.
@@ -510,13 +510,6 @@ Blockly.blockRendering.ConstantProvider = function() {
     PUZZLE: 1,
     NOTCH: 2
   };
-
-  /**
-   * Rendering constant overrides, passed in through options.
-   * @type {?Object}
-   * @package
-   */
-  this.overrides = null;
 };
 
 /**
@@ -1006,7 +999,7 @@ Blockly.blockRendering.ConstantProvider.prototype.createDom = function(svg,
     </filter>
   */
   var embossFilter = Blockly.utils.dom.createSvgElement('filter',
-      {'id': 'blocklyEmbossFilter' + this.randomIdentifier_}, defs);
+      {'id': 'blocklyEmbossFilter' + this.randomIdentifier}, defs);
   Blockly.utils.dom.createSvgElement('feGaussianBlur',
       {'in': 'SourceAlpha', 'stdDeviation': 1, 'result': 'blur'}, embossFilter);
   var feSpecularLighting = Blockly.utils.dom.createSvgElement('feSpecularLighting',
@@ -1050,7 +1043,7 @@ Blockly.blockRendering.ConstantProvider.prototype.createDom = function(svg,
   */
   var disabledPattern = Blockly.utils.dom.createSvgElement('pattern',
       {
-        'id': 'blocklyDisabledPattern' + this.randomIdentifier_,
+        'id': 'blocklyDisabledPattern' + this.randomIdentifier,
         'patternUnits': 'userSpaceOnUse',
         'width': 10,
         'height': 10
@@ -1065,7 +1058,7 @@ Blockly.blockRendering.ConstantProvider.prototype.createDom = function(svg,
   if (Blockly.blockRendering.Debug) {
     var debugFilter = Blockly.utils.dom.createSvgElement('filter',
         {
-          'id': 'blocklyDebugFilter' + this.randomIdentifier_,
+          'id': 'blocklyDebugFilter' + this.randomIdentifier,
           'height': '160%',
           'width': '180%',
           y: '-30%',

@@ -113,7 +113,7 @@ Blockly.FieldCheckbox.prototype.render_ = function() {
   if (this.textContent_) {
     this.textContent_.nodeValue = this.getDisplayText_();
   }
-  this.updateSize_(this.constants_.FIELD_CHECKBOX_X_OFFSET);
+  this.updateSize_(this.getConstants().FIELD_CHECKBOX_X_OFFSET);
 };
 
 /**

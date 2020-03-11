@@ -94,10 +94,6 @@ Blockly.ThemeManager.prototype.setTheme = function(theme) {
   // Refresh all subscribed workspaces.
   for (var i = 0, workspace; (workspace = this.subscribedWorkspaces_[i]); i++) {
     workspace.refreshTheme();
-    // Re-render if workspace is visible
-    if (workspace.isVisible()) {
-      workspace.setVisible(true);
-    }
   }
 
   // Refresh all registered Blockly UI components.

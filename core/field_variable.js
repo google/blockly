@@ -145,7 +145,7 @@ Blockly.FieldVariable.prototype.initModel = function() {
  */
 Blockly.FieldVariable.prototype.shouldAddBorderRect_ = function() {
   return Blockly.FieldVariable.superClass_.shouldAddBorderRect_.call(this) &&
-    (!this.constants_.FIELD_DROPDOWN_NO_BORDER_RECT_SHADOW ||
+    (!this.getConstants().FIELD_DROPDOWN_NO_BORDER_RECT_SHADOW ||
         this.sourceBlock_.type != 'variables_get');
 };
 

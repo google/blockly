@@ -44,15 +44,28 @@ Blockly.blockRendering.Renderer = function(name) {
    * @private
    */
   this.constants_ = null;
+
+  /**
+   * Rendering constant overrides, passed in through options.
+   * @type {?Object}
+   * @package
+   */
+  this.overrides = null;
 };
 
 /**
  * Initialize the renderer.
  * @param {!Blockly.Theme} theme The workspace theme object.
+ * @param {Object=} opt_rendererOverrides Rendering constant overrides.
  * @package
  */
-Blockly.blockRendering.Renderer.prototype.init = function(theme) {
+Blockly.blockRendering.Renderer.prototype.init = function(theme,
+    opt_rendererOverrides) {
   this.constants_ = this.makeConstants_();
+  if (opt_rendererOverrides) {
+    this.overrides = opt_rendererOverrides;
+    Blockly.utils.object.mixin(this.constants_, opt_rendererOverrides);
+  }
   this.constants_.setTheme(theme);
   this.constants_.init();
 };
@@ -64,11 +77,17 @@ Blockly.blockRendering.Renderer.prototype.init = function(theme) {
  * @package
  */
 Blockly.blockRendering.Renderer.prototype.refresh = function(svg, theme) {
-  var constants = this.getConstants();
-  constants.dispose();
-  constants.setTheme(theme);
-  constants.init();
-  constants.createDom(svg, this.name);
+  var previousConstants = this.getConstants();
+  previousConstants.dispose();
+  this.constants_ = this.makeConstants_();
+  if (this.overrides) {
+    Blockly.utils.object.mixin(this.constants_, this.overrides);
+  }
+  // Ensure the constant provider's random identifier does not change.
+  this.constants_.randomIdentifier = previousConstants.randomIdentifier;
+  this.constants_.setTheme(theme);
+  this.constants_.init();
+  this.getConstants().createDom(svg, this.name);
 };
 
 /**

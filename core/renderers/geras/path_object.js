@@ -36,7 +36,7 @@ Blockly.geras.PathObject = function(root, style, constants) {
    * The renderer's constant provider.
    * @type {!Blockly.geras.ConstantProvider}
    */
-  this.constants_ = constants;
+  this.constants = constants;
 
   this.svgRoot = root;
 
@@ -142,7 +142,7 @@ Blockly.geras.PathObject.prototype.setStyle = function(blockStyle) {
 Blockly.geras.PathObject.prototype.updateHighlighted = function(highlighted) {
   if (highlighted) {
     this.svgPath.setAttribute('filter',
-        'url(#' + this.constants_.embossFilterId + ')');
+        'url(#' + this.constants.embossFilterId + ')');
     this.svgPathLight.style.display = 'none';
   } else {
     this.svgPath.setAttribute('filter', 'none');

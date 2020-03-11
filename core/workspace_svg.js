@@ -136,7 +136,7 @@ Blockly.WorkspaceSvg = function(options,
    * @private
    */
   this.renderer_ = Blockly.blockRendering.init(this.options.renderer || 'geras',
-      this.getTheme());
+      this.getTheme(), this.options.rendererOverrides);
 
   /**
    * Cached parent SVG.
@@ -532,6 +532,11 @@ Blockly.WorkspaceSvg.prototype.refreshTheme = function() {
     this.toolbox_.updateColourFromTheme();
   }
 
+  // Re-render if workspace is visible
+  if (this.isVisible()) {
+    this.setVisible(true);
+  }
+
   var event = new Blockly.Events.Ui(null, 'theme', null, null);
   event.workspaceId = this.id;
   Blockly.Events.fire(event);
@@ -888,7 +893,8 @@ Blockly.WorkspaceSvg.prototype.addFlyout = function(tagName) {
         'rtl': this.RTL,
         'oneBasedIndex': this.options.oneBasedIndex,
         'horizontalLayout': this.horizontalLayout,
-        'renderer': this.options.renderer
+        'renderer': this.options.renderer,
+        'rendererOverrides': this.options.rendererOverrides
       }));
   workspaceOptions.toolboxPosition = this.options.toolboxPosition;
   if (this.horizontalLayout) {

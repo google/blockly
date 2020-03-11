@@ -175,7 +175,8 @@ Blockly.Toolbox.prototype.init = function() {
         'rtl': workspace.RTL,
         'oneBasedIndex': workspace.options.oneBasedIndex,
         'horizontalLayout': workspace.horizontalLayout,
-        'renderer': workspace.options.renderer
+        'renderer': workspace.options.renderer,
+        'rendererOverrides': workspace.options.rendererOverrides
       }));
   workspaceOptions.toolboxPosition = workspace.options.toolboxPosition;
   

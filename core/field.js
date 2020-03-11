@@ -249,9 +249,19 @@ Blockly.Field.prototype.setSourceBlock = function(block) {
     throw Error('Field already bound to a block.');
   }
   this.sourceBlock_ = block;
-  if (block.workspace.rendered) {
-    this.constants_ = block.workspace.getRenderer().getConstants();
+};
+
+/**
+ * Get the renderer constant provider.
+ * @return {?Blockly.blockRendering.ConstantProvider} The renderer constant
+ *     provider.
+ */
+Blockly.Field.prototype.getConstants = function() {
+  if (!this.constants_ && this.sourceBlock_ && this.sourceBlock_.workspace &&
+      this.sourceBlock_.workspace.rendered) {
+    this.constants_ = this.sourceBlock_.workspace.getRenderer().getConstants();
   }
+  return this.constants_;
 };
 
 /**
@@ -313,8 +323,8 @@ Blockly.Field.prototype.createBorderRect_ = function() {
   this.borderRect_ = /** @type {!SVGRectElement} **/
       (Blockly.utils.dom.createSvgElement('rect',
           {
-            'rx': this.constants_.FIELD_BORDER_RECT_RADIUS,
-            'ry': this.constants_.FIELD_BORDER_RECT_RADIUS,
+            'rx': this.getConstants().FIELD_BORDER_RECT_RADIUS,
+            'ry': this.getConstants().FIELD_BORDER_RECT_RADIUS,
             'x': 0,
             'y': 0,
             'height': this.size_.height,
@@ -335,7 +345,7 @@ Blockly.Field.prototype.createTextElement_ = function() {
           {
             'class': 'blocklyText',
           }, this.fieldGroup_));
-  if (this.constants_.FIELD_TEXT_BASELINE_CENTER) {
+  if (this.getConstants().FIELD_TEXT_BASELINE_CENTER) {
     this.textElement_.setAttribute('dominant-baseline', 'central');
   }
   this.textContent_ = document.createTextNode('');
@@ -607,9 +617,9 @@ Blockly.Field.prototype.updateWidth = function() {
  * @protected
  */
 Blockly.Field.prototype.updateSize_ = function(opt_margin) {
-  var constants = this.constants_;
+  var constants = this.getConstants();
   var xOffset = opt_margin != undefined ? opt_margin :
-      (this.borderRect_ ? this.constants_.FIELD_BORDER_RECT_X_PADDING : 0);
+      (this.borderRect_ ? this.getConstants().FIELD_BORDER_RECT_X_PADDING : 0);
   var totalWidth = xOffset * 2;
   var totalHeight = constants.FIELD_TEXT_HEIGHT;
 
@@ -643,7 +653,7 @@ Blockly.Field.prototype.positionTextElement_ = function(xOffset, contentWidth) {
   if (!this.textElement_) {
     return;
   }
-  var constants = this.constants_;
+  var constants = this.getConstants();
   var halfHeight = this.size_.height / 2;
 
   this.textElement_.setAttribute('x', this.sourceBlock_.RTL ?
@@ -664,9 +674,9 @@ Blockly.Field.prototype.positionBorderRect_ = function() {
   this.borderRect_.setAttribute('width', this.size_.width);
   this.borderRect_.setAttribute('height', this.size_.height);
   this.borderRect_.setAttribute('rx',
-      this.constants_.FIELD_BORDER_RECT_RADIUS);
+      this.getConstants().FIELD_BORDER_RECT_RADIUS);
   this.borderRect_.setAttribute('ry',
-      this.constants_.FIELD_BORDER_RECT_RADIUS);
+      this.getConstants().FIELD_BORDER_RECT_RADIUS);
 };
 
 
@@ -796,6 +806,7 @@ Blockly.Field.prototype.setText = function(_newText) {
  */
 Blockly.Field.prototype.markDirty = function() {
   this.isDirty_ = true;
+  this.constants_ = null;
 };
 
 /**

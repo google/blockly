@@ -38,7 +38,7 @@ Blockly.zelos.PathObject = function(root, style, constants) {
    * The renderer's constant provider.
    * @type {!Blockly.zelos.ConstantProvider}
    */
-  this.constants_ = constants;
+  this.constants = constants;
 
   /**
    * The selected path of the block.
@@ -124,7 +124,7 @@ Blockly.zelos.PathObject.prototype.updateSelected = function(enable) {
         /** @type {!SVGElement} */ (this.svgPath.cloneNode(true));
       this.svgPathSelected_.setAttribute('fill', 'none');
       this.svgPathSelected_.setAttribute('filter',
-          'url(#' + this.constants_.selectedGlowFilterId + ')');
+          'url(#' + this.constants.selectedGlowFilterId + ')');
       this.svgRoot.appendChild(this.svgPathSelected_);
     }
   } else {
@@ -143,7 +143,7 @@ Blockly.zelos.PathObject.prototype.updateReplacementFade = function(
   this.setClass_('blocklyReplaceable', enable);
   if (enable) {
     this.svgPath.setAttribute('filter',
-        'url(#' + this.constants_.replacementGlowFilterId + ')');
+        'url(#' + this.constants.replacementGlowFilterId + ')');
   } else {
     this.svgPath.removeAttribute('filter');
   }
@@ -161,7 +161,7 @@ Blockly.zelos.PathObject.prototype.updateShapeForInputHighlight = function(
   }
   if (enable) {
     outlinePath.setAttribute('filter',
-        'url(#' + this.constants_.replacementGlowFilterId + ')');
+        'url(#' + this.constants.replacementGlowFilterId + ')');
   } else {
     outlinePath.removeAttribute('filter');
   }

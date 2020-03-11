@@ -266,7 +266,7 @@ Blockly.StaticTyping.prototype.setBlockTypeWarning =
     // User still has to attach a block to this variable or its first
     // declaration, so for now do not display any warning
     block.setWarningText(null, warningLabel);
-  } else if (blockType !== Blockly.Types.UNDEF) {
+  } else if (blockType !== Blockly.Types.UNDEF && block.type != 'variables_get') {
       if (this.varTypeDict[varName] !== blockType) {
         block.setWarningText('The variable ' + varName + ' has been first ' +
             'assigned to the "' + this.varTypeDict[varName].typeName + '" type\n' +

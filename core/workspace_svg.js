@@ -912,6 +912,9 @@ Blockly.WorkspaceSvg.prototype.resize = function() {
   if (this.flyout_) {
     this.flyout_.position();
   }
+  if (this.toolboxSearch_ && this.toolboxSearch_.flyout_) {
+    this.toolboxSearch_.flyout_.position();
+  }
   if (this.trashcan) {
     this.trashcan.position();
   }

@@ -237,6 +237,22 @@ Blockly.zelos.ConstantProvider = function() {
   /**
    * @override
    */
+  this.FIELD_TEXT_FONTSIZE = 3 * this.GRID_UNIT;
+
+  /**
+   * @override
+   */
+  this.FIELD_TEXT_FONTWEIGHT = 'bold';
+
+  /**
+   * @override
+   */
+  this.FIELD_TEXT_FONTFAMILY =
+    '"Helvetica Neue", "Segoe UI", Helvetica, sans-serif';
+
+  /**
+   * @override
+   */
   this.FIELD_BORDER_RECT_RADIUS = this.CORNER_RADIUS;
 
   /**
@@ -366,18 +382,6 @@ Blockly.zelos.ConstantProvider = function() {
 };
 Blockly.utils.object.inherits(Blockly.zelos.ConstantProvider,
     Blockly.blockRendering.ConstantProvider);
-
-/**
- * @override
- */
-Blockly.zelos.ConstantProvider.prototype.getDefaultFontStyle_ = function() {
-  var fontStyle =
-      Blockly.zelos.ConstantProvider.superClass_.getDefaultFontStyle_.call(this);
-  fontStyle['weight'] = 'bold';
-  fontStyle['size'] = 3 * this.GRID_UNIT;
-  fontStyle['family'] = '"Helvetica Neue", "Segoe UI", Helvetica, sans-serif';
-  return fontStyle;
-};
 
 /**
  * @override
@@ -807,7 +811,7 @@ Blockly.zelos.ConstantProvider.prototype.createDom = function(svg,
   // Instead use a gaussian blur, and then set all alpha to 1 with a transfer.
   var selectedGlowFilter = Blockly.utils.dom.createSvgElement('filter',
       {
-        'id': 'blocklySelectedGlowFilter' + this.randomIdentifier_,
+        'id': 'blocklySelectedGlowFilter' + this.randomIdentifier,
         'height': '160%',
         'width': '180%',
         y: '-30%',
@@ -849,7 +853,7 @@ Blockly.zelos.ConstantProvider.prototype.createDom = function(svg,
   // Instead use a gaussian blur, and then set all alpha to 1 with a transfer.
   var replacementGlowFilter = Blockly.utils.dom.createSvgElement('filter',
       {
-        'id': 'blocklyReplacementGlowFilter' + this.randomIdentifier_,
+        'id': 'blocklyReplacementGlowFilter' + this.randomIdentifier,
         'height': '160%',
         'width': '180%',
         y: '-30%',
@@ -960,7 +964,7 @@ Blockly.zelos.ConstantProvider.prototype.getCSS_ = function(name) {
 
     // Disabled outline paths.
     selector + ' .blocklyDisabled > .blocklyOutlinePath {',
-      'fill: url(#blocklyDisabledPattern' + this.randomIdentifier_ + ')',
+      'fill: url(#blocklyDisabledPattern' + this.randomIdentifier + ')',
     '}',
     /* eslint-enable indent */
   ];

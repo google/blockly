@@ -38,6 +38,24 @@ Blockly.utils.object.mixin = function(target, source) {
 };
 
 /**
+ * Complete a deep merge of all members of a source object with a target object.
+ * @param {!Object} target Target.
+ * @param {!Object} source Source.
+ * @return {!Object} The resulting object.
+ */
+Blockly.utils.object.deepMerge = function(target, source) {
+  for (var x in source) {
+    if (typeof source[x] === 'object') {
+      target[x] = Blockly.utils.object.deepMerge(
+          target[x] || Object.create(null), source[x]);
+    } else {
+      target[x] = source[x];
+    }
+  }
+  return target;
+};
+
+/**
  * Returns an array of a given object's own enumerable property values.
  * @param {!Object} obj Object containing values.
  * @return {!Array} Array of values.

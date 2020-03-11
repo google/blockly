@@ -175,7 +175,8 @@ Blockly.Toolbox.prototype.init = function() {
         'rtl': workspace.RTL,
         'oneBasedIndex': workspace.options.oneBasedIndex,
         'horizontalLayout': workspace.horizontalLayout,
-        'renderer': workspace.options.renderer
+        'renderer': workspace.options.renderer,
+        'rendererOverrides': workspace.options.rendererOverrides
       }));
   workspaceOptions.toolboxPosition = workspace.options.toolboxPosition;
   
@@ -301,7 +302,7 @@ Blockly.Toolbox.prototype.handleAfterTreeSelected_ = function(
   }
   if (oldNode != newNode && oldNode != this) {
     var event = new Blockly.Events.Ui(null, 'category',
-        oldNode && oldNode.getText(), newNode && newNode.getText());
+        oldNode && oldNode.content, newNode && newNode.content);
     event.workspaceId = this.workspace_.id;
     Blockly.Events.fire(event);
   }
@@ -708,7 +709,7 @@ Blockly.Toolbox.prototype.refreshSelection = function() {
 Blockly.Toolbox.prototype.selectFirstCategory = function() {
   var selectedItem = this.tree_.getSelectedItem();
   if (!selectedItem) {
-    this.tree_.selectFirst();
+    this.tree_.selectChild();
   }
 };
 
@@ -780,7 +781,7 @@ Blockly.Css.register([
   '}',
 
   '.blocklyTreeRow:not(.blocklyTreeSelected):hover {',
-    'background-color: #e4e4e4;',
+    'background-color: rgba(255, 255, 255, 0.2);',
   '}',
 
   '.blocklyTreeSeparator {',

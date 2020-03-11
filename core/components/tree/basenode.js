@@ -34,30 +34,30 @@ Blockly.tree.BaseNode = function(content, config) {
   Blockly.Component.call(this);
 
   /**
-   * The configuration for the tree.
-   * @type {!Blockly.tree.BaseNode.Config}
-   * @private
-   */
-  this.config_ = config;
-
-  /**
    * Text content of the node label.
    * @type {string}
-   * @private
+   * @package
    */
-  this.content_ = content;
+  this.content = content;
 
   /**
    * @type {string}
-   * @private
+   * @package
    */
-  this.iconClass_;
+  this.iconClass;
 
   /**
    * @type {string}
-   * @private
+   * @package
    */
-  this.expandedIconClass_;
+  this.expandedIconClass;
+
+  /**
+   * The configuration for the tree.
+   * @type {!Blockly.tree.BaseNode.Config}
+   * @protected
+   */
+  this.config_ = config;
 
   /**
    * @type {Blockly.tree.TreeControl}
@@ -78,47 +78,28 @@ Blockly.tree.BaseNode = function(content, config) {
   this.nextSibling_;
 
   /**
-   * @type {Blockly.tree.BaseNode}
-   * @private
-   */
-  this.firstChild_;
-
-  /**
-   * @type {Blockly.tree.BaseNode}
-   * @private
-   */
-  this.lastChild_;
-
-  /**
    * Whether the tree item is selected.
    * @type {boolean}
-   * @private
+   * @protected
    */
   this.selected_ = false;
 
   /**
    * Whether the tree node is expanded.
    * @type {boolean}
-   * @private
+   * @protected
    */
   this.expanded_ = false;
 
   /**
-   * Tooltip for the tree item
-   * @type {?string}
-   * @private
-   */
-  this.toolTip_ = null;
-
-  /**
    * Whether to allow user to collapse this node.
    * @type {boolean}
-   * @private
+   * @protected
    */
   this.isUserCollapsible_ = true;
 
   /**
-   * Nesting depth of this node; cached result of computeDepth_.
+   * Nesting depth of this node; cached result of getDepth.
    * -1 if value has not been cached.
    * @type {number}
    * @private
@@ -255,13 +236,9 @@ Blockly.tree.BaseNode.prototype.addChildAt = function(child, index) {
 
   if (prevNode) {
     prevNode.nextSibling_ = child;
-  } else {
-    this.firstChild_ = child;
   }
   if (nextNode) {
     nextNode.previousSibling_ = child;
-  } else {
-    this.lastChild_ = child;
   }
 
   var tree = this.getTree();
@@ -275,8 +252,8 @@ Blockly.tree.BaseNode.prototype.addChildAt = function(child, index) {
   if (el) {
     this.updateExpandIcon();
     Blockly.utils.aria.setState(
-        el, Blockly.utils.aria.State.EXPANDED, this.getExpanded());
-    if (this.getExpanded()) {
+        el, Blockly.utils.aria.State.EXPANDED, this.expanded_);
+    if (this.expanded_) {
       var childrenEl = this.getChildrenElement();
       if (!child.getElement()) {
         child.createDom();
@@ -294,7 +271,7 @@ Blockly.tree.BaseNode.prototype.addChildAt = function(child, index) {
           prevNode.updateExpandIcon();
         } else {
           Blockly.utils.style.setElementShown(childrenEl, true);
-          this.setExpanded(this.getExpanded());
+          this.setExpanded(this.expanded_);
         }
       }
     }
@@ -330,25 +307,15 @@ Blockly.tree.BaseNode.prototype.getTree = function() {
 Blockly.tree.BaseNode.prototype.getDepth = function() {
   var depth = this.depth_;
   if (depth < 0) {
-    depth = this.computeDepth_();
+    var parent = this.getParent();
+    if (parent) {
+      depth = parent.getDepth() + 1;
+    } else {
+      depth = 0;
+    }
     this.setDepth_(depth);
   }
   return depth;
-};
-
-/**
- * Computes the depth of the node in the tree.
- * Called only by getDepth, when the depth hasn't already been cached.
- * @return {number} The non-negative depth of this node (the root is zero).
- * @private
- */
-Blockly.tree.BaseNode.prototype.computeDepth_ = function() {
-  var parent = this.getParent();
-  if (parent) {
-    return parent.getDepth() + 1;
-  } else {
-    return 0;
-  }
 };
 
 /**
@@ -362,7 +329,7 @@ Blockly.tree.BaseNode.prototype.setDepth_ = function(depth) {
     var row = this.getRowElement();
     if (row) {
       var indent = this.getPixelIndent_() + 'px';
-      if (this.isRightToLeft()) {
+      if (this.rightToLeft_) {
         row.style.paddingRight = indent;
       } else {
         row.style.paddingLeft = indent;
@@ -411,22 +378,6 @@ Blockly.tree.BaseNode.prototype.getChildren = function() {
 };
 
 /**
- * @return {Blockly.tree.BaseNode} The first child of this node.
- * @protected
- */
-Blockly.tree.BaseNode.prototype.getFirstChild = function() {
-  return this.getChildAt(0);
-};
-
-/**
- * @return {Blockly.tree.BaseNode} The last child of this node.
- * @protected
- */
-Blockly.tree.BaseNode.prototype.getLastChild = function() {
-  return this.getChildAt(this.getChildCount() - 1);
-};
-
-/**
  * @return {Blockly.tree.BaseNode} The previous sibling of this node.
  * @protected
  */
@@ -470,22 +421,11 @@ Blockly.tree.BaseNode.prototype.select = function() {
 };
 
 /**
- * Selects the first node.
- * @protected
- */
-Blockly.tree.BaseNode.prototype.selectFirst = function() {
-  var tree = this.getTree();
-  if (tree && this.firstChild_) {
-    tree.setSelectedItem(this.firstChild_);
-  }
-};
-
-/**
  * Called from the tree to instruct the node change its selection state.
  * @param {boolean} selected The new selection state.
  * @protected
  */
-Blockly.tree.BaseNode.prototype.setSelectedInternal = function(selected) {
+Blockly.tree.BaseNode.prototype.setSelected = function(selected) {
   if (this.selected_ == selected) {
     return;
   }
@@ -502,23 +442,6 @@ Blockly.tree.BaseNode.prototype.setSelectedInternal = function(selected) {
           Blockly.utils.aria.State.ACTIVEDESCENDANT, this.getId());
     }
   }
-};
-
-/**
- * @return {boolean} Whether the node is expanded.
- * @protected
- */
-Blockly.tree.BaseNode.prototype.getExpanded = function() {
-  return this.expanded_;
-};
-
-/**
- * Sets the node to be expanded internally, without state change events.
- * @param {boolean} expanded Whether to expand or close the node.
- * @protected
- */
-Blockly.tree.BaseNode.prototype.setExpandedInternal = function(expanded) {
-  this.expanded_ = expanded;
 };
 
 /**
@@ -596,15 +519,7 @@ Blockly.tree.BaseNode.prototype.doNodeCollapsed = function() {
  * @protected
  */
 Blockly.tree.BaseNode.prototype.toggle = function() {
-  this.setExpanded(!this.getExpanded());
-};
-
-/**
- * @return {boolean} Whether the node is collapsible by user actions.
- * @protected
- */
-Blockly.tree.BaseNode.prototype.isUserCollapsible = function() {
-  return this.isUserCollapsible_;
+  this.setExpanded(!this.expanded_);
 };
 
 /**
@@ -613,7 +528,7 @@ Blockly.tree.BaseNode.prototype.isUserCollapsible = function() {
  * @protected
  */
 Blockly.tree.BaseNode.prototype.toDom = function() {
-  var nonEmptyAndExpanded = this.getExpanded() && this.hasChildren();
+  var nonEmptyAndExpanded = this.expanded_ && this.hasChildren();
 
   var children = document.createElement('div');
   children.style.backgroundPosition = this.getBackgroundPosition();
@@ -650,7 +565,7 @@ Blockly.tree.BaseNode.prototype.getPixelIndent_ = function() {
 Blockly.tree.BaseNode.prototype.getRowDom = function() {
   var row = document.createElement('div');
   row.className = this.getRowClassName();
-  row.style['padding-' + (this.isRightToLeft() ? 'right' : 'left')] =
+  row.style['padding-' + (this.rightToLeft_ ? 'right' : 'left')] =
       this.getPixelIndent_() + 'px';
 
   row.appendChild(this.getIconDom());
@@ -678,7 +593,7 @@ Blockly.tree.BaseNode.prototype.getRowClassName = function() {
 Blockly.tree.BaseNode.prototype.getLabelDom = function() {
   var label = document.createElement('span');
   label.className = this.config_.cssItemLabel || '';
-  label.textContent = this.getText();
+  label.textContent = this.content;
   return label;
 };
 
@@ -760,43 +675,6 @@ Blockly.tree.BaseNode.prototype.getLabelElement = function() {
 Blockly.tree.BaseNode.prototype.getChildrenElement = function() {
   var el = this.getElement();
   return el ? /** @type {Element} */ (el.lastChild) : null;
-};
-
-/**
- * Gets the icon class for the node.
- * @return {string} s The icon source.
- * @protected
- */
-Blockly.tree.BaseNode.prototype.getIconClass = function() {
-  return this.iconClass_;
-};
-
-/**
- * Gets the icon class for when the node is expanded.
- * @return {string} The class.
- * @protected
- */
-Blockly.tree.BaseNode.prototype.getExpandedIconClass = function() {
-  return this.expandedIconClass_;
-};
-
-/**
- * Sets the text of the label.
- * @param {string} s The plain text of the label.
- * @protected
- */
-Blockly.tree.BaseNode.prototype.setText = function(s) {
-  this.content_ = s;
-};
-
-/**
- * Returns the text of the label. If the text was originally set as HTML, the
- * return value is unspecified.
- * @return {string} The plain text of the label.
- * @package
- */
-Blockly.tree.BaseNode.prototype.getText = function() {
-  return this.content_;
 };
 
 /**
@@ -933,7 +811,7 @@ Blockly.tree.BaseNode.prototype.selectPrevious = function() {
  * @package
  */
 Blockly.tree.BaseNode.prototype.selectParent = function() {
-  if (this.hasChildren() && this.getExpanded() && this.isUserCollapsible_) {
+  if (this.hasChildren() && this.expanded_ && this.isUserCollapsible_) {
     this.setExpanded(false);
   } else {
     var parent = this.getParent();
@@ -954,10 +832,10 @@ Blockly.tree.BaseNode.prototype.selectParent = function() {
  */
 Blockly.tree.BaseNode.prototype.selectChild = function() {
   if (this.hasChildren()) {
-    if (!this.getExpanded()) {
+    if (!this.expanded_) {
       this.setExpanded(true);
     } else {
-      this.getFirstChild().select();
+      this.getChildAt(0).select();
     }
     return true;
   }
@@ -969,11 +847,11 @@ Blockly.tree.BaseNode.prototype.selectChild = function() {
  * @protected
  */
 Blockly.tree.BaseNode.prototype.getLastShownDescendant = function() {
-  if (!this.getExpanded() || !this.hasChildren()) {
+  if (!this.expanded_ || !this.hasChildren()) {
     return this;
   }
   // we know there is at least 1 child
-  return this.getLastChild().getLastShownDescendant();
+  return this.getChildAt(this.getChildCount() - 1).getLastShownDescendant();
 };
 
 /**
@@ -982,8 +860,8 @@ Blockly.tree.BaseNode.prototype.getLastShownDescendant = function() {
  * @protected
  */
 Blockly.tree.BaseNode.prototype.getNextShownNode = function() {
-  if (this.hasChildren() && this.getExpanded()) {
-    return this.getFirstChild();
+  if (this.hasChildren() && this.expanded_) {
+    return this.getChildAt(0);
   } else {
     var parent = this;
     var next;
@@ -1017,14 +895,6 @@ Blockly.tree.BaseNode.prototype.getPreviousShownNode = function() {
     return null;
   }
   return /** @type {Blockly.tree.BaseNode} */ (parent);
-};
-
-/**
- * @return {!Blockly.tree.BaseNode.Config} The configuration for the tree.
- * @protected
- */
-Blockly.tree.BaseNode.prototype.getConfig = function() {
-  return this.config_;
 };
 
 /**

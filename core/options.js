@@ -131,6 +131,7 @@ Blockly.Options = function(options) {
   this.theme = Blockly.Options.parseThemeOptions_(options);
   this.keyMap = keyMap;
   this.renderer = renderer;
+  this.rendererOverrides = options['rendererOverrides'];
 
   /**
    * The SVG element for the grid pattern.
@@ -282,8 +283,7 @@ Blockly.Options.parseThemeOptions_ = function(options) {
   if (theme instanceof Blockly.Theme) {
     return /** @type {!Blockly.Theme} */ (theme);
   }
-  return new Blockly.Theme('builtin',
-      theme['blockStyles'], theme['categoryStyles'], theme['componentStyles']);
+  return Blockly.Theme.defineTheme('builtin', theme);
 };
 
 /**

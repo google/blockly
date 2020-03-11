@@ -64,9 +64,9 @@ Blockly.tree.TreeControl = function(toolbox, config) {
   Blockly.tree.BaseNode.call(this, '', config);
 
   // The root is open and selected by default.
-  this.setExpandedInternal(true);
-  this.setSelectedInternal(true);
-
+  this.expanded_ = true;
+  this.selected_ = true;
+  
   /**
    * Currently selected item.
    * @type {Blockly.tree.BaseNode}
@@ -137,13 +137,8 @@ Blockly.tree.TreeControl.prototype.hasFocus = function() {
 };
 
 /** @override */
-Blockly.tree.TreeControl.prototype.getExpanded = function() {
-  return true;
-};
-
-/** @override */
 Blockly.tree.TreeControl.prototype.setExpanded = function(expanded) {
-  this.setExpandedInternal(expanded);
+  this.expanded_ = expanded;
 };
 
 /** @override */
@@ -160,7 +155,7 @@ Blockly.tree.TreeControl.prototype.updateExpandIcon = function() {
 /** @override */
 Blockly.tree.TreeControl.prototype.getRowClassName = function() {
   return Blockly.tree.TreeControl.superClass_.getRowClassName.call(this) +
-      ' ' + this.getConfig().cssHideRoot;
+      ' ' + this.config_.cssHideRoot;
 };
 
 /**
@@ -169,20 +164,18 @@ Blockly.tree.TreeControl.prototype.getRowClassName = function() {
  * @override
  */
 Blockly.tree.TreeControl.prototype.getCalculatedIconClass = function() {
-  var expanded = this.getExpanded();
-  var expandedIconClass = this.getExpandedIconClass();
-  if (expanded && expandedIconClass) {
-    return expandedIconClass;
+  var expanded = this.expanded_;
+  if (expanded && this.expandedIconClass) {
+    return this.expandedIconClass;
   }
-  var iconClass = this.getIconClass();
+  var iconClass = this.iconClass;
   if (!expanded && iconClass) {
     return iconClass;
   }
 
   // fall back on default icons
-  var config = this.getConfig();
-  if (expanded && config.cssExpandedRootIcon) {
-    return config.cssTreeIcon + ' ' + config.cssExpandedRootIcon;
+  if (expanded && this.config_.cssExpandedRootIcon) {
+    return this.config_.cssTreeIcon + ' ' + this.config_.cssExpandedRootIcon;
   }
   return '';
 };
@@ -205,13 +198,13 @@ Blockly.tree.TreeControl.prototype.setSelectedItem = function(node) {
   var oldNode = this.getSelectedItem();
 
   if (this.selectedItem_) {
-    this.selectedItem_.setSelectedInternal(false);
+    this.selectedItem_.setSelected(false);
   }
 
   this.selectedItem_ = node;
 
   if (node) {
-    node.setSelectedInternal(true);
+    node.setSelected(true);
   }
 
   if (this.onAfterSelected_) {
@@ -265,7 +258,7 @@ Blockly.tree.TreeControl.prototype.initAccessibility = function() {
 Blockly.tree.TreeControl.prototype.enterDocument = function() {
   Blockly.tree.TreeControl.superClass_.enterDocument.call(this);
   var el = this.getElement();
-  el.className = this.getConfig().cssRoot;
+  el.className = this.config_.cssRoot;
   el.setAttribute('hideFocus', 'true');
   this.attachEvents_();
   this.initAccessibility();
@@ -392,5 +385,5 @@ Blockly.tree.TreeControl.prototype.getNodeFromEvent_ = function(e) {
  */
 Blockly.tree.TreeControl.prototype.createNode = function(opt_content) {
   return new Blockly.tree.TreeNode(
-      this.toolbox_, opt_content || '', this.getConfig());
+      this.toolbox_, opt_content || '', this.config_);
 };

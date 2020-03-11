@@ -173,9 +173,9 @@ Blockly.FieldColour.prototype.configure_ = function(config) {
  */
 Blockly.FieldColour.prototype.initView = function() {
   this.size_ = new Blockly.utils.Size(
-      this.constants_.FIELD_COLOUR_DEFAULT_WIDTH,
-      this.constants_.FIELD_COLOUR_DEFAULT_HEIGHT);
-  if (!this.constants_.FIELD_COLOUR_FULL_BLOCK) {
+      this.getConstants().FIELD_COLOUR_DEFAULT_WIDTH,
+      this.getConstants().FIELD_COLOUR_DEFAULT_HEIGHT);
+  if (!this.getConstants().FIELD_COLOUR_FULL_BLOCK) {
     this.createBorderRect_();
     this.borderRect_.style['fillOpacity'] = '1';
   } else {
@@ -187,7 +187,7 @@ Blockly.FieldColour.prototype.initView = function() {
  * @override
  */
 Blockly.FieldColour.prototype.applyColour = function() {
-  if (!this.constants_.FIELD_COLOUR_FULL_BLOCK) {
+  if (!this.getConstants().FIELD_COLOUR_FULL_BLOCK) {
     if (this.borderRect_) {
       this.borderRect_.style.fill = this.getValue();
     }

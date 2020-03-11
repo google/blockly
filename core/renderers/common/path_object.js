@@ -35,9 +35,9 @@ Blockly.blockRendering.PathObject = function(root, style, constants) {
   /**
    * The renderer's constant provider.
    * @type {!Blockly.blockRendering.ConstantProvider}
-   * @protected
+   * @package
    */
-  this.constants_ = constants;
+  this.constants = constants;
 
   this.svgRoot = root;
 
@@ -60,17 +60,17 @@ Blockly.blockRendering.PathObject = function(root, style, constants) {
    * Holds the cursors svg element when the cursor is attached to the block.
    * This is null if there is no cursor on the block.
    * @type {SVGElement}
-   * @private
+   * @package
    */
-  this.cursorSvg_ = null;
+  this.cursorSvg = null;
 
   /**
    * Holds the markers svg element when the marker is attached to the block.
    * This is null if there is no marker on the block.
    * @type {SVGElement}
-   * @private
+   * @package
    */
-  this.markerSvg_ = null;
+  this.markerSvg = null;
 };
 
 /**
@@ -99,12 +99,12 @@ Blockly.blockRendering.PathObject.prototype.flipRTL = function() {
  */
 Blockly.blockRendering.PathObject.prototype.setCursorSvg = function(cursorSvg) {
   if (!cursorSvg) {
-    this.cursorSvg_ = null;
+    this.cursorSvg = null;
     return;
   }
 
   this.svgRoot.appendChild(cursorSvg);
-  this.cursorSvg_ = cursorSvg;
+  this.cursorSvg = cursorSvg;
 };
 
 /**
@@ -115,16 +115,16 @@ Blockly.blockRendering.PathObject.prototype.setCursorSvg = function(cursorSvg) {
  */
 Blockly.blockRendering.PathObject.prototype.setMarkerSvg = function(markerSvg) {
   if (!markerSvg) {
-    this.markerSvg_ = null;
+    this.markerSvg = null;
     return;
   }
 
-  if (this.cursorSvg_) {
-    this.svgRoot.insertBefore(markerSvg, this.cursorSvg_);
+  if (this.cursorSvg) {
+    this.svgRoot.insertBefore(markerSvg, this.cursorSvg);
   } else {
     this.svgRoot.appendChild(markerSvg);
   }
-  this.markerSvg_ = markerSvg;
+  this.markerSvg = markerSvg;
 };
 
 /**
@@ -178,7 +178,7 @@ Blockly.blockRendering.PathObject.prototype.updateHighlighted = function(
     enable) {
   if (enable) {
     this.svgPath.setAttribute('filter',
-        'url(#' + this.constants_.embossFilterId + ')');
+        'url(#' + this.constants.embossFilterId + ')');
   } else {
     this.svgPath.setAttribute('filter', 'none');
   }
@@ -206,7 +206,7 @@ Blockly.blockRendering.PathObject.prototype.updateDisabled_ = function(
   this.setClass_('blocklyDisabled', disabled);
   if (disabled) {
     this.svgPath.setAttribute('fill',
-        'url(#' + this.constants_.disabledPatternId + ')');
+        'url(#' + this.constants.disabledPatternId + ')');
   }
 };
 

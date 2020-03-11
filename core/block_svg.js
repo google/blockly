@@ -586,6 +586,9 @@ Blockly.BlockSvg.prototype.getBoundingRectangle = function() {
  * A dirty field is a field that needs to be re-rendererd.
  */
 Blockly.BlockSvg.prototype.markDirty = function() {
+  this.pathObject.constants =
+    (/** @type {!Blockly.WorkspaceSvg} */ (this.workspace))
+        .getRenderer().getConstants();
   for (var i = 0, input; (input = this.inputList[i]); i++) {
     input.markDirty();
   }
@@ -1661,9 +1664,19 @@ Blockly.BlockSvg.prototype.render = function(opt_bubble) {
   }
   Blockly.utils.dom.stopTextWidthCache();
 
-  var cursor = this.workspace.getCursor();
-  if (this.workspace.keyboardAccessibilityMode && this.pathObject.cursorSvg_) {
-    cursor.draw();
+  this.updateMarkers_();
+};
+
+/**
+ * Redraw any attached marker or cursor svgs if needed.
+ * @protected
+ */
+Blockly.BlockSvg.prototype.updateMarkers_ = function() {
+  if (this.workspace.keyboardAccessibilityMode && this.pathObject.cursorSvg) {
+    this.workspace.getCursor().draw();
+  }
+  if (this.workspace.keyboardAccessibilityMode && this.pathObject.markerSvg) {
+    this.workspace.getMarker(Blockly.navigation.MARKER_NAME).draw();
   }
 };
 

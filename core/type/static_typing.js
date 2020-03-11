@@ -258,18 +258,18 @@ Blockly.StaticTyping.prototype.assignTypeToVars =
  * @param {!Blockly.Type} blockType The type of this block.
  * @param {!string} varName The variable name.
  */
-Blockly.StaticTyping.prototype.setBlockTypeWarning =
-    function(block, blockType, varName) {
+Blockly.StaticTyping.prototype.setBlockTypeWarning = function(block, blockType, varId) {
   var warningLabel = 'varType';
+  var varName = block.workspace.getVariableById(varId).name;
   if ((blockType == Blockly.Types.CHILD_BLOCK_MISSING) ||
-      (this.varTypeDict[varName] == Blockly.Types.CHILD_BLOCK_MISSING)) {
+      (this.varTypeDict[varId] == Blockly.Types.CHILD_BLOCK_MISSING)) {
     // User still has to attach a block to this variable or its first
     // declaration, so for now do not display any warning
     block.setWarningText(null, warningLabel);
   } else if (blockType !== Blockly.Types.UNDEF && block.type != 'variables_get') {
-      if (this.varTypeDict[varName] !== blockType) {
-        block.setWarningText('The variable ' + varName + ' has been first ' +
-            'assigned to the "' + this.varTypeDict[varName].typeName + '" type\n' +
+      if (this.varTypeDict[varId] !== blockType) {
+        block.setWarningText('The variable "' + varName + '" has been first ' +
+            'assigned to the "' + this.varTypeDict[varId].typeName + '" type\n' +
             'and this block tries to assign the type "' + blockType.typeName + '"!',
             warningLabel);
       }

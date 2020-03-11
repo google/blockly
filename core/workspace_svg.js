@@ -532,6 +532,11 @@ Blockly.WorkspaceSvg.prototype.refreshTheme = function() {
     this.toolbox_.updateColourFromTheme();
   }
 
+  // Re-render if workspace is visible
+  if (this.isVisible()) {
+    this.setVisible(true);
+  }
+
   var event = new Blockly.Events.Ui(null, 'theme', null, null);
   event.workspaceId = this.id;
   Blockly.Events.fire(event);

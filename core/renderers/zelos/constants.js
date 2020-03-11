@@ -811,7 +811,7 @@ Blockly.zelos.ConstantProvider.prototype.createDom = function(svg,
   // Instead use a gaussian blur, and then set all alpha to 1 with a transfer.
   var selectedGlowFilter = Blockly.utils.dom.createSvgElement('filter',
       {
-        'id': 'blocklySelectedGlowFilter' + this.randomIdentifier_,
+        'id': 'blocklySelectedGlowFilter' + this.randomIdentifier,
         'height': '160%',
         'width': '180%',
         y: '-30%',
@@ -853,7 +853,7 @@ Blockly.zelos.ConstantProvider.prototype.createDom = function(svg,
   // Instead use a gaussian blur, and then set all alpha to 1 with a transfer.
   var replacementGlowFilter = Blockly.utils.dom.createSvgElement('filter',
       {
-        'id': 'blocklyReplacementGlowFilter' + this.randomIdentifier_,
+        'id': 'blocklyReplacementGlowFilter' + this.randomIdentifier,
         'height': '160%',
         'width': '180%',
         y: '-30%',
@@ -964,7 +964,7 @@ Blockly.zelos.ConstantProvider.prototype.getCSS_ = function(name) {
 
     // Disabled outline paths.
     selector + ' .blocklyDisabled > .blocklyOutlinePath {',
-      'fill: url(#blocklyDisabledPattern' + this.randomIdentifier_ + ')',
+      'fill: url(#blocklyDisabledPattern' + this.randomIdentifier + ')',
     '}',
     /* eslint-enable indent */
   ];

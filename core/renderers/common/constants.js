@@ -393,7 +393,7 @@ Blockly.blockRendering.ConstantProvider = function() {
    * A random identifier used to ensure a unique ID is used for each
    * filter/pattern for the case of multiple Blockly instances on a page.
    * @type {string}
-   * @protected
+   * @package
    */
   this.randomIdentifier = String(Math.random()).substring(2);
 

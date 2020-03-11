@@ -136,13 +136,13 @@ Blockly.FieldMultilineInput.prototype.render_ = function() {
   var lines = this.getDisplayText_().split('\n');
   var y = 0;
   for (var i = 0; i < lines.length; i++) {
-    var lineHeight = this.constants_.FIELD_TEXT_HEIGHT +
-        this.constants_.FIELD_BORDER_RECT_Y_PADDING;
+    var lineHeight = this.getConstants().FIELD_TEXT_HEIGHT +
+        this.getConstants().FIELD_BORDER_RECT_Y_PADDING;
     var span = Blockly.utils.dom.createSvgElement('text', {
       'class': 'blocklyText blocklyMultilineText',
-      x: this.constants_.FIELD_BORDER_RECT_X_PADDING,
-      y: y + this.constants_.FIELD_BORDER_RECT_Y_PADDING,
-      dy: this.constants_.FIELD_TEXT_BASELINE
+      x: this.getConstants().FIELD_BORDER_RECT_X_PADDING,
+      y: y + this.getConstants().FIELD_BORDER_RECT_Y_PADDING,
+      dy: this.getConstants().FIELD_TEXT_BASELINE
     }, this.textGroup_);
     span.appendChild(document.createTextNode(lines[i]));
     y += lineHeight;
@@ -186,12 +186,12 @@ Blockly.FieldMultilineInput.prototype.updateSize_ = function() {
     if (textWidth > totalWidth) {
       totalWidth = textWidth;
     }
-    totalHeight += this.constants_.FIELD_TEXT_HEIGHT +
-        (i > 0 ? this.constants_.FIELD_BORDER_RECT_Y_PADDING : 0);
+    totalHeight += this.getConstants().FIELD_TEXT_HEIGHT +
+        (i > 0 ? this.getConstants().FIELD_BORDER_RECT_Y_PADDING : 0);
   }
   if (this.borderRect_) {
-    totalHeight += this.constants_.FIELD_BORDER_RECT_Y_PADDING * 2;
-    totalWidth += this.constants_.FIELD_BORDER_RECT_X_PADDING * 2;
+    totalHeight += this.getConstants().FIELD_BORDER_RECT_Y_PADDING * 2;
+    totalWidth += this.getConstants().FIELD_BORDER_RECT_X_PADDING * 2;
     this.borderRect_.setAttribute('width', totalWidth);
     this.borderRect_.setAttribute('height', totalHeight);
   }
@@ -214,17 +214,17 @@ Blockly.FieldMultilineInput.prototype.widgetCreate_ = function() {
     /** @type {HTMLTextAreaElement} */ (document.createElement('textarea'));
   htmlInput.className = 'blocklyHtmlInput blocklyHtmlTextAreaInput';
   htmlInput.setAttribute('spellcheck', this.spellcheck_);
-  var fontSize = (this.constants_.FIELD_TEXT_FONTSIZE * scale) + 'pt';
+  var fontSize = (this.getConstants().FIELD_TEXT_FONTSIZE * scale) + 'pt';
   div.style.fontSize = fontSize;
   htmlInput.style.fontSize = fontSize;
   var borderRadius = (Blockly.FieldTextInput.BORDERRADIUS * scale) + 'px';
   htmlInput.style.borderRadius = borderRadius;
-  var paddingX = this.constants_.FIELD_BORDER_RECT_X_PADDING * scale;
-  var paddingY = this.constants_.FIELD_BORDER_RECT_Y_PADDING * scale / 2;
+  var paddingX = this.getConstants().FIELD_BORDER_RECT_X_PADDING * scale;
+  var paddingY = this.getConstants().FIELD_BORDER_RECT_Y_PADDING * scale / 2;
   htmlInput.style.padding = paddingY + 'px ' + paddingX + 'px ' + paddingY +
       'px ' + paddingX + 'px';
-  var lineHeight = this.constants_.FIELD_TEXT_HEIGHT +
-      this.constants_.FIELD_BORDER_RECT_Y_PADDING;
+  var lineHeight = this.getConstants().FIELD_TEXT_HEIGHT +
+      this.getConstants().FIELD_BORDER_RECT_Y_PADDING;
   htmlInput.style.lineHeight = (lineHeight * scale) + 'px';
 
   div.appendChild(htmlInput);

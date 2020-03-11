@@ -35,9 +35,9 @@ Blockly.blockRendering.PathObject = function(root, style, constants) {
   /**
    * The renderer's constant provider.
    * @type {!Blockly.blockRendering.ConstantProvider}
-   * @protected
+   * @package
    */
-  this.constants_ = constants;
+  this.constants = constants;
 
   this.svgRoot = root;
 
@@ -178,7 +178,7 @@ Blockly.blockRendering.PathObject.prototype.updateHighlighted = function(
     enable) {
   if (enable) {
     this.svgPath.setAttribute('filter',
-        'url(#' + this.constants_.embossFilterId + ')');
+        'url(#' + this.constants.embossFilterId + ')');
   } else {
     this.svgPath.setAttribute('filter', 'none');
   }
@@ -206,7 +206,7 @@ Blockly.blockRendering.PathObject.prototype.updateDisabled_ = function(
   this.setClass_('blocklyDisabled', disabled);
   if (disabled) {
     this.svgPath.setAttribute('fill',
-        'url(#' + this.constants_.disabledPatternId + ')');
+        'url(#' + this.constants.disabledPatternId + ')');
   }
 };
 

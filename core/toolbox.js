@@ -302,7 +302,7 @@ Blockly.Toolbox.prototype.handleAfterTreeSelected_ = function(
   }
   if (oldNode != newNode && oldNode != this) {
     var event = new Blockly.Events.Ui(null, 'category',
-        oldNode && oldNode.getText(), newNode && newNode.getText());
+        oldNode && oldNode.content, newNode && newNode.content);
     event.workspaceId = this.workspace_.id;
     Blockly.Events.fire(event);
   }
@@ -709,7 +709,7 @@ Blockly.Toolbox.prototype.refreshSelection = function() {
 Blockly.Toolbox.prototype.selectFirstCategory = function() {
   var selectedItem = this.tree_.getSelectedItem();
   if (!selectedItem) {
-    this.tree_.selectFirst();
+    this.tree_.selectChild();
   }
 };
 

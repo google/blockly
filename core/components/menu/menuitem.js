@@ -67,7 +67,7 @@ Blockly.MenuItem.prototype.createDom = function() {
   element.className = 'goog-menuitem goog-option ' +
       (!this.enabled_ ? 'goog-menuitem-disabled ' : '') +
       (this.checked_ ? 'goog-option-selected ' : '') +
-      (this.isRightToLeft() ? 'goog-menuitem-rtl ' : '');
+      (this.rightToLeft_ ? 'goog-menuitem-rtl ' : '');
 
   var content = this.getContentWrapperDom();
   element.appendChild(content);

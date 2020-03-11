@@ -1664,14 +1664,14 @@ Blockly.BlockSvg.prototype.render = function(opt_bubble) {
   }
   Blockly.utils.dom.stopTextWidthCache();
 
-  this.updateAccessibility_();
+  this.updateMarkers_();
 };
 
 /**
  * Redraw any attached marker or cursor svgs if needed.
  * @protected
  */
-Blockly.BlockSvg.prototype.updateAccessibility_ = function() {
+Blockly.BlockSvg.prototype.updateMarkers_ = function() {
   if (this.workspace.keyboardAccessibilityMode && this.pathObject.cursorSvg) {
     this.workspace.getCursor().draw();
   }

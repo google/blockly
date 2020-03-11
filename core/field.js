@@ -821,7 +821,7 @@ Blockly.Field.prototype.forceRerender = function() {
   if (this.sourceBlock_ && this.sourceBlock_.rendered) {
     this.sourceBlock_.render();
     this.sourceBlock_.bumpNeighbours();
-    this.updateAccessibility_();
+    this.updateMarkers_();
   }
 };
 
@@ -1099,7 +1099,7 @@ Blockly.Field.prototype.setMarkerSvg = function(markerSvg) {
  * Redraw any attached marker or cursor svgs if needed.
  * @protected
  */
-Blockly.Field.prototype.updateAccessibility_ = function() {
+Blockly.Field.prototype.updateMarkers_ = function() {
   var workspace = this.sourceBlock_.workspace;
   if (workspace.keyboardAccessibilityMode && this.cursorSvg_) {
     workspace.getCursor().draw();

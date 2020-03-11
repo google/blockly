@@ -24,8 +24,8 @@ goog.require('Blockly.utils.object');
  * @param {!Object.<string, Blockly.Theme.CategoryStyle>=} opt_categoryStyles A
  *     map from style names (strings) to objects with style attributes for
  *     categories.
- * @param {!Object.<string, *>=} opt_componentStyles A map of Blockly component
- *     names to style value.
+ * @param {!Blockly.Theme.ComponentStyle=} opt_componentStyles A map of Blockly
+ *     component names to style value.
  * @constructor
  */
 Blockly.Theme = function(name, opt_blockStyles, opt_categoryStyles,
@@ -53,10 +53,11 @@ Blockly.Theme = function(name, opt_blockStyles, opt_categoryStyles,
 
   /**
    * The UI components styles map.
-   * @type {!Object.<string, *>}
+   * @type {!Blockly.Theme.ComponentStyle}
    * @package
    */
-  this.componentStyles = opt_componentStyles || Object.create(null);
+  this.componentStyles = opt_componentStyles ||
+    (/** @type {Blockly.Theme.ComponentStyle} */ (Object.create(null)));
 
   /**
    * The font style.
@@ -72,14 +73,6 @@ Blockly.Theme = function(name, opt_blockStyles, opt_categoryStyles,
    * @package
    */
   this.startHats = null;
-
-  /**
-   * The accessibility style.
-   * @type {!Blockly.Theme.AccessibilityStyle}
-   * @package
-   */
-  this.accessibilityStyle =
-    /** @type {Blockly.Theme.AccessibilityStyle} */ (Object.create(null));
 };
 
 /**
@@ -102,6 +95,23 @@ Blockly.Theme.BlockStyle;
 Blockly.Theme.CategoryStyle;
 
 /**
+ * A component style.
+ * @typedef {{
+ *            workspaceBackgroundColour:string?,
+ *            toolboxBackgroundColour:string?,
+ *            toolboxForegroundColour:string?,
+ *            flyoutBackgroundColour:string?,
+ *            flyoutForegroundColour:string?,
+ *            flyoutOpacity:number?,
+ *            scrollbarColour:string?,
+ *            scrollbarOpacity:number?,
+ *            markerColour:string?,
+ *            cursorColour:string?
+ *          }}
+ */
+Blockly.Theme.ComponentStyle;
+
+/**
  * A font style.
  * @typedef {{
  *            family:string?,
@@ -110,15 +120,6 @@ Blockly.Theme.CategoryStyle;
  *          }}
  */
 Blockly.Theme.FontStyle;
-
-/**
- * An Accessibility style.
- * @typedef {{
- *            markerColour:string?,
- *            cursorColour:string?
- *          }}
- */
-Blockly.Theme.AccessibilityStyle;
 
 /**
  * Overrides or adds a style to the blockStyles map.
@@ -182,15 +183,6 @@ Blockly.Theme.prototype.setStartHats = function(startHats) {
 };
 
 /**
- * Configure a theme's accessibility style.
- * @param {Blockly.Theme.AccessibilityStyle} accessibilityStyle The
- *     accessibility style.
-*/
-Blockly.Theme.prototype.setAccessibilityStyle = function(accessibilityStyle) {
-  this.accessibilityStyle = accessibilityStyle;
-};
-
-/**
  * Define a new Blockly theme.
  * @param {string} name The name of the theme.
  * @param {!Object} themeObj An object containing theme properties.
@@ -214,7 +206,5 @@ Blockly.Theme.defineTheme = function(name, themeObj) {
   if (themeObj['startHats'] != null) {
     theme.startHats = themeObj['startHats'];
   }
-  Blockly.utils.object.deepMerge(theme.accessibilityStyle,
-      themeObj['accessibilityStyle']);
   return theme;
 };

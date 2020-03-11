@@ -628,12 +628,10 @@ Blockly.blockRendering.ConstantProvider.prototype.setFontConstants_ = function(
 Blockly.blockRendering.ConstantProvider.prototype.setAccessibilityConstants_ =
     function(theme) {
     /* eslint-disable indent */
-  if (theme.accessibilityStyle) {
-    this.CURSOR_COLOUR = theme.accessibilityStyle['cursorColour'] != undefined ?
-      theme.accessibilityStyle['cursorColour'] : this.CURSOR_COLOUR;
-    this.MARKER_COLOUR = theme.accessibilityStyle['markerColour'] != undefined ?
-      theme.accessibilityStyle['markerColour'] : this.CURSOR_COLOUR;
-  }
+  this.CURSOR_COLOUR = theme.getComponentStyle('cursorColour') ||
+    this.CURSOR_COLOUR;
+  this.MARKER_COLOUR = theme.getComponentStyle('markerColour') ||
+    this.MARKER_COLOUR;
 }; /* eslint-enable indent */
 
 /**

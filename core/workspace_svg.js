@@ -1212,7 +1212,7 @@ Blockly.WorkspaceSvg.prototype.render = function() {
     }
   }
 
-  this.markerManager_.updateAccessibility();
+  this.markerManager_.updateMarkers();
 };
 
 /**

@@ -155,6 +155,16 @@ Blockly.MarkerManager.prototype.setMarkerSvg = function(markerSvg) {
 };
 
 /**
+ * Redraw the attached cursor svg if needed.
+ * @package
+ */
+Blockly.MarkerManager.prototype.updateMarkers = function() {
+  if (this.workspace_.keyboardAccessibilityMode && this.cursorSvg_) {
+    this.workspace_.getCursor().draw();
+  }
+};
+
+/**
  * Dispose of the marker manager.
  * Go through and delete all markers associated with this marker manager.
  * @suppress {checkTypes}

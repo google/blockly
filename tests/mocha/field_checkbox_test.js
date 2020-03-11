@@ -167,6 +167,9 @@ suite('Checkbox Fields', function() {
         field.sourceBlock_ = {
           RTL: false,
           rendered: true,
+          workspace: {
+            keyboardAccessibilityMode: false
+          },
           render: function() { field.render_(); },
           bumpNeighbours: function() {}
         };

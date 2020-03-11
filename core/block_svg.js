@@ -1664,9 +1664,19 @@ Blockly.BlockSvg.prototype.render = function(opt_bubble) {
   }
   Blockly.utils.dom.stopTextWidthCache();
 
-  var cursor = this.workspace.getCursor();
-  if (this.workspace.keyboardAccessibilityMode && this.pathObject.cursorSvg_) {
-    cursor.draw();
+  this.updateMarkers_();
+};
+
+/**
+ * Redraw any attached marker or cursor svgs if needed.
+ * @protected
+ */
+Blockly.BlockSvg.prototype.updateMarkers_ = function() {
+  if (this.workspace.keyboardAccessibilityMode && this.pathObject.cursorSvg) {
+    this.workspace.getCursor().draw();
+  }
+  if (this.workspace.keyboardAccessibilityMode && this.pathObject.markerSvg) {
+    this.workspace.getMarker(Blockly.navigation.MARKER_NAME).draw();
   }
 };
 

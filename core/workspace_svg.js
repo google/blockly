@@ -1211,6 +1211,8 @@ Blockly.WorkspaceSvg.prototype.render = function() {
       imList[i].render(false);
     }
   }
+
+  this.markerManager_.updateMarkers();
 };
 
 /**

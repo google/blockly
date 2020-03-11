@@ -24,8 +24,8 @@ goog.require('Blockly.utils.object');
  * @param {!Object.<string, Blockly.Theme.CategoryStyle>=} opt_categoryStyles A
  *     map from style names (strings) to objects with style attributes for
  *     categories.
- * @param {!Object.<string, *>=} opt_componentStyles A map of Blockly component
- *     names to style value.
+ * @param {!Blockly.Theme.ComponentStyle=} opt_componentStyles A map of Blockly
+ *     component names to style value.
  * @constructor
  */
 Blockly.Theme = function(name, opt_blockStyles, opt_categoryStyles,
@@ -53,14 +53,15 @@ Blockly.Theme = function(name, opt_blockStyles, opt_categoryStyles,
 
   /**
    * The UI components styles map.
-   * @type {!Object.<string, *>}
+   * @type {!Blockly.Theme.ComponentStyle}
    * @package
    */
-  this.componentStyles = opt_componentStyles || Object.create(null);
+  this.componentStyles = opt_componentStyles ||
+    (/** @type {Blockly.Theme.ComponentStyle} */ (Object.create(null)));
 
   /**
    * The font style.
-   * @type {Blockly.Theme.FontStyle}
+   * @type {!Blockly.Theme.FontStyle}
    * @package
    */
   this.fontStyle = /** @type {Blockly.Theme.FontStyle} */ (Object.create(null));
@@ -68,10 +69,10 @@ Blockly.Theme = function(name, opt_blockStyles, opt_categoryStyles,
   /**
    * Whether or not to add a 'hat' on top of all blocks with no previous or
    * output connections.
-   * @type {boolean}
+   * @type {?boolean}
    * @package
    */
-  this.startHats = false;
+  this.startHats = null;
 };
 
 /**
@@ -92,6 +93,23 @@ Blockly.Theme.BlockStyle;
  *          }}
  */
 Blockly.Theme.CategoryStyle;
+
+/**
+ * A component style.
+ * @typedef {{
+ *            workspaceBackgroundColour:string?,
+ *            toolboxBackgroundColour:string?,
+ *            toolboxForegroundColour:string?,
+ *            flyoutBackgroundColour:string?,
+ *            flyoutForegroundColour:string?,
+ *            flyoutOpacity:number?,
+ *            scrollbarColour:string?,
+ *            scrollbarOpacity:number?,
+ *            markerColour:string?,
+ *            cursorColour:string?
+ *          }}
+ */
+Blockly.Theme.ComponentStyle;
 
 /**
  * A font style.

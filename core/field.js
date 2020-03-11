@@ -692,7 +692,6 @@ Blockly.Field.prototype.getSize = function() {
   }
 
   if (this.isDirty_) {
-    this.constants_ = null;
     this.render_();
     this.isDirty_ = false;
   } else if (this.visible_ && this.size_.width == 0) {
@@ -807,6 +806,7 @@ Blockly.Field.prototype.setText = function(_newText) {
  */
 Blockly.Field.prototype.markDirty = function() {
   this.isDirty_ = true;
+  this.constants_ = null;
 };
 
 /**

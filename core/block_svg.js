@@ -586,6 +586,9 @@ Blockly.BlockSvg.prototype.getBoundingRectangle = function() {
  * A dirty field is a field that needs to be re-rendererd.
  */
 Blockly.BlockSvg.prototype.markDirty = function() {
+  this.pathObject.constants =
+    (/** @type {!Blockly.WorkspaceSvg} */ (this.workspace))
+        .getRenderer().getConstants();
   for (var i = 0, input; (input = this.inputList[i]); i++) {
     input.markDirty();
   }

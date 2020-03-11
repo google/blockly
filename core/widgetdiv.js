@@ -37,17 +37,17 @@ Blockly.WidgetDiv.dispose_ = null;
 
 /**
  * A class name representing the current owner's workspace renderer.
- * @type {?string}
+ * @type {string}
  * @private
  */
-Blockly.WidgetDiv.rendererClassName_ = null;
+Blockly.WidgetDiv.rendererClassName_ = '';
 
 /**
  * A class name representing the current owner's workspace theme.
- * @type {?string}
+ * @type {string}
  * @private
  */
-Blockly.WidgetDiv.themeClassName_ = null;
+Blockly.WidgetDiv.themeClassName_ = '';
 
 /**
  * Create the widget div and inject it onto the page.
@@ -80,9 +80,9 @@ Blockly.WidgetDiv.show = function(newOwner, rtl, dispose) {
   div.style.direction = rtl ? 'rtl' : 'ltr';
   div.style.display = 'block';
   Blockly.WidgetDiv.rendererClassName_ =
-      Blockly.getMainWorkspace().getRenderer().name + '-renderer';
+      Blockly.getMainWorkspace().getRenderer().getClassName();
   Blockly.WidgetDiv.themeClassName_ =
-      Blockly.getMainWorkspace().getTheme().name + '-theme';
+      Blockly.getMainWorkspace().getTheme().getClassName();
   Blockly.utils.dom.addClass(div, Blockly.WidgetDiv.rendererClassName_);
   Blockly.utils.dom.addClass(div, Blockly.WidgetDiv.themeClassName_);
 };
@@ -106,11 +106,11 @@ Blockly.WidgetDiv.hide = function() {
 
   if (Blockly.WidgetDiv.rendererClassName_) {
     Blockly.utils.dom.removeClass(div, Blockly.WidgetDiv.rendererClassName_);
-    Blockly.WidgetDiv.rendererClassName_ = null;
+    Blockly.WidgetDiv.rendererClassName_ = '';
   }
   if (Blockly.WidgetDiv.themeClassName_) {
     Blockly.utils.dom.removeClass(div, Blockly.WidgetDiv.themeClassName_);
-    Blockly.WidgetDiv.themeClassName_ = null;
+    Blockly.WidgetDiv.themeClassName_ = '';
   }
   Blockly.getMainWorkspace().markFocused();
 };

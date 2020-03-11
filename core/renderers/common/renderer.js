@@ -54,6 +54,15 @@ Blockly.blockRendering.Renderer = function(name) {
 };
 
 /**
+ * Gets the class name that identifies this renderer.
+ * @return {string} The CSS class name.
+ * @package
+ */
+Blockly.blockRendering.Renderer.prototype.getClassName = function() {
+  return this.name + '-renderer';
+};
+
+/**
  * Initialize the renderer.
  * @param {!Blockly.Theme} theme The workspace theme object.
  * @param {Object=} opt_rendererOverrides Rendering constant overrides.
@@ -71,12 +80,23 @@ Blockly.blockRendering.Renderer.prototype.init = function(theme,
 };
 
 /**
+ * Create any DOM elements that this renderer needs.
+ * @param {!SVGElement} svg The root of the workspace's SVG.
+ * @param {!Blockly.Theme} theme The workspace theme object.
+ * @package
+ */
+Blockly.blockRendering.Renderer.prototype.createDom = function(svg, theme) {
+  this.constants_.createDom(svg, this.name + '-' + theme.name,
+      '.' + this.getClassName() + '.' + theme.getClassName());
+};
+
+/**
  * Refresh the renderer after a theme change.
  * @param {!SVGElement} svg The root of the workspace's SVG.
  * @param {!Blockly.Theme} theme The workspace theme object.
  * @package
  */
-Blockly.blockRendering.Renderer.prototype.refresh = function(svg, theme) {
+Blockly.blockRendering.Renderer.prototype.refreshDom = function(svg, theme) {
   var previousConstants = this.getConstants();
   previousConstants.dispose();
   this.constants_ = this.makeConstants_();
@@ -87,7 +107,18 @@ Blockly.blockRendering.Renderer.prototype.refresh = function(svg, theme) {
   this.constants_.randomIdentifier = previousConstants.randomIdentifier;
   this.constants_.setTheme(theme);
   this.constants_.init();
-  this.getConstants().createDom(svg, this.name + '-' + theme.name);
+  this.createDom(svg, theme);
+};
+
+/**
+ * Dispose of this renderer.
+ * Delete all DOM elements that this renderer and its constants created.
+ * @package
+ */
+Blockly.blockRendering.Renderer.prototype.dispose = function() {
+  if (this.constants_) {
+    this.constants_.dispose();
+  }
 };
 
 /**

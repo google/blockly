@@ -984,13 +984,15 @@ Blockly.blockRendering.ConstantProvider.prototype.shapeFor = function(
 /**
  * Create any DOM elements that this renderer needs (filters, patterns, etc).
  * @param {!SVGElement} svg The root of the workspace's SVG.
- * @param {string} name The renderer and theme name combo.
+ * @param {string} tagName The name to use for the CSS style tag.
+ * @param {string} selector The CSS selector to use.
  * @suppress {strictModuleDepCheck} Debug renderer only included in playground.
  * @package
  */
 Blockly.blockRendering.ConstantProvider.prototype.createDom = function(svg,
-    name) {
-  this.injectCSS_(name);
+    tagName, selector) {
+  this.injectCSS_(tagName, selector);
+
   /*
   <defs>
     ... filters go here ...
@@ -1107,13 +1109,14 @@ Blockly.blockRendering.ConstantProvider.prototype.createDom = function(svg,
 
 /**
  * Inject renderer specific CSS into the page.
- * @param {string} name The renderer and theme name combo.
+ * @param {string} tagName The name of the style tag to use.
+ * @param {string} selector The CSS selector to use.
  * @protected
  */
 Blockly.blockRendering.ConstantProvider.prototype.injectCSS_ = function(
-    name) {
-  var cssArray = this.getCSS_(name);
-  var cssNodeId = 'blockly-renderer-style-' + name;
+    tagName, selector) {
+  var cssArray = this.getCSS_(selector);
+  var cssNodeId = 'blockly-renderer-style-' + tagName;
   this.cssNode_ =
     /** @type {!HTMLStyleElement} */ (document.getElementById(cssNodeId));
   if (this.cssNode_) {
@@ -1133,12 +1136,11 @@ Blockly.blockRendering.ConstantProvider.prototype.injectCSS_ = function(
 
 /**
  * Get any renderer specific CSS to inject when the renderer is initialized.
- * @param {string} name Name of the renderer.
+ * @param {string} selector CSS selector to use.
  * @return {!Array.<string>} Array of CSS strings.
  * @protected
  */
-Blockly.blockRendering.ConstantProvider.prototype.getCSS_ = function(name) {
-  var selector = '.' + name + '-renderer';
+Blockly.blockRendering.ConstantProvider.prototype.getCSS_ = function(selector) {
   return [
     /* eslint-disable indent */
     // Fields.

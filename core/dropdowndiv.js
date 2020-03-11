@@ -105,17 +105,17 @@ Blockly.DropDownDiv.onHide_ = null;
 
 /**
  * A class name representing the current owner's workspace renderer.
- * @type {?string}
+ * @type {string}
  * @private
  */
-Blockly.DropDownDiv.rendererClassName_ = null;
+Blockly.DropDownDiv.rendererClassName_ = '';
 
 /**
  * A class name representing the current owner's workspace theme.
- * @type {?string}
+ * @type {string}
  * @private
  */
-Blockly.DropDownDiv.themeClassName_ = null;
+Blockly.DropDownDiv.themeClassName_ = '';
 
 /**
  * Create and insert the DOM element for this div.
@@ -340,9 +340,9 @@ Blockly.DropDownDiv.show = function(owner, rtl, primaryX, primaryY,
   div.style.direction = rtl ? 'rtl' : 'ltr';
 
   Blockly.DropDownDiv.rendererClassName_ =
-      Blockly.getMainWorkspace().getRenderer().name + '-renderer';
+      Blockly.getMainWorkspace().getRenderer().getClassName();
   Blockly.DropDownDiv.themeClassName_ =
-      Blockly.getMainWorkspace().getTheme().name + '-theme';
+      Blockly.getMainWorkspace().getTheme().getClassName();
   Blockly.utils.dom.addClass(div, Blockly.DropDownDiv.rendererClassName_);
   Blockly.utils.dom.addClass(div, Blockly.DropDownDiv.themeClassName_);
 
@@ -642,11 +642,11 @@ Blockly.DropDownDiv.hideWithoutAnimation = function() {
 
   if (Blockly.DropDownDiv.rendererClassName_) {
     Blockly.utils.dom.removeClass(div, Blockly.DropDownDiv.rendererClassName_);
-    Blockly.DropDownDiv.rendererClassName_ = null;
+    Blockly.DropDownDiv.rendererClassName_ = '';
   }
   if (Blockly.DropDownDiv.themeClassName_) {
     Blockly.utils.dom.removeClass(div, Blockly.DropDownDiv.themeClassName_);
-    Blockly.DropDownDiv.themeClassName_ = null;
+    Blockly.DropDownDiv.themeClassName_ = '';
   }
   Blockly.getMainWorkspace().markFocused();
 };

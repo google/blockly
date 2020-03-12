@@ -1,6 +1,6 @@
 {
   "name": "varwin-blockly",
-  "version": "3.20200312.0",
+  "version": "3.20200312.1",
   "description": "Blockly is a library for building visual programming editors.",
   "keywords": [
     "blockly"

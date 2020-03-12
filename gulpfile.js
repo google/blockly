@@ -39,7 +39,7 @@ var closureDeps = require('google-closure-deps');
 var packageJson = require('./package.json');
 var argv = require('yargs').argv;
 
-const upstream_url = "https://github.com/google/blockly.git";
+const upstream_url = "https://github.com/varwin/blockly.git";
 
 ////////////////////////////////////////////////////////////
 //                        Build                           //

@@ -548,6 +548,9 @@ Blockly.blockRendering.RenderInfo.prototype.alignRowElements_ = function() {
       if (missingSpace > 0) {
         this.addAlignmentPadding_(row, missingSpace);
       }
+      if (Blockly.blockRendering.Types.isTopOrBottomRow(row)) {
+        row.widthWithConnectedBlocks = row.width;
+      }
     }
   }
 };
@@ -764,8 +767,7 @@ Blockly.blockRendering.RenderInfo.prototype.finalize_ = function() {
             this.block_.nextConnection.targetBlock().getHeightWidth().width);
   }
 
-  this.widthWithChildren = Math.max(this.widthWithChildren,
-      widestRowWithConnectedBlocks + this.startX);
+  this.widthWithChildren = widestRowWithConnectedBlocks + this.startX;
 
   this.height = yCursor;
   this.startY = this.topRow.capline;

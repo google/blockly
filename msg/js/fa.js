@@ -58,8 +58,10 @@ Blockly.Msg["CONTROLS_WHILEUNTIL_OPERATOR_UNTIL"] = "تکرار تا زمانی 
 Blockly.Msg["CONTROLS_WHILEUNTIL_OPERATOR_WHILE"] = "تکرار در حالی که";
 Blockly.Msg["CONTROLS_WHILEUNTIL_TOOLTIP_UNTIL"] = "تا زمانی که یک مقدار ناصحیح است، چند عبارت را انجام بده.";
 Blockly.Msg["CONTROLS_WHILEUNTIL_TOOLTIP_WHILE"] = "تا زمانی که یک مقدار صحیح است، چند عبارت را انجام بده.";
+Blockly.Msg["DEFAULT_MODULE_NAME"] = "General";  // untranslated
 Blockly.Msg["DELETE_ALL_BLOCKS"] = "حذف همهٔ بلاک‌های %1؟";
 Blockly.Msg["DELETE_BLOCK"] = "حذف بلوک";
+Blockly.Msg["DELETE_MODULE"] = "Delete module";  // untranslated
 Blockly.Msg["DELETE_VARIABLE"] = "متغیر '%1'را پاک کنید";
 Blockly.Msg["DELETE_VARIABLE_CONFIRMATION"] = "تعداد %1 استفاده از متغیر '%2' پاک شود؟";
 Blockly.Msg["DELETE_X_BLOCKS"] = "حذف بلوک‌های %1";
@@ -85,6 +87,7 @@ Blockly.Msg["IOS_VARIABLES_DELETE_BUTTON"] = "حذف";
 Blockly.Msg["IOS_VARIABLES_EMPTY_NAME_ERROR"] = "نام متغیر نمی‌تواند خالی باشد";
 Blockly.Msg["IOS_VARIABLES_RENAME_BUTTON"] = "تغییر نام";
 Blockly.Msg["IOS_VARIABLES_VARIABLE_NAME"] = "نام متغیر";
+Blockly.Msg["LAST_MODULE_DELETE_RESTRICTION"] = "Can't delete the last module.";  // untranslated
 Blockly.Msg["LISTS_CREATE_EMPTY_HELPURL"] = "https://github.com/google/blockly/wiki/Lists#create-empty-list";  // untranslated
 Blockly.Msg["LISTS_CREATE_EMPTY_TITLE"] = "ایجاد فهرست خالی";
 Blockly.Msg["LISTS_CREATE_EMPTY_TOOLTIP"] = "فهرستی با طول صفر شامل هیچ رکورد داده‌ای بر می‌گرداند.";
@@ -283,11 +286,14 @@ Blockly.Msg["MATH_TRIG_TOOLTIP_COS"] = "بازگرداندن کسینوس یک �
 Blockly.Msg["MATH_TRIG_TOOLTIP_SIN"] = "بازگرداندن سینوس یک زاویه به درجه (نه رادیان).";
 Blockly.Msg["MATH_TRIG_TOOLTIP_TAN"] = "بازگرداندن تانژانت یک زاویه به درجه (نه رادیان).";
 Blockly.Msg["NEW_COLOUR_VARIABLE"] = "ساخت متغیر رنگ...";
+Blockly.Msg["NEW_MODULE"] = "Create module";  // untranslated
+Blockly.Msg["NEW_MODULE_TITLE"] = "New module name:";  // untranslated
 Blockly.Msg["NEW_NUMBER_VARIABLE"] = "ساخت متغیر عددی...";
 Blockly.Msg["NEW_STRING_VARIABLE"] = "ساخت متغیر رشته...";
 Blockly.Msg["NEW_VARIABLE"] = "ایجاد متغیر...";
 Blockly.Msg["NEW_VARIABLE_TITLE"] = "نام متغیر تازه:";
 Blockly.Msg["NEW_VARIABLE_TYPE_TITLE"] = "نوع متغیر جدید:";
+Blockly.Msg["NOT_EMPTY_MODULE_DELETE_RESTRICTION"] = "Can't delete not empty module. Delete all module blocks first.";  // untranslated
 Blockly.Msg["ORDINAL_NUMBER_SUFFIX"] = "";  // untranslated
 Blockly.Msg["PROCEDURES_ALLOW_STATEMENTS"] = "اجازه اظهارات";
 Blockly.Msg["PROCEDURES_BEFORE_PARAMS"] = "با:";
@@ -317,6 +323,8 @@ Blockly.Msg["PROCEDURES_MUTATORCONTAINER_TITLE"] = "ورودی‌ها";
 Blockly.Msg["PROCEDURES_MUTATORCONTAINER_TOOLTIP"] = "افزودن، حذف یا دوباره مرتب‌کردن ورودی این تابع.";
 Blockly.Msg["REDO"] = "انجام دوباره";
 Blockly.Msg["REMOVE_COMMENT"] = "حذف نظر";
+Blockly.Msg["RENAME_MODULE"] = "Rename module";  // untranslated
+Blockly.Msg["RENAME_MODULE_TITLE"] = "Rename module to:";  // untranslated
 Blockly.Msg["RENAME_VARIABLE"] = "تغییر نام متغیر...";
 Blockly.Msg["RENAME_VARIABLE_TITLE"] = "تغییر نام همهٔ متغیرهای «%1» به:";
 Blockly.Msg["TEXT_APPEND_HELPURL"] = "https://github.com/google/blockly/wiki/Text#text-modification";  // untranslated

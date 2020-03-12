@@ -140,6 +140,11 @@ Blockly.Msg.UNDO = 'Undo';
 /// context menu - Undo the previous undo action.\n{{Identical|Redo}}
 Blockly.Msg.REDO = 'Redo';
 
+
+/** @type {string} */
+/// default module name.
+Blockly.Msg.DEFAULT_MODULE_NAME = 'General';
+
 // Module renaming.
 /** @type {string} */
 /// button hint - Hint on the button used to launch the module renaming dialogue.
@@ -155,14 +160,14 @@ Blockly.Msg.NEW_MODULE = 'Create module';
 /** @type {string} */
 /// prompt - Prompts the user to enter the name for a new module.
 Blockly.Msg.NEW_MODULE_TITLE = 'New module name:';
-/** @type {string} */
-/// alert - Tells the user that they can't delete a module because it's last module.
-Blockly.Msg.LAST_MODULE_DELETE_RESTRICTION = 'Can\'t delete the last module.';
 
 // Module deletion.
 /** @type {string} */
-/// confirm -  Ask the user to confirm their deletion a module.
-Blockly.Msg.DELETE_MODULE_CONFIRMATION = 'Delete module "%1" and all it\'s blocks?';
+/// alert - Tells the user that they can't delete a module because it's last module.
+Blockly.Msg.LAST_MODULE_DELETE_RESTRICTION = 'Can\'t delete the last module.';
+/** @type {string} */
+/// alert - Tells the user that they can't delete a module because it's last module.
+Blockly.Msg.NOT_EMPTY_MODULE_DELETE_RESTRICTION = 'Can\'t delete not empty module. Delete all module blocks first.';
 /** @type {string} */
 /// button hint - Hint on the button used to launch the module deletion.
 Blockly.Msg.DELETE_MODULE = 'Delete module';

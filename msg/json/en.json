@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2020-01-23 14:59:14.637552",
+		"lastupdated": "2020-03-12 16:02:56.386000",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -27,6 +27,14 @@
 	"HELP": "Help",
 	"UNDO": "Undo",
 	"REDO": "Redo",
+	"DEFAULT_MODULE_NAME": "General",
+	"RENAME_MODULE": "Rename module",
+	"RENAME_MODULE_TITLE": "Rename module to:",
+	"NEW_MODULE": "Create module",
+	"NEW_MODULE_TITLE": "New module name:",
+	"LAST_MODULE_DELETE_RESTRICTION": "Can't delete the last module.",
+	"NOT_EMPTY_MODULE_DELETE_RESTRICTION": "Can't delete not empty module. Delete all module blocks first.",
+	"DELETE_MODULE": "Delete module",
 	"CHANGE_VALUE_TITLE": "Change value:",
 	"RENAME_VARIABLE": "Rename variable...",
 	"RENAME_VARIABLE_TITLE": "Rename all '%1' variables to:",

@@ -676,6 +676,11 @@ Blockly.BlockSvg.prototype.tab = function(start, forward) {
   if (nextNode && nextNode !== currentNode) {
     var nextField = /** @type {!Blockly.Field} */ (nextNode.getLocation());
     nextField.showEditor();
+
+    // Also move the cursor if we're in keyboard nav mode.
+    if (this.workspace.keyboardAccessibilityMode) {
+      this.workspace.getCursor().setCurNode(nextNode);
+    }
   }
 };
 

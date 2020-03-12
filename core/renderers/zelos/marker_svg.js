@@ -39,9 +39,7 @@ Blockly.zelos.MarkerSvg.prototype.showWithInput_ = function(curNode) {
   var connection = curNode.getLocation();
   var offsetInBlock = connection.getOffsetInBlock();
 
-  var y = offsetInBlock.y + this.constants_.CURSOR_RADIUS;
-  
-  this.positionCircle_(offsetInBlock.x, y);
+  this.positionCircle_(offsetInBlock.x, offsetInBlock.y);
   this.setParent_(block);
   this.showCurrent_();
 };

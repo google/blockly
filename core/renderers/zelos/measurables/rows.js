@@ -62,7 +62,8 @@ Blockly.zelos.TopRow.prototype.hasLeftSquareCorner = function(block) {
  * @override
  */
 Blockly.zelos.TopRow.prototype.hasRightSquareCorner = function(block) {
-  return !!block.outputConnection && !block.statementInputCount;
+  return !!block.outputConnection && !block.statementInputCount &&
+    !block.nextConnection;
 };
 
 /**
@@ -102,5 +103,6 @@ Blockly.zelos.BottomRow.prototype.hasLeftSquareCorner = function(block) {
  * @override
  */
 Blockly.zelos.BottomRow.prototype.hasRightSquareCorner = function(block) {
-  return !!block.outputConnection && !block.statementInputCount;
+  return !!block.outputConnection && !block.statementInputCount &&
+    !block.nextConnection;
 };

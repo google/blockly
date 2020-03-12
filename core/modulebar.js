@@ -364,19 +364,20 @@ Blockly.ModuleBar.prototype.onMouseClick_ = function(e) {
  * @private
  */
 Blockly.ModuleBar.prototype.handleShowModuleMenu_ = function(e) {
+  var self_ = this;
   var menuOptions = [
     {
       text: Blockly.Msg['RENAME_MODULE'],
       enabled: true,
-      callback: () => {
-        this.handleRenameModule_();
+      callback: function() {
+        self_.handleRenameModule_();
       }
     },
     {
       text: Blockly.Msg['DELETE_MODULE'],
       enabled: true,
-      callback: () => {
-        this.handleDeleteModule_();
+      callback: function() {
+        self_.handleDeleteModule_();
       }
     }
   ];

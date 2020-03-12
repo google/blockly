@@ -23,6 +23,7 @@
 
 goog.provide('Blockly.ModuleManager');
 
+goog.require('Blockly.ModuleBar');
 goog.require('Blockly.Events');
 goog.require('Blockly.ModuleModel');
 goog.require('Blockly.Events.ModuleDelete');

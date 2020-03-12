@@ -569,7 +569,8 @@ Blockly.blockRendering.MarkerSvg.prototype.createDomInternal_ = function() {
       {
         'class': 'blocklyVerticalMarker',
         'rx': 10, 'ry': 10,
-        'style': 'display: none'
+        'style': 'display: none',
+        'pointer-events': 'none'
       },
       this.markerSvg_);
 

@@ -67,19 +67,9 @@ Blockly.zelos.PathObject = function(root, style, constants) {
   /**
    * The type of block's output connection shape.  This is set when a block with
    * an output connection is drawn.
-   * @type {?number}
    * @package
    */
   this.outputShapeType = null;
-
-  /**
-   * The height of the block.  This is set when a block with an output
-   * connection and a next connection is drawn to be referenced during
-   * rendering.
-   * @type {?number}
-   * @package
-   */
-  this.blockHeight = null;
 };
 Blockly.utils.object.inherits(Blockly.zelos.PathObject,
     Blockly.blockRendering.PathObject);

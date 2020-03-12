@@ -252,7 +252,7 @@ Blockly.zelos.RenderInfo.prototype.getElemCenterline_ = function(row, elem) {
     var connectedBlock = elem.connectedBlock;
     if (connectedBlock && connectedBlock.outputConnection &&
         connectedBlock.nextConnection) {
-      return row.yPos + connectedBlock.pathObject.blockHeight / 2;
+      return row.yPos + connectedBlock.height / 2;
     }
   }
   return Blockly.zelos.RenderInfo.superClass_.getElemCenterline_.call(this,

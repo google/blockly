@@ -477,6 +477,7 @@ Blockly.Css.CONTENT = [
   '.blocklyVerticalMarker {',
     'stroke-width: 3px;',
     'fill: rgba(255,255,255,.5);',
+    'pointer-events: none',
   '}',
 
   '.blocklyWidgetDiv .goog-option-selected .goog-menuitem-checkbox,',

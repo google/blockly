@@ -1,18 +1,7 @@
 /**
  * @license
  * Copyright 2019 Google LLC
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 /**
@@ -55,15 +44,81 @@ Blockly.blockRendering.Renderer = function(name) {
    * @private
    */
   this.constants_ = null;
+
+  /**
+   * Rendering constant overrides, passed in through options.
+   * @type {?Object}
+   * @package
+   */
+  this.overrides = null;
+};
+
+/**
+ * Gets the class name that identifies this renderer.
+ * @return {string} The CSS class name.
+ * @package
+ */
+Blockly.blockRendering.Renderer.prototype.getClassName = function() {
+  return this.name + '-renderer';
 };
 
 /**
  * Initialize the renderer.
+ * @param {!Blockly.Theme} theme The workspace theme object.
+ * @param {Object=} opt_rendererOverrides Rendering constant overrides.
  * @package
  */
-Blockly.blockRendering.Renderer.prototype.init = function() {
+Blockly.blockRendering.Renderer.prototype.init = function(theme,
+    opt_rendererOverrides) {
   this.constants_ = this.makeConstants_();
+  if (opt_rendererOverrides) {
+    this.overrides = opt_rendererOverrides;
+    Blockly.utils.object.mixin(this.constants_, opt_rendererOverrides);
+  }
+  this.constants_.setTheme(theme);
   this.constants_.init();
+};
+
+/**
+ * Create any DOM elements that this renderer needs.
+ * @param {!SVGElement} svg The root of the workspace's SVG.
+ * @param {!Blockly.Theme} theme The workspace theme object.
+ * @package
+ */
+Blockly.blockRendering.Renderer.prototype.createDom = function(svg, theme) {
+  this.constants_.createDom(svg, this.name + '-' + theme.name,
+      '.' + this.getClassName() + '.' + theme.getClassName());
+};
+
+/**
+ * Refresh the renderer after a theme change.
+ * @param {!SVGElement} svg The root of the workspace's SVG.
+ * @param {!Blockly.Theme} theme The workspace theme object.
+ * @package
+ */
+Blockly.blockRendering.Renderer.prototype.refreshDom = function(svg, theme) {
+  var previousConstants = this.getConstants();
+  previousConstants.dispose();
+  this.constants_ = this.makeConstants_();
+  if (this.overrides) {
+    Blockly.utils.object.mixin(this.constants_, this.overrides);
+  }
+  // Ensure the constant provider's random identifier does not change.
+  this.constants_.randomIdentifier = previousConstants.randomIdentifier;
+  this.constants_.setTheme(theme);
+  this.constants_.init();
+  this.createDom(svg, theme);
+};
+
+/**
+ * Dispose of this renderer.
+ * Delete all DOM elements that this renderer and its constants created.
+ * @package
+ */
+Blockly.blockRendering.Renderer.prototype.dispose = function() {
+  if (this.constants_) {
+    this.constants_.dispose();
+  }
 };
 
 /**
@@ -107,7 +162,7 @@ Blockly.blockRendering.Renderer.prototype.makeDebugger_ = function() {
   if (!Blockly.blockRendering.Debug) {
     throw Error('Missing require for Blockly.blockRendering.Debug');
   }
-  return new Blockly.blockRendering.Debug();
+  return new Blockly.blockRendering.Debug(this.getConstants());
 };
 
 /**

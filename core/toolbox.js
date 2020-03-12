@@ -1,18 +1,7 @@
 /**
  * @license
  * Copyright 2011 Google LLC
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 /**
@@ -186,7 +175,8 @@ Blockly.Toolbox.prototype.init = function() {
         'rtl': workspace.RTL,
         'oneBasedIndex': workspace.options.oneBasedIndex,
         'horizontalLayout': workspace.horizontalLayout,
-        'renderer': workspace.options.renderer
+        'renderer': workspace.options.renderer,
+        'rendererOverrides': workspace.options.rendererOverrides
       }));
   workspaceOptions.toolboxPosition = workspace.options.toolboxPosition;
   
@@ -312,7 +302,7 @@ Blockly.Toolbox.prototype.handleAfterTreeSelected_ = function(
   }
   if (oldNode != newNode && oldNode != this) {
     var event = new Blockly.Events.Ui(null, 'category',
-        oldNode && oldNode.getText(), newNode && newNode.getText());
+        oldNode && oldNode.content, newNode && newNode.content);
     event.workspaceId = this.workspace_.id;
     Blockly.Events.fire(event);
   }
@@ -719,7 +709,7 @@ Blockly.Toolbox.prototype.refreshSelection = function() {
 Blockly.Toolbox.prototype.selectFirstCategory = function() {
   var selectedItem = this.tree_.getSelectedItem();
   if (!selectedItem) {
-    this.tree_.selectFirst();
+    this.tree_.selectChild();
   }
 };
 
@@ -791,7 +781,7 @@ Blockly.Css.register([
   '}',
 
   '.blocklyTreeRow:not(.blocklyTreeSelected):hover {',
-    'background-color: #e4e4e4;',
+    'background-color: rgba(255, 255, 255, 0.2);',
   '}',
 
   '.blocklyTreeSeparator {',

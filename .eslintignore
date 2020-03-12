@@ -4,6 +4,7 @@ gulpfile.js
 /msg/*
 /core/utils/global.js
 /tests/blocks/*
+/tests/themes/*
 /tests/compile/*
 /tests/jsunit/*
 /tests/generators/*
@@ -16,3 +17,4 @@ gulpfile.js
 /appengine/*
 /externs/*
 /closure/*
+/scripts/gulpfiles/*

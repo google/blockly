@@ -1,18 +1,7 @@
 /**
  * @license
  * Copyright 2019 Google LLC
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 /**
@@ -90,6 +79,12 @@ Blockly.zelos.RenderInfo = function(renderer, block) {
   this.isMultiRow = !block.getInputsInline() || block.isCollapsed();
 
   /**
+   * Whether or not the block has a statement input in one of its rows.
+   * @type {boolean}
+   */
+  this.hasStatementInput = block.statementInputCount > 0;
+
+  /**
    * An object with rendering information about the right connection shape.
    * @type {Blockly.zelos.RightConnectionShape}
    */
@@ -164,7 +159,8 @@ Blockly.zelos.RenderInfo.prototype.getInRowSpacing_ = function(prev, next) {
   if (!prev || !next) {
     // No need for padding at the beginning or end of the row if the
     // output shape is dynamic.
-    if (this.outputConnection && this.outputConnection.isDynamicShape) {
+    if (this.outputConnection && this.outputConnection.isDynamicShape &&
+        !this.hasStatementInput) {
       return this.constants_.NO_PADDING;
     }
   }
@@ -205,21 +201,28 @@ Blockly.zelos.RenderInfo.prototype.getSpacerRowHeight_ = function(
       Blockly.blockRendering.Types.isInputRow(next) && next.hasStatement;
   if (precedesStatement || followsStatement) {
     var cornerHeight = this.constants_.INSIDE_CORNERS.rightHeight || 0;
-    var height = Math.max(this.constants_.MEDIUM_PADDING,
-        Math.max(this.constants_.NOTCH_HEIGHT, cornerHeight));
+    var height = Math.max(this.constants_.NOTCH_HEIGHT, cornerHeight);
     return precedesStatement && followsStatement ?
         Math.max(height, this.constants_.DUMMY_INPUT_MIN_HEIGHT) : height;
   }
   // Top and bottom rows act as a spacer so we don't need any extra padding.
   if ((Blockly.blockRendering.Types.isTopRow(prev))) {
-    if (!prev.hasPreviousConnection && !this.outputConnection) {
-      return this.constants_.SMALL_PADDING;
+    if (!prev.hasPreviousConnection &&
+        (!this.outputConnection || this.hasStatementInput)) {
+      return Math.abs(this.constants_.NOTCH_HEIGHT -
+          this.constants_.CORNER_RADIUS);
     }
     return this.constants_.NO_PADDING;
   }
   if ((Blockly.blockRendering.Types.isBottomRow(next))) {
     if (!this.outputConnection) {
-      return this.constants_.SMALL_PADDING;
+      var topHeight = Math.max(this.topRow.minHeight,
+          Math.max(this.constants_.NOTCH_HEIGHT,
+              this.constants_.CORNER_RADIUS)) - this.constants_.CORNER_RADIUS;
+      return topHeight;
+    } else if (!next.hasNextConnection && this.hasStatementInput) {
+      return Math.abs(this.constants_.NOTCH_HEIGHT -
+          this.constants_.CORNER_RADIUS);
     }
     return this.constants_.NO_PADDING;
   }
@@ -261,31 +264,7 @@ Blockly.zelos.RenderInfo.prototype.addInput_ = function(input, activeRow) {
       input.align == Blockly.ALIGN_RIGHT) {
     activeRow.rightAlignedDummyInput = input;
   }
-  // Non-dummy inputs have visual representations onscreen.
-  if (this.isInline && input.type == Blockly.INPUT_VALUE) {
-    activeRow.elements.push(
-        new Blockly.blockRendering.InlineInput(this.constants_, input));
-    activeRow.hasInlineInput = true;
-  } else if (input.type == Blockly.NEXT_STATEMENT) {
-    activeRow.elements.push(
-        new Blockly.zelos.StatementInput(this.constants_, input));
-    activeRow.hasStatement = true;
-  } else if (input.type == Blockly.INPUT_VALUE) {
-    activeRow.elements.push(
-        new Blockly.blockRendering.ExternalValueInput(this.constants_, input));
-    activeRow.hasExternalInput = true;
-  } else if (input.type == Blockly.DUMMY_INPUT) {
-    // Dummy inputs have no visual representation, but the information is still
-    // important.
-    activeRow.minHeight = Math.max(activeRow.minHeight,
-        input.getSourceBlock() && input.getSourceBlock().isShadow() ?
-        this.constants_.DUMMY_INPUT_SHADOW_MIN_HEIGHT :
-        this.constants_.DUMMY_INPUT_MIN_HEIGHT);
-    activeRow.hasDummyInput = true;
-  }
-  if (activeRow.align == null) {
-    activeRow.align = input.align;
-  }
+  Blockly.zelos.RenderInfo.superClass_.addInput_.call(this, input, activeRow);
 };
 
 /**
@@ -397,10 +376,12 @@ Blockly.zelos.RenderInfo.prototype.finalizeOutputConnection_ = function() {
       this.outputConnection.shape.connectionOffsetX(connectionWidth);
 
   // Adjust right side measurable.
-  this.rightSide.height = connectionHeight;
-  this.rightSide.width = connectionWidth;
-  this.rightSide.centerline = connectionHeight / 2;
-  this.rightSide.xPos = this.width + connectionWidth;
+  if (!this.hasStatementInput) {
+    this.rightSide.height = connectionHeight;
+    this.rightSide.width = connectionWidth;
+    this.rightSide.centerline = connectionHeight / 2;
+    this.rightSide.xPos = this.width + connectionWidth;
+  }
 
   this.startX = connectionWidth;
   this.width += connectionWidth * 2;
@@ -415,7 +396,7 @@ Blockly.zelos.RenderInfo.prototype.finalizeOutputConnection_ = function() {
  * @protected
  */
 Blockly.zelos.RenderInfo.prototype.finalizeHorizontalAlignment_ = function() {
-  if (!this.outputConnection) {
+  if (!this.outputConnection || this.hasStatementInput) {
     return;
   }
   var totalNegativeSpacing = 0;
@@ -474,14 +455,15 @@ Blockly.zelos.RenderInfo.prototype.getNegativeSpacing_ = function(elem) {
   var outerShape = this.outputConnection.shape.type;
   var constants =
     /** @type {!Blockly.zelos.ConstantProvider} */ (this.constants_);
-  if (this.isMultiRow && this.inputRowNum_ > 1) {
+  if (this.isMultiRow && this.inputRows.length > 1) {
     switch (outerShape) {
       case constants.SHAPES.ROUND:
         // Special case for multi-row round reporter blocks.
-        var radius = this.height / 2;
+        var maxWidth = this.constants_.MAX_DYNAMIC_CONNECTION_SHAPE_WIDTH;
+        var width = this.height / 2 > maxWidth ? maxWidth : this.height / 2;
         var topPadding = this.constants_.SMALL_PADDING;
-        var roundPadding = radius *
-          (1 - Math.sin(Math.acos((radius - topPadding) / radius)));
+        var roundPadding = width *
+          (1 - Math.sin(Math.acos((width - topPadding) / width)));
         return connectionWidth - roundPadding;
       default:
         return 0;

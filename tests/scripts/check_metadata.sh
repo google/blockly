@@ -21,8 +21,8 @@ ANSI_RESET='\033[0m'
 # Build the compressed files for core and blocks
 echo "Building files"
 npm install
-gulp build-compressed
-gulp build-blocks
+gulp buildCompressed
+gulp buildBlocks
 
 # GZip them for additional size comparisons
 echo "Zipping the compressed files"

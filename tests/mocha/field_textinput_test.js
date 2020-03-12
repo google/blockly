@@ -218,8 +218,12 @@ suite('Text Input Fields', function() {
         this.prepField = function(field) {
           var workspace = {
             scale: 1,
-            getRenderer: function() { return {}; },
-            getTheme: function() { return {}; },
+            getRenderer: function() { return {
+              getClassName: function() { return ''; }
+            }; },
+            getTheme: function() { return {
+              getClassName: function() { return ''; }
+            }; },
             markFocused: function() {}
           };
           field.sourceBlock_ = {

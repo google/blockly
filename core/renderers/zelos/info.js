@@ -160,7 +160,7 @@ Blockly.zelos.RenderInfo.prototype.getInRowSpacing_ = function(prev, next) {
     // No need for padding at the beginning or end of the row if the
     // output shape is dynamic.
     if (this.outputConnection && this.outputConnection.isDynamicShape &&
-        !this.hasStatementInput) {
+        !this.hasStatementInput && !this.bottomRow.hasNextConnection) {
       return this.constants_.NO_PADDING;
     }
   }
@@ -248,6 +248,13 @@ Blockly.zelos.RenderInfo.prototype.getElemCenterline_ = function(row, elem) {
   if (row.hasStatement && !Blockly.blockRendering.Types.isSpacer(elem) &&
       !Blockly.blockRendering.Types.isStatementInput(elem)) {
     return row.yPos + this.constants_.EMPTY_STATEMENT_INPUT_HEIGHT / 2;
+  }
+  if (Blockly.blockRendering.Types.isInlineInput(elem)) {
+    var connectedBlock = elem.connectedBlock;
+    if (connectedBlock && connectedBlock.outputConnection &&
+        connectedBlock.nextConnection) {
+      return row.yPos + connectedBlock.height / 2;
+    }
   }
   return Blockly.zelos.RenderInfo.superClass_.getElemCenterline_.call(this,
       row, elem);
@@ -365,8 +372,10 @@ Blockly.zelos.RenderInfo.prototype.finalizeOutputConnection_ = function() {
   this.height = yCursor;
 
   // Adjust the height of the output connection.
-  var connectionHeight = this.outputConnection.shape.height(yCursor);
-  var connectionWidth = this.outputConnection.shape.width(yCursor);
+  var blockHeight = this.bottomRow.hasNextConnection ?
+      this.height - this.bottomRow.descenderHeight : this.height;
+  var connectionHeight = this.outputConnection.shape.height(blockHeight);
+  var connectionWidth = this.outputConnection.shape.width(blockHeight);
 
   this.outputConnection.height = connectionHeight;
   this.outputConnection.width = connectionWidth;
@@ -377,8 +386,9 @@ Blockly.zelos.RenderInfo.prototype.finalizeOutputConnection_ = function() {
       this.outputConnection.shape.connectionOffsetX(connectionWidth);
 
   // Add the right connection measurable.
+  // Don't add it if we have a value-to-statament or a value-to-stack block.
   var rightConnectionWidth = 0;
-  if (!this.hasStatementInput) {
+  if (!this.hasStatementInput && !this.bottomRow.hasNextConnection) {
     rightConnectionWidth = connectionWidth;
     this.rightSide.height = connectionHeight;
     this.rightSide.width = rightConnectionWidth;
@@ -398,7 +408,8 @@ Blockly.zelos.RenderInfo.prototype.finalizeOutputConnection_ = function() {
  * @protected
  */
 Blockly.zelos.RenderInfo.prototype.finalizeHorizontalAlignment_ = function() {
-  if (!this.outputConnection || this.hasStatementInput) {
+  if (!this.outputConnection || this.hasStatementInput ||
+      this.bottomRow.hasNextConnection) {
     return;
   }
   var totalNegativeSpacing = 0;
@@ -472,9 +483,15 @@ Blockly.zelos.RenderInfo.prototype.getNegativeSpacing_ = function(elem) {
     }
   }
   if (Blockly.blockRendering.Types.isInlineInput(elem)) {
-    var innerShape = elem.connectedBlock ?
-        elem.connectedBlock.pathObject.outputShapeType :
+    var connectedBlock = elem.connectedBlock;
+    var innerShape = connectedBlock ?
+        connectedBlock.pathObject.outputShapeType :
         elem.shape.type;
+    // Special case for value to stack / value to statement blocks.
+    if (connectedBlock && connectedBlock.outputConnection &&
+        (connectedBlock.statementInputCount || connectedBlock.nextConnection)) {
+      return 0;
+    }
     // Special case for hexagonal output.
     if (outerShape == constants.SHAPES.HEXAGONAL &&
         outerShape != innerShape) {

@@ -70,7 +70,8 @@ Blockly.zelos.Drawer.prototype.draw = function() {
 Blockly.zelos.Drawer.prototype.drawOutline_ = function() {
   if (this.info_.outputConnection &&
       this.info_.outputConnection.isDynamicShape &&
-      !this.info_.hasStatementInput) {
+      !this.info_.hasStatementInput &&
+      !this.info_.bottomRow.hasNextConnection) {
     this.drawFlatTop_();
     this.drawRightDynamicConnection_();
     this.drawFlatBottom_();

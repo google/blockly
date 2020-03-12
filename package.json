@@ -1,13 +1,13 @@
 {
-  "name": "blockly",
-  "version": "3.20200123.1",
+  "name": "varwin-blockly",
+  "version": "3.20200312.0",
   "description": "Blockly is a library for building visual programming editors.",
   "keywords": [
     "blockly"
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/google/blockly.git"
+    "url": "https://github.com/varwin/blockly.git"
   },
   "bugs": {
     "url": "https://github.com/google/blockly/issues"

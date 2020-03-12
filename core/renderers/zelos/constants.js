@@ -798,9 +798,9 @@ Blockly.zelos.ConstantProvider.prototype.generateTertiaryColour_ = function(
  * @override
  */
 Blockly.zelos.ConstantProvider.prototype.createDom = function(svg,
-    rendererName) {
+    tagName, selector) {
   Blockly.zelos.ConstantProvider.superClass_.createDom.call(this, svg,
-      rendererName);
+      tagName, selector);
   /*
   <defs>
     ... filters go here ...
@@ -901,8 +901,7 @@ Blockly.zelos.ConstantProvider.prototype.createDom = function(svg,
 /**
  * @override
  */
-Blockly.zelos.ConstantProvider.prototype.getCSS_ = function(name) {
-  var selector = '.' + name + '-renderer';
+Blockly.zelos.ConstantProvider.prototype.getCSS_ = function(selector) {
   return [
     /* eslint-disable indent */
     // Fields.

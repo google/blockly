@@ -59,8 +59,8 @@ Blockly.geras.Renderer.prototype.init = function(theme,
 /**
  * @override
  */
-Blockly.geras.Renderer.prototype.refresh = function(svg, theme) {
-  Blockly.geras.Renderer.superClass_.refresh.call(this, svg, theme);
+Blockly.geras.Renderer.prototype.refreshDom = function(svg, theme) {
+  Blockly.geras.Renderer.superClass_.refreshDom.call(this, svg, theme);
   this.getHighlightConstants().init();
 };
 

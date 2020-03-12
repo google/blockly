@@ -516,7 +516,7 @@ Blockly.WorkspaceSvg.prototype.setTheme = function(theme) {
  */
 Blockly.WorkspaceSvg.prototype.refreshTheme = function() {
   if (this.svgGroup_) {
-    this.getRenderer().refresh(this.svgGroup_, this.getTheme());
+    this.renderer_.refreshDom(this.svgGroup_, this.getTheme());
   }
 
   // Update all blocks in workspace that have a style name.
@@ -748,8 +748,7 @@ Blockly.WorkspaceSvg.prototype.createDom = function(opt_backgroundClass) {
   this.markerManager_.registerMarker(Blockly.navigation.MARKER_NAME,
       new Blockly.Marker());
 
-  var constants = this.getRenderer().getConstants();
-  constants.createDom(this.svgGroup_, this.getRenderer().name);
+  this.renderer_.createDom(this.svgGroup_, this.getTheme());
   return this.svgGroup_;
 };
 
@@ -801,7 +800,7 @@ Blockly.WorkspaceSvg.prototype.dispose = function() {
     this.grid_ = null;
   }
 
-  this.renderer_.getConstants().dispose();
+  this.renderer_.dispose();
 
   if (this.themeManager_) {
     this.themeManager_.unsubscribeWorkspace(this);

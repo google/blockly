@@ -122,6 +122,15 @@ Blockly.Theme.ComponentStyle;
 Blockly.Theme.FontStyle;
 
 /**
+ * Gets the class name that identifies this theme.
+ * @return {string} The CSS class name.
+ * @package
+ */
+Blockly.Theme.prototype.getClassName = function() {
+  return this.name + '-theme';
+};
+
+/**
  * Overrides or adds a style to the blockStyles map.
  * @param {string} blockStyleName The name of the block style.
  * @param {Blockly.Theme.BlockStyle} blockStyle The block style.

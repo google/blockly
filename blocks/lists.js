@@ -401,7 +401,7 @@ Blockly.Blocks['lists_getIndex'] = {
   /**
    * Create XML to represent whether the block is a statement or a value.
    * Also represent whether there is an 'AT' input.
-   * @return {Element} XML storage element.
+   * @return {!Element} XML storage element.
    * @this {Blockly.Block}
    */
   mutationToDom: function() {
@@ -565,7 +565,7 @@ Blockly.Blocks['lists_setIndex'] = {
   },
   /**
    * Create XML to represent whether there is an 'AT' input.
-   * @return {Element} XML storage element.
+   * @return {!Element} XML storage element.
    * @this {Blockly.Block}
    */
   mutationToDom: function() {
@@ -663,7 +663,7 @@ Blockly.Blocks['lists_getSublist'] = {
   },
   /**
    * Create XML to represent whether there are 'AT' inputs.
-   * @return {Element} XML storage element.
+   * @return {!Element} XML storage element.
    * @this {Blockly.Block}
    */
   mutationToDom: function() {

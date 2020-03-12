@@ -245,7 +245,8 @@ Blockly.zelos.RenderInfo.prototype.getSpacerRowWidth_ = function(prev, next) {
  * @override
  */
 Blockly.zelos.RenderInfo.prototype.getElemCenterline_ = function(row, elem) {
-  if (row.hasStatement && !Blockly.blockRendering.Types.isSpacer(elem)) {
+  if (row.hasStatement && !Blockly.blockRendering.Types.isSpacer(elem) &&
+      !Blockly.blockRendering.Types.isStatementInput(elem)) {
     return row.yPos + this.constants_.EMPTY_STATEMENT_INPUT_HEIGHT / 2;
   }
   return Blockly.zelos.RenderInfo.superClass_.getElemCenterline_.call(this,
@@ -375,17 +376,18 @@ Blockly.zelos.RenderInfo.prototype.finalizeOutputConnection_ = function() {
   this.outputConnection.connectionOffsetX =
       this.outputConnection.shape.connectionOffsetX(connectionWidth);
 
-  // Adjust right side measurable.
+  // Add the right connection measurable.
+  var rightConnectionWidth = 0;
   if (!this.hasStatementInput) {
+    rightConnectionWidth = connectionWidth;
     this.rightSide.height = connectionHeight;
-    this.rightSide.width = connectionWidth;
+    this.rightSide.width = rightConnectionWidth;
     this.rightSide.centerline = connectionHeight / 2;
-    this.rightSide.xPos = this.width + connectionWidth;
+    this.rightSide.xPos = this.width + rightConnectionWidth;
   }
-
   this.startX = connectionWidth;
-  this.width += connectionWidth * 2;
-  this.widthWithChildren += connectionWidth * 2;
+  this.width += connectionWidth + rightConnectionWidth;
+  this.widthWithChildren += connectionWidth + rightConnectionWidth;
 };
 
 /**
@@ -429,9 +431,9 @@ Blockly.zelos.RenderInfo.prototype.finalizeHorizontalAlignment_ = function() {
     this.widthWithChildren -= totalNegativeSpacing;
     this.rightSide.xPos -= totalNegativeSpacing;
     for (var i = 0, row; (row = this.rows[i]); i++) {
-      if (Blockly.blockRendering.Types.isTopRow(row) ||
-          Blockly.blockRendering.Types.isBottomRow(row)) {
+      if (Blockly.blockRendering.Types.isTopOrBottomRow(row)) {
         row.elements[1].width -= totalNegativeSpacing;
+        row.elements[1].widthWithConnectedBlocks -= totalNegativeSpacing;
       }
       row.width -= totalNegativeSpacing;
       row.widthWithConnectedBlocks -= totalNegativeSpacing;
@@ -561,4 +563,8 @@ Blockly.zelos.RenderInfo.prototype.finalize_ = function() {
   this.finalizeHorizontalAlignment_();
   this.finalizeVerticalAlignment_();
   Blockly.zelos.RenderInfo.superClass_.finalize_.call(this);
+
+  if (this.rightSide) {
+    this.widthWithChildren += this.rightSide.width;
+  }
 };

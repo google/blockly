@@ -376,17 +376,18 @@ Blockly.zelos.RenderInfo.prototype.finalizeOutputConnection_ = function() {
   this.outputConnection.connectionOffsetX =
       this.outputConnection.shape.connectionOffsetX(connectionWidth);
 
-  // Adjust right side measurable.
-  this.startX = connectionWidth;
-  if (!this.hasStatementInput && !this.bottomRow.hasNextConnection) {
+  // Add the right connection measurable.
+  var rightConnectionWidth = 0;
+  if (!this.hasStatementInput) {
+    rightConnectionWidth = connectionWidth;
     this.rightSide.height = connectionHeight;
-    this.rightSide.width = connectionWidth;
+    this.rightSide.width = rightConnectionWidth;
     this.rightSide.centerline = connectionHeight / 2;
-    this.rightSide.xPos = this.width + connectionWidth;
-    connectionWidth *= 2;
+    this.rightSide.xPos = this.width + rightConnectionWidth;
   }
-  this.width += connectionWidth;
-  this.widthWithChildren += connectionWidth;
+  this.startX = connectionWidth;
+  this.width += connectionWidth + rightConnectionWidth;
+  this.widthWithChildren += connectionWidth + rightConnectionWidth;
 };
 
 /**

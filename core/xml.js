@@ -46,7 +46,7 @@ goog.require('Blockly.utils.xml');
 Blockly.Xml.workspaceToDom = function(workspace, opt_noId) {
   var xml = Blockly.utils.xml.createElement('xml');
 
-  var modulesElement = Blockly.Xml.modulesToDom(workspace.getModuleManager().getAllModules());
+  var modulesElement = Blockly.Xml.modulesToDom();
   if (modulesElement.hasChildNodes()) {
     xml.appendChild(modulesElement);
   }
@@ -89,12 +89,13 @@ Blockly.Xml.variablesToDom = function(variableList) {
 
 /**
  * Encode a list of modules as XML.
- * @param {!Array.<!Blockly.ModuleModel>} moduleList List of all module
- *     models.
  * @return {!Element} Tree of XML elements.
  */
-Blockly.Xml.modulesToDom = function(moduleList) {
+Blockly.Xml.modulesToDom = function() {
   var modules = Blockly.utils.xml.createElement('modules');
+
+  var moduleList = workspace.getModuleManager().getAllModules();
+  modules.setAttribute('active', workspace.getModuleManager().getActiveModule().getId());
 
   for (var i = 0, module; (module = moduleList[i]); i++) {
     var element = Blockly.utils.xml.createElement('module');
@@ -429,11 +430,18 @@ Blockly.Xml.domToWorkspace = function(xml, workspace) {
     workspace.setResizesEnabled(false);
   }
   var variablesFirst = true;
-  var modulesFirst = true;
   try {
+    // first load and init modules
     for (var i = 0, xmlChild; (xmlChild = xml.childNodes[i]); i++) {
+      if (xmlChild.nodeName.toLowerCase() === 'modules') {
+        Blockly.Xml.domToModules(xmlChild, workspace);
+      }
+    }
+
+    for (i = 0, xmlChild; (xmlChild = xml.childNodes[i]); i++) {
       var name = xmlChild.nodeName.toLowerCase();
       var xmlChildElement = /** @type {!Element} */ (xmlChild);
+
       if (name == 'block' ||
           (name == 'shadow' && !Blockly.Events.recordUndo)) {
         // Allow top-level shadow blocks if recordUndo is disabled since
@@ -450,7 +458,6 @@ Blockly.Xml.domToWorkspace = function(xml, workspace) {
         }
 
         variablesFirst = false;
-        modulesFirst = false;
       } else if (name == 'shadow') {
         throw TypeError('Shadow block cannot be a top-level block.');
       } else if (name == 'comment') {
@@ -479,14 +486,6 @@ Blockly.Xml.domToWorkspace = function(xml, workspace) {
               'another location.');
         }
         variablesFirst = false;
-      } else if (name === 'modules') {
-        if (!modulesFirst) {
-          throw Error('\'modules\' tag must exist once before block and ' +
-            'shadow tag elements in the workspace XML, but it was found in ' +
-            'another location.');
-        }
-        Blockly.Xml.domToModules(xmlChildElement, workspace);
-        modulesFirst = false;
       }
     }
   } finally {
@@ -658,6 +657,11 @@ Blockly.Xml.domToModules = function(xmlModules, workspace) {
     }
 
     workspace.getModuleManager().createModule(xmlChild.textContent, xmlChild.getAttribute('id'));
+  }
+
+  var activeId = xmlModules.getAttribute('active');
+  if (activeId) {
+    workspace.getModuleManager().setActiveModuleId(activeId);
   }
 };
 

@@ -1709,7 +1709,7 @@ Blockly.WorkspaceSvg.prototype.showContextMenu = function(e) {
     return;
   }
   var menuOptions = [];
-  var topBlocks = this.getTopBlocks(true);
+  var topBlocks = this.getTopBlocks(true, true);
   var eventGroup = Blockly.utils.genUid();
   var ws = this;
 
@@ -2504,11 +2504,12 @@ Blockly.WorkspaceSvg.prototype.getBlockById = function(id) {
  * Finds the top-level blocks and returns them.  Blocks are optionally sorted
  * by position; top to bottom (with slight LTR or RTL bias).
  * @param {boolean} ordered Sort the list if true.
+ * @param {boolean} [inActiveModule] filter blocks by active module if true.
  * @return {!Array.<!Blockly.BlockSvg>} The top-level block objects.
  * @override
  */
-Blockly.WorkspaceSvg.prototype.getTopBlocks = function(ordered) {
-  return Blockly.WorkspaceSvg.superClass_.getTopBlocks.call(this, ordered);
+Blockly.WorkspaceSvg.prototype.getTopBlocks = function(ordered, inActiveModule) {
+  return Blockly.WorkspaceSvg.superClass_.getTopBlocks.call(this, ordered, inActiveModule);
 };
 
 /**

@@ -40,10 +40,10 @@ goog.require('Blockly.utils.object');
 Blockly.ModuleManager = function(workspace) {
   /**
    * Default module
-   * @type {Blockly.ModuleModel}
    * @private
+   * @type {Blockly.ModuleModel}
    */
-  this.defaultModule_ =  new Blockly.ModuleModel(workspace, 'General', 'general');
+  this.defaultModule_ =  new Blockly.ModuleModel(workspace,Blockly.Msg['DEFAULT_MODULE_NAME'], 'general');
 
   /**
    * A map from module type to list of module names.  The lists contain all
@@ -51,14 +51,14 @@ Blockly.ModuleManager = function(workspace) {
    * @type {Array.<Blockly.ModuleModel>}
    * @private
    */
-  this.moduleMap_ = [];
+  this.moduleMap_ = [this.defaultModule_];
 
   /**
    * Active module
    * @type {?string}
    * @private
    */
-  this.activeModuleId_ = null;
+  this.activeModuleId_ = this.defaultModule_.getId();
 
   /**
    * The workspace this map belongs to.
@@ -95,6 +95,7 @@ Blockly.ModuleManager.prototype.clear = function() {
   }
 };
 
+
 /**
  * Rename a module by updating its name in the module map. Identify the
  * module to rename with the given ID.
@@ -104,11 +105,30 @@ Blockly.ModuleManager.prototype.clear = function() {
 Blockly.ModuleManager.prototype.renameModule = function(module, newName) {
   var previousName = module.name;
   module.name = newName;
-  if (this.workspace instanceof Blockly.WorkspaceSvg) {
+  if (this.workspace instanceof Blockly.WorkspaceSvg && this.workspace.getModuleBar()) {
     this.workspace.getModuleBar().render();
   }
 
   Blockly.Events.fire(new Blockly.Events.ModuleRename(module, previousName));
+};
+
+
+/**
+ * Move a module to position.
+ * @param {Blockly.ModuleModel} module Module to move.
+ * @param {int} newOrder New module order.
+ */
+Blockly.ModuleManager.prototype.moveModule = function(module, newOrder) {
+  var previousOrder = this.getModuleOrder(module.getId());
+
+  this.moduleMap_[previousOrder] = this.moduleMap_[newOrder];
+  this.moduleMap_[newOrder] = module;
+
+  if (this.workspace instanceof Blockly.WorkspaceSvg && this.workspace.getModuleBar()) {
+    this.workspace.getModuleBar().render();
+  }
+
+  Blockly.Events.fire(new Blockly.Events.ModuleMove(module, newOrder, previousOrder));
 };
 
 /**
@@ -120,7 +140,6 @@ Blockly.ModuleManager.prototype.renameModule = function(module, newName) {
  */
 Blockly.ModuleManager.prototype.createModule = function(name, opt_id) {
   if (opt_id && this.getModuleById(opt_id)) {
-    console.log('Module with id ' + opt_id + ' is already in use.');
     return this.getModuleById(opt_id);
   }
 
@@ -129,7 +148,7 @@ Blockly.ModuleManager.prototype.createModule = function(name, opt_id) {
 
   this.moduleMap_.push(module);
 
-  if (this.workspace instanceof Blockly.WorkspaceSvg) {
+  if (this.workspace instanceof Blockly.WorkspaceSvg && this.workspace.getModuleBar()) {
     this.workspace.getModuleBar().render();
   }
 
@@ -164,15 +183,9 @@ Blockly.ModuleManager.prototype.fireCreateEvent_ = function(module) {
  * @param {Blockly.ModuleModel} module Module to delete.
  */
 Blockly.ModuleManager.prototype.deleteModule = function(module) {
-  var deleteActiveModule = this.getActiveModule().getId() ===  module.getId();
-
   for (var i = 0; i < this.moduleMap_.length; i++) {
     if (this.moduleMap_[i].getId() === module.getId()) {
       this.moduleMap_.splice(i, 1);
-
-      if (this.moduleMap_.length === 0) {
-        this.moduleMap_.push(this.defaultModule_);
-      }
 
       try {
         var existingGroup = Blockly.Events.getGroup();
@@ -180,10 +193,7 @@ Blockly.ModuleManager.prototype.deleteModule = function(module) {
           Blockly.Events.setGroup(true);
         }
 
-        if (deleteActiveModule) {
-          var nextActiveModule = this.moduleMap_[i] || this.moduleMap_[i - 1];
-          this.activateModule(nextActiveModule);
-        } else if (this.workspace instanceof Blockly.WorkspaceSvg) {
+        if (this.workspace instanceof Blockly.WorkspaceSvg && this.workspace.getModuleBar()) {
           this.workspace.getModuleBar().render();
         }
 
@@ -230,7 +240,6 @@ Blockly.ModuleManager.prototype.activateModule = function(module) {
   }
 
   Blockly.ContextMenu.hide();
-
   var previousActive = this.getActiveModule();
 
   var existingGroup = Blockly.Events.getGroup();
@@ -239,10 +248,15 @@ Blockly.ModuleManager.prototype.activateModule = function(module) {
   }
 
   try {
+    Blockly.Events.disable();
+
+    this.setActiveModuleId(module.getId());
     var xml = Blockly.Xml.workspaceToDom(workspace);
     this.workspace.clear();
-    this.activeModuleId_ = module.getId();
     Blockly.Xml.domToWorkspace(xml, workspace);
+
+    Blockly.Events.enable();
+
     Blockly.Events.fire(new Blockly.Events.ModuleActivate(module, previousActive));
   } finally {
     if (!existingGroup) {
@@ -252,11 +266,19 @@ Blockly.ModuleManager.prototype.activateModule = function(module) {
 };
 
 /**
+ * Set active module id.
+ * @param {string} id Module.
+ */
+Blockly.ModuleManager.prototype.setActiveModuleId = function(id) {
+  this.activeModuleId_ = id;
+};
+
+/**
  * Returns active module.
  * @return {!Blockly.ModuleModel} current active module.
  */
 Blockly.ModuleManager.prototype.getActiveModule = function() {
-  return this.getModuleById(this.activeModuleId_) || this.getAllModules()[0]
+  return this.getModuleById(this.activeModuleId_) || this.getAllModules()[0];
 };
 
 /**
@@ -265,6 +287,9 @@ Blockly.ModuleManager.prototype.getActiveModule = function() {
  * @return {Blockly.ModuleModel} The module with the given ID.
  */
 Blockly.ModuleManager.prototype.getModuleById = function(id) {
+  if (!id) {
+    return null;
+  }
   for (var i = 0; i < this.moduleMap_.length; i++) {
     if (this.moduleMap_[i].getId() === id) {
       return this.moduleMap_[i];
@@ -292,9 +317,5 @@ Blockly.ModuleManager.prototype.getModuleOrder = function(id) {
  * @return {!Array.<!Blockly.ModuleModel>} List of module models.
  */
 Blockly.ModuleManager.prototype.getAllModules = function() {
-  if (this.moduleMap_.length === 0) {
-    this.moduleMap_.push(this.defaultModule_);
-  }
-
   return this.moduleMap_;
 };

@@ -219,11 +219,21 @@ Blockly.Workspace.prototype.removeTopBlock = function(block) {
  * Finds the top-level blocks and returns them.  Blocks are optionally sorted
  * by position; top to bottom (with slight LTR or RTL bias).
  * @param {boolean} ordered Sort the list if true.
+ * @param {boolean} [inActiveModule] filter blocks by active module if true.
  * @return {!Array.<!Blockly.Block>} The top-level block objects.
  */
-Blockly.Workspace.prototype.getTopBlocks = function(ordered) {
-  // Copy the topBlocks_ list.
-  var blocks = [].concat(this.topBlocks_);
+Blockly.Workspace.prototype.getTopBlocks = function(ordered, inActiveModule) {
+  var blocks = [];
+  if (inActiveModule) {
+    for (var i = 0, block; (block = this.topBlocks_[i]); i++) {
+      if (block.InActiveModule()) {
+        blocks.push(block);
+      }
+    }
+  } else {
+    blocks = [].concat(this.topBlocks_);
+  }
+
   if (ordered && blocks.length > 1) {
     this.sortObjects_.offset =
         Math.sin(Blockly.utils.math.toRadians(Blockly.Workspace.SCAN_ANGLE));
@@ -338,19 +348,20 @@ Blockly.Workspace.prototype.getTopComments = function(ordered) {
  * Find all blocks in workspace.  Blocks are optionally sorted
  * by position; top to bottom (with slight LTR or RTL bias).
  * @param {boolean} ordered Sort the list if true.
+ * @param {boolean} [inActiveModule] filter blocks by active module if true.
  * @return {!Array.<!Blockly.Block>} Array of blocks.
  */
-Blockly.Workspace.prototype.getAllBlocks = function(ordered) {
+Blockly.Workspace.prototype.getAllBlocks = function(ordered, inActiveModule) {
   if (ordered) {
     // Slow, but ordered.
-    var topBlocks = this.getTopBlocks(true);
+    var topBlocks = this.getTopBlocks(true, inActiveModule);
     var blocks = [];
     for (var i = 0; i < topBlocks.length; i++) {
       blocks.push.apply(blocks, topBlocks[i].getDescendants(true));
     }
   } else {
     // Fast, but in no particular order.
-    var blocks = this.getTopBlocks(false);
+    var blocks = this.getTopBlocks(false, inActiveModule);
     for (var i = 0; i < blocks.length; i++) {
       blocks.push.apply(blocks, blocks[i].getChildren(false));
     }
@@ -376,7 +387,7 @@ Blockly.Workspace.prototype.clear = function() {
       Blockly.Events.setGroup(true);
     }
 
-    this.moduleManager_.clear();
+    this.getModuleManager().clear();
 
     while (this.topBlocks_.length) {
       this.topBlocks_[0].dispose(false);

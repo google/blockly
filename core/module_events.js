@@ -291,3 +291,68 @@ Blockly.Events.ModuleRename.prototype.run = function(forward) {
     moduleManager.renameModule(module, this.oldName);
   }
 };
+
+
+
+/**
+ * Class for a module move event.
+ * @param {Blockly.ModuleModel} module The moved module.
+ *     Null for a blank event.
+ * @param {int} newOrder The new module order.
+ * @param {int} previousOrder The previous module order.
+ * @extends {Blockly.Events.ModuleBase}
+ * @constructor
+ */
+Blockly.Events.ModuleMove = function(module, newOrder, previousOrder) {
+  if (!module) {
+    return;  // Blank event to be populated by fromJson.
+  }
+  Blockly.Events.ModuleMove.superClass_.constructor.call(this, module);
+  this.newOrder = newOrder;
+  this.previousOrder = previousOrder;
+};
+Blockly.utils.object.inherits(Blockly.Events.ModuleMove, Blockly.Events.ModuleBase);
+
+/**
+ * Type of this event.
+ * @type {string}
+ */
+Blockly.Events.ModuleMove.prototype.type = Blockly.Events.MODULE_MOVE;
+
+/**
+ * Encode the event as JSON.
+ * @return {!Object} JSON representation.
+ */
+Blockly.Events.ModuleMove.prototype.toJson = function() {
+  var json = Blockly.Events.ModuleMove.superClass_.toJson.call(this);
+  json['newOrder'] = this.newOrder;
+  json['previousOrder'] = this.previousOrder;
+  return json;
+};
+
+/**
+ * Decode the JSON event.
+ * @param {!Object} json JSON representation.
+ */
+Blockly.Events.ModuleMove.prototype.fromJson = function(json) {
+  Blockly.Events.ModuleMove.superClass_.fromJson.call(this, json);
+  this.newOrder = json['newOrder'];
+  this.previousOrder = json['previousOrder'];
+};
+
+/**
+ * Run a module move event.
+ * @param {boolean} forward True if run forward, false if run backward (undo).
+ */
+Blockly.Events.ModuleMove.prototype.run = function(forward) {
+  var moduleManager = this.getEventWorkspace_().getModuleManager();
+  var module = moduleManager.getModuleById(this.moduleId);
+  if (forward) {
+    moduleManager.moveModule(module, this.newOrder);
+  } else {
+    moduleManager.moveModule(module, this.previousOrder);
+  }
+};
+
+
+

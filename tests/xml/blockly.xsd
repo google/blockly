@@ -81,6 +81,7 @@
       <xs:sequence>
         <xs:element ref="module" maxOccurs="unbounded"/>
       </xs:sequence>
+      <xs:attribute name="active" type="xs:string"/>
     </xs:complexType>
   </xs:element>
 

@@ -49,6 +49,18 @@ Blockly.ModuleBar = function(workspace) {
    * @type {?Element}
    * @private
    */
+  this.dragDropModuleEl_ = null;
+
+  /**
+   * @type {?Element}
+   * @private
+   */
+  this.dragDropTargetModuleEl_ = null;
+
+  /**
+   * @type {?Element}
+   * @private
+   */
   this.htmlContainer_ = null;
 
   /**
@@ -57,6 +69,27 @@ Blockly.ModuleBar = function(workspace) {
    * @private
    */
   this.onClickWrapper_ = null;
+
+  /**
+   * Mouse down event data.
+   * @type {?Blockly.EventData}
+   * @private
+   */
+  this.onMouseDownWrapper_ = null;
+
+  /**
+   * Mouse move event data.
+   * @type {?Blockly.EventData}
+   * @private
+   */
+  this.onMouseMoveWrapper_ = null;
+
+  /**
+   * Mouse up event data.
+   * @type {?Blockly.EventData}
+   * @private
+   */
+  this.onMouseUpWrapper_ = null;
 };
 
 /**
@@ -102,6 +135,7 @@ Blockly.ModuleBar.prototype.render = function() {
     var tab = document.createElement('li');
     tab.className = 'blocklyModuleBarTab';
     tab.setAttribute('data-module-id', modules[i].getId());
+    tab.setAttribute('ondragstart', 'return false;');
 
     var link = document.createElement('a');
 
@@ -111,7 +145,8 @@ Blockly.ModuleBar.prototype.render = function() {
     link.appendChild(name);
 
 
-    if (modules[i].getId() === this.workspace_.getModuleManager().getActiveModule().getId()) {
+    var activeModule = this.workspace_.getModuleManager().getActiveModule();
+    if (activeModule && modules[i].getId() === activeModule.getId()) {
       link.className = 'blocklyModuleBarLink blocklyModuleBarLinkActive';
 
       var menuIcon = document.createElement('span');
@@ -160,7 +195,16 @@ Blockly.ModuleBar.prototype.setContainerVisible = function(visible) {
  */
 Blockly.ModuleBar.prototype.attachEvents_ = function() {
   this.onClickWrapper_ = Blockly.bindEventWithChecks_(this.htmlContainer_,
-    'click', this, this.handleMouseEvent_);
+    'click', this, this.onMouseClick_);
+
+  this.onMouseDownWrapper_ = Blockly.bindEventWithChecks_(this.htmlContainer_,
+    'mousedown', this, this.onMouseDown_);
+
+  this.onMouseUpWrapper_ = Blockly.bindEventWithChecks_(document,
+    'mouseup', this, this.onMouseUp_);
+
+  this.onMouseMoveWrapper_ = Blockly.bindEventWithChecks_(document,
+    'mousemove', this, this.onMouseMove_);
 };
 
 /**
@@ -172,15 +216,136 @@ Blockly.ModuleBar.prototype.detachEvents_ = function() {
     Blockly.unbindEvent_(this.onClickWrapper_);
     this.onClickWrapper_ = null;
   }
+
+  if (this.onMouseDownWrapper_) {
+    Blockly.unbindEvent_(this.onMouseDownWrapper_);
+    this.onMouseDownWrapper_ = null;
+  }
+
+  if (this.onMouseUpWrapper_) {
+    Blockly.unbindEvent_(this.onMouseUpWrapper_);
+    this.onMouseUpWrapper_ = null;
+  }
+
+  if (this.onMouseMoveWrapper_) {
+    Blockly.unbindEvent_(this.onMouseMoveWrapper_);
+    this.onMouseMoveWrapper_ = null;
+  }
 };
 
 /**
- * Handles mouse events.
+ * Mouse click handler.
  * @param {!Event} e The browser event.
  * @private
  */
-Blockly.ModuleBar.prototype.handleMouseEvent_ = function(e) {
-  console.log(e);
+Blockly.ModuleBar.prototype.onMouseClick_ = function(e) {
+  var role = e.target.getAttribute('role');
+
+  switch (role) {
+    case 'module-menu-control':
+      return this.handleShowModuleMenu_(e);
+    case 'create-module-control':
+      return this.handleCreateModule_();
+  }
+
+  return this.handleActivateModule_(e);
+};
+
+/**
+ * Mouse down handler.
+ * @param {!Event} e The browser event.
+ * @private
+ */
+Blockly.ModuleBar.prototype.onMouseDown_ = function(e) {
+  var role = e.target.getAttribute('role');
+  if (role === 'module-menu-control') {
+    return;
+  }
+
+  if (this.workspace_.getModuleManager().getAllModules().length < 2) {
+    return;
+  }
+
+  var moduleEl = this.getModuleElementFromEvent_(e);
+  if (!moduleEl) {
+    return;
+  }
+
+  var module = this.workspace_.getModuleManager().getModuleById(moduleEl.getAttribute('data-module-id'));
+  if (!module) {
+    return;
+  }
+
+  if (module.getId() !== this.workspace_.getModuleManager().getActiveModule().getId()) {
+    return;
+  }
+
+  this.dragDropModuleEl_ = moduleEl;
+  Blockly.ContextMenu.hide();
+};
+
+
+
+/**
+ * Mouse up handler.
+ * @param {!Event} e The browser event.
+ * @private
+ */
+Blockly.ModuleBar.prototype.onMouseUp_ = function(e) {
+  if (!this.dragDropModuleEl_) {
+    return;
+  }
+
+  var module = this.workspace_.getModuleManager().getModuleById(this.dragDropModuleEl_.getAttribute('data-module-id'));
+  this.dragDropModuleEl_ = null;
+  if (!this.dragDropTargetModuleEl_) {
+    return;
+  }
+
+  var targetModule = this.workspace_.getModuleManager().getModuleById(this.dragDropTargetModuleEl_.getAttribute('data-module-id'));
+  this.dragDropTargetModuleEl_ = null;
+
+  this.workspace_.getModuleManager().moveModule(module, this.workspace_.getModuleManager().getModuleOrder(targetModule.getId()));
+};
+
+/**
+ * Mouse up handler.
+ * @param {!Event} e The browser event.
+ * @private
+ */
+Blockly.ModuleBar.prototype.onMouseMove_ = function(e) {
+  if (!this.dragDropModuleEl_) {
+    return;
+  }
+
+  var targetModuleEl = this.getModuleElementFromEvent_(e);
+  if (!targetModuleEl || targetModuleEl === this.dragDropModuleEl_) {
+    if (this.dragDropTargetModuleEl_) {
+      this.dragDropTargetModuleEl_.classList.remove('blocklyModuleBarTabDropZone');
+      this.dragDropTargetModuleEl_ = null;
+    }
+
+    return;
+  }
+
+  if (targetModuleEl === this.dragDropTargetModuleEl_) {
+    return;
+  }
+
+  if (this.dragDropTargetModuleEl_) {
+    this.dragDropTargetModuleEl_.classList.remove('blocklyModuleBarTabDropZone');
+  }
+
+  this.dragDropTargetModuleEl_ = targetModuleEl;
+  this.dragDropTargetModuleEl_.classList.add('blocklyModuleBarTabDropZone');
+};
+
+/**
+ * Mouse click handler.
+ * @param {!Event} e The browser event.
+ * @private
+ */
+Blockly.ModuleBar.prototype.onMouseClick_ = function(e) {
   var role = e.target.getAttribute('role');
 
   switch (role) {
@@ -225,25 +390,32 @@ Blockly.ModuleBar.prototype.handleShowModuleMenu_ = function(e) {
  * @private
  */
 Blockly.ModuleBar.prototype.handleActivateModule_ = function(e) {
-  var module = this.getModuleFromEvent_(e);
-  if (module) {
-    this.workspace_.getModuleManager().activateModule(module);
+  var moduleEl = this.getModuleElementFromEvent_(e);
+  if (!moduleEl) {
+    return;
   }
+
+  var module = this.workspace_.getModuleManager().getModuleById(moduleEl.getAttribute('data-module-id'));
+  if (!module) {
+    return;
+  }
+
+  this.workspace_.getModuleManager().activateModule(module);
 };
 
 /**
- * Finds the containing module given an event.
+ * Finds the containing module element given an event.
  * @param {!Event} e The browser event.
- * @return {?Blockly.ModuleModel} The containing module or null if no module is
+ * @return {?Element} The module element or null if no module element is
  *     found.
  * @private
  */
-Blockly.ModuleBar.prototype.getModuleFromEvent_ = function(e) {
+Blockly.ModuleBar.prototype.getModuleElementFromEvent_ = function(e) {
   var target = e.target;
-  while (target != null) {
+  while (target instanceof Element) {
     var moduleId = target.getAttribute('data-module-id');
     if (moduleId) {
-      return this.workspace_.getModuleManager().getModuleById(moduleId);
+      return target;
     }
 
     if (target === this.htmlContainer_) {
@@ -315,11 +487,12 @@ Blockly.ModuleBar.prototype.handleDeleteModule_ = function() {
     return;
   }
 
-  Blockly.confirm(Blockly.Msg['DELETE_MODULE_CONFIRMATION'].replace('%1', activeModule.name), function(ok) {
-    if (ok) {
-      workspace.getModuleManager().deleteModule(activeModule);
-    }
-  });
+  if (workspace.getTopBlocks(false, true).length > 0) {
+    Blockly.alert(Blockly.Msg['NOT_EMPTY_MODULE_DELETE_RESTRICTION']);
+    return;
+  }
+
+  workspace.getModuleManager().deleteModule(activeModule);
 };
 
 
@@ -357,6 +530,12 @@ Blockly.Css.register([
     'margin: 0;',
   '}',
 
+
+  '.blocklyModuleBarTabDropZone {',
+    'border-right: 5px solid #ccc;',
+    'cursor: grab;',
+  '}',
+
   '.blocklyModuleBarLink {',
     'display: block;',
     'padding: 5px;',
@@ -380,7 +559,7 @@ Blockly.Css.register([
     'border-color: #ddd;',
   '}',
 
-  '.blocklyModuleBarLink:not(.blocklyModuleBarLinkActive):hover {',
+  '.blocklyModuleBarTab:not(.blocklyModuleBarTabDropZone) .blocklyModuleBarLink:not(.blocklyModuleBarLinkActive):hover {',
     'background-color: #e4e4e4;',
     'border-color: #e4e4e4;',
   '}',
@@ -401,8 +580,8 @@ Blockly.Css.register([
     'background-repeat: no-repeat;',
     'background-size: contain;',
     'display: inline-block;',
-    'width: 13px;',
-    'height: 13px;',
+    'width: 12px;',
+    'height: 12px;',
     'margin: 0px 2px;',
   '}',
 

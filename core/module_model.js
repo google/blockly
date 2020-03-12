@@ -33,7 +33,7 @@ goog.require('Blockly.utils');
  * Holds information for the module including name and ID
  * @param {!Blockly.Workspace} workspace The module's workspace.
  * @param {string} name The name of the module.
- * @param {string=} opt_id The unique ID of the module. This will default to
+ * @param {string} opt_id The unique ID of the module. This will default to
  *     a UUID.
  * @constructor
  */
@@ -51,7 +51,6 @@ Blockly.ModuleModel = function(workspace, name, opt_id) {
    */
   this.name = name;
 
-
   /**
    * A unique id for the module. This should be defined at creation and
    * not change, even if the name changes. In most cases this should be a
@@ -68,3 +67,4 @@ Blockly.ModuleModel = function(workspace, name, opt_id) {
 Blockly.ModuleModel.prototype.getId = function() {
   return this.id_;
 };
+

@@ -21,7 +21,7 @@
  */
 'use strict';
 
-goog.provide('Blockly.ModuleMap');
+goog.provide('Blockly.ModuleManager');
 
 goog.require('Blockly.Events');
 goog.require('Blockly.ModuleModel');

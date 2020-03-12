@@ -194,7 +194,7 @@ gulp.task('build-compressed', function (cb) {
     // Flatten all files so they're in the same directory, but ensure that
     // files with the same name don't conflict.
     .pipe(gulp.rename(function (p) {
-      var dirname = p.dirname.replace(new RegExp(path.sep, "g"), "-");
+      var dirname = p.dirname.replace(new RegExp(path.sep.replace('\\', '\\\\'), "g"), "-");
       p.dirname = "";
       p.basename = dirname + "-" + p.basename;
     }))

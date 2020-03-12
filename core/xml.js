@@ -431,14 +431,14 @@ Blockly.Xml.domToWorkspace = function(xml, workspace) {
   }
   var variablesFirst = true;
   try {
-    // first load and init modules
+    // first load modules
     for (var i = 0, xmlChild; (xmlChild = xml.childNodes[i]); i++) {
       if (xmlChild.nodeName.toLowerCase() === 'modules') {
         Blockly.Xml.domToModules(xmlChild, workspace);
       }
     }
 
-    for (i = 0, xmlChild; (xmlChild = xml.childNodes[i]); i++) {
+    for (var i = 0, xmlChild; (xmlChild = xml.childNodes[i]); i++) {
       var name = xmlChild.nodeName.toLowerCase();
       var xmlChildElement = /** @type {!Element} */ (xmlChild);
 

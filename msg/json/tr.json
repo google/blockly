@@ -184,7 +184,7 @@
 	"MATH_IS_NEGATIVE": "negatif",
 	"MATH_IS_DIVISIBLE_BY": "bölünebilir",
 	"MATH_IS_TOOLTIP": "Bir sayının çift, tek, asal, bütün, pozitif, negatif veya belirli bir sayıya bölünebilir olup olmadığını kontrol edin. True veya false değerini döndürür.",
-	"MATH_CHANGE_HELPURL": "https://tr.wikipedia.org/wiki/Programlama_deyimi#Sayacı_artırma",
+	"MATH_CHANGE_HELPURL": "https://tr.wikipedia.org/wiki/Programlama_deyimi",
 	"MATH_CHANGE_TITLE": "%1 %2 göre değiştir",
 	"MATH_CHANGE_TOOLTIP": "'%1' değişkenine bir sayı ekle.",
 	"MATH_ROUND_HELPURL": "https://tr.wikipedia.org/wiki/Yuvarlatma",

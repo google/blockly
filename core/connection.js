@@ -195,9 +195,10 @@ Blockly.Connection.prototype.connect_ = function(childConnection) {
  */
 Blockly.Connection.prototype.dispose = function() {
 
+  this.setShadowDom(null);
+
   // isConnected returns true for shadows and non-shadows.
   if (this.isConnected()) {
-    this.setShadowDom(null);
     var targetBlock = this.targetBlock();
     if (targetBlock.isShadow()) {
       // Destroy the attached shadow block & its children.

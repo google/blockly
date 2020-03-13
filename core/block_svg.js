@@ -986,6 +986,7 @@ Blockly.BlockSvg.prototype.dispose = function(healStack, animate) {
   Blockly.utils.dom.removeNode(this.svgGroup_);
   blockWorkspace.resizeContents();
   // Sever JavaScript to DOM connections.
+  this.pathObject = null;
   this.svgGroup_ = null;
   Blockly.utils.dom.stopTextWidthCache();
 };

@@ -394,6 +394,7 @@ Blockly.Field.prototype.toXml = function(fieldElement) {
 Blockly.Field.prototype.dispose = function() {
   Blockly.DropDownDiv.hideIfOwner(this);
   Blockly.WidgetDiv.hideIfOwner(this);
+  Blockly.Tooltip.unbindMouseEvents(this.getClickTarget_());
 
   if (this.mouseDownWrapper_) {
     Blockly.unbindEvent_(this.mouseDownWrapper_);

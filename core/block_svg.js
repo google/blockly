@@ -944,6 +944,7 @@ Blockly.BlockSvg.prototype.dispose = function(healStack, animate) {
     return;
   }
   Blockly.Tooltip.dispose();
+  Blockly.Tooltip.unbindMouseEvents(this.pathObject.svgPath);
   Blockly.utils.dom.startTextWidthCache();
   // Save the block's workspace temporarily so we can resize the
   // contents once the block is disposed.
@@ -982,9 +983,6 @@ Blockly.BlockSvg.prototype.dispose = function(healStack, animate) {
     icons[i].dispose();
   }
   Blockly.BlockSvg.superClass_.dispose.call(this, !!healStack);
-
-  // This is needed to resolve the circular dependency through tooltip.
-  this.pathObject.svgPath.tooltip = null;
 
   Blockly.utils.dom.removeNode(this.svgGroup_);
   blockWorkspace.resizeContents();

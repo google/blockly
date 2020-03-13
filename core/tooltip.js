@@ -129,15 +129,28 @@ Blockly.Tooltip.createDom = function() {
  * @param {!Element} element SVG element onto which tooltip is to be bound.
  */
 Blockly.Tooltip.bindMouseEvents = function(element) {
-  Blockly.bindEvent_(element, 'mouseover', null,
+  element.mouseOverWrapper_ = Blockly.bindEvent_(element, 'mouseover', null,
       Blockly.Tooltip.onMouseOver_);
-  Blockly.bindEvent_(element, 'mouseout', null,
+  element.mouseOutWrapper_ = Blockly.bindEvent_(element, 'mouseout', null,
       Blockly.Tooltip.onMouseOut_);
 
   // Don't use bindEvent_ for mousemove since that would create a
   // corresponding touch handler, even though this only makes sense in the
   // context of a mouseover/mouseout.
   element.addEventListener('mousemove', Blockly.Tooltip.onMouseMove_, false);
+};
+
+/**
+ * Unbinds tooltip mouse events from the SVG element.
+ * @param {!Element} element SVG element onto which tooltip is bound.
+ */
+Blockly.Tooltip.unbindMouseEvents = function(element) {
+  if (!element) {
+    return;
+  }
+  Blockly.unbindEvent_(element.mouseOverWrapper_);
+  Blockly.unbindEvent_(element.mouseOutWrapper_);
+  element.removeEventListener('mousemove', Blockly.Tooltip.onMouseMove_);
 };
 
 /**

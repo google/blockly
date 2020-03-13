@@ -353,6 +353,7 @@ Blockly.Css.CONTENT = [
   '.blocklyEditableText>rect {',
     'fill: #fff;',
     'fill-opacity: .6;',
+    'y: 0;',
   '}',
 
   '.blocklyNonEditableText>text,',
@@ -363,6 +364,14 @@ Blockly.Css.CONTENT = [
   '.blocklyEditableText:hover>rect {',
     'stroke: #fff;',
     'stroke-width: 2;',
+  '}',
+
+  '.blocklyNonEditableText>rect,',
+  '.blocklyEditableText>rect,',
+  '.blocklyNonEditableText>path,',
+  '.blocklyEditableText>path {',
+    'fill-opacity: 0.7;',
+    'y: 0;',
   '}',
 
   '.blocklyBubbleText {',

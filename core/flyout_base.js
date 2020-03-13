@@ -255,6 +255,9 @@ Blockly.Flyout.prototype.init = function(targetWorkspace) {
   this.scrollbar_ = new Blockly.Scrollbar(this.workspace_,
       this.horizontalLayout_, false, 'blocklyFlyoutScrollbar');
 
+  // Add close button
+  this.closeButton_ = new Blockly.FlyoutCloseButton(this.workspace_, this.targetWorkspace_, this);
+
   this.hide();
 
   Array.prototype.push.apply(this.eventWrappers_,
@@ -293,6 +296,10 @@ Blockly.Flyout.prototype.dispose = function() {
   if (this.scrollbar_) {
     this.scrollbar_.dispose();
     this.scrollbar_ = null;
+  }
+  if (this.closeButton_) {
+    this.closeButton_.dispose();
+    this.closeButton_ = null;
   }
   if (this.workspace_) {
     this.workspace_.getThemeManager().unsubscribe(this.svgBackground_);
@@ -383,6 +390,7 @@ Blockly.Flyout.prototype.updateDisplay_ = function() {
   // Update the scrollbar's visibility too since it should mimic the
   // flyout's visibility.
   this.scrollbar_.setContainerVisible(show);
+  this.closeButton_.setVisible(show);
 };
 
 /**
@@ -452,6 +460,10 @@ Blockly.Flyout.prototype.positionAt_ = function(width, height, x, y) {
     this.svgGroup_.setAttribute("transform", transform);
   }
 
+  if (this.closeButton_) {
+    this.closeButton_.updateTransform_(x, y, width);
+  }
+
   // Update the scrollbar (if one exists).
   if (this.scrollbar_) {
     // Set the scrollbars origin to be the top left of the flyout.
@@ -476,6 +488,15 @@ Blockly.Flyout.prototype.hide = function() {
     return;
   }
   this.setVisible(false);
+
+  // Clear the "selected" category when closing the Toolbox flyout
+  var workspace = Blockly.getMainWorkspace();
+  if (workspace.toolbox_ &&
+    workspace.toolbox_.flyout_ &&
+    this === workspace.toolbox_.flyout_) {
+    workspace.toolbox_.clearSelection();
+  }
+
   // Delete all the event listeners.
   for (var i = 0, listen; listen = this.listeners_[i]; i++) {
     Blockly.unbindEvent_(listen);

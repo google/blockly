@@ -943,7 +943,8 @@ Blockly.BlockSvg.prototype.dispose = function(healStack, animate) {
     // The block has already been deleted.
     return;
   }
-  Blockly.Tooltip.hide();
+  Blockly.Tooltip.dispose();
+  Blockly.Tooltip.unbindMouseEvents(this.pathObject.svgPath);
   Blockly.utils.dom.startTextWidthCache();
   // Save the block's workspace temporarily so we can resize the
   // contents once the block is disposed.

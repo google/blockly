@@ -548,6 +548,7 @@ Blockly.Flyout.prototype.clearOldBlocks_ = function() {
   for (var j = 0; j < this.mats_.length; j++) {
     var rect = this.mats_[j];
     if (rect) {
+      Blockly.Tooltip.unbindMouseEvents(rect);
       Blockly.utils.dom.removeNode(rect);
     }
   }

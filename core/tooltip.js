@@ -224,6 +224,16 @@ Blockly.Tooltip.onMouseMove_ = function(e) {
 };
 
 /**
+ * Dispose of the tooltip.
+ * @package
+ */
+Blockly.Tooltip.dispose = function() {
+  Blockly.Tooltip.element_ = null;
+  Blockly.Tooltip.poisonedElement_ = null;
+  Blockly.Tooltip.hide();
+};
+
+/**
  * Hide the tooltip.
  */
 Blockly.Tooltip.hide = function() {

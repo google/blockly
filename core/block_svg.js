@@ -943,7 +943,7 @@ Blockly.BlockSvg.prototype.dispose = function(healStack, animate) {
     // The block has already been deleted.
     return;
   }
-  Blockly.Tooltip.hide();
+  Blockly.Tooltip.dispose();
   Blockly.utils.dom.startTextWidthCache();
   // Save the block's workspace temporarily so we can resize the
   // contents once the block is disposed.
@@ -983,10 +983,12 @@ Blockly.BlockSvg.prototype.dispose = function(healStack, animate) {
   }
   Blockly.BlockSvg.superClass_.dispose.call(this, !!healStack);
 
+  // This is needed to resolve the circular dependency through tooltip.
+  this.pathObject.svgPath.tooltip = null;
+
   Blockly.utils.dom.removeNode(this.svgGroup_);
   blockWorkspace.resizeContents();
   // Sever JavaScript to DOM connections.
-  this.pathObject = null;
   this.svgGroup_ = null;
   Blockly.utils.dom.stopTextWidthCache();
 };

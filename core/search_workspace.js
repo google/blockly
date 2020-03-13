@@ -237,7 +237,7 @@ Blockly.WorkspaceSearch.prototype.onNewWorkspaceEvent = function (event) {
           // Remove the reverse information as well, i.e. remove the keyword from the block's list of keywords
           for (let l = 0; l < this.blocksAdded_[event.blockId].length; l++) {
             if (this.blocksAdded_[event.blockId][l] === text) {
-              this.blocksAdded_[event.blockId] = this.blocksAdded_[event.blockId].splice(l, 1);
+              this.blocksAdded_[event.blockId].splice(l, 1);
               l--;
             }
           }

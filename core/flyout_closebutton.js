@@ -202,6 +202,14 @@ Blockly.FlyoutCloseButton.prototype.onMouseClick_ = function (e) {
     gesture.cancel();
   }
 
+  // Clear the "selected" category when closing the Toolbox flyout
+  var workspace = Blockly.getMainWorkspace();
+  if (workspace.toolbox_ &&
+    workspace.toolbox_.flyout_ &&
+    this.flyout_ === workspace.toolbox_.flyout_) {
+    workspace.toolbox_.clearSelection();
+  }
+
   this.flyout_.hide();
 };
 

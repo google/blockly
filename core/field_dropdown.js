@@ -484,14 +484,32 @@ Blockly.FieldDropdown.prototype.doClassValidation_ = function(opt_newValue) {
     if ((option.length === 1 && option[0] === opt_newValue) || 
         (option[1] == opt_newValue)) {
       isValueValid = true;
+      this.skipTimeout = false;
       break;
     }
   }
   if (!isValueValid) {
     if (this.sourceBlock_) {
+      // Check for two special cases, but only if the skipTimeout flag hasn't been raised yet
+      if (!this.skipTimeout &&
+          (this.sourceBlock_.type === 'fable_imread' ||
+          this.sourceBlock_.type === 'fable_play_custom_sound')) {
+        // Raise the skipTimeout flag
+        this.skipTimeout = true;
+
+        // Set a timeout for 500 ms that will repeat the check.
+        // Used for "dynamic" dropdowns, which are based on FableAPI's response time
+        var thisObj = this;
+        setTimeout(function () {
+          thisObj.setValue(opt_newValue);
+        }, 500);
+
+        return opt_newValue;
+      }
+
       console.warn('Cannot set the dropdown\'s value to an unavailable option.' +
-        ' Block type: ' + this.sourceBlock_.type + ', Field name: ' + this.name +
-        ', Value: ' + opt_newValue);
+          ' Block type: ' + this.sourceBlock_.type + ', Field name: ' + this.name +
+          ', Value: ' + opt_newValue);
     }
     return null;
   }

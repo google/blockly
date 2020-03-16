@@ -94,17 +94,23 @@ Blockly.Blocks['procedures_defnoreturn'] = {
   },
   /**
    * Create XML to represent the argument inputs.
+   * @param {boolean=} opt_paramIds If true include the IDs of the parameter
+   *     quarks.  Used by Blockly.Procedures.mutateCallers for reconnection.
    * @return {!Element} XML storage element.
    * @this {Blockly.Block}
    */
-  mutationToDom: function() {
+  mutationToDom: function(opt_paramIds) {
     var container = Blockly.utils.xml.createElement('mutation');
-    container.setAttribute('name', this.getFieldValue('NAME'));
+    if (opt_paramIds) {
+      container.setAttribute('name', this.getFieldValue('NAME'));
+    }
     for (var i = 0; i < this.arguments_.length; i++) {
       var parameter = Blockly.utils.xml.createElement('arg');
       parameter.setAttribute('name', this.arguments_[i]);
       parameter.setAttribute('varid', this.varIds_[i]);
-      parameter.setAttribute('paramid', this.paramIds_[i]);
+      if (opt_paramIds) {
+        parameter.setAttribute('paramid', this.paramIds_[i]);
+      }
       container.appendChild(parameter);
     }
 
@@ -122,6 +128,7 @@ Blockly.Blocks['procedures_defnoreturn'] = {
   domToMutation: function(xmlElement) {
     this.arguments_ = [];
     this.varIds_ = [];
+    this.paramIds_ = [];
     this.argumentVarModels_ = [];
     for (var i = 0, childNode; (childNode = xmlElement.childNodes[i]); i++) {
       if (childNode.nodeName.toLowerCase() == 'arg') {
@@ -292,30 +299,20 @@ Blockly.Blocks['procedures_defnoreturn'] = {
       return;  // Not on this block.
     }
 
+    var oldName = this.arguments_[index];
     var newVar = this.workspace.getVariableById(newId);
     var newName = newVar.name;
 
-    // Should be updated by compose. But just
-    // in case we ever optimize that away.
     this.varIds_[index] = newId;
     this.arguments_[index] = newName;
     this.argumentVarModels_[index] = newVar;
     this.updateParams_();
 
-    // Should always be false, because this is triggered
-    // by an edit inside of the mutator.
-    if (!this.mutator || !this.mutator.isVisible()) {
-      return;
+    if (this.mutator && this.mutator.isVisible()) {
+      var block = this.mutator.workspace_.getBlockById(this.paramIds_[index]);
+      block.setFieldValue(newName, 'NAME');
     }
 
-    var mutatorWorkspace = this.mutator.workspace_;
-    var oldBlock = mutatorWorkspace.getBlockById(oldId);
-    var argXml = this.createArgXml_(newName, newId);
-    var newBlock = Blockly.Xml.domToBlock(argXml, mutatorWorkspace);
-    // Connect new on top of old.
-    oldBlock.previousConnection.targetConnection
-        .connect(newBlock.previousConnection);
-    oldBlock.dispose(true);
     Blockly.Procedures.mutateCallers(this);
   },
 
@@ -332,16 +329,15 @@ Blockly.Blocks['procedures_defnoreturn'] = {
     if (index == -1) {
       return;  // Not on this block.
     }
-    this.arguments_[index] = variable.name;  // Must be updated before display.
+    var newName = variable.name;
+    this.arguments_[index] = newName;  // Must be updated before display.
     this.updateParams_();  // Might be updated by compose, but just in case.
 
-    if (!this.mutator || !this.mutator.isVisible()) {
-      return;
+    if (this.mutator && this.mutator.isVisible()) {
+      var block = this.mutator.workspace_.getBlockById(this.paramIds_[index]);
+      block.setFieldValue(newName, 'NAME');
     }
 
-    var mutatorWorkspace = this.mutator.workspace_;
-    var block = mutatorWorkspace.getBlockById(variable.getId());
-    block.setFieldValue(variable.name, 'NAME');
     Blockly.Procedures.mutateCallers(this);
   },
 

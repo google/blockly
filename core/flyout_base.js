@@ -630,8 +630,8 @@ Blockly.Flyout.prototype.isBlockCreatable_ = function(block) {
 /**
  * Create a copy of this block on the workspace.
  * @param {!Blockly.BlockSvg} originalBlock The block to copy from the flyout.
- * @return {!Blockly.BlockSvg} The newly created block, or null if something
- *     went wrong with deserialization.
+ * @return {!Blockly.BlockSvg} The newly created block.
+ * @throws {Error} if something went wrong with deserialization.
  * @package
  */
 Blockly.Flyout.prototype.createBlock = function(originalBlock) {

@@ -317,7 +317,7 @@ Blockly.Extensions.mutatorPropertiesMatch_ = function(oldProperties, block) {
  *     to the lookup table.
  * @param {!Object.<string, string>} lookupTable The table of field values to
  *     tooltip text.
- * @return {Function} The extension function.
+ * @return {!Function} The extension function.
  */
 Blockly.Extensions.buildTooltipForDropdown = function(dropdownName,
     lookupTable) {
@@ -401,7 +401,7 @@ Blockly.Extensions.checkDropdownOptionsInTable_ = function(block, dropdownName,
  * @param {string} msgTemplate The template form to of the message text, with
  *     %1 placeholder.
  * @param {string} fieldName The field with the replacement text.
- * @return {Function} The extension function.
+ * @return {!Function} The extension function.
  */
 Blockly.Extensions.buildTooltipWithFieldText = function(msgTemplate,
     fieldName) {

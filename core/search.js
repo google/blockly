@@ -141,6 +141,80 @@ Blockly.Search.prototype.onBlockRemoved = function (type, val) {
 };
 
 /**
+ * Utility function that decode's a Blockly event's XML contents.
+ * Used to find all blocks that got simultaneously added/removed in the same Blockly event.
+ *
+ * Loosely based on Blockly.Xml.domToBlockHeadless_, with the main
+ * difference that it doesn't create any new blocks (so it avoids creating the block that was just created AGAIN).
+ *
+ * @param {!String} xmlBlock XML of the block. Provided by the Blockly event.
+ */
+Blockly.Search.prototype.decodeXmlBlocks = function (xmlBlock) {
+  var allBlocks = [];
+
+  var nodeName = xmlBlock.nodeName;
+
+  // Skip XML elements that are not blocks or shadow blocks
+  if (nodeName.toUpperCase() !== 'BLOCK' &&
+      nodeName.toUpperCase() !== 'SHADOW') {
+    return allBlocks;
+  }
+
+  // Add the topmost block of the provided XML
+  var topMostBlockType = xmlBlock.getAttribute('type');
+  var id = xmlBlock.getAttribute('id');
+
+  allBlocks.push([topMostBlockType, id]);
+
+  // Go through the children of the topmost block
+  for (var i = 0, xmlChild; xmlChild = xmlBlock.childNodes[i]; i++) {
+    if (xmlChild.nodeType === 3) {
+      // Ignore any text at the <block> level.  It's all whitespace anyway.
+      continue;
+    }
+
+    // Find any enclosed blocks or shadows in this tag.
+    var childBlockElement = null;
+    var childShadowElement = null;
+
+    // Get the current child. Either a block or a shadow block
+    for (var j = 0, grandchild; grandchild = xmlChild.childNodes[j]; j++) {
+      if (grandchild.nodeType === 1) {
+        if (grandchild.nodeName.toLowerCase() === 'block') {
+          childBlockElement = /** @type {!Element} */ (grandchild);
+        } else if (grandchild.nodeName.toLowerCase() === 'shadow') {
+          childShadowElement = /** @type {!Element} */ (grandchild);
+        }
+      }
+    }
+    // Use the shadow block if there is no child block.
+    if (!childBlockElement && childShadowElement) {
+      childBlockElement = childShadowElement;
+    }
+
+    // If the element is a value, statement, or next element, then it might have further child blocks inside.
+    // Recursively call the same function to get those potential inner blocks.
+    switch (xmlChild.nodeName.toLowerCase()) {
+      default:
+        break;
+      case 'value':
+      case 'statement':
+      case 'next':
+        if (childBlockElement) {
+          var blockChild = this.decodeXmlBlocks(childBlockElement);
+
+          for (var k = 0, grandchild; grandchild = blockChild[k]; k++) {
+            allBlocks.push(grandchild);
+          }
+        }
+        break;
+    }
+  }
+
+  return allBlocks;
+};
+
+/**
  * Finds all blocks that match a single search word.
  *
  * Lowercases the word because all of the words in the trie are also lowercased.

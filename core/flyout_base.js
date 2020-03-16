@@ -256,7 +256,9 @@ Blockly.Flyout.prototype.init = function(targetWorkspace) {
       this.horizontalLayout_, false, 'blocklyFlyoutScrollbar');
 
   // Add close button
-  this.closeButton_ = new Blockly.FlyoutCloseButton(this.workspace_, this.targetWorkspace_, this);
+  if (this.targetWorkspace_ == Blockly.mainWorkspace) {
+    this.closeButton_ = new Blockly.FlyoutCloseButton(this.workspace_, this.targetWorkspace_, this);
+  }
 
   this.hide();
 
@@ -390,7 +392,9 @@ Blockly.Flyout.prototype.updateDisplay_ = function() {
   // Update the scrollbar's visibility too since it should mimic the
   // flyout's visibility.
   this.scrollbar_.setContainerVisible(show);
-  this.closeButton_.setVisible(show);
+  if (this.closeButton_) {
+    this.closeButton_.setVisible(show);
+  }
 };
 
 /**

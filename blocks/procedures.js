@@ -94,8 +94,6 @@ Blockly.Blocks['procedures_defnoreturn'] = {
   },
   /**
    * Create XML to represent the argument inputs.
-   * @param {boolean=} opt_paramIds If true include the IDs of the parameter
-   *     quarks.  Used by Blockly.Procedures.mutateCallers for reconnection.
    * @return {!Element} XML storage element.
    * @this {Blockly.Block}
    */
@@ -106,6 +104,7 @@ Blockly.Blocks['procedures_defnoreturn'] = {
       var parameter = Blockly.utils.xml.createElement('arg');
       parameter.setAttribute('name', this.arguments_[i]);
       parameter.setAttribute('varid', this.varIds_[i]);
+      parameter.setAttribute('paramid', this.paramIds_[i]);
       container.appendChild(parameter);
     }
 
@@ -138,6 +137,10 @@ Blockly.Blocks['procedures_defnoreturn'] = {
           console.log('Failed to create a variable with name ' +
               varName + ', ignoring.');
         }
+
+        var paramId = childNode.getAttribute('paramid') ||
+            Blockly.utils.genUid();
+        this.paramIds_.push(paramId);
       }
     }
     this.updateParams_();
@@ -173,7 +176,7 @@ Blockly.Blocks['procedures_defnoreturn'] = {
 
     var node = statementNode;
     for (var i = 0; i < this.arguments_.length; i++) {
-      var argXml = this.createArgXml_(this.arguments_[i], this.varIds_[i]);
+      var argXml = this.createArgXml_(this.arguments_[i], this.paramIds_[i]);
       var nextNode = Blockly.utils.xml.createElement('next');
       argXml.appendChild(nextNode);
       node.appendChild(argXml);
@@ -198,6 +201,8 @@ Blockly.Blocks['procedures_defnoreturn'] = {
   compose: function(containerBlock) {
     this.arguments_ = [];
     this.varIds_ = [];
+    // Each param gets an ID separate from the var ID.
+    this.paramIds_ = [];
     this.argumentVarModels_ = [];
 
     var paramBlock = containerBlock.getInputTargetBlock('STACK');
@@ -209,9 +214,9 @@ Blockly.Blocks['procedures_defnoreturn'] = {
         continue;
       }
 
-      var varName = paramBlock.getFieldValue('NAME');
-      var varId = paramBlock.id;  // Invariant.
-      this.arguments_.push(varName);
+      this.arguments_.push(paramBlock.getFieldValue('NAME'));
+      this.paramIds_.push(paramBlock.id);
+      var varId = paramBlock.getVarId();
       this.varIds_.push(varId);
       this.argumentVarModels_.push(this.workspace.getVariableById(varId));
 
@@ -311,6 +316,7 @@ Blockly.Blocks['procedures_defnoreturn'] = {
     oldBlock.previousConnection.targetConnection
         .connect(newBlock.previousConnection);
     oldBlock.dispose(true);
+    Blockly.Procedures.mutateCallers(this);
   },
 
   /**
@@ -336,12 +342,13 @@ Blockly.Blocks['procedures_defnoreturn'] = {
     var mutatorWorkspace = this.mutator.workspace_;
     var block = mutatorWorkspace.getBlockById(variable.getId());
     block.setFieldValue(variable.name, 'NAME');
+    Blockly.Procedures.mutateCallers(this);
   },
 
-  createArgXml_: function(varName, varId) {
+  createArgXml_: function(varName, paramId) {
     var xml = Blockly.utils.xml.createElement('block');
     xml.setAttribute('type', 'procedures_mutatorarg');
-    xml.setAttribute('id', varId);
+    xml.setAttribute('id', paramId);
 
     var field = Blockly.utils.xml.createElement('field');
     field.setAttribute('name', 'NAME');
@@ -488,6 +495,20 @@ Blockly.Blocks['procedures_mutatorarg'] = {
     this.setStyle('procedure_blocks');
     this.setTooltip(Blockly.Msg['PROCEDURES_MUTATORARG_TOOLTIP']);
     this.contextMenu = false;
+
+    // Don't create variables for arg blocks that
+    // only exist in the mutator's flyout.
+    if (this.isInFlyout) {
+      return;
+    }
+
+    field.onFinishEditing_ = this.deleteIntermediateVars_;
+    this.outerWorkspace_ = Blockly.Mutator.findParentWs(this.workspace);
+    var id = Blockly.utils.genUid();
+    var model = Blockly.Variables.getOrCreateVariablePackage(
+        this.outerWorkspace_, id, Blockly.Procedures.DEFAULT_ARG, '');
+    this.varId_ = model.getId();
+    this.createdVariables_ = [this.varId_];
   },
 
   /**
@@ -507,7 +528,7 @@ Blockly.Blocks['procedures_mutatorarg'] = {
       return null;
     }
 
-    // Prevents duplicate parameter names in functions
+    // Prevents duplicate parameter names in functions.
     var workspace = sourceBlock.workspace.targetWorkspace ||
         sourceBlock.workspace;
     var blocks = workspace.getAllBlocks(false);
@@ -529,17 +550,36 @@ Blockly.Blocks['procedures_mutatorarg'] = {
       return varName;
     }
 
-    var outerWorkspace = Blockly.Mutator.findParentWs(sourceBlock.workspace);
-    var id = sourceBlock.id;
-    var varModel = outerWorkspace.getVariableById(id);
-    if (varModel) {
-      if (varModel.name != varName) {
-        outerWorkspace.renameVariableById(id, varName);
-      }
-    } else {
-      // Happens when the field val gets set via XML.
-      outerWorkspace.createVariable(varName, '', id);
+    var outerWorkspace = sourceBlock.outerWorkspace_;
+    var model = outerWorkspace.getVariable(varName, '');
+    if (!model) {
+      // Create a new variable instead of renaming. Otherwise the user
+      // might accidentally coalesce variables.
+      model = outerWorkspace.createVariable(varName, '');
+      sourceBlock.createdVariables_.push(model.getId());
+    } else if (model.name != varName) {
+      // Rename the variable (case change)
+      outerWorkspace.renameVariableById(model.getId(), varName);
     }
+    sourceBlock.varId_ = model.getId();
+  },
+
+  deleteIntermediateVars_: function() {
+    // It's easier to delete all created vars at once, rather than track if
+    // the previous var already existed or was created.
+    var source = this.getSourceBlock();
+    var outerWorkspace = source.outerWorkspace_;
+    var createdVars = source.createdVariables_;
+    for (var i = 0, id; (id = createdVars[i]); i++) {
+      if (id != source.varId_) {
+        outerWorkspace.deleteVariableById(id);
+      }
+    }
+    createdVars.length = 0;
+  },
+
+  getVarId: function() {
+    return this.varId_;
   },
 };
 
@@ -559,7 +599,7 @@ Blockly.Blocks['procedures_callnoreturn'] = {
 
     // Parallel arrays.
     this.arguments_ = [];
-    this.varIds_ = [];
+    this.paramIds_ = [];
     this.argumentVarModels_ = [];
     // Map of var ids to connections associated with those inputs.
     // IDs are purposefully never removed while the block is alive. The are not
@@ -610,19 +650,19 @@ Blockly.Blocks['procedures_callnoreturn'] = {
     }
 
     // Save the current state of connections.
-    for (var i = 0, id; (id = this.varIds_[i]); i++) {
+    for (var i = 0, id; (id = this.paramIds_[i]); i++) {
       var input = this.getInput('ARG' + i);
       this.idsToConnections_[id] = input.connection.targetConnection;
     }
 
     // Update state to match definition.
     this.arguments_ = paramNames;
-    this.varIds_ = paramIds;
+    this.paramIds_ = paramIds;
     this.argumentVarModels_ = [];
-    for (var i = 0, id; (id = paramIds[i]); i++) {
-      var varModel = this.workspace.getVariableById(id);
+    for (var i = 0, name; (name = paramNames[i]); i++) {
+      var varModel = this.workspace.getVariable(name, '');
       if (!varModel) {
-        throw Error('Call block received invalid var ID: ' + id + ' ' +
+        throw Error('Call block received invalid var name: ' + name + ' ' +
             this.toDevString());
       }
       this.argumentVarModels_[i] = varModel;
@@ -719,7 +759,7 @@ Blockly.Blocks['procedures_callnoreturn'] = {
     for (var i = 0, childNode; (childNode = xmlElement.childNodes[i]); i++) {
       if (childNode.nodeName.toLowerCase() == 'arg') {
         args.push(childNode.getAttribute('name'));
-        paramIds.push(childNode.getAttribute('varid'));
+        paramIds.push(childNode.getAttribute('paramid'));
       }
     }
     this.setProcedureParameters_(args, paramIds);
@@ -731,40 +771,6 @@ Blockly.Blocks['procedures_callnoreturn'] = {
    */
   getVarModels: function() {
     return this.argumentVarModels_;
-  },
-
-  /**
-   * Notification that a variable was renamed to the same name as an existing
-   * variable. These variables are coalescing into a single variable with the
-   * ID of the variable that was already using the name.
-   * @param {string} oldId The ID of the variable that was renamed.
-   * @param {string} newId The ID of the variable that was already using
-   *     the name.
-   */
-  renameVarById: function(oldId, newId) {
-    var index = this.varIds_.indexOf(oldId);
-    if (index == -1) {
-      return;  // Not on this block.
-    }
-
-    var newVar = this.workspace.getVariableById(newId);
-    var newName = newVar.name;
-    this.setFieldValue(newName, 'ARGNAME' + index);
-
-    this.varIds_[index] = newId;
-    this.arguments_[index] = newName;
-    this.argumentVarModels_[index] = newVar;
-  },
-
-  updateVarName: function(variable) {
-    var id = variable.getId();
-    var index = this.varIds_.indexOf(id);
-    if (index == -1) {
-      return;  // Not on this block.
-    }
-    var name = variable.name;
-    this.setFieldValue(name, 'ARGNAME' + index);
-    this.arguments_[index] = name;
   },
 
   /**

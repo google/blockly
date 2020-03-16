@@ -98,6 +98,16 @@ Blockly.ModuleManager.prototype.clear = function() {
 
 
 /**
+ * Create default module if empty modules.
+ */
+Blockly.ModuleManager.prototype.createDefaultModuleIfNeed = function() {
+  if (this.moduleMap_.length === 0) {
+    this.moduleMap_ = [this.defaultModule_];
+    this.activeModuleId_ = [this.defaultModule_.getId()];
+  }
+};
+
+/**
  * Rename a module by updating its name in the module map. Identify the
  * module to rename with the given ID.
  * @param {Blockly.ModuleModel} module Module to rename.
@@ -252,9 +262,9 @@ Blockly.ModuleManager.prototype.activateModule = function(module) {
     Blockly.Events.disable();
 
     this.setActiveModuleId(module.getId());
-    var xml = Blockly.Xml.workspaceToDom(workspace);
+    var xml = Blockly.Xml.workspaceToDom(this.workspace);
     this.workspace.clear();
-    Blockly.Xml.domToWorkspace(xml, workspace);
+    Blockly.Xml.domToWorkspace(xml, this.workspace);
 
     Blockly.Events.enable();
 

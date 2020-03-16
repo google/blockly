@@ -1314,9 +1314,6 @@ Blockly.WorkspaceSvg.prototype.paste = function(xmlBlock) {
 Blockly.WorkspaceSvg.prototype.pasteBlock_ = function(xmlBlock) {
   Blockly.Events.disable();
   try {
-    // Remove module from xml
-    xmlBlock.removeAttribute('module');
-
     var block = Blockly.Xml.domToBlock(xmlBlock, this);
 
     // Handle paste for keyboard navigation

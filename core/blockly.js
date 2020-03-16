@@ -276,7 +276,7 @@ Blockly.copy_ = function(toCopy) {
   if (toCopy.isComment) {
     var xml = toCopy.toXmlWithXY();
   } else {
-    var xml = Blockly.Xml.blockToDom(toCopy, true);
+    var xml = Blockly.Xml.blockToDom(toCopy, true, true);
     // Copy only the selected block and internal blocks.
     Blockly.Xml.deleteNext(xml);
     // Encode start position in XML.
@@ -284,8 +284,6 @@ Blockly.copy_ = function(toCopy) {
     xml.setAttribute('x', toCopy.RTL ? -xy.x : xy.x);
     xml.setAttribute('y', xy.y);
   }
-  // Remove current module from xml
-  xml.removeAttribute('module');
 
   Blockly.clipboardXml_ = xml;
   Blockly.clipboardSource_ = toCopy.workspace;

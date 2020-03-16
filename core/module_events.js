@@ -119,7 +119,7 @@ Blockly.Events.ModuleCreate.prototype.run = function(forward) {
   if (forward) {
     moduleManager.createModule(this.moduleName, this.moduleId);
   } else {
-    moduleManager.deleteModule(workspace.getModuleManager().getModuleById(this.moduleId));
+    moduleManager.deleteModule(moduleManager.getModuleById(this.moduleId));
   }
 };
 
@@ -226,9 +226,9 @@ Blockly.Events.ModuleActivate.prototype.fromJson = function(json) {
 Blockly.Events.ModuleActivate.prototype.run = function(forward) {
   var moduleManager = this.getEventWorkspace_().getModuleManager();
   if (forward) {
-    moduleManager.activateModule(workspace.getModuleManager().getModuleById(this.moduleId));
+    moduleManager.activateModule(moduleManager.getModuleById(this.moduleId));
   } else if(this.previousActiveId) {
-    moduleManager.activateModule(workspace.getModuleManager().getModuleById(this.previousActiveId));
+    moduleManager.activateModule(moduleManager.getModuleById(this.previousActiveId));
   }
 };
 

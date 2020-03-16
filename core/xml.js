@@ -46,7 +46,7 @@ goog.require('Blockly.utils.xml');
 Blockly.Xml.workspaceToDom = function(workspace, opt_noId) {
   var xml = Blockly.utils.xml.createElement('xml');
 
-  var modulesElement = Blockly.Xml.modulesToDom();
+  var modulesElement = Blockly.Xml.modulesToDom(workspace);
   if (modulesElement.hasChildNodes()) {
     xml.appendChild(modulesElement);
   }
@@ -89,9 +89,10 @@ Blockly.Xml.variablesToDom = function(variableList) {
 
 /**
  * Encode a list of modules as XML.
+ * @param {!Blockly.Workspace} workspace The workspace containing blocks.
  * @return {!Element} Tree of XML elements.
  */
-Blockly.Xml.modulesToDom = function() {
+Blockly.Xml.modulesToDom = function(workspace) {
   var modules = Blockly.utils.xml.createElement('modules');
 
   var moduleList = workspace.getModuleManager().getAllModules();
@@ -164,9 +165,10 @@ Blockly.Xml.allFieldsToDom_ = function(block, element) {
  * Encode a block subtree as XML.
  * @param {!Blockly.Block} block The root block to encode.
  * @param {boolean=} opt_noId True if the encoder should skip the block ID.
+ * @param {boolean=} opt_noModule True if the encoder should skip the block module.
  * @return {!Element} Tree of XML elements.
  */
-Blockly.Xml.blockToDom = function(block, opt_noId) {
+Blockly.Xml.blockToDom = function(block, opt_noId, opt_noModule) {
   var element =
       Blockly.utils.xml.createElement(block.isShadow() ? 'shadow' : 'block');
   element.setAttribute('type', block.type);
@@ -175,7 +177,9 @@ Blockly.Xml.blockToDom = function(block, opt_noId) {
     // the block's id when domToText is called.
     element.setAttribute('id', block.id);
   }
-  element.setAttribute('module', block.getModuleId());
+  if (!opt_noModule) {
+    element.setAttribute('module', block.getModuleId());
+  }
 
   if (block.mutationToDom) {
     // Custom data for an advanced block.
@@ -221,10 +225,10 @@ Blockly.Xml.blockToDom = function(block, opt_noId) {
       }
       var shadow = input.connection.getShadowDom();
       if (shadow && (!childBlock || !childBlock.isShadow())) {
-        container.appendChild(Blockly.Xml.cloneShadow_(shadow, opt_noId));
+        container.appendChild(Blockly.Xml.cloneShadow_(shadow, opt_noId, opt_noModule));
       }
       if (childBlock) {
-        container.appendChild(Blockly.Xml.blockToDom(childBlock, opt_noId));
+        container.appendChild(Blockly.Xml.blockToDom(childBlock, opt_noId, opt_noModule));
         empty = false;
       }
     }
@@ -256,12 +260,12 @@ Blockly.Xml.blockToDom = function(block, opt_noId) {
   var nextBlock = block.getNextBlock();
   if (nextBlock) {
     var container = Blockly.utils.xml.createElement('next');
-    container.appendChild(Blockly.Xml.blockToDom(nextBlock, opt_noId));
+    container.appendChild(Blockly.Xml.blockToDom(nextBlock, opt_noId, opt_noModule));
     element.appendChild(container);
   }
   var shadow = block.nextConnection && block.nextConnection.getShadowDom();
   if (shadow && (!nextBlock || !nextBlock.isShadow())) {
-    container.appendChild(Blockly.Xml.cloneShadow_(shadow, opt_noId));
+    container.appendChild(Blockly.Xml.cloneShadow_(shadow, opt_noId, opt_noModule));
   }
 
   return element;
@@ -271,19 +275,23 @@ Blockly.Xml.blockToDom = function(block, opt_noId) {
  * Deeply clone the shadow's DOM so that changes don't back-wash to the block.
  * @param {!Element} shadow A tree of XML elements.
  * @param {boolean=} opt_noId True if the encoder should skip the block ID.
+ * @param {boolean=} opt_noModule True if the encoder should skip the block module.
  * @return {!Element} A tree of XML elements.
  * @private
  */
-Blockly.Xml.cloneShadow_ = function(shadow, opt_noId) {
+Blockly.Xml.cloneShadow_ = function(shadow, opt_noId, opt_noModule) {
   shadow = shadow.cloneNode(true);
   // Walk the tree looking for whitespace.  Don't prune whitespace in a tag.
   var node = shadow;
   var textNode;
   while (node) {
-    if (opt_noId && node.nodeName == 'shadow') {
+    if (opt_noId && node.nodeName === 'shadow') {
       // Strip off IDs from shadow blocks.  There should never be a 'block' as
       // a child of a 'shadow', so no need to check that.
       node.removeAttribute('id');
+    }
+    if (opt_noModule && node.nodeName === 'shadow') {
+      node.removeAttribute('module');
     }
     if (node.firstChild) {
       node = node.firstChild;
@@ -437,6 +445,8 @@ Blockly.Xml.domToWorkspace = function(xml, workspace) {
         Blockly.Xml.domToModules(xmlChild, workspace);
       }
     }
+    workspace.getModuleManager().createDefaultModuleIfNeed();
+
 
     for (var i = 0, xmlChild; (xmlChild = xml.childNodes[i]); i++) {
       var name = xmlChild.nodeName.toLowerCase();

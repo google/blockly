@@ -105,6 +105,22 @@ Blockly.WorkspaceSvg = function(options,
    */
   this.markerManager_ = new Blockly.MarkerManager(this);
 
+  /**
+  * Map from function names to callbacks, for deciding what to do when a custom
+  * toolbox category is opened.
+  * @type {!Object.<string, ?function(!Blockly.Workspace):!Array.<!Element>>}
+  * @private
+  */
+  this.toolboxCategoryCallbacks_ = {};
+
+  /**
+  * Map from function names to callbacks, for deciding what to do when a button
+  * is clicked.
+  * @type {!Object.<string, ?function(!Blockly.FlyoutButton)>}
+  * @private
+  */
+  this.flyoutButtonCallbacks_ = {};
+
   if (Blockly.Variables && Blockly.Variables.flyoutCategory) {
     this.registerToolboxCategoryCallback(Blockly.VARIABLE_CATEGORY_NAME,
         Blockly.Variables.flyoutCategory);
@@ -373,22 +389,6 @@ Blockly.WorkspaceSvg.prototype.injectionDiv_ = null;
  * @private
  */
 Blockly.WorkspaceSvg.prototype.lastRecordedPageScroll_ = null;
-
-/**
- * Map from function names to callbacks, for deciding what to do when a button
- * is clicked.
- * @type {!Object.<string, ?function(!Blockly.FlyoutButton)>}
- * @private
- */
-Blockly.WorkspaceSvg.prototype.flyoutButtonCallbacks_ = {};
-
-/**
- * Map from function names to callbacks, for deciding what to do when a custom
- * toolbox category is opened.
- * @type {!Object.<string, ?function(!Blockly.Workspace):!Array.<!Element>>}
- * @private
- */
-Blockly.WorkspaceSvg.prototype.toolboxCategoryCallbacks_ = {};
 
 /**
  * Developers may define this function to add custom menu options to the

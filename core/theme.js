@@ -105,6 +105,8 @@ Blockly.Theme.CategoryStyle;
  *            flyoutOpacity:number?,
  *            scrollbarColour:string?,
  *            scrollbarOpacity:number?,
+ *            insertionMarkerColour:string?,
+ *            insertionMarkerOpacity:number?,
  *            markerColour:string?,
  *            cursorColour:string?
  *          }}
@@ -202,6 +204,7 @@ Blockly.Theme.defineTheme = function(name, themeObj) {
   var base = themeObj['base'];
   if (base && base instanceof Blockly.Theme) {
     Blockly.utils.object.deepMerge(theme, base);
+    theme.name = name;
   }
   
   Blockly.utils.object.deepMerge(theme.blockStyles,

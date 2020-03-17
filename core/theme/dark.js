@@ -24,6 +24,8 @@ Blockly.Themes.Dark = Blockly.Theme.defineTheme('dark', {
     'flyoutForegroundColour': '#ccc',
     'flyoutOpacity': 1,
     'scrollbarColour': '#797979',
+    'insertionMarkerColour': '#fff',
+    'insertionMarkerOpacity': 0.3,
     'scrollbarOpacity': 0.4,
     'cursorColour': '#d0d0d0'
   }

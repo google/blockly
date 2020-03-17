@@ -55,12 +55,6 @@ Blockly.CONNECTING_SNAP_RADIUS = Blockly.SNAP_RADIUS;
 Blockly.CURRENT_CONNECTION_PREFERENCE = 8;
 
 /**
- * The main colour of insertion markers, in hex.  The block is rendered a
- * transparent grey by changing the fill opacity in CSS.
- */
-Blockly.INSERTION_MARKER_COLOUR = '#000000';
-
-/**
  * Delay in ms between trigger and bumping unconnected block out of alignment.
  */
 Blockly.BUMP_DELAY = 250;

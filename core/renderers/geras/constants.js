@@ -44,3 +44,21 @@ Blockly.geras.ConstantProvider = function() {
 };
 Blockly.utils.object.inherits(Blockly.geras.ConstantProvider,
     Blockly.blockRendering.ConstantProvider);
+
+
+/**
+ * @override
+ */
+Blockly.geras.ConstantProvider.prototype.getCSS_ = function(selector) {
+  return Blockly.geras.ConstantProvider.superClass_.getCSS_.call(this, selector)
+      .concat([
+        /* eslint-disable indent */
+        // Insertion marker.
+        selector + ' .blocklyInsertionMarker>.blocklyPathLight,',
+        selector + ' .blocklyInsertionMarker>.blocklyPathDark {',
+          'fill-opacity: ' + this.INSERTION_MARKER_OPACITY + ';',
+          'stroke: none',
+        '}',
+        /* eslint-enable indent */
+      ]);
+};

@@ -917,7 +917,8 @@ Blockly.BlockSvg.prototype.setInsertionMarker = function(insertionMarker) {
   }
   this.isInsertionMarker_ = insertionMarker;
   if (this.isInsertionMarker_) {
-    this.setColour(Blockly.INSERTION_MARKER_COLOUR);
+    this.setColour(this.workspace.getRenderer().getConstants().
+        INSERTION_MARKER_COLOUR);
     this.pathObject.updateInsertionMarker(true);
   }
 };

@@ -503,6 +503,21 @@ Blockly.blockRendering.ConstantProvider = function() {
   this.FULL_BLOCK_FIELDS = false;
 
   /**
+   * The main colour of insertion markers, in hex.  The block is rendered a
+   * transparent grey by changing the fill opacity in CSS.
+   * @type {string}
+   * @package
+   */
+  this.INSERTION_MARKER_COLOUR = '#000000';
+
+  /**
+   * The insertion marker opacity.
+   * @type {number}
+   * @package
+   */
+  this.INSERTION_MARKER_OPACITY = 0.2;
+
+  /**
    * Enum for connection shapes.
    * @enum {number}
    */
@@ -588,7 +603,7 @@ Blockly.blockRendering.ConstantProvider.prototype.setDynamicProperties_ =
     function(theme) {
     /* eslint-disable indent */
   this.setFontConstants_(theme);
-  this.setAccessibilityConstants_(theme);
+  this.setComponentConstants_(theme);
 
   this.ADD_START_HATS = theme.startHats != null ? theme.startHats :
       this.ADD_START_HATS;
@@ -621,17 +636,23 @@ Blockly.blockRendering.ConstantProvider.prototype.setFontConstants_ = function(
 };
 
 /**
- * Set constants related to accessibility.
+ * Set constants from a theme's component styles.
  * @param {!Blockly.Theme} theme The current workspace theme.
  * @protected
  */
-Blockly.blockRendering.ConstantProvider.prototype.setAccessibilityConstants_ =
+Blockly.blockRendering.ConstantProvider.prototype.setComponentConstants_ =
     function(theme) {
     /* eslint-disable indent */
   this.CURSOR_COLOUR = theme.getComponentStyle('cursorColour') ||
     this.CURSOR_COLOUR;
   this.MARKER_COLOUR = theme.getComponentStyle('markerColour') ||
     this.MARKER_COLOUR;
+  this.INSERTION_MARKER_COLOUR =
+    theme.getComponentStyle('insertionMarkerColour') ||
+    this.INSERTION_MARKER_COLOUR;
+  this.INSERTION_MARKER_OPACITY =
+    theme.getComponentStyle('insertionMarkerOpacity') ||
+    this.INSERTION_MARKER_OPACITY;
 }; /* eslint-enable indent */
 
 /**
@@ -1196,6 +1217,12 @@ Blockly.blockRendering.ConstantProvider.prototype.getCSS_ = function(selector) {
     selector + ' .blocklyReplaceable .blocklyPathLight,',
     selector + ' .blocklyReplaceable .blocklyPathDark {',
       'display: none;',
+    '}',
+
+    // Insertion marker.
+    selector + ' .blocklyInsertionMarker>.blocklyPath {',
+      'fill-opacity: ' + this.INSERTION_MARKER_OPACITY + ';',
+      'stroke: none',
     '}',
     /* eslint-enable indent */
   ];

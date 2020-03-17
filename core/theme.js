@@ -108,7 +108,11 @@ Blockly.Theme.CategoryStyle;
  *            insertionMarkerColour:string?,
  *            insertionMarkerOpacity:number?,
  *            markerColour:string?,
- *            cursorColour:string?
+ *            cursorColour:string?,
+ *            selectedGlowColour:string?,
+ *            selectedGlowOpacity:number?,
+ *            replacementGlowColour:string?,
+ *            replacementGlowOpacity:number?,
  *          }}
  */
 Blockly.Theme.ComponentStyle;

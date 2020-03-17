@@ -651,7 +651,7 @@ Blockly.blockRendering.ConstantProvider.prototype.setComponentConstants_ =
     theme.getComponentStyle('insertionMarkerColour') ||
     this.INSERTION_MARKER_COLOUR;
   this.INSERTION_MARKER_OPACITY =
-    theme.getComponentStyle('insertionMarkerOpacity') ||
+    Number(theme.getComponentStyle('insertionMarkerOpacity')) ||
     this.INSERTION_MARKER_OPACITY;
 }; /* eslint-enable indent */
 

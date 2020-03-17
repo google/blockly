@@ -29,6 +29,7 @@
 goog.provide('Blockly.ToolboxSearch');
 
 goog.require('Blockly.Search');
+goog.require('Blockly.ToolboxSearchHelper');
 
 /**
  * Initializes the search handler and its associated GUI.
@@ -40,12 +41,13 @@ Blockly.ToolboxSearch = function (workspace) {
   Blockly.ToolboxSearch.superClass_.constructor.call(
     this, workspace);
 
+  this.helper_ = new Blockly.ToolboxSearchHelper(this, workspace);
   var thisObj = this;
 
   // Add a workspace change listener (so function blocks that get added/removed to the workspace
   // will be available for "execution" in the toolbox
   this.workspace_.addChangeListener(function (event) {
-    thisObj.onNewWorkspaceEvent(event);
+    thisObj.helper_.onNewWorkspaceEvent(event);
   });
 };
 Blockly.utils.object.inherits(Blockly.ToolboxSearch, Blockly.Search);
@@ -88,146 +90,6 @@ Blockly.ToolboxSearch.prototype.init_ = function () {
     // search flyout.
     return true;
   };
-};
-
-/**
- * Event handler for whenever the Blockly workspace changes.
- * Specifically needed to add or remove blocks to the Search handler's trie
- * whenever the user adds or removes blocks from the workspace.
- *
- * @param {!Blockly.Event} event The Blockly event that got fired because of something changing in Blockly.
- */
-Blockly.ToolboxSearch.prototype.onNewWorkspaceEvent = function (event) {
-  var i;
-  var blockData;
-
-  // If a block was added to the workspace, add it's associated keywords to the handler's trie.
-  if (event.type === Blockly.Events.CREATE) {
-    // Decode the XML contents so any child blocks that also got added to the workspace get added to the trie as well,
-    // e.g. for procedure blocks that hold multiple children inside them.
-    var blocksAdded = this.decodeXmlBlocks(event.xml);
-
-    for (i = 0; i < blocksAdded.length; i++) {
-      blockData = blocksAdded[i];
-
-      if (blockData[0] && blockData[1]) {
-        if (blockData[0] !== 'procedures_defnoreturn' &&
-            blockData[0] !== 'procedures_defreturn') {
-          return;
-        }
-
-        
-        var info1 = this.extractFunctionInfo(event);
-        console.log(info1);
-        // this.onBlockAdded(blockData[0], blockData[1]);
-      }
-    }
-  } else if (event.type === Blockly.Events.DELETE) {
-    // If a block was removed from the workspace, remove it's associated keywords from the handler's trie.
-    // Decode the XML contents so any child blocks that got removed from the workspace also get removed from the trie,
-    // e.g. for procedure blocks that hold multiple children inside them.
-    var blocksRemoved = this.decodeXmlBlocks(event.oldXml);
-
-    for (i = 0; i < blocksRemoved.length; i++) {
-      blockData = blocksRemoved[i];
-
-      if (blockData[0] && blockData[1]) {
-        if (blockData[0] !== 'procedures_defnoreturn' &&
-            blockData[0] !== 'procedures_defreturn') {
-          return;
-        }
-
-        var info2 = this.extractDeletedBlockInfo(event.oldXml);
-        console.log(info2);
-        // this.onBlockRemoved(blockData[0], blockData[1]);
-      }
-    }
-  } else if (event.type === Blockly.Events.CHANGE &&
-            (event.element === 'field' || event.element === 'mutation')) {
-    var blockInfo = this.workspace_.getBlockById(event.blockId);
-
-    if (blockInfo.type !== 'procedures_defnoreturn' &&
-        blockInfo.type !== 'procedures_defreturn') {
-      return;
-    }
-    
-    var info3 = this.extractFunctionInfo(event);
-    console.log(info3);
-
-    // var changedField = blockInfo.getField(event.name);
-    var newName = event.newValue;
-    var oldName = event.oldValue;
-
-    // var name = procedureList[i][0];
-    //   var args = procedureList[i][1];
-    //   // <block type="procedures_callnoreturn" gap="16">
-    //   //   <mutation name="do something">
-    //   //     <arg name="x"></arg>
-    //   //   </mutation>
-    //   // </block>
-    //   var block = Blockly.utils.xml.createElement('block');
-    //   block.setAttribute('type', templateName);
-    //   block.setAttribute('gap', 16);
-    //   var mutation = Blockly.utils.xml.createElement('mutation');
-    //   mutation.setAttribute('name', name);
-    //   block.appendChild(mutation);
-    //   for (var j = 0; j < args.length; j++) {
-    //     var arg = Blockly.utils.xml.createElement('arg');
-    //     arg.setAttribute('name', args[j]);
-    //     mutation.appendChild(arg);
-    //   }
-    //   xmlList.push(block);
-  }
-};
-
-Blockly.ToolboxSearch.prototype.extractFunctionInfo = function (event) {
-  var blockInfo = this.workspace_.getBlockById(event.blockId);
-  var funcName = blockInfo.getField('NAME');
-  var funcArgs = blockInfo.arguments_;
-  var hasReturnValue = (blockInfo.type === 'procedures_defreturn');
-
-  var oldFuncName = '';
-  if (event.element && event.element === 'field' && event.name === 'NAME') {
-    oldFuncName = event.oldValue;
-  }
-
-  var oldArguments = [];
-  if (event.element && event.element === 'mutation') {
-    var oldMutationChildren = Blockly.Xml.textToDom(event.oldValue).children;
-    for (var i = 0; i < oldMutationChildren.length; i++) {
-      if (oldMutationChildren[i].tagName === 'arg') {
-        oldArguments.push(oldMutationChildren[i].getAttribute('name'));
-      }
-    }
-  }
-
-  return [funcName, oldFuncName, funcArgs, oldArguments, hasReturnValue];
-};
-
-Blockly.ToolboxSearch.prototype.extractDeletedBlockInfo = function (oldXml) {
-  var funcName = '';
-  var funcArgs = [];
-  var hasReturnValue = (oldXml.getAttribute('type') === 'procedures_defreturn');
-
-  var children = oldXml.children;
-  for (var i = 0; i < children.length; i++) {
-    if (children[i].tagName === 'field' && children[i].getAttribute('name') === 'NAME') {
-      funcName = children[i].textContent;
-      continue;
-    }
-
-    if (children[i].tagName === 'mutation') {
-      var mutationChildren = children[i].children;
-      for (var j = 0; j < mutationChildren.length; j++) {
-        if (mutationChildren[i].tagName === 'arg') {
-          var argName = mutationChildren[i].getAttribute('name');
-          funcArgs.push(argName);
-        }
-      }
-    }
-  }
-
-  return [funcName, funcArgs, hasReturnValue];
 };
 
 /**

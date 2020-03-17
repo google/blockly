@@ -79,8 +79,10 @@ Blockly.Search.prototype.removeFromTrie = function (key, value) {
     return;
   }
 
-  if (value in this.blockTrie_.get(key)) {
-    this.blockTrie_.set(key, this.blockTrie_.get(key).pop(value));
+  var listToClean = this.blockTrie_.get(key);
+  if (listToClean.indexOf(value) !== -1) {
+    listToClean.pop(value);
+    this.blockTrie_.set(key, listToClean);
   }
 };
 

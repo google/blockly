@@ -783,6 +783,16 @@ Blockly.Blocks['procedures_callnoreturn'] = {
     this.quarkIds_ = null;
     this.previousEnabledState_ = true;
   },
+  ensureSearchKeywords: function () {
+    var keywords = [
+      Blockly.Msg.LABEL_PROCEDURE_EXECUTION,
+      Blockly.Msg.FABLE_SEARCH_KEYWORD_FUNCTION
+    ];
+
+    var toolboxKeywords = [];
+
+    Blockly.Search.preprocessSearchKeywords('procedures_callnoreturn', keywords, toolboxKeywords);
+  },
 
   /**
    * Returns the name of the procedure this block calls.
@@ -1129,6 +1139,16 @@ Blockly.Blocks['procedures_callreturn'] = {
     this.quarkConnections_ = {};
     this.quarkIds_ = null;
     this.previousEnabledState_ = true;
+  },
+  ensureSearchKeywords: function () {
+    var keywords = [
+      Blockly.Msg.LABEL_PROCEDURE_EXECUTION,
+      Blockly.Msg.FABLE_SEARCH_KEYWORD_FUNCTION
+    ];
+
+    var toolboxKeywords = [];
+
+    Blockly.Search.preprocessSearchKeywords('procedures_callreturn', keywords, toolboxKeywords);
   },
 
   getProcedureCall: Blockly.Blocks['procedures_callnoreturn'].getProcedureCall,

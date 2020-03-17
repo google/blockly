@@ -455,9 +455,24 @@ Blockly.Toolbox.prototype.syncTrees_ = function (treeIn, treeOut, pathToMedia, s
           // Variables and procedures are special dynamic categories.
           childOut.blocks = custom;
 
-          if (custom !== 'MOST_USED_CUSTOM' && shouldAddToSearchTrie && this.search_) {
-            var blocksFunction = this.workspace_.getToolboxCategoryCallback(custom);
-            var blocksArr = blocksFunction(this.workspace_);
+          if (shouldAddToSearchTrie && this.search_) {
+            var blocksArr;
+
+            switch (custom) {
+              case Blockly.VARIABLE_CATEGORY_NAME:
+                blocksArr = Blockly.Variables.flyoutSearchBlocks();
+                break;
+              case Blockly.VARIABLE_DYNAMIC_CATEGORY_NAME:
+                blocksArr = Blockly.VariablesDynamic.flyoutSearchBlocks();
+                break;
+              case Blockly.MOST_USED_CATEGORY_NAME:
+                blocksArr = [];
+                break;
+              default:
+                var blocksFunction = this.workspace_.getToolboxCategoryCallback(custom);
+                blocksArr = blocksFunction(this.workspace_);
+                break;
+            }
 
             for (let i = 0; i < blocksArr.length; i++) {
               if (blocksArr[i].nodeName === 'block') {

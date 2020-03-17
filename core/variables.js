@@ -174,6 +174,13 @@ Blockly.Variables.flyoutCategoryBlocks = function(workspace) {
       block.setAttribute('gap', Blockly.Blocks['math_change'] ? 8 : 24);
       block.appendChild(
           Blockly.Variables.generateVariableFieldDom(mostRecentVariable));
+      var shadowBlock = Blockly.Xml.textToDom(
+        '<value name="VALUE">' +
+        '<shadow type="math_number">' +
+        '<field name="NUM">0</field>' +
+        '</shadow>' +
+        '</value>');
+      block.appendChild(shadowBlock);
       xmlList.push(block);
     }
     if (Blockly.Blocks['math_change']) {
@@ -203,6 +210,40 @@ Blockly.Variables.flyoutCategoryBlocks = function(workspace) {
       }
     }
   }
+  return xmlList;
+};
+
+Blockly.Variables.flyoutSearchBlocks = function () {
+  var xmlList = [];
+
+  if (Blockly.Blocks['variables_set']) {
+    var block = Blockly.utils.xml.createElement('block');
+    block.setAttribute('type', 'variables_set');
+    block.setAttribute('gap', Blockly.Blocks['math_change'] ? 8 : 24);
+    xmlList.push(block);
+  }
+
+  if (Blockly.Blocks['math_change']) {
+    var block = Blockly.utils.xml.createElement('block');
+    block.setAttribute('type', 'math_change');
+    block.setAttribute('gap', Blockly.Blocks['variables_get'] ? 20 : 8);
+    var value = Blockly.Xml.textToDom(
+      '<value name="DELTA">' +
+      '<shadow type="math_number">' +
+      '<field name="NUM">1</field>' +
+      '</shadow>' +
+      '</value>');
+    block.appendChild(value);
+    xmlList.push(block);
+  }
+
+  if (Blockly.Blocks['variables_get']) {
+    var block = Blockly.utils.xml.createElement('block');
+    block.setAttribute('type', 'variables_get');
+    block.setAttribute('gap', 8);
+    xmlList.push(block);
+  }
+
   return xmlList;
 };
 

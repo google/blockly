@@ -474,9 +474,10 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     "helpUrl": "%{BKY_MATH_CHANGE_HELPURL}",
     "extensions": ["math_change_tooltip"],
     "search_keywords": [
-        "%{BKY_MATH_CHANGE_TITLE}",
-        "%{BKY_MATH}",
-        "%{BKY_LABEL_MATH_FUNCTION}"
+      "%{BKY_MATH_CHANGE_TITLE}",
+      "%{BKY_MATH}",
+      "%{BKY_LABEL_MATH_FUNCTION}",
+      "%{BKY_FABLE_SEARCH_KEYWORD_VARIABLES_SET}"
     ],
     "search_toolbox_keywords": []
   },

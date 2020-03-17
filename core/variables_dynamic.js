@@ -109,3 +109,22 @@ Blockly.VariablesDynamic.flyoutCategoryBlocks = function(workspace) {
   }
   return xmlList;
 };
+
+Blockly.VariablesDynamic.flyoutSearchBlocks = function () {
+  var xmlList = [];
+
+  if (Blockly.Blocks['variables_set_dynamic']) {
+    var block = Blockly.utils.xml.createElement('block');
+    block.setAttribute('type', 'variables_set_dynamic');
+    block.setAttribute('gap', 24);
+    xmlList.push(block);
+  }
+  if (Blockly.Blocks['variables_get_dynamic']) {
+    var block = Blockly.utils.xml.createElement('block');
+    block.setAttribute('type', 'variables_get_dynamic');
+    block.setAttribute('gap', 8);
+    xmlList.push(block);
+  }
+
+  return xmlList;
+};

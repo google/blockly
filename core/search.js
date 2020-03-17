@@ -44,6 +44,8 @@ Blockly.Search = function (workspace) {
 
   // Initialize a key-value dictionary which holds the block-keyword connection in reverse to the trie. This is used for easier de-registering of blocks in onBlockRemoved
   this.blocksAdded_ = {};
+
+  this.finalResults_ = [];
 };
 
 /**
@@ -305,6 +307,10 @@ Blockly.Search.prototype.clearAll = function () {
   delete this.blockTrie_;
 
   this.blockTrie_ = new Blockly.Trie();
+};
+
+Blockly.Search.prototype.onCloseSearch = function () {
+  this.finalResults_ = [];
 };
 
 // Filters out empty spaces. Stolen from Closure's goog.array.filter so we can remove it completely.

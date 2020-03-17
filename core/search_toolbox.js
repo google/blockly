@@ -127,7 +127,9 @@ Blockly.ToolboxSearch.prototype.onBlockAdded = function (type, val) {
  * Inspect the contents of the trash.
  */
 Blockly.ToolboxSearch.prototype.runSearch = function (inputVal) {
-  var matchingBlocks = Blockly.WorkspaceSearch.superClass_.runSearch.call(this, inputVal);
+  this.finalResults_ = [];
+
+  var matchingBlocks = Blockly.ToolboxSearch.superClass_.runSearch.call(this, inputVal);
 
   // // Create a label for the search results category
   // // TODO: Localization
@@ -149,8 +151,33 @@ Blockly.ToolboxSearch.prototype.runSearch = function (inputVal) {
     this.flyout_.show(matchingBlocks);
     this.flyout_.scrollToStart();
 
-    return this.flyout_.workspace_.topBlocks_;
+    this.finalResults_ = this.flyout_.workspace_.topBlocks_;
   }
 
-  return [];
+  return this.finalResults_.length;
+};
+
+Blockly.ToolboxSearch.prototype.highlightResult = function (index) {
+  if (!this.finalResults_ || this.finalResults_.length === 0) {
+    return;
+  }
+
+  index = Math.max(0, index);
+  index = Math.min(index, this.finalResults_.length);
+
+  var resultToScrollTo = this.finalResults_[index];
+  resultToScrollTo.select();
+
+  try {
+    var blockYPos = resultToScrollTo.flyoutRect_.getAttribute('y');
+    this.flyout_.scrollbar_.set(blockYPos - 10);
+  } catch (e) {
+    console.log('Could not get the Y position of the block');
+  }
+};
+
+Blockly.ToolboxSearch.prototype.onCloseSearch = function () {
+  Blockly.ToolboxSearch.superClass_.onCloseSearch.call(this);
+
+  this.flyout_.hide();
 };

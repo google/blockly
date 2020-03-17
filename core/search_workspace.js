@@ -268,7 +268,7 @@ Blockly.WorkspaceSearch.prototype.runSearch = function (inputVal) {
   var matchingBlockIds = Blockly.WorkspaceSearch.superClass_.runSearch.call(this, inputVal);
 
   // Initialize a list that will hold the results
-  var finalResults = [];
+  this.finalResults_ = [];
 
   if (matchingBlockIds.length > 0) {
     var counter = 0;
@@ -280,7 +280,7 @@ Blockly.WorkspaceSearch.prototype.runSearch = function (inputVal) {
 
       // Only add the block if it is found (could be that the workspace has hidden blocks inside it?)
       if (block) {
-        finalResults.push(block);
+        this.finalResults_.push(block);
       }
 
       counter++;
@@ -288,8 +288,31 @@ Blockly.WorkspaceSearch.prototype.runSearch = function (inputVal) {
 
     // Sort the final results by the sortObjects_ function. It uses the physical
     // location of blocks so blocks on top of other blocks are always first.
-    finalResults.sort(Blockly.Workspace.prototype.sortObjects_);
+    this.finalResults_.sort(Blockly.Workspace.prototype.sortObjects_);
   }
 
-  return finalResults;
+  return this.finalResults_.length;
+};
+
+Blockly.WorkspaceSearch.prototype.highlightResult = function (index) {
+  if (!this.finalResults_ || this.finalResults_.length === 0) {
+    return;
+  }
+
+  index = Math.max(0, index);
+  index = Math.min(index, this.finalResults_.length);
+
+  var resultToShow = this.finalResults_[index];
+  this.workspace_.centerOnBlock(resultToShow.id);
+  resultToShow.select();
+};
+
+Blockly.WorkspaceSearch.prototype.onCloseSearch = function () {
+  Blockly.WorkspaceSearch.superClass_.onCloseSearch.call(this);
+
+  // Reset workspace
+  this.workspace_.highlightBlock('');
+  if (Blockly.selected) {
+    Blockly.selected.unselect();
+  }
 };

@@ -537,7 +537,7 @@ Blockly.Css.CONTENT = [
     'box-shadow: 0px 0px 6px 1px rgba(0,0,0,.3);',
   '}',
 
-  '.blocklyDropDownDiv .goog-menu {',
+  '.blocklyDropDownDiv .blockly-goog-menu {',
     'cursor: default;',
     'font: normal 13px "Helvetica Neue", Helvetica, sans-serif;',
     'outline: none;',

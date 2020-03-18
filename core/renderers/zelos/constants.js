@@ -965,6 +965,12 @@ Blockly.zelos.ConstantProvider.prototype.getCSS_ = function(selector) {
     selector + ' .blocklyDisabled > .blocklyOutlinePath {',
       'fill: url(#blocklyDisabledPattern' + this.randomIdentifier + ')',
     '}',
+
+    // Insertion marker.
+    selector + ' .blocklyInsertionMarker>.blocklyPath {',
+      'fill-opacity: ' + this.INSERTION_MARKER_OPACITY + ';',
+      'stroke: none',
+    '}',
     /* eslint-enable indent */
   ];
 };

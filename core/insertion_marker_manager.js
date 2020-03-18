@@ -255,16 +255,18 @@ Blockly.InsertionMarkerManager.prototype.createMarkerBlock_ = function(sourceBlo
     }
     result.setCollapsed(sourceBlock.isCollapsed());
     result.setInputsInline(sourceBlock.getInputsInline());
-    // Copy field values from the other block.  These values may impact the
-    // rendered size of the insertion marker.  Note that we do not care about
-    // child blocks here.
+    // Copy visible field values from the other block.  These values may impact
+    // the rendered size of the insertion marker.  Note that we do not care
+    // about child blocks here.
     for (var i = 0; i < sourceBlock.inputList.length; i++) {
       var sourceInput = sourceBlock.inputList[i];
-      var resultInput = result.inputList[i];
-      for (var j = 0; j < sourceInput.fieldRow.length; j++) {
-        var sourceField = sourceInput.fieldRow[j];
-        var resultField = resultInput.fieldRow[j];
-        resultField.setValue(sourceField.getValue());
+      if (sourceInput.isVisible()) {
+        var resultInput = result.inputList[i];
+        for (var j = 0; j < sourceInput.fieldRow.length; j++) {
+          var sourceField = sourceInput.fieldRow[j];
+          var resultField = resultInput.fieldRow[j];
+          resultField.setValue(sourceField.getValue());
+        }
       }
     }
 

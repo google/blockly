@@ -207,7 +207,7 @@ goog.provide('Blockly.FieldTextInput');
 goog.provide('Blockly.FieldVariable');
 goog.provide('Blockly.Mutator');
 goog.provide('Blockly.Warning');`;
-  return gulp.src(maybeAddClosureLibrary(['blocks/*.js']), {base: './'})
+  return gulp.src(['blocks/*.js'], {base: './'})
     // Add Blockly.Blocks to be compatible with the compiler.
     .pipe(gulp.replace(`goog.provide('Blockly.Constants.Colour');`,
       `${provides}goog.provide('Blockly.Constants.Colour');`))

@@ -1140,11 +1140,12 @@ Blockly.blockRendering.ConstantProvider.prototype.injectCSS_ = function(
   var cssNodeId = 'blockly-renderer-style-' + tagName;
   this.cssNode_ =
     /** @type {!HTMLStyleElement} */ (document.getElementById(cssNodeId));
+  var text = cssArray.join('\n');
   if (this.cssNode_) {
-    // Already injected.
+    // Already injected, update if the theme changed.
+    this.cssNode_.firstChild.textContent = text;
     return;
   }
-  var text = cssArray.join('\n');
   // Inject CSS tag at start of head.
   var cssNode =
     /** @type {!HTMLStyleElement} */ (document.createElement('style'));

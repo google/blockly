@@ -10,23 +10,9 @@
  */
 
 var gulp = require('gulp');
-gulp.shell = require('gulp-shell');
-gulp.concat = require('gulp-concat');
-gulp.replace = require('gulp-replace');
-gulp.rename = require('gulp-rename');
-gulp.insert = require('gulp-insert');
-gulp.umd = require('gulp-umd');
-
-var path = require('path');
-var fs = require('fs');
-var rimraf = require('rimraf');
 var execSync = require('child_process').execSync;
-var through2 = require('through2');
 
-var closureCompiler = require('google-closure-compiler').gulp();
-var closureDeps = require('google-closure-deps');
 var packageJson = require('./package.json');
-var argv = require('yargs').argv;
 
 var typings = require('./scripts/gulpfiles/typings');
 var buildTasks = require('./scripts/gulpfiles/build_tasks');

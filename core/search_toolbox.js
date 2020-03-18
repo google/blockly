@@ -1,26 +1,6 @@
 /**
- * @license
- * Visual Blocks Editor
- *
- * Copyright 2012 Google Inc.
- * https://developers.google.com/blockly/
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
-/**
- * @fileoverview Search handler for Blockly. Specifically handles
- * all searches that happen in the main workspace.
+ * @fileoverview Search handler for Blockly.
+ * Specifically handles all searches that happen in the toolbox.
  *
  * @author ivan@shaperobotics.com
  */
@@ -32,28 +12,28 @@ goog.require('Blockly.Search');
 goog.require('Blockly.ToolboxSearchHelper');
 
 /**
- * Initializes the search handler and its associated GUI.
+ * Initializes the search handler.
  *
  * @param {!Blockly.Workspace} workspace The workspace in which to create the button callback.
  */
 Blockly.ToolboxSearch = function (workspace) {
-  // Initialize the search handler
+  // Initialize the base search handler
   Blockly.ToolboxSearch.superClass_.constructor.call(
     this, workspace);
 
+  // Create a helper for any function blocks
   this.helper_ = new Blockly.ToolboxSearchHelper(this, workspace);
-  var thisObj = this;
-
-  // Add a workspace change listener (so function blocks that get added/removed to the workspace
-  // will be available for "execution" in the toolbox
-  this.workspace_.addChangeListener(function (event) {
-    thisObj.helper_.onNewWorkspaceEvent(event);
-  });
 };
 Blockly.utils.object.inherits(Blockly.ToolboxSearch, Blockly.Search);
 
+/**
+ * Initializes any extra stuff.
+ * In particular, initializes the flyout that shows results.
+ *
+ * Has to be done away from the constructor, as some elements cannot be guaranteed to have loaded immediately.
+ */
 Blockly.ToolboxSearch.prototype.init_ = function () {
-  // Create flyout options.
+  // Define the flyout options.
   var flyoutWorkspaceOptions = {
     scrollbars: true,
     disabledPatternId: this.workspace_.options.disabledPatternId,
@@ -63,7 +43,7 @@ Blockly.ToolboxSearch.prototype.init_ = function () {
     renderer: this.workspace_.options.renderer
   };
 
-  // Create vertical or horizontal flyout.
+  // Create the vertical or horizontal flyout.
   if (this.workspace_.horizontalLayout) {
     flyoutWorkspaceOptions.toolboxPosition =
         this.workspace_.toolboxPosition === Blockly.TOOLBOX_AT_TOP
@@ -82,9 +62,11 @@ Blockly.ToolboxSearch.prototype.init_ = function () {
     this.flyout_ = new Blockly.VerticalFlyout(flyoutWorkspaceOptions);
   }
 
+  // Insert the flyout immediately after the workspace's svg element.
   Blockly.utils.dom.insertAfter(this.flyout_.createDom('svg'),
     this.workspace_.getParentSvg());
   this.flyout_.init(this.workspace_);
+
   this.flyout_.isBlockCreatable_ = function () {
     // All blocks, including disabled ones, can be dragged from the
     // search flyout.
@@ -97,12 +79,13 @@ Blockly.ToolboxSearch.prototype.init_ = function () {
  * Extends the logic of its parent class (@see search.js) by including all "dropdown" options to the search.
  *
  * @param {!String} type The type ID of the block, e.g. "fable_play_sound".
- * @param {!String} val The block itself. Similar to addToTrie, will either be XML or the unique block ID.
+ * @param {!String} val The XML structure of the block.
  */
 Blockly.ToolboxSearch.prototype.onBlockAdded = function (type, val) {
+  // Call the base class' onBlockAdded
   Blockly.ToolboxSearch.superClass_.onBlockAdded.call(this, type, val);
 
-  // If there are any extra keywords, add them to the trie. Otherwise, warn in the console.
+  // If there are any extra keywords for the toolbox, add them to the trie.
   if (Blockly.Blocks[type].StaticToolboxSearchKeywords) {
     var extraKeys = Blockly.Blocks[type].StaticToolboxSearchKeywords;
 
@@ -111,6 +94,7 @@ Blockly.ToolboxSearch.prototype.onBlockAdded = function (type, val) {
       this.blocksAdded_[val] = [];
     }
 
+    // Go through all extra blocks
     for (var j = 0; j < extraKeys.length; j++) {
       // Add a keyword to the search trie
       this.addToTrie(extraKeys[j], val);
@@ -124,7 +108,13 @@ Blockly.ToolboxSearch.prototype.onBlockAdded = function (type, val) {
 };
 
 /**
- * Inspect the contents of the trash.
+ * Executes a single search based on a search term.
+ * The term gets cleaned up (separate words split, all lowercase, etc)
+ * and the search is conducted.
+ *
+ * @param {String} inputValue the string which represents the search terms.
+ *
+ * @returns {int} the number results that match the search term.
  */
 Blockly.ToolboxSearch.prototype.runSearch = function (inputVal) {
   this.finalResults_ = [];
@@ -142,32 +132,46 @@ Blockly.ToolboxSearch.prototype.runSearch = function (inputVal) {
   // // Add the label to the flyout of results. Put it in the beginning.
   // matchingBlocks.splice(0, 0, label);
 
+  // Go through the results and convert them to XML
   for (let i = 0; i < matchingBlocks.length; i++) {
     matchingBlocks[i] = Blockly.Xml.textToDom(matchingBlocks[i]);
   }
 
-  // Show the resulting XML in the flyout
+  // Show the resulting XML list in the flyout
   if (matchingBlocks.length > 0) {
     this.flyout_.show(matchingBlocks);
     this.flyout_.scrollToStart();
 
+    // Store the results
     this.finalResults_ = this.flyout_.workspace_.topBlocks_;
   }
 
   return this.finalResults_.length;
 };
 
+/**
+ * Highlights a result from a previously executed search.
+ *
+ * @param {number} index - The index of the result that should be highlighted
+ * @returns {Void}
+ */
 Blockly.ToolboxSearch.prototype.highlightResult = function (index) {
+  // Do nothing if there are no results
   if (!this.finalResults_ || this.finalResults_.length === 0) {
     return;
   }
 
+  // Clamp the index so it's not out of bounds from the results
   index = Math.max(0, index);
   index = Math.min(index, this.finalResults_.length);
 
+  // Find the result that should be highlighted
   var resultToScrollTo = this.finalResults_[index];
+
+  // Highlight it
   resultToScrollTo.select();
 
+  // Try to find its Y position so the flyout can scroll to it.
   try {
     var blockYPos = resultToScrollTo.flyoutRect_.getAttribute('y');
     this.flyout_.scrollbar_.set(blockYPos - 10);
@@ -176,8 +180,15 @@ Blockly.ToolboxSearch.prototype.highlightResult = function (index) {
   }
 };
 
+/**
+ * Execute this when the user "ends" a search by closing it.
+ *
+ * Resets the array which holds results. Also hides the flyout that had results.
+ */
 Blockly.ToolboxSearch.prototype.onCloseSearch = function () {
+  // call the base method
   Blockly.ToolboxSearch.superClass_.onCloseSearch.call(this);
 
+  // hide the flyout
   this.flyout_.hide();
 };

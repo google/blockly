@@ -62,12 +62,13 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     "tooltip": "%{BKY_LOGIC_BOOLEAN_TOOLTIP}",
     "helpUrl": "%{BKY_LOGIC_BOOLEAN_HELPURL}",
     "search_keywords": [
-        "%{BKY_LOGIC_BOOLEAN_TRUE}",
-        "%{BKY_LOGIC_BOOLEAN_FALSE}",
         "%{BKY_LOGIC}",
         "%{BKY_LABEL_BOOLEAN}"
     ],
-    "search_toolbox_keywords": []
+    "search_toolbox_keywords": [
+      "%{BKY_LOGIC_BOOLEAN_TRUE}",
+      "%{BKY_LOGIC_BOOLEAN_FALSE}"
+    ]
   },
   // Block for if/elseif/else condition.
   {

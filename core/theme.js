@@ -112,7 +112,7 @@ Blockly.Theme.CategoryStyle;
  *            selectedGlowColour:string?,
  *            selectedGlowOpacity:number?,
  *            replacementGlowColour:string?,
- *            replacementGlowOpacity:number?,
+ *            replacementGlowOpacity:number?
  *          }}
  */
 Blockly.Theme.ComponentStyle;

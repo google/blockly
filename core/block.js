@@ -1993,9 +1993,27 @@ Blockly.Block.prototype.appendDynamicIDInput = function (requestedModuleTypes, m
     var inputExists = this.getInput('#');
     if (inputID) {
       if (!inputExists) {
+        // Add a connector for external blocks
         this.appendValueInput('#').setCheck('String');
+
+        // Create a shadow block with a module selector in it
+        var shadowChild = this.workspace.newBlock('fable_get_module_id');
+        shadowChild.setShadow(true);
+        shadowChild.initSvg();
+        shadowChild.render();
+
+        // Attach the shadow block to the this block (the parent)
+        var parentConnection = this.getInput('#').connection;
+        parentConnection.connect(shadowChild.outputConnection);
       }
     } else if (inputExists) {
+      // Remove any attached shadow blocks
+      var connectedBlock = this.getInput('#').connection.targetBlock();
+      if (connectedBlock && connectedBlock.isShadow()) {
+        connectedBlock.dispose(true, true);
+      }
+
+      // Remove the connector for external blocks
       this.removeInput('#');
     }
   };
@@ -2159,6 +2177,7 @@ Blockly.Block.prototype.appendDrowdownWithMutation = function (fixedOptions,
           // Creates and connects a block to the Value Input.
           if (!skipChild && inputOptions.addBlock) {
             var addedBlock = this.workspace.newBlock(inputOptions.addBlock);
+            addedBlock.setShadow(true);
             addedBlock.initSvg();
             // Customizes fields of the block.
             if (inputOptions.blockFields) {

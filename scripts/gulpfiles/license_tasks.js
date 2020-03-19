@@ -11,10 +11,7 @@
 const jsgl = require('js-green-licenses');
 
 function checkLicenses() {
-  const checker = new jsgl.LicenseChecker({
-    // dev: true,
-    // verbose: false,
-  });
+  const checker = new jsgl.LicenseChecker();
   checker.setDefaultHandlers();
   return checker.checkLocalDirectory('.');
 };

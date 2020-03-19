@@ -63,10 +63,16 @@ Blockly.Blocks['procedures_defnoreturn'] = {
   ensureSearchKeywords: function () {
     var keywords = [
       Blockly.Msg.PROCEDURES_DEFNORETURN_TITLE,
+      Blockly.Msg.PROCEDURES_BEFORE_PARAMS,
+      Blockly.Msg.LABEL_PROCEDURE_DEFINITION,
       Blockly.Msg.FABLE_SEARCH_KEYWORD_FUNCTION
     ];
 
-    Blockly.Search.preprocessSearchKeywords('procedures_defnoreturn', keywords);
+    var toolboxKeywords = [
+      Blockly.Msg.PROCEDURES_DEFNORETURN_PROCEDURE
+    ];
+
+    Blockly.Search.preprocessSearchKeywords('procedures_defnoreturn', keywords, toolboxKeywords);
   },
   /**
    * Add or remove the statement block from this function definition.
@@ -542,10 +548,16 @@ Blockly.Blocks['procedures_defreturn'] = {
     var keywords = [
       Blockly.Msg.PROCEDURES_DEFRETURN_TITLE,
       Blockly.Msg.PROCEDURES_DEFRETURN_RETURN,
+      Blockly.Msg.LABEL_PROCEDURE_DEFINITION,
       Blockly.Msg.FABLE_SEARCH_KEYWORD_FUNCTION
     ];
 
-    Blockly.Search.preprocessSearchKeywords('procedures_defreturn', keywords);
+    var toolboxKeywords = [
+      Blockly.Msg.PROCEDURES_DEFRETURN_PROCEDURE,
+      Blockly.Msg.PROCEDURES_BEFORE_PARAMS
+    ];
+
+    Blockly.Search.preprocessSearchKeywords('procedures_defreturn', keywords, toolboxKeywords);
   },
   setStatements_: Blockly.Blocks['procedures_defnoreturn'].setStatements_,
   updateParams_: Blockly.Blocks['procedures_defnoreturn'].updateParams_,
@@ -770,6 +782,16 @@ Blockly.Blocks['procedures_callnoreturn'] = {
     this.quarkConnections_ = {};
     this.quarkIds_ = null;
     this.previousEnabledState_ = true;
+  },
+  ensureSearchKeywords: function () {
+    var keywords = [
+      Blockly.Msg.LABEL_PROCEDURE_EXECUTION,
+      Blockly.Msg.FABLE_SEARCH_KEYWORD_FUNCTION
+    ];
+
+    var toolboxKeywords = [];
+
+    Blockly.Search.preprocessSearchKeywords('procedures_callnoreturn', keywords, toolboxKeywords);
   },
 
   /**
@@ -1118,6 +1140,16 @@ Blockly.Blocks['procedures_callreturn'] = {
     this.quarkIds_ = null;
     this.previousEnabledState_ = true;
   },
+  ensureSearchKeywords: function () {
+    var keywords = [
+      Blockly.Msg.LABEL_PROCEDURE_EXECUTION,
+      Blockly.Msg.FABLE_SEARCH_KEYWORD_FUNCTION
+    ];
+
+    var toolboxKeywords = [];
+
+    Blockly.Search.preprocessSearchKeywords('procedures_callreturn', keywords, toolboxKeywords);
+  },
 
   getProcedureCall: Blockly.Blocks['procedures_callnoreturn'].getProcedureCall,
   renameProcedure: Blockly.Blocks['procedures_callnoreturn'].renameProcedure,
@@ -1156,10 +1188,13 @@ Blockly.Blocks['procedures_ifreturn'] = {
     var keywords = [
       Blockly.Msg.CONTROLS_IF_MSG_IF,
       Blockly.Msg.PROCEDURES_DEFRETURN_RETURN,
-      Blockly.Msg.FABLE_SEARCH_KEYWORD_FUNCTION
+      Blockly.Msg.FABLE_SEARCH_KEYWORD_FUNCTION,
+      Blockly.Msg.LABEL_PROCEDURE_DEFINITION
     ];
 
-    Blockly.Search.preprocessSearchKeywords('procedures_ifreturn', keywords);
+    var toolboxKeywords = [];
+
+    Blockly.Search.preprocessSearchKeywords('procedures_ifreturn', keywords, toolboxKeywords);
   },
   /**
    * Create XML to represent whether this block has a return value.

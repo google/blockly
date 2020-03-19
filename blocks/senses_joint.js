@@ -54,7 +54,12 @@ Blockly.Blocks.fable_get_module_motor_position = {
       '%{BKY_LABEL_JOINT}'
     ];
 
-    Blockly.Search.preprocessSearchKeywords('fable_get_module_motor_position', keywords);
+    var toolboxKeywords = [
+      'X',
+      'Y'
+    ];
+
+    Blockly.Search.preprocessSearchKeywords('fable_get_module_motor_position', keywords, toolboxKeywords);
   }
 };
 
@@ -111,16 +116,19 @@ Blockly.Blocks.fable_read_joint_sensor = {
   ensureSearchKeywords: function () {
     var keywords = [
       Blockly.Msg.FABLE_READ_JOINT_SENSOR,
+      '%{BKY_INPUT}',
+      '%{BKY_LABEL_JOINT}'
+    ];
+
+    var toolboxKeywords = [
       Blockly.Msg.FABLE_JOINT_POSITION_X,
       Blockly.Msg.FABLE_JOINT_POSITION_Y,
       Blockly.Msg.FABLE_JOINT_TORQUE_X,
       Blockly.Msg.FABLE_JOINT_TORQUE_Y,
       Blockly.Msg.FABLE_JOINT_SPEED_X,
-      Blockly.Msg.FABLE_JOINT_SPEED_Y,
-      '%{BKY_INPUT}',
-      '%{BKY_LABEL_JOINT}'
+      Blockly.Msg.FABLE_JOINT_SPEED_Y
     ];
 
-    Blockly.Search.preprocessSearchKeywords('fable_read_joint_sensor', keywords);
+    Blockly.Search.preprocessSearchKeywords('fable_read_joint_sensor', keywords, toolboxKeywords);
   }
 };

@@ -50,6 +50,8 @@ Blockly.VerticalFlyout = function(workspaceOptions) {
    * @private
    */
   this.horizontalLayout_ = false;
+  this.minScale = 1;
+  this.maxScale = 1.2;
 };
 Blockly.utils.object.inherits(Blockly.VerticalFlyout, Blockly.Flyout);
 
@@ -92,11 +94,15 @@ Blockly.VerticalFlyout.prototype.getMetrics_ = function() {
     viewWidth -= this.SCROLLBAR_PADDING;
   }
 
+  var scaleToUse = this.workspace_.scale;
+  scaleToUse = Math.max(scaleToUse, this.minScale);
+  scaleToUse = Math.min(scaleToUse, this.maxScale);
+
   var metrics = {
     viewHeight: viewHeight,
     viewWidth: viewWidth,
-    contentHeight: optionBox.height * this.workspace_.scale + 2 * this.MARGIN,
-    contentWidth: optionBox.width * this.workspace_.scale + 2 * this.MARGIN,
+    contentHeight: optionBox.height * scaleToUse + 2 * this.MARGIN,
+    contentWidth: optionBox.width * scaleToUse + 2 * this.MARGIN,
     viewTop: -this.workspace_.scrollY + optionBox.y,
     viewLeft: -this.workspace_.scrollX,
     contentTop: optionBox.y,
@@ -252,7 +258,7 @@ Blockly.VerticalFlyout.prototype.wheel_ = function(e) {
  * @private
  */
 Blockly.VerticalFlyout.prototype.layout_ = function(contents, gaps) {
-  this.workspace_.scale = this.targetWorkspace_.scale;
+  this.workspace_.scale = Math.min(this.maxScale, Math.max(this.targetWorkspace_.scale, this.minScale));
   var margin = this.MARGIN;
   var cursorX = this.RTL ? margin : margin + this.tabWidth_;
   var cursorY = margin;
@@ -351,7 +357,7 @@ Blockly.VerticalFlyout.prototype.getClientRect = function() {
         // If we're in a mutator, its scale is always 1, purely because of some
         // oddities in our rendering optimizations.  The actual scale is the
         // same as the scale on the parent workspace.
-        var scale = this.targetWorkspace_.options.parentWorkspace.scale;
+        var scale = Math.min(this.maxScale, Math.max(this.targetWorkspace_.options.parentWorkspace.scale, this.minScale));
         left += this.leftEdge_ * scale;
       }
     }
@@ -365,7 +371,7 @@ Blockly.VerticalFlyout.prototype.getClientRect = function() {
  * @private
  */
 Blockly.VerticalFlyout.prototype.reflowInternal_ = function() {
-  this.workspace_.scale = this.targetWorkspace_.scale;
+  this.workspace_.scale = Math.min(this.maxScale, Math.max(this.targetWorkspace_.scale, this.minScale));
   var flyoutWidth = 0;
   var blocks = this.workspace_.getTopBlocks(false);
   for (var i = 0, block; (block = blocks[i]); i++) {
@@ -379,7 +385,7 @@ Blockly.VerticalFlyout.prototype.reflowInternal_ = function() {
     flyoutWidth = Math.max(flyoutWidth, button.width);
   }
   flyoutWidth += this.MARGIN * 1.5 + this.tabWidth_;
-  flyoutWidth *= this.workspace_.scale;
+  flyoutWidth *= Math.min(this.maxScale, Math.max(this.workspace_.scale, this.minScale));
   flyoutWidth += Blockly.Scrollbar.scrollbarThickness;
 
   if (this.width_ != flyoutWidth) {
@@ -387,7 +393,7 @@ Blockly.VerticalFlyout.prototype.reflowInternal_ = function() {
       if (this.RTL) {
         // With the flyoutWidth known, right-align the blocks.
         var oldX = block.getRelativeToSurfaceXY().x;
-        var newX = flyoutWidth / this.workspace_.scale - this.MARGIN;
+        var newX = flyoutWidth / (Math.min(this.maxScale, Math.max(this.workspace_.scale, this.minScale))) - this.MARGIN;
         if (!block.outputConnection) {
           newX -= this.tabWidth_;
         }
@@ -401,7 +407,7 @@ Blockly.VerticalFlyout.prototype.reflowInternal_ = function() {
       // With the flyoutWidth known, right-align the buttons.
       for (var i = 0, button; (button = this.buttons_[i]); i++) {
         var y = button.getPosition().y;
-        var x = flyoutWidth / this.workspace_.scale - button.width -
+        var x = flyoutWidth / Math.min(this.maxScale, Math.max(this.workspace_.scale, this.minScale)) - button.width -
             this.MARGIN - this.tabWidth_;
         button.moveTo(x, y);
       }

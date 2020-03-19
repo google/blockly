@@ -70,7 +70,11 @@ Blockly.Blocks.controls_whileForever = {
       '%{BKY_LABEL_LOOPS}'
     ];
 
-    Blockly.Search.preprocessSearchKeywords('controls_whileForever', keywords);
+    var toolboxKeywords = [
+
+    ];
+
+    Blockly.Search.preprocessSearchKeywords('controls_whileForever', keywords, toolboxKeywords);
   }
 };
 
@@ -99,7 +103,11 @@ Blockly.Blocks.controls_stopApp = {
       '%{BKY_LABEL_LOOPS}'
     ];
 
-    Blockly.Search.preprocessSearchKeywords('controls_stopApp', keywords);
+    var toolboxKeywords = [
+
+    ];
+
+    Blockly.Search.preprocessSearchKeywords('controls_stopApp', keywords, toolboxKeywords);
   }
 };
 
@@ -135,7 +143,11 @@ Blockly.Blocks.fable_wait = {
       '%{BKY_LABEL_TIME_CONTROL}'
     ];
 
-    Blockly.Search.preprocessSearchKeywords('fable_wait', keywords);
+    var toolboxKeywords = [
+
+    ];
+
+    Blockly.Search.preprocessSearchKeywords('fable_wait', keywords, toolboxKeywords);
   }
 };
 
@@ -172,7 +184,11 @@ Blockly.Blocks.fable_wait_until = {
       '%{BKY_LABEL_TIME_CONTROL}'
     ];
 
-    Blockly.Search.preprocessSearchKeywords('fable_wait_until', keywords);
+    var toolboxKeywords = [
+
+    ];
+
+    Blockly.Search.preprocessSearchKeywords('fable_wait_until', keywords, toolboxKeywords);
   }
 };
 
@@ -198,8 +214,11 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     "helpUrl": "%{BKY_CONTROLS_REPEAT_HELPURL}",
     "search_keywords": [
         "%{BKY_CONTROLS_REPEAT_TITLE}",
-        "%{BKY_CONTROLS_REPEAT_INPUT_DO}"
-    ]
+        "%{BKY_CONTROLS_REPEAT_INPUT_DO}",
+        '%{BKY_LOOPS}',
+        '%{BKY_LABEL_TIME_CONTROL}'
+    ],
+    "search_toolbox_keywords": []
   },
   // Block for repeat n times (internal number).
   // The 'controls_repeat_ext' block is preferred as it is more flexible.
@@ -225,8 +244,11 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     "helpUrl": "%{BKY_CONTROLS_REPEAT_HELPURL}",
     "search_keywords": [
         "%{BKY_CONTROLS_REPEAT_TITLE}",
-        "%{BKY_CONTROLS_REPEAT_INPUT_DO}"
-    ]
+        "%{BKY_CONTROLS_REPEAT_INPUT_DO}",
+        '%{BKY_LOOPS}',
+        '%{BKY_LABEL_TIME_CONTROL}'
+    ],
+    "search_toolbox_keywords": []
   },
   // Block for 'do while/until' loop.
   {
@@ -258,9 +280,13 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     "helpUrl": "%{BKY_CONTROLS_WHILEUNTIL_HELPURL}",
     "extensions": ["controls_whileUntil_tooltip"],
     "search_keywords": [
-        "%{BKY_CONTROLS_WHILEUNTIL_OPERATOR_WHILE}",
-        "%{BKY_CONTROLS_WHILEUNTIL_OPERATOR_UNTIL}",
-        "%{BKY_CONTROLS_REPEAT_INPUT_DO}"
+        "%{BKY_CONTROLS_REPEAT_INPUT_DO}",
+        '%{BKY_LOOPS}',
+        '%{BKY_LABEL_TIME_CONTROL}'
+    ],
+    "search_toolbox_keywords": [
+      "%{BKY_CONTROLS_WHILEUNTIL_OPERATOR_WHILE}",
+      "%{BKY_CONTROLS_WHILEUNTIL_OPERATOR_UNTIL}"
     ]
   },
   // Block for 'for' loop.
@@ -308,8 +334,11 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     ],
     "search_keywords": [
         "%{BKY_CONTROLS_FOR_TITLE}",
-        "%{BKY_CONTROLS_REPEAT_INPUT_DO}"
-    ]
+        "%{BKY_CONTROLS_REPEAT_INPUT_DO}",
+        '%{BKY_LOOPS}',
+        '%{BKY_LABEL_TIME_CONTROL}'
+    ],
+    "search_toolbox_keywords": []
   },
   // Block for 'for each' loop.
   {
@@ -342,8 +371,11 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     ],
     "search_keywords": [
         "%{BKY_CONTROLS_FOREACH_TITLE}",
-        "%{BKY_CONTROLS_REPEAT_INPUT_DO}"
-    ]
+        "%{BKY_CONTROLS_REPEAT_INPUT_DO}",
+        '%{BKY_LOOPS}',
+        '%{BKY_LABEL_TIME_CONTROL}'
+    ],
+    "search_toolbox_keywords": []
   },
   // Block for flow statements: continue, break.
   {
@@ -365,8 +397,12 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
       "controls_flow_in_loop_check"
     ],
     "search_keywords": [
-        "%{BKY_CONTROLS_FLOW_STATEMENTS_OPERATOR_BREAK}",
-        "%{BKY_CONTROLS_FLOW_STATEMENTS_OPERATOR_CONTINUE}"
+      '%{BKY_LOOPS}',
+      '%{BKY_LABEL_TIME_CONTROL}'
+    ],
+    "search_toolbox_keywords": [
+      "%{BKY_CONTROLS_FLOW_STATEMENTS_OPERATOR_BREAK}",
+      "%{BKY_CONTROLS_FLOW_STATEMENTS_OPERATOR_CONTINUE}"
     ]
   }
 ]);  // END JSON EXTRACT (Do not delete this comment.)

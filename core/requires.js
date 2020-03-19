@@ -38,6 +38,8 @@ goog.require('Blockly.VerticalFlyout');
 // Flyout buttons are needed by the variable category,
 // and by any custom toolbox that has a button or a label.
 goog.require('Blockly.FlyoutButton');
+// Flyout close buttons add a small "close" button next to each flyout, so users can close the flyouts easily.
+goog.require('Blockly.FlyoutCloseButton');
 // If there is code generation into any language, then the generator is needed.
 // Should not be required when using advanced compilation since
 // individual generator files should already have this require.

@@ -57,7 +57,11 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     "style": "variable_blocks",
     "helpUrl": "%{BKY_VARIABLES_GET_HELPURL}",
     "tooltip": "%{BKY_VARIABLES_GET_TOOLTIP}",
-    "extensions": ["contextMenu_variableSetterGetter"]
+    "extensions": ["contextMenu_variableSetterGetter"],
+    "search_keywords": [
+      "%{BKY_FABLE_SEARCH_KEYWORD_VARIABLES_GET}",
+    ],
+    "search_toolbox_keywords": []
   },
   // Block for variable setter.
   {
@@ -79,7 +83,12 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     "style": "variable_blocks",
     "tooltip": "%{BKY_VARIABLES_SET_TOOLTIP}",
     "helpUrl": "%{BKY_VARIABLES_SET_HELPURL}",
-    "extensions": ["contextMenu_variableSetterGetter"]
+    "extensions": ["contextMenu_variableSetterGetter"],
+    "search_keywords": [
+      "%{BKY_VARIABLES_SET}",
+      "%{BKY_FABLE_SEARCH_KEYWORD_VARIABLES_SET}",
+    ],
+    "search_toolbox_keywords": []
   }
 ]);  // END JSON EXTRACT (Do not delete this comment.)
 

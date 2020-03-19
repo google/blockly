@@ -347,6 +347,10 @@ Blockly.Trashcan.prototype.position = function() {
 
   this.svgGroup_.setAttribute('transform',
       'translate(' + this.left_ + ',' + this.top_ + ')');
+
+  if (this.flyout_) {
+    this.flyout_.position();
+  }
 };
 
 /**

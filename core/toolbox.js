@@ -56,7 +56,9 @@ Blockly.Toolbox = function(workspace) {
    * @type {!Blockly.Search}
    * @private
    */
-  this.search_ = this.workspace_.search_;
+  if (this.workspace_.toolboxSearch_) {
+    this.search_ = this.workspace_.toolboxSearch_;
+  }
 
   /**
    * Is RTL vs LTR.
@@ -202,8 +204,6 @@ Blockly.Toolbox.prototype.init = function() {
     this.flyout_ = new Blockly.VerticalFlyout(workspaceOptions);
   }
 
-  this.search_ = this.flyout_.workspace_.search_;
-
   // Insert the flyout after the workspace.
   Blockly.utils.dom.insertAfter(this.flyout_.createDom('svg'),
       this.workspace_.getParentSvg());
@@ -221,21 +221,12 @@ Blockly.Toolbox.prototype.init = function() {
  * @package
  */
 Blockly.Toolbox.prototype.renderTree = function(languageTree) {
-  this.shouldPopulateSearch_ = false;
+  this.shouldPopulateSearch_ = true;
 
-  // Determine whether the Toolbox will have any search logic in it.
-  // It will have it if the toolbox has a search XML element in it.
-  for (var child in languageTree.childNodes) {
-    if (languageTree.childNodes[child].tagName === "search") {
-      this.shouldPopulateSearch_ = true;
-      break;
-    }
-  }
-
-  //If there will be any search logic, clear the current trie (useful when changing Toolboxes - Simple/Advanced)
-  if (this.shouldPopulateSearch_) {
-    this.search_.clearAll();
-  }
+  // //If there will be any search logic, clear the current trie (useful when changing Toolboxes - Simple/Advanced)
+  // if (this.shouldPopulateSearch_) {
+  //   this.search_.clearAll();
+  // }
 
   if (this.tree_) {
     this.tree_.dispose();  // Delete any existing content.
@@ -464,9 +455,24 @@ Blockly.Toolbox.prototype.syncTrees_ = function (treeIn, treeOut, pathToMedia, s
           // Variables and procedures are special dynamic categories.
           childOut.blocks = custom;
 
-          if (custom !== 'MOST_USED_CUSTOM' && shouldAddToSearchTrie) {
-            var blocksFunction = this.workspace_.getToolboxCategoryCallback(custom);
-            var blocksArr = blocksFunction(this.workspace_);
+          if (shouldAddToSearchTrie && this.search_) {
+            var blocksArr;
+
+            switch (custom) {
+              case Blockly.VARIABLE_CATEGORY_NAME:
+                blocksArr = Blockly.Variables.flyoutSearchBlocks();
+                break;
+              case Blockly.VARIABLE_DYNAMIC_CATEGORY_NAME:
+                blocksArr = Blockly.VariablesDynamic.flyoutSearchBlocks();
+                break;
+              case Blockly.MOST_USED_CATEGORY_NAME:
+                blocksArr = [];
+                break;
+              default:
+                var blocksFunction = this.workspace_.getToolboxCategoryCallback(custom);
+                blocksArr = blocksFunction(this.workspace_);
+                break;
+            }
 
             for (let i = 0; i < blocksArr.length; i++) {
               if (blocksArr[i].nodeName === 'block') {
@@ -544,7 +550,7 @@ Blockly.Toolbox.prototype.syncTrees_ = function (treeIn, treeOut, pathToMedia, s
         break;
       case 'BLOCK':
         // If the toolbox will have a search handler, add the block to the handler
-        if (shouldAddToSearchTrie) {
+        if (shouldAddToSearchTrie && this.search_) {
           var blockType = childIn.getAttribute('type');
           this.search_.onBlockAdded(blockType, Blockly.utils.xml.domToText(childIn));
         }
@@ -553,14 +559,14 @@ Blockly.Toolbox.prototype.syncTrees_ = function (treeIn, treeOut, pathToMedia, s
         treeOut.blocks.push(childIn);
         lastElement = childIn;
         break;
-      case 'SEARCH':
-        // Initialzie the Search handler and place a GUI button in the list of categories (left sidebar)
-        var treeSearch = new Blockly.Toolbox.TreeSearch(this, this.search_);
-        // TODO: Move hex colour to the toolbox's XML
-        treeSearch.hexColour = '#144bb2';
-        treeOut.add(treeSearch);
-        lastElement = childIn;
-        break;
+      // case 'SEARCH':
+      //   // Initialzie the Search handler and place a GUI button in the list of categories (left sidebar)
+      //   var treeSearch = new Blockly.Toolbox.TreeSearch(this, this.search_);
+      //   // TODO: Move hex colour to the toolbox's XML
+      //   treeSearch.hexColour = '#144bb2';
+      //   treeOut.add(treeSearch);
+      //   lastElement = childIn;
+      //   break;
     }
   }
   return openNode;
@@ -777,149 +783,6 @@ Blockly.Toolbox.prototype.selectFirstCategory = function() {
   if (!selectedItem) {
     this.tree_.selectFirst();
   }
-};
-
-/**
- * Event handler for clicking on the search bar in the Toolbox.
- * Sets focus to the search field in the toolbox, so the user can search.
- */
-Blockly.Toolbox.prototype.focusSearchField = function () {
-  // Close any other opened categories
-  this.tree_.setSelectedItem(null);
-
-  // Find the search bar and focus it
-  var children = this.tree_.getChildren();
-  for (var i = 0; i < children.length; i++) {
-    var child = children[i];
-    if (child.focusSearchField) {
-      child.focusSearchField();
-      return;
-    } else {
-      child.blur();
-    }
-  }
-};
-
-/**
- * A GUI element that acts as a search field in the Toolbox tree.
- * @constructor
- * @extends {Blockly.tree.TreeNode}
- */
-Blockly.Toolbox.TreeSearch = function (toolbox, search) {
-  this.toolbox_ = toolbox;
-  this.search_ = search;
-
-  // TODO: Localization for the placeholder
-  const searchField = document.createElement('input');
-  searchField.setAttribute('id', 'blockSearchInput');
-  searchField.setAttribute('type', 'search');
-  searchField.setAttribute('placeholder', 'Search');
-
-  Blockly.tree.TreeNode.call(this, toolbox, searchField,
-    Blockly.Toolbox.TreeSearch.CONFIG_);
-};
-Blockly.utils.object.inherits(Blockly.Toolbox.TreeSearch, Blockly.tree.TreeNode);
-
-/**
- * Configuration constants for tree typeahead search field.
- * @type {Object.<string,*>}
- * @const
- * @private
- */
-Blockly.Toolbox.TreeSearch.CONFIG_ = {
-  cssTreeRow: 'blocklyTreeSearch blocklyTreeRow'
-};
-
-/**
- * Event handler for when the user focuses on the search bar. Initializes all the
- * required event listeners for actually carrying out the search.
- */
-Blockly.Toolbox.TreeSearch.prototype.enterDocument = function () {
-  Blockly.tree.TreeNode.prototype.enterDocument.call(this);
-
-  var toolbox = this.toolbox_;
-  var search = this.search_;
-
-  var searchField = this.getElement().getElementsByTagName('input')[0];
-  this.searchField_ = searchField;
-
-  searchField.addEventListener('click', function (e) {
-    e.stopPropagation();
-  });
-
-  searchField.addEventListener('keydown', function (e) {
-    e.stopPropagation();
-  });
-
-  // Execute a search on a keyup event
-  searchField.addEventListener('keyup', function (e) {
-    // Clear the search and hide the flyout, also unfocus the search box (when pressing Escape)
-    if (e.keyCode === 27) {
-      toolbox.flyout_.hide();
-      this.blur();
-      return;
-    }
-
-    // Initalize the list that will hold all results
-    var matchingBlocks = [];
-
-    // Preprocess the user's search input by trimming, lowercasing and splitting by whitespace
-    var searchTerms = e.target.value.trim().toLowerCase().split(/\s+/);
-
-    // Filter out all empty strings from the search list
-    if (searchTerms.length > 0) {
-      searchTerms = Blockly.Toolbox.TreeSearch.filter(searchTerms, function (term) {
-        return term.length > 0;
-      });
-
-      if (searchTerms.length > 0) {
-        matchingBlocks = search.blocksMatchingSearchTerms(searchTerms);
-      }
-    }
-
-    // Create a label for the search results category
-    // TODO: Localization
-    var labelText = 'Search results:';
-    if (matchingBlocks.length === 0) {
-      labelText = 'No results found';
-    }
-    var label = '<label web-class="subcategoryClass" text="' + labelText + '"/>';
-
-    // Add the label to the flyout of results. Put it in the beginning.
-    matchingBlocks.splice(0, 0, label);
-
-    for (let i = 0; i < matchingBlocks.length; i++) {
-      matchingBlocks[i] = Blockly.Xml.textToDom(matchingBlocks[i]);
-    }
-
-    // Show the resulting XML in the flyout
-    toolbox.flyout_.show(matchingBlocks);
-    toolbox.flyout_.scrollToStart();
-  });
-};
-
-// Filters out empty spaces. Stolen from Closure's goog.array.filter so we can remove it completely.
-Blockly.Toolbox.TreeSearch.filter = function (arr, f, optObj) {
-  var l = arr.length; // must be fixed during loop... see docs
-  var res = [];
-  var resLength = 0;
-  var arr2 = (typeof arr === 'string') ? arr.split(' ') : arr;
-  for (var i = 0; i < l; i++) {
-    if (i in arr2) {
-      var val = arr2[i]; // in case f mutates arr2
-      if (f.call(optObj, val, i, arr)) {
-        res[resLength++] = val;
-      }
-    }
-  }
-  return res;
-};
-
-/**
- * Event handler for focusing the search bar inside the Toolbox.
- */
-Blockly.Toolbox.TreeSearch.prototype.focusSearchField = function () {
-  this.searchField_.focus();
 };
 
 /**

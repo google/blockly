@@ -215,6 +215,13 @@ Blockly.createMainWorkspace_ = function(svg, options, blockDragSurface,
   var mainWorkspace =
       new Blockly.WorkspaceSvg(options, blockDragSurface, workspaceDragSurface);
   mainWorkspace.scale = options.zoomOptions.startScale;
+
+  // Add the search handlers if those are present in the options
+  // IMPORTANT! Do this BEFORE mainWorkspace.createDom, as createDom creates a Toolbox that needs a Blockly.ToolboxSearch
+  if (options.hasWorkspaceSearch || options.hasToolboxSearch) {
+    mainWorkspace.addSearch(options.hasWorkspaceSearch, options.hasToolboxSearch);
+  }
+
   svg.appendChild(mainWorkspace.createDom('blocklyMainBackground'));
 
   if (!options.hasCategories && options.languageTree) {
@@ -421,6 +428,9 @@ Blockly.init_ = function(mainWorkspace) {
     }
   }
 
+  if (options.hasToolboxSearch) {
+    mainWorkspace.toolboxSearch_.init_();
+  }
   var verticalSpacing = Blockly.Scrollbar.scrollbarThickness;
   if (options.hasTrashcan) {
     verticalSpacing = mainWorkspace.trashcan.init(verticalSpacing);

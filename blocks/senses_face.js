@@ -88,6 +88,11 @@ Blockly.Blocks.fable_read_face_sensor = {
   ensureSearchKeywords: function () {
     var keywords = [
       Blockly.Msg.FACE_READ_SENSOR,
+      '%{BKY_INPUT}',
+      '%{BKY_LABEL_FACE}'
+    ];
+
+    var toolboxKeywords = [
       Blockly.Msg.FACE_ACCELERATION_X,
       Blockly.Msg.FACE_ACCELERATION_Y,
       Blockly.Msg.FACE_ACCELERATION_Z,
@@ -98,11 +103,9 @@ Blockly.Blocks.fable_read_face_sensor = {
       Blockly.Msg.FACE_TOUCH_PRESSURE,
       Blockly.Msg.LATITUDE,
       Blockly.Msg.LONGITUDE,
-      Blockly.Msg.ALTITUDE,
-      '%{BKY_INPUT}',
-      '%{BKY_LABEL_FACE}'
+      Blockly.Msg.ALTITUDE
     ];
 
-    Blockly.Search.preprocessSearchKeywords('fable_read_face_sensor', keywords);
+    Blockly.Search.preprocessSearchKeywords('fable_read_face_sensor', keywords, toolboxKeywords);
   }
 };

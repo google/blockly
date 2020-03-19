@@ -258,12 +258,6 @@ Blockly.onKeyDown_ = function(e) {
       Blockly.hideChaff();
       mainWorkspace.undo(e.shiftKey);
     }
-    else if (e.keyCode == 70) {
-      // 'f' for focusing the workspace search,
-      // 'F' for focusing the toolbox search
-      // Both need to be triggered with the Ctrl/Cmd key - Ctrl + F, Ctrl + Shift + F
-      workspace.focusSearch(e.shiftKey);
-    }
   }
   // Common code for delete and cut.
   // Don't delete in the flyout.
@@ -351,6 +345,10 @@ Blockly.hideChaff = function(opt_allowToolbox) {
         workspace.toolbox_.flyout_ &&
         workspace.toolbox_.flyout_.autoClose) {
       workspace.toolbox_.clearSelection();
+    }
+    if (workspace.toolboxSearch_ &&
+        workspace.toolboxSearch_.flyout_) {
+      workspace.toolboxSearch_.flyout_.hide();
     }
   }
 };
@@ -442,13 +440,13 @@ Blockly.jsonInitFactory_ = function(jsonDef) {
  * resulting function will send a list of keywords to the Search handler.
  * 
  * @param {!String} type The Type ID of the block
- * @param {!Array<String>} keyword_list The list of keywords that this block can be found with
+ * @param {!Array<String>} keywordList The list of keywords that this block can be found with
  * @return {function()} A function that calls the Search handler and gives it the list of keywords
  * @private
  */
-Blockly.evaluateSearchJson_ = function(type, keyword_list) {
-  return function() {
-      Blockly.Search.preprocessSearchKeywords(type, keyword_list);
+Blockly.evaluateSearchJson_ = function (type, keywordList, toolboxKeywordList) {
+  return function () {
+    Blockly.Search.preprocessSearchKeywords(type, keywordList, toolboxKeywordList);
   };
 };
 
@@ -478,7 +476,7 @@ Blockly.defineBlocksWithJsonArray = function(jsonArray) {
         }
         Blockly.Blocks[typename] = {
           init: Blockly.jsonInitFactory_(elem),
-          ensureSearchKeywords: Blockly.evaluateSearchJson_(elem["type"], elem["search_keywords"]),
+          ensureSearchKeywords: Blockly.evaluateSearchJson_(elem["type"], elem["search_keywords"], elem["search_toolbox_keywords"]),
         };
       }
     }

@@ -766,6 +766,21 @@ Blockly.WorkspaceSvg.prototype.newBlock = function(prototypeName, opt_id) {
   return new Blockly.BlockSvg(this, prototypeName, opt_id);
 };
 
+/*
+ * Add the search handlers.
+ */
+Blockly.WorkspaceSvg.prototype.addSearch = function (shouldAddWorkspace, shouldAddToolbox) {
+  // Instantiate the search handlers
+  // WorkspaceSearch is the handler for the blocks added to a workspace. Created when the initial workspace is created.
+  // ToolboxSearch is the handler for searching in the toolbox.
+  if (shouldAddWorkspace) {
+    this.workspaceSearch_ = new Blockly.WorkspaceSearch(this);
+  }
+  if (shouldAddToolbox) {
+    this.toolboxSearch_ = new Blockly.ToolboxSearch(this);
+  }
+};
+
 /**
  * Add a trashcan.
  * @package
@@ -896,6 +911,9 @@ Blockly.WorkspaceSvg.prototype.resize = function() {
   }
   if (this.flyout_) {
     this.flyout_.position();
+  }
+  if (this.toolboxSearch_ && this.toolboxSearch_.flyout_) {
+    this.toolboxSearch_.flyout_.position();
   }
   if (this.trashcan) {
     this.trashcan.position();
@@ -1744,22 +1762,6 @@ Blockly.WorkspaceSvg.prototype.updateToolbox = function(tree) {
     }
     this.options.languageTree = tree;
     this.flyout_.show(tree.childNodes);
-  }
-};
-
-/**
- * Set focus to the search field of the toolbox, if it exists.
- */
-Blockly.WorkspaceSvg.prototype.focusSearch = function(shouldFocusToolbox) {
-  if (shouldFocusToolbox) {
-    if (this.toolbox_) {
-      this.toolbox_.focusSearchField();
-    }
-  }
-  else {
-    if (this.search_) {
-      this.search_.focusSearchField();
-    }
   }
 };
 

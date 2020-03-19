@@ -58,7 +58,11 @@ Blockly.Blocks.fable_set_face_focus = {
       '%{BKY_LABEL_FACE}'
     ];
 
-    Blockly.Search.preprocessSearchKeywords('fable_set_face_focus', keywords);
+    var toolboxKeywords = [
+
+    ];
+
+    Blockly.Search.preprocessSearchKeywords('fable_set_face_focus', keywords, toolboxKeywords);
   }
 };
 
@@ -100,6 +104,11 @@ Blockly.Blocks.fable_set_face_emotion = {
   ensureSearchKeywords: function () {
     var keywords = [
       Blockly.Msg.FABLE_FACE_SET_EMOTION,
+      '%{BKY_OUTPUT}',
+      '%{BKY_LABEL_FACE}'
+    ];
+
+    var toolboxKeywords = [
       Blockly.Msg.EMOTION_NEUTRAL,
       Blockly.Msg.EMOTION_HAPPY,
       Blockly.Msg.EMOTION_SAD,
@@ -107,12 +116,10 @@ Blockly.Blocks.fable_set_face_emotion = {
       Blockly.Msg.EMOTION_TIRED,
       Blockly.Msg.EMOTION_SURPRISED,
       Blockly.Msg.EMOTION_FEAR,
-      Blockly.Msg.EMOTION_DISGUST,
-      '%{BKY_OUTPUT}',
-      '%{BKY_LABEL_FACE}'
+      Blockly.Msg.EMOTION_DISGUST
     ];
 
-    Blockly.Search.preprocessSearchKeywords('fable_set_face_emotion', keywords);
+    Blockly.Search.preprocessSearchKeywords('fable_set_face_emotion', keywords, toolboxKeywords);
   }
 };
 
@@ -152,17 +159,20 @@ Blockly.Blocks.fable_set_face_animation = {
   ensureSearchKeywords: function () {
     var keywords = [
       Blockly.Msg.FABLE_FACE_SET_ANIMATION,
+      '%{BKY_OUTPUT}',
+      '%{BKY_LABEL_FACE}'
+    ];
+
+    var toolboxKeywords = [
       Blockly.Msg.EMOTION_LAUGH,
       Blockly.Msg.EMOTION_TALK,
       Blockly.Msg.EMOTION_HAPPY_SURPRISED,
       Blockly.Msg.EMOTION_SHOCK_CRY,
       Blockly.Msg.EMOTION_RAGE,
-      Blockly.Msg.EMOTION_SLEEP,
-      '%{BKY_OUTPUT}',
-      '%{BKY_LABEL_FACE}'
+      Blockly.Msg.EMOTION_SLEEP
     ];
 
-    Blockly.Search.preprocessSearchKeywords('fable_set_face_animation', keywords);
+    Blockly.Search.preprocessSearchKeywords('fable_set_face_animation', keywords, toolboxKeywords);
   }
 };
 
@@ -235,6 +245,11 @@ Blockly.Blocks.fable_blend_face_emotion = {
     var keywords = [
       Blockly.Msg.FABLE_FACE_BLEND_EMOTION,
       Blockly.Msg.FABLE_FACE_BLEND_SECOND,
+      '%{BKY_OUTPUT}',
+      '%{BKY_LABEL_FACE}'
+    ];
+
+    var toolboxKeywords = [
       Blockly.Msg.EMOTION_NEUTRAL,
       Blockly.Msg.EMOTION_HAPPY,
       Blockly.Msg.EMOTION_SAD,
@@ -248,12 +263,10 @@ Blockly.Blocks.fable_blend_face_emotion = {
       Blockly.Msg.EMOTION_HAPPY_SURPRISED,
       Blockly.Msg.EMOTION_SHOCK_CRY,
       Blockly.Msg.EMOTION_RAGE,
-      Blockly.Msg.EMOTION_SLEEP,
-      '%{BKY_OUTPUT}',
-      '%{BKY_LABEL_FACE}'
+      Blockly.Msg.EMOTION_SLEEP
     ];
 
-    Blockly.Search.preprocessSearchKeywords('fable_blend_face_emotion', keywords);
+    Blockly.Search.preprocessSearchKeywords('fable_blend_face_emotion', keywords, toolboxKeywords);
   }
 };
 
@@ -292,13 +305,17 @@ Blockly.Blocks.fable_set_eyes_color = {
   ensureSearchKeywords: function () {
     var keywords = [
       Blockly.Msg.FABLE_FACE_SET_EYES_COLOR,
-      Blockly.Msg.FABLE_FACE_SET_IRIS_COLOR,
-      Blockly.Msg.FABLE_FACE_SET_EYELID_COLOR,
       '%{BKY_OUTPUT}',
       '%{BKY_LABEL_FACE}'
     ];
 
-    Blockly.Search.preprocessSearchKeywords('fable_set_eyes_color', keywords);
+    var toolboxKeywords = [
+      Blockly.Msg.FABLE_FACE_SET_IRIS_COLOR,
+      Blockly.Msg.FABLE_FACE_SET_EYELID_COLOR,
+      '%{BKY_COLORS}'
+    ];
+
+    Blockly.Search.preprocessSearchKeywords('fable_set_eyes_color', keywords, toolboxKeywords);
   }
 };
 
@@ -332,6 +349,10 @@ Blockly.Blocks.fable_face_vibrate = {
       '%{BKY_LABEL_FACE}'
     ];
 
-    Blockly.Search.preprocessSearchKeywords('fable_face_vibrate', keywords);
+    var toolboxKeywords = [
+
+    ];
+
+    Blockly.Search.preprocessSearchKeywords('fable_face_vibrate', keywords, toolboxKeywords);
   }
 };

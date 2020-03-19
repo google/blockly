@@ -62,8 +62,12 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     "tooltip": "%{BKY_LOGIC_BOOLEAN_TOOLTIP}",
     "helpUrl": "%{BKY_LOGIC_BOOLEAN_HELPURL}",
     "search_keywords": [
-        "%{BKY_LOGIC_BOOLEAN_TRUE}",
-        "%{BKY_LOGIC_BOOLEAN_FALSE}"
+        "%{BKY_LOGIC}",
+        "%{BKY_LABEL_BOOLEAN}"
+    ],
+    "search_toolbox_keywords": [
+      "%{BKY_LOGIC_BOOLEAN_TRUE}",
+      "%{BKY_LOGIC_BOOLEAN_FALSE}"
     ]
   },
   // Block for if/elseif/else condition.
@@ -94,7 +98,13 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
         "%{BKY_CONTROLS_IF_MSG_IF}",
         "%{BKY_CONTROLS_IF_MSG_THEN}",
         "%{BKY_CONTROLS_IF_MSG_ELSEIF}",
-        "%{BKY_CONTROLS_IF_MSG_ELSE}"
+        "%{BKY_CONTROLS_IF_MSG_ELSE}",
+        "%{BKY_LOGIC}",
+        "%{BKY_LABEL_CONDITIONS}"
+    ],
+    "search_toolbox_keywords": [
+      "%{BKY_LOGIC_BOOLEAN_TRUE}",
+      "%{BKY_LOGIC_BOOLEAN_FALSE}"
     ]
   },
   // If/else block that does not use a mutator.
@@ -131,7 +141,13 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     "search_keywords": [
         "%{BKY_CONTROLS_IF_MSG_IF}",
         "%{BKY_CONTROLS_IF_MSG_THEN}",
-        "%{BKY_CONTROLS_IF_MSG_ELSE}"
+        "%{BKY_CONTROLS_IF_MSG_ELSE}",
+        "%{BKY_LOGIC}",
+        "%{BKY_LABEL_CONDITIONS}"
+    ],
+    "search_toolbox_keywords": [
+      "%{BKY_LOGIC_BOOLEAN_TRUE}",
+      "%{BKY_LOGIC_BOOLEAN_FALSE}"
     ]
   },
   // Block for comparison operator.
@@ -172,7 +188,10 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
         "\u200F\u2264",
         "\u200F>",
         "\u200F\u2265",
-    ]
+        "%{BKY_LOGIC}",
+        "%{BKY_LABEL_COMPARISON}"
+    ],
+    "search_toolbox_keywords": []
   },
   // Block for logical operations: 'and', 'or'.
   {
@@ -205,7 +224,13 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     "extensions": ["logic_op_tooltip"],
     "search_keywords": [
         "%{BKY_LOGIC_OPERATION_AND}",
-        "%{BKY_LOGIC_OPERATION_OR}"
+        "%{BKY_LOGIC_OPERATION_OR}",
+        "%{BKY_LOGIC}",
+        "%{BKY_LABEL_BOOLEAN}"
+    ],
+    "search_toolbox_keywords": [
+      "%{BKY_LOGIC_BOOLEAN_TRUE}",
+      "%{BKY_LOGIC_BOOLEAN_FALSE}"
     ]
   },
   // Block for negation.
@@ -224,7 +249,13 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     "tooltip": "%{BKY_LOGIC_NEGATE_TOOLTIP}",
     "helpUrl": "%{BKY_LOGIC_NEGATE_HELPURL}",
     "search_keywords": [
-        "%{BKY_LOGIC_NEGATE_TITLE}"
+        "%{BKY_LOGIC_NEGATE_TITLE}",
+        "%{BKY_LOGIC}",
+        "%{BKY_LABEL_BOOLEAN}"
+    ],
+    "search_toolbox_keywords": [
+      "%{BKY_LOGIC_BOOLEAN_TRUE}",
+      "%{BKY_LOGIC_BOOLEAN_FALSE}"
     ]
   },
   // Block for null data type.
@@ -236,8 +267,10 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     "tooltip": "%{BKY_LOGIC_NULL_TOOLTIP}",
     "helpUrl": "%{BKY_LOGIC_NULL_HELPURL}",
     "search_keywords": [
-        "%{BKY_LOGIC_NULL}"
-    ]
+        "%{BKY_LOGIC_NULL}",
+        "%{BKY_LOGIC}"
+    ],
+    "search_toolbox_keywords": []
   },
   // Block for ternary operator.
   {
@@ -272,8 +305,10 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     "search_keywords": [
         "%{BKY_LOGIC_TERNARY_CONDITION}",
         "%{BKY_LOGIC_TERNARY_IF_TRUE}",
-        "%{BKY_LOGIC_TERNARY_IF_FALSE}"
-    ]
+        "%{BKY_LOGIC_TERNARY_IF_FALSE}",
+        "%{BKY_LOGIC}"
+    ],
+    "search_toolbox_keywords": []
   }
 ]);  // END JSON EXTRACT (Do not delete this comment.)
 

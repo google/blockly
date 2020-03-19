@@ -48,7 +48,9 @@ Blockly.Blocks.camera_take_picture = {
       '%{BKY_VISION}'
     ];
 
-    Blockly.Search.preprocessSearchKeywords('camera_take_picture', keywords);
+    var toolboxKeywords = [];
+
+    Blockly.Search.preprocessSearchKeywords('camera_take_picture', keywords, toolboxKeywords);
   }
 };
 
@@ -85,7 +87,11 @@ Blockly.Blocks.camera_check_for_simple_color = {
       '%{BKY_VISION}'
     ];
 
-    Blockly.Search.preprocessSearchKeywords('camera_check_for_simple_color', keywords);
+    var toolboxKeywords = [
+      '%{BKY_COLORS}'
+    ];
+
+    Blockly.Search.preprocessSearchKeywords('camera_check_for_simple_color', keywords, toolboxKeywords);
   }
 };
 
@@ -133,7 +139,11 @@ Blockly.Blocks.camera_check_for_advanced_color = {
       '%{BKY_VISION}'
     ];
 
-    Blockly.Search.preprocessSearchKeywords('camera_check_for_advanced_color', keywords);
+    var toolboxKeywords = [
+      '%{BKY_COLORS}'
+    ];
+
+    Blockly.Search.preprocessSearchKeywords('camera_check_for_advanced_color', keywords, toolboxKeywords);
   }
 };
 
@@ -176,7 +186,13 @@ Blockly.Blocks.camera_get_center_from_simple_color = {
       '%{BKY_VISION}'
     ];
 
-    Blockly.Search.preprocessSearchKeywords('camera_get_center_from_simple_color', keywords);
+    var toolboxKeywords = [
+      '%{BKY_COLORS}',
+      'X',
+      'Y'
+    ];
+
+    Blockly.Search.preprocessSearchKeywords('camera_get_center_from_simple_color', keywords, toolboxKeywords);
   }
 };
 
@@ -229,7 +245,13 @@ Blockly.Blocks.camera_get_center_from_advanced_color = {
       '%{BKY_VISION}'
     ];
 
-    Blockly.Search.preprocessSearchKeywords('camera_get_center_from_advanced_color', keywords);
+    var toolboxKeywords = [
+      '%{BKY_COLORS}',
+      'X',
+      'Y'
+    ];
+
+    Blockly.Search.preprocessSearchKeywords('camera_get_center_from_advanced_color', keywords, toolboxKeywords);
   }
 };
 
@@ -268,7 +290,11 @@ Blockly.Blocks.camera_check_for_motion = {
       '%{BKY_VISION}'
     ];
 
-    Blockly.Search.preprocessSearchKeywords('camera_check_for_motion', keywords);
+    var toolboxKeywords = [
+    
+    ];
+
+    Blockly.Search.preprocessSearchKeywords('camera_check_for_motion', keywords, toolboxKeywords);
   }
 };
 
@@ -311,6 +337,11 @@ Blockly.Blocks.camera_get_center_of_motion = {
       '%{BKY_VISION}'
     ];
 
-    Blockly.Search.preprocessSearchKeywords('camera_get_center_of_motion', keywords);
+    var toolboxKeywords = [
+      'X',
+      'Y'
+    ];
+
+    Blockly.Search.preprocessSearchKeywords('camera_get_center_of_motion', keywords, toolboxKeywords);
   }
 };

@@ -121,7 +121,8 @@ Blockly.Flyout = function(workspaceOptions) {
    */
   this.widthCalcElements_ = {
     mainToolbox: document.getElementsByClassName('blocklyToolboxDiv')[0],
-    rightSidebar: document.getElementById('right_content')
+    rightSidebar: document.getElementById('rightside-bar'),
+    extraSpacing: 100
   };
 };
 
@@ -254,6 +255,11 @@ Blockly.Flyout.prototype.init = function(targetWorkspace) {
   this.scrollbar_ = new Blockly.Scrollbar(this.workspace_,
       this.horizontalLayout_, false, 'blocklyFlyoutScrollbar');
 
+  // Add close button
+  if (this.targetWorkspace_ == Blockly.mainWorkspace) {
+    this.closeButton_ = new Blockly.FlyoutCloseButton(this.workspace_, this.targetWorkspace_, this);
+  }
+
   this.hide();
 
   Array.prototype.push.apply(this.eventWrappers_,
@@ -292,6 +298,10 @@ Blockly.Flyout.prototype.dispose = function() {
   if (this.scrollbar_) {
     this.scrollbar_.dispose();
     this.scrollbar_ = null;
+  }
+  if (this.closeButton_) {
+    this.closeButton_.dispose();
+    this.closeButton_ = null;
   }
   if (this.workspace_) {
     this.workspace_.getThemeManager().unsubscribe(this.svgBackground_);
@@ -382,6 +392,9 @@ Blockly.Flyout.prototype.updateDisplay_ = function() {
   // Update the scrollbar's visibility too since it should mimic the
   // flyout's visibility.
   this.scrollbar_.setContainerVisible(show);
+  if (this.closeButton_) {
+    this.closeButton_.setVisible(show);
+  }
 };
 
 /**
@@ -412,13 +425,22 @@ Blockly.Flyout.prototype.positionAt_ = function(width, height, x, y) {
 
     if (!this.widthCalcElements_.rightSidebar) {
       try {
-        this.widthCalcElements_.rightSidebar = document.getElementById('right_content');
+        this.widthCalcElements_.rightSidebar = document.getElementById('rightside-bar');
         maxWidth = maxWidth - this.widthCalcElements_.rightSidebar.offsetWidth;
       } catch (e) {
         console.log('Cannot find the right sidebar element for flyout positioning!');
       }
     } else {
       maxWidth = maxWidth - this.widthCalcElements_.rightSidebar.offsetWidth;
+    }
+
+    if (this.widthCalcElements_.extraSpacing) {
+      maxWidth = maxWidth - this.widthCalcElements_.extraSpacing;
+
+      // If based on the right, push out minLeftTransform
+      if (this.toolboxPosition_ === Blockly.TOOLBOX_AT_RIGHT) {
+        minLeftTransform = minLeftTransform + this.widthCalcElements_.extraSpacing;
+      }
     }
 
     if (!Blockly.mainWorkspace.RTL) {
@@ -442,11 +464,19 @@ Blockly.Flyout.prototype.positionAt_ = function(width, height, x, y) {
     this.svgGroup_.setAttribute("transform", transform);
   }
 
+  if (this.closeButton_) {
+    this.closeButton_.updateTransform_(x, y, width);
+  }
+
   // Update the scrollbar (if one exists).
   if (this.scrollbar_) {
     // Set the scrollbars origin to be the top left of the flyout.
     this.scrollbar_.setOrigin(x, y);
-    this.scrollbar_.resize();
+
+    var metrics = this.getMetrics_();
+    metrics.viewWidth = width - 2;
+    this.scrollbar_.resize(metrics);
+
     // Set the position again so that if the metrics were the same (and the
     // resize failed) our position is still updated.
     this.scrollbar_.setPosition_(
@@ -493,6 +523,11 @@ Blockly.Flyout.prototype.show = function(xmlList) {
       workspace.toolbox_.flyout_ &&
       this !== workspace.toolbox_.flyout_) {
     workspace.toolbox_.clearSelection();
+  }
+  if (workspace.toolboxSearch_ &&
+    workspace.toolboxSearch_.flyout_ &&
+    this !== workspace.toolboxSearch_.flyout_) {
+    workspace.toolboxSearch_.flyout_.hide();
   }
 
   this.hide();

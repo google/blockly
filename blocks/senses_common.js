@@ -32,7 +32,6 @@ Blockly.Blocks.fable_get_module_id = {
 
     this.appendDummyInput().appendField(Blockly.Msg.FABLE_MODULE_ID);
 
-    // TODO: Check if this block can have the Face module added
     this.appendDynamicIDInput(Blockly.Blocks.Definitions.requestedModules_any, [['Hub']], [['#']]);
 
     this.appendDummyInput();
@@ -51,7 +50,11 @@ Blockly.Blocks.fable_get_module_id = {
       '%{BKY_LABEL_COMMON}'
     ];
 
-    Blockly.Search.preprocessSearchKeywords('fable_get_module_id', keywords);
+    var toolboxKeywords = [
+
+    ];
+
+    Blockly.Search.preprocessSearchKeywords('fable_get_module_id', keywords, toolboxKeywords);
   }
 };
 
@@ -86,7 +89,11 @@ Blockly.Blocks.fable_get_time = {
       '%{BKY_LABEL_COMMON}'
     ];
 
-    Blockly.Search.preprocessSearchKeywords('fable_get_time', keywords);
+    var toolboxKeywords = [
+
+    ];
+
+    Blockly.Search.preprocessSearchKeywords('fable_get_time', keywords, toolboxKeywords);
   }
 };
 
@@ -121,7 +128,11 @@ Blockly.Blocks.fable_get_microphone = {
       '%{BKY_LABEL_COMMON}'
     ];
 
-    Blockly.Search.preprocessSearchKeywords('fable_get_microphone', keywords);
+    var toolboxKeywords = [
+
+    ];
+
+    Blockly.Search.preprocessSearchKeywords('fable_get_microphone', keywords, toolboxKeywords);
   }
 };
 
@@ -158,7 +169,11 @@ Blockly.Blocks.fable_get_module_battery = {
       '%{BKY_LABEL_COMMON}'
     ];
 
-    Blockly.Search.preprocessSearchKeywords('fable_get_module_battery', keywords);
+    var toolboxKeywords = [
+
+    ];
+
+    Blockly.Search.preprocessSearchKeywords('fable_get_module_battery', keywords, toolboxKeywords);
   }
 };
 
@@ -195,16 +210,19 @@ Blockly.Blocks.fable_check_key = {
   ensureSearchKeywords: function () {
     var keywords = [
       Blockly.Msg.FABLE_CHECK_FOR_KEY,
-      Blockly.Msg.SPACEBAR,
-      Blockly.Msg.UP,
-      Blockly.Msg.DOWN,
-      Blockly.Msg.LEFT,
-      Blockly.Msg.RIGHT,
       '%{BKY_INPUT}',
       '%{BKY_LABEL_COMMON}'
     ];
 
-    Blockly.Search.preprocessSearchKeywords('fable_check_key', keywords);
+    var toolboxKeywords = [
+      Blockly.Msg.SPACEBAR,
+      Blockly.Msg.UP,
+      Blockly.Msg.DOWN,
+      Blockly.Msg.LEFT,
+      Blockly.Msg.RIGHT
+    ];
+
+    Blockly.Search.preprocessSearchKeywords('fable_check_key', keywords, toolboxKeywords);
   }
 };
 
@@ -236,16 +254,19 @@ Blockly.Blocks.fable_check_custom_key = {
   ensureSearchKeywords: function () {
     var keywords = [
       Blockly.Msg.FABLE_CHECK_FOR_KEY,
-      Blockly.Msg.SPACEBAR,
-      Blockly.Msg.UP,
-      Blockly.Msg.DOWN,
-      Blockly.Msg.LEFT,
-      Blockly.Msg.RIGHT,
       '%{BKY_INPUT}',
       '%{BKY_LABEL_COMMON}'
     ];
 
-    Blockly.Search.preprocessSearchKeywords('fable_check_custom_key', keywords);
+    var toolboxKeywords = [
+      Blockly.Msg.SPACEBAR,
+      Blockly.Msg.UP,
+      Blockly.Msg.DOWN,
+      Blockly.Msg.LEFT,
+      Blockly.Msg.RIGHT
+    ];
+
+    Blockly.Search.preprocessSearchKeywords('fable_check_custom_key', keywords, toolboxKeywords);
   }
 };
 

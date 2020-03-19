@@ -67,7 +67,9 @@ Blockly.Blocks.colour_picker = {
       '%{BKY_COLORS}'
     ];
 
-    Blockly.Search.preprocessSearchKeywords('colour_picker', keywords);
+    var toolboxKeywords = [];
+
+    Blockly.Search.preprocessSearchKeywords('colour_picker', keywords, toolboxKeywords);
   }
 };
 
@@ -104,14 +106,17 @@ Blockly.Blocks.color_channel = {
   ensureSearchKeywords: function () {
     var keywords = [
       Blockly.Msg.FABLE_GET_COLOR_CHANNEL,
-      Blockly.Msg.FABLE_GET_COLOR_CHANNEL_FROM,
+      Blockly.Msg.FABLE_GET_COLOR_CHANNEL_FROM
+    ];
+
+    var toolboxKeywords = [
       Blockly.Msg.RED,
       Blockly.Msg.GREEN,
       Blockly.Msg.BLUE,
       '%{BKY_COLORS}'
     ];
 
-    Blockly.Search.preprocessSearchKeywords('color_channel', keywords);
+    Blockly.Search.preprocessSearchKeywords('color_channel', keywords, toolboxKeywords);
   }
 };
 
@@ -147,11 +152,14 @@ Blockly.Blocks.custom_color_blend = {
   ensureSearchKeywords: function () {
     var keywords = [
       Blockly.Msg.FABLE_CUSTOM_COLOR_BLEND,
-      Blockly.Msg.FABLE_COLOR_RATIO,
+      Blockly.Msg.FABLE_COLOR_RATIO
+    ];
+
+    var toolboxKeywords = [
       '%{BKY_COLORS}'
     ];
 
-    Blockly.Search.preprocessSearchKeywords('custom_color_blend', keywords);
+    Blockly.Search.preprocessSearchKeywords('custom_color_blend', keywords, toolboxKeywords);
   }
 };
 
@@ -177,7 +185,9 @@ Blockly.Blocks.random_color = {
       '%{BKY_COLORS}'
     ];
 
-    Blockly.Search.preprocessSearchKeywords('random_color', keywords);
+    var toolboxKeywords = [];
+
+    Blockly.Search.preprocessSearchKeywords('random_color', keywords, toolboxKeywords);
   }
 };
 
@@ -212,14 +222,17 @@ Blockly.Blocks.custom_color = {
   },
   ensureSearchKeywords: function () {
     var keywords = [
-      Blockly.Msg.FABLE_CUSTOM_COLOR,
+      Blockly.Msg.FABLE_CUSTOM_COLOR
+    ];
+
+    var toolboxKeywords = [
       Blockly.Msg.RED,
       Blockly.Msg.GREEN,
       Blockly.Msg.BLUE,
       '%{BKY_COLORS}'
     ];
 
-    Blockly.Search.preprocessSearchKeywords('custom_color', keywords);
+    Blockly.Search.preprocessSearchKeywords('custom_color', keywords, toolboxKeywords);
   }
 };
 

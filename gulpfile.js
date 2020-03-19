@@ -18,7 +18,7 @@ var typings = require('./scripts/gulpfiles/typings');
 var buildTasks = require('./scripts/gulpfiles/build_tasks');
 var packageTasks = require('./scripts/gulpfiles/package_tasks');
 var gitTasks = require('./scripts/gulpfiles/git_tasks');
-
+var licenseTasks = require('./scripts/gulpfiles/license_tasks');
 
 // See https://docs.npmjs.com/cli/version.
 const preversion = gulp.series(
@@ -57,5 +57,6 @@ module.exports = {
   gitCreateRC: gitTasks.createRC,
   gitRecompile: gitTasks.recompile,
   typings: typings.typings,
-  package: packageTasks.package
+  package: packageTasks.package,
+  checkLicenses: licenseTasks.checkLicenses
 };

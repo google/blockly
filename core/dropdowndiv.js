@@ -193,7 +193,7 @@ Blockly.DropDownDiv.getContentDiv = function() {
  * Clear the content of the drop-down.
  */
 Blockly.DropDownDiv.clearContent = function() {
-  Blockly.DropDownDiv.content_.innerHTML = '';
+  Blockly.DropDownDiv.content_.textContent = '';
   Blockly.DropDownDiv.content_.style.width = '';
 };
 

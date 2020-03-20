@@ -102,7 +102,7 @@ Blockly.WidgetDiv.hide = function() {
   div.style.top = '';
   Blockly.WidgetDiv.dispose_ && Blockly.WidgetDiv.dispose_();
   Blockly.WidgetDiv.dispose_ = null;
-  div.innerHTML = '';
+  div.textContent = '';
 
   if (Blockly.WidgetDiv.rendererClassName_) {
     Blockly.utils.dom.removeClass(div, Blockly.WidgetDiv.rendererClassName_);

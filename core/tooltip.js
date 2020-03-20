@@ -294,7 +294,7 @@ Blockly.Tooltip.show_ = function() {
     return;
   }
   // Erase all existing text.
-  Blockly.Tooltip.DIV.innerHTML = '';
+  Blockly.Tooltip.DIV.innerText = '';
   // Get the new text.
   var tip = Blockly.Tooltip.element_.tooltip;
   while (typeof tip == 'function') {

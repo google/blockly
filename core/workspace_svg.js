@@ -2154,7 +2154,8 @@ Blockly.WorkspaceSvg.prototype.setScale = function(newScale) {
 
 
 /**
- * Get the workspace's zoom factor.
+ * Get the workspace's zoom factor.  If the workspace has a parent, we call into
+ * the parent to get the workspace scale.
  * @return {number} The workspace zoom factor. Units: (pixels / workspaceUnit).
  */
 Blockly.WorkspaceSvg.prototype.getScale = function() {

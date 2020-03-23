@@ -105,6 +105,7 @@ const updateGithubPages = gulp.series(
     syncBranch('gh-pages');
     execSync('git pull ' + upstream_url + ' develop');
     execSync('git push ' + upstream_url + ' gh-pages');
+    done();
   }
 );
 

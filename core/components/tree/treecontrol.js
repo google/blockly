@@ -372,6 +372,10 @@ Blockly.tree.TreeControl.prototype.getNodeFromEvent_ = function(e) {
     if (target == this.getElement()) {
       break;
     }
+    // Don't bubble if we hit a group. See issue #714.
+    if (target.getAttribute('role') == Blockly.utils.aria.Role.GROUP) {
+      return null;
+    }
     target = target.parentNode;
   }
   return null;

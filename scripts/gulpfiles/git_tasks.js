@@ -101,8 +101,8 @@ const createRC = gulp.series(
 
 // Update github pages with what is currently in develop.
 const updateGithubPages = gulp.series(
+  syncBranch('gh-pages'),
   function(done) {
-    syncBranch('gh-pages');
     execSync('git pull ' + upstream_url + ' develop');
     execSync('git push ' + upstream_url + ' gh-pages');
     done();

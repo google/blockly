@@ -75,9 +75,10 @@ Blockly.Search.prototype.removeFromTrie = function (key, value) {
 
   // NOTE: if you change this logic, be very careful with list references in JS. I had the problem of removing everything BUT the block before.
   // If the specified block is in the list...
-  if (listToClean.indexOf(value) !== -1) {
+  const indexOf = listToClean.indexOf(value);
+  if (indexOf !== -1) {
     // Remove the block
-    listToClean.pop(value);
+    listToClean.splice(indexOf, 1);
 
     // And put the list back in the trie
     this.blockTrie_.set(key, listToClean);

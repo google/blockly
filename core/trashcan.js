@@ -81,6 +81,7 @@ Blockly.Trashcan = function(workspace) {
     this.flyout_ = new Blockly.VerticalFlyout(flyoutWorkspaceOptions);
   }
   this.workspace_.addChangeListener(this.onDelete_.bind(this));
+  this.workspace_.addChangeListener(this.onFinishedLoading_.bind(this));
 };
 
 /**
@@ -490,6 +491,24 @@ Blockly.Trashcan.prototype.onDelete_ = function(event) {
 
     this.minOpenness_ = this.HAS_BLOCKS_LID_ANGLE;
     this.setLidAngle_(this.minOpenness_ * 45);
+  }
+};
+
+/**
+ * Handle a FINISHED_LOADING event. Resets the contents of the trash can,
+ * as sometimes Blockly deletes blocks while loading/initializing. These deleted blocks
+ * should not be added to the trashcan.
+ *
+ * @param {!Blockly.Events.Abstract} event Workspace event.
+ * @private
+ */
+Blockly.Trashcan.prototype.onFinishedLoading_ = function (event) {
+  if (event.type === Blockly.Events.FINISHED_LOADING) {
+    this.contents_ = [];
+
+    this.minOpenness_ = 0;
+    this.setLidAngle_(0);
+    this.setOpen_(false);
   }
 };
 

@@ -209,6 +209,7 @@ Blockly.Procedures.flyoutCategory = function(workspace) {
     // <block type="procedures_defreturn" gap="16">
     //     <field name="NAME">do something</field>
     // </block>
+    // Add one block that returns a number
     var block = Blockly.utils.xml.createElement('block');
     block.setAttribute('type', 'procedures_defreturn');
     block.setAttribute('gap', 16);
@@ -217,13 +218,79 @@ Blockly.Procedures.flyoutCategory = function(workspace) {
     nameField.appendChild(Blockly.utils.xml.createTextNode(
         Blockly.Msg['PROCEDURES_DEFRETURN_PROCEDURE']));
     block.appendChild(nameField);
+
+    var mathShadow = Blockly.Xml.textToDom(
+      '<value name="RETURN">' +
+      '<shadow type="math_number">' +
+      '<field name="NUM">1</field>' +
+      '</shadow>' +
+      '</value>');
+    block.appendChild(mathShadow);
+
     xmlList.push(block);
+
+    // Add one block that returns a number
+    var boolBlock = Blockly.utils.xml.createElement('block');
+    boolBlock.setAttribute('type', 'procedures_defreturn');
+    boolBlock.setAttribute('gap', 16);
+
+    nameField = Blockly.utils.xml.createElement('field');
+    nameField.setAttribute('name', 'NAME');
+    nameField.appendChild(Blockly.utils.xml.createTextNode(
+      Blockly.Msg['PROCEDURES_DEFRETURN_PROCEDURE']));
+
+    boolBlock.appendChild(nameField);
+
+    var boolShadow = Blockly.Xml.textToDom(
+      '<value name="RETURN">' +
+      '<shadow type="logic_boolean">' +
+      '<field name="BOOL">TRUE</field>' +
+      '</shadow>' +
+      '</value>');
+    boolBlock.appendChild(boolShadow);
+
+    xmlList.push(boolBlock);
   }
   if (Blockly.Blocks['procedures_ifreturn']) {
     // <block type="procedures_ifreturn" gap="16"></block>
     var block = Blockly.utils.xml.createElement('block');
     block.setAttribute('type', 'procedures_ifreturn');
     block.setAttribute('gap', 16);
+
+    var boolShadow = Blockly.Xml.textToDom(
+      '<value name="CONDITION">' +
+      '<shadow type="logic_boolean">' +
+      '<field name="BOOL">TRUE</field>' +
+      '</shadow>' +
+      '</value>');
+
+    var returnShadow = Blockly.Xml.textToDom(
+      '<value name="VALUE">' +
+      '<shadow type="math_number">' +
+      '<field name="NUM">1</field>' +
+      '</shadow>' +
+      '</value>');
+
+    block.appendChild(boolShadow);
+    block.appendChild(returnShadow);
+
+    xmlList.push(block);
+  }
+  if (Blockly.Blocks['procedures_fable_return']) {
+    // <block type="procedures_ifreturn" gap="16"></block>
+    var block = Blockly.utils.xml.createElement('block');
+    block.setAttribute('type', 'procedures_fable_return');
+    block.setAttribute('gap', 16);
+
+    var returnShadow = Blockly.Xml.textToDom(
+      '<value name="VALUE">' +
+      '<shadow type="logic_boolean">' +
+      '<field name="BOOL">TRUE</field>' +
+      '</shadow>' +
+      '</value>');
+
+    block.appendChild(returnShadow);
+
     xmlList.push(block);
   }
   if (xmlList.length) {

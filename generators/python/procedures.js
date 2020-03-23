@@ -141,3 +141,16 @@ Blockly.Python['procedures_ifreturn'] = function(block) {
   }
   return code;
 };
+
+Blockly.Python['procedures_fable_return'] = function(block) {
+  // Conditionally return value from a procedure.
+  var code = '';
+  if (block.hasReturnValue_) {
+    var value = Blockly.Python.valueToCode(block, 'VALUE',
+      Blockly.Python.ORDER_NONE) || 'None';
+    code += 'return ' + value + '\n';
+  } else {
+    code += 'return\n';
+  }
+  return code;
+};

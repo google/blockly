@@ -56,6 +56,7 @@ module.exports = {
   gitSyncMaster: gitTasks.syncMaster,
   gitCreateRC: gitTasks.createRC,
   gitRecompile: gitTasks.recompile,
+  gitUpdateGithubPages: gitTasks.updateGithubPages,
   typings: typings.typings,
   package: packageTasks.package,
   checkLicenses: licenseTasks.checkLicenses

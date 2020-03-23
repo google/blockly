@@ -21,7 +21,7 @@ const upstream_url = "https://github.com/google/blockly.git";
 function syncBranch(branchName) {
   return function(done) {
     execSync('git stash save -m "Stash for sync"', { stdio: 'inherit' });
-    execSync('git checkout ' + branchName, { stdio: 'inherit' });
+    checkoutBranch(branchName);
     execSync('git pull ' + upstream_url + ' ' + branchName,
         { stdio: 'inherit' });
     execSync('git push origin ' + branchName, { stdio: 'inherit' });
@@ -55,6 +55,13 @@ function getRCBranchName() {
   var yyyy = date.getFullYear();
   return 'rc_' + yyyy + '_' + mm;
 };
+
+// If branch does not exist then create the branch. 
+// If branch exists switch to branch.
+function checkoutBranch(branchName) {
+  execSync('git checkout ' + branchName + ' || git checkout -b ' + branchName,
+   { stdio: 'inherit' });
+}
 
 // Recompile and push to origin.
 const recompile = gulp.series(
@@ -93,9 +100,20 @@ const createRC = gulp.series(
   },
 );
 
+// Update github pages with what is currently in develop.
+const updateGithubPages = gulp.series(
+  syncBranch('gh-pages'),
+  function(done) {
+    execSync('git pull ' + upstream_url + ' develop', { stdio: 'inherit' });
+    execSync('git push ' + upstream_url + ' gh-pages', { stdio: 'inherit' });
+    done();
+  }
+);
+
 module.exports = {
   syncDevelop: syncDevelop,
   syncMaster: syncMaster,
   createRC: createRC,
-  recompile: recompile
+  recompile: recompile,
+  updateGithubPages: updateGithubPages
 }

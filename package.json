@@ -41,6 +41,7 @@
     "test:setupselenium": "selenium-standalone install --config=./tests/scripts/selenium-config.js",
     "test:startselenium": "selenium-standalone start --config=./tests/scripts/selenium-config.js",
     "typings": "gulp typings",
+    "updateGithubPages": "gulp gitUpdateGithubPages",
     "version": "gulp build && git add -A"
   },
   "main": "./index.js",

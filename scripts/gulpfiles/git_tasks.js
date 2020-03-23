@@ -56,6 +56,12 @@ function getRCBranchName() {
   return 'rc_' + yyyy + '_' + mm;
 };
 
+// If branch does not exist then create the branch. 
+// If branch exists switch to branch.
+function checkoutBranch(branchName) {
+  execSync('git checkout ' + branchName + ' || git checkout -b ' + foo);
+}
+
 // Recompile and push to origin.
 const recompile = gulp.series(
   syncDevelop,
@@ -91,6 +97,17 @@ const createRC = gulp.series(
     execSync('git push ' + upstream_url + ' gh-pages');
     done();
   },
+);
+
+// Update github pages with what is currently in develop.
+const updateGithubPages = gulp.series(
+  syncDevelop,
+  function(done) {
+    checkoutBranch('gh-pages');
+    execSync('git pull ' + upstream_url + ' develop');
+    execSync('git push ' + upstream_url + ' gh-pages');
+  }
+
 );
 
 module.exports = {

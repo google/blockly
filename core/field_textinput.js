@@ -330,7 +330,7 @@ Blockly.FieldTextInput.prototype.widgetCreate_ = function() {
   var htmlInput = /** @type {HTMLInputElement} */ (document.createElement('input'));
   htmlInput.className = 'blocklyHtmlInput';
   htmlInput.setAttribute('spellcheck', this.spellcheck_);
-  var scale = this.workspace_.scale;
+  var scale = this.workspace_.getScale();
   var fontSize =
       (this.getConstants().FIELD_TEXT_FONTSIZE * scale) + 'pt';
   div.style.fontSize = fontSize;

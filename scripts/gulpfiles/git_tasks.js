@@ -59,7 +59,7 @@ function getRCBranchName() {
 // If branch does not exist then create the branch. 
 // If branch exists switch to branch.
 function checkoutBranch(branchName) {
-  execSync('git checkout ' + branchName + ' || git checkout -b ' + foo);
+  execSync('git checkout ' + branchName + ' || git checkout -b ' + branchName);
 }
 
 // Recompile and push to origin.
@@ -101,18 +101,17 @@ const createRC = gulp.series(
 
 // Update github pages with what is currently in develop.
 const updateGithubPages = gulp.series(
-  syncDevelop,
   function(done) {
     checkoutBranch('gh-pages');
     execSync('git pull ' + upstream_url + ' develop');
     execSync('git push ' + upstream_url + ' gh-pages');
   }
-
 );
 
 module.exports = {
   syncDevelop: syncDevelop,
   syncMaster: syncMaster,
   createRC: createRC,
-  recompile: recompile
+  recompile: recompile,
+  updateGithubPages: updateGithubPages
 }

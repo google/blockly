@@ -217,7 +217,9 @@ suite('Text Input Fields', function() {
       setup(function() {
         this.prepField = function(field) {
           var workspace = {
-            scale: 1,
+            getScale: function() {
+              return 1;
+            },
             getRenderer: function() { return {
               getClassName: function() { return ''; }
             }; },

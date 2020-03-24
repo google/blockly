@@ -208,7 +208,7 @@ Blockly.FieldMultilineInput.prototype.updateSize_ = function() {
  */
 Blockly.FieldMultilineInput.prototype.widgetCreate_ = function() {
   var div = Blockly.WidgetDiv.DIV;
-  var scale = this.workspace_.scale;
+  var scale = this.workspace_.getScale();
 
   var htmlInput =
     /** @type {HTMLTextAreaElement} */ (document.createElement('textarea'));

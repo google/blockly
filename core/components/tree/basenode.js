@@ -498,7 +498,7 @@ Blockly.tree.BaseNode.prototype.setExpanded = function(expanded) {
 
 /**
  * Used to notify a node of that we have expanded it.
- * Can be overidden by subclasses, see Blockly.tree.TreeNode.
+ * Can be overridden by subclasses, see Blockly.tree.TreeNode.
  * @protected
  */
 Blockly.tree.BaseNode.prototype.doNodeExpanded = function() {
@@ -507,7 +507,7 @@ Blockly.tree.BaseNode.prototype.doNodeExpanded = function() {
 
 /**
  * Used to notify a node that we have collapsed it.
- * Can be overidden by subclasses, see Blockly.tree.TreeNode.
+ * Can be overridden by subclasses, see Blockly.tree.TreeNode.
  * @protected
  */
 Blockly.tree.BaseNode.prototype.doNodeCollapsed = function() {

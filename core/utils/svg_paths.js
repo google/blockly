@@ -33,7 +33,7 @@ Blockly.utils.svgPaths.point = function(x, y) {
 };
 
 /**
- * Draw a curbic or quadratic curve.  See
+ * Draw a cubic or quadratic curve.  See
  * developer.mozilla.org/en-US/docs/Web/SVG/Attribute/d#Cubic_B%C3%A9zier_Curve
  * These coordinates are unitless and hence in the user coordinate system.
  * @param {string} command The command to use.

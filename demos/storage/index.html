@@ -86,7 +86,7 @@
         {media: '../../media/',
          toolbox: document.getElementById('toolbox')});
 
-    // An href with #key trigers an AJAX call to retrieve saved blocks.
+    // An href with #key triggers an AJAX call to retrieve saved blocks.
     if ('BlocklyStorage' in window && window.location.hash.length > 1) {
       BlocklyStorage.retrieveXml(window.location.hash.substring(1));
     }

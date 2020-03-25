@@ -2310,7 +2310,7 @@ Blockly.WorkspaceSvg.getContentDimensionsBounded_ = function(ws, svgSize) {
   var halfWidth = viewWidth / 2;
   var halfHeight = viewHeight / 2;
 
-  // Add a border around the content that is at least half a screenful wide.
+  // Add a border around the content that is at least half a screen wide.
   // Ensure border is wide enough that blocks can scroll over entire screen.
   var left = Math.min(content.left - halfWidth, content.right - viewWidth);
   var right = Math.max(content.right + halfWidth, content.left + viewWidth);

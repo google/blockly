@@ -583,7 +583,7 @@ Blockly.BlockSvg.prototype.getBoundingRectangle = function() {
 
 /**
  * Notify every input on this block to mark its fields as dirty.
- * A dirty field is a field that needs to be re-rendererd.
+ * A dirty field is a field that needs to be re-rendered.
  */
 Blockly.BlockSvg.prototype.markDirty = function() {
   this.pathObject.constants =

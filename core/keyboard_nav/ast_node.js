@@ -20,7 +20,7 @@ goog.require('Blockly.utils.Coordinate');
  * It is recommended that you use one of the createNode methods instead of
  * creating a node directly.
  * @param {string} type The type of the location.
- *     Must be in Bockly.ASTNode.types.
+ *     Must be in Blockly.ASTNode.types.
  * @param {!(Blockly.Block|Blockly.Connection|Blockly.Field|Blockly.Workspace)}
  *     location The position in the AST.
  * @param {!Object=} opt_params Optional dictionary of options.

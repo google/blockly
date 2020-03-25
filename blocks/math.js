@@ -487,7 +487,7 @@ Blockly.Constants.Math.IS_DIVISIBLEBY_MUTATOR_MIXIN = {
 /**
  * 'math_is_divisibleby_mutator' extension to the 'math_property' block that
  * can update the block shape (add/remove divisor input) based on whether
- * property is "divisble by".
+ * property is "divisible by".
  * @this {Blockly.Block}
  * @package
  */

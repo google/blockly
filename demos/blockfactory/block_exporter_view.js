@@ -51,7 +51,7 @@ BlockExporterView.prototype.select = function(blockType) {
 
 /**
  * Deselects a block in the selector.
- * @param {!Blockly.Block} block Type of block to add to selector workspce.
+ * @param {!Blockly.Block} block Type of block to add to selector workspace.
  */
 BlockExporterView.prototype.deselect = function(blockType) {
   this.blockOptions[blockType].setSelected(false);

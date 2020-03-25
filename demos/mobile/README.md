@@ -15,7 +15,7 @@ see changes in both the Android and iOS native apps.
 
 Before running the mobile HTML demo, you need to create some symbolic links
 in your local file system. Run the `mobile/html/ln_resources.sh` file from
-the `mobile/html/` directory.  This mimicks the relative locations of the
+the `mobile/html/` directory.  This mimics the relative locations of the
 Blockly files seen when loading the page in a native app's embedded WebView.
 
 After doing this, opening `mobile/html/index.html` should open normally,

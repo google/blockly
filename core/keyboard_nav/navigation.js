@@ -782,7 +782,7 @@ Blockly.navigation.onBlocklyAction = function(action) {
     } else if (Blockly.navigation.READONLY_ACTION_LIST.indexOf(action) > -1) {
       actionHandled = Blockly.navigation.handleActions_(action);
     }
-  // If not in accessibility mode only hanlde turning on keyboard navigation.
+  // If not in accessibility mode only handle turning on keyboard navigation.
   } else if (action.name === Blockly.navigation.actionNames.TOGGLE_KEYBOARD_NAV) {
     Blockly.navigation.enableKeyboardAccessibility();
     actionHandled = true;
@@ -1031,7 +1031,7 @@ Blockly.navigation.ACTION_TOGGLE_KEYBOARD_NAV = new Blockly.Action(
     'Turns on and off keyboard navigation.');
 
 /**
- * The action to move the cursor to the keft on a worksapce.
+ * The action to move the cursor to the left on a workspace.
  * @type {!Blockly.Action}
  */
 Blockly.navigation.ACTION_MOVE_WS_CURSOR_LEFT = new Blockly.Action(
@@ -1039,7 +1039,7 @@ Blockly.navigation.ACTION_MOVE_WS_CURSOR_LEFT = new Blockly.Action(
     'Move the workspace cursor to the lefts.');
 
 /**
- * The action to move the cursor to the right on a worksapce.
+ * The action to move the cursor to the right on a workspace.
  * @type {!Blockly.Action}
  */
 Blockly.navigation.ACTION_MOVE_WS_CURSOR_RIGHT = new Blockly.Action(
@@ -1047,7 +1047,7 @@ Blockly.navigation.ACTION_MOVE_WS_CURSOR_RIGHT = new Blockly.Action(
     'Move the workspace cursor to the right.');
 
 /**
- * The action to move the cursor up on a worksapce.
+ * The action to move the cursor up on a workspace.
  * @type {!Blockly.Action}
  */
 Blockly.navigation.ACTION_MOVE_WS_CURSOR_UP = new Blockly.Action(
@@ -1055,7 +1055,7 @@ Blockly.navigation.ACTION_MOVE_WS_CURSOR_UP = new Blockly.Action(
     'Move the workspace cursor up.');
 
 /**
- * The action to move the cursor down on a worksapce.
+ * The action to move the cursor down on a workspace.
  * @type {!Blockly.Action}
  */
 Blockly.navigation.ACTION_MOVE_WS_CURSOR_DOWN = new Blockly.Action(

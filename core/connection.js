@@ -158,7 +158,7 @@ Blockly.Connection.prototype.connect_ = function(childConnection) {
         // Bump it off to the side after a moment.
         var group = Blockly.Events.getGroup();
         setTimeout(function() {
-          // Verify orphan hasn't been deleted or reconnected (user on meth).
+          // Verify orphan hasn't been deleted or reconnected.
           if (orphanBlock.workspace && !orphanBlock.getParent()) {
             Blockly.Events.setGroup(group);
             if (orphanBlock.outputConnection) {

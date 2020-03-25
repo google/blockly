@@ -79,7 +79,7 @@ Blockly.BasicCursor.prototype.prev = function() {
 };
 
 /**
- * For a basic cursor we only have the ability to go next and previou, so
+ * For a basic cursor we only have the ability to go next and previous, so
  * out will allow the user to get to the previous node in the pre order traversal.
  * @return {Blockly.ASTNode} The previous node, or null if the current node is
  *     not set or there is no previous value.

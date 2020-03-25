@@ -167,7 +167,7 @@ Blockly.tree.TreeNode.prototype.doNodeExpanded =
     Blockly.tree.TreeNode.prototype.resizeToolbox_;
 
 /**
- * Resize the toolbox when a node is collased.
+ * Resize the toolbox when a node is collapsed.
  * @override
  */
 Blockly.tree.TreeNode.prototype.doNodeCollapsed =

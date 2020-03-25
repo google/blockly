@@ -478,7 +478,7 @@ Blockly.zelos.ConstantProvider.prototype.makeHexagonal = function() {
   var maxWidth = this.MAX_DYNAMIC_CONNECTION_SHAPE_WIDTH;
 
   // The main path for the hexagonal connection shape is made out of two lines.
-  // The lines are defined with relative positons and require the block height.
+  // The lines are defined with relative positions and require the block height.
   // The 'up' and 'down' versions of the paths are the same, but the Y sign
   // flips.  The 'left' and 'right' versions of the path are also the same, but
   // the X sign flips.
@@ -650,7 +650,7 @@ Blockly.zelos.ConstantProvider.prototype.shapeFor = function(
     case Blockly.INPUT_VALUE:
     case Blockly.OUTPUT_VALUE:
       var outputShape = connection.getSourceBlock().getOutputShape();
-      // If the block has an ouput shape set, use that instead.
+      // If the block has an output shape set, use that instead.
       if (outputShape != null) {
         switch (outputShape) {
           case this.SHAPES.HEXAGONAL: return this.HEXAGONAL;

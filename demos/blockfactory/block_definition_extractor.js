@@ -556,7 +556,7 @@ BlockDefinitionExtractor.buildFieldColour_ =
 };
 
 /**
- * Creates a <block> element representing a FieldVaraible definition.
+ * Creates a <block> element representing a FieldVariable definition.
  *
  * @param {string} fieldName The identifying name of the field.
  * @param {string} varName The variables
@@ -579,7 +579,7 @@ BlockDefinitionExtractor.buildFieldVariable_ = function(fieldName, varName) {
  * @param {string} src The URL of the field image.
  * @param {number} width The pixel width of the source image
  * @param {number} height The pixel height of the source image.
- * @param {string} alt Alterante text to describe image.
+ * @param {string} alt Alternate text to describe image.
  * @private
  */
 BlockDefinitionExtractor.buildFieldImage_ =
@@ -693,7 +693,7 @@ BlockDefinitionExtractor.typeList_ = function() {
  * Creates a <block> element representing the given custom connection
  * constraint type name.
  *
- * @param {string} type The connection constratin type name.
+ * @param {string} type The connection constraint type name.
  * @return {Element} The <block> element representing a custom input type
  *     constraint.
  * @private

@@ -70,7 +70,7 @@ function packageBlockly() {
 
 /**
  * This task wraps blocks_compressed.js into a CommonJS module for Node.js.
- * This is an equivelant task to package-blockly but for Node.js.
+ * This is an equivalent task to package-blockly but for Node.js.
  * @example import 'blockly/blockly-node';
  */
 function packageBlocklyNode() {

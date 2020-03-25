@@ -167,7 +167,7 @@ Blockly.Grid.prototype.setLineAttributes_ = function(line, width,
  * Move the grid to a new x and y position, and make sure that change is
  * visible.
  * @param {number} x The new x position of the grid (in px).
- * @param {number} y The new y position ofthe grid (in px).
+ * @param {number} y The new y position of the grid (in px).
  * @package
  */
 Blockly.Grid.prototype.moveTo = function(x, y) {

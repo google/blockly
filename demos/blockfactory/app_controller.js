@@ -162,7 +162,7 @@ AppController.prototype.formatBlockLibraryForImport_ = function(xmlText) {
   // since the addition to editorWorkspaceXml below removes it from inputXml.
   var inputChildren = Array.from(inputXml.children);
 
-  // Create empty map. The line below creates a  truly empy object. It doesn't
+  // Create empty map. The line below creates a  truly empty object. It doesn't
   // have built-in attributes/functions such as length or toString.
   var blockXmlTextMap = Object.create(null);
 

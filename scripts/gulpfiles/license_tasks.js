@@ -5,7 +5,7 @@
  */
 
 /**
- * @fileoverview Gulp tasks to check the licenses of Blockly depenedencies.
+ * @fileoverview Gulp tasks to check the licenses of Blockly dependencies.
  */
 
 const jsgl = require('js-green-licenses');

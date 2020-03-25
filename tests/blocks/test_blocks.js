@@ -1343,6 +1343,22 @@ Blockly.Blocks['test_images_clickhandler'] = {
   }
 };
 
+Blockly.Blocks['test_validators_dispose_block'] = {
+  init: function() {
+    this.appendDummyInput()
+        .appendField("dispose block")
+        .appendField(new Blockly.FieldTextInput("default", this.validate), "INPUT");
+    this.setColour(230);
+    this.setCommentText('Any changes to the text cause the block to be disposed');
+  },
+
+  validate: function(newValue) {
+    if (newValue != "default") {
+      this.getSourceBlock().dispose(true);
+    }
+  }
+};
+
 Blockly.Blocks['test_validators_text_null'] = {
   init: function() {
     this.appendDummyInput()

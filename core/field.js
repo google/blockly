@@ -858,16 +858,20 @@ Blockly.Field.prototype.setValue = function(newValue) {
       return;
     }
   }
+  var source = this.sourceBlock_;
+  if (source && source.disposed) {
+    doLogging && console.log('source disposed, return');
+    return;
+  }
   var oldValue = this.getValue();
   if (oldValue === newValue) {
     doLogging && console.log('same, return');
-    // No change.
     return;
   }
 
-  if (this.sourceBlock_ && Blockly.Events.isEnabled()) {
+  if (source && Blockly.Events.isEnabled()) {
     Blockly.Events.fire(new Blockly.Events.BlockChange(
-        this.sourceBlock_, 'field', this.name || null, oldValue, newValue));
+        source, 'field', this.name || null, oldValue, newValue));
   }
   this.doValueUpdate_(newValue);
   if (this.isDirty_) {

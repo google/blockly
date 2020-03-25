@@ -318,23 +318,25 @@ Blockly.BlockSvg.INNER_BOTTOM_LEFT_CORNER_HIGHLIGHT_LTR =
 /**
  * Returns a bounding box describing the dimensions of this block
  * and any blocks stacked below it.
+ * @param {boolean} shouldSkipNextBlock - A boolean for whether to skip recursively
+ * retrieving the following connected blocks. Used in `WorkspaceSvg.centerOnBlock` as that was not centering properly.
  * @return {!{height: number, width: number}} Object with height and width
  *    properties in workspace units.
  */
-Blockly.BlockSvg.prototype.getHeightWidth = function() {
+Blockly.BlockSvg.prototype.getHeightWidth = function (shouldSkipNextBlock) {
   var height = this.height;
   var width = this.width;
   // Recursively add size of subsequent blocks.
   var nextBlock = this.getNextBlock();
-  if (nextBlock) {
+  if (nextBlock && !shouldSkipNextBlock) {
     var nextHeightWidth = nextBlock.getHeightWidth();
-    height += nextHeightWidth.height - 4;  // Height of tab.
+    height += nextHeightWidth.height - 4; // Height of tab.
     width = Math.max(width, nextHeightWidth.width);
   } else if (!this.nextConnection && !this.outputConnection) {
     // Add a bit of margin under blocks with no bottom tab.
     height += 2;
   }
-  return {height: height, width: width};
+  return { height: height, width: width };
 };
 
 /**

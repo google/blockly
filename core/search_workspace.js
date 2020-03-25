@@ -145,12 +145,12 @@ Blockly.WorkspaceSearch.prototype.highlightResult = function (index) {
   this.unhighlightAll();
 
   // Highlight every block except for this one (its a white-ish overlay so blocks look "disabled")
-  const blockKeys = Object.keys(this.blocksAdded_);
-  for (var i = 0; i < blockKeys.length; i++) {
-    if (blockKeys[i] !== resultToShow.id) {
-      this.workspace_.highlightBlock(blockKeys[i], true);
-    }
-  }
+  // const blockKeys = Object.keys(this.blocksAdded_);
+  // for (var i = 0; i < blockKeys.length; i++) {
+  //   if (blockKeys[i] !== resultToShow.id) {
+  //     this.workspace_.highlightBlock(blockKeys[i], true);
+  //   }
+  // }
 
   // Select the result (adds a yellow outline)
   resultToShow.select();

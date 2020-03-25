@@ -151,6 +151,8 @@ Blockly.Search.prototype.clearAll = function () {
   delete this.blockTrie_;
 
   this.blockTrie_ = new Blockly.Trie();
+
+  this.blocksAdded_ = {};
 };
 
 /**

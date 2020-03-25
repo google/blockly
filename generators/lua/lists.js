@@ -17,7 +17,7 @@ goog.require('Blockly.Lua');
 
 Blockly.Lua['lists_create_empty'] = function(block) {
   // Create an empty list.
-  return ['{}', Blockly.Lua.ORDER_ATOMIC];
+  return ['{}', Blockly.Lua.ORDER_HIGH];
 };
 
 Blockly.Lua['lists_create_with'] = function(block) {
@@ -28,7 +28,7 @@ Blockly.Lua['lists_create_with'] = function(block) {
         Blockly.Lua.ORDER_NONE) || 'None';
   }
   var code = '{' + elements.join(', ') + '}';
-  return [code, Blockly.Lua.ORDER_ATOMIC];
+  return [code, Blockly.Lua.ORDER_HIGH];
 };
 
 Blockly.Lua['lists_repeat'] = function(block) {
@@ -126,7 +126,7 @@ Blockly.Lua['lists_getIndex'] = function(block) {
   var mode = block.getFieldValue('MODE') || 'GET';
   var where = block.getFieldValue('WHERE') || 'FROM_START';
   var list = Blockly.Lua.valueToCode(block, 'VALUE', Blockly.Lua.ORDER_HIGH) ||
-      '{}';
+      '({})';
   var getIndex_ = Blockly.Lua.lists.getIndex_;
 
   // If `list` would be evaluated more than once (which is the case for LAST,

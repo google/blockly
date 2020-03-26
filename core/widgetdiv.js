@@ -50,6 +50,13 @@ Blockly.WidgetDiv.rendererClassName_ = '';
 Blockly.WidgetDiv.themeClassName_ = '';
 
 /**
+ * Container element to render the widget div into.
+ * @type {?Element}
+ * @const
+ */
+Blockly.WidgetDiv.CONTAINER_ELEMENT = null;
+
+/**
  * Create the widget div and inject it onto the page.
  */
 Blockly.WidgetDiv.createDom = function() {
@@ -62,7 +69,8 @@ Blockly.WidgetDiv.createDom = function() {
    */
   Blockly.WidgetDiv.DIV = document.createElement('div');
   Blockly.WidgetDiv.DIV.className = 'blocklyWidgetDiv';
-  document.body.appendChild(Blockly.WidgetDiv.DIV);
+  var container = Blockly.WidgetDiv.CONTAINER_ELEMENT || document.body;
+  container.appendChild(Blockly.WidgetDiv.DIV);
 };
 
 /**

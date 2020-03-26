@@ -112,6 +112,13 @@ Blockly.Tooltip.MARGINS = 5;
 Blockly.Tooltip.DIV = null;
 
 /**
+ * Container element to render the tooltip into.
+ * @type {?Element}
+ * @const
+ */
+Blockly.Tooltip.CONTAINER_ELEMENT = null;
+
+/**
  * Create the tooltip div and inject it onto the page.
  */
 Blockly.Tooltip.createDom = function() {
@@ -121,7 +128,8 @@ Blockly.Tooltip.createDom = function() {
   // Create an HTML container for popup overlays (e.g. editor widgets).
   Blockly.Tooltip.DIV = document.createElement('div');
   Blockly.Tooltip.DIV.className = 'blocklyTooltipDiv';
-  document.body.appendChild(Blockly.Tooltip.DIV);
+  var container = Blockly.Tooltip.CONTAINER_ELEMENT || document.body;
+  container.appendChild(Blockly.Tooltip.DIV);
 };
 
 /**

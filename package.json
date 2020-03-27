@@ -58,28 +58,28 @@
     "chai": "^4.2.0",
     "concurrently": "^4.1.2",
     "eslint": "^5.13.0",
-    "eslint-plugin-es5": "^1.4.1",
+    "eslint-plugin-es5": "^1.5.0",
     "google-closure-compiler": "^20200101.0.0",
     "google-closure-deps": "^20200101.0.0",
     "gulp": "^4.0.2",
     "gulp-concat": "^2.6.1",
     "gulp-insert": "^0.5.0",
-    "gulp-series": "^1.0.2",
-    "gulp-shell": "^0.7.1",
     "gulp-rename": "^1.4.0",
     "gulp-replace": "^1.0.0",
+    "gulp-series": "^1.0.2",
+    "gulp-shell": "^0.7.1",
     "gulp-umd": "^2.0.0",
-    "jshint": "^2.10.2",
     "js-green-licenses": "^1.1.0",
-    "mocha": "^6.1.4",
+    "jshint": "^2.11.0",
+    "mocha": "^6.2.3",
     "pixelmatch": "^4.0.2",
     "pngjs": "^3.4.0",
-    "selenium-standalone": "^6.16.0",
     "rimraf": "^2.6.3",
+    "selenium-standalone": "^6.17.0",
     "through2": "^3.0.1",
     "typescript-closure-tools": "^0.0.7",
-    "webdriverio": "^5.11.5",
-    "yargs": "^14.0.0"
+    "webdriverio": "^5.22.4",
+    "yargs": "^14.2.3"
   },
   "jshintConfig": {
     "globalstrict": true,
@@ -96,6 +96,6 @@
     "unused": true
   },
   "dependencies": {
-    "jsdom": "^15.1.1"
+    "jsdom": "^15.2.1"
   }
 }

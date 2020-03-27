@@ -207,7 +207,7 @@ Plane.sliderChange = function(value) {
   var newRows = Math.round(value * 410 / 20);
   Plane.redraw(newRows);
 
-  function updateBlocks(blocks, verbose) {
+  function updateBlocks(blocks) {
     for (var i = 0, block; block = blocks[i]; i++) {
       block.customUpdate && block.customUpdate();
     }

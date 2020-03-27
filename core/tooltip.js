@@ -113,17 +113,15 @@ Blockly.Tooltip.DIV = null;
 
 /**
  * Create the tooltip div and inject it onto the page.
- * @param {Element=} opt_container Optional container element to render the
- *    tooltip into.
  */
-Blockly.Tooltip.createDom = function(opt_container) {
+Blockly.Tooltip.createDom = function() {
   if (Blockly.Tooltip.DIV) {
     return;  // Already created.
   }
   // Create an HTML container for popup overlays (e.g. editor widgets).
   Blockly.Tooltip.DIV = document.createElement('div');
   Blockly.Tooltip.DIV.className = 'blocklyTooltipDiv';
-  var container = opt_container || document.body;
+  var container = Blockly.PARENT_CONTAINER || document.body;
   container.appendChild(Blockly.Tooltip.DIV);
 };
 

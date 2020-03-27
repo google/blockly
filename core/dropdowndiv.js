@@ -119,17 +119,15 @@ Blockly.DropDownDiv.themeClassName_ = '';
 
 /**
  * Create and insert the DOM element for this div.
- * @param {Element=} opt_container Optional container element to render the
- *    dropdown into.
  * @package
  */
-Blockly.DropDownDiv.createDom = function(opt_container) {
+Blockly.DropDownDiv.createDom = function() {
   if (Blockly.DropDownDiv.DIV_) {
     return;  // Already created.
   }
   var div = document.createElement('div');
   div.className = 'blocklyDropDownDiv';
-  var container = opt_container || document.body;
+  var container = Blockly.PARENT_CONTAINER || document.body;
   container.appendChild(div);
   /**
    * The div element.

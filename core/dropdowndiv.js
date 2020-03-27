@@ -89,12 +89,6 @@ Blockly.DropDownDiv.PADDING_Y = 16;
 Blockly.DropDownDiv.ANIMATION_TIME = 0.25;
 
 /**
- * Container element to render the dropdown div into.
- * @type {?Element}
- */
-Blockly.DropDownDiv.CONTAINER_ELEMENT = null;
-
-/**
  * Timer for animation out, to be cleared if we need to immediately hide
  * without disrupting new shows.
  * @type {?number}
@@ -125,15 +119,17 @@ Blockly.DropDownDiv.themeClassName_ = '';
 
 /**
  * Create and insert the DOM element for this div.
+ * @param {Element=} opt_container Optional container element to render the
+ *    dropdown into.
  * @package
  */
-Blockly.DropDownDiv.createDom = function() {
+Blockly.DropDownDiv.createDom = function(opt_container) {
   if (Blockly.DropDownDiv.DIV_) {
     return;  // Already created.
   }
   var div = document.createElement('div');
   div.className = 'blocklyDropDownDiv';
-  var container = Blockly.DropDownDiv.CONTAINER_ELEMENT || document.body;
+  var container = opt_container || document.body;
   container.appendChild(div);
   /**
    * The div element.

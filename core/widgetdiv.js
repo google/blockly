@@ -52,7 +52,6 @@ Blockly.WidgetDiv.themeClassName_ = '';
 /**
  * Container element to render the widget div into.
  * @type {?Element}
- * @const
  */
 Blockly.WidgetDiv.CONTAINER_ELEMENT = null;
 

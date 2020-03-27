@@ -114,7 +114,6 @@ Blockly.Tooltip.DIV = null;
 /**
  * Container element to render the tooltip into.
  * @type {?Element}
- * @const
  */
 Blockly.Tooltip.CONTAINER_ELEMENT = null;
 

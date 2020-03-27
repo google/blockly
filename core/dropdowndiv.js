@@ -91,7 +91,6 @@ Blockly.DropDownDiv.ANIMATION_TIME = 0.25;
 /**
  * Container element to render the dropdown div into.
  * @type {?Element}
- * @const
  */
 Blockly.DropDownDiv.CONTAINER_ELEMENT = null;
 

@@ -200,12 +200,20 @@ Plane.rows1st = 0;
 Plane.rows2nd = 0;
 
 /**
- * Redraw the rows when the slider has moved.
+ * Redraw the rows and update blocks when the slider has moved.
  * @param {number} value New slider position.
  */
 Plane.sliderChange = function(value) {
   var newRows = Math.round(value * 410 / 20);
   Plane.redraw(newRows);
+
+  function updateBlocks(blocks, verbose) {
+    for (var i = 0, block; block = blocks[i]; i++) {
+      block.customUpdate && block.customUpdate();
+    }
+  }
+  updateBlocks(Plane.workspace.getAllBlocks(false), true);
+  updateBlocks(Plane.workspace.flyout_.workspace_.getAllBlocks(false));
 };
 
 /**
@@ -340,15 +348,6 @@ Plane.recalculate = function() {
       Plane.getMsg('Plane_seats').replace(
           '%1', isNaN(seats) ? '?' : seats));
   Plane.setCorrect(isNaN(seats) ? null : (Plane.answer() == seats));
-
-  // Update blocks to show values.
-  function updateBlocks(blocks) {
-    for (var i = 0, block; block = blocks[i]; i++) {
-      block.customUpdate && block.customUpdate();
-    }
-  }
-  updateBlocks(Plane.workspace.getAllBlocks(false));
-  updateBlocks(Plane.workspace.flyout_.workspace_.getAllBlocks(false));
 };
 
 /**

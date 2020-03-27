@@ -35,12 +35,14 @@ Blockly.Blocks['plane_get_rows'] = {
     this.setHelpUrl(Blockly.Msg['VARIABLES_GET_HELPURL']);
     this.setColour(330);
     this.appendDummyInput()
-        .appendField(Plane.getMsg('Plane_getRows'), 'title');
+        .appendField(Plane.getMsg('Plane_getRows')
+            .replace('%1', Plane.rows1st), 'title');
     this.setOutput(true, 'Number');
   },
   customUpdate: function() {
     this.setFieldValue(
-        Plane.getMsg('Plane_getRows').replace('%1', Plane.rows1st), 'title');
+        Plane.getMsg('Plane_getRows')
+            .replace('%1', Plane.rows1st), 'title');
   }
 };
 
@@ -55,12 +57,14 @@ Blockly.Blocks['plane_get_rows1st'] = {
     this.setHelpUrl(Blockly.Msg['VARIABLES_GET_HELPURL']);
     this.setColour(330);
     this.appendDummyInput()
-        .appendField(Plane.getMsg('Plane_getRows1'), 'title');
+        .appendField(Plane.getMsg('Plane_getRows1')
+            .replace('%1', Plane.rows1st), 'title');
     this.setOutput(true, 'Number');
   },
   customUpdate: function() {
     this.setFieldValue(
-        Plane.getMsg('Plane_getRows1').replace('%1', Plane.rows1st), 'title');
+        Plane.getMsg('Plane_getRows1')
+            .replace('%1', Plane.rows1st), 'title');
   }
 };
 
@@ -75,12 +79,14 @@ Blockly.Blocks['plane_get_rows2nd'] = {
     this.setHelpUrl(Blockly.Msg['VARIABLES_GET_HELPURL']);
     this.setColour(330);
     this.appendDummyInput()
-        .appendField(Plane.getMsg('Plane_getRows2'), 'title');
+        .appendField(Plane.getMsg('Plane_getRows2')
+            .replace('%1', Plane.rows2nd), 'title');
     this.setOutput(true, 'Number');
   },
   customUpdate: function() {
     this.setFieldValue(
-        Plane.getMsg('Plane_getRows2').replace('%1', Plane.rows2nd), 'title');
+        Plane.getMsg('Plane_getRows2')
+            .replace('%1', Plane.rows2nd), 'title');
   }
 };
 

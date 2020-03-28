@@ -95,7 +95,7 @@ Blockly.cache3dSupported_ = null;
  * @type {?Element}
  * @package
  */
-Blockly.PARENT_CONTAINER = null;
+Blockly.parentContainer = null;
 
 /**
  * Blockly opaque event data used to unbind events when using
@@ -673,8 +673,9 @@ Blockly.checkBlockColourConstant_ = function(
  * Set the parent container.  This is the container element that the WidgetDiv,
  * DropDownDiv, and Tooltip are rendered into the first time `Blockly.inject`
  * is called.
+ * This method is a NOP if called after the first ``Blockly.inject``.
  * @param {!Element} container The container element.
  */
 Blockly.setParentContainer = function(container) {
-  Blockly.PARENT_CONTAINER = container;
+  Blockly.parentContainer = container;
 };

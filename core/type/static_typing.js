@@ -99,6 +99,10 @@ Blockly.StaticTyping.prototype.collectFunctionVars = function(workspace) {
               var funcName = blocks[i].inputList[0].fieldRow[2].value_;
               this.functionVars[variableId] = funcName
           }
+          else if (blocks[i].type=='procedures_defnoreturn') {
+            var funcName = blocks[i].inputList[0].fieldRow[2].value_;
+            this.functionVars[variableId] = funcName
+          }
           else this.functionVars[variableId] = null
       }
   }
@@ -260,7 +264,10 @@ Blockly.StaticTyping.prototype.assignTypeToVars =
  */
 Blockly.StaticTyping.prototype.setBlockTypeWarning = function(block, blockType, varId) {
   var warningLabel = 'varType';
-  var varName = block.workspace.getVariableById(varId).name;
+  var variable = block.workspace.getVariableById(varId);
+  if(variable) {
+    var varName = variable.name;
+  }
   if ((blockType == Blockly.Types.CHILD_BLOCK_MISSING) ||
       (this.varTypeDict[varId] == Blockly.Types.CHILD_BLOCK_MISSING)) {
     // User still has to attach a block to this variable or its first

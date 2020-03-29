@@ -201,11 +201,11 @@ Blockly.Types.getFieldVariableNameByBlock = function(block, row) {
 * @return {Blockly.Type}
 */
 Blockly.Types.getChildBlockType = function(child) {
-  if (child.outputConnection && child.outputConnection.check_) {
-    var typeCheck = child.outputConnection.check_[0];
-    return Blockly.Types.getTypeWithId(typeCheck);
-  } else if (child.getBlockType) {
+  if (child.getBlockType) {
       return child.getBlockType();
+  } else if (child.outputConnection && child.outputConnection.check_) {
+      var typeCheck = child.outputConnection.check_[0];
+      return Blockly.Types.getTypeWithId(typeCheck);
   } else {
       return Blockly.Types.CHILD_BLOCK_MISSING;
   }

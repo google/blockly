@@ -4,7 +4,8 @@ pipeline {
     stage('Build') {
       steps {
         echo 'Building last Blockly version'
-        sh './build.sh'
+        sh 'ls -la'
+        sh '$WORKSPACE/build.sh'
       }
     }
 

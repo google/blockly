@@ -939,7 +939,7 @@ Blockly.Block.prototype.setStyle = function(blockStyleName) {
  * initializer function.
  * @param {function(Blockly.Events.Abstract)} onchangeFn The callback to call
  *     when the block's workspace changes.
- * @throws {Error} if onchangeFn is not falsey or a function.
+ * @throws {Error} if onchangeFn is not falsey and not a function.
  */
 Blockly.Block.prototype.setOnChange = function(onchangeFn) {
   if (onchangeFn && typeof onchangeFn != 'function') {

@@ -1469,7 +1469,7 @@ soydata.VERY_UNSAFE.ordainSanitizedJs =
 // finally printed.
 /**
  * Takes a leap of faith that the provided content can be safely embedded in
- * a Javascript string without re-esacping.
+ * a Javascript string without re-escaping.
  *
  * @param {*} content Content that can be safely inserted as part of a
  *     single- or double-quoted string without terminating the string.
@@ -2479,7 +2479,7 @@ soy.$$changeNewlineToBr = function(value) {
 /**
  * Inserts word breaks ('wbr' tags) into a HTML string at a given interval. The
  * counter is reset if a space is encountered. Word breaks aren't inserted into
- * HTML tags or entities. Entites count towards the character count; HTML tags
+ * HTML tags or entities. Entities count towards the character count; HTML tags
  * do not.
  *
  * @param {*} value The HTML string to insert word breaks into. Can be other

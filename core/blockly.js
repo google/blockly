@@ -91,6 +91,13 @@ Blockly.clipboardTypeCounts_ = null;
 Blockly.cache3dSupported_ = null;
 
 /**
+ * Container element to render the WidgetDiv, DropDownDiv and Tooltip.
+ * @type {?Element}
+ * @package
+ */
+Blockly.parentContainer = null;
+
+/**
  * Blockly opaque event data used to unbind events when using
  * `Blockly.bindEvent_` and `Blockly.bindEventWithChecks_`.
  * @typedef {!Array.<!Array>}
@@ -660,4 +667,15 @@ Blockly.checkBlockColourConstant_ = function(
     var warning = warningPattern.replace('%1', namePath).replace('%2', msgName);
     console.warn(warning);
   }
+};
+
+/**
+ * Set the parent container.  This is the container element that the WidgetDiv,
+ * DropDownDiv, and Tooltip are rendered into the first time `Blockly.inject`
+ * is called.
+ * This method is a NOP if called after the first ``Blockly.inject``.
+ * @param {!Element} container The container element.
+ */
+Blockly.setParentContainer = function(container) {
+  Blockly.parentContainer = container;
 };

@@ -107,7 +107,7 @@ Blockly.zelos.RenderInfo.prototype.getRenderer = function() {
  * @override
  */
 Blockly.zelos.RenderInfo.prototype.measure = function() {
-  // Modifing parent measure method to add `adjustXPosition_`.
+  // Modifying parent measure method to add `adjustXPosition_`.
   this.createRows_();
   this.addElemSpacing_();
   this.addRowSpacing_();
@@ -386,7 +386,7 @@ Blockly.zelos.RenderInfo.prototype.finalizeOutputConnection_ = function() {
       this.outputConnection.shape.connectionOffsetX(connectionWidth);
 
   // Add the right connection measurable.
-  // Don't add it if we have a value-to-statament or a value-to-stack block.
+  // Don't add it if we have a value-to-statement or a value-to-stack block.
   var rightConnectionWidth = 0;
   if (!this.hasStatementInput && !this.bottomRow.hasNextConnection) {
     rightConnectionWidth = connectionWidth;

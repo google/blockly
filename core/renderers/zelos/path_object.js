@@ -57,7 +57,7 @@ Blockly.zelos.PathObject = function(root, style, constants) {
   /**
    * A set used to determine which outlines were used during a draw pass.  The
    * set is initialized with a reference to all the outlines in
-   * `this.outlines_`. Everytime we use an outline during the draw pass, the
+   * `this.outlines_`. Every time we use an outline during the draw pass, the
    * reference is removed from this set.
    * @type {Object.<string, number>}
    * @private

@@ -1027,15 +1027,27 @@ void test_get_lists_simple() {
   unittest_assertequals(list[list.length - (0 + 3)], 'Kirk', 'get #-end order simple');
 }
 
+dynamic lists_get_from_end(List my_list, num x) {
+  x = my_list.length - x;
+  return my_list[x];
+}
+
+/// Tests the "get" block with create list call.
+void test_get_lists_create_list() {
+  unittest_assertequals(['Kirk', 'Spock', 'McCoy'].first, 'Kirk', 'get first create list');
+  unittest_assertequals(['Kirk', 'Spock', 'McCoy'].last, 'McCoy', 'get last simple');
+  unittest_assertequals(['Kirk', 'Spock', 'McCoy'].indexOf(lists_get_random_item(['Kirk', 'Spock', 'McCoy'])) + 1 > 0, true, 'get random simple');
+  unittest_assertequals(['Kirk', 'Spock', 'McCoy'][1], 'Spock', 'get # simple');
+  unittest_assertequals(['Kirk', 'Spock', 'McCoy'][((true ? 2 : null) - 1)], 'Spock', 'get # order simple');
+  unittest_assertequals(lists_get_from_end(['Kirk', 'Spock', 'McCoy'], 3), 'Kirk', 'get #-end simple');
+  // The order for index for #-end is addition because this will catch errors in generators where most perform the operation ... - index.
+  unittest_assertequals(lists_get_from_end(['Kirk', 'Spock', 'McCoy'], 0 + 3), 'Kirk', 'get #-end order simple');
+}
+
 /// Creates a list for use with the get test.
 dynamic get_star_wars() {
   number_of_calls = (number_of_calls is num ? number_of_calls : 0) + 1;
   return ['Kirk', 'Spock', 'McCoy'];
-}
-
-dynamic lists_get_from_end(List my_list, num x) {
-  x = my_list.length - x;
-  return my_list[x];
 }
 
 /// Tests the "get" block with a function call.
@@ -1623,6 +1635,7 @@ main() {
   test_find_lists_simple();
   test_find_lists_complex();
   test_get_lists_simple();
+  test_get_lists_create_list();
   test_get_lists_complex();
   test_getRemove();
   test_remove();

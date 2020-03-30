@@ -595,7 +595,7 @@ Blockly.blockRendering.ConstantProvider.prototype.setTheme = function(
 };
 
 /**
- * Sets dynamic properties that depent on other values or theme properties.
+ * Sets dynamic properties that depend on other values or theme properties.
  * @param {!Blockly.Theme} theme The current workspace theme.
  * @protected
  */
@@ -1211,7 +1211,7 @@ Blockly.blockRendering.ConstantProvider.prototype.getCSS_ = function(selector) {
       'stroke: #fc3;',
     '}',
 
-    // Replacable highlight.
+    // Replaceable highlight.
     selector + ' .blocklyReplaceable .blocklyPath {',
       'fill-opacity: .5;',
     '}',

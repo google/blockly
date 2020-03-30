@@ -79,7 +79,7 @@ Blockly.blockRendering.Types.nextTypeValue_ = 1 << 24;
 /**
  * Get the enum flag value of an existing type or register a new type.
  * @param {!string} type The name of the type.
- * @return {!number} The enum flag value assosiated with that type.
+ * @return {!number} The enum flag value associated with that type.
  * @package
  */
 Blockly.blockRendering.Types.getType = function(type) {

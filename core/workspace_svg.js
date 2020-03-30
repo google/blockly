@@ -2152,6 +2152,19 @@ Blockly.WorkspaceSvg.prototype.setScale = function(newScale) {
   }
 };
 
+
+/**
+ * Get the workspace's zoom factor.  If the workspace has a parent, we call into
+ * the parent to get the workspace scale.
+ * @return {number} The workspace zoom factor. Units: (pixels / workspaceUnit).
+ */
+Blockly.WorkspaceSvg.prototype.getScale = function() {
+  if (this.options.parentWorkspace) {
+    return this.options.parentWorkspace.getScale();
+  }
+  return this.scale;
+};
+
 /**
  * Scroll the workspace to a specified offset (in pixels), keeping in the
  * workspace bounds. See comment on workspaceSvg.scrollX for more detail on
@@ -2297,7 +2310,7 @@ Blockly.WorkspaceSvg.getContentDimensionsBounded_ = function(ws, svgSize) {
   var halfWidth = viewWidth / 2;
   var halfHeight = viewHeight / 2;
 
-  // Add a border around the content that is at least half a screenful wide.
+  // Add a border around the content that is at least half a screen wide.
   // Ensure border is wide enough that blocks can scroll over entire screen.
   var left = Math.min(content.left - halfWidth, content.right - viewWidth);
   var right = Math.max(content.right + halfWidth, content.left + viewWidth);

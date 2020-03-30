@@ -579,7 +579,7 @@ Blockly.utils.getBlockTypeCounts = function(block, opt_stripFollowing) {
  * Converts screen coordinates to workspace coordinates.
  * @param {Blockly.WorkspaceSvg} ws The workspace to find the coordinates on.
  * @param {Blockly.utils.Coordinate} screenCoordinates The screen coordinates to
- * be converted to workspace coordintaes
+ * be converted to workspace coordinates
  * @return {Blockly.utils.Coordinate} The workspace coordinates.
  * @package
  */

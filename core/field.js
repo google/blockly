@@ -935,7 +935,7 @@ Blockly.Field.prototype.doValueUpdate_ = function(newValue) {
 };
 
 /**
- * Used to notify the field an invalid value was input. Can be overidden by
+ * Used to notify the field an invalid value was input. Can be overridden by
  * subclasses, see FieldTextInput.
  * No-op by default.
  * @param {*} _invalidValue The input value that was determined to be invalid.

@@ -163,7 +163,7 @@ FactoryUtils.getGeneratorStub = function(block, generatorLanguage) {
  * Update the language code as JSON.
  * @param {string} blockType Name of block.
  * @param {!Blockly.Block} rootBlock Factory_base block.
- * @return {string} Generanted language code.
+ * @return {string} Generated language code.
  * @private
  */
 FactoryUtils.formatJson_ = function(blockType, rootBlock) {
@@ -830,7 +830,7 @@ FactoryUtils.parseJsonBlockDefinitions = function(blockDefsString) {
     else if (currentChar == '}') {
       unbalancedBracketCount--;
       if (unbalancedBracketCount == 0 && i > 0) {
-        // The brackets are balanced. We've got a complete block defintion.
+        // The brackets are balanced. We've got a complete block definition.
         var blockDef = blockDefsString.substring(defStart, i + 1);
         blockDefArray.push(blockDef);
         defStart = i + 1;

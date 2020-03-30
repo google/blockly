@@ -294,7 +294,7 @@ Blockly.Mutator.prototype.setVisible = function(visible) {
     for (var i = 0, child; (child = blocks[i]); i++) {
       child.render();
     }
-    // The root block should not be dragable or deletable.
+    // The root block should not be draggable or deletable.
     this.rootBlock_.setMovable(false);
     this.rootBlock_.setDeletable(false);
     if (flyout) {

@@ -81,7 +81,7 @@ function updateLanguage() {
  * Update the language code as JSON.
  * @param {string} blockType Name of block.
  * @param {!Blockly.Block} rootBlock Factory_base block.
- * @return {string} Generanted language code.
+ * @return {string} Generated language code.
  * @private
  */
 function formatJson_(blockType, rootBlock) {
@@ -183,7 +183,7 @@ function formatJson_(blockType, rootBlock) {
  * Update the language code as JavaScript.
  * @param {string} blockType Name of block.
  * @param {!Blockly.Block} rootBlock Factory_base block.
- * @return {string} Generanted language code.
+ * @return {string} Generated language code.
  * @private
  */
 function formatJavaScript_(blockType, rootBlock) {
@@ -487,7 +487,7 @@ function getFieldsJson_(block) {
 /**
  * Escape a string.
  * @param {string} string String to escape.
- * @return {string} Escaped string surrouned by quotes.
+ * @return {string} Escaped string surrounded by quotes.
  */
 function escapeString(string) {
   return JSON.stringify(string);

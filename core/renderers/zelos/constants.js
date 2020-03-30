@@ -905,7 +905,8 @@ Blockly.zelos.ConstantProvider.prototype.getCSS_ = function(selector) {
   return [
     /* eslint-disable indent */
     // Fields.
-    selector + ' .blocklyText {',
+    selector + ' .blocklyText, ',
+    selector + ' .blocklyFlyoutLabelText {',
       'fill: #fff;',
       'font-family: ' + this.FIELD_TEXT_FONTFAMILY + ';',
       'font-size: ' + this.FIELD_TEXT_FONTSIZE + 'pt;',
@@ -919,6 +920,11 @@ Blockly.zelos.ConstantProvider.prototype.getCSS_ = function(selector) {
     selector + ' .blocklyEditableText>text,',
     selector + ' .blocklyNonEditableText>g>text,',
     selector + ' .blocklyEditableText>g>text {',
+      'fill: #575E75;',
+    '}',
+  
+    // Flyout labels.
+    selector + ' .blocklyFlyoutLabelText {',
       'fill: #575E75;',
     '}',
 

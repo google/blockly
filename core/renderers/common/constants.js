@@ -1166,7 +1166,8 @@ Blockly.blockRendering.ConstantProvider.prototype.getCSS_ = function(selector) {
   return [
     /* eslint-disable indent */
     // Fields.
-    selector + ' .blocklyText {',
+    selector + ' .blocklyText, ',
+    selector + ' .blocklyFlyoutLabelText {',
       'fill: #fff;',
       'font-family: ' + this.FIELD_TEXT_FONTFAMILY + ';',
       'font-size: ' + this.FIELD_TEXT_FONTSIZE + 'pt;',
@@ -1180,6 +1181,11 @@ Blockly.blockRendering.ConstantProvider.prototype.getCSS_ = function(selector) {
     '}',
     selector + ' .blocklyNonEditableText>text,',
     selector + ' .blocklyEditableText>text {',
+      'fill: #000;',
+    '}',
+
+    // Flyout labels.
+    selector + ' .blocklyFlyoutLabelText {',
       'fill: #000;',
     '}',
 

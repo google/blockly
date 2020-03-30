@@ -294,9 +294,5 @@ Blockly.Css.register([
   '.blocklyFlyoutLabelBackground {',
     'opacity: 0;',
   '}',
-
-  '.blocklyFlyoutLabelText {',
-    'fill: #000;',
-  '}'
   /* eslint-enable indent */
 ]);

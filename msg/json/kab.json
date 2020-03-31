@@ -4,7 +4,8 @@
 			"Amaziɣ maziɣ",
 			"Belkacem77",
 			"Alem",
-			"YubaWissin"
+			"YubaWissin",
+			"SlimaneAmiri"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "aferdis",
@@ -343,5 +344,6 @@
 	"PROCEDURES_IFRETURN_TOOLTIP": "ma yella azal d idetti, ad d-yerr azal-nniḍen wis sin.",
 	"PROCEDURES_IFRETURN_WARNING": "Ɣur-k: Iḥder-agi yezmer ur yettwaseqdac ara ala di tebadut n twuri-agi.",
 	"WORKSPACE_COMMENT_DEFAULT_TEXT": "Ini kra...",
+	"WORKSPACE_ARIA_LABEL": "Tallunt n umahel Blockly",
 	"COLLAPSED_WARNINGS_WARNING": "Iḥedran yettin gebren ilɣa."
 }

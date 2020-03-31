@@ -904,13 +904,17 @@ Blockly.zelos.ConstantProvider.prototype.createDom = function(svg,
 Blockly.zelos.ConstantProvider.prototype.getCSS_ = function(selector) {
   return [
     /* eslint-disable indent */
-    // Fields.
+    // Text.
     selector + ' .blocklyText, ',
     selector + ' .blocklyFlyoutLabelText {',
-      'fill: #fff;',
       'font-family: ' + this.FIELD_TEXT_FONTFAMILY + ';',
       'font-size: ' + this.FIELD_TEXT_FONTSIZE + 'pt;',
       'font-weight: ' + this.FIELD_TEXT_FONTWEIGHT + ';',
+    '}',
+  
+    // Fields.
+    selector + ' .blocklyText {',
+      'fill: #fff;',
     '}',
     selector + ' .blocklyNonEditableText>rect:not(.blocklyDropdownRect),',
     selector + ' .blocklyEditableText>rect:not(.blocklyDropdownRect) {',

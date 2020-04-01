@@ -904,12 +904,17 @@ Blockly.zelos.ConstantProvider.prototype.createDom = function(svg,
 Blockly.zelos.ConstantProvider.prototype.getCSS_ = function(selector) {
   return [
     /* eslint-disable indent */
-    // Fields.
-    selector + ' .blocklyText {',
-      'fill: #fff;',
+    // Text.
+    selector + ' .blocklyText, ',
+    selector + ' .blocklyFlyoutLabelText {',
       'font-family: ' + this.FIELD_TEXT_FONTFAMILY + ';',
       'font-size: ' + this.FIELD_TEXT_FONTSIZE + 'pt;',
       'font-weight: ' + this.FIELD_TEXT_FONTWEIGHT + ';',
+    '}',
+  
+    // Fields.
+    selector + ' .blocklyText {',
+      'fill: #fff;',
     '}',
     selector + ' .blocklyNonEditableText>rect:not(.blocklyDropdownRect),',
     selector + ' .blocklyEditableText>rect:not(.blocklyDropdownRect) {',
@@ -919,6 +924,11 @@ Blockly.zelos.ConstantProvider.prototype.getCSS_ = function(selector) {
     selector + ' .blocklyEditableText>text,',
     selector + ' .blocklyNonEditableText>g>text,',
     selector + ' .blocklyEditableText>g>text {',
+      'fill: #575E75;',
+    '}',
+  
+    // Flyout labels.
+    selector + ' .blocklyFlyoutLabelText {',
       'fill: #575E75;',
     '}',
 

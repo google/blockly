@@ -311,3 +311,26 @@ Blockly.StaticTyping.prototype.setProcedureArgs = function(workspace) {
     }
   }
 };
+
+/**
+ * Iterates through the parents of input block and return the space.
+ * @param {Blockly.Block} block
+ */
+// Blockly.StaticTyping.getParentSpaceBlock = function(block) {
+//   var hasParent = true,
+//       parent;
+//   parent = block.getParent();
+//   if (parent) {
+//     while (hasParent) {
+//       if (parent && parent.type != 'forever' 
+//                  && parent.type != 'on_start'
+//                  && parent.type != 'procedures_def' 
+//                  && parent.type != 'procedures_defnoreturn') {
+//         parent = parent.getParent();
+//       }
+//       else hasParent = false;
+//     }
+//     return parent;
+//   }
+//   else return null    
+// };

@@ -53,33 +53,26 @@
     <a href="../index.html">Demos</a> &gt; Keyboard Navigation</h1>
 
   <p>Keyboard Navigation is our first step towards an accessible Blockly.<br />
-  You can enter accessibility mode by <b>shift clicking anywhere on the
-  workspace or on a block</b>. <br />Some basic commands for moving around are below.
-  More complete documentation is still in progress.<br /><br />
-    <b>Workspace Navigation</b><br />
-    W: Previous block/field/input at the same level<br />
-    A: Up one level (Field (or input) -> Block -> Input (or field) -> Block ->
-    Stack -> Workspace)<br />
-    S: Next block/field/input at the same level<br />
-    D: Down one level (Workspace -> Stack -> Block -> Input (or field) -> Block
-     -> Field (or input))<br />
-    T: Will open the toolbox. Once in there you can moving around using the WASD keys. And insert a block by hitting Enter<br />
-    X: While on a connection hit X to disconnect the block after the cursor<br /><br />
-
+  For more information on how the default keyboard navigation works please see
+  the <a href="https://developers.google.com/blockly/guides/configure/web/keyboard-nav">documentation</a>.
+  <br />
+  <br />
   <b>Pre Order Traversal</b><br />
   Feel free to just play around in accessibility mode or hit the button below to see the demo.
   The demo uses <a href="https://en.wikipedia.org/wiki/Tree_traversal#Pre-order_(NLR)">preorder tree traversal</a>
   as an alternative way to navigate the blocks,
   connections, and fields on the workspace.<br /><br />
 
-  <!-- TODO: Update when we add keyboard navigation to site -->
-  <!-- <p>&rarr; More info on <a href="">Keyboard Navigation</a>.</p> -->
-
-  <b>Cursor</b><br />
+  <b>Cursors</b><br />
   The cursor controls how the user navigates the blocks, inputs, fields and connections on a workspace.
-  This demo shows two different cursors:<br />
-  <b>Default Cursor:</b> Allow the user to go to the previous, next, in or out location.<br />
-  <b>Basic Cursor:</b> Using the pre order traversal allows the user to go to the next and previous location.
+  This demo shows three different cursors:<br />
+  <b>Default Cursor:</b> Explained in <a href="https://developers.google.com/blockly/guides/configure/web/keyboard-nav">documentation</a>.<br />
+  <b>Basic Cursor:</b> Uses pre order traversal to allow users to navigate
+  through everything using only the previous and next command.<br />
+  <b>Line Cursor:</b> We tried to make this cursor mimic a text editor. Navigating
+  up and down will take the cursor to the next and previous "line" of code.
+  Navigating in and out will move the cursor through all the fields and inputs
+  in that "line" of code.
   </p>
 
   <p>

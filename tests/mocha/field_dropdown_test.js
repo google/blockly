@@ -131,7 +131,6 @@ suite('Dropdown Fields', function() {
     setup(function() {
       this.dropdownField = new Blockly.FieldDropdown(
           [['a', 'A'], ['b', 'B'], ['c', 'C']]);
-      this.dropdownField.setSourceBlock(createTestBlock());
     });
     test('Null', function() {
       this.dropdownField.setValue(null);
@@ -149,13 +148,17 @@ suite('Dropdown Fields', function() {
       this.dropdownField.setValue('B');
       assertValue(this.dropdownField, 'B', 'b');
     });
+    test('With source block', function() {
+      this.dropdownField.setSourceBlock(createTestBlock());
+      this.dropdownField.setValue('B');
+      assertValue(this.dropdownField, 'B', 'b');
+    });
   });
   suite('Validators', function() {
     setup(function() {
       this.dropdownField = new Blockly.FieldDropdown([
         ["1a","1A"], ["1b","1B"], ["1c","1C"],
         ["2a","2A"], ["2b","2B"], ["2c","2C"]]);
-      this.dropdownField.setSourceBlock(createTestBlock());
     });
     teardown(function() {
       this.dropdownField.setValidator(null);

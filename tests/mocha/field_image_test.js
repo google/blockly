@@ -100,7 +100,6 @@ suite('Image Fields', function() {
   suite('setValue', function() {
     setup(function() {
       this.imageField = new Blockly.FieldImage('src', 1, 1, 'alt');
-      this.imageField.setSourceBlock(createTestBlock());
     });
     test('Null', function() {
       this.imageField.setValue(null);

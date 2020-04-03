@@ -135,7 +135,6 @@ suite('Colour Fields', function() {
     suite('Empty -> New Value', function() {
       setup(function() {
         this.colourField = new Blockly.FieldColour();
-        this.colourField.setSourceBlock(createTestBlock());
       });
       test('Null', function() {
         this.colourField.setValue(null);
@@ -169,11 +168,15 @@ suite('Colour Fields', function() {
         this.colourField.setValue('red');
         assertValue(this.colourField, '#ff0000', '#f00');
       });
+      test('With source block', function() {
+        this.colourField.setSourceBlock(createTestBlock());
+        this.colourField.setValue('#bcbcbc');
+        assertValue(this.colourField, '#bcbcbc', '#bcbcbc');
+      });
     });
     suite('Value -> New Value', function() {
       setup(function() {
         this.colourField = new Blockly.FieldColour('#aaaaaa');
-        this.colourField.setSourceBlock(createTestBlock());
       });
       test('Null', function() {
         this.colourField.setValue(null);
@@ -212,7 +215,6 @@ suite('Colour Fields', function() {
   suite('Validators', function() {
     setup(function() {
       this.colourField = new Blockly.FieldColour('#aaaaaa');
-      this.colourField.setSourceBlock(createTestBlock());
     });
     teardown(function() {
       this.colourField.setValidator(null);

@@ -70,7 +70,6 @@ suite('Checkbox Fields', function() {
     suite('True -> New Value', function() {
       setup(function() {
         this.checkboxField = new Blockly.FieldCheckbox('TRUE');
-        this.checkboxField.setSourceBlock(createTestBlock());
       });
       test('Null', function() {
         this.checkboxField.setValue(null);
@@ -88,11 +87,15 @@ suite('Checkbox Fields', function() {
         this.checkboxField.setValue('FALSE');
         assertValue(this.checkboxField, 'FALSE', 'false');
       });
+      test('With source block', function() {
+        this.checkboxField.setSourceBlock(createTestBlock());
+        this.checkboxField.setValue('FALSE');
+        assertValue(this.checkboxField, 'FALSE', 'false');
+      });
     });
     suite('False -> New Value', function() {
       setup(function() {
         this.checkboxField = new Blockly.FieldCheckbox('FALSE');
-        this.checkboxField.setSourceBlock(createTestBlock());
       });
       test('Null', function() {
         this.checkboxField.setValue(null);
@@ -115,7 +118,6 @@ suite('Checkbox Fields', function() {
   suite('Validators', function() {
     setup(function() {
       this.checkboxField = new Blockly.FieldCheckbox(true);
-      this.checkboxField.setSourceBlock(createTestBlock());
     });
     teardown(function() {
       this.checkboxField.setValidator(null);

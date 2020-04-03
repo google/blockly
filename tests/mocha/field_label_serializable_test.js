@@ -107,7 +107,6 @@ suite('Label Serializable Fields', function() {
     suite('Empty -> New Value', function() {
       setup(function() {
         this.labelField = new Blockly.FieldLabelSerializable();
-        this.labelField.setSourceBlock(createTestBlock());
       });
       test('Null', function() {
         this.labelField.setValue(null);
@@ -137,11 +136,15 @@ suite('Label Serializable Fields', function() {
         this.labelField.setValue(false);
         assertValue(this.labelField, 'false');
       });
+      test('With source block', function() {
+        this.labelField.setSourceBlock(createTestBlock());
+        this.labelField.setValue('newValue');
+        assertValue(this.labelField, 'newValue');
+      });
     });
     suite('Value -> New Value', function() {
       setup(function() {
         this.labelField = new Blockly.FieldLabelSerializable('value');
-        this.labelField.setSourceBlock(createTestBlock());
       });
       test('Null', function() {
         this.labelField.setValue(null);

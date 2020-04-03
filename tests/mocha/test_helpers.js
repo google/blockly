@@ -7,7 +7,7 @@
 /* exported assertEquals, assertNotEquals, assertArrayEquals, assertTrue, assertFalse,
    assertNull, assertNotNull, assertNotNullNorUndefined, assert,
    isEqualArrays, assertUndefined, assertNotUndefined,
-   defineRowBlock, defineStackBlock, defineStatementBlock */
+   defineRowBlock, defineStackBlock, defineStatementBlock, createTestBlock */
 function _argumentsIncludeComments(expectedNumberOfNonCommentArgs, args) {
   return args.length == expectedNumberOfNonCommentArgs + 1;
 }
@@ -180,4 +180,14 @@ function defineStatementBlock() {
     "tooltip": "",
     "helpUrl": ""
   }]);
+}
+
+function createTestBlock() {
+  return {
+    id: 'test',
+    rendered: false,
+    workspace: {
+      rendered: false
+    }
+  };
 }

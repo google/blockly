@@ -88,6 +88,7 @@ suite('Angle Fields', function() {
     suite('Empty -> New Value', function() {
       setup(function() {
         this.angleField = new Blockly.FieldAngle();
+        this.angleField.setSourceBlock(createTestBlock());
       });
       test('Null', function() {
         this.angleField.setValue(null);
@@ -137,6 +138,7 @@ suite('Angle Fields', function() {
     suite('Value -> New Value', function() {
       setup(function() {
         this.angleField = new Blockly.FieldAngle(1);
+        this.angleField.setSourceBlock(createTestBlock());
       });
       test('Null', function() {
         this.angleField.setValue(null);
@@ -187,6 +189,7 @@ suite('Angle Fields', function() {
   suite('Validators', function() {
     setup(function() {
       this.angleField = new Blockly.FieldAngle(1);
+      this.angleField.setSourceBlock(createTestBlock());
       this.angleField.htmlInput_ = Object.create(null);
       this.angleField.htmlInput_.oldValue_ = '1';
       this.angleField.htmlInput_.untypedDefaultValue_ = 1;

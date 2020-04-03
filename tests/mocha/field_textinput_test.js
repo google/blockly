@@ -80,6 +80,7 @@ suite('Text Input Fields', function() {
     suite('Empty -> New Value', function() {
       setup(function() {
         this.textInputField = new Blockly.FieldTextInput();
+        this.textInputField.setSourceBlock(createTestBlock());
       });
       test('Null', function() {
         this.textInputField.setValue(null);
@@ -113,6 +114,7 @@ suite('Text Input Fields', function() {
     suite('Value -> New Value', function() {
       setup(function() {
         this.textInputField = new Blockly.FieldTextInput('value');
+        this.textInputField.setSourceBlock(createTestBlock());
       });
       test('Null', function() {
         this.textInputField.setValue(null);
@@ -147,6 +149,7 @@ suite('Text Input Fields', function() {
   suite('Validators', function() {
     setup(function() {
       this.textInputField = new Blockly.FieldTextInput('value');
+      this.textInputField.setSourceBlock(createTestBlock());
       this.textInputField.htmlInput_ = Object.create(null);
       this.textInputField.htmlInput_.oldValue_ = 'value';
       this.textInputField.htmlInput_.untypedDefaultValue_ = 'value';

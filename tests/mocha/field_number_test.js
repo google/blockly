@@ -117,6 +117,7 @@ suite('Number Fields', function() {
       suite('Empty -> New Value', function() {
         setup(function() {
           this.numberField = new Blockly.FieldNumber();
+          this.numberField.setSourceBlock(createTestBlock());
         });
         test('Null', function() {
           this.numberField.setValue(null);
@@ -162,6 +163,7 @@ suite('Number Fields', function() {
       suite('Value -> New Value', function() {
         setup(function() {
           this.numberField = new Blockly.FieldNumber(1);
+          this.numberField.setSourceBlock(createTestBlock());
         });
         test('Null', function() {
           this.numberField.setValue(null);
@@ -315,6 +317,7 @@ suite('Number Fields', function() {
   suite('Validators', function() {
     setup(function() {
       this.numberField = new Blockly.FieldNumber(1);
+      this.numberField.setSourceBlock(createTestBlock());
       this.numberField.htmlInput_ = Object.create(null);
       this.numberField.htmlInput_.oldValue_ = '1';
       this.numberField.htmlInput_.untypedDefaultValue_ = 1;

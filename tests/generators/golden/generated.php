@@ -1039,6 +1039,19 @@ function test_get_lists_simple() {
   assertEquals(array_slice($list2, (-(0 + 3)), 1)[0], 'Kirk', 'get #-end order simple');
 }
 
+// Tests the "get" block with create list call.
+function test_get_lists_create_list() {
+  global $test_name, $naked, $proc_x, $proc_y, $func_x, $func_y, $func_a, $n, $ok, $log, $count, $varToChange, $rand, $item, $text, $number_of_calls, $list2, $proc_z, $func_z, $x, $proc_w, $func_c, $if2, $i, $loglist, $changing_list, $list_copy, $unittestResults;
+  assertEquals(array('Kirk', 'Spock', 'McCoy')[0], 'Kirk', 'get first create list');
+  assertEquals(end(array('Kirk', 'Spock', 'McCoy')), 'McCoy', 'get last simple');
+  assertEquals(indexOf(array('Kirk', 'Spock', 'McCoy'), lists_get_random_item(array('Kirk', 'Spock', 'McCoy'))) > 0, true, 'get random simple');
+  assertEquals(array('Kirk', 'Spock', 'McCoy')[1], 'Spock', 'get # simple');
+  assertEquals(array('Kirk', 'Spock', 'McCoy')[((true ? 2 : null) - 1)], 'Spock', 'get # order simple');
+  assertEquals(array_slice(array('Kirk', 'Spock', 'McCoy'), -3, 1)[0], 'Kirk', 'get #-end simple');
+  // The order for index for #-end is addition because this will catch errors in generators where most perform the operation ... - index.
+  assertEquals(array_slice(array('Kirk', 'Spock', 'McCoy'), (-(0 + 3)), 1)[0], 'Kirk', 'get #-end order simple');
+}
+
 // Creates a list for use with the get test.
 function get_star_wars() {
   global $test_name, $naked, $proc_x, $proc_y, $func_x, $func_y, $func_a, $n, $ok, $log, $count, $varToChange, $rand, $item, $text, $number_of_calls, $list2, $proc_z, $func_z, $x, $proc_w, $func_c, $if2, $i, $loglist, $changing_list, $list_copy, $unittestResults;
@@ -1650,6 +1663,7 @@ test_lists_length();
 test_find_lists_simple();
 test_find_lists_complex();
 test_get_lists_simple();
+test_get_lists_create_list();
 test_get_lists_complex();
 test_getRemove();
 test_remove();

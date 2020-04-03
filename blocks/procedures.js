@@ -1,18 +1,7 @@
 /**
  * @license
  * Copyright 2012 Google LLC
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 /**
@@ -542,11 +531,14 @@ Blockly.Blocks['procedures_mutatorarg'] = {
     var workspace = sourceBlock.workspace.targetWorkspace ||
         sourceBlock.workspace;
     var blocks = workspace.getAllBlocks(false);
+    var caselessName = varName.toLowerCase();
     for (var i = 0; i < blocks.length; i++) {
       if (blocks[i].id == this.getSourceBlock().id) {
         continue;
       }
-      if (blocks[i].getFieldValue('NAME') == varName) {
+      // Other blocks values may not be set yet when this is loaded.
+      var otherVar = blocks[i].getFieldValue('NAME');
+      if (otherVar && otherVar.toLowerCase() == caselessName) {
         return null;
       }
     }
@@ -898,7 +890,7 @@ Blockly.Blocks['procedures_callnoreturn'] = {
         // in most cases the old group should be ''
         var oldGroup = Blockly.Events.getGroup();
         if (oldGroup) {
-          // This should only be possible programatically and may indicate a problem
+          // This should only be possible programmatically and may indicate a problem
           // with event grouping. If you see this message please investigate. If the
           // use ends up being valid we may need to reorder events in the undo stack.
           console.log('Saw an existing group while responding to a definition change');

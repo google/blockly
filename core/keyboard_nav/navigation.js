@@ -1,18 +1,7 @@
 /**
  * @license
  * Copyright 2019 Google LLC
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 /**
@@ -793,7 +782,7 @@ Blockly.navigation.onBlocklyAction = function(action) {
     } else if (Blockly.navigation.READONLY_ACTION_LIST.indexOf(action) > -1) {
       actionHandled = Blockly.navigation.handleActions_(action);
     }
-  // If not in accessibility mode only hanlde turning on keyboard navigation.
+  // If not in accessibility mode only handle turning on keyboard navigation.
   } else if (action.name === Blockly.navigation.actionNames.TOGGLE_KEYBOARD_NAV) {
     Blockly.navigation.enableKeyboardAccessibility();
     actionHandled = true;
@@ -1042,7 +1031,7 @@ Blockly.navigation.ACTION_TOGGLE_KEYBOARD_NAV = new Blockly.Action(
     'Turns on and off keyboard navigation.');
 
 /**
- * The action to move the cursor to the keft on a worksapce.
+ * The action to move the cursor to the left on a workspace.
  * @type {!Blockly.Action}
  */
 Blockly.navigation.ACTION_MOVE_WS_CURSOR_LEFT = new Blockly.Action(
@@ -1050,7 +1039,7 @@ Blockly.navigation.ACTION_MOVE_WS_CURSOR_LEFT = new Blockly.Action(
     'Move the workspace cursor to the lefts.');
 
 /**
- * The action to move the cursor to the right on a worksapce.
+ * The action to move the cursor to the right on a workspace.
  * @type {!Blockly.Action}
  */
 Blockly.navigation.ACTION_MOVE_WS_CURSOR_RIGHT = new Blockly.Action(
@@ -1058,7 +1047,7 @@ Blockly.navigation.ACTION_MOVE_WS_CURSOR_RIGHT = new Blockly.Action(
     'Move the workspace cursor to the right.');
 
 /**
- * The action to move the cursor up on a worksapce.
+ * The action to move the cursor up on a workspace.
  * @type {!Blockly.Action}
  */
 Blockly.navigation.ACTION_MOVE_WS_CURSOR_UP = new Blockly.Action(
@@ -1066,7 +1055,7 @@ Blockly.navigation.ACTION_MOVE_WS_CURSOR_UP = new Blockly.Action(
     'Move the workspace cursor up.');
 
 /**
- * The action to move the cursor down on a worksapce.
+ * The action to move the cursor down on a workspace.
  * @type {!Blockly.Action}
  */
 Blockly.navigation.ACTION_MOVE_WS_CURSOR_DOWN = new Blockly.Action(

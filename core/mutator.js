@@ -1,18 +1,7 @@
 /**
  * @license
  * Copyright 2012 Google LLC
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 /**
@@ -171,7 +160,8 @@ Blockly.Mutator.prototype.createEditor_ = function() {
         'media': this.block_.workspace.options.pathToMedia,
         'rtl': this.block_.RTL,
         'horizontalLayout': false,
-        'renderer': this.block_.workspace.options.renderer
+        'renderer': this.block_.workspace.options.renderer,
+        'rendererOverrides': this.block_.workspace.options.rendererOverrides
       }));
   workspaceOptions.toolboxPosition = this.block_.RTL ? Blockly.TOOLBOX_AT_RIGHT :
       Blockly.TOOLBOX_AT_LEFT;
@@ -304,7 +294,7 @@ Blockly.Mutator.prototype.setVisible = function(visible) {
     for (var i = 0, child; (child = blocks[i]); i++) {
       child.render();
     }
-    // The root block should not be dragable or deletable.
+    // The root block should not be draggable or deletable.
     this.rootBlock_.setMovable(false);
     this.rootBlock_.setDeletable(false);
     if (flyout) {

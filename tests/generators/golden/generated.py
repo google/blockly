@@ -872,6 +872,18 @@ def test_get_lists_simple():
   # The order for index for #-end is addition because this will catch errors in generators where most perform the operation ... - index.
   assertEquals(list2[-int(0 + 3)], 'Kirk', 'get #-end order simple')
 
+# Tests the "get" block with create list call.
+def test_get_lists_create_list():
+  global test_name, naked, proc_x, proc_y, func_x, func_y, func_a, n, ok, log, count, varToChange, rand, item, text, number_of_calls, list2, proc_z, func_z, x, proc_w, func_c, if2, i, loglist, changing_list, list_copy, unittestResults
+  assertEquals(['Kirk', 'Spock', 'McCoy'][0], 'Kirk', 'get first create list')
+  assertEquals(['Kirk', 'Spock', 'McCoy'][-1], 'McCoy', 'get last simple')
+  assertEquals(first_index(['Kirk', 'Spock', 'McCoy'], random.choice(['Kirk', 'Spock', 'McCoy'])) > 0, True, 'get random simple')
+  assertEquals(['Kirk', 'Spock', 'McCoy'][1], 'Spock', 'get # simple')
+  assertEquals(['Kirk', 'Spock', 'McCoy'][int((2 if True else None) - 1)], 'Spock', 'get # order simple')
+  assertEquals(['Kirk', 'Spock', 'McCoy'][-3], 'Kirk', 'get #-end simple')
+  # The order for index for #-end is addition because this will catch errors in generators where most perform the operation ... - index.
+  assertEquals(['Kirk', 'Spock', 'McCoy'][-int(0 + 3)], 'Kirk', 'get #-end order simple')
+
 # Creates a list for use with the get test.
 def get_star_wars():
   global test_name, naked, proc_x, proc_y, func_x, func_y, func_a, n, ok, log, count, varToChange, rand, item, text, number_of_calls, list2, proc_z, func_z, x, proc_w, func_c, if2, i, loglist, changing_list, list_copy, unittestResults
@@ -1395,6 +1407,7 @@ test_lists_length()
 test_find_lists_simple()
 test_find_lists_complex()
 test_get_lists_simple()
+test_get_lists_create_list()
 test_get_lists_complex()
 test_getRemove()
 test_remove()

@@ -1,18 +1,7 @@
 /**
  * @license
  * Copyright 2012 Google LLC
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 /**
@@ -594,9 +583,12 @@ Blockly.BlockSvg.prototype.getBoundingRectangle = function() {
 
 /**
  * Notify every input on this block to mark its fields as dirty.
- * A dirty field is a field that needs to be re-rendererd.
+ * A dirty field is a field that needs to be re-rendered.
  */
 Blockly.BlockSvg.prototype.markDirty = function() {
+  this.pathObject.constants =
+    (/** @type {!Blockly.WorkspaceSvg} */ (this.workspace))
+        .getRenderer().getConstants();
   for (var i = 0, input; (input = this.inputList[i]); i++) {
     input.markDirty();
   }
@@ -684,6 +676,11 @@ Blockly.BlockSvg.prototype.tab = function(start, forward) {
   if (nextNode && nextNode !== currentNode) {
     var nextField = /** @type {!Blockly.Field} */ (nextNode.getLocation());
     nextField.showEditor();
+
+    // Also move the cursor if we're in keyboard nav mode.
+    if (this.workspace.keyboardAccessibilityMode) {
+      this.workspace.getCursor().setCurNode(nextNode);
+    }
   }
 };
 
@@ -920,7 +917,8 @@ Blockly.BlockSvg.prototype.setInsertionMarker = function(insertionMarker) {
   }
   this.isInsertionMarker_ = insertionMarker;
   if (this.isInsertionMarker_) {
-    this.setColour(Blockly.INSERTION_MARKER_COLOUR);
+    this.setColour(this.workspace.getRenderer().getConstants().
+        INSERTION_MARKER_COLOUR);
     this.pathObject.updateInsertionMarker(true);
   }
 };
@@ -946,7 +944,8 @@ Blockly.BlockSvg.prototype.dispose = function(healStack, animate) {
     // The block has already been deleted.
     return;
   }
-  Blockly.Tooltip.hide();
+  Blockly.Tooltip.dispose();
+  Blockly.Tooltip.unbindMouseEvents(this.pathObject.svgPath);
   Blockly.utils.dom.startTextWidthCache();
   // Save the block's workspace temporarily so we can resize the
   // contents once the block is disposed.
@@ -1191,7 +1190,7 @@ Blockly.BlockSvg.prototype.setDisabled = function(disabled) {
 Blockly.BlockSvg.prototype.setEnabled = function(enabled) {
   if (this.isEnabled() != enabled) {
     Blockly.BlockSvg.superClass_.setEnabled.call(this, enabled);
-    if (this.rendered) {
+    if (this.rendered && !this.getInheritedDisabled()) {
       this.updateDisabled();
     }
   }
@@ -1656,7 +1655,8 @@ Blockly.BlockSvg.prototype.getRootBlock = function() {
 Blockly.BlockSvg.prototype.render = function(opt_bubble) {
   Blockly.utils.dom.startTextWidthCache();
   this.rendered = true;
-  (/** @type {!Blockly.WorkspaceSvg} */ (this.workspace)).getRenderer().render(this);
+  (/** @type {!Blockly.WorkspaceSvg} */ (this.workspace))
+      .getRenderer().render(this);
   // No matter how we rendered, connection locations should now be correct.
   this.updateConnectionLocations_();
   if (opt_bubble !== false) {
@@ -1671,9 +1671,19 @@ Blockly.BlockSvg.prototype.render = function(opt_bubble) {
   }
   Blockly.utils.dom.stopTextWidthCache();
 
-  var cursor = this.workspace.getCursor();
-  if (this.pathObject.cursorSvg_) {
-    cursor.draw();
+  this.updateMarkers_();
+};
+
+/**
+ * Redraw any attached marker or cursor svgs if needed.
+ * @protected
+ */
+Blockly.BlockSvg.prototype.updateMarkers_ = function() {
+  if (this.workspace.keyboardAccessibilityMode && this.pathObject.cursorSvg) {
+    this.workspace.getCursor().draw();
+  }
+  if (this.workspace.keyboardAccessibilityMode && this.pathObject.markerSvg) {
+    this.workspace.getMarker(Blockly.navigation.MARKER_NAME).draw();
   }
 };
 
@@ -1760,8 +1770,8 @@ Blockly.BlockSvg.prototype.getHeightWidth = function() {
  * @param {boolean} add True if highlighting should be added.
  * @package
  */
-Blockly.BlockSvg.prototype.highlightForReplacement = function(add) {
-  this.pathObject.updateReplacementHighlight(add);
+Blockly.BlockSvg.prototype.fadeForReplacement = function(add) {
+  this.pathObject.updateReplacementFade(add);
 };
 
 /**

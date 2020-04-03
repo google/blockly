@@ -24,7 +24,7 @@
   <h1><a href="https://developers.google.com/blockly/">Blockly</a> &gt;
     <a href="../index.html">Demos</a> &gt; Asynchronous Execution with JS Interpreter</h1>
 
-  <p>This is a demo of executing code asychronously (e.g., waiting for delays or user input) using the JavaScript interpreter.</p>
+  <p>This is a demo of executing code asynchronously (e.g., waiting for delays or user input) using the JavaScript interpreter.</p>
 
   <p>&rarr; <a href="https://developers.google.com/blockly/guides/configure-blockly/web/running-javascript#js_interpreter">More info on running code with JS Interpreter</a></p>
 
@@ -151,13 +151,13 @@
     var myInterpreter = null;
     var runner;
 
-    function initApi(interpreter, scope) {
+    function initApi(interpreter, globalObject) {
       // Add an API function for the alert() block, generated for "text_print" blocks.
       var wrapper = function(text) {
         text = text ? text.toString() : '';
         outputArea.value = outputArea.value + '\n' + text;
       };
-      interpreter.setProperty(scope, 'alert',
+      interpreter.setProperty(globalObject, 'alert',
           interpreter.createNativeFunction(wrapper));
 
       // Add an API function for the prompt() block.
@@ -165,18 +165,18 @@
         text = text ? text.toString() : '';
         return interpreter.createPrimitive(prompt(text));
       };
-      interpreter.setProperty(scope, 'prompt',
+      interpreter.setProperty(globalObject, 'prompt',
           interpreter.createNativeFunction(wrapper));
 
       // Add an API for the wait block.  See wait_block.js
-      initInterpreterWaitForSeconds(interpreter, scope);
+      initInterpreterWaitForSeconds(interpreter, globalObject);
 
       // Add an API function for highlighting blocks.
       var wrapper = function(id) {
         id = id ? id.toString() : '';
         return interpreter.createPrimitive(highlightBlock(id));
       };
-      interpreter.setProperty(scope, 'highlightBlock',
+      interpreter.setProperty(globalObject, 'highlightBlock',
           interpreter.createNativeFunction(wrapper));
     }
 

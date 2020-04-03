@@ -1,18 +1,7 @@
 /**
  * @license
  * Copyright 2016 Google LLC
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 /**
@@ -142,6 +131,7 @@ Blockly.Options = function(options) {
   this.theme = Blockly.Options.parseThemeOptions_(options);
   this.keyMap = keyMap;
   this.renderer = renderer;
+  this.rendererOverrides = options['rendererOverrides'];
 
   /**
    * The SVG element for the grid pattern.
@@ -160,7 +150,8 @@ Blockly.Options = function(options) {
 
 /**
  * Blockly options.
- * This interface is further described in `typings/blockly-interfaces.d.ts`.
+ * This interface is further described in
+ * `typings/parts/blockly-interfaces.d.ts`.
  * @interface
  */
 Blockly.BlocklyOptions = function() {};
@@ -292,8 +283,7 @@ Blockly.Options.parseThemeOptions_ = function(options) {
   if (theme instanceof Blockly.Theme) {
     return /** @type {!Blockly.Theme} */ (theme);
   }
-  return new Blockly.Theme('builtin',
-      theme['blockStyles'], theme['categoryStyles'], theme['componentStyles']);
+  return Blockly.Theme.defineTheme('builtin', theme);
 };
 
 /**

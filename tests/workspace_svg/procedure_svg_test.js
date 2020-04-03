@@ -1,18 +1,7 @@
 /**
  * @license
  * Copyright 2018 Google LLC
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * SPDX-License-Identifier: Apache-2.0
  */
 'use strict';
 
@@ -327,7 +316,7 @@ function test_procedureEnableDisableInteractions() {
 
     assertTrue('Callers are disabled when their definition is disabled.',
         barCalls[0].disabled && barCalls[1].disabled);
-    assertTrue('Callers in definitions are disabled by inheritence.',
+    assertTrue('Callers in definitions are disabled by inheritance.',
         !fooCalls[0].disabled && fooCalls[0].getInheritedDisabled());
 
     fooDef.setEnabled(false);
@@ -340,7 +329,7 @@ function test_procedureEnableDisableInteractions() {
     assertTrue('Callers are reenabled with their definition',
         !barCalls[0].disabled && !barCalls[0].disabled);
 
-    assertTrue('Nested disabled callers remain disabled, not by inheritence.',
+    assertTrue('Nested disabled callers remain disabled, not by inheritance.',
         fooCalls[0].disabled && !fooCalls[0].getInheritedDisabled());
 
     bazDef.setEnabled(false);
@@ -348,7 +337,7 @@ function test_procedureEnableDisableInteractions() {
     assertTrue('Caller is disabled with its definition',
         bazCall.disabled);
 
-    assertTrue('Caller in the return is disabled by inheritence.',
+    assertTrue('Caller in the return is disabled by inheritance.',
         !barCalls[1].disabled && barCalls[1].getInheritedDisabled());
 
     barDef.setEnabled(false);
@@ -357,7 +346,7 @@ function test_procedureEnableDisableInteractions() {
 
     bazDef.setEnabled(true);
 
-    assertTrue('Caller in the return remains disabled, not by inheritence.',
+    assertTrue('Caller in the return remains disabled, not by inheritance.',
         barCalls[1].disabled && !barCalls[1].getInheritedDisabled());
 
   } finally {

@@ -1,18 +1,7 @@
 /**
  * @license
  * Copyright 2016 Google LLC
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 /**
@@ -97,9 +86,14 @@ Blockly.FlyoutButton = function(workspace, targetWorkspace, xml, isLabel) {
 };
 
 /**
- * The margin around the text in the button.
+ * The horizontal margin around the text in the button.
  */
-Blockly.FlyoutButton.MARGIN = 5;
+Blockly.FlyoutButton.MARGIN_X = 5;
+
+/**
+ * The vertical margin around the text in the button.
+ */
+Blockly.FlyoutButton.MARGIN_Y = 2;
 
 /**
  * The width of the button's rect.
@@ -164,11 +158,18 @@ Blockly.FlyoutButton.prototype.createDom = function() {
         'flyoutForegroundColour', 'fill');
   }
 
-  this.width = Blockly.utils.dom.getTextWidth(svgText);
-  this.height = 20;  // Can't compute it :(
-
+  var fontSize = Blockly.utils.style.getComputedStyle(svgText, 'fontSize');
+  var fontWeight = Blockly.utils.style.getComputedStyle(svgText, 'fontWeight');
+  var fontFamily = Blockly.utils.style.getComputedStyle(svgText, 'fontFamily');
+  this.width = Blockly.utils.dom.getFastTextWidthWithSizeString(svgText,
+      fontSize, fontWeight, fontFamily);
+  var fontMetrics = Blockly.utils.dom.measureFontMetrics(text, fontSize,
+      fontWeight, fontFamily);
+  this.height = fontMetrics.height;
+  
   if (!this.isLabel_) {
-    this.width += 2 * Blockly.FlyoutButton.MARGIN;
+    this.width += 2 * Blockly.FlyoutButton.MARGIN_X;
+    this.height += 2 * Blockly.FlyoutButton.MARGIN_Y;
     shadow.setAttribute('width', this.width);
     shadow.setAttribute('height', this.height);
   }
@@ -176,7 +177,8 @@ Blockly.FlyoutButton.prototype.createDom = function() {
   rect.setAttribute('height', this.height);
 
   svgText.setAttribute('x', this.width / 2);
-  svgText.setAttribute('y', this.height - Blockly.FlyoutButton.MARGIN);
+  svgText.setAttribute('y', this.height / 2 - fontMetrics.height / 2 +
+      fontMetrics.baseline);
 
   this.updateTransform_();
 
@@ -292,9 +294,5 @@ Blockly.Css.register([
   '.blocklyFlyoutLabelBackground {',
     'opacity: 0;',
   '}',
-
-  '.blocklyFlyoutLabelText {',
-    'fill: #000;',
-  '}'
   /* eslint-enable indent */
 ]);

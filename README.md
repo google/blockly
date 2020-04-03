@@ -16,6 +16,8 @@ a few minutes and will help us better support the Blockly community.
 
 Cross-browser Testing Platform and Open Source <3 Provided by [Sauce Labs](https://saucelabs.com)
 
+We support IE11 and test it using [BrowserStack](https://browserstack.com)
+
 Want to contribute? Great! First, read [our guidelines for contributors](https://developers.google.com/blockly/guides/modify/contributing).
 
 ## Releases

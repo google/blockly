@@ -1,18 +1,7 @@
 /**
  * @license
  * Copyright 2017 Google LLC
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * SPDX-License-Identifier: Apache-2.0
  */
 'use strict';
 
@@ -1340,6 +1329,20 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
   }
 ]);  // END JSON EXTRACT (Do not delete this comment.)
 
+Blockly.Blocks['test_images_clickhandler'] = {
+  init: function() {
+    this.appendDummyInput()
+      .appendField("Image click handler")
+      .appendField(new Blockly.FieldImage(
+        "https://blockly-demo.appspot.com/static/tests/media/a.png", 32, 32,
+        "image with click handler", this.onClick_), "IMAGE");
+    this.setStyle('text_blocks');
+  },
+  onClick_: function() {
+    alert('Image clicked');
+  }
+};
+
 Blockly.Blocks['test_validators_text_null'] = {
   init: function() {
     this.appendDummyInput()
@@ -1486,7 +1489,7 @@ Blockly.Blocks['test_validators_checkbox_not_match_null'] = {
     this.setCommentText('The validator for this block only works on the' +
       ' end-most checkbox. If the new value does not match the value of the' +
       ' start-most checkbox, it will return null (invalid), which means the' +
-      ' field value should not change. Therfore they should always match.');
+      ' field value should not change. Therefore they should always match.');
   },
 
   validate: function(newValue) {
@@ -1632,7 +1635,7 @@ Blockly.Blocks['test_validators_number_mult10_force'] = {
       .appendField("force mult of 10")
       .appendField(new Blockly.FieldNumber(123, null, null, null, this.validate), "INPUT");
     this.setColour(230);
-    this.setCommentText('Theinput value will be rounded to the nearest' +
+    this.setCommentText('The input value will be rounded to the nearest' +
       ' multiple of 10. The field will display the input while the field is' +
       ' being edited, but the value should be the validated (rounded) value.' +
       ' Note: If you want to do rounding this is not the proper way, use the' +

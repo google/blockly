@@ -1,18 +1,7 @@
 /**
  * @license
  * Copyright 2019 Google LLC
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 /**
@@ -90,7 +79,7 @@ Blockly.blockRendering.Types.nextTypeValue_ = 1 << 24;
 /**
  * Get the enum flag value of an existing type or register a new type.
  * @param {!string} type The name of the type.
- * @return {!number} The enum flag value assosiated with that type.
+ * @return {!number} The enum flag value associated with that type.
  * @package
  */
 Blockly.blockRendering.Types.getType = function(type) {

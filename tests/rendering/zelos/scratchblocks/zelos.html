@@ -7,31 +7,6 @@
   <script type="text/javascript"
     src="https://unpkg.com/scratch-blocks@0.1.0-prerelease.1578322100/msg/messages.js"></script>
   <script type="text/javascript" src="../../../playgrounds/screenshot.js"></script>
-
-  <style id="blocklycss">
-    .blocklyText,
-    .blocklyHtmlInput {
-      font-family: "Helvetica Neue", "Segoe UI", Helvetica, sans-serif;
-      font-weight: bold;
-      font-size: 12pt;
-    }
-
-    .blocklyNonEditableText>text,
-    .blocklyEditableText>text,
-    .blocklyNonEditableText>g>text,
-    .blocklyEditableText>g>text {
-      fill: #575E75;
-    }
-
-    .blocklyHtmlInput {
-      color: #575E75;
-    }
-    .zelos-renderer .blocklyText {
-      font-weight: 500 !important;
-    }
-  </style>
-
-
   <script>
 
     Blockly.Block.prototype.setColourFromRawValues_ = function (primary, secondary,
@@ -62,10 +37,6 @@
     goog.require('Blockly.zelos.Renderer');
     // Blockly.blockRendering.startDebugger();
 
-    // This stub is a workaround in order to load pxt-blockly blocks, as they
-    // rely on a setOutputShape method on the block.
-    Blockly.BlockSvg.prototype.setOutputShape = function () { };
-
     var blocklyDiv = document.getElementById('blocklyDiv');
     var workspace;
     window.addEventListener('message', function (msg) {
@@ -84,6 +55,13 @@
 
       workspace = Blockly.inject(blocklyDiv, {
         renderer: 'zelos',
+        rendererOverrides: {
+          'FIELD_TEXT_FONTFAMILY': 'Helvetica Neue',
+          'FIELD_TEXT_FONTWEIGHT': '500',
+          'FIELD_TEXT_FONTSIZE': 12,
+          'FIELD_BORDER_RECT_X_PADDING': 2.75 * 4,
+          'ADD_START_HATS': true
+        },
         move: {
           scrollbars: true,
           drag: true,
@@ -95,14 +73,6 @@
         },
         media: 'https://unpkg.com/scratch-blocks@0.1.0-prerelease.1578322100/media/'
       });
-      var constants = workspace.getRenderer().getConstants();
-      constants.FIELD_TEXT_FONTSIZE = 12;
-      constants.FIELD_TEXT_FONTWEIGHT = '500';
-      constants.FIELD_TEXT_FONTFAMILY = 'Helvetica Neue';
-
-      constants.FIELD_BORDER_RECT_X_PADDING = 2.75 * constants.GRID_UNIT;
-
-      constants.ADD_START_HATS = true;
 
       Blockly.Xml.domToWorkspace(Blockly.Xml.textToDom(xml), workspace);
 
@@ -115,7 +85,7 @@
               from: 'zelos',
               text: datauri
             }, '*');
-          }, document.getElementById('blocklycss').innerText);
+          });
         } catch (err) {
           console.error(err);
         }

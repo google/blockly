@@ -1,18 +1,7 @@
 /**
  * @license
  * Copyright 2011 Google LLC
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 /**
@@ -100,6 +89,13 @@ Blockly.clipboardTypeCounts_ = null;
  * @private
  */
 Blockly.cache3dSupported_ = null;
+
+/**
+ * Container element to render the WidgetDiv, DropDownDiv and Tooltip.
+ * @type {?Element}
+ * @package
+ */
+Blockly.parentContainer = null;
 
 /**
  * Blockly opaque event data used to unbind events when using
@@ -671,4 +667,15 @@ Blockly.checkBlockColourConstant_ = function(
     var warning = warningPattern.replace('%1', namePath).replace('%2', msgName);
     console.warn(warning);
   }
+};
+
+/**
+ * Set the parent container.  This is the container element that the WidgetDiv,
+ * DropDownDiv, and Tooltip are rendered into the first time `Blockly.inject`
+ * is called.
+ * This method is a NOP if called after the first ``Blockly.inject``.
+ * @param {!Element} container The container element.
+ */
+Blockly.setParentContainer = function(container) {
+  Blockly.parentContainer = container;
 };

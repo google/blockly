@@ -1,18 +1,7 @@
 /**
  * @license
  * Copyright 2016 Google LLC
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 /**
@@ -174,7 +163,7 @@ FactoryUtils.getGeneratorStub = function(block, generatorLanguage) {
  * Update the language code as JSON.
  * @param {string} blockType Name of block.
  * @param {!Blockly.Block} rootBlock Factory_base block.
- * @return {string} Generanted language code.
+ * @return {string} Generated language code.
  * @private
  */
 FactoryUtils.formatJson_ = function(blockType, rootBlock) {
@@ -841,7 +830,7 @@ FactoryUtils.parseJsonBlockDefinitions = function(blockDefsString) {
     else if (currentChar == '}') {
       unbalancedBracketCount--;
       if (unbalancedBracketCount == 0 && i > 0) {
-        // The brackets are balanced. We've got a complete block defintion.
+        // The brackets are balanced. We've got a complete block definition.
         var blockDef = blockDefsString.substring(defStart, i + 1);
         blockDefArray.push(blockDef);
         defStart = i + 1;

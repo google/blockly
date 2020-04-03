@@ -1,18 +1,7 @@
 /**
  * @license
  * Copyright 2011 Google LLC
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 /**
@@ -57,6 +46,8 @@ Blockly.Flyout = function(workspaceOptions) {
    */
   this.workspace_ = new Blockly.WorkspaceSvg(workspaceOptions);
   this.workspace_.isFlyout = true;
+  // Keep the workspace visibility consistent with the flyout's visibility.
+  this.workspace_.setVisible(this.isVisible_);
 
   /**
    * Is RTL vs LTR.
@@ -557,6 +548,7 @@ Blockly.Flyout.prototype.clearOldBlocks_ = function() {
   for (var j = 0; j < this.mats_.length; j++) {
     var rect = this.mats_[j];
     if (rect) {
+      Blockly.Tooltip.unbindMouseEvents(rect);
       Blockly.utils.dom.removeNode(rect);
     }
   }
@@ -638,8 +630,8 @@ Blockly.Flyout.prototype.isBlockCreatable_ = function(block) {
 /**
  * Create a copy of this block on the workspace.
  * @param {!Blockly.BlockSvg} originalBlock The block to copy from the flyout.
- * @return {Blockly.BlockSvg} The newly created block, or null if something
- *     went wrong with deserialization.
+ * @return {!Blockly.BlockSvg} The newly created block.
+ * @throws {Error} if something went wrong with deserialization.
  * @package
  */
 Blockly.Flyout.prototype.createBlock = function(originalBlock) {

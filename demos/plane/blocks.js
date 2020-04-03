@@ -1,18 +1,7 @@
 /**
  * @license
  * Copyright 2013 Google LLC
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 /**
@@ -46,12 +35,14 @@ Blockly.Blocks['plane_get_rows'] = {
     this.setHelpUrl(Blockly.Msg['VARIABLES_GET_HELPURL']);
     this.setColour(330);
     this.appendDummyInput()
-        .appendField(Plane.getMsg('Plane_getRows'), 'title');
+        .appendField(Plane.getMsg('Plane_getRows')
+            .replace('%1', Plane.rows1st), 'title');
     this.setOutput(true, 'Number');
   },
   customUpdate: function() {
     this.setFieldValue(
-        Plane.getMsg('Plane_getRows').replace('%1', Plane.rows1st), 'title');
+        Plane.getMsg('Plane_getRows')
+            .replace('%1', Plane.rows1st), 'title');
   }
 };
 
@@ -66,12 +57,14 @@ Blockly.Blocks['plane_get_rows1st'] = {
     this.setHelpUrl(Blockly.Msg['VARIABLES_GET_HELPURL']);
     this.setColour(330);
     this.appendDummyInput()
-        .appendField(Plane.getMsg('Plane_getRows1'), 'title');
+        .appendField(Plane.getMsg('Plane_getRows1')
+            .replace('%1', Plane.rows1st), 'title');
     this.setOutput(true, 'Number');
   },
   customUpdate: function() {
     this.setFieldValue(
-        Plane.getMsg('Plane_getRows1').replace('%1', Plane.rows1st), 'title');
+        Plane.getMsg('Plane_getRows1')
+            .replace('%1', Plane.rows1st), 'title');
   }
 };
 
@@ -86,12 +79,14 @@ Blockly.Blocks['plane_get_rows2nd'] = {
     this.setHelpUrl(Blockly.Msg['VARIABLES_GET_HELPURL']);
     this.setColour(330);
     this.appendDummyInput()
-        .appendField(Plane.getMsg('Plane_getRows2'), 'title');
+        .appendField(Plane.getMsg('Plane_getRows2')
+            .replace('%1', Plane.rows2nd), 'title');
     this.setOutput(true, 'Number');
   },
   customUpdate: function() {
     this.setFieldValue(
-        Plane.getMsg('Plane_getRows2').replace('%1', Plane.rows2nd), 'title');
+        Plane.getMsg('Plane_getRows2')
+            .replace('%1', Plane.rows2nd), 'title');
   }
 };
 

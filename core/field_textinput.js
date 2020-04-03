@@ -1,18 +1,7 @@
 /**
  * @license
  * Copyright 2012 Google LLC
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 /**
@@ -139,7 +128,7 @@ Blockly.FieldTextInput.prototype.configure_ = function(config) {
  * @override
  */
 Blockly.FieldTextInput.prototype.initView = function() {
-  if (this.constants_.FULL_BLOCK_FIELDS) {
+  if (this.getConstants().FULL_BLOCK_FIELDS) {
     // Step one: figure out if this is the only field on this block.
     // Rendering is quite different in that case.
     var nFields = 0;
@@ -227,13 +216,13 @@ Blockly.FieldTextInput.prototype.doValueUpdate_ = function(newValue) {
  * @package
  */
 Blockly.FieldTextInput.prototype.applyColour = function() {
-  if (this.sourceBlock_ && this.constants_.FULL_BLOCK_FIELDS) {
+  if (this.sourceBlock_ && this.getConstants().FULL_BLOCK_FIELDS) {
     if (this.borderRect_) {
       this.borderRect_.setAttribute('stroke',
           this.sourceBlock_.style.colourTertiary);
     } else {
       this.sourceBlock_.pathObject.svgPath.setAttribute('fill',
-          this.constants_.FIELD_BORDER_RECT_COLOUR);
+          this.getConstants().FIELD_BORDER_RECT_COLOUR);
     }
   }
 };
@@ -279,7 +268,7 @@ Blockly.FieldTextInput.prototype.setSpellcheck = function(check) {
 /**
  * Show the inline free-text editor on top of the text.
  * @param {Event=} _opt_e Optional mouse event that triggered the field to open,
- *     or undefined if triggered programatically.
+ *     or undefined if triggered programmatically.
  * @param {boolean=} opt_quietInput True if editor should be created without
  *     focus.  Defaults to false.
  * @protected
@@ -341,9 +330,9 @@ Blockly.FieldTextInput.prototype.widgetCreate_ = function() {
   var htmlInput = /** @type {HTMLInputElement} */ (document.createElement('input'));
   htmlInput.className = 'blocklyHtmlInput';
   htmlInput.setAttribute('spellcheck', this.spellcheck_);
-  var scale = this.workspace_.scale;
+  var scale = this.workspace_.getScale();
   var fontSize =
-      (this.constants_.FIELD_TEXT_FONTSIZE * scale) + 'pt';
+      (this.getConstants().FIELD_TEXT_FONTSIZE * scale) + 'pt';
   div.style.fontSize = fontSize;
   htmlInput.style.fontSize = fontSize;
   var borderRadius =
@@ -361,7 +350,7 @@ Blockly.FieldTextInput.prototype.widgetCreate_ = function() {
     htmlInput.style.border = (1 * scale) + 'px solid ' + strokeColour;
     div.style.borderRadius = borderRadius;
     div.style.transition = 'box-shadow 0.25s ease 0s';
-    if (this.constants_.FIELD_TEXTINPUT_BOX_SHADOW) {
+    if (this.getConstants().FIELD_TEXTINPUT_BOX_SHADOW) {
       div.style.boxShadow = 'rgba(255, 255, 255, 0.3) 0px 0px 0px ' +
           4 * scale + 'px';
     }

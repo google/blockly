@@ -1,18 +1,7 @@
 /**
  * @license
  * Copyright 2013 Google LLC
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 /**
@@ -48,17 +37,17 @@ Blockly.WidgetDiv.dispose_ = null;
 
 /**
  * A class name representing the current owner's workspace renderer.
- * @type {?string}
+ * @type {string}
  * @private
  */
-Blockly.WidgetDiv.rendererClassName_ = null;
+Blockly.WidgetDiv.rendererClassName_ = '';
 
 /**
  * A class name representing the current owner's workspace theme.
- * @type {?string}
+ * @type {string}
  * @private
  */
-Blockly.WidgetDiv.themeClassName_ = null;
+Blockly.WidgetDiv.themeClassName_ = '';
 
 /**
  * Create the widget div and inject it onto the page.
@@ -73,7 +62,8 @@ Blockly.WidgetDiv.createDom = function() {
    */
   Blockly.WidgetDiv.DIV = document.createElement('div');
   Blockly.WidgetDiv.DIV.className = 'blocklyWidgetDiv';
-  document.body.appendChild(Blockly.WidgetDiv.DIV);
+  var container = Blockly.parentContainer || document.body;
+  container.appendChild(Blockly.WidgetDiv.DIV);
 };
 
 /**
@@ -91,9 +81,9 @@ Blockly.WidgetDiv.show = function(newOwner, rtl, dispose) {
   div.style.direction = rtl ? 'rtl' : 'ltr';
   div.style.display = 'block';
   Blockly.WidgetDiv.rendererClassName_ =
-      Blockly.getMainWorkspace().getRenderer().name + '-renderer';
+      Blockly.getMainWorkspace().getRenderer().getClassName();
   Blockly.WidgetDiv.themeClassName_ =
-      Blockly.getMainWorkspace().getTheme().name + '-theme';
+      Blockly.getMainWorkspace().getTheme().getClassName();
   Blockly.utils.dom.addClass(div, Blockly.WidgetDiv.rendererClassName_);
   Blockly.utils.dom.addClass(div, Blockly.WidgetDiv.themeClassName_);
 };
@@ -102,23 +92,26 @@ Blockly.WidgetDiv.show = function(newOwner, rtl, dispose) {
  * Destroy the widget and hide the div.
  */
 Blockly.WidgetDiv.hide = function() {
-  var div = Blockly.WidgetDiv.DIV;
-  if (Blockly.WidgetDiv.owner_) {
-    Blockly.WidgetDiv.owner_ = null;
-    div.style.display = 'none';
-    div.style.left = '';
-    div.style.top = '';
-    Blockly.WidgetDiv.dispose_ && Blockly.WidgetDiv.dispose_();
-    Blockly.WidgetDiv.dispose_ = null;
-    div.innerHTML = '';
+  if (!Blockly.WidgetDiv.isVisible()) {
+    return;
   }
+  Blockly.WidgetDiv.owner_ = null;
+
+  var div = Blockly.WidgetDiv.DIV;
+  div.style.display = 'none';
+  div.style.left = '';
+  div.style.top = '';
+  Blockly.WidgetDiv.dispose_ && Blockly.WidgetDiv.dispose_();
+  Blockly.WidgetDiv.dispose_ = null;
+  div.textContent = '';
+
   if (Blockly.WidgetDiv.rendererClassName_) {
     Blockly.utils.dom.removeClass(div, Blockly.WidgetDiv.rendererClassName_);
-    Blockly.WidgetDiv.rendererClassName_ = null;
+    Blockly.WidgetDiv.rendererClassName_ = '';
   }
   if (Blockly.WidgetDiv.themeClassName_) {
     Blockly.utils.dom.removeClass(div, Blockly.WidgetDiv.themeClassName_);
-    Blockly.WidgetDiv.themeClassName_ = null;
+    Blockly.WidgetDiv.themeClassName_ = '';
   }
   Blockly.getMainWorkspace().markFocused();
 };

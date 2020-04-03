@@ -1,18 +1,7 @@
 /**
  * @license
  * Copyright 2011 Google LLC
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 /**
@@ -180,6 +169,13 @@ Blockly.Block = function(workspace, prototypeName, opt_id) {
    * @type {string|undefined}
    */
   this.hat = undefined;
+
+  /**
+   * A count of statement inputs on the block.
+   * @type {number}
+   * @package
+   */
+  this.statementInputCount = 0;
 
   // Copy the type-specific functions and data from the prototype.
   if (prototypeName) {
@@ -943,7 +939,7 @@ Blockly.Block.prototype.setStyle = function(blockStyleName) {
  * initializer function.
  * @param {function(Blockly.Events.Abstract)} onchangeFn The callback to call
  *     when the block's workspace changes.
- * @throws {Error} if onchangeFn is not falsey or a function.
+ * @throws {Error} if onchangeFn is not falsey and not a function.
  */
 Blockly.Block.prototype.setOnChange = function(onchangeFn) {
   if (onchangeFn && typeof onchangeFn != 'function') {
@@ -1646,6 +1642,9 @@ Blockly.Block.prototype.appendInput_ = function(type, name) {
   if (type == Blockly.INPUT_VALUE || type == Blockly.NEXT_STATEMENT) {
     connection = this.makeConnection_(type);
   }
+  if (type == Blockly.NEXT_STATEMENT) {
+    this.statementInputCount++;
+  }
   var input = new Blockly.Input(type, name, this, connection);
   // Append input to list.
   this.inputList.push(input);
@@ -1723,6 +1722,9 @@ Blockly.Block.prototype.moveNumberedInputBefore = function(
 Blockly.Block.prototype.removeInput = function(name, opt_quiet) {
   for (var i = 0, input; (input = this.inputList[i]); i++) {
     if (input.name == name) {
+      if (input.type == Blockly.NEXT_STATEMENT) {
+        this.statementInputCount--;
+      }
       input.dispose();
       this.inputList.splice(i, 1);
       return;

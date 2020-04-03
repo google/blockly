@@ -65,16 +65,23 @@
 <script src="../blocks/variables_dynamic.js"></script>
 <script src="../blocks/procedures.js"></script>
 <script src="blocks/test_blocks.js"></script>
+<script src="themes/test_themes.js"></script>
 <script src="./playgrounds/screenshot.js"></script>
 
 <script>
 // Custom requires for the playground.
+
+// Rendering.
 goog.require('Blockly.blockRendering.Debug');
 goog.require('Blockly.minimalist.Renderer');
 goog.require('Blockly.Themes.Modern');
 goog.require('Blockly.Themes.Zelos');
 goog.require('Blockly.thrasos.Renderer');
 goog.require('Blockly.zelos.Renderer');
+
+// Other.
+goog.require('Blockly.WorkspaceCommentSvg');
+goog.require('Blockly.WorkspaceCommentSvg.render');
 </script>
 <script>
 'use strict';
@@ -145,6 +152,7 @@ function start() {
   workspace.configureContextMenu = configureContextMenu;
   addToolboxButtonCallbacks();
   addRenderDebugOptionsCheckboxes();
+  populateTestThemes();
   // Restore previously displayed text.
   if (sessionStorage) {
     var text = sessionStorage.getItem('textarea');
@@ -282,6 +290,9 @@ function addToolboxButtonCallbacks() {
 }
 
 function setRenderDebugOptionCheckboxState(overrideOptions) {
+  if (!Blockly.blockRendering.Debug) {
+    return;
+  }
   Blockly.blockRendering.Debug.config = overrideOptions || {};
   if (!overrideOptions) {
     return;
@@ -297,6 +308,9 @@ function setRenderDebugOptionCheckboxState(overrideOptions) {
 }
 
 function updateRenderDebugOptions(e) {
+  if (!Blockly.blockRendering.Debug) {
+    return;
+  }
   var target = e.target;
   var optionName = target.getAttribute('data-optionName');
   var config = Blockly.blockRendering.Debug.config;
@@ -307,6 +321,9 @@ function updateRenderDebugOptions(e) {
 }
 
 function addRenderDebugOptionsCheckboxes() {
+  if (!Blockly.blockRendering.Debug) {
+    return;
+  }
   var renderDebugConfig = Blockly.blockRendering.Debug.config;
   var renderDebugOptionsListEl = document.getElementById('renderDebugOptions');
   var optionNames = Object.keys(renderDebugConfig);
@@ -343,8 +360,25 @@ function changeTheme() {
   } else if (theme.value === "zelos") {
     Blockly.getMainWorkspace().setTheme(Blockly.Themes.Zelos);
   } else {
-    Blockly.getMainWorkspace().setTheme(Blockly.Themes.Classic);
+    var testTheme = getTestTheme(theme.value);
+    if (testTheme) {
+      Blockly.getMainWorkspace().setTheme(testTheme);
+    } else {
+      Blockly.getMainWorkspace().setTheme(Blockly.Themes.Classic);
+    }
   }
+}
+
+function changeRenderingConstant(value) {
+  var type = document.getElementById('rendering-constant-selector').value;
+  if (type == 'fontSize') {
+    var fontStyle = {
+      'size': value
+    };
+    workspace.getTheme().setFontStyle(fontStyle);
+  }
+  // Refresh theme.
+  workspace.setTheme(workspace.getTheme());
 }
 
 function setBackgroundColour() {
@@ -420,6 +454,9 @@ function logEvents(state) {
 }
 
 function toggleRenderingDebug(state) {
+  if (!Blockly.blockRendering.Debug) {
+    return;
+  }
   var checkbox = document.getElementById('blockRenderDebugCheck');
   checkbox.checked = state;
   if (sessionStorage) {
@@ -444,7 +481,7 @@ function toggleAccessibilityMode(state) {
   }
 }
 
-function configureContextMenu(menuOptions) {
+function configureContextMenu(menuOptions, e) {
   var screenshotOption = {
     text: 'Download Screenshot',
     enabled: workspace.getTopBlocks().length,
@@ -453,6 +490,9 @@ function configureContextMenu(menuOptions) {
     }
   };
   menuOptions.push(screenshotOption);
+
+  // Adds a default-sized workspace comment to the workspace.
+  menuOptions.push(Blockly.ContextMenu.workspaceCommentOption(workspace, e));
 }
 
 function logger(e) {
@@ -563,6 +603,10 @@ var spaghettiXml = [
   .blockRenderDebug {
     display: none;
   }
+
+  .zelos-renderer .blocklyFlyoutButton .blocklyText {
+    font-size: 1.5rem;
+  }
 </style>
 </head>
 <body onload="start()">
@@ -630,6 +674,15 @@ var spaghettiXml = [
     Stress test: &nbsp;
     <input type="button" value="Airstrike!" onclick="airstrike(100)">
     <input type="button" value="Spaghetti!" onclick="spaghetti(8)">
+  </p>
+  <p>
+    Rendering: &nbsp;
+    <select id="rendering-constant-selector">
+      <option value="fontSize">Font Size</option>
+    </select>
+    <input type="range" min="3" max="50" value="4"
+      oninput="changeRenderingConstant(this.value)"
+      onchange="changeRenderingConstant(this.value)" />
   </p>
   <ul class="playgroundToggleOptions">
     <li>
@@ -1608,6 +1661,7 @@ var spaghettiXml = [
         <block type="test_images_fliprtl"></block>
         <block type="test_images_missing"></block>
         <block type="test_images_many_icons"></block>
+        <block type="test_images_clickhandler"></block>
       </category>
       <category name="Emoji! o((*^ᴗ^*))o">
         <label text="Unicode & Emojis"></label>

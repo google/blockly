@@ -1,18 +1,7 @@
 /**
  * @license
  * Copyright 2012 Google LLC
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 /**
@@ -211,12 +200,20 @@ Plane.rows1st = 0;
 Plane.rows2nd = 0;
 
 /**
- * Redraw the rows when the slider has moved.
+ * Redraw the rows and update blocks when the slider has moved.
  * @param {number} value New slider position.
  */
 Plane.sliderChange = function(value) {
   var newRows = Math.round(value * 410 / 20);
   Plane.redraw(newRows);
+
+  function updateBlocks(blocks) {
+    for (var i = 0, block; block = blocks[i]; i++) {
+      block.customUpdate && block.customUpdate();
+    }
+  }
+  updateBlocks(Plane.workspace.getAllBlocks(false), true);
+  updateBlocks(Plane.workspace.flyout_.workspace_.getAllBlocks(false));
 };
 
 /**
@@ -351,15 +348,6 @@ Plane.recalculate = function() {
       Plane.getMsg('Plane_seats').replace(
           '%1', isNaN(seats) ? '?' : seats));
   Plane.setCorrect(isNaN(seats) ? null : (Plane.answer() == seats));
-
-  // Update blocks to show values.
-  function updateBlocks(blocks) {
-    for (var i = 0, block; block = blocks[i]; i++) {
-      block.customUpdate && block.customUpdate();
-    }
-  }
-  updateBlocks(Plane.workspace.getAllBlocks(false));
-  updateBlocks(Plane.workspace.flyout_.workspace_.getAllBlocks(false));
 };
 
 /**

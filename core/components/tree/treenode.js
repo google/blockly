@@ -1,18 +1,7 @@
 /**
  * @license
  * Copyright 2019 Google LLC
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 /**
@@ -72,18 +61,17 @@ Blockly.tree.TreeNode.prototype.getTree = function() {
  * @override
  */
 Blockly.tree.TreeNode.prototype.getCalculatedIconClass = function() {
-  var expanded = this.getExpanded();
-  var expandedIconClass = this.getExpandedIconClass();
-  if (expanded && expandedIconClass) {
-    return expandedIconClass;
+  var expanded = this.expanded_;
+  if (expanded && this.expandedIconClass) {
+    return this.expandedIconClass;
   }
-  var iconClass = this.getIconClass();
+  var iconClass = this.iconClass;
   if (!expanded && iconClass) {
     return iconClass;
   }
 
   // fall back on default icons
-  var config = this.getConfig();
+  var config = this.config_;
   if (this.hasChildren()) {
     if (expanded && config.cssExpandedFolderIcon) {
       return config.cssTreeIcon + ' ' + config.cssExpandedFolderIcon;
@@ -105,7 +93,7 @@ Blockly.tree.TreeNode.prototype.getCalculatedIconClass = function() {
  */
 Blockly.tree.TreeNode.prototype.onClick_ = function(_e) {
   // Expand icon.
-  if (this.hasChildren() && this.isUserCollapsible()) {
+  if (this.hasChildren() && this.isUserCollapsible_) {
     this.toggle();
     this.select();
   } else if (this.isSelected()) {
@@ -139,8 +127,8 @@ Blockly.tree.TreeNode.prototype.onKeyDown = function(e) {
     var map = {};
     var next = Blockly.utils.KeyCodes.DOWN;
     var prev = Blockly.utils.KeyCodes.UP;
-    map[Blockly.utils.KeyCodes.RIGHT] = this.isRightToLeft() ? prev : next;
-    map[Blockly.utils.KeyCodes.LEFT] = this.isRightToLeft() ? next : prev;
+    map[Blockly.utils.KeyCodes.RIGHT] = this.rightToLeft_ ? prev : next;
+    map[Blockly.utils.KeyCodes.LEFT] = this.rightToLeft_ ? next : prev;
     map[Blockly.utils.KeyCodes.UP] = Blockly.utils.KeyCodes.LEFT;
     map[Blockly.utils.KeyCodes.DOWN] = Blockly.utils.KeyCodes.RIGHT;
 
@@ -179,7 +167,7 @@ Blockly.tree.TreeNode.prototype.doNodeExpanded =
     Blockly.tree.TreeNode.prototype.resizeToolbox_;
 
 /**
- * Resize the toolbox when a node is collased.
+ * Resize the toolbox when a node is collapsed.
  * @override
  */
 Blockly.tree.TreeNode.prototype.doNodeCollapsed =

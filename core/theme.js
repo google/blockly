@@ -97,22 +97,22 @@ Blockly.Theme.CategoryStyle;
 /**
  * A component style.
  * @typedef {{
- *            workspaceBackgroundColour:string?,
- *            toolboxBackgroundColour:string?,
- *            toolboxForegroundColour:string?,
- *            flyoutBackgroundColour:string?,
- *            flyoutForegroundColour:string?,
- *            flyoutOpacity:number?,
- *            scrollbarColour:string?,
- *            scrollbarOpacity:number?,
- *            insertionMarkerColour:string?,
- *            insertionMarkerOpacity:number?,
- *            markerColour:string?,
- *            cursorColour:string?,
- *            selectedGlowColour:string?,
- *            selectedGlowOpacity:number?,
- *            replacementGlowColour:string?,
- *            replacementGlowOpacity:number?
+ *            workspaceBackgroundColour:?string,
+ *            toolboxBackgroundColour:?string,
+ *            toolboxForegroundColour:?string,
+ *            flyoutBackgroundColour:?string,
+ *            flyoutForegroundColour:?string,
+ *            flyoutOpacity:?number,
+ *            scrollbarColour:?string,
+ *            scrollbarOpacity:?number,
+ *            insertionMarkerColour:?string,
+ *            insertionMarkerOpacity:?number,
+ *            markerColour:?string,
+ *            cursorColour:?string,
+ *            selectedGlowColour:?string,
+ *            selectedGlowOpacity:?number,
+ *            replacementGlowColour:?string,
+ *            replacementGlowOpacity:?number
  *          }}
  */
 Blockly.Theme.ComponentStyle;
@@ -120,9 +120,9 @@ Blockly.Theme.ComponentStyle;
 /**
  * A font style.
  * @typedef {{
- *            family:string?,
- *            weight:string?,
- *            size:number?
+ *            family:?string,
+ *            weight:?string,
+ *            size:?number
  *          }}
  */
 Blockly.Theme.FontStyle;

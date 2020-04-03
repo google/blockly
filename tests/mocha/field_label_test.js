@@ -125,6 +125,11 @@ suite('Label Fields', function() {
         this.labelField.setValue(false);
         assertValue(this.labelField, 'false');
       });
+      test('With source block', function() {
+        this.labelField.setSourceBlock(createTestBlock());
+        this.labelField.setValue('newValue');
+        assertValue(this.labelField, 'newValue');
+      });
     });
     suite('Value -> New Value', function() {
       setup(function() {

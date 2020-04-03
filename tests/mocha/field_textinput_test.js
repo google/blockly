@@ -109,6 +109,11 @@ suite('Text Input Fields', function() {
         this.textInputField.setValue(false);
         assertValue(this.textInputField, 'false');
       });
+      test('With source block', function() {
+        this.textInputField.setSourceBlock(createTestBlock());
+        this.textInputField.setValue('newValue');
+        assertValue(this.textInputField, 'newValue');
+      });
     });
     suite('Value -> New Value', function() {
       setup(function() {

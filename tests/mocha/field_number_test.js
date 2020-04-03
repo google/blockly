@@ -158,6 +158,11 @@ suite('Number Fields', function() {
           this.numberField.setValue('-Infinity');
           assertValue(this.numberField, -Infinity);
         });
+        test('With source block', function() {
+          this.numberField.setSourceBlock(createTestBlock());
+          this.numberField.setValue(2.5);
+          assertValue(this.numberField, 2.5);
+        });
       });
       suite('Value -> New Value', function() {
         setup(function() {

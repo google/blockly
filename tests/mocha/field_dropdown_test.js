@@ -148,6 +148,11 @@ suite('Dropdown Fields', function() {
       this.dropdownField.setValue('B');
       assertValue(this.dropdownField, 'B', 'b');
     });
+    test('With source block', function() {
+      this.dropdownField.setSourceBlock(createTestBlock());
+      this.dropdownField.setValue('B');
+      assertValue(this.dropdownField, 'B', 'b');
+    });
   });
   suite('Validators', function() {
     setup(function() {

@@ -133,6 +133,11 @@ suite('Angle Fields', function() {
         this.angleField.setValue('-Infinity');
         assertValueDefault(this.angleField);
       });
+      test('With source block', function() {
+        this.angleField.setSourceBlock(createTestBlock());
+        this.angleField.setValue(2.5);
+        assertValue(this.angleField, 2.5);
+      });
     });
     suite('Value -> New Value', function() {
       setup(function() {

@@ -168,6 +168,11 @@ suite('Colour Fields', function() {
         this.colourField.setValue('red');
         assertValue(this.colourField, '#ff0000', '#f00');
       });
+      test('With source block', function() {
+        this.colourField.setSourceBlock(createTestBlock());
+        this.colourField.setValue('#bcbcbc');
+        assertValue(this.colourField, '#bcbcbc', '#bcbcbc');
+      });
     });
     suite('Value -> New Value', function() {
       setup(function() {

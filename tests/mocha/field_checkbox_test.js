@@ -87,6 +87,11 @@ suite('Checkbox Fields', function() {
         this.checkboxField.setValue('FALSE');
         assertValue(this.checkboxField, 'FALSE', 'false');
       });
+      test('With source block', function() {
+        this.checkboxField.setSourceBlock(createTestBlock());
+        this.checkboxField.setValue('FALSE');
+        assertValue(this.checkboxField, 'FALSE', 'false');
+      });
     });
     suite('False -> New Value', function() {
       setup(function() {

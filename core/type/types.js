@@ -184,16 +184,6 @@ Blockly.Types.getTypeWithId = function(id) {
   }
   throw "type with id '" + id + "' is not defined in Blockly.Types \n\t at Blockly.Types.getTypeWithId()" 
 };
-
-/**
-* Return name of first variable from block containing field variables
-* @param {Blockly.Block} block
-* @param {int} row
-* @return {String} varName
-*/
-Blockly.Types.getFieldVariableNameByBlock = function(block, row) {
-      return block.inputList[0].fieldRow[row].variable_.name;
-};
   
 /**
 * Procedure to get child type of a block
@@ -202,10 +192,12 @@ Blockly.Types.getFieldVariableNameByBlock = function(block, row) {
 */
 Blockly.Types.getChildBlockType = function(child) {
   if (child.outputConnection && child.outputConnection.check_) {
-    var typeCheck = child.outputConnection.check_[0];
-    return Blockly.Types.getTypeWithId(typeCheck);
+      var typeCheck = child.outputConnection.check_[0];
+      return Blockly.Types.getTypeWithId(typeCheck);
   } else if (child.getBlockType) {
       return child.getBlockType();
+  } else if (child.getVarType) {
+      return child.getVarType();
   } else {
       return Blockly.Types.CHILD_BLOCK_MISSING;
   }

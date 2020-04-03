@@ -82,27 +82,43 @@ Blockly.StaticTyping.prototype.collectVarsWithTypes = function(workspace) {
 };
 
 /**
- * Navigates through all the statement blocks, collecting all variables and
- * indicates the function in case its a function arg, else return null.
+ * Navigates through all the statement blocks, collecting all procedures
  * @param {Blockly.Workspace} workspace Blockly Workspace to collect variables.
- * @return {Object{ String: Blockly.Type, } Associative array with the variable
- *     names as the keys and the function name as the values.
+ * @return {Object{ String: Array<ProcedureDefinition>, } Associative array with the variable
+ *     names as the keys and the procedure as the values.
  */
-Blockly.StaticTyping.prototype.collectFunctionVars = function(workspace) {
+Blockly.StaticTyping.prototype.collectProcedures = function(workspace) {
   this.functionVars = Object.create(null);
   var blocks = Blockly.StaticTyping.getAllStatementsOrdered(workspace);
   for (var i = 0; i < blocks.length; i++) {
-      var blockVarAndTypes = Blockly.StaticTyping.getBlockVars(blocks[i]);
-      for (var j = 0; j < blockVarAndTypes.length; j++) {
-          var variableId = blockVarAndTypes[j][0];
-          if (blocks[i].type=='procedures_defreturn') {
-              var funcName = blocks[i].inputList[0].fieldRow[2].value_;
-              this.functionVars[variableId] = funcName
-          }
-          else this.functionVars[variableId] = null
-      }
+    var getProcedureDef = blocks[i].getProcedureDef;
+    if (getProcedureDef) {
+      var procedure = blocks[i].getProcedureDef();
+      var funcName = procedure[0];
+      this.functionVars[funcName] = procedure;
+    }
   }
-  return this.functionVars
+  return this.functionVars;
+};
+
+/**
+ * Navigates through all the procedures and return the type of the variable input 
+ * if its an argument of procedure.
+ * @param {Blockly.Workspace} workspace Blockly Workspace to collect variables.
+ * @param {String} variable
+ * @return {Blockly.Type} type of variable
+ */
+Blockly.StaticTyping.getProcedureVarType = function(workspace, variable) {
+  var procedures = Blockly.StaticTyping.prototype.collectProcedures(workspace);
+  for (var func in procedures) {
+    var funcArgs = procedures[func][2];
+    for (var arg in funcArgs) {
+      if (arg == variable) {
+        return funcArgs[arg];
+      }
+    }
+  }
+  return null;
 };
 
 /**
@@ -122,7 +138,7 @@ Blockly.StaticTyping.prototype.collectListsId = function(workspace) {
         if (blocks[i].type=='variables_set') {
             var variableName = workspace.getVariableById(variableId ).name;
             var child = blocks[i].childBlocks_[0];
-            var listName = Blockly.Types.getFieldVariableNameByBlock(blocks[i], 1);
+            var listName = blocks[i].getVarName();
             if (listName == variableName) {
                 if (child && (child.type == 'lists_create_with' || child.type == 'lists_repeat')) {
                     this.listVars[variableId] = listName;
@@ -260,7 +276,10 @@ Blockly.StaticTyping.prototype.assignTypeToVars =
  */
 Blockly.StaticTyping.prototype.setBlockTypeWarning = function(block, blockType, varId) {
   var warningLabel = 'varType';
-  var varName = block.workspace.getVariableById(varId).name;
+  var variable = block.workspace.getVariableById(varId);
+  if(variable) {
+    var varName = variable.name;
+  }
   if ((blockType == Blockly.Types.CHILD_BLOCK_MISSING) ||
       (this.varTypeDict[varId] == Blockly.Types.CHILD_BLOCK_MISSING)) {
     // User still has to attach a block to this variable or its first
@@ -292,3 +311,26 @@ Blockly.StaticTyping.prototype.setProcedureArgs = function(workspace) {
     }
   }
 };
+
+/**
+ * Iterates through the parents of input block and return the space.
+ * @param {Blockly.Block} block
+ */
+// Blockly.StaticTyping.getParentSpaceBlock = function(block) {
+//   var hasParent = true,
+//       parent;
+//   parent = block.getParent();
+//   if (parent) {
+//     while (hasParent) {
+//       if (parent && parent.type != 'forever' 
+//                  && parent.type != 'on_start'
+//                  && parent.type != 'procedures_def' 
+//                  && parent.type != 'procedures_defnoreturn') {
+//         parent = parent.getParent();
+//       }
+//       else hasParent = false;
+//     }
+//     return parent;
+//   }
+//   else return null    
+// };

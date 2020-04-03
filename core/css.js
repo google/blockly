@@ -501,7 +501,7 @@ Blockly.Css.CONTENT = [
    * @author attila@google.com (Attila Bodis)
    */
 
-  '.blocklyWidgetDiv .goog-menu {',
+  '.blocklyWidgetDiv .blockly-goog-menu {',
     'background: #fff;',
     'border-color: transparent;',
     'border-style: solid;',

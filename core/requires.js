@@ -66,8 +66,6 @@ goog.require('Blockly.FieldTextInput');
 goog.require('Blockly.FieldMultilineInput');
 goog.require('Blockly.FieldNumber');
 goog.require('Blockly.FieldVariable');
-goog.require('plusMinus.FieldMinus');
-goog.require('plusMinus.FieldPlus');
 // If you'd like to include the date field in your build, you will also need to
 // include the Closure library as a build dependency.  You can do so by running:
 //     gulp build-compressed --closure-library

@@ -871,6 +871,13 @@ Blockly.Field.prototype.setValue = function(newValue) {
   }
   this.doValueUpdate_(newValue);
   if (this.isDirty_) {
+    if (this.sourceBlock_ && this.sourceBlock_.isCollapsed()) {
+      var field = this.sourceBlock_.getField('_TEMP_COLLAPSED_FIELD');
+      if (field) {
+        var text = this.sourceBlock_.toString(Blockly.COLLAPSE_CHARS, undefined, true);
+        field.doValueUpdate_(text);
+      }
+    }
     this.forceRerender();
   }
   doLogging && console.log(this.value_);

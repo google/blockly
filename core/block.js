@@ -1022,6 +1022,13 @@ Blockly.Block.prototype.updateVarName = function(variable) {
     for (var j = 0, field; (field = input.fieldRow[j]); j++) {
       if (field.referencesVariables() &&
           variable.getId() == field.getValue()) {
+        if (this.isCollapsed()) {
+          var collapsedField = this.getField('_TEMP_COLLAPSED_FIELD');
+          if (collapsedField) {
+            var text = this.toString(Blockly.COLLAPSE_CHARS, undefined, true);
+            collapsedField.doValueUpdate_(text);
+          }
+        }
         field.refreshVariableName();
       }
     }
@@ -1292,20 +1299,23 @@ Blockly.Block.prototype.setCollapsed = function(collapsed) {
  *     empty field. If not specified, '?' is used.
  * @return {string} Text of block.
  */
-Blockly.Block.prototype.toString = function(opt_maxLength, opt_emptyToken) {
+Blockly.Block.prototype.toString = function(opt_maxLength, opt_emptyToken, opt_updatingCollapsedText) {
   var text = [];
   var emptyFieldPlaceholder = opt_emptyToken || '?';
-  if (this.collapsed_) {
+  if (this.collapsed_ && !opt_updatingCollapsedText) {
     text.push(this.getInput('_TEMP_COLLAPSED_INPUT').fieldRow[0].getText());
   } else {
     for (var i = 0, input; (input = this.inputList[i]); i++) {
+      if (input.name == '_TEMP_COLLAPSED_INPUT') {
+        continue;
+      }
       for (var j = 0, field; (field = input.fieldRow[j]); j++) {
         text.push(field.getText());
       }
       if (input.connection) {
         var child = input.connection.targetBlock();
         if (child) {
-          text.push(child.toString(undefined, opt_emptyToken));
+          text.push(child.toString(undefined, opt_emptyToken, opt_updatingCollapsedText));
         } else {
           text.push(emptyFieldPlaceholder);
         }

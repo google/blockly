@@ -615,7 +615,7 @@ Blockly.BlockSvg.prototype.setCollapsed = function(collapsed) {
       icons[i].setVisible(false);
     }
     var text = this.toString(Blockly.COLLAPSE_CHARS);
-    this.appendDummyInput(COLLAPSED_INPUT_NAME).appendField(text).init();
+    this.appendDummyInput(COLLAPSED_INPUT_NAME).appendField(new Blockly.FieldLabel(text), '_TEMP_COLLAPSED_FIELD').init();
 
     // Add any warnings on enclosed blocks to this block.
     var descendants = this.getDescendants(true);

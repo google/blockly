@@ -230,8 +230,6 @@ Blockly.StaticTyping.getBlockVars = function(block) {
       if (getVarType) {
         var varType = getVarType.call(block, varName);
         blockVarAndTypes.push([varName, varType]);
-      } else {
-        blockVarAndTypes.push([varName, Blockly.Types.NULL]);
       }
     }
   } // else: !(block.getVars), block does not define variables, so do nothing

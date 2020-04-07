@@ -170,7 +170,7 @@ Blockly.Variables.flyoutCategoryBlocks = function(workspace) {
     if (Blockly.Blocks['variables_increment']) {
       var block = Blockly.utils.xml.createElement('block');
       block.setAttribute('type', 'variables_increment');
-      block.setAttribute('gap', Blockly.Blocks['variables_get'] ? 20 : 8);
+      block.setAttribute('gap', Blockly.Blocks['variables_get'] ? 12 : 8);
       block.appendChild(Blockly.Variables.generateVariableFieldDom(mostRecentVariable));
       var value = Blockly.Xml.textToDom(
           '<value name="DELTA">' +
@@ -186,7 +186,7 @@ Blockly.Variables.flyoutCategoryBlocks = function(workspace) {
     if (Blockly.Blocks['variables_set']) {
       var block = Blockly.utils.xml.createElement('block');
       block.setAttribute('type', 'variables_set');
-      block.setAttribute('gap', Blockly.Blocks['variables_get'] ? 24 : 8);
+      block.setAttribute('gap', Blockly.Blocks['variables_get'] ? 12 : 8);
       block.appendChild(Blockly.Variables.generateVariableFieldDom(mostRecentVariable));
       var value = Blockly.Xml.textToDom(
           '<value name="VALUE">' +

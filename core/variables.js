@@ -182,7 +182,7 @@ Blockly.Variables.flyoutCategoryBlocks = function(workspace) {
       xmlList.push(block);
     }
 
-    // Addition of the variables_set_type block in the xml variable category
+    // Addition of the variables_force_type block in the xml variable category
     if (Blockly.Blocks['variables_set']) {
       var block = Blockly.utils.xml.createElement('block');
       block.setAttribute('type', 'variables_set');
@@ -190,7 +190,7 @@ Blockly.Variables.flyoutCategoryBlocks = function(workspace) {
       block.appendChild(Blockly.Variables.generateVariableFieldDom(mostRecentVariable));
       var value = Blockly.Xml.textToDom(
           '<value name="VALUE">' +
-          '<block type="variables_set_type"></block>' +
+          '<block type="variables_force_type"></block>' +
           '</value>');
       block.appendChild(value);
       xmlList.push(block);

@@ -69,6 +69,13 @@ Blockly.BlockSvg = function(workspace, prototypeName, opt_id) {
 
   /** @type {boolean} */
   this.rendered = false;
+  /**
+   * Is this block currently rendering? Used to stop recursive render calls.
+   * @type {boolean}
+   * @private
+   */
+  this.renderIsInProgress_ = false;
+
 
   /** @type {!Blockly.WorkspaceSvg} */
   this.workspace = workspace;
@@ -1647,31 +1654,41 @@ Blockly.BlockSvg.prototype.getRootBlock = function() {
 };
 
 /**
- * Render the block.
  * Lays out and reflows a block based on its contents and settings.
  * @param {boolean=} opt_bubble If false, just render this block.
  *   If true, also render block's parent, grandparent, etc.  Defaults to true.
  */
 Blockly.BlockSvg.prototype.render = function(opt_bubble) {
-  Blockly.utils.dom.startTextWidthCache();
-  this.rendered = true;
-  (/** @type {!Blockly.WorkspaceSvg} */ (this.workspace))
-      .getRenderer().render(this);
-  // No matter how we rendered, connection locations should now be correct.
-  this.updateConnectionLocations_();
-  if (opt_bubble !== false) {
-    // Render all blocks above this one (propagate a reflow).
-    var parentBlock = this.getParent();
-    if (parentBlock) {
-      parentBlock.render(true);
-    } else {
-      // Top-most block.  Fire an event to allow scrollbars to resize.
-      this.workspace.resizeContents();
-    }
+  if (this.renderIsInProgress_) {
+    return;  // Don't allow recursive renders.
   }
-  Blockly.utils.dom.stopTextWidthCache();
+  this.renderIsInProgress_ = true;
+  try {
+    this.rendered = true;
+    Blockly.utils.dom.startTextWidthCache();
 
-  this.updateMarkers_();
+    (/** @type {!Blockly.WorkspaceSvg} */ (this.workspace))
+        .getRenderer().render(this);
+
+    // No matter how we rendered, connection locations should now be correct.
+    this.updateConnectionLocations_();
+
+    if (opt_bubble !== false) {
+      // Render all blocks above this one (propagate a reflow).
+      var parentBlock = this.getParent();
+      if (parentBlock) {
+        parentBlock.render(true);
+      } else {
+        // Top-most block. Fire an event to allow scrollbars to resize.
+        this.workspace.resizeContents();
+      }
+    }
+
+    Blockly.utils.dom.stopTextWidthCache();
+    this.updateMarkers_();
+  } finally {
+    this.renderIsInProgress_ = false;
+  }
 };
 
 /**

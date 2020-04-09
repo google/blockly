@@ -615,7 +615,7 @@ Blockly.BlockSvg.prototype.setCollapsed = function(collapsed) {
     renderList.push.apply(renderList, input.setVisible(!collapsed));
   }
 
-  var COLLAPSED_INPUT_NAME = '_TEMP_COLLAPSED_INPUT';
+  var COLLAPSED_INPUT_NAME = Blockly.Block.COLLAPSED_INPUT_NAME;
   if (collapsed) {
     var icons = this.getIcons();
     for (var i = 0; i < icons.length; i++) {

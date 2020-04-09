@@ -1,21 +1,21 @@
 {
 	"@metadata": {
 		"authors": [
-			"Espertus",
-			"Takács Viktor László",
-			"Dj",
-			"Grin",
-			"ViDam",
-			"Csega",
-			"Fitoschido",
-			"Lajthabalazs",
-			"Tacsipacsi",
-			"Rodrigo",
-			"Máté",
 			"BanKris",
+			"Csega",
+			"Dj",
+			"Espertus",
+			"Fitoschido",
+			"Grin",
+			"Lajthabalazs",
+			"MeskoBalazs",
+			"Máté",
 			"Notramo",
+			"Rodrigo",
+			"Tacsipacsi",
+			"Takács Viktor László",
 			"Urbalazs",
-			"MeskoBalazs"
+			"ViDam"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "változó",

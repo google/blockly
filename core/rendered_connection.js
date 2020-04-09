@@ -439,8 +439,8 @@ Blockly.RenderedConnection.prototype.onFailedConnect = function(
 
 /**
  * Disconnect two blocks that are connected by this connection.
- * @param {!Blockly.Block} parentBlock The superior block.
- * @param {!Blockly.Block} childBlock The inferior block.
+ * @param {!Blockly.BlockSvg} parentBlock The superior block.
+ * @param {!Blockly.BlockSvg} childBlock The inferior block.
  * @private
  */
 Blockly.RenderedConnection.prototype.disconnectInternal_ = function(parentBlock,
@@ -454,6 +454,8 @@ Blockly.RenderedConnection.prototype.disconnectInternal_ = function(parentBlock,
   if (childBlock.rendered) {
     childBlock.updateDisabled();
     childBlock.render();
+    // Reset visibility, since the child is now a top block.
+    childBlock.getSvgRoot().style.display = 'block';
   }
 };
 
@@ -504,14 +506,16 @@ Blockly.RenderedConnection.prototype.connect_ = function(childConnection) {
   var parentConnection = this;
   var parentBlock = parentConnection.getSourceBlock();
   var childBlock = childConnection.getSourceBlock();
+  var parentRendered = parentBlock.rendered;
+  var childRendered = childBlock.rendered;
 
-  if (parentBlock.rendered) {
+  if (parentRendered) {
     parentBlock.updateDisabled();
   }
-  if (childBlock.rendered) {
+  if (childRendered) {
     childBlock.updateDisabled();
   }
-  if (parentBlock.rendered && childBlock.rendered) {
+  if (parentRendered && childRendered) {
     if (parentConnection.type == Blockly.NEXT_STATEMENT ||
         parentConnection.type == Blockly.PREVIOUS_STATEMENT) {
       // Child block may need to square off its corners if it is in a stack.
@@ -522,6 +526,13 @@ Blockly.RenderedConnection.prototype.connect_ = function(childConnection) {
       // move its connected children into position.
       parentBlock.render();
     }
+  }
+
+  // The input the child block is connected to (if any).
+  var parentInput = parentBlock.getInputWithBlock(childBlock);
+  if (parentInput) {
+    var visible = parentInput.isVisible();
+    childBlock.getSvgRoot().style.display = visible ? 'block' : 'none';
   }
 };
 

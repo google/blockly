@@ -91,21 +91,23 @@ Blockly.Input.prototype.insertFieldAt = function(index, field, opt_name) {
   if (index < 0 || index > this.fieldRow.length) {
     throw Error('index ' + index + ' out of bounds.');
   }
-
   // Falsy field values don't generate a field, unless the field is an empty
   // string and named.
   if (!field && !(field == '' && opt_name)) {
     return index;
   }
+
   // Generate a FieldLabel when given a plain text field.
   if (typeof field == 'string') {
     field = new Blockly.FieldLabel(/** @type {string} */ (field));
   }
+
   field.setSourceBlock(this.sourceBlock_);
   if (this.sourceBlock_.rendered) {
     field.init();
   }
   field.name = opt_name;
+  field.setVisible(this.isVisible());
 
   if (field.prefixField) {
     // Add any prefix.
@@ -173,7 +175,6 @@ Blockly.Input.prototype.setVisible = function(visible) {
   }
   this.visible_ = visible;
 
-  var display = visible ? 'block' : 'none';
   for (var y = 0, field; (field = this.fieldRow[y]); y++) {
     field.setVisible(visible);
   }
@@ -186,10 +187,7 @@ Blockly.Input.prototype.setVisible = function(visible) {
     }
     var child = this.connection.targetBlock();
     if (child) {
-      child.getSvgRoot().style.display = display;
-      if (!visible) {
-        child.rendered = false;
-      }
+      child.getSvgRoot().style.display = visible ? 'block' : 'none';
     }
   }
   return renderList;

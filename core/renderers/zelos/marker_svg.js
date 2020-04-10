@@ -131,8 +131,8 @@ Blockly.zelos.MarkerSvg.prototype.createDomInternal_ = function() {
 /**
  * @override
  */
-Blockly.zelos.MarkerSvg.prototype.applyColour_ = function() {
-  Blockly.zelos.MarkerSvg.superClass_.applyColour_.call(this);
+Blockly.zelos.MarkerSvg.prototype.applyColour_ = function(curNode) {
+  Blockly.zelos.MarkerSvg.superClass_.applyColour_.call(this, curNode);
 
   this.markerCircle_.setAttribute('fill', this.colour_);
   this.markerCircle_.setAttribute('stroke', this.colour_);

@@ -222,7 +222,7 @@ Blockly.blockRendering.MarkerSvg.prototype.showAtLocation_ = function(curNode) {
  */
 Blockly.blockRendering.MarkerSvg.prototype.showWithBlockPrevOutput_ = function(
     curNode) {
-  var block = /** @type {!Blockly.BlockSvg} */ curNode.getSourceBlock();
+  var block = /** @type {!Blockly.BlockSvg} */ (curNode.getSourceBlock());
   var width = block.width;
   var height = block.height;
   var markerHeight = height * Blockly.blockRendering.MarkerSvg.HEIGHT_MULTIPLIER;

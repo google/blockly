@@ -167,7 +167,7 @@ Blockly.navigation.focusWorkspace_ = function() {
   Blockly.navigation.resetFlyout_(reset);
   Blockly.navigation.currentState_ = Blockly.navigation.STATE_WS;
   if (topBlocks.length > 0) {
-    cursor.setCurNode(Blockly.navigation.getTopNode(topBlocks[0]));
+    cursor.setCurNode(Blockly.ASTNode.createTopNode(topBlocks[0]));
   } else {
     // TODO: Find the center of the visible workspace.
     var wsCoord = new Blockly.utils.Coordinate(100, 100);
@@ -230,7 +230,7 @@ Blockly.navigation.insertFromFlyout = function() {
   }
 
   Blockly.navigation.focusWorkspace_();
-  workspace.getCursor().setCurNode(Blockly.navigation.getTopNode(newBlock));
+  workspace.getCursor().setCurNode(Blockly.ASTNode.createTopNode(newBlock));
   Blockly.navigation.removeMark_();
 };
 
@@ -604,25 +604,6 @@ Blockly.navigation.removeMark_ = function() {
  */
 Blockly.navigation.setState = function(newState) {
   Blockly.navigation.currentState_ = newState;
-};
-
-/**
- * Gets the top node on a block.
- * This is either the previous connection, output connection or the block.
- * @param {!Blockly.Block} block The block to find the top most AST node on.
- * @return {Blockly.ASTNode} The AST node holding the top most node on the
- *     block.
- * @package
- */
-Blockly.navigation.getTopNode = function(block) {
-  var astNode;
-  var topConnection = block.previousConnection || block.outputConnection;
-  if (topConnection) {
-    astNode = Blockly.ASTNode.createConnectionNode(topConnection);
-  } else {
-    astNode = Blockly.ASTNode.createBlockNode(block);
-  }
-  return astNode;
 };
 
 /**

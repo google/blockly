@@ -439,8 +439,8 @@ Blockly.RenderedConnection.prototype.onFailedConnect = function(
 
 /**
  * Disconnect two blocks that are connected by this connection.
- * @param {!Blockly.BlockSvg} parentBlock The superior block.
- * @param {!Blockly.BlockSvg} childBlock The inferior block.
+ * @param {!Blockly.Block} parentBlock The superior block.
+ * @param {!Blockly.Block} childBlock The inferior block.
  * @private
  */
 Blockly.RenderedConnection.prototype.disconnectInternal_ = function(parentBlock,

@@ -49,6 +49,29 @@ suite('Blocks', function() {
     delete Blockly.Blocks['statement_block'];
   });
 
+  function createTestBlocks(workspace, isRow) {
+    var blockType = isRow ? 'row_block' : 'stack_block';
+    var blockA = workspace.newBlock(blockType);
+    var blockB = workspace.newBlock(blockType);
+    var blockC = workspace.newBlock(blockType);
+
+    if (isRow) {
+      blockA.inputList[0].connection.connect(blockB.outputConnection);
+      blockB.inputList[0].connection.connect(blockC.outputConnection);
+    } else {
+      blockA.nextConnection.connect(blockB.previousConnection);
+      blockB.nextConnection.connect(blockC.previousConnection);
+    }
+
+    assertEquals(blockB, blockC.getParent());
+
+    return {
+      A: blockA,  /* Parent */
+      B: blockB,  /* Middle */
+      C: blockC  /* Child */
+    };
+  }
+
   suite('Unplug', function() {
     function assertUnpluggedNoheal(blocks) {
       // A has nothing connected to it.
@@ -80,20 +103,7 @@ suite('Blocks', function() {
 
     suite('Row', function() {
       setup(function() {
-        var blockA = this.workspace.newBlock('row_block');
-        var blockB = this.workspace.newBlock('row_block');
-        var blockC = this.workspace.newBlock('row_block');
-
-        blockA.inputList[0].connection.connect(blockB.outputConnection);
-        blockB.inputList[0].connection.connect(blockC.outputConnection);
-
-        assertEquals(blockB, blockC.getParent());
-
-        this.blocks = {
-          A: blockA,
-          B: blockB,
-          C: blockC
-        };
+        this.blocks = createTestBlocks(this.workspace, true);
       });
 
       test('Don\'t heal', function() {
@@ -149,20 +159,7 @@ suite('Blocks', function() {
     });
     suite('Stack', function() {
       setup(function() {
-        var blockA = this.workspace.newBlock('stack_block');
-        var blockB = this.workspace.newBlock('stack_block');
-        var blockC = this.workspace.newBlock('stack_block');
-
-        blockA.nextConnection.connect(blockB.previousConnection);
-        blockB.nextConnection.connect(blockC.previousConnection);
-
-        assertEquals(blockB, blockC.getParent());
-
-        this.blocks = {
-          A: blockA,
-          B: blockB,
-          C: blockC
-        };
+        this.blocks = createTestBlocks(this.workspace, false);
       });
 
       test('Don\'t heal', function() {
@@ -226,20 +223,7 @@ suite('Blocks', function() {
 
     suite('Row', function() {
       setup(function() {
-        var blockA = this.workspace.newBlock('row_block');
-        var blockB = this.workspace.newBlock('row_block');
-        var blockC = this.workspace.newBlock('row_block');
-
-        blockA.inputList[0].connection.connect(blockB.outputConnection);
-        blockB.inputList[0].connection.connect(blockC.outputConnection);
-
-        assertEquals(blockB, blockC.getParent());
-
-        this.blocks = {
-          A: blockA,
-          B: blockB,
-          C: blockC
-        };
+        this.blocks = createTestBlocks(this.workspace, true);
       });
 
       test('Don\'t heal', function() {
@@ -295,20 +279,7 @@ suite('Blocks', function() {
     });
     suite('Stack', function() {
       setup(function() {
-        var blockA = this.workspace.newBlock('stack_block');
-        var blockB = this.workspace.newBlock('stack_block');
-        var blockC = this.workspace.newBlock('stack_block');
-
-        blockA.nextConnection.connect(blockB.previousConnection);
-        blockB.nextConnection.connect(blockC.previousConnection);
-
-        assertEquals(blockB, blockC.getParent());
-
-        this.blocks = {
-          A: blockA,
-          B: blockB,
-          C: blockC
-        };
+        this.blocks = createTestBlocks(this.workspace, false);
       });
 
       test('Don\'t heal', function() {

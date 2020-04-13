@@ -160,7 +160,7 @@ Blockly.Variables.flyoutCategoryBlocks = function(workspace) {
     if (Blockly.Blocks['variables_set']) {
       var block = Blockly.utils.xml.createElement('block');
       block.setAttribute('type', 'variables_set');
-      block.setAttribute('gap', Blockly.Blocks['variables_increment'] ? 8 : 24);
+      block.setAttribute('gap', 12);
       block.appendChild(
           Blockly.Variables.generateVariableFieldDom(mostRecentVariable));
       xmlList.push(block);
@@ -170,29 +170,35 @@ Blockly.Variables.flyoutCategoryBlocks = function(workspace) {
     if (Blockly.Blocks['variables_increment']) {
       var block = Blockly.utils.xml.createElement('block');
       block.setAttribute('type', 'variables_increment');
-      block.setAttribute('gap', Blockly.Blocks['variables_get'] ? 12 : 8);
+      block.setAttribute('gap', 12);
       block.appendChild(Blockly.Variables.generateVariableFieldDom(mostRecentVariable));
-      var value = Blockly.Xml.textToDom(
-          '<value name="DELTA">' +
-          '<shadow type="math_number">' +
-          '<field name="NUM">1</field>' +
-          '</shadow>' +
-          '</value>');
-      block.appendChild(value);
+      if (Blockly.Blocks['math_number']) {
+        var value = Blockly.Xml.textToDom(
+            '<value name="DELTA">' +
+            '<shadow type="math_number">' +
+            '<field name="NUM">1</field>' +
+            '</shadow>' +
+            '</value>');
+        block.appendChild(value);
+      }
       xmlList.push(block);
     }
 
     // Addition of the variables_force_type block in the xml variable category
-    if (Blockly.Blocks['variables_set']) {
+    if (Blockly.Blocks['variables_force_type']) {
       var block = Blockly.utils.xml.createElement('block');
-      block.setAttribute('type', 'variables_set');
-      block.setAttribute('gap', Blockly.Blocks['variables_get'] ? 12 : 8);
+      block.setAttribute('type', 'variables_force_type');
+      block.setAttribute('gap', 24);
       block.appendChild(Blockly.Variables.generateVariableFieldDom(mostRecentVariable));
-      var value = Blockly.Xml.textToDom(
-          '<value name="VALUE">' +
-          '<block type="variables_force_type"></block>' +
-          '</value>');
-      block.appendChild(value);
+      if (Blockly.Blocks['text']) {
+        var value = Blockly.Xml.textToDom(
+            '<value name="VALUE">' +
+            '<shadow type="text">' +
+            '<field name="TEXT">1</field>' +
+            '</shadow>' +
+            '</value>');
+        block.appendChild(value);
+      }
       xmlList.push(block);
     }
 

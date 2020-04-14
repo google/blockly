@@ -6,6 +6,7 @@
     "globals": {
         "chai": false,
         "sinon": false,
+        "assertArrayEquals": true,
         "assertNull": true,
         "assertNotNull": true,
         "assertEquals": true,

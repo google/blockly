@@ -189,7 +189,6 @@ Blockly.Variables.flyoutCategoryBlocks = function(workspace) {
       var block = Blockly.utils.xml.createElement('block');
       block.setAttribute('type', 'variables_force_type');
       block.setAttribute('gap', 24);
-      block.appendChild(Blockly.Variables.generateVariableFieldDom(mostRecentVariable));
       if (Blockly.Blocks['text']) {
         var value = Blockly.Xml.textToDom(
             '<value name="VALUE">' +

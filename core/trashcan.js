@@ -224,7 +224,7 @@ Blockly.Trashcan.prototype.createDom = function() {
   </g>
   */
   this.svgGroup_ = Blockly.utils.dom.createSvgElement('g',
-      {'class': 'blocklyTrash'}, null);
+      {'class': 'blocklyTrash', 'id': 'blocklyTrashCanButton' }, null);
   var clip;
   var rnd = String(Math.random()).substring(2);
   clip = Blockly.utils.dom.createSvgElement('clipPath',

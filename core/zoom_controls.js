@@ -210,6 +210,7 @@ Blockly.ZoomControls.prototype.createZoomOutSvg_ = function(rnd) {
       clip);
   var zoomoutSvg = Blockly.utils.dom.createSvgElement('image',
       {
+        'id': 'blocklyZoomOutButton',
         'width': Blockly.SPRITE.width,
         'height': Blockly.SPRITE.height,
         'x': -64,
@@ -263,6 +264,7 @@ Blockly.ZoomControls.prototype.createZoomInSvg_ = function(rnd) {
       clip);
   var zoominSvg = Blockly.utils.dom.createSvgElement('image',
       {
+        'id': 'blocklyZoomInButton',
         'width': Blockly.SPRITE.width,
         'height': Blockly.SPRITE.height,
         'x': -32,
@@ -316,6 +318,7 @@ Blockly.ZoomControls.prototype.createZoomResetSvg_ = function(rnd) {
       clip);
   var zoomresetSvg = Blockly.utils.dom.createSvgElement('image',
       {
+        'id': 'blocklyZoomResetButton',
         'width': Blockly.SPRITE.width,
         'height': Blockly.SPRITE.height,
         'y': -92,

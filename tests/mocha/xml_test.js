@@ -463,11 +463,9 @@ suite('XML', function() {
           'name2');
     });
     test('No variables', function() {
-      // TODO(kozbial) does this test make sense? copied from jsunit/xml_test
-      this.workspace.createVariable('name1');
       var resultDom =
           Blockly.Xml.variablesToDom(this.workspace.getAllVariables());
-      assertEquals(1, resultDom.children.length);
+      assertEquals(0, resultDom.children.length);
     });
   });
   suite('domToText', function() {

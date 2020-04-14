@@ -846,15 +846,14 @@ suite('XML', function() {
       });
     });
     suite('Headless -> XML -> Rendered -> XML', function() {
-      test('Comment', async function() {
+      test('Comment', function() {
         var block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
             '<block type="empty_block"/>'
         ), this.headlessWorkspace);
         block.setCommentText('test text');
         block.commentModel.size = new Blockly.utils.Size(100, 100);
         block.commentModel.pinned = true;
-
-        // domToBlockHeadless_ has async logic triggered by comment
+        
         assertRoundTrip(this.headlessWorkspace, this.renderedWorkspace);
       });
     });

@@ -155,14 +155,15 @@ Blockly.Variables.flyoutCategoryBlocks = function(workspace) {
 
   var xmlList = [];
   if (variableModelList.length > 0) {
+
     // New variables are added to the end of the variableModelList.
     var mostRecentVariable = variableModelList[variableModelList.length - 1];
+    
     if (Blockly.Blocks['variables_set']) {
       var block = Blockly.utils.xml.createElement('block');
       block.setAttribute('type', 'variables_set');
       block.setAttribute('gap', 12);
-      block.appendChild(
-          Blockly.Variables.generateVariableFieldDom(mostRecentVariable));
+      block.appendChild(Blockly.Variables.generateVariableFieldDom(mostRecentVariable));
       xmlList.push(block);
     }
 
@@ -170,7 +171,7 @@ Blockly.Variables.flyoutCategoryBlocks = function(workspace) {
     if (Blockly.Blocks['variables_increment']) {
       var block = Blockly.utils.xml.createElement('block');
       block.setAttribute('type', 'variables_increment');
-      block.setAttribute('gap', 12);
+      block.setAttribute('gap', Blockly.Blocks['variables_force_type'] ? 12 : 24);
       block.appendChild(Blockly.Variables.generateVariableFieldDom(mostRecentVariable));
       if (Blockly.Blocks['math_number']) {
         var value = Blockly.Xml.textToDom(
@@ -188,7 +189,7 @@ Blockly.Variables.flyoutCategoryBlocks = function(workspace) {
     if (Blockly.Blocks['variables_force_type']) {
       var block = Blockly.utils.xml.createElement('block');
       block.setAttribute('type', 'variables_force_type');
-      block.setAttribute('gap', 24);
+      block.setAttribute('gap', Blockly.Blocks['variables_type_of'] ? 12 : 24);
       if (Blockly.Blocks['text']) {
         var value = Blockly.Xml.textToDom(
             '<value name="VALUE">' +
@@ -198,6 +199,15 @@ Blockly.Variables.flyoutCategoryBlocks = function(workspace) {
             '</value>');
         block.appendChild(value);
       }
+      xmlList.push(block);
+    }
+
+    // Addition of the variables_type_of block in the xml variable category
+    if (Blockly.Blocks['variables_type_of']) {
+      var block = Blockly.utils.xml.createElement('block');
+      block.setAttribute('type', 'variables_type_of');
+      block.setAttribute('gap', 24);
+      block.appendChild(Blockly.Variables.generateVariableFieldDom(mostRecentVariable));
       xmlList.push(block);
     }
 

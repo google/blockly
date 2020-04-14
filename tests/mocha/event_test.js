@@ -58,6 +58,16 @@ suite('Events', function() {
     assertEquals(type, event.type);
   }
 
+  function createSimpleTestBlock(workspace, opt_prototypeName) {
+    // Disable events while constructing the block: this is a test of the
+    // Blockly.Event constructors, not the block constructor.
+    Blockly.Events.disable();
+    var block = new Blockly.Block(
+        workspace, opt_prototypeName || 'simple_test_block');
+    Blockly.Events.enable();
+    return block;
+  }
+
   suite('Constructors', function() {
     test('Abstract', function() {
       var event = new Blockly.Events.Abstract();
@@ -87,12 +97,7 @@ suite('Events', function() {
       setup(function() {
         this.FAKE_ID = 'hedgehog';
         sinon.stub(Blockly.utils, "genUid").returns(this.FAKE_ID);
-
-        // Disable events while constructing the block: this is a test of the
-        // Blockly.Event constructors, not the block constructor.
-        Blockly.Events.disable();
-        this.block = new Blockly.Block(this.workspace, 'simple_test_block');
-        Blockly.Events.enable();
+        this.block = createSimpleTestBlock(this.workspace);
         sinon.restore();
       });
 
@@ -169,9 +174,7 @@ suite('Events', function() {
         suite('Move by parent', function() {
           setup(function() {
             sinon.stub(Blockly.utils, "genUid").returns("parent");
-            Blockly.Events.disable();
-            this.parentBlock = new Blockly.Block(this.workspace, 'simple_test_block');
-            Blockly.Events.enable();
+            this.parentBlock = createSimpleTestBlock(this.workspace);
             sinon.restore();
 
             this.block.parentBlock_ = this.parentBlock;
@@ -201,15 +204,7 @@ suite('Events', function() {
 
     suite('With variable getter blocks', function() {
       setup(function() {
-        // Disable events while constructing the block: this is a test of the
-        // Blockly.Event constructors, not the block constructor.
-        Blockly.Events.disable();
-        this.block = new Blockly.Block(this.workspace, 'field_variable_test_block');
-        Blockly.Events.enable();
-      });
-
-      teardown(function() {
-
+        this.block = createSimpleTestBlock(this.workspace, 'field_variable_test_block');
       });
 
       test('Change', function() {
@@ -304,8 +299,7 @@ suite('Events', function() {
 
     suite('toJson', function() {
       test('Var create', function() {
-        var variable = this.workspace.createVariable('name1', 'type1', 'id1');
-        var event = new Blockly.Events.VarCreate(variable);
+        var event = new Blockly.Events.VarCreate(this.variable);
         var json = event.toJson();
         var expectedJson = ({type: "var_create", varId: "id1", varType: "type1",
           varName: "name1"});
@@ -332,14 +326,15 @@ suite('Events', function() {
       });
     });
 
-    suite.skip('Run Forward', function() {
+    suite('Run Forward', function() {
       test('Var create', function() {
-        var json = {type: "var_create", varId: "id1", varType: "type1",
-          varName: "name1"};
+        var json = {type: "var_create", varId: "id2", varType: "type2",
+          varName: "name2"};
         var event = Blockly.Events.fromJson(json, this.workspace);
-        assertNull(this.workspace.getVariableById('id1'));
+        var x = this.workspace.getVariableById('id2');
+        assertNull(x);
         event.run(true);
-        checkVariableValues(this.workspace, 'name1', 'type1', 'id1');
+        checkVariableValues(this.workspace, 'name2', 'type2', 'id2');
       });
 
       test('Var delete', function() {
@@ -356,21 +351,20 @@ suite('Events', function() {
         checkVariableValues(this.workspace, 'name2', 'type1', 'id1');
       });
     });
-    suite.skip('Run Backward', function() {
+    suite('Run Backward', function() {
       test('Var create', function() {
-        var variable = this.workspace.createVariable('name1', 'type1', 'id1');
-        var event = new Blockly.Events.VarCreate(variable);
+        var event = new Blockly.Events.VarCreate(this.variable);
         assertNotNull(this.workspace.getVariableById('id1'));
         event.run(false);
       });
 
       test('Var delete', function() {
-        var json = {type: "var_delete", varId: "id1", varType: "type1",
-          varName: "name1"};
+        var json = {type: "var_delete", varId: "id2", varType: "type2",
+          varName: "name2"};
         var event = Blockly.Events.fromJson(json, this.workspace);
-        assertNull(this.workspace.getVariableById('id1'));
+        assertNull(this.workspace.getVariableById('id2'));
         event.run(false);
-        checkVariableValues(this.workspace, 'name1', 'type1', 'id1');
+        checkVariableValues(this.workspace, 'name2', 'type2', 'id2');
       });
 
       test('Var rename', function() {

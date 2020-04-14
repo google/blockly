@@ -387,7 +387,7 @@ suite('Events', function() {
     function addMoveEventParent(events, block, parent) {
       events.push(new Blockly.Events.BlockMove(block));
       block.setParent(parent);
-      events[events.length-1].recordNew();
+      events[events.length - 1].recordNew();
     }
 
     test('No removed, order unchanged', function() {

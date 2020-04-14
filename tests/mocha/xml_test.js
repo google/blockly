@@ -806,7 +806,7 @@ suite('XML', function() {
       assertEquals('Block count', 1, this.workspace.getAllBlocks(false).length);
       var newBlockIds = Blockly.Xml.appendDomToWorkspace(dom, this.workspace);
       assertEquals('Block count', 2, this.workspace.getAllBlocks(false).length);
-      assertEquals('Number of new block ids',1,newBlockIds.length);
+      assertEquals('Number of new block ids', 1, newBlockIds.length);
     });
   });
   suite('workspaceToDom -> domToWorkspace -> workspaceToDom', function() {
@@ -872,13 +872,13 @@ suite('XML', function() {
 
       var generatedXml = Blockly.Xml.domToText(
           Blockly.Variables.generateVariableFieldDom(mockVariableModel));
-      var goldenXml =
+      var expectedXml =
           '<field xmlns="https://developers.google.com/blockly/xml"' +
           ' name="VAR"' +
           ' id="' + varId + '"' +
           ' variabletype="' + type + '"' +
           '>' + name + '</field>';
-      assertEquals(goldenXml, generatedXml);
+      assertEquals(expectedXml, generatedXml);
     });
   });
 });

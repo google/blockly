@@ -33,6 +33,7 @@ function typings() {
     "core/renderers/common",
     "core/renderers/measurables",
     "core/theme",
+    "core/interfaces",
     "core/utils",
     "msg/"
   ];

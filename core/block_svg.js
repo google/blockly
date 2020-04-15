@@ -32,6 +32,7 @@ goog.require('Blockly.utils.dom');
 goog.require('Blockly.utils.object');
 goog.require('Blockly.utils.Rect');
 
+goog.requireType('Blockly.ISelectable');
 
 /**
  * Class for a block's SVG representation.
@@ -42,6 +43,7 @@ goog.require('Blockly.utils.Rect');
  * @param {string=} opt_id Optional ID.  Use this ID if provided, otherwise
  *     create a new ID.
  * @extends {Blockly.Block}
+ * @implements {Blockly.ISelectable}
  * @constructor
  */
 Blockly.BlockSvg = function(workspace, prototypeName, opt_id) {
@@ -990,6 +992,26 @@ Blockly.BlockSvg.prototype.dispose = function(healStack, animate) {
   // Sever JavaScript to DOM connections.
   this.svgGroup_ = null;
   Blockly.utils.dom.stopTextWidthCache();
+};
+
+/**
+ * Encode a block for copying.
+ * @return {!Blockly.ISelectable.CopyData} Copy metadata.
+ * @package
+ */
+Blockly.BlockSvg.prototype.toCopyData = function() {
+  var xml = Blockly.Xml.blockToDom(this, true);
+  // Copy only the selected block and internal blocks.
+  Blockly.Xml.deleteNext(xml);
+  // Encode start position in XML.
+  var xy = this.getRelativeToSurfaceXY();
+  xml.setAttribute('x', this.RTL ? -xy.x : xy.x);
+  xml.setAttribute('y', xy.y);
+  return {
+    xml: xml,
+    source: this.workspace,
+    typeCounts: Blockly.utils.getBlockTypeCounts(this, true)
+  };
 };
 
 /**

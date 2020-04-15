@@ -54,7 +54,7 @@ Blockly.geras.PathObject = function(root, style, constants) {
 
   /**
    * The primary path of the block.
-   * @type {SVGElement}
+   * @type {!SVGElement}
    * @package
    */
   this.svgPath = Blockly.utils.dom.createSvgElement('path',

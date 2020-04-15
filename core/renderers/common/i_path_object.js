@@ -29,7 +29,7 @@ Blockly.blockRendering.IPathObject = function(_root, _constants) {};
 
 /**
  * The primary path of the block.
- * @type {SVGElement}
+ * @type {!SVGElement}
  */
 Blockly.blockRendering.IPathObject.prototype.svgPath;
 

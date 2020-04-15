@@ -489,7 +489,7 @@ Blockly.Gesture.prototype.doStart = function(e) {
         e.shiftKey &&
         this.targetBlock_.workspace.keyboardAccessibilityMode) {
       this.creatorWorkspace_.getCursor().setCurNode(
-          Blockly.navigation.getTopNode(this.targetBlock_));
+          Blockly.ASTNode.createTopNode(this.targetBlock_));
     } else {
       this.targetBlock_.select();
     }

@@ -620,6 +620,11 @@ Blockly.BlockSvg.prototype.setCollapsed = function(collapsed) {
   }
 };
 
+/**
+ * Makes sure that when the block is collapsed, it is rendered correctly
+ * for that state.
+ * @private
+ */
 Blockly.BlockSvg.prototype.updateCollapsed_ = function() {
   var collapsed = this.isCollapsed();
   var collapsedInputName = Blockly.Block.COLLAPSED_INPUT_NAME;

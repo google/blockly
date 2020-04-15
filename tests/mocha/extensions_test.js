@@ -21,8 +21,8 @@ suite('Extensions', function() {
       delete Blockly.Extensions.ALL_[extension];
     }
     this.workspace.dispose();
-    sinon.restore();
     Blockly.Events.enable();
+    sinon.restore();
   });
 
   test('Definition before and after block type', function() {
@@ -293,7 +293,7 @@ suite('Extensions', function() {
 
     test('Mixin overwrites prototype', function() {
       this.extensionsCleanup_.push('mixin_bad_colour_');
-      this.blockTypesCleanup_.push('mixin_bad_colour_');
+      this.blockTypesCleanup_.push('test_block_bad_colour');
 
       var TEST_MIXIN_BAD_COLOUR = {
         colour_: 'bad colour_' // Defined on prototype

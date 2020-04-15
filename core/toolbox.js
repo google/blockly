@@ -225,7 +225,7 @@ Blockly.Toolbox.prototype.renderTree = function(languageTree) {
 
   // //If there will be any search logic, clear the current trie (useful when changing Toolboxes - Simple/Advanced)
   // if (this.shouldPopulateSearch_) {
-  //   this.search_.clearAll();
+  this.search_.clearAll();
   // }
 
   if (this.tree_) {

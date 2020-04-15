@@ -45,6 +45,7 @@ Blockly.WorkspaceSearch.prototype.onBlockAdded = function (type, val) {
     console.warn('Cannot find newly created block with ID ' + val);
     return;
   }
+
   // Get the block's dynamic inputs
   // FieldDropdown / FieldTextInput / FieldBoolean / ButtonInput / AsciiInput / FieldAngle / FieldJointAngle
   // @todo Add any other types that we end up creating
@@ -140,6 +141,18 @@ Blockly.WorkspaceSearch.prototype.highlightResult = function (index) {
 
   // Center the workspace on it and hightlight it
   this.workspace_.centerOnBlock(resultToShow.id);
+
+  this.unhighlightAll();
+
+  // Highlight every block except for this one (its a white-ish overlay so blocks look "disabled")
+  // const blockKeys = Object.keys(this.blocksAdded_);
+  // for (var i = 0; i < blockKeys.length; i++) {
+  //   if (blockKeys[i] !== resultToShow.id) {
+  //     this.workspace_.highlightBlock(blockKeys[i], true);
+  //   }
+  // }
+
+  // Select the result (adds a yellow outline)
   resultToShow.select();
 };
 
@@ -154,7 +167,17 @@ Blockly.WorkspaceSearch.prototype.onCloseSearch = function () {
   Blockly.WorkspaceSearch.superClass_.onCloseSearch.call(this);
 
   // Reset workspace highlighting
+  this.unhighlightAll();
+};
+
+/**
+ * Resets all of the highlighting associated with the search
+ */
+Blockly.WorkspaceSearch.prototype.unhighlightAll = function () {
+  // Reset workspace highlighting
   this.workspace_.highlightBlock('');
+
+  // Unselect any selected blocks
   if (Blockly.selected) {
     Blockly.selected.unselect();
   }

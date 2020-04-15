@@ -1998,7 +1998,7 @@ Blockly.WorkspaceSvg.prototype.centerOnBlock = function(id) {
   // XY is in workspace coordinates.
   var xy = block.getRelativeToSurfaceXY();
   // Height/width is in workspace units.
-  var heightWidth = block.getHeightWidth();
+  var heightWidth = block.getHeightWidth(true);
 
   // Find the enter of the block in workspace units.
   var blockCenterY = xy.y + heightWidth.height / 2;

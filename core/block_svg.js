@@ -32,7 +32,7 @@ goog.require('Blockly.utils.dom');
 goog.require('Blockly.utils.object');
 goog.require('Blockly.utils.Rect');
 
-goog.requireType('Blockly.ISelectable');
+goog.requireType('Blockly.ICopyable');
 
 /**
  * Class for a block's SVG representation.
@@ -43,7 +43,7 @@ goog.requireType('Blockly.ISelectable');
  * @param {string=} opt_id Optional ID.  Use this ID if provided, otherwise
  *     create a new ID.
  * @extends {Blockly.Block}
- * @implements {Blockly.ISelectable}
+ * @implements {Blockly.ICopyable}
  * @constructor
  */
 Blockly.BlockSvg = function(workspace, prototypeName, opt_id) {
@@ -996,7 +996,7 @@ Blockly.BlockSvg.prototype.dispose = function(healStack, animate) {
 
 /**
  * Encode a block for copying.
- * @return {!Blockly.ISelectable.CopyData} Copy metadata.
+ * @return {!Blockly.ICopyable.CopyData} Copy metadata.
  * @package
  */
 Blockly.BlockSvg.prototype.toCopyData = function() {

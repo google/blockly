@@ -13,28 +13,21 @@
 
 goog.provide('Blockly.ISelectable');
 
-goog.requireType('Blockly.WorkspaceSvg');
+goog.require('Blockly.IDeletable');
+goog.require('Blockly.IMovable');
 
 
-/** @interface */
+/**
+ * @extends {Blockly.IDeletable}
+ * @extends {Blockly.IMovable}
+ * @interface
+ */
 Blockly.ISelectable = function() {};
 
 /**
  * @type {string}
  */
 Blockly.ISelectable.prototype.id;
-
-/**
- * Get whether this is deletable or not.
- * @return {boolean} True if deletable.
- */
-Blockly.ISelectable.prototype.isDeletable;
-
-/**
- * Get whether this is movable or not.
- * @return {boolean} True if movable.
- */
-Blockly.ISelectable.prototype.isMovable;
 
 /**
  * Select this.  Highlight it visually.
@@ -47,19 +40,3 @@ Blockly.ISelectable.prototype.select;
  * @return {void}
  */
 Blockly.ISelectable.prototype.unselect;
-
-/**
- * Encode for copying.
- * @return {!Blockly.ISelectable.CopyData} Copy metadata.
- */
-Blockly.ISelectable.prototype.toCopyData;
-
-/**
- * Copy Metadata.
- * @typedef {{
- *            xml:!Element,
- *            source:Blockly.WorkspaceSvg,
- *            typeCounts:Object
- *          }}
- */
-Blockly.ISelectable.CopyData;

@@ -51,7 +51,7 @@ Blockly.mainWorkspace = null;
 
 /**
  * Currently selected block.
- * @type {?Blockly.ISelectable}
+ * @type {?Blockly.ICopyable}
  */
 Blockly.selected = null;
 
@@ -264,7 +264,7 @@ Blockly.onKeyDown = function(e) {
 
 /**
  * Copy a block or workspace comment onto the local clipboard.
- * @param {!Blockly.ISelectable} toCopy Block or Workspace Comment to be copied.
+ * @param {!Blockly.ICopyable} toCopy Block or Workspace Comment to be copied.
  * @private
  */
 Blockly.copy_ = function(toCopy) {
@@ -276,7 +276,7 @@ Blockly.copy_ = function(toCopy) {
 
 /**
  * Duplicate this block and its children, or a workspace comment.
- * @param {!Blockly.ISelectable} toDuplicate Block or Workspace Comment to be
+ * @param {!Blockly.ICopyable} toDuplicate Block or Workspace Comment to be
  *     copied.
  * @package
  */

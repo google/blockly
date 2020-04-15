@@ -1245,7 +1245,6 @@ suite('Blocks', function() {
         if (input.name == Blockly.Block.COLLAPSED_INPUT_NAME) {
           continue;
         }
-        console.log(input);
         chai.assert.isFalse(input.isVisible());
         for (var j = 0, field; (field = input.fieldRow[j]); j++) {
           chai.assert.isFalse(field.isVisible());
@@ -1267,7 +1266,7 @@ suite('Blocks', function() {
         chai.assert.equal(field.getText(), opt_string);
       }
     }
-    function assertExpanded(block) {
+    function assertNotCollapsed(block) {
       chai.assert.isFalse(block.isCollapsed());
       for (var i = 0, input; (input = block.inputList[i]); i++) {
         chai.assert.isTrue(input.isVisible());
@@ -1281,31 +1280,16 @@ suite('Blocks', function() {
       var field = block.getField(Blockly.Block.COLLAPSED_FIELD_NAME);
       chai.assert.isNull(field);
     }
-    function assertHidden(block) {
-      // Annoyingly, this is the only way I could find to test visibility.
+    function isBlockHidden(block) {
       var node = block.getSvgRoot();
       do {
         var visible = node.style.display != 'none';
         if (!visible) {
-          chai.assert(true);  // Succeed the test
-          return;
+          return true;
         }
         node = node.parentNode;
       } while (node != document);
-      chai.assert.fail();
-    }
-    function assertShown(block) {
-      // Annoyingly, this is the only way I could find to test visibility.
-      var node = block.getSvgRoot();
-      do {
-        var visible = node.style.display != 'none';
-        if (!visible) {
-          chai.assert.fail();
-          return;
-        }
-        node = node.parentNode;
-      } while (node != document);
-      chai.assert(true);  // Succeed the test
+      return false;
     }
 
     setup(function() {
@@ -1334,6 +1318,7 @@ suite('Blocks', function() {
     });
     teardown(function() {
       Blockly.Events.enable();
+      delete Blockly.Blocks['variable_block'];
     });
     suite('Connecting and Disconnecting', function() {
       test('Connect Block to Next', function() {
@@ -1343,7 +1328,7 @@ suite('Blocks', function() {
         blockA.setCollapsed(true);
         assertCollapsed(blockA);
         blockA.nextConnection.connect(blockB.previousConnection);
-        assertExpanded(blockB);
+        assertNotCollapsed(blockB);
       });
       test('Connect Block to Value Input', function() {
         var blockA = this.createBlock('row_block');
@@ -1352,10 +1337,10 @@ suite('Blocks', function() {
         blockA.setCollapsed(true);
         assertCollapsed(blockA);
         blockA.getInput('INPUT').connection.connect(blockB.outputConnection);
-        assertHidden(blockB);
+        chai.assert.isTrue(isBlockHidden(blockB));
         blockA.setCollapsed(false);
-        assertExpanded(blockA);
-        assertShown(blockB);
+        assertNotCollapsed(blockA);
+        chai.assert.isFalse(isBlockHidden(blockB));
       });
       test('Connect Block to Statement Input', function() {
         var blockA = this.createBlock('statement_block');
@@ -1365,10 +1350,10 @@ suite('Blocks', function() {
         assertCollapsed(blockA);
         blockA.getInput('STATEMENT').connection
             .connect(blockB.previousConnection);
-        assertHidden(blockB);
+        chai.assert.isTrue(isBlockHidden(blockB));
         blockA.setCollapsed(false);
-        assertExpanded(blockA);
-        assertShown(blockB);
+        assertNotCollapsed(blockA);
+        chai.assert.isFalse(isBlockHidden(blockB));
       });
       test('Connect Block to Child of Collapsed - Input', function() {
         var blockA = this.createBlock('row_block');
@@ -1378,14 +1363,14 @@ suite('Blocks', function() {
         blockA.getInput('INPUT').connection.connect(blockB.outputConnection);
         blockA.setCollapsed(true);
         assertCollapsed(blockA);
-        assertHidden(blockB);
+        chai.assert.isTrue(isBlockHidden(blockB));
         blockB.getInput('INPUT').connection.connect(blockC.outputConnection);
-        assertHidden(blockC);
+        chai.assert.isTrue(isBlockHidden(blockC));
 
         blockA.setCollapsed(false);
-        assertExpanded(blockA);
-        assertShown(blockB);
-        assertShown(blockC);
+        assertNotCollapsed(blockA);
+        chai.assert.isFalse(isBlockHidden(blockB));
+        chai.assert.isFalse(isBlockHidden(blockC));
       });
       test('Connect Block to Child of Collapsed - Next', function() {
         var blockA = this.createBlock('statement_block');
@@ -1396,14 +1381,14 @@ suite('Blocks', function() {
             .connect(blockB.previousConnection);
         blockA.setCollapsed(true);
         assertCollapsed(blockA);
-        assertHidden(blockB);
+        chai.assert.isTrue(isBlockHidden(blockB));
         blockB.nextConnection.connect(blockC.previousConnection);
-        assertHidden(blockC);
+        chai.assert.isTrue(isBlockHidden(blockC));
 
         blockA.setCollapsed(false);
-        assertExpanded(blockA);
-        assertShown(blockB);
-        assertShown(blockC);
+        assertNotCollapsed(blockA);
+        chai.assert.isFalse(isBlockHidden(blockB));
+        chai.assert.isFalse(isBlockHidden(blockC));
       });
       test('Connect Block to Value Input Already Taken', function() {
         var blockA = this.createBlock('row_block');
@@ -1413,15 +1398,16 @@ suite('Blocks', function() {
         blockA.getInput('INPUT').connection.connect(blockB.outputConnection);
         blockA.setCollapsed(true);
         assertCollapsed(blockA);
-        assertHidden(blockB);
+        chai.assert.isTrue(isBlockHidden(blockB));
         blockA.getInput('INPUT').connection.connect(blockC.outputConnection);
-        assertHidden(blockC);
-        assertHidden(blockB);  // Still hidden after C is inserted between.
+        chai.assert.isTrue(isBlockHidden(blockC));
+        // Still hidden after C is inserted between.
+        chai.assert.isTrue(isBlockHidden(blockB));
 
         blockA.setCollapsed(false);
-        assertExpanded(blockA);
-        assertShown(blockB);
-        assertShown(blockC);
+        assertNotCollapsed(blockA);
+        chai.assert.isFalse(isBlockHidden(blockB));
+        chai.assert.isFalse(isBlockHidden(blockC));
       });
       test('Connect Block to Statement Input Already Taken', function() {
         var blockA = this.createBlock('statement_block');
@@ -1432,16 +1418,17 @@ suite('Blocks', function() {
             .connect(blockB.previousConnection);
         blockA.setCollapsed(true);
         assertCollapsed(blockA);
-        assertHidden(blockB);
+        chai.assert.isTrue(isBlockHidden(blockB));
         blockA.getInput('STATEMENT').connection
             .connect(blockC.previousConnection);
-        assertHidden(blockC);
-        assertHidden(blockB);  // Still hidden after C is inserted between.
+        chai.assert.isTrue(isBlockHidden(blockC));
+        // Still hidden after C is inserted between.
+        chai.assert.isTrue(isBlockHidden(blockB));
 
         blockA.setCollapsed(false);
-        assertExpanded(blockA);
-        assertShown(blockB);
-        assertShown(blockC);
+        assertNotCollapsed(blockA);
+        chai.assert.isFalse(isBlockHidden(blockB));
+        chai.assert.isFalse(isBlockHidden(blockC));
       });
       test('Connect Block with Child - Input', function() {
         var blockA = this.createBlock('row_block');
@@ -1452,13 +1439,13 @@ suite('Blocks', function() {
         blockA.setCollapsed(true);
         assertCollapsed(blockA);
         blockA.getInput('INPUT').connection.connect(blockB.outputConnection);
-        assertHidden(blockC);
-        assertHidden(blockB);
+        chai.assert.isTrue(isBlockHidden(blockC));
+        chai.assert.isTrue(isBlockHidden(blockB));
 
         blockA.setCollapsed(false);
-        assertExpanded(blockA);
-        assertShown(blockB);
-        assertShown(blockC);
+        assertNotCollapsed(blockA);
+        chai.assert.isFalse(isBlockHidden(blockB));
+        chai.assert.isFalse(isBlockHidden(blockC));
       });
       test('Connect Block with Child - Statement', function() {
         var blockA = this.createBlock('statement_block');
@@ -1470,13 +1457,13 @@ suite('Blocks', function() {
         assertCollapsed(blockA);
         blockA.getInput('STATEMENT').connection
             .connect(blockB.previousConnection);
-        assertHidden(blockC);
-        assertHidden(blockB);
+        chai.assert.isTrue(isBlockHidden(blockC));
+        chai.assert.isTrue(isBlockHidden(blockB));
 
         blockA.setCollapsed(false);
-        assertExpanded(blockA);
-        assertShown(blockB);
-        assertShown(blockC);
+        assertNotCollapsed(blockA);
+        chai.assert.isFalse(isBlockHidden(blockB));
+        chai.assert.isFalse(isBlockHidden(blockC));
       });
       test('Disconnect Block from Value Input', function() {
         var blockA = this.createBlock('row_block');
@@ -1485,9 +1472,9 @@ suite('Blocks', function() {
         blockA.getInput('INPUT').connection.connect(blockB.outputConnection);
         blockA.setCollapsed(true);
         assertCollapsed(blockA);
-        assertHidden(blockB);
+        chai.assert.isTrue(isBlockHidden(blockB));
         blockB.outputConnection.disconnect();
-        assertShown(blockB);
+        chai.assert.isFalse(isBlockHidden(blockB));
       });
       test('Disconnect Block from Statement Input', function() {
         var blockA = this.createBlock('statement_block');
@@ -1497,9 +1484,9 @@ suite('Blocks', function() {
             .connect(blockB.previousConnection);
         blockA.setCollapsed(true);
         assertCollapsed(blockA);
-        assertHidden(blockB);
+        chai.assert.isTrue(isBlockHidden(blockB));
         blockB.previousConnection.disconnect();
-        assertShown(blockB);
+        chai.assert.isFalse(isBlockHidden(blockB));
       });
       test('Disconnect Block from Child of Collapsed - Input', function() {
         var blockA = this.createBlock('row_block');
@@ -1510,11 +1497,11 @@ suite('Blocks', function() {
         blockB.getInput('INPUT').connection.connect(blockC.outputConnection);
         blockA.setCollapsed(true);
         assertCollapsed(blockA);
-        assertHidden(blockB);
-        assertHidden(blockC);
+        chai.assert.isTrue(isBlockHidden(blockB));
+        chai.assert.isTrue(isBlockHidden(blockC));
 
         blockC.outputConnection.disconnect();
-        assertShown(blockC);
+        chai.assert.isFalse(isBlockHidden(blockC));
       });
       test('Disconnect Block from Child of Collapsed - Next', function() {
         var blockA = this.createBlock('statement_block');
@@ -1526,11 +1513,11 @@ suite('Blocks', function() {
         blockB.nextConnection.connect(blockC.previousConnection);
         blockA.setCollapsed(true);
         assertCollapsed(blockA);
-        assertHidden(blockB);
-        assertHidden(blockC);
+        chai.assert.isTrue(isBlockHidden(blockB));
+        chai.assert.isTrue(isBlockHidden(blockC));
 
         blockC.previousConnection.disconnect();
-        assertShown(blockC);
+        chai.assert.isFalse(isBlockHidden(blockC));
       });
       test('Disconnect Block with Child - Input', function() {
         var blockA = this.createBlock('row_block');
@@ -1541,12 +1528,12 @@ suite('Blocks', function() {
         blockA.getInput('INPUT').connection.connect(blockB.outputConnection);
         blockA.setCollapsed(true);
         assertCollapsed(blockA);
-        assertHidden(blockB);
-        assertHidden(blockC);
+        chai.assert.isTrue(isBlockHidden(blockB));
+        chai.assert.isTrue(isBlockHidden(blockC));
 
         blockB.outputConnection.disconnect();
-        assertShown(blockB);
-        assertShown(blockC);
+        chai.assert.isFalse(isBlockHidden(blockB));
+        chai.assert.isFalse(isBlockHidden(blockC));
       });
       test('Disconnect Block with Child - Statement', function() {
         var blockA = this.createBlock('statement_block');
@@ -1558,12 +1545,12 @@ suite('Blocks', function() {
             .connect(blockB.previousConnection);
         blockA.setCollapsed(true);
         assertCollapsed(blockA);
-        assertHidden(blockC);
-        assertHidden(blockB);
+        chai.assert.isTrue(isBlockHidden(blockC));
+        chai.assert.isTrue(isBlockHidden(blockB));
 
         blockB.previousConnection.disconnect();
-        assertShown(blockB);
-        assertShown(blockC);
+        chai.assert.isFalse(isBlockHidden(blockB));
+        chai.assert.isFalse(isBlockHidden(blockC));
       });
     });
     suite('Adding and Removing Block Parts', function() {

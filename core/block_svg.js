@@ -70,7 +70,8 @@ Blockly.BlockSvg = function(workspace, prototypeName, opt_id) {
   /** @type {boolean} */
   this.rendered = false;
   /**
-   * Is this block currently rendering? Used to stop recursive render calls.
+   * Is this block currently rendering? Used to stop recursive render calls
+   * from actually triggering a re-render.
    * @type {boolean}
    * @private
    */

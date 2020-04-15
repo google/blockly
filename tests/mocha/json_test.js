@@ -1,10 +1,10 @@
 /**
  * @license
- * Copyright 2019 Google LLC
+ * Copyright 2020 Google LLC
  * SPDX-License-Identifier: Apache-2.0
  */
 
-suite('JSON', function() {
+suite('JSON Block Definitions', function() {
   setup(function() {
     this.workspace_ = new Blockly.Workspace();
     this.blocks_ = [];
@@ -317,25 +317,25 @@ suite('JSON', function() {
       assertEquals(Blockly.FieldDropdown, dropdown.constructor);
       assertEquals(VALUE0, dropdown.getValue());
 
+      function assertImageEquals(actualImage, expectedImage) {
+        assertEquals(actualImage.width, expectedImage.width);
+        assertEquals(actualImage.height, expectedImage.height);
+        assertEquals(actualImage.src, expectedImage.src);
+      }
+
       var options = dropdown.getOptions();
       var image0 = options[0][0];
-      assertEquals(IMAGE0.width, image0.width);
-      assertEquals(IMAGE0.height, image0.height);
-      assertEquals(IMAGE0.src, image0.src);
+      assertImageEquals(IMAGE0, image0);
       assertEquals(IMAGE0.alt, image0.alt);
-      assertEquals(VALUE0, options[0][1]);
+      assertEquals(options[0][1], VALUE0);
 
       var image1 = options[1][0];
-      assertEquals(IMAGE1.width, image1.width);
-      assertEquals(IMAGE1.height, image1.height);
-      assertEquals(IMAGE1.src, image1.src);
+      assertImageEquals(IMAGE1, image1);
       assertEquals(IMAGE1.alt, IMAGE1_ALT_TEXT);  // Via Msg reference
       assertEquals(VALUE1, options[1][1]);
 
       var image2 = options[2][0];
-      assertEquals(IMAGE2.width, image2.width);
-      assertEquals(IMAGE2.height, image2.height);
-      assertEquals(IMAGE2.src, image2.src);
+      assertImageEquals(IMAGE1, image1);
       assert(image2.alt == null);  // No alt specified.
       assertEquals(VALUE2, options[2][1]);
     });

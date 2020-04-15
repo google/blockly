@@ -365,7 +365,7 @@ function packageReadme() {
  * The bundled declaration file is referenced in package.json in the types property.
  */
 function packageDTS() {
-  return gulp.src('./typings/blockly.d.ts')
+  return gulp.src(['./typings/*.d.ts', './typings/msg/*.d.ts'], {base: './typings'})
     .pipe(gulp.dest(`${packageDistribution}`));
 };
 

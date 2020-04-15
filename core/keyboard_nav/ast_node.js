@@ -200,6 +200,24 @@ Blockly.ASTNode.createWorkspaceNode = function(workspace, wsCoordinate) {
 };
 
 /**
+ * Creates an AST node for the top position on a block.
+ * This is either an output connection, previous connection, or block.
+ * @param {!Blockly.Block} block The block to find the top most AST node on.
+ * @return {Blockly.ASTNode} The AST node holding the top most position on the
+ *     block.
+ */
+Blockly.ASTNode.createTopNode = function(block) {
+  var astNode;
+  var topConnection = block.previousConnection || block.outputConnection;
+  if (topConnection) {
+    astNode = Blockly.ASTNode.createConnectionNode(topConnection);
+  } else {
+    astNode = Blockly.ASTNode.createBlockNode(block);
+  }
+  return astNode;
+};
+
+/**
  * Parse the optional parameters.
  * @param {Object} params The user specified parameters.
  * @private

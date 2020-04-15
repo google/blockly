@@ -60,7 +60,7 @@ suite('Events', function() {
 
   function createSimpleTestBlock(workspace, opt_prototypeName) {
     // Disable events while constructing the block: this is a test of the
-    // Blockly.Event constructors, not the block constructor.
+    // Blockly.Event constructors, not the block constructor.s
     Blockly.Events.disable();
     var block = new Blockly.Block(
         workspace, opt_prototypeName || 'simple_test_block');
@@ -373,6 +373,260 @@ suite('Events', function() {
         assertNull(this.workspace.getVariable('name2'));
         checkVariableValues(this.workspace, 'name1', 'type1', 'id1');
       });
+    });
+  });
+
+  suite('Filters', function() {
+
+    function addMoveEvent(events, block, newX, newY) {
+      events.push(new Blockly.Events.BlockMove(block));
+      block.xy_ = new Blockly.utils.Coordinate(newX, newY);
+      events[events.length - 1].recordNew();
+    }
+
+    function addMoveEventParent(events, block, parent) {
+      events.push(new Blockly.Events.BlockMove(block));
+      block.setParent(parent);
+      events[events.length - 1].recordNew();
+    }
+
+    test('No removed, order unchanged', function() {
+      var block = this.workspace.newBlock('field_variable_test_block', '1');
+      var events = [
+        new Blockly.Events.BlockCreate(block),
+        new Blockly.Events.BlockMove(block),
+        new Blockly.Events.BlockChange(block, 'field', 'VAR', 'id1', 'id2'),
+        new Blockly.Events.Ui(block, 'click', undefined, undefined)
+      ];
+      var filteredEvents = Blockly.Events.filter(events, true);
+      assertEquals(4, filteredEvents.length);  // no event should have been removed.
+      // test that the order hasn't changed
+      assertTrue(filteredEvents[0] instanceof Blockly.Events.BlockCreate);
+      assertTrue(filteredEvents[1] instanceof Blockly.Events.BlockMove);
+      assertTrue(filteredEvents[2] instanceof Blockly.Events.BlockChange);
+      assertTrue(filteredEvents[3] instanceof Blockly.Events.Ui);
+    });
+
+    test('Different blocks no removed', function() {
+      var block1 = this.workspace.newBlock('field_variable_test_block', '1');
+      var block2 = this.workspace.newBlock('field_variable_test_block', '2');
+      var events = [
+        new Blockly.Events.BlockCreate(block1),
+        new Blockly.Events.BlockMove(block1),
+        new Blockly.Events.BlockCreate(block2),
+        new Blockly.Events.BlockMove(block2)
+      ];
+      var filteredEvents = Blockly.Events.filter(events, true);
+      assertEquals(4, filteredEvents.length);  // no event should have been removed.
+    });
+
+    test('Forward', function() {
+      var block = this.workspace.newBlock('field_variable_test_block', '1');
+      var events = [ new Blockly.Events.BlockCreate(block) ];
+      addMoveEvent(events, block, 1, 1);
+      addMoveEvent(events, block, 2, 2);
+      addMoveEvent(events, block, 3, 3);
+      var filteredEvents = Blockly.Events.filter(events, true);
+      assertEquals(2, filteredEvents.length);  // duplicate moves should have been removed.
+      // test that the order hasn't changed
+      assertTrue(filteredEvents[0] instanceof Blockly.Events.BlockCreate);
+      assertTrue(filteredEvents[1] instanceof Blockly.Events.BlockMove);
+      assertEquals(3, filteredEvents[1].newCoordinate.x);
+      assertEquals(3, filteredEvents[1].newCoordinate.y);
+    });
+
+    test('Backward', function() {
+      var block = this.workspace.newBlock('field_variable_test_block', '1');
+      var events = [ new Blockly.Events.BlockCreate(block) ];
+      addMoveEvent(events, block, 1, 1);
+      addMoveEvent(events, block, 2, 2);
+      addMoveEvent(events, block, 3, 3);
+      var filteredEvents = Blockly.Events.filter(events, false);
+      assertEquals(2, filteredEvents.length);  // duplicate event should have been removed.
+      // test that the order hasn't changed
+      assertTrue(filteredEvents[0] instanceof Blockly.Events.BlockCreate);
+      assertTrue(filteredEvents[1] instanceof Blockly.Events.BlockMove);
+      assertEquals(1, filteredEvents[1].newCoordinate.x);
+      assertEquals(1, filteredEvents[1].newCoordinate.y);
+    });
+
+    test('Merge move events', function() {
+      var block = this.workspace.newBlock('field_variable_test_block', '1');
+      var events = [];
+      addMoveEvent(events, block, 0, 0);
+      addMoveEvent(events, block, 1, 1);
+      var filteredEvents = Blockly.Events.filter(events, true);
+      assertEquals(1, filteredEvents.length);  // second move event merged into first
+      assertEquals(1, filteredEvents[0].newCoordinate.x);
+      assertEquals(1, filteredEvents[0].newCoordinate.y);
+    });
+
+    test('Merge change events', function() {
+      var block1 = this.workspace.newBlock('field_variable_test_block', '1');
+      var events = [
+        new Blockly.Events.Change(block1, 'field', 'VAR', 'item', 'item1'),
+        new Blockly.Events.Change(block1, 'field', 'VAR', 'item1', 'item2')
+      ];
+      var filteredEvents = Blockly.Events.filter(events, true);
+      assertEquals(1, filteredEvents.length);  // second change event merged into first
+      assertEquals('item', filteredEvents[0].oldValue);
+      assertEquals('item2', filteredEvents[0].newValue);
+    });
+
+    test('Merge ui events', function() {
+      var block1 = this.workspace.newBlock('field_variable_test_block', '1');
+      var block2 = this.workspace.newBlock('field_variable_test_block', '2');
+      var block3 = this.workspace.newBlock('field_variable_test_block', '3');
+      var events = [
+        new Blockly.Events.Ui(block1, 'commentOpen', 'false', 'true'),
+        new Blockly.Events.Ui(block1, 'click', 'false', 'true'),
+        new Blockly.Events.Ui(block2, 'mutatorOpen', 'false', 'true'),
+        new Blockly.Events.Ui(block2, 'click', 'false', 'true'),
+        new Blockly.Events.Ui(block3, 'warningOpen', 'false', 'true'),
+        new Blockly.Events.Ui(block3, 'click', 'false', 'true')
+      ];
+      var filteredEvents = Blockly.Events.filter(events, true);
+      assertEquals(3, filteredEvents.length);  // click event merged into corresponding *Open event
+      assertEquals('commentOpen', filteredEvents[0].element);
+      assertEquals('mutatorOpen', filteredEvents[1].element);
+      assertEquals('warningOpen', filteredEvents[2].element);
+    });
+
+    test('Colliding events not dropped', function() {
+      // Tests that events that collide on a (event, block, workspace) tuple
+      // but cannot be merged do not get dropped during filtering.
+      var block = this.workspace.newBlock('field_variable_test_block', '1');
+      var events = [
+        new Blockly.Events.Ui(block, 'click', undefined, undefined),
+        new Blockly.Events.Ui(block, 'stackclick', undefined, undefined)
+      ];
+      var filteredEvents = Blockly.Events.filter(events, true);
+      // click and stackclick should both exist
+      assertEquals(2, filteredEvents.length);
+      assertEquals('click', filteredEvents[0].element);
+      assertEquals('stackclick', filteredEvents[1].element);
+    });
+
+    test('Merging null operations dropped', function() {
+      // Mutator composition could result in move events for blocks
+      // connected to the mutated block that were null operations. This
+      // leads to events in the undo/redo queue that do nothing, requiring
+      // an extra undo/redo to proceed to the next event. This test ensures
+      // that two move events that do get merged (disconnecting and
+      // reconnecting a block in response to a mutator change) are filtered
+      // from the queue.
+      var block = this.workspace.newBlock('field_variable_test_block', '1');
+      block.setParent(null);
+      var events = [];
+      addMoveEventParent(events, block, null);
+      addMoveEventParent(events, block, null);
+      var filteredEvents = Blockly.Events.filter(events, true);
+      // The two events should be merged, but because nothing has changed
+      // they will be filtered out.
+      assertEquals(0, filteredEvents.length);
+    });
+
+    test('Move events different blocks not merged', function() {
+      // Move events should only merge if they refer to the same block and are
+      // consecutive.
+      // See github.com/google/blockly/pull/1892 for a worked example showing
+      // how merging non-consecutive events can fail when replacing a shadow
+      // block.
+      var block1 = createSimpleTestBlock(this.workspace);
+      var block2 = createSimpleTestBlock(this.workspace);
+
+      var events = [];
+      addMoveEvent(events, block1, 1, 1);
+      addMoveEvent(events, block2, 1, 1);
+      events.push(new Blockly.Events.BlockDelete(block2));
+      addMoveEvent(events, block1, 2, 2);
+
+      var filteredEvents = Blockly.Events.filter(events, true);
+      // Nothing should have merged.
+      assertEquals(4, filteredEvents.length);
+      // test that the order hasn't changed
+      assertTrue(filteredEvents[0] instanceof Blockly.Events.BlockMove);
+      assertTrue(filteredEvents[1] instanceof Blockly.Events.BlockMove);
+      assertTrue(filteredEvents[2] instanceof Blockly.Events.BlockDelete);
+      assertTrue(filteredEvents[3] instanceof Blockly.Events.BlockMove);
+    });
+  });
+
+  suite('Firing', function() {
+    function temporary_fireEvent(event) {
+      if (!Blockly.Events.isEnabled()) {
+        return;
+      }
+      Blockly.Events.FIRE_QUEUE_.push(event);
+      Blockly.Events.fireNow_();
+    }
+
+    setup(function() {
+      this.savedFireFunc_ = Blockly.Events.fire;
+      Blockly.Events.fire = temporary_fireEvent;
+      temporary_fireEvent.firedEvents_ = [];
+    });
+
+    teardown(function() {
+      Blockly.Events.fire = this.savedFireFunc_;
+      sinon.restore();
+    });
+
+    test('New block new var', function() {
+      // Expect three calls to genUid: one to set the block's ID, one for the event
+      // group's id, and one for the variable's ID.
+      var stub = sinon.stub(Blockly.utils, "genUid");
+      stub.onCall(0).returns('1');
+      stub.onCall(1).returns('2');
+      stub.onCall(2).returns('3');
+      var _ = this.workspace.newBlock('field_variable_test_block');
+
+      var firedEvents = this.workspace.undoStack_;
+      // Expect two events: varCreate and block create.
+      assertEquals(2, firedEvents.length);
+
+      var event0 = firedEvents[0];
+      var event1 = firedEvents[1];
+      assertEquals('var_create', event0.type);
+      assertEquals('create', event1.type);
+
+      // Expect the events to have the same group ID.
+      assertEquals(event0.group, event1.group);
+
+      // Expect the group ID to be the result of the second call to genUid.
+      assertEquals('2', event0.group);
+
+      // Expect the workspace to have a variable with ID '3'.
+      assertNotNull(this.workspace.getVariableById('3'));
+      assertEquals('3', event0.varId);
+    });
+
+    test('New block new var xml', function() {
+      // The sequence of events should be the same whether the block was created from
+      // XML or directly.
+      var dom = Blockly.Xml.textToDom(
+          '<xml xmlns="https://developers.google.com/blockly/xml">' +
+          '  <block type="field_variable_test_block" id="block1">' +
+          '    <field name="VAR" id="id1">name1</field>' +
+          '  </block>' +
+          '</xml>');
+      Blockly.Xml.domToWorkspace(dom, this.workspace);
+
+      var firedEvents = this.workspace.undoStack_;
+      // Expect two events: varCreate and block create.
+      assertEquals(2, firedEvents.length);
+
+      var event0 = firedEvents[0];
+      var event1 = firedEvents[1];
+      assertEquals('var_create', event0.type);
+      assertEquals('create', event1.type);
+
+      // Expect the events to have the same group ID.
+      assertEquals(event0.group, event1.group);
+
+      // Expect the workspace to have a variable with ID 'id1'.
+      assertNotNull(this.workspace.getVariableById('id1'));
+      assertEquals('id1', event0.varId);
     });
   });
 });

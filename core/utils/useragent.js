@@ -20,6 +20,45 @@ goog.provide('Blockly.utils.userAgent');
 
 goog.require('Blockly.utils.global');
 
+/** @const {boolean} */
+Blockly.utils.userAgent.IE;
+
+/** @const {boolean} */
+Blockly.utils.userAgent.EDGE;
+
+/** @const {boolean} */
+Blockly.utils.userAgent.JAVA_FX;
+
+/** @const {boolean} */
+Blockly.utils.userAgent.CHROME;
+
+/** @const {boolean} */
+Blockly.utils.userAgent.WEBKIT;
+
+/** @const {boolean} */
+Blockly.utils.userAgent.GECKO;
+
+/** @const {boolean} */
+Blockly.utils.userAgent.ANDROID;
+
+/** @const {boolean} */
+Blockly.utils.userAgent.IPAD;
+
+/** @const {boolean} */
+Blockly.utils.userAgent.IPOD;
+
+/** @const {boolean} */
+Blockly.utils.userAgent.IPHONE;
+
+/** @const {boolean} */
+Blockly.utils.userAgent.MAC;
+
+/** @const {boolean} */
+Blockly.utils.userAgent.TABLET;
+
+/** @const {boolean} */
+Blockly.utils.userAgent.MOBILE;
+
 (function(raw) {
   Blockly.utils.userAgent.raw = raw;
   var rawUpper = Blockly.utils.userAgent.raw.toUpperCase();

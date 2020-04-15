@@ -47,7 +47,7 @@
   "main": "./index.js",
   "umd": "./blockly.min.js",
   "unpkg": "./blockly.min.js",
-  "types": "./blockly.d.ts",
+  "types": "./index.d.ts",
   "browser": {
     "./node.js": "./browser.js",
     "./core.js": "./core-browser.js",

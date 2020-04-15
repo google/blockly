@@ -393,7 +393,7 @@ Blockly.blockRendering.MarkerSvg.prototype.showCurrent_ = function() {
  * @param {number} width The width of the block.
  * @param {number} markerOffset The extra padding for around the block.
  * @param {number} markerHeight The height of the marker.
- * @private
+ * @protected
  */
 Blockly.blockRendering.MarkerSvg.prototype.positionBlock_ = function(
     width, markerOffset, markerHeight) {
@@ -413,7 +413,7 @@ Blockly.blockRendering.MarkerSvg.prototype.positionBlock_ = function(
  * Displays a filled in puzzle piece.
  * @param {!Blockly.RenderedConnection} connection The connection to position
  *     marker around.
- * @private
+ * @protected
  */
 Blockly.blockRendering.MarkerSvg.prototype.positionInput_ = function(
     connection) {
@@ -452,7 +452,7 @@ Blockly.blockRendering.MarkerSvg.prototype.positionLine_ = function(
  * @param {number} width The width of the block.
  * @param {number} height The height of the block.
  * @param {!Object} connectionShape The shape object for the connection.
- * @private
+ * @protected
  */
 Blockly.blockRendering.MarkerSvg.prototype.positionOutput_ = function(
     width, height, connectionShape) {
@@ -479,7 +479,7 @@ Blockly.blockRendering.MarkerSvg.prototype.positionOutput_ = function(
  * @param {number} markerOffset The offset of the marker from around the block.
  * @param {number} markerHeight The height of the marker.
  * @param {!Object} connectionShape The shape object for the connection.
- * @private
+ * @protected
  */
 Blockly.blockRendering.MarkerSvg.prototype.positionPrevious_ = function(
     width, markerOffset, markerHeight, connectionShape) {

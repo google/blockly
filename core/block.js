@@ -1945,6 +1945,8 @@ Blockly.Block.prototype.toDevString = function() {
  */
 Blockly.Block.prototype.appendDynamicIDInput = function (requestedModuleTypes, mandatoryComponentsPrefix, mandatoryComponentsPostfix) {
   // Create a dropdown in the block, with an option for every active/recent module of the requested types
+
+  var thisBlock = this;
   this.appendDummyInput().appendField(new Blockly.FieldDropdown(
 
     function dynamicOptions () {
@@ -1953,6 +1955,9 @@ Blockly.Block.prototype.appendDynamicIDInput = function (requestedModuleTypes, m
 
       // Add the 'mandatory' components that are put before the active/recent modules (ex. Hub)
       for (let i = 0; i < mandatoryComponentsPrefix.length; i++) {
+        if (thisBlock.isShadow() && mandatoryComponentsPrefix[i][0] === '#') {
+          continue;
+        }
         result.push(mandatoryComponentsPrefix[i]);
       }
 
@@ -1977,6 +1982,9 @@ Blockly.Block.prototype.appendDynamicIDInput = function (requestedModuleTypes, m
 
       // Add the 'mandatory' components that should be last in the dropdown (ex. '#')
       for (let i = 0; i < mandatoryComponentsPostfix.length; i++) {
+        if (thisBlock.isShadow() && mandatoryComponentsPostfix[i][0] === '#') {
+          continue;
+        }
         result.push(mandatoryComponentsPostfix[i]);
       }
 
@@ -1993,6 +2001,11 @@ Blockly.Block.prototype.appendDynamicIDInput = function (requestedModuleTypes, m
     var inputExists = this.getInput('#');
     if (inputID) {
       if (!inputExists) {
+        // Do nothing if this block is already a shadow block.
+        if (this.isShadow()) {
+          return;
+        }
+
         // Add a connector for external blocks
         this.appendValueInput('#').setCheck('String');
 

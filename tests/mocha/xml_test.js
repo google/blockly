@@ -76,6 +76,9 @@ suite('XML', function() {
       delete Blockly.Blocks[this.blockTypes_[i]];
     }
     this.blockTypes_.length = 0;
+    // Clear Blockly.Event state.
+    Blockly.Events.setGroup(false);
+    Blockly.Events.disabled_ = 0;
     sinon.restore();
   });
   suite('textToDom', function() {

@@ -6,6 +6,7 @@
     "globals": {
         "chai": false,
         "sinon": false,
+        "assert": true,
         "assertArrayEquals": true,
         "assertNull": true,
         "assertNotNull": true,
@@ -15,6 +16,7 @@
         "isEqualArrays": true,
         "assertUndefined": true,
         "assertNotUndefined": true,
+        "assertNotNullNorUndefined": true,
         "defineStackBlock": true,
         "defineRowBlock": true,
         "defineStatementBlock": true,

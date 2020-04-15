@@ -1014,7 +1014,8 @@ FactoryUtils.isProcedureBlock = function(block) {
       block.type == 'procedures_defreturn' ||
       block.type == 'procedures_callnoreturn' ||
       block.type == 'procedures_callreturn' ||
-      block.type == 'procedures_ifreturn');
+      block.type == 'procedures_ifreturn' ||
+      block.type == 'procedures_fable_return');
 };
 
 /**

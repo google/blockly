@@ -5,6 +5,7 @@ declare module Blockly {
     toolbox?: HTMLElement | string;
     readOnly?: boolean;
     trashcan?: boolean;
+    maxInstances?: {[type: string]: number;};
     maxTrashcanContents?: number;
     collapse?: boolean;
     comments?: boolean;
@@ -35,14 +36,19 @@ declare module Blockly {
       maxScale?: number;
       minScale?: number;
       scaleSpeed?: number;
+      pinch?: boolean;
     };
     renderer?: string;
+    keyMap?: {[type: string]: Blockly.Action;};
   }
 
   interface BlocklyThemeOptions {
+    base?: string;
     blockStyles?: {[blocks: string]: Blockly.Theme.BlockStyle;};
     categoryStyles?: {[category: string]: Blockly.Theme.CategoryStyle;};
     componentStyles?: {[component: string]: any;};
+    fontStyle?: Blockly.Theme.FontStyle;
+    startHats?: boolean;
   }
 
   interface Metrics {

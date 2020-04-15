@@ -106,31 +106,55 @@ Blockly.Options = function(options) {
 
   var renderer = options['renderer'] || 'geras';
 
+  /** @type {boolean} */
   this.RTL = rtl;
+  /** @type {boolean} */
   this.oneBasedIndex = oneBasedIndex;
+  /** @type {boolean} */
   this.collapse = hasCollapse;
+  /** @type {boolean} */
   this.comments = hasComments;
+  /** @type {boolean} */
   this.disable = hasDisable;
+  /** @type {boolean} */
   this.readOnly = readOnly;
+  /** @type {number} */
   this.maxBlocks = options['maxBlocks'] || Infinity;
+  /** @type {?Object.<string, number>} */
   this.maxInstances = options['maxInstances'];
+  /** @type {string} */
   this.pathToMedia = pathToMedia;
+  /** @type {boolean} */
   this.hasCategories = hasCategories;
+  /** @type {!Object} */
   this.moveOptions = Blockly.Options.parseMoveOptions(options, hasCategories);
   /** @deprecated  January 2019 */
   this.hasScrollbars = this.moveOptions.scrollbars;
+  /** @type {boolean} */
   this.hasTrashcan = hasTrashcan;
+  /** @type {number} */
   this.maxTrashcanContents = maxTrashcanContents;
+  /** @type {boolean} */
   this.hasSounds = hasSounds;
+  /** @type {boolean} */
   this.hasCss = hasCss;
+  /** @type {boolean} */
   this.horizontalLayout = horizontalLayout;
+  /** @type {Node} */
   this.languageTree = languageTree;
+  /** @type {!Object} */
   this.gridOptions = Blockly.Options.parseGridOptions_(options);
+  /** @type {!Object} */
   this.zoomOptions = Blockly.Options.parseZoomOptions_(options);
+  /** @type {number} */
   this.toolboxPosition = toolboxPosition;
+  /** @type {!Blockly.Theme} */
   this.theme = Blockly.Options.parseThemeOptions_(options);
+  /** @type {!Object<string,Blockly.Action>} */
   this.keyMap = keyMap;
+  /** @type {string} */
   this.renderer = renderer;
+  /** @type {?Object} */
   this.rendererOverrides = options['rendererOverrides'];
 
   /**

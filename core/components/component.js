@@ -476,7 +476,8 @@ Blockly.Component.prototype.addChildAt = function(child, index, opt_render) {
       child.element_.parentNode &&
       // Under some circumstances, IE8 implicitly creates a Document Fragment
       // for detached nodes, so ensure the parent is an Element as it should be.
-      child.element_.parentNode.nodeType == Blockly.utils.dom.Node.ELEMENT_NODE) {
+      child.element_.parentNode.nodeType ==
+          Blockly.utils.dom.NodeType.ELEMENT_NODE) {
     // We don't touch the DOM, but if the parent is in the document, and the
     // child element is in the document but not marked as such, then we call
     // enterDocument on the child.

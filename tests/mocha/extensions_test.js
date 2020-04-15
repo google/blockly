@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2019 Google LLC
+ * Copyright 2020 Google LLC
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -142,6 +142,7 @@ suite('Extensions', function() {
       assertEquals(testMixin.field, block.field);
       assertEquals(testMixin.method, block.method);
     });
+
     suite('Mutator', function() {
       test('Basic', function() {
         this.extensionsCleanup_.push('mutator_test');
@@ -180,6 +181,7 @@ suite('Extensions', function() {
         assertEquals(block.compose(), 'composeFn');
         assertEquals(block.decompose(), 'decomposeFn');
       });
+
       test('With helper function', function() {
         this.extensionsCleanup_.push('extensions_test');
         this.blockTypesCleanup_.push('mutator_test_block');
@@ -211,6 +213,7 @@ suite('Extensions', function() {
 
         sinon.assert.calledOnce(helperFunctionSpy);
       });
+
       test('No dialog', function() {
         this.extensionsCleanup_.push('mutator_test');
         this.blockTypesCleanup_.push('mutator_test_block');
@@ -262,6 +265,7 @@ suite('Extensions', function() {
         var _ = new Blockly.Block(workspace, 'missing_extension_block');
       });
     });
+
     test('Mixin overwrites local value', function() {
       this.extensionsCleanup_.push('mixin_bad_inputList');
       this.blockTypesCleanup_.push('test_block_bad_inputList');
@@ -286,6 +290,7 @@ suite('Extensions', function() {
         var _ = new Blockly.Block(workspace, 'test_block_bad_inputList');
       }, /inputList/);
     });
+
     test('Mixin overwrites prototype', function() {
       this.extensionsCleanup_.push('mixin_bad_colour_');
       this.blockTypesCleanup_.push('mixin_bad_colour_');
@@ -310,6 +315,7 @@ suite('Extensions', function() {
         var _ = new Blockly.Block(workspace, 'test_block_bad_colour');
       }, /colour_/);
     });
+
     test('Use mutator as extension', function() {
       this.extensionsCleanup_.push('mutator_test');
       this.blockTypesCleanup_.push('mutator_test_block');
@@ -341,6 +347,7 @@ suite('Extensions', function() {
       // Should have failed on apply, not on register.
       assertNotNull(Blockly.Extensions.ALL_['mutator_test']);
     });
+
     test('Use mutator mixin as extension', function() {
       this.extensionsCleanup_.push('mutator_test');
       this.blockTypesCleanup_.push('mutator_test_block');
@@ -372,6 +379,7 @@ suite('Extensions', function() {
       // Should have failed on apply, not on register.
       assertNotNull(Blockly.Extensions.ALL_['mutator_test']);
     });
+
     test('Use extension as mutator', function() {
       this.extensionsCleanup_.push('extensions_test');
       this.blockTypesCleanup_.push('mutator_test_block');
@@ -397,6 +405,7 @@ suite('Extensions', function() {
       // Should have failed on apply, not on register.
       assertNotNull(Blockly.Extensions.ALL_['extensions_test']);
     });
+
     suite('register', function() {
       test('Just a string', function() {
         this.extensionsCleanup_.push('extension_just_a_string');
@@ -405,6 +414,7 @@ suite('Extensions', function() {
           Blockly.Extensions.register('extension_just_a_string', null);
         });
       });
+
       test('Null', function() {
         this.extensionsCleanup_.push('extension_is_null');
         assertUndefined(Blockly.Extensions.ALL_['extension_is_null']);
@@ -412,6 +422,7 @@ suite('Extensions', function() {
           Blockly.Extensions.register('extension_is_null', null);
         });
       });
+
       test('Undefined', function() {
         this.extensionsCleanup_.push('extension_is_undefined');
         assertUndefined(Blockly.Extensions.ALL_['extension_is_undefined']);
@@ -420,6 +431,7 @@ suite('Extensions', function() {
         });
       });
     });
+
     suite('registerMutator', function() {
       test('No domToMutation', function() {
         this.extensionsCleanup_.push('mutator_test');
@@ -436,8 +448,9 @@ suite('Extensions', function() {
                   return 'decomposeFn';
                 }
               });
-        });
-      }, /domToMutation/);
+        }, /domToMutation/);
+      });
+
       test('No mutationToDom', function() {
         this.extensionsCleanup_.push('mutator_test');
         chai.assert.throws(function() {
@@ -455,6 +468,7 @@ suite('Extensions', function() {
               });
         }, /mutationToDom/);
       });
+
       test('Has decompose but no compose', function() {
         this.extensionsCleanup_.push('mutator_test');
         chai.assert.throws(function() {
@@ -472,6 +486,7 @@ suite('Extensions', function() {
               });
         }, /compose/);
       });
+
       test('Has compose but no decompose', function() {
         this.extensionsCleanup_.push('mutator_test');
         chai.assert.throws(function() {
@@ -487,8 +502,8 @@ suite('Extensions', function() {
                   return 'composeFn';
                 }
               });
-        });
-      }, /decompose/);
+        }, /decompose/);
+      });
     });
   });
 });

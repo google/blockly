@@ -21,7 +21,9 @@ suite('Extensions', function() {
       delete Blockly.Extensions.ALL_[extension];
     }
     this.workspace.dispose();
-    Blockly.Events.enable();
+    // Clear Blockly.Event state.
+    Blockly.Events.setGroup(false);
+    Blockly.Events.disabled_ = 0;
     sinon.restore();
   });
 

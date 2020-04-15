@@ -57,7 +57,7 @@ module.exports = {
   gitCreateRC: gitTasks.createRC,
   gitRecompile: gitTasks.recompile,
   gitUpdateGithubPages: gitTasks.updateGithubPages,
-  typings: typings.typings,
+  typings: gulp.series(typings.typings, typings.msgTypings),
   package: packageTasks.package,
   checkLicenses: licenseTasks.checkLicenses
 };

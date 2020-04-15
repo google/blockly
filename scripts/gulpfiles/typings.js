@@ -62,8 +62,8 @@ function typings() {
   });
 
   const srcs = [
-    'typings/parts/blockly-header.d.ts',
-    'typings/parts/blockly-interfaces.d.ts',
+    'typings/templates/blockly-header.template',
+    'typings/templates/blockly-interfaces.template',
     `${tmpDir}/core/**`,
     `${tmpDir}/core/components/**`,
     `${tmpDir}/core/components/tree/**`,
@@ -86,6 +86,19 @@ function typings() {
     });
 };
 
+// Generates the TypeScript definition files (d.ts) for Blockly locales.
+function msgTypings(cb) {
+  const template = fs.readFileSync(path.join('typings/templates/msg.template'), 'utf-8');
+  const msgFiles = fs.readdirSync(path.join('msg', 'json'));
+  msgFiles.forEach(msg => {
+    const localeName = msg.substring(0, msg.indexOf('.json'));
+    const msgTypings = template.slice().replace(/<%= locale %>/gi, localeName);
+    fs.writeFileSync(path.join('typings', 'msg', localeName + '.d.ts'), msgTypings, 'utf-8');
+  })
+  cb();
+}
+
 module.exports = {
-  typings: typings
+  typings: typings,
+  msgTypings: msgTypings
 };

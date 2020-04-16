@@ -35,20 +35,6 @@ function testInit_Trivial() {
   variableModelTest_tearDown();
 }
 
-function testInit_NullType() {
-  variableModelTest_setUp();
-  variable = new Blockly.VariableModel(workspace, 'test', null, 'test_id');
-  assertEquals('', variable.type);
-  variableModelTest_tearDown();
-}
-
-function testInit_UndefinedType() {
-  variableModelTest_setUp();
-  variable = new Blockly.VariableModel(workspace, 'test', undefined, 'test_id');
-  assertEquals('', variable.type);
-  variableModelTest_tearDown();
-}
-
 function testInit_NullId() {
   variableModelTest_setUp();
   variable = new Blockly.VariableModel(workspace, 'test', 'test_type', null);

@@ -230,6 +230,17 @@ Blockly.Block = function(workspace, prototypeName, opt_id) {
 Blockly.Block.CommentModel;
 
 /**
+ * The language-neutral id given to the collapsed input.
+ * @const {string}
+ */
+Blockly.Block.COLLAPSED_INPUT_NAME = '_TEMP_COLLAPSED_INPUT';
+/**
+ * The language-neutral id given to the collapsed field.
+ * @const {string}
+ */
+Blockly.Block.COLLAPSED_FIELD_NAME = '_TEMP_COLLAPSED_FIELD';
+
+/**
  * Optional text data that round-trips between blocks and XML.
  * Has no effect. May be used by 3rd parties for meta information.
  * @type {?string}
@@ -1295,20 +1306,19 @@ Blockly.Block.prototype.setCollapsed = function(collapsed) {
 Blockly.Block.prototype.toString = function(opt_maxLength, opt_emptyToken) {
   var text = [];
   var emptyFieldPlaceholder = opt_emptyToken || '?';
-  if (this.collapsed_) {
-    text.push(this.getInput('_TEMP_COLLAPSED_INPUT').fieldRow[0].getText());
-  } else {
-    for (var i = 0, input; (input = this.inputList[i]); i++) {
-      for (var j = 0, field; (field = input.fieldRow[j]); j++) {
-        text.push(field.getText());
-      }
-      if (input.connection) {
-        var child = input.connection.targetBlock();
-        if (child) {
-          text.push(child.toString(undefined, opt_emptyToken));
-        } else {
-          text.push(emptyFieldPlaceholder);
-        }
+  for (var i = 0, input; (input = this.inputList[i]); i++) {
+    if (input.name == Blockly.Block.COLLAPSED_INPUT_NAME) {
+      continue;
+    }
+    for (var j = 0, field; (field = input.fieldRow[j]); j++) {
+      text.push(field.getText());
+    }
+    if (input.connection) {
+      var child = input.connection.targetBlock();
+      if (child) {
+        text.push(child.toString(undefined, opt_emptyToken));
+      } else {
+        text.push(emptyFieldPlaceholder);
       }
     }
   }

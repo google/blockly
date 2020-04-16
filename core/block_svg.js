@@ -69,6 +69,14 @@ Blockly.BlockSvg = function(workspace, prototypeName, opt_id) {
 
   /** @type {boolean} */
   this.rendered = false;
+  /**
+   * Is this block currently rendering? Used to stop recursive render calls
+   * from actually triggering a re-render.
+   * @type {boolean}
+   * @private
+   */
+  this.renderIsInProgress_ = false;
+
 
   /** @type {!Blockly.WorkspaceSvg} */
   this.workspace = workspace;
@@ -602,60 +610,51 @@ Blockly.BlockSvg.prototype.setCollapsed = function(collapsed) {
   if (this.collapsed_ == collapsed) {
     return;
   }
-  var renderList = [];
-  // Show/hide the inputs.
-  for (var i = 0, input; (input = this.inputList[i]); i++) {
-    renderList.push.apply(renderList, input.setVisible(!collapsed));
-  }
-
-  var COLLAPSED_INPUT_NAME = '_TEMP_COLLAPSED_INPUT';
-  if (collapsed) {
-    var icons = this.getIcons();
-    for (var i = 0; i < icons.length; i++) {
-      icons[i].setVisible(false);
-    }
-    var text = this.toString(Blockly.COLLAPSE_CHARS);
-    this.appendDummyInput(COLLAPSED_INPUT_NAME).appendField(text).init();
-
-    // Add any warnings on enclosed blocks to this block.
-    var descendants = this.getDescendants(true);
-    var nextBlock = this.getNextBlock();
-    if (nextBlock) {
-      var index = descendants.indexOf(nextBlock);
-      descendants.splice(index, descendants.length - index);
-    }
-    for (var i = 1, block; (block = descendants[i]); i++) {
-      if (block.warning) {
-        this.setWarningText(Blockly.Msg['COLLAPSED_WARNINGS_WARNING'],
-            Blockly.BlockSvg.COLLAPSED_WARNING_ID);
-        break;
-      }
-    }
-  } else {
-    this.removeInput(COLLAPSED_INPUT_NAME);
-    // Clear any warnings inherited from enclosed blocks.
-    if (this.warning) {
-      this.warning.setText('', Blockly.BlockSvg.COLLAPSED_WARNING_ID);
-      if (!Object.keys(this.warning.text_).length) {
-        this.setWarningText(null);
-      }
-    }
-  }
   Blockly.BlockSvg.superClass_.setCollapsed.call(this, collapsed);
+  if (!collapsed) {
+    this.updateCollapsed_();
+  } else if (this.rendered) {
+    this.render();
+    // Don't bump neighbours. Users like to store collapsed functions together
+    // and bumping makes them go out of alignment.
+  }
+};
 
-  if (!renderList.length) {
-    // No child blocks, just render this block.
-    renderList[0] = this;
-  }
-  if (this.rendered) {
-    for (var i = 0, block; (block = renderList[i]); i++) {
-      block.render();
+/**
+ * Makes sure that when the block is collapsed, it is rendered correctly
+ * for that state.
+ * @private
+ */
+Blockly.BlockSvg.prototype.updateCollapsed_ = function() {
+  var collapsed = this.isCollapsed();
+  var collapsedInputName = Blockly.Block.COLLAPSED_INPUT_NAME;
+  var collapsedFieldName = Blockly.Block.COLLAPSED_FIELD_NAME;
+
+  for (var i = 0, input; (input = this.inputList[i]); i++) {
+    if (input.name != collapsedInputName) {
+      input.setVisible(!collapsed);
     }
-    // Don't bump neighbours.
-    // Although bumping neighbours would make sense, users often collapse
-    // all their functions and store them next to each other.  Expanding and
-    // bumping causes all their definitions to go out of alignment.
   }
+
+  if (!collapsed) {
+    this.removeInput(collapsedInputName);
+    return;
+  }
+
+  var icons = this.getIcons();
+  for (var i = 0, icon; (icon = icons[i]); i++) {
+    icon.setVisible(false);
+  }
+
+  var text = this.toString(Blockly.COLLAPSE_CHARS);
+  var field = this.getField(collapsedFieldName);
+  if (field) {
+    field.setValue(text);
+    return;
+  }
+  var input = this.getInput(collapsedInputName) ||
+      this.appendDummyInput(collapsedInputName);
+  input.appendField(new Blockly.FieldLabel(text), collapsedFieldName);
 };
 
 /**
@@ -1647,31 +1646,40 @@ Blockly.BlockSvg.prototype.getRootBlock = function() {
 };
 
 /**
- * Render the block.
  * Lays out and reflows a block based on its contents and settings.
  * @param {boolean=} opt_bubble If false, just render this block.
  *   If true, also render block's parent, grandparent, etc.  Defaults to true.
  */
 Blockly.BlockSvg.prototype.render = function(opt_bubble) {
-  Blockly.utils.dom.startTextWidthCache();
-  this.rendered = true;
-  (/** @type {!Blockly.WorkspaceSvg} */ (this.workspace))
-      .getRenderer().render(this);
-  // No matter how we rendered, connection locations should now be correct.
-  this.updateConnectionLocations_();
-  if (opt_bubble !== false) {
-    // Render all blocks above this one (propagate a reflow).
-    var parentBlock = this.getParent();
-    if (parentBlock) {
-      parentBlock.render(true);
-    } else {
-      // Top-most block.  Fire an event to allow scrollbars to resize.
-      this.workspace.resizeContents();
-    }
+  if (this.renderIsInProgress_) {
+    return;  // Don't allow recursive renders.
   }
-  Blockly.utils.dom.stopTextWidthCache();
+  this.renderIsInProgress_ = true;
+  try {
+    this.rendered = true;
+    Blockly.utils.dom.startTextWidthCache();
 
-  this.updateMarkers_();
+    if (this.isCollapsed()) {
+      this.updateCollapsed_();
+    }
+    this.workspace.getRenderer().render(this);
+    this.updateConnectionLocations_();
+
+    if (opt_bubble !== false) {
+      var parentBlock = this.getParent();
+      if (parentBlock) {
+        parentBlock.render(true);
+      } else {
+        // Top-most block. Fire an event to allow scrollbars to resize.
+        this.workspace.resizeContents();
+      }
+    }
+
+    Blockly.utils.dom.stopTextWidthCache();
+    this.updateMarkers_();
+  } finally {
+    this.renderIsInProgress_ = false;
+  }
 };
 
 /**

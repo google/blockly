@@ -8,8 +8,8 @@ suite('Checkbox Fields', function() {
   function assertValue(checkboxField, expectedValue, expectedText) {
     var actualValue = checkboxField.getValue();
     var actualText = checkboxField.getText();
-    assertEquals(actualValue, expectedValue);
-    assertEquals(actualText, expectedText);
+    chai.assert.equal(actualValue, expectedValue);
+    chai.assert.equal(actualText, expectedText);
   }
   function assertValueDefault(checkboxField) {
     assertValue(checkboxField, 'FALSE', 'false');

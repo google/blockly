@@ -662,7 +662,7 @@ suite('Navigation', function() {
       Blockly.navigation.connect_(cursorLocation, markedLocation);
 
       chai.assert.equal(this.basicBlock.nextConnection.targetBlock(), this.basicBlock4);
-      chai.assert.equal(this.basicBlock3.nextConnection.targetConnection, null);
+      chai.assert.isNull(this.basicBlock3.nextConnection.targetConnection);
     });
 
     test('Connect cursor with parents', function() {
@@ -680,7 +680,7 @@ suite('Navigation', function() {
 
       Blockly.navigation.connect_(cursorLocation, markedLocation);
 
-      chai.assert.equal(this.inlineBlock2.outputConnection.targetBlock(), null);
+      chai.assert.isNull(this.inlineBlock2.outputConnection.targetBlock());
       chai.assert.equal(this.inlineBlock1.outputConnection.targetBlock(), this.inlineBlock2);
     });
   });

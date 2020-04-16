@@ -8,8 +8,8 @@ suite('Colour Fields', function() {
   function assertValue(colourField, expectedValue, expectedText) {
     var actualValue = colourField.getValue();
     var actualText = colourField.getText();
-    assertEquals(actualValue, expectedValue);
-    assertEquals(actualText, expectedText);
+    chai.assert.equal(actualValue, expectedValue);
+    chai.assert.equal(actualText, expectedText);
   }
   function assertValueDefault(colourField) {
     var expectedValue = Blockly.FieldColour.COLOURS[0];

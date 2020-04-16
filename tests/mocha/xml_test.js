@@ -6,33 +6,33 @@
 
 suite('XML', function() {
   var assertSimpleFieldDom = function(fieldDom, name, text) {
-    assertEquals(text, fieldDom.textContent);
-    assertEquals(name, fieldDom.getAttribute('name'));
+    chai.assert.equal(text, fieldDom.textContent);
+    chai.assert.equal(name, fieldDom.getAttribute('name'));
   };
   var assertNonSerializingFieldDom = function(fieldDom) {
-    assertEquals(undefined, fieldDom.childNodes[0]);
+    chai.assert.isUndefined(fieldDom.childNodes[0]);
   };
   var assertNonVariableField = function(fieldDom, name, text) {
     assertSimpleFieldDom(fieldDom, name, text);
-    assertNull('id', fieldDom.getAttribute('id'));
-    assertNull('variabletype', fieldDom.getAttribute('variabletype'));
+    chai.assert.isNull(fieldDom.getAttribute('id'), 'id');
+    chai.assert.isNull(fieldDom.getAttribute('variabletype'), 'variabletype');
   };
   var assertVariableDomField = function(fieldDom, name, type, id, text) {
     assertSimpleFieldDom(fieldDom, name, text);
-    assertEquals(type, fieldDom.getAttribute('variabletype'));
-    assertEquals(id, fieldDom.getAttribute('id'));
+    chai.assert.equal(fieldDom.getAttribute('variabletype'), type);
+    chai.assert.equal(fieldDom.getAttribute('id'), id);
   };
   var assertVariableDom = function(fieldDom, type, id, text) {
-    assertEquals(type, fieldDom.getAttribute('type'));
-    assertEquals(id, fieldDom.getAttribute('id'));
-    assertEquals(text, fieldDom.textContent);
+    chai.assert.equal(fieldDom.getAttribute('type'), type);
+    chai.assert.equal(fieldDom.getAttribute('id'), id);
+    chai.assert.equal(fieldDom.textContent, text);
   };
   var assertVariableValues = function(container, name, type, id) {
     var variable = container.getVariableById(id);
-    assertNotUndefined(variable);
-    assertEquals(name, variable.name);
-    assertEquals(type, variable.type);
-    assertEquals(id, variable.getId());
+    chai.assert.isDefined(variable);
+    chai.assert.equal(variable.name, name);
+    chai.assert.equal(variable.type, type);
+    chai.assert.equal(variable.getId(), id);
   };
   setup(function() {
     Blockly.defineBlocksWithJsonArray([
@@ -84,8 +84,8 @@ suite('XML', function() {
   suite('textToDom', function() {
     test('Basic', function() {
       var dom = Blockly.Xml.textToDom(this.complexXmlText);
-      assertEquals('XML tag', 'xml', dom.nodeName);
-      assertEquals('Block tags', 6, dom.getElementsByTagName('block').length);
+      chai.assert.equal(dom.nodeName, 'xml', 'XML tag');
+      chai.assert.equal(dom.getElementsByTagName('block').length, 6, 'Block tags');
     });
   });
   suite('blockToDom', function() {
@@ -442,11 +442,11 @@ suite('XML', function() {
       this.workspace.createVariable('name1');
       var resultDom =
           Blockly.Xml.variablesToDom(this.workspace.getAllVariables());
-      assertEquals(1, resultDom.children.length);
+      chai.assert.equal(resultDom.children.length, 1);
       var resultVariableDom = resultDom.children[0];
-      assertEquals('name1', resultVariableDom.textContent);
-      assertEquals(null, resultVariableDom.getAttribute('type'));
-      assertEquals('1', resultVariableDom.getAttribute('id'));
+      chai.assert.equal(resultVariableDom.textContent, 'name1');
+      chai.assert.isNull(resultVariableDom.getAttribute('type'));
+      chai.assert.equal(resultVariableDom.getAttribute('id'), '1');
     });
     test('Two Variable one block', function() {
       this.workspace.createVariable('name1', '', 'id1');
@@ -459,7 +459,7 @@ suite('XML', function() {
       Blockly.Events.enable();
 
       var resultDom = Blockly.Xml.variablesToDom(this.workspace.getAllVariables());
-      assertEquals(2, resultDom.children.length);
+      chai.assert.equal(resultDom.children.length, 2);
       assertVariableDom(resultDom.children[0], null, 'id1',
           'name1');
       assertVariableDom(resultDom.children[1], 'type2', 'id2',
@@ -468,23 +468,23 @@ suite('XML', function() {
     test('No variables', function() {
       var resultDom =
           Blockly.Xml.variablesToDom(this.workspace.getAllVariables());
-      assertEquals(0, resultDom.children.length);
+      chai.assert.equal(resultDom.children.length, 0);
     });
   });
   suite('domToText', function() {
     test('Round tripping', function() {
       var dom = Blockly.Xml.textToDom(this.complexXmlText);
       var text = Blockly.Xml.domToText(dom);
-      assertEquals('Round trip', this.complexXmlText.replace(/\s+/g, ''),
-          text.replace(/\s+/g, ''));
+      chai.assert.equal(text.replace(/\s+/g, ''),
+          this.complexXmlText.replace(/\s+/g, ''), 'Round trip');
     });
   });
   suite('domToPrettyText', function() {
     test('Round tripping', function() {
       var dom = Blockly.Xml.textToDom(this.complexXmlText);
       var text = Blockly.Xml.domToPrettyText(dom);
-      assertEquals('Round trip', this.complexXmlText.replace(/\s+/g, ''),
-          text.replace(/\s+/g, ''));
+      chai.assert.equal(text.replace(/\s+/g, ''),
+          this.complexXmlText.replace(/\s+/g, ''), 'Round trip');
     });
   });
   suite('domToBlock', function() {
@@ -722,7 +722,7 @@ suite('XML', function() {
           '  </block>' +
           '</xml>');
       Blockly.Xml.domToWorkspace(dom, this.workspace);
-      assertEquals('Block count', 1, this.workspace.getAllBlocks(false).length);
+      chai.assert.equal(this.workspace.getAllBlocks(false).length, 1, 'Block count');
       assertVariableValues(this.workspace, 'name1', '', '1');
     });
     test('Variables at top', function() {
@@ -738,7 +738,7 @@ suite('XML', function() {
           '  </block>' +
           '</xml>');
       Blockly.Xml.domToWorkspace(dom, this.workspace);
-      assertEquals('Block count', 1, this.workspace.getAllBlocks(false).length);
+      chai.assert.equal(this.workspace.getAllBlocks(false).length, 1, 'Block count');
       assertVariableValues(this.workspace, 'name1', 'type1', 'id1');
       assertVariableValues(this.workspace, 'name2', 'type2', 'id2');
       assertVariableValues(this.workspace, 'name3', '', 'id3');
@@ -806,10 +806,10 @@ suite('XML', function() {
           '  </block>' +
           '</xml>');
       Blockly.Xml.appendDomToWorkspace(dom, this.workspace);
-      assertEquals('Block count', 1, this.workspace.getAllBlocks(false).length);
+      chai.assert.equal(this.workspace.getAllBlocks(false).length, 1, 'Block count');
       var newBlockIds = Blockly.Xml.appendDomToWorkspace(dom, this.workspace);
-      assertEquals('Block count', 2, this.workspace.getAllBlocks(false).length);
-      assertEquals('Number of new block ids', 1, newBlockIds.length);
+      chai.assert.equal(this.workspace.getAllBlocks(false).length, 2, 'Block count');
+      chai.assert.equal(newBlockIds.length, 1, 'Number of new block ids');
     });
   });
   suite('workspaceToDom -> domToWorkspace -> workspaceToDom', function() {
@@ -881,7 +881,7 @@ suite('XML', function() {
           ' id="' + varId + '"' +
           ' variabletype="' + type + '"' +
           '>' + name + '</field>';
-      assertEquals(expectedXml, generatedXml);
+      chai.assert.equal(generatedXml, expectedXml);
     });
   });
 });

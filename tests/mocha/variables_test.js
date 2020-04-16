@@ -57,18 +57,18 @@ suite('Variables', function() {
       createTestVarBlock(this.workspace, '3');
 
       var result = Blockly.Variables.allUsedVarModels(this.workspace);
-      assertEquals('Expected three variables in the list of used variables',
-          3, result.length);
+      chai.assert.equal(result.length, 3,
+          'Expected three variables in the list of used variables');
     });
 
     test('Some unused', function() {
       createTestVarBlock(this.workspace, '2');
 
       var result = Blockly.Variables.allUsedVarModels(this.workspace);
-      assertEquals('Expected one variable in the list of used variables',
-          1, result.length);
-      assertEquals('Expected variable with ID 2 in the list of used variables',
-          '2', result[0].getId());
+      chai.assert.equal(result.length, 1,
+          'Expected one variable in the list of used variables');
+      chai.assert.equal(result[0].getId(), '2',
+          'Expected variable with ID 2 in the list of used variables');
     });
 
     test('Var used twice', function() {
@@ -78,16 +78,16 @@ suite('Variables', function() {
       var result = Blockly.Variables.allUsedVarModels(this.workspace);
       // Using the same variable multiple times should not change the number of
       // elements in the list.
-      assertEquals('Expected one variable in the list of used variables',
-          1, result.length);
-      assertEquals('Expected variable with ID 2 in the list of used variables',
-          '2', result[0].getId());
+      chai.assert.equal(result.length, 1,
+          'Expected one variable in the list of used variables');
+      chai.assert.equal(result[0].getId(), '2',
+          'Expected variable with ID 2 in the list of used variables');
     });
 
     test('All unused', function() {
       var result = Blockly.Variables.allUsedVarModels(this.workspace);
-      assertEquals('Expected no variables in the list of used variables',
-          0, result.length);
+      chai.assert.equal(result.length, 0,
+          'Expected no variables in the list of used variables');
     });
   });
 
@@ -100,9 +100,9 @@ suite('Variables', function() {
       var result2 = Blockly.Variables.getVariable(this.workspace, 'id2');
       var result3 = Blockly.Variables.getVariable(this.workspace, 'id3');
 
-      assertEquals(var1, result1);
-      assertEquals(var2, result2);
-      assertEquals(var3, result3);
+      chai.assert.equal(var1, result1);
+      chai.assert.equal(var2, result2);
+      chai.assert.equal(var3, result3);
     });
 
     test('By name and type', function() {
@@ -117,9 +117,9 @@ suite('Variables', function() {
           Blockly.Variables.getVariable(this.workspace, null, 'name3', 'type2');
 
       // Searching by name + type is correct.
-      assertEquals(var1, result1);
-      assertEquals(var2, result2);
-      assertEquals(var3, result3);
+      chai.assert.equal(var1, result1);
+      chai.assert.equal(var2, result2);
+      chai.assert.equal(var3, result3);
     });
 
     test('Bad id with name and type fallback', function() {
@@ -134,9 +134,9 @@ suite('Variables', function() {
           Blockly.Variables.getVariable(this.workspace, 'badId', 'name3', 'type2');
 
       // Searching by ID failed, but falling back onto name + type is correct.
-      assertEquals(var1, result1);
-      assertEquals(var2, result2);
-      assertEquals(var3, result3);
+      chai.assert.equal(var1, result1);
+      chai.assert.equal(var2, result2);
+      chai.assert.equal(var3, result3);
     });
   });
 });

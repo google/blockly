@@ -12,8 +12,8 @@ suite.skip('Date Fields', function() {
   function assertValue(dateField, expectedValue) {
     var actualValue = dateField.getValue();
     var actualText = dateField.getText();
-    assertEquals(actualValue, expectedValue);
-    assertEquals(actualText, expectedValue);
+    chai.assert.equal(actualValue, expectedValue);
+    chai.assert.equal(actualText, expectedValue);
   }
   function assertValueDefault(dateField) {
     var today = new goog.date.Date().toIsoString(true);

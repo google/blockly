@@ -6,7 +6,7 @@
 
 /* exported assertEquals, assertNotEquals, assertArrayEquals, assertTrue, assertFalse,
    assertNull, assertNotNull, assertNotNullNorUndefined, assert,
-   isEqualArrays, assertUndefined, assertNotUndefined,
+   isEqualArrays, assertUndefined, assertNotUndefined, assertVariableValues,
    defineRowBlock, defineStackBlock, defineStatementBlock, createTestBlock */
 function _argumentsIncludeComments(expectedNumberOfNonCommentArgs, args) {
   return args.length == expectedNumberOfNonCommentArgs + 1;
@@ -141,6 +141,22 @@ function assertArrayEquals() {
   isEqualArrays(var1, var2);
 }
 
+/**
+ * Check if a variable with the given values exists.
+ * @param {Blockly.Workspace|Blockly.VariableMap} container The workspace  or
+ *     variableMap the checked variable belongs to.
+ * @param {!string} name The expected name of the variable.
+ * @param {!string} type The expected type of the variable.
+ * @param {!string} id The expected id of the variable.
+ */
+function assertVariableValues(container, name, type, id) {
+  var variable = container.getVariableById(id);
+  assertNotNull(variable);
+  assertEquals(name, variable.name);
+  assertEquals(type, variable.type);
+  assertEquals(id, variable.getId());
+}
+
 function defineStackBlock() {
   Blockly.defineBlocksWithJsonArray([{
     "type": "stack_block",
@@ -191,4 +207,3 @@ function createTestBlock() {
     }
   };
 }
-

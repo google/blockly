@@ -27,17 +27,17 @@ suite('Variable Map', function() {
 
       // Assert there is only one variable in the this.variableMap.
       var keys = Object.keys(this.variableMap.variableMap_);
-      assertEquals(1, keys.length);
+      chai.assert.equal(keys.length, 1);
       var varMapLength = this.variableMap.variableMap_[keys[0]].length;
-      assertEquals(1, varMapLength);
+      chai.assert.equal(varMapLength, 1);
 
       this.variableMap.createVariable('name1', 'type1');
       assertVariableValues(this.variableMap, 'name1', 'type1', 'id1');
       // Check that the size of the variableMap_ did not change.
       keys = Object.keys(this.variableMap.variableMap_);
-      assertEquals(1, keys.length);
+      chai.assert.equal(keys.length, 1);
       varMapLength = this.variableMap.variableMap_[keys[0]].length;
-      assertEquals(1, varMapLength);
+      chai.assert.equal(varMapLength, 1);
     });
 
     test('Name already exists', function() {
@@ -47,16 +47,16 @@ suite('Variable Map', function() {
 
       // Assert there is only one variable in the this.variableMap.
       var keys = Object.keys(this.variableMap.variableMap_);
-      assertEquals(1, keys.length);
+      chai.assert.equal(keys.length, 1);
       var varMapLength = this.variableMap.variableMap_[keys[0]].length;
-      assertEquals(1, varMapLength);
+      chai.assert.equal(varMapLength, 1);
 
       this.variableMap.createVariable('name1', 'type2', 'id2');
       assertVariableValues(this.variableMap, 'name1', 'type1', 'id1');
       assertVariableValues(this.variableMap, 'name1', 'type2', 'id2');
       // Check that the size of the variableMap_ did change.
       keys = Object.keys(this.variableMap.variableMap_);
-      assertEquals(2, keys.length);
+      chai.assert.equal(keys.length, 2);
     });
 
     test('Null type', function() {
@@ -90,7 +90,6 @@ suite('Variable Map', function() {
     });
 
     test('Two variables same name', function() {
-      // TODO(kozbial) shouldn't this fail?
       this.variableMap.createVariable('name1', 'type1', 'id1');
       this.variableMap.createVariable('name1', 'type2', 'id2');
 
@@ -124,7 +123,7 @@ suite('Variable Map', function() {
           variableMap.createVariable('name1', 'type2', 'id1');
         });
         assertVariableValues(this.variableMap, 'name1', 'type1', 'id1');
-        assertNull(this.variableMap.getVariableById('id2'));
+        chai.assert.isNull(this.variableMap.getVariableById('id2'));
       });
     });
   });
@@ -139,19 +138,19 @@ suite('Variable Map', function() {
       var result3 = this.variableMap.getVariable('name3', 'type2');
 
       // Searching by name + type is correct.
-      assertEquals(var1, result1);
-      assertEquals(var2, result2);
-      assertEquals(var3, result3);
+      chai.assert.equal(result1, var1);
+      chai.assert.equal(result2, var2);
+      chai.assert.equal(result3, var3);
 
       // Searching only by name defaults to the '' type.
-      assertNull(this.variableMap.getVariable('name1'));
-      assertNull(this.variableMap.getVariable('name2'));
-      assertNull(this.variableMap.getVariable('name3'));
+      chai.assert.isNull(this.variableMap.getVariable('name1'));
+      chai.assert.isNull(this.variableMap.getVariable('name2'));
+      chai.assert.isNull(this.variableMap.getVariable('name3'));
     });
 
     test('Not found', function() {
       var result = this.variableMap.getVariable('name1');
-      assertNull(result);
+      chai.assert.isNull(result);
     });
   });
 
@@ -164,14 +163,14 @@ suite('Variable Map', function() {
       var result2 = this.variableMap.getVariableById('id2');
       var result3 = this.variableMap.getVariableById('id3');
 
-      assertEquals(var1, result1);
-      assertEquals(var2, result2);
-      assertEquals(var3, result3);
+      chai.assert.equal(result1, var1);
+      chai.assert.equal(result2, var2);
+      chai.assert.equal(result3, var3);
     });
 
     test('Not found', function() {
       var result = this.variableMap.getVariableById('id1');
-      assertNull(result);
+      chai.assert.isNull(result);
     });
   });
 
@@ -183,13 +182,13 @@ suite('Variable Map', function() {
       this.variableMap.createVariable('name4', 'type3', 'id4');
       var resultArray = this.variableMap.getVariableTypes();
       // The empty string is always an option.
-      isEqualArrays(['type1', 'type2', 'type3', ''], resultArray);
+      assertArrayEquals(resultArray, ['type1', 'type2', 'type3', '']);
     });
 
     test('None', function() {
       // The empty string is always an option.
       var resultArray = this.variableMap.getVariableTypes();
-      isEqualArrays([''], resultArray);
+      assertArrayEquals(resultArray, ['']);
     });
   });
 
@@ -201,8 +200,8 @@ suite('Variable Map', function() {
       this.variableMap.createVariable('name4', 'type3', 'id4');
       var resultArray1 = this.variableMap.getVariablesOfType('type1');
       var resultArray2 = this.variableMap.getVariablesOfType('type5');
-      isEqualArrays([var1, var2], resultArray1);
-      isEqualArrays([], resultArray2);
+      assertArrayEquals(resultArray1, [var1, var2]);
+      assertArrayEquals(resultArray2, []);
     });
 
     test('Null', function() {
@@ -211,26 +210,26 @@ suite('Variable Map', function() {
       var var3 = this.variableMap.createVariable('name3', '', 'id3');
       this.variableMap.createVariable('name4', 'type1', 'id4');
       var resultArray = this.variableMap.getVariablesOfType(null);
-      isEqualArrays([var1, var2, var3], resultArray);
+      assertArrayEquals(resultArray, [var1, var2, var3]);
     });
 
     test('Empty string', function() {
       var var1 = this.variableMap.createVariable('name1', null, 'id1');
       var var2 = this.variableMap.createVariable('name2', null, 'id2');
       var resultArray = this.variableMap.getVariablesOfType('');
-      isEqualArrays([var1, var2], resultArray);
+      assertArrayEquals(resultArray, [var1, var2]);
     });
 
     test('Deleted', function() {
       var variable = this.variableMap.createVariable('name1', null, 'id1');
       this.variableMap.deleteVariable(variable);
       var resultArray = this.variableMap.getVariablesOfType('');
-      isEqualArrays([], resultArray);
+      assertArrayEquals(resultArray, []);
     });
 
     test('Does not exist', function() {
       var resultArray = this.variableMap.getVariablesOfType('type1');
-      isEqualArrays([], resultArray);
+      assertArrayEquals(resultArray, []);
     });
   });
 
@@ -240,12 +239,12 @@ suite('Variable Map', function() {
       var var2 = this.variableMap.createVariable('name2', 'type1', 'id2');
       var var3 = this.variableMap.createVariable('name3', 'type2', 'id3');
       var resultArray = this.variableMap.getAllVariables();
-      isEqualArrays([var1, var2, var3], resultArray);
+      assertArrayEquals(resultArray, [var1, var2, var3]);
     });
 
     test('None', function() {
       var resultArray = this.variableMap.getAllVariables();
-      isEqualArrays([], resultArray);
+      assertArrayEquals(resultArray, []);
     });
   });
 });

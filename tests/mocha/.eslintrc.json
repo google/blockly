@@ -7,10 +7,11 @@
         "chai": false,
         "sinon": false,
         "assertArrayEquals": true,
-        "defineStackBlock": true,
+        "assertVariableValues": true,
+        "createTestBlock": true,
         "defineRowBlock": true,
-        "defineStatementBlock": true,
-        "createTestBlock": true
+        "defineStackBlock": true,
+        "defineStatementBlock": true
     },
     "extends": "../../.eslintrc.json"
 }

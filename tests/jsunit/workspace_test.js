@@ -22,66 +22,6 @@ function workspaceTest_tearDown() {
   workspace.dispose();
 }
 
-function test_emptyWorkspace() {
-  workspaceTest_setUp();
-  try {
-    assertEquals('Empty workspace (1).', 0, workspace.getTopBlocks(true).length);
-    assertEquals('Empty workspace (2).', 0, workspace.getTopBlocks(false).length);
-    assertEquals('Empty workspace (3).', 0, workspace.getAllBlocks(false).length);
-    workspace.clear();
-    assertEquals('Empty workspace (4).', 0, workspace.getTopBlocks(true).length);
-    assertEquals('Empty workspace (5).', 0, workspace.getTopBlocks(false).length);
-    assertEquals('Empty workspace (6).', 0, workspace.getAllBlocks(false).length);
-  } finally {
-    workspaceTest_tearDown();
-  }
-}
-
-function test_flatWorkspace() {
-  workspaceTest_setUp();
-  try {
-    var blockA = workspace.newBlock('');
-    assertEquals('One block workspace (1).', 1, workspace.getTopBlocks(true).length);
-    assertEquals('One block workspace (2).', 1, workspace.getTopBlocks(false).length);
-    assertEquals('One block workspace (3).', 1, workspace.getAllBlocks(false).length);
-    var blockB = workspace.newBlock('');
-    assertEquals('Two block workspace (1).', 2, workspace.getTopBlocks(true).length);
-    assertEquals('Two block workspace (2).', 2, workspace.getTopBlocks(false).length);
-    assertEquals('Two block workspace (3).', 2, workspace.getAllBlocks(false).length);
-    blockA.dispose();
-    assertEquals('One block workspace (4).', 1, workspace.getTopBlocks(true).length);
-    assertEquals('One block workspace (5).', 1, workspace.getTopBlocks(false).length);
-    assertEquals('One block workspace (6).', 1, workspace.getAllBlocks(false).length);
-    workspace.clear();
-    assertEquals('Cleared workspace (1).', 0, workspace.getTopBlocks(true).length);
-    assertEquals('Cleared workspace (2).', 0, workspace.getTopBlocks(false).length);
-    assertEquals('Cleared workspace (3).', 0, workspace.getAllBlocks(false).length);
-  } finally {
-    workspaceTest_tearDown();
-  }
-}
-
-function test_maxBlocksWorkspace() {
-  workspaceTest_setUp();
-  try {
-    var blockA = workspace.newBlock('');
-    var blockB = workspace.newBlock('');
-    assertEquals('Infinite capacity.', Infinity, workspace.remainingCapacity());
-    workspace.options.maxBlocks = 3;
-    assertEquals('Three capacity.', 1, workspace.remainingCapacity());
-    workspace.options.maxBlocks = 2;
-    assertEquals('Two capacity.', 0, workspace.remainingCapacity());
-    workspace.options.maxBlocks = 1;
-    assertEquals('One capacity.', -1, workspace.remainingCapacity());
-    workspace.options.maxBlocks = 0;
-    assertEquals('Zero capacity.', -2, workspace.remainingCapacity());
-    workspace.clear();
-    assertEquals('Cleared capacity.', 0, workspace.remainingCapacity());
-  } finally {
-    workspaceTest_tearDown();
-  }
-}
-
 function test_getWorkspaceById() {
   var workspaceA = new Blockly.Workspace();
   var workspaceB = new Blockly.Workspace();

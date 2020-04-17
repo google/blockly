@@ -9,8 +9,8 @@ suite('Text Input Fields', function() {
     var actualValue = textInputField.getValue();
     var actualText = textInputField.getText();
     opt_expectedText = opt_expectedText || expectedValue;
-    assertEquals(actualValue, expectedValue);
-    assertEquals(actualText, opt_expectedText);
+    chai.assert.equal(actualValue, expectedValue);
+    chai.assert.equal(actualText, opt_expectedText);
   }
   function assertValueDefault(textInputField) {
     assertValue(textInputField, '');

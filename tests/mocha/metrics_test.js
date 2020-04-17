@@ -12,10 +12,10 @@
 
 suite('Metrics', function() {
   function assertDimensionsMatch(toCheck, left, top, width, height) {
-    assertEquals('Top did not match.', top, toCheck.top);
-    assertEquals('Left did not match.', left, toCheck.left);
-    assertEquals('Width did not match.', width, toCheck.width);
-    assertEquals('Height did not match.', height, toCheck.height);
+    chai.assert.equal(top, toCheck.top, 'Top did not match.');
+    chai.assert.equal(left, toCheck.left, 'Left did not match.');
+    chai.assert.equal(width, toCheck.width, 'Width did not match.');
+    chai.assert.equal(height, toCheck.height, 'Height did not match.');
   }
 
   // Make a mock workspace object with two properties:

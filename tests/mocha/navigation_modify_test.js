@@ -195,7 +195,7 @@ suite('Insert/Modify', function() {
             Blockly.ASTNode.createConnectionNode(
                 this.row_block_1.outputConnection));
         chai.assert.isFalse(Blockly.navigation.modify_());
-        chai.assert.equal(this.row_block_1.getParent(), null);
+        chai.assert.isNull(this.row_block_1.getParent());
       });
 
     });

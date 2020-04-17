@@ -83,14 +83,14 @@ suite('Cursor', function() {
     this.cursor.setCurNode(prevNode);
     this.cursor.next();
     var curNode = this.cursor.getCurNode();
-    assertEquals(curNode.getLocation(), this.blocks.B.previousConnection);
+    chai.assert.equal(curNode.getLocation(), this.blocks.B.previousConnection);
   });
   test('Next - From last block in a stack go to next connection', function() {
     var prevNode = Blockly.ASTNode.createConnectionNode(this.blocks.B.previousConnection);
     this.cursor.setCurNode(prevNode);
     this.cursor.next();
     var curNode = this.cursor.getCurNode();
-    assertEquals(curNode.getLocation(), this.blocks.B.nextConnection);
+    chai.assert.equal(curNode.getLocation(), this.blocks.B.nextConnection);
   });
 
   test('In - From output connection', function() {
@@ -99,7 +99,7 @@ suite('Cursor', function() {
     this.cursor.setCurNode(outputNode);
     this.cursor.in();
     var curNode = this.cursor.getCurNode();
-    assertEquals(curNode.getLocation(), fieldBlock.inputList[0].fieldRow[0]);
+    chai.assert.equal(curNode.getLocation(), fieldBlock.inputList[0].fieldRow[0]);
   });
 
   test('Prev - From previous connection skip over next connection', function() {
@@ -108,7 +108,7 @@ suite('Cursor', function() {
     this.cursor.setCurNode(prevConnectionNode);
     this.cursor.prev();
     var curNode = this.cursor.getCurNode();
-    assertEquals(curNode.getLocation(), this.blocks.A.previousConnection);
+    chai.assert.equal(curNode.getLocation(), this.blocks.A.previousConnection);
   });
 
   test('Out - From field skip over block node', function() {
@@ -117,6 +117,6 @@ suite('Cursor', function() {
     this.cursor.setCurNode(fieldNode);
     this.cursor.out();
     var curNode = this.cursor.getCurNode();
-    assertEquals(curNode.getLocation(), this.blocks.E.outputConnection);
+    chai.assert.equal(curNode.getLocation(), this.blocks.E.outputConnection);
   });
 });

@@ -243,6 +243,7 @@ suite('Events', function() {
       chai.assert.equal(type, variable.type);
       chai.assert.equal(id, variable.getId());
     }
+
     suite('Constructors', function() {
       test('Var base', function() {
         var event = new Blockly.Events.VarBase(this.variable);
@@ -334,7 +335,7 @@ suite('Events', function() {
         var x = this.workspace.getVariableById('id2');
         chai.assert.isNull(x);
         event.run(true);
-        checkVariableValues(this.workspace, 'name2', 'type2', 'id2');
+        assertVariableValues(this.workspace, 'name2', 'type2', 'id2');
       });
 
       test('Var delete', function() {
@@ -364,7 +365,7 @@ suite('Events', function() {
         var event = Blockly.Events.fromJson(json, this.workspace);
         chai.assert.isNull(this.workspace.getVariableById('id2'));
         event.run(false);
-        checkVariableValues(this.workspace, 'name2', 'type2', 'id2');
+        assertVariableValues(this.workspace, 'name2', 'type2', 'id2');
       });
 
       test('Var rename', function() {

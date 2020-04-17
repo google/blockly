@@ -27,13 +27,6 @@ suite('XML', function() {
     chai.assert.equal(fieldDom.getAttribute('id'), id);
     chai.assert.equal(fieldDom.textContent, text);
   };
-  var assertVariableValues = function(container, name, type, id) {
-    var variable = container.getVariableById(id);
-    chai.assert.isDefined(variable);
-    chai.assert.equal(variable.name, name);
-    chai.assert.equal(variable.type, type);
-    chai.assert.equal(variable.getId(), id);
-  };
   setup(function() {
     Blockly.defineBlocksWithJsonArray([
       {

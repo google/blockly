@@ -4,8 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/* exported assertArrayEquals, defineRowBlock, defineStackBlock,
-   defineStatementBlock, createTestBlock */
+/* exported assertArrayEquals, assertVariableValues, defineRowBlock,
+   defineStackBlock, defineStatementBlock, createTestBlock */
 
 /**
  * Check that two arrays have the same content.
@@ -22,6 +22,22 @@ function isEqualArrays(array1, array2, opt_message) {
 
 function assertArrayEquals(actualArray, expectedArray, opt_message) {
   isEqualArrays(actualArray, expectedArray, opt_message);
+}
+
+/**
+ * Check if a variable with the given values exists.
+ * @param {Blockly.Workspace|Blockly.VariableMap} container The workspace  or
+ *     variableMap the checked variable belongs to.
+ * @param {!string} name The expected name of the variable.
+ * @param {!string} type The expected type of the variable.
+ * @param {!string} id The expected id of the variable.
+ */
+function assertVariableValues(container, name, type, id) {
+  var variable = container.getVariableById(id);
+  chai.assert.isDefined(variable);
+  chai.assert.equal(variable.name, name);
+  chai.assert.equal(variable.type, type);
+  chai.assert.equal(variable.getId(), id);
 }
 
 function defineStackBlock() {
@@ -74,4 +90,3 @@ function createTestBlock() {
     }
   };
 }
-

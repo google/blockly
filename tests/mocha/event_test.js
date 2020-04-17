@@ -228,21 +228,6 @@ suite('Events', function() {
       this.variable = this.workspace.createVariable('name1', 'type1', 'id1');
     });
 
-    /**
-     * Check if a variable with the given values exists.
-     * @param {Blockly.Workspace|Blockly.VariableMap} container The workspace  or
-     *     variableMap the checked variable belongs to.
-     * @param {!string} name The expected name of the variable.
-     * @param {!string} type The expected type of the variable.
-     * @param {!string} id The expected id of the variable.
-     */
-    function checkVariableValues(container, name, type, id) {
-      var variable = container.getVariableById(id);
-      assertNotUndefined(variable);
-      assertEquals(name, variable.name);
-      assertEquals(type, variable.type);
-      assertEquals(id, variable.getId());
-    }
     suite('Constructors', function() {
       test('Var base', function() {
         var event = new Blockly.Events.VarBase(this.variable);
@@ -334,7 +319,7 @@ suite('Events', function() {
         var x = this.workspace.getVariableById('id2');
         assertNull(x);
         event.run(true);
-        checkVariableValues(this.workspace, 'name2', 'type2', 'id2');
+        assertVariableValues(this.workspace, 'name2', 'type2', 'id2');
       });
 
       test('Var delete', function() {
@@ -348,7 +333,7 @@ suite('Events', function() {
         var event = new Blockly.Events.VarRename(this.variable, 'name2');
         event.run(true);
         assertNull(this.workspace.getVariable('name1'));
-        checkVariableValues(this.workspace, 'name2', 'type1', 'id1');
+        assertVariableValues(this.workspace, 'name2', 'type1', 'id1');
       });
     });
     suite('Run Backward', function() {
@@ -364,14 +349,14 @@ suite('Events', function() {
         var event = Blockly.Events.fromJson(json, this.workspace);
         assertNull(this.workspace.getVariableById('id2'));
         event.run(false);
-        checkVariableValues(this.workspace, 'name2', 'type2', 'id2');
+        assertVariableValues(this.workspace, 'name2', 'type2', 'id2');
       });
 
       test('Var rename', function() {
         var event = new Blockly.Events.VarRename(this.variable, 'name2');
         event.run(false);
         assertNull(this.workspace.getVariable('name2'));
-        checkVariableValues(this.workspace, 'name1', 'type1', 'id1');
+        assertVariableValues(this.workspace, 'name1', 'type1', 'id1');
       });
     });
   });

@@ -17,6 +17,7 @@
         "assertUndefined": true,
         "assertNotUndefined": true,
         "assertNotNullNorUndefined": true,
+        "assertVariableValues": true,
         "defineStackBlock": true,
         "defineRowBlock": true,
         "defineStatementBlock": true,

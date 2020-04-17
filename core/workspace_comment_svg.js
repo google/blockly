@@ -25,6 +25,7 @@ goog.require('Blockly.utils.object');
 goog.require('Blockly.utils.Rect');
 goog.require('Blockly.WorkspaceComment');
 
+goog.requireType('Blockly.ICopyable');
 
 /**
  * Class for a workspace comment's SVG representation.
@@ -35,6 +36,7 @@ goog.require('Blockly.WorkspaceComment');
  * @param {string=} opt_id Optional ID.  Use this ID if provided, otherwise
  *     create a new ID.
  * @extends {Blockly.WorkspaceComment}
+ * @implements {Blockly.ICopyable}
  * @constructor
  */
 Blockly.WorkspaceCommentSvg = function(workspace, content, height, width,
@@ -610,6 +612,19 @@ Blockly.WorkspaceCommentSvg.prototype.toXmlWithXY = function(opt_noId) {
   element.setAttribute('h', this.getHeight());
   element.setAttribute('w', this.getWidth());
   return element;
+};
+
+/**
+ * Encode a comment for copying.
+ * @return {!Blockly.ICopyable.CopyData} Copy metadata.
+ * @package
+ */
+Blockly.WorkspaceCommentSvg.prototype.toCopyData = function() {
+  return {
+    xml: this.toXmlWithXY(),
+    source: this.workspace,
+    typeCounts: null
+  };
 };
 
 /**

@@ -51,7 +51,7 @@ Blockly.mainWorkspace = null;
 
 /**
  * Currently selected block.
- * @type {Blockly.Block}
+ * @type {?Blockly.ICopyable}
  */
 Blockly.selected = null;
 
@@ -264,32 +264,20 @@ Blockly.onKeyDown = function(e) {
 
 /**
  * Copy a block or workspace comment onto the local clipboard.
- * @param {!Blockly.Block | !Blockly.WorkspaceComment} toCopy Block or
- *    Workspace Comment to be copied.
+ * @param {!Blockly.ICopyable} toCopy Block or Workspace Comment to be copied.
  * @private
  */
 Blockly.copy_ = function(toCopy) {
-  if (toCopy.isComment) {
-    var xml = toCopy.toXmlWithXY();
-  } else {
-    var xml = Blockly.Xml.blockToDom(toCopy, true);
-    // Copy only the selected block and internal blocks.
-    Blockly.Xml.deleteNext(xml);
-    // Encode start position in XML.
-    var xy = toCopy.getRelativeToSurfaceXY();
-    xml.setAttribute('x', toCopy.RTL ? -xy.x : xy.x);
-    xml.setAttribute('y', xy.y);
-  }
-  Blockly.clipboardXml_ = xml;
-  Blockly.clipboardSource_ = toCopy.workspace;
-  Blockly.clipboardTypeCounts_ = toCopy.isComment ? null :
-      Blockly.utils.getBlockTypeCounts(toCopy, true);
+  var data = toCopy.toCopyData();
+  Blockly.clipboardXml_ = data.xml;
+  Blockly.clipboardSource_ = data.source;
+  Blockly.clipboardTypeCounts_ = data.typeCounts;
 };
 
 /**
  * Duplicate this block and its children, or a workspace comment.
- * @param {!Blockly.Block | !Blockly.WorkspaceComment} toDuplicate Block or
- *     Workspace Comment to be copied.
+ * @param {!Blockly.ICopyable} toDuplicate Block or Workspace Comment to be
+ *     copied.
  * @package
  */
 Blockly.duplicate = function(toDuplicate) {

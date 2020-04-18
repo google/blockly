@@ -1727,6 +1727,7 @@ Blockly.Block.prototype.moveNumberedInputBefore = function(
  * Remove an input from this block.
  * @param {string} name The name of the input.
  * @param {boolean=} opt_quiet True to prevent error if input is not present.
+ * @return {boolean} True if operation succeeds, false if input is not present and opt_quiet is true
  * @throws {Error} if the input is not present and opt_quiet is not true.
  */
 Blockly.Block.prototype.removeInput = function(name, opt_quiet) {
@@ -1737,10 +1738,12 @@ Blockly.Block.prototype.removeInput = function(name, opt_quiet) {
       }
       input.dispose();
       this.inputList.splice(i, 1);
-      return;
+      return true;
     }
   }
-  if (!opt_quiet) {
+  if (opt_quiet) {
+    return false;
+  } else {
     throw Error('Input not found: ' + name);
   }
 };

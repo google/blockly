@@ -424,7 +424,6 @@ Blockly.Variables.nameUsedWithOtherType_ = function(name, type, workspace) {
  *     variable.
  * @return {Blockly.VariableModel} The variable with the given name,
  *     or null if none was found.
- * @private
  */
 Blockly.Variables.nameUsedWithAnyType = function(name, workspace) {
   var allVariables = workspace.getVariableMap().getAllVariables();

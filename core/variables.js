@@ -279,7 +279,7 @@ Blockly.Variables.createVariableButtonHandler = function(
         function(text) {
           if (text) {
             var existing =
-                Blockly.Variables.nameUsedWithAnyType_(text, workspace);
+                Blockly.Variables.nameUsedWithAnyType(text, workspace);
             if (existing) {
               if (existing.type == type) {
                 var msg = Blockly.Msg['VARIABLE_ALREADY_EXISTS'].replace(
@@ -426,7 +426,7 @@ Blockly.Variables.nameUsedWithOtherType_ = function(name, type, workspace) {
  *     or null if none was found.
  * @private
  */
-Blockly.Variables.nameUsedWithAnyType_ = function(name, workspace) {
+Blockly.Variables.nameUsedWithAnyType = function(name, workspace) {
   var allVariables = workspace.getVariableMap().getAllVariables();
 
   name = name.toLowerCase();

@@ -33,7 +33,7 @@ Blockly.Python.fable_speak = function (block) {
 
   var code = 'api.fableSpeak(str(' + text + '), "' + lang + '")\n';
 
-  if (text.length && text.length > 30) {
+  if (text.length && text.length > 250) {
     // 666 is a special ID in order to support easily removing the warning later, without clearing OTHER warnings on the block
     block.setWarningText(Blockly.Msg.FABLE_FIELD_WRN_TEXT_TOO_LONG, 666);
   } else {

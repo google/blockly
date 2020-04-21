@@ -17,7 +17,7 @@ suite('Toolbox', function() {
         }
       ]
     }]);
-    this.toolboxXml = document.getElementById('toolbox-categories');
+    this.toolboxXml = document.getElementById('toolbox-test');
     this.workspace = Blockly.inject('blocklyDiv',
         {
           toolbox: this.toolboxXml
@@ -198,7 +198,7 @@ suite('Toolbox', function() {
     setup(function() {
       this.tree = new Blockly.tree.TreeControl(this.toolbox, this.toolbox.config_);
       this.tree.blocks = [];
-      this.toolboxXml = document.getElementById('toolbox-categories');
+      this.toolboxXml = document.getElementById('toolbox-test');
       this.separatorIdx = 0;
       this.buttonIdx = 1;
       this.dynamicCategoryIdx = 3;
@@ -221,8 +221,7 @@ suite('Toolbox', function() {
       chai.assert.equal(sepString, '<sep xmlns="http://www.w3.org/1999/xhtml" gap="-1"></sep>');
     });
     test('Separator between two categories', function() {
-      var simpleToolbox = document.getElementById('toolbox-categories');
-      this.toolbox.syncTrees_(simpleToolbox, this.tree,
+      this.toolbox.syncTrees_(this.toolboxXml, this.tree,
           this.toolbox.workspace_.options.pathToMedia);
       chai.assert.isTrue(this.tree.children_[
           this.categorySeparatorIdx] instanceof Blockly.Toolbox.TreeSeparator);

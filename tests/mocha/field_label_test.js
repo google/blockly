@@ -8,8 +8,8 @@ suite('Label Fields', function() {
   function assertValue(labelField, expectedValue) {
     var actualValue = labelField.getValue();
     var actualText = labelField.getText();
-    assertEquals(actualValue, expectedValue);
-    assertEquals(actualText, expectedValue);
+    chai.assert.equal(actualValue, expectedValue);
+    chai.assert.equal(actualText, expectedValue);
   }
   function assertValueDefault(labelField) {
     assertValue(labelField, '');

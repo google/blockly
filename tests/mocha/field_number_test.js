@@ -9,9 +9,9 @@ suite('Number Fields', function() {
     var actualValue = numberField.getValue();
     var actualText = numberField.getText();
     opt_expectedText = opt_expectedText || String(expectedValue);
-    assertEquals(String(actualValue), String(expectedValue));
-    assertEquals(Number(actualValue), expectedValue);
-    assertEquals(actualText, opt_expectedText);
+    chai.assert.equal(String(actualValue), String(expectedValue));
+    chai.assert.equal(Number(actualValue), expectedValue);
+    chai.assert.equal(actualText, opt_expectedText);
   }
   function assertValueDefault(numberField) {
     assertValue(numberField, 0);
@@ -244,7 +244,7 @@ suite('Number Fields', function() {
         test('Null', function() {
           var numberField = new Blockly.FieldNumber
               .fromJson({ precision: null});
-          assertEquals(numberField.getPrecision(), 0);
+          chai.assert.equal(numberField.getPrecision(), 0);
         });
       });
       suite('Min', function() {
@@ -278,7 +278,7 @@ suite('Number Fields', function() {
         test('Null', function() {
           var numberField = new Blockly.FieldNumber
               .fromJson({ min: null});
-          assertEquals(numberField.getMin(), -Infinity);
+          chai.assert.equal(numberField.getMin(), -Infinity);
         });
       });
       suite('Max', function() {
@@ -312,7 +312,7 @@ suite('Number Fields', function() {
         test('null', function() {
           var numberField = new Blockly.FieldNumber
               .fromJson({ max: null});
-          assertEquals(numberField.getMax(), Infinity);
+          chai.assert.equal(numberField.getMax(), Infinity);
         });
       });
     });

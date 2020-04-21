@@ -63,7 +63,7 @@ suite('Blocks', function() {
       blockB.nextConnection.connect(blockC.previousConnection);
     }
 
-    assertEquals(blockB, blockC.getParent());
+    chai.assert.equal(blockC.getParent(), blockB);
 
     return {
       A: blockA,  /* Parent */
@@ -75,30 +75,30 @@ suite('Blocks', function() {
   suite('Unplug', function() {
     function assertUnpluggedNoheal(blocks) {
       // A has nothing connected to it.
-      assertEquals(0, blocks.A.getChildren().length);
+      chai.assert.equal(blocks.A.getChildren().length, 0);
       // B and C are still connected.
-      assertEquals(blocks.B, blocks.C.getParent());
+      chai.assert.equal(blocks.C.getParent(), blocks.B);
       // B is the top of its stack.
-      assertNull(blocks.B.getParent());
+      chai.assert.isNull(blocks.B.getParent());
     }
     function assertUnpluggedHealed(blocks) {
       // A and C are connected.
-      assertEquals(1, blocks.A.getChildren().length);
-      assertEquals(blocks.A, blocks.C.getParent());
+      chai.assert.equal(blocks.A.getChildren().length, 1);
+      chai.assert.equal(blocks.C.getParent(), blocks.A);
       // B has nothing connected to it.
-      assertEquals(0, blocks.B.getChildren().length);
+      chai.assert.equal(blocks.B.getChildren().length, 0);
       // B is the top of its stack.
-      assertNull(blocks.B.getParent());
+      chai.assert.isNull(blocks.B.getParent());
     }
     function assertUnpluggedHealFailed(blocks) {
       // A has nothing connected to it.
-      assertEquals(0, blocks.A.getChildren().length);
+      chai.assert.equal(blocks.A.getChildren().length, 0);
       // B has nothing connected to it.
-      assertEquals(0, blocks.B.getChildren().length);
+      chai.assert.equal(blocks.B.getChildren().length, 0);
       // B is the top of its stack.
-      assertNull(blocks.B.getParent());
+      chai.assert.isNull(blocks.B.getParent());
       // C is the top of its stack.
-      assertNull(blocks.C.getParent());
+      chai.assert.isNull(blocks.C.getParent());
     }
 
     suite('Row', function() {
@@ -195,7 +195,7 @@ suite('Blocks', function() {
     function assertDisposedNoheal(blocks) {
       chai.assert.isFalse(blocks.A.disposed);
       // A has nothing connected to it.
-      chai.assert.equal(0, blocks.A.getChildren().length);
+      chai.assert.equal(blocks.A.getChildren().length, 0);
       // B is disposed.
       chai.assert.isTrue(blocks.B.disposed);
       // And C is disposed.
@@ -205,8 +205,8 @@ suite('Blocks', function() {
       chai.assert.isFalse(blocks.A.disposed);
       chai.assert.isFalse(blocks.C.disposed);
       // A and C are connected.
-      assertEquals(1, blocks.A.getChildren().length);
-      assertEquals(blocks.A, blocks.C.getParent());
+      chai.assert.equal(blocks.A.getChildren().length, 1);
+      chai.assert.equal(blocks.C.getParent(), blocks.A);
       // B is disposed.
       chai.assert.isTrue(blocks.B.disposed);
     }
@@ -214,11 +214,11 @@ suite('Blocks', function() {
       chai.assert.isFalse(blocks.A.disposed);
       chai.assert.isFalse(blocks.C.disposed);
       // A has nothing connected to it.
-      chai.assert.equal(0, blocks.A.getChildren().length);
+      chai.assert.equal(blocks.A.getChildren().length, 0);
       // B is disposed.
       chai.assert.isTrue(blocks.B.disposed);
       // C is the top of its stack.
-      assertNull(blocks.C.getParent());
+      chai.assert.isNull(blocks.C.getParent());
     }
 
     suite('Row', function() {
@@ -1075,14 +1075,14 @@ suite('Blocks', function() {
         });
         test('Text Null', function() {
           this.block.setCommentText(null);
-          chai.assert.equal(this.block.getCommentText(), null);
+          chai.assert.isNull(this.block.getCommentText());
           assertNoCommentEvent(this.eventSpy);
         });
         test('Text -> Null', function() {
           this.block.setCommentText('first text');
 
           this.block.setCommentText(null);
-          chai.assert.equal(this.block.getCommentText(), null);
+          chai.assert.isNull(this.block.getCommentText());
           assertCommentEvent(this.eventSpy, 'first text', null);
         });
       });
@@ -1111,14 +1111,14 @@ suite('Blocks', function() {
         });
         test('Text Null', function() {
           this.block.setCommentText(null);
-          chai.assert.equal(this.block.getCommentText(), null);
+          chai.assert.isNull(this.block.getCommentText());
           assertNoCommentEvent(this.eventSpy);
         });
         test('Text -> Null', function() {
           this.block.setCommentText('first text');
 
           this.block.setCommentText(null);
-          chai.assert.equal(this.block.getCommentText(), null);
+          chai.assert.isNull(this.block.getCommentText());
           assertCommentEvent(this.eventSpy, 'first text', null);
         });
         test('Set While Visible - Editable', function() {
@@ -1558,7 +1558,7 @@ suite('Blocks', function() {
         assertCollapsed(blockA);
         var field = blockA.getField('FIELD');
         chai.assert.isNotNull(field);
-        chai.assert.equal('test', field.getText());
+        chai.assert.equal(field.getText(), 'test');
       });
       test('Add Icon', function() {
         var blockA = this.createBlock('empty_block');
@@ -1646,16 +1646,16 @@ suite('Blocks', function() {
       });
       test('Set colour', function() {
         this.block.setColour('20');
-        assertEquals(this.block.getColour(), '#a5745b');
-        assertEquals(this.block.colour_, this.block.getColour());
-        assertEquals(this.block.hue_, '20');
+        chai.assert.equal(this.block.getColour(), '#a5745b');
+        chai.assert.equal(this.block.colour_, this.block.getColour());
+        chai.assert.equal(this.block.hue_, '20');
       });
       test('Set style', function() {
         this.block.setStyle('styleOne');
-        assertEquals(this.block.getStyleName(), 'styleOne');
-        assertEquals(this.block.hue_, null);
+        chai.assert.equal(this.block.getStyleName(), 'styleOne');
+        chai.assert.isNull(this.block.hue_);
         // Calling setStyle does not update the colour on a headless block.
-        assertEquals(this.block.getColour(), '#000000');
+        chai.assert.equal(this.block.getColour(), '#000000');
       });
     });
     suite('Rendered', function() {
@@ -1678,23 +1678,23 @@ suite('Blocks', function() {
       });
       test('Set colour hue', function() {
         this.block.setColour('20');
-        assertEquals(this.block.getStyleName(), 'auto_#a5745b');
-        assertEquals(this.block.getColour(), '#a5745b');
-        assertEquals(this.block.colour_, this.block.getColour());
-        assertEquals(this.block.hue_, '20');
+        chai.assert.equal(this.block.getStyleName(), 'auto_#a5745b');
+        chai.assert.equal(this.block.getColour(), '#a5745b');
+        chai.assert.equal(this.block.colour_, this.block.getColour());
+        chai.assert.equal(this.block.hue_, '20');
       });
       test('Set colour hex', function() {
         this.block.setColour('#000000');
-        assertEquals(this.block.getStyleName(), 'auto_#000000');
-        assertEquals(this.block.getColour(), '#000000');
-        assertEquals(this.block.colour_, this.block.getColour());
-        assertEquals(this.block.hue_, null);
+        chai.assert.equal(this.block.getStyleName(), 'auto_#000000');
+        chai.assert.equal(this.block.getColour(), '#000000');
+        chai.assert.equal(this.block.colour_, this.block.getColour());
+        chai.assert.isNull(this.block.hue_);
       });
       test('Set style', function() {
         this.block.setStyle('styleOne');
-        assertEquals(this.block.getStyleName(), 'styleOne');
-        assertEquals(this.block.getColour(), '#000000');
-        assertEquals(this.block.colour_, this.block.getColour());
+        chai.assert.equal(this.block.getStyleName(), 'styleOne');
+        chai.assert.equal(this.block.getColour(), '#000000');
+        chai.assert.equal(this.block.colour_, this.block.getColour());
       });
     });
   });

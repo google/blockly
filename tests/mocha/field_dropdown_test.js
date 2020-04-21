@@ -8,8 +8,8 @@ suite('Dropdown Fields', function() {
   function assertValue(dropdownField, expectedValue, expectedText) {
     var actualValue = dropdownField.getValue();
     var actualText = dropdownField.getText();
-    assertEquals(actualValue, expectedValue);
-    assertEquals(actualText, expectedText);
+    chai.assert.equal(actualValue, expectedValue);
+    chai.assert.equal(actualText, expectedText);
   }
   suite('Constructor', function() {
     test('Empty', function() {

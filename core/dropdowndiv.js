@@ -303,9 +303,13 @@ Blockly.DropDownDiv.showPositionedByRect_ = function(bBox, field,
     secondaryY += opt_secondaryYOffset;
   }
   var sourceBlock = field.getSourceBlock();
-  // Set bounds to workspace; show the drop-down.
+  // Set bounds to main workspace; show the drop-down.
+  var workspace = sourceBlock.workspace;
+  while (workspace.options.parentWorkspace) {
+    workspace = workspace.options.parentWorkspace;
+  }
   Blockly.DropDownDiv.setBoundsElement(
-      sourceBlock.workspace.getParentSvg().parentNode);
+      workspace.getParentSvg().parentNode);
   return Blockly.DropDownDiv.show(
       field, sourceBlock.RTL,
       primaryX, primaryY, secondaryX, secondaryY, opt_onHide);

@@ -658,6 +658,25 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     ]
   },
   {
+    "type": "test_dropdowns_in_mutator",
+    "message0": "dropdown mutator",
+    "mutator": "test_dropdown_mutator"
+  },
+  {
+    "type": "test_dropdowns_in_mutator_block",
+    "message0": "dropdown %1",
+    "args0": [
+      {
+        "type": "field_dropdown",
+        "name": "DROPDOWN",
+        "options": [
+          [ "option", "ONE" ],
+          [ "option", "TWO" ]
+        ]
+      },
+    ]
+  },
+  {
     "type": "test_fields_angle",
     "message0": "angle: %1",
     "args0": [
@@ -1817,6 +1836,57 @@ Blockly.Blocks['test_dropdowns_dynamic_random'] = {
     return options;
   }
 };
+
+/**
+ * Mutator methods added to the test_dropdowns_in_mutator block.
+ * @mixin
+ * @augments Blockly.Block
+ * @package
+ * @readonly
+ */
+var DROPDOWN_MUTATOR = {
+  /**
+   * Create XML to represent the block mutation.
+   * @return {Element} XML storage element.
+   * @this {Blockly.Block}
+   */
+  mutationToDom: function() {
+    var container = Blockly.utils.xml.createElement('mutation');
+    return container;
+  },
+  /**
+   * Restore a block from XML.
+   * @param {!Element} _xmlElement XML storage element.
+   * @this {Blockly.Block}
+   */
+  domToMutation: function(_xmlElement) {
+  },
+  /**
+   * Populate the mutator's dialog with this block's components.
+   * @param {!Blockly.Workspace} workspace Mutator's workspace.
+   * @return {!Blockly.Block} Root block in mutator.
+   * @this {Blockly.Block}
+   */
+  decompose: function(workspace) {
+    var containerBlock = workspace.newBlock('test_dropdowns_in_mutator_block');
+    containerBlock.initSvg();
+    
+    return containerBlock;
+  },
+  /**
+   * Reconfigure this block based on the mutator dialog's components.
+   * @param {!Blockly.Block} _containerBlock Root block in mutator.
+   * @this {Blockly.Block}
+   */
+  compose: function(_containerBlock) {  
+  },
+};
+
+/**
+ * Register custom mutator used by the test_dropdowns_in_mutator block.
+ */
+Blockly.Extensions.registerMutator('test_dropdown_mutator',
+  DROPDOWN_MUTATOR, null, ['test_dropdowns_in_mutator_block']);
 
 /**
  * Handles "insert" button in the connection row test category. This will insert

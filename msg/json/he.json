@@ -100,6 +100,7 @@
 	"IOS_ERROR": "שגיאה",
 	"IOS_PROCEDURES_INPUTS": "קלטים",
 	"IOS_PROCEDURES_ADD_INPUT": "+ הוספת קלט",
+	"IOS_PROCEDURES_ALLOW_STATEMENTS": "לאפשר פעולות",
 	"IOS_PROCEDURES_DUPLICATE_INPUTS_ERROR": "לפונקציה יש קלטים כפולים.",
 	"IOS_VARIABLES_ADD_VARIABLE": "+ הוספת משתנה",
 	"IOS_VARIABLES_ADD_BUTTON": "הוספה",

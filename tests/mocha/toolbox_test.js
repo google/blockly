@@ -4,9 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-goog.require('Blockly.Blocks.procedures');
-goog.require('Blockly.Msg');
-
 suite('Toolbox', function() {
   setup(function() {
     Blockly.defineBlocksWithJsonArray([{
@@ -43,7 +40,7 @@ suite('Toolbox', function() {
       var toolboxDiv = Blockly.getMainWorkspace().getInjectionDiv().childNodes[0];
       chai.assert.equal(toolboxDiv.className, 'blocklyToolboxDiv blocklyNonSelectable');
     });
-    test('hideChaff is closed when the toolbox is clicked', function() {
+    test('hideChaff is called when the toolbox is clicked', function() {
       sinon.stub(Blockly, "hideChaff");
       var evt = new MouseEvent('pointerdown', {
       });
@@ -69,13 +66,22 @@ suite('Toolbox', function() {
         this.toolbox.renderTree(badXml);
       } catch (Error) {
         threwError = true;
-        chai.assert.equal(Error.message, 'Toolbox cannot have both blocks and categories in the root level.');
+        chai.assert.equal(Error.message,
+            'Toolbox cannot have both blocks and categories in the root level.');
       }
       chai.assert.isTrue(threwError);
     });
     test('Select any open nodes', function() {
+      this.toolbox.renderTree(this.toolboxXml);
+      var selectedNode = this.toolbox.tree_.children_[0];
+      chai.assert.isTrue(selectedNode.selected_);
     });
     test('Set the state for horizontal layout ', function() {
+      this.toolbox.horizontalLayout_ = true;
+      this.toolbox.renderTree(this.toolboxXml);
+      var orientationAttribute = this.toolbox.tree_.getElement()
+          .getAttribute('aria-orientation');
+      chai.assert.equal(orientationAttribute, 'horizontal');
     });
   });
 
@@ -90,7 +96,8 @@ suite('Toolbox', function() {
       chai.assert.equal('', this.firstChild.getRowElement().style.backgroundColor);
     });
     test('Set color for new selected category', function() {
-      chai.assert.equal('rgb(85, 119, 238)', this.secondChild.getRowElement().style.backgroundColor);
+      chai.assert.equal('rgb(85, 119, 238)', this.secondChild
+          .getRowElement().style.backgroundColor);
     });
   });
 
@@ -192,10 +199,10 @@ suite('Toolbox', function() {
       this.tree = new Blockly.tree.TreeControl(this.toolbox, this.toolbox.config_);
       this.tree.blocks = [];
       this.toolboxXml = document.getElementById('toolbox-categories');
-      this.buttonIdx = 1;
       this.separatorIdx = 0;
+      this.buttonIdx = 1;
       this.dynamicCategoryIdx = 3;
-      this.separatorBtwnCategoriesIdx = 2;
+      this.categorySeparatorIdx = 2;
     });
     test('Having a dynamic category', function() {
       this.toolbox.syncTrees_(this.toolboxXml, this.tree,
@@ -217,13 +224,15 @@ suite('Toolbox', function() {
       var simpleToolbox = document.getElementById('toolbox-categories');
       this.toolbox.syncTrees_(simpleToolbox, this.tree,
           this.toolbox.workspace_.options.pathToMedia);
-      chai.assert.isTrue(this.tree.children_[this.separatorBtwnCategoriesIdx] instanceof Blockly.Toolbox.TreeSeparator);
+      chai.assert.isTrue(this.tree.children_[
+          this.categorySeparatorIdx] instanceof Blockly.Toolbox.TreeSeparator);
     });
     test('Having a button', function() {
       this.toolbox.syncTrees_(this.toolboxXml, this.tree,
           this.toolbox.workspace_.options.pathToMedia);
       var btnString = Blockly.utils.xml.domToText(this.tree.children_[0].blocks[this.buttonIdx]);
-      chai.assert.equal(btnString, '<button xmlns="http://www.w3.org/1999/xhtml" text="insert" callbackkey="insertConnectionRows"></button>');
+      chai.assert.equal(btnString,
+          '<button xmlns="http://www.w3.org/1999/xhtml" text="insert" callbackkey="insertConnectionRows"></button>');
     });
     test('Colours are set using style', function() {
       sinon.stub(this.toolbox, "setColourFromStyle_");

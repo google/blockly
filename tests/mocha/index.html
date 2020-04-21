@@ -57,6 +57,7 @@
     <script src="navigation_test.js"></script>
     <script src="procedures_test.js"></script>
     <script src="theme_test.js"></script>
+    <!-- <script src="toolbox_test.js"></script> -->
     <script src="trashcan_test.js"></script>
     <script src="utils_test.js"></script>
     <script src="variable_map_test.js"></script>
@@ -69,9 +70,22 @@
     <xml xmlns="https://developers.google.com/blockly/xml" id="toolbox-minimal" style="display: none">
       <block type="basic_block"></block>
     </xml>
+    <xml xmlns="https://developers.google.com/blockly/xml" id="toolbox-incorrect" style="display: none">
+      <block type="basic_block"></block>
+      <category name="First">
+        <block type="basic_block">
+          <field name="TEXT">FirstCategory-FirstBlock</field>
+        </block>
+        <block type="basic_block">
+          <field name="TEXT">FirstCategory-SecondBlock</field>
+        </block>
+      </category>
+    </xml>
 
     <xml xmlns="https://developers.google.com/blockly/xml" id="toolbox-categories" style="display: none">
-      <category name="First">
+      <category name="First" expanded="true" categorystyle="logic_category">
+        <sep gap="-1"></sep>
+        <button text="insert" callbackkey="insertConnectionRows"></button>
         <block type="basic_block">
           <field name="TEXT">FirstCategory-FirstBlock</field>
         </block>
@@ -84,6 +98,8 @@
           <field name="TEXT">SecondCategory-FirstBlock</field>
         </block>
       </category>
+      <sep gap="-1"></sep>
+      <category name="Variables" custom="VARIABLE"></category>
     </xml>
     <xml xmlns="https://developers.google.com/blockly/xml" id="toolbox-connections" style="display: none">
       <block type="stack_block"></block>

@@ -320,9 +320,6 @@ Blockly.tree.TreeControl.prototype.handleMouseEvent_ = function(e) {
   var node = this.getNodeFromEvent_(e);
   if (node) {
     switch (e.type) {
-      case 'mousedown':
-        node.onMouseDown(e);
-        break;
       case 'click':
         node.onClick_(e);
         break;

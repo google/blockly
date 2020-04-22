@@ -102,7 +102,7 @@ suite('Toolbox', function() {
     });
     test('Show the new set of blocks in the flyout', function() {
       this.toolbox.handleAfterTreeSelected_(this.firstChild, this.secondChild);
-      sinon.assert.calledWith(this.showStub, this.secondChild.blocks);
+      sinon.assert.calledWith(this.showStub, this.secondChild.contents);
     });
     test('Opening the previous selected category does not scroll', function() {
       var scrollStub = sinon.stub(this.toolbox.flyout_, "scrollToStart");
@@ -189,7 +189,7 @@ suite('Toolbox', function() {
   suite('syncTrees_', function() {
     setup(function() {
       this.tree = new Blockly.tree.TreeControl(this.toolbox, this.toolbox.config_);
-      this.tree.blocks = [];
+      this.tree.contents = [];
       this.toolboxXml = document.getElementById('toolbox-test');
       this.separatorIdx = 0;
       this.buttonIdx = 1;
@@ -199,7 +199,7 @@ suite('Toolbox', function() {
     test('Having a dynamic category', function() {
       this.toolbox.syncTrees_(this.toolboxXml, this.tree,
           this.toolbox.workspace_.options.pathToMedia);
-      chai.assert.equal(this.tree.children_[this.dynamicCategoryIdx].blocks, 'VARIABLE');
+      chai.assert.equal(this.tree.children_[this.dynamicCategoryIdx].contents, 'VARIABLE');
     });
     test('Node is expanded', function() {
       var openNode = this.toolbox.syncTrees_(this.toolboxXml, this.tree,
@@ -209,7 +209,8 @@ suite('Toolbox', function() {
     test('Having a tree separator', function() {
       this.toolbox.syncTrees_(this.toolboxXml, this.tree,
           this.toolbox.workspace_.options.pathToMedia);
-      var sepString = Blockly.utils.xml.domToText(this.tree.children_[0].blocks[this.separatorIdx]);
+      var sepString = Blockly.utils.xml.domToText(
+          this.tree.children_[0].contents[this.separatorIdx]);
       chai.assert.equal(sepString, '<sep xmlns="http://www.w3.org/1999/xhtml" gap="-1"></sep>');
     });
     test('Separator between two categories', function() {
@@ -221,7 +222,7 @@ suite('Toolbox', function() {
     test('Having a button', function() {
       this.toolbox.syncTrees_(this.toolboxXml, this.tree,
           this.toolbox.workspace_.options.pathToMedia);
-      var btnString = Blockly.utils.xml.domToText(this.tree.children_[0].blocks[this.buttonIdx]);
+      var btnString = Blockly.utils.xml.domToText(this.tree.children_[0].contents[this.buttonIdx]);
       chai.assert.equal(btnString,
           '<button xmlns="http://www.w3.org/1999/xhtml" text="insert" callbackkey="insertConnectionRows"></button>');
     });

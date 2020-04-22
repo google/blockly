@@ -209,7 +209,8 @@ suite('Toolbox', function() {
     test('Having a tree separator', function() {
       this.toolbox.syncTrees_(this.toolboxXml, this.tree,
           this.toolbox.workspace_.options.pathToMedia);
-      var sepString = Blockly.utils.xml.domToText(this.tree.children_[0].contents[this.separatorIdx]);
+      var sepString = Blockly.utils.xml.domToText(
+          this.tree.children_[0].contents[this.separatorIdx]);
       chai.assert.equal(sepString, '<sep xmlns="http://www.w3.org/1999/xhtml" gap="-1"></sep>');
     });
     test('Separator between two categories', function() {

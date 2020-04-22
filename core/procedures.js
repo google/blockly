@@ -60,7 +60,8 @@ Blockly.Procedures.ProcedureBlock;
  *     list, and return value boolean.
  */
 Blockly.Procedures.allProcedures = function(root) {
-  var blocks = root.getAllBlocks(false);
+  // Assume that a procedure definition is a top block.
+  var blocks = root.getTopBlocks(false);
   var proceduresReturn = [];
   var proceduresNoReturn = [];
   for (var i = 0; i < blocks.length; i++) {

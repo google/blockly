@@ -104,15 +104,6 @@ Blockly.tree.TreeNode.prototype.onClick_ = function(_e) {
   this.updateRow();
 };
 
-/**
- * Suppress the inherited mouse down behaviour.
- * @param {!Event} _e The browser event.
- * @override
- * @private
- */
-Blockly.tree.TreeNode.prototype.onMouseDown = function(_e) {
-  // NOP
-};
 
 /**
  * Remap event.keyCode in horizontalLayout so that arrow

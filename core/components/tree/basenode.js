@@ -551,6 +551,7 @@ Blockly.tree.BaseNode.prototype.toDom = function() {
 };
 
 /**
+ * Calculates correct padding for each row. Nested categories are indented more.
  * @return {number} The pixel indent of the row.
  * @private
  */
@@ -559,6 +560,7 @@ Blockly.tree.BaseNode.prototype.getPixelIndent_ = function() {
 };
 
 /**
+ * Creates row with icon and label dom.
  * @return {!Element} The HTML element for the row.
  * @protected
  */
@@ -575,6 +577,8 @@ Blockly.tree.BaseNode.prototype.getRowDom = function() {
 };
 
 /**
+ * Adds the selected class name to the default row class name if node is
+ *     selected.
  * @return {string} The class name for the row.
  * @protected
  */
@@ -617,6 +621,7 @@ Blockly.tree.BaseNode.prototype.getCalculatedIconClass = function() {
 };
 
 /**
+ * Gets a string containing the x and y position of the node's background.
  * @return {string} The background position style value.
  * @protected
  */
@@ -705,26 +710,6 @@ Blockly.tree.BaseNode.prototype.updateExpandIcon = function() {
  */
 Blockly.tree.BaseNode.prototype.updateIcon_ = function() {
   this.getIconElement().className = this.getCalculatedIconClass();
-};
-
-/**
- * Handles mouse down event.
- * @param {!Event} e The browser event.
- * @protected
- */
-Blockly.tree.BaseNode.prototype.onMouseDown = function(e) {
-  var el = e.target;
-  // expand icon
-  var type = el.getAttribute('type');
-  if (type == 'expand' && this.hasChildren()) {
-    if (this.isUserCollapsible_) {
-      this.toggle();
-    }
-    return;
-  }
-
-  this.select();
-  this.updateRow();
 };
 
 /**

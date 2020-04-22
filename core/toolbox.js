@@ -114,23 +114,23 @@ Blockly.Toolbox = function(workspace) {
   this.width = 0;
 
   /**
-  * Height of the toolbox, which changes only in horizontal layout.
-  * @type {number}
-  */
+   * Height of the toolbox, which changes only in horizontal layout.
+   * @type {number}
+   */
   this.height = 0;
 
   /**
-  * The SVG group currently selected.
-  * @type {SVGGElement}
-  * @private
-  */
+   * The SVG group currently selected.
+   * @type {SVGGElement}
+   * @private
+   */
   this.selectedOption_ = null;
 
   /**
-  * The tree node most recently selected.
-  * @type {Blockly.tree.BaseNode}
-  * @private
-  */
+   * The tree node most recently selected.
+   * @type {Blockly.tree.BaseNode}
+   * @private
+   */
   this.lastCategory_ = null;
 
 };

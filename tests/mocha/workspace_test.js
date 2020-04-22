@@ -711,6 +711,9 @@ suite('Workspace', function() {
         createTwoVarsDifferentTypes(this.workspace);
 
         this.workspace.undo();
+        assertVariableValues(this.workspace, 'name1', 'type1', 'id1');
+        chai.assert.isNull(this.workspace.getVariableById('id2'));
+
         this.workspace.undo(true);
 
         // Expect that variable 'id2' is recreated
@@ -719,6 +722,8 @@ suite('Workspace', function() {
 
         this.workspace.undo();
         this.workspace.undo();
+        chai.assert.isNull(this.workspace.getVariableById('id1'));
+        chai.assert.isNull(this.workspace.getVariableById('id2'));
         this.workspace.undo(true);
 
         // Expect that variable 'id1' is recreated
@@ -767,6 +772,9 @@ suite('Workspace', function() {
         this.workspace.deleteVariableById('id2');
 
         this.workspace.undo();
+        chai.assert.isNull(this.workspace.getVariableById('id1'));
+        assertVariableValues(this.workspace, 'name2', 'type2', 'id2');
+
         this.workspace.undo(true);
         // Expect that both variables are deleted
         chai.assert.isNull(this.workspace.getVariableById('id1'));
@@ -774,6 +782,9 @@ suite('Workspace', function() {
 
         this.workspace.undo();
         this.workspace.undo();
+        assertVariableValues(this.workspace, 'name1', 'type1', 'id1');
+        assertVariableValues(this.workspace, 'name2', 'type2', 'id2');
+
         this.workspace.undo(true);
         // Expect that variable 'id2' is recreated
         chai.assert.isNull(this.workspace.getVariableById('id1'));
@@ -788,6 +799,10 @@ suite('Workspace', function() {
         this.workspace.deleteVariableById('id2');
 
         this.workspace.undo();
+        assertBlockVarModelName(this.workspace, 0, 'name2');
+        chai.assert.isNull(this.workspace.getVariableById('id1'));
+        assertVariableValues(this.workspace, 'name2', 'type2', 'id2');
+
         this.workspace.undo(true);
         // Expect that both variables are deleted
         chai.assert.equal(this.workspace.topBlocks_.length, 0);
@@ -796,6 +811,11 @@ suite('Workspace', function() {
 
         this.workspace.undo();
         this.workspace.undo();
+        assertBlockVarModelName(this.workspace, 0, 'name2');
+        assertBlockVarModelName(this.workspace, 1, 'name1');
+        assertVariableValues(this.workspace, 'name1', 'type1', 'id1');
+        assertVariableValues(this.workspace, 'name2', 'type2', 'id2');
+
         this.workspace.undo(true);
         // Expect that variable 'id2' is recreated
         assertBlockVarModelName(this.workspace,0, 'name2');

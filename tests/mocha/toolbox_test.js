@@ -215,8 +215,8 @@ suite('Toolbox', function() {
     test('Separator between two categories', function() {
       this.toolbox.syncTrees_(this.toolboxXml, this.tree,
           this.toolbox.workspace_.options.pathToMedia);
-      chai.assert.isTrue(this.tree.children_[
-          this.categorySeparatorIdx] instanceof Blockly.Toolbox.TreeSeparator);
+      chai.assert.instanceOf(this.tree.children_[this.categorySeparatorIdx],
+          Blockly.Toolbox.TreeSeparator);
     });
     test('Having a button', function() {
       this.toolbox.syncTrees_(this.toolboxXml, this.tree,

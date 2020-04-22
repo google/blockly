@@ -26,26 +26,6 @@ suite('JSON Block Definitions', function() {
     this.workspace_.dispose();
   });
 
-  /**
-   * Captures the strings sent to console.warn() when calling a function.
-   * @param {function} innerFunc The function where warnings may called.
-   * @return {string[]} The warning messages (only the first arguments).
-   */
-  function captureWarnings(innerFunc) {
-    var msgs = [];
-    var nativeConsoleWarn = console.warn;
-    try {
-      console.warn = function(msg) {
-        msgs.push(msg);
-        nativeConsoleWarn.apply(console, arguments);
-      };
-      innerFunc();
-    } finally {
-      console.warn = nativeConsoleWarn;
-    }
-    return msgs;
-  }
-
   suite('defineBlocksWithJsonArray', function() {
     test('Basic block', function() {
       /**  Ensure a block can be instantiated from a JSON definition.  */

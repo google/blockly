@@ -45,7 +45,7 @@ Blockly.utils.object.mixin = function(target, source) {
  */
 Blockly.utils.object.deepMerge = function(target, source) {
   for (var x in source) {
-    if (typeof source[x] === 'object') {
+    if (source[x] != null && typeof source[x] === 'object') {
       target[x] = Blockly.utils.object.deepMerge(
           target[x] || Object.create(null), source[x]);
     } else {

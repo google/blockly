@@ -31,11 +31,13 @@ suite('Workspace', function() {
 
   function assertBlockVarModelName(workspace, blockIndex, name) {
     var block = workspace.topBlocks_[blockIndex];
-    chai.assert.exists(block, 'Block');
+    chai.assert.exists(block, 'Block at topBlocks_[' + blockIndex + ']');
     var varModel = block.getVarModels()[0];
-    chai.assert.exists(varModel, 'VariableModel');
+    chai.assert.exists(varModel,
+        'VariableModel for block at topBlocks_[' + blockIndex + ']');
     var blockVarName = varModel.name;
-    chai.assert.equal(blockVarName, name);
+    chai.assert.equal(blockVarName, name,
+        'VariableModel name for block at topBlocks_[' + blockIndex + ']');
   }
 
   function createVarBlocksNoEvents(workspace, ids) {
@@ -86,7 +88,7 @@ suite('Workspace', function() {
       createVarBlocksNoEvents(this.workspace, ['id1', 'id1', 'id2']);
     });
 
-    test('deleteVariableInternal_', function() {
+    test('deleteVariableInternal_(\'id1\')', function() {
       var uses = this.workspace.getVariableUsesById(this.var1.getId());
       this.workspace.deleteVariableInternal_(this.var1, uses);
 
@@ -96,7 +98,7 @@ suite('Workspace', function() {
       assertBlockVarModelName(this.workspace, 0, 'name2');
     });
 
-    test('deleteVariableById one usage', function() {
+    test('deleteVariableById(\'id2\') one usage', function() {
       // Deleting variable one usage should not trigger confirm dialog.
       var stub =
           sinon.stub(Blockly, "confirm").callsArgWith(1, true);
@@ -109,7 +111,7 @@ suite('Workspace', function() {
       assertBlockVarModelName(this.workspace, 0, 'name1');
     });
 
-    test('deleteVariableById multiple usages confirm', function() {
+    test('deleteVariableById(\'id1\') multiple usages confirm', function() {
       // Deleting variable with multiple usages triggers confirm dialog.
       var stub =
           sinon.stub(Blockly, "confirm").callsArgWith(1, true);
@@ -122,7 +124,7 @@ suite('Workspace', function() {
       assertBlockVarModelName(this.workspace, 0, 'name2');
     });
 
-    test('deleteVariableById multiple usages cancel', function() {
+    test('deleteVariableById(\'id1\') multiple usages cancel', function() {
       // Deleting variable with multiple usages triggers confirm dialog.
       var stub =
           sinon.stub(Blockly, "confirm").callsArgWith(1, false);
@@ -142,14 +144,14 @@ suite('Workspace', function() {
       this.workspace.createVariable('name1', 'type1', 'id1');
     });
 
-    test('No references', function() {
+    test('No references rename to name2', function() {
       this.workspace.renameVariableById('id1', 'name2');
       assertVariableValues(this.workspace, 'name2', 'type1', 'id1');
       // Renaming should not have created a new variable.
       chai.assert.equal(this.workspace.getAllVariables().length, 1);
     });
 
-    test('Reference exists', function() {
+    test('Reference exists rename to name2', function() {
       createVarBlocksNoEvents(this.workspace, ['id1']);
 
       this.workspace.renameVariableById('id1', 'name2');
@@ -159,7 +161,7 @@ suite('Workspace', function() {
       assertBlockVarModelName(this.workspace, 0, 'name2');
     });
 
-    test('Reference exists different capitalization', function() {
+    test('Reference exists different capitalization rename to Name1', function() {
       createVarBlocksNoEvents(this.workspace, ['id1']);
 
       this.workspace.renameVariableById('id1', 'Name1');
@@ -170,7 +172,7 @@ suite('Workspace', function() {
     });
 
     suite('Two variables rename overlap', function() {
-      test('Same type', function() {
+      test('Same type rename variable id=id1 to name2', function() {
         this.workspace.createVariable('name2', 'type1', 'id2');
         createVarBlocksNoEvents(this.workspace, ['id1', 'id2']);
 
@@ -189,7 +191,7 @@ suite('Workspace', function() {
         assertBlockVarModelName(this.workspace, 1, 'name2');
       });
 
-      test('Different type', function() {
+      test('Different type rename variable id=id1 to name2', function() {
         this.workspace.createVariable('name2', 'type2', 'id2');
         createVarBlocksNoEvents(this.workspace, ['id1', 'id2']);
 
@@ -204,7 +206,7 @@ suite('Workspace', function() {
         assertBlockVarModelName(this.workspace, 1, 'name2');
       });
 
-      test('Same type different capitalization', function() {
+      test('Same type different capitalization rename variable id=id1 to Name2', function() {
         this.workspace.createVariable('name2', 'type1', 'id2');
         createVarBlocksNoEvents(this.workspace, ['id1', 'id2']);
 
@@ -223,7 +225,7 @@ suite('Workspace', function() {
         assertBlockVarModelName(this.workspace, 1, 'Name2');
       });
 
-      test('Different type different capitalization', function() {
+      test('Different type different capitalization rename variable id=id1 to Name2', function() {
         this.workspace.createVariable('name2', 'type2', 'id2');
         createVarBlocksNoEvents(this.workspace, ['id1', 'id2']);
 
@@ -858,7 +860,7 @@ suite('Workspace', function() {
         this.workspace.createVariable('name1', 'type1', 'id1');
       });
 
-      test('Reference exists no usages', function() {
+      test('Reference exists no usages rename to name2', function() {
         this.workspace.renameVariableById('id1', 'name2');
 
         this.workspace.undo();
@@ -869,7 +871,7 @@ suite('Workspace', function() {
 
       });
 
-      test('Reference exists with usages', function() {
+      test('Reference exists with usages rename to name2', function() {
         createVarBlocksNoEvents(this.workspace, ['id1']);
         this.workspace.renameVariableById('id1', 'name2');
 
@@ -882,7 +884,7 @@ suite('Workspace', function() {
         assertVariableValues(this.workspace, 'name2', 'type1', 'id1');
       });
 
-      test('Reference exists different capitalization no usages', function() {
+      test('Reference exists different capitalization no usages rename to Name1', function() {
         this.workspace.renameVariableById('id1', 'Name1');
 
         this.workspace.undo();
@@ -892,7 +894,7 @@ suite('Workspace', function() {
         assertVariableValues(this.workspace, 'Name1', 'type1', 'id1');
       });
 
-      test('Reference exists different capitalization with usages', function() {
+      test('Reference exists different capitalization with usages rename to Name1', function() {
         createVarBlocksNoEvents(this.workspace, ['id1']);
         this.workspace.renameVariableById('id1', 'Name1');
 
@@ -906,7 +908,7 @@ suite('Workspace', function() {
       });
 
       suite('Two variables rename overlap', function() {
-        test('Same type no usages', function() {
+        test('Same type no usages rename variable id=id1 to name2', function() {
           this.workspace.createVariable('name2', 'type1', 'id2');
           this.workspace.renameVariableById('id1', 'name2');
 
@@ -919,7 +921,7 @@ suite('Workspace', function() {
           chai.assert.isNull(this.workspace.getVariableById('id1'));
         });
 
-        test('Same type with usages', function() {
+        test('Same type with usages rename variable id=id1 to name2', function() {
           this.workspace.createVariable('name2', 'type1', 'id2');
           createVarBlocksNoEvents(this.workspace, ['id1', 'id2']);
           this.workspace.renameVariableById('id1', 'name2');
@@ -935,7 +937,7 @@ suite('Workspace', function() {
           chai.assert.isNull(this.workspace.getVariableById('id1'));
         });
 
-        test('Same type different capitalization no usages', function() {
+        test('Same type different capitalization no usages rename variable id=id1 to Name2', function() {
           this.workspace.createVariable('name2', 'type1', 'id2');
           this.workspace.renameVariableById('id1', 'Name2');
 
@@ -948,7 +950,7 @@ suite('Workspace', function() {
           chai.assert.isNull(this.workspace.getVariable('name1'));
         });
 
-        test('Same type different capitalization with usages', function() {
+        test('Same type different capitalization with usages rename variable id=id1 to Name2', function() {
           this.workspace.createVariable('name2', 'type1', 'id2');
           createVarBlocksNoEvents(this.workspace, ['id1', 'id2']);
           this.workspace.renameVariableById('id1', 'Name2');
@@ -966,7 +968,7 @@ suite('Workspace', function() {
           assertBlockVarModelName(this.workspace, 1, 'Name2');
         });
 
-        test('Different type no usages', function() {
+        test('Different type no usages rename variable id=id1 to name2', function() {
           this.workspace.createVariable('name2', 'type2', 'id2');
           this.workspace.renameVariableById('id1', 'name2');
 
@@ -979,7 +981,7 @@ suite('Workspace', function() {
           assertVariableValues(this.workspace, 'name2', 'type2', 'id2');
         });
 
-        test('Different type with usages', function() {
+        test('Different type with usages rename variable id=id1 to name2', function() {
           this.workspace.createVariable('name2', 'type2', 'id2');
           createVarBlocksNoEvents(this.workspace, ['id1', 'id2']);
           this.workspace.renameVariableById('id1', 'name2');
@@ -997,7 +999,7 @@ suite('Workspace', function() {
           assertBlockVarModelName(this.workspace, 1, 'name2');
         });
 
-        test('Different type different capitalization no usages', function() {
+        test('Different type different capitalization no usages rename variable id=id1 to Name2', function() {
           this.workspace.createVariable('name2', 'type2', 'id2');
           this.workspace.renameVariableById('id1', 'Name2');
 
@@ -1010,7 +1012,7 @@ suite('Workspace', function() {
           assertVariableValues(this.workspace, 'name2', 'type2', 'id2');
         });
 
-        test('Different type different capitalization with usages', function() {
+        test('Different type different capitalization with usages rename variable id=id1 to Name2', function() {
           this.workspace.createVariable('name2', 'type2', 'id2');
           createVarBlocksNoEvents(this.workspace, ['id1', 'id2']);
           this.workspace.renameVariableById('id1', 'Name2');

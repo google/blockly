@@ -40,7 +40,7 @@ async function runMochaTestsInBrowser() {
     var elem = await browser.$('#failureCount');
     var text = await elem.getAttribute('tests_failed');
     return text != 'unset';
-  }, 12000);
+  }, 20000);
 
   const elem = await browser.$('#failureCount');
   const numOfFailure = await elem.getAttribute('tests_failed');

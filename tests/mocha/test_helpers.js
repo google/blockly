@@ -4,8 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/* exported assertArrayEquals, assertVariableValues, defineRowBlock,
-   defineStackBlock, defineStatementBlock, createTestBlock */
+/* exported assertArrayEquals, assertVariableValues, captureWarnings
+   defineRowBlock, defineStackBlock, defineStatementBlock, createTestBlock */
 
 /**
  * Check that two arrays have the same content.

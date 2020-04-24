@@ -840,7 +840,7 @@ suite('XML', function() {
       });
     });
     suite('Headless -> XML -> Rendered -> XML', function() {
-      test('Comment', function() {
+      test('Comment', function(done) {
         var block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
             '<block type="empty_block"/>'
         ), this.headlessWorkspace);
@@ -849,6 +849,11 @@ suite('XML', function() {
         block.commentModel.pinned = true;
         
         assertRoundTrip(this.headlessWorkspace, this.renderedWorkspace);
+
+        // domToBlockHeadless_ triggers setTimeout call we need to wait for.
+        setTimeout(function() {
+          done();
+        }, 10);
       });
     });
   });

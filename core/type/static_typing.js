@@ -285,10 +285,16 @@ Blockly.StaticTyping.prototype.setBlockTypeWarning = function(block, blockType, 
     block.setWarningText(null, warningLabel);
   } else if (blockType !== Blockly.Types.UNDEF && block.type != 'variables_get') {
       if (this.varTypeDict[varId] !== blockType) {
-        block.setWarningText('The variable "' + varName + '" has been first ' +
-            'assigned to the "' + this.varTypeDict[varId].typeName + '" type\n' +
-            'and this block tries to assign the type "' + blockType.typeName + '"!',
-            warningLabel);
+        var warningText = Blockly.Msg['VARIABLES_SET_WARNING'];
+        warningText = warningText.replace('%1', varName);
+        warningText = warningText.replace('%2', this.varTypeDict[varId].typeName);
+        warningText = warningText.replace('%3', blockType.typeName);
+        if (this.varTypeDict[varId].typeName == "Number" && blockType.typeName == "Decimal") {
+          var warningNumber = Blockly.Msg['VARIABLES_SET_WARNING_NUMBERS'];
+          warningNumber = '\n' + warningNumber.replace('%3', blockType.typeName);
+          warningText += warningNumber;
+        }
+        block.setWarningText(warningText, warningLabel);
       }
   } else {
     block.setWarningText(null, warningLabel);

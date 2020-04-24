@@ -367,6 +367,9 @@ suite('Navigation', function() {
         }
       };
     });
+    teardown(function() {
+      delete Blockly.Blocks['basic_block'];
+    })
     test('Action does not exist', function() {
       var block = this.workspace.getTopBlocks()[0];
       var field = block.inputList[0].fieldRow[0];
@@ -630,6 +633,7 @@ suite('Navigation', function() {
     });
 
     teardown(function() {
+      delete Blockly.Blocks['inline_block'];
       delete Blockly.Blocks['basic_block'];
       this.workspace.dispose();
     });

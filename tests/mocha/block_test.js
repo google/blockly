@@ -44,6 +44,7 @@ suite('Blocks', function() {
   });
   teardown(function() {
     this.workspace.dispose();
+    delete Blockly.Blocks['empty_block'];
     delete Blockly.Blocks['stack_block'];
     delete Blockly.Blocks['row_block'];
     delete Blockly.Blocks['statement_block'];
@@ -321,16 +322,6 @@ suite('Blocks', function() {
             {
               "type": "input_value",
               "name": "VALUE"
-            }
-          ]
-        },
-        {
-          "type": "statement_block",
-          "message0": "%1",
-          "args0": [
-            {
-              "type": "input_statement",
-              "name": "STATEMENT"
             }
           ]
         },
@@ -1030,13 +1021,6 @@ suite('Blocks', function() {
   });
   suite('Comments', function() {
     setup(function() {
-      Blockly.defineBlocksWithJsonArray([
-        {
-          "type": "empty_block",
-          "message0": "",
-          "args0": []
-        },
-      ]);
       this.eventSpy = sinon.spy(Blockly.Events, 'fire');
     });
     teardown(function() {

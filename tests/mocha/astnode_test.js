@@ -321,8 +321,8 @@ suite('ASTNode', function() {
       delete this.blocks.dummyInput;
       delete this.blocks.dummyInputValue;
       delete this.blocks.fieldWithOutput2;
-      
 
+      delete Blockly.Blocks['output_next'];
       delete Blockly.Blocks['fields_and_input2'];
       delete Blockly.Blocks['two_fields'];
       delete Blockly.Blocks['fields_and_input'];

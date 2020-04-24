@@ -162,25 +162,15 @@ suite('Workspace comment', function() {
   });
 
   suite('Content', function() {
-    function temporary_fireEvent(event) {
-      if (!Blockly.Events.isEnabled()) {
-        return;
-      }
-      Blockly.Events.FIRE_QUEUE_.push(event);
-      Blockly.Events.fireNow_();
-    }
-
     setup(function() {
-      this.savedFireFunc_ = Blockly.Events.fire;
-      Blockly.Events.fire = temporary_fireEvent;
-      temporary_fireEvent.firedEvents_ = [];
+      createEventsFireStub();
 
       this.comment = new Blockly.WorkspaceComment(
           this.workspace, 'comment text', 0, 0, 'comment id');
     });
 
     teardown(function() {
-      Blockly.Events.fire = this.savedFireFunc_;
+      sinon.restore();
     });
 
     test('After creation', function() {

@@ -564,13 +564,10 @@ suite('Events', function() {
     }
 
     setup(function() {
-      this.savedFireFunc_ = Blockly.Events.fire;
-      Blockly.Events.fire = temporary_fireEvent;
-      temporary_fireEvent.firedEvents_ = [];
+      createEventsFireStub();
     });
 
     teardown(function() {
-      Blockly.Events.fire = this.savedFireFunc_;
       sinon.restore();
     });
 

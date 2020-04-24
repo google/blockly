@@ -5,7 +5,8 @@
  */
 
 /* exported assertArrayEquals, assertVariableValues, captureWarnings
-   defineRowBlock, defineStackBlock, defineStatementBlock, createTestBlock */
+   defineRowBlock, defineStackBlock, defineStatementBlock, createTestBlock,
+   createEventsFireStub */
 
 /**
  * Check that two arrays have the same content.
@@ -57,6 +58,25 @@ function captureWarnings(innerFunc) {
     console.warn = nativeConsoleWarn;
   }
   return msgs;
+}
+
+
+/**
+ * Creates stub for Blockly.Events.fire that fires events immediately instead of
+ * with timeout.
+ * @return {sinon.stub} The created stub.
+ */
+function createEventsFireStub() {
+  var stub = sinon.stub(Blockly.Events, 'fire');
+  stub.callsFake(function(event) {
+    if (!Blockly.Events.isEnabled()) {
+      return;
+    }
+    Blockly.Events.FIRE_QUEUE_.push(event);
+    Blockly.Events.fireNow_();
+  });
+  stub.firedEvents_ = [];
+  return stub;
 }
 
 function defineStackBlock() {

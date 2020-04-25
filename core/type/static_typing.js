@@ -111,7 +111,7 @@ Blockly.StaticTyping.prototype.collectProcedures = function(workspace) {
 Blockly.StaticTyping.getProcedureVarType = function(workspace, variable) {
   var procedures = Blockly.StaticTyping.prototype.collectProcedures(workspace);
   for (var func in procedures) {
-    var funcArgs = procedures[func][2];
+    var funcArgs = procedures[func][3];
     for (var arg in funcArgs) {
       if (arg == variable) {
         return funcArgs[arg];
@@ -286,14 +286,22 @@ Blockly.StaticTyping.prototype.setBlockTypeWarning = function(block, blockType, 
   } else if (blockType !== Blockly.Types.UNDEF && block.type != 'variables_get') {
       if (this.varTypeDict[varId] !== blockType) {
         var warningText = Blockly.Msg['VARIABLES_SET_WARNING'];
-        warningText = warningText.replace('%1', varName);
-        warningText = warningText.replace('%2', this.varTypeDict[varId].typeName);
-        warningText = warningText.replace('%3', blockType.typeName);
-        if (this.varTypeDict[varId].typeName == "Number" && blockType.typeName == "Decimal") {
-          var warningNumber = Blockly.Msg['VARIABLES_SET_WARNING_NUMBERS'];
-          warningNumber = '\n' + warningNumber.replace('%3', blockType.typeName);
-          warningText += warningNumber;
+        var previousType = this.varTypeDict[varId];
+        var nextType = blockType;
+        if (previousType == Blockly.Types.NUMBER && nextType == Blockly.Types.DECIMAL) {
+          var warningNumber = '\n' + Blockly.Msg['VARIABLES_SET_WARNING_NUMBERS'];
+          warningText = warningText + warningNumber;
         }
+        if (Blockly.Arduino.getArduinoType_) {
+          previousType = Blockly.Arduino.getArduinoType_(previousType);
+          nextType = Blockly.Arduino.getArduinoType_(nextType)
+        } else {
+          previousType = previousType.typeName;
+          nextType = nextType.typeName;
+        }
+        warningText = warningText.replace('%1', varName);
+        warningText = warningText.replace('%2', previousType);
+        warningText = warningText.replace('%3', nextType);
         block.setWarningText(warningText, warningLabel);
       }
   } else {

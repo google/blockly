@@ -4,8 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/* exported assertArrayEquals, assertVariableValues, defineRowBlock,
-   defineStackBlock, defineStatementBlock, createTestBlock */
+/* exported assertArrayEquals, assertVariableValues, captureWarnings
+   defineRowBlock, defineStackBlock, defineStatementBlock, createTestBlock */
 
 /**
  * Check that two arrays have the same content.
@@ -38,6 +38,25 @@ function assertVariableValues(container, name, type, id) {
   chai.assert.equal(variable.name, name);
   chai.assert.equal(variable.type, type);
   chai.assert.equal(variable.getId(), id);
+}
+
+/**
+ * Captures the strings sent to console.warn() when calling a function.
+ * @param {function} innerFunc The function where warnings may called.
+ * @return {string[]} The warning messages (only the first arguments).
+ */
+function captureWarnings(innerFunc) {
+  var msgs = [];
+  var nativeConsoleWarn = console.warn;
+  try {
+    console.warn = function(msg) {
+      msgs.push(msg);
+    };
+    innerFunc();
+  } finally {
+    console.warn = nativeConsoleWarn;
+  }
+  return msgs;
 }
 
 function defineStackBlock() {

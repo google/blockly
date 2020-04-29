@@ -135,7 +135,7 @@ function maybeAddClosureLibrary(srcs) {
  * @param {string} namespace The export namespace.
  * @param {Array.<Object>} dependencies An array of dependencies to inject.
  */
-function UMDOutputWrapper(namespace, dependencies) {
+function outputWrapperUMD(namespace, dependencies) {
   const amdDeps = dependencies.map(d => '\'' + d.amd + '\'' ).join(', ');
   const cjsDeps = dependencies.map(d => `require('${d.cjs}')`).join(', ');
   const browserDeps = dependencies.map(d => 'root.' + d.name).join(', ');
@@ -185,7 +185,7 @@ function buildCompressed() {
       define: defines,
       language_in:
         argv.closureLibrary ? 'ECMASCRIPT_2015' : 'ECMASCRIPT5_STRICT',
-      output_wrapper: UMDOutputWrapper('Blockly', [])
+      output_wrapper: outputWrapperUMD('Blockly', [])
     }, argv.verbose, argv.strict))
     .pipe(gulp.sourcemaps.mapSources(function (sourcePath, file) {
       return sourcePath.replace(/-/g, '/');
@@ -209,7 +209,7 @@ function buildBlocks() {
       dependency_mode: 'NONE',
       externs: ['./externs/goog-externs.js', './externs/block-externs.js'],
       js_output_file: 'blocks_compressed.js',
-      output_wrapper: UMDOutputWrapper('Blockly.Blocks', [{
+      output_wrapper: outputWrapperUMD('Blockly.Blocks', [{
         name: 'Blockly',
         amd: './blockly_compressed.js',
         cjs: './blockly_compressed.js'
@@ -234,7 +234,7 @@ function buildGenerator(language, namespace) {
       dependency_mode: 'NONE',
       externs: ['./externs/goog-externs.js', './externs/generator-externs.js'],
       js_output_file: `${language}_compressed.js`,
-      output_wrapper: UMDOutputWrapper(`Blockly.${namespace}`, [{
+      output_wrapper: outputWrapperUMD(`Blockly.${namespace}`, [{
         name: 'Blockly',
         amd: './blockly_compressed.js',
         cjs: './blockly_compressed.js'

@@ -2,6 +2,7 @@
 *_uncompressed*.js
 gulpfile.js
 /msg/*
+/dist/*
 /core/utils/global.js
 /tests/blocks/*
 /tests/themes/*

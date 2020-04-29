@@ -555,14 +555,6 @@ suite('Events', function() {
   });
 
   suite('Firing', function() {
-    function temporary_fireEvent(event) {
-      if (!Blockly.Events.isEnabled()) {
-        return;
-      }
-      Blockly.Events.FIRE_QUEUE_.push(event);
-      Blockly.Events.fireNow_();
-    }
-
     setup(function() {
       createEventsFireStub();
     });

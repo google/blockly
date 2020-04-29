@@ -563,6 +563,31 @@ suite('Events', function() {
       sinon.restore();
     });
 
+    test('Block dispose triggers BlockDelete', function() {
+      try {
+        var toolbox = document.getElementById('toolbox-categories');
+        var workspaceSvg = Blockly.inject('blocklyDiv', {toolbox: toolbox});
+        temporary_fireEvent.firedEvents_ = [];
+
+        var block = workspaceSvg.newBlock('');
+        block.initSvg();
+        block.setCommentText('test comment');
+
+        var event = new Blockly.Events.BlockDelete(block);
+
+        workspaceSvg.clearUndo();
+        block.dispose();
+
+        var firedEvents = workspaceSvg.undoStack_;
+        chai.assert.equal(
+            Blockly.Xml.domToText(firedEvents[0].oldXml),
+            Blockly.Xml.domToText(event.oldXml),
+            'Delete event created by dispose');
+      } finally {
+        workspaceSvg.dispose();
+      }
+    });
+
     test('New block new var', function() {
       // Expect three calls to genUid: one to set the block's ID, one for the event
       // group's id, and one for the variable's ID.

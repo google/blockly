@@ -64,7 +64,8 @@ function packageSources() {
 };
 
 /**
- * This task copies the compressed files into the distribution directory.
+ * This task copies the compressed files and their source maps into the
+ * distribution directory.
  */
 function packageCompressed() {
   return gulp.src('*_compressed.js?(.map)')
@@ -394,5 +395,4 @@ const package = gulp.parallel(
 
 module.exports = {
   package: package,
-  packageBlockly: packageBlockly
 };

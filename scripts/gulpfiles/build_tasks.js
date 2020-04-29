@@ -198,8 +198,7 @@ function buildCompressed() {
 };
 
 /**
- * This task builds th
- * e Blockly's built in blocks.
+ * This task builds the Blockly's built in blocks.
  *     blocks_compressed.js
  */
 function buildBlocks() {

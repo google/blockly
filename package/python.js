@@ -5,7 +5,7 @@
  */
 
 /**
- * @fileoverview JavaScript generator module.
+ * @fileoverview Python Generator module.
  */
 
 /* eslint-disable */

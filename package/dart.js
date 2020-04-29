@@ -5,7 +5,7 @@
  */
 
 /**
- * @fileoverview Dart generator module.
+ * @fileoverview Dart Generator module.
  */
 
 /* eslint-disable */

@@ -5,7 +5,7 @@
  */
 
 /**
- * @fileoverview PHP generator module.
+ * @fileoverview PHP Generator module.
  */
 
 /* eslint-disable */

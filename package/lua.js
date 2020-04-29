@@ -5,7 +5,7 @@
  */
 
 /**
- * @fileoverview Lua generator module.
+ * @fileoverview Lua Generator module.
  */
 
 /* eslint-disable */

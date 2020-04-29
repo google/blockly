@@ -20,6 +20,8 @@ var fs = require('fs');
 
 var packageJson = require('../../package.json');
 
+const blocklyRoot = '../../';
+
 // The destination path where all the NPM distribution files will go.
 const packageDistribution = 'dist';
 

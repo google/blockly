@@ -13,6 +13,7 @@
         "defineRowBlock": true,
         "defineStackBlock": true,
         "defineStatementBlock": true,
+        "createEventsFireStub": true,
         "testAWorkspace": true
     },
     "extends": "../../.eslintrc.json"

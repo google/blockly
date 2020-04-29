@@ -682,22 +682,8 @@ function testAWorkspace() {
   });
 
   suite('Undo/Redo', function() {
-    function temporary_fireEvent(event) {
-      if (!Blockly.Events.isEnabled()) {
-        return;
-      }
-      Blockly.Events.FIRE_QUEUE_.push(event);
-      Blockly.Events.fireNow_();
-    }
-
     setup(function() {
-      this.savedFireFunc_ = Blockly.Events.fire;
-      Blockly.Events.fire = temporary_fireEvent;
-      temporary_fireEvent.firedEvents_ = [];
-    });
-
-    teardown(function() {
-      Blockly.Events.fire = this.savedFireFunc_;
+      createEventsFireStub();
     });
 
     function createTwoVarsDifferentTypes(workspace) {

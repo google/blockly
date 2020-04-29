@@ -555,22 +555,11 @@ suite('Events', function() {
   });
 
   suite('Firing', function() {
-    function temporary_fireEvent(event) {
-      if (!Blockly.Events.isEnabled()) {
-        return;
-      }
-      Blockly.Events.FIRE_QUEUE_.push(event);
-      Blockly.Events.fireNow_();
-    }
-
     setup(function() {
-      this.savedFireFunc_ = Blockly.Events.fire;
-      Blockly.Events.fire = temporary_fireEvent;
-      temporary_fireEvent.firedEvents_ = [];
+      createEventsFireStub();
     });
 
     teardown(function() {
-      Blockly.Events.fire = this.savedFireFunc_;
       sinon.restore();
     });
 
@@ -578,7 +567,7 @@ suite('Events', function() {
       try {
         var toolbox = document.getElementById('toolbox-categories');
         var workspaceSvg = Blockly.inject('blocklyDiv', {toolbox: toolbox});
-        temporary_fireEvent.firedEvents_ = [];
+        Blockly.Events.fire.firedEvents_ = [];
 
         var block = workspaceSvg.newBlock('');
         block.initSvg();

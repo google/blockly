@@ -567,7 +567,7 @@ suite('Events', function() {
       try {
         var toolbox = document.getElementById('toolbox-categories');
         var workspaceSvg = Blockly.inject('blocklyDiv', {toolbox: toolbox});
-        temporary_fireEvent.firedEvents_ = [];
+        Blockly.Events.fire.firedEvents_ = [];
 
         var block = workspaceSvg.newBlock('');
         block.initSvg();

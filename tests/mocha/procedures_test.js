@@ -40,6 +40,49 @@ suite('Procedures', function() {
     this.workspace.dispose();
   });
 
+  suite('allProcedures', function() {
+    test('Only Procedures', function() {
+      var noReturnBlock = new Blockly.Block(this.workspace, 'procedures_defnoreturn');
+      noReturnBlock.setFieldValue('no return', 'NAME');
+      var returnBlock = new Blockly.Block(this.workspace, 'procedures_defreturn');
+      returnBlock.setFieldValue('return', 'NAME');
+
+      var allProcedures = Blockly.Procedures.allProcedures(this.workspace);
+      chai.assert.lengthOf(allProcedures, 2);
+      
+      chai.assert.lengthOf(allProcedures[0], 1);
+      chai.assert.equal(allProcedures[0][0][0], 'no return');
+
+      chai.assert.lengthOf(allProcedures[1], 1);
+      chai.assert.equal(allProcedures[1][0][0], 'return');
+    });
+    test('Multiple Blocks', function() {
+      var noReturnBlock = new Blockly.Block(this.workspace, 'procedures_defnoreturn');
+      noReturnBlock.setFieldValue('no return', 'NAME');
+      var returnBlock = new Blockly.Block(this.workspace, 'procedures_defreturn');
+      returnBlock.setFieldValue('return', 'NAME');
+      var returnBlock2 = new Blockly.Block(this.workspace, 'procedures_defreturn');
+      returnBlock2.setFieldValue('return2', 'NAME');
+      var _ = new Blockly.Block(this.workspace, 'controls_if');
+
+      var allProcedures = Blockly.Procedures.allProcedures(this.workspace);
+      chai.assert.lengthOf(allProcedures, 2);
+      
+      chai.assert.lengthOf(allProcedures[0], 1);
+      chai.assert.equal(allProcedures[0][0][0], 'no return');
+
+      chai.assert.lengthOf(allProcedures[1], 2);
+      chai.assert.equal(allProcedures[1][0][0], 'return');
+      chai.assert.equal(allProcedures[1][1][0], 'return2');
+    });
+    test('No Procedures', function() {
+      var _ = new Blockly.Block(this.workspace, 'controls_if');
+      var allProcedures = Blockly.Procedures.allProcedures(this.workspace);
+      chai.assert.lengthOf(allProcedures, 2);
+      chai.assert.lengthOf(allProcedures[0], 0);
+      chai.assert.lengthOf(allProcedures[1], 0);
+    });
+  });
   suite('isNameUsed', function() {
     test('No Blocks', function() {
       chai.assert.isFalse(

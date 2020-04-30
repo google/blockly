@@ -249,6 +249,10 @@ Blockly.onKeyDown = function(e) {
       // 'z' for undo 'Z' is for redo.
       Blockly.hideChaff();
       mainWorkspace.undo(e.shiftKey);
+    } else if (e.ctrlKey && e.keyCode == Blockly.utils.KeyCodes.Y) {
+      // Ctrl-y is redo in Windows.  Command-y is never valid on Macs.
+      Blockly.hideChaff();
+      mainWorkspace.undo(true);
     }
   }
   // Common code for delete and cut.

@@ -8,10 +8,13 @@
         "sinon": false,
         "assertArrayEquals": true,
         "assertVariableValues": true,
+        "captureWarnings": true,
         "createTestBlock": true,
         "defineRowBlock": true,
         "defineStackBlock": true,
-        "defineStatementBlock": true
+        "defineStatementBlock": true,
+        "createEventsFireStub": true,
+        "testAWorkspace": true
     },
     "extends": "../../.eslintrc.json"
 }

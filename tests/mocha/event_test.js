@@ -555,23 +555,37 @@ suite('Events', function() {
   });
 
   suite('Firing', function() {
-    function temporary_fireEvent(event) {
-      if (!Blockly.Events.isEnabled()) {
-        return;
-      }
-      Blockly.Events.FIRE_QUEUE_.push(event);
-      Blockly.Events.fireNow_();
-    }
-
     setup(function() {
-      this.savedFireFunc_ = Blockly.Events.fire;
-      Blockly.Events.fire = temporary_fireEvent;
-      temporary_fireEvent.firedEvents_ = [];
+      createEventsFireStub();
     });
 
     teardown(function() {
-      Blockly.Events.fire = this.savedFireFunc_;
       sinon.restore();
+    });
+
+    test('Block dispose triggers BlockDelete', function() {
+      try {
+        var toolbox = document.getElementById('toolbox-categories');
+        var workspaceSvg = Blockly.inject('blocklyDiv', {toolbox: toolbox});
+        Blockly.Events.fire.firedEvents_ = [];
+
+        var block = workspaceSvg.newBlock('');
+        block.initSvg();
+        block.setCommentText('test comment');
+
+        var event = new Blockly.Events.BlockDelete(block);
+
+        workspaceSvg.clearUndo();
+        block.dispose();
+
+        var firedEvents = workspaceSvg.undoStack_;
+        chai.assert.equal(
+            Blockly.Xml.domToText(firedEvents[0].oldXml),
+            Blockly.Xml.domToText(event.oldXml),
+            'Delete event created by dispose');
+      } finally {
+        workspaceSvg.dispose();
+      }
     });
 
     test('New block new var', function() {

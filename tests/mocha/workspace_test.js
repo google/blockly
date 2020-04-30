@@ -7,6 +7,18 @@
 suite('Workspace', function() {
   setup(function() {
     this.workspace = new Blockly.Workspace();
+  });
+
+  teardown(function() {
+    this.workspace.dispose();
+  });
+
+  // eslint-disable-next-line no-use-before-define
+  testAWorkspace();
+});
+
+function testAWorkspace() {
+  setup(function() {
     Blockly.defineBlocksWithJsonArray([{
       "type": "get_var_block",
       "message0": "%1",
@@ -22,7 +34,6 @@ suite('Workspace', function() {
 
   teardown(function() {
     delete Blockly.Blocks['get_var_block'];
-    this.workspace.dispose();
     // Clear Blockly.Event state.
     Blockly.Events.setGroup(false);
     Blockly.Events.disabled_ = 0;
@@ -671,22 +682,8 @@ suite('Workspace', function() {
   });
 
   suite('Undo/Redo', function() {
-    function temporary_fireEvent(event) {
-      if (!Blockly.Events.isEnabled()) {
-        return;
-      }
-      Blockly.Events.FIRE_QUEUE_.push(event);
-      Blockly.Events.fireNow_();
-    }
-
     setup(function() {
-      this.savedFireFunc_ = Blockly.Events.fire;
-      Blockly.Events.fire = temporary_fireEvent;
-      temporary_fireEvent.firedEvents_ = [];
-    });
-
-    teardown(function() {
-      Blockly.Events.fire = this.savedFireFunc_;
+      createEventsFireStub();
     });
 
     function createTwoVarsDifferentTypes(workspace) {
@@ -826,7 +823,12 @@ suite('Workspace', function() {
       test('Delete same variable twice no usages', function() {
         this.workspace.createVariable('name1', 'type1', 'id1');
         this.workspace.deleteVariableById('id1');
-        this.workspace.deleteVariableById('id1');
+        var workspace = this.workspace;
+        var warnings = captureWarnings(function() {
+          workspace.deleteVariableById('id1');
+        });
+        chai.assert.equal(warnings.length, 1,
+            'Expected 1 warning for second deleteVariableById call.');
 
         // Check the undoStack only recorded one delete event.
         var undoStack = this.workspace.undoStack_;
@@ -850,7 +852,12 @@ suite('Workspace', function() {
         this.workspace.createVariable('name1', 'type1', 'id1');
         createVarBlocksNoEvents(this.workspace, ['id1']);
         this.workspace.deleteVariableById('id1');
-        this.workspace.deleteVariableById('id1');
+        var workspace = this.workspace;
+        var warnings = captureWarnings(function() {
+          workspace.deleteVariableById('id1');
+        });
+        chai.assert.equal(warnings.length, 1,
+            'Expected 1 warning for second deleteVariableById call.');
 
         // Check the undoStack only recorded one delete event.
         var undoStack = this.workspace.undoStack_;
@@ -1052,4 +1059,4 @@ suite('Workspace', function() {
       });
     });
   });
-});
+}

@@ -52,9 +52,6 @@ run_test_command () {
 # Lint the codebase.
 run_test_command "eslint" "eslint ."
 
-# Run JSUnit tests inside a browser.
-run_test_command "jsunit" "node tests/jsunit/run_jsunit_tests_in_browser.js"
-
 # Run Mocha tests inside a browser.
 run_test_command "mocha" "node tests/mocha/run_mocha_tests_in_browser.js"
 

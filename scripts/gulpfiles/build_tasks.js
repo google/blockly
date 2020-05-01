@@ -35,13 +35,13 @@ const licenseRegex = `\\/\\*\\*
 )? \\* SPDX-License-Identifier: Apache-2.0
  \\*\\/`;
 
-/**	
- * Helper method for stripping the Google's and MIT's Apache Licenses.	
- */	
+/**
+ * Helper method for stripping the Google's and MIT's Apache Licenses.
+ */
 function stripApacheLicense() {
-  // Strip out Google's and MIT's Apache licences.	
-  // Closure Compiler preserves dozens of Apache licences in the Blockly code.	
-  // Remove these if they belong to Google or MIT.	
+  // Strip out Google's and MIT's Apache licences.
+  // Closure Compiler preserves dozens of Apache licences in the Blockly code.
+  // Remove these if they belong to Google or MIT.
   // MIT's permission to do this is logged in Blockly issue #2412.
   return gulp.replace(new RegExp(licenseRegex, "g"), '\n\n\n\n');
   // Replace with the same number of lines so that source-maps are not affected.

@@ -79,8 +79,8 @@ suite('Procedures', function() {
       var _ = new Blockly.Block(this.workspace, 'controls_if');
       var allProcedures = Blockly.Procedures.allProcedures(this.workspace);
       chai.assert.lengthOf(allProcedures, 2);
-      chai.assert.lengthOf(allProcedures[0], 0);
-      chai.assert.lengthOf(allProcedures[1], 0);
+      chai.assert.lengthOf(allProcedures[0], 0, 'No procedures_defnoreturn blocks expected');
+      chai.assert.lengthOf(allProcedures[1], 0, 'No procedures_defreturn blocks expected');
     });
   });
   suite('isNameUsed', function() {

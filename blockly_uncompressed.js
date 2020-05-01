@@ -73,6 +73,10 @@ goog.addDependency('../../core/icon.js', ['Blockly.Icon'], ['Blockly.utils', 'Bl
 goog.addDependency('../../core/inject.js', ['Blockly.inject'], ['Blockly.BlockDragSurfaceSvg', 'Blockly.Component', 'Blockly.Css', 'Blockly.DropDownDiv', 'Blockly.Events', 'Blockly.Grid', 'Blockly.Msg', 'Blockly.Options', 'Blockly.ScrollbarPair', 'Blockly.Tooltip', 'Blockly.WorkspaceDragSurfaceSvg', 'Blockly.WorkspaceSvg', 'Blockly.user.keyMap', 'Blockly.utils', 'Blockly.utils.dom', 'Blockly.utils.userAgent'], {});
 goog.addDependency('../../core/input.js', ['Blockly.Input'], ['Blockly.Connection', 'Blockly.FieldLabel'], {});
 goog.addDependency('../../core/insertion_marker_manager.js', ['Blockly.InsertionMarkerManager'], ['Blockly.Events', 'Blockly.blockAnimations'], {'lang': 'es5'});
+goog.addDependency('../../core/interfaces/i_copyable.js', ['Blockly.ICopyable'], ['Blockly.ISelectable'], {});
+goog.addDependency('../../core/interfaces/i_deletable.js', ['Blockly.IDeletable'], [], {});
+goog.addDependency('../../core/interfaces/i_movable.js', ['Blockly.IMovable'], [], {});
+goog.addDependency('../../core/interfaces/i_selectable.js', ['Blockly.ISelectable'], ['Blockly.IDeletable', 'Blockly.IMovable'], {});
 goog.addDependency('../../core/keyboard_nav/action.js', ['Blockly.Action'], [], {});
 goog.addDependency('../../core/keyboard_nav/ast_node.js', ['Blockly.ASTNode'], ['Blockly.utils.Coordinate'], {'lang': 'es5'});
 goog.addDependency('../../core/keyboard_nav/basic_cursor.js', ['Blockly.BasicCursor'], ['Blockly.ASTNode', 'Blockly.Cursor'], {'lang': 'es5'});

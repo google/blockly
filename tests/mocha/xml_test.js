@@ -143,28 +143,6 @@ suite('XML', function() {
         var resultFieldDom = Blockly.Xml.blockToDom(block).childNodes[0];
         assertNonVariableField(resultFieldDom, 'COLOUR', '#000099');
       });
-      /* If you want to run date tests add the date picker here:
-       * https://github.com/google/blockly/blob/master/core/blockly.js#L41
-       * before unskipping.
-       */
-      test.skip('Date', function() {
-        Blockly.defineBlocksWithJsonArray([{
-          "type": "field_date_test_block",
-          "message0": "%1",
-          "args0": [
-            {
-              "type": "field_date",
-              "name": "DATE",
-              "date": "2020-02-20"
-            }
-          ],
-        }]);
-        this.blockTypes_.push('field_date_test_block');
-        var block = new Blockly.Block(this.workspace,
-            'field_date_test_block');
-        var resultFieldDom = Blockly.Xml.blockToDom(block).childNodes[0];
-        assertNonVariableField(resultFieldDom, 'DATE', '2020-02-20');
-      });
       test('Dropdown', function() {
         Blockly.defineBlocksWithJsonArray([{
           "type": "field_dropdown_test_block",

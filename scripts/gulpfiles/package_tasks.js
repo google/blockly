@@ -322,7 +322,6 @@ function packageUMDBundle() {
   ];
   return gulp.src(srcs)
     .pipe(gulp.concat('blockly.min.js'))
-    .pipe(packageUMD('Blockly', []))
     .pipe(gulp.dest(`${packageDistribution}`))
 };
 

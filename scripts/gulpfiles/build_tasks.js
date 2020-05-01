@@ -11,7 +11,6 @@
 var gulp = require('gulp');
 gulp.replace = require('gulp-replace');
 gulp.rename = require('gulp-rename');
-gulp.insert = require('gulp-insert');
 gulp.sourcemaps = require('gulp-sourcemaps');
 
 var path = require('path');
@@ -29,6 +28,23 @@ var argv = require('yargs').argv;
 //                        Build                           //
 ////////////////////////////////////////////////////////////
 
+const licenseRegex = `\\/\\*\\*
+ \\* @license
+ \\* (Copyright \\d+ (Google LLC|Massachusetts Institute of Technology))
+( \\* All rights reserved.
+)? \\* SPDX-License-Identifier: Apache-2.0
+ \\*\\/`;
+
+/**	
+ * Helper method for stripping the Google's and MIT's Apache Licenses.	
+ */	
+function stripApacheLicense() {
+  // Strip out Google's and MIT's Apache licences.	
+  // Closure Compiler preserves dozens of Apache licences in the Blockly code.	
+  // Remove these if they belong to Google or MIT.	
+  // MIT's permission to do this is logged in Blockly issue #2412.
+  return gulp.replace(new RegExp(licenseRegex, "g"), '\n\n\n\n');
+}
 
 /**
  * Closure compiler warning groups used to treat warnings as errors.
@@ -165,6 +181,7 @@ return ${namespace};
 function buildCompressed() {
   const defines = 'Blockly.VERSION="' + packageJson.version + '"';
   return gulp.src(maybeAddClosureLibrary(['core/**/**/*.js']), {base: './'})
+    .pipe(stripApacheLicense())
     .pipe(gulp.sourcemaps.init())
     // Directories in Blockly are used to group similar files together
     // but are not used to limit access with @package, instead the
@@ -203,6 +220,7 @@ function buildCompressed() {
  */
 function buildBlocks() {
   return gulp.src(['blocks/*.js'], {base: './'})
+    .pipe(stripApacheLicense())
     .pipe(gulp.sourcemaps.init())
     .pipe(compile({
       dependency_mode: 'NONE',
@@ -228,6 +246,7 @@ function buildBlocks() {
  */
 function buildGenerator(language, namespace) {
   return gulp.src([`generators/${language}.js`, `generators/${language}/*.js`], {base: './'})
+    .pipe(stripApacheLicense())
     .pipe(gulp.sourcemaps.init())
     .pipe(compile({
       dependency_mode: 'NONE',

@@ -24,7 +24,4 @@ goog.provide('Blockly.FieldVariable');
 goog.provide('Blockly.Mutator');
 goog.provide('Blockly.Warning');
 
-/**
- * @type {!Object}
- */
-var Blockly = {};
+var Blockly;

@@ -44,6 +44,7 @@ function stripApacheLicense() {
   // Remove these if they belong to Google or MIT.	
   // MIT's permission to do this is logged in Blockly issue #2412.
   return gulp.replace(new RegExp(licenseRegex, "g"), '\n\n\n\n');
+  // Replace with the same number of lines so that source-maps are not affected.
 }
 
 /**

@@ -45,7 +45,10 @@ Blockly.Xml.workspaceToDom = function(workspace, opt_noId) {
   }
   var blocks = workspace.getTopBlocks(true);
   for (var i = 0, block; (block = blocks[i]); i++) {
-    xml.appendChild(Blockly.Xml.blockToDomWithXY(block, opt_noId));
+    var dom = Blockly.Xml.blockToDomWithXY(block, opt_noId);
+    if (dom) {
+      xml.appendChild(dom);
+    }
   }
   return xml;
 };
@@ -82,6 +85,9 @@ Blockly.Xml.blockToDomWithXY = function(block, opt_noId) {
     width = block.workspace.getWidth();
   }
   var element = Blockly.Xml.blockToDom(block, opt_noId);
+  if (!element) {
+    return null;
+  }
   var xy = block.getRelativeToSurfaceXY();
   element.setAttribute('x',
       Math.round(block.workspace.RTL ? width - xy.x : xy.x));
@@ -128,9 +134,20 @@ Blockly.Xml.allFieldsToDom_ = function(block, element) {
  * Encode a block subtree as XML.
  * @param {!Blockly.Block} block The root block to encode.
  * @param {boolean=} opt_noId True if the encoder should skip the block ID.
- * @return {!Element} Tree of XML elements.
+ * @return {Element} Tree of XML elements.
  */
 Blockly.Xml.blockToDom = function(block, opt_noId) {
+  // Skip over insertion markers.
+  if (block.isInsertionMarker()) {
+    var child = block.getChildren(false)[0];
+    if (child) {
+      return Blockly.Xml.blockToDom(child);
+    } else {
+      return null;
+    }
+  }
+
+
   var element =
       Blockly.utils.xml.createElement(block.isShadow() ? 'shadow' : 'block');
   element.setAttribute('type', block.type);
@@ -186,8 +203,11 @@ Blockly.Xml.blockToDom = function(block, opt_noId) {
         container.appendChild(Blockly.Xml.cloneShadow_(shadow, opt_noId));
       }
       if (childBlock) {
-        container.appendChild(Blockly.Xml.blockToDom(childBlock, opt_noId));
-        empty = false;
+        var dom = Blockly.Xml.blockToDom(childBlock, opt_noId);
+        if (dom) {
+          container.appendChild(dom);
+          empty = false;
+        }
       }
     }
     container.setAttribute('name', input.name);
@@ -218,8 +238,11 @@ Blockly.Xml.blockToDom = function(block, opt_noId) {
   var nextBlock = block.getNextBlock();
   if (nextBlock) {
     var container = Blockly.utils.xml.createElement('next');
-    container.appendChild(Blockly.Xml.blockToDom(nextBlock, opt_noId));
-    element.appendChild(container);
+    var dom = Blockly.Xml.blockToDom(nextBlock, opt_noId);
+    if (dom) {
+      container.appendChild(dom);
+      element.appendChild(container);
+    }
   }
   var shadow = block.nextConnection && block.nextConnection.getShadowDom();
   if (shadow && (!nextBlock || !nextBlock.isShadow())) {

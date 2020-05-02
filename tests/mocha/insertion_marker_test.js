@@ -200,4 +200,189 @@ suite('InsertionMarkers', function() {
       this.assertGen(xml, 'stack[a];\n');
     });
   });
+  suite('Serialization', function() {
+    setup(function() {
+      this.assertGen = function(xml, expectXml) {
+        Blockly.Xml.domToWorkspace(xml, this.workspace);
+        var block = this.workspace.getBlockById('insertion');
+        block.isInsertionMarker_ = true;
+        var xml = Blockly.Xml.workspaceToDom(this.workspace);
+        xml = Blockly.Xml.domToText(xml);
+        chai.assert.equal(xml, expectXml);
+      };
+    });
+    teardown(function() {
+      delete this.assertGen;
+    });
+    test('Marker Surrounds', function() {
+      var xml = Blockly.Xml.textToDom(
+          '<xml xmlns="https://developers.google.com/blockly/xml">' +
+          '  <block type="statement_block" id="insertion" x="10" y="10">' +
+          '    <statement name="STATEMENT">' +
+          '      <block type="statement_block" id="a"/>' +
+          '    </statement>' +
+          '  </block>' +
+          '</xml>');
+      // The block wouldn't technically be at 10, it would be slightly lower
+      // and end-er but I think that's a fair compromise when we're comparing
+      // it against extra blocks.
+      this.assertGen(xml,
+          '<xml xmlns="https://developers.google.com/blockly/xml">' +
+          '<block type="statement_block" id="a" x="10" y="10"></block>' +
+          '</xml>');
+    });
+    test('Marker Enclosed', function() {
+      var xml = Blockly.Xml.textToDom(
+          '<xml xmlns="https://developers.google.com/blockly/xml">' +
+          '  <block type="statement_block" id="a" x="10" y="10">' +
+          '    <statement name="STATEMENT">' +
+          '      <block type="statement_block" id="insertion"/>' +
+          '    </statement>' +
+          '  </block>' +
+          '</xml>');
+      this.assertGen(xml,
+          '<xml xmlns="https://developers.google.com/blockly/xml">' +
+          '<block type="statement_block" id="a" x="10" y="10"></block>' +
+          '</xml>');
+    });
+    test('Marker Enclosed and Surrounds', function() {
+      var xml = Blockly.Xml.textToDom(
+          '<xml xmlns="https://developers.google.com/blockly/xml">' +
+          '  <block type="statement_block" id="a" x="10" y="10">' +
+          '    <statement name="STATEMENT">' +
+          '      <block type="statement_block" id="insertion">' +
+          '        <statement name="STATEMENT">' +
+          '          <block type="statement_block" id="b"/>' +
+          '        </statement>' +
+          '      </block>' +
+          '    </statement>' +
+          '  </block>' +
+          '</xml>');
+      this.assertGen(xml,
+          '<xml xmlns="https://developers.google.com/blockly/xml">' +
+          '<block type="statement_block" id="a" x="10" y="10">' +
+          '<statement name="STATEMENT">' +
+          '<block type="statement_block" id="b"></block>' +
+          '</statement>' +
+          '</block>' +
+          '</xml>');
+    });
+    test('Marker Prev', function() {
+      var xml = Blockly.Xml.textToDom(
+          '<xml xmlns="https://developers.google.com/blockly/xml">' +
+          '  <block type="stack_block" id="insertion" x="10" y="10">' +
+          '    <next>' +
+          '      <block type="stack_block" id="a"/>' +
+          '    </next>' +
+          '  </block>' +
+          '</xml>');
+      // The block wouldn't technically be at 10, it would be slightly lower
+      // but I think that's a fair compromise when we're comparing
+      // it against extra blocks.
+      this.assertGen(xml,
+          '<xml xmlns="https://developers.google.com/blockly/xml">' +
+          '<block type="stack_block" id="a" x="10" y="10"></block>' +
+          '</xml>');
+    });
+    test('Marker Next', function() {
+      var xml = Blockly.Xml.textToDom(
+          '<xml xmlns="https://developers.google.com/blockly/xml">' +
+          '  <block type="stack_block" id="a" x="10" y="10">' +
+          '    <next>' +
+          '      <block type="stack_block" id="insertion"/>' +
+          '    </next>' +
+          '  </block>' +
+          '</xml>');
+      this.assertGen(xml,
+          '<xml xmlns="https://developers.google.com/blockly/xml">' +
+          '<block type="stack_block" id="a" x="10" y="10"></block>' +
+          '</xml>');
+    });
+    test('Marker Middle of Stack', function() {
+      var xml = Blockly.Xml.textToDom(
+          '<xml xmlns="https://developers.google.com/blockly/xml">' +
+          '  <block type="stack_block" id="a" x="10" y="10">' +
+          '    <next>' +
+          '      <block type="stack_block" id="insertion">' +
+          '        <next>' +
+          '          <block type="stack_block" id="b"/>' +
+          '        </next>' +
+          '      </block>' +
+          '    </next>' +
+          '  </block>' +
+          '</xml>');
+      this.assertGen(xml,
+          '<xml xmlns="https://developers.google.com/blockly/xml">' +
+          '<block type="stack_block" id="a" x="10" y="10">' +
+          '<next>' +
+          '<block type="stack_block" id="b"></block>' +
+          '</next>' +
+          '</block>' +
+          '</xml>');
+    });
+    test('Marker On Output', function() {
+      var xml = Blockly.Xml.textToDom(
+          '<xml xmlns="https://developers.google.com/blockly/xml">' +
+          '  <block type="row_block" id="insertion" x="10" y="10">' +
+          '    <value name="INPUT">' +
+          '      <block type="row_block" id="a"/>' +
+          '    </value>' +
+          '  </block>' +
+          '</xml>');
+      // The block wouldn't technically be at 10, it would be slightly end-er
+      // but I think that's a fair compromise when we're comparing
+      // it against extra blocks.
+      this.assertGen(xml,
+          '<xml xmlns="https://developers.google.com/blockly/xml">' +
+          '<block type="row_block" id="a" x="10" y="10"></block>' +
+          '</xml>');
+    });
+    test('Marker On Input', function() {
+      var xml = Blockly.Xml.textToDom(
+          '<xml xmlns="https://developers.google.com/blockly/xml">' +
+          '  <block type="row_block" id="a">' +
+          '    <value name="INPUT">' +
+          '      <block type="row_block" id="insertion"/>' +
+          '    </value>' +
+          '  </block>' +
+          '</xml>');
+      this.assertGen(xml,
+          '<xml xmlns="https://developers.google.com/blockly/xml">' +
+          '<block type="row_block" id="a" x="10" y="10"></block>' +
+          '</xml>');
+    });
+    test('Marker Middle of Row', function() {
+      var xml = Blockly.Xml.textToDom(
+          '<xml xmlns="https://developers.google.com/blockly/xml">' +
+          '  <block type="row_block" id="a">' +
+          '    <value name="INPUT">' +
+          '      <block type="row_block" id="insertion">' +
+          '        <value name="INPUT">' +
+          '          <block type="row_block" id="b"/>' +
+          '        </value>' +
+          '      </block>' +
+          '    </value>' +
+          '  </block>' +
+          '</xml>');
+      this.assertGen(xml,
+          '<xml xmlns="https://developers.google.com/blockly/xml">' +
+          '<block type="row_block" id="a" x="10" y="10">' +
+          '<value name="INPUT">' +
+          '<block type="row_block" id="b"></block>' +
+          '</value>' +
+          '</block>' +
+          '</xml>');
+    });
+    test('Marker Detatched', function() {
+      var xml = Blockly.Xml.textToDom(
+          '<xml xmlns="https://developers.google.com/blockly/xml">' +
+          '  <block type="stack_block" id="insertion"/>' +
+          '  <block type="stack_block" id="a" x="10" y="10"/>' +
+          '</xml>');
+      this.assertGen(xml,
+          '<xml xmlns="https://developers.google.com/blockly/xml">' +
+          '<block type="stack_block" id="a" x="10" y="10"></block>' +
+          '</xml>');
+    });
+  });
 });

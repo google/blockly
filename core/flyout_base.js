@@ -426,10 +426,10 @@ Blockly.Flyout.prototype.hide = function() {
 
 /**
  * Show and populate the flyout.
- * @param {!Array|!NodeList|string} xmlList List of blocks to show.
+ * @param {!Array|!NodeList|string} contentDef List of contents for the flyout.
  *     Variables and procedures have a custom set of blocks.
  */
-Blockly.Flyout.prototype.show = function(xmlList) {
+Blockly.Flyout.prototype.show = function(contentDef) {
   this.workspace_.setResizesEnabled(false);
   this.hide();
   this.clearOldBlocks_();
@@ -437,15 +437,15 @@ Blockly.Flyout.prototype.show = function(xmlList) {
   // Handle dynamic categories, represented by a name instead of a list of XML.
   // Look up the correct category generation function and call that to get a
   // valid XML list.
-  if (typeof xmlList == 'string') {
+  if (typeof contentDef == 'string') {
     var fnToApply = this.workspace_.targetWorkspace.getToolboxCategoryCallback(
-        xmlList);
+        contentDef);
     if (typeof fnToApply != 'function') {
       throw TypeError('Couldn\'t find a callback function when opening' +
           ' a toolbox category.');
     }
-    xmlList = fnToApply(this.workspace_.targetWorkspace);
-    if (!Array.isArray(xmlList)) {
+    contentDef = fnToApply(this.workspace_.targetWorkspace);
+    if (!Array.isArray(contentDef)) {
       throw TypeError('Result of toolbox category callback must be an array.');
     }
   }
@@ -456,47 +456,22 @@ Blockly.Flyout.prototype.show = function(xmlList) {
   var gaps = [];
   this.permanentlyDisabled_.length = 0;
   var default_gap = this.horizontalLayout_ ? this.GAP_X : this.GAP_Y;
-  for (var i = 0, xml; (xml = xmlList[i]); i++) {
-    if (!xml.tagName) {
+  for (var i = 0, child; (child = contentDef[i]); i++) {
+    if (!child.tagName) {
       continue;
     }
-    switch (xml.tagName.toUpperCase()) {
+    switch (child.tagName.toUpperCase()) {
       case 'BLOCK':
-        var curBlock = Blockly.Xml.domToBlock(xml, this.workspace_);
-        if (!curBlock.isEnabled()) {
-          // Record blocks that were initially disabled.
-          // Do not enable these blocks as a result of capacity filtering.
-          this.permanentlyDisabled_.push(curBlock);
-        }
-        contents.push({type: 'block', block: curBlock});
-        // This is a deprecated method for adding gap to a block.
-        // <block type="math_arithmetic" gap="8"></block>
-        var gap = parseInt(xml.getAttribute('gap'), 10);
-        gaps.push(isNaN(gap) ? default_gap : gap);
+        this.addBlock_(child, contents, gaps, default_gap);
         break;
       case 'SEP':
-        // Change the gap between two toolbox elements.
-        // <sep gap="36"></sep>
-        // The default gap is 24, can be set larger or smaller.
-        // This overwrites the gap attribute on the previous element.
-        var newGap = parseInt(xml.getAttribute('gap'), 10);
-        // Ignore gaps before the first block.
-        if (!isNaN(newGap) && gaps.length > 0) {
-          gaps[gaps.length - 1] = newGap;
-        } else {
-          gaps.push(default_gap);
-        }
+        this.addSeparator_(child, gaps, default_gap);
         break;
       case 'LABEL':
+        this.addButton_(child, contents, gaps, default_gap, true);
+        break;
       case 'BUTTON':
-        var isLabel = xml.tagName.toUpperCase() == 'LABEL';
-        if (!Blockly.FlyoutButton) {
-          throw Error('Missing require for Blockly.FlyoutButton');
-        }
-        var curButton = new Blockly.FlyoutButton(this.workspace_,
-            this.targetWorkspace_, xml, isLabel);
-        contents.push({type: 'button', button: curButton});
-        gaps.push(default_gap);
+        this.addButton_(child, contents, gaps, default_gap, false);
         break;
     }
   }
@@ -530,6 +505,50 @@ Blockly.Flyout.prototype.show = function(xmlList) {
 
   this.reflowWrapper_ = this.reflow.bind(this);
   this.workspace_.addChangeListener(this.reflowWrapper_);
+};
+
+Blockly.Flyout.prototype.addButton_ = function(child, contents, gaps, default_gap, isLabel) {
+  if (!Blockly.FlyoutButton) {
+    throw Error('Missing require for Blockly.FlyoutButton');
+  }
+  var curButton = new Blockly.FlyoutButton(this.workspace_,
+      this.targetWorkspace_, child, isLabel);
+  contents.push({type: 'button', button: curButton});
+  gaps.push(default_gap);
+};
+
+Blockly.Flyout.prototype.addBlock_ = function(child, contents, gaps, default_gap) {
+  var blockXml = null;
+  if (!(child instanceof Node)) {
+    blockXml = Blockly.utils.xml.textToDomDocument(child['xmlDef']).childNodes[0];
+  } else {
+    blockXml = child;
+  }
+  var curBlock = Blockly.Xml.domToBlock(blockXml, this.workspace_);
+  if (!curBlock.isEnabled()) {
+    // Record blocks that were initially disabled.
+    // Do not enable these blocks as a result of capacity filtering.
+    this.permanentlyDisabled_.push(curBlock);
+  }
+  contents.push({type: 'block', block: curBlock});
+  // This is a deprecated method for adding gap to a block.
+  // <block type="math_arithmetic" gap="8"></block>
+  var gap = parseInt(blockXml.getAttribute('gap'), 10);
+  gaps.push(isNaN(gap) ? default_gap : gap);
+};
+
+Blockly.Flyout.prototype.addSeparator_ = function(child, gaps, default_gap) {
+  // Change the gap between two toolbox elements.
+  // <sep gap="36"></sep>
+  // The default gap is 24, can be set larger or smaller.
+  // This overwrites the gap attribute on the previous element.
+  var newGap = parseInt(Blockly.Toolbox.getAttribute(child, 'gap'), 10);
+  // Ignore gaps before the first block.
+  if (!isNaN(newGap) && gaps.length > 0) {
+    gaps[gaps.length - 1] = newGap;
+  } else {
+    gaps.push(default_gap);
+  }
 };
 
 /**

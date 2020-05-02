@@ -46,7 +46,7 @@ Blockly.FlyoutButton = function(workspace, targetWorkspace, xml, isLabel) {
    * @type {string}
    * @private
    */
-  this.text_ = xml.getAttribute('text');
+  this.text_ = Blockly.Toolbox.getAttribute_(xml, 'text');
 
   /**
    * @type {!Blockly.utils.Coordinate}
@@ -66,16 +66,16 @@ Blockly.FlyoutButton = function(workspace, targetWorkspace, xml, isLabel) {
    * @type {string}
    * @private
    */
-  this.callbackKey_ = xml.getAttribute('callbackKey') ||
+  this.callbackKey_ = Blockly.Toolbox.getAttribute_(xml, 'callbackKey') ||
   /* Check the lower case version too to satisfy IE */
-                      xml.getAttribute('callbackkey');
+                      Blockly.Toolbox.getAttribute_(xml, 'callbackkey');
 
   /**
    * If specified, a CSS class to add to this button.
    * @type {?string}
    * @private
    */
-  this.cssClass_ = xml.getAttribute('web-class') || null;
+  this.cssClass_ = Blockly.Toolbox.getAttribute_(xml, 'web-class') || null;
 
   /**
    * Mouse up event data.
@@ -166,7 +166,7 @@ Blockly.FlyoutButton.prototype.createDom = function() {
   var fontMetrics = Blockly.utils.dom.measureFontMetrics(text, fontSize,
       fontWeight, fontFamily);
   this.height = fontMetrics.height;
-  
+
   if (!this.isLabel_) {
     this.width += 2 * Blockly.FlyoutButton.MARGIN_X;
     this.height += 2 * Blockly.FlyoutButton.MARGIN_Y;

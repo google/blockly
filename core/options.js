@@ -39,8 +39,7 @@ Blockly.Options = function(options) {
   } else {
     var languageTree =
         Blockly.Options.parseToolboxTree(options['toolbox'] || null);
-    var hasCategories = Boolean(languageTree &&
-        languageTree.getElementsByTagName('category').length);
+    var hasCategories = Blockly.Options.hasCategories(languageTree);
     var hasTrashcan = options['trashcan'];
     if (hasTrashcan === undefined) {
       hasTrashcan = hasCategories;
@@ -317,6 +316,9 @@ Blockly.Options.parseThemeOptions_ = function(options) {
  */
 Blockly.Options.parseToolboxTree = function(tree) {
   if (tree) {
+    if (Array.isArray(tree)) {
+      return tree;
+    }
     if (typeof tree != 'string') {
       if (Blockly.utils.userAgent.IE && tree.outerHTML) {
         // In this case the tree will not have been properly built by the
@@ -339,3 +341,23 @@ Blockly.Options.parseToolboxTree = function(tree) {
   }
   return tree;
 };
+
+/**
+ * Handle the before tree item selected action.
+ * @param {Node|Array<Object>} tree The newly selected node.
+ * @return {boolean} True if the toolbox input has categories.
+ */
+Blockly.Options.hasCategories = function(tree) {
+  if (Array.isArray(tree)) {
+    // Search for categories
+    for (var i = 0; i < tree.length; i++) {
+      if (tree[i].tagName.toUpperCase() === 'CATEGORY') {
+        return true;
+      }
+    }
+  } else {
+    return Boolean(tree &&
+        tree.getElementsByTagName('category').length);
+  }
+};
+

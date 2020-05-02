@@ -180,7 +180,7 @@ Blockly.Toolbox.prototype.init = function() {
         'rendererOverrides': workspace.options.rendererOverrides
       }));
   workspaceOptions.toolboxPosition = workspace.options.toolboxPosition;
-  
+
   if (workspace.horizontalLayout) {
     if (!Blockly.HorizontalFlyout) {
       throw Error('Missing require for Blockly.HorizontalFlyout');
@@ -196,7 +196,7 @@ Blockly.Toolbox.prototype.init = function() {
     throw Error('One of Blockly.VerticalFlyout or Blockly.Horizontal must be' +
         'required.');
   }
-  
+
   // Insert the flyout after the workspace.
   Blockly.utils.dom.insertAfter(this.flyout_.createDom('svg'), svg);
   this.flyout_.init(workspace);
@@ -226,8 +226,7 @@ Blockly.Toolbox.prototype.renderTree = function(languageTree) {
   if (languageTree) {
     this.tree_.contents = [];
     this.hasColours_ = false;
-    openNode = this.syncTrees_(
-        languageTree, this.tree_, this.workspace_.options.pathToMedia);
+    openNode = this.createTree_(languageTree, this.tree_);
 
     if (this.tree_.contents.length) {
       throw Error('Toolbox cannot have both blocks and categories ' +
@@ -249,6 +248,154 @@ Blockly.Toolbox.prototype.renderTree = function(languageTree) {
     Blockly.utils.aria.setState(
         /** @type {!Element} */ (this.tree_.getElement()),
         Blockly.utils.aria.State.ORIENTATION, 'horizontal');
+  }
+};
+
+/**
+ * Sync trees of the toolbox.
+ * @param {!Node} treeIn DOM tree of blocks.
+ * @param {!Blockly.tree.BaseNode} treeOut The TreeControl or TreeNode
+ *     object built from treeIn.
+ * @param {string} pathToMedia The path to the Blockly media directory.
+ * @return {Blockly.tree.BaseNode} Tree node to open at startup (or null).
+ * @private
+ */
+Blockly.Toolbox.prototype.createTree_ = function(treeIn, treeOut) {
+  var openNode = null;
+  var lastElement = null;
+  var childNodes = treeIn;
+  var isXml = false;
+  if (!Array.isArray(childNodes)) {
+    childNodes = treeIn.childNodes;
+    isXml = true;
+  }
+
+  for (var i = 0, childIn; (childIn = childNodes[i]); i++) {
+    if (!childIn.tagName) {
+      // Skip over text.
+      continue;
+    }
+    switch (childIn.tagName.toUpperCase()) {
+      case 'CATEGORY':
+        openNode = this.addCategory_(childIn, treeOut, isXml) || openNode;
+        lastElement = childIn;
+        break;
+      case 'SEP':
+        lastElement = this.addSeparator_(childIn, treeOut, lastElement, isXml) || lastElement;
+        break;
+      case 'BLOCK':
+        lastElement = this.addBlock_(childIn, treeOut, isXml) || lastElement;
+        break;
+      case 'SHADOW':
+      case 'LABEL':
+      case 'BUTTON':
+        treeOut.contents.push(childIn, treeOut);
+        lastElement = childIn;
+        break;
+    }
+  }
+  return openNode;
+};
+
+Blockly.Toolbox.prototype.addCategory_ = function(childIn, treeOut, isXml) {
+  var openNode = null;
+  // Decode the category name for any potential message references
+  // (eg. `%{BKY_CATEGORY_NAME_LOGIC}`).
+  var categoryName = Blockly.utils.replaceMessageReferences(
+      this.getAttribute_(childIn, 'name', isXml));
+  var childOut = this.addCategoryChild_(categoryName, treeOut);
+  var custom = this.getAttribute_(childIn, 'custom', isXml);
+
+  if (custom) {
+    // Variables and procedures are special dynamic categories.
+    childOut.contents = custom;
+  } else {
+    openNode = this.createTree_(childIn.contents || childIn, childOut) || openNode;
+  }
+  this.addColourOrStyle_(childIn, childOut, categoryName, isXml);
+  openNode = this.setExpanded_(childIn, childOut, isXml) || openNode;
+  return openNode;
+};
+
+Blockly.Toolbox.prototype.addCategoryChild_ = function(categoryName, treeOut) {
+  var childOut = this.tree_.createNode(categoryName);
+  childOut.onSizeChanged(this.handleNodeSizeChanged_);
+  childOut.contents = [];
+  treeOut.add(childOut);
+  return childOut;
+};
+
+Blockly.Toolbox.prototype.addSeparator_ = function(childIn, treeOut, lastElement) {
+  if (lastElement && lastElement.tagName.toUpperCase() == 'CATEGORY') {
+    // Separator between two categories.
+    // <sep></sep>
+    treeOut.add(new Blockly.Toolbox.TreeSeparator(
+        /** @type {!Blockly.tree.BaseNode.Config} */
+        (this.treeSeparatorConfig_)));
+  } else {
+    // Otherwise falls through.
+    treeOut.contents.push(childIn);
+    return childIn;
+  }
+};
+
+Blockly.Toolbox.prototype.addColourOrStyle_ = function(childIn, childOut, categoryName, isXml) {
+  var styleName = this.getAttribute_(childIn, 'categorystyle', isXml);
+  var colour = this.getAttribute_(childIn, 'colour', isXml);
+
+  if (colour && styleName) {
+    childOut.hexColour = '';
+    console.warn('Toolbox category "' + categoryName +
+        '" can not have both a style and a colour');
+  } else if (styleName) {
+    this.setColourFromStyle_(styleName, childOut, categoryName);
+  } else {
+    this.setColour_(colour, childOut, categoryName);
+  }
+};
+
+Blockly.Toolbox.prototype.setExpanded_ = function(childIn, childOut, isXml) {
+  var openNode = null;
+  if (this.getAttribute_(childIn, 'expanded', isXml) == 'true') {
+    if (childOut.contents.length) {
+      // This is a category that directly contains blocks.
+      // After the tree is rendered, open this category and show flyout.
+      openNode = childOut;
+    }
+    childOut.setExpanded(true);
+  } else {
+    childOut.setExpanded(false);
+  }
+  return openNode;
+};
+
+Blockly.Toolbox.prototype.addBlock_ = function(childIn, treeOut) {
+  treeOut.contents.push(childIn);
+  // if (childIn['xmlDef']) {
+  //   // TODO: This seems sketchy.
+  //   var childXml = Blockly.utils.xml.textToDomDocument(childIn['xmlDef']).childNodes[0];
+  //   treeOut.contents.push(childXml);
+  //   return childXml;
+  // } else {
+  //   treeOut.contents.push(childIn, treeOut);
+  //   return childIn;
+  // }
+};
+
+Blockly.Toolbox.prototype.getAttribute_ = function(el, name, isXml) {
+  if (isXml) {
+    return el.getAttribute(name);
+  } else {
+    return el[name];
+  }
+};
+
+
+Blockly.Toolbox.getAttribute_ = function(el, name) {
+  if (el instanceof Node) {
+    return el.getAttribute(name);
+  } else {
+    return el[name];
   }
 };
 

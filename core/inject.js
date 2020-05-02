@@ -364,7 +364,7 @@ Blockly.init_ = function(mainWorkspace) {
     } else if (flyout) {
       // Build a fixed flyout with the root blocks.
       flyout.init(mainWorkspace);
-      flyout.show(options.languageTree.childNodes);
+      flyout.show(options.languageTree.childNodes || options.languageTree);
       flyout.scrollToStart();
     }
   }

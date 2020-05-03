@@ -64,7 +64,7 @@ Blockly.MenuItem.prototype.createDom = function() {
   this.setElementInternal(element);
 
   // Set class and style
-  element.className = 'goog-menuitem goog-option ' +
+  element.className = 'goog-menuitem ' +
       (!this.enabled_ ? 'goog-menuitem-disabled ' : '') +
       (this.checked_ ? 'goog-option-selected ' : '') +
       (this.rightToLeft_ ? 'goog-menuitem-rtl ' : '');

@@ -92,7 +92,7 @@ Blockly.Menu.prototype.createDom = function() {
   this.setElementInternal(element);
 
   // Set class
-  element.className = 'goog-menu goog-menu-vertical blocklyNonSelectable';
+  element.className = 'goog-menu blocklyNonSelectable';
   element.tabIndex = 0;
 
   // Initialize ARIA role.

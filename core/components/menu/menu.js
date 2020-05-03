@@ -260,22 +260,10 @@ Blockly.Menu.prototype.getMenuItem = function(node) {
 // Highlight management.
 
 /**
- * Unhighlight the current highlighted item.
- * @protected
- */
-Blockly.Menu.prototype.unhighlightCurrent = function() {
-  var highlighted = this.getHighlighted();
-  if (highlighted) {
-    highlighted.setHighlighted(false);
-  }
-};
-
-/**
  * Clears the currently highlighted item.
  * @protected
  */
 Blockly.Menu.prototype.clearHighlighted = function() {
-  this.unhighlightCurrent();
   this.setHighlightedIndex(-1);
 };
 
@@ -330,10 +318,11 @@ Blockly.Menu.prototype.setHighlighted = function(item) {
  * @package
  */
 Blockly.Menu.prototype.highlightNext = function() {
-  this.unhighlightCurrent();
+  var highlightedIndex = this.highlightedIndex_;
+  this.clearHighlighted();
   this.highlightHelper(function(index, max) {
     return (index + 1) % max;
-  }, this.highlightedIndex_);
+  }, highlightedIndex);
 };
 
 /**
@@ -342,11 +331,12 @@ Blockly.Menu.prototype.highlightNext = function() {
  * @package
  */
 Blockly.Menu.prototype.highlightPrevious = function() {
-  this.unhighlightCurrent();
+  var highlightedIndex = this.highlightedIndex_;
+  this.clearHighlighted();
   this.highlightHelper(function(index, max) {
     index--;
     return index < 0 ? max - 1 : index;
-  }, this.highlightedIndex_);
+  }, highlightedIndex);
 };
 
 /**
@@ -369,7 +359,7 @@ Blockly.Menu.prototype.highlightHelper = function(fn, startIndex) {
   var visited = 0;
   while (visited <= numItems) {
     var menuItem = /** @type {Blockly.MenuItem} */ (this.getChildAt(curIndex));
-    if (menuItem && this.canHighlightItem(menuItem)) {
+    if (menuItem && menuItem.isEnabled()) {
       this.setHighlightedIndex(curIndex);
       return true;
     }
@@ -377,16 +367,6 @@ Blockly.Menu.prototype.highlightHelper = function(fn, startIndex) {
     curIndex = fn.call(this, curIndex, numItems);
   }
   return false;
-};
-
-/**
- * Returns whether the given item can be highlighted.
- * @param {Blockly.MenuItem} item The item to check.
- * @return {boolean} Whether the item can be highlighted.
- * @protected
- */
-Blockly.Menu.prototype.canHighlightItem = function(item) {
-  return item.isEnabled();
 };
 
 // Mouse events.
@@ -406,11 +386,10 @@ Blockly.Menu.prototype.handleMouseOver_ = function(e) {
       if (currentHighlighted === menuItem) {
         return;
       }
-
-      this.unhighlightCurrent();
+      this.clearHighlighted();
       this.setHighlighted(menuItem);
     } else {
-      this.unhighlightCurrent();
+      this.clearHighlighted();
     }
   }
 };

@@ -260,14 +260,6 @@ Blockly.Menu.prototype.getMenuItem = function(node) {
 // Highlight management.
 
 /**
- * Clears the currently highlighted item.
- * @protected
- */
-Blockly.Menu.prototype.clearHighlighted = function() {
-  this.setHighlightedIndex(-1);
-};
-
-/**
  * Returns the currently highlighted item (if any).
  * @return {?Blockly.Component} Highlighted item (null if none).
  * @protected
@@ -284,18 +276,17 @@ Blockly.Menu.prototype.getHighlighted = function() {
  * @protected
  */
 Blockly.Menu.prototype.setHighlightedIndex = function(index) {
+  var currentHighlighted = this.getHighlighted();
+  if (currentHighlighted) {
+    currentHighlighted.setHighlighted(false);
+    this.highlightedIndex_ = -1;
+  }
   var child = this.getChildAt(index);
   if (child) {
     child.setHighlighted(true);
     this.highlightedIndex_ = index;
-  } else if (this.highlightedIndex_ > -1) {
-    this.getHighlighted().setHighlighted(false);
-    this.highlightedIndex_ = -1;
-  }
-
-  // Bring the highlighted item into view. This has no effect if the menu is not
-  // scrollable.
-  if (child) {
+    // Bring the highlighted item into view. This has no effect if the menu is
+    // not scrollable.
     Blockly.utils.style.scrollIntoContainerView(
         /** @type {!Element} */ (child.getElement()),
         /** @type {!Element} */ (this.getElement()));
@@ -318,11 +309,9 @@ Blockly.Menu.prototype.setHighlighted = function(item) {
  * @package
  */
 Blockly.Menu.prototype.highlightNext = function() {
-  var highlightedIndex = this.highlightedIndex_;
-  this.clearHighlighted();
   this.highlightHelper(function(index, max) {
     return (index + 1) % max;
-  }, highlightedIndex);
+  }, this.highlightedIndex_);
 };
 
 /**
@@ -331,12 +320,10 @@ Blockly.Menu.prototype.highlightNext = function() {
  * @package
  */
 Blockly.Menu.prototype.highlightPrevious = function() {
-  var highlightedIndex = this.highlightedIndex_;
-  this.clearHighlighted();
   this.highlightHelper(function(index, max) {
     index--;
     return index < 0 ? max - 1 : index;
-  }, highlightedIndex);
+  }, this.highlightedIndex_);
 };
 
 /**
@@ -344,7 +331,6 @@ Blockly.Menu.prototype.highlightPrevious = function() {
  * @package
  */
 Blockly.Menu.prototype.highlightFirst = function() {
-  this.clearHighlighted();
   this.highlightHelper(function(index, max) {
     return (index + 1) % max;
   }, -1);
@@ -355,7 +341,6 @@ Blockly.Menu.prototype.highlightFirst = function() {
  * @package
  */
 Blockly.Menu.prototype.highlightLast = function() {
-  this.clearHighlighted();
   this.highlightHelper(function(index, max) {
     index--;
     return index < 0 ? max - 1 : index;
@@ -409,10 +394,9 @@ Blockly.Menu.prototype.handleMouseOver_ = function(e) {
       if (currentHighlighted === menuItem) {
         return;
       }
-      this.clearHighlighted();
       this.setHighlighted(menuItem);
     } else {
-      this.clearHighlighted();
+      this.setHighlightedIndex(-1);
     }
   }
 };
@@ -462,7 +446,7 @@ Blockly.Menu.prototype.handleMouseEnter_ = function(_e) {
 Blockly.Menu.prototype.handleMouseLeave_ = function(_e) {
   if (this.getElement()) {
     this.blur();
-    this.clearHighlighted();
+    this.setHighlightedIndex(-1);
   }
 };
 

@@ -327,7 +327,9 @@ Blockly.Variables.createVariable =
     Blockly.Variables.createVariableButtonHandler;
 
 /**
- * Rename a variable with the given workspace, variableType, and oldName.
+ * Opens a prompt that allows the user to enter a new name for a variable.
+ * Triggers a rename if the new name is valid. Or re-prompts if there is a
+ * collision.
  * @param {!Blockly.Workspace} workspace The workspace on which to rename the
  *     variable.
  * @param {Blockly.VariableModel} variable Variable to rename.

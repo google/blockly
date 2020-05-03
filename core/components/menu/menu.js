@@ -340,6 +340,29 @@ Blockly.Menu.prototype.highlightPrevious = function() {
 };
 
 /**
+ * Highlights the first highlightable item.
+ * @package
+ */
+Blockly.Menu.prototype.highlightFirst = function() {
+  this.clearHighlighted();
+  this.highlightHelper(function(index, max) {
+    return (index + 1) % max;
+  }, -1);
+};
+
+/**
+ * Highlights the ranh highlightable item.
+ * @package
+ */
+Blockly.Menu.prototype.highlightLast = function() {
+  this.clearHighlighted();
+  this.highlightHelper(function(index, max) {
+    index--;
+    return index < 0 ? max - 1 : index;
+  }, -1);
+};
+
+/**
  * Helper function that manages the details of moving the highlight among
  * child menuitems in response to keyboard events.
  * @param {function(this: Blockly.Component, number, number) : number} fn
@@ -449,46 +472,34 @@ Blockly.Menu.prototype.handleMouseLeave_ = function(_e) {
  * Attempts to handle a keyboard event, if the menuitem is enabled, by calling
  * {@link handleKeyEventInternal}.  Considered protected; should only be used
  * within this package and by subclasses.
- * @param {Event} e Key event to handle.
- * @return {boolean} Whether the key event was handled.
+ * @param {!Event} e Key event to handle.
  * @protected
  */
 Blockly.Menu.prototype.handleKeyEvent = function(e) {
-  if (this.getChildCount() != 0 && this.handleKeyEventInternal(e)) {
+  if (this.getChildCount() && this.handleKeyEventInternal(e)) {
     e.preventDefault();
     e.stopPropagation();
-    return true;
   }
-  return false;
 };
 
 /**
  * Attempts to handle a keyboard event; returns true if the event was handled,
- * false otherwise.  If the container is enabled, and a child is highlighted,
- * calls the child menuitem's `handleKeyEvent` method to give the menuitem
- * a chance to handle the event first.
- * @param {Event} e Key event to handle.
+ * false otherwise.
+ * @param {!Event} e Key event to handle.
  * @return {boolean} Whether the event was handled by the container (or one of
  *     its children).
  * @protected
  */
 Blockly.Menu.prototype.handleKeyEventInternal = function(e) {
-  // Give the highlighted menuitem the chance to handle the key event.
-  var highlighted = this.getHighlighted();
-  if (highlighted && typeof highlighted.handleKeyEvent == 'function' &&
-      highlighted.handleKeyEvent(e)) {
-    return true;
-  }
-
   // Do not handle the key event if any modifier key is pressed.
   if (e.shiftKey || e.ctrlKey || e.metaKey || e.altKey) {
     return false;
   }
 
-  // Either nothing is highlighted, or the highlighted menuitem didn't handle
-  // the key event, so attempt to handle it here.
+  var highlighted = this.getHighlighted();
   switch (e.keyCode) {
     case Blockly.utils.KeyCodes.ENTER:
+    case Blockly.utils.KeyCodes.SPACE:
       if (highlighted) {
         highlighted.performActionInternal(e);
       }
@@ -500,6 +511,16 @@ Blockly.Menu.prototype.handleKeyEventInternal = function(e) {
 
     case Blockly.utils.KeyCodes.DOWN:
       this.highlightNext();
+      break;
+
+    case Blockly.utils.KeyCodes.PAGE_UP:
+    case Blockly.utils.KeyCodes.HOME:
+      this.highlightFirst();
+      break;
+
+    case Blockly.utils.KeyCodes.PAGE_DOWN:
+    case Blockly.utils.KeyCodes.END:
+      this.highlightLast();
       break;
 
     default:

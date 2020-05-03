@@ -78,6 +78,15 @@ Blockly.Menu = function() {
    * @private
    */
   this.onKeyDownWrapper_ = null;
+
+  /**
+   * Map of DOM IDs to child menuitems. Each key is the DOM ID of a child
+   * menuitems's root element; each value is a reference to the child menu
+   * item itself.
+   * @type {!Object}
+   * @private
+   */
+  this.childElementIdMap_ = {};
 };
 Blockly.utils.object.inherits(Blockly.Menu, Blockly.Component);
 
@@ -215,17 +224,8 @@ Blockly.Menu.prototype.detachEvents_ = function() {
 // Child component management.
 
 /**
- * Map of DOM IDs to child menuitems. Each key is the DOM ID of a child
- * menuitems's root element; each value is a reference to the child menu
- * item itself.
- * @type {?Object}
- * @private
- */
-Blockly.Menu.prototype.childElementIdMap_ = null;
-
-/**
  * Creates a DOM ID for the child menuitem and registers it to an internal
- * hash table to be able to find it fast by id.
+ * hash table to be able to find it fast by ID.
  * @param {Blockly.Component} child The child menuitem. Its root element has
  *     to be created yet.
  * @private
@@ -233,14 +233,8 @@ Blockly.Menu.prototype.childElementIdMap_ = null;
 Blockly.Menu.prototype.registerChildId_ = function(child) {
   // Map the DOM ID of the menuitem's root element to the menuitem itself.
   var childElem = child.getElement();
-
   // If the menuitem's root element doesn't have a DOM ID assign one.
   var id = childElem.id || (childElem.id = child.getId());
-
-  // Lazily create the child element ID map on first use.
-  if (!this.childElementIdMap_) {
-    this.childElementIdMap_ = {};
-  }
   this.childElementIdMap_[id] = child;
 };
 
@@ -252,17 +246,13 @@ Blockly.Menu.prototype.registerChildId_ = function(child) {
  * @protected
  */
 Blockly.Menu.prototype.getMenuItem = function(node) {
-  // Ensure that this menu actually has child menuitems before
-  // looking up the menuitem.
-  if (this.childElementIdMap_) {
-    var elem = this.getElement();
-    while (node && node !== elem) {
-      var id = node.id;
-      if (id in this.childElementIdMap_) {
-        return this.childElementIdMap_[id];
-      }
-      node = node.parentNode;
+  var elem = this.getElement();
+  while (node && node !== elem) {
+    var id = node.id;
+    if (id in this.childElementIdMap_) {
+      return this.childElementIdMap_[id];
     }
+    node = node.parentNode;
   }
   return null;
 };
@@ -372,8 +362,7 @@ Blockly.Menu.prototype.highlightPrevious = function() {
 Blockly.Menu.prototype.highlightHelper = function(fn, startIndex) {
   // If the start index is -1 (meaning there's nothing currently highlighted),
   // try starting from the currently open item, if any.
-  var curIndex =
-      startIndex < 0 ? -1 : startIndex;
+  var curIndex = startIndex < 0 ? -1 : startIndex;
   var numItems = this.getChildCount();
 
   curIndex = fn.call(this, curIndex, numItems);
@@ -486,8 +475,7 @@ Blockly.Menu.prototype.handleMouseLeave_ = function(_e) {
  * @protected
  */
 Blockly.Menu.prototype.handleKeyEvent = function(e) {
-  if (this.getChildCount() != 0 &&
-      this.handleKeyEventInternal(e)) {
+  if (this.getChildCount() != 0 && this.handleKeyEventInternal(e)) {
     e.preventDefault();
     e.stopPropagation();
     return true;

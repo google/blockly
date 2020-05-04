@@ -342,7 +342,7 @@ Blockly.Menu.prototype.highlightLast = function() {
  * Helper function that manages the details of moving the highlight among
  * child menuitems in response to keyboard events.
  * @param {number} startIndex Start index.
- * @param {boolean} delta Step direction: 1 to go down, -1 to go up.
+ * @param {number} delta Step direction: 1 to go down, -1 to go up.
  * @protected
  */
 Blockly.Menu.prototype.highlightHelper = function(startIndex, delta) {

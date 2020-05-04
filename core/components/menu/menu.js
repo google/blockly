@@ -403,9 +403,8 @@ Blockly.Menu.prototype.handleClick_ = function(e) {
   }
 
   var menuItem = this.getMenuItem(/** @type {Node} */ (e.target));
-
-  if (menuItem && menuItem.handleClick(e)) {
-    e.preventDefault();
+  if (menuItem) {
+    menuItem.performAction();
   }
 };
 
@@ -465,7 +464,7 @@ Blockly.Menu.prototype.handleKeyEventInternal = function(e) {
     case Blockly.utils.KeyCodes.ENTER:
     case Blockly.utils.KeyCodes.SPACE:
       if (highlighted) {
-        highlighted.performActionInternal(e);
+        highlighted.performAction();
       }
       break;
 

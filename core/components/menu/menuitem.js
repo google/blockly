@@ -38,18 +38,6 @@ Blockly.MenuItem = function(content, opt_value) {
    * @private
    */
   this.enabled_ = true;
-
-  /**
-   * @type {Blockly.MenuItem}
-   * @private
-   */
-  this.previousSibling_;
-
-  /**
-   * @type {Blockly.MenuItem}
-   * @private
-   */
-  this.nextSibling_;
 };
 Blockly.utils.object.inherits(Blockly.MenuItem, Blockly.Component);
 
@@ -241,42 +229,24 @@ Blockly.MenuItem.prototype.setEnabled = function(enabled) {
 };
 
 /**
- * Handles click events. If the component is enabled, trigger
- * the action associated with this menu item.
- * @param {Event} _e Mouse event to handle.
- * @package
- */
-Blockly.MenuItem.prototype.handleClick = function(_e) {
-  if (this.isEnabled()) {
-    this.setHighlighted(true);
-    this.performActionInternal();
-  }
-};
-
-/**
  * Performs the appropriate action when the menu item is activated
  * by the user.
- * @protected
+ * @package
  */
-Blockly.MenuItem.prototype.performActionInternal = function() {
-  if (this.checkable_) {
-    this.setChecked(!this.checked_);
-  }
-  if (this.actionHandler_) {
-    this.actionHandler_.call(/** @type {?} */ (this.actionHandlerObj_), this);
+Blockly.MenuItem.prototype.performAction = function() {
+  if (this.isEnabled() && this.actionHandler_) {
+    this.actionHandler_.call(this.actionHandlerObj_, this);
   }
 };
 
 /**
- * Set the handler that's triggered when the menu item is activated
- * by the user. If `opt_obj` is provided, it will be used as the
- * 'this' object in the function when called.
+ * Set the handler that's called when the menu item is activated by the user.
+ * `obj` will be used as the 'this' object in the function when called.
  * @param {function(this:T,!Blockly.MenuItem):?} fn The handler.
- * @param {T=} opt_obj Used as the 'this' object in f when called.
- * @template T
+ * @param {!Object} obj Used as the 'this' object in fn when called.
  * @package
  */
-Blockly.MenuItem.prototype.onAction = function(fn, opt_obj) {
+Blockly.MenuItem.prototype.onAction = function(fn, obj) {
   this.actionHandler_ = fn;
-  this.actionHandlerObj_ = opt_obj;
+  this.actionHandlerObj_ = obj;
 };

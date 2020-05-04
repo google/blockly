@@ -69,9 +69,7 @@ Blockly.MenuItem.prototype.createDom = function() {
   content.appendChild(this.getContentDom());
 
   // Initialize ARIA role and state.
-  Blockly.utils.aria.setRole(element, this.roleName_ || (this.checkable_ ?
-      Blockly.utils.aria.Role.MENUITEMCHECKBOX :
-      Blockly.utils.aria.Role.MENUITEM));
+  Blockly.utils.aria.setRole(element, this.roleName_);
   Blockly.utils.aria.setState(element, Blockly.utils.aria.State.SELECTED,
       (this.checkable_ && this.checked_) || false);
 };
@@ -242,7 +240,7 @@ Blockly.MenuItem.prototype.performAction = function() {
 /**
  * Set the handler that's called when the menu item is activated by the user.
  * `obj` will be used as the 'this' object in the function when called.
- * @param {function(this:T,!Blockly.MenuItem):?} fn The handler.
+ * @param {function(!Blockly.MenuItem)} fn The handler.
  * @param {!Object} obj Used as the 'this' object in fn when called.
  * @package
  */

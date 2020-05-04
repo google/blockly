@@ -78,15 +78,6 @@ Blockly.Menu = function() {
    * @private
    */
   this.onKeyDownWrapper_ = null;
-
-  /**
-   * Map of DOM IDs to child menuitems. Each key is the DOM ID of a child
-   * menuitems's root element; each value is a reference to the child menu
-   * item itself.
-   * @type {!Object}
-   * @private
-   */
-  this.childElementIdMap_ = {};
 };
 Blockly.utils.object.inherits(Blockly.Menu, Blockly.Component);
 
@@ -105,8 +96,7 @@ Blockly.Menu.prototype.createDom = function() {
   element.tabIndex = 0;
 
   // Initialize ARIA role.
-  Blockly.utils.aria.setRole(element,
-      this.roleName_ || Blockly.utils.aria.Role.MENU);
+  Blockly.utils.aria.setRole(element, this.roleName_);
 };
 
 /**
@@ -142,17 +132,25 @@ Blockly.Menu.prototype.setRole = function(roleName) {
   this.roleName_ = roleName;
 };
 
-/** @override */
+/**
+ * Adds the event listeners to the menu.
+ * @override
+ */
 Blockly.Menu.prototype.enterDocument = function() {
   Blockly.Menu.superClass_.enterDocument.call(this);
 
-  this.forEachChild(function(child) {
-    if (child.isInDocument()) {
-      this.registerChildId_(child);
-    }
-  }, this);
+  var el = /** @type {!EventTarget} */ (this.getElement());
 
-  this.attachEvents_();
+  this.mouseOverHandler_ = Blockly.bindEventWithChecks_(el,
+      'mouseover', this, this.handleMouseOver_, true);
+  this.clickHandler_ = Blockly.bindEventWithChecks_(el,
+      'click', this, this.handleClick_, true);
+  this.mouseEnterHandler_ = Blockly.bindEventWithChecks_(el,
+      'mouseenter', this, this.handleMouseEnter_, true);
+  this.mouseLeaveHandler_ = Blockly.bindEventWithChecks_(el,
+      'mouseleave', this, this.handleMouseLeave_, true);
+  this.onKeyDownWrapper_ = Blockly.bindEventWithChecks_(el,
+      'keydown', this, this.handleKeyEvent);
 };
 
 /**
@@ -173,25 +171,6 @@ Blockly.Menu.prototype.disposeInternal = function() {
   Blockly.Menu.superClass_.disposeInternal.call(this);
 
   this.detachEvents_();
-};
-
-/**
- * Adds the event listeners to the menu.
- * @private
- */
-Blockly.Menu.prototype.attachEvents_ = function() {
-  var el = /** @type {!EventTarget} */ (this.getElement());
-
-  this.mouseOverHandler_ = Blockly.bindEventWithChecks_(el,
-      'mouseover', this, this.handleMouseOver_, true);
-  this.clickHandler_ = Blockly.bindEventWithChecks_(el,
-      'click', this, this.handleClick_, true);
-  this.mouseEnterHandler_ = Blockly.bindEventWithChecks_(el,
-      'mouseenter', this, this.handleMouseEnter_, true);
-  this.mouseLeaveHandler_ = Blockly.bindEventWithChecks_(el,
-      'mouseleave', this, this.handleMouseLeave_, true);
-  this.onKeyDownWrapper_ = Blockly.bindEventWithChecks_(el,
-      'keydown', this, this.handleKeyEvent);
 };
 
 /**
@@ -224,21 +203,6 @@ Blockly.Menu.prototype.detachEvents_ = function() {
 // Child component management.
 
 /**
- * Creates a DOM ID for the child menuitem and registers it to an internal
- * hash table to be able to find it fast by ID.
- * @param {Blockly.Component} child The child menuitem. Its root element has
- *     to be created yet.
- * @private
- */
-Blockly.Menu.prototype.registerChildId_ = function(child) {
-  // Map the DOM ID of the menuitem's root element to the menuitem itself.
-  var childElem = child.getElement();
-  // If the menuitem's root element doesn't have a DOM ID assign one.
-  var id = childElem.id || (childElem.id = child.getId());
-  this.childElementIdMap_[id] = child;
-};
-
-/**
  * Returns the child menuitem that owns the given DOM node, or null if no such
  * menuitem is found.
  * @param {Node} node DOM node whose owner is to be returned.
@@ -248,9 +212,8 @@ Blockly.Menu.prototype.registerChildId_ = function(child) {
 Blockly.Menu.prototype.getMenuItem = function(node) {
   var elem = this.getElement();
   while (node && node !== elem) {
-    var id = node.id;
-    if (id in this.childElementIdMap_) {
-      return this.childElementIdMap_[id];
+    if (node.blocklyMenuItem) {
+      return node.blocklyMenuItem;
     }
     node = node.parentNode;
   }

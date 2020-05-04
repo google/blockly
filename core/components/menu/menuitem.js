@@ -49,6 +49,7 @@ Blockly.utils.object.inherits(Blockly.MenuItem, Blockly.Component);
 Blockly.MenuItem.prototype.createDom = function() {
   var element = document.createElement('div');
   element.id = this.getId();
+  element.blocklyMenuItem = this;  // Link DOM back to this data structure.
   this.setElementInternal(element);
 
   // Set class and style

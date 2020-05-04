@@ -308,7 +308,6 @@ Blockly.FieldDropdown.prototype.showEditor_ = function(opt_e) {
  */
 Blockly.FieldDropdown.prototype.dropdownCreate_ = function() {
   var menu = new Blockly.Menu();
-  menu.setRightToLeft(this.sourceBlock_.RTL);
   menu.setRole(Blockly.utils.aria.Role.LISTBOX);
 
   var options = this.getOptions(false);

@@ -77,7 +77,7 @@ Blockly.ContextMenu.populate_ = function(options, rtl) {
      callback: Blockly.MakeItSo}
   */
   var menu = new Blockly.Menu();
-  menu.setRightToLeft(rtl);
+  menu.setRole(Blockly.utils.aria.Role.MENU);
   for (var i = 0, option; (option = options[i]); i++) {
     var menuItem = new Blockly.MenuItem(option.text);
     menuItem.setRightToLeft(rtl);

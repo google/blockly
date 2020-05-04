@@ -309,9 +309,7 @@ Blockly.Menu.prototype.setHighlighted = function(item) {
  * @package
  */
 Blockly.Menu.prototype.highlightNext = function() {
-  this.highlightHelper(function(index, max) {
-    return (index + 1) % max;
-  }, this.highlightedIndex_);
+  this.highlightHelper(this.highlightedIndex_, 1);
 };
 
 /**
@@ -320,10 +318,8 @@ Blockly.Menu.prototype.highlightNext = function() {
  * @package
  */
 Blockly.Menu.prototype.highlightPrevious = function() {
-  this.highlightHelper(function(index, max) {
-    index--;
-    return index < 0 ? max - 1 : index;
-  }, this.highlightedIndex_);
+  this.highlightHelper(this.highlightedIndex_ < 0 ?
+      this.getChildCount() : this.highlightedIndex_, -1);
 };
 
 /**
@@ -331,50 +327,34 @@ Blockly.Menu.prototype.highlightPrevious = function() {
  * @package
  */
 Blockly.Menu.prototype.highlightFirst = function() {
-  this.highlightHelper(function(index, max) {
-    return (index + 1) % max;
-  }, -1);
+  this.highlightHelper(-1, 1);
 };
 
 /**
- * Highlights the ranh highlightable item.
+ * Highlights the last highlightable item.
  * @package
  */
 Blockly.Menu.prototype.highlightLast = function() {
-  this.highlightHelper(function(index, max) {
-    index--;
-    return index < 0 ? max - 1 : index;
-  }, -1);
+  this.highlightHelper(this.getChildCount(), -1);
 };
 
 /**
  * Helper function that manages the details of moving the highlight among
  * child menuitems in response to keyboard events.
- * @param {function(this: Blockly.Component, number, number) : number} fn
- *     Function that accepts the current and maximum indices, and returns the
- *     next index to check.
  * @param {number} startIndex Start index.
- * @return {boolean} Whether the highlight has changed.
+ * @param {boolean} delta Step direction: 1 to go down, -1 to go up.
  * @protected
  */
-Blockly.Menu.prototype.highlightHelper = function(fn, startIndex) {
-  // If the start index is -1 (meaning there's nothing currently highlighted),
-  // try starting from the currently open item, if any.
-  var curIndex = startIndex < 0 ? -1 : startIndex;
-  var numItems = this.getChildCount();
-
-  curIndex = fn.call(this, curIndex, numItems);
-  var visited = 0;
-  while (visited <= numItems) {
-    var menuItem = /** @type {Blockly.MenuItem} */ (this.getChildAt(curIndex));
-    if (menuItem && menuItem.isEnabled()) {
-      this.setHighlightedIndex(curIndex);
-      return true;
+Blockly.Menu.prototype.highlightHelper = function(startIndex, delta) {
+  var index = startIndex + delta;
+  var menuItem;
+  while ((menuItem = this.getChildAt(index))) {
+    if (menuItem.isEnabled()) {
+      this.setHighlightedIndex(index);
+      break;
     }
-    visited++;
-    curIndex = fn.call(this, curIndex, numItems);
+    index += delta;
   }
-  return false;
 };
 
 // Mouse events.

@@ -12,9 +12,9 @@
 
 goog.provide('Blockly.MenuItem');
 
-goog.require('Blockly.Component');
 goog.require('Blockly.utils.aria');
 goog.require('Blockly.utils.dom');
+goog.require('Blockly.utils.IdGenerator');
 goog.require('Blockly.utils.object');
 
 
@@ -25,11 +25,8 @@ goog.require('Blockly.utils.object');
  *     the item.
  * @param {string=} opt_value Data/model associated with the menu item.
  * @constructor
- * @extends {Blockly.Component}
  */
 Blockly.MenuItem = function(content, opt_value) {
-  Blockly.Component.call(this);
-
   /**
    * Human-readable text of this menu item.
    * @type {string}
@@ -45,24 +42,37 @@ Blockly.MenuItem = function(content, opt_value) {
   this.value_ = opt_value;
 
   /**
-   * Is the menu clickable, as opposed to greyed-out.
+   * Is the menu item clickable, as opposed to greyed-out.
    * @type {boolean}
    * @private
    */
   this.enabled_ = true;
+
+  /**
+   * The DOM element for the menu item.
+   * @type {?Element}
+   * @private
+   */
+  this.element_ = null;
+
+  /**
+   * Whether the menu item is rendered right-to-left.
+   * @type {boolean}
+   * @protected
+   */
+  this.rightToLeft_ = false;
 };
-Blockly.utils.object.inherits(Blockly.MenuItem, Blockly.Component);
 
 
 /**
  * Creates the menuitem's DOM.
- * @override
+ * @return {!Element} Completed DOM.
  */
 Blockly.MenuItem.prototype.createDom = function() {
   var element = document.createElement('div');
-  element.id = this.getId();
+  element.id = Blockly.utils.IdGenerator.getNextUniqueId();
   element.blocklyMenuItem = this;  // Link DOM back to this data structure.
-  this.setElementInternal(element);
+  this.element_ = element;
 
   // Set class and style
   element.className = 'goog-menuitem ' +
@@ -73,7 +83,7 @@ Blockly.MenuItem.prototype.createDom = function() {
   var content = document.createElement('div');
   content.className = 'goog-menuitem-content';
   // Add a checkbox for checkable menu items.
-  if (!this.checkable_) {
+  if (this.checkable_) {
     var checkbox = document.createElement('div');
     checkbox.className = 'goog-menuitem-checkbox';
     content.appendChild(checkbox);
@@ -86,12 +96,36 @@ Blockly.MenuItem.prototype.createDom = function() {
   Blockly.utils.aria.setRole(element, this.roleName_);
   Blockly.utils.aria.setState(element, Blockly.utils.aria.State.SELECTED,
       (this.checkable_ && this.checked_) || false);
+
+  return element;
 };
 
-/** @override */
-Blockly.MenuItem.prototype.disposeInternal = function() {
-  this.getElement().blocklyMenuItem = null;
-  Blockly.MenuItem.superClass_.disposeInternal.call(this);
+/**
+ * Dispose of this menu item.
+ */
+Blockly.MenuItem.prototype.dispose = function() {
+  if (this.element_) {
+    this.element_.blocklyMenuItem = null;
+    this.element_ = null;
+  }
+};
+
+/**
+ * Gets the menu item's element.
+ * @return {Element} The DOM element.
+ * @package
+ */
+Blockly.MenuItem.prototype.getElement = function() {
+  return this.element_;
+};
+
+/**
+ * Gets the unique ID for this menu item.
+ * @return {string} Unique component ID.
+ * @package
+ */
+Blockly.MenuItem.prototype.getId = function() {
+  return this.element_.id_;
 };
 
 /**
@@ -104,7 +138,16 @@ Blockly.MenuItem.prototype.getValue = function() {
 };
 
 /**
- * Set the menu accessibility role.
+ * Set menu item's rendering direction.
+ * @param {boolean} rightToLeft True if RTL, false if LTR.
+ * @package
+ */
+Blockly.MenuItem.prototype.setRightToLeft = function(rtl) {
+  this.rightToLeft_ = rtl;
+};
+
+/**
+ * Set the menu item's accessibility role.
  * @param {!Blockly.utils.aria.Role} roleName Role name.
  * @package
  */
@@ -128,23 +171,7 @@ Blockly.MenuItem.prototype.setCheckable = function(checkable) {
  * @package
  */
 Blockly.MenuItem.prototype.setChecked = function(checked) {
-  if (!this.checkable_) {
-    throw Error('MenuItem not checkable');
-  }
   this.checked_ = checked;
-
-  var el = this.getElement();
-  if (el && this.isEnabled()) {
-    if (checked) {
-      Blockly.utils.dom.addClass(el, 'goog-option-selected');
-      Blockly.utils.aria.setState(el,
-          Blockly.utils.aria.State.SELECTED, true);
-    } else {
-      Blockly.utils.dom.removeClass(el, 'goog-option-selected');
-      Blockly.utils.aria.setState(el,
-          Blockly.utils.aria.State.SELECTED, false);
-    }
-  }
 };
 
 /**

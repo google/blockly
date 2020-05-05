@@ -224,19 +224,6 @@ Blockly.Component.prototype.render = function(opt_parentElement) {
 };
 
 /**
- * Renders the component before another element. The other element should be in
- * the document already.
- *
- * Throws an Error if the component is already rendered.
- *
- * @param {Node} sibling Node to render the component before.
- * @protected
- */
-Blockly.Component.prototype.renderBefore = function(sibling) {
-  this.render_(/** @type {Element} */ (sibling.parentNode), sibling);
-};
-
-/**
  * Renders the component.  If a parent element is supplied, the component's
  * element will be appended to it.  If there is no optional parent element and
  * the element doesn't have a parentNode then it will be appended to the
@@ -498,21 +485,6 @@ Blockly.Component.prototype.getContentElement = function() {
 };
 
 /**
- * Set is right-to-left. This function should be used if the component needs
- * to know the rendering direction during DOM creation (i.e. before
- * {@link #enterDocument} is called and is right-to-left is set).
- * @param {boolean} rightToLeft Whether the component is rendered
- *     right-to-left.
- * @package
- */
-Blockly.Component.prototype.setRightToLeft = function(rightToLeft) {
-  if (this.inDocument_) {
-    throw Error(Blockly.Component.Error.ALREADY_RENDERED);
-  }
-  this.rightToLeft_ = rightToLeft;
-};
-
-/**
  * Returns true if the component has children.
  * @return {boolean} True if the component has children.
  * @protected
@@ -568,15 +540,4 @@ Blockly.Component.prototype.forEachChild = function(f, opt_obj) {
   for (var i = 0; i < this.children_.length; i++) {
     f.call(/** @type {?} */ (opt_obj), this.children_[i], i);
   }
-};
-
-/**
- * Returns the 0-based index of the given child component, or -1 if no such
- * child is found.
- * @param {?Blockly.Component} child The child component.
- * @return {number} 0-based index of the child component; -1 if not found.
- * @protected
- */
-Blockly.Component.prototype.indexOfChild = function(child) {
-  return this.children_.indexOf(child);
 };

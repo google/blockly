@@ -70,7 +70,7 @@ Blockly.MenuItem.prototype.createDom = function() {
       (this.checked_ ? 'goog-option-selected ' : '') +
       (this.rightToLeft_ ? 'goog-menuitem-rtl ' : '');
 
-  var content =  document.createElement('div');
+  var content = document.createElement('div');
   content.className = 'goog-menuitem-content';
   // Add a checkbox for checkable menu items.
   if (!this.checkable_) {
@@ -93,6 +93,7 @@ Blockly.MenuItem.prototype.disposeInternal = function() {
   this.getElement().blocklyMenuItem = null;
   Blockly.MenuItem.superClass_.disposeInternal.call(this);
 };
+
 /**
  * Gets the value associated with the menu item.
  * @return {*} value Value associated with the menu item.

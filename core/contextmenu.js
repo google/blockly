@@ -83,7 +83,7 @@ Blockly.ContextMenu.populate_ = function(options, rtl) {
     var menuItem = new Blockly.MenuItem(option.text);
     menuItem.setRightToLeft(rtl);
     menuItem.setRole(Blockly.utils.aria.Role.MENUITEM);
-    menu.addChild(menuItem, true);
+    menu.addChild(menuItem);
     menuItem.setEnabled(option.enabled);
     if (option.enabled) {
       var actionHandler = function() {

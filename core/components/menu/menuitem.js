@@ -124,7 +124,7 @@ Blockly.MenuItem.prototype.getElement = function() {
  * @package
  */
 Blockly.MenuItem.prototype.getId = function() {
-  return this.element_.id_;
+  return this.element_.id;
 };
 
 /**

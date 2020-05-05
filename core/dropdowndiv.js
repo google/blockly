@@ -184,7 +184,7 @@ Blockly.DropDownDiv.setBoundsElement = function(boundsElement) {
 
 /**
  * Provide the div for inserting content into the drop-down.
- * @return {Element} Div to populate with content
+ * @return {!Element} Div to populate with content.
  */
 Blockly.DropDownDiv.getContentDiv = function() {
   return Blockly.DropDownDiv.content_;

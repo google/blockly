@@ -258,7 +258,7 @@ Blockly.Menu.prototype.setHighlightedIndex = function(index) {
 /**
  * Highlights the given item if it exists and is a child of the container;
  * otherwise un-highlights the currently highlighted item.
- * @param {Blockly.MenuItem} item Item to highlight.
+ * @param {!Blockly.MenuItem} item Item to highlight.
  * @protected
  */
 Blockly.Menu.prototype.setHighlighted = function(item) {

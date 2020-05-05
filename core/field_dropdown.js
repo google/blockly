@@ -330,7 +330,7 @@ Blockly.FieldDropdown.prototype.dropdownCreate_ = function() {
     menuItem.setRole(Blockly.utils.aria.Role.OPTION);
     menuItem.setRightToLeft(this.sourceBlock_.RTL);
     menuItem.setCheckable(true);
-    menu.addChild(menuItem, true);
+    menu.addChild(menuItem);
     menuItem.setChecked(value == this.value_);
     if (value == this.value_) {
       this.selectedMenuItem_ = menuItem;

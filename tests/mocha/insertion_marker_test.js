@@ -202,7 +202,7 @@ suite('InsertionMarkers', function() {
   });
   suite('Serialization', function() {
     setup(function() {
-      this.assertGen = function(xml, expectXml) {
+      this.assertXml = function(xml, expectXml) {
         Blockly.Xml.domToWorkspace(xml, this.workspace);
         var block = this.workspace.getBlockById('insertion');
         block.isInsertionMarker_ = true;
@@ -212,7 +212,7 @@ suite('InsertionMarkers', function() {
       };
     });
     teardown(function() {
-      delete this.assertGen;
+      delete this.assertXml;
     });
     test('Marker Surrounds', function() {
       var xml = Blockly.Xml.textToDom(
@@ -226,7 +226,7 @@ suite('InsertionMarkers', function() {
       // The block wouldn't technically be at 10, it would be slightly lower
       // and end-er but I think that's a fair compromise when we're comparing
       // it against extra blocks.
-      this.assertGen(xml,
+      this.assertXml(xml,
           '<xml xmlns="https://developers.google.com/blockly/xml">' +
           '<block type="statement_block" id="a" x="10" y="10"></block>' +
           '</xml>');
@@ -240,7 +240,7 @@ suite('InsertionMarkers', function() {
           '    </statement>' +
           '  </block>' +
           '</xml>');
-      this.assertGen(xml,
+      this.assertXml(xml,
           '<xml xmlns="https://developers.google.com/blockly/xml">' +
           '<block type="statement_block" id="a" x="10" y="10"></block>' +
           '</xml>');
@@ -258,7 +258,7 @@ suite('InsertionMarkers', function() {
           '    </statement>' +
           '  </block>' +
           '</xml>');
-      this.assertGen(xml,
+      this.assertXml(xml,
           '<xml xmlns="https://developers.google.com/blockly/xml">' +
           '<block type="statement_block" id="a" x="10" y="10">' +
           '<statement name="STATEMENT">' +
@@ -279,7 +279,7 @@ suite('InsertionMarkers', function() {
       // The block wouldn't technically be at 10, it would be slightly lower
       // but I think that's a fair compromise when we're comparing
       // it against extra blocks.
-      this.assertGen(xml,
+      this.assertXml(xml,
           '<xml xmlns="https://developers.google.com/blockly/xml">' +
           '<block type="stack_block" id="a" x="10" y="10"></block>' +
           '</xml>');
@@ -293,7 +293,7 @@ suite('InsertionMarkers', function() {
           '    </next>' +
           '  </block>' +
           '</xml>');
-      this.assertGen(xml,
+      this.assertXml(xml,
           '<xml xmlns="https://developers.google.com/blockly/xml">' +
           '<block type="stack_block" id="a" x="10" y="10"></block>' +
           '</xml>');
@@ -311,7 +311,7 @@ suite('InsertionMarkers', function() {
           '    </next>' +
           '  </block>' +
           '</xml>');
-      this.assertGen(xml,
+      this.assertXml(xml,
           '<xml xmlns="https://developers.google.com/blockly/xml">' +
           '<block type="stack_block" id="a" x="10" y="10">' +
           '<next>' +
@@ -332,7 +332,7 @@ suite('InsertionMarkers', function() {
       // The block wouldn't technically be at 10, it would be slightly end-er
       // but I think that's a fair compromise when we're comparing
       // it against extra blocks.
-      this.assertGen(xml,
+      this.assertXml(xml,
           '<xml xmlns="https://developers.google.com/blockly/xml">' +
           '<block type="row_block" id="a" x="10" y="10"></block>' +
           '</xml>');
@@ -346,7 +346,7 @@ suite('InsertionMarkers', function() {
           '    </value>' +
           '  </block>' +
           '</xml>');
-      this.assertGen(xml,
+      this.assertXml(xml,
           '<xml xmlns="https://developers.google.com/blockly/xml">' +
           '<block type="row_block" id="a" x="10" y="10"></block>' +
           '</xml>');
@@ -364,7 +364,7 @@ suite('InsertionMarkers', function() {
           '    </value>' +
           '  </block>' +
           '</xml>');
-      this.assertGen(xml,
+      this.assertXml(xml,
           '<xml xmlns="https://developers.google.com/blockly/xml">' +
           '<block type="row_block" id="a" x="10" y="10">' +
           '<value name="INPUT">' +
@@ -379,7 +379,7 @@ suite('InsertionMarkers', function() {
           '  <block type="stack_block" id="insertion"/>' +
           '  <block type="stack_block" id="a" x="10" y="10"/>' +
           '</xml>');
-      this.assertGen(xml,
+      this.assertXml(xml,
           '<xml xmlns="https://developers.google.com/blockly/xml">' +
           '<block type="stack_block" id="a" x="10" y="10"></block>' +
           '</xml>');

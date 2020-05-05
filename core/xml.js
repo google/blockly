@@ -45,10 +45,7 @@ Blockly.Xml.workspaceToDom = function(workspace, opt_noId) {
   }
   var blocks = workspace.getTopBlocks(true);
   for (var i = 0, block; (block = blocks[i]); i++) {
-    var dom = Blockly.Xml.blockToDomWithXY(block, opt_noId);
-    if (dom) {
-      xml.appendChild(dom);
-    }
+    xml.appendChild(Blockly.Xml.blockToDomWithXY(block, opt_noId));
   }
   return xml;
 };
@@ -84,15 +81,14 @@ Blockly.Xml.blockToDomWithXY = function(block, opt_noId) {
   if (block.workspace.RTL) {
     width = block.workspace.getWidth();
   }
-  var element = Blockly.Xml.blockToDom(block, opt_noId);
-  if (!element) {
-    return null;
+  var elem = Blockly.Xml.blockToDom(block, opt_noId);
+  if (elem instanceof Element) {
+    var xy = block.getRelativeToSurfaceXY();
+    elem.setAttribute('x',
+        Math.round(block.workspace.RTL ? width - xy.x : xy.x));
+    elem.setAttribute('y', Math.round(xy.y));
   }
-  var xy = block.getRelativeToSurfaceXY();
-  element.setAttribute('x',
-      Math.round(block.workspace.RTL ? width - xy.x : xy.x));
-  element.setAttribute('y', Math.round(xy.y));
-  return element;
+  return elem;
 };
 
 /**
@@ -134,7 +130,7 @@ Blockly.Xml.allFieldsToDom_ = function(block, element) {
  * Encode a block subtree as XML.
  * @param {!Blockly.Block} block The root block to encode.
  * @param {boolean=} opt_noId True if the encoder should skip the block ID.
- * @return {Element} Tree of XML elements.
+ * @return {!Element} Tree of XML elements.
  */
 Blockly.Xml.blockToDom = function(block, opt_noId) {
   // Skip over insertion markers.
@@ -143,7 +139,8 @@ Blockly.Xml.blockToDom = function(block, opt_noId) {
     if (child) {
       return Blockly.Xml.blockToDom(child);
     } else {
-      return null;
+      // Disappears when appended.
+      return /** @type{!Element} */ (new DocumentFragment());
     }
   }
 
@@ -203,9 +200,9 @@ Blockly.Xml.blockToDom = function(block, opt_noId) {
         container.appendChild(Blockly.Xml.cloneShadow_(shadow, opt_noId));
       }
       if (childBlock) {
-        var dom = Blockly.Xml.blockToDom(childBlock, opt_noId);
-        if (dom) {
-          container.appendChild(dom);
+        var elem = Blockly.Xml.blockToDom(childBlock, opt_noId);
+        if (elem instanceof Element) {
+          container.appendChild(elem);
           empty = false;
         }
       }
@@ -237,10 +234,10 @@ Blockly.Xml.blockToDom = function(block, opt_noId) {
 
   var nextBlock = block.getNextBlock();
   if (nextBlock) {
-    var container = Blockly.utils.xml.createElement('next');
-    var dom = Blockly.Xml.blockToDom(nextBlock, opt_noId);
-    if (dom) {
-      container.appendChild(dom);
+    var elem = Blockly.Xml.blockToDom(nextBlock, opt_noId);
+    if (elem instanceof Element) {
+      var container = Blockly.utils.xml.createElement('next');
+      container.appendChild(elem);
       element.appendChild(container);
     }
   }

@@ -154,30 +154,10 @@ Blockly.Menu.prototype.enterDocument = function() {
 };
 
 /**
- * Cleans up the container before its DOM is removed from the document, and
- * removes event handlers.  Overrides {@link Blockly.Component#exitDocument}.
+ * Removes event handlers.  Overrides {@link Blockly.Component#exitDocument}.
  * @override
  */
 Blockly.Menu.prototype.exitDocument = function() {
-  // {@link #setHighlightedIndex} has to be called before
-  // {@link Blockly.Component#exitDocument}, otherwise it has no effect.
-  this.setHighlightedIndex(-1);
-
-  Blockly.Menu.superClass_.exitDocument.call(this);
-};
-
-/** @override */
-Blockly.Menu.prototype.disposeInternal = function() {
-  Blockly.Menu.superClass_.disposeInternal.call(this);
-
-  this.detachEvents_();
-};
-
-/**
- * Removes the event listeners from the menu.
- * @private
- */
-Blockly.Menu.prototype.detachEvents_ = function() {
   if (this.mouseOverHandler_) {
     Blockly.unbindEvent_(this.mouseOverHandler_);
     this.mouseOverHandler_ = null;
@@ -198,6 +178,8 @@ Blockly.Menu.prototype.detachEvents_ = function() {
     Blockly.unbindEvent_(this.onKeyDownWrapper_);
     this.onKeyDownWrapper_ = null;
   }
+
+  Blockly.Menu.superClass_.exitDocument.call(this);
 };
 
 // Child component management.

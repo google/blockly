@@ -322,10 +322,9 @@ Blockly.FieldDropdown.prototype.dropdownCreate_ = function() {
       image.alt = content['alt'] || '';
       content = image;
     }
-    var menuItem = new Blockly.MenuItem(content);
+    var menuItem = new Blockly.MenuItem(content, value);
     menuItem.setRole(Blockly.utils.aria.Role.OPTION);
     menuItem.setRightToLeft(this.sourceBlock_.RTL);
-    menuItem.setValue(value);
     menuItem.setCheckable(true);
     menu.addChild(menuItem, true);
     menuItem.setChecked(value == this.value_);

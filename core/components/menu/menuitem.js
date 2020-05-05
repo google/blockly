@@ -30,10 +30,22 @@ goog.require('Blockly.utils.object');
 Blockly.MenuItem = function(content, opt_value) {
   Blockly.Component.call(this);
 
-  this.setContentInternal(content);
-  this.setValue(opt_value);
+  /**
+   * Human-readable text of this menu item.
+   * @type {string}
+   * @private
+   */
+  this.content_ = content;
 
   /**
+   * Machine-readable value of this menu item.
+   * @type {string|undefined}
+   * @private
+   */
+  this.value_ = opt_value;
+
+  /**
+   * Is the menu clickable, as opposed to greyed-out.
    * @type {boolean}
    * @private
    */
@@ -58,16 +70,17 @@ Blockly.MenuItem.prototype.createDom = function() {
       (this.checked_ ? 'goog-option-selected ' : '') +
       (this.rightToLeft_ ? 'goog-menuitem-rtl ' : '');
 
-  var content = this.getContentWrapperDom();
-  element.appendChild(content);
-
+  var content =  document.createElement('div');
+  content.className = 'goog-menuitem-content';
   // Add a checkbox for checkable menu items.
-  var checkboxDom = this.getCheckboxDom();
-  if (checkboxDom) {
-    content.appendChild(checkboxDom);
+  if (!this.checkable_) {
+    var checkbox = document.createElement('div');
+    checkbox.className = 'goog-menuitem-checkbox';
+    content.appendChild(checkbox);
   }
 
-  content.appendChild(this.getContentDom());
+  content.appendChild(document.createTextNode(this.content_));
+  element.appendChild(content);
 
   // Initialize ARIA role and state.
   Blockly.utils.aria.setRole(element, this.roleName_);
@@ -75,60 +88,11 @@ Blockly.MenuItem.prototype.createDom = function() {
       (this.checkable_ && this.checked_) || false);
 };
 
-/**
- * @return {Element} The HTML element for the checkbox.
- * @protected
- */
-Blockly.MenuItem.prototype.getCheckboxDom = function() {
-  if (!this.checkable_) {
-    return null;
-  }
-  var menuItemCheckbox = document.createElement('div');
-  menuItemCheckbox.className = 'goog-menuitem-checkbox';
-  return menuItemCheckbox;
+/** @override */
+Blockly.MenuItem.prototype.disposeInternal = function() {
+  this.getElement().blocklyMenuItem = null;
+  Blockly.MenuItem.superClass_.disposeInternal.call(this);
 };
-
-/**
- * @return {!Element} The HTML for the content.
- * @protected
- */
-Blockly.MenuItem.prototype.getContentDom = function() {
-  var content = this.content_;
-  if (typeof content === 'string') {
-    content = document.createTextNode(content);
-  }
-  return content;
-};
-
-/**
- * @return {!Element} The HTML for the content wrapper.
- * @protected
- */
-Blockly.MenuItem.prototype.getContentWrapperDom = function() {
-  var contentWrapper = document.createElement('div');
-  contentWrapper.className = 'goog-menuitem-content';
-  return contentWrapper;
-};
-
-/**
- * Sets the content associated with the menu item.
- * @param {string} content Text caption to set as the
- *    menuitem's contents.
- * @protected
- */
-Blockly.MenuItem.prototype.setContentInternal = function(content) {
-  this.content_ = content;
-};
-
-/**
- * Sets the value associated with the menu item.
- * @param {*} value Value to be associated with the menu item.
- * @package
- */
-Blockly.MenuItem.prototype.setValue = function(value) {
-  this.value_ = value;
-};
-
 /**
  * Gets the value associated with the menu item.
  * @return {*} value Value associated with the menu item.
@@ -164,7 +128,7 @@ Blockly.MenuItem.prototype.setCheckable = function(checkable) {
  */
 Blockly.MenuItem.prototype.setChecked = function(checked) {
   if (!this.checkable_) {
-    return;
+    throw Error('MenuItem not checkable');
   }
   this.checked_ = checked;
 
@@ -219,10 +183,10 @@ Blockly.MenuItem.prototype.setEnabled = function(enabled) {
 
   var el = this.getElement();
   if (el) {
-    if (!this.enabled_) {
-      Blockly.utils.dom.addClass(el, 'goog-menuitem-disabled');
-    } else {
+    if (enabled) {
       Blockly.utils.dom.removeClass(el, 'goog-menuitem-disabled');
+    } else {
+      Blockly.utils.dom.addClass(el, 'goog-menuitem-disabled');
     }
   }
 };

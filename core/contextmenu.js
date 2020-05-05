@@ -36,11 +36,11 @@ goog.require('Blockly.Xml');
 Blockly.ContextMenu.currentBlock = null;
 
 /**
- * Opaque data that can be passed to unbindEvent_.
- * @type {Array.<!Array>}
+ * Menu object.
+ * @type {Blockly.Menu}
  * @private
  */
-Blockly.ContextMenu.eventWrapper_ = null;
+Blockly.ContextMenu.menu_ = null;
 
 /**
  * Construct the menu based on the list of options and show the menu.
@@ -49,12 +49,13 @@ Blockly.ContextMenu.eventWrapper_ = null;
  * @param {boolean} rtl True if RTL, false if LTR.
  */
 Blockly.ContextMenu.show = function(e, options, rtl) {
-  Blockly.WidgetDiv.show(Blockly.ContextMenu, rtl, null);
+  Blockly.WidgetDiv.show(Blockly.ContextMenu, rtl, Blockly.ContextMenu.dispose);
   if (!options.length) {
     Blockly.ContextMenu.hide();
     return;
   }
   var menu = Blockly.ContextMenu.populate_(options, rtl);
+  Blockly.ContextMenu.menu_ = menu;
 
   Blockly.ContextMenu.position_(menu, e, rtl);
   // 1ms delay is required for focusing on context menus because some other
@@ -154,9 +155,15 @@ Blockly.ContextMenu.createWidget_ = function(menu) {
 Blockly.ContextMenu.hide = function() {
   Blockly.WidgetDiv.hideIfOwner(Blockly.ContextMenu);
   Blockly.ContextMenu.currentBlock = null;
-  if (Blockly.ContextMenu.eventWrapper_) {
-    Blockly.unbindEvent_(Blockly.ContextMenu.eventWrapper_);
-    Blockly.ContextMenu.eventWrapper_ = null;
+};
+
+/**
+ * Dispose of the menu.
+ */
+Blockly.ContextMenu.dispose = function() {
+  if (Blockly.ContextMenu.menu_) {
+    Blockly.ContextMenu.menu_.dispose();
+    Blockly.ContextMenu.menu_ = null;
   }
 };
 

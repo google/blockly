@@ -15,7 +15,6 @@ goog.provide('Blockly.MenuItem');
 goog.require('Blockly.utils.aria');
 goog.require('Blockly.utils.dom');
 goog.require('Blockly.utils.IdGenerator');
-goog.require('Blockly.utils.object');
 
 
 /**
@@ -139,7 +138,7 @@ Blockly.MenuItem.prototype.getValue = function() {
 
 /**
  * Set menu item's rendering direction.
- * @param {boolean} rightToLeft True if RTL, false if LTR.
+ * @param {boolean} rtl True if RTL, false if LTR.
  * @package
  */
 Blockly.MenuItem.prototype.setRightToLeft = function(rtl) {

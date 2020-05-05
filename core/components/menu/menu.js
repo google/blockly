@@ -15,7 +15,8 @@ goog.provide('Blockly.Menu');
 goog.require('Blockly.utils.aria');
 goog.require('Blockly.utils.Coordinate');
 goog.require('Blockly.utils.dom');
-goog.require('Blockly.utils.object');
+goog.require('Blockly.utils.KeyCodes');
+goog.require('Blockly.utils.style');
 
 
 /**

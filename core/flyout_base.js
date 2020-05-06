@@ -426,7 +426,7 @@ Blockly.Flyout.prototype.hide = function() {
 
 /**
  * Show and populate the flyout.
- * @param {!Array|!NodeList|string} contentDef List of contents for the flyout.
+ * @param {!Array<Object>|!NodeList|string} contentDef List of contents for the flyout.
  *     Variables and procedures have a custom set of blocks.
  */
 Blockly.Flyout.prototype.show = function(contentDef) {
@@ -449,11 +449,7 @@ Blockly.Flyout.prototype.show = function(contentDef) {
       throw TypeError('Result of toolbox category callback must be an array.');
     }
   }
-
-  // TODO: Has to be a better way than this.
-  if (contentDef.length && contentDef[0] instanceof Node) {
-    contentDef = this.xmlToJson_(contentDef);
-  }
+  var parsedContent = Blockly.Options.parseToolboxTree(contentDef);
 
   this.setVisible(true);
   // Create the blocks to be shown in this flyout.
@@ -461,7 +457,7 @@ Blockly.Flyout.prototype.show = function(contentDef) {
   var gaps = [];
   this.permanentlyDisabled_.length = 0;
   var defaultGap = this.horizontalLayout_ ? this.GAP_X : this.GAP_Y;
-  for (var i = 0, child; (child = contentDef[i]); i++) {
+  for (var i = 0, child; (child = parsedContent[i]); i++) {
     if (!child.tagName) {
       continue;
     }
@@ -513,28 +509,6 @@ Blockly.Flyout.prototype.show = function(contentDef) {
   this.workspace_.addChangeListener(this.reflowWrapper_);
 };
 
-Blockly.Flyout.prototype.xmlToJson_ = function(xmlArr) {
-  var arr = [];
-  for (var i = 0, child; (child = xmlArr[i]); i++) {
-    if (!child.tagName) {
-      continue;
-    }
-    var obj = {};
-    obj['tagName'] = child.tagName;
-    // Store the xml for a block
-    if (child.tagName.toUpperCase() === "BLOCK") {
-      obj['xmlDef'] = Blockly.utils.xml.domToText(child);
-    }
-
-    for (var j = 0; j < child.attributes.length; j++) {
-      var attr = child.attributes[j];
-      obj[attr.nodeName] = attr.value;
-    }
-    arr.push(obj);
-  }
-  return arr;
-};
-
 /**
  * Add a button to the flyout contents.
  * @param {!Object} child The object holding information about a button.
@@ -567,7 +541,9 @@ Blockly.Flyout.prototype.addButton_ = function(child, contents, gaps, defaultGap
 Blockly.Flyout.prototype.addBlock_ = function(child, contents, gaps, defaultGap) {
   var blockXml = null;
   if (child['xmlDef']) {
-    blockXml = Blockly.utils.xml.textToDomDocument(child['xmlDef']).childNodes[0];
+    blockXml = Blockly.Xml.textToDom(child['xmlDef']);
+  } else {
+    throw Error('Error: Invalid block definition. Block definition must have xmlDef.');
   }
   var curBlock = Blockly.Xml.domToBlock(blockXml, this.workspace_);
   if (!curBlock.isEnabled()) {

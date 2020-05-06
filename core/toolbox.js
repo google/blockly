@@ -208,7 +208,7 @@ Blockly.Toolbox.prototype.init = function() {
 
 /**
  * Fill the toolbox with categories and blocks.
- * @param {Node|Array<Object>} languageTree DOM tree of blocks or array holding
+ * @param {Array<Object>} languageTree DOM tree of blocks or array holding
  *    objects containing information on the structure of the toolbox.
  * @package
  */
@@ -227,9 +227,9 @@ Blockly.Toolbox.prototype.renderTree = function(languageTree) {
   if (languageTree) {
     this.tree_.contents = [];
     this.hasColours_ = false;
-    if (!Array.isArray(languageTree)) {
-      languageTree = this.xmlToJson_(languageTree);
-    }
+    // if (!Array.isArray(languageTree)) {
+    //   languageTree = this.xmlToJson_(languageTree);
+    // }
     openNode = this.createTree_(languageTree, this.tree_);
 
     if (this.tree_.contents.length) {
@@ -294,39 +294,6 @@ Blockly.Toolbox.prototype.createTree_ = function(childNodes, treeOut) {
     }
   }
   return openNode;
-};
-/**
- * Convert the xml for a toolbox to JSON.
- * @param {Node} xml DOM tree of blocks.
- * @return {Array<Object>} A list of objects in the toolbox.
- * @private
- */
-Blockly.Toolbox.prototype.xmlToJson_ = function(xml) {
-  var arr = [];
-  for (var i = 0, child; (child = xml.children[i]); i++) {
-    if (!child.tagName) {
-      continue;
-    }
-    var obj = {};
-    obj['tagName'] = child.tagName;
-    // Store the xml for a block
-    if (child.tagName.toUpperCase() === 'BLOCK') {
-      obj['xmlDef'] = Blockly.utils.xml.domToText(child);
-    }
-    // Get the contents for a category.
-    if (child.tagName.toUpperCase() === 'CATEGORY') {
-      for (var k = 0; k < child.children.length; k++) {
-        obj['contents'] = this.xmlToJson_(child);
-      }
-    }
-    // Add xml attributes to object
-    for (var j = 0; j < child.attributes.length; j++) {
-      var attr = child.attributes[j];
-      obj[attr.nodeName] = attr.value;
-    }
-    arr.push(obj);
-  }
-  return arr.length ? arr : null;
 };
 
 /**

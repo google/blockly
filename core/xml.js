@@ -81,7 +81,7 @@ Blockly.Xml.blockToDomWithXY = function(block, opt_noId) {
     block = block.getChildren(false)[0];
     if (!block) {
       // Disappears when appended.
-      return /** @type{!Element} */ new DocumentFragment();
+      return /** @type{!Element} */ (new DocumentFragment());
     }
   }
 

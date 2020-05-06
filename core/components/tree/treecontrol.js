@@ -34,20 +34,6 @@ Blockly.tree.TreeControl = function(toolbox, config) {
   this.toolbox_ = toolbox;
 
   /**
-   * Focus event data.
-   * @type {?Blockly.EventData}
-   * @private
-   */
-  this.onFocusWrapper_ = null;
-
-  /**
-   * Blur event data.
-   * @type {?Blockly.EventData}
-   * @private
-   */
-  this.onBlurWrapper_ = null;
-
-  /**
    * Click event data.
    * @type {?Blockly.EventData}
    * @private
@@ -66,7 +52,7 @@ Blockly.tree.TreeControl = function(toolbox, config) {
   // The root is open and selected by default.
   this.expanded_ = true;
   this.selected_ = true;
-  
+
   /**
    * Currently selected item.
    * @type {Blockly.tree.BaseNode}
@@ -99,41 +85,6 @@ Blockly.tree.TreeControl.prototype.getToolbox = function() {
  */
 Blockly.tree.TreeControl.prototype.getDepth = function() {
   return 0;
-};
-
-/**
- * Handles focus on the tree.
- * @param {!Event} _e The browser event.
- * @private
- */
-Blockly.tree.TreeControl.prototype.handleFocus_ = function(_e) {
-  this.focused_ = true;
-  var el = /** @type {!Element} */ (this.getElement());
-  Blockly.utils.dom.addClass(el, 'focused');
-
-  if (this.selectedItem_) {
-    this.selectedItem_.select();
-  }
-};
-
-/**
- * Handles blur on the tree.
- * @param {!Event} _e The browser event.
- * @private
- */
-Blockly.tree.TreeControl.prototype.handleBlur_ = function(_e) {
-  this.focused_ = false;
-  var el = /** @type {!Element} */ (this.getElement());
-  Blockly.utils.dom.removeClass(el, 'focused');
-};
-
-/**
- * Get whether this tree has focus or not.
- * @return {boolean} True if it has focus.
- * @package
- */
-Blockly.tree.TreeControl.prototype.hasFocus = function() {
-  return this.focused_;
 };
 
 /** @override */
@@ -278,10 +229,6 @@ Blockly.tree.TreeControl.prototype.attachEvents_ = function() {
   var el = this.getElement();
   el.tabIndex = 0;
 
-  this.onFocusWrapper_ = Blockly.bindEvent_(el,
-      'focus', this, this.handleFocus_);
-  this.onBlurWrapper_ = Blockly.bindEvent_(el,
-      'blur', this, this.handleBlur_);
   this.onClickWrapper_ = Blockly.bindEventWithChecks_(el,
       'click', this, this.handleMouseEvent_);
   this.onKeydownWrapper_ = Blockly.bindEvent_(el,
@@ -293,14 +240,6 @@ Blockly.tree.TreeControl.prototype.attachEvents_ = function() {
  * @private
  */
 Blockly.tree.TreeControl.prototype.detachEvents_ = function() {
-  if (this.onFocusWrapper_) {
-    Blockly.unbindEvent_(this.onFocusWrapper_);
-    this.onFocusWrapper_ = null;
-  }
-  if (this.onBlurWrapper_) {
-    Blockly.unbindEvent_(this.onBlurWrapper_);
-    this.onBlurWrapper_ = null;
-  }
   if (this.onClickWrapper_) {
     Blockly.unbindEvent_(this.onClickWrapper_);
     this.onClickWrapper_ = null;

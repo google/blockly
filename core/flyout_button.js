@@ -23,11 +23,11 @@ goog.require('Blockly.utils.dom');
  * @param {!Blockly.WorkspaceSvg} workspace The workspace in which to place this
  *     button.
  * @param {!Blockly.WorkspaceSvg} targetWorkspace The flyout's target workspace.
- * @param {!Element} xml The XML specifying the label/button.
+ * @param {!Object} json The JSON specifying the label/button.
  * @param {boolean} isLabel Whether this button should be styled as a label.
  * @constructor
  */
-Blockly.FlyoutButton = function(workspace, targetWorkspace, xml, isLabel) {
+Blockly.FlyoutButton = function(workspace, targetWorkspace, json, isLabel) {
   // Labels behave the same as buttons, but are styled differently.
 
   /**
@@ -46,7 +46,7 @@ Blockly.FlyoutButton = function(workspace, targetWorkspace, xml, isLabel) {
    * @type {string}
    * @private
    */
-  this.text_ = Blockly.Toolbox.getAttribute_(xml, 'text');
+  this.text_ = json['text'];
 
   /**
    * @type {!Blockly.utils.Coordinate}
@@ -66,16 +66,16 @@ Blockly.FlyoutButton = function(workspace, targetWorkspace, xml, isLabel) {
    * @type {string}
    * @private
    */
-  this.callbackKey_ = Blockly.Toolbox.getAttribute_(xml, 'callbackKey') ||
+  this.callbackKey_ = json['callbackKey'] ||
   /* Check the lower case version too to satisfy IE */
-                      Blockly.Toolbox.getAttribute_(xml, 'callbackkey');
+                      json['callbackkey'];
 
   /**
    * If specified, a CSS class to add to this button.
    * @type {?string}
    * @private
    */
-  this.cssClass_ = Blockly.Toolbox.getAttribute_(xml, 'web-class') || null;
+  this.cssClass_ = json['web-class'] || null;
 
   /**
    * Mouse up event data.

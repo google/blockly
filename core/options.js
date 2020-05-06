@@ -139,7 +139,7 @@ Blockly.Options = function(options) {
   this.hasCss = hasCss;
   /** @type {boolean} */
   this.horizontalLayout = horizontalLayout;
-  /** @type {Node} */
+  /** @type {Array<Object>|Node} */
   this.languageTree = languageTree;
   /** @type {!Object} */
   this.gridOptions = Blockly.Options.parseGridOptions_(options);
@@ -311,53 +311,52 @@ Blockly.Options.parseThemeOptions_ = function(options) {
 
 /**
  * Parse the provided toolbox tree into a consistent DOM format.
- * @param {Node|string} tree DOM tree of blocks, or text representation of same.
- * @return {Node} DOM tree of blocks, or null.
+ * @param {Array<Object>|Node|string} toolboxDef The definition of the toolbox.
+ *    Either in xml, a text representation of xml or JSON.
+ * @return {Node|Array<Object>} DOM tree of blocks, an array, or null.
  */
-Blockly.Options.parseToolboxTree = function(tree) {
-  if (tree) {
-    if (Array.isArray(tree)) {
-      return tree;
-    }
-    if (typeof tree != 'string') {
-      if (Blockly.utils.userAgent.IE && tree.outerHTML) {
-        // In this case the tree will not have been properly built by the
-        // browser. The HTML will be contained in the element, but it will
-        // not have the proper DOM structure since the browser doesn't support
-        // XSLTProcessor (XML -> HTML).
-        tree = tree.outerHTML;
-      } else if (!(tree instanceof Element)) {
-        tree = null;
-      }
-    }
-    if (typeof tree == 'string') {
-      tree = Blockly.Xml.textToDom(tree);
-      if (tree.nodeName.toLowerCase() != 'xml') {
-        throw TypeError('Toolbox should be an <xml> document.');
-      }
-    }
-  } else {
-    tree = null;
+Blockly.Options.parseToolboxTree = function(toolboxDef) {
+  if (!toolboxDef || Array.isArray(toolboxDef)) {
+    return toolboxDef || null;
   }
-  return tree;
+  if (typeof toolboxDef != 'string') {
+    if (Blockly.utils.userAgent.IE && toolboxDef.outerHTML) {
+      // In this case the tree will not have been properly built by the
+      // browser. The HTML will be contained in the element, but it will
+      // not have the proper DOM structure since the browser doesn't support
+      // XSLTProcessor (XML -> HTML).
+      toolboxDef = toolboxDef.outerHTML;
+    } else if (!(toolboxDef instanceof Element)) {
+      return null;
+    }
+  }
+  if (typeof toolboxDef == 'string') {
+    toolboxDef = Blockly.Xml.textToDom(toolboxDef);
+    if (toolboxDef.nodeName.toLowerCase() != 'xml') {
+      throw TypeError('Toolbox should be an <xml> document.');
+    }
+  }
+  return toolboxDef;
 };
 
 /**
  * Handle the before tree item selected action.
- * @param {Node|Array<Object>} tree The newly selected node.
+ * @param {Node|Array<Object>} toolboxDef The definition of the toolbox. Either
+ *    in xml or JSON.
  * @return {boolean} True if the toolbox input has categories.
  */
-Blockly.Options.hasCategories = function(tree) {
-  if (Array.isArray(tree)) {
+Blockly.Options.hasCategories = function(toolboxDef) {
+  if (Array.isArray(toolboxDef)) {
     // Search for categories
-    for (var i = 0; i < tree.length; i++) {
-      if (tree[i].tagName.toUpperCase() === 'CATEGORY') {
+    for (var i = 0; i < toolboxDef.length; i++) {
+      if (toolboxDef[i].tagName.toUpperCase() === 'CATEGORY') {
         return true;
       }
     }
   } else {
-    return Boolean(tree &&
-        tree.getElementsByTagName('category').length);
+    return Boolean(toolboxDef &&
+        toolboxDef.getElementsByTagName('category').length);
   }
+  return false;
 };
 

@@ -434,7 +434,7 @@ Blockly.Flyout.prototype.show = function(contentDef) {
   this.hide();
   this.clearOldBlocks_();
 
-  // Handle dynamic categories, represented by a name instead of a list of XML.
+  // Handle dynamic categories, represented by a name instead of a list.
   // Look up the correct category generation function and call that to get a
   // valid XML list.
   if (typeof contentDef == 'string') {
@@ -450,28 +450,34 @@ Blockly.Flyout.prototype.show = function(contentDef) {
     }
   }
 
+  // TODO: Has to be a better way than this.
+  if (contentDef.length && contentDef[0] instanceof Node) {
+    contentDef = this.xmlToJson_(contentDef);
+  }
+
   this.setVisible(true);
   // Create the blocks to be shown in this flyout.
   var contents = [];
   var gaps = [];
   this.permanentlyDisabled_.length = 0;
-  var default_gap = this.horizontalLayout_ ? this.GAP_X : this.GAP_Y;
+  var defaultGap = this.horizontalLayout_ ? this.GAP_X : this.GAP_Y;
   for (var i = 0, child; (child = contentDef[i]); i++) {
     if (!child.tagName) {
       continue;
     }
     switch (child.tagName.toUpperCase()) {
       case 'BLOCK':
-        this.addBlock_(child, contents, gaps, default_gap);
+        this.addBlock_(child, contents, gaps, defaultGap);
         break;
       case 'SEP':
-        this.addSeparator_(child, gaps, default_gap);
+        this.addSeparator_(child, gaps, defaultGap);
         break;
       case 'LABEL':
-        this.addButton_(child, contents, gaps, default_gap, true);
+        // A label is a button with different styling.
+        this.addButton_(child, contents, gaps, defaultGap, true);
         break;
       case 'BUTTON':
-        this.addButton_(child, contents, gaps, default_gap, false);
+        this.addButton_(child, contents, gaps, defaultGap, false);
         break;
     }
   }
@@ -507,22 +513,61 @@ Blockly.Flyout.prototype.show = function(contentDef) {
   this.workspace_.addChangeListener(this.reflowWrapper_);
 };
 
-Blockly.Flyout.prototype.addButton_ = function(child, contents, gaps, default_gap, isLabel) {
+Blockly.Flyout.prototype.xmlToJson_ = function(xmlArr) {
+  var arr = [];
+  for (var i = 0, child; (child = xmlArr[i]); i++) {
+    if (!child.tagName) {
+      continue;
+    }
+    var obj = {};
+    obj['tagName'] = child.tagName;
+    // Store the xml for a block
+    if (child.tagName.toUpperCase() === "BLOCK") {
+      obj['xmlDef'] = Blockly.utils.xml.domToText(child);
+    }
+
+    for (var j = 0; j < child.attributes.length; j++) {
+      var attr = child.attributes[j];
+      obj[attr.nodeName] = attr.value;
+    }
+    arr.push(obj);
+  }
+  return arr;
+};
+
+/**
+ * Add a button to the flyout contents.
+ * @param {!Object} child The object holding information about a button.
+ * @param {!Array<Object>} contents The array holding JSON representation of the
+ *    flyout contents.
+ * @param {!Array<number>} gaps The gaps in the flyout.
+ * @param {number} defaultGap The default gap between the button and next element.
+ * @param {boolean} isLabel True if the button is a label, false otherwise.
+ * @private
+ */
+Blockly.Flyout.prototype.addButton_ = function(child, contents, gaps, defaultGap, isLabel) {
   if (!Blockly.FlyoutButton) {
     throw Error('Missing require for Blockly.FlyoutButton');
   }
   var curButton = new Blockly.FlyoutButton(this.workspace_,
       this.targetWorkspace_, child, isLabel);
   contents.push({type: 'button', button: curButton});
-  gaps.push(default_gap);
+  gaps.push(defaultGap);
 };
 
-Blockly.Flyout.prototype.addBlock_ = function(child, contents, gaps, default_gap) {
+/**
+ * Add a block to the flyout contents.
+ * @param {!Object} child The xml or object holding information about a block.
+ * @param {!Array<Object>} contents The array holding JSON representation of the
+ *    flyout contents.
+ * @param {!Array<number>} gaps The gaps in the flyout.
+ * @param {number} defaultGap The default gap between the button and next element.
+ * @private
+ */
+Blockly.Flyout.prototype.addBlock_ = function(child, contents, gaps, defaultGap) {
   var blockXml = null;
-  if (!(child instanceof Node)) {
+  if (child['xmlDef']) {
     blockXml = Blockly.utils.xml.textToDomDocument(child['xmlDef']).childNodes[0];
-  } else {
-    blockXml = child;
   }
   var curBlock = Blockly.Xml.domToBlock(blockXml, this.workspace_);
   if (!curBlock.isEnabled()) {
@@ -534,20 +579,27 @@ Blockly.Flyout.prototype.addBlock_ = function(child, contents, gaps, default_gap
   // This is a deprecated method for adding gap to a block.
   // <block type="math_arithmetic" gap="8"></block>
   var gap = parseInt(blockXml.getAttribute('gap'), 10);
-  gaps.push(isNaN(gap) ? default_gap : gap);
+  gaps.push(isNaN(gap) ? defaultGap : gap);
 };
 
-Blockly.Flyout.prototype.addSeparator_ = function(child, gaps, default_gap) {
+/**
+ * Add a separator to the flyout. A separator in the flyout is a gap.
+ * @param {!Object} child The object holding information about a separator.
+ * @param {!Array<number>} gaps The gaps in the flyout.
+ * @param {number} defaultGap The default gap between the button and next element.
+ * @private
+ */
+Blockly.Flyout.prototype.addSeparator_ = function(child, gaps, defaultGap) {
   // Change the gap between two toolbox elements.
   // <sep gap="36"></sep>
   // The default gap is 24, can be set larger or smaller.
   // This overwrites the gap attribute on the previous element.
-  var newGap = parseInt(Blockly.Toolbox.getAttribute(child, 'gap'), 10);
+  var newGap = parseInt(child['gap'], 10);
   // Ignore gaps before the first block.
   if (!isNaN(newGap) && gaps.length > 0) {
     gaps[gaps.length - 1] = newGap;
   } else {
-    gaps.push(default_gap);
+    gaps.push(defaultGap);
   }
 };
 

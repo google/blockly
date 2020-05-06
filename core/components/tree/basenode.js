@@ -731,14 +731,14 @@ Blockly.tree.BaseNode.prototype.onKeyDown = function(e) {
   var handled = true;
   switch (e.keyCode) {
     case Blockly.utils.KeyCodes.RIGHT:
-      if (e.altKey) {
+      if (e.altKey) {  // Why?
         break;
       }
       handled = this.selectChild();
       break;
 
     case Blockly.utils.KeyCodes.LEFT:
-      if (e.altKey) {
+      if (e.altKey) {  // Why?
         break;
       }
       handled = this.selectParent();
@@ -750,6 +750,12 @@ Blockly.tree.BaseNode.prototype.onKeyDown = function(e) {
 
     case Blockly.utils.KeyCodes.UP:
       handled = this.selectPrevious();
+      break;
+
+    case Blockly.utils.KeyCodes.ENTER:
+    case Blockly.utils.KeyCodes.SPACE:
+      this.setExpanded(!this.expanded_);
+      handled = true;
       break;
 
     default:
@@ -847,18 +853,17 @@ Blockly.tree.BaseNode.prototype.getLastShownDescendant = function() {
 Blockly.tree.BaseNode.prototype.getNextShownNode = function() {
   if (this.hasChildren() && this.expanded_) {
     return this.getChildAt(0);
-  } else {
-    var parent = this;
-    var next;
-    while (parent != this.getTree()) {
-      next = parent.getNextSibling();
-      if (next != null) {
-        return next;
-      }
-      parent = parent.getParent();
-    }
-    return null;
   }
+  var parent = this;
+  var next;
+  while (parent != this.getTree()) {
+    next = parent.getNextSibling();
+    if (next != null) {
+      return next;
+    }
+    parent = parent.getParent();
+  }
+  return null;
 };
 
 /**

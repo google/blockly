@@ -257,12 +257,8 @@ Blockly.tree.TreeControl.prototype.detachEvents_ = function() {
  */
 Blockly.tree.TreeControl.prototype.handleMouseEvent_ = function(e) {
   var node = this.getNodeFromEvent_(e);
-  if (node) {
-    switch (e.type) {
-      case 'click':
-        node.onClick_(e);
-        break;
-    }
+  if (node && e.type == 'click') {
+    node.onClick_(e);
   }
 };
 
@@ -273,10 +269,8 @@ Blockly.tree.TreeControl.prototype.handleMouseEvent_ = function(e) {
  * @private
  */
 Blockly.tree.TreeControl.prototype.handleKeyEvent_ = function(e) {
-  var handled = false;
-
   // Handle navigation keystrokes.
-  handled = (this.selectedItem_ && this.selectedItem_.onKeyDown(e)) || handled;
+  var handled = !!(this.selectedItem_ && this.selectedItem_.onKeyDown(e));
 
   if (handled) {
     Blockly.utils.style.scrollIntoContainerView(
@@ -299,7 +293,7 @@ Blockly.tree.TreeControl.prototype.getNodeFromEvent_ = function(e) {
   // find the right node
   var node = null;
   var target = e.target;
-  while (target != null) {
+  while (target) {
     var id = target.id;
     node = Blockly.tree.BaseNode.allNodes[id];
     if (node) {

@@ -4711,18 +4711,6 @@ declare module Blockly {
     
 }
 
-declare module Blockly.FieldDate {
-
-    /**
-     * Construct a FieldDate from a JSON arg object.
-     * @param {!Object} options A JSON object with options (date).
-     * @return {!Blockly.FieldDate} The new field instance.
-     * @package
-     * @nocollapse
-     */
-    function fromJson(options: Object): Blockly.FieldDate;
-}
-
 declare module goog {
 
     /**

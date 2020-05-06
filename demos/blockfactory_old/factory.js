@@ -335,12 +335,6 @@ function getFieldsJs_(block) {
               escapeString(block.getFieldValue('COLOUR')) + '), ' +
               escapeString(block.getFieldValue('FIELDNAME')));
           break;
-        case 'field_date':
-          // Result: new Blockly.FieldDate('2015-02-04'), 'DATE'
-          fields.push('new Blockly.FieldDate(' +
-              escapeString(block.getFieldValue('DATE')) + '), ' +
-              escapeString(block.getFieldValue('FIELDNAME')));
-          break;
         case 'field_variable':
           // Result: new Blockly.FieldVariable('item'), 'VAR'
           var varname = escapeString(block.getFieldValue('TEXT') || null);
@@ -438,13 +432,6 @@ function getFieldsJson_(block) {
             type: block.type,
             name: block.getFieldValue('FIELDNAME'),
             colour: block.getFieldValue('COLOUR')
-          });
-          break;
-        case 'field_date':
-          fields.push({
-            type: block.type,
-            name: block.getFieldValue('FIELDNAME'),
-            date: block.getFieldValue('DATE')
           });
           break;
         case 'field_variable':
@@ -576,10 +563,6 @@ function updateGenerator(block) {
       } else if (field instanceof Blockly.FieldAngle) {
         // Subclass of Blockly.FieldTextInput, must test first.
         code.push(makeVar('angle', name) +
-                  " = block.getFieldValue('" + name + "');");
-      } else if (Blockly.FieldDate && field instanceof Blockly.FieldDate) {
-        // Blockly.FieldDate may not be compiled into Blockly.
-        code.push(makeVar('date', name) +
                   " = block.getFieldValue('" + name + "');");
       } else if (field instanceof Blockly.FieldColour) {
         code.push(makeVar('colour', name) +

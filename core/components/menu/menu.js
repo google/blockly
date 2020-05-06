@@ -99,7 +99,8 @@ Blockly.Menu.prototype.addChild = function(menuItem) {
  */
 Blockly.Menu.prototype.render = function(container) {
   var element = document.createElement('div');
-  element.className = 'goog-menu blocklyNonSelectable';
+  // goog-menu is deprecated, use blocklyMenu.  May 2020.
+  element.className = 'blocklyMenu goog-menu blocklyNonSelectable';
   element.tabIndex = 0;
   Blockly.utils.aria.setRole(element, this.roleName_);
   this.element_ = element;
@@ -141,7 +142,7 @@ Blockly.Menu.prototype.focus = function() {
   var el = this.getElement();
   if (el) {
     el.focus({preventScroll:true});
-    Blockly.utils.dom.addClass(el, 'focused');
+    Blockly.utils.dom.addClass(el, 'blocklyFocused');
   }
 };
 
@@ -153,7 +154,7 @@ Blockly.Menu.prototype.blur = function() {
   var el = this.getElement();
   if (el) {
     el.blur();
-    Blockly.utils.dom.removeClass(el, 'focused');
+    Blockly.utils.dom.removeClass(el, 'blocklyFocused');
   }
 };
 
@@ -223,7 +224,7 @@ Blockly.Menu.prototype.getMenuItem = function(node) {
 
 /**
  * Highlights the given menu item, or clears highlighting if null.
- * @param {!Blockly.MenuItem} item Item to highlight.
+ * @param {Blockly.MenuItem} item Item to highlight, or null.
  * @protected
  */
 Blockly.Menu.prototype.setHighlighted = function(item) {

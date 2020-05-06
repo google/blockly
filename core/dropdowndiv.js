@@ -166,10 +166,10 @@ Blockly.DropDownDiv.createDom = function() {
   // Handle focusin/out events to add a visual indicator when
   // a child is focused or blurred.
   div.addEventListener('focusin', function() {
-    Blockly.utils.dom.addClass(div, 'focused');
+    Blockly.utils.dom.addClass(div, 'blocklyFocused');
   });
   div.addEventListener('focusout', function() {
-    Blockly.utils.dom.removeClass(div, 'focused');
+    Blockly.utils.dom.removeClass(div, 'blocklyFocused');
   });
 };
 

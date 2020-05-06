@@ -74,17 +74,18 @@ Blockly.MenuItem.prototype.createDom = function() {
   this.element_ = element;
 
   // Set class and style
-  element.className = 'goog-menuitem ' +
-      (!this.enabled_ ? 'goog-menuitem-disabled ' : '') +
-      (this.checked_ ? 'goog-option-selected ' : '') +
-      (this.rightToLeft_ ? 'goog-menuitem-rtl ' : '');
+  // goog-menuitem* is deprecated, use blocklyMenuItem*.  May 2020.
+  element.className = 'blocklyMenuItem goog-menuitem ' +
+      (this.enabled_ ? '' : 'blocklyMenuItemDisabled goog-menuitem-disabled ') +
+      (this.checked_ ? 'blocklyMenuItemSelected goog-option-selected ' : '') +
+      (this.rightToLeft_ ? 'blocklyMenuItemRtl goog-menuitem-rtl ' : '');
 
   var content = document.createElement('div');
-  content.className = 'goog-menuitem-content';
+  content.className = 'blocklyMenuItemContent goog-menuitem-content';
   // Add a checkbox for checkable menu items.
   if (this.checkable_) {
     var checkbox = document.createElement('div');
-    checkbox.className = 'goog-menuitem-checkbox';
+    checkbox.className = 'blocklyMenuItemCheckbox goog-menuitem-checkbox';
     content.appendChild(checkbox);
   }
 
@@ -183,10 +184,16 @@ Blockly.MenuItem.prototype.setHighlighted = function(highlight) {
 
   var el = this.getElement();
   if (el && this.isEnabled()) {
+    // goog-menuitem-highlight is deprecated, use blocklyMenuItemHighlight.
+    // May 2020.
+    var name = 'blocklyMenuItemHighlight';
+    var nameDep = 'goog-menuitem-highlight';
     if (highlight) {
-      Blockly.utils.dom.addClass(el, 'goog-menuitem-highlight');
+      Blockly.utils.dom.addClass(el, name);
+      Blockly.utils.dom.addClass(el, nameDep);
     } else {
-      Blockly.utils.dom.removeClass(el, 'goog-menuitem-highlight');
+      Blockly.utils.dom.removeClass(el, name);
+      Blockly.utils.dom.removeClass(el, nameDep);
     }
   }
 };
@@ -210,10 +217,16 @@ Blockly.MenuItem.prototype.setEnabled = function(enabled) {
 
   var el = this.getElement();
   if (el) {
+    // goog-menuitem-disabled is deprecated, use blocklyMenuItemDisabled.
+    // May 2020.
+    var name = 'blocklyMenuItemDisabled';
+    var nameDep = 'goog-menuitem-disabled';
     if (enabled) {
-      Blockly.utils.dom.removeClass(el, 'goog-menuitem-disabled');
+      Blockly.utils.dom.removeClass(el, name);
+      Blockly.utils.dom.removeClass(el, nameDep);
     } else {
-      Blockly.utils.dom.addClass(el, 'goog-menuitem-disabled');
+      Blockly.utils.dom.addClass(el, name);
+      Blockly.utils.dom.addClass(el, nameDep);
     }
   }
 };

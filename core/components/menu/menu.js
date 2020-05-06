@@ -84,6 +84,20 @@ Blockly.Menu = function() {
    * @private
    */
   this.onKeyDownHandler_ = null;
+
+  /**
+   * The menu's root DOM element.
+   * @type {Element}
+   * @private
+   */
+  this.element_ = null;
+
+  /**
+   * ARIA name for this menu.
+   * @type {string}
+   * @private
+   */
+  this.roleName_ = '';
 };
 
 
@@ -150,9 +164,9 @@ Blockly.Menu.prototype.focus = function() {
 
 /**
  * Blur the menu element.
- * @package
+ * @private
  */
-Blockly.Menu.prototype.blur = function() {
+Blockly.Menu.prototype.blur_ = function() {
   var el = this.getElement();
   if (el) {
     el.blur();
@@ -249,9 +263,9 @@ Blockly.Menu.prototype.setHighlighted_ = function(item) {
 /**
  * Highlights the next highlightable item (or the first if nothing is currently
  * highlighted).
- * @private
+ * @package
  */
-Blockly.Menu.prototype.highlightNext_ = function() {
+Blockly.Menu.prototype.highlightNext = function() {
   var index = this.menuItems_.indexOf(this.highlightedItem_);
   this.highlightHelper_(index, 1);
 };
@@ -259,9 +273,9 @@ Blockly.Menu.prototype.highlightNext_ = function() {
 /**
  * Highlights the previous highlightable item (or the last if nothing is
  * currently highlighted).
- * @private
+ * @package
  */
-Blockly.Menu.prototype.highlightPrevious_ = function() {
+Blockly.Menu.prototype.highlightPrevious = function() {
   var index = this.menuItems_.indexOf(this.highlightedItem_);
   this.highlightHelper_(index < 0 ? this.menuItems_.length : index, -1);
 };
@@ -366,7 +380,7 @@ Blockly.Menu.prototype.handleMouseEnter_ = function(_e) {
  */
 Blockly.Menu.prototype.handleMouseLeave_ = function(_e) {
   if (this.getElement()) {
-    this.blur();
+    this.blur_();
     this.setHighlighted_(null);
   }
 };
@@ -380,24 +394,13 @@ Blockly.Menu.prototype.handleMouseLeave_ = function(_e) {
  * @private
  */
 Blockly.Menu.prototype.handleKeyEvent_ = function(e) {
-  if (this.menuItems_.length && this.handleKeyEventInternal_(e)) {
-    e.preventDefault();
-    e.stopPropagation();
+  if (!this.menuItems_.length) {
+    // Empty menu.
+    return;
   }
-};
-
-/**
- * Attempts to handle a keyboard event; returns true if the event was handled,
- * false otherwise.
- * @param {!Event} e Key event to handle.
- * @return {boolean} Whether the event was handled by the container (or one of
- *     its children).
- * @private
- */
-Blockly.Menu.prototype.handleKeyEventInternal_ = function(e) {
-  // Do not handle the key event if any modifier key is pressed.
   if (e.shiftKey || e.ctrlKey || e.metaKey || e.altKey) {
-    return false;
+    // Do not handle the key event if any modifier key is pressed.
+    return;
   }
 
   var highlighted = this.highlightedItem_;
@@ -410,11 +413,11 @@ Blockly.Menu.prototype.handleKeyEventInternal_ = function(e) {
       break;
 
     case Blockly.utils.KeyCodes.UP:
-      this.highlightPrevious_();
+      this.highlightPrevious();
       break;
 
     case Blockly.utils.KeyCodes.DOWN:
-      this.highlightNext_();
+      this.highlightNext();
       break;
 
     case Blockly.utils.KeyCodes.PAGE_UP:
@@ -428,8 +431,10 @@ Blockly.Menu.prototype.handleKeyEventInternal_ = function(e) {
       break;
 
     default:
-      return false;
+      // Not a key the menu is interested in.
+      return;
   }
-
-  return true;
+  // The menu used this key, don't let it have secondary effects.
+  e.preventDefault();
+  e.stopPropagation();
 };

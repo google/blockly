@@ -722,16 +722,10 @@ Blockly.tree.BaseNode.prototype.onKeyDown = function(e) {
   var handled = true;
   switch (e.keyCode) {
     case Blockly.utils.KeyCodes.RIGHT:
-      if (e.altKey) {  // Why?
-        break;
-      }
       handled = this.selectChild();
       break;
 
     case Blockly.utils.KeyCodes.LEFT:
-      if (e.altKey) {  // Why?
-        break;
-      }
       handled = this.selectParent();
       break;
 

@@ -60,6 +60,34 @@ Blockly.MenuItem = function(content, opt_value) {
    * @private
    */
   this.rightToLeft_ = false;
+
+  /**
+   * ARIA name for this menu.
+   * @type {string}
+   * @private
+   */
+  this.roleName_ = '';
+
+  /**
+   * Is this menu item checkable.
+   * @type {boolean}
+   * @private
+   */
+  this.checkable_ = false;
+
+  /**
+   * Is this menu item currently checked.
+   * @type {boolean}
+   * @private
+   */
+  this.checked_ = false;
+
+  /**
+   * Bound function to call when this menu item is clicked.
+   * @type {Function}
+   * @private
+   */
+  this.actionHandler_ = null;
 };
 
 
@@ -214,21 +242,6 @@ Blockly.MenuItem.prototype.isEnabled = function() {
  */
 Blockly.MenuItem.prototype.setEnabled = function(enabled) {
   this.enabled_ = enabled;
-
-  var el = this.getElement();
-  if (el) {
-    // goog-menuitem-disabled is deprecated, use blocklyMenuItemDisabled.
-    // May 2020.
-    var name = 'blocklyMenuItemDisabled';
-    var nameDep = 'goog-menuitem-disabled';
-    if (enabled) {
-      Blockly.utils.dom.removeClass(el, name);
-      Blockly.utils.dom.removeClass(el, nameDep);
-    } else {
-      Blockly.utils.dom.addClass(el, name);
-      Blockly.utils.dom.addClass(el, nameDep);
-    }
-  }
 };
 
 /**
@@ -238,7 +251,7 @@ Blockly.MenuItem.prototype.setEnabled = function(enabled) {
  */
 Blockly.MenuItem.prototype.performAction = function() {
   if (this.isEnabled() && this.actionHandler_) {
-    this.actionHandler_.call(this.actionHandlerObj_, this);
+    this.actionHandler_(this);
   }
 };
 
@@ -250,6 +263,5 @@ Blockly.MenuItem.prototype.performAction = function() {
  * @package
  */
 Blockly.MenuItem.prototype.onAction = function(fn, obj) {
-  this.actionHandler_ = fn;
-  this.actionHandlerObj_ = obj;
+  this.actionHandler_ = fn.bind(obj);
 };

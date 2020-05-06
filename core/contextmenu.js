@@ -60,7 +60,7 @@ Blockly.ContextMenu.show = function(e, options, rtl) {
   Blockly.ContextMenu.position_(menu, e, rtl);
   // 1ms delay is required for focusing on context menus because some other
   // mouse event is still waiting in the queue and clears focus.
-  setTimeout(function() {menu.getElement().focus();}, 1);
+  setTimeout(function() {menu.focus();}, 1);
   Blockly.ContextMenu.currentBlock = null;  // May be set by Blockly.Block.
 };
 
@@ -86,7 +86,7 @@ Blockly.ContextMenu.populate_ = function(options, rtl) {
     menu.addChild(menuItem);
     menuItem.setEnabled(option.enabled);
     if (option.enabled) {
-      var actionHandler = function() {
+      var actionHandler = function(_menuItem) {
         var option = this;
         Blockly.ContextMenu.hide();
         option.callback();
@@ -128,7 +128,7 @@ Blockly.ContextMenu.position_ = function(menu, e, rtl) {
   // Calling menuDom.focus() has to wait until after the menu has been placed
   // correctly.  Otherwise it will cause a page scroll to get the misplaced menu
   // in view.  See issue #1329.
-  menu.getElement().focus();
+  menu.focus();
 };
 
 /**

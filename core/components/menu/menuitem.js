@@ -57,7 +57,7 @@ Blockly.MenuItem = function(content, opt_value) {
   /**
    * Whether the menu item is rendered right-to-left.
    * @type {boolean}
-   * @protected
+   * @private
    */
   this.rightToLeft_ = false;
 };

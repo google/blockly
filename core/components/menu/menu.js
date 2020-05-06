@@ -122,7 +122,7 @@ Blockly.Menu.prototype.render = function(container) {
   this.mouseLeaveHandler_ = Blockly.bindEventWithChecks_(element,
       'mouseleave', this, this.handleMouseLeave_, true);
   this.onKeyDownHandler_ = Blockly.bindEventWithChecks_(element,
-      'keydown', this, this.handleKeyEvent);
+      'keydown', this, this.handleKeyEvent_);
 
   container.appendChild(element);
 };
@@ -209,9 +209,9 @@ Blockly.Menu.prototype.dispose = function() {
  * menu item is found.
  * @param {Node} node DOM node whose owner is to be returned.
  * @return {?Blockly.MenuItem} Menu item for which the DOM node belongs to.
- * @protected
+ * @private
  */
-Blockly.Menu.prototype.getMenuItem = function(node) {
+Blockly.Menu.prototype.getMenuItem_ = function(node) {
   var elem = this.getElement();
   while (node && node !== elem) {
     if (node.blocklyMenuItem) {
@@ -227,9 +227,9 @@ Blockly.Menu.prototype.getMenuItem = function(node) {
 /**
  * Highlights the given menu item, or clears highlighting if null.
  * @param {Blockly.MenuItem} item Item to highlight, or null.
- * @protected
+ * @private
  */
-Blockly.Menu.prototype.setHighlighted = function(item) {
+Blockly.Menu.prototype.setHighlighted_ = function(item) {
   var currentHighlighted = this.highlightedItem_;
   if (currentHighlighted) {
     currentHighlighted.setHighlighted(false);
@@ -249,37 +249,37 @@ Blockly.Menu.prototype.setHighlighted = function(item) {
 /**
  * Highlights the next highlightable item (or the first if nothing is currently
  * highlighted).
- * @package
+ * @private
  */
-Blockly.Menu.prototype.highlightNext = function() {
+Blockly.Menu.prototype.highlightNext_ = function() {
   var index = this.menuItems_.indexOf(this.highlightedItem_);
-  this.highlightHelper(index, 1);
+  this.highlightHelper_(index, 1);
 };
 
 /**
  * Highlights the previous highlightable item (or the last if nothing is
  * currently highlighted).
- * @package
+ * @private
  */
-Blockly.Menu.prototype.highlightPrevious = function() {
+Blockly.Menu.prototype.highlightPrevious_ = function() {
   var index = this.menuItems_.indexOf(this.highlightedItem_);
-  this.highlightHelper(index < 0 ? this.menuItems_.length : index, -1);
+  this.highlightHelper_(index < 0 ? this.menuItems_.length : index, -1);
 };
 
 /**
  * Highlights the first highlightable item.
- * @package
+ * @private
  */
-Blockly.Menu.prototype.highlightFirst = function() {
-  this.highlightHelper(-1, 1);
+Blockly.Menu.prototype.highlightFirst_ = function() {
+  this.highlightHelper_(-1, 1);
 };
 
 /**
  * Highlights the last highlightable item.
- * @package
+ * @private
  */
-Blockly.Menu.prototype.highlightLast = function() {
-  this.highlightHelper(this.menuItems_.length, -1);
+Blockly.Menu.prototype.highlightLast_ = function() {
+  this.highlightHelper_(this.menuItems_.length, -1);
 };
 
 /**
@@ -287,14 +287,14 @@ Blockly.Menu.prototype.highlightLast = function() {
  * child menuitems in response to keyboard events.
  * @param {number} startIndex Start index.
  * @param {number} delta Step direction: 1 to go down, -1 to go up.
- * @protected
+ * @private
  */
-Blockly.Menu.prototype.highlightHelper = function(startIndex, delta) {
+Blockly.Menu.prototype.highlightHelper_ = function(startIndex, delta) {
   var index = startIndex + delta;
   var menuItem;
   while ((menuItem = this.menuItems_[index])) {
     if (menuItem.isEnabled()) {
-      this.setHighlighted(menuItem);
+      this.setHighlighted_(menuItem);
       break;
     }
     index += delta;
@@ -310,15 +310,15 @@ Blockly.Menu.prototype.highlightHelper = function(startIndex, delta) {
  * @private
  */
 Blockly.Menu.prototype.handleMouseOver_ = function(e) {
-  var menuItem = this.getMenuItem(/** @type {Node} */ (e.target));
+  var menuItem = this.getMenuItem_(/** @type {Node} */ (e.target));
 
   if (menuItem) {
     if (menuItem.isEnabled()) {
       if (this.highlightedItem_ != menuItem) {
-        this.setHighlighted(menuItem);
+        this.setHighlighted_(menuItem);
       }
     } else {
-      this.setHighlighted(null);
+      this.setHighlighted_(null);
     }
   }
 };
@@ -344,7 +344,7 @@ Blockly.Menu.prototype.handleClick_ = function(e) {
     }
   }
 
-  var menuItem = this.getMenuItem(/** @type {Node} */ (e.target));
+  var menuItem = this.getMenuItem_(/** @type {Node} */ (e.target));
   if (menuItem) {
     menuItem.performAction();
   }
@@ -367,7 +367,7 @@ Blockly.Menu.prototype.handleMouseEnter_ = function(_e) {
 Blockly.Menu.prototype.handleMouseLeave_ = function(_e) {
   if (this.getElement()) {
     this.blur();
-    this.setHighlighted(null);
+    this.setHighlighted_(null);
   }
 };
 
@@ -375,13 +375,12 @@ Blockly.Menu.prototype.handleMouseLeave_ = function(_e) {
 
 /**
  * Attempts to handle a keyboard event, if the menu item is enabled, by calling
- * {@link handleKeyEventInternal}.  Considered protected; should only be used
- * within this package and by subclasses.
+ * {@link handleKeyEventInternal_}.
  * @param {!Event} e Key event to handle.
- * @protected
+ * @private
  */
-Blockly.Menu.prototype.handleKeyEvent = function(e) {
-  if (this.menuItems_.length && this.handleKeyEventInternal(e)) {
+Blockly.Menu.prototype.handleKeyEvent_ = function(e) {
+  if (this.menuItems_.length && this.handleKeyEventInternal_(e)) {
     e.preventDefault();
     e.stopPropagation();
   }
@@ -393,9 +392,9 @@ Blockly.Menu.prototype.handleKeyEvent = function(e) {
  * @param {!Event} e Key event to handle.
  * @return {boolean} Whether the event was handled by the container (or one of
  *     its children).
- * @protected
+ * @private
  */
-Blockly.Menu.prototype.handleKeyEventInternal = function(e) {
+Blockly.Menu.prototype.handleKeyEventInternal_ = function(e) {
   // Do not handle the key event if any modifier key is pressed.
   if (e.shiftKey || e.ctrlKey || e.metaKey || e.altKey) {
     return false;
@@ -411,21 +410,21 @@ Blockly.Menu.prototype.handleKeyEventInternal = function(e) {
       break;
 
     case Blockly.utils.KeyCodes.UP:
-      this.highlightPrevious();
+      this.highlightPrevious_();
       break;
 
     case Blockly.utils.KeyCodes.DOWN:
-      this.highlightNext();
+      this.highlightNext_();
       break;
 
     case Blockly.utils.KeyCodes.PAGE_UP:
     case Blockly.utils.KeyCodes.HOME:
-      this.highlightFirst();
+      this.highlightFirst_();
       break;
 
     case Blockly.utils.KeyCodes.PAGE_DOWN:
     case Blockly.utils.KeyCodes.END:
-      this.highlightLast();
+      this.highlightLast_();
       break;
 
     default:

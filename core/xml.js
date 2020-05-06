@@ -82,7 +82,7 @@ Blockly.Xml.blockToDomWithXY = function(block, opt_noId) {
     width = block.workspace.getWidth();
   }
   var elem = Blockly.Xml.blockToDom(block, opt_noId);
-  if (elem instanceof Element) {
+  if (elem.nodeType == Blockly.utils.dom.NodeType.ELEMENT_NODE) {
     var xy = block.getRelativeToSurfaceXY();
     elem.setAttribute('x',
         Math.round(block.workspace.RTL ? width - xy.x : xy.x));
@@ -201,7 +201,7 @@ Blockly.Xml.blockToDom = function(block, opt_noId) {
       }
       if (childBlock) {
         var elem = Blockly.Xml.blockToDom(childBlock, opt_noId);
-        if (elem instanceof Element) {
+        if (elem.nodeType == Blockly.utils.dom.NodeType.ELEMENT_NODE) {
           container.appendChild(elem);
           empty = false;
         }
@@ -235,7 +235,7 @@ Blockly.Xml.blockToDom = function(block, opt_noId) {
   var nextBlock = block.getNextBlock();
   if (nextBlock) {
     var elem = Blockly.Xml.blockToDom(nextBlock, opt_noId);
-    if (elem instanceof Element) {
+    if (elem.nodeType == Blockly.utils.dom.NodeType.ELEMENT_NODE) {
       var container = Blockly.utils.xml.createElement('next');
       container.appendChild(elem);
       element.appendChild(container);

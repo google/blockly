@@ -94,10 +94,10 @@ Blockly.Menu = function() {
 
   /**
    * ARIA name for this menu.
-   * @type {string}
+   * @type {Blockly.utils.aria.Role}
    * @private
    */
-  this.roleName_ = '';
+  this.roleName_ = null;
 };
 
 
@@ -118,7 +118,9 @@ Blockly.Menu.prototype.render = function(container) {
   // goog-menu is deprecated, use blocklyMenu.  May 2020.
   element.className = 'blocklyMenu goog-menu blocklyNonSelectable';
   element.tabIndex = 0;
-  Blockly.utils.aria.setRole(element, this.roleName_);
+  if (this.roleName_) {
+    Blockly.utils.aria.setRole(element, this.roleName_);
+  }
   this.element_ = element;
 
   // Add menu items.

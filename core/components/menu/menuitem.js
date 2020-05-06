@@ -63,10 +63,10 @@ Blockly.MenuItem = function(content, opt_value) {
 
   /**
    * ARIA name for this menu.
-   * @type {string}
+   * @type {Blockly.utils.aria.Role}
    * @private
    */
-  this.roleName_ = '';
+  this.roleName_ = null;
 
   /**
    * Is this menu item checkable.
@@ -121,7 +121,9 @@ Blockly.MenuItem.prototype.createDom = function() {
   element.appendChild(content);
 
   // Initialize ARIA role and state.
-  Blockly.utils.aria.setRole(element, this.roleName_);
+  if (this.roleName_) {
+    Blockly.utils.aria.setRole(element, this.roleName_);
+  }
   Blockly.utils.aria.setState(element, Blockly.utils.aria.State.SELECTED,
       (this.checkable_ && this.checked_) || false);
 

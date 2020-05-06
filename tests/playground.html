@@ -104,12 +104,7 @@ function start() {
   document.forms.options.elements.toolbox.selectedIndex =
       toolboxNames.indexOf(toolbox.id);
   match = location.search.match(/side=([^&]+)/);
-  var side = match ? match[1] : 'start';
-  document.forms.options.elements.side.value = side;
   var autoimport = !!location.search.match(/autoimport=([^&]+)/);
-  match = location.search.match(/renderer=([^&]+)/);
-  var renderer = match ? match[1] : 'geras';
-  document.forms.options.elements.renderer.value = renderer;
   // Create main workspace.
   workspace = Blockly.inject('blocklyDiv',
       {
@@ -123,7 +118,7 @@ function start() {
             colour: '#ccc',
             snap: true
           },
-        horizontalLayout: side == 'top' || side == 'bottom',
+        horizontalLayout: false,
         maxBlocks: Infinity,
         maxInstances: {'test_basic_limit_instances': 3},
         maxTrashcanContents: 256,
@@ -137,8 +132,8 @@ function start() {
           wheel: false,
         },
         toolbox: toolbox,
-        toolboxPosition: side == 'top' || side == 'start' ? 'start' : 'end',
-        renderer: renderer,
+        toolboxPosition: 'start',
+        renderer: 'geras',
         zoom:
           {
             controls: true,
@@ -151,7 +146,6 @@ function start() {
       });
   workspace.configureContextMenu = configureContextMenu;
   addToolboxButtonCallbacks();
-  addRenderDebugOptionsCheckboxes();
   populateTestThemes();
   // Restore previously displayed text.
   if (sessionStorage) {
@@ -162,13 +156,6 @@ function start() {
     // Restore event logging state.
     var state = sessionStorage.getItem('logEvents');
     logEvents(Boolean(Number(state)));
-    // Restore render debug state.
-    var renderDebugState = sessionStorage.getItem('blockRenderDebug');
-    toggleRenderingDebug(Boolean(Number(renderDebugState)));
-    // Restore render debug options state.
-    var renderDebugOptionsState =
-        JSON.parse(sessionStorage.getItem('blockRenderDebugOptions'));
-    setRenderDebugOptionCheckboxState(renderDebugOptionsState);
   } else {
     // MSIE 11 does not support sessionStorage on file:// URLs.
     logEvents(false);
@@ -287,86 +274,6 @@ function addToolboxButtonCallbacks() {
   workspace.registerButtonCallback(
       'insertConnectionStatements',
           Blockly.TestBlocks.insertConnectionStatements);
-}
-
-function setRenderDebugOptionCheckboxState(overrideOptions) {
-  if (!Blockly.blockRendering.Debug) {
-    return;
-  }
-  Blockly.blockRendering.Debug.config = overrideOptions || {};
-  if (!overrideOptions) {
-    return;
-  }
-  var renderDebugOptionsListEl = document.getElementById('renderDebugOptions');
-  var renderDebugOptionInputs =
-      renderDebugOptionsListEl.getElementsByTagName('input');
-  for (var i = 0, optionInput;
-      (optionInput = renderDebugOptionInputs[i]); i++) {
-    var optionName = optionInput.getAttribute('data-optionName');
-    optionInput.checked = !!overrideOptions[optionName];
-  }
-}
-
-function updateRenderDebugOptions(e) {
-  if (!Blockly.blockRendering.Debug) {
-    return;
-  }
-  var target = e.target;
-  var optionName = target.getAttribute('data-optionName');
-  var config = Blockly.blockRendering.Debug.config;
-  config[optionName] = !!target.checked;
-  sessionStorage.setItem(
-      'blockRenderDebugOptions', JSON.stringify(config));
-  workspace.render();
-}
-
-function addRenderDebugOptionsCheckboxes() {
-  if (!Blockly.blockRendering.Debug) {
-    return;
-  }
-  var renderDebugConfig = Blockly.blockRendering.Debug.config;
-  var renderDebugOptionsListEl = document.getElementById('renderDebugOptions');
-  var optionNames = Object.keys(renderDebugConfig);
-  for (var i = 0, optionName; (optionName = optionNames[i]); i++) {
-    var optionCheckId = 'RenderDebug' + optionName + 'Check';
-    var optionLabel = document.createElement('label');
-    optionLabel.setAttribute('for', optionCheckId);
-    optionLabel.textContent = optionName;
-    var optionCheck = document.createElement('input');
-    optionCheck.setAttribute('type', 'checkbox');
-    optionCheck.setAttribute('id', optionCheckId);
-    optionCheck.setAttribute('data-optionName', optionName);
-    optionCheck.onclick = updateRenderDebugOptions;
-    var optionLi = document.createElement('li');
-    optionLi.appendChild(optionLabel);
-    optionLi.appendChild(optionCheck);
-    renderDebugOptionsListEl.appendChild(optionLi);
-  }
-}
-
-function changeTheme() {
-  var theme = document.getElementById('themeChanger');
-
-  if (theme.value === "dark") {
-    Blockly.getMainWorkspace().setTheme(Blockly.Themes.Dark);
-  } else if (theme.value === "high_contrast") {
-    Blockly.getMainWorkspace().setTheme(Blockly.Themes.HighContrast);
-  } else if (theme.value === "deuteranopia") {
-    Blockly.getMainWorkspace().setTheme(Blockly.Themes.Deuteranopia);
-  } else if (theme.value === "tritanopia") {
-    Blockly.getMainWorkspace().setTheme(Blockly.Themes.Tritanopia);
-  } else if (theme.value === "modern") {
-    Blockly.getMainWorkspace().setTheme(Blockly.Themes.Modern);
-  } else if (theme.value === "zelos") {
-    Blockly.getMainWorkspace().setTheme(Blockly.Themes.Zelos);
-  } else {
-    var testTheme = getTestTheme(theme.value);
-    if (testTheme) {
-      Blockly.getMainWorkspace().setTheme(testTheme);
-    } else {
-      Blockly.getMainWorkspace().setTheme(Blockly.Themes.Classic);
-    }
-  }
 }
 
 function changeRenderingConstant(value) {
@@ -629,28 +536,7 @@ var spaghettiXml = [
       <option value="simple">Simple</option>
       <option value="test-blocks">Test Blocks</option>
     </select>
-    <select name="side" onchange="document.forms.options.submit()">
-      <option value="start">Start</option>
-      <option value="end">End</option>
-      <option value="top">Top</option>
-      <option value="bottom">Bottom</option>
-    </select>
-    <select name="renderer" onchange="document.forms.options.submit()">
-      <option value="geras">Geras</option>
-      <option value="thrasos">Thrasos</option>
-      <option value="zelos">Zelos</option>
-      <option value="minimalist">Minimalist</option>
-    </select>
   </form>
-  <select id="themeChanger" name="theme" onchange="changeTheme()">
-    <option value="classic">Classic</option>
-    <option value="modern">Modern</option>
-    <option value="dark">Dark</option>
-    <option value="high_contrast">High Contrast</option>
-    <option value="deuteranopia">Deuteranopia/Protanopia</option>
-    <option value="tritanopia">Tritanopia</option>
-    <option value="zelos">Zelos</option>
-  </select>
   <p>
     <input type="button" value="Export to XML" onclick="toXml()">
     &nbsp;
@@ -675,28 +561,10 @@ var spaghettiXml = [
     <input type="button" value="Airstrike!" onclick="airstrike(100)">
     <input type="button" value="Spaghetti!" onclick="spaghetti(8)">
   </p>
-  <p>
-    Rendering: &nbsp;
-    <select id="rendering-constant-selector">
-      <option value="fontSize">Font Size</option>
-    </select>
-    <input type="range" min="3" max="50" value="4"
-      oninput="changeRenderingConstant(this.value)"
-      onchange="changeRenderingConstant(this.value)" />
-  </p>
   <ul class="playgroundToggleOptions">
     <li>
       <label for="logCheck">Log events:</label>
       <input type="checkbox" onclick="logEvents(this.checked)" id="logCheck">
-    </li>
-    <li>
-      <label for="blockRenderDebugCheck">Enable block rendering debug:</label>
-      <input type="checkbox" onclick="toggleRenderingDebug(this.checked)" id="blockRenderDebugCheck">
-      <ul id="renderDebugOptions"></ul>
-    </li>
-    <li>
-      <label for="accessibilityModeCheck">Enable Accessibility Mode:</label>
-      <input type="checkbox" onclick="toggleAccessibilityMode(this.checked)" id="accessibilityModeCheck">
     </li>
   </ul>
 

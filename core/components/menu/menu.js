@@ -42,11 +42,11 @@ Blockly.Menu = function() {
 
   /**
    * This is the element that we will listen to the real focus events on.
-   * A value of -1 means no menu item is highlighted.
-   * @type {number}
+   * A value of null means no menu item is highlighted.
+   * @type {Blockly.MenuItem}
    * @private
    */
-  this.highlightedIndex_ = -1;
+  this.highlightedItem_ = null;
 
   /**
    * Mouse over event data.
@@ -81,7 +81,7 @@ Blockly.Menu = function() {
    * @type {?Blockly.EventData}
    * @private
    */
-  this.onKeyDownWrapper_ = null;
+  this.onKeyDownHandler_ = null;
 };
 
 
@@ -118,7 +118,7 @@ Blockly.Menu.prototype.render = function(container) {
       'mouseenter', this, this.handleMouseEnter_, true);
   this.mouseLeaveHandler_ = Blockly.bindEventWithChecks_(element,
       'mouseleave', this, this.handleMouseLeave_, true);
-  this.onKeyDownWrapper_ = Blockly.bindEventWithChecks_(element,
+  this.onKeyDownHandler_ = Blockly.bindEventWithChecks_(element,
       'keydown', this, this.handleKeyEvent);
 
   container.appendChild(element);
@@ -187,9 +187,9 @@ Blockly.Menu.prototype.dispose = function() {
     Blockly.unbindEvent_(this.mouseLeaveHandler_);
     this.mouseLeaveHandler_ = null;
   }
-  if (this.onKeyDownWrapper_) {
-    Blockly.unbindEvent_(this.onKeyDownWrapper_);
-    this.onKeyDownWrapper_ = null;
+  if (this.onKeyDownHandler_) {
+    Blockly.unbindEvent_(this.onKeyDownHandler_);
+    this.onKeyDownHandler_ = null;
   }
 
   // Remove menu items.
@@ -203,7 +203,7 @@ Blockly.Menu.prototype.dispose = function() {
 
 /**
  * Returns the child menu item that owns the given DOM node, or null if no such
- * menui tem is found.
+ * menu item is found.
  * @param {Node} node DOM node whose owner is to be returned.
  * @return {?Blockly.MenuItem} Menu item for which the DOM node belongs to.
  * @protected
@@ -222,47 +222,25 @@ Blockly.Menu.prototype.getMenuItem = function(node) {
 // Highlight management.
 
 /**
- * Returns the currently highlighted item (if any).
- * @return {?Blockly.MenuItem} Highlighted menu item (null if none).
- * @protected
- */
-Blockly.Menu.prototype.getHighlighted = function() {
-  return this.menuItems_[this.highlightedIndex_];
-};
-
-/**
- * Highlights the item at the given 0-based index (if any). If another item
- * was previously highlighted, it is un-highlighted.
- * @param {number} index Index of item to highlight (-1 removes the current
- *     highlight).
- * @protected
- */
-Blockly.Menu.prototype.setHighlightedIndex = function(index) {
-  var currentHighlighted = this.getHighlighted();
-  if (currentHighlighted) {
-    currentHighlighted.setHighlighted(false);
-    this.highlightedIndex_ = -1;
-  }
-  var child = this.menuItems_[index];
-  if (child) {
-    child.setHighlighted(true);
-    this.highlightedIndex_ = index;
-    // Bring the highlighted item into view. This has no effect if the menu is
-    // not scrollable.
-    Blockly.utils.style.scrollIntoContainerView(
-        /** @type {!Element} */ (child.getElement()),
-        /** @type {!Element} */ (this.getElement()));
-  }
-};
-
-/**
- * Highlights the given item if it exists and is a child of the container;
- * otherwise un-highlights the currently highlighted item.
+ * Highlights the given menu item, or clears highlighting if null.
  * @param {!Blockly.MenuItem} item Item to highlight.
  * @protected
  */
 Blockly.Menu.prototype.setHighlighted = function(item) {
-  this.setHighlightedIndex(this.menuItems_.indexOf(item));
+  var currentHighlighted = this.highlightedItem_;
+  if (currentHighlighted) {
+    currentHighlighted.setHighlighted(false);
+    this.highlightedItem_ = null;
+  }
+  if (item) {
+    item.setHighlighted(true);
+    this.highlightedItem_ = item;
+    // Bring the highlighted item into view. This has no effect if the menu is
+    // not scrollable.
+    Blockly.utils.style.scrollIntoContainerView(
+        /** @type {!Element} */ (item.getElement()),
+        /** @type {!Element} */ (this.getElement()));
+  }
 };
 
 /**
@@ -271,7 +249,8 @@ Blockly.Menu.prototype.setHighlighted = function(item) {
  * @package
  */
 Blockly.Menu.prototype.highlightNext = function() {
-  this.highlightHelper(this.highlightedIndex_, 1);
+  var index = this.menuItems_.indexOf(this.highlightedItem_);
+  this.highlightHelper(index, 1);
 };
 
 /**
@@ -280,8 +259,8 @@ Blockly.Menu.prototype.highlightNext = function() {
  * @package
  */
 Blockly.Menu.prototype.highlightPrevious = function() {
-  this.highlightHelper(this.highlightedIndex_ < 0 ?
-      this.menuItems_.length : this.highlightedIndex_, -1);
+  var index = this.menuItems_.indexOf(this.highlightedItem_);
+  this.highlightHelper(index < 0 ? this.menuItems_.length : index, -1);
 };
 
 /**
@@ -312,7 +291,7 @@ Blockly.Menu.prototype.highlightHelper = function(startIndex, delta) {
   var menuItem;
   while ((menuItem = this.menuItems_[index])) {
     if (menuItem.isEnabled()) {
-      this.setHighlightedIndex(index);
+      this.setHighlighted(menuItem);
       break;
     }
     index += delta;
@@ -332,13 +311,11 @@ Blockly.Menu.prototype.handleMouseOver_ = function(e) {
 
   if (menuItem) {
     if (menuItem.isEnabled()) {
-      var currentHighlighted = this.getHighlighted();
-      if (currentHighlighted === menuItem) {
-        return;
+      if (this.highlightedItem_ != menuItem) {
+        this.setHighlighted(menuItem);
       }
-      this.setHighlighted(menuItem);
     } else {
-      this.setHighlightedIndex(-1);
+      this.setHighlighted(null);
     }
   }
 };
@@ -353,7 +330,7 @@ Blockly.Menu.prototype.handleClick_ = function(e) {
   var oldCoords = this.openingCoords;
   // Clear out the saved opening coords immediately so they're not used twice.
   this.openingCoords = null;
-  if (oldCoords && typeof e.clientX === 'number') {
+  if (oldCoords && typeof e.clientX == 'number') {
     var newCoords = new Blockly.utils.Coordinate(e.clientX, e.clientY);
     if (Blockly.utils.Coordinate.distance(oldCoords, newCoords) < 1) {
       // This menu was opened by a mousedown and we're handling the consequent
@@ -387,7 +364,7 @@ Blockly.Menu.prototype.handleMouseEnter_ = function(_e) {
 Blockly.Menu.prototype.handleMouseLeave_ = function(_e) {
   if (this.getElement()) {
     this.blur();
-    this.setHighlightedIndex(-1);
+    this.setHighlighted(null);
   }
 };
 
@@ -421,7 +398,7 @@ Blockly.Menu.prototype.handleKeyEventInternal = function(e) {
     return false;
   }
 
-  var highlighted = this.getHighlighted();
+  var highlighted = this.highlightedItem_;
   switch (e.keyCode) {
     case Blockly.utils.KeyCodes.ENTER:
     case Blockly.utils.KeyCodes.SPACE:

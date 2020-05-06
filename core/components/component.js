@@ -115,7 +115,12 @@ Blockly.Component.Error = {
    * Error when an attempt is made to add a child component at an out-of-bounds
    * index.  We don't support sparse child arrays.
    */
-  CHILD_INDEX_OUT_OF_BOUNDS: 'Child component index out of bounds'
+  CHILD_INDEX_OUT_OF_BOUNDS: 'Child component index out of bounds',
+
+  /**
+   * Error when calling an abstract method that should be overriden.
+   */
+  ABSTRACT_METHOD: 'Unimplemented abstract method'
 };
 
 /**
@@ -195,12 +200,11 @@ Blockly.Component.prototype.isInDocument = function() {
 };
 
 /**
- * Creates the initial DOM representation for the component.  The default
- * implementation is to set this.element_ = div.
+ * Creates the initial DOM representation for the component.
  * @protected
  */
 Blockly.Component.prototype.createDom = function() {
-  this.element_ = document.createElement('div');
+  throw Error(Blockly.Component.Error.ABSTRACT_METHOD);
 };
 
 /**

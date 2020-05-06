@@ -26,7 +26,9 @@ goog.require('Blockly.utils.style');
 Blockly.Menu = function() {
   /**
    * Array of menu items.
-   * @type {!Array.<!Blockly.MenuItem>}
+   * (Nulls are never in the array, but typing the array as nullable prevents
+   * the compiler from objecting to .indexOf(null))
+   * @type {!Array.<Blockly.MenuItem>}
    * @private
    */
   this.menuItems_ = [];

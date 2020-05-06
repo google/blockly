@@ -92,13 +92,6 @@ Blockly.tree.BaseNode = function(content, config) {
   this.expanded_ = false;
 
   /**
-   * Whether to allow user to collapse this node.
-   * @type {boolean}
-   * @protected
-   */
-  this.isUserCollapsible_ = true;
-
-  /**
    * Nesting depth of this node; cached result of getDepth.
    * -1 if value has not been cached.
    * @type {number}
@@ -174,8 +167,7 @@ Blockly.tree.BaseNode.prototype.initAccessibility = function() {
 
     var ce = this.getChildrenElement();
     if (ce) {
-      Blockly.utils.aria.setRole(ce,
-          Blockly.utils.aria.Role.GROUP);
+      Blockly.utils.aria.setRole(ce, Blockly.utils.aria.Role.GROUP);
 
       // In case the children will be created lazily.
       if (ce.hasChildNodes()) {
@@ -347,18 +339,17 @@ Blockly.tree.BaseNode.prototype.setDepth_ = function(depth) {
  * @protected
  */
 Blockly.tree.BaseNode.prototype.contains = function(node) {
-  var current = node;
-  while (current) {
-    if (current == this) {
+  while (node) {
+    if (node == this) {
       return true;
     }
-    current = current.getParent();
+    node = node.getParent();
   }
   return false;
 };
 
 /**
- * This is re-defined here to indicate to the closure compiler the correct
+ * This is re-defined here to indicate to the Closure Compiler the correct
  * child return type.
  * @param {number} index 0-based index.
  * @return {Blockly.tree.BaseNode} The child at the given index; null if none.
@@ -617,7 +608,7 @@ Blockly.tree.BaseNode.prototype.getIconDom = function() {
  * @protected
  */
 Blockly.tree.BaseNode.prototype.getCalculatedIconClass = function() {
-  throw Error('unimplemented abstract method');
+  throw Error(Blockly.Component.Error.ABSTRACT_METHOD);
 };
 
 /**
@@ -754,7 +745,7 @@ Blockly.tree.BaseNode.prototype.onKeyDown = function(e) {
 
     case Blockly.utils.KeyCodes.ENTER:
     case Blockly.utils.KeyCodes.SPACE:
-      this.setExpanded(!this.expanded_);
+      this.toggle();
       handled = true;
       break;
 
@@ -802,7 +793,7 @@ Blockly.tree.BaseNode.prototype.selectPrevious = function() {
  * @package
  */
 Blockly.tree.BaseNode.prototype.selectParent = function() {
-  if (this.hasChildren() && this.expanded_ && this.isUserCollapsible_) {
+  if (this.hasChildren() && this.expanded_) {
     this.setExpanded(false);
   } else {
     var parent = this.getParent();

@@ -332,8 +332,8 @@ Blockly.tree.BaseNode.prototype.setDepth_ = function(depth) {
 };
 
 /**
- * Returns true if the node is a descendant of this node
- * @param {Blockly.tree.BaseNode} node The node to check.
+ * Returns true if the node is a descendant of this node.
+ * @param {Blockly.tree.Component} node The node to check.
  * @return {boolean} True if the node is a descendant of this node, false
  *    otherwise.
  * @protected

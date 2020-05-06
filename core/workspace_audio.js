@@ -110,7 +110,7 @@ Blockly.WorkspaceAudio.prototype.preload = function() {
     } else {
       sound.pause();
     }
-    
+
     // iOS can only process one sound at a time.  Trying to load more than one
     // corrupts the earlier ones.  Just load one and leave the others uncached.
     if (Blockly.utils.userAgent.IPAD || Blockly.utils.userAgent.IPHONE) {

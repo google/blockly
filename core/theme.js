@@ -210,7 +210,7 @@ Blockly.Theme.defineTheme = function(name, themeObj) {
     Blockly.utils.object.deepMerge(theme, base);
     theme.name = name;
   }
-  
+
   Blockly.utils.object.deepMerge(theme.blockStyles,
       themeObj['blockStyles']);
   Blockly.utils.object.deepMerge(theme.categoryStyles,

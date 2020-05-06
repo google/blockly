@@ -308,7 +308,7 @@ Blockly.Css.CONTENT = [
   '.blocklyInsertionMarker>.blocklyPathLight,',
   '.blocklyInsertionMarker>.blocklyPathDark {',
     'fill-opacity: .2;',
-    'stroke: none',
+    'stroke: none;',
   '}',
 
   '.blocklyMultilineText {',
@@ -453,7 +453,7 @@ Blockly.Css.CONTENT = [
   '.blocklyVerticalMarker {',
     'stroke-width: 3px;',
     'fill: rgba(255,255,255,.5);',
-    'pointer-events: none',
+    'pointer-events: none;',
   '}',
 
   '.blocklyComputeCanvas {',

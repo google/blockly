@@ -426,10 +426,11 @@ Blockly.Flyout.prototype.hide = function() {
 
 /**
  * Show and populate the flyout.
- * @param {!Array<Object>|!NodeList|string} contentDef List of contents for the flyout.
+ * @param {!Array|!NodeList|string} contentInfo List of contents to display in
+ *     the flyout or a string with the name of the dynamic category.
  *     Variables and procedures have a custom set of blocks.
  */
-Blockly.Flyout.prototype.show = function(contentDef) {
+Blockly.Flyout.prototype.show = function(contentInfo) {
   this.workspace_.setResizesEnabled(false);
   this.hide();
   this.clearOldBlocks_();
@@ -437,19 +438,20 @@ Blockly.Flyout.prototype.show = function(contentDef) {
   // Handle dynamic categories, represented by a name instead of a list.
   // Look up the correct category generation function and call that to get a
   // valid XML list.
-  if (typeof contentDef == 'string') {
+  if (typeof contentInfo == 'string') {
     var fnToApply = this.workspace_.targetWorkspace.getToolboxCategoryCallback(
-        contentDef);
+        contentInfo);
     if (typeof fnToApply != 'function') {
       throw TypeError('Couldn\'t find a callback function when opening' +
           ' a toolbox category.');
     }
-    contentDef = fnToApply(this.workspace_.targetWorkspace);
-    if (!Array.isArray(contentDef)) {
+    contentInfo = fnToApply(this.workspace_.targetWorkspace);
+    if (!Array.isArray(contentInfo)) {
       throw TypeError('Result of toolbox category callback must be an array.');
     }
   }
-  var parsedContent = Blockly.Options.parseToolboxTree(contentDef);
+  // contentInfo is either an array with JSON, an Array with xml, or a NodeList.
+  var parsedContent = Blockly.Options.parseToolbox(contentInfo);
 
   this.setVisible(true);
   // Create the blocks to be shown in this flyout.
@@ -457,23 +459,23 @@ Blockly.Flyout.prototype.show = function(contentDef) {
   var gaps = [];
   this.permanentlyDisabled_.length = 0;
   var defaultGap = this.horizontalLayout_ ? this.GAP_X : this.GAP_Y;
-  for (var i = 0, child; (child = parsedContent[i]); i++) {
-    if (!child.tagName) {
+  for (var i = 0, contentItem; (contentItem = parsedContent[i]); i++) {
+    if (!contentItem.tagName) {
       continue;
     }
-    switch (child.tagName.toUpperCase()) {
+    switch (contentItem.tagName.toUpperCase()) {
       case 'BLOCK':
-        this.addBlock_(child, contents, gaps, defaultGap);
+        this.addBlock_(contentItem, contents, gaps, defaultGap);
         break;
       case 'SEP':
-        this.addSeparator_(child, gaps, defaultGap);
+        this.addSeparator_(contentItem, gaps, defaultGap);
         break;
       case 'LABEL':
         // A label is a button with different styling.
-        this.addButton_(child, contents, gaps, defaultGap, true);
+        this.addButton_(contentItem, contents, gaps, defaultGap, true);
         break;
       case 'BUTTON':
-        this.addButton_(child, contents, gaps, defaultGap, false);
+        this.addButton_(contentItem, contents, gaps, defaultGap, false);
         break;
     }
   }
@@ -511,37 +513,37 @@ Blockly.Flyout.prototype.show = function(contentDef) {
 
 /**
  * Add a button to the flyout contents.
- * @param {!Object} child The object holding information about a button.
+ * @param {!Object} btnJson The object holding information about a button.
  * @param {!Array<Object>} contents The array holding JSON representation of the
  *    flyout contents.
- * @param {!Array<number>} gaps The gaps in the flyout.
+ * @param {!Array<number>} gaps The gaps between items in the flyout.
  * @param {number} defaultGap The default gap between the button and next element.
  * @param {boolean} isLabel True if the button is a label, false otherwise.
  * @private
  */
-Blockly.Flyout.prototype.addButton_ = function(child, contents, gaps, defaultGap, isLabel) {
+Blockly.Flyout.prototype.addButton_ = function(btnJson, contents, gaps, defaultGap, isLabel) {
   if (!Blockly.FlyoutButton) {
     throw Error('Missing require for Blockly.FlyoutButton');
   }
   var curButton = new Blockly.FlyoutButton(this.workspace_,
-      this.targetWorkspace_, child, isLabel);
+      this.targetWorkspace_, btnJson, isLabel);
   contents.push({type: 'button', button: curButton});
   gaps.push(defaultGap);
 };
 
 /**
  * Add a block to the flyout contents.
- * @param {!Object} child The xml or object holding information about a block.
+ * @param {!Object} blockJson The object holding information about a block.
  * @param {!Array<Object>} contents The array holding JSON representation of the
  *    flyout contents.
- * @param {!Array<number>} gaps The gaps in the flyout.
+ * @param {!Array<number>} gaps The gaps between items in the flyout.
  * @param {number} defaultGap The default gap between the button and next element.
  * @private
  */
-Blockly.Flyout.prototype.addBlock_ = function(child, contents, gaps, defaultGap) {
+Blockly.Flyout.prototype.addBlock_ = function(blockJson, contents, gaps, defaultGap) {
   var blockXml = null;
-  if (child['xmlDef']) {
-    blockXml = Blockly.Xml.textToDom(child['xmlDef']);
+  if (blockJson['xmlDef']) {
+    blockXml = Blockly.Xml.textToDom(blockJson['xmlDef']);
   } else {
     throw Error('Error: Invalid block definition. Block definition must have xmlDef.');
   }
@@ -560,17 +562,17 @@ Blockly.Flyout.prototype.addBlock_ = function(child, contents, gaps, defaultGap)
 
 /**
  * Add a separator to the flyout. A separator in the flyout is a gap.
- * @param {!Object} child The object holding information about a separator.
- * @param {!Array<number>} gaps The gaps in the flyout.
+ * @param {!Object} sepJson The object holding information about a separator.
+ * @param {!Array<number>} gaps The gaps between items in the flyout.
  * @param {number} defaultGap The default gap between the button and next element.
  * @private
  */
-Blockly.Flyout.prototype.addSeparator_ = function(child, gaps, defaultGap) {
+Blockly.Flyout.prototype.addSeparator_ = function(sepJson, gaps, defaultGap) {
   // Change the gap between two toolbox elements.
   // <sep gap="36"></sep>
   // The default gap is 24, can be set larger or smaller.
   // This overwrites the gap attribute on the previous element.
-  var newGap = parseInt(child['gap'], 10);
+  var newGap = parseInt(sepJson['gap'], 10);
   // Ignore gaps before the first block.
   if (!isNaN(newGap) && gaps.length > 0) {
     gaps[gaps.length - 1] = newGap;

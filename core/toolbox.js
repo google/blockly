@@ -227,9 +227,6 @@ Blockly.Toolbox.prototype.renderTree = function(languageTree) {
   if (languageTree) {
     this.tree_.contents = [];
     this.hasColours_ = false;
-    // if (!Array.isArray(languageTree)) {
-    //   languageTree = this.xmlToJson_(languageTree);
-    // }
     openNode = this.createTree_(languageTree, this.tree_);
 
     if (this.tree_.contents.length) {

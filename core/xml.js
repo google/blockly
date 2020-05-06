@@ -77,18 +77,25 @@ Blockly.Xml.variablesToDom = function(variableList) {
  * @return {!Element} Tree of XML elements.
  */
 Blockly.Xml.blockToDomWithXY = function(block, opt_noId) {
+  if (block.isInsertionMarker()) {  // Skip over insertion markers.
+    block = block.getChildren(false)[0];
+    if (!block) {
+      // Disappears when appended.
+      return /** @type{!Element} */ new DocumentFragment();
+    }
+  }
+
   var width;  // Not used in LTR.
   if (block.workspace.RTL) {
     width = block.workspace.getWidth();
   }
-  var elem = Blockly.Xml.blockToDom(block, opt_noId);
-  if (elem.nodeType == Blockly.utils.dom.NodeType.ELEMENT_NODE) {
-    var xy = block.getRelativeToSurfaceXY();
-    elem.setAttribute('x',
-        Math.round(block.workspace.RTL ? width - xy.x : xy.x));
-    elem.setAttribute('y', Math.round(xy.y));
-  }
-  return elem;
+
+  var element = Blockly.Xml.blockToDom(block, opt_noId);
+  var xy = block.getRelativeToSurfaceXY();
+  element.setAttribute('x',
+      Math.round(block.workspace.RTL ? width - xy.x : xy.x));
+  element.setAttribute('y', Math.round(xy.y));
+  return element;
 };
 
 /**

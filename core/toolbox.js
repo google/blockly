@@ -186,7 +186,8 @@ Blockly.Toolbox.ToolboxItem;
  * @typedef {{
  *            contenttype:string,
  *            name:string,
- *            categorystyle:string,
+ *            categorystyle:?string,
+ *            colour:?string,
  *            contents:Array<Blockly.Toolbox.ToolboxItem>
  *          }}
  */
@@ -265,11 +266,11 @@ Blockly.Toolbox.prototype.init = function() {
 
 /**
  * Fill the toolbox with categories and blocks.
- * @param {Array<Object>} languageTree DOM tree of blocks or array holding
- *    objects containing information on the structure of the toolbox.
+ * @param {Array<Blockly.Toolbox.ToolboxItem>} toolboxDef Array holding objects
+ *    containing information on the contents of the toolbox.
  * @package
  */
-Blockly.Toolbox.prototype.renderTree = function(languageTree) {
+Blockly.Toolbox.prototype.renderTree = function(toolboxDef) {
   if (this.tree_) {
     this.tree_.dispose();  // Delete any existing content.
     this.lastCategory_ = null;
@@ -281,10 +282,10 @@ Blockly.Toolbox.prototype.renderTree = function(languageTree) {
   tree.onBeforeSelected(this.handleBeforeTreeSelected_);
   tree.onAfterSelected(this.handleAfterTreeSelected_);
   var openNode = null;
-  if (languageTree) {
+  if (toolboxDef) {
     this.tree_.contents = [];
     this.hasColours_ = false;
-    openNode = this.createTree_(languageTree, this.tree_);
+    openNode = this.createTree_(toolboxDef, this.tree_);
 
     if (this.tree_.contents.length) {
       throw Error('Toolbox cannot have both blocks and categories ' +
@@ -310,22 +311,22 @@ Blockly.Toolbox.prototype.renderTree = function(languageTree) {
 };
 
 /**
- * Sync trees of the toolbox.
- * @param {Array<Blockly.Toolbox.ToolboxItem>} childNodes List of objects holding information on
+ * Create the toolbox tree.
+ * @param {Array<Blockly.Toolbox.ToolboxItem>} toolboxDef List of objects holding information on
  *    toolbox contents.
  * @param {!Blockly.tree.BaseNode} treeOut The TreeControl or TreeNode
  *     object built from the childNodes.
  * @return {Blockly.tree.BaseNode} TreeNode to open at startup (or null).
  * @private
  */
-Blockly.Toolbox.prototype.createTree_ = function(childNodes, treeOut) {
+Blockly.Toolbox.prototype.createTree_ = function(toolboxDef, treeOut) {
   var openNode = null;
   var lastElement = null;
-  if (!childNodes) {
+  if (!toolboxDef) {
     return null;
   }
 
-  for (var i = 0, childIn; (childIn = childNodes[i]); i++) {
+  for (var i = 0, childIn; (childIn = toolboxDef[i]); i++) {
     if (!childIn.contenttype) {
       // Skip over text.
       continue;

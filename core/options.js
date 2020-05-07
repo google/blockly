@@ -363,17 +363,18 @@ Blockly.Options.parseToolboxTree = function(tree) {
 
 /**
  * Convert the xml for a toolbox to JSON.
- * @param {!NodeList|!Node|!Array<Blockly.Toolbox.ToolboxItem>} xml DOM tree of
- *    blocks or list of xml
- *    blocks.
+ * @param {!NodeList|!Node|!Array<Blockly.Toolbox.ToolboxItem>} toolboxDef The
+ *     definition of the toolbox in one of its many forms.
  * @return {!Array<Blockly.Toolbox.ToolboxItem>} A list of objects in the toolbox.
  * @private
  */
-Blockly.Options.toolboxXmlToJson_ = function(xml) {
+Blockly.Options.toolboxXmlToJson_ = function(toolboxDef) {
   var arr = [];
-  var childNodes = xml.children;
+  // If it is a node it will have children.
+  var childNodes = toolboxDef.children;
   if (!childNodes) {
-    childNodes = xml;
+    // Otherwise the toolboxDef is an array or collection.
+    childNodes = toolboxDef;
   }
   for (var i = 0, child; (child = childNodes[i]); i++) {
     if (!child.tagName) {

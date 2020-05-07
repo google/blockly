@@ -1816,7 +1816,7 @@ Blockly.WorkspaceSvg.prototype.showContextMenu = function(e) {
 /**
  * Modify the block tree on the existing toolbox.
  * @param {Node|Array<Object>|string} toolboxDef DOM tree of toolbox contents,
- * string of toolbox contents, or array of JSON representing toolbox contents.
+ *    string of toolbox contents, or array of JSON representing toolbox contents.
  */
 Blockly.WorkspaceSvg.prototype.updateToolbox = function(toolboxDef) {
   toolboxDef = Blockly.Options.parseToolbox(toolboxDef);
@@ -1840,7 +1840,7 @@ Blockly.WorkspaceSvg.prototype.updateToolbox = function(toolboxDef) {
       throw Error('Existing toolbox has categories.  Can\'t change mode.');
     }
     this.options.languageTree = toolboxDef;
-    this.flyout_.show(toolboxDef.childNodes || toolboxDef);
+    this.flyout_.show(toolboxDef);
   }
 };
 

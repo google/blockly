@@ -640,7 +640,7 @@ Blockly.Css.register([
   '.blocklyCommentRect {',
     'fill: #E7DE8E;',
     'stroke: #bcA903;',
-    'stroke-width: 1px',
+    'stroke-width: 1px;',
   '}',
 
   '.blocklyCommentTarget {',
@@ -673,11 +673,11 @@ Blockly.Css.register([
   '.blocklyCommentDeleteIcon {',
     'cursor: pointer;',
     'fill: #000;',
-    'display: none',
+    'display: none;',
   '}',
 
   '.blocklySelected > .blocklyCommentDeleteIcon {',
-    'display: block',
+    'display: block;',
   '}',
 
   '.blocklyDeleteIconShape {',

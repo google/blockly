@@ -270,8 +270,12 @@ Blockly.FieldDropdown.prototype.showEditor_ = function(opt_e) {
   }
   // Element gets created in render.
   this.menu_.render(Blockly.DropDownDiv.getContentDiv());
-  Blockly.utils.dom.addClass(
-      /** @type {!Element} */ (this.menu_.getElement()), 'blocklyDropdownMenu');
+  var menuElement = /** @type {!Element} */ (this.menu_.getElement());
+  Blockly.utils.dom.addClass(menuElement, 'blocklyDropdownMenu');
+
+  Blockly.utils.aria.setState(menuElement,
+      Blockly.utils.aria.State.ACTIVEDESCENDANT,
+      this.selectedMenuItem_ ? this.selectedMenuItem_.getId() : '');
 
   if (this.getConstants().FIELD_DROPDOWN_COLOURED_DIV) {
     var primaryColour = (this.sourceBlock_.isShadow()) ?
@@ -295,7 +299,7 @@ Blockly.FieldDropdown.prototype.showEditor_ = function(opt_e) {
   if (this.selectedMenuItem_) {
     Blockly.utils.style.scrollIntoContainerView(
         /** @type {!Element} */ (this.selectedMenuItem_.getElement()),
-        /** @type {!Element} */ (this.menu_.getElement()));
+        menuElement);
   }
 
   this.applyColour();
@@ -308,7 +312,6 @@ Blockly.FieldDropdown.prototype.showEditor_ = function(opt_e) {
  */
 Blockly.FieldDropdown.prototype.dropdownCreate_ = function() {
   var menu = new Blockly.Menu();
-  menu.setRightToLeft(this.sourceBlock_.RTL);
   menu.setRole(Blockly.utils.aria.Role.LISTBOX);
 
   var options = this.getOptions(false);
@@ -323,22 +326,17 @@ Blockly.FieldDropdown.prototype.dropdownCreate_ = function() {
       image.alt = content['alt'] || '';
       content = image;
     }
-    var menuItem = new Blockly.MenuItem(content);
+    var menuItem = new Blockly.MenuItem(content, value);
     menuItem.setRole(Blockly.utils.aria.Role.OPTION);
     menuItem.setRightToLeft(this.sourceBlock_.RTL);
-    menuItem.setValue(value);
     menuItem.setCheckable(true);
-    menu.addChild(menuItem, true);
+    menu.addChild(menuItem);
     menuItem.setChecked(value == this.value_);
     if (value == this.value_) {
       this.selectedMenuItem_ = menuItem;
     }
     menuItem.onAction(this.handleMenuActionEvent_, this);
   }
-
-  Blockly.utils.aria.setState(/** @type {!Element} */ (menu.getElement()),
-      Blockly.utils.aria.State.ACTIVEDESCENDANT,
-      this.selectedMenuItem_ ? this.selectedMenuItem_.getId() : '');
 
   return menu;
 };

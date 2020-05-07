@@ -906,8 +906,7 @@ Blockly.Css.register([
 
   '.blocklyTreeLabel {',
     'cursor: default;',
-    'font-family: sans-serif;',
-    'font-size: 16px;',
+    'font: 16px sans-serif;',
     'padding: 0 3px;',
     'vertical-align: middle;',
   '}',

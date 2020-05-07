@@ -367,6 +367,10 @@ suite('Navigation', function() {
         }
       };
     });
+    teardown(function() {
+      delete Blockly.Blocks['basic_block'];
+      this.workspace.dispose();
+    });
     test('Action does not exist', function() {
       var block = this.workspace.getTopBlocks()[0];
       var field = block.inputList[0].fieldRow[0];
@@ -432,7 +436,6 @@ suite('Navigation', function() {
       chai.assert.isTrue(Blockly.navigation.focusWorkspace_.calledOnce);
       chai.assert.isTrue(Blockly.getMainWorkspace().keyboardAccessibilityMode);
       Blockly.navigation.focusWorkspace_.restore();
-      this.workspace.dispose();
     });
 
     suite('Test key press in read only mode', function() {
@@ -630,6 +633,7 @@ suite('Navigation', function() {
     });
 
     teardown(function() {
+      delete Blockly.Blocks['inline_block'];
       delete Blockly.Blocks['basic_block'];
       this.workspace.dispose();
     });

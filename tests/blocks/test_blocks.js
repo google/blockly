@@ -694,23 +694,6 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     "style": "math_blocks",
   },
   {
-    "type": "test_fields_date",
-    "message0": "date: %1",
-    "args0": [
-      {
-        "type": "field_date",
-        "name": "FIELDNAME",
-        "date": "2020-02-20",
-        "alt":
-          {
-            "type": "field_label",
-            "text": "NO DATE FIELD"
-          }
-      }
-    ],
-    "style": "math_blocks",
-  },
-  {
     "type": "test_fields_text_input",
     "message0": "text input %1",
     "args0": [

@@ -329,7 +329,6 @@ suite('Blocks', function() {
     });
     teardown(function() {
       delete Blockly.Blocks['value_block'];
-      delete Blockly.Blocks['statement_block'];
     });
 
     suite('Value', function() {
@@ -1024,7 +1023,6 @@ suite('Blocks', function() {
       this.eventSpy = sinon.spy(Blockly.Events, 'fire');
     });
     teardown(function() {
-      delete Blockly.Blocks['empty_block'];
       this.eventSpy.restore();
     });
     suite('Set/Get Text', function() {

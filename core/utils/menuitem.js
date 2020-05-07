@@ -10,7 +10,7 @@
  */
 'use strict';
 
-goog.provide('Blockly.MenuItem');
+goog.provide('Blockly.utils.MenuItem');
 
 goog.require('Blockly.utils.aria');
 goog.require('Blockly.utils.dom');
@@ -25,7 +25,7 @@ goog.require('Blockly.utils.IdGenerator');
  * @param {string=} opt_value Data/model associated with the menu item.
  * @constructor
  */
-Blockly.MenuItem = function(content, opt_value) {
+Blockly.utils.MenuItem = function(content, opt_value) {
   /**
    * Human-readable text of this menu item.
    * @type {string}
@@ -95,7 +95,7 @@ Blockly.MenuItem = function(content, opt_value) {
  * Creates the menuitem's DOM.
  * @return {!Element} Completed DOM.
  */
-Blockly.MenuItem.prototype.createDom = function() {
+Blockly.utils.MenuItem.prototype.createDom = function() {
   var element = document.createElement('div');
   element.id = Blockly.utils.IdGenerator.getNextUniqueId();
   this.element_ = element;
@@ -132,7 +132,7 @@ Blockly.MenuItem.prototype.createDom = function() {
 /**
  * Dispose of this menu item.
  */
-Blockly.MenuItem.prototype.dispose = function() {
+Blockly.utils.MenuItem.prototype.dispose = function() {
   this.element_ = null;
 };
 
@@ -141,7 +141,7 @@ Blockly.MenuItem.prototype.dispose = function() {
  * @return {Element} The DOM element.
  * @package
  */
-Blockly.MenuItem.prototype.getElement = function() {
+Blockly.utils.MenuItem.prototype.getElement = function() {
   return this.element_;
 };
 
@@ -150,7 +150,7 @@ Blockly.MenuItem.prototype.getElement = function() {
  * @return {string} Unique component ID.
  * @package
  */
-Blockly.MenuItem.prototype.getId = function() {
+Blockly.utils.MenuItem.prototype.getId = function() {
   return this.element_.id;
 };
 
@@ -159,7 +159,7 @@ Blockly.MenuItem.prototype.getId = function() {
  * @return {*} value Value associated with the menu item.
  * @package
  */
-Blockly.MenuItem.prototype.getValue = function() {
+Blockly.utils.MenuItem.prototype.getValue = function() {
   return this.value_;
 };
 
@@ -168,7 +168,7 @@ Blockly.MenuItem.prototype.getValue = function() {
  * @param {boolean} rtl True if RTL, false if LTR.
  * @package
  */
-Blockly.MenuItem.prototype.setRightToLeft = function(rtl) {
+Blockly.utils.MenuItem.prototype.setRightToLeft = function(rtl) {
   this.rightToLeft_ = rtl;
 };
 
@@ -177,7 +177,7 @@ Blockly.MenuItem.prototype.setRightToLeft = function(rtl) {
  * @param {!Blockly.utils.aria.Role} roleName Role name.
  * @package
  */
-Blockly.MenuItem.prototype.setRole = function(roleName) {
+Blockly.utils.MenuItem.prototype.setRole = function(roleName) {
   this.roleName_ = roleName;
 };
 
@@ -187,7 +187,7 @@ Blockly.MenuItem.prototype.setRole = function(roleName) {
  * @param {boolean} checkable Whether the menu item is checkable.
  * @package
  */
-Blockly.MenuItem.prototype.setCheckable = function(checkable) {
+Blockly.utils.MenuItem.prototype.setCheckable = function(checkable) {
   this.checkable_ = checkable;
 };
 
@@ -196,7 +196,7 @@ Blockly.MenuItem.prototype.setCheckable = function(checkable) {
  * @param {boolean} checked Whether to check or uncheck the component.
  * @package
  */
-Blockly.MenuItem.prototype.setChecked = function(checked) {
+Blockly.utils.MenuItem.prototype.setChecked = function(checked) {
   this.checked_ = checked;
 };
 
@@ -205,7 +205,7 @@ Blockly.MenuItem.prototype.setChecked = function(checked) {
  * @param {boolean} highlight Whether to highlight or unhighlight the component.
  * @package
  */
-Blockly.MenuItem.prototype.setHighlighted = function(highlight) {
+Blockly.utils.MenuItem.prototype.setHighlighted = function(highlight) {
   this.highlight_ = highlight;
 
   var el = this.getElement();
@@ -229,7 +229,7 @@ Blockly.MenuItem.prototype.setHighlighted = function(highlight) {
  * @return {boolean} Whether the menu item is enabled.
  * @package
  */
-Blockly.MenuItem.prototype.isEnabled = function() {
+Blockly.utils.MenuItem.prototype.isEnabled = function() {
   return this.enabled_;
 };
 
@@ -238,7 +238,7 @@ Blockly.MenuItem.prototype.isEnabled = function() {
  * @param {boolean} enabled Whether to enable or disable the menu item.
  * @package
  */
-Blockly.MenuItem.prototype.setEnabled = function(enabled) {
+Blockly.utils.MenuItem.prototype.setEnabled = function(enabled) {
   this.enabled_ = enabled;
 };
 
@@ -247,7 +247,7 @@ Blockly.MenuItem.prototype.setEnabled = function(enabled) {
  * by the user.
  * @package
  */
-Blockly.MenuItem.prototype.performAction = function() {
+Blockly.utils.MenuItem.prototype.performAction = function() {
   if (this.isEnabled() && this.actionHandler_) {
     this.actionHandler_(this);
   }
@@ -256,10 +256,10 @@ Blockly.MenuItem.prototype.performAction = function() {
 /**
  * Set the handler that's called when the menu item is activated by the user.
  * `obj` will be used as the 'this' object in the function when called.
- * @param {function(!Blockly.MenuItem)} fn The handler.
+ * @param {function(!Blockly.utils.MenuItem)} fn The handler.
  * @param {!Object} obj Used as the 'this' object in fn when called.
  * @package
  */
-Blockly.MenuItem.prototype.onAction = function(fn, obj) {
+Blockly.utils.MenuItem.prototype.onAction = function(fn, obj) {
   this.actionHandler_ = fn.bind(obj);
 };

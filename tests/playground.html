@@ -90,88 +90,11 @@ var workspace = null;
 function start() {
   setBackgroundColour();
 
-    var toolboxCategories = [
-      {
-        "contenttype": "category",
-        "name": "loops",
-        "categorystyle": "math_category",
-        "contents": [
-          {
-            "contenttype": "block",
-            "xmldef": "<block type='controls_if'></block>"
-          },
-          {
-            "contenttype": "button",
-            "text": "insert",
-            "callbackkey":"insertConnectionRows"
-          },
-          {
-            "contenttype": "label",
-            "text": "Something"
-          }
-        ]
-      },
-      {
-        "contenttype": "sep",
-        "gap": 6
-      },
-      {
-        "contenttype": "category",
-        "name": "loops",
-        "categorystyle": "math_category",
-        "contents": [
-          {
-            "contenttype": "block",
-            "xmldef": "<block type='controls_if'></block>"
-          },
-          {
-            "contenttype": "button",
-            "text": "insert",
-            "callbackkey":"insertConnectionRows"
-          },
-          {
-            "contenttype": "label",
-            "text": "Something"
-          }
-        ]
-      }
-    ];
-  var toolboxSimple = [
-    {
-      "contenttype": "block",
-      "xmldef": "<block type='controls_if'></block>"
-    },
-    {
-      "contenttype": "block",
-      "xmldef": "<block type='controls_if'></block>"
-    },
-    {
-      "contenttype": "block",
-      "xmldef": "<block type='controls_if'></block>"
-    },
-    {
-      "contenttype": "block",
-      "xmldef": "<block type='controls_if'></block>"
-    },
-    {
-      "contenttype": "button",
-      "text": "insert",
-      "callbackkey":"insertConnectionRows"
-    },
-    {
-      "contenttype": "label",
-      "text": "Something"
-    }
-  ];
-
-  var toolboxString = '<xml xmlns="https://developers.google.com/blockly/xml" id="toolbox-simple" style="display: none"><block type="controls_ifelse"></block></xml>';
-
   // Parse the URL arguments.
   var match = location.search.match(/dir=([^&]+)/);
   var rtl = match && match[1] == 'rtl';
   document.forms.options.elements.dir.selectedIndex = Number(rtl);
   var toolbox = getToolboxElement();
-  // var toolbox = document.getElementById('toolbox-simple');
   var toolboxNames = [
       'toolbox-categories',
       'toolbox-categories-typed-variables',
@@ -213,7 +136,7 @@ function start() {
           drag: true,
           wheel: false,
         },
-        toolbox: toolboxCategories,
+        toolbox: toolbox,
         toolboxPosition: side == 'top' || side == 'start' ? 'start' : 'end',
         renderer: renderer,
         zoom:

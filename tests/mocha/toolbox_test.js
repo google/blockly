@@ -25,7 +25,7 @@ suite('Toolbox', function() {
     this.toolbox = this.workspace.getToolbox();
     this.toolbox.init();
   });
-  
+
   teardown(function() {
     this.workspace.dispose();
     delete Blockly.Blocks['basic_block'];
@@ -52,15 +52,47 @@ suite('Toolbox', function() {
   });
 
   suite('renderTree', function() {
+    setup(function() {
+      this.toolboxXml = Blockly.Options.parseToolbox(this.toolboxXml);
+      this.toolbox.selectFirstCategory();
+      this.firstChild = this.toolbox.tree_.getChildAt(0);
+      this.secondChild = this.toolbox.tree_.getChildAt(1);
+      this.toolbox.handleBeforeTreeSelected_(this.secondChild);
+    });
     test('Tree is created and set', function() {
       this.toolbox.renderTree(this.toolboxXml);
       chai.assert.isDefined(this.toolbox.tree_);
     });
     test('Throws error if a toolbox has both blocks and categories at root level', function() {
-      var badXml = document.getElementById('toolbox-incorrect');
       var toolbox = this.toolbox;
+      var badToolboxDef = [
+        {
+          "contenttype": "block",
+          "xmldef": "<block type='controls_if'></block>"
+        },
+        {
+          "contenttype": "category",
+          "name": "loops",
+          "categorystyle": "math_category",
+          "contents": [
+            {
+              "contenttype": "block",
+              "xmldef": "<block type='controls_if'></block>"
+            },
+            {
+              "contenttype": "button",
+              "text": "insert",
+              "callbackkey":"insertConnectionRows"
+            },
+            {
+              "contenttype": "label",
+              "text": "Something"
+            }
+          ]
+        }
+      ];
       chai.assert.throws(function() {
-        toolbox.renderTree(badXml);
+        toolbox.renderTree(badToolboxDef);
       }, 'Toolbox cannot have both blocks and categories in the root level.');
     });
     test('Select any open nodes', function() {
@@ -74,6 +106,36 @@ suite('Toolbox', function() {
       var orientationAttribute = this.toolbox.tree_.getElement()
           .getAttribute('aria-orientation');
       chai.assert.equal(orientationAttribute, 'horizontal');
+    });
+    test('Create a toolbox from JSON', function() {
+      var jsonDef = [
+        {
+          "contenttype": "category",
+          "contents": [
+            {
+              "contenttype": "block",
+              "xmldef": '<block xmlns="http://www.w3.org/1999/xhtml" type="basic_block"><field name="TEXT">FirstCategory-FirstBlock</field></block>'
+            },
+            {
+              "contenttype": "label",
+              "text": "Input/Output:",
+              "web-class": "ioLabel"
+            },
+            {
+              "contenttype": "button",
+              "text": "insert",
+              "callbackkey": "insertConnectionStacks",
+              "web-class": "ioLabel"
+            },
+            {
+              "contenttype": "sep",
+              "gap": "7"
+            }
+          ]
+        }
+      ];
+      this.toolbox.renderTree(jsonDef);
+      chai.assert.lengthOf(this.toolbox.tree_.children_, 1);
     });
   });
 
@@ -186,7 +248,7 @@ suite('Toolbox', function() {
     });
   });
 
-  suite('syncTrees_', function() {
+  suite('createTree_', function() {
     setup(function() {
       this.tree = new Blockly.tree.TreeControl(this.toolbox, this.toolbox.config_);
       this.tree.contents = [];
@@ -195,42 +257,38 @@ suite('Toolbox', function() {
       this.buttonIdx = 1;
       this.dynamicCategoryIdx = 3;
       this.categorySeparatorIdx = 2;
+      this.toolboxXml = Blockly.Options.parseToolbox(this.toolboxXml);
     });
     test('Having a dynamic category', function() {
-      this.toolbox.syncTrees_(this.toolboxXml, this.tree,
-          this.toolbox.workspace_.options.pathToMedia);
+      this.toolbox.createTree_(this.toolboxXml, this.tree);
       chai.assert.equal(this.tree.children_[this.dynamicCategoryIdx].contents, 'VARIABLE');
     });
     test('Node is expanded', function() {
-      var openNode = this.toolbox.syncTrees_(this.toolboxXml, this.tree,
-          this.toolbox.workspace_.options.pathToMedia);
+      var openNode = this.toolbox.createTree_(this.toolboxXml, this.tree);
       chai.assert.exists(openNode);
     });
     test('Having a tree separator', function() {
-      this.toolbox.syncTrees_(this.toolboxXml, this.tree,
-          this.toolbox.workspace_.options.pathToMedia);
-      var sepString = Blockly.utils.xml.domToText(
-          this.tree.children_[0].contents[this.separatorIdx]);
-      chai.assert.equal(sepString, '<sep xmlns="http://www.w3.org/1999/xhtml" gap="-1"></sep>');
+      this.toolbox.createTree_(this.toolboxXml, this.tree);
+      var sepObj = this.tree.children_[0].contents[this.separatorIdx];
+      chai.assert.isNotNull(sepObj);
+      chai.assert.equal(sepObj['gap'], -1);
     });
     test('Separator between two categories', function() {
-      this.toolbox.syncTrees_(this.toolboxXml, this.tree,
-          this.toolbox.workspace_.options.pathToMedia);
+      this.toolbox.createTree_(this.toolboxXml, this.tree);
       chai.assert.instanceOf(this.tree.children_[this.categorySeparatorIdx],
           Blockly.Toolbox.TreeSeparator);
     });
     test('Having a button', function() {
-      this.toolbox.syncTrees_(this.toolboxXml, this.tree,
-          this.toolbox.workspace_.options.pathToMedia);
-      var btnString = Blockly.utils.xml.domToText(this.tree.children_[0].contents[this.buttonIdx]);
-      chai.assert.equal(btnString,
-          '<button xmlns="http://www.w3.org/1999/xhtml" text="insert" callbackkey="insertConnectionRows"></button>');
+      this.toolbox.createTree_(this.toolboxXml, this.tree);
+      var btnObj = this.tree.children_[0].contents[this.buttonIdx];
+      chai.assert.isNotNull(btnObj);
+      chai.assert.equal(btnObj['text'], 'insert');
+      chai.assert.equal(btnObj['callbackkey'], 'insertConnectionRows');
     });
     test('Colours are set using correct method', function() {
       var setColourFromStyleStub = sinon.stub(this.toolbox, "setColourFromStyle_");
       var setColourStub = sinon.stub(this.toolbox, "setColour_");
-      this.toolbox.syncTrees_(this.toolboxXml, this.tree,
-          this.toolbox.workspace_.options.pathToMedia);
+      this.toolbox.createTree_(this.toolboxXml, this.tree);
       sinon.assert.calledOnce(setColourFromStyleStub);
       sinon.assert.called(setColourStub);
     });

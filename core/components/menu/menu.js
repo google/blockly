@@ -243,7 +243,7 @@ Blockly.Menu.prototype.getMenuItem_ = function(elem) {
         }
       }
     }
-    elem = elem.parentNode;
+    elem = elem.parentElement;
   }
   return null;
 };

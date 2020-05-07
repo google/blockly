@@ -39,7 +39,7 @@ goog.addDependency("../../core/components/tree/treenode.js", ['Blockly.tree.Tree
 goog.addDependency("../../core/connection.js", ['Blockly.Connection'], ['Blockly.Events', 'Blockly.Events.BlockMove', 'Blockly.Xml']);
 goog.addDependency("../../core/connection_db.js", ['Blockly.ConnectionDB'], ['Blockly.RenderedConnection']);
 goog.addDependency("../../core/constants.js", ['Blockly.constants'], []);
-goog.addDependency("../../core/contextmenu.js", ['Blockly.ContextMenu'], ['Blockly.Events', 'Blockly.Events.BlockCreate', 'Blockly.Msg', 'Blockly.utils', 'Blockly.utils.Coordinate', 'Blockly.utils.dom', 'Blockly.utils.Menu', 'Blockly.utils.MenuItem', 'Blockly.utils.userAgent', 'Blockly.Xml']);
+goog.addDependency("../../core/contextmenu.js", ['Blockly.ContextMenu'], ['Blockly.Events', 'Blockly.Events.BlockCreate', 'Blockly.Msg', 'Blockly.utils', 'Blockly.utils.Coordinate', 'Blockly.utils.dom', 'Blockly.Menu', 'Blockly.MenuItem', 'Blockly.utils.userAgent', 'Blockly.Xml']);
 goog.addDependency("../../core/css.js", ['Blockly.Css'], []);
 goog.addDependency("../../core/dropdowndiv.js", ['Blockly.DropDownDiv'], ['Blockly.utils.dom', 'Blockly.utils.math', 'Blockly.utils.style']);
 goog.addDependency("../../core/events.js", ['Blockly.Events'], ['Blockly.utils']);
@@ -49,7 +49,7 @@ goog.addDependency("../../core/field.js", ['Blockly.Field'], ['Blockly.Events', 
 goog.addDependency("../../core/field_angle.js", ['Blockly.FieldAngle'], ['Blockly.Css', 'Blockly.DropDownDiv', 'Blockly.fieldRegistry', 'Blockly.FieldTextInput', 'Blockly.utils.dom', 'Blockly.utils.math', 'Blockly.utils.object', 'Blockly.utils.userAgent']);
 goog.addDependency("../../core/field_checkbox.js", ['Blockly.FieldCheckbox'], ['Blockly.Events', 'Blockly.Events.BlockChange', 'Blockly.Field', 'Blockly.fieldRegistry', 'Blockly.utils.dom', 'Blockly.utils.object', 'Blockly.utils.Size']);
 goog.addDependency("../../core/field_colour.js", ['Blockly.FieldColour'], ['Blockly.Css', 'Blockly.DropDownDiv', 'Blockly.Events', 'Blockly.Events.BlockChange', 'Blockly.Field', 'Blockly.fieldRegistry', 'Blockly.navigation', 'Blockly.utils.aria', 'Blockly.utils.colour', 'Blockly.utils.dom', 'Blockly.utils.IdGenerator', 'Blockly.utils.KeyCodes', 'Blockly.utils.object', 'Blockly.utils.Size']);
-goog.addDependency("../../core/field_dropdown.js", ['Blockly.FieldDropdown'], ['Blockly.Events', 'Blockly.Events.BlockChange', 'Blockly.Field', 'Blockly.fieldRegistry', 'Blockly.navigation', 'Blockly.utils', 'Blockly.utils.aria', 'Blockly.utils.Coordinate', 'Blockly.utils.dom', 'Blockly.utils.Menu', 'Blockly.utils.MenuItem', 'Blockly.utils.object', 'Blockly.utils.Size', 'Blockly.utils.string', 'Blockly.utils.userAgent']);
+goog.addDependency("../../core/field_dropdown.js", ['Blockly.FieldDropdown'], ['Blockly.Events', 'Blockly.Events.BlockChange', 'Blockly.Field', 'Blockly.fieldRegistry', 'Blockly.navigation', 'Blockly.utils', 'Blockly.utils.aria', 'Blockly.utils.Coordinate', 'Blockly.utils.dom', 'Blockly.Menu', 'Blockly.MenuItem', 'Blockly.utils.object', 'Blockly.utils.Size', 'Blockly.utils.string', 'Blockly.utils.userAgent']);
 goog.addDependency("../../core/field_image.js", ['Blockly.FieldImage'], ['Blockly.Field', 'Blockly.fieldRegistry', 'Blockly.utils', 'Blockly.utils.dom', 'Blockly.utils.object', 'Blockly.utils.Size']);
 goog.addDependency("../../core/field_label.js", ['Blockly.FieldLabel'], ['Blockly.Field', 'Blockly.fieldRegistry', 'Blockly.utils', 'Blockly.utils.dom', 'Blockly.utils.object', 'Blockly.utils.Size']);
 goog.addDependency("../../core/field_label_serializable.js", ['Blockly.FieldLabelSerializable'], ['Blockly.FieldLabel', 'Blockly.fieldRegistry', 'Blockly.utils', 'Blockly.utils.object']);
@@ -84,6 +84,8 @@ goog.addDependency("../../core/keyboard_nav/marker.js", ['Blockly.Marker'], ['Bl
 goog.addDependency("../../core/keyboard_nav/navigation.js", ['Blockly.navigation'], ['Blockly.Action', 'Blockly.ASTNode', 'Blockly.utils.Coordinate', 'Blockly.user.keyMap']);
 goog.addDependency("../../core/keyboard_nav/tab_navigate_cursor.js", ['Blockly.TabNavigateCursor'], ['Blockly.ASTNode', 'Blockly.BasicCursor', 'Blockly.utils.object']);
 goog.addDependency("../../core/marker_manager.js", ['Blockly.MarkerManager'], ['Blockly.Cursor', 'Blockly.Marker']);
+goog.addDependency("../../core/menu.js", ['Blockly.Menu'], ['Blockly.utils.aria', 'Blockly.utils.Coordinate', 'Blockly.utils.dom', 'Blockly.utils.KeyCodes', 'Blockly.utils.style']);
+goog.addDependency("../../core/menuitem.js", ['Blockly.MenuItem'], ['Blockly.utils.aria', 'Blockly.utils.dom', 'Blockly.utils.IdGenerator']);
 goog.addDependency("../../core/msg.js", ['Blockly.Msg'], ['Blockly.utils.global']);
 goog.addDependency("../../core/mutator.js", ['Blockly.Mutator'], ['Blockly.Bubble', 'Blockly.Events', 'Blockly.Events.BlockChange', 'Blockly.Events.Ui', 'Blockly.Icon', 'Blockly.navigation', 'Blockly.utils', 'Blockly.utils.dom', 'Blockly.utils.global', 'Blockly.utils.object', 'Blockly.utils.xml', 'Blockly.WorkspaceSvg', 'Blockly.Xml']);
 goog.addDependency("../../core/names.js", ['Blockly.Names'], ['Blockly.Msg']);
@@ -154,8 +156,6 @@ goog.addDependency("../../core/utils/global.js", ['Blockly.utils.global'], []);
 goog.addDependency("../../core/utils/idgenerator.js", ['Blockly.utils.IdGenerator'], []);
 goog.addDependency("../../core/utils/keycodes.js", ['Blockly.utils.KeyCodes'], []);
 goog.addDependency("../../core/utils/math.js", ['Blockly.utils.math'], []);
-goog.addDependency("../../core/utils/menu.js", ['Blockly.utils.Menu'], ['Blockly.utils.aria', 'Blockly.utils.Coordinate', 'Blockly.utils.dom', 'Blockly.utils.KeyCodes', 'Blockly.utils.style']);
-goog.addDependency("../../core/utils/menuitem.js", ['Blockly.utils.MenuItem'], ['Blockly.utils.aria', 'Blockly.utils.dom', 'Blockly.utils.IdGenerator']);
 goog.addDependency("../../core/utils/object.js", ['Blockly.utils.object'], []);
 goog.addDependency("../../core/utils/rect.js", ['Blockly.utils.Rect'], []);
 goog.addDependency("../../core/utils/size.js", ['Blockly.utils.Size'], []);

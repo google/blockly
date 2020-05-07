@@ -22,8 +22,8 @@ goog.require('Blockly.Msg');
 goog.require('Blockly.utils');
 goog.require('Blockly.utils.Coordinate');
 goog.require('Blockly.utils.dom');
-goog.require('Blockly.utils.Menu');
-goog.require('Blockly.utils.MenuItem');
+goog.require('Blockly.Menu');
+goog.require('Blockly.MenuItem');
 goog.require('Blockly.utils.userAgent');
 goog.require('Blockly.Xml');
 
@@ -36,7 +36,7 @@ Blockly.ContextMenu.currentBlock = null;
 
 /**
  * Menu object.
- * @type {Blockly.utils.Menu}
+ * @type {Blockly.Menu}
  * @private
  */
 Blockly.ContextMenu.menu_ = null;
@@ -67,7 +67,7 @@ Blockly.ContextMenu.show = function(e, options, rtl) {
  * Create the context menu object and populate it with the given options.
  * @param {!Array.<!Object>} options Array of menu options.
  * @param {boolean} rtl True if RTL, false if LTR.
- * @return {!Blockly.utils.Menu} The menu that will be shown on right click.
+ * @return {!Blockly.Menu} The menu that will be shown on right click.
  * @private
  */
 Blockly.ContextMenu.populate_ = function(options, rtl) {
@@ -76,10 +76,10 @@ Blockly.ContextMenu.populate_ = function(options, rtl) {
      enabled: true,
      callback: Blockly.MakeItSo}
   */
-  var menu = new Blockly.utils.Menu();
+  var menu = new Blockly.Menu();
   menu.setRole(Blockly.utils.aria.Role.MENU);
   for (var i = 0, option; (option = options[i]); i++) {
-    var menuItem = new Blockly.utils.MenuItem(option.text);
+    var menuItem = new Blockly.MenuItem(option.text);
     menuItem.setRightToLeft(rtl);
     menuItem.setRole(Blockly.utils.aria.Role.MENUITEM);
     menu.addChild(menuItem);
@@ -98,7 +98,7 @@ Blockly.ContextMenu.populate_ = function(options, rtl) {
 
 /**
  * Add the menu to the page and position it correctly.
- * @param {!Blockly.utils.Menu} menu The menu to add and position.
+ * @param {!Blockly.Menu} menu The menu to add and position.
  * @param {!Event} e Mouse event for the right click that is making the context
  *     menu appear.
  * @param {boolean} rtl True if RTL, false if LTR.
@@ -135,7 +135,7 @@ Blockly.ContextMenu.position_ = function(menu, e, rtl) {
 
 /**
  * Create and render the menu widget inside Blockly's widget div.
- * @param {!Blockly.utils.Menu} menu The menu to add to the widget div.
+ * @param {!Blockly.Menu} menu The menu to add to the widget div.
  * @private
  */
 Blockly.ContextMenu.createWidget_ = function(menu) {

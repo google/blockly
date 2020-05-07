@@ -23,8 +23,8 @@ goog.require('Blockly.utils');
 goog.require('Blockly.utils.aria');
 goog.require('Blockly.utils.Coordinate');
 goog.require('Blockly.utils.dom');
-goog.require('Blockly.utils.Menu');
-goog.require('Blockly.utils.MenuItem');
+goog.require('Blockly.Menu');
+goog.require('Blockly.MenuItem');
 goog.require('Blockly.utils.object');
 goog.require('Blockly.utils.Size');
 goog.require('Blockly.utils.string');
@@ -83,14 +83,14 @@ Blockly.FieldDropdown = function(menuGenerator, opt_validator, opt_config) {
 
   /**
    * A reference to the currently selected menu item.
-   * @type {Blockly.utils.MenuItem}
+   * @type {Blockly.MenuItem}
    * @private
    */
   this.selectedMenuItem_ = null;
 
   /**
    * The dropdown menu.
-   * @type {Blockly.utils.Menu}
+   * @type {Blockly.Menu}
    * @private
    */
   this.menu_ = null;
@@ -307,11 +307,11 @@ Blockly.FieldDropdown.prototype.showEditor_ = function(opt_e) {
 
 /**
  * Create the dropdown editor.
- * @return {!Blockly.utils.Menu} The newly created dropdown menu.
+ * @return {!Blockly.Menu} The newly created dropdown menu.
  * @private
  */
 Blockly.FieldDropdown.prototype.dropdownCreate_ = function() {
-  var menu = new Blockly.utils.Menu();
+  var menu = new Blockly.Menu();
   menu.setRole(Blockly.utils.aria.Role.LISTBOX);
 
   var options = this.getOptions(false);
@@ -326,7 +326,7 @@ Blockly.FieldDropdown.prototype.dropdownCreate_ = function() {
       image.alt = content['alt'] || '';
       content = image;
     }
-    var menuItem = new Blockly.utils.MenuItem(content, value);
+    var menuItem = new Blockly.MenuItem(content, value);
     menuItem.setRole(Blockly.utils.aria.Role.OPTION);
     menuItem.setRightToLeft(this.sourceBlock_.RTL);
     menuItem.setCheckable(true);
@@ -356,18 +356,18 @@ Blockly.FieldDropdown.prototype.dropdownDispose_ = function() {
 
 /**
  * Handle an action in the dropdown menu.
- * @param {!Blockly.utils.MenuItem} menuItem The MenuItem selected within menu.
+ * @param {!Blockly.MenuItem} menuItem The MenuItem selected within menu.
  * @private
  */
 Blockly.FieldDropdown.prototype.handleMenuActionEvent_ = function(menuItem) {
   Blockly.DropDownDiv.hideIfOwner(this, true);
-  this.onItemSelected_(/** @type {!Blockly.utils.Menu} */ (this.menu_), menuItem);
+  this.onItemSelected_(/** @type {!Blockly.Menu} */ (this.menu_), menuItem);
 };
 
 /**
  * Handle the selection of an item in the dropdown menu.
- * @param {!Blockly.utils.Menu} menu The Menu component clicked.
- * @param {!Blockly.utils.MenuItem} menuItem The MenuItem selected within menu.
+ * @param {!Blockly.Menu} menu The Menu component clicked.
+ * @param {!Blockly.MenuItem} menuItem The MenuItem selected within menu.
  * @protected
  */
 Blockly.FieldDropdown.prototype.onItemSelected_ = function(menu, menuItem) {

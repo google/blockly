@@ -138,7 +138,7 @@ Blockly.Options = function(options) {
   this.hasCss = hasCss;
   /** @type {boolean} */
   this.horizontalLayout = horizontalLayout;
-  /** @type {Array<Object>} */
+  /** @type {Array<Blockly.Toolbox.ToolboxItem>} */
   this.languageTree = languageTree;
   /** @type {!Object} */
   this.gridOptions = Blockly.Options.parseGridOptions_(options);
@@ -312,27 +312,28 @@ Blockly.Options.parseThemeOptions_ = function(options) {
  * Parse the provided toolbox definition into a consistent format.
  * @param {Array|Node|NodeList|string|null} toolboxDef The definition of the
  *    toolbox in one of its many forms.
- * @return {Array<Object>} Array of JSON holding information on toolbox contents.
+ * @return {!Array<Blockly.Toolbox.ToolboxItem>} Array of JSON holding information
+ *    on toolbox contents.
+ * @package
  */
 Blockly.Options.parseToolbox = function(toolboxDef) {
-  if (!toolboxDef) {
-    return null;
-  }
-
   // The array can be either an array of xml or an array of JSON.
   if (Array.isArray(toolboxDef)) {
     if (toolboxDef.length && !(toolboxDef[0].nodeType)) {
-      return /** @type {Array<Object>} */ (toolboxDef);
+      return /** @type {!Array<Blockly.Toolbox.ToolboxItem>} */ (toolboxDef);
     }
   } else {
     toolboxDef = Blockly.Options.parseToolboxTree(toolboxDef);
+  }
+  if (!toolboxDef) {
+    return [];
   }
   return Blockly.Options.toolboxXmlToJson_(toolboxDef);
 };
 
 /**
  * Parse the provided toolbox tree into a consistent DOM format.
- * @param {Node|string} tree DOM tree of blocks, or text representation of same.
+ * @param {Node|NodeList|string|null} tree DOM tree of blocks, or text representation of same.
  * @return {Node} DOM tree of blocks, or null.
  */
 Blockly.Options.parseToolboxTree = function(tree) {
@@ -362,8 +363,10 @@ Blockly.Options.parseToolboxTree = function(tree) {
 
 /**
  * Convert the xml for a toolbox to JSON.
- * @param {!NodeList|!Node} xml DOM tree of blocks or list of xml blocks.
- * @return {!Array<Object>} A list of objects in the toolbox.
+ * @param {!NodeList|!Node|!Array<Blockly.Toolbox.ToolboxItem>} xml DOM tree of
+ *    blocks or list of xml
+ *    blocks.
+ * @return {!Array<Blockly.Toolbox.ToolboxItem>} A list of objects in the toolbox.
  * @private
  */
 Blockly.Options.toolboxXmlToJson_ = function(xml) {
@@ -377,10 +380,10 @@ Blockly.Options.toolboxXmlToJson_ = function(xml) {
       continue;
     }
     var obj = {};
-    obj['tagName'] = child.tagName;
+    obj['contenttype'] = child.tagName;
     // Store the xml for a block
     if (child.tagName.toUpperCase() === 'BLOCK') {
-      obj['xmlDef'] = Blockly.utils.xml.domToText(child);
+      obj['xmldef'] = Blockly.utils.xml.domToText(child);
     }
     // Get the contents for a category.
     if (child.tagName.toUpperCase() === 'CATEGORY') {
@@ -400,8 +403,8 @@ Blockly.Options.toolboxXmlToJson_ = function(xml) {
 
 /**
  * Handle the before tree item selected action.
- * @param {Node|Array<Object>} toolboxDef The definition of the toolbox. Either
- *    in xml or JSON.
+ * @param {Node|Array<Blockly.Toolbox.ToolboxItem>} toolboxDef The definition
+ *    of the toolbox. Either in xml or JSON.
  * @return {boolean} True if the toolbox input has categories.
  * @package
  */
@@ -409,7 +412,7 @@ Blockly.Options.hasCategories = function(toolboxDef) {
   if (Array.isArray(toolboxDef)) {
     // Search for categories
     for (var i = 0; i < toolboxDef.length; i++) {
-      if (toolboxDef[i].tagName.toUpperCase() === 'CATEGORY') {
+      if (toolboxDef[i]['contenttype'].toUpperCase() === 'CATEGORY') {
         return true;
       }
     }

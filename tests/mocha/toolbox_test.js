@@ -53,7 +53,7 @@ suite('Toolbox', function() {
 
   suite('renderTree', function() {
     setup(function() {
-      this.toolboxXml = Blockly.Options.parseToolbox(this.toolboxXml);
+      this.toolboxXml = Blockly.utils.toolbox.parseToolbox(this.toolboxXml);
       this.toolbox.selectFirstCategory();
       this.firstChild = this.toolbox.tree_.getChildAt(0);
       this.secondChild = this.toolbox.tree_.getChildAt(1);
@@ -257,7 +257,7 @@ suite('Toolbox', function() {
       this.buttonIdx = 1;
       this.dynamicCategoryIdx = 3;
       this.categorySeparatorIdx = 2;
-      this.toolboxXml = Blockly.Options.parseToolbox(this.toolboxXml);
+      this.toolboxXml = Blockly.utils.toolbox.parseToolbox(this.toolboxXml);
     });
     test('Having a dynamic category', function() {
       this.toolbox.createTree_(this.toolboxXml, this.tree);

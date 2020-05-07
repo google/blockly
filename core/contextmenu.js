@@ -18,12 +18,12 @@ goog.provide('Blockly.ContextMenu');
 
 goog.require('Blockly.Events');
 goog.require('Blockly.Events.BlockCreate');
+goog.require('Blockly.Menu');
+goog.require('Blockly.MenuItem');
 goog.require('Blockly.Msg');
 goog.require('Blockly.utils');
 goog.require('Blockly.utils.Coordinate');
 goog.require('Blockly.utils.dom');
-goog.require('Blockly.Menu');
-goog.require('Blockly.MenuItem');
 goog.require('Blockly.utils.userAgent');
 goog.require('Blockly.Xml');
 

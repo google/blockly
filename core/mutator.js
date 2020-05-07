@@ -165,7 +165,7 @@ Blockly.Mutator.prototype.createEditor_ = function() {
       }));
   workspaceOptions.toolboxPosition = this.block_.RTL ? Blockly.TOOLBOX_AT_RIGHT :
       Blockly.TOOLBOX_AT_LEFT;
-  workspaceOptions.languageTree = Blockly.Options.parseToolbox(quarkXml);
+  workspaceOptions.languageTree = Blockly.utils.toolbox.parseToolbox(quarkXml);
   workspaceOptions.getMetrics = this.getFlyoutMetrics_.bind(this);
   this.workspace_ = new Blockly.WorkspaceSvg(workspaceOptions);
   this.workspace_.isMutator = true;

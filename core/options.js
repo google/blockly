@@ -16,6 +16,7 @@ goog.require('Blockly.Theme');
 goog.require('Blockly.Themes.Classic');
 goog.require('Blockly.user.keyMap');
 goog.require('Blockly.utils.userAgent');
+goog.require('Blockly.utils.toolbox');
 goog.require('Blockly.Xml');
 
 
@@ -37,8 +38,9 @@ Blockly.Options = function(options) {
     var hasDisable = false;
     var hasSounds = false;
   } else {
-    var languageTree = Blockly.Options.parseToolbox(options['toolbox']);
-    var hasCategories = Blockly.Options.hasCategories(languageTree);
+    var languageTree = Blockly.Options.parseToolboxTree(options['toolbox'] || null);
+    languageTree = Blockly.utils.toolbox.parseToolbox(languageTree);
+    var hasCategories = Blockly.utils.toolbox.hasCategories(languageTree);
     var hasTrashcan = options['trashcan'];
     if (hasTrashcan === undefined) {
       hasTrashcan = hasCategories;
@@ -138,7 +140,7 @@ Blockly.Options = function(options) {
   this.hasCss = hasCss;
   /** @type {boolean} */
   this.horizontalLayout = horizontalLayout;
-  /** @type {Array<Blockly.Toolbox.ToolboxItem>} */
+  /** @type {Array<Blockly.utils.toolbox.ToolboxItem>} */
   this.languageTree = languageTree;
   /** @type {!Object} */
   this.gridOptions = Blockly.Options.parseGridOptions_(options);
@@ -309,29 +311,6 @@ Blockly.Options.parseThemeOptions_ = function(options) {
 };
 
 /**
- * Parse the provided toolbox definition into a consistent format.
- * @param {Array|Node|NodeList|string|null} toolboxDef The definition of the
- *    toolbox in one of its many forms.
- * @return {!Array<Blockly.Toolbox.ToolboxItem>} Array of JSON holding information
- *    on toolbox contents.
- * @package
- */
-Blockly.Options.parseToolbox = function(toolboxDef) {
-  // The array can be either an array of xml or an array of JSON.
-  if (Array.isArray(toolboxDef)) {
-    if (toolboxDef.length && !(toolboxDef[0].nodeType)) {
-      return /** @type {!Array<Blockly.Toolbox.ToolboxItem>} */ (toolboxDef);
-    }
-  } else {
-    toolboxDef = Blockly.Options.parseToolboxTree(toolboxDef);
-  }
-  if (!toolboxDef) {
-    return [];
-  }
-  return Blockly.Options.toolboxXmlToJson_(toolboxDef);
-};
-
-/**
  * Parse the provided toolbox tree into a consistent DOM format.
  * @param {Node|NodeList|string|null} tree DOM tree of blocks, or text representation of same.
  * @return {Node} DOM tree of blocks, or null.
@@ -359,67 +338,4 @@ Blockly.Options.parseToolboxTree = function(tree) {
     tree = null;
   }
   return tree;
-};
-
-/**
- * Convert the xml for a toolbox to JSON.
- * @param {!NodeList|!Node|!Array<Blockly.Toolbox.ToolboxItem>} toolboxDef The
- *     definition of the toolbox in one of its many forms.
- * @return {!Array<Blockly.Toolbox.ToolboxItem>} A list of objects in the toolbox.
- * @private
- */
-Blockly.Options.toolboxXmlToJson_ = function(toolboxDef) {
-  var arr = [];
-  // If it is a node it will have children.
-  var childNodes = toolboxDef.children;
-  if (!childNodes) {
-    // Otherwise the toolboxDef is an array or collection.
-    childNodes = toolboxDef;
-  }
-  for (var i = 0, child; (child = childNodes[i]); i++) {
-    if (!child.tagName) {
-      continue;
-    }
-    var obj = {};
-    obj['contenttype'] = child.tagName;
-    // Store the xml for a block
-    if (child.tagName.toUpperCase() === 'BLOCK') {
-      obj['xmldef'] = Blockly.utils.xml.domToText(child);
-    }
-    // Get the contents for a category.
-    if (child.tagName.toUpperCase() === 'CATEGORY') {
-      for (var k = 0; k < child.children.length; k++) {
-        obj['contents'] = Blockly.Options.toolboxXmlToJson_(child);
-      }
-    }
-    // Add xml attributes to object
-    for (var j = 0; j < child.attributes.length; j++) {
-      var attr = child.attributes[j];
-      obj[attr.nodeName] = attr.value;
-    }
-    arr.push(obj);
-  }
-  return arr;
-};
-
-/**
- * Handle the before tree item selected action.
- * @param {Node|Array<Blockly.Toolbox.ToolboxItem>} toolboxDef The definition
- *    of the toolbox. Either in xml or JSON.
- * @return {boolean} True if the toolbox input has categories.
- * @package
- */
-Blockly.Options.hasCategories = function(toolboxDef) {
-  if (Array.isArray(toolboxDef)) {
-    // Search for categories
-    for (var i = 0; i < toolboxDef.length; i++) {
-      if (toolboxDef[i]['contenttype'].toUpperCase() === 'CATEGORY') {
-        return true;
-      }
-    }
-  } else {
-    return Boolean(toolboxDef &&
-        toolboxDef.getElementsByTagName('category').length);
-  }
-  return false;
 };

@@ -32,6 +32,7 @@ goog.require('Blockly.utils.Coordinate');
 goog.require('Blockly.utils.dom');
 goog.require('Blockly.utils.object');
 goog.require('Blockly.utils.Rect');
+goog.require('Blockly.utils.toolbox');
 goog.require('Blockly.Workspace');
 goog.require('Blockly.WorkspaceAudio');
 goog.require('Blockly.WorkspaceDragSurfaceSvg');
@@ -1819,7 +1820,10 @@ Blockly.WorkspaceSvg.prototype.showContextMenu = function(e) {
  *    string of toolbox contents, or array of JSON representing toolbox contents.
  */
 Blockly.WorkspaceSvg.prototype.updateToolbox = function(toolboxDef) {
-  toolboxDef = Blockly.Options.parseToolbox(toolboxDef);
+  if (!Array.isArray(toolboxDef)) {
+    toolboxDef = Blockly.Options.parseToolboxTree(toolboxDef);
+  }
+  toolboxDef = Blockly.utils.toolbox.parseToolbox(toolboxDef);
   if (!toolboxDef) {
     if (this.options.languageTree) {
       throw Error('Can\'t nullify an existing toolbox.');
@@ -1829,7 +1833,7 @@ Blockly.WorkspaceSvg.prototype.updateToolbox = function(toolboxDef) {
   if (!this.options.languageTree) {
     throw Error('Existing toolbox is null.  Can\'t create new toolbox.');
   }
-  if (Blockly.Options.hasCategories(toolboxDef)) {
+  if (Blockly.utils.toolbox.hasCategories(toolboxDef)) {
     if (!this.toolbox_) {
       throw Error('Existing toolbox has no categories.  Can\'t change mode.');
     }

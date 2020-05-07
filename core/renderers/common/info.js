@@ -581,7 +581,7 @@ Blockly.blockRendering.RenderInfo.prototype.addAlignmentPadding_ = function(row,
   if (row.hasExternalInput || row.hasStatement) {
     row.widthWithConnectedBlocks += missingSpace;
   }
-  
+
   // Decide where the extra padding goes.
   if (row.align == Blockly.ALIGN_LEFT) {
     // Add padding to the end of the row.

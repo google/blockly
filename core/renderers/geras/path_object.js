@@ -122,7 +122,7 @@ Blockly.geras.PathObject.prototype.applyColour = function(block) {
   this.svgPathDark.setAttribute('fill', this.colourDark);
 
   Blockly.geras.PathObject.superClass_.applyColour.call(this, block);
-  
+
   this.svgPath.setAttribute('stroke', 'none');
 };
 

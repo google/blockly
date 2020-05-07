@@ -166,10 +166,10 @@ Blockly.DropDownDiv.createDom = function() {
   // Handle focusin/out events to add a visual indicator when
   // a child is focused or blurred.
   div.addEventListener('focusin', function() {
-    Blockly.utils.dom.addClass(div, 'focused');
+    Blockly.utils.dom.addClass(div, 'blocklyFocused');
   });
   div.addEventListener('focusout', function() {
-    Blockly.utils.dom.removeClass(div, 'focused');
+    Blockly.utils.dom.removeClass(div, 'blocklyFocused');
   });
 };
 
@@ -184,7 +184,7 @@ Blockly.DropDownDiv.setBoundsElement = function(boundsElement) {
 
 /**
  * Provide the div for inserting content into the drop-down.
- * @return {Element} Div to populate with content
+ * @return {!Element} Div to populate with content.
  */
 Blockly.DropDownDiv.getContentDiv = function() {
   return Blockly.DropDownDiv.content_;

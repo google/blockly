@@ -93,7 +93,7 @@ Blockly.tree.TreeNode.prototype.getCalculatedIconClass = function() {
  */
 Blockly.tree.TreeNode.prototype.onClick_ = function(_e) {
   // Expand icon.
-  if (this.hasChildren() && this.isUserCollapsible_) {
+  if (this.hasChildren()) {
     this.toggle();
     this.select();
   } else if (this.isSelected()) {

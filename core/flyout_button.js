@@ -166,7 +166,7 @@ Blockly.FlyoutButton.prototype.createDom = function() {
   var fontMetrics = Blockly.utils.dom.measureFontMetrics(text, fontSize,
       fontWeight, fontFamily);
   this.height = fontMetrics.height;
-  
+
   if (!this.isLabel_) {
     this.width += 2 * Blockly.FlyoutButton.MARGIN_X;
     this.height += 2 * Blockly.FlyoutButton.MARGIN_Y;

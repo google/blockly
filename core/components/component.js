@@ -115,7 +115,12 @@ Blockly.Component.Error = {
    * Error when an attempt is made to add a child component at an out-of-bounds
    * index.  We don't support sparse child arrays.
    */
-  CHILD_INDEX_OUT_OF_BOUNDS: 'Child component index out of bounds'
+  CHILD_INDEX_OUT_OF_BOUNDS: 'Child component index out of bounds',
+
+  /**
+   * Error when calling an abstract method that should be overriden.
+   */
+  ABSTRACT_METHOD: 'Unimplemented abstract method'
 };
 
 /**
@@ -195,12 +200,11 @@ Blockly.Component.prototype.isInDocument = function() {
 };
 
 /**
- * Creates the initial DOM representation for the component.  The default
- * implementation is to set this.element_ = div.
+ * Creates the initial DOM representation for the component.
  * @protected
  */
 Blockly.Component.prototype.createDom = function() {
-  this.element_ = document.createElement('div');
+  throw Error(Blockly.Component.Error.ABSTRACT_METHOD);
 };
 
 /**
@@ -221,19 +225,6 @@ Blockly.Component.prototype.createDom = function() {
  */
 Blockly.Component.prototype.render = function(opt_parentElement) {
   this.render_(opt_parentElement);
-};
-
-/**
- * Renders the component before another element. The other element should be in
- * the document already.
- *
- * Throws an Error if the component is already rendered.
- *
- * @param {Node} sibling Node to render the component before.
- * @protected
- */
-Blockly.Component.prototype.renderBefore = function(sibling) {
-  this.render_(/** @type {Element} */ (sibling.parentNode), sibling);
 };
 
 /**
@@ -498,21 +489,6 @@ Blockly.Component.prototype.getContentElement = function() {
 };
 
 /**
- * Set is right-to-left. This function should be used if the component needs
- * to know the rendering direction during DOM creation (i.e. before
- * {@link #enterDocument} is called and is right-to-left is set).
- * @param {boolean} rightToLeft Whether the component is rendered
- *     right-to-left.
- * @package
- */
-Blockly.Component.prototype.setRightToLeft = function(rightToLeft) {
-  if (this.inDocument_) {
-    throw Error(Blockly.Component.Error.ALREADY_RENDERED);
-  }
-  this.rightToLeft_ = rightToLeft;
-};
-
-/**
  * Returns true if the component has children.
  * @return {boolean} True if the component has children.
  * @protected
@@ -568,15 +544,4 @@ Blockly.Component.prototype.forEachChild = function(f, opt_obj) {
   for (var i = 0; i < this.children_.length; i++) {
     f.call(/** @type {?} */ (opt_obj), this.children_[i], i);
   }
-};
-
-/**
- * Returns the 0-based index of the given child component, or -1 if no such
- * child is found.
- * @param {?Blockly.Component} child The child component.
- * @return {number} 0-based index of the child component; -1 if not found.
- * @protected
- */
-Blockly.Component.prototype.indexOfChild = function(child) {
-  return this.children_.indexOf(child);
 };

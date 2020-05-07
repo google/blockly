@@ -12,20 +12,26 @@
 
 goog.provide('Blockly.Menu');
 
-goog.require('Blockly.Component');
 goog.require('Blockly.utils.aria');
 goog.require('Blockly.utils.Coordinate');
 goog.require('Blockly.utils.dom');
-goog.require('Blockly.utils.object');
+goog.require('Blockly.utils.KeyCodes');
+goog.require('Blockly.utils.style');
 
 
 /**
  * A basic menu class.
  * @constructor
- * @extends {Blockly.Component}
  */
 Blockly.Menu = function() {
-  Blockly.Component.call(this);
+  /**
+   * Array of menu items.
+   * (Nulls are never in the array, but typing the array as nullable prevents
+   * the compiler from objecting to .indexOf(null))
+   * @type {!Array.<Blockly.MenuItem>}
+   * @private
+   */
+  this.menuItems_ = [];
 
   /**
    * Coordinates of the mousedown event that caused this menu to open. Used to
@@ -38,11 +44,11 @@ Blockly.Menu = function() {
 
   /**
    * This is the element that we will listen to the real focus events on.
-   * A value of -1 means no menuitem is highlighted.
-   * @type {number}
+   * A value of null means no menu item is highlighted.
+   * @type {Blockly.MenuItem}
    * @private
    */
-  this.highlightedIndex_ = -1;
+  this.highlightedItem_ = null;
 
   /**
    * Mouse over event data.
@@ -77,27 +83,73 @@ Blockly.Menu = function() {
    * @type {?Blockly.EventData}
    * @private
    */
-  this.onKeyDownWrapper_ = null;
+  this.onKeyDownHandler_ = null;
+
+  /**
+   * The menu's root DOM element.
+   * @type {Element}
+   * @private
+   */
+  this.element_ = null;
+
+  /**
+   * ARIA name for this menu.
+   * @type {?Blockly.utils.aria.Role}
+   * @private
+   */
+  this.roleName_ = null;
 };
-Blockly.utils.object.inherits(Blockly.Menu, Blockly.Component);
 
 
 /**
- * Creates the menu DOM.
- * @override
+ * Add a new menu item to the bottom of this menu.
+ * @param {!Blockly.MenuItem} menuItem Menu item to append.
  */
-Blockly.Menu.prototype.createDom = function() {
+Blockly.Menu.prototype.addChild = function(menuItem) {
+  this.menuItems_.push(menuItem);
+};
+
+/**
+ * Creates the menu DOM.
+ * @param {!Element} container Element upon which to append this menu.
+ */
+Blockly.Menu.prototype.render = function(container) {
   var element = document.createElement('div');
-  element.id = this.getId();
-  this.setElementInternal(element);
-
-  // Set class
-  element.className = 'goog-menu goog-menu-vertical blocklyNonSelectable';
+  // goog-menu is deprecated, use blocklyMenu.  May 2020.
+  element.className = 'blocklyMenu goog-menu blocklyNonSelectable';
   element.tabIndex = 0;
+  if (this.roleName_) {
+    Blockly.utils.aria.setRole(element, this.roleName_);
+  }
+  this.element_ = element;
 
-  // Initialize ARIA role.
-  Blockly.utils.aria.setRole(element,
-      this.roleName_ || Blockly.utils.aria.Role.MENU);
+  // Add menu items.
+  for (var i = 0, menuItem; (menuItem = this.menuItems_[i]); i++) {
+    element.appendChild(menuItem.createDom());
+  }
+
+  // Add event handlers.
+  this.mouseOverHandler_ = Blockly.bindEventWithChecks_(element,
+      'mouseover', this, this.handleMouseOver_, true);
+  this.clickHandler_ = Blockly.bindEventWithChecks_(element,
+      'click', this, this.handleClick_, true);
+  this.mouseEnterHandler_ = Blockly.bindEventWithChecks_(element,
+      'mouseenter', this, this.handleMouseEnter_, true);
+  this.mouseLeaveHandler_ = Blockly.bindEventWithChecks_(element,
+      'mouseleave', this, this.handleMouseLeave_, true);
+  this.onKeyDownHandler_ = Blockly.bindEventWithChecks_(element,
+      'keydown', this, this.handleKeyEvent_);
+
+  container.appendChild(element);
+};
+
+/**
+ * Gets the menu's element.
+ * @return {Element} The DOM element.
+ * @package
+ */
+Blockly.Menu.prototype.getElement = function() {
+  return this.element_;
 };
 
 /**
@@ -108,19 +160,19 @@ Blockly.Menu.prototype.focus = function() {
   var el = this.getElement();
   if (el) {
     el.focus({preventScroll:true});
-    Blockly.utils.dom.addClass(el, 'focused');
+    Blockly.utils.dom.addClass(el, 'blocklyFocused');
   }
 };
 
 /**
  * Blur the menu element.
- * @package
+ * @private
  */
-Blockly.Menu.prototype.blur = function() {
+Blockly.Menu.prototype.blur_ = function() {
   var el = this.getElement();
   if (el) {
     el.blur();
-    Blockly.utils.dom.removeClass(el, 'focused');
+    Blockly.utils.dom.removeClass(el, 'blocklyFocused');
   }
 };
 
@@ -133,63 +185,11 @@ Blockly.Menu.prototype.setRole = function(roleName) {
   this.roleName_ = roleName;
 };
 
-/** @override */
-Blockly.Menu.prototype.enterDocument = function() {
-  Blockly.Menu.superClass_.enterDocument.call(this);
-
-  this.forEachChild(function(child) {
-    if (child.isInDocument()) {
-      this.registerChildId_(child);
-    }
-  }, this);
-
-  this.attachEvents_();
-};
-
 /**
- * Cleans up the container before its DOM is removed from the document, and
- * removes event handlers.  Overrides {@link Blockly.Component#exitDocument}.
- * @override
+ * Dispose of this menu.
  */
-Blockly.Menu.prototype.exitDocument = function() {
-  // {@link #setHighlightedIndex} has to be called before
-  // {@link Blockly.Component#exitDocument}, otherwise it has no effect.
-  this.setHighlightedIndex(-1);
-
-  Blockly.Menu.superClass_.exitDocument.call(this);
-};
-
-/** @override */
-Blockly.Menu.prototype.disposeInternal = function() {
-  Blockly.Menu.superClass_.disposeInternal.call(this);
-
-  this.detachEvents_();
-};
-
-/**
- * Adds the event listeners to the menu.
- * @private
- */
-Blockly.Menu.prototype.attachEvents_ = function() {
-  var el = /** @type {!EventTarget} */ (this.getElement());
-
-  this.mouseOverHandler_ = Blockly.bindEventWithChecks_(el,
-      'mouseover', this, this.handleMouseOver_, true);
-  this.clickHandler_ = Blockly.bindEventWithChecks_(el,
-      'click', this, this.handleClick_, true);
-  this.mouseEnterHandler_ = Blockly.bindEventWithChecks_(el,
-      'mouseenter', this, this.handleMouseEnter_, true);
-  this.mouseLeaveHandler_ = Blockly.bindEventWithChecks_(el,
-      'mouseleave', this, this.handleMouseLeave_, true);
-  this.onKeyDownWrapper_ = Blockly.bindEventWithChecks_(el,
-      'keydown', this, this.handleKeyEvent);
-};
-
-/**
- * Removes the event listeners from the menu.
- * @private
- */
-Blockly.Menu.prototype.detachEvents_ = function() {
+Blockly.Menu.prototype.dispose = function() {
+  // Remove event handlers.
   if (this.mouseOverHandler_) {
     Blockly.unbindEvent_(this.mouseOverHandler_);
     this.mouseOverHandler_ = null;
@@ -206,63 +206,44 @@ Blockly.Menu.prototype.detachEvents_ = function() {
     Blockly.unbindEvent_(this.mouseLeaveHandler_);
     this.mouseLeaveHandler_ = null;
   }
-  if (this.onKeyDownWrapper_) {
-    Blockly.unbindEvent_(this.onKeyDownWrapper_);
-    this.onKeyDownWrapper_ = null;
+  if (this.onKeyDownHandler_) {
+    Blockly.unbindEvent_(this.onKeyDownHandler_);
+    this.onKeyDownHandler_ = null;
   }
+
+  // Remove menu items.
+  for (var i = 0, menuItem; (menuItem = this.menuItems_[i]); i++) {
+    menuItem.dispose();
+  }
+  this.menuItems_length = 0;
+  this.element_ = null;
 };
 
 // Child component management.
 
 /**
- * Map of DOM IDs to child menuitems. Each key is the DOM ID of a child
- * menuitems's root element; each value is a reference to the child menu
- * item itself.
- * @type {?Object}
+ * Returns the child menu item that owns the given DOM element,
+ * or null if no such menu item is found.
+ * @param {Element} elem DOM element whose owner is to be returned.
+ * @return {?Blockly.MenuItem} Menu item for which the DOM element belongs to.
  * @private
  */
-Blockly.Menu.prototype.childElementIdMap_ = null;
-
-/**
- * Creates a DOM ID for the child menuitem and registers it to an internal
- * hash table to be able to find it fast by id.
- * @param {Blockly.Component} child The child menuitem. Its root element has
- *     to be created yet.
- * @private
- */
-Blockly.Menu.prototype.registerChildId_ = function(child) {
-  // Map the DOM ID of the menuitem's root element to the menuitem itself.
-  var childElem = child.getElement();
-
-  // If the menuitem's root element doesn't have a DOM ID assign one.
-  var id = childElem.id || (childElem.id = child.getId());
-
-  // Lazily create the child element ID map on first use.
-  if (!this.childElementIdMap_) {
-    this.childElementIdMap_ = {};
-  }
-  this.childElementIdMap_[id] = child;
-};
-
-/**
- * Returns the child menuitem that owns the given DOM node, or null if no such
- * menuitem is found.
- * @param {Node} node DOM node whose owner is to be returned.
- * @return {?Blockly.MenuItem} menuitem for which the DOM node belongs to.
- * @protected
- */
-Blockly.Menu.prototype.getMenuItem = function(node) {
-  // Ensure that this menu actually has child menuitems before
-  // looking up the menuitem.
-  if (this.childElementIdMap_) {
-    var elem = this.getElement();
-    while (node && node !== elem) {
-      var id = node.id;
-      if (id in this.childElementIdMap_) {
-        return this.childElementIdMap_[id];
+Blockly.Menu.prototype.getMenuItem_ = function(elem) {
+  var menuElem = this.getElement();
+  // Node might be the menu border (resulting in no associated menu item), or
+  // a menu item's div, or some element within the menu item.
+  // Walk up parents until one meets either the menu's root element, or
+  // a menu item's div.
+  while (elem && elem != menuElem) {
+    if (Blockly.utils.dom.hasClass(elem, 'blocklyMenuItem')) {
+      // Having found a menu item's div, locate that menu item in this menu.
+      for (var i = 0, menuItem; (menuItem = this.menuItems_[i]); i++) {
+        if (menuItem.getElement() == elem) {
+          return menuItem;
+        }
       }
-      node = node.parentNode;
     }
+    elem = elem.parentElement;
   }
   return null;
 };
@@ -270,68 +251,25 @@ Blockly.Menu.prototype.getMenuItem = function(node) {
 // Highlight management.
 
 /**
- * Unhighlight the current highlighted item.
- * @protected
+ * Highlights the given menu item, or clears highlighting if null.
+ * @param {Blockly.MenuItem} item Item to highlight, or null.
+ * @private
  */
-Blockly.Menu.prototype.unhighlightCurrent = function() {
-  var highlighted = this.getHighlighted();
-  if (highlighted) {
-    highlighted.setHighlighted(false);
+Blockly.Menu.prototype.setHighlighted_ = function(item) {
+  var currentHighlighted = this.highlightedItem_;
+  if (currentHighlighted) {
+    currentHighlighted.setHighlighted(false);
+    this.highlightedItem_ = null;
   }
-};
-
-/**
- * Clears the currently highlighted item.
- * @protected
- */
-Blockly.Menu.prototype.clearHighlighted = function() {
-  this.unhighlightCurrent();
-  this.setHighlightedIndex(-1);
-};
-
-/**
- * Returns the currently highlighted item (if any).
- * @return {?Blockly.Component} Highlighted item (null if none).
- * @protected
- */
-Blockly.Menu.prototype.getHighlighted = function() {
-  return this.getChildAt(this.highlightedIndex_);
-};
-
-/**
- * Highlights the item at the given 0-based index (if any). If another item
- * was previously highlighted, it is un-highlighted.
- * @param {number} index Index of item to highlight (-1 removes the current
- *     highlight).
- * @protected
- */
-Blockly.Menu.prototype.setHighlightedIndex = function(index) {
-  var child = this.getChildAt(index);
-  if (child) {
-    child.setHighlighted(true);
-    this.highlightedIndex_ = index;
-  } else if (this.highlightedIndex_ > -1) {
-    this.getHighlighted().setHighlighted(false);
-    this.highlightedIndex_ = -1;
-  }
-
-  // Bring the highlighted item into view. This has no effect if the menu is not
-  // scrollable.
-  if (child) {
+  if (item) {
+    item.setHighlighted(true);
+    this.highlightedItem_ = item;
+    // Bring the highlighted item into view. This has no effect if the menu is
+    // not scrollable.
     Blockly.utils.style.scrollIntoContainerView(
-        /** @type {!Element} */ (child.getElement()),
+        /** @type {!Element} */ (item.getElement()),
         /** @type {!Element} */ (this.getElement()));
   }
-};
-
-/**
- * Highlights the given item if it exists and is a child of the container;
- * otherwise un-highlights the currently highlighted item.
- * @param {Blockly.MenuItem} item Item to highlight.
- * @protected
- */
-Blockly.Menu.prototype.setHighlighted = function(item) {
-  this.setHighlightedIndex(this.indexOfChild(item));
 };
 
 /**
@@ -340,10 +278,8 @@ Blockly.Menu.prototype.setHighlighted = function(item) {
  * @package
  */
 Blockly.Menu.prototype.highlightNext = function() {
-  this.unhighlightCurrent();
-  this.highlightHelper(function(index, max) {
-    return (index + 1) % max;
-  }, this.highlightedIndex_);
+  var index = this.menuItems_.indexOf(this.highlightedItem_);
+  this.highlightHelper_(index, 1);
 };
 
 /**
@@ -352,91 +288,76 @@ Blockly.Menu.prototype.highlightNext = function() {
  * @package
  */
 Blockly.Menu.prototype.highlightPrevious = function() {
-  this.unhighlightCurrent();
-  this.highlightHelper(function(index, max) {
-    index--;
-    return index < 0 ? max - 1 : index;
-  }, this.highlightedIndex_);
+  var index = this.menuItems_.indexOf(this.highlightedItem_);
+  this.highlightHelper_(index < 0 ? this.menuItems_.length : index, -1);
+};
+
+/**
+ * Highlights the first highlightable item.
+ * @private
+ */
+Blockly.Menu.prototype.highlightFirst_ = function() {
+  this.highlightHelper_(-1, 1);
+};
+
+/**
+ * Highlights the last highlightable item.
+ * @private
+ */
+Blockly.Menu.prototype.highlightLast_ = function() {
+  this.highlightHelper_(this.menuItems_.length, -1);
 };
 
 /**
  * Helper function that manages the details of moving the highlight among
  * child menuitems in response to keyboard events.
- * @param {function(this: Blockly.Component, number, number) : number} fn
- *     Function that accepts the current and maximum indices, and returns the
- *     next index to check.
  * @param {number} startIndex Start index.
- * @return {boolean} Whether the highlight has changed.
- * @protected
+ * @param {number} delta Step direction: 1 to go down, -1 to go up.
+ * @private
  */
-Blockly.Menu.prototype.highlightHelper = function(fn, startIndex) {
-  // If the start index is -1 (meaning there's nothing currently highlighted),
-  // try starting from the currently open item, if any.
-  var curIndex =
-      startIndex < 0 ? -1 : startIndex;
-  var numItems = this.getChildCount();
-
-  curIndex = fn.call(this, curIndex, numItems);
-  var visited = 0;
-  while (visited <= numItems) {
-    var menuItem = /** @type {Blockly.MenuItem} */ (this.getChildAt(curIndex));
-    if (menuItem && this.canHighlightItem(menuItem)) {
-      this.setHighlightedIndex(curIndex);
-      return true;
+Blockly.Menu.prototype.highlightHelper_ = function(startIndex, delta) {
+  var index = startIndex + delta;
+  var menuItem;
+  while ((menuItem = this.menuItems_[index])) {
+    if (menuItem.isEnabled()) {
+      this.setHighlighted_(menuItem);
+      break;
     }
-    visited++;
-    curIndex = fn.call(this, curIndex, numItems);
+    index += delta;
   }
-  return false;
-};
-
-/**
- * Returns whether the given item can be highlighted.
- * @param {Blockly.MenuItem} item The item to check.
- * @return {boolean} Whether the item can be highlighted.
- * @protected
- */
-Blockly.Menu.prototype.canHighlightItem = function(item) {
-  return item.isEnabled();
 };
 
 // Mouse events.
 
 /**
- * Handles mouseover events. Highlight menuitems as the user
- * hovers over them.
- * @param {Event} e Mouse event to handle.
+ * Handles mouseover events. Highlight menuitems as the user hovers over them.
+ * @param {!Event} e Mouse event to handle.
  * @private
  */
 Blockly.Menu.prototype.handleMouseOver_ = function(e) {
-  var menuItem = this.getMenuItem(/** @type {Node} */ (e.target));
+  var menuItem = this.getMenuItem_(/** @type {Element} */ (e.target));
 
   if (menuItem) {
     if (menuItem.isEnabled()) {
-      var currentHighlighted = this.getHighlighted();
-      if (currentHighlighted === menuItem) {
-        return;
+      if (this.highlightedItem_ != menuItem) {
+        this.setHighlighted_(menuItem);
       }
-
-      this.unhighlightCurrent();
-      this.setHighlighted(menuItem);
     } else {
-      this.unhighlightCurrent();
+      this.setHighlighted_(null);
     }
   }
 };
 
 /**
- * Handles click events. Pass the event onto the child
- * menuitem to handle.
- * @param {Event} e Click to handle.
+ * Handles click events. Pass the event onto the child menuitem to handle.
+ * @param {!Event} e Click event to handle.
  * @private
  */
 Blockly.Menu.prototype.handleClick_ = function(e) {
   var oldCoords = this.openingCoords;
   // Clear out the saved opening coords immediately so they're not used twice.
   this.openingCoords = null;
-  if (oldCoords && typeof e.clientX === 'number') {
+  if (oldCoords && typeof e.clientX == 'number') {
     var newCoords = new Blockly.utils.Coordinate(e.clientX, e.clientY);
     if (Blockly.utils.Coordinate.distance(oldCoords, newCoords) < 1) {
       // This menu was opened by a mousedown and we're handling the consequent
@@ -447,10 +368,9 @@ Blockly.Menu.prototype.handleClick_ = function(e) {
     }
   }
 
-  var menuItem = this.getMenuItem(/** @type {Node} */ (e.target));
-
-  if (menuItem && menuItem.handleClick(e)) {
-    e.preventDefault();
+  var menuItem = this.getMenuItem_(/** @type {Element} */ (e.target));
+  if (menuItem) {
+    menuItem.performAction();
   }
 };
 
@@ -470,60 +390,35 @@ Blockly.Menu.prototype.handleMouseEnter_ = function(_e) {
  */
 Blockly.Menu.prototype.handleMouseLeave_ = function(_e) {
   if (this.getElement()) {
-    this.blur();
-    this.clearHighlighted();
+    this.blur_();
+    this.setHighlighted_(null);
   }
 };
 
 // Keyboard events.
 
 /**
- * Attempts to handle a keyboard event, if the menuitem is enabled, by calling
- * {@link handleKeyEventInternal}.  Considered protected; should only be used
- * within this package and by subclasses.
- * @param {Event} e Key event to handle.
- * @return {boolean} Whether the key event was handled.
- * @protected
+ * Attempts to handle a keyboard event, if the menu item is enabled, by calling
+ * {@link handleKeyEventInternal_}.
+ * @param {!Event} e Key event to handle.
+ * @private
  */
-Blockly.Menu.prototype.handleKeyEvent = function(e) {
-  if (this.getChildCount() != 0 &&
-      this.handleKeyEventInternal(e)) {
-    e.preventDefault();
-    e.stopPropagation();
-    return true;
+Blockly.Menu.prototype.handleKeyEvent_ = function(e) {
+  if (!this.menuItems_.length) {
+    // Empty menu.
+    return;
   }
-  return false;
-};
-
-/**
- * Attempts to handle a keyboard event; returns true if the event was handled,
- * false otherwise.  If the container is enabled, and a child is highlighted,
- * calls the child menuitem's `handleKeyEvent` method to give the menuitem
- * a chance to handle the event first.
- * @param {Event} e Key event to handle.
- * @return {boolean} Whether the event was handled by the container (or one of
- *     its children).
- * @protected
- */
-Blockly.Menu.prototype.handleKeyEventInternal = function(e) {
-  // Give the highlighted menuitem the chance to handle the key event.
-  var highlighted = this.getHighlighted();
-  if (highlighted && typeof highlighted.handleKeyEvent == 'function' &&
-      highlighted.handleKeyEvent(e)) {
-    return true;
-  }
-
-  // Do not handle the key event if any modifier key is pressed.
   if (e.shiftKey || e.ctrlKey || e.metaKey || e.altKey) {
-    return false;
+    // Do not handle the key event if any modifier key is pressed.
+    return;
   }
 
-  // Either nothing is highlighted, or the highlighted menuitem didn't handle
-  // the key event, so attempt to handle it here.
+  var highlighted = this.highlightedItem_;
   switch (e.keyCode) {
     case Blockly.utils.KeyCodes.ENTER:
+    case Blockly.utils.KeyCodes.SPACE:
       if (highlighted) {
-        highlighted.performActionInternal(e);
+        highlighted.performAction();
       }
       break;
 
@@ -535,9 +430,21 @@ Blockly.Menu.prototype.handleKeyEventInternal = function(e) {
       this.highlightNext();
       break;
 
-    default:
-      return false;
-  }
+    case Blockly.utils.KeyCodes.PAGE_UP:
+    case Blockly.utils.KeyCodes.HOME:
+      this.highlightFirst_();
+      break;
 
-  return true;
+    case Blockly.utils.KeyCodes.PAGE_DOWN:
+    case Blockly.utils.KeyCodes.END:
+      this.highlightLast_();
+      break;
+
+    default:
+      // Not a key the menu is interested in.
+      return;
+  }
+  // The menu used this key, don't let it have secondary effects.
+  e.preventDefault();
+  e.stopPropagation();
 };

@@ -180,7 +180,7 @@ Blockly.Toolbox.prototype.init = function() {
         'rendererOverrides': workspace.options.rendererOverrides
       }));
   workspaceOptions.toolboxPosition = workspace.options.toolboxPosition;
-  
+
   if (workspace.horizontalLayout) {
     if (!Blockly.HorizontalFlyout) {
       throw Error('Missing require for Blockly.HorizontalFlyout');
@@ -196,7 +196,7 @@ Blockly.Toolbox.prototype.init = function() {
     throw Error('One of Blockly.VerticalFlyout or Blockly.Horizontal must be' +
         'required.');
   }
-  
+
   // Insert the flyout after the workspace.
   Blockly.utils.dom.insertAfter(this.flyout_.createDom('svg'), svg);
   this.flyout_.init(workspace);
@@ -830,8 +830,7 @@ Blockly.Css.register([
 
   '.blocklyTreeLabel {',
     'cursor: default;',
-    'font-family: sans-serif;',
-    'font-size: 16px;',
+    'font: 16px sans-serif;',
     'padding: 0 3px;',
     'vertical-align: middle;',
   '}',

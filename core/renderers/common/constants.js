@@ -256,7 +256,7 @@ Blockly.blockRendering.ConstantProvider = function() {
    * @type {number}
    */
   this.FIELD_TEXT_HEIGHT = -1; // Dynamically set
-  
+
   /**
    * Text baseline.  This constant is dynamically set in ``setFontConstants_``
    * to be the baseline of the text based on the font used.
@@ -1168,9 +1168,8 @@ Blockly.blockRendering.ConstantProvider.prototype.getCSS_ = function(selector) {
     // Text.
     selector + ' .blocklyText, ',
     selector + ' .blocklyFlyoutLabelText {',
-      'font-family: ' + this.FIELD_TEXT_FONTFAMILY + ';',
-      'font-size: ' + this.FIELD_TEXT_FONTSIZE + 'pt;',
-      'font-weight: ' + this.FIELD_TEXT_FONTWEIGHT + ';',
+      'font: ' + this.FIELD_TEXT_FONTWEIGHT + ' ' +
+          this.FIELD_TEXT_FONTSIZE + 'pt ' + this.FIELD_TEXT_FONTFAMILY + ';',
     '}',
 
     // Fields.
@@ -1233,7 +1232,7 @@ Blockly.blockRendering.ConstantProvider.prototype.getCSS_ = function(selector) {
     // Insertion marker.
     selector + ' .blocklyInsertionMarker>.blocklyPath {',
       'fill-opacity: ' + this.INSERTION_MARKER_OPACITY + ';',
-      'stroke: none',
+      'stroke: none;',
     '}',
     /* eslint-enable indent */
   ];

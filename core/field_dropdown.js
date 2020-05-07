@@ -273,9 +273,9 @@ Blockly.FieldDropdown.prototype.showEditor_ = function(opt_e) {
   var menuElement = /** @type {!Element} */ (this.menu_.getElement());
   Blockly.utils.dom.addClass(menuElement, 'blocklyDropdownMenu');
 
-  Blockly.utils.aria.setState(menuElement,
-      Blockly.utils.aria.State.ACTIVEDESCENDANT,
-      this.selectedMenuItem_ ? this.selectedMenuItem_.getId() : '');
+  if (this.selectedMenuItem_) {
+    this.menu_.setHighlighted(this.selectedMenuItem_);
+  }
 
   if (this.getConstants().FIELD_DROPDOWN_COLOURED_DIV) {
     var primaryColour = (this.sourceBlock_.isShadow()) ?

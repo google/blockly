@@ -125,6 +125,8 @@ Blockly.MenuItem.prototype.createDom = function() {
   }
   Blockly.utils.aria.setState(element, Blockly.utils.aria.State.SELECTED,
       (this.checkable_ && this.checked_) || false);
+  Blockly.utils.aria.setState(element, Blockly.utils.aria.State.DISABLED,
+      !this.enabled_);
 
   return element;
 };

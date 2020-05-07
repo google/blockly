@@ -253,9 +253,9 @@ Blockly.Menu.prototype.getMenuItem_ = function(elem) {
 /**
  * Highlights the given menu item, or clears highlighting if null.
  * @param {Blockly.MenuItem} item Item to highlight, or null.
- * @private
+ * @package
  */
-Blockly.Menu.prototype.setHighlighted_ = function(item) {
+Blockly.Menu.prototype.setHighlighted = function(item) {
   var currentHighlighted = this.highlightedItem_;
   if (currentHighlighted) {
     currentHighlighted.setHighlighted(false);
@@ -266,9 +266,12 @@ Blockly.Menu.prototype.setHighlighted_ = function(item) {
     this.highlightedItem_ = item;
     // Bring the highlighted item into view. This has no effect if the menu is
     // not scrollable.
+    var el = /** @type {!Element} */ (this.getElement());
     Blockly.utils.style.scrollIntoContainerView(
-        /** @type {!Element} */ (item.getElement()),
-        /** @type {!Element} */ (this.getElement()));
+        /** @type {!Element} */ (item.getElement()), el);
+
+    Blockly.utils.aria.setState(el, Blockly.utils.aria.State.ACTIVEDESCENDANT,
+        item.getId());
   }
 };
 
@@ -320,7 +323,7 @@ Blockly.Menu.prototype.highlightHelper_ = function(startIndex, delta) {
   var menuItem;
   while ((menuItem = this.menuItems_[index])) {
     if (menuItem.isEnabled()) {
-      this.setHighlighted_(menuItem);
+      this.setHighlighted(menuItem);
       break;
     }
     index += delta;
@@ -340,10 +343,10 @@ Blockly.Menu.prototype.handleMouseOver_ = function(e) {
   if (menuItem) {
     if (menuItem.isEnabled()) {
       if (this.highlightedItem_ != menuItem) {
-        this.setHighlighted_(menuItem);
+        this.setHighlighted(menuItem);
       }
     } else {
-      this.setHighlighted_(null);
+      this.setHighlighted(null);
     }
   }
 };
@@ -391,7 +394,7 @@ Blockly.Menu.prototype.handleMouseEnter_ = function(_e) {
 Blockly.Menu.prototype.handleMouseLeave_ = function(_e) {
   if (this.getElement()) {
     this.blur_();
-    this.setHighlighted_(null);
+    this.setHighlighted(null);
   }
 };
 

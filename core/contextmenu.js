@@ -24,7 +24,6 @@ goog.require('Blockly.Msg');
 goog.require('Blockly.utils');
 goog.require('Blockly.utils.Coordinate');
 goog.require('Blockly.utils.dom');
-goog.require('Blockly.utils.uiMenu');
 goog.require('Blockly.utils.userAgent');
 goog.require('Blockly.Xml');
 
@@ -118,10 +117,13 @@ Blockly.ContextMenu.position_ = function(menu, e, rtl) {
   };
 
   Blockly.ContextMenu.createWidget_(menu);
-  var menuSize = Blockly.utils.uiMenu.getSize(menu);
+  var menuSize = menu.getSize();
 
   if (rtl) {
-    Blockly.utils.uiMenu.adjustBBoxesForRTL(viewportBBox, anchorBBox, menuSize);
+    anchorBBox.left += menuSize.width;
+    anchorBBox.right += menuSize.width;
+    viewportBBox.left += menuSize.width;
+    viewportBBox.right += menuSize.width;
   }
 
   Blockly.WidgetDiv.positionWithAnchor(viewportBBox, anchorBBox, menuSize, rtl);
@@ -143,8 +145,8 @@ Blockly.ContextMenu.createWidget_ = function(menu) {
   Blockly.utils.dom.addClass(
       /** @type {!Element} */ (menuDom), 'blocklyContextMenu');
   // Prevent system context menu when right-clicking a Blockly context menu.
-  Blockly.bindEventWithChecks_(
-      /** @type {!EventTarget} */ (menuDom), 'contextmenu', null, Blockly.utils.noEvent);
+  Blockly.bindEventWithChecks_(/** @type {!EventTarget} */ (menuDom),
+      'contextmenu', null, Blockly.utils.noEvent);
   // Focus only after the initial render to avoid issue #1329.
   menu.focus();
 };

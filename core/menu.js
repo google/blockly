@@ -451,3 +451,16 @@ Blockly.Menu.prototype.handleKeyEvent_ = function(e) {
   e.preventDefault();
   e.stopPropagation();
 };
+
+/**
+ * Get the size of a rendered menu.
+ * @return {!Blockly.utils.Size} Object with width and height properties.
+ * @package
+ */
+Blockly.Menu.prototype.getSize = function() {
+  var menuDom = this.getElement();
+  var menuSize = Blockly.utils.style.getSize(/** @type {!Element} */ (menuDom));
+  // Recalculate height for the total content, not only box height.
+  menuSize.height = menuDom.scrollHeight;
+  return menuSize;
+};

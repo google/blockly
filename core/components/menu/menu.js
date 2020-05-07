@@ -222,28 +222,28 @@ Blockly.Menu.prototype.dispose = function() {
 // Child component management.
 
 /**
- * Returns the child menu item that owns the given DOM node, or null if no such
- * menu item is found.
- * @param {Node} node DOM node whose owner is to be returned.
- * @return {?Blockly.MenuItem} Menu item for which the DOM node belongs to.
+ * Returns the child menu item that owns the given DOM element,
+ * or null if no such menu item is found.
+ * @param {Element} elem DOM element whose owner is to be returned.
+ * @return {?Blockly.MenuItem} Menu item for which the DOM element belongs to.
  * @private
  */
-Blockly.Menu.prototype.getMenuItem_ = function(node) {
+Blockly.Menu.prototype.getMenuItem_ = function(elem) {
   var menuElem = this.getElement();
   // Node might be the menu border (resulting in no associated menu item), or
-  // a menu item's div, or some node within the menu item.
+  // a menu item's div, or some element within the menu item.
   // Walk up parents until one meets either the menu's root element, or
   // a menu item's div.
-  while (node && node != menuElem) {
-    if (Blockly.utils.dom.hasClass(node, 'blocklyMenuItem')) {
+  while (elem && elem != menuElem) {
+    if (Blockly.utils.dom.hasClass(elem, 'blocklyMenuItem')) {
       // Having found a menu item's div, locate that menu item in this menu.
       for (var i = 0, menuItem; (menuItem = this.menuItems_[i]); i++) {
-        if (menuItem.getElement() == node) {
+        if (menuItem.getElement() == elem) {
           return menuItem;
         }
       }
     }
-    node = node.parentNode;
+    elem = elem.parentNode;
   }
   return null;
 };
@@ -330,13 +330,12 @@ Blockly.Menu.prototype.highlightHelper_ = function(startIndex, delta) {
 // Mouse events.
 
 /**
- * Handles mouseover events. Highlight menuitems as the user
- * hovers over them.
- * @param {Event} e Mouse event to handle.
+ * Handles mouseover events. Highlight menuitems as the user hovers over them.
+ * @param {!Event} e Mouse event to handle.
  * @private
  */
 Blockly.Menu.prototype.handleMouseOver_ = function(e) {
-  var menuItem = this.getMenuItem_(/** @type {Node} */ (e.target));
+  var menuItem = this.getMenuItem_(/** @type {Element} */ (e.target));
 
   if (menuItem) {
     if (menuItem.isEnabled()) {
@@ -350,9 +349,8 @@ Blockly.Menu.prototype.handleMouseOver_ = function(e) {
 };
 
 /**
- * Handles click events. Pass the event onto the child
- * menuitem to handle.
- * @param {Event} e Click to handle.
+ * Handles click events. Pass the event onto the child menuitem to handle.
+ * @param {!Event} e Click event to handle.
  * @private
  */
 Blockly.Menu.prototype.handleClick_ = function(e) {
@@ -370,7 +368,7 @@ Blockly.Menu.prototype.handleClick_ = function(e) {
     }
   }
 
-  var menuItem = this.getMenuItem_(/** @type {Node} */ (e.target));
+  var menuItem = this.getMenuItem_(/** @type {Element} */ (e.target));
   if (menuItem) {
     menuItem.performAction();
   }

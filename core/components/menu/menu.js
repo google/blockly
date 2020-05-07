@@ -94,7 +94,7 @@ Blockly.Menu = function() {
 
   /**
    * ARIA name for this menu.
-   * @type {Blockly.utils.aria.Role}
+   * @type {?Blockly.utils.aria.Role}
    * @private
    */
   this.roleName_ = null;
@@ -215,6 +215,7 @@ Blockly.Menu.prototype.dispose = function() {
   for (var i = 0, menuItem; (menuItem = this.menuItems_[i]); i++) {
     menuItem.dispose();
   }
+  this.menuItems_length = 0;
   this.element_ = null;
 };
 
@@ -228,10 +229,19 @@ Blockly.Menu.prototype.dispose = function() {
  * @private
  */
 Blockly.Menu.prototype.getMenuItem_ = function(node) {
-  var elem = this.getElement();
-  while (node && node !== elem) {
-    if (node.blocklyMenuItem) {
-      return node.blocklyMenuItem;
+  var menuElem = this.getElement();
+  // Node might be the menu border (resulting in no associated menu item), or
+  // a menu item's div, or some node within the menu item.
+  // Walk up parents until one meets either the menu's root element, or
+  // a menu item's div.
+  while (node && node != menuElem) {
+    if (Blockly.utils.dom.hasClass(node, 'blocklyMenuItem')) {
+      // Having found a menu item's div, locate that menu item in this menu.
+      for (var i = 0, menuItem; (menuItem = this.menuItems_[i]); i++) {
+        if (menuItem.getElement() == node) {
+          return menuItem;
+        }
+      }
     }
     node = node.parentNode;
   }

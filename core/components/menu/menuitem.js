@@ -63,7 +63,7 @@ Blockly.MenuItem = function(content, opt_value) {
 
   /**
    * ARIA name for this menu.
-   * @type {Blockly.utils.aria.Role}
+   * @type {?Blockly.utils.aria.Role}
    * @private
    */
   this.roleName_ = null;
@@ -98,7 +98,6 @@ Blockly.MenuItem = function(content, opt_value) {
 Blockly.MenuItem.prototype.createDom = function() {
   var element = document.createElement('div');
   element.id = Blockly.utils.IdGenerator.getNextUniqueId();
-  element.blocklyMenuItem = this;  // Link DOM back to this data structure.
   this.element_ = element;
 
   // Set class and style
@@ -134,10 +133,7 @@ Blockly.MenuItem.prototype.createDom = function() {
  * Dispose of this menu item.
  */
 Blockly.MenuItem.prototype.dispose = function() {
-  if (this.element_) {
-    this.element_.blocklyMenuItem = null;
-    this.element_ = null;
-  }
+  this.element_ = null;
 };
 
 /**

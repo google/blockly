@@ -84,10 +84,8 @@ Blockly.utils.toolbox.parseToolboxContents = function(toolboxDef) {
     return [];
   }
   // The array can be either an array of xml or an array of JSON.
-  if (Array.isArray(toolboxDef)) {
-    if (toolboxDef.length && !(toolboxDef[0].nodeType)) {
-      return /** @type {!Array.<Blockly.utils.toolbox.ToolboxInfo>} */ (toolboxDef);
-    }
+  if (Array.isArray(toolboxDef) && toolboxDef.length && !(toolboxDef[0].nodeType)) {
+    return /** @type {!Array.<Blockly.utils.toolbox.ToolboxInfo>} */ (toolboxDef);
   }
 
   return Blockly.utils.toolbox.toolboxXmlToJson_(toolboxDef);
@@ -95,7 +93,7 @@ Blockly.utils.toolbox.parseToolboxContents = function(toolboxDef) {
 
 /**
  * Convert the xml for a toolbox to JSON.
- * @param {!NodeList|!Node|!Array.<Blockly.utils.toolbox.ToolboxInfo>} toolboxDef The
+ * @param {!NodeList|!Node} toolboxDef The
  *     definition of the toolbox in one of its many forms.
  * @return {!Array.<Blockly.utils.toolbox.ToolboxInfo>} A list of objects in the
  *    toolbox.
@@ -121,7 +119,7 @@ Blockly.utils.toolbox.toolboxXmlToJson_ = function(toolboxDef) {
     }
     // Get the contents for a category.
     if (child.tagName.toUpperCase() == 'CATEGORY') {
-      for (var k = 0; k < child.children.length; k++) {
+      for (var k = 0; k < child.childNodes.length; k++) {
         obj['contents'] = Blockly.utils.toolbox.toolboxXmlToJson_(child);
       }
     }
@@ -136,10 +134,10 @@ Blockly.utils.toolbox.toolboxXmlToJson_ = function(toolboxDef) {
 };
 
 /**
- * Handle the before tree item selected action.
+ * Whether or not the toolbox definition has categories or not.
  * @param {Node|Array.<Blockly.utils.toolbox.ToolboxInfo>} toolboxDef The definition
  *    of the toolbox. Either in xml or JSON.
- * @return {boolean} True if the toolbox input has categories.
+ * @return {boolean} True if the toolbox has categories.
  * @package
  */
 Blockly.utils.toolbox.hasCategories = function(toolboxDef) {

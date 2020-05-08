@@ -305,7 +305,13 @@ Blockly.Toolbox.prototype.addCategory_ = function(categoryInfo, treeOut) {
   // Decode the category name for any potential message references
   // (eg. `%{BKY_CATEGORY_NAME_LOGIC}`).
   var categoryName = Blockly.utils.replaceMessageReferences(categoryInfo['name']);
-  var childOut = this.addCategoryChild_(categoryName, treeOut);
+
+  // Create and add the tree node for the category.
+  var childOut = this.tree_.createNode(categoryName);
+  childOut.onSizeChanged(this.handleNodeSizeChanged_);
+  childOut.contents = [];
+  treeOut.add(childOut);
+
   var custom = categoryInfo['custom'];
 
   if (custom) {
@@ -317,22 +323,6 @@ Blockly.Toolbox.prototype.addCategory_ = function(categoryInfo, treeOut) {
   this.addColourOrStyle_(categoryInfo, childOut, categoryName);
   openNode = this.setExpanded_(categoryInfo, childOut) || openNode;
   return openNode;
-};
-
-/**
- * Create the TreeNode for the category.
- * @param {string} categoryName The name of the category.
- * @param {!Blockly.tree.BaseNode} treeOut The TreeControl or TreeNode
- *     object built from the childNodes.
- * @return {!Blockly.tree.TreeNode} The TreeNode for the category.
- * @private
- */
-Blockly.Toolbox.prototype.addCategoryChild_ = function(categoryName, treeOut) {
-  var childOut = this.tree_.createNode(categoryName);
-  childOut.onSizeChanged(this.handleNodeSizeChanged_);
-  childOut.contents = [];
-  treeOut.add(childOut);
-  return childOut;
 };
 
 /**
@@ -351,7 +341,7 @@ Blockly.Toolbox.prototype.addColourOrStyle_ = function(
   if (colour && styleName) {
     childOut.hexColour = '';
     console.warn('Toolbox category "' + categoryName +
-        '" can not have both a style and a colour');
+        '" must not have both a style and a colour');
   } else if (styleName) {
     this.setColourFromStyle_(styleName, childOut, categoryName);
   } else {

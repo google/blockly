@@ -427,7 +427,7 @@ Blockly.Flyout.prototype.hide = function() {
 /**
  * Show and populate the flyout.
  * @param {!Array.<Blockly.utils.toolbox.ToolboxInfo>|!Array.<Node>|!NodeList|string} flyoutDef
- *    List of contents to display in the flyout as either an array of xml an
+ *    List of contents to display in the flyout as an array of xml an
  *    array of Nodes, a NodeList or a string with the name of the dynamic category.
  *    Variables and procedures have a custom set of blocks.
  */

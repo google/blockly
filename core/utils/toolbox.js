@@ -17,7 +17,7 @@ goog.provide('Blockly.utils.toolbox');
  * A block definition.
  * @typedef {{
  *            kind:string,
- *            blockxml:string|Node
+ *            blockxml:(string|Node)
  *          }}
  */
 Blockly.utils.toolbox.BlockInfo;

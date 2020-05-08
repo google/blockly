@@ -426,12 +426,12 @@ Blockly.Flyout.prototype.hide = function() {
 
 /**
  * Show and populate the flyout.
- * @param {!Array.<Blockly.utils.toolbox.ToolboxInfo>|!Array.<Node>|!NodeList|string} contentInfo
+ * @param {!Array.<Blockly.utils.toolbox.ToolboxInfo>|!Array.<Node>|!NodeList|string} flyoutDef
  *    List of contents to display in the flyout as either an array of xml an
  *    array of Nodes, a NodeList or a string with the name of the dynamic category.
  *    Variables and procedures have a custom set of blocks.
  */
-Blockly.Flyout.prototype.show = function(contentInfo) {
+Blockly.Flyout.prototype.show = function(flyoutDef) {
   this.workspace_.setResizesEnabled(false);
   this.hide();
   this.clearOldBlocks_();
@@ -439,20 +439,20 @@ Blockly.Flyout.prototype.show = function(contentInfo) {
   // Handle dynamic categories, represented by a name instead of a list.
   // Look up the correct category generation function and call that to get a
   // valid XML list.
-  if (typeof contentInfo == 'string') {
+  if (typeof flyoutDef == 'string') {
     var fnToApply = this.workspace_.targetWorkspace.getToolboxCategoryCallback(
-        contentInfo);
+        flyoutDef);
     if (typeof fnToApply != 'function') {
       throw TypeError('Couldn\'t find a callback function when opening' +
           ' a toolbox category.');
     }
-    contentInfo = fnToApply(this.workspace_.targetWorkspace);
-    if (!Array.isArray(contentInfo)) {
+    flyoutDef = fnToApply(this.workspace_.targetWorkspace);
+    if (!Array.isArray(flyoutDef)) {
       throw TypeError('Result of toolbox category callback must be an array.');
     }
   }
   // contentInfo is either an array with JSON, an Array with xml, or a NodeList.
-  var parsedContent = Blockly.utils.toolbox.parseToolboxContents(contentInfo);
+  var parsedContent = Blockly.utils.toolbox.parseToolboxContents(flyoutDef);
 
   this.setVisible(true);
   // Create the blocks to be shown in this flyout.
@@ -517,7 +517,7 @@ Blockly.Flyout.prototype.show = function(contentInfo) {
  * Add a button to the flyout contents.
  * @param {!Blockly.utils.toolbox.ButtonInfo|!Blockly.utils.toolbox.LabelInfo} btnInfo
  *    The object holding information about a button or a label.
- * @param {!Array.<Blockly.utils.toolbox.ToolboxInfo>} contents The array holding
+ * @param {!Array.<Object>} contents The array holding
  *    JSON representation of the flyout contents.
  * @param {!Array.<number>} gaps The gaps between items in the flyout.
  * @param {number} defaultGap The default gap between the button and next element.
@@ -539,7 +539,7 @@ Blockly.Flyout.prototype.addButton_ = function(
  * Add a block to the flyout contents.
  * @param {!Blockly.utils.toolbox.BlockInfo} blockInfo The object holding
  *    information about a block.
- * @param {!Array.<Blockly.utils.toolbox.ToolboxInfo>} contents The array holding
+ * @param {!Array.<Object>} contents The array holding
  *    JSON representation of the flyout contents.
  * @param {!Array.<number>} gaps The gaps between items in the flyout.
  * @param {number} defaultGap The default gap between the button and next element.

@@ -67,12 +67,12 @@
 <script src="../blocks/test_blocks.js"></script>
 <script src="../themes/test_themes.js"></script>
 <script src="./screenshot.js"></script>
-<script src="https://unpkg.com/@blockly/dev-tools@0.20200313.7/dist/index.js"></script>
-<script src="https://unpkg.com/@blockly/theme-modern@1.20200417.5/dist/index.js"></script>
+<script src="https://unpkg.com/@blockly/dev-tools/dist/index.js"></script>
+<script src="https://unpkg.com/@blockly/theme-modern/dist/index.js"></script>
 
 <script>
-// // Custom requires for the playground.
-// // Rendering.
+// Custom requires for the playground.
+// Rendering.
 goog.require('Blockly.minimalist.Renderer');
 goog.require('Blockly.Themes.Zelos');
 
@@ -86,13 +86,33 @@ var workspace = null;
 
 function start() {
   setBackgroundColour();
+  createWorkspace();
+  // Restore previously displayed text.
+  if (sessionStorage) {
+    var text = sessionStorage.getItem('textarea');
+    if (text) {
+      document.getElementById('importExport').value = text;
+    }
+    // Restore event logging state.
+    var state = sessionStorage.getItem('logEvents');
+    logEvents(Boolean(Number(state)));
+  } else {
+    // MSIE 11 does not support sessionStorage on file:// URLs.
+    logEvents(false);
+  }
+  taChange();
+  var autoimport = !!location.search.match(/autoimport=([^&]+)/);
+  if (autoimport) {
+    fromXml();
+  }
+}
 
+function createWorkspace() {
   // Parse the URL arguments.
   var toolbox = getToolboxElement();
-  var autoimport = !!location.search.match(/autoimport=([^&]+)/);
   var match = location.search.match(/renderer=([^&]+)/);
 
-  var options = {
+  var defaultOptions = {
         comments: true,
         collapse: true,
         disable: true,
@@ -132,30 +152,11 @@ function start() {
 
   // Create main workspace.
   addGUIControls((options) => {
-    workspace = Blockly.inject('blocklyDiv', options);
+    workspace = Blockly.inject('blocklyDiv', defaultOptions);
     workspace.configureContextMenu = configureContextMenu;
     addToolboxButtonCallbacks();
     return workspace;
   }, options);
-
-
-  // Restore previously displayed text.
-  if (sessionStorage) {
-    var text = sessionStorage.getItem('textarea');
-    if (text) {
-      document.getElementById('importExport').value = text;
-    }
-    // Restore event logging state.
-    var state = sessionStorage.getItem('logEvents');
-    logEvents(Boolean(Number(state)));
-  } else {
-    // MSIE 11 does not support sessionStorage on file:// URLs.
-    logEvents(false);
-  }
-  taChange();
-  if (autoimport) {
-    fromXml();
-  }
 }
 
 function addToolboxButtonCallbacks() {

@@ -208,7 +208,7 @@ Blockly.Toolbox.prototype.init = function() {
 
 /**
  * Fill the toolbox with categories and blocks.
- * @param {Array<Blockly.utils.toolbox.ToolboxItem>} toolboxDef Array holding objects
+ * @param {Array.<Blockly.utils.toolbox.ToolboxInfo>} toolboxDef Array holding objects
  *    containing information on the contents of the toolbox.
  * @package
  */
@@ -254,7 +254,7 @@ Blockly.Toolbox.prototype.renderTree = function(toolboxDef) {
 
 /**
  * Create the toolbox tree.
- * @param {Array<Blockly.utils.toolbox.ToolboxItem>} toolboxDef List of objects
+ * @param {Array.<Blockly.utils.toolbox.ToolboxInfo>} toolboxDef List of objects
  *    holding information on toolbox contents.
  * @param {!Blockly.tree.BaseNode} treeOut The TreeControl or TreeNode
  *     object built from the childNodes.
@@ -269,11 +269,7 @@ Blockly.Toolbox.prototype.createTree_ = function(toolboxDef, treeOut) {
   }
 
   for (var i = 0, childIn; (childIn = toolboxDef[i]); i++) {
-    if (!childIn.contenttype) {
-      // Skip over text.
-      continue;
-    }
-    switch (childIn.contenttype.toUpperCase()) {
+    switch (childIn.kind.toUpperCase()) {
       case 'CATEGORY':
         var categoryInfo = /** @type {Blockly.utils.toolbox.CategoryInfo} */ (childIn);
         openNode = this.addCategory_(categoryInfo, treeOut) || openNode;
@@ -377,7 +373,7 @@ Blockly.Toolbox.prototype.addColourOrStyle_ = function(
  */
 Blockly.Toolbox.prototype.addSeparator_ = function(
     separatorInfo, treeOut, lastElement) {
-  if (lastElement && lastElement.contenttype.toUpperCase() == 'CATEGORY') {
+  if (lastElement && lastElement.kind.toUpperCase() == 'CATEGORY') {
     // Separator between two categories.
     // <sep></sep>
     treeOut.add(new Blockly.Toolbox.TreeSeparator(

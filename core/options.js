@@ -39,7 +39,7 @@ Blockly.Options = function(options) {
     var hasSounds = false;
   } else {
     var languageTree = Blockly.Options.parseToolboxTree(options['toolbox'] || null);
-    languageTree = Blockly.utils.toolbox.parseToolbox(languageTree);
+    languageTree = Blockly.utils.toolbox.parseToolboxContents(languageTree);
     var hasCategories = Blockly.utils.toolbox.hasCategories(languageTree);
     var hasTrashcan = options['trashcan'];
     if (hasTrashcan === undefined) {
@@ -140,7 +140,7 @@ Blockly.Options = function(options) {
   this.hasCss = hasCss;
   /** @type {boolean} */
   this.horizontalLayout = horizontalLayout;
-  /** @type {Array<Blockly.utils.toolbox.ToolboxItem>} */
+  /** @type {Array.<Blockly.utils.toolbox.ToolboxInfo>} */
   this.languageTree = languageTree;
   /** @type {!Object} */
   this.gridOptions = Blockly.Options.parseGridOptions_(options);
@@ -312,7 +312,7 @@ Blockly.Options.parseThemeOptions_ = function(options) {
 
 /**
  * Parse the provided toolbox tree into a consistent DOM format.
- * @param {Node|NodeList|string|null} tree DOM tree of blocks, or text representation of same.
+ * @param {Node|NodeList|?string} tree DOM tree of blocks, or text representation of same.
  * @return {Node} DOM tree of blocks, or null.
  */
 Blockly.Options.parseToolboxTree = function(tree) {

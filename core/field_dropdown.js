@@ -273,10 +273,6 @@ Blockly.FieldDropdown.prototype.showEditor_ = function(opt_e) {
   var menuElement = /** @type {!Element} */ (this.menu_.getElement());
   Blockly.utils.dom.addClass(menuElement, 'blocklyDropdownMenu');
 
-  Blockly.utils.aria.setState(menuElement,
-      Blockly.utils.aria.State.ACTIVEDESCENDANT,
-      this.selectedMenuItem_ ? this.selectedMenuItem_.getId() : '');
-
   if (this.getConstants().FIELD_DROPDOWN_COLOURED_DIV) {
     var primaryColour = (this.sourceBlock_.isShadow()) ?
         this.sourceBlock_.getParent().getColour() :
@@ -295,11 +291,8 @@ Blockly.FieldDropdown.prototype.showEditor_ = function(opt_e) {
   // view. See issue #1329.
   this.menu_.focus();
 
-  // Scroll the dropdown to show the selected menu item.
   if (this.selectedMenuItem_) {
-    Blockly.utils.style.scrollIntoContainerView(
-        /** @type {!Element} */ (this.selectedMenuItem_.getElement()),
-        menuElement);
+    this.menu_.setHighlighted(this.selectedMenuItem_);
   }
 
   this.applyColour();

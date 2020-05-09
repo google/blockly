@@ -12,6 +12,7 @@
 
 goog.provide('Blockly.Block');
 
+goog.require('Blockly.ASTNode');
 goog.require('Blockly.Blocks');
 goog.require('Blockly.Connection');
 goog.require('Blockly.Events');
@@ -1306,23 +1307,95 @@ Blockly.Block.prototype.setCollapsed = function(collapsed) {
 Blockly.Block.prototype.toString = function(opt_maxLength, opt_emptyToken) {
   var text = [];
   var emptyFieldPlaceholder = opt_emptyToken || '?';
-  for (var i = 0, input; (input = this.inputList[i]); i++) {
-    if (input.name == Blockly.Block.COLLAPSED_INPUT_NAME) {
-      continue;
+  
+  // Temporarily set flag to navigate to all fields.
+  var prevNavigateFields = Blockly.ASTNode.NAVIGATE_ALL_FIELDS;
+  Blockly.ASTNode.NAVIGATE_ALL_FIELDS = true;
+
+  var node = Blockly.ASTNode.createBlockNode(this);
+  var rootNode = node;
+
+  /**
+   * Whether or not to add parentheses around an input.
+   * @param {Blockly.Connection} connection The connection.
+   * @return {boolean} True if we should add parentheses around the input.
+   */
+  function shouldAddParentheses(connection) {
+    var checks = connection.getCheck();
+    if (!checks && connection.targetConnection) {
+      checks = connection.targetConnection.getCheck();
     }
-    for (var j = 0, field; (field = input.fieldRow[j]); j++) {
-      text.push(field.getText());
+    return !!checks && (checks.indexOf('Boolean') != -1 ||
+        checks.indexOf('Number') != -1);
+  }
+
+  /**
+   * Check that we haven't circled back to the original root node.
+   */
+  function checkRoot() {
+    if (node && node.getType() == rootNode.getType() &&
+        node.getLocation() == rootNode.getLocation()) {
+      node = null;
     }
-    if (input.connection) {
-      var child = input.connection.targetBlock();
-      if (child) {
-        text.push(child.toString(undefined, opt_emptyToken));
-      } else {
-        text.push(emptyFieldPlaceholder);
+  }
+
+  // Traverse the AST building up our text string.
+  while (node) {
+    switch (node.getType()) {
+      case Blockly.ASTNode.types.INPUT:
+        var connection = /** @type {Blockly.Connection} */ (node.getLocation());
+        if (!node.in()) {
+          text.push(emptyFieldPlaceholder);
+        } else if (shouldAddParentheses(connection)) {
+          text.push('(');
+        }
+        break;
+      case Blockly.ASTNode.types.FIELD:
+        var field = /** @type {Blockly.Field} */ (node.getLocation());
+        if (field.name != Blockly.Block.COLLAPSED_FIELD_NAME) {
+          text.push(field.getText());
+        }
+        break;
+    }
+  
+    var current = node;
+    node = current.in() || current.next();
+    if (!node) {
+      // Can't go in or next, keep going out until we can go next.
+      node = current.out();
+      checkRoot();
+      while (node && !node.next()) {
+        node = node.out();
+        checkRoot();
+        // If we hit an input on the way up, possibly close out parentheses.
+        if (node && node.getType() == Blockly.ASTNode.types.INPUT) {
+          var connection = /** @type {Blockly.Connection} */ (
+            node.getLocation());
+          if (shouldAddParentheses(connection)) {
+            text.push(')');
+          }
+        }
+      }
+      if (node) {
+        node = node.next();
       }
     }
   }
-  text = text.join(' ').trim() || '???';
+
+  // Restore state of NAVIGATE_ALL_FIELDS.
+  Blockly.ASTNode.NAVIGATE_ALL_FIELDS = prevNavigateFields;
+
+  // Run through our text array and simplify expression to remove parentheses
+  // around a single field.
+  for (var i = 2, l = text.length; i < l; i++) {
+    if (text[i - 2] == '(' && text[i] == ')') {
+      text[i - 2] = text[i - 1];
+      text.splice(i - 1, 2);
+      l -= 2;
+    }
+  }
+
+  text = text.join(' ').replace(/(\() | (\))/gmi, '$1$2').trim() || '???';
   if (opt_maxLength) {
     // TODO: Improve truncation so that text from this block is given priority.
     // E.g. "1+2+3+4+5+6+7+8+9=0" should be "...6+7+8+9=0", not "1+2+3+4+5...".

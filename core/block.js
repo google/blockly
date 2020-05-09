@@ -1384,7 +1384,7 @@ Blockly.Block.prototype.toString = function(opt_maxLength, opt_emptyToken) {
   Blockly.ASTNode.NAVIGATE_ALL_FIELDS = prevNavigateFields;
 
   // Run through our text array and simplify expression to remove parentheses
-  // around a single field.
+  // around single field blocks.
   for (var i = 2, l = text.length; i < l; i++) {
     if (text[i - 2] == '(' && text[i] == ')') {
       text[i - 2] = text[i - 1];

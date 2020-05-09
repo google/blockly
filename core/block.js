@@ -1368,12 +1368,10 @@ Blockly.Block.prototype.toString = function(opt_maxLength, opt_emptyToken) {
         node = node.out();
         checkRoot();
         // If we hit an input on the way up, possibly close out parentheses.
-        if (node && node.getType() == Blockly.ASTNode.types.INPUT) {
-          var connection = /** @type {Blockly.Connection} */ (
-            node.getLocation());
-          if (shouldAddParentheses(connection)) {
-            text.push(')');
-          }
+        if (node && node.getType() == Blockly.ASTNode.types.INPUT &&
+            shouldAddParentheses(
+                /** @type {Blockly.Connection} */ (node.getLocation()))) {
+          text.push(')');
         }
       }
       if (node) {

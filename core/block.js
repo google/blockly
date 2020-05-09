@@ -1307,7 +1307,7 @@ Blockly.Block.prototype.setCollapsed = function(collapsed) {
 Blockly.Block.prototype.toString = function(opt_maxLength, opt_emptyToken) {
   var text = [];
   var emptyFieldPlaceholder = opt_emptyToken || '?';
-  
+
   // Temporarily set flag to navigate to all fields.
   var prevNavigateFields = Blockly.ASTNode.NAVIGATE_ALL_FIELDS;
   Blockly.ASTNode.NAVIGATE_ALL_FIELDS = true;
@@ -1357,7 +1357,7 @@ Blockly.Block.prototype.toString = function(opt_maxLength, opt_emptyToken) {
         }
         break;
     }
-  
+
     var current = node;
     node = current.in() || current.next();
     if (!node) {

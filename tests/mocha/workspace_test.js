@@ -669,15 +669,15 @@ function testAWorkspace() {
 
     test('After dispose', function() {
       this.blockA.dispose();
-      chai.assert.isNull(this.workspace.getBlockById(this.blockA));
+      chai.assert.isNull(this.workspace.getBlockById(this.blockA.id));
       chai.assert.equal(
           this.workspace.getBlockById(this.blockB.id), this.blockB);
     });
 
     test('After clear', function() {
       this.workspace.clear();
-      chai.assert.isNull(this.workspace.getBlockById(this.blockA));
-      chai.assert.isNull(this.workspace.getBlockById(this.blockB));
+      chai.assert.isNull(this.workspace.getBlockById(this.blockA.id));
+      chai.assert.isNull(this.workspace.getBlockById(this.blockB.id));
     });
   });
 

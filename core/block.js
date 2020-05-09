@@ -1317,7 +1317,7 @@ Blockly.Block.prototype.toString = function(opt_maxLength, opt_emptyToken) {
 
   /**
    * Whether or not to add parentheses around an input.
-   * @param {Blockly.Connection} connection The connection.
+   * @param {!Blockly.Connection} connection The connection.
    * @return {boolean} True if we should add parentheses around the input.
    */
   function shouldAddParentheses(connection) {
@@ -1343,7 +1343,7 @@ Blockly.Block.prototype.toString = function(opt_maxLength, opt_emptyToken) {
   while (node) {
     switch (node.getType()) {
       case Blockly.ASTNode.types.INPUT:
-        var connection = /** @type {Blockly.Connection} */ (node.getLocation());
+        var connection = /** @type {!Blockly.Connection} */ (node.getLocation());
         if (!node.in()) {
           text.push(emptyFieldPlaceholder);
         } else if (shouldAddParentheses(connection)) {
@@ -1370,7 +1370,7 @@ Blockly.Block.prototype.toString = function(opt_maxLength, opt_emptyToken) {
         // If we hit an input on the way up, possibly close out parentheses.
         if (node && node.getType() == Blockly.ASTNode.types.INPUT &&
             shouldAddParentheses(
-                /** @type {Blockly.Connection} */ (node.getLocation()))) {
+                /** @type {!Blockly.Connection} */ (node.getLocation()))) {
           text.push(')');
         }
       }

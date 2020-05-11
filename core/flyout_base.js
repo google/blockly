@@ -426,7 +426,7 @@ Blockly.Flyout.prototype.hide = function() {
 
 /**
  * Show and populate the flyout.
- * @param {!Array.<Blockly.utils.toolbox.ToolboxInfo>|!Array.<Node>|!NodeList|string} flyoutDef
+ * @param {!Blockly.utils.toolbox.ToolboxDefinition|string} flyoutDef
  *    List of contents to display in the flyout as an array of xml an
  *    array of Nodes, a NodeList or a string with the name of the dynamic category.
  *    Variables and procedures have a custom set of blocks.
@@ -451,7 +451,8 @@ Blockly.Flyout.prototype.show = function(flyoutDef) {
       throw TypeError('Result of toolbox category callback must be an array.');
     }
   }
-  // contentInfo is either an array with JSON, an Array with xml, or a NodeList.
+
+  // Parse the Array or NodeList passed in into an Array of Blockly.utils.toolbox.ToolboxInfo.
   var parsedContent = Blockly.utils.toolbox.parseToolboxContents(flyoutDef);
 
   this.setVisible(true);
@@ -514,7 +515,7 @@ Blockly.Flyout.prototype.show = function(flyoutDef) {
 };
 
 /**
- * Add a button to the flyout contents.
+ * Add a button to the contents array.
  * @param {!Blockly.utils.toolbox.ButtonInfo|!Blockly.utils.toolbox.LabelInfo} btnInfo
  *    The object holding information about a button or a label.
  * @param {!Array.<Object>} contents The array holding

@@ -14,7 +14,7 @@ goog.provide('Blockly.utils.toolbox');
 
 
 /**
- * A block definition.
+ * The information needed to create a block in the toolbox.
  * @typedef {{
  *            kind:string,
  *            blockxml:(string|Node)
@@ -23,7 +23,7 @@ goog.provide('Blockly.utils.toolbox');
 Blockly.utils.toolbox.BlockInfo;
 
 /**
- * A separator definition.
+ * The information needed to create a separator in the toolbox.
  * @typedef {{
  *            kind:string,
  *            gap:?number
@@ -32,7 +32,7 @@ Blockly.utils.toolbox.BlockInfo;
 Blockly.utils.toolbox.SeparatorInfo;
 
 /**
- * A button definition.
+ * The information needed to create a button in the toolbox.
  * @typedef {{
  *            kind:string,
  *            text:string,
@@ -42,7 +42,7 @@ Blockly.utils.toolbox.SeparatorInfo;
 Blockly.utils.toolbox.ButtonInfo;
 
 /**
- * A label definition.
+ * The information needed to create a label in the toolbox.
  * @typedef {{
  *            kind:string,
  *            text:string
@@ -51,16 +51,7 @@ Blockly.utils.toolbox.ButtonInfo;
 Blockly.utils.toolbox.LabelInfo;
 
 /**
- * A toolbox item.
- * @typedef {Blockly.utils.toolbox.BlockInfo|
- *           Blockly.utils.toolbox.SeparatorInfo|
- *           Blockly.utils.toolbox.ButtonInfo|
- *           Blockly.utils.toolbox.LabelInfo}
- */
-Blockly.utils.toolbox.ToolboxInfo;
-
-/**
- * A category definition.
+ * The information needed to create a category in the toolbox.
  * @typedef {{
  *            kind:string,
  *            name:string,
@@ -72,8 +63,28 @@ Blockly.utils.toolbox.ToolboxInfo;
 Blockly.utils.toolbox.CategoryInfo;
 
 /**
+ * Any information that can be used to create an item in the toolbox.
+ * @typedef {Blockly.utils.toolbox.BlockInfo|
+ *           Blockly.utils.toolbox.SeparatorInfo|
+ *           Blockly.utils.toolbox.ButtonInfo|
+ *           Blockly.utils.toolbox.LabelInfo|
+ *           Blockly.utils.toolbox.CategoryInfo}
+ */
+Blockly.utils.toolbox.ToolboxInfo;
+
+/**
+ * All of the different types that can create a toolbox.
+ * @typedef {Node|
+ *           NodeList|
+ *           Array.<Blockly.utils.toolbox.ToolboxInfo>|
+ *           Array.<Node>}
+ */
+Blockly.utils.toolbox.ToolboxDefinition;
+
+
+/**
  * Parse the provided toolbox definition into a consistent format.
- * @param {Array|Node|NodeList|null} toolboxDef The definition of the
+ * @param {Blockly.utils.toolbox.ToolboxDefinition} toolboxDef The definition of the
  *    toolbox in one of its many forms.
  * @return {!Array.<Blockly.utils.toolbox.ToolboxInfo>} Array of JSON holding
  *    information on toolbox contents.
@@ -83,7 +94,7 @@ Blockly.utils.toolbox.parseToolboxContents = function(toolboxDef) {
   if (!toolboxDef) {
     return [];
   }
-  // The array can be either an array of xml or an array of JSON.
+  // If it is an array of JSON, then it is already in the correct format.
   if (Array.isArray(toolboxDef) && toolboxDef.length && !(toolboxDef[0].nodeType)) {
     return /** @type {!Array.<Blockly.utils.toolbox.ToolboxInfo>} */ (toolboxDef);
   }
@@ -93,7 +104,7 @@ Blockly.utils.toolbox.parseToolboxContents = function(toolboxDef) {
 
 /**
  * Convert the xml for a toolbox to JSON.
- * @param {!NodeList|!Node} toolboxDef The
+ * @param {!NodeList|!Node|!Array<Node>} toolboxDef The
  *     definition of the toolbox in one of its many forms.
  * @return {!Array.<Blockly.utils.toolbox.ToolboxInfo>} A list of objects in the
  *    toolbox.

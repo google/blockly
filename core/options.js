@@ -30,7 +30,7 @@ goog.require('Blockly.Xml');
 Blockly.Options = function(options) {
   var readOnly = !!options['readOnly'];
   if (readOnly) {
-    var languageTree = null;
+    var toolboxContents = null;
     var hasCategories = false;
     var hasTrashcan = false;
     var hasCollapse = false;
@@ -38,9 +38,12 @@ Blockly.Options = function(options) {
     var hasDisable = false;
     var hasSounds = false;
   } else {
-    var languageTree = Blockly.Options.parseToolboxTree(options['toolbox'] || null);
-    languageTree = Blockly.utils.toolbox.parseToolboxContents(languageTree);
-    var hasCategories = Blockly.utils.toolbox.hasCategories(languageTree);
+    var toolboxDef = options['toolbox'];
+    if (!Array.isArray(toolboxDef)) {
+      toolboxDef = Blockly.Options.parseToolboxTree(toolboxDef || null);
+    }
+    var toolboxContents = Blockly.utils.toolbox.parseToolboxContents(toolboxDef);
+    var hasCategories = Blockly.utils.toolbox.hasCategories(toolboxContents);
     var hasTrashcan = options['trashcan'];
     if (hasTrashcan === undefined) {
       hasTrashcan = hasCategories;
@@ -141,7 +144,7 @@ Blockly.Options = function(options) {
   /** @type {boolean} */
   this.horizontalLayout = horizontalLayout;
   /** @type {Array.<Blockly.utils.toolbox.ToolboxInfo>} */
-  this.languageTree = languageTree;
+  this.languageTree = toolboxContents;
   /** @type {!Object} */
   this.gridOptions = Blockly.Options.parseGridOptions_(options);
   /** @type {!Object} */
@@ -312,7 +315,8 @@ Blockly.Options.parseThemeOptions_ = function(options) {
 
 /**
  * Parse the provided toolbox tree into a consistent DOM format.
- * @param {Node|NodeList|?string} tree DOM tree of blocks, or text representation of same.
+ * @param {Node|NodeList|?string} tree DOM tree of blocks, or text representation
+ *    of same.
  * @return {Node} DOM tree of blocks, or null.
  */
 Blockly.Options.parseToolboxTree = function(tree) {

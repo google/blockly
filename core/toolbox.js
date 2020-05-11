@@ -256,9 +256,12 @@ Blockly.Toolbox.prototype.renderTree = function(toolboxDef) {
  * Create the toolbox tree.
  * @param {Array.<Blockly.utils.toolbox.ToolboxInfo>} toolboxDef List of objects
  *    holding information on toolbox contents.
- * @param {!Blockly.tree.BaseNode} treeOut The TreeControl or TreeNode
- *     object built from the childNodes.
- * @return {Blockly.tree.BaseNode} TreeNode to open at startup (or null).
+ * @param {!Blockly.tree.BaseNode} treeOut The output tree for the toolbox. Due
+ *    to the recursive nature of this function, treeOut can be either the root of
+ *    the tree (Blockly.tree.TreeControl) or a child node of the tree
+ *    (Blockly.tree.TreeNode). These nodes are built from the toolboxDef.
+ * @return {Blockly.tree.BaseNode} The TreeNode to expand when the toolbox is
+ *    first loaded (or null).
  * @private
  */
 Blockly.Toolbox.prototype.createTree_ = function(toolboxDef, treeOut) {

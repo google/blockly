@@ -1816,7 +1816,7 @@ Blockly.WorkspaceSvg.prototype.showContextMenu = function(e) {
 
 /**
  * Modify the block tree on the existing toolbox.
- * @param {Node|Array.<Blockly.utils.toolbox.ToolboxInfo>|Array.<Node>|string} toolboxDef
+ * @param {Blockly.utils.toolbox.ToolboxDefinition|string} toolboxDef
  *    DOM tree of toolbox contents, string of toolbox contents, or array of JSON
  *    representing toolbox contents.
  */

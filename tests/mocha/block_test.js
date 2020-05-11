@@ -1680,4 +1680,116 @@ suite('Blocks', function() {
       });
     });
   });
+  suite('toString', function() {
+    var toStringTests = [
+      {
+        name: 'statement block',
+        xml: '<block type="controls_repeat_ext">' +
+          '<value name="TIMES">' +
+            '<shadow type="math_number">' +
+              '<field name="NUM">10</field>' +
+          '</shadow>' +
+          '</value>' +
+        '</block>',
+        toString: 'repeat 10 times do ?',
+      },
+      {
+        name: 'nested statement blocks',
+        xml: '<block type="controls_repeat_ext">' +
+          '<value name="TIMES">' +
+            '<shadow type="math_number">' +
+              '<field name="NUM">10</field>' +
+            '</shadow>' +
+          '</value>' +
+          '<statement name="DO">' +
+            '<block type="controls_if"></block>' +
+          '</statement>' +
+        '</block>',
+        toString: 'repeat 10 times do if ? do ?',
+      },
+      {
+        name: 'nested Boolean output blocks',
+        xml: '<block type="controls_if">' +
+          '<value name="IF0">' +
+            '<block type="logic_compare">' +
+              '<field name="OP">EQ</field>' +
+              '<value name="A">' +
+                '<block type="logic_operation">' +
+                  '<field name="OP">AND</field>' +
+                '</block>' +
+              '</value>' +
+            '</block>' +
+          '</value>' +
+        '</block>',
+        toString: 'if ((? and ?) = ?) do ?',
+      },
+      {
+        name: 'output block',
+        xml: '<block type="math_single">' +
+          '<field name="OP">ROOT</field>' +
+          '<value name="NUM">' +
+            '<shadow type="math_number">' +
+              '<field name="NUM">9</field>' +
+            '</shadow>' +
+          '</value>' +
+        '</block>',
+        toString: 'square root 9',
+      },
+      {
+        name: 'nested Number output blocks',
+        xml: '<block type="math_arithmetic">' +
+          '<field name="OP">ADD</field>' +
+          '<value name="A">' +
+            '<shadow type="math_number">' +
+              '<field name="NUM">1</field>' +
+            '</shadow>' +
+            '<block type="math_arithmetic">' +
+              '<field name="OP">MULTIPLY</field>' +
+              '<value name="A">' +
+                '<shadow type="math_number">' +
+                  '<field name="NUM">10</field>' +
+                '</shadow>' +
+              '</value>' +
+              '<value name="B">' +
+                '<shadow type="math_number">' +
+                  '<field name="NUM">5</field>' +
+                '</shadow>' +
+              '</value>' +
+            '</block>' +
+          '</value>' +
+          '<value name="B">' +
+            '<shadow type="math_number">' +
+              '<field name="NUM">3</field>' +
+            '</shadow>' +
+          '</value>' +
+        '</block>',
+        toString: '(10 × 5) + 3',
+      },
+      {
+        name: 'nested String output blocks',
+        xml: '<block type="text_join">' +
+          '<mutation items="2"></mutation>' +
+          '<value name="ADD0">' +
+            '<block type="text">' +
+              '<field name="TEXT">Hello</field>' +
+            '</block>' +
+          '</value>' +
+          '<value name="ADD1">' +
+            '<block type="text">' +
+              '<field name="TEXT">World</field>' +
+            '</block>' +
+          '</value>' +
+        '</block>',
+        toString: 'create text with “ Hello ” “ World ”',
+      },
+    ];
+    // Create mocha test cases for each toString test.
+    toStringTests.forEach(function(t) {
+      test(t.name, function() {
+        var block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(t.xml),
+            this.workspace);
+        chai.assert.equal(block.toString(), t.toString);
+      });
+    });
+  });
 });

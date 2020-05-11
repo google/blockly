@@ -1393,6 +1393,7 @@ Blockly.Block.prototype.toString = function(opt_maxLength, opt_emptyToken) {
     }
   }
 
+  // Join the text array, removing spaces around added paranthesis.
   text = text.join(' ').replace(/(\() | (\))/gmi, '$1$2').trim() || '???';
   if (opt_maxLength) {
     // TODO: Improve truncation so that text from this block is given priority.

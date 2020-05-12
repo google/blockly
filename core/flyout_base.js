@@ -451,7 +451,8 @@ Blockly.Flyout.prototype.show = function(flyoutDef) {
       throw TypeError('Result of toolbox category callback must be an array.');
     }
   }
-  // Parse the Array or NodeList passed in into an Array of Blockly.utils.toolbox.Toolbox.
+  // Parse the Array or NodeList passed in into an Array of
+  // Blockly.utils.toolbox.Toolbox.
   var parsedContent = Blockly.utils.toolbox.convertToolboxToJSON(flyoutDef);
   var flyoutInfo = /** @type {{contents:Array<Object>, gaps:Array<number>}} */
       (this.createFlyoutInfo_(parsedContent));
@@ -496,6 +497,7 @@ Blockly.Flyout.prototype.show = function(flyoutDef) {
  *   of objects to show in the flyout.
  * @return {{contents:Array<Object>, gaps:Array<number>}} The list of contents
  *   and gaps needed to lay out the flyout.
+ * @private
  */
 Blockly.Flyout.prototype.createFlyoutInfo_ = function(parsedContent) {
   var contents = [];

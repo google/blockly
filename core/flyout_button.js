@@ -27,6 +27,7 @@ goog.require('Blockly.utils.dom');
  *    The JSON specifying the label/button.
  * @param {boolean} isLabel Whether this button should be styled as a label.
  * @constructor
+ * @package
  */
 Blockly.FlyoutButton = function(workspace, targetWorkspace, json, isLabel) {
   // Labels behave the same as buttons, but are styled differently.

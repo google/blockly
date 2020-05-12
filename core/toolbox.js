@@ -323,7 +323,7 @@ Blockly.Toolbox.prototype.addCategory_ = function(categoryInfo, treeOut) {
   } else {
     openNode = this.createTree_(categoryInfo.contents, childOut) || openNode;
   }
-  this.addColourOrStyle_(categoryInfo, childOut, categoryName);
+  this.setColourOrStyle_(categoryInfo, childOut, categoryName);
   openNode = this.setExpanded_(categoryInfo, childOut) || openNode;
   return openNode;
 };
@@ -336,7 +336,7 @@ Blockly.Toolbox.prototype.addCategory_ = function(categoryInfo, treeOut) {
  * @param {string} categoryName The name of the category.
  * @private
  */
-Blockly.Toolbox.prototype.addColourOrStyle_ = function(
+Blockly.Toolbox.prototype.setColourOrStyle_ = function(
     categoryInfo, childOut, categoryName) {
   var styleName = categoryInfo['categorystyle'];
   var colour = categoryInfo['colour'];

@@ -5,6 +5,13 @@
  */
 
 
+/* exported getCategoryJSON, getSimpleJSON, getXmlArray */
+
+/**
+ * Get JSON for a toolbox that contains categories.
+ * @return {Array.<Blockly.utils.toolbox.Toolbox>} The array holding information
+ *    for a toolbox.
+ */
 function getCategoryJSON() {
   return [
     {
@@ -33,6 +40,11 @@ function getCategoryJSON() {
     }];
 }
 
+/**
+ * Get JSON for a simple toolbox.
+ * @return {Array.<Blockly.utils.toolbox.Toolbox>} The array holding information
+ *    for a simple toolbox.
+ */
 function getSimpleJSON() {
   return [
     {
@@ -56,6 +68,10 @@ function getSimpleJSON() {
   ];
 }
 
+/**
+ * Get an array filled with xml elements.
+ * @return {Array.<Nodde>} Array holding xml elements for a toolbox.
+ */
 function getXmlArray() {
   // Need to use HTMLElement instead of Element so parser output is
   // consistent with other tests

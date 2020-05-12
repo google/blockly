@@ -208,7 +208,7 @@ Blockly.Toolbox.prototype.init = function() {
 
 /**
  * Fill the toolbox with categories and blocks.
- * @param {Array.<Blockly.utils.toolbox.ToolboxInfo>} toolboxDef Array holding objects
+ * @param {Array.<Blockly.utils.toolbox.Toolbox>} toolboxDef Array holding objects
  *    containing information on the contents of the toolbox.
  * @package
  */
@@ -254,7 +254,7 @@ Blockly.Toolbox.prototype.renderTree = function(toolboxDef) {
 
 /**
  * Create the toolbox tree.
- * @param {Array.<Blockly.utils.toolbox.ToolboxInfo>} toolboxDef List of objects
+ * @param {Array.<Blockly.utils.toolbox.Toolbox>} toolboxDef List of objects
  *    holding information on toolbox contents.
  * @param {!Blockly.tree.BaseNode} treeOut The output tree for the toolbox. Due
  *    to the recursive nature of this function, treeOut can be either the root of
@@ -274,12 +274,12 @@ Blockly.Toolbox.prototype.createTree_ = function(toolboxDef, treeOut) {
   for (var i = 0, childIn; (childIn = toolboxDef[i]); i++) {
     switch (childIn.kind.toUpperCase()) {
       case 'CATEGORY':
-        var categoryInfo = /** @type {Blockly.utils.toolbox.CategoryInfo} */ (childIn);
+        var categoryInfo = /** @type {Blockly.utils.toolbox.Category} */ (childIn);
         openNode = this.addCategory_(categoryInfo, treeOut) || openNode;
         lastElement = childIn;
         break;
       case 'SEP':
-        var separatorInfo = /** @type {Blockly.utils.toolbox.SeparatorInfo} */ (childIn);
+        var separatorInfo = /** @type {Blockly.utils.toolbox.Separator} */ (childIn);
         lastElement = this.addSeparator_(separatorInfo, treeOut, lastElement) || lastElement;
         break;
       case 'BLOCK':
@@ -296,7 +296,7 @@ Blockly.Toolbox.prototype.createTree_ = function(toolboxDef, treeOut) {
 
 /**
  * Add a category to the toolbox tree.
- * @param {!Blockly.utils.toolbox.CategoryInfo} categoryInfo The object holding
+ * @param {!Blockly.utils.toolbox.Category} categoryInfo The object holding
  *    information on the category.
  * @param {!Blockly.tree.BaseNode} treeOut The TreeControl or TreeNode
  *     object built from the childNodes.
@@ -330,7 +330,7 @@ Blockly.Toolbox.prototype.addCategory_ = function(categoryInfo, treeOut) {
 
 /**
  * Add either the colour or the style for a category.
- * @param {!Blockly.utils.toolbox.CategoryInfo} categoryInfo The object holding
+ * @param {!Blockly.utils.toolbox.Category} categoryInfo The object holding
  *    information on the category.
  * @param {!Blockly.tree.TreeNode} childOut The TreeNode for a category.
  * @param {string} categoryName The name of the category.
@@ -355,7 +355,7 @@ Blockly.Toolbox.prototype.addColourOrStyle_ = function(
 /**
  * Add a separator to the toolbox tree if it is between categories. Otherwise,
  * add the separator to the list of contents.
- * @param {!Blockly.utils.toolbox.SeparatorInfo} separatorInfo The object holding
+ * @param {!Blockly.utils.toolbox.Separator} separatorInfo The object holding
  *    information on the separator.
  * @param {!Blockly.tree.BaseNode} treeOut The TreeControl or TreeNode
  *     object built from the childNodes.
@@ -382,7 +382,7 @@ Blockly.Toolbox.prototype.addSeparator_ = function(
 
 /**
  * Checks whether a node should be expanded, and expands if necessary.
- * @param {!Blockly.utils.toolbox.CategoryInfo} categoryInfo The child to expand.
+ * @param {!Blockly.utils.toolbox.Category} categoryInfo The child to expand.
  * @param {!Blockly.tree.TreeNode} childOut The TreeNode created from childIn.
  * @return {Blockly.tree.BaseNode} TreeNode to open at startup (or null).
  * @private

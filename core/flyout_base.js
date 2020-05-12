@@ -451,39 +451,14 @@ Blockly.Flyout.prototype.show = function(flyoutDef) {
       throw TypeError('Result of toolbox category callback must be an array.');
     }
   }
-
   // Parse the Array or NodeList passed in into an Array of Blockly.utils.toolbox.ToolboxInfo.
   var parsedContent = Blockly.utils.toolbox.convertToolboxToJSON(flyoutDef);
+  var flyoutInfo = /** @type {{contents:Array<Object>, gaps:Array<number>}} */
+      (this.createFlyoutInfo_(parsedContent));
 
   this.setVisible(true);
-  // Create the blocks to be shown in this flyout.
-  var contents = [];
-  var gaps = [];
-  this.permanentlyDisabled_.length = 0;
-  var defaultGap = this.horizontalLayout_ ? this.GAP_X : this.GAP_Y;
-  for (var i = 0, contentInfo; (contentInfo = parsedContent[i]); i++) {
-    switch (contentInfo.kind.toUpperCase()) {
-      case 'BLOCK':
-        var blockInfo = /** @type {Blockly.utils.toolbox.BlockInfo} */ (contentInfo);
-        this.addBlock_(blockInfo, contents, gaps, defaultGap);
-        break;
-      case 'SEP':
-        var sepInfo = /** @type {Blockly.utils.toolbox.SeparatorInfo} */ (contentInfo);
-        this.addSeparator_(sepInfo, gaps, defaultGap);
-        break;
-      case 'LABEL':
-        var labelInfo = /** @type {Blockly.utils.toolbox.LabelInfo} */ (contentInfo);
-        // A label is a button with different styling.
-        this.addButton_(labelInfo, contents, gaps, defaultGap, true);
-        break;
-      case 'BUTTON':
-        var buttonInfo = /** @type {Blockly.utils.toolbox.ButtonInfo} */ (contentInfo);
-        this.addButton_(buttonInfo, contents, gaps, defaultGap, false);
-        break;
-    }
-  }
 
-  this.layout_(contents, gaps);
+  this.layout_(flyoutInfo.contents, flyoutInfo.gaps);
 
   // IE 11 is an incompetent browser that fails to fire mouseout events.
   // When the mouse is over the background, deselect all blocks.
@@ -515,66 +490,115 @@ Blockly.Flyout.prototype.show = function(flyoutDef) {
 };
 
 /**
- * Add a button to the contents array.
+ * Create the contents array and gaps array necessary to create the layout for
+ * the flyout.
+ * @param {Array.<Blockly.utils.toolbox.ToolboxInfo>} parsedContent The array
+ *   of objects to show in the flyout.
+ * @return {{contents:Array<Object>, gaps:Array<number>}} The list of contents
+ *   and gaps needed to lay out the flyout.
+ */
+Blockly.Flyout.prototype.createFlyoutInfo_ = function(parsedContent) {
+  var contents = [];
+  var gaps = [];
+  this.permanentlyDisabled_.length = 0;
+  var defaultGap = this.horizontalLayout_ ? this.GAP_X : this.GAP_Y;
+  for (var i = 0, contentInfo; (contentInfo = parsedContent[i]); i++) {
+    switch (contentInfo.kind.toUpperCase()) {
+      case 'BLOCK':
+        var blockInfo = /** @type {Blockly.utils.toolbox.BlockInfo} */ (contentInfo);
+        var blockXml = this.getBlockXml_(blockInfo);
+        var block = this.createBlock_(blockXml);
+        // This is a deprecated method for adding gap to a block.
+        // <block type="math_arithmetic" gap="8"></block>
+        var gap = parseInt(blockXml.getAttribute('gap'), 10);
+        gaps.push(isNaN(gap) ? defaultGap : gap);
+        contents.push({type: 'block', block: block});
+        break;
+      case 'SEP':
+        var sepInfo = /** @type {Blockly.utils.toolbox.SeparatorInfo} */ (contentInfo);
+        this.addSeparatorGap_(sepInfo, gaps, defaultGap);
+        break;
+      case 'LABEL':
+        var labelInfo = /** @type {Blockly.utils.toolbox.LabelInfo} */ (contentInfo);
+        // A label is a button with different styling.
+        // Rename this function.
+        var label = this.createButton_(labelInfo, /** isLabel */ true);
+        contents.push({type: 'button', button: label});
+        gaps.push(defaultGap);
+        break;
+      case 'BUTTON':
+        var buttonInfo = /** @type {Blockly.utils.toolbox.ButtonInfo} */ (contentInfo);
+        var button = this.createButton_(buttonInfo, /** isLabel */ false);
+        contents.push({type: 'button', button: button});
+        gaps.push(defaultGap);
+        break;
+    }
+  }
+  return {contents: contents, gaps: gaps};
+};
+
+/**
+ * Creates a flyout button or a flyout label.
  * @param {!Blockly.utils.toolbox.ButtonInfo|!Blockly.utils.toolbox.LabelInfo} btnInfo
  *    The object holding information about a button or a label.
- * @param {!Array.<Object>} contents The array holding
- *    JSON representation of the flyout contents.
- * @param {!Array.<number>} gaps The gaps between items in the flyout.
- * @param {number} defaultGap The default gap between the button and next element.
  * @param {boolean} isLabel True if the button is a label, false otherwise.
+ * @return {!Blockly.FlyoutButton} The object used to display the button in the
+ *    flyout.
  * @private
  */
-Blockly.Flyout.prototype.addButton_ = function(
-    btnInfo, contents, gaps, defaultGap, isLabel) {
+Blockly.Flyout.prototype.createButton_ = function(btnInfo, isLabel) {
   if (!Blockly.FlyoutButton) {
     throw Error('Missing require for Blockly.FlyoutButton');
   }
   var curButton = new Blockly.FlyoutButton(this.workspace_,
       this.targetWorkspace_, btnInfo, isLabel);
-  contents.push({type: 'button', button: curButton});
-  gaps.push(defaultGap);
+  return curButton;
 };
 
 /**
- * Add a block to the flyout contents.
- * @param {!Blockly.utils.toolbox.BlockInfo} blockInfo The object holding
- *    information about a block.
- * @param {!Array.<Object>} contents The array holding
- *    JSON representation of the flyout contents.
- * @param {!Array.<number>} gaps The gaps between items in the flyout.
- * @param {number} defaultGap The default gap between the button and next element.
+ * Create a block from the xml and permanently disable any blocks that were
+ * defined as disabled.
+ * @param {!Element} blockXml The xml of the block.
+ * @return {!Blockly.Block} The block created from the blockXml.
  * @private
  */
-Blockly.Flyout.prototype.addBlock_ = function(blockInfo, contents, gaps, defaultGap) {
-  var blockXml = blockInfo['blockxml'];
-  if (blockInfo['blockxml']) {
-    blockXml = Blockly.Xml.textToDom(blockInfo['blockxml']);
-  } else {
-    throw Error('Error: Invalid block definition. Block definition must have blockxml.');
-  }
+Blockly.Flyout.prototype.createBlock_ = function(blockXml) {
   var curBlock = Blockly.Xml.domToBlock(blockXml, this.workspace_);
   if (!curBlock.isEnabled()) {
     // Record blocks that were initially disabled.
     // Do not enable these blocks as a result of capacity filtering.
     this.permanentlyDisabled_.push(curBlock);
   }
-  contents.push({type: 'block', block: curBlock});
-  // This is a deprecated method for adding gap to a block.
-  // <block type="math_arithmetic" gap="8"></block>
-  var gap = parseInt(blockXml.getAttribute('gap'), 10);
-  gaps.push(isNaN(gap) ? defaultGap : gap);
+  return curBlock;
 };
 
 /**
- * Add a separator to the flyout. A separator in the flyout is a gap.
+ * Get the xml from the block info object.
+ * @param {!Blockly.utils.toolbox.BlockInfo}  blockInfo The object holding
+ *    information about a block.
+ * @return {!Element} The xml for the block.
+ * @throws {Error} if the xml is not a valid block definition.
+ * @private
+ */
+Blockly.Flyout.prototype.getBlockXml_ = function(blockInfo) {
+  var blockXml = blockInfo['blockxml'];
+  if (blockXml) {
+    blockXml = Blockly.Xml.textToDom(blockInfo['blockxml']);
+  } else {
+    throw Error('Error: Invalid block definition. Block definition must have blockxml.');
+  }
+  return blockXml;
+};
+
+/**
+ * Add the necessary gap in the flyout for a separator.
  * @param {!Blockly.utils.toolbox.SeparatorInfo} sepInfo The object holding
  *    information about a separator.
- * @param {!Array.<number>} gaps The gaps between items in the flyout.
+ * @param {!Array.<number>} gaps The list gaps between items in the flyout.
  * @param {number} defaultGap The default gap between the button and next element.
  * @private
  */
-Blockly.Flyout.prototype.addSeparator_ = function(sepInfo, gaps, defaultGap) {
+Blockly.Flyout.prototype.addSeparatorGap_ = function(sepInfo, gaps, defaultGap) {
   // Change the gap between two toolbox elements.
   // <sep gap="36"></sep>
   // The default gap is 24, can be set larger or smaller.

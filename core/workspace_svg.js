@@ -1824,7 +1824,7 @@ Blockly.WorkspaceSvg.prototype.updateToolbox = function(toolboxDef) {
   if (!Array.isArray(toolboxDef)) {
     toolboxDef = Blockly.Options.parseToolboxTree(toolboxDef);
   }
-  toolboxDef = Blockly.utils.toolbox.parseToolboxContents(toolboxDef);
+  toolboxDef = Blockly.utils.toolbox.convertToolboxToJSON(toolboxDef);
   if (!toolboxDef) {
     if (this.options.languageTree) {
       throw Error('Can\'t nullify an existing toolbox.');

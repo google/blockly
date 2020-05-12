@@ -90,7 +90,7 @@ Blockly.utils.toolbox.ToolboxDefinition;
  *    information on toolbox contents.
  * @package
  */
-Blockly.utils.toolbox.parseToolboxContents = function(toolboxDef) {
+Blockly.utils.toolbox.convertToolboxToJSON = function(toolboxDef) {
   if (!toolboxDef) {
     return [];
   }

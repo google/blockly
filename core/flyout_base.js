@@ -453,7 +453,7 @@ Blockly.Flyout.prototype.show = function(flyoutDef) {
   }
 
   // Parse the Array or NodeList passed in into an Array of Blockly.utils.toolbox.ToolboxInfo.
-  var parsedContent = Blockly.utils.toolbox.parseToolboxContents(flyoutDef);
+  var parsedContent = Blockly.utils.toolbox.convertToolboxToJSON(flyoutDef);
 
   this.setVisible(true);
   // Create the blocks to be shown in this flyout.

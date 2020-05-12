@@ -55,7 +55,7 @@ suite('Toolbox', function() {
 
   suite('renderTree', function() {
     setup(function() {
-      this.toolboxXml = Blockly.utils.toolbox.parseToolboxContents(this.toolboxXml);
+      this.toolboxXml = Blockly.utils.toolbox.convertToolboxToJSON(this.toolboxXml);
       this.toolbox.selectFirstCategory();
       this.firstChild = this.toolbox.tree_.getChildAt(0);
       this.secondChild = this.toolbox.tree_.getChildAt(1);
@@ -259,7 +259,7 @@ suite('Toolbox', function() {
       this.buttonIdx = 1;
       this.dynamicCategoryIdx = 3;
       this.categorySeparatorIdx = 2;
-      this.toolboxXml = Blockly.utils.toolbox.parseToolboxContents(this.toolboxXml);
+      this.toolboxXml = Blockly.utils.toolbox.convertToolboxToJSON(this.toolboxXml);
     });
     test('Having a dynamic category', function() {
       this.toolbox.createTree_(this.toolboxXml, this.tree);
@@ -298,125 +298,79 @@ suite('Toolbox', function() {
 
   suite('parseToolbox', function() {
     setup(function() {
-      this.categoryToolbox = [
-        {
-          "kind": "CATEGORY",
-          "contents": [
-            {
-              "kind": "BLOCK",
-              "blockxml": '<block type="basic_block"><field name="TEXT">FirstCategory-FirstBlock</field></block>'
-            },
-            {
-              "kind": "BLOCK",
-              "blockxml": '<block type="basic_block"><field name="TEXT">FirstCategory-SecondBlock</field></block>'
-            }
-          ],
-          "name": "First"
-        },
-        {
-          "kind": "CATEGORY",
-          "contents": [
-            {
-              "kind": "BLOCK",
-              "blockxml": '<block type="basic_block"><field name="TEXT">SecondCategory-FirstBlock</field></block>'
-            }
-          ],
-          "name": "Second"
-        }];
-
-      this.simpleToolbox = [
-        {
-          "kind":"BLOCK",
-          "blockxml": "<block type=\"logic_operation\"></block>",
-          "type":"logic_operation"
-        },
-        {
-          "kind":"SEP"
-        },
-        {
-          "kind":"BUTTON",
-          "text": "insert",
-          "callbackkey": "insertConnectionRows"
-        },
-        {
-          "kind":"LABEL",
-          "text":"tooltips"
-        }
-      ];
-
+      this.categoryToolboxJSON = getCategoryJSON();
+      this.simpleToolboxJSON = getSimpleJSON();
     });
+
     function checkValue(actual, expected, value) {
       var actualVal = actual[value];
       var expectedVal = expected[value];
       chai.assert.equal(actualVal.toUpperCase(), expectedVal.toUpperCase(), 'Checknig value for: ' + value);
     }
-
     function checkCategory(actual, expected) {
       checkValue(actual, expected, 'kind');
       checkValue(actual, expected, 'name');
-      chai.assert.equal(actual.contents.length, expected.contents.length);
+      checkContents(actual.contents, expected.contents);
     }
-
     function checkCategoryToolbox(actual, expected) {
       chai.assert.equal(actual.length, expected.length);
       for (var i = 0; i < expected.length; i++) {
         checkCategory(actual[i], expected[i]);
       }
     }
-
-    function checkSimpleToolbox(actual, expected) {
-      chai.assert.equal(JSON.stringify(actual).replace(' xmlns=\\"http://www.w3.org/1999/xhtml\\"', ''), JSON.stringify(expected));
+    function checkContents(actualContents, expectedContents) {
+      chai.assert.equal(actualContents.length, expectedContents.length);
+      for (var i = 0; i < actualContents.length; i++) {
+        chai.assert.containsAllKeys(actualContents[i], Object.keys(expectedContents[i]));
+      }
     }
+    function checkSimpleToolbox(actual, expected) {
+      checkContents(actual, expected);
+    }
+
     test('Simple Toolbox: Array with xml', function() {
-      // Need to use HTMLElement instead of Element so parser output is
-      // consistent with other tests
-      var block = document.createElement('block');
-      block.setAttribute('type', 'logic_operation');
-      var separator = Blockly.Xml.textToDom('<sep></sep>');
-      var button = Blockly.Xml.textToDom('<button text="insert" callbackkey="insertConnectionRows"></button>');
-      var label = Blockly.Xml.textToDom('<label text="tooltips"></label>');
-      var xmlList = [block, separator, button, label];
-      var toolboxDef = Blockly.utils.toolbox.parseToolboxContents(xmlList);
-      checkSimpleToolbox(toolboxDef, this.simpleToolbox);
+      var xmlList = getXmlArray();
+      var toolboxDef = Blockly.utils.toolbox.convertToolboxToJSON(xmlList);
+      checkSimpleToolbox(toolboxDef, this.simpleToolboxJSON);
     });
     test('Category Toolbox: Array with xml', function() {
       var categoryOne = Blockly.Xml.textToDom('<category name="First"><block type="basic_block"><field name="TEXT">FirstCategory-FirstBlock</field></block><block type="basic_block"><field name="TEXT">FirstCategory-SecondBlock</field></block></category>');
       var categoryTwo = Blockly.Xml.textToDom('<category name="Second"><block type="basic_block"><field name="TEXT">SecondCategory-FirstBlock</field></block></category>');
       var xmlList = [categoryOne, categoryTwo];
-      var toolboxDef = Blockly.utils.toolbox.parseToolboxContents(xmlList);
-      checkCategoryToolbox(toolboxDef, this.categoryToolbox);
+      var toolboxDef = Blockly.utils.toolbox.convertToolboxToJSON(xmlList);
+      checkCategoryToolbox(toolboxDef, this.categoryToolboxJSON);
     });
     test('Category Toolbox: Array with JSON', function() {
-      var toolboxDef = Blockly.utils.toolbox.parseToolboxContents(this.categoryToolbox);
+      var toolboxDef = Blockly.utils.toolbox.convertToolboxToJSON(this.categoryToolboxJSON);
       chai.assert.isNotNull(toolboxDef);
-      checkCategoryToolbox(toolboxDef, this.categoryToolbox);
+      checkCategoryToolbox(toolboxDef, this.categoryToolboxJSON);
     });
     test('Simple Toolbox: Array with JSON', function() {
-      var toolboxDef = Blockly.utils.toolbox.parseToolboxContents(this.simpleToolbox);
+      var toolboxDef = Blockly.utils.toolbox.convertToolboxToJSON(this.simpleToolboxJSON);
       chai.assert.isNotNull(toolboxDef);
-      checkSimpleToolbox(toolboxDef, this.simpleToolbox);
+      checkSimpleToolbox(toolboxDef, this.simpleToolboxJSON);
     });
     test('Category Toolbox: NodeList', function() {
       var nodeList = document.getElementById('toolbox-categories').childNodes;
-      var toolboxDef = Blockly.utils.toolbox.parseToolboxContents(nodeList);
-      checkCategoryToolbox(toolboxDef, this.categoryToolbox);
+      var toolboxDef = Blockly.utils.toolbox.convertToolboxToJSON(nodeList);
+      checkCategoryToolbox(toolboxDef, this.categoryToolboxJSON);
     });
     test('Simple Toolbox: NodeList', function() {
       var nodeList = document.getElementById('toolbox-simple').childNodes;
-      var toolboxDef = Blockly.utils.toolbox.parseToolboxContents(nodeList);
-      checkSimpleToolbox(toolboxDef, this.simpleToolbox);
+      var toolboxDef = Blockly.utils.toolbox.convertToolboxToJSON(nodeList);
+      checkSimpleToolbox(toolboxDef, this.simpleToolboxJSON);
     });
     test('Category Toolbox: xml', function() {
       var toolboxXml = document.getElementById('toolbox-categories');
-      var toolboxDef = Blockly.utils.toolbox.parseToolboxContents(toolboxXml);
+      var toolboxDef = Blockly.utils.toolbox.convertToolboxToJSON(toolboxXml);
       chai.assert.isNotNull(toolboxDef);
-      checkCategoryToolbox(toolboxDef, this.categoryToolbox);
+      checkCategoryToolbox(toolboxDef, this.categoryToolboxJSON);
     });
     test('Simple Toolbox: xml', function() {
       var toolboxXml = document.getElementById('toolbox-simple');
-      var toolboxDef = Blockly.utils.toolbox.parseToolboxContents(toolboxXml);
+      var toolboxDef = Blockly.utils.toolbox.convertToolboxToJSON(toolboxXml);
       chai.assert.isNotNull(toolboxDef);
-      checkSimpleToolbox(toolboxDef, this.simpleToolbox);
+      checkSimpleToolbox(toolboxDef, this.simpleToolboxJSON);
     });
   });
 });

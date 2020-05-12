@@ -29,6 +29,7 @@ suite('WorkspaceSvg', function() {
     delete Blockly.Blocks['simple_test_block'];
     delete Blockly.Blocks['test_val_in'];
     this.workspace.dispose();
+    sinon.restore();
   });
 
   test('appendDomToWorkspace alignment', function() {
@@ -80,6 +81,39 @@ suite('WorkspaceSvg', function() {
     inputConnection.connect(block.outputConnection);
     chai.assert.exists(block.getSvgRoot());
     chai.assert.notExists(shadowBlock.getSvgRoot());
+  });
+
+  suite('updateToolbox', function() {
+    test('Passes in null when toolbox exists', function() {
+      chai.assert.throws(function() {
+        this.workspace.updateToolbox(null);
+      }.bind(this), 'Can\'t nullify an existing toolbox.');
+    });
+    test('Passes in toolbox def when current toolbox is null', function() {
+      this.workspace.options.languageTree = null;
+      chai.assert.throws(function() {
+        this.workspace.updateToolbox([]);
+      }.bind(this), 'Existing toolbox is null.  Can\'t create new toolbox.');
+    });
+    test('Existing toolbox has no categories', function() {
+      sinon.stub(Blockly.utils.toolbox, 'hasCategories').returns(true);
+      this.workspace.toolbox_ = null;
+      chai.assert.throws(function() {
+        this.workspace.updateToolbox([]);
+      }.bind(this), 'Existing toolbox has no categories.  Can\'t change mode.');
+    });
+    test('Existing toolbox has categories', function() {
+      sinon.stub(Blockly.utils.toolbox, 'hasCategories').returns(false);
+      this.workspace.flyout_ = null;
+      chai.assert.throws(function() {
+        this.workspace.updateToolbox([]);
+      }.bind(this), 'Existing toolbox has categories.  Can\'t change mode.');
+    });
+    test('Passing in string as toolboxdef', function() {
+      var parseToolboxFake = sinon.spy(Blockly.Options, 'parseToolboxTree');
+      this.workspace.updateToolbox('<xml><category name="something"></category></xml>');
+      sinon.assert.calledOnce(parseToolboxFake);
+    });
   });
 
   suite('Workspace Base class', function() {

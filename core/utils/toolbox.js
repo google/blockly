@@ -86,13 +86,13 @@ Blockly.utils.toolbox.ToolboxDefinition;
  * Parse the provided toolbox definition into a consistent format.
  * @param {Blockly.utils.toolbox.ToolboxDefinition} toolboxDef The definition of the
  *    toolbox in one of its many forms.
- * @return {!Array.<Blockly.utils.toolbox.Toolbox>} Array of JSON holding
+ * @return {Array.<Blockly.utils.toolbox.Toolbox>} Array of JSON holding
  *    information on toolbox contents.
  * @package
  */
 Blockly.utils.toolbox.convertToolboxToJSON = function(toolboxDef) {
   if (!toolboxDef) {
-    return [];
+    return null;
   }
   // If it is an array of JSON, then it is already in the correct format.
   if (Array.isArray(toolboxDef) && toolboxDef.length && !(toolboxDef[0].nodeType)) {

@@ -130,9 +130,7 @@ Blockly.utils.toolbox.toolboxXmlToJson_ = function(toolboxDef) {
     }
     // Get the contents for a category.
     if (child.tagName.toUpperCase() == 'CATEGORY') {
-      for (var k = 0; k < child.childNodes.length; k++) {
-        obj['contents'] = Blockly.utils.toolbox.toolboxXmlToJson_(child);
-      }
+      obj['contents'] = Blockly.utils.toolbox.toolboxXmlToJson_(child);
     }
     // Add xml attributes to object
     for (var j = 0; j < child.attributes.length; j++) {

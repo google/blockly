@@ -23,9 +23,8 @@ suite('Toolbox', function() {
           toolbox: this.toolboxXml
         });
     this.toolbox = this.workspace.getToolbox();
-    this.toolbox.init();
   });
-  
+
   teardown(function() {
     this.workspace.dispose();
     delete Blockly.Blocks['basic_block'];
@@ -33,6 +32,9 @@ suite('Toolbox', function() {
   });
 
   suite('init', function() {
+    setup(function() {
+      this.toolbox.init();
+    });
     test('HtmlDiv is created', function() {
       chai.assert.isDefined(this.toolbox.HtmlDiv);
     });
@@ -52,15 +54,47 @@ suite('Toolbox', function() {
   });
 
   suite('renderTree', function() {
+    setup(function() {
+      this.toolboxXml = Blockly.utils.toolbox.convertToolboxToJSON(this.toolboxXml);
+      this.toolbox.selectFirstCategory();
+      this.firstChild = this.toolbox.tree_.getChildAt(0);
+      this.secondChild = this.toolbox.tree_.getChildAt(1);
+      this.toolbox.handleBeforeTreeSelected_(this.secondChild);
+    });
     test('Tree is created and set', function() {
       this.toolbox.renderTree(this.toolboxXml);
       chai.assert.isDefined(this.toolbox.tree_);
     });
     test('Throws error if a toolbox has both blocks and categories at root level', function() {
-      var badXml = document.getElementById('toolbox-incorrect');
       var toolbox = this.toolbox;
+      var badToolboxDef = [
+        {
+          "kind": "block",
+          "blockxml": "<block type='controls_if'></block>"
+        },
+        {
+          "kind": "category",
+          "name": "loops",
+          "categorystyle": "math_category",
+          "contents": [
+            {
+              "kind": "block",
+              "blockxml": "<block type='controls_if'></block>"
+            },
+            {
+              "kind": "button",
+              "text": "insert",
+              "callbackkey":"insertConnectionRows"
+            },
+            {
+              "kind": "label",
+              "text": "Something"
+            }
+          ]
+        }
+      ];
       chai.assert.throws(function() {
-        toolbox.renderTree(badXml);
+        toolbox.renderTree(badToolboxDef);
       }, 'Toolbox cannot have both blocks and categories in the root level.');
     });
     test('Select any open nodes', function() {
@@ -74,6 +108,36 @@ suite('Toolbox', function() {
       var orientationAttribute = this.toolbox.tree_.getElement()
           .getAttribute('aria-orientation');
       chai.assert.equal(orientationAttribute, 'horizontal');
+    });
+    test('Create a toolbox from JSON', function() {
+      var jsonDef = [
+        {
+          "kind": "category",
+          "contents": [
+            {
+              "kind": "block",
+              "blockxml": '<block xmlns="http://www.w3.org/1999/xhtml" type="basic_block"><field name="TEXT">FirstCategory-FirstBlock</field></block>'
+            },
+            {
+              "kind": "label",
+              "text": "Input/Output:",
+              "web-class": "ioLabel"
+            },
+            {
+              "kind": "button",
+              "text": "insert",
+              "callbackkey": "insertConnectionStacks",
+              "web-class": "ioLabel"
+            },
+            {
+              "kind": "sep",
+              "gap": "7"
+            }
+          ]
+        }
+      ];
+      this.toolbox.renderTree(jsonDef);
+      chai.assert.lengthOf(this.toolbox.tree_.children_, 1);
     });
   });
 
@@ -186,7 +250,7 @@ suite('Toolbox', function() {
     });
   });
 
-  suite('syncTrees_', function() {
+  suite('createTree_', function() {
     setup(function() {
       this.tree = new Blockly.tree.TreeControl(this.toolbox, this.toolbox.config_);
       this.tree.contents = [];
@@ -195,44 +259,119 @@ suite('Toolbox', function() {
       this.buttonIdx = 1;
       this.dynamicCategoryIdx = 3;
       this.categorySeparatorIdx = 2;
+      this.toolboxXml = Blockly.utils.toolbox.convertToolboxToJSON(this.toolboxXml);
     });
     test('Having a dynamic category', function() {
-      this.toolbox.syncTrees_(this.toolboxXml, this.tree,
-          this.toolbox.workspace_.options.pathToMedia);
+      this.toolbox.createTree_(this.toolboxXml, this.tree);
       chai.assert.equal(this.tree.children_[this.dynamicCategoryIdx].contents, 'VARIABLE');
     });
     test('Node is expanded', function() {
-      var openNode = this.toolbox.syncTrees_(this.toolboxXml, this.tree,
-          this.toolbox.workspace_.options.pathToMedia);
+      var openNode = this.toolbox.createTree_(this.toolboxXml, this.tree);
       chai.assert.exists(openNode);
     });
     test('Having a tree separator', function() {
-      this.toolbox.syncTrees_(this.toolboxXml, this.tree,
-          this.toolbox.workspace_.options.pathToMedia);
-      var sepString = Blockly.utils.xml.domToText(
-          this.tree.children_[0].contents[this.separatorIdx]);
-      chai.assert.equal(sepString, '<sep xmlns="http://www.w3.org/1999/xhtml" gap="-1"></sep>');
+      this.toolbox.createTree_(this.toolboxXml, this.tree);
+      var sepObj = this.tree.children_[0].contents[this.separatorIdx];
+      chai.assert.isNotNull(sepObj);
+      chai.assert.equal(sepObj['gap'], -1);
     });
     test('Separator between two categories', function() {
-      this.toolbox.syncTrees_(this.toolboxXml, this.tree,
-          this.toolbox.workspace_.options.pathToMedia);
+      this.toolbox.createTree_(this.toolboxXml, this.tree);
       chai.assert.instanceOf(this.tree.children_[this.categorySeparatorIdx],
           Blockly.Toolbox.TreeSeparator);
     });
     test('Having a button', function() {
-      this.toolbox.syncTrees_(this.toolboxXml, this.tree,
-          this.toolbox.workspace_.options.pathToMedia);
-      var btnString = Blockly.utils.xml.domToText(this.tree.children_[0].contents[this.buttonIdx]);
-      chai.assert.equal(btnString,
-          '<button xmlns="http://www.w3.org/1999/xhtml" text="insert" callbackkey="insertConnectionRows"></button>');
+      this.toolbox.createTree_(this.toolboxXml, this.tree);
+      var btnObj = this.tree.children_[0].contents[this.buttonIdx];
+      chai.assert.isNotNull(btnObj);
+      chai.assert.equal(btnObj['text'], 'insert');
+      chai.assert.equal(btnObj['callbackkey'], 'insertConnectionRows');
     });
     test('Colours are set using correct method', function() {
       var setColourFromStyleStub = sinon.stub(this.toolbox, "setColourFromStyle_");
       var setColourStub = sinon.stub(this.toolbox, "setColour_");
-      this.toolbox.syncTrees_(this.toolboxXml, this.tree,
-          this.toolbox.workspace_.options.pathToMedia);
+      this.toolbox.createTree_(this.toolboxXml, this.tree);
       sinon.assert.calledOnce(setColourFromStyleStub);
       sinon.assert.called(setColourStub);
+    });
+  });
+
+  suite('parseToolbox', function() {
+    setup(function() {
+      this.categoryToolboxJSON = getCategoryJSON();
+      this.simpleToolboxJSON = getSimpleJSON();
+    });
+
+    function checkValue(actual, expected, value) {
+      var actualVal = actual[value];
+      var expectedVal = expected[value];
+      chai.assert.equal(actualVal.toUpperCase(), expectedVal.toUpperCase(), 'Checknig value for: ' + value);
+    }
+    function checkContents(actualContents, expectedContents) {
+      chai.assert.equal(actualContents.length, expectedContents.length);
+      console.log(actualContents);
+      for (var i = 0; i < actualContents.length; i++) {
+        chai.assert.containsAllKeys(actualContents[i], Object.keys(expectedContents[i]));
+      }
+    }
+    function checkCategory(actual, expected) {
+      checkValue(actual, expected, 'kind');
+      checkValue(actual, expected, 'name');
+      checkContents(actual.contents, expected.contents);
+    }
+    function checkCategoryToolbox(actual, expected) {
+      chai.assert.equal(actual.length, expected.length);
+      for (var i = 0; i < expected.length; i++) {
+        checkCategory(actual[i], expected[i]);
+      }
+    }
+    function checkSimpleToolbox(actual, expected) {
+      checkContents(actual, expected);
+    }
+
+    test('Simple Toolbox: Array with xml', function() {
+      var xmlList = getXmlArray();
+      var toolboxDef = Blockly.utils.toolbox.convertToolboxToJSON(xmlList);
+      checkSimpleToolbox(toolboxDef, this.simpleToolboxJSON);
+    });
+    test('Category Toolbox: Array with xml', function() {
+      var categoryOne = Blockly.Xml.textToDom('<category name="First"><block type="basic_block"><field name="TEXT">FirstCategory-FirstBlock</field></block><block type="basic_block"><field name="TEXT">FirstCategory-SecondBlock</field></block></category>');
+      var categoryTwo = Blockly.Xml.textToDom('<category name="Second"><block type="basic_block"><field name="TEXT">SecondCategory-FirstBlock</field></block></category>');
+      var xmlList = [categoryOne, categoryTwo];
+      var toolboxDef = Blockly.utils.toolbox.convertToolboxToJSON(xmlList);
+      checkCategoryToolbox(toolboxDef, this.categoryToolboxJSON);
+    });
+    test('Category Toolbox: Array with JSON', function() {
+      var toolboxDef = Blockly.utils.toolbox.convertToolboxToJSON(this.categoryToolboxJSON);
+      chai.assert.isNotNull(toolboxDef);
+      checkCategoryToolbox(toolboxDef, this.categoryToolboxJSON);
+    });
+    test('Simple Toolbox: Array with JSON', function() {
+      var toolboxDef = Blockly.utils.toolbox.convertToolboxToJSON(this.simpleToolboxJSON);
+      chai.assert.isNotNull(toolboxDef);
+      checkSimpleToolbox(toolboxDef, this.simpleToolboxJSON);
+    });
+    test('Category Toolbox: NodeList', function() {
+      var nodeList = document.getElementById('toolbox-categories').childNodes;
+      var toolboxDef = Blockly.utils.toolbox.convertToolboxToJSON(nodeList);
+      checkCategoryToolbox(toolboxDef, this.categoryToolboxJSON);
+    });
+    test('Simple Toolbox: NodeList', function() {
+      var nodeList = document.getElementById('toolbox-simple').childNodes;
+      var toolboxDef = Blockly.utils.toolbox.convertToolboxToJSON(nodeList);
+      checkSimpleToolbox(toolboxDef, this.simpleToolboxJSON);
+    });
+    test('Category Toolbox: xml', function() {
+      var toolboxXml = document.getElementById('toolbox-categories');
+      var toolboxDef = Blockly.utils.toolbox.convertToolboxToJSON(toolboxXml);
+      chai.assert.isNotNull(toolboxDef);
+      checkCategoryToolbox(toolboxDef, this.categoryToolboxJSON);
+    });
+    test('Simple Toolbox: xml', function() {
+      var toolboxXml = document.getElementById('toolbox-simple');
+      var toolboxDef = Blockly.utils.toolbox.convertToolboxToJSON(toolboxXml);
+      chai.assert.isNotNull(toolboxDef);
+      checkSimpleToolbox(toolboxDef, this.simpleToolboxJSON);
     });
   });
 });

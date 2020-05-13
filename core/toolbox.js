@@ -25,6 +25,7 @@ goog.require('Blockly.utils.colour');
 goog.require('Blockly.utils.dom');
 goog.require('Blockly.utils.object');
 goog.require('Blockly.utils.Rect');
+goog.require('Blockly.utils.toolbox');
 
 
 /**
@@ -127,12 +128,11 @@ Blockly.Toolbox = function(workspace) {
   this.selectedOption_ = null;
 
   /**
-   * The tree node most recently selected.
+   * The TreeNode most recently selected.
    * @type {Blockly.tree.BaseNode}
    * @private
    */
   this.lastCategory_ = null;
-
 };
 
 /**
@@ -208,10 +208,11 @@ Blockly.Toolbox.prototype.init = function() {
 
 /**
  * Fill the toolbox with categories and blocks.
- * @param {Node} languageTree DOM tree of blocks.
+ * @param {Array.<Blockly.utils.toolbox.Toolbox>} toolboxDef Array holding objects
+ *    containing information on the contents of the toolbox.
  * @package
  */
-Blockly.Toolbox.prototype.renderTree = function(languageTree) {
+Blockly.Toolbox.prototype.renderTree = function(toolboxDef) {
   if (this.tree_) {
     this.tree_.dispose();  // Delete any existing content.
     this.lastCategory_ = null;
@@ -223,11 +224,10 @@ Blockly.Toolbox.prototype.renderTree = function(languageTree) {
   tree.onBeforeSelected(this.handleBeforeTreeSelected_);
   tree.onAfterSelected(this.handleAfterTreeSelected_);
   var openNode = null;
-  if (languageTree) {
+  if (toolboxDef) {
     this.tree_.contents = [];
     this.hasColours_ = false;
-    openNode = this.syncTrees_(
-        languageTree, this.tree_, this.workspace_.options.pathToMedia);
+    openNode = this.createTree_(toolboxDef, this.tree_);
 
     if (this.tree_.contents.length) {
       throw Error('Toolbox cannot have both blocks and categories ' +
@@ -250,6 +250,156 @@ Blockly.Toolbox.prototype.renderTree = function(languageTree) {
         /** @type {!Element} */ (this.tree_.getElement()),
         Blockly.utils.aria.State.ORIENTATION, 'horizontal');
   }
+};
+
+/**
+ * Create the toolbox tree.
+ * @param {Array.<Blockly.utils.toolbox.Toolbox>} toolboxDef List of objects
+ *    holding information on toolbox contents.
+ * @param {!Blockly.tree.BaseNode} treeOut The output tree for the toolbox. Due
+ *    to the recursive nature of this function, treeOut can be either the root of
+ *    the tree (Blockly.tree.TreeControl) or a child node of the tree
+ *    (Blockly.tree.TreeNode). These nodes are built from the toolboxDef.
+ * @return {Blockly.tree.BaseNode} The TreeNode to expand when the toolbox is
+ *    first loaded (or null).
+ * @private
+ */
+Blockly.Toolbox.prototype.createTree_ = function(toolboxDef, treeOut) {
+  var openNode = null;
+  var lastElement = null;
+  if (!toolboxDef) {
+    return null;
+  }
+
+  for (var i = 0, childIn; (childIn = toolboxDef[i]); i++) {
+    switch (childIn.kind.toUpperCase()) {
+      case 'CATEGORY':
+        var categoryInfo = /** @type {Blockly.utils.toolbox.Category} */ (childIn);
+        openNode = this.addCategory_(categoryInfo, treeOut) || openNode;
+        lastElement = childIn;
+        break;
+      case 'SEP':
+        var separatorInfo = /** @type {Blockly.utils.toolbox.Separator} */ (childIn);
+        lastElement = this.addSeparator_(separatorInfo, treeOut, lastElement) || lastElement;
+        break;
+      case 'BLOCK':
+      case 'SHADOW':
+      case 'LABEL':
+      case 'BUTTON':
+        treeOut.contents.push(childIn);
+        lastElement = childIn;
+        break;
+    }
+  }
+  return openNode;
+};
+
+/**
+ * Add a category to the toolbox tree.
+ * @param {!Blockly.utils.toolbox.Category} categoryInfo The object holding
+ *    information on the category.
+ * @param {!Blockly.tree.BaseNode} treeOut The TreeControl or TreeNode
+ *     object built from the childNodes.
+ * @return {Blockly.tree.BaseNode} TreeNode to open at startup (or null).
+ * @private
+ */
+Blockly.Toolbox.prototype.addCategory_ = function(categoryInfo, treeOut) {
+  var openNode = null;
+  // Decode the category name for any potential message references
+  // (eg. `%{BKY_CATEGORY_NAME_LOGIC}`).
+  var categoryName = Blockly.utils.replaceMessageReferences(categoryInfo['name']);
+
+  // Create and add the tree node for the category.
+  var childOut = this.tree_.createNode(categoryName);
+  childOut.onSizeChanged(this.handleNodeSizeChanged_);
+  childOut.contents = [];
+  treeOut.add(childOut);
+
+  var custom = categoryInfo['custom'];
+
+  if (custom) {
+    // Variables and procedures are special dynamic categories.
+    childOut.contents = custom;
+  } else {
+    openNode = this.createTree_(categoryInfo.contents, childOut) || openNode;
+  }
+  this.setColourOrStyle_(categoryInfo, childOut, categoryName);
+  openNode = this.setExpanded_(categoryInfo, childOut) || openNode;
+  return openNode;
+};
+
+/**
+ * Add either the colour or the style for a category.
+ * @param {!Blockly.utils.toolbox.Category} categoryInfo The object holding
+ *    information on the category.
+ * @param {!Blockly.tree.TreeNode} childOut The TreeNode for a category.
+ * @param {string} categoryName The name of the category.
+ * @private
+ */
+Blockly.Toolbox.prototype.setColourOrStyle_ = function(
+    categoryInfo, childOut, categoryName) {
+  var styleName = categoryInfo['categorystyle'];
+  var colour = categoryInfo['colour'];
+
+  if (colour && styleName) {
+    childOut.hexColour = '';
+    console.warn('Toolbox category "' + categoryName +
+        '" must not have both a style and a colour');
+  } else if (styleName) {
+    this.setColourFromStyle_(styleName, childOut, categoryName);
+  } else {
+    this.setColour_(colour, childOut, categoryName);
+  }
+};
+
+/**
+ * Add a separator to the toolbox tree if it is between categories. Otherwise,
+ * add the separator to the list of contents.
+ * @param {!Blockly.utils.toolbox.Separator} separatorInfo The object holding
+ *    information on the separator.
+ * @param {!Blockly.tree.BaseNode} treeOut The TreeControl or TreeNode
+ *     object built from the childNodes.
+ * @param {Object} lastElement The last element to be added to the tree.
+ * @return {Object} The last element to be added to the tree, or
+ *     null.
+ * @private
+ */
+Blockly.Toolbox.prototype.addSeparator_ = function(
+    separatorInfo, treeOut, lastElement) {
+  if (lastElement && lastElement.kind.toUpperCase() == 'CATEGORY') {
+    // Separator between two categories.
+    // <sep></sep>
+    treeOut.add(new Blockly.Toolbox.TreeSeparator(
+        /** @type {!Blockly.tree.BaseNode.Config} */
+        (this.treeSeparatorConfig_)));
+  } else {
+    // Otherwise add to contents array.
+    treeOut.contents.push(separatorInfo);
+    return separatorInfo;
+  }
+  return null;
+};
+
+/**
+ * Checks whether a node should be expanded, and expands if necessary.
+ * @param {!Blockly.utils.toolbox.Category} categoryInfo The child to expand.
+ * @param {!Blockly.tree.TreeNode} childOut The TreeNode created from childIn.
+ * @return {Blockly.tree.BaseNode} TreeNode to open at startup (or null).
+ * @private
+ */
+Blockly.Toolbox.prototype.setExpanded_ = function(categoryInfo, childOut) {
+  var openNode = null;
+  if (categoryInfo['expanded'] == 'true') {
+    if (childOut.contents.length) {
+      // This is a category that directly contains blocks.
+      // After the tree is rendered, open this category and show flyout.
+      openNode = childOut;
+    }
+    childOut.setExpanded(true);
+  } else {
+    childOut.setExpanded(false);
+  }
+  return openNode;
 };
 
 /**
@@ -407,91 +557,6 @@ Blockly.Toolbox.prototype.position = function() {
     this.width = treeDiv.offsetWidth;
   }
   this.flyout_.position();
-};
-
-/**
- * Sync trees of the toolbox.
- * @param {!Node} treeIn DOM tree of blocks.
- * @param {!Blockly.tree.BaseNode} treeOut The TreeControl or TreeNode
- *     object built from treeIn.
- * @param {string} pathToMedia The path to the Blockly media directory.
- * @return {Blockly.tree.BaseNode} Tree node to open at startup (or null).
- * @private
- */
-Blockly.Toolbox.prototype.syncTrees_ = function(treeIn, treeOut, pathToMedia) {
-  var openNode = null;
-  var lastElement = null;
-  for (var i = 0, childIn; (childIn = treeIn.childNodes[i]); i++) {
-    if (!childIn.tagName) {
-      // Skip over text.
-      continue;
-    }
-    switch (childIn.tagName.toUpperCase()) {
-      case 'CATEGORY':
-        // Decode the category name for any potential message references
-        // (eg. `%{BKY_CATEGORY_NAME_LOGIC}`).
-        var categoryName = Blockly.utils.replaceMessageReferences(
-            childIn.getAttribute('name'));
-        var childOut = this.tree_.createNode(categoryName);
-        childOut.onSizeChanged(this.handleNodeSizeChanged_);
-        childOut.contents = [];
-        treeOut.add(childOut);
-        var custom = childIn.getAttribute('custom');
-        if (custom) {
-          // Variables and procedures are special dynamic categories.
-          childOut.contents = custom;
-        } else {
-          var newOpenNode = this.syncTrees_(childIn, childOut, pathToMedia);
-          if (newOpenNode) {
-            openNode = newOpenNode;
-          }
-        }
-
-        var styleName = childIn.getAttribute('categorystyle');
-        var colour = childIn.getAttribute('colour');
-
-        if (colour && styleName) {
-          childOut.hexColour = '';
-          console.warn('Toolbox category "' + categoryName +
-              '" can not have both a style and a colour');
-        } else if (styleName) {
-          this.setColourFromStyle_(styleName, childOut, categoryName);
-        } else {
-          this.setColour_(colour, childOut, categoryName);
-        }
-
-        if (childIn.getAttribute('expanded') == 'true') {
-          if (childOut.contents.length) {
-            // This is a category that directly contains blocks.
-            // After the tree is rendered, open this category and show flyout.
-            openNode = childOut;
-          }
-          childOut.setExpanded(true);
-        } else {
-          childOut.setExpanded(false);
-        }
-        lastElement = childIn;
-        break;
-      case 'SEP':
-        if (lastElement && lastElement.tagName.toUpperCase() == 'CATEGORY') {
-          // Separator between two categories.
-          // <sep></sep>
-          treeOut.add(new Blockly.Toolbox.TreeSeparator(
-              /** @type {!Blockly.tree.BaseNode.Config} */
-              (this.treeSeparatorConfig_)));
-          break;
-        }
-        // Otherwise falls through.
-      case 'BLOCK':
-      case 'SHADOW':
-      case 'LABEL':
-      case 'BUTTON':
-        treeOut.contents.push(childIn);
-        lastElement = childIn;
-        break;
-    }
-  }
-  return openNode;
 };
 
 /**

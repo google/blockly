@@ -426,82 +426,40 @@ Blockly.Flyout.prototype.hide = function() {
 
 /**
  * Show and populate the flyout.
- * @param {!Array|!NodeList|string} xmlList List of blocks to show.
- *     Variables and procedures have a custom set of blocks.
+ * @param {!Blockly.utils.toolbox.ToolboxDefinition|string} flyoutDef
+ *    List of contents to display in the flyout as an array of xml an
+ *    array of Nodes, a NodeList or a string with the name of the dynamic category.
+ *    Variables and procedures have a custom set of blocks.
  */
-Blockly.Flyout.prototype.show = function(xmlList) {
+Blockly.Flyout.prototype.show = function(flyoutDef) {
   this.workspace_.setResizesEnabled(false);
   this.hide();
   this.clearOldBlocks_();
 
-  // Handle dynamic categories, represented by a name instead of a list of XML.
+  // Handle dynamic categories, represented by a name instead of a list.
   // Look up the correct category generation function and call that to get a
   // valid XML list.
-  if (typeof xmlList == 'string') {
+  if (typeof flyoutDef == 'string') {
     var fnToApply = this.workspace_.targetWorkspace.getToolboxCategoryCallback(
-        xmlList);
+        flyoutDef);
     if (typeof fnToApply != 'function') {
       throw TypeError('Couldn\'t find a callback function when opening' +
           ' a toolbox category.');
     }
-    xmlList = fnToApply(this.workspace_.targetWorkspace);
-    if (!Array.isArray(xmlList)) {
+    flyoutDef = fnToApply(this.workspace_.targetWorkspace);
+    if (!Array.isArray(flyoutDef)) {
       throw TypeError('Result of toolbox category callback must be an array.');
     }
   }
+  // Parse the Array or NodeList passed in into an Array of
+  // Blockly.utils.toolbox.Toolbox.
+  var parsedContent = Blockly.utils.toolbox.convertToolboxToJSON(flyoutDef);
+  var flyoutInfo = /** @type {{contents:Array<Object>, gaps:Array<number>}} */
+      (this.createFlyoutInfo_(parsedContent));
 
   this.setVisible(true);
-  // Create the blocks to be shown in this flyout.
-  var contents = [];
-  var gaps = [];
-  this.permanentlyDisabled_.length = 0;
-  var default_gap = this.horizontalLayout_ ? this.GAP_X : this.GAP_Y;
-  for (var i = 0, xml; (xml = xmlList[i]); i++) {
-    if (!xml.tagName) {
-      continue;
-    }
-    switch (xml.tagName.toUpperCase()) {
-      case 'BLOCK':
-        var curBlock = Blockly.Xml.domToBlock(xml, this.workspace_);
-        if (!curBlock.isEnabled()) {
-          // Record blocks that were initially disabled.
-          // Do not enable these blocks as a result of capacity filtering.
-          this.permanentlyDisabled_.push(curBlock);
-        }
-        contents.push({type: 'block', block: curBlock});
-        // This is a deprecated method for adding gap to a block.
-        // <block type="math_arithmetic" gap="8"></block>
-        var gap = parseInt(xml.getAttribute('gap'), 10);
-        gaps.push(isNaN(gap) ? default_gap : gap);
-        break;
-      case 'SEP':
-        // Change the gap between two toolbox elements.
-        // <sep gap="36"></sep>
-        // The default gap is 24, can be set larger or smaller.
-        // This overwrites the gap attribute on the previous element.
-        var newGap = parseInt(xml.getAttribute('gap'), 10);
-        // Ignore gaps before the first block.
-        if (!isNaN(newGap) && gaps.length > 0) {
-          gaps[gaps.length - 1] = newGap;
-        } else {
-          gaps.push(default_gap);
-        }
-        break;
-      case 'LABEL':
-      case 'BUTTON':
-        var isLabel = xml.tagName.toUpperCase() == 'LABEL';
-        if (!Blockly.FlyoutButton) {
-          throw Error('Missing require for Blockly.FlyoutButton');
-        }
-        var curButton = new Blockly.FlyoutButton(this.workspace_,
-            this.targetWorkspace_, xml, isLabel);
-        contents.push({type: 'button', button: curButton});
-        gaps.push(default_gap);
-        break;
-    }
-  }
 
-  this.layout_(contents, gaps);
+  this.layout_(flyoutInfo.contents, flyoutInfo.gaps);
 
   // IE 11 is an incompetent browser that fails to fire mouseout events.
   // When the mouse is over the background, deselect all blocks.
@@ -530,6 +488,130 @@ Blockly.Flyout.prototype.show = function(xmlList) {
 
   this.reflowWrapper_ = this.reflow.bind(this);
   this.workspace_.addChangeListener(this.reflowWrapper_);
+};
+
+/**
+ * Create the contents array and gaps array necessary to create the layout for
+ * the flyout.
+ * @param {Array.<Blockly.utils.toolbox.Toolbox>} parsedContent The array
+ *   of objects to show in the flyout.
+ * @return {{contents:Array<Object>, gaps:Array<number>}} The list of contents
+ *   and gaps needed to lay out the flyout.
+ * @private
+ */
+Blockly.Flyout.prototype.createFlyoutInfo_ = function(parsedContent) {
+  var contents = [];
+  var gaps = [];
+  this.permanentlyDisabled_.length = 0;
+  var defaultGap = this.horizontalLayout_ ? this.GAP_X : this.GAP_Y;
+  for (var i = 0, contentInfo; (contentInfo = parsedContent[i]); i++) {
+    switch (contentInfo.kind.toUpperCase()) {
+      case 'BLOCK':
+        var blockInfo = /** @type {Blockly.utils.toolbox.Block} */ (contentInfo);
+        var blockXml = this.getBlockXml_(blockInfo);
+        var block = this.createBlock_(blockXml);
+        // This is a deprecated method for adding gap to a block.
+        // <block type="math_arithmetic" gap="8"></block>
+        var gap = parseInt(blockXml.getAttribute('gap'), 10);
+        gaps.push(isNaN(gap) ? defaultGap : gap);
+        contents.push({type: 'block', block: block});
+        break;
+      case 'SEP':
+        var sepInfo = /** @type {Blockly.utils.toolbox.Separator} */ (contentInfo);
+        this.addSeparatorGap_(sepInfo, gaps, defaultGap);
+        break;
+      case 'LABEL':
+        var labelInfo = /** @type {Blockly.utils.toolbox.Label} */ (contentInfo);
+        // A label is a button with different styling.
+        // Rename this function.
+        var label = this.createButton_(labelInfo, /** isLabel */ true);
+        contents.push({type: 'button', button: label});
+        gaps.push(defaultGap);
+        break;
+      case 'BUTTON':
+        var buttonInfo = /** @type {Blockly.utils.toolbox.Button} */ (contentInfo);
+        var button = this.createButton_(buttonInfo, /** isLabel */ false);
+        contents.push({type: 'button', button: button});
+        gaps.push(defaultGap);
+        break;
+    }
+  }
+  return {contents: contents, gaps: gaps};
+};
+
+/**
+ * Creates a flyout button or a flyout label.
+ * @param {!Blockly.utils.toolbox.Button|!Blockly.utils.toolbox.Label} btnInfo
+ *    The object holding information about a button or a label.
+ * @param {boolean} isLabel True if the button is a label, false otherwise.
+ * @return {!Blockly.FlyoutButton} The object used to display the button in the
+ *    flyout.
+ * @private
+ */
+Blockly.Flyout.prototype.createButton_ = function(btnInfo, isLabel) {
+  if (!Blockly.FlyoutButton) {
+    throw Error('Missing require for Blockly.FlyoutButton');
+  }
+  var curButton = new Blockly.FlyoutButton(this.workspace_,
+      this.targetWorkspace_, btnInfo, isLabel);
+  return curButton;
+};
+
+/**
+ * Create a block from the xml and permanently disable any blocks that were
+ * defined as disabled.
+ * @param {!Element} blockXml The xml of the block.
+ * @return {!Blockly.Block} The block created from the blockXml.
+ * @private
+ */
+Blockly.Flyout.prototype.createBlock_ = function(blockXml) {
+  var curBlock = Blockly.Xml.domToBlock(blockXml, this.workspace_);
+  if (!curBlock.isEnabled()) {
+    // Record blocks that were initially disabled.
+    // Do not enable these blocks as a result of capacity filtering.
+    this.permanentlyDisabled_.push(curBlock);
+  }
+  return curBlock;
+};
+
+/**
+ * Get the xml from the block info object.
+ * @param {!Blockly.utils.toolbox.Block}  blockInfo The object holding
+ *    information about a block.
+ * @return {!Element} The xml for the block.
+ * @throws {Error} if the xml is not a valid block definition.
+ * @private
+ */
+Blockly.Flyout.prototype.getBlockXml_ = function(blockInfo) {
+  var blockXml = blockInfo['blockxml'];
+  if (blockXml) {
+    blockXml = Blockly.Xml.textToDom(blockInfo['blockxml']);
+  } else {
+    throw Error('Error: Invalid block definition. Block definition must have blockxml.');
+  }
+  return blockXml;
+};
+
+/**
+ * Add the necessary gap in the flyout for a separator.
+ * @param {!Blockly.utils.toolbox.Separator} sepInfo The object holding
+ *    information about a separator.
+ * @param {!Array.<number>} gaps The list gaps between items in the flyout.
+ * @param {number} defaultGap The default gap between the button and next element.
+ * @private
+ */
+Blockly.Flyout.prototype.addSeparatorGap_ = function(sepInfo, gaps, defaultGap) {
+  // Change the gap between two toolbox elements.
+  // <sep gap="36"></sep>
+  // The default gap is 24, can be set larger or smaller.
+  // This overwrites the gap attribute on the previous element.
+  var newGap = parseInt(sepInfo['gap'], 10);
+  // Ignore gaps before the first block.
+  if (!isNaN(newGap) && gaps.length > 0) {
+    gaps[gaps.length - 1] = newGap;
+  } else {
+    gaps.push(defaultGap);
+  }
 };
 
 /**

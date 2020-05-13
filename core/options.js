@@ -16,6 +16,7 @@ goog.require('Blockly.Theme');
 goog.require('Blockly.Themes.Classic');
 goog.require('Blockly.user.keyMap');
 goog.require('Blockly.utils.userAgent');
+goog.require('Blockly.utils.toolbox');
 goog.require('Blockly.Xml');
 
 
@@ -29,7 +30,7 @@ goog.require('Blockly.Xml');
 Blockly.Options = function(options) {
   var readOnly = !!options['readOnly'];
   if (readOnly) {
-    var languageTree = null;
+    var toolboxContents = null;
     var hasCategories = false;
     var hasTrashcan = false;
     var hasCollapse = false;
@@ -37,10 +38,12 @@ Blockly.Options = function(options) {
     var hasDisable = false;
     var hasSounds = false;
   } else {
-    var languageTree =
-        Blockly.Options.parseToolboxTree(options['toolbox'] || null);
-    var hasCategories = Boolean(languageTree &&
-        languageTree.getElementsByTagName('category').length);
+    var toolboxDef = options['toolbox'];
+    if (!Array.isArray(toolboxDef)) {
+      toolboxDef = Blockly.Options.parseToolboxTree(toolboxDef || null);
+    }
+    var toolboxContents = Blockly.utils.toolbox.convertToolboxToJSON(toolboxDef);
+    var hasCategories = Blockly.utils.toolbox.hasCategories(toolboxContents);
     var hasTrashcan = options['trashcan'];
     if (hasTrashcan === undefined) {
       hasTrashcan = hasCategories;
@@ -140,8 +143,8 @@ Blockly.Options = function(options) {
   this.hasCss = hasCss;
   /** @type {boolean} */
   this.horizontalLayout = horizontalLayout;
-  /** @type {Node} */
-  this.languageTree = languageTree;
+  /** @type {Array.<Blockly.utils.toolbox.Toolbox>} */
+  this.languageTree = toolboxContents;
   /** @type {!Object} */
   this.gridOptions = Blockly.Options.parseGridOptions_(options);
   /** @type {!Object} */
@@ -312,7 +315,8 @@ Blockly.Options.parseThemeOptions_ = function(options) {
 
 /**
  * Parse the provided toolbox tree into a consistent DOM format.
- * @param {Node|string} tree DOM tree of blocks, or text representation of same.
+ * @param {Node|NodeList|?string} tree DOM tree of blocks, or text representation
+ *    of same.
  * @return {Node} DOM tree of blocks, or null.
  */
 Blockly.Options.parseToolboxTree = function(tree) {

@@ -32,6 +32,7 @@
     </script>
 
     <script src="test_helpers.js"></script>
+    <script src="toolbox_helper.js"></script>
 
     <script src="astnode_test.js"></script>
     <script src="block_test.js"></script>
@@ -55,6 +56,7 @@
     <script src="field_registry_test.js"></script>
     <script src="field_textinput_test.js"></script>
     <script src="field_variable_test.js"></script>
+    <script src="flyout_test.js"></script>
     <script src="generator_test.js"></script>
     <script src="gesture_test.js"></script>
     <script src="input_test.js"></script>
@@ -82,6 +84,13 @@
     <script src="xml_test.js"></script>
 
     <div id="blocklyDiv"></div>
+    <xml xmlns="https://developers.google.com/blockly/xml" id="toolbox-simple" style="display: none">
+      <block type="logic_operation"></block>
+      <sep gap="20"></sep>
+      <button text="insert" callbackkey="insertConnectionRows"></button>
+      <label text="tooltips"></label>
+    </xml>
+
     <xml xmlns="https://developers.google.com/blockly/xml" id="toolbox-minimal" style="display: none">
       <block type="basic_block"></block>
     </xml>

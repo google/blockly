@@ -307,6 +307,13 @@ suite('Toolbox', function() {
       var expectedVal = expected[value];
       chai.assert.equal(actualVal.toUpperCase(), expectedVal.toUpperCase(), 'Checknig value for: ' + value);
     }
+    function checkContents(actualContents, expectedContents) {
+      chai.assert.equal(actualContents.length, expectedContents.length);
+      console.log(actualContents);
+      for (var i = 0; i < actualContents.length; i++) {
+        chai.assert.containsAllKeys(actualContents[i], Object.keys(expectedContents[i]));
+      }
+    }
     function checkCategory(actual, expected) {
       checkValue(actual, expected, 'kind');
       checkValue(actual, expected, 'name');
@@ -316,12 +323,6 @@ suite('Toolbox', function() {
       chai.assert.equal(actual.length, expected.length);
       for (var i = 0; i < expected.length; i++) {
         checkCategory(actual[i], expected[i]);
-      }
-    }
-    function checkContents(actualContents, expectedContents) {
-      chai.assert.equal(actualContents.length, expectedContents.length);
-      for (var i = 0; i < actualContents.length; i++) {
-        chai.assert.containsAllKeys(actualContents[i], Object.keys(expectedContents[i]));
       }
     }
     function checkSimpleToolbox(actual, expected) {

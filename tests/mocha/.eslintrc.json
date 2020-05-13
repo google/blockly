@@ -14,7 +14,10 @@
         "defineStackBlock": true,
         "defineStatementBlock": true,
         "createEventsFireStub": true,
-        "testAWorkspace": true
+        "testAWorkspace": true,
+        "getSimpleJSON": true,
+        "getXmlArray": true,
+        "getCategoryJSON": true
     },
     "extends": "../../.eslintrc.json"
 }

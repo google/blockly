@@ -80,8 +80,9 @@ Blockly.Xml.blockToDomWithXY = function(block, opt_noId) {
   if (block.isInsertionMarker()) {  // Skip over insertion markers.
     block = block.getChildren(false)[0];
     if (!block) {
-      // Disappears when appended.
-      return /** @type{!Element} */ (new DocumentFragment());
+      // Disappears when appended. Cast to ANY b/c DocumentFragment -> Element
+      // is invalid. We have to cast to ANY in between.
+      return /** @type{?} */ (new DocumentFragment());
     }
   }
 
@@ -146,8 +147,9 @@ Blockly.Xml.blockToDom = function(block, opt_noId) {
     if (child) {
       return Blockly.Xml.blockToDom(child);
     } else {
-      // Disappears when appended.
-      return /** @type{!Element} */ (new DocumentFragment());
+      // Disappears when appended. Cast to ANY b/c DocumentFragment -> Element
+      // is invalid. We have to cast to ANY in between.
+      return /** @type{?} */ (new DocumentFragment());
     }
   }
 

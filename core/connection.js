@@ -111,7 +111,7 @@ Blockly.Connection.prototype.connect_ = function(childConnection) {
     var orphanBlock = parentConnection.targetBlock();
     var shadowDom = parentConnection.getShadowDom();
     // Temporarily set the shadow DOM to null so it does not respawn.
-    parentConnection.setShadowDom(null);
+    parentConnection.shadowDom_ = null;
     // Displaced shadow blocks dissolve rather than reattaching or bumping.
     if (orphanBlock.isShadow()) {
       // Save the shadow block so that field values are preserved.
@@ -179,7 +179,7 @@ Blockly.Connection.prototype.connect_ = function(childConnection) {
       }
     }
     // Restore the shadow DOM.
-    parentConnection.setShadowDom(shadowDom);
+    parentConnection.shadowDom_ = shadowDom;
   }
 
   var event;
@@ -204,12 +204,11 @@ Blockly.Connection.prototype.dispose = function() {
 
   // isConnected returns true for shadows and non-shadows.
   if (this.isConnected()) {
+    // Destroy the attached shadow block & its children (if it exists).
     this.setShadowDom(null);
+
     var targetBlock = this.targetBlock();
-    if (targetBlock.isShadow()) {
-      // Destroy the attached shadow block & its children.
-      targetBlock.dispose(false);
-    } else {
+    if (targetBlock) {
       // Disconnect the attached normal block.
       targetBlock.unplug();
     }
@@ -586,15 +585,22 @@ Blockly.Connection.prototype.getCheck = function() {
 };
 
 /**
- * Change a connection's shadow block.
+ * Changes the connection's shadow block.
  * @param {Element} shadow DOM representation of a block or null.
  */
 Blockly.Connection.prototype.setShadowDom = function(shadow) {
   this.shadowDom_ = shadow;
+  var target = this.targetBlock();
+  if (!target) {
+    this.respawnShadow_();
+  } else if (target.isShadow()) {
+    // The disconnect from dispose will automatically generate the new shadow.
+    target.dispose(false);
+  }
 };
 
 /**
- * Return a connection's shadow block.
+ * Returns the xml representation of the connection's shadow block.
  * @return {Element} Shadow DOM representation of a block or null.
  */
 Blockly.Connection.prototype.getShadowDom = function() {

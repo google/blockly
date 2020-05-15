@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2014 Google LLC
+ * Copyright 2020 Google LLC
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -9,6 +9,7 @@
  * The blocks in this toolbox reflect block configurations not used by
  * the standard predefined blocks, and so test alternative block rendering
  * code paths.
+ * @author aschmiedt@google.com (Abby Schmiedt)
  */
 
 

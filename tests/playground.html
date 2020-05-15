@@ -67,7 +67,7 @@
 <script src="blocks/test_blocks.js"></script>
 <script src="themes/test_themes.js"></script>
 <script src="./playgrounds/screenshot.js"></script>
-<script src="./test_blocks_toolbox.js"></script>
+<script src="./playgrounds/test_blocks_toolbox.js"></script>
 
 <script>
 // Custom requires for the playground.
@@ -96,14 +96,7 @@ function start() {
   var rtl = match && match[1] == 'rtl';
   document.forms.options.elements.dir.selectedIndex = Number(rtl);
   var toolbox = getToolboxElement();
-  var toolboxNames = [
-      'toolbox-categories',
-      'toolbox-categories-typed-variables',
-      'toolbox-simple',
-      'toolbox-test-blocks'
-  ];
-  document.forms.options.elements.toolbox.selectedIndex =
-      toolboxNames.indexOf(toolbox.id);
+  setToolboxDropdown();
   match = location.search.match(/side=([^&]+)/);
   var autoimport = !!location.search.match(/autoimport=([^&]+)/);
   // Create main workspace.
@@ -296,18 +289,34 @@ function setBackgroundColour() {
   }
 }
 
-function getToolboxElement() {
+function getToolboxSuffix() {
   var match = location.search.match(/toolbox=([^&]+)/);
   // Default to the basic toolbox with categories and untyped variables,
   // but override that if the toolbox type is set in the URL.
-  var toolboxSuffix = (match ? match[1] : 'categories');
-  // The three possible values are: "simple", "categories",
+  return (match ? match[1] : 'categories');
+}
+
+function getToolboxElement() {
+  // The four possible values are: "simple", "categories",
   // "categories-typed-variables", and "test-blocks".
+  var toolboxSuffix = getToolboxSuffix();
   // test-blocks are defined in JSON
   if (toolboxSuffix == 'test-blocks') {
     return testBlocksToolbox;
   }
   return document.getElementById('toolbox-' + toolboxSuffix);
+}
+
+function setToolboxDropdown() {
+  var toolboxNames = [
+      'toolbox-categories',
+      'toolbox-categories-typed-variables',
+      'toolbox-simple',
+      'toolbox-test-blocks'
+  ];
+  var toolboxSuffix = getToolboxSuffix();
+  document.forms.options.elements.toolbox.selectedIndex =
+      toolboxNames.indexOf('toolbox-' + toolboxSuffix);
 }
 
 function toXml() {

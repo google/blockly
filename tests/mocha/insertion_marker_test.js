@@ -6,7 +6,7 @@
 
 suite('InsertionMarkers', function() {
   setup(function() {
-    this.workspace = new Blockly.Workspace();
+    this.workspace = Blockly.inject('blocklyDiv', {});
     Blockly.defineBlocksWithJsonArray([
       {
         "type": "stack_block",
@@ -198,6 +198,189 @@ suite('InsertionMarkers', function() {
           '  <block type="stack_block" id="a"/>' +
           '</xml>');
       this.assertGen(xml, 'stack[a];\n');
+    });
+  });
+  suite('Serialization', function() {
+    setup(function() {
+      this.assertXml = function(xml, expectXml) {
+        Blockly.Xml.domToWorkspace(xml, this.workspace);
+        var block = this.workspace.getBlockById('insertion');
+        block.setInsertionMarker(true);
+        var xml = Blockly.Xml.workspaceToDom(this.workspace);
+        Blockly.Xml.domToWorkspace(xml, this.workspace);
+        xml = Blockly.Xml.domToText(xml);
+        chai.assert.equal(xml, expectXml);
+      };
+    });
+    teardown(function() {
+      delete this.assertXml;
+    });
+    test('Marker Surrounds', function() {
+      var xml = Blockly.Xml.textToDom(
+          '<xml xmlns="https://developers.google.com/blockly/xml">' +
+          '  <block type="statement_block" id="insertion" x="20" y="20">' +
+          '    <statement name="STATEMENT">' +
+          '      <block type="statement_block" id="a"/>' +
+          '    </statement>' +
+          '  </block>' +
+          '</xml>');
+      // Note how the x and y are not 20, they are slightly lower and end-er
+      // because these are the coords of the wrapped block.
+      this.assertXml(xml,
+          '<xml xmlns="https://developers.google.com/blockly/xml">' +
+          '<block type="statement_block" id="a" x="41" y="31"></block>' +
+          '</xml>');
+    });
+    test('Marker Enclosed', function() {
+      var xml = Blockly.Xml.textToDom(
+          '<xml xmlns="https://developers.google.com/blockly/xml">' +
+          '  <block type="statement_block" id="a" x="20" y="20">' +
+          '    <statement name="STATEMENT">' +
+          '      <block type="statement_block" id="insertion"/>' +
+          '    </statement>' +
+          '  </block>' +
+          '</xml>');
+      this.assertXml(xml,
+          '<xml xmlns="https://developers.google.com/blockly/xml">' +
+          '<block type="statement_block" id="a" x="20" y="20"></block>' +
+          '</xml>');
+    });
+    test('Marker Enclosed and Surrounds', function() {
+      var xml = Blockly.Xml.textToDom(
+          '<xml xmlns="https://developers.google.com/blockly/xml">' +
+          '  <block type="statement_block" id="a" x="20" y="20">' +
+          '    <statement name="STATEMENT">' +
+          '      <block type="statement_block" id="insertion">' +
+          '        <statement name="STATEMENT">' +
+          '          <block type="statement_block" id="b"/>' +
+          '        </statement>' +
+          '      </block>' +
+          '    </statement>' +
+          '  </block>' +
+          '</xml>');
+      this.assertXml(xml,
+          '<xml xmlns="https://developers.google.com/blockly/xml">' +
+          '<block type="statement_block" id="a" x="20" y="20">' +
+          '<statement name="STATEMENT">' +
+          '<block type="statement_block" id="b"></block>' +
+          '</statement>' +
+          '</block>' +
+          '</xml>');
+    });
+    test('Marker Prev', function() {
+      var xml = Blockly.Xml.textToDom(
+          '<xml xmlns="https://developers.google.com/blockly/xml">' +
+          '  <block type="stack_block" id="insertion" x="20" y="20">' +
+          '    <next>' +
+          '      <block type="stack_block" id="a"/>' +
+          '    </next>' +
+          '  </block>' +
+          '</xml>');
+      // Note how the y coord is not at 20, it is lower. This is because these
+      // are the coords of the next block.
+      this.assertXml(xml,
+          '<xml xmlns="https://developers.google.com/blockly/xml">' +
+          '<block type="stack_block" id="a" x="20" y="46"></block>' +
+          '</xml>');
+    });
+    test('Marker Next', function() {
+      var xml = Blockly.Xml.textToDom(
+          '<xml xmlns="https://developers.google.com/blockly/xml">' +
+          '  <block type="stack_block" id="a" x="20" y="20">' +
+          '    <next>' +
+          '      <block type="stack_block" id="insertion"/>' +
+          '    </next>' +
+          '  </block>' +
+          '</xml>');
+      this.assertXml(xml,
+          '<xml xmlns="https://developers.google.com/blockly/xml">' +
+          '<block type="stack_block" id="a" x="20" y="20"></block>' +
+          '</xml>');
+    });
+    test('Marker Middle of Stack', function() {
+      var xml = Blockly.Xml.textToDom(
+          '<xml xmlns="https://developers.google.com/blockly/xml">' +
+          '  <block type="stack_block" id="a" x="20" y="20">' +
+          '    <next>' +
+          '      <block type="stack_block" id="insertion">' +
+          '        <next>' +
+          '          <block type="stack_block" id="b"/>' +
+          '        </next>' +
+          '      </block>' +
+          '    </next>' +
+          '  </block>' +
+          '</xml>');
+      this.assertXml(xml,
+          '<xml xmlns="https://developers.google.com/blockly/xml">' +
+          '<block type="stack_block" id="a" x="20" y="20">' +
+          '<next>' +
+          '<block type="stack_block" id="b"></block>' +
+          '</next>' +
+          '</block>' +
+          '</xml>');
+    });
+    test('Marker On Output', function() {
+      var xml = Blockly.Xml.textToDom(
+          '<xml xmlns="https://developers.google.com/blockly/xml">' +
+          '  <block type="row_block" id="insertion" x="20" y="20">' +
+          '    <value name="INPUT">' +
+          '      <block type="row_block" id="a"/>' +
+          '    </value>' +
+          '  </block>' +
+          '</xml>');
+      // Note how the x value is not at 20. This is because these are the coords
+      // of the wrapped block.
+      this.assertXml(xml,
+          '<xml xmlns="https://developers.google.com/blockly/xml">' +
+          '<block type="row_block" id="a" x="41" y="20"></block>' +
+          '</xml>');
+    });
+    test('Marker On Input', function() {
+      var xml = Blockly.Xml.textToDom(
+          '<xml xmlns="https://developers.google.com/blockly/xml">' +
+          '  <block type="row_block" id="a" x="20" y="20">' +
+          '    <value name="INPUT">' +
+          '      <block type="row_block" id="insertion"/>' +
+          '    </value>' +
+          '  </block>' +
+          '</xml>');
+      this.assertXml(xml,
+          '<xml xmlns="https://developers.google.com/blockly/xml">' +
+          '<block type="row_block" id="a" x="20" y="20"></block>' +
+          '</xml>');
+    });
+    test('Marker Middle of Row', function() {
+      var xml = Blockly.Xml.textToDom(
+          '<xml xmlns="https://developers.google.com/blockly/xml">' +
+          '  <block type="row_block" id="a" x="20" y="20">' +
+          '    <value name="INPUT">' +
+          '      <block type="row_block" id="insertion">' +
+          '        <value name="INPUT">' +
+          '          <block type="row_block" id="b"/>' +
+          '        </value>' +
+          '      </block>' +
+          '    </value>' +
+          '  </block>' +
+          '</xml>');
+      this.assertXml(xml,
+          '<xml xmlns="https://developers.google.com/blockly/xml">' +
+          '<block type="row_block" id="a" x="20" y="20">' +
+          '<value name="INPUT">' +
+          '<block type="row_block" id="b"></block>' +
+          '</value>' +
+          '</block>' +
+          '</xml>');
+    });
+    test('Marker Detatched', function() {
+      var xml = Blockly.Xml.textToDom(
+          '<xml xmlns="https://developers.google.com/blockly/xml">' +
+          '  <block type="stack_block" id="insertion"/>' +
+          '  <block type="stack_block" id="a" x="20" y="20"/>' +
+          '</xml>');
+      this.assertXml(xml,
+          '<xml xmlns="https://developers.google.com/blockly/xml">' +
+          '<block type="stack_block" id="a" x="20" y="20"></block>' +
+          '</xml>');
     });
   });
 });

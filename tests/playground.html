@@ -69,6 +69,7 @@
 <script src="./playgrounds/screenshot.js"></script>
 <script src="./plugins/toolbox_new.js"></script>
 <script src="./plugins/dragged_connection_manager.js"></script>
+<script src="./plugins/workspace_search.js"></script>
 
 <script>
 // Custom requires for the playground.
@@ -152,7 +153,7 @@ function start() {
         },
       });
 
-  // workspace.addPlugin('uiplugin', Blockly.WorkspaceSearch);
+  workspace.addPlugin('uiplugin', Blockly.WorkspaceSearch);
   workspace.configureContextMenu = configureContextMenu;
   addToolboxButtonCallbacks();
   // Restore previously displayed text.

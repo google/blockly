@@ -13,6 +13,7 @@
 <script src="../blocks/colour.js"></script>
 <script src="../blocks/variables.js"></script>
 <script src="../blocks/procedures.js"></script>
+<script src="./plugins/workspace_search.js"></script>
 <script>
 'use strict';
 var options = {
@@ -64,7 +65,8 @@ function startBlocklyInstance(suffix, rtl, horizontalLayout, position,
   options.toolbox = toolbox;
   options.horizontalLayout = horizontalLayout;
   options.toolboxPosition = position;
-  Blockly.inject('blocklyDiv' + suffix, options);
+  var ws = Blockly.inject('blocklyDiv' + suffix, options);
+  ws.addPlugin('uiplugin', Blockly.WorkspaceSearch);
 }
 </script>
 

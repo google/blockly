@@ -168,6 +168,14 @@ Blockly.WorkspaceSvg = function(options,
    * @type {boolean}
    */
   this.keyboardAccessibilityMode = false;
+
+  /**
+   * The object holding all plugins by type. The all type holds all plugins.
+   * @type {Object<string, Array<Object>>}
+   */
+  this.plugins = {
+    'all': []
+  };
 };
 Blockly.utils.object.inherits(Blockly.WorkspaceSvg, Blockly.Workspace);
 
@@ -448,6 +456,25 @@ Blockly.WorkspaceSvg.prototype.setCursorSvg = function(cursorSvg) {
  */
 Blockly.WorkspaceSvg.prototype.setMarkerSvg = function(markerSvg) {
   this.markerManager_.setMarkerSvg(markerSvg);
+};
+
+/**
+ * Add a plugin to the list of plugins for this workspace. If it is of certain
+ * types then add it to all lists that it applies to.
+ * @param {string} type The type of the plugin.
+ * @param {Object} pluginClass The constructor for a plugin.
+ * @param {Object} params The other params for the plugin.
+ */
+Blockly.WorkspaceSvg.prototype.addPlugin = function(type, pluginClass, params) {
+  if (!this.plugins[type]) {
+    this.plugins[type] = [];
+  }
+  var newPlugin = new pluginClass(this, params);
+  newPlugin.init();
+  this.plugins[type].push(newPlugin);
+
+  // List of all plugins for dispose.
+  this.plugins['all'].push(newPlugin);
 };
 
 /**
@@ -835,6 +862,11 @@ Blockly.WorkspaceSvg.prototype.dispose = function() {
     Blockly.unbindEvent_(this.resizeHandlerWrapper_);
     this.resizeHandlerWrapper_ = null;
   }
+
+  var allPlugins = this.plugins['all'];
+  for (var i = 0, plugin; (plugin = allPlugins[i]); i++) {
+    plugin.dispose();
+  }
 };
 
 /**
@@ -991,6 +1023,11 @@ Blockly.WorkspaceSvg.prototype.resize = function() {
   }
   if (this.scrollbar) {
     this.scrollbar.resize();
+  }
+  var uiPlugins = this.plugins['uiplugin'];
+  for (var i = 0; uiPlugins && i < uiPlugins.length; i++) {
+    var plugin = uiPlugins[i];
+    plugin.position();
   }
   this.updateScreenCalculations_();
 };
@@ -1176,6 +1213,11 @@ Blockly.WorkspaceSvg.prototype.setVisible = function(isVisible) {
   if (this.toolbox_) {
     // Currently does not support toolboxes in mutators.
     this.toolbox_.HtmlDiv.style.display = isVisible ? 'block' : 'none';
+  }
+  var uiPlugins = this.plugins['uiplugin'];
+  for (var i = 0; uiPlugins && i < uiPlugins.length; i++) {
+    var plugin = uiPlugins[i];
+    plugin.setVisible(isVisible);
   }
   if (isVisible) {
     var blocks = this.getAllBlocks(false);

@@ -39,6 +39,7 @@ goog.require('Blockly.WorkspaceDragSurfaceSvg');
 goog.require('Blockly.Xml');
 
 goog.requireType('Blockly.blockRendering.Renderer');
+goog.requireType('Blockly.IToolbox');
 
 
 /**
@@ -735,10 +736,8 @@ Blockly.WorkspaceSvg.prototype.createDom = function(opt_backgroundClass) {
   // Determine if there needs to be a category tree, or a simple list of
   // blocks.  This cannot be changed later, since the UI is very different.
   if (this.options.hasCategories) {
-    if (!Blockly.Toolbox) {
-      throw Error('Missing require for Blockly.Toolbox');
-    }
-    this.toolbox_ = new Blockly.Toolbox(this);
+    var toolboxClass = Blockly.registry.getClassFromOptions(this.options, 'toolbox');
+    this.toolbox_ = /** @type {!Blockly.IToolbox} */ (new toolboxClass(this));
   }
   if (this.grid_) {
     this.grid_.update(this.scale);
@@ -937,7 +936,7 @@ Blockly.WorkspaceSvg.prototype.getFlyout = function(opt_own) {
 
 /**
  * Getter for the toolbox associated with this workspace, if one exists.
- * @return {Blockly.Toolbox} The toolbox on this workspace.
+ * @return {Blockly.IToolbox} The toolbox on this workspace.
  * @package
  */
 Blockly.WorkspaceSvg.prototype.getToolbox = function() {

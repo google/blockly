@@ -67,6 +67,8 @@
 <script src="blocks/test_blocks.js"></script>
 <script src="themes/test_themes.js"></script>
 <script src="./playgrounds/screenshot.js"></script>
+<script src="./plugins/toolbox_new.js"></script>
+<script src="./plugins/dragged_connection_manager.js"></script>
 
 <script>
 // Custom requires for the playground.
@@ -78,6 +80,7 @@ goog.require('Blockly.Themes.Modern');
 goog.require('Blockly.Themes.Zelos');
 goog.require('Blockly.thrasos.Renderer');
 goog.require('Blockly.zelos.Renderer');
+goog.require('Blockly.IToolbox');
 
 // Other.
 goog.require('Blockly.WorkspaceCommentSvg');
@@ -142,8 +145,14 @@ function start() {
             maxScale: 4,
             minScale: 0.25,
             scaleSpeed: 1.1
-          }
+          },
+        plugins: {
+          'toolbox': 'newToolbox',
+          'connectionManager': 'draggedConnections',
+        },
       });
+
+  // workspace.addPlugin('uiplugin', Blockly.WorkspaceSearch);
   workspace.configureContextMenu = configureContextMenu;
   addToolboxButtonCallbacks();
   // Restore previously displayed text.

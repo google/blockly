@@ -34,33 +34,6 @@ Blockly.blockRendering.rendererMap_ = {};
 Blockly.blockRendering.useDebugger = false;
 
 /**
- * Registers a new renderer.
- * @param {string} name The name of the renderer.
- * @param {!Function} rendererClass The new renderer class
- *     to register.
- * @throws {Error} if a renderer with the same name has already been registered.
- */
-Blockly.blockRendering.register = function(name, rendererClass) {
-  if (Blockly.blockRendering.rendererMap_[name]) {
-    throw Error('Renderer has already been registered.');
-  }
-  Blockly.blockRendering.rendererMap_[name] = rendererClass;
-};
-
-/**
- * Unregisters the renderer registered with the given name.
- * @param {string} name The name of the renderer.
- */
-Blockly.blockRendering.unregister = function(name) {
-  if (Blockly.blockRendering.rendererMap_[name]) {
-    delete Blockly.blockRendering.rendererMap_[name];
-  } else {
-    console.warn('No renderer mapping for name "' + name +
-        '" found to unregister');
-  }
-};
-
-/**
  * Turn on the blocks debugger.
  * @package
  */
@@ -86,11 +59,9 @@ Blockly.blockRendering.stopDebugger = function() {
  * @package
  */
 Blockly.blockRendering.init = function(name, theme, opt_rendererOverrides) {
-  if (!Blockly.blockRendering.rendererMap_[name]) {
-    throw Error('Renderer not registered: ', name);
-  }
+  var rendererClass = Blockly.registry.getClass('renderer', name);
   var renderer = (/** @type {!Blockly.blockRendering.Renderer} */ (
-    new Blockly.blockRendering.rendererMap_[name](name)));
+    new rendererClass(name)));
   renderer.init(theme, opt_rendererOverrides);
   return renderer;
 };

@@ -15,7 +15,7 @@ goog.provide('CustomFields.FieldTurtle');
 
 // You must require the abstract field class to inherit from.
 goog.require('Blockly.Field');
-goog.require('Blockly.fieldRegistry');
+goog.require('Blockly.registry');
 goog.require('Blockly.utils');
 goog.require('Blockly.utils.dom');
 goog.require('Blockly.utils.object');
@@ -529,7 +529,7 @@ CustomFields.FieldTurtle.prototype.fromXml = function(fieldElement) {
 
 // Blockly needs to know the JSON name of this field. Usually this is
 // registered at the bottom of the field class.
-Blockly.fieldRegistry.register('field_turtle', CustomFields.FieldTurtle);
+Blockly.registry.register('field', 'field_turtle', CustomFields.FieldTurtle);
 
 // Called by initView to create all of the SVGs. This is just used to keep
 // the code more organized.

@@ -17,7 +17,7 @@ goog.provide('Blockly.FieldDropdown');
 goog.require('Blockly.Events');
 goog.require('Blockly.Events.BlockChange');
 goog.require('Blockly.Field');
-goog.require('Blockly.fieldRegistry');
+goog.require('Blockly.registry');
 goog.require('Blockly.Menu');
 goog.require('Blockly.MenuItem');
 goog.require('Blockly.navigation');
@@ -743,4 +743,4 @@ Blockly.FieldDropdown.prototype.onBlocklyAction = function(action) {
 };
 
 
-Blockly.fieldRegistry.register('field_dropdown', Blockly.FieldDropdown);
+Blockly.registry.register('field', 'field_dropdown', Blockly.FieldDropdown);

@@ -236,4 +236,4 @@ CustomFields.FieldPitch.prototype.doClassValidation_ = function(opt_newValue) {
   return null;
 };
 
-Blockly.fieldRegistry.register('field_pitch', CustomFields.FieldPitch);
+Blockly.registry.register('field', 'field_pitch', CustomFields.FieldPitch);

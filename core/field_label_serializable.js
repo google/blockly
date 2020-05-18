@@ -14,7 +14,7 @@
 goog.provide('Blockly.FieldLabelSerializable');
 
 goog.require('Blockly.FieldLabel');
-goog.require('Blockly.fieldRegistry');
+goog.require('Blockly.registry');
 goog.require('Blockly.utils');
 goog.require('Blockly.utils.object');
 
@@ -65,5 +65,5 @@ Blockly.FieldLabelSerializable.prototype.EDITABLE = false;
  */
 Blockly.FieldLabelSerializable.prototype.SERIALIZABLE = true;
 
-Blockly.fieldRegistry.register(
+Blockly.registry.register('field',
     'field_label_serializable', Blockly.FieldLabelSerializable);

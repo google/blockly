@@ -14,6 +14,7 @@ goog.provide('Blockly.InsertionMarkerManager');
 
 goog.require('Blockly.blockAnimations');
 goog.require('Blockly.Events');
+goog.require('Blockly.registry');
 
 
 /**
@@ -681,3 +682,5 @@ Blockly.InsertionMarkerManager.prototype.getInsertionMarkers = function() {
   }
   return result;
 };
+
+Blockly.registry.register('connectionManager', 'builtin', Blockly.InsertionMarkerManager);

@@ -127,4 +127,4 @@ Blockly.zelos.Renderer.prototype.getConnectionPreviewMethod =
           .getConnectionPreviewMethod(closest, local, topBlock);
     };
 
-Blockly.registry.register('renderer', 'zelos', Blockly.zelos.Renderer);
+Blockly.blockRendering.register('zelos', Blockly.zelos.Renderer);

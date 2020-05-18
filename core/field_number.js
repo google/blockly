@@ -12,7 +12,7 @@
 
 goog.provide('Blockly.FieldNumber');
 
-goog.require('Blockly.registry');
+goog.require('Blockly.fieldRegistry');
 goog.require('Blockly.FieldTextInput');
 goog.require('Blockly.utils.aria');
 goog.require('Blockly.utils.object');
@@ -307,4 +307,4 @@ Blockly.FieldNumber.prototype.widgetCreate_ = function() {
   return htmlInput;
 };
 
-Blockly.registry.register('field', 'field_number', Blockly.FieldNumber);
+Blockly.fieldRegistry.register('field_number', Blockly.FieldNumber);

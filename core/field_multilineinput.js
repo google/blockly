@@ -272,4 +272,4 @@ Blockly.Css.register([
 ]);
 
 
-Blockly.fieldRegistry.register('field_multilinetext', Blockly.FieldMultilineInput);
+Blockly.registry.register('field', 'field_multilinetext', Blockly.FieldMultilineInput);

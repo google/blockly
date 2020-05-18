@@ -15,7 +15,7 @@ goog.provide('Blockly.FieldCheckbox');
 goog.require('Blockly.Events');
 goog.require('Blockly.Events.BlockChange');
 goog.require('Blockly.Field');
-goog.require('Blockly.fieldRegistry');
+goog.require('Blockly.registry');
 goog.require('Blockly.utils.dom');
 goog.require('Blockly.utils.object');
 goog.require('Blockly.utils.Size');
@@ -213,4 +213,4 @@ Blockly.FieldCheckbox.prototype.convertValueToBool_ = function(value) {
   }
 };
 
-Blockly.fieldRegistry.register('field_checkbox', Blockly.FieldCheckbox);
+Blockly.registry.register('field', 'field_checkbox', Blockly.FieldCheckbox);

@@ -17,7 +17,7 @@ goog.require('Blockly.DropDownDiv');
 goog.require('Blockly.Events');
 goog.require('Blockly.Events.BlockChange');
 goog.require('Blockly.Field');
-goog.require('Blockly.fieldRegistry');
+goog.require('Blockly.registry');
 goog.require('Blockly.navigation');
 goog.require('Blockly.utils.aria');
 goog.require('Blockly.utils.colour');
@@ -655,4 +655,4 @@ Blockly.Css.register([
   /* eslint-enable indent */
 ]);
 
-Blockly.fieldRegistry.register('field_colour', Blockly.FieldColour);
+Blockly.registry.register('field', 'field_colour', Blockly.FieldColour);

@@ -25,7 +25,7 @@ Blockly.fieldRegistry.typeMap_ = {};
 
 /**
  * Registers a field type.
- * Blockly.fieldRegistry.fromJson uses this registry to
+ * Blockly.registry.fieldFromJson uses this registry to
  * find the appropriate field type.
  * @param {string} type The field type name as used in the JSON definition.
  * @param {!{fromJson: Function}} fieldClass The field class containing a

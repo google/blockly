@@ -14,7 +14,7 @@ goog.provide('Blockly.FieldAngle');
 
 goog.require('Blockly.Css');
 goog.require('Blockly.DropDownDiv');
-goog.require('Blockly.fieldRegistry');
+goog.require('Blockly.registry');
 goog.require('Blockly.FieldTextInput');
 goog.require('Blockly.utils.dom');
 goog.require('Blockly.utils.math');
@@ -544,4 +544,4 @@ Blockly.Css.register([
   /* eslint-enable indent */
 ]);
 
-Blockly.fieldRegistry.register('field_angle', Blockly.FieldAngle);
+Blockly.registry.register('field', 'field_angle', Blockly.FieldAngle);

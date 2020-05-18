@@ -601,4 +601,4 @@ Blockly.FieldTextInput.prototype.getValueFromEditorText_ = function(text) {
   return text;
 };
 
-Blockly.registry.register('field', 'field_input', Blockly.FieldTextInput);
+Blockly.fieldRegistry.register('field_input', Blockly.FieldTextInput);

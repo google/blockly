@@ -529,7 +529,7 @@ CustomFields.FieldTurtle.prototype.fromXml = function(fieldElement) {
 
 // Blockly needs to know the JSON name of this field. Usually this is
 // registered at the bottom of the field class.
-Blockly.registry.register('field', 'field_turtle', CustomFields.FieldTurtle);
+Blockly.fieldRegistry.register('field_turtle', CustomFields.FieldTurtle);
 
 // Called by initView to create all of the SVGs. This is just used to keep
 // the code more organized.

@@ -13,7 +13,7 @@
 goog.provide('Blockly.FieldImage');
 
 goog.require('Blockly.Field');
-goog.require('Blockly.registry');
+goog.require('Blockly.fieldRegistry');
 goog.require('Blockly.utils');
 goog.require('Blockly.utils.dom');
 goog.require('Blockly.utils.object');
@@ -276,4 +276,4 @@ Blockly.FieldImage.prototype.getText_ = function() {
   return this.altText_;
 };
 
-Blockly.registry.register('field', 'field_image', Blockly.FieldImage);
+Blockly.fieldRegistry.register('field_image', Blockly.FieldImage);

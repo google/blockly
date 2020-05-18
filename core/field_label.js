@@ -14,7 +14,7 @@
 goog.provide('Blockly.FieldLabel');
 
 goog.require('Blockly.Field');
-goog.require('Blockly.registry');
+goog.require('Blockly.fieldRegistry');
 goog.require('Blockly.utils');
 goog.require('Blockly.utils.dom');
 goog.require('Blockly.utils.object');
@@ -123,4 +123,4 @@ Blockly.FieldLabel.prototype.setClass = function(cssClass) {
   this.class_ = cssClass;
 };
 
-Blockly.registry.register('field', 'field_label', Blockly.FieldLabel);
+Blockly.fieldRegistry.register('field_label', Blockly.FieldLabel);

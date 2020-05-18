@@ -16,6 +16,7 @@
  */
 goog.provide('Blockly.blockRendering');
 
+goog.require('Blockly.registry');
 goog.require('Blockly.utils.object');
 
 
@@ -33,6 +34,24 @@ Blockly.blockRendering.rendererMap_ = {};
  */
 Blockly.blockRendering.useDebugger = false;
 
+/**
+ * Registers a new renderer.
+ * @param {string} name The name of the renderer.
+ * @param {!Function} rendererClass The new renderer class
+ *     to register.
+ * @throws {Error} if a renderer with the same name has already been registered.
+ */
+Blockly.blockRendering.register = function(name, rendererClass) {
+  Blockly.registry.register('renderer', name, rendererClass);
+};
+
+/**
+ * Unregisters the renderer registered with the given name.
+ * @param {string} name The name of the renderer.
+ */
+Blockly.blockRendering.unregister = function(name) {
+  Blockly.registry.unregister('renderer', name);
+};
 /**
  * Turn on the blocks debugger.
  * @package

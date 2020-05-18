@@ -42,4 +42,4 @@ Blockly.thrasos.Renderer.prototype.makeRenderInfo_ = function(block) {
 };
 
 
-Blockly.registry.register('renderer', 'thrasos', Blockly.thrasos.Renderer);
+Blockly.blockRendering.register('thrasos', Blockly.thrasos.Renderer);

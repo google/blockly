@@ -135,4 +135,4 @@ Blockly.geras.Renderer.prototype.getHighlightConstants = function() {
     (this.highlightConstants_));
 };
 
-Blockly.registry.register('renderer', 'geras', Blockly.geras.Renderer);
+Blockly.blockRendering.register('geras', Blockly.geras.Renderer);

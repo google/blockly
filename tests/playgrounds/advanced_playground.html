@@ -152,11 +152,11 @@ function createWorkspace() {
 
   // Create main workspace.
   addGUIControls((options) => {
-    workspace = Blockly.inject('blocklyDiv', defaultOptions);
+    workspace = Blockly.inject('blocklyDiv', options);
     workspace.configureContextMenu = configureContextMenu;
     addToolboxButtonCallbacks();
     return workspace;
-  }, options);
+  }, defaultOptions);
 }
 
 function addToolboxButtonCallbacks() {

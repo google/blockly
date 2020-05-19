@@ -15,7 +15,7 @@ goog.provide('CustomFields.FieldTurtle');
 
 // You must require the abstract field class to inherit from.
 goog.require('Blockly.Field');
-goog.require('Blockly.registry');
+goog.require('Blockly.fieldRegistry');
 goog.require('Blockly.utils');
 goog.require('Blockly.utils.dom');
 goog.require('Blockly.utils.object');

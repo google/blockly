@@ -21,7 +21,7 @@ goog.require('Blockly.Events.BlockCreate');
 goog.require('Blockly.Events.BlockDelete');
 goog.require('Blockly.Events.BlockMove');
 goog.require('Blockly.Extensions');
-goog.require('Blockly.registry');
+goog.require('Blockly.fieldRegistry');
 goog.require('Blockly.Input');
 goog.require('Blockly.navigation');
 goog.require('Blockly.utils');

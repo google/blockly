@@ -65,5 +65,5 @@ Blockly.FieldLabelSerializable.prototype.EDITABLE = false;
  */
 Blockly.FieldLabelSerializable.prototype.SERIALIZABLE = true;
 
-Blockly.fieldRegistry.register('field_label_serializable',
-    Blockly.FieldLabelSerializable);
+Blockly.fieldRegistry.register(
+    'field_label_serializable', Blockly.FieldLabelSerializable);

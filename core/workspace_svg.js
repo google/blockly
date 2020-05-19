@@ -2576,6 +2576,7 @@ Blockly.WorkspaceSvg.prototype.setResizesEnabled = function(enabled) {
 Blockly.WorkspaceSvg.prototype.clear = function() {
   this.setResizesEnabled(false);
   Blockly.WorkspaceSvg.superClass_.clear.call(this);
+  this.topBoundingBoxes_ = [];
   this.setResizesEnabled(true);
 };
 

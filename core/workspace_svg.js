@@ -40,7 +40,7 @@ goog.require('Blockly.Xml');
 
 goog.requireType('Blockly.blockRendering.Renderer');
 goog.requireType('Blockly.IASTNodeLocationSvg');
-goog.requireType('Blockly.IBoundingBox');
+goog.requireType('Blockly.IBoundedElement');
 
 
 /**
@@ -172,11 +172,11 @@ Blockly.WorkspaceSvg = function(options,
   this.keyboardAccessibilityMode = false;
 
   /**
-   * The list of top-level bounding boxes on the workspace.
-   * @type {!Array.<!Blockly.IBoundingBox>}
+   * The list of top-level bounded elements on the workspace.
+   * @type {!Array.<!Blockly.IBoundedElement>}
    * @private
    */
-  this.topBoundingBoxes_ = [];
+  this.topBoundedElements_ = [];
 };
 Blockly.utils.object.inherits(Blockly.WorkspaceSvg, Blockly.Workspace);
 
@@ -1624,7 +1624,7 @@ Blockly.WorkspaceSvg.prototype.onMouseWheel_ = function(e) {
  *   bounding box containing the blocks on the workspace.
  */
 Blockly.WorkspaceSvg.prototype.getBlocksBoundingBox = function() {
-  var topElements = this.getTopBoundingBoxes();
+  var topElements = this.getTopBoundedElements();
   // There are no blocks, return empty rectangle.
   if (!topElements.length) {
     return new Blockly.utils.Rect(0, 0, 0, 0);
@@ -2500,7 +2500,7 @@ Blockly.WorkspaceSvg.prototype.getTopBlocks = function(ordered) {
  * @param {!Blockly.Block} block Block to add.
  */
 Blockly.WorkspaceSvg.prototype.addTopBlock = function(block) {
-  this.addTopBoundingBox(/** @type {!Blockly.BlockSvg} */ (block));
+  this.addTopBoundedElement(/** @type {!Blockly.BlockSvg} */ (block));
   Blockly.WorkspaceSvg.superClass_.addTopBlock.call(this, block);
 };
 
@@ -2509,7 +2509,7 @@ Blockly.WorkspaceSvg.prototype.addTopBlock = function(block) {
  * @param {!Blockly.Block} block Block to remove.
  */
 Blockly.WorkspaceSvg.prototype.removeTopBlock = function(block) {
-  this.removeTopBoundingBox(/** @type {!Blockly.BlockSvg} */ (block));
+  this.removeTopBoundedElement(/** @type {!Blockly.BlockSvg} */ (block));
   Blockly.WorkspaceSvg.superClass_.removeTopBlock.call(this, block);
 };
 
@@ -2518,7 +2518,7 @@ Blockly.WorkspaceSvg.prototype.removeTopBlock = function(block) {
  * @param {!Blockly.WorkspaceComment} comment comment to add.
  */
 Blockly.WorkspaceSvg.prototype.addTopComment = function(comment) {
-  this.addTopBoundingBox(
+  this.addTopBoundedElement(
       /** @type {!Blockly.WorkspaceCommentSvg} */ (comment));
   Blockly.WorkspaceSvg.superClass_.addTopComment.call(this, comment);
 };
@@ -2528,33 +2528,33 @@ Blockly.WorkspaceSvg.prototype.addTopComment = function(comment) {
  * @param {!Blockly.WorkspaceComment} comment comment to remove.
  */
 Blockly.WorkspaceSvg.prototype.removeTopComment = function(comment) {
-  this.removeTopBoundingBox(
+  this.removeTopBoundedElement(
       /** @type {!Blockly.WorkspaceCommentSvg} */ (comment));
   Blockly.WorkspaceSvg.superClass_.removeTopComment.call(this, comment);
 };
 
 /**
- * Adds a bounding box to the list of top bounding boxes.
- * @param {!Blockly.IBoundingBox} element Bounding box to add.
+ * Adds a bounded element to the list of top bounded elements.
+ * @param {!Blockly.IBoundedElement} element Bounded element to add.
  */
-Blockly.WorkspaceSvg.prototype.addTopBoundingBox = function(element) {
-  this.topBoundingBoxes_.push(element);
+Blockly.WorkspaceSvg.prototype.addTopBoundedElement = function(element) {
+  this.topBoundedElements_.push(element);
 };
 
 /**
- * Removes a bounding box from the list of top bounding boxes.
- * @param {!Blockly.IBoundingBox} element Bounding box to remove.
+ * Removes a bounded element from the list of top bounded elements.
+ * @param {!Blockly.IBoundedElement} element Bounded element to remove.
  */
-Blockly.WorkspaceSvg.prototype.removeTopBoundingBox = function(element) {
-  Blockly.utils.arrayRemove(this.topBoundingBoxes_, element);
+Blockly.WorkspaceSvg.prototype.removeTopBoundedElement = function(element) {
+  Blockly.utils.arrayRemove(this.topBoundedElements_, element);
 };
 
 /**
- * Finds the top-level bounding box and returns them.
- * @return {!Array.<!Blockly.IBoundingBox>} The top-level bounding boxes.
+ * Finds the top-level bounded elements and returns them.
+ * @return {!Array.<!Blockly.IBoundedElement>} The top-level bounded elements.
  */
-Blockly.WorkspaceSvg.prototype.getTopBoundingBoxes = function() {
-  return [].concat(this.topBoundingBoxes_);
+Blockly.WorkspaceSvg.prototype.getTopBoundedElements = function() {
+  return [].concat(this.topBoundedElements_);
 };
 
 /**
@@ -2579,7 +2579,7 @@ Blockly.WorkspaceSvg.prototype.setResizesEnabled = function(enabled) {
 Blockly.WorkspaceSvg.prototype.clear = function() {
   this.setResizesEnabled(false);
   Blockly.WorkspaceSvg.superClass_.clear.call(this);
-  this.topBoundingBoxes_ = [];
+  this.topBoundedElements_ = [];
   this.setResizesEnabled(true);
 };
 

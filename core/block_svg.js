@@ -33,7 +33,7 @@ goog.require('Blockly.utils.object');
 goog.require('Blockly.utils.Rect');
 
 goog.requireType('Blockly.IASTNodeLocationSvg');
-goog.requireType('Blockly.IBoundingBox');
+goog.requireType('Blockly.IBoundedElement');
 goog.requireType('Blockly.ICopyable');
 
 
@@ -47,7 +47,7 @@ goog.requireType('Blockly.ICopyable');
  *     create a new ID.
  * @extends {Blockly.Block}
  * @implements {Blockly.IASTNodeLocationSvg}
- * @implements {Blockly.IBoundingBox}
+ * @implements {Blockly.IBoundedElement}
  * @implements {Blockly.ICopyable}
  * @constructor
  */

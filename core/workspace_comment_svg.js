@@ -25,7 +25,7 @@ goog.require('Blockly.utils.object');
 goog.require('Blockly.utils.Rect');
 goog.require('Blockly.WorkspaceComment');
 
-goog.requireType('Blockly.IBoundingBox');
+goog.requireType('Blockly.IBoundedElement');
 goog.requireType('Blockly.ICopyable');
 
 /**
@@ -37,7 +37,7 @@ goog.requireType('Blockly.ICopyable');
  * @param {string=} opt_id Optional ID.  Use this ID if provided, otherwise
  *     create a new ID.
  * @extends {Blockly.WorkspaceComment}
- * @implements {Blockly.IBoundingBox}
+ * @implements {Blockly.IBoundedElement}
  * @implements {Blockly.ICopyable}
  * @constructor
  */

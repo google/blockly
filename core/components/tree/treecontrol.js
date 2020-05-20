@@ -59,6 +59,20 @@ Blockly.tree.TreeControl = function(toolbox, config) {
    * @private
    */
   this.selectedItem_ = this;
+
+  /**
+   * A handler that's triggered before a node is selected.
+   * @type {?function(Blockly.tree.BaseNode):boolean}
+   * @private
+   */
+  this.onBeforeSelected_ = null;
+
+  /**
+   * A handler that's triggered before a node is selected.
+   * @type {?function(Blockly.tree.BaseNode, Blockly.tree.BaseNode):?}
+   * @private
+   */
+  this.onAfterSelected_ = null;
 };
 Blockly.utils.object.inherits(Blockly.tree.TreeControl, Blockly.tree.BaseNode);
 
@@ -122,11 +136,6 @@ Blockly.tree.TreeControl.prototype.getCalculatedIconClass = function() {
   var iconClass = this.iconClass;
   if (!expanded && iconClass) {
     return iconClass;
-  }
-
-  // fall back on default icons
-  if (expanded && this.config_.cssExpandedRootIcon) {
-    return this.config_.cssTreeIcon + ' ' + this.config_.cssExpandedRootIcon;
   }
   return '';
 };

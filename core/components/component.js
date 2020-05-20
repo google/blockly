@@ -84,6 +84,13 @@ Blockly.Component = function() {
    * @private
    */
   this.childIndex_ = {};
+
+  /**
+   * Whether or not the component has been disposed.
+   * @type {boolean}
+   * @private
+   */
+  this.disposed_ = false;
 };
 
 

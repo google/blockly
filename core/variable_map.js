@@ -378,7 +378,7 @@ Blockly.VariableMap.prototype.getAllVariables = function() {
 
 /**
  * Returns all of the variable names of all types.
- * @return {!Array<string>} All of the variable names of all types.
+ * @return {!Array.<string>} All of the variable names of all types.
  */
 Blockly.VariableMap.prototype.getAllVariableNames = function() {
   var allNames = [];

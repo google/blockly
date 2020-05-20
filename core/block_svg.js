@@ -32,6 +32,7 @@ goog.require('Blockly.utils.dom');
 goog.require('Blockly.utils.object');
 goog.require('Blockly.utils.Rect');
 
+goog.requireType('Blockly.IBoundingBox');
 goog.requireType('Blockly.ICopyable');
 
 /**
@@ -43,6 +44,7 @@ goog.requireType('Blockly.ICopyable');
  * @param {string=} opt_id Optional ID.  Use this ID if provided, otherwise
  *     create a new ID.
  * @extends {Blockly.Block}
+ * @implements {Blockly.IBoundingBox}
  * @implements {Blockly.ICopyable}
  * @constructor
  */

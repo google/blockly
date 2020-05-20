@@ -42,7 +42,7 @@ Blockly.blockRendering.MarkerSvg = function(workspace, constants, marker) {
   /**
    * The workspace, field, or block that the marker SVG element should be
    * attached to.
-   * @type {Blockly.WorkspaceSvg|Blockly.Field|Blockly.BlockSvg}
+   * @type {Blockly.IASTNodeLocationSvg}
    * @private
    */
   this.parent_ = null;
@@ -135,9 +135,8 @@ Blockly.blockRendering.MarkerSvg.prototype.createDom = function() {
 
 /**
  * Attaches the SVG root of the marker to the SVG group of the parent.
- * @param {!Blockly.WorkspaceSvg|!Blockly.Field|!Blockly.BlockSvg} newParent
- *    The workspace, field, or block that the marker SVG element should be
- *    attached to.
+ * @param {!Blockly.IASTNodeLocationSvg} newParent The workspace, field, or
+ *     block that the marker SVG element should be attached to.
  * @protected
  */
 Blockly.blockRendering.MarkerSvg.prototype.setParent_ = function(newParent) {

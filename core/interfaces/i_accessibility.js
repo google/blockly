@@ -5,13 +5,14 @@
  */
 
 /**
- * @fileoverview AST Node and navigation interfaces.
+ * @fileoverview AST Node and keyboard navigation interfaces.
  * @author samelh@google.com (Sam El-Husseini)
  */
 
 'use strict';
 
 goog.provide('Blockly.IASTNodeLocation');
+goog.provide('Blockly.IASTNodeLocationSvg');
 goog.provide('Blockly.IASTNodeLocationWithBlock');
 goog.provide('Blockly.IBlocklyActionable');
 
@@ -21,6 +22,26 @@ goog.provide('Blockly.IBlocklyActionable');
  */
 Blockly.IASTNodeLocation = function() {};
 
+/**
+ * An AST node location SVG interface.
+ * @interface
+ * @extends {Blockly.IASTNodeLocation}
+ */
+Blockly.IASTNodeLocationSvg = function() {};
+
+/**
+ * Add the marker svg to this node's svg group.
+ * @param {SVGElement} markerSvg The svg root of the marker to be added to the
+ *     svg group.
+ */
+Blockly.IASTNodeLocationSvg.prototype.setMarkerSvg;
+
+/**
+ * Add the cursor svg to this node's svg group.
+ * @param {SVGElement} cursorSvg The svg root of the cursor to be added to the
+ *     svg group.
+ */
+Blockly.IASTNodeLocationSvg.prototype.setCursorSvg;
 
 /**
  * An AST node location that has an associated block.

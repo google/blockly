@@ -39,6 +39,7 @@ goog.require('Blockly.WorkspaceDragSurfaceSvg');
 goog.require('Blockly.Xml');
 
 goog.requireType('Blockly.blockRendering.Renderer');
+goog.requireType('Blockly.IASTNodeLocationSvg');
 goog.requireType('Blockly.IBoundingBox');
 
 
@@ -51,6 +52,7 @@ goog.requireType('Blockly.IBoundingBox');
  * @param {Blockly.WorkspaceDragSurfaceSvg=} opt_wsDragSurface Drag surface for
  *     the workspace.
  * @extends {Blockly.Workspace}
+ * @implements {Blockly.IASTNodeLocationSvg}
  * @constructor
  */
 Blockly.WorkspaceSvg = function(options,

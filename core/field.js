@@ -1109,7 +1109,8 @@ Blockly.Field.prototype.setMarkerSvg = function(markerSvg) {
  * @protected
  */
 Blockly.Field.prototype.updateMarkers_ = function() {
-  var workspace = this.sourceBlock_.workspace;
+  var workspace =
+    /** @type {!Blockly.WorkspaceSvg} */ (this.sourceBlock_.workspace);
   if (workspace.keyboardAccessibilityMode && this.cursorSvg_) {
     workspace.getCursor().draw();
   }

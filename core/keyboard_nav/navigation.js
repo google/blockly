@@ -756,7 +756,7 @@ Blockly.navigation.error_ = function(msg) {
 
 /**
  * Handler for all the keyboard navigation events.
- * @param {!Event} e The keyboard event.
+ * @param {!KeyboardEvent} e The keyboard event.
  * @return {boolean} True if the key was handled false otherwise.
  */
 Blockly.navigation.onKeyPress = function(e) {

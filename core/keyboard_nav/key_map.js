@@ -101,7 +101,7 @@ Blockly.user.keyMap.getKeyByAction = function(action) {
 
 /**
  * Serialize the key event.
- * @param {!Event} e A key up event holding the key code.
+ * @param {!KeyboardEvent} e A key up event holding the key code.
  * @return {string} A string containing the serialized key event.
  * @package
  */

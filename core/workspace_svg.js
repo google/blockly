@@ -1298,8 +1298,9 @@ Blockly.WorkspaceSvg.prototype.pasteBlock_ = function(xmlBlock) {
     if (this.keyboardAccessibilityMode && markedNode &&
         markedNode.isConnection()) {
       var markedLocation =
-        /** @type {!Blockly.Connection} */ (markedNode.getLocation());
-      Blockly.navigation.insertBlock(block, markedLocation);
+        /** @type {!Blockly.RenderedConnection} */ (markedNode.getLocation());
+      Blockly.navigation.insertBlock(/** @type {!Blockly.BlockSvg} */ (block),
+          markedLocation);
       return;
     }
 

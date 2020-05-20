@@ -32,6 +32,13 @@ goog.require('Blockly.utils.KeyCodes');
 Blockly.tree.TreeNode = function(toolbox, content, config) {
   this.toolbox_ = toolbox;
   Blockly.tree.BaseNode.call(this, content, config);
+
+  /**
+   * A handler that's triggered when the size of node has changed.
+   * @type {?function():?}
+   * @private
+   */
+  this.onSizeChanged_ = null;
 };
 Blockly.utils.object.inherits(Blockly.tree.TreeNode, Blockly.tree.BaseNode);
 

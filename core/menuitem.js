@@ -83,6 +83,13 @@ Blockly.MenuItem = function(content, opt_value) {
   this.checked_ = false;
 
   /**
+   * Is this menu item currently highlighted.
+   * @type {boolean}
+   * @private
+   */
+  this.highlight_ = false;
+
+  /**
    * Bound function to call when this menu item is clicked.
    * @type {Function}
    * @private

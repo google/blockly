@@ -114,7 +114,7 @@ Blockly.Menu.prototype.addChild = function(menuItem) {
  * @param {!Element} container Element upon which to append this menu.
  */
 Blockly.Menu.prototype.render = function(container) {
-  var element = document.createElement('div');
+  var element = /** @type {!HTMLDivElement} */ (document.createElement('div'));
   // goog-menu is deprecated, use blocklyMenu.  May 2020.
   element.className = 'blocklyMenu goog-menu blocklyNonSelectable';
   element.tabIndex = 0;
@@ -215,7 +215,6 @@ Blockly.Menu.prototype.dispose = function() {
   for (var i = 0, menuItem; (menuItem = this.menuItems_[i]); i++) {
     menuItem.dispose();
   }
-  this.menuItems_length = 0;
   this.element_ = null;
 };
 

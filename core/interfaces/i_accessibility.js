@@ -23,7 +23,7 @@ Blockly.IASTNode = function() {};
 
 
 /**
- * An AST node location that has an associated block.
+ * An AST node that has an associated block.
  * @interface
  * @extends {Blockly.IASTNode}
  */

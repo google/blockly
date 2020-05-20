@@ -18,7 +18,7 @@ goog.require('Blockly.utils');
 goog.require('Blockly.utils.math');
 goog.require('Blockly.VariableMap');
 
-goog.requireType('Blockly.IASTNode');
+goog.requireType('Blockly.IASTNodeLocation');
 
 
 /**
@@ -26,7 +26,7 @@ goog.requireType('Blockly.IASTNode');
  * There is no UI, and can be created headlessly.
  * @param {!Blockly.Options=} opt_options Dictionary of options.
  * @constructor
- * @implements {Blockly.IASTNode}
+ * @implements {Blockly.IASTNodeLocation}
  */
 Blockly.Workspace = function(opt_options) {
   /** @type {string} */

@@ -16,7 +16,7 @@ goog.require('Blockly.Events');
 goog.require('Blockly.Events.BlockMove');
 goog.require('Blockly.Xml');
 
-goog.requireType('Blockly.IASTNodeWithBlock');
+goog.requireType('Blockly.IASTNodeLocationWithBlock');
 
 
 /**
@@ -24,7 +24,7 @@ goog.requireType('Blockly.IASTNodeWithBlock');
  * @param {!Blockly.Block} source The block establishing this connection.
  * @param {number} type The type of the connection.
  * @constructor
- * @implements {Blockly.IASTNodeWithBlock}
+ * @implements {Blockly.IASTNodeLocationWithBlock}
  */
 Blockly.Connection = function(source, type) {
   /**

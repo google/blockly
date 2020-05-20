@@ -24,7 +24,7 @@ goog.require('Blockly.utils.style');
 goog.require('Blockly.utils.userAgent');
 
 goog.requireType('Blockly.blockRendering.ConstantProvider');
-goog.requireType('Blockly.IASTNodeWithBlock');
+goog.requireType('Blockly.IASTNodeLocationWithBlock');
 goog.requireType('Blockly.IBlocklyActionable');
 
 
@@ -38,7 +38,7 @@ goog.requireType('Blockly.IBlocklyActionable');
  *    the individual field's documentation for a list of properties this
  *    parameter supports.
  * @constructor
- * @implements {Blockly.IASTNodeWithBlock}
+ * @implements {Blockly.IASTNodeLocationWithBlock}
  * @implements {Blockly.IBlocklyActionable}
  */
 Blockly.Field = function(value, opt_validator, opt_config) {

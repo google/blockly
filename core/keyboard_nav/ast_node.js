@@ -14,8 +14,8 @@ goog.provide('Blockly.ASTNode');
 
 goog.require('Blockly.utils.Coordinate');
 
-goog.requireType('Blockly.IASTNode');
-goog.requireType('Blockly.IASTNodeWithBlock');
+goog.requireType('Blockly.IASTNodeLocation');
+goog.requireType('Blockly.IASTNodeLocationWithBlock');
 
 
 /**
@@ -252,7 +252,7 @@ Blockly.ASTNode.prototype.processParams_ = function(params) {
  * Gets the value pointed to by this node.
  * It is the callers responsibility to check the node type to figure out what
  * type of object they get back from this.
- * @return {!Blockly.IASTNode} The current field, connection, workspace, or
+ * @return {!Blockly.IASTNodeLocation} The current field, connection, workspace, or
  *     block the cursor is on.
  */
 Blockly.ASTNode.prototype.getLocation = function() {
@@ -411,7 +411,7 @@ Blockly.ASTNode.prototype.findPrevForField_ = function() {
 Blockly.ASTNode.prototype.navigateBetweenStacks_ = function(forward) {
   var curLocation = this.getLocation();
   if (!(curLocation instanceof Blockly.Block)) {
-    curLocation = /** @type {!Blockly.IASTNodeWithBlock} */ (
+    curLocation = /** @type {!Blockly.IASTNodeLocationWithBlock} */ (
       curLocation).getSourceBlock();
   }
   if (!curLocation || !curLocation.workspace) {
@@ -517,7 +517,7 @@ Blockly.ASTNode.prototype.getSourceBlock = function() {
   } else if (this.getType() === Blockly.ASTNode.types.WORKSPACE) {
     return null;
   } else {
-    return /** @type {Blockly.IASTNodeWithBlock} */ (
+    return /** @type {Blockly.IASTNodeLocationWithBlock} */ (
       this.getLocation()).getSourceBlock();
   }
 };

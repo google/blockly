@@ -30,7 +30,7 @@ goog.require('Blockly.utils.object');
 goog.require('Blockly.utils.string');
 goog.require('Blockly.Workspace');
 
-goog.requireType('Blockly.IASTNode');
+goog.requireType('Blockly.IASTNodeLocation');
 
 
 /**
@@ -42,7 +42,7 @@ goog.requireType('Blockly.IASTNode');
  * @param {string=} opt_id Optional ID.  Use this ID if provided, otherwise
  *     create a new ID.
  * @constructor
- * @implements {Blockly.IASTNode}
+ * @implements {Blockly.IASTNodeLocation}
  * @throws When block is not valid or block name is not allowed.
  */
 Blockly.Block = function(workspace, prototypeName, opt_id) {

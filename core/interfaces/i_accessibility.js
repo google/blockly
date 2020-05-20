@@ -11,29 +11,29 @@
 
 'use strict';
 
-goog.provide('Blockly.IASTNode');
-goog.provide('Blockly.IASTNodeWithBlock');
+goog.provide('Blockly.IASTNodeLocation');
+goog.provide('Blockly.IASTNodeLocationWithBlock');
 goog.provide('Blockly.IBlocklyActionable');
 
 /**
- * An AST node interface.
+ * An AST node location interface.
  * @interface
  */
-Blockly.IASTNode = function() {};
+Blockly.IASTNodeLocation = function() {};
 
 
 /**
- * An AST node that has an associated block.
+ * An AST node location that has an associated block.
  * @interface
- * @extends {Blockly.IASTNode}
+ * @extends {Blockly.IASTNodeLocation}
  */
-Blockly.IASTNodeWithBlock = function() {};
+Blockly.IASTNodeLocationWithBlock = function() {};
 
 /**
  * Get the source block associated with this node.
  * @return {Blockly.Block} The source block.
  */
-Blockly.IASTNodeWithBlock.prototype.getSourceBlock;
+Blockly.IASTNodeLocationWithBlock.prototype.getSourceBlock;
 
 
 /**

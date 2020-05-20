@@ -29,12 +29,15 @@ goog.require('Blockly.utils.dom');
 goog.require('Blockly.WorkspaceSvg');
 goog.require('Blockly.Xml');
 
+goog.requireType('Blockly.IBlocklyActionable');
+
 
 /**
  * Class for a flyout.
  * @param {!Blockly.Options} workspaceOptions Dictionary of options for the
  *     workspace.
  * @constructor
+ * @implements {Blockly.IBlocklyActionable}
  */
 Blockly.Flyout = function(workspaceOptions) {
   workspaceOptions.getMetrics = this.getMetrics_.bind(this);

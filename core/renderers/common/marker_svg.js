@@ -191,13 +191,15 @@ Blockly.blockRendering.MarkerSvg.prototype.draw = function(oldNode, curNode) {
  * @protected
  */
 Blockly.blockRendering.MarkerSvg.prototype.showAtLocation_ = function(curNode) {
+  var curNodeAsConnection =
+    /** @type {!Blockly.Connection} */ (curNode.getLocation());
   if (curNode.getType() == Blockly.ASTNode.types.BLOCK) {
     this.showWithBlock_(curNode);
   } else if (curNode.getType() == Blockly.ASTNode.types.OUTPUT) {
     this.showWithOutput_(curNode);
-  } else if (curNode.getLocation().type == Blockly.INPUT_VALUE) {
+  } else if (curNodeAsConnection.type == Blockly.INPUT_VALUE) {
     this.showWithInput_(curNode);
-  } else if (curNode.getLocation().type == Blockly.NEXT_STATEMENT) {
+  } else if (curNodeAsConnection.type == Blockly.NEXT_STATEMENT) {
     this.showWithNext_(curNode);
   } else if (curNode.getType() == Blockly.ASTNode.types.PREVIOUS) {
     this.showWithPrevious_(curNode);
@@ -330,8 +332,10 @@ Blockly.blockRendering.MarkerSvg.prototype.showWithInput_ = function(curNode) {
  * @protected
  */
 Blockly.blockRendering.MarkerSvg.prototype.showWithNext_ = function(curNode) {
-  var connection = curNode.getLocation();
-  var targetBlock = /** @type {Blockly.BlockSvg} */ (connection.getSourceBlock());
+  var connection =
+    /** @type {!Blockly.RenderedConnection} */ (curNode.getLocation());
+  var targetBlock =
+    /** @type {Blockly.BlockSvg} */ (connection.getSourceBlock());
   var x = 0;
   var y = connection.getOffsetInBlock().y;
   var width = targetBlock.getHeightWidth().width;
@@ -548,7 +552,8 @@ Blockly.blockRendering.MarkerSvg.prototype.fireMarkerEvent_ = function(
   var eventType = this.isCursor() ? 'cursorMove' : 'markerMove';
   var event = new Blockly.Events.Ui(curBlock, eventType, oldNode, curNode);
   if (curNode.getType() == Blockly.ASTNode.types.WORKSPACE) {
-    event.workspaceId = curNode.getLocation().id;
+    event.workspaceId =
+      (/** @type {!Blockly.Workspace} */ (curNode.getLocation())).id;
   }
   Blockly.Events.fire(event);
 };

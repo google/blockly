@@ -19,12 +19,15 @@ goog.require('Blockly.Marker');
 goog.require('Blockly.navigation');
 goog.require('Blockly.utils.object');
 
+goog.requireType('Blockly.IBlocklyActionable');
+
 
 /**
  * Class for a cursor.
  * A cursor controls how a user navigates the Blockly AST.
  * @constructor
  * @extends {Blockly.Marker}
+ * @implements {Blockly.IBlocklyActionable}
  */
 Blockly.Cursor = function() {
   Blockly.Cursor.superClass_.constructor.call(this);
@@ -144,7 +147,8 @@ Blockly.Cursor.prototype.onBlocklyAction = function(action) {
   // If we are on a field give it the option to handle the action
   if (this.getCurNode() &&
       this.getCurNode().getType() === Blockly.ASTNode.types.FIELD &&
-      this.getCurNode().getLocation().onBlocklyAction(action)) {
+      (/** @type {!Blockly.Field} */ (this.getCurNode().getLocation()))
+          .onBlocklyAction(action)) {
     return true;
   }
   switch (action.name) {

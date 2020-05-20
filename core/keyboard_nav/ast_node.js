@@ -14,6 +14,9 @@ goog.provide('Blockly.ASTNode');
 
 goog.require('Blockly.utils.Coordinate');
 
+goog.requireType('Blockly.IASTNode');
+goog.requireType('Blockly.IASTNodeWithBlock');
+
 
 /**
  * Class for an AST node.
@@ -23,7 +26,7 @@ goog.require('Blockly.utils.Coordinate');
  *     Must be in Blockly.ASTNode.types.
  * @param {!(Blockly.Block|Blockly.Connection|Blockly.Field|Blockly.Workspace)}
  *     location The position in the AST.
- * @param {!Object=} opt_params Optional dictionary of options.
+ * @param {!Blockly.ASTNode.Params=} opt_params Optional dictionary of options.
  * @constructor
  */
 Blockly.ASTNode = function(type, location, opt_params) {
@@ -53,8 +56,22 @@ Blockly.ASTNode = function(type, location, opt_params) {
    */
   this.location_ = location;
 
+  /**
+   * The coordinate on the workspace.
+   * @type {Blockly.utils.Coordinate}
+   * @private
+   */
+  this.wsCoordinate_ = null;
+
   this.processParams_(opt_params || null);
 };
+
+/**
+ * @typedef {{
+ *     wsCoordinate: Blockly.utils.Coordinate,
+ * }}
+ */
+Blockly.ASTNode.Params;
 
 /**
  * Object holding different types for an AST node.
@@ -219,7 +236,7 @@ Blockly.ASTNode.createTopNode = function(block) {
 
 /**
  * Parse the optional parameters.
- * @param {Object} params The user specified parameters.
+ * @param {?Blockly.ASTNode.Params} params The user specified parameters.
  * @private
  */
 Blockly.ASTNode.prototype.processParams_ = function(params) {
@@ -235,8 +252,8 @@ Blockly.ASTNode.prototype.processParams_ = function(params) {
  * Gets the value pointed to by this node.
  * It is the callers responsibility to check the node type to figure out what
  * type of object they get back from this.
- * @return {!(Blockly.Field|Blockly.Connection|Blockly.Block|Blockly.Workspace)}
- * The current field, connection, workspace, or block the cursor is on.
+ * @return {!Blockly.IASTNode} The current field, connection, workspace, or
+ *     block the cursor is on.
  */
 Blockly.ASTNode.prototype.getLocation = function() {
   return this.location_;
@@ -394,7 +411,8 @@ Blockly.ASTNode.prototype.findPrevForField_ = function() {
 Blockly.ASTNode.prototype.navigateBetweenStacks_ = function(forward) {
   var curLocation = this.getLocation();
   if (!(curLocation instanceof Blockly.Block)) {
-    curLocation = curLocation.getSourceBlock();
+    curLocation = /** @type {!Blockly.IASTNodeWithBlock} */ (
+      curLocation).getSourceBlock();
   }
   if (!curLocation || !curLocation.workspace) {
     return null;
@@ -499,7 +517,8 @@ Blockly.ASTNode.prototype.getSourceBlock = function() {
   } else if (this.getType() === Blockly.ASTNode.types.WORKSPACE) {
     return null;
   } else {
-    return this.getLocation().getSourceBlock();
+    return /** @type {Blockly.IASTNodeWithBlock} */ (
+      this.getLocation()).getSourceBlock();
   }
 };
 

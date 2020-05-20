@@ -38,7 +38,7 @@ Blockly.utils.object.inherits(Blockly.zelos.MarkerSvg,
  */
 Blockly.zelos.MarkerSvg.prototype.showWithInputOutput_ = function(curNode) {
   var block = /** @type {!Blockly.BlockSvg} */ (curNode.getSourceBlock());
-  var connection = curNode.getLocation();
+  var connection = /** @type {!Blockly.Connection} */ (curNode.getLocation());
   var offsetInBlock = connection.getOffsetInBlock();
 
   this.positionCircle_(offsetInBlock.x, offsetInBlock.y);

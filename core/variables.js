@@ -217,7 +217,7 @@ Blockly.Variables.generateUniqueName = function(workspace) {
  * will try to generate single letter names in the range a -> z (skip l). It
  * will start with the character passed to startChar.
  * @param {string} startChar The character to start the search at.
- * @param {!Array<string>} usedNames A list of all of the used names.
+ * @param {!Array.<string>} usedNames A list of all of the used names.
  * @return {string} A unique name that is not present in the usedNames array.
  */
 Blockly.Variables.generateUniqueNameFromOptions = function(startChar, usedNames) {

@@ -1753,7 +1753,7 @@ Blockly.Blocks['test_dropdowns_dynamic'] = {
 
 /**
  * An array of options for the dynamic dropdown.
- * @type {!Array<!Array>}
+ * @type {!Array.<!Array>}
  * @private
  */
 Blockly.TestBlocks.dynamicDropdownOptions_ = [];

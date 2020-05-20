@@ -454,7 +454,7 @@ Blockly.Flyout.prototype.show = function(flyoutDef) {
   // Parse the Array or NodeList passed in into an Array of
   // Blockly.utils.toolbox.Toolbox.
   var parsedContent = Blockly.utils.toolbox.convertToolboxToJSON(flyoutDef);
-  var flyoutInfo = /** @type {{contents:Array<Object>, gaps:Array<number>}} */
+  var flyoutInfo = /** @type {{contents:Array.<Object>, gaps:Array.<number>}} */
       (this.createFlyoutInfo_(parsedContent));
 
   this.setVisible(true);
@@ -495,7 +495,7 @@ Blockly.Flyout.prototype.show = function(flyoutDef) {
  * the flyout.
  * @param {Array.<Blockly.utils.toolbox.Toolbox>} parsedContent The array
  *   of objects to show in the flyout.
- * @return {{contents:Array<Object>, gaps:Array<number>}} The list of contents
+ * @return {{contents:Array.<Object>, gaps:Array.<number>}} The list of contents
  *   and gaps needed to lay out the flyout.
  * @private
  */

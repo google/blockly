@@ -104,7 +104,7 @@ Blockly.utils.toolbox.convertToolboxToJSON = function(toolboxDef) {
 
 /**
  * Convert the xml for a toolbox to JSON.
- * @param {!NodeList|!Node|!Array<Node>} toolboxDef The
+ * @param {!NodeList|!Node|!Array.<Node>} toolboxDef The
  *     definition of the toolbox in one of its many forms.
  * @return {!Array.<Blockly.utils.toolbox.Toolbox>} A list of objects in the
  *    toolbox.

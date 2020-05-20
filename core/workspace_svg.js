@@ -2493,7 +2493,7 @@ Blockly.WorkspaceSvg.prototype.getTopBlocks = function(ordered) {
 };
 
 /**
- * Add a block to the list of top blocks.
+ * Adds a block to the list of top blocks.
  * @param {!Blockly.Block} block Block to add.
  */
 Blockly.WorkspaceSvg.prototype.addTopBlock = function(block) {
@@ -2502,7 +2502,7 @@ Blockly.WorkspaceSvg.prototype.addTopBlock = function(block) {
 };
 
 /**
- * Remove a block from the list of top blocks.
+ * Removes a block from the list of top blocks.
  * @param {!Blockly.Block} block Block to remove.
  */
 Blockly.WorkspaceSvg.prototype.removeTopBlock = function(block) {
@@ -2511,7 +2511,7 @@ Blockly.WorkspaceSvg.prototype.removeTopBlock = function(block) {
 };
 
 /**
- * Add a comment to the list of top comments.
+ * Adds a comment to the list of top comments.
  * @param {!Blockly.WorkspaceComment} comment comment to add.
  */
 Blockly.WorkspaceSvg.prototype.addTopComment = function(comment) {
@@ -2521,7 +2521,7 @@ Blockly.WorkspaceSvg.prototype.addTopComment = function(comment) {
 };
 
 /**
- * Remove a comment from the list of top comments.
+ * Removes a comment from the list of top comments.
  * @param {!Blockly.WorkspaceComment} comment comment to remove.
  */
 Blockly.WorkspaceSvg.prototype.removeTopComment = function(comment) {
@@ -2531,7 +2531,7 @@ Blockly.WorkspaceSvg.prototype.removeTopComment = function(comment) {
 };
 
 /**
- * Add a bounding box to the list of top bounding boxes.
+ * Adds a bounding box to the list of top bounding boxes.
  * @param {!Blockly.IBoundingBox} element Bounding box to add.
  */
 Blockly.WorkspaceSvg.prototype.addTopBoundingBox = function(element) {
@@ -2539,7 +2539,7 @@ Blockly.WorkspaceSvg.prototype.addTopBoundingBox = function(element) {
 };
 
 /**
- * Remove a bounding box from the list of top bounding boxes.
+ * Removes a bounding box from the list of top bounding boxes.
  * @param {!Blockly.IBoundingBox} element Bounding box to remove.
  */
 Blockly.WorkspaceSvg.prototype.removeTopBoundingBox = function(element) {

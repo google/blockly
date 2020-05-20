@@ -357,7 +357,7 @@ Blockly.ASTNode.prototype.findPrevForInput_ = function() {
   var block = parentInput.getSourceBlock();
   var curIdx = block.inputList.indexOf(parentInput);
   for (var i = curIdx, input; (input = block.inputList[i]); i--) {
-    if (input.connection && input !== input) {
+    if (input.connection && input !== parentInput) {
       return Blockly.ASTNode.createInputNode(input);
     }
     var fieldRow = input.fieldRow;

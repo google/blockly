@@ -1,4 +1,5 @@
 /**
+ *
  * @license
  * Copyright 2019 Google LLC
  * SPDX-License-Identifier: Apache-2.0
@@ -42,7 +43,7 @@ Blockly.blockRendering.useDebugger = false;
  * @throws {Error} if a renderer with the same name has already been registered.
  */
 Blockly.blockRendering.register = function(name, rendererClass) {
-  Blockly.registry.register(Blockly.registry.types.RENDERER, name,
+  Blockly.registry.register(Blockly.registry.Type.RENDERER, name,
       rendererClass);
 };
 
@@ -51,7 +52,7 @@ Blockly.blockRendering.register = function(name, rendererClass) {
  * @param {string} name The name of the renderer.
  */
 Blockly.blockRendering.unregister = function(name) {
-  Blockly.registry.unregister(Blockly.registry.types.RENDERER, name);
+  Blockly.registry.unregister(Blockly.registry.Type.RENDERER, name);
 };
 /**
  * Turn on the blocks debugger.
@@ -78,8 +79,10 @@ Blockly.blockRendering.stopDebugger = function() {
  *     Already initialized.
  * @package
  */
+
 Blockly.blockRendering.init = function(name, theme, opt_rendererOverrides) {
-  var rendererClass = Blockly.registry.getClass(Blockly.registry.types.RENDERER, name);
+  var rendererClass = Blockly.registry.getClass(
+      Blockly.registry.Type.RENDERER, name);
   var renderer = new rendererClass(name);
   renderer.init(theme, opt_rendererOverrides);
   return renderer;

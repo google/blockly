@@ -22,14 +22,15 @@ goog.require('Blockly.registry');
  * Blockly.fieldRegistry.fromJson uses this registry to
  * find the appropriate field type.
  * @param {string} type The field type name as used in the JSON definition.
- * @param {!{fromJson: Function}} fieldClass The field class containing a
- *     fromJson function that can construct an instance of the field.
+ * @param {?function(new:Blockly.Field, ...?)} fieldClass The field class
+ *     containing a fromJson function that can construct an instance of the
+ *     field.
  * @throws {Error} if the type name is empty, the field is already
  *     registered, or the fieldClass is not an object containing a fromJson
  *     function.
  */
 Blockly.fieldRegistry.register = function(type, fieldClass) {
-  Blockly.registry.register(Blockly.registry.types.FIELD, type, fieldClass);
+  Blockly.registry.register(Blockly.registry.Type.FIELD, type, fieldClass);
 };
 
 /**
@@ -37,7 +38,7 @@ Blockly.fieldRegistry.register = function(type, fieldClass) {
  * @param {string} type The field type name as used in the JSON definition.
  */
 Blockly.fieldRegistry.unregister = function(type) {
-  Blockly.registry.unregister(Blockly.registry.types.FIELD, type);
+  Blockly.registry.unregister(Blockly.registry.Type.FIELD, type);
 };
 
 /**
@@ -51,8 +52,8 @@ Blockly.fieldRegistry.unregister = function(type) {
  * @package
  */
 Blockly.fieldRegistry.fromJson = function(options) {
-  var fieldClass = Blockly.registry.getClass(Blockly.registry.types.FIELD,
-      options['type']);
+  var fieldClass = /** @type {{fromJson:function(!Object):!Blockly.Field}} */ (
+    Blockly.registry.getClass(Blockly.registry.Type.FIELD, options['type']));
   if (!fieldClass) {
     console.warn('Blockly could not create a field of type ' + options['type'] +
       '. The field is probably not being registered. This could be because' +

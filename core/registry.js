@@ -24,25 +24,43 @@ goog.provide('Blockly.registry');
 Blockly.registry.typeMap_ = {};
 
 /**
- * Registry types.
- * @enum {string}
+ * A name with the type of the element stored in the generic.
+ * @param {string} name The name of the registry type.
+ * @constructor
+ * @template T
  */
-Blockly.registry.types = {
-  FIELD: 'field',
-  RENDERER: 'renderer'
+Blockly.registry.Type = function(name) {
+  /** @private {string} */
+  this.name_ = name;
 };
 
 /**
+ * Returns the name of the type.
+ * @return {string} The name.
+ * @override
+ */
+Blockly.registry.Type.prototype.toString = function() {
+  return this.name_;
+};
+
+/** @type {!Blockly.registry.Type<Blockly.blockRendering.Renderer>} */
+Blockly.registry.Type.RENDERER = new Blockly.registry.Type('renderer');
+
+/** @type {!Blockly.registry.Type<Blockly.Field>} */
+Blockly.registry.Type.FIELD = new Blockly.registry.Type('field');
+
+/**
  * Registers a class based on a type and name.
- * @param {!Blockly.registry.types} type The registry type for the class.
- *    (Ex. Field, Renderer)
- * @param {string} name The name given to the specific class.
- *    (Ex. field_angle, geras)
- * @param {Function} registryClass The class to register.
+ * @param {string|Blockly.registry.Type<T>} type The type of the plugin.
+ *     (eg: Field, Renderer)
+ * @param {string} name The plugin's name. (Ex. field_angle, geras)
+ * @param {?function(new:T, ...?)} registryClass The class to register.
  * @throws {Error} if the type or name is empty, a name with the given type has
- *    already been registered, or if the given class is not valid for it's type.
+ *     already been registered, or if the given class is not valid for it's type.
+ * @template T
  */
 Blockly.registry.register = function(type, name, registryClass) {
+  type = String(type);
   if ((typeof type != 'string') || (type.trim() == '')) {
     throw Error('Invalid type "' + type + '". The type must be a' +
       ' non-empty string.');
@@ -73,18 +91,18 @@ Blockly.registry.register = function(type, name, registryClass) {
 
 /**
  * Checks the given class for properties that are required based on the type.
- * @param {!Blockly.registry.types} type The registry type for the class.
- *    (Ex. Field, Renderer)
+ * @param {string} type The type of the plugin. (eg: Field, Renderer)
  * @param {Function} registryClass A class that we are checking for the required
  *    properties.
  * @private
  */
 Blockly.registry.validate_ = function(type, registryClass) {
   switch (type) {
-    case Blockly.registry.types.FIELD:
+    case String(Blockly.registry.Type.FIELD):
       Blockly.registry.validateProperties_(type, ['fromJson'], registryClass);
       break;
-    case Blockly.registry.types.RENDERER:
+    case String(Blockly.registry.Type.RENDERER):
+      // TODO: Figure out what methods to check here.
       Blockly.registry.validateProperties_(type, [], registryClass);
       break;
   }
@@ -92,12 +110,11 @@ Blockly.registry.validate_ = function(type, registryClass) {
 
 /**
  * Checks that the given class has all the given method names.
- * @param {!Blockly.registry.types} type The registry type for the class.
- *    (Ex. Field, Renderer)
+ * @param {string} type The type of the plugin. (eg: Field, Renderer)
  * @param {Array.<string>} requiredProperties The list of method names we expect the
- *    given class to have.
+ *     given class to have.
  * @param {Function} registryClass A class that we are checking for the required
- *    properties.
+ *     properties.
  * @throws {Error} if the class does not implement all of the method names.
  * @private
  */
@@ -114,12 +131,13 @@ Blockly.registry.validateProperties_ = function(type, requiredProperties, regist
 
 /**
  * Unregisters the class with the given type and name.
- * @param {!Blockly.registry.types} type The registry type for the class.
- *    (Ex. Field, Renderer)
- * @param {string} name The name given to the specific class.
- *    (Ex. field_angle, geras)
+ * @param {string|Blockly.registry.Type<T>} type The type of the plugin.
+ *     (eg: Field, Renderer)
+ * @param {string} name The plugin's name. (Ex. field_angle, geras)
+ * @template T
  */
 Blockly.registry.unregister = function(type, name) {
+  type = String(type);
   var typeRegistry = Blockly.registry.typeMap_[type.toLowerCase()];
   if (!typeRegistry) {
     console.warn('No type "' + type + '" found');
@@ -134,14 +152,15 @@ Blockly.registry.unregister = function(type, name) {
 
 /**
  * Get the class for the given name and type.
- * @param {!Blockly.registry.types} type The registry type for the class.
- *    (Ex. Field, Renderer)
- * @param {string} name The name given to the specific class.
- *    (Ex. field_angle, geras)
- * @return {Function} The class with the given name and type or null if none
- *    exists.
+ * @param {string|Blockly.registry.Type<T>} type The type of the plugin.
+ *     (eg: Field, Renderer)
+ * @param {string} name The plugin's name. (Ex. field_angle, geras)
+ * @return {?function(new:T, ...?)} The class with the given name and type or
+ *     null if none exists.
+ * @template T
  */
 Blockly.registry.getClass = function(type, name) {
+  type = String(type);
   var typeRegistry = Blockly.registry.typeMap_[type.toLowerCase()];
   if (!typeRegistry) {
     console.warn('No type "' + type + '" found');

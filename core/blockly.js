@@ -26,6 +26,7 @@ goog.require('Blockly.Tooltip');
 goog.require('Blockly.Touch');
 goog.require('Blockly.utils');
 goog.require('Blockly.utils.colour');
+goog.require('Blockly.utils.Size');
 goog.require('Blockly.Variables');
 goog.require('Blockly.WidgetDiv');
 goog.require('Blockly.WorkspaceSvg');
@@ -107,13 +108,11 @@ Blockly.EventData;
 /**
  * Returns the dimensions of the specified SVG image.
  * @param {!SVGElement} svg SVG image.
- * @return {!Object} Contains width and height properties.
+ * @return {!Blockly.utils.Size} Contains width and height properties.
  */
 Blockly.svgSize = function(svg) {
-  return {
-    width: svg.cachedWidth_,
-    height: svg.cachedHeight_
-  };
+  svg = /** @type {?} */ (svg);
+  return new Blockly.utils.Size(svg.cachedWidth_, svg.cachedHeight_);
 };
 
 /**

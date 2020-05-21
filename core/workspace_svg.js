@@ -30,6 +30,7 @@ goog.require('Blockly.TouchGesture');
 goog.require('Blockly.utils');
 goog.require('Blockly.utils.Coordinate');
 goog.require('Blockly.utils.dom');
+goog.require('Blockly.utils.Metrics');
 goog.require('Blockly.utils.object');
 goog.require('Blockly.utils.Rect');
 goog.require('Blockly.utils.toolbox');
@@ -58,10 +59,10 @@ goog.requireType('Blockly.IBoundedElement');
 Blockly.WorkspaceSvg = function(options,
     opt_blockDragSurface, opt_wsDragSurface) {
   Blockly.WorkspaceSvg.superClass_.constructor.call(this, options);
-  /** @type {function():!Object} */
+  /** @type {function():!Blockly.utils.Metrics} */
   this.getMetrics =
       options.getMetrics || Blockly.WorkspaceSvg.getTopLevelWorkspaceMetrics_;
-  /** @type {function(!Object):void} */
+  /** @type {function(!{x:number, y:number}):void} */
   this.setMetrics =
       options.setMetrics || Blockly.WorkspaceSvg.setTopLevelWorkspaceMetrics_;
 
@@ -1967,8 +1968,8 @@ Blockly.WorkspaceSvg.prototype.zoomCenter = function(type) {
     // when the size of the flyout increases) you need the center of the
     // *blockly div* to stay in the same pixel-position.
     // Note: This only works because of how scrollCenter positions blocks.
-    var x = metrics.svgWidth / 2;
-    var y = metrics.svgHeight / 2;
+    var x = metrics.svgWidth ? metrics.svgWidth / 2 : 0;
+    var y = metrics.svgHeight ? metrics.svgHeight / 2 : 0;
   } else {
     var x = (metrics.viewWidth / 2) + metrics.absoluteLeft;
     var y = (metrics.viewHeight / 2) + metrics.absoluteTop;
@@ -2217,11 +2218,10 @@ Blockly.WorkspaceSvg.prototype.scroll = function(x, y) {
     // the content's top-left to the view's top-left, matching the
     // directionality of the scrollbars.
 
-    // TODO (#2299): Change these to not use the internal ratio_ property.
     this.scrollbar.hScroll.setHandlePosition(-(x + metrics.contentLeft) *
-        this.scrollbar.hScroll.ratio_);
+        this.scrollbar.hScroll.ratio);
     this.scrollbar.vScroll.setHandlePosition(-(y + metrics.contentTop) *
-        this.scrollbar.vScroll.ratio_);
+        this.scrollbar.vScroll.ratio);
   }
   // We have to shift the translation so that when the canvas is at 0, 0 the
   // workspace origin is not underneath the toolbox.
@@ -2235,8 +2235,8 @@ Blockly.WorkspaceSvg.prototype.scroll = function(x, y) {
  * @param {Blockly.Toolbox|Blockly.Flyout} elem The element to get the
  *     dimensions of, or null.  It should be a toolbox or flyout, and should
  *     implement getWidth() and getHeight().
- * @return {!Object} An object containing width and height attributes, which
- *     will both be zero if elem did not exist.
+ * @return {!Blockly.utils.Size} An object containing width and height
+ *     attributes, which will both be zero if elem did not exist.
  * @private
  */
 Blockly.WorkspaceSvg.getDimensionsPx_ = function(elem) {
@@ -2246,10 +2246,7 @@ Blockly.WorkspaceSvg.getDimensionsPx_ = function(elem) {
     width = elem.getWidth();
     height = elem.getHeight();
   }
-  return {
-    width: width,
-    height: height
-  };
+  return new Blockly.utils.Size(width, height);
 };
 
 /**
@@ -2370,8 +2367,8 @@ Blockly.WorkspaceSvg.getContentDimensionsBounded_ = function(ws, svgSize) {
  * .flyoutHeight: Height of the flyout if it is always open.  Otherwise zero.
  * .toolboxPosition: Top, bottom, left or right. Use TOOLBOX_AT constants to
  *     compare.
- * @return {!Object} Contains size and position metrics of a top level
- *   workspace.
+ * @return {!Blockly.utils.Metrics} Contains size and position metrics of a top
+ *     level workspace.
  * @private
  * @this {Blockly.WorkspaceSvg}
  */
@@ -2441,11 +2438,10 @@ Blockly.WorkspaceSvg.getTopLevelWorkspaceMetrics_ = function() {
 
     toolboxWidth: toolboxDimensions.width,
     toolboxHeight: toolboxDimensions.height,
+    toolboxPosition: this.toolboxPosition,
 
     flyoutWidth: flyoutDimensions.width,
-    flyoutHeight: flyoutDimensions.height,
-
-    toolboxPosition: this.toolboxPosition
+    flyoutHeight: flyoutDimensions.height
   };
   return metrics;
 };

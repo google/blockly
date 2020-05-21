@@ -42,7 +42,8 @@ Blockly.blockRendering.useDebugger = false;
  * @throws {Error} if a renderer with the same name has already been registered.
  */
 Blockly.blockRendering.register = function(name, rendererClass) {
-  Blockly.registry.register('renderer', name, rendererClass);
+  Blockly.registry.register(Blockly.registry.types.RENDERER, name,
+      rendererClass);
 };
 
 /**
@@ -50,7 +51,7 @@ Blockly.blockRendering.register = function(name, rendererClass) {
  * @param {string} name The name of the renderer.
  */
 Blockly.blockRendering.unregister = function(name) {
-  Blockly.registry.unregister('renderer', name);
+  Blockly.registry.unregister(Blockly.registry.types.RENDERER, name);
 };
 /**
  * Turn on the blocks debugger.
@@ -78,9 +79,8 @@ Blockly.blockRendering.stopDebugger = function() {
  * @package
  */
 Blockly.blockRendering.init = function(name, theme, opt_rendererOverrides) {
-  var rendererClass = Blockly.registry.getClass('renderer', name);
-  var renderer = (/** @type {!Blockly.blockRendering.Renderer} */ (
-    new rendererClass(name)));
+  var rendererClass = Blockly.registry.getClass(Blockly.registry.types.RENDERER, name);
+  var renderer = new rendererClass(name);
   renderer.init(theme, opt_rendererOverrides);
   return renderer;
 };

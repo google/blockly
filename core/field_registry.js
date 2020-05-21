@@ -29,7 +29,7 @@ goog.require('Blockly.registry');
  *     function.
  */
 Blockly.fieldRegistry.register = function(type, fieldClass) {
-  Blockly.registry.register('field', type, fieldClass);
+  Blockly.registry.register(Blockly.registry.types.FIELD, type, fieldClass);
 };
 
 /**
@@ -37,7 +37,7 @@ Blockly.fieldRegistry.register = function(type, fieldClass) {
  * @param {string} type The field type name as used in the JSON definition.
  */
 Blockly.fieldRegistry.unregister = function(type) {
-  Blockly.registry.unregister('field', type);
+  Blockly.registry.unregister(Blockly.registry.types.FIELD, type);
 };
 
 /**
@@ -51,7 +51,8 @@ Blockly.fieldRegistry.unregister = function(type) {
  * @package
  */
 Blockly.fieldRegistry.fromJson = function(options) {
-  var fieldClass = Blockly.registry.getClass('field', options['type']);
+  var fieldClass = Blockly.registry.getClass(Blockly.registry.types.FIELD,
+      options['type']);
   if (!fieldClass) {
     console.warn('Blockly could not create a field of type ' + options['type'] +
       '. The field is probably not being registered. This could be because' +

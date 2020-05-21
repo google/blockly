@@ -28,38 +28,17 @@ suite('Field Registry', function() {
     test('Simple', function() {
       Blockly.fieldRegistry.register('field_custom_test', CustomFieldType);
     });
-    test('Empty String Key', function() {
-      chai.assert.throws(function() {
-        Blockly.fieldRegistry.register('', CustomFieldType);
-      }, 'Invalid name');
-    });
-    test('Class as Key', function() {
-      chai.assert.throws(function() {
-        Blockly.fieldRegistry.register(CustomFieldType, '');
-      }, 'Invalid name');
-    });
     test('fromJson as Key', function() {
       chai.assert.throws(function() {
         Blockly.fieldRegistry.register(CustomFieldType.fromJson, '');
       }, 'Invalid name');
-    });
-    test('Overwrite a Key', function() {
-      Blockly.fieldRegistry.register('field_custom_test', CustomFieldType);
-      chai.assert.throws(function() {
-        Blockly.fieldRegistry.register('field_custom_test', CustomFieldType);
-      }, 'already registered');
-    });
-    test('Null Value', function() {
-      chai.assert.throws(function() {
-        Blockly.fieldRegistry.register('field_custom_test', null);
-      }, 'fromJson function');
     });
     test('No fromJson', function() {
       var fromJson = CustomFieldType.fromJson;
       delete CustomFieldType.fromJson;
       chai.assert.throws(function() {
         Blockly.fieldRegistry.register('field_custom_test', CustomFieldType);
-      }, 'fromJson function');
+      }, 'requires the following properties "fromJson"');
       CustomFieldType.fromJson = fromJson;
     });
     test('fromJson not a function', function() {
@@ -67,7 +46,7 @@ suite('Field Registry', function() {
       CustomFieldType.fromJson = true;
       chai.assert.throws(function() {
         Blockly.fieldRegistry.register('field_custom_test', CustomFieldType);
-      }, 'fromJson function');
+      }, 'requires the following properties "fromJson"');
       CustomFieldType.fromJson = fromJson;
     });
   });

@@ -52,7 +52,7 @@ Blockly.registry.Type.FIELD = new Blockly.registry.Type('field');
 /**
  * Registers a class based on a type and name.
  * @param {string|Blockly.registry.Type<T>} type The type of the plugin.
- *     (eg: Field, Renderer)
+ *     (Ex: Field, Renderer)
  * @param {string} name The plugin's name. (Ex. field_angle, geras)
  * @param {?function(new:T, ...?)} registryClass The class to register.
  * @throws {Error} if the type or name is empty, a name with the given type has
@@ -60,7 +60,8 @@ Blockly.registry.Type.FIELD = new Blockly.registry.Type('field');
  * @template T
  */
 Blockly.registry.register = function(type, name, registryClass) {
-  type = String(type);
+  type = String(type).toLowerCase();
+  name = name.toLowerCase();
   if ((typeof type != 'string') || (type.trim() == '')) {
     throw Error('Invalid type "' + type + '". The type must be a' +
       ' non-empty string.');
@@ -73,25 +74,25 @@ Blockly.registry.register = function(type, name, registryClass) {
   if (!registryClass) {
     throw Error('Can not register a null value');
   }
-  var typeRegistry = Blockly.registry.typeMap_[type.toLowerCase()];
+  var typeRegistry = Blockly.registry.typeMap_[type];
   // If the type registry has not been created, create it.
   if (!typeRegistry) {
-    typeRegistry = Blockly.registry.typeMap_[type.toLowerCase()] = {};
+    typeRegistry = Blockly.registry.typeMap_[type] = {};
   }
 
   // Validate that the given class has all the required properties.
   Blockly.registry.validate_(type, registryClass);
 
   // If the name already exists throw an error.
-  if (typeRegistry[name.toLowerCase()]) {
+  if (typeRegistry[name]) {
     throw Error('Name "' + name + '" with type "' + type + '" already registered.');
   }
-  typeRegistry[name.toLowerCase()] = registryClass;
+  typeRegistry[name] = registryClass;
 };
 
 /**
  * Checks the given class for properties that are required based on the type.
- * @param {string} type The type of the plugin. (eg: Field, Renderer)
+ * @param {string} type The type of the plugin. (Ex: Field, Renderer)
  * @param {Function} registryClass A class that we are checking for the required
  *    properties.
  * @private
@@ -110,7 +111,7 @@ Blockly.registry.validate_ = function(type, registryClass) {
 
 /**
  * Checks that the given class has all the given method names.
- * @param {string} type The type of the plugin. (eg: Field, Renderer)
+ * @param {string} type The type of the plugin. (Ex: Field, Renderer)
  * @param {Array.<string>} requiredProperties The list of method names we expect the
  *     given class to have.
  * @param {Function} registryClass A class that we are checking for the required
@@ -137,8 +138,9 @@ Blockly.registry.validateProperties_ = function(type, requiredProperties, regist
  * @template T
  */
 Blockly.registry.unregister = function(type, name) {
-  type = String(type);
-  var typeRegistry = Blockly.registry.typeMap_[type.toLowerCase()];
+  type = String(type).toLowerCase();
+  name = name.toLowerCase();
+  var typeRegistry = Blockly.registry.typeMap_[type];
   if (!typeRegistry) {
     console.warn('No type "' + type + '" found');
     return;
@@ -147,7 +149,7 @@ Blockly.registry.unregister = function(type, name) {
     console.warn('No name "' + name + '" with type "' + type + '" found');
     return;
   }
-  delete Blockly.registry.typeMap_[type.toLowerCase()][name.toLowerCase()];
+  delete Blockly.registry.typeMap_[type][name];
 };
 
 /**
@@ -160,15 +162,16 @@ Blockly.registry.unregister = function(type, name) {
  * @template T
  */
 Blockly.registry.getClass = function(type, name) {
-  type = String(type);
-  var typeRegistry = Blockly.registry.typeMap_[type.toLowerCase()];
+  type = String(type).toLowerCase();
+  name = name.toLowerCase();
+  var typeRegistry = Blockly.registry.typeMap_[type];
   if (!typeRegistry) {
     console.warn('No type "' + type + '" found');
     return null;
   }
-  if (!typeRegistry[name.toLowerCase()]) {
+  if (!typeRegistry[name]) {
     console.warn('No name "' + name + '" with type "' + type + '" found');
     return null;
   }
-  return typeRegistry[name.toLowerCase()];
+  return typeRegistry[name];
 };

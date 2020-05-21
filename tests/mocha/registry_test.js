@@ -1,12 +1,12 @@
 /**
  * @license
- * Copyright 2019 Google LLC
+ * Copyright 2020 Google LLC
  * SPDX-License-Identifier: Apache-2.0
  */
 
 /**
- * @fileoverview Tests for Blockly.fieldRegistry
- * @author bekawestberg@gmail.com (Beka Westberg)
+ * @fileoverview Tests for Blockly.registry
+ * @author aschmiedt@google.com (Abby Schmiedt)
  */
 'use strict';
 

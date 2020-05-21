@@ -126,7 +126,7 @@ Blockly.registry.validateProperties_ = function(type, requiredProperties, regist
   });
   if (unimplemented.length) {
     throw Error('Type "' + type + '" requires the following properties "' +
-        unimplemented + '"');
+        unimplemented.join() + '"');
   }
 };
 

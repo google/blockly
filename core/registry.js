@@ -36,8 +36,9 @@ Blockly.registry.types = {
  * Registers a class based on a type and name.
  * @param {!Blockly.registry.types} type The registry type for the class.
  *    (Ex. Field, Renderer)
- * @param {string} name The name given to the specific class. (Ex. field_angle, geras)
- * @param {Function} registryClass The class.
+ * @param {string} name The name given to the specific class.
+ *    (Ex. field_angle, geras)
+ * @param {Function} registryClass The class to register.
  * @throws {Error} if the type or name is empty, a name with the given type has
  *    already been registered, or if the given class is not valid for it's type.
  */

@@ -2438,11 +2438,10 @@ Blockly.WorkspaceSvg.getTopLevelWorkspaceMetrics_ = function() {
 
     toolboxWidth: toolboxDimensions.width,
     toolboxHeight: toolboxDimensions.height,
+    toolboxPosition: this.toolboxPosition,
 
     flyoutWidth: flyoutDimensions.width,
-    flyoutHeight: flyoutDimensions.height,
-
-    toolboxPosition: this.toolboxPosition
+    flyoutHeight: flyoutDimensions.height
   };
   return metrics;
 };

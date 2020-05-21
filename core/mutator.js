@@ -416,14 +416,16 @@ Blockly.Mutator.prototype.getFlyoutMetrics_ = function() {
   // properties as features such as scroll and zoom are unsupported.
   var unsupported = 0;
   return {
-    viewHeight: this.workspaceHeight_,
-    viewWidth: this.workspaceWidth_ - this.workspace_.getFlyout().getWidth(),
     contentHeight: unsupported,
     contentWidth: unsupported,
-    viewTop: unsupported,
-    viewLeft: unsupported,
     contentTop: unsupported,
     contentLeft: unsupported,
+
+    viewHeight: this.workspaceHeight_,
+    viewWidth: this.workspaceWidth_ - this.workspace_.getFlyout().getWidth(),
+    viewTop: unsupported,
+    viewLeft: unsupported,
+
     absoluteTop: unsupported,
     absoluteLeft: this.workspace_.RTL ? 0 :
         this.workspace_.getFlyout().getWidth()

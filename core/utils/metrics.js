@@ -106,6 +106,12 @@ Blockly.utils.Metrics.prototype.toolboxWidth;
 Blockly.utils.Metrics.prototype.toolboxHeight;
 
 /**
+ * Top, bottom, left or right. Use TOOLBOX_AT constants to compare.
+ * @type {number|undefined}
+ */
+Blockly.utils.Metrics.prototype.toolboxPosition;
+
+/**
  * Width of the flyout if it is always open.  Otherwise zero.
  * @type {number|undefined}
  */
@@ -116,9 +122,3 @@ Blockly.utils.Metrics.prototype.flyoutWidth;
  * @type {number|undefined}
  */
 Blockly.utils.Metrics.prototype.flyoutHeight;
-
-/**
- * Top, bottom, left or right. Use TOOLBOX_AT constants to compare.
- * @type {number|undefined}
- */
-Blockly.utils.Metrics.prototype.toolboxPosition;

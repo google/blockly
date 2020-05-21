@@ -60,17 +60,17 @@ Blockly.registry.Type.FIELD = new Blockly.registry.Type('field');
  * @template T
  */
 Blockly.registry.register = function(type, name, registryClass) {
-  type = String(type).toLowerCase();
-  name = name.toLowerCase();
-  if ((typeof type != 'string') || (type.trim() == '')) {
+  if ((!(type instanceof Blockly.registry.Type) && typeof type != 'string') || String(type).trim() == '') {
     throw Error('Invalid type "' + type + '". The type must be a' +
-      ' non-empty string.');
+      ' non-empty string or a Blockly.registry.Type.');
   }
+  type = String(type).toLowerCase();
 
   if ((typeof name != 'string') || (name.trim() == '')) {
     throw Error('Invalid name "' + name + '". The name must be a' +
       ' non-empty string.');
   }
+  name = name.toLowerCase();
   if (!registryClass) {
     throw Error('Can not register a null value');
   }
@@ -102,10 +102,6 @@ Blockly.registry.validate_ = function(type, registryClass) {
     case String(Blockly.registry.Type.FIELD):
       Blockly.registry.validateProperties_(type, ['fromJson'], registryClass);
       break;
-    case String(Blockly.registry.Type.RENDERER):
-      // TODO: Figure out what methods to check here.
-      Blockly.registry.validateProperties_(type, [], registryClass);
-      break;
   }
 };
 
@@ -121,8 +117,9 @@ Blockly.registry.validate_ = function(type, registryClass) {
  */
 Blockly.registry.validateProperties_ = function(type, requiredProperties, registryClass) {
   var unimplemented = requiredProperties.filter(function(property) {
-    return !registryClass.hasOwnProperty(property) ||
-        (typeof registryClass[property] != 'function');
+    return !(registryClass[property] || registryClass.prototype[property]) ||
+        (typeof registryClass[property] != 'function' &&
+        typeof registryClass.prototype[property] != 'function');
   });
   if (unimplemented.length) {
     throw Error('Type "' + type + '" requires the following properties "' +

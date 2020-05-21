@@ -17,7 +17,8 @@ suite('Registry', function() {
   };
 
   teardown(function() {
-    if (Blockly.registry.typeMap_['test']['test_name']) {
+    if (Blockly.registry.typeMap_['test'] &&
+        Blockly.registry.typeMap_['test']['test_name']) {
       delete Blockly.registry.typeMap_['test']['test_name'];
     }
   });

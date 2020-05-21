@@ -378,7 +378,8 @@ Blockly.Mutator.prototype.workspaceChanged_ = function(e) {
     block.initSvg();
     block.render();
 
-    if (Blockly.getMainWorkspace().keyboardAccessibilityMode) {
+    if ((/** @type {!Blockly.WorkspaceSvg} */ (Blockly.getMainWorkspace()))
+        .keyboardAccessibilityMode) {
       Blockly.navigation.moveCursorOnBlockMutation(block);
     }
     var newMutationDom = block.mutationToDom();

@@ -223,7 +223,7 @@ suite('Connections', function() {
         workspace.clear();
         workspace.dispose();
 
-        var workspace = Blockly.inject('blocklyDiv');
+        workspace = Blockly.inject('blocklyDiv');
         func.call(context, workspace);
         workspace.clear();
         workspace.dispose();

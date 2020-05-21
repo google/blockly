@@ -100,6 +100,9 @@ Blockly.registry.register = function(type, name, registryClass) {
 Blockly.registry.validate_ = function(type, registryClass) {
   switch (type) {
     case String(Blockly.registry.Type.FIELD):
+      if (!(registryClass.prototype instanceof Blockly.Field)) {
+        throw Error('Type "' + type + '" is not an instance of Blockly.Field');
+      }
       Blockly.registry.validateProperties_(type, ['fromJson'], registryClass);
       break;
   }
@@ -117,9 +120,13 @@ Blockly.registry.validate_ = function(type, registryClass) {
  */
 Blockly.registry.validateProperties_ = function(type, requiredProperties, registryClass) {
   var unimplemented = requiredProperties.filter(function(property) {
-    return !(registryClass[property] || registryClass.prototype[property]) ||
-        (typeof registryClass[property] != 'function' &&
-        typeof registryClass.prototype[property] != 'function');
+    var isFunctionOnClass = registryClass[property] &&
+        typeof registryClass[property] == 'function';
+    var isFunctionOnPrototype = registryClass.prototype[property] &&
+        registryClass.prototype[property] == 'function';
+    // If the property is not a function on the class or the prototype add it
+    // to the list of unimplemented methods.
+    return !(isFunctionOnClass || isFunctionOnPrototype);
   });
   if (unimplemented.length) {
     throw Error('Type "' + type + '" requires the following properties "' +

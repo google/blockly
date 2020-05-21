@@ -47,10 +47,5 @@ suite('Registry', function() {
         Blockly.registry.register('test', 'field_custom_test', null);
       }, 'Can not register a null value');
     });
-    test('No required type', function() {
-      chai.assert.throws(function() {
-        Blockly.fieldRegistry.register('field_custom_test', TestClass, ['testMethod']);
-      }, 'requires the following properties "fromJson"');
-    });
   });
 });

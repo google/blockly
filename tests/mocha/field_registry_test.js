@@ -49,6 +49,14 @@ suite('Field Registry', function() {
       }, 'requires the following properties "fromJson"');
       CustomFieldType.fromJson = fromJson;
     });
+    test('Not a field', function() {
+      var fakeField = {
+        fromJson: true
+      };
+      chai.assert.throws(function() {
+        Blockly.fieldRegistry.register('field_custom_test', fakeField);
+      }, 'Type "field" is not an instance of Blockly.Field');
+    });
   });
   suite('Retrieval', function() {
     test('Simple', function() {

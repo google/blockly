@@ -314,7 +314,7 @@ Blockly.Gesture.prototype.updateIsDraggingFromFlyout_ = function() {
   }
   if (!this.flyout_.isScrollable() ||
       this.flyout_.isDragTowardWorkspace(this.currentDragDeltaXY_)) {
-    this.startWorkspace_ = this.flyout_.targetWorkspace_;
+    this.startWorkspace_ = this.flyout_.targetWorkspace;
     this.startWorkspace_.updateScreenCalculationsIfScrolled();
     // Start the event group now, so that the same event group is used for block
     // creation and block dragging.

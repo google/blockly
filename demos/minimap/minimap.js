@@ -35,7 +35,7 @@ Minimap.init = function(workspace, minimap) {
     // New code starts from here.
 
     // Get the absolutePosition.
-    var absolutePosition = (this.handlePosition_ / this.ratio_);
+    var absolutePosition = (this.handlePosition_ / this.ratio);
 
     // Firing the scroll change listener.
     Minimap.onScrollChange(absolutePosition, this.horizontal_);
@@ -50,7 +50,7 @@ Minimap.init = function(workspace, minimap) {
     // New code starts from here.
 
     // Get the absolutePosition.
-    var absolutePosition = (this.handlePosition_ / this.ratio_);
+    var absolutePosition = (this.handlePosition_ / this.ratio);
 
     // Firing the scroll change listener.
     Minimap.onScrollChange(absolutePosition, this.horizontal_);

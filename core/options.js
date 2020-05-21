@@ -15,8 +15,9 @@ goog.provide('Blockly.Options');
 goog.require('Blockly.Theme');
 goog.require('Blockly.Themes.Classic');
 goog.require('Blockly.user.keyMap');
-goog.require('Blockly.utils.userAgent');
+goog.require('Blockly.utils.Metrics');
 goog.require('Blockly.utils.toolbox');
+goog.require('Blockly.utils.userAgent');
 goog.require('Blockly.Xml');
 
 
@@ -185,15 +186,15 @@ Blockly.BlocklyOptions = function() {};
 
 /**
  * If set, sets the translation of the workspace to match the scrollbars.
- * @param {!Object} xyRatio Contains an x and/or y property which is a float
- *     between 0 and 1 specifying the degree of scrolling.
+ * @param {!{x:number,y:number}} xyRatio Contains an x and/or y property which
+ *     is a float between 0 and 1 specifying the degree of scrolling.
  * @return {void}
  */
 Blockly.Options.prototype.setMetrics;
 
 /**
  * Return an object with the metrics required to size the workspace.
- * @return {!Object} Contains size and position metrics.
+ * @return {!Blockly.utils.Metrics} Contains size and position metrics.
  */
 Blockly.Options.prototype.getMetrics;
 

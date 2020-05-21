@@ -29,6 +29,8 @@ goog.require('Blockly.utils.userAgent');
 goog.require('Blockly.WorkspaceDragSurfaceSvg');
 goog.require('Blockly.WorkspaceSvg');
 
+goog.requireType('Blockly.utils.Metrics');
+
 
 /**
  * Inject a Blockly editor into the specified container element (usually a div).

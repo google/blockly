@@ -27,6 +27,8 @@ goog.require('Blockly.utils.xml');
 goog.require('Blockly.WorkspaceSvg');
 goog.require('Blockly.Xml');
 
+goog.requireType('Blockly.utils.Metrics');
+
 
 /**
  * Class for a mutator dialog.
@@ -404,14 +406,20 @@ Blockly.Mutator.prototype.workspaceChanged_ = function(e) {
  * .viewWidth: Width of the visible rectangle,
  * .absoluteTop: Top-edge of view.
  * .absoluteLeft: Left-edge of view.
- * @return {!Object} Contains size and position metrics of mutator dialog's
- *     workspace.
+ * @return {!Blockly.utils.Metrics} Contains size and position metrics of
+ *     mutator dialog's workspace.
  * @private
  */
 Blockly.Mutator.prototype.getFlyoutMetrics_ = function() {
   return {
     viewHeight: this.workspaceHeight_,
     viewWidth: this.workspaceWidth_ - this.workspace_.getFlyout().getWidth(),
+    contentHeight: 0,
+    contentWidth: 0,
+    viewTop: 0,
+    viewLeft: 0,
+    contentTop: 0,
+    contentLeft: 0,
     absoluteTop: 0,
     absoluteLeft: this.workspace_.RTL ? 0 :
         this.workspace_.getFlyout().getWidth()

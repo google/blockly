@@ -248,7 +248,7 @@ Blockly.Input.prototype.setAlign = function(align) {
 /**
  * Changes the connection's shadow block.
  * @param {Element} shadow DOM representation of a block or null.
- * @returns {Blockly.Input} The input being modified (to allow chaining).
+ * @return {Blockly.Input} The input being modified (to allow chaining).
  */
 Blockly.Input.prototype.setShadowDom = function(shadow) {
   if (!this.connection) {

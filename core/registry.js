@@ -60,16 +60,24 @@ Blockly.registry.register = function(type, name, registryClass) {
     typeRegistry = Blockly.registry.typeMap_[type.toLowerCase()] = {};
   }
 
-  // Validate that the given class has all the required properties
+  // Validate that the given class has all the required properties.
   Blockly.registry.validate_(type, registryClass);
 
-  // If the name already exists throw an error
+  // If the name already exists throw an error.
   if (typeRegistry[name.toLowerCase()]) {
     throw Error('Name "' + name + '" with type "' + type + '" already registered.');
   }
   typeRegistry[name.toLowerCase()] = registryClass;
 };
 
+/**
+ * Checks the given class for properties that are required based on the type.
+ * @param {!Blockly.registry.types} type The registry type for the class.
+ *    (Ex. Field, Renderer)
+ * @param {Function} registryClass A class that we are checking for the required
+ *    properties.
+ * @private
+ */
 Blockly.registry.validate_ = function(type, registryClass) {
   switch (type) {
     case Blockly.registry.types.FIELD:
@@ -82,10 +90,33 @@ Blockly.registry.validate_ = function(type, registryClass) {
 };
 
 /**
+ * Checks that the given class has all the given method names.
+ * @param {!Blockly.registry.types} type The registry type for the class.
+ *    (Ex. Field, Renderer)
+ * @param {Array.<string>} requiredProperties The list of method names we expect the
+ *    given class to have.
+ * @param {Function} registryClass A class that we are checking for the required
+ *    properties.
+ * @throws {Error} if the class does not implement all of the method names.
+ * @private
+ */
+Blockly.registry.validateProperties_ = function(type, requiredProperties, registryClass) {
+  var unimplemented = requiredProperties.filter(function(property) {
+    return !registryClass.hasOwnProperty(property) ||
+        (typeof registryClass[property] != 'function');
+  });
+  if (unimplemented.length) {
+    throw Error('Type "' + type + '" requires the following properties "' +
+        unimplemented + '"');
+  }
+};
+
+/**
  * Unregisters the class with the given type and name.
  * @param {!Blockly.registry.types} type The registry type for the class.
  *    (Ex. Field, Renderer)
- * @param {string} name The name given to the specific class. (Ex. field_angle, geras)
+ * @param {string} name The name given to the specific class.
+ *    (Ex. field_angle, geras)
  */
 Blockly.registry.unregister = function(type, name) {
   var typeRegistry = Blockly.registry.typeMap_[type.toLowerCase()];
@@ -104,8 +135,10 @@ Blockly.registry.unregister = function(type, name) {
  * Get the class for the given name and type.
  * @param {!Blockly.registry.types} type The registry type for the class.
  *    (Ex. Field, Renderer)
- * @param {string} name The name given to the specific class. (Ex. field_angle, geras)
- * @return {Function} The class with the given name and type or null if none exists.
+ * @param {string} name The name given to the specific class.
+ *    (Ex. field_angle, geras)
+ * @return {Function} The class with the given name and type or null if none
+ *    exists.
  */
 Blockly.registry.getClass = function(type, name) {
   var typeRegistry = Blockly.registry.typeMap_[type.toLowerCase()];
@@ -118,25 +151,4 @@ Blockly.registry.getClass = function(type, name) {
     return null;
   }
   return typeRegistry[name.toLowerCase()];
-};
-
-/**
- * Checks that the given class has all the given method names.
- * @param {!Blockly.registry.types} type The registry type for the class.
- *    (Ex. Field, Renderer)
- * @param {Array.<string>} requiredProperties The list of method names we expect the
- *    given class to have.
- * @param {Function} registryClass A class that we are checking for the required
- *    properties.
- * @throws {Error} if the class does not implement all of the method names.
- */
-Blockly.registry.validateProperties_ = function(type, requiredProperties, registryClass) {
-  var unimplemented = requiredProperties.filter(function(property) {
-    return !registryClass.hasOwnProperty(property) ||
-        (typeof registryClass[property] != 'function');
-  });
-  if (unimplemented.length) {
-    throw Error('Type "' + type + '" requires the following properties "' +
-        unimplemented + '"');
-  }
 };

@@ -109,12 +109,12 @@ Blockly.ContextMenu.position_ = function(menu, e, rtl) {
   var viewportBBox = Blockly.utils.getViewportBBox();
   // This one is just a point, but we'll pretend that it's a rect so we can use
   // some helper functions.
-  var anchorBBox = {
-    top: e.clientY + viewportBBox.top,
-    bottom: e.clientY + viewportBBox.top,
-    left: e.clientX + viewportBBox.left,
-    right: e.clientX + viewportBBox.left
-  };
+  var anchorBBox = new Blockly.utils.Rect(
+      e.clientY + viewportBBox.top,
+      e.clientY + viewportBBox.top,
+      e.clientX + viewportBBox.left,
+      e.clientX + viewportBBox.left
+  );
 
   Blockly.ContextMenu.createWidget_(menu);
   var menuSize = menu.getSize();

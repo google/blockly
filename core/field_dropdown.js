@@ -69,14 +69,14 @@ Blockly.FieldDropdown = function(menuGenerator, opt_validator, opt_config) {
 
   /**
    * The prefix field label, of common words set after options are trimmed.
-   * @type {string}
+   * @type {?string}
    * @package
    */
   this.prefixField = null;
 
   /**
    * The suffix field label, of common words set after options are trimmed.
-   * @type {string}
+   * @type {?string}
    * @package
    */
   this.suffixField = null;

@@ -58,7 +58,8 @@ Blockly.IASTNodeLocationWithBlock.prototype.getSourceBlock;
 
 
 /**
- * An interface for an object that handles Blockly actions.
+ * An interface for an object that handles Blockly actions when keyboard
+ * navigation is enabled.
  * @interface
  */
 Blockly.IBlocklyActionable = function() {};

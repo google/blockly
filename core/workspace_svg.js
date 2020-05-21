@@ -40,6 +40,7 @@ goog.require('Blockly.WorkspaceDragSurfaceSvg');
 goog.require('Blockly.Xml');
 
 goog.requireType('Blockly.blockRendering.Renderer');
+goog.requireType('Blockly.IASTNodeLocationSvg');
 goog.requireType('Blockly.IBoundedElement');
 
 
@@ -52,6 +53,7 @@ goog.requireType('Blockly.IBoundedElement');
  * @param {Blockly.WorkspaceDragSurfaceSvg=} opt_wsDragSurface Drag surface for
  *     the workspace.
  * @extends {Blockly.Workspace}
+ * @implements {Blockly.IASTNodeLocationSvg}
  * @constructor
  */
 Blockly.WorkspaceSvg = function(options,
@@ -1299,8 +1301,9 @@ Blockly.WorkspaceSvg.prototype.pasteBlock_ = function(xmlBlock) {
     if (this.keyboardAccessibilityMode && markedNode &&
         markedNode.isConnection()) {
       var markedLocation =
-        /** @type {!Blockly.Connection} */ (markedNode.getLocation());
-      Blockly.navigation.insertBlock(block, markedLocation);
+        /** @type {!Blockly.RenderedConnection} */ (markedNode.getLocation());
+      Blockly.navigation.insertBlock(/** @type {!Blockly.BlockSvg} */ (block),
+          markedLocation);
       return;
     }
 

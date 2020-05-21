@@ -27,6 +27,8 @@ goog.require('Blockly.utils.object');
 goog.require('Blockly.utils.Rect');
 goog.require('Blockly.utils.toolbox');
 
+goog.requireType('Blockly.IBlocklyActionable');
+
 
 /**
  * Class for a Toolbox.
@@ -34,6 +36,7 @@ goog.require('Blockly.utils.toolbox');
  * @param {!Blockly.WorkspaceSvg} workspace The workspace in which to create new
  *     blocks.
  * @constructor
+ * @implements {Blockly.IBlocklyActionable}
  */
 Blockly.Toolbox = function(workspace) {
   /**

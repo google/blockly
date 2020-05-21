@@ -59,6 +59,12 @@ Blockly.RenderedConnection = function(source, type) {
    * @private
    */
   this.trackedState_ = Blockly.RenderedConnection.TrackedState.WILL_TRACK;
+
+  /**
+   * Connection this connection connects to.  Null if not connected.
+   * @type {Blockly.RenderedConnection}
+   */
+  this.targetConnection = null;
 };
 Blockly.utils.object.inherits(Blockly.RenderedConnection, Blockly.Connection);
 

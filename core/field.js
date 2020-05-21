@@ -24,6 +24,9 @@ goog.require('Blockly.utils.style');
 goog.require('Blockly.utils.userAgent');
 
 goog.requireType('Blockly.blockRendering.ConstantProvider');
+goog.requireType('Blockly.IASTNodeLocationSvg');
+goog.requireType('Blockly.IASTNodeLocationWithBlock');
+goog.requireType('Blockly.IBlocklyActionable');
 
 
 /**
@@ -36,6 +39,9 @@ goog.requireType('Blockly.blockRendering.ConstantProvider');
  *    the individual field's documentation for a list of properties this
  *    parameter supports.
  * @constructor
+ * @implements {Blockly.IASTNodeLocationSvg}
+ * @implements {Blockly.IASTNodeLocationWithBlock}
+ * @implements {Blockly.IBlocklyActionable}
  */
 Blockly.Field = function(value, opt_validator, opt_config) {
   /**
@@ -1105,7 +1111,8 @@ Blockly.Field.prototype.setMarkerSvg = function(markerSvg) {
  * @protected
  */
 Blockly.Field.prototype.updateMarkers_ = function() {
-  var workspace = this.sourceBlock_.workspace;
+  var workspace =
+    /** @type {!Blockly.WorkspaceSvg} */ (this.sourceBlock_.workspace);
   if (workspace.keyboardAccessibilityMode && this.cursorSvg_) {
     workspace.getCursor().draw();
   }

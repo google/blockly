@@ -661,10 +661,6 @@ Blockly.Xml.domToBlockHeadless_ = function(xmlBlock, workspace) {
         }
       }
     }
-    // Use the shadow block if there is no child block.
-    if (!childBlockElement && childShadowElement) {
-      childBlockElement = childShadowElement;
-    }
 
     var name = xmlChild.getAttribute('name');
     var xmlChildElement = /** @type {!Element} */ (xmlChild);
@@ -719,9 +715,6 @@ Blockly.Xml.domToBlockHeadless_ = function(xmlBlock, workspace) {
                        prototypeName);
           break;
         }
-        if (childShadowElement) {
-          input.connection.setShadowDom(childShadowElement);
-        }
         if (childBlockElement) {
           blockChild = Blockly.Xml.domToBlockHeadless_(childBlockElement,
               workspace);
@@ -734,11 +727,12 @@ Blockly.Xml.domToBlockHeadless_ = function(xmlBlock, workspace) {
                 'Child block does not have output or previous statement.');
           }
         }
+        // Set shadow after so we don't create a shadow we delete immediately.
+        if (childShadowElement) {
+          input.connection.setShadowDom(childShadowElement);
+        }
         break;
       case 'next':
-        if (childShadowElement && block.nextConnection) {
-          block.nextConnection.setShadowDom(childShadowElement);
-        }
         if (childBlockElement) {
           if (!block.nextConnection) {
             throw TypeError('Next statement does not exist.');
@@ -753,6 +747,10 @@ Blockly.Xml.domToBlockHeadless_ = function(xmlBlock, workspace) {
             throw TypeError('Next block does not have previous statement.');
           }
           block.nextConnection.connect(blockChild.previousConnection);
+        }
+        // Set shadow after so we don't create a shadow we delete immediately.
+        if (childShadowElement && block.nextConnection) {
+          block.nextConnection.setShadowDom(childShadowElement);
         }
         break;
       default:

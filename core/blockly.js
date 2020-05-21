@@ -159,7 +159,7 @@ Blockly.svgResize = function(workspace) {
 /**
  * Handle a key-down on SVG drawing surface. Does nothing if the main workspace
  * is not visible.
- * @param {!Event} e Key down event.
+ * @param {!KeyboardEvent} e Key down event.
  * @package
  */
 // TODO (https://github.com/google/blockly/issues/1998) handle cases where there

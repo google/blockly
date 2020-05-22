@@ -174,6 +174,9 @@ Blockly.Block = function(workspace, prototypeName, opt_id) {
    */
   this.hat = undefined;
 
+  /** @type {?boolean} */
+  this.rendered = null;
+
   /**
    * A count of statement inputs on the block.
    * @type {number}

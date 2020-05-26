@@ -37,6 +37,8 @@ goog.requireType('Blockly.IBlocklyActionable');
  *     blocks.
  * @constructor
  * @implements {Blockly.IBlocklyActionable}
+ * @implements {Blockly.IDeleteArea}
+ * @implements {Blockly.IRegistrable}
  */
 Blockly.Toolbox = function(workspace) {
   /**
@@ -206,7 +208,7 @@ Blockly.Toolbox.prototype.init = function() {
 
   this.config_['cssCollapsedFolderIcon'] =
       'blocklyTreeIconClosed' + (workspace.RTL ? 'Rtl' : 'Ltr');
-  this.renderTree(workspace.options.languageTree);
+  this.render(workspace.options.languageTree);
 };
 
 /**
@@ -215,7 +217,7 @@ Blockly.Toolbox.prototype.init = function() {
  *    containing information on the contents of the toolbox.
  * @package
  */
-Blockly.Toolbox.prototype.renderTree = function(toolboxDef) {
+Blockly.Toolbox.prototype.render = function(toolboxDef) {
   if (this.tree_) {
     this.tree_.dispose();  // Delete any existing content.
     this.lastCategory_ = null;

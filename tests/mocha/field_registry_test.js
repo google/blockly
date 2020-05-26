@@ -38,7 +38,7 @@ suite('Field Registry', function() {
       delete CustomFieldType.fromJson;
       chai.assert.throws(function() {
         Blockly.fieldRegistry.register('field_custom_test', CustomFieldType);
-      }, 'requires the following properties "fromJson"');
+      }, 'must have a fromJson function');
       CustomFieldType.fromJson = fromJson;
     });
     test('fromJson not a function', function() {
@@ -46,16 +46,8 @@ suite('Field Registry', function() {
       CustomFieldType.fromJson = true;
       chai.assert.throws(function() {
         Blockly.fieldRegistry.register('field_custom_test', CustomFieldType);
-      }, 'requires the following properties "fromJson"');
+      }, 'must have a fromJson function');
       CustomFieldType.fromJson = fromJson;
-    });
-    test('Not a field', function() {
-      var fakeField = {
-        fromJson: true
-      };
-      chai.assert.throws(function() {
-        Blockly.fieldRegistry.register('field_custom_test', fakeField);
-      }, 'Type "field" is not an instance of Blockly.Field');
     });
   });
   suite('Retrieval', function() {

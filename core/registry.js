@@ -100,37 +100,10 @@ Blockly.registry.register = function(type, name, registryClass) {
 Blockly.registry.validate_ = function(type, registryClass) {
   switch (type) {
     case String(Blockly.registry.Type.FIELD):
-      if (!(registryClass.prototype instanceof Blockly.Field)) {
-        throw Error('Type "' + type + '" is not an instance of Blockly.Field');
+      if (typeof registryClass['fromJson'] != 'function') {
+        throw Error('Type "' + type + '" must have a fromJson function');
       }
-      Blockly.registry.validateProperties_(type, ['fromJson'], registryClass);
       break;
-  }
-};
-
-/**
- * Checks that the given class has all the given method names.
- * @param {string} type The type of the plugin. (Ex: Field, Renderer)
- * @param {Array.<string>} requiredProperties The list of method names we expect the
- *     given class to have.
- * @param {Function} registryClass A class that we are checking for the required
- *     properties.
- * @throws {Error} if the class does not implement all of the method names.
- * @private
- */
-Blockly.registry.validateProperties_ = function(type, requiredProperties, registryClass) {
-  var unimplemented = requiredProperties.filter(function(property) {
-    var isFunctionOnClass = registryClass[property] &&
-        typeof registryClass[property] == 'function';
-    var isFunctionOnPrototype = registryClass.prototype[property] &&
-        registryClass.prototype[property] == 'function';
-    // If the property is not a function on the class or the prototype add it
-    // to the list of unimplemented methods.
-    return !(isFunctionOnClass || isFunctionOnPrototype);
-  });
-  if (unimplemented.length) {
-    throw Error('Type "' + type + '" requires the following properties "' +
-        unimplemented.join() + '"');
   }
 };
 

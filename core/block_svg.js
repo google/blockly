@@ -1135,22 +1135,22 @@ Blockly.BlockSvg.prototype.setWarningText = function(text, opt_id) {
     text = null;
   }
 
-  // Bubble up to add a warning on top-most collapsed block.
-  var parent = this.getSurroundParent();
-  var collapsedParent = null;
-  while (parent) {
-    if (parent.isCollapsed()) {
-      collapsedParent = parent;
-    }
-    parent = parent.getSurroundParent();
-  }
-  if (collapsedParent) {
-    collapsedParent.setWarningText(Blockly.Msg['COLLAPSED_WARNINGS_WARNING'],
-        Blockly.BlockSvg.COLLAPSED_WARNING_ID);
-  }
-
   var changedState = false;
   if (typeof text == 'string') {
+    // Bubble up to add a warning on top-most collapsed block.
+    var parent = this.getSurroundParent();
+    var collapsedParent = null;
+    while (parent) {
+      if (parent.isCollapsed()) {
+        collapsedParent = parent;
+      }
+      parent = parent.getSurroundParent();
+    }
+    if (collapsedParent) {
+      collapsedParent.setWarningText(Blockly.Msg['COLLAPSED_WARNINGS_WARNING'],
+          Blockly.BlockSvg.COLLAPSED_WARNING_ID);
+    }
+    
     if (!this.warning) {
       this.warning = new Blockly.Warning(this);
       changedState = true;

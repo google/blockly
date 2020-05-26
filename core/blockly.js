@@ -157,6 +157,11 @@ Blockly.svgResize = function(workspace) {
   }
   var width = div.offsetWidth;
   var height = div.offsetHeight;
+
+  if (width === 0 && height === 0) {
+    return;
+  }
+
   if (svg.cachedWidth_ != width) {
     svg.setAttribute('width', width + 'px');
     svg.cachedWidth_ = width;

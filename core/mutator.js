@@ -27,6 +27,8 @@ goog.require('Blockly.utils.xml');
 goog.require('Blockly.WorkspaceSvg');
 goog.require('Blockly.Xml');
 
+goog.requireType('Blockly.utils.Metrics');
+
 
 /**
  * Class for a mutator dialog.
@@ -378,7 +380,8 @@ Blockly.Mutator.prototype.workspaceChanged_ = function(e) {
     block.initSvg();
     block.render();
 
-    if (Blockly.getMainWorkspace().keyboardAccessibilityMode) {
+    if ((/** @type {!Blockly.WorkspaceSvg} */ (Blockly.getMainWorkspace()))
+        .keyboardAccessibilityMode) {
       Blockly.navigation.moveCursorOnBlockMutation(block);
     }
     var newMutationDom = block.mutationToDom();
@@ -404,15 +407,26 @@ Blockly.Mutator.prototype.workspaceChanged_ = function(e) {
  * .viewWidth: Width of the visible rectangle,
  * .absoluteTop: Top-edge of view.
  * .absoluteLeft: Left-edge of view.
- * @return {!Object} Contains size and position metrics of mutator dialog's
- *     workspace.
+ * @return {!Blockly.utils.Metrics} Contains size and position metrics of
+ *     mutator dialog's workspace.
  * @private
  */
 Blockly.Mutator.prototype.getFlyoutMetrics_ = function() {
+  // The mutator workspace only uses a subset of Blockly.utils.Metrics
+  // properties as features such as scroll and zoom are unsupported.
+  var unsupported = 0;
   return {
+    contentHeight: unsupported,
+    contentWidth: unsupported,
+    contentTop: unsupported,
+    contentLeft: unsupported,
+
     viewHeight: this.workspaceHeight_,
     viewWidth: this.workspaceWidth_ - this.workspace_.getFlyout().getWidth(),
-    absoluteTop: 0,
+    viewTop: unsupported,
+    viewLeft: unsupported,
+
+    absoluteTop: unsupported,
     absoluteLeft: this.workspace_.RTL ? 0 :
         this.workspace_.getFlyout().getWidth()
   };

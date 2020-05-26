@@ -67,6 +67,20 @@ Blockly.FieldDropdown = function(menuGenerator, opt_validator, opt_config) {
    */
   this.generatedOptions_ = null;
 
+  /**
+   * The prefix field label, of common words set after options are trimmed.
+   * @type {?string}
+   * @package
+   */
+  this.prefixField = null;
+
+  /**
+   * The suffix field label, of common words set after options are trimmed.
+   * @type {?string}
+   * @package
+   */
+  this.suffixField = null;
+
   this.trimOptions_();
 
   /**
@@ -373,8 +387,6 @@ Blockly.FieldDropdown.prototype.onItemSelected_ = function(menu, menuItem) {
  * @private
  */
 Blockly.FieldDropdown.prototype.trimOptions_ = function() {
-  this.prefixField = null;
-  this.suffixField = null;
   var options = this.menuGenerator_;
   if (!Array.isArray(options)) {
     return;

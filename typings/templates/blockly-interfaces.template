@@ -51,19 +51,6 @@ declare module Blockly {
     startHats?: boolean;
   }
 
-  interface Metrics {
-    absoluteLeft: number;
-    absoluteTop: number;
-    contentHeight: number;
-    contentLeft: number;
-    contentTop: number;
-    contentWidth: number;
-    viewHeight: number;
-    viewLeft: number;
-    viewTop: number;
-    viewWidth: number;
-  }
-
   /**
    * Set the Blockly locale.
    * Note: this method is only available in the npm release of Blockly.
@@ -71,4 +58,26 @@ declare module Blockly {
    *     language.
    */
   function setLocale(msg: {[key: string]: string;}): void;
+}
+
+declare module Blockly.utils {
+  interface Metrics {
+    viewHeight: number;
+    viewWidth: number;
+    contentHeight: number;
+    contentWidth: number;
+    viewTop: number;
+    viewLeft: number;
+    contentTop: number;
+    contentLeft: number;
+    absoluteTop: number;
+    absoluteLeft: number;
+    svgHeight?: number;
+    svgWidth?: number;
+    toolboxWidth?: number;
+    toolboxHeight?: number;
+    flyoutWidth?: number;
+    flyoutHeight?: number;
+    toolboxPosition?: number;
+  }
 }

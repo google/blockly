@@ -18,12 +18,15 @@ goog.require('Blockly.utils');
 goog.require('Blockly.utils.math');
 goog.require('Blockly.VariableMap');
 
+goog.requireType('Blockly.IASTNodeLocation');
+
 
 /**
  * Class for a workspace.  This is a data structure that contains blocks.
  * There is no UI, and can be created headlessly.
  * @param {!Blockly.Options=} opt_options Dictionary of options.
  * @constructor
+ * @implements {Blockly.IASTNodeLocation}
  */
 Blockly.Workspace = function(opt_options) {
   /** @type {string} */
@@ -167,7 +170,7 @@ Blockly.Workspace.prototype.sortObjects_ = function(a, b) {
 };
 
 /**
- * Add a block to the list of top blocks.
+ * Adds a block to the list of top blocks.
  * @param {!Blockly.Block} block Block to add.
  */
 Blockly.Workspace.prototype.addTopBlock = function(block) {
@@ -175,7 +178,7 @@ Blockly.Workspace.prototype.addTopBlock = function(block) {
 };
 
 /**
- * Remove a block from the list of top blocks.
+ * Removes a block from the list of top blocks.
  * @param {!Blockly.Block} block Block to remove.
  */
 Blockly.Workspace.prototype.removeTopBlock = function(block) {
@@ -251,7 +254,7 @@ Blockly.Workspace.prototype.getBlocksByType = function(type, ordered) {
 };
 
 /**
- * Add a comment to the list of top comments.
+ * Adds a comment to the list of top comments.
  * @param {!Blockly.WorkspaceComment} comment comment to add.
  * @package
  */
@@ -268,7 +271,7 @@ Blockly.Workspace.prototype.addTopComment = function(comment) {
 };
 
 /**
- * Remove a comment from the list of top comments.
+ * Removes a comment from the list of top comments.
  * @param {!Blockly.WorkspaceComment} comment comment to remove.
  * @package
  */
@@ -485,7 +488,7 @@ Blockly.Workspace.prototype.getAllVariables = function() {
 
 /**
  * Returns all variable names of all types.
- * @return {!Array<string>} List of all variable names of all types.
+ * @return {!Array.<string>} List of all variable names of all types.
  */
 Blockly.Workspace.prototype.getAllVariableNames = function() {
   return this.variableMap_.getAllVariableNames();

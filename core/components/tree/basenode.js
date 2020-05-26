@@ -114,7 +114,7 @@ Blockly.utils.object.inherits(Blockly.tree.BaseNode, Blockly.Component);
  *            cssExpandedFolderIcon:string,
  *            cssCollapsedFolderIcon:string,
  *            cssFileIcon:string,
- *            cssSelectedRow:string
+ *            cssSelectedRow:string,
  *          }}
  */
 Blockly.tree.BaseNode.Config;
@@ -193,7 +193,7 @@ Blockly.tree.BaseNode.prototype.initAccessibility = function() {
 Blockly.tree.BaseNode.prototype.createDom = function() {
   var element = document.createElement('div');
   element.appendChild(this.toDom());
-  this.setElementInternal(/** @type {!Element} */ (element));
+  this.setElementInternal(/** @type {!HTMLElement} */ (element));
 };
 
 
@@ -366,6 +366,16 @@ Blockly.tree.BaseNode.prototype.getChildren = function() {
   var children = [];
   this.forEachChild(function(child) { children.push(child); });
   return children;
+};
+
+/**
+ * Returns the node's parent, if any.
+ * @return {?Blockly.tree.BaseNode} The parent node.
+ * @protected
+ */
+Blockly.tree.BaseNode.prototype.getParent = function() {
+  return /** @type {Blockly.tree.BaseNode} */ (
+    Blockly.tree.BaseNode.superClass_.getParent.call(this));
 };
 
 /**
@@ -622,7 +632,7 @@ Blockly.tree.BaseNode.prototype.getBackgroundPosition = function() {
 };
 
 /**
- * @return {Element} The element for the tree node.
+ * @return {HTMLElement} The element for the tree node.
  * @override
  */
 Blockly.tree.BaseNode.prototype.getElement = function() {
@@ -631,7 +641,7 @@ Blockly.tree.BaseNode.prototype.getElement = function() {
     el = document.getElementById(this.getId());
     this.setElementInternal(el);
   }
-  return el;
+  return /** @type {!HTMLElement} */ (el);
 };
 
 /**

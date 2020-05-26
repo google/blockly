@@ -26,6 +26,7 @@ goog.require('Blockly.Tooltip');
 goog.require('Blockly.Touch');
 goog.require('Blockly.utils');
 goog.require('Blockly.utils.colour');
+goog.require('Blockly.utils.Size');
 goog.require('Blockly.Variables');
 goog.require('Blockly.WidgetDiv');
 goog.require('Blockly.WorkspaceSvg');
@@ -107,13 +108,11 @@ Blockly.EventData;
 /**
  * Returns the dimensions of the specified SVG image.
  * @param {!SVGElement} svg SVG image.
- * @return {!Object} Contains width and height properties.
+ * @return {!Blockly.utils.Size} Contains width and height properties.
  */
 Blockly.svgSize = function(svg) {
-  return {
-    width: svg.cachedWidth_,
-    height: svg.cachedHeight_
-  };
+  svg = /** @type {?} */ (svg);
+  return new Blockly.utils.Size(svg.cachedWidth_, svg.cachedHeight_);
 };
 
 /**
@@ -160,7 +159,7 @@ Blockly.svgResize = function(workspace) {
 /**
  * Handle a key-down on SVG drawing surface. Does nothing if the main workspace
  * is not visible.
- * @param {!Event} e Key down event.
+ * @param {!KeyboardEvent} e Key down event.
  * @package
  */
 // TODO (https://github.com/google/blockly/issues/1998) handle cases where there

@@ -17,6 +17,8 @@ goog.require('Blockly.utils.dom');
 goog.require('Blockly.utils.Rect');
 goog.require('Blockly.Xml');
 
+goog.requireType('Blockly.IDeleteArea');
+
 
 /**
  * Class for a trash can.

@@ -30,6 +30,7 @@ goog.require('Blockly.WorkspaceSvg');
 goog.require('Blockly.Xml');
 
 goog.requireType('Blockly.IBlocklyActionable');
+goog.requireType('Blockly.IDeleteArea');
 goog.requireType('Blockly.utils.Metrics');
 
 

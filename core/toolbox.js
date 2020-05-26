@@ -28,6 +28,8 @@ goog.require('Blockly.utils.Rect');
 goog.require('Blockly.utils.toolbox');
 
 goog.requireType('Blockly.IBlocklyActionable');
+goog.requireType('Blockly.IDeleteArea');
+goog.requireType('Blockly.IRegistrable');
 
 
 /**

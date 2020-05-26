@@ -27,6 +27,7 @@ goog.requireType('Blockly.blockRendering.ConstantProvider');
 goog.requireType('Blockly.IASTNodeLocationSvg');
 goog.requireType('Blockly.IASTNodeLocationWithBlock');
 goog.requireType('Blockly.IBlocklyActionable');
+goog.requireType('Blockly.IRegistrable');
 
 
 /**

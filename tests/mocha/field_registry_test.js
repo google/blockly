@@ -20,46 +20,25 @@ suite('Field Registry', function() {
   };
 
   teardown(function() {
-    if (Blockly.fieldRegistry.typeMap_['field_custom_test']) {
-      delete Blockly.fieldRegistry.typeMap_['field_custom_test'];
+    if (Blockly.registry.typeMap_['field']['field_custom_test']) {
+      delete Blockly.registry.typeMap_['field']['field_custom_test'];
     }
   });
   suite('Registration', function() {
     test('Simple', function() {
       Blockly.fieldRegistry.register('field_custom_test', CustomFieldType);
     });
-    test('Empty String Key', function() {
-      chai.assert.throws(function() {
-        Blockly.fieldRegistry.register('', CustomFieldType);
-      }, 'Invalid field type');
-    });
-    test('Class as Key', function() {
-      chai.assert.throws(function() {
-        Blockly.fieldRegistry.register(CustomFieldType, '');
-      }, 'Invalid field type');
-    });
     test('fromJson as Key', function() {
       chai.assert.throws(function() {
         Blockly.fieldRegistry.register(CustomFieldType.fromJson, '');
-      }, 'Invalid field type');
-    });
-    test('Overwrite a Key', function() {
-      Blockly.fieldRegistry.register('field_custom_test', CustomFieldType);
-      chai.assert.throws(function() {
-        Blockly.fieldRegistry.register('field_custom_test', CustomFieldType);
-      }, 'already registered');
-    });
-    test('Null Value', function() {
-      chai.assert.throws(function() {
-        Blockly.fieldRegistry.register('field_custom_test', null);
-      }, 'fromJson function');
+      }, 'Invalid name');
     });
     test('No fromJson', function() {
       var fromJson = CustomFieldType.fromJson;
       delete CustomFieldType.fromJson;
       chai.assert.throws(function() {
         Blockly.fieldRegistry.register('field_custom_test', CustomFieldType);
-      }, 'fromJson function');
+      }, 'must have a fromJson function');
       CustomFieldType.fromJson = fromJson;
     });
     test('fromJson not a function', function() {
@@ -67,7 +46,7 @@ suite('Field Registry', function() {
       CustomFieldType.fromJson = true;
       chai.assert.throws(function() {
         Blockly.fieldRegistry.register('field_custom_test', CustomFieldType);
-      }, 'fromJson function');
+      }, 'must have a fromJson function');
       CustomFieldType.fromJson = fromJson;
     });
   });

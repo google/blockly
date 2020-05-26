@@ -42,6 +42,7 @@ goog.requireType('Blockly.IBlocklyActionable');
  * @implements {Blockly.IASTNodeLocationSvg}
  * @implements {Blockly.IASTNodeLocationWithBlock}
  * @implements {Blockly.IBlocklyActionable}
+ * @implements {Blockly.IRegistrable}
  */
 Blockly.Field = function(value, opt_validator, opt_config) {
   /**

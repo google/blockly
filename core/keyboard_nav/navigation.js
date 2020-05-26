@@ -855,7 +855,8 @@ Blockly.navigation.flyoutOnAction_ = function(action) {
 Blockly.navigation.toolboxOnAction_ = function(action) {
   var workspace = Blockly.navigation.getNavigationWorkspace();
   var toolbox = workspace.getToolbox();
-  var handled = toolbox ? toolbox.onBlocklyAction(action) : false;
+  var handled = toolbox && typeof toolbox.onBlocklyAction == 'function' ?
+      toolbox.onBlocklyAction(action) : false;
 
   if (handled) {
     return true;

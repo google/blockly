@@ -22,6 +22,7 @@ goog.require('Blockly.Xml');
  * Class for a trash can.
  * @param {!Blockly.WorkspaceSvg} workspace The workspace to sit in.
  * @constructor
+ * @implements {Blockly.IDeleteArea}
  */
 Blockly.Trashcan = function(workspace) {
   /**

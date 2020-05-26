@@ -6,7 +6,7 @@
 
 /**
  * @fileoverview The interface for a Blockly component that can be registered.
- *    (Ex. Toolbox)
+ *    (Ex. Toolbox, Fields, Renderers)
  * @author aschmiedt@google.com (Abby Schmiedt)
  */
 

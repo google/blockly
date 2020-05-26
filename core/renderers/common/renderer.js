@@ -28,6 +28,7 @@ goog.requireType('Blockly.blockRendering.Debug');
  * @param {string} name The renderer name.
  * @package
  * @constructor
+ * @implements {Blockly.IRegistrable}
  */
 Blockly.blockRendering.Renderer = function(name) {
 

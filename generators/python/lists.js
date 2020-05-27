@@ -1,21 +1,7 @@
 /**
  * @license
- * Visual Blocks Language
- *
- * Copyright 2012 Google Inc.
- * https://developers.google.com/blockly/
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Copyright 2012 Google LLC
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 /**
@@ -183,7 +169,7 @@ Blockly.Python['lists_getIndex'] = function(block) {
       }
       break;
   }
-  throw 'Unhandled combination (lists_getIndex).';
+  throw Error('Unhandled combination (lists_getIndex).');
 };
 
 Blockly.Python['lists_setIndex'] = function(block) {
@@ -202,7 +188,7 @@ Blockly.Python['lists_setIndex'] = function(block) {
       return '';
     }
     var listVar = Blockly.Python.variableDB_.getDistinctName(
-        'tmp_list', Blockly.Variables.NAME_TYPE);
+        'tmp_list', Blockly.VARIABLE_CATEGORY_NAME);
     var code = listVar + ' = ' + list + '\n';
     list = listVar;
     return code;
@@ -243,7 +229,7 @@ Blockly.Python['lists_setIndex'] = function(block) {
         Blockly.Python.definitions_['import_random'] = 'import random';
         var code = cacheList();
         var xVar = Blockly.Python.variableDB_.getDistinctName(
-            'tmp_x', Blockly.Variables.NAME_TYPE);
+            'tmp_x', Blockly.VARIABLE_CATEGORY_NAME);
         code += xVar + ' = int(random.random() * len(' + list + '))\n';
         if (mode == 'SET') {
           code += list + '[' + xVar + '] = ' + value + '\n';
@@ -254,7 +240,7 @@ Blockly.Python['lists_setIndex'] = function(block) {
         }
       break;
   }
-  throw 'Unhandled combination (lists_setIndex).';
+  throw Error('Unhandled combination (lists_setIndex).');
 };
 
 Blockly.Python['lists_getSublist'] = function(block) {
@@ -277,7 +263,7 @@ Blockly.Python['lists_getSublist'] = function(block) {
       var at1 = '';
       break;
     default:
-      throw 'Unhandled option (lists_getSublist)';
+      throw Error('Unhandled option (lists_getSublist)');
   }
   switch (where2) {
     case 'FROM_START':
@@ -298,7 +284,7 @@ Blockly.Python['lists_getSublist'] = function(block) {
       var at2 = '';
       break;
     default:
-      throw 'Unhandled option (lists_getSublist)';
+      throw Error('Unhandled option (lists_getSublist)');
   }
   var code = list + '[' + at1 + ' : ' + at2 + ']';
   return [code, Blockly.Python.ORDER_MEMBER];
@@ -349,7 +335,7 @@ Blockly.Python['lists_split'] = function(block) {
         Blockly.Python.ORDER_MEMBER) || '\'\'';
     var code = value_delim + '.join(' + value_input + ')';
   } else {
-    throw 'Unknown mode: ' + mode;
+    throw Error('Unknown mode: ' + mode);
   }
   return [code, Blockly.Python.ORDER_FUNCTION_CALL];
 };

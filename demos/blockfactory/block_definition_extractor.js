@@ -23,21 +23,15 @@
 'use strict';
 
 /**
- * Namespace for BlockDefinitionExtractor.
- */
-goog.provide('BlockDefinitionExtractor');
-
-
-/**
- * Class to contain all functions needed to extract block definition from
+ * Namespace to contain all functions needed to extract block definition from
  * the block preview data structure.
  * @namespace
  */
-BlockDefinitionExtractor = BlockDefinitionExtractor || Object.create(null);
+var BlockDefinitionExtractor = BlockDefinitionExtractor || Object.create(null);
 
 /**
  * Builds a BlockFactory workspace that reflects the block structure of the
- * exmaple block.
+ * example block.
  *
  * @param {!Blockly.Block} block The reference block from which the definition
  *     will be extracted.
@@ -45,10 +39,8 @@ BlockDefinitionExtractor = BlockDefinitionExtractor || Object.create(null);
  *     workspace.
  */
 BlockDefinitionExtractor.buildBlockFactoryWorkspace = function(block) {
-  var workspaceXml = goog.dom.createDom('xml');
-  workspaceXml.append(
-      BlockDefinitionExtractor.factoryBase_(block, block.type));
-
+  var workspaceXml = Blockly.utils.xml.createElement('xml');
+  workspaceXml.append(BlockDefinitionExtractor.factoryBase_(block, block.type));
   return workspaceXml;
 };
 
@@ -57,14 +49,14 @@ BlockDefinitionExtractor.buildBlockFactoryWorkspace = function(block) {
  * inner text.
  *
  * @param {string} name New element tag name.
- * @param {Map<String,String>} opt_attrs Optional list of attributes.
- * @param {string?} opt_text Optional inner text.
+ * @param {!Object.<string, string>=} opt_attrs Optional list of attributes.
+ * @param {string=} opt_text Optional inner text.
  * @return {!Element} The newly created element.
  * @private
  */
 BlockDefinitionExtractor.newDomElement_ = function(name, opt_attrs, opt_text) {
   // Avoid createDom(..)'s attributes argument for being too HTML specific.
-  var elem = goog.dom.createDom(name);
+  var elem = Blockly.utils.xml.createElement(name);
   if (opt_attrs) {
     for (var key in opt_attrs) {
       elem.setAttribute(key, opt_attrs[key]);
@@ -164,16 +156,17 @@ BlockDefinitionExtractor.factoryBase_ = function(block, name) {
   factoryBaseEl.append(helpUrlValue);
 
   // Convert colour_ to hue value 0-360 degrees
-  // TODO(#1247): Solve off-by-one errors.
-  // TODO: Deal with colors that don't map to standard hues. (Needs improved
-  //     block definitions.)
-  var colour_hue = Math.floor(
-      goog.color.hexToHsv(block.colour_)[0]);  // Off by one... sometimes
-  var colourBlock = BlockDefinitionExtractor.colourBlockFromHue_(colour_hue);
-  var colourInputValue =
-      BlockDefinitionExtractor.newDomElement_('value', {name: 'COLOUR'});
-  colourInputValue.append(colourBlock);
-  factoryBaseEl.append(colourInputValue);
+  var colour_hue = block.getHue();  // May be null if not set via hue.
+  if (colour_hue) {
+    var colourBlock = BlockDefinitionExtractor.colourBlockFromHue_(colour_hue);
+    var colourInputValue =
+        BlockDefinitionExtractor.newDomElement_('value', {name: 'COLOUR'});
+    colourInputValue.append(colourBlock);
+    factoryBaseEl.append(colourInputValue);
+  } else {
+    // Editor will not have a colour block and preview will render black.
+    // TODO: Support RGB colours in the block editor.
+  }
   return factoryBaseEl;
 };
 
@@ -330,7 +323,7 @@ BlockDefinitionExtractor.input_ = function(input, align) {
 
 /**
  * Constructs a sequence <block> elements representing the field definition.
- * @param {Array<Blockly.Field>} fieldRow A list of fields in a Blockly.Input.
+ * @param {Array.<Blockly.Field>} fieldRow A list of fields in a Blockly.Input.
  * @return {Element} The fist <block> element of the sequence
  *     (and the root of the constructed DOM).
  * @private
@@ -480,10 +473,10 @@ BlockDefinitionExtractor.buildFieldDropdown_ = function(dropdown) {
   var menuGenerator = dropdown.menuGenerator_;
   if (typeof menuGenerator === 'function') {
     var options = menuGenerator();
-  } else if (goog.isArray(menuGenerator)) {
+  } else if (Array.isArray(menuGenerator)) {
     var options = menuGenerator;
   } else {
-    throw new Error('Unrecognized type of menuGenerator: ' + menuGenerator);
+    throw Error('Unrecognized type of menuGenerator: ' + menuGenerator);
   }
 
   var fieldDropdown = BlockDefinitionExtractor.newDomElement_(
@@ -563,7 +556,7 @@ BlockDefinitionExtractor.buildFieldColour_ =
 };
 
 /**
- * Creates a <block> element representing a FieldVaraible definition.
+ * Creates a <block> element representing a FieldVariable definition.
  *
  * @param {string} fieldName The identifying name of the field.
  * @param {string} varName The variables
@@ -586,7 +579,7 @@ BlockDefinitionExtractor.buildFieldVariable_ = function(fieldName, varName) {
  * @param {string} src The URL of the field image.
  * @param {number} width The pixel width of the source image
  * @param {number} height The pixel height of the source image.
- * @param {string} alt Alterante text to describe image.
+ * @param {string} alt Alternate text to describe image.
  * @private
  */
 BlockDefinitionExtractor.buildFieldImage_ =
@@ -607,7 +600,7 @@ BlockDefinitionExtractor.buildFieldImage_ =
 /**
  * Creates a <block> element a group of allowed connection constraint types.
  *
- * @param {Array<string>} types List of type names in this group.
+ * @param {Array.<string>} types List of type names in this group.
  * @return {Element} The <block> element representing the group, with child
  *     types attached.
  * @private
@@ -700,7 +693,7 @@ BlockDefinitionExtractor.typeList_ = function() {
  * Creates a <block> element representing the given custom connection
  * constraint type name.
  *
- * @param {string} type The connection constratin type name.
+ * @param {string} type The connection constraint type name.
  * @return {Element} The <block> element representing a custom input type
  *     constraint.
  * @private

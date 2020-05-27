@@ -1,0 +1,23 @@
+{
+    "env": {
+        "browser": true,
+        "mocha": true
+    },
+    "globals": {
+        "chai": false,
+        "sinon": false,
+        "assertArrayEquals": true,
+        "assertVariableValues": true,
+        "captureWarnings": true,
+        "createTestBlock": true,
+        "defineRowBlock": true,
+        "defineStackBlock": true,
+        "defineStatementBlock": true,
+        "createEventsFireStub": true,
+        "testAWorkspace": true,
+        "getSimpleJSON": true,
+        "getXmlArray": true,
+        "getCategoryJSON": true
+    },
+    "extends": "../../.eslintrc.json"
+}

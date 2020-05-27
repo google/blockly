@@ -1,21 +1,7 @@
 /**
  * @license
- * Blockly Demos: Block Factory
- *
- * Copyright 2016 Google Inc.
- * https://developers.google.com/blockly/
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Copyright 2016 Google LLC
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 /**
@@ -50,7 +36,7 @@ WorkspaceFactoryModel = function() {
   // Boolean for if a Procedure category has been added.
   this.hasProcedureCategory = false;
   // XML to be pre-loaded to workspace. Empty on default;
-  this.preloadXml = Blockly.Xml.textToDom('<xml></xml>');
+  this.preloadXml = Blockly.utils.xml.createElement('xml');
   // Options object to be configured for Blockly inject call.
   this.options = new Object(null);
   // Block Library block types.
@@ -164,7 +150,7 @@ WorkspaceFactoryModel.prototype.moveElementToIndex = function(element, newIndex,
   // Check that indexes are in bounds.
   if (newIndex < 0 || newIndex >= this.toolboxList.length || oldIndex < 0 ||
       oldIndex >= this.toolboxList.length) {
-    throw new Error('Index out of bounds when moving element in the model.');
+    throw Error('Index out of bounds when moving element in the model.');
   }
   this.deleteElementFromList(oldIndex);
   this.toolboxList.splice(newIndex, 0, element);
@@ -288,7 +274,7 @@ WorkspaceFactoryModel.prototype.clearToolboxList = function() {
   this.hasVariableCategory = false;
   this.hasProcedureCategory = false;
   this.shadowBlocks = [];
-  this.selected.xml = Blockly.Xml.textToDom('<xml></xml>');
+  this.selected.xml = Blockly.utils.xml.createElement('xml');
 };
 
 /**
@@ -393,7 +379,7 @@ WorkspaceFactoryModel.prototype.setOptions = function(options) {
   this.options = options;
 };
 
-/*
+/**
  * Returns an array of all the block types currently being used in the toolbox
  * and the pre-loaded blocks. No duplicates.
  * TODO(evd2014): Move pushBlockTypesToList to FactoryUtils.
@@ -488,7 +474,7 @@ WorkspaceFactoryModel.prototype.hasDefinedBlockTypes = function(blockTypes) {
 ListElement = function(type, opt_name) {
   this.type = type;
   // XML DOM element to load the element.
-  this.xml = Blockly.Xml.textToDom('<xml></xml>');
+  this.xml = Blockly.utils.xml.createElement('xml');
   // Name of category. Can be changed by user. Null if separator.
   this.name = opt_name ? opt_name : null;
   // Unique ID of element. Does not change.
@@ -535,7 +521,8 @@ ListElement.prototype.changeName = function (name) {
 /**
  * Sets the color of a category. If tries to set the color of something other
  * than a category, returns.
- * @param {string} color The color that should be used for that category.
+ * @param {?string} color The color that should be used for that category,
+ *     or null if none.
  */
 ListElement.prototype.changeColor = function (color) {
   if (this.type != ListElement.TYPE_CATEGORY) {

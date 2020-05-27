@@ -1,13 +1,14 @@
-<xml xmlns="http://www.w3.org/1999/xhtml">
+<xml xmlns="https://developers.google.com/blockly/xml">
   <block type="procedures_defnoreturn" x="260" y="14">
     <field name="NAME">test colour picker</field>
+    <comment pinned="false" h="80" w="160">Describe this function...</comment>
     <statement name="STACK">
       <block type="unittest_assertequals" inline="false">
         <value name="MESSAGE">
-           <block type="text">
-             <field name="TEXT">static colour</field>
-           </block>
-         </value>
+          <block type="text">
+            <field name="TEXT">static colour</field>
+          </block>
+        </value>
         <value name="ACTUAL">
           <block type="colour_picker">
             <field name="COLOUR">#ff6600</field>
@@ -23,13 +24,14 @@
   </block>
   <block type="procedures_defnoreturn" x="630" y="13">
     <field name="NAME">test rgb</field>
+    <comment pinned="false" h="80" w="160">Describe this function...</comment>
     <statement name="STACK">
       <block type="unittest_assertequals" inline="false">
         <value name="MESSAGE">
-           <block type="text">
-             <field name="TEXT">from rgb</field>
-           </block>
-         </value>
+          <block type="text">
+            <field name="TEXT">from rgb</field>
+          </block>
+        </value>
         <value name="ACTUAL">
           <block type="colour_rgb" inline="false">
             <value name="RED">
@@ -58,6 +60,7 @@
     </statement>
   </block>
   <block type="unittest_main" x="-5" y="49">
+    <field name="SUITE_NAME">Colour</field>
     <statement name="DO">
       <block type="procedures_callnoreturn">
         <mutation name="test colour picker"></mutation>
@@ -81,6 +84,7 @@
   </block>
   <block type="procedures_defnoreturn" x="-7" y="223">
     <field name="NAME">test colour random</field>
+    <comment pinned="false" h="80" w="160">Describe this function...</comment>
     <statement name="STACK">
       <block type="controls_repeat_ext" inline="true">
         <value name="TIMES">
@@ -97,10 +101,20 @@
             <next>
               <block type="unittest_assertequals" inline="false">
                 <value name="MESSAGE">
-                   <block type="text">
-                     <field name="TEXT">test name</field>
-                   </block>
-                 </value>
+                  <block type="text_join">
+                    <mutation items="2"></mutation>
+                    <value name="ADD0">
+                      <block type="text">
+                        <field name="TEXT">length of random colour string: </field>
+                      </block>
+                    </value>
+                    <value name="ADD1">
+                      <block type="variables_get">
+                        <field name="VAR">item</field>
+                      </block>
+                    </value>
+                  </block>
+                </value>
                 <value name="ACTUAL">
                   <block type="text_length" inline="false">
                     <value name="VALUE">
@@ -118,10 +132,20 @@
                 <next>
                   <block type="unittest_assertequals" inline="false">
                     <value name="MESSAGE">
-                       <block type="text">
-                         <field name="TEXT">test name</field>
-                       </block>
-                     </value>
+                      <block type="text_join">
+                        <mutation items="2"></mutation>
+                        <value name="ADD0">
+                          <block type="text">
+                            <field name="TEXT">format of random colour string: </field>
+                          </block>
+                        </value>
+                        <value name="ADD1">
+                          <block type="variables_get">
+                            <field name="VAR">item</field>
+                          </block>
+                        </value>
+                      </block>
+                    </value>
                     <value name="ACTUAL">
                       <block type="text_charAt">
                         <mutation at="false"></mutation>
@@ -143,28 +167,56 @@
                         <field name="VAR">i</field>
                         <value name="FROM">
                           <block type="math_number">
-                            <field name="NUM">2</field>
+                            <field name="NUM">1</field>
                           </block>
                         </value>
                         <value name="TO">
                           <block type="math_number">
-                            <field name="NUM">7</field>
+                            <field name="NUM">6</field>
                           </block>
                         </value>
                         <statement name="DO">
                           <block type="unittest_assertvalue" inline="false">
-                            <value name="MESSAGE">
-                               <block type="text">
-                                 <field name="TEXT">test name</field>
-                               </block>
-                             </value>
                             <field name="EXPECTED">TRUE</field>
+                            <value name="MESSAGE">
+                              <block type="text_join">
+                                <mutation items="4"></mutation>
+                                <value name="ADD0">
+                                  <block type="text">
+                                    <field name="TEXT">contents of random colour string: </field>
+                                  </block>
+                                </value>
+                                <value name="ADD1">
+                                  <block type="variables_get">
+                                    <field name="VAR">item</field>
+                                  </block>
+                                </value>
+                                <value name="ADD2">
+                                  <block type="text">
+                                    <field name="TEXT"> at index: </field>
+                                  </block>
+                                </value>
+                                <value name="ADD3">
+                                  <block type="unittest_adjustindex">
+                                    <value name="INDEX">
+                                      <block type="variables_get">
+                                        <field name="VAR">i</field>
+                                      </block>
+                                    </value>
+                                  </block>
+                                </value>
+                              </block>
+                            </value>
                             <value name="ACTUAL">
                               <block type="logic_compare">
                                 <field name="OP">NEQ</field>
                                 <value name="A">
-                                  <block type="math_number">
-                                    <field name="NUM">0</field>
+                                  <block type="unittest_adjustindex">
+                                    <value name="INDEX">
+                                      <block type="math_number">
+                                        <field name="NUM">-1</field>
+                                      </block>
+                                    </value>
                                   </block>
                                 </value>
                                 <value name="B">
@@ -185,8 +237,12 @@
                                           </block>
                                         </value>
                                         <value name="AT">
-                                          <block type="variables_get">
-                                            <field name="VAR">i</field>
+                                          <block type="unittest_adjustindex">
+                                            <value name="INDEX">
+                                              <block type="variables_get">
+                                                <field name="VAR">i</field>
+                                              </block>
+                                            </value>
                                           </block>
                                         </value>
                                       </block>
@@ -208,15 +264,16 @@
       </block>
     </statement>
   </block>
-  <block type="procedures_defnoreturn" x="520" y="205">
+  <block type="procedures_defnoreturn" x="638" y="213">
     <field name="NAME">test blend</field>
+    <comment pinned="false" h="80" w="160">Describe this function...</comment>
     <statement name="STACK">
       <block type="unittest_assertequals" inline="false">
         <value name="MESSAGE">
-           <block type="text">
-             <field name="TEXT">blend</field>
-           </block>
-         </value>
+          <block type="text">
+            <field name="TEXT">blend</field>
+          </block>
+        </value>
         <value name="ACTUAL">
           <block type="colour_blend" inline="false">
             <value name="COLOUR1">

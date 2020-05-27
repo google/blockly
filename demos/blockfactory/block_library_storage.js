@@ -1,21 +1,7 @@
 /**
  * @license
- * Blockly Demos: Block Factory
- *
- * Copyright 2016 Google Inc.
- * https://developers.google.com/blockly/
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Copyright 2016 Google LLC
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 /**
@@ -27,17 +13,14 @@
 
 'use strict';
 
-goog.provide('BlockLibraryStorage');
-
-
 /**
  * Represents a block library's storage.
  * @param {string} blockLibraryName Desired name of Block Library, also used
  *    to create the key for where it's stored in local storage.
- * @param {Object} opt_blocks Object mapping block type to XML.
+ * @param {!Object=} opt_blocks Object mapping block type to XML.
  * @constructor
  */
-BlockLibraryStorage = function(blockLibraryName, opt_blocks) {
+function BlockLibraryStorage(blockLibraryName, opt_blocks) {
   // Add prefix to this.name to avoid collisions in local storage.
   this.name = 'BlockLibraryStorage.' + blockLibraryName;
   if (!opt_blocks) {
@@ -60,9 +43,7 @@ BlockLibraryStorage = function(blockLibraryName, opt_blocks) {
  * Reads the named block library from local storage and saves it in this.blocks.
  */
 BlockLibraryStorage.prototype.loadFromLocalStorage = function() {
-  // goog.global is synonymous to window, and allows for flexibility
-  // between browsers.
-  var object = goog.global.localStorage[this.name];
+  var object = localStorage[this.name];
   this.blocks = object ? JSON.parse(object) : null;
 };
 
@@ -70,7 +51,7 @@ BlockLibraryStorage.prototype.loadFromLocalStorage = function() {
  * Writes the current block library (this.blocks) to local storage.
  */
 BlockLibraryStorage.prototype.saveToLocalStorage = function() {
-  goog.global.localStorage[this.name] = JSON.stringify(this.blocks);
+  localStorage[this.name] = JSON.stringify(this.blocks);
 };
 
 /**
@@ -123,7 +104,7 @@ BlockLibraryStorage.prototype.getBlockXml = function(blockType) {
  * @return {!Object} Map of block type to corresponding XML.
  */
 BlockLibraryStorage.prototype.getBlockXmlMap = function(blockTypes) {
-  var blockXmlMap = {};
+  var blockXmlMap = Object.create(null);
   for (var i = 0; i < blockTypes.length; i++) {
     var blockType = blockTypes[i];
     var xml = this.getBlockXml(blockType);

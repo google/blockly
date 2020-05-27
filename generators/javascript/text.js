@@ -1,21 +1,7 @@
 /**
  * @license
- * Visual Blocks Language
- *
- * Copyright 2012 Google Inc.
- * https://developers.google.com/blockly/
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Copyright 2012 Google LLC
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 /**
@@ -35,6 +21,34 @@ Blockly.JavaScript['text'] = function(block) {
   return [code, Blockly.JavaScript.ORDER_ATOMIC];
 };
 
+Blockly.JavaScript['text_multiline'] = function(block) {
+  // Text value.
+  var code = Blockly.JavaScript.multiline_quote_(block.getFieldValue('TEXT'));
+  if (code.includes('\n')) {
+      code = '(' + code + ')'
+  }
+  return [code, Blockly.JavaScript.ORDER_ATOMIC];
+};
+
+/**
+ * Enclose the provided value in 'String(...)' function.
+ * Leave string literals alone.
+ * @param {string} value Code evaluating to a value.
+ * @return {string} Code evaluating to a string.
+ * @private
+ */
+Blockly.JavaScript.text.forceString_ = function(value) {
+  if (Blockly.JavaScript.text.forceString_.strRegExp.test(value)) {
+    return value;
+  }
+  return 'String(' + value + ')';
+};
+
+/**
+ * Regular expression to detect a single-quoted string literal.
+ */
+Blockly.JavaScript.text.forceString_.strRegExp = /^\s*'([^']|\\')*'\s*$/;
+
 Blockly.JavaScript['text_join'] = function(block) {
   // Create a string made up of any number of elements of any type.
   switch (block.itemCount_) {
@@ -43,14 +57,15 @@ Blockly.JavaScript['text_join'] = function(block) {
     case 1:
       var element = Blockly.JavaScript.valueToCode(block, 'ADD0',
           Blockly.JavaScript.ORDER_NONE) || '\'\'';
-      var code = 'String(' + element + ')';
+      var code = Blockly.JavaScript.text.forceString_(element);
       return [code, Blockly.JavaScript.ORDER_FUNCTION_CALL];
     case 2:
       var element0 = Blockly.JavaScript.valueToCode(block, 'ADD0',
           Blockly.JavaScript.ORDER_NONE) || '\'\'';
       var element1 = Blockly.JavaScript.valueToCode(block, 'ADD1',
           Blockly.JavaScript.ORDER_NONE) || '\'\'';
-      var code = 'String(' + element0 + ') + String(' + element1 + ')';
+      var code = Blockly.JavaScript.text.forceString_(element0) + ' + ' +
+          Blockly.JavaScript.text.forceString_(element1);
       return [code, Blockly.JavaScript.ORDER_ADDITION];
     default:
       var elements = new Array(block.itemCount_);
@@ -66,10 +81,10 @@ Blockly.JavaScript['text_join'] = function(block) {
 Blockly.JavaScript['text_append'] = function(block) {
   // Append to a variable in place.
   var varName = Blockly.JavaScript.variableDB_.getName(
-      block.getFieldValue('VAR'), Blockly.Variables.NAME_TYPE);
+      block.getFieldValue('VAR'), Blockly.VARIABLE_CATEGORY_NAME);
   var value = Blockly.JavaScript.valueToCode(block, 'TEXT',
       Blockly.JavaScript.ORDER_NONE) || '\'\'';
-  return varName + ' = String(' + varName + ') + String(' + value + ');\n';
+  return varName + ' += ' + Blockly.JavaScript.text.forceString_(value) + ';\n';
 };
 
 Blockly.JavaScript['text_length'] = function(block) {
@@ -137,16 +152,16 @@ Blockly.JavaScript['text_charAt'] = function(block) {
       var code = functionName + '(' + text + ')';
       return [code, Blockly.JavaScript.ORDER_FUNCTION_CALL];
   }
-  throw 'Unhandled option (text_charAt).';
+  throw Error('Unhandled option (text_charAt).');
 };
 
 /**
  * Returns an expression calculating the index into a string.
- * @private
  * @param {string} stringName Name of the string, used to calculate length.
  * @param {string} where The method of indexing, selected by dropdown in Blockly
  * @param {string=} opt_at The optional offset when indexing from start/end.
- * @return {string} Index expression.
+ * @return {string|undefined} Index expression.
+ * @private
  */
 Blockly.JavaScript.text.getIndex_ = function(stringName, where, opt_at) {
   if (where == 'FIRST') {
@@ -186,7 +201,7 @@ Blockly.JavaScript['text_getSubstring'] = function(block) {
         var at1 = '0';
         break;
       default:
-        throw 'Unhandled option (text_getSubstring).';
+        throw Error('Unhandled option (text_getSubstring).');
     }
     switch (where2) {
       case 'FROM_START':
@@ -201,7 +216,7 @@ Blockly.JavaScript['text_getSubstring'] = function(block) {
         var at2 = text + '.length';
         break;
       default:
-        throw 'Unhandled option (text_getSubstring).';
+        throw Error('Unhandled option (text_getSubstring).');
     }
     code = text + '.slice(' + at1 + ', ' + at2 + ')';
   } else {
@@ -296,7 +311,7 @@ Blockly.JavaScript['text_prompt_ext'] = function(block) {
   var code = 'window.prompt(' + msg + ')';
   var toNumber = block.getFieldValue('TYPE') == 'NUMBER';
   if (toNumber) {
-    code = 'parseFloat(' + code + ')';
+    code = 'Number(' + code + ')';
   }
   return [code, Blockly.JavaScript.ORDER_FUNCTION_CALL];
 };

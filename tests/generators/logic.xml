@@ -1,5 +1,6 @@
-<xml xmlns="http://www.w3.org/1999/xhtml">
+<xml xmlns="https://developers.google.com/blockly/xml">
   <block type="unittest_main" x="-13" y="-13">
+    <field name="SUITE_NAME">Logic</field>
     <statement name="DO">
       <block type="unittest_assertvalue" inline="false">
         <field name="EXPECTED">TRUE</field>

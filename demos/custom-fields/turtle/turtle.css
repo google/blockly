@@ -1,0 +1,48 @@
+/**
+ * @license
+ * Copyright 2019 Google LLC
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+.customFieldsTurtleWidget {
+  width: 150px;
+}
+
+.customFieldsTurtleWidget button {
+  border-radius: 4px;
+  border: none;
+  background-color: #fff;
+  opacity: .6;
+  color: #000;
+}
+
+.customFieldsTurtleWidget .table {
+  width: 100%;
+}
+
+.customFieldsTurtleWidget .row {
+  width: 100%;
+  display: flex;
+}
+
+.customFieldsTurtleWidget .arrow {
+  text-align: center;
+  padding: 0;
+  flex-grow: 0;
+}
+
+.customFieldsTurtleWidget .text {
+  height: 20px;
+  color: #fff;
+  flex-grow: 1;
+  text-align: center;
+}
+
+.customFieldsTurtleWidget .randomize {
+  width: 100%;
+}
+
+.blocklySvg .blocklyNonEditableText text,
+.blocklySvg .blocklyEditableText text {
+  fill: #000;
+}

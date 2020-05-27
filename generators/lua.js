@@ -1,21 +1,7 @@
 /**
  * @license
- * Visual Blocks Language
- *
- * Copyright 2016 Google Inc.
- * https://developers.google.com/blockly/
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Copyright 2016 Google LLC
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 /**
@@ -28,6 +14,7 @@
 goog.provide('Blockly.Lua');
 
 goog.require('Blockly.Generator');
+goog.require('Blockly.utils.string');
 
 
 /**
@@ -109,6 +96,7 @@ Blockly.Lua.init = function(workspace) {
   } else {
     Blockly.Lua.variableDB_.reset();
   }
+  Blockly.Lua.variableDB_.setVariableMap(workspace.getVariableMap());
 };
 
 /**
@@ -156,22 +144,38 @@ Blockly.Lua.quote_ = function(string) {
 };
 
 /**
+ * Encode a string as a properly escaped multiline Lua string, complete with
+ * quotes.
+ * @param {string} string Text to encode.
+ * @return {string} Lua string.
+ * @private
+ */
+Blockly.Lua.multiline_quote_ = function(string) {
+  string = string.replace(/\\/g, '\\\\')
+                 .replace(/\n/g, '\\\n')
+                 .replace(/'/g, '\\\'');
+  return '[===' + string + '===]';
+};
+
+/**
  * Common tasks for generating Lua from blocks.
  * Handles comments for the specified block and any connected value blocks.
  * Calls any statements following this block.
  * @param {!Blockly.Block} block The current block.
  * @param {string} code The Lua code created for this block.
+ * @param {boolean=} opt_thisOnly True to generate code for only this statement.
  * @return {string} Lua code with comments and subsequent blocks added.
  * @private
  */
-Blockly.Lua.scrub_ = function(block, code) {
+Blockly.Lua.scrub_ = function(block, code, opt_thisOnly) {
   var commentCode = '';
   // Only collect comments for blocks that aren't inline.
   if (!block.outputConnection || !block.outputConnection.targetConnection) {
     // Collect comment for this block.
     var comment = block.getCommentText();
-    comment = Blockly.utils.wrap(comment, Blockly.Lua.COMMENT_WRAP - 3);
     if (comment) {
+      comment = Blockly.utils.string.wrap(comment,
+          Blockly.Lua.COMMENT_WRAP - 3);
       commentCode += Blockly.Lua.prefixLines(comment, '-- ') + '\n';
     }
     // Collect comments for all value arguments.
@@ -189,6 +193,6 @@ Blockly.Lua.scrub_ = function(block, code) {
     }
   }
   var nextBlock = block.nextConnection && block.nextConnection.targetBlock();
-  var nextCode = Blockly.Lua.blockToCode(nextBlock);
+  var nextCode = opt_thisOnly ? '' : Blockly.Lua.blockToCode(nextBlock);
   return commentCode + code + nextCode;
 };

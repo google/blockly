@@ -1,21 +1,7 @@
 /**
  * @license
- * Blockly Demos: Block Factory
- *
- * Copyright 2016 Google Inc.
- * https://developers.google.com/blockly/
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Copyright 2016 Google LLC
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 /**
@@ -28,25 +14,15 @@
  */
 'use strict';
 
-goog.provide('BlockExporterTools');
-
-goog.require('FactoryUtils');
-goog.require('BlockOption');
-goog.require('goog.dom');
-goog.require('goog.dom.xml');
-
-
 /**
  * Block Exporter Tools Class
  * @constructor
  */
-BlockExporterTools = function() {
+function BlockExporterTools() {
   // Create container for hidden workspace.
-  this.container = goog.dom.createDom('div', {
-    'id': 'blockExporterTools_hiddenWorkspace'
-  }, ''); // Empty quotes for empty div.
-  // Hide hidden workspace.
-  this.container.style.display = 'none';
+  this.container = document.createElement('div');
+  this.container.id = 'blockExporterTools_hiddenWorkspace';
+  this.container.style.display = 'none';  // Hide the hidden workspace.
   document.body.appendChild(this.container);
   /**
    * Hidden workspace for the Block Exporter that holds pieces that make
@@ -165,45 +141,6 @@ BlockExporterTools.prototype.getGeneratorCode =
 BlockExporterTools.prototype.addBlockDefinitions = function(blockXmlMap) {
   var blockDefs = this.getBlockDefinitions(blockXmlMap, 'JavaScript');
   eval(blockDefs);
-};
-
-/**
- * Pulls information about all blocks in the block library to generate XML
- * for the selector workpace's toolbox.
- * @param {!BlockLibraryStorage} blockLibStorage Block Library Storage object.
- * @return {!Element} XML representation of the toolbox.
- */
-BlockExporterTools.prototype.generateToolboxFromLibrary
-    = function(blockLibStorage) {
-  // Create DOM for XML.
-  var xmlDom = goog.dom.createDom('xml', {
-    'id' : 'blockExporterTools_toolbox',
-    'style' : 'display:none'
-  });
-
-  var allBlockTypes = blockLibStorage.getBlockTypes();
-  // Object mapping block type to XML.
-  var blockXmlMap = blockLibStorage.getBlockXmlMap(allBlockTypes);
-
-  // Define the custom blocks in order to be able to create instances of
-  // them in the exporter workspace.
-  this.addBlockDefinitions(blockXmlMap);
-
-  for (var blockType in blockXmlMap) {
-    // Get block.
-    var block = FactoryUtils.getDefinedBlock(blockType, this.hiddenWorkspace);
-    var category = FactoryUtils.generateCategoryXml([block], blockType);
-    xmlDom.appendChild(category);
-  }
-
-  // If there are no blocks in library and the map is empty, append dummy
-  // category.
-  if (Object.keys(blockXmlMap).length == 0) {
-    var category = goog.dom.createDom('category');
-    category.setAttribute('name','Next Saved Block');
-    xmlDom.appendChild(category);
-  }
-  return xmlDom;
 };
 
 /**

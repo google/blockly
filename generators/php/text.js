@@ -1,21 +1,7 @@
 /**
  * @license
- * Visual Blocks Language
- *
- * Copyright 2015 Google Inc.
- * https://developers.google.com/blockly/
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Copyright 2015 Google LLC
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 /**
@@ -35,6 +21,12 @@ Blockly.PHP['text'] = function(block) {
   return [code, Blockly.PHP.ORDER_ATOMIC];
 };
 
+Blockly.PHP['text_multiline'] = function(block) {
+  // Text value.
+  var code = Blockly.PHP.multiline_quote_(block.getFieldValue('TEXT'));
+  return [code, Blockly.PHP.ORDER_ATOMIC];
+};
+
 Blockly.PHP['text_join'] = function(block) {
   // Create a string made up of any number of elements of any type.
   if (block.itemCount_ == 0) {
@@ -46,11 +38,11 @@ Blockly.PHP['text_join'] = function(block) {
     return [code, Blockly.PHP.ORDER_FUNCTION_CALL];
   } else if (block.itemCount_ == 2) {
     var element0 = Blockly.PHP.valueToCode(block, 'ADD0',
-        Blockly.PHP.ORDER_NONE) || '\'\'';
+        Blockly.PHP.ORDER_ATOMIC) || '\'\'';
     var element1 = Blockly.PHP.valueToCode(block, 'ADD1',
-        Blockly.PHP.ORDER_NONE) || '\'\'';
+        Blockly.PHP.ORDER_ATOMIC) || '\'\'';
     var code = element0 + ' . ' + element1;
-    return [code, Blockly.PHP.ORDER_ADDITION];
+    return [code, Blockly.PHP.ORDER_STRING_CONCAT];
   } else {
     var elements = new Array(block.itemCount_);
     for (var i = 0; i < block.itemCount_; i++) {
@@ -65,7 +57,7 @@ Blockly.PHP['text_join'] = function(block) {
 Blockly.PHP['text_append'] = function(block) {
   // Append to a variable in place.
   var varName = Blockly.PHP.variableDB_.getName(
-      block.getFieldValue('VAR'), Blockly.Variables.NAME_TYPE);
+      block.getFieldValue('VAR'), Blockly.VARIABLE_CATEGORY_NAME);
   var value = Blockly.PHP.valueToCode(block, 'TEXT',
       Blockly.PHP.ORDER_ASSIGNMENT) || '\'\'';
   return varName + ' .= ' + value + ';\n';
@@ -152,7 +144,7 @@ Blockly.PHP['text_charAt'] = function(block) {
       code = functionName + '(' + text + ')';
       return [code, Blockly.PHP.ORDER_FUNCTION_CALL];
   }
-  throw 'Unhandled option (text_charAt).';
+  throw Error('Unhandled option (text_charAt).');
 };
 
 Blockly.PHP['text_getSubstring'] = function(block) {
@@ -174,7 +166,7 @@ Blockly.PHP['text_getSubstring'] = function(block) {
          '    $at1 = strlen($text) - 1 - $at1;',
          '  } else if ($where1 == \'FIRST\') {',
          '    $at1 = 0;',
-         '  } else if ($where1 != \'FROM_START\'){',
+         '  } else if ($where1 != \'FROM_START\') {',
          '    throw new Exception(\'Unhandled option (text_get_substring).\');',
          '  }',
          '  $length = 0;',

@@ -1,20 +1,7 @@
 /**
- * Blockly Demos: Custom Dialogs
- *
- * Copyright 2016 Google Inc.
- * https://developers.google.com/blockly/
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * @license
+ * Copyright 2016 Google LLC
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 /**
@@ -40,11 +27,11 @@ Blockly.confirm = function(message, callback) {
   CustomDialog.show('Confirm', message, {
     showOkay: true,
     onOkay: function() {
-      callback(true)
+      callback(true);
     },
     showCancel: true,
     onCancel: function() {
-      callback(false)
+      callback(false);
     }
   });
 };
@@ -56,11 +43,11 @@ Blockly.prompt = function(message, defaultValue, callback) {
     showInput: true,
     showOkay: true,
     onOkay: function() {
-      callback(CustomDialog.inputField.value)
+      callback(CustomDialog.inputField.value);
     },
     showCancel: true,
     onCancel: function() {
-      callback(null)
+      callback(null);
     }
   });
   CustomDialog.inputField.value = defaultValue;
@@ -69,8 +56,8 @@ Blockly.prompt = function(message, defaultValue, callback) {
 /** Hides any currently visible dialog. */
 CustomDialog.hide = function() {
   if (CustomDialog.backdropDiv_) {
-    CustomDialog.backdropDiv_.style.display = 'none'
-    CustomDialog.dialogDiv_.style.display = 'none'
+    CustomDialog.backdropDiv_.style.display = 'none';
+    CustomDialog.dialogDiv_.style.display = 'none';
   }
 };
 
@@ -93,7 +80,8 @@ CustomDialog.show = function(title, message, options) {
     backdropDiv.style.cssText =
         'position: absolute;' +
         'top: 0; left: 0; right: 0; bottom: 0;' +
-        'background-color: rgba(0, 0, 0, .7);';
+        'background-color: rgba(0, 0, 0, .7);' +
+        'z-index: 100;';
     document.body.appendChild(backdropDiv);
 
     dialogDiv = document.createElement('div');

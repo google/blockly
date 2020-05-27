@@ -1,5 +1,7 @@
-<xml xmlns="http://www.w3.org/1999/xhtml">
+<xml xmlns="https://developers.google.com/blockly/xml">
+  <!-- Do not include <variables> here to test backward compatibility. -->
   <block type="unittest_main" x="0" y="0">
+    <field name="SUITE_NAME">Variables</field>
     <statement name="DO">
       <block type="variables_set" inline="false">
         <field name="VAR">item</field>

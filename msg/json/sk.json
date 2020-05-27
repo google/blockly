@@ -1,22 +1,25 @@
 {
 	"@metadata": {
 		"authors": [
+			"Adams",
+			"Genhis",
 			"Jaroslav.micek",
+			"Kusavica",
+			"Lexected",
 			"Marian.stano",
 			"Mark",
-			"Kusavica",
-			"Genhis",
-			"Lexected",
-			"Adams",
-			"TomášPolonec",
-			"Pmikolas44"
+			"Nykta 1917",
+			"Pmikolas44",
+			"TomášPolonec"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "prvok",
+	"UNNAMED_KEY": "nepomenované",
 	"TODAY": "Dnes",
 	"DUPLICATE_BLOCK": "Duplikovať",
 	"ADD_COMMENT": "Pridať komentár",
 	"REMOVE_COMMENT": "Odstrániť komentár",
+	"DUPLICATE_COMMENT": "Duplicitný komentár",
 	"EXTERNAL_INPUTS": "Vonkajšie vstupy",
 	"INLINE_INPUTS": "Riadkové vstupy",
 	"DELETE_BLOCK": "Odstrániť blok",
@@ -36,6 +39,10 @@
 	"RENAME_VARIABLE": "Premenovať premennú...",
 	"RENAME_VARIABLE_TITLE": "Premenovať všetky premenné '%1' na:",
 	"NEW_VARIABLE": "Vytvoriť premennú...",
+	"NEW_STRING_VARIABLE": "Vytvoriť reťazovú premennú...",
+	"NEW_NUMBER_VARIABLE": "Vytvoriť číselnú premennú...",
+	"NEW_COLOUR_VARIABLE": "vytvoriť farbu premennej",
+	"NEW_VARIABLE_TYPE_TITLE": "nový typ premennej",
 	"NEW_VARIABLE_TITLE": "Názov novej premennej:",
 	"VARIABLE_ALREADY_EXISTS": "Premenná s názvom %1 už existuje.",
 	"VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE": "Premenná s názvom '%1' už existuje pre inú premennú typu '%2'.",
@@ -191,6 +198,9 @@
 	"MATH_RANDOM_FLOAT_HELPURL": "https://en.wikipedia.org/wiki/Random_number_generation",
 	"MATH_RANDOM_FLOAT_TITLE_RANDOM": "náhodné číslo od 0 do 1",
 	"MATH_RANDOM_FLOAT_TOOLTIP": "Vráť náhodné číslo z intervalu 0.0 (vrátane) až 1.0.",
+	"MATH_ATAN2_HELPURL": "https://en.wikipedia.org/wiki/Atan2",
+	"MATH_ATAN2_TITLE": "atan2 of X:%1 Y:%2",
+	"MATH_ATAN2_TOOLTIP": "Vráťte arktangent bodu (X, Y) v stupňoch od -180 do 180.",
 	"TEXT_TEXT_HELPURL": "https://en.wikipedia.org/wiki/String_(computer_science)",
 	"TEXT_TEXT_TOOLTIP": "Písmeno, slovo alebo riadok textu.",
 	"TEXT_JOIN_TITLE_CREATEWITH": "vytvor text z",
@@ -341,5 +351,7 @@
 	"PROCEDURES_HIGHLIGHT_DEF": "Zvýrazniť definíciu funkcie",
 	"PROCEDURES_CREATE_DO": "Vytvoriť '%1'",
 	"PROCEDURES_IFRETURN_TOOLTIP": "Ak je hodnota pravda, tak vráti druhú hodnotu.",
-	"PROCEDURES_IFRETURN_WARNING": "Upozornenie: Tento blok môže byť len vo vnútri funkcie."
+	"PROCEDURES_IFRETURN_WARNING": "Upozornenie: Tento blok môže byť len vo vnútri funkcie.",
+	"WORKSPACE_COMMENT_DEFAULT_TEXT": "Povedz niečo...",
+	"WORKSPACE_ARIA_LABEL": "Pracovisko Bloskly"
 }

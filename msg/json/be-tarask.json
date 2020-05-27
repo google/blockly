@@ -1,16 +1,19 @@
 {
 	"@metadata": {
 		"authors": [
-			"Renessaince",
 			"Jim-by",
-			"Red Winged Duck"
+			"Nerogaf",
+			"Red Winged Duck",
+			"Renessaince"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "аб’ект",
+	"UNNAMED_KEY": "безназоўны",
 	"TODAY": "Сёньня",
 	"DUPLICATE_BLOCK": "Капіяваць",
 	"ADD_COMMENT": "Дадаць камэнтар",
 	"REMOVE_COMMENT": "Выдаліць камэнтар",
+	"DUPLICATE_COMMENT": "Прадубляваць камэнтар",
 	"EXTERNAL_INPUTS": "Зьнешнія ўваходы",
 	"INLINE_INPUTS": "Унутраныя ўваходы",
 	"DELETE_BLOCK": "Выдаліць блёк",
@@ -30,9 +33,13 @@
 	"RENAME_VARIABLE": "Перайменаваць зьменную…",
 	"RENAME_VARIABLE_TITLE": "Перайменаваць усе назвы зьменных '%1' на:",
 	"NEW_VARIABLE": "Стварыць зьменную…",
+	"NEW_STRING_VARIABLE": "Стварыць радковую зьменную…",
+	"NEW_NUMBER_VARIABLE": "Стварыць лікавую зьменную…",
+	"NEW_COLOUR_VARIABLE": "Стварыць зьменную колеру…",
+	"NEW_VARIABLE_TYPE_TITLE": "Новы тып зьменнай:",
 	"NEW_VARIABLE_TITLE": "Імя новай зьменнай:",
 	"VARIABLE_ALREADY_EXISTS": "Зьменная з назвай «%1» ужо існуе.",
-	"VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE": "Зьменная з назвай «%1» ужо існуе зь іншым тыпам «%2».",
+	"VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE": "Зьменная з назвай «%1» ужо існуе зь іншым тыпам: «%2».",
 	"DELETE_VARIABLE_CONFIRMATION": "Выдаліць %1 выкарыстаньняў зьменнай «%2»?",
 	"CANNOT_DELETE_VARIABLE_PROCEDURE": "Немагчыма выдаліць зьменную «%1», таму што яна зьяўляецца часткай вызначэньня функцыі «%2»",
 	"DELETE_VARIABLE": "Выдаліць зьменную «%1»",
@@ -182,6 +189,9 @@
 	"MATH_RANDOM_FLOAT_HELPURL": "https://en.wikipedia.org/wiki/Random_number_generation",
 	"MATH_RANDOM_FLOAT_TITLE_RANDOM": "выпадковая дроб",
 	"MATH_RANDOM_FLOAT_TOOLTIP": "Вяртае выпадковую дроб у дыяпазоне ад 0,0 (уключна) да 1,0.",
+	"MATH_ATAN2_HELPURL": "https://en.wikipedia.org/wiki/Atan2",
+	"MATH_ATAN2_TITLE": "atan2 ад X:%1 Y:%2",
+	"MATH_ATAN2_TOOLTIP": "Вяртае арктангенс пункту (X, Y) у градусах ад -180 да 180.",
 	"TEXT_TEXT_HELPURL": "https://en.wikipedia.org/wiki/String_(computer_science)",
 	"TEXT_TEXT_TOOLTIP": "Літара, слова ці радок тэксту.",
 	"TEXT_JOIN_TITLE_CREATEWITH": "стварыць тэкст з",
@@ -336,5 +346,8 @@
 	"PROCEDURES_CREATE_DO": "Стварыць '%1'",
 	"PROCEDURES_IFRETURN_TOOLTIP": "Калі значэньне ісьціна, вярнуць другое значэньне.",
 	"PROCEDURES_IFRETURN_HELPURL": "http://c2.com/cgi/wiki?GuardClause",
-	"PROCEDURES_IFRETURN_WARNING": "Папярэджаньне: гэты блёк можа выкарыстоўвацца толькі ў вызначанай функцыі."
+	"PROCEDURES_IFRETURN_WARNING": "Папярэджаньне: гэты блёк можа выкарыстоўвацца толькі ў вызначанай функцыі.",
+	"WORKSPACE_COMMENT_DEFAULT_TEXT": "Напішыце што-небудзь…",
+	"WORKSPACE_ARIA_LABEL": "Працоўная прастора Blockly",
+	"COLLAPSED_WARNINGS_WARNING": "Згорнутыя блёкі ўтрымліваюць папярэджаньні."
 }

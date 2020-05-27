@@ -2,14 +2,16 @@
 	"@metadata": {
 		"authors": [
 			"Bl707",
-			"संजीव कुमार",
-			"Phoenix303",
-			"Sfic",
 			"Earlyengineers",
-			"Sachinkatiyar"
+			"Nilesh shukla",
+			"Phoenix303",
+			"Sachinkatiyar",
+			"Sfic",
+			"संजीव कुमार"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "वस्तु",
+	"UNNAMED_KEY": "अज्ञात",
 	"TODAY": "आज",
 	"DUPLICATE_BLOCK": "कॉपी करें",
 	"ADD_COMMENT": "टिप्पणी छोड़ें",
@@ -33,6 +35,10 @@
 	"RENAME_VARIABLE": "चर का नाम बदलें...",
 	"RENAME_VARIABLE_TITLE": "सभी '%1' चरों के नाम बदलें:",
 	"NEW_VARIABLE": "चर बनाएँ...",
+	"NEW_STRING_VARIABLE": "लड़ी चर बनायें...",
+	"NEW_NUMBER_VARIABLE": "संख्या चर बनायें...",
+	"NEW_COLOUR_VARIABLE": "रंग चर बनाएँ...",
+	"NEW_VARIABLE_TYPE_TITLE": "नए चर का नाम:",
 	"NEW_VARIABLE_TITLE": "नए चर का नाम:",
 	"VARIABLE_ALREADY_EXISTS": "प्राचल नाम '%1' पहले से मौजूद है।",
 	"VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE": "'%1' नाम का एक चर पहले से '%2' प्रकार के अन्य चर के लिए मौजूद है।",

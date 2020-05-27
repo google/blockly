@@ -1,21 +1,7 @@
 /**
  * @license
- * Blockly Demos: Block Factory
- *
- * Copyright 2016 Google Inc.
- * https://developers.google.com/blockly/
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Copyright 2016 Google LLC
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 /**
@@ -32,10 +18,7 @@
 /**
  * Namespace for Block Factory.
  */
-goog.provide('BlockFactory');
-
-goog.require('FactoryUtils');
-goog.require('StandardCategories');
+var BlockFactory = BlockFactory || Object.create(null);
 
 /**
  * Workspace for user to build block.
@@ -77,12 +60,13 @@ BlockFactory.updateBlocksFlag = false;
 // TODO: Replace global state with parameter passed to functions.
 BlockFactory.updateBlocksFlagDelayed = false;
 
-/*
+/**
  * The starting XML for the Block Factory main workspace. Contains the
  * unmovable, undeletable factory_base block.
  */
-BlockFactory.STARTER_BLOCK_XML_TEXT = '<xml><block type="factory_base" ' +
-    'deletable="false" movable="false">' +
+BlockFactory.STARTER_BLOCK_XML_TEXT =
+    '<xml xmlns="https://developers.google.com/blockly/xml">' +
+    '<block type="factory_base" deletable="false" movable="false">' +
     '<value name="TOOLTIP">' +
     '<block type="text" deletable="false" movable="false">' +
     '<field name="TEXT"></field></block></value>' +
@@ -151,7 +135,7 @@ BlockFactory.updateLanguage = function() {
     if (!BlockFactory.updateBlocksFlagDelayed) {
       var languagePre = document.getElementById('languagePre');
       var languageTA = document.getElementById('languageTA');
-      code = languagePre.textContent.trim();
+      code = languagePre.innerText.trim();
       languageTA.value = code;
     }
   }

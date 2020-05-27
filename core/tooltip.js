@@ -1,21 +1,7 @@
 /**
  * @license
- * Visual Blocks Editor
- *
- * Copyright 2011 Google Inc.
- * https://developers.google.com/blockly/
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Copyright 2011 Google LLC
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 /**
@@ -32,11 +18,10 @@
 /**
  * @name Blockly.Tooltip
  * @namespace
- **/
+ */
 goog.provide('Blockly.Tooltip');
 
-goog.require('goog.dom');
-goog.require('goog.dom.TagName');
+goog.require('Blockly.utils.string');
 
 
 /**
@@ -82,6 +67,7 @@ Blockly.Tooltip.lastY_ = 0;
 
 /**
  * Current element being pointed at.
+ * @type {Element}
  * @private
  */
 Blockly.Tooltip.element_ = null;
@@ -89,6 +75,7 @@ Blockly.Tooltip.element_ = null;
 /**
  * Once a tooltip has opened for an element, that element is 'poisoned' and
  * cannot respawn a tooltip until the pointer moves over a different element.
+ * @type {Element}
  * @private
  */
 Blockly.Tooltip.poisonedElement_ = null;
@@ -132,9 +119,10 @@ Blockly.Tooltip.createDom = function() {
     return;  // Already created.
   }
   // Create an HTML container for popup overlays (e.g. editor widgets).
-  Blockly.Tooltip.DIV =
-      goog.dom.createDom(goog.dom.TagName.DIV, 'blocklyTooltipDiv');
-  document.body.appendChild(Blockly.Tooltip.DIV);
+  Blockly.Tooltip.DIV = document.createElement('div');
+  Blockly.Tooltip.DIV.className = 'blocklyTooltipDiv';
+  var container = Blockly.parentContainer || document.body;
+  container.appendChild(Blockly.Tooltip.DIV);
 };
 
 /**
@@ -142,15 +130,28 @@ Blockly.Tooltip.createDom = function() {
  * @param {!Element} element SVG element onto which tooltip is to be bound.
  */
 Blockly.Tooltip.bindMouseEvents = function(element) {
-  Blockly.bindEvent_(element, 'mouseover', null,
+  element.mouseOverWrapper_ = Blockly.bindEvent_(element, 'mouseover', null,
       Blockly.Tooltip.onMouseOver_);
-  Blockly.bindEvent_(element, 'mouseout', null,
+  element.mouseOutWrapper_ = Blockly.bindEvent_(element, 'mouseout', null,
       Blockly.Tooltip.onMouseOut_);
 
   // Don't use bindEvent_ for mousemove since that would create a
   // corresponding touch handler, even though this only makes sense in the
   // context of a mouseover/mouseout.
   element.addEventListener('mousemove', Blockly.Tooltip.onMouseMove_, false);
+};
+
+/**
+ * Unbinds tooltip mouse events from the SVG element.
+ * @param {!Element} element SVG element onto which tooltip is bound.
+ */
+Blockly.Tooltip.unbindMouseEvents = function(element) {
+  if (!element) {
+    return;
+  }
+  Blockly.unbindEvent_(element.mouseOverWrapper_);
+  Blockly.unbindEvent_(element.mouseOutWrapper_);
+  element.removeEventListener('mousemove', Blockly.Tooltip.onMouseMove_);
 };
 
 /**
@@ -166,8 +167,9 @@ Blockly.Tooltip.onMouseOver_ = function(e) {
   }
   // If the tooltip is an object, treat it as a pointer to the next object in
   // the chain to look at.  Terminate when a string or function is found.
-  var element = e.target;
-  while (!goog.isString(element.tooltip) && !goog.isFunction(element.tooltip)) {
+  var element = e.currentTarget;
+  while ((typeof element.tooltip != 'string') &&
+         (typeof element.tooltip != 'function')) {
     element = element.tooltip;
   }
   if (Blockly.Tooltip.element_ != element) {
@@ -181,11 +183,10 @@ Blockly.Tooltip.onMouseOver_ = function(e) {
 
 /**
  * Hide the tooltip if the mouse leaves the object and enters the workspace.
- * @param {!Event} e Mouse event.
+ * @param {!Event} _e Mouse event.
  * @private
  */
-Blockly.Tooltip.onMouseOut_ = function(/* eslint-disable no-unused-vars */e
-    /* eslint-enable no-unused-vars */) {
+Blockly.Tooltip.onMouseOut_ = function(_e) {
   if (Blockly.Tooltip.blocked_) {
     // Someone doesn't want us to show tooltips.
     return;
@@ -212,9 +213,6 @@ Blockly.Tooltip.onMouseMove_ = function(e) {
   if (!Blockly.Tooltip.element_ || !Blockly.Tooltip.element_.tooltip) {
     // No tooltip here to show.
     return;
-  } else if (Blockly.WidgetDiv.isVisible()) {
-    // Don't display a tooltip if a widget is open (tooltip would be under it).
-    return;
   } else if (Blockly.Tooltip.blocked_) {
     // Someone doesn't want us to show tooltips.  We are probably handling a
     // user gesture, such as a click or drag.
@@ -237,6 +235,16 @@ Blockly.Tooltip.onMouseMove_ = function(e) {
     Blockly.Tooltip.showPid_ =
         setTimeout(Blockly.Tooltip.show_, Blockly.Tooltip.HOVER_MS);
   }
+};
+
+/**
+ * Dispose of the tooltip.
+ * @package
+ */
+Blockly.Tooltip.dispose = function() {
+  Blockly.Tooltip.element_ = null;
+  Blockly.Tooltip.poisonedElement_ = null;
+  Blockly.Tooltip.hide();
 };
 
 /**
@@ -287,13 +295,13 @@ Blockly.Tooltip.show_ = function() {
     return;
   }
   // Erase all existing text.
-  goog.dom.removeChildren(/** @type {!Element} */ (Blockly.Tooltip.DIV));
+  Blockly.Tooltip.DIV.textContent = '';
   // Get the new text.
   var tip = Blockly.Tooltip.element_.tooltip;
-  while (goog.isFunction(tip)) {
+  while (typeof tip == 'function') {
     tip = tip();
   }
-  tip = Blockly.utils.wrap(tip, Blockly.Tooltip.LIMIT);
+  tip = Blockly.utils.string.wrap(tip, Blockly.Tooltip.LIMIT);
   // Create new text, line by line.
   var lines = tip.split('\n');
   for (var i = 0; i < lines.length; i++) {
@@ -302,7 +310,8 @@ Blockly.Tooltip.show_ = function() {
     Blockly.Tooltip.DIV.appendChild(div);
   }
   var rtl = Blockly.Tooltip.element_.RTL;
-  var windowSize = goog.dom.getViewportSize();
+  var windowWidth = document.documentElement.clientWidth;
+  var windowHeight = document.documentElement.clientHeight;
   // Display the tooltip.
   Blockly.Tooltip.DIV.style.direction = rtl ? 'rtl' : 'ltr';
   Blockly.Tooltip.DIV.style.display = 'block';
@@ -317,7 +326,7 @@ Blockly.Tooltip.show_ = function() {
   var anchorY = Blockly.Tooltip.lastY_ + Blockly.Tooltip.OFFSET_Y;
 
   if (anchorY + Blockly.Tooltip.DIV.offsetHeight >
-      windowSize.height + window.scrollY) {
+      windowHeight + window.scrollY) {
     // Falling off the bottom of the screen; shift the tooltip up.
     anchorY -= Blockly.Tooltip.DIV.offsetHeight + 2 * Blockly.Tooltip.OFFSET_Y;
   }
@@ -326,10 +335,10 @@ Blockly.Tooltip.show_ = function() {
     anchorX = Math.max(Blockly.Tooltip.MARGINS - window.scrollX, anchorX);
   } else {
     if (anchorX + Blockly.Tooltip.DIV.offsetWidth >
-        windowSize.width + window.scrollX - 2 * Blockly.Tooltip.MARGINS) {
+        windowWidth + window.scrollX - 2 * Blockly.Tooltip.MARGINS) {
       // Falling off the right edge of the screen;
       // clamp the tooltip on the edge.
-      anchorX = windowSize.width - Blockly.Tooltip.DIV.offsetWidth -
+      anchorX = windowWidth - Blockly.Tooltip.DIV.offsetWidth -
           2 * Blockly.Tooltip.MARGINS;
     }
   }

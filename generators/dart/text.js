@@ -1,21 +1,7 @@
 /**
  * @license
- * Visual Blocks Language
- *
- * Copyright 2014 Google Inc.
- * https://developers.google.com/blockly/
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Copyright 2014 Google LLC
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 /**
@@ -34,6 +20,12 @@ Blockly.Dart.addReservedWords('Html,Math');
 Blockly.Dart['text'] = function(block) {
   // Text value.
   var code = Blockly.Dart.quote_(block.getFieldValue('TEXT'));
+  return [code, Blockly.Dart.ORDER_ATOMIC];
+};
+
+Blockly.Dart['text_multiline'] = function(block) {
+  // Text value.
+  var code = Blockly.Dart.multiline_quote_(block.getFieldValue('TEXT'));
   return [code, Blockly.Dart.ORDER_ATOMIC];
 };
 
@@ -61,7 +53,7 @@ Blockly.Dart['text_join'] = function(block) {
 Blockly.Dart['text_append'] = function(block) {
   // Append to a variable in place.
   var varName = Blockly.Dart.variableDB_.getName(block.getFieldValue('VAR'),
-      Blockly.Variables.NAME_TYPE);
+      Blockly.VARIABLE_CATEGORY_NAME);
   var value = Blockly.Dart.valueToCode(block, 'TEXT',
       Blockly.Dart.ORDER_NONE) || '\'\'';
   return varName + ' = [' + varName + ', ' + value + '].join();\n';
@@ -136,7 +128,7 @@ Blockly.Dart['text_charAt'] = function(block) {
       code = functionName + '(' + text + ')';
       return [code, Blockly.Dart.ORDER_UNARY_POSTFIX];
   }
-  throw 'Unhandled option (text_charAt).';
+  throw Error('Unhandled option (text_charAt).');
 };
 
 Blockly.Dart['text_getSubstring'] = function(block) {
@@ -164,7 +156,7 @@ Blockly.Dart['text_getSubstring'] = function(block) {
         var at1 = '0';
         break;
       default:
-        throw 'Unhandled option (text_getSubstring).';
+        throw Error('Unhandled option (text_getSubstring).');
     }
     switch (where2) {
       case 'FROM_START':
@@ -178,7 +170,7 @@ Blockly.Dart['text_getSubstring'] = function(block) {
       case 'LAST':
         break;
       default:
-        throw 'Unhandled option (text_getSubstring).';
+        throw Error('Unhandled option (text_getSubstring).');
     }
     if (where2 == 'LAST') {
       var code = text + '.substring(' + at1 + ')';
@@ -190,9 +182,9 @@ Blockly.Dart['text_getSubstring'] = function(block) {
     var at2 = Blockly.Dart.getAdjusted(block, 'AT2');
     var functionName = Blockly.Dart.provideFunction_(
         'text_get_substring',
-        ['List ' + Blockly.Dart.FUNCTION_NAME_PLACEHOLDER_ +
-            '(text, where1, at1, where2, at2) {',
-         '  int getAt(where, at) {',
+        ['String ' + Blockly.Dart.FUNCTION_NAME_PLACEHOLDER_ +
+            '(String text, String where1, num at1, String where2, num at2) {',
+         '  int getAt(String where, num at) {',
          '    if (where == \'FROM_END\') {',
          '      at = text.length - 1 - at;',
          '    } else if (where == \'FIRST\') {',

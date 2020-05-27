@@ -47,15 +47,15 @@
     </textarea>
   </div>
 
-  <xml id="toolbox" style="display: none">
-    <category name="Logic">
+  <xml xmlns="https://developers.google.com/blockly/xml" id="toolbox" style="display: none">
+    <category name="Logic" colour="%{BKY_LOGIC_HUE}">
       <block type="controls_if"></block>
       <block type="logic_compare"></block>
       <block type="logic_operation"></block>
       <block type="logic_negate"></block>
       <block type="logic_boolean"></block>
     </category>
-    <category name="Loops">
+    <category name="Loops" colour="%{BKY_LOOPS_HUE}">
       <block type="controls_repeat_ext">
         <value name="TIMES">
           <block type="math_number">
@@ -65,12 +65,14 @@
       </block>
       <block type="controls_whileUntil"></block>
     </category>
-    <category name="Math">
-      <block type="math_number"></block>
+    <category name="Math" colour="%{BKY_MATH_HUE}">
+      <block type="math_number">
+        <field name="NUM">123</field>
+      </block>
       <block type="math_arithmetic"></block>
       <block type="math_single"></block>
     </category>
-    <category name="Text">
+    <category name="Text" colour="%{BKY_TEXTS_HUE}">
       <block type="text"></block>
       <block type="text_length"></block>
       <block type="text_print"></block>
@@ -80,11 +82,14 @@
         </value>
       </block>
     </category>
-    <category name="Variables" custom="VARIABLE"></category>
-    <category name="Functions" custom="PROCEDURE"></category>
+    <sep></sep>
+    <category name="Variables" custom="VARIABLE" colour="%{BKY_VARIABLES_HUE}">
+    </category>
+    <category name="Functions" custom="PROCEDURE" colour="%{BKY_PROCEDURES_HUE}">
+    </category>
   </xml>
 
-  <xml id="startBlocks" style="display: none">
+  <xml xmlns="https://developers.google.com/blockly/xml" id="startBlocks" style="display: none">
     <block type="variables_set" id="set_n_initial" inline="true" x="20" y="20">
       <field name="VAR">n</field>
       <value name="VALUE">
@@ -144,28 +149,27 @@
     var stepButton = document.getElementById('stepButton');
     var myInterpreter = null;
 
-    function initApi(interpreter, scope) {
+    function initApi(interpreter, globalObject) {
       // Add an API function for the alert() block, generated for "text_print" blocks.
-      interpreter.setProperty(scope, 'alert',
+      interpreter.setProperty(globalObject, 'alert',
           interpreter.createNativeFunction(function(text) {
-        text = text ? text.toString() : '';
+        text = arguments.length ? text : '';
         outputArea.value += '\n' + text;
       }));
 
       // Add an API function for the prompt() block.
       var wrapper = function(text) {
-        text = text ? text.toString() : '';
         return interpreter.createPrimitive(prompt(text));
       };
-      interpreter.setProperty(scope, 'prompt',
+      interpreter.setProperty(globalObject, 'prompt',
           interpreter.createNativeFunction(wrapper));
 
       // Add an API function for highlighting blocks.
       var wrapper = function(id) {
-        id = id ? id.toString() : '';
+        id = String(id || '');
         return interpreter.createPrimitive(highlightBlock(id));
       };
-      interpreter.setProperty(scope, 'highlightBlock',
+      interpreter.setProperty(globalObject, 'highlightBlock',
           interpreter.createNativeFunction(wrapper));
     }
 

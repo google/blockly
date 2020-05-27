@@ -1,7 +1,8 @@
 {
 	"@metadata": {
 		"authors": [
-			"Baloch Afghanistan"
+			"Baloch Afghanistan",
+			"Sultanselim baloch"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "مورد",
@@ -181,7 +182,7 @@
 	"TEXT_CHARAT_RANDOM": "گرفتن حرف تصادفی",
 	"TEXT_CHARAT_TOOLTIP": "حرفی در موقعیت مشخص‌شده بر می‌گرداند.",
 	"TEXT_GET_SUBSTRING_TOOLTIP": "قسمت مشخصی‌شده‌ای از متن را بر می‌گرداند.",
-	"TEXT_GET_SUBSTRING_INPUT_IN_TEXT": "در متن",
+	"TEXT_GET_SUBSTRING_INPUT_IN_TEXT": "مہ نبشتہ‌ئا",
 	"TEXT_GET_SUBSTRING_START_FROM_START": "گرفتن زیرمتن از حرف #",
 	"TEXT_GET_SUBSTRING_START_FROM_END": "گرفتن زیرمتن از حرف # به انتها",
 	"TEXT_GET_SUBSTRING_START_FIRST": "گرفتن زیرمتن از اولین حرف",
@@ -206,7 +207,7 @@
 	"LISTS_CREATE_EMPTY_TOOLTIP": "فهرستی با طول صفر شامل هیچ رکورد داده‌ای بر می‌گرداند.",
 	"LISTS_CREATE_WITH_TOOLTIP": "فهرستی از هر عددی از موارد می‌سازد.",
 	"LISTS_CREATE_WITH_INPUT_WITH": "ایجاد فهرست با",
-	"LISTS_CREATE_WITH_CONTAINER_TITLE_ADD": "فهرست",
+	"LISTS_CREATE_WITH_CONTAINER_TITLE_ADD": "لیست",
 	"LISTS_CREATE_WITH_CONTAINER_TOOLTIP": "اضافه‌کردن، حذف‌کردن یا ترتیب‌سازی مجدد بخش‌ها این بلوک فهرستی.",
 	"LISTS_CREATE_WITH_ITEM_TOOLTIP": "اضافه‌کردن یک مورد به فهرست.",
 	"LISTS_REPEAT_TOOLTIP": "فهرستی شامل مقادیر داده‌شدهٔ تکرار شده عدد مشخص‌شده می‌سازد.",
@@ -215,7 +216,7 @@
 	"LISTS_LENGTH_TOOLTIP": "طول یک فهرست را برمی‌گرداند.",
 	"LISTS_ISEMPTY_TITLE": "%1 خالی است",
 	"LISTS_ISEMPTY_TOOLTIP": "اگر فهرست خالی است مقدار صجیج بر می‌گرداند.",
-	"LISTS_INLIST": "در فهرست",
+	"LISTS_INLIST": "مہ لیست‌ئا",
 	"LISTS_INDEX_OF_FIRST": "آخرین رخداد متن را بیاب",
 	"LISTS_INDEX_OF_LAST": "یافتن آخرین رخ‌داد مورد",
 	"LISTS_INDEX_OF_TOOLTIP": "شاخصی از اولین/آخرین رخ‌داد مورد در فهرست را بر می‌گرداند. %1 بر می‌گرداند اگر متن موجود نبود.",
@@ -225,7 +226,7 @@
 	"LISTS_GET_INDEX_FROM_END": "# از انتها",
 	"LISTS_GET_INDEX_FIRST": "اولین",
 	"LISTS_GET_INDEX_LAST": "اهرین",
-	"LISTS_GET_INDEX_RANDOM": "تصادفی",
+	"LISTS_GET_INDEX_RANDOM": "یکپارگی",
 	"LISTS_INDEX_FROM_START_TOOLTIP": "%1 اولین مورد است.",
 	"LISTS_INDEX_FROM_END_TOOLTIP": "%1 آخرین مورد است.",
 	"LISTS_GET_INDEX_TOOLTIP_GET_FROM": "موردی در محل مشخص‌شده بر می‌گرداند.",
@@ -241,7 +242,7 @@
 	"LISTS_GET_INDEX_TOOLTIP_REMOVE_LAST": "آخرین مورد را در یک فهرست حذف می‌کند.",
 	"LISTS_GET_INDEX_TOOLTIP_REMOVE_RANDOM": "یک مورد تصادفی را یک فهرست حذف می‌کند.",
 	"LISTS_SET_INDEX_SET": "مجموعه",
-	"LISTS_SET_INDEX_INSERT": "درج در",
+	"LISTS_SET_INDEX_INSERT": "جاہ دیگ مہ",
 	"LISTS_SET_INDEX_INPUT_TO": "به‌عنوان",
 	"LISTS_SET_INDEX_TOOLTIP_SET_FROM": "مورد مشخص‌شده در یک فهرست را قرار می‌دهد.",
 	"LISTS_SET_INDEX_TOOLTIP_SET_FIRST": "اولین مورد در یک فهرست را تعیین می‌کند.",

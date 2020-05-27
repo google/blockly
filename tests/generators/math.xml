@@ -1,5 +1,6 @@
-<xml xmlns="http://www.w3.org/1999/xhtml">
+<xml xmlns="https://developers.google.com/blockly/xml">
   <block type="unittest_main" x="13" y="13">
+    <field name="SUITE_NAME">Math</field>
     <statement name="DO">
       <block type="procedures_callnoreturn">
         <mutation name="test arithmetic"></mutation>
@@ -36,6 +37,11 @@
                                                 <next>
                                                   <block type="procedures_callnoreturn">
                                                     <mutation name="test random fraction"></mutation>
+                                                    <next>
+                                                      <block type="procedures_callnoreturn">
+                                                        <mutation name="test atan2"></mutation>
+                                                      </block>
+                                                    </next>
                                                   </block>
                                                 </next>
                                               </block>
@@ -1874,6 +1880,66 @@
                     </value>
                   </block>
                 </value>
+              </block>
+            </value>
+          </block>
+        </next>
+      </block>
+    </statement>
+  </block>
+  <block type="procedures_defnoreturn" y="5938" x="13">
+    <field name="NAME">test atan2</field>
+    <comment w="160" h="80" pinned="false">Describe this function...</comment>
+    <statement name="STACK">
+      <block type="unittest_assertequals">
+        <value name="MESSAGE">
+          <block type="text">
+            <field name="TEXT">atan2</field>
+          </block>
+        </value>
+        <value name="ACTUAL">
+          <block type="math_atan2">
+            <value name="X">
+              <block type="math_number">
+                <field name="NUM">-5</field>
+              </block>
+            </value>
+            <value name="Y">
+              <block type="math_number">
+                <field name="NUM">5</field>
+              </block>
+            </value>
+          </block>
+        </value>
+        <value name="EXPECTED">
+          <block type="math_number">
+            <field name="NUM">135</field>
+          </block>
+        </value>
+        <next>
+          <block type="unittest_assertequals">
+            <value name="MESSAGE">
+              <block type="text">
+                <field name="TEXT">atan2</field>
+              </block>
+            </value>
+            <value name="ACTUAL">
+              <block type="math_atan2">
+                <value name="X">
+                  <block type="math_number">
+                    <field name="NUM">0</field>
+                  </block>
+                </value>
+                <value name="Y">
+                  <block type="math_number">
+                    <field name="NUM">-12</field>
+                  </block>
+                </value>
+              </block>
+            </value>
+            <value name="EXPECTED">
+              <block type="math_number">
+                <field name="NUM">-90</field>
               </block>
             </value>
           </block>

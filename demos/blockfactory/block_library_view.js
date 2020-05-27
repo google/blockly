@@ -1,21 +1,7 @@
 /**
  * @license
- * Blockly Demos: Block Factory
- *
- * Copyright 2016 Google Inc.
- * https://developers.google.com/blockly/
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Copyright 2016 Google LLC
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 /**
@@ -26,12 +12,6 @@
  */
 
 'use strict';
-
-goog.provide('BlockLibraryView');
-
-goog.require('goog.dom');
-goog.require('goog.dom.classlist');
-
 
 /**
  * BlockLibraryView Class
@@ -59,10 +39,10 @@ var BlockLibraryView = function() {
  */
 BlockLibraryView.prototype.addOption = function(blockType, selected) {
   // Create option.
-  var option = goog.dom.createDom('a', {
-    'id': 'dropdown_' + blockType,
-    'class': 'blockLibOpt'
-  }, blockType);
+  var option = document.createElement('a');
+  option.id ='dropdown_' + blockType;
+  option.classList.add('blockLibOpt');
+  option.textContent = blockType;
 
   // Add option to dropdown.
   this.dropdown.appendChild(option);
@@ -99,7 +79,7 @@ BlockLibraryView.prototype.setSelectedBlockType = function(blockTypeToSelect) {
  * @private
  */
 BlockLibraryView.prototype.selectOption_ = function(option) {
-  goog.dom.classlist.add(option, 'dropdown-content-selected');
+  option.classList.add('dropdown-content-selected');
 };
 
 /**
@@ -109,7 +89,7 @@ BlockLibraryView.prototype.selectOption_ = function(option) {
  * @private
  */
 BlockLibraryView.prototype.deselectOption_ = function(option) {
-  goog.dom.classlist.remove(option, 'dropdown-content-selected');
+  option.classList.remove('dropdown-content-selected');
 };
 
 /**
@@ -150,13 +130,12 @@ BlockLibraryView.prototype.updateButtons =
       if (blockType == 'block_type') {
         buttonFormatClass = 'button_alert';
       }
-      goog.dom.classlist.add(this.saveButton, buttonFormatClass);
+      this.saveButton.classList.add(buttonFormatClass);
       this.saveButton.disabled = false;
 
     } else {
       // No changes to save.
-      var classesToRemove = ['button_alert', 'button_warn'];
-      goog.dom.classlist.removeAll(this.saveButton, classesToRemove);
+      this.saveButton.classList.remove('button_alert', 'button_warn');
       this.saveButton.disabled = true;
     }
 

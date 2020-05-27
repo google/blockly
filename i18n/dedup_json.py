@@ -6,8 +6,7 @@
 # There is also no guarantee as to the order of the key-value pairs
 # output.
 #
-# Copyright 2013 Google Inc.
-# https://developers.google.com/blockly/
+# Copyright 2013 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -51,9 +50,9 @@ def main():
     try:
       with codecs.open(filename, 'r', 'utf-8') as infile:
         j = json.load(infile)
-    except ValueError, e:
+    except ValueError as e:
       print('Error reading ' + filename)
-      raise InputError(file, str(e))
+      raise InputError(filename, str(e))
 
     # Built up output strings as an array to make output of delimiters easier.
     output = []

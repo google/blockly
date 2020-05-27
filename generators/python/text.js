@@ -1,21 +1,7 @@
 /**
  * @license
- * Visual Blocks Language
- *
- * Copyright 2012 Google Inc.
- * https://developers.google.com/blockly/
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Copyright 2012 Google LLC
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 /**
@@ -35,6 +21,31 @@ Blockly.Python['text'] = function(block) {
   return [code, Blockly.Python.ORDER_ATOMIC];
 };
 
+Blockly.Python['text_multiline'] = function(block) {
+  // Text value.
+  var code = Blockly.Python.multiline_quote_(block.getFieldValue('TEXT'));
+  return [code, Blockly.Python.ORDER_ATOMIC];
+};
+
+/**
+ * Enclose the provided value in 'str(...)' function.
+ * Leave string literals alone.
+ * @param {string} value Code evaluating to a value.
+ * @return {string} Code evaluating to a string.
+ * @private
+ */
+Blockly.Python.text.forceString_ = function(value) {
+  if (Blockly.Python.text.forceString_.strRegExp.test(value)) {
+    return value;
+  }
+  return 'str(' + value + ')';
+};
+
+/**
+ * Regular expression to detect a single-quoted string literal.
+ */
+Blockly.Python.text.forceString_.strRegExp = /^\s*'([^']|\\')*'\s*$/;
+
 Blockly.Python['text_join'] = function(block) {
   // Create a string made up of any number of elements of any type.
   //Should we allow joining by '-' or ',' or any other characters?
@@ -45,15 +56,16 @@ Blockly.Python['text_join'] = function(block) {
     case 1:
       var element = Blockly.Python.valueToCode(block, 'ADD0',
               Blockly.Python.ORDER_NONE) || '\'\'';
-      var code = 'str(' + element + ')';
+      var code = Blockly.Python.text.forceString_(element);
       return [code, Blockly.Python.ORDER_FUNCTION_CALL];
       break;
     case 2:
       var element0 = Blockly.Python.valueToCode(block, 'ADD0',
-              Blockly.Python.ORDER_NONE) || '\'\'';
+          Blockly.Python.ORDER_NONE) || '\'\'';
       var element1 = Blockly.Python.valueToCode(block, 'ADD1',
-              Blockly.Python.ORDER_NONE) || '\'\'';
-      var code = 'str(' + element0 + ') + str(' + element1 + ')';
+          Blockly.Python.ORDER_NONE) || '\'\'';
+      var code = Blockly.Python.text.forceString_(element0) + ' + ' +
+          Blockly.Python.text.forceString_(element1);
       return [code, Blockly.Python.ORDER_ADDITIVE];
       break;
     default:
@@ -63,7 +75,7 @@ Blockly.Python['text_join'] = function(block) {
                 Blockly.Python.ORDER_NONE) || '\'\'';
       }
       var tempVar = Blockly.Python.variableDB_.getDistinctName('x',
-          Blockly.Variables.NAME_TYPE);
+          Blockly.VARIABLE_CATEGORY_NAME);
       var code = '\'\'.join([str(' + tempVar + ') for ' + tempVar + ' in [' +
           elements.join(', ') + ']])';
       return [code, Blockly.Python.ORDER_FUNCTION_CALL];
@@ -73,10 +85,11 @@ Blockly.Python['text_join'] = function(block) {
 Blockly.Python['text_append'] = function(block) {
   // Append to a variable in place.
   var varName = Blockly.Python.variableDB_.getName(block.getFieldValue('VAR'),
-      Blockly.Variables.NAME_TYPE);
+      Blockly.VARIABLE_CATEGORY_NAME);
   var value = Blockly.Python.valueToCode(block, 'TEXT',
       Blockly.Python.ORDER_NONE) || '\'\'';
-  return varName + ' = str(' + varName + ') + str(' + value + ')\n';
+  return varName + ' = str(' + varName + ') + ' +
+      Blockly.Python.text.forceString_(value) + '\n';
 };
 
 Blockly.Python['text_length'] = function(block) {
@@ -140,7 +153,7 @@ Blockly.Python['text_charAt'] = function(block) {
       code = functionName + '(' + text + ')';
       return [code, Blockly.Python.ORDER_FUNCTION_CALL];
   }
-  throw 'Unhandled option (text_charAt).';
+  throw Error('Unhandled option (text_charAt).');
 };
 
 Blockly.Python['text_getSubstring'] = function(block) {
@@ -163,7 +176,7 @@ Blockly.Python['text_getSubstring'] = function(block) {
       var at1 = '';
       break;
     default:
-      throw 'Unhandled option (text_getSubstring)';
+      throw Error('Unhandled option (text_getSubstring)');
   }
   switch (where2) {
     case 'FROM_START':
@@ -184,7 +197,7 @@ Blockly.Python['text_getSubstring'] = function(block) {
       var at2 = '';
       break;
     default:
-      throw 'Unhandled option (text_getSubstring)';
+      throw Error('Unhandled option (text_getSubstring)');
   }
   var code = text + '[' + at1 + ' : ' + at2 + ']';
   return [code, Blockly.Python.ORDER_MEMBER];

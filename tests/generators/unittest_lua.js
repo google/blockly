@@ -1,21 +1,7 @@
 /**
  * @license
- * Visual Blocks Language
- *
- * Copyright 2016 Google Inc.
- * https://developers.google.com/blockly/
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Copyright 2016 Google LLC
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 /**
@@ -27,7 +13,7 @@
 Blockly.Lua['unittest_main'] = function(block) {
   // Container for unit tests.
   var resultsVar = Blockly.Lua.variableDB_.getName('unittestResults',
-      Blockly.Variables.NAME_TYPE);
+      Blockly.Names.DEVELOPER_VARIABLE_TYPE);
   var functionName = Blockly.Lua.provideFunction_(
       'unittest_report',
       ['function ' + Blockly.Lua.FUNCTION_NAME_PLACEHOLDER_ + '()',
@@ -58,22 +44,24 @@ Blockly.Lua['unittest_main'] = function(block) {
        'end']);
   // Setup global to hold test results.
   var code = resultsVar + ' = {}\n';
+  // Say which test suite this is.
+  code += 'print(\'\\n====================\\n\\n' +
+      'Running suite: ' +
+      block.getFieldValue('SUITE_NAME') +
+       '\')\n';
   // Run tests (unindented).
   code += Blockly.Lua.statementToCode(block, 'DO')
       .replace(/^  /, '').replace(/\n  /g, '\n');
-  var reportVar = Blockly.Lua.variableDB_.getDistinctName(
-      'report', Blockly.Variables.NAME_TYPE);
-  code += reportVar + ' = ' + functionName + '()\n';
+  // Print the report.
+  code += 'print(' + functionName + '())\n';
   // Destroy results.
   code += resultsVar + ' = nil\n';
-  // Print the report.
-  code += 'print(' + reportVar + ')\n';
   return code;
 };
 
 Blockly.Lua['unittest_main'].defineAssert_ = function(block) {
   var resultsVar = Blockly.Lua.variableDB_.getName('unittestResults',
-      Blockly.Variables.NAME_TYPE);
+      Blockly.Names.DEVELOPER_VARIABLE_TYPE);
   var functionName = Blockly.Lua.provideFunction_(
       'assertEquals',
       ['function ' + Blockly.Lua.FUNCTION_NAME_PLACEHOLDER_ +
@@ -152,9 +140,8 @@ Blockly.Lua['unittest_assertvalue'] = function(block) {
 Blockly.Lua['unittest_fail'] = function(block) {
   // Always assert an error.
   var resultsVar = Blockly.Lua.variableDB_.getName('unittestResults',
-      Blockly.Variables.NAME_TYPE);
-  var message = Blockly.Lua.valueToCode(block, 'MESSAGE',
-      Blockly.Lua.ORDER_NONE) || '';
+      Blockly.Names.DEVELOPER_VARIABLE_TYPE);
+  var message = Blockly.Lua.quote_(block.getFieldValue('MESSAGE'));
   var functionName = Blockly.Lua.provideFunction_(
       'unittest_fail',
       ['function ' + Blockly.Lua.FUNCTION_NAME_PLACEHOLDER_ + '(message)',
@@ -172,7 +159,7 @@ Blockly.Lua['unittest_adjustindex'] = function(block) {
       Blockly.Lua.ORDER_ADDITIVE) || '0';
   if (Blockly.isNumber(index)) {
     // If the index is a naked number, adjust it right now.
-    return [parseFloat(index) + 1, Blockly.Lua.ORDER_ATOMIC];
+    return [Number(index) + 1, Blockly.Lua.ORDER_ATOMIC];
   }
   // If the index is dynamic, adjust it in code.
   return [index + ' + 1', Blockly.Lua.ORDER_ATOMIC];

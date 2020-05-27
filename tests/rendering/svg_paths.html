@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<!--
+@license
+Copyright 2019 Google LLC
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+ http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>SVG Path Playground</title>
+  <script src="../../blockly_uncompressed.js"></script>
+
+  <style>
+    html, body {
+      height: 100%;
+    }
+    body {
+      background-color: #fff;
+      font-family: sans-serif;
+      overflow: hidden;
+    }
+    .pathDebugClass {
+      stroke-width: 1px;
+      stroke: black;
+      fill: none;
+    }
+    .lineStartMarker {
+      fill: blue;
+    }
+  </style>
+
+<script>
+'use strict';
+var svgSpace;
+
+function addPathAt(path, x, y) {
+  var group = Blockly.utils.dom.createSvgElement('g',
+      {
+        'transform': 'translate(' + (x + 50) + ', ' + y + ')'
+      }, svgSpace);
+  Blockly.utils.dom.createSvgElement('path', {
+    'd': 'M 0,0 ' + path,
+    'marker-start': 'url(#startDot)',
+    'marker-end': 'url(#endDot)',
+    'class': 'pathDebugClass'
+  },
+  group);
+
+
+  return group;
+}
+
+function start() {
+  svgSpace = document.getElementById('workspace');
+  addPathAt(Blockly.BlockSvg.START_HAT_PATH, 0, 40);
+  addPathAt(Blockly.BlockSvg.NOTCH_PATH_LEFT, 0, 60);
+  addPathAt(Blockly.BlockSvg.NOTCH_PATH_RIGHT, 0, 70);
+  addPathAt(Blockly.BlockSvg.INNER_TOP_LEFT_CORNER, 0, 90);
+}
+</script>
+
+</head>
+
+<body onload="start()">
+
+  <svg xmlns="http://www.w4.org/2000/svg" version="1.1" width="1000px" height="1000px" viewBox="0 0 200 200" id="workspace">
+
+    <defs>
+      <!-- Background grid -->
+      <pattern id="grid" patternUnits="userSpaceOnUse" width="10" height="10">
+        <line stroke="#ccc" stroke-width="2" x1="0" y1="1" x2="2" y2="1"></line>
+      </pattern>
+      <!-- simple dot marker definitions -->
+      <marker id="startDot" viewBox="0 0 10 10" refX="5" refY="5"
+          markerWidth="5" markerHeight="5">
+        <circle cx="5" cy="5" r="2" fill="red" />
+      </marker>
+      <marker id="endDot" viewBox="0 0 10 10" refX="5" refY="5"
+          markerWidth="5" markerHeight="5">
+        <circle cx="5" cy="5" r="2" fill="blue" />
+      </marker>
+    </defs>
+    <rect x="0" y="0" width="1000" height="1000" style="fill:url(#grid);"></rect>
+  </svg>
+</body>

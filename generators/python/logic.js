@@ -1,21 +1,7 @@
 /**
  * @license
- * Visual Blocks Language
- *
- * Copyright 2012 Google Inc.
- * https://developers.google.com/blockly/
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Copyright 2012 Google LLC
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 /**
@@ -33,19 +19,32 @@ Blockly.Python['controls_if'] = function(block) {
   // If/elseif/else condition.
   var n = 0;
   var code = '', branchCode, conditionCode;
+  if (Blockly.Python.STATEMENT_PREFIX) {
+    // Automatic prefix insertion is switched off for this block.  Add manually.
+    code += Blockly.Python.injectId(Blockly.Python.STATEMENT_PREFIX, block);
+  }
   do {
     conditionCode = Blockly.Python.valueToCode(block, 'IF' + n,
         Blockly.Python.ORDER_NONE) || 'False';
     branchCode = Blockly.Python.statementToCode(block, 'DO' + n) ||
         Blockly.Python.PASS;
+    if (Blockly.Python.STATEMENT_SUFFIX) {
+      branchCode = Blockly.Python.prefixLines(
+          Blockly.Python.injectId(Blockly.Python.STATEMENT_SUFFIX, block),
+          Blockly.Python.INDENT) + branchCode;
+    }
     code += (n == 0 ? 'if ' : 'elif ' ) + conditionCode + ':\n' + branchCode;
-
     ++n;
   } while (block.getInput('IF' + n));
 
-  if (block.getInput('ELSE')) {
+  if (block.getInput('ELSE') || Blockly.Python.STATEMENT_SUFFIX) {
     branchCode = Blockly.Python.statementToCode(block, 'ELSE') ||
         Blockly.Python.PASS;
+    if (Blockly.Python.STATEMENT_SUFFIX) {
+      branchCode = Blockly.Python.prefixLines(
+          Blockly.Python.injectId(Blockly.Python.STATEMENT_SUFFIX, block),
+          Blockly.Python.INDENT) + branchCode;
+    }
     code += 'else:\n' + branchCode;
   }
   return code;

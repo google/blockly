@@ -13,8 +13,7 @@
 
 goog.provide('Blockly.ICopyable');
 
-goog.require('Blockly.ISelectable');
-
+goog.requireType('Blockly.ISelectable');
 goog.requireType('Blockly.WorkspaceSvg');
 
 

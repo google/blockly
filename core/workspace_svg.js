@@ -1187,7 +1187,7 @@ Blockly.WorkspaceSvg.prototype.setVisible = function(isVisible) {
   this.getParentSvg().style.display = isVisible ? 'block' : 'none';
   if (this.toolbox_) {
     // Currently does not support toolboxes in mutators.
-    this.setVisible(isVisible);
+    this.toolbox_.setVisible(isVisible);
   }
   if (isVisible) {
     var blocks = this.getAllBlocks(false);

@@ -13,12 +13,10 @@
 
 goog.provide('Blockly.IToolbox');
 
-goog.require('Blockly.IDisposable');
 goog.require('Blockly.IRegistrable');
 
 
 /**
- * @extends {Blockly.IDisposable}
  * @extends {Blockly.IRegistrable}
  * @interface
  */

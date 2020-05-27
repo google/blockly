@@ -21,6 +21,7 @@ goog.require('Blockly.blockRendering.RenderInfo');
 goog.require('Blockly.InsertionMarkerManager');
 
 goog.requireType('Blockly.blockRendering.Debug');
+goog.requireType('Blockly.IRegistrable');
 
 
 /**

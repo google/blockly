@@ -41,7 +41,6 @@ goog.requireType('Blockly.IToolbox');
  * @constructor
  * @implements {Blockly.IBlocklyActionable}
  * @implements {Blockly.IDeleteArea}
- * @implements {Blockly.IRegistrable}
  * @implements {Blockly.IToolbox}
  */
 Blockly.Toolbox = function(workspace) {

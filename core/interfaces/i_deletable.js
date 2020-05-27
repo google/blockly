@@ -14,7 +14,10 @@
 goog.provide('Blockly.IDeletable');
 
 
-/** @interface */
+/**
+ * The interface for an object that can be deleted.
+ * @interface
+ */
 Blockly.IDeletable = function() {};
 
 /**

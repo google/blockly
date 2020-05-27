@@ -21,6 +21,7 @@ goog.require('Blockly.blockRendering.RenderInfo');
 goog.require('Blockly.InsertionMarkerManager');
 
 goog.requireType('Blockly.blockRendering.Debug');
+goog.requireType('Blockly.IRegistrable');
 
 
 /**
@@ -28,6 +29,7 @@ goog.requireType('Blockly.blockRendering.Debug');
  * @param {string} name The renderer name.
  * @package
  * @constructor
+ * @implements {Blockly.IRegistrable}
  */
 Blockly.blockRendering.Renderer = function(name) {
 

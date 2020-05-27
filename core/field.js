@@ -27,6 +27,7 @@ goog.requireType('Blockly.blockRendering.ConstantProvider');
 goog.requireType('Blockly.IASTNodeLocationSvg');
 goog.requireType('Blockly.IASTNodeLocationWithBlock');
 goog.requireType('Blockly.IBlocklyActionable');
+goog.requireType('Blockly.IRegistrable');
 
 
 /**
@@ -42,6 +43,7 @@ goog.requireType('Blockly.IBlocklyActionable');
  * @implements {Blockly.IASTNodeLocationSvg}
  * @implements {Blockly.IASTNodeLocationWithBlock}
  * @implements {Blockly.IBlocklyActionable}
+ * @implements {Blockly.IRegistrable}
  */
 Blockly.Field = function(value, opt_validator, opt_config) {
   /**

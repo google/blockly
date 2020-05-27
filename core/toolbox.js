@@ -28,6 +28,8 @@ goog.require('Blockly.utils.Rect');
 goog.require('Blockly.utils.toolbox');
 
 goog.requireType('Blockly.IBlocklyActionable');
+goog.requireType('Blockly.IDeleteArea');
+goog.requireType('Blockly.IToolbox');
 
 
 /**
@@ -37,6 +39,8 @@ goog.requireType('Blockly.IBlocklyActionable');
  *     blocks.
  * @constructor
  * @implements {Blockly.IBlocklyActionable}
+ * @implements {Blockly.IDeleteArea}
+ * @implements {Blockly.IToolbox}
  */
 Blockly.Toolbox = function(workspace) {
   /**
@@ -206,7 +210,7 @@ Blockly.Toolbox.prototype.init = function() {
 
   this.config_['cssCollapsedFolderIcon'] =
       'blocklyTreeIconClosed' + (workspace.RTL ? 'Rtl' : 'Ltr');
-  this.renderTree(workspace.options.languageTree);
+  this.render(workspace.options.languageTree);
 };
 
 /**
@@ -215,7 +219,7 @@ Blockly.Toolbox.prototype.init = function() {
  *    containing information on the contents of the toolbox.
  * @package
  */
-Blockly.Toolbox.prototype.renderTree = function(toolboxDef) {
+Blockly.Toolbox.prototype.render = function(toolboxDef) {
   if (this.tree_) {
     this.tree_.dispose();  // Delete any existing content.
     this.lastCategory_ = null;
@@ -504,6 +508,14 @@ Blockly.Toolbox.prototype.dispose = function() {
   this.workspace_.getThemeManager().unsubscribe(this.HtmlDiv);
   Blockly.utils.dom.removeNode(this.HtmlDiv);
   this.lastCategory_ = null;
+};
+
+/**
+ * Toggles the visibility of the toolbox.
+ * @param {boolean} isVisible True if toolbox should be visible.
+ */
+Blockly.Toolbox.prototype.setVisible = function(isVisible) {
+  this.HtmlDiv.style.display = isVisible ? 'block' : 'none';
 };
 
 /**

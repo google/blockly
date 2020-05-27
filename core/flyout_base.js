@@ -30,6 +30,7 @@ goog.require('Blockly.WorkspaceSvg');
 goog.require('Blockly.Xml');
 
 goog.requireType('Blockly.IBlocklyActionable');
+goog.requireType('Blockly.IDeleteArea');
 goog.requireType('Blockly.utils.Metrics');
 
 
@@ -40,6 +41,7 @@ goog.requireType('Blockly.utils.Metrics');
  * @constructor
  * @abstract
  * @implements {Blockly.IBlocklyActionable}
+ * @implements {Blockly.IDeleteArea}
  */
 Blockly.Flyout = function(workspaceOptions) {
   workspaceOptions.getMetrics =

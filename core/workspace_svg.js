@@ -1187,7 +1187,7 @@ Blockly.WorkspaceSvg.prototype.setVisible = function(isVisible) {
   this.getParentSvg().style.display = isVisible ? 'block' : 'none';
   if (this.toolbox_) {
     // Currently does not support toolboxes in mutators.
-    this.toolbox_.HtmlDiv.style.display = isVisible ? 'block' : 'none';
+    this.toolbox_.setVisible(isVisible);
   }
   if (isVisible) {
     var blocks = this.getAllBlocks(false);
@@ -1455,7 +1455,7 @@ Blockly.WorkspaceSvg.prototype.recordDeleteAreas = function() {
   }
   if (this.flyout_) {
     this.deleteAreaToolbox_ = this.flyout_.getClientRect();
-  } else if (this.toolbox_) {
+  } else if (this.toolbox_ && typeof this.toolbox_.getClientRect == 'function') {
     this.deleteAreaToolbox_ = this.toolbox_.getClientRect();
   } else {
     this.deleteAreaToolbox_ = null;
@@ -1849,7 +1849,7 @@ Blockly.WorkspaceSvg.prototype.updateToolbox = function(toolboxDef) {
       throw Error('Existing toolbox has no categories.  Can\'t change mode.');
     }
     this.options.languageTree = toolboxDef;
-    this.toolbox_.renderTree(toolboxDef);
+    this.toolbox_.render(toolboxDef);
   } else {
     if (!this.flyout_) {
       throw Error('Existing toolbox has categories.  Can\'t change mode.');

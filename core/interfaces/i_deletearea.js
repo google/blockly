@@ -15,7 +15,10 @@
 goog.provide('Blockly.IDeleteArea');
 
 
-/** @interface */
+/**
+ * Interface for a component that can delete a block that is dropped on top of it.
+ * @interface
+ */
 Blockly.IDeleteArea = function() {};
 
 /**

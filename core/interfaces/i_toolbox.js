@@ -13,10 +13,11 @@
 
 goog.provide('Blockly.IToolbox');
 
-goog.require('Blockly.IRegistrable');
+goog.requireType('Blockly.IRegistrable');
 
 
 /**
+ * Interface for a toolbox.
  * @extends {Blockly.IRegistrable}
  * @interface
  */
@@ -24,6 +25,7 @@ Blockly.IToolbox = function() {};
 
 /**
  * Initializes the toolbox.
+ * @return {void}
  */
 Blockly.IToolbox.prototype.init;
 
@@ -31,11 +33,13 @@ Blockly.IToolbox.prototype.init;
  * Fill the toolbox with categories and blocks.
  * @param {Array.<Blockly.utils.toolbox.Toolbox>} toolboxDef Array holding objects
  *    containing information on the contents of the toolbox.
+ * @return {void}
  */
 Blockly.IToolbox.prototype.render;
 
 /**
  * Dispose of this toolbox.
+ * @return {void}
  */
 Blockly.IToolbox.prototype.dispose;
 
@@ -59,6 +63,7 @@ Blockly.IToolbox.prototype.getFlyout;
 
 /**
  * Move the toolbox to the edge.
+ * @return {void}
  */
 Blockly.IToolbox.prototype.position;
 
@@ -70,6 +75,7 @@ Blockly.IToolbox.prototype.clearSelection;
 
 /**
  * Updates the category colours and background colour of selected categories.
+ * @return {void}
  */
 Blockly.IToolbox.prototype.updateColourFromTheme;
 
@@ -89,6 +95,7 @@ Blockly.IToolbox.prototype.removeStyle;
  * Update the flyout's contents without closing it.  Should be used in response
  * to a change in one of the dynamic categories, such as variables or
  * procedures.
+ * @return {void}
  */
 Blockly.IToolbox.prototype.refreshSelection;
 
@@ -100,5 +107,6 @@ Blockly.IToolbox.prototype.setVisible;
 
 /**
  * Select the first toolbox category if no category is selected.
+ * @return {void}
  */
 Blockly.IToolbox.prototype.selectFirstCategory;

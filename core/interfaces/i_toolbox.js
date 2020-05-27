@@ -33,7 +33,6 @@ Blockly.IToolbox.prototype.init;
  * Fill the toolbox with categories and blocks.
  * @param {Array.<Blockly.utils.toolbox.Toolbox>} toolboxDef Array holding objects
  *    containing information on the contents of the toolbox.
- * @return {void}
  */
 Blockly.IToolbox.prototype.render;
 

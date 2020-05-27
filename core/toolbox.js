@@ -30,6 +30,7 @@ goog.require('Blockly.utils.toolbox');
 goog.requireType('Blockly.IBlocklyActionable');
 goog.requireType('Blockly.IDeleteArea');
 goog.requireType('Blockly.IRegistrable');
+goog.requireType('Blockly.IToolbox');
 
 
 /**
@@ -509,6 +510,14 @@ Blockly.Toolbox.prototype.dispose = function() {
   this.workspace_.getThemeManager().unsubscribe(this.HtmlDiv);
   Blockly.utils.dom.removeNode(this.HtmlDiv);
   this.lastCategory_ = null;
+};
+
+/**
+ * Toggles the visibility of the toolbox.
+ * @param {boolean} isVisible True if toolbox should be visible.
+ */
+Blockly.Toolbox.prototype.setVisible = function(isVisible) {
+  this.HtmlDiv.style.display = isVisible ? 'block' : 'none';
 };
 
 /**

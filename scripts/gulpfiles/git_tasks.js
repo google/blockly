@@ -56,7 +56,7 @@ function getRCBranchName() {
   return 'rc_' + yyyy + '_' + mm;
 };
 
-// If branch does not exist then create the branch. 
+// If branch does not exist then create the branch.
 // If branch exists switch to branch.
 function checkoutBranch(branchName) {
   execSync('git checkout ' + branchName + ' || git checkout -b ' + branchName,
@@ -70,6 +70,10 @@ const recompile = gulp.series(
     var branchName = getRebuildBranchName();
     console.log('make-rebuild-branch: creating branch ' + branchName);
     execSync('git checkout -b ' + branchName, { stdio: 'inherit' });
+    done();
+  },
+  function(done) {
+    execSync('npm run version', { stdio: 'inherit' });
     done();
   },
   buildTasks.build,

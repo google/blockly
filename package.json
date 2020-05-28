@@ -1,6 +1,6 @@
 {
   "name": "blockly",
-  "version": "3.20200402.0-develop",
+  "version": "3.20200528.0",
   "description": "Blockly is a library for building visual programming editors.",
   "keywords": [
     "blockly"
@@ -17,7 +17,7 @@
     "name": "Neil Fraser"
   },
   "scripts": {
-    "build": "gulp build",
+    "build": "npm run version && gulp build",
     "build:blocks": "gulp buildBlocks",
     "build:compressed": "gulp buildCompressed",
     "build:core": "gulp buildCore",
@@ -26,13 +26,11 @@
     "build:generators": "gulp buildGenerators",
     "build:langfiles": "gulp buildLangfiles",
     "build:uncompressed": "gulp buildUncompressed",
-    "bump": "npm version 3.$(date +'%Y%m%d').0",
+    "bump": "npm run build ",
     "license": "gulp checkLicenses",
     "lint": "eslint .",
     "package": "gulp package",
-    "postversion": "gulp postversion",
     "prepare": "npm run package",
-    "preversion": "gulp preversion",
     "prerelease": "gulp gitRecompile",
     "release": "gulp gitCreateRC",
     "test": "concurrently 'npm run test:prepare' 'sleep 5 && npm run test:run'",
@@ -42,7 +40,7 @@
     "test:startselenium": "selenium-standalone start --config=./tests/scripts/selenium-config.js",
     "typings": "gulp typings",
     "updateGithubPages": "gulp gitUpdateGithubPages",
-    "version": "gulp build && git add -A"
+    "version": "npm --allow-same-version --no-git-tag-version version 3.$(date +'%Y%m%d').0"
   },
   "main": "./index.js",
   "umd": "./blockly.min.js",

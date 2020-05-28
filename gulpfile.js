@@ -26,8 +26,6 @@ module.exports = {
   buildUncompressed: buildTasks.uncompressed,
   buildCompressed: buildTasks.compressed,
   buildGenerators: buildTasks.generators,
-  preversion: preversion,
-  postversion: postversion,
   gitSyncDevelop: gitTasks.syncDevelop,
   gitSyncMaster: gitTasks.syncMaster,
   gitCreateRC: gitTasks.createRC,

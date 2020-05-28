@@ -924,3 +924,6 @@ Blockly.Css.register([
   '}'
   /* eslint-enable indent */
 ]);
+
+Blockly.registry.register(Blockly.registry.Type.TOOLBOX,
+    Blockly.registry.DEFAULT, Blockly.Toolbox);

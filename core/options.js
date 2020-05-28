@@ -74,6 +74,7 @@ Blockly.Options = function(options) {
       hasSounds = true;
     }
   }
+  var plugins = options['plugins'] || {};
   var rtl = !!options['rtl'];
   var horizontalLayout = options['horizontalLayout'];
   if (horizontalLayout === undefined) {
@@ -174,6 +175,12 @@ Blockly.Options = function(options) {
    * @type {Blockly.Workspace}
    */
   this.parentWorkspace = options['parentWorkspace'];
+
+  /**
+   * Map of plugin type to name of plugin or plugin class.
+   * @type {?Object<string, (function(new:?, ...?)|string)>}
+   */
+  this.plugins = plugins;
 };
 
 /**

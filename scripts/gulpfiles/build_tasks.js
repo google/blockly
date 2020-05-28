@@ -18,7 +18,6 @@ var fs = require('fs');
 var execSync = require('child_process').execSync;
 var through2 = require('through2');
 
-
 var closureCompiler = require('google-closure-compiler').gulp();
 var closureDeps = require('google-closure-deps');
 var packageJson = require('../../package.json');

@@ -105,7 +105,13 @@ const updateGithubPages = gulp.series(
   syncBranch('gh-pages'),
   function(done) {
     execSync('git pull ' + upstream_url + ' develop', { stdio: 'inherit' });
+    done();
+  },
+  buildTasks.build,
+  function(done) {
+    execSync('git commit -am "Rebuild"', { stdio: 'inherit' });
     execSync('git push ' + upstream_url + ' gh-pages', { stdio: 'inherit' });
+    execSync('git push origin gh-pages', { stdio: 'inherit' });
     done();
   }
 );

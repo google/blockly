@@ -24,6 +24,7 @@ goog.require('Blockly.MarkerManager');
 goog.require('Blockly.Msg');
 goog.require('Blockly.navigation');
 goog.require('Blockly.Options');
+goog.require('Blockly.registry');
 goog.require('Blockly.ThemeManager');
 goog.require('Blockly.Themes.Classic');
 goog.require('Blockly.TouchGesture');

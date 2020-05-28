@@ -169,7 +169,7 @@ Blockly.registry.getClass = function(type, name) {
 /**
  * Gets the class name or the class from Blockly options for the given type.
  * This is used for plugins that override a built in feature. (Ex: Toolbox)
- * @param {string|Blockly.registry.Type<T>} type The type of the plugin.
+ * @param {Blockly.registry.Type<T>} type The type of the plugin.
  * @param {!Blockly.Options} options The option object to check for the given
  *     plugin.
  * @return {?function(new:T, ...?)} The class for the plugin.

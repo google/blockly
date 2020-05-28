@@ -74,7 +74,6 @@ Blockly.Options = function(options) {
       hasSounds = true;
     }
   }
-  var plugins = options['plugins'] || {};
   var rtl = !!options['rtl'];
   var horizontalLayout = options['horizontalLayout'];
   if (horizontalLayout === undefined) {
@@ -110,6 +109,8 @@ Blockly.Options = function(options) {
   var keyMap = options['keyMap'] || Blockly.user.keyMap.createDefaultKeyMap();
 
   var renderer = options['renderer'] || 'geras';
+
+  var plugins = options['plugins'] || {};
 
   /** @type {boolean} */
   this.RTL = rtl;
@@ -177,8 +178,8 @@ Blockly.Options = function(options) {
   this.parentWorkspace = options['parentWorkspace'];
 
   /**
-   * Map of plugin type to name of plugin or plugin class.
-   * @type {?Object<string, (function(new:?, ...?)|string)>}
+   * Map of plugin type to name of registered plugin or plugin class.
+   * @type {!Object<string, (function(new:?, ...?)|string)>}
    */
   this.plugins = plugins;
 };

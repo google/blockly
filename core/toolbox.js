@@ -16,6 +16,7 @@ goog.require('Blockly.Css');
 goog.require('Blockly.Events');
 goog.require('Blockly.Events.Ui');
 goog.require('Blockly.navigation');
+goog.require('Blockly.registry');
 goog.require('Blockly.Touch');
 goog.require('Blockly.tree.TreeControl');
 goog.require('Blockly.tree.TreeNode');

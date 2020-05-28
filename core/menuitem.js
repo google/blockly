@@ -112,7 +112,8 @@ Blockly.MenuItem.prototype.createDom = function() {
   element.className = 'blocklyMenuItem goog-menuitem ' +
       (this.enabled_ ? '' : 'blocklyMenuItemDisabled goog-menuitem-disabled ') +
       (this.checked_ ? 'blocklyMenuItemSelected goog-option-selected ' : '') +
-      (this.highlight_ ? 'blocklyMenuItemHighlight goog-menuitem-highlight ' : '') +
+      (this.highlight_ ?
+        'blocklyMenuItemHighlight goog-menuitem-highlight ' : '') +
       (this.rightToLeft_ ? 'blocklyMenuItemRtl goog-menuitem-rtl ' : '');
 
   var content = document.createElement('div');

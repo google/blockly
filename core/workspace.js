@@ -415,6 +415,7 @@ Blockly.Workspace.prototype.deleteVariableById = function(id) {
  * @param {!Blockly.VariableModel} variable Variable to delete.
  * @param {!Array.<!Blockly.Block>} uses An array of uses of the variable.
  * @private
+ * @suppress {unusedPrivateMembers}
  */
 Blockly.Workspace.prototype.deleteVariableInternal_ = function(variable, uses) {
   this.variableMap_.deleteVariableInternal(variable, uses);

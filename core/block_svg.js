@@ -131,13 +131,6 @@ Blockly.BlockSvg.prototype.height = 0;
 Blockly.BlockSvg.prototype.width = 0;
 
 /**
- * Original location of block being dragged.
- * @type {Blockly.utils.Coordinate}
- * @private
- */
-Blockly.BlockSvg.prototype.dragStartXY_ = null;
-
-/**
  * Map from IDs for warnings text to PIDs of functions to apply them.
  * Used to be able to maintain multiple warnings.
  * @type {Object.<string, number>}

@@ -54,10 +54,11 @@ goog.requireType('Blockly.ICopyable');
 Blockly.BlockSvg = function(workspace, prototypeName, opt_id) {
   // Create core elements for the block.
   /**
-   * @type {!SVGElement}
+   * @type {!SVGGElement}
    * @private
    */
-  this.svgGroup_ = Blockly.utils.dom.createSvgElement('g', {}, null);
+  this.svgGroup_ = /** @type {!SVGGElement} */ (
+    Blockly.utils.dom.createSvgElement('g', {}, null));
   this.svgGroup_.translate_ = '';
 
   /**
@@ -931,7 +932,7 @@ Blockly.BlockSvg.prototype.setInsertionMarker = function(insertionMarker) {
 
 /**
  * Return the root node of the SVG or null if none exists.
- * @return {!SVGElement} The root SVG node (probably a group).
+ * @return {!SVGGElement} The root SVG node (probably a group).
  */
 Blockly.BlockSvg.prototype.getSvgRoot = function() {
   return this.svgGroup_;

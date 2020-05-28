@@ -8,8 +8,8 @@ suite('Label Serializable Fields', function() {
   function assertValue(labelField, expectedValue) {
     var actualValue = labelField.getValue();
     var actualText = labelField.getText();
-    assertEquals(actualValue, expectedValue);
-    assertEquals(actualText, expectedValue);
+    chai.assert.equal(actualValue, expectedValue);
+    chai.assert.equal(actualText, expectedValue);
   }
   function assertValueDefault(labelField) {
     assertValue(labelField, '');
@@ -135,6 +135,11 @@ suite('Label Serializable Fields', function() {
       test('Boolean False', function() {
         this.labelField.setValue(false);
         assertValue(this.labelField, 'false');
+      });
+      test('With source block', function() {
+        this.labelField.setSourceBlock(createTestBlock());
+        this.labelField.setValue('newValue');
+        assertValue(this.labelField, 'newValue');
       });
     });
     suite('Value -> New Value', function() {

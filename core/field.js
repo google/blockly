@@ -19,11 +19,16 @@ goog.require('Blockly.Events.BlockChange');
 goog.require('Blockly.Gesture');
 goog.require('Blockly.utils');
 goog.require('Blockly.utils.dom');
+goog.require('Blockly.utils.Rect');
 goog.require('Blockly.utils.Size');
 goog.require('Blockly.utils.style');
 goog.require('Blockly.utils.userAgent');
 
 goog.requireType('Blockly.blockRendering.ConstantProvider');
+goog.requireType('Blockly.IASTNodeLocationSvg');
+goog.requireType('Blockly.IASTNodeLocationWithBlock');
+goog.requireType('Blockly.IBlocklyActionable');
+goog.requireType('Blockly.IRegistrable');
 
 
 /**
@@ -36,6 +41,10 @@ goog.requireType('Blockly.blockRendering.ConstantProvider');
  *    the individual field's documentation for a list of properties this
  *    parameter supports.
  * @constructor
+ * @implements {Blockly.IASTNodeLocationSvg}
+ * @implements {Blockly.IASTNodeLocationWithBlock}
+ * @implements {Blockly.IBlocklyActionable}
+ * @implements {Blockly.IRegistrable}
  */
 Blockly.Field = function(value, opt_validator, opt_config) {
   /**
@@ -708,8 +717,8 @@ Blockly.Field.prototype.getSize = function() {
 /**
  * Returns the bounding box of the rendered field, accounting for workspace
  * scaling.
- * @return {!Object} An object with top, bottom, left, and right in pixels
- *     relative to the top left corner of the page (window coordinates).
+ * @return {!Blockly.utils.Rect} An object with top, bottom, left, and right in
+ *     pixels relative to the top left corner of the page (window coordinates).
  * @package
  */
 Blockly.Field.prototype.getScaledBBox = function() {
@@ -742,12 +751,12 @@ Blockly.Field.prototype.getScaledBBox = function() {
     var scaledWidth = bBox.width;
     var scaledHeight = bBox.height;
   }
-  return {
-    top: xy.y,
-    bottom: xy.y + scaledHeight,
-    left: xy.x,
-    right: xy.x + scaledWidth
-  };
+  return new Blockly.utils.Rect(
+      xy.y,
+      xy.y + scaledHeight,
+      xy.x,
+      xy.x + scaledWidth
+  );
 };
 
 /**
@@ -858,16 +867,20 @@ Blockly.Field.prototype.setValue = function(newValue) {
       return;
     }
   }
+  var source = this.sourceBlock_;
+  if (source && source.disposed) {
+    doLogging && console.log('source disposed, return');
+    return;
+  }
   var oldValue = this.getValue();
   if (oldValue === newValue) {
     doLogging && console.log('same, return');
-    // No change.
     return;
   }
 
-  if (this.sourceBlock_ && Blockly.Events.isEnabled()) {
+  if (source && Blockly.Events.isEnabled()) {
     Blockly.Events.fire(new Blockly.Events.BlockChange(
-        this.sourceBlock_, 'field', this.name || null, oldValue, newValue));
+        source, 'field', this.name || null, oldValue, newValue));
   }
   this.doValueUpdate_(newValue);
   if (this.isDirty_) {
@@ -1101,7 +1114,8 @@ Blockly.Field.prototype.setMarkerSvg = function(markerSvg) {
  * @protected
  */
 Blockly.Field.prototype.updateMarkers_ = function() {
-  var workspace = this.sourceBlock_.workspace;
+  var workspace =
+    /** @type {!Blockly.WorkspaceSvg} */ (this.sourceBlock_.workspace);
   if (workspace.keyboardAccessibilityMode && this.cursorSvg_) {
     workspace.getCursor().draw();
   }

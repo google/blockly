@@ -1,14 +1,14 @@
 {
 	"@metadata": {
 		"authors": [
-			"Gkostov",
-			"Vodnokon4e",
 			"Alpinistbg",
-			"Miroslav35232",
-			"StanProg",
-			"ShockD",
+			"Gkostov",
 			"InsomniHat",
-			"Vlad5250"
+			"Miroslav35232",
+			"ShockD",
+			"StanProg",
+			"Vlad5250",
+			"Vodnokon4e"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "елемент",

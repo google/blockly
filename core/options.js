@@ -15,6 +15,8 @@ goog.provide('Blockly.Options');
 goog.require('Blockly.Theme');
 goog.require('Blockly.Themes.Classic');
 goog.require('Blockly.user.keyMap');
+goog.require('Blockly.utils.Metrics');
+goog.require('Blockly.utils.toolbox');
 goog.require('Blockly.utils.userAgent');
 goog.require('Blockly.Xml');
 
@@ -29,7 +31,7 @@ goog.require('Blockly.Xml');
 Blockly.Options = function(options) {
   var readOnly = !!options['readOnly'];
   if (readOnly) {
-    var languageTree = null;
+    var toolboxContents = null;
     var hasCategories = false;
     var hasTrashcan = false;
     var hasCollapse = false;
@@ -37,10 +39,12 @@ Blockly.Options = function(options) {
     var hasDisable = false;
     var hasSounds = false;
   } else {
-    var languageTree =
-        Blockly.Options.parseToolboxTree(options['toolbox'] || null);
-    var hasCategories = Boolean(languageTree &&
-        languageTree.getElementsByTagName('category').length);
+    var toolboxDef = options['toolbox'];
+    if (!Array.isArray(toolboxDef)) {
+      toolboxDef = Blockly.Options.parseToolboxTree(toolboxDef || null);
+    }
+    var toolboxContents = Blockly.utils.toolbox.convertToolboxToJSON(toolboxDef);
+    var hasCategories = Blockly.utils.toolbox.hasCategories(toolboxContents);
     var hasTrashcan = options['trashcan'];
     if (hasTrashcan === undefined) {
       hasTrashcan = hasCategories;
@@ -106,31 +110,55 @@ Blockly.Options = function(options) {
 
   var renderer = options['renderer'] || 'geras';
 
+  /** @type {boolean} */
   this.RTL = rtl;
+  /** @type {boolean} */
   this.oneBasedIndex = oneBasedIndex;
+  /** @type {boolean} */
   this.collapse = hasCollapse;
+  /** @type {boolean} */
   this.comments = hasComments;
+  /** @type {boolean} */
   this.disable = hasDisable;
+  /** @type {boolean} */
   this.readOnly = readOnly;
+  /** @type {number} */
   this.maxBlocks = options['maxBlocks'] || Infinity;
+  /** @type {?Object.<string, number>} */
   this.maxInstances = options['maxInstances'];
+  /** @type {string} */
   this.pathToMedia = pathToMedia;
+  /** @type {boolean} */
   this.hasCategories = hasCategories;
+  /** @type {!Object} */
   this.moveOptions = Blockly.Options.parseMoveOptions(options, hasCategories);
   /** @deprecated  January 2019 */
   this.hasScrollbars = this.moveOptions.scrollbars;
+  /** @type {boolean} */
   this.hasTrashcan = hasTrashcan;
+  /** @type {number} */
   this.maxTrashcanContents = maxTrashcanContents;
+  /** @type {boolean} */
   this.hasSounds = hasSounds;
+  /** @type {boolean} */
   this.hasCss = hasCss;
+  /** @type {boolean} */
   this.horizontalLayout = horizontalLayout;
-  this.languageTree = languageTree;
+  /** @type {Array.<Blockly.utils.toolbox.Toolbox>} */
+  this.languageTree = toolboxContents;
+  /** @type {!Object} */
   this.gridOptions = Blockly.Options.parseGridOptions_(options);
+  /** @type {!Object} */
   this.zoomOptions = Blockly.Options.parseZoomOptions_(options);
+  /** @type {number} */
   this.toolboxPosition = toolboxPosition;
+  /** @type {!Blockly.Theme} */
   this.theme = Blockly.Options.parseThemeOptions_(options);
+  /** @type {!Object<string,Blockly.Action>} */
   this.keyMap = keyMap;
+  /** @type {string} */
   this.renderer = renderer;
+  /** @type {?Object} */
   this.rendererOverrides = options['rendererOverrides'];
 
   /**
@@ -158,15 +186,15 @@ Blockly.BlocklyOptions = function() {};
 
 /**
  * If set, sets the translation of the workspace to match the scrollbars.
- * @param {!Object} xyRatio Contains an x and/or y property which is a float
- *     between 0 and 1 specifying the degree of scrolling.
+ * @param {!{x:number,y:number}} xyRatio Contains an x and/or y property which
+ *     is a float between 0 and 1 specifying the degree of scrolling.
  * @return {void}
  */
 Blockly.Options.prototype.setMetrics;
 
 /**
  * Return an object with the metrics required to size the workspace.
- * @return {!Object} Contains size and position metrics.
+ * @return {!Blockly.utils.Metrics} Contains size and position metrics.
  */
 Blockly.Options.prototype.getMetrics;
 
@@ -288,7 +316,8 @@ Blockly.Options.parseThemeOptions_ = function(options) {
 
 /**
  * Parse the provided toolbox tree into a consistent DOM format.
- * @param {Node|string} tree DOM tree of blocks, or text representation of same.
+ * @param {Node|NodeList|?string} tree DOM tree of blocks, or text representation
+ *    of same.
  * @return {Node} DOM tree of blocks, or null.
  */
 Blockly.Options.parseToolboxTree = function(tree) {

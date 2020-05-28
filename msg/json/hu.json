@@ -1,24 +1,25 @@
 {
 	"@metadata": {
 		"authors": [
-			"Espertus",
-			"Takács Viktor László",
-			"Dj",
-			"Grin",
-			"ViDam",
-			"Csega",
-			"Fitoschido",
-			"Lajthabalazs",
-			"Tacsipacsi",
-			"Rodrigo",
-			"Máté",
 			"BanKris",
+			"Csega",
+			"Dj",
+			"Espertus",
+			"Fitoschido",
+			"Grin",
+			"Lajthabalazs",
+			"MeskoBalazs",
+			"Máté",
 			"Notramo",
+			"Rodrigo",
+			"Tacsipacsi",
+			"Takács Viktor László",
 			"Urbalazs",
-			"MeskoBalazs"
+			"ViDam"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "változó",
+	"UNNAMED_KEY": "névtelen",
 	"TODAY": "Ma",
 	"DUPLICATE_BLOCK": "Másolat",
 	"ADD_COMMENT": "Megjegyzés hozzáadása",
@@ -42,6 +43,7 @@
 	"RENAME_VARIABLE": "Változó átnevezése…",
 	"RENAME_VARIABLE_TITLE": "Minden „%1” változó átnevezése erre:",
 	"NEW_VARIABLE": "Változó létrehozása…",
+	"NEW_VARIABLE_TYPE_TITLE": "Az új változó típusa:",
 	"NEW_VARIABLE_TITLE": "Az új változó neve:",
 	"VARIABLE_ALREADY_EXISTS": "A(z) „%1” nevű változó már létezik.",
 	"VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE": "Egy „%1” nevű változó már létezik egy másik típussal: „%2”.",
@@ -194,6 +196,9 @@
 	"MATH_RANDOM_FLOAT_HELPURL": "https://hu.wikipedia.org/wiki/V%C3%A9letlen",
 	"MATH_RANDOM_FLOAT_TITLE_RANDOM": "véletlen tört",
 	"MATH_RANDOM_FLOAT_TOOLTIP": "Véletlen tört érték 0.0 és 1.0 között.",
+	"MATH_ATAN2_HELPURL": "https://hu.wikipedia.org/wiki/Arctg2",
+	"MATH_ATAN2_TITLE": "Arctg2 X:%1 Y:%2",
+	"MATH_ATAN2_TOOLTIP": "Az (X,Y) pont arkusz tangens értéke fokban -180 és 180 között.",
 	"TEXT_TEXT_HELPURL": "https://hu.wikipedia.org/wiki/String",
 	"TEXT_TEXT_TOOLTIP": "Egy betű, szó vagy szöveg egy sora.",
 	"TEXT_JOIN_TITLE_CREATEWITH": "fűzd össze",
@@ -351,5 +356,8 @@
 	"PROCEDURES_CREATE_DO": "„%1” létrehozása",
 	"PROCEDURES_IFRETURN_TOOLTIP": "Ha az érték igaz, akkor visszatér a függvény értékével.",
 	"PROCEDURES_IFRETURN_HELPURL": "http://c2.com/cgi/wiki?GuardClause",
-	"PROCEDURES_IFRETURN_WARNING": "Figyelem: Ez a blokk csak függvénydefiníción belül használható."
+	"PROCEDURES_IFRETURN_WARNING": "Figyelem: Ez a blokk csak függvénydefiníción belül használható.",
+	"WORKSPACE_COMMENT_DEFAULT_TEXT": "Mondj valamit...",
+	"WORKSPACE_ARIA_LABEL": "Blockly munkaterület",
+	"COLLAPSED_WARNINGS_WARNING": "Az összecsukott blokk figyelmeztetéseket tartalmaz."
 }

@@ -314,7 +314,7 @@ Blockly.Gesture.prototype.updateIsDraggingFromFlyout_ = function() {
   }
   if (!this.flyout_.isScrollable() ||
       this.flyout_.isDragTowardWorkspace(this.currentDragDeltaXY_)) {
-    this.startWorkspace_ = this.flyout_.targetWorkspace_;
+    this.startWorkspace_ = this.flyout_.targetWorkspace;
     this.startWorkspace_.updateScreenCalculationsIfScrolled();
     // Start the event group now, so that the same event group is used for block
     // creation and block dragging.
@@ -489,7 +489,7 @@ Blockly.Gesture.prototype.doStart = function(e) {
         e.shiftKey &&
         this.targetBlock_.workspace.keyboardAccessibilityMode) {
       this.creatorWorkspace_.getCursor().setCurNode(
-          Blockly.navigation.getTopNode(this.targetBlock_));
+          Blockly.ASTNode.createTopNode(this.targetBlock_));
     } else {
       this.targetBlock_.select();
     }

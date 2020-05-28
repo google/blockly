@@ -9,9 +9,9 @@ suite('Angle Fields', function() {
     var actualValue = angleField.getValue();
     var actualText = angleField.getText();
     opt_expectedText = opt_expectedText || String(expectedValue);
-    assertEquals(String(actualValue), String(expectedValue));
-    assertEquals(Number(actualValue), expectedValue);
-    assertEquals(actualText, opt_expectedText);
+    chai.assert.equal(String(actualValue), String(expectedValue));
+    chai.assert.equal(Number(actualValue), expectedValue);
+    chai.assert.equal(actualText, opt_expectedText);
   }
   function assertValueDefault(angleField) {
     assertValue(angleField, 0);
@@ -132,6 +132,11 @@ suite('Angle Fields', function() {
       test('Negative Infinity String', function() {
         this.angleField.setValue('-Infinity');
         assertValueDefault(this.angleField);
+      });
+      test('With source block', function() {
+        this.angleField.setSourceBlock(createTestBlock());
+        this.angleField.setValue(2.5);
+        assertValue(this.angleField, 2.5);
       });
     });
     suite('Value -> New Value', function() {

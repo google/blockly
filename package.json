@@ -1,6 +1,6 @@
 {
   "name": "blockly",
-  "version": "3.20200123.0-develop",
+  "version": "3.20200402.0-develop",
   "description": "Blockly is a library for building visual programming editors.",
   "keywords": [
     "blockly"
@@ -47,7 +47,7 @@
   "main": "./index.js",
   "umd": "./blockly.min.js",
   "unpkg": "./blockly.min.js",
-  "types": "./blockly.d.ts",
+  "types": "./index.d.ts",
   "browser": {
     "./node.js": "./browser.js",
     "./core.js": "./core-browser.js",
@@ -68,6 +68,7 @@
     "gulp-replace": "^1.0.0",
     "gulp-series": "^1.0.2",
     "gulp-shell": "^0.7.1",
+    "gulp-sourcemaps": "^2.6.5",
     "gulp-umd": "^2.0.0",
     "js-green-licenses": "^1.1.0",
     "jshint": "^2.11.0",

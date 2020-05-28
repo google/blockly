@@ -20,6 +20,9 @@ goog.provide('Blockly.WidgetDiv');
 
 goog.require('Blockly.utils.style');
 
+goog.requireType('Blockly.utils.Rect');
+goog.requireType('Blockly.utils.Size');
+
 
 /**
  * The object currently using this container.
@@ -80,10 +83,11 @@ Blockly.WidgetDiv.show = function(newOwner, rtl, dispose) {
   var div = Blockly.WidgetDiv.DIV;
   div.style.direction = rtl ? 'rtl' : 'ltr';
   div.style.display = 'block';
+  var mainWorkspace =
+    /** @type {!Blockly.WorkspaceSvg} */ (Blockly.getMainWorkspace());
   Blockly.WidgetDiv.rendererClassName_ =
-      Blockly.getMainWorkspace().getRenderer().getClassName();
-  Blockly.WidgetDiv.themeClassName_ =
-      Blockly.getMainWorkspace().getTheme().getClassName();
+      mainWorkspace.getRenderer().getClassName();
+  Blockly.WidgetDiv.themeClassName_ = mainWorkspace.getTheme().getClassName();
   Blockly.utils.dom.addClass(div, Blockly.WidgetDiv.rendererClassName_);
   Blockly.utils.dom.addClass(div, Blockly.WidgetDiv.themeClassName_);
 };
@@ -113,7 +117,8 @@ Blockly.WidgetDiv.hide = function() {
     Blockly.utils.dom.removeClass(div, Blockly.WidgetDiv.themeClassName_);
     Blockly.WidgetDiv.themeClassName_ = '';
   }
-  Blockly.getMainWorkspace().markFocused();
+  (/** @type {!Blockly.WorkspaceSvg} */ (
+    Blockly.getMainWorkspace())).markFocused();
 };
 
 /**
@@ -154,12 +159,12 @@ Blockly.WidgetDiv.positionInternal_ = function(x, y, height) {
  * The widget should be placed adjacent to but not overlapping the anchor
  * rectangle.  The preferred position is directly below and aligned to the left
  * (LTR) or right (RTL) side of the anchor.
- * @param {!Object} viewportBBox The bounding rectangle of the current viewport,
+ * @param {!Blockly.utils.Rect} viewportBBox The bounding rectangle of the
+ *     current viewport, in window coordinates.
+ * @param {!Blockly.utils.Rect} anchorBBox The bounding rectangle of the anchor,
  *     in window coordinates.
- * @param {!Object} anchorBBox The bounding rectangle of the anchor, in window
- *     coordinates.
- * @param {!Blockly.utils.Size} widgetSize The size of the widget that is inside the
- *     widget div, in window coordinates.
+ * @param {!Blockly.utils.Size} widgetSize The size of the widget that is inside
+ *     the widget div, in window coordinates.
  * @param {boolean} rtl Whether the workspace is in RTL mode.  This determines
  *     horizontal alignment.
  * @package
@@ -180,10 +185,10 @@ Blockly.WidgetDiv.positionWithAnchor = function(viewportBBox, anchorBBox,
 /**
  * Calculate an x position (in window coordinates) such that the widget will not
  * be offscreen on the right or left.
- * @param {!Object} viewportBBox The bounding rectangle of the current viewport,
+ * @param {!Blockly.utils.Rect} viewportBBox The bounding rectangle of the
+ *     current viewport, in window coordinates.
+ * @param {!Blockly.utils.Rect} anchorBBox The bounding rectangle of the anchor,
  *     in window coordinates.
- * @param {!Object} anchorBBox The bounding rectangle of the anchor, in window
- *     coordinates.
  * @param {Blockly.utils.Size} widgetSize The dimensions of the widget inside the
  *     widget div.
  * @param {boolean} rtl Whether the Blockly workspace is in RTL mode.
@@ -212,10 +217,10 @@ Blockly.WidgetDiv.calculateX_ = function(viewportBBox, anchorBBox, widgetSize,
 /**
  * Calculate a y position (in window coordinates) such that the widget will not
  * be offscreen on the top or bottom.
- * @param {!Object} viewportBBox The bounding rectangle of the current viewport,
+ * @param {!Blockly.utils.Rect} viewportBBox The bounding rectangle of the
+ *     current viewport, in window coordinates.
+ * @param {!Blockly.utils.Rect} anchorBBox The bounding rectangle of the anchor,
  *     in window coordinates.
- * @param {!Object} anchorBBox The bounding rectangle of the anchor, in window
- *     coordinates.
  * @param {Blockly.utils.Size} widgetSize The dimensions of the widget inside the
  *     widget div.
  * @return {number} A valid y-coordinate for the top left corner of the widget

@@ -97,22 +97,22 @@ Blockly.Theme.CategoryStyle;
 /**
  * A component style.
  * @typedef {{
- *            workspaceBackgroundColour:string?,
- *            toolboxBackgroundColour:string?,
- *            toolboxForegroundColour:string?,
- *            flyoutBackgroundColour:string?,
- *            flyoutForegroundColour:string?,
- *            flyoutOpacity:number?,
- *            scrollbarColour:string?,
- *            scrollbarOpacity:number?,
- *            insertionMarkerColour:string?,
- *            insertionMarkerOpacity:number?,
- *            markerColour:string?,
- *            cursorColour:string?,
- *            selectedGlowColour:string?,
- *            selectedGlowOpacity:number?,
- *            replacementGlowColour:string?,
- *            replacementGlowOpacity:number?
+ *            workspaceBackgroundColour:?string,
+ *            toolboxBackgroundColour:?string,
+ *            toolboxForegroundColour:?string,
+ *            flyoutBackgroundColour:?string,
+ *            flyoutForegroundColour:?string,
+ *            flyoutOpacity:?number,
+ *            scrollbarColour:?string,
+ *            scrollbarOpacity:?number,
+ *            insertionMarkerColour:?string,
+ *            insertionMarkerOpacity:?number,
+ *            markerColour:?string,
+ *            cursorColour:?string,
+ *            selectedGlowColour:?string,
+ *            selectedGlowOpacity:?number,
+ *            replacementGlowColour:?string,
+ *            replacementGlowOpacity:?number
  *          }}
  */
 Blockly.Theme.ComponentStyle;
@@ -120,9 +120,9 @@ Blockly.Theme.ComponentStyle;
 /**
  * A font style.
  * @typedef {{
- *            family:string?,
- *            weight:string?,
- *            size:number?
+ *            family:?string,
+ *            weight:?string,
+ *            size:?number
  *          }}
  */
 Blockly.Theme.FontStyle;
@@ -210,7 +210,7 @@ Blockly.Theme.defineTheme = function(name, themeObj) {
     Blockly.utils.object.deepMerge(theme, base);
     theme.name = name;
   }
-  
+
   Blockly.utils.object.deepMerge(theme.blockStyles,
       themeObj['blockStyles']);
   Blockly.utils.object.deepMerge(theme.categoryStyles,

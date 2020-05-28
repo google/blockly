@@ -1,0 +1,83 @@
+
+declare module Blockly {
+
+  interface BlocklyOptions {
+    toolbox?: HTMLElement | string;
+    readOnly?: boolean;
+    trashcan?: boolean;
+    maxInstances?: {[type: string]: number;};
+    maxTrashcanContents?: number;
+    collapse?: boolean;
+    comments?: boolean;
+    disable?: boolean;
+    sounds?: boolean;
+    rtl?: boolean;
+    horizontalLayout?: boolean;
+    toolboxPosition?: string;
+    css?: boolean;
+    oneBasedIndex?: boolean;
+    media?: string;
+    theme?: Blockly.Theme | BlocklyThemeOptions;
+    move?: {
+      scrollbars?: boolean;
+      drag?: boolean;
+      wheel?: boolean;
+    };
+    grid?: {
+      spacing?: number;
+      colour?: string;
+      length?: number;
+      snap?: boolean;
+    };
+    zoom?: {
+      controls?: boolean;
+      wheel?: boolean;
+      startScale?: number;
+      maxScale?: number;
+      minScale?: number;
+      scaleSpeed?: number;
+      pinch?: boolean;
+    };
+    renderer?: string;
+    keyMap?: {[type: string]: Blockly.Action;};
+  }
+
+  interface BlocklyThemeOptions {
+    base?: string;
+    blockStyles?: {[blocks: string]: Blockly.Theme.BlockStyle;};
+    categoryStyles?: {[category: string]: Blockly.Theme.CategoryStyle;};
+    componentStyles?: {[component: string]: any;};
+    fontStyle?: Blockly.Theme.FontStyle;
+    startHats?: boolean;
+  }
+
+  /**
+   * Set the Blockly locale.
+   * Note: this method is only available in the npm release of Blockly.
+   * @param {!Object} msg An object of Blockly message strings in the desired
+   *     language.
+   */
+  function setLocale(msg: {[key: string]: string;}): void;
+}
+
+declare module Blockly.utils {
+  interface Metrics {
+    viewHeight: number;
+    viewWidth: number;
+    contentHeight: number;
+    contentWidth: number;
+    viewTop: number;
+    viewLeft: number;
+    contentTop: number;
+    contentLeft: number;
+    absoluteTop: number;
+    absoluteLeft: number;
+    svgHeight?: number;
+    svgWidth?: number;
+    toolboxWidth?: number;
+    toolboxHeight?: number;
+    flyoutWidth?: number;
+    flyoutHeight?: number;
+    toolboxPosition?: number;
+  }
+}

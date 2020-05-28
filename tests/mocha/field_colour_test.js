@@ -8,8 +8,8 @@ suite('Colour Fields', function() {
   function assertValue(colourField, expectedValue, expectedText) {
     var actualValue = colourField.getValue();
     var actualText = colourField.getText();
-    assertEquals(actualValue, expectedValue);
-    assertEquals(actualText, expectedText);
+    chai.assert.equal(actualValue, expectedValue);
+    chai.assert.equal(actualText, expectedText);
   }
   function assertValueDefault(colourField) {
     var expectedValue = Blockly.FieldColour.COLOURS[0];
@@ -167,6 +167,11 @@ suite('Colour Fields', function() {
       test('red', function() {
         this.colourField.setValue('red');
         assertValue(this.colourField, '#ff0000', '#f00');
+      });
+      test('With source block', function() {
+        this.colourField.setSourceBlock(createTestBlock());
+        this.colourField.setValue('#bcbcbc');
+        assertValue(this.colourField, '#bcbcbc', '#bcbcbc');
       });
     });
     suite('Value -> New Value', function() {

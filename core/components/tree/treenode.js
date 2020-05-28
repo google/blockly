@@ -32,6 +32,13 @@ goog.require('Blockly.utils.KeyCodes');
 Blockly.tree.TreeNode = function(toolbox, content, config) {
   this.toolbox_ = toolbox;
   Blockly.tree.BaseNode.call(this, content, config);
+
+  /**
+   * A handler that's triggered when the size of node has changed.
+   * @type {?function():?}
+   * @private
+   */
+  this.onSizeChanged_ = null;
 };
 Blockly.utils.object.inherits(Blockly.tree.TreeNode, Blockly.tree.BaseNode);
 
@@ -93,7 +100,7 @@ Blockly.tree.TreeNode.prototype.getCalculatedIconClass = function() {
  */
 Blockly.tree.TreeNode.prototype.onClick_ = function(_e) {
   // Expand icon.
-  if (this.hasChildren() && this.isUserCollapsible_) {
+  if (this.hasChildren()) {
     this.toggle();
     this.select();
   } else if (this.isSelected()) {
@@ -104,15 +111,6 @@ Blockly.tree.TreeNode.prototype.onClick_ = function(_e) {
   this.updateRow();
 };
 
-/**
- * Suppress the inherited mouse down behaviour.
- * @param {!Event} _e The browser event.
- * @override
- * @private
- */
-Blockly.tree.TreeNode.prototype.onMouseDown = function(_e) {
-  // NOP
-};
 
 /**
  * Remap event.keyCode in horizontalLayout so that arrow

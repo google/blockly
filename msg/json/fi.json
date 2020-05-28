@@ -1,19 +1,19 @@
 {
 	"@metadata": {
 		"authors": [
-			"Nike",
-			"Silvonen",
-			"Espertus",
-			"Pettevi",
-			"McSalama",
 			"Espeox",
-			"SNuutti",
-			"PStudios",
-			"Mikahama",
-			"Pyscowicz",
-			"Pahkiqaz",
+			"Espertus",
 			"Hopea",
-			"KK"
+			"KK",
+			"McSalama",
+			"Mikahama",
+			"Nike",
+			"PStudios",
+			"Pahkiqaz",
+			"Pettevi",
+			"Pyscowicz",
+			"SNuutti",
+			"Silvonen"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "kohde",

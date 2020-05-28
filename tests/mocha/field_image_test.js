@@ -8,8 +8,8 @@ suite('Image Fields', function() {
   function assertValue(imageField, expectedValue, expectedText) {
     var actualValue = imageField.getValue();
     var actualText = imageField.getText();
-    assertEquals(actualValue, expectedValue);
-    assertEquals(actualText, expectedText);
+    chai.assert.equal(actualValue, expectedValue);
+    chai.assert.equal(actualText, expectedText);
   }
   suite('Constructor', function() {
     test('Empty', function() {
@@ -136,7 +136,7 @@ suite('Image Fields', function() {
       test('Remove Click Handler', function() {
         var field = new Blockly.FieldImage('src', 10, 10, null, this.onClick);
         field.setOnClickHandler(null);
-        chai.assert.equal(field.clickHandler_, null);
+        chai.assert.isNull(field.clickHandler_);
       });
     });
     suite('Alt', function() {

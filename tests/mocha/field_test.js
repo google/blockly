@@ -36,26 +36,26 @@ suite('Abstract Fields', function() {
       // An old default field should be serialized.
       var field = new FieldDefault();
       var stub = sinon.stub(console, 'warn');
-      assertEquals(true, field.isSerializable());
+      chai.assert.isTrue(field.isSerializable());
       chai.assert(stub.calledOnce);
       stub.restore();
     });
     test('Editable False, Serializable Default(false)', function() {
       // An old non-editable field should not be serialized.
       var field = new FieldFalseDefault();
-      assertEquals(false, field.isSerializable());
+      chai.assert.isFalse(field.isSerializable());
     });
     /* Test Other Cases */
     test('Editable Default(true), Serializable True', function() {
       // A field that is both editable and serializable should be serialized.
       var field = new FieldDefaultTrue();
-      assertEquals(true, field.isSerializable());
+      chai.assert.isTrue(field.isSerializable());
     });
     test('Editable False, Serializable True', function() {
       // A field that is not editable, but overrides serializable to true
       // should be serialized (e.g. field_label_serializable)
       var field = new FieldFalseTrue();
-      assertEquals(true, field.isSerializable());
+      chai.assert.isTrue(field.isSerializable());
     });
   });
   suite('setValue', function() {

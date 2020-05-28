@@ -1,16 +1,16 @@
 {
 	"@metadata": {
 		"authors": [
-			"Meno25",
-			"Test Create account",
-			"아라",
 			"Diyariq",
-			"محمد أحمد عبد الفتاح",
-			"Moud hosny",
-			"ديفيد",
-			"Samir",
+			"DonAdnan",
+			"Meno25",
 			"Mido",
-			"DonAdnan"
+			"Moud hosny",
+			"Samir",
+			"Test Create account",
+			"ديفيد",
+			"محمد أحمد عبد الفتاح",
+			"아라"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "البند",
@@ -53,13 +53,13 @@
 	"COLOUR_PICKER_TOOLTIP": "اختر لون من اللوحة.",
 	"COLOUR_RANDOM_TITLE": "لون عشوائي",
 	"COLOUR_RANDOM_TOOLTIP": "اختر لون بشكل عشوائي.",
-	"COLOUR_RGB_HELPURL": "http://www.december.com/html/spec/colorper.html",
+	"COLOUR_RGB_HELPURL": "https://www.december.com/html/spec/colorpercompact.html",
 	"COLOUR_RGB_TITLE": "لون مع",
 	"COLOUR_RGB_RED": "أحمر",
 	"COLOUR_RGB_GREEN": "أخضر",
 	"COLOUR_RGB_BLUE": "أزرق",
 	"COLOUR_RGB_TOOLTIP": "إنشئ لون بالكمية المحددة من الأحمر, الأخضر والأزرق. بحيث يجب تكون كافة القيم بين 0 و 100.",
-	"COLOUR_BLEND_HELPURL": "http://meyerweb.com/eric/tools/color-blend/",
+	"COLOUR_BLEND_HELPURL": "https://meyerweb.com/eric/tools/color-blend/#:::rgbp",
 	"COLOUR_BLEND_TITLE": "دمج",
 	"COLOUR_BLEND_COLOUR1": "اللون 1",
 	"COLOUR_BLEND_COLOUR2": "اللون 2",

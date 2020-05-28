@@ -37,7 +37,7 @@ Blockly.FlyoutDragger = function(flyout) {
    * @type {!Blockly.Scrollbar}
    * @private
    */
-  this.scrollbar_ = flyout.scrollbar_;
+  this.scrollbar_ = flyout.scrollbar;
 
   /**
    * Whether the flyout scrolls horizontally.  If false, the flyout scrolls

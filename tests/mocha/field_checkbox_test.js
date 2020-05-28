@@ -8,8 +8,8 @@ suite('Checkbox Fields', function() {
   function assertValue(checkboxField, expectedValue, expectedText) {
     var actualValue = checkboxField.getValue();
     var actualText = checkboxField.getText();
-    assertEquals(actualValue, expectedValue);
-    assertEquals(actualText, expectedText);
+    chai.assert.equal(actualValue, expectedValue);
+    chai.assert.equal(actualText, expectedText);
   }
   function assertValueDefault(checkboxField) {
     assertValue(checkboxField, 'FALSE', 'false');
@@ -84,6 +84,11 @@ suite('Checkbox Fields', function() {
         assertValue(this.checkboxField, 'TRUE', 'true');
       });
       test('False', function() {
+        this.checkboxField.setValue('FALSE');
+        assertValue(this.checkboxField, 'FALSE', 'false');
+      });
+      test('With source block', function() {
+        this.checkboxField.setSourceBlock(createTestBlock());
         this.checkboxField.setValue('FALSE');
         assertValue(this.checkboxField, 'FALSE', 'false');
       });

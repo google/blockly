@@ -438,10 +438,6 @@ function buildLangfiles(done) {
  *     blockly_uncompressed.js
  */
 const buildCore = gulp.parallel(
-  function(done) {
-    execSync('npm --allow-same-version --no-git-tag-version version 3.$(date +\'%Y%m%d\').0', { stdio: 'inherit' });
-    done();
-  },
   buildCompressed,
   buildBlocks,
   buildUncompressed

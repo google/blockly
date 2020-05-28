@@ -65,22 +65,26 @@ function checkoutBranch(branchName) {
 
 // Recompile and push to origin.
 const recompile = gulp.series(
-  syncDevelop(),
+  // syncDevelop(),
   function(done) {
-    var branchName = getRebuildBranchName();
-    console.log('make-rebuild-branch: creating branch ' + branchName);
-    execSync('git checkout -b ' + branchName, { stdio: 'inherit' });
+    // var branchName = getRebuildBranchName();
+    // console.log('make-rebuild-branch: creating branch ' + branchName);
+    // execSync('git checkout -b ' + branchName, { stdio: 'inherit' });
+    done();
+  },
+  function(done) {
+    execSync('npm run bump', { stdio: 'inherit' });
     done();
   },
   buildTasks.build,
   typings.typings,
   function(done) {
-    console.log('push-rebuild-branch: committing rebuild');
-    execSync('git commit -am "Rebuild"', { stdio: 'inherit' });
-    var branchName = getRebuildBranchName();
-    execSync('git push origin ' + branchName, { stdio: 'inherit' });
-    console.log('Branch ' + branchName + ' pushed to GitHub.');
-    console.log('Next step: create a pull request against develop.');
+    // console.log('push-rebuild-branch: committing rebuild');
+    // execSync('git commit -am "Rebuild"', { stdio: 'inherit' });
+    // var branchName = getRebuildBranchName();
+    // execSync('git push origin ' + branchName, { stdio: 'inherit' });
+    // console.log('Branch ' + branchName + ' pushed to GitHub.');
+    // console.log('Next step: create a pull request against develop.');
     done();
     }
 );

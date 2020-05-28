@@ -18,6 +18,7 @@ var fs = require('fs');
 var execSync = require('child_process').execSync;
 var through2 = require('through2');
 
+
 var closureCompiler = require('google-closure-compiler').gulp();
 var closureDeps = require('google-closure-deps');
 var packageJson = require('../../package.json');
@@ -438,6 +439,10 @@ function buildLangfiles(done) {
  *     blockly_uncompressed.js
  */
 const buildCore = gulp.parallel(
+  function(done) {
+    execSync('npm --allow-same-version --no-git-tag-version version 3.$(date +\'%Y%m%d\').0', { stdio: 'inherit' });
+    done();
+  },
   buildCompressed,
   buildBlocks,
   buildUncompressed

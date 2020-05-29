@@ -94,7 +94,7 @@ var JSCOMP_ERROR = [
   'underscore',
   'unknownDefines',
   'unusedLocalVariables',
-  // 'unusedPrivateMembers',
+  'unusedPrivateMembers',
   'useOfGoogBase',
   'uselessCode',
   'untranspilableFeatures',

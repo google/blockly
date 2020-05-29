@@ -42,7 +42,7 @@ Blockly.Warning.prototype.collapseHidden = false;
 /**
  * Draw the warning icon.
  * @param {!Element} group The icon group.
- * @private
+ * @protected
  */
 Blockly.Warning.prototype.drawIcon_ = function(group) {
   // Triangle with rounded corners.
@@ -152,16 +152,6 @@ Blockly.Warning.prototype.disposeBubble = function() {
   this.bubble_ = null;
   this.body_ = null;
   this.paragraphElement_ = null;
-};
-
-/**
- * Bring the warning to the top of the stack when clicked on.
- * @param {!Event} _e Mouse up event.
- * @private
- */
-
-Blockly.Warning.prototype.bodyFocus_ = function(_e) {
-  this.bubble_.promote();
 };
 
 /**

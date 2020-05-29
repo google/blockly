@@ -128,13 +128,6 @@ Blockly.Toolbox = function(workspace) {
   this.height = 0;
 
   /**
-   * The SVG group currently selected.
-   * @type {SVGGElement}
-   * @private
-   */
-  this.selectedOption_ = null;
-
-  /**
    * The TreeNode most recently selected.
    * @type {Blockly.tree.BaseNode}
    * @private

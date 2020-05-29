@@ -99,13 +99,6 @@ Blockly.FieldVariable.fromJson = function(options) {
 };
 
 /**
- * The workspace that this variable field belongs to.
- * @type {?Blockly.Workspace}
- * @private
- */
-Blockly.FieldVariable.prototype.workspace_ = null;
-
-/**
  * Serializable fields are saved by the XML renderer, non-serializable fields
  * are not. Editable fields should also be serializable.
  * @type {boolean}

@@ -272,7 +272,7 @@ Blockly.FieldDropdown.prototype.createSVGArrow_ = function() {
  * Create a dropdown menu under the text.
  * @param {Event=} opt_e Optional mouse event that triggered the field to open,
  *     or undefined if triggered programmatically.
- * @private
+ * @protected
  */
 Blockly.FieldDropdown.prototype.showEditor_ = function(opt_e) {
   this.menu_ = this.dropdownCreate_();
@@ -552,7 +552,7 @@ Blockly.FieldDropdown.prototype.applyColour = function() {
 
 /**
  * Draws the border with the correct width.
- * @private
+ * @protected
  */
 Blockly.FieldDropdown.prototype.render_ = function() {
   // Hide both elements.

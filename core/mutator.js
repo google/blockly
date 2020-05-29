@@ -76,7 +76,7 @@ Blockly.Mutator.prototype.getWorkspace = function() {
 /**
  * Draw the mutator icon.
  * @param {!Element} group The icon group.
- * @private
+ * @protected
  */
 Blockly.Mutator.prototype.drawIcon_ = function(group) {
   // Square with rounded corners.

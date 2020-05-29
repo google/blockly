@@ -31,7 +31,7 @@
     "lint": "eslint .",
     "package": "gulp package",
     "prepare": "npm run package",
-    "recompile": "gulp gitRecompile",
+    "recompile": "gulp gitPreCompile && npm run bump && gulp gitPostCompile",
     "release": "gulp gitCreateRC",
     "test": "concurrently 'npm run test:prepare' 'sleep 5 && npm run test:run'",
     "test:prepare": "npm run test:setupselenium && npm run test:startselenium",

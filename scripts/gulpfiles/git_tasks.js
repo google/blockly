@@ -10,7 +10,6 @@
 
 var gulp = require('gulp');
 var execSync = require('child_process').execSync;
-var exec = require('child_process').exec;
 
 var typings = require('./typings');
 var buildTasks = require('./build_tasks');
@@ -64,19 +63,19 @@ function checkoutBranch(branchName) {
    { stdio: 'inherit' });
 }
 
-// Recompile and push to origin.
-const recompile = gulp.series(
+// Switch to a new rebuild branch.
+const preCompile = gulp.series(
   syncDevelop(),
   function(done) {
     var branchName = getRebuildBranchName();
     console.log('make-rebuild-branch: creating branch ' + branchName);
     execSync('git checkout -b ' + branchName, { stdio: 'inherit' });
     done();
-  },
-  function(done) {
-    exec('npm run bump');
-    done();
-  },
+  }
+);
+
+// Build all files, types, and push to rebuild branch.
+const postCompile = gulp.series(
   buildTasks.build,
   typings.typings,
   function(done) {
@@ -87,7 +86,7 @@ const recompile = gulp.series(
     console.log('Branch ' + branchName + ' pushed to GitHub.');
     console.log('Next step: create a pull request against develop.');
     done();
-    }
+  }
 );
 
 // Create and push an RC branch.
@@ -119,6 +118,7 @@ module.exports = {
   syncDevelop: syncDevelop,
   syncMaster: syncMaster,
   createRC: createRC,
-  recompile: recompile,
+  preCompile: preCompile,
+  postCompile: postCompile,
   updateGithubPages: updateGithubPages
 }

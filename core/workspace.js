@@ -410,18 +410,6 @@ Blockly.Workspace.prototype.deleteVariableById = function(id) {
 };
 
 /**
- * Deletes a variable and all of its uses from this workspace without asking
- * the user for confirmation.
- * @param {!Blockly.VariableModel} variable Variable to delete.
- * @param {!Array.<!Blockly.Block>} uses An array of uses of the variable.
- * @private
- * @suppress {unusedPrivateMembers}
- */
-Blockly.Workspace.prototype.deleteVariableInternal_ = function(variable, uses) {
-  this.variableMap_.deleteVariableInternal(variable, uses);
-};
-
-/**
  * Check whether a variable exists with the given name.  The check is
  * case-insensitive.
  * @param {string} _name The name to check for.

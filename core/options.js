@@ -179,7 +179,7 @@ Blockly.Options = function(options) {
 
   /**
    * Map of plugin type to name of registered plugin or plugin class.
-   * @type {!Object<string, (function(new:?, ...?)|string)>}
+   * @type {!Object.<string, (function(new:?, ...?)|string)>}
    */
   this.plugins = plugins;
 };

@@ -179,7 +179,7 @@ Blockly.registry.getClassFromOptions = function(type, options) {
   var typeName = type.toString();
   var plugin = options.plugins[typeName] || Blockly.registry.DEFAULT;
 
-  // If the user passed in a plugin class instead of a registered plugin name
+  // If the user passed in a plugin class instead of a registered plugin name.
   if (typeof plugin == 'function') {
     return plugin;
   }

@@ -750,9 +750,9 @@ Blockly.WorkspaceSvg.prototype.createDom = function(opt_backgroundClass) {
     if (!Blockly.Toolbox) {
       throw Error('Missing require for Blockly.Toolbox');
     }
-    var toolboxClass = Blockly.registry.getClassFromOptions(
+    var ToolboxClass = Blockly.registry.getClassFromOptions(
         Blockly.registry.Type.TOOLBOX, this.options);
-    this.toolbox_ = new toolboxClass(this);
+    this.toolbox_ = new ToolboxClass(this);
   }
   if (this.grid_) {
     this.grid_.update(this.scale);

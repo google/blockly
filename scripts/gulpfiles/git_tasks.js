@@ -99,10 +99,8 @@ const createRC = gulp.series(
     execSync('git checkout -b ' + branchName, { stdio: 'inherit' });
     execSync('git push ' + upstream_url + ' ' + branchName,
         { stdio: 'inherit' });
-    execSync('git checkout -b gh-pages');
-    execSync('git push ' + upstream_url + ' gh-pages');
     done();
-  },
+  }
 );
 
 // Update github pages with what is currently in develop.

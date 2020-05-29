@@ -13,6 +13,10 @@
 
 goog.provide('Blockly.registry');
 
+goog.requireType('Blockly.blockRendering.Renderer');
+goog.requireType('Blockly.Field');
+goog.requireType('Blockly.IToolbox');
+
 
 /**
  * A map of maps. With the keys being the type and name of the class we are
@@ -22,6 +26,12 @@ goog.provide('Blockly.registry');
  * @type {Object<string, Object<string, function(new:?)>>}
  */
 Blockly.registry.typeMap_ = {};
+
+/**
+ * The string used to register the default class for a type of plugin.
+ * @type {string}
+ */
+Blockly.registry.DEFAULT = 'default';
 
 /**
  * A name with the type of the element stored in the generic.
@@ -48,6 +58,9 @@ Blockly.registry.Type.RENDERER = new Blockly.registry.Type('renderer');
 
 /** @type {!Blockly.registry.Type<Blockly.Field>} */
 Blockly.registry.Type.FIELD = new Blockly.registry.Type('field');
+
+/** @type {!Blockly.registry.Type<Blockly.IToolbox>} */
+Blockly.registry.Type.TOOLBOX = new Blockly.registry.Type('toolbox');
 
 /**
  * Registers a class based on a type and name.
@@ -151,4 +164,24 @@ Blockly.registry.getClass = function(type, name) {
     return null;
   }
   return typeRegistry[name];
+};
+
+/**
+ * Gets the class name or the class from Blockly options for the given type.
+ * This is used for plugins that override a built in feature. (Ex: Toolbox)
+ * @param {Blockly.registry.Type<T>} type The type of the plugin.
+ * @param {!Blockly.Options} options The option object to check for the given
+ *     plugin.
+ * @return {?function(new:T, ...?)} The class for the plugin.
+ * @template T
+ */
+Blockly.registry.getClassFromOptions = function(type, options) {
+  var typeName = type.toString();
+  var plugin = options.plugins[typeName] || Blockly.registry.DEFAULT;
+
+  // If the user passed in a plugin class instead of a registered plugin name.
+  if (typeof plugin == 'function') {
+    return plugin;
+  }
+  return Blockly.registry.getClass(type, plugin);
 };

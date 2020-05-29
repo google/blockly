@@ -10,6 +10,7 @@
 
 var gulp = require('gulp');
 var execSync = require('child_process').execSync;
+var exec = require('child_process').exec;
 
 var typings = require('./typings');
 var buildTasks = require('./build_tasks');
@@ -56,7 +57,7 @@ function getRCBranchName() {
   return 'rc_' + yyyy + '_' + mm;
 };
 
-// If branch does not exist then create the branch. 
+// If branch does not exist then create the branch.
 // If branch exists switch to branch.
 function checkoutBranch(branchName) {
   execSync('git checkout ' + branchName + ' || git checkout -b ' + branchName,
@@ -65,11 +66,15 @@ function checkoutBranch(branchName) {
 
 // Recompile and push to origin.
 const recompile = gulp.series(
-  syncDevelop,
+  syncDevelop(),
   function(done) {
     var branchName = getRebuildBranchName();
     console.log('make-rebuild-branch: creating branch ' + branchName);
     execSync('git checkout -b ' + branchName, { stdio: 'inherit' });
+    done();
+  },
+  function(done) {
+    exec('npm run bump');
     done();
   },
   buildTasks.build,
@@ -88,7 +93,7 @@ const recompile = gulp.series(
 // Create and push an RC branch.
 // Note that this pushes to google/blockly.
 const createRC = gulp.series(
-  syncDevelop,
+  syncDevelop(),
   function(done) {
     var branchName = getRCBranchName();
     execSync('git checkout -b ' + branchName, { stdio: 'inherit' });

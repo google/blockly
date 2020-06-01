@@ -16,7 +16,7 @@ goog.provide('Blockly.registry');
 goog.requireType('Blockly.blockRendering.Renderer');
 goog.requireType('Blockly.Field');
 goog.requireType('Blockly.IToolbox');
-goog.requireType('Blockly.utils.toolbox.Category');
+goog.requireType('Blockly.utils.toolbox');
 
 
 /**

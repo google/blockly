@@ -68,6 +68,7 @@
 <script src="themes/test_themes.js"></script>
 <script src="./playgrounds/screenshot.js"></script>
 <script src="./playgrounds/test_blocks_toolbox.js"></script>
+<script src="./playgrounds/toolbox_categories.js"></script>
 
 <script>
 // Custom requires for the playground.
@@ -617,15 +618,7 @@ var spaghettiXml = [
   Variables category uses untyped variable blocks.
   See https://developers.google.com/blockly/guides/create-custom-blocks/variables#untyped_variable_blocks for more information. -->
   <xml xmlns="https://developers.google.com/blockly/xml" id="toolbox-categories" style="display: none">
-    <category name="Logic" categorystyle="logic_category">
-      <block type="controls_if"></block>
-      <block type="logic_compare"></block>
-      <block type="logic_operation"></block>
-      <block type="logic_negate"></block>
-      <block type="logic_boolean"></block>
-      <block type="logic_null" disabled="true"></block>
-      <block type="logic_ternary"></block>
-    </category>
+    <category type="logic_category"></category>
     <category name="Loops" categorystyle="loop_category">
       <block type="controls_repeat_ext">
         <value name="TIMES">
@@ -959,15 +952,7 @@ var spaghettiXml = [
   auto-closing flyout.  The Variables category uses typed variable blocks.
   See https://developers.google.com/blockly/guides/create-custom-blocks/variables#typed_variable_blocks for more information. -->
   <xml xmlns="https://developers.google.com/blockly/xml" id="toolbox-categories-typed-variables" style="display: none">
-    <category name="Logic" categorystyle="logic_category">
-      <block type="controls_if"></block>
-      <block type="logic_compare"></block>
-      <block type="logic_operation"></block>
-      <block type="logic_negate"></block>
-      <block type="logic_boolean"></block>
-      <block type="logic_null" disabled="true"></block>
-      <block type="logic_ternary"></block>
-    </category>
+    <category type="logic_category"></category>
     <category name="Loops" categorystyle="loop_category">
       <block type="controls_repeat_ext">
         <value name="TIMES">

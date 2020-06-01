@@ -276,6 +276,11 @@ Blockly.Toolbox.prototype.createTree_ = function(toolboxDef, treeOut) {
     switch (childIn.kind.toUpperCase()) {
       case 'CATEGORY':
         var categoryInfo = /** @type {Blockly.utils.toolbox.Category} */ (childIn);
+        var categoryType = categoryInfo['type'];
+        if (categoryType) {
+          categoryInfo = Blockly.registry.getObject(
+              Blockly.registry.Type.TOOLBOX_CATEGORY, categoryType);
+        }
         openNode = this.addCategory_(categoryInfo, treeOut) || openNode;
         lastElement = childIn;
         break;

@@ -82,3 +82,10 @@ function getXmlArray() {
   var label = Blockly.Xml.textToDom('<label text="tooltips"></label>');
   return [block, separator, button, label];
 }
+
+
+var testCategory = {
+  "name": "Test_Name"
+};
+
+Blockly.registry.register(Blockly.registry.Type.TOOLBOX_CATEGORY, 'test_category', testCategory);

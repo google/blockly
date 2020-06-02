@@ -163,7 +163,6 @@ Blockly.Blocks.fable_draw_circle = {
       .setCheck('Number');
 
     this.appendValueInput('COLOUR')
-      .appendField(Blockly.Msg.FABLE_VIDEO_DRAW_COLOR)
       .setCheck('Colour');
 
     // Properties:
@@ -227,7 +226,6 @@ Blockly.Blocks.fable_draw_rect = {
       .setCheck('Number');
 
     this.appendValueInput('COLOUR')
-      .appendField(Blockly.Msg.FABLE_VIDEO_DRAW_COLOR)
       .setCheck('Colour');
 
     // Properties:
@@ -286,7 +284,6 @@ Blockly.Blocks.fable_draw_text = {
       .setCheck('Number');
 
     this.appendValueInput('COLOUR')
-      .appendField(Blockly.Msg.FABLE_VIDEO_DRAW_COLOR)
       .setCheck('Colour');
 
     // Properties:
@@ -308,7 +305,6 @@ Blockly.Blocks.fable_draw_text = {
     ];
 
     var toolboxKeywords = [
-      Blockly.Msg.FABLE_VIDEO_DRAW_COLOR,
       '%{BKY_FABLE_SEARCH_KEYWORD_TEXT}',
       '%{BKY_COLORS}'
     ];

@@ -965,14 +965,14 @@ Blockly.WorkspaceSvg.prototype.getBubbleCanvas = function() {
  */
 Blockly.WorkspaceSvg.prototype.getParentSvg = function() {
   if (this.cachedParentSvg_) {
-    console.log(this.cachedParentSvg_);
+    // console.log(this.cachedParentSvg_);
     return this.cachedParentSvg_;
   }
   var element = this.svgGroup_;
   while (element) {
     if (element.tagName == 'svg') {
       this.cachedParentSvg_ = element;
-      console.log(element);
+      // console.log(element);
       return element;
     }
     element = /** @type {!SVGElement} */ (element.parentNode);
@@ -2293,7 +2293,7 @@ Blockly.WorkspaceSvg.getTopLevelWorkspaceMetrics_ = function() {
   // svgSize is equivalent to the size of the injectionDiv at this point.
   var svgSize = Blockly.svgSize(this.getParentSvg());
   var viewSize = {height: svgSize.height, width: svgSize.width};
-  console.log(viewSize);
+  // console.log(viewSize);
   if (this.toolbox_) {
     if (this.toolboxPosition == Blockly.TOOLBOX_AT_TOP ||
         this.toolboxPosition == Blockly.TOOLBOX_AT_BOTTOM) {

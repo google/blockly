@@ -417,7 +417,7 @@ Blockly.Toolbox.prototype.position = function() {
     } else {  // Left
       treeDiv.style.left = '0';
     }
-    console.log(svgSize);
+    // console.log(svgSize);
     treeDiv.style.height = svgSize.height + 'px';
     this.width = treeDiv.offsetWidth;
   }

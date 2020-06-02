@@ -283,7 +283,7 @@ Blockly.createMainWorkspace_ = function(svg, options, blockDragSurface,
 
     var getObjectMetrics = function(object) {
       var objectMetrics = object.getBoundingRectangle();
-      console.log(objectMetrics);
+      // console.log(objectMetrics);
       objectMetrics.height = objectMetrics.bottom - objectMetrics.top;
       objectMetrics.width = objectMetrics.right - objectMetrics.left;
       return objectMetrics;

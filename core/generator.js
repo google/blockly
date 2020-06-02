@@ -70,9 +70,11 @@ Blockly.Generator.prototype.STATEMENT_SUFFIX = null;
 /**
  * The method of indenting.  Defaults to two spaces, but language generators
  * may override this to increase indent or change to tabs.
+ *
+ * SHAPER NOTE: Setting the indent to 4 spaces instead of 2 (blockly default).
  * @type {string}
  */
-Blockly.Generator.prototype.INDENT = '  ';
+Blockly.Generator.prototype.INDENT = '    ';
 
 /**
  * Maximum length for a comment before wrapping.  Does not account for

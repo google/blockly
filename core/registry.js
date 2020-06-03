@@ -63,9 +63,6 @@ Blockly.registry.Type.FIELD = new Blockly.registry.Type('field');
 /** @type {!Blockly.registry.Type<Blockly.IToolbox>} */
 Blockly.registry.Type.TOOLBOX = new Blockly.registry.Type('toolbox');
 
-/** @type {!Blockly.registry.Type<Blockly.utils.toolbox.Category>} */
-Blockly.registry.Type.TOOLBOX_CATEGORY = new Blockly.registry.Type('toolboxCategory');
-
 /**
  * Registers a class based on a type and name.
  * @param {string|Blockly.registry.Type<T>} type The type of the plugin.

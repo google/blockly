@@ -294,10 +294,6 @@ suite('Toolbox', function() {
       sinon.assert.calledOnce(setColourFromStyleStub);
       sinon.assert.called(setColourStub);
     });
-    test('Using a registered category', function() {
-      this.toolbox.createTree_(this.toolboxXml, this.tree);
-      chai.assert.equal(this.tree.children_[4].content, 'Test_Name');
-    });
   });
 
   suite('parseToolbox', function() {

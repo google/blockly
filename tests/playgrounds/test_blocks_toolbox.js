@@ -918,7 +918,13 @@ var style = {
     {
       "kind": "BLOCK",
       "type": "test_style_hex5",
-    }
+      "gap": "40",
+    },
+    {
+      "kind": "BLOCK",
+      "type": "test_style_hex5",
+      "disabled": "true",
+    },
   ],
 };
 

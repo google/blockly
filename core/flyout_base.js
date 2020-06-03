@@ -612,13 +612,15 @@ Blockly.Flyout.prototype.createBlock_ = function(blockXml) {
  * @private
  */
 Blockly.Flyout.prototype.getBlockXml_ = function(blockInfo) {
-  if (blockInfo['type']) {
+  var blockXml = null;
+  // All blockInfo will have type, so check for blockxml first.
+  if (blockInfo['blockxml']) {
+    blockXml = Blockly.Xml.textToDom(blockInfo['blockxml']);
+  } else if (blockInfo['type']) {
     var blockXml = Blockly.utils.xml.createElement('xml');
     blockXml.setAttribute('type', blockInfo['type']);
     blockXml.setAttribute('gap', blockInfo['gap']);
     blockXml.setAttribute('disabled', blockInfo['disabled']);
-  } else if (blockInfo['blockxml']) {
-    blockXml = Blockly.Xml.textToDom(blockInfo['blockxml']);
   } else {
     throw Error('Error: Invalid block definition. Block definition must have blockxml or type.');
   }

@@ -17,7 +17,10 @@ goog.provide('Blockly.utils.toolbox');
  * The information needed to create a block in the toolbox.
  * @typedef {{
  *            kind:string,
- *            blockxml:(string|Node)
+ *            blockxml:(?string|Node),
+ *            type: ?string,
+ *            gap: (?string|?number),
+ *            disabled: (?string|?boolean)
  *          }}
  */
 Blockly.utils.toolbox.Block;

@@ -612,10 +612,14 @@ Blockly.Flyout.prototype.createBlock_ = function(blockXml) {
  * @private
  */
 Blockly.Flyout.prototype.getBlockXml_ = function(blockInfo) {
+  var potBlockXml = blockInfo['blockxml'];
   var blockXml = null;
+
   // All blockInfo will have type, so check for blockxml first.
-  if (blockInfo['blockxml']) {
-    blockXml = Blockly.Xml.textToDom(blockInfo['blockxml']);
+  if (potBlockXml && typeof potBlockXml == 'string') {
+    blockXml = Blockly.Xml.textToDom(potBlockXml);
+  } else if (potBlockXml) {
+    blockXml = potBlockXml;
   } else if (blockInfo['type']) {
     blockXml = Blockly.utils.xml.createElement('xml');
     blockXml.setAttribute('type', blockInfo['type']);

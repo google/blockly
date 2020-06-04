@@ -43,7 +43,10 @@ Blockly.Options = function(options) {
     if (!Array.isArray(toolboxDef)) {
       toolboxDef = Blockly.Options.parseToolboxTree(toolboxDef || null);
     }
+    var start = window.performance.now();
     var toolboxContents = Blockly.utils.toolbox.convertToolboxToJSON(toolboxDef);
+    var end = window.performance.now();
+    console.log("Convert toolbox: " + (end - start));
     var hasCategories = Blockly.utils.toolbox.hasCategories(toolboxContents);
     var hasTrashcan = options['trashcan'];
     if (hasTrashcan === undefined) {

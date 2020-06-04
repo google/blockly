@@ -17,11 +17,14 @@ goog.require('Blockly.utils.dom');
 goog.require('Blockly.utils.Rect');
 goog.require('Blockly.Xml');
 
+goog.requireType('Blockly.IDeleteArea');
+
 
 /**
  * Class for a trash can.
  * @param {!Blockly.WorkspaceSvg} workspace The workspace to sit in.
  * @constructor
+ * @implements {Blockly.IDeleteArea}
  */
 Blockly.Trashcan = function(workspace) {
   /**

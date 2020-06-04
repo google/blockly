@@ -22,6 +22,7 @@ goog.require('Blockly.utils.Size');
  * Class for an icon.
  * @param {Blockly.BlockSvg} block The block associated with this icon.
  * @constructor
+ * @abstract
  */
 Blockly.Icon = function(block) {
   /**
@@ -181,3 +182,10 @@ Blockly.Icon.prototype.getCorrectedSize = function() {
   return new Blockly.utils.Size(
       Blockly.Icon.prototype.SIZE, Blockly.Icon.prototype.SIZE - 2);
 };
+
+/**
+ * Draw the icon.
+ * @param {!Element} group The icon group.
+ * @protected
+ */
+Blockly.Icon.prototype.drawIcon_;

@@ -23,6 +23,7 @@ goog.require('Blockly.constants');
 goog.require('Blockly.utils.colour');
 goog.require('Blockly.utils.Coordinate');
 goog.require('Blockly.utils.global');
+goog.require('Blockly.utils.Rect');
 goog.require('Blockly.utils.string');
 goog.require('Blockly.utils.style');
 goog.require('Blockly.utils.userAgent');
@@ -496,19 +497,19 @@ Blockly.utils.runAfterPageLoad = function(fn) {
 /**
  * Get the position of the current viewport in window coordinates.  This takes
  * scroll into account.
- * @return {!Object} An object containing window width, height, and scroll
- *     position in window coordinates.
+ * @return {!Blockly.utils.Rect} An object containing window width, height, and
+ *     scroll position in window coordinates.
  * @package
  */
 Blockly.utils.getViewportBBox = function() {
   // Pixels, in window coordinates.
   var scrollOffset = Blockly.utils.style.getViewportPageOffset();
-  return {
-    right: document.documentElement.clientWidth + scrollOffset.x,
-    bottom: document.documentElement.clientHeight + scrollOffset.y,
-    top: scrollOffset.y,
-    left: scrollOffset.x
-  };
+  return new Blockly.utils.Rect(
+      scrollOffset.y,
+      document.documentElement.clientHeight + scrollOffset.y,
+      scrollOffset.x,
+      document.documentElement.clientWidth + scrollOffset.x
+  );
 };
 
 /**

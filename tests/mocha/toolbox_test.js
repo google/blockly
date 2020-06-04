@@ -53,7 +53,7 @@ suite('Toolbox', function() {
     });
   });
 
-  suite('renderTree', function() {
+  suite('render', function() {
     setup(function() {
       this.toolboxXml = Blockly.utils.toolbox.convertToolboxToJSON(this.toolboxXml);
       this.toolbox.selectFirstCategory();
@@ -62,7 +62,7 @@ suite('Toolbox', function() {
       this.toolbox.handleBeforeTreeSelected_(this.secondChild);
     });
     test('Tree is created and set', function() {
-      this.toolbox.renderTree(this.toolboxXml);
+      this.toolbox.render(this.toolboxXml);
       chai.assert.isDefined(this.toolbox.tree_);
     });
     test('Throws error if a toolbox has both blocks and categories at root level', function() {
@@ -94,17 +94,17 @@ suite('Toolbox', function() {
         }
       ];
       chai.assert.throws(function() {
-        toolbox.renderTree(badToolboxDef);
+        toolbox.render(badToolboxDef);
       }, 'Toolbox cannot have both blocks and categories in the root level.');
     });
     test('Select any open nodes', function() {
-      this.toolbox.renderTree(this.toolboxXml);
+      this.toolbox.render(this.toolboxXml);
       var selectedNode = this.toolbox.tree_.children_[0];
       chai.assert.isTrue(selectedNode.selected_);
     });
     test('Set the state for horizontal layout ', function() {
       this.toolbox.horizontalLayout_ = true;
-      this.toolbox.renderTree(this.toolboxXml);
+      this.toolbox.render(this.toolboxXml);
       var orientationAttribute = this.toolbox.tree_.getElement()
           .getAttribute('aria-orientation');
       chai.assert.equal(orientationAttribute, 'horizontal');
@@ -136,7 +136,7 @@ suite('Toolbox', function() {
           ]
         }
       ];
-      this.toolbox.renderTree(jsonDef);
+      this.toolbox.render(jsonDef);
       chai.assert.lengthOf(this.toolbox.tree_.children_, 1);
     });
   });

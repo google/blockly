@@ -45,7 +45,7 @@ Blockly.FlyoutDragger = function(flyout) {
    * @type {boolean}
    * @private
    */
-  this.horizontalLayout_ = flyout.horizontalLayout_;
+  this.horizontalLayout_ = flyout.horizontalLayout;
 };
 Blockly.utils.object.inherits(Blockly.FlyoutDragger, Blockly.WorkspaceDragger);
 

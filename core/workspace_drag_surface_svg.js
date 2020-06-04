@@ -40,16 +40,6 @@ Blockly.WorkspaceDragSurfaceSvg = function(container) {
 Blockly.WorkspaceDragSurfaceSvg.prototype.SVG_ = null;
 
 /**
- * SVG group inside the drag surface that holds blocks while a drag is in
- * progress. Blocks are moved here by the workspace at start of a drag and moved
- * back into the main SVG at the end of a drag.
- *
- * @type {Element}
- * @private
- */
-Blockly.WorkspaceDragSurfaceSvg.prototype.dragGroup_ = null;
-
-/**
  * Containing HTML element; parent of the workspace and the drag surface.
  * @type {Element}
  * @private

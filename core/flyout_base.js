@@ -30,6 +30,7 @@ goog.require('Blockly.WorkspaceSvg');
 goog.require('Blockly.Xml');
 
 goog.requireType('Blockly.IBlocklyActionable');
+goog.requireType('Blockly.IDeleteArea');
 goog.requireType('Blockly.utils.Metrics');
 
 
@@ -40,6 +41,7 @@ goog.requireType('Blockly.utils.Metrics');
  * @constructor
  * @abstract
  * @implements {Blockly.IBlocklyActionable}
+ * @implements {Blockly.IDeleteArea}
  */
 Blockly.Flyout = function(workspaceOptions) {
   workspaceOptions.getMetrics =
@@ -61,6 +63,13 @@ Blockly.Flyout = function(workspaceOptions) {
    * @type {boolean}
    */
   this.RTL = !!workspaceOptions.RTL;
+
+  /**
+   * Whether the flyout should be laid out horizontally or not.
+   * @type {boolean}
+   * @package
+   */
+  this.horizontalLayout = false;
 
   /**
    * Position of the toolbox and flyout relative to the workspace.
@@ -254,7 +263,7 @@ Blockly.Flyout.prototype.init = function(targetWorkspace) {
    * @package
    */
   this.scrollbar = new Blockly.Scrollbar(this.workspace_,
-      this.horizontalLayout_, false, 'blocklyFlyoutScrollbar');
+      this.horizontalLayout, false, 'blocklyFlyoutScrollbar');
 
   this.hide();
 
@@ -471,8 +480,9 @@ Blockly.Flyout.prototype.show = function(flyoutDef) {
   // Parse the Array or NodeList passed in into an Array of
   // Blockly.utils.toolbox.Toolbox.
   var parsedContent = Blockly.utils.toolbox.convertToolboxToJSON(flyoutDef);
-  var flyoutInfo = /** @type {{contents:Array.<Object>, gaps:Array.<number>}} */
-      (this.createFlyoutInfo_(parsedContent));
+  var flyoutInfo =
+    /** @type {{contents:!Array.<!Object>, gaps:!Array.<number>}} */ (
+      this.createFlyoutInfo_(parsedContent));
 
   this.setVisible(true);
 
@@ -490,7 +500,7 @@ Blockly.Flyout.prototype.show = function(flyoutDef) {
   this.listeners_.push(Blockly.bindEventWithChecks_(this.svgBackground_,
       'mouseover', this, deselectAll));
 
-  if (this.horizontalLayout_) {
+  if (this.horizontalLayout) {
     this.height_ = 0;
   } else {
     this.width_ = 0;
@@ -520,7 +530,7 @@ Blockly.Flyout.prototype.createFlyoutInfo_ = function(parsedContent) {
   var contents = [];
   var gaps = [];
   this.permanentlyDisabled_.length = 0;
-  var defaultGap = this.horizontalLayout_ ? this.GAP_X : this.GAP_Y;
+  var defaultGap = this.horizontalLayout ? this.GAP_X : this.GAP_Y;
   for (var i = 0, contentInfo; (contentInfo = parsedContent[i]); i++) {
     switch (contentInfo.kind.toUpperCase()) {
       case 'BLOCK':
@@ -529,7 +539,7 @@ Blockly.Flyout.prototype.createFlyoutInfo_ = function(parsedContent) {
         var block = this.createBlock_(blockXml);
         // This is a deprecated method for adding gap to a block.
         // <block type="math_arithmetic" gap="8"></block>
-        var gap = parseInt(blockXml.getAttribute('gap'), 10);
+        var gap = parseInt(blockInfo['gap'] || blockXml.getAttribute('gap'), 10);
         gaps.push(isNaN(gap) ? defaultGap : gap);
         contents.push({type: 'block', block: block});
         break;
@@ -602,11 +612,16 @@ Blockly.Flyout.prototype.createBlock_ = function(blockXml) {
  * @private
  */
 Blockly.Flyout.prototype.getBlockXml_ = function(blockInfo) {
-  var blockXml = blockInfo['blockxml'];
-  if (blockXml) {
+  var blockXml = null;
+  // All blockInfo will have type, so check for blockxml first.
+  if (blockInfo['blockxml']) {
     blockXml = Blockly.Xml.textToDom(blockInfo['blockxml']);
+  } else if (blockInfo['type']) {
+    blockXml = Blockly.utils.xml.createElement('xml');
+    blockXml.setAttribute('type', blockInfo['type']);
+    blockXml.setAttribute('disabled', blockInfo['disabled']);
   } else {
-    throw Error('Error: Invalid block definition. Block definition must have blockxml.');
+    throw Error('Error: Invalid block definition. Block definition must have blockxml or type.');
   }
   return blockXml;
 };
@@ -992,3 +1007,26 @@ Blockly.Flyout.prototype.getMetrics_;
  * @protected
  */
 Blockly.Flyout.prototype.setMetrics_;
+
+/**
+ * Lay out the blocks in the flyout.
+ * @param {!Array.<!Object>} contents The blocks and buttons to lay out.
+ * @param {!Array.<number>} gaps The visible gaps between blocks.
+ * @protected
+ */
+Blockly.Flyout.prototype.layout_;
+
+/**
+ * Scroll the flyout.
+ * @param {!Event} e Mouse wheel scroll event.
+ * @protected
+ */
+Blockly.Flyout.prototype.wheel_;
+
+/**
+ * Compute height of flyout.  Position mat under each block.
+ * For RTL: Lay out the blocks right-aligned.
+ * @return {void}
+ * @protected
+ */
+Blockly.Flyout.prototype.reflowInternal_;

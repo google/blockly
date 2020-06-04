@@ -32,12 +32,8 @@ goog.requireType('Blockly.utils.Metrics');
  */
 Blockly.HorizontalFlyout = function(workspaceOptions) {
   Blockly.HorizontalFlyout.superClass_.constructor.call(this, workspaceOptions);
-  /**
-   * Flyout should be laid out horizontally.
-   * @type {boolean}
-   * @private
-   */
-  this.horizontalLayout_ = true;
+  
+  this.horizontalLayout = true;
 };
 Blockly.utils.object.inherits(Blockly.HorizontalFlyout, Blockly.Flyout);
 
@@ -227,7 +223,7 @@ Blockly.HorizontalFlyout.prototype.scrollToStart = function() {
 /**
  * Scroll the flyout.
  * @param {!Event} e Mouse wheel scroll event.
- * @private
+ * @protected
  */
 Blockly.HorizontalFlyout.prototype.wheel_ = function(e) {
   var scrollDelta = Blockly.utils.getScrollDeltaPixels(e);
@@ -255,7 +251,7 @@ Blockly.HorizontalFlyout.prototype.wheel_ = function(e) {
  * Lay out the blocks in the flyout.
  * @param {!Array.<!Object>} contents The blocks and buttons to lay out.
  * @param {!Array.<number>} gaps The visible gaps between blocks.
- * @private
+ * @protected
  */
 Blockly.HorizontalFlyout.prototype.layout_ = function(contents, gaps) {
   this.workspace_.scale = this.targetWorkspace.scale;
@@ -352,7 +348,7 @@ Blockly.HorizontalFlyout.prototype.getClientRect = function() {
 /**
  * Compute height of flyout.  Position mat under each block.
  * For RTL: Lay out the blocks right-aligned.
- * @private
+ * @protected
  */
 Blockly.HorizontalFlyout.prototype.reflowInternal_ = function() {
   this.workspace_.scale = this.targetWorkspace.scale;

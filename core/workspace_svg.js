@@ -25,6 +25,7 @@ goog.require('Blockly.MarkerManager');
 goog.require('Blockly.Msg');
 goog.require('Blockly.navigation');
 goog.require('Blockly.Options');
+goog.require('Blockly.registry');
 goog.require('Blockly.ThemeManager');
 goog.require('Blockly.Themes.Classic');
 goog.require('Blockly.TouchGesture');
@@ -342,7 +343,7 @@ Blockly.WorkspaceSvg.prototype.flyout_ = null;
 /**
  * Category-based toolbox providing blocks which may be dragged into this
  * workspace.
- * @type {Blockly.Toolbox}
+ * @type {Blockly.IToolbox}
  * @private
  */
 Blockly.WorkspaceSvg.prototype.toolbox_ = null;
@@ -750,7 +751,9 @@ Blockly.WorkspaceSvg.prototype.createDom = function(opt_backgroundClass) {
     if (!Blockly.Toolbox) {
       throw Error('Missing require for Blockly.Toolbox');
     }
-    this.toolbox_ = new Blockly.Toolbox(this);
+    var ToolboxClass = Blockly.registry.getClassFromOptions(
+        Blockly.registry.Type.TOOLBOX, this.options);
+    this.toolbox_ = new ToolboxClass(this);
   }
   if (this.grid_) {
     this.grid_.update(this.scale);
@@ -949,7 +952,7 @@ Blockly.WorkspaceSvg.prototype.getFlyout = function(opt_own) {
 
 /**
  * Getter for the toolbox associated with this workspace, if one exists.
- * @return {Blockly.Toolbox} The toolbox on this workspace.
+ * @return {Blockly.IToolbox} The toolbox on this workspace.
  * @package
  */
 Blockly.WorkspaceSvg.prototype.getToolbox = function() {
@@ -1188,7 +1191,7 @@ Blockly.WorkspaceSvg.prototype.setVisible = function(isVisible) {
   this.getParentSvg().style.display = isVisible ? 'block' : 'none';
   if (this.toolbox_) {
     // Currently does not support toolboxes in mutators.
-    this.toolbox_.HtmlDiv.style.display = isVisible ? 'block' : 'none';
+    this.toolbox_.setVisible(isVisible);
   }
   if (isVisible) {
     var blocks = this.getAllBlocks(false);
@@ -1456,7 +1459,7 @@ Blockly.WorkspaceSvg.prototype.recordDeleteAreas = function() {
   }
   if (this.flyout_) {
     this.deleteAreaToolbox_ = this.flyout_.getClientRect();
-  } else if (this.toolbox_) {
+  } else if (this.toolbox_ && typeof this.toolbox_.getClientRect == 'function') {
     this.deleteAreaToolbox_ = this.toolbox_.getClientRect();
   } else {
     this.deleteAreaToolbox_ = null;
@@ -1722,7 +1725,7 @@ Blockly.WorkspaceSvg.prototype.updateToolbox = function(toolboxDef) {
       throw Error('Existing toolbox has no categories.  Can\'t change mode.');
     }
     this.options.languageTree = toolboxDef;
-    this.toolbox_.renderTree(toolboxDef);
+    this.toolbox_.render(toolboxDef);
   } else {
     if (!this.flyout_) {
       throw Error('Existing toolbox has categories.  Can\'t change mode.');
@@ -2105,7 +2108,7 @@ Blockly.WorkspaceSvg.prototype.scroll = function(x, y) {
 
 /**
  * Get the dimensions of the given workspace component, in pixels.
- * @param {Blockly.Toolbox|Blockly.Flyout} elem The element to get the
+ * @param {Blockly.IToolbox|Blockly.Flyout} elem The element to get the
  *     dimensions of, or null.  It should be a toolbox or flyout, and should
  *     implement getWidth() and getHeight().
  * @return {!Blockly.utils.Size} An object containing width and height

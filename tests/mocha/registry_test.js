@@ -48,4 +48,40 @@ suite('Registry', function() {
       }, 'Can not register a null value');
     });
   });
+  suite('getClassFromOptions', function() {
+    setup(function() {
+      this.defaultClass = function() {};
+      this.defaultClass.prototype.testMethod = function() {
+        return 'default';
+      };
+      this.options = {
+        'plugins': {
+          'test' : 'test_name'
+        }
+      };
+      Blockly.registry.typeMap_['test'] = {
+        'test_name': TestClass,
+        'default': this.defaultClass
+      };
+    });
+    test('Simple - Plugin name given', function() {
+      var testClass = Blockly.registry.getClassFromOptions('test', this.options);
+      chai.assert.instanceOf(new testClass(), TestClass);
+    });
+    test('Simple - Plugin class given', function() {
+      this.options.plugins['test'] = TestClass;
+      var testClass = Blockly.registry.getClassFromOptions('test', this.options);
+      chai.assert.instanceOf(new testClass(), TestClass);
+    });
+    test('No Plugin Name Given', function() {
+      delete this.options['plugins']['test'];
+      var testClass = Blockly.registry.getClassFromOptions('test', this.options);
+      chai.assert.instanceOf(new testClass(), this.defaultClass);
+    });
+    test('Incorrect Plugin Name', function() {
+      this.options['plugins']['test'] = 'random';
+      var testClass = Blockly.registry.getClassFromOptions('test', this.options);
+      chai.assert.isNull(testClass);
+    });
+  });
 });

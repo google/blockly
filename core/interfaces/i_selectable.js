@@ -13,11 +13,12 @@
 
 goog.provide('Blockly.ISelectable');
 
-goog.require('Blockly.IDeletable');
-goog.require('Blockly.IMovable');
+goog.requireType('Blockly.IDeletable');
+goog.requireType('Blockly.IMovable');
 
 
 /**
+ * The interface for an object that is selectable.
  * @extends {Blockly.IDeletable}
  * @extends {Blockly.IMovable}
  * @interface

@@ -110,6 +110,8 @@ Blockly.Options = function(options) {
 
   var renderer = options['renderer'] || 'geras';
 
+  var plugins = options['plugins'] || {};
+
   /** @type {boolean} */
   this.RTL = rtl;
   /** @type {boolean} */
@@ -174,6 +176,12 @@ Blockly.Options = function(options) {
    * @type {Blockly.Workspace}
    */
   this.parentWorkspace = options['parentWorkspace'];
+
+  /**
+   * Map of plugin type to name of registered plugin or plugin class.
+   * @type {!Object.<string, (function(new:?, ...?)|string)>}
+   */
+  this.plugins = plugins;
 };
 
 /**

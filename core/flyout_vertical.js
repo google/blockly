@@ -33,12 +33,6 @@ goog.requireType('Blockly.utils.Metrics');
  */
 Blockly.VerticalFlyout = function(workspaceOptions) {
   Blockly.VerticalFlyout.superClass_.constructor.call(this, workspaceOptions);
-  /**
-   * Flyout should be laid out vertically.
-   * @type {boolean}
-   * @private
-   */
-  this.horizontalLayout_ = false;
 };
 Blockly.utils.object.inherits(Blockly.VerticalFlyout, Blockly.Flyout);
 
@@ -215,7 +209,7 @@ Blockly.VerticalFlyout.prototype.scrollToStart = function() {
 /**
  * Scroll the flyout.
  * @param {!Event} e Mouse wheel scroll event.
- * @private
+ * @protected
  */
 Blockly.VerticalFlyout.prototype.wheel_ = function(e) {
   var scrollDelta = Blockly.utils.getScrollDeltaPixels(e);
@@ -242,7 +236,7 @@ Blockly.VerticalFlyout.prototype.wheel_ = function(e) {
  * Lay out the blocks in the flyout.
  * @param {!Array.<!Object>} contents The blocks and buttons to lay out.
  * @param {!Array.<number>} gaps The visible gaps between blocks.
- * @private
+ * @protected
  */
 Blockly.VerticalFlyout.prototype.layout_ = function(contents, gaps) {
   this.workspace_.scale = this.targetWorkspace.scale;
@@ -331,7 +325,7 @@ Blockly.VerticalFlyout.prototype.getClientRect = function() {
 /**
  * Compute width of flyout.  Position mat under each block.
  * For RTL: Lay out the blocks and buttons to be right-aligned.
- * @private
+ * @protected
  */
 Blockly.VerticalFlyout.prototype.reflowInternal_ = function() {
   this.workspace_.scale = this.targetWorkspace.scale;

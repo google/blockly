@@ -19,6 +19,7 @@ goog.require('Blockly.Events.BlockChange');
 goog.require('Blockly.Gesture');
 goog.require('Blockly.utils');
 goog.require('Blockly.utils.dom');
+goog.require('Blockly.utils.Rect');
 goog.require('Blockly.utils.Size');
 goog.require('Blockly.utils.style');
 goog.require('Blockly.utils.userAgent');
@@ -27,6 +28,7 @@ goog.requireType('Blockly.blockRendering.ConstantProvider');
 goog.requireType('Blockly.IASTNodeLocationSvg');
 goog.requireType('Blockly.IASTNodeLocationWithBlock');
 goog.requireType('Blockly.IBlocklyActionable');
+goog.requireType('Blockly.IRegistrable');
 
 
 /**
@@ -42,6 +44,7 @@ goog.requireType('Blockly.IBlocklyActionable');
  * @implements {Blockly.IASTNodeLocationSvg}
  * @implements {Blockly.IASTNodeLocationWithBlock}
  * @implements {Blockly.IBlocklyActionable}
+ * @implements {Blockly.IRegistrable}
  */
 Blockly.Field = function(value, opt_validator, opt_config) {
   /**
@@ -714,8 +717,8 @@ Blockly.Field.prototype.getSize = function() {
 /**
  * Returns the bounding box of the rendered field, accounting for workspace
  * scaling.
- * @return {!Object} An object with top, bottom, left, and right in pixels
- *     relative to the top left corner of the page (window coordinates).
+ * @return {!Blockly.utils.Rect} An object with top, bottom, left, and right in
+ *     pixels relative to the top left corner of the page (window coordinates).
  * @package
  */
 Blockly.Field.prototype.getScaledBBox = function() {
@@ -748,12 +751,12 @@ Blockly.Field.prototype.getScaledBBox = function() {
     var scaledWidth = bBox.width;
     var scaledHeight = bBox.height;
   }
-  return {
-    top: xy.y,
-    bottom: xy.y + scaledHeight,
-    left: xy.x,
-    right: xy.x + scaledWidth
-  };
+  return new Blockly.utils.Rect(
+      xy.y,
+      xy.y + scaledHeight,
+      xy.x,
+      xy.x + scaledWidth
+  );
 };
 
 /**

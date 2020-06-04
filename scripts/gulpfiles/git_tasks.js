@@ -56,22 +56,26 @@ function getRCBranchName() {
   return 'rc_' + yyyy + '_' + mm;
 };
 
-// If branch does not exist then create the branch. 
+// If branch does not exist then create the branch.
 // If branch exists switch to branch.
 function checkoutBranch(branchName) {
   execSync('git checkout ' + branchName + ' || git checkout -b ' + branchName,
    { stdio: 'inherit' });
 }
 
-// Recompile and push to origin.
-const recompile = gulp.series(
-  syncDevelop,
+// Switch to a new rebuild branch.
+const preCompile = gulp.series(
+  syncDevelop(),
   function(done) {
     var branchName = getRebuildBranchName();
     console.log('make-rebuild-branch: creating branch ' + branchName);
     execSync('git checkout -b ' + branchName, { stdio: 'inherit' });
     done();
-  },
+  }
+);
+
+// Build all files, types, and push to rebuild branch.
+const postCompile = gulp.series(
   buildTasks.build,
   typings.typings,
   function(done) {
@@ -82,22 +86,20 @@ const recompile = gulp.series(
     console.log('Branch ' + branchName + ' pushed to GitHub.');
     console.log('Next step: create a pull request against develop.');
     done();
-    }
+  }
 );
 
 // Create and push an RC branch.
 // Note that this pushes to google/blockly.
 const createRC = gulp.series(
-  syncDevelop,
+  syncDevelop(),
   function(done) {
     var branchName = getRCBranchName();
     execSync('git checkout -b ' + branchName, { stdio: 'inherit' });
     execSync('git push ' + upstream_url + ' ' + branchName,
         { stdio: 'inherit' });
-    execSync('git checkout -b gh-pages');
-    execSync('git push ' + upstream_url + ' gh-pages');
     done();
-  },
+  }
 );
 
 // Update github pages with what is currently in develop.
@@ -105,7 +107,13 @@ const updateGithubPages = gulp.series(
   syncBranch('gh-pages'),
   function(done) {
     execSync('git pull ' + upstream_url + ' develop', { stdio: 'inherit' });
+    done();
+  },
+  buildTasks.build,
+  function(done) {
+    execSync('git commit -am "Rebuild"', { stdio: 'inherit' });
     execSync('git push ' + upstream_url + ' gh-pages', { stdio: 'inherit' });
+    execSync('git push origin gh-pages', { stdio: 'inherit' });
     done();
   }
 );
@@ -114,6 +122,7 @@ module.exports = {
   syncDevelop: syncDevelop,
   syncMaster: syncMaster,
   createRC: createRC,
-  recompile: recompile,
+  preCompile: preCompile,
+  postCompile: postCompile,
   updateGithubPages: updateGithubPages
 }

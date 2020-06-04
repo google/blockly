@@ -86,7 +86,7 @@ Blockly.utils.object.inherits(Blockly.Comment, Blockly.Icon);
 /**
  * Draw the comment icon.
  * @param {!Element} group The icon group.
- * @private
+ * @protected
  */
 Blockly.Comment.prototype.drawIcon_ = function(group) {
   // Circle.

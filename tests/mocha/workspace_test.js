@@ -99,16 +99,6 @@ function testAWorkspace() {
       createVarBlocksNoEvents(this.workspace, ['id1', 'id1', 'id2']);
     });
 
-    test('deleteVariableInternal_(id1)', function() {
-      var uses = this.workspace.getVariableUsesById(this.var1.getId());
-      this.workspace.deleteVariableInternal_(this.var1, uses);
-
-      var variable = this.workspace.getVariableById('id1');
-      chai.assert.isNull(variable);
-      assertVariableValues(this.workspace, 'name2', 'type2', 'id2');
-      assertBlockVarModelName(this.workspace, 0, 'name2');
-    });
-
     test('deleteVariableById(id2) one usage', function() {
       // Deleting variable one usage should not trigger confirm dialog.
       var stub =

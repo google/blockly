@@ -16,6 +16,7 @@ goog.require('Blockly.Css');
 goog.require('Blockly.Events');
 goog.require('Blockly.Events.Ui');
 goog.require('Blockly.navigation');
+goog.require('Blockly.registry');
 goog.require('Blockly.Touch');
 goog.require('Blockly.tree.TreeControl');
 goog.require('Blockly.tree.TreeNode');
@@ -28,6 +29,8 @@ goog.require('Blockly.utils.Rect');
 goog.require('Blockly.utils.toolbox');
 
 goog.requireType('Blockly.IBlocklyActionable');
+goog.requireType('Blockly.IDeleteArea');
+goog.requireType('Blockly.IToolbox');
 
 
 /**
@@ -37,6 +40,8 @@ goog.requireType('Blockly.IBlocklyActionable');
  *     blocks.
  * @constructor
  * @implements {Blockly.IBlocklyActionable}
+ * @implements {Blockly.IDeleteArea}
+ * @implements {Blockly.IToolbox}
  */
 Blockly.Toolbox = function(workspace) {
   /**
@@ -124,13 +129,6 @@ Blockly.Toolbox = function(workspace) {
   this.height = 0;
 
   /**
-   * The SVG group currently selected.
-   * @type {SVGGElement}
-   * @private
-   */
-  this.selectedOption_ = null;
-
-  /**
    * The TreeNode most recently selected.
    * @type {Blockly.tree.BaseNode}
    * @private
@@ -206,7 +204,7 @@ Blockly.Toolbox.prototype.init = function() {
 
   this.config_['cssCollapsedFolderIcon'] =
       'blocklyTreeIconClosed' + (workspace.RTL ? 'Rtl' : 'Ltr');
-  this.renderTree(workspace.options.languageTree);
+  this.render(workspace.options.languageTree);
 };
 
 /**
@@ -215,7 +213,7 @@ Blockly.Toolbox.prototype.init = function() {
  *    containing information on the contents of the toolbox.
  * @package
  */
-Blockly.Toolbox.prototype.renderTree = function(toolboxDef) {
+Blockly.Toolbox.prototype.render = function(toolboxDef) {
   if (this.tree_) {
     this.tree_.dispose();  // Delete any existing content.
     this.lastCategory_ = null;
@@ -504,6 +502,14 @@ Blockly.Toolbox.prototype.dispose = function() {
   this.workspace_.getThemeManager().unsubscribe(this.HtmlDiv);
   Blockly.utils.dom.removeNode(this.HtmlDiv);
   this.lastCategory_ = null;
+};
+
+/**
+ * Toggles the visibility of the toolbox.
+ * @param {boolean} isVisible True if toolbox should be visible.
+ */
+Blockly.Toolbox.prototype.setVisible = function(isVisible) {
+  this.HtmlDiv.style.display = isVisible ? 'block' : 'none';
 };
 
 /**
@@ -912,3 +918,6 @@ Blockly.Css.register([
   '}'
   /* eslint-enable indent */
 ]);
+
+Blockly.registry.register(Blockly.registry.Type.TOOLBOX,
+    Blockly.registry.DEFAULT, Blockly.Toolbox);

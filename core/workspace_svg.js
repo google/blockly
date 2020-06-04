@@ -2600,14 +2600,7 @@ Blockly.WorkspaceSvg.prototype.getGrid = function() {
 
 
 /**
- *  {{
-  *    callback: function(*),
-  *    scopeType: !Blockly.ContextMenuRegistry.ScopeType,
-  *    displayText: ((function(!Blockly.ContextMenuRegistry.Scope):string)|string),
-  *    preconditionFn: function(!Blockly.ContextMenuRegistry.Scope):string,
-  *    weight: number,
-  *    id: string,
-  * }}
+ * Registers all of the context menu options for the workspace menu.
  */
 (function() {
   // Options to undo/redo previous action.

@@ -17,7 +17,8 @@
 goog.provide('Blockly.ContextMenuRegistry');
 
 /**
- *
+ * Where this menu item should be rendered. If the menu item should be rendered in multiple
+ * scopes, e.g. on both a block and a workspace, it should be registered for each scope.
  * @enum {string}
  */
 Blockly.ContextMenuRegistry.ScopeType = {
@@ -26,8 +27,8 @@ Blockly.ContextMenuRegistry.ScopeType = {
 };
 
 /**
- * Where this menu item should be rendered. If the menu item should be rendered in multiple
- * scopes, e.g. on both a block and a workspace, it should be registered for each scope.
+ * The actual workspace/block where the menu is being rendered. This is passed to callback and
+ * displayText functions that depend on this information.
  * @typedef {{
  *    block: (Blockly.BlockSvg|undefined),
  *    workspace: (Blockly.WorkspaceSvg|undefined),
@@ -36,6 +37,7 @@ Blockly.ContextMenuRegistry.ScopeType = {
 Blockly.ContextMenuRegistry.Scope;
 
 /**
+ * A menu item as entered in the registry.
  * @typedef {{
  *    callback: function(*),
  *    scopeType: !Blockly.ContextMenuRegistry.ScopeType,
@@ -48,6 +50,7 @@ Blockly.ContextMenuRegistry.Scope;
 Blockly.ContextMenuRegistry.RegistryItem;
 
 /**
+ * A menu item as presented to contextmenu.js.
  * @typedef {{
  *    text: string,
  *    enabled: boolean,

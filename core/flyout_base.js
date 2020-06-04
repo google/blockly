@@ -759,7 +759,6 @@ Blockly.Flyout.prototype.createBlock = function(originalBlock) {
   var newBlock = null;
   Blockly.Events.disable();
   var variablesBeforeCreation = this.targetWorkspace.getAllVariables();
-  this.targetWorkspace.setResizesEnabled(false);
   try {
     newBlock = this.placeNewBlock_(originalBlock);
     // Close the flyout.
@@ -917,8 +916,8 @@ Blockly.Flyout.prototype.placeNewBlock_ = function(oldBlock) {
 
   // Create the new block by cloning the block in the flyout (via XML).
   var xml = Blockly.Xml.blockToDom(oldBlock, true);
-  // The target workspace would normally resize during domToBlock, which will
-  // lead to weird jumps.  Save it for terminateDrag.
+  // The target workspace would normally resize during domToBlock since it
+  // starts blocks out at (0, 0), which would lead to weird jumps.
   targetWorkspace.setResizesEnabled(false);
 
   // Using domToBlock instead of domToWorkspace means that the new block will be
@@ -957,6 +956,10 @@ Blockly.Flyout.prototype.placeNewBlock_ = function(oldBlock) {
   finalOffset.scale(1 / targetWorkspace.scale);
 
   block.moveBy(finalOffset.x, finalOffset.y);
+
+  // Now that the block is properly positioned, we can re-enable resizing.
+  targetWorkspace.setResizesEnabled(true);
+
   return block;
 };
 

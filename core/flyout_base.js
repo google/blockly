@@ -539,7 +539,7 @@ Blockly.Flyout.prototype.createFlyoutInfo_ = function(parsedContent) {
         var block = this.createBlock_(blockXml);
         // This is a deprecated method for adding gap to a block.
         // <block type="math_arithmetic" gap="8"></block>
-        var gap = parseInt(blockXml.getAttribute('gap'), 10);
+        var gap = parseInt(blockInfo['gap'] || blockXml.getAttribute('gap'), 10);
         gaps.push(isNaN(gap) ? defaultGap : gap);
         contents.push({type: 'block', block: block});
         break;
@@ -612,11 +612,16 @@ Blockly.Flyout.prototype.createBlock_ = function(blockXml) {
  * @private
  */
 Blockly.Flyout.prototype.getBlockXml_ = function(blockInfo) {
-  var blockXml = blockInfo['blockxml'];
-  if (blockXml) {
+  var blockXml = null;
+  // All blockInfo will have type, so check for blockxml first.
+  if (blockInfo['blockxml']) {
     blockXml = Blockly.Xml.textToDom(blockInfo['blockxml']);
+  } else if (blockInfo['type']) {
+    blockXml = Blockly.utils.xml.createElement('xml');
+    blockXml.setAttribute('type', blockInfo['type']);
+    blockXml.setAttribute('disabled', blockInfo['disabled']);
   } else {
-    throw Error('Error: Invalid block definition. Block definition must have blockxml.');
+    throw Error('Error: Invalid block definition. Block definition must have blockxml or type.');
   }
   return blockXml;
 };

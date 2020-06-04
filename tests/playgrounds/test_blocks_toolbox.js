@@ -19,15 +19,15 @@ var alignCategory = {
   "contents": [
     {
       "kind": "BLOCK",
-      "blockxml": "<block type=\"test_align_dummy_right\"></block>",
+      "type": "test_align_dummy_right",
     },
     {
       "kind": "BLOCK",
-      "blockxml": "<block type=\"test_align_all\"></block>",
+      "type": "test_align_all",
     },
     {
       "kind": "BLOCK",
-      "blockxml": "<block type=\"test_align_with_external_input\"></block>",
+      "type": "test_align_with_external_input",
     }
   ],
 };
@@ -38,47 +38,47 @@ var basicCategory = {
   "contents": [
     {
       "kind": "BLOCK",
-      "blockxml": "<block type=\"test_basic_empty\"></block>",
+      "type": "test_basic_empty",
     },
     {
       "kind": "BLOCK",
-      "blockxml": "<block type=\"test_basic_empty_with_mutator\"></block>",
+      "type": "test_basic_empty_with_mutator",
     },
     {
       "kind": "BLOCK",
-      "blockxml": "<block type=\"test_basic_dummy\"></block>",
+      "type": "test_basic_dummy",
     },
     {
       "kind": "BLOCK",
-      "blockxml": "<block type=\"test_basic_multiple_dummy\"></block>",
+      "type": "test_basic_multiple_dummy",
     },
     {
       "kind": "BLOCK",
-      "blockxml": "<block type=\"test_basic_stack\"></block>",
+      "type": "test_basic_stack",
     },
     {
       "kind": "BLOCK",
-      "blockxml": "<block type=\"test_basic_row\"></block>",
+      "type": "test_basic_row",
     },
     {
       "kind": "BLOCK",
-      "blockxml": "<block type=\"test_basic_value_to_stack\"></block>",
+      "type": "test_basic_value_to_stack",
     },
     {
       "kind": "BLOCK",
-      "blockxml": "<block type=\"test_basic_value_to_statement\"></block>",
+      "type": "test_basic_value_to_statement",
     },
     {
       "kind": "BLOCK",
-      "blockxml": "<block type=\"test_basic_limit_instances\"></block>",
+      "type": "test_basic_limit_instances",
     },
     {
       "kind": "BLOCK",
-      "blockxml": "<block type=\"test_basic_tooltips\"></block>"
+      "type": "test_basic_tooltips"
     },
     {
       "kind": "BLOCK",
-      "blockxml": "<block type=\"test_basic_javascript\"></block>",
+      "type": "test_basic_javascript",
     }
   ],
 };
@@ -110,7 +110,7 @@ var rowCategory = {
     },
     {
       "kind": "BLOCK",
-      "blockxml": "<block type=\"test_connections_row_input\"></block>",
+      "type": "test_connections_row_input",
     },
     {
       "kind": "SEP",
@@ -118,7 +118,7 @@ var rowCategory = {
     },
     {
       "kind": "BLOCK",
-      "blockxml": "<block type=\"test_connections_row_blue\"></block>",
+      "type": "test_connections_row_blue",
     },
     {
       "kind": "SEP",
@@ -126,7 +126,7 @@ var rowCategory = {
     },
     {
       "kind": "BLOCK",
-      "blockxml": "<block type=\"test_connections_row_yellow\"></block>",
+      "type": "test_connections_row_yellow",
     },
     {
       "kind": "SEP",
@@ -134,7 +134,7 @@ var rowCategory = {
     },
     {
       "kind": "BLOCK",
-      "blockxml": "<block type=\"test_connections_row_red\"></block>",
+      "type": "test_connections_row_red",
     },
     {
       "kind": "SEP",
@@ -142,7 +142,7 @@ var rowCategory = {
     },
     {
       "kind": "BLOCK",
-      "blockxml": "<block type=\"test_connections_row_output\"></block>",
+      "type": "test_connections_row_output",
     },
     {
       "kind": "BLOCK",
@@ -154,7 +154,7 @@ var rowCategory = {
     },
     {
       "kind": "BLOCK",
-      "blockxml": "<block type=\"test_connections_multivalue_1valid\"></block>",
+      "type": "test_connections_multivalue_1valid",
     },
     {
       "kind": "SEP",
@@ -162,7 +162,7 @@ var rowCategory = {
     },
     {
       "kind": "BLOCK",
-      "blockxml": "<block type=\"test_connections_multivalue_2valid\"></block>",
+      "type": "test_connections_multivalue_2valid",
     }
   ],
 };
@@ -194,7 +194,7 @@ var stackCategory = {
     },
     {
       "kind": "BLOCK",
-      "blockxml": "<block type=\"test_connections_stack_next\"></block>",
+      "type": "test_connections_stack_next",
     },
     {
       "kind": "SEP",
@@ -202,7 +202,7 @@ var stackCategory = {
     },
     {
       "kind": "BLOCK",
-      "blockxml": "<block type=\"test_connections_stack_blue\"></block>",
+      "type": "test_connections_stack_blue",
     },
     {
       "kind": "SEP",
@@ -210,7 +210,7 @@ var stackCategory = {
     },
     {
       "kind": "BLOCK",
-      "blockxml": "<block type=\"test_connections_stack_yellow\"></block>",
+      "type": "test_connections_stack_yellow",
     },
     {
       "kind": "SEP",
@@ -218,7 +218,7 @@ var stackCategory = {
     },
     {
       "kind": "BLOCK",
-      "blockxml": "<block type=\"test_connections_stack_red\"></block>",
+      "type": "test_connections_stack_red",
     },
     {
       "kind": "SEP",
@@ -226,7 +226,7 @@ var stackCategory = {
     },
     {
       "kind": "BLOCK",
-      "blockxml": "<block type=\"test_connections_stack_prev\"></block>",
+      "type": "test_connections_stack_prev",
     },
     {
       "kind": "BLOCK",
@@ -262,7 +262,7 @@ var statementCategory = {
     },
     {
       "kind": "BLOCK",
-      "blockxml": "<block type=\"test_connections_statement_blue\"></block>",
+      "type": "test_connections_statement_blue",
     },
     {
       "kind": "SEP",
@@ -270,7 +270,7 @@ var statementCategory = {
     },
     {
       "kind": "BLOCK",
-      "blockxml": "<block type=\"test_connections_statement_yellow\"></block>",
+      "type": "test_connections_statement_yellow",
     },
     {
       "kind": "SEP",
@@ -278,11 +278,11 @@ var statementCategory = {
     },
     {
       "kind": "BLOCK",
-      "blockxml": "<block type=\"test_connections_statement_red\"></block>",
+      "type": "test_connections_statement_red",
     },
     {
       "kind": "BLOCK",
-      "blockxml": "<block type=\"test_connections_statement_nonext\"></block>",
+      "type": "test_connections_statement_nonext",
     },
     {
       "kind": "SEP",
@@ -290,7 +290,7 @@ var statementCategory = {
     },
     {
       "kind": "BLOCK",
-      "blockxml": "<block type=\"test_connections_multistatement_1valid\"></block>",
+      "type": "test_connections_multistatement_1valid",
     },
     {
       "kind": "SEP",
@@ -298,7 +298,7 @@ var statementCategory = {
     },
     {
       "kind": "BLOCK",
-      "blockxml": "<block type=\"test_connections_multistatement_2valid\"></block>",
+      "type": "test_connections_multistatement_2valid",
     }
   ],
 };
@@ -393,35 +393,35 @@ var fieldDefaults = {
     },
     {
       "kind": "BLOCK",
-      "blockxml": "<block type=\"test_fields_angle\"></block>",
+      "type": "test_fields_angle",
     },
     {
       "kind": "BLOCK",
-      "blockxml": "<block type=\"test_fields_checkbox\"></block>",
+      "type": "test_fields_checkbox",
     },
     {
       "kind": "BLOCK",
-      "blockxml": "<block type=\"test_fields_colour\"></block>",
+      "type": "test_fields_colour",
     },
     {
       "kind": "BLOCK",
-      "blockxml": "<block type=\"test_fields_colour_options\"></block>",
+      "type": "test_fields_colour_options",
     },
     {
       "kind": "BLOCK",
-      "blockxml": "<block type=\"test_fields_text_input\"></block>",
+      "type": "test_fields_text_input",
     },
     {
       "kind": "BLOCK",
-      "blockxml": "<block type=\"test_fields_only_text_input\"></block>",
+      "type": "test_fields_only_text_input",
     },
     {
       "kind": "BLOCK",
-      "blockxml": "<block type=\"test_fields_multilinetext\"></block>",
+      "type": "test_fields_multilinetext",
     },
     {
       "kind": "BLOCK",
-      "blockxml": "<block type=\"test_fields_variable\"></block>",
+      "type": "test_fields_variable",
     },
     {
       "kind": "BUTTON",
@@ -434,7 +434,7 @@ var fieldDefaults = {
     },
     {
       "kind": "BLOCK",
-      "blockxml": "<block type=\"test_fields_label_serializable\"></block>",
+      "type": "test_fields_label_serializable",
     },
     {
       "kind": "BUTTON",
@@ -447,7 +447,7 @@ var fieldDefaults = {
     },
     {
       "kind": "BLOCK",
-      "blockxml": "<block type=\"test_fields_image\"></block>",
+      "type": "test_fields_image",
     }
   ],
 };
@@ -489,31 +489,31 @@ var fieldAngles = {
   "contents": [
     {
       "kind": "BLOCK",
-      "blockxml": "<block type=\"test_angles_clockwise\"></block>",
+      "type": "test_angles_clockwise",
     },
     {
       "kind": "BLOCK",
-      "blockxml": "<block type=\"test_angles_offset\"></block>",
+      "type": "test_angles_offset",
     },
     {
       "kind": "BLOCK",
-      "blockxml": "<block type=\"test_angles_wrap\"></block>",
+      "type": "test_angles_wrap",
     },
     {
       "kind": "BLOCK",
-      "blockxml": "<block type=\"test_angles_round_30\"></block>",
+      "type": "test_angles_round_30",
     },
     {
       "kind": "BLOCK",
-      "blockxml": "<block type=\"test_angles_round_0\"></block>",
+      "type": "test_angles_round_0",
     },
     {
       "kind": "BLOCK",
-      "blockxml": "<block type=\"test_angles_protractor\"></block>",
+      "type": "test_angles_protractor",
     },
     {
       "kind": "BLOCK",
-      "blockxml": "<block type=\"test_angles_compass\"></block>",
+      "type": "test_angles_compass",
     }
   ],
 };
@@ -528,7 +528,7 @@ var fieldDropDowns = {
     },
     {
       "kind": "BLOCK",
-      "blockxml": "<block type=\"test_dropdowns_dynamic\"></block>",
+      "type": "test_dropdowns_dynamic",
     },
     {
       "kind": "BUTTON",
@@ -542,7 +542,7 @@ var fieldDropDowns = {
     },
     {
       "kind": "BLOCK",
-      "blockxml": "<block type=\"test_dropdowns_dynamic_random\"></block>",
+      "type": "test_dropdowns_dynamic_random",
     },
     {
       "kind": "LABEL",
@@ -550,15 +550,15 @@ var fieldDropDowns = {
     },
     {
       "kind": "BLOCK",
-      "blockxml": "<block type=\"test_dropdowns_long\"></block>",
+      "type": "test_dropdowns_long",
     },
     {
       "kind": "BLOCK",
-      "blockxml": "<block type=\"test_dropdowns_images\"></block>",
+      "type": "test_dropdowns_images",
     },
     {
       "kind": "BLOCK",
-      "blockxml": "<block type=\"test_dropdowns_images_and_text\"></block>",
+      "type": "test_dropdowns_images_and_text",
     }
   ],
 };
@@ -569,31 +569,31 @@ var fieldImages = {
   "contents": [
     {
       "kind": "BLOCK",
-      "blockxml": "<block type=\"test_images_datauri\"></block>",
+      "type": "test_images_datauri",
     },
     {
       "kind": "BLOCK",
-      "blockxml": "<block type=\"test_images_small\"></block>",
+      "type": "test_images_small",
     },
     {
       "kind": "BLOCK",
-      "blockxml": "<block type=\"test_images_large\"></block>",
+      "type": "test_images_large",
     },
     {
       "kind": "BLOCK",
-      "blockxml": "<block type=\"test_images_fliprtl\"></block>",
+      "type": "test_images_fliprtl",
     },
     {
       "kind": "BLOCK",
-      "blockxml": "<block type=\"test_images_missing\"></block>",
+      "type": "test_images_missing",
     },
     {
       "kind": "BLOCK",
-      "blockxml": "<block type=\"test_images_many_icons\"></block>",
+      "type": "test_images_many_icons",
     },
     {
       "kind": "BLOCK",
-      "blockxml": "<block type=\"test_images_clickhandler\"></block>",
+      "type": "test_images_clickhandler",
     }
   ],
 };
@@ -608,7 +608,7 @@ var fieldEmoji = {
     },
     {
       "kind": "BLOCK",
-      "blockxml": "<block type=\"test_style_emoji\"></block>",
+      "type": "test_style_emoji",
     },
     {
       "kind": "BLOCK",
@@ -649,7 +649,7 @@ var fieldValidators = {
     },
     {
       "kind": "BLOCK",
-      "blockxml": "<block type=\"test_validators_dispose_block\"></block>",
+      "type": "test_validators_dispose_block",
     },
     {
       "kind": "LABEL",
@@ -661,7 +661,7 @@ var fieldValidators = {
     },
     {
       "kind": "BLOCK",
-      "blockxml": "<block type=\"test_validators_angle_null\"></block>",
+      "type": "test_validators_angle_null",
     },
     {
       "kind": "SEP",
@@ -669,7 +669,7 @@ var fieldValidators = {
     },
     {
       "kind": "BLOCK",
-      "blockxml": "<block type=\"test_validators_angle_mult30_force\"></block>",
+      "type": "test_validators_angle_mult30_force",
     },
     {
       "kind": "SEP",
@@ -677,7 +677,7 @@ var fieldValidators = {
     },
     {
       "kind": "BLOCK",
-      "blockxml": "<block type=\"test_validators_angle_mult30_null\"></block>",
+      "type": "test_validators_angle_mult30_null",
     },
     {
       "kind": "LABEL",
@@ -689,7 +689,7 @@ var fieldValidators = {
     },
     {
       "kind": "BLOCK",
-      "blockxml": "<block type=\"test_validators_checkbox_null\"></block>",
+      "type": "test_validators_checkbox_null",
     },
     {
       "kind": "SEP",
@@ -697,7 +697,7 @@ var fieldValidators = {
     },
     {
       "kind": "BLOCK",
-      "blockxml": "<block type=\"test_validators_checkbox_match\"></block>",
+      "type": "test_validators_checkbox_match",
     },
     {
       "kind": "SEP",
@@ -705,7 +705,7 @@ var fieldValidators = {
     },
     {
       "kind": "BLOCK",
-      "blockxml": "<block type=\"test_validators_checkbox_not_match_null\"></block>",
+      "type": "test_validators_checkbox_not_match_null",
     },
     {
       "kind": "LABEL",
@@ -717,7 +717,7 @@ var fieldValidators = {
     },
     {
       "kind": "BLOCK",
-      "blockxml": "<block type=\"test_validators_colour_null\"></block>",
+      "type": "test_validators_colour_null",
     },
     {
       "kind": "SEP",
@@ -725,7 +725,7 @@ var fieldValidators = {
     },
     {
       "kind": "BLOCK",
-      "blockxml": "<block type=\"test_validators_colour_force_red\"></block>",
+      "type": "test_validators_colour_force_red",
     },
     {
       "kind": "SEP",
@@ -733,7 +733,7 @@ var fieldValidators = {
     },
     {
       "kind": "BLOCK",
-      "blockxml": "<block type=\"test_validators_colour_red_null\"></block>",
+      "type": "test_validators_colour_red_null",
     },
     {
       "kind": "LABEL",
@@ -745,7 +745,7 @@ var fieldValidators = {
     },
     {
       "kind": "BLOCK",
-      "blockxml": "<block type=\"test_validators_dropdown_null\"></block>",
+      "type": "test_validators_dropdown_null",
     },
     {
       "kind": "SEP",
@@ -753,7 +753,7 @@ var fieldValidators = {
     },
     {
       "kind": "BLOCK",
-      "blockxml": "<block type=\"test_validators_dropdown_force_1s\"></block>",
+      "type": "test_validators_dropdown_force_1s",
     },
     {
       "kind": "SEP",
@@ -761,7 +761,7 @@ var fieldValidators = {
     },
     {
       "kind": "BLOCK",
-      "blockxml": "<block type=\"test_validators_dropdown_1s_null\"></block>",
+      "type": "test_validators_dropdown_1s_null",
     },
     {
       "kind": "LABEL",
@@ -773,7 +773,7 @@ var fieldValidators = {
     },
     {
       "kind": "BLOCK",
-      "blockxml": "<block type=\"test_validators_number_null\"></block>",
+      "type": "test_validators_number_null",
     },
     {
       "kind": "SEP",
@@ -781,7 +781,7 @@ var fieldValidators = {
     },
     {
       "kind": "BLOCK",
-      "blockxml": "<block type=\"test_validators_number_mult10_force\"></block>",
+      "type": "test_validators_number_mult10_force",
     },
     {
       "kind": "SEP",
@@ -789,7 +789,7 @@ var fieldValidators = {
     },
     {
       "kind": "BLOCK",
-      "blockxml": "<block type=\"test_validators_number_mult10_null\"></block>",
+      "type": "test_validators_number_mult10_null",
     },
     {
       "kind": "LABEL",
@@ -801,7 +801,7 @@ var fieldValidators = {
     },
     {
       "kind": "BLOCK",
-      "blockxml": "<block type=\"test_validators_text_null\"></block>",
+      "type": "test_validators_text_null",
     },
     {
       "kind": "SEP",
@@ -809,7 +809,7 @@ var fieldValidators = {
     },
     {
       "kind": "BLOCK",
-      "blockxml": "<block type=\"test_validators_text_A\"></block>",
+      "type": "test_validators_text_A",
     },
     {
       "kind": "SEP",
@@ -817,7 +817,7 @@ var fieldValidators = {
     },
     {
       "kind": "BLOCK",
-      "blockxml": "<block type=\"test_validators_text_B\"></block>",
+      "type": "test_validators_text_B",
     },
     {
       "kind": "LABEL",
@@ -839,7 +839,7 @@ var fieldValidators = {
     },
     {
       "kind": "BLOCK",
-      "blockxml": "<block type=\"test_validators_variable_null\"></block>",
+      "type": "test_validators_variable_null",
     },
     {
       "kind": "SEP",
@@ -847,7 +847,7 @@ var fieldValidators = {
     },
     {
       "kind": "BLOCK",
-      "blockxml": "<block type=\"test_validators_variable_force_1s\"></block>",
+      "type": "test_validators_variable_force_1s",
     },
     {
       "kind": "SEP",
@@ -855,7 +855,7 @@ var fieldValidators = {
     },
     {
       "kind": "BLOCK",
-      "blockxml": "<block type=\"test_validators_variable_1s_null\"></block>",
+      "type": "test_validators_variable_1s_null",
     }
   ],
 };
@@ -889,7 +889,7 @@ var style = {
     },
     {
       "kind": "BLOCK",
-      "blockxml": "<block type=\"test_style_hat\"></block>",
+      "type": "test_style_hat",
     },
     {
       "kind": "LABEL",
@@ -897,28 +897,34 @@ var style = {
     },
     {
       "kind": "BLOCK",
-      "blockxml": "<block type=\"test_style_hex1\"></block>",
+      "type": "test_style_hex1",
     },
     {
       "kind": "BLOCK",
-      "blockxml": "<block type=\"test_style_hex2\"></block>",
+      "type": "test_style_hex2",
     },
     {
       "kind": "BLOCK",
-      "blockxml": "<block type=\"test_style_hex3\"></block>",
+      "type": "test_style_hex3",
     },
     {
       "kind": "BLOCK",
-      "blockxml": "<block type=\"test_style_no_colour\"></block>",
+      "type": "test_style_no_colour",
     },
     {
       "kind": "BLOCK",
-      "blockxml": "<block type=\"test_style_hex4\"></block>",
+      "type": "test_style_hex4",
     },
     {
       "kind": "BLOCK",
-      "blockxml": "<block type=\"test_style_hex5\"></block>",
-    }
+      "type": "test_style_hex5",
+      "gap": "40",
+    },
+    {
+      "kind": "BLOCK",
+      "type": "test_style_hex5",
+      "disabled": "true",
+    },
   ],
 };
 

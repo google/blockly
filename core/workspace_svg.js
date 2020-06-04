@@ -1662,22 +1662,25 @@ Blockly.WorkspaceSvg.prototype.getBlocksBoundingBox = function() {
  */
 Blockly.WorkspaceSvg.prototype.cleanUp = function() {
   this.setResizesEnabled(false);
-  Blockly.Events.setGroup(true);
-  var topBlocks = this.getTopBlocks(true);
-  var cursorY = 0;
-  for (var i = 0, block; (block = topBlocks[i]); i++) {
-    if (!block.isMovable()) {
-      continue;
+  try {
+    Blockly.Events.setGroup(true);
+    var topBlocks = this.getTopBlocks(true);
+    var cursorY = 0;
+    for (var i = 0, block; (block = topBlocks[i]); i++) {
+      if (!block.isMovable()) {
+        continue;
+      }
+      var xy = block.getRelativeToSurfaceXY();
+      block.moveBy(-xy.x, cursorY - xy.y);
+      block.snapToGrid();
+      cursorY = block.getRelativeToSurfaceXY().y +
+          block.getHeightWidth().height +
+          this.renderer_.getConstants().MIN_BLOCK_HEIGHT;
     }
-    var xy = block.getRelativeToSurfaceXY();
-    block.moveBy(-xy.x, cursorY - xy.y);
-    block.snapToGrid();
-    cursorY = block.getRelativeToSurfaceXY().y +
-        block.getHeightWidth().height +
-        this.renderer_.getConstants().MIN_BLOCK_HEIGHT;
+    Blockly.Events.setGroup(false);
+  } finally {
+    this.setResizesEnabled(true);
   }
-  Blockly.Events.setGroup(false);
-  this.setResizesEnabled(true);
 };
 
 /**
@@ -2582,9 +2585,12 @@ Blockly.WorkspaceSvg.prototype.setResizesEnabled = function(enabled) {
  */
 Blockly.WorkspaceSvg.prototype.clear = function() {
   this.setResizesEnabled(false);
-  Blockly.WorkspaceSvg.superClass_.clear.call(this);
-  this.topBoundedElements_ = [];
-  this.setResizesEnabled(true);
+  try {
+    Blockly.WorkspaceSvg.superClass_.clear.call(this);
+    this.topBoundedElements_ = [];
+  } finally {
+    this.setResizesEnabled(true);
+  }
 };
 
 /**

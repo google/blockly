@@ -459,53 +459,57 @@ Blockly.Flyout.prototype.hide = function() {
  */
 Blockly.Flyout.prototype.show = function(flyoutDef) {
   this.workspace_.setResizesEnabled(false);
-  this.hide();
-  this.clearOldBlocks_();
+  try {
+    this.hide();
+    this.clearOldBlocks_();
 
-  // Handle dynamic categories, represented by a name instead of a list.
-  // Look up the correct category generation function and call that to get a
-  // valid XML list.
-  if (typeof flyoutDef == 'string') {
-    var fnToApply = this.workspace_.targetWorkspace.getToolboxCategoryCallback(
-        flyoutDef);
-    if (typeof fnToApply != 'function') {
-      throw TypeError('Couldn\'t find a callback function when opening' +
-          ' a toolbox category.');
+    // Handle dynamic categories, represented by a name instead of a list.
+    // Look up the correct category generation function and call that to get a
+    // valid XML list.
+    if (typeof flyoutDef == 'string') {
+      var fnToApply = this.workspace_.targetWorkspace.getToolboxCategoryCallback(
+          flyoutDef);
+      if (typeof fnToApply != 'function') {
+        throw TypeError('Couldn\'t find a callback function when opening' +
+            ' a toolbox category.');
+      }
+      flyoutDef = fnToApply(this.workspace_.targetWorkspace);
+      if (!Array.isArray(flyoutDef)) {
+        throw TypeError('Result of toolbox category callback must be an array.');
+      }
     }
-    flyoutDef = fnToApply(this.workspace_.targetWorkspace);
-    if (!Array.isArray(flyoutDef)) {
-      throw TypeError('Result of toolbox category callback must be an array.');
+    // Parse the Array or NodeList passed in into an Array of
+    // Blockly.utils.toolbox.Toolbox.
+    var parsedContent = Blockly.utils.toolbox.convertToolboxToJSON(flyoutDef);
+    var flyoutInfo =
+      /** @type {{contents:!Array.<!Object>, gaps:!Array.<number>}} */ (
+        this.createFlyoutInfo_(parsedContent));
+
+    this.setVisible(true);
+
+    this.layout_(flyoutInfo.contents, flyoutInfo.gaps);
+
+    // IE 11 is an incompetent browser that fails to fire mouseout events.
+    // When the mouse is over the background, deselect all blocks.
+    var deselectAll = function() {
+      var topBlocks = this.workspace_.getTopBlocks(false);
+      for (var i = 0, block; (block = topBlocks[i]); i++) {
+        block.removeSelect();
+      }
+    };
+
+    this.listeners_.push(Blockly.bindEventWithChecks_(this.svgBackground_,
+        'mouseover', this, deselectAll));
+
+    if (this.horizontalLayout) {
+      this.height_ = 0;
+    } else {
+      this.width_ = 0;
     }
+  } finally {
+    this.workspace_.setResizesEnabled(true);
   }
-  // Parse the Array or NodeList passed in into an Array of
-  // Blockly.utils.toolbox.Toolbox.
-  var parsedContent = Blockly.utils.toolbox.convertToolboxToJSON(flyoutDef);
-  var flyoutInfo =
-    /** @type {{contents:!Array.<!Object>, gaps:!Array.<number>}} */ (
-      this.createFlyoutInfo_(parsedContent));
 
-  this.setVisible(true);
-
-  this.layout_(flyoutInfo.contents, flyoutInfo.gaps);
-
-  // IE 11 is an incompetent browser that fails to fire mouseout events.
-  // When the mouse is over the background, deselect all blocks.
-  var deselectAll = function() {
-    var topBlocks = this.workspace_.getTopBlocks(false);
-    for (var i = 0, block; (block = topBlocks[i]); i++) {
-      block.removeSelect();
-    }
-  };
-
-  this.listeners_.push(Blockly.bindEventWithChecks_(this.svgBackground_,
-      'mouseover', this, deselectAll));
-
-  if (this.horizontalLayout) {
-    this.height_ = 0;
-  } else {
-    this.width_ = 0;
-  }
-  this.workspace_.setResizesEnabled(true);
   this.reflow();
 
   this.filterForCapacity_();
@@ -920,45 +924,47 @@ Blockly.Flyout.prototype.placeNewBlock_ = function(oldBlock) {
   // starts blocks out at (0, 0), which would lead to weird jumps.
   targetWorkspace.setResizesEnabled(false);
 
-  // Using domToBlock instead of domToWorkspace means that the new block will be
-  // placed at position (0, 0) in main workspace units.
-  var block = /** @type {!Blockly.BlockSvg} */
-      (Blockly.Xml.domToBlock(xml, targetWorkspace));
-  var svgRootNew = block.getSvgRoot();
-  if (!svgRootNew) {
-    throw Error('block is not rendered.');
+  try {
+    // Using domToBlock instead of domToWorkspace means that the new block will
+    // be placed at position (0, 0) in main workspace units.
+    var block = /** @type {!Blockly.BlockSvg} */
+        (Blockly.Xml.domToBlock(xml, targetWorkspace));
+    var svgRootNew = block.getSvgRoot();
+    if (!svgRootNew) {
+      throw Error('block is not rendered.');
+    }
+
+    // The offset in pixels between the main workspace's origin and the upper
+    // left corner of the injection div.
+    var mainOffsetPixels = targetWorkspace.getOriginOffsetInPixels();
+
+    // The offset in pixels between the flyout workspace's origin and the upper
+    // left corner of the injection div.
+    var flyoutOffsetPixels = this.workspace_.getOriginOffsetInPixels();
+
+    // The position of the old block in flyout workspace coordinates.
+    var oldBlockPos = oldBlock.getRelativeToSurfaceXY();
+    // The position of the old block in pixels relative to the flyout
+    // workspace's origin.
+    oldBlockPos.scale(this.workspace_.scale);
+
+    // The position of the old block in pixels relative to the upper left corner
+    // of the injection div.
+    var oldBlockOffsetPixels = Blockly.utils.Coordinate.sum(flyoutOffsetPixels,
+        oldBlockPos);
+
+    // The position of the old block in pixels relative to the origin of the
+    // main workspace.
+    var finalOffset = Blockly.utils.Coordinate.difference(oldBlockOffsetPixels,
+        mainOffsetPixels);
+    // The position of the old block in main workspace coordinates.
+    finalOffset.scale(1 / targetWorkspace.scale);
+
+    block.moveBy(finalOffset.x, finalOffset.y);
+  } finally {
+    // Now that the block is properly positioned, we can re-enable resizing.
+    targetWorkspace.setResizesEnabled(true);
   }
-
-  // The offset in pixels between the main workspace's origin and the upper left
-  // corner of the injection div.
-  var mainOffsetPixels = targetWorkspace.getOriginOffsetInPixels();
-
-  // The offset in pixels between the flyout workspace's origin and the upper
-  // left corner of the injection div.
-  var flyoutOffsetPixels = this.workspace_.getOriginOffsetInPixels();
-
-  // The position of the old block in flyout workspace coordinates.
-  var oldBlockPos = oldBlock.getRelativeToSurfaceXY();
-  // The position of the old block in pixels relative to the flyout
-  // workspace's origin.
-  oldBlockPos.scale(this.workspace_.scale);
-
-  // The position of the old block in pixels relative to the upper left corner
-  // of the injection div.
-  var oldBlockOffsetPixels = Blockly.utils.Coordinate.sum(flyoutOffsetPixels,
-      oldBlockPos);
-
-  // The position of the old block in pixels relative to the origin of the
-  // main workspace.
-  var finalOffset = Blockly.utils.Coordinate.difference(oldBlockOffsetPixels,
-      mainOffsetPixels);
-  // The position of the old block in main workspace coordinates.
-  finalOffset.scale(1 / targetWorkspace.scale);
-
-  block.moveBy(finalOffset.x, finalOffset.y);
-
-  // Now that the block is properly positioned, we can re-enable resizing.
-  targetWorkspace.setResizesEnabled(true);
 
   return block;
 };

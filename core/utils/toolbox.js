@@ -126,15 +126,17 @@ Blockly.utils.toolbox.toolboxXmlToJson_ = function(toolboxDef) {
       continue;
     }
     var obj = {};
-    obj['kind'] = child.tagName.toUpperCase();
+    var tagName = child.tagName.toUpperCase();
+    obj['kind'] = tagName;
+
     // Store the xml for a block
-    if (child.tagName.toUpperCase() == 'BLOCK') {
-      obj['blockxml'] = Blockly.utils.xml.domToText(child);
-    }
-    // Get the contents for a category.
-    if (child.tagName.toUpperCase() == 'CATEGORY') {
+    if (tagName == 'BLOCK') {
+      obj['blockxml'] = child;
+    } else if (tagName == 'CATEGORY') {
+      // Get the contents of a category
       obj['contents'] = Blockly.utils.toolbox.toolboxXmlToJson_(child);
     }
+
     // Add xml attributes to object
     for (var j = 0; j < child.attributes.length; j++) {
       var attr = child.attributes[j];

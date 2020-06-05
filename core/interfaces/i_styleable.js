@@ -15,6 +15,12 @@ goog.provide('Blockly.IStyleable');
 
 
 /**
+ * Interface for an object that a style can be added to.
+ * @interface
+ */
+Blockly.IStyleable = function() {};
+
+/**
  * Adds a style on the toolbox. Usually used to change the cursor.
  * @param {string} style The name of the class to add.
  */

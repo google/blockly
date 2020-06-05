@@ -110,7 +110,7 @@ Blockly.BubbleDragger.prototype.startBubbleDrag = function() {
   if (toolbox && typeof toolbox.addStyle == 'function') {
     var style = this.draggingBubble_.isDeletable() ? 'blocklyToolboxDelete' :
         'blocklyToolboxGrab';
-    toolbox.c(style);
+    toolbox.addStyle(style);
   }
 };
 

@@ -21,13 +21,6 @@ goog.require('Blockly.utils.object');
 
 
 /**
- * The set of all registered renderers, keyed by their name.
- * @type {!Object<string, !Function>}
- * @private
- */
-Blockly.blockRendering.rendererMap_ = {};
-
-/**
  * Whether or not the debugger is turned on.
  * @type {boolean}
  * @package

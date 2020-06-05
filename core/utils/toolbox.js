@@ -132,9 +132,8 @@ Blockly.utils.toolbox.toolboxXmlToJson_ = function(toolboxDef) {
     // Store the xml for a block
     if (tagName == 'BLOCK') {
       obj['blockxml'] = child;
-    }
-    // Get the contents for a category.
-    if (tagName == 'CATEGORY') {
+    } else if (tagName == 'CATEGORY') {
+      // Get the contents of a category
       obj['contents'] = Blockly.utils.toolbox.toolboxXmlToJson_(child);
     }
 

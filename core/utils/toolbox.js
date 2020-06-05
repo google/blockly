@@ -130,11 +130,13 @@ Blockly.utils.toolbox.toolboxXmlToJson_ = function(toolboxDef) {
     obj['kind'] = tagName;
 
     // Store the xml for a block
-    (tagName == 'BLOCK' && (obj['blockxml'] = child));
-
-    // Get the contents for the category
-    (tagName == 'CATEGORY' &&
-        (obj['contents'] = Blockly.utils.toolbox.toolboxXmlToJson_(child)));
+    if (tagName == 'BLOCK') {
+      obj['blockxml'] = child;
+    }
+    // Get the contents for a category.
+    if (tagName == 'CATEGORY') {
+      obj['contents'] = Blockly.utils.toolbox.toolboxXmlToJson_(child);
+    }
 
     // Add xml attributes to object
     for (var j = 0; j < child.attributes.length; j++) {

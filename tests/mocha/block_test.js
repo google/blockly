@@ -1657,6 +1657,8 @@ suite('Blocks', function() {
       });
       teardown(function() {
         this.workspace.dispose();
+        // Clear all registered themes.
+        Blockly.registry.typeMap_['theme'] = {};
       });
       test('Set colour hue', function() {
         this.block.setColour('20');

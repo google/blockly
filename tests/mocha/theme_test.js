@@ -11,6 +11,10 @@
 'use strict';
 
 suite('Theme', function() {
+  teardown(function() {
+    // Clear all registered themes.
+    Blockly.registry.typeMap_['theme'] = {};
+  });
 
   function defineThemeTestBlocks() {
     Blockly.defineBlocksWithJsonArray([{

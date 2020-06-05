@@ -363,17 +363,30 @@ Blockly.Gesture.prototype.updateIsDraggingBlock_ = function() {
     return false;
   }
 
-  if (this.flyout_) {
-    this.isDraggingBlock_ = this.updateIsDraggingFromFlyout_();
-  } else if (this.targetBlock_.isMovable()) {
-    this.isDraggingBlock_ = true;
+  // Make sure we don't resize the workspace in between creating the flyout
+  // block and beginning to drag it.
+  var ws = this.flyout_ && this.flyout_.targetWorkspace;
+  if (ws) {
+    ws.setResizesEnabled(false);
   }
 
-  if (this.isDraggingBlock_) {
-    this.startDraggingBlock_();
-    return true;
+  try {
+    if (this.flyout_) {
+      this.isDraggingBlock_ = this.updateIsDraggingFromFlyout_();
+    } else if (this.targetBlock_.isMovable()) {
+      this.isDraggingBlock_ = true;
+    }
+
+    if (this.isDraggingBlock_) {
+      this.startDraggingBlock_();
+    }
+  } finally {
+    if (ws) {
+      ws.setResizesEnabled(true);
+    }
   }
-  return false;
+
+  return this.isDraggingBlock_;
 };
 
 /**

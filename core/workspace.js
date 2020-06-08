@@ -132,10 +132,10 @@ Blockly.Workspace.prototype.connectionDBList = null;
  * Refresh workspace after changing some blolcks
  */
 Blockly.Workspace.prototype.refresh = function() {
-    var xml = Blockly.Xml.workspaceToDom(this);
-    this.clear();
-    Blockly.Xml.domToWorkspace(xml, this);
-    this.refreshToolboxSelection();
+  var xml = Blockly.Xml.workspaceToDom(this);
+  this.clear();
+  Blockly.Xml.domToWorkspace(xml, this);
+  this.refreshToolboxSelection();
 };
 
 /**

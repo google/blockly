@@ -652,7 +652,7 @@ Blockly.Toolbox.prototype.updateColourFromTheme_ = function(opt_tree) {
  * Updates the category colours and background colour of selected categories.
  * @package
  */
-Blockly.Toolbox.prototype.applyTheme = function() {
+Blockly.Toolbox.prototype.refreshTheme = function() {
   var tree = this.tree_;
   if (tree) {
     this.updateColourFromTheme_(tree);

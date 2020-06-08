@@ -542,7 +542,7 @@ Blockly.WorkspaceSvg.prototype.refreshTheme = function() {
   // Update current toolbox selection.
   this.refreshToolboxSelection();
   if (this.toolbox_) {
-    this.toolbox_.applyTheme();
+    this.toolbox_.refreshTheme();
   }
 
   // Re-render if workspace is visible

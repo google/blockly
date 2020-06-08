@@ -76,7 +76,7 @@ Blockly.IToolbox.prototype.clearSelection;
  * Updates the category colours and background colour of selected categories.
  * @return {void}
  */
-Blockly.IToolbox.prototype.applyTheme;
+Blockly.IToolbox.prototype.refreshTheme;
 
 /**
  * Update the flyout's contents without closing it.  Should be used in response

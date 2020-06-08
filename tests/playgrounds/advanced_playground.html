@@ -119,7 +119,7 @@ function configurePlayground(playground) {
     'font Size': 10,
   };
   renderingFolder.add(renderingOptions, 'font Size', 0, 50)
-    .onChange((value) => {
+    .onChange(function(value) {
       var ws = playground.getWorkspace();
       var fontStyle = {
         'size': value
@@ -180,7 +180,7 @@ function initPlayground() {
   createPlayground(document.getElementById('root'), createWorkspace,
       defaultOptions, playgroundConfig,
       'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.19.2/min/vs')
-      .then((playground) => {
+      .then(function(playground) {
         configurePlayground(playground);
       });
 }

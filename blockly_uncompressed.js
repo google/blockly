@@ -75,6 +75,7 @@ goog.addDependency('../../core/interfaces/i_bounded_element.js', ['Blockly.IBoun
 goog.addDependency('../../core/interfaces/i_copyable.js', ['Blockly.ICopyable'], [], {});
 goog.addDependency('../../core/interfaces/i_deletable.js', ['Blockly.IDeletable'], [], {});
 goog.addDependency('../../core/interfaces/i_deletearea.js', ['Blockly.IDeleteArea'], [], {});
+goog.addDependency('../../core/interfaces/i_disposable.js', ['Blockly.IDisposable'], [], {});
 goog.addDependency('../../core/interfaces/i_movable.js', ['Blockly.IMovable'], [], {});
 goog.addDependency('../../core/interfaces/i_registrable.js', ['Blockly.IRegistrable'], [], {});
 goog.addDependency('../../core/interfaces/i_selectable.js', ['Blockly.ISelectable'], [], {});

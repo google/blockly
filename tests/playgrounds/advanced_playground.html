@@ -68,7 +68,8 @@
 <script src="../themes/test_themes.js"></script>
 <script src="./screenshot.js"></script>
 <script src="./test_blocks_toolbox.js"></script>
-<script src="https://unpkg.com/@blockly/dev-tools/dist/index.js"></script>
+<script src="../../../blockly-samples2/plugins/dev-tools/dist/index.js"></script>
+<!-- <script src="https://unpkg.com/@blockly/dev-tools/dist/index.js"></script> -->
 <script src="https://unpkg.com/@blockly/theme-modern/dist/index.js"></script>
 
 <script>
@@ -83,7 +84,6 @@ goog.require('Blockly.WorkspaceCommentSvg.render');
 </script>
 <script>
 'use strict';
-var workspace = null;
 
 function start() {
   setBackgroundColour();
@@ -91,8 +91,8 @@ function start() {
 }
 
 function createWorkspace(blocklyDiv, options) {
-  workspace = Blockly.inject(blocklyDiv, options);
-  workspace.configureContextMenu = configureContextMenu;
+  var workspace = Blockly.inject(blocklyDiv, options);
+  workspace.configureContextMenu = configureContextMenu.bind(workspace);
   addToolboxButtonCallbacks(workspace);
   return workspace;
 }
@@ -107,9 +107,9 @@ function configurePlayground(playground) {
   }, 'Stress Test');
   playground.addCheckboxAction('Log Events', function(ws, value) {
     if (value) {
-      workspace.addChangeListener(logger);
+      ws.addChangeListener(logger);
     } else {
-      workspace.removeChangeListener(logger);
+      ws.removeChangeListener(logger);
     }
   }, 'Logging');
 
@@ -121,13 +121,13 @@ function configurePlayground(playground) {
   };
   renderingFolder.add(renderingOptions, 'font Size', 0, 50)
     .onChange((value) => {
-      var workspace = playground.getWorkspace();
+      var ws = playground.getWorkspace();
       var fontStyle = {
         'size': value
       };
-      workspace.getTheme().setFontStyle(fontStyle);
+      ws.getTheme().setFontStyle(fontStyle);
       // Refresh theme.
-      workspace.setTheme(workspace.getTheme());
+      ws.setTheme(ws.getTheme());
     });
 }
 
@@ -306,6 +306,7 @@ function setBackgroundColour() {
 
 
 function configureContextMenu(menuOptions, e) {
+  var workspace = this;
   var screenshotOption = {
     text: 'Download Screenshot',
     enabled: workspace.getTopBlocks().length,

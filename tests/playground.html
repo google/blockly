@@ -361,34 +361,6 @@ function logEvents(state) {
   }
 }
 
-function toggleRenderingDebug(state) {
-  if (!Blockly.blockRendering.Debug) {
-    return;
-  }
-  var checkbox = document.getElementById('blockRenderDebugCheck');
-  checkbox.checked = state;
-  if (sessionStorage) {
-    sessionStorage.setItem('blockRenderDebug', Number(state));
-  }
-  if (state) {
-    document.getElementById('blocklyDiv').className = 'renderingDebug';
-    Blockly.blockRendering.startDebugger();
-    document.getElementById('renderDebugOptions').style.display = 'block';
-  } else {
-    document.getElementById('blocklyDiv').className = '';
-    Blockly.blockRendering.stopDebugger();
-    document.getElementById('renderDebugOptions').style.display = 'none';
-  }
-}
-
-function toggleAccessibilityMode(state) {
-  if (state) {
-    Blockly.navigation.enableKeyboardAccessibility();
-  } else {
-    Blockly.navigation.disableKeyboardAccessibility();
-  }
-}
-
 function configureContextMenu(menuOptions, e) {
   var screenshotOption = {
     text: 'Download Screenshot',

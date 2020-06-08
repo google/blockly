@@ -67,7 +67,9 @@
 <script src="../blocks/test_blocks.js"></script>
 <script src="../themes/test_themes.js"></script>
 <script src="./screenshot.js"></script>
-<script src="https://unpkg.com/@blockly/dev-tools/dist/index.js"></script>
+<script src="./test_blocks_toolbox.js"></script>
+<script src="../../../blockly-samples2/plugins/dev-tools/dist/index.js"></script>
+<!-- <script src="https://unpkg.com/@blockly/dev-tools/dist/index.js"></script> -->
 <script src="https://unpkg.com/@blockly/theme-modern/dist/index.js"></script>
 
 <script>
@@ -86,32 +88,51 @@ var workspace = null;
 
 function start() {
   setBackgroundColour();
-  createWorkspace();
-  // Restore previously displayed text.
-  if (sessionStorage) {
-    var text = sessionStorage.getItem('textarea');
-    if (text) {
-      document.getElementById('importExport').value = text;
-    }
-    // Restore event logging state.
-    var state = sessionStorage.getItem('logEvents');
-    logEvents(Boolean(Number(state)));
-  } else {
-    // MSIE 11 does not support sessionStorage on file:// URLs.
-    logEvents(false);
-  }
-  taChange();
-  var autoimport = !!location.search.match(/autoimport=([^&]+)/);
-  if (autoimport) {
-    fromXml();
-  }
+  initPlayground();
 }
 
-function createWorkspace() {
-  // Parse the URL arguments.
-  var toolbox = getToolboxElement();
-  var match = location.search.match(/renderer=([^&]+)/);
+function createWorkspace(blocklyDiv, options) {
+  workspace = Blockly.inject(blocklyDiv, options);
+  workspace.configureContextMenu = configureContextMenu;
+  addToolboxButtonCallbacks(workspace);
+  return workspace;
+}
 
+function configurePlayground(playground) {
+  // Add custom actions.
+  playground.addAction('Random Blocks!', function(ws) {
+    populateRandom(ws, 100);
+  }, 'Stress Test');
+  playground.addAction('Spaghetti!', function(ws) {
+    spaghetti(ws, 8);
+  }, 'Stress Test');
+  playground.addCheckboxAction('Log Events', function(ws, value) {
+    if (value) {
+      workspace.addChangeListener(logger);
+    } else {
+      workspace.removeChangeListener(logger);
+    }
+  }, 'Logging');
+
+  // Rendering options.
+  var gui = playground.getGUI();
+  var renderingFolder = gui.addFolder('Rendering');
+  var renderingOptions = {
+    'font Size': 10,
+  };
+  renderingFolder.add(renderingOptions, 'font Size', 0, 50)
+    .onChange((value) => {
+      var workspace = playground.getWorkspace();
+      var fontStyle = {
+        'size': value
+      };
+      workspace.getTheme().setFontStyle(fontStyle);
+      // Refresh theme.
+      workspace.setTheme(workspace.getTheme());
+    });
+}
+
+function initPlayground() {
   var defaultOptions = {
         comments: true,
         collapse: true,
@@ -136,7 +157,7 @@ function createWorkspace() {
           drag: true,
           wheel: false,
         },
-        toolbox: toolbox,
+        toolbox: toolboxCategories,
         toolboxPosition: 'start',
         renderer: 'geras',
         zoom:
@@ -150,16 +171,23 @@ function createWorkspace() {
           }
   };
 
-  // Create main workspace.
-  addGUIControls((options) => {
-    workspace = Blockly.inject('blocklyDiv', options);
-    workspace.configureContextMenu = configureContextMenu;
-    addToolboxButtonCallbacks();
-    return workspace;
-  }, defaultOptions);
+  const playgroundConfig = {
+    toolboxes: {
+      'categories': toolboxCategories,
+      'simple': toolboxSimple,
+      'test blocks': testBlocksToolbox,
+    }
+  }
+
+  createPlayground(document.getElementById('root'), createWorkspace,
+      defaultOptions, playgroundConfig,
+      'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.19.2/min/vs')
+      .then((playground) => {
+        configurePlayground(playground);
+      });
 }
 
-function addToolboxButtonCallbacks() {
+function addToolboxButtonCallbacks(workspace) {
   var addAllBlocksToWorkspace = function(button) {
     var workspace = button.getTargetWorkspace();
     var blocks = button.workspace_.getTopBlocks();
@@ -269,18 +297,6 @@ function addToolboxButtonCallbacks() {
           Blockly.TestBlocks.insertConnectionStatements);
 }
 
-function changeRenderingConstant(value) {
-  var type = document.getElementById('rendering-constant-selector').value;
-  if (type == 'fontSize') {
-    var fontStyle = {
-      'size': value
-    };
-    workspace.getTheme().setFontStyle(fontStyle);
-  }
-  // Refresh theme.
-  workspace.setTheme(workspace.getTheme());
-}
-
 function setBackgroundColour() {
   // Set background colour to differentiate server vs local copy.
   if (location.protocol == 'file:') {
@@ -289,83 +305,6 @@ function setBackgroundColour() {
   }
 }
 
-function getToolboxElement() {
-  var match = location.search.match(/toolbox=([^&]+)/);
-  // Default to the basic toolbox with categories and untyped variables,
-  // but override that if the toolbox type is set in the URL.
-  var toolboxSuffix = (match ? match[1] : 'categories');
-
-  // The two toolboxes available from dev-tools are toolboxSimple and
-  // toolboxCategories.
-  if (toolboxSuffix == 'categories') {
-    document.forms.options.elements.toolbox.selectedIndex = 0;
-    return toolboxCategories;
-  }
-  document.forms.options.elements.toolbox.selectedIndex = 1;
-  return toolboxSimple;
-}
-
-function toXml() {
-  var output = document.getElementById('importExport');
-  var xml = Blockly.Xml.workspaceToDom(workspace);
-  output.value = Blockly.Xml.domToPrettyText(xml);
-  output.focus();
-  output.select();
-  taChange();
-}
-
-function fromXml() {
-  var input = document.getElementById('importExport');
-  if (!input.value) {
-    return;
-  }
-  var xml = Blockly.Xml.textToDom(input.value);
-  Blockly.Xml.domToWorkspace(xml, workspace);
-  taChange();
-}
-
-function toCode(lang) {
-  var output = document.getElementById('importExport');
-  output.value = Blockly[lang].workspaceToCode(workspace);
-  taChange();
-}
-
-// Disable the "Import from XML" button if the XML is invalid.
-// Preserve text between page reloads.
-function taChange() {
-  var textarea = document.getElementById('importExport');
-  if (sessionStorage) {
-    sessionStorage.setItem('textarea', textarea.value);
-  }
-  var valid = true;
-  try {
-    Blockly.Xml.textToDom(textarea.value);
-  } catch (e) {
-    valid = false;
-  }
-  document.getElementById('import').disabled = !valid;
-}
-
-function logEvents(state) {
-  var checkbox = document.getElementById('logCheck');
-  checkbox.checked = state;
-  if (sessionStorage) {
-    sessionStorage.setItem('logEvents', Number(state));
-  }
-  if (state) {
-    workspace.addChangeListener(logger);
-  } else {
-    workspace.removeChangeListener(logger);
-  }
-}
-
-function toggleAccessibilityMode(state) {
-  if (state) {
-    Blockly.navigation.enableKeyboardAccessibility();
-  } else {
-    Blockly.navigation.disableKeyboardAccessibility();
-  }
-}
 
 function configureContextMenu(menuOptions, e) {
   var screenshotOption = {
@@ -385,7 +324,7 @@ function logger(e) {
   console.log(e);
 }
 
-function populateRandom(n) {
+function populateRandom(ws, n) {
   var names = [];
   for (var blockName in Blockly.Blocks) {
     names.push(blockName);
@@ -393,7 +332,7 @@ function populateRandom(n) {
 
   for (var i = 0; i < n; i++) {
     var name = names[Math.floor(Math.random() * names.length)];
-    var block = workspace.newBlock(name);
+    var block = ws.newBlock(name);
     block.initSvg();
     block.getSvgRoot().setAttribute('transform', 'translate(' +
         Math.round(Math.random() * 450 + 40) + ', ' +
@@ -402,7 +341,7 @@ function populateRandom(n) {
   }
 }
 
-function spaghetti(n) {
+function spaghetti(ws, n) {
   var xml = spaghettiXml;
   for(var i = 0; i < n; i++) {
     xml = xml.replace(/(<(statement|next)( name="DO0")?>)<\//g,
@@ -411,7 +350,7 @@ function spaghetti(n) {
   xml = '<xml xmlns="https://developers.google.com/blockly/xml">' + xml + '</xml>';
   var dom = Blockly.Xml.textToDom(xml);
   console.time('Spaghetti domToWorkspace');
-  Blockly.Xml.domToWorkspace(dom, workspace);
+  Blockly.Xml.domToWorkspace(dom, ws);
   console.timeEnd('Spaghetti domToWorkspace');
 }
 var spaghettiXml = [
@@ -449,24 +388,7 @@ var spaghettiXml = [
 
 <style>
   html, body {
-    height: 100%;
-  }
-  body {
-    background-color: #fff;
-    font-family: sans-serif;
-    overflow: hidden;
-  }
-  h1 {
-    font-weight: normal;
-    font-size: 140%;
-  }
-  #blocklyDiv {
-    float: right;
-    height: 95%;
-    width: 70%;
-  }
-  #importExport {
-    font-family: monospace;
+    margin: 0;
   }
 
   .ioLabel>.blocklyFlyoutLabelText {
@@ -487,63 +409,6 @@ var spaghettiXml = [
 </style>
 </head>
 <body onload="start()">
-
-  <div id="blocklyDiv"></div>
-
-  <h1>Blockly Playground</h1>
-
-  <p><a href="javascript:void(workspace.setVisible(true))">Show</a>
-   - <a href="javascript:void(workspace.setVisible(false))">Hide</a></p>
-
-  <form id="options">
-    <select name="toolbox" onchange="document.forms.options.submit()">
-      <option value="categories">Categories (untyped variables)</option>
-      <option value="simple">Simple</option>
-    </select>
-  </form>
-  <p>
-    <input type="button" value="Export to XML" onclick="toXml()">
-    &nbsp;
-    <input type="button" value="Import from XML" onclick="fromXml()" id="import">
-    <br>
-    <input type="button" value="To JavaScript" onclick="toCode('JavaScript')">
-    &nbsp;
-    <input type="button" value="To Python" onclick="toCode('Python')">
-    &nbsp;
-    <input type="button" value="To PHP" onclick="toCode('PHP')">
-    &nbsp;
-    <input type="button" value="To Lua" onclick="toCode('Lua')">
-    &nbsp;
-    <input type="button" value="To Dart" onclick="toCode('Dart')">
-    <br>
-    <textarea id="importExport" style="width: 26%; height: 12em"
-      onchange="taChange();" onkeyup="taChange()"></textarea>
-  </p>
-
-  <p>
-    Stress test: &nbsp;
-    <input type="button" value="Random Blocks!" onclick="populateRandom(100)">
-    <input type="button" value="Spaghetti!" onclick="spaghetti(8)">
-  </p>
-  <p>
-    Rendering: &nbsp;
-    <select id="rendering-constant-selector">
-      <option value="fontSize">Font Size</option>
-    </select>
-    <input type="range" min="3" max="50" value="4"
-      oninput="changeRenderingConstant(this.value)"
-      onchange="changeRenderingConstant(this.value)" />
-  </p>
-  <ul class="playgroundToggleOptions">
-    <li>
-      <label for="logCheck">Log events:</label>
-      <input type="checkbox" onclick="logEvents(this.checked)" id="logCheck">
-    </li>
-    <li>
-      <label for="accessibilityModeCheck">Enable Accessibility Mode:</label>
-      <input type="checkbox" onclick="toggleAccessibilityMode(this.checked)" id="accessibilityModeCheck">
-    </li>
-  </ul>
-
+  <div id="root"></div>
 </body>
 </html>

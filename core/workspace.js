@@ -132,6 +132,15 @@ Blockly.Workspace.prototype.MAX_UNDO = 1024;
 Blockly.Workspace.prototype.connectionDBList = null;
 
 /**
+ * Refresh workspace after changing some blolcks.
+ */
+Blockly.Workspace.prototype.refresh = function() {
+  this.clear();
+  Blockly.Xml.domToWorkspace(Blockly.Xml.workspaceToDom(this), this);
+  this.refreshToolboxSelection();
+};
+
+/**
  * Dispose of this workspace.
  * Unlink from all DOM elements to prevent memory leaks.
  * @suppress {checkTypes}

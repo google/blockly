@@ -454,8 +454,7 @@ function testAWorkspace() {
           0, 'With maxInstances limit 2');
     });
 
-    test.skip('At instance limit of 0 after clear', function() {
-      // TODO(3837): Un-skip test after resolving.
+    test('At instance limit of 0 after clear', function() {
       this.workspace.clear();
       this.workspace.options.maxInstances['get_var_block'] = 0;
       chai.assert.equal(this.workspace.remainingCapacityOfType('get_var_block'),
@@ -471,8 +470,7 @@ function testAWorkspace() {
           0, 'With maxInstances limit 2');
     });
 
-    test.skip('At instance limit of 0 with multiple block types', function() {
-      // TODO(3837): Un-skip test after resolving.
+    test('At instance limit of 0 with multiple block types', function() {
       this.workspace.newBlock('');
       this.workspace.newBlock('');
       this.workspace.newBlock('');
@@ -488,8 +486,7 @@ function testAWorkspace() {
           -1,'With maxInstances limit 1');
     });
 
-    test.skip('Over instance limit of 0', function() {
-      // TODO(3837): Un-skip test after resolving.
+    test('Over instance limit of 0', function() {
       this.workspace.options.maxInstances['get_var_block'] = 0;
       chai.assert.equal(this.workspace.remainingCapacityOfType('get_var_block'),
           -2,'With maxInstances limit 0');
@@ -504,8 +501,7 @@ function testAWorkspace() {
           -1,'With maxInstances limit 1');
     });
 
-    test.skip('Over instance limit of 0 with multiple block types', function() {
-      // TODO(3837): Un-skip test after resolving.
+    test('Over instance limit of 0 with multiple block types', function() {
       this.workspace.newBlock('');
       this.workspace.newBlock('');
       this.workspace.newBlock('');
@@ -528,8 +524,7 @@ function testAWorkspace() {
             this.workspace.remainingCapacityOfType('get_var_block'), 0);
       });
 
-      test.skip('Over block limit of 0 and no instance limit', function() {
-        // TODO(3837|3836): Un-skip test after resolving both.
+      test('Over block limit of 0 and no instance limit', function() {
         this.workspace.options.maxBlocks = 0;
         chai.assert.equal(
             this.workspace.remainingCapacityOfType('get_var_block'), -2);
@@ -544,8 +539,7 @@ function testAWorkspace() {
             'With maxBlocks limit 1 and maxInstances limit 3');
       });
 
-      test.skip('Over block limit of 0 but under instance limit', function() {
-        // TODO(3837|3836): Un-skip test after resolving both.
+      test('Over block limit of 0 but under instance limit', function() {
         this.workspace.options.maxBlocks = 0;
         this.workspace.options.maxInstances['get_var_block'] = 3;
         chai.assert.equal(
@@ -572,8 +566,7 @@ function testAWorkspace() {
             'With maxBlocks limit 1 and maxInstances limit 1');
       });
 
-      test.skip('Over block limit of 0 and over instance limit', function() {
-        // TODO(3837|3836): Un-skip test after resolving both.
+      test('Over block limit of 0 and over instance limit', function() {
         this.workspace.options.maxBlocks = 0;
         this.workspace.options.maxInstances['get_var_block'] = 1;
         chai.assert.equal(
@@ -591,8 +584,7 @@ function testAWorkspace() {
             'With maxBlocks limit 1 and maxInstances limit 0');
       });
 
-      test.skip('Over block limit of 0 and over instance limit of 0', function() {
-        // TODO(3837|3836): Un-skip test after resolving both.
+      test('Over block limit of 0 and over instance limit of 0', function() {
         this.workspace.options.maxBlocks = 0;
         this.workspace.options.maxInstances['get_var_block'] = 0;
         chai.assert.equal(

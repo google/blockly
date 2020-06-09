@@ -139,6 +139,9 @@ Blockly.Workspace.prototype.refresh = function() {
   this.clear();
   Blockly.Xml.domToWorkspace(xml, this);
   this.refreshToolboxSelection();
+  if(this.trashcan.contentsIsOpen()) this.trashcan.click();
+  // Or 
+  // if(this.trashcan.flyout.isVisible()}) this.trashcan.click();
 };
 
 /**

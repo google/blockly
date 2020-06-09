@@ -70,9 +70,9 @@ suite('Variable Fields', function() {
 
     // Expect three variable options, a rename option, and a delete option.
     chai.assert.equal(result_options.length, 5);
-    assertArrayEquals(result_options[0], ['name1', 'id1']);
-    assertArrayEquals(result_options[1], ['name2', 'id2']);
-    assertArrayEquals(result_options[2], ['name3', 'id3']);
+    chai.assert.deepEqual(result_options[0], ['name1', 'id1']);
+    chai.assert.deepEqual(result_options[1], ['name2', 'id2']);
+    chai.assert.deepEqual(result_options[2], ['name3', 'id3']);
   });
   suite('Constructor', function() {
     test('Null', function() {
@@ -244,7 +244,7 @@ suite('Variable Fields', function() {
       // will be returned (regardless of what types are available on the workspace).
       var fieldVariable = new Blockly.FieldVariable('name1');
       var resultTypes = fieldVariable.getVariableTypes_();
-      assertArrayEquals(resultTypes, ['']);
+      chai.assert.deepEqual(resultTypes, ['']);
     });
     test('variableTypes is explicit', function() {
       // Expect that since variableTypes is defined, it will be the return
@@ -252,7 +252,7 @@ suite('Variable Fields', function() {
       var fieldVariable = new Blockly.FieldVariable(
           'name1', null, ['type1', 'type2'], 'type1');
       var resultTypes = fieldVariable.getVariableTypes_();
-      assertArrayEquals(resultTypes, ['type1', 'type2']);
+      chai.assert.deepEqual(resultTypes, ['type1', 'type2']);
       chai.assert.equal(fieldVariable.defaultType_, 'type1',
           'Default type was wrong');
     });
@@ -267,7 +267,7 @@ suite('Variable Fields', function() {
 
       var resultTypes = fieldVariable.getVariableTypes_();
       // The empty string is always one of the options.
-      assertArrayEquals(resultTypes, ['type1', 'type2', '']);
+      chai.assert.deepEqual(resultTypes, ['type1', 'type2', '']);
     });
     test('variableTypes is the empty list', function() {
       var fieldVariable = new Blockly.FieldVariable('name1');

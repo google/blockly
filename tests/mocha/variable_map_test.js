@@ -182,13 +182,13 @@ suite('Variable Map', function() {
       this.variableMap.createVariable('name4', 'type3', 'id4');
       var resultArray = this.variableMap.getVariableTypes();
       // The empty string is always an option.
-      assertArrayEquals(resultArray, ['type1', 'type2', 'type3', '']);
+      chai.assert.deepEqual(resultArray, ['type1', 'type2', 'type3', '']);
     });
 
     test('None', function() {
       // The empty string is always an option.
       var resultArray = this.variableMap.getVariableTypes();
-      assertArrayEquals(resultArray, ['']);
+      chai.assert.deepEqual(resultArray, ['']);
     });
   });
 
@@ -200,8 +200,8 @@ suite('Variable Map', function() {
       this.variableMap.createVariable('name4', 'type3', 'id4');
       var resultArray1 = this.variableMap.getVariablesOfType('type1');
       var resultArray2 = this.variableMap.getVariablesOfType('type5');
-      assertArrayEquals(resultArray1, [var1, var2]);
-      assertArrayEquals(resultArray2, []);
+      chai.assert.deepEqual(resultArray1, [var1, var2]);
+      chai.assert.deepEqual(resultArray2, []);
     });
 
     test('Null', function() {
@@ -210,26 +210,26 @@ suite('Variable Map', function() {
       var var3 = this.variableMap.createVariable('name3', '', 'id3');
       this.variableMap.createVariable('name4', 'type1', 'id4');
       var resultArray = this.variableMap.getVariablesOfType(null);
-      assertArrayEquals(resultArray, [var1, var2, var3]);
+      chai.assert.deepEqual(resultArray, [var1, var2, var3]);
     });
 
     test('Empty string', function() {
       var var1 = this.variableMap.createVariable('name1', null, 'id1');
       var var2 = this.variableMap.createVariable('name2', null, 'id2');
       var resultArray = this.variableMap.getVariablesOfType('');
-      assertArrayEquals(resultArray, [var1, var2]);
+      chai.assert.deepEqual(resultArray, [var1, var2]);
     });
 
     test('Deleted', function() {
       var variable = this.variableMap.createVariable('name1', null, 'id1');
       this.variableMap.deleteVariable(variable);
       var resultArray = this.variableMap.getVariablesOfType('');
-      assertArrayEquals(resultArray, []);
+      chai.assert.deepEqual(resultArray, []);
     });
 
     test('Does not exist', function() {
       var resultArray = this.variableMap.getVariablesOfType('type1');
-      assertArrayEquals(resultArray, []);
+      chai.assert.deepEqual(resultArray, []);
     });
   });
 
@@ -239,12 +239,12 @@ suite('Variable Map', function() {
       var var2 = this.variableMap.createVariable('name2', 'type1', 'id2');
       var var3 = this.variableMap.createVariable('name3', 'type2', 'id3');
       var resultArray = this.variableMap.getAllVariables();
-      assertArrayEquals(resultArray, [var1, var2, var3]);
+      chai.assert.deepEqual(resultArray, [var1, var2, var3]);
     });
 
     test('None', function() {
       var resultArray = this.variableMap.getAllVariables();
-      assertArrayEquals(resultArray, []);
+      chai.assert.deepEqual(resultArray, []);
     });
   });
 });

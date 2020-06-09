@@ -509,87 +509,86 @@ function testAWorkspace() {
       chai.assert.equal(this.workspace.remainingCapacityOfType('get_var_block'),
           -2,'With maxInstances limit 0');
     });
+  });
 
-    suite.skip('Max blocks and max instance interaction', function() {
-      // TODO(3836): Un-skip test suite after resolving.
-      test('Under block limit and no instance limit', function() {
-        this.workspace.options.maxBlocks = 3;
-        chai.assert.equal(
-            this.workspace.remainingCapacityOfType('get_var_block'), 1);
-      });
+  suite('isCapacityAvailable', function() {
+    setup(function() {
+      this.workspace.newBlock('get_var_block');
+      this.workspace.newBlock('get_var_block');
+      this.workspace.options.maxInstances = {};
+    });
 
-      test('At block limit and no instance limit', function() {
-        this.workspace.options.maxBlocks = 2;
-        chai.assert.equal(
-            this.workspace.remainingCapacityOfType('get_var_block'), 0);
-      });
+    test('Under block limit and no instance limit', function() {
+      this.workspace.options.maxBlocks = 3;
+      var typeCountsMap = {'get_var_block': 1};
+      chai.assert.isTrue(this.workspace.isCapacityAvailable(typeCountsMap));
+    });
 
-      test('Over block limit of 0 and no instance limit', function() {
-        this.workspace.options.maxBlocks = 0;
-        chai.assert.equal(
-            this.workspace.remainingCapacityOfType('get_var_block'), -2);
-      });
+    test('At block limit and no instance limit', function() {
+      this.workspace.options.maxBlocks = 2;
+      var typeCountsMap = {'get_var_block': 1};
+      chai.assert.isFalse(this.workspace.isCapacityAvailable(typeCountsMap));
+    });
 
-      test('Over block limit but under instance limit', function() {
-        this.workspace.options.maxBlocks = 1;
-        this.workspace.options.maxInstances['get_var_block'] = 3;
-        chai.assert.equal(
-            this.workspace.remainingCapacityOfType('get_var_block'),
-            -2,
-            'With maxBlocks limit 1 and maxInstances limit 3');
-      });
+    test('Over block limit of 0 and no instance limit', function() {
+      this.workspace.options.maxBlocks = 0;
+      var typeCountsMap = {'get_var_block': 1};
+      chai.assert.isFalse(this.workspace.isCapacityAvailable(typeCountsMap));
+    });
 
-      test('Over block limit of 0 but under instance limit', function() {
-        this.workspace.options.maxBlocks = 0;
-        this.workspace.options.maxInstances['get_var_block'] = 3;
-        chai.assert.equal(
-            this.workspace.remainingCapacityOfType('get_var_block'),
-            -2,
-            'With maxBlocks limit 0 and maxInstances limit 3');
-      });
+    test('Over block limit but under instance limit', function() {
+      this.workspace.options.maxBlocks = 1;
+      this.workspace.options.maxInstances['get_var_block'] = 3;
+      var typeCountsMap = {'get_var_block': 1};
+      chai.assert.isFalse(this.workspace.isCapacityAvailable(typeCountsMap),
+          'With maxBlocks limit 1 and maxInstances limit 3');
+    });
 
-      test('Over block limit but at instance limit', function() {
-        this.workspace.options.maxBlocks = 1;
-        this.workspace.options.maxInstances['get_var_block'] = 2;
-        chai.assert.equal(
-            this.workspace.remainingCapacityOfType('get_var_block'),
-            -2,
-            'With maxBlocks limit 1 and maxInstances limit 2');
-      });
+    test('Over block limit of 0 but under instance limit', function() {
+      this.workspace.options.maxBlocks = 0;
+      this.workspace.options.maxInstances['get_var_block'] = 3;
+      var typeCountsMap = {'get_var_block': 1};
+      chai.assert.isFalse(this.workspace.isCapacityAvailable(typeCountsMap),
+          'With maxBlocks limit 0 and maxInstances limit 3');
+    });
 
-      test('Over block limit and over instance limit', function() {
-        this.workspace.options.maxBlocks = 1;
-        this.workspace.options.maxInstances['get_var_block'] = 1;
-        chai.assert.equal(
-            this.workspace.remainingCapacityOfType('get_var_block'),
-            -1,
-            'With maxBlocks limit 1 and maxInstances limit 1');
-      });
+    test('Over block limit but at instance limit', function() {
+      this.workspace.options.maxBlocks = 1;
+      this.workspace.options.maxInstances['get_var_block'] = 2;
+      var typeCountsMap = {'get_var_block': 1};
+      chai.assert.isFalse(this.workspace.isCapacityAvailable(typeCountsMap),
+          'With maxBlocks limit 1 and maxInstances limit 2');
+    });
 
-      test('Over block limit of 0 and over instance limit', function() {
-        this.workspace.options.maxBlocks = 0;
-        this.workspace.options.maxInstances['get_var_block'] = 1;
-        chai.assert.equal(
-            this.workspace.remainingCapacityOfType('get_var_block'),
-            -2,
-            'With maxBlocks limit 0 and maxInstances limit 1');
-      });
+    test('Over block limit and over instance limit', function() {
+      this.workspace.options.maxBlocks = 1;
+      this.workspace.options.maxInstances['get_var_block'] = 1;
+      var typeCountsMap = {'get_var_block': 1};
+      chai.assert.isFalse(this.workspace.isCapacityAvailable(typeCountsMap),
+          'With maxBlocks limit 1 and maxInstances limit 1');
+    });
 
-      test('Over block limit and over instance limit of 0', function() {
-        this.workspace.options.maxBlocks = 1;
-        this.workspace.options.maxInstances['get_var_block'] = 0;
-        chai.assert.equal(
-            this.workspace.remainingCapacityOfType('get_var_block'),
-            -1,
-            'With maxBlocks limit 1 and maxInstances limit 0');
-      });
+    test('Over block limit of 0 and over instance limit', function() {
+      this.workspace.options.maxBlocks = 0;
+      this.workspace.options.maxInstances['get_var_block'] = 1;
+      var typeCountsMap = {'get_var_block': 1};
+      chai.assert.isFalse(this.workspace.isCapacityAvailable(typeCountsMap),
+          'With maxBlocks limit 0 and maxInstances limit 1');
+    });
 
-      test('Over block limit of 0 and over instance limit of 0', function() {
-        this.workspace.options.maxBlocks = 0;
-        this.workspace.options.maxInstances['get_var_block'] = 0;
-        chai.assert.equal(
-            this.workspace.remainingCapacityOfType('get_var_block'),-1);
-      });
+    test('Over block limit and over instance limit of 0', function() {
+      this.workspace.options.maxBlocks = 1;
+      this.workspace.options.maxInstances['get_var_block'] = 0;
+      var typeCountsMap = {'get_var_block': 1};
+      chai.assert.isFalse(this.workspace.isCapacityAvailable(typeCountsMap),
+          'With maxBlocks limit 1 and maxInstances limit 0');
+    });
+
+    test('Over block limit of 0 and over instance limit of 0', function() {
+      this.workspace.options.maxBlocks = 0;
+      this.workspace.options.maxInstances['get_var_block'] = 0;
+      var typeCountsMap = {'get_var_block': 1};
+      chai.assert.isFalse(this.workspace.isCapacityAvailable(typeCountsMap));
     });
   });
 

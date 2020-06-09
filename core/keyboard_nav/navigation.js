@@ -15,10 +15,8 @@ goog.provide('Blockly.navigation');
 
 goog.require('Blockly.Action');
 goog.require('Blockly.ASTNode');
-goog.require('Blockly.Gesture');
 goog.require('Blockly.utils.Coordinate');
 goog.require('Blockly.user.keyMap');
-
 
 /**
  * A function to call to give feedback to the user about logs, warnings, and
@@ -764,7 +762,7 @@ Blockly.navigation.onKeyPress = function(e) {
   var key = Blockly.user.keyMap.serializeKeyEvent(e);
   var action = Blockly.user.keyMap.getActionByKeyCode(key);
 
-  if (action && !Blockly.Gesture.inProgress()) {
+  if (action) {
     return Blockly.navigation.onBlocklyAction(action);
   }
   return false;

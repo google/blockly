@@ -18,7 +18,6 @@ goog.require('Blockly.ASTNode');
 goog.require('Blockly.utils.Coordinate');
 goog.require('Blockly.user.keyMap');
 
-
 /**
  * A function to call to give feedback to the user about logs, warnings, and
  * errors.  You can override this to customize feedback (e.g. warning sounds,

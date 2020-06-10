@@ -162,6 +162,7 @@ Blockly.BlockDragger.prototype.startBlockDrag = function(currentDragDeltaXY,
 
     this.draggingBlock_.translate(newLoc.x, newLoc.y);
     Blockly.blockAnimations.disconnectUiEffect(this.draggingBlock_);
+    this.draggedConnectionManager_.updateAvailbleConnections();
   }
   this.draggingBlock_.setDragging(true);
   // For future consideration: we may be able to put moveToDragSurface inside

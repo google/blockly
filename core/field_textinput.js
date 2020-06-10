@@ -88,11 +88,11 @@ Blockly.FieldTextInput = function(opt_value, opt_validator, opt_config) {
 Blockly.utils.object.inherits(Blockly.FieldTextInput, Blockly.Field);
 
 /**
- * A generic value possessed by the field.
+ * The default value for this field.
  * @type {*}
  * @protected
  */
-Blockly.FieldTextInput.prototype.value_ = '';
+Blockly.FieldTextInput.prototype.DEFAULT_VALUE = 0;
 
 /**
  * Construct a FieldTextInput from a JSON arg object,

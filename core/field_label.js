@@ -50,11 +50,11 @@ Blockly.FieldLabel = function(opt_value, opt_class, opt_config) {
 Blockly.utils.object.inherits(Blockly.FieldLabel, Blockly.Field);
 
 /**
- * A generic value possessed by the field.
+ * The default value for this field.
  * @type {*}
  * @protected
  */
-Blockly.FieldLabel.prototype.value_ = '';
+Blockly.FieldLabel.prototype.DEFAULT_VALUE = '';
 
 /**
  * Construct a FieldLabel from a JSON arg object,

@@ -50,11 +50,11 @@ Blockly.FieldCheckbox = function(opt_value, opt_validator, opt_config) {
 Blockly.utils.object.inherits(Blockly.FieldCheckbox, Blockly.Field);
 
 /**
- * A generic value possessed by the field.
+ * The default value for this field.
  * @type {*}
  * @protected
  */
-Blockly.FieldCheckbox.prototype.value_ = 'FALSE';
+Blockly.FieldCheckbox.prototype.DEFAULT_VALUE = 'FALSE';
 
 /**
  * Construct a FieldCheckbox from a JSON arg object.

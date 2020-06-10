@@ -76,11 +76,11 @@ Blockly.FieldNumber = function(opt_value, opt_min, opt_max, opt_precision,
 Blockly.utils.object.inherits(Blockly.FieldNumber, Blockly.FieldTextInput);
 
 /**
- * A generic value possessed by the field.
+ * The default value for this field.
  * @type {*}
  * @protected
  */
-Blockly.FieldNumber.prototype.value_ = 0;
+Blockly.FieldNumber.prototype.DEFAULT_VALUE = 0;
 
 /**
  * Construct a FieldNumber from a JSON arg object.

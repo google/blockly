@@ -108,12 +108,13 @@ Blockly.FieldAngle = function(opt_value, opt_validator, opt_config) {
 };
 Blockly.utils.object.inherits(Blockly.FieldAngle, Blockly.FieldTextInput);
 
+
 /**
- * A generic value possessed by the field.
+ * The default value for this field.
  * @type {*}
  * @protected
  */
-Blockly.FieldAngle.prototype.value_ = 0;
+Blockly.FieldAngle.prototype.DEFAULT_VALUE = 0;
 
 /**
  * Construct a FieldAngle from a JSON arg object.

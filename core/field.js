@@ -48,6 +48,14 @@ goog.requireType('Blockly.IRegistrable');
  */
 Blockly.Field = function(value, opt_validator, opt_config) {
   /**
+   * A generic value possessed by the field.
+   * Should generally be non-null, only null when the field is created.
+   * @type {*}
+   * @protected
+   */
+  this.value_ = this.DEFAULT_VALUE;
+
+  /**
    * Validation function called when user edits an editable field.
    * @type {Function}
    * @protected
@@ -133,12 +141,11 @@ Blockly.Field = function(value, opt_validator, opt_config) {
 };
 
 /**
- * A generic value possessed by the field.
- * Should generally be non-null, only null when the field is created.
+ * The default value for this field.
  * @type {*}
  * @protected
  */
-Blockly.Field.prototype.value_ = null;
+Blockly.Field.prototype.DEFAULT_VALUE = null;
 
 /**
  * Name of field.  Unique within each block.

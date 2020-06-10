@@ -115,11 +115,11 @@ Blockly.FieldImage = function(src, width, height,
 Blockly.utils.object.inherits(Blockly.FieldImage, Blockly.Field);
 
 /**
- * A generic value possessed by the field.
+ * The default value for this field.
  * @type {*}
  * @protected
  */
-Blockly.FieldImage.prototype.value_ = '';
+Blockly.FieldImage.prototype.DEFAULT_VALUE = '';
 
 /**
  * Construct a FieldImage from a JSON arg object,

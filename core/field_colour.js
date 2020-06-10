@@ -97,11 +97,11 @@ Blockly.FieldColour = function(opt_value, opt_validator, opt_config) {
 Blockly.utils.object.inherits(Blockly.FieldColour, Blockly.Field);
 
 /**
- * A generic value possessed by the field.
+ * The default value for this field.
  * @type {*}
  * @protected
  */
-Blockly.FieldColour.prototype.value_ = Blockly.FieldColour.COLOURS[0];
+Blockly.FieldColour.prototype.DEFAULT_VALUE = Blockly.FieldColour.COLOURS[0];
 
 /**
  * Construct a FieldColour from a JSON arg object.

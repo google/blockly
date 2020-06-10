@@ -97,13 +97,6 @@ Blockly.FieldColour = function(opt_value, opt_validator, opt_config) {
 Blockly.utils.object.inherits(Blockly.FieldColour, Blockly.Field);
 
 /**
- * The default value for this field.
- * @type {*}
- * @protected
- */
-Blockly.FieldColour.prototype.DEFAULT_VALUE = Blockly.FieldColour.COLOURS[0];
-
-/**
  * Construct a FieldColour from a JSON arg object.
  * @param {!Object} options A JSON object with options (colour).
  * @return {!Blockly.FieldColour} The new field instance.
@@ -273,6 +266,13 @@ Blockly.FieldColour.COLOURS = [
   // violets
   '#ffccff', '#ff99ff', '#cc66cc', '#cc33cc', '#993399', '#663366', '#330033'
 ];
+
+/**
+ * The default value for this field.
+ * @type {*}
+ * @protected
+ */
+Blockly.FieldColour.prototype.DEFAULT_VALUE = Blockly.FieldColour.COLOURS[0];
 
 /**
  * An array of tooltip strings for the palette.  If not the same length as

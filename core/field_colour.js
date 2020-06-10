@@ -43,8 +43,7 @@ goog.require('Blockly.utils.Size');
  */
 Blockly.FieldColour = function(opt_value, opt_validator, opt_config) {
   Blockly.FieldColour.superClass_.constructor.call(
-      this, opt_value || Blockly.FieldColour.COLOURS[0],
-      opt_validator, opt_config);
+      this, opt_value, opt_validator, opt_config);
 
   /**
    * The field's colour picker element.
@@ -96,6 +95,13 @@ Blockly.FieldColour = function(opt_value, opt_validator, opt_config) {
   this.onKeyDownWrapper_ = null;
 };
 Blockly.utils.object.inherits(Blockly.FieldColour, Blockly.Field);
+
+/**
+ * A generic value possessed by the field.
+ * @type {*}
+ * @protected
+ */
+Blockly.Field.prototype.value_ = Blockly.FieldColour.COLOURS[0];
 
 /**
  * Construct a FieldColour from a JSON arg object.

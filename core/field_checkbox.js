@@ -44,13 +44,17 @@ Blockly.FieldCheckbox = function(opt_value, opt_validator, opt_config) {
    */
   this.checkChar_ = null;
 
-  if (opt_value == null) {
-    opt_value = 'FALSE';
-  }
   Blockly.FieldCheckbox.superClass_.constructor.call(
       this, opt_value, opt_validator, opt_config);
 };
 Blockly.utils.object.inherits(Blockly.FieldCheckbox, Blockly.Field);
+
+/**
+ * A generic value possessed by the field.
+ * @type {*}
+ * @protected
+ */
+Blockly.Field.prototype.value_ = 'FALSE';
 
 /**
  * Construct a FieldCheckbox from a JSON arg object.

@@ -67,13 +67,20 @@ Blockly.FieldNumber = function(opt_value, opt_min, opt_max, opt_precision,
   this.decimalPlaces_ = null;
 
   Blockly.FieldNumber.superClass_.constructor.call(
-      this, opt_value || 0, opt_validator, opt_config);
+      this, opt_value, opt_validator, opt_config);
 
   if (!opt_config) {  // Only do one kind of configuration or the other.
     this.setConstraints(opt_min, opt_max, opt_precision);
   }
 };
 Blockly.utils.object.inherits(Blockly.FieldNumber, Blockly.FieldTextInput);
+
+/**
+ * A generic value possessed by the field.
+ * @type {*}
+ * @protected
+ */
+Blockly.Field.prototype.value_ = 0;
 
 /**
  * Construct a FieldNumber from a JSON arg object.
@@ -106,7 +113,7 @@ Blockly.FieldNumber.prototype.configure_ = function(config) {
   this.setMaxInternal_(config['max']);
   this.setPrecisionInternal_(config['precision']);
 };
-
+SERIALIZABLE
 /**
  * Set the maximum, minimum and precision constraints on this field.
  * Any of these properties may be undefined or NaN to be disabled.

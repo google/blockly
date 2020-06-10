@@ -48,9 +48,6 @@ Blockly.FieldTextInput = function(opt_value, opt_validator, opt_config) {
    */
   this.spellcheck_ = true;
 
-  if (opt_value == null) {
-    opt_value = '';
-  }
   Blockly.FieldTextInput.superClass_.constructor.call(this,
       opt_value, opt_validator, opt_config);
 
@@ -89,6 +86,13 @@ Blockly.FieldTextInput = function(opt_value, opt_validator, opt_config) {
   this.workspace_ = null;
 };
 Blockly.utils.object.inherits(Blockly.FieldTextInput, Blockly.Field);
+
+/**
+ * A generic value possessed by the field.
+ * @type {*}
+ * @protected
+ */
+Blockly.Field.prototype.value_ = '';
 
 /**
  * Construct a FieldTextInput from a JSON arg object,

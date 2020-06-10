@@ -71,7 +71,7 @@ Blockly.FieldAngle = function(opt_value, opt_validator, opt_config) {
   this.round_ = Blockly.FieldAngle.ROUND;
 
   Blockly.FieldAngle.superClass_.constructor.call(
-      this, opt_value || 0, opt_validator, opt_config);
+      this, opt_value, opt_validator, opt_config);
 
   /**
    * The angle picker's gauge path depending on the value.
@@ -107,6 +107,13 @@ Blockly.FieldAngle = function(opt_value, opt_validator, opt_config) {
   this.moveSurfaceWrapper_ = null;
 };
 Blockly.utils.object.inherits(Blockly.FieldAngle, Blockly.FieldTextInput);
+
+/**
+ * A generic value possessed by the field.
+ * @type {*}
+ * @protected
+ */
+Blockly.Field.prototype.value_ = 0;
 
 /**
  * Construct a FieldAngle from a JSON arg object.

@@ -101,7 +101,7 @@ Blockly.utils.object.inherits(Blockly.FieldColour, Blockly.Field);
  * @type {*}
  * @protected
  */
-Blockly.Field.prototype.value_ = Blockly.FieldColour.COLOURS[0];
+Blockly.FieldColour.prototype.value_ = Blockly.FieldColour.COLOURS[0];
 
 /**
  * Construct a FieldColour from a JSON arg object.

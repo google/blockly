@@ -70,7 +70,7 @@ Blockly.FieldImage = function(src, width, height,
   this.altText_ = '';
 
   Blockly.FieldImage.superClass_.constructor.call(
-      this, src || '', null, opt_config);
+      this, src, null, opt_config);
 
   if (!opt_config) {  // If the config wasn't passed, do old configuration.
     this.flipRtl_ = !!opt_flipRtl;
@@ -113,6 +113,13 @@ Blockly.FieldImage = function(src, width, height,
   this.imageElement_ = null;
 };
 Blockly.utils.object.inherits(Blockly.FieldImage, Blockly.Field);
+
+/**
+ * A generic value possessed by the field.
+ * @type {*}
+ * @protected
+ */
+Blockly.FieldImage.prototype.value_ = '';
 
 /**
  * Construct a FieldImage from a JSON arg object,

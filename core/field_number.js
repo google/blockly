@@ -80,7 +80,7 @@ Blockly.utils.object.inherits(Blockly.FieldNumber, Blockly.FieldTextInput);
  * @type {*}
  * @protected
  */
-Blockly.Field.prototype.value_ = 0;
+Blockly.FieldNumber.prototype.value_ = 0;
 
 /**
  * Construct a FieldNumber from a JSON arg object.
@@ -113,7 +113,7 @@ Blockly.FieldNumber.prototype.configure_ = function(config) {
   this.setMaxInternal_(config['max']);
   this.setPrecisionInternal_(config['precision']);
 };
-SERIALIZABLE
+
 /**
  * Set the maximum, minimum and precision constraints on this field.
  * Any of these properties may be undefined or NaN to be disabled.

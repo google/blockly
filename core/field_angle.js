@@ -113,7 +113,7 @@ Blockly.utils.object.inherits(Blockly.FieldAngle, Blockly.FieldTextInput);
  * @type {*}
  * @protected
  */
-Blockly.Field.prototype.value_ = 0;
+Blockly.FieldAngle.prototype.value_ = 0;
 
 /**
  * Construct a FieldAngle from a JSON arg object.

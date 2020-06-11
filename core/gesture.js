@@ -665,7 +665,7 @@ Blockly.Gesture.prototype.handleWsStart = function(e, ws) {
  * @private
  */
 Blockly.Gesture.prototype.fireWorkspaceClick_ = function(ws) {
-  var clickEvent = new Blockly.Events.Ui(null, "workspaceClick", null, null);
+  var clickEvent = new Blockly.Events.Ui(null, 'workspaceClick', null, null);
   clickEvent.workspaceId = ws.id;
   Blockly.Events.fire(clickEvent);
 };
@@ -777,6 +777,7 @@ Blockly.Gesture.prototype.doWorkspaceClick_ = function(e) {
   } else if (Blockly.selected) {
     Blockly.selected.unselect();
   }
+  this.fireWorkspaceClick_(ws);
 };
 
 /* End functions defining what actions to take to execute clicks on each type

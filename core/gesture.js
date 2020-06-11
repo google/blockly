@@ -651,9 +651,6 @@ Blockly.Gesture.prototype.handleWsStart = function(e, ws) {
   this.setStartWorkspace_(ws);
   this.mostRecentEvent_ = e;
   this.doStart(e);
-  if (!this.startBlock_ && !this.startBubble_) {
-    this.fireWorkspaceClick_(ws);
-  }
   if (this.startWorkspace_.keyboardAccessibilityMode) {
     Blockly.navigation.setState(Blockly.navigation.STATE_WS);
   }

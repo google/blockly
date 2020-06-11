@@ -161,6 +161,15 @@ Blockly.InsertionMarkerManager.prototype.dispose = function() {
 };
 
 /**
+ * Update the available connections for the top block. These connections can
+ * change if a block is unplugged and the stack is healed.
+ * @package
+ */
+Blockly.InsertionMarkerManager.prototype.updateAvailableConnections = function() {
+  this.availableConnections_ = this.initAvailableConnections_();
+};
+
+/**
  * Return whether the block would be deleted if dropped immediately, based on
  * information from the most recent move event.
  * @return {boolean} True if the block would be deleted if dropped immediately.

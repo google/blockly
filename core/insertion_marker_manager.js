@@ -163,8 +163,9 @@ Blockly.InsertionMarkerManager.prototype.dispose = function() {
 /**
  * Update the available connections for the top block. These connections can
  * change if a block is unplugged and the stack is healed.
+ * @package
  */
-Blockly.InsertionMarkerManager.prototype.updateAvailbleConnections = function() {
+Blockly.InsertionMarkerManager.prototype.updateAvailableConnections = function() {
   this.availableConnections_ = this.initAvailableConnections_();
 };
 

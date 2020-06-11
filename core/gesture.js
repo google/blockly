@@ -651,9 +651,23 @@ Blockly.Gesture.prototype.handleWsStart = function(e, ws) {
   this.setStartWorkspace_(ws);
   this.mostRecentEvent_ = e;
   this.doStart(e);
+  if (!this.startBlock_ && !this.startBubble_) {
+    this.fireWorkspaceClick_(ws);
+  }
   if (this.startWorkspace_.keyboardAccessibilityMode) {
     Blockly.navigation.setState(Blockly.navigation.STATE_WS);
   }
+};
+
+/**
+ * Fires a workspace click event.
+ * @param {!Blockly.WorkspaceSvg} ws The workspace that a user clicks on.
+ * @private
+ */
+Blockly.Gesture.prototype.fireWorkspaceClick_ = function(ws) {
+  var clickEvent = new Blockly.Events.Ui(null, "workspaceClick", null, null);
+  clickEvent.workspaceId = ws.id;
+  Blockly.Events.fire(clickEvent);
 };
 
 /**

@@ -817,6 +817,14 @@ Blockly.WorkspaceSvg.prototype.dispose = function() {
 
   this.renderer_.dispose();
 
+  if (this.markerManager_) {
+    this.markerManager_.dispose();
+    this.markerManager_ = null;
+  }
+
+  Blockly.WorkspaceSvg.superClass_.dispose.call(this);
+
+  // Dispose of theme manager after all blocks and mutators are disposed of.
   if (this.themeManager_) {
     this.themeManager_.unsubscribeWorkspace(this);
     this.themeManager_.unsubscribe(this.svgBackground_);
@@ -825,13 +833,6 @@ Blockly.WorkspaceSvg.prototype.dispose = function() {
       this.themeManager_ = null;
     }
   }
-
-  if (this.markerManager_) {
-    this.markerManager_.dispose();
-    this.markerManager_ = null;
-  }
-
-  Blockly.WorkspaceSvg.superClass_.dispose.call(this);
 
   this.connectionDBList = null;
 

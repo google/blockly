@@ -875,7 +875,11 @@ var mutators = {
     {
       "kind": "BLOCK",
       "blockxml": "<block type=\"logic_compare\"><value name=\"A\"><block type=\"math_number\"><field name=\"NUM\">10</field></block></value><value name=\"B\"><block type=\"math_number\"><field name=\"NUM\">10</field></block></value></block>",
-    }
+    },
+    {
+      "kind": "BLOCK",
+      "type": "test_mutators_noflyout",
+    },
   ],
 };
 

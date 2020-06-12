@@ -24,8 +24,8 @@ suite('Checkbox Fields', function() {
    * @type {!Array<!FieldCreationTestCase>}
    */
   const validValueTestCases = [
-    {title: 'true', value: true, expectedValue: 'TRUE'},
-    {title: 'false', value: false, expectedValue: 'FALSE'},
+    {title: 'Boolean true', value: true, expectedValue: 'TRUE'},
+    {title: 'Boolean false', value: false, expectedValue: 'FALSE'},
     {title: 'String TRUE', value: 'TRUE', expectedValue: 'TRUE'},
     {title: 'String FALSE', value: 'FALSE', expectedValue: 'FALSE'},
   ];

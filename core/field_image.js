@@ -22,7 +22,7 @@ goog.require('Blockly.utils.Size');
 
 /**
  * Class for an image on a block.
- * @param {string} src The URL of the image. Defaults to an empty string.
+ * @param {string} src The URL of the image.
  * @param {!(string|number)} width Width of the image.
  * @param {!(string|number)} height Height of the image.
  * @param {string=} opt_alt Optional alt text for when block is collapsed.

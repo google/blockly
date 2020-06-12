@@ -134,7 +134,7 @@ Blockly.Input.prototype.insertFieldAt = function(index, field, opt_name) {
 /**
  * Remove a field from this input.
  * @param {string} name The name of the field.
- * @param {boolean=} opt_quiet True to prevent error if field is not present.
+ * @param {boolean=} opt_quiet True to prevent an error if field is not present.
  * @return {boolean} True if operation succeeds, false if field is not present
  *     and opt_quiet is true.
  * @throws {Error} if the field is not present and opt_quiet is false.

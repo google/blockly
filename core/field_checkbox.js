@@ -54,7 +54,7 @@ Blockly.utils.object.inherits(Blockly.FieldCheckbox, Blockly.Field);
  * @type {*}
  * @protected
  */
-Blockly.FieldCheckbox.prototype.DEFAULT_VALUE = 'FALSE';
+Blockly.FieldCheckbox.prototype.DEFAULT_VALUE = false;
 
 /**
  * Construct a FieldCheckbox from a JSON arg object.

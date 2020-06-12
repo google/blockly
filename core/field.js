@@ -849,7 +849,7 @@ Blockly.Field.prototype.forceRerender = function() {
  * @param {*} newValue New value.
  */
 Blockly.Field.prototype.setValue = function(newValue) {
-  var doLogging = false;
+  var doLogging = true;
   if (newValue === null) {
     doLogging && console.log('null, return');
     // Not a valid value to check.

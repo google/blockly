@@ -9,7 +9,7 @@ suite('Number Fields', function() {
    * Configuration for field tests with invalid values.
    * @type {!Array<!FieldCreationTestCase>}
    */
-  const invalidValueTestCases = [
+  var invalidValueTestCases = [
     {title: 'Undefined', value: undefined},
     {title: 'Null', value: null},
     {title: 'NaN', value: NaN},
@@ -19,7 +19,7 @@ suite('Number Fields', function() {
    * Configuration for field tests with valid values.
    * @type {!Array<!FieldCreationTestCase>}
    */
-  const validValueTestCases = [
+  var validValueTestCases = [
     {title: 'Integer', value: 1, expectedValue: 1},
     {title: 'Float', value: 1.5, expectedValue: 1.5},
     {title: 'Integer String', value: '1', expectedValue: 1},
@@ -30,7 +30,7 @@ suite('Number Fields', function() {
     {title: 'Negative Infinity String', value: '-Infinity',
       expectedValue: -Infinity},
   ];
-  const addArgsAndJson = function(testCase) {
+  var addArgsAndJson = function(testCase) {
     testCase.args = Array(4).fill(testCase.value);
     testCase.json = {'value': testCase.value, 'min': testCase.value,
       'max': testCase.value, 'precision': testCase.value};
@@ -42,7 +42,7 @@ suite('Number Fields', function() {
    * The expected default value for the field being tested.
    * @type {*}
    */
-  const defaultFieldValue = 0;
+  var defaultFieldValue = 0;
   /**
    * Asserts that the field property values are as expected.
    * @param {!Blockly.FieldNumber} field The field to check.
@@ -63,7 +63,7 @@ suite('Number Fields', function() {
    * Asserts that the field property values are set to default.
    * @param {!Blockly.FieldNumber} field The field to check.
    */
-  const assertFieldDefault = function(field) {
+  var assertFieldDefault = function(field) {
     assertNumberField(field, -Infinity, Infinity, 0, defaultFieldValue);
   };
   /**
@@ -71,7 +71,7 @@ suite('Number Fields', function() {
    * @param {!Blockly.FieldNumber} field The field to check.
    * @param {!FieldValueTestCase} testCase The test case.
    */
-  const validTestCaseAssertField = function(field, testCase) {
+  var validTestCaseAssertField = function(field, testCase) {
     assertNumberField(
         field, testCase.expectedValue, testCase.expectedValue,
         testCase.expectedValue, testCase.expectedValue);
@@ -94,7 +94,7 @@ suite('Number Fields', function() {
           validValueTestCases, invalidValueTestCases, defaultFieldValue);
     });
     suite('Value -> New Value', function() {
-      const initialValue = 1;
+      var initialValue = 1;
       setup(function() {
         this.field = new Blockly.FieldNumber(initialValue);
       });
@@ -102,7 +102,7 @@ suite('Number Fields', function() {
           validValueTestCases, invalidValueTestCases, initialValue);
     });
     suite('Constraints', function() {
-      const testCases = [
+      var testCases = [
         {title: 'Float', json: {}, value: 123.456, expectedValue: 123.456},
         {title: '0.01', json: {precision: .01}, value: 123.456,
           expectedValue: 123.46},
@@ -116,19 +116,19 @@ suite('Number Fields', function() {
       suite('Precision', function() {
         testHelpers.runTestCases(testCases, function(testCase) {
           return function() {
-            const field = Blockly.FieldNumber.fromJson(testCase.json);
+            var field = Blockly.FieldNumber.fromJson(testCase.json);
             field.setValue(testCase.value);
             testHelpers.assertFieldValue(field, testCase.expectedValue);
           };
         });
         test('Null', function() {
-          const field = Blockly.FieldNumber.fromJson({precision: null});
+          var field = Blockly.FieldNumber.fromJson({precision: null});
           chai.assert.equal(field.getPrecision(), 0);
         });
       });
-      const setValueBoundsTestFn = (testCase) => {
-        return function () {
-          const field = Blockly.FieldNumber.fromJson(testCase.json);
+      var setValueBoundsTestFn = function(testCase) {
+        return function() {
+          var field = Blockly.FieldNumber.fromJson(testCase.json);
           testCase.values.forEach(function(value, i) {
             field.setValue(value);
             testHelpers.assertFieldValue(
@@ -137,7 +137,7 @@ suite('Number Fields', function() {
         };
       };
       suite('Min', function() {
-        const testCases = [
+        var testCases = [
           {title: '-10', json: {min: -10}, values: [-20, 0, 20],
             expectedValues: [-10, 0, 20]},
           {title: '0', json: {min: 0}, values: [-20, 0, 20],
@@ -147,12 +147,12 @@ suite('Number Fields', function() {
         ];
         testHelpers.runTestCases(testCases, setValueBoundsTestFn);
         test('Null', function() {
-          const field = Blockly.FieldNumber.fromJson({min: null});
+          var field = Blockly.FieldNumber.fromJson({min: null});
           chai.assert.equal(field.getMin(), -Infinity);
         });
       });
       suite('Max', function() {
-        const testCases = [
+        var testCases = [
           {title: '-10', json: {max: -10}, values: [-20, 0, 20],
             expectedValues: [-20, -10, -10]},
           {title: '0', json: {max: 0}, values: [-20, 0, 20],
@@ -162,7 +162,7 @@ suite('Number Fields', function() {
         ];
         testHelpers.runTestCases(testCases, setValueBoundsTestFn);
         test('Null', function() {
-          const field = Blockly.FieldNumber.fromJson({max: null});
+          var field = Blockly.FieldNumber.fromJson({max: null});
           chai.assert.equal(field.getMax(), Infinity);
         });
       });
@@ -179,13 +179,15 @@ suite('Number Fields', function() {
     teardown(function() {
       sinon.restore();
     });
-    const testSuites = [
-      {title: 'Null Validator', validator:
+    var testSuites = [
+      {title: 'Null Validator',
+        validator:
             function() {
               return null;
             },
         value: 2, expectedValue: 1},
-      {title: 'Force End with 6 Validator', validator:
+      {title: 'Force End with 6 Validator',
+        validator:
             function(newValue) {
               return String(newValue).replace(/.$/, '6');
             },

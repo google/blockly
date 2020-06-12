@@ -9,7 +9,7 @@ suite('Colour Fields', function() {
    * Configuration for field tests with invalid values.
    * @type {!Array<!FieldCreationTestCase>}
    */
-  const invalidValueTestCases = [
+  var invalidValueTestCases = [
     {title: 'Undefined', value: undefined},
     {title: 'Null', value: null},
     {title: 'NaN', value: NaN},
@@ -24,7 +24,7 @@ suite('Colour Fields', function() {
    * @type {!Array<!FieldCreationTestCase>}
    */
 
-  const validValueTestCases = [
+  var validValueTestCases = [
     {title: '#AAAAAA', value: '#AAAAAA', expectedValue: '#aaaaaa',
       expectedText: '#aaa'},
     {title: '#aaaaaa', value: '#aaaaaa', expectedValue: '#aaaaaa',
@@ -46,7 +46,7 @@ suite('Colour Fields', function() {
     {title: 'red', value: 'red', expectedValue: '#ff0000',
       expectedText: '#f00'},
   ];
-  const addArgsAndJson = function(testCase) {
+  var addArgsAndJson = function(testCase) {
     testCase.args = [testCase.value];
     testCase.json = {'colour': testCase.value};
   };
@@ -57,25 +57,25 @@ suite('Colour Fields', function() {
    * The expected default value for the field being tested.
    * @type {*}
    */
-  const defaultFieldValue = Blockly.FieldColour.COLOURS[0];
+  var defaultFieldValue = Blockly.FieldColour.COLOURS[0];
   /**
    * The expected default text for the field being tested.
    * @type {*}
    */
-  const defaultTextValue = (
-      function() {
-        var expectedText = defaultFieldValue;
-        var m = defaultFieldValue.match(/^#(.)\1(.)\2(.)\3$/);
-        if (m) {
-          expectedText = '#' + m[1] + m[2] + m[3];
-        }
-        return expectedText;
-      })();
+  var defaultTextValue = (
+    function() {
+      var expectedText = defaultFieldValue;
+      var m = defaultFieldValue.match(/^#(.)\1(.)\2(.)\3$/);
+      if (m) {
+        expectedText = '#' + m[1] + m[2] + m[3];
+      }
+      return expectedText;
+    })();
   /**
    * Asserts that the field property values are set to default.
    * @param {FieldTemplate} field The field to check.
    */
-  const assertFieldDefault = function(field) {
+  var assertFieldDefault = function(field) {
     testHelpers.assertFieldValue(field, defaultFieldValue, defaultTextValue);
   };
   /**
@@ -83,7 +83,7 @@ suite('Colour Fields', function() {
    * @param {!Blockly.FieldAngle} field The field to check.
    * @param {!FieldValueTestCase} testCase The test case.
    */
-  const validTestCaseAssertField = function(field, testCase) {
+  var validTestCaseAssertField = function(field, testCase) {
     testHelpers.assertFieldValue(
         field, testCase.expectedValue, testCase.expectedText);
   };
@@ -181,13 +181,15 @@ suite('Colour Fields', function() {
     setup(function() {
       this.field = new Blockly.FieldColour('#aaaaaa');
     });
-    const testSuites = [
-      {title: 'Null Validator', validator:
+    var testSuites = [
+      {title: 'Null Validator',
+        validator:
             function() {
               return null;
             },
         value: '#000000', expectedValue: '#aaaaaa', expectedText: '#aaa'},
-      {title: 'Force Full Red Validator', validator:
+      {title: 'Force Full Red Validator',
+        validator:
             function(newValue) {
               return '#ff' + newValue.substr(3, 4);
             },

@@ -9,7 +9,7 @@ suite('Angle Fields', function() {
    * Configuration for field tests with invalid values.
    * @type {!Array<!FieldCreationTestCase>}
    */
-  const invalidValueTestCases = [
+  var invalidValueTestCases = [
     {title: 'Undefined', value: undefined},
     {title: 'Null', value: null},
     {title: 'NaN', value: NaN},
@@ -25,14 +25,14 @@ suite('Angle Fields', function() {
    * @type {!Array<!FieldCreationTestCase>}
    */
 
-  const validValueTestCases = [
+  var validValueTestCases = [
     {title: 'Integer', value: 1, expectedValue: 1},
     {title: 'Float', value: 1.5, expectedValue: 1.5},
     {title: 'Integer String', value: '1', expectedValue: 1},
     {title: 'Float String', value: '1.5', expectedValue: 1.5},
     {title: '> 360°', value: 362, expectedValue: 2},
   ];
-  const addArgsAndJson = function(testCase) {
+  var addArgsAndJson = function(testCase) {
     testCase.args = [testCase.value];
     testCase.json = {'angle': testCase.value};
   };
@@ -43,12 +43,12 @@ suite('Angle Fields', function() {
    * The expected default value for the field being tested.
    * @type {*}
    */
-  const defaultFieldValue = 0;
+  var defaultFieldValue = 0;
   /**
    * Asserts that the field property values are set to default.
    * @param {FieldTemplate} field The field to check.
    */
-  const assertFieldDefault = function(field) {
+  var assertFieldDefault = function(field) {
     testHelpers.assertFieldValue(field, defaultFieldValue);
   };
   /**
@@ -56,7 +56,7 @@ suite('Angle Fields', function() {
    * @param {!Blockly.FieldAngle} field The field to check.
    * @param {!FieldValueTestCase} testCase The test case.
    */
-  const validTestCaseAssertField = function(field, testCase) {
+  var validTestCaseAssertField = function(field, testCase) {
     testHelpers.assertFieldValue(field, testCase.expectedValue);
   };
 
@@ -69,8 +69,8 @@ suite('Angle Fields', function() {
       validTestCaseAssertField, assertFieldDefault);
 
   suite('setValue', function() {
-    suite('Empty -> New Value', function () {
-      setup(function () {
+    suite('Empty -> New Value', function() {
+      setup(function() {
         this.field = new Blockly.FieldAngle();
       });
       testHelpers.runSetValueTests(
@@ -81,9 +81,9 @@ suite('Angle Fields', function() {
         testHelpers.assertFieldValue(this.field, 2.5);
       });
     });
-    suite('Value -> New Value', function () {
-      const initialValue = 1;
-      setup(function () {
+    suite('Value -> New Value', function() {
+      var initialValue = 1;
+      setup(function() {
         this.field = new Blockly.FieldAngle(initialValue);
       });
       testHelpers.runSetValueTests(
@@ -106,13 +106,15 @@ suite('Angle Fields', function() {
     teardown(function() {
       sinon.restore();
     });
-    const testSuites = [
-      {title: 'Null Validator', validator:
+    var testSuites = [
+      {title: 'Null Validator',
+        validator:
             function() {
               return null;
             },
         value: 2, expectedValue: 1},
-      {title: 'Force Mult of 30 Validator', validator:
+      {title: 'Force Mult of 30 Validator',
+        validator:
             function(newValue) {
               return Math.round(newValue / 30) * 30;
             },

@@ -9,7 +9,7 @@ suite('Text Input Fields', function() {
    * Configuration for field tests with invalid values.
    * @type {!Array<!FieldCreationTestCase>}
    */
-  const invalidValueTestCases = [
+  var invalidValueTestCases = [
     {title: 'Undefined', value: undefined},
     {title: 'Null', value: null},
   ];
@@ -17,7 +17,7 @@ suite('Text Input Fields', function() {
    * Configuration for field tests with valid values.
    * @type {!Array<!FieldCreationTestCase>}
    */
-  const validValueTestCases = [
+  var validValueTestCases = [
     {title: 'String', value: 'value', expectedValue: 'value'},
     {title: 'Boolean true', value: true, expectedValue: 'true'},
     {title: 'Boolean false', value: false, expectedValue: 'false'},
@@ -25,7 +25,7 @@ suite('Text Input Fields', function() {
     {title: 'Number (Falsy)', value: 0, expectedValue: '0'},
     {title: 'NaN', value: NaN, expectedValue: 'NaN'},
   ];
-  const addArgsAndJson = function(testCase) {
+  var addArgsAndJson = function(testCase) {
     testCase.args = [testCase.value];
     testCase.json = {'text': testCase.value};
   };
@@ -36,12 +36,12 @@ suite('Text Input Fields', function() {
    * The expected default value for the field being tested.
    * @type {*}
    */
-  const defaultFieldValue = '';
+  var defaultFieldValue = '';
   /**
    * Asserts that the field property values are set to default.
    * @param {!Blockly.FieldNumber} field The field to check.
    */
-  const assertFieldDefault = function(field) {
+  var assertFieldDefault = function(field) {
     testHelpers.assertFieldValue(field, defaultFieldValue);
   };
   /**
@@ -49,7 +49,7 @@ suite('Text Input Fields', function() {
    * @param {!Blockly.FieldNumber} field The field to check.
    * @param {!FieldValueTestCase} testCase The test case.
    */
-  const validTestCaseAssertField = function(field, testCase) {
+  var validTestCaseAssertField = function(field, testCase) {
     testHelpers.assertFieldValue(field, testCase.expectedValue);
   };
 
@@ -62,8 +62,8 @@ suite('Text Input Fields', function() {
       validTestCaseAssertField, assertFieldDefault);
 
   suite('setValue', function() {
-    suite('Empty -> New Value', function () {
-      setup(function () {
+    suite('Empty -> New Value', function() {
+      setup(function() {
         this.field = new Blockly.FieldTextInput();
       });
       testHelpers.runSetValueTests(
@@ -74,9 +74,9 @@ suite('Text Input Fields', function() {
         testHelpers.assertFieldValue(this.field, 'value');
       });
     });
-    suite('Value -> New Value', function () {
-      const initialValue = 'oldValue';
-      setup(function () {
+    suite('Value -> New Value', function() {
+      var initialValue = 'oldValue';
+      setup(function() {
         this.field = new Blockly.FieldTextInput(initialValue);
       });
       testHelpers.runSetValueTests(
@@ -100,13 +100,15 @@ suite('Text Input Fields', function() {
     teardown(function() {
       sinon.restore();
     });
-    const testSuites = [
-      {title: 'Null Validator', validator:
+    var testSuites = [
+      {title: 'Null Validator',
+        validator:
             function() {
               return null;
             },
         value: 'newValue', expectedValue: 'value'},
-      {title: 'Remove \'a\' Validator', validator:
+      {title: 'Remove \'a\' Validator',
+        validator:
             function(newValue) {
               return newValue.replace(/a/g, '');
             },

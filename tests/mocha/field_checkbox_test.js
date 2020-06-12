@@ -9,7 +9,7 @@ suite('Checkbox Fields', function() {
    * Configuration for field tests with invalid values.
    * @type {!Array<!FieldCreationTestCase>}
    */
-  const invalidValueTestCases = [
+  var invalidValueTestCases = [
     {title: 'Undefined', value: undefined},
     {title: 'Null', value: null},
     {title: 'NaN', value: NaN},
@@ -23,13 +23,13 @@ suite('Checkbox Fields', function() {
    * Configuration for field tests with valid values.
    * @type {!Array<!FieldCreationTestCase>}
    */
-  const validValueTestCases = [
+  var validValueTestCases = [
     {title: 'Boolean true', value: true, expectedValue: 'TRUE'},
     {title: 'Boolean false', value: false, expectedValue: 'FALSE'},
     {title: 'String TRUE', value: 'TRUE', expectedValue: 'TRUE'},
     {title: 'String FALSE', value: 'FALSE', expectedValue: 'FALSE'},
   ];
-  const addArgsAndJson = function(testCase) {
+  var addArgsAndJson = function(testCase) {
     testCase.args = [testCase.value];
     testCase.json = {'checked': testCase.value};
   };
@@ -40,12 +40,12 @@ suite('Checkbox Fields', function() {
    * The expected default value for the field being tested.
    * @type {*}
    */
-  const defaultFieldValue = 'FALSE';
+  var defaultFieldValue = 'FALSE';
   /**
    * Asserts that the field property values are set to default.
    * @param {!Blockly.FieldNumber} field The field to check.
    */
-  const assertFieldDefault = function(field) {
+  var assertFieldDefault = function(field) {
     testHelpers.assertFieldValue(
         field, defaultFieldValue, defaultFieldValue.toLowerCase());
   };
@@ -54,7 +54,7 @@ suite('Checkbox Fields', function() {
    * @param {!Blockly.FieldNumber} field The field to check.
    * @param {!FieldValueTestCase} testCase The test case.
    */
-  const validTestCaseAssertField = function(field, testCase) {
+  var validTestCaseAssertField = function(field, testCase) {
     testHelpers.assertFieldValue(
         field, testCase.expectedValue, testCase.expectedValue.toLowerCase());
   };
@@ -120,19 +120,22 @@ suite('Checkbox Fields', function() {
     setup(function() {
       this.field = new Blockly.FieldCheckbox(true);
     });
-    const testSuites = [
-      {title: 'Null Validator', validator:
+    var testSuites = [
+      {title: 'Null Validator',
+        validator:
             function() {
               return null;
             },
         value: 'FALSE', expectedValue: 'TRUE'},
-      {title: 'Always True Validator', validator:
-            function(newValue) {
+      {title: 'Always True Validator',
+        validator:
+            function() {
               return 'TRUE';
             },
         value: 'FALSE', expectedValue: 'TRUE'},
-      {title: 'Always False Validator', validator:
-            function(newValue) {
+      {title: 'Always False Validator',
+        validator:
+            function() {
               return 'TRUE';
             },
         value: 'FALSE', expectedValue: 'TRUE'},

@@ -53,7 +53,7 @@ Blockly.Field = function(value, opt_validator, opt_config) {
    * @type {*}
    * @protected
    */
-  this.value_ = null;
+  this.value_ = this.DEFAULT_VALUE;
 
   /**
    * Validation function called when user edits an editable field.
@@ -139,6 +139,13 @@ Blockly.Field = function(value, opt_validator, opt_config) {
   this.setValue(value);
   opt_validator && this.setValidator(opt_validator);
 };
+
+/**
+ * The default value for this field.
+ * @type {*}
+ * @protected
+ */
+Blockly.Field.prototype.DEFAULT_VALUE = null;
 
 /**
  * Name of field.  Unique within each block.

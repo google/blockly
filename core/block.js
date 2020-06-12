@@ -568,7 +568,9 @@ Blockly.Block.prototype.bumpNeighbours = function() {
 };
 
 /**
- * Return the parent block or null if this block is at the top level.
+ * Return the parent block or null if this block is at the top level. The parent
+ * block is either the block connected to the previous connection (for a statement
+ * block) or the block connected to the output connection (for a value block).
  * @return {Blockly.Block} The block that holds the current block.
  */
 Blockly.Block.prototype.getParent = function() {
@@ -619,7 +621,7 @@ Blockly.Block.prototype.getNextBlock = function() {
 };
 
 /**
- * Return the previous statement block directly connected to this block.
+ * Returns the block connected to the previous connection.
  * @return {Blockly.Block} The previous statement block or null.
  */
 Blockly.Block.prototype.getPreviousBlock = function() {

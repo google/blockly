@@ -203,8 +203,7 @@ suite('Number Fields', function() {
           this.field.htmlInput_.value = String(suiteInfo.value);
           this.field.onHtmlInputChange_(null);
           testHelpers.assertFieldValue(
-              this.field, suiteInfo.expectedValue,
-              String(suiteInfo.value));
+              this.field, suiteInfo.expectedValue, String(suiteInfo.value));
         });
         test('When Not Editing', function() {
           this.field.setValue(suiteInfo.value);

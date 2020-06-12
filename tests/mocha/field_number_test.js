@@ -5,7 +5,7 @@
  */
 
 suite('Number Fields', function() {
-    /**
+  /**
    * Configuration for field tests with invalid values.
    * @type {!Array<!FieldCreationTestCase>}
    */
@@ -94,11 +94,12 @@ suite('Number Fields', function() {
           validValueTestCases, invalidValueTestCases, defaultFieldValue);
     });
     suite('Value -> New Value', function() {
+      const initialValue = 1;
       setup(function() {
-        this.field = new Blockly.FieldNumber(1);
+        this.field = new Blockly.FieldNumber(initialValue);
       });
       testHelpers.runSetValueTests(
-          validValueTestCases, invalidValueTestCases, 1);
+          validValueTestCases, invalidValueTestCases, initialValue);
     });
     suite('Constraints', function() {
       const testCases = [

@@ -82,11 +82,12 @@ suite('Angle Fields', function() {
       });
     });
     suite('Value -> New Value', function () {
+      const initialValue = 1;
       setup(function () {
-        this.field = new Blockly.FieldAngle(1);
+        this.field = new Blockly.FieldAngle(initialValue);
       });
       testHelpers.runSetValueTests(
-          validValueTestCases, invalidValueTestCases, 1);
+          validValueTestCases, invalidValueTestCases, initialValue);
       test('With source block', function() {
         this.field.setSourceBlock(createTestBlock());
         this.field.setValue(2.5);

@@ -4,23 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-suite.only('Number Fields', function() {
-  function assertNumberField(numberField, expectedMin, expectedMax,
-      expectedPrecision, expectedValue) {
-    testHelpers.assertFieldValue(numberField, expectedValue);
-    chai.assert.equal(numberField.getMin(), expectedMin, 'Min');
-    chai.assert.equal(numberField.getMax(), expectedMax, 'Max');
-    chai.assert.equal(
-        numberField.getPrecision(), expectedPrecision, 'Precision');
-  }
-  function assertNumberFieldDefault(numberField) {
-    assertNumberField(numberField, -Infinity, Infinity, 0, 0);
-  }
-  function assertNumberFieldSameValues(numberField, value) {
-    assertNumberField(numberField, value, value, value, value);
-  }
-
-  /**
+suite('Number Fields', function() {
+    /**
    * Configuration for field tests with invalid values.
    * @type {!Array<!FieldCreationTestCase>}
    */
@@ -54,21 +39,51 @@ suite.only('Number Fields', function() {
   validValueTestCases.forEach(addArgsAndJson);
 
   /**
+   * The expected default value for the field being tested.
+   * @type {*}
+   */
+  const defaultFieldValue = 0;
+  /**
+   * Asserts that the field property values are as expected.
+   * @param {!Blockly.FieldNumber} field The field to check.
+   * @param {!number} expectedMin The expected min.
+   * @param {!number} expectedMax The expected max.
+   * @param {!number} expectedPrecision The expected precision.
+   * @param {!number} expectedValue The expected value.
+   */
+  function assertNumberField(field, expectedMin, expectedMax,
+      expectedPrecision, expectedValue) {
+    testHelpers.assertFieldValue(field, expectedValue);
+    chai.assert.equal(field.getMin(), expectedMin, 'Min');
+    chai.assert.equal(field.getMax(), expectedMax, 'Max');
+    chai.assert.equal(
+        field.getPrecision(), expectedPrecision, 'Precision');
+  }
+  /**
+   * Asserts that the field property values are set to default.
+   * @param {!Blockly.FieldNumber} field The field to check.
+   */
+  const assertFieldDefault = function(field) {
+    assertNumberField(field, -Infinity, Infinity, 0, defaultFieldValue);
+  };
+  /**
    * Asserts that the field properties are correct based on the test case.
    * @param {!Blockly.FieldNumber} field The field to check.
    * @param {!FieldValueTestCase} testCase The test case.
    */
   const validTestCaseAssertField = function(field, testCase) {
-    assertNumberFieldSameValues(field, testCase.value);
+    assertNumberField(
+        field, testCase.expectedValue, testCase.expectedValue,
+        testCase.expectedValue, testCase.expectedValue);
   };
 
   testHelpers.runConstructorSuiteTests(
       Blockly.FieldNumber, validValueTestCases, invalidValueTestCases,
-      validTestCaseAssertField, assertNumberFieldDefault);
+      validTestCaseAssertField, assertFieldDefault);
 
   testHelpers.runFromJsonSuiteTests(
       Blockly.FieldNumber, validValueTestCases,invalidValueTestCases,
-      validTestCaseAssertField, assertNumberFieldDefault);
+      validTestCaseAssertField, assertFieldDefault);
 
   suite('setValue', function() {
     suite('Empty -> New Value', function() {
@@ -76,7 +91,7 @@ suite.only('Number Fields', function() {
         this.field = new Blockly.FieldNumber();
       });
       testHelpers.runSetValueTests(
-          validValueTestCases, invalidValueTestCases, 0);
+          validValueTestCases, invalidValueTestCases, defaultFieldValue);
     });
     suite('Value -> New Value', function() {
       setup(function() {
@@ -197,7 +212,7 @@ suite.only('Number Fields', function() {
       });
     });
   });
-  suite.skip('Customizations', function() {
+  suite('Customizations', function() {
     suite('Min', function() {
       test('JS Constructor', function() {
         var field = new Blockly.FieldNumber(0, -10);

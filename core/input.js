@@ -156,7 +156,7 @@ Blockly.Input.prototype.removeField = function(name, opt_quiet) {
   if (opt_quiet) {
     return false;
   } else {
-    throw Error('Field "%s" not found.', name);
+    throw Error('Field "' + name + '" not found.');
   }
 };
 

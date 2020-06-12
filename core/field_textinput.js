@@ -92,7 +92,7 @@ Blockly.utils.object.inherits(Blockly.FieldTextInput, Blockly.Field);
  * @type {*}
  * @protected
  */
-Blockly.FieldTextInput.prototype.DEFAULT_VALUE = 0;
+Blockly.FieldTextInput.prototype.DEFAULT_VALUE = '';
 
 /**
  * Construct a FieldTextInput from a JSON arg object,

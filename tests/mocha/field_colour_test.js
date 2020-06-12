@@ -14,11 +14,10 @@ suite('Colour Fields', function() {
     {title: 'Null', value: null},
     {title: 'NaN', value: NaN},
     {title: 'Non-Parsable String', value: 'bad-string'},
+    {title: 'Integer', value: 1},
+    {title: 'Float', value: 1.5},
     {title: 'Infinity', value: Infinity, expectedValue: Infinity},
     {title: 'Negative Infinity', value: -Infinity, expectedValue: -Infinity},
-    {title: 'Infinity String', value: 'Infinity', expectedValue: Infinity},
-    {title: 'Negative Infinity String', value: '-Infinity',
-      expectedValue: -Infinity},
   ];
   /**
    * Configuration for field tests with valid values.

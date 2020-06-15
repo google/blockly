@@ -74,6 +74,8 @@ Blockly.Xml.variablesToDom = function(variableList) {
     element.appendChild(Blockly.utils.xml.createTextNode(variable.name));
     if (variable.type) {
       element.setAttribute('type', variable.type);
+    } else {
+      element.setAttribute('type', '');
     }
     element.id = variable.getId();
     variables.appendChild(element);

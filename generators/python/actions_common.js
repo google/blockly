@@ -31,9 +31,15 @@ Blockly.Python.fable_speak = function (block) {
     lang = 'en';
   }
 
+  const matchGroups = /(str\()(.*)(\)\s\+\s'\s'\s\+\sstr\()(.*)(\))/gm.exec(text);
+  let croppedText = text;
+  if (matchGroups && matchGroups.length >= 5) {
+    croppedText = matchGroups[2] + matchGroups[4];
+  }
+
   var code = 'api.fableSpeak(str(' + text + '), "' + lang + '")\n';
 
-  if (text.length && text.length > 250) {
+  if (croppedText.length && croppedText.length > 250) {
     // 666 is a special ID in order to support easily removing the warning later, without clearing OTHER warnings on the block
     block.setWarningText(Blockly.Msg.FABLE_FIELD_WRN_TEXT_TOO_LONG, 666);
   } else {
@@ -48,7 +54,13 @@ Blockly.Python.fable_speak_lang = function (block) {
   var lang = block.getFieldValue('LANGUAGE');
   var code = 'api.fableSpeak(str(' + text + '), "' + lang + '")\n';
 
-  if (text.length && text.length > 30) {
+  const matchGroups = /(str\()(.*)(\)\s\+\s'\s'\s\+\sstr\()(.*)(\))/gm.exec(text);
+  let croppedText = text;
+  if (matchGroups && matchGroups.length >= 5) {
+    croppedText = matchGroups[2] + matchGroups[4];
+  }
+
+  if (croppedText.length && croppedText.length > 30) {
     // 666 is a special ID in order to support easily removing the warning later, without clearing OTHER warnings on the block
     block.setWarningText(Blockly.Msg.FABLE_FIELD_WRN_TEXT_TOO_LONG, 666);
   } else {

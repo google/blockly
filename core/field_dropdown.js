@@ -109,6 +109,8 @@ Blockly.FieldDropdown = function(menuGenerator, opt_validator, opt_config) {
    * @private
    */
   this.selectedMenuItem_ = null;
+
+  this.storedSelection = null;
 };
 Blockly.utils.object.inherits(Blockly.FieldDropdown, Blockly.Field);
 
@@ -461,9 +463,9 @@ Blockly.FieldDropdown.prototype.trimMaxLengthOptions_ = function(options) {
  */
 Blockly.FieldDropdown.prototype.getOptions = function(opt_useCache) {
   if (this.isOptionListDynamic()) {
-    if (!this.generatedOptions_ || !opt_useCache) {
+    if (!this.generatedOptions_ || !opt_useCache || this.storedSelection) {
       this.generatedOptions_ = this.menuGenerator_.call(this);
-      Blockly.FieldDropdown.validateOptions_(this.generatedOptions_);
+      Blockly.FieldDropdown.validateOptions_(this.generatedOptions_, this.storedSelection);
     }
     return this.generatedOptions_;
   }
@@ -507,9 +509,13 @@ Blockly.FieldDropdown.prototype.doClassValidation_ = function(opt_newValue) {
         return opt_newValue;
       }
 
+      this.storedSelection = opt_newValue;
+
       console.warn('Cannot set the dropdown\'s value to an unavailable option.' +
           ' Block type: ' + this.sourceBlock_.type + ', Field name: ' + this.name +
           ', Value: ' + opt_newValue);
+
+      return opt_newValue;
     }
     return null;
   }
@@ -735,7 +741,7 @@ Blockly.FieldDropdown.changeRecentModuleColors = function (activeIDsDict, recent
       // Otherwise, un-grey it out.
       if (child.children.length > 0) {
         if (!(listOfActiveModules.includes(innerText)) &&
-            (listOfRecentModules.includes(innerText))) {
+            (innerText !== '#')) {
           child.children[0].className = 'goog-menuitem-content recent-module';
         } else if (child.children[0].className === 'goog-menuitem-content recent-module') {
           child.children[0].className = 'goog-menuitem-content';
@@ -751,7 +757,7 @@ Blockly.FieldDropdown.changeRecentModuleColors = function (activeIDsDict, recent
  * @throws {TypeError} If proposed options are incorrectly structured.
  * @private
  */
-Blockly.FieldDropdown.validateOptions_ = function(options) {
+Blockly.FieldDropdown.validateOptions_ = function(options, storedSelection) {
   if (!Array.isArray(options)) {
     throw TypeError('FieldDropdown options must be an array.');
   }
@@ -759,6 +765,7 @@ Blockly.FieldDropdown.validateOptions_ = function(options) {
     throw TypeError('FieldDropdown options must not be an empty array.');
   }
   var foundError = false;
+  var foundStored = false;
   for (var i = 0; i < options.length; ++i) {
     var tuple = options[i];
     if (typeof tuple == 'string') {	
@@ -793,7 +800,19 @@ Blockly.FieldDropdown.validateOptions_ = function(options) {
           'Invalid option[' + i + ']: Each FieldDropdown option id must be ' +	
           'a string. Found ' + tuple[1] + ' in: ', tuple);	
     }
+
+    if (storedSelection) {
+      if (options[i][0] === storedSelection ||
+          options[i][1] === storedSelection) {
+        foundStored = true;
+      }
+    }
   }
+
+  if (!foundStored && storedSelection) {
+    options.push([storedSelection, storedSelection]);
+  }
+
   if (foundError) {
     throw TypeError('Found invalid FieldDropdown options.');
   }

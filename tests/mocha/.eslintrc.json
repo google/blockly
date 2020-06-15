@@ -15,6 +15,7 @@
         "defineStatementBlock": true,
         "createEventsFireStub": true,
         "testAWorkspace": true,
+        "testHelpers" : true,
         "getSimpleJSON": true,
         "getXmlArray": true,
         "getCategoryJSON": true

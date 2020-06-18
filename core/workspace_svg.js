@@ -222,10 +222,10 @@ Blockly.WorkspaceSvg.prototype.isMutator = false;
 /**
  * Whether this workspace has resizes enabled.
  * Disable during batch operations for a performance improvement.
- * @type {boolean}
+ * @type {number}
  * @private
  */
-Blockly.WorkspaceSvg.prototype.resizesEnabled_ = true;
+Blockly.WorkspaceSvg.prototype.resizesDisabled_ = 0;
 
 /**
  * Current horizontal scrolling offset in pixel units, relative to the
@@ -976,7 +976,7 @@ Blockly.WorkspaceSvg.prototype.updateScreenCalculations_ = function() {
  * @package
  */
 Blockly.WorkspaceSvg.prototype.resizeContents = function() {
-  if (!this.resizesEnabled_ || !this.rendered) {
+  if (this.resizesDisabled_ > 0 || !this.rendered) {
     return;
   }
   if (this.scrollbar) {
@@ -1662,22 +1662,25 @@ Blockly.WorkspaceSvg.prototype.getBlocksBoundingBox = function() {
  */
 Blockly.WorkspaceSvg.prototype.cleanUp = function() {
   this.setResizesEnabled(false);
-  Blockly.Events.setGroup(true);
-  var topBlocks = this.getTopBlocks(true);
-  var cursorY = 0;
-  for (var i = 0, block; (block = topBlocks[i]); i++) {
-    if (!block.isMovable()) {
-      continue;
+  try {
+    Blockly.Events.setGroup(true);
+    var topBlocks = this.getTopBlocks(true);
+    var cursorY = 0;
+    for (var i = 0, block; (block = topBlocks[i]); i++) {
+      if (!block.isMovable()) {
+        continue;
+      }
+      var xy = block.getRelativeToSurfaceXY();
+      block.moveBy(-xy.x, cursorY - xy.y);
+      block.snapToGrid();
+      cursorY = block.getRelativeToSurfaceXY().y +
+          block.getHeightWidth().height +
+          this.renderer_.getConstants().MIN_BLOCK_HEIGHT;
     }
-    var xy = block.getRelativeToSurfaceXY();
-    block.moveBy(-xy.x, cursorY - xy.y);
-    block.snapToGrid();
-    cursorY = block.getRelativeToSurfaceXY().y +
-        block.getHeightWidth().height +
-        this.renderer_.getConstants().MIN_BLOCK_HEIGHT;
+    Blockly.Events.setGroup(false);
+  } finally {
+    this.setResizesEnabled(true);
   }
-  Blockly.Events.setGroup(false);
-  this.setResizesEnabled(true);
 };
 
 /**
@@ -2565,8 +2568,12 @@ Blockly.WorkspaceSvg.prototype.getTopBoundedElements = function() {
  * @param {boolean} enabled Whether resizes should be enabled.
  */
 Blockly.WorkspaceSvg.prototype.setResizesEnabled = function(enabled) {
-  var reenabled = (!this.resizesEnabled_ && enabled);
-  this.resizesEnabled_ = enabled;
+  if (enabled) {
+    this.resizesDisabled_--;
+  } else {
+    this.resizesDisabled_++;
+  }
+  var reenabled = this.resizesDisabled_ <= 0;
   if (reenabled) {
     // Newly enabled.  Trigger a resize.
     this.resizeContents();
@@ -2578,9 +2585,12 @@ Blockly.WorkspaceSvg.prototype.setResizesEnabled = function(enabled) {
  */
 Blockly.WorkspaceSvg.prototype.clear = function() {
   this.setResizesEnabled(false);
-  Blockly.WorkspaceSvg.superClass_.clear.call(this);
-  this.topBoundedElements_ = [];
-  this.setResizesEnabled(true);
+  try {
+    Blockly.WorkspaceSvg.superClass_.clear.call(this);
+    this.topBoundedElements_ = [];
+  } finally {
+    this.setResizesEnabled(true);
+  }
 };
 
 /**

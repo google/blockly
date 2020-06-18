@@ -217,34 +217,37 @@ Blockly.BlockDragger.prototype.dragBlock = function(e, currentDragDeltaXY) {
  * @package
  */
 Blockly.BlockDragger.prototype.endBlockDrag = function(e, currentDragDeltaXY) {
-  // Make sure internal state is fresh.
-  this.dragBlock(e, currentDragDeltaXY);
-  this.dragIconData_ = [];
-  this.fireDragEndEvent_();
+  try {
+    // Make sure internal state is fresh.
+    this.dragBlock(e, currentDragDeltaXY);
+    this.dragIconData_ = [];
+    this.fireDragEndEvent_();
 
-  Blockly.utils.dom.stopTextWidthCache();
+    Blockly.utils.dom.stopTextWidthCache();
 
-  Blockly.blockAnimations.disconnectUiStop();
+    Blockly.blockAnimations.disconnectUiStop();
 
-  var delta = this.pixelsToWorkspaceUnits_(currentDragDeltaXY);
-  var newLoc = Blockly.utils.Coordinate.sum(this.startXY_, delta);
-  this.draggingBlock_.moveOffDragSurface(newLoc);
+    var delta = this.pixelsToWorkspaceUnits_(currentDragDeltaXY);
+    var newLoc = Blockly.utils.Coordinate.sum(this.startXY_, delta);
+    this.draggingBlock_.moveOffDragSurface(newLoc);
 
-  var deleted = this.maybeDeleteBlock_();
-  if (!deleted) {
-    // These are expensive and don't need to be done if we're deleting.
-    this.draggingBlock_.moveConnections(delta.x, delta.y);
-    this.draggingBlock_.setDragging(false);
-    this.fireMoveEvent_();
-    if (this.draggedConnectionManager_.wouldConnectBlock()) {
-      // Applying connections also rerenders the relevant blocks.
-      this.draggedConnectionManager_.applyConnections();
-    } else {
-      this.draggingBlock_.render();
+    var deleted = this.maybeDeleteBlock_();
+    if (!deleted) {
+      // These are expensive and don't need to be done if we're deleting.
+      this.draggingBlock_.moveConnections(delta.x, delta.y);
+      this.draggingBlock_.setDragging(false);
+      this.fireMoveEvent_();
+      if (this.draggedConnectionManager_.wouldConnectBlock()) {
+        // Applying connections also rerenders the relevant blocks.
+        this.draggedConnectionManager_.applyConnections();
+      } else {
+        this.draggingBlock_.render();
+      }
+      this.draggingBlock_.scheduleSnapAndBump();
     }
-    this.draggingBlock_.scheduleSnapAndBump();
+  } finally {
+    this.workspace_.setResizesEnabled(true);
   }
-  this.workspace_.setResizesEnabled(true);
 
   var toolbox = this.workspace_.getToolbox();
   if (toolbox && typeof toolbox.removeStyle == 'function') {

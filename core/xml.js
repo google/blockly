@@ -383,10 +383,13 @@ Blockly.Xml.textToDom = function(text) {
  */
 Blockly.Xml.clearWorkspaceAndLoadFromXml = function(xml, workspace) {
   workspace.setResizesEnabled(false);
-  workspace.clear();
-  var blockIds = Blockly.Xml.domToWorkspace(xml, workspace);
-  workspace.setResizesEnabled(true);
-  return blockIds;
+  try {
+    workspace.clear();
+    var blockIds = Blockly.Xml.domToWorkspace(xml, workspace);
+    return blockIds;
+  } finally {
+    workspace.setResizesEnabled(true);
+  }
 };
 
 /**
@@ -478,11 +481,12 @@ Blockly.Xml.domToWorkspace = function(xml, workspace) {
       Blockly.Events.setGroup(false);
     }
     Blockly.utils.dom.stopTextWidthCache();
+    // Re-enable workspace resizing.
+    if (workspace.setResizesEnabled) {
+      workspace.setResizesEnabled(true);
+    }
   }
-  // Re-enable workspace resizing.
-  if (workspace.setResizesEnabled) {
-    workspace.setResizesEnabled(true);
-  }
+
   Blockly.Events.fire(new Blockly.Events.FinishedLoading(workspace));
   return newBlockIds;
 };

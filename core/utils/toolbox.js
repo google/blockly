@@ -99,8 +99,11 @@ Blockly.utils.toolbox.convertToolboxToJSON = function(toolboxDef) {
   }
   // If it is an array of JSON, then it is already in the correct format.
   if (Array.isArray(toolboxDef) && toolboxDef.length && !(toolboxDef[0].nodeType)) {
-    console.warn('Due to some performance issues, defining a toolbox using JSON is not' +
-        ' ready yet. Please define your toolbox using xml.');
+    if (Blockly.utils.toolbox.hasCategories(toolboxDef)) {
+      // TODO: Remove after #3985 has been looked into.
+      console.warn('Due to some performance issues, defining a toolbox using' +
+          'JSON is not ready yet. Please define your toolbox using xml.');
+    }
     return /** @type {!Array.<Blockly.utils.toolbox.Toolbox>} */ (toolboxDef);
   }
 

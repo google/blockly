@@ -24,7 +24,7 @@ Blockly.PHP['procedures_defreturn'] = function(block) {
   var variables = Blockly.Variables.allUsedVarModels(workspace) || [];
   for (var i = 0, variable; variable = variables[i]; i++) {
     varName = variable.name;
-    if (block.arguments_.indexOf(varName) == -1) {
+    if (block.getVars().indexOf(varName) == -1) {
       globals.push(Blockly.PHP.variableDB_.getName(varName,
           Blockly.VARIABLE_CATEGORY_NAME));
     }
@@ -68,8 +68,9 @@ Blockly.PHP['procedures_defreturn'] = function(block) {
     returnValue = Blockly.PHP.INDENT + 'return ' + returnValue + ';\n';
   }
   var args = [];
-  for (var i = 0; i < block.arguments_.length; i++) {
-    args[i] = Blockly.PHP.variableDB_.getName(block.arguments_[i],
+  var variables = block.getVars();
+  for (var i = 0; i < variables.length; i++) {
+    args[i] = Blockly.PHP.variableDB_.getName(variables[i],
         Blockly.VARIABLE_CATEGORY_NAME);
   }
   var code = 'function ' + funcName + '(' + args.join(', ') + ') {\n' +
@@ -90,7 +91,8 @@ Blockly.PHP['procedures_callreturn'] = function(block) {
   var funcName = Blockly.PHP.variableDB_.getName(
       block.getFieldValue('NAME'), Blockly.PROCEDURE_CATEGORY_NAME);
   var args = [];
-  for (var i = 0; i < block.arguments_.length; i++) {
+  var variables = block.getVars();
+  for (var i = 0; i < variables.length; i++) {
     args[i] = Blockly.PHP.valueToCode(block, 'ARG' + i,
         Blockly.PHP.ORDER_COMMA) || 'null';
   }

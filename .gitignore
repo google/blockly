@@ -7,6 +7,7 @@ build-debug.log
 *.gz
 *.pyc
 *.komodoproject
+*.idea
 /nbproject/private/
 
 tests/compile/main_compressed.js

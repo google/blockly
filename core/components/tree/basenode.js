@@ -114,7 +114,7 @@ Blockly.utils.object.inherits(Blockly.tree.BaseNode, Blockly.Component);
  *            cssExpandedFolderIcon:string,
  *            cssCollapsedFolderIcon:string,
  *            cssFileIcon:string,
- *            cssSelectedRow:string,
+ *            cssSelectedRow:string
  *          }}
  */
 Blockly.tree.BaseNode.Config;

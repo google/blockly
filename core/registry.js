@@ -42,7 +42,10 @@ Blockly.registry.DEFAULT = 'default';
  * @template T
  */
 Blockly.registry.Type = function(name) {
-  /** @private {string} */
+  /**
+   * @type {string}
+   * @private
+   */
   this.name_ = name;
 };
 

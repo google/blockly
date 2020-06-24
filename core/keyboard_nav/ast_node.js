@@ -67,7 +67,7 @@ Blockly.ASTNode = function(type, location, opt_params) {
 
 /**
  * @typedef {{
- *     wsCoordinate: Blockly.utils.Coordinate,
+ *     wsCoordinate: Blockly.utils.Coordinate
  * }}
  */
 Blockly.ASTNode.Params;

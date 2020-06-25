@@ -532,7 +532,7 @@ Blockly.Flyout.prototype.createFlyoutInfo_ = function(parsedContent) {
   this.permanentlyDisabled_.length = 0;
   var defaultGap = this.horizontalLayout ? this.GAP_X : this.GAP_Y;
   for (var i = 0, contentInfo; (contentInfo = parsedContent[i]); i++) {
-    switch (contentInfo.kind.toUpperCase()) {
+    switch (contentInfo['kind'].toUpperCase()) {
       case 'BLOCK':
         var blockInfo = /** @type {Blockly.utils.toolbox.Block} */ (contentInfo);
         var blockXml = this.getBlockXml_(blockInfo);

@@ -275,7 +275,7 @@ Blockly.Toolbox.prototype.createTree_ = function(toolboxDef, treeOut) {
   }
 
   for (var i = 0, childIn; (childIn = toolboxDef[i]); i++) {
-    switch (childIn.kind.toUpperCase()) {
+    switch (childIn['kind'].toUpperCase()) {
       case 'CATEGORY':
         var categoryInfo = /** @type {Blockly.utils.toolbox.Category} */ (childIn);
         openNode = this.addCategory_(categoryInfo, treeOut) || openNode;
@@ -324,7 +324,7 @@ Blockly.Toolbox.prototype.addCategory_ = function(categoryInfo, treeOut) {
     // Variables and procedures are special dynamic categories.
     childOut.contents = custom;
   } else {
-    openNode = this.createTree_(categoryInfo.contents, childOut) || openNode;
+    openNode = this.createTree_(categoryInfo['contents'], childOut) || openNode;
   }
   this.setColourOrStyle_(categoryInfo, childOut, categoryName);
   openNode = this.setExpanded_(categoryInfo, childOut) || openNode;
@@ -369,7 +369,7 @@ Blockly.Toolbox.prototype.setColourOrStyle_ = function(
  */
 Blockly.Toolbox.prototype.addSeparator_ = function(
     separatorInfo, treeOut, lastElement) {
-  if (lastElement && lastElement.kind.toUpperCase() == 'CATEGORY') {
+  if (lastElement && lastElement['kind'].toUpperCase() == 'CATEGORY') {
     // Separator between two categories.
     // <sep></sep>
     treeOut.add(new Blockly.Toolbox.TreeSeparator(

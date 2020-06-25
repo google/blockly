@@ -168,9 +168,9 @@ Blockly.Options = function(options) {
   /**
    * The SVG element for the grid pattern.
    * Created during injection.
-   * @type {!SVGElement}
+   * @type {SVGElement}
    */
-  this.gridPattern = undefined;
+  this.gridPattern = null;
 
   /**
    * The parent of the current workspace, or null if there is no parent

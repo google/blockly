@@ -1,19 +1,20 @@
 {
 	"@metadata": {
 		"authors": [
-			"Shirayuki",
-			"Oda",
-			"아라",
-			"Otokoume",
-			"Sujiniku",
-			"Sgk",
-			"TAKAHASHI Shuuji",
-			"Suiato",
-			"ネイ",
 			"Aefgh39622",
-			"Omotecho",
 			"Gimite",
-			"Gulpin"
+			"Gulpin",
+			"Kebhr",
+			"Oda",
+			"Omotecho",
+			"Otokoume",
+			"Sgk",
+			"Shirayuki",
+			"Suiato",
+			"Sujiniku",
+			"TAKAHASHI Shuuji",
+			"ネイ",
+			"아라"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "項目",
@@ -330,7 +331,7 @@
 	"LISTS_GET_SUBLIST_END_FROM_END": "終了位置：後ろから",
 	"LISTS_GET_SUBLIST_END_LAST": "最後まで",
 	"LISTS_GET_SUBLIST_TAIL": "",
-	"LISTS_GET_SUBLIST_TOOLTIP": "リストの指定された部分のコピーを作成してくださ。",
+	"LISTS_GET_SUBLIST_TOOLTIP": "リストの指定された部分のコピーを作成します。",
 	"LISTS_SORT_HELPURL": "https://github.com/google/blockly/wiki/Lists#sorting-a-list",
 	"LISTS_SORT_TITLE": "%1 ( %2 ) に %3 を並び替える",
 	"LISTS_SORT_TOOLTIP": "リストのコピーを並べ替え",

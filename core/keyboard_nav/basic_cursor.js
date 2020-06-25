@@ -71,7 +71,7 @@ Blockly.BasicCursor.prototype.prev = function() {
     return null;
   }
   var newNode = this.getPreviousNode_(curNode, this.validNode_);
-  
+
   if (newNode) {
     this.setCurNode(newNode);
   }

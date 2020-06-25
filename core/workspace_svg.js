@@ -24,20 +24,25 @@ goog.require('Blockly.MarkerManager');
 goog.require('Blockly.Msg');
 goog.require('Blockly.navigation');
 goog.require('Blockly.Options');
+goog.require('Blockly.registry');
 goog.require('Blockly.ThemeManager');
 goog.require('Blockly.Themes.Classic');
 goog.require('Blockly.TouchGesture');
 goog.require('Blockly.utils');
 goog.require('Blockly.utils.Coordinate');
 goog.require('Blockly.utils.dom');
+goog.require('Blockly.utils.Metrics');
 goog.require('Blockly.utils.object');
 goog.require('Blockly.utils.Rect');
+goog.require('Blockly.utils.toolbox');
 goog.require('Blockly.Workspace');
 goog.require('Blockly.WorkspaceAudio');
 goog.require('Blockly.WorkspaceDragSurfaceSvg');
 goog.require('Blockly.Xml');
 
 goog.requireType('Blockly.blockRendering.Renderer');
+goog.requireType('Blockly.IASTNodeLocationSvg');
+goog.requireType('Blockly.IBoundedElement');
 
 
 /**
@@ -49,15 +54,16 @@ goog.requireType('Blockly.blockRendering.Renderer');
  * @param {Blockly.WorkspaceDragSurfaceSvg=} opt_wsDragSurface Drag surface for
  *     the workspace.
  * @extends {Blockly.Workspace}
+ * @implements {Blockly.IASTNodeLocationSvg}
  * @constructor
  */
 Blockly.WorkspaceSvg = function(options,
     opt_blockDragSurface, opt_wsDragSurface) {
   Blockly.WorkspaceSvg.superClass_.constructor.call(this, options);
-  /** @type {function():!Object} */
+  /** @type {function():!Blockly.utils.Metrics} */
   this.getMetrics =
       options.getMetrics || Blockly.WorkspaceSvg.getTopLevelWorkspaceMetrics_;
-  /** @type {function(!Object):void} */
+  /** @type {function(!{x:number, y:number}):void} */
   this.setMetrics =
       options.setMetrics || Blockly.WorkspaceSvg.setTopLevelWorkspaceMetrics_;
 
@@ -96,7 +102,7 @@ Blockly.WorkspaceSvg = function(options,
    * @private
    */
   this.grid_ = this.options.gridPattern ?
-      new Blockly.Grid(options.gridPattern, options.gridOptions) : null;
+      new Blockly.Grid(this.options.gridPattern, options.gridOptions) : null;
 
   /**
    * Manager in charge of markers and cursors.
@@ -166,6 +172,13 @@ Blockly.WorkspaceSvg = function(options,
    * @type {boolean}
    */
   this.keyboardAccessibilityMode = false;
+
+  /**
+   * The list of top-level bounded elements on the workspace.
+   * @type {!Array.<!Blockly.IBoundedElement>}
+   * @private
+   */
+  this.topBoundedElements_ = [];
 };
 Blockly.utils.object.inherits(Blockly.WorkspaceSvg, Blockly.Workspace);
 
@@ -329,7 +342,7 @@ Blockly.WorkspaceSvg.prototype.flyout_ = null;
 /**
  * Category-based toolbox providing blocks which may be dragged into this
  * workspace.
- * @type {Blockly.Toolbox}
+ * @type {Blockly.IToolbox}
  * @private
  */
 Blockly.WorkspaceSvg.prototype.toolbox_ = null;
@@ -529,7 +542,7 @@ Blockly.WorkspaceSvg.prototype.refreshTheme = function() {
   // Update current toolbox selection.
   this.refreshToolboxSelection();
   if (this.toolbox_) {
-    this.toolbox_.updateColourFromTheme();
+    this.toolbox_.refreshTheme();
   }
 
   // Re-render if workspace is visible
@@ -737,7 +750,9 @@ Blockly.WorkspaceSvg.prototype.createDom = function(opt_backgroundClass) {
     if (!Blockly.Toolbox) {
       throw Error('Missing require for Blockly.Toolbox');
     }
-    this.toolbox_ = new Blockly.Toolbox(this);
+    var ToolboxClass = Blockly.registry.getClassFromOptions(
+        Blockly.registry.Type.TOOLBOX, this.options);
+    this.toolbox_ = new ToolboxClass(this);
   }
   if (this.grid_) {
     this.grid_.update(this.scale);
@@ -802,6 +817,14 @@ Blockly.WorkspaceSvg.prototype.dispose = function() {
 
   this.renderer_.dispose();
 
+  if (this.markerManager_) {
+    this.markerManager_.dispose();
+    this.markerManager_ = null;
+  }
+
+  Blockly.WorkspaceSvg.superClass_.dispose.call(this);
+
+  // Dispose of theme manager after all blocks and mutators are disposed of.
   if (this.themeManager_) {
     this.themeManager_.unsubscribeWorkspace(this);
     this.themeManager_.unsubscribe(this.svgBackground_);
@@ -810,13 +833,6 @@ Blockly.WorkspaceSvg.prototype.dispose = function() {
       this.themeManager_ = null;
     }
   }
-
-  if (this.markerManager_) {
-    this.markerManager_.dispose();
-    this.markerManager_ = null;
-  }
-
-  Blockly.WorkspaceSvg.superClass_.dispose.call(this);
 
   this.connectionDBList = null;
 
@@ -936,7 +952,7 @@ Blockly.WorkspaceSvg.prototype.getFlyout = function(opt_own) {
 
 /**
  * Getter for the toolbox associated with this workspace, if one exists.
- * @return {Blockly.Toolbox} The toolbox on this workspace.
+ * @return {Blockly.IToolbox} The toolbox on this workspace.
  * @package
  */
 Blockly.WorkspaceSvg.prototype.getToolbox = function() {
@@ -1175,7 +1191,7 @@ Blockly.WorkspaceSvg.prototype.setVisible = function(isVisible) {
   this.getParentSvg().style.display = isVisible ? 'block' : 'none';
   if (this.toolbox_) {
     // Currently does not support toolboxes in mutators.
-    this.toolbox_.HtmlDiv.style.display = isVisible ? 'block' : 'none';
+    this.toolbox_.setVisible(isVisible);
   }
   if (isVisible) {
     var blocks = this.getAllBlocks(false);
@@ -1289,8 +1305,9 @@ Blockly.WorkspaceSvg.prototype.pasteBlock_ = function(xmlBlock) {
     if (this.keyboardAccessibilityMode && markedNode &&
         markedNode.isConnection()) {
       var markedLocation =
-        /** @type {!Blockly.Connection} */ (markedNode.getLocation());
-      Blockly.navigation.insertBlock(block, markedLocation);
+        /** @type {!Blockly.RenderedConnection} */ (markedNode.getLocation());
+      Blockly.navigation.insertBlock(/** @type {!Blockly.BlockSvg} */ (block),
+          markedLocation);
       return;
     }
 
@@ -1442,7 +1459,7 @@ Blockly.WorkspaceSvg.prototype.recordDeleteAreas = function() {
   }
   if (this.flyout_) {
     this.deleteAreaToolbox_ = this.flyout_.getClientRect();
-  } else if (this.toolbox_) {
+  } else if (this.toolbox_ && typeof this.toolbox_.getClientRect == 'function') {
     this.deleteAreaToolbox_ = this.toolbox_.getClientRect();
   } else {
     this.deleteAreaToolbox_ = null;
@@ -1612,9 +1629,7 @@ Blockly.WorkspaceSvg.prototype.onMouseWheel_ = function(e) {
  *   bounding box containing the blocks on the workspace.
  */
 Blockly.WorkspaceSvg.prototype.getBlocksBoundingBox = function() {
-  var topBlocks = this.getTopBlocks(false);
-  var topComments = this.getTopComments(false);
-  var topElements = topBlocks.concat(topComments);
+  var topElements = this.getTopBoundedElements();
   // There are no blocks, return empty rectangle.
   if (!topElements.length) {
     return new Blockly.utils.Rect(0, 0, 0, 0);
@@ -1815,11 +1830,16 @@ Blockly.WorkspaceSvg.prototype.showContextMenu = function(e) {
 
 /**
  * Modify the block tree on the existing toolbox.
- * @param {Node|string} tree DOM tree of blocks, or text representation of same.
+ * @param {Blockly.utils.toolbox.ToolboxDefinition|string} toolboxDef
+ *    DOM tree of toolbox contents, string of toolbox contents, or array of JSON
+ *    representing toolbox contents.
  */
-Blockly.WorkspaceSvg.prototype.updateToolbox = function(tree) {
-  tree = Blockly.Options.parseToolboxTree(tree);
-  if (!tree) {
+Blockly.WorkspaceSvg.prototype.updateToolbox = function(toolboxDef) {
+  if (!Array.isArray(toolboxDef)) {
+    toolboxDef = Blockly.Options.parseToolboxTree(toolboxDef);
+  }
+  toolboxDef = Blockly.utils.toolbox.convertToolboxToJSON(toolboxDef);
+  if (!toolboxDef) {
     if (this.options.languageTree) {
       throw Error('Can\'t nullify an existing toolbox.');
     }
@@ -1828,18 +1848,18 @@ Blockly.WorkspaceSvg.prototype.updateToolbox = function(tree) {
   if (!this.options.languageTree) {
     throw Error('Existing toolbox is null.  Can\'t create new toolbox.');
   }
-  if (tree.getElementsByTagName('category').length) {
+  if (Blockly.utils.toolbox.hasCategories(toolboxDef)) {
     if (!this.toolbox_) {
       throw Error('Existing toolbox has no categories.  Can\'t change mode.');
     }
-    this.options.languageTree = tree;
-    this.toolbox_.renderTree(tree);
+    this.options.languageTree = toolboxDef;
+    this.toolbox_.render(toolboxDef);
   } else {
     if (!this.flyout_) {
       throw Error('Existing toolbox has categories.  Can\'t change mode.');
     }
-    this.options.languageTree = tree;
-    this.flyout_.show(tree.childNodes);
+    this.options.languageTree = toolboxDef;
+    this.flyout_.show(toolboxDef);
   }
 };
 
@@ -1952,8 +1972,8 @@ Blockly.WorkspaceSvg.prototype.zoomCenter = function(type) {
     // when the size of the flyout increases) you need the center of the
     // *blockly div* to stay in the same pixel-position.
     // Note: This only works because of how scrollCenter positions blocks.
-    var x = metrics.svgWidth / 2;
-    var y = metrics.svgHeight / 2;
+    var x = metrics.svgWidth ? metrics.svgWidth / 2 : 0;
+    var y = metrics.svgHeight ? metrics.svgHeight / 2 : 0;
   } else {
     var x = (metrics.viewWidth / 2) + metrics.absoluteLeft;
     var y = (metrics.viewHeight / 2) + metrics.absoluteTop;
@@ -2202,11 +2222,10 @@ Blockly.WorkspaceSvg.prototype.scroll = function(x, y) {
     // the content's top-left to the view's top-left, matching the
     // directionality of the scrollbars.
 
-    // TODO (#2299): Change these to not use the internal ratio_ property.
     this.scrollbar.hScroll.setHandlePosition(-(x + metrics.contentLeft) *
-        this.scrollbar.hScroll.ratio_);
+        this.scrollbar.hScroll.ratio);
     this.scrollbar.vScroll.setHandlePosition(-(y + metrics.contentTop) *
-        this.scrollbar.vScroll.ratio_);
+        this.scrollbar.vScroll.ratio);
   }
   // We have to shift the translation so that when the canvas is at 0, 0 the
   // workspace origin is not underneath the toolbox.
@@ -2217,11 +2236,11 @@ Blockly.WorkspaceSvg.prototype.scroll = function(x, y) {
 
 /**
  * Get the dimensions of the given workspace component, in pixels.
- * @param {Blockly.Toolbox|Blockly.Flyout} elem The element to get the
+ * @param {Blockly.IToolbox|Blockly.Flyout} elem The element to get the
  *     dimensions of, or null.  It should be a toolbox or flyout, and should
  *     implement getWidth() and getHeight().
- * @return {!Object} An object containing width and height attributes, which
- *     will both be zero if elem did not exist.
+ * @return {!Blockly.utils.Size} An object containing width and height
+ *     attributes, which will both be zero if elem did not exist.
  * @private
  */
 Blockly.WorkspaceSvg.getDimensionsPx_ = function(elem) {
@@ -2231,10 +2250,7 @@ Blockly.WorkspaceSvg.getDimensionsPx_ = function(elem) {
     width = elem.getWidth();
     height = elem.getHeight();
   }
-  return {
-    width: width,
-    height: height
-  };
+  return new Blockly.utils.Size(width, height);
 };
 
 /**
@@ -2355,8 +2371,8 @@ Blockly.WorkspaceSvg.getContentDimensionsBounded_ = function(ws, svgSize) {
  * .flyoutHeight: Height of the flyout if it is always open.  Otherwise zero.
  * .toolboxPosition: Top, bottom, left or right. Use TOOLBOX_AT constants to
  *     compare.
- * @return {!Object} Contains size and position metrics of a top level
- *   workspace.
+ * @return {!Blockly.utils.Metrics} Contains size and position metrics of a top
+ *     level workspace.
  * @private
  * @this {Blockly.WorkspaceSvg}
  */
@@ -2426,11 +2442,10 @@ Blockly.WorkspaceSvg.getTopLevelWorkspaceMetrics_ = function() {
 
     toolboxWidth: toolboxDimensions.width,
     toolboxHeight: toolboxDimensions.height,
+    toolboxPosition: this.toolboxPosition,
 
     flyoutWidth: flyoutDimensions.width,
-    flyoutHeight: flyoutDimensions.height,
-
-    toolboxPosition: this.toolboxPosition
+    flyoutHeight: flyoutDimensions.height
   };
   return metrics;
 };
@@ -2481,6 +2496,68 @@ Blockly.WorkspaceSvg.prototype.getTopBlocks = function(ordered) {
 };
 
 /**
+ * Adds a block to the list of top blocks.
+ * @param {!Blockly.Block} block Block to add.
+ */
+Blockly.WorkspaceSvg.prototype.addTopBlock = function(block) {
+  this.addTopBoundedElement(/** @type {!Blockly.BlockSvg} */ (block));
+  Blockly.WorkspaceSvg.superClass_.addTopBlock.call(this, block);
+};
+
+/**
+ * Removes a block from the list of top blocks.
+ * @param {!Blockly.Block} block Block to remove.
+ */
+Blockly.WorkspaceSvg.prototype.removeTopBlock = function(block) {
+  this.removeTopBoundedElement(/** @type {!Blockly.BlockSvg} */ (block));
+  Blockly.WorkspaceSvg.superClass_.removeTopBlock.call(this, block);
+};
+
+/**
+ * Adds a comment to the list of top comments.
+ * @param {!Blockly.WorkspaceComment} comment comment to add.
+ */
+Blockly.WorkspaceSvg.prototype.addTopComment = function(comment) {
+  this.addTopBoundedElement(
+      /** @type {!Blockly.WorkspaceCommentSvg} */ (comment));
+  Blockly.WorkspaceSvg.superClass_.addTopComment.call(this, comment);
+};
+
+/**
+ * Removes a comment from the list of top comments.
+ * @param {!Blockly.WorkspaceComment} comment comment to remove.
+ */
+Blockly.WorkspaceSvg.prototype.removeTopComment = function(comment) {
+  this.removeTopBoundedElement(
+      /** @type {!Blockly.WorkspaceCommentSvg} */ (comment));
+  Blockly.WorkspaceSvg.superClass_.removeTopComment.call(this, comment);
+};
+
+/**
+ * Adds a bounded element to the list of top bounded elements.
+ * @param {!Blockly.IBoundedElement} element Bounded element to add.
+ */
+Blockly.WorkspaceSvg.prototype.addTopBoundedElement = function(element) {
+  this.topBoundedElements_.push(element);
+};
+
+/**
+ * Removes a bounded element from the list of top bounded elements.
+ * @param {!Blockly.IBoundedElement} element Bounded element to remove.
+ */
+Blockly.WorkspaceSvg.prototype.removeTopBoundedElement = function(element) {
+  Blockly.utils.arrayRemove(this.topBoundedElements_, element);
+};
+
+/**
+ * Finds the top-level bounded elements and returns them.
+ * @return {!Array.<!Blockly.IBoundedElement>} The top-level bounded elements.
+ */
+Blockly.WorkspaceSvg.prototype.getTopBoundedElements = function() {
+  return [].concat(this.topBoundedElements_);
+};
+
+/**
  * Update whether this workspace has resizes enabled.
  * If enabled, workspace will resize when appropriate.
  * If disabled, workspace will not resize until re-enabled.
@@ -2502,6 +2579,7 @@ Blockly.WorkspaceSvg.prototype.setResizesEnabled = function(enabled) {
 Blockly.WorkspaceSvg.prototype.clear = function() {
   this.setResizesEnabled(false);
   Blockly.WorkspaceSvg.superClass_.clear.call(this);
+  this.topBoundedElements_ = [];
   this.setResizesEnabled(true);
 };
 

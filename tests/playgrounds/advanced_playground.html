@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Advanced Blockly Playground</title>
+<script src="../../blockly_uncompressed.js"></script>
+<script src="../../generators/javascript.js"></script>
+<script src="../../generators/javascript/logic.js"></script>
+<script src="../../generators/javascript/loops.js"></script>
+<script src="../../generators/javascript/math.js"></script>
+<script src="../../generators/javascript/text.js"></script>
+<script src="../../generators/javascript/lists.js"></script>
+<script src="../../generators/javascript/colour.js"></script>
+<script src="../../generators/javascript/variables.js"></script>
+<script src="../../generators/javascript/variables_dynamic.js"></script>
+<script src="../../generators/javascript/procedures.js"></script>
+<script src="../../generators/python.js"></script>
+<script src="../../generators/python/logic.js"></script>
+<script src="../../generators/python/loops.js"></script>
+<script src="../../generators/python/math.js"></script>
+<script src="../../generators/python/text.js"></script>
+<script src="../../generators/python/lists.js"></script>
+<script src="../../generators/python/colour.js"></script>
+<script src="../../generators/python/variables.js"></script>
+<script src="../../generators/python/variables_dynamic.js"></script>
+<script src="../../generators/python/procedures.js"></script>
+<script src="../../generators/php.js"></script>
+<script src="../../generators/php/logic.js"></script>
+<script src="../../generators/php/loops.js"></script>
+<script src="../../generators/php/math.js"></script>
+<script src="../../generators/php/text.js"></script>
+<script src="../../generators/php/lists.js"></script>
+<script src="../../generators/php/colour.js"></script>
+<script src="../../generators/php/variables.js"></script>
+<script src="../../generators/php/variables_dynamic.js"></script>
+<script src="../../generators/php/procedures.js"></script>
+<script src="../../generators/lua.js"></script>
+<script src="../../generators/lua/logic.js"></script>
+<script src="../../generators/lua/loops.js"></script>
+<script src="../../generators/lua/math.js"></script>
+<script src="../../generators/lua/text.js"></script>
+<script src="../../generators/lua/lists.js"></script>
+<script src="../../generators/lua/colour.js"></script>
+<script src="../../generators/lua/variables.js"></script>
+<script src="../../generators/lua/variables_dynamic.js"></script>
+<script src="../../generators/lua/procedures.js"></script>
+<script src="../../generators/dart.js"></script>
+<script src="../../generators/dart/logic.js"></script>
+<script src="../../generators/dart/loops.js"></script>
+<script src="../../generators/dart/math.js"></script>
+<script src="../../generators/dart/text.js"></script>
+<script src="../../generators/dart/lists.js"></script>
+<script src="../../generators/dart/colour.js"></script>
+<script src="../../generators/dart/variables.js"></script>
+<script src="../../generators/dart/variables_dynamic.js"></script>
+<script src="../../generators/dart/procedures.js"></script>
+<script src="../../msg/messages.js"></script>
+<script src="../../blocks/logic.js"></script>
+<script src="../../blocks/loops.js"></script>
+<script src="../../blocks/math.js"></script>
+<script src="../../blocks/text.js"></script>
+<script src="../../blocks/lists.js"></script>
+<script src="../../blocks/colour.js"></script>
+<script src="../../blocks/variables.js"></script>
+<script src="../../blocks/variables_dynamic.js"></script>
+<script src="../../blocks/procedures.js"></script>
+<script src="../blocks/test_blocks.js"></script>
+<script src="../themes/test_themes.js"></script>
+<script src="./screenshot.js"></script>
+<script src="./test_blocks_toolbox.js"></script>
+<script src="https://unpkg.com/@blockly/dev-tools/dist/index.js"></script>
+<script src="https://unpkg.com/@blockly/theme-modern/dist/index.js"></script>
+
+<script>
+// Custom requires for the playground.
+// Rendering.
+goog.require('Blockly.minimalist.Renderer');
+goog.require('Blockly.Themes.Zelos');
+
+// Other.
+goog.require('Blockly.WorkspaceCommentSvg');
+goog.require('Blockly.WorkspaceCommentSvg.render');
+</script>
+<script>
+'use strict';
+
+function start() {
+  setBackgroundColour();
+  initPlayground();
+}
+
+function createWorkspace(blocklyDiv, options) {
+  var workspace = Blockly.inject(blocklyDiv, options);
+  workspace.configureContextMenu = configureContextMenu.bind(workspace);
+  addToolboxButtonCallbacks(workspace);
+  return workspace;
+}
+
+function configurePlayground(playground) {
+  // Add custom actions.
+  playground.addAction('Random Blocks!', function(ws) {
+    populateRandom(ws, 100);
+  }, 'Stress Test');
+  playground.addAction('Spaghetti!', function(ws) {
+    spaghetti(ws, 8);
+  }, 'Stress Test');
+  playground.addCheckboxAction('Log Events', function(ws, value) {
+    if (value) {
+      ws.addChangeListener(logger);
+    } else {
+      ws.removeChangeListener(logger);
+    }
+  }, 'Logging');
+
+  // Rendering options.
+  var gui = playground.getGUI();
+  var renderingFolder = gui.addFolder('Rendering');
+  var renderingOptions = {
+    'font Size': 10,
+  };
+  renderingFolder.add(renderingOptions, 'font Size', 0, 50)
+    .onChange(function(value) {
+      var ws = playground.getWorkspace();
+      var fontStyle = {
+        'size': value
+      };
+      ws.getTheme().setFontStyle(fontStyle);
+      // Refresh theme.
+      ws.setTheme(ws.getTheme());
+    });
+}
+
+function initPlayground() {
+  var defaultOptions = {
+        comments: true,
+        collapse: true,
+        disable: true,
+        grid:
+          {
+            spacing: 25,
+            length: 3,
+            colour: '#ccc',
+            snap: true
+          },
+        horizontalLayout: false,
+        maxBlocks: Infinity,
+        maxInstances: {'test_basic_limit_instances': 3},
+        maxTrashcanContents: 256,
+        media: '../../media/',
+        oneBasedIndex: true,
+        readOnly: false,
+        rtl: false,
+        move: {
+          scrollbars: true,
+          drag: true,
+          wheel: false,
+        },
+        toolbox: toolboxCategories,
+        toolboxPosition: 'start',
+        renderer: 'geras',
+        zoom:
+          {
+            controls: true,
+            wheel: true,
+            startScale: 1.0,
+            maxScale: 4,
+            minScale: 0.25,
+            scaleSpeed: 1.1
+          }
+  };
+
+  const playgroundConfig = {
+    toolboxes: {
+      'categories': toolboxCategories,
+      'simple': toolboxSimple,
+      'test blocks': testBlocksToolbox,
+    }
+  }
+
+  createPlayground(document.getElementById('root'), createWorkspace,
+      defaultOptions, playgroundConfig,
+      'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.19.2/min/vs')
+      .then(function(playground) {
+        configurePlayground(playground);
+      });
+}
+
+function addToolboxButtonCallbacks(workspace) {
+  var addAllBlocksToWorkspace = function(button) {
+    var workspace = button.getTargetWorkspace();
+    var blocks = button.workspace_.getTopBlocks();
+    for(var i = 0, block; block = blocks[i]; i++) {
+      var xml = Blockly.utils.xml.createElement('xml');
+      xml.appendChild(Blockly.Xml.blockToDom(block));
+      Blockly.Xml.appendDomToWorkspace(xml, workspace);
+    }
+  };
+  var randomizeLabelText = function(button) {
+    var blocks = button.targetWorkspace_
+        .getBlocksByType('test_fields_label_serializable');
+    var possible = 'AB';
+    for (var i = 0, block; block = blocks[i]; i++) {
+      var text = '';
+      for (var j = 0; j < 4; j++) {
+        text += possible.charAt(Math.floor(Math.random() * possible.length));
+      }
+      block.setFieldValue(text, 'LABEL');
+    }
+  };
+  var setRandomStyle = function(button) {
+    var blocks = button.workspace_.getAllBlocks(false);
+    var styles =
+        Object.keys(workspace.getRenderer().getConstants().blockStyles);
+    styles.splice(styles.indexOf(blocks[0].getStyleName()), 1);
+    var style = styles[Math.floor(Math.random() * styles.length)];
+    for(var i = 0, block; block = blocks[i]; i++) {
+      block.setStyle(style);
+    }
+  };
+  var toggleEnabled = function(button) {
+    var blocks = button.workspace_.getAllBlocks(false);
+    for(var i = 0, block; block = blocks[i]; i++) {
+      block.setEnabled(!block.isEnabled());
+    }
+  };
+  var toggleShadow = function(button) {
+    var blocks = button.workspace_.getAllBlocks(false);
+    for(var i = 0, block; block = blocks[i]; i++) {
+      block.setShadow(!block.isShadow());
+    }
+  };
+  var toggleCollapsed = function(button) {
+    var blocks = button.workspace_.getAllBlocks(false);
+    for(var i = 0, block; block = blocks[i]; i++) {
+      block.setCollapsed(!block.isCollapsed());
+    }
+  };
+  var setInput = function(button) {
+    Blockly.prompt('Input text to set.', 'ab', function(input) {
+      var blocks = button.getTargetWorkspace().getAllBlocks(false);
+      for(var i = 0, block; block = blocks[i]; i++) {
+        if (block.getField('INPUT')) {
+          block.setFieldValue(input, 'INPUT');
+        }
+      }
+    })
+  };
+  var changeImage = function(button) {
+    var blocks = button.workspace_.getBlocksByType('test_fields_image');
+    var possible = 'abcdefghijklm';
+    var image = possible.charAt(Math.floor(Math.random() * possible.length));
+    var src = 'https://blockly-demo.appspot.com/static/tests/media/'
+      + image + '.png';
+    for (var i = 0, block; block = blocks[i]; i++) {
+      var imageField = block.getField('IMAGE');
+      imageField.setValue(src);
+    }
+  };
+  var addVariables = function(button) {
+    workspace.createVariable('1b', '', '1B');
+    workspace.createVariable('1c', '', '1C');
+    workspace.createVariable('2a', '', '2A');
+    workspace.createVariable('2b', '', '2B');
+    workspace.createVariable('2c', '', '2C');
+  };
+
+  workspace.registerButtonCallback(
+      'addVariables', addVariables);
+  workspace.registerButtonCallback(
+      'changeImage', changeImage);
+  workspace.registerButtonCallback(
+      'addAllBlocksToWorkspace', addAllBlocksToWorkspace);
+  workspace.registerButtonCallback(
+      'setInput', setInput);
+  workspace.registerButtonCallback(
+      'setRandomStyle', setRandomStyle);
+  workspace.registerButtonCallback(
+      'toggleEnabled', toggleEnabled);
+  workspace.registerButtonCallback(
+      'toggleShadow', toggleShadow);
+  workspace.registerButtonCallback(
+    'toggleCollapsed', toggleCollapsed);
+  workspace.registerButtonCallback(
+      'randomizeLabelText', randomizeLabelText);
+  workspace.registerButtonCallback(
+      'addDynamicOption', Blockly.TestBlocks.addDynamicDropdownOption);
+  workspace.registerButtonCallback(
+      'removeDynamicOption', Blockly.TestBlocks.removeDynamicDropdownOption);
+  workspace.registerButtonCallback(
+      'insertConnectionRows', Blockly.TestBlocks.insertConnectionRows);
+  workspace.registerButtonCallback(
+      'insertConnectionStacks', Blockly.TestBlocks.insertConnectionStacks);
+  workspace.registerButtonCallback(
+      'insertConnectionStatements',
+          Blockly.TestBlocks.insertConnectionStatements);
+}
+
+function setBackgroundColour() {
+  // Set background colour to differentiate server vs local copy.
+  if (location.protocol == 'file:') {
+    var lilac = '#d6d6ff';
+    document.body.style.backgroundColor = lilac;
+  }
+}
+
+
+function configureContextMenu(menuOptions, e) {
+  var workspace = this;
+  var screenshotOption = {
+    text: 'Download Screenshot',
+    enabled: workspace.getTopBlocks().length,
+    callback: function() {
+      Blockly.downloadScreenshot(workspace);
+    }
+  };
+  menuOptions.push(screenshotOption);
+
+  // Adds a default-sized workspace comment to the workspace.
+  menuOptions.push(Blockly.ContextMenu.workspaceCommentOption(workspace, e));
+}
+
+function logger(e) {
+  console.log(e);
+}
+
+function populateRandom(ws, n) {
+  var names = [];
+  for (var blockName in Blockly.Blocks) {
+    names.push(blockName);
+  }
+
+  for (var i = 0; i < n; i++) {
+    var name = names[Math.floor(Math.random() * names.length)];
+    var block = ws.newBlock(name);
+    block.initSvg();
+    block.getSvgRoot().setAttribute('transform', 'translate(' +
+        Math.round(Math.random() * 450 + 40) + ', ' +
+        Math.round(Math.random() * 600 + 40) + ')');
+    block.render();
+  }
+}
+
+function spaghetti(ws, n) {
+  var xml = spaghettiXml;
+  for(var i = 0; i < n; i++) {
+    xml = xml.replace(/(<(statement|next)( name="DO0")?>)<\//g,
+        '$1' + spaghettiXml + '</');
+  }
+  xml = '<xml xmlns="https://developers.google.com/blockly/xml">' + xml + '</xml>';
+  var dom = Blockly.Xml.textToDom(xml);
+  console.time('Spaghetti domToWorkspace');
+  Blockly.Xml.domToWorkspace(dom, ws);
+  console.timeEnd('Spaghetti domToWorkspace');
+}
+var spaghettiXml = [
+  '  <block type="controls_if">',
+  '    <value name="IF0">',
+  '      <block type="logic_compare">',
+  '        <field name="OP">EQ</field>',
+  '        <value name="A">',
+  '          <block type="math_arithmetic">',
+  '            <field name="OP">MULTIPLY</field>',
+  '            <value name="A">',
+  '              <block type="math_number">',
+  '                <field name="NUM">6</field>',
+  '              </block>',
+  '            </value>',
+  '            <value name="B">',
+  '              <block type="math_number">',
+  '                <field name="NUM">7</field>',
+  '              </block>',
+  '            </value>',
+  '          </block>',
+  '        </value>',
+  '        <value name="B">',
+  '          <block type="math_number">',
+  '            <field name="NUM">42</field>',
+  '          </block>',
+  '        </value>',
+  '      </block>',
+  '    </value>',
+  '    <statement name="DO0"></statement>',
+  '    <next></next>',
+  '  </block>'].join('\n');
+
+</script>
+
+<style>
+  html, body {
+    margin: 0;
+  }
+
+  .ioLabel>.blocklyFlyoutLabelText {
+    font-style: italic;
+  }
+
+  .playgroundToggleOptions {
+    list-style: none;
+    padding: 0;
+  }
+  .playgroundToggleOptions li {
+    margin-top: 1em;
+  }
+
+  .zelos-renderer .blocklyFlyoutButton .blocklyText {
+    font-size: 1.5rem;
+  }
+</style>
+</head>
+<body onload="start()">
+  <div id="root"></div>
+</body>
+</html>

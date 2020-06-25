@@ -807,6 +807,14 @@ Blockly.Blocks['procedures_callnoreturn'] = {
   },
   /**
    * Return all variables referenced by this block.
+   * @return {!Array.<string>} List of variable names.
+   * @this {Blockly.Block}
+   */
+  getVars: function() {
+    return this.arguments_;
+  },
+  /**
+   * Return all variables referenced by this block.
    * @return {!Array.<!Blockly.VariableModel>} List of variable models.
    * @this {Blockly.Block}
    */
@@ -836,7 +844,7 @@ Blockly.Blocks['procedures_callnoreturn'] = {
       var name = this.getProcedureCall();
       var def = Blockly.Procedures.getDefinition(name, this.workspace);
       if (def && (def.type != this.defType_ ||
-          JSON.stringify(def.arguments_) != JSON.stringify(this.arguments_))) {
+          JSON.stringify(def.getVars()) != JSON.stringify(this.arguments_))) {
         // The signatures don't match.
         def = null;
       }
@@ -959,6 +967,7 @@ Blockly.Blocks['procedures_callreturn'] = {
   updateShape_: Blockly.Blocks['procedures_callnoreturn'].updateShape_,
   mutationToDom: Blockly.Blocks['procedures_callnoreturn'].mutationToDom,
   domToMutation: Blockly.Blocks['procedures_callnoreturn'].domToMutation,
+  getVars: Blockly.Blocks['procedures_callnoreturn'].getVars,
   getVarModels: Blockly.Blocks['procedures_callnoreturn'].getVarModels,
   onchange: Blockly.Blocks['procedures_callnoreturn'].onchange,
   customContextMenu:

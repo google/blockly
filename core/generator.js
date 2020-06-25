@@ -172,6 +172,10 @@ Blockly.Generator.prototype.blockToCode = function(block, opt_thisOnly) {
     // Skip past this block if it is disabled.
     return opt_thisOnly ? '' : this.blockToCode(block.getNextBlock());
   }
+  if (block.isInsertionMarker()) {
+    // Skip past insertion markers.
+    return opt_thisOnly ? '' : this.blockToCode(block.getChildren(false)[0]);
+  }
 
   var func = this[block.type];
   if (typeof func != 'function') {

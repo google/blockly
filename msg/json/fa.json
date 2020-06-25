@@ -1,19 +1,22 @@
 {
 	"@metadata": {
 		"authors": [
-			"Ebraminio",
-			"Reza1615",
 			"Alirezaaa",
+			"Arash.pt",
+			"AzorAhai",
+			"Dalba",
+			"Ebraminio",
+			"Hamisun",
+			"Hossein.safavi",
 			"Mehran",
 			"MohandesWiki",
-			"Dalba",
-			"Hamisun",
 			"Nhzandi",
-			"Arash.pt",
-			"Hossein.safavi"
+			"Reza1615",
+			"Sunfyre"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "مورد",
+	"UNNAMED_KEY": "بدون نام",
 	"TODAY": "امروز",
 	"DUPLICATE_BLOCK": "تکراری",
 	"ADD_COMMENT": "افزودن نظر",

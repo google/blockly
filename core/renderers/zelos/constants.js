@@ -69,7 +69,7 @@ Blockly.zelos.ConstantProvider = function() {
    * @override
    */
   this.NOTCH_OFFSET_LEFT = 3 * this.GRID_UNIT;
-  
+
   /**
    * @override
    */
@@ -259,7 +259,7 @@ Blockly.zelos.ConstantProvider = function() {
    * @override
    */
   this.FIELD_BORDER_RECT_X_PADDING = 2 * this.GRID_UNIT;
-  
+
   /**
    * @override
    */
@@ -905,13 +905,12 @@ Blockly.zelos.ConstantProvider.prototype.getCSS_ = function(selector) {
   return [
     /* eslint-disable indent */
     // Text.
-    selector + ' .blocklyText, ',
+    selector + ' .blocklyText,',
     selector + ' .blocklyFlyoutLabelText {',
-      'font-family: ' + this.FIELD_TEXT_FONTFAMILY + ';',
-      'font-size: ' + this.FIELD_TEXT_FONTSIZE + 'pt;',
-      'font-weight: ' + this.FIELD_TEXT_FONTWEIGHT + ';',
+      'font: ' + this.FIELD_TEXT_FONTWEIGHT + ' ' +
+          this.FIELD_TEXT_FONTSIZE + 'pt ' + this.FIELD_TEXT_FONTFAMILY + ';',
     '}',
-  
+
     // Fields.
     selector + ' .blocklyText {',
       'fill: #fff;',
@@ -926,7 +925,7 @@ Blockly.zelos.ConstantProvider.prototype.getCSS_ = function(selector) {
     selector + ' .blocklyEditableText>g>text {',
       'fill: #575E75;',
     '}',
-  
+
     // Flyout labels.
     selector + ' .blocklyFlyoutLabelText {',
       'fill: #575E75;',
@@ -939,7 +938,7 @@ Blockly.zelos.ConstantProvider.prototype.getCSS_ = function(selector) {
 
     // Editable field hover.
     selector + ' .blocklyDraggable:not(.blocklyDisabled)',
-    ' .blocklyEditableText:not(.editing):hover>rect ,',
+    ' .blocklyEditableText:not(.editing):hover>rect,',
     selector + ' .blocklyDraggable:not(.blocklyDisabled)',
     ' .blocklyEditableText:not(.editing):hover>.blocklyPath {',
       'stroke: #fff;',
@@ -952,7 +951,7 @@ Blockly.zelos.ConstantProvider.prototype.getCSS_ = function(selector) {
       'font-weight: ' + this.FIELD_TEXT_FONTWEIGHT + ';',
       'color: #575E75;',
     '}',
-  
+
     // Dropdown field.
     selector + ' .blocklyDropdownText {',
       'fill: #fff !important;',
@@ -979,7 +978,7 @@ Blockly.zelos.ConstantProvider.prototype.getCSS_ = function(selector) {
     // Insertion marker.
     selector + ' .blocklyInsertionMarker>.blocklyPath {',
       'fill-opacity: ' + this.INSERTION_MARKER_OPACITY + ';',
-      'stroke: none',
+      'stroke: none;',
     '}',
     /* eslint-enable indent */
   ];

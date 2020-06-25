@@ -11,6 +11,10 @@
 'use strict';
 
 suite('Theme', function() {
+  teardown(function() {
+    // Clear all registered themes.
+    Blockly.registry.typeMap_['theme'] = {};
+  });
 
   function defineThemeTestBlocks() {
     Blockly.defineBlocksWithJsonArray([{
@@ -69,7 +73,7 @@ suite('Theme', function() {
   function stringifyAndCompare(val1, val2) {
     var stringVal1 = JSON.stringify(val1);
     var stringVal2 = JSON.stringify(val2);
-    assertEquals(stringVal1, stringVal2);
+    chai.assert.equal(stringVal1, stringVal2);
   }
 
   test('Set All BlockStyles', function() {
@@ -136,12 +140,12 @@ suite('Theme', function() {
     stringifyAndCompare(workspace.getTheme(), blockStyles);
 
     // Checks that the setTheme function was called on the block
-    assertEquals(blockA.getStyleName(), 'styleTwo');
+    chai.assert.equal(blockA.getStyleName(), 'styleTwo');
 
     // check that the toolbox refreshed method was called
-    assertEquals(workspace.refreshToolboxSelection(), 3);
+    chai.assert.equal(workspace.refreshToolboxSelection(), 3);
 
-    assertEquals(Blockly.Events.FIRE_QUEUE_.pop().element, 'theme');
+    chai.assert.equal(Blockly.Events.FIRE_QUEUE_.pop().element, 'theme');
 
     undefineThemeTestBlocks();
 

@@ -658,6 +658,25 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     ]
   },
   {
+    "type": "test_dropdowns_in_mutator",
+    "message0": "dropdown mutator",
+    "mutator": "test_dropdown_mutator"
+  },
+  {
+    "type": "test_dropdowns_in_mutator_block",
+    "message0": "dropdown %1",
+    "args0": [
+      {
+        "type": "field_dropdown",
+        "name": "DROPDOWN",
+        "options": [
+          [ "option", "ONE" ],
+          [ "option", "TWO" ]
+        ]
+      },
+    ]
+  },
+  {
     "type": "test_fields_angle",
     "message0": "angle: %1",
     "args0": [
@@ -669,23 +688,6 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
           {
             "type": "field_label",
             "text": "NO ANGLE FIELD"
-          }
-      }
-    ],
-    "style": "math_blocks",
-  },
-  {
-    "type": "test_fields_date",
-    "message0": "date: %1",
-    "args0": [
-      {
-        "type": "field_date",
-        "name": "FIELDNAME",
-        "date": "2020-02-20",
-        "alt":
-          {
-            "type": "field_label",
-            "text": "NO DATE FIELD"
           }
       }
     ],
@@ -1210,6 +1212,24 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     "style": "text_blocks"
   },
   {
+    "type": "test_mutators_noflyout",
+    "message0": "noflyout mutator",
+    "mutator": "test_noflyout_mutator",
+    "colour": "#000000"
+  },
+  {
+    "type": "test_mutators_noflyout_block",
+    "message0": "colour %1",
+    "args0": [
+      {
+        "type": "field_colour",
+        "name": "COLOUR",
+        "colour": "#ff0000"
+      }
+    ],
+    "style": "colour_blocks"
+  },
+  {
     "type": "test_style_hat",
     "message0": "Hat block (event)",
     "nextStatement": null,
@@ -1340,6 +1360,22 @@ Blockly.Blocks['test_images_clickhandler'] = {
   },
   onClick_: function() {
     alert('Image clicked');
+  }
+};
+
+Blockly.Blocks['test_validators_dispose_block'] = {
+  init: function() {
+    this.appendDummyInput()
+        .appendField("dispose block")
+        .appendField(new Blockly.FieldTextInput("default", this.validate), "INPUT");
+    this.setColour(230);
+    this.setCommentText('Any changes to the text cause the block to be disposed');
+  },
+
+  validate: function(newValue) {
+    if (newValue != "default") {
+      this.getSourceBlock().dispose(true);
+    }
   }
 };
 
@@ -1717,6 +1753,62 @@ Blockly.Blocks['test_basic_empty_with_mutator'] = {
   }
 };
 
+/**
+ * Mutator methods added to the test_mutators_noflyout block.
+ * @mixin
+ * @augments Blockly.Block
+ * @package
+ * @readonly
+ */
+var NO_FLYOUT_MUTATOR = {
+  /**
+   * Create XML to represent the block mutation.
+   * @return {Element} XML storage element.
+   * @this {Blockly.Block}
+   */
+  mutationToDom: function() {
+    var container = Blockly.utils.xml.createElement('mutation');
+    container.setAttribute('colour', this.colour_);
+    this.setColour(this.colour_);
+    return container;
+  },
+  /**
+   * Restore a block from XML.
+   * @param {!Element} xmlElement XML storage element.
+   * @this {Blockly.Block}
+   */
+  domToMutation: function(xmlElement) {
+    this.colour_ = xmlElement.getAttribute('colour');
+  },
+  /**
+   * Populate the mutator's dialog with this block's components.
+   * @param {!Blockly.Workspace} workspace Mutator's workspace.
+   * @return {!Blockly.Block} Root block in mutator.
+   * @this {Blockly.Block}
+   */
+  decompose: function(workspace) {
+    var containerBlock = workspace.newBlock('test_mutators_noflyout_block');
+    containerBlock.getField('COLOUR').setValue(this.colour_);
+    containerBlock.initSvg();
+    return containerBlock;
+  },
+  /**
+   * Reconfigure this block based on the mutator dialog's components.
+   * @param {!Blockly.Block} containerBlock Root block in mutator.
+   * @this {Blockly.Block}
+   */
+  compose: function(containerBlock) {
+    this.colour_ = containerBlock.getFieldValue('COLOUR');
+    this.setColour(this.colour_);
+  },
+};
+
+/**
+ * Register custom mutator used by the test_mutators_noflyout block.
+ */
+Blockly.Extensions.registerMutator('test_noflyout_mutator',
+  NO_FLYOUT_MUTATOR, null, []);
+
 Blockly.Blocks['test_dropdowns_dynamic'] = {
   init: function() {
     var dropdown = new Blockly.FieldDropdown(this.dynamicOptions);
@@ -1735,7 +1827,7 @@ Blockly.Blocks['test_dropdowns_dynamic'] = {
 
 /**
  * An array of options for the dynamic dropdown.
- * @type {!Array<!Array>}
+ * @type {!Array.<!Array>}
  * @private
  */
 Blockly.TestBlocks.dynamicDropdownOptions_ = [];
@@ -1801,6 +1893,57 @@ Blockly.Blocks['test_dropdowns_dynamic_random'] = {
     return options;
   }
 };
+
+/**
+ * Mutator methods added to the test_dropdowns_in_mutator block.
+ * @mixin
+ * @augments Blockly.Block
+ * @package
+ * @readonly
+ */
+var DROPDOWN_MUTATOR = {
+  /**
+   * Create XML to represent the block mutation.
+   * @return {Element} XML storage element.
+   * @this {Blockly.Block}
+   */
+  mutationToDom: function() {
+    var container = Blockly.utils.xml.createElement('mutation');
+    return container;
+  },
+  /**
+   * Restore a block from XML.
+   * @param {!Element} _xmlElement XML storage element.
+   * @this {Blockly.Block}
+   */
+  domToMutation: function(_xmlElement) {
+  },
+  /**
+   * Populate the mutator's dialog with this block's components.
+   * @param {!Blockly.Workspace} workspace Mutator's workspace.
+   * @return {!Blockly.Block} Root block in mutator.
+   * @this {Blockly.Block}
+   */
+  decompose: function(workspace) {
+    var containerBlock = workspace.newBlock('test_dropdowns_in_mutator_block');
+    containerBlock.initSvg();
+    
+    return containerBlock;
+  },
+  /**
+   * Reconfigure this block based on the mutator dialog's components.
+   * @param {!Blockly.Block} _containerBlock Root block in mutator.
+   * @this {Blockly.Block}
+   */
+  compose: function(_containerBlock) {  
+  },
+};
+
+/**
+ * Register custom mutator used by the test_dropdowns_in_mutator block.
+ */
+Blockly.Extensions.registerMutator('test_dropdown_mutator',
+  DROPDOWN_MUTATOR, null, ['test_dropdowns_in_mutator_block']);
 
 /**
  * Handles "insert" button in the connection row test category. This will insert

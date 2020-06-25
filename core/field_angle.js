@@ -71,7 +71,7 @@ Blockly.FieldAngle = function(opt_value, opt_validator, opt_config) {
   this.round_ = Blockly.FieldAngle.ROUND;
 
   Blockly.FieldAngle.superClass_.constructor.call(
-      this, opt_value || 0, opt_validator, opt_config);
+      this, opt_value, opt_validator, opt_config);
 
   /**
    * The angle picker's gauge path depending on the value.
@@ -107,6 +107,14 @@ Blockly.FieldAngle = function(opt_value, opt_validator, opt_config) {
   this.moveSurfaceWrapper_ = null;
 };
 Blockly.utils.object.inherits(Blockly.FieldAngle, Blockly.FieldTextInput);
+
+
+/**
+ * The default value for this field.
+ * @type {*}
+ * @protected
+ */
+Blockly.FieldAngle.prototype.DEFAULT_VALUE = 0;
 
 /**
  * Construct a FieldAngle from a JSON arg object.
@@ -247,7 +255,7 @@ Blockly.FieldAngle.prototype.render_ = function() {
  * Create and show the angle field's editor.
  * @param {Event=} opt_e Optional mouse event that triggered the field to open,
  *     or undefined if triggered programmatically.
- * @private
+ * @protected
  */
 Blockly.FieldAngle.prototype.showEditor_ = function(opt_e) {
   // Mobile browsers have issues with in-line textareas (focus & keyboards).

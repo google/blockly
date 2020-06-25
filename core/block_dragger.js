@@ -162,6 +162,7 @@ Blockly.BlockDragger.prototype.startBlockDrag = function(currentDragDeltaXY,
 
     this.draggingBlock_.translate(newLoc.x, newLoc.y);
     Blockly.blockAnimations.disconnectUiEffect(this.draggingBlock_);
+    this.draggedConnectionManager_.updateAvailableConnections();
   }
   this.draggingBlock_.setDragging(true);
   // For future consideration: we may be able to put moveToDragSurface inside
@@ -170,7 +171,7 @@ Blockly.BlockDragger.prototype.startBlockDrag = function(currentDragDeltaXY,
   this.draggingBlock_.moveToDragSurface();
 
   var toolbox = this.workspace_.getToolbox();
-  if (toolbox) {
+  if (toolbox && typeof toolbox.addStyle == 'function') {
     var style = this.draggingBlock_.isDeletable() ? 'blocklyToolboxDelete' :
         'blocklyToolboxGrab';
     toolbox.addStyle(style);
@@ -220,7 +221,7 @@ Blockly.BlockDragger.prototype.endBlockDrag = function(e, currentDragDeltaXY) {
   this.dragBlock(e, currentDragDeltaXY);
   this.dragIconData_ = [];
   this.fireDragEndEvent_();
-  
+
   Blockly.utils.dom.stopTextWidthCache();
 
   Blockly.blockAnimations.disconnectUiStop();
@@ -246,7 +247,7 @@ Blockly.BlockDragger.prototype.endBlockDrag = function(e, currentDragDeltaXY) {
   this.workspace_.setResizesEnabled(true);
 
   var toolbox = this.workspace_.getToolbox();
-  if (toolbox) {
+  if (toolbox && typeof toolbox.removeStyle == 'function') {
     var style = this.draggingBlock_.isDeletable() ? 'blocklyToolboxDelete' :
         'blocklyToolboxGrab';
     toolbox.removeStyle(style);

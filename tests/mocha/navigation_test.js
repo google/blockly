@@ -367,6 +367,10 @@ suite('Navigation', function() {
         }
       };
     });
+    teardown(function() {
+      delete Blockly.Blocks['basic_block'];
+      this.workspace.dispose();
+    });
     test('Action does not exist', function() {
       var block = this.workspace.getTopBlocks()[0];
       var field = block.inputList[0].fieldRow[0];
@@ -432,7 +436,6 @@ suite('Navigation', function() {
       chai.assert.isTrue(Blockly.navigation.focusWorkspace_.calledOnce);
       chai.assert.isTrue(Blockly.getMainWorkspace().keyboardAccessibilityMode);
       Blockly.navigation.focusWorkspace_.restore();
-      this.workspace.dispose();
     });
 
     suite('Test key press in read only mode', function() {
@@ -630,6 +633,7 @@ suite('Navigation', function() {
     });
 
     teardown(function() {
+      delete Blockly.Blocks['inline_block'];
       delete Blockly.Blocks['basic_block'];
       this.workspace.dispose();
     });
@@ -662,7 +666,7 @@ suite('Navigation', function() {
       Blockly.navigation.connect_(cursorLocation, markedLocation);
 
       chai.assert.equal(this.basicBlock.nextConnection.targetBlock(), this.basicBlock4);
-      chai.assert.equal(this.basicBlock3.nextConnection.targetConnection, null);
+      chai.assert.isNull(this.basicBlock3.nextConnection.targetConnection);
     });
 
     test('Connect cursor with parents', function() {
@@ -680,7 +684,7 @@ suite('Navigation', function() {
 
       Blockly.navigation.connect_(cursorLocation, markedLocation);
 
-      chai.assert.equal(this.inlineBlock2.outputConnection.targetBlock(), null);
+      chai.assert.isNull(this.inlineBlock2.outputConnection.targetBlock());
       chai.assert.equal(this.inlineBlock1.outputConnection.targetBlock(), this.inlineBlock2);
     });
   });

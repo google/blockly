@@ -1,20 +1,20 @@
 {
 	"@metadata": {
 		"authors": [
-			"Fitoschido",
-			"VegaDark",
-			"WeSiToS",
-			"Macofe",
 			"Codynguyen1116",
-			"Indiralena",
-			"Rubentl134",
-			"Martineduardo",
-			"Julián L",
-			"Luisangelrg",
-			"MarcoAurelio",
-			"Ryo567",
+			"Fitoschido",
 			"Harvest",
-			"Ktranz"
+			"Indiralena",
+			"Julián L",
+			"Ktranz",
+			"Luisangelrg",
+			"Macofe",
+			"MarcoAurelio",
+			"Martineduardo",
+			"Rubentl134",
+			"Ryo567",
+			"VegaDark",
+			"WeSiToS"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "elemento",

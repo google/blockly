@@ -92,13 +92,6 @@ Blockly.tree.BaseNode = function(content, config) {
   this.expanded_ = false;
 
   /**
-   * Whether to allow user to collapse this node.
-   * @type {boolean}
-   * @protected
-   */
-  this.isUserCollapsible_ = true;
-
-  /**
    * Nesting depth of this node; cached result of getDepth.
    * -1 if value has not been cached.
    * @type {number}
@@ -174,8 +167,7 @@ Blockly.tree.BaseNode.prototype.initAccessibility = function() {
 
     var ce = this.getChildrenElement();
     if (ce) {
-      Blockly.utils.aria.setRole(ce,
-          Blockly.utils.aria.Role.GROUP);
+      Blockly.utils.aria.setRole(ce, Blockly.utils.aria.Role.GROUP);
 
       // In case the children will be created lazily.
       if (ce.hasChildNodes()) {
@@ -201,7 +193,7 @@ Blockly.tree.BaseNode.prototype.initAccessibility = function() {
 Blockly.tree.BaseNode.prototype.createDom = function() {
   var element = document.createElement('div');
   element.appendChild(this.toDom());
-  this.setElementInternal(/** @type {!Element} */ (element));
+  this.setElementInternal(/** @type {!HTMLElement} */ (element));
 };
 
 
@@ -340,25 +332,24 @@ Blockly.tree.BaseNode.prototype.setDepth_ = function(depth) {
 };
 
 /**
- * Returns true if the node is a descendant of this node
- * @param {Blockly.tree.BaseNode} node The node to check.
+ * Returns true if the node is a descendant of this node.
+ * @param {Blockly.Component} node The node to check.
  * @return {boolean} True if the node is a descendant of this node, false
  *    otherwise.
  * @protected
  */
 Blockly.tree.BaseNode.prototype.contains = function(node) {
-  var current = node;
-  while (current) {
-    if (current == this) {
+  while (node) {
+    if (node == this) {
       return true;
     }
-    current = current.getParent();
+    node = node.getParent();
   }
   return false;
 };
 
 /**
- * This is re-defined here to indicate to the closure compiler the correct
+ * This is re-defined here to indicate to the Closure Compiler the correct
  * child return type.
  * @param {number} index 0-based index.
  * @return {Blockly.tree.BaseNode} The child at the given index; null if none.
@@ -375,6 +366,16 @@ Blockly.tree.BaseNode.prototype.getChildren = function() {
   var children = [];
   this.forEachChild(function(child) { children.push(child); });
   return children;
+};
+
+/**
+ * Returns the node's parent, if any.
+ * @return {?Blockly.tree.BaseNode} The parent node.
+ * @protected
+ */
+Blockly.tree.BaseNode.prototype.getParent = function() {
+  return /** @type {Blockly.tree.BaseNode} */ (
+    Blockly.tree.BaseNode.superClass_.getParent.call(this));
 };
 
 /**
@@ -551,6 +552,7 @@ Blockly.tree.BaseNode.prototype.toDom = function() {
 };
 
 /**
+ * Calculates correct padding for each row. Nested categories are indented more.
  * @return {number} The pixel indent of the row.
  * @private
  */
@@ -559,6 +561,7 @@ Blockly.tree.BaseNode.prototype.getPixelIndent_ = function() {
 };
 
 /**
+ * Creates row with icon and label dom.
  * @return {!Element} The HTML element for the row.
  * @protected
  */
@@ -575,6 +578,8 @@ Blockly.tree.BaseNode.prototype.getRowDom = function() {
 };
 
 /**
+ * Adds the selected class name to the default row class name if node is
+ *     selected.
  * @return {string} The class name for the row.
  * @protected
  */
@@ -613,10 +618,11 @@ Blockly.tree.BaseNode.prototype.getIconDom = function() {
  * @protected
  */
 Blockly.tree.BaseNode.prototype.getCalculatedIconClass = function() {
-  throw Error('unimplemented abstract method');
+  throw Error(Blockly.Component.Error.ABSTRACT_METHOD);
 };
 
 /**
+ * Gets a string containing the x and y position of the node's background.
  * @return {string} The background position style value.
  * @protected
  */
@@ -626,7 +632,7 @@ Blockly.tree.BaseNode.prototype.getBackgroundPosition = function() {
 };
 
 /**
- * @return {Element} The element for the tree node.
+ * @return {HTMLElement} The element for the tree node.
  * @override
  */
 Blockly.tree.BaseNode.prototype.getElement = function() {
@@ -635,7 +641,7 @@ Blockly.tree.BaseNode.prototype.getElement = function() {
     el = document.getElementById(this.getId());
     this.setElementInternal(el);
   }
-  return el;
+  return /** @type {!HTMLElement} */ (el);
 };
 
 /**
@@ -708,26 +714,6 @@ Blockly.tree.BaseNode.prototype.updateIcon_ = function() {
 };
 
 /**
- * Handles mouse down event.
- * @param {!Event} e The browser event.
- * @protected
- */
-Blockly.tree.BaseNode.prototype.onMouseDown = function(e) {
-  var el = e.target;
-  // expand icon
-  var type = el.getAttribute('type');
-  if (type == 'expand' && this.hasChildren()) {
-    if (this.isUserCollapsible_) {
-      this.toggle();
-    }
-    return;
-  }
-
-  this.select();
-  this.updateRow();
-};
-
-/**
  * Handles a click event.
  * @param {!Event} e The browser event.
  * @protected
@@ -746,16 +732,10 @@ Blockly.tree.BaseNode.prototype.onKeyDown = function(e) {
   var handled = true;
   switch (e.keyCode) {
     case Blockly.utils.KeyCodes.RIGHT:
-      if (e.altKey) {
-        break;
-      }
       handled = this.selectChild();
       break;
 
     case Blockly.utils.KeyCodes.LEFT:
-      if (e.altKey) {
-        break;
-      }
       handled = this.selectParent();
       break;
 
@@ -765,6 +745,12 @@ Blockly.tree.BaseNode.prototype.onKeyDown = function(e) {
 
     case Blockly.utils.KeyCodes.UP:
       handled = this.selectPrevious();
+      break;
+
+    case Blockly.utils.KeyCodes.ENTER:
+    case Blockly.utils.KeyCodes.SPACE:
+      this.toggle();
+      handled = true;
       break;
 
     default:
@@ -811,7 +797,7 @@ Blockly.tree.BaseNode.prototype.selectPrevious = function() {
  * @package
  */
 Blockly.tree.BaseNode.prototype.selectParent = function() {
-  if (this.hasChildren() && this.expanded_ && this.isUserCollapsible_) {
+  if (this.hasChildren() && this.expanded_) {
     this.setExpanded(false);
   } else {
     var parent = this.getParent();
@@ -862,18 +848,17 @@ Blockly.tree.BaseNode.prototype.getLastShownDescendant = function() {
 Blockly.tree.BaseNode.prototype.getNextShownNode = function() {
   if (this.hasChildren() && this.expanded_) {
     return this.getChildAt(0);
-  } else {
-    var parent = this;
-    var next;
-    while (parent != this.getTree()) {
-      next = parent.getNextSibling();
-      if (next != null) {
-        return next;
-      }
-      parent = parent.getParent();
-    }
-    return null;
   }
+  var parent = this;
+  var next;
+  while (parent != this.getTree()) {
+    next = parent.getNextSibling();
+    if (next != null) {
+      return next;
+    }
+    parent = parent.getParent();
+  }
+  return null;
 };
 
 /**

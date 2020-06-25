@@ -48,9 +48,6 @@ Blockly.FieldTextInput = function(opt_value, opt_validator, opt_config) {
    */
   this.spellcheck_ = true;
 
-  if (opt_value == null) {
-    opt_value = '';
-  }
   Blockly.FieldTextInput.superClass_.constructor.call(this,
       opt_value, opt_validator, opt_config);
 
@@ -80,8 +77,22 @@ Blockly.FieldTextInput = function(opt_value, opt_validator, opt_config) {
    * @type {?boolean}
    */
   this.fullBlockClickTarget_ = false;
+
+  /**
+   * The workspace that this field belongs to.
+   * @type {?Blockly.WorkspaceSvg}
+   * @protected
+   */
+  this.workspace_ = null;
 };
 Blockly.utils.object.inherits(Blockly.FieldTextInput, Blockly.Field);
+
+/**
+ * The default value for this field.
+ * @type {*}
+ * @protected
+ */
+Blockly.FieldTextInput.prototype.DEFAULT_VALUE = '';
 
 /**
  * Construct a FieldTextInput from a JSON arg object,
@@ -275,7 +286,8 @@ Blockly.FieldTextInput.prototype.setSpellcheck = function(check) {
  */
 Blockly.FieldTextInput.prototype.showEditor_ = function(_opt_e,
     opt_quietInput) {
-  this.workspace_ = this.sourceBlock_.workspace;
+  this.workspace_ =
+    (/** @type {!Blockly.BlockSvg} */ (this.sourceBlock_)).workspace;
   var quietInput = opt_quietInput || false;
   if (!quietInput && (Blockly.utils.userAgent.MOBILE ||
                       Blockly.utils.userAgent.ANDROID ||

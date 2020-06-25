@@ -26,6 +26,7 @@ goog.require('Blockly.Tooltip');
 goog.require('Blockly.Touch');
 goog.require('Blockly.utils');
 goog.require('Blockly.utils.colour');
+goog.require('Blockly.utils.Size');
 goog.require('Blockly.Variables');
 goog.require('Blockly.WidgetDiv');
 goog.require('Blockly.WorkspaceSvg');
@@ -51,7 +52,7 @@ Blockly.mainWorkspace = null;
 
 /**
  * Currently selected block.
- * @type {Blockly.Block}
+ * @type {?Blockly.ICopyable}
  */
 Blockly.selected = null;
 
@@ -107,13 +108,11 @@ Blockly.EventData;
 /**
  * Returns the dimensions of the specified SVG image.
  * @param {!SVGElement} svg SVG image.
- * @return {!Object} Contains width and height properties.
+ * @return {!Blockly.utils.Size} Contains width and height properties.
  */
 Blockly.svgSize = function(svg) {
-  return {
-    width: svg.cachedWidth_,
-    height: svg.cachedHeight_
-  };
+  svg = /** @type {?} */ (svg);
+  return new Blockly.utils.Size(svg.cachedWidth_, svg.cachedHeight_);
 };
 
 /**
@@ -160,7 +159,7 @@ Blockly.svgResize = function(workspace) {
 /**
  * Handle a key-down on SVG drawing surface. Does nothing if the main workspace
  * is not visible.
- * @param {!Event} e Key down event.
+ * @param {!KeyboardEvent} e Key down event.
  * @package
  */
 // TODO (https://github.com/google/blockly/issues/1998) handle cases where there
@@ -190,7 +189,7 @@ Blockly.onKeyDown = function(e) {
     // Pressing esc closes the context menu.
     Blockly.hideChaff();
     Blockly.navigation.onBlocklyAction(Blockly.navigation.ACTION_EXIT);
-  } else if (Blockly.navigation.onKeyPress(e)) {
+  } else if (!Blockly.Gesture.inProgress() && Blockly.navigation.onKeyPress(e)) {
     // If the keyboard or field handled the key press return.
     return;
   } else if (e.keyCode == Blockly.utils.KeyCodes.BACKSPACE ||
@@ -249,6 +248,10 @@ Blockly.onKeyDown = function(e) {
       // 'z' for undo 'Z' is for redo.
       Blockly.hideChaff();
       mainWorkspace.undo(e.shiftKey);
+    } else if (e.ctrlKey && e.keyCode == Blockly.utils.KeyCodes.Y) {
+      // Ctrl-y is redo in Windows.  Command-y is never valid on Macs.
+      Blockly.hideChaff();
+      mainWorkspace.undo(true);
     }
   }
   // Common code for delete and cut.
@@ -264,32 +267,20 @@ Blockly.onKeyDown = function(e) {
 
 /**
  * Copy a block or workspace comment onto the local clipboard.
- * @param {!Blockly.Block | !Blockly.WorkspaceComment} toCopy Block or
- *    Workspace Comment to be copied.
+ * @param {!Blockly.ICopyable} toCopy Block or Workspace Comment to be copied.
  * @private
  */
 Blockly.copy_ = function(toCopy) {
-  if (toCopy.isComment) {
-    var xml = toCopy.toXmlWithXY();
-  } else {
-    var xml = Blockly.Xml.blockToDom(toCopy, true);
-    // Copy only the selected block and internal blocks.
-    Blockly.Xml.deleteNext(xml);
-    // Encode start position in XML.
-    var xy = toCopy.getRelativeToSurfaceXY();
-    xml.setAttribute('x', toCopy.RTL ? -xy.x : xy.x);
-    xml.setAttribute('y', xy.y);
-  }
-  Blockly.clipboardXml_ = xml;
-  Blockly.clipboardSource_ = toCopy.workspace;
-  Blockly.clipboardTypeCounts_ = toCopy.isComment ? null :
-      Blockly.utils.getBlockTypeCounts(toCopy, true);
+  var data = toCopy.toCopyData();
+  Blockly.clipboardXml_ = data.xml;
+  Blockly.clipboardSource_ = data.source;
+  Blockly.clipboardTypeCounts_ = data.typeCounts;
 };
 
 /**
  * Duplicate this block and its children, or a workspace comment.
- * @param {!Blockly.Block | !Blockly.WorkspaceComment} toDuplicate Block or
- *     Workspace Comment to be copied.
+ * @param {!Blockly.ICopyable} toDuplicate Block or Workspace Comment to be
+ *     copied.
  * @package
  */
 Blockly.duplicate = function(toDuplicate) {

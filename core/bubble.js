@@ -21,6 +21,8 @@ goog.require('Blockly.utils.math');
 goog.require('Blockly.utils.userAgent');
 goog.require('Blockly.Workspace');
 
+goog.requireType('Blockly.utils.Metrics');
+
 
 /**
  * Class for UI bubble.
@@ -489,8 +491,8 @@ Blockly.Bubble.prototype.layoutBubble_ = function() {
  * workspace (what percentage of the bubble is visible).
  * @param {!{x: number, y: number}} relativeMin The position of the top-left
  *     corner of the bubble relative to the anchor point.
- * @param {!Object} metrics The metrics of the workspace the bubble will
- *     appear in.
+ * @param {!Blockly.utils.Metrics} metrics The metrics of the workspace the
+ *     bubble will appear in.
  * @return {number} The percentage of the bubble that is visible.
  * @private
  */
@@ -535,10 +537,10 @@ Blockly.Bubble.prototype.getOverlap_ = function(relativeMin, metrics) {
  * Calculate what the optimal horizontal position of the top-left corner of the
  * bubble is (relative to the anchor point) so that the most area of the
  * bubble is shown.
- * @param {!Object} metrics The metrics of the workspace the bubble will
- *    appear in.
+ * @param {!Blockly.utils.Metrics} metrics The metrics of the workspace the
+ *     bubble will appear in.
  * @return {number} The optimal horizontal position of the top-left corner
- *    of the bubble.
+ *     of the bubble.
  * @private
  */
 Blockly.Bubble.prototype.getOptimalRelativeLeft_ = function(metrics) {
@@ -593,10 +595,10 @@ Blockly.Bubble.prototype.getOptimalRelativeLeft_ = function(metrics) {
  * Calculate what the optimal vertical position of the top-left corner of
  * the bubble is (relative to the anchor point) so that the most area of the
  * bubble is shown.
- * @param {!Object} metrics The metrics of the workspace the bubble will
- *    appear in.
+ * @param {!Blockly.utils.Metrics} metrics The metrics of the workspace the
+ *     bubble will appear in.
  * @return {number} The optimal vertical position of the top-left corner
- *    of the bubble.
+ *     of the bubble.
  * @private
  */
 Blockly.Bubble.prototype.getOptimalRelativeTop_ = function(metrics) {

@@ -1,6 +1,6 @@
 {
   "name": "blockly",
-  "version": "3.20200402.1",
+  "version": "3.20200625.0",
   "description": "Blockly is a library for building visual programming editors.",
   "keywords": [
     "blockly"
@@ -26,14 +26,12 @@
     "build:generators": "gulp buildGenerators",
     "build:langfiles": "gulp buildLangfiles",
     "build:uncompressed": "gulp buildUncompressed",
-    "bump": "npm version 3.$(date +'%Y%m%d').0",
+    "bump": "npm --no-git-tag-version version 3.$(date +'%Y%m%d').0",
     "license": "gulp checkLicenses",
     "lint": "eslint .",
     "package": "gulp package",
-    "postversion": "gulp postversion",
     "prepare": "npm run package",
-    "preversion": "gulp preversion",
-    "prerelease": "gulp gitRecompile",
+    "recompile": "gulp gitPreCompile && npm run bump && gulp gitPostCompile",
     "release": "gulp gitCreateRC",
     "test": "concurrently 'npm run test:prepare' 'sleep 5 && npm run test:run'",
     "test:prepare": "npm run test:setupselenium && npm run test:startselenium",
@@ -41,13 +39,12 @@
     "test:setupselenium": "selenium-standalone install --config=./tests/scripts/selenium-config.js",
     "test:startselenium": "selenium-standalone start --config=./tests/scripts/selenium-config.js",
     "typings": "gulp typings",
-    "updateGithubPages": "gulp gitUpdateGithubPages",
-    "version": "gulp build && git add -A"
+    "updateGithubPages": "gulp gitUpdateGithubPages"
   },
   "main": "./index.js",
   "umd": "./blockly.min.js",
   "unpkg": "./blockly.min.js",
-  "types": "./blockly.d.ts",
+  "types": "./index.d.ts",
   "browser": {
     "./node.js": "./browser.js",
     "./core.js": "./core-browser.js",
@@ -68,6 +65,7 @@
     "gulp-replace": "^1.0.0",
     "gulp-series": "^1.0.2",
     "gulp-shell": "^0.7.1",
+    "gulp-sourcemaps": "^2.6.5",
     "gulp-umd": "^2.0.0",
     "js-green-licenses": "^1.1.0",
     "jshint": "^2.11.0",

@@ -63,7 +63,7 @@ CustomFields.FieldPitch.NOTES = 'C3 D3 E3 F3 G3 A3 B3 C4 D4 E4 F4 G4 A4'.split(/
 
 /**
  * Show the inline free-text editor on top of the text and the note picker.
- * @private
+ * @protected
  */
 CustomFields.FieldPitch.prototype.showEditor_ = function() {
   CustomFields.FieldPitch.superClass_.showEditor_.call(this);

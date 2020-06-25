@@ -16,12 +16,15 @@ goog.require('Blockly.Events');
 goog.require('Blockly.Events.BlockMove');
 goog.require('Blockly.Xml');
 
+goog.requireType('Blockly.IASTNodeLocationWithBlock');
+
 
 /**
  * Class for a connection between blocks.
  * @param {!Blockly.Block} source The block establishing this connection.
  * @param {number} type The type of the connection.
  * @constructor
+ * @implements {Blockly.IASTNodeLocationWithBlock}
  */
 Blockly.Connection = function(source, type) {
   /**
@@ -242,7 +245,6 @@ Blockly.Connection.prototype.isConnected = function() {
  * @param {Blockly.Connection} target Connection to check compatibility with.
  * @return {number} Blockly.Connection.CAN_CONNECT if the connection is legal,
  *    an error code otherwise.
- * @package
  */
 Blockly.Connection.prototype.canConnectWithReason = function(target) {
   if (!target) {
@@ -617,6 +619,7 @@ Blockly.Connection.prototype.checkType = function(otherConnection) {
  * @return {boolean} True if the connections share a type.
  * @private
  * @deprecated October 2019, use connection.checkType instead.
+ * @suppress {unusedPrivateMembers}
  */
 Blockly.Connection.prototype.checkType_ = function(otherConnection) {
   console.warn('Deprecated call to Blockly.Connection.prototype.checkType_, ' +
@@ -639,7 +642,7 @@ Blockly.Connection.prototype.onCheckChanged_ = function() {
 
 /**
  * Change a connection's compatibility.
- * @param {?(string|!Array<string>)} check Compatible value type or list of
+ * @param {?(string|!Array.<string>)} check Compatible value type or list of
  *     value types. Null if all types are compatible.
  * @return {!Blockly.Connection} The connection being modified
  *     (to allow chaining).

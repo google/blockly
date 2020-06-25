@@ -6,8 +6,18 @@
 
     <link href="https://unpkg.com/mocha@5.2.0/mocha.css" rel="stylesheet" />
     <script src="../../blockly_uncompressed.js"></script>
+    <script src="../../generators/dart.js"></script>
+    <script src="../../generators/javascript.js"></script>
+    <script src="../../generators/lua.js"></script>
+    <script src="../../generators/php.js"></script>
+    <script src="../../generators/python.js"></script>
     <script src="../../msg/messages.js"></script>
+    <script src="../../blocks/loops.js"></script>
+    <script src="../../blocks/lists.js"></script>
+    <script src="../../blocks/logic.js"></script>
+    <script src="../../blocks/math.js"></script>
     <script src="../../blocks/procedures.js"></script>
+    <script src="../../blocks/text.js"></script>
   </head>
   <body>
 
@@ -16,6 +26,7 @@
     <script src="https://unpkg.com/chai/chai.js"></script>
     <script src="https://unpkg.com/mocha@5.2.0/mocha.js"></script>
     <script src="https://unpkg.com/sinon/pkg/sinon.js"></script>
+    <script src="https://unpkg.com/@blockly/dev-tools/dist/index.js"></script>
     <script>
       mocha.setup({
         ui: 'tdd'
@@ -23,6 +34,7 @@
     </script>
 
     <script src="test_helpers.js"></script>
+    <script src="toolbox_helper.js"></script>
 
     <script src="astnode_test.js"></script>
     <script src="block_test.js"></script>
@@ -33,11 +45,11 @@
     <script src="cursor_test.js"></script>
     <script src="dropdowndiv_test.js"></script>
     <script src="event_test.js"></script>
+    <script src="extensions_test.js"></script>
     <script src="field_test.js"></script>
     <script src="field_angle_test.js"></script>
     <script src="field_checkbox_test.js"></script>
     <script src="field_colour_test.js"></script>
-    <script src="field_date_test.js"></script>
     <script src="field_dropdown_test.js"></script>
     <script src="field_image_test.js"></script>
     <script src="field_label_test.js"></script>
@@ -46,23 +58,55 @@
     <script src="field_registry_test.js"></script>
     <script src="field_textinput_test.js"></script>
     <script src="field_variable_test.js"></script>
+    <script src="flyout_test.js"></script>
+    <script src="generator_test.js"></script>
     <script src="gesture_test.js"></script>
     <script src="input_test.js"></script>
+    <script src="insertion_marker_test.js"></script>
+    <script src="json_test.js"></script>
     <script src="key_map_test.js"></script>
+    <script src="logic_ternary_test.js"></script>
     <script src="metrics_test.js"></script>
     <script src="names_test.js"></script>
     <script src="navigation_modify_test.js"></script>
     <script src="navigation_test.js"></script>
     <script src="procedures_test.js"></script>
+    <script src="registry_test.js"></script>
     <script src="theme_test.js"></script>
+    <script src="toolbox_test.js"></script>
     <script src="trashcan_test.js"></script>
     <script src="utils_test.js"></script>
+    <script src="variable_map_test.js"></script>
+    <script src="variable_model_test.js"></script>
+    <script src="variables_test.js"></script>
+    <script src="widget_div_test.js"></script>
+    <script src="workspace_test.js"></script>
+    <script src="workspace_svg_test.js"></script>
+    <script src="workspace_comment_test.js"></script>
     <script src="xml_procedures_test.js"></script>
     <script src="xml_test.js"></script>
 
     <div id="blocklyDiv"></div>
+    <xml xmlns="https://developers.google.com/blockly/xml" id="toolbox-simple" style="display: none">
+      <block type="logic_operation"></block>
+      <sep gap="20"></sep>
+      <button text="insert" callbackkey="insertConnectionRows"></button>
+      <label text="tooltips"></label>
+    </xml>
+
     <xml xmlns="https://developers.google.com/blockly/xml" id="toolbox-minimal" style="display: none">
       <block type="basic_block"></block>
+    </xml>
+    <xml xmlns="https://developers.google.com/blockly/xml" id="toolbox-incorrect" style="display: none">
+      <block type="basic_block"></block>
+      <category name="First">
+        <block type="basic_block">
+          <field name="TEXT">FirstCategory-FirstBlock</field>
+        </block>
+        <block type="basic_block">
+          <field name="TEXT">FirstCategory-SecondBlock</field>
+        </block>
+      </category>
     </xml>
 
     <xml xmlns="https://developers.google.com/blockly/xml" id="toolbox-categories" style="display: none">
@@ -79,6 +123,26 @@
           <field name="TEXT">SecondCategory-FirstBlock</field>
         </block>
       </category>
+    </xml>
+
+    <xml xmlns="https://developers.google.com/blockly/xml" id="toolbox-test" style="display: none">
+      <category name="First" expanded="true" categorystyle="logic_category">
+        <sep gap="-1"></sep>
+        <button text="insert" callbackkey="insertConnectionRows"></button>
+        <block type="basic_block">
+          <field name="TEXT">FirstCategory-FirstBlock</field>
+        </block>
+        <block type="basic_block">
+          <field name="TEXT">FirstCategory-SecondBlock</field>
+        </block>
+      </category>
+      <category name="Second">
+        <block type="basic_block">
+          <field name="TEXT">SecondCategory-FirstBlock</field>
+        </block>
+      </category>
+      <sep gap="-1"></sep>
+      <category name="Variables" custom="VARIABLE"></category>
     </xml>
     <xml xmlns="https://developers.google.com/blockly/xml" id="toolbox-connections" style="display: none">
       <block type="stack_block"></block>

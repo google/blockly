@@ -123,7 +123,7 @@ Blockly.registry.register = function(type, name, registryItem) {
 Blockly.registry.validate_ = function(type, registryItem) {
   switch (type) {
     case String(Blockly.registry.Type.FIELD):
-      if (typeof registryItem['fromJson'] != 'function') {
+      if (typeof registryItem.fromJson != 'function') {
         throw Error('Type "' + type + '" must have a fromJson function');
       }
       break;

@@ -16,6 +16,7 @@ goog.provide('Blockly.registry');
 goog.requireType('Blockly.blockRendering.Renderer');
 goog.requireType('Blockly.Field');
 goog.requireType('Blockly.IToolbox');
+goog.requireType('Blockly.Theme');
 goog.requireType('Blockly.utils.toolbox');
 
 
@@ -41,7 +42,10 @@ Blockly.registry.DEFAULT = 'default';
  * @template T
  */
 Blockly.registry.Type = function(name) {
-  /** @private {string} */
+  /**
+   * @type {string}
+   * @private
+   */
   this.name_ = name;
 };
 
@@ -62,6 +66,9 @@ Blockly.registry.Type.FIELD = new Blockly.registry.Type('field');
 
 /** @type {!Blockly.registry.Type<Blockly.IToolbox>} */
 Blockly.registry.Type.TOOLBOX = new Blockly.registry.Type('toolbox');
+
+/** @type {!Blockly.registry.Type<Blockly.Theme>} */
+Blockly.registry.Type.THEME = new Blockly.registry.Type('theme');
 
 /**
  * Registers a class based on a type and name.

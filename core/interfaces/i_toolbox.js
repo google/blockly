@@ -76,19 +76,7 @@ Blockly.IToolbox.prototype.clearSelection;
  * Updates the category colours and background colour of selected categories.
  * @return {void}
  */
-Blockly.IToolbox.prototype.updateColourFromTheme;
-
-/**
- * Adds a style on the toolbox. Usually used to change the cursor.
- * @param {string} style The name of the class to add.
- */
-Blockly.IToolbox.prototype.addStyle;
-
-/**
- * Removes a style from the toolbox. Usually used to change the cursor.
- * @param {string} style The name of the class to remove.
- */
-Blockly.IToolbox.prototype.removeStyle;
+Blockly.IToolbox.prototype.refreshTheme;
 
 /**
  * Update the flyout's contents without closing it.  Should be used in response

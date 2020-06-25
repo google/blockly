@@ -313,15 +313,15 @@ var dragCategory = {
     },
     {
       "kind": "BLOCK",
-      "blockxml": "<block type=\"text_print\"><value name=\"TEXT\"><block type=\"text\"><field name=\"TEXT\">Dragmebythischild</field></block></value></block>",
+      "blockxml": "<block type=\"text_print\"><value name=\"TEXT\"><block type=\"text\"><field name=\"TEXT\">Drag me by this child</field></block></value></block>",
     },
     {
       "kind": "BLOCK",
-      "blockxml": "<block type=\"text_print\"><value name=\"TEXT\"><shadow type=\"text\"><field name=\"TEXT\">Dragmebythisshadow</field></shadow></value></block>",
+      "blockxml": "<block type=\"text_print\"><value name=\"TEXT\"><shadow type=\"text\"><field name=\"TEXT\">Drag me by this shadow</field></shadow></value></block>",
     },
     {
       "kind": "BLOCK",
-      "blockxml": "<block type=\"text_print\"><value name=\"TEXT\"><shadow type=\"text\"><field name=\"TEXT\">Shadowvalue</field></shadow></value><next><shadow type=\"text_print\"><value name=\"TEXT\"><shadow type=\"text\"><field name=\"TEXT\">Shadowstatement</field></shadow></value></shadow></next></block>",
+      "blockxml": "<block type=\"text_print\"><value name=\"TEXT\"><shadow type=\"text\"><field name=\"TEXT\">Shadow value</field></shadow></value><next><shadow type=\"text_print\"><value name=\"TEXT\"><shadow type=\"text\"><field name=\"TEXT\">Shadow statement</field></shadow></value></shadow></next></block>",
     },
     {
       "kind": "LABEL",
@@ -337,11 +337,11 @@ var dragCategory = {
     },
     {
       "kind": "BLOCK",
-      "blockxml": "<block type=\"procedures_defnoreturn\"><field name=\"NAME\">withoutarguments</field><statement name=\"STACK\"><block type=\"text_print\"><value name=\"TEXT\"><shadow type=\"text\"><field name=\"TEXT\">Noargumentreference.</field></shadow></value></block></statement></block>",
+      "blockxml": "<block type=\"procedures_defnoreturn\"><field name=\"NAME\">without arguments</field><statement name=\"STACK\"><block type=\"text_print\"><value name=\"TEXT\"><shadow type=\"text\"><field name=\"TEXT\">No argument reference.</field></shadow></value></block></statement></block>",
     },
     {
       "kind": "BLOCK",
-      "blockxml": "<block type=\"procedures_defnoreturn\"><mutation><arg name=\"fnArgument\"></arg></mutation><field name=\"NAME\">withoneargument</field><statement name=\"STACK\"><block type=\"text_print\"><value name=\"TEXT\"><shadow type=\"text\"><field name=\"TEXT\">Expectedanargumentreferencehere.</field></shadow><block type=\"variables_get\"><field name=\"VAR\">fnArgument</field></block></value></block></statement></block>",
+      "blockxml": "<block type=\"procedures_defnoreturn\"><mutation><arg name=\"fnArgument\"></arg></mutation><field name=\"NAME\">with one argument</field><statement name=\"STACK\"><block type=\"text_print\"><value name=\"TEXT\"><shadow type=\"text\"><field name=\"TEXT\">Expected an argument reference here.</field></shadow><block type=\"variables_get\"><field name=\"VAR\">fnArgument</field></block></value></block></statement></block>",
     }
   ],
 };
@@ -612,11 +612,11 @@ var fieldEmoji = {
     },
     {
       "kind": "BLOCK",
-      "blockxml": "<block type=\"text\"><field name=\"TEXT\">Robotfaceintextfield:🤖</field></block>",
+      "blockxml": "<block type=\"text\"><field name=\"TEXT\">Robot face in text field:🤖</field></block>",
     },
     {
       "kind": "BLOCK",
-      "blockxml": "<block type=\"text\"><field name=\"TEXT\">Zalgointextfield:B̛̻̦̬̘̰͎̥̈̔͊͞ͅl̡͖̫̺̬̖̣̳̃̀́͑͑̕͟͠͝o̢̹͙̮̫͔͋̉̊̑̿̽̚c̸̹̹̜͙̹̠͋̒͑̊̇͝k̡͉̫͇̖̳͖̊͒́̆̄̎̂̔̕͜͞l̰̙̞̳̩̠͖̯̀̆̈́̿̈̓͗y̨̡̟͇̮͈̬̙̲̏̅̀͘͠</field></block>",
+      "blockxml": "<block type=\"text\"><field name=\"TEXT\">Zalgo in text field:B̛̻̦̬̘̰͎̥̈̔͊͞ͅl̡͖̫̺̬̖̣̳̃̀́͑͑̕͟͠͝o̢̹͙̮̫͔͋̉̊̑̿̽̚c̸̹̹̜͙̹̠͋̒͑̊̇͝k̡͉̫͇̖̳͖̊͒́̆̄̎̂̔̕͜͞l̰̙̞̳̩̠͖̯̀̆̈́̿̈̓͗y̨̡̟͇̮͈̬̙̲̏̅̀͘͠</field></block>",
     }
   ]
 };
@@ -875,7 +875,11 @@ var mutators = {
     {
       "kind": "BLOCK",
       "blockxml": "<block type=\"logic_compare\"><value name=\"A\"><block type=\"math_number\"><field name=\"NUM\">10</field></block></value><value name=\"B\"><block type=\"math_number\"><field name=\"NUM\">10</field></block></value></block>",
-    }
+    },
+    {
+      "kind": "BLOCK",
+      "type": "test_mutators_noflyout",
+    },
   ],
 };
 

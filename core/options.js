@@ -14,7 +14,9 @@ goog.provide('Blockly.Options');
 
 goog.require('Blockly.Theme');
 goog.require('Blockly.Themes.Classic');
+goog.require('Blockly.registry');
 goog.require('Blockly.user.keyMap');
+goog.require('Blockly.utils.IdGenerator');
 goog.require('Blockly.utils.Metrics');
 goog.require('Blockly.utils.toolbox');
 goog.require('Blockly.utils.userAgent');
@@ -316,10 +318,14 @@ Blockly.Options.parseGridOptions_ = function(options) {
  */
 Blockly.Options.parseThemeOptions_ = function(options) {
   var theme = options['theme'] || Blockly.Themes.Classic;
-  if (theme instanceof Blockly.Theme) {
+  if (typeof theme == 'string') {
+    return /** @type {!Blockly.Theme} */ (
+      Blockly.registry.getObject(Blockly.registry.Type.THEME, theme));
+  } else if (theme instanceof Blockly.Theme) {
     return /** @type {!Blockly.Theme} */ (theme);
   }
-  return Blockly.Theme.defineTheme('builtin', theme);
+  return Blockly.Theme.defineTheme(theme.name ||
+      ('builtin' + Blockly.utils.IdGenerator.getNextUniqueId()), theme);
 };
 
 /**

@@ -30,6 +30,7 @@ goog.require('Blockly.utils.toolbox');
 
 goog.requireType('Blockly.IBlocklyActionable');
 goog.requireType('Blockly.IDeleteArea');
+goog.requireType('Blockly.IStyleable');
 goog.requireType('Blockly.IToolbox');
 
 
@@ -41,6 +42,7 @@ goog.requireType('Blockly.IToolbox');
  * @constructor
  * @implements {Blockly.IBlocklyActionable}
  * @implements {Blockly.IDeleteArea}
+ * @implements {Blockly.IStyleable}
  * @implements {Blockly.IToolbox}
  */
 Blockly.Toolbox = function(workspace) {
@@ -440,11 +442,16 @@ Blockly.Toolbox.prototype.handleAfterTreeSelected_ = function(
     if (this.lastCategory_ != newNode) {
       this.flyout_.scrollToStart();
     }
-  } else if (newNode instanceof Blockly.Toolbox.TreeSeparator){
-    // Do nothing
+    if (this.workspace_.keyboardAccessibilityMode) {
+      Blockly.navigation.setState(Blockly.navigation.STATE_TOOLBOX);
+    }
   } else {
     // Hide the flyout.
     this.flyout_.hide();
+    if (this.workspace_.keyboardAccessibilityMode &&
+        !(newNode instanceof Blockly.Toolbox.TreeSeparator)) {
+      Blockly.navigation.setState(Blockly.navigation.STATE_WS);
+    }
   }
   if (oldNode != newNode && oldNode != this) {
     var event = new Blockly.Events.Ui(null, 'category',
@@ -650,7 +657,7 @@ Blockly.Toolbox.prototype.updateColourFromTheme_ = function(opt_tree) {
  * Updates the category colours and background colour of selected categories.
  * @package
  */
-Blockly.Toolbox.prototype.updateColourFromTheme = function() {
+Blockly.Toolbox.prototype.refreshTheme = function() {
   var tree = this.tree_;
   if (tree) {
     this.updateColourFromTheme_(tree);

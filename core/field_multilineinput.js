@@ -43,9 +43,6 @@ goog.require('Blockly.utils.userAgent');
 Blockly.FieldMultilineInput = function(opt_value, opt_validator, opt_config) {
   // TODO: Once this field is documented the opt_config link should point to its
   //  creation documentation, rather than the text input field's.
-  if (opt_value == null) {
-    opt_value = '';
-  }
   Blockly.FieldMultilineInput.superClass_.constructor.call(this,
       opt_value, opt_validator, opt_config);
 
@@ -58,7 +55,6 @@ Blockly.FieldMultilineInput = function(opt_value, opt_validator, opt_config) {
 };
 Blockly.utils.object.inherits(Blockly.FieldMultilineInput,
     Blockly.FieldTextInput);
-
 
 /**
  * Construct a FieldMultilineInput from a JSON arg object,

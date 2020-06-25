@@ -530,8 +530,11 @@ Blockly.Workspace.prototype.remainingCapacityOfType = function(type) {
   if (!this.options.maxInstances) {
     return Infinity;
   }
-  return (this.options.maxInstances[type] || Infinity) -
-      this.getBlocksByType(type, false).length;
+
+  var maxInstanceOfType = (this.options.maxInstances[type] !== undefined) ?
+      this.options.maxInstances[type] : Infinity;
+
+  return maxInstanceOfType - this.getBlocksByType(type, false).length;
 };
 
 /**

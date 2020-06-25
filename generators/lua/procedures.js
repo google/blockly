@@ -49,8 +49,9 @@ Blockly.Lua['procedures_defreturn'] = function(block) {
     branch = '';
   }
   var args = [];
-  for (var i = 0; i < block.arguments_.length; i++) {
-    args[i] = Blockly.Lua.variableDB_.getName(block.arguments_[i],
+  var variables = block.getVars();
+  for (var i = 0; i < variables.length; i++) {
+    args[i] = Blockly.Lua.variableDB_.getName(variables[i],
         Blockly.VARIABLE_CATEGORY_NAME);
   }
   var code = 'function ' + funcName + '(' + args.join(', ') + ')\n' +
@@ -71,7 +72,8 @@ Blockly.Lua['procedures_callreturn'] = function(block) {
   var funcName = Blockly.Lua.variableDB_.getName(
       block.getFieldValue('NAME'), Blockly.PROCEDURE_CATEGORY_NAME);
   var args = [];
-  for (var i = 0; i < block.arguments_.length; i++) {
+  var variables = block.getVars();
+  for (var i = 0; i < variables.length; i++) {
     args[i] = Blockly.Lua.valueToCode(block, 'ARG' + i,
         Blockly.Lua.ORDER_NONE) || 'nil';
   }

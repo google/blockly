@@ -134,9 +134,12 @@ Blockly.Input.prototype.insertFieldAt = function(index, field, opt_name) {
 /**
  * Remove a field from this input.
  * @param {string} name The name of the field.
- * @throws {Error} if the field is not present.
+ * @param {boolean=} opt_quiet True to prevent an error if field is not present.
+ * @return {boolean} True if operation succeeds, false if field is not present
+ *     and opt_quiet is true.
+ * @throws {Error} if the field is not present and opt_quiet is false.
  */
-Blockly.Input.prototype.removeField = function(name) {
+Blockly.Input.prototype.removeField = function(name, opt_quiet) {
   for (var i = 0, field; (field = this.fieldRow[i]); i++) {
     if (field.name === name) {
       field.dispose();
@@ -147,10 +150,14 @@ Blockly.Input.prototype.removeField = function(name) {
         // Removing a field will cause the block to change shape.
         this.sourceBlock_.bumpNeighbours();
       }
-      return;
+      return true;
     }
   }
-  throw Error('Field "%s" not found.', name);
+  if (opt_quiet) {
+    return false;
+  } else {
+    throw Error('Field "' + name + '" not found.');
+  }
 };
 
 /**
@@ -235,30 +242,6 @@ Blockly.Input.prototype.setAlign = function(align) {
     this.sourceBlock_.render();
   }
   return this;
-};
-
-/**
- * Changes the connection's shadow block.
- * @param {Element} shadow DOM representation of a block or null.
- * @return {Blockly.Input} The input being modified (to allow chaining).
- */
-Blockly.Input.prototype.setShadowDom = function(shadow) {
-  if (!this.connection) {
-    throw Error('This input does not have a connection.');
-  }
-  this.connection.setShadowDom(shadow);
-  return this;
-};
-
-/**
- * Returns the xml representation of the connection's shadow block.
- * @return {Element} Shadow DOM representation of a block or null.
- */
-Blockly.Input.prototype.getShadowDom = function() {
-  if (!this.connection) {
-    throw Error('This input does not have a connection.');
-  }
-  return this.connection.getShadowDom();
 };
 
 /**

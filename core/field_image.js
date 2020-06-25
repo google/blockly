@@ -22,7 +22,7 @@ goog.require('Blockly.utils.Size');
 
 /**
  * Class for an image on a block.
- * @param {string} src The URL of the image. Defaults to an empty string.
+ * @param {string} src The URL of the image.
  * @param {!(string|number)} width Width of the image.
  * @param {!(string|number)} height Height of the image.
  * @param {string=} opt_alt Optional alt text for when block is collapsed.
@@ -70,7 +70,7 @@ Blockly.FieldImage = function(src, width, height,
   this.altText_ = '';
 
   Blockly.FieldImage.superClass_.constructor.call(
-      this, src || '', null, opt_config);
+      this, src, null, opt_config);
 
   if (!opt_config) {  // If the config wasn't passed, do old configuration.
     this.flipRtl_ = !!opt_flipRtl;
@@ -113,6 +113,13 @@ Blockly.FieldImage = function(src, width, height,
   this.imageElement_ = null;
 };
 Blockly.utils.object.inherits(Blockly.FieldImage, Blockly.Field);
+
+/**
+ * The default value for this field.
+ * @type {*}
+ * @protected
+ */
+Blockly.FieldImage.prototype.DEFAULT_VALUE = '';
 
 /**
  * Construct a FieldImage from a JSON arg object,

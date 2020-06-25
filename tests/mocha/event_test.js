@@ -46,7 +46,7 @@ suite('Events', function() {
     var expected_xml = Blockly.Xml.domToText(Blockly.Xml.blockToDom(block));
     var result_xml = Blockly.Xml.domToText(event.xml);
     chai.assert.equal(expected_xml, result_xml);
-    assertArrayEquals(ids, event.ids);
+    chai.assert.deepEqual(ids, event.ids);
     chai.assert.equal(type, event.type);
   }
 
@@ -54,7 +54,7 @@ suite('Events', function() {
     var expected_xml = Blockly.Xml.domToText(Blockly.Xml.blockToDom(block));
     var result_xml = Blockly.Xml.domToText(event.oldXml);
     chai.assert.equal(expected_xml, result_xml);
-    assertArrayEquals(ids, event.ids);
+    chai.assert.deepEqual(ids, event.ids);
     chai.assert.equal(type, event.type);
   }
 

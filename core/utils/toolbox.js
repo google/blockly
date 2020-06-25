@@ -99,6 +99,11 @@ Blockly.utils.toolbox.convertToolboxToJSON = function(toolboxDef) {
   }
   // If it is an array of JSON, then it is already in the correct format.
   if (Array.isArray(toolboxDef) && toolboxDef.length && !(toolboxDef[0].nodeType)) {
+    if (Blockly.utils.toolbox.hasCategories(toolboxDef)) {
+      // TODO: Remove after #3985 has been looked into.
+      console.warn('Due to some performance issues, defining a toolbox using' +
+          'JSON is not ready yet. Please define your toolbox using xml.');
+    }
     return /** @type {!Array.<Blockly.utils.toolbox.Toolbox>} */ (toolboxDef);
   }
 
@@ -126,15 +131,17 @@ Blockly.utils.toolbox.toolboxXmlToJson_ = function(toolboxDef) {
       continue;
     }
     var obj = {};
-    obj['kind'] = child.tagName.toUpperCase();
+    var tagName = child.tagName.toUpperCase();
+    obj['kind'] = tagName;
+
     // Store the xml for a block
-    if (child.tagName.toUpperCase() == 'BLOCK') {
-      obj['blockxml'] = Blockly.utils.xml.domToText(child);
-    }
-    // Get the contents for a category.
-    if (child.tagName.toUpperCase() == 'CATEGORY') {
+    if (tagName == 'BLOCK') {
+      obj['blockxml'] = child;
+    } else if (tagName == 'CATEGORY') {
+      // Get the contents of a category
       obj['contents'] = Blockly.utils.toolbox.toolboxXmlToJson_(child);
     }
+
     // Add xml attributes to object
     for (var j = 0; j < child.attributes.length; j++) {
       var attr = child.attributes[j];

@@ -477,14 +477,14 @@ Blockly.Flyout.prototype.show = function(flyoutDef) {
       throw TypeError('Result of toolbox category callback must be an array.');
     }
   }
+  this.setVisible(true);
+  
   // Parse the Array or NodeList passed in into an Array of
   // Blockly.utils.toolbox.Toolbox.
   var parsedContent = Blockly.utils.toolbox.convertToolboxToJSON(flyoutDef);
   var flyoutInfo =
     /** @type {{contents:!Array.<!Object>, gaps:!Array.<number>}} */ (
       this.createFlyoutInfo_(parsedContent));
-
-  this.setVisible(true);
 
   this.layout_(flyoutInfo.contents, flyoutInfo.gaps);
 
@@ -612,18 +612,23 @@ Blockly.Flyout.prototype.createBlock_ = function(blockXml) {
  * @private
  */
 Blockly.Flyout.prototype.getBlockXml_ = function(blockInfo) {
-  var blockXml = null;
-  // All blockInfo will have type, so check for blockxml first.
-  if (blockInfo['blockxml']) {
-    blockXml = Blockly.Xml.textToDom(blockInfo['blockxml']);
+  var blockElement = null;
+  var blockXml = blockInfo['blockxml'];
+
+  if (blockXml && typeof blockXml != 'string') {
+    blockElement = blockXml;
+  } else if (blockXml && typeof blockXml == 'string') {
+    blockElement = Blockly.Xml.textToDom(blockXml);
   } else if (blockInfo['type']) {
-    blockXml = Blockly.utils.xml.createElement('xml');
-    blockXml.setAttribute('type', blockInfo['type']);
-    blockXml.setAttribute('disabled', blockInfo['disabled']);
-  } else {
+    blockElement = Blockly.utils.xml.createElement('xml');
+    blockElement.setAttribute('type', blockInfo['type']);
+    blockElement.setAttribute('disabled', blockInfo['disabled']);
+  }
+
+  if (!blockElement) {
     throw Error('Error: Invalid block definition. Block definition must have blockxml or type.');
   }
-  return blockXml;
+  return blockElement;
 };
 
 /**

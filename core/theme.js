@@ -11,6 +11,7 @@
 
 goog.provide('Blockly.Theme');
 
+goog.require('Blockly.registry');
 goog.require('Blockly.utils');
 goog.require('Blockly.utils.colour');
 goog.require('Blockly.utils.object');
@@ -73,6 +74,9 @@ Blockly.Theme = function(name, opt_blockStyles, opt_categoryStyles,
    * @package
    */
   this.startHats = null;
+
+  // Register the theme by name.
+  Blockly.registry.register(Blockly.registry.Type.THEME, name, this);
 };
 
 /**
@@ -206,9 +210,14 @@ Blockly.Theme.prototype.setStartHats = function(startHats) {
 Blockly.Theme.defineTheme = function(name, themeObj) {
   var theme = new Blockly.Theme(name);
   var base = themeObj['base'];
-  if (base && base instanceof Blockly.Theme) {
-    Blockly.utils.object.deepMerge(theme, base);
-    theme.name = name;
+  if (base) {
+    if (typeof base == "string") {
+      base = Blockly.registry.getObject(Blockly.registry.Type.THEME, base);
+    }
+    if (base instanceof Blockly.Theme) {
+      Blockly.utils.object.deepMerge(theme, base);
+      theme.name = name;
+    }
   }
 
   Blockly.utils.object.deepMerge(theme.blockStyles,
@@ -222,5 +231,6 @@ Blockly.Theme.defineTheme = function(name, themeObj) {
   if (themeObj['startHats'] != null) {
     theme.startHats = themeObj['startHats'];
   }
+
   return theme;
 };

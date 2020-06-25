@@ -568,7 +568,9 @@ Blockly.Block.prototype.bumpNeighbours = function() {
 };
 
 /**
- * Return the parent block or null if this block is at the top level.
+ * Return the parent block or null if this block is at the top level. The parent
+ * block is either the block connected to the previous connection (for a statement
+ * block) or the block connected to the output connection (for a value block).
  * @return {Blockly.Block} The block that holds the current block.
  */
 Blockly.Block.prototype.getParent = function() {
@@ -619,7 +621,7 @@ Blockly.Block.prototype.getNextBlock = function() {
 };
 
 /**
- * Return the previous statement block directly connected to this block.
+ * Returns the block connected to the previous connection.
  * @return {Blockly.Block} The previous statement block or null.
  */
 Blockly.Block.prototype.getPreviousBlock = function() {
@@ -1804,7 +1806,7 @@ Blockly.Block.prototype.moveNumberedInputBefore = function(
 /**
  * Remove an input from this block.
  * @param {string} name The name of the input.
- * @param {boolean=} opt_quiet True to prevent error if input is not present.
+ * @param {boolean=} opt_quiet True to prevent an error if input is not present.
  * @return {boolean} True if operation succeeds, false if input is not present and opt_quiet is true
  * @throws {Error} if the input is not present and opt_quiet is not true.
  */

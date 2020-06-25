@@ -167,8 +167,12 @@ Blockly.Mutator.prototype.createEditor_ = function() {
       }));
   workspaceOptions.toolboxPosition = this.block_.RTL ? Blockly.TOOLBOX_AT_RIGHT :
       Blockly.TOOLBOX_AT_LEFT;
-  workspaceOptions.languageTree = Blockly.utils.toolbox.convertToolboxToJSON(quarkXml);
-  workspaceOptions.getMetrics = this.getFlyoutMetrics_.bind(this);
+  var hasFlyout = !!quarkXml;
+  if (hasFlyout) {
+    workspaceOptions.languageTree =
+        Blockly.utils.toolbox.convertToolboxToJSON(quarkXml);
+    workspaceOptions.getMetrics = this.getFlyoutMetrics_.bind(this);
+  }
   this.workspace_ = new Blockly.WorkspaceSvg(workspaceOptions);
   this.workspace_.isMutator = true;
   this.workspace_.addChangeListener(Blockly.Events.disableOrphans);
@@ -177,13 +181,15 @@ Blockly.Mutator.prototype.createEditor_ = function() {
   // a top level svg. Instead of handling scale themselves, mutators
   // inherit scale from the parent workspace.
   // To fix this, scale needs to be applied at a different level in the dom.
-  var flyoutSvg = this.workspace_.addFlyout('g');
+  var flyoutSvg = hasFlyout ? this.workspace_.addFlyout('g') : null;
   var background = this.workspace_.createDom('blocklyMutatorBackground');
 
-  // Insert the flyout after the <rect> but before the block canvas so that
-  // the flyout is underneath in z-order.  This makes blocks layering during
-  // dragging work properly.
-  background.insertBefore(flyoutSvg, this.workspace_.svgBlockCanvas_);
+  if (flyoutSvg) {
+    // Insert the flyout after the <rect> but before the block canvas so that
+    // the flyout is underneath in z-order.  This makes blocks layering during
+    // dragging work properly.
+    background.insertBefore(flyoutSvg, this.workspace_.svgBlockCanvas_);
+  }
   this.svgDialog_.appendChild(background);
 
   return this.svgDialog_;

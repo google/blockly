@@ -73,6 +73,7 @@ Blockly.ContextMenuRegistry.RegistryItem;
  *    enabled: boolean,
  *    callback: function(!Blockly.ContextMenuRegistry.Scope),
  *    scope: !Blockly.ContextMenuRegistry.Scope,
+ *    weight: number,
  * }}
  */
 Blockly.ContextMenuRegistry.ContextMenuOption;
@@ -145,10 +146,14 @@ Blockly.ContextMenuRegistry.prototype.getContextMenuOptions = function(scopeType
           enabled: (precondition == 'enabled'),
           callback: item.callback,
           scope: scope,
+          weight: item.weight,
         };
         menuOptions.push(menuOption);
       }
     }
+  });
+  menuOptions.sort(function(a, b) {
+    return a.weight - b.weight;
   });
   return menuOptions;
 };

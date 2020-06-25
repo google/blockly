@@ -38,6 +38,7 @@
     "test:run": "tests/run_all_tests.sh",
     "test:setupselenium": "selenium-standalone install --config=./tests/scripts/selenium-config.js",
     "test:startselenium": "selenium-standalone start --config=./tests/scripts/selenium-config.js",
+    "test:compile:advanced": "gulp buildAdvancedCompilationTest",
     "typings": "gulp typings",
     "updateGithubPages": "gulp gitUpdateGithubPages"
   },

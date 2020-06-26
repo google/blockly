@@ -16,7 +16,9 @@
  */
 goog.provide('Blockly.ContextMenuItems');
 
-// Option to undo previous action.
+goog.requireType('Blockly.BlockSvg');
+
+/** Option to undo previous action. */
 var registerUndo = function() {
   var undoOption = {};
   undoOption.displayText = function() {
@@ -37,7 +39,7 @@ var registerUndo = function() {
   Blockly.ContextMenuRegistry.registry.register(undoOption);
 };
 
-// Option to redo previous action.
+/** Option to redo previous action. */
 var registerRedo = function() {
   var redoOption = {};
   redoOption.displayText = function() { return Blockly.Msg['REDO']; };
@@ -56,7 +58,7 @@ var registerRedo = function() {
   Blockly.ContextMenuRegistry.registry.register(redoOption);
 };
     
-// Option to clean up blocks.
+/** Option to clean up blocks. */
 var registerCleanup = function() {
   var cleanOption = {};
   cleanOption.displayText = function() {
@@ -83,8 +85,7 @@ var registerCleanup = function() {
 /**
  * Creates a callback to collapse or expand top blocks.
  * @param {boolean} shouldCollapse Whether a block should collapse.
- * @param {!Array<?>} topBlocks Top blocks in the workspace.
- * @private
+ * @param {!Array<Blockly.BlockSvg>} topBlocks Top blocks in the workspace.
  */
 var toggleOption = function(shouldCollapse, topBlocks) {
   var DELAY = 10;
@@ -99,7 +100,7 @@ var toggleOption = function(shouldCollapse, topBlocks) {
   }
 };
 
-// Option to collapse all blocks.
+/** Option to collapse all blocks. */
 var registerCollapse = function() {
   var collapseOption = {};
   collapseOption.displayText = function() {
@@ -130,6 +131,7 @@ var registerCollapse = function() {
   Blockly.ContextMenuRegistry.registry.register(collapseOption);
 };
   
+/** Option to expand all blocks. */
 var registerExpand = function() {
   var expandOption = {};
   expandOption.displayText = function() {
@@ -160,17 +162,28 @@ var registerExpand = function() {
   Blockly.ContextMenuRegistry.registry.register(expandOption);
 };
   
+/**
+ * Adds a block and its children to a list of deletable blocks.
+ * @param {!Blockly.BlockSvg} block to delete.
+ * @param {!Array.<!Blockly.BlockSvg>} deleteList list of blocks that can be deleted. This will be
+ *    modifed in place with the given block and its descendants.
+ */
 var addDeletableBlocks = function(block, deleteList) {
   if (block.isDeletable()) {
-    deleteList = Array.prototype.push.apply(deleteList, block.getDescendants(false));
+    Array.prototype.push.apply(deleteList, block.getDescendants(false));
   } else {
-    var children = block.getChildren(false);
+    var children = /** @type !Array.<!Blockly.BlockSvg> */ (block.getChildren(false));
     for (var i = 0; i < children.length; i++) {
       addDeletableBlocks(children[i], deleteList);
     }
   }
 };
   
+/**
+ * Constructs a list of blocks that can be deleted in the given workspace.
+ * @param {!Blockly.WorkspaceSvg} workspace to delete all blocks from.
+ * @return {!Array.<!Blockly.BlockSvg>} list of blocks to delete.
+ */
 var getDeletableBlocks = function(workspace) {
   var deleteList = [];
   var topBlocks = workspace.getTopBlocks(true);
@@ -180,6 +193,10 @@ var getDeletableBlocks = function(workspace) {
   return deleteList;
 };
     
+/** Deletes the given blocks. Used to delete all blocks in the workspace.
+ * @param {!Array.<!Blockly.BlockSvg>} deleteList list of blocks to delete.
+ * @param {string} eventGroup event group id with which all delete events should be associated.
+ */
 var deleteNext = function(deleteList, eventGroup) {
   var DELAY = 10;
   Blockly.Events.setGroup(eventGroup);
@@ -195,7 +212,7 @@ var deleteNext = function(deleteList, eventGroup) {
   Blockly.Events.setGroup(false);
 };
   
-// Option to delete all blocks.
+/** Option to delete all blocks. */
 var registerDeleteAll = function() {
   var deleteOption = {};
   deleteOption.displayText = function(scope) {
@@ -234,7 +251,7 @@ var registerDeleteAll = function() {
   Blockly.ContextMenuRegistry.registry.register(deleteOption);
 };
 
-
+/** Registers all workspace-scoped context menu items. */
 var registerWorkspaceOptions = function() {
   registerUndo();
   registerRedo();
@@ -244,6 +261,11 @@ var registerWorkspaceOptions = function() {
   registerDeleteAll();
 };
 
+/**
+ * Registers all default context menu items. This should be called once per instance of
+ * ContextMenuRegistry.
+ * @package
+ */
 Blockly.ContextMenuItems.registerDefaultOptions = function() {
   registerWorkspaceOptions();
 };

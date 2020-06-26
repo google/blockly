@@ -24,11 +24,15 @@ goog.require('Blockly.ContextMenuItems');
  * @constructor
  */
 Blockly.ContextMenuRegistry = function() {
-  /**
- * Registry of all registered RegistryItems, keyed by id.
- * @type {!Object<string, Blockly.ContextMenuRegistry.RegistryItem>}
- */
+
+  // Singleton instance should be registered once.
   Blockly.ContextMenuRegistry.registry = this;
+
+  /**
+   * Registry of all registered RegistryItems, keyed by id.
+   * @type {!Object<string, Blockly.ContextMenuRegistry.RegistryItem>}
+   * @private
+   */
   this.registry_ = {};
   Blockly.ContextMenuItems.registerDefaultOptions();
 };
@@ -37,6 +41,7 @@ Blockly.ContextMenuRegistry = function() {
  * Where this menu item should be rendered. If the menu item should be rendered in multiple
  * scopes, e.g. on both a block and a workspace, it should be registered for each scope.
  * @enum {string}
+ * @public
  */
 Blockly.ContextMenuRegistry.ScopeType = {
   BLOCK: 'block',
@@ -56,7 +61,7 @@ Blockly.ContextMenuRegistry.Scope;
 /**
  * A menu item as entered in the registry.
  * @typedef {{
- *    callback: function(!Blockly.ContextMenuRegistry.Scope,
+ *    callback: function(!Blockly.ContextMenuRegistry.Scope),
  *    scopeType: !Blockly.ContextMenuRegistry.ScopeType,
  *    displayText: ((function(!Blockly.ContextMenuRegistry.Scope):string)|string),
  *    preconditionFn: function(!Blockly.ContextMenuRegistry.Scope):string,
@@ -81,6 +86,7 @@ Blockly.ContextMenuRegistry.ContextMenuOption;
 /**
  * Singleton instance of this class. All interactions with this class should be done on this object.
  * @type {?Blockly.ContextMenuRegistry}
+ * @public
  */
 Blockly.ContextMenuRegistry.registry = null;
 
@@ -88,6 +94,7 @@ Blockly.ContextMenuRegistry.registry = null;
  * Registers a RegistryItem.
  * @param {!Blockly.ContextMenuRegistry.RegistryItem} item Context menu item to register.
  * @throws {Error} if an item with the given id already exists.
+ * @public
  */
 Blockly.ContextMenuRegistry.prototype.register = function(item) {
   if (this.registry_[item.id]) {
@@ -100,6 +107,7 @@ Blockly.ContextMenuRegistry.prototype.register = function(item) {
  * Unregisters a RegistryItem with the given id.
  * @param {string} id The id of the RegistryItem to remove.
  * @throws {Error} if an item with the given id does not exist.
+ * @public
  */
 Blockly.ContextMenuRegistry.prototype.unregister = function(id) {
   if (this.registry_[id]) {
@@ -112,6 +120,7 @@ Blockly.ContextMenuRegistry.prototype.unregister = function(id) {
 /**
  * @param {string} id The id of the RegistryItem to get.
  * @returns {?Blockly.ContextMenuRegistry.RegistryItem} RegistryItem or null if not found
+ * @public
  */
 Blockly.ContextMenuRegistry.prototype.getItem = function(id) {
   if (this.registry_[id]) {
@@ -128,6 +137,7 @@ Blockly.ContextMenuRegistry.prototype.getItem = function(id) {
  * @param {!Blockly.ContextMenuRegistry.Scope} scope Current scope of context menu
  *     (i.e., the exact workspace or block being clicked on)
  * @returns {!Array.<!Blockly.ContextMenuRegistry.ContextMenuOption>} the list of ContextMenuOptions
+ * @public
  */
 Blockly.ContextMenuRegistry.prototype.getContextMenuOptions = function(scopeType, scope) {
   var items = Object.keys(this.registry_);

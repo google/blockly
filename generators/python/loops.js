@@ -163,7 +163,7 @@ Blockly.Python['controls_for'] = function(block) {
       range += '(' + startVar + ', ' + endVar + ', ' + incVar + ')';
     } else {
       // We cannot determine direction statically.
-      range  = generateUpDownRange(startVar, endVar, incVar);
+      range = generateUpDownRange(startVar, endVar, incVar);
     }
   }
   code += 'for ' + variable0 + ' in ' + range + ':\n' + branch;

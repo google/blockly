@@ -1179,9 +1179,9 @@ def lists_sort(my_list, type, reverse):
     except:
       return 0
   key_funcs = {
-    "NUMERIC": try_float,
-    "TEXT": str,
-    "IGNORE_CASE": lambda s: str(s).lower()
+      "NUMERIC": try_float,
+      "TEXT": str,
+      "IGNORE_CASE": lambda s: str(s).lower()
   }
   key_func = key_funcs[type]
   list_cpy = list(my_list)

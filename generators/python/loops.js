@@ -156,9 +156,9 @@ Blockly.Python['controls_for'] = function(block) {
 
     if (typeof startVar == 'number' && typeof endVar == 'number') {
       if (startVar < endVar) {
-        range  = defineUpRange();
+        range = defineUpRange();
       } else {
-        range  = defineDownRange();
+        range = defineDownRange();
       }
       range += '(' + startVar + ', ' + endVar + ', ' + incVar + ')';
     } else {

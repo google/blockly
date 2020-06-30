@@ -588,7 +588,7 @@ Blockly.Toolbox.prototype.setColour_ = function(colourValue, childOut,
   // Decode the colour for any potential message references
   // (eg. `%{BKY_MATH_HUE}`).
   var colour = Blockly.utils.replaceMessageReferences(colourValue);
-  if (colour === null || colour === '') {
+  if (colour == null || colour === '') {
     // No attribute. No colour.
     childOut.hexColour = '';
   } else {

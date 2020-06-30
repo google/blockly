@@ -13,6 +13,7 @@
 			"Redredsonia",
 			"Silovan",
 			"SimondR",
+			"Teretalexev",
 			"Vlad5250"
 		]
 	},
@@ -22,7 +23,7 @@
 	"DUPLICATE_BLOCK": "Дублировать",
 	"ADD_COMMENT": "Добавить комментарий",
 	"REMOVE_COMMENT": "Удалить комментарий",
-	"DUPLICATE_COMMENT": "Клонировать комментарий",
+	"DUPLICATE_COMMENT": "Дублировать комментарий",
 	"EXTERNAL_INPUTS": "Вставки снаружи",
 	"INLINE_INPUTS": "Вставки внутри",
 	"DELETE_BLOCK": "Удалить блок",

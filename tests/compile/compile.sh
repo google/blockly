@@ -75,6 +75,7 @@ done
 echo "Compiling Blockly..."
 COMPILATION_COMMAND="java -jar $COMPILER --js='$BLOCKLY_ROOT/tests/compile/main.js' \
   --js='$tempPath/**.js' \
+  --js='$BLOCKLY_ROOT/tests/blocks/**.js' \
   --js='$BLOCKLY_ROOT/blocks/**.js' \
   --js='$BLOCKLY_ROOT/generators/**.js' \
   --generate_exports \

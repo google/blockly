@@ -103,7 +103,7 @@ Blockly.WorkspaceSvg = function(options,
    * @private
    */
   this.grid_ = this.options.gridPattern ?
-      new Blockly.Grid(options.gridPattern, options.gridOptions) : null;
+      new Blockly.Grid(this.options.gridPattern, options.gridOptions) : null;
 
   /**
    * Manager in charge of markers and cursors.

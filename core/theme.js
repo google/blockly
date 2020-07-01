@@ -167,7 +167,7 @@ Blockly.Theme.prototype.setCategoryStyle = function(categoryStyleName,
  */
 Blockly.Theme.prototype.getComponentStyle = function(componentName) {
   var style = this.componentStyles[componentName];
-  if (style && typeof propertyValue == 'string' &&
+  if (style && typeof style == 'string' &&
       this.getComponentStyle(/** @type {string} */ (style))) {
     return this.getComponentStyle(/** @type {string} */ (style));
   }

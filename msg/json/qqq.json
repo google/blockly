@@ -4,7 +4,6 @@
 			"Espertus",
 			"Liuxinyu970226",
 			"Metalhead64",
-			"Norhorn",
 			"Robby",
 			"Shirayuki"
 		]
@@ -219,7 +218,7 @@
 	"MATH_RANDOM_FLOAT_TOOLTIP": "tooltip - Return a random fraction between 0 and 1.  The value may be equal to 0 but must be less than 1.",
 	"MATH_ATAN2_HELPURL": "{{Optional}} url - Information about how to calculate atan2.",
 	"MATH_ATAN2_TITLE": "block text - The title of the block that calculates atan2 of point (X, Y).  For example, if the point is (-1, -1), this returns -135. %1 is a placeholder for the X coordinate, %2 is the placeholder for the Y coordinate.",
-	"MATH_ATAN2_TOOLTIP": "επεξήγηση εργαλείου - Επιστρέφει την εφαπτομένη τόξου του σημείου (X, Y) σε μοίρες από -180 έως 180. Για παράδειγμα, εάν το σημείο είναι (-1, -1) αυτό επιστρέφει -135.",
+	"MATH_ATAN2_TOOLTIP": "tooltip - Return the arctangent of point (X, Y) in degrees from -180 to 180. For example, if the point is (-1, -1) this returns -135.",
 	"TEXT_TEXT_HELPURL": "{{Optional}} url - Information about how computers represent text (sometimes referred to as ''string''s).",
 	"TEXT_TEXT_TOOLTIP": "tooltip - See [https://github.com/google/blockly/wiki/Text https://github.com/google/blockly/wiki/Text].",
 	"TEXT_JOIN_HELPURL": "{{Optional}} url - Information on concatenating/appending pieces of text.",

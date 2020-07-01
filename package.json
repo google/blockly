@@ -1,6 +1,6 @@
 {
   "name": "blockly",
-  "version": "3.20200402.1",
+  "version": "3.20200625.1",
   "description": "Blockly is a library for building visual programming editors.",
   "keywords": [
     "blockly"
@@ -38,6 +38,7 @@
     "test:run": "tests/run_all_tests.sh",
     "test:setupselenium": "selenium-standalone install --config=./tests/scripts/selenium-config.js",
     "test:startselenium": "selenium-standalone start --config=./tests/scripts/selenium-config.js",
+    "test:compile:advanced": "gulp buildAdvancedCompilationTest",
     "typings": "gulp typings",
     "updateGithubPages": "gulp gitUpdateGithubPages"
   },

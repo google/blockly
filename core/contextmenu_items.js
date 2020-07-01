@@ -19,7 +19,7 @@ goog.provide('Blockly.ContextMenuItems');
 goog.requireType('Blockly.BlockSvg');
 
 /** Option to undo previous action. */
-var registerUndo = function() {
+Blockly.ContextMenuItems.registerUndo = function() {
   var undoOption = {};
   undoOption.displayText = function() {
     return Blockly.Msg['UNDO'];
@@ -40,7 +40,7 @@ var registerUndo = function() {
 };
 
 /** Option to redo previous action. */
-var registerRedo = function() {
+Blockly.ContextMenuItems.registerRedo = function() {
   var redoOption = {};
   redoOption.displayText = function() { return Blockly.Msg['REDO']; };
   redoOption.preconditionFn = function(scope) {
@@ -59,7 +59,7 @@ var registerRedo = function() {
 };
     
 /** Option to clean up blocks. */
-var registerCleanup = function() {
+Blockly.ContextMenuItems.registerCleanup = function() {
   var cleanOption = {};
   cleanOption.displayText = function() {
     return Blockly.Msg['CLEAN_UP'];
@@ -101,7 +101,7 @@ var toggleOption = function(shouldCollapse, topBlocks) {
 };
 
 /** Option to collapse all blocks. */
-var registerCollapse = function() {
+Blockly.ContextMenuItems.registerCollapse = function() {
   var collapseOption = {};
   collapseOption.displayText = function() {
     return Blockly.Msg['COLLAPSE_ALL'];
@@ -132,7 +132,7 @@ var registerCollapse = function() {
 };
   
 /** Option to expand all blocks. */
-var registerExpand = function() {
+Blockly.ContextMenuItems.registerExpand = function() {
   var expandOption = {};
   expandOption.displayText = function() {
     return Blockly.Msg['EXPAND_ALL'];
@@ -213,7 +213,7 @@ var deleteNext = function(deleteList, eventGroup) {
 };
   
 /** Option to delete all blocks. */
-var registerDeleteAll = function() {
+Blockly.ContextMenuItems.registerDeleteAll = function() {
   var deleteOption = {};
   deleteOption.displayText = function(scope) {
     var deletableBlocksLength = getDeletableBlocks(scope.workspace).length;
@@ -253,12 +253,12 @@ var registerDeleteAll = function() {
 
 /** Registers all workspace-scoped context menu items. */
 var registerWorkspaceOptions = function() {
-  registerUndo();
-  registerRedo();
-  registerCleanup();
-  registerCollapse();
-  registerExpand();
-  registerDeleteAll();
+  Blockly.ContextMenuItems.registerUndo();
+  Blockly.ContextMenuItems.registerRedo();
+  Blockly.ContextMenuItems.registerCleanup();
+  Blockly.ContextMenuItems.registerCollapse();
+  Blockly.ContextMenuItems.registerExpand();
+  Blockly.ContextMenuItems.registerDeleteAll();
 };
 
 /**

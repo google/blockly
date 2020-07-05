@@ -173,6 +173,7 @@ class Gen_compressed(threading.Thread):
       self.gen_generator("php")
       self.gen_generator("lua")
       self.gen_generator("dart")
+      self.gen_generator("arduino")
 
   def gen_core(self):
     target_filename = "blockly_compressed.js"
@@ -265,10 +266,11 @@ goog.provide('Blockly.Warning');
       ]
 
     # Read in all the source files.
-    # Add Blockly.Generator and Blockly.utils.string to be compatible
+    # Add Blockly.Generator, Blockly.StaticTyping and Blockly.utils.string to be compatible
     # with the compiler.
     params.append(("js_code", """
 goog.provide('Blockly.Generator');
+goog.provide('Blockly.StaticTyping');
 goog.provide('Blockly.utils.global');
 goog.provide('Blockly.utils.string');
 """))

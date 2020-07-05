@@ -308,19 +308,29 @@ function buildDart() {
 };
 
 /**
+ * This task builds the arduino generator:
+ *     arduino_compressed.js
+ */
+function buildArduino() {
+  return buildGenerator('arduino', 'Arduino');
+};
+
+/**
  * This tasks builds all the generators:
  *     javascript_compressed.js
  *     python_compressed.js
  *     php_compressed.js
  *     lua_compressed.js
  *     dart_compressed.js
+ *     arduino_compressed.js
  */
 const buildGenerators = gulp.parallel(
   buildJavascript,
   buildPython,
   buildPHP,
   buildLua,
-  buildDart
+  buildDart,
+  buildArduino
 );
 
 /**

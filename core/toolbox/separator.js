@@ -13,11 +13,28 @@
 
 goog.provide('Blockly.ToolboxSeparator');
 
+/**
+ * Class for a toolbox separator.
+ * @param {!Blockly.utils.toolbox.Separator} toolboxSeparatorDef The information
+ *     needed
+ * @param {!Blockly.IToolbox} toolbox The parent toolbox for the category.
+ * @constructor
+ */
 Blockly.ToolboxSeparator = function(toolboxSeparatorDef, toolbox) {
+  /**
+   * The toolbox this category belongs to.
+   * @type {!Blockly.IToolbox}
+   * @protected
+   */
   this.parentToolbox = toolbox;
 };
 
+/**
+ * Create the dom for a toolbox separator.
+ * @return {HTMLDivElement} The div for the separator.
+ */
 Blockly.ToolboxSeparator.prototype.createDom = function() {
+  // TODO: Figure out what spans and divs are actually necessary for this.
   var treeSeparatorContainer = document.createElement('div');
   if (this.parentToolbox.isHorizontal()) {
     treeSeparatorContainer.classList.add('blocklyTreeSeparatorHorizontal');
@@ -29,7 +46,6 @@ Blockly.ToolboxSeparator.prototype.createDom = function() {
   } else {
     treeSeparatorContainer.classList.add('blocklyTreeSeparator');
   }
-  // TODO: Figure out what spans and divs are actually necessary for this.
   return treeSeparatorContainer;
 };
 

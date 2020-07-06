@@ -7618,12 +7618,12 @@ declare module Blockly {
             /**
              * Class representing an item in a menu.
              *
-             * @param {string} content Text caption to display as the content of
-             *     the item.
+             * @param {string|!HTMLElement} content Text caption to display as the content
+             *     of the item, or a HTML element to display.
              * @param {string=} opt_value Data/model associated with the menu item.
              * @constructor
              */
-            constructor(content: string, opt_value?: string);
+            constructor(content: string|HTMLElement, opt_value?: string);
     
             /**
              * Creates the menuitem's DOM.

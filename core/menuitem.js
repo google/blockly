@@ -21,13 +21,13 @@ goog.require('Blockly.utils.IdGenerator');
  * Class representing an item in a menu.
  *
  * @param {string|!HTMLElement} content Text caption to display as the content
- *     of the item.
+ *     of the item, or a HTML element to display.
  * @param {string=} opt_value Data/model associated with the menu item.
  * @constructor
  */
 Blockly.MenuItem = function(content, opt_value) {
   /**
-   * Human-readable text of this menu item.
+   * Human-readable text of this menu item, or the HTML element to display.
    * @type {string|!HTMLElement}
    * @private
    */

@@ -125,7 +125,6 @@ Blockly.NewToolbox.prototype.createContainer_ = function(workspace) {
  * @protected
  */
 Blockly.NewToolbox.prototype.onClick_ = function(e) {
-  console.log("HERE");
   if (Blockly.utils.isRightButton(e) || e.target == this.HtmlDiv) {
     // Close flyout.
     Blockly.hideChaff(false);

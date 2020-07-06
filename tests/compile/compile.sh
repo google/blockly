@@ -1,4 +1,18 @@
 #!/bin/bash
+#
+# Deprecation warning: (July 2020)
+# This advanced compilation test script has been deprecated in favour of
+#   npm run test:compile:advanced
+#
+# The script will be removed from Blockly core in Q4 of 2020.
+#
+echo "Deprecation warning: (July 2020)"
+echo "This advanced compilation test script has been deprecated in favour of"
+echo "  npm run test:compile:advanced"
+echo ""
+echo "The script will be removed from Blockly core in Q4 of 2020."
+echo ""
+
 echo "Executing compile.sh from $(pwd)"
 
 # Find the Blockly project root if pwd is the root

@@ -98,21 +98,34 @@ Blockly.ToolboxCategory.prototype.createDom = function() {
   var toolboxLabel = this.createLabelSpan_();
   toolboxCategoryRow.appendChild(toolboxLabel);
 
-  // Create all children categories.
   if (this.hasCategories()) {
-    for (var i = 0; i < this.contents.length; i++) {
-      // TODO: This should check the type of toolbox item before creating.
-      var child = this.contents[i];
-      var newCategory = new Blockly.ToolboxCategory(child, this.parentToolbox_);
-      var dom = newCategory.createDom();
-      toolboxCategory.appendChild(dom);
-    }
+    var subCategoriesContainer = this.createSubCategories_(this.contents);
+    toolboxCategory.appendChild(subCategoriesContainer);
   }
 
   Blockly.bindEvent_(
       toolboxCategoryRow, 'mouseup', this, this.onClick_);
   this.HtmlDiv = toolboxCategory;
   return toolboxCategory;
+};
+
+/**
+ * Create the dom for all sub categories.
+ * @param {Blockly.utils.toolbox.Toolbox} contents The contents of the category.
+ * @return {HTMLDivElement} The div holding all the subcategories.
+ * @private
+ */
+Blockly.ToolboxCategory.prototype.createSubCategories_ = function(contents) {
+  var contentsContainer = document.createElement('div');
+  contentsContainer.classList.add('blocklyToolboxContents');
+  for (var i = 0; i < contents.length; i++) {
+    // TODO: This should check the type of toolbox item before creating.
+    var child = this.contents[i];
+    var newCategory = new Blockly.ToolboxCategory(child, this.parentToolbox_);
+    var dom = newCategory.createDom();
+    contentsContainer.appendChild(dom);
+  }
+  return contentsContainer;
 };
 
 /**

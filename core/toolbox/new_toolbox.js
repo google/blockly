@@ -77,6 +77,13 @@ Blockly.NewToolbox = function(workspace) {
    * @type {number}
    */
   this.toolboxPosition = workspace.options.toolboxPosition;
+
+  /**
+   * The currently selected item.
+   * @type {Blockly.IToolboxItem}
+   * @protected
+   */
+  this.selectedItem_ = null;
 };
 
 /**
@@ -87,6 +94,10 @@ Blockly.NewToolbox.prototype.init = function() {
   var svg = this.workspace_.getParentSvg();
 
   this.HtmlDiv = this.createContainer_(workspace);
+
+  this.contentsDiv = this.createContentsContainer_();
+  this.HtmlDiv.appendChild(this.contentsDiv);
+
   svg.parentNode.insertBefore(this.HtmlDiv, svg);
 
   var themeManager = workspace.getThemeManager();
@@ -117,6 +128,17 @@ Blockly.NewToolbox.prototype.createContainer_ = function(workspace) {
   toolboxContainer.className = 'blocklyToolboxDiv blocklyNonSelectable';
   toolboxContainer.setAttribute('dir', workspace.RTL ? 'RTL' : 'LTR');
   return toolboxContainer;
+};
+
+/**
+ * Create the container for all the contents in the toolbox.
+ * @return {!HTMLDivElement} The div that holds the toolbox.
+ * @protected
+ */
+Blockly.NewToolbox.prototype.createContentsContainer_ = function() {
+  var contentsContainer = document.createElement('div');
+  contentsContainer.classList.add('blocklyToolboxContents');
+  return contentsContainer;
 };
 
 /**
@@ -190,14 +212,14 @@ Blockly.NewToolbox.prototype.render = function(toolboxDef) {
         this.toolboxItems.push(category);
 
         var categoryDom = category.createDom();
-        this.HtmlDiv.appendChild(categoryDom);
+        this.contentsDiv.appendChild(categoryDom);
         break;
       case 'SEP':
         var separator = new Blockly.ToolboxSeparator(childIn, this);
         this.toolboxItems.push(separator);
 
         var separatorDom = separator.createDom();
-        this.HtmlDiv.appendChild(separatorDom);
+        this.contentsDiv.appendChild(separatorDom);
         break;
       case 'BLOCK':
       case 'SHADOW':
@@ -334,7 +356,6 @@ Blockly.NewToolbox.prototype.selectFirstCategory = function() {};
  * @param {Blockly.IToolboxItem} item The toolbox item to select.
  */
 Blockly.NewToolbox.prototype.setSelectedItem = function(item) {
-  // TODO: nope. fix this logic.
   if (this.selectedItem_) {
     this.selectedItem_.setSelected(false);
   }
@@ -342,10 +363,135 @@ Blockly.NewToolbox.prototype.setSelectedItem = function(item) {
     this.selectedItem_ = null;
     this.flyout_.hide();
   } else {
-    item.setSelected(true);
-    this.flyout_.show(item.contents);
     this.selectedItem_ = item;
+    this.selectedItem_.setSelected(true);
+    this.flyout_.show(this.selectedItem_.contents);
   }
 };
+
+/**
+ * CSS for Toolbox.  See css.js for use.
+ */
+Blockly.Css.register([
+  /* eslint-disable indent */
+  '.blocklyToolboxDelete {',
+    'cursor: url("<<<PATH>>>/handdelete.cur"), auto;',
+  '}',
+
+  '.blocklyToolboxGrab {',
+    'cursor: url("<<<PATH>>>/handclosed.cur"), auto;',
+    'cursor: grabbing;',
+    'cursor: -webkit-grabbing;',
+  '}',
+
+  /* Category tree in Toolbox. */
+  '.blocklyToolboxDiv {',
+    'background-color: #ddd;',
+    'overflow-x: visible;',
+    'overflow-y: auto;',
+    'position: absolute;',
+    'z-index: 70;', /* so blocks go under toolbox when dragging */
+    '-webkit-tap-highlight-color: transparent;', /* issue #1345 */
+  '}',
+
+  '.blocklyTreeRoot {',
+    'padding: 4px 0;',
+  '}',
+
+  '.blocklyTreeRoot:focus {',
+    'outline: none;',
+  '}',
+
+  '.blocklyTreeRow {',
+    'height: 22px;',
+    'line-height: 22px;',
+    'margin-bottom: 3px;',
+    'padding-right: 8px;',
+    'white-space: nowrap;',
+  '}',
+
+  '.blocklyHorizontalTree {',
+    'float: left;',
+    'margin: 1px 5px 8px 0;',
+  '}',
+
+  '.blocklyHorizontalTreeRtl {',
+    'float: right;',
+    'margin: 1px 0 8px 5px;',
+  '}',
+
+  '.blocklyToolboxDiv[dir="RTL"] .blocklyTreeRow {',
+    'margin-left: 8px;',
+  '}',
+
+  '.blocklyTreeRow:not(.blocklyTreeSelected):hover {',
+    'background-color: rgba(255, 255, 255, 0.2);',
+  '}',
+
+  '.blocklyTreeSeparator {',
+    'border-bottom: solid #e5e5e5 1px;',
+    'height: 0;',
+    'margin: 5px 0;',
+  '}',
+
+  '.blocklyTreeSeparatorHorizontal {',
+    'border-right: solid #e5e5e5 1px;',
+    'width: 0;',
+    'padding: 5px 0;',
+    'margin: 0 5px;',
+  '}',
+
+  '.blocklyTreeIcon {',
+    'background-image: url(<<<PATH>>>/sprites.png);',
+    'height: 16px;',
+    'vertical-align: middle;',
+    'width: 16px;',
+  '}',
+
+  '.blocklyTreeIconClosedLtr {',
+    'background-position: -32px -1px;',
+  '}',
+
+  '.blocklyTreeIconClosedRtl {',
+    'background-position: 0 -1px;',
+  '}',
+
+  '.blocklyTreeIconOpen {',
+    'background-position: -16px -1px;',
+  '}',
+
+  '.blocklyTreeSelected>.blocklyTreeIconClosedLtr {',
+    'background-position: -32px -17px;',
+  '}',
+
+  '.blocklyTreeSelected>.blocklyTreeIconClosedRtl {',
+    'background-position: 0 -17px;',
+  '}',
+
+  '.blocklyTreeSelected>.blocklyTreeIconOpen {',
+    'background-position: -16px -17px;',
+  '}',
+
+  '.blocklyTreeIconNone,',
+  '.blocklyTreeSelected>.blocklyTreeIconNone {',
+    'background-position: -48px -1px;',
+  '}',
+
+  '.blocklyTreeLabel {',
+    'cursor: default;',
+    'font: 16px sans-serif;',
+    'padding: 0 3px;',
+    'vertical-align: middle;',
+  '}',
+
+  '.blocklyToolboxDelete .blocklyTreeLabel {',
+    'cursor: url("<<<PATH>>>/handdelete.cur"), auto;',
+  '}',
+
+  '.blocklyTreeSelected .blocklyTreeLabel {',
+    'color: #fff;',
+  '}'
+  /* eslint-enable indent */
+]);
 
 Blockly.registry.register(Blockly.registry.Type.TOOLBOX, 'newToolbox', Blockly.NewToolbox);

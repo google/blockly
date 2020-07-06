@@ -485,6 +485,10 @@ if __name__ == "__main__":
   full_search_paths = calcdeps.ExpandDirectories(["core", "closure"])
   full_search_paths = sorted(full_search_paths)  # Deterministic build.
 
+  print("Deprecation Warning: \n This build script has been deprecated, " +
+    "please use 'npm run build' instead. \n The script will be removed from " +
+    "Blockly core in Q4 of 2020.\n")
+
   # Uncompressed and compressed are run in parallel threads.
   # Uncompressed is limited by processor speed.
   if (args.core):

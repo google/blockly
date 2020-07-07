@@ -37,11 +37,10 @@ Blockly.ToolboxCategory = function(categoryDef, toolbox) {
 
   /**
    * The workspace of the parent toolbox.
-   * TODO: This should not be accessing a private variable.
    * @type {!Blockly.WorkspaceSvg}
    * @protected
    */
-  this.workspace_ = this.parentToolbox_.workspace_;
+  this.workspace_ = this.parentToolbox_.getWorkspace();
 
   /**
    * The contents of the category.
@@ -70,8 +69,24 @@ Blockly.ToolboxCategory = function(categoryDef, toolbox) {
   /**
    * The html container for the category.
    * @type {HTMLDivElement}
+   * @protected
    */
-  this.HtmlDiv = null;
+  this.htmlDiv_ = null;
+
+  /**
+   * The html element for the category row.
+   * @type {HTMLDivElement}
+   * @protected
+   */
+  this.rowDiv_ = null;
+
+  /**
+   * A handle to use to unbind the click event for this category.
+   * Data returned from Blockly.bindEvent_.
+   * @type {?Blockly.EventData}
+   * @private
+   */
+  this.clickEvent_ = null;
 };
 
 /**
@@ -79,34 +94,52 @@ Blockly.ToolboxCategory = function(categoryDef, toolbox) {
  * @return {HTMLDivElement} The div for the category.
  */
 Blockly.ToolboxCategory.prototype.createDom = function() {
-  var toolboxCategory = document.createElement('div');
-  toolboxCategory.classList.add('blocklyToolboxCategory');
+  this.htmlDiv_ = document.createElement('div');
+  this.htmlDiv_.classList.add('blocklyToolboxCategory');
 
-  var toolboxCategoryRow = document.createElement('div');
-  toolboxCategoryRow.classList.add('blocklyTreeRow');
-  toolboxCategory.appendChild(toolboxCategoryRow);
+  this.rowDiv_ = document.createElement('div');
+  this.rowDiv_.classList.add('blocklyTreeRow');
+  this.htmlDiv_.appendChild(this.rowDiv_);
 
   if (this.parentToolbox_.isHorizontal()) {
-    // TODO: Could we use flexbox to more easily accomplish this?
+    // TODO: All these classes do is add margins. Do we want to keep this?
     var horizontalClass = this.parentToolbox_.isRtl() ?
         'blocklyHorizontalTreeRtl' : 'blocklyHorizontalTree';
-    toolboxCategory.classList.add(horizontalClass);
+    this.htmlDiv_.classList.add(horizontalClass);
   }
   var toolboxIcon = this.createIconSpan_();
-  toolboxCategoryRow.appendChild(toolboxIcon);
+  this.rowDiv_.appendChild(toolboxIcon);
 
   var toolboxLabel = this.createLabelSpan_();
-  toolboxCategoryRow.appendChild(toolboxLabel);
+  this.rowDiv_.appendChild(toolboxLabel);
 
   if (this.hasCategories()) {
     var subCategoriesContainer = this.createSubCategories_(this.contents);
-    toolboxCategory.appendChild(subCategoriesContainer);
+    this.htmlDiv_.appendChild(subCategoriesContainer);
   }
 
-  Blockly.bindEvent_(
-      toolboxCategoryRow, 'mouseup', this, this.onClick_);
-  this.HtmlDiv = toolboxCategory;
-  return toolboxCategory;
+  this.addColour_(this.rowDiv_, this.colour_);
+
+  this.clickEvent_ = Blockly.bindEvent_(
+      this.rowDiv_, 'mouseup', this, this.onClick_);
+  return this.htmlDiv_;
+};
+
+/**
+ * Add the strip of colour to the toolbox category.
+ * @param {HTMLDivElement} rowDiv The div to add the colour to.
+ * @param {string} colour The category colour.
+ * @private
+ */
+Blockly.ToolboxCategory.prototype.addColour_ = function(rowDiv, colour) {
+  if (colour) {
+    var border = '8px solid ' + (colour || '#ddd');
+    if (this.workspace_.RTL) {
+      rowDiv.style.borderRight = border;
+    } else {
+      rowDiv.style.borderLeft = border;
+    }
+  }
 };
 
 /**
@@ -136,7 +169,12 @@ Blockly.ToolboxCategory.prototype.createSubCategories_ = function(contents) {
 Blockly.ToolboxCategory.prototype.createIconSpan_ = function() {
   var toolboxIcon = document.createElement('span');
   // TODO: Should get the class name from the config.
-  toolboxIcon.classList.add('blocklyTreeIcon');
+  if (!this.parentToolbox_.isHorizontal()) {
+    toolboxIcon.classList.add('blocklyTreeIcon');
+    toolboxIcon.classList.add('blocklyTreeIconNone');
+  }
+
+  toolboxIcon.style.display = 'inline-block';
   return toolboxIcon;
 };
 
@@ -231,6 +269,7 @@ Blockly.ToolboxCategory.prototype.parseColour_ = function(colourValue) {
  * @return {boolean} True if this category has sub categories, false otherwise.
  */
 Blockly.ToolboxCategory.prototype.hasCategories = function() {
+  // TODO: I think we can store this at the beginning.
   return this.contents && this.contents.length &&
     typeof this.contents != 'string' &&
     this.contents[0].kind.toUpperCase() == 'CATEGORY';
@@ -243,10 +282,11 @@ Blockly.ToolboxCategory.prototype.hasCategories = function() {
 Blockly.ToolboxCategory.prototype.setSelected = function(isSelected) {
   console.log("Setting selected for category");
   if (isSelected) {
-    // TODO: This should store correct html div.
-    this.HtmlDiv.children[0].style.backgroundColor = this.colour_;
+    this.rowDiv_.style.backgroundColor = this.colour_ || '#57e';
+    this.rowDiv_.classList.add('blocklyTreeSelected');
   } else {
-    this.HtmlDiv.children[0].style.backgroundColor = '';
+    this.rowDiv_.style.backgroundColor = '';
+    this.rowDiv_.classList.remove('blocklyTreeSelected');
   }
 };
 
@@ -263,5 +303,8 @@ Blockly.ToolboxCategory.prototype.onClick_ = function(e) {
  * Dispose of this category.
  */
 Blockly.ToolboxCategory.prototype.dispose = function() {
-  // TODO: Dispose of the toolbox category.
+  if (this.clickEvent_) {
+    Blockly.unbindEvent_(this.clickEvent_);
+  }
+  Blockly.utils.dom.removeNode(this.htmlDiv_);
 };

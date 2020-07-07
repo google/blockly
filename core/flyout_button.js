@@ -73,6 +73,15 @@ Blockly.FlyoutButton = function(workspace, targetWorkspace, json, isLabel) {
                       json['callbackkey'];
 
   /**
+   * The argument to the function called when this button is clicked.
+   * @type {string}
+   * @private
+   */
+  this.callbackArg_ = xml.getAttribute('callbackArg')||
+  /* Check the lower case version too to satisfy IE */
+                      xml.getAttribute('callbackarg');
+
+  /**
    * If specified, a CSS class to add to this button.
    * @type {?string}
    * @private
@@ -267,7 +276,7 @@ Blockly.FlyoutButton.prototype.onMouseUp_ = function(e) {
       this.targetWorkspace_.getButtonCallback(this.callbackKey_))) {
     console.warn('Buttons should have callbacks. Button text: ' + this.text_);
   } else if (!this.isLabel_) {
-    this.targetWorkspace_.getButtonCallback(this.callbackKey_)(this);
+    this.targetWorkspace_.getButtonCallback(this.callbackKey_)(this, this.callbackArg_);
   }
 };
 

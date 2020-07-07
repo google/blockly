@@ -89,7 +89,7 @@ Blockly.ContextMenu.populate_ = function(options, rtl) {
       var actionHandler = function(_menuItem) {
         var option = this;
         Blockly.ContextMenu.hide();
-        option.callback();
+        option.callback(option.scope);
       };
       menuItem.onAction(actionHandler, option);
     }

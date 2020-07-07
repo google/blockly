@@ -94,8 +94,10 @@ Blockly.NewToolbox.prototype.init = function() {
   var svg = this.workspace_.getParentSvg();
 
   this.HtmlDiv = this.createContainer_(workspace);
-
   this.contentsDiv = this.createContentsContainer_();
+  if (this.isHorizontal()) {
+    this.contentsDiv.style.flexDirection = 'row';
+  }
   this.HtmlDiv.appendChild(this.contentsDiv);
 
   svg.parentNode.insertBefore(this.HtmlDiv, svg);
@@ -296,11 +298,11 @@ Blockly.NewToolbox.prototype.position = function() {
     // Not initialized yet.
     return;
   }
-  var svgSize = Blockly.svgSize(this.workspace_.getParentSvg());
+
   if (this.horizontalLayout_) {
     toolboxDiv.style.left = '0';
     toolboxDiv.style.height = 'auto';
-    toolboxDiv.style.width = svgSize.width + 'px';
+    toolboxDiv.style.width = '100%';
     this.height = toolboxDiv.offsetHeight;
     if (this.toolboxPosition == Blockly.TOOLBOX_AT_TOP) {  // Top
       toolboxDiv.style.top = '0';
@@ -313,7 +315,7 @@ Blockly.NewToolbox.prototype.position = function() {
     } else {  // Left
       toolboxDiv.style.left = '0';
     }
-    toolboxDiv.style.height = svgSize.height + 'px';
+    toolboxDiv.style.height = '100%';
     this.width = toolboxDiv.offsetWidth;
   }
   this.flyout_.position();
@@ -322,7 +324,9 @@ Blockly.NewToolbox.prototype.position = function() {
 /**
  * Unhighlight any previously specified option.
  */
-Blockly.NewToolbox.prototype.clearSelection = function() {};
+Blockly.NewToolbox.prototype.clearSelection = function() {
+  this.setSelectedItem(null);
+};
 
 /**
  * Updates the category colours and background colour of selected categories.
@@ -335,15 +339,17 @@ Blockly.NewToolbox.prototype.refreshTheme = function() {};
  * to a change in one of the dynamic categories, such as variables or
  * procedures.
  */
-Blockly.NewToolbox.prototype.refreshSelection = function() {};
+Blockly.NewToolbox.prototype.refreshSelection = function() {
+  if (this.selectedItem_ && this.selectedItem_.contents) {
+    this.flyout_.show(this.selectedItem_.contents);
+  }
+};
 
 /**
  * Toggles the visibility of the toolbox.
  * @param {boolean} isVisible True if toolbox should be visible.
  */
-Blockly.NewToolbox.prototype.setVisible = function() {
-
-};
+Blockly.NewToolbox.prototype.setVisible = function() {};
 
 /**
  * Select the first toolbox category if no category is selected.
@@ -356,17 +362,33 @@ Blockly.NewToolbox.prototype.selectFirstCategory = function() {};
  * @param {Blockly.IToolboxItem} item The toolbox item to select.
  */
 Blockly.NewToolbox.prototype.setSelectedItem = function(item) {
+  // Unselect the old item.
   if (this.selectedItem_) {
     this.selectedItem_.setSelected(false);
   }
-  if (this.selectedItem_ == item) {
+
+  if (!item || this.selectedItem_ == item) {
     this.selectedItem_ = null;
     this.flyout_.hide();
   } else {
     this.selectedItem_ = item;
     this.selectedItem_.setSelected(true);
-    this.flyout_.show(this.selectedItem_.contents);
+    // If the new item does not have contents close the old flyout.
+    if (this.selectedItem_.contents) {
+      this.flyout_.show(this.selectedItem_.contents);
+      this.flyout_.scrollToStart();
+    } else {
+      this.flyout_.hide();
+    }
   }
+};
+
+/**
+ * Gets the workspace for the toolbox.
+ * @return {!Blockly.WorkspaceSvg} The parent workspace for the toolbox.
+ */
+Blockly.NewToolbox.prototype.getWorkspace = function() {
+  return this.workspace_;
 };
 
 /**
@@ -394,6 +416,12 @@ Blockly.Css.register([
     '-webkit-tap-highlight-color: transparent;', /* issue #1345 */
   '}',
 
+  '.blocklyToolboxContents {',
+    'display: flex;',
+    'flex-wrap: wrap;',
+    'flex-direction: column;',
+  '}',
+
   '.blocklyTreeRoot {',
     'padding: 4px 0;',
   '}',
@@ -411,17 +439,16 @@ Blockly.Css.register([
   '}',
 
   '.blocklyHorizontalTree {',
-    'float: left;',
     'margin: 1px 5px 8px 0;',
   '}',
 
   '.blocklyHorizontalTreeRtl {',
-    'float: right;',
     'margin: 1px 0 8px 5px;',
   '}',
 
   '.blocklyToolboxDiv[dir="RTL"] .blocklyTreeRow {',
     'margin-left: 8px;',
+    'padding-right: 0px',
   '}',
 
   '.blocklyTreeRow:not(.blocklyTreeSelected):hover {',

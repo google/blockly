@@ -86,8 +86,9 @@ Blockly.ContextMenuItems.registerCleanup = function() {
  * Creates a callback to collapse or expand top blocks.
  * @param {boolean} shouldCollapse Whether a block should collapse.
  * @param {!Array<Blockly.BlockSvg>} topBlocks Top blocks in the workspace.
+ * @private
  */
-var toggleOption = function(shouldCollapse, topBlocks) {
+Blockly.ContextMenuItems.toggleOption_ = function(shouldCollapse, topBlocks) {
   var DELAY = 10;
   var ms = 0;
   for (var i = 0; i < topBlocks.length; i++) {
@@ -123,7 +124,7 @@ Blockly.ContextMenuItems.registerCollapse = function() {
     return 'hidden';
   };
   collapseOption.callback = function(scope) {
-    toggleOption(true, scope.workspace.getTopBlocks(true));
+    Blockly.ContextMenuItems.toggleOption_(true, scope.workspace.getTopBlocks(true));
   };
   collapseOption.scopeType = Blockly.ContextMenuRegistry.ScopeType.WORKSPACE;
   collapseOption.id = 'collapseWorkspace';
@@ -154,7 +155,7 @@ Blockly.ContextMenuItems.registerExpand = function() {
     return 'hidden';
   };
   expandOption.callback = function(scope) {
-    toggleOption(false, scope.workspace.getTopBlocks(true));
+    Blockly.ContextMenuItems.toggleOption_(false, scope.workspace.getTopBlocks(true));
   };
   expandOption.scopeType = Blockly.ContextMenuRegistry.ScopeType.WORKSPACE;
   expandOption.id = 'toggleWorkspace';
@@ -167,14 +168,15 @@ Blockly.ContextMenuItems.registerExpand = function() {
  * @param {!Blockly.BlockSvg} block to delete.
  * @param {!Array.<!Blockly.BlockSvg>} deleteList list of blocks that can be deleted. This will be
  *    modifed in place with the given block and its descendants.
+ * @private
  */
-var addDeletableBlocks = function(block, deleteList) {
+Blockly.ContextMenuItems.addDeletableBlocks_ = function(block, deleteList) {
   if (block.isDeletable()) {
     Array.prototype.push.apply(deleteList, block.getDescendants(false));
   } else {
     var children = /** @type !Array.<!Blockly.BlockSvg> */ (block.getChildren(false));
     for (var i = 0; i < children.length; i++) {
-      addDeletableBlocks(children[i], deleteList);
+      Blockly.ContextMenuItems.addDeletableBlocks_(children[i], deleteList);
     }
   }
 };
@@ -183,12 +185,13 @@ var addDeletableBlocks = function(block, deleteList) {
  * Constructs a list of blocks that can be deleted in the given workspace.
  * @param {!Blockly.WorkspaceSvg} workspace to delete all blocks from.
  * @return {!Array.<!Blockly.BlockSvg>} list of blocks to delete.
+ * @private
  */
-var getDeletableBlocks = function(workspace) {
+Blockly.ContextMenuItems.getDeletableBlocks_ = function(workspace) {
   var deleteList = [];
   var topBlocks = workspace.getTopBlocks(true);
   for (var i = 0; i < topBlocks.length; i++) {
-    addDeletableBlocks(topBlocks[i], deleteList);
+    Blockly.ContextMenuItems.addDeletableBlocks_(topBlocks[i], deleteList);
   }
   return deleteList;
 };
@@ -196,17 +199,18 @@ var getDeletableBlocks = function(workspace) {
 /** Deletes the given blocks. Used to delete all blocks in the workspace.
  * @param {!Array.<!Blockly.BlockSvg>} deleteList list of blocks to delete.
  * @param {string} eventGroup event group id with which all delete events should be associated.
+ * @private
  */
-var deleteNext = function(deleteList, eventGroup) {
+Blockly.ContextMenuItems.deleteNext_ = function(deleteList, eventGroup) {
   var DELAY = 10;
   Blockly.Events.setGroup(eventGroup);
   var block = deleteList.shift();
   if (block) {
     if (block.workspace) {
       block.dispose(false, true);
-      setTimeout(deleteNext, DELAY, deleteList, eventGroup);
+      setTimeout(Blockly.ContextMenuItems.deleteNext_, DELAY, deleteList, eventGroup);
     } else {
-      deleteNext(deleteList, eventGroup);
+      Blockly.ContextMenuItems.deleteNext_(deleteList, eventGroup);
     }
   }
   Blockly.Events.setGroup(false);
@@ -216,7 +220,8 @@ var deleteNext = function(deleteList, eventGroup) {
 Blockly.ContextMenuItems.registerDeleteAll = function() {
   var deleteOption = {};
   deleteOption.displayText = function(scope) {
-    var deletableBlocksLength = getDeletableBlocks(scope.workspace).length;
+    var deletableBlocksLength =
+        Blockly.ContextMenuItems.getDeletableBlocks_(scope.workspace).length;
     if (deletableBlocksLength == 1) {
       return Blockly.Msg['DELETE_BLOCK'];
     } else {
@@ -224,23 +229,24 @@ Blockly.ContextMenuItems.registerDeleteAll = function() {
     }
   };
   deleteOption.preconditionFn = function(scope) {
-    var deletableBlocksLength = getDeletableBlocks(scope.workspace).length;
+    var deletableBlocksLength =
+        Blockly.ContextMenuItems.getDeletableBlocks_(scope.workspace).length;
     return deletableBlocksLength > 0 ? 'enabled' : 'disabled';
   };
   deleteOption.callback = function(scope) {
     if (scope.workspace.currentGesture_) {
       scope.workspace.currentGesture_.cancel();
     }
-    var deletableBlocks = getDeletableBlocks(scope.workspace);
+    var deletableBlocks = Blockly.ContextMenuItems.getDeletableBlocks_(scope.workspace);
     var eventGroup = Blockly.utils.genUid();
     if (deletableBlocks.length < 2) {
-      deleteNext(deletableBlocks, eventGroup);
+      Blockly.ContextMenuItems.deleteNext_(deletableBlocks, eventGroup);
     } else {
       Blockly.confirm(
           Blockly.Msg['DELETE_ALL_BLOCKS'].replace('%1', deletableBlocks.length),
           function(ok) {
             if (ok) {
-              deleteNext(deletableBlocks, eventGroup);
+              Blockly.ContextMenuItems.deleteNext_(deletableBlocks, eventGroup);
             }
           });
     }
@@ -251,8 +257,11 @@ Blockly.ContextMenuItems.registerDeleteAll = function() {
   Blockly.ContextMenuRegistry.registry.register(deleteOption);
 };
 
-/** Registers all workspace-scoped context menu items. */
-var registerWorkspaceOptions = function() {
+/**
+ * Registers all workspace-scoped context menu items.
+ * @private
+ */
+Blockly.ContextMenuItems.registerWorkspaceOptions_ = function() {
   Blockly.ContextMenuItems.registerUndo();
   Blockly.ContextMenuItems.registerRedo();
   Blockly.ContextMenuItems.registerCleanup();
@@ -267,6 +276,6 @@ var registerWorkspaceOptions = function() {
  * @package
  */
 Blockly.ContextMenuItems.registerDefaultOptions = function() {
-  registerWorkspaceOptions();
+  Blockly.ContextMenuItems.registerWorkspaceOptions_();
 };
   

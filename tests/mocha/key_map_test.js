@@ -1,18 +1,7 @@
 /**
  * @license
  * Copyright 2019 Google LLC
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 suite('Key Map Tests', function() {
@@ -25,38 +14,38 @@ suite('Key Map Tests', function() {
       return "test";
     });
     Blockly.user.keyMap.setActionForKey('65', newAction);
-    assertEquals(Blockly.user.keyMap.map_['65'].name, 'test_action');
+    chai.assert.equal(Blockly.user.keyMap.map_['65'].name, 'test_action');
   });
 
   test('Test giving an old action a new key', function() {
     Blockly.user.keyMap.setActionForKey(Blockly.utils.KeyCodes.F,
         Blockly.navigation.ACTION_PREVIOUS);
-    assertEquals(Blockly.user.keyMap.map_[Blockly.utils.KeyCodes.W], undefined);
-    assertEquals(Blockly.user.keyMap.map_[Blockly.utils.KeyCodes.F],
+    chai.assert.isUndefined(Blockly.user.keyMap.map_[Blockly.utils.KeyCodes.W]);
+    chai.assert.equal(Blockly.user.keyMap.map_[Blockly.utils.KeyCodes.F],
         Blockly.navigation.ACTION_PREVIOUS);
   });
 
   test('Test get key by action defined', function() {
     var key = Blockly.user.keyMap.getKeyByAction(Blockly.navigation.ACTION_PREVIOUS);
-    assertEquals(key, Blockly.utils.KeyCodes.W);
+    chai.assert.equal(key, Blockly.utils.KeyCodes.W);
   });
 
-  test('Test get key by action undefined', function() {
+  test('Test get key by action not defined', function() {
     var key = Blockly.user.keyMap.getKeyByAction(new Blockly.Action('something'));
-    assertEquals(key, undefined);
+    chai.assert.notExists(key);
   });
 
   test('Test set key map', function() {
     var testKeyMap = Blockly.user.keyMap.createDefaultKeyMap();
     testKeyMap['randomKey'] = new Blockly.Action('test','',null);
     Blockly.user.keyMap.setKeyMap(testKeyMap);
-    assertEquals(Blockly.user.keyMap.map_['randomKey'].name, 'test');
+    chai.assert.equal(Blockly.user.keyMap.map_['randomKey'].name, 'test');
   });
 
   test('Test get key map returns a clone', function() {
     var keyMap = Blockly.user.keyMap.getKeyMap();
     keyMap['randomKey'] = new Blockly.Action('test', '', null);
-    assertEquals(Blockly.user.keyMap.map_['randomKey'], undefined);
+    chai.assert.isUndefined(Blockly.user.keyMap.map_['randomKey']);
   });
 
   test('Test serialize key code with modifiers', function() {
@@ -67,7 +56,7 @@ suite('Key Map Tests', function() {
       keyCode: 65
     };
     var serializedKey = Blockly.user.keyMap.serializeKeyEvent(mockEvent);
-    assertEquals(serializedKey, 'ShiftControlAltMeta65');
+    chai.assert.equal(serializedKey, 'ShiftControlAltMeta65');
   });
 
   test('Test serialize key code without modifiers', function() {
@@ -78,7 +67,7 @@ suite('Key Map Tests', function() {
       keyCode: 65
     };
     var serializedKey = Blockly.user.keyMap.serializeKeyEvent(mockEvent);
-    assertEquals(serializedKey, '65');
+    chai.assert.equal(serializedKey, '65');
   });
 
   test('Test modifiers in reverse order', function() {
@@ -87,8 +76,8 @@ suite('Key Map Tests', function() {
           Blockly.user.keyMap.modifierKeys.SHIFT]);
     Blockly.user.keyMap.setActionForKey(testKey, new Blockly.Action('test', '', null));
     var action = Blockly.user.keyMap.getActionByKeyCode('ShiftControl75');
-    assertNotNull(action);
-    assertEquals(action.name, 'test');
+    chai.assert.isNotNull(action);
+    chai.assert.equal(action.name, 'test');
   });
 
   test('Test report invalid modifiers', function() {

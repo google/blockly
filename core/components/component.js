@@ -1,18 +1,7 @@
 /**
  * @license
  * Copyright 2019 Google LLC
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 /**
@@ -41,7 +30,7 @@ Blockly.Component = function() {
   /**
    * Whether the component is rendered right-to-left.
    * @type {boolean}
-   * @private
+   * @protected
    */
   this.rightToLeft_ = Blockly.Component.defaultRightToLeft;
 
@@ -95,6 +84,13 @@ Blockly.Component = function() {
    * @private
    */
   this.childIndex_ = {};
+
+  /**
+   * Whether or not the component has been disposed.
+   * @type {boolean}
+   * @private
+   */
+  this.disposed_ = false;
 };
 
 
@@ -126,7 +122,12 @@ Blockly.Component.Error = {
    * Error when an attempt is made to add a child component at an out-of-bounds
    * index.  We don't support sparse child arrays.
    */
-  CHILD_INDEX_OUT_OF_BOUNDS: 'Child component index out of bounds'
+  CHILD_INDEX_OUT_OF_BOUNDS: 'Child component index out of bounds',
+
+  /**
+   * Error when calling an abstract method that should be overriden.
+   */
+  ABSTRACT_METHOD: 'Unimplemented abstract method'
 };
 
 /**
@@ -206,12 +207,11 @@ Blockly.Component.prototype.isInDocument = function() {
 };
 
 /**
- * Creates the initial DOM representation for the component.  The default
- * implementation is to set this.element_ = div.
+ * Creates the initial DOM representation for the component.
  * @protected
  */
 Blockly.Component.prototype.createDom = function() {
-  this.element_ = document.createElement('div');
+  throw Error(Blockly.Component.Error.ABSTRACT_METHOD);
 };
 
 /**
@@ -232,19 +232,6 @@ Blockly.Component.prototype.createDom = function() {
  */
 Blockly.Component.prototype.render = function(opt_parentElement) {
   this.render_(opt_parentElement);
-};
-
-/**
- * Renders the component before another element. The other element should be in
- * the document already.
- *
- * Throws an Error if the component is already rendered.
- *
- * @param {Node} sibling Node to render the component before.
- * @protected
- */
-Blockly.Component.prototype.renderBefore = function(sibling) {
-  this.render_(/** @type {Element} */ (sibling.parentNode), sibling);
 };
 
 /**
@@ -487,7 +474,8 @@ Blockly.Component.prototype.addChildAt = function(child, index, opt_render) {
       child.element_.parentNode &&
       // Under some circumstances, IE8 implicitly creates a Document Fragment
       // for detached nodes, so ensure the parent is an Element as it should be.
-      child.element_.parentNode.nodeType == Blockly.utils.dom.Node.ELEMENT_NODE) {
+      child.element_.parentNode.nodeType ==
+          Blockly.utils.dom.NodeType.ELEMENT_NODE) {
     // We don't touch the DOM, but if the parent is in the document, and the
     // child element is in the document but not marked as such, then we call
     // enterDocument on the child.
@@ -505,32 +493,6 @@ Blockly.Component.prototype.addChildAt = function(child, index, opt_render) {
  */
 Blockly.Component.prototype.getContentElement = function() {
   return this.element_;
-};
-
-/**
- * Returns true if the component is rendered right-to-left, false otherwise.
- * The first time this function is invoked, the right-to-left rendering property
- * is set if it has not been already.
- * @return {boolean} Whether the control is rendered right-to-left.
- * @protected
- */
-Blockly.Component.prototype.isRightToLeft = function() {
-  return this.rightToLeft_;
-};
-
-/**
- * Set is right-to-left. This function should be used if the component needs
- * to know the rendering direction during DOM creation (i.e. before
- * {@link #enterDocument} is called and is right-to-left is set).
- * @param {boolean} rightToLeft Whether the component is rendered
- *     right-to-left.
- * @package
- */
-Blockly.Component.prototype.setRightToLeft = function(rightToLeft) {
-  if (this.inDocument_) {
-    throw Error(Blockly.Component.Error.ALREADY_RENDERED);
-  }
-  this.rightToLeft_ = rightToLeft;
 };
 
 /**
@@ -589,15 +551,4 @@ Blockly.Component.prototype.forEachChild = function(f, opt_obj) {
   for (var i = 0; i < this.children_.length; i++) {
     f.call(/** @type {?} */ (opt_obj), this.children_[i], i);
   }
-};
-
-/**
- * Returns the 0-based index of the given child component, or -1 if no such
- * child is found.
- * @param {?Blockly.Component} child The child component.
- * @return {number} 0-based index of the child component; -1 if not found.
- * @protected
- */
-Blockly.Component.prototype.indexOfChild = function(child) {
-  return this.children_.indexOf(child);
 };

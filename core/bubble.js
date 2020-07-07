@@ -1,18 +1,7 @@
 /**
  * @license
  * Copyright 2012 Google LLC
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 /**
@@ -31,6 +20,8 @@ goog.require('Blockly.utils.dom');
 goog.require('Blockly.utils.math');
 goog.require('Blockly.utils.userAgent');
 goog.require('Blockly.Workspace');
+
+goog.requireType('Blockly.utils.Metrics');
 
 
 /**
@@ -500,8 +491,8 @@ Blockly.Bubble.prototype.layoutBubble_ = function() {
  * workspace (what percentage of the bubble is visible).
  * @param {!{x: number, y: number}} relativeMin The position of the top-left
  *     corner of the bubble relative to the anchor point.
- * @param {!Object} metrics The metrics of the workspace the bubble will
- *     appear in.
+ * @param {!Blockly.utils.Metrics} metrics The metrics of the workspace the
+ *     bubble will appear in.
  * @return {number} The percentage of the bubble that is visible.
  * @private
  */
@@ -546,10 +537,10 @@ Blockly.Bubble.prototype.getOverlap_ = function(relativeMin, metrics) {
  * Calculate what the optimal horizontal position of the top-left corner of the
  * bubble is (relative to the anchor point) so that the most area of the
  * bubble is shown.
- * @param {!Object} metrics The metrics of the workspace the bubble will
- *    appear in.
+ * @param {!Blockly.utils.Metrics} metrics The metrics of the workspace the
+ *     bubble will appear in.
  * @return {number} The optimal horizontal position of the top-left corner
- *    of the bubble.
+ *     of the bubble.
  * @private
  */
 Blockly.Bubble.prototype.getOptimalRelativeLeft_ = function(metrics) {
@@ -604,10 +595,10 @@ Blockly.Bubble.prototype.getOptimalRelativeLeft_ = function(metrics) {
  * Calculate what the optimal vertical position of the top-left corner of
  * the bubble is (relative to the anchor point) so that the most area of the
  * bubble is shown.
- * @param {!Object} metrics The metrics of the workspace the bubble will
- *    appear in.
+ * @param {!Blockly.utils.Metrics} metrics The metrics of the workspace the
+ *     bubble will appear in.
  * @return {number} The optimal vertical position of the top-left corner
- *    of the bubble.
+ *     of the bubble.
  * @private
  */
 Blockly.Bubble.prototype.getOptimalRelativeTop_ = function(metrics) {

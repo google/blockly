@@ -1,18 +1,7 @@
 /**
  * @license
  * Copyright 2017 Google LLC
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * SPDX-License-Identifier: Apache-2.0
  */
 'use strict';
 
@@ -669,6 +658,25 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     ]
   },
   {
+    "type": "test_dropdowns_in_mutator",
+    "message0": "dropdown mutator",
+    "mutator": "test_dropdown_mutator"
+  },
+  {
+    "type": "test_dropdowns_in_mutator_block",
+    "message0": "dropdown %1",
+    "args0": [
+      {
+        "type": "field_dropdown",
+        "name": "DROPDOWN",
+        "options": [
+          [ "option", "ONE" ],
+          [ "option", "TWO" ]
+        ]
+      },
+    ]
+  },
+  {
     "type": "test_fields_angle",
     "message0": "angle: %1",
     "args0": [
@@ -680,23 +688,6 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
           {
             "type": "field_label",
             "text": "NO ANGLE FIELD"
-          }
-      }
-    ],
-    "style": "math_blocks",
-  },
-  {
-    "type": "test_fields_date",
-    "message0": "date: %1",
-    "args0": [
-      {
-        "type": "field_date",
-        "name": "FIELDNAME",
-        "date": "2020-02-20",
-        "alt":
-          {
-            "type": "field_label",
-            "text": "NO DATE FIELD"
           }
       }
     ],
@@ -1221,6 +1212,24 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     "style": "text_blocks"
   },
   {
+    "type": "test_mutators_noflyout",
+    "message0": "noflyout mutator",
+    "mutator": "test_noflyout_mutator",
+    "colour": "#000000"
+  },
+  {
+    "type": "test_mutators_noflyout_block",
+    "message0": "colour %1",
+    "args0": [
+      {
+        "type": "field_colour",
+        "name": "COLOUR",
+        "colour": "#ff0000"
+      }
+    ],
+    "style": "colour_blocks"
+  },
+  {
     "type": "test_style_hat",
     "message0": "Hat block (event)",
     "nextStatement": null,
@@ -1339,6 +1348,36 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     "colour": "#AAAAAA"
   }
 ]);  // END JSON EXTRACT (Do not delete this comment.)
+
+Blockly.Blocks['test_images_clickhandler'] = {
+  init: function() {
+    this.appendDummyInput()
+      .appendField("Image click handler")
+      .appendField(new Blockly.FieldImage(
+        "https://blockly-demo.appspot.com/static/tests/media/a.png", 32, 32,
+        "image with click handler", this.onClick_), "IMAGE");
+    this.setStyle('text_blocks');
+  },
+  onClick_: function() {
+    alert('Image clicked');
+  }
+};
+
+Blockly.Blocks['test_validators_dispose_block'] = {
+  init: function() {
+    this.appendDummyInput()
+        .appendField("dispose block")
+        .appendField(new Blockly.FieldTextInput("default", this.validate), "INPUT");
+    this.setColour(230);
+    this.setCommentText('Any changes to the text cause the block to be disposed');
+  },
+
+  validate: function(newValue) {
+    if (newValue != "default") {
+      this.getSourceBlock().dispose(true);
+    }
+  }
+};
 
 Blockly.Blocks['test_validators_text_null'] = {
   init: function() {
@@ -1486,7 +1525,7 @@ Blockly.Blocks['test_validators_checkbox_not_match_null'] = {
     this.setCommentText('The validator for this block only works on the' +
       ' end-most checkbox. If the new value does not match the value of the' +
       ' start-most checkbox, it will return null (invalid), which means the' +
-      ' field value should not change. Therfore they should always match.');
+      ' field value should not change. Therefore they should always match.');
   },
 
   validate: function(newValue) {
@@ -1632,7 +1671,7 @@ Blockly.Blocks['test_validators_number_mult10_force'] = {
       .appendField("force mult of 10")
       .appendField(new Blockly.FieldNumber(123, null, null, null, this.validate), "INPUT");
     this.setColour(230);
-    this.setCommentText('Theinput value will be rounded to the nearest' +
+    this.setCommentText('The input value will be rounded to the nearest' +
       ' multiple of 10. The field will display the input while the field is' +
       ' being edited, but the value should be the validated (rounded) value.' +
       ' Note: If you want to do rounding this is not the proper way, use the' +
@@ -1714,6 +1753,62 @@ Blockly.Blocks['test_basic_empty_with_mutator'] = {
   }
 };
 
+/**
+ * Mutator methods added to the test_mutators_noflyout block.
+ * @mixin
+ * @augments Blockly.Block
+ * @package
+ * @readonly
+ */
+var NO_FLYOUT_MUTATOR = {
+  /**
+   * Create XML to represent the block mutation.
+   * @return {Element} XML storage element.
+   * @this {Blockly.Block}
+   */
+  mutationToDom: function() {
+    var container = Blockly.utils.xml.createElement('mutation');
+    container.setAttribute('colour', this.colour_);
+    this.setColour(this.colour_);
+    return container;
+  },
+  /**
+   * Restore a block from XML.
+   * @param {!Element} xmlElement XML storage element.
+   * @this {Blockly.Block}
+   */
+  domToMutation: function(xmlElement) {
+    this.colour_ = xmlElement.getAttribute('colour');
+  },
+  /**
+   * Populate the mutator's dialog with this block's components.
+   * @param {!Blockly.Workspace} workspace Mutator's workspace.
+   * @return {!Blockly.Block} Root block in mutator.
+   * @this {Blockly.Block}
+   */
+  decompose: function(workspace) {
+    var containerBlock = workspace.newBlock('test_mutators_noflyout_block');
+    containerBlock.getField('COLOUR').setValue(this.colour_);
+    containerBlock.initSvg();
+    return containerBlock;
+  },
+  /**
+   * Reconfigure this block based on the mutator dialog's components.
+   * @param {!Blockly.Block} containerBlock Root block in mutator.
+   * @this {Blockly.Block}
+   */
+  compose: function(containerBlock) {
+    this.colour_ = containerBlock.getFieldValue('COLOUR');
+    this.setColour(this.colour_);
+  },
+};
+
+/**
+ * Register custom mutator used by the test_mutators_noflyout block.
+ */
+Blockly.Extensions.registerMutator('test_noflyout_mutator',
+  NO_FLYOUT_MUTATOR, null, []);
+
 Blockly.Blocks['test_dropdowns_dynamic'] = {
   init: function() {
     var dropdown = new Blockly.FieldDropdown(this.dynamicOptions);
@@ -1732,7 +1827,7 @@ Blockly.Blocks['test_dropdowns_dynamic'] = {
 
 /**
  * An array of options for the dynamic dropdown.
- * @type {!Array<!Array>}
+ * @type {!Array.<!Array>}
  * @private
  */
 Blockly.TestBlocks.dynamicDropdownOptions_ = [];
@@ -1798,6 +1893,57 @@ Blockly.Blocks['test_dropdowns_dynamic_random'] = {
     return options;
   }
 };
+
+/**
+ * Mutator methods added to the test_dropdowns_in_mutator block.
+ * @mixin
+ * @augments Blockly.Block
+ * @package
+ * @readonly
+ */
+var DROPDOWN_MUTATOR = {
+  /**
+   * Create XML to represent the block mutation.
+   * @return {Element} XML storage element.
+   * @this {Blockly.Block}
+   */
+  mutationToDom: function() {
+    var container = Blockly.utils.xml.createElement('mutation');
+    return container;
+  },
+  /**
+   * Restore a block from XML.
+   * @param {!Element} _xmlElement XML storage element.
+   * @this {Blockly.Block}
+   */
+  domToMutation: function(_xmlElement) {
+  },
+  /**
+   * Populate the mutator's dialog with this block's components.
+   * @param {!Blockly.Workspace} workspace Mutator's workspace.
+   * @return {!Blockly.Block} Root block in mutator.
+   * @this {Blockly.Block}
+   */
+  decompose: function(workspace) {
+    var containerBlock = workspace.newBlock('test_dropdowns_in_mutator_block');
+    containerBlock.initSvg();
+    
+    return containerBlock;
+  },
+  /**
+   * Reconfigure this block based on the mutator dialog's components.
+   * @param {!Blockly.Block} _containerBlock Root block in mutator.
+   * @this {Blockly.Block}
+   */
+  compose: function(_containerBlock) {  
+  },
+};
+
+/**
+ * Register custom mutator used by the test_dropdowns_in_mutator block.
+ */
+Blockly.Extensions.registerMutator('test_dropdown_mutator',
+  DROPDOWN_MUTATOR, null, ['test_dropdowns_in_mutator_block']);
 
 /**
  * Handles "insert" button in the connection row test category. This will insert

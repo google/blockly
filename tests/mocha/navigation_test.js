@@ -1,18 +1,7 @@
 /**
  * @license
  * Copyright 2019 Google LLC
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 /**
@@ -56,7 +45,7 @@ suite('Navigation', function() {
         }
       };
 
-      this.firstCategory_ = this.workspace.getToolbox().tree_.firstChild_;
+      this.firstCategory_ = this.workspace.getToolbox().tree_.getChildAt(0);
       this.secondCategory_ = this.firstCategory_.getNextShownNode();
     });
 
@@ -259,7 +248,7 @@ suite('Navigation', function() {
       }]);
       this.workspace = createNavigationWorkspace(true);
       this.basicBlock = this.workspace.newBlock('basic_block');
-      this.firstCategory_ = this.workspace.getToolbox().tree_.firstChild_;
+      this.firstCategory_ = this.workspace.getToolbox().tree_.getChildAt(0);
       this.mockEvent = {
         getModifierState: function() {
           return false;
@@ -378,6 +367,10 @@ suite('Navigation', function() {
         }
       };
     });
+    teardown(function() {
+      delete Blockly.Blocks['basic_block'];
+      this.workspace.dispose();
+    });
     test('Action does not exist', function() {
       var block = this.workspace.getTopBlocks()[0];
       var field = block.inputList[0].fieldRow[0];
@@ -443,7 +436,6 @@ suite('Navigation', function() {
       chai.assert.isTrue(Blockly.navigation.focusWorkspace_.calledOnce);
       chai.assert.isTrue(Blockly.getMainWorkspace().keyboardAccessibilityMode);
       Blockly.navigation.focusWorkspace_.restore();
-      this.workspace.dispose();
     });
 
     suite('Test key press in read only mode', function() {
@@ -641,6 +633,7 @@ suite('Navigation', function() {
     });
 
     teardown(function() {
+      delete Blockly.Blocks['inline_block'];
       delete Blockly.Blocks['basic_block'];
       this.workspace.dispose();
     });
@@ -673,7 +666,7 @@ suite('Navigation', function() {
       Blockly.navigation.connect_(cursorLocation, markedLocation);
 
       chai.assert.equal(this.basicBlock.nextConnection.targetBlock(), this.basicBlock4);
-      chai.assert.equal(this.basicBlock3.nextConnection.targetConnection, null);
+      chai.assert.isNull(this.basicBlock3.nextConnection.targetConnection);
     });
 
     test('Connect cursor with parents', function() {
@@ -691,7 +684,7 @@ suite('Navigation', function() {
 
       Blockly.navigation.connect_(cursorLocation, markedLocation);
 
-      chai.assert.equal(this.inlineBlock2.outputConnection.targetBlock(), null);
+      chai.assert.isNull(this.inlineBlock2.outputConnection.targetBlock());
       chai.assert.equal(this.inlineBlock1.outputConnection.targetBlock(), this.inlineBlock2);
     });
   });

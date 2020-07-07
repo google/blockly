@@ -1,18 +1,7 @@
 /**
  * @license
  * Copyright 2012 Google LLC
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 /**
@@ -54,8 +43,7 @@ goog.require('Blockly.utils.Size');
  */
 Blockly.FieldColour = function(opt_value, opt_validator, opt_config) {
   Blockly.FieldColour.superClass_.constructor.call(
-      this, opt_value || Blockly.FieldColour.COLOURS[0],
-      opt_validator, opt_config);
+      this, opt_value, opt_validator, opt_config);
 
   /**
    * The field's colour picker element.
@@ -184,9 +172,9 @@ Blockly.FieldColour.prototype.configure_ = function(config) {
  */
 Blockly.FieldColour.prototype.initView = function() {
   this.size_ = new Blockly.utils.Size(
-      this.constants_.FIELD_COLOUR_DEFAULT_WIDTH,
-      this.constants_.FIELD_COLOUR_DEFAULT_HEIGHT);
-  if (!this.constants_.FIELD_COLOUR_FULL_BLOCK) {
+      this.getConstants().FIELD_COLOUR_DEFAULT_WIDTH,
+      this.getConstants().FIELD_COLOUR_DEFAULT_HEIGHT);
+  if (!this.getConstants().FIELD_COLOUR_FULL_BLOCK) {
     this.createBorderRect_();
     this.borderRect_.style['fillOpacity'] = '1';
   } else {
@@ -198,7 +186,7 @@ Blockly.FieldColour.prototype.initView = function() {
  * @override
  */
 Blockly.FieldColour.prototype.applyColour = function() {
-  if (!this.constants_.FIELD_COLOUR_FULL_BLOCK) {
+  if (!this.getConstants().FIELD_COLOUR_FULL_BLOCK) {
     if (this.borderRect_) {
       this.borderRect_.style.fill = this.getValue();
     }
@@ -231,7 +219,7 @@ Blockly.FieldColour.prototype.doValueUpdate_ = function(newValue) {
   this.value_ = newValue;
   if (this.borderRect_) {
     this.borderRect_.style.fill = newValue;
-  } else if (this.sourceBlock_) {
+  } else if (this.sourceBlock_ && this.sourceBlock_.rendered) {
     this.sourceBlock_.pathObject.svgPath.setAttribute('fill', newValue);
     this.sourceBlock_.pathObject.svgPath.setAttribute('stroke', '#fff');
   }
@@ -280,6 +268,13 @@ Blockly.FieldColour.COLOURS = [
 ];
 
 /**
+ * The default value for this field.
+ * @type {*}
+ * @protected
+ */
+Blockly.FieldColour.prototype.DEFAULT_VALUE = Blockly.FieldColour.COLOURS[0];
+
+/**
  * An array of tooltip strings for the palette.  If not the same length as
  * COLOURS, the colour's hex code will be used for any missing titles.
  * All colour pickers use this unless overridden with setColours.
@@ -322,7 +317,7 @@ Blockly.FieldColour.prototype.setColumns = function(columns) {
 
 /**
  * Create and show the colour field's editor.
- * @private
+ * @protected
  */
 Blockly.FieldColour.prototype.showEditor_ = function() {
   this.picker_ = this.dropdownCreate_();

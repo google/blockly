@@ -1469,7 +1469,7 @@ soydata.VERY_UNSAFE.ordainSanitizedJs =
 // finally printed.
 /**
  * Takes a leap of faith that the provided content can be safely embedded in
- * a Javascript string without re-esacping.
+ * a Javascript string without re-escaping.
  *
  * @param {*} content Content that can be safely inserted as part of a
  *     single- or double-quoted string without terminating the string.
@@ -2002,7 +2002,7 @@ soy.$$cleanHtml = function(value) {
     return /** @type {!soydata.SanitizedHtml} */ (value);
   }
   return soydata.VERY_UNSAFE.ordainSanitizedHtml(
-      soy.$$stripHtmlTags(value, soy.esc.$$SAFE_TAG_WHITELIST_),
+      soy.$$stripHtmlTags(value, soy.esc.$$SAFE_TAG_ALLOWLIST_),
       soydata.getContentDir(value));
 };
 
@@ -2047,20 +2047,20 @@ soy.$$HTML5_VOID_ELEMENTS_ = new RegExp(
 
 /**
  * Removes HTML tags from a string of known safe HTML.
- * If opt_tagWhitelist is not specified or is empty, then
+ * If opt_tagAllowlist is not specified or is empty, then
  * the result can be used as an attribute value.
  *
  * @param {*} value The HTML to be escaped. May not be a string, but the
  *     value will be coerced to a string.
- * @param {Object.<string, number>=} opt_tagWhitelist Has an own property whose
+ * @param {Object.<string, number>=} opt_tagAllowlist Has an own property whose
  *     name is a lower-case tag name and whose value is {@code 1} for
  *     each element that is allowed in the output.
  * @return {string} A representation of value without disallowed tags,
  *     HTML comments, or other non-text content.
  */
-soy.$$stripHtmlTags = function(value, opt_tagWhitelist) {
-  if (!opt_tagWhitelist) {
-    // If we have no white-list, then use a fast track which elides all tags.
+soy.$$stripHtmlTags = function(value, opt_tagAllowlist) {
+  if (!opt_tagAllowlist) {
+    // If we have no allow-list, then use a fast track which elides all tags.
     return String(value).replace(soy.esc.$$HTML_TAG_REGEX_, '')
         // This is just paranoia since callers should normalize the result
         // anyway, but if they didn't, it would be necessary to ensure that
@@ -2073,7 +2073,7 @@ soy.$$stripHtmlTags = function(value, opt_tagWhitelist) {
   // have been removed.
   var html = String(value).replace(/\[/g, '&#91;');
 
-  // Consider all uses of '<' and replace whitelisted tags with markers like
+  // Consider all uses of '<' and replace allowlisted tags with markers like
   // [1] which are indices into a list of approved tag names.
   // Replace all other uses of < and > with entities.
   var tags = [];
@@ -2082,8 +2082,8 @@ soy.$$stripHtmlTags = function(value, opt_tagWhitelist) {
     function(tok, tagName) {
       if (tagName) {
         tagName = tagName.toLowerCase();
-        if (opt_tagWhitelist.hasOwnProperty(tagName) &&
-            opt_tagWhitelist[tagName]) {
+        if (opt_tagAllowlist.hasOwnProperty(tagName) &&
+            opt_tagAllowlist[tagName]) {
           var start = tok.charAt(1) === '/' ? '</' : '<';
           var index = tags.length;
           tags[index] = start + tagName + '>';
@@ -2102,7 +2102,7 @@ soy.$$stripHtmlTags = function(value, opt_tagWhitelist) {
   // Now html contains no tags or less-than characters that could become
   // part of a tag via a replacement operation and tags only contains
   // approved tags.
-  // Reinsert the white-listed tags.
+  // Reinsert the allow-listed tags.
   html = html.replace(
        /\[(\d+)\]/g, function(_, index) { return tags[index]; });
 
@@ -2479,7 +2479,7 @@ soy.$$changeNewlineToBr = function(value) {
 /**
  * Inserts word breaks ('wbr' tags) into a HTML string at a given interval. The
  * counter is reset if a space is encountered. Word breaks aren't inserted into
- * HTML tags or entities. Entites count towards the character count; HTML tags
+ * HTML tags or entities. Entities count towards the character count; HTML tags
  * do not.
  *
  * @param {*} value The HTML string to insert word breaks into. Can be other
@@ -3294,6 +3294,6 @@ soy.esc.$$LT_REGEX_ = /</g;
  * @type {Object.<string,number>}
  * @private
  */
-soy.esc.$$SAFE_TAG_WHITELIST_ = {'b': 1, 'br': 1, 'em': 1, 'i': 1, 's': 1, 'sub': 1, 'sup': 1, 'u': 1};
+soy.esc.$$SAFE_TAG_ALLOWLIST_ = {'b': 1, 'br': 1, 'em': 1, 'i': 1, 's': 1, 'sub': 1, 'sup': 1, 'u': 1};
 
 // END GENERATED CODE

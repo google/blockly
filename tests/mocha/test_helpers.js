@@ -1,155 +1,64 @@
 /**
  * @license
  * Copyright 2019 Google LLC
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
-/* exported assertEquals, assertNotEquals, assertArrayEquals, assertTrue, assertFalse,
-   assertNull, assertNotNull, assertNotNullNorUndefined, assert,
-   isEqualArrays, assertUndefined, assertNotUndefined,
-   defineRowBlock, defineStackBlock, defineStatementBlock */
-function _argumentsIncludeComments(expectedNumberOfNonCommentArgs, args) {
-  return args.length == expectedNumberOfNonCommentArgs + 1;
+/* exported assertVariableValues, captureWarnings, defineRowBlock,
+   defineStackBlock, defineStatementBlock, createTestBlock, createEventsFireStub */
+
+/**
+ * Check if a variable with the given values exists.
+ * @param {Blockly.Workspace|Blockly.VariableMap} container The workspace  or
+ *     variableMap the checked variable belongs to.
+ * @param {!string} name The expected name of the variable.
+ * @param {!string} type The expected type of the variable.
+ * @param {!string} id The expected id of the variable.
+ */
+function assertVariableValues(container, name, type, id) {
+  var variable = container.getVariableById(id);
+  chai.assert.isDefined(variable);
+  chai.assert.equal(variable.name, name);
+  chai.assert.equal(variable.type, type);
+  chai.assert.equal(variable.getId(), id);
 }
 
-function _commentArg(expectedNumberOfNonCommentArgs, args) {
-  if (_argumentsIncludeComments(expectedNumberOfNonCommentArgs, args)) {
-    return args[0];
+/**
+ * Captures the strings sent to console.warn() when calling a function.
+ * @param {function} innerFunc The function where warnings may called.
+ * @return {string[]} The warning messages (only the first arguments).
+ */
+function captureWarnings(innerFunc) {
+  var msgs = [];
+  var nativeConsoleWarn = console.warn;
+  try {
+    console.warn = function(msg) {
+      msgs.push(msg);
+    };
+    innerFunc();
+  } finally {
+    console.warn = nativeConsoleWarn;
   }
-
-  return null;
+  return msgs;
 }
 
-function _nonCommentArg(desiredNonCommentArgIndex, expectedNumberOfNonCommentArgs, args) {
-  return _argumentsIncludeComments(expectedNumberOfNonCommentArgs, args) ?
-      args[desiredNonCommentArgIndex] :
-      args[desiredNonCommentArgIndex - 1];
-}
-
-function _validateArguments(expectedNumberOfNonCommentArgs, args) {
-  if (!( args.length == expectedNumberOfNonCommentArgs ||
-      (args.length == expectedNumberOfNonCommentArgs + 1 && (typeof(args[0]) == 'string') || args[0] == null))) {
-    throw Error('Incorrect arguments passed to assert function');
-  }
-}
-/**
- * Converts from JSUnit assertEquals to chai.assert.equal.
- */
-function assertEquals() {
-  _validateArguments(2, arguments);
-  var var1 = _nonCommentArg(1, 2, arguments);
-  var var2 = _nonCommentArg(2, 2, arguments);
-  var comment = _commentArg(2, arguments);
-  chai.assert.equal(var1, var2, comment);
-}
 
 /**
- * Converts from JSUnit assertNotEquals to chai.assert.notEquals.
+ * Creates stub for Blockly.Events.fire that fires events immediately instead of
+ * with timeout.
+ * @return {sinon.stub} The created stub.
  */
-function assertNotEquals() {
-  _validateArguments(2, arguments);
-  var var1 = _nonCommentArg(1, 2, arguments);
-  var var2 = _nonCommentArg(2, 2, arguments);
-  var comment = _commentArg(2, arguments);
-  chai.assert.notEqual(var1, var2, comment);
-}
-
-/**
- * Converts from JSUnit assertTrue to chai.assert.isTrue.
- */
-function assertTrue() {
-  _validateArguments(1, arguments);
-  var commentArg = _commentArg(1, arguments);
-  var booleanValue = _nonCommentArg(1, 1, arguments);
-  if (typeof(booleanValue) != 'boolean') {
-    throw Error('Bad argument to assertTrue(boolean)');
-  }
-
-  chai.assert.isTrue(booleanValue, commentArg);
-}
-
-/**
- * Converts from JSUnit assertFalse to chai.assert.isNotTrue.
- */
-function assertFalse() {
-  _validateArguments(1, arguments);
-  var commentArg = _commentArg(1, arguments);
-  var booleanValue = _nonCommentArg(1, 1, arguments);
-
-  if (typeof(booleanValue) != 'boolean') {
-    throw Error('Bad argument to assertFalse(boolean)');
-  }
-
-  chai.assert.isNotTrue(booleanValue, commentArg);
-}
-
-/**
- * Converts from JSUnit assertNull to chai.assert.isNull.
- */
-function assertNull() {
-  _validateArguments(1, arguments);
-  var commentArg = _commentArg(1, arguments);
-  var val = _nonCommentArg(1, 1, arguments);
-  chai.assert.isNull(val, commentArg);
-}
-
-function assertNotNull() {
-  _validateArguments(1, arguments);
-  var commentArg = _commentArg(1, arguments);
-  var val = _nonCommentArg(1, 1, arguments);
-  chai.assert.isNotNull(val, commentArg);
-}
-
-function assertNotNullNorUndefined() {
-  assertNotNull(arguments);
-}
-
-function assert() {
-  chai.assert(arguments);
-}
-
-/**
- * Check that two arrays have the same content.
- * @param {!Array.<string>} array1 The first array.
- * @param {!Array.<string>} array2 The second array.
- */
-function isEqualArrays(array1, array2) {
-  assertEquals(array1.length, array2.length);
-  for (var i = 0; i < array1.length; i++) {
-    assertEquals(array1[i], array2[i]);
-  }
-}
-
-function assertUndefined() {
-  _validateArguments(1, arguments);
-  var commentArg = _commentArg(1, arguments);
-  var val = _nonCommentArg(1, 1, arguments);
-  chai.assert.isUndefined(val, commentArg);
-}
-
-function assertNotUndefined() {
-  _validateArguments(1, arguments);
-  var commentArg = _commentArg(1, arguments);
-  var val = _nonCommentArg(1, 1, arguments);
-  chai.assert.isDefined(val, commentArg);
-}
-
-function assertArrayEquals() {
-  _validateArguments(2, arguments);
-  var var1 = _nonCommentArg(1, 2, arguments);
-  var var2 = _nonCommentArg(2, 2, arguments);
-  isEqualArrays(var1, var2);
+function createEventsFireStub() {
+  var stub = sinon.stub(Blockly.Events, 'fire');
+  stub.callsFake(function(event) {
+    if (!Blockly.Events.isEnabled()) {
+      return;
+    }
+    Blockly.Events.FIRE_QUEUE_.push(event);
+    Blockly.Events.fireNow_();
+  });
+  stub.firedEvents_ = [];
+  return stub;
 }
 
 function defineStackBlock() {
@@ -191,4 +100,14 @@ function defineStatementBlock() {
     "tooltip": "",
     "helpUrl": ""
   }]);
+}
+
+function createTestBlock() {
+  return {
+    id: 'test',
+    rendered: false,
+    workspace: {
+      rendered: false
+    }
+  };
 }

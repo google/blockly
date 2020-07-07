@@ -1,18 +1,7 @@
 /**
  * @license
  * Copyright 2019 Google LLC
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 /**
@@ -47,7 +36,7 @@ Blockly.geras.PathObject = function(root, style, constants) {
    * The renderer's constant provider.
    * @type {!Blockly.geras.ConstantProvider}
    */
-  this.constants_ = constants;
+  this.constants = constants;
 
   this.svgRoot = root;
 
@@ -65,7 +54,7 @@ Blockly.geras.PathObject = function(root, style, constants) {
 
   /**
    * The primary path of the block.
-   * @type {SVGElement}
+   * @type {!SVGElement}
    * @package
    */
   this.svgPath = Blockly.utils.dom.createSvgElement('path',
@@ -133,7 +122,7 @@ Blockly.geras.PathObject.prototype.applyColour = function(block) {
   this.svgPathDark.setAttribute('fill', this.colourDark);
 
   Blockly.geras.PathObject.superClass_.applyColour.call(this, block);
-  
+
   this.svgPath.setAttribute('stroke', 'none');
 };
 
@@ -153,7 +142,7 @@ Blockly.geras.PathObject.prototype.setStyle = function(blockStyle) {
 Blockly.geras.PathObject.prototype.updateHighlighted = function(highlighted) {
   if (highlighted) {
     this.svgPath.setAttribute('filter',
-        'url(#' + this.constants_.embossFilterId + ')');
+        'url(#' + this.constants.embossFilterId + ')');
     this.svgPathLight.style.display = 'none';
   } else {
     this.svgPath.setAttribute('filter', 'none');

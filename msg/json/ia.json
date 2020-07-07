@@ -1,12 +1,13 @@
 {
 	"@metadata": {
 		"authors": [
-			"McDutchie",
+			"Fanjiayi",
 			"Karmwiki",
-			"Fanjiayi"
+			"McDutchie"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "cosa",
+	"UNNAMED_KEY": "sin nomine",
 	"TODAY": "Hodie",
 	"DUPLICATE_BLOCK": "Duplicar",
 	"ADD_COMMENT": "Adder commento",
@@ -55,7 +56,7 @@
 	"COLOUR_BLEND_COLOUR2": "color 2",
 	"COLOUR_BLEND_RATIO": "ration",
 	"COLOUR_BLEND_TOOLTIP": "Misce duo colores con un ration specificate (0.0 - 1.0).",
-	"CONTROLS_REPEAT_HELPURL": "https://en.wikipedia.org/wiki/For_loop",
+	"CONTROLS_REPEAT_HELPURL": "https://ia.wikipedia.org/wiki/Bucla_for",
 	"CONTROLS_REPEAT_TITLE": "repeter %1 vices",
 	"CONTROLS_REPEAT_INPUT_DO": "face",
 	"CONTROLS_REPEAT_TOOLTIP": "Exequer certe instructiones plure vices.",

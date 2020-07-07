@@ -2,17 +2,17 @@
 	"@metadata": {
 		"authors": [
 			"Espertus",
-			"MS",
-			"Okras",
-			"RedFox",
-			"Mailman",
-			"Silovan",
-			"Redredsonia",
 			"Facenapalm",
 			"Helpau",
-			"SimondR",
+			"MS",
+			"Mailman",
 			"Mouse21",
 			"Movses",
+			"Okras",
+			"RedFox",
+			"Redredsonia",
+			"Silovan",
+			"SimondR",
 			"Vlad5250"
 		]
 	},
@@ -60,7 +60,7 @@
 	"COLOUR_RGB_RED": "красного",
 	"COLOUR_RGB_GREEN": "зелёного",
 	"COLOUR_RGB_BLUE": "синего",
-	"COLOUR_RGB_TOOLTIP": "Создаёт цвет с указанной пропорцией  красного, зеленого и синего.  Все значения должны быть между 0 и 100.",
+	"COLOUR_RGB_TOOLTIP": "Создаёт цвет с указанной пропорцией красного, зелёного и синего. Все значения должны быть между 0 и 100.",
 	"COLOUR_BLEND_TITLE": "смешать",
 	"COLOUR_BLEND_COLOUR1": "цвет 1",
 	"COLOUR_BLEND_COLOUR2": "цвет 2",

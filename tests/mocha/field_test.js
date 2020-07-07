@@ -1,18 +1,7 @@
 /**
  * @license
  * Copyright 2019 Google LLC
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 suite('Abstract Fields', function() {
@@ -47,26 +36,26 @@ suite('Abstract Fields', function() {
       // An old default field should be serialized.
       var field = new FieldDefault();
       var stub = sinon.stub(console, 'warn');
-      assertEquals(true, field.isSerializable());
+      chai.assert.isTrue(field.isSerializable());
       chai.assert(stub.calledOnce);
       stub.restore();
     });
     test('Editable False, Serializable Default(false)', function() {
       // An old non-editable field should not be serialized.
       var field = new FieldFalseDefault();
-      assertEquals(false, field.isSerializable());
+      chai.assert.isFalse(field.isSerializable());
     });
     /* Test Other Cases */
     test('Editable Default(true), Serializable True', function() {
       // A field that is both editable and serializable should be serialized.
       var field = new FieldDefaultTrue();
-      assertEquals(true, field.isSerializable());
+      chai.assert.isTrue(field.isSerializable());
     });
     test('Editable False, Serializable True', function() {
       // A field that is not editable, but overrides serializable to true
       // should be serialized (e.g. field_label_serializable)
       var field = new FieldFalseTrue();
-      assertEquals(true, field.isSerializable());
+      chai.assert.isTrue(field.isSerializable());
     });
   });
   suite('setValue', function() {

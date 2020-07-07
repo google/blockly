@@ -1,18 +1,7 @@
 /**
  * @license
  * Copyright 2012 Google LLC
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 /**
@@ -92,7 +81,7 @@ function updateLanguage() {
  * Update the language code as JSON.
  * @param {string} blockType Name of block.
  * @param {!Blockly.Block} rootBlock Factory_base block.
- * @return {string} Generanted language code.
+ * @return {string} Generated language code.
  * @private
  */
 function formatJson_(blockType, rootBlock) {
@@ -194,7 +183,7 @@ function formatJson_(blockType, rootBlock) {
  * Update the language code as JavaScript.
  * @param {string} blockType Name of block.
  * @param {!Blockly.Block} rootBlock Factory_base block.
- * @return {string} Generanted language code.
+ * @return {string} Generated language code.
  * @private
  */
 function formatJavaScript_(blockType, rootBlock) {
@@ -346,12 +335,6 @@ function getFieldsJs_(block) {
               escapeString(block.getFieldValue('COLOUR')) + '), ' +
               escapeString(block.getFieldValue('FIELDNAME')));
           break;
-        case 'field_date':
-          // Result: new Blockly.FieldDate('2015-02-04'), 'DATE'
-          fields.push('new Blockly.FieldDate(' +
-              escapeString(block.getFieldValue('DATE')) + '), ' +
-              escapeString(block.getFieldValue('FIELDNAME')));
-          break;
         case 'field_variable':
           // Result: new Blockly.FieldVariable('item'), 'VAR'
           var varname = escapeString(block.getFieldValue('TEXT') || null);
@@ -451,13 +434,6 @@ function getFieldsJson_(block) {
             colour: block.getFieldValue('COLOUR')
           });
           break;
-        case 'field_date':
-          fields.push({
-            type: block.type,
-            name: block.getFieldValue('FIELDNAME'),
-            date: block.getFieldValue('DATE')
-          });
-          break;
         case 'field_variable':
           fields.push({
             type: block.type,
@@ -498,7 +474,7 @@ function getFieldsJson_(block) {
 /**
  * Escape a string.
  * @param {string} string String to escape.
- * @return {string} Escaped string surrouned by quotes.
+ * @return {string} Escaped string surrounded by quotes.
  */
 function escapeString(string) {
   return JSON.stringify(string);
@@ -587,10 +563,6 @@ function updateGenerator(block) {
       } else if (field instanceof Blockly.FieldAngle) {
         // Subclass of Blockly.FieldTextInput, must test first.
         code.push(makeVar('angle', name) +
-                  " = block.getFieldValue('" + name + "');");
-      } else if (Blockly.FieldDate && field instanceof Blockly.FieldDate) {
-        // Blockly.FieldDate may not be compiled into Blockly.
-        code.push(makeVar('date', name) +
                   " = block.getFieldValue('" + name + "');");
       } else if (field instanceof Blockly.FieldColour) {
         code.push(makeVar('colour', name) +

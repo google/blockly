@@ -1,10 +1,10 @@
 {
 	"@metadata": {
 		"authors": [
-			"Renessaince",
 			"Jim-by",
+			"Nerogaf",
 			"Red Winged Duck",
-			"Nerogaf"
+			"Renessaince"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "аб’ект",
@@ -150,9 +150,9 @@
 	"MATH_IS_ODD": "няпарная",
 	"MATH_IS_PRIME": "простая",
 	"MATH_IS_WHOLE": "цэлая",
-	"MATH_IS_POSITIVE": "станоўчая",
+	"MATH_IS_POSITIVE": "дадатная",
 	"MATH_IS_NEGATIVE": "адмоўная",
-	"MATH_IS_DIVISIBLE_BY": "дзяліць на",
+	"MATH_IS_DIVISIBLE_BY": "дзеліцца на",
 	"MATH_IS_TOOLTIP": "Правярае, ці зьяўляецца лік парным, няпарным, простым, станоўчым, адмоўным, ці ён дзеліцца на пэўны лік без астатку. Вяртае значэньне ісьціна або няпраўда.",
 	"MATH_CHANGE_HELPURL": "https://en.wikipedia.org/wiki/Programming_idiom#Incrementing_a_counter",
 	"MATH_CHANGE_TITLE": "зьмяніць %1 на %2",

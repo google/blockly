@@ -1,18 +1,7 @@
 /**
  * @license
  * Copyright 2013 Google LLC
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 /**
@@ -33,6 +22,7 @@ goog.require('Blockly.utils.Size');
  * Class for an icon.
  * @param {Blockly.BlockSvg} block The block associated with this icon.
  * @constructor
+ * @abstract
  */
 Blockly.Icon = function(block) {
   /**
@@ -192,3 +182,10 @@ Blockly.Icon.prototype.getCorrectedSize = function() {
   return new Blockly.utils.Size(
       Blockly.Icon.prototype.SIZE, Blockly.Icon.prototype.SIZE - 2);
 };
+
+/**
+ * Draw the icon.
+ * @param {!Element} group The icon group.
+ * @protected
+ */
+Blockly.Icon.prototype.drawIcon_;

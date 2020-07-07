@@ -1,18 +1,7 @@
 /**
  * @license
  * Copyright 2012 Google LLC
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 /**
@@ -37,6 +26,8 @@ goog.require('Blockly.utils.object');
 goog.require('Blockly.utils.xml');
 goog.require('Blockly.WorkspaceSvg');
 goog.require('Blockly.Xml');
+
+goog.requireType('Blockly.utils.Metrics');
 
 
 /**
@@ -85,7 +76,7 @@ Blockly.Mutator.prototype.getWorkspace = function() {
 /**
  * Draw the mutator icon.
  * @param {!Element} group The icon group.
- * @private
+ * @protected
  */
 Blockly.Mutator.prototype.drawIcon_ = function(group) {
   // Square with rounded corners.
@@ -171,12 +162,17 @@ Blockly.Mutator.prototype.createEditor_ = function() {
         'media': this.block_.workspace.options.pathToMedia,
         'rtl': this.block_.RTL,
         'horizontalLayout': false,
-        'renderer': this.block_.workspace.options.renderer
+        'renderer': this.block_.workspace.options.renderer,
+        'rendererOverrides': this.block_.workspace.options.rendererOverrides
       }));
   workspaceOptions.toolboxPosition = this.block_.RTL ? Blockly.TOOLBOX_AT_RIGHT :
       Blockly.TOOLBOX_AT_LEFT;
-  workspaceOptions.languageTree = quarkXml;
-  workspaceOptions.getMetrics = this.getFlyoutMetrics_.bind(this);
+  var hasFlyout = !!quarkXml;
+  if (hasFlyout) {
+    workspaceOptions.languageTree =
+        Blockly.utils.toolbox.convertToolboxToJSON(quarkXml);
+    workspaceOptions.getMetrics = this.getFlyoutMetrics_.bind(this);
+  }
   this.workspace_ = new Blockly.WorkspaceSvg(workspaceOptions);
   this.workspace_.isMutator = true;
   this.workspace_.addChangeListener(Blockly.Events.disableOrphans);
@@ -185,13 +181,15 @@ Blockly.Mutator.prototype.createEditor_ = function() {
   // a top level svg. Instead of handling scale themselves, mutators
   // inherit scale from the parent workspace.
   // To fix this, scale needs to be applied at a different level in the dom.
-  var flyoutSvg = this.workspace_.addFlyout('g');
+  var flyoutSvg = hasFlyout ? this.workspace_.addFlyout('g') : null;
   var background = this.workspace_.createDom('blocklyMutatorBackground');
 
-  // Insert the flyout after the <rect> but before the block canvas so that
-  // the flyout is underneath in z-order.  This makes blocks layering during
-  // dragging work properly.
-  background.insertBefore(flyoutSvg, this.workspace_.svgBlockCanvas_);
+  if (flyoutSvg) {
+    // Insert the flyout after the <rect> but before the block canvas so that
+    // the flyout is underneath in z-order.  This makes blocks layering during
+    // dragging work properly.
+    background.insertBefore(flyoutSvg, this.workspace_.svgBlockCanvas_);
+  }
   this.svgDialog_.appendChild(background);
 
   return this.svgDialog_;
@@ -296,7 +294,7 @@ Blockly.Mutator.prototype.setVisible = function(visible) {
     var flyout = this.workspace_.getFlyout();
     if (tree) {
       flyout.init(this.workspace_);
-      flyout.show(tree.childNodes);
+      flyout.show(tree);
     }
 
     this.rootBlock_ = this.block_.decompose(this.workspace_);
@@ -304,7 +302,7 @@ Blockly.Mutator.prototype.setVisible = function(visible) {
     for (var i = 0, child; (child = blocks[i]); i++) {
       child.render();
     }
-    // The root block should not be dragable or deletable.
+    // The root block should not be draggable or deletable.
     this.rootBlock_.setMovable(false);
     this.rootBlock_.setDeletable(false);
     if (flyout) {
@@ -388,7 +386,8 @@ Blockly.Mutator.prototype.workspaceChanged_ = function(e) {
     block.initSvg();
     block.render();
 
-    if (Blockly.getMainWorkspace().keyboardAccessibilityMode) {
+    if ((/** @type {!Blockly.WorkspaceSvg} */ (Blockly.getMainWorkspace()))
+        .keyboardAccessibilityMode) {
       Blockly.navigation.moveCursorOnBlockMutation(block);
     }
     var newMutationDom = block.mutationToDom();
@@ -396,13 +395,6 @@ Blockly.Mutator.prototype.workspaceChanged_ = function(e) {
     if (oldMutation != newMutation) {
       Blockly.Events.fire(new Blockly.Events.BlockChange(
           block, 'mutation', null, oldMutation, newMutation));
-      // Ensure that any bump is part of this mutation's event group.
-      var group = Blockly.Events.getGroup();
-      setTimeout(function() {
-        Blockly.Events.setGroup(group);
-        block.bumpNeighbours();
-        Blockly.Events.setGroup(false);
-      }, Blockly.BUMP_DELAY);
     }
 
     // Don't update the bubble until the drag has ended, to avoid moving blocks
@@ -421,15 +413,26 @@ Blockly.Mutator.prototype.workspaceChanged_ = function(e) {
  * .viewWidth: Width of the visible rectangle,
  * .absoluteTop: Top-edge of view.
  * .absoluteLeft: Left-edge of view.
- * @return {!Object} Contains size and position metrics of mutator dialog's
- *     workspace.
+ * @return {!Blockly.utils.Metrics} Contains size and position metrics of
+ *     mutator dialog's workspace.
  * @private
  */
 Blockly.Mutator.prototype.getFlyoutMetrics_ = function() {
+  // The mutator workspace only uses a subset of Blockly.utils.Metrics
+  // properties as features such as scroll and zoom are unsupported.
+  var unsupported = 0;
   return {
+    contentHeight: unsupported,
+    contentWidth: unsupported,
+    contentTop: unsupported,
+    contentLeft: unsupported,
+
     viewHeight: this.workspaceHeight_,
     viewWidth: this.workspaceWidth_ - this.workspace_.getFlyout().getWidth(),
-    absoluteTop: 0,
+    viewTop: unsupported,
+    viewLeft: unsupported,
+
+    absoluteTop: unsupported,
     absoluteLeft: this.workspace_.RTL ? 0 :
         this.workspace_.getFlyout().getWidth()
   };

@@ -1,18 +1,7 @@
 /**
  * @license
  * Copyright 2019 Google LLC
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 /**
@@ -22,6 +11,10 @@
 'use strict';
 
 suite('Theme', function() {
+  teardown(function() {
+    // Clear all registered themes.
+    Blockly.registry.typeMap_['theme'] = {};
+  });
 
   function defineThemeTestBlocks() {
     Blockly.defineBlocksWithJsonArray([{
@@ -80,7 +73,7 @@ suite('Theme', function() {
   function stringifyAndCompare(val1, val2) {
     var stringVal1 = JSON.stringify(val1);
     var stringVal2 = JSON.stringify(val2);
-    assertEquals(stringVal1, stringVal2);
+    chai.assert.equal(stringVal1, stringVal2);
   }
 
   test('Set All BlockStyles', function() {
@@ -147,12 +140,12 @@ suite('Theme', function() {
     stringifyAndCompare(workspace.getTheme(), blockStyles);
 
     // Checks that the setTheme function was called on the block
-    assertEquals(blockA.getStyleName(), 'styleTwo');
+    chai.assert.equal(blockA.getStyleName(), 'styleTwo');
 
     // check that the toolbox refreshed method was called
-    assertEquals(workspace.refreshToolboxSelection(), 3);
+    chai.assert.equal(workspace.refreshToolboxSelection(), 3);
 
-    assertEquals(Blockly.Events.FIRE_QUEUE_.pop().element, 'theme');
+    chai.assert.equal(Blockly.Events.FIRE_QUEUE_.pop().element, 'theme');
 
     undefineThemeTestBlocks();
 

@@ -1,18 +1,7 @@
 /**
  * @license
  * Copyright 2011 Google LLC
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 /**
@@ -37,6 +26,7 @@ goog.require('Blockly.Tooltip');
 goog.require('Blockly.Touch');
 goog.require('Blockly.utils');
 goog.require('Blockly.utils.colour');
+goog.require('Blockly.utils.Size');
 goog.require('Blockly.Variables');
 goog.require('Blockly.WidgetDiv');
 goog.require('Blockly.WorkspaceSvg');
@@ -62,7 +52,7 @@ Blockly.mainWorkspace = null;
 
 /**
  * Currently selected block.
- * @type {Blockly.Block}
+ * @type {?Blockly.ICopyable}
  */
 Blockly.selected = null;
 
@@ -102,6 +92,13 @@ Blockly.clipboardTypeCounts_ = null;
 Blockly.cache3dSupported_ = null;
 
 /**
+ * Container element to render the WidgetDiv, DropDownDiv and Tooltip.
+ * @type {?Element}
+ * @package
+ */
+Blockly.parentContainer = null;
+
+/**
  * Blockly opaque event data used to unbind events when using
  * `Blockly.bindEvent_` and `Blockly.bindEventWithChecks_`.
  * @typedef {!Array.<!Array>}
@@ -111,13 +108,11 @@ Blockly.EventData;
 /**
  * Returns the dimensions of the specified SVG image.
  * @param {!SVGElement} svg SVG image.
- * @return {!Object} Contains width and height properties.
+ * @return {!Blockly.utils.Size} Contains width and height properties.
  */
 Blockly.svgSize = function(svg) {
-  return {
-    width: svg.cachedWidth_,
-    height: svg.cachedHeight_
-  };
+  svg = /** @type {?} */ (svg);
+  return new Blockly.utils.Size(svg.cachedWidth_, svg.cachedHeight_);
 };
 
 /**
@@ -164,7 +159,7 @@ Blockly.svgResize = function(workspace) {
 /**
  * Handle a key-down on SVG drawing surface. Does nothing if the main workspace
  * is not visible.
- * @param {!Event} e Key down event.
+ * @param {!KeyboardEvent} e Key down event.
  * @package
  */
 // TODO (https://github.com/google/blockly/issues/1998) handle cases where there
@@ -194,7 +189,7 @@ Blockly.onKeyDown = function(e) {
     // Pressing esc closes the context menu.
     Blockly.hideChaff();
     Blockly.navigation.onBlocklyAction(Blockly.navigation.ACTION_EXIT);
-  } else if (Blockly.navigation.onKeyPress(e)) {
+  } else if (!Blockly.Gesture.inProgress() && Blockly.navigation.onKeyPress(e)) {
     // If the keyboard or field handled the key press return.
     return;
   } else if (e.keyCode == Blockly.utils.KeyCodes.BACKSPACE ||
@@ -253,6 +248,10 @@ Blockly.onKeyDown = function(e) {
       // 'z' for undo 'Z' is for redo.
       Blockly.hideChaff();
       mainWorkspace.undo(e.shiftKey);
+    } else if (e.ctrlKey && e.keyCode == Blockly.utils.KeyCodes.Y) {
+      // Ctrl-y is redo in Windows.  Command-y is never valid on Macs.
+      Blockly.hideChaff();
+      mainWorkspace.undo(true);
     }
   }
   // Common code for delete and cut.
@@ -268,32 +267,20 @@ Blockly.onKeyDown = function(e) {
 
 /**
  * Copy a block or workspace comment onto the local clipboard.
- * @param {!Blockly.Block | !Blockly.WorkspaceComment} toCopy Block or
- *    Workspace Comment to be copied.
+ * @param {!Blockly.ICopyable} toCopy Block or Workspace Comment to be copied.
  * @private
  */
 Blockly.copy_ = function(toCopy) {
-  if (toCopy.isComment) {
-    var xml = toCopy.toXmlWithXY();
-  } else {
-    var xml = Blockly.Xml.blockToDom(toCopy, true);
-    // Copy only the selected block and internal blocks.
-    Blockly.Xml.deleteNext(xml);
-    // Encode start position in XML.
-    var xy = toCopy.getRelativeToSurfaceXY();
-    xml.setAttribute('x', toCopy.RTL ? -xy.x : xy.x);
-    xml.setAttribute('y', xy.y);
-  }
-  Blockly.clipboardXml_ = xml;
-  Blockly.clipboardSource_ = toCopy.workspace;
-  Blockly.clipboardTypeCounts_ = toCopy.isComment ? null :
-      Blockly.utils.getBlockTypeCounts(toCopy, true);
+  var data = toCopy.toCopyData();
+  Blockly.clipboardXml_ = data.xml;
+  Blockly.clipboardSource_ = data.source;
+  Blockly.clipboardTypeCounts_ = data.typeCounts;
 };
 
 /**
  * Duplicate this block and its children, or a workspace comment.
- * @param {!Blockly.Block | !Blockly.WorkspaceComment} toDuplicate Block or
- *     Workspace Comment to be copied.
+ * @param {!Blockly.ICopyable} toDuplicate Block or Workspace Comment to be
+ *     copied.
  * @package
  */
 Blockly.duplicate = function(toDuplicate) {
@@ -671,4 +658,15 @@ Blockly.checkBlockColourConstant_ = function(
     var warning = warningPattern.replace('%1', namePath).replace('%2', msgName);
     console.warn(warning);
   }
+};
+
+/**
+ * Set the parent container.  This is the container element that the WidgetDiv,
+ * DropDownDiv, and Tooltip are rendered into the first time `Blockly.inject`
+ * is called.
+ * This method is a NOP if called after the first ``Blockly.inject``.
+ * @param {!Element} container The container element.
+ */
+Blockly.setParentContainer = function(container) {
+  Blockly.parentContainer = container;
 };

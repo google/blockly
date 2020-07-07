@@ -2,12 +2,12 @@
 	"@metadata": {
 		"authors": [
 			"Anzeljg",
-			"Miloš Košir",
 			"Dbc334",
 			"HairyFotr",
 			"Igor.pesek",
+			"LoveMortuus",
 			"MaxiMouse",
-			"LoveMortuus"
+			"Miloš Košir"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "element",
@@ -99,7 +99,7 @@
 	"IOS_ERROR": "Napaka",
 	"IOS_PROCEDURES_INPUTS": "VNOSI",
 	"IOS_PROCEDURES_ADD_INPUT": "+ Dodaj vnos",
-	"IOS_PROCEDURES_ALLOW_STATEMENTS": "Dovoli izjave",
+	"IOS_PROCEDURES_ALLOW_STATEMENTS": "Vsebuje delčke",
 	"IOS_PROCEDURES_DUPLICATE_INPUTS_ERROR": "Ta funkcija ima podvojene vnose",
 	"IOS_VARIABLES_ADD_VARIABLE": "+ Dodaj spremenljivko",
 	"IOS_VARIABLES_ADD_BUTTON": "Dodaj",
@@ -380,7 +380,7 @@
 	"PROCEDURES_DEFRETURN_HELPURL": "https://en.wikipedia.org/wiki/Procedure_%28computer_science%29",
 	"PROCEDURES_DEFRETURN_RETURN": "vrni",
 	"PROCEDURES_DEFRETURN_TOOLTIP": "Ustvari funkcijo z izhodom.",
-	"PROCEDURES_ALLOW_STATEMENTS": "dovoli korake",
+	"PROCEDURES_ALLOW_STATEMENTS": "vsebuje delčke",
 	"PROCEDURES_DEF_DUPLICATE_WARNING": "Pozor: Ta funkcija ima podvojene parametre.",
 	"PROCEDURES_CALLNORETURN_HELPURL": "https://en.wikipedia.org/wiki/Subroutine",
 	"PROCEDURES_CALLNORETURN_TOOLTIP": "Izvede uporabniško funkcijo '%1'.",

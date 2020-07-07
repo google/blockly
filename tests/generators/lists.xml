@@ -21,43 +21,48 @@
                             <mutation name="test get lists simple"></mutation>
                             <next>
                               <block type="procedures_callnoreturn">
-                                <mutation name="test get lists complex"></mutation>
+                                <mutation name="test get lists create list"></mutation>
                                 <next>
                                   <block type="procedures_callnoreturn">
-                                    <mutation name="test getRemove"></mutation>
+                                    <mutation name="test get lists complex"></mutation>
                                     <next>
                                       <block type="procedures_callnoreturn">
-                                        <mutation name="test remove"></mutation>
+                                        <mutation name="test getRemove"></mutation>
                                         <next>
                                           <block type="procedures_callnoreturn">
-                                            <mutation name="test set"></mutation>
+                                            <mutation name="test remove"></mutation>
                                             <next>
                                               <block type="procedures_callnoreturn">
-                                                <mutation name="test insert"></mutation>
+                                                <mutation name="test set"></mutation>
                                                 <next>
                                                   <block type="procedures_callnoreturn">
-                                                    <mutation name="test sublist simple"></mutation>
+                                                    <mutation name="test insert"></mutation>
                                                     <next>
                                                       <block type="procedures_callnoreturn">
-                                                        <mutation name="test sublist complex"></mutation>
+                                                        <mutation name="test sublist simple"></mutation>
                                                         <next>
                                                           <block type="procedures_callnoreturn">
-                                                            <mutation name="test join"></mutation>
+                                                            <mutation name="test sublist complex"></mutation>
                                                             <next>
                                                               <block type="procedures_callnoreturn">
-                                                                <mutation name="test split"></mutation>
+                                                                <mutation name="test join"></mutation>
                                                                 <next>
                                                                   <block type="procedures_callnoreturn">
-                                                                    <mutation name="test sort alphabetic"></mutation>
+                                                                    <mutation name="test split"></mutation>
                                                                     <next>
                                                                       <block type="procedures_callnoreturn">
-                                                                        <mutation name="test sort ignoreCase"></mutation>
+                                                                        <mutation name="test sort alphabetic"></mutation>
                                                                         <next>
                                                                           <block type="procedures_callnoreturn">
-                                                                            <mutation name="test sort numeric"></mutation>
+                                                                            <mutation name="test sort ignoreCase"></mutation>
                                                                             <next>
                                                                               <block type="procedures_callnoreturn">
-                                                                                <mutation name="test lists reverse"></mutation>
+                                                                                <mutation name="test sort numeric"></mutation>
+                                                                                <next>
+                                                                                  <block type="procedures_callnoreturn">
+                                                                                    <mutation name="test lists reverse"></mutation>
+                                                                                  </block>
+                                                                                </next>
                                                                               </block>
                                                                             </next>
                                                                           </block>
@@ -97,7 +102,7 @@
       </block>
     </statement>
   </block>
-  <block type="procedures_defnoreturn" x="13" y="538">
+  <block type="procedures_defnoreturn" x="13" y="588">
     <mutation>
       <arg name="test name"></arg>
     </mutation>
@@ -133,7 +138,7 @@
       </block>
     </statement>
   </block>
-  <block type="procedures_defnoreturn" x="13" y="713">
+  <block type="procedures_defnoreturn" x="13" y="763">
     <field name="NAME">test create lists</field>
     <comment pinned="false" h="80" w="160">Tests the "create list with" and "create empty list" blocks.</comment>
     <statement name="STACK">
@@ -289,7 +294,7 @@
       </block>
     </statement>
   </block>
-  <block type="procedures_defreturn" x="13" y="1163">
+  <block type="procedures_defreturn" x="13" y="1213">
     <mutation statements="false"></mutation>
     <field name="NAME">get empty list</field>
     <comment pinned="false" h="80" w="160">Creates an empty list for use with the empty test.</comment>
@@ -297,7 +302,7 @@
       <block type="lists_create_empty"></block>
     </value>
   </block>
-  <block type="procedures_defnoreturn" x="13" y="1238">
+  <block type="procedures_defnoreturn" x="13" y="1288">
     <field name="NAME">test lists empty</field>
     <comment pinned="false" h="80" w="160">Tests the "is empty" block.</comment>
     <statement name="STACK">
@@ -390,7 +395,7 @@
       </block>
     </statement>
   </block>
-  <block type="procedures_defnoreturn" x="13" y="1563">
+  <block type="procedures_defnoreturn" x="13" y="1613">
     <field name="NAME">test lists length</field>
     <comment pinned="false" h="80" w="160">Tests the "length" block.</comment>
     <statement name="STACK">
@@ -524,7 +529,7 @@
       </block>
     </statement>
   </block>
-  <block type="procedures_defnoreturn" x="13" y="1988">
+  <block type="procedures_defnoreturn" x="13" y="2038">
     <field name="NAME">test find lists simple</field>
     <comment pinned="false" h="80" w="160">Tests the "find" block with a variable.</comment>
     <statement name="STACK">
@@ -657,7 +662,7 @@
       </block>
     </statement>
   </block>
-  <block type="procedures_defreturn" x="13" y="2438">
+  <block type="procedures_defreturn" x="13" y="2488">
     <field name="NAME">get names</field>
     <comment pinned="false" h="80" w="160">Creates a list for use with the find test.</comment>
     <statement name="STACK">
@@ -696,7 +701,7 @@
       </block>
     </value>
   </block>
-  <block type="procedures_defnoreturn" x="13" y="2563">
+  <block type="procedures_defnoreturn" x="13" y="2613">
     <field name="NAME">test find lists complex</field>
     <comment pinned="false" h="80" w="160">Tests the "find" block with a function call.</comment>
     <statement name="STACK">
@@ -1066,7 +1071,7 @@
       </block>
     </statement>
   </block>
-  <block type="procedures_defnoreturn" x="13" y="3738">
+  <block type="procedures_defnoreturn" x="13" y="3788">
     <field name="NAME">test get lists simple</field>
     <comment pinned="false" h="80" w="160">Tests the "get" block with a variable.</comment>
     <statement name="STACK">
@@ -1356,7 +1361,392 @@
       </block>
     </statement>
   </block>
-  <block type="procedures_defreturn" x="13" y="4538">
+  <block type="procedures_defnoreturn" x="13" y="4588">
+    <field name="NAME">test get lists create list</field>
+    <comment pinned="false" h="80" w="160">Tests the "get" block with create list call.</comment>
+    <statement name="STACK">
+      <block type="unittest_assertequals" inline="false">
+        <value name="MESSAGE">
+          <block type="text">
+            <field name="TEXT">get first create list</field>
+          </block>
+        </value>
+        <value name="ACTUAL">
+          <block type="lists_getIndex">
+            <mutation statement="false" at="false"></mutation>
+            <field name="MODE">GET</field>
+            <field name="WHERE">FIRST</field>
+            <value name="VALUE">
+              <block type="lists_create_with" inline="true">
+                <mutation items="3"></mutation>
+                <value name="ADD0">
+                  <block type="text">
+                    <field name="TEXT">Kirk</field>
+                  </block>
+                </value>
+                <value name="ADD1">
+                  <block type="text">
+                    <field name="TEXT">Spock</field>
+                  </block>
+                </value>
+                <value name="ADD2">
+                  <block type="text">
+                    <field name="TEXT">McCoy</field>
+                  </block>
+                </value>
+              </block>
+            </value>
+          </block>
+        </value>
+        <value name="EXPECTED">
+          <block type="text">
+            <field name="TEXT">Kirk</field>
+          </block>
+        </value>
+        <next>
+          <block type="unittest_assertequals" inline="false">
+            <value name="MESSAGE">
+              <block type="text">
+                <field name="TEXT">get last simple</field>
+              </block>
+            </value>
+            <value name="ACTUAL">
+              <block type="lists_getIndex">
+                <mutation statement="false" at="false"></mutation>
+                <field name="MODE">GET</field>
+                <field name="WHERE">LAST</field>
+                <value name="VALUE">
+                  <block type="lists_create_with" inline="true">
+                    <mutation items="3"></mutation>
+                    <value name="ADD0">
+                      <block type="text">
+                        <field name="TEXT">Kirk</field>
+                      </block>
+                    </value>
+                    <value name="ADD1">
+                      <block type="text">
+                        <field name="TEXT">Spock</field>
+                      </block>
+                    </value>
+                    <value name="ADD2">
+                      <block type="text">
+                        <field name="TEXT">McCoy</field>
+                      </block>
+                    </value>
+                  </block>
+                </value>
+              </block>
+            </value>
+            <value name="EXPECTED">
+              <block type="text">
+                <field name="TEXT">McCoy</field>
+              </block>
+            </value>
+            <next>
+              <block type="unittest_assertvalue" inline="false">
+                <field name="EXPECTED">TRUE</field>
+                <value name="MESSAGE">
+                  <block type="text">
+                    <field name="TEXT">get random simple</field>
+                  </block>
+                </value>
+                <value name="ACTUAL">
+                  <block type="logic_compare">
+                    <field name="OP">GT</field>
+                    <value name="A">
+                      <block type="lists_indexOf" inline="false">
+                        <field name="END">FIRST</field>
+                        <value name="VALUE">
+                          <block type="lists_create_with" inline="true">
+                            <mutation items="3"></mutation>
+                            <value name="ADD0">
+                              <block type="text">
+                                <field name="TEXT">Kirk</field>
+                              </block>
+                            </value>
+                            <value name="ADD1">
+                              <block type="text">
+                                <field name="TEXT">Spock</field>
+                              </block>
+                            </value>
+                            <value name="ADD2">
+                              <block type="text">
+                                <field name="TEXT">McCoy</field>
+                              </block>
+                            </value>
+                          </block>
+                        </value>
+                        <value name="FIND">
+                          <block type="lists_getIndex">
+                            <mutation statement="false" at="false"></mutation>
+                            <field name="MODE">GET</field>
+                            <field name="WHERE">RANDOM</field>
+                            <value name="VALUE">
+                              <block type="lists_create_with" inline="true">
+                                <mutation items="3"></mutation>
+                                <value name="ADD0">
+                                  <block type="text">
+                                    <field name="TEXT">Kirk</field>
+                                  </block>
+                                </value>
+                                <value name="ADD1">
+                                  <block type="text">
+                                    <field name="TEXT">Spock</field>
+                                  </block>
+                                </value>
+                                <value name="ADD2">
+                                  <block type="text">
+                                    <field name="TEXT">McCoy</field>
+                                  </block>
+                                </value>
+                              </block>
+                            </value>
+                          </block>
+                        </value>
+                      </block>
+                    </value>
+                    <value name="B">
+                      <block type="unittest_adjustindex">
+                        <value name="INDEX">
+                          <block type="math_number">
+                            <field name="NUM">-1</field>
+                          </block>
+                        </value>
+                      </block>
+                    </value>
+                  </block>
+                </value>
+                <next>
+                  <block type="unittest_assertequals" inline="false">
+                    <value name="MESSAGE">
+                      <block type="text">
+                        <field name="TEXT">get # simple</field>
+                      </block>
+                    </value>
+                    <value name="ACTUAL">
+                      <block type="lists_getIndex">
+                        <mutation statement="false" at="true"></mutation>
+                        <field name="MODE">GET</field>
+                        <field name="WHERE">FROM_START</field>
+                        <value name="VALUE">
+                          <block type="lists_create_with" inline="true">
+                            <mutation items="3"></mutation>
+                            <value name="ADD0">
+                              <block type="text">
+                                <field name="TEXT">Kirk</field>
+                              </block>
+                            </value>
+                            <value name="ADD1">
+                              <block type="text">
+                                <field name="TEXT">Spock</field>
+                              </block>
+                            </value>
+                            <value name="ADD2">
+                              <block type="text">
+                                <field name="TEXT">McCoy</field>
+                              </block>
+                            </value>
+                          </block>
+                        </value>
+                        <value name="AT">
+                          <block type="unittest_adjustindex">
+                            <value name="INDEX">
+                              <block type="math_number">
+                                <field name="NUM">1</field>
+                              </block>
+                            </value>
+                          </block>
+                        </value>
+                      </block>
+                    </value>
+                    <value name="EXPECTED">
+                      <block type="text">
+                        <field name="TEXT">Spock</field>
+                      </block>
+                    </value>
+                    <next>
+                      <block type="unittest_assertequals" inline="false">
+                        <value name="MESSAGE">
+                          <block type="text">
+                            <field name="TEXT">get # order simple</field>
+                          </block>
+                        </value>
+                        <value name="ACTUAL">
+                          <block type="lists_getIndex">
+                            <mutation statement="false" at="true"></mutation>
+                            <field name="MODE">GET</field>
+                            <field name="WHERE">FROM_START</field>
+                            <value name="VALUE">
+                              <block type="lists_create_with" inline="true">
+                                <mutation items="3"></mutation>
+                                <value name="ADD0">
+                                  <block type="text">
+                                    <field name="TEXT">Kirk</field>
+                                  </block>
+                                </value>
+                                <value name="ADD1">
+                                  <block type="text">
+                                    <field name="TEXT">Spock</field>
+                                  </block>
+                                </value>
+                                <value name="ADD2">
+                                  <block type="text">
+                                    <field name="TEXT">McCoy</field>
+                                  </block>
+                                </value>
+                              </block>
+                            </value>
+                            <value name="AT">
+                              <block type="logic_ternary" inline="true">
+                                <value name="IF">
+                                  <block type="logic_boolean">
+                                    <field name="BOOL">TRUE</field>
+                                  </block>
+                                </value>
+                                <value name="THEN">
+                                  <block type="unittest_adjustindex">
+                                    <value name="INDEX">
+                                      <block type="math_number">
+                                        <field name="NUM">1</field>
+                                      </block>
+                                    </value>
+                                  </block>
+                                </value>
+                                <value name="ELSE">
+                                  <block type="logic_null"></block>
+                                </value>
+                              </block>
+                            </value>
+                          </block>
+                        </value>
+                        <value name="EXPECTED">
+                          <block type="text">
+                            <field name="TEXT">Spock</field>
+                          </block>
+                        </value>
+                        <next>
+                          <block type="unittest_assertequals" inline="false">
+                            <value name="MESSAGE">
+                              <block type="text">
+                                <field name="TEXT">get #-end simple</field>
+                              </block>
+                            </value>
+                            <value name="ACTUAL">
+                              <block type="lists_getIndex">
+                                <mutation statement="false" at="true"></mutation>
+                                <field name="MODE">GET</field>
+                                <field name="WHERE">FROM_END</field>
+                                <value name="VALUE">
+                                  <block type="lists_create_with" inline="true">
+                                    <mutation items="3"></mutation>
+                                    <value name="ADD0">
+                                      <block type="text">
+                                        <field name="TEXT">Kirk</field>
+                                      </block>
+                                    </value>
+                                    <value name="ADD1">
+                                      <block type="text">
+                                        <field name="TEXT">Spock</field>
+                                      </block>
+                                    </value>
+                                    <value name="ADD2">
+                                      <block type="text">
+                                        <field name="TEXT">McCoy</field>
+                                      </block>
+                                    </value>
+                                  </block>
+                                </value>
+                                <value name="AT">
+                                  <block type="unittest_adjustindex">
+                                    <value name="INDEX">
+                                      <block type="math_number">
+                                        <field name="NUM">2</field>
+                                      </block>
+                                    </value>
+                                  </block>
+                                </value>
+                              </block>
+                            </value>
+                            <value name="EXPECTED">
+                              <block type="text">
+                                <field name="TEXT">Kirk</field>
+                              </block>
+                            </value>
+                            <next>
+                              <block type="unittest_assertequals" inline="false">
+                                <value name="MESSAGE">
+                                  <block type="text">
+                                    <field name="TEXT">get #-end order simple</field>
+                                  </block>
+                                </value>
+                                <value name="ACTUAL">
+                                  <block type="lists_getIndex">
+                                    <mutation statement="false" at="true"></mutation>
+                                    <field name="MODE">GET</field>
+                                    <field name="WHERE">FROM_END</field>
+                                    <comment pinned="false" h="81" w="289">The order for index for #-end is addition because this will catch errors in generators where most perform the operation ... - index.</comment>
+                                    <value name="VALUE">
+                                      <block type="lists_create_with" inline="true">
+                                        <mutation items="3"></mutation>
+                                        <value name="ADD0">
+                                          <block type="text">
+                                            <field name="TEXT">Kirk</field>
+                                          </block>
+                                        </value>
+                                        <value name="ADD1">
+                                          <block type="text">
+                                            <field name="TEXT">Spock</field>
+                                          </block>
+                                        </value>
+                                        <value name="ADD2">
+                                          <block type="text">
+                                            <field name="TEXT">McCoy</field>
+                                          </block>
+                                        </value>
+                                      </block>
+                                    </value>
+                                    <value name="AT">
+                                      <block type="math_arithmetic">
+                                        <field name="OP">ADD</field>
+                                        <value name="A">
+                                          <block type="math_number">
+                                            <field name="NUM">0</field>
+                                          </block>
+                                        </value>
+                                        <value name="B">
+                                          <block type="unittest_adjustindex">
+                                            <value name="INDEX">
+                                              <block type="math_number">
+                                                <field name="NUM">2</field>
+                                              </block>
+                                            </value>
+                                          </block>
+                                        </value>
+                                      </block>
+                                    </value>
+                                  </block>
+                                </value>
+                                <value name="EXPECTED">
+                                  <block type="text">
+                                    <field name="TEXT">Kirk</field>
+                                  </block>
+                                </value>
+                              </block>
+                            </next>
+                          </block>
+                        </next>
+                      </block>
+                    </next>
+                  </block>
+                </next>
+              </block>
+            </next>
+          </block>
+        </next>
+      </block>
+    </statement>
+  </block>
+  <block type="procedures_defreturn" x="13" y="5388">
     <field name="NAME">get star wars</field>
     <comment pinned="false" h="80" w="160">Creates a list for use with the get test.</comment>
     <statement name="STACK">
@@ -1390,7 +1780,7 @@
       </block>
     </value>
   </block>
-  <block type="procedures_defnoreturn" x="13" y="4663">
+  <block type="procedures_defnoreturn" x="13" y="5513">
     <field name="NAME">test get lists complex</field>
     <comment pinned="false" h="80" w="160">Tests the "get" block with a function call.</comment>
     <statement name="STACK">
@@ -2058,7 +2448,7 @@
       </block>
     </statement>
   </block>
-  <block type="procedures_defnoreturn" x="13" y="6488">
+  <block type="procedures_defnoreturn" x="13" y="7338">
     <field name="NAME">test getRemove</field>
     <comment pinned="false" h="80" w="160">Tests the "get and remove" block.</comment>
     <statement name="STACK">
@@ -3009,7 +3399,7 @@
       </block>
     </statement>
   </block>
-  <block type="procedures_defnoreturn" x="13" y="8888">
+  <block type="procedures_defnoreturn" x="13" y="9738">
     <field name="NAME">test remove</field>
     <comment pinned="false" h="80" w="160">Tests the "remove" block.</comment>
     <statement name="STACK">
@@ -3780,7 +4170,7 @@
       </block>
     </statement>
   </block>
-  <block type="procedures_defnoreturn" x="13" y="10713">
+  <block type="procedures_defnoreturn" x="13" y="11563">
     <field name="NAME">test set</field>
     <comment pinned="false" h="80" w="160">Tests the "set" block.</comment>
     <statement name="STACK">
@@ -4641,7 +5031,7 @@
       </block>
     </statement>
   </block>
-  <block type="procedures_defnoreturn" x="13" y="12538">
+  <block type="procedures_defnoreturn" x="13" y="13388">
     <field name="NAME">test insert</field>
     <comment pinned="false" h="80" w="160">Tests the "insert" block.</comment>
     <statement name="STACK">
@@ -5542,7 +5932,7 @@
       </block>
     </statement>
   </block>
-  <block type="procedures_defnoreturn" x="13" y="14363">
+  <block type="procedures_defnoreturn" x="13" y="15213">
     <field name="NAME">test sublist simple</field>
     <comment pinned="false" h="80" w="160">Tests the "get sub-list" block with a variable.</comment>
     <statement name="STACK">
@@ -6417,7 +6807,7 @@
       </block>
     </statement>
   </block>
-  <block type="procedures_defreturn" x="13" y="16238">
+  <block type="procedures_defreturn" x="13" y="17088">
     <field name="NAME">get space shuttles</field>
     <comment pinned="false" h="80" w="160">Creates a list for use with the sublist test.</comment>
     <statement name="STACK">
@@ -6461,7 +6851,7 @@
       </block>
     </value>
   </block>
-  <block type="procedures_defnoreturn" x="13" y="16363">
+  <block type="procedures_defnoreturn" x="13" y="17213">
     <field name="NAME">test sublist complex</field>
     <comment pinned="false" h="80" w="160">Tests the "get sub-list" block with a function call.</comment>
     <statement name="STACK">
@@ -7557,7 +7947,7 @@
       </block>
     </statement>
   </block>
-  <block type="procedures_defnoreturn" x="13" y="18963">
+  <block type="procedures_defnoreturn" x="13" y="19813">
     <field name="NAME">test join</field>
     <comment pinned="false" h="80" w="160">Tests the "join" block.</comment>
     <statement name="STACK">
@@ -7658,7 +8048,7 @@
       </block>
     </statement>
   </block>
-  <block type="procedures_defnoreturn" x="13" y="19263">
+  <block type="procedures_defnoreturn" x="13" y="20113">
     <field name="NAME">test split</field>
     <comment pinned="false" h="80" w="160">Tests the "split" block.</comment>
     <statement name="STACK">
@@ -7774,7 +8164,7 @@
       </block>
     </statement>
   </block>
-  <block type="procedures_defnoreturn" x="13" y="19563">
+  <block type="procedures_defnoreturn" x="13" y="20413">
     <field name="NAME">test sort alphabetic</field>
     <comment pinned="false" h="80" w="160">Tests the "alphabetic sort" block.</comment>
     <statement name="STACK">
@@ -7895,7 +8285,7 @@
       </block>
     </statement>
   </block>
-  <block type="procedures_defnoreturn" x="13" y="19863">
+  <block type="procedures_defnoreturn" x="13" y="20713">
     <field name="NAME">test sort ignoreCase</field>
     <comment pinned="false" h="80" w="160">Tests the "alphabetic sort ignore case" block.</comment>
     <statement name="STACK">
@@ -8016,7 +8406,7 @@
       </block>
     </statement>
   </block>
-  <block type="procedures_defnoreturn" x="13" y="20163">
+  <block type="procedures_defnoreturn" x="13" y="21013">
     <field name="NAME">test sort numeric</field>
     <comment pinned="false" h="80" w="160">Tests the "numeric sort" block.</comment>
     <statement name="STACK">
@@ -8137,7 +8527,7 @@
       </block>
     </statement>
   </block>
-  <block type="procedures_defnoreturn" x="13" y="20463">
+  <block type="procedures_defnoreturn" x="13" y="21313">
     <field name="NAME">test lists reverse</field>
     <comment pinned="false" h="80" w="160">Tests the "list reverse" block.</comment>
     <statement name="STACK">

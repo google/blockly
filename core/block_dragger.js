@@ -1,18 +1,7 @@
 /**
  * @license
  * Copyright 2017 Google LLC
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 /**
@@ -173,6 +162,7 @@ Blockly.BlockDragger.prototype.startBlockDrag = function(currentDragDeltaXY,
 
     this.draggingBlock_.translate(newLoc.x, newLoc.y);
     Blockly.blockAnimations.disconnectUiEffect(this.draggingBlock_);
+    this.draggedConnectionManager_.updateAvailableConnections();
   }
   this.draggingBlock_.setDragging(true);
   // For future consideration: we may be able to put moveToDragSurface inside
@@ -181,7 +171,7 @@ Blockly.BlockDragger.prototype.startBlockDrag = function(currentDragDeltaXY,
   this.draggingBlock_.moveToDragSurface();
 
   var toolbox = this.workspace_.getToolbox();
-  if (toolbox) {
+  if (toolbox && typeof toolbox.addStyle == 'function') {
     var style = this.draggingBlock_.isDeletable() ? 'blocklyToolboxDelete' :
         'blocklyToolboxGrab';
     toolbox.addStyle(style);
@@ -231,7 +221,7 @@ Blockly.BlockDragger.prototype.endBlockDrag = function(e, currentDragDeltaXY) {
   this.dragBlock(e, currentDragDeltaXY);
   this.dragIconData_ = [];
   this.fireDragEndEvent_();
-  
+
   Blockly.utils.dom.stopTextWidthCache();
 
   Blockly.blockAnimations.disconnectUiStop();
@@ -257,7 +247,7 @@ Blockly.BlockDragger.prototype.endBlockDrag = function(e, currentDragDeltaXY) {
   this.workspace_.setResizesEnabled(true);
 
   var toolbox = this.workspace_.getToolbox();
-  if (toolbox) {
+  if (toolbox && typeof toolbox.removeStyle == 'function') {
     var style = this.draggingBlock_.isDeletable() ? 'blocklyToolboxDelete' :
         'blocklyToolboxGrab';
     toolbox.removeStyle(style);
@@ -302,6 +292,7 @@ Blockly.BlockDragger.prototype.maybeDeleteBlock_ = function() {
     // Fire a move event, so we know where to go back to for an undo.
     this.fireMoveEvent_();
     this.draggingBlock_.dispose(false, true);
+    Blockly.draggingConnections = [];
   } else if (trashcan) {
     // Make sure the trash can is closed.
     trashcan.close();

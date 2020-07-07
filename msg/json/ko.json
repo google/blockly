@@ -1,21 +1,23 @@
 {
 	"@metadata": {
 		"authors": [
+			"Alex00728",
+			"Codenstory",
+			"Gongsoonyee",
 			"Hym411",
-			"아라",
+			"JeonHK",
+			"Jerrykim306",
+			"Kurousagi",
+			"Lemondoge",
+			"Liuxinyu970226",
+			"Nuevo Paso",
+			"Onebone",
+			"Peurocs4",
 			"Priviet",
 			"Revi",
 			"SeoJeongHo",
-			"Alex00728",
-			"Kurousagi",
-			"Lemondoge",
 			"Ykhwong",
-			"Jerrykim306",
-			"Onebone",
-			"JeonHK",
-			"Liuxinyu970226",
-			"Peurocs4",
-			"Gongsoonyee"
+			"아라"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "항목",
@@ -56,7 +58,7 @@
 	"DELETE_VARIABLE": "'%1' 변수를 삭제합니다",
 	"COLOUR_PICKER_HELPURL": "https://ko.wikipedia.org/wiki/색",
 	"COLOUR_PICKER_TOOLTIP": "팔레트에서 색을 고릅니다",
-	"COLOUR_RANDOM_TITLE": "임의 색상",
+	"COLOUR_RANDOM_TITLE": "무작위 색상",
 	"COLOUR_RANDOM_TOOLTIP": "무작위로 색을 고릅니다.",
 	"COLOUR_RGB_HELPURL": "http://www.december.com/html/spec/colorper.html",
 	"COLOUR_RGB_TITLE": "색",
@@ -107,6 +109,7 @@
 	"IOS_ERROR": "오류",
 	"IOS_PROCEDURES_INPUTS": "입력",
 	"IOS_PROCEDURES_ADD_INPUT": "+ 입력 추가",
+	"IOS_PROCEDURES_ALLOW_STATEMENTS": "구문 허가",
 	"IOS_PROCEDURES_DUPLICATE_INPUTS_ERROR": "이 기능은 중복된 입력이 있습니다.",
 	"IOS_VARIABLES_ADD_VARIABLE": "+ 변수 추가",
 	"IOS_VARIABLES_ADD_BUTTON": "추가",
@@ -225,6 +228,8 @@
 	"MATH_RANDOM_FLOAT_TITLE_RANDOM": "임의 분수",
 	"MATH_RANDOM_FLOAT_TOOLTIP": "0.0 (포함)과 1.0 (배타적) 사이의 임의 분수 값을 돌려줍니다.",
 	"MATH_ATAN2_HELPURL": "https://en.wikipedia.org/wiki/Atan2",
+	"MATH_ATAN2_TITLE": "X:%1 Y:%2의 atan2",
+	"MATH_ATAN2_TOOLTIP": "점 (X, Y)의 아크탄젠트를 -180에서 180까지 도 단위로 반환합니다.",
 	"TEXT_TEXT_HELPURL": "https://ko.wikipedia.org/wiki/문자열",
 	"TEXT_TEXT_TOOLTIP": "문자, 단어, 문장.",
 	"TEXT_JOIN_HELPURL": "https://github.com/google/blockly/wiki/Text#text-creation",
@@ -289,6 +294,7 @@
 	"TEXT_COUNT_TOOLTIP": "다른 어떤 텍스트에서 어떤 텍스트가 나타난 횟수를 셉니다.",
 	"TEXT_REPLACE_MESSAGE0": "%3에서 %2을(를) %1(으)로 바꾸기",
 	"TEXT_REPLACE_HELPURL": "https://github.com/google/blockly/wiki/Text#replacing-substrings",
+	"TEXT_REPLACE_TOOLTIP": "다른 텍스트 내에서 일부 텍스트의 모든 발생을 치환합니다.",
 	"TEXT_REVERSE_MESSAGE0": "%1 뒤집기",
 	"TEXT_REVERSE_HELPURL": "https://github.com/google/blockly/wiki/Text#reversing-text",
 	"TEXT_REVERSE_TOOLTIP": "텍스트 안의 문자의 순서를 반전시킵니다.",
@@ -410,5 +416,7 @@
 	"PROCEDURES_IFRETURN_TOOLTIP": "값이 참이라면, 두 번째 값을 반환합니다.",
 	"PROCEDURES_IFRETURN_HELPURL": "http://c2.com/cgi/wiki?GuardClause",
 	"PROCEDURES_IFRETURN_WARNING": "경고: 이 블럭은, 함수 정의 블럭 안에서만 사용할 수 있습니다.",
-	"WORKSPACE_COMMENT_DEFAULT_TEXT": "말해 보세요..."
+	"WORKSPACE_COMMENT_DEFAULT_TEXT": "말해 보세요...",
+	"WORKSPACE_ARIA_LABEL": "Blockly 워크스페이스",
+	"COLLAPSED_WARNINGS_WARNING": "접힌 블록이 경고를 포함하고 있습니다."
 }

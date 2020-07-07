@@ -8,7 +8,7 @@ node_js:
 addons:
   chrome: stable
   firefox: latest
-    # TODO (#2114): reenable osx build.
+    # TODO (#2114): re-enable osx build.
     # - os: osx
     #   node_js: stable
     #   osx_image: xcode8.3

@@ -1,18 +1,7 @@
 /**
  * @license
  * Copyright 2016 Google LLC
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 /**
@@ -64,12 +53,6 @@ Blockly.CONNECTING_SNAP_RADIUS = Blockly.SNAP_RADIUS;
  * much closer to the matching connection on the block than it actually is.
  */
 Blockly.CURRENT_CONNECTION_PREFERENCE = 8;
-
-/**
- * The main colour of insertion markers, in hex.  The block is rendered a
- * transparent grey by changing the fill opacity in CSS.
- */
-Blockly.INSERTION_MARKER_COLOUR = '#000000';
 
 /**
  * Delay in ms between trigger and bumping unconnected block out of alignment.

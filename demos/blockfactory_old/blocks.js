@@ -1,18 +1,7 @@
 /**
  * @license
  * Copyright 2012 Google LLC
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 /**
@@ -69,7 +58,7 @@ Blockly.Blocks['factory_base'] = {
   },
   spawnOutputShadow_: function(option) {
     // Helper method for deciding which type of outputs this block needs
-    // to attach shaddow blocks to.
+    // to attach shadow blocks to.
     switch (option) {
       case 'LEFT':
         this.connectOutputShadow_('OUTPUTTYPE');
@@ -465,24 +454,6 @@ Blockly.Blocks['field_colour'] = {
     this.setNextStatement(true, 'Field');
     this.setTooltip('Colour input field.');
     this.setHelpUrl('https://www.youtube.com/watch?v=s2_xaEvcVI0#t=495');
-  },
-  onchange: function() {
-    fieldNameCheck(this);
-  }
-};
-
-Blockly.Blocks['field_date'] = {
-  // Date input.
-  init: function() {
-    this.setColour(160);
-    this.appendDummyInput()
-        .appendField('date')
-        .appendField(new Blockly.FieldDate(), 'DATE')
-        .appendField(',')
-        .appendField(new Blockly.FieldTextInput('NAME'), 'FIELDNAME');
-    this.setPreviousStatement(true, 'Field');
-    this.setNextStatement(true, 'Field');
-    this.setTooltip('Date input field.');
   },
   onchange: function() {
     fieldNameCheck(this);

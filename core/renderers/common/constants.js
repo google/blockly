@@ -1,18 +1,7 @@
 /**
  * @license
  * Copyright 2019 Google LLC
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 /**
@@ -28,6 +17,8 @@ goog.require('Blockly.utils.colour');
 goog.require('Blockly.utils.dom');
 goog.require('Blockly.utils.svgPaths');
 goog.require('Blockly.utils.userAgent');
+
+goog.requireType('Blockly.blockRendering.Debug');
 
 
 /**
@@ -248,12 +239,6 @@ Blockly.blockRendering.ConstantProvider = function() {
   this.FIELD_TEXT_FONTSIZE = 11;
 
   /**
-   * Height of text.
-   * @type {number}
-   */
-  this.FIELD_TEXT_HEIGHT = 16;
-
-  /**
    * Text font weight.
    * @type {string}
    */
@@ -264,6 +249,20 @@ Blockly.blockRendering.ConstantProvider = function() {
    * @type {string}
    */
   this.FIELD_TEXT_FONTFAMILY = 'sans-serif';
+
+  /**
+   * Height of text.  This constant is dynamically set in ``setFontConstants_``
+   * to be the height of the text based on the font used.
+   * @type {number}
+   */
+  this.FIELD_TEXT_HEIGHT = -1; // Dynamically set
+
+  /**
+   * Text baseline.  This constant is dynamically set in ``setFontConstants_``
+   * to be the baseline of the text based on the font used.
+   * @type {number}
+   */
+  this.FIELD_TEXT_BASELINE = -1; // Dynamically set
 
   /**
    * A field's border rect corner radius.
@@ -295,19 +294,6 @@ Blockly.blockRendering.ConstantProvider = function() {
    * @package
    */
   this.FIELD_BORDER_RECT_COLOUR = '#fff';
-
-  /**
-   * Field text baseline.
-   * This is only used if `FIELD_TEXT_BASELINE_CENTER` is false.
-   * @type {number}
-   */
-  this.FIELD_TEXT_BASELINE_Y = Blockly.utils.userAgent.GECKO ? 12 : 13.09;
-
-  /**
-   * An text offset adjusting the Y position of text after positioning.
-   * @type {number}
-   */
-  this.FIELD_TEXT_Y_OFFSET = 0;
 
   /**
    * A field's text element's dominant baseline.
@@ -404,24 +390,12 @@ Blockly.blockRendering.ConstantProvider = function() {
   this.FIELD_CHECKBOX_X_OFFSET = this.FIELD_BORDER_RECT_X_PADDING - 3;
 
   /**
-   * A checkbox field's Y offset.
-   * @type {number}
-   */
-  this.FIELD_CHECKBOX_Y_OFFSET = 14;
-
-  /**
-   * A checkbox field's default width.
-   * @type {number}
-   */
-  this.FIELD_CHECKBOX_DEFAULT_WIDTH = 15;
-
-  /**
    * A random identifier used to ensure a unique ID is used for each
    * filter/pattern for the case of multiple Blockly instances on a page.
    * @type {string}
-   * @protected
+   * @package
    */
-  this.randomIdentifier_ = String(Math.random()).substring(2);
+  this.randomIdentifier = String(Math.random()).substring(2);
 
   /**
    * The ID of the emboss filter, or the empty string if no filter is set.
@@ -450,6 +424,27 @@ Blockly.blockRendering.ConstantProvider = function() {
    * @private
    */
   this.disabledPattern_ = null;
+
+  /**
+   * The ID of the debug filter, or the empty string if no pattern is set.
+   * @type {string}
+   * @package
+   */
+  this.debugFilterId = '';
+
+  /**
+   * The <filter> element to use for a debug highlight, or null if not set.
+   * @type {SVGElement}
+   * @private
+   */
+  this.debugFilter_ = null;
+
+  /**
+   * The <style> element to use for injecting renderer specific CSS.
+   * @type {HTMLStyleElement}
+   * @private
+   */
+  this.cssNode_ = null;
 
   /**
    * Cursor colour.
@@ -506,6 +501,21 @@ Blockly.blockRendering.ConstantProvider = function() {
    * @package
    */
   this.FULL_BLOCK_FIELDS = false;
+
+  /**
+   * The main colour of insertion markers, in hex.  The block is rendered a
+   * transparent grey by changing the fill opacity in CSS.
+   * @type {string}
+   * @package
+   */
+  this.INSERTION_MARKER_COLOUR = '#000000';
+
+  /**
+   * The insertion marker opacity.
+   * @type {number}
+   * @package
+   */
+  this.INSERTION_MARKER_OPACITY = 0.2;
 
   /**
    * Enum for connection shapes.
@@ -566,7 +576,7 @@ Blockly.blockRendering.ConstantProvider.prototype.init = function() {
  * @param {!Blockly.Theme} theme The current workspace theme.
  * @package
  */
-Blockly.blockRendering.ConstantProvider.prototype.refreshTheme = function(
+Blockly.blockRendering.ConstantProvider.prototype.setTheme = function(
     theme) {
 
   /**
@@ -580,7 +590,70 @@ Blockly.blockRendering.ConstantProvider.prototype.refreshTheme = function(
   for (var key in blockStyles) {
     this.blockStyles[key] = this.validatedBlockStyle_(blockStyles[key]);
   }
+
+  this.setDynamicProperties_(theme);
 };
+
+/**
+ * Sets dynamic properties that depend on other values or theme properties.
+ * @param {!Blockly.Theme} theme The current workspace theme.
+ * @protected
+ */
+Blockly.blockRendering.ConstantProvider.prototype.setDynamicProperties_ =
+    function(theme) {
+    /* eslint-disable indent */
+  this.setFontConstants_(theme);
+  this.setComponentConstants_(theme);
+
+  this.ADD_START_HATS = theme.startHats != null ? theme.startHats :
+      this.ADD_START_HATS;
+}; /* eslint-enable indent */
+
+/**
+ * Set constants related to fonts.
+ * @param {!Blockly.Theme} theme The current workspace theme.
+ * @protected
+ */
+Blockly.blockRendering.ConstantProvider.prototype.setFontConstants_ = function(
+    theme) {
+  this.FIELD_TEXT_FONTFAMILY =
+      theme.fontStyle && theme.fontStyle['family'] != undefined ?
+      theme.fontStyle['family'] : this.FIELD_TEXT_FONTFAMILY;
+  this.FIELD_TEXT_FONTWEIGHT =
+      theme.fontStyle && theme.fontStyle['weight'] != undefined ?
+      theme.fontStyle['weight'] : this.FIELD_TEXT_FONTWEIGHT;
+  this.FIELD_TEXT_FONTSIZE =
+      theme.fontStyle && theme.fontStyle['size'] != undefined ?
+      theme.fontStyle['size'] : this.FIELD_TEXT_FONTSIZE;
+
+  var fontMetrics = Blockly.utils.dom.measureFontMetrics('Hg',
+      this.FIELD_TEXT_FONTSIZE + 'pt',
+      this.FIELD_TEXT_FONTWEIGHT,
+      this.FIELD_TEXT_FONTFAMILY);
+
+  this.FIELD_TEXT_HEIGHT = fontMetrics.height;
+  this.FIELD_TEXT_BASELINE = fontMetrics.baseline;
+};
+
+/**
+ * Set constants from a theme's component styles.
+ * @param {!Blockly.Theme} theme The current workspace theme.
+ * @protected
+ */
+Blockly.blockRendering.ConstantProvider.prototype.setComponentConstants_ =
+    function(theme) {
+    /* eslint-disable indent */
+  this.CURSOR_COLOUR = theme.getComponentStyle('cursorColour') ||
+    this.CURSOR_COLOUR;
+  this.MARKER_COLOUR = theme.getComponentStyle('markerColour') ||
+    this.MARKER_COLOUR;
+  this.INSERTION_MARKER_COLOUR =
+    theme.getComponentStyle('insertionMarkerColour') ||
+    this.INSERTION_MARKER_COLOUR;
+  this.INSERTION_MARKER_OPACITY =
+    Number(theme.getComponentStyle('insertionMarkerOpacity')) ||
+    this.INSERTION_MARKER_OPACITY;
+}; /* eslint-enable indent */
 
 /**
  * Get or create a block style based on a single colour value.  Generate a name
@@ -609,7 +682,9 @@ Blockly.blockRendering.ConstantProvider.prototype.getBlockStyleForColour =
 Blockly.blockRendering.ConstantProvider.prototype.getBlockStyle = function(
     blockStyleName) {
   return this.blockStyles[blockStyleName || ''] ||
-      this.createBlockStyle_('#000000');
+      (blockStyleName && blockStyleName.indexOf('auto_') == 0 ?
+        this.getBlockStyleForColour(blockStyleName.substring(5)).style :
+        this.createBlockStyle_('#000000'));
 };
 
 /**
@@ -700,6 +775,10 @@ Blockly.blockRendering.ConstantProvider.prototype.dispose = function() {
   if (this.disabledPattern_) {
     Blockly.utils.dom.removeNode(this.disabledPattern_);
   }
+  if (this.debugFilter_) {
+    Blockly.utils.dom.removeNode(this.debugFilter_);
+  }
+  this.cssNode_ = null;
 };
 
 /**
@@ -926,9 +1005,15 @@ Blockly.blockRendering.ConstantProvider.prototype.shapeFor = function(
 /**
  * Create any DOM elements that this renderer needs (filters, patterns, etc).
  * @param {!SVGElement} svg The root of the workspace's SVG.
+ * @param {string} tagName The name to use for the CSS style tag.
+ * @param {string} selector The CSS selector to use.
+ * @suppress {strictModuleDepCheck} Debug renderer only included in playground.
  * @package
  */
-Blockly.blockRendering.ConstantProvider.prototype.createDom = function(svg) {
+Blockly.blockRendering.ConstantProvider.prototype.createDom = function(svg,
+    tagName, selector) {
+  this.injectCSS_(tagName, selector);
+
   /*
   <defs>
     ... filters go here ...
@@ -950,7 +1035,7 @@ Blockly.blockRendering.ConstantProvider.prototype.createDom = function(svg) {
     </filter>
   */
   var embossFilter = Blockly.utils.dom.createSvgElement('filter',
-      {'id': 'blocklyEmbossFilter' + this.randomIdentifier_}, defs);
+      {'id': 'blocklyEmbossFilter' + this.randomIdentifier}, defs);
   Blockly.utils.dom.createSvgElement('feGaussianBlur',
       {'in': 'SourceAlpha', 'stdDeviation': 1, 'result': 'blur'}, embossFilter);
   var feSpecularLighting = Blockly.utils.dom.createSvgElement('feSpecularLighting',
@@ -994,7 +1079,7 @@ Blockly.blockRendering.ConstantProvider.prototype.createDom = function(svg) {
   */
   var disabledPattern = Blockly.utils.dom.createSvgElement('pattern',
       {
-        'id': 'blocklyDisabledPattern' + this.randomIdentifier_,
+        'id': 'blocklyDisabledPattern' + this.randomIdentifier,
         'patternUnits': 'userSpaceOnUse',
         'width': 10,
         'height': 10
@@ -1005,46 +1090,91 @@ Blockly.blockRendering.ConstantProvider.prototype.createDom = function(svg) {
       {'d': 'M 0 0 L 10 10 M 10 0 L 0 10', 'stroke': '#cc0'}, disabledPattern);
   this.disabledPatternId = disabledPattern.id;
   this.disabledPattern_ = disabledPattern;
+
+  if (Blockly.blockRendering.Debug) {
+    var debugFilter = Blockly.utils.dom.createSvgElement('filter',
+        {
+          'id': 'blocklyDebugFilter' + this.randomIdentifier,
+          'height': '160%',
+          'width': '180%',
+          y: '-30%',
+          x: '-40%'
+        },
+        defs);
+    // Set all gaussian blur pixels to 1 opacity before applying flood
+    var debugComponentTransfer = Blockly.utils.dom.createSvgElement(
+        'feComponentTransfer', {'result': 'outBlur'}, debugFilter);
+    Blockly.utils.dom.createSvgElement('feFuncA',
+        {
+          'type': 'table', 'tableValues': '0 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1'
+        },
+        debugComponentTransfer);
+    // Color the highlight
+    Blockly.utils.dom.createSvgElement('feFlood',
+        {
+          'flood-color': '#ff0000',
+          'flood-opacity': 0.5,
+          'result': 'outColor'
+        },
+        debugFilter);
+    Blockly.utils.dom.createSvgElement('feComposite',
+        {
+          'in': 'outColor', 'in2': 'outBlur',
+          'operator': 'in', 'result': 'outGlow'
+        },
+        debugFilter);
+    this.debugFilterId = debugFilter.id;
+    this.debugFilter_ = debugFilter;
+  }
 };
 
 /**
  * Inject renderer specific CSS into the page.
- * @param {string} name Name of the renderer.
- * @package
+ * @param {string} tagName The name of the style tag to use.
+ * @param {string} selector The CSS selector to use.
+ * @protected
  */
-Blockly.blockRendering.ConstantProvider.prototype.injectCSS = function(
-    name) {
-  var cssArray = this.getCSS_(name);
-  var cssNodeId = 'blockly-renderer-style-' + name;
-  if (document.getElementById(cssNodeId)) {
-    // Already injected.
+Blockly.blockRendering.ConstantProvider.prototype.injectCSS_ = function(
+    tagName, selector) {
+  var cssArray = this.getCSS_(selector);
+  var cssNodeId = 'blockly-renderer-style-' + tagName;
+  this.cssNode_ =
+    /** @type {!HTMLStyleElement} */ (document.getElementById(cssNodeId));
+  var text = cssArray.join('\n');
+  if (this.cssNode_) {
+    // Already injected, update if the theme changed.
+    this.cssNode_.firstChild.textContent = text;
     return;
   }
-  var text = cssArray.join('\n');
   // Inject CSS tag at start of head.
-  var cssNode = document.createElement('style');
+  var cssNode =
+    /** @type {!HTMLStyleElement} */ (document.createElement('style'));
   cssNode.id = cssNodeId;
   var cssTextNode = document.createTextNode(text);
   cssNode.appendChild(cssTextNode);
   document.head.insertBefore(cssNode, document.head.firstChild);
+  this.cssNode_ = cssNode;
 };
 
 /**
  * Get any renderer specific CSS to inject when the renderer is initialized.
- * @param {string} name Name of the renderer.
+ * @param {string} selector CSS selector to use.
  * @return {!Array.<string>} Array of CSS strings.
  * @protected
  */
-Blockly.blockRendering.ConstantProvider.prototype.getCSS_ = function(name) {
-  var selector = '.' + name + '-renderer';
+Blockly.blockRendering.ConstantProvider.prototype.getCSS_ = function(selector) {
   return [
     /* eslint-disable indent */
+    // Text.
+    selector + ' .blocklyText, ',
+    selector + ' .blocklyFlyoutLabelText {',
+      'font: ' + this.FIELD_TEXT_FONTWEIGHT + ' ' +
+          this.FIELD_TEXT_FONTSIZE + 'pt ' + this.FIELD_TEXT_FONTFAMILY + ';',
+    '}',
+
     // Fields.
     selector + ' .blocklyText {',
       'fill: #fff;',
-      'font-family: ' + this.FIELD_TEXT_FONTFAMILY + ';',
-      'font-size: ' + this.FIELD_TEXT_FONTSIZE + 'pt;',
-      'font-weight: ' + this.FIELD_TEXT_FONTWEIGHT + ';',
     '}',
     selector + ' .blocklyNonEditableText>rect,',
     selector + ' .blocklyEditableText>rect {',
@@ -1054,6 +1184,16 @@ Blockly.blockRendering.ConstantProvider.prototype.getCSS_ = function(name) {
     '}',
     selector + ' .blocklyNonEditableText>text,',
     selector + ' .blocklyEditableText>text {',
+      'fill: #000;',
+    '}',
+
+    // Flyout labels.
+    selector + ' .blocklyFlyoutLabelText {',
+      'fill: #000;',
+    '}',
+
+    // Bubbles.
+    selector + ' .blocklyText.blocklyBubbleText {',
       'fill: #000;',
     '}',
 
@@ -1080,13 +1220,19 @@ Blockly.blockRendering.ConstantProvider.prototype.getCSS_ = function(name) {
       'stroke: #fc3;',
     '}',
 
-    // Replacable highlight.
+    // Replaceable highlight.
     selector + ' .blocklyReplaceable .blocklyPath {',
       'fill-opacity: .5;',
     '}',
     selector + ' .blocklyReplaceable .blocklyPathLight,',
     selector + ' .blocklyReplaceable .blocklyPathDark {',
       'display: none;',
+    '}',
+
+    // Insertion marker.
+    selector + ' .blocklyInsertionMarker>.blocklyPath {',
+      'fill-opacity: ' + this.INSERTION_MARKER_OPACITY + ';',
+      'stroke: none;',
     '}',
     /* eslint-enable indent */
   ];

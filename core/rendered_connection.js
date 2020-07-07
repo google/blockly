@@ -1,18 +1,7 @@
 /**
  * @license
  * Copyright 2016 Google LLC
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 /**
@@ -70,6 +59,12 @@ Blockly.RenderedConnection = function(source, type) {
    * @private
    */
   this.trackedState_ = Blockly.RenderedConnection.TrackedState.WILL_TRACK;
+
+  /**
+   * Connection this connection connects to.  Null if not connected.
+   * @type {Blockly.RenderedConnection}
+   */
+  this.targetConnection = null;
 };
 Blockly.utils.object.inherits(Blockly.RenderedConnection, Blockly.Connection);
 
@@ -465,6 +460,8 @@ Blockly.RenderedConnection.prototype.disconnectInternal_ = function(parentBlock,
   if (childBlock.rendered) {
     childBlock.updateDisabled();
     childBlock.render();
+    // Reset visibility, since the child is now a top block.
+    childBlock.getSvgRoot().style.display = 'block';
   }
 };
 
@@ -515,14 +512,16 @@ Blockly.RenderedConnection.prototype.connect_ = function(childConnection) {
   var parentConnection = this;
   var parentBlock = parentConnection.getSourceBlock();
   var childBlock = childConnection.getSourceBlock();
+  var parentRendered = parentBlock.rendered;
+  var childRendered = childBlock.rendered;
 
-  if (parentBlock.rendered) {
+  if (parentRendered) {
     parentBlock.updateDisabled();
   }
-  if (childBlock.rendered) {
+  if (childRendered) {
     childBlock.updateDisabled();
   }
-  if (parentBlock.rendered && childBlock.rendered) {
+  if (parentRendered && childRendered) {
     if (parentConnection.type == Blockly.NEXT_STATEMENT ||
         parentConnection.type == Blockly.PREVIOUS_STATEMENT) {
       // Child block may need to square off its corners if it is in a stack.
@@ -533,6 +532,13 @@ Blockly.RenderedConnection.prototype.connect_ = function(childConnection) {
       // move its connected children into position.
       parentBlock.render();
     }
+  }
+
+  // The input the child block is connected to (if any).
+  var parentInput = parentBlock.getInputWithBlock(childBlock);
+  if (parentInput) {
+    var visible = parentInput.isVisible();
+    childBlock.getSvgRoot().style.display = visible ? 'block' : 'none';
   }
 };
 

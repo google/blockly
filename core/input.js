@@ -1,18 +1,7 @@
 /**
  * @license
  * Copyright 2012 Google LLC
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 /**
@@ -102,35 +91,39 @@ Blockly.Input.prototype.insertFieldAt = function(index, field, opt_name) {
   if (index < 0 || index > this.fieldRow.length) {
     throw Error('index ' + index + ' out of bounds.');
   }
-
   // Falsy field values don't generate a field, unless the field is an empty
   // string and named.
   if (!field && !(field == '' && opt_name)) {
     return index;
   }
+
   // Generate a FieldLabel when given a plain text field.
   if (typeof field == 'string') {
     field = new Blockly.FieldLabel(/** @type {string} */ (field));
   }
+
   field.setSourceBlock(this.sourceBlock_);
   if (this.sourceBlock_.rendered) {
     field.init();
   }
   field.name = opt_name;
+  field.setVisible(this.isVisible());
 
-  if (field.prefixField) {
+  var fieldDropdown = /** @type {Blockly.FieldDropdown} */ (field);
+  if (fieldDropdown.prefixField) {
     // Add any prefix.
-    index = this.insertFieldAt(index, field.prefixField);
+    index = this.insertFieldAt(index, fieldDropdown.prefixField);
   }
   // Add the field to the field row.
   this.fieldRow.splice(index, 0, field);
   ++index;
-  if (field.suffixField) {
+  if (fieldDropdown.suffixField) {
     // Add any suffix.
-    index = this.insertFieldAt(index, field.suffixField);
+    index = this.insertFieldAt(index, fieldDropdown.suffixField);
   }
 
   if (this.sourceBlock_.rendered) {
+    this.sourceBlock_ = /** @type {!Blockly.BlockSvg} */ (this.sourceBlock_);
     this.sourceBlock_.render();
     // Adding a field will cause the block to change shape.
     this.sourceBlock_.bumpNeighbours();
@@ -141,22 +134,30 @@ Blockly.Input.prototype.insertFieldAt = function(index, field, opt_name) {
 /**
  * Remove a field from this input.
  * @param {string} name The name of the field.
- * @throws {Error} if the field is not present.
+ * @param {boolean=} opt_quiet True to prevent an error if field is not present.
+ * @return {boolean} True if operation succeeds, false if field is not present
+ *     and opt_quiet is true.
+ * @throws {Error} if the field is not present and opt_quiet is false.
  */
-Blockly.Input.prototype.removeField = function(name) {
+Blockly.Input.prototype.removeField = function(name, opt_quiet) {
   for (var i = 0, field; (field = this.fieldRow[i]); i++) {
     if (field.name === name) {
       field.dispose();
       this.fieldRow.splice(i, 1);
       if (this.sourceBlock_.rendered) {
+        this.sourceBlock_ = /** @type {!Blockly.BlockSvg} */ (this.sourceBlock_);
         this.sourceBlock_.render();
         // Removing a field will cause the block to change shape.
         this.sourceBlock_.bumpNeighbours();
       }
-      return;
+      return true;
     }
   }
-  throw Error('Field "%s" not found.', name);
+  if (opt_quiet) {
+    return false;
+  } else {
+    throw Error('Field "' + name + '" not found.');
+  }
 };
 
 /**
@@ -171,7 +172,7 @@ Blockly.Input.prototype.isVisible = function() {
  * Sets whether this input is visible or not.
  * Should only be used to collapse/uncollapse a block.
  * @param {boolean} visible True if visible.
- * @return {!Array.<!Blockly.Block>} List of blocks to render.
+ * @return {!Array.<!Blockly.BlockSvg>} List of blocks to render.
  * @package
  */
 Blockly.Input.prototype.setVisible = function(visible) {
@@ -184,11 +185,12 @@ Blockly.Input.prototype.setVisible = function(visible) {
   }
   this.visible_ = visible;
 
-  var display = visible ? 'block' : 'none';
   for (var y = 0, field; (field = this.fieldRow[y]); y++) {
     field.setVisible(visible);
   }
   if (this.connection) {
+    this.connection =
+      /** @type {!Blockly.RenderedConnection} */ (this.connection);
     // Has a connection.
     if (visible) {
       renderList = this.connection.startTrackingAll();
@@ -197,10 +199,7 @@ Blockly.Input.prototype.setVisible = function(visible) {
     }
     var child = this.connection.targetBlock();
     if (child) {
-      child.getSvgRoot().style.display = display;
-      if (!visible) {
-        child.rendered = false;
-      }
+      child.getSvgRoot().style.display = visible ? 'block' : 'none';
     }
   }
   return renderList;
@@ -239,6 +238,7 @@ Blockly.Input.prototype.setCheck = function(check) {
 Blockly.Input.prototype.setAlign = function(align) {
   this.align = align;
   if (this.sourceBlock_.rendered) {
+    this.sourceBlock_ = /** @type {!Blockly.BlockSvg} */ (this.sourceBlock_);
     this.sourceBlock_.render();
   }
   return this;

@@ -1,18 +1,7 @@
 /**
  * @license
  * Copyright 2013 Google LLC
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 /**
@@ -31,6 +20,9 @@ goog.provide('Blockly.WidgetDiv');
 
 goog.require('Blockly.utils.style');
 
+goog.requireType('Blockly.utils.Rect');
+goog.requireType('Blockly.utils.Size');
+
 
 /**
  * The object currently using this container.
@@ -48,17 +40,17 @@ Blockly.WidgetDiv.dispose_ = null;
 
 /**
  * A class name representing the current owner's workspace renderer.
- * @type {?string}
+ * @type {string}
  * @private
  */
-Blockly.WidgetDiv.rendererClassName_ = null;
+Blockly.WidgetDiv.rendererClassName_ = '';
 
 /**
  * A class name representing the current owner's workspace theme.
- * @type {?string}
+ * @type {string}
  * @private
  */
-Blockly.WidgetDiv.themeClassName_ = null;
+Blockly.WidgetDiv.themeClassName_ = '';
 
 /**
  * Create the widget div and inject it onto the page.
@@ -73,7 +65,8 @@ Blockly.WidgetDiv.createDom = function() {
    */
   Blockly.WidgetDiv.DIV = document.createElement('div');
   Blockly.WidgetDiv.DIV.className = 'blocklyWidgetDiv';
-  document.body.appendChild(Blockly.WidgetDiv.DIV);
+  var container = Blockly.parentContainer || document.body;
+  container.appendChild(Blockly.WidgetDiv.DIV);
 };
 
 /**
@@ -90,10 +83,11 @@ Blockly.WidgetDiv.show = function(newOwner, rtl, dispose) {
   var div = Blockly.WidgetDiv.DIV;
   div.style.direction = rtl ? 'rtl' : 'ltr';
   div.style.display = 'block';
+  var mainWorkspace =
+    /** @type {!Blockly.WorkspaceSvg} */ (Blockly.getMainWorkspace());
   Blockly.WidgetDiv.rendererClassName_ =
-      Blockly.getMainWorkspace().getRenderer().name + '-renderer';
-  Blockly.WidgetDiv.themeClassName_ =
-      Blockly.getMainWorkspace().getTheme().name + '-theme';
+      mainWorkspace.getRenderer().getClassName();
+  Blockly.WidgetDiv.themeClassName_ = mainWorkspace.getTheme().getClassName();
   Blockly.utils.dom.addClass(div, Blockly.WidgetDiv.rendererClassName_);
   Blockly.utils.dom.addClass(div, Blockly.WidgetDiv.themeClassName_);
 };
@@ -102,25 +96,29 @@ Blockly.WidgetDiv.show = function(newOwner, rtl, dispose) {
  * Destroy the widget and hide the div.
  */
 Blockly.WidgetDiv.hide = function() {
-  var div = Blockly.WidgetDiv.DIV;
-  if (Blockly.WidgetDiv.owner_) {
-    Blockly.WidgetDiv.owner_ = null;
-    div.style.display = 'none';
-    div.style.left = '';
-    div.style.top = '';
-    Blockly.WidgetDiv.dispose_ && Blockly.WidgetDiv.dispose_();
-    Blockly.WidgetDiv.dispose_ = null;
-    div.innerHTML = '';
+  if (!Blockly.WidgetDiv.isVisible()) {
+    return;
   }
+  Blockly.WidgetDiv.owner_ = null;
+
+  var div = Blockly.WidgetDiv.DIV;
+  div.style.display = 'none';
+  div.style.left = '';
+  div.style.top = '';
+  Blockly.WidgetDiv.dispose_ && Blockly.WidgetDiv.dispose_();
+  Blockly.WidgetDiv.dispose_ = null;
+  div.textContent = '';
+
   if (Blockly.WidgetDiv.rendererClassName_) {
     Blockly.utils.dom.removeClass(div, Blockly.WidgetDiv.rendererClassName_);
-    Blockly.WidgetDiv.rendererClassName_ = null;
+    Blockly.WidgetDiv.rendererClassName_ = '';
   }
   if (Blockly.WidgetDiv.themeClassName_) {
     Blockly.utils.dom.removeClass(div, Blockly.WidgetDiv.themeClassName_);
-    Blockly.WidgetDiv.themeClassName_ = null;
+    Blockly.WidgetDiv.themeClassName_ = '';
   }
-  Blockly.getMainWorkspace().markFocused();
+  (/** @type {!Blockly.WorkspaceSvg} */ (
+    Blockly.getMainWorkspace())).markFocused();
 };
 
 /**
@@ -161,12 +159,12 @@ Blockly.WidgetDiv.positionInternal_ = function(x, y, height) {
  * The widget should be placed adjacent to but not overlapping the anchor
  * rectangle.  The preferred position is directly below and aligned to the left
  * (LTR) or right (RTL) side of the anchor.
- * @param {!Object} viewportBBox The bounding rectangle of the current viewport,
+ * @param {!Blockly.utils.Rect} viewportBBox The bounding rectangle of the
+ *     current viewport, in window coordinates.
+ * @param {!Blockly.utils.Rect} anchorBBox The bounding rectangle of the anchor,
  *     in window coordinates.
- * @param {!Object} anchorBBox The bounding rectangle of the anchor, in window
- *     coordinates.
- * @param {!Blockly.utils.Size} widgetSize The size of the widget that is inside the
- *     widget div, in window coordinates.
+ * @param {!Blockly.utils.Size} widgetSize The size of the widget that is inside
+ *     the widget div, in window coordinates.
  * @param {boolean} rtl Whether the workspace is in RTL mode.  This determines
  *     horizontal alignment.
  * @package
@@ -187,10 +185,10 @@ Blockly.WidgetDiv.positionWithAnchor = function(viewportBBox, anchorBBox,
 /**
  * Calculate an x position (in window coordinates) such that the widget will not
  * be offscreen on the right or left.
- * @param {!Object} viewportBBox The bounding rectangle of the current viewport,
+ * @param {!Blockly.utils.Rect} viewportBBox The bounding rectangle of the
+ *     current viewport, in window coordinates.
+ * @param {!Blockly.utils.Rect} anchorBBox The bounding rectangle of the anchor,
  *     in window coordinates.
- * @param {!Object} anchorBBox The bounding rectangle of the anchor, in window
- *     coordinates.
  * @param {Blockly.utils.Size} widgetSize The dimensions of the widget inside the
  *     widget div.
  * @param {boolean} rtl Whether the Blockly workspace is in RTL mode.
@@ -219,10 +217,10 @@ Blockly.WidgetDiv.calculateX_ = function(viewportBBox, anchorBBox, widgetSize,
 /**
  * Calculate a y position (in window coordinates) such that the widget will not
  * be offscreen on the top or bottom.
- * @param {!Object} viewportBBox The bounding rectangle of the current viewport,
+ * @param {!Blockly.utils.Rect} viewportBBox The bounding rectangle of the
+ *     current viewport, in window coordinates.
+ * @param {!Blockly.utils.Rect} anchorBBox The bounding rectangle of the anchor,
  *     in window coordinates.
- * @param {!Object} anchorBBox The bounding rectangle of the anchor, in window
- *     coordinates.
  * @param {Blockly.utils.Size} widgetSize The dimensions of the widget inside the
  *     widget div.
  * @return {number} A valid y-coordinate for the top left corner of the widget

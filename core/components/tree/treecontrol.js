@@ -1,18 +1,7 @@
 /**
  * @license
  * Copyright 2019 Google LLC
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 /**
@@ -45,20 +34,6 @@ Blockly.tree.TreeControl = function(toolbox, config) {
   this.toolbox_ = toolbox;
 
   /**
-   * Focus event data.
-   * @type {?Blockly.EventData}
-   * @private
-   */
-  this.onFocusWrapper_ = null;
-
-  /**
-   * Blur event data.
-   * @type {?Blockly.EventData}
-   * @private
-   */
-  this.onBlurWrapper_ = null;
-
-  /**
    * Click event data.
    * @type {?Blockly.EventData}
    * @private
@@ -75,8 +50,8 @@ Blockly.tree.TreeControl = function(toolbox, config) {
   Blockly.tree.BaseNode.call(this, '', config);
 
   // The root is open and selected by default.
-  this.setExpandedInternal(true);
-  this.setSelectedInternal(true);
+  this.expanded_ = true;
+  this.selected_ = true;
 
   /**
    * Currently selected item.
@@ -84,6 +59,20 @@ Blockly.tree.TreeControl = function(toolbox, config) {
    * @private
    */
   this.selectedItem_ = this;
+
+  /**
+   * A handler that's triggered before a node is selected.
+   * @type {?function(Blockly.tree.BaseNode):boolean}
+   * @private
+   */
+  this.onBeforeSelected_ = null;
+
+  /**
+   * A handler that's triggered before a node is selected.
+   * @type {?function(Blockly.tree.BaseNode, Blockly.tree.BaseNode):?}
+   * @private
+   */
+  this.onAfterSelected_ = null;
 };
 Blockly.utils.object.inherits(Blockly.tree.TreeControl, Blockly.tree.BaseNode);
 
@@ -112,49 +101,9 @@ Blockly.tree.TreeControl.prototype.getDepth = function() {
   return 0;
 };
 
-/**
- * Handles focus on the tree.
- * @param {!Event} _e The browser event.
- * @private
- */
-Blockly.tree.TreeControl.prototype.handleFocus_ = function(_e) {
-  this.focused_ = true;
-  var el = /** @type {!Element} */ (this.getElement());
-  Blockly.utils.dom.addClass(el, 'focused');
-
-  if (this.selectedItem_) {
-    this.selectedItem_.select();
-  }
-};
-
-/**
- * Handles blur on the tree.
- * @param {!Event} _e The browser event.
- * @private
- */
-Blockly.tree.TreeControl.prototype.handleBlur_ = function(_e) {
-  this.focused_ = false;
-  var el = /** @type {!Element} */ (this.getElement());
-  Blockly.utils.dom.removeClass(el, 'focused');
-};
-
-/**
- * Get whether this tree has focus or not.
- * @return {boolean} True if it has focus.
- * @package
- */
-Blockly.tree.TreeControl.prototype.hasFocus = function() {
-  return this.focused_;
-};
-
-/** @override */
-Blockly.tree.TreeControl.prototype.getExpanded = function() {
-  return true;
-};
-
 /** @override */
 Blockly.tree.TreeControl.prototype.setExpanded = function(expanded) {
-  this.setExpandedInternal(expanded);
+  this.expanded_ = expanded;
 };
 
 /** @override */
@@ -171,7 +120,7 @@ Blockly.tree.TreeControl.prototype.updateExpandIcon = function() {
 /** @override */
 Blockly.tree.TreeControl.prototype.getRowClassName = function() {
   return Blockly.tree.TreeControl.superClass_.getRowClassName.call(this) +
-      ' ' + this.getConfig().cssHideRoot;
+      ' ' + this.config_.cssHideRoot;
 };
 
 /**
@@ -180,20 +129,13 @@ Blockly.tree.TreeControl.prototype.getRowClassName = function() {
  * @override
  */
 Blockly.tree.TreeControl.prototype.getCalculatedIconClass = function() {
-  var expanded = this.getExpanded();
-  var expandedIconClass = this.getExpandedIconClass();
-  if (expanded && expandedIconClass) {
-    return expandedIconClass;
+  var expanded = this.expanded_;
+  if (expanded && this.expandedIconClass) {
+    return this.expandedIconClass;
   }
-  var iconClass = this.getIconClass();
+  var iconClass = this.iconClass;
   if (!expanded && iconClass) {
     return iconClass;
-  }
-
-  // fall back on default icons
-  var config = this.getConfig();
-  if (expanded && config.cssExpandedRootIcon) {
-    return config.cssTreeIcon + ' ' + config.cssExpandedRootIcon;
   }
   return '';
 };
@@ -216,13 +158,13 @@ Blockly.tree.TreeControl.prototype.setSelectedItem = function(node) {
   var oldNode = this.getSelectedItem();
 
   if (this.selectedItem_) {
-    this.selectedItem_.setSelectedInternal(false);
+    this.selectedItem_.setSelected(false);
   }
 
   this.selectedItem_ = node;
 
   if (node) {
-    node.setSelectedInternal(true);
+    node.setSelected(true);
   }
 
   if (this.onAfterSelected_) {
@@ -276,7 +218,7 @@ Blockly.tree.TreeControl.prototype.initAccessibility = function() {
 Blockly.tree.TreeControl.prototype.enterDocument = function() {
   Blockly.tree.TreeControl.superClass_.enterDocument.call(this);
   var el = this.getElement();
-  el.className = this.getConfig().cssRoot;
+  el.className = this.config_.cssRoot;
   el.setAttribute('hideFocus', 'true');
   this.attachEvents_();
   this.initAccessibility();
@@ -296,10 +238,6 @@ Blockly.tree.TreeControl.prototype.attachEvents_ = function() {
   var el = this.getElement();
   el.tabIndex = 0;
 
-  this.onFocusWrapper_ = Blockly.bindEvent_(el,
-      'focus', this, this.handleFocus_);
-  this.onBlurWrapper_ = Blockly.bindEvent_(el,
-      'blur', this, this.handleBlur_);
   this.onClickWrapper_ = Blockly.bindEventWithChecks_(el,
       'click', this, this.handleMouseEvent_);
   this.onKeydownWrapper_ = Blockly.bindEvent_(el,
@@ -311,14 +249,6 @@ Blockly.tree.TreeControl.prototype.attachEvents_ = function() {
  * @private
  */
 Blockly.tree.TreeControl.prototype.detachEvents_ = function() {
-  if (this.onFocusWrapper_) {
-    Blockly.unbindEvent_(this.onFocusWrapper_);
-    this.onFocusWrapper_ = null;
-  }
-  if (this.onBlurWrapper_) {
-    Blockly.unbindEvent_(this.onBlurWrapper_);
-    this.onBlurWrapper_ = null;
-  }
   if (this.onClickWrapper_) {
     Blockly.unbindEvent_(this.onClickWrapper_);
     this.onClickWrapper_ = null;
@@ -336,15 +266,8 @@ Blockly.tree.TreeControl.prototype.detachEvents_ = function() {
  */
 Blockly.tree.TreeControl.prototype.handleMouseEvent_ = function(e) {
   var node = this.getNodeFromEvent_(e);
-  if (node) {
-    switch (e.type) {
-      case 'mousedown':
-        node.onMouseDown(e);
-        break;
-      case 'click':
-        node.onClick_(e);
-        break;
-    }
+  if (node && e.type == 'click') {
+    node.onClick_(e);
   }
 };
 
@@ -355,10 +278,8 @@ Blockly.tree.TreeControl.prototype.handleMouseEvent_ = function(e) {
  * @private
  */
 Blockly.tree.TreeControl.prototype.handleKeyEvent_ = function(e) {
-  var handled = false;
-
   // Handle navigation keystrokes.
-  handled = (this.selectedItem_ && this.selectedItem_.onKeyDown(e)) || handled;
+  var handled = !!(this.selectedItem_ && this.selectedItem_.onKeyDown(e));
 
   if (handled) {
     Blockly.utils.style.scrollIntoContainerView(
@@ -381,7 +302,7 @@ Blockly.tree.TreeControl.prototype.getNodeFromEvent_ = function(e) {
   // find the right node
   var node = null;
   var target = e.target;
-  while (target != null) {
+  while (target) {
     var id = target.id;
     node = Blockly.tree.BaseNode.allNodes[id];
     if (node) {
@@ -389,6 +310,10 @@ Blockly.tree.TreeControl.prototype.getNodeFromEvent_ = function(e) {
     }
     if (target == this.getElement()) {
       break;
+    }
+    // Don't bubble if we hit a group. See issue #714.
+    if (target.getAttribute('role') == Blockly.utils.aria.Role.GROUP) {
+      return null;
     }
     target = target.parentNode;
   }
@@ -403,5 +328,5 @@ Blockly.tree.TreeControl.prototype.getNodeFromEvent_ = function(e) {
  */
 Blockly.tree.TreeControl.prototype.createNode = function(opt_content) {
   return new Blockly.tree.TreeNode(
-      this.toolbox_, opt_content || '', this.getConfig());
+      this.toolbox_, opt_content || '', this.config_);
 };

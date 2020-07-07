@@ -1,18 +1,7 @@
 /**
  * @license
  * Copyright 2012 Google LLC
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 /**
@@ -71,23 +60,13 @@ Blockly.Procedures.ProcedureBlock;
  *     list, and return value boolean.
  */
 Blockly.Procedures.allProcedures = function(root) {
-  var blocks = root.getAllBlocks(false);
-  var proceduresReturn = [];
-  var proceduresNoReturn = [];
-  for (var i = 0; i < blocks.length; i++) {
-    if (blocks[i].getProcedureDef) {
-      var procedureBlock = /** @type {!Blockly.Procedures.ProcedureBlock} */ (
-        blocks[i]);
-      var tuple = procedureBlock.getProcedureDef();
-      if (tuple) {
-        if (tuple[2]) {
-          proceduresReturn.push(tuple);
-        } else {
-          proceduresNoReturn.push(tuple);
-        }
-      }
-    }
-  }
+  var proceduresNoReturn = root.getBlocksByType('procedures_defnoreturn', false)
+      .map(function(block) {
+        return /** @type {!Blockly.Procedures.ProcedureBlock} */ (block).getProcedureDef();
+      });
+  var proceduresReturn = root.getBlocksByType('procedures_defreturn', false).map(function(block) {
+    return /** @type {!Blockly.Procedures.ProcedureBlock} */ (block).getProcedureDef();
+  });
   proceduresNoReturn.sort(Blockly.Procedures.procTupleComparator_);
   proceduresReturn.sort(Blockly.Procedures.procTupleComparator_);
   return [proceduresNoReturn, proceduresReturn];

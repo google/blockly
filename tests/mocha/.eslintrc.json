@@ -6,18 +6,19 @@
     "globals": {
         "chai": false,
         "sinon": false,
-        "assertNull": true,
-        "assertNotNull": true,
-        "assertEquals": true,
-        "assertTrue": true,
-        "assertFalse": true,
-        "isEqualArrays": true,
-        "assertUndefined": true,
-        "assertNotUndefined": true,
-        "defineStackBlock": true,
+        "assertArrayEquals": true,
+        "assertVariableValues": true,
+        "captureWarnings": true,
+        "createTestBlock": true,
         "defineRowBlock": true,
-        "defineStatementBlock": true
-
+        "defineStackBlock": true,
+        "defineStatementBlock": true,
+        "createEventsFireStub": true,
+        "testAWorkspace": true,
+        "testHelpers" : true,
+        "getSimpleJSON": true,
+        "getXmlArray": true,
+        "getCategoryJSON": true
     },
     "extends": "../../.eslintrc.json"
 }

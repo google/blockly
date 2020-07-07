@@ -1,18 +1,7 @@
 /**
  * @license
  * Copyright 2019 Google LLC
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 /**
@@ -30,12 +19,15 @@ goog.require('Blockly.Marker');
 goog.require('Blockly.navigation');
 goog.require('Blockly.utils.object');
 
+goog.requireType('Blockly.IBlocklyActionable');
+
 
 /**
  * Class for a cursor.
  * A cursor controls how a user navigates the Blockly AST.
  * @constructor
  * @extends {Blockly.Marker}
+ * @implements {Blockly.IBlocklyActionable}
  */
 Blockly.Cursor = function() {
   Blockly.Cursor.superClass_.constructor.call(this);
@@ -155,7 +147,8 @@ Blockly.Cursor.prototype.onBlocklyAction = function(action) {
   // If we are on a field give it the option to handle the action
   if (this.getCurNode() &&
       this.getCurNode().getType() === Blockly.ASTNode.types.FIELD &&
-      this.getCurNode().getLocation().onBlocklyAction(action)) {
+      (/** @type {!Blockly.Field} */ (this.getCurNode().getLocation()))
+          .onBlocklyAction(action)) {
     return true;
   }
   switch (action.name) {

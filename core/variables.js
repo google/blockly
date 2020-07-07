@@ -1,18 +1,7 @@
 /**
  * @license
  * Copyright 2012 Google LLC
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 /**
@@ -228,7 +217,7 @@ Blockly.Variables.generateUniqueName = function(workspace) {
  * will try to generate single letter names in the range a -> z (skip l). It
  * will start with the character passed to startChar.
  * @param {string} startChar The character to start the search at.
- * @param {!Array<string>} usedNames A list of all of the used names.
+ * @param {!Array.<string>} usedNames A list of all of the used names.
  * @return {string} A unique name that is not present in the usedNames array.
  */
 Blockly.Variables.generateUniqueNameFromOptions = function(startChar, usedNames) {
@@ -290,7 +279,7 @@ Blockly.Variables.createVariableButtonHandler = function(
         function(text) {
           if (text) {
             var existing =
-                Blockly.Variables.nameUsedWithAnyType_(text, workspace);
+                Blockly.Variables.nameUsedWithAnyType(text, workspace);
             if (existing) {
               if (existing.type == type) {
                 var msg = Blockly.Msg['VARIABLE_ALREADY_EXISTS'].replace(
@@ -338,7 +327,9 @@ Blockly.Variables.createVariable =
     Blockly.Variables.createVariableButtonHandler;
 
 /**
- * Rename a variable with the given workspace, variableType, and oldName.
+ * Opens a prompt that allows the user to enter a new name for a variable.
+ * Triggers a rename if the new name is valid. Or re-prompts if there is a
+ * collision.
  * @param {!Blockly.Workspace} workspace The workspace on which to rename the
  *     variable.
  * @param {Blockly.VariableModel} variable Variable to rename.
@@ -435,9 +426,8 @@ Blockly.Variables.nameUsedWithOtherType_ = function(name, type, workspace) {
  *     variable.
  * @return {Blockly.VariableModel} The variable with the given name,
  *     or null if none was found.
- * @private
  */
-Blockly.Variables.nameUsedWithAnyType_ = function(name, workspace) {
+Blockly.Variables.nameUsedWithAnyType = function(name, workspace) {
   var allVariables = workspace.getVariableMap().getAllVariables();
 
   name = name.toLowerCase();

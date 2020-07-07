@@ -149,9 +149,9 @@
     var stepButton = document.getElementById('stepButton');
     var myInterpreter = null;
 
-    function initApi(interpreter, scope) {
+    function initApi(interpreter, globalObject) {
       // Add an API function for the alert() block, generated for "text_print" blocks.
-      interpreter.setProperty(scope, 'alert',
+      interpreter.setProperty(globalObject, 'alert',
           interpreter.createNativeFunction(function(text) {
         text = arguments.length ? text : '';
         outputArea.value += '\n' + text;
@@ -161,7 +161,7 @@
       var wrapper = function(text) {
         return interpreter.createPrimitive(prompt(text));
       };
-      interpreter.setProperty(scope, 'prompt',
+      interpreter.setProperty(globalObject, 'prompt',
           interpreter.createNativeFunction(wrapper));
 
       // Add an API function for highlighting blocks.
@@ -169,7 +169,7 @@
         id = String(id || '');
         return interpreter.createPrimitive(highlightBlock(id));
       };
-      interpreter.setProperty(scope, 'highlightBlock',
+      interpreter.setProperty(globalObject, 'highlightBlock',
           interpreter.createNativeFunction(wrapper));
     }
 

@@ -1,177 +1,116 @@
 /**
  * @license
  * Copyright 2019 Google LLC
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 suite('Label Fields', function() {
-  function assertValue(labelField, expectedValue) {
-    var actualValue = labelField.getValue();
-    var actualText = labelField.getText();
-    assertEquals(actualValue, expectedValue);
-    assertEquals(actualText, expectedValue);
-  }
-  function assertValueDefault(labelField) {
-    assertValue(labelField, '');
-  }
-  function assertHasClass(labelField, cssClass) {
-    labelField.fieldGroup_ = Blockly.utils.dom.createSvgElement('g', {}, null);
-    labelField.constants_ = {
-      FIELD_TEXT_BASELINE_Y: 13
-    };
-    labelField.initView();
-    chai.assert.isTrue(Blockly.utils.dom.hasClass(
-        labelField.textElement_, cssClass));
-  }
-  function assertDoesNotHaveClass(labelField, cssClass) {
-    labelField.fieldGroup_ = Blockly.utils.dom.createSvgElement('g', {}, null);
-    labelField.constants_ = {
-      FIELD_TEXT_BASELINE_Y: 13
-    };
-    labelField.initView();
-    chai.assert.isFalse(Blockly.utils.dom.hasClass(
-        labelField.textElement_, cssClass));
-  }
-  suite('Constructor', function() {
-    test('Empty', function() {
-      var labelField = new Blockly.FieldLabel();
-      assertValueDefault(labelField);
-    });
-    test('Undefined', function() {
-      var labelField = new Blockly.FieldLabel(undefined);
-      assertValueDefault(labelField);
-    });
-    test('String', function() {
-      var labelField = new Blockly.FieldLabel('value');
-      assertValue(labelField, 'value');
-    });
-    test('Number (Truthy)', function() {
-      var labelField = new Blockly.FieldLabel(1);
-      assertValue(labelField, '1');
-    });
-    test('Number (Falsy)', function() {
-      var labelField = new Blockly.FieldLabel(0);
-      assertValue(labelField, '0');
-    });
-    test('Boolean True', function() {
-      var labelField = new Blockly.FieldLabel(true);
-      assertValue(labelField, 'true');
-    });
-    test('Boolean False', function() {
-      var labelField = new Blockly.FieldLabel(false);
-      assertValue(labelField, 'false');
-    });
-  });
-  suite('fromJson', function() {
-    test('Empty', function() {
-      var labelField = new Blockly.FieldLabel.fromJson({});
-      assertValueDefault(labelField);
-    });
-    test('Undefined', function() {
-      var labelField = new Blockly.FieldLabel.fromJson({ text:undefined });
-      assertValueDefault(labelField);
-    });
-    test('String', function() {
-      var labelField = Blockly.FieldLabel.fromJson({ text:'value' });
-      assertValue(labelField, 'value');
-    });
-    test('Number (Truthy)', function() {
-      var labelField = Blockly.FieldLabel.fromJson({ text:1 });
-      assertValue(labelField, '1');
-    });
-    test('Number (Falsy)', function() {
-      var labelField = Blockly.FieldLabel.fromJson({ text:0 });
-      assertValue(labelField, '0');
-    });
-    test('Boolean True', function() {
-      var labelField = Blockly.FieldLabel.fromJson({ text:true });
-      assertValue(labelField, 'true');
-    });
-    test('Boolean False', function() {
-      var labelField = Blockly.FieldLabel.fromJson({ text:false });
-      assertValue(labelField, 'false');
-    });
-  });
+  /**
+   * Configuration for field tests with invalid values.
+   * @type {!Array<!FieldCreationTestCase>}
+   */
+  var invalidValueTestCases = [
+    {title: 'Undefined', value: undefined},
+    {title: 'Null', value: null},
+  ];
+  /**
+   * Configuration for field tests with valid values.
+   * @type {!Array<!FieldCreationTestCase>}
+   */
+  var validValueTestCases = [
+    {title: 'String', value: 'value', expectedValue: 'value'},
+    {title: 'Boolean true', value: true, expectedValue: 'true'},
+    {title: 'Boolean false', value: false, expectedValue: 'false'},
+    {title: 'Number (Truthy)', value: 1, expectedValue: '1'},
+    {title: 'Number (Falsy)', value: 0, expectedValue: '0'},
+    {title: 'NaN', value: NaN, expectedValue: 'NaN'},
+  ];
+  var addArgsAndJson = function(testCase) {
+    testCase.args = [testCase.value];
+    testCase.json = {'text': testCase.value};
+  };
+  invalidValueTestCases.forEach(addArgsAndJson);
+  validValueTestCases.forEach(addArgsAndJson);
+
+  /**
+   * The expected default value for the field being tested.
+   * @type {*}
+   */
+  var defaultFieldValue = '';
+  /**
+   * Asserts that the field property values are set to default.
+   * @param {!Blockly.FieldNumber} field The field to check.
+   */
+  var assertFieldDefault = function(field) {
+    testHelpers.assertFieldValue(field, defaultFieldValue);
+  };
+  /**
+   * Asserts that the field properties are correct based on the test case.
+   * @param {!Blockly.FieldNumber} field The field to check.
+   * @param {!FieldValueTestCase} testCase The test case.
+   */
+  var validTestCaseAssertField = function(field, testCase) {
+    testHelpers.assertFieldValue(field, testCase.expectedValue);
+  };
+
+  testHelpers.runConstructorSuiteTests(
+      Blockly.FieldLabel, validValueTestCases, invalidValueTestCases,
+      validTestCaseAssertField, assertFieldDefault);
+
+  testHelpers.runFromJsonSuiteTests(
+      Blockly.FieldLabel, validValueTestCases,invalidValueTestCases,
+      validTestCaseAssertField, assertFieldDefault);
+
   suite('setValue', function() {
     suite('Empty -> New Value', function() {
       setup(function() {
-        this.labelField = new Blockly.FieldLabel();
+        this.field = new Blockly.FieldLabel();
       });
-      test('Null', function() {
-        this.labelField.setValue(null);
-        assertValueDefault(this.labelField);
-      });
-      test('Undefined', function() {
-        this.labelField.setValue(undefined);
-        assertValueDefault(this.labelField);
-      });
-      test('New String', function() {
-        this.labelField.setValue('newValue');
-        assertValue(this.labelField, 'newValue');
-      });
-      test('Number (Truthy)', function() {
-        this.labelField.setValue(1);
-        assertValue(this.labelField, '1');
-      });
-      test('Number (Falsy)', function() {
-        this.labelField.setValue(0);
-        assertValue(this.labelField, '0');
-      });
-      test('Boolean True', function() {
-        this.labelField.setValue(true);
-        assertValue(this.labelField, 'true');
-      });
-      test('Boolean False', function() {
-        this.labelField.setValue(false);
-        assertValue(this.labelField, 'false');
+      testHelpers.runSetValueTests(
+          validValueTestCases, invalidValueTestCases, defaultFieldValue);
+      test('With source block', function() {
+        this.field.setSourceBlock(createTestBlock());
+        this.field.setValue('value');
+        testHelpers.assertFieldValue(this.field, 'value');
       });
     });
     suite('Value -> New Value', function() {
+      var initialValue = 'oldValue';
       setup(function() {
-        this.labelField = new Blockly.FieldLabel('value');
+        this.field = new Blockly.FieldLabel(initialValue);
       });
-      test('Null', function() {
-        this.labelField.setValue(null);
-        assertValue(this.labelField, 'value');
-      });
-      test('Undefined', function() {
-        this.labelField.setValue(undefined);
-        assertValue(this.labelField, 'value');
-      });
-      test('New String', function() {
-        this.labelField.setValue('newValue');
-        assertValue(this.labelField, 'newValue');
-      });
-      test('Number (Truthy)', function() {
-        this.labelField.setValue(1);
-        assertValue(this.labelField, '1');
-      });
-      test('Number (Falsy)', function() {
-        this.labelField.setValue(0);
-        assertValue(this.labelField, '0');
-      });
-      test('Boolean True', function() {
-        this.labelField.setValue(true);
-        assertValue(this.labelField, 'true');
-      });
-      test('Boolean False', function() {
-        this.labelField.setValue(false);
-        assertValue(this.labelField, 'false');
+      testHelpers.runSetValueTests(
+          validValueTestCases, invalidValueTestCases, initialValue);
+      test('With source block', function() {
+        this.field.setSourceBlock(createTestBlock());
+        this.field.setValue('value');
+        testHelpers.assertFieldValue(this.field, 'value');
       });
     });
   });
+
   suite('Customizations', function() {
+    function assertHasClass(labelField, cssClass) {
+      labelField.fieldGroup_ =
+          Blockly.utils.dom.createSvgElement('g', {}, null);
+      labelField.constants_ = {
+        FIELD_TEXT_BASELINE_Y: 13
+      };
+      labelField.initView();
+      chai.assert.isTrue(Blockly.utils.dom.hasClass(
+          labelField.textElement_, cssClass));
+    }
+    function assertDoesNotHaveClass(labelField, cssClass) {
+      labelField.fieldGroup_ =
+          Blockly.utils.dom.createSvgElement('g', {}, null);
+      labelField.constants_ = {
+        FIELD_TEXT_BASELINE_Y: 13
+      };
+      labelField.initView();
+      chai.assert.isFalse(Blockly.utils.dom.hasClass(
+          labelField.textElement_, cssClass));
+    }
+
     test('JS Constructor', function() {
       var field = new Blockly.FieldLabel('text', 'testClass');
       assertHasClass(field, 'testClass');

@@ -1,18 +1,7 @@
 /**
  * @license
  * Copyright 2018 Google LLC
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 /**
@@ -118,7 +107,7 @@ Blockly.BubbleDragger.prototype.startBubbleDrag = function() {
   this.draggingBubble_.setDragging && this.draggingBubble_.setDragging(true);
 
   var toolbox = this.workspace_.getToolbox();
-  if (toolbox) {
+  if (toolbox && typeof toolbox.addStyle == 'function') {
     var style = this.draggingBubble_.isDeletable() ? 'blocklyToolboxDelete' :
         'blocklyToolboxGrab';
     toolbox.addStyle(style);
@@ -219,10 +208,11 @@ Blockly.BubbleDragger.prototype.endBubbleDrag = function(
   }
   this.workspace_.setResizesEnabled(true);
 
-  if (this.workspace_.getToolbox()) {
+  var toolbox = this.workspace_.getToolbox();
+  if (toolbox && typeof toolbox.removeStyle == 'function') {
     var style = this.draggingBubble_.isDeletable() ? 'blocklyToolboxDelete' :
         'blocklyToolboxGrab';
-    this.workspace_.getToolbox().removeStyle(style);
+    toolbox.removeStyle(style);
   }
   Blockly.Events.setGroup(false);
 };

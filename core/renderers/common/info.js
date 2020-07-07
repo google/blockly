@@ -1,18 +1,7 @@
 /**
  * @license
  * Copyright 2019 Google LLC
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 /**
@@ -139,11 +128,10 @@ Blockly.blockRendering.RenderInfo = function(renderer, block) {
   this.rows = [];
 
   /**
-   * The total number of input rows added onto the block.
-   * @type {number}
-   * @protected
+   * An array of input rows on the block.
+   * @type {!Array.<!Blockly.blockRendering.InputRow>}
    */
-  this.inputRowNum_ = 1;
+  this.inputRows = [];
 
   /**
    * An array of measurable objects containing hidden icons.
@@ -206,6 +194,7 @@ Blockly.blockRendering.RenderInfo.prototype.createRows_ = function() {
   this.populateTopRow_();
   this.rows.push(this.topRow);
   var activeRow = new Blockly.blockRendering.InputRow(this.constants_);
+  this.inputRows.push(activeRow);
 
   // Icons always go on the first row, before anything else.
   var icons = this.block_.getIcons();
@@ -231,7 +220,7 @@ Blockly.blockRendering.RenderInfo.prototype.createRows_ = function() {
       // Finish this row and create a new one.
       this.rows.push(activeRow);
       activeRow = new Blockly.blockRendering.InputRow(this.constants_);
-      this.inputRowNum_ ++;
+      this.inputRows.push(activeRow);
     }
 
     // All of the fields in an input go on the same row.
@@ -559,6 +548,9 @@ Blockly.blockRendering.RenderInfo.prototype.alignRowElements_ = function() {
       if (missingSpace > 0) {
         this.addAlignmentPadding_(row, missingSpace);
       }
+      if (Blockly.blockRendering.Types.isTopOrBottomRow(row)) {
+        row.widthWithConnectedBlocks = row.width;
+      }
     }
   }
 };
@@ -589,7 +581,7 @@ Blockly.blockRendering.RenderInfo.prototype.addAlignmentPadding_ = function(row,
   if (row.hasExternalInput || row.hasStatement) {
     row.widthWithConnectedBlocks += missingSpace;
   }
-  
+
   // Decide where the extra padding goes.
   if (row.align == Blockly.ALIGN_LEFT) {
     // Add padding to the end of the row.
@@ -775,8 +767,7 @@ Blockly.blockRendering.RenderInfo.prototype.finalize_ = function() {
             this.block_.nextConnection.targetBlock().getHeightWidth().width);
   }
 
-  this.widthWithChildren = Math.max(this.widthWithChildren,
-      widestRowWithConnectedBlocks + this.startX);
+  this.widthWithChildren = widestRowWithConnectedBlocks + this.startX;
 
   this.height = yCursor;
   this.startY = this.topRow.capline;

@@ -1,18 +1,19 @@
 {
 	"@metadata": {
 		"authors": [
+			"Albe Albe 460",
+			"Albe Albe460",
 			"Beta16",
 			"Espertus",
-			"Nerimic",
+			"Federico Mugnaini",
 			"Gbonanome",
 			"Gianfranco",
-			"Federico Mugnaini",
-			"JackLantern",
-			"Selven",
-			"Samuele2002",
 			"Greis",
+			"JackLantern",
+			"Nerimic",
+			"Samuele2002",
 			"Sarah Bernabei",
-			"Albe Albe 460"
+			"Selven"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "elemento",
@@ -354,5 +355,6 @@
 	"PROCEDURES_IFRETURN_HELPURL": "http://c2.com/cgi/wiki?GuardClause",
 	"PROCEDURES_IFRETURN_WARNING": "Attenzioneː Questo blocco può essere usato solo all'interno di una definizione di funzione.",
 	"WORKSPACE_COMMENT_DEFAULT_TEXT": "Scrivi qualcosa...",
+	"WORKSPACE_ARIA_LABEL": "Area di lavoro di Blockly",
 	"COLLAPSED_WARNINGS_WARNING": "I blocchi compressi contengono avvertimenti."
 }

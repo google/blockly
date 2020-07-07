@@ -1,147 +1,101 @@
 /**
  * @license
  * Copyright 2019 Google LLC
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 suite('Colour Fields', function() {
-  function assertValue(colourField, expectedValue, expectedText) {
-    var actualValue = colourField.getValue();
-    var actualText = colourField.getText();
-    assertEquals(actualValue, expectedValue);
-    assertEquals(actualText, expectedText);
-  }
-  function assertValueDefault(colourField) {
-    var expectedValue = Blockly.FieldColour.COLOURS[0];
-    var expectedText = expectedValue;
-    var m = expectedValue.match(/^#(.)\1(.)\2(.)\3$/);
-    if (m) {
-      expectedText = '#' + m[1] + m[2] + m[3];
-    }
-    assertValue(colourField, expectedValue, expectedText);
-  }
+  /**
+   * Configuration for field tests with invalid values.
+   * @type {!Array<!FieldCreationTestCase>}
+   */
+  var invalidValueTestCases = [
+    {title: 'Undefined', value: undefined},
+    {title: 'Null', value: null},
+    {title: 'NaN', value: NaN},
+    {title: 'Non-Parsable String', value: 'bad-string'},
+    {title: 'Integer', value: 1},
+    {title: 'Float', value: 1.5},
+    {title: 'Infinity', value: Infinity, expectedValue: Infinity},
+    {title: 'Negative Infinity', value: -Infinity, expectedValue: -Infinity},
+  ];
+  /**
+   * Configuration for field tests with valid values.
+   * @type {!Array<!FieldCreationTestCase>}
+   */
 
-  setup(function() {
-    this.previousColours = Blockly.FieldColour.COLOURS;
-    Blockly.FieldColour.Colours = [
-      '#ffffff', '#ff0000', '#00ff00', '#0000ff', '#ffffff'
-    ];
-  });
-  teardown(function() {
-    Blockly.FieldColour.Colours = this.previousColours;
-  });
-  suite('Constructor', function() {
-    test('Empty', function() {
-      var colourField = new Blockly.FieldColour();
-      assertValueDefault(colourField);
-    });
-    test('Undefined', function() {
-      var colourField = new Blockly.FieldColour(undefined);
-      assertValueDefault(colourField);
-    });
-    test('#AAAAAA', function() {
-      var colourField = new Blockly.FieldColour('#AAAAAA');
-      assertValue(colourField, '#aaaaaa', '#aaa');
-    });
-    test('#aaaaaa', function() {
-      var colourField = new Blockly.FieldColour('#aaaaaa');
-      assertValue(colourField, '#aaaaaa', '#aaa');
-    });
-    test('#AAAA00', function() {
-      var colourField = new Blockly.FieldColour('#AAAA00');
-      assertValue(colourField, '#aaaa00', '#aa0');
-    });
-    test('#aaaa00', function() {
-      var colourField = new Blockly.FieldColour('#aaaa00');
-      assertValue(colourField, '#aaaa00', '#aa0');
-    });
-    test('#BCBCBC', function() {
-      var colourField = new Blockly.FieldColour('#BCBCBC');
-      assertValue(colourField, '#bcbcbc', '#bcbcbc');
-    });
-    test('#bcbcbc', function() {
-      var colourField = new Blockly.FieldColour('#bcbcbc');
-      assertValue(colourField, '#bcbcbc', '#bcbcbc');
-    });
-    test('#AA0', function() {
-      var colourField = new Blockly.FieldColour('#AA0');
-      assertValue(colourField, '#aaaa00', '#aa0');
-    });
-    test('#aa0', function() {
-      var colourField = new Blockly.FieldColour('#aa0');
-      assertValue(colourField, '#aaaa00', '#aa0');
-    });
-    test('rgb(170, 170, 0)', function() {
-      var colourField = new Blockly.FieldColour('rgb(170, 170, 0)');
-      assertValue(colourField, '#aaaa00', '#aa0');
-    });
-    test('red', function() {
-      var colourField = new Blockly.FieldColour('red');
-      assertValue(colourField, '#ff0000', '#f00');
-    });
-  });
-  suite('fromJson', function() {
-    test('Empty', function() {
-      var colourField = new Blockly.FieldColour.fromJson({});
-      assertValueDefault(colourField);
-    });
-    test('Undefined', function() {
-      var colourField = new Blockly.FieldColour.fromJson({ colour:undefined });
-      assertValueDefault(colourField);
-    });
-    test('#AAAAAA', function() {
-      var colourField = Blockly.FieldColour.fromJson({ colour: '#AAAAAA' });
-      assertValue(colourField, '#aaaaaa', '#aaa');
-    });
-    test('#aaaaaa', function() {
-      var colourField = Blockly.FieldColour.fromJson({ colour: '#aaaaaa' });
-      assertValue(colourField, '#aaaaaa', '#aaa');
-    });
-    test('#AAAA00', function() {
-      var colourField = Blockly.FieldColour.fromJson({ colour: '#AAAA00' });
-      assertValue(colourField, '#aaaa00', '#aa0');
-    });
-    test('#aaaa00', function() {
-      var colourField = Blockly.FieldColour.fromJson({ colour: '#aaaa00' });
-      assertValue(colourField, '#aaaa00', '#aa0');
-    });
-    test('#BCBCBC', function() {
-      var colourField = Blockly.FieldColour.fromJson({ colour: '#BCBCBC' });
-      assertValue(colourField, '#bcbcbc', '#bcbcbc');
-    });
-    test('#bcbcbc', function() {
-      var colourField = Blockly.FieldColour.fromJson({ colour: '#bcbcbc' });
-      assertValue(colourField, '#bcbcbc', '#bcbcbc');
-    });
-    test('#AA0', function() {
-      var colourField = Blockly.FieldColour.fromJson({ colour: '#AA0' });
-      assertValue(colourField, '#aaaa00', '#aa0');
-    });
-    test('#aa0', function() {
-      var colourField = Blockly.FieldColour.fromJson({ colour: '#aa0' });
-      assertValue(colourField, '#aaaa00', '#aa0');
-    });
-    test('rgb(170, 170, 0)', function() {
-      var colourField = Blockly.FieldColour.fromJson(
-          { colour: 'rgb(170, 170, 0)' });
-      assertValue(colourField, '#aaaa00', '#aa0');
-    });
-    test('red', function() {
-      var colourField = Blockly.FieldColour.fromJson({ colour: 'red' });
-      assertValue(colourField, '#ff0000', '#f00');
-    });
-  });
+  var validValueTestCases = [
+    {title: '#AAAAAA', value: '#AAAAAA', expectedValue: '#aaaaaa',
+      expectedText: '#aaa'},
+    {title: '#aaaaaa', value: '#aaaaaa', expectedValue: '#aaaaaa',
+      expectedText: '#aaa'},
+    {title: '#AAAA00', value: '#AAAA00', expectedValue: '#aaaa00',
+      expectedText: '#aa0'},
+    {title: '#aaaA00', value: '#aaaA00', expectedValue: '#aaaa00',
+      expectedText: '#aa0'},
+    {title: '#BCBCBC', value: '#BCBCBC', expectedValue: '#bcbcbc',
+      expectedText: '#bcbcbc'},
+    {title: '#bcbcbc', value: '#bcbcbc', expectedValue: '#bcbcbc',
+      expectedText: '#bcbcbc'},
+    {title: '#AA0', value: '#AA0', expectedValue: '#aaaa00',
+      expectedText: '#aa0'},
+    {title: '#aa0', value: '#aa0', expectedValue: '#aaaa00',
+      expectedText: '#aa0'},
+    {title: 'rgb(170, 170, 0)', value: 'rgb(170, 170, 0)',
+      expectedValue: '#aaaa00', expectedText: '#aa0'},
+    {title: 'red', value: 'red', expectedValue: '#ff0000',
+      expectedText: '#f00'},
+  ];
+  var addArgsAndJson = function(testCase) {
+    testCase.args = [testCase.value];
+    testCase.json = {'colour': testCase.value};
+  };
+  invalidValueTestCases.forEach(addArgsAndJson);
+  validValueTestCases.forEach(addArgsAndJson);
+
+  /**
+   * The expected default value for the field being tested.
+   * @type {*}
+   */
+  var defaultFieldValue = Blockly.FieldColour.COLOURS[0];
+  /**
+   * The expected default text for the field being tested.
+   * @type {*}
+   */
+  var defaultTextValue = (
+    function() {
+      var expectedText = defaultFieldValue;
+      var m = defaultFieldValue.match(/^#(.)\1(.)\2(.)\3$/);
+      if (m) {
+        expectedText = '#' + m[1] + m[2] + m[3];
+      }
+      return expectedText;
+    })();
+  /**
+   * Asserts that the field property values are set to default.
+   * @param {FieldTemplate} field The field to check.
+   */
+  var assertFieldDefault = function(field) {
+    testHelpers.assertFieldValue(field, defaultFieldValue, defaultTextValue);
+  };
+  /**
+   * Asserts that the field properties are correct based on the test case.
+   * @param {!Blockly.FieldAngle} field The field to check.
+   * @param {!FieldValueTestCase} testCase The test case.
+   */
+  var validTestCaseAssertField = function(field, testCase) {
+    testHelpers.assertFieldValue(
+        field, testCase.expectedValue, testCase.expectedText);
+  };
+
+  testHelpers.runConstructorSuiteTests(
+      Blockly.FieldColour, validValueTestCases, invalidValueTestCases,
+      validTestCaseAssertField, assertFieldDefault);
+
+  testHelpers.runFromJsonSuiteTests(
+      Blockly.FieldColour, validValueTestCases,invalidValueTestCases,
+      validTestCaseAssertField, assertFieldDefault);
+  
   suite('setValue', function() {
     suite('Empty -> New Value', function() {
       setup(function() {
@@ -149,35 +103,40 @@ suite('Colour Fields', function() {
       });
       test('Null', function() {
         this.colourField.setValue(null);
-        assertValueDefault(this.colourField);
+        assertFieldDefault(this.colourField);
       });
       test('Undefined', function() {
         this.colourField.setValue(undefined);
-        assertValueDefault(this.colourField);
+        assertFieldDefault(this.colourField);
       });
       test('Non-Parsable String', function() {
         this.colourField.setValue('not_a_colour');
-        assertValueDefault(this.colourField);
+        assertFieldDefault(this.colourField);
       });
       test('#000000', function() {
         this.colourField.setValue('#000000');
-        assertValue(this.colourField, '#000000', '#000');
+        testHelpers.assertFieldValue(this.colourField, '#000000', '#000');
       });
       test('#bcbcbc', function() {
         this.colourField.setValue('#bcbcbc');
-        assertValue(this.colourField, '#bcbcbc', '#bcbcbc');
+        testHelpers.assertFieldValue(this.colourField, '#bcbcbc', '#bcbcbc');
       });
       test('#aa0', function() {
         this.colourField.setValue('#aa0');
-        assertValue(this.colourField, '#aaaa00', '#aa0');
+        testHelpers.assertFieldValue(this.colourField, '#aaaa00', '#aa0');
       });
       test('rgb(170, 170, 0)', function() {
         this.colourField.setValue('rgb(170, 170, 0)');
-        assertValue(this.colourField, '#aaaa00', '#aa0');
+        testHelpers.assertFieldValue(this.colourField, '#aaaa00', '#aa0');
       });
       test('red', function() {
         this.colourField.setValue('red');
-        assertValue(this.colourField, '#ff0000', '#f00');
+        testHelpers.assertFieldValue(this.colourField, '#ff0000', '#f00');
+      });
+      test('With source block', function() {
+        this.colourField.setSourceBlock(createTestBlock());
+        this.colourField.setValue('#bcbcbc');
+        testHelpers.assertFieldValue(this.colourField, '#bcbcbc', '#bcbcbc');
       });
     });
     suite('Value -> New Value', function() {
@@ -186,74 +145,68 @@ suite('Colour Fields', function() {
       });
       test('Null', function() {
         this.colourField.setValue(null);
-        assertValue(this.colourField, '#aaaaaa', '#aaa');
+        testHelpers.assertFieldValue(this.colourField, '#aaaaaa', '#aaa');
       });
       test('Undefined', function() {
         this.colourField.setValue(undefined);
-        assertValue(this.colourField, '#aaaaaa', '#aaa');
+        testHelpers.assertFieldValue(this.colourField, '#aaaaaa', '#aaa');
       });
       test('Non-Parsable String', function() {
         this.colourField.setValue('not_a_colour');
-        assertValue(this.colourField, '#aaaaaa', '#aaa');
+        testHelpers.assertFieldValue(this.colourField, '#aaaaaa', '#aaa');
       });
       test('#000000', function() {
         this.colourField.setValue('#000000');
-        assertValue(this.colourField, '#000000', '#000');
+        testHelpers.assertFieldValue(this.colourField, '#000000', '#000');
       });
       test('#bcbcbc', function() {
         this.colourField.setValue('#bcbcbc');
-        assertValue(this.colourField, '#bcbcbc', '#bcbcbc');
+        testHelpers.assertFieldValue(this.colourField, '#bcbcbc', '#bcbcbc');
       });
       test('#aa0', function() {
         this.colourField.setValue('#aa0');
-        assertValue(this.colourField, '#aaaa00', '#aa0');
+        testHelpers.assertFieldValue(this.colourField, '#aaaa00', '#aa0');
       });
       test('rgb(170, 170, 0)', function() {
         this.colourField.setValue('rgb(170, 170, 0)');
-        assertValue(this.colourField, '#aaaa00', '#aa0');
+        testHelpers.assertFieldValue(this.colourField, '#aaaa00', '#aa0');
       });
       test('red', function() {
         this.colourField.setValue('red');
-        assertValue(this.colourField, '#ff0000', '#f00');
+        testHelpers.assertFieldValue(this.colourField, '#ff0000', '#f00');
       });
     });
   });
   suite('Validators', function() {
     setup(function() {
-      this.colourField = new Blockly.FieldColour('#aaaaaa');
+      this.field = new Blockly.FieldColour('#aaaaaa');
     });
-    teardown(function() {
-      this.colourField.setValidator(null);
-    });
-    suite('Null Validator', function() {
-      setup(function() {
-        this.colourField.setValidator(function() {
-          return null;
+    var testSuites = [
+      {title: 'Null Validator',
+        validator:
+            function() {
+              return null;
+            },
+        value: '#000000', expectedValue: '#aaaaaa', expectedText: '#aaa'},
+      {title: 'Force Full Red Validator',
+        validator:
+            function(newValue) {
+              return '#ff' + newValue.substr(3, 4);
+            },
+        value: '#000000', expectedValue: '#ff0000', expectedText: '#f00'},
+      {title: 'Returns Undefined Validator', validator: function() {},
+        value: '#000000', expectedValue: '#000000', expectedText: '#000'},
+    ];
+    testSuites.forEach(function(suiteInfo) {
+      suite(suiteInfo.title, function() {
+        setup(function() {
+          this.field.setValidator(suiteInfo.validator);
         });
-      });
-      test('New Value', function() {
-        this.colourField.setValue('#000000');
-        assertValue(this.colourField, '#aaaaaa', '#aaa');
-      });
-    });
-    suite('Force Full Red Validator', function() {
-      setup(function() {
-        this.colourField.setValidator(function(newValue) {
-          return '#ff' + newValue.substr(3, 4);
+        test('New Value', function() {
+          this.field.setValue(suiteInfo.value);
+          testHelpers.assertFieldValue(
+              this.field, suiteInfo.expectedValue, suiteInfo.expectedText);
         });
-      });
-      test('New Value', function() {
-        this.colourField.setValue('#000000');
-        assertValue(this.colourField, '#ff0000', '#f00');
-      });
-    });
-    suite('Returns Undefined Validator', function() {
-      setup(function() {
-        this.colourField.setValidator(function() {});
-      });
-      test('New Value', function() {
-        this.colourField.setValue('#000000');
-        assertValue(this.colourField, '#000000', '#000');
       });
     });
   });

@@ -65,16 +65,24 @@
 <script src="../blocks/variables_dynamic.js"></script>
 <script src="../blocks/procedures.js"></script>
 <script src="blocks/test_blocks.js"></script>
+<script src="themes/test_themes.js"></script>
 <script src="./playgrounds/screenshot.js"></script>
+<script src="./playgrounds/test_blocks_toolbox.js"></script>
 
 <script>
 // Custom requires for the playground.
+
+// Rendering.
 goog.require('Blockly.blockRendering.Debug');
 goog.require('Blockly.minimalist.Renderer');
 goog.require('Blockly.Themes.Modern');
 goog.require('Blockly.Themes.Zelos');
 goog.require('Blockly.thrasos.Renderer');
 goog.require('Blockly.zelos.Renderer');
+
+// Other.
+goog.require('Blockly.WorkspaceCommentSvg');
+goog.require('Blockly.WorkspaceCommentSvg.render');
 </script>
 <script>
 'use strict';
@@ -88,21 +96,9 @@ function start() {
   var rtl = match && match[1] == 'rtl';
   document.forms.options.elements.dir.selectedIndex = Number(rtl);
   var toolbox = getToolboxElement();
-  var toolboxNames = [
-      'toolbox-categories',
-      'toolbox-categories-typed-variables',
-      'toolbox-simple',
-      'toolbox-test-blocks'
-  ];
-  document.forms.options.elements.toolbox.selectedIndex =
-      toolboxNames.indexOf(toolbox.id);
+  setToolboxDropdown();
   match = location.search.match(/side=([^&]+)/);
-  var side = match ? match[1] : 'start';
-  document.forms.options.elements.side.value = side;
   var autoimport = !!location.search.match(/autoimport=([^&]+)/);
-  match = location.search.match(/renderer=([^&]+)/);
-  var renderer = match ? match[1] : 'geras';
-  document.forms.options.elements.renderer.value = renderer;
   // Create main workspace.
   workspace = Blockly.inject('blocklyDiv',
       {
@@ -116,7 +112,7 @@ function start() {
             colour: '#ccc',
             snap: true
           },
-        horizontalLayout: side == 'top' || side == 'bottom',
+        horizontalLayout: false,
         maxBlocks: Infinity,
         maxInstances: {'test_basic_limit_instances': 3},
         maxTrashcanContents: 256,
@@ -130,8 +126,8 @@ function start() {
           wheel: false,
         },
         toolbox: toolbox,
-        toolboxPosition: side == 'top' || side == 'start' ? 'start' : 'end',
-        renderer: renderer,
+        toolboxPosition: 'start',
+        renderer: 'geras',
         zoom:
           {
             controls: true,
@@ -144,7 +140,6 @@ function start() {
       });
   workspace.configureContextMenu = configureContextMenu;
   addToolboxButtonCallbacks();
-  addRenderDebugOptionsCheckboxes();
   // Restore previously displayed text.
   if (sessionStorage) {
     var text = sessionStorage.getItem('textarea');
@@ -154,13 +149,6 @@ function start() {
     // Restore event logging state.
     var state = sessionStorage.getItem('logEvents');
     logEvents(Boolean(Number(state)));
-    // Restore render debug state.
-    var renderDebugState = sessionStorage.getItem('blockRenderDebug');
-    toggleRenderingDebug(Boolean(Number(renderDebugState)));
-    // Restore render debug options state.
-    var renderDebugOptionsState =
-        JSON.parse(sessionStorage.getItem('blockRenderDebugOptions'));
-    setRenderDebugOptionCheckboxState(renderDebugOptionsState);
   } else {
     // MSIE 11 does not support sessionStorage on file:// URLs.
     logEvents(false);
@@ -281,72 +269,6 @@ function addToolboxButtonCallbacks() {
           Blockly.TestBlocks.insertConnectionStatements);
 }
 
-function setRenderDebugOptionCheckboxState(overrideOptions) {
-  Blockly.blockRendering.Debug.config = overrideOptions || {};
-  if (!overrideOptions) {
-    return;
-  }
-  var renderDebugOptionsListEl = document.getElementById('renderDebugOptions');
-  var renderDebugOptionInputs =
-      renderDebugOptionsListEl.getElementsByTagName('input');
-  for (var i = 0, optionInput;
-      (optionInput = renderDebugOptionInputs[i]); i++) {
-    var optionName = optionInput.getAttribute('data-optionName');
-    optionInput.checked = !!overrideOptions[optionName];
-  }
-}
-
-function updateRenderDebugOptions(e) {
-  var target = e.target;
-  var optionName = target.getAttribute('data-optionName');
-  var config = Blockly.blockRendering.Debug.config;
-  config[optionName] = !!target.checked;
-  sessionStorage.setItem(
-      'blockRenderDebugOptions', JSON.stringify(config));
-  workspace.render();
-}
-
-function addRenderDebugOptionsCheckboxes() {
-  var renderDebugConfig = Blockly.blockRendering.Debug.config;
-  var renderDebugOptionsListEl = document.getElementById('renderDebugOptions');
-  var optionNames = Object.keys(renderDebugConfig);
-  for (var i = 0, optionName; (optionName = optionNames[i]); i++) {
-    var optionCheckId = 'RenderDebug' + optionName + 'Check';
-    var optionLabel = document.createElement('label');
-    optionLabel.setAttribute('for', optionCheckId);
-    optionLabel.textContent = optionName;
-    var optionCheck = document.createElement('input');
-    optionCheck.setAttribute('type', 'checkbox');
-    optionCheck.setAttribute('id', optionCheckId);
-    optionCheck.setAttribute('data-optionName', optionName);
-    optionCheck.onclick = updateRenderDebugOptions;
-    var optionLi = document.createElement('li');
-    optionLi.appendChild(optionLabel);
-    optionLi.appendChild(optionCheck);
-    renderDebugOptionsListEl.appendChild(optionLi);
-  }
-}
-
-function changeTheme() {
-  var theme = document.getElementById('themeChanger');
-
-  if (theme.value === "dark") {
-    Blockly.getMainWorkspace().setTheme(Blockly.Themes.Dark);
-  } else if (theme.value === "high_contrast") {
-    Blockly.getMainWorkspace().setTheme(Blockly.Themes.HighContrast);
-  } else if (theme.value === "deuteranopia") {
-    Blockly.getMainWorkspace().setTheme(Blockly.Themes.Deuteranopia);
-  } else if (theme.value === "tritanopia") {
-    Blockly.getMainWorkspace().setTheme(Blockly.Themes.Tritanopia);
-  } else if (theme.value === "modern") {
-    Blockly.getMainWorkspace().setTheme(Blockly.Themes.Modern);
-  } else if (theme.value === "zelos") {
-    Blockly.getMainWorkspace().setTheme(Blockly.Themes.Zelos);
-  } else {
-    Blockly.getMainWorkspace().setTheme(Blockly.Themes.Classic);
-  }
-}
-
 function setBackgroundColour() {
   // Set background colour to differentiate server vs local copy.
   if (location.protocol == 'file:') {
@@ -355,14 +277,34 @@ function setBackgroundColour() {
   }
 }
 
-function getToolboxElement() {
+function getToolboxSuffix() {
   var match = location.search.match(/toolbox=([^&]+)/);
   // Default to the basic toolbox with categories and untyped variables,
   // but override that if the toolbox type is set in the URL.
-  var toolboxSuffix = (match ? match[1] : 'categories');
-  // The three possible values are: "simple", "categories",
-  // "categories-typed-variables".
+  return (match ? match[1] : 'categories');
+}
+
+function getToolboxElement() {
+  // The four possible values are: "simple", "categories",
+  // "categories-typed-variables", and "test-blocks".
+  var toolboxSuffix = getToolboxSuffix();
+  // test-blocks are defined in JSON
+  if (toolboxSuffix == 'test-blocks') {
+    return testBlocksToolbox;
+  }
   return document.getElementById('toolbox-' + toolboxSuffix);
+}
+
+function setToolboxDropdown() {
+  var toolboxNames = [
+      'toolbox-categories',
+      'toolbox-categories-typed-variables',
+      'toolbox-simple',
+      'toolbox-test-blocks'
+  ];
+  var toolboxSuffix = getToolboxSuffix();
+  document.forms.options.elements.toolbox.selectedIndex =
+      toolboxNames.indexOf('toolbox-' + toolboxSuffix);
 }
 
 function toXml() {
@@ -419,32 +361,7 @@ function logEvents(state) {
   }
 }
 
-function toggleRenderingDebug(state) {
-  var checkbox = document.getElementById('blockRenderDebugCheck');
-  checkbox.checked = state;
-  if (sessionStorage) {
-    sessionStorage.setItem('blockRenderDebug', Number(state));
-  }
-  if (state) {
-    document.getElementById('blocklyDiv').className = 'renderingDebug';
-    Blockly.blockRendering.startDebugger();
-    document.getElementById('renderDebugOptions').style.display = 'block';
-  } else {
-    document.getElementById('blocklyDiv').className = '';
-    Blockly.blockRendering.stopDebugger();
-    document.getElementById('renderDebugOptions').style.display = 'none';
-  }
-}
-
-function toggleAccessibilityMode(state) {
-  if (state) {
-    Blockly.navigation.enableKeyboardAccessibility();
-  } else {
-    Blockly.navigation.disableKeyboardAccessibility();
-  }
-}
-
-function configureContextMenu(menuOptions) {
+function configureContextMenu(menuOptions, e) {
   var screenshotOption = {
     text: 'Download Screenshot',
     enabled: workspace.getTopBlocks().length,
@@ -453,6 +370,9 @@ function configureContextMenu(menuOptions) {
     }
   };
   menuOptions.push(screenshotOption);
+
+  // Adds a default-sized workspace comment to the workspace.
+  menuOptions.push(Blockly.ContextMenu.workspaceCommentOption(workspace, e));
 }
 
 function logger(e) {
@@ -563,6 +483,10 @@ var spaghettiXml = [
   .blockRenderDebug {
     display: none;
   }
+
+  .zelos-renderer .blocklyFlyoutButton .blocklyText {
+    font-size: 1.5rem;
+  }
 </style>
 </head>
 <body onload="start()">
@@ -572,7 +496,8 @@ var spaghettiXml = [
   <h1>Blockly Playground</h1>
 
   <p><a href="javascript:void(workspace.setVisible(true))">Show</a>
-   - <a href="javascript:void(workspace.setVisible(false))">Hide</a></p>
+   - <a href="javascript:void(workspace.setVisible(false))">Hide</a>
+   - <a href="playgrounds/advanced_playground.html">Advanced</a></p>
 
   <form id="options">
     <select name="dir" onchange="document.forms.options.submit()">
@@ -585,28 +510,7 @@ var spaghettiXml = [
       <option value="simple">Simple</option>
       <option value="test-blocks">Test Blocks</option>
     </select>
-    <select name="side" onchange="document.forms.options.submit()">
-      <option value="start">Start</option>
-      <option value="end">End</option>
-      <option value="top">Top</option>
-      <option value="bottom">Bottom</option>
-    </select>
-    <select name="renderer" onchange="document.forms.options.submit()">
-      <option value="geras">Geras</option>
-      <option value="thrasos">Thrasos</option>
-      <option value="zelos">Zelos</option>
-      <option value="minimalist">Minimalist</option>
-    </select>
   </form>
-  <select id="themeChanger" name="theme" onchange="changeTheme()">
-    <option value="classic">Classic</option>
-    <option value="modern">Modern</option>
-    <option value="dark">Dark</option>
-    <option value="high_contrast">High Contrast</option>
-    <option value="deuteranopia">Deuteranopia/Protanopia</option>
-    <option value="tritanopia">Tritanopia</option>
-    <option value="zelos">Zelos</option>
-  </select>
   <p>
     <input type="button" value="Export to XML" onclick="toXml()">
     &nbsp;
@@ -635,15 +539,6 @@ var spaghettiXml = [
     <li>
       <label for="logCheck">Log events:</label>
       <input type="checkbox" onclick="logEvents(this.checked)" id="logCheck">
-    </li>
-    <li>
-      <label for="blockRenderDebugCheck">Enable block rendering debug:</label>
-      <input type="checkbox" onclick="toggleRenderingDebug(this.checked)" id="blockRenderDebugCheck">
-      <ul id="renderDebugOptions"></ul>
-    </li>
-    <li>
-      <label for="accessibilityModeCheck">Enable Accessibility Mode:</label>
-      <input type="checkbox" onclick="toggleAccessibilityMode(this.checked)" id="accessibilityModeCheck">
     </li>
   </ul>
 
@@ -1361,359 +1256,6 @@ var spaghettiXml = [
     <sep></sep>
     <category name="Variables" categorystyle="variable_category" custom="VARIABLE_DYNAMIC"></category>
     <category name="Functions" categorystyle="procedure_category" custom="PROCEDURE"></category>
-  </xml>
-
-  <!-- toolbox-test-blocks has a category menu and an auto-closing flyout.
-  The blocks in this toolbox reflect block configurations not used by
-  the standard predefined blocks, and so test alternative block rendering
-  code paths. -->
-  <xml xmlns="https://developers.google.com/blockly/xml" id="toolbox-test-blocks" style="display: none">
-    <category name="Align">
-      <block type="test_align_dummy_right"></block>
-      <block type="test_align_all"></block>
-      <block type="test_align_with_external_input"></block>
-    </category>
-    <category name="Basic">
-      <block type="test_basic_empty"></block>
-      <block type="test_basic_empty_with_mutator"></block>
-      <block type="test_basic_dummy"></block>
-      <block type="test_basic_multiple_dummy"></block>
-      <block type="test_basic_stack"></block>
-      <block type="test_basic_row"></block>
-      <block type="test_basic_value_to_stack"></block>
-      <block type="test_basic_value_to_statement"></block>
-      <block type="test_basic_limit_instances"></block>
-      <block type="test_basic_tooltips"></block>
-      <block type="test_basic_javascript"></block>
-    </category>
-    <category name="Connections" expanded="true">
-      <category name="Row">
-        <label text="blocks have"></label>
-        <sep gap="-1"></sep>
-        <label text="tooltips"></label>
-
-        <button text="insert" callbackkey="insertConnectionRows"></button>
-        <sep gap="7"></sep>
-        <block type="test_connections_row_input"></block>
-        <sep gap="7"></sep>
-        <block type="test_connections_row_blue"></block>
-        <sep gap="7"></sep>
-        <block type="test_connections_row_yellow"></block>
-        <sep gap="7"></sep>
-        <block type="test_connections_row_red"></block>
-        <sep gap="7"></sep>
-        <block type="test_connections_row_output"></block>
-        <block type="test_connections_row_yellow">
-          <value name="NAME">
-            <block type="test_connections_row_yellow" movable="false"></block>
-          </value>
-        </block>
-        <sep gap="7"></sep>
-        <block type="test_connections_multivalue_1valid"></block>
-        <sep gap="7"></sep>
-        <block type="test_connections_multivalue_2valid"></block>
-      </category>
-      <category name="Stack">
-        <label text="blocks have"></label>
-        <sep gap="-1"></sep>
-        <label text="tooltips"></label>
-
-        <button text="insert" callbackkey="insertConnectionStacks"></button>
-        <sep gap="7"></sep>
-        <block type="test_connections_stack_next"></block>
-        <sep gap="7"></sep>
-        <block type="test_connections_stack_blue"></block>
-        <sep gap="7"></sep>
-        <block type="test_connections_stack_yellow"></block>
-        <sep gap="7"></sep>
-        <block type="test_connections_stack_red"></block>
-        <sep gap="7"></sep>
-        <block type="test_connections_stack_prev"></block>
-        <block type="test_connections_stack_yellow">
-          <next>
-            <block type="test_connections_stack_yellow" movable="false"></block>
-          </next>
-        </block>
-      </category>
-      <category name="Statement">
-        <label text="blocks have"></label>
-        <sep gap="-1"></sep>
-        <label text="tooltips"></label>
-
-        <button text="insert" callbackkey="insertConnectionStatements"></button>
-        <sep gap="7"></sep>
-        <block type="test_connections_statement_blue"></block>
-        <sep gap="7"></sep>
-        <block type="test_connections_statement_yellow"></block>
-        <sep gap="7"></sep>
-        <block type="test_connections_statement_red"></block>
-        <block type="test_connections_statement_nonext"></block>
-        <sep gap="7"></sep>
-        <block type="test_connections_multistatement_1valid"></block>
-        <sep gap="7"></sep>
-        <block type="test_connections_multistatement_2valid"></block>
-      </category>
-    </category>
-    <category name="Drag">
-      <label text="Drag each to the workspace"></label>
-      <block type="text_print">
-        <value name="TEXT">
-          <block type="text">
-            <field name="TEXT">Drag me by this child</field>
-          </block>
-        </value>
-      </block>
-      <block type="text_print">
-        <value name="TEXT">
-          <shadow type="text">
-            <field name="TEXT">Drag me by this shadow</field>
-          </shadow>
-        </value>
-      </block>
-      <block type="text_print">
-        <value name="TEXT">
-          <shadow type="text">
-            <field name="TEXT">Shadow value</field>
-          </shadow>
-        </value>
-        <next>
-          <shadow type="text_print">
-            <value name="TEXT">
-              <shadow type="text">
-                <field name="TEXT">Shadow statement</field>
-              </shadow>
-            </value>
-          </shadow>
-        </next>
-      </block>
-      <label text="Multiple Variable Refs"></label>
-      <block type="text_print">
-        <value name="TEXT">
-          <block type="variables_get">
-            <field name="VAR" id="item">item</field>
-          </block>
-        </value>
-        <next>
-          <block type="text_print">
-            <value name="TEXT">
-              <block type="variables_get">
-                <field name="VAR" id="item">item</field>
-              </block>
-            </value>
-          </block>
-        </next>
-      </block>
-      <label text="Procedure Definitions"></label>
-      <block type="procedures_defnoreturn">
-        <field name="NAME">without arguments</field>
-        <statement name="STACK">
-          <block type="text_print">
-            <value name="TEXT">
-              <shadow type="text">
-                <field name="TEXT">No argument reference.</field>
-              </shadow>
-            </value>
-          </block>
-        </statement>
-      </block>
-      <block type="procedures_defnoreturn">
-        <mutation>
-          <arg name="fnArgument"></arg>
-        </mutation>
-        <field name="NAME">with one argument</field>
-        <statement name="STACK">
-          <block type="text_print">
-            <value name="TEXT">
-              <shadow type="text">
-                <field name="TEXT">Expected an argument reference here.</field>
-              </shadow>
-              <block type="variables_get">
-                <field name="VAR">fnArgument</field>
-              </block>
-            </value>
-          </block>
-        </statement>
-      </block>
-    </category>
-    <category name="Fields" expanded="true">
-      <category name="Defaults">
-        <button text="add blocks to workspace" callbackKey="addAllBlocksToWorkspace"></button>
-        <sep gap="8"></sep>
-        <button text="set random style" callbackKey="setRandomStyle"></button>
-        <sep gap="8"></sep>
-        <button text="toggle enabled" callbackKey="toggleEnabled"></button>
-        <sep gap="8"></sep>
-        <button text="toggle shadow" callbackKey="toggleShadow"></button>
-        <sep gap="8"></sep>
-        <button text="toggle collapsed" callbackKey="toggleCollapsed"></button>
-        <block type="test_fields_angle"></block>
-        <block type="test_fields_checkbox"></block>
-        <block type="test_fields_colour"></block>
-        <block type="test_fields_colour_options"></block>
-        <block type="test_fields_text_input"></block>
-        <block type="test_fields_only_text_input"></block>
-        <block type="test_fields_multilinetext"></block>
-        <block type="test_fields_variable"></block>
-        <button text="randomize label text" callbackKey="randomizeLabelText"></button>
-        <sep gap="12"></sep>
-        <block type="test_fields_label_serializable"></block>
-        <button text="change image" callbackKey="changeImage"></button>
-        <sep gap="12"></sep>
-        <block type="test_fields_image"></block>
-      </category>
-      <category name="Numbers">
-        <block type="test_numbers_float">
-          <field name="NUM">123.456</field>
-        </block>
-        <block type="test_numbers_hundredths">
-          <field name="NUM">123.456</field>
-        </block>
-        <block type="test_numbers_halves">
-          <field name="NUM">123.456</field>
-        </block>
-        <block type="test_numbers_whole">
-          <field name="NUM">123.456</field>
-        </block>
-        <block type="test_numbers_three_halves">
-          <field name="NUM">123.456</field>
-        </block>
-        <block type="test_numbers_whole_bounded">
-          <field name="NOTE">60</field>
-        </block>
-      </category>
-      <category name="Angles">
-        <block type="test_angles_clockwise"></block>
-        <block type="test_angles_offset"></block>
-        <block type="test_angles_wrap"></block>
-        <block type="test_angles_round_30"></block>
-        <block type="test_angles_round_0"></block>
-        <block type="test_angles_protractor"></block>
-        <block type="test_angles_compass"></block>
-      </category>
-      <category name="Drop-downs">
-        <label text="Dynamic"></label>
-        <block type="test_dropdowns_dynamic"></block>
-        <button text="Add option" callbackKey="addDynamicOption"></button>
-        <button text="Remove option" callbackKey="removeDynamicOption"></button>
-        <block type="test_dropdowns_dynamic_random"></block>
-        <label text="Other"></label>
-        <block type="test_dropdowns_long"></block>
-        <block type="test_dropdowns_images"></block>
-        <block type="test_dropdowns_images_and_text"></block>
-      </category>
-      <category name="Images">
-        <block type="test_images_datauri"></block>
-        <block type="test_images_small"></block>
-        <block type="test_images_large"></block>
-        <block type="test_images_fliprtl"></block>
-        <block type="test_images_missing"></block>
-        <block type="test_images_many_icons"></block>
-      </category>
-      <category name="Emoji! o((*^ᴗ^*))o">
-        <label text="Unicode & Emojis"></label>
-        <block type="test_style_emoji"></block>
-        <block type="text">
-          <field name="TEXT">Robot face in text field: &#x1f916;</field>
-        </block>
-        <block type="text">
-          <field name="TEXT">Zalgo in text field: B&#776;&#788;&#862;&#795;&#842;&#827;&#806;&#837;&#812;&#792;&#816;&#846;&#805;l&#771;&#832;&#833;&#864;&#849;&#849;&#789;&#861;&#801;&#854;&#863;&#811;&#826;&#812;&#790;&#803;&#819;o&#843;&#777;&#778;&#785;&#831;&#829;&#794;&#825;&#857;&#814;&#802;&#811;&#852;c&#843;&#786;&#849;&#778;&#861;&#775;&#825;&#825;&#796;&#857;&#825;&#800;&#824;k&#778;&#850;&#833;&#774;&#772;&#782;&#862;&#770;&#789;&#788;&#841;&#801;&#811;&#860;&#839;&#790;&#819;&#854;l&#832;&#774;&#836;&#831;&#776;&#787;&#855;&#816;&#793;&#798;&#819;&#809;&#800;&#854;&#815;y&#864;&#783;&#856;&#773;&#832;&#808;&#799;&#839;&#814;&#840;&#812;&#793;&#818;&#801;</field>
-        </block>
-      </category>
-      <category name="Validators">
-        <button text="add blocks to workspace" callbackKey="addAllBlocksToWorkspace"></button>
-        <sep gap="8"></sep>
-        <button text="set input" callbackKey="setInput"></button>
-        <label text="Angles"></label>
-        <sep gap="12"></sep>
-        <block type="test_validators_angle_null"></block>
-        <sep gap="12"></sep>
-        <block type="test_validators_angle_mult30_force"></block>
-        <sep gap="12"></sep>
-        <block type="test_validators_angle_mult30_null"></block>
-        <label text="Checkboxes"></label>
-        <sep gap="12"></sep>
-        <block type="test_validators_checkbox_null"></block>
-        <sep gap="12"></sep>
-        <block type="test_validators_checkbox_match"></block>
-        <sep gap="12"></sep>
-        <block type="test_validators_checkbox_not_match_null"></block>
-        <label text="Colours"></label>
-        <sep gap="12"></sep>
-        <block type="test_validators_colour_null"></block>
-        <sep gap="12"></sep>
-        <block type="test_validators_colour_force_red"></block>
-        <sep gap="12"></sep>
-        <block type="test_validators_colour_red_null"></block>
-        <label text="Dropdowns"></label>
-        <sep gap="12"></sep>
-        <block type="test_validators_dropdown_null"></block>
-        <sep gap="12"></sep>
-        <block type="test_validators_dropdown_force_1s"></block>
-        <sep gap="12"></sep>
-        <block type="test_validators_dropdown_1s_null"></block>
-        <label text="Numbers"></label>
-        <sep gap="12"></sep>
-        <block type="test_validators_number_null"></block>
-        <sep gap="12"></sep>
-        <block type="test_validators_number_mult10_force"></block>
-        <sep gap="12"></sep>
-        <block type="test_validators_number_mult10_null"></block>
-        <label text="Text"></label>
-        <sep gap="12"></sep>
-        <block type="test_validators_text_null"></block>
-        <sep gap="12"></sep>
-        <block type="test_validators_text_A"></block>
-        <sep gap="12"></sep>
-        <block type="test_validators_text_B"></block>
-        <label text="Variables"></label>
-        <sep gap="8"></sep>
-        <button text="add test variables" callbackKey="addVariables" web-class="modifiesWorkspace"></button>
-        <sep gap="12"></sep>
-        <block type="test_validators_variable_null"></block>
-        <sep gap="12"></sep>
-        <block type="test_validators_variable_force_1s"></block>
-        <sep gap="12"></sep>
-        <block type="test_validators_variable_1s_null"></block>
-      </category>
-    </category>
-    <category name="Mutators">
-      <label text="logic_compare"></label>
-      <block type="logic_compare">
-        <value name="A">
-          <shadow type="math_number">
-            <field name="NUM">10</field>
-          </shadow>
-        </value>
-        <value name="B">
-          <shadow type="math_number">
-            <field name="NUM">10</field>
-          </shadow>
-        </value>
-      </block>
-      <block type="logic_compare">
-        <value name="A">
-          <block type="math_number">
-            <field name="NUM">10</field>
-          </block>
-        </value>
-        <value name="B">
-          <block type="math_number">
-            <field name="NUM">10</field>
-          </block>
-        </value>
-      </block>
-    </category>
-    <category name="Style">
-      <label text="Hats"></label>
-      <block type="test_style_hat"></block>
-      <label text="Colour"></label>
-      <block type="test_style_hex1"></block>
-      <block type="test_style_hex2"></block>
-      <block type="test_style_hex3"></block>
-      <block type="test_style_no_colour"></block>
-      <block type="test_style_hex4"></block>
-      <block type="test_style_hex5"></block>
-    </category>
   </xml>
 </body>
 </html>

@@ -1,265 +1,143 @@
 /**
  * @license
  * Copyright 2019 Google LLC
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 suite('Angle Fields', function() {
-  function assertValue(angleField, expectedValue, opt_expectedText) {
-    var actualValue = angleField.getValue();
-    var actualText = angleField.getText();
-    opt_expectedText = opt_expectedText || String(expectedValue);
-    assertEquals(String(actualValue), String(expectedValue));
-    assertEquals(Number(actualValue), expectedValue);
-    assertEquals(actualText, opt_expectedText);
-  }
-  function assertValueDefault(angleField) {
-    assertValue(angleField, 0);
-  }
-  suite('Constructor', function() {
-    test('Empty', function() {
-      var angleField = new Blockly.FieldAngle();
-      assertValueDefault(angleField);
-    });
-    test('Undefined', function() {
-      var angleField = new Blockly.FieldAngle(undefined);
-      assertValueDefault(angleField);
-    });
-    test('NaN', function() {
-      var angleField = new Blockly.FieldAngle(NaN);
-      assertValueDefault(angleField);
-    });
-    test('Integer', function() {
-      var angleField = new Blockly.FieldAngle(1);
-      assertValue(angleField, 1);
-    });
-    test('Float', function() {
-      var angleField = new Blockly.FieldAngle(1.5);
-      assertValue(angleField, 1.5);
-    });
-    test('Integer String', function() {
-      var angleField = new Blockly.FieldAngle('1');
-      assertValue(angleField, 1);
-    });
-    test('Float String', function() {
-      var angleField = new Blockly.FieldAngle('1.5');
-      assertValue(angleField, 1.5);
-    });
-    test('> 360°', function() {
-      var angleField = new Blockly.FieldAngle(362);
-      assertValue(angleField, 2);
-    });
-  });
-  suite('fromJson', function() {
-    test('Empty', function() {
-      var angleField = Blockly.FieldAngle.fromJson({});
-      assertValueDefault(angleField);
-    });
-    test('Undefined', function() {
-      var angleField = Blockly.FieldAngle.fromJson({ angle:undefined });
-      assertValueDefault(angleField);
-    });
-    test('NaN', function() {
-      var angleField = Blockly.FieldAngle.fromJson({ angle:NaN });
-      assertValueDefault(angleField);
-    });
-    test('Integer', function() {
-      var angleField = Blockly.FieldAngle.fromJson({ angle:1 });
-      assertValue(angleField, 1);
-    });
-    test('Float', function() {
-      var angleField = Blockly.FieldAngle.fromJson({ angle:1.5 });
-      assertValue(angleField, 1.5);
-    });
-    test('Integer String', function() {
-      var angleField = Blockly.FieldAngle.fromJson({ angle:'1' });
-      assertValue(angleField, 1);
-    });
-    test('Float String', function() {
-      var angleField = Blockly.FieldAngle.fromJson({ angle:'1.5' });
-      assertValue(angleField, 1.5);
-    });
-    test('> 360°', function() {
-      var angleField = Blockly.FieldAngle.fromJson({ angle:362 });
-      assertValue(angleField, 2);
-    });
-  });
+  /**
+   * Configuration for field tests with invalid values.
+   * @type {!Array<!FieldCreationTestCase>}
+   */
+  var invalidValueTestCases = [
+    {title: 'Undefined', value: undefined},
+    {title: 'Null', value: null},
+    {title: 'NaN', value: NaN},
+    {title: 'Non-Parsable String', value: 'bad'},
+    {title: 'Infinity', value: Infinity, expectedValue: Infinity},
+    {title: 'Negative Infinity', value: -Infinity, expectedValue: -Infinity},
+    {title: 'Infinity String', value: 'Infinity', expectedValue: Infinity},
+    {title: 'Negative Infinity String', value: '-Infinity',
+      expectedValue: -Infinity},
+  ];
+  /**
+   * Configuration for field tests with valid values.
+   * @type {!Array<!FieldCreationTestCase>}
+   */
+
+  var validValueTestCases = [
+    {title: 'Integer', value: 1, expectedValue: 1},
+    {title: 'Float', value: 1.5, expectedValue: 1.5},
+    {title: 'Integer String', value: '1', expectedValue: 1},
+    {title: 'Float String', value: '1.5', expectedValue: 1.5},
+    {title: '> 360°', value: 362, expectedValue: 2},
+  ];
+  var addArgsAndJson = function(testCase) {
+    testCase.args = [testCase.value];
+    testCase.json = {'angle': testCase.value};
+  };
+  invalidValueTestCases.forEach(addArgsAndJson);
+  validValueTestCases.forEach(addArgsAndJson);
+
+  /**
+   * The expected default value for the field being tested.
+   * @type {*}
+   */
+  var defaultFieldValue = 0;
+  /**
+   * Asserts that the field property values are set to default.
+   * @param {FieldTemplate} field The field to check.
+   */
+  var assertFieldDefault = function(field) {
+    testHelpers.assertFieldValue(field, defaultFieldValue);
+  };
+  /**
+   * Asserts that the field properties are correct based on the test case.
+   * @param {!Blockly.FieldAngle} field The field to check.
+   * @param {!FieldValueTestCase} testCase The test case.
+   */
+  var validTestCaseAssertField = function(field, testCase) {
+    testHelpers.assertFieldValue(field, testCase.expectedValue);
+  };
+
+  testHelpers.runConstructorSuiteTests(
+      Blockly.FieldAngle, validValueTestCases, invalidValueTestCases,
+      validTestCaseAssertField, assertFieldDefault);
+
+  testHelpers.runFromJsonSuiteTests(
+      Blockly.FieldAngle, validValueTestCases,invalidValueTestCases,
+      validTestCaseAssertField, assertFieldDefault);
+
   suite('setValue', function() {
     suite('Empty -> New Value', function() {
       setup(function() {
-        this.angleField = new Blockly.FieldAngle();
+        this.field = new Blockly.FieldAngle();
       });
-      test('Null', function() {
-        this.angleField.setValue(null);
-        assertValueDefault(this.angleField);
-      });
-      test('Undefined', function() {
-        this.angleField.setValue(undefined);
-        assertValueDefault(this.angleField);
-      });
-      test('Non-Parsable String', function() {
-        this.angleField.setValue('bad');
-        assertValueDefault(this.angleField);
-      });
-      test('NaN', function() {
-        this.angleField.setValue(NaN);
-        assertValueDefault(this.angleField);
-      });
-      test('Integer', function() {
-        this.angleField.setValue(2);
-        assertValue(this.angleField, 2);
-      });
-      test('Float', function() {
-        this.angleField.setValue(2.5);
-        assertValue(this.angleField, 2.5);
-      });
-      test('Integer String', function() {
-        this.angleField.setValue('2');
-        assertValue(this.angleField, 2);
-      });
-      test('Float', function() {
-        this.angleField.setValue('2.5');
-        assertValue(this.angleField, 2.5);
-      });
-      test('>360°', function() {
-        this.angleField.setValue(362);
-        assertValue(this.angleField, 2);
-      });
-      test('Infinity', function() {
-        this.angleField.setValue(Infinity);
-        assertValueDefault(this.angleField);
-      });
-      test('Negative Infinity String', function() {
-        this.angleField.setValue('-Infinity');
-        assertValueDefault(this.angleField);
+      testHelpers.runSetValueTests(
+          validValueTestCases, invalidValueTestCases, defaultFieldValue);
+      test('With source block', function() {
+        this.field.setSourceBlock(createTestBlock());
+        this.field.setValue(2.5);
+        testHelpers.assertFieldValue(this.field, 2.5);
       });
     });
     suite('Value -> New Value', function() {
+      var initialValue = 1;
       setup(function() {
-        this.angleField = new Blockly.FieldAngle(1);
+        this.field = new Blockly.FieldAngle(initialValue);
       });
-      test('Null', function() {
-        this.angleField.setValue(null);
-        assertValue(this.angleField, 1);
-      });
-      test('Undefined', function() {
-        this.angleField.setValue(undefined);
-        assertValue(this.angleField, 1);
-      });
-      test('Non-Parsable String', function() {
-        this.angleField.setValue('bad');
-        assertValue(this.angleField, 1);
-      });
-      test('NaN', function() {
-        this.angleField.setValue(NaN);
-        assertValue(this.angleField, 1);
-      });
-      test('Integer', function() {
-        this.angleField.setValue(2);
-        assertValue(this.angleField, 2);
-      });
-      test('Float', function() {
-        this.angleField.setValue(2.5);
-        assertValue(this.angleField, 2.5);
-      });
-      test('Integer String', function() {
-        this.angleField.setValue('2');
-        assertValue(this.angleField, 2);
-      });
-      test('Float', function() {
-        this.angleField.setValue('2.5');
-        assertValue(this.angleField, 2.5);
-      });
-      test('>360°', function() {
-        this.angleField.setValue(362);
-        assertValue(this.angleField, 2);
-      });
-      test('Infinity', function() {
-        this.angleField.setValue(Infinity);
-        assertValue(this.angleField, 1);
-      });
-      test('Negative Infinity String', function() {
-        this.angleField.setValue('-Infinity');
-        assertValue(this.angleField, 1);
+      testHelpers.runSetValueTests(
+          validValueTestCases, invalidValueTestCases, initialValue);
+      test('With source block', function() {
+        this.field.setSourceBlock(createTestBlock());
+        this.field.setValue(2.5);
+        testHelpers.assertFieldValue(this.field, 2.5);
       });
     });
   });
   suite('Validators', function() {
     setup(function() {
-      this.angleField = new Blockly.FieldAngle(1);
-      this.angleField.htmlInput_ = Object.create(null);
-      this.angleField.htmlInput_.oldValue_ = '1';
-      this.angleField.htmlInput_.untypedDefaultValue_ = 1;
-      this.stub = sinon.stub(this.angleField, 'resizeEditor_');
+      this.field = new Blockly.FieldAngle(1);
+      this.field.htmlInput_ = Object.create(null);
+      this.field.htmlInput_.oldValue_ = '1';
+      this.field.htmlInput_.untypedDefaultValue_ = 1;
+      this.stub = sinon.stub(this.field, 'resizeEditor_');
     });
     teardown(function() {
-      this.angleField.setValidator(null);
-      this.angleField.htmlInput_ = null;
-      if (this.stub) {
-        this.stub.restore();
-      }
+      sinon.restore();
     });
-    suite('Null Validator', function() {
-      setup(function() {
-        this.angleField.setValidator(function() {
-          return null;
+    var testSuites = [
+      {title: 'Null Validator',
+        validator:
+            function() {
+              return null;
+            },
+        value: 2, expectedValue: 1},
+      {title: 'Force Mult of 30 Validator',
+        validator:
+            function(newValue) {
+              return Math.round(newValue / 30) * 30;
+            },
+        value: 25, expectedValue: 30},
+      {title: 'Returns Undefined Validator', validator: function() {}, value: 2,
+        expectedValue: 2},
+    ];
+    testSuites.forEach(function(suiteInfo) {
+      suite(suiteInfo.title, function() {
+        setup(function() {
+          this.field.setValidator(suiteInfo.validator);
         });
-      });
-      test('When Editing', function() {
-        this.angleField.isBeingEdited_ = true;
-        this.angleField.htmlInput_.value = '2';
-        this.angleField.onHtmlInputChange_(null);
-        assertValue(this.angleField, 1, '2');
-        this.angleField.isBeingEdited_ = false;
-      });
-      test('When Not Editing', function() {
-        this.angleField.setValue(2);
-        assertValue(this.angleField, 1);
-      });
-    });
-    suite('Force Mult of 30 Validator', function() {
-      setup(function() {
-        this.angleField.setValidator(function(newValue) {
-          return Math.round(newValue / 30) * 30;
+        test('When Editing', function() {
+          this.field.isBeingEdited_ = true;
+          this.field.htmlInput_.value = String(suiteInfo.value);
+          this.field.onHtmlInputChange_(null);
+          testHelpers.assertFieldValue(
+              this.field, suiteInfo.expectedValue, String(suiteInfo.value));
         });
-      });
-      test('When Editing', function() {
-        this.angleField.isBeingEdited_ = true;
-        this.angleField.htmlInput_.value = '25';
-        this.angleField.onHtmlInputChange_(null);
-        assertValue(this.angleField, 30, '25');
-        this.angleField.isBeingEdited_ = false;
-      });
-      test('When Not Editing', function() {
-        this.angleField.setValue(25);
-        assertValue(this.angleField, 30);
-      });
-    });
-    suite('Returns Undefined Validator', function() {
-      setup(function() {
-        this.angleField.setValidator(function() {});
-      });
-      test('When Editing', function() {
-        this.angleField.isBeingEdited_ = true;
-        this.angleField.htmlInput_.value = '2';
-        this.angleField.onHtmlInputChange_(null);
-        assertValue(this.angleField, 2);
-        this.angleField.isBeingEdited_ = false;
-      });
-      test('When Not Editing', function() {
-        this.angleField.setValue(2);
-        assertValue(this.angleField, 2);
+        test('When Not Editing', function() {
+          this.field.setValue(suiteInfo.value);
+          testHelpers.assertFieldValue(this.field, suiteInfo.expectedValue);
+        });
       });
     });
   });

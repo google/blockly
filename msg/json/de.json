@@ -1,18 +1,21 @@
 {
 	"@metadata": {
 		"authors": [
-			"Metalhead64",
-			"M165437",
-			"Dan-yell",
-			"아라",
-			"Octycs",
 			"Cvanca",
+			"Dan-yell",
+			"M165437",
+			"Metalhead64",
+			"Octycs",
+			"Sillyfreak",
+			"Sushi",
 			"THINK",
+			"Tiin",
 			"Zgtm",
-			"Sushi"
+			"아라"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "Element",
+	"UNNAMED_KEY": "unbenannt",
 	"TODAY": "Heute",
 	"DUPLICATE_BLOCK": "Kopieren",
 	"ADD_COMMENT": "Kommentar hinzufügen",
@@ -357,7 +360,7 @@
 	"VARIABLES_SET_TOOLTIP": "Setzt den Wert einer Variable.",
 	"VARIABLES_SET_CREATE_GET": "Erzeuge \"Lese %1\"",
 	"PROCEDURES_DEFNORETURN_HELPURL": "https://de.wikipedia.org/wiki/Prozedur_%28Programmierung%29",
-	"PROCEDURES_DEFNORETURN_TITLE": "nach",
+	"PROCEDURES_DEFNORETURN_TITLE": "um",
 	"PROCEDURES_DEFNORETURN_PROCEDURE": "etwas tun",
 	"PROCEDURES_BEFORE_PARAMS": "mit:",
 	"PROCEDURES_CALL_BEFORE_PARAMS": "mit:",
@@ -383,5 +386,6 @@
 	"PROCEDURES_IFRETURN_HELPURL": "http://c2.com/cgi/wiki?GuardClause",
 	"PROCEDURES_IFRETURN_WARNING": "Warnung: Dieser Block darf nur innerhalb eines Funktionsblocks genutzt werden.",
 	"WORKSPACE_COMMENT_DEFAULT_TEXT": "Teile etwas mit…",
+	"WORKSPACE_ARIA_LABEL": "Blockly Arbeitsbereich",
 	"COLLAPSED_WARNINGS_WARNING": "Eingeklappte Blöcke enthalten Warnungen."
 }

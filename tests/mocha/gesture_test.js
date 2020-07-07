@@ -1,18 +1,7 @@
 /**
  * @license
  * Copyright 2019 Google LLC
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 /**
@@ -35,8 +24,8 @@ suite('Gesture', function() {
 
   test('Constructor', function() {
     var gesture = new Blockly.Gesture(this.e, this.workspace);
-    assertEquals(gesture.mostRecentEvent_, this.e);
-    assertEquals(gesture.creatorWorkspace_, this.workspace);
+    chai.assert.equal(gesture.mostRecentEvent_, this.e);
+    chai.assert.equal(gesture.creatorWorkspace_, this.workspace);
   });
 
   test('Field click - Click in workspace', function() {
@@ -48,7 +37,7 @@ suite('Gesture', function() {
     gesture.setStartField(field);
   
     var isFieldClick = gesture.isFieldClick_();
-    assertEquals(isFieldClick, true);
+    chai.assert.isTrue(isFieldClick);
   });
 
   function gestureIsFieldClick_InFlyoutHelper(flyout, expectedResult){
@@ -66,7 +55,7 @@ suite('Gesture', function() {
     gesture.setStartFlyout_(this.workspace.flyout_);
   
     var isFieldClick = gesture.isFieldClick_();
-    assertEquals(isFieldClick, expectedResult);
+    chai.assert.equal(isFieldClick, expectedResult);
   }
 
   test('Field click - Auto close flyout', function() {
@@ -93,6 +82,6 @@ suite('Gesture', function() {
     var gesture = new Blockly.Gesture(event, ws);
     gesture.doWorkspaceClick_(event);
     var cursor = ws.getCursor();
-    assertEquals(cursor.getCurNode().getType(), Blockly.ASTNode.types.WORKSPACE);
+    chai.assert.equal(cursor.getCurNode().getType(), Blockly.ASTNode.types.WORKSPACE);
   });
 });

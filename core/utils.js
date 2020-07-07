@@ -1,18 +1,7 @@
 /**
  * @license
  * Copyright 2012 Google LLC
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 /**
@@ -34,6 +23,7 @@ goog.require('Blockly.constants');
 goog.require('Blockly.utils.colour');
 goog.require('Blockly.utils.Coordinate');
 goog.require('Blockly.utils.global');
+goog.require('Blockly.utils.Rect');
 goog.require('Blockly.utils.string');
 goog.require('Blockly.utils.style');
 goog.require('Blockly.utils.userAgent');
@@ -507,19 +497,19 @@ Blockly.utils.runAfterPageLoad = function(fn) {
 /**
  * Get the position of the current viewport in window coordinates.  This takes
  * scroll into account.
- * @return {!Object} An object containing window width, height, and scroll
- *     position in window coordinates.
+ * @return {!Blockly.utils.Rect} An object containing window width, height, and
+ *     scroll position in window coordinates.
  * @package
  */
 Blockly.utils.getViewportBBox = function() {
   // Pixels, in window coordinates.
   var scrollOffset = Blockly.utils.style.getViewportPageOffset();
-  return {
-    right: document.documentElement.clientWidth + scrollOffset.x,
-    bottom: document.documentElement.clientHeight + scrollOffset.y,
-    top: scrollOffset.y,
-    left: scrollOffset.x
-  };
+  return new Blockly.utils.Rect(
+      scrollOffset.y,
+      document.documentElement.clientHeight + scrollOffset.y,
+      scrollOffset.x,
+      document.documentElement.clientWidth + scrollOffset.x
+  );
 };
 
 /**
@@ -590,7 +580,7 @@ Blockly.utils.getBlockTypeCounts = function(block, opt_stripFollowing) {
  * Converts screen coordinates to workspace coordinates.
  * @param {Blockly.WorkspaceSvg} ws The workspace to find the coordinates on.
  * @param {Blockly.utils.Coordinate} screenCoordinates The screen coordinates to
- * be converted to workspace coordintaes
+ * be converted to workspace coordinates
  * @return {Blockly.utils.Coordinate} The workspace coordinates.
  * @package
  */

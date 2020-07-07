@@ -1,18 +1,7 @@
 /**
  * @license
  * Copyright 2011 Google LLC
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 /**
@@ -39,6 +28,8 @@ goog.require('Blockly.utils.dom');
 goog.require('Blockly.utils.userAgent');
 goog.require('Blockly.WorkspaceDragSurfaceSvg');
 goog.require('Blockly.WorkspaceSvg');
+
+goog.requireType('Blockly.utils.Metrics');
 
 
 /**
@@ -167,9 +158,9 @@ Blockly.createMainWorkspace_ = function(svg, options, blockDragSurface,
 
   // Set the theme name and renderer name onto the injection div.
   Blockly.utils.dom.addClass(mainWorkspace.getInjectionDiv(),
-      (wsOptions.renderer || 'geras') + '-renderer');
+      mainWorkspace.getRenderer().getClassName());
   Blockly.utils.dom.addClass(mainWorkspace.getInjectionDiv(),
-      mainWorkspace.getTheme().name + '-theme');
+      mainWorkspace.getTheme().getClassName());
 
   if (!wsOptions.hasCategories && wsOptions.languageTree) {
     // Add flyout as an <svg> that is a sibling of the workspace svg.
@@ -375,7 +366,7 @@ Blockly.init_ = function(mainWorkspace) {
     } else if (flyout) {
       // Build a fixed flyout with the root blocks.
       flyout.init(mainWorkspace);
-      flyout.show(options.languageTree.childNodes);
+      flyout.show(options.languageTree);
       flyout.scrollToStart();
     }
   }

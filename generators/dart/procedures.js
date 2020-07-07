@@ -1,18 +1,7 @@
 /**
  * @license
  * Copyright 2014 Google LLC
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 /**
@@ -59,8 +48,9 @@ Blockly.Dart['procedures_defreturn'] = function(block) {
   }
   var returnType = returnValue ? 'dynamic' : 'void';
   var args = [];
-  for (var i = 0; i < block.arguments_.length; i++) {
-    args[i] = Blockly.Dart.variableDB_.getName(block.arguments_[i],
+  var variables = block.getVars();
+  for (var i = 0; i < variables.length; i++) {
+    args[i] = Blockly.Dart.variableDB_.getName(variables[i],
         Blockly.VARIABLE_CATEGORY_NAME);
   }
   var code = returnType + ' ' + funcName + '(' + args.join(', ') + ') {\n' +
@@ -80,7 +70,8 @@ Blockly.Dart['procedures_callreturn'] = function(block) {
   var funcName = Blockly.Dart.variableDB_.getName(block.getFieldValue('NAME'),
       Blockly.PROCEDURE_CATEGORY_NAME);
   var args = [];
-  for (var i = 0; i < block.arguments_.length; i++) {
+  var variables = block.getVars();
+  for (var i = 0; i < variables.length; i++) {
     args[i] = Blockly.Dart.valueToCode(block, 'ARG' + i,
         Blockly.Dart.ORDER_NONE) || 'null';
   }

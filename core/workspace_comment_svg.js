@@ -1,18 +1,7 @@
 /**
  * @license
  * Copyright 2017 Google LLC
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 /**
@@ -36,6 +25,8 @@ goog.require('Blockly.utils.object');
 goog.require('Blockly.utils.Rect');
 goog.require('Blockly.WorkspaceComment');
 
+goog.requireType('Blockly.IBoundedElement');
+goog.requireType('Blockly.ICopyable');
 
 /**
  * Class for a workspace comment's SVG representation.
@@ -46,6 +37,8 @@ goog.require('Blockly.WorkspaceComment');
  * @param {string=} opt_id Optional ID.  Use this ID if provided, otherwise
  *     create a new ID.
  * @extends {Blockly.WorkspaceComment}
+ * @implements {Blockly.IBoundedElement}
+ * @implements {Blockly.ICopyable}
  * @constructor
  */
 Blockly.WorkspaceCommentSvg = function(workspace, content, height, width,
@@ -624,6 +617,19 @@ Blockly.WorkspaceCommentSvg.prototype.toXmlWithXY = function(opt_noId) {
 };
 
 /**
+ * Encode a comment for copying.
+ * @return {!Blockly.ICopyable.CopyData} Copy metadata.
+ * @package
+ */
+Blockly.WorkspaceCommentSvg.prototype.toCopyData = function() {
+  return {
+    xml: this.toXmlWithXY(),
+    source: this.workspace,
+    typeCounts: null
+  };
+};
+
+/**
  * CSS for workspace comment.  See css.js for use.
  */
 Blockly.Css.register([
@@ -636,7 +642,7 @@ Blockly.Css.register([
   '.blocklyCommentRect {',
     'fill: #E7DE8E;',
     'stroke: #bcA903;',
-    'stroke-width: 1px',
+    'stroke-width: 1px;',
   '}',
 
   '.blocklyCommentTarget {',
@@ -669,11 +675,11 @@ Blockly.Css.register([
   '.blocklyCommentDeleteIcon {',
     'cursor: pointer;',
     'fill: #000;',
-    'display: none',
+    'display: none;',
   '}',
 
   '.blocklySelected > .blocklyCommentDeleteIcon {',
-    'display: block',
+    'display: block;',
   '}',
 
   '.blocklyDeleteIconShape {',

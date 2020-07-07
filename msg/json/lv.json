@@ -4,11 +4,12 @@
 			"Elomage",
 			"Janis",
 			"Papuass",
-			"Silraks",
-			"RFenichel"
+			"RFenichel",
+			"Silraks"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "vienums",
+	"UNNAMED_KEY": "nenosaukts",
 	"TODAY": "Šodiena",
 	"DUPLICATE_BLOCK": "Dublēt",
 	"ADD_COMMENT": "Pievienot komentāru",

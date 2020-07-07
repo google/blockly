@@ -1,18 +1,7 @@
 /**
  * @license
  * Copyright 2019 Google LLC
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 /**
@@ -80,7 +69,7 @@ Blockly.zelos.ConstantProvider = function() {
    * @override
    */
   this.NOTCH_OFFSET_LEFT = 3 * this.GRID_UNIT;
-  
+
   /**
    * @override
    */
@@ -109,7 +98,7 @@ Blockly.zelos.ConstantProvider = function() {
   /**
    * @override
    */
-  this.TOP_ROW_MIN_HEIGHT = this.GRID_UNIT;
+  this.TOP_ROW_MIN_HEIGHT = this.CORNER_RADIUS;
 
   /**
    * @override
@@ -119,7 +108,7 @@ Blockly.zelos.ConstantProvider = function() {
   /**
    * @override
    */
-  this.BOTTOM_ROW_MIN_HEIGHT = this.GRID_UNIT;
+  this.BOTTOM_ROW_MIN_HEIGHT = this.CORNER_RADIUS;
 
   /**
    * @override
@@ -259,19 +248,7 @@ Blockly.zelos.ConstantProvider = function() {
    * @override
    */
   this.FIELD_TEXT_FONTFAMILY =
-      '"Helvetica Neue", "Segoe UI", Helvetica, sans-serif';
-
-  /**
-   * @override
-   */
-  this.FIELD_TEXT_HEIGHT = 13.1;
-
-  /**
-   * Used by positioning text on IE and Edge as they don't support
-   * dominant-baseline:center.
-   * @override
-   */
-  this.FIELD_TEXT_BASELINE_Y = 13.1;
+    '"Helvetica Neue", "Segoe UI", Helvetica, sans-serif';
 
   /**
    * @override
@@ -282,11 +259,11 @@ Blockly.zelos.ConstantProvider = function() {
    * @override
    */
   this.FIELD_BORDER_RECT_X_PADDING = 2 * this.GRID_UNIT;
-  
+
   /**
    * @override
    */
-  this.FIELD_BORDER_RECT_Y_PADDING = 1 * this.GRID_UNIT;
+  this.FIELD_BORDER_RECT_Y_PADDING = 1.625 * this.GRID_UNIT;
 
   /**
    * @override
@@ -326,11 +303,6 @@ Blockly.zelos.ConstantProvider = function() {
   /**
    * @override
    */
-  this.FIELD_TEXT_Y_OFFSET = Blockly.utils.userAgent.CHROME ? -.45 : 0;
-
-  /**
-   * @override
-   */
   this.FIELD_COLOUR_FULL_BLOCK = true;
 
   /**
@@ -346,35 +318,55 @@ Blockly.zelos.ConstantProvider = function() {
   /**
    * @override
    */
-  this.FIELD_CHECKBOX_X_OFFSET = this.FIELD_BORDER_RECT_X_PADDING - 3;
+  this.FIELD_CHECKBOX_X_OFFSET = 1 * this.GRID_UNIT;
 
   /**
-   * @override
+   * The maximum width of a dynamic connection shape.
+   * @type {number}
    */
-  this.FIELD_CHECKBOX_Y_OFFSET = 22;
+  this.MAX_DYNAMIC_CONNECTION_SHAPE_WIDTH = 12 * this.GRID_UNIT;
 
   /**
-   * @override
+   * The selected glow colour.
+   * @type {string}
    */
-  this.FIELD_CHECKBOX_DEFAULT_WIDTH = 6 * this.GRID_UNIT;
+  this.SELECTED_GLOW_COLOUR = '#fff200';
 
   /**
-   * The ID of the highlight glow filter, or the empty string if no filter is
+   * The size of the selected glow.
+   * @type {number}
+   */
+  this.SELECTED_GLOW_SIZE = 0.5;
+
+  /**
+   * The replacement glow colour.
+   * @type {string}
+   */
+  this.REPLACEMENT_GLOW_COLOUR = '#fff200';
+
+  /**
+   * The size of the selected glow.
+   * @type {number}
+   */
+  this.REPLACEMENT_GLOW_SIZE = 2;
+
+  /**
+   * The ID of the selected glow filter, or the empty string if no filter is
    * set.
    * @type {string}
    * @package
    */
-  this.highlightGlowFilterId = '';
+  this.selectedGlowFilterId = '';
 
   /**
-   * The <filter> element to use for a higlight glow, or null if not set.
+   * The <filter> element to use for a selected glow, or null if not set.
    * @type {SVGElement}
    * @private
    */
-  this.highlightGlowFilter_ = null;
+  this.selectedGlowFilter_ = null;
 
   /**
-   * The ID of the highlight glow filter, or the empty string if no filter is
+   * The ID of the replacement glow filter, or the empty string if no filter is
    * set.
    * @type {string}
    * @package
@@ -382,7 +374,7 @@ Blockly.zelos.ConstantProvider = function() {
   this.replacementGlowFilterId = '';
 
   /**
-   * The <filter> element to use for a higlight glow, or null if not set.
+   * The <filter> element to use for a replacement glow, or null if not set.
    * @type {SVGElement}
    * @private
    */
@@ -394,13 +386,52 @@ Blockly.utils.object.inherits(Blockly.zelos.ConstantProvider,
 /**
  * @override
  */
+Blockly.zelos.ConstantProvider.prototype.setFontConstants_ = function(theme) {
+  Blockly.zelos.ConstantProvider.superClass_.setFontConstants_.call(this,
+      theme);
+
+  this.FIELD_BORDER_RECT_HEIGHT = this.FIELD_TEXT_HEIGHT +
+      this.FIELD_BORDER_RECT_Y_PADDING * 2;
+  this.FIELD_DROPDOWN_BORDER_RECT_HEIGHT = this.FIELD_BORDER_RECT_HEIGHT;
+};
+
+/**
+ * @override
+ */
 Blockly.zelos.ConstantProvider.prototype.init = function() {
   Blockly.zelos.ConstantProvider.superClass_.init.call(this);
   this.HEXAGONAL = this.makeHexagonal();
   this.ROUNDED = this.makeRounded();
   this.SQUARED = this.makeSquared();
 
-  this.STATEMENT_INPUT_NOTCH_OFFSET += this.INSIDE_CORNERS.rightWidth;
+  this.STATEMENT_INPUT_NOTCH_OFFSET = this.NOTCH_OFFSET_LEFT +
+      this.INSIDE_CORNERS.rightWidth;
+};
+
+/**
+ * @override
+ */
+Blockly.zelos.ConstantProvider.prototype.setDynamicProperties_ = function(
+    theme) {
+  Blockly.zelos.ConstantProvider.superClass_.setDynamicProperties_.call(this,
+      theme);
+
+  this.SELECTED_GLOW_COLOUR =
+      theme.getComponentStyle('selectedGlowColour') ||
+      this.SELECTED_GLOW_COLOUR;
+  var selectedGlowSize =
+      Number(theme.getComponentStyle('selectedGlowSize'));
+  this.SELECTED_GLOW_SIZE =
+      selectedGlowSize && !isNaN(selectedGlowSize) ?
+      selectedGlowSize : this.SELECTED_GLOW_SIZE;
+  this.REPLACEMENT_GLOW_COLOUR =
+      theme.getComponentStyle('replacementGlowColour') ||
+      this.REPLACEMENT_GLOW_COLOUR;
+  var replacementGlowSize =
+      Number(theme.getComponentStyle('replacementGlowSize'));
+  this.REPLACEMENT_GLOW_SIZE =
+      replacementGlowSize && !isNaN(replacementGlowSize) ?
+      replacementGlowSize : this.REPLACEMENT_GLOW_SIZE;
 };
 
 /**
@@ -408,8 +439,11 @@ Blockly.zelos.ConstantProvider.prototype.init = function() {
  */
 Blockly.zelos.ConstantProvider.prototype.dispose = function() {
   Blockly.zelos.ConstantProvider.superClass_.dispose.call(this);
-  if (this.highlightGlowFilter_) {
-    Blockly.utils.dom.removeNode(this.highlightGlowFilter_);
+  if (this.selectedGlowFilter_) {
+    Blockly.utils.dom.removeNode(this.selectedGlowFilter_);
+  }
+  if (this.replacementGlowFilter_) {
+    Blockly.utils.dom.removeNode(this.replacementGlowFilter_);
   }
 };
 
@@ -441,13 +475,16 @@ Blockly.zelos.ConstantProvider.prototype.makeStartHat = function() {
  * @package
  */
 Blockly.zelos.ConstantProvider.prototype.makeHexagonal = function() {
+  var maxWidth = this.MAX_DYNAMIC_CONNECTION_SHAPE_WIDTH;
+
   // The main path for the hexagonal connection shape is made out of two lines.
-  // The lines are defined with relative positons and require the block height.
+  // The lines are defined with relative positions and require the block height.
   // The 'up' and 'down' versions of the paths are the same, but the Y sign
   // flips.  The 'left' and 'right' versions of the path are also the same, but
   // the X sign flips.
   function makeMainPath(height, up, right) {
-    var width = height / 2;
+    var halfHeight = height / 2;
+    var width = halfHeight > maxWidth ? maxWidth : halfHeight;
     var forward = up ? -1 : 1;
     var direction = right ? -1 : 1;
     var dy = forward * height / 2;
@@ -459,7 +496,8 @@ Blockly.zelos.ConstantProvider.prototype.makeHexagonal = function() {
     type: this.SHAPES.HEXAGONAL,
     isDynamic: true,
     width: function(height) {
-      return height / 2;
+      var halfHeight = height / 2;
+      return halfHeight > maxWidth ? maxWidth : halfHeight;
     },
     height: function(height) {
       return height;
@@ -492,22 +530,34 @@ Blockly.zelos.ConstantProvider.prototype.makeHexagonal = function() {
  * @package
  */
 Blockly.zelos.ConstantProvider.prototype.makeRounded = function() {
-  // The main path for the rounded connection shape is made out of a single arc.
-  // The arc is defined with relative positions and requires the block height.
+  var maxWidth = this.MAX_DYNAMIC_CONNECTION_SHAPE_WIDTH;
+  var maxHeight = maxWidth * 2;
+
+  // The main path for the rounded connection shape is made out of two arcs and
+  // a line that joins them.  The arcs are defined with relative positions.
+  // Usually, the height of the block is split between the two arcs. In the case
+  // where the height of the block exceeds the maximum height, a line is drawn
+  // in between the two arcs.
   // The 'up' and 'down' versions of the paths are the same, but the Y sign
   // flips.  The 'up' and 'right' versions of the path flip the sweep-flag
   // which moves the arc at negative angles.
-  function makeMainPath(height, up, right) {
-    var edgeWidth = height / 2;
-    return Blockly.utils.svgPaths.arc('a', '0 0 ' + (up || right ? 1 : 0), edgeWidth,
-        Blockly.utils.svgPaths.point(0, (up ? -1 : 1) * edgeWidth * 2));
+  function makeMainPath(blockHeight, up, right) {
+    var remainingHeight = blockHeight > maxHeight ? blockHeight - maxHeight : 0;
+    var height = blockHeight > maxHeight ? maxHeight : blockHeight;
+    var radius = height / 2;
+    return Blockly.utils.svgPaths.arc('a', '0 0,1', radius,
+        Blockly.utils.svgPaths.point((up ? -1 : 1) * radius, (up ? -1 : 1) * radius)) +
+      Blockly.utils.svgPaths.lineOnAxis('v', (right ? 1 : -1) * remainingHeight) +
+      Blockly.utils.svgPaths.arc('a', '0 0,1', radius,
+          Blockly.utils.svgPaths.point((up ? 1 : -1) * radius, (up ? -1 : 1) * radius));
   }
 
   return {
     type: this.SHAPES.ROUND,
     isDynamic: true,
     width: function(height) {
-      return height / 2;
+      var halfHeight = height / 2;
+      return halfHeight > maxWidth ? maxWidth : halfHeight;
     },
     height: function(height) {
       return height;
@@ -600,7 +650,7 @@ Blockly.zelos.ConstantProvider.prototype.shapeFor = function(
     case Blockly.INPUT_VALUE:
     case Blockly.OUTPUT_VALUE:
       var outputShape = connection.getSourceBlock().getOutputShape();
-      // If the block has an ouput shape set, use that instead.
+      // If the block has an output shape set, use that instead.
       if (outputShape != null) {
         switch (outputShape) {
           case this.SHAPES.HEXAGONAL: return this.HEXAGONAL;
@@ -747,8 +797,10 @@ Blockly.zelos.ConstantProvider.prototype.generateTertiaryColour_ = function(
 /**
  * @override
  */
-Blockly.zelos.ConstantProvider.prototype.createDom = function(svg) {
-  Blockly.zelos.ConstantProvider.superClass_.createDom.call(this, svg);
+Blockly.zelos.ConstantProvider.prototype.createDom = function(svg,
+    tagName, selector) {
+  Blockly.zelos.ConstantProvider.superClass_.createDom.call(this, svg,
+      tagName, selector);
   /*
   <defs>
     ... filters go here ...
@@ -757,9 +809,9 @@ Blockly.zelos.ConstantProvider.prototype.createDom = function(svg) {
   var defs = Blockly.utils.dom.createSvgElement('defs', {}, svg);
   // Using a dilate distorts the block shape.
   // Instead use a gaussian blur, and then set all alpha to 1 with a transfer.
-  var highlightGlowFilter = Blockly.utils.dom.createSvgElement('filter',
+  var selectedGlowFilter = Blockly.utils.dom.createSvgElement('filter',
       {
-        'id': 'blocklyHighlightGlowFilter' + this.randomIdentifier_,
+        'id': 'blocklySelectedGlowFilter' + this.randomIdentifier,
         'height': '160%',
         'width': '180%',
         y: '-30%',
@@ -769,39 +821,39 @@ Blockly.zelos.ConstantProvider.prototype.createDom = function(svg) {
   Blockly.utils.dom.createSvgElement('feGaussianBlur',
       {
         'in': 'SourceGraphic',
-        'stdDeviation': 0.5  // TODO: configure size in theme.
+        'stdDeviation': this.SELECTED_GLOW_SIZE
       },
-      highlightGlowFilter);
+      selectedGlowFilter);
   // Set all gaussian blur pixels to 1 opacity before applying flood
-  var highlightComponentTransfer = Blockly.utils.dom.createSvgElement(
-      'feComponentTransfer', {'result': 'outBlur'}, highlightGlowFilter);
+  var selectedComponentTransfer = Blockly.utils.dom.createSvgElement(
+      'feComponentTransfer', {'result': 'outBlur'}, selectedGlowFilter);
   Blockly.utils.dom.createSvgElement('feFuncA',
       {
         'type': 'table', 'tableValues': '0 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1'
       },
-      highlightComponentTransfer);
+      selectedComponentTransfer);
   // Color the highlight
   Blockly.utils.dom.createSvgElement('feFlood',
       {
-        'flood-color': '#fff200', // TODO: configure colour in theme.
+        'flood-color': this.SELECTED_GLOW_COLOUR,
         'flood-opacity': 1,
         'result': 'outColor'
       },
-      highlightGlowFilter);
+      selectedGlowFilter);
   Blockly.utils.dom.createSvgElement('feComposite',
       {
         'in': 'outColor', 'in2': 'outBlur',
         'operator': 'in', 'result': 'outGlow'
       },
-      highlightGlowFilter);
-  this.highlightGlowFilterId = highlightGlowFilter.id;
-  this.highlightGlowFilter_ = highlightGlowFilter;
+      selectedGlowFilter);
+  this.selectedGlowFilterId = selectedGlowFilter.id;
+  this.selectedGlowFilter_ = selectedGlowFilter;
 
   // Using a dilate distorts the block shape.
   // Instead use a gaussian blur, and then set all alpha to 1 with a transfer.
   var replacementGlowFilter = Blockly.utils.dom.createSvgElement('filter',
       {
-        'id': 'blocklyReplacementGlowFilter' + this.randomIdentifier_,
+        'id': 'blocklyReplacementGlowFilter' + this.randomIdentifier,
         'height': '160%',
         'width': '180%',
         y: '-30%',
@@ -811,7 +863,7 @@ Blockly.zelos.ConstantProvider.prototype.createDom = function(svg) {
   Blockly.utils.dom.createSvgElement('feGaussianBlur',
       {
         'in': 'SourceGraphic',
-        'stdDeviation': 2  // TODO: configure size in theme.
+        'stdDeviation': this.REPLACEMENT_GLOW_SIZE
       },
       replacementGlowFilter);
   // Set all gaussian blur pixels to 1 opacity before applying flood
@@ -825,7 +877,7 @@ Blockly.zelos.ConstantProvider.prototype.createDom = function(svg) {
   // Color the highlight
   Blockly.utils.dom.createSvgElement('feFlood',
       {
-        'flood-color': '#fff200', // TODO: configure colour in theme.
+        'flood-color': this.REPLACEMENT_GLOW_COLOUR,
         'flood-opacity': 1,
         'result': 'outColor'
       },
@@ -849,16 +901,19 @@ Blockly.zelos.ConstantProvider.prototype.createDom = function(svg) {
 /**
  * @override
  */
-Blockly.zelos.ConstantProvider.prototype.getCSS_ = function(name) {
-  var selector = '.' + name + '-renderer';
+Blockly.zelos.ConstantProvider.prototype.getCSS_ = function(selector) {
   return [
     /* eslint-disable indent */
+    // Text.
+    selector + ' .blocklyText,',
+    selector + ' .blocklyFlyoutLabelText {',
+      'font: ' + this.FIELD_TEXT_FONTWEIGHT + ' ' +
+          this.FIELD_TEXT_FONTSIZE + 'pt ' + this.FIELD_TEXT_FONTFAMILY + ';',
+    '}',
+
     // Fields.
     selector + ' .blocklyText {',
       'fill: #fff;',
-      'font-family: ' + this.FIELD_TEXT_FONTFAMILY + ';',
-      'font-size: ' + this.FIELD_TEXT_FONTSIZE + 'pt;',
-      'font-weight: ' + this.FIELD_TEXT_FONTWEIGHT + ';',
     '}',
     selector + ' .blocklyNonEditableText>rect:not(.blocklyDropdownRect),',
     selector + ' .blocklyEditableText>rect:not(.blocklyDropdownRect) {',
@@ -871,9 +926,19 @@ Blockly.zelos.ConstantProvider.prototype.getCSS_ = function(name) {
       'fill: #575E75;',
     '}',
 
+    // Flyout labels.
+    selector + ' .blocklyFlyoutLabelText {',
+      'fill: #575E75;',
+    '}',
+
+    // Bubbles.
+    selector + ' .blocklyText.blocklyBubbleText {',
+      'fill: #575E75;',
+    '}',
+
     // Editable field hover.
     selector + ' .blocklyDraggable:not(.blocklyDisabled)',
-    ' .blocklyEditableText:not(.editing):hover>rect ,',
+    ' .blocklyEditableText:not(.editing):hover>rect,',
     selector + ' .blocklyDraggable:not(.blocklyDisabled)',
     ' .blocklyEditableText:not(.editing):hover>.blocklyPath {',
       'stroke: #fff;',
@@ -886,7 +951,7 @@ Blockly.zelos.ConstantProvider.prototype.getCSS_ = function(name) {
       'font-weight: ' + this.FIELD_TEXT_FONTWEIGHT + ';',
       'color: #575E75;',
     '}',
-  
+
     // Dropdown field.
     selector + ' .blocklyDropdownText {',
       'fill: #fff !important;',
@@ -902,12 +967,18 @@ Blockly.zelos.ConstantProvider.prototype.getCSS_ = function(name) {
 
     // Connection highlight.
     selector + ' .blocklyHighlightedConnectionPath {',
-      'stroke: #fff200;',
+      'stroke: ' + this.SELECTED_GLOW_COLOUR + ';',
     '}',
 
     // Disabled outline paths.
     selector + ' .blocklyDisabled > .blocklyOutlinePath {',
-      'fill: url(#blocklyDisabledPattern' + this.randomIdentifier_ + ')',
+      'fill: url(#blocklyDisabledPattern' + this.randomIdentifier + ')',
+    '}',
+
+    // Insertion marker.
+    selector + ' .blocklyInsertionMarker>.blocklyPath {',
+      'fill-opacity: ' + this.INSERTION_MARKER_OPACITY + ';',
+      'stroke: none;',
     '}',
     /* eslint-enable indent */
   ];

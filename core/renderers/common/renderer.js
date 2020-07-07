@@ -1,18 +1,7 @@
 /**
  * @license
  * Copyright 2019 Google LLC
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 /**
@@ -29,8 +18,10 @@ goog.require('Blockly.blockRendering.Drawer');
 goog.require('Blockly.blockRendering.IPathObject');
 goog.require('Blockly.blockRendering.PathObject');
 goog.require('Blockly.blockRendering.RenderInfo');
+goog.require('Blockly.InsertionMarkerManager');
 
 goog.requireType('Blockly.blockRendering.Debug');
+goog.requireType('Blockly.IRegistrable');
 
 
 /**
@@ -38,6 +29,7 @@ goog.requireType('Blockly.blockRendering.Debug');
  * @param {string} name The renderer name.
  * @package
  * @constructor
+ * @implements {Blockly.IRegistrable}
  */
 Blockly.blockRendering.Renderer = function(name) {
 
@@ -54,15 +46,81 @@ Blockly.blockRendering.Renderer = function(name) {
    * @private
    */
   this.constants_ = null;
+
+  /**
+   * Rendering constant overrides, passed in through options.
+   * @type {?Object}
+   * @package
+   */
+  this.overrides = null;
+};
+
+/**
+ * Gets the class name that identifies this renderer.
+ * @return {string} The CSS class name.
+ * @package
+ */
+Blockly.blockRendering.Renderer.prototype.getClassName = function() {
+  return this.name + '-renderer';
 };
 
 /**
  * Initialize the renderer.
+ * @param {!Blockly.Theme} theme The workspace theme object.
+ * @param {Object=} opt_rendererOverrides Rendering constant overrides.
  * @package
  */
-Blockly.blockRendering.Renderer.prototype.init = function() {
+Blockly.blockRendering.Renderer.prototype.init = function(theme,
+    opt_rendererOverrides) {
   this.constants_ = this.makeConstants_();
+  if (opt_rendererOverrides) {
+    this.overrides = opt_rendererOverrides;
+    Blockly.utils.object.mixin(this.constants_, opt_rendererOverrides);
+  }
+  this.constants_.setTheme(theme);
   this.constants_.init();
+};
+
+/**
+ * Create any DOM elements that this renderer needs.
+ * @param {!SVGElement} svg The root of the workspace's SVG.
+ * @param {!Blockly.Theme} theme The workspace theme object.
+ * @package
+ */
+Blockly.blockRendering.Renderer.prototype.createDom = function(svg, theme) {
+  this.constants_.createDom(svg, this.name + '-' + theme.name,
+      '.' + this.getClassName() + '.' + theme.getClassName());
+};
+
+/**
+ * Refresh the renderer after a theme change.
+ * @param {!SVGElement} svg The root of the workspace's SVG.
+ * @param {!Blockly.Theme} theme The workspace theme object.
+ * @package
+ */
+Blockly.blockRendering.Renderer.prototype.refreshDom = function(svg, theme) {
+  var previousConstants = this.getConstants();
+  previousConstants.dispose();
+  this.constants_ = this.makeConstants_();
+  if (this.overrides) {
+    Blockly.utils.object.mixin(this.constants_, this.overrides);
+  }
+  // Ensure the constant provider's random identifier does not change.
+  this.constants_.randomIdentifier = previousConstants.randomIdentifier;
+  this.constants_.setTheme(theme);
+  this.constants_.init();
+  this.createDom(svg, theme);
+};
+
+/**
+ * Dispose of this renderer.
+ * Delete all DOM elements that this renderer and its constants created.
+ * @package
+ */
+Blockly.blockRendering.Renderer.prototype.dispose = function() {
+  if (this.constants_) {
+    this.constants_.dispose();
+  }
 };
 
 /**
@@ -106,7 +164,7 @@ Blockly.blockRendering.Renderer.prototype.makeDebugger_ = function() {
   if (!Blockly.blockRendering.Debug) {
     throw Error('Missing require for Blockly.blockRendering.Debug');
   }
-  return new Blockly.blockRendering.Debug();
+  return new Blockly.blockRendering.Debug(this.getConstants());
 };
 
 /**
@@ -163,19 +221,69 @@ Blockly.blockRendering.Renderer.prototype.shouldHighlightConnection =
 }; /* eslint-enable indent */
 
 /**
- * Determine whether or not to insert a dragged block into a stack.
- * @param {!Blockly.Block} block The target block.
- * @param {!Blockly.Connection} conn The closest connection.
- * @return {boolean} True if we should insert the dragged block into the stack.
+ * Checks if an orphaned block can connect to the "end" of the topBlock's
+ * block-clump. If the clump is a row the end is the last input. If the clump
+ * is a stack, the end is the last next connection. If the clump is neither,
+ * then this returns false.
+ * @param {!Blockly.BlockSvg} topBlock The top block of the block clump we want to try and
+ *     connect to.
+ * @param {!Blockly.BlockSvg} orphanBlock The orphan block that wants to find
+ *     a home.
+ * @param {number} localType The type of the connection being dragged.
+ * @return {boolean} Whether there is a home for the orphan or not.
  * @package
  */
-Blockly.blockRendering.Renderer.prototype.shouldInsertDraggedBlock =
-    function(block, conn) {
-    /* eslint-disable indent */
-  return !conn.isConnected() ||
-    !!Blockly.Connection.lastConnectionInRow(block,
-        conn.targetConnection.getSourceBlock());
-}; /* eslint-enable indent */
+Blockly.blockRendering.Renderer.prototype.orphanCanConnectAtEnd =
+    function(topBlock, orphanBlock, localType) {
+      var orphanConnection = null;
+      var lastConnection = null;
+      if (localType == Blockly.OUTPUT_VALUE) {  // We are replacing an output.
+        orphanConnection = orphanBlock.outputConnection;
+        // TODO:  I don't think this function necessarily has the correct logic,
+        //  but for now it is being kept for behavioral backwards-compat.
+        lastConnection = Blockly.Connection
+            .lastConnectionInRow(
+                /** @type {!Blockly.Block} **/ (topBlock), orphanBlock);
+      } else {  // We are replacing a previous.
+        orphanConnection = orphanBlock.previousConnection;
+        // TODO: This lives on the block while lastConnectionInRow lives on
+        //  on the connection. Something is fishy.
+        lastConnection = topBlock.lastConnectionInStack();
+      }
+
+      if (!lastConnection) {
+        return false;
+      }
+      return orphanConnection.checkType(lastConnection);
+    };
+
+/**
+ * Chooses a connection preview method based on the available connection, the
+ * current dragged connection, and the block being dragged.
+ * @param {!Blockly.RenderedConnection} closest The available connection.
+ * @param {!Blockly.RenderedConnection} local The connection currently being
+ *     dragged.
+ * @param {!Blockly.BlockSvg} topBlock The block currently being dragged.
+ * @return {!Blockly.InsertionMarkerManager.PREVIEW_TYPE} The preview type
+ *     to display.
+ * @package
+ */
+Blockly.blockRendering.Renderer.prototype.getConnectionPreviewMethod =
+    function(closest, local, topBlock) {
+      if (local.type == Blockly.OUTPUT_VALUE ||
+          local.type == Blockly.PREVIOUS_STATEMENT) {
+        if (!closest.isConnected() ||
+            this.orphanCanConnectAtEnd(
+                topBlock,
+                /** @type {!Blockly.BlockSvg} */ (closest.targetBlock()),
+                local.type)) {
+          return Blockly.InsertionMarkerManager.PREVIEW_TYPE.INSERTION_MARKER;
+        }
+        return Blockly.InsertionMarkerManager.PREVIEW_TYPE.REPLACEMENT_FADE;
+      }
+
+      return Blockly.InsertionMarkerManager.PREVIEW_TYPE.INSERTION_MARKER;
+    };
 
 /**
  * Render the block.

@@ -1,393 +1,216 @@
 /**
  * @license
  * Copyright 2019 Google LLC
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 suite('Number Fields', function() {
-  function assertValue(numberField, expectedValue, opt_expectedText) {
-    var actualValue = numberField.getValue();
-    var actualText = numberField.getText();
-    opt_expectedText = opt_expectedText || String(expectedValue);
-    assertEquals(String(actualValue), String(expectedValue));
-    assertEquals(Number(actualValue), expectedValue);
-    assertEquals(actualText, opt_expectedText);
-  }
-  function assertValueDefault(numberField) {
-    assertValue(numberField, 0);
-  }
-  function assertNumberField(numberField, expectedMin, expectedMax,
+  /**
+   * Configuration for field tests with invalid values.
+   * @type {!Array<!FieldCreationTestCase>}
+   */
+  var invalidValueTestCases = [
+    {title: 'Undefined', value: undefined},
+    {title: 'Null', value: null},
+    {title: 'NaN', value: NaN},
+    {title: 'Non-Parsable String', value: 'bad'},
+  ];
+  /**
+   * Configuration for field tests with valid values.
+   * @type {!Array<!FieldCreationTestCase>}
+   */
+  var validValueTestCases = [
+    {title: 'Integer', value: 1, expectedValue: 1},
+    {title: 'Float', value: 1.5, expectedValue: 1.5},
+    {title: 'Integer String', value: '1', expectedValue: 1},
+    {title: 'Float String', value: '1.5', expectedValue: 1.5},
+    {title: 'Infinity', value: Infinity, expectedValue: Infinity},
+    {title: 'Negative Infinity', value: -Infinity, expectedValue: -Infinity},
+    {title: 'Infinity String', value: 'Infinity', expectedValue: Infinity},
+    {title: 'Negative Infinity String', value: '-Infinity',
+      expectedValue: -Infinity},
+  ];
+  var addArgsAndJson = function(testCase) {
+    testCase.args = Array(4).fill(testCase.value);
+    testCase.json = {'value': testCase.value, 'min': testCase.value,
+      'max': testCase.value, 'precision': testCase.value};
+  };
+  invalidValueTestCases.forEach(addArgsAndJson);
+  validValueTestCases.forEach(addArgsAndJson);
+
+  /**
+   * The expected default value for the field being tested.
+   * @type {*}
+   */
+  var defaultFieldValue = 0;
+  /**
+   * Asserts that the field property values are as expected.
+   * @param {!Blockly.FieldNumber} field The field to check.
+   * @param {!number} expectedMin The expected min.
+   * @param {!number} expectedMax The expected max.
+   * @param {!number} expectedPrecision The expected precision.
+   * @param {!number} expectedValue The expected value.
+   */
+  function assertNumberField(field, expectedMin, expectedMax,
       expectedPrecision, expectedValue) {
-    assertValue(numberField, expectedValue);
-    chai.assert.equal(numberField.getMin(), expectedMin);
-    chai.assert.equal(numberField.getMax(), expectedMax);
-    chai.assert.equal(numberField.getPrecision(), expectedPrecision);
+    testHelpers.assertFieldValue(field, expectedValue);
+    chai.assert.equal(field.getMin(), expectedMin, 'Min');
+    chai.assert.equal(field.getMax(), expectedMax, 'Max');
+    chai.assert.equal(
+        field.getPrecision(), expectedPrecision, 'Precision');
   }
-  function assertNumberFieldDefault(numberField) {
-    assertNumberField(numberField, -Infinity, Infinity, 0, 0);
-  }
-  function createNumberFieldSameValuesConstructor(value) {
-    return new Blockly.FieldNumber(value, value, value, value);
-  }
-  function createNumberFieldSameValuesJson(value) {
-    return Blockly.FieldNumber.fromJson(
-        { 'value': value, min: value, max: value, precision: value });
-  }
-  function assertNumberFieldSameValues(numberField, value) {
-    assertNumberField(numberField, value, value, value, value);
-  }
-  suite('Constructor', function() {
-    test('Empty', function() {
-      var numberField = new Blockly.FieldNumber();
-      assertNumberFieldDefault(numberField);
-    });
-    test('Undefined', function() {
-      var numberField = createNumberFieldSameValuesConstructor(undefined);
-      assertNumberFieldDefault(numberField);
-    });
-    test('NaN', function() {
-      var numberField = createNumberFieldSameValuesConstructor(NaN);
-      assertNumberFieldDefault(numberField);
-    });
-    test('Integer', function() {
-      var numberField = createNumberFieldSameValuesConstructor(1);
-      assertNumberFieldSameValues(numberField, 1);
-    });
-    test('Float', function() {
-      var numberField = createNumberFieldSameValuesConstructor(1.5);
-      assertNumberFieldSameValues(numberField, 1.5);
-    });
-    test('Integer String', function() {
-      var numberField = createNumberFieldSameValuesConstructor('1');
-      assertNumberFieldSameValues(numberField, 1);
-    });
-    test('Float String', function() {
-      var numberField = createNumberFieldSameValuesConstructor('1.5');
-      assertNumberFieldSameValues(numberField, 1.5);
-    });
-    test('Infinity', function() {
-      var numberField = createNumberFieldSameValuesConstructor('Infinity');
-      assertNumberFieldSameValues(numberField, Infinity);
-    });
-    test('Negative Infinity String', function() {
-      var numberField = createNumberFieldSameValuesConstructor('-Infinity');
-      assertNumberFieldSameValues(numberField, -Infinity);
-    });
-  });
-  suite('fromJson', function() {
-    test('Empty', function() {
-      var numberField = Blockly.FieldNumber.fromJson({});
-      assertNumberFieldDefault(numberField);
-    });
-    test('Undefined', function() {
-      var numberField = createNumberFieldSameValuesJson(undefined);
-      assertNumberFieldDefault(numberField);
-    });
-    test('NaN', function() {
-      var numberField = createNumberFieldSameValuesJson(NaN);
-      assertNumberFieldDefault(numberField);
-    });
-    test('Integer', function() {
-      var numberField = createNumberFieldSameValuesJson(1);
-      assertNumberFieldSameValues(numberField, 1);
-    });
-    test('Float', function() {
-      var numberField = createNumberFieldSameValuesJson(1.5);
-      assertNumberFieldSameValues(numberField, 1.5);
-    });
-    test('Integer String', function() {
-      var numberField = createNumberFieldSameValuesJson('1');
-      assertNumberFieldSameValues(numberField, 1);
-    });
-    test('Float String', function() {
-      var numberField = createNumberFieldSameValuesJson('1.5');
-      assertNumberFieldSameValues(numberField, 1.5);
-    });
-    test('Infinity', function() {
-      var numberField = createNumberFieldSameValuesJson('Infinity');
-      assertNumberFieldSameValues(numberField, Infinity);
-    });
-    test('Negative Infinity String', function() {
-      var numberField = createNumberFieldSameValuesJson('-Infinity');
-      assertNumberFieldSameValues(numberField, -Infinity);
-    });
-  });
+  /**
+   * Asserts that the field property values are set to default.
+   * @param {!Blockly.FieldNumber} field The field to check.
+   */
+  var assertFieldDefault = function(field) {
+    assertNumberField(field, -Infinity, Infinity, 0, defaultFieldValue);
+  };
+  /**
+   * Asserts that the field properties are correct based on the test case.
+   * @param {!Blockly.FieldNumber} field The field to check.
+   * @param {!FieldValueTestCase} testCase The test case.
+   */
+  var validTestCaseAssertField = function(field, testCase) {
+    assertNumberField(
+        field, testCase.expectedValue, testCase.expectedValue,
+        testCase.expectedValue, testCase.expectedValue);
+  };
+
+  testHelpers.runConstructorSuiteTests(
+      Blockly.FieldNumber, validValueTestCases, invalidValueTestCases,
+      validTestCaseAssertField, assertFieldDefault);
+
+  testHelpers.runFromJsonSuiteTests(
+      Blockly.FieldNumber, validValueTestCases,invalidValueTestCases,
+      validTestCaseAssertField, assertFieldDefault);
+
   suite('setValue', function() {
-    suite('Value Types', function() {
-      suite('Empty -> New Value', function() {
-        setup(function() {
-          this.numberField = new Blockly.FieldNumber();
-        });
-        test('Null', function() {
-          this.numberField.setValue(null);
-          assertValueDefault(this.numberField);
-        });
-        test('Undefined', function() {
-          this.numberField.setValue(undefined);
-          assertValueDefault(this.numberField);
-        });
-        test('Non-Parsable String', function() {
-          this.numberField.setValue('bad');
-          assertValueDefault(this.numberField);
-        });
-        test('NaN', function() {
-          this.numberField.setValue(NaN);
-          assertValueDefault(this.numberField);
-        });
-        test('Integer', function() {
-          this.numberField.setValue(2);
-          assertValue(this.numberField, 2);
-        });
-        test('Float', function() {
-          this.numberField.setValue(2.5);
-          assertValue(this.numberField, 2.5);
-        });
-        test('Integer String', function() {
-          this.numberField.setValue('2');
-          assertValue(this.numberField, 2);
-        });
-        test('Float String', function() {
-          this.numberField.setValue('2.5');
-          assertValue(this.numberField, 2.5);
-        });
-        test('Infinity', function() {
-          this.numberField.setValue(Infinity);
-          assertValue(this.numberField, Infinity);
-        });
-        test('Negative Infinity String', function() {
-          this.numberField.setValue('-Infinity');
-          assertValue(this.numberField, -Infinity);
-        });
+    suite('Empty -> New Value', function() {
+      setup(function() {
+        this.field = new Blockly.FieldNumber();
       });
-      suite('Value -> New Value', function() {
-        setup(function() {
-          this.numberField = new Blockly.FieldNumber(1);
-        });
-        test('Null', function() {
-          this.numberField.setValue(null);
-          assertValue(this.numberField, 1);
-        });
-        test('Undefined', function() {
-          this.numberField.setValue(undefined);
-          assertValue(this.numberField, 1);
-        });
-        test('Non-Parsable String', function() {
-          this.numberField.setValue('bad');
-          assertValue(this.numberField, 1);
-        });
-        test('NaN', function() {
-          this.numberField.setValue(NaN);
-          assertValue(this.numberField, 1);
-        });
-        test('Integer', function() {
-          this.numberField.setValue(2);
-          assertValue(this.numberField, 2);
-        });
-        test('Float', function() {
-          this.numberField.setValue(2.5);
-          assertValue(this.numberField, 2.5);
-        });
-        test('Integer String', function() {
-          this.numberField.setValue('2');
-          assertValue(this.numberField, 2);
-        });
-        test('Float String', function() {
-          this.numberField.setValue('2.5');
-          assertValue(this.numberField, 2.5);
-        });
-        test('Infinity', function() {
-          this.numberField.setValue(Infinity);
-          assertValue(this.numberField, Infinity);
-        });
-        test('Negative Infinity String', function() {
-          this.numberField.setValue('-Infinity');
-          assertValue(this.numberField, -Infinity);
-        });
+      testHelpers.runSetValueTests(
+          validValueTestCases, invalidValueTestCases, defaultFieldValue);
+    });
+    suite('Value -> New Value', function() {
+      var initialValue = 1;
+      setup(function() {
+        this.field = new Blockly.FieldNumber(initialValue);
       });
+      testHelpers.runSetValueTests(
+          validValueTestCases, invalidValueTestCases, initialValue);
     });
     suite('Constraints', function() {
+      var testCases = [
+        {title: 'Float', json: {}, value: 123.456, expectedValue: 123.456},
+        {title: '0.01', json: {precision: .01}, value: 123.456,
+          expectedValue: 123.46},
+        {title: '0.5', json: {precision: .5}, value: 123.456,
+          expectedValue: 123.5},
+        {title: '1', json: {precision: 1}, value: 123.456,
+          expectedValue: 123},
+        {title: '1.5', json: {precision: 1.5}, value: 123.456,
+          expectedValue: 123},
+      ];
       suite('Precision', function() {
-        test('Float', function() {
-          var numberField = new Blockly.FieldNumber();
-          numberField.setValue(123.456);
-          assertValue(numberField, 123.456);
-        });
-        test('0.01', function() {
-          var numberField = new Blockly.FieldNumber
-              .fromJson({ precision: .01 });
-          numberField.setValue(123.456);
-          assertValue(numberField, 123.46);
-        });
-        test('0.5', function() {
-          var numberField = new Blockly.FieldNumber
-              .fromJson({ precision: .5 });
-          numberField.setValue(123.456);
-          assertValue(numberField, 123.5);
-        });
-        test('1', function() {
-          var numberField = new Blockly.FieldNumber
-              .fromJson({ precision: 1 });
-          numberField.setValue(123.456);
-          assertValue(numberField, 123);
-        });
-        test('1.5', function() {
-          var numberField = new Blockly.FieldNumber
-              .fromJson({ precision: 1.5 });
-          numberField.setValue(123.456);
-          assertValue(numberField, 123);
+        testHelpers.runTestCases(testCases, function(testCase) {
+          return function() {
+            var field = Blockly.FieldNumber.fromJson(testCase.json);
+            field.setValue(testCase.value);
+            testHelpers.assertFieldValue(field, testCase.expectedValue);
+          };
         });
         test('Null', function() {
-          var numberField = new Blockly.FieldNumber
-              .fromJson({ precision: null});
-          assertEquals(numberField.getPrecision(), 0);
+          var field = Blockly.FieldNumber.fromJson({precision: null});
+          chai.assert.equal(field.getPrecision(), 0);
         });
       });
+      var setValueBoundsTestFn = function(testCase) {
+        return function() {
+          var field = Blockly.FieldNumber.fromJson(testCase.json);
+          testCase.values.forEach(function(value, i) {
+            field.setValue(value);
+            testHelpers.assertFieldValue(
+                field, testCase.expectedValues[i]);
+          });
+        };
+      };
       suite('Min', function() {
-        test('-10', function() {
-          var numberField = new Blockly.FieldNumber.fromJson({ min: -10 });
-          numberField.setValue(-20);
-          assertValue(numberField, -10);
-          numberField.setValue(0);
-          assertValue(numberField, 0);
-          numberField.setValue(20);
-          assertValue(numberField, 20);
-        });
-        test('0', function() {
-          var numberField = new Blockly.FieldNumber.fromJson({ min: 0 });
-          numberField.setValue(-20);
-          assertValue(numberField, 0);
-          numberField.setValue(0);
-          assertValue(numberField, 0);
-          numberField.setValue(20);
-          assertValue(numberField, 20);
-        });
-        test('+10', function() {
-          var numberField = new Blockly.FieldNumber.fromJson({ min: 10 });
-          numberField.setValue(-20);
-          assertValue(numberField, 10);
-          numberField.setValue(0);
-          assertValue(numberField, 10);
-          numberField.setValue(20);
-          assertValue(numberField, 20);
-        });
+        var testCases = [
+          {title: '-10', json: {min: -10}, values: [-20, 0, 20],
+            expectedValues: [-10, 0, 20]},
+          {title: '0', json: {min: 0}, values: [-20, 0, 20],
+            expectedValues: [0, 0, 20]},
+          {title: '+10', json: {min: 10}, values: [-20, 0, 20],
+            expectedValues: [10, 10, 20]},
+        ];
+        testHelpers.runTestCases(testCases, setValueBoundsTestFn);
         test('Null', function() {
-          var numberField = new Blockly.FieldNumber
-              .fromJson({ min: null});
-          assertEquals(numberField.getMin(), -Infinity);
+          var field = Blockly.FieldNumber.fromJson({min: null});
+          chai.assert.equal(field.getMin(), -Infinity);
         });
       });
       suite('Max', function() {
-        test('-10', function() {
-          var numberField = new Blockly.FieldNumber.fromJson({ max: -10 });
-          numberField.setValue(-20);
-          assertValue(numberField, -20);
-          numberField.setValue(0);
-          assertValue(numberField, -10);
-          numberField.setValue(20);
-          assertValue(numberField, -10);
-        });
-        test('0', function() {
-          var numberField = new Blockly.FieldNumber.fromJson({ max: 0 });
-          numberField.setValue(-20);
-          assertValue(numberField, -20);
-          numberField.setValue(0);
-          assertValue(numberField, 0);
-          numberField.setValue(20);
-          assertValue(numberField, 0);
-        });
-        test('+10', function() {
-          var numberField = new Blockly.FieldNumber.fromJson({ max: 10 });
-          numberField.setValue(-20);
-          assertValue(numberField, -20);
-          numberField.setValue(0);
-          assertValue(numberField, 0);
-          numberField.setValue(20);
-          assertValue(numberField, 10);
-        });
-        test('null', function() {
-          var numberField = new Blockly.FieldNumber
-              .fromJson({ max: null});
-          assertEquals(numberField.getMax(), Infinity);
+        var testCases = [
+          {title: '-10', json: {max: -10}, values: [-20, 0, 20],
+            expectedValues: [-20, -10, -10]},
+          {title: '0', json: {max: 0}, values: [-20, 0, 20],
+            expectedValues: [-20, 0, 0]},
+          {title: '+10', json: {max: 10}, values: [-20, 0, 20],
+            expectedValues: [-20, 0, 10]},
+        ];
+        testHelpers.runTestCases(testCases, setValueBoundsTestFn);
+        test('Null', function() {
+          var field = Blockly.FieldNumber.fromJson({max: null});
+          chai.assert.equal(field.getMax(), Infinity);
         });
       });
     });
   });
   suite('Validators', function() {
     setup(function() {
-      this.numberField = new Blockly.FieldNumber(1);
-      this.numberField.htmlInput_ = Object.create(null);
-      this.numberField.htmlInput_.oldValue_ = '1';
-      this.numberField.htmlInput_.untypedDefaultValue_ = 1;
-      this.stub = sinon.stub(this.numberField, 'resizeEditor_');
+      this.field = new Blockly.FieldNumber(1);
+      this.field.htmlInput_ = Object.create(null);
+      this.field.htmlInput_.oldValue_ = '1';
+      this.field.htmlInput_.untypedDefaultValue_ = 1;
+      this.stub = sinon.stub(this.field, 'resizeEditor_');
     });
     teardown(function() {
-      this.numberField.setValidator(null);
-      this.numberField.htmlInput_ = null;
-      if (this.stub) {
-        this.stub.restore();
-      }
+      sinon.restore();
     });
-    suite('Null Validator', function() {
-      setup(function() {
-        this.numberField.setValidator(function() {
-          return null;
+    var testSuites = [
+      {title: 'Null Validator',
+        validator:
+            function() {
+              return null;
+            },
+        value: 2, expectedValue: 1},
+      {title: 'Force End with 6 Validator',
+        validator:
+            function(newValue) {
+              return String(newValue).replace(/.$/, '6');
+            },
+        value: 25, expectedValue: 26},
+      {title: 'Returns Undefined Validator', validator: function() {}, value: 2,
+        expectedValue: 2},
+    ];
+    testSuites.forEach(function(suiteInfo) {
+      suite(suiteInfo.title, function() {
+        setup(function() {
+          this.field.setValidator(suiteInfo.validator);
         });
-      });
-      test('When Editing', function() {
-        this.numberField.isBeingEdited_ = true;
-        this.numberField.htmlInput_.value = '2';
-        this.numberField.onHtmlInputChange_(null);
-        assertValue(this.numberField, 1, '2');
-        this.numberField.isBeingEdited_ = false;
-      });
-      test('When Not Editing', function() {
-        this.numberField.setValue(2);
-        assertValue(this.numberField, 1);
-      });
-    });
-    suite('Force End with 6 Validator', function() {
-      setup(function() {
-        this.numberField.setValidator(function(newValue) {
-          return String(newValue).replace(/.$/, "6");
+        test('When Editing', function() {
+          this.field.isBeingEdited_ = true;
+          this.field.htmlInput_.value = String(suiteInfo.value);
+          this.field.onHtmlInputChange_(null);
+          testHelpers.assertFieldValue(
+              this.field, suiteInfo.expectedValue, String(suiteInfo.value));
         });
-      });
-      test('When Editing', function() {
-        this.numberField.isBeingEdited_ = true;
-        this.numberField.htmlInput_.value = '25';
-        this.numberField.onHtmlInputChange_(null);
-        assertValue(this.numberField, 26, '25');
-        this.numberField.isBeingEdited_ = false;
-      });
-      test('When Not Editing', function() {
-        this.numberField.setValue(25);
-        assertValue(this.numberField, 26);
-      });
-    });
-    suite('Returns Undefined Validator', function() {
-      setup(function() {
-        this.numberField.setValidator(function() {});
-      });
-      test('When Editing', function() {
-        this.numberField.isBeingEdited_ = true;
-        this.numberField.htmlInput_.value = '2';
-        this.numberField.onHtmlInputChange_(null);
-        assertValue(this.numberField, 2);
-        this.numberField.isBeingEdited_ = false;
-      });
-      test('When Not Editing', function() {
-        this.numberField.setValue(2);
-        assertValue(this.numberField, 2);
+        test('When Not Editing', function() {
+          this.field.setValue(suiteInfo.value);
+          testHelpers.assertFieldValue(this.field, suiteInfo.expectedValue);
+        });
       });
     });
   });

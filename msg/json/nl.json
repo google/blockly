@@ -1,21 +1,22 @@
 {
 	"@metadata": {
 		"authors": [
-			"Siebrand",
-			"McDutchie",
-			"Ribert",
-			"MedShot",
-			"아라",
-			"JaapDeKleine",
-			"Sjoerddebruin",
-			"Lemondoge",
-			"Jeleniccz",
+			"Elroy",
 			"Festina90",
+			"JaapDeKleine",
+			"Jeleniccz",
+			"Klaas van Buiten",
+			"KlaasZ4usV",
+			"Lemondoge",
+			"Marcelhospers",
+			"McDutchie",
+			"MedShot",
 			"Optilete",
 			"Patio",
-			"KlaasZ4usV",
-			"Marcelhospers",
-			"Elroy"
+			"Ribert",
+			"Siebrand",
+			"Sjoerddebruin",
+			"아라"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "item",

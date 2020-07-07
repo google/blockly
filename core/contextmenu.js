@@ -1,18 +1,7 @@
 /**
  * @license
  * Copyright 2011 Google LLC
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 /**
@@ -35,7 +24,7 @@ goog.require('Blockly.Msg');
 goog.require('Blockly.utils');
 goog.require('Blockly.utils.Coordinate');
 goog.require('Blockly.utils.dom');
-goog.require('Blockly.utils.uiMenu');
+goog.require('Blockly.utils.Rect');
 goog.require('Blockly.utils.userAgent');
 goog.require('Blockly.Xml');
 
@@ -47,11 +36,11 @@ goog.require('Blockly.Xml');
 Blockly.ContextMenu.currentBlock = null;
 
 /**
- * Opaque data that can be passed to unbindEvent_.
- * @type {Array.<!Array>}
+ * Menu object.
+ * @type {Blockly.Menu}
  * @private
  */
-Blockly.ContextMenu.eventWrapper_ = null;
+Blockly.ContextMenu.menu_ = null;
 
 /**
  * Construct the menu based on the list of options and show the menu.
@@ -60,17 +49,18 @@ Blockly.ContextMenu.eventWrapper_ = null;
  * @param {boolean} rtl True if RTL, false if LTR.
  */
 Blockly.ContextMenu.show = function(e, options, rtl) {
-  Blockly.WidgetDiv.show(Blockly.ContextMenu, rtl, null);
+  Blockly.WidgetDiv.show(Blockly.ContextMenu, rtl, Blockly.ContextMenu.dispose);
   if (!options.length) {
     Blockly.ContextMenu.hide();
     return;
   }
   var menu = Blockly.ContextMenu.populate_(options, rtl);
+  Blockly.ContextMenu.menu_ = menu;
 
   Blockly.ContextMenu.position_(menu, e, rtl);
   // 1ms delay is required for focusing on context menus because some other
   // mouse event is still waiting in the queue and clears focus.
-  setTimeout(function() {menu.getElement().focus();}, 1);
+  setTimeout(function() {menu.focus();}, 1);
   Blockly.ContextMenu.currentBlock = null;  // May be set by Blockly.Block.
 };
 
@@ -88,14 +78,15 @@ Blockly.ContextMenu.populate_ = function(options, rtl) {
      callback: Blockly.MakeItSo}
   */
   var menu = new Blockly.Menu();
-  menu.setRightToLeft(rtl);
+  menu.setRole(Blockly.utils.aria.Role.MENU);
   for (var i = 0, option; (option = options[i]); i++) {
     var menuItem = new Blockly.MenuItem(option.text);
     menuItem.setRightToLeft(rtl);
-    menu.addChild(menuItem, true);
+    menuItem.setRole(Blockly.utils.aria.Role.MENUITEM);
+    menu.addChild(menuItem);
     menuItem.setEnabled(option.enabled);
     if (option.enabled) {
-      var actionHandler = function() {
+      var actionHandler = function(_menuItem) {
         var option = this;
         Blockly.ContextMenu.hide();
         option.callback();
@@ -119,25 +110,28 @@ Blockly.ContextMenu.position_ = function(menu, e, rtl) {
   var viewportBBox = Blockly.utils.getViewportBBox();
   // This one is just a point, but we'll pretend that it's a rect so we can use
   // some helper functions.
-  var anchorBBox = {
-    top: e.clientY + viewportBBox.top,
-    bottom: e.clientY + viewportBBox.top,
-    left: e.clientX + viewportBBox.left,
-    right: e.clientX + viewportBBox.left
-  };
+  var anchorBBox = new Blockly.utils.Rect(
+      e.clientY + viewportBBox.top,
+      e.clientY + viewportBBox.top,
+      e.clientX + viewportBBox.left,
+      e.clientX + viewportBBox.left
+  );
 
   Blockly.ContextMenu.createWidget_(menu);
-  var menuSize = Blockly.utils.uiMenu.getSize(menu);
+  var menuSize = menu.getSize();
 
   if (rtl) {
-    Blockly.utils.uiMenu.adjustBBoxesForRTL(viewportBBox, anchorBBox, menuSize);
+    anchorBBox.left += menuSize.width;
+    anchorBBox.right += menuSize.width;
+    viewportBBox.left += menuSize.width;
+    viewportBBox.right += menuSize.width;
   }
 
   Blockly.WidgetDiv.positionWithAnchor(viewportBBox, anchorBBox, menuSize, rtl);
   // Calling menuDom.focus() has to wait until after the menu has been placed
   // correctly.  Otherwise it will cause a page scroll to get the misplaced menu
   // in view.  See issue #1329.
-  menu.getElement().focus();
+  menu.focus();
 };
 
 /**
@@ -152,8 +146,8 @@ Blockly.ContextMenu.createWidget_ = function(menu) {
   Blockly.utils.dom.addClass(
       /** @type {!Element} */ (menuDom), 'blocklyContextMenu');
   // Prevent system context menu when right-clicking a Blockly context menu.
-  Blockly.bindEventWithChecks_(
-      /** @type {!EventTarget} */ (menuDom), 'contextmenu', null, Blockly.utils.noEvent);
+  Blockly.bindEventWithChecks_(/** @type {!EventTarget} */ (menuDom),
+      'contextmenu', null, Blockly.utils.noEvent);
   // Focus only after the initial render to avoid issue #1329.
   menu.focus();
 };
@@ -164,9 +158,15 @@ Blockly.ContextMenu.createWidget_ = function(menu) {
 Blockly.ContextMenu.hide = function() {
   Blockly.WidgetDiv.hideIfOwner(Blockly.ContextMenu);
   Blockly.ContextMenu.currentBlock = null;
-  if (Blockly.ContextMenu.eventWrapper_) {
-    Blockly.unbindEvent_(Blockly.ContextMenu.eventWrapper_);
-    Blockly.ContextMenu.eventWrapper_ = null;
+};
+
+/**
+ * Dispose of the menu.
+ */
+Blockly.ContextMenu.dispose = function() {
+  if (Blockly.ContextMenu.menu_) {
+    Blockly.ContextMenu.menu_.dispose();
+    Blockly.ContextMenu.menu_ = null;
   }
 };
 

@@ -1,18 +1,7 @@
 /**
  * @license
  * Copyright 2011 Google LLC
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 /**
@@ -28,6 +17,7 @@ goog.require('Blockly.Touch');
 goog.require('Blockly.utils');
 goog.require('Blockly.utils.Coordinate');
 goog.require('Blockly.utils.dom');
+goog.require('Blockly.utils.Metrics');
 
 
 /**
@@ -37,7 +27,7 @@ goog.require('Blockly.utils.dom');
 
 /**
  * Class for a pair of scrollbars.  Horizontal and vertical.
- * @param {!Blockly.Workspace} workspace Workspace to bind the scrollbars to.
+ * @param {!Blockly.WorkspaceSvg} workspace Workspace to bind the scrollbars to.
  * @constructor
  */
 Blockly.ScrollbarPair = function(workspace) {
@@ -55,14 +45,14 @@ Blockly.ScrollbarPair = function(workspace) {
       },
       null);
   Blockly.utils.dom.insertAfter(this.corner_, workspace.getBubbleCanvas());
-};
 
-/**
- * Previously recorded metrics from the workspace.
- * @type {Object}
- * @private
- */
-Blockly.ScrollbarPair.prototype.oldHostMetrics_ = null;
+  /**
+   * Previously recorded metrics from the workspace.
+   * @type {?Blockly.utils.Metrics}
+   * @private
+   */
+  this.oldHostMetrics_ = null;
+};
 
 /**
  * Dispose of this pair of scrollbars.
@@ -128,12 +118,12 @@ Blockly.ScrollbarPair.prototype.resize = function() {
   if (!this.oldHostMetrics_ ||
       this.oldHostMetrics_.viewWidth != hostMetrics.viewWidth ||
       this.oldHostMetrics_.absoluteLeft != hostMetrics.absoluteLeft) {
-    this.corner_.setAttribute('x', this.vScroll.position_.x);
+    this.corner_.setAttribute('x', this.vScroll.position.x);
   }
   if (!this.oldHostMetrics_ ||
       this.oldHostMetrics_.viewHeight != hostMetrics.viewHeight ||
       this.oldHostMetrics_.absoluteTop != hostMetrics.absoluteTop) {
-    this.corner_.setAttribute('y', this.hScroll.position_.y);
+    this.corner_.setAttribute('y', this.hScroll.position.y);
   }
 
   // Cache the current metrics to potentially short-cut the next resize event.
@@ -155,8 +145,8 @@ Blockly.ScrollbarPair.prototype.set = function(x, y) {
   // Combining them speeds up rendering.
   var xyRatio = {};
 
-  var hHandlePosition = x * this.hScroll.ratio_;
-  var vHandlePosition = y * this.vScroll.ratio_;
+  var hHandlePosition = x * this.hScroll.ratio;
+  var vHandlePosition = y * this.vScroll.ratio;
 
   var hBarLength = this.hScroll.scrollViewSize_;
   var vBarLength = this.vScroll.scrollViewSize_;
@@ -190,7 +180,7 @@ Blockly.ScrollbarPair.prototype.getRatio_ = function(handlePosition, viewSize) {
  * Class for a pure SVG scrollbar.
  * This technique offers a scrollbar that is guaranteed to work, but may not
  * look or behave like the system's scrollbars.
- * @param {!Blockly.Workspace} workspace Workspace to bind the scrollbar to.
+ * @param {!Blockly.WorkspaceSvg} workspace Workspace to bind the scrollbar to.
  * @param {boolean} horizontal True if horizontal, false if vertical.
  * @param {boolean=} opt_pair True if scrollbar is part of a horiz/vert pair.
  * @param {string=} opt_class A class to be applied to this scrollbar.
@@ -202,6 +192,12 @@ Blockly.Scrollbar = function(workspace, horizontal, opt_pair, opt_class) {
   this.horizontal_ = horizontal;
   this.oldHostMetrics_ = null;
 
+  /**
+   * @type {?number}
+   * @package
+   */
+  this.ratio = null;
+
   this.createDom_(opt_class);
 
   /**
@@ -209,9 +205,9 @@ Blockly.Scrollbar = function(workspace, horizontal, opt_pair, opt_class) {
    * to the scrollbar's origin.  This is usually relative to the injection div
    * origin.
    * @type {Blockly.utils.Coordinate}
-   * @private
+   * @package
    */
-  this.position_ = new Blockly.utils.Coordinate(0, 0);
+  this.position = new Blockly.utils.Coordinate(0, 0);
 
   // Store the thickness in a temp variable for readability.
   var scrollbarThickness = Blockly.Scrollbar.scrollbarThickness;
@@ -306,10 +302,10 @@ if (Blockly.Touch.TOUCH_ENABLED) {
 }
 
 /**
- * @param {Object} first An object containing computed measurements of a
- *    workspace.
- * @param {Object} second Another object containing computed measurements of a
- *    workspace.
+ * @param {Blockly.utils.Metrics} first An object containing computed
+ *     measurements of a workspace.
+ * @param {Blockly.utils.Metrics} second Another object containing computed
+ *     measurements of a workspace.
  * @return {boolean} Whether the two sets of metrics are equivalent.
  * @private
  */
@@ -403,23 +399,23 @@ Blockly.ScrollbarPair.prototype.setContainerVisible = function(visible) {
  * scrollbar's origin.  This sets the scrollbar's location within the workspace.
  * @param {number} x The new x coordinate.
  * @param {number} y The new y coordinate.
- * @private
+ * @package
  */
-Blockly.Scrollbar.prototype.setPosition_ = function(x, y) {
-  this.position_.x = x;
-  this.position_.y = y;
+Blockly.Scrollbar.prototype.setPosition = function(x, y) {
+  this.position.x = x;
+  this.position.y = y;
 
-  var tempX = this.position_.x + this.origin_.x;
-  var tempY = this.position_.y + this.origin_.y;
+  var tempX = this.position.x + this.origin_.x;
+  var tempY = this.position.y + this.origin_.y;
   var transform = 'translate(' + tempX + 'px,' + tempY + 'px)';
   Blockly.utils.dom.setCssTransform(this.outerSvg_, transform);
 };
 
 /**
  * Recalculate the scrollbar's location and its length.
- * @param {Object=} opt_metrics A data structure of from the describing all the
- * required dimensions.  If not provided, it will be fetched from the host
- * object.
+ * @param {Blockly.utils.Metrics=} opt_metrics A data structure of from the
+ *     describing all the required dimensions.  If not provided, it will be
+ *     fetched from the host object.
  */
 Blockly.Scrollbar.prototype.resize = function(opt_metrics) {
   // Determine the location, height and width of the host element.
@@ -461,8 +457,8 @@ Blockly.Scrollbar.prototype.resize = function(opt_metrics) {
 
 /**
  * Recalculate a horizontal scrollbar's location and length.
- * @param {!Object} hostMetrics A data structure describing all the
- *     required dimensions, possibly fetched from the host object.
+ * @param {!Blockly.utils.Metrics} hostMetrics A data structure describing all
+ *     the required dimensions, possibly fetched from the host object.
  * @private
  */
 Blockly.Scrollbar.prototype.resizeHorizontal_ = function(hostMetrics) {
@@ -474,8 +470,8 @@ Blockly.Scrollbar.prototype.resizeHorizontal_ = function(hostMetrics) {
 /**
  * Recalculate a horizontal scrollbar's location on the screen and path length.
  * This should be called when the layout or size of the window has changed.
- * @param {!Object} hostMetrics A data structure describing all the
- *     required dimensions, possibly fetched from the host object.
+ * @param {!Blockly.utils.Metrics} hostMetrics A data structure describing all
+ *     the required dimensions, possibly fetched from the host object.
  */
 Blockly.Scrollbar.prototype.resizeViewHorizontal = function(hostMetrics) {
   var viewSize = hostMetrics.viewWidth - 1;
@@ -493,7 +489,7 @@ Blockly.Scrollbar.prototype.resizeViewHorizontal = function(hostMetrics) {
   // Horizontal toolbar should always be just above the bottom of the workspace.
   var yCoordinate = hostMetrics.absoluteTop + hostMetrics.viewHeight -
       Blockly.Scrollbar.scrollbarThickness - 0.5;
-  this.setPosition_(xCoordinate, yCoordinate);
+  this.setPosition(xCoordinate, yCoordinate);
 
   // If the view has been resized, a content resize will also be necessary.  The
   // reverse is not true.
@@ -503,8 +499,8 @@ Blockly.Scrollbar.prototype.resizeViewHorizontal = function(hostMetrics) {
 /**
  * Recalculate a horizontal scrollbar's location within its path and length.
  * This should be called when the contents of the workspace have changed.
- * @param {!Object} hostMetrics A data structure describing all the
- *     required dimensions, possibly fetched from the host object.
+ * @param {!Blockly.utils.Metrics} hostMetrics A data structure describing all
+ *     the required dimensions, possibly fetched from the host object.
  */
 Blockly.Scrollbar.prototype.resizeContentHorizontal = function(hostMetrics) {
   if (!this.pair_) {
@@ -514,24 +510,24 @@ Blockly.Scrollbar.prototype.resizeContentHorizontal = function(hostMetrics) {
     this.setVisible(this.scrollViewSize_ < hostMetrics.contentWidth);
   }
 
-  this.ratio_ = this.scrollViewSize_ / hostMetrics.contentWidth;
-  if (this.ratio_ == -Infinity || this.ratio_ == Infinity ||
-      isNaN(this.ratio_)) {
-    this.ratio_ = 0;
+  this.ratio = this.scrollViewSize_ / hostMetrics.contentWidth;
+  if (this.ratio == -Infinity || this.ratio == Infinity ||
+      isNaN(this.ratio)) {
+    this.ratio = 0;
   }
 
-  var handleLength = hostMetrics.viewWidth * this.ratio_;
+  var handleLength = hostMetrics.viewWidth * this.ratio;
   this.setHandleLength_(Math.max(0, handleLength));
 
   var handlePosition = (hostMetrics.viewLeft - hostMetrics.contentLeft) *
-      this.ratio_;
+      this.ratio;
   this.setHandlePosition(this.constrainHandle_(handlePosition));
 };
 
 /**
  * Recalculate a vertical scrollbar's location and length.
- * @param {!Object} hostMetrics A data structure describing all the
- *     required dimensions, possibly fetched from the host object.
+ * @param {!Blockly.utils.Metrics} hostMetrics A data structure describing all
+ *     the required dimensions, possibly fetched from the host object.
  * @private
  */
 Blockly.Scrollbar.prototype.resizeVertical_ = function(hostMetrics) {
@@ -543,8 +539,8 @@ Blockly.Scrollbar.prototype.resizeVertical_ = function(hostMetrics) {
 /**
  * Recalculate a vertical scrollbar's location on the screen and path length.
  * This should be called when the layout or size of the window has changed.
- * @param {!Object} hostMetrics A data structure describing all the
- *     required dimensions, possibly fetched from the host object.
+ * @param {!Blockly.utils.Metrics} hostMetrics A data structure describing all
+ *     the required dimensions, possibly fetched from the host object.
  */
 Blockly.Scrollbar.prototype.resizeViewVertical = function(hostMetrics) {
   var viewSize = hostMetrics.viewHeight - 1;
@@ -560,7 +556,7 @@ Blockly.Scrollbar.prototype.resizeViewVertical = function(hostMetrics) {
         Blockly.Scrollbar.scrollbarThickness - 1;
   }
   var yCoordinate = hostMetrics.absoluteTop + 0.5;
-  this.setPosition_(xCoordinate, yCoordinate);
+  this.setPosition(xCoordinate, yCoordinate);
 
   // If the view has been resized, a content resize will also be necessary.  The
   // reverse is not true.
@@ -570,8 +566,8 @@ Blockly.Scrollbar.prototype.resizeViewVertical = function(hostMetrics) {
 /**
  * Recalculate a vertical scrollbar's location within its path and length.
  * This should be called when the contents of the workspace have changed.
- * @param {!Object} hostMetrics A data structure describing all the
- *     required dimensions, possibly fetched from the host object.
+ * @param {!Blockly.utils.Metrics} hostMetrics A data structure describing all
+ *     the required dimensions, possibly fetched from the host object.
  */
 Blockly.Scrollbar.prototype.resizeContentVertical = function(hostMetrics) {
   if (!this.pair_) {
@@ -579,17 +575,17 @@ Blockly.Scrollbar.prototype.resizeContentVertical = function(hostMetrics) {
     this.setVisible(this.scrollViewSize_ < hostMetrics.contentHeight);
   }
 
-  this.ratio_ = this.scrollViewSize_ / hostMetrics.contentHeight;
-  if (this.ratio_ == -Infinity || this.ratio_ == Infinity ||
-      isNaN(this.ratio_)) {
-    this.ratio_ = 0;
+  this.ratio = this.scrollViewSize_ / hostMetrics.contentHeight;
+  if (this.ratio == -Infinity || this.ratio == Infinity ||
+      isNaN(this.ratio)) {
+    this.ratio = 0;
   }
 
-  var handleLength = hostMetrics.viewHeight * this.ratio_;
+  var handleLength = hostMetrics.viewHeight * this.ratio;
   this.setHandleLength_(Math.max(0, handleLength));
 
   var handlePosition = (hostMetrics.viewTop - hostMetrics.contentTop) *
-      this.ratio_;
+      this.ratio;
   this.setHandlePosition(this.constrainHandle_(handlePosition));
 };
 
@@ -855,7 +851,7 @@ Blockly.Scrollbar.prototype.onScroll_ = function() {
  *     scrollbar handle.
  */
 Blockly.Scrollbar.prototype.set = function(value) {
-  this.setHandlePosition(this.constrainHandle_(value * this.ratio_));
+  this.setHandlePosition(this.constrainHandle_(value * this.ratio));
   this.onScroll_();
 };
 

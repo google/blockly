@@ -16,9 +16,13 @@ a few minutes and will help us better support the Blockly community.
 
 Cross-browser Testing Platform and Open Source <3 Provided by [Sauce Labs](https://saucelabs.com)
 
+We support IE11 and test it using [BrowserStack](https://browserstack.com)
+
 Want to contribute? Great! First, read [our guidelines for contributors](https://developers.google.com/blockly/guides/modify/contributing).
 
 ## Releases
+
+The next major release will be **June 26th, 2020**.
 
 We release by pushing the latest code to the master branch, followed by updating our [docs](https://developers.google.com/blockly) and [demo pages](https://blockly-demo.appspot.com). We typically release a new version of Blockly once a quarter (every 3 months). If there are breaking bugs, such as a crash when performing a standard action or a rendering issue that makes Blockly unusable, we will cherry-pick fixes to master between releases to fix them. The [releases page](https://github.com/google/blockly/releases) has a list of all releases.
 

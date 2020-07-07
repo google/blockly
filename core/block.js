@@ -1,18 +1,7 @@
 /**
  * @license
  * Copyright 2011 Google LLC
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 /**
@@ -23,6 +12,7 @@
 
 goog.provide('Blockly.Block');
 
+goog.require('Blockly.ASTNode');
 goog.require('Blockly.Blocks');
 goog.require('Blockly.Connection');
 goog.require('Blockly.Events');
@@ -40,6 +30,8 @@ goog.require('Blockly.utils.object');
 goog.require('Blockly.utils.string');
 goog.require('Blockly.Workspace');
 
+goog.requireType('Blockly.IASTNodeLocation');
+
 
 /**
  * Class for one block.
@@ -50,6 +42,7 @@ goog.require('Blockly.Workspace');
  * @param {string=} opt_id Optional ID.  Use this ID if provided, otherwise
  *     create a new ID.
  * @constructor
+ * @implements {Blockly.IASTNodeLocation}
  * @throws When block is not valid or block name is not allowed.
  */
 Blockly.Block = function(workspace, prototypeName, opt_id) {
@@ -181,6 +174,16 @@ Blockly.Block = function(workspace, prototypeName, opt_id) {
    */
   this.hat = undefined;
 
+  /** @type {?boolean} */
+  this.rendered = null;
+
+  /**
+   * A count of statement inputs on the block.
+   * @type {number}
+   * @package
+   */
+  this.statementInputCount = 0;
+
   // Copy the type-specific functions and data from the prototype.
   if (prototypeName) {
     /** @type {string} */
@@ -232,6 +235,17 @@ Blockly.Block = function(workspace, prototypeName, opt_id) {
  *          }}
  */
 Blockly.Block.CommentModel;
+
+/**
+ * The language-neutral id given to the collapsed input.
+ * @const {string}
+ */
+Blockly.Block.COLLAPSED_INPUT_NAME = '_TEMP_COLLAPSED_INPUT';
+/**
+ * The language-neutral id given to the collapsed field.
+ * @const {string}
+ */
+Blockly.Block.COLLAPSED_FIELD_NAME = '_TEMP_COLLAPSED_FIELD';
 
 /**
  * Optional text data that round-trips between blocks and XML.
@@ -554,7 +568,9 @@ Blockly.Block.prototype.bumpNeighbours = function() {
 };
 
 /**
- * Return the parent block or null if this block is at the top level.
+ * Return the parent block or null if this block is at the top level. The parent
+ * block is either the block connected to the previous connection (for a statement
+ * block) or the block connected to the output connection (for a value block).
  * @return {Blockly.Block} The block that holds the current block.
  */
 Blockly.Block.prototype.getParent = function() {
@@ -605,7 +621,7 @@ Blockly.Block.prototype.getNextBlock = function() {
 };
 
 /**
- * Return the previous statement block directly connected to this block.
+ * Returns the block connected to the previous connection.
  * @return {Blockly.Block} The previous statement block or null.
  */
 Blockly.Block.prototype.getPreviousBlock = function() {
@@ -943,7 +959,7 @@ Blockly.Block.prototype.setStyle = function(blockStyleName) {
  * initializer function.
  * @param {function(Blockly.Events.Abstract)} onchangeFn The callback to call
  *     when the block's workspace changes.
- * @throws {Error} if onchangeFn is not falsey or a function.
+ * @throws {Error} if onchangeFn is not falsey and not a function.
  */
 Blockly.Block.prototype.setOnChange = function(onchangeFn) {
   if (onchangeFn && typeof onchangeFn != 'function') {
@@ -978,7 +994,6 @@ Blockly.Block.prototype.getField = function(name) {
 /**
  * Return all variables referenced by this block.
  * @return {!Array.<string>} List of variable names.
- * @package
  */
 Blockly.Block.prototype.getVars = function() {
   var vars = [];
@@ -1299,24 +1314,94 @@ Blockly.Block.prototype.setCollapsed = function(collapsed) {
 Blockly.Block.prototype.toString = function(opt_maxLength, opt_emptyToken) {
   var text = [];
   var emptyFieldPlaceholder = opt_emptyToken || '?';
-  if (this.collapsed_) {
-    text.push(this.getInput('_TEMP_COLLAPSED_INPUT').fieldRow[0].getText());
-  } else {
-    for (var i = 0, input; (input = this.inputList[i]); i++) {
-      for (var j = 0, field; (field = input.fieldRow[j]); j++) {
-        text.push(field.getText());
-      }
-      if (input.connection) {
-        var child = input.connection.targetBlock();
-        if (child) {
-          text.push(child.toString(undefined, opt_emptyToken));
-        } else {
+
+  // Temporarily set flag to navigate to all fields.
+  var prevNavigateFields = Blockly.ASTNode.NAVIGATE_ALL_FIELDS;
+  Blockly.ASTNode.NAVIGATE_ALL_FIELDS = true;
+
+  var node = Blockly.ASTNode.createBlockNode(this);
+  var rootNode = node;
+
+  /**
+   * Whether or not to add parentheses around an input.
+   * @param {!Blockly.Connection} connection The connection.
+   * @return {boolean} True if we should add parentheses around the input.
+   */
+  function shouldAddParentheses(connection) {
+    var checks = connection.getCheck();
+    if (!checks && connection.targetConnection) {
+      checks = connection.targetConnection.getCheck();
+    }
+    return !!checks && (checks.indexOf('Boolean') != -1 ||
+        checks.indexOf('Number') != -1);
+  }
+
+  /**
+   * Check that we haven't circled back to the original root node.
+   */
+  function checkRoot() {
+    if (node && node.getType() == rootNode.getType() &&
+        node.getLocation() == rootNode.getLocation()) {
+      node = null;
+    }
+  }
+
+  // Traverse the AST building up our text string.
+  while (node) {
+    switch (node.getType()) {
+      case Blockly.ASTNode.types.INPUT:
+        var connection = /** @type {!Blockly.Connection} */ (node.getLocation());
+        if (!node.in()) {
           text.push(emptyFieldPlaceholder);
+        } else if (shouldAddParentheses(connection)) {
+          text.push('(');
         }
+        break;
+      case Blockly.ASTNode.types.FIELD:
+        var field = /** @type {Blockly.Field} */ (node.getLocation());
+        if (field.name != Blockly.Block.COLLAPSED_FIELD_NAME) {
+          text.push(field.getText());
+        }
+        break;
+    }
+
+    var current = node;
+    node = current.in() || current.next();
+    if (!node) {
+      // Can't go in or next, keep going out until we can go next.
+      node = current.out();
+      checkRoot();
+      while (node && !node.next()) {
+        node = node.out();
+        checkRoot();
+        // If we hit an input on the way up, possibly close out parentheses.
+        if (node && node.getType() == Blockly.ASTNode.types.INPUT &&
+            shouldAddParentheses(
+                /** @type {!Blockly.Connection} */ (node.getLocation()))) {
+          text.push(')');
+        }
+      }
+      if (node) {
+        node = node.next();
       }
     }
   }
-  text = text.join(' ').trim() || '???';
+
+  // Restore state of NAVIGATE_ALL_FIELDS.
+  Blockly.ASTNode.NAVIGATE_ALL_FIELDS = prevNavigateFields;
+
+  // Run through our text array and simplify expression to remove parentheses
+  // around single field blocks.
+  for (var i = 2, l = text.length; i < l; i++) {
+    if (text[i - 2] == '(' && text[i] == ')') {
+      text[i - 2] = text[i - 1];
+      text.splice(i - 1, 2);
+      l -= 2;
+    }
+  }
+
+  // Join the text array, removing spaces around added paranthesis.
+  text = text.join(' ').replace(/(\() | (\))/gmi, '$1$2').trim() || '???';
   if (opt_maxLength) {
     // TODO: Improve truncation so that text from this block is given priority.
     // E.g. "1+2+3+4+5+6+7+8+9=0" should be "...6+7+8+9=0", not "1+2+3+4+5...".
@@ -1646,6 +1731,9 @@ Blockly.Block.prototype.appendInput_ = function(type, name) {
   if (type == Blockly.INPUT_VALUE || type == Blockly.NEXT_STATEMENT) {
     connection = this.makeConnection_(type);
   }
+  if (type == Blockly.NEXT_STATEMENT) {
+    this.statementInputCount++;
+  }
   var input = new Blockly.Input(type, name, this, connection);
   // Append input to list.
   this.inputList.push(input);
@@ -1717,18 +1805,24 @@ Blockly.Block.prototype.moveNumberedInputBefore = function(
 /**
  * Remove an input from this block.
  * @param {string} name The name of the input.
- * @param {boolean=} opt_quiet True to prevent error if input is not present.
+ * @param {boolean=} opt_quiet True to prevent an error if input is not present.
+ * @return {boolean} True if operation succeeds, false if input is not present and opt_quiet is true
  * @throws {Error} if the input is not present and opt_quiet is not true.
  */
 Blockly.Block.prototype.removeInput = function(name, opt_quiet) {
   for (var i = 0, input; (input = this.inputList[i]); i++) {
     if (input.name == name) {
+      if (input.type == Blockly.NEXT_STATEMENT) {
+        this.statementInputCount--;
+      }
       input.dispose();
       this.inputList.splice(i, 1);
-      return;
+      return true;
     }
   }
-  if (!opt_quiet) {
+  if (opt_quiet) {
+    return false;
+  } else {
     throw Error('Input not found: ' + name);
   }
 };

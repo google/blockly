@@ -1,18 +1,7 @@
 /**
  * @license
  * Copyright 2019 Google LLC
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 suite('Variable Fields', function() {
@@ -47,8 +36,8 @@ suite('Variable Fields', function() {
     var actualName = variableField.getText();
     var actualId = variableField.getValue();
     opt_expectedId = opt_expectedId || FAKE_ID;
-    assertEquals(actualName, expectedName);
-    assertEquals(actualId, opt_expectedId);
+    chai.assert.equal(actualName, expectedName);
+    chai.assert.equal(actualId, opt_expectedId);
   }
   function assertValueDefault(variableField) {
     assertValue(variableField, FAKE_VARIABLE_NAME, FAKE_ID);
@@ -80,10 +69,10 @@ suite('Variable Fields', function() {
         fieldVariable);
 
     // Expect three variable options, a rename option, and a delete option.
-    assertEquals(result_options.length, 5);
-    isEqualArrays(result_options[0], ['name1', 'id1']);
-    isEqualArrays(result_options[1], ['name2', 'id2']);
-    isEqualArrays(result_options[2], ['name3', 'id3']);
+    chai.assert.equal(result_options.length, 5);
+    chai.assert.deepEqual(result_options[0], ['name1', 'id1']);
+    chai.assert.deepEqual(result_options[1], ['name2', 'id2']);
+    chai.assert.deepEqual(result_options[2], ['name3', 'id3']);
   });
   suite('Constructor', function() {
     test('Null', function() {
@@ -97,8 +86,8 @@ suite('Variable Fields', function() {
     });
     test('No Value Before InitModel', function() {
       var fieldVariable = new Blockly.FieldVariable('name1');
-      assertEquals('', fieldVariable.getText());
-      assertNull(fieldVariable.getValue());
+      chai.assert.equal(fieldVariable.getText(), '');
+      chai.assert.isNull(fieldVariable.getValue());
     });
     test('Given Variable Name', function() {
       var fieldVariable = createAndInitFieldConstructor(
@@ -117,8 +106,8 @@ suite('Variable Fields', function() {
     });
     test('No Value Before InitModel', function() {
       var variableField = new Blockly.FieldVariable('name1');
-      assertEquals('', variableField.getText());
-      assertNull(variableField.getValue());
+      chai.assert.equal(variableField.getText(), '');
+      chai.assert.isNull(variableField.getValue());
     });
     test('Given Variable Name', function() {
       var variableField = createAndInitFieldJson(this.workspace, 'name1');
@@ -150,8 +139,8 @@ suite('Variable Fields', function() {
 
       variableField.setValue('id2');
       // Setting value by ID gives us the right text as well.
-      assertEquals('name2', variableField.getText());
-      assertEquals('id2', variableField.getValue());
+      chai.assert.equal(variableField.getText(), 'name2');
+      chai.assert.equal(variableField.getValue(), 'id2');
       chai.assert.notEqual(oldId, variableField.getValue());
     });
     test('Variable Does not Exist', function() {
@@ -255,7 +244,7 @@ suite('Variable Fields', function() {
       // will be returned (regardless of what types are available on the workspace).
       var fieldVariable = new Blockly.FieldVariable('name1');
       var resultTypes = fieldVariable.getVariableTypes_();
-      isEqualArrays(resultTypes, ['']);
+      chai.assert.deepEqual(resultTypes, ['']);
     });
     test('variableTypes is explicit', function() {
       // Expect that since variableTypes is defined, it will be the return
@@ -263,9 +252,9 @@ suite('Variable Fields', function() {
       var fieldVariable = new Blockly.FieldVariable(
           'name1', null, ['type1', 'type2'], 'type1');
       var resultTypes = fieldVariable.getVariableTypes_();
-      isEqualArrays(resultTypes, ['type1', 'type2']);
-      assertEquals('Default type was wrong', 'type1',
-          fieldVariable.defaultType_);
+      chai.assert.deepEqual(resultTypes, ['type1', 'type2']);
+      chai.assert.equal(fieldVariable.defaultType_, 'type1',
+          'Default type was wrong');
     });
     test('variableTypes is null', function() {
       // Expect all variable types to be returned.
@@ -278,7 +267,7 @@ suite('Variable Fields', function() {
 
       var resultTypes = fieldVariable.getVariableTypes_();
       // The empty string is always one of the options.
-      isEqualArrays(resultTypes, ['type1', 'type2', '']);
+      chai.assert.deepEqual(resultTypes, ['type1', 'type2', '']);
     });
     test('variableTypes is the empty list', function() {
       var fieldVariable = new Blockly.FieldVariable('name1');
@@ -294,15 +283,14 @@ suite('Variable Fields', function() {
   suite('Default types', function() {
     test('Default type exists', function() {
       var fieldVariable = new Blockly.FieldVariable(null, null, ['b'], 'b');
-      assertEquals('The variable field\'s default type should be "b"',
-          'b', fieldVariable.defaultType_);
+      chai.assert.equal(fieldVariable.defaultType_, 'b',
+          'The variable field\'s default type should be "b"');
     });
     test('No default type', function() {
       var fieldVariable = new Blockly.FieldVariable(null);
-      assertEquals('The variable field\'s default type should be the empty string',
-          '', fieldVariable.defaultType_);
-      assertNull('The variable field\'s allowed types should be null',
-          fieldVariable.variableTypes);
+      chai.assert.equal(fieldVariable.defaultType_, '', 'The variable field\'s default type should be the empty string');
+      chai.assert.isNull(fieldVariable.variableTypes,
+          'The variable field\'s allowed types should be null');
     });
     test('Default type mismatch', function() {
       // Invalid default type when creating a variable field.

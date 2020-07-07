@@ -1,18 +1,7 @@
 /**
  * @license
  * Copyright 2011 Google LLC
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 /**
@@ -132,7 +121,8 @@ Blockly.Tooltip.createDom = function() {
   // Create an HTML container for popup overlays (e.g. editor widgets).
   Blockly.Tooltip.DIV = document.createElement('div');
   Blockly.Tooltip.DIV.className = 'blocklyTooltipDiv';
-  document.body.appendChild(Blockly.Tooltip.DIV);
+  var container = Blockly.parentContainer || document.body;
+  container.appendChild(Blockly.Tooltip.DIV);
 };
 
 /**
@@ -140,15 +130,28 @@ Blockly.Tooltip.createDom = function() {
  * @param {!Element} element SVG element onto which tooltip is to be bound.
  */
 Blockly.Tooltip.bindMouseEvents = function(element) {
-  Blockly.bindEvent_(element, 'mouseover', null,
+  element.mouseOverWrapper_ = Blockly.bindEvent_(element, 'mouseover', null,
       Blockly.Tooltip.onMouseOver_);
-  Blockly.bindEvent_(element, 'mouseout', null,
+  element.mouseOutWrapper_ = Blockly.bindEvent_(element, 'mouseout', null,
       Blockly.Tooltip.onMouseOut_);
 
   // Don't use bindEvent_ for mousemove since that would create a
   // corresponding touch handler, even though this only makes sense in the
   // context of a mouseover/mouseout.
   element.addEventListener('mousemove', Blockly.Tooltip.onMouseMove_, false);
+};
+
+/**
+ * Unbinds tooltip mouse events from the SVG element.
+ * @param {!Element} element SVG element onto which tooltip is bound.
+ */
+Blockly.Tooltip.unbindMouseEvents = function(element) {
+  if (!element) {
+    return;
+  }
+  Blockly.unbindEvent_(element.mouseOverWrapper_);
+  Blockly.unbindEvent_(element.mouseOutWrapper_);
+  element.removeEventListener('mousemove', Blockly.Tooltip.onMouseMove_);
 };
 
 /**
@@ -235,6 +238,16 @@ Blockly.Tooltip.onMouseMove_ = function(e) {
 };
 
 /**
+ * Dispose of the tooltip.
+ * @package
+ */
+Blockly.Tooltip.dispose = function() {
+  Blockly.Tooltip.element_ = null;
+  Blockly.Tooltip.poisonedElement_ = null;
+  Blockly.Tooltip.hide();
+};
+
+/**
  * Hide the tooltip.
  */
 Blockly.Tooltip.hide = function() {
@@ -282,7 +295,7 @@ Blockly.Tooltip.show_ = function() {
     return;
   }
   // Erase all existing text.
-  Blockly.Tooltip.DIV.innerHTML = '';
+  Blockly.Tooltip.DIV.textContent = '';
   // Get the new text.
   var tip = Blockly.Tooltip.element_.tooltip;
   while (typeof tip == 'function') {

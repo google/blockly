@@ -1,18 +1,7 @@
 /**
  * @license
  * Copyright 2017 Google LLC
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 /**
@@ -325,7 +314,7 @@ Blockly.Gesture.prototype.updateIsDraggingFromFlyout_ = function() {
   }
   if (!this.flyout_.isScrollable() ||
       this.flyout_.isDragTowardWorkspace(this.currentDragDeltaXY_)) {
-    this.startWorkspace_ = this.flyout_.targetWorkspace_;
+    this.startWorkspace_ = this.flyout_.targetWorkspace;
     this.startWorkspace_.updateScreenCalculationsIfScrolled();
     // Start the event group now, so that the same event group is used for block
     // creation and block dragging.
@@ -500,7 +489,7 @@ Blockly.Gesture.prototype.doStart = function(e) {
         e.shiftKey &&
         this.targetBlock_.workspace.keyboardAccessibilityMode) {
       this.creatorWorkspace_.getCursor().setCurNode(
-          Blockly.navigation.getTopNode(this.targetBlock_));
+          Blockly.ASTNode.createTopNode(this.targetBlock_));
     } else {
       this.targetBlock_.select();
     }
@@ -668,6 +657,17 @@ Blockly.Gesture.prototype.handleWsStart = function(e, ws) {
 };
 
 /**
+ * Fires a workspace click event.
+ * @param {!Blockly.WorkspaceSvg} ws The workspace that a user clicks on.
+ * @private
+ */
+Blockly.Gesture.prototype.fireWorkspaceClick_ = function(ws) {
+  var clickEvent = new Blockly.Events.Ui(null, 'workspaceClick', null, null);
+  clickEvent.workspaceId = ws.id;
+  Blockly.Events.fire(clickEvent);
+};
+
+/**
  * Handle a mousedown/touchstart event on a flyout.
  * @param {!Event} e A mouse down or touch start event.
  * @param {!Blockly.Flyout} flyout The flyout the event hit.
@@ -774,6 +774,7 @@ Blockly.Gesture.prototype.doWorkspaceClick_ = function(e) {
   } else if (Blockly.selected) {
     Blockly.selected.unselect();
   }
+  this.fireWorkspaceClick_(ws);
 };
 
 /* End functions defining what actions to take to execute clicks on each type

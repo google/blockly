@@ -1,18 +1,7 @@
 /**
  * @license
  * Copyright 2019 Google LLC
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 goog.require('Blockly.Blocks.procedures');
@@ -51,6 +40,49 @@ suite('Procedures', function() {
     this.workspace.dispose();
   });
 
+  suite('allProcedures', function() {
+    test('Only Procedures', function() {
+      var noReturnBlock = new Blockly.Block(this.workspace, 'procedures_defnoreturn');
+      noReturnBlock.setFieldValue('no return', 'NAME');
+      var returnBlock = new Blockly.Block(this.workspace, 'procedures_defreturn');
+      returnBlock.setFieldValue('return', 'NAME');
+
+      var allProcedures = Blockly.Procedures.allProcedures(this.workspace);
+      chai.assert.lengthOf(allProcedures, 2);
+      
+      chai.assert.lengthOf(allProcedures[0], 1);
+      chai.assert.equal(allProcedures[0][0][0], 'no return');
+
+      chai.assert.lengthOf(allProcedures[1], 1);
+      chai.assert.equal(allProcedures[1][0][0], 'return');
+    });
+    test('Multiple Blocks', function() {
+      var noReturnBlock = new Blockly.Block(this.workspace, 'procedures_defnoreturn');
+      noReturnBlock.setFieldValue('no return', 'NAME');
+      var returnBlock = new Blockly.Block(this.workspace, 'procedures_defreturn');
+      returnBlock.setFieldValue('return', 'NAME');
+      var returnBlock2 = new Blockly.Block(this.workspace, 'procedures_defreturn');
+      returnBlock2.setFieldValue('return2', 'NAME');
+      var _ = new Blockly.Block(this.workspace, 'controls_if');
+
+      var allProcedures = Blockly.Procedures.allProcedures(this.workspace);
+      chai.assert.lengthOf(allProcedures, 2);
+      
+      chai.assert.lengthOf(allProcedures[0], 1);
+      chai.assert.equal(allProcedures[0][0][0], 'no return');
+
+      chai.assert.lengthOf(allProcedures[1], 2);
+      chai.assert.equal(allProcedures[1][0][0], 'return');
+      chai.assert.equal(allProcedures[1][1][0], 'return2');
+    });
+    test('No Procedures', function() {
+      var _ = new Blockly.Block(this.workspace, 'controls_if');
+      var allProcedures = Blockly.Procedures.allProcedures(this.workspace);
+      chai.assert.lengthOf(allProcedures, 2);
+      chai.assert.lengthOf(allProcedures[0], 0, 'No procedures_defnoreturn blocks expected');
+      chai.assert.lengthOf(allProcedures[1], 0, 'No procedures_defreturn blocks expected');
+    });
+  });
   suite('isNameUsed', function() {
     test('No Blocks', function() {
       chai.assert.isFalse(
@@ -304,6 +336,244 @@ suite('Procedures', function() {
         def2.dispose();
         caller2.dispose();
       }, 'name');
+    });
+  });
+  suite('Enable/Disable', function() {
+    setup(function() {
+      createEventsFireStub();
+      var toolbox = document.getElementById('toolbox-categories');
+      this.workspaceSvg = Blockly.inject('blocklyDiv', {toolbox: toolbox});
+    });
+    teardown(function() {
+      this.workspaceSvg.dispose();
+      sinon.restore();
+    });
+    suite('Inherited disabled', function() {
+      setup(function() {
+        var dom = Blockly.Xml.textToDom(
+            '<xml xmlns="https://developers.google.com/blockly/xml">' +
+            '<block type="procedures_defreturn" id="bar-def">' +
+              '<field name="NAME">bar</field>' +
+              '<statement name="STACK">' +
+                '<block type="procedures_callnoreturn" id="foo-c1">' +
+                  '<mutation name="foo"></mutation>' +
+                '</block>' +
+              '</statement>' +
+              '<value name="RETURN">' +
+                '<block type="procedures_callreturn" id="bar-c1">' +
+                  '<mutation name="bar"></mutation>' +
+                '</block>' +
+              '</value>' +
+            '</block>' +
+            '<block type="procedures_defnoreturn" id="foo-def">' +
+              '<field name="NAME">foo</field>' +
+            '</block>' +
+            '<block type="procedures_defreturn" id="baz-def">' +
+              '<field name="NAME">baz</field>' +
+              '<value name="RETURN">' +
+                '<block type="procedures_callreturn" id="bar-c2">' +
+                  '<mutation name="bar"></mutation>' +
+                '</block>' +
+              '</value>' +
+            '</block>' +
+            '<block type="procedures_callnoreturn" id="foo-c2">' +
+              '<mutation name="foo"></mutation>' +
+            '</block>' +
+            '<block type="procedures_callreturn" id="baz-c1">' +
+              '<mutation name="baz"></mutation>' +
+            '</block>' +
+          '</xml>');
+        Blockly.Events.disable();
+        Blockly.Xml.appendDomToWorkspace(dom, this.workspaceSvg);
+        Blockly.Events.enable();
+
+        this.barDef = this.workspaceSvg.getBlockById('bar-def');
+        this.fooDef = this.workspaceSvg.getBlockById('foo-def');
+        this.bazDef = this.workspaceSvg.getBlockById('baz-def');
+
+        this.barCalls = [
+          this.workspaceSvg.getBlockById('bar-c1'),
+          this.workspaceSvg.getBlockById('bar-c2')];
+        this.fooCalls = [
+          this.workspaceSvg.getBlockById('foo-c1'),
+          this.workspaceSvg.getBlockById('foo-c2')];
+        this.bazCall = this.workspaceSvg.getBlockById('baz-c1');
+      });
+      test('Nested caller', function() {
+        this.barDef.setEnabled(false);
+
+        for (var i = 0; i < 2; i++) {
+          chai.assert.isFalse(this.barCalls[i].isEnabled(),
+              'Callers are disabled when their definition is disabled ' +
+              '(bar call ' + i + ')');
+        }
+        chai.assert.isTrue(this.fooCalls[0].isEnabled(),
+            'Callers in definitions are disabled by inheritance');
+        chai.assert.isTrue(this.fooCalls[0].getInheritedDisabled(),
+            'Callers in definitions are disabled by inheritance');
+
+        this.fooDef.setEnabled(false);
+
+        for (var i = 0; i < 2; i++) {
+          chai.assert.isFalse(this.fooCalls[i].isEnabled(),
+              'Callers are disabled when their definition is disabled ' +
+              '(foo call ' + i + ')');
+        }
+
+        this.barDef.setEnabled(true);
+
+        for (var i = 0; i < 2; i++) {
+          chai.assert.isTrue(this.barCalls[i].isEnabled(),
+              'Callers are reenabled with their definition ' +
+              '(bar call ' + i + ')');
+        }
+        chai.assert.isFalse(this.fooCalls[0].isEnabled(),
+            'Nested disabled callers remain disabled');
+        chai.assert.isFalse(this.fooCalls[0].getInheritedDisabled(),
+            'Nested disabled callers remain disabled, not by inheritance');
+      });
+      test('Caller in return', function() {
+        this.bazDef.setEnabled(false);
+
+        chai.assert.isFalse(this.bazCall.isEnabled(),
+            'Caller is disabled with its definition');
+
+        chai.assert.isTrue(this.barCalls[1].isEnabled(),
+            'Caller in the return is disabled by inheritance');
+        chai.assert.isTrue(this.barCalls[1].getInheritedDisabled(),
+            'Caller in the return is disabled by inheritance');
+
+        this.barDef.setEnabled(false);
+
+        for (var i = 0; i < 2; i++) {
+          chai.assert.isFalse(this.barCalls[i].isEnabled(),
+              'Callers are disabled when their definition is disabled ' +
+              '(bar call ' + i + ')');
+        }
+
+        this.bazDef.setEnabled(true);
+
+        chai.assert.isFalse(this.barCalls[1].isEnabled(),
+            'Caller in return remains disabled');
+        chai.assert.isFalse(this.barCalls[1].getInheritedDisabled(),
+            'Caller in return remains disabled, not by inheritance');
+      });
+    });
+    var testCases = [
+      ['procedures_defnoreturn',
+        ('<xml xmlns="https://developers.google.com/blockly/xml">' +
+          '<block type="procedures_defnoreturn" id="bar-def">' +
+            '<field name="NAME">bar</field>' +
+          '</block>' +
+          '<block type="procedures_callnoreturn" id="bar-c1">' +
+            '<mutation name="bar"></mutation>' +
+          '</block>' +
+          '<block type="procedures_callnoreturn" id="bar-c2">' +
+            '<mutation name="bar"></mutation>' +
+          '</block>' +
+        '</xml>')],
+      ['procedures_defreturn',
+        ('<xml xmlns="https://developers.google.com/blockly/xml">' +
+          '<block type="procedures_defreturn" id="bar-def">' +
+            '<field name="NAME">bar</field>' +
+            '<value name="RETURN">' +
+              '<block type="procedures_callreturn" id="bar-c1">' +
+                '<mutation name="bar"></mutation>' +
+              '</block>' +
+            '</value>' +
+          '</block>' +
+          '<block type="procedures_callreturn" id="bar-c2">' +
+            '<mutation name="bar"></mutation>' +
+          '</block>' +
+        '</xml>')]];
+    testCases.forEach(function(testCase) {
+      var suiteName = testCase[0];
+      var domText = testCase[1];
+      suite(suiteName, function() {
+        setup(function() {
+          var dom = Blockly.Xml.textToDom(domText);
+
+          Blockly.Xml.appendDomToWorkspace(dom, this.workspaceSvg);
+          this.barDef = this.workspaceSvg.getBlockById('bar-def');
+          this.barCalls = [
+            this.workspaceSvg.getBlockById('bar-c1'),
+            this.workspaceSvg.getBlockById('bar-c2')
+          ];
+        });
+
+        test('Set disabled updates callers', function() {
+          this.workspaceSvg.clearUndo();
+          Blockly.Events.setGroup('g1');
+          this.barDef.setEnabled(false);
+          Blockly.Events.setGroup(false);
+
+          for (var i = 0; i < 2; i++) {
+            chai.assert.isFalse(this.barCalls[i].isEnabled(),
+                'Callers are disabled when their definition is disabled (call ' +
+                i + ')');
+          }
+          var firedEvents = this.workspaceSvg.undoStack_;
+          chai.assert.equal(firedEvents.length, 3,
+              'An event was fired for the definition and each caller');
+          for (var i = 0; i < 3; i++) {
+            chai.assert.equal(firedEvents[i].group, 'g1',
+                'Disable events are in the same group (event ' + i + ')');
+          }
+
+          this.workspaceSvg.clearUndo();
+          Blockly.Events.setGroup('g2');
+          this.barDef.setEnabled(true);
+          Blockly.Events.setGroup(false);
+
+          for (var i = 0; i < 2; i++) {
+            chai.assert.isTrue(this.barCalls[i].isEnabled(),
+                'Callers are enabled when their definition is enabled (call ' +
+                i + ')');
+          }
+          chai.assert.equal(firedEvents.length,3,
+              'An event was fired for the definition and each caller');
+          for (var i = 0; i < 3; i++) {
+            chai.assert.equal(firedEvents[i].group, 'g2',
+                'Enable events are in the same group (event ' + i + ')');
+          }
+        });
+        test('Set disabled updates callers while remembering old caller state', function() {
+          this.barCalls[0].setEnabled(false);
+          this.workspaceSvg.clearUndo();
+          Blockly.Events.setGroup('g1');
+          this.barDef.setEnabled(false);
+          Blockly.Events.setGroup(false);
+
+          for (var i = 0; i < 2; i++) {
+            chai.assert.isFalse(this.barCalls[i].isEnabled(),
+                'Callers are disabled when their definition is disabled (call ' +
+                i + ')');
+          }
+          var firedEvents = this.workspaceSvg.undoStack_;
+          chai.assert.equal(firedEvents.length, 2,
+              'An event was fired for the definition and the enabled caller');
+          for (var i = 0; i < 2; i++) {
+            chai.assert.equal(firedEvents[i].group, 'g1',
+                'Disable events are in the same group (event ' + i + ')');
+          }
+
+          this.workspaceSvg.clearUndo();
+          Blockly.Events.setGroup('g2');
+          this.barDef.setEnabled(true);
+          Blockly.Events.setGroup(false);
+
+          chai.assert.isFalse(this.barCalls[0].isEnabled(),
+              'Caller remains in disabled state when the definition is enabled');
+          chai.assert.isTrue(this.barCalls[1].isEnabled(),
+              'Caller returns to previous enabled state when the definition is enabled');
+          chai.assert.equal(firedEvents.length,2,
+              'An event was fired for the definition and the enabled caller');
+          for (var i = 0; i < 2; i++) {
+            chai.assert.equal(firedEvents[i].group, 'g2',
+                'Enable events are in the same group (event ' + i + ')');
+          }
+        });
+      });
     });
   });
   suite('Mutation', function() {

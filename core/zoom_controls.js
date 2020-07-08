@@ -210,7 +210,7 @@ Blockly.ZoomControls.prototype.createZoomOutSvg_ = function(rnd) {
 
   // Attach listener.
   Blockly.bindEventWithChecks_(
-      zoominSvg, 'mousedown', null, this.zoom_.bind(this, -1));
+      zoomoutSvg, 'mousedown', null, this.zoom_.bind(this, -1));
 };
 
 /**

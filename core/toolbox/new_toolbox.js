@@ -234,6 +234,37 @@ Blockly.NewToolbox.prototype.render = function(toolboxDef) {
   }
 };
 
+// TODO: Update this.
+Blockly.NewToolbox.prototype.getClientRect = function() {
+  // TODO: Fix deleting clicking on the category.
+  if (!this.HtmlDiv) {
+    return null;
+  }
+
+  // BIG_NUM is offscreen padding so that blocks dragged beyond the toolbox
+  // area are still deleted.  Must be smaller than Infinity, but larger than
+  // the largest screen size.
+  var BIG_NUM = 10000000;
+  var toolboxRect = this.HtmlDiv.getBoundingClientRect();
+
+  var top = toolboxRect.top;
+  var bottom = top + toolboxRect.height;
+  var left = toolboxRect.left;
+  var right = left + toolboxRect.width;
+
+  // Assumes that the toolbox is on the SVG edge.  If this changes
+  // (e.g. toolboxes in mutators) then this code will need to be more complex.
+  if (this.toolboxPosition == Blockly.TOOLBOX_AT_TOP) {
+    return new Blockly.utils.Rect(-BIG_NUM, bottom, -BIG_NUM, BIG_NUM);
+  } else if (this.toolboxPosition == Blockly.TOOLBOX_AT_BOTTOM) {
+    return new Blockly.utils.Rect(top, BIG_NUM, -BIG_NUM, BIG_NUM);
+  } else if (this.toolboxPosition == Blockly.TOOLBOX_AT_LEFT) {
+    return new Blockly.utils.Rect(-BIG_NUM, BIG_NUM, -BIG_NUM, right);
+  } else {  // Right
+    return new Blockly.utils.Rect(-BIG_NUM, BIG_NUM, left, BIG_NUM);
+  }
+};
+
 /**
  * Get whether or not the toolbox is horizontal.
  * @return {boolean} True if the toolbox is horizontal, false if the toolbox is
@@ -354,6 +385,7 @@ Blockly.NewToolbox.prototype.selectFirstCategory = function() {};
  * @param {Blockly.IToolboxItem} item The toolbox item to select.
  */
 Blockly.NewToolbox.prototype.setSelectedItem = function(item) {
+  // TODO: Add event logging.
   // Unselect the old item.
   if (this.selectedItem_) {
     this.selectedItem_.setSelected(false);
@@ -408,6 +440,7 @@ Blockly.NewToolbox.prototype.getWorkspace = function() {
 
 /**
  * CSS for Toolbox.  See css.js for use.
+ * TODO: add -moz- to flex-direction.
  */
 Blockly.Css.register([
   /* eslint-disable indent */

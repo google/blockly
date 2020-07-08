@@ -106,9 +106,26 @@ Blockly.ToolboxCategory = function(categoryDef, toolbox) {
   /**
    * Whether or not the category should display it's children.
    * @type {boolean}
-   * @private
+   * @protected
    */
   this.expanded_ = true;
+
+  /**
+   * The config for all the classes in the category.
+   * @type {Object}
+   * @protected
+   */
+  this.classConfig_ = {
+    'container': 'blocklyToolboxCategory',
+    'row': 'blocklyTreeRow',
+    'icon': 'blocklyTreeIcon',
+    'label': 'blocklyTreeLabel',
+    'contents': 'blocklyToolboxContents',
+    'selected': 'blocklyTreeSelected',
+    'openIcon': ''
+  };
+
+  Blockly.utils.object.mixin(this.classConfig_, categoryDef['classConfig']);
 };
 
 /**
@@ -117,10 +134,10 @@ Blockly.ToolboxCategory = function(categoryDef, toolbox) {
  */
 Blockly.ToolboxCategory.prototype.createDom = function() {
   this.htmlDiv_ = document.createElement('div');
-  this.htmlDiv_.classList.add('blocklyToolboxCategory');
+  this.htmlDiv_.classList.add(this.classConfig_['container']);
 
   this.rowDiv_ = document.createElement('div');
-  this.rowDiv_.classList.add('blocklyTreeRow');
+  this.rowDiv_.classList.add(this.classConfig_['row']);
   this.htmlDiv_.appendChild(this.rowDiv_);
   // TODO: Should this be on the htmlDiv_ or the rowDiv_?
   this.rowDiv_.tabIndex = 0;
@@ -180,7 +197,7 @@ Blockly.ToolboxCategory.prototype.addColour_ = function(rowDiv, colour) {
  */
 Blockly.ToolboxCategory.prototype.createSubCategories_ = function(contents) {
   var contentsContainer = document.createElement('div');
-  contentsContainer.classList.add('blocklyToolboxContents');
+  contentsContainer.classList.add(this.classConfig_['contents']);
   if (this.workspace_.RTL) {
     contentsContainer.style.paddingRight = '19px';
   } else {
@@ -204,9 +221,8 @@ Blockly.ToolboxCategory.prototype.createSubCategories_ = function(contents) {
  */
 Blockly.ToolboxCategory.prototype.createIconSpan_ = function() {
   var toolboxIcon = document.createElement('span');
-  // TODO: Should get the class name from the config.
   if (!this.parentToolbox_.isHorizontal()) {
-    toolboxIcon.classList.add('blocklyTreeIcon');
+    toolboxIcon.classList.add(this.classConfig_['icon']);
     if (!this.hasCategories()) {
       // TODO: This is a bit weird. We should only add if we have a category.
       toolboxIcon.classList.add('blocklyTreeIconNone');
@@ -226,21 +242,21 @@ Blockly.ToolboxCategory.prototype.createLabelSpan_ = function() {
   var toolboxLabel = document.createElement('span');
   toolboxLabel.textContent = this.name_;
   // TODO: Should get the class name from the config.
-  toolboxLabel.classList.add('blocklyTreeLabel');
+  toolboxLabel.classList.add(this.classConfig_['label']);
   return toolboxLabel;
 };
 
 
 /**
  * Add either the colour or the style for a category.
- * @param {!Blockly.utils.toolbox.Category} categoryInfo The object holding
+ * @param {!Blockly.utils.toolbox.Category} categoryDef The object holding
  *    information on the category.
  * @return {string} The hex color for the category.
  * @private
  */
-Blockly.ToolboxCategory.prototype.getColour_ = function(categoryInfo) {
-  var styleName = categoryInfo['categorystyle'];
-  var colour = categoryInfo['colour'];
+Blockly.ToolboxCategory.prototype.getColour_ = function(categoryDef) {
+  var styleName = categoryDef['categorystyle'];
+  var colour = categoryDef['colour'];
 
   if (colour && styleName) {
     console.warn('Toolbox category "' + this.name_ +
@@ -323,10 +339,10 @@ Blockly.ToolboxCategory.prototype.setSelected = function(isSelected) {
   console.log("Setting selected for category");
   if (isSelected) {
     this.rowDiv_.style.backgroundColor = this.colour_ || '#57e';
-    this.rowDiv_.classList.add('blocklyTreeSelected');
+    this.rowDiv_.classList.add(this.classConfig_['selected']);
   } else {
     this.rowDiv_.style.backgroundColor = '';
-    this.rowDiv_.classList.remove('blocklyTreeSelected');
+    this.rowDiv_.classList.remove(this.classConfig_['selected']);
   }
 };
 

@@ -662,7 +662,7 @@ Blockly.Gesture.prototype.handleWsStart = function(e, ws) {
  * @private
  */
 Blockly.Gesture.prototype.fireWorkspaceClick_ = function(ws) {
-  var clickEvent = new Blockly.Events.Ui(null, 'workspaceClick', null, null);
+  var clickEvent = new Blockly.Events.Ui(null, 'click', null, 'workspace');
   clickEvent.workspaceId = ws.id;
   Blockly.Events.fire(clickEvent);
 };
@@ -752,7 +752,7 @@ Blockly.Gesture.prototype.doBlockClick_ = function() {
   } else {
     // Clicks events are on the start block, even if it was a shadow.
     Blockly.Events.fire(
-        new Blockly.Events.Ui(this.startBlock_, 'click', undefined, undefined));
+        new Blockly.Events.Ui(this.startBlock_, 'click', undefined, 'block'));
   }
   this.bringBlockToFront_();
   Blockly.Events.setGroup(false);

@@ -81,12 +81,34 @@ Blockly.ToolboxCategory = function(categoryDef, toolbox) {
   this.rowDiv_ = null;
 
   /**
+   * The html element for the toolbox icon.
+   * @type {HTMLDivElement}
+   * @private
+   */
+  this.iconDiv_ = null;
+
+  /**
    * A handle to use to unbind the click event for this category.
    * Data returned from Blockly.bindEvent_.
    * @type {?Blockly.EventData}
    * @private
    */
   this.clickEvent_ = null;
+
+  /**
+   * A handle to use to unbind the key down event for this category.
+   * Data returned from Blockly.bindEvent_.
+   * @type {?Blockly.EventData}
+   * @private
+   */
+  this.keyDownEvent_ = null;
+
+  /**
+   * Whether or not the category should display it's children.
+   * @type {boolean}
+   * @private
+   */
+  this.expanded_ = true;
 };
 
 /**
@@ -100,28 +122,36 @@ Blockly.ToolboxCategory.prototype.createDom = function() {
   this.rowDiv_ = document.createElement('div');
   this.rowDiv_.classList.add('blocklyTreeRow');
   this.htmlDiv_.appendChild(this.rowDiv_);
+  // TODO: Should this be on the htmlDiv_ or the rowDiv_?
+  this.rowDiv_.tabIndex = 0;
 
   if (this.parentToolbox_.isHorizontal()) {
     // TODO: All these classes do is add margins. Do we want to keep this?
-    var horizontalClass = this.parentToolbox_.isRtl() ?
+    var horizontalClass = this.workspace_.RTL ?
         'blocklyHorizontalTreeRtl' : 'blocklyHorizontalTree';
     this.htmlDiv_.classList.add(horizontalClass);
   }
-  var toolboxIcon = this.createIconSpan_();
-  this.rowDiv_.appendChild(toolboxIcon);
+  this.iconDiv_ = this.createIconSpan_();
+  this.rowDiv_.appendChild(this.iconDiv_);
 
   var toolboxLabel = this.createLabelSpan_();
   this.rowDiv_.appendChild(toolboxLabel);
 
   if (this.hasCategories()) {
-    var subCategoriesContainer = this.createSubCategories_(this.contents);
-    this.htmlDiv_.appendChild(subCategoriesContainer);
+    this.subCategoriesDiv_ = this.createSubCategories_(this.contents);
+    this.htmlDiv_.appendChild(this.subCategoriesDiv_);
   }
 
   this.addColour_(this.rowDiv_, this.colour_);
 
+  this.setExpanded(this.expanded_);
+
   this.clickEvent_ = Blockly.bindEvent_(
       this.rowDiv_, 'mouseup', this, this.onClick_);
+
+  this.keyDownEvent_ = Blockly.bindEvent_(
+      this.rowDiv_, 'keydown', this, this.onKeyDown_);
+
   return this.htmlDiv_;
 };
 
@@ -151,6 +181,12 @@ Blockly.ToolboxCategory.prototype.addColour_ = function(rowDiv, colour) {
 Blockly.ToolboxCategory.prototype.createSubCategories_ = function(contents) {
   var contentsContainer = document.createElement('div');
   contentsContainer.classList.add('blocklyToolboxContents');
+  if (this.workspace_.RTL) {
+    contentsContainer.style.paddingRight = '19px';
+  } else {
+    contentsContainer.style.paddingLeft = '19px';
+  }
+
   for (var i = 0; i < contents.length; i++) {
     // TODO: This should check the type of toolbox item before creating.
     var child = this.contents[i];
@@ -171,7 +207,10 @@ Blockly.ToolboxCategory.prototype.createIconSpan_ = function() {
   // TODO: Should get the class name from the config.
   if (!this.parentToolbox_.isHorizontal()) {
     toolboxIcon.classList.add('blocklyTreeIcon');
-    toolboxIcon.classList.add('blocklyTreeIconNone');
+    if (!this.hasCategories()) {
+      // TODO: This is a bit weird. We should only add if we have a category.
+      toolboxIcon.classList.add('blocklyTreeIconNone');
+    }
   }
 
   toolboxIcon.style.display = 'inline-block';
@@ -270,6 +309,7 @@ Blockly.ToolboxCategory.prototype.parseColour_ = function(colourValue) {
  */
 Blockly.ToolboxCategory.prototype.hasCategories = function() {
   // TODO: I think we can store this at the beginning.
+  // TODO: Rename to hasChildren?
   return this.contents && this.contents.length &&
     typeof this.contents != 'string' &&
     this.contents[0].kind.toUpperCase() == 'CATEGORY';
@@ -296,7 +336,69 @@ Blockly.ToolboxCategory.prototype.setSelected = function(isSelected) {
  * @protected
  */
 Blockly.ToolboxCategory.prototype.onClick_ = function(e) {
+  this.setExpanded(!this.expanded_);
   this.parentToolbox_.setSelectedItem(this);
+};
+
+/**
+ * Opens or closes the current category if it has children.
+ * @param {boolean} isExpanded True to expand the category, false otherwise.
+ */
+Blockly.ToolboxCategory.prototype.setExpanded = function(isExpanded) {
+  if (!this.hasCategories()) {
+    return;
+  }
+  this.expanded_ = isExpanded;
+  if (isExpanded) {
+    this.subCategoriesDiv_.style.display = 'block';
+    // TODO: All these classes should come from a class config.
+    this.iconDiv_.classList.add('blocklyTreeIconOpen');
+    // TODO: Is there a better way than always checking the workspace direction?
+    // TODO: Get a class config based on the direction?
+    // TODO: How does this work for people passing in configs?
+    if (this.workspace_.RTL) {
+      this.iconDiv_.classList.remove('blocklyTreeIconClosedRtl');
+    } else {
+      this.iconDiv_.classList.remove('blocklyTreeIconClosedLtr');
+    }
+  } else {
+    this.iconDiv_.classList.add('blocklyTreeIconClosedLtr');
+    if (this.workspace_.RTL) {
+      this.iconDiv_.classList.add('blocklyTreeIconClosedRtl');
+    } else {
+      this.iconDiv_.classList.add('blocklyTreeIconClosedLtr');
+    }
+    this.iconDiv_.classList.remove('blocklyTreeIconOpen');
+    this.subCategoriesDiv_.style.display = 'none';
+  }
+  // TODO: Look into this. We were using Blockly.svgResize(this.workspace_) before.
+  // TODO: Look into Blockly.svgResize(this.workspace_) it creates line btwn toolbox and flyout.
+  this.parentToolbox_.position();
+};
+
+/**
+ * Handles key down for the category.
+ * @param {Event} e Key down event.
+ * @protected
+ */
+Blockly.ToolboxCategory.prototype.onKeyDown_ = function(e) {
+  var handled = true;
+  switch (e.keyCode) {
+    case Blockly.utils.KeyCodes.DOWN:
+      // TODO: Don't love this.
+      handled = this.parentToolbox_.selectNext();
+      break;
+    case Blockly.utils.KeyCodes.UP:
+      handled = this.parentToolbox_.selectPrevious();
+      break;
+    default:
+      handled = false;
+      break;
+  }
+
+  if (handled) {
+    e.preventDefault();
+  }
 };
 
 /**
@@ -305,6 +407,9 @@ Blockly.ToolboxCategory.prototype.onClick_ = function(e) {
 Blockly.ToolboxCategory.prototype.dispose = function() {
   if (this.clickEvent_) {
     Blockly.unbindEvent_(this.clickEvent_);
+  }
+  if (this.keyDownEvent_) {
+    Blockly.unbindEvent_(this.keyDownEvent_);
   }
   Blockly.utils.dom.removeNode(this.htmlDiv_);
 };

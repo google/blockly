@@ -77,9 +77,9 @@ Blockly.FlyoutButton = function(workspace, targetWorkspace, json, isLabel) {
    * @type {string}
    * @private
    */
-  this.callbackArg_ = xml.getAttribute('callbackArg')||
+  this.callbackArg_ = json('callbackArg')||
   /* Check the lower case version too to satisfy IE */
-                      xml.getAttribute('callbackarg');
+                      json('callbackarg');
 
   /**
    * If specified, a CSS class to add to this button.

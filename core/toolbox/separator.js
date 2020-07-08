@@ -52,6 +52,13 @@ Blockly.ToolboxSeparator.prototype.createDom = function() {
 /**
  * Dispose of this separator.
  */
+Blockly.ToolboxSeparator.prototype.setSelected = function() {
+  // TODO: Figure out what to do here.
+};
+
+/**
+ * Dispose of this separator.
+ */
 Blockly.ToolboxSeparator.prototype.dispose = function() {
   // TODO: Dispose of the toolbox category.
 };

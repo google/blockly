@@ -348,7 +348,7 @@ Blockly.Trashcan.prototype.dispose = function() {
 };
 
 /**
- * RWhether the trashcan has contents.
+ * Whether the trashcan has contents.
  * @return {boolean} True if the trashcan has contents.
  * @private
  */

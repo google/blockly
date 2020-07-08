@@ -309,7 +309,6 @@ suite('Toolbox', function() {
     }
     function checkContents(actualContents, expectedContents) {
       chai.assert.equal(actualContents.length, expectedContents.length);
-      console.log(actualContents);
       for (var i = 0; i < actualContents.length; i++) {
         chai.assert.containsAllKeys(actualContents[i], Object.keys(expectedContents[i]));
       }

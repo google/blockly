@@ -4,6 +4,7 @@
 
 Blockly.Msg["ADD_COMMENT"] = "Дадаць каментарый";
 Blockly.Msg["CANNOT_DELETE_VARIABLE_PROCEDURE"] = "Немагчыма выдаліць пераменную '%1', паколькі яна з'яўляецца часткай вызначэння функцыі '%2'";
+Blockly.Msg["CATLEAPHY_ORIGINAL"] = "Leaphy Original";  // untranslated
 Blockly.Msg["CHANGE_VALUE_TITLE"] = "Змяніць значэння:";
 Blockly.Msg["CLEAN_UP"] = "Выраўнаваць блокі";
 Blockly.Msg["COLLAPSED_WARNINGS_WARNING"] = "Collapsed blocks contain warnings.";  // untranslated
@@ -85,6 +86,7 @@ Blockly.Msg["IOS_VARIABLES_DELETE_BUTTON"] = "Выдаліць";
 Blockly.Msg["IOS_VARIABLES_EMPTY_NAME_ERROR"] = "Вы не можаце выкарыстоўваць пустое імя пераменнай.";
 Blockly.Msg["IOS_VARIABLES_RENAME_BUTTON"] = "Перайменаваць";
 Blockly.Msg["IOS_VARIABLES_VARIABLE_NAME"] = "Назва пераменнай";
+Blockly.Msg["LEAPHY_START"] = "Leaphy";  // untranslated
 Blockly.Msg["LISTS_CREATE_EMPTY_HELPURL"] = "https://github.com/google/blockly/wiki/Lists#create-empty-list";  // untranslated
 Blockly.Msg["LISTS_CREATE_EMPTY_TITLE"] = "стварыць пусты спіс";
 Blockly.Msg["LISTS_CREATE_EMPTY_TOOLTIP"] = "Вяртае спіс даўжыні 0, які не ўтрымлівае дадзеных";
@@ -428,6 +430,7 @@ Blockly.Msg["LOOPS_HUE"] = "120";
 Blockly.Msg["LISTS_HUE"] = "260";
 Blockly.Msg["LOGIC_HUE"] = "210";
 Blockly.Msg["VARIABLES_HUE"] = "330";
+Blockly.Msg["LEAPHY_HUE"] = "188";
 Blockly.Msg["TEXTS_HUE"] = "160";
 Blockly.Msg["PROCEDURES_HUE"] = "290";
 Blockly.Msg["COLOUR_HUE"] = "20";

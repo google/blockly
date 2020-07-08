@@ -4,6 +4,7 @@
 
 Blockly.Msg["ADD_COMMENT"] = "মন্তব্য যোগ করুন";
 Blockly.Msg["CANNOT_DELETE_VARIABLE_PROCEDURE"] = "'%1' চলক অপসারণ করা যাবে না কারণ এটি '%2' কার্যপ্রণালীর সংজ্ঞার অংশ";
+Blockly.Msg["CATLEAPHY_ORIGINAL"] = "Leaphy Original";  // untranslated
 Blockly.Msg["CHANGE_VALUE_TITLE"] = "মান পরিবর্তন করুন:";
 Blockly.Msg["CLEAN_UP"] = "ব্লকসমূহ পরিস্কার করুন";
 Blockly.Msg["COLLAPSED_WARNINGS_WARNING"] = "Collapsed blocks contain warnings.";  // untranslated
@@ -85,6 +86,7 @@ Blockly.Msg["IOS_VARIABLES_DELETE_BUTTON"] = "অপসারণ";
 Blockly.Msg["IOS_VARIABLES_EMPTY_NAME_ERROR"] = "অাপনি চলকের নাম খালি রাখতে পারেননা।";
 Blockly.Msg["IOS_VARIABLES_RENAME_BUTTON"] = "পুনরায় শুরু";
 Blockly.Msg["IOS_VARIABLES_VARIABLE_NAME"] = "চলকের নাম";
+Blockly.Msg["LEAPHY_START"] = "Leaphy";  // untranslated
 Blockly.Msg["LISTS_CREATE_EMPTY_HELPURL"] = "https://github.com/google/blockly/wiki/Lists#create-empty-list";  // untranslated
 Blockly.Msg["LISTS_CREATE_EMPTY_TITLE"] = "খালি তালিকা তৈরি করুন";
 Blockly.Msg["LISTS_CREATE_EMPTY_TOOLTIP"] = "পাঠাবে একটি তালিকা, দের্ঘ্য হবে ০, কোন উপাত্ত থাকবে না";
@@ -428,6 +430,7 @@ Blockly.Msg["LOOPS_HUE"] = "120";
 Blockly.Msg["LISTS_HUE"] = "260";
 Blockly.Msg["LOGIC_HUE"] = "210";
 Blockly.Msg["VARIABLES_HUE"] = "330";
+Blockly.Msg["LEAPHY_HUE"] = "188";
 Blockly.Msg["TEXTS_HUE"] = "160";
 Blockly.Msg["PROCEDURES_HUE"] = "290";
 Blockly.Msg["COLOUR_HUE"] = "20";

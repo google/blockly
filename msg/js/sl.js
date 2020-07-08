@@ -4,6 +4,7 @@
 
 Blockly.Msg["ADD_COMMENT"] = "Dodaj komentar";
 Blockly.Msg["CANNOT_DELETE_VARIABLE_PROCEDURE"] = "Ni mogoče izbrisati spremenljivke »%1«, ker je uporabljena v definiciji funkcije »%2«";
+Blockly.Msg["CATLEAPHY_ORIGINAL"] = "Leaphy Original";  // untranslated
 Blockly.Msg["CHANGE_VALUE_TITLE"] = "Spremeni vrednost:";
 Blockly.Msg["CLEAN_UP"] = "Ponastavi delčke";
 Blockly.Msg["COLLAPSED_WARNINGS_WARNING"] = "Skrčeni delčki vsebujejo opozorila.";
@@ -85,6 +86,7 @@ Blockly.Msg["IOS_VARIABLES_DELETE_BUTTON"] = "Izbriši";
 Blockly.Msg["IOS_VARIABLES_EMPTY_NAME_ERROR"] = "Ne moreš uporabiti spremenljivke brez imena.";
 Blockly.Msg["IOS_VARIABLES_RENAME_BUTTON"] = "Preimenuj";
 Blockly.Msg["IOS_VARIABLES_VARIABLE_NAME"] = "Ime spremenljivke";
+Blockly.Msg["LEAPHY_START"] = "Leaphy";  // untranslated
 Blockly.Msg["LISTS_CREATE_EMPTY_HELPURL"] = "https://github.com/google/blockly/wiki/Lists#create-empty-list";
 Blockly.Msg["LISTS_CREATE_EMPTY_TITLE"] = "ustvari prazen seznam";
 Blockly.Msg["LISTS_CREATE_EMPTY_TOOLTIP"] = "Vrne seznam, dolžine 0, ki ne vsebuje nobenih podatkov.";
@@ -428,6 +430,7 @@ Blockly.Msg["LOOPS_HUE"] = "120";
 Blockly.Msg["LISTS_HUE"] = "260";
 Blockly.Msg["LOGIC_HUE"] = "210";
 Blockly.Msg["VARIABLES_HUE"] = "330";
+Blockly.Msg["LEAPHY_HUE"] = "188";
 Blockly.Msg["TEXTS_HUE"] = "160";
 Blockly.Msg["PROCEDURES_HUE"] = "290";
 Blockly.Msg["COLOUR_HUE"] = "20";

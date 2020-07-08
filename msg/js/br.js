@@ -4,6 +4,7 @@
 
 Blockly.Msg["ADD_COMMENT"] = "Ouzhpennañ un evezhiadenn";
 Blockly.Msg["CANNOT_DELETE_VARIABLE_PROCEDURE"] = "Ne ch'aller ket dilemel an argemmenn \"%1\" dre m'eo lod eus dielfennadur an arc'hwel \"%2\"";
+Blockly.Msg["CATLEAPHY_ORIGINAL"] = "Leaphy Original";  // untranslated
 Blockly.Msg["CHANGE_VALUE_TITLE"] = "Kemmañ an dalvoudenn :";
 Blockly.Msg["CLEAN_UP"] = "Naetaat ar bloc'hoù";
 Blockly.Msg["COLLAPSED_WARNINGS_WARNING"] = "Kemennoù-diwall zo er bloc'hadoù pleget.";
@@ -85,6 +86,7 @@ Blockly.Msg["IOS_VARIABLES_DELETE_BUTTON"] = "Diverkañ";
 Blockly.Msg["IOS_VARIABLES_EMPTY_NAME_ERROR"] = "Ne c'hallit ket implijout un anv argemmenn c'houllo.";
 Blockly.Msg["IOS_VARIABLES_RENAME_BUTTON"] = "Adenvel";
 Blockly.Msg["IOS_VARIABLES_VARIABLE_NAME"] = "Anv an argemmenn";
+Blockly.Msg["LEAPHY_START"] = "Leaphy";  // untranslated
 Blockly.Msg["LISTS_CREATE_EMPTY_HELPURL"] = "https://github.com/google/blockly/wiki/Lists#create-empty-list";  // untranslated
 Blockly.Msg["LISTS_CREATE_EMPTY_TITLE"] = "krouiñ ur roll goullo";
 Blockly.Msg["LISTS_CREATE_EMPTY_TOOLTIP"] = "Distreiñ ul listenn, 0 a hirder, n'eus enrolladenn ebet enni";
@@ -428,6 +430,7 @@ Blockly.Msg["LOOPS_HUE"] = "120";
 Blockly.Msg["LISTS_HUE"] = "260";
 Blockly.Msg["LOGIC_HUE"] = "210";
 Blockly.Msg["VARIABLES_HUE"] = "330";
+Blockly.Msg["LEAPHY_HUE"] = "188";
 Blockly.Msg["TEXTS_HUE"] = "160";
 Blockly.Msg["PROCEDURES_HUE"] = "290";
 Blockly.Msg["COLOUR_HUE"] = "20";

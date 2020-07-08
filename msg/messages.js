@@ -57,6 +57,8 @@ Blockly.Msg.VARIABLES_DYNAMIC_HUE = '310';
 /** @type {string} */
 /// {{Notranslate}} Hue value for all procedure blocks.
 Blockly.Msg.PROCEDURES_HUE = '290';
+/// {{Notranslate}} Hue value for all Leaphy blocks.
+Blockly.Msg.LEAPHY_HUE = '188';
 
 /** @type {string} */
 /// default name - A simple, general default name for a variable, preferably short.
@@ -1628,3 +1630,12 @@ Blockly.Msg.WORKSPACE_ARIA_LABEL = 'Blockly Workspace';
 /// that block have warnings attached to them. It should inform the user that the
 /// block they collapsed contains blocks that have warnings.
 Blockly.Msg.COLLAPSED_WARNINGS_WARNING = 'Collapsed blocks contain warnings.';
+
+/** @type {string} */
+/// leaphy Category title - The text that appears in the Leaphy Original Category.
+Blockly.Msg.CATLEAPHY_ORIGINAL = 'Leaphy Original';
+
+/** @type {string} */
+/// leaphy start block title - The text that appears in the Leaphy start block.
+Blockly.Msg.LEAPHY_START = 'Leaphy';
+

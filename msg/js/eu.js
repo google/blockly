@@ -4,6 +4,7 @@
 
 Blockly.Msg["ADD_COMMENT"] = "Iruzkina gehitu";
 Blockly.Msg["CANNOT_DELETE_VARIABLE_PROCEDURE"] = "Ezin da '%1' aldagaia ezabatu '%2' funtzioaren definizioaren zati delako.";
+Blockly.Msg["CATLEAPHY_ORIGINAL"] = "Leaphy Original";  // untranslated
 Blockly.Msg["CHANGE_VALUE_TITLE"] = "Aldatu balioa:";
 Blockly.Msg["CLEAN_UP"] = "Blokeak garbitu";
 Blockly.Msg["COLLAPSED_WARNINGS_WARNING"] = "Collapsed blocks contain warnings.";  // untranslated
@@ -85,6 +86,7 @@ Blockly.Msg["IOS_VARIABLES_DELETE_BUTTON"] = "Ezabatu";
 Blockly.Msg["IOS_VARIABLES_EMPTY_NAME_ERROR"] = "Ezin duzu aldagaiaren izen huts bat erabili.";
 Blockly.Msg["IOS_VARIABLES_RENAME_BUTTON"] = "Izena aldatu";
 Blockly.Msg["IOS_VARIABLES_VARIABLE_NAME"] = "Aldagaiaren izena";
+Blockly.Msg["LEAPHY_START"] = "Leaphy";  // untranslated
 Blockly.Msg["LISTS_CREATE_EMPTY_HELPURL"] = "https://github.com/google/blockly/wiki/Lists#create-empty-list";  // untranslated
 Blockly.Msg["LISTS_CREATE_EMPTY_TITLE"] = "sortu zerrenda hutsa";
 Blockly.Msg["LISTS_CREATE_EMPTY_TOOLTIP"] = "Zerrenda bat itzultzen du, 0 luzera duena, daturik gabekoa";
@@ -428,6 +430,7 @@ Blockly.Msg["LOOPS_HUE"] = "120";
 Blockly.Msg["LISTS_HUE"] = "260";
 Blockly.Msg["LOGIC_HUE"] = "210";
 Blockly.Msg["VARIABLES_HUE"] = "330";
+Blockly.Msg["LEAPHY_HUE"] = "188";
 Blockly.Msg["TEXTS_HUE"] = "160";
 Blockly.Msg["PROCEDURES_HUE"] = "290";
 Blockly.Msg["COLOUR_HUE"] = "20";

@@ -4,6 +4,7 @@
 
 Blockly.Msg["ADD_COMMENT"] = "Aggiungi commento";
 Blockly.Msg["CANNOT_DELETE_VARIABLE_PROCEDURE"] = "Non si può cancellare la variabile '%1' perché è parte della definizione della funzione '%2'";
+Blockly.Msg["CATLEAPHY_ORIGINAL"] = "Leaphy Original";  // untranslated
 Blockly.Msg["CHANGE_VALUE_TITLE"] = "Modifica valore:";
 Blockly.Msg["CLEAN_UP"] = "Pulisci i blocchi";
 Blockly.Msg["COLLAPSED_WARNINGS_WARNING"] = "I blocchi compressi contengono avvertimenti.";
@@ -85,6 +86,7 @@ Blockly.Msg["IOS_VARIABLES_DELETE_BUTTON"] = "Cancella";
 Blockly.Msg["IOS_VARIABLES_EMPTY_NAME_ERROR"] = "Non puoi utilizzare un nome di variabile vuoto.";
 Blockly.Msg["IOS_VARIABLES_RENAME_BUTTON"] = "Rinomina";
 Blockly.Msg["IOS_VARIABLES_VARIABLE_NAME"] = "Nome variabile";
+Blockly.Msg["LEAPHY_START"] = "Leaphy";  // untranslated
 Blockly.Msg["LISTS_CREATE_EMPTY_HELPURL"] = "https://github.com/google/blockly/wiki/Lists#create-empty-list";  // untranslated
 Blockly.Msg["LISTS_CREATE_EMPTY_TITLE"] = "crea lista vuota";
 Blockly.Msg["LISTS_CREATE_EMPTY_TOOLTIP"] = "Restituisce una lista, di lunghezza 0, contenente nessun record di dati";
@@ -428,6 +430,7 @@ Blockly.Msg["LOOPS_HUE"] = "120";
 Blockly.Msg["LISTS_HUE"] = "260";
 Blockly.Msg["LOGIC_HUE"] = "210";
 Blockly.Msg["VARIABLES_HUE"] = "330";
+Blockly.Msg["LEAPHY_HUE"] = "188";
 Blockly.Msg["TEXTS_HUE"] = "160";
 Blockly.Msg["PROCEDURES_HUE"] = "290";
 Blockly.Msg["COLOUR_HUE"] = "20";

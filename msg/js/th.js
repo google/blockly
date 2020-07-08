@@ -4,6 +4,7 @@
 
 Blockly.Msg["ADD_COMMENT"] = "ใส่คำอธิบาย";
 Blockly.Msg["CANNOT_DELETE_VARIABLE_PROCEDURE"] = "ไม่สามารถลบตัวแปร '%1' ได้เนื่องจากเป็นส่วนหนึ่งของนิยามของฟังก์ชัน '%2'";
+Blockly.Msg["CATLEAPHY_ORIGINAL"] = "Leaphy Original";  // untranslated
 Blockly.Msg["CHANGE_VALUE_TITLE"] = "เปลี่ยนค่า:";
 Blockly.Msg["CLEAN_UP"] = "จัดเรียงบล็อกให้เป็นแถว";
 Blockly.Msg["COLLAPSED_WARNINGS_WARNING"] = "บล็อกที่ถูกพับมีคำเตือนอยู่ข้างใน.";
@@ -85,6 +86,7 @@ Blockly.Msg["IOS_VARIABLES_DELETE_BUTTON"] = "ลบ";
 Blockly.Msg["IOS_VARIABLES_EMPTY_NAME_ERROR"] = "คุณไม่สามารถใช้ชื่อตัวแปรที่ว่างเปล่าได้";
 Blockly.Msg["IOS_VARIABLES_RENAME_BUTTON"] = "เปลี่ยนชื่อ";
 Blockly.Msg["IOS_VARIABLES_VARIABLE_NAME"] = "ชื่อตัวแปร";
+Blockly.Msg["LEAPHY_START"] = "Leaphy";  // untranslated
 Blockly.Msg["LISTS_CREATE_EMPTY_HELPURL"] = "https://github.com/google/blockly/wiki/Lists#create-empty-list";  // untranslated
 Blockly.Msg["LISTS_CREATE_EMPTY_TITLE"] = "สร้างรายการเปล่า";
 Blockly.Msg["LISTS_CREATE_EMPTY_TOOLTIP"] = "สร้างรายการเปล่า (ความยาวเป็น 0) ยังไม่มีข้อมูลใดๆ อยู่";
@@ -428,6 +430,7 @@ Blockly.Msg["LOOPS_HUE"] = "120";
 Blockly.Msg["LISTS_HUE"] = "260";
 Blockly.Msg["LOGIC_HUE"] = "210";
 Blockly.Msg["VARIABLES_HUE"] = "330";
+Blockly.Msg["LEAPHY_HUE"] = "188";
 Blockly.Msg["TEXTS_HUE"] = "160";
 Blockly.Msg["PROCEDURES_HUE"] = "290";
 Blockly.Msg["COLOUR_HUE"] = "20";

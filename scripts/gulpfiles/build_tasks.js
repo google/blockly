@@ -221,7 +221,7 @@ function buildCompressed() {
  *     blocks_compressed.js
  */
 function buildBlocks() {
-  return gulp.src(['blocks/*.js'], {base: './'})
+  return gulp.src(['blocks/**/*.js'], {base: './'})
     .pipe(stripApacheLicense())
     .pipe(gulp.sourcemaps.init())
     .pipe(compile({

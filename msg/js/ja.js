@@ -4,6 +4,7 @@
 
 Blockly.Msg["ADD_COMMENT"] = "コメントを追加";
 Blockly.Msg["CANNOT_DELETE_VARIABLE_PROCEDURE"] = "変数 '%1' は関数 '%2' の定義の一部であるため、削除できません";
+Blockly.Msg["CATLEAPHY_ORIGINAL"] = "Leaphy Original";  // untranslated
 Blockly.Msg["CHANGE_VALUE_TITLE"] = "値を変える：";
 Blockly.Msg["CLEAN_UP"] = "ブロックを整理する";
 Blockly.Msg["COLLAPSED_WARNINGS_WARNING"] = "Collapsed blocks contain warnings.";  // untranslated
@@ -85,6 +86,7 @@ Blockly.Msg["IOS_VARIABLES_DELETE_BUTTON"] = "削除";
 Blockly.Msg["IOS_VARIABLES_EMPTY_NAME_ERROR"] = "空の変数名は使用できません。";
 Blockly.Msg["IOS_VARIABLES_RENAME_BUTTON"] = "名前を変更";
 Blockly.Msg["IOS_VARIABLES_VARIABLE_NAME"] = "変数名";
+Blockly.Msg["LEAPHY_START"] = "Leaphy";  // untranslated
 Blockly.Msg["LISTS_CREATE_EMPTY_HELPURL"] = "https://github.com/google/blockly/wiki/Lists#create-empty-list";
 Blockly.Msg["LISTS_CREATE_EMPTY_TITLE"] = "空のリストを作成";
 Blockly.Msg["LISTS_CREATE_EMPTY_TOOLTIP"] = "長さ０でデータ・レコードを含まない空のリストを返す";
@@ -428,6 +430,7 @@ Blockly.Msg["LOOPS_HUE"] = "120";
 Blockly.Msg["LISTS_HUE"] = "260";
 Blockly.Msg["LOGIC_HUE"] = "210";
 Blockly.Msg["VARIABLES_HUE"] = "330";
+Blockly.Msg["LEAPHY_HUE"] = "188";
 Blockly.Msg["TEXTS_HUE"] = "160";
 Blockly.Msg["PROCEDURES_HUE"] = "290";
 Blockly.Msg["COLOUR_HUE"] = "20";

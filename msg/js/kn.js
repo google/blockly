@@ -4,6 +4,7 @@
 
 Blockly.Msg["ADD_COMMENT"] = "ಟಿಪ್ಪಣಿ ಸೇರಿಸು";
 Blockly.Msg["CANNOT_DELETE_VARIABLE_PROCEDURE"] = "%1' ಮಾರ್ಪಡಿಸಬಹುದಾದ ಮೂಲಾಂಶವನ್ನು ಅಳಿಸಲು ಬರುವುದಿಲ್ಲ. ಏಕೆಂದರೆ ಅದು '%2' ಕೆಲಸದಲ್ಲಿ ಉಪಯೋಗಿಸಲ್ಪಟ್ಟಿದೆ";
+Blockly.Msg["CATLEAPHY_ORIGINAL"] = "Leaphy Original";  // untranslated
 Blockly.Msg["CHANGE_VALUE_TITLE"] = "ಮೌಲ್ಯ ಬದಲಾಯಿಸು:";
 Blockly.Msg["CLEAN_UP"] = "ಬ್ಲಾಕ್‍ಗಳನ್ನು ಸ್ವಚ್ಛಗೊಳಿಸು";
 Blockly.Msg["COLLAPSED_WARNINGS_WARNING"] = "Collapsed blocks contain warnings.";  // untranslated
@@ -85,6 +86,7 @@ Blockly.Msg["IOS_VARIABLES_DELETE_BUTTON"] = "ಅಳಿಸು";
 Blockly.Msg["IOS_VARIABLES_EMPTY_NAME_ERROR"] = "ನೀವು ಖಾಲಿ ಮೂಲಾಂಶದ ಹೆಸರನ್ನು ಬಳಸಲಾಗುವುದಿಲ್ಲ.";
 Blockly.Msg["IOS_VARIABLES_RENAME_BUTTON"] = "ಹೆಸರು ಬದಲಾಯಿಸು";
 Blockly.Msg["IOS_VARIABLES_VARIABLE_NAME"] = "ಮಾರ್ಪಡಿಸಬಹುದಾದ ಮೂಲಾಂಶದ ಹೆಸರು";
+Blockly.Msg["LEAPHY_START"] = "Leaphy";  // untranslated
 Blockly.Msg["LISTS_CREATE_EMPTY_HELPURL"] = "https://github.com/google/blockly/wiki/Lists#create-empty-list";  // untranslated
 Blockly.Msg["LISTS_CREATE_EMPTY_TITLE"] = "create empty list";  // untranslated
 Blockly.Msg["LISTS_CREATE_EMPTY_TOOLTIP"] = "Returns a list, of length 0, containing no data records";  // untranslated
@@ -428,6 +430,7 @@ Blockly.Msg["LOOPS_HUE"] = "120";
 Blockly.Msg["LISTS_HUE"] = "260";
 Blockly.Msg["LOGIC_HUE"] = "210";
 Blockly.Msg["VARIABLES_HUE"] = "330";
+Blockly.Msg["LEAPHY_HUE"] = "188";
 Blockly.Msg["TEXTS_HUE"] = "160";
 Blockly.Msg["PROCEDURES_HUE"] = "290";
 Blockly.Msg["COLOUR_HUE"] = "20";

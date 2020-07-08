@@ -4,6 +4,7 @@
 
 Blockly.Msg["ADD_COMMENT"] = "Yorum Ekle";
 Blockly.Msg["CANNOT_DELETE_VARIABLE_PROCEDURE"] = "'%1' değişkeni, '%2' fonksiyonunun tanımının bir parçası olduğu için silinemez";
+Blockly.Msg["CATLEAPHY_ORIGINAL"] = "Leaphy Original";  // untranslated
 Blockly.Msg["CHANGE_VALUE_TITLE"] = "Değeri değiştir:";
 Blockly.Msg["CLEAN_UP"] = "Blokları Temizle";
 Blockly.Msg["COLLAPSED_WARNINGS_WARNING"] = "Daraltılmış bloklar uyarı içerir.";
@@ -85,6 +86,7 @@ Blockly.Msg["IOS_VARIABLES_DELETE_BUTTON"] = "Sil";
 Blockly.Msg["IOS_VARIABLES_EMPTY_NAME_ERROR"] = "Değişken adı kısmı boş bırakılamaz.";
 Blockly.Msg["IOS_VARIABLES_RENAME_BUTTON"] = "Yeniden adlandır";
 Blockly.Msg["IOS_VARIABLES_VARIABLE_NAME"] = "Değişken adı";
+Blockly.Msg["LEAPHY_START"] = "Leaphy";  // untranslated
 Blockly.Msg["LISTS_CREATE_EMPTY_HELPURL"] = "https://github.com/google/blockly/wiki/Lists#create-empty-list";
 Blockly.Msg["LISTS_CREATE_EMPTY_TITLE"] = "boş liste oluştur";
 Blockly.Msg["LISTS_CREATE_EMPTY_TOOLTIP"] = "Veri kaydı içermeyen 0 uzunluğunda bir liste döndürür";
@@ -428,6 +430,7 @@ Blockly.Msg["LOOPS_HUE"] = "120";
 Blockly.Msg["LISTS_HUE"] = "260";
 Blockly.Msg["LOGIC_HUE"] = "210";
 Blockly.Msg["VARIABLES_HUE"] = "330";
+Blockly.Msg["LEAPHY_HUE"] = "188";
 Blockly.Msg["TEXTS_HUE"] = "160";
 Blockly.Msg["PROCEDURES_HUE"] = "290";
 Blockly.Msg["COLOUR_HUE"] = "20";

@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2020-07-05 20:59:42.819017",
+		"lastupdated": "2020-07-08 20:54:17.769745",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -404,5 +404,7 @@
 	"PROCEDURES_IFRETURN_WARNING": "Warning: This block may be used only within a function definition.",
 	"WORKSPACE_COMMENT_DEFAULT_TEXT": "Say something...",
 	"WORKSPACE_ARIA_LABEL": "Blockly Workspace",
-	"COLLAPSED_WARNINGS_WARNING": "Collapsed blocks contain warnings."
+	"COLLAPSED_WARNINGS_WARNING": "Collapsed blocks contain warnings.",
+	"CATLEAPHY_ORIGINAL": "Leaphy Original",
+	"LEAPHY_START": "Leaphy"
 }

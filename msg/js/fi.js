@@ -4,6 +4,7 @@
 
 Blockly.Msg["ADD_COMMENT"] = "Lisää kommentti";
 Blockly.Msg["CANNOT_DELETE_VARIABLE_PROCEDURE"] = "Ei voida poistaa muuttujaa '%1' koska se on osa funktion määritelmää '%2'";
+Blockly.Msg["CATLEAPHY_ORIGINAL"] = "Leaphy Original";  // untranslated
 Blockly.Msg["CHANGE_VALUE_TITLE"] = "Muuta arvoa:";
 Blockly.Msg["CLEAN_UP"] = "Siivoa lohkot";
 Blockly.Msg["COLLAPSED_WARNINGS_WARNING"] = "Supistetut lohkot sisältävät varoituksia.";
@@ -85,6 +86,7 @@ Blockly.Msg["IOS_VARIABLES_DELETE_BUTTON"] = "Poista";
 Blockly.Msg["IOS_VARIABLES_EMPTY_NAME_ERROR"] = "Et voi käyttää tyhjää muuttujan nimeä.";
 Blockly.Msg["IOS_VARIABLES_RENAME_BUTTON"] = "Nimeä uudelleen";
 Blockly.Msg["IOS_VARIABLES_VARIABLE_NAME"] = "Muuttujan nimi";
+Blockly.Msg["LEAPHY_START"] = "Leaphy";  // untranslated
 Blockly.Msg["LISTS_CREATE_EMPTY_HELPURL"] = "https://github.com/google/blockly/wiki/Lists#create-empty-list";  // untranslated
 Blockly.Msg["LISTS_CREATE_EMPTY_TITLE"] = "Luo tyhjä lista";
 Blockly.Msg["LISTS_CREATE_EMPTY_TOOLTIP"] = "Palauta tyhjä lista, pituus 0";
@@ -428,6 +430,7 @@ Blockly.Msg["LOOPS_HUE"] = "120";
 Blockly.Msg["LISTS_HUE"] = "260";
 Blockly.Msg["LOGIC_HUE"] = "210";
 Blockly.Msg["VARIABLES_HUE"] = "330";
+Blockly.Msg["LEAPHY_HUE"] = "188";
 Blockly.Msg["TEXTS_HUE"] = "160";
 Blockly.Msg["PROCEDURES_HUE"] = "290";
 Blockly.Msg["COLOUR_HUE"] = "20";

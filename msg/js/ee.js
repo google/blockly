@@ -4,6 +4,7 @@
 
 Blockly.Msg["ADD_COMMENT"] = "Ŋlɔ Numeɖeɖe";
 Blockly.Msg["CANNOT_DELETE_VARIABLE_PROCEDURE"] = "Mate ŋu atutu teaŋutrɔna '%1' o elabe ewɔ akpa aɖe le teaŋutrɔna '%2' me.";
+Blockly.Msg["CATLEAPHY_ORIGINAL"] = "Leaphy Original";  // untranslated
 Blockly.Msg["CHANGE_VALUE_TITLE"] = "Trɔ nuŋlɔdzesiawo:";
 Blockly.Msg["CLEAN_UP"] = "Tutu Nuawo";
 Blockly.Msg["COLLAPSED_WARNINGS_WARNING"] = "Collapsed blocks contain warnings.";  // untranslated
@@ -85,6 +86,7 @@ Blockly.Msg["IOS_VARIABLES_DELETE_BUTTON"] = "Tutui";
 Blockly.Msg["IOS_VARIABLES_EMPTY_NAME_ERROR"] = "Màte ŋu azã nugba si mena ŋkɔe o.";
 Blockly.Msg["IOS_VARIABLES_RENAME_BUTTON"] = "Gbugbɔ na ŋkɔe";
 Blockly.Msg["IOS_VARIABLES_VARIABLE_NAME"] = "Nugba ŋkɔ";
+Blockly.Msg["LEAPHY_START"] = "Leaphy";  // untranslated
 Blockly.Msg["LISTS_CREATE_EMPTY_HELPURL"] = "https://github.com/google/blockly/wiki/Lists#create-empty-list";  // untranslated
 Blockly.Msg["LISTS_CREATE_EMPTY_TITLE"] = "create empty list";  // untranslated
 Blockly.Msg["LISTS_CREATE_EMPTY_TOOLTIP"] = "Returns a list, of length 0, containing no data records";  // untranslated
@@ -428,6 +430,7 @@ Blockly.Msg["LOOPS_HUE"] = "120";
 Blockly.Msg["LISTS_HUE"] = "260";
 Blockly.Msg["LOGIC_HUE"] = "210";
 Blockly.Msg["VARIABLES_HUE"] = "330";
+Blockly.Msg["LEAPHY_HUE"] = "188";
 Blockly.Msg["TEXTS_HUE"] = "160";
 Blockly.Msg["PROCEDURES_HUE"] = "290";
 Blockly.Msg["COLOUR_HUE"] = "20";

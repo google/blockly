@@ -4,6 +4,7 @@
 
 Blockly.Msg["ADD_COMMENT"] = "Vendos nje Koment";
 Blockly.Msg["CANNOT_DELETE_VARIABLE_PROCEDURE"] = "Nuk mund të fshihet variabla '%1' sepse është pjesë e definicionit të funksionit '%2'";
+Blockly.Msg["CATLEAPHY_ORIGINAL"] = "Leaphy Original";  // untranslated
 Blockly.Msg["CHANGE_VALUE_TITLE"] = "Ndrysho Vlerat:";
 Blockly.Msg["CLEAN_UP"] = "Pastro blloqet";
 Blockly.Msg["COLLAPSED_WARNINGS_WARNING"] = "Collapsed blocks contain warnings.";  // untranslated
@@ -85,6 +86,7 @@ Blockly.Msg["IOS_VARIABLES_DELETE_BUTTON"] = "Grise";
 Blockly.Msg["IOS_VARIABLES_EMPTY_NAME_ERROR"] = "Nuk mund të përdorni variabël pa emër.";
 Blockly.Msg["IOS_VARIABLES_RENAME_BUTTON"] = "Riemro";
 Blockly.Msg["IOS_VARIABLES_VARIABLE_NAME"] = "Emri i variablës";
+Blockly.Msg["LEAPHY_START"] = "Leaphy";  // untranslated
 Blockly.Msg["LISTS_CREATE_EMPTY_HELPURL"] = "https://github.com/google/blockly/wiki/Lists#create-empty-list";
 Blockly.Msg["LISTS_CREATE_EMPTY_TITLE"] = "krijo një listë të zbrazët";
 Blockly.Msg["LISTS_CREATE_EMPTY_TOOLTIP"] = "Kthen një listë, te gjatësisë 0, duke mos përmbajtur asnjë regjistrim të të dhënave";
@@ -428,6 +430,7 @@ Blockly.Msg["LOOPS_HUE"] = "120";
 Blockly.Msg["LISTS_HUE"] = "260";
 Blockly.Msg["LOGIC_HUE"] = "210";
 Blockly.Msg["VARIABLES_HUE"] = "330";
+Blockly.Msg["LEAPHY_HUE"] = "188";
 Blockly.Msg["TEXTS_HUE"] = "160";
 Blockly.Msg["PROCEDURES_HUE"] = "290";
 Blockly.Msg["COLOUR_HUE"] = "20";

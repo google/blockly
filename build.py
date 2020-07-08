@@ -220,13 +220,14 @@ class Gen_compressed(threading.Thread):
         ("output_info", "warnings"),
         ("output_info", "errors"),
         ("output_info", "statistics"),
-        ("warning_level", "DEFAULT"),
+        ("warning_level", "DEFAULT")
       ]
 
     # Add Blockly, Blockly.Blocks, and all fields to be compatible with the compiler.
     params.append(("js_code", """
 goog.provide('Blockly');
 goog.provide('Blockly.Blocks');
+goog.provide('Blockly.Types');
 goog.provide('Blockly.Comment');
 goog.provide('Blockly.FieldCheckbox');
 goog.provide('Blockly.FieldColour');

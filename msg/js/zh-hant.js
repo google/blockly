@@ -4,6 +4,7 @@
 
 Blockly.Msg["ADD_COMMENT"] = "加入註解";
 Blockly.Msg["CANNOT_DELETE_VARIABLE_PROCEDURE"] = "無法刪除變數「%1」，因為這是功能「%2」定義的一部份內容";
+Blockly.Msg["CATLEAPHY_ORIGINAL"] = "Leaphy Original";  // untranslated
 Blockly.Msg["CHANGE_VALUE_TITLE"] = "修改值：";
 Blockly.Msg["CLEAN_UP"] = "整理積木";
 Blockly.Msg["COLLAPSED_WARNINGS_WARNING"] = "收合含有警告的區塊。";
@@ -85,6 +86,7 @@ Blockly.Msg["IOS_VARIABLES_DELETE_BUTTON"] = "刪除";
 Blockly.Msg["IOS_VARIABLES_EMPTY_NAME_ERROR"] = "您不能使用空的變數名稱。";
 Blockly.Msg["IOS_VARIABLES_RENAME_BUTTON"] = "重新命名";
 Blockly.Msg["IOS_VARIABLES_VARIABLE_NAME"] = "變數名稱";
+Blockly.Msg["LEAPHY_START"] = "Leaphy";  // untranslated
 Blockly.Msg["LISTS_CREATE_EMPTY_HELPURL"] = "https://github.com/google/blockly/wiki/Lists#create-empty-list";  // untranslated
 Blockly.Msg["LISTS_CREATE_EMPTY_TITLE"] = "建立空的清單";
 Blockly.Msg["LISTS_CREATE_EMPTY_TOOLTIP"] = "返回一個長度（項目數量）為 0 的清單，不包含任何資料記錄";
@@ -428,6 +430,7 @@ Blockly.Msg["LOOPS_HUE"] = "120";
 Blockly.Msg["LISTS_HUE"] = "260";
 Blockly.Msg["LOGIC_HUE"] = "210";
 Blockly.Msg["VARIABLES_HUE"] = "330";
+Blockly.Msg["LEAPHY_HUE"] = "188";
 Blockly.Msg["TEXTS_HUE"] = "160";
 Blockly.Msg["PROCEDURES_HUE"] = "290";
 Blockly.Msg["COLOUR_HUE"] = "20";

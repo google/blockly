@@ -12,8 +12,13 @@
 'use strict';
 
 goog.provide('Blockly.Blocks.tone');
+goog.provide('Blockly.Constants.Tone');
 
+goog.require('Blockly');
 goog.require('Blockly.Blocks');
+goog.require('Blockly.FieldDropdown');
+goog.require('Blockly.FieldLabel');
+goog.require('Blockly.Mutator');
 goog.require('Blockly.Types');
 
 /** Common HSV hue for all blocks in this category. */

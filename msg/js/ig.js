@@ -4,6 +4,7 @@
 
 Blockly.Msg["ADD_COMMENT"] = "Tịnye okwu";
 Blockly.Msg["CANNOT_DELETE_VARIABLE_PROCEDURE"] = "Agaghị ekpochapụlị agbanwe '%1' maka nsonye ya na nkọwa nke ọrụ ahụ '%2'";
+Blockly.Msg["CATLEAPHY_ORIGINAL"] = "Leaphy Original";  // untranslated
 Blockly.Msg["CHANGE_VALUE_TITLE"] = "Gbanwee akara:";
 Blockly.Msg["CLEAN_UP"] = "Hichapụ ngọngọ";
 Blockly.Msg["COLLAPSED_WARNINGS_WARNING"] = "Collapsed blocks contain warnings.";  // untranslated
@@ -85,6 +86,7 @@ Blockly.Msg["IOS_VARIABLES_DELETE_BUTTON"] = "Kpochapụ";
 Blockly.Msg["IOS_VARIABLES_EMPTY_NAME_ERROR"] = "Ị nweghị ike iji aha agbanwe dị n’efu.";
 Blockly.Msg["IOS_VARIABLES_RENAME_BUTTON"] = "Nyegharịa aha";
 Blockly.Msg["IOS_VARIABLES_VARIABLE_NAME"] = "Aha agbanwe";
+Blockly.Msg["LEAPHY_START"] = "Leaphy";  // untranslated
 Blockly.Msg["LISTS_CREATE_EMPTY_HELPURL"] = "https://github.com/google/blockly/wiki/Lists#create-empty-list";  // untranslated
 Blockly.Msg["LISTS_CREATE_EMPTY_TITLE"] = "mepụta ndepụta efu";
 Blockly.Msg["LISTS_CREATE_EMPTY_TOOLTIP"] = "Weghachite ndepụta, nke ogologo 0, nke enweghị ndekọ data";
@@ -428,6 +430,7 @@ Blockly.Msg["LOOPS_HUE"] = "120";
 Blockly.Msg["LISTS_HUE"] = "260";
 Blockly.Msg["LOGIC_HUE"] = "210";
 Blockly.Msg["VARIABLES_HUE"] = "330";
+Blockly.Msg["LEAPHY_HUE"] = "188";
 Blockly.Msg["TEXTS_HUE"] = "160";
 Blockly.Msg["PROCEDURES_HUE"] = "290";
 Blockly.Msg["COLOUR_HUE"] = "20";

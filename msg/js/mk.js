@@ -4,6 +4,7 @@
 
 Blockly.Msg["ADD_COMMENT"] = "Додај коментар:";
 Blockly.Msg["CANNOT_DELETE_VARIABLE_PROCEDURE"] = "Променливата '%1' не може се избрише бидејќи е дел од определението на функцијата '%2'";
+Blockly.Msg["CATLEAPHY_ORIGINAL"] = "Leaphy Original";  // untranslated
 Blockly.Msg["CHANGE_VALUE_TITLE"] = "Смена на вредност:";
 Blockly.Msg["CLEAN_UP"] = "Исчисти блокови";
 Blockly.Msg["COLLAPSED_WARNINGS_WARNING"] = "Collapsed blocks contain warnings.";  // untranslated
@@ -85,6 +86,7 @@ Blockly.Msg["IOS_VARIABLES_DELETE_BUTTON"] = "Избриши";
 Blockly.Msg["IOS_VARIABLES_EMPTY_NAME_ERROR"] = "Не можете да искористите празно име за променлива.";
 Blockly.Msg["IOS_VARIABLES_RENAME_BUTTON"] = "Преименувај";
 Blockly.Msg["IOS_VARIABLES_VARIABLE_NAME"] = "Име на променливата";
+Blockly.Msg["LEAPHY_START"] = "Leaphy";  // untranslated
 Blockly.Msg["LISTS_CREATE_EMPTY_HELPURL"] = "https://github.com/google/blockly/wiki/Lists#create-empty-list";  // untranslated
 Blockly.Msg["LISTS_CREATE_EMPTY_TITLE"] = "создај празен список";
 Blockly.Msg["LISTS_CREATE_EMPTY_TOOLTIP"] = "Returns a list, of length 0, containing no data records";  // untranslated
@@ -428,6 +430,7 @@ Blockly.Msg["LOOPS_HUE"] = "120";
 Blockly.Msg["LISTS_HUE"] = "260";
 Blockly.Msg["LOGIC_HUE"] = "210";
 Blockly.Msg["VARIABLES_HUE"] = "330";
+Blockly.Msg["LEAPHY_HUE"] = "188";
 Blockly.Msg["TEXTS_HUE"] = "160";
 Blockly.Msg["PROCEDURES_HUE"] = "290";
 Blockly.Msg["COLOUR_HUE"] = "20";

@@ -4,6 +4,7 @@
 
 Blockly.Msg["ADD_COMMENT"] = "添加注释";
 Blockly.Msg["CANNOT_DELETE_VARIABLE_PROCEDURE"] = "不能删除变量“%1”，因为它是函数“%2”定义的一部分";
+Blockly.Msg["CATLEAPHY_ORIGINAL"] = "Leaphy Original";  // untranslated
 Blockly.Msg["CHANGE_VALUE_TITLE"] = "更改值：";
 Blockly.Msg["CLEAN_UP"] = "整理块";
 Blockly.Msg["COLLAPSED_WARNINGS_WARNING"] = "已收起的信息块内包含警告。";
@@ -85,6 +86,7 @@ Blockly.Msg["IOS_VARIABLES_DELETE_BUTTON"] = "删除";
 Blockly.Msg["IOS_VARIABLES_EMPTY_NAME_ERROR"] = "你不能使用空白的变量名。";
 Blockly.Msg["IOS_VARIABLES_RENAME_BUTTON"] = "重命名";
 Blockly.Msg["IOS_VARIABLES_VARIABLE_NAME"] = "变量名";
+Blockly.Msg["LEAPHY_START"] = "Leaphy";  // untranslated
 Blockly.Msg["LISTS_CREATE_EMPTY_HELPURL"] = "https://github.com/google/blockly/wiki/Lists#create-empty-list";
 Blockly.Msg["LISTS_CREATE_EMPTY_TITLE"] = "创建空列表";
 Blockly.Msg["LISTS_CREATE_EMPTY_TOOLTIP"] = "返回一个列表，长度为 0，不包含任何数据记录";
@@ -428,6 +430,7 @@ Blockly.Msg["LOOPS_HUE"] = "120";
 Blockly.Msg["LISTS_HUE"] = "260";
 Blockly.Msg["LOGIC_HUE"] = "210";
 Blockly.Msg["VARIABLES_HUE"] = "330";
+Blockly.Msg["LEAPHY_HUE"] = "188";
 Blockly.Msg["TEXTS_HUE"] = "160";
 Blockly.Msg["PROCEDURES_HUE"] = "290";
 Blockly.Msg["COLOUR_HUE"] = "20";

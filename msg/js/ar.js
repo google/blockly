@@ -4,6 +4,7 @@
 
 Blockly.Msg["ADD_COMMENT"] = "أضف تعليقًا";
 Blockly.Msg["CANNOT_DELETE_VARIABLE_PROCEDURE"] = "لايمكن حذف متغير \"%1\" بسبب انه جزء من الدالة \"%2\"";
+Blockly.Msg["CATLEAPHY_ORIGINAL"] = "Leaphy Original";  // untranslated
 Blockly.Msg["CHANGE_VALUE_TITLE"] = "تغيير قيمة:";
 Blockly.Msg["CLEAN_UP"] = "ترتيب القطع";
 Blockly.Msg["COLLAPSED_WARNINGS_WARNING"] = "الكتل المطوية تحتوي على تحذيرات.";
@@ -85,6 +86,7 @@ Blockly.Msg["IOS_VARIABLES_DELETE_BUTTON"] = "احذف";
 Blockly.Msg["IOS_VARIABLES_EMPTY_NAME_ERROR"] = "لا يمكنك استخدام اسم متغير فارغ.";
 Blockly.Msg["IOS_VARIABLES_RENAME_BUTTON"] = "أعد التسمية";
 Blockly.Msg["IOS_VARIABLES_VARIABLE_NAME"] = "اسم المتغير";
+Blockly.Msg["LEAPHY_START"] = "Leaphy";  // untranslated
 Blockly.Msg["LISTS_CREATE_EMPTY_HELPURL"] = "https://github.com/google/blockly/wiki/Lists#create-empty-list";
 Blockly.Msg["LISTS_CREATE_EMPTY_TITLE"] = "إنشئ قائمة فارغة";
 Blockly.Msg["LISTS_CREATE_EMPTY_TOOLTIP"] = "تقوم بإرجاع قائمة، طولها 0, لا تحتوي على أية سجلات البيانات";
@@ -428,6 +430,7 @@ Blockly.Msg["LOOPS_HUE"] = "120";
 Blockly.Msg["LISTS_HUE"] = "260";
 Blockly.Msg["LOGIC_HUE"] = "210";
 Blockly.Msg["VARIABLES_HUE"] = "330";
+Blockly.Msg["LEAPHY_HUE"] = "188";
 Blockly.Msg["TEXTS_HUE"] = "160";
 Blockly.Msg["PROCEDURES_HUE"] = "290";
 Blockly.Msg["COLOUR_HUE"] = "20";

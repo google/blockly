@@ -244,14 +244,6 @@ Blockly.NewToolbox.prototype.isHorizontal = function() {
 };
 
 /**
- * Whether or not the parent workspace is in RTL mode.
- * @return {boolean} True if the parent workspace is in rtl mode, false otherwise.
- */
-Blockly.NewToolbox.prototype.isRtl = function() {
-  return this.workspace_.RTL;
-};
-
-/**
  * Dispose of this toolbox.
  */
 Blockly.NewToolbox.prototype.dispose = function() {
@@ -374,12 +366,35 @@ Blockly.NewToolbox.prototype.setSelectedItem = function(item) {
     this.selectedItem_ = item;
     this.selectedItem_.setSelected(true);
     // If the new item does not have contents close the old flyout.
-    if (this.selectedItem_.contents) {
+    // TODO: This can be fixed to just check the blocks array when I split them up.
+    if (this.selectedItem_.contents && !this.selectedItem_.hasCategories()) {
       this.flyout_.show(this.selectedItem_.contents);
       this.flyout_.scrollToStart();
     } else {
       this.flyout_.hide();
     }
+  }
+};
+
+/**
+ * Selects the next toolbox item.
+ */
+Blockly.NewToolbox.prototype.selectNext = function() {
+  var items = this.toolboxItems;
+  var nextItemIdx = items.indexOf(this.selectedItem_) + 1;
+  if (nextItemIdx < items.length) {
+    this.setSelectedItem(items[nextItemIdx]);
+  }
+};
+
+/**
+ * Selects the previous toolbox item.
+ */
+Blockly.NewToolbox.prototype.selectPrevious = function() {
+  var items = this.toolboxItems;
+  var nextItemIdx = items.indexOf(this.selectedItem_) - 1;
+  if (nextItemIdx > -1) {
+    this.setSelectedItem(items[nextItemIdx]);
   }
 };
 

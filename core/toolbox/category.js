@@ -223,6 +223,8 @@ Blockly.ToolboxCategory.prototype.createDom = function() {
 
   this.rowDiv_ = this.createRowContainer_();
   this.htmlDiv_.appendChild(this.rowDiv_);
+  // TODO: Should this be on the htmlDiv_ or the rowDiv_?
+  this.rowDiv_.tabIndex = 0;
 
   this.iconSpan_ = this.createIconSpan_();
   Blockly.utils.aria.setRole(this.iconSpan_, Blockly.utils.aria.Role.PRESENTATION);

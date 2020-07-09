@@ -526,11 +526,11 @@ Blockly.Trashcan.prototype.click = function() {
 };
 
 /**
- * Fires a ui event for trashcan click.
+ * Fires a ui event for trashcan flyout opening.
  * @private
  */
 Blockly.Trashcan.prototype.fireUiEvent_ = function() {
-  var uiEvent = new Blockly.Events.Ui(null, 'trashcan', null, null);
+  var uiEvent = new Blockly.Events.Ui(null, 'trashcanOpen', null, true);
   uiEvent.workspaceId = this.workspace_.id;
   Blockly.Events.fire(uiEvent);
 };

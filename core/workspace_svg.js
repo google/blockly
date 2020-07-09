@@ -1232,16 +1232,6 @@ Blockly.WorkspaceSvg.prototype.render = function() {
 };
 
 /**
- * Was used back when block highlighting (for execution) and block selection
- * (for editing) were the same thing.
- * Any calls of this function can be deleted.
- * @deprecated October 2016
- */
-Blockly.WorkspaceSvg.prototype.traceOn = function() {
-  console.warn('Deprecated call to traceOn, delete this.');
-};
-
-/**
  * Highlight or unhighlight a block in the workspace.  Block highlighting is
  * often used to visually mark blocks currently being executed.
  * @param {?string} id ID of block to highlight/unhighlight,

@@ -250,29 +250,7 @@ Blockly.Connection.prototype.isConnected = function() {
  *    an error code otherwise.
  */
 Blockly.Connection.prototype.canConnectWithReason = function(target) {
-  return this.sourceBlock_.workspace.connectionTypeChecker.canConnectWithReason(this, target);
-  // if (!target) {
-  //   return Blockly.Connection.REASON_TARGET_NULL;
-  // }
-  // if (this.isSuperior()) {
-  //   var blockA = this.sourceBlock_;
-  //   var blockB = target.getSourceBlock();
-  // } else {
-  //   var blockB = this.sourceBlock_;
-  //   var blockA = target.getSourceBlock();
-  // }
-  // if (blockA && blockA == blockB) {
-  //   return Blockly.Connection.REASON_SELF_CONNECTION;
-  // } else if (target.type != Blockly.OPPOSITE_TYPE[this.type]) {
-  //   return Blockly.Connection.REASON_WRONG_TYPE;
-  // } else if (blockA && blockB && blockA.workspace !== blockB.workspace) {
-  //   return Blockly.Connection.REASON_DIFFERENT_WORKSPACES;
-  // } else if (!this.checkType(target)) {
-  //   return Blockly.Connection.REASON_CHECKS_FAILED;
-  // } else if (blockA.isShadow() && !blockB.isShadow()) {
-  //   return Blockly.Connection.REASON_SHADOW_PARENT;
-  // }
-  // return Blockly.Connection.CAN_CONNECT;
+  return this.getConnectionTypeChecker().canConnectWithReason(this, target);
 };
 
 /**
@@ -284,48 +262,52 @@ Blockly.Connection.prototype.canConnectWithReason = function(target) {
  */
 Blockly.Connection.prototype.checkConnection = function(target) {
 
-  var checker = this.sourceBlock_.workspace.connectionTypeChecker;
+  var checker = this.getConnectionTypeChecker();
   var reason = checker.canConnectWithReason(this, target);
   if (reason != Blockly.Connection.CAN_CONNECT) {
     throw Error(checker.getErrorMessage(reason, this, target));
   }
 };
 
-/**
- * Check if the two connections can be dragged to connect to each other.
- * This is used by the connection database when searching for the closest
- * connection.
- * @param {!Blockly.Connection} candidate A nearby connection to check, which
- *     must be a previous connection.
- * @return {boolean} True if the connection is allowed, false otherwise.
- * @private
- */
-Blockly.Connection.prototype.canConnectToPrevious_ = function(candidate) {
-  if (this.targetConnection) {
-    // This connection is already occupied.
-    // A next connection will never disconnect itself mid-drag.
-    return false;
-  }
-
-  // Don't let blocks try to connect to themselves or ones they nest.
-  if (Blockly.draggingConnections.indexOf(candidate) != -1) {
-    return false;
-  }
-
-  if (!candidate.targetConnection) {
-    return true;
-  }
-
-  var targetBlock = candidate.targetBlock();
-  // If it is connected to a real block, game over.
-  if (!targetBlock.isInsertionMarker()) {
-    return false;
-  }
-  // If it's connected to an insertion marker but that insertion marker
-  // is the first block in a stack, it's still fine.  If that insertion
-  // marker is in the middle of a stack, it won't work.
-  return !targetBlock.getPreviousBlock();
+Blockly.Connection.prototype.getConnectionTypeChecker = function() {
+  return this.sourceBlock_.workspace.connectionTypeChecker;
 };
+
+// /**
+//  * Check if the two connections can be dragged to connect to each other.
+//  * This is used by the connection database when searching for the closest
+//  * connection.
+//  * @param {!Blockly.Connection} candidate A nearby connection to check, which
+//  *     must be a previous connection.
+//  * @return {boolean} True if the connection is allowed, false otherwise.
+//  * @private
+//  */
+// Blockly.Connection.prototype.canConnectToPrevious_ = function(candidate) {
+//   if (this.targetConnection) {
+//     // This connection is already occupied.
+//     // A next connection will never disconnect itself mid-drag.
+//     return false;
+//   }
+
+//   // Don't let blocks try to connect to themselves or ones they nest.
+//   if (Blockly.draggingConnections.indexOf(candidate) != -1) {
+//     return false;
+//   }
+
+//   if (!candidate.targetConnection) {
+//     return true;
+//   }
+
+//   var targetBlock = candidate.targetBlock();
+//   // If it is connected to a real block, game over.
+//   if (!targetBlock.isInsertionMarker()) {
+//     return false;
+//   }
+//   // If it's connected to an insertion marker but that insertion marker
+//   // is the first block in a stack, it's still fine.  If that insertion
+//   // marker is in the middle of a stack, it won't work.
+//   return !targetBlock.getPreviousBlock();
+// };
 
 /**
  * Check if the two connections can be dragged to connect to each other.
@@ -333,8 +315,7 @@ Blockly.Connection.prototype.canConnectToPrevious_ = function(candidate) {
  * @return {boolean} True if the connection is allowed, false otherwise.
  */
 Blockly.Connection.prototype.isConnectionAllowed = function(candidate) {
-  var checker = this.sourceBlock_.workspace.connectionTypeChecker;
-  return checker.isConnectionAllowed(this, candidate);
+  return this.getConnectionTypeChecker().isConnectionAllowed(this, candidate);
 };
 
 /**
@@ -357,7 +338,7 @@ Blockly.Connection.prototype.connect = function(otherConnection) {
     return;
   }
 
-  var checker = this.sourceBlock_.workspace.connectionTypeChecker;
+  var checker = this.getConnectionTypeChecker();
   var reason = checker.canConnectWithReason(this, otherConnection);
   if (reason != Blockly.Connection.CAN_CONNECT) {
     throw Error(checker.getErrorMessage(reason, this, otherConnection));
@@ -538,8 +519,7 @@ Blockly.Connection.prototype.targetBlock = function() {
  * @return {boolean} True if the connections share a type.
  */
 Blockly.Connection.prototype.checkType = function(otherConnection) {
-  return this.sourceBlock_.workspace.connectionTypeChecker.checkType(
-      this, otherConnection);
+  return this.getConnectionTypeChecker().checkType(this, otherConnection);
 };
 
 /**

@@ -53,46 +53,31 @@ Blockly.ConnectionTypeChecker.prototype.getErrorMessage = function(errorCode,
  *    an error code otherwise.
  */
 Blockly.ConnectionTypeChecker.prototype.canConnectWithReason = function(one, two) {
-  if (!two) {
+  if (!one || !two) {
     return Blockly.Connection.REASON_TARGET_NULL;
   }
   if (one.isSuperior()) {
-    var blockA = one.sourceBlock_;
+    var blockA = one.getSourceBlock();
     var blockB = two.getSourceBlock();
   } else {
-    var blockB = one.sourceBlock_;
+    var blockB = one.getSourceBlock();
     var blockA = two.getSourceBlock();
   }
-
+  // TODO (fenichel): The null checks seem like they're only for making tests
+  // work better.
   if (blockA && blockA == blockB) {
     return Blockly.Connection.REASON_SELF_CONNECTION;
   } else if (two.type != Blockly.OPPOSITE_TYPE[one.type]) {
     return Blockly.Connection.REASON_WRONG_TYPE;
   } else if (blockA && blockB && blockA.workspace !== blockB.workspace) {
     return Blockly.Connection.REASON_DIFFERENT_WORKSPACES;
-  } else if (!this.checkType(one, two)) {
-    return Blockly.Connection.REASON_CHECKS_FAILED;
   } else if (blockA.isShadow() && !blockB.isShadow()) {
     return Blockly.Connection.REASON_SHADOW_PARENT;
+  } else if (!this.checkType(one, two)) {
+    return Blockly.Connection.REASON_CHECKS_FAILED;
   }
   return Blockly.Connection.CAN_CONNECT;
 };
-
-/**
- * Checks whether the current connection and target connection are compatible
- * and throws an exception if they are not.
- * @param {!Blockly.Connection} one The connection to check compatibility
- *    with.
- * @param {!Blockly.Connection} two The connection to check compatibility
- *    with.
- * @package
- */
-// Blockly.ConnectionTypeChecker.prototype.checkConnection = function(one, two) {
-//   var reason = one.canConnectWithReason(two);
-//   if (reason != Blockly.Connection.CAN_CONNECT) {
-//     throw Error(this.getErrorMessage_(reason, one, two));
-//   }
-// };
 
 /**
  * Is this connection compatible with another connection with respect to the

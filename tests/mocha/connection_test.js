@@ -4,11 +4,23 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-suite('Connections', function() {
+suite('Connection type checker', function() {
+  suiteSetup(function() {
+    this.checker = new Blockly.ConnectionTypeChecker();
+  });
   suite('Can Connect With Reason', function() {
+    function assertReasonHelper(checker, one, two, reason) {
+      chai.assert.equal(checker.canConnectWithReason(one, two), reason);
+      // Order should not matter.
+      chai.assert.equal(checker.canConnectWithReason(two, one), reason);
+    }
+
     test('Target Null', function() {
       var connection = new Blockly.Connection({}, Blockly.INPUT_VALUE);
-      chai.assert.equal(connection.canConnectWithReason(null),
+      assertReasonHelper(
+          this.checker,
+          connection,
+          null,
           Blockly.Connection.REASON_TARGET_NULL);
     });
     test('Target Self', function() {
@@ -16,7 +28,10 @@ suite('Connections', function() {
       var connection1 = new Blockly.Connection(block, Blockly.INPUT_VALUE);
       var connection2 = new Blockly.Connection(block, Blockly.OUTPUT_VALUE);
 
-      chai.assert.equal(connection1.canConnectWithReason(connection2),
+      assertReasonHelper(
+          this.checker,
+          connection1,
+          connection2,
           Blockly.Connection.REASON_SELF_CONNECTION);
     });
     test('Different Workspaces', function() {
@@ -25,7 +40,10 @@ suite('Connections', function() {
       var connection2 = new Blockly.Connection(
           {workspace: 2}, Blockly.OUTPUT_VALUE);
 
-      chai.assert.equal(connection1.canConnectWithReason(connection2),
+      assertReasonHelper(
+          this.checker,
+          connection1,
+          connection2,
           Blockly.Connection.REASON_DIFFERENT_WORKSPACES);
     });
     suite('Types', function() {
@@ -46,51 +64,87 @@ suite('Connections', function() {
             inBlock, Blockly.INPUT_VALUE);
       });
       test('Previous, Next', function() {
-        chai.assert.equal(this.previous.canConnectWithReason(this.next),
+        assertReasonHelper(
+            this.checker,
+            this.previous,
+            this.next,
             Blockly.Connection.CAN_CONNECT);
       });
       test('Previous, Output', function() {
-        chai.assert.equal(this.previous.canConnectWithReason(this.output),
+        assertReasonHelper(
+            this.checker,
+            this.previous,
+            this.output,
             Blockly.Connection.REASON_WRONG_TYPE);
       });
       test('Previous, Input', function() {
-        chai.assert.equal(this.previous.canConnectWithReason(this.input),
+        assertReasonHelper(
+            this.checker,
+            this.previous,
+            this.input,
             Blockly.Connection.REASON_WRONG_TYPE);
       });
       test('Next, Previous', function() {
-        chai.assert.equal(this.next.canConnectWithReason(this.previous),
+        assertReasonHelper(
+            this.checker,
+            this.next,
+            this.previous,
             Blockly.Connection.CAN_CONNECT);
       });
       test('Next, Output', function() {
-        chai.assert.equal(this.next.canConnectWithReason(this.output),
+        assertReasonHelper(
+            this.checker,
+            this.next,
+            this.output,
             Blockly.Connection.REASON_WRONG_TYPE);
       });
       test('Next, Input', function() {
-        chai.assert.equal(this.next.canConnectWithReason(this.input),
+        assertReasonHelper(
+            this.checker,
+            this.next,
+            this.input,
             Blockly.Connection.REASON_WRONG_TYPE);
       });
       test('Output, Previous', function() {
-        chai.assert.equal(this.output.canConnectWithReason(this.previous),
+        assertReasonHelper(
+            this.checker,
+            this.previous,
+            this.output,
             Blockly.Connection.REASON_WRONG_TYPE);
       });
       test('Output, Next', function() {
-        chai.assert.equal(this.output.canConnectWithReason(this.next),
+        assertReasonHelper(
+            this.checker,
+            this.output,
+            this.next,
             Blockly.Connection.REASON_WRONG_TYPE);
       });
       test('Output, Input', function() {
-        chai.assert.equal(this.output.canConnectWithReason(this.input),
+        assertReasonHelper(
+            this.checker,
+            this.output,
+            this.input,
             Blockly.Connection.CAN_CONNECT);
       });
       test('Input, Previous', function() {
-        chai.assert.equal(this.input.canConnectWithReason(this.previous),
+        assertReasonHelper(
+            this.checker,
+            this.previous,
+            this.input,
             Blockly.Connection.REASON_WRONG_TYPE);
       });
       test('Input, Next', function() {
-        chai.assert.equal(this.input.canConnectWithReason(this.next),
+        assertReasonHelper(
+            this.checker,
+            this.input,
+            this.next,
             Blockly.Connection.REASON_WRONG_TYPE);
       });
       test('Input, Output', function() {
-        chai.assert.equal(this.input.canConnectWithReason(this.output),
+        assertReasonHelper(
+            this.checker,
+            this.input,
+            this.output,
             Blockly.Connection.CAN_CONNECT);
       });
     });
@@ -101,7 +155,10 @@ suite('Connections', function() {
         var prev = new Blockly.Connection(prevBlock, Blockly.PREVIOUS_STATEMENT);
         var next = new Blockly.Connection(nextBlock, Blockly.NEXT_STATEMENT);
 
-        chai.assert.equal(prev.canConnectWithReason(next),
+        assertReasonHelper(
+            this.checker,
+            prev,
+            next,
             Blockly.Connection.CAN_CONNECT);
       });
       test('Next Shadow', function() {
@@ -110,7 +167,10 @@ suite('Connections', function() {
         var prev = new Blockly.Connection(prevBlock, Blockly.PREVIOUS_STATEMENT);
         var next = new Blockly.Connection(nextBlock, Blockly.NEXT_STATEMENT);
 
-        chai.assert.equal(prev.canConnectWithReason(next),
+        assertReasonHelper(
+            this.checker,
+            prev,
+            next,
             Blockly.Connection.REASON_SHADOW_PARENT);
       });
       test('Prev and Next Shadow', function() {
@@ -119,7 +179,10 @@ suite('Connections', function() {
         var prev = new Blockly.Connection(prevBlock, Blockly.PREVIOUS_STATEMENT);
         var next = new Blockly.Connection(nextBlock, Blockly.NEXT_STATEMENT);
 
-        chai.assert.equal(prev.canConnectWithReason(next),
+        assertReasonHelper(
+            this.checker,
+            prev,
+            next,
             Blockly.Connection.CAN_CONNECT);
       });
       test('Output Shadow', function() {
@@ -128,7 +191,10 @@ suite('Connections', function() {
         var outCon = new Blockly.Connection(outBlock, Blockly.OUTPUT_VALUE);
         var inCon = new Blockly.Connection(inBlock, Blockly.INPUT_VALUE);
 
-        chai.assert.equal(outCon.canConnectWithReason(inCon),
+        assertReasonHelper(
+            this.checker,
+            outCon,
+            inCon,
             Blockly.Connection.CAN_CONNECT);
       });
       test('Input Shadow', function() {
@@ -137,7 +203,10 @@ suite('Connections', function() {
         var outCon = new Blockly.Connection(outBlock, Blockly.OUTPUT_VALUE);
         var inCon = new Blockly.Connection(inBlock, Blockly.INPUT_VALUE);
 
-        chai.assert.equal(outCon.canConnectWithReason(inCon),
+        assertReasonHelper(
+            this.checker,
+            outCon,
+            inCon,
             Blockly.Connection.REASON_SHADOW_PARENT);
       });
       test('Output and Input Shadow', function() {
@@ -146,7 +215,10 @@ suite('Connections', function() {
         var outCon = new Blockly.Connection(outBlock, Blockly.OUTPUT_VALUE);
         var inCon = new Blockly.Connection(inBlock, Blockly.INPUT_VALUE);
 
-        chai.assert.equal(outCon.canConnectWithReason(inCon),
+        assertReasonHelper(
+            this.checker,
+            outCon,
+            inCon,
             Blockly.Connection.CAN_CONNECT);
       });
     });
@@ -156,32 +228,38 @@ suite('Connections', function() {
       this.con1 = new Blockly.Connection({}, Blockly.PREVIOUS_STATEMENT);
       this.con2 = new Blockly.Connection({}, Blockly.NEXT_STATEMENT);
     });
+    function assertCheckTypes(checker, one, two) {
+      chai.assert.isTrue(checker.checkType(one, two));
+      // Order should not matter.
+      chai.assert.isTrue(checker.checkType(one, two));
+    }
     test('No Types', function() {
-      chai.assert.isTrue(this.con1.checkType((this.con2)));
+      assertCheckTypes(this.checker, this.con1, this.con2);
+      chai.assert.isTrue(this.checker.checkType(this.con1, this.con2));
     });
     test('Same Type', function() {
       this.con1.setCheck('type1');
       this.con2.setCheck('type1');
-      chai.assert.isTrue(this.con1.checkType((this.con2)));
+      assertCheckTypes(this.checker, this.con1, this.con2);
     });
     test('Same Types', function() {
       this.con1.setCheck(['type1', 'type2']);
       this.con2.setCheck(['type1', 'type2']);
-      chai.assert.isTrue(this.con1.checkType((this.con2)));
+      assertCheckTypes(this.checker, this.con1, this.con2);
     });
     test('Single Same Type', function() {
       this.con1.setCheck(['type1', 'type2']);
       this.con2.setCheck(['type1', 'type3']);
-      chai.assert.isTrue(this.con1.checkType((this.con2)));
+      assertCheckTypes(this.checker, this.con1, this.con2);
     });
     test('One Typed, One Promiscuous', function() {
       this.con1.setCheck('type1');
-      chai.assert.isTrue(this.con1.checkType((this.con2)));
+      assertCheckTypes(this.checker, this.con1, this.con2);
     });
     test('No Compatible Types', function() {
       this.con1.setCheck('type1');
       this.con2.setCheck('type2');
-      chai.assert.isFalse(this.con1.checkType((this.con2)));
+      chai.assert.isFalse(this.checker.checkType(this.con1, this.con2));
     });
   });
 });

@@ -411,9 +411,9 @@ Blockly.navigation.moveAndConnect_ = function(movingConnection, destConnection) 
   }
   var movingBlock = movingConnection.getSourceBlock();
 
-  if (destConnection.canConnectWithReason(movingConnection) ==
-      Blockly.Connection.CAN_CONNECT) {
+  var checker = movingConnection.getConnectionTypeChecker();
 
+  if (checker.canConnect(movingConnection, destConnection, false, false)) {
     Blockly.navigation.disconnectChild_(movingConnection, destConnection);
 
     if (!destConnection.isSuperior()) {
@@ -502,10 +502,12 @@ Blockly.navigation.connect_ = function(movingConnection, destConnection) {
     return true;
   } else {
     try {
-      destConnection.checkConnection(movingConnection);
+      var checker = movingConnection.getConnectionTypeChecker();
+      checker.canConnect(movingConnection, destConnection, false, true);
     }
     catch (e) {
-      // If nothing worked report the error from the original connections.
+      // If nothing worked there should be an error.
+      // Report the error from the original connections.
       Blockly.navigation.warn_('Connection failed with error: ' + e);
     }
     return false;

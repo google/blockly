@@ -238,15 +238,17 @@ Blockly.ConnectionDB.prototype.searchForClosest = function(conn, maxRadius,
   var bestConnection = null;
   var bestRadius = maxRadius;
   var temp;
+  var curDistance;
 
   // Walk forward and back on the y axis looking for the closest x,y point.
   var pointerMin = closestIndex - 1;
   while (pointerMin >= 0 && this.isInYRange_(pointerMin, conn.y, maxRadius)) {
     temp = this.connections_[pointerMin];
-    if (this.typeChecker_.canConnectDuringDrag(conn, temp, bestRadius)) {
-    //conn.isConnectionAllowed(temp, bestRadius)) {
+    curDistance = temp.distanceFrom(conn);
+    if (curDistance <= bestRadius &&
+        this.typeChecker_.canConnect(conn, temp, true, false)) {
       bestConnection = temp;
-      bestRadius = temp.distanceFrom(conn);
+      bestRadius = curDistance;
     }
     pointerMin--;
   }
@@ -255,10 +257,11 @@ Blockly.ConnectionDB.prototype.searchForClosest = function(conn, maxRadius,
   while (pointerMax < this.connections_.length &&
       this.isInYRange_(pointerMax, conn.y, maxRadius)) {
     temp = this.connections_[pointerMax];
-    if (this.typeChecker_.canConnectDuringDrag(conn, temp, bestRadius)) {
-      //conn.isConnectionAllowed(temp, bestRadius)) {
+    curDistance = temp.distanceFrom(conn);
+    if (curDistance <= bestRadius &&
+        this.typeChecker_.canConnect(conn, temp, true, false)) {
       bestConnection = temp;
-      bestRadius = temp.distanceFrom(conn);
+      bestRadius = curDistance;
     }
     pointerMax++;
   }

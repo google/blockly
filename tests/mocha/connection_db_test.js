@@ -194,26 +194,13 @@ suite('Connection Database', function() {
   suite('Search For Closest', function() {
     setup(function() {
       this.allowedStub = null;
-      this.database.typeChecker_.canConnectDuringDrag = function(
-          dragging, candidate, maxRadius) {
-              if (dragging.distanceFrom(candidate) > maxRadius) {
-                return false;
-              }
-              // Ignore non-distance parameters.
-              return true;
-            };
-
+      this.allowedStub = sinon.stub(this.database.typeChecker_, 'canConnect')
+          .callsFake(function(dragging, candidate) {
+            return true;
+          });
       this.createCheckConnection = function(x, y) {
         var checkConnection = this.createConnection(x, y, Blockly.NEXT_STATEMENT,
             new Blockly.ConnectionDB());
-        // this.allowedStub = sinon.stub(checkConnection, 'isConnectionAllowed')
-        //     .callsFake(function(candidate, maxRadius) {
-        //       if (this.distanceFrom(candidate) > maxRadius) {
-        //         return false;
-        //       }
-        //       // Ignore non-distance parameters.
-        //       return true;
-        //     });
         return checkConnection;
       };
     });

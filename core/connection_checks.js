@@ -9,7 +9,6 @@ goog.requireType('Blockly.Connection');
  * @constructor
  */
 Blockly.ConnectionTypeChecker = function() {
-
 };
 
 /**
@@ -39,6 +38,8 @@ Blockly.ConnectionTypeChecker.prototype.getErrorMessage = function(errorCode,
       return msg;
     case Blockly.Connection.REASON_SHADOW_PARENT:
       return 'Connecting non-shadow to shadow block.';
+    case Blockly.Connection.REASON_DRAG_CHECKS_FAILED:
+      return 'Drag checks failed.'
     default:
       return 'Unknown connection failure: this should never happen!';
   }
@@ -53,6 +54,17 @@ Blockly.ConnectionTypeChecker.prototype.getErrorMessage = function(errorCode,
  *    an error code otherwise.
  */
 Blockly.ConnectionTypeChecker.prototype.canConnectWithReason = function(one, two) {
+  var validity = this.doValidityChecks(one, two);
+  if (validity != Blockly.Connection.CAN_CONNECT) {
+    return validity;
+  }
+  if (!this.checkType(one, two)) {
+    return Blockly.Connection.REASON_CHECKS_FAILED;
+  }
+  return Blockly.Connection.CAN_CONNECT;
+};
+
+Blockly.ConnectionTypeChecker.prototype.doValidityChecks = function(one, two) {
   if (!one || !two) {
     return Blockly.Connection.REASON_TARGET_NULL;
   }
@@ -65,18 +77,56 @@ Blockly.ConnectionTypeChecker.prototype.canConnectWithReason = function(one, two
   }
   // TODO (fenichel): The null checks seem like they're only for making tests
   // work better.
-  if (blockA && blockA == blockB) {
+  if (blockA == blockB) {
     return Blockly.Connection.REASON_SELF_CONNECTION;
   } else if (two.type != Blockly.OPPOSITE_TYPE[one.type]) {
     return Blockly.Connection.REASON_WRONG_TYPE;
-  } else if (blockA && blockB && blockA.workspace !== blockB.workspace) {
+  } else if (blockA.workspace !== blockB.workspace) {
     return Blockly.Connection.REASON_DIFFERENT_WORKSPACES;
   } else if (blockA.isShadow() && !blockB.isShadow()) {
     return Blockly.Connection.REASON_SHADOW_PARENT;
-  } else if (!this.checkType(one, two)) {
-    return Blockly.Connection.REASON_CHECKS_FAILED;
   }
   return Blockly.Connection.CAN_CONNECT;
+};
+
+/**
+ * Checks whether the current connection can connect with the target
+ * connection.
+ * @param {Blockly.Connection} one Connection to check compatibility with.
+ * @param {Blockly.Connection} two Connection to check compatibility with.
+ * @return {boolean} Whether the connection is legal.
+ */
+Blockly.ConnectionTypeChecker.prototype.canConnect = function(one, two,
+    isDragging, shouldThrow) {
+  var validity = this.doValidityChecks(one, two);
+  if (validity != Blockly.Connection.CAN_CONNECT) {
+    if (shouldThrow) {
+      throw Error(this.getErrorMessage(validity, one, two));
+    }
+    return false;
+  }
+
+  var passesTypeChecks = this.checkType(one, two);
+  if (!passesTypeChecks) {
+
+    if (shouldThrow) {
+      throw Error(this.getErrorMessage(
+          Blockly.Connection.REASON_CHECKS_FAILED, one, two));
+    }
+    return false;
+  }
+
+  if (isDragging) {
+    var passesDragChecks = this.passesDragChecks(one, two);
+    if (!passesDragChecks) {
+      if (shouldThrow) {
+        throw Error(this.getErrorMessage(
+            Blockly.Connection.REASON_DRAG_CHECKS_FAILED, one, two));
+      }
+      return false;
+    }
+  }
+  return true;
 };
 
 /**
@@ -104,21 +154,9 @@ Blockly.ConnectionTypeChecker.prototype.checkType = function(one, two) {
   return false;
 };
 
-
-/**
- * Check if the two connections can be dragged to connect to each other.
- * @param {!Blockly.Connection} one The moving connection to check.
- * @param {!Blockly.Connection} two A stationary connection to check.
- * @return {boolean} True if the connection is allowed, false otherwise.
- */
-Blockly.ConnectionTypeChecker.prototype.isConnectionAllowed = function(one, two) {
+Blockly.ConnectionTypeChecker.prototype.passesDragChecks = function(one, two) {
   // Don't consider insertion markers.
   if (two.sourceBlock_.isInsertionMarker()) {
-    return false;
-  }
-  // Type checking.
-  var canConnect = one.canConnectWithReason(two);
-  if (canConnect != Blockly.Connection.CAN_CONNECT) {
     return false;
   }
 
@@ -160,7 +198,7 @@ Blockly.ConnectionTypeChecker.prototype.isConnectionAllowed = function(one, two)
       break;
     }
     default:
-      throw Error('Unknown connection type in isConnectionAllowed');
+      throw Error('Unknown connection type in passesDragChecks');
   }
 
   // Don't let blocks try to connect to themselves or ones they nest.
@@ -171,24 +209,6 @@ Blockly.ConnectionTypeChecker.prototype.isConnectionAllowed = function(one, two)
   return true;
 };
 
-/**
- * Check if the two connections can be dragged to connect to each other.
- * @param {!Blockly.RenderedConnection} dragging The connection to check on a
- *     block that is being dragged.
- * @param {!Blockly.RenderedConnection} candidate The stationary connection to
- *     check.
- * @param {number=} maxRadius The maximum radius allowed for connections, in
- *     workspace units.
- * @return {boolean} True if the connection is allowed, false otherwise.
- */
-Blockly.ConnectionTypeChecker.prototype.canConnectDuringDrag = function(
-    dragging, candidate, maxRadius) {
-  if (dragging.distanceFrom(candidate) > maxRadius) {
-    return false;
-  }
-
-  return this.isConnectionAllowed(dragging, candidate);
-};
 /**
  * Check if the two connections can be dragged to connect to each other.
  * This is used by the connection database when searching for the closest

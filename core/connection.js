@@ -47,6 +47,7 @@ Blockly.Connection.REASON_TARGET_NULL = 3;
 Blockly.Connection.REASON_CHECKS_FAILED = 4;
 Blockly.Connection.REASON_DIFFERENT_WORKSPACES = 5;
 Blockly.Connection.REASON_SHADOW_PARENT = 6;
+Blockly.Connection.REASON_DRAG_CHECKS_FAILED = 7;
 
 /**
  * Connection this connection connects to.  Null if not connected.
@@ -250,6 +251,7 @@ Blockly.Connection.prototype.isConnected = function() {
  *    an error code otherwise.
  */
 Blockly.Connection.prototype.canConnectWithReason = function(target) {
+  // TODO: deprecation warning with date, plus tests.
   return this.getConnectionTypeChecker().canConnectWithReason(this, target);
 };
 
@@ -261,12 +263,10 @@ Blockly.Connection.prototype.canConnectWithReason = function(target) {
  * @package
  */
 Blockly.Connection.prototype.checkConnection = function(target) {
-
+// TODO: Add deprecation warning notices *and* add tests to make sure these
+// still work (for any blocks that use them).
   var checker = this.getConnectionTypeChecker();
-  var reason = checker.canConnectWithReason(this, target);
-  if (reason != Blockly.Connection.CAN_CONNECT) {
-    throw Error(checker.getErrorMessage(reason, this, target));
-  }
+  checker.canConnect(this, target, false, true);
 };
 
 Blockly.Connection.prototype.getConnectionTypeChecker = function() {
@@ -315,7 +315,7 @@ Blockly.Connection.prototype.getConnectionTypeChecker = function() {
  * @return {boolean} True if the connection is allowed, false otherwise.
  */
 Blockly.Connection.prototype.isConnectionAllowed = function(candidate) {
-  return this.getConnectionTypeChecker().isConnectionAllowed(this, candidate);
+  return this.getConnectionTypeChecker().canConnect(this, candidate, true, false);
 };
 
 /**
@@ -339,10 +339,7 @@ Blockly.Connection.prototype.connect = function(otherConnection) {
   }
 
   var checker = this.getConnectionTypeChecker();
-  var reason = checker.canConnectWithReason(this, otherConnection);
-  if (reason != Blockly.Connection.CAN_CONNECT) {
-    throw Error(checker.getErrorMessage(reason, this, otherConnection));
-  }
+  checker.canConnect(this, otherConnection, false, true);
 
   var eventGroup = Blockly.Events.getGroup();
   if (!eventGroup) {

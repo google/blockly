@@ -6,7 +6,7 @@
 
 suite('Connection Database', function() {
   setup(function() {
-    this.database = new Blockly.ConnectionDB();
+    this.database = new Blockly.ConnectionDB(new Blockly.ConnectionTypeChecker());
 
     this.assertOrder = function() {
       var length = this.database.connections_.length;
@@ -194,18 +194,26 @@ suite('Connection Database', function() {
   suite('Search For Closest', function() {
     setup(function() {
       this.allowedStub = null;
-
-      this.createCheckConnection = function(x, y) {
-        var checkConnection = this.createConnection(x, y, Blockly.NEXT_STATEMENT,
-            new Blockly.ConnectionDB());
-        this.allowedStub = sinon.stub(checkConnection, 'isConnectionAllowed')
-            .callsFake(function(candidate, maxRadius) {
-              if (this.distanceFrom(candidate) > maxRadius) {
+      this.database.typeChecker_.canConnectDuringDrag = function(
+          dragging, candidate, maxRadius) {
+              if (dragging.distanceFrom(candidate) > maxRadius) {
                 return false;
               }
               // Ignore non-distance parameters.
               return true;
-            });
+            };
+
+      this.createCheckConnection = function(x, y) {
+        var checkConnection = this.createConnection(x, y, Blockly.NEXT_STATEMENT,
+            new Blockly.ConnectionDB());
+        // this.allowedStub = sinon.stub(checkConnection, 'isConnectionAllowed')
+        //     .callsFake(function(candidate, maxRadius) {
+        //       if (this.distanceFrom(candidate) > maxRadius) {
+        //         return false;
+        //       }
+        //       // Ignore non-distance parameters.
+        //       return true;
+        //     });
         return checkConnection;
       };
     });

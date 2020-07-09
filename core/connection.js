@@ -16,6 +16,7 @@ goog.require('Blockly.Events');
 goog.require('Blockly.Events.BlockMove');
 goog.require('Blockly.Xml');
 
+goog.requireType('Blockly.ConnectionTypeChecker');
 goog.requireType('Blockly.IASTNodeLocationWithBlock');
 
 
@@ -145,8 +146,10 @@ Blockly.Connection.prototype.connect_ = function(childConnection) {
         if (nextBlock && !nextBlock.isShadow()) {
           newBlock = nextBlock;
         } else {
-          if (orphanBlock.previousConnection.checkType(
-              newBlock.nextConnection)) {
+          if (orphanBlock.workspace.connectionTypeChecker.checkType(
+              orphanBlock.previousConnection, newBlock.nextConnection)) {
+            //orphanBlock.previousConnection.checkType(
+              //newBlock.nextConnection)) {
             newBlock.nextConnection.connect(orphanBlock.previousConnection);
             orphanBlock = null;
           }
@@ -247,28 +250,29 @@ Blockly.Connection.prototype.isConnected = function() {
  *    an error code otherwise.
  */
 Blockly.Connection.prototype.canConnectWithReason = function(target) {
-  if (!target) {
-    return Blockly.Connection.REASON_TARGET_NULL;
-  }
-  if (this.isSuperior()) {
-    var blockA = this.sourceBlock_;
-    var blockB = target.getSourceBlock();
-  } else {
-    var blockB = this.sourceBlock_;
-    var blockA = target.getSourceBlock();
-  }
-  if (blockA && blockA == blockB) {
-    return Blockly.Connection.REASON_SELF_CONNECTION;
-  } else if (target.type != Blockly.OPPOSITE_TYPE[this.type]) {
-    return Blockly.Connection.REASON_WRONG_TYPE;
-  } else if (blockA && blockB && blockA.workspace !== blockB.workspace) {
-    return Blockly.Connection.REASON_DIFFERENT_WORKSPACES;
-  } else if (!this.checkType(target)) {
-    return Blockly.Connection.REASON_CHECKS_FAILED;
-  } else if (blockA.isShadow() && !blockB.isShadow()) {
-    return Blockly.Connection.REASON_SHADOW_PARENT;
-  }
-  return Blockly.Connection.CAN_CONNECT;
+  return this.sourceBlock_.workspace.connectionTypeChecker.canConnectWithReason(this, target);
+  // if (!target) {
+  //   return Blockly.Connection.REASON_TARGET_NULL;
+  // }
+  // if (this.isSuperior()) {
+  //   var blockA = this.sourceBlock_;
+  //   var blockB = target.getSourceBlock();
+  // } else {
+  //   var blockB = this.sourceBlock_;
+  //   var blockA = target.getSourceBlock();
+  // }
+  // if (blockA && blockA == blockB) {
+  //   return Blockly.Connection.REASON_SELF_CONNECTION;
+  // } else if (target.type != Blockly.OPPOSITE_TYPE[this.type]) {
+  //   return Blockly.Connection.REASON_WRONG_TYPE;
+  // } else if (blockA && blockB && blockA.workspace !== blockB.workspace) {
+  //   return Blockly.Connection.REASON_DIFFERENT_WORKSPACES;
+  // } else if (!this.checkType(target)) {
+  //   return Blockly.Connection.REASON_CHECKS_FAILED;
+  // } else if (blockA.isShadow() && !blockB.isShadow()) {
+  //   return Blockly.Connection.REASON_SHADOW_PARENT;
+  // }
+  // return Blockly.Connection.CAN_CONNECT;
 };
 
 /**
@@ -279,26 +283,11 @@ Blockly.Connection.prototype.canConnectWithReason = function(target) {
  * @package
  */
 Blockly.Connection.prototype.checkConnection = function(target) {
-  switch (this.canConnectWithReason(target)) {
-    case Blockly.Connection.CAN_CONNECT:
-      break;
-    case Blockly.Connection.REASON_SELF_CONNECTION:
-      throw Error('Attempted to connect a block to itself.');
-    case Blockly.Connection.REASON_DIFFERENT_WORKSPACES:
-      // Usually this means one block has been deleted.
-      throw Error('Blocks not on same workspace.');
-    case Blockly.Connection.REASON_WRONG_TYPE:
-      throw Error('Attempt to connect incompatible types.');
-    case Blockly.Connection.REASON_TARGET_NULL:
-      throw Error('Target connection is null.');
-    case Blockly.Connection.REASON_CHECKS_FAILED:
-      var msg = 'Connection checks failed. ';
-      msg += this + ' expected ' + this.check_ + ', found ' + target.check_;
-      throw Error(msg);
-    case Blockly.Connection.REASON_SHADOW_PARENT:
-      throw Error('Connecting non-shadow to shadow block.');
-    default:
-      throw Error('Unknown connection failure: this should never happen!');
+
+  var checker = this.sourceBlock_.workspace.connectionTypeChecker;
+  var reason = checker.canConnectWithReason(this, target);
+  if (reason != Blockly.Connection.CAN_CONNECT) {
+    throw Error(checker.getErrorMessage(reason, this, target));
   }
 };
 
@@ -344,63 +333,8 @@ Blockly.Connection.prototype.canConnectToPrevious_ = function(candidate) {
  * @return {boolean} True if the connection is allowed, false otherwise.
  */
 Blockly.Connection.prototype.isConnectionAllowed = function(candidate) {
-  // Don't consider insertion markers.
-  if (candidate.sourceBlock_.isInsertionMarker()) {
-    return false;
-  }
-  // Type checking.
-  var canConnect = this.canConnectWithReason(candidate);
-  if (canConnect != Blockly.Connection.CAN_CONNECT) {
-    return false;
-  }
-
-  switch (candidate.type) {
-    case Blockly.PREVIOUS_STATEMENT:
-      return this.canConnectToPrevious_(candidate);
-    case Blockly.OUTPUT_VALUE: {
-      // Don't offer to connect an already connected left (male) value plug to
-      // an available right (female) value plug.
-      if ((candidate.isConnected() &&
-          !candidate.targetBlock().isInsertionMarker()) ||
-          this.isConnected()) {
-        return false;
-      }
-      break;
-    }
-    case Blockly.INPUT_VALUE: {
-      // Offering to connect the left (male) of a value block to an already
-      // connected value pair is ok, we'll splice it in.
-      // However, don't offer to splice into an immovable block.
-      if (candidate.isConnected() &&
-          !candidate.targetBlock().isMovable() &&
-          !candidate.targetBlock().isShadow()) {
-        return false;
-      }
-      break;
-    }
-    case Blockly.NEXT_STATEMENT: {
-      // Don't let a block with no next connection bump other blocks out of the
-      // stack.  But covering up a shadow block or stack of shadow blocks is
-      // fine.  Similarly, replacing a terminal statement with another terminal
-      // statement is allowed.
-      if (candidate.isConnected() &&
-          !this.sourceBlock_.nextConnection &&
-          !candidate.targetBlock().isShadow() &&
-          candidate.targetBlock().nextConnection) {
-        return false;
-      }
-      break;
-    }
-    default:
-      throw Error('Unknown connection type in isConnectionAllowed');
-  }
-
-  // Don't let blocks try to connect to themselves or ones they nest.
-  if (Blockly.draggingConnections.indexOf(candidate) != -1) {
-    return false;
-  }
-
-  return true;
+  var checker = this.sourceBlock_.workspace.connectionTypeChecker;
+  return checker.isConnectionAllowed(this, candidate);
 };
 
 /**
@@ -422,7 +356,13 @@ Blockly.Connection.prototype.connect = function(otherConnection) {
     // Already connected together.  NOP.
     return;
   }
-  this.checkConnection(otherConnection);
+
+  var checker = this.sourceBlock_.workspace.connectionTypeChecker;
+  var reason = checker.canConnectWithReason(this, otherConnection);
+  if (reason != Blockly.Connection.CAN_CONNECT) {
+    throw Error(checker.getErrorMessage(reason, this, otherConnection));
+  }
+
   var eventGroup = Blockly.Events.getGroup();
   if (!eventGroup) {
     Blockly.Events.setGroup(true);
@@ -598,18 +538,8 @@ Blockly.Connection.prototype.targetBlock = function() {
  * @return {boolean} True if the connections share a type.
  */
 Blockly.Connection.prototype.checkType = function(otherConnection) {
-  if (!this.check_ || !otherConnection.check_) {
-    // One or both sides are promiscuous enough that anything will fit.
-    return true;
-  }
-  // Find any intersection in the check lists.
-  for (var i = 0; i < this.check_.length; i++) {
-    if (otherConnection.check_.indexOf(this.check_[i]) != -1) {
-      return true;
-    }
-  }
-  // No intersection.
-  return false;
+  return this.sourceBlock_.workspace.connectionTypeChecker.checkType(
+      this, otherConnection);
 };
 
 /**

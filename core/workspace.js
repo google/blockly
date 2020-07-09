@@ -12,6 +12,7 @@
 
 goog.provide('Blockly.Workspace');
 
+goog.require('Blockly.ConnectionTypeChecker');
 goog.require('Blockly.Events');
 goog.require('Blockly.Options');
 goog.require('Blockly.utils');
@@ -103,6 +104,8 @@ Blockly.Workspace = function(opt_options) {
    * @private
    */
   this.potentialVariableMap_ = null;
+  /** @type {Blockly.ConnectionTypeChecker} [description] */
+  this.connectionTypeChecker = new Blockly.ConnectionTypeChecker();
 };
 
 /**

@@ -19,6 +19,8 @@ goog.require('Blockly.utils.Coordinate');
 goog.require('Blockly.utils.dom');
 goog.require('Blockly.utils.object');
 
+goog.requireType('Blockly.ConnectionTypeChecker');
+
 
 /**
  * Class for a connection between blocks that may be rendered on screen.

@@ -44,6 +44,7 @@ goog.require('Blockly.Xml');
 goog.requireType('Blockly.blockRendering.Renderer');
 goog.requireType('Blockly.IASTNodeLocationSvg');
 goog.requireType('Blockly.IBoundedElement');
+goog.requireType('Blockly.ConnectionTypeChecker');
 
 
 /**
@@ -68,7 +69,8 @@ Blockly.WorkspaceSvg = function(options,
   this.setMetrics =
       options.setMetrics || Blockly.WorkspaceSvg.setTopLevelWorkspaceMetrics_;
 
-  this.connectionDBList = Blockly.ConnectionDB.init();
+
+  this.connectionDBList = Blockly.ConnectionDB.init(this.connectionTypeChecker);
 
   if (opt_blockDragSurface) {
     this.blockDragSurface_ = opt_blockDragSurface;

@@ -16,6 +16,8 @@ goog.provide('Blockly.ConnectionDB');
 
 goog.require('Blockly.RenderedConnection');
 
+goog.requireType('Blockly.ConnectionTypeChecker');
+
 
 /**
  * Database of connections.
@@ -23,13 +25,14 @@ goog.require('Blockly.RenderedConnection');
  * connections in an area may be looked up quickly using a binary search.
  * @constructor
  */
-Blockly.ConnectionDB = function() {
+Blockly.ConnectionDB = function(typeChecker) {
   /**
    * Array of connections sorted by y position in workspace units.
    * @type {!Array.<!Blockly.RenderedConnection>}
    * @private
    */
   this.connections_ = [];
+  this.typeChecker_ = typeChecker;
 };
 
 /**
@@ -240,7 +243,8 @@ Blockly.ConnectionDB.prototype.searchForClosest = function(conn, maxRadius,
   var pointerMin = closestIndex - 1;
   while (pointerMin >= 0 && this.isInYRange_(pointerMin, conn.y, maxRadius)) {
     temp = this.connections_[pointerMin];
-    if (conn.isConnectionAllowed(temp, bestRadius)) {
+    if (this.typeChecker_.canConnectDuringDrag(conn, temp, bestRadius)) {
+    //conn.isConnectionAllowed(temp, bestRadius)) {
       bestConnection = temp;
       bestRadius = temp.distanceFrom(conn);
     }
@@ -251,7 +255,8 @@ Blockly.ConnectionDB.prototype.searchForClosest = function(conn, maxRadius,
   while (pointerMax < this.connections_.length &&
       this.isInYRange_(pointerMax, conn.y, maxRadius)) {
     temp = this.connections_[pointerMax];
-    if (conn.isConnectionAllowed(temp, bestRadius)) {
+    if (this.typeChecker_.canConnectDuringDrag(conn, temp, bestRadius)) {
+      //conn.isConnectionAllowed(temp, bestRadius)) {
       bestConnection = temp;
       bestRadius = temp.distanceFrom(conn);
     }
@@ -270,12 +275,12 @@ Blockly.ConnectionDB.prototype.searchForClosest = function(conn, maxRadius,
  * Initialize a set of connection DBs for a workspace.
  * @return {!Array.<!Blockly.ConnectionDB>} Array of databases.
  */
-Blockly.ConnectionDB.init = function() {
+Blockly.ConnectionDB.init = function(typeChecker) {
   // Create four databases, one for each connection type.
   var dbList = [];
-  dbList[Blockly.INPUT_VALUE] = new Blockly.ConnectionDB();
-  dbList[Blockly.OUTPUT_VALUE] = new Blockly.ConnectionDB();
-  dbList[Blockly.NEXT_STATEMENT] = new Blockly.ConnectionDB();
-  dbList[Blockly.PREVIOUS_STATEMENT] = new Blockly.ConnectionDB();
+  dbList[Blockly.INPUT_VALUE] = new Blockly.ConnectionDB(typeChecker);
+  dbList[Blockly.OUTPUT_VALUE] = new Blockly.ConnectionDB(typeChecker);
+  dbList[Blockly.NEXT_STATEMENT] = new Blockly.ConnectionDB(typeChecker);
+  dbList[Blockly.PREVIOUS_STATEMENT] = new Blockly.ConnectionDB(typeChecker);
   return dbList;
 };

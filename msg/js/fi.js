@@ -4,7 +4,6 @@
 
 Blockly.Msg["ADD_COMMENT"] = "Lisää kommentti";
 Blockly.Msg["CANNOT_DELETE_VARIABLE_PROCEDURE"] = "Ei voida poistaa muuttujaa '%1' koska se on osa funktion määritelmää '%2'";
-Blockly.Msg["CATLEAPHY_ORIGINAL"] = "Leaphy Original";  // untranslated
 Blockly.Msg["CHANGE_VALUE_TITLE"] = "Muuta arvoa:";
 Blockly.Msg["CLEAN_UP"] = "Siivoa lohkot";
 Blockly.Msg["COLLAPSED_WARNINGS_WARNING"] = "Supistetut lohkot sisältävät varoituksia.";
@@ -100,6 +99,7 @@ Blockly.Msg["LEAPHY_MOTOR_LEFT"] = "Left";  // untranslated
 Blockly.Msg["LEAPHY_MOTOR_RIGHT"] = "Right";  // untranslated
 Blockly.Msg["LEAPHY_MOTOR_SPEED"] = "Speed";  // untranslated
 Blockly.Msg["LEAPHY_MOTOR_TYPE"] = "Type";  // untranslated
+Blockly.Msg["LEAPHY_ORIGINAL_CATEGORY"] = "Leaphy Original";  // untranslated
 Blockly.Msg["LEAPHY_READ_HAND"] = "Read Hand sensor";  // untranslated
 Blockly.Msg["LEAPHY_READ_STOMACH"] = "Read Belly sensor";  // untranslated
 Blockly.Msg["LEAPHY_START"] = "Leaphy";  // untranslated

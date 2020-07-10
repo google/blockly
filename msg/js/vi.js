@@ -4,7 +4,6 @@
 
 Blockly.Msg["ADD_COMMENT"] = "Thêm Chú Giải";
 Blockly.Msg["CANNOT_DELETE_VARIABLE_PROCEDURE"] = "Không thể xóa giá trị '%1' vì nó được bao gồm trong định nghĩa của chức năng '%2'";
-Blockly.Msg["CATLEAPHY_ORIGINAL"] = "Leaphy Original";  // untranslated
 Blockly.Msg["CHANGE_VALUE_TITLE"] = "Thay giá trị thành:";
 Blockly.Msg["CLEAN_UP"] = "Sắp xếp lại các khối";
 Blockly.Msg["COLLAPSED_WARNINGS_WARNING"] = "Các khối bị sập có chứa cảnh báo.";
@@ -100,6 +99,7 @@ Blockly.Msg["LEAPHY_MOTOR_LEFT"] = "Left";  // untranslated
 Blockly.Msg["LEAPHY_MOTOR_RIGHT"] = "Right";  // untranslated
 Blockly.Msg["LEAPHY_MOTOR_SPEED"] = "Speed";  // untranslated
 Blockly.Msg["LEAPHY_MOTOR_TYPE"] = "Type";  // untranslated
+Blockly.Msg["LEAPHY_ORIGINAL_CATEGORY"] = "Leaphy Original";  // untranslated
 Blockly.Msg["LEAPHY_READ_HAND"] = "Read Hand sensor";  // untranslated
 Blockly.Msg["LEAPHY_READ_STOMACH"] = "Read Belly sensor";  // untranslated
 Blockly.Msg["LEAPHY_START"] = "Leaphy";  // untranslated

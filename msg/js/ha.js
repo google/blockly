@@ -4,7 +4,6 @@
 
 Blockly.Msg["ADD_COMMENT"] = "Daɗa Sharhi";
 Blockly.Msg["CANNOT_DELETE_VARIABLE_PROCEDURE"] = "An kasa goge siffa '%1' sabo da tana daga sashi na bayanin aikin '%2'";
-Blockly.Msg["CATLEAPHY_ORIGINAL"] = "Leaphy Original";  // untranslated
 Blockly.Msg["CHANGE_VALUE_TITLE"] = "Canza kima:";
 Blockly.Msg["CLEAN_UP"] = "A share Bululluka";
 Blockly.Msg["COLLAPSED_WARNINGS_WARNING"] = "Collapsed blocks contain warnings.";  // untranslated
@@ -100,6 +99,7 @@ Blockly.Msg["LEAPHY_MOTOR_LEFT"] = "Left";  // untranslated
 Blockly.Msg["LEAPHY_MOTOR_RIGHT"] = "Right";  // untranslated
 Blockly.Msg["LEAPHY_MOTOR_SPEED"] = "Speed";  // untranslated
 Blockly.Msg["LEAPHY_MOTOR_TYPE"] = "Type";  // untranslated
+Blockly.Msg["LEAPHY_ORIGINAL_CATEGORY"] = "Leaphy Original";  // untranslated
 Blockly.Msg["LEAPHY_READ_HAND"] = "Read Hand sensor";  // untranslated
 Blockly.Msg["LEAPHY_READ_STOMACH"] = "Read Belly sensor";  // untranslated
 Blockly.Msg["LEAPHY_START"] = "Leaphy";  // untranslated

@@ -4,7 +4,6 @@
 
 Blockly.Msg["ADD_COMMENT"] = "Adicionar comentário";
 Blockly.Msg["CANNOT_DELETE_VARIABLE_PROCEDURE"] = "Não se pode deletar a variável '%1' porque é parte da definição da função '%2'";
-Blockly.Msg["CATLEAPHY_ORIGINAL"] = "Leaphy Original";  // untranslated
 Blockly.Msg["CHANGE_VALUE_TITLE"] = "Mudar valor:";
 Blockly.Msg["CLEAN_UP"] = "Limpar blocos";
 Blockly.Msg["COLLAPSED_WARNINGS_WARNING"] = "Bloqueios recolhidos contêm avisos.";
@@ -100,6 +99,7 @@ Blockly.Msg["LEAPHY_MOTOR_LEFT"] = "Left";  // untranslated
 Blockly.Msg["LEAPHY_MOTOR_RIGHT"] = "Right";  // untranslated
 Blockly.Msg["LEAPHY_MOTOR_SPEED"] = "Speed";  // untranslated
 Blockly.Msg["LEAPHY_MOTOR_TYPE"] = "Type";  // untranslated
+Blockly.Msg["LEAPHY_ORIGINAL_CATEGORY"] = "Leaphy Original";  // untranslated
 Blockly.Msg["LEAPHY_READ_HAND"] = "Read Hand sensor";  // untranslated
 Blockly.Msg["LEAPHY_READ_STOMACH"] = "Read Belly sensor";  // untranslated
 Blockly.Msg["LEAPHY_START"] = "Leaphy";  // untranslated

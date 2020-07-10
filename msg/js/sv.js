@@ -4,7 +4,6 @@
 
 Blockly.Msg["ADD_COMMENT"] = "Lägg till kommentar";
 Blockly.Msg["CANNOT_DELETE_VARIABLE_PROCEDURE"] = "Kan inte radera variabeln '%1' eftersom den är en del av definition för funktionen '%2'";
-Blockly.Msg["CATLEAPHY_ORIGINAL"] = "Leaphy Original";  // untranslated
 Blockly.Msg["CHANGE_VALUE_TITLE"] = "Ändra värde:";
 Blockly.Msg["CLEAN_UP"] = "Städa upp block";
 Blockly.Msg["COLLAPSED_WARNINGS_WARNING"] = "Hopfällda block innehåller varningar.";
@@ -100,6 +99,7 @@ Blockly.Msg["LEAPHY_MOTOR_LEFT"] = "Left";  // untranslated
 Blockly.Msg["LEAPHY_MOTOR_RIGHT"] = "Right";  // untranslated
 Blockly.Msg["LEAPHY_MOTOR_SPEED"] = "Speed";  // untranslated
 Blockly.Msg["LEAPHY_MOTOR_TYPE"] = "Type";  // untranslated
+Blockly.Msg["LEAPHY_ORIGINAL_CATEGORY"] = "Leaphy Original";  // untranslated
 Blockly.Msg["LEAPHY_READ_HAND"] = "Read Hand sensor";  // untranslated
 Blockly.Msg["LEAPHY_READ_STOMACH"] = "Read Belly sensor";  // untranslated
 Blockly.Msg["LEAPHY_START"] = "Leaphy";  // untranslated

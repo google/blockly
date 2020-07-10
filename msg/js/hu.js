@@ -4,7 +4,6 @@
 
 Blockly.Msg["ADD_COMMENT"] = "Megjegyzés hozzáadása";
 Blockly.Msg["CANNOT_DELETE_VARIABLE_PROCEDURE"] = "A(z) „%1” változó nem törölhető, mert része a(z) „%2” függvény definíciójának.";
-Blockly.Msg["CATLEAPHY_ORIGINAL"] = "Leaphy Original";  // untranslated
 Blockly.Msg["CHANGE_VALUE_TITLE"] = "Érték módosítása:";
 Blockly.Msg["CLEAN_UP"] = "Blokkok kiürítése";
 Blockly.Msg["COLLAPSED_WARNINGS_WARNING"] = "Az összecsukott blokk figyelmeztetéseket tartalmaz.";
@@ -100,6 +99,7 @@ Blockly.Msg["LEAPHY_MOTOR_LEFT"] = "Left";  // untranslated
 Blockly.Msg["LEAPHY_MOTOR_RIGHT"] = "Right";  // untranslated
 Blockly.Msg["LEAPHY_MOTOR_SPEED"] = "Speed";  // untranslated
 Blockly.Msg["LEAPHY_MOTOR_TYPE"] = "Type";  // untranslated
+Blockly.Msg["LEAPHY_ORIGINAL_CATEGORY"] = "Leaphy Original";  // untranslated
 Blockly.Msg["LEAPHY_READ_HAND"] = "Read Hand sensor";  // untranslated
 Blockly.Msg["LEAPHY_READ_STOMACH"] = "Read Belly sensor";  // untranslated
 Blockly.Msg["LEAPHY_START"] = "Leaphy";  // untranslated

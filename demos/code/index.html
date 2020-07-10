@@ -392,15 +392,42 @@
     <category name="%{BKY_CATVARIABLES}" colour="%{BKY_VARIABLES_HUE}" custom="VARIABLE"></category>
     <category name="%{BKY_CATFUNCTIONS}" colour="%{BKY_PROCEDURES_HUE}" custom="PROCEDURE"></category>
     <sep></sep>
-    <category name="%{BKY_CATLEAPHY_ORIGINAL}" categorystyle="leaphy_category">
-      <block type="leaphy_start"></block>
-      <block type="leaphy_original_set_led"></block>
-      <block type="leaphy_original_set_motor"></block>
+    <category id="l_original" name="%{BKY_LEAPHY_ORIGINAL_CATEGORY}" categorystyle="leaphy_category">
+      <block type="leaphy_original_set_led">
+        <value name="LED_RED">
+          <shadow type="math_number">
+            <field name="NUM">0</field>
+          </shadow>
+        </value>
+        <value name="LED_GREEN">
+          <shadow type="math_number">
+            <field name="NUM">0</field>
+          </shadow>
+        </value>
+        <value name="LED_BLUE">
+          <shadow type="math_number">
+            <field name="NUM">0</field>
+          </shadow>
+        </value>
+      </block>
+      <block type="leaphy_original_set_motor">
+        <value name="MOTOR_SPEED">
+          <shadow type="math_number">
+            <field name="NUM">100</field>
+          </shadow>
+        </value>
+      </block>
       <block type="leaphy_original_get_distance"></block>
-      <block type="leaphy_original_move_motors"></block>
+      <block type="leaphy_original_move_motors">
+        <value name="MOTOR_SPEED">
+          <shadow type="math_number">
+            <field name="NUM">100</field>
+          </shadow>
+        </value>
+      </block>
       <block type="leaphy_original_digital_read"></block>
       <block type="leaphy_original_analog_read"></block>
     </category>
-  </xml>
+    </xml>
 </body>
 </html>

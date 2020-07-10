@@ -4,7 +4,6 @@
 
 Blockly.Msg["ADD_COMMENT"] = "Opmerking toevoegen";
 Blockly.Msg["CANNOT_DELETE_VARIABLE_PROCEDURE"] = "De variabele \"%1\" kan niet verwijderd worden omdat die onderdeel uitmaakt van de definitie van de functie \"%2\"";
-Blockly.Msg["CATLEAPHY_ORIGINAL"] = "Leaphy Original";  // untranslated
 Blockly.Msg["CHANGE_VALUE_TITLE"] = "Waarde wijzigen:";
 Blockly.Msg["CLEAN_UP"] = "Blokken opschonen";
 Blockly.Msg["COLLAPSED_WARNINGS_WARNING"] = "Samengevouwen blokken bevatten waarschuwingen.";
@@ -100,6 +99,7 @@ Blockly.Msg["LEAPHY_MOTOR_LEFT"] = "Links";
 Blockly.Msg["LEAPHY_MOTOR_RIGHT"] = "Rechts";
 Blockly.Msg["LEAPHY_MOTOR_SPEED"] = "Snelheid";
 Blockly.Msg["LEAPHY_MOTOR_TYPE"] = "Type";  // untranslated
+Blockly.Msg["LEAPHY_ORIGINAL_CATEGORY"] = "Leaphy Original";  // untranslated
 Blockly.Msg["LEAPHY_READ_HAND"] = "Lees handsensor";
 Blockly.Msg["LEAPHY_READ_STOMACH"] = "Lees buiksensor";
 Blockly.Msg["LEAPHY_START"] = "Leaphy";  // untranslated

@@ -4,7 +4,6 @@
 
 Blockly.Msg["ADD_COMMENT"] = "ಟಿಪ್ಪಣಿ ಸೇರಿಸು";
 Blockly.Msg["CANNOT_DELETE_VARIABLE_PROCEDURE"] = "%1' ಮಾರ್ಪಡಿಸಬಹುದಾದ ಮೂಲಾಂಶವನ್ನು ಅಳಿಸಲು ಬರುವುದಿಲ್ಲ. ಏಕೆಂದರೆ ಅದು '%2' ಕೆಲಸದಲ್ಲಿ ಉಪಯೋಗಿಸಲ್ಪಟ್ಟಿದೆ";
-Blockly.Msg["CATLEAPHY_ORIGINAL"] = "Leaphy Original";  // untranslated
 Blockly.Msg["CHANGE_VALUE_TITLE"] = "ಮೌಲ್ಯ ಬದಲಾಯಿಸು:";
 Blockly.Msg["CLEAN_UP"] = "ಬ್ಲಾಕ್‍ಗಳನ್ನು ಸ್ವಚ್ಛಗೊಳಿಸು";
 Blockly.Msg["COLLAPSED_WARNINGS_WARNING"] = "Collapsed blocks contain warnings.";  // untranslated
@@ -100,6 +99,7 @@ Blockly.Msg["LEAPHY_MOTOR_LEFT"] = "Left";  // untranslated
 Blockly.Msg["LEAPHY_MOTOR_RIGHT"] = "Right";  // untranslated
 Blockly.Msg["LEAPHY_MOTOR_SPEED"] = "Speed";  // untranslated
 Blockly.Msg["LEAPHY_MOTOR_TYPE"] = "Type";  // untranslated
+Blockly.Msg["LEAPHY_ORIGINAL_CATEGORY"] = "Leaphy Original";  // untranslated
 Blockly.Msg["LEAPHY_READ_HAND"] = "Read Hand sensor";  // untranslated
 Blockly.Msg["LEAPHY_READ_STOMACH"] = "Read Belly sensor";  // untranslated
 Blockly.Msg["LEAPHY_START"] = "Leaphy";  // untranslated

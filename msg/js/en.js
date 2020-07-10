@@ -4,7 +4,6 @@
 
 Blockly.Msg["ADD_COMMENT"] = "Add Comment";
 Blockly.Msg["CANNOT_DELETE_VARIABLE_PROCEDURE"] = "Can't delete the variable '%1' because it's part of the definition of the function '%2'";
-Blockly.Msg["CATLEAPHY_ORIGINAL"] = "Leaphy Original";
 Blockly.Msg["CHANGE_VALUE_TITLE"] = "Change value:";
 Blockly.Msg["CLEAN_UP"] = "Clean up Blocks";
 Blockly.Msg["COLLAPSED_WARNINGS_WARNING"] = "Collapsed blocks contain warnings.";
@@ -100,6 +99,7 @@ Blockly.Msg["LEAPHY_MOTOR_LEFT"] = "Left";
 Blockly.Msg["LEAPHY_MOTOR_RIGHT"] = "Right";
 Blockly.Msg["LEAPHY_MOTOR_SPEED"] = "Speed";
 Blockly.Msg["LEAPHY_MOTOR_TYPE"] = "Type";
+Blockly.Msg["LEAPHY_ORIGINAL_CATEGORY"] = "Leaphy Original";
 Blockly.Msg["LEAPHY_READ_HAND"] = "Read Hand sensor";
 Blockly.Msg["LEAPHY_READ_STOMACH"] = "Read Belly sensor";
 Blockly.Msg["LEAPHY_START"] = "Leaphy";

@@ -4,7 +4,6 @@
 
 Blockly.Msg["ADD_COMMENT"] = "ใส่คำอธิบาย";
 Blockly.Msg["CANNOT_DELETE_VARIABLE_PROCEDURE"] = "ไม่สามารถลบตัวแปร '%1' ได้เนื่องจากเป็นส่วนหนึ่งของนิยามของฟังก์ชัน '%2'";
-Blockly.Msg["CATLEAPHY_ORIGINAL"] = "Leaphy Original";  // untranslated
 Blockly.Msg["CHANGE_VALUE_TITLE"] = "เปลี่ยนค่า:";
 Blockly.Msg["CLEAN_UP"] = "จัดเรียงบล็อกให้เป็นแถว";
 Blockly.Msg["COLLAPSED_WARNINGS_WARNING"] = "บล็อกที่ถูกพับมีคำเตือนอยู่ข้างใน.";
@@ -100,6 +99,7 @@ Blockly.Msg["LEAPHY_MOTOR_LEFT"] = "Left";  // untranslated
 Blockly.Msg["LEAPHY_MOTOR_RIGHT"] = "Right";  // untranslated
 Blockly.Msg["LEAPHY_MOTOR_SPEED"] = "Speed";  // untranslated
 Blockly.Msg["LEAPHY_MOTOR_TYPE"] = "Type";  // untranslated
+Blockly.Msg["LEAPHY_ORIGINAL_CATEGORY"] = "Leaphy Original";  // untranslated
 Blockly.Msg["LEAPHY_READ_HAND"] = "Read Hand sensor";  // untranslated
 Blockly.Msg["LEAPHY_READ_STOMACH"] = "Read Belly sensor";  // untranslated
 Blockly.Msg["LEAPHY_START"] = "Leaphy";  // untranslated

@@ -1,12 +1,12 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2020-07-10 11:46:00.009640",
+		"lastupdated": "2020-07-10 11:55:42.511284",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
 	"LEAPHY_START": "Leaphy",
-	"CATLEAPHY_ORIGINAL": "Leaphy Original",
+	"LEAPHY_ORIGINAL_CATEGORY": "Leaphy Original",
 	"LEAPHY_MOTOR_FORWARD": "Forward",
 	"LEAPHY_MOTOR_BACKWARD": "Backward",
 	"LEAPHY_MOTOR_LEFT": "Left",

@@ -35,7 +35,7 @@
 Blockly.Msg.LEAPHY_START = 'Leaphy';
 /** @type {string} */
 /// leaphy Original Category title - The text that appears in the Leaphy Original Category.
-Blockly.Msg.CATLEAPHY_ORIGINAL = 'Leaphy Original';
+Blockly.Msg.LEAPHY_ORIGINAL_CATEGORY = 'Leaphy Original';
 /** @type {string} */
 /// leaphy Motor Forward.
 Blockly.Msg.LEAPHY_MOTOR_FORWARD = 'Forward';

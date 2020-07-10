@@ -261,7 +261,8 @@ Blockly.ZoomControls.prototype.createZoomInSvg_ = function(rnd) {
 };
 
 /**
- * Zooms in or out of the workspace.
+ * Handles a mouse down event on the zoom in or zoom out buttons on the
+ *    workspace.
  * @param {number} amount Amount of zooming. Negative amount values zoom out,
  *    and positive amount values zoom in.
  * @param {!Event} e A mouse down event.
@@ -324,7 +325,7 @@ Blockly.ZoomControls.prototype.createZoomResetSvg_ = function(rnd) {
 };
 
 /**
- * Resets zoom on the workspace.
+ * Handles a mouse down event on the reset zoom button on the workspace.
  * @param {!Event} e A mouse down event.
  * @private
  */

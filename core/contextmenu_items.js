@@ -270,6 +270,223 @@ Blockly.ContextMenuItems.registerWorkspaceOptions_ = function() {
   Blockly.ContextMenuItems.registerDeleteAll();
 };
 
+/** Option to duplicate a block. */
+Blockly.ContextMenuItems.registerDuplicate = function() {
+  var duplicateOption = {};
+  duplicateOption.displayText = function() {
+    return Blockly.Msg['DUPLICATE_BLOCK'];
+  };
+  duplicateOption.preconditionFn = function(scope) {
+    var block = scope.block;
+    if (!block.isInFlyout && block.isDeletable() && block.isMovable()) {
+      if (block.isDuplicatable()) {
+        return 'enabled';
+      }
+      return 'disabled';
+    }
+    return 'hidden';
+  };
+  duplicateOption.callback = function(scope) {
+    Blockly.duplicate(scope.block);
+  };
+  duplicateOption.scopeType = Blockly.ContextMenuRegistry.ScopeType.BLOCK;
+  duplicateOption.id = 'blockDuplicate';
+  duplicateOption.weight = 0;
+  Blockly.ContextMenuRegistry.registry.register(duplicateOption);
+};
+
+/** Option to add or remove block-level comment. */
+Blockly.ContextMenuItems.registerComment = function() {
+  var commentOption = {};
+  commentOption.displayText = function(scope) {
+    if (scope.block.getCommentIcon()) {
+      // If there's already a comment,  option is to remove.
+      return Blockly.Msg['REMOVE_COMMENT'];
+    }
+    // If there's no comment yet, option is to add.
+    return Blockly.Msg['ADD_COMMENT'];
+  };
+  commentOption.preconditionFn = function(scope) {
+    var block = scope.block;
+    // IE doesn't support necessary features for comment editing.
+    if (!Blockly.utils.userAgent.IE && !block.isInFlyout && block.workspace.options.comments &&
+        !block.collapsed_ && block.isEditable()) {
+      return 'enabled';
+    }
+    return 'hidden';
+  };
+  commentOption.callback = function(scope) {
+    var block = scope.block;
+    if (block.getCommentIcon()) {
+      block.setCommentText(null);
+    } else {
+      block.setCommentText('');
+    }
+  };
+  commentOption.scopeType = Blockly.ContextMenuRegistry.ScopeType.BLOCK;
+  commentOption.id = 'blockComment';
+  commentOption.weight = 0;
+  Blockly.ContextMenuRegistry.registry.register(commentOption);
+};
+
+/** Option to inline variables. */
+Blockly.ContextMenuItems.registerInline = function() {
+  var inlineOption = {};
+  inlineOption.displayText = function(scope) {
+    return (scope.block.getInputsInline()) ?
+        Blockly.Msg['EXTERNAL_INPUTS'] : Blockly.Msg['INLINE_INPUTS'];
+  };
+  inlineOption.preconditionFn = function(scope) {
+    var block = scope.block;
+    if (!block.isInFlyout && block.isMovable() && !block.collapsed_) {
+      for (var i = 1; i < block.inputList.length; i++) {
+        // Only display this option if there are two value or dummy inputs next to each other.
+        if (block.inputList[i - 1].type != Blockly.NEXT_STATEMENT &&
+            block.inputList[i].type != Blockly.NEXT_STATEMENT) {
+          return 'enabled';
+        }
+      }
+    }
+    return 'hidden';
+  };
+  inlineOption.callback = function(scope) {
+    scope.block.setInputsInline(!scope.block.getInputsInline());
+  };
+  inlineOption.scopeType = Blockly.ContextMenuRegistry.ScopeType.BLOCK;
+  inlineOption.id = 'blockInline';
+  inlineOption.weight = 0;
+  Blockly.ContextMenuRegistry.registry.register(inlineOption);
+};
+
+/** Option to collapse or expand a block. */
+Blockly.ContextMenuItems.registerCollapseExpandBlock = function() {
+  var collapseExpandOption = {};
+  collapseExpandOption.displayText = function(scope) {
+    if (scope.block.collapsed_) {
+      return Blockly.Msg['EXPAND_BLOCK'];
+    }
+    return Blockly.Msg['COLLAPSE_BLOCK'];
+  };
+  collapseExpandOption.preconditionFn = function(scope) {
+    var block = scope.block;
+    if (!block.isInFlyout && block.isMovable()) {
+      return 'enabled';
+    }
+    return 'hidden';
+  };
+  collapseExpandOption.callback = function(scope) {
+    scope.block.setCollapsed(!scope.block.collapsed_);
+  };
+  collapseExpandOption.scopeType = Blockly.ContextMenuRegistry.ScopeType.BLOCK;
+  collapseExpandOption.id = 'blockCollapseExpand';
+  collapseExpandOption.weight = 0;
+  Blockly.ContextMenuRegistry.registry.register(collapseExpandOption);
+};
+
+/** Option to disable or enable a block. */
+Blockly.ContextMenuItems.registerDisable = function() {
+  var disableOption = {};
+  disableOption.displayText = function(scope) {
+    return (scope.block.isEnabled()) ?
+        Blockly.Msg['DISABLE_BLOCK'] : Blockly.Msg['ENABLE_BLOCK'];
+  };
+  disableOption.preconditionFn = function(scope) {
+    var block = scope.block;
+    if (!block.isInFlyout && block.workspace.options.disable && block.isEditable()) {
+      if (block.getInheritedDisabled()) {
+        return 'disabled';
+      }
+      return 'enabled';
+    }
+    return 'hidden';
+  };
+  disableOption.callback = function(scope) {
+    var block = scope.block;
+    var group = Blockly.Events.getGroup();
+    if (!group) {
+      Blockly.Events.setGroup(true);
+    }
+    block.setEnabled(!block.isEnabled());
+    if (!group) {
+      Blockly.Events.setGroup(false);
+    }
+  };
+  disableOption.scopeType = Blockly.ContextMenuRegistry.ScopeType.BLOCK;
+  disableOption.id = 'blockDisable';
+  disableOption.weight = 0;
+  Blockly.ContextMenuRegistry.registry.register(disableOption);
+};
+
+/** Option to delete a block. */
+Blockly.ContextMenuItems.registerDelete = function() {
+  var deleteOption = {};
+  deleteOption.displayText = function(scope) {
+    var block = scope.block;
+    // Count the number of blocks that are nested in this block.
+    var descendantCount = block.getDescendants(false).length;
+    var nextBlock = block.getNextBlock();
+    if (nextBlock) {
+    // Blocks in the current stack would survive this block's deletion.
+      descendantCount -= nextBlock.getDescendants(false).length;
+    }
+    return (descendantCount == 1) ? Blockly.Msg['DELETE_BLOCK'] :
+        Blockly.Msg['DELETE_X_BLOCKS'].replace('%1', String(descendantCount));
+  };
+  deleteOption.preconditionFn = function(scope) {
+    if (!scope.block.isInFlyout && scope.block.isDeletable()) {
+      return 'enabled';
+    }
+    return 'hidden';
+  };
+  deleteOption.callback = function(scope) {
+    Blockly.Events.setGroup(true);
+    scope.block.dispose(true, true);
+    Blockly.Events.setGroup(false);
+  };
+  deleteOption.scopeType = Blockly.ContextMenuRegistry.ScopeType.BLOCK;
+  deleteOption.id = 'blockDelete';
+  deleteOption.weight = 0;
+  Blockly.ContextMenuRegistry.registry.register(deleteOption);
+};
+
+/** Option to open help for a block. */
+Blockly.ContextMenuItems.registerHelp = function() {
+  var helpOption = {};
+  helpOption.displayText = function() {
+    return Blockly.Msg['HELP'];
+  };
+  helpOption.preconditionFn = function(scope) {
+    var block = scope.block;
+    var url = (typeof block.helpUrl == 'function') ?
+      block.helpUrl() : block.helpUrl;
+    if (url) {
+      return 'enabled';
+    }
+    return 'hidden';
+  };
+  helpOption.callback = function(scope) {
+    scope.block.showHelp();
+  };
+  helpOption.scopeType = Blockly.ContextMenuRegistry.ScopeType.BLOCK;
+  helpOption.id = 'blockHelp';
+  helpOption.weight = 0;
+  Blockly.ContextMenuRegistry.registry.register(helpOption);
+};
+
+/**
+ * Registers all block-scoped context menu items.
+ * @private
+ */
+Blockly.ContextMenuItems.registerBlockOptions_ = function() {
+  Blockly.ContextMenuItems.registerDuplicate();
+  Blockly.ContextMenuItems.registerComment();
+  Blockly.ContextMenuItems.registerInline();
+  Blockly.ContextMenuItems.registerCollapseExpandBlock();
+  Blockly.ContextMenuItems.registerDisable();
+  Blockly.ContextMenuItems.registerDelete();
+  Blockly.ContextMenuItems.registerHelp();
+};
+
 /**
  * Registers all default context menu items. This should be called once per instance of
  * ContextMenuRegistry.
@@ -277,5 +494,6 @@ Blockly.ContextMenuItems.registerWorkspaceOptions_ = function() {
  */
 Blockly.ContextMenuItems.registerDefaultOptions = function() {
   Blockly.ContextMenuItems.registerWorkspaceOptions_();
+  Blockly.ContextMenuItems.registerBlockOptions_();
 };
   

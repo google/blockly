@@ -63,6 +63,12 @@ Blockly.Arduino['controls_repeat_ext'] = function(block) {
   return code;
 };
 
+Blockly.Arduino['controls_repeat_forever'] = function(block) {
+  var branch = Blockly.Arduino.statementToCode(block, 'DO');
+  branch = Blockly.Arduino.addLoopTrap(branch, block.id);
+  return 'while (true) {\n' + branch + '}\n';
+};
+
 /**
  * Generator for the repeat while block using a While statement.
  * Arduino code: loop { while (X) { Y } }

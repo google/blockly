@@ -88,6 +88,26 @@ Blockly.Msg.LEAPHY_READ_HAND = 'Read Hand sensor';
 Blockly.Msg.LEAPHY_HUE = '188';
 
 /** @type {string} */
+/// Sitation Category Title
+Blockly.Msg.LEAPHY_SITUATION_CATEGORY = 'Situation';
+/** @type {string} */
+/// Numbers Category Title
+Blockly.Msg.LEAPHY_NUMBERS_CATEGORY = 'Numbers';
+/** @type {string} */
+/// Variables Category Title
+Blockly.Msg.LEAPHY_VARIABLES_CATEGORY = 'Variables';
+/** @type {string} */
+/// Functions Category Title
+Blockly.Msg.LEAPHY_FUNCTIONS_CATEGORY = 'Functions';
+
+/** @type {string} */
+/// Arduino Delay in ms
+Blockly.Msg.ARD_TIME_DELAY = 'wait (ms)'
+/** @type {string} */
+/// Frduino Delay in ms tooltip
+Blockly.Msg.ARD_TIME_DELAY_TIP = 'Wait specific time in milliseconds';
+
+/** @type {string} */
 /// {{Notranslate}} Hue value for all logic blocks.
 Blockly.Msg.LOGIC_HUE = '210';
 /** @type {string} */
@@ -294,6 +314,9 @@ Blockly.Msg.CONTROLS_REPEAT_HELPURL = 'https://en.wikipedia.org/wiki/For_loop';
 /** @type {string} */
 /// block input text - Title of [https://github.com/google/blockly/wiki/Loops#repeat repeat block].\n\nParameters:\n* %1 - the number of times the body of the loop should be repeated.
 Blockly.Msg.CONTROLS_REPEAT_TITLE = 'repeat %1 times';
+/** @type {string} */
+/// block input text - Title of repeat forever block
+Blockly.Msg.CONTROLS_REPEAT_FOREVER_TITLE = 'repeat forever';
 /** @type {string} */
 /// block text - Preceding the blocks in the body of the loop.  See [https://github.com/google/blockly/wiki/Loops https://github.com/google/blockly/wiki/Loops].\n{{Identical|Do}}
 Blockly.Msg.CONTROLS_REPEAT_INPUT_DO = 'do';

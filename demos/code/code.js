@@ -234,14 +234,14 @@ Code.LANG = Code.getLang();
  * List of tab names.
  * @private
  */
-Code.TABS_ = ['blocks', 'javascript', 'php', 'python', 'dart', 'lua', 'arduino', 'xml'];
+Code.TABS_ = ['blocks','arduino', 'xml'];
 
 /**
  * List of tab names with casing, for display in the UI.
  * @private
  */
 Code.TABS_DISPLAY_ = [
-  'Blocks', 'JavaScript', 'PHP', 'Python', 'Dart', 'Lua', 'Arduino', 'XML',
+  'Blocks','Arduino', 'XML',
 ];
 
 Code.selected = 'blocks';
@@ -448,12 +448,8 @@ Code.init = function () {
       {
         controls: true,
         wheel: true
-      }
+      }      
     });
-
-  // Add to reserved word list: Local variables in execution environment (runJS)
-  // and the infinite loop detection function.
-  Blockly.JavaScript.addReservedWords('code,timeouts,checkTimeout');
 
   Code.loadBlocks('<xml xmlns="https://developers.google.com/blockly/xml"><block type="leaphy_start" id="rzE0Ve:6bHB~8aIqyj-U" deletable="false" x="250" y="10"/></xml>');
 

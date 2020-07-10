@@ -14,7 +14,6 @@ goog.provide('Blockly.Themes.Leaphy');
 
 goog.require('Blockly.Theme');
 
-
 // Temporary holding object.
 Blockly.Themes.Leaphy = {};
 
@@ -23,69 +22,35 @@ Blockly.Themes.Leaphy.defaultBlockStyles = {
     "colourPrimary": "188",
     "hat": "cap"
   },
-  "colour_blocks": {
-    "colourPrimary": "20"
+  "situation_blocks": {
+    "colourPrimary": "#E0A830"
   },
-  "list_blocks": {
-    "colourPrimary": "260"
+  "numbers_blocks": {
+    "colourPrimary": "#5FB627"
   },
-  "logic_blocks": {
-    "colourPrimary": "210"
+  "variables_blocks": {
+    "colourPrimary": "#EC7D2A"
   },
-  "loop_blocks": {
-    "colourPrimary": "120"
-  },
-  "math_blocks": {
-    "colourPrimary": "230"
-  },
-  "procedure_blocks": {
-    "colourPrimary": "290"
-  },
-  "text_blocks": {
-    "colourPrimary": "160"
-  },
-  "variable_blocks": {
-    "colourPrimary": "330"
-  },
-  "variable_dynamic_blocks": {
-    "colourPrimary": "310"
-  },
-  "hat_blocks": {
-    "colourPrimary": "330",
-    "hat": "cap"
+  "functions_blocks": {
+    "colourPrimary": "#658FD7"
   }
 };
 
 Blockly.Themes.Leaphy.categoryStyles = {
   "leaphy_category": {
-    "colour": "188"
+    "colour": "#188697"
   },
-  "colour_category": {
-    "colour": "20"
+  "situation_category": {
+    "colour": "#E0A830"
   },
-  "list_category": {
-    "colour": "260"
+  "numbers_category": {
+    "colour": "#5FB627"
   },
-  "logic_category": {
-    "colour": "210"
+  "variables_category": {
+    "colour": "#EC7D2A"
   },
-  "loop_category": {
-    "colour": "120"
-  },
-  "math_category": {
-    "colour": "230"
-  },
-  "procedure_category": {
-    "colour": "290"
-  },
-  "text_category": {
-    "colour": "160"
-  },
-  "variable_category": {
-    "colour": "330"
-  },
-  "variable_dynamic_category": {
-    "colour": "310"
+  "functions_category": {
+    "colour": "#658FD7"
   }
 };
 

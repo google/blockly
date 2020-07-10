@@ -325,11 +325,11 @@ function buildArduino() {
  *     arduino_compressed.js
  */
 const buildGenerators = gulp.parallel(
-  buildJavascript,
-  buildPython,
-  buildPHP,
-  buildLua,
-  buildDart,
+  //buildJavascript,
+  //buildPython,
+  //uildPHP,
+  //buildLua,
+  //buildDart,
   buildArduino
 );
 

@@ -190,6 +190,9 @@ function packageNode() {
         name: 'BlocklyBlocks',
         cjs: './blocks',
       },{
+        name: 'BlocklyArduino',
+        cjs: './arduino',
+      },{
         name: 'BlocklyJS',
         cjs: './javascript',
       },{
@@ -247,6 +250,14 @@ function packageGenerator(file, rename, namespace) {
       }]))
     .pipe(gulp.rename(rename))
     .pipe(gulp.dest(packageDistribution));
+};
+
+/**
+ * This task wraps arduino_compressed.js into a UMD module.
+ * @example import 'blockly/arduino';
+ */
+function packageArduino() {
+  return packageGenerator('arduino_compressed.js', 'arduino.js', 'Arduino');
 };
 
 /**
@@ -309,7 +320,7 @@ function packageLocales() {
 
 /**
  * This task creates a UMD bundle of Blockly which includes the Blockly
- * core files, the built-in blocks, the JavaScript code generator and the
+ * core files, the built-in blocks, the Arduino code generator and the
  * English localization files.
  * @example <script src="https://unpkg.com/blockly/blockly.min.js"></script>
  */
@@ -318,7 +329,7 @@ function packageUMDBundle() {
     'blockly_compressed.js',
     'msg/js/en.js',
     'blocks_compressed.js',
-    'javascript_compressed.js'
+    'arduino_compressed.js'
   ];
   return gulp.src(srcs)
     .pipe(gulp.concat('blockly.min.js'))
@@ -379,11 +390,12 @@ const package = gulp.parallel(
   packageNodeCore,
   packageBlockly,
   packageBlocks,
-  packageJavascript,
-  packagePython,
-  packageLua,
-  packageDart,
-  packagePHP,
+  packageArduino,
+  //packageJavascript,
+  //packagePython,
+  //packageLua,
+  //packageDart,
+  //packagePHP,
   packageLocales,
   packageMedia,
   packageUMDBundle,

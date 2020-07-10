@@ -301,6 +301,8 @@ Blockly.Trashcan.prototype.createDom = function() {
   this.svgLid_.setAttributeNS(Blockly.utils.dom.XLINK_NS, 'xlink:href',
       this.workspace_.options.pathToMedia + Blockly.SPRITE.url);
 
+  Blockly.bindEventWithChecks_(
+      this.svgGroup_, 'mousedown', this, this.blockMouseDownWhenFull_);
   Blockly.bindEventWithChecks_(this.svgGroup_, 'mouseup', this, this.click);
   // bindEventWithChecks_ quashes events too aggressively. See:
   // https://groups.google.com/forum/#!topic/blockly/QF4yB9Wx00s
@@ -346,6 +348,15 @@ Blockly.Trashcan.prototype.dispose = function() {
 };
 
 /**
+ * Whether the trashcan has contents.
+ * @return {boolean} True if the trashcan has contents.
+ * @private
+ */
+Blockly.Trashcan.prototype.hasContents_ = function() {
+  return !!this.contents_.length;
+};
+
+/**
  * Returns true if the trashcan contents-flyout is currently open.
  * @return {boolean} True if the trashcan contents-flyout is currently open.
  */
@@ -358,7 +369,7 @@ Blockly.Trashcan.prototype.contentsIsOpen = function() {
  * it will be closed.
  */
 Blockly.Trashcan.prototype.emptyContents = function() {
-  if (!this.contents_.length) {
+  if (!this.hasContents_()) {
     return;
   }
   this.contents_.length = 0;
@@ -501,7 +512,7 @@ Blockly.Trashcan.prototype.close = function() {
  * Inspect the contents of the trash.
  */
 Blockly.Trashcan.prototype.click = function() {
-  if (!this.contents_.length) {
+  if (!this.hasContents_()) {
     return;
   }
 
@@ -510,14 +521,38 @@ Blockly.Trashcan.prototype.click = function() {
     xml[i] = Blockly.Xml.textToDom(text);
   }
   this.flyout.show(xml);
+
+  this.fireUiEvent_();
 };
+
+/**
+ * Fires a ui event for trashcan flyout opening.
+ * @private
+ */
+Blockly.Trashcan.prototype.fireUiEvent_ = function() {
+  var uiEvent = new Blockly.Events.Ui(null, 'trashcanOpen', null, true);
+  uiEvent.workspaceId = this.workspace_.id;
+  Blockly.Events.fire(uiEvent);
+};
+
+/**
+ * Prevents a workspace scroll and click event if the trashcan has blocks.
+ * @param {!Event} e A mouse down event.
+ * @private
+ */
+Blockly.Trashcan.prototype.blockMouseDownWhenFull_ = function(e) {
+  if (this.hasContents_()) {
+    e.stopPropagation();  // Don't start a workspace scroll.
+  }
+};
+
 
 /**
  * Indicate that the trashcan can be clicked (by opening it) if it has blocks.
  * @private
  */
 Blockly.Trashcan.prototype.mouseOver_ = function() {
-  if (this.contents_.length) {
+  if (this.hasContents_()) {
     this.setOpen(true);
   }
 };

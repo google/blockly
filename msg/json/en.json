@@ -1,10 +1,28 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2020-07-08 21:11:07.887731",
+		"lastupdated": "2020-07-10 11:46:00.009640",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
+	"LEAPHY_START": "Leaphy",
+	"CATLEAPHY_ORIGINAL": "Leaphy Original",
+	"LEAPHY_MOTOR_FORWARD": "Forward",
+	"LEAPHY_MOTOR_BACKWARD": "Backward",
+	"LEAPHY_MOTOR_LEFT": "Left",
+	"LEAPHY_MOTOR_RIGHT": "Right",
+	"LEAPHY_LED": "Led",
+	"LEAPHY_LED_RED": "Red",
+	"LEAPHY_LED_BLUE": "Blue",
+	"LEAPHY_LED_GREEN": "Green",
+	"LEAPHY_MOTOR_TYPE": "Type",
+	"LEAPHY_MOTOR_SPEED": "Speed",
+	"LEAPHY_MOTOR_DIRECTION": "Direction",
+	"LEAPHY_GET_DISTANCE": "Get distance",
+	"LEAPHY_DIGITAL_READ": "Read digipin",
+	"LEAPHY_ANALOG_READ": "Read anapin",
+	"LEAPHY_READ_STOMACH": "Read Belly sensor",
+	"LEAPHY_READ_HAND": "Read Hand sensor",
 	"VARIABLES_DEFAULT_NAME": "item",
 	"UNNAMED_KEY": "unnamed",
 	"TODAY": "Today",
@@ -404,7 +422,5 @@
 	"PROCEDURES_IFRETURN_WARNING": "Warning: This block may be used only within a function definition.",
 	"WORKSPACE_COMMENT_DEFAULT_TEXT": "Say something...",
 	"WORKSPACE_ARIA_LABEL": "Blockly Workspace",
-	"COLLAPSED_WARNINGS_WARNING": "Collapsed blocks contain warnings.",
-	"CATLEAPHY_ORIGINAL": "Leaphy Original",
-	"LEAPHY_START": "Leaphy"
+	"COLLAPSED_WARNINGS_WARNING": "Collapsed blocks contain warnings."
 }

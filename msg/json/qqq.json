@@ -1,4 +1,22 @@
 {
+	"LEAPHY_START": "leaphy start block title - The text that appears in the Leaphy start block.",
+	"CATLEAPHY_ORIGINAL": "leaphy Original Category title - The text that appears in the Leaphy Original Category.",
+	"LEAPHY_MOTOR_FORWARD": "leaphy Motor Forward.",
+	"LEAPHY_MOTOR_BACKWARD": "leaphy Motor Backward.",
+	"LEAPHY_MOTOR_LEFT": "leaphy Motor Left.",
+	"LEAPHY_MOTOR_RIGHT": "leaphy Motor Right.",
+	"LEAPHY_LED": "leaphy LED.",
+	"LEAPHY_LED_RED": "leaphy LED Red.",
+	"LEAPHY_LED_BLUE": "leaphy LED Blue.",
+	"LEAPHY_LED_GREEN": "leaphy LED Green.",
+	"LEAPHY_MOTOR_TYPE": "leaphy Motor Type.",
+	"LEAPHY_MOTOR_SPEED": "leaphy Motor Speed.",
+	"LEAPHY_MOTOR_DIRECTION": "leaphy Motor Direction.",
+	"LEAPHY_GET_DISTANCE": "leaphy Get Distance.",
+	"LEAPHY_DIGITAL_READ": "leaphy Read Digital Pin.",
+	"LEAPHY_ANALOG_READ": "leaphy Read Analog Pin.",
+	"LEAPHY_READ_STOMACH": "leaphy Read Belly Sensor.",
+	"LEAPHY_READ_HAND": "leaphy Read Hand Sensor",
 	"VARIABLES_DEFAULT_NAME": "default name - A simple, general default name for a variable, preferably short. For more context, see [[Translating:Blockly#infrequent_message_types]].\n{{Identical|Item}}",
 	"UNNAMED_KEY": "default name - A simple, default name for an unnamed function or variable. Preferably indicates that the item is unnamed.",
 	"TODAY": "button text - Button that sets a calendar to today's date.\n{{Identical|Today}}",
@@ -398,7 +416,5 @@
 	"PROCEDURES_IFRETURN_WARNING": "warning - This appears if the user tries to use this block outside of a function definition.",
 	"WORKSPACE_COMMENT_DEFAULT_TEXT": "comment text - This text appears in a new workspace comment, to hint that the user can type here.",
 	"WORKSPACE_ARIA_LABEL": "workspace - This text is read out when a user navigates to the workspace while using a screen reader.",
-	"COLLAPSED_WARNINGS_WARNING": "warning - This appears if the user collapses a block, and blocks inside that block have warnings attached to them. It should inform the user that the block they collapsed contains blocks that have warnings.",
-	"CATLEAPHY_ORIGINAL": "leaphy Category title - The text that appears in the Leaphy Original Category.",
-	"LEAPHY_START": "leaphy start block title - The text that appears in the Leaphy start block."
+	"COLLAPSED_WARNINGS_WARNING": "warning - This appears if the user collapses a block, and blocks inside that block have warnings attached to them. It should inform the user that the block they collapsed contains blocks that have warnings."
 }

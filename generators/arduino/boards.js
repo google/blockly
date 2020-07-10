@@ -81,6 +81,9 @@ Blockly.Arduino.Boards.duplicateBoardProfile =
 /** Object to contain all Arduino board profiles. */
 Blockly.Arduino.Boards.profiles = new Object();
 
+Blockly.Msg.LEAPHY_ORIGINAL_DIGITAL_PINS_DROPDOWN = [["0", "0"], ["1", "1"], ["2", "2"], ["3", "3"], ["4", "4"], ["5", "5"], ["6", "6"], ["7", "7"], ["8", "8"], ["9", "9"], ["10", "10"], ["11", "11"], ["12", "12"], ["13", "13"], ["14", "14"], ["15", "15"], ["16", "16"], ["17", "17"], ["18", "18"], ["19", "19"]];
+Blockly.Msg.LEAPHY_ORIGINAL_ANALOG_PINS_DROPDOWN = [["A0", "A0"], ["A1", "A1"], ["A2", "A2"], ["A3", "A3"], ["A4", "A4"], ["A5", "A5"]];
+
 /** Arduino Uno board profile. */
 Blockly.Arduino.Boards.profiles.uno = {
   name: 'Arduino Uno',

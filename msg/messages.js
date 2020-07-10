@@ -30,6 +30,63 @@
  * them to msg/json/qqq.json, and they show up in the translation console.
  */
 
+ /** @type {string} */
+/// leaphy start block title - The text that appears in the Leaphy start block.
+Blockly.Msg.LEAPHY_START = 'Leaphy';
+/** @type {string} */
+/// leaphy Original Category title - The text that appears in the Leaphy Original Category.
+Blockly.Msg.CATLEAPHY_ORIGINAL = 'Leaphy Original';
+/** @type {string} */
+/// leaphy Motor Forward.
+Blockly.Msg.LEAPHY_MOTOR_FORWARD = 'Forward';
+/** @type {string} */
+/// leaphy Motor Backward.
+Blockly.Msg.LEAPHY_MOTOR_BACKWARD = 'Backward';
+/** @type {string} */
+/// leaphy Motor Left.
+Blockly.Msg.LEAPHY_MOTOR_LEFT = 'Left';
+/** @type {string} */
+/// leaphy Motor Right.
+Blockly.Msg.LEAPHY_MOTOR_RIGHT = 'Right';
+/** @type {string} */
+/// leaphy LED.
+Blockly.Msg.LEAPHY_LED = 'Led';
+/** @type {string} */
+/// leaphy LED Red.
+Blockly.Msg.LEAPHY_LED_RED = 'Red';
+/** @type {string} */
+/// leaphy LED Blue.
+Blockly.Msg.LEAPHY_LED_BLUE = 'Blue';
+/** @type {string} */
+/// leaphy LED Green.
+Blockly.Msg.LEAPHY_LED_GREEN = 'Green';
+/** @type {string} */
+/// leaphy Motor Type.
+Blockly.Msg.LEAPHY_MOTOR_TYPE = 'Type';
+/** @type {string} */
+/// leaphy Motor Speed.
+Blockly.Msg.LEAPHY_MOTOR_SPEED = 'Speed';
+/** @type {string} */
+/// leaphy Motor Direction.
+Blockly.Msg.LEAPHY_MOTOR_DIRECTION = 'Direction';
+/** @type {string} */
+/// leaphy Get Distance.
+Blockly.Msg.LEAPHY_GET_DISTANCE = 'Get distance';
+/** @type {string} */
+/// leaphy Read Digital Pin.
+Blockly.Msg.LEAPHY_DIGITAL_READ = 'Read digipin';
+/** @type {string} */
+/// leaphy Read Analog Pin.
+Blockly.Msg.LEAPHY_ANALOG_READ = 'Read anapin';
+/** @type {string} */
+/// leaphy Read Belly Sensor.
+Blockly.Msg.LEAPHY_READ_STOMACH = 'Read Belly sensor';
+/** @type {string} */
+/// leaphy Read Hand Sensor
+Blockly.Msg.LEAPHY_READ_HAND = 'Read Hand sensor';
+/// {{Notranslate}} Hue value for all Leaphy blocks.
+Blockly.Msg.LEAPHY_HUE = '188';
+
 /** @type {string} */
 /// {{Notranslate}} Hue value for all logic blocks.
 Blockly.Msg.LOGIC_HUE = '210';
@@ -57,8 +114,6 @@ Blockly.Msg.VARIABLES_DYNAMIC_HUE = '310';
 /** @type {string} */
 /// {{Notranslate}} Hue value for all procedure blocks.
 Blockly.Msg.PROCEDURES_HUE = '290';
-/// {{Notranslate}} Hue value for all Leaphy blocks.
-Blockly.Msg.LEAPHY_HUE = '188';
 
 /** @type {string} */
 /// default name - A simple, general default name for a variable, preferably short.
@@ -1630,12 +1685,4 @@ Blockly.Msg.WORKSPACE_ARIA_LABEL = 'Blockly Workspace';
 /// that block have warnings attached to them. It should inform the user that the
 /// block they collapsed contains blocks that have warnings.
 Blockly.Msg.COLLAPSED_WARNINGS_WARNING = 'Collapsed blocks contain warnings.';
-
-/** @type {string} */
-/// leaphy Category title - The text that appears in the Leaphy Original Category.
-Blockly.Msg.CATLEAPHY_ORIGINAL = 'Leaphy Original';
-
-/** @type {string} */
-/// leaphy start block title - The text that appears in the Leaphy start block.
-Blockly.Msg.LEAPHY_START = 'Leaphy';
 

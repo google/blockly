@@ -30,6 +30,30 @@ Blockly.ZoomControls = function(workspace) {
    */
   this.workspace_ = workspace;
 
+  /*
+   * A handle to use to unbind the mouse down event handler for zoom reset
+   *    button. Opaque data returned from Blockly.bindEventWithChecks_.
+   * @type {?Blockly.EventData}
+   * @private
+   */
+  this.onZoomResetWrapper_ = null;
+
+  /**
+   * A handle to use to unbind the mouse down event handler for zoom in button.
+   * Opaque data returned from Blockly.bindEventWithChecks_.
+   * @type {?Blockly.EventData}
+   * @private
+   */
+  this.onZoomInWrapper_ = null;
+
+  /**
+   * A handle to use to unbind the mouse down event handler for zoom out button.
+   * Opaque data returned from Blockly.bindEventWithChecks_.
+   * @type {?Blockly.EventData}
+   * @private
+   */
+  this.onZoomOutWrapper_ = null;
+
   /**
    * The vertical distance between the workspace bottom edge and the control.
    * The value is initialized during `init`.
@@ -109,6 +133,7 @@ Blockly.ZoomControls.prototype.left_ = 0;
  */
 Blockly.ZoomControls.prototype.top_ = 0;
 
+
 /**
  * Create the zoom controls.
  * @return {!SVGElement} The zoom controls SVG group.
@@ -150,6 +175,15 @@ Blockly.ZoomControls.prototype.init = function(verticalSpacing) {
 Blockly.ZoomControls.prototype.dispose = function() {
   if (this.svgGroup_) {
     Blockly.utils.dom.removeNode(this.svgGroup_);
+  }
+  if (this.onZoomResetWrapper_) {
+    Blockly.unbindEvent_(this.onZoomResetWrapper_);
+  }
+  if (this.onZoomInWrapper_) {
+    Blockly.unbindEvent_(this.onZoomInWrapper_);
+  }
+  if (this.onZoomOutWrapper_) {
+    Blockly.unbindEvent_(this.onZoomOutWrapper_);
   }
 };
 
@@ -242,7 +276,7 @@ Blockly.ZoomControls.prototype.createZoomOutSvg_ = function(rnd) {
       this.workspace_.options.pathToMedia + Blockly.SPRITE.url);
 
   // Attach listener.
-  Blockly.bindEventWithChecks_(
+  this.onZoomOutWrapper_ = Blockly.bindEventWithChecks_(
       zoomoutSvg, 'mousedown', null, this.zoom_.bind(this, -1));
 };
 
@@ -293,7 +327,7 @@ Blockly.ZoomControls.prototype.createZoomInSvg_ = function(rnd) {
       this.workspace_.options.pathToMedia + Blockly.SPRITE.url);
 
   // Attach listener.
-  Blockly.bindEventWithChecks_(
+  this.onZoomInWrapper_ = Blockly.bindEventWithChecks_(
       zoominSvg, 'mousedown', null, this.zoom_.bind(this, 1));
 };
 
@@ -361,7 +395,7 @@ Blockly.ZoomControls.prototype.createZoomResetSvg_ = function(rnd) {
       this.workspace_.options.pathToMedia + Blockly.SPRITE.url);
 
   // Attach event listeners.
-  Blockly.bindEventWithChecks_(
+  this.onZoomResetWrapper_ = Blockly.bindEventWithChecks_(
       zoomresetSvg, 'mousedown', null, this.resetZoom_.bind(this));
 };
 

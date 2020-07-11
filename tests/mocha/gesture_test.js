@@ -80,8 +80,6 @@ suite('Gesture', function() {
     var ws = Blockly.inject('blocklyDiv', {});
     ws.keyboardAccessibilityMode = true;
     var gesture = new Blockly.Gesture(event, ws);
-    // Start workspace would normally be set in handleWsStart.
-    gesture.setStartWorkspace_(ws);
     gesture.doWorkspaceClick_(event);
     var cursor = ws.getCursor();
     chai.assert.equal(cursor.getCurNode().getType(), Blockly.ASTNode.types.WORKSPACE);

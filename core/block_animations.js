@@ -103,7 +103,7 @@ Blockly.blockAnimations.connectionUiEffect = function(block) {
     xy.y += 3 * scale;
   }
   var ripple = Blockly.utils.dom.createSvgElement(
-      Blockly.utils.dom.SVGElementType.SVGCircleElement,
+      Blockly.utils.dom.SvgElementType.CIRCLE,
       {
         'cx': xy.x,
         'cy': xy.y,

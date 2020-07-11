@@ -47,7 +47,7 @@ Blockly.Warning.prototype.collapseHidden = false;
 Blockly.Warning.prototype.drawIcon_ = function(group) {
   // Triangle with rounded corners.
   Blockly.utils.dom.createSvgElement(
-      Blockly.utils.dom.SVGElementType.SVGPathElement,
+      Blockly.utils.dom.SvgElementType.PATH,
       {
         'class': 'blocklyIconShape',
         'd': 'M2,15Q-1,15 0.5,12L6.5,1.7Q8,-1 9.5,1.7L15.5,12Q17,15 14,15z'
@@ -57,7 +57,7 @@ Blockly.Warning.prototype.drawIcon_ = function(group) {
   // systems render it differently.
   // Body of exclamation point.
   Blockly.utils.dom.createSvgElement(
-      Blockly.utils.dom.SVGElementType.SVGPathElement,
+      Blockly.utils.dom.SvgElementType.PATH,
       {
         'class': 'blocklyIconSymbol',
         'd': 'm7,4.8v3.16l0.27,2.27h1.46l0.27,-2.27v-3.16z'
@@ -65,7 +65,7 @@ Blockly.Warning.prototype.drawIcon_ = function(group) {
       group);
   // Dot of exclamation point.
   Blockly.utils.dom.createSvgElement(
-      Blockly.utils.dom.SVGElementType.SVGRectElement,
+      Blockly.utils.dom.SvgElementType.RECT,
       {
         'class': 'blocklyIconSymbol',
         'x': '7', 'y': '11', 'height': '2', 'width': '2'
@@ -80,19 +80,17 @@ Blockly.Warning.prototype.drawIcon_ = function(group) {
  * @private
  */
 Blockly.Warning.textToDom_ = function(text) {
-  var paragraph = /** @type {!SVGTextElement} */
-      (Blockly.utils.dom.createSvgElement(
-          'text',
-          {
-            'class': 'blocklyText blocklyBubbleText blocklyNoPointerEvents',
-            'y': Blockly.Bubble.BORDER_WIDTH
-          },
-          null)
-      );
+  var paragraph = Blockly.utils.dom.createSvgElement(
+      Blockly.utils.dom.SvgElementType.TEXT,
+      {
+        'class': 'blocklyText blocklyBubbleText blocklyNoPointerEvents',
+        'y': Blockly.Bubble.BORDER_WIDTH
+      },
+      null);
   var lines = text.split('\n');
   for (var i = 0; i < lines.length; i++) {
     var tspanElement = Blockly.utils.dom.createSvgElement(
-        Blockly.utils.dom.SVGElementType.SVGTSpanElement,
+        Blockly.utils.dom.SvgElementType.TSPAN,
         {'dy': '1em', 'x': Blockly.Bubble.BORDER_WIDTH}, paragraph);
     var textNode = document.createTextNode(lines[i]);
     tspanElement.appendChild(textNode);

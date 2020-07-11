@@ -219,7 +219,7 @@ Blockly.zelos.PathObject.prototype.setOutlinePath = function(name, pathString) {
 Blockly.zelos.PathObject.prototype.getOutlinePath_ = function(name) {
   if (!this.outlines_[name]) {
     this.outlines_[name] = Blockly.utils.dom.createSvgElement(
-        Blockly.utils.dom.SVGElementType.SVGPathElement, {
+        Blockly.utils.dom.SvgElementType.PATH, {
           'class': 'blocklyOutlinePath',
           // IE doesn't like paths without the data definition, set empty default
           'd': ''

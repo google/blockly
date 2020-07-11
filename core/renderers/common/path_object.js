@@ -47,7 +47,7 @@ Blockly.blockRendering.PathObject = function(root, style, constants) {
    * @package
    */
   this.svgPath = Blockly.utils.dom.createSvgElement(
-      Blockly.utils.dom.SVGElementType.SVGPathElement,
+      Blockly.utils.dom.SvgElementType.PATH,
       {'class': 'blocklyPath'}, this.svgRoot);
 
   /**

@@ -807,11 +807,11 @@ Blockly.zelos.ConstantProvider.prototype.createDom = function(svg,
   </defs>
   */
   var defs = Blockly.utils.dom.createSvgElement(
-      Blockly.utils.dom.SVGElementType.SVGDefsElement, {}, svg);
+      Blockly.utils.dom.SvgElementType.DEFS, {}, svg);
   // Using a dilate distorts the block shape.
   // Instead use a gaussian blur, and then set all alpha to 1 with a transfer.
   var selectedGlowFilter = Blockly.utils.dom.createSvgElement(
-      Blockly.utils.dom.SVGElementType.SVGFilterElement,
+      Blockly.utils.dom.SvgElementType.FILTER,
       {
         'id': 'blocklySelectedGlowFilter' + this.randomIdentifier,
         'height': '160%',
@@ -821,7 +821,7 @@ Blockly.zelos.ConstantProvider.prototype.createDom = function(svg,
       },
       defs);
   Blockly.utils.dom.createSvgElement(
-      Blockly.utils.dom.SVGElementType.SVGFEGaussianBlurElement,
+      Blockly.utils.dom.SvgElementType.FEGAUSSIANBLUR,
       {
         'in': 'SourceGraphic',
         'stdDeviation': this.SELECTED_GLOW_SIZE
@@ -829,16 +829,18 @@ Blockly.zelos.ConstantProvider.prototype.createDom = function(svg,
       selectedGlowFilter);
   // Set all gaussian blur pixels to 1 opacity before applying flood
   var selectedComponentTransfer = Blockly.utils.dom.createSvgElement(
-      'feComponentTransfer', {'result': 'outBlur'}, selectedGlowFilter);
+      Blockly.utils.dom.SvgElementType.FECOMPONENTTRANSFER, {
+        'result': 'outBlur'
+      }, selectedGlowFilter);
   Blockly.utils.dom.createSvgElement(
-      Blockly.utils.dom.SVGElementType.SVGFEFuncAElement,
+      Blockly.utils.dom.SvgElementType.FEFUNCA,
       {
         'type': 'table', 'tableValues': '0 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1'
       },
       selectedComponentTransfer);
   // Color the highlight
   Blockly.utils.dom.createSvgElement(
-      Blockly.utils.dom.SVGElementType.SVGFEFloodElement,
+      Blockly.utils.dom.SvgElementType.FEFLOOD,
       {
         'flood-color': this.SELECTED_GLOW_COLOUR,
         'flood-opacity': 1,
@@ -846,7 +848,7 @@ Blockly.zelos.ConstantProvider.prototype.createDom = function(svg,
       },
       selectedGlowFilter);
   Blockly.utils.dom.createSvgElement(
-      Blockly.utils.dom.SVGElementType.SVGFECompositeElement,
+      Blockly.utils.dom.SvgElementType.FECOMPOSITE,
       {
         'in': 'outColor', 'in2': 'outBlur',
         'operator': 'in', 'result': 'outGlow'
@@ -858,7 +860,7 @@ Blockly.zelos.ConstantProvider.prototype.createDom = function(svg,
   // Using a dilate distorts the block shape.
   // Instead use a gaussian blur, and then set all alpha to 1 with a transfer.
   var replacementGlowFilter = Blockly.utils.dom.createSvgElement(
-      Blockly.utils.dom.SVGElementType.SVGFilterElement,
+      Blockly.utils.dom.SvgElementType.FILTER,
       {
         'id': 'blocklyReplacementGlowFilter' + this.randomIdentifier,
         'height': '160%',
@@ -868,7 +870,7 @@ Blockly.zelos.ConstantProvider.prototype.createDom = function(svg,
       },
       defs);
   Blockly.utils.dom.createSvgElement(
-      Blockly.utils.dom.SVGElementType.SVGFEGaussianBlurElement,
+      Blockly.utils.dom.SvgElementType.FEGAUSSIANBLUR,
       {
         'in': 'SourceGraphic',
         'stdDeviation': this.REPLACEMENT_GLOW_SIZE
@@ -876,16 +878,18 @@ Blockly.zelos.ConstantProvider.prototype.createDom = function(svg,
       replacementGlowFilter);
   // Set all gaussian blur pixels to 1 opacity before applying flood
   var replacementComponentTransfer = Blockly.utils.dom.createSvgElement(
-      'feComponentTransfer', {'result': 'outBlur'}, replacementGlowFilter);
+      Blockly.utils.dom.SvgElementType.FECOMPONENTTRANSFER, {
+        'result': 'outBlur'
+      }, replacementGlowFilter);
   Blockly.utils.dom.createSvgElement(
-      Blockly.utils.dom.SVGElementType.SVGFEFuncAElement,
+      Blockly.utils.dom.SvgElementType.FEFUNCA,
       {
         'type': 'table', 'tableValues': '0 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1'
       },
       replacementComponentTransfer);
   // Color the highlight
   Blockly.utils.dom.createSvgElement(
-      Blockly.utils.dom.SVGElementType.SVGFEFloodElement,
+      Blockly.utils.dom.SvgElementType.FEFLOOD,
       {
         'flood-color': this.REPLACEMENT_GLOW_COLOUR,
         'flood-opacity': 1,
@@ -893,14 +897,14 @@ Blockly.zelos.ConstantProvider.prototype.createDom = function(svg,
       },
       replacementGlowFilter);
   Blockly.utils.dom.createSvgElement(
-      Blockly.utils.dom.SVGElementType.SVGFECompositeElement,
+      Blockly.utils.dom.SvgElementType.FECOMPOSITE,
       {
         'in': 'outColor', 'in2': 'outBlur',
         'operator': 'in', 'result': 'outGlow'
       },
       replacementGlowFilter);
   Blockly.utils.dom.createSvgElement(
-      Blockly.utils.dom.SVGElementType.SVGFECompositeElement,
+      Blockly.utils.dom.SvgElementType.FECOMPOSITE,
       {
         'in': 'SourceGraphic', 'in2': 'outGlow',
         'operator': 'over',

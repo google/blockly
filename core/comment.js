@@ -91,14 +91,14 @@ Blockly.utils.object.inherits(Blockly.Comment, Blockly.Icon);
 Blockly.Comment.prototype.drawIcon_ = function(group) {
   // Circle.
   Blockly.utils.dom.createSvgElement(
-      Blockly.utils.dom.SVGElementType.SVGCircleElement,
+      Blockly.utils.dom.SvgElementType.CIRCLE,
       {'class': 'blocklyIconShape', 'r': '8', 'cx': '8', 'cy': '8'},
       group);
   // Can't use a real '?' text character since different browsers and operating
   // systems render it differently.
   // Body of question mark.
   Blockly.utils.dom.createSvgElement(
-      Blockly.utils.dom.SVGElementType.SVGPathElement,
+      Blockly.utils.dom.SvgElementType.PATH,
       {
         'class': 'blocklyIconSymbol',
         'd': 'm6.8,10h2c0.003,-0.617 0.271,-0.962 0.633,-1.266 2.875,-2.405' +
@@ -107,7 +107,7 @@ Blockly.Comment.prototype.drawIcon_ = function(group) {
       group);
   // Dot of question mark.
   Blockly.utils.dom.createSvgElement(
-      Blockly.utils.dom.SVGElementType.SVGRectElement,
+      Blockly.utils.dom.SvgElementType.RECT,
       {
         'class': 'blocklyIconSymbol',
         'x': '6.8',
@@ -137,7 +137,7 @@ Blockly.Comment.prototype.createEditor_ = function() {
    */
 
   this.foreignObject_ = Blockly.utils.dom.createSvgElement(
-      Blockly.utils.dom.SVGElementType.SVGForeignObjectElement,
+      Blockly.utils.dom.SvgElementType.FOREIGNOBJECT,
       {'x': Blockly.Bubble.BORDER_WIDTH, 'y': Blockly.Bubble.BORDER_WIDTH},
       null);
 

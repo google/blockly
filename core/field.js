@@ -299,7 +299,7 @@ Blockly.Field.prototype.init = function() {
     return;
   }
   this.fieldGroup_ = Blockly.utils.dom.createSvgElement(
-      Blockly.utils.dom.SVGElementType.SVGGElement, {}, null);
+      Blockly.utils.dom.SvgElementType.G, {}, null);
   if (!this.isVisible()) {
     this.fieldGroup_.style.display = 'none';
   }
@@ -337,7 +337,7 @@ Blockly.Field.prototype.initModel = function() {
  */
 Blockly.Field.prototype.createBorderRect_ = function() {
   this.borderRect_ = Blockly.utils.dom.createSvgElement(
-      Blockly.utils.dom.SVGElementType.SVGRectElement, {
+      Blockly.utils.dom.SvgElementType.RECT, {
         'rx': this.getConstants().FIELD_BORDER_RECT_RADIUS,
         'ry': this.getConstants().FIELD_BORDER_RECT_RADIUS,
         'x': 0,
@@ -356,7 +356,7 @@ Blockly.Field.prototype.createBorderRect_ = function() {
  */
 Blockly.Field.prototype.createTextElement_ = function() {
   this.textElement_ = Blockly.utils.dom.createSvgElement(
-      Blockly.utils.dom.SVGElementType.SVGTextElement, {
+      Blockly.utils.dom.SvgElementType.TEXT, {
         'class': 'blocklyText',
       }, this.fieldGroup_);
   if (this.getConstants().FIELD_TEXT_BASELINE_CENTER) {

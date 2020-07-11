@@ -78,7 +78,7 @@ Blockly.utils.dom.canvasContext_ = null;
  * @constructor
  * @template T
  */
-Blockly.utils.dom.SVGElementType = function(tagName) {
+Blockly.utils.dom.SvgElementType = function(tagName) {
   /**
    * @type {string}
    * @private
@@ -91,107 +91,111 @@ Blockly.utils.dom.SVGElementType = function(tagName) {
  * @return {string} The name.
  * @override
  */
-Blockly.utils.dom.SVGElementType.prototype.toString = function() {
+Blockly.utils.dom.SvgElementType.prototype.toString = function() {
   return this.tagName_;
 };
 
-/** @type {!Blockly.utils.dom.SVGElementType<!SVGAnimateElement>} */
-Blockly.utils.dom.SVGElementType.SVGAnimateElement =
-    new Blockly.utils.dom.SVGElementType('animate');
+/** @type {!Blockly.utils.dom.SvgElementType<!SVGAnimateElement>} */
+Blockly.utils.dom.SvgElementType.ANIMATE =
+    new Blockly.utils.dom.SvgElementType('animate');
 
-/** @type {!Blockly.utils.dom.SVGElementType<!SVGCircleElement>} */
-Blockly.utils.dom.SVGElementType.SVGCircleElement =
-    new Blockly.utils.dom.SVGElementType('circle');
+/** @type {!Blockly.utils.dom.SvgElementType<!SVGCircleElement>} */
+Blockly.utils.dom.SvgElementType.CIRCLE =
+    new Blockly.utils.dom.SvgElementType('circle');
 
-/** @type {!Blockly.utils.dom.SVGElementType<!SVGClipPathElement>} */
-Blockly.utils.dom.SVGElementType.SVGClipPathElement =
-    new Blockly.utils.dom.SVGElementType('clipPath');
+/** @type {!Blockly.utils.dom.SvgElementType<!SVGClipPathElement>} */
+Blockly.utils.dom.SvgElementType.CLIPPATH =
+    new Blockly.utils.dom.SvgElementType('clipPath');
 
-/** @type {!Blockly.utils.dom.SVGElementType<!SVGDefsElement>} */
-Blockly.utils.dom.SVGElementType.SVGDefsElement =
-    new Blockly.utils.dom.SVGElementType('defs');
+/** @type {!Blockly.utils.dom.SvgElementType<!SVGDefsElement>} */
+Blockly.utils.dom.SvgElementType.DEFS =
+    new Blockly.utils.dom.SvgElementType('defs');
 
-/** @type {!Blockly.utils.dom.SVGElementType<!SVGFECompositeElement>} */
-Blockly.utils.dom.SVGElementType.SVGFECompositeElement =
-    new Blockly.utils.dom.SVGElementType('feComposite');
+/** @type {!Blockly.utils.dom.SvgElementType<!SVGFECompositeElement>} */
+Blockly.utils.dom.SvgElementType.FECOMPOSITE =
+    new Blockly.utils.dom.SvgElementType('feComposite');
 
-/** @type {!Blockly.utils.dom.SVGElementType<!SVGFEFloodElement>} */
-Blockly.utils.dom.SVGElementType.SVGFEFloodElement =
-    new Blockly.utils.dom.SVGElementType('feFlood');
+/** @type {!Blockly.utils.dom.SvgElementType<!SVGFEComponentTransferElement>} */
+Blockly.utils.dom.SvgElementType.FECOMPONENTTRANSFER =
+    new Blockly.utils.dom.SvgElementType('feComponentTransfer');
 
-/** @type {!Blockly.utils.dom.SVGElementType<!SVGFEFuncAElement>} */
-Blockly.utils.dom.SVGElementType.SVGFEFuncAElement =
-    new Blockly.utils.dom.SVGElementType('feFuncA');
+/** @type {!Blockly.utils.dom.SvgElementType<!SVGFEFloodElement>} */
+Blockly.utils.dom.SvgElementType.FEFLOOD =
+    new Blockly.utils.dom.SvgElementType('feFlood');
 
-/** @type {!Blockly.utils.dom.SVGElementType<!SVGFEGaussianBlurElement>} */
-Blockly.utils.dom.SVGElementType.SVGFEGaussianBlurElement =
-    new Blockly.utils.dom.SVGElementType('feGaussianBlur');
+/** @type {!Blockly.utils.dom.SvgElementType<!SVGFEFuncAElement>} */
+Blockly.utils.dom.SvgElementType.FEFUNCA =
+    new Blockly.utils.dom.SvgElementType('feFuncA');
 
-/** @type {!Blockly.utils.dom.SVGElementType<!SVGFEPointLightElement>} */
-Blockly.utils.dom.SVGElementType.SVGFEPointLightElement =
-    new Blockly.utils.dom.SVGElementType('fePointLight');
+/** @type {!Blockly.utils.dom.SvgElementType<!SVGFEGaussianBlurElement>} */
+Blockly.utils.dom.SvgElementType.FEGAUSSIANBLUR =
+    new Blockly.utils.dom.SvgElementType('feGaussianBlur');
 
-/** @type {!Blockly.utils.dom.SVGElementType<!SVGFESpecularLightingElement>} */
-Blockly.utils.dom.SVGElementType.SVGFESpecularLightingElement =
-    new Blockly.utils.dom.SVGElementType('feSpecularLighting');
+/** @type {!Blockly.utils.dom.SvgElementType<!SVGFEPointLightElement>} */
+Blockly.utils.dom.SvgElementType.FEPOINTLIGHT =
+    new Blockly.utils.dom.SvgElementType('fePointLight');
 
-/** @type {!Blockly.utils.dom.SVGElementType<!SVGFilterElement>} */
-Blockly.utils.dom.SVGElementType.SVGFilterElement =
-    new Blockly.utils.dom.SVGElementType('filter');
+/** @type {!Blockly.utils.dom.SvgElementType<!SVGFESpecularLightingElement>} */
+Blockly.utils.dom.SvgElementType.FESPECULARLIGHTING =
+    new Blockly.utils.dom.SvgElementType('feSpecularLighting');
 
-/** @type {!Blockly.utils.dom.SVGElementType<!SVGForeignObjectElement>} */
-Blockly.utils.dom.SVGElementType.SVGForeignObjectElement =
-    new Blockly.utils.dom.SVGElementType('foreignObject');
+/** @type {!Blockly.utils.dom.SvgElementType<!SVGFilterElement>} */
+Blockly.utils.dom.SvgElementType.FILTER =
+    new Blockly.utils.dom.SvgElementType('filter');
 
-/** @type {!Blockly.utils.dom.SVGElementType<!SVGGElement>} */
-Blockly.utils.dom.SVGElementType.SVGGElement =
-    new Blockly.utils.dom.SVGElementType('g');
+/** @type {!Blockly.utils.dom.SvgElementType<!SVGForeignObjectElement>} */
+Blockly.utils.dom.SvgElementType.FOREIGNOBJECT =
+    new Blockly.utils.dom.SvgElementType('foreignObject');
 
-/** @type {!Blockly.utils.dom.SVGElementType<!SVGImageElement>} */
-Blockly.utils.dom.SVGElementType.SVGImageElement =
-    new Blockly.utils.dom.SVGElementType('image');
+/** @type {!Blockly.utils.dom.SvgElementType<!SVGGElement>} */
+Blockly.utils.dom.SvgElementType.G =
+    new Blockly.utils.dom.SvgElementType('g');
 
-/** @type {!Blockly.utils.dom.SVGElementType<!SVGLineElement>} */
-Blockly.utils.dom.SVGElementType.SVGLineElement =
-    new Blockly.utils.dom.SVGElementType('line');
+/** @type {!Blockly.utils.dom.SvgElementType<!SVGImageElement>} */
+Blockly.utils.dom.SvgElementType.IMAGE =
+    new Blockly.utils.dom.SvgElementType('image');
 
-/** @type {!Blockly.utils.dom.SVGElementType<!SVGPathElement>} */
-Blockly.utils.dom.SVGElementType.SVGPathElement =
-    new Blockly.utils.dom.SVGElementType('path');
+/** @type {!Blockly.utils.dom.SvgElementType<!SVGLineElement>} */
+Blockly.utils.dom.SvgElementType.LINE =
+    new Blockly.utils.dom.SvgElementType('line');
 
-/** @type {!Blockly.utils.dom.SVGElementType<!SVGPatternElement>} */
-Blockly.utils.dom.SVGElementType.SVGPatternElement =
-    new Blockly.utils.dom.SVGElementType('pattern');
+/** @type {!Blockly.utils.dom.SvgElementType<!SVGPathElement>} */
+Blockly.utils.dom.SvgElementType.PATH =
+    new Blockly.utils.dom.SvgElementType('path');
 
-/** @type {!Blockly.utils.dom.SVGElementType<!SVGPolygonElement>} */
-Blockly.utils.dom.SVGElementType.SVGPolygonElement =
-    new Blockly.utils.dom.SVGElementType('polygon');
+/** @type {!Blockly.utils.dom.SvgElementType<!SVGPatternElement>} */
+Blockly.utils.dom.SvgElementType.PATTERN =
+    new Blockly.utils.dom.SvgElementType('pattern');
 
-/** @type {!Blockly.utils.dom.SVGElementType<!SVGRectElement>} */
-Blockly.utils.dom.SVGElementType.SVGRectElement =
-    new Blockly.utils.dom.SVGElementType('rect');
+/** @type {!Blockly.utils.dom.SvgElementType<!SVGPolygonElement>} */
+Blockly.utils.dom.SvgElementType.POLYGON =
+    new Blockly.utils.dom.SvgElementType('polygon');
 
-/** @type {!Blockly.utils.dom.SVGElementType<!SVGSVGElement>} */
-Blockly.utils.dom.SVGElementType.SVGSVGElement =
-    new Blockly.utils.dom.SVGElementType('svg');
+/** @type {!Blockly.utils.dom.SvgElementType<!SVGRectElement>} */
+Blockly.utils.dom.SvgElementType.RECT =
+    new Blockly.utils.dom.SvgElementType('rect');
 
-/** @type {!Blockly.utils.dom.SVGElementType<!SVGTextElement>} */
-Blockly.utils.dom.SVGElementType.SVGTextElement =
-    new Blockly.utils.dom.SVGElementType('text');
+/** @type {!Blockly.utils.dom.SvgElementType<!SVGSVGElement>} */
+Blockly.utils.dom.SvgElementType.SVG =
+    new Blockly.utils.dom.SvgElementType('svg');
 
-/** @type {!Blockly.utils.dom.SVGElementType<!SVGTSpanElement>} */
-Blockly.utils.dom.SVGElementType.SVGTSpanElement =
-    new Blockly.utils.dom.SVGElementType('tspan');
+/** @type {!Blockly.utils.dom.SvgElementType<!SVGTextElement>} */
+Blockly.utils.dom.SvgElementType.TEXT =
+    new Blockly.utils.dom.SvgElementType('text');
+
+/** @type {!Blockly.utils.dom.SvgElementType<!SVGTSpanElement>} */
+Blockly.utils.dom.SvgElementType.TSPAN =
+    new Blockly.utils.dom.SvgElementType('tspan');
 
 
 /**
  * Helper method for creating SVG elements.
- * @param {string|Blockly.utils.dom.SVGElementType<T>} name Element's tag name.
+ * @param {string|Blockly.utils.dom.SvgElementType<T>} name Element's tag name.
  * @param {!Object} attrs Dictionary of attribute names and values.
  * @param {Element=} opt_parent Optional parent on which to append the element.
  * @return {R} Newly created SVG element.  The return type is {!SVGElement} if
  *     name is a string or a more specific type if it a member of
- *     Blockly.utils.dom.SVGElementType
+ *     Blockly.utils.dom.SvgElementType
  * @template T {SVGElement}
  * @template R := cond(isUnknown(T), 'SVGElement', T) =:
  */

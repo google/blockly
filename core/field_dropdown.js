@@ -213,7 +213,7 @@ Blockly.FieldDropdown.prototype.initView = function() {
   this.createTextElement_();
 
   this.imageElement_ = Blockly.utils.dom.createSvgElement(
-      Blockly.utils.dom.SVGElementType.SVGImageElement, {}, this.fieldGroup_);
+      Blockly.utils.dom.SvgElementType.IMAGE, {}, this.fieldGroup_);
 
   if (this.getConstants().FIELD_DROPDOWN_SVG_ARROW) {
     this.createSVGArrow_();
@@ -243,7 +243,7 @@ Blockly.FieldDropdown.prototype.shouldAddBorderRect_ = function() {
  */
 Blockly.FieldDropdown.prototype.createTextArrow_ = function() {
   this.arrow_ = Blockly.utils.dom.createSvgElement(
-      Blockly.utils.dom.SVGElementType.SVGTSpanElement, {}, this.textElement_);
+      Blockly.utils.dom.SvgElementType.TSPAN, {}, this.textElement_);
   this.arrow_.appendChild(document.createTextNode(
       this.sourceBlock_.RTL ?
       Blockly.FieldDropdown.ARROW_CHAR + ' ' :
@@ -261,7 +261,7 @@ Blockly.FieldDropdown.prototype.createTextArrow_ = function() {
  */
 Blockly.FieldDropdown.prototype.createSVGArrow_ = function() {
   this.svgArrow_ = Blockly.utils.dom.createSvgElement(
-      Blockly.utils.dom.SVGElementType.SVGImageElement, {
+      Blockly.utils.dom.SvgElementType.IMAGE, {
         'height': this.getConstants().FIELD_DROPDOWN_SVG_ARROW_SIZE + 'px',
         'width': this.getConstants().FIELD_DROPDOWN_SVG_ARROW_SIZE + 'px'
       }, this.fieldGroup_);

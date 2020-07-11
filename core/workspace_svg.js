@@ -712,7 +712,7 @@ Blockly.WorkspaceSvg.prototype.createDom = function(opt_backgroundClass) {
    * @type {SVGElement}
    */
   this.svgGroup_ = Blockly.utils.dom.createSvgElement(
-      Blockly.utils.dom.SVGElementType.SVGGElement,
+      Blockly.utils.dom.SvgElementType.G,
       {'class': 'blocklyWorkspace'}, null);
 
   // Note that a <g> alone does not receive mouse events--it must have a
@@ -721,7 +721,7 @@ Blockly.WorkspaceSvg.prototype.createDom = function(opt_backgroundClass) {
   if (opt_backgroundClass) {
     /** @type {SVGElement} */
     this.svgBackground_ = Blockly.utils.dom.createSvgElement(
-        Blockly.utils.dom.SVGElementType.SVGRectElement,
+        Blockly.utils.dom.SvgElementType.RECT,
         {'height': '100%', 'width': '100%', 'class': opt_backgroundClass},
         this.svgGroup_);
 
@@ -735,11 +735,11 @@ Blockly.WorkspaceSvg.prototype.createDom = function(opt_backgroundClass) {
   }
   /** @type {SVGElement} */
   this.svgBlockCanvas_ = Blockly.utils.dom.createSvgElement(
-      Blockly.utils.dom.SVGElementType.SVGGElement,
+      Blockly.utils.dom.SvgElementType.G,
       {'class': 'blocklyBlockCanvas'}, this.svgGroup_);
   /** @type {SVGElement} */
   this.svgBubbleCanvas_ = Blockly.utils.dom.createSvgElement(
-      Blockly.utils.dom.SVGElementType.SVGGElement,
+      Blockly.utils.dom.SvgElementType.G,
       {'class': 'blocklyBubbleCanvas'}, this.svgGroup_);
 
   if (!this.isFlyout) {
@@ -901,7 +901,8 @@ Blockly.WorkspaceSvg.prototype.addZoomControls = function() {
 
 /**
  * Add a flyout element in an element with the given tag name.
- * @param {string} tagName What type of tag the flyout belongs in.
+ * @param {string|Blockly.utils.dom.SvgElementType} tagName What type of tag the
+ *     flyout belongs in.
  * @return {!Element} The element containing the flyout DOM.
  * @package
  */

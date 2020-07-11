@@ -70,7 +70,7 @@ suite('Gesture', function() {
     gestureIsFieldClick_InFlyoutHelper.call(this, flyout, true);
   });
 
-  test('Workspace click - Shift click enters accessibility mode', function() {
+  test('Workspace click in accessibility mode - moves the cursor', function() {
     var event = {
       shiftKey : true,
       clientX : 10,
@@ -80,6 +80,8 @@ suite('Gesture', function() {
     var ws = Blockly.inject('blocklyDiv', {});
     ws.keyboardAccessibilityMode = true;
     var gesture = new Blockly.Gesture(event, ws);
+    // Start workspace would normally be set in handleWsStart.
+    gesture.setStartWorkspace_(ws);
     gesture.doWorkspaceClick_(event);
     var cursor = ws.getCursor();
     chai.assert.equal(cursor.getCurNode().getType(), Blockly.ASTNode.types.WORKSPACE);

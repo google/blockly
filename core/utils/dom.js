@@ -157,7 +157,7 @@ Blockly.utils.dom.SVGElementType.SVGLineElement =
 
 /** @type {!Blockly.utils.dom.SVGElementType<!SVGPathElement>} */
 Blockly.utils.dom.SVGElementType.SVGPathElement =
-  new Blockly.utils.dom.SVGElementType('path');
+    new Blockly.utils.dom.SVGElementType('path');
 
 /** @type {!Blockly.utils.dom.SVGElementType<!SVGPatternElement>} */
 Blockly.utils.dom.SVGElementType.SVGPatternElement =
@@ -169,7 +169,7 @@ Blockly.utils.dom.SVGElementType.SVGPolygonElement =
 
 /** @type {!Blockly.utils.dom.SVGElementType<!SVGRectElement>} */
 Blockly.utils.dom.SVGElementType.SVGRectElement =
-  new Blockly.utils.dom.SVGElementType('rect');
+    new Blockly.utils.dom.SVGElementType('rect');
 
 /** @type {!Blockly.utils.dom.SVGElementType<!SVGSVGElement>} */
 Blockly.utils.dom.SVGElementType.SVGSVGElement =
@@ -177,11 +177,11 @@ Blockly.utils.dom.SVGElementType.SVGSVGElement =
 
 /** @type {!Blockly.utils.dom.SVGElementType<!SVGTextElement>} */
 Blockly.utils.dom.SVGElementType.SVGTextElement =
-  new Blockly.utils.dom.SVGElementType('text');
+    new Blockly.utils.dom.SVGElementType('text');
 
 /** @type {!Blockly.utils.dom.SVGElementType<!SVGTSpanElement>} */
 Blockly.utils.dom.SVGElementType.SVGTSpanElement =
-  new Blockly.utils.dom.SVGElementType('tspan');
+    new Blockly.utils.dom.SVGElementType('tspan');
 
 
 /**

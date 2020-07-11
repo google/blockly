@@ -774,7 +774,7 @@ Blockly.Gesture.prototype.doWorkspaceClick_ = function(e) {
   } else if (Blockly.selected) {
     Blockly.selected.unselect();
   }
-  this.fireWorkspaceClick_(ws);
+  this.fireWorkspaceClick_(this.startWorkspace_);
 };
 
 /* End functions defining what actions to take to execute clicks on each type

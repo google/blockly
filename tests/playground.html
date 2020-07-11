@@ -149,6 +149,8 @@ function start() {
     // Restore event logging state.
     var state = sessionStorage.getItem('logEvents');
     logEvents(Boolean(Number(state)));
+    state = sessionStorage.getItem('logFlyoutEvents');
+    logFlyoutEvents(Boolean(Number(state)));
   } else {
     // MSIE 11 does not support sessionStorage on file:// URLs.
     logEvents(false);
@@ -361,6 +363,20 @@ function logEvents(state) {
   }
 }
 
+function logFlyoutEvents(state) {
+  var checkbox = document.getElementById('logFlyoutCheck');
+  checkbox.checked = state;
+  if (sessionStorage) {
+    sessionStorage.setItem('logFlyoutEvents', Number(state));
+  }
+  var flyoutWorkspace = workspace.getFlyout().getWorkspace();
+  if (state) {
+    flyoutWorkspace.addChangeListener(logger);
+  } else {
+    flyoutWorkspace.removeChangeListener(logger);
+  }
+}
+
 function configureContextMenu(menuOptions, e) {
   var screenshotOption = {
     text: 'Download Screenshot',
@@ -537,9 +553,13 @@ var spaghettiXml = [
   </p>
   <ul class="playgroundToggleOptions">
     <li>
-      <label for="logCheck">Log events:</label>
+      <label for="logCheck">Log main workspace events:</label>
       <input type="checkbox" onclick="logEvents(this.checked)" id="logCheck">
     </li>
+    <li>
+    <label for="logFlyoutCheck">Log flyout events:</label>
+    <input type="checkbox" onclick="logFlyoutEvents(this.checked)" id="logFlyoutCheck">
+  </li>
   </ul>
 
 

@@ -113,20 +113,22 @@ Blockly.createDom_ = function(container, options) {
     ...
   </svg>
   */
-  var svg = Blockly.utils.dom.createSvgElement('svg', {
-    'xmlns': Blockly.utils.dom.SVG_NS,
-    'xmlns:html': Blockly.utils.dom.HTML_NS,
-    'xmlns:xlink': Blockly.utils.dom.XLINK_NS,
-    'version': '1.1',
-    'class': 'blocklySvg',
-    'tabindex': '0'
-  }, container);
+  var svg = Blockly.utils.dom.createSvgElement(
+      Blockly.utils.dom.SVGElementType.SVGSVGElement, {
+        'xmlns': Blockly.utils.dom.SVG_NS,
+        'xmlns:html': Blockly.utils.dom.HTML_NS,
+        'xmlns:xlink': Blockly.utils.dom.XLINK_NS,
+        'version': '1.1',
+        'class': 'blocklySvg',
+        'tabindex': '0'
+      }, container);
   /*
   <defs>
     ... filters go here ...
   </defs>
   */
-  var defs = Blockly.utils.dom.createSvgElement('defs', {}, svg);
+  var defs = Blockly.utils.dom.createSvgElement(
+      Blockly.utils.dom.SVGElementType.SVGDefsElement, {}, svg);
   // Each filter/pattern needs a unique ID for the case of multiple Blockly
   // instances on a page.  Browser behaviour becomes undefined otherwise.
   // https://neil.fraser.name/news/2015/11/01/

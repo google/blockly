@@ -238,7 +238,8 @@ Blockly.Flyout.prototype.createDom = function(tagName) {
   // hide/show code will set up proper visibility and size later.
   this.svgGroup_ = Blockly.utils.dom.createSvgElement(tagName,
       {'class': 'blocklyFlyout', 'style': 'display: none'}, null);
-  this.svgBackground_ = Blockly.utils.dom.createSvgElement('path',
+  this.svgBackground_ = Blockly.utils.dom.createSvgElement(
+      Blockly.utils.dom.SVGElementType.SVGPathElement,
       {'class': 'blocklyFlyoutBackground'}, this.svgGroup_);
   this.svgGroup_.appendChild(this.workspace_.createDom());
   this.workspace_.getThemeManager().subscribe(
@@ -825,7 +826,8 @@ Blockly.Flyout.prototype.initFlyoutButton_ = function(button, x, y) {
 Blockly.Flyout.prototype.createRect_ = function(block, x, y, blockHW, index) {
   // Create an invisible rectangle under the block to act as a button.  Just
   // using the block as a button is poor, since blocks have holes in them.
-  var rect = Blockly.utils.dom.createSvgElement('rect',
+  var rect = Blockly.utils.dom.createSvgElement(
+      Blockly.utils.dom.SVGElementType.SVGRectElement,
       {
         'fill-opacity': 0,
         'x': x,

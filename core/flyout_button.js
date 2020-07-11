@@ -119,12 +119,14 @@ Blockly.FlyoutButton.prototype.createDom = function() {
     cssClass += ' ' + this.cssClass_;
   }
 
-  this.svgGroup_ = Blockly.utils.dom.createSvgElement('g', {'class': cssClass},
+  this.svgGroup_ = Blockly.utils.dom.createSvgElement(
+      Blockly.utils.dom.SVGElementType.SVGGElement, {'class': cssClass},
       this.workspace_.getCanvas());
 
   if (!this.isLabel_) {
     // Shadow rectangle (light source does not mirror in RTL).
-    var shadow = Blockly.utils.dom.createSvgElement('rect',
+    var shadow = Blockly.utils.dom.createSvgElement(
+        Blockly.utils.dom.SVGElementType.SVGRectElement,
         {
           'class': 'blocklyFlyoutButtonShadow',
           'rx': 4, 'ry': 4, 'x': 1, 'y': 1
@@ -132,7 +134,8 @@ Blockly.FlyoutButton.prototype.createDom = function() {
         this.svgGroup_);
   }
   // Background rectangle.
-  var rect = Blockly.utils.dom.createSvgElement('rect',
+  var rect = Blockly.utils.dom.createSvgElement(
+      Blockly.utils.dom.SVGElementType.SVGRectElement,
       {
         'class': this.isLabel_ ?
             'blocklyFlyoutLabelBackground' : 'blocklyFlyoutButtonBackground',
@@ -140,7 +143,8 @@ Blockly.FlyoutButton.prototype.createDom = function() {
       },
       this.svgGroup_);
 
-  var svgText = Blockly.utils.dom.createSvgElement('text',
+  var svgText = Blockly.utils.dom.createSvgElement(
+      Blockly.utils.dom.SVGElementType.SVGTextElement,
       {
         'class': this.isLabel_ ? 'blocklyFlyoutLabelText' : 'blocklyText',
         'x': 0,

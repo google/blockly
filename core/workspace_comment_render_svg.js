@@ -74,14 +74,16 @@ Blockly.WorkspaceCommentSvg.prototype.render = function() {
   this.createEditor_();
   this.svgGroup_.appendChild(this.foreignObject_);
 
-  this.svgHandleTarget_ = Blockly.utils.dom.createSvgElement('rect',
+  this.svgHandleTarget_ = Blockly.utils.dom.createSvgElement(
+      Blockly.utils.dom.SVGElementType.SVGRectElement,
       {
         'class': 'blocklyCommentHandleTarget',
         'x': 0,
         'y': 0
       });
   this.svgGroup_.appendChild(this.svgHandleTarget_);
-  this.svgRectTarget_ = Blockly.utils.dom.createSvgElement('rect',
+  this.svgRectTarget_ = Blockly.utils.dom.createSvgElement(
+      Blockly.utils.dom.SVGElementType.SVGRectElement,
       {
         'class': 'blocklyCommentTarget',
         'x': 0,
@@ -208,7 +210,8 @@ Blockly.WorkspaceCommentSvg.prototype.addDeleteDom_ = function() {
         'class': 'blocklyCommentDeleteIcon'
       },
       this.svgGroup_);
-  this.deleteIconBorder_ = Blockly.utils.dom.createSvgElement('circle',
+  this.deleteIconBorder_ = Blockly.utils.dom.createSvgElement(
+      Blockly.utils.dom.SVGElementType.SVGCircleElement,
       {
         'class': 'blocklyDeleteIconShape',
         'r': '7',

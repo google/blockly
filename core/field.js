@@ -298,8 +298,8 @@ Blockly.Field.prototype.init = function() {
     // Field has already been initialized once.
     return;
   }
-  this.fieldGroup_ = /** @type {!SVGGElement} **/
-      (Blockly.utils.dom.createSvgElement('g', {}, null));
+  this.fieldGroup_ = Blockly.utils.dom.createSvgElement(
+      Blockly.utils.dom.SVGElementType.SVGGElement, {}, null);
   if (!this.isVisible()) {
     this.fieldGroup_.style.display = 'none';
   }
@@ -336,17 +336,16 @@ Blockly.Field.prototype.initModel = function() {
  * @protected
  */
 Blockly.Field.prototype.createBorderRect_ = function() {
-  this.borderRect_ = /** @type {!SVGRectElement} **/
-      (Blockly.utils.dom.createSvgElement('rect',
-          {
-            'rx': this.getConstants().FIELD_BORDER_RECT_RADIUS,
-            'ry': this.getConstants().FIELD_BORDER_RECT_RADIUS,
-            'x': 0,
-            'y': 0,
-            'height': this.size_.height,
-            'width': this.size_.width,
-            'class': 'blocklyFieldRect'
-          }, this.fieldGroup_));
+  this.borderRect_ = Blockly.utils.dom.createSvgElement(
+      Blockly.utils.dom.SVGElementType.SVGRectElement, {
+        'rx': this.getConstants().FIELD_BORDER_RECT_RADIUS,
+        'ry': this.getConstants().FIELD_BORDER_RECT_RADIUS,
+        'x': 0,
+        'y': 0,
+        'height': this.size_.height,
+        'width': this.size_.width,
+        'class': 'blocklyFieldRect'
+      }, this.fieldGroup_);
 };
 
 /**
@@ -356,11 +355,10 @@ Blockly.Field.prototype.createBorderRect_ = function() {
  * @protected
  */
 Blockly.Field.prototype.createTextElement_ = function() {
-  this.textElement_ = /** @type {!SVGTextElement} **/
-      (Blockly.utils.dom.createSvgElement('text',
-          {
-            'class': 'blocklyText',
-          }, this.fieldGroup_));
+  this.textElement_ = Blockly.utils.dom.createSvgElement(
+      Blockly.utils.dom.SVGElementType.SVGTextElement, {
+        'class': 'blocklyText',
+      }, this.fieldGroup_);
   if (this.getConstants().FIELD_TEXT_BASELINE_CENTER) {
     this.textElement_.setAttribute('dominant-baseline', 'central');
   }

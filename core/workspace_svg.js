@@ -711,7 +711,8 @@ Blockly.WorkspaceSvg.prototype.createDom = function(opt_backgroundClass) {
    * </g>
    * @type {SVGElement}
    */
-  this.svgGroup_ = Blockly.utils.dom.createSvgElement('g',
+  this.svgGroup_ = Blockly.utils.dom.createSvgElement(
+      Blockly.utils.dom.SVGElementType.SVGGElement,
       {'class': 'blocklyWorkspace'}, null);
 
   // Note that a <g> alone does not receive mouse events--it must have a
@@ -719,7 +720,8 @@ Blockly.WorkspaceSvg.prototype.createDom = function(opt_backgroundClass) {
   // flyout, the workspace will not receive mouse events.
   if (opt_backgroundClass) {
     /** @type {SVGElement} */
-    this.svgBackground_ = Blockly.utils.dom.createSvgElement('rect',
+    this.svgBackground_ = Blockly.utils.dom.createSvgElement(
+        Blockly.utils.dom.SVGElementType.SVGRectElement,
         {'height': '100%', 'width': '100%', 'class': opt_backgroundClass},
         this.svgGroup_);
 
@@ -732,10 +734,12 @@ Blockly.WorkspaceSvg.prototype.createDom = function(opt_backgroundClass) {
     }
   }
   /** @type {SVGElement} */
-  this.svgBlockCanvas_ = Blockly.utils.dom.createSvgElement('g',
+  this.svgBlockCanvas_ = Blockly.utils.dom.createSvgElement(
+      Blockly.utils.dom.SVGElementType.SVGGElement,
       {'class': 'blocklyBlockCanvas'}, this.svgGroup_);
   /** @type {SVGElement} */
-  this.svgBubbleCanvas_ = Blockly.utils.dom.createSvgElement('g',
+  this.svgBubbleCanvas_ = Blockly.utils.dom.createSvgElement(
+      Blockly.utils.dom.SVGElementType.SVGGElement,
       {'class': 'blocklyBubbleCanvas'}, this.svgGroup_);
 
   if (!this.isFlyout) {

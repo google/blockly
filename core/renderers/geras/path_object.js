@@ -48,7 +48,8 @@ Blockly.geras.PathObject = function(root, style, constants) {
    * @type {SVGElement}
    * @package
    */
-  this.svgPathDark = Blockly.utils.dom.createSvgElement('path',
+  this.svgPathDark = Blockly.utils.dom.createSvgElement(
+      Blockly.utils.dom.SVGElementType.SVGPathElement,
       {'class': 'blocklyPathDark', 'transform': 'translate(1,1)'},
       this.svgRoot);
 
@@ -57,7 +58,8 @@ Blockly.geras.PathObject = function(root, style, constants) {
    * @type {!SVGElement}
    * @package
    */
-  this.svgPath = Blockly.utils.dom.createSvgElement('path',
+  this.svgPath = Blockly.utils.dom.createSvgElement(
+      Blockly.utils.dom.SVGElementType.SVGPathElement,
       {'class': 'blocklyPath'}, this.svgRoot);
 
   /**
@@ -65,7 +67,8 @@ Blockly.geras.PathObject = function(root, style, constants) {
    * @type {SVGElement}
    * @package
    */
-  this.svgPathLight = Blockly.utils.dom.createSvgElement('path',
+  this.svgPathLight = Blockly.utils.dom.createSvgElement(
+      Blockly.utils.dom.SVGElementType.SVGPathElement,
       {'class': 'blocklyPathLight'}, this.svgRoot);
 
   /**

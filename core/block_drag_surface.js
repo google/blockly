@@ -82,14 +82,16 @@ Blockly.BlockDragSurfaceSvg.prototype.createDom = function() {
   if (this.SVG_) {
     return;  // Already created.
   }
-  this.SVG_ = Blockly.utils.dom.createSvgElement('svg', {
-    'xmlns': Blockly.utils.dom.SVG_NS,
-    'xmlns:html': Blockly.utils.dom.HTML_NS,
-    'xmlns:xlink': Blockly.utils.dom.XLINK_NS,
-    'version': '1.1',
-    'class': 'blocklyBlockDragSurface'
-  }, this.container_);
-  this.dragGroup_ = Blockly.utils.dom.createSvgElement('g', {}, this.SVG_);
+  this.SVG_ = Blockly.utils.dom.createSvgElement(
+      Blockly.utils.dom.SVGElementType.SVGSVGElement, {
+        'xmlns': Blockly.utils.dom.SVG_NS,
+        'xmlns:html': Blockly.utils.dom.HTML_NS,
+        'xmlns:xlink': Blockly.utils.dom.XLINK_NS,
+        'version': '1.1',
+        'class': 'blocklyBlockDragSurface'
+      }, this.container_);
+  this.dragGroup_ = Blockly.utils.dom.createSvgElement(
+      Blockly.utils.dom.SVGElementType.SVGGElement, {}, this.SVG_);
 };
 
 /**

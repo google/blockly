@@ -559,6 +559,24 @@ Blockly.Workspace.prototype.hasBlockLimits = function() {
 };
 
 /**
+ * Gets the undo stack for workplace.
+ * @return {!Array.<!Blockly.Events.Abstract>} undo stack
+ * @package
+ */
+Blockly.Workspace.prototype.getUndoStack = function() {
+  return this.undoStack_;
+};
+
+/**
+ * Gets the redo stack for workplace.
+ * @return {!Array.<!Blockly.Events.Abstract>} redo stack
+ * @package
+ */
+Blockly.Workspace.prototype.getRedoStack = function() {
+  return this.redoStack_;
+};
+
+/**
  * Undo or redo the previous action.
  * @param {boolean} redo False if undo, true if redo.
  */

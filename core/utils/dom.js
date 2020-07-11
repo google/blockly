@@ -193,14 +193,13 @@ Blockly.utils.dom.SvgElementType.TSPAN =
  * @param {string|Blockly.utils.dom.SvgElementType<T>} name Element's tag name.
  * @param {!Object} attrs Dictionary of attribute names and values.
  * @param {Element=} opt_parent Optional parent on which to append the element.
- * @return {R} Newly created SVG element.  The return type is {!SVGElement} if
+ * @return {T} Newly created SVG element.  The return type is {!SVGElement} if
  *     name is a string or a more specific type if it a member of
  *     Blockly.utils.dom.SvgElementType
- * @template T {SVGElement}
- * @template R := cond(isUnknown(T), 'SVGElement', T) =:
+ * @template T
  */
 Blockly.utils.dom.createSvgElement = function(name, attrs, opt_parent) {
-  var e = /** @type {!SVGElement} */
+  var e = /** @type {T} */
       (document.createElementNS(Blockly.utils.dom.SVG_NS, String(name)));
   for (var key in attrs) {
     e.setAttribute(key, attrs[key]);

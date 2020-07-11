@@ -223,7 +223,9 @@ Blockly.Flyout.prototype.dragAngleRange_ = 70;
  * Creates the flyout's DOM.  Only needs to be called once.  The flyout can
  * either exist as its own svg element or be a g element nested inside a
  * separate svg element.
- * @param {string|Blockly.utils.dom.SvgElementType} tagName The type of tag to
+ * @param {string|
+ * !Blockly.utils.dom.SvgElementType<!SVGSVGElement>|
+ * !Blockly.utils.dom.SvgElementType<!SVGGElement>} tagName The type of tag to
  *     put the flyout in. This should be <svg> or <g>.
  * @return {!SVGElement} The flyout's SVG group.
  */

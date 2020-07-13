@@ -75,11 +75,10 @@ Blockly.FieldMultilineInput.fromJson = function(options) {
  */
 Blockly.FieldMultilineInput.prototype.initView = function() {
   this.createBorderRect_();
-  this.textGroup_ = /** @type {!SVGGElement} **/
-      (Blockly.utils.dom.createSvgElement('g',
-          {
-            'class': 'blocklyEditableText',
-          }, this.fieldGroup_));
+  this.textGroup_ = Blockly.utils.dom.createSvgElement(
+      Blockly.utils.dom.SvgElementType.G, {
+        'class': 'blocklyEditableText',
+      }, this.fieldGroup_);
 };
 
 /**
@@ -134,12 +133,13 @@ Blockly.FieldMultilineInput.prototype.render_ = function() {
   for (var i = 0; i < lines.length; i++) {
     var lineHeight = this.getConstants().FIELD_TEXT_HEIGHT +
         this.getConstants().FIELD_BORDER_RECT_Y_PADDING;
-    var span = Blockly.utils.dom.createSvgElement('text', {
-      'class': 'blocklyText blocklyMultilineText',
-      x: this.getConstants().FIELD_BORDER_RECT_X_PADDING,
-      y: y + this.getConstants().FIELD_BORDER_RECT_Y_PADDING,
-      dy: this.getConstants().FIELD_TEXT_BASELINE
-    }, this.textGroup_);
+    var span = Blockly.utils.dom.createSvgElement(
+        Blockly.utils.dom.SvgElementType.TEXT, {
+          'class': 'blocklyText blocklyMultilineText',
+          x: this.getConstants().FIELD_BORDER_RECT_X_PADDING,
+          y: y + this.getConstants().FIELD_BORDER_RECT_Y_PADDING,
+          dy: this.getConstants().FIELD_TEXT_BASELINE
+        }, this.textGroup_);
     span.appendChild(document.createTextNode(lines[i]));
     y += lineHeight;
   }

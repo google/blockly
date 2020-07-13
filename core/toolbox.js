@@ -201,7 +201,8 @@ Blockly.Toolbox.prototype.init = function() {
   }
 
   // Insert the flyout after the workspace.
-  Blockly.utils.dom.insertAfter(this.flyout_.createDom('svg'), svg);
+  Blockly.utils.dom.insertAfter(
+      this.flyout_.createDom(Blockly.utils.dom.SvgElementType.SVG), svg);
   this.flyout_.init(workspace);
 
   this.config_['cssCollapsedFolderIcon'] =

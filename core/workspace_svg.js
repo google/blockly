@@ -711,7 +711,8 @@ Blockly.WorkspaceSvg.prototype.createDom = function(opt_backgroundClass) {
    * </g>
    * @type {SVGElement}
    */
-  this.svgGroup_ = Blockly.utils.dom.createSvgElement('g',
+  this.svgGroup_ = Blockly.utils.dom.createSvgElement(
+      Blockly.utils.dom.SvgElementType.G,
       {'class': 'blocklyWorkspace'}, null);
 
   // Note that a <g> alone does not receive mouse events--it must have a
@@ -719,7 +720,8 @@ Blockly.WorkspaceSvg.prototype.createDom = function(opt_backgroundClass) {
   // flyout, the workspace will not receive mouse events.
   if (opt_backgroundClass) {
     /** @type {SVGElement} */
-    this.svgBackground_ = Blockly.utils.dom.createSvgElement('rect',
+    this.svgBackground_ = Blockly.utils.dom.createSvgElement(
+        Blockly.utils.dom.SvgElementType.RECT,
         {'height': '100%', 'width': '100%', 'class': opt_backgroundClass},
         this.svgGroup_);
 
@@ -732,10 +734,12 @@ Blockly.WorkspaceSvg.prototype.createDom = function(opt_backgroundClass) {
     }
   }
   /** @type {SVGElement} */
-  this.svgBlockCanvas_ = Blockly.utils.dom.createSvgElement('g',
+  this.svgBlockCanvas_ = Blockly.utils.dom.createSvgElement(
+      Blockly.utils.dom.SvgElementType.G,
       {'class': 'blocklyBlockCanvas'}, this.svgGroup_);
   /** @type {SVGElement} */
-  this.svgBubbleCanvas_ = Blockly.utils.dom.createSvgElement('g',
+  this.svgBubbleCanvas_ = Blockly.utils.dom.createSvgElement(
+      Blockly.utils.dom.SvgElementType.G,
       {'class': 'blocklyBubbleCanvas'}, this.svgGroup_);
 
   if (!this.isFlyout) {
@@ -897,7 +901,10 @@ Blockly.WorkspaceSvg.prototype.addZoomControls = function() {
 
 /**
  * Add a flyout element in an element with the given tag name.
- * @param {string} tagName What type of tag the flyout belongs in.
+ * @param {string|
+ * !Blockly.utils.dom.SvgElementType<!SVGSVGElement>|
+ * !Blockly.utils.dom.SvgElementType<!SVGGElement>} tagName What type of tag the
+ *     flyout belongs in.
  * @return {!Element} The element containing the flyout DOM.
  * @package
  */

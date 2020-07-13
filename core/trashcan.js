@@ -258,21 +258,25 @@ Blockly.Trashcan.prototype.createDom = function() {
         clip-path="url(#blocklyTrashLidClipPath837493)"></image>
   </g>
   */
-  this.svgGroup_ = Blockly.utils.dom.createSvgElement('g',
+  this.svgGroup_ = Blockly.utils.dom.createSvgElement(
+      Blockly.utils.dom.SvgElementType.G,
       {'class': 'blocklyTrash'}, null);
   var clip;
   var rnd = String(Math.random()).substring(2);
-  clip = Blockly.utils.dom.createSvgElement('clipPath',
+  clip = Blockly.utils.dom.createSvgElement(
+      Blockly.utils.dom.SvgElementType.CLIPPATH,
       {'id': 'blocklyTrashBodyClipPath' + rnd},
       this.svgGroup_);
-  Blockly.utils.dom.createSvgElement('rect',
+  Blockly.utils.dom.createSvgElement(
+      Blockly.utils.dom.SvgElementType.RECT,
       {
         'width': this.WIDTH_,
         'height': this.BODY_HEIGHT_,
         'y': this.LID_HEIGHT_
       },
       clip);
-  var body = Blockly.utils.dom.createSvgElement('image',
+  var body = Blockly.utils.dom.createSvgElement(
+      Blockly.utils.dom.SvgElementType.IMAGE,
       {
         'width': Blockly.SPRITE.width,
         'x': -this.SPRITE_LEFT_,
@@ -284,12 +288,15 @@ Blockly.Trashcan.prototype.createDom = function() {
   body.setAttributeNS(Blockly.utils.dom.XLINK_NS, 'xlink:href',
       this.workspace_.options.pathToMedia + Blockly.SPRITE.url);
 
-  clip = Blockly.utils.dom.createSvgElement('clipPath',
+  clip = Blockly.utils.dom.createSvgElement(
+      Blockly.utils.dom.SvgElementType.CLIPPATH,
       {'id': 'blocklyTrashLidClipPath' + rnd},
       this.svgGroup_);
-  Blockly.utils.dom.createSvgElement('rect',
+  Blockly.utils.dom.createSvgElement(
+      Blockly.utils.dom.SvgElementType.RECT,
       {'width': this.WIDTH_, 'height': this.LID_HEIGHT_}, clip);
-  this.svgLid_ = Blockly.utils.dom.createSvgElement('image',
+  this.svgLid_ = Blockly.utils.dom.createSvgElement(
+      Blockly.utils.dom.SvgElementType.IMAGE,
       {
         'width': Blockly.SPRITE.width,
         'x': -this.SPRITE_LEFT_,
@@ -322,7 +329,8 @@ Blockly.Trashcan.prototype.createDom = function() {
  */
 Blockly.Trashcan.prototype.init = function(verticalSpacing) {
   if (this.workspace_.options.maxTrashcanContents > 0) {
-    Blockly.utils.dom.insertAfter(this.flyout.createDom('svg'),
+    Blockly.utils.dom.insertAfter(
+        this.flyout.createDom(Blockly.utils.dom.SvgElementType.SVG),
         this.workspace_.getParentSvg());
     this.flyout.init(this.workspace_);
   }

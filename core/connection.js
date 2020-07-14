@@ -494,6 +494,7 @@ Blockly.Connection.prototype.targetBlock = function() {
  * @return {boolean} True if the connections share a type.
  */
 Blockly.Connection.prototype.checkType = function(otherConnection) {
+  // TODO (fenichel): Add deprecation warnings.
   return this.getConnectionTypeChecker().canConnect(this, otherConnection,
       false);
 };

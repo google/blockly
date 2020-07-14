@@ -32,7 +32,6 @@ goog.require('Blockly.utils.string');
 goog.require('Blockly.Workspace');
 
 goog.requireType('Blockly.IASTNodeLocation');
-goog.requireType('Blockly.connectionTypeChecker');
 
 
 /**

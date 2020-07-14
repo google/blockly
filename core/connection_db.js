@@ -16,8 +16,6 @@ goog.provide('Blockly.ConnectionDB');
 
 goog.require('Blockly.RenderedConnection');
 
-goog.requireType('Blockly.ConnectionTypeChecker');
-
 
 /**
  * Database of connections.

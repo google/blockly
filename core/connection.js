@@ -312,6 +312,7 @@ Blockly.Connection.prototype.connect = function(otherConnection) {
   }
 
   var checker = this.getConnectionTypeChecker();
+  // TODO (fenichel): Try to get rid of the extra parameter (shouldThrow).
   if (checker.canConnect(this, otherConnection, false, true)) {
     var eventGroup = Blockly.Events.getGroup();
     if (!eventGroup) {

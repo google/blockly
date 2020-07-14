@@ -502,6 +502,8 @@ Blockly.navigation.connect_ = function(movingConnection, destConnection) {
     return true;
   } else {
     try {
+      // TODO (fenichel): Don't rely on canConnect throwing an error.
+      // TODO (fenichel): Fix associated tests.
       var checker = movingConnection.getConnectionTypeChecker();
       checker.canConnect(movingConnection, destConnection, false, true);
     }

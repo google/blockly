@@ -35,7 +35,8 @@ goog.require('Blockly.utils.userAgent');
  *     text as an argument and returns either the accepted text, a replacement
  *     text, or null to abort the change.
  * @param {Object=} opt_config A map of options used to configure the field.
- *    See the [field creation documentation]{@link https://developers.google.com/blockly/guides/create-custom-blocks/fields/built-in-fields/text-input#creation}
+ *    See the [field creation documentation]{@link
+ * https://developers.google.com/blockly/guides/create-custom-blocks/fields/built-in-fields/text-input#creation}
  *    for a list of properties this parameter supports.
  * @extends {Blockly.FieldTextInput}
  * @constructor
@@ -43,8 +44,8 @@ goog.require('Blockly.utils.userAgent');
 Blockly.FieldMultilineInput = function(opt_value, opt_validator, opt_config) {
   // TODO: Once this field is documented the opt_config link should point to its
   //  creation documentation, rather than the text input field's.
-  Blockly.FieldMultilineInput.superClass_.constructor.call(this,
-      opt_value, opt_validator, opt_config);
+  Blockly.FieldMultilineInput.superClass_.constructor.call(
+      this, opt_value, opt_validator, opt_config);
 
   /**
    * The SVG group element that will contain a text element for each text row
@@ -53,8 +54,8 @@ Blockly.FieldMultilineInput = function(opt_value, opt_validator, opt_config) {
    */
   this.textGroup_ = null;
 };
-Blockly.utils.object.inherits(Blockly.FieldMultilineInput,
-    Blockly.FieldTextInput);
+Blockly.utils.object.inherits(
+    Blockly.FieldMultilineInput, Blockly.FieldTextInput);
 
 /**
  * Construct a FieldMultilineInput from a JSON arg object,
@@ -78,7 +79,8 @@ Blockly.FieldMultilineInput.prototype.initView = function() {
   this.textGroup_ = Blockly.utils.dom.createSvgElement(
       Blockly.utils.dom.SvgElementType.G, {
         'class': 'blocklyEditableText',
-      }, this.fieldGroup_);
+      },
+      this.fieldGroup_);
 };
 
 /**
@@ -139,7 +141,8 @@ Blockly.FieldMultilineInput.prototype.render_ = function() {
           x: this.getConstants().FIELD_BORDER_RECT_X_PADDING,
           y: y + this.getConstants().FIELD_BORDER_RECT_Y_PADDING,
           dy: this.getConstants().FIELD_TEXT_BASELINE
-        }, this.textGroup_);
+        },
+        this.textGroup_);
     span.appendChild(document.createTextNode(lines[i]));
     y += lineHeight;
   }
@@ -155,15 +158,15 @@ Blockly.FieldMultilineInput.prototype.render_ = function() {
     } else {
       this.resizeEditor_();
     }
-    var htmlInput = /** @type {!HTMLElement} */(this.htmlInput_);
+    var htmlInput = /** @type {!HTMLElement} */ (this.htmlInput_);
     if (!this.isTextValid_) {
       Blockly.utils.dom.addClass(htmlInput, 'blocklyInvalidInput');
-      Blockly.utils.aria.setState(htmlInput,
-          Blockly.utils.aria.State.INVALID, true);
+      Blockly.utils.aria.setState(
+          htmlInput, Blockly.utils.aria.State.INVALID, true);
     } else {
       Blockly.utils.dom.removeClass(htmlInput, 'blocklyInvalidInput');
-      Blockly.utils.aria.setState(htmlInput,
-          Blockly.utils.aria.State.INVALID, false);
+      Blockly.utils.aria.setState(
+          htmlInput, Blockly.utils.aria.State.INVALID, false);
     }
   }
 };
@@ -207,7 +210,7 @@ Blockly.FieldMultilineInput.prototype.widgetCreate_ = function() {
   var scale = this.workspace_.getScale();
 
   var htmlInput =
-    /** @type {HTMLTextAreaElement} */ (document.createElement('textarea'));
+      /** @type {HTMLTextAreaElement} */ (document.createElement('textarea'));
   htmlInput.className = 'blocklyHtmlInput blocklyHtmlTextAreaInput';
   htmlInput.setAttribute('spellcheck', this.spellcheck_);
   var fontSize = (this.getConstants().FIELD_TEXT_FONTSIZE * scale) + 'pt';
@@ -217,8 +220,8 @@ Blockly.FieldMultilineInput.prototype.widgetCreate_ = function() {
   htmlInput.style.borderRadius = borderRadius;
   var paddingX = this.getConstants().FIELD_BORDER_RECT_X_PADDING * scale;
   var paddingY = this.getConstants().FIELD_BORDER_RECT_Y_PADDING * scale / 2;
-  htmlInput.style.padding = paddingY + 'px ' + paddingX + 'px ' + paddingY +
-      'px ' + paddingX + 'px';
+  htmlInput.style.padding =
+      paddingY + 'px ' + paddingX + 'px ' + paddingY + 'px ' + paddingX + 'px';
   var lineHeight = this.getConstants().FIELD_TEXT_HEIGHT +
       this.getConstants().FIELD_BORDER_RECT_Y_PADDING;
   htmlInput.style.lineHeight = (lineHeight * scale) + 'px';
@@ -257,15 +260,11 @@ Blockly.FieldMultilineInput.prototype.onHtmlInputKeyDown_ = function(e) {
  */
 Blockly.Css.register([
   /* eslint-disable indent */
-  '.blocklyHtmlTextAreaInput {',
-    'font-family: monospace;',
-    'resize: none;',
-    'overflow: hidden;',
-    'height: 100%;',
-    'text-align: left;',
-  '}'
+  '.blocklyHtmlTextAreaInput {', 'font-family: monospace;', 'resize: none;',
+  'overflow: hidden;', 'height: 100%;', 'text-align: left;', '}'
   /* eslint-enable indent */
 ]);
 
 
-Blockly.fieldRegistry.register('field_multilinetext', Blockly.FieldMultilineInput);
+Blockly.fieldRegistry.register(
+    'field_multilinetext', Blockly.FieldMultilineInput);

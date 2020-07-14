@@ -36,7 +36,8 @@ goog.require('Blockly.utils.Size');
  *    changes to the field's value. Takes in a colour string & returns a
  *    validated colour string ('#rrggbb' format), or null to abort the change.
  * @param {Object=} opt_config A map of options used to configure the field.
- *    See the [field creation documentation]{@link https://developers.google.com/blockly/guides/create-custom-blocks/fields/built-in-fields/colour}
+ *    See the [field creation documentation]{@link
+ * https://developers.google.com/blockly/guides/create-custom-blocks/fields/built-in-fields/colour}
  *    for a list of properties this parameter supports.
  * @extends {Blockly.Field}
  * @constructor
@@ -327,7 +328,7 @@ Blockly.FieldColour.prototype.showEditor_ = function() {
       this, this.dropdownDispose_.bind(this));
 
   // Focus so we can start receiving keyboard events.
-  this.picker_.focus({preventScroll:true});
+  this.picker_.focus({preventScroll: true});
 };
 
 /**
@@ -437,8 +438,7 @@ Blockly.FieldColour.prototype.moveHighlightBy_ = function(dx, dy) {
   } else if (dx > 0) {
     // Move right one grid cell, even in RTL.
     // Loop to the start of the next row, if there's room.
-    if (x > columns - 1 &&
-      y < Math.floor(colours.length / columns) - 1) {
+    if (x > columns - 1 && y < Math.floor(colours.length / columns) - 1) {
       x = 0;
       y++;
     } else if (x > columns - 1) {
@@ -480,7 +480,7 @@ Blockly.FieldColour.prototype.onMouseMove_ = function(e) {
  * @private
  */
 Blockly.FieldColour.prototype.onMouseEnter_ = function() {
-  this.picker_.focus({preventScroll:true});
+  this.picker_.focus({preventScroll: true});
 };
 
 /**
@@ -531,7 +531,8 @@ Blockly.FieldColour.prototype.setHighlightedCell_ = function(cell, index) {
   this.highlightedIndex_ = index;
 
   // Update accessibility roles.
-  Blockly.utils.aria.setState(/** @type {!Element} */ (this.picker_),
+  Blockly.utils.aria.setState(
+      /** @type {!Element} */ (this.picker_),
       Blockly.utils.aria.State.ACTIVEDESCENDANT, cell.getAttribute('id'));
 };
 
@@ -552,10 +553,11 @@ Blockly.FieldColour.prototype.dropdownCreate_ = function() {
   table.dir = 'ltr';
   Blockly.utils.aria.setRole(table, Blockly.utils.aria.Role.GRID);
   Blockly.utils.aria.setState(table, Blockly.utils.aria.State.EXPANDED, true);
-  Blockly.utils.aria.setState(table, Blockly.utils.aria.State.ROWCOUNT,
+  Blockly.utils.aria.setState(
+      table, Blockly.utils.aria.State.ROWCOUNT,
       Math.floor(colours.length / columns));
-  Blockly.utils.aria.setState(table, Blockly.utils.aria.State.COLCOUNT,
-      columns);
+  Blockly.utils.aria.setState(
+      table, Blockly.utils.aria.State.COLCOUNT, columns);
   var row;
   for (var i = 0; i < colours.length; i++) {
     if (i % columns == 0) {
@@ -570,10 +572,10 @@ Blockly.FieldColour.prototype.dropdownCreate_ = function() {
     cell.id = Blockly.utils.IdGenerator.getNextUniqueId();
     cell.setAttribute('data-index', i);
     Blockly.utils.aria.setRole(cell, Blockly.utils.aria.Role.GRIDCELL);
-    Blockly.utils.aria.setState(cell,
-        Blockly.utils.aria.State.LABEL, colours[i]);
-    Blockly.utils.aria.setState(cell,
-        Blockly.utils.aria.State.SELECTED, colours[i] == selectedColour);
+    Blockly.utils.aria.setState(
+        cell, Blockly.utils.aria.State.LABEL, colours[i]);
+    Blockly.utils.aria.setState(
+        cell, Blockly.utils.aria.State.SELECTED, colours[i] == selectedColour);
     cell.style.backgroundColor = colours[i];
     if (colours[i] == selectedColour) {
       cell.className = 'blocklyColourSelected';
@@ -582,16 +584,16 @@ Blockly.FieldColour.prototype.dropdownCreate_ = function() {
   }
 
   // Configure event handler on the table to listen for any event in a cell.
-  this.onClickWrapper_ = Blockly.bindEventWithChecks_(table,
-      'click', this, this.onClick_, true);
-  this.onMouseMoveWrapper_ = Blockly.bindEventWithChecks_(table,
-      'mousemove', this, this.onMouseMove_, true);
-  this.onMouseEnterWrapper_ = Blockly.bindEventWithChecks_(table,
-      'mouseenter', this, this.onMouseEnter_, true);
-  this.onMouseLeaveWrapper_ = Blockly.bindEventWithChecks_(table,
-      'mouseleave', this, this.onMouseLeave_, true);
-  this.onKeyDownWrapper_ = Blockly.bindEventWithChecks_(table,
-      'keydown', this, this.onKeyDown_);
+  this.onClickWrapper_ =
+      Blockly.bindEventWithChecks_(table, 'click', this, this.onClick_, true);
+  this.onMouseMoveWrapper_ = Blockly.bindEventWithChecks_(
+      table, 'mousemove', this, this.onMouseMove_, true);
+  this.onMouseEnterWrapper_ = Blockly.bindEventWithChecks_(
+      table, 'mouseenter', this, this.onMouseEnter_, true);
+  this.onMouseLeaveWrapper_ = Blockly.bindEventWithChecks_(
+      table, 'mouseleave', this, this.onMouseLeave_, true);
+  this.onKeyDownWrapper_ =
+      Blockly.bindEventWithChecks_(table, 'keydown', this, this.onKeyDown_);
 
   return table;
 };
@@ -631,32 +633,32 @@ Blockly.FieldColour.prototype.dropdownDispose_ = function() {
 Blockly.Css.register([
   /* eslint-disable indent */
   '.blocklyColourTable {',
-    'border-collapse: collapse;',
-    'display: block;',
-    'outline: none;',
-    'padding: 1px;',
+  'border-collapse: collapse;',
+  'display: block;',
+  'outline: none;',
+  'padding: 1px;',
   '}',
 
   '.blocklyColourTable>tr>td {',
-    'border: .5px solid #888;',
-    'box-sizing: border-box;',
-    'cursor: pointer;',
-    'display: inline-block;',
-    'height: 20px;',
-    'padding: 0;',
-    'width: 20px;',
+  'border: .5px solid #888;',
+  'box-sizing: border-box;',
+  'cursor: pointer;',
+  'display: inline-block;',
+  'height: 20px;',
+  'padding: 0;',
+  'width: 20px;',
   '}',
 
   '.blocklyColourTable>tr>td.blocklyColourHighlighted {',
-    'border-color: #eee;',
-    'box-shadow: 2px 2px 7px 2px rgba(0,0,0,.3);',
-    'position: relative;',
+  'border-color: #eee;',
+  'box-shadow: 2px 2px 7px 2px rgba(0,0,0,.3);',
+  'position: relative;',
   '}',
 
   '.blocklyColourSelected, .blocklyColourSelected:hover {',
-    'border-color: #eee !important;',
-    'outline: 1px solid #333;',
-    'position: relative;',
+  'border-color: #eee !important;',
+  'outline: 1px solid #333;',
+  'position: relative;',
   '}'
   /* eslint-enable indent */
 ]);

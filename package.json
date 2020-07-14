@@ -27,6 +27,7 @@
     "build:langfiles": "gulp buildLangfiles",
     "build:uncompressed": "gulp buildUncompressed",
     "bump": "npm --no-git-tag-version version 3.$(date +'%Y%m%d').0",
+    "format": "clang-format -i --glob=core/**/*.js",
     "license": "gulp checkLicenses",
     "lint": "eslint .",
     "package": "gulp package",
@@ -54,6 +55,7 @@
   "license": "Apache-2.0",
   "devDependencies": {
     "chai": "^4.2.0",
+    "clang-format": "^1.4.0",
     "concurrently": "^4.1.2",
     "eslint": "^5.13.0",
     "eslint-plugin-es5": "^1.5.0",

@@ -553,7 +553,7 @@ Blockly.RenderedConnection.prototype.onCheckChanged_ = function() {
   // The new value type may not be compatible with the existing connection.
   if (this.isConnected() && (!this.targetConnection ||
       !this.getConnectionTypeChecker().canConnect(
-          this, this.targetConnection, false, false))) {
+          this, this.targetConnection, false))) {
     var child = this.isSuperior() ? this.targetBlock() : this.sourceBlock_;
     child.unplug();
     // Bump away.

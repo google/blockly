@@ -32,6 +32,7 @@ goog.require('Blockly.utils.string');
 goog.require('Blockly.Workspace');
 
 goog.requireType('Blockly.IASTNodeLocation');
+goog.requireType('Blockly.connectionTypeChecker');
 
 
 /**
@@ -457,7 +458,7 @@ Blockly.Block.prototype.unplugFromRow_ = function(opt_healStack) {
   childConnection.disconnect();
   // Connect child to the parent if possible, otherwise bump away.
   if (this.workspace.connectionTypeChecker.canConnect(
-      childConnection, parentConnection, false, false)) {
+      childConnection, parentConnection, false)) {
     parentConnection.connect(childConnection);
   } else {
     childConnection.onFailedConnect(parentConnection);
@@ -511,7 +512,7 @@ Blockly.Block.prototype.unplugFromStack_ = function(opt_healStack) {
     nextTarget.disconnect();
     if (previousTarget &&
         this.workspace.connectionTypeChecker.canConnect(
-            previousTarget, nextTarget, false, false)) {
+            previousTarget, nextTarget, false)) {
       // Attach the next statement to the previous statement.
       previousTarget.connect(nextTarget);
     }

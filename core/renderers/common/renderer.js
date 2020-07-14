@@ -255,7 +255,7 @@ Blockly.blockRendering.Renderer.prototype.orphanCanConnectAtEnd =
         return false;
       }
       return orphanConnection.getConnectionTypeChecker().canConnect(
-          lastConnection, orphanConnection, false, false);
+          lastConnection, orphanConnection, false);
     };
 
 /**

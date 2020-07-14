@@ -149,8 +149,7 @@ Blockly.Connection.prototype.connect_ = function(childConnection) {
         } else {
           var typeChecker = orphanBlock.workspace.connectionTypeChecker;
           if (typeChecker.canConnect(
-              orphanBlock.previousConnection, newBlock.nextConnection,
-              false, false)) {
+              orphanBlock.previousConnection, newBlock.nextConnection, false)) {
             newBlock.nextConnection.connect(orphanBlock.previousConnection);
             orphanBlock = null;
           }
@@ -253,7 +252,8 @@ Blockly.Connection.prototype.isConnected = function() {
  */
 Blockly.Connection.prototype.canConnectWithReason = function(target) {
   // TODO: deprecation warning with date, plus tests.
-  return this.getConnectionTypeChecker().canConnectWithReason(this, target);
+  return this.getConnectionTypeChecker().canConnectWithReason(
+      this, target);
 };
 
 /**
@@ -268,7 +268,10 @@ Blockly.Connection.prototype.checkConnection = function(target) {
 // TODO: Add deprecation warning notices *and* add tests to make sure these
 // still work (for any blocks that use them).
   var checker = this.getConnectionTypeChecker();
-  checker.canConnect(this, target, false, true);
+  var reason = !checker.canConnectWithReason(this, target, false);
+  if (reason != Blockly.Connection.CAN_CONNECT) {
+    throw new Error(checker.getErrorMessage(this, target, reason));
+  }
 };
 
 /**
@@ -288,7 +291,7 @@ Blockly.Connection.prototype.getConnectionTypeChecker = function() {
  * @deprecated July 2020
  */
 Blockly.Connection.prototype.isConnectionAllowed = function(candidate) {
-  return this.getConnectionTypeChecker().canConnect(this, candidate, true, false);
+  return this.getConnectionTypeChecker().canConnect(this, candidate, true);
 };
 
 /**
@@ -312,8 +315,7 @@ Blockly.Connection.prototype.connect = function(otherConnection) {
   }
 
   var checker = this.getConnectionTypeChecker();
-  // TODO (fenichel): Try to get rid of the extra parameter (shouldThrow).
-  if (checker.canConnect(this, otherConnection, false, true)) {
+  if (checker.canConnect(this, otherConnection, false)) {
     var eventGroup = Blockly.Events.getGroup();
     if (!eventGroup) {
       Blockly.Events.setGroup(true);
@@ -362,7 +364,7 @@ Blockly.Connection.singleConnection_ = function(block, orphanBlock) {
     var thisConnection = block.inputList[i].connection;
     var typeChecker = output.getConnectionTypeChecker();
     if (thisConnection && thisConnection.type == Blockly.INPUT_VALUE &&
-        typeChecker.canConnect(output, thisConnection, false, false)) {
+        typeChecker.canConnect(output, thisConnection, false)) {
       if (connection) {
         return null;  // More than one connection.
       }
@@ -492,7 +494,8 @@ Blockly.Connection.prototype.targetBlock = function() {
  * @return {boolean} True if the connections share a type.
  */
 Blockly.Connection.prototype.checkType = function(otherConnection) {
-  return this.getConnectionTypeChecker().canConnect(this, otherConnection, false, false);
+  return this.getConnectionTypeChecker().canConnect(this, otherConnection,
+      false);
 };
 
 /**
@@ -518,7 +521,7 @@ Blockly.Connection.prototype.onCheckChanged_ = function() {
   // The new value type may not be compatible with the existing connection.
   if (this.isConnected() && (!this.targetConnection ||
       !this.getConnectionTypeChecker().canConnect(
-          this, this.targetConnection, false, false))) {
+          this, this.targetConnection, false))) {
     var child = this.isSuperior() ? this.targetBlock() : this.sourceBlock_;
     child.unplug();
   }

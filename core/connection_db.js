@@ -23,6 +23,9 @@ goog.requireType('Blockly.ConnectionTypeChecker');
  * Database of connections.
  * Connections are stored in order of their vertical component.  This way
  * connections in an area may be looked up quickly using a binary search.
+ * @param {!Blockly.ConnectionTypeChecker} typeChecker The workspace's
+ *     connection type checker, used to decide if connections are valid during a
+ *     drag.
  * @constructor
  */
 Blockly.ConnectionDB = function(typeChecker) {
@@ -246,7 +249,7 @@ Blockly.ConnectionDB.prototype.searchForClosest = function(conn, maxRadius,
     temp = this.connections_[pointerMin];
     curDistance = temp.distanceFrom(conn);
     if (curDistance <= bestRadius &&
-        this.typeChecker_.canConnect(conn, temp, true, false)) {
+        this.typeChecker_.canConnect(conn, temp, true)) {
       bestConnection = temp;
       bestRadius = curDistance;
     }
@@ -259,7 +262,7 @@ Blockly.ConnectionDB.prototype.searchForClosest = function(conn, maxRadius,
     temp = this.connections_[pointerMax];
     curDistance = temp.distanceFrom(conn);
     if (curDistance <= bestRadius &&
-        this.typeChecker_.canConnect(conn, temp, true, false)) {
+        this.typeChecker_.canConnect(conn, temp, true)) {
       bestConnection = temp;
       bestRadius = curDistance;
     }
@@ -276,6 +279,9 @@ Blockly.ConnectionDB.prototype.searchForClosest = function(conn, maxRadius,
 
 /**
  * Initialize a set of connection DBs for a workspace.
+ * @param {!Blockly.ConnectionTypeChecker} typeChecker The workspace's
+ *     connection type checker, used to decide if connections are valid during a
+ *     drag.
  * @return {!Array.<!Blockly.ConnectionDB>} Array of databases.
  */
 Blockly.ConnectionDB.init = function(typeChecker) {

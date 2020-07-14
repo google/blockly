@@ -8,7 +8,7 @@ suite('Connection type checker', function() {
   suiteSetup(function() {
     this.checker = new Blockly.ConnectionTypeChecker();
   });
-  suite('Can Connect With Reason', function() {
+  suite('Safety checks', function() {
     function assertReasonHelper(checker, one, two, reason) {
       chai.assert.equal(checker.canConnectWithReason(one, two), reason);
       // Order should not matter.
@@ -229,9 +229,9 @@ suite('Connection type checker', function() {
       this.con2 = new Blockly.Connection({}, Blockly.NEXT_STATEMENT);
     });
     function assertCheckTypes(checker, one, two) {
-      chai.assert.isTrue(checker.passesTypeChecks(one, two));
+      chai.assert.isTrue(checker.doTypeChecks(one, two));
       // Order should not matter.
-      chai.assert.isTrue(checker.passesTypeChecks(one, two));
+      chai.assert.isTrue(checker.doTypeChecks(one, two));
     }
     test('No Types', function() {
       assertCheckTypes(this.checker, this.con1, this.con2);
@@ -258,7 +258,7 @@ suite('Connection type checker', function() {
     test('No Compatible Types', function() {
       this.con1.setCheck('type1');
       this.con2.setCheck('type2');
-      chai.assert.isFalse(this.checker.passesTypeChecks(this.con1, this.con2));
+      chai.assert.isFalse(this.checker.doTypeChecks(this.con1, this.con2));
     });
   });
 });

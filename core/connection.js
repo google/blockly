@@ -147,10 +147,10 @@ Blockly.Connection.prototype.connect_ = function(childConnection) {
         if (nextBlock && !nextBlock.isShadow()) {
           newBlock = nextBlock;
         } else {
-          if (orphanBlock.workspace.connectionTypeChecker.checkType(
-              orphanBlock.previousConnection, newBlock.nextConnection)) {
-            //orphanBlock.previousConnection.checkType(
-              //newBlock.nextConnection)) {
+          var typeChecker = orphanBlock.workspace.connectionTypeChecker;
+          if (typeChecker.canConnect(
+              orphanBlock.previousConnection, newBlock.nextConnection,
+              false, false)) {
             newBlock.nextConnection.connect(orphanBlock.previousConnection);
             orphanBlock = null;
           }
@@ -249,6 +249,7 @@ Blockly.Connection.prototype.isConnected = function() {
  * @param {Blockly.Connection} target Connection to check compatibility with.
  * @return {number} Blockly.Connection.CAN_CONNECT if the connection is legal,
  *    an error code otherwise.
+ * @deprecated July 2020
  */
 Blockly.Connection.prototype.canConnectWithReason = function(target) {
   // TODO: deprecation warning with date, plus tests.
@@ -261,6 +262,7 @@ Blockly.Connection.prototype.canConnectWithReason = function(target) {
  * @param {Blockly.Connection} target The connection to check compatibility
  *    with.
  * @package
+ * @deprecated July 2020
  */
 Blockly.Connection.prototype.checkConnection = function(target) {
 // TODO: Add deprecation warning notices *and* add tests to make sure these
@@ -269,50 +271,21 @@ Blockly.Connection.prototype.checkConnection = function(target) {
   checker.canConnect(this, target, false, true);
 };
 
+/**
+ * Get the workspace's connection type checker object.
+ * @return {!Blockly.ConnectionTypeChecker} The connection type checker for the
+ *     source block's workspace.
+ * @package
+ */
 Blockly.Connection.prototype.getConnectionTypeChecker = function() {
   return this.sourceBlock_.workspace.connectionTypeChecker;
 };
-
-// /**
-//  * Check if the two connections can be dragged to connect to each other.
-//  * This is used by the connection database when searching for the closest
-//  * connection.
-//  * @param {!Blockly.Connection} candidate A nearby connection to check, which
-//  *     must be a previous connection.
-//  * @return {boolean} True if the connection is allowed, false otherwise.
-//  * @private
-//  */
-// Blockly.Connection.prototype.canConnectToPrevious_ = function(candidate) {
-//   if (this.targetConnection) {
-//     // This connection is already occupied.
-//     // A next connection will never disconnect itself mid-drag.
-//     return false;
-//   }
-
-//   // Don't let blocks try to connect to themselves or ones they nest.
-//   if (Blockly.draggingConnections.indexOf(candidate) != -1) {
-//     return false;
-//   }
-
-//   if (!candidate.targetConnection) {
-//     return true;
-//   }
-
-//   var targetBlock = candidate.targetBlock();
-//   // If it is connected to a real block, game over.
-//   if (!targetBlock.isInsertionMarker()) {
-//     return false;
-//   }
-//   // If it's connected to an insertion marker but that insertion marker
-//   // is the first block in a stack, it's still fine.  If that insertion
-//   // marker is in the middle of a stack, it won't work.
-//   return !targetBlock.getPreviousBlock();
-// };
 
 /**
  * Check if the two connections can be dragged to connect to each other.
  * @param {!Blockly.Connection} candidate A nearby connection to check.
  * @return {boolean} True if the connection is allowed, false otherwise.
+ * @deprecated July 2020
  */
 Blockly.Connection.prototype.isConnectionAllowed = function(candidate) {
   return this.getConnectionTypeChecker().canConnect(this, candidate, true, false);
@@ -339,22 +312,22 @@ Blockly.Connection.prototype.connect = function(otherConnection) {
   }
 
   var checker = this.getConnectionTypeChecker();
-  checker.canConnect(this, otherConnection, false, true);
-
-  var eventGroup = Blockly.Events.getGroup();
-  if (!eventGroup) {
-    Blockly.Events.setGroup(true);
-  }
-  // Determine which block is superior (higher in the source stack).
-  if (this.isSuperior()) {
-    // Superior block.
-    this.connect_(otherConnection);
-  } else {
-    // Inferior block.
-    otherConnection.connect_(this);
-  }
-  if (!eventGroup) {
-    Blockly.Events.setGroup(false);
+  if (checker.canConnect(this, otherConnection, false, true)) {
+    var eventGroup = Blockly.Events.getGroup();
+    if (!eventGroup) {
+      Blockly.Events.setGroup(true);
+    }
+    // Determine which block is superior (higher in the source stack).
+    if (this.isSuperior()) {
+      // Superior block.
+      this.connect_(otherConnection);
+    } else {
+      // Inferior block.
+      otherConnection.connect_(this);
+    }
+    if (!eventGroup) {
+      Blockly.Events.setGroup(false);
+    }
   }
 };
 
@@ -383,10 +356,12 @@ Blockly.Connection.connectReciprocally_ = function(first, second) {
  */
 Blockly.Connection.singleConnection_ = function(block, orphanBlock) {
   var connection = null;
+  var output = orphanBlock.outputConnection;
   for (var i = 0; i < block.inputList.length; i++) {
     var thisConnection = block.inputList[i].connection;
+    var typeChecker = output.getConnectionTypeChecker();
     if (thisConnection && thisConnection.type == Blockly.INPUT_VALUE &&
-        orphanBlock.outputConnection.checkType(thisConnection)) {
+        typeChecker.canConnect(output, thisConnection, false, false)) {
       if (connection) {
         return null;  // More than one connection.
       }
@@ -516,7 +491,7 @@ Blockly.Connection.prototype.targetBlock = function() {
  * @return {boolean} True if the connections share a type.
  */
 Blockly.Connection.prototype.checkType = function(otherConnection) {
-  return this.getConnectionTypeChecker().checkType(this, otherConnection);
+  return this.getConnectionTypeChecker().canConnect(this, otherConnection, false, false);
 };
 
 /**
@@ -541,7 +516,8 @@ Blockly.Connection.prototype.checkType_ = function(otherConnection) {
 Blockly.Connection.prototype.onCheckChanged_ = function() {
   // The new value type may not be compatible with the existing connection.
   if (this.isConnected() && (!this.targetConnection ||
-      !this.checkType(this.targetConnection))) {
+      !this.getConnectionTypeChecker().canConnect(
+          this, this.targetConnection, false, false))) {
     var child = this.isSuperior() ? this.targetBlock() : this.sourceBlock_;
     child.unplug();
   }

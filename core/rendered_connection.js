@@ -422,6 +422,7 @@ Blockly.RenderedConnection.prototype.startTrackingAll = function() {
  * @param {number=} maxRadius The maximum radius allowed for connections, in
  *     workspace units.
  * @return {boolean} True if the connection is allowed, false otherwise.
+ * @deprecated July 2020
  */
 Blockly.RenderedConnection.prototype.isConnectionAllowed = function(candidate,
     maxRadius) {
@@ -551,7 +552,8 @@ Blockly.RenderedConnection.prototype.connect_ = function(childConnection) {
 Blockly.RenderedConnection.prototype.onCheckChanged_ = function() {
   // The new value type may not be compatible with the existing connection.
   if (this.isConnected() && (!this.targetConnection ||
-      !this.checkType(this.targetConnection))) {
+      !this.getConnectionTypeChecker().canConnect(
+          this, this.targetConnection, false, false))) {
     var child = this.isSuperior() ? this.targetBlock() : this.sourceBlock_;
     child.unplug();
     // Bump away.

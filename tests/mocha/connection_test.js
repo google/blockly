@@ -229,13 +229,12 @@ suite('Connection type checker', function() {
       this.con2 = new Blockly.Connection({}, Blockly.NEXT_STATEMENT);
     });
     function assertCheckTypes(checker, one, two) {
-      chai.assert.isTrue(checker.checkType(one, two));
+      chai.assert.isTrue(checker.passesTypeChecks(one, two));
       // Order should not matter.
-      chai.assert.isTrue(checker.checkType(one, two));
+      chai.assert.isTrue(checker.passesTypeChecks(one, two));
     }
     test('No Types', function() {
       assertCheckTypes(this.checker, this.con1, this.con2);
-      chai.assert.isTrue(this.checker.checkType(this.con1, this.con2));
     });
     test('Same Type', function() {
       this.con1.setCheck('type1');
@@ -259,7 +258,7 @@ suite('Connection type checker', function() {
     test('No Compatible Types', function() {
       this.con1.setCheck('type1');
       this.con2.setCheck('type2');
-      chai.assert.isFalse(this.checker.checkType(this.con1, this.con2));
+      chai.assert.isFalse(this.checker.passesTypeChecks(this.con1, this.con2));
     });
   });
 });

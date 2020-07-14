@@ -25,8 +25,10 @@ Blockly.ConnectionTypeChecker = function() {
 Blockly.ConnectionTypeChecker.prototype.canConnect = function(one, two,
     isDragging, shouldThrow) {
   if (this.passesSafetyChecks(one, two, shouldThrow)) {
-    if (this.passesTypeChecks(one, two, shouldThrow)) {
-      if (!isDragging || this.passesDragChecks(one, two, shouldThrow)) {
+    var connOne = /** @type {!Blockly.Connection} **/ (one);
+    var connTwo = /** @type {!Blockly.Connection} **/ (two);
+    if (this.passesTypeChecks(connOne, connTwo, shouldThrow)) {
+      if (!isDragging || this.passesDragChecks(connOne, connTwo, shouldThrow)) {
         return true;
       }
     }
@@ -37,8 +39,8 @@ Blockly.ConnectionTypeChecker.prototype.canConnect = function(one, two,
 /**
  * Check that connecting the given connections is safe, meaning that it would
  * not break any of Blockly's basic assumptions--no self connections, etc.
- * @param {!Blockly.Connection} one The first of the connections to check.
- * @param {!Blockly.Connection} two The second of the connections to check.
+ * @param {Blockly.Connection} one The first of the connections to check.
+ * @param {Blockly.Connection} two The second of the connections to check.
  * @param {boolean} shouldThrow Whether to throw an error if the connection is
  *     unsafe.
  * @return {boolean} Whether the connection is safe.
@@ -93,7 +95,10 @@ Blockly.ConnectionTypeChecker.prototype.canConnectWithReason = function(one, two
   if (safety != Blockly.Connection.CAN_CONNECT) {
     return safety;
   }
-  if (!this.doTypeChecks_(one, two)) {
+
+  var connOne = /** @type {!Blockly.Connection} **/ (one);
+  var connTwo = /** @type {!Blockly.Connection} **/ (two);
+  if (!this.doTypeChecks_(connOne, connTwo)) {
     return Blockly.Connection.REASON_CHECKS_FAILED;
   }
   return Blockly.Connection.CAN_CONNECT;
@@ -102,8 +107,8 @@ Blockly.ConnectionTypeChecker.prototype.canConnectWithReason = function(one, two
 /**
  * Helper method that translates a connection error code into a string.
  * @param {number} errorCode The error code.
- * @param {!Blockly.Connection} one One of the two connections being checked.
- * @param {!Blockly.Connection} two The second of the two connections being
+ * @param {Blockly.Connection} one One of the two connections being checked.
+ * @param {Blockly.Connection} two The second of the two connections being
  *     checked.
  * @return {string} A developer-readable error string.
  * @private
@@ -122,7 +127,7 @@ Blockly.ConnectionTypeChecker.prototype.getErrorMessage_ = function(errorCode,
       return 'Target connection is null.';
     case Blockly.Connection.REASON_CHECKS_FAILED:
       var msg = 'Connection checks failed. ';
-      msg += one + ' expected ' + one.check_ + ', found ' + two.check_;
+      msg += one + ' expected ' + one.getCheck() + ', found ' + two.getCheck();
       return msg;
     case Blockly.Connection.REASON_SHADOW_PARENT:
       return 'Connecting non-shadow to shadow block.';
@@ -136,9 +141,9 @@ Blockly.ConnectionTypeChecker.prototype.getErrorMessage_ = function(errorCode,
 /**
  * Check that connecting the given connections is safe, meaning that it would
  * not break any of Blockly's basic assumptions--no self connections, etc.
- * @param {!Blockly.Connection} one The first of the connections to check.
- * @param {!Blockly.Connection} two The second of the connections to check.
- * @return {boolean} True if making this connection is safe.
+ * @param {Blockly.Connection} one The first of the connections to check.
+ * @param {Blockly.Connection} two The second of the connections to check.
+ * @return {number} An enum with the reason this connection is safe or unsafe.
  * @private
  */
 Blockly.ConnectionTypeChecker.prototype.doSafetyChecks_ = function(one, two) {
@@ -200,13 +205,13 @@ Blockly.ConnectionTypeChecker.prototype.doTypeChecks_ = function(one, two) {
  */
 Blockly.ConnectionTypeChecker.prototype.doDragChecks_ = function(one, two) {
   // Don't consider insertion markers.
-  if (two.sourceBlock_.isInsertionMarker()) {
+  if (two.getSourceBlock().isInsertionMarker()) {
     return false;
   }
 
   switch (two.type) {
     case Blockly.PREVIOUS_STATEMENT:
-      return one.canConnectToPrevious_(two);
+      return this.canConnectToPrevious_(one, two);
     case Blockly.OUTPUT_VALUE: {
       // Don't offer to connect an already connected left (male) value plug to
       // an available right (female) value plug.
@@ -234,7 +239,7 @@ Blockly.ConnectionTypeChecker.prototype.doDragChecks_ = function(one, two) {
       // fine.  Similarly, replacing a terminal statement with another terminal
       // statement is allowed.
       if (two.isConnected() &&
-          !one.sourceBlock_.nextConnection &&
+          !one.getSourceBlock().nextConnection &&
           !two.targetBlock().isShadow() &&
           two.targetBlock().nextConnection) {
         return false;

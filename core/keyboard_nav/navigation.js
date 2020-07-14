@@ -104,8 +104,8 @@ Blockly.navigation.MARKER_NAME = 'local_marker_1';
  * @return {Blockly.Marker} The local marker for the main workspace.
  */
 Blockly.navigation.getMarker = function() {
-  return Blockly.navigation.getNavigationWorkspace()
-      .getMarker(Blockly.navigation.MARKER_NAME);
+  return Blockly.navigation.getNavigationWorkspace().getMarker(
+      Blockly.navigation.MARKER_NAME);
 };
 
 /**
@@ -189,7 +189,8 @@ Blockly.navigation.focusWorkspace_ = function() {
 
 /**
  * Get the cursor from the flyouts workspace.
- * @return {Blockly.FlyoutCursor} The flyouts cursor or null if no flyout exists.
+ * @return {Blockly.FlyoutCursor} The flyouts cursor or null if no flyout
+ *     exists.
  * @private
  */
 Blockly.navigation.getFlyoutCursor_ = function() {
@@ -212,13 +213,14 @@ Blockly.navigation.insertFromFlyout = function() {
   var workspace = Blockly.navigation.getNavigationWorkspace();
   var flyout = workspace.getFlyout();
   if (!flyout || !flyout.isVisible()) {
-    Blockly.navigation.warn_('Trying to insert from the flyout when the flyout does not ' +
-      ' exist or is not visible');
+    Blockly.navigation.warn_(
+        'Trying to insert from the flyout when the flyout does not ' +
+        ' exist or is not visible');
     return;
   }
 
   var curBlock = /** @type {!Blockly.BlockSvg} */ (
-    Blockly.navigation.getFlyoutCursor_().getCurNode().getLocation());
+      Blockly.navigation.getFlyoutCursor_().getCurNode().getLocation());
   if (!curBlock.isEnabled()) {
     Blockly.navigation.warn_('Can\'t insert a disabled block.');
     return;
@@ -231,10 +233,10 @@ Blockly.navigation.insertFromFlyout = function() {
   // there's enough time for them to become tracked in the user's mouse
   // movements, but not here.
   newBlock.setConnectionTracking(true);
-  workspace.getCursor().setCurNode(
-      Blockly.ASTNode.createBlockNode(newBlock));
+  workspace.getCursor().setCurNode(Blockly.ASTNode.createBlockNode(newBlock));
   if (!Blockly.navigation.modify_()) {
-    Blockly.navigation.warn_('Something went wrong while inserting a block from the flyout.');
+    Blockly.navigation.warn_(
+        'Something went wrong while inserting a block from the flyout.');
   }
 
   Blockly.navigation.focusWorkspace_();
@@ -261,15 +263,16 @@ Blockly.navigation.resetFlyout_ = function(shouldHide) {
 /** **************** */
 
 /**
- * Warns the user if the cursor or marker is on a type that can not be connected.
+ * Warns the user if the cursor or marker is on a type that can not be
+ * connected.
  * @return {boolean} True if the marker and cursor are valid types, false
  *     otherwise.
  * @private
  */
 Blockly.navigation.modifyWarn_ = function() {
   var markerNode = Blockly.navigation.getMarker().getCurNode();
-  var cursorNode = Blockly.navigation.getNavigationWorkspace()
-      .getCursor().getCurNode();
+  var cursorNode =
+      Blockly.navigation.getNavigationWorkspace().getCursor().getCurNode();
 
   if (!markerNode) {
     Blockly.navigation.warn_('Cannot insert with no marked node.');
@@ -340,8 +343,8 @@ Blockly.navigation.moveBlockToWorkspace_ = function(block, wsNode) {
  */
 Blockly.navigation.modify_ = function() {
   var markerNode = Blockly.navigation.getMarker().getCurNode();
-  var cursorNode = Blockly.navigation.getNavigationWorkspace()
-      .getCursor().getCurNode();
+  var cursorNode =
+      Blockly.navigation.getNavigationWorkspace().getCursor().getCurNode();
   if (!Blockly.navigation.modifyWarn_()) {
     return false;
   }
@@ -356,9 +359,10 @@ Blockly.navigation.modify_ = function() {
     cursorLoc = /** @type {!Blockly.RenderedConnection} */ (cursorLoc);
     markerLoc = /** @type {!Blockly.RenderedConnection} */ (markerLoc);
     return Blockly.navigation.connect_(cursorLoc, markerLoc);
-  } else if (markerNode.isConnection() &&
+  } else if (
+      markerNode.isConnection() &&
       (cursorType == Blockly.ASTNode.types.BLOCK ||
-      cursorType == Blockly.ASTNode.types.STACK)) {
+       cursorType == Blockly.ASTNode.types.STACK)) {
     cursorLoc = /** @type {!Blockly.BlockSvg} */ (cursorLoc);
     markerLoc = /** @type {!Blockly.RenderedConnection} */ (markerLoc);
     return Blockly.navigation.insertBlock(cursorLoc, markerLoc);
@@ -380,7 +384,8 @@ Blockly.navigation.modify_ = function() {
  *     moved to.
  * @private
  */
-Blockly.navigation.disconnectChild_ = function(movingConnection, destConnection) {
+Blockly.navigation.disconnectChild_ = function(
+    movingConnection, destConnection) {
   var movingBlock = movingConnection.getSourceBlock();
   var destBlock = destConnection.getSourceBlock();
 
@@ -403,7 +408,8 @@ Blockly.navigation.disconnectChild_ = function(movingConnection, destConnection)
  * @return {boolean} True if the connections were connected, false otherwise.
  * @private
  */
-Blockly.navigation.moveAndConnect_ = function(movingConnection, destConnection) {
+Blockly.navigation.moveAndConnect_ = function(
+    movingConnection, destConnection) {
   if (!movingConnection || !destConnection) {
     return false;
   }
@@ -411,7 +417,6 @@ Blockly.navigation.moveAndConnect_ = function(movingConnection, destConnection) 
 
   if (destConnection.canConnectWithReason(movingConnection) ==
       Blockly.Connection.CAN_CONNECT) {
-
     Blockly.navigation.disconnectChild_(movingConnection, destConnection);
 
     if (!destConnection.isSuperior()) {
@@ -467,8 +472,8 @@ Blockly.navigation.getSuperiorConnection_ = function(connection) {
 /**
  * Tries to connect the  given connections.
  *
- * If the given connections are not compatible try finding compatible connections
- * on the source blocks of the given connections.
+ * If the given connections are not compatible try finding compatible
+ * connections on the source blocks of the given connections.
  *
  * @param {Blockly.RenderedConnection} movingConnection The connection that is
  *     being moved.
@@ -483,26 +488,29 @@ Blockly.navigation.connect_ = function(movingConnection, destConnection) {
     return false;
   }
 
-  var movingInferior = Blockly.navigation.getInferiorConnection_(movingConnection);
+  var movingInferior =
+      Blockly.navigation.getInferiorConnection_(movingConnection);
   var destSuperior = Blockly.navigation.getSuperiorConnection_(destConnection);
 
-  var movingSuperior = Blockly.navigation.getSuperiorConnection_(movingConnection);
+  var movingSuperior =
+      Blockly.navigation.getSuperiorConnection_(movingConnection);
   var destInferior = Blockly.navigation.getInferiorConnection_(destConnection);
 
   if (movingInferior && destSuperior &&
       Blockly.navigation.moveAndConnect_(movingInferior, destSuperior)) {
     return true;
-  // Try swapping the inferior and superior connections on the blocks.
-  } else if (movingSuperior && destInferior &&
+    // Try swapping the inferior and superior connections on the blocks.
+  } else if (
+      movingSuperior && destInferior &&
       Blockly.navigation.moveAndConnect_(movingSuperior, destInferior)) {
     return true;
-  } else if (Blockly.navigation.moveAndConnect_(movingConnection, destConnection)){
+  } else if (Blockly.navigation.moveAndConnect_(
+                 movingConnection, destConnection)) {
     return true;
   } else {
     try {
       destConnection.checkConnection(movingConnection);
-    }
-    catch (e) {
+    } catch (e) {
       // If nothing worked report the error from the original connections.
       Blockly.navigation.warn_('Connection failed with error: ' + e);
     }
@@ -526,7 +534,8 @@ Blockly.navigation.insertBlock = function(block, destConnection) {
       }
       break;
     case Blockly.NEXT_STATEMENT:
-      if (Blockly.navigation.connect_(block.previousConnection, destConnection)) {
+      if (Blockly.navigation.connect_(
+              block.previousConnection, destConnection)) {
         return true;
       }
       break;
@@ -538,21 +547,22 @@ Blockly.navigation.insertBlock = function(block, destConnection) {
     case Blockly.OUTPUT_VALUE:
       for (var i = 0; i < block.inputList.length; i++) {
         var inputConnection = /** @type {Blockly.RenderedConnection} */ (
-          block.inputList[i].connection);
+            block.inputList[i].connection);
         if (inputConnection && inputConnection.type === Blockly.INPUT_VALUE &&
             Blockly.navigation.connect_(inputConnection, destConnection)) {
           return true;
         }
       }
-      // If there are no input values pass the output and destination connections
-      // to connect_ to find a way to connect the two.
+      // If there are no input values pass the output and destination
+      // connections to connect_ to find a way to connect the two.
       if (block.outputConnection &&
           Blockly.navigation.connect_(block.outputConnection, destConnection)) {
         return true;
       }
       break;
   }
-  Blockly.navigation.warn_('This block can not be inserted at the marked location.');
+  Blockly.navigation.warn_(
+      'This block can not be inserted at the marked location.');
   return false;
 };
 
@@ -566,20 +576,23 @@ Blockly.navigation.disconnectBlocks_ = function() {
   var workspace = Blockly.navigation.getNavigationWorkspace();
   var curNode = workspace.getCursor().getCurNode();
   if (!curNode.isConnection()) {
-    Blockly.navigation.log_('Cannot disconnect blocks when the cursor is not on a connection');
+    Blockly.navigation.log_(
+        'Cannot disconnect blocks when the cursor is not on a connection');
     return;
   }
   var curConnection =
-    /** @type {!Blockly.RenderedConnection} */ (curNode.getLocation());
+      /** @type {!Blockly.RenderedConnection} */ (curNode.getLocation());
   if (!curConnection.isConnected()) {
     Blockly.navigation.log_('Cannot disconnect unconnected connection');
     return;
   }
-  var superiorConnection =
-      curConnection.isSuperior() ? curConnection : curConnection.targetConnection;
+  var superiorConnection = curConnection.isSuperior() ?
+      curConnection :
+      curConnection.targetConnection;
 
-  var inferiorConnection =
-      curConnection.isSuperior() ? curConnection.targetConnection : curConnection;
+  var inferiorConnection = curConnection.isSuperior() ?
+      curConnection.targetConnection :
+      curConnection;
 
   if (inferiorConnection.getSourceBlock().isShadow()) {
     Blockly.navigation.log_('Cannot disconnect a shadow block');
@@ -646,19 +659,19 @@ Blockly.navigation.moveCursorOnBlockDelete = function(deletedBlock) {
       if (block.getParent()) {
         var topConnection = block.previousConnection || block.outputConnection;
         if (topConnection) {
-          cursor.setCurNode(
-              Blockly.ASTNode.createConnectionNode(topConnection.targetConnection));
+          cursor.setCurNode(Blockly.ASTNode.createConnectionNode(
+              topConnection.targetConnection));
         }
       } else {
         // If the block is by itself move the cursor to the workspace.
-        cursor.setCurNode(Blockly.ASTNode.createWorkspaceNode(block.workspace,
-            block.getRelativeToSurfaceXY()));
+        cursor.setCurNode(Blockly.ASTNode.createWorkspaceNode(
+            block.workspace, block.getRelativeToSurfaceXY()));
       }
-    // If the cursor is on a block whose parent is being deleted, move the
-    // cursor to the workspace.
+      // If the cursor is on a block whose parent is being deleted, move the
+      // cursor to the workspace.
     } else if (block && deletedBlock.getChildren(false).indexOf(block) > -1) {
-      cursor.setCurNode(Blockly.ASTNode.createWorkspaceNode(block.workspace,
-          block.getRelativeToSurfaceXY()));
+      cursor.setCurNode(Blockly.ASTNode.createWorkspaceNode(
+          block.workspace, block.getRelativeToSurfaceXY()));
     }
   }
 };
@@ -782,12 +795,13 @@ Blockly.navigation.onBlocklyAction = function(action) {
   if (workspace.keyboardAccessibilityMode) {
     if (!readOnly) {
       actionHandled = Blockly.navigation.handleActions_(action);
-    // If in readonly mode only handle valid actions.
+      // If in readonly mode only handle valid actions.
     } else if (Blockly.navigation.READONLY_ACTION_LIST.indexOf(action) > -1) {
       actionHandled = Blockly.navigation.handleActions_(action);
     }
-  // If not in accessibility mode only handle turning on keyboard navigation.
-  } else if (action.name === Blockly.navigation.actionNames.TOGGLE_KEYBOARD_NAV) {
+    // If not in accessibility mode only handle turning on keyboard navigation.
+  } else if (
+      action.name === Blockly.navigation.actionNames.TOGGLE_KEYBOARD_NAV) {
     Blockly.navigation.enableKeyboardAccessibility();
     actionHandled = true;
   }
@@ -802,14 +816,17 @@ Blockly.navigation.onBlocklyAction = function(action) {
  */
 Blockly.navigation.handleActions_ = function(action) {
   if (action.name == Blockly.navigation.actionNames.TOOLBOX ||
-    Blockly.navigation.currentState_ == Blockly.navigation.STATE_TOOLBOX) {
+      Blockly.navigation.currentState_ == Blockly.navigation.STATE_TOOLBOX) {
     return Blockly.navigation.toolboxOnAction_(action);
-  } else if (action.name == Blockly.navigation.actionNames.TOGGLE_KEYBOARD_NAV) {
+  } else if (
+      action.name == Blockly.navigation.actionNames.TOGGLE_KEYBOARD_NAV) {
     Blockly.navigation.disableKeyboardAccessibility();
     return true;
-  } if (Blockly.navigation.currentState_ == Blockly.navigation.STATE_WS) {
+  }
+  if (Blockly.navigation.currentState_ == Blockly.navigation.STATE_WS) {
     return Blockly.navigation.workspaceOnAction_(action);
-  } else if (Blockly.navigation.currentState_ == Blockly.navigation.STATE_FLYOUT) {
+  } else if (
+      Blockly.navigation.currentState_ == Blockly.navigation.STATE_FLYOUT) {
     return Blockly.navigation.flyoutOnAction_(action);
   }
   return false;
@@ -855,7 +872,8 @@ Blockly.navigation.toolboxOnAction_ = function(action) {
   var workspace = Blockly.navigation.getNavigationWorkspace();
   var toolbox = workspace.getToolbox();
   var handled = toolbox && typeof toolbox.onBlocklyAction == 'function' ?
-      toolbox.onBlocklyAction(action) : false;
+      toolbox.onBlocklyAction(action) :
+      false;
 
   if (handled) {
     return true;
@@ -946,9 +964,9 @@ Blockly.navigation.handleEnterForWS_ = function() {
   var curNode = cursor.getCurNode();
   var nodeType = curNode.getType();
   if (nodeType == Blockly.ASTNode.types.FIELD) {
-    (/** @type {!Blockly.Field} */(curNode.getLocation())).showEditor();
-  } else if (curNode.isConnection() ||
-      nodeType == Blockly.ASTNode.types.WORKSPACE) {
+    (/** @type {!Blockly.Field} */ (curNode.getLocation())).showEditor();
+  } else if (
+      curNode.isConnection() || nodeType == Blockly.ASTNode.types.WORKSPACE) {
     Blockly.navigation.markAtCursor_();
   } else if (nodeType == Blockly.ASTNode.types.BLOCK) {
     Blockly.navigation.warn_('Cannot mark a block.');
@@ -1075,9 +1093,7 @@ Blockly.navigation.ACTION_MOVE_WS_CURSOR_DOWN = new Blockly.Action(
  * @type {!Array.<!Blockly.Action>}
  */
 Blockly.navigation.READONLY_ACTION_LIST = [
-  Blockly.navigation.ACTION_PREVIOUS,
-  Blockly.navigation.ACTION_OUT,
-  Blockly.navigation.ACTION_IN,
-  Blockly.navigation.ACTION_NEXT,
+  Blockly.navigation.ACTION_PREVIOUS, Blockly.navigation.ACTION_OUT,
+  Blockly.navigation.ACTION_IN, Blockly.navigation.ACTION_NEXT,
   Blockly.navigation.ACTION_TOGGLE_KEYBOARD_NAV
 ];

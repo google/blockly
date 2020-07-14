@@ -90,22 +90,23 @@ Blockly.utils.object.inherits(Blockly.Comment, Blockly.Icon);
  */
 Blockly.Comment.prototype.drawIcon_ = function(group) {
   // Circle.
-  Blockly.utils.dom.createSvgElement('circle',
-      {'class': 'blocklyIconShape', 'r': '8', 'cx': '8', 'cy': '8'},
+  Blockly.utils.dom.createSvgElement(
+      'circle', {'class': 'blocklyIconShape', 'r': '8', 'cx': '8', 'cy': '8'},
       group);
   // Can't use a real '?' text character since different browsers and operating
   // systems render it differently.
   // Body of question mark.
-  Blockly.utils.dom.createSvgElement('path',
-      {
+  Blockly.utils.dom.createSvgElement(
+      'path', {
         'class': 'blocklyIconSymbol',
         'd': 'm6.8,10h2c0.003,-0.617 0.271,-0.962 0.633,-1.266 2.875,-2.405' +
-          '0.607,-5.534 -3.765,-3.874v1.7c3.12,-1.657 3.698,0.118 2.336,1.25' +
-          '-1.201,0.998 -1.201,1.528 -1.204,2.19z'},
+            '0.607,-5.534 -3.765,-3.874v1.7c3.12,-1.657 3.698,0.118 2.336,1.25' +
+            '-1.201,0.998 -1.201,1.528 -1.204,2.19z'
+      },
       group);
   // Dot of question mark.
-  Blockly.utils.dom.createSvgElement('rect',
-      {
+  Blockly.utils.dom.createSvgElement(
+      'rect', {
         'class': 'blocklyIconSymbol',
         'x': '6.8',
         'y': '10.78',
@@ -133,7 +134,8 @@ Blockly.Comment.prototype.createEditor_ = function() {
    * For non-editable mode see Warning.textToDom_.
    */
 
-  this.foreignObject_ = Blockly.utils.dom.createSvgElement('foreignObject',
+  this.foreignObject_ = Blockly.utils.dom.createSvgElement(
+      'foreignObject',
       {'x': Blockly.Bubble.BORDER_WIDTH, 'y': Blockly.Bubble.BORDER_WIDTH},
       null);
 
@@ -141,8 +143,8 @@ Blockly.Comment.prototype.createEditor_ = function() {
   body.setAttribute('xmlns', Blockly.utils.dom.HTML_NS);
   body.className = 'blocklyMinimalBody';
 
-  this.textarea_ = document.createElementNS(
-      Blockly.utils.dom.HTML_NS, 'textarea');
+  this.textarea_ =
+      document.createElementNS(Blockly.utils.dom.HTML_NS, 'textarea');
   var textarea = this.textarea_;
   textarea.className = 'blocklyCommentTextarea';
   textarea.setAttribute('dir', this.block_.RTL ? 'RTL' : 'LTR');
@@ -158,19 +160,20 @@ Blockly.Comment.prototype.createEditor_ = function() {
   this.onMouseUpWrapper_ = Blockly.bindEventWithChecks_(
       textarea, 'mouseup', this, this.startEdit_, true, true);
   // Don't zoom with mousewheel.
-  this.onWheelWrapper_ = Blockly.bindEventWithChecks_(
-      textarea, 'wheel', this, function(e) {
+  this.onWheelWrapper_ =
+      Blockly.bindEventWithChecks_(textarea, 'wheel', this, function(e) {
         e.stopPropagation();
       });
-  this.onChangeWrapper_ = Blockly.bindEventWithChecks_(
-      textarea, 'change', this, function(_e) {
+  this.onChangeWrapper_ =
+      Blockly.bindEventWithChecks_(textarea, 'change', this, function(_e) {
         if (this.cachedText_ != this.model_.text) {
           Blockly.Events.fire(new Blockly.Events.BlockChange(
-              this.block_, 'comment', null, this.cachedText_, this.model_.text));
+              this.block_, 'comment', null, this.cachedText_,
+              this.model_.text));
         }
       });
-  this.onInputWrapper_ = Blockly.bindEventWithChecks_(
-      textarea, 'input', this, function(_e) {
+  this.onInputWrapper_ =
+      Blockly.bindEventWithChecks_(textarea, 'input', this, function(_e) {
         this.model_.text = textarea.value;
       });
 
@@ -409,15 +412,8 @@ Blockly.Comment.prototype.dispose = function() {
  */
 Blockly.Css.register([
   /* eslint-disable indent */
-  '.blocklyCommentTextarea {',
-    'background-color: #fef49c;',
-    'border: 0;',
-    'outline: 0;',
-    'margin: 0;',
-    'padding: 3px;',
-    'resize: none;',
-    'display: block;',
-    'overflow: hidden;',
-  '}'
+  '.blocklyCommentTextarea {', 'background-color: #fef49c;', 'border: 0;',
+  'outline: 0;', 'margin: 0;', 'padding: 3px;', 'resize: none;',
+  'display: block;', 'overflow: hidden;', '}'
   /* eslint-enable indent */
 ]);

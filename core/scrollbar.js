@@ -37,8 +37,7 @@ Blockly.ScrollbarPair = function(workspace) {
   this.vScroll = new Blockly.Scrollbar(
       workspace, false, true, 'blocklyMainWorkspaceScrollbar');
   this.corner_ = Blockly.utils.dom.createSvgElement(
-      'rect',
-      {
+      'rect', {
         'height': Blockly.Scrollbar.scrollbarThickness,
         'width': Blockly.Scrollbar.scrollbarThickness,
         'class': 'blocklyScrollbarBackground'
@@ -231,8 +230,8 @@ Blockly.Scrollbar = function(workspace, horizontal, opt_pair, opt_class) {
   var scrollbar = this;
   this.onMouseDownBarWrapper_ = Blockly.bindEventWithChecks_(
       this.svgBackground_, 'mousedown', scrollbar, scrollbar.onMouseDownBar_);
-  this.onMouseDownHandleWrapper_ = Blockly.bindEventWithChecks_(this.svgHandle_,
-      'mousedown', scrollbar, scrollbar.onMouseDownHandle_);
+  this.onMouseDownHandleWrapper_ = Blockly.bindEventWithChecks_(
+      this.svgHandle_, 'mousedown', scrollbar, scrollbar.onMouseDownHandle_);
 };
 
 /**
@@ -316,8 +315,7 @@ Blockly.Scrollbar.metricsAreEquivalent_ = function(first, second) {
 
   if (first.viewWidth != second.viewWidth ||
       first.viewHeight != second.viewHeight ||
-      first.viewLeft != second.viewLeft ||
-      first.viewTop != second.viewTop ||
+      first.viewLeft != second.viewLeft || first.viewTop != second.viewTop ||
       first.absoluteTop != second.absoluteTop ||
       first.absoluteLeft != second.absoluteLeft ||
       first.contentWidth != second.contentWidth ||
@@ -428,8 +426,8 @@ Blockly.Scrollbar.prototype.resize = function(opt_metrics) {
     }
   }
 
-  if (Blockly.Scrollbar.metricsAreEquivalent_(hostMetrics,
-      this.oldHostMetrics_)) {
+  if (Blockly.Scrollbar.metricsAreEquivalent_(
+          hostMetrics, this.oldHostMetrics_)) {
     return;
   }
   this.oldHostMetrics_ = hostMetrics;
@@ -511,16 +509,15 @@ Blockly.Scrollbar.prototype.resizeContentHorizontal = function(hostMetrics) {
   }
 
   this.ratio = this.scrollViewSize_ / hostMetrics.contentWidth;
-  if (this.ratio == -Infinity || this.ratio == Infinity ||
-      isNaN(this.ratio)) {
+  if (this.ratio == -Infinity || this.ratio == Infinity || isNaN(this.ratio)) {
     this.ratio = 0;
   }
 
   var handleLength = hostMetrics.viewWidth * this.ratio;
   this.setHandleLength_(Math.max(0, handleLength));
 
-  var handlePosition = (hostMetrics.viewLeft - hostMetrics.contentLeft) *
-      this.ratio;
+  var handlePosition =
+      (hostMetrics.viewLeft - hostMetrics.contentLeft) * this.ratio;
   this.setHandlePosition(this.constrainHandle_(handlePosition));
 };
 
@@ -552,8 +549,8 @@ Blockly.Scrollbar.prototype.resizeViewVertical = function(hostMetrics) {
 
   var xCoordinate = hostMetrics.absoluteLeft + 0.5;
   if (!this.workspace_.RTL) {
-    xCoordinate += hostMetrics.viewWidth -
-        Blockly.Scrollbar.scrollbarThickness - 1;
+    xCoordinate +=
+        hostMetrics.viewWidth - Blockly.Scrollbar.scrollbarThickness - 1;
   }
   var yCoordinate = hostMetrics.absoluteTop + 0.5;
   this.setPosition(xCoordinate, yCoordinate);
@@ -576,16 +573,15 @@ Blockly.Scrollbar.prototype.resizeContentVertical = function(hostMetrics) {
   }
 
   this.ratio = this.scrollViewSize_ / hostMetrics.contentHeight;
-  if (this.ratio == -Infinity || this.ratio == Infinity ||
-      isNaN(this.ratio)) {
+  if (this.ratio == -Infinity || this.ratio == Infinity || isNaN(this.ratio)) {
     this.ratio = 0;
   }
 
   var handleLength = hostMetrics.viewHeight * this.ratio;
   this.setHandleLength_(Math.max(0, handleLength));
 
-  var handlePosition = (hostMetrics.viewTop - hostMetrics.contentTop) *
-      this.ratio;
+  var handlePosition =
+      (hostMetrics.viewTop - hostMetrics.contentTop) * this.ratio;
   this.setHandlePosition(this.constrainHandle_(handlePosition));
 };
 
@@ -604,31 +600,25 @@ Blockly.Scrollbar.prototype.createDom_ = function(opt_class) {
     </g>
   </svg>
   */
-  var className = 'blocklyScrollbar' +
-      (this.horizontal_ ? 'Horizontal' : 'Vertical');
+  var className =
+      'blocklyScrollbar' + (this.horizontal_ ? 'Horizontal' : 'Vertical');
   if (opt_class) {
     className += ' ' + opt_class;
   }
-  this.outerSvg_ = Blockly.utils.dom.createSvgElement(
-      'svg', {'class': className}, null);
+  this.outerSvg_ =
+      Blockly.utils.dom.createSvgElement('svg', {'class': className}, null);
   this.svgGroup_ = Blockly.utils.dom.createSvgElement('g', {}, this.outerSvg_);
   this.svgBackground_ = Blockly.utils.dom.createSvgElement(
       'rect', {'class': 'blocklyScrollbarBackground'}, this.svgGroup_);
   var radius = Math.floor((Blockly.Scrollbar.scrollbarThickness - 5) / 2);
   this.svgHandle_ = Blockly.utils.dom.createSvgElement(
-      'rect',
-      {
-        'class': 'blocklyScrollbarHandle',
-        'rx': radius,
-        'ry': radius
-      },
+      'rect', {'class': 'blocklyScrollbarHandle', 'rx': radius, 'ry': radius},
       this.svgGroup_);
   this.workspace_.getThemeManager().subscribe(
       this.svgHandle_, 'scrollbarColour', 'fill');
   this.workspace_.getThemeManager().subscribe(
       this.svgHandle_, 'scrollbarOpacity', 'fill-opacity');
-  Blockly.utils.dom.insertAfter(this.outerSvg_,
-      this.workspace_.getParentSvg());
+  Blockly.utils.dom.insertAfter(this.outerSvg_, this.workspace_.getParentSvg());
 };
 
 /**
@@ -710,9 +700,8 @@ Blockly.Scrollbar.prototype.onMouseDownBar_ = function(e) {
     e.stopPropagation();
     return;
   }
-  var mouseXY = Blockly.utils.mouseToSvg(e,
-      this.workspace_.getParentSvg(),
-      this.workspace_.getInverseScreenCTM());
+  var mouseXY = Blockly.utils.mouseToSvg(
+      e, this.workspace_.getParentSvg(), this.workspace_.getInverseScreenCTM());
   var mouseLocation = this.horizontal_ ? mouseXY.x : mouseXY.y;
 
   var handleXY = Blockly.utils.getInjectionDivXY_(this.svgHandle_);
@@ -760,10 +749,10 @@ Blockly.Scrollbar.prototype.onMouseDownHandle_ = function(e) {
 
   // Record the current mouse position.
   this.startDragMouse_ = this.horizontal_ ? e.clientX : e.clientY;
-  Blockly.Scrollbar.onMouseUpWrapper_ = Blockly.bindEventWithChecks_(document,
-      'mouseup', this, this.onMouseUpHandle_);
-  Blockly.Scrollbar.onMouseMoveWrapper_ = Blockly.bindEventWithChecks_(document,
-      'mousemove', this, this.onMouseMoveHandle_);
+  Blockly.Scrollbar.onMouseUpWrapper_ = Blockly.bindEventWithChecks_(
+      document, 'mouseup', this, this.onMouseUpHandle_);
+  Blockly.Scrollbar.onMouseMoveWrapper_ = Blockly.bindEventWithChecks_(
+      document, 'mousemove', this, this.onMouseMoveHandle_);
   e.stopPropagation();
   e.preventDefault();
 };

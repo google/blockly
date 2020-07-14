@@ -43,8 +43,8 @@ Blockly.blockRendering.Icon = function(constants, icon) {
   this.height = size.height;
   this.width = size.width;
 };
-Blockly.utils.object.inherits(Blockly.blockRendering.Icon,
-    Blockly.blockRendering.Measurable);
+Blockly.utils.object.inherits(
+    Blockly.blockRendering.Icon, Blockly.blockRendering.Measurable);
 
 /**
  * An object containing information about the jagged edge of a collapsed block
@@ -62,8 +62,8 @@ Blockly.blockRendering.JaggedEdge = function(constants) {
   this.height = this.constants_.JAGGED_TEETH.height;
   this.width = this.constants_.JAGGED_TEETH.width;
 };
-Blockly.utils.object.inherits(Blockly.blockRendering.JaggedEdge,
-    Blockly.blockRendering.Measurable);
+Blockly.utils.object.inherits(
+    Blockly.blockRendering.JaggedEdge, Blockly.blockRendering.Measurable);
 
 
 /**
@@ -89,8 +89,8 @@ Blockly.blockRendering.Field = function(constants, field, parentInput) {
   this.width = size.width;
   this.parentInput = parentInput;
 };
-Blockly.utils.object.inherits(Blockly.blockRendering.Field,
-    Blockly.blockRendering.Measurable);
+Blockly.utils.object.inherits(
+    Blockly.blockRendering.Field, Blockly.blockRendering.Measurable);
 
 /**
  * An object containing information about the space a hat takes up during
@@ -107,10 +107,9 @@ Blockly.blockRendering.Hat = function(constants) {
   this.height = this.constants_.START_HAT.height;
   this.width = this.constants_.START_HAT.width;
   this.ascenderHeight = this.height;
-
 };
-Blockly.utils.object.inherits(Blockly.blockRendering.Hat,
-    Blockly.blockRendering.Measurable);
+Blockly.utils.object.inherits(
+    Blockly.blockRendering.Hat, Blockly.blockRendering.Measurable);
 
 /**
  * An object containing information about the space a square corner takes up
@@ -123,18 +122,17 @@ Blockly.utils.object.inherits(Blockly.blockRendering.Hat,
  * @extends {Blockly.blockRendering.Measurable}
  */
 Blockly.blockRendering.SquareCorner = function(constants, opt_position) {
-  Blockly.blockRendering.SquareCorner.superClass_.constructor.call(this,
-      constants);
+  Blockly.blockRendering.SquareCorner.superClass_.constructor.call(
+      this, constants);
   this.type = ((!opt_position || opt_position == 'left') ?
-      Blockly.blockRendering.Types.LEFT_SQUARE_CORNER :
-      Blockly.blockRendering.Types.RIGHT_SQUARE_CORNER) |
-          Blockly.blockRendering.Types.CORNER;
+                   Blockly.blockRendering.Types.LEFT_SQUARE_CORNER :
+                   Blockly.blockRendering.Types.RIGHT_SQUARE_CORNER) |
+      Blockly.blockRendering.Types.CORNER;
   this.height = this.constants_.NO_PADDING;
   this.width = this.constants_.NO_PADDING;
-
 };
-Blockly.utils.object.inherits(Blockly.blockRendering.SquareCorner,
-    Blockly.blockRendering.Measurable);
+Blockly.utils.object.inherits(
+    Blockly.blockRendering.SquareCorner, Blockly.blockRendering.Measurable);
 
 /**
  * An object containing information about the space a rounded corner takes up
@@ -147,20 +145,19 @@ Blockly.utils.object.inherits(Blockly.blockRendering.SquareCorner,
  * @extends {Blockly.blockRendering.Measurable}
  */
 Blockly.blockRendering.RoundCorner = function(constants, opt_position) {
-  Blockly.blockRendering.RoundCorner.superClass_.constructor.call(this,
-      constants);
+  Blockly.blockRendering.RoundCorner.superClass_.constructor.call(
+      this, constants);
   this.type = ((!opt_position || opt_position == 'left') ?
-      Blockly.blockRendering.Types.LEFT_ROUND_CORNER :
-      Blockly.blockRendering.Types.RIGHT_ROUND_CORNER) |
-          Blockly.blockRendering.Types.CORNER;
+                   Blockly.blockRendering.Types.LEFT_ROUND_CORNER :
+                   Blockly.blockRendering.Types.RIGHT_ROUND_CORNER) |
+      Blockly.blockRendering.Types.CORNER;
   this.width = this.constants_.CORNER_RADIUS;
   // The rounded corner extends into the next row by 4 so we only take the
   // height that is aligned with this row.
   this.height = this.constants_.CORNER_RADIUS / 2;
-
 };
-Blockly.utils.object.inherits(Blockly.blockRendering.RoundCorner,
-    Blockly.blockRendering.Measurable);
+Blockly.utils.object.inherits(
+    Blockly.blockRendering.RoundCorner, Blockly.blockRendering.Measurable);
 
 /**
  * An object containing information about a spacer between two elements on a
@@ -173,13 +170,12 @@ Blockly.utils.object.inherits(Blockly.blockRendering.RoundCorner,
  * @extends {Blockly.blockRendering.Measurable}
  */
 Blockly.blockRendering.InRowSpacer = function(constants, width) {
-  Blockly.blockRendering.InRowSpacer.superClass_.constructor.call(this,
-      constants);
+  Blockly.blockRendering.InRowSpacer.superClass_.constructor.call(
+      this, constants);
   this.type |= Blockly.blockRendering.Types.SPACER |
       Blockly.blockRendering.Types.IN_ROW_SPACER;
   this.width = width;
   this.height = this.constants_.SPACER_DEFAULT_HEIGHT;
 };
-Blockly.utils.object.inherits(Blockly.blockRendering.InRowSpacer,
-    Blockly.blockRendering.Measurable);
-
+Blockly.utils.object.inherits(
+    Blockly.blockRendering.InRowSpacer, Blockly.blockRendering.Measurable);

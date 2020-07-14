@@ -46,10 +46,10 @@ Blockly.utils.noEvent = function(e) {
  */
 Blockly.utils.isTargetInput = function(e) {
   return e.target.type == 'textarea' || e.target.type == 'text' ||
-         e.target.type == 'number' || e.target.type == 'email' ||
-         e.target.type == 'password' || e.target.type == 'search' ||
-         e.target.type == 'tel' || e.target.type == 'url' ||
-         e.target.isContentEditable;
+      e.target.type == 'number' || e.target.type == 'email' ||
+      e.target.type == 'password' || e.target.type == 'search' ||
+      e.target.type == 'tel' || e.target.type == 'url' ||
+      e.target.isContentEditable;
 };
 
 /**
@@ -183,10 +183,7 @@ Blockly.utils.getScrollDeltaPixels = function(e) {
   switch (e.deltaMode) {
     case 0x00:  // Pixel mode.
     default:
-      return {
-        x: e.deltaX,
-        y: e.deltaY
-      };
+      return {x: e.deltaX, y: e.deltaY};
     case 0x01:  // Line mode.
       return {
         x: e.deltaX * Blockly.LINE_MODE_MULTIPLIER,
@@ -268,8 +265,8 @@ Blockly.utils.checkMessageReferences = function(message) {
  * @return {!Array.<string|number>} Array of strings and numbers.
  * @private
  */
-Blockly.utils.tokenizeInterpolation_ = function(message,
-    parseInterpolationTokens) {
+Blockly.utils.tokenizeInterpolation_ = function(
+    message, parseInterpolationTokens) {
   var tokens = [];
   var chars = message.split('');
   chars.push('');  // End marker.
@@ -324,8 +321,8 @@ Blockly.utils.tokenizeInterpolation_ = function(message,
       if (c == '') {
         // Premature end before closing '}'
         buffer.splice(0, 0, '%{');  // Re-insert leading delimiter
-        i--;  // Parse this char again.
-        state = 0;  // and parse as string literal.
+        i--;                        // Parse this char again.
+        state = 0;                  // and parse as string literal.
       } else if (c != '}') {
         buffer.push(c);
       } else {
@@ -338,12 +335,14 @@ Blockly.utils.tokenizeInterpolation_ = function(message,
           // core files and the predefined blocks in ../blocks/.
           // These strings are defined in ../msgs/ files.
           var bklyKey = Blockly.utils.string.startsWith(keyUpper, 'BKY_') ?
-              keyUpper.substring(4) : null;
+              keyUpper.substring(4) :
+              null;
           if (bklyKey && bklyKey in Blockly.Msg) {
             var rawValue = Blockly.Msg[bklyKey];
             if (typeof rawValue == 'string') {
               // Attempt to dereference substrings, too, appending to the end.
-              Array.prototype.push.apply(tokens,
+              Array.prototype.push.apply(
+                  tokens,
                   Blockly.utils.tokenizeInterpolation_(
                       rawValue, parseInterpolationTokens));
             } else if (parseInterpolationTokens) {
@@ -505,11 +504,8 @@ Blockly.utils.getViewportBBox = function() {
   // Pixels, in window coordinates.
   var scrollOffset = Blockly.utils.style.getViewportPageOffset();
   return new Blockly.utils.Rect(
-      scrollOffset.y,
-      document.documentElement.clientHeight + scrollOffset.y,
-      scrollOffset.x,
-      document.documentElement.clientWidth + scrollOffset.x
-  );
+      scrollOffset.y, document.documentElement.clientHeight + scrollOffset.y,
+      scrollOffset.x, document.documentElement.clientWidth + scrollOffset.x);
 };
 
 /**
@@ -604,8 +600,8 @@ Blockly.utils.screenToWsCoordinates = function(ws, screenCoordinates) {
 
   // The position of the new comment in pixels relative to the origin of the
   // main workspace.
-  var finalOffsetPixels = Blockly.utils.Coordinate.difference(
-      clientOffsetPixels, mainOffsetPixels);
+  var finalOffsetPixels =
+      Blockly.utils.Coordinate.difference(clientOffsetPixels, mainOffsetPixels);
 
   // The position in main workspace coordinates.
   var finalOffsetMainWs = finalOffsetPixels.scale(1 / ws.scale);
@@ -623,23 +619,21 @@ Blockly.utils.screenToWsCoordinates = function(ws, screenCoordinates) {
  */
 Blockly.utils.parseBlockColour = function(colour) {
   var dereferenced = (typeof colour == 'string') ?
-      Blockly.utils.replaceMessageReferences(colour) : colour;
+      Blockly.utils.replaceMessageReferences(colour) :
+      colour;
 
   var hue = Number(dereferenced);
   if (!isNaN(hue) && 0 <= hue && hue <= 360) {
     return {
       hue: hue,
-      hex: Blockly.utils.colour.hsvToHex(hue, Blockly.HSV_SATURATION,
-          Blockly.HSV_VALUE * 255)
+      hex: Blockly.utils.colour.hsvToHex(
+          hue, Blockly.HSV_SATURATION, Blockly.HSV_VALUE * 255)
     };
   } else {
     var hex = Blockly.utils.colour.parse(dereferenced);
     if (hex) {
       // Only store hue if colour is set as a hue.
-      return {
-        hue: null,
-        hex: hex
-      };
+      return {hue: null, hex: hex};
     } else {
       var errorMsg = 'Invalid colour: "' + dereferenced + '"';
       if (colour != dereferenced) {

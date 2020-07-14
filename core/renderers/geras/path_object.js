@@ -48,8 +48,8 @@ Blockly.geras.PathObject = function(root, style, constants) {
    * @type {SVGElement}
    * @package
    */
-  this.svgPathDark = Blockly.utils.dom.createSvgElement('path',
-      {'class': 'blocklyPathDark', 'transform': 'translate(1,1)'},
+  this.svgPathDark = Blockly.utils.dom.createSvgElement(
+      'path', {'class': 'blocklyPathDark', 'transform': 'translate(1,1)'},
       this.svgRoot);
 
   /**
@@ -57,16 +57,16 @@ Blockly.geras.PathObject = function(root, style, constants) {
    * @type {!SVGElement}
    * @package
    */
-  this.svgPath = Blockly.utils.dom.createSvgElement('path',
-      {'class': 'blocklyPath'}, this.svgRoot);
+  this.svgPath = Blockly.utils.dom.createSvgElement(
+      'path', {'class': 'blocklyPath'}, this.svgRoot);
 
   /**
    * The light path of the block.
    * @type {SVGElement}
    * @package
    */
-  this.svgPathLight = Blockly.utils.dom.createSvgElement('path',
-      {'class': 'blocklyPathLight'}, this.svgRoot);
+  this.svgPathLight = Blockly.utils.dom.createSvgElement(
+      'path', {'class': 'blocklyPathLight'}, this.svgRoot);
 
   /**
    * The colour of the dark path on the block in '#RRGGBB' format.
@@ -82,8 +82,8 @@ Blockly.geras.PathObject = function(root, style, constants) {
    */
   this.style = style;
 };
-Blockly.utils.object.inherits(Blockly.geras.PathObject,
-    Blockly.blockRendering.PathObject);
+Blockly.utils.object.inherits(
+    Blockly.geras.PathObject, Blockly.blockRendering.PathObject);
 
 /**
  * @override
@@ -141,8 +141,8 @@ Blockly.geras.PathObject.prototype.setStyle = function(blockStyle) {
  */
 Blockly.geras.PathObject.prototype.updateHighlighted = function(highlighted) {
   if (highlighted) {
-    this.svgPath.setAttribute('filter',
-        'url(#' + this.constants.embossFilterId + ')');
+    this.svgPath.setAttribute(
+        'filter', 'url(#' + this.constants.embossFilterId + ')');
     this.svgPathLight.style.display = 'none';
   } else {
     this.svgPath.setAttribute('filter', 'none');

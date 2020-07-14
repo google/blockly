@@ -203,8 +203,8 @@ Blockly.ConnectionDB.prototype.isInYRange_ = function(index, baseY, maxRadius) {
 
 /**
  * Find the closest compatible connection to this connection.
- * @param {!Blockly.RenderedConnection} conn The connection searching for a compatible
- *     mate.
+ * @param {!Blockly.RenderedConnection} conn The connection searching for a
+ *     compatible mate.
  * @param {number} maxRadius The maximum radius to another connection.
  * @param {!Blockly.utils.Coordinate} dxy Offset between this connection's
  *     location in the database and the current location (as a result of
@@ -213,8 +213,8 @@ Blockly.ConnectionDB.prototype.isInYRange_ = function(index, baseY, maxRadius) {
  *     Contains two properties: 'connection' which is either another
  *     connection or null, and 'radius' which is the distance.
  */
-Blockly.ConnectionDB.prototype.searchForClosest = function(conn, maxRadius,
-    dxy) {
+Blockly.ConnectionDB.prototype.searchForClosest = function(
+    conn, maxRadius, dxy) {
   if (!this.connections_.length) {
     // Don't bother.
     return {connection: null, radius: maxRadius};
@@ -249,7 +249,7 @@ Blockly.ConnectionDB.prototype.searchForClosest = function(conn, maxRadius,
 
   var pointerMax = closestIndex;
   while (pointerMax < this.connections_.length &&
-      this.isInYRange_(pointerMax, conn.y, maxRadius)) {
+         this.isInYRange_(pointerMax, conn.y, maxRadius)) {
     temp = this.connections_[pointerMax];
     if (conn.isConnectionAllowed(temp, bestRadius)) {
       bestConnection = temp;

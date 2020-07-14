@@ -36,8 +36,8 @@ goog.require('Blockly.utils.object');
 Blockly.zelos.TopRow = function(constants) {
   Blockly.zelos.TopRow.superClass_.constructor.call(this, constants);
 };
-Blockly.utils.object.inherits(Blockly.zelos.TopRow,
-    Blockly.blockRendering.TopRow);
+Blockly.utils.object.inherits(
+    Blockly.zelos.TopRow, Blockly.blockRendering.TopRow);
 
 /**
  * @override
@@ -51,8 +51,8 @@ Blockly.zelos.TopRow.prototype.endsWithElemSpacer = function() {
  * @override
  */
 Blockly.zelos.TopRow.prototype.hasLeftSquareCorner = function(block) {
-  var hasHat = (block.hat ?
-      block.hat === 'cap' : this.constants_.ADD_START_HATS) &&
+  var hasHat =
+      (block.hat ? block.hat === 'cap' : this.constants_.ADD_START_HATS) &&
       !block.outputConnection && !block.previousConnection;
   return !!block.outputConnection || hasHat;
 };
@@ -63,7 +63,7 @@ Blockly.zelos.TopRow.prototype.hasLeftSquareCorner = function(block) {
  */
 Blockly.zelos.TopRow.prototype.hasRightSquareCorner = function(block) {
   return !!block.outputConnection && !block.statementInputCount &&
-    !block.nextConnection;
+      !block.nextConnection;
 };
 
 /**
@@ -80,8 +80,8 @@ Blockly.zelos.TopRow.prototype.hasRightSquareCorner = function(block) {
 Blockly.zelos.BottomRow = function(constants) {
   Blockly.zelos.BottomRow.superClass_.constructor.call(this, constants);
 };
-Blockly.utils.object.inherits(Blockly.zelos.BottomRow,
-    Blockly.blockRendering.BottomRow);
+Blockly.utils.object.inherits(
+    Blockly.zelos.BottomRow, Blockly.blockRendering.BottomRow);
 
 /**
  * @override
@@ -104,5 +104,5 @@ Blockly.zelos.BottomRow.prototype.hasLeftSquareCorner = function(block) {
  */
 Blockly.zelos.BottomRow.prototype.hasRightSquareCorner = function(block) {
   return !!block.outputConnection && !block.statementInputCount &&
-    !block.nextConnection;
+      !block.nextConnection;
 };

@@ -47,9 +47,7 @@ Blockly.Events.Abstract = function() {
  * @return {!Object} JSON representation.
  */
 Blockly.Events.Abstract.prototype.toJson = function() {
-  var json = {
-    'type': this.type
-  };
+  var json = {'type': this.type};
   if (this.group) {
     json['group'] = this.group;
   }
@@ -91,7 +89,8 @@ Blockly.Events.Abstract.prototype.getEventWorkspace_ = function() {
     var workspace = Blockly.Workspace.getById(this.workspaceId);
   }
   if (!workspace) {
-    throw Error('Workspace is null. Event must have been generated from real' +
+    throw Error(
+        'Workspace is null. Event must have been generated from real' +
         ' Blockly events.');
   }
   return workspace;

@@ -25,7 +25,6 @@ goog.require('Blockly.utils.userAgent');
  * @constructor
  */
 Blockly.WorkspaceAudio = function(parentWorkspace) {
-
   /**
    * The parent of the workspace this object belongs to, or null.  May be
    * checked for sounds that this object can't find.
@@ -101,9 +100,10 @@ Blockly.WorkspaceAudio.prototype.preload = function() {
     var playPromise = sound.play();
     // Edge does not return a promise, so we need to check.
     if (playPromise !== undefined) {
-      // If we don't wait for the play request to complete before calling pause()
-      // we will get an exception: (DOMException: The play() request was interrupted)
-      // See more: https://developers.google.com/web/updates/2017/06/play-request-was-interrupted
+      // If we don't wait for the play request to complete before calling
+      // pause() we will get an exception: (DOMException: The play() request was
+      // interrupted) See more:
+      // https://developers.google.com/web/updates/2017/06/play-request-was-interrupted
       playPromise.then(sound.pause).catch(function() {
         // Play without user interaction was prevented.
       });

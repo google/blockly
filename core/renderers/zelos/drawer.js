@@ -33,8 +33,8 @@ goog.requireType('Blockly.zelos.PathObject');
 Blockly.zelos.Drawer = function(block, info) {
   Blockly.zelos.Drawer.superClass_.constructor.call(this, block, info);
 };
-Blockly.utils.object.inherits(Blockly.zelos.Drawer,
-    Blockly.blockRendering.Drawer);
+Blockly.utils.object.inherits(
+    Blockly.zelos.Drawer, Blockly.blockRendering.Drawer);
 
 
 /**
@@ -42,7 +42,7 @@ Blockly.utils.object.inherits(Blockly.zelos.Drawer,
  */
 Blockly.zelos.Drawer.prototype.draw = function() {
   var pathObject =
-    /** @type {!Blockly.zelos.PathObject} */ (this.block_.pathObject);
+      /** @type {!Blockly.zelos.PathObject} */ (this.block_.pathObject);
   pathObject.beginDrawing();
   this.hideHiddenIcons_();
   this.drawOutline_();
@@ -106,16 +106,16 @@ Blockly.zelos.Drawer.prototype.drawRightSideRow_ = function(row) {
   }
   if (row.precedesStatement || row.followsStatement) {
     var cornerHeight = this.constants_.INSIDE_CORNERS.rightHeight;
-    var remainingHeight = row.height -
-        (row.precedesStatement ? cornerHeight : 0);
+    var remainingHeight =
+        row.height - (row.precedesStatement ? cornerHeight : 0);
     this.outlinePath_ +=
-        (row.followsStatement ?
-            this.constants_.INSIDE_CORNERS.pathBottomRight : '') +
-        (remainingHeight > 0 ?
-            Blockly.utils.svgPaths
-                .lineOnAxis('V', row.yPos + remainingHeight) : '') +
-        (row.precedesStatement ?
-            this.constants_.INSIDE_CORNERS.pathTopRight : '');
+        (row.followsStatement ? this.constants_.INSIDE_CORNERS.pathBottomRight :
+                                '') +
+        (remainingHeight > 0 ? Blockly.utils.svgPaths.lineOnAxis(
+                                   'V', row.yPos + remainingHeight) :
+                               '') +
+        (row.precedesStatement ? this.constants_.INSIDE_CORNERS.pathTopRight :
+                                 '');
   } else {
     this.outlinePath_ +=
         Blockly.utils.svgPaths.lineOnAxis('V', row.yPos + row.height);
@@ -169,7 +169,7 @@ Blockly.zelos.Drawer.prototype.drawFlatBottom_ = function() {
   this.positionNextConnection_();
 
   this.outlinePath_ +=
-    Blockly.utils.svgPaths.lineOnAxis('V', bottomRow.baseline);
+      Blockly.utils.svgPaths.lineOnAxis('V', bottomRow.baseline);
 
   this.outlinePath_ += Blockly.utils.svgPaths.lineOnAxis('h', -bottomRow.width);
 };
@@ -195,8 +195,7 @@ Blockly.zelos.Drawer.prototype.drawInlineInput_ = function(input) {
       Blockly.utils.svgPaths.lineOnAxis('h', width) +
       input.shape.pathRightDown(input.height) +
       Blockly.utils.svgPaths.lineOnAxis('h', -width) +
-      input.shape.pathUp(input.height) +
-      'z';
+      input.shape.pathUp(input.height) + 'z';
   this.block_.pathObject.setOutlinePath(inputName, outlinePath);
 };
 
@@ -208,24 +207,20 @@ Blockly.zelos.Drawer.prototype.drawStatementInput_ = function(row) {
   // Where to start drawing the notch, which is on the right side in LTR.
   var x = input.xPos + input.notchOffset + input.shape.width;
 
-  var innerTopLeftCorner =
-      input.shape.pathRight +
-      Blockly.utils.svgPaths.lineOnAxis('h',
-          -(input.notchOffset - this.constants_.INSIDE_CORNERS.width)) +
+  var innerTopLeftCorner = input.shape.pathRight +
+      Blockly.utils.svgPaths.lineOnAxis(
+          'h', -(input.notchOffset - this.constants_.INSIDE_CORNERS.width)) +
       this.constants_.INSIDE_CORNERS.pathTop;
 
-  var innerHeight =
-      row.height - (2 * this.constants_.INSIDE_CORNERS.height);
+  var innerHeight = row.height - (2 * this.constants_.INSIDE_CORNERS.height);
 
-  var innerBottomLeftCorner =
-    this.constants_.INSIDE_CORNERS.pathBottom +
-    Blockly.utils.svgPaths.lineOnAxis('h',
-        (input.notchOffset - this.constants_.INSIDE_CORNERS.width)) +
-    (input.connectedBottomNextConnection ? '' : input.shape.pathLeft);
+  var innerBottomLeftCorner = this.constants_.INSIDE_CORNERS.pathBottom +
+      Blockly.utils.svgPaths.lineOnAxis(
+          'h', (input.notchOffset - this.constants_.INSIDE_CORNERS.width)) +
+      (input.connectedBottomNextConnection ? '' : input.shape.pathLeft);
 
   this.outlinePath_ += Blockly.utils.svgPaths.lineOnAxis('H', x) +
-      innerTopLeftCorner +
-      Blockly.utils.svgPaths.lineOnAxis('v', innerHeight) +
+      innerTopLeftCorner + Blockly.utils.svgPaths.lineOnAxis('v', innerHeight) +
       innerBottomLeftCorner +
       Blockly.utils.svgPaths.lineOnAxis('H', row.xPos + row.width);
 

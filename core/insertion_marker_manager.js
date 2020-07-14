@@ -165,7 +165,8 @@ Blockly.InsertionMarkerManager.prototype.dispose = function() {
  * change if a block is unplugged and the stack is healed.
  * @package
  */
-Blockly.InsertionMarkerManager.prototype.updateAvailableConnections = function() {
+Blockly.InsertionMarkerManager.prototype.updateAvailableConnections =
+    function() {
   this.availableConnections_ = this.initAvailableConnections_();
 };
 
@@ -207,7 +208,8 @@ Blockly.InsertionMarkerManager.prototype.applyConnections = function() {
       // Trigger a connection animation.
       // Determine which connection is inferior (lower in the source stack).
       var inferiorConnection = this.localConnection_.isSuperior() ?
-          this.closestConnection_ : this.localConnection_;
+          this.closestConnection_ :
+          this.localConnection_;
       Blockly.blockAnimations.connectionUiEffect(
           inferiorConnection.getSourceBlock());
       // Bring the just-edited stack to the front.
@@ -229,8 +231,8 @@ Blockly.InsertionMarkerManager.prototype.update = function(dxy, deleteArea) {
   var candidate = this.getCandidate_(dxy);
 
   this.wouldDeleteBlock_ = this.shouldDelete_(candidate, deleteArea);
-  var shouldUpdate = this.wouldDeleteBlock_ ||
-      this.shouldUpdatePreviews_(candidate, dxy);
+  var shouldUpdate =
+      this.wouldDeleteBlock_ || this.shouldUpdatePreviews_(candidate, dxy);
 
   if (shouldUpdate) {
     // Don't fire events for insertion marker creation or movement.
@@ -249,7 +251,8 @@ Blockly.InsertionMarkerManager.prototype.update = function(dxy, deleteArea) {
  *     block.
  * @private
  */
-Blockly.InsertionMarkerManager.prototype.createMarkerBlock_ = function(sourceBlock) {
+Blockly.InsertionMarkerManager.prototype.createMarkerBlock_ = function(
+    sourceBlock) {
   var imType = sourceBlock.type;
 
   Blockly.Events.disable();
@@ -299,7 +302,8 @@ Blockly.InsertionMarkerManager.prototype.createMarkerBlock_ = function(sourceBlo
  *     connections.
  * @private
  */
-Blockly.InsertionMarkerManager.prototype.initAvailableConnections_ = function() {
+Blockly.InsertionMarkerManager.prototype.initAvailableConnections_ =
+    function() {
   var available = this.topBlock_.getConnections_(false);
   // Also check the last connection on this stack
   var lastOnStack = this.topBlock_.lastConnectionInStack();
@@ -341,20 +345,23 @@ Blockly.InsertionMarkerManager.prototype.shouldUpdatePreviews_ = function(
       var yDiff = this.localConnection_.y + dxy.y - this.closestConnection_.y;
       var curDistance = Math.sqrt(xDiff * xDiff + yDiff * yDiff);
       // Slightly prefer the existing preview over a new preview.
-      return !(candidateClosest && radius > curDistance -
-          Blockly.CURRENT_CONNECTION_PREFERENCE);
+      return !(
+          candidateClosest &&
+          radius > curDistance - Blockly.CURRENT_CONNECTION_PREFERENCE);
     } else if (!this.localConnection_ && !this.closestConnection_) {
-    // We weren't showing a preview before, but we should now.
+      // We weren't showing a preview before, but we should now.
       return true;
     } else {
-      console.error('Only one of localConnection_ and closestConnection_ was set.');
+      console.error(
+          'Only one of localConnection_ and closestConnection_ was set.');
     }
-  } else { // No connection found.
+  } else {  // No connection found.
     // Only need to update if we were showing a preview before.
     return !!(this.localConnection_ && this.closestConnection_);
   }
 
-  console.error('Returning true from shouldUpdatePreviews, but it\'s not clear why.');
+  console.error(
+      'Returning true from shouldUpdatePreviews, but it\'s not clear why.');
   return true;
 };
 
@@ -381,11 +388,7 @@ Blockly.InsertionMarkerManager.prototype.getCandidate_ = function(dxy) {
       radius = neighbour.radius;
     }
   }
-  return {
-    closest: candidateClosest,
-    local: candidateLocal,
-    radius: radius
-  };
+  return {closest: candidateClosest, local: candidateLocal, radius: radius};
 };
 
 /**
@@ -397,10 +400,10 @@ Blockly.InsertionMarkerManager.prototype.getCandidate_ = function(dxy) {
 Blockly.InsertionMarkerManager.prototype.getStartRadius_ = function() {
   // If there is already a connection highlighted,
   // increase the radius we check for making new connections.
-  // Why? When a connection is highlighted, blocks move around when the insertion
-  // marker is created, which could cause the connection became out of range.
-  // By increasing radiusConnection when a connection already exists,
-  // we never "lose" the connection from the offset.
+  // Why? When a connection is highlighted, blocks move around when the
+  // insertion marker is created, which could cause the connection became out of
+  // range. By increasing radiusConnection when a connection already exists, we
+  // never "lose" the connection from the offset.
   if (this.closestConnection_ && this.localConnection_) {
     return Blockly.CONNECTING_SNAP_RADIUS;
   }
@@ -417,8 +420,8 @@ Blockly.InsertionMarkerManager.prototype.getStartRadius_ = function() {
  *     delete the block.  False otherwise.
  * @private
  */
-Blockly.InsertionMarkerManager.prototype.shouldDelete_ = function(candidate,
-    deleteArea) {
+Blockly.InsertionMarkerManager.prototype.shouldDelete_ = function(
+    candidate, deleteArea) {
   // Prefer connecting over dropping into the trash can, but prefer dragging to
   // the toolbox over connecting to other blocks.
   var wouldConnect = candidate && !!candidate.closest &&
@@ -438,7 +441,8 @@ Blockly.InsertionMarkerManager.prototype.shouldDelete_ = function(candidate,
  *     connection, and a radius.
  * @private
  */
-Blockly.InsertionMarkerManager.prototype.maybeShowPreview_ = function(candidate) {
+Blockly.InsertionMarkerManager.prototype.maybeShowPreview_ = function(
+    candidate) {
   // Nope, don't add a marker.
   if (this.wouldDeleteBlock_) {
     return;
@@ -503,7 +507,8 @@ Blockly.InsertionMarkerManager.prototype.showPreview_ = function() {
  *     connection, and a radius.
  * @private
  */
-Blockly.InsertionMarkerManager.prototype.maybeHidePreview_ = function(candidate) {
+Blockly.InsertionMarkerManager.prototype.maybeHidePreview_ = function(
+    candidate) {
   // If there's no new preview, remove the old one but don't bother deleting it.
   // We might need it later, and this saves disposing of it and recreating it.
   if (!candidate.closest) {
@@ -515,8 +520,10 @@ Blockly.InsertionMarkerManager.prototype.maybeHidePreview_ = function(candidate)
     var closestChanged = this.closestConnection_ != candidate.closest;
     var localChanged = this.localConnection_ != candidate.local;
 
-    // Also hide if we had a preview before but now we're going to delete instead.
-    if (hadPreview && (closestChanged || localChanged || this.wouldDeleteBlock_)) {
+    // Also hide if we had a preview before but now we're going to delete
+    // instead.
+    if (hadPreview &&
+        (closestChanged || localChanged || this.wouldDeleteBlock_)) {
       this.hidePreview_();
     }
   }
@@ -534,8 +541,8 @@ Blockly.InsertionMarkerManager.prototype.maybeHidePreview_ = function(candidate)
  */
 Blockly.InsertionMarkerManager.prototype.hidePreview_ = function() {
   if (this.closestConnection_ && this.closestConnection_.targetBlock() &&
-      this.workspace_.getRenderer()
-          .shouldHighlightConnection(this.closestConnection_)) {
+      this.workspace_.getRenderer().shouldHighlightConnection(
+          this.closestConnection_)) {
     this.closestConnection_.unhighlight();
   }
   if (this.fadedBlock_) {
@@ -561,7 +568,8 @@ Blockly.InsertionMarkerManager.prototype.showInsertionMarker_ = function() {
   var imConn = imBlock.getMatchingConnection(local.getSourceBlock(), local);
 
   if (imConn == this.markerConnection_) {
-    throw Error('Made it to showInsertionMarker_ even though the marker isn\'t ' +
+    throw Error(
+        'Made it to showInsertionMarker_ even though the marker isn\'t ' +
         'changing');
   }
 
@@ -627,7 +635,8 @@ Blockly.InsertionMarkerManager.prototype.hideInsertionMarker_ = function() {
   }
 
   if (imConn.targetConnection) {
-    throw Error('markerConnection_ still connected at the end of ' +
+    throw Error(
+        'markerConnection_ still connected at the end of ' +
         'disconnectInsertionMarker');
   }
 
@@ -639,7 +648,8 @@ Blockly.InsertionMarkerManager.prototype.hideInsertionMarker_ = function() {
  * Shows an outline around the input the closest connection belongs to.
  * @private
  */
-Blockly.InsertionMarkerManager.prototype.showInsertionInputOutline_ = function() {
+Blockly.InsertionMarkerManager.prototype.showInsertionInputOutline_ =
+    function() {
   var closest = this.closestConnection_;
   this.highlightedBlock_ = closest.getSourceBlock();
   this.highlightedBlock_.highlightShapeForInput(closest, true);
@@ -649,7 +659,8 @@ Blockly.InsertionMarkerManager.prototype.showInsertionInputOutline_ = function()
  * Hides any visible input outlines.
  * @private
  */
-Blockly.InsertionMarkerManager.prototype.hideInsertionInputOutline_ = function() {
+Blockly.InsertionMarkerManager.prototype.hideInsertionInputOutline_ =
+    function() {
   this.highlightedBlock_.highlightShapeForInput(this.closestConnection_, false);
   this.highlightedBlock_ = null;
 };

@@ -27,8 +27,8 @@ goog.require('Blockly.utils.object');
 Blockly.thrasos.Renderer = function(name) {
   Blockly.thrasos.Renderer.superClass_.constructor.call(this, name);
 };
-Blockly.utils.object.inherits(Blockly.thrasos.Renderer,
-    Blockly.blockRendering.Renderer);
+Blockly.utils.object.inherits(
+    Blockly.thrasos.Renderer, Blockly.blockRendering.Renderer);
 
 /**
  * Create a new instance of the renderer's render info object.

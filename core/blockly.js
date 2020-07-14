@@ -35,9 +35,9 @@ goog.require('Blockly.Xml');
 
 /**
  * Blockly core version.
- * This constant is overridden by the build script (build.py) to the value of the version
- * in package.json. This is done during the gen_core build step.
- * For local builds, you can pass --define='Blockly.VERSION=X.Y.Z' to the compiler
+ * This constant is overridden by the build script (build.py) to the value of
+ * the version in package.json. This is done during the gen_core build step. For
+ * local builds, you can pass --define='Blockly.VERSION=X.Y.Z' to the compiler
  * to override this constant.
  * @define {string}
  */
@@ -189,10 +189,12 @@ Blockly.onKeyDown = function(e) {
     // Pressing esc closes the context menu.
     Blockly.hideChaff();
     Blockly.navigation.onBlocklyAction(Blockly.navigation.ACTION_EXIT);
-  } else if (!Blockly.Gesture.inProgress() && Blockly.navigation.onKeyPress(e)) {
+  } else if (
+      !Blockly.Gesture.inProgress() && Blockly.navigation.onKeyPress(e)) {
     // If the keyboard or field handled the key press return.
     return;
-  } else if (e.keyCode == Blockly.utils.KeyCodes.BACKSPACE ||
+  } else if (
+      e.keyCode == Blockly.utils.KeyCodes.BACKSPACE ||
       e.keyCode == Blockly.utils.KeyCodes.DELETE) {
     // Delete or backspace.
     // Stop the browser from going back to the previous page.
@@ -211,8 +213,8 @@ Blockly.onKeyDown = function(e) {
     if (Blockly.Gesture.inProgress()) {
       return;
     }
-    if (Blockly.selected &&
-        Blockly.selected.isDeletable() && Blockly.selected.isMovable()) {
+    if (Blockly.selected && Blockly.selected.isDeletable() &&
+        Blockly.selected.isMovable()) {
       // Don't allow copying immovable or undeletable blocks. The next step
       // would be to paste, which would create additional undeletable/immovable
       // blocks on the workspace.
@@ -220,7 +222,8 @@ Blockly.onKeyDown = function(e) {
         // 'c' for copy.
         Blockly.hideChaff();
         Blockly.copy_(Blockly.selected);
-      } else if (e.keyCode == Blockly.utils.KeyCodes.X &&
+      } else if (
+          e.keyCode == Blockly.utils.KeyCodes.X &&
           !Blockly.selected.workspace.isFlyout) {
         // 'x' for cut, but not in a flyout.
         // Don't even copy the selected item in the flyout.
@@ -321,14 +324,11 @@ Blockly.hideChaff = function(opt_allowToolbox) {
     var workspace = Blockly.getMainWorkspace();
     // For now the trashcan flyout always autocloses because it overlays the
     // trashcan UI (no trashcan to click to close it).
-    if (workspace.trashcan &&
-      workspace.trashcan.flyout) {
+    if (workspace.trashcan && workspace.trashcan.flyout) {
       workspace.trashcan.flyout.hide();
     }
     var toolbox = workspace.getToolbox();
-    if (toolbox &&
-        toolbox.getFlyout() &&
-        toolbox.getFlyout().autoClose) {
+    if (toolbox && toolbox.getFlyout() && toolbox.getFlyout().autoClose) {
       toolbox.clearSelection();
     }
   }
@@ -418,9 +418,7 @@ Blockly.defineBlocksWithJsonArray = function(jsonArray) {
               'Block definition #' + i + ' in JSON array' +
               ' overwrites prior definition of "' + typename + '".');
         }
-        Blockly.Blocks[typename] = {
-          init: Blockly.jsonInitFactory_(elem)
-        };
+        Blockly.Blocks[typename] = {init: Blockly.jsonInitFactory_(elem)};
       }
     }
   }
@@ -443,8 +441,9 @@ Blockly.defineBlocksWithJsonArray = function(jsonArray) {
  *     provided.
  * @return {!Blockly.EventData} Opaque data that can be passed to unbindEvent_.
  */
-Blockly.bindEventWithChecks_ = function(node, name, thisObject, func,
-    opt_noCaptureIdentifier, opt_noPreventDefault) {
+Blockly.bindEventWithChecks_ = function(
+    node, name, thisObject, func, opt_noCaptureIdentifier,
+    opt_noPreventDefault) {
   var handled = false;
   var wrapFunc = function(e) {
     var captureIdentifier = !opt_noCaptureIdentifier;
@@ -584,8 +583,8 @@ Blockly.isNumber = function(str) {
  * @return {string} RGB code, e.g. '#5ba65b'.
  */
 Blockly.hueToHex = function(hue) {
-  return Blockly.utils.colour.hsvToHex(hue, Blockly.HSV_SATURATION,
-      Blockly.HSV_VALUE * 255);
+  return Blockly.utils.colour.hsvToHex(
+      hue, Blockly.HSV_SATURATION, Blockly.HSV_VALUE * 255);
 };
 
 /**

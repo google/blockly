@@ -27,11 +27,12 @@ goog.require('Blockly.utils.object');
  * @extends {Blockly.blockRendering.Measurable}
  */
 Blockly.zelos.RightConnectionShape = function(constants) {
-  Blockly.zelos.RightConnectionShape.superClass_.constructor.call(this, constants);
+  Blockly.zelos.RightConnectionShape.superClass_.constructor.call(
+      this, constants);
   this.type |= Blockly.blockRendering.Types.getType('RIGHT_CONNECTION');
   // Size is dynamic
   this.height = 0;
   this.width = 0;
 };
-Blockly.utils.object.inherits(Blockly.zelos.RightConnectionShape,
-    Blockly.blockRendering.Measurable);
+Blockly.utils.object.inherits(
+    Blockly.zelos.RightConnectionShape, Blockly.blockRendering.Measurable);

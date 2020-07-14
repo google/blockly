@@ -45,7 +45,8 @@ Blockly.user.keyMap.modifierKeys = {
  */
 Blockly.user.keyMap.setActionForKey = function(keyCode, action) {
   var oldKey = Blockly.user.keyMap.getKeyByAction(action);
-  // If the action already exists in the key map remove it and add the new mapping.
+  // If the action already exists in the key map remove it and add the new
+  // mapping.
   if (oldKey) {
     delete Blockly.user.keyMap.map_[oldKey];
   }
@@ -141,7 +142,8 @@ Blockly.user.keyMap.checkModifiers_ = function(modifiers, validModifiers) {
  */
 Blockly.user.keyMap.createSerializedKey = function(keyCode, modifiers) {
   var key = '';
-  var validModifiers = Blockly.utils.object.values(Blockly.user.keyMap.modifierKeys);
+  var validModifiers =
+      Blockly.utils.object.values(Blockly.user.keyMap.modifierKeys);
   Blockly.user.keyMap.checkModifiers_(modifiers, validModifiers);
   for (var i = 0, validModifier; (validModifier = validModifiers[i]); i++) {
     if (modifiers.indexOf(validModifier) > -1) {
@@ -159,9 +161,11 @@ Blockly.user.keyMap.createSerializedKey = function(keyCode, modifiers) {
  */
 Blockly.user.keyMap.createDefaultKeyMap = function() {
   var map = {};
-  var controlK = Blockly.user.keyMap.createSerializedKey(
-      Blockly.utils.KeyCodes.K, [Blockly.user.keyMap.modifierKeys.CONTROL,
-        Blockly.user.keyMap.modifierKeys.SHIFT]);
+  var controlK =
+      Blockly.user.keyMap.createSerializedKey(Blockly.utils.KeyCodes.K, [
+        Blockly.user.keyMap.modifierKeys.CONTROL,
+        Blockly.user.keyMap.modifierKeys.SHIFT
+      ]);
   var shiftW = Blockly.user.keyMap.createSerializedKey(
       Blockly.utils.KeyCodes.W, [Blockly.user.keyMap.modifierKeys.SHIFT]);
   var shiftA = Blockly.user.keyMap.createSerializedKey(

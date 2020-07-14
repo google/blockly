@@ -33,8 +33,8 @@ goog.require('Blockly.zelos.MarkerSvg');
 Blockly.zelos.Renderer = function(name) {
   Blockly.zelos.Renderer.superClass_.constructor.call(this, name);
 };
-Blockly.utils.object.inherits(Blockly.zelos.Renderer,
-    Blockly.blockRendering.Renderer);
+Blockly.utils.object.inherits(
+    Blockly.zelos.Renderer, Blockly.blockRendering.Renderer);
 
 /**
  * Create a new instance of the renderer's constant provider.
@@ -67,7 +67,8 @@ Blockly.zelos.Renderer.prototype.makeRenderInfo_ = function(block) {
  * @override
  */
 Blockly.zelos.Renderer.prototype.makeDrawer_ = function(block, info) {
-  return new Blockly.zelos.Drawer(block,
+  return new Blockly.zelos.Drawer(
+      block,
       /** @type {!Blockly.zelos.RenderInfo} */ (info));
 };
 
@@ -95,7 +96,8 @@ Blockly.zelos.Renderer.prototype.makeMarkerDrawer = function(
  * @override
  */
 Blockly.zelos.Renderer.prototype.makePathObject = function(root, style) {
-  return new Blockly.zelos.PathObject(root, style,
+  return new Blockly.zelos.PathObject(
+      root, style,
       /** @type {!Blockly.zelos.ConstantProvider} */ (this.getConstants()));
 };
 
@@ -109,22 +111,22 @@ Blockly.zelos.Renderer.prototype.shouldHighlightConnection = function(conn) {
 /**
  * @override
  */
-Blockly.zelos.Renderer.prototype.getConnectionPreviewMethod =
-    function(closest, local, topBlock) {
-      if (local.type == Blockly.OUTPUT_VALUE) {
-        if (!closest.isConnected()) {
-          return Blockly.InsertionMarkerManager.PREVIEW_TYPE.INPUT_OUTLINE;
-        }
-        // TODO: Returning this is a total hack, because we don't want to show
-        //   a replacement fade, we want to show an outline affect.
-        //   Sadly zelos does not support showing an outline around filled
-        //   inputs, so we have to pretend like the connected block is getting
-        //   replaced.
-        return Blockly.InsertionMarkerManager.PREVIEW_TYPE.REPLACEMENT_FADE;
-      }
+Blockly.zelos.Renderer.prototype.getConnectionPreviewMethod = function(
+    closest, local, topBlock) {
+  if (local.type == Blockly.OUTPUT_VALUE) {
+    if (!closest.isConnected()) {
+      return Blockly.InsertionMarkerManager.PREVIEW_TYPE.INPUT_OUTLINE;
+    }
+    // TODO: Returning this is a total hack, because we don't want to show
+    //   a replacement fade, we want to show an outline affect.
+    //   Sadly zelos does not support showing an outline around filled
+    //   inputs, so we have to pretend like the connected block is getting
+    //   replaced.
+    return Blockly.InsertionMarkerManager.PREVIEW_TYPE.REPLACEMENT_FADE;
+  }
 
-      return Blockly.zelos.Renderer.superClass_
-          .getConnectionPreviewMethod(closest, local, topBlock);
-    };
+  return Blockly.zelos.Renderer.superClass_.getConnectionPreviewMethod(
+      closest, local, topBlock);
+};
 
 Blockly.blockRendering.register('zelos', Blockly.zelos.Renderer);

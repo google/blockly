@@ -223,8 +223,8 @@ Blockly.Workspace.prototype.addTypedBlock = function(block) {
  * @param {!Blockly.Block} block Block to remove.
  */
 Blockly.Workspace.prototype.removeTypedBlock = function(block) {
-  this.typedBlocksDB_[block.type].splice(this.typedBlocksDB_[block.type]
-      .indexOf(block), 1);
+  this.typedBlocksDB_[block.type].splice(
+      this.typedBlocksDB_[block.type].indexOf(block), 1);
   if (!this.typedBlocksDB_[block.type].length) {
     delete this.typedBlocksDB_[block.type];
   }
@@ -264,7 +264,8 @@ Blockly.Workspace.prototype.addTopComment = function(comment) {
   // Note: If the comment database starts to hold block comments, this may need
   // to move to a separate function.
   if (this.commentDB_[comment.id]) {
-    console.warn('Overriding an existing comment on this workspace, with id "' +
+    console.warn(
+        'Overriding an existing comment on this workspace, with id "' +
         comment.id + '"');
   }
   this.commentDB_[comment.id] = comment;
@@ -277,7 +278,8 @@ Blockly.Workspace.prototype.addTopComment = function(comment) {
  */
 Blockly.Workspace.prototype.removeTopComment = function(comment) {
   if (!Blockly.utils.arrayRemove(this.topComments_, comment)) {
-    throw Error('Comment not present in workspace\'s list of top-most ' +
+    throw Error(
+        'Comment not present in workspace\'s list of top-most ' +
         'comments.');
   }
   // Note: If the comment database starts to hold block comments, this may need
@@ -517,7 +519,8 @@ Blockly.Workspace.prototype.remainingCapacityOfType = function(type) {
   }
 
   var maxInstanceOfType = (this.options.maxInstances[type] !== undefined) ?
-      this.options.maxInstances[type] : Infinity;
+      this.options.maxInstances[type] :
+      Infinity;
 
   return maxInstanceOfType - this.getBlocksByType(type, false).length;
 };
@@ -590,7 +593,7 @@ Blockly.Workspace.prototype.undo = function(redo) {
   var events = [inputEvent];
   // Do another undo/redo if the next one is of the same group.
   while (inputStack.length && inputEvent.group &&
-      inputEvent.group == inputStack[inputStack.length - 1].group) {
+         inputEvent.group == inputStack[inputStack.length - 1].group) {
     events.push(inputStack.pop());
   }
   // Push these popped events on the opposite stack.

@@ -149,10 +149,8 @@ Blockly.Events.FINISHED_LOADING = 'finished_loading';
  * @const
  */
 Blockly.Events.BUMP_EVENTS = [
-  Blockly.Events.BLOCK_CREATE,
-  Blockly.Events.BLOCK_MOVE,
-  Blockly.Events.COMMENT_CREATE,
-  Blockly.Events.COMMENT_MOVE
+  Blockly.Events.BLOCK_CREATE, Blockly.Events.BLOCK_MOVE,
+  Blockly.Events.COMMENT_CREATE, Blockly.Events.COMMENT_MOVE
 ];
 
 /**
@@ -219,22 +217,22 @@ Blockly.Events.filter = function(queueIn, forward) {
         // Each item in the hash table has the event and the index of that event
         // in the input array.  This lets us make sure we only merge adjacent
         // move events.
-        hash[key] = { event: event, index: i};
+        hash[key] = {event: event, index: i};
         mergedQueue.push(event);
-      } else if (event.type == Blockly.Events.MOVE &&
-          lastEntry.index == i - 1) {
+      } else if (
+          event.type == Blockly.Events.MOVE && lastEntry.index == i - 1) {
         // Merge move events.
         lastEvent.newParentId = event.newParentId;
         lastEvent.newInputName = event.newInputName;
         lastEvent.newCoordinate = event.newCoordinate;
         lastEntry.index = i;
-      } else if (event.type == Blockly.Events.CHANGE &&
-          event.element == lastEvent.element &&
-          event.name == lastEvent.name) {
+      } else if (
+          event.type == Blockly.Events.CHANGE &&
+          event.element == lastEvent.element && event.name == lastEvent.name) {
         // Merge change events.
         lastEvent.newValue = event.newValue;
-      } else if (event.type == Blockly.Events.UI &&
-          event.element == 'click' &&
+      } else if (
+          event.type == Blockly.Events.UI && event.element == 'click' &&
           (lastEvent.element == 'commentOpen' ||
            lastEvent.element == 'mutatorOpen' ||
            lastEvent.element == 'warningOpen')) {
@@ -248,7 +246,9 @@ Blockly.Events.filter = function(queueIn, forward) {
     }
   }
   // Filter out any events that have become null due to merging.
-  queue = mergedQueue.filter(function(e) { return !e.isNull(); });
+  queue = mergedQueue.filter(function(e) {
+    return !e.isNull();
+  });
   if (!forward) {
     // Restore undo order.
     queue.reverse();
@@ -256,8 +256,7 @@ Blockly.Events.filter = function(queueIn, forward) {
   // Move mutation events to the top of the queue.
   // Intentionally skip first event.
   for (var i = 1, event; (event = queue[i]); i++) {
-    if (event.type == Blockly.Events.CHANGE &&
-        event.element == 'mutation') {
+    if (event.type == Blockly.Events.CHANGE && event.element == 'mutation') {
       queue.unshift(queue.splice(i, 1)[0]);
     }
   }
@@ -412,8 +411,9 @@ Blockly.Events.disableOrphans = function(event) {
         for (var i = 0, child; (child = children[i]); i++) {
           child.setEnabled(true);
         }
-      } else if ((block.outputConnection || block.previousConnection) &&
-                 !workspace.isDragging()) {
+      } else if (
+          (block.outputConnection || block.previousConnection) &&
+          !workspace.isDragging()) {
         do {
           block.setEnabled(false);
           block = block.getNextBlock();

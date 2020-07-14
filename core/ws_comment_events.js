@@ -59,8 +59,8 @@ Blockly.Events.CommentBase = function(comment) {
    */
   this.recordUndo = Blockly.Events.recordUndo;
 };
-Blockly.utils.object.inherits(Blockly.Events.CommentBase,
-    Blockly.Events.Abstract);
+Blockly.utils.object.inherits(
+    Blockly.Events.CommentBase, Blockly.Events.Abstract);
 
 /**
  * Encode the event as JSON.
@@ -100,8 +100,8 @@ Blockly.Events.CommentChange = function(comment, oldContents, newContents) {
   this.oldContents_ = oldContents;
   this.newContents_ = newContents;
 };
-Blockly.utils.object.inherits(Blockly.Events.CommentChange,
-    Blockly.Events.CommentBase);
+Blockly.utils.object.inherits(
+    Blockly.Events.CommentChange, Blockly.Events.CommentBase);
 
 /**
  * Type of this event.
@@ -167,8 +167,8 @@ Blockly.Events.CommentCreate = function(comment) {
 
   this.xml = comment.toXmlWithXY();
 };
-Blockly.utils.object.inherits(Blockly.Events.CommentCreate,
-    Blockly.Events.CommentBase);
+Blockly.utils.object.inherits(
+    Blockly.Events.CommentCreate, Blockly.Events.CommentBase);
 
 /**
  * Type of this event.
@@ -222,7 +222,7 @@ Blockly.Events.CommentCreateDeleteHelper = function(event, create) {
       comment.dispose(false, false);
     } else {
       // Only complain about root-level block.
-      console.warn("Can't uncreate non-existent comment: " + event.commentId);
+      console.warn('Can\'t uncreate non-existent comment: ' + event.commentId);
     }
   }
 };
@@ -241,8 +241,8 @@ Blockly.Events.CommentDelete = function(comment) {
 
   this.xml = comment.toXmlWithXY();
 };
-Blockly.utils.object.inherits(Blockly.Events.CommentDelete,
-    Blockly.Events.CommentBase);
+Blockly.utils.object.inherits(
+    Blockly.Events.CommentDelete, Blockly.Events.CommentBase);
 
 /**
  * Type of this event.
@@ -308,8 +308,8 @@ Blockly.Events.CommentMove = function(comment) {
    */
   this.newCoordinate_ = null;
 };
-Blockly.utils.object.inherits(Blockly.Events.CommentMove,
-    Blockly.Events.CommentBase);
+Blockly.utils.object.inherits(
+    Blockly.Events.CommentMove, Blockly.Events.CommentBase);
 
 /**
  * Record the comment's new location.  Called after the move.  Can only be
@@ -317,7 +317,8 @@ Blockly.utils.object.inherits(Blockly.Events.CommentMove,
  */
 Blockly.Events.CommentMove.prototype.recordNew = function() {
   if (!this.comment_) {
-    throw Error('Tried to record the new position of a comment on the ' +
+    throw Error(
+        'Tried to record the new position of a comment on the ' +
         'same event twice.');
   }
   this.newCoordinate_ = this.comment_.getXY();
@@ -373,8 +374,8 @@ Blockly.Events.CommentMove.prototype.fromJson = function(json) {
  * @return {boolean} False if something changed.
  */
 Blockly.Events.CommentMove.prototype.isNull = function() {
-  return Blockly.utils.Coordinate.equals(this.oldCoordinate_,
-      this.newCoordinate_);
+  return Blockly.utils.Coordinate.equals(
+      this.oldCoordinate_, this.newCoordinate_);
 };
 
 /**

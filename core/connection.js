@@ -124,8 +124,8 @@ Blockly.Connection.prototype.connect_ = function(childConnection) {
       // Attempt to reattach the orphan at the end of the newly inserted
       // block.  Since this block may be a row, walk down to the end
       // or to the first (and only) shadow block.
-      var connection = Blockly.Connection.lastConnectionInRow(
-          childBlock, orphanBlock);
+      var connection =
+          Blockly.Connection.lastConnectionInRow(childBlock, orphanBlock);
       if (connection) {
         orphanBlock.outputConnection.connect(connection);
         orphanBlock = null;
@@ -146,7 +146,7 @@ Blockly.Connection.prototype.connect_ = function(childConnection) {
           newBlock = nextBlock;
         } else {
           if (orphanBlock.previousConnection.checkType(
-              newBlock.nextConnection)) {
+                  newBlock.nextConnection)) {
             newBlock.nextConnection.connect(orphanBlock.previousConnection);
             orphanBlock = null;
           }
@@ -197,7 +197,6 @@ Blockly.Connection.prototype.connect_ = function(childConnection) {
  * @package
  */
 Blockly.Connection.prototype.dispose = function() {
-
   // isConnected returns true for shadows and non-shadows.
   if (this.isConnected()) {
     this.setShadowDom(null);
@@ -361,7 +360,7 @@ Blockly.Connection.prototype.isConnectionAllowed = function(candidate) {
       // Don't offer to connect an already connected left (male) value plug to
       // an available right (female) value plug.
       if ((candidate.isConnected() &&
-          !candidate.targetBlock().isInsertionMarker()) ||
+           !candidate.targetBlock().isInsertionMarker()) ||
           this.isConnected()) {
         return false;
       }
@@ -371,8 +370,7 @@ Blockly.Connection.prototype.isConnectionAllowed = function(candidate) {
       // Offering to connect the left (male) of a value block to an already
       // connected value pair is ok, we'll splice it in.
       // However, don't offer to splice into an immovable block.
-      if (candidate.isConnected() &&
-          !candidate.targetBlock().isMovable() &&
+      if (candidate.isConnected() && !candidate.targetBlock().isMovable() &&
           !candidate.targetBlock().isShadow()) {
         return false;
       }
@@ -383,8 +381,7 @@ Blockly.Connection.prototype.isConnectionAllowed = function(candidate) {
       // stack.  But covering up a shadow block or stack of shadow blocks is
       // fine.  Similarly, replacing a terminal statement with another terminal
       // statement is allowed.
-      if (candidate.isConnected() &&
-          !this.sourceBlock_.nextConnection &&
+      if (candidate.isConnected() && !this.sourceBlock_.nextConnection &&
           !candidate.targetBlock().isShadow() &&
           candidate.targetBlock().nextConnection) {
         return false;
@@ -493,8 +490,9 @@ Blockly.Connection.singleConnection_ = function(block, orphanBlock) {
 Blockly.Connection.lastConnectionInRow = function(startBlock, orphanBlock) {
   var newBlock = startBlock;
   var connection;
-  while ((connection = Blockly.Connection.singleConnection_(
-      /** @type {!Blockly.Block} */ (newBlock), orphanBlock))) {
+  while (
+      (connection = Blockly.Connection.singleConnection_(
+           /** @type {!Blockly.Block} */ (newBlock), orphanBlock))) {
     newBlock = connection.targetBlock();
     if (!newBlock || newBlock.isShadow()) {
       return connection;
@@ -544,8 +542,8 @@ Blockly.Connection.prototype.disconnect = function() {
  * @param {!Blockly.Block} childBlock The inferior block.
  * @protected
  */
-Blockly.Connection.prototype.disconnectInternal_ = function(parentBlock,
-    childBlock) {
+Blockly.Connection.prototype.disconnectInternal_ = function(
+    parentBlock, childBlock) {
   var event;
   if (Blockly.Events.isEnabled()) {
     event = new Blockly.Events.BlockMove(childBlock);
@@ -568,8 +566,7 @@ Blockly.Connection.prototype.respawnShadow_ = function() {
   var parentBlock = this.getSourceBlock();
   var shadow = this.getShadowDom();
   if (parentBlock.workspace && shadow && Blockly.Events.recordUndo) {
-    var blockShadow =
-        Blockly.Xml.domToBlock(shadow, parentBlock.workspace);
+    var blockShadow = Blockly.Xml.domToBlock(shadow, parentBlock.workspace);
     if (blockShadow.outputConnection) {
       this.connect(blockShadow.outputConnection);
     } else if (blockShadow.previousConnection) {
@@ -622,8 +619,9 @@ Blockly.Connection.prototype.checkType = function(otherConnection) {
  * @suppress {unusedPrivateMembers}
  */
 Blockly.Connection.prototype.checkType_ = function(otherConnection) {
-  console.warn('Deprecated call to Blockly.Connection.prototype.checkType_, ' +
-  'use Blockly.Connection.prototype.checkType instead.');
+  console.warn(
+      'Deprecated call to Blockly.Connection.prototype.checkType_, ' +
+      'use Blockly.Connection.prototype.checkType instead.');
   return this.checkType(otherConnection);
 };
 
@@ -633,8 +631,8 @@ Blockly.Connection.prototype.checkType_ = function(otherConnection) {
  */
 Blockly.Connection.prototype.onCheckChanged_ = function() {
   // The new value type may not be compatible with the existing connection.
-  if (this.isConnected() && (!this.targetConnection ||
-      !this.checkType(this.targetConnection))) {
+  if (this.isConnected() &&
+      (!this.targetConnection || !this.checkType(this.targetConnection))) {
     var child = this.isSuperior() ? this.targetBlock() : this.sourceBlock_;
     child.unplug();
   }

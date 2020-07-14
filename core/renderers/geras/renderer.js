@@ -39,8 +39,8 @@ Blockly.geras.Renderer = function(name) {
    */
   this.highlightConstants_ = null;
 };
-Blockly.utils.object.inherits(Blockly.geras.Renderer,
-    Blockly.blockRendering.Renderer);
+Blockly.utils.object.inherits(
+    Blockly.geras.Renderer, Blockly.blockRendering.Renderer);
 
 /**
  * Initialize the renderer.  Geras has a highlight provider in addition to
@@ -48,10 +48,9 @@ Blockly.utils.object.inherits(Blockly.geras.Renderer,
  * @package
  * @override
  */
-Blockly.geras.Renderer.prototype.init = function(theme,
-    opt_rendererOverrides) {
-  Blockly.geras.Renderer.superClass_.init.call(this, theme,
-      opt_rendererOverrides);
+Blockly.geras.Renderer.prototype.init = function(theme, opt_rendererOverrides) {
+  Blockly.geras.Renderer.superClass_.init.call(
+      this, theme, opt_rendererOverrides);
   this.highlightConstants_ = this.makeHighlightConstants_();
   this.highlightConstants_.init();
 };
@@ -92,7 +91,8 @@ Blockly.geras.Renderer.prototype.makeRenderInfo_ = function(block) {
  * @override
  */
 Blockly.geras.Renderer.prototype.makeDrawer_ = function(block, info) {
-  return new Blockly.geras.Drawer(block,
+  return new Blockly.geras.Drawer(
+      block,
       /** @type {!Blockly.geras.RenderInfo} */ (info));
 };
 
@@ -106,7 +106,8 @@ Blockly.geras.Renderer.prototype.makeDrawer_ = function(block, info) {
  * @override
  */
 Blockly.geras.Renderer.prototype.makePathObject = function(root, style) {
-  return new Blockly.geras.PathObject(root, style,
+  return new Blockly.geras.PathObject(
+      root, style,
       /** @type {!Blockly.geras.ConstantProvider} */ (this.getConstants()));
 };
 
@@ -131,8 +132,8 @@ Blockly.geras.Renderer.prototype.makeHighlightConstants_ = function() {
  */
 Blockly.geras.Renderer.prototype.getHighlightConstants = function() {
   return (
-    /** @type {!Blockly.geras.HighlightConstantProvider} */
-    (this.highlightConstants_));
+      /** @type {!Blockly.geras.HighlightConstantProvider} */
+      (this.highlightConstants_));
 };
 
 Blockly.blockRendering.register('geras', Blockly.geras.Renderer);

@@ -43,8 +43,8 @@ Blockly.RenderedConnection = function(source, type) {
    * @const {!Blockly.ConnectionDB}
    * @private
    */
-  this.dbOpposite_ = source.workspace
-      .connectionDBList[Blockly.OPPOSITE_TYPE[type]];
+  this.dbOpposite_ =
+      source.workspace.connectionDBList[Blockly.OPPOSITE_TYPE[type]];
 
   /**
    * Workspace units, (0, 0) is top left of block.
@@ -106,7 +106,7 @@ Blockly.RenderedConnection.prototype.dispose = function() {
  */
 Blockly.RenderedConnection.prototype.getSourceBlock = function() {
   return /** @type {!Blockly.BlockSvg} */ (
-    Blockly.RenderedConnection.superClass_.getSourceBlock.call(this));
+      Blockly.RenderedConnection.superClass_.getSourceBlock.call(this));
 };
 
 /**
@@ -116,7 +116,7 @@ Blockly.RenderedConnection.prototype.getSourceBlock = function() {
  */
 Blockly.RenderedConnection.prototype.targetBlock = function() {
   return /** @type {Blockly.BlockSvg} */ (
-    Blockly.RenderedConnection.superClass_.targetBlock.call(this));
+      Blockly.RenderedConnection.superClass_.targetBlock.call(this));
 };
 
 /**
@@ -166,16 +166,19 @@ Blockly.RenderedConnection.prototype.bumpAwayFrom = function(staticConnection) {
   var selected = Blockly.selected == rootBlock;
   selected || rootBlock.addSelect();
   var dx = (staticConnection.x + Blockly.SNAP_RADIUS +
-      Math.floor(Math.random() * Blockly.BUMP_RANDOMNESS)) - this.x;
+            Math.floor(Math.random() * Blockly.BUMP_RANDOMNESS)) -
+      this.x;
   var dy = (staticConnection.y + Blockly.SNAP_RADIUS +
-      Math.floor(Math.random() * Blockly.BUMP_RANDOMNESS)) - this.y;
+            Math.floor(Math.random() * Blockly.BUMP_RANDOMNESS)) -
+      this.y;
   if (reverse) {
     // When reversing a bump due to an uneditable block, bump up.
     dy = -dy;
   }
   if (rootBlock.RTL) {
     dx = (staticConnection.x - Blockly.SNAP_RADIUS -
-      Math.floor(Math.random() * Blockly.BUMP_RANDOMNESS)) - this.x;
+          Math.floor(Math.random() * Blockly.BUMP_RANDOMNESS)) -
+        this.x;
   }
   rootBlock.moveBy(dx, dy);
   selected || rootBlock.removeSelect();
@@ -187,11 +190,12 @@ Blockly.RenderedConnection.prototype.bumpAwayFrom = function(staticConnection) {
  * @param {number} y New absolute y coordinate, in workspace coordinates.
  */
 Blockly.RenderedConnection.prototype.moveTo = function(x, y) {
-  if (this.trackedState_ == Blockly.RenderedConnection.TrackedState.WILL_TRACK) {
+  if (this.trackedState_ ==
+      Blockly.RenderedConnection.TrackedState.WILL_TRACK) {
     this.db_.addConnection(this, y);
     this.trackedState_ = Blockly.RenderedConnection.TrackedState.TRACKED;
-  } else if (this.trackedState_ == Blockly.RenderedConnection
-      .TrackedState.TRACKED) {
+  } else if (
+      this.trackedState_ == Blockly.RenderedConnection.TrackedState.TRACKED) {
     this.db_.removeConnection(this, this.y);
     this.db_.addConnection(this, y);
   }
@@ -215,8 +219,8 @@ Blockly.RenderedConnection.prototype.moveBy = function(dx, dy) {
  *     corner of the block, in workspace coordinates.
  */
 Blockly.RenderedConnection.prototype.moveToOffset = function(blockTL) {
-  this.moveTo(blockTL.x + this.offsetInBlock_.x,
-      blockTL.y + this.offsetInBlock_.y);
+  this.moveTo(
+      blockTL.x + this.offsetInBlock_.x, blockTL.y + this.offsetInBlock_.y);
 };
 
 /**
@@ -253,8 +257,8 @@ Blockly.RenderedConnection.prototype.tighten = function() {
     }
     // Workspace coordinates.
     var xy = Blockly.utils.getRelativeXY(svgRoot);
-    block.getSvgRoot().setAttribute('transform',
-        'translate(' + (xy.x - dx) + ',' + (xy.y - dy) + ')');
+    block.getSvgRoot().setAttribute(
+        'transform', 'translate(' + (xy.x - dx) + ',' + (xy.y - dy) + ')');
     block.moveConnections(-dx, -dy);
   }
 };
@@ -263,8 +267,9 @@ Blockly.RenderedConnection.prototype.tighten = function() {
  * Find the closest compatible connection to this connection.
  * All parameters are in workspace units.
  * @param {number} maxLimit The maximum radius to another connection.
- * @param {!Blockly.utils.Coordinate} dxy Offset between this connection's location
- *     in the database and the current location (as a result of dragging).
+ * @param {!Blockly.utils.Coordinate} dxy Offset between this connection's
+ *     location in the database and the current location (as a result of
+ *     dragging).
  * @return {!{connection: ?Blockly.Connection, radius: number}} Contains two
  *     properties: 'connection' which is either another connection or null,
  *     and 'radius' which is the distance.
@@ -285,24 +290,21 @@ Blockly.RenderedConnection.prototype.highlight = function() {
     // Vertical line, puzzle tab, vertical line.
     var yLen = renderConstants.TAB_OFFSET_FROM_TOP;
     steps = Blockly.utils.svgPaths.moveBy(0, -yLen) +
-        Blockly.utils.svgPaths.lineOnAxis('v', yLen) +
-        shape.pathDown +
+        Blockly.utils.svgPaths.lineOnAxis('v', yLen) + shape.pathDown +
         Blockly.utils.svgPaths.lineOnAxis('v', yLen);
   } else {
     var xLen =
         renderConstants.NOTCH_OFFSET_LEFT - renderConstants.CORNER_RADIUS;
     // Horizontal line, notch, horizontal line.
     steps = Blockly.utils.svgPaths.moveBy(-xLen, 0) +
-        Blockly.utils.svgPaths.lineOnAxis('h', xLen) +
-        shape.pathLeft +
+        Blockly.utils.svgPaths.lineOnAxis('h', xLen) + shape.pathLeft +
         Blockly.utils.svgPaths.lineOnAxis('h', xLen);
   }
   var xy = this.sourceBlock_.getRelativeToSurfaceXY();
   var x = this.x - xy.x;
   var y = this.y - xy.y;
   Blockly.Connection.highlightedPath_ = Blockly.utils.dom.createSvgElement(
-      'path',
-      {
+      'path', {
         'class': 'blocklyHighlightedConnectionPath',
         'd': steps,
         transform: 'translate(' + x + ',' + y + ')' +
@@ -325,10 +327,11 @@ Blockly.RenderedConnection.prototype.unhighlight = function() {
  * @package
  */
 Blockly.RenderedConnection.prototype.setTracking = function(doTracking) {
-  if ((doTracking && this.trackedState_ ==
-      Blockly.RenderedConnection.TrackedState.TRACKED) ||
-      (!doTracking && this.trackedState_ ==
-      Blockly.RenderedConnection.TrackedState.UNTRACKED)) {
+  if ((doTracking &&
+       this.trackedState_ == Blockly.RenderedConnection.TrackedState.TRACKED) ||
+      (!doTracking &&
+       this.trackedState_ ==
+           Blockly.RenderedConnection.TrackedState.UNTRACKED)) {
     return;
   }
   if (this.sourceBlock_.isInFlyout) {
@@ -421,14 +424,14 @@ Blockly.RenderedConnection.prototype.startTrackingAll = function() {
  *     workspace units.
  * @return {boolean} True if the connection is allowed, false otherwise.
  */
-Blockly.RenderedConnection.prototype.isConnectionAllowed = function(candidate,
-    maxRadius) {
+Blockly.RenderedConnection.prototype.isConnectionAllowed = function(
+    candidate, maxRadius) {
   if (this.distanceFrom(candidate) > maxRadius) {
     return false;
   }
 
-  return Blockly.RenderedConnection.superClass_.isConnectionAllowed.call(this,
-      candidate);
+  return Blockly.RenderedConnection.superClass_.isConnectionAllowed.call(
+      this, candidate);
 };
 
 /**
@@ -449,10 +452,10 @@ Blockly.RenderedConnection.prototype.onFailedConnect = function(
  * @param {!Blockly.Block} childBlock The inferior block.
  * @private
  */
-Blockly.RenderedConnection.prototype.disconnectInternal_ = function(parentBlock,
-    childBlock) {
-  Blockly.RenderedConnection.superClass_.disconnectInternal_.call(this,
-      parentBlock, childBlock);
+Blockly.RenderedConnection.prototype.disconnectInternal_ = function(
+    parentBlock, childBlock) {
+  Blockly.RenderedConnection.superClass_.disconnectInternal_.call(
+      this, parentBlock, childBlock);
   // Rerender the parent so that it may reflow.
   if (parentBlock.rendered) {
     parentBlock.render();
@@ -548,8 +551,8 @@ Blockly.RenderedConnection.prototype.connect_ = function(childConnection) {
  */
 Blockly.RenderedConnection.prototype.onCheckChanged_ = function() {
   // The new value type may not be compatible with the existing connection.
-  if (this.isConnected() && (!this.targetConnection ||
-      !this.checkType(this.targetConnection))) {
+  if (this.isConnected() &&
+      (!this.targetConnection || !this.checkType(this.targetConnection))) {
     var child = this.isSuperior() ? this.targetBlock() : this.sourceBlock_;
     child.unplug();
     // Bump away.

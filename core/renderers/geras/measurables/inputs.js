@@ -39,8 +39,8 @@ Blockly.geras.InlineInput = function(constants, input) {
     this.height += this.constants_.DARK_PATH_OFFSET;
   }
 };
-Blockly.utils.object.inherits(Blockly.geras.InlineInput,
-    Blockly.blockRendering.InlineInput);
+Blockly.utils.object.inherits(
+    Blockly.geras.InlineInput, Blockly.blockRendering.InlineInput);
 
 /**
  * An object containing information about the space a statement input takes up
@@ -63,5 +63,5 @@ Blockly.geras.StatementInput = function(constants, input) {
     this.height += this.constants_.DARK_PATH_OFFSET;
   }
 };
-Blockly.utils.object.inherits(Blockly.geras.StatementInput,
-    Blockly.blockRendering.StatementInput);
+Blockly.utils.object.inherits(
+    Blockly.geras.StatementInput, Blockly.blockRendering.StatementInput);

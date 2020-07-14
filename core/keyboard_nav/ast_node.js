@@ -143,7 +143,8 @@ Blockly.ASTNode.createConnectionNode = function(connection) {
   }
   if (connection.type == Blockly.INPUT_VALUE) {
     return Blockly.ASTNode.createInputNode(connection.getParentInput());
-  } else if (connection.type == Blockly.NEXT_STATEMENT &&
+  } else if (
+      connection.type == Blockly.NEXT_STATEMENT &&
       connection.getParentInput()) {
     return Blockly.ASTNode.createInputNode(connection.getParentInput());
   } else if (connection.type == Blockly.NEXT_STATEMENT) {
@@ -208,9 +209,7 @@ Blockly.ASTNode.createWorkspaceNode = function(workspace, wsCoordinate) {
   if (!wsCoordinate || !workspace) {
     return null;
   }
-  var params = {
-    wsCoordinate: wsCoordinate
-  };
+  var params = {wsCoordinate: wsCoordinate};
   return new Blockly.ASTNode(
       Blockly.ASTNode.types.WORKSPACE, workspace, params);
 };
@@ -251,8 +250,8 @@ Blockly.ASTNode.prototype.processParams_ = function(params) {
  * Gets the value pointed to by this node.
  * It is the callers responsibility to check the node type to figure out what
  * type of object they get back from this.
- * @return {!Blockly.IASTNodeLocation} The current field, connection, workspace, or
- *     block the cursor is on.
+ * @return {!Blockly.IASTNodeLocation} The current field, connection, workspace,
+ *     or block the cursor is on.
  */
 Blockly.ASTNode.prototype.getLocation = function() {
   return this.location_;
@@ -330,7 +329,8 @@ Blockly.ASTNode.prototype.findNextForField_ = function() {
   for (var i = curIdx, newInput; (newInput = block.inputList[i]); i++) {
     var fieldRow = newInput.fieldRow;
     while (fieldIdx < fieldRow.length) {
-      if (fieldRow[fieldIdx].isClickable() || Blockly.ASTNode.NAVIGATE_ALL_FIELDS) {
+      if (fieldRow[fieldIdx].isClickable() ||
+          Blockly.ASTNode.NAVIGATE_ALL_FIELDS) {
         return Blockly.ASTNode.createFieldNode(fieldRow[fieldIdx]);
       }
       fieldIdx++;
@@ -389,7 +389,8 @@ Blockly.ASTNode.prototype.findPrevForField_ = function() {
     }
     var fieldRow = input.fieldRow;
     while (fieldIdx > -1) {
-      if (fieldRow[fieldIdx].isClickable() || Blockly.ASTNode.NAVIGATE_ALL_FIELDS) {
+      if (fieldRow[fieldIdx].isClickable() ||
+          Blockly.ASTNode.NAVIGATE_ALL_FIELDS) {
         return Blockly.ASTNode.createFieldNode(fieldRow[fieldIdx]);
       }
       fieldIdx--;
@@ -412,8 +413,9 @@ Blockly.ASTNode.prototype.findPrevForField_ = function() {
 Blockly.ASTNode.prototype.navigateBetweenStacks_ = function(forward) {
   var curLocation = this.getLocation();
   if (!(curLocation instanceof Blockly.Block)) {
-    curLocation = /** @type {!Blockly.IASTNodeLocationWithBlock} */ (
-      curLocation).getSourceBlock();
+    curLocation =
+        /** @type {!Blockly.IASTNodeLocationWithBlock} */ (curLocation)
+            .getSourceBlock();
   }
   if (!curLocation || !curLocation.workspace) {
     return null;
@@ -445,11 +447,11 @@ Blockly.ASTNode.prototype.navigateBetweenStacks_ = function(forward) {
 Blockly.ASTNode.prototype.findTopASTNodeForBlock_ = function(block) {
   var topConnection = block.previousConnection || block.outputConnection;
   if (topConnection) {
-    return /** @type {!Blockly.ASTNode} */ (Blockly.ASTNode.createConnectionNode(
-        topConnection));
+    return /** @type {!Blockly.ASTNode} */ (
+        Blockly.ASTNode.createConnectionNode(topConnection));
   } else {
-    return /** @type {!Blockly.ASTNode} */ (Blockly.ASTNode.createBlockNode(
-        block));
+    return /** @type {!Blockly.ASTNode} */ (
+        Blockly.ASTNode.createBlockNode(block));
   }
 };
 
@@ -518,8 +520,8 @@ Blockly.ASTNode.prototype.getSourceBlock = function() {
   } else if (this.getType() === Blockly.ASTNode.types.WORKSPACE) {
     return null;
   } else {
-    return /** @type {Blockly.IASTNodeLocationWithBlock} */ (
-      this.getLocation()).getSourceBlock();
+    return /** @type {Blockly.IASTNodeLocationWithBlock} */ (this.getLocation())
+        .getSourceBlock();
   }
 };
 

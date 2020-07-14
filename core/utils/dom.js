@@ -191,8 +191,9 @@ Blockly.utils.dom.insertAfter = function(newNode, refNode) {
  * @return {boolean} Whether the parent node contains the descendant node.
  */
 Blockly.utils.dom.containsNode = function(parent, descendant) {
-  return !!(parent.compareDocumentPosition(descendant) &
-            Blockly.utils.dom.NodeType.DOCUMENT_POSITION_CONTAINED_BY);
+  return !!(
+      parent.compareDocumentPosition(descendant) &
+      Blockly.utils.dom.NodeType.DOCUMENT_POSITION_CONTAINED_BY);
 };
 
 /**
@@ -278,10 +279,10 @@ Blockly.utils.dom.getTextWidth = function(textElement) {
  * @param {string} fontFamily The font family to use.
  * @return {number} Width of element.
  */
-Blockly.utils.dom.getFastTextWidth = function(textElement,
-    fontSize, fontWeight, fontFamily) {
-  return Blockly.utils.dom.getFastTextWidthWithSizeString(textElement,
-      fontSize + 'pt', fontWeight, fontFamily);
+Blockly.utils.dom.getFastTextWidth = function(
+    textElement, fontSize, fontWeight, fontFamily) {
+  return Blockly.utils.dom.getFastTextWidthWithSizeString(
+      textElement, fontSize + 'pt', fontWeight, fontFamily);
 };
 
 /**
@@ -296,8 +297,8 @@ Blockly.utils.dom.getFastTextWidth = function(textElement,
  * @param {string} fontFamily The font family to use.
  * @return {number} Width of element.
  */
-Blockly.utils.dom.getFastTextWidthWithSizeString = function(textElement,
-    fontSize, fontWeight, fontFamily) {
+Blockly.utils.dom.getFastTextWidthWithSizeString = function(
+    textElement, fontSize, fontWeight, fontFamily) {
   var text = textElement.textContent;
   var key = text + '\n' + textElement.className.baseVal;
   var width;
@@ -343,9 +344,8 @@ Blockly.utils.dom.getFastTextWidthWithSizeString = function(textElement,
  * @param {string} fontFamily The font family to use.
  * @return {{height: number, baseline: number}} Font measurements.
  */
-Blockly.utils.dom.measureFontMetrics = function(text, fontSize, fontWeight,
-    fontFamily) {
-
+Blockly.utils.dom.measureFontMetrics = function(
+    text, fontSize, fontWeight, fontFamily) {
   var span = document.createElement('span');
   span.style.font = fontWeight + ' ' + fontSize + ' ' + fontFamily;
   span.textContent = text;

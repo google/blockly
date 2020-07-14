@@ -48,8 +48,8 @@ Blockly.blockAnimations.disposeUiEffect = function(block) {
   workspace.getParentSvg().appendChild(clone);
   clone.bBox_ = clone.getBBox();
   // Start the animation.
-  Blockly.blockAnimations.disposeUiStep_(clone, workspace.RTL, new Date,
-      workspace.scale);
+  Blockly.blockAnimations.disposeUiStep_(
+      clone, workspace.RTL, new Date, workspace.scale);
 };
 
 /**
@@ -62,8 +62,8 @@ Blockly.blockAnimations.disposeUiEffect = function(block) {
  * @param {number} workspaceScale Scale of workspace.
  * @private
  */
-Blockly.blockAnimations.disposeUiStep_ = function(clone, rtl, start,
-    workspaceScale) {
+Blockly.blockAnimations.disposeUiStep_ = function(
+    clone, rtl, start, workspaceScale) {
   var ms = new Date - start;
   var percent = ms / 150;
   if (percent > 1) {
@@ -73,9 +73,12 @@ Blockly.blockAnimations.disposeUiStep_ = function(clone, rtl, start,
         (rtl ? -1 : 1) * clone.bBox_.width * workspaceScale / 2 * percent;
     var y = clone.translateY_ + clone.bBox_.height * workspaceScale * percent;
     var scale = (1 - percent) * workspaceScale;
-    clone.setAttribute('transform', 'translate(' + x + ',' + y + ')' +
-        ' scale(' + scale + ')');
-    setTimeout(Blockly.blockAnimations.disposeUiStep_, 10, clone, rtl, start,
+    clone.setAttribute(
+        'transform',
+        'translate(' + x + ',' + y + ')' +
+            ' scale(' + scale + ')');
+    setTimeout(
+        Blockly.blockAnimations.disposeUiStep_, 10, clone, rtl, start,
         workspaceScale);
   }
 };
@@ -102,8 +105,8 @@ Blockly.blockAnimations.connectionUiEffect = function(block) {
     xy.x += (block.RTL ? -23 : 23) * scale;
     xy.y += 3 * scale;
   }
-  var ripple = Blockly.utils.dom.createSvgElement('circle',
-      {
+  var ripple = Blockly.utils.dom.createSvgElement(
+      'circle', {
         'cx': xy.x,
         'cy': xy.y,
         'r': 0,
@@ -167,7 +170,7 @@ Blockly.blockAnimations.disconnectUiEffect = function(block) {
  */
 Blockly.blockAnimations.disconnectUiStep_ = function(group, magnitude, start) {
   var DURATION = 200;  // Milliseconds.
-  var WIGGLES = 3;  // Half oscillations.
+  var WIGGLES = 3;     // Half oscillations.
 
   var ms = new Date - start;
   var percent = ms / DURATION;
@@ -179,9 +182,8 @@ Blockly.blockAnimations.disconnectUiStep_ = function(group, magnitude, start) {
         Math.sin(percent * Math.PI * WIGGLES) * (1 - percent) * magnitude);
     group.skew_ = 'skewX(' + skew + ')';
     Blockly.blockAnimations.disconnectGroup_ = group;
-    Blockly.blockAnimations.disconnectPid_ =
-        setTimeout(Blockly.blockAnimations.disconnectUiStep_, 10, group,
-            magnitude, start);
+    Blockly.blockAnimations.disconnectPid_ = setTimeout(
+        Blockly.blockAnimations.disconnectUiStep_, 10, group, magnitude, start);
   }
   group.setAttribute('transform', group.translate_ + group.skew_);
 };

@@ -60,8 +60,8 @@ Blockly.Grid = function(pattern, options) {
    * @type {SVGElement}
    * @private
    */
-  this.line2_ = this.line1_ &&
-    (/** @type {SVGElement} */ (this.line1_.nextSibling));
+  this.line2_ =
+      this.line1_ && (/** @type {SVGElement} */ (this.line1_.nextSibling));
 
   /**
    * Whether blocks should snap to the grid.
@@ -152,8 +152,8 @@ Blockly.Grid.prototype.update = function(scale) {
  * @param {number} y2 The new y end position of the line (in px).
  * @private
  */
-Blockly.Grid.prototype.setLineAttributes_ = function(line, width,
-    x1, x2, y1, y2) {
+Blockly.Grid.prototype.setLineAttributes_ = function(
+    line, width, x1, x2, y1, y2) {
   if (line) {
     line.setAttribute('stroke-width', width);
     line.setAttribute('x1', x1);
@@ -196,17 +196,16 @@ Blockly.Grid.createDom = function(rnd, gridOptions, defs) {
       <rect stroke="#888" />
     </pattern>
   */
-  var gridPattern = Blockly.utils.dom.createSvgElement('pattern',
-      {
-        'id': 'blocklyGridPattern' + rnd,
-        'patternUnits': 'userSpaceOnUse'
-      }, defs);
+  var gridPattern = Blockly.utils.dom.createSvgElement(
+      'pattern',
+      {'id': 'blocklyGridPattern' + rnd, 'patternUnits': 'userSpaceOnUse'},
+      defs);
   if (gridOptions['length'] > 0 && gridOptions['spacing'] > 0) {
-    Blockly.utils.dom.createSvgElement('line',
-        {'stroke': gridOptions['colour']}, gridPattern);
+    Blockly.utils.dom.createSvgElement(
+        'line', {'stroke': gridOptions['colour']}, gridPattern);
     if (gridOptions['length'] > 1) {
-      Blockly.utils.dom.createSvgElement('line',
-          {'stroke': gridOptions['colour']}, gridPattern);
+      Blockly.utils.dom.createSvgElement(
+          'line', {'stroke': gridOptions['colour']}, gridPattern);
     }
     // x1, y1, x1, x2 properties will be set later in update.
   } else {

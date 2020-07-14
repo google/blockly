@@ -35,7 +35,8 @@ goog.require('Blockly.utils.xml');
 Blockly.WorkspaceComment = function(workspace, content, height, width, opt_id) {
   /** @type {string} */
   this.id = (opt_id && !workspace.getCommentById(opt_id)) ?
-      opt_id : Blockly.utils.genUid();
+      opt_id :
+      Blockly.utils.genUid();
 
   workspace.addTopComment(this);
 
@@ -211,8 +212,7 @@ Blockly.WorkspaceComment.prototype.setDeletable = function(deletable) {
  * @package
  */
 Blockly.WorkspaceComment.prototype.isMovable = function() {
-  return this.movable_ &&
-      !(this.workspace && this.workspace.options.readOnly);
+  return this.movable_ && !(this.workspace && this.workspace.options.readOnly);
 };
 
 /**
@@ -229,8 +229,7 @@ Blockly.WorkspaceComment.prototype.setMovable = function(movable) {
  * @return {boolean} True if editable.
  */
 Blockly.WorkspaceComment.prototype.isEditable = function() {
-  return this.editable_ &&
-      !(this.workspace && this.workspace.options.readOnly);
+  return this.editable_ && !(this.workspace && this.workspace.options.readOnly);
 };
 
 /**

@@ -28,5 +28,5 @@ goog.require('Blockly.minimalist.RenderInfo');
 Blockly.minimalist.Drawer = function(block, info) {
   Blockly.minimalist.Drawer.superClass_.constructor.call(this, block, info);
 };
-Blockly.utils.object.inherits(Blockly.minimalist.Drawer,
-    Blockly.blockRendering.Drawer);
+Blockly.utils.object.inherits(
+    Blockly.minimalist.Drawer, Blockly.blockRendering.Drawer);

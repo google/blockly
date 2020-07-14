@@ -29,11 +29,11 @@ goog.require('Blockly.utils.object');
  * @extends {Blockly.blockRendering.RenderInfo}
  */
 Blockly.minimalist.RenderInfo = function(renderer, block) {
-  Blockly.minimalist.RenderInfo.superClass_.constructor.call(this, renderer, block);
-
+  Blockly.minimalist.RenderInfo.superClass_.constructor.call(
+      this, renderer, block);
 };
-Blockly.utils.object.inherits(Blockly.minimalist.RenderInfo,
-    Blockly.blockRendering.RenderInfo);
+Blockly.utils.object.inherits(
+    Blockly.minimalist.RenderInfo, Blockly.blockRendering.RenderInfo);
 
 /**
  * Get the block renderer in use.

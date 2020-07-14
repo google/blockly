@@ -270,8 +270,8 @@ Blockly.blockRendering.TopRow = function(constants) {
    */
   this.connection = null;
 };
-Blockly.utils.object.inherits(Blockly.blockRendering.TopRow,
-    Blockly.blockRendering.Row);
+Blockly.utils.object.inherits(
+    Blockly.blockRendering.TopRow, Blockly.blockRendering.Row);
 
 /**
  * Returns whether or not the top row has a left square corner.
@@ -279,13 +279,13 @@ Blockly.utils.object.inherits(Blockly.blockRendering.TopRow,
  * @return {boolean} Whether or not the top row has a left square corner.
  */
 Blockly.blockRendering.TopRow.prototype.hasLeftSquareCorner = function(block) {
-  var hasHat = (block.hat ?
-      block.hat === 'cap' : this.constants_.ADD_START_HATS) &&
+  var hasHat =
+      (block.hat ? block.hat === 'cap' : this.constants_.ADD_START_HATS) &&
       !block.outputConnection && !block.previousConnection;
   var prevBlock = block.getPreviousBlock();
 
-  return !!block.outputConnection ||
-      hasHat || (prevBlock ? prevBlock.getNextBlock() == block : false);
+  return !!block.outputConnection || hasHat ||
+      (prevBlock ? prevBlock.getNextBlock() == block : false);
 };
 
 /**
@@ -348,8 +348,8 @@ Blockly.blockRendering.TopRow.prototype.endsWithElemSpacer = function() {
  * @extends {Blockly.blockRendering.Row}
  */
 Blockly.blockRendering.BottomRow = function(constants) {
-  Blockly.blockRendering.BottomRow.superClass_.constructor.call(this,
-      constants);
+  Blockly.blockRendering.BottomRow.superClass_.constructor.call(
+      this, constants);
   this.type |= Blockly.blockRendering.Types.BOTTOM_ROW;
 
   /**
@@ -381,8 +381,8 @@ Blockly.blockRendering.BottomRow = function(constants) {
    */
   this.baseline = 0;
 };
-Blockly.utils.object.inherits(Blockly.blockRendering.BottomRow,
-    Blockly.blockRendering.Row);
+Blockly.utils.object.inherits(
+    Blockly.blockRendering.BottomRow, Blockly.blockRendering.Row);
 
 /**
  * Returns whether or not the bottom row has a left square corner.
@@ -454,19 +454,19 @@ Blockly.blockRendering.BottomRow.prototype.endsWithElemSpacer = function() {
  * @extends {Blockly.blockRendering.Row}
  */
 Blockly.blockRendering.SpacerRow = function(constants, height, width) {
-  Blockly.blockRendering.SpacerRow.superClass_.constructor.call(this,
-      constants);
+  Blockly.blockRendering.SpacerRow.superClass_.constructor.call(
+      this, constants);
   this.type |= Blockly.blockRendering.Types.SPACER |
       Blockly.blockRendering.Types.BETWEEN_ROW_SPACER;
   this.width = width;
   this.height = height;
   this.followsStatement = false;
   this.widthWithConnectedBlocks = 0;
-  this.elements = [
-    new Blockly.blockRendering.InRowSpacer(this.constants_, width)];
+  this.elements =
+      [new Blockly.blockRendering.InRowSpacer(this.constants_, width)];
 };
-Blockly.utils.object.inherits(Blockly.blockRendering.SpacerRow,
-    Blockly.blockRendering.Row);
+Blockly.utils.object.inherits(
+    Blockly.blockRendering.SpacerRow, Blockly.blockRendering.Row);
 
 /**
  * @override
@@ -494,8 +494,8 @@ Blockly.blockRendering.InputRow = function(constants) {
    */
   this.connectedBlockWidths = 0;
 };
-Blockly.utils.object.inherits(Blockly.blockRendering.InputRow,
-    Blockly.blockRendering.Row);
+Blockly.utils.object.inherits(
+    Blockly.blockRendering.InputRow, Blockly.blockRendering.Row);
 
 /**
  * Inspect all subcomponents and populate all size properties on the row.
@@ -510,10 +510,11 @@ Blockly.blockRendering.InputRow.prototype.measure = function() {
     if (Blockly.blockRendering.Types.isInput(elem)) {
       if (Blockly.blockRendering.Types.isStatementInput(elem)) {
         connectedBlockWidths += elem.connectedBlockWidth;
-      } else if (Blockly.blockRendering.Types.isExternalInput(elem) &&
+      } else if (
+          Blockly.blockRendering.Types.isExternalInput(elem) &&
           elem.connectedBlockWidth != 0) {
-        connectedBlockWidths += (elem.connectedBlockWidth -
-          elem.connectionWidth);
+        connectedBlockWidths +=
+            (elem.connectedBlockWidth - elem.connectionWidth);
       }
     }
     if (!(Blockly.blockRendering.Types.isSpacer(elem))) {

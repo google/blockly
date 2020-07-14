@@ -26,7 +26,6 @@ goog.require('Blockly.utils.style');
  * @constructor
  */
 Blockly.Component = function() {
-
   /**
    * Whether the component is rendered right-to-left.
    * @type {boolean}
@@ -350,7 +349,9 @@ Blockly.Component.prototype.disposeInternal = function() {
   }
 
   // Disposes of the component's children, if any.
-  this.forEachChild(function(child) { child.dispose(); });
+  this.forEachChild(function(child) {
+    child.dispose();
+  });
 
   // Detach the component's element from the DOM.
   if (this.element_) {
@@ -470,7 +471,8 @@ Blockly.Component.prototype.addChildAt = function(child, index, opt_render) {
     var sibling = this.getChildAt(index + 1);
     // render_() calls enterDocument() if the parent is already in the document.
     child.render_(this.getContentElement(), sibling ? sibling.element_ : null);
-  } else if (this.inDocument_ && !child.inDocument_ && child.element_ &&
+  } else if (
+      this.inDocument_ && !child.inDocument_ && child.element_ &&
       child.element_.parentNode &&
       // Under some circumstances, IE8 implicitly creates a Document Fragment
       // for detached nodes, so ensure the parent is an Element as it should be.
@@ -522,7 +524,8 @@ Blockly.Component.prototype.getChildCount = function() {
 Blockly.Component.prototype.getChild = function(id) {
   // Use childIndex_ for O(1) access by ID.
   return id ?
-      /** @type {Blockly.Component} */ (this.childIndex_[id]) || null : null;
+      /** @type {Blockly.Component} */ (this.childIndex_[id]) || null :
+      null;
 };
 
 /**

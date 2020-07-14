@@ -60,7 +60,9 @@ Blockly.ContextMenu.show = function(e, options, rtl) {
   Blockly.ContextMenu.position_(menu, e, rtl);
   // 1ms delay is required for focusing on context menus because some other
   // mouse event is still waiting in the queue and clears focus.
-  setTimeout(function() {menu.focus();}, 1);
+  setTimeout(function() {
+    menu.focus();
+  }, 1);
   Blockly.ContextMenu.currentBlock = null;  // May be set by Blockly.Block.
 };
 
@@ -111,11 +113,8 @@ Blockly.ContextMenu.position_ = function(menu, e, rtl) {
   // This one is just a point, but we'll pretend that it's a rect so we can use
   // some helper functions.
   var anchorBBox = new Blockly.utils.Rect(
-      e.clientY + viewportBBox.top,
-      e.clientY + viewportBBox.top,
-      e.clientX + viewportBBox.left,
-      e.clientX + viewportBBox.left
-  );
+      e.clientY + viewportBBox.top, e.clientY + viewportBBox.top,
+      e.clientX + viewportBBox.left, e.clientX + viewportBBox.left);
 
   Blockly.ContextMenu.createWidget_(menu);
   var menuSize = menu.getSize();
@@ -146,8 +145,9 @@ Blockly.ContextMenu.createWidget_ = function(menu) {
   Blockly.utils.dom.addClass(
       /** @type {!Element} */ (menuDom), 'blocklyContextMenu');
   // Prevent system context menu when right-clicking a Blockly context menu.
-  Blockly.bindEventWithChecks_(/** @type {!EventTarget} */ (menuDom),
-      'contextmenu', null, Blockly.utils.noEvent);
+  Blockly.bindEventWithChecks_(
+      /** @type {!EventTarget} */ (menuDom), 'contextmenu', null,
+      Blockly.utils.noEvent);
   // Focus only after the initial render to avoid issue #1329.
   menu.focus();
 };
@@ -279,8 +279,8 @@ Blockly.ContextMenu.workspaceCommentOption = function(ws, e) {
 
     // The position of the new comment in pixels relative to the origin of the
     // main workspace.
-    var finalOffset = Blockly.utils.Coordinate.difference(clientOffsetPixels,
-        mainOffsetPixels);
+    var finalOffset = Blockly.utils.Coordinate.difference(
+        clientOffsetPixels, mainOffsetPixels);
     // The position of the new comment in main workspace coordinates.
     finalOffset.scale(1 / ws.scale);
 

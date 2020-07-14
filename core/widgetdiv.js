@@ -84,7 +84,7 @@ Blockly.WidgetDiv.show = function(newOwner, rtl, dispose) {
   div.style.direction = rtl ? 'rtl' : 'ltr';
   div.style.display = 'block';
   var mainWorkspace =
-    /** @type {!Blockly.WorkspaceSvg} */ (Blockly.getMainWorkspace());
+      /** @type {!Blockly.WorkspaceSvg} */ (Blockly.getMainWorkspace());
   Blockly.WidgetDiv.rendererClassName_ =
       mainWorkspace.getRenderer().getClassName();
   Blockly.WidgetDiv.themeClassName_ = mainWorkspace.getTheme().getClassName();
@@ -117,8 +117,8 @@ Blockly.WidgetDiv.hide = function() {
     Blockly.utils.dom.removeClass(div, Blockly.WidgetDiv.themeClassName_);
     Blockly.WidgetDiv.themeClassName_ = '';
   }
-  (/** @type {!Blockly.WorkspaceSvg} */ (
-    Blockly.getMainWorkspace())).markFocused();
+  (/** @type {!Blockly.WorkspaceSvg} */ (Blockly.getMainWorkspace()))
+      .markFocused();
 };
 
 /**
@@ -169,11 +169,11 @@ Blockly.WidgetDiv.positionInternal_ = function(x, y, height) {
  *     horizontal alignment.
  * @package
  */
-Blockly.WidgetDiv.positionWithAnchor = function(viewportBBox, anchorBBox,
-    widgetSize, rtl) {
+Blockly.WidgetDiv.positionWithAnchor = function(
+    viewportBBox, anchorBBox, widgetSize, rtl) {
   var y = Blockly.WidgetDiv.calculateY_(viewportBBox, anchorBBox, widgetSize);
-  var x = Blockly.WidgetDiv.calculateX_(viewportBBox, anchorBBox, widgetSize,
-      rtl);
+  var x =
+      Blockly.WidgetDiv.calculateX_(viewportBBox, anchorBBox, widgetSize, rtl);
 
   if (y < 0) {
     Blockly.WidgetDiv.positionInternal_(x, 0, widgetSize.height + y);
@@ -189,15 +189,15 @@ Blockly.WidgetDiv.positionWithAnchor = function(viewportBBox, anchorBBox,
  *     current viewport, in window coordinates.
  * @param {!Blockly.utils.Rect} anchorBBox The bounding rectangle of the anchor,
  *     in window coordinates.
- * @param {Blockly.utils.Size} widgetSize The dimensions of the widget inside the
- *     widget div.
+ * @param {Blockly.utils.Size} widgetSize The dimensions of the widget inside
+ *     the widget div.
  * @param {boolean} rtl Whether the Blockly workspace is in RTL mode.
  * @return {number} A valid x-coordinate for the top left corner of the widget
  *     div, in window coordinates.
  * @private
  */
-Blockly.WidgetDiv.calculateX_ = function(viewportBBox, anchorBBox, widgetSize,
-    rtl) {
+Blockly.WidgetDiv.calculateX_ = function(
+    viewportBBox, anchorBBox, widgetSize, rtl) {
   if (rtl) {
     // Try to align the right side of the field and the right side of widget.
     var widgetLeft = anchorBBox.right - widgetSize.width;
@@ -221,8 +221,8 @@ Blockly.WidgetDiv.calculateX_ = function(viewportBBox, anchorBBox, widgetSize,
  *     current viewport, in window coordinates.
  * @param {!Blockly.utils.Rect} anchorBBox The bounding rectangle of the anchor,
  *     in window coordinates.
- * @param {Blockly.utils.Size} widgetSize The dimensions of the widget inside the
- *     widget div.
+ * @param {Blockly.utils.Size} widgetSize The dimensions of the widget inside
+ *     the widget div.
  * @return {number} A valid y-coordinate for the top left corner of the widget
  *     div, in window coordinates.
  * @private

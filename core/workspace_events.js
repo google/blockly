@@ -45,8 +45,8 @@ Blockly.Events.FinishedLoading = function(workspace) {
   // Workspace events do not undo or redo.
   this.recordUndo = false;
 };
-Blockly.utils.object.inherits(Blockly.Events.FinishedLoading,
-    Blockly.Events.Ui);
+Blockly.utils.object.inherits(
+    Blockly.Events.FinishedLoading, Blockly.Events.Ui);
 
 /**
  * Type of this event.

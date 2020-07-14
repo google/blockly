@@ -75,7 +75,8 @@ Blockly.BubbleDragger = function(bubble, workspace) {
    */
   this.dragSurface_ =
       Blockly.utils.is3dSupported() && !!workspace.getBlockDragSurface() ?
-      workspace.getBlockDragSurface() : null;
+      workspace.getBlockDragSurface() :
+      null;
 };
 
 /**
@@ -109,7 +110,7 @@ Blockly.BubbleDragger.prototype.startBubbleDrag = function() {
   var toolbox = this.workspace_.getToolbox();
   if (toolbox && typeof toolbox.addStyle == 'function') {
     var style = this.draggingBubble_.isDeletable() ? 'blocklyToolboxDelete' :
-        'blocklyToolboxGrab';
+                                                     'blocklyToolboxGrab';
     toolbox.addStyle(style);
   }
 };
@@ -211,7 +212,7 @@ Blockly.BubbleDragger.prototype.endBubbleDrag = function(
   var toolbox = this.workspace_.getToolbox();
   if (toolbox && typeof toolbox.removeStyle == 'function') {
     var style = this.draggingBubble_.isDeletable() ? 'blocklyToolboxDelete' :
-        'blocklyToolboxGrab';
+                                                     'blocklyToolboxGrab';
     toolbox.removeStyle(style);
   }
   Blockly.Events.setGroup(false);
@@ -238,14 +239,15 @@ Blockly.BubbleDragger.prototype.fireMoveEvent_ = function() {
  * correction for mutator workspaces.
  * This function does not consider differing origins.  It simply scales the
  * input's x and y values.
- * @param {!Blockly.utils.Coordinate} pixelCoord A coordinate with x and y values
- *     in CSS pixel units.
- * @return {!Blockly.utils.Coordinate} The input coordinate divided by the workspace
- *     scale.
+ * @param {!Blockly.utils.Coordinate} pixelCoord A coordinate with x and y
+ *     values in CSS pixel units.
+ * @return {!Blockly.utils.Coordinate} The input coordinate divided by the
+ *     workspace scale.
  * @private
  */
 Blockly.BubbleDragger.prototype.pixelsToWorkspaceUnits_ = function(pixelCoord) {
-  var result = new Blockly.utils.Coordinate(pixelCoord.x / this.workspace_.scale,
+  var result = new Blockly.utils.Coordinate(
+      pixelCoord.x / this.workspace_.scale,
       pixelCoord.y / this.workspace_.scale);
   if (this.workspace_.isMutator) {
     // If we're in a mutator, its scale is always 1, purely because of some

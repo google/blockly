@@ -18,7 +18,7 @@ goog.provide('Blockly.Events.BlockMove');
 goog.provide('Blockly.Events.Change');  // Deprecated.
 goog.provide('Blockly.Events.Create');  // Deprecated.
 goog.provide('Blockly.Events.Delete');  // Deprecated.
-goog.provide('Blockly.Events.Move');  // Deprecated.
+goog.provide('Blockly.Events.Move');    // Deprecated.
 
 goog.require('Blockly.Events');
 goog.require('Blockly.Events.Abstract');
@@ -45,8 +45,8 @@ Blockly.Events.BlockBase = function(block) {
   this.blockId = block.id;
   this.workspaceId = block.workspace.id;
 };
-Blockly.utils.object.inherits(Blockly.Events.BlockBase,
-    Blockly.Events.Abstract);
+Blockly.utils.object.inherits(
+    Blockly.Events.BlockBase, Blockly.Events.Abstract);
 
 /**
  * Encode the event as JSON.
@@ -148,7 +148,7 @@ Blockly.Events.Change.prototype.run = function(forward) {
   var workspace = this.getEventWorkspace_();
   var block = workspace.getBlockById(this.blockId);
   if (!block) {
-    console.warn("Can't change non-existent block: " + this.blockId);
+    console.warn('Can\'t change non-existent block: ' + this.blockId);
     return;
   }
   if (block.mutator) {
@@ -162,7 +162,7 @@ Blockly.Events.Change.prototype.run = function(forward) {
       if (field) {
         field.setValue(value);
       } else {
-        console.warn("Can't set non-existent field: " + this.name);
+        console.warn('Can\'t set non-existent field: ' + this.name);
       }
       break;
     case 'comment':
@@ -184,7 +184,8 @@ Blockly.Events.Change.prototype.run = function(forward) {
         oldMutation = oldMutationDom && Blockly.Xml.domToText(oldMutationDom);
       }
       if (block.domToMutation) {
-        var dom = Blockly.Xml.textToDom(/** @type {string} */ (value) || '<mutation/>');
+        var dom = Blockly.Xml.textToDom(
+            /** @type {string} */ (value) || '<mutation/>');
         block.domToMutation(dom);
       }
       Blockly.Events.fire(new Blockly.Events.Change(
@@ -268,7 +269,7 @@ Blockly.Events.Create.prototype.run = function(forward) {
         block.dispose(false);
       } else if (id == this.blockId) {
         // Only complain about root-level block.
-        console.warn("Can't uncreate non-existent block: " + id);
+        console.warn('Can\'t uncreate non-existent block: ' + id);
       }
     }
   }
@@ -344,7 +345,7 @@ Blockly.Events.Delete.prototype.run = function(forward) {
         block.dispose(false);
       } else if (id == this.blockId) {
         // Only complain about root-level block.
-        console.warn("Can't delete non-existent block: " + id);
+        console.warn('Can\'t delete non-existent block: ' + id);
       }
     }
   } else {
@@ -471,7 +472,7 @@ Blockly.Events.Move.prototype.run = function(forward) {
   var workspace = this.getEventWorkspace_();
   var block = workspace.getBlockById(this.blockId);
   if (!block) {
-    console.warn("Can't move non-existent block: " + this.blockId);
+    console.warn('Can\'t move non-existent block: ' + this.blockId);
     return;
   }
   var parentId = forward ? this.newParentId : this.oldParentId;
@@ -481,7 +482,7 @@ Blockly.Events.Move.prototype.run = function(forward) {
   if (parentId) {
     parentBlock = workspace.getBlockById(parentId);
     if (!parentBlock) {
-      console.warn("Can't connect to non-existent block: " + parentId);
+      console.warn('Can\'t connect to non-existent block: ' + parentId);
       return;
     }
   }
@@ -505,7 +506,7 @@ Blockly.Events.Move.prototype.run = function(forward) {
     if (parentConnection) {
       blockConnection.connect(parentConnection);
     } else {
-      console.warn("Can't connect to non-existent input: " + inputName);
+      console.warn('Can\'t connect to non-existent input: ' + inputName);
     }
   }
 };

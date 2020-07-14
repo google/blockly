@@ -42,8 +42,8 @@ Blockly.geras.ConstantProvider = function() {
    */
   this.MAX_BOTTOM_WIDTH = 30;
 };
-Blockly.utils.object.inherits(Blockly.geras.ConstantProvider,
-    Blockly.blockRendering.ConstantProvider);
+Blockly.utils.object.inherits(
+    Blockly.geras.ConstantProvider, Blockly.blockRendering.ConstantProvider);
 
 
 /**
@@ -56,8 +56,7 @@ Blockly.geras.ConstantProvider.prototype.getCSS_ = function(selector) {
         // Insertion marker.
         selector + ' .blocklyInsertionMarker>.blocklyPathLight,',
         selector + ' .blocklyInsertionMarker>.blocklyPathDark {',
-          'fill-opacity: ' + this.INSERTION_MARKER_OPACITY + ';',
-          'stroke: none;',
+        'fill-opacity: ' + this.INSERTION_MARKER_OPACITY + ';', 'stroke: none;',
         '}',
         /* eslint-enable indent */
       ]);

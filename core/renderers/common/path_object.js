@@ -46,8 +46,8 @@ Blockly.blockRendering.PathObject = function(root, style, constants) {
    * @type {!SVGElement}
    * @package
    */
-  this.svgPath = Blockly.utils.dom.createSvgElement('path',
-      {'class': 'blocklyPath'}, this.svgRoot);
+  this.svgPath = Blockly.utils.dom.createSvgElement(
+      'path', {'class': 'blocklyPath'}, this.svgRoot);
 
   /**
    * The style object to use when colouring block paths.
@@ -160,11 +160,11 @@ Blockly.blockRendering.PathObject.prototype.setStyle = function(blockStyle) {
 Blockly.blockRendering.PathObject.prototype.setClass_ = function(
     className, add) {
   if (add) {
-    Blockly.utils.dom.addClass(/** @type {!Element} */ (this.svgRoot),
-        className);
+    Blockly.utils.dom.addClass(
+        /** @type {!Element} */ (this.svgRoot), className);
   } else {
-    Blockly.utils.dom.removeClass(/** @type {!Element} */ (this.svgRoot),
-        className);
+    Blockly.utils.dom.removeClass(
+        /** @type {!Element} */ (this.svgRoot), className);
   }
 };
 
@@ -177,8 +177,8 @@ Blockly.blockRendering.PathObject.prototype.setClass_ = function(
 Blockly.blockRendering.PathObject.prototype.updateHighlighted = function(
     enable) {
   if (enable) {
-    this.svgPath.setAttribute('filter',
-        'url(#' + this.constants.embossFilterId + ')');
+    this.svgPath.setAttribute(
+        'filter', 'url(#' + this.constants.embossFilterId + ')');
   } else {
     this.svgPath.setAttribute('filter', 'none');
   }
@@ -205,8 +205,8 @@ Blockly.blockRendering.PathObject.prototype.updateDisabled_ = function(
     disabled) {
   this.setClass_('blocklyDisabled', disabled);
   if (disabled) {
-    this.svgPath.setAttribute('fill',
-        'url(#' + this.constants.disabledPatternId + ')');
+    this.svgPath.setAttribute(
+        'fill', 'url(#' + this.constants.disabledPatternId + ')');
   }
 };
 
@@ -257,9 +257,9 @@ Blockly.blockRendering.PathObject.prototype.updateMovable = function(enable) {
  * @param {boolean} enable True if styling should be added.
  * @package
  */
-Blockly.blockRendering.PathObject.prototype.updateReplacementFade =
-    function(enable) {
-    /* eslint-disable indent */
+Blockly.blockRendering.PathObject.prototype.updateReplacementFade = function(
+    enable) {
+  /* eslint-disable indent */
   this.setClass_('blocklyReplaceable', enable);
 }; /* eslint-enable indent */
 
@@ -272,6 +272,6 @@ Blockly.blockRendering.PathObject.prototype.updateReplacementFade =
  */
 Blockly.blockRendering.PathObject.prototype.updateShapeForInputHighlight =
     function(_conn, _enable) {
-    /* eslint-disable indent */
+  /* eslint-disable indent */
   // NOP
 }; /* eslint-enable indent */

@@ -45,10 +45,11 @@ goog.require('Blockly.utils.object');
  * @extends {Blockly.blockRendering.RenderInfo}
  */
 Blockly.thrasos.RenderInfo = function(renderer, block) {
-  Blockly.thrasos.RenderInfo.superClass_.constructor.call(this, renderer, block);
+  Blockly.thrasos.RenderInfo.superClass_.constructor.call(
+      this, renderer, block);
 };
-Blockly.utils.object.inherits(Blockly.thrasos.RenderInfo,
-    Blockly.blockRendering.RenderInfo);
+Blockly.utils.object.inherits(
+    Blockly.thrasos.RenderInfo, Blockly.blockRendering.RenderInfo);
 
 /**
  * Get the block renderer in use.
@@ -91,8 +92,8 @@ Blockly.thrasos.RenderInfo.prototype.addElemSpacing_ = function() {
         spacing += this.constants_.TAB_WIDTH;
       }
       // There's a spacer after the last element in the row.
-      row.elements.push(new Blockly.blockRendering.InRowSpacer(
-          this.constants_, spacing));
+      row.elements.push(
+          new Blockly.blockRendering.InRowSpacer(this.constants_, spacing));
     }
   }
 };
@@ -160,8 +161,8 @@ Blockly.thrasos.RenderInfo.prototype.getInRowSpacing_ = function(prev, next) {
   }
 
   // Spacing between a non-input and an input.
-  if (!Blockly.blockRendering.Types.isInput(prev) &&
-      next && Blockly.blockRendering.Types.isInput(next)) {
+  if (!Blockly.blockRendering.Types.isInput(prev) && next &&
+      Blockly.blockRendering.Types.isInput(next)) {
     // Between an editable field and an input.
     if (Blockly.blockRendering.Types.isField(prev) &&
         (/** @type Blockly.blockRendering.Field */ (prev)).isEditable) {
@@ -183,14 +184,14 @@ Blockly.thrasos.RenderInfo.prototype.getInRowSpacing_ = function(prev, next) {
   }
 
   // Spacing between an icon and an icon or field.
-  if (Blockly.blockRendering.Types.isIcon(prev) &&
-      next && !Blockly.blockRendering.Types.isInput(next)) {
+  if (Blockly.blockRendering.Types.isIcon(prev) && next &&
+      !Blockly.blockRendering.Types.isInput(next)) {
     return this.constants_.LARGE_PADDING;
   }
 
   // Spacing between an inline input and a field.
-  if (Blockly.blockRendering.Types.isInlineInput(prev) &&
-      next && Blockly.blockRendering.Types.isField(next)) {
+  if (Blockly.blockRendering.Types.isInlineInput(prev) && next &&
+      Blockly.blockRendering.Types.isField(next)) {
     // Editable field after inline input.
     if ((/** @type Blockly.blockRendering.Field */ (next)).isEditable) {
       return this.constants_.MEDIUM_PADDING;
@@ -218,10 +219,10 @@ Blockly.thrasos.RenderInfo.prototype.getInRowSpacing_ = function(prev, next) {
   }
 
   // Spacing between two fields of the same editability.
-  if (Blockly.blockRendering.Types.isField(prev) &&
-      next && Blockly.blockRendering.Types.isField(next) &&
+  if (Blockly.blockRendering.Types.isField(prev) && next &&
+      Blockly.blockRendering.Types.isField(next) &&
       ((/** @type Blockly.blockRendering.Field */ (prev)).isEditable ==
-          (/** @type Blockly.blockRendering.Field */ (next)).isEditable)) {
+       (/** @type Blockly.blockRendering.Field */ (next)).isEditable)) {
     return this.constants_.LARGE_PADDING;
   }
 
@@ -286,8 +287,7 @@ Blockly.thrasos.RenderInfo.prototype.getElemCenterline_ = function(row, elem) {
 
   var result = row.yPos;
   if (Blockly.blockRendering.Types.isField(elem) && row.hasStatement) {
-    var offset = this.constants_.TALL_INPUT_FIELD_OFFSET_Y +
-        elem.height / 2;
+    var offset = this.constants_.TALL_INPUT_FIELD_OFFSET_Y + elem.height / 2;
     result += offset;
   } else {
     result += (row.height / 2);
@@ -325,9 +325,9 @@ Blockly.thrasos.RenderInfo.prototype.finalize_ = function() {
   if (this.outputConnection && this.block_.nextConnection &&
       this.block_.nextConnection.isConnected()) {
     // Include width of connected block in value to stack width measurement.
-    widestRowWithConnectedBlocks =
-        Math.max(widestRowWithConnectedBlocks,
-            this.block_.nextConnection.targetBlock().getHeightWidth().width);
+    widestRowWithConnectedBlocks = Math.max(
+        widestRowWithConnectedBlocks,
+        this.block_.nextConnection.targetBlock().getHeightWidth().width);
   }
 
   this.bottomRow.baseline = yCursor - this.bottomRow.descenderHeight;

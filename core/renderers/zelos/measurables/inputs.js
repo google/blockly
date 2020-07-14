@@ -28,8 +28,8 @@ goog.require('Blockly.utils.object');
  * @extends {Blockly.blockRendering.StatementInput}
  */
 Blockly.zelos.StatementInput = function(constants, input) {
-  Blockly.zelos.StatementInput.superClass_.constructor.call(this,
-      constants, input);
+  Blockly.zelos.StatementInput.superClass_.constructor.call(
+      this, constants, input);
 
   if (this.connectedBlock) {
     // Find the bottom-most connected block in the stack.
@@ -43,5 +43,5 @@ Blockly.zelos.StatementInput = function(constants, input) {
     }
   }
 };
-Blockly.utils.object.inherits(Blockly.zelos.StatementInput,
-    Blockly.blockRendering.StatementInput);
+Blockly.utils.object.inherits(
+    Blockly.zelos.StatementInput, Blockly.blockRendering.StatementInput);

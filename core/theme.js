@@ -29,9 +29,8 @@ goog.require('Blockly.utils.object');
  *     component names to style value.
  * @constructor
  */
-Blockly.Theme = function(name, opt_blockStyles, opt_categoryStyles,
-    opt_componentStyles) {
-
+Blockly.Theme = function(
+    name, opt_blockStyles, opt_categoryStyles, opt_componentStyles) {
   /**
    * The theme name. This can be used to reference a specific theme in CSS.
    * @type {string}
@@ -58,7 +57,7 @@ Blockly.Theme = function(name, opt_blockStyles, opt_categoryStyles,
    * @package
    */
   this.componentStyles = opt_componentStyles ||
-    (/** @type {Blockly.Theme.ComponentStyle} */ (Object.create(null)));
+      (/** @type {Blockly.Theme.ComponentStyle} */ (Object.create(null)));
 
   /**
    * The font style.
@@ -144,7 +143,7 @@ Blockly.Theme.prototype.getClassName = function() {
  * Overrides or adds a style to the blockStyles map.
  * @param {string} blockStyleName The name of the block style.
  * @param {Blockly.Theme.BlockStyle} blockStyle The block style.
-*/
+ */
 Blockly.Theme.prototype.setBlockStyle = function(blockStyleName, blockStyle) {
   this.blockStyles[blockStyleName] = blockStyle;
 };
@@ -153,9 +152,9 @@ Blockly.Theme.prototype.setBlockStyle = function(blockStyleName, blockStyle) {
  * Overrides or adds a style to the categoryStyles map.
  * @param {string} categoryStyleName The name of the category style.
  * @param {Blockly.Theme.CategoryStyle} categoryStyle The category style.
-*/
-Blockly.Theme.prototype.setCategoryStyle = function(categoryStyleName,
-    categoryStyle) {
+ */
+Blockly.Theme.prototype.setCategoryStyle = function(
+    categoryStyleName, categoryStyle) {
   this.categoryStyles[categoryStyleName] = categoryStyle;
 };
 
@@ -178,16 +177,16 @@ Blockly.Theme.prototype.getComponentStyle = function(componentName) {
  * Configure a specific Blockly UI component with a style value.
  * @param {string} componentName The name of the component.
  * @param {*} styleValue The style value.
-*/
-Blockly.Theme.prototype.setComponentStyle = function(componentName,
-    styleValue) {
+ */
+Blockly.Theme.prototype.setComponentStyle = function(
+    componentName, styleValue) {
   this.componentStyles[componentName] = styleValue;
 };
 
 /**
  * Configure a theme's font style.
  * @param {Blockly.Theme.FontStyle} fontStyle The font style.
-*/
+ */
 Blockly.Theme.prototype.setFontStyle = function(fontStyle) {
   this.fontStyle = fontStyle;
 };
@@ -196,7 +195,7 @@ Blockly.Theme.prototype.setFontStyle = function(fontStyle) {
  * Configure a theme's start hats.
  * @param {boolean} startHats True if the theme enables start hats, false
  *     otherwise.
-*/
+ */
 Blockly.Theme.prototype.setStartHats = function(startHats) {
   this.startHats = startHats;
 };
@@ -206,12 +205,12 @@ Blockly.Theme.prototype.setStartHats = function(startHats) {
  * @param {string} name The name of the theme.
  * @param {!Object} themeObj An object containing theme properties.
  * @return {!Blockly.Theme} A new Blockly theme.
-*/
+ */
 Blockly.Theme.defineTheme = function(name, themeObj) {
   var theme = new Blockly.Theme(name);
   var base = themeObj['base'];
   if (base) {
-    if (typeof base == "string") {
+    if (typeof base == 'string') {
       base = Blockly.registry.getObject(Blockly.registry.Type.THEME, base);
     }
     if (base instanceof Blockly.Theme) {
@@ -220,14 +219,12 @@ Blockly.Theme.defineTheme = function(name, themeObj) {
     }
   }
 
-  Blockly.utils.object.deepMerge(theme.blockStyles,
-      themeObj['blockStyles']);
-  Blockly.utils.object.deepMerge(theme.categoryStyles,
-      themeObj['categoryStyles']);
-  Blockly.utils.object.deepMerge(theme.componentStyles,
-      themeObj['componentStyles']);
-  Blockly.utils.object.deepMerge(theme.fontStyle,
-      themeObj['fontStyle']);
+  Blockly.utils.object.deepMerge(theme.blockStyles, themeObj['blockStyles']);
+  Blockly.utils.object.deepMerge(
+      theme.categoryStyles, themeObj['categoryStyles']);
+  Blockly.utils.object.deepMerge(
+      theme.componentStyles, themeObj['componentStyles']);
+  Blockly.utils.object.deepMerge(theme.fontStyle, themeObj['fontStyle']);
   if (themeObj['startHats'] != null) {
     theme.startHats = themeObj['startHats'];
   }

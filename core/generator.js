@@ -179,7 +179,8 @@ Blockly.Generator.prototype.blockToCode = function(block, opt_thisOnly) {
 
   var func = this[block.type];
   if (typeof func != 'function') {
-    throw Error('Language "' + this.name_ + '" does not know how to generate ' +
+    throw Error(
+        'Language "' + this.name_ + '" does not know how to generate ' +
         ' code for block type "' + block.type + '".');
   }
   // First argument to func.call is the value of 'this' in the generator.
@@ -239,8 +240,8 @@ Blockly.Generator.prototype.valueToCode = function(block, name, outerOrder) {
   var code = tuple[0];
   var innerOrder = tuple[1];
   if (isNaN(innerOrder)) {
-    throw TypeError('Expecting valid order from value block: ' +
-        targetBlock.type);
+    throw TypeError(
+        'Expecting valid order from value block: ' + targetBlock.type);
   }
   if (!code) {
     return '';
@@ -295,7 +296,8 @@ Blockly.Generator.prototype.statementToCode = function(block, name) {
   // Value blocks must return code and order of operations info.
   // Statement blocks must only return code.
   if (typeof code != 'string') {
-    throw TypeError('Expecting code from statement block: ' +
+    throw TypeError(
+        'Expecting code from statement block: ' +
         (targetBlock && targetBlock.type));
   }
   if (code) {
@@ -315,16 +317,19 @@ Blockly.Generator.prototype.statementToCode = function(block, name) {
  */
 Blockly.Generator.prototype.addLoopTrap = function(branch, block) {
   if (this.INFINITE_LOOP_TRAP) {
-    branch = this.prefixLines(this.injectId(this.INFINITE_LOOP_TRAP, block),
-        this.INDENT) + branch;
+    branch = this.prefixLines(
+                 this.injectId(this.INFINITE_LOOP_TRAP, block), this.INDENT) +
+        branch;
   }
   if (this.STATEMENT_SUFFIX && !block.suppressPrefixSuffix) {
-    branch = this.prefixLines(this.injectId(this.STATEMENT_SUFFIX, block),
-        this.INDENT) + branch;
+    branch = this.prefixLines(
+                 this.injectId(this.STATEMENT_SUFFIX, block), this.INDENT) +
+        branch;
   }
   if (this.STATEMENT_PREFIX && !block.suppressPrefixSuffix) {
-    branch = branch + this.prefixLines(this.injectId(this.STATEMENT_PREFIX,
-        block), this.INDENT);
+    branch = branch +
+        this.prefixLines(
+            this.injectId(this.STATEMENT_PREFIX, block), this.INDENT);
   }
   return branch;
 };
@@ -408,8 +413,8 @@ Blockly.Generator.prototype.variableDB_;
  */
 Blockly.Generator.prototype.provideFunction_ = function(desiredName, code) {
   if (!this.definitions_[desiredName]) {
-    var functionName = this.variableDB_.getDistinctName(desiredName,
-        Blockly.PROCEDURE_CATEGORY_NAME);
+    var functionName = this.variableDB_.getDistinctName(
+        desiredName, Blockly.PROCEDURE_CATEGORY_NAME);
     this.functionNames_[desiredName] = functionName;
     var codeText = code.join('\n').replace(
         this.FUNCTION_NAME_PLACEHOLDER_REGEXP_, functionName);

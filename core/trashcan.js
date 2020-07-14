@@ -66,15 +66,17 @@ Blockly.Trashcan = function(workspace) {
   if (this.workspace_.horizontalLayout) {
     flyoutWorkspaceOptions.toolboxPosition =
         this.workspace_.toolboxPosition == Blockly.TOOLBOX_AT_TOP ?
-        Blockly.TOOLBOX_AT_BOTTOM : Blockly.TOOLBOX_AT_TOP;
+        Blockly.TOOLBOX_AT_BOTTOM :
+        Blockly.TOOLBOX_AT_TOP;
     if (!Blockly.HorizontalFlyout) {
       throw Error('Missing require for Blockly.HorizontalFlyout');
     }
     this.flyout = new Blockly.HorizontalFlyout(flyoutWorkspaceOptions);
   } else {
     flyoutWorkspaceOptions.toolboxPosition =
-      this.workspace_.toolboxPosition == Blockly.TOOLBOX_AT_RIGHT ?
-        Blockly.TOOLBOX_AT_LEFT : Blockly.TOOLBOX_AT_RIGHT;
+        this.workspace_.toolboxPosition == Blockly.TOOLBOX_AT_RIGHT ?
+        Blockly.TOOLBOX_AT_LEFT :
+        Blockly.TOOLBOX_AT_RIGHT;
     if (!Blockly.VerticalFlyout) {
       throw Error('Missing require for Blockly.VerticalFlyout');
     }
@@ -258,22 +260,21 @@ Blockly.Trashcan.prototype.createDom = function() {
         clip-path="url(#blocklyTrashLidClipPath837493)"></image>
   </g>
   */
-  this.svgGroup_ = Blockly.utils.dom.createSvgElement('g',
-      {'class': 'blocklyTrash'}, null);
+  this.svgGroup_ =
+      Blockly.utils.dom.createSvgElement('g', {'class': 'blocklyTrash'}, null);
   var clip;
   var rnd = String(Math.random()).substring(2);
-  clip = Blockly.utils.dom.createSvgElement('clipPath',
-      {'id': 'blocklyTrashBodyClipPath' + rnd},
-      this.svgGroup_);
-  Blockly.utils.dom.createSvgElement('rect',
-      {
+  clip = Blockly.utils.dom.createSvgElement(
+      'clipPath', {'id': 'blocklyTrashBodyClipPath' + rnd}, this.svgGroup_);
+  Blockly.utils.dom.createSvgElement(
+      'rect', {
         'width': this.WIDTH_,
         'height': this.BODY_HEIGHT_,
         'y': this.LID_HEIGHT_
       },
       clip);
-  var body = Blockly.utils.dom.createSvgElement('image',
-      {
+  var body = Blockly.utils.dom.createSvgElement(
+      'image', {
         'width': Blockly.SPRITE.width,
         'x': -this.SPRITE_LEFT_,
         'height': Blockly.SPRITE.height,
@@ -281,16 +282,16 @@ Blockly.Trashcan.prototype.createDom = function() {
         'clip-path': 'url(#blocklyTrashBodyClipPath' + rnd + ')'
       },
       this.svgGroup_);
-  body.setAttributeNS(Blockly.utils.dom.XLINK_NS, 'xlink:href',
+  body.setAttributeNS(
+      Blockly.utils.dom.XLINK_NS, 'xlink:href',
       this.workspace_.options.pathToMedia + Blockly.SPRITE.url);
 
-  clip = Blockly.utils.dom.createSvgElement('clipPath',
-      {'id': 'blocklyTrashLidClipPath' + rnd},
-      this.svgGroup_);
-  Blockly.utils.dom.createSvgElement('rect',
-      {'width': this.WIDTH_, 'height': this.LID_HEIGHT_}, clip);
-  this.svgLid_ = Blockly.utils.dom.createSvgElement('image',
-      {
+  clip = Blockly.utils.dom.createSvgElement(
+      'clipPath', {'id': 'blocklyTrashLidClipPath' + rnd}, this.svgGroup_);
+  Blockly.utils.dom.createSvgElement(
+      'rect', {'width': this.WIDTH_, 'height': this.LID_HEIGHT_}, clip);
+  this.svgLid_ = Blockly.utils.dom.createSvgElement(
+      'image', {
         'width': Blockly.SPRITE.width,
         'x': -this.SPRITE_LEFT_,
         'height': Blockly.SPRITE.height,
@@ -298,7 +299,8 @@ Blockly.Trashcan.prototype.createDom = function() {
         'clip-path': 'url(#blocklyTrashLidClipPath' + rnd + ')'
       },
       this.svgGroup_);
-  this.svgLid_.setAttributeNS(Blockly.utils.dom.XLINK_NS, 'xlink:href',
+  this.svgLid_.setAttributeNS(
+      Blockly.utils.dom.XLINK_NS, 'xlink:href',
       this.workspace_.options.pathToMedia + Blockly.SPRITE.url);
 
   Blockly.bindEventWithChecks_(
@@ -322,8 +324,8 @@ Blockly.Trashcan.prototype.createDom = function() {
  */
 Blockly.Trashcan.prototype.init = function(verticalSpacing) {
   if (this.workspace_.options.maxTrashcanContents > 0) {
-    Blockly.utils.dom.insertAfter(this.flyout.createDom('svg'),
-        this.workspace_.getParentSvg());
+    Blockly.utils.dom.insertAfter(
+        this.flyout.createDom('svg'), this.workspace_.getParentSvg());
     this.flyout.init(this.workspace_);
   }
 
@@ -397,8 +399,8 @@ Blockly.Trashcan.prototype.position = function() {
   if (metrics.toolboxPosition == Blockly.TOOLBOX_AT_LEFT ||
       (this.workspace_.horizontalLayout && !this.workspace_.RTL)) {
     // Toolbox starts in the left corner.
-    this.left_ = metrics.viewWidth + metrics.absoluteLeft -
-        this.WIDTH_ - this.MARGIN_SIDE_ - Blockly.Scrollbar.scrollbarThickness;
+    this.left_ = metrics.viewWidth + metrics.absoluteLeft - this.WIDTH_ -
+        this.MARGIN_SIDE_ - Blockly.Scrollbar.scrollbarThickness;
   } else {
     // Toolbox starts in the right corner.
     this.left_ = this.MARGIN_SIDE_ + Blockly.Scrollbar.scrollbarThickness;
@@ -411,8 +413,8 @@ Blockly.Trashcan.prototype.position = function() {
         (this.BODY_HEIGHT_ + this.LID_HEIGHT_) - this.verticalSpacing_;
   }
 
-  this.svgGroup_.setAttribute('transform',
-      'translate(' + this.left_ + ',' + this.top_ + ')');
+  this.svgGroup_.setAttribute(
+      'transform', 'translate(' + this.left_ + ',' + this.top_ + ')');
 };
 
 /**
@@ -426,8 +428,8 @@ Blockly.Trashcan.prototype.getClientRect = function() {
 
   var trashRect = this.svgGroup_.getBoundingClientRect();
   var top = trashRect.top + this.SPRITE_TOP_ - this.MARGIN_HOTSPOT_;
-  var bottom = top + this.LID_HEIGHT_ + this.BODY_HEIGHT_ +
-      2 * this.MARGIN_HOTSPOT_;
+  var bottom =
+      top + this.LID_HEIGHT_ + this.BODY_HEIGHT_ + 2 * this.MARGIN_HOTSPOT_;
   var left = trashRect.left + this.SPRITE_LEFT_ - this.MARGIN_HOTSPOT_;
   var right = left + this.WIDTH_ + 2 * this.MARGIN_HOTSPOT_;
   return new Blockly.utils.Rect(top, bottom, left, right);
@@ -467,7 +469,8 @@ Blockly.Trashcan.prototype.animateLid_ = function() {
   this.svgGroup_.style.opacity = opacity;
 
   if (this.lidOpen_ > this.minOpenness_ && this.lidOpen_ < 1) {
-    this.lidTask_ = setTimeout(this.animateLid_.bind(this),
+    this.lidTask_ = setTimeout(
+        this.animateLid_.bind(this),
         Blockly.Trashcan.ANIMATION_LENGTH_ / frames);
   }
 };
@@ -478,12 +481,14 @@ Blockly.Trashcan.prototype.animateLid_ = function() {
  * @private
  */
 Blockly.Trashcan.prototype.setLidAngle_ = function(lidAngle) {
-  var openAtRight = this.workspace_.toolboxPosition == Blockly.TOOLBOX_AT_RIGHT ||
+  var openAtRight =
+      this.workspace_.toolboxPosition == Blockly.TOOLBOX_AT_RIGHT ||
       (this.workspace_.horizontalLayout && this.workspace_.RTL);
-  this.svgLid_.setAttribute('transform', 'rotate(' +
-      (openAtRight ? -lidAngle : lidAngle) + ',' +
-      (openAtRight ? 4 : this.WIDTH_ - 4) + ',' +
-      (this.LID_HEIGHT_ - 2) + ')');
+  this.svgLid_.setAttribute(
+      'transform',
+      'rotate(' + (openAtRight ? -lidAngle : lidAngle) + ',' +
+          (openAtRight ? 4 : this.WIDTH_ - 4) + ',' + (this.LID_HEIGHT_ - 2) +
+          ')');
 };
 
 /**
@@ -585,7 +590,7 @@ Blockly.Trashcan.prototype.onDelete_ = function(event) {
     }
     this.contents_.unshift(cleanedXML);
     while (this.contents_.length >
-        this.workspace_.options.maxTrashcanContents) {
+           this.workspace_.options.maxTrashcanContents) {
       this.contents_.pop();
     }
 

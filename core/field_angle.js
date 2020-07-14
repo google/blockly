@@ -30,13 +30,13 @@ goog.require('Blockly.utils.userAgent');
  *    changes to the field's value. Takes in a number & returns a
  *    validated number, or null to abort the change.
  * @param {Object=} opt_config A map of options used to configure the field.
- *    See the [field creation documentation]{@link https://developers.google.com/blockly/guides/create-custom-blocks/fields/built-in-fields/angle#creation}
+ *    See the [field creation documentation]{@link
+ * https://developers.google.com/blockly/guides/create-custom-blocks/fields/built-in-fields/angle#creation}
  *    for a list of properties this parameter supports.
  * @extends {Blockly.FieldTextInput}
  * @constructor
  */
 Blockly.FieldAngle = function(opt_value, opt_validator, opt_config) {
-
   /**
    * Should the angle increase as the angle picker is moved clockwise (true)
    * or counterclockwise (false)
@@ -259,16 +259,15 @@ Blockly.FieldAngle.prototype.render_ = function() {
  */
 Blockly.FieldAngle.prototype.showEditor_ = function(opt_e) {
   // Mobile browsers have issues with in-line textareas (focus & keyboards).
-  var noFocus =
-      Blockly.utils.userAgent.MOBILE ||
-      Blockly.utils.userAgent.ANDROID ||
-      Blockly.utils.userAgent.IPAD;
+  var noFocus = Blockly.utils.userAgent.MOBILE ||
+      Blockly.utils.userAgent.ANDROID || Blockly.utils.userAgent.IPAD;
   Blockly.FieldAngle.superClass_.showEditor_.call(this, opt_e, noFocus);
 
   var editor = this.dropdownCreate_();
   Blockly.DropDownDiv.getContentDiv().appendChild(editor);
 
-  Blockly.DropDownDiv.setColour(this.sourceBlock_.style.colourPrimary,
+  Blockly.DropDownDiv.setColour(
+      this.sourceBlock_.style.colourPrimary,
       this.sourceBlock_.style.colourTertiary);
 
   Blockly.DropDownDiv.showPositionedByField(
@@ -283,41 +282,48 @@ Blockly.FieldAngle.prototype.showEditor_ = function(opt_e) {
  * @private
  */
 Blockly.FieldAngle.prototype.dropdownCreate_ = function() {
-  var svg = Blockly.utils.dom.createSvgElement('svg', {
-    'xmlns': Blockly.utils.dom.SVG_NS,
-    'xmlns:html': Blockly.utils.dom.HTML_NS,
-    'xmlns:xlink': Blockly.utils.dom.XLINK_NS,
-    'version': '1.1',
-    'height': (Blockly.FieldAngle.HALF * 2) + 'px',
-    'width': (Blockly.FieldAngle.HALF * 2) + 'px',
-    'style': 'touch-action: none'
-  }, null);
-  var circle = Blockly.utils.dom.createSvgElement('circle', {
-    'cx': Blockly.FieldAngle.HALF,
-    'cy': Blockly.FieldAngle.HALF,
-    'r': Blockly.FieldAngle.RADIUS,
-    'class': 'blocklyAngleCircle'
-  }, svg);
-  this.gauge_ = Blockly.utils.dom.createSvgElement('path', {
-    'class': 'blocklyAngleGauge'
-  }, svg);
-  this.line_ = Blockly.utils.dom.createSvgElement('line', {
-    'x1': Blockly.FieldAngle.HALF,
-    'y1': Blockly.FieldAngle.HALF,
-    'class': 'blocklyAngleLine'
-  }, svg);
+  var svg = Blockly.utils.dom.createSvgElement(
+      'svg', {
+        'xmlns': Blockly.utils.dom.SVG_NS,
+        'xmlns:html': Blockly.utils.dom.HTML_NS,
+        'xmlns:xlink': Blockly.utils.dom.XLINK_NS,
+        'version': '1.1',
+        'height': (Blockly.FieldAngle.HALF * 2) + 'px',
+        'width': (Blockly.FieldAngle.HALF * 2) + 'px',
+        'style': 'touch-action: none'
+      },
+      null);
+  var circle = Blockly.utils.dom.createSvgElement(
+      'circle', {
+        'cx': Blockly.FieldAngle.HALF,
+        'cy': Blockly.FieldAngle.HALF,
+        'r': Blockly.FieldAngle.RADIUS,
+        'class': 'blocklyAngleCircle'
+      },
+      svg);
+  this.gauge_ = Blockly.utils.dom.createSvgElement(
+      'path', {'class': 'blocklyAngleGauge'}, svg);
+  this.line_ = Blockly.utils.dom.createSvgElement(
+      'line', {
+        'x1': Blockly.FieldAngle.HALF,
+        'y1': Blockly.FieldAngle.HALF,
+        'class': 'blocklyAngleLine'
+      },
+      svg);
   // Draw markers around the edge.
   for (var angle = 0; angle < 360; angle += 15) {
-    Blockly.utils.dom.createSvgElement('line', {
-      'x1': Blockly.FieldAngle.HALF + Blockly.FieldAngle.RADIUS,
-      'y1': Blockly.FieldAngle.HALF,
-      'x2': Blockly.FieldAngle.HALF + Blockly.FieldAngle.RADIUS -
-          (angle % 45 == 0 ? 10 : 5),
-      'y2': Blockly.FieldAngle.HALF,
-      'class': 'blocklyAngleMarks',
-      'transform': 'rotate(' + angle + ',' +
-          Blockly.FieldAngle.HALF + ',' + Blockly.FieldAngle.HALF + ')'
-    }, svg);
+    Blockly.utils.dom.createSvgElement(
+        'line', {
+          'x1': Blockly.FieldAngle.HALF + Blockly.FieldAngle.RADIUS,
+          'y1': Blockly.FieldAngle.HALF,
+          'x2': Blockly.FieldAngle.HALF + Blockly.FieldAngle.RADIUS -
+              (angle % 45 == 0 ? 10 : 5),
+          'y2': Blockly.FieldAngle.HALF,
+          'class': 'blocklyAngleMarks',
+          'transform': 'rotate(' + angle + ',' + Blockly.FieldAngle.HALF + ',' +
+              Blockly.FieldAngle.HALF + ')'
+        },
+        svg);
   }
 
   // The angle picker is different from other fields in that it updates on
@@ -328,12 +334,10 @@ Blockly.FieldAngle.prototype.dropdownCreate_ = function() {
   // On touch devices, the picker's value is only updated with a drag. Add
   // a click handler on the drag surface to update the value if the surface
   // is clicked.
-  this.clickSurfaceWrapper_ =
-      Blockly.bindEventWithChecks_(circle, 'click', this, this.onMouseMove_,
-          true, true);
-  this.moveSurfaceWrapper_ =
-      Blockly.bindEventWithChecks_(circle, 'mousemove', this, this.onMouseMove_,
-          true, true);
+  this.clickSurfaceWrapper_ = Blockly.bindEventWithChecks_(
+      circle, 'click', this, this.onMouseMove_, true, true);
+  this.moveSurfaceWrapper_ = Blockly.bindEventWithChecks_(
+      circle, 'mousemove', this, this.onMouseMove_, true, true);
   return svg;
 };
 
@@ -447,9 +451,10 @@ Blockly.FieldAngle.prototype.updateGraph_ = function() {
     if (clockwiseFlag) {
       largeFlag = 1 - largeFlag;
     }
-    path.push(' l ', x1, ',', y1,
-        ' A ', Blockly.FieldAngle.RADIUS, ',', Blockly.FieldAngle.RADIUS,
-        ' 0 ', largeFlag, ' ', clockwiseFlag, ' ', x2, ',', y2, ' z');
+    path.push(
+        ' l ', x1, ',', y1, ' A ', Blockly.FieldAngle.RADIUS, ',',
+        Blockly.FieldAngle.RADIUS, ' 0 ', largeFlag, ' ', clockwiseFlag, ' ',
+        x2, ',', y2, ' z');
   }
   this.gauge_.setAttribute('d', path.join(''));
   this.line_.setAttribute('x2', x2);
@@ -481,8 +486,7 @@ Blockly.FieldAngle.prototype.onHtmlInputKeyDown_ = function(e) {
   }
   if (multiplier) {
     var value = /** @type {number} */ (this.getValue());
-    this.displayMouseOrKeyboardValue_(
-        value + (multiplier * this.round_));
+    this.displayMouseOrKeyboardValue_(value + (multiplier * this.round_));
     e.preventDefault();
     e.stopPropagation();
   }
@@ -526,28 +530,28 @@ Blockly.FieldAngle.prototype.wrapValue_ = function(value) {
 Blockly.Css.register([
   /* eslint-disable indent */
   '.blocklyAngleCircle {',
-    'stroke: #444;',
-    'stroke-width: 1;',
-    'fill: #ddd;',
-    'fill-opacity: .8;',
+  'stroke: #444;',
+  'stroke-width: 1;',
+  'fill: #ddd;',
+  'fill-opacity: .8;',
   '}',
 
   '.blocklyAngleMarks {',
-    'stroke: #444;',
-    'stroke-width: 1;',
+  'stroke: #444;',
+  'stroke-width: 1;',
   '}',
 
   '.blocklyAngleGauge {',
-    'fill: #f88;',
-    'fill-opacity: .8;',
-    'pointer-events: none;',
+  'fill: #f88;',
+  'fill-opacity: .8;',
+  'pointer-events: none;',
   '}',
 
   '.blocklyAngleLine {',
-    'stroke: #f00;',
-    'stroke-width: 2;',
-    'stroke-linecap: round;',
-    'pointer-events: none;',
+  'stroke: #f00;',
+  'stroke-width: 2;',
+  'stroke-linecap: round;',
+  'pointer-events: none;',
   '}'
   /* eslint-enable indent */
 ]);

@@ -56,7 +56,7 @@ Blockly.WorkspaceCommentSvg.TOP_OFFSET = 10;
  * @package
  */
 Blockly.WorkspaceCommentSvg.prototype.getHeightWidth = function() {
-  return { width: this.getWidth(), height: this.getHeight() };
+  return {width: this.getWidth(), height: this.getHeight()};
 };
 
 /**
@@ -74,21 +74,16 @@ Blockly.WorkspaceCommentSvg.prototype.render = function() {
   this.createEditor_();
   this.svgGroup_.appendChild(this.foreignObject_);
 
-  this.svgHandleTarget_ = Blockly.utils.dom.createSvgElement('rect',
-      {
-        'class': 'blocklyCommentHandleTarget',
-        'x': 0,
-        'y': 0
-      });
+  this.svgHandleTarget_ = Blockly.utils.dom.createSvgElement(
+      'rect', {'class': 'blocklyCommentHandleTarget', 'x': 0, 'y': 0});
   this.svgGroup_.appendChild(this.svgHandleTarget_);
-  this.svgRectTarget_ = Blockly.utils.dom.createSvgElement('rect',
-      {
-        'class': 'blocklyCommentTarget',
-        'x': 0,
-        'y': 0,
-        'rx': Blockly.WorkspaceCommentSvg.BORDER_RADIUS,
-        'ry': Blockly.WorkspaceCommentSvg.BORDER_RADIUS
-      });
+  this.svgRectTarget_ = Blockly.utils.dom.createSvgElement('rect', {
+    'class': 'blocklyCommentTarget',
+    'x': 0,
+    'y': 0,
+    'rx': Blockly.WorkspaceCommentSvg.BORDER_RADIUS,
+    'ry': Blockly.WorkspaceCommentSvg.BORDER_RADIUS
+  });
   this.svgGroup_.appendChild(this.svgRectTarget_);
 
   // Add the resize icon
@@ -127,17 +122,16 @@ Blockly.WorkspaceCommentSvg.prototype.render = function() {
  */
 Blockly.WorkspaceCommentSvg.prototype.createEditor_ = function() {
   /* Create the editor.  Here's the markup that will be generated:
-    <foreignObject class="blocklyCommentForeignObject" x="0" y="10" width="164" height="164">
-      <body xmlns="http://www.w3.org/1999/xhtml" class="blocklyMinimalBody">
-        <textarea xmlns="http://www.w3.org/1999/xhtml"
+    <foreignObject class="blocklyCommentForeignObject" x="0" y="10" width="164"
+    height="164"> <body xmlns="http://www.w3.org/1999/xhtml"
+    class="blocklyMinimalBody"> <textarea xmlns="http://www.w3.org/1999/xhtml"
             class="blocklyCommentTextarea"
             style="height: 164px; width: 164px;"></textarea>
       </body>
     </foreignObject>
   */
   this.foreignObject_ = Blockly.utils.dom.createSvgElement(
-      'foreignObject',
-      {
+      'foreignObject', {
         'x': 0,
         'y': Blockly.WorkspaceCommentSvg.TOP_OFFSET,
         'class': 'blocklyCommentForeignObject'
@@ -146,7 +140,8 @@ Blockly.WorkspaceCommentSvg.prototype.createEditor_ = function() {
   var body = document.createElementNS(Blockly.utils.dom.HTML_NS, 'body');
   body.setAttribute('xmlns', Blockly.utils.dom.HTML_NS);
   body.className = 'blocklyMinimalBody';
-  var textarea = document.createElementNS(Blockly.utils.dom.HTML_NS, 'textarea');
+  var textarea =
+      document.createElementNS(Blockly.utils.dom.HTML_NS, 'textarea');
   textarea.className = 'blocklyCommentTextarea';
   textarea.setAttribute('dir', this.RTL ? 'RTL' : 'LTR');
   textarea.readOnly = !this.isEditable();
@@ -157,11 +152,13 @@ Blockly.WorkspaceCommentSvg.prototype.createEditor_ = function() {
   Blockly.bindEventWithChecks_(textarea, 'wheel', this, function(e) {
     e.stopPropagation();
   });
-  Blockly.bindEventWithChecks_(textarea, 'change', this, function(
-      /* eslint-disable no-unused-vars */ e
-      /* eslint-enable no-unused-vars */) {
-    this.setContent(textarea.value);
-  });
+  Blockly.bindEventWithChecks_(
+      textarea, 'change', this,
+      function(
+          /* eslint-disable no-unused-vars */ e
+          /* eslint-enable no-unused-vars */) {
+        this.setContent(textarea.value);
+      });
   return this.foreignObject_;
 };
 
@@ -171,30 +168,30 @@ Blockly.WorkspaceCommentSvg.prototype.createEditor_ = function() {
  */
 Blockly.WorkspaceCommentSvg.prototype.addResizeDom_ = function() {
   this.resizeGroup_ = Blockly.utils.dom.createSvgElement(
-      'g',
-      {
-        'class': this.RTL ? 'blocklyResizeSW' : 'blocklyResizeSE'
-      },
+      'g', {'class': this.RTL ? 'blocklyResizeSW' : 'blocklyResizeSE'},
       this.svgGroup_);
   var resizeSize = Blockly.WorkspaceCommentSvg.RESIZE_SIZE;
   Blockly.utils.dom.createSvgElement(
-      'polygon',
-      {'points': '0,x x,x x,0'.replace(/x/g, resizeSize.toString())},
+      'polygon', {'points': '0,x x,x x,0'.replace(/x/g, resizeSize.toString())},
       this.resizeGroup_);
   Blockly.utils.dom.createSvgElement(
-      'line',
-      {
+      'line', {
         'class': 'blocklyResizeLine',
-        'x1': resizeSize / 3, 'y1': resizeSize - 1,
-        'x2': resizeSize - 1, 'y2': resizeSize / 3
-      }, this.resizeGroup_);
+        'x1': resizeSize / 3,
+        'y1': resizeSize - 1,
+        'x2': resizeSize - 1,
+        'y2': resizeSize / 3
+      },
+      this.resizeGroup_);
   Blockly.utils.dom.createSvgElement(
-      'line',
-      {
+      'line', {
         'class': 'blocklyResizeLine',
-        'x1': resizeSize * 2 / 3, 'y1': resizeSize - 1,
-        'x2': resizeSize - 1, 'y2': resizeSize * 2 / 3
-      }, this.resizeGroup_);
+        'x1': resizeSize * 2 / 3,
+        'y1': resizeSize - 1,
+        'x2': resizeSize - 1,
+        'y2': resizeSize * 2 / 3
+      },
+      this.resizeGroup_);
 };
 
 /**
@@ -203,34 +200,28 @@ Blockly.WorkspaceCommentSvg.prototype.addResizeDom_ = function() {
  */
 Blockly.WorkspaceCommentSvg.prototype.addDeleteDom_ = function() {
   this.deleteGroup_ = Blockly.utils.dom.createSvgElement(
-      'g',
-      {
-        'class': 'blocklyCommentDeleteIcon'
-      },
-      this.svgGroup_);
-  this.deleteIconBorder_ = Blockly.utils.dom.createSvgElement('circle',
-      {
-        'class': 'blocklyDeleteIconShape',
-        'r': '7',
-        'cx': '7.5',
-        'cy': '7.5'
-      },
+      'g', {'class': 'blocklyCommentDeleteIcon'}, this.svgGroup_);
+  this.deleteIconBorder_ = Blockly.utils.dom.createSvgElement(
+      'circle',
+      {'class': 'blocklyDeleteIconShape', 'r': '7', 'cx': '7.5', 'cy': '7.5'},
       this.deleteGroup_);
   // x icon.
   Blockly.utils.dom.createSvgElement(
-      'line',
-      {
-        'x1': '5', 'y1': '10',
-        'x2': '10', 'y2': '5',
+      'line', {
+        'x1': '5',
+        'y1': '10',
+        'x2': '10',
+        'y2': '5',
         'stroke': '#fff',
         'stroke-width': '2'
       },
       this.deleteGroup_);
   Blockly.utils.dom.createSvgElement(
-      'line',
-      {
-        'x1': '5', 'y1': '5',
-        'x2': '10', 'y2': '10',
+      'line', {
+        'x1': '5',
+        'y1': '5',
+        'x2': '10',
+        'y2': '10',
         'stroke': '#fff',
         'stroke-width': '2'
       },
@@ -250,8 +241,10 @@ Blockly.WorkspaceCommentSvg.prototype.resizeMouseDown_ = function(e) {
     return;
   }
   // Left-click (or middle click)
-  this.workspace.startDrag(e, new Blockly.utils.Coordinate(
-    this.workspace.RTL ? -this.width_ : this.width_, this.height_));
+  this.workspace.startDrag(
+      e,
+      new Blockly.utils.Coordinate(
+          this.workspace.RTL ? -this.width_ : this.width_, this.height_));
 
   this.onMouseUpWrapper_ = Blockly.bindEventWithChecks_(
       document, 'mouseup', this, this.resizeMouseUp_);
@@ -372,8 +365,8 @@ Blockly.WorkspaceCommentSvg.prototype.setSize_ = function(width, height) {
   this.svgRectTarget_.setAttribute('width', width);
   this.svgRectTarget_.setAttribute('height', height);
   this.svgHandleTarget_.setAttribute('width', width);
-  this.svgHandleTarget_.setAttribute('height',
-      Blockly.WorkspaceCommentSvg.TOP_OFFSET);
+  this.svgHandleTarget_.setAttribute(
+      'height', Blockly.WorkspaceCommentSvg.TOP_OFFSET);
   if (this.RTL) {
     this.svgRect_.setAttribute('transform', 'scale(-1 1)');
     this.svgRectTarget_.setAttribute('transform', 'scale(-1 1)');
@@ -383,17 +376,22 @@ Blockly.WorkspaceCommentSvg.prototype.setSize_ = function(width, height) {
   if (this.resizeGroup_) {
     if (this.RTL) {
       // Mirror the resize group.
-      this.resizeGroup_.setAttribute('transform', 'translate(' +
-        (-width + resizeSize) + ',' + (height - resizeSize) + ') scale(-1 1)');
-      this.deleteGroup_.setAttribute('transform', 'translate(' +
-        (-width + resizeSize) + ',' + (-resizeSize) + ') scale(-1 1)');
+      this.resizeGroup_.setAttribute(
+          'transform',
+          'translate(' + (-width + resizeSize) + ',' + (height - resizeSize) +
+              ') scale(-1 1)');
+      this.deleteGroup_.setAttribute(
+          'transform',
+          'translate(' + (-width + resizeSize) + ',' + (-resizeSize) +
+              ') scale(-1 1)');
     } else {
-      this.resizeGroup_.setAttribute('transform', 'translate(' +
-        (width - resizeSize) + ',' +
-        (height - resizeSize) + ')');
-      this.deleteGroup_.setAttribute('transform', 'translate(' +
-        (width - resizeSize) + ',' +
-        (-resizeSize) + ')');
+      this.resizeGroup_.setAttribute(
+          'transform',
+          'translate(' + (width - resizeSize) + ',' + (height - resizeSize) +
+              ')');
+      this.deleteGroup_.setAttribute(
+          'transform',
+          'translate(' + (width - resizeSize) + ',' + (-resizeSize) + ')');
     }
   }
 

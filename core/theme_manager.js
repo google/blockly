@@ -25,7 +25,6 @@ goog.require('Blockly.Theme');
  * @package
  */
 Blockly.ThemeManager = function(workspace, theme) {
-
   /**
    * The main workspace.
    * @type {!Blockly.WorkspaceSvg}
@@ -58,10 +57,10 @@ Blockly.ThemeManager = function(workspace, theme) {
 /**
  * A Blockly UI component type.
  * @typedef {{
-  *            element:!Element,
-  *            propertyName:string
-  *          }}
-  */
+ *            element:!Element,
+ *            propertyName:string
+ *          }}
+ */
 Blockly.ThemeManager.Component;
 
 /**
@@ -97,8 +96,8 @@ Blockly.ThemeManager.prototype.setTheme = function(theme) {
   }
 
   // Refresh all registered Blockly UI components.
-  for (var i = 0, keys = Object.keys(this.componentDB_),
-    key; (key = keys[i]); i++) {
+  for (var i = 0, keys = Object.keys(this.componentDB_), key; (key = keys[i]);
+       i++) {
     for (var j = 0, component; (component = this.componentDB_[key][j]); j++) {
       var element = component.element;
       var propertyName = component.propertyName;
@@ -142,17 +141,15 @@ Blockly.ThemeManager.prototype.unsubscribeWorkspace = function(workspace) {
  * @param {string} propertyName The inline style property name to update.
  * @package
  */
-Blockly.ThemeManager.prototype.subscribe = function(element, componentName,
-    propertyName) {
+Blockly.ThemeManager.prototype.subscribe = function(
+    element, componentName, propertyName) {
   if (!this.componentDB_[componentName]) {
     this.componentDB_[componentName] = [];
   }
 
   // Add the element to our component map.
-  this.componentDB_[componentName].push({
-    element: element,
-    propertyName: propertyName
-  });
+  this.componentDB_[componentName].push(
+      {element: element, propertyName: propertyName});
 
   // Initialize the element with its corresponding theme style.
   var style = this.theme_ && this.theme_.getComponentStyle(componentName);

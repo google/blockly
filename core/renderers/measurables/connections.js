@@ -32,15 +32,15 @@ goog.require('Blockly.utils.object');
  * @extends {Blockly.blockRendering.Measurable}
  */
 Blockly.blockRendering.Connection = function(constants, connectionModel) {
-  Blockly.blockRendering.Connection.superClass_.constructor.call(this,
-      constants);
+  Blockly.blockRendering.Connection.superClass_.constructor.call(
+      this, constants);
   this.connectionModel = connectionModel;
   this.shape = this.constants_.shapeFor(connectionModel);
   this.isDynamicShape = !!this.shape['isDynamic'];
   this.type |= Blockly.blockRendering.Types.CONNECTION;
 };
-Blockly.utils.object.inherits(Blockly.blockRendering.Connection,
-    Blockly.blockRendering.Measurable);
+Blockly.utils.object.inherits(
+    Blockly.blockRendering.Connection, Blockly.blockRendering.Measurable);
 
 /**
  * An object containing information about the space an output connection takes
@@ -54,8 +54,8 @@ Blockly.utils.object.inherits(Blockly.blockRendering.Connection,
  * @extends {Blockly.blockRendering.Connection}
  */
 Blockly.blockRendering.OutputConnection = function(constants, connectionModel) {
-  Blockly.blockRendering.OutputConnection.superClass_.constructor.call(this,
-      constants, connectionModel);
+  Blockly.blockRendering.OutputConnection.superClass_.constructor.call(
+      this, constants, connectionModel);
   this.type |= Blockly.blockRendering.Types.OUTPUT_CONNECTION;
 
   this.height = !this.isDynamicShape ? this.shape.height : 0;
@@ -65,8 +65,8 @@ Blockly.blockRendering.OutputConnection = function(constants, connectionModel) {
   this.connectionOffsetY = this.constants_.TAB_OFFSET_FROM_TOP;
   this.connectionOffsetX = 0;
 };
-Blockly.utils.object.inherits(Blockly.blockRendering.OutputConnection,
-    Blockly.blockRendering.Connection);
+Blockly.utils.object.inherits(
+    Blockly.blockRendering.OutputConnection, Blockly.blockRendering.Connection);
 
 
 /**
@@ -82,14 +82,14 @@ Blockly.utils.object.inherits(Blockly.blockRendering.OutputConnection,
  */
 Blockly.blockRendering.PreviousConnection = function(
     constants, connectionModel) {
-  Blockly.blockRendering.PreviousConnection.superClass_.constructor.call(this,
-      constants, connectionModel);
+  Blockly.blockRendering.PreviousConnection.superClass_.constructor.call(
+      this, constants, connectionModel);
   this.type |= Blockly.blockRendering.Types.PREVIOUS_CONNECTION;
   this.height = this.shape.height;
   this.width = this.shape.width;
-
 };
-Blockly.utils.object.inherits(Blockly.blockRendering.PreviousConnection,
+Blockly.utils.object.inherits(
+    Blockly.blockRendering.PreviousConnection,
     Blockly.blockRendering.Connection);
 
 /**
@@ -104,11 +104,11 @@ Blockly.utils.object.inherits(Blockly.blockRendering.PreviousConnection,
  * @extends {Blockly.blockRendering.Connection}
  */
 Blockly.blockRendering.NextConnection = function(constants, connectionModel) {
-  Blockly.blockRendering.NextConnection.superClass_.constructor.call(this,
-      constants, connectionModel);
+  Blockly.blockRendering.NextConnection.superClass_.constructor.call(
+      this, constants, connectionModel);
   this.type |= Blockly.blockRendering.Types.NEXT_CONNECTION;
   this.height = this.shape.height;
   this.width = this.shape.width;
 };
-Blockly.utils.object.inherits(Blockly.blockRendering.NextConnection,
-    Blockly.blockRendering.Connection);
+Blockly.utils.object.inherits(
+    Blockly.blockRendering.NextConnection, Blockly.blockRendering.Connection);

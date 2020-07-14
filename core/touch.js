@@ -22,9 +22,9 @@ goog.require('Blockly.utils.string');
 
 
 /**
-  * Whether touch is enabled in the browser.
-  * Copied from Closure's goog.events.BrowserFeature.TOUCH_ENABLED
-  */
+ * Whether touch is enabled in the browser.
+ * Copied from Closure's goog.events.BrowserFeature.TOUCH_ENABLED
+ */
 Blockly.Touch.TOUCH_ENABLED =
     ('ontouchstart' in Blockly.utils.global ||
      !!(Blockly.utils.global['document'] && document.documentElement &&
@@ -103,7 +103,6 @@ Blockly.longStart = function(e, gesture) {
     if (gesture) {
       gesture.handleRightClick(e);
     }
-
   }, Blockly.LONGPRESS);
 };
 
@@ -149,11 +148,13 @@ Blockly.Touch.shouldHandleEvent = function(e) {
  *     defined.  Otherwise 'mouse'.
  */
 Blockly.Touch.getTouchIdentifierFromEvent = function(e) {
-  return e.pointerId != undefined ? e.pointerId :
+  return e.pointerId != undefined ?
+      e.pointerId :
       (e.changedTouches && e.changedTouches[0] &&
-      e.changedTouches[0].identifier !== undefined &&
-      e.changedTouches[0].identifier !== null) ?
-      e.changedTouches[0].identifier : 'mouse';
+       e.changedTouches[0].identifier !== undefined &&
+       e.changedTouches[0].identifier !== null) ?
+      e.changedTouches[0].identifier :
+      'mouse';
 };
 
 /**
@@ -243,8 +244,12 @@ Blockly.Touch.splitEventByTouches = function(e) {
         type: e.type,
         changedTouches: [e.changedTouches[i]],
         target: e.target,
-        stopPropagation: function() { e.stopPropagation(); },
-        preventDefault: function() { e.preventDefault(); }
+        stopPropagation: function() {
+          e.stopPropagation();
+        },
+        preventDefault: function() {
+          e.preventDefault();
+        }
       };
       events[i] = newEvent;
     }

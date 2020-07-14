@@ -53,12 +53,13 @@ Blockly.fieldRegistry.unregister = function(type) {
  */
 Blockly.fieldRegistry.fromJson = function(options) {
   var fieldClass = /** @type {{fromJson:function(!Object):!Blockly.Field}} */ (
-    Blockly.registry.getClass(Blockly.registry.Type.FIELD, options['type']));
+      Blockly.registry.getClass(Blockly.registry.Type.FIELD, options['type']));
   if (!fieldClass) {
-    console.warn('Blockly could not create a field of type ' + options['type'] +
-      '. The field is probably not being registered. This could be because' +
-      ' the file is not loaded, the field does not register itself (Issue' +
-      ' #1584), or the registration is not being reached.');
+    console.warn(
+        'Blockly could not create a field of type ' + options['type'] +
+        '. The field is probably not being registered. This could be because' +
+        ' the file is not loaded, the field does not register itself (Issue' +
+        ' #1584), or the registration is not being reached.');
     return null;
   }
   return fieldClass.fromJson(options);

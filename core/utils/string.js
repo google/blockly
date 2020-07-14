@@ -39,9 +39,11 @@ Blockly.utils.string.shortestStringLength = function(array) {
   if (!array.length) {
     return 0;
   }
-  return array.reduce(function(a, b) {
-    return a.length < b.length ? a : b;
-  }).length;
+  return array
+      .reduce(function(a, b) {
+        return a.length < b.length ? a : b;
+      })
+      .length;
 };
 
 /**
@@ -222,8 +224,9 @@ Blockly.utils.string.wrapScore_ = function(words, wordBreaks, limit) {
   // previous line.  For example, this looks wrong:
   // aaa bbb
   // ccc ddd eee
-  if (lineLengths.length > 1 && lineLengths[lineLengths.length - 1] <=
-      lineLengths[lineLengths.length - 2]) {
+  if (lineLengths.length > 1 &&
+      lineLengths[lineLengths.length - 1] <=
+          lineLengths[lineLengths.length - 2]) {
     score += 0.5;
   }
   return score;
@@ -281,4 +284,3 @@ Blockly.utils.string.wrapToText_ = function(words, wordBreaks) {
   }
   return text.join('');
 };
-

@@ -112,8 +112,8 @@ Blockly.MenuItem.prototype.createDom = function() {
   element.className = 'blocklyMenuItem goog-menuitem ' +
       (this.enabled_ ? '' : 'blocklyMenuItemDisabled goog-menuitem-disabled ') +
       (this.checked_ ? 'blocklyMenuItemSelected goog-option-selected ' : '') +
-      (this.highlight_ ?
-        'blocklyMenuItemHighlight goog-menuitem-highlight ' : '') +
+      (this.highlight_ ? 'blocklyMenuItemHighlight goog-menuitem-highlight ' :
+                         '') +
       (this.rightToLeft_ ? 'blocklyMenuItemRtl goog-menuitem-rtl ' : '');
 
   var content = document.createElement('div');
@@ -136,10 +136,11 @@ Blockly.MenuItem.prototype.createDom = function() {
   if (this.roleName_) {
     Blockly.utils.aria.setRole(element, this.roleName_);
   }
-  Blockly.utils.aria.setState(element, Blockly.utils.aria.State.SELECTED,
+  Blockly.utils.aria.setState(
+      element, Blockly.utils.aria.State.SELECTED,
       (this.checkable_ && this.checked_) || false);
-  Blockly.utils.aria.setState(element, Blockly.utils.aria.State.DISABLED,
-      !this.enabled_);
+  Blockly.utils.aria.setState(
+      element, Blockly.utils.aria.State.DISABLED, !this.enabled_);
 
   return element;
 };

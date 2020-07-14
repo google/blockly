@@ -145,7 +145,8 @@ Blockly.Input.prototype.removeField = function(name, opt_quiet) {
       field.dispose();
       this.fieldRow.splice(i, 1);
       if (this.sourceBlock_.rendered) {
-        this.sourceBlock_ = /** @type {!Blockly.BlockSvg} */ (this.sourceBlock_);
+        this.sourceBlock_ =
+            /** @type {!Blockly.BlockSvg} */ (this.sourceBlock_);
         this.sourceBlock_.render();
         // Removing a field will cause the block to change shape.
         this.sourceBlock_.bumpNeighbours();
@@ -190,7 +191,7 @@ Blockly.Input.prototype.setVisible = function(visible) {
   }
   if (this.connection) {
     this.connection =
-      /** @type {!Blockly.RenderedConnection} */ (this.connection);
+        /** @type {!Blockly.RenderedConnection} */ (this.connection);
     // Has a connection.
     if (visible) {
       renderList = this.connection.startTrackingAll();

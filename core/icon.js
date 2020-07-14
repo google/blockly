@@ -70,8 +70,8 @@ Blockly.Icon.prototype.createIcon = function() {
     ...
   </g>
   */
-  this.iconGroup_ = Blockly.utils.dom.createSvgElement('g',
-      {'class': 'blocklyIconGroup'}, null);
+  this.iconGroup_ = Blockly.utils.dom.createSvgElement(
+      'g', {'class': 'blocklyIconGroup'}, null);
   if (this.block_.isInFlyout) {
     Blockly.utils.dom.addClass(
         /** @type {!Element} */ (this.iconGroup_), 'blocklyIconGroupReadonly');
@@ -137,7 +137,8 @@ Blockly.Icon.prototype.applyColour = function() {
 
 /**
  * Notification that the icon has moved.  Update the arrow accordingly.
- * @param {!Blockly.utils.Coordinate} xy Absolute location in workspace coordinates.
+ * @param {!Blockly.utils.Coordinate} xy Absolute location in workspace
+ *     coordinates.
  */
 Blockly.Icon.prototype.setIconLocation = function(xy) {
   this.iconXY_ = xy;

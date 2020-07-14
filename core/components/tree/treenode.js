@@ -131,9 +131,7 @@ Blockly.tree.TreeNode.prototype.onKeyDown = function(e) {
     map[Blockly.utils.KeyCodes.DOWN] = Blockly.utils.KeyCodes.RIGHT;
 
     var newKeyCode = map[e.keyCode];
-    Object.defineProperties(e, {
-      keyCode: {value: newKeyCode || e.keyCode}
-    });
+    Object.defineProperties(e, {keyCode: {value: newKeyCode || e.keyCode}});
   }
   return Blockly.tree.TreeNode.superClass_.onKeyDown.call(this, e);
 };

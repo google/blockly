@@ -29,8 +29,8 @@ goog.require('Blockly.minimalist.RenderInfo');
 Blockly.minimalist.Renderer = function(name) {
   Blockly.minimalist.Renderer.superClass_.constructor.call(this, name);
 };
-Blockly.utils.object.inherits(Blockly.minimalist.Renderer,
-    Blockly.blockRendering.Renderer);
+Blockly.utils.object.inherits(
+    Blockly.minimalist.Renderer, Blockly.blockRendering.Renderer);
 
 /**
  * Create a new instance of the renderer's constant provider.
@@ -63,7 +63,8 @@ Blockly.minimalist.Renderer.prototype.makeRenderInfo_ = function(block) {
  * @override
  */
 Blockly.minimalist.Renderer.prototype.makeDrawer_ = function(block, info) {
-  return new Blockly.minimalist.Drawer(block,
+  return new Blockly.minimalist.Drawer(
+      block,
       /** @type {!Blockly.minimalist.RenderInfo} */ (info));
 };
 

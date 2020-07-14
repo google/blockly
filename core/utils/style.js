@@ -197,7 +197,8 @@ Blockly.utils.style.getBorderBox = function(element) {
   var left = Blockly.utils.style.getComputedStyle(element, 'borderLeftWidth');
   var right = Blockly.utils.style.getComputedStyle(element, 'borderRightWidth');
   var top = Blockly.utils.style.getComputedStyle(element, 'borderTopWidth');
-  var bottom = Blockly.utils.style.getComputedStyle(element, 'borderBottomWidth');
+  var bottom =
+      Blockly.utils.style.getComputedStyle(element, 'borderBottomWidth');
 
   return {
     top: parseFloat(top),
@@ -222,9 +223,8 @@ Blockly.utils.style.getBorderBox = function(element) {
  */
 Blockly.utils.style.scrollIntoContainerView = function(
     element, container, opt_center) {
-  var offset =
-      Blockly.utils.style.getContainerOffsetToScrollInto(element,
-          container, opt_center);
+  var offset = Blockly.utils.style.getContainerOffsetToScrollInto(
+      element, container, opt_center);
   container.scrollLeft = offset.x;
   container.scrollTop = offset.y;
 };

@@ -29,14 +29,14 @@ goog.require('Blockly.utils.object');
  *    changes to the field's value. Takes in a number & returns a validated
  *    number, or null to abort the change.
  * @param {Object=} opt_config A map of options used to configure the field.
- *    See the [field creation documentation]{@link https://developers.google.com/blockly/guides/create-custom-blocks/fields/built-in-fields/number#creation}
+ *    See the [field creation documentation]{@link
+ * https://developers.google.com/blockly/guides/create-custom-blocks/fields/built-in-fields/number#creation}
  *    for a list of properties this parameter supports.
  * @extends {Blockly.FieldTextInput}
  * @constructor
  */
-Blockly.FieldNumber = function(opt_value, opt_min, opt_max, opt_precision,
-    opt_validator, opt_config) {
-
+Blockly.FieldNumber = function(
+    opt_value, opt_min, opt_max, opt_precision, opt_validator, opt_config) {
   /**
    * The minimum value this number field can contain.
    * @type {number}
@@ -91,8 +91,8 @@ Blockly.FieldNumber.prototype.DEFAULT_VALUE = 0;
  * @nocollapse
  */
 Blockly.FieldNumber.fromJson = function(options) {
-  return new Blockly.FieldNumber(options['value'],
-      undefined, undefined, undefined, undefined, options);
+  return new Blockly.FieldNumber(
+      options['value'], undefined, undefined, undefined, undefined, options);
 };
 
 /**
@@ -304,12 +304,12 @@ Blockly.FieldNumber.prototype.widgetCreate_ = function() {
 
   // Set the accessibility state
   if (this.min_ > -Infinity) {
-    Blockly.utils.aria.setState(htmlInput,
-        Blockly.utils.aria.State.VALUEMIN, this.min_);
+    Blockly.utils.aria.setState(
+        htmlInput, Blockly.utils.aria.State.VALUEMIN, this.min_);
   }
   if (this.max_ < Infinity) {
-    Blockly.utils.aria.setState(htmlInput,
-        Blockly.utils.aria.State.VALUEMAX, this.max_);
+    Blockly.utils.aria.setState(
+        htmlInput, Blockly.utils.aria.State.VALUEMAX, this.max_);
   }
   return htmlInput;
 };

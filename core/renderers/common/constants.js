@@ -27,7 +27,6 @@ goog.requireType('Blockly.blockRendering.Debug');
  * @package
  */
 Blockly.blockRendering.ConstantProvider = function() {
-
   /**
    * The size of an empty spacer.
    * @type {number}
@@ -210,10 +209,10 @@ Blockly.blockRendering.ConstantProvider = function() {
   this.EXTERNAL_VALUE_INPUT_PADDING = 2;
 
   /**
-   * The height of an empty statement input.  Note that in the old rendering this
-   * varies slightly depending on whether the block has external or inline inputs.
-   * In the new rendering this is consistent.  It seems unlikely that the old
-   * behaviour was intentional.
+   * The height of an empty statement input.  Note that in the old rendering
+   * this varies slightly depending on whether the block has external or inline
+   * inputs. In the new rendering this is consistent.  It seems unlikely that
+   * the old behaviour was intentional.
    * @type {number}
    */
   this.EMPTY_STATEMENT_INPUT_HEIGHT = this.MIN_BLOCK_HEIGHT;
@@ -255,14 +254,14 @@ Blockly.blockRendering.ConstantProvider = function() {
    * to be the height of the text based on the font used.
    * @type {number}
    */
-  this.FIELD_TEXT_HEIGHT = -1; // Dynamically set
+  this.FIELD_TEXT_HEIGHT = -1;  // Dynamically set
 
   /**
    * Text baseline.  This constant is dynamically set in ``setFontConstants_``
    * to be the baseline of the text based on the font used.
    * @type {number}
    */
-  this.FIELD_TEXT_BASELINE = -1; // Dynamically set
+  this.FIELD_TEXT_BASELINE = -1;  // Dynamically set
 
   /**
    * A field's border rect corner radius.
@@ -345,17 +344,17 @@ Blockly.blockRendering.ConstantProvider = function() {
    * @type {string}
    */
   this.FIELD_DROPDOWN_SVG_ARROW_DATAURI =
-    'data:image/svg+xml;base64,PHN2ZyBpZD0iTGF5ZXJfMSIgZGF0YS1uYW1lPSJMYXllci' +
-    'AxIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMi43MSIgaG' +
-    'VpZ2h0PSI4Ljc5IiB2aWV3Qm94PSIwIDAgMTIuNzEgOC43OSI+PHRpdGxlPmRyb3Bkb3duLW' +
-    'Fycm93PC90aXRsZT48ZyBvcGFjaXR5PSIwLjEiPjxwYXRoIGQ9Ik0xMi43MSwyLjQ0QTIuND' +
-    'EsMi40MSwwLDAsMSwxMiw0LjE2TDguMDgsOC4wOGEyLjQ1LDIuNDUsMCwwLDEtMy40NSwwTD' +
-    'AuNzIsNC4xNkEyLjQyLDIuNDIsMCwwLDEsMCwyLjQ0LDIuNDgsMi40OCwwLDAsMSwuNzEuNz' +
-    'FDMSwwLjQ3LDEuNDMsMCw2LjM2LDBTMTEuNzUsMC40NiwxMiwuNzFBMi40NCwyLjQ0LDAsMC' +
-    'wxLDEyLjcxLDIuNDRaIiBmaWxsPSIjMjMxZjIwIi8+PC9nPjxwYXRoIGQ9Ik02LjM2LDcuNz' +
-    'lhMS40MywxLjQzLDAsMCwxLTEtLjQyTDEuNDIsMy40NWExLjQ0LDEuNDQsMCwwLDEsMC0yYz' +
-    'AuNTYtLjU2LDkuMzEtMC41Niw5Ljg3LDBhMS40NCwxLjQ0LDAsMCwxLDAsMkw3LjM3LDcuMz' +
-    'dBMS40MywxLjQzLDAsMCwxLDYuMzYsNy43OVoiIGZpbGw9IiNmZmYiLz48L3N2Zz4=';
+      'data:image/svg+xml;base64,PHN2ZyBpZD0iTGF5ZXJfMSIgZGF0YS1uYW1lPSJMYXllci' +
+      'AxIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMi43MSIgaG' +
+      'VpZ2h0PSI4Ljc5IiB2aWV3Qm94PSIwIDAgMTIuNzEgOC43OSI+PHRpdGxlPmRyb3Bkb3duLW' +
+      'Fycm93PC90aXRsZT48ZyBvcGFjaXR5PSIwLjEiPjxwYXRoIGQ9Ik0xMi43MSwyLjQ0QTIuND' +
+      'EsMi40MSwwLDAsMSwxMiw0LjE2TDguMDgsOC4wOGEyLjQ1LDIuNDUsMCwwLDEtMy40NSwwTD' +
+      'AuNzIsNC4xNkEyLjQyLDIuNDIsMCwwLDEsMCwyLjQ0LDIuNDgsMi40OCwwLDAsMSwuNzEuNz' +
+      'FDMSwwLjQ3LDEuNDMsMCw2LjM2LDBTMTEuNzUsMC40NiwxMiwuNzFBMi40NCwyLjQ0LDAsMC' +
+      'wxLDEyLjcxLDIuNDRaIiBmaWxsPSIjMjMxZjIwIi8+PC9nPjxwYXRoIGQ9Ik02LjM2LDcuNz' +
+      'lhMS40MywxLjQzLDAsMCwxLTEtLjQyTDEuNDIsMy40NWExLjQ0LDEuNDQsMCwwLDEsMC0yYz' +
+      'AuNTYtLjU2LDkuMzEtMC41Niw5Ljg3LDBhMS40NCwxLjQ0LDAsMCwxLDAsMkw3LjM3LDcuMz' +
+      'dBMS40MywxLjQzLDAsMCwxLDYuMzYsNy43OVoiIGZpbGw9IiNmZmYiLz48L3N2Zz4=';
 
   /**
    * Whether or not to show a box shadow around the widget div. This is only a
@@ -521,10 +520,7 @@ Blockly.blockRendering.ConstantProvider = function() {
    * Enum for connection shapes.
    * @enum {number}
    */
-  this.SHAPES = {
-    PUZZLE: 1,
-    NOTCH: 2
-  };
+  this.SHAPES = {PUZZLE: 1, NOTCH: 2};
 };
 
 /**
@@ -532,7 +528,6 @@ Blockly.blockRendering.ConstantProvider = function() {
  * @package
  */
 Blockly.blockRendering.ConstantProvider.prototype.init = function() {
-
   /**
    * An object containing sizing and path information about collapsed block
    * indicators.
@@ -576,9 +571,7 @@ Blockly.blockRendering.ConstantProvider.prototype.init = function() {
  * @param {!Blockly.Theme} theme The current workspace theme.
  * @package
  */
-Blockly.blockRendering.ConstantProvider.prototype.setTheme = function(
-    theme) {
-
+Blockly.blockRendering.ConstantProvider.prototype.setTheme = function(theme) {
   /**
    * The block styles map.
    * @type {Object.<string, Blockly.Theme.BlockStyle>}
@@ -601,12 +594,12 @@ Blockly.blockRendering.ConstantProvider.prototype.setTheme = function(
  */
 Blockly.blockRendering.ConstantProvider.prototype.setDynamicProperties_ =
     function(theme) {
-    /* eslint-disable indent */
+  /* eslint-disable indent */
   this.setFontConstants_(theme);
   this.setComponentConstants_(theme);
 
-  this.ADD_START_HATS = theme.startHats != null ? theme.startHats :
-      this.ADD_START_HATS;
+  this.ADD_START_HATS =
+      theme.startHats != null ? theme.startHats : this.ADD_START_HATS;
 }; /* eslint-enable indent */
 
 /**
@@ -618,17 +611,19 @@ Blockly.blockRendering.ConstantProvider.prototype.setFontConstants_ = function(
     theme) {
   this.FIELD_TEXT_FONTFAMILY =
       theme.fontStyle && theme.fontStyle['family'] != undefined ?
-      theme.fontStyle['family'] : this.FIELD_TEXT_FONTFAMILY;
+      theme.fontStyle['family'] :
+      this.FIELD_TEXT_FONTFAMILY;
   this.FIELD_TEXT_FONTWEIGHT =
       theme.fontStyle && theme.fontStyle['weight'] != undefined ?
-      theme.fontStyle['weight'] : this.FIELD_TEXT_FONTWEIGHT;
+      theme.fontStyle['weight'] :
+      this.FIELD_TEXT_FONTWEIGHT;
   this.FIELD_TEXT_FONTSIZE =
       theme.fontStyle && theme.fontStyle['size'] != undefined ?
-      theme.fontStyle['size'] : this.FIELD_TEXT_FONTSIZE;
+      theme.fontStyle['size'] :
+      this.FIELD_TEXT_FONTSIZE;
 
-  var fontMetrics = Blockly.utils.dom.measureFontMetrics('Hg',
-      this.FIELD_TEXT_FONTSIZE + 'pt',
-      this.FIELD_TEXT_FONTWEIGHT,
+  var fontMetrics = Blockly.utils.dom.measureFontMetrics(
+      'Hg', this.FIELD_TEXT_FONTSIZE + 'pt', this.FIELD_TEXT_FONTWEIGHT,
       this.FIELD_TEXT_FONTFAMILY);
 
   this.FIELD_TEXT_HEIGHT = fontMetrics.height;
@@ -642,17 +637,17 @@ Blockly.blockRendering.ConstantProvider.prototype.setFontConstants_ = function(
  */
 Blockly.blockRendering.ConstantProvider.prototype.setComponentConstants_ =
     function(theme) {
-    /* eslint-disable indent */
-  this.CURSOR_COLOUR = theme.getComponentStyle('cursorColour') ||
-    this.CURSOR_COLOUR;
-  this.MARKER_COLOUR = theme.getComponentStyle('markerColour') ||
-    this.MARKER_COLOUR;
+  /* eslint-disable indent */
+  this.CURSOR_COLOUR =
+      theme.getComponentStyle('cursorColour') || this.CURSOR_COLOUR;
+  this.MARKER_COLOUR =
+      theme.getComponentStyle('markerColour') || this.MARKER_COLOUR;
   this.INSERTION_MARKER_COLOUR =
-    theme.getComponentStyle('insertionMarkerColour') ||
-    this.INSERTION_MARKER_COLOUR;
+      theme.getComponentStyle('insertionMarkerColour') ||
+      this.INSERTION_MARKER_COLOUR;
   this.INSERTION_MARKER_OPACITY =
-    Number(theme.getComponentStyle('insertionMarkerOpacity')) ||
-    this.INSERTION_MARKER_OPACITY;
+      Number(theme.getComponentStyle('insertionMarkerOpacity')) ||
+      this.INSERTION_MARKER_OPACITY;
 }; /* eslint-enable indent */
 
 /**
@@ -665,7 +660,7 @@ Blockly.blockRendering.ConstantProvider.prototype.setComponentConstants_ =
  */
 Blockly.blockRendering.ConstantProvider.prototype.getBlockStyleForColour =
     function(colour) {
-    /* eslint-disable indent */
+  /* eslint-disable indent */
   var name = 'auto_' + colour;
   if (!this.blockStyles[name]) {
     this.blockStyles[name] = this.createBlockStyle_(colour);
@@ -683,8 +678,8 @@ Blockly.blockRendering.ConstantProvider.prototype.getBlockStyle = function(
     blockStyleName) {
   return this.blockStyles[blockStyleName || ''] ||
       (blockStyleName && blockStyleName.indexOf('auto_') == 0 ?
-        this.getBlockStyleForColour(blockStyleName.substring(5)).style :
-        this.createBlockStyle_('#000000'));
+           this.getBlockStyleForColour(blockStyleName.substring(5)).style :
+           this.createBlockStyle_('#000000'));
 };
 
 /**
@@ -696,9 +691,7 @@ Blockly.blockRendering.ConstantProvider.prototype.getBlockStyle = function(
  */
 Blockly.blockRendering.ConstantProvider.prototype.createBlockStyle_ = function(
     colour) {
-  return this.validatedBlockStyle_({
-    'colourPrimary': colour
-  });
+  return this.validatedBlockStyle_({'colourPrimary': colour});
 };
 
 /**
@@ -717,15 +710,15 @@ Blockly.blockRendering.ConstantProvider.prototype.createBlockStyle_ = function(
  */
 Blockly.blockRendering.ConstantProvider.prototype.validatedBlockStyle_ =
     function(blockStyle) {
-    /* eslint-disable indent */
+  /* eslint-disable indent */
   // Make a new object with all of the same properties.
   var valid = /** @type {!Blockly.Theme.BlockStyle} */ ({});
   if (blockStyle) {
     Blockly.utils.object.mixin(valid, blockStyle);
   }
   // Validate required properties.
-  var parsedColour = Blockly.utils.parseBlockColour(
-      valid['colourPrimary'] || '#000');
+  var parsedColour =
+      Blockly.utils.parseBlockColour(valid['colourPrimary'] || '#000');
   valid.colourPrimary = parsedColour.hex;
   valid.colourSecondary = valid['colourSecondary'] ?
       Blockly.utils.parseBlockColour(valid['colourSecondary']).hex :
@@ -746,7 +739,7 @@ Blockly.blockRendering.ConstantProvider.prototype.validatedBlockStyle_ =
  */
 Blockly.blockRendering.ConstantProvider.prototype.generateSecondaryColour_ =
     function(colour) {
-    /* eslint-disable indent */
+  /* eslint-disable indent */
   return Blockly.utils.colour.blend('#fff', colour, 0.6) || colour;
 }; /* eslint-enable indent */
 
@@ -758,7 +751,7 @@ Blockly.blockRendering.ConstantProvider.prototype.generateSecondaryColour_ =
  */
 Blockly.blockRendering.ConstantProvider.prototype.generateTertiaryColour_ =
     function(colour) {
-    /* eslint-disable indent */
+  /* eslint-disable indent */
   return Blockly.utils.colour.blend('#fff', colour, 0.3) || colour;
 }; /* eslint-enable indent */
 
@@ -790,18 +783,12 @@ Blockly.blockRendering.ConstantProvider.prototype.makeJaggedTeeth = function() {
   var height = this.JAGGED_TEETH_HEIGHT;
   var width = this.JAGGED_TEETH_WIDTH;
 
-  var mainPath =
-      Blockly.utils.svgPaths.line(
-          [
-            Blockly.utils.svgPaths.point(width, height / 4),
-            Blockly.utils.svgPaths.point(-width * 2, height / 2),
-            Blockly.utils.svgPaths.point(width, height / 4)
-          ]);
-  return {
-    height: height,
-    width: width,
-    path: mainPath
-  };
+  var mainPath = Blockly.utils.svgPaths.line([
+    Blockly.utils.svgPaths.point(width, height / 4),
+    Blockly.utils.svgPaths.point(-width * 2, height / 2),
+    Blockly.utils.svgPaths.point(width, height / 4)
+  ]);
+  return {height: height, width: width, path: mainPath};
 };
 
 /**
@@ -813,18 +800,12 @@ Blockly.blockRendering.ConstantProvider.prototype.makeStartHat = function() {
   var height = this.START_HAT_HEIGHT;
   var width = this.START_HAT_WIDTH;
 
-  var mainPath =
-      Blockly.utils.svgPaths.curve('c',
-          [
-            Blockly.utils.svgPaths.point(30, -height),
-            Blockly.utils.svgPaths.point(70, -height),
-            Blockly.utils.svgPaths.point(width, 0)
-          ]);
-  return {
-    height: height,
-    width: width,
-    path: mainPath
-  };
+  var mainPath = Blockly.utils.svgPaths.curve('c', [
+    Blockly.utils.svgPaths.point(30, -height),
+    Blockly.utils.svgPaths.point(70, -height),
+    Blockly.utils.svgPaths.point(width, 0)
+  ]);
+  return {height: height, width: width, path: mainPath};
 };
 
 /**
@@ -849,22 +830,21 @@ Blockly.blockRendering.ConstantProvider.prototype.makePuzzleTab = function() {
     var halfHeight = height / 2;
     var control1Y = halfHeight + overlap;
     var control2Y = halfHeight + 0.5;
-    var control3Y = overlap; // 2.5
+    var control3Y = overlap;  // 2.5
 
     var endPoint1 = Blockly.utils.svgPaths.point(-width, forward * halfHeight);
     var endPoint2 = Blockly.utils.svgPaths.point(width, forward * halfHeight);
 
-    return Blockly.utils.svgPaths.curve('c',
-        [
-          Blockly.utils.svgPaths.point(0, forward * control1Y),
-          Blockly.utils.svgPaths.point(-width, back * control2Y),
-          endPoint1
-        ]) +
-        Blockly.utils.svgPaths.curve('s',
-            [
-              Blockly.utils.svgPaths.point(width, back * control3Y),
-              endPoint2
-            ]);
+    return Blockly.utils.svgPaths.curve(
+               'c',
+               [
+                 Blockly.utils.svgPaths.point(0, forward * control1Y),
+                 Blockly.utils.svgPaths.point(-width, back * control2Y),
+                 endPoint1
+               ]) +
+        Blockly.utils.svgPaths.curve(
+            's',
+            [Blockly.utils.svgPaths.point(width, back * control3Y), endPoint2]);
   }
 
   // c 0,-10  -8,8  -8,-7.5  s 8,2.5  8,-7.5
@@ -892,12 +872,11 @@ Blockly.blockRendering.ConstantProvider.prototype.makeNotch = function() {
   var innerWidth = 3;
   var outerWidth = (width - innerWidth) / 2;
   function makeMainPath(dir) {
-    return Blockly.utils.svgPaths.line(
-        [
-          Blockly.utils.svgPaths.point(dir * outerWidth, height),
-          Blockly.utils.svgPaths.point(dir * innerWidth, 0),
-          Blockly.utils.svgPaths.point(dir * outerWidth, -height)
-        ]);
+    return Blockly.utils.svgPaths.line([
+      Blockly.utils.svgPaths.point(dir * outerWidth, height),
+      Blockly.utils.svgPaths.point(dir * innerWidth, 0),
+      Blockly.utils.svgPaths.point(dir * outerWidth, -height)
+    ]);
   }
   var pathLeft = makeMainPath(1);
   var pathRight = makeMainPath(-1);
@@ -916,14 +895,15 @@ Blockly.blockRendering.ConstantProvider.prototype.makeNotch = function() {
  *     inside corners.
  * @package
  */
-Blockly.blockRendering.ConstantProvider.prototype.makeInsideCorners = function() {
+Blockly.blockRendering.ConstantProvider.prototype.makeInsideCorners =
+    function() {
   var radius = this.CORNER_RADIUS;
 
-  var innerTopLeftCorner = Blockly.utils.svgPaths.arc('a', '0 0,0', radius,
-      Blockly.utils.svgPaths.point(-radius, radius));
+  var innerTopLeftCorner = Blockly.utils.svgPaths.arc(
+      'a', '0 0,0', radius, Blockly.utils.svgPaths.point(-radius, radius));
 
-  var innerBottomLeftCorner = Blockly.utils.svgPaths.arc('a', '0 0,0', radius,
-      Blockly.utils.svgPaths.point(radius, radius));
+  var innerBottomLeftCorner = Blockly.utils.svgPaths.arc(
+      'a', '0 0,0', radius, Blockly.utils.svgPaths.point(radius, radius));
 
   return {
     width: radius,
@@ -938,38 +918,37 @@ Blockly.blockRendering.ConstantProvider.prototype.makeInsideCorners = function()
  *     outside corners.
  * @package
  */
-Blockly.blockRendering.ConstantProvider.prototype.makeOutsideCorners = function() {
+Blockly.blockRendering.ConstantProvider.prototype.makeOutsideCorners =
+    function() {
   var radius = this.CORNER_RADIUS;
   /**
    * SVG path for drawing the rounded top-left corner.
    * @const
    */
-  var topLeft =
-      Blockly.utils.svgPaths.moveBy(0, radius) +
-      Blockly.utils.svgPaths.arc('a', '0 0,1', radius,
-          Blockly.utils.svgPaths.point(radius, -radius));
+  var topLeft = Blockly.utils.svgPaths.moveBy(0, radius) +
+      Blockly.utils.svgPaths.arc(
+          'a', '0 0,1', radius, Blockly.utils.svgPaths.point(radius, -radius));
 
   /**
    * SVG path for drawing the rounded top-right corner.
    * @const
    */
-  var topRight =
-      Blockly.utils.svgPaths.arc('a', '0 0,1', radius,
-          Blockly.utils.svgPaths.point(radius, radius));
+  var topRight = Blockly.utils.svgPaths.arc(
+      'a', '0 0,1', radius, Blockly.utils.svgPaths.point(radius, radius));
 
   /**
    * SVG path for drawing the rounded bottom-left corner.
    * @const
    */
-  var bottomLeft = Blockly.utils.svgPaths.arc('a', '0 0,1', radius,
-      Blockly.utils.svgPaths.point(-radius, -radius));
+  var bottomLeft = Blockly.utils.svgPaths.arc(
+      'a', '0 0,1', radius, Blockly.utils.svgPaths.point(-radius, -radius));
 
   /**
    * SVG path for drawing the rounded bottom-right corner.
    * @const
    */
-  var bottomRight = Blockly.utils.svgPaths.arc('a', '0 0,1', radius,
-      Blockly.utils.svgPaths.point(-radius, radius));
+  var bottomRight = Blockly.utils.svgPaths.arc(
+      'a', '0 0,1', radius, Blockly.utils.svgPaths.point(-radius, radius));
 
   return {
     topLeft: topLeft,
@@ -1010,8 +989,8 @@ Blockly.blockRendering.ConstantProvider.prototype.shapeFor = function(
  * @suppress {strictModuleDepCheck} Debug renderer only included in playground.
  * @package
  */
-Blockly.blockRendering.ConstantProvider.prototype.createDom = function(svg,
-    tagName, selector) {
+Blockly.blockRendering.ConstantProvider.prototype.createDom = function(
+    svg, tagName, selector) {
   this.injectCSS_(tagName, selector);
 
   /*
@@ -1034,12 +1013,13 @@ Blockly.blockRendering.ConstantProvider.prototype.createDom = function(svg,
                    k1="0" k2="1" k3="1" k4="0" />
     </filter>
   */
-  var embossFilter = Blockly.utils.dom.createSvgElement('filter',
-      {'id': 'blocklyEmbossFilter' + this.randomIdentifier}, defs);
-  Blockly.utils.dom.createSvgElement('feGaussianBlur',
+  var embossFilter = Blockly.utils.dom.createSvgElement(
+      'filter', {'id': 'blocklyEmbossFilter' + this.randomIdentifier}, defs);
+  Blockly.utils.dom.createSvgElement(
+      'feGaussianBlur',
       {'in': 'SourceAlpha', 'stdDeviation': 1, 'result': 'blur'}, embossFilter);
-  var feSpecularLighting = Blockly.utils.dom.createSvgElement('feSpecularLighting',
-      {
+  var feSpecularLighting = Blockly.utils.dom.createSvgElement(
+      'feSpecularLighting', {
         'in': 'blur',
         'surfaceScale': 1,
         'specularConstant': 0.5,
@@ -1048,17 +1028,19 @@ Blockly.blockRendering.ConstantProvider.prototype.createDom = function(svg,
         'result': 'specOut'
       },
       embossFilter);
-  Blockly.utils.dom.createSvgElement('fePointLight',
-      {'x': -5000, 'y': -10000, 'z': 20000}, feSpecularLighting);
-  Blockly.utils.dom.createSvgElement('feComposite',
-      {
+  Blockly.utils.dom.createSvgElement(
+      'fePointLight', {'x': -5000, 'y': -10000, 'z': 20000},
+      feSpecularLighting);
+  Blockly.utils.dom.createSvgElement(
+      'feComposite', {
         'in': 'specOut',
         'in2': 'SourceAlpha',
         'operator': 'in',
         'result': 'specOut'
-      }, embossFilter);
-  Blockly.utils.dom.createSvgElement('feComposite',
-      {
+      },
+      embossFilter);
+  Blockly.utils.dom.createSvgElement(
+      'feComposite', {
         'in': 'SourceGraphic',
         'in2': 'specOut',
         'operator': 'arithmetic',
@@ -1066,7 +1048,8 @@ Blockly.blockRendering.ConstantProvider.prototype.createDom = function(svg,
         'k2': 1,
         'k3': 1,
         'k4': 0
-      }, embossFilter);
+      },
+      embossFilter);
   this.embossFilterId = embossFilter.id;
   this.embossFilter_ = embossFilter;
 
@@ -1077,23 +1060,25 @@ Blockly.blockRendering.ConstantProvider.prototype.createDom = function(svg,
       <path d="M 0 0 L 10 10 M 10 0 L 0 10" stroke="#cc0" />
     </pattern>
   */
-  var disabledPattern = Blockly.utils.dom.createSvgElement('pattern',
-      {
+  var disabledPattern = Blockly.utils.dom.createSvgElement(
+      'pattern', {
         'id': 'blocklyDisabledPattern' + this.randomIdentifier,
         'patternUnits': 'userSpaceOnUse',
         'width': 10,
         'height': 10
-      }, defs);
-  Blockly.utils.dom.createSvgElement('rect',
-      {'width': 10, 'height': 10, 'fill': '#aaa'}, disabledPattern);
-  Blockly.utils.dom.createSvgElement('path',
-      {'d': 'M 0 0 L 10 10 M 10 0 L 0 10', 'stroke': '#cc0'}, disabledPattern);
+      },
+      defs);
+  Blockly.utils.dom.createSvgElement(
+      'rect', {'width': 10, 'height': 10, 'fill': '#aaa'}, disabledPattern);
+  Blockly.utils.dom.createSvgElement(
+      'path', {'d': 'M 0 0 L 10 10 M 10 0 L 0 10', 'stroke': '#cc0'},
+      disabledPattern);
   this.disabledPatternId = disabledPattern.id;
   this.disabledPattern_ = disabledPattern;
 
   if (Blockly.blockRendering.Debug) {
-    var debugFilter = Blockly.utils.dom.createSvgElement('filter',
-        {
+    var debugFilter = Blockly.utils.dom.createSvgElement(
+        'filter', {
           'id': 'blocklyDebugFilter' + this.randomIdentifier,
           'height': '160%',
           'width': '180%',
@@ -1104,23 +1089,21 @@ Blockly.blockRendering.ConstantProvider.prototype.createDom = function(svg,
     // Set all gaussian blur pixels to 1 opacity before applying flood
     var debugComponentTransfer = Blockly.utils.dom.createSvgElement(
         'feComponentTransfer', {'result': 'outBlur'}, debugFilter);
-    Blockly.utils.dom.createSvgElement('feFuncA',
-        {
-          'type': 'table', 'tableValues': '0 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1'
-        },
+    Blockly.utils.dom.createSvgElement(
+        'feFuncA',
+        {'type': 'table', 'tableValues': '0 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1'},
         debugComponentTransfer);
     // Color the highlight
-    Blockly.utils.dom.createSvgElement('feFlood',
-        {
-          'flood-color': '#ff0000',
-          'flood-opacity': 0.5,
-          'result': 'outColor'
-        },
+    Blockly.utils.dom.createSvgElement(
+        'feFlood',
+        {'flood-color': '#ff0000', 'flood-opacity': 0.5, 'result': 'outColor'},
         debugFilter);
-    Blockly.utils.dom.createSvgElement('feComposite',
-        {
-          'in': 'outColor', 'in2': 'outBlur',
-          'operator': 'in', 'result': 'outGlow'
+    Blockly.utils.dom.createSvgElement(
+        'feComposite', {
+          'in': 'outColor',
+          'in2': 'outBlur',
+          'operator': 'in',
+          'result': 'outGlow'
         },
         debugFilter);
     this.debugFilterId = debugFilter.id;
@@ -1139,7 +1122,7 @@ Blockly.blockRendering.ConstantProvider.prototype.injectCSS_ = function(
   var cssArray = this.getCSS_(selector);
   var cssNodeId = 'blockly-renderer-style-' + tagName;
   this.cssNode_ =
-    /** @type {!HTMLStyleElement} */ (document.getElementById(cssNodeId));
+      /** @type {!HTMLStyleElement} */ (document.getElementById(cssNodeId));
   var text = cssArray.join('\n');
   if (this.cssNode_) {
     // Already injected, update if the theme changed.
@@ -1148,7 +1131,7 @@ Blockly.blockRendering.ConstantProvider.prototype.injectCSS_ = function(
   }
   // Inject CSS tag at start of head.
   var cssNode =
-    /** @type {!HTMLStyleElement} */ (document.createElement('style'));
+      /** @type {!HTMLStyleElement} */ (document.createElement('style'));
   cssNode.id = cssNodeId;
   var cssTextNode = document.createTextNode(text);
   cssNode.appendChild(cssTextNode);
@@ -1166,73 +1149,49 @@ Blockly.blockRendering.ConstantProvider.prototype.getCSS_ = function(selector) {
   return [
     /* eslint-disable indent */
     // Text.
-    selector + ' .blocklyText, ',
-    selector + ' .blocklyFlyoutLabelText {',
-      'font: ' + this.FIELD_TEXT_FONTWEIGHT + ' ' +
-          this.FIELD_TEXT_FONTSIZE + 'pt ' + this.FIELD_TEXT_FONTFAMILY + ';',
+    selector + ' .blocklyText, ', selector + ' .blocklyFlyoutLabelText {',
+    'font: ' + this.FIELD_TEXT_FONTWEIGHT + ' ' + this.FIELD_TEXT_FONTSIZE +
+        'pt ' + this.FIELD_TEXT_FONTFAMILY + ';',
     '}',
 
     // Fields.
-    selector + ' .blocklyText {',
-      'fill: #fff;',
-    '}',
+    selector + ' .blocklyText {', 'fill: #fff;', '}',
     selector + ' .blocklyNonEditableText>rect,',
     selector + ' .blocklyEditableText>rect {',
-      'fill: ' + this.FIELD_BORDER_RECT_COLOUR + ';',
-      'fill-opacity: .6;',
-      'stroke: none;',
-    '}',
-    selector + ' .blocklyNonEditableText>text,',
-    selector + ' .blocklyEditableText>text {',
-      'fill: #000;',
-    '}',
+    'fill: ' + this.FIELD_BORDER_RECT_COLOUR + ';', 'fill-opacity: .6;',
+    'stroke: none;', '}', selector + ' .blocklyNonEditableText>text,',
+    selector + ' .blocklyEditableText>text {', 'fill: #000;', '}',
 
     // Flyout labels.
-    selector + ' .blocklyFlyoutLabelText {',
-      'fill: #000;',
-    '}',
+    selector + ' .blocklyFlyoutLabelText {', 'fill: #000;', '}',
 
     // Bubbles.
-    selector + ' .blocklyText.blocklyBubbleText {',
-      'fill: #000;',
-    '}',
+    selector + ' .blocklyText.blocklyBubbleText {', 'fill: #000;', '}',
 
     // Editable field hover.
     selector + ' .blocklyEditableText:not(.editing):hover>rect {',
-      'stroke: #fff;',
-      'stroke-width: 2;',
-    '}',
+    'stroke: #fff;', 'stroke-width: 2;', '}',
 
     // Text field input.
     selector + ' .blocklyHtmlInput {',
-      'font-family: ' + this.FIELD_TEXT_FONTFAMILY + ';',
-      'font-weight: ' + this.FIELD_TEXT_FONTWEIGHT + ';',
-    '}',
+    'font-family: ' + this.FIELD_TEXT_FONTFAMILY + ';',
+    'font-weight: ' + this.FIELD_TEXT_FONTWEIGHT + ';', '}',
 
     // Selection highlight.
-    selector + ' .blocklySelected>.blocklyPath {',
-      'stroke: #fc3;',
-      'stroke-width: 3px;',
-    '}',
+    selector + ' .blocklySelected>.blocklyPath {', 'stroke: #fc3;',
+    'stroke-width: 3px;', '}',
 
     // Connection highlight.
-    selector + ' .blocklyHighlightedConnectionPath {',
-      'stroke: #fc3;',
-    '}',
+    selector + ' .blocklyHighlightedConnectionPath {', 'stroke: #fc3;', '}',
 
     // Replaceable highlight.
-    selector + ' .blocklyReplaceable .blocklyPath {',
-      'fill-opacity: .5;',
-    '}',
+    selector + ' .blocklyReplaceable .blocklyPath {', 'fill-opacity: .5;', '}',
     selector + ' .blocklyReplaceable .blocklyPathLight,',
-    selector + ' .blocklyReplaceable .blocklyPathDark {',
-      'display: none;',
-    '}',
+    selector + ' .blocklyReplaceable .blocklyPathDark {', 'display: none;', '}',
 
     // Insertion marker.
     selector + ' .blocklyInsertionMarker>.blocklyPath {',
-      'fill-opacity: ' + this.INSERTION_MARKER_OPACITY + ';',
-      'stroke: none;',
+    'fill-opacity: ' + this.INSERTION_MARKER_OPACITY + ';', 'stroke: none;',
     '}',
     /* eslint-enable indent */
   ];

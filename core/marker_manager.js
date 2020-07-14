@@ -18,11 +18,12 @@ goog.require('Blockly.Marker');
 
 /**
  * Class to manage the multiple markers and the cursor on a workspace.
- * @param {!Blockly.WorkspaceSvg} workspace The workspace for the marker manager.
+ * @param {!Blockly.WorkspaceSvg} workspace The workspace for the marker
+ *     manager.
  * @constructor
  * @package
  */
-Blockly.MarkerManager = function(workspace){
+Blockly.MarkerManager = function(workspace) {
   /**
    * The cursor.
    * @type {Blockly.Cursor}
@@ -61,8 +62,8 @@ Blockly.MarkerManager.prototype.registerMarker = function(id, marker) {
   if (this.markers_[id]) {
     this.unregisterMarker(id);
   }
-  marker.setDrawer(this.workspace_.getRenderer()
-      .makeMarkerDrawer(this.workspace_, marker));
+  marker.setDrawer(
+      this.workspace_.getRenderer().makeMarkerDrawer(this.workspace_, marker));
   this.setMarkerSvg(marker.getDrawer().createDom());
   this.markers_[id] = marker;
 };
@@ -77,7 +78,8 @@ Blockly.MarkerManager.prototype.unregisterMarker = function(id) {
     marker.dispose();
     delete this.markers_[id];
   } else {
-    throw Error('Marker with id ' + id + ' does not exist. Can only unregister' +
+    throw Error(
+        'Marker with id ' + id + ' does not exist. Can only unregister' +
         'markers that exist.');
   }
 };
@@ -110,8 +112,8 @@ Blockly.MarkerManager.prototype.setCursor = function(cursor) {
   }
   this.cursor_ = cursor;
   if (this.cursor_) {
-    var drawer = this.workspace_.getRenderer()
-        .makeMarkerDrawer(this.workspace_, this.cursor_);
+    var drawer = this.workspace_.getRenderer().makeMarkerDrawer(
+        this.workspace_, this.cursor_);
     this.cursor_.setDrawer(drawer);
     this.setCursorSvg(this.cursor_.getDrawer().createDom());
   }

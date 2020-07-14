@@ -32,7 +32,6 @@ goog.requireType('Blockly.IRegistrable');
  * @implements {Blockly.IRegistrable}
  */
 Blockly.blockRendering.Renderer = function(name) {
-
   /**
    * The renderer name.
    * @type {string}
@@ -70,8 +69,8 @@ Blockly.blockRendering.Renderer.prototype.getClassName = function() {
  * @param {Object=} opt_rendererOverrides Rendering constant overrides.
  * @package
  */
-Blockly.blockRendering.Renderer.prototype.init = function(theme,
-    opt_rendererOverrides) {
+Blockly.blockRendering.Renderer.prototype.init = function(
+    theme, opt_rendererOverrides) {
   this.constants_ = this.makeConstants_();
   if (opt_rendererOverrides) {
     this.overrides = opt_rendererOverrides;
@@ -88,7 +87,8 @@ Blockly.blockRendering.Renderer.prototype.init = function(theme,
  * @package
  */
 Blockly.blockRendering.Renderer.prototype.createDom = function(svg, theme) {
-  this.constants_.createDom(svg, this.name + '-' + theme.name,
+  this.constants_.createDom(
+      svg, this.name + '-' + theme.name,
       '.' + this.getClassName() + '.' + theme.getClassName());
 };
 
@@ -177,7 +177,8 @@ Blockly.blockRendering.Renderer.prototype.makeDebugger_ = function() {
  */
 Blockly.blockRendering.Renderer.prototype.makeMarkerDrawer = function(
     workspace, marker) {
-  return new Blockly.blockRendering.MarkerSvg(workspace, this.getConstants(), marker);
+  return new Blockly.blockRendering.MarkerSvg(
+      workspace, this.getConstants(), marker);
 };
 
 /**
@@ -188,11 +189,12 @@ Blockly.blockRendering.Renderer.prototype.makeMarkerDrawer = function(
  * @return {!Blockly.blockRendering.IPathObject} The renderer path object.
  * @package
  */
-Blockly.blockRendering.Renderer.prototype.makePathObject = function(root,
-    style) {
-  return new Blockly.blockRendering.PathObject(root, style,
-      /** @type {!Blockly.blockRendering.ConstantProvider} */ (this.constants_));
-
+Blockly.blockRendering.Renderer.prototype.makePathObject = function(
+    root, style) {
+  return new Blockly.blockRendering.PathObject(
+      root, style,
+      /** @type {!Blockly.blockRendering.ConstantProvider} */
+      (this.constants_));
 };
 
 /**
@@ -203,8 +205,8 @@ Blockly.blockRendering.Renderer.prototype.makePathObject = function(root,
  */
 Blockly.blockRendering.Renderer.prototype.getConstants = function() {
   return (
-    /** @type {!Blockly.blockRendering.ConstantProvider} */
-    (this.constants_));
+      /** @type {!Blockly.blockRendering.ConstantProvider} */
+      (this.constants_));
 };
 
 /**
@@ -214,9 +216,9 @@ Blockly.blockRendering.Renderer.prototype.getConstants = function() {
  * @return {boolean} True if we should highlight the connection.
  * @package
  */
-Blockly.blockRendering.Renderer.prototype.shouldHighlightConnection =
-    function(_conn) {
-    /* eslint-disable indent */
+Blockly.blockRendering.Renderer.prototype.shouldHighlightConnection = function(
+    _conn) {
+  /* eslint-disable indent */
   return true;
 }; /* eslint-enable indent */
 
@@ -225,37 +227,36 @@ Blockly.blockRendering.Renderer.prototype.shouldHighlightConnection =
  * block-clump. If the clump is a row the end is the last input. If the clump
  * is a stack, the end is the last next connection. If the clump is neither,
  * then this returns false.
- * @param {!Blockly.BlockSvg} topBlock The top block of the block clump we want to try and
- *     connect to.
+ * @param {!Blockly.BlockSvg} topBlock The top block of the block clump we want
+ *     to try and connect to.
  * @param {!Blockly.BlockSvg} orphanBlock The orphan block that wants to find
  *     a home.
  * @param {number} localType The type of the connection being dragged.
  * @return {boolean} Whether there is a home for the orphan or not.
  * @package
  */
-Blockly.blockRendering.Renderer.prototype.orphanCanConnectAtEnd =
-    function(topBlock, orphanBlock, localType) {
-      var orphanConnection = null;
-      var lastConnection = null;
-      if (localType == Blockly.OUTPUT_VALUE) {  // We are replacing an output.
-        orphanConnection = orphanBlock.outputConnection;
-        // TODO:  I don't think this function necessarily has the correct logic,
-        //  but for now it is being kept for behavioral backwards-compat.
-        lastConnection = Blockly.Connection
-            .lastConnectionInRow(
-                /** @type {!Blockly.Block} **/ (topBlock), orphanBlock);
-      } else {  // We are replacing a previous.
-        orphanConnection = orphanBlock.previousConnection;
-        // TODO: This lives on the block while lastConnectionInRow lives on
-        //  on the connection. Something is fishy.
-        lastConnection = topBlock.lastConnectionInStack();
-      }
+Blockly.blockRendering.Renderer.prototype.orphanCanConnectAtEnd = function(
+    topBlock, orphanBlock, localType) {
+  var orphanConnection = null;
+  var lastConnection = null;
+  if (localType == Blockly.OUTPUT_VALUE) {  // We are replacing an output.
+    orphanConnection = orphanBlock.outputConnection;
+    // TODO:  I don't think this function necessarily has the correct logic,
+    //  but for now it is being kept for behavioral backwards-compat.
+    lastConnection = Blockly.Connection.lastConnectionInRow(
+        /** @type {!Blockly.Block} **/ (topBlock), orphanBlock);
+  } else {  // We are replacing a previous.
+    orphanConnection = orphanBlock.previousConnection;
+    // TODO: This lives on the block while lastConnectionInRow lives on
+    //  on the connection. Something is fishy.
+    lastConnection = topBlock.lastConnectionInStack();
+  }
 
-      if (!lastConnection) {
-        return false;
-      }
-      return orphanConnection.checkType(lastConnection);
-    };
+  if (!lastConnection) {
+    return false;
+  }
+  return orphanConnection.checkType(lastConnection);
+};
 
 /**
  * Chooses a connection preview method based on the available connection, the
@@ -268,22 +269,22 @@ Blockly.blockRendering.Renderer.prototype.orphanCanConnectAtEnd =
  *     to display.
  * @package
  */
-Blockly.blockRendering.Renderer.prototype.getConnectionPreviewMethod =
-    function(closest, local, topBlock) {
-      if (local.type == Blockly.OUTPUT_VALUE ||
-          local.type == Blockly.PREVIOUS_STATEMENT) {
-        if (!closest.isConnected() ||
-            this.orphanCanConnectAtEnd(
-                topBlock,
-                /** @type {!Blockly.BlockSvg} */ (closest.targetBlock()),
-                local.type)) {
-          return Blockly.InsertionMarkerManager.PREVIEW_TYPE.INSERTION_MARKER;
-        }
-        return Blockly.InsertionMarkerManager.PREVIEW_TYPE.REPLACEMENT_FADE;
-      }
-
+Blockly.blockRendering.Renderer.prototype.getConnectionPreviewMethod = function(
+    closest, local, topBlock) {
+  if (local.type == Blockly.OUTPUT_VALUE ||
+      local.type == Blockly.PREVIOUS_STATEMENT) {
+    if (!closest.isConnected() ||
+        this.orphanCanConnectAtEnd(
+            topBlock,
+            /** @type {!Blockly.BlockSvg} */ (closest.targetBlock()),
+            local.type)) {
       return Blockly.InsertionMarkerManager.PREVIEW_TYPE.INSERTION_MARKER;
-    };
+    }
+    return Blockly.InsertionMarkerManager.PREVIEW_TYPE.REPLACEMENT_FADE;
+  }
+
+  return Blockly.InsertionMarkerManager.PREVIEW_TYPE.INSERTION_MARKER;
+};
 
 /**
  * Render the block.

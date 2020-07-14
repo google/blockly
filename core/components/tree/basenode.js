@@ -153,11 +153,11 @@ Blockly.tree.BaseNode.prototype.initAccessibility = function() {
 
     Blockly.utils.aria.setRole(el, Blockly.utils.aria.Role.TREEITEM);
     Blockly.utils.aria.setState(el, Blockly.utils.aria.State.SELECTED, false);
-    Blockly.utils.aria.setState(el,
-        Blockly.utils.aria.State.LEVEL, this.getDepth());
+    Blockly.utils.aria.setState(
+        el, Blockly.utils.aria.State.LEVEL, this.getDepth());
     if (label) {
-      Blockly.utils.aria.setState(el,
-          Blockly.utils.aria.State.LABELLEDBY, label.id);
+      Blockly.utils.aria.setState(
+          el, Blockly.utils.aria.State.LABELLEDBY, label.id);
     }
 
     var img = this.getIconElement();
@@ -172,16 +172,18 @@ Blockly.tree.BaseNode.prototype.initAccessibility = function() {
       // In case the children will be created lazily.
       if (ce.hasChildNodes()) {
         // Only set aria-expanded if the node has children (can be expanded).
-        Blockly.utils.aria.setState(el, Blockly.utils.aria.State.EXPANDED, false);
+        Blockly.utils.aria.setState(
+            el, Blockly.utils.aria.State.EXPANDED, false);
 
         // do setsize for each child
         var count = this.getChildCount();
         for (var i = 1; i <= count; i++) {
-          var child = /** @type {!Element} */ (this.getChildAt(i - 1).getElement());
-          Blockly.utils.aria.setState(child,
-              Blockly.utils.aria.State.SETSIZE, count);
-          Blockly.utils.aria.setState(child,
-              Blockly.utils.aria.State.POSINSET, i);
+          var child =
+              /** @type {!Element} */ (this.getChildAt(i - 1).getElement());
+          Blockly.utils.aria.setState(
+              child, Blockly.utils.aria.State.SETSIZE, count);
+          Blockly.utils.aria.setState(
+              child, Blockly.utils.aria.State.POSINSET, i);
         }
       }
     }
@@ -327,7 +329,9 @@ Blockly.tree.BaseNode.prototype.setDepth_ = function(depth) {
         row.style.paddingLeft = indent;
       }
     }
-    this.forEachChild(function(child) { child.setDepth_(depth + 1); });
+    this.forEachChild(function(child) {
+      child.setDepth_(depth + 1);
+    });
   }
 };
 
@@ -364,7 +368,9 @@ Blockly.tree.BaseNode.prototype.getChildAt;
  */
 Blockly.tree.BaseNode.prototype.getChildren = function() {
   var children = [];
-  this.forEachChild(function(child) { children.push(child); });
+  this.forEachChild(function(child) {
+    children.push(child);
+  });
   return children;
 };
 
@@ -375,7 +381,7 @@ Blockly.tree.BaseNode.prototype.getChildren = function() {
  */
 Blockly.tree.BaseNode.prototype.getParent = function() {
   return /** @type {Blockly.tree.BaseNode} */ (
-    Blockly.tree.BaseNode.superClass_.getParent.call(this));
+      Blockly.tree.BaseNode.superClass_.getParent.call(this));
 };
 
 /**
@@ -436,11 +442,12 @@ Blockly.tree.BaseNode.prototype.setSelected = function(selected) {
 
   var el = this.getElement();
   if (el) {
-    Blockly.utils.aria.setState(el, Blockly.utils.aria.State.SELECTED, selected);
+    Blockly.utils.aria.setState(
+        el, Blockly.utils.aria.State.SELECTED, selected);
     if (selected) {
       var treeElement = /** @type {!Element} */ (this.getTree().getElement());
-      Blockly.utils.aria.setState(treeElement,
-          Blockly.utils.aria.State.ACTIVEDESCENDANT, this.getId());
+      Blockly.utils.aria.setState(
+          treeElement, Blockly.utils.aria.State.ACTIVEDESCENDANT, this.getId());
     }
   }
 };
@@ -466,14 +473,17 @@ Blockly.tree.BaseNode.prototype.setExpanded = function(expanded) {
       ce = this.getChildrenElement();
       if (ce) {
         Blockly.utils.style.setElementShown(ce, expanded);
-        Blockly.utils.aria.setState(el, Blockly.utils.aria.State.EXPANDED, expanded);
+        Blockly.utils.aria.setState(
+            el, Blockly.utils.aria.State.EXPANDED, expanded);
 
         // Make sure we have the HTML for the children here.
         if (expanded && this.isInDocument() && !ce.hasChildNodes()) {
           this.forEachChild(function(child) {
             ce.appendChild(child.toDom());
           });
-          this.forEachChild(function(child) { child.enterDocument(); });
+          this.forEachChild(function(child) {
+            child.enterDocument();
+          });
         }
       }
       this.updateExpandIcon();
@@ -539,7 +549,9 @@ Blockly.tree.BaseNode.prototype.toDom = function() {
 
   if (nonEmptyAndExpanded) {
     // children
-    this.forEachChild(function(child) { children.appendChild(child.toDom()); });
+    this.forEachChild(function(child) {
+      children.appendChild(child.toDom());
+    });
   }
 
   var node = document.createElement('div');
@@ -627,8 +639,10 @@ Blockly.tree.BaseNode.prototype.getCalculatedIconClass = function() {
  * @protected
  */
 Blockly.tree.BaseNode.prototype.getBackgroundPosition = function() {
-  return (this.isLastSibling() ? '-100' : (this.getDepth() - 1) *
-      this.config_.indentWidth) + 'px 0';
+  return (this.isLastSibling() ?
+              '-100' :
+              (this.getDepth() - 1) * this.config_.indentWidth) +
+      'px 0';
 };
 
 /**
@@ -671,7 +685,7 @@ Blockly.tree.BaseNode.prototype.getLabelElement = function() {
   var el = this.getRowElement();
   return el && el.lastChild ?
       /** @type {Element} */ (el.lastChild.previousSibling) :
-                             null;
+      null;
 };
 
 /**
@@ -890,6 +904,8 @@ Blockly.tree.BaseNode.prototype.getPreviousShownNode = function() {
 Blockly.tree.BaseNode.prototype.setTreeInternal = function(tree) {
   if (this.tree != tree) {
     this.tree = tree;
-    this.forEachChild(function(child) { child.setTreeInternal(tree); });
+    this.forEachChild(function(child) {
+      child.setTreeInternal(tree);
+    });
   }
 };

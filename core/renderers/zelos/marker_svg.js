@@ -28,8 +28,8 @@ Blockly.zelos.MarkerSvg = function(workspace, constants, marker) {
   Blockly.zelos.MarkerSvg.superClass_.constructor.call(
       this, workspace, constants, marker);
 };
-Blockly.utils.object.inherits(Blockly.zelos.MarkerSvg,
-    Blockly.blockRendering.MarkerSvg);
+Blockly.utils.object.inherits(
+    Blockly.zelos.MarkerSvg, Blockly.blockRendering.MarkerSvg);
 
 /**
  * Position and display the marker for an input or an output connection.
@@ -104,25 +104,27 @@ Blockly.zelos.MarkerSvg.prototype.createDomInternal_ = function() {
   <g>
     <rect width="100" height="5">
       <animate attributeType="XML" attributeName="fill" dur="1s"
-        values="transparent;transparent;#fff;transparent" repeatCount="indefinite" />
+        values="transparent;transparent;#fff;transparent"
+  repeatCount="indefinite" />
     </rect>
   </g>
   */
 
   Blockly.zelos.MarkerSvg.superClass_.createDomInternal_.call(this);
 
-  this.markerCircle_ = Blockly.utils.dom.createSvgElement('circle', {
-    'r': this.constants_.CURSOR_RADIUS,
-    'style': 'display: none',
-    'stroke-width': this.constants_.CURSOR_STROKE_WIDTH
-  },
-  this.markerSvg_);
+  this.markerCircle_ = Blockly.utils.dom.createSvgElement(
+      'circle', {
+        'r': this.constants_.CURSOR_RADIUS,
+        'style': 'display: none',
+        'stroke-width': this.constants_.CURSOR_STROKE_WIDTH
+      },
+      this.markerSvg_);
 
   // Markers and stack cursors don't blink.
   if (this.isCursor()) {
     var blinkProperties = this.getBlinkProperties_();
-    Blockly.utils.dom.createSvgElement('animate', blinkProperties,
-        this.markerCircle_);
+    Blockly.utils.dom.createSvgElement(
+        'animate', blinkProperties, this.markerCircle_);
   }
 
   return this.markerSvg_;

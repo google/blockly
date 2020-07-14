@@ -27,7 +27,8 @@ goog.require('Blockly.Xml');
  * Parse the user-specified options, using reasonable defaults where behaviour
  * is unspecified.
  * @param {!Blockly.BlocklyOptions} options Dictionary of options.
- *     Specification: https://developers.google.com/blockly/guides/get-started/web#configuration
+ *     Specification:
+ * https://developers.google.com/blockly/guides/get-started/web#configuration
  * @constructor
  */
 Blockly.Options = function(options) {
@@ -45,7 +46,8 @@ Blockly.Options = function(options) {
     if (!Array.isArray(toolboxDef)) {
       toolboxDef = Blockly.Options.parseToolboxTree(toolboxDef || null);
     }
-    var toolboxContents = Blockly.utils.toolbox.convertToolboxToJSON(toolboxDef);
+    var toolboxContents =
+        Blockly.utils.toolbox.convertToolboxToJSON(toolboxDef);
     var hasCategories = Blockly.utils.toolbox.hasCategories(toolboxContents);
     var hasTrashcan = options['trashcan'];
     if (hasTrashcan === undefined) {
@@ -85,11 +87,11 @@ Blockly.Options = function(options) {
   toolboxAtStart = toolboxAtStart !== 'end';
 
   if (horizontalLayout) {
-    var toolboxPosition = toolboxAtStart ?
-        Blockly.TOOLBOX_AT_TOP : Blockly.TOOLBOX_AT_BOTTOM;
+    var toolboxPosition =
+        toolboxAtStart ? Blockly.TOOLBOX_AT_TOP : Blockly.TOOLBOX_AT_BOTTOM;
   } else {
-    var toolboxPosition = (toolboxAtStart == rtl) ?
-        Blockly.TOOLBOX_AT_RIGHT : Blockly.TOOLBOX_AT_LEFT;
+    var toolboxPosition = (toolboxAtStart == rtl) ? Blockly.TOOLBOX_AT_RIGHT :
+                                                    Blockly.TOOLBOX_AT_LEFT;
   }
 
   var hasCss = options['css'];
@@ -320,17 +322,19 @@ Blockly.Options.parseThemeOptions_ = function(options) {
   var theme = options['theme'] || Blockly.Themes.Classic;
   if (typeof theme == 'string') {
     return /** @type {!Blockly.Theme} */ (
-      Blockly.registry.getObject(Blockly.registry.Type.THEME, theme));
+        Blockly.registry.getObject(Blockly.registry.Type.THEME, theme));
   } else if (theme instanceof Blockly.Theme) {
     return /** @type {!Blockly.Theme} */ (theme);
   }
-  return Blockly.Theme.defineTheme(theme.name ||
-      ('builtin' + Blockly.utils.IdGenerator.getNextUniqueId()), theme);
+  return Blockly.Theme.defineTheme(
+      theme.name || ('builtin' + Blockly.utils.IdGenerator.getNextUniqueId()),
+      theme);
 };
 
 /**
  * Parse the provided toolbox tree into a consistent DOM format.
- * @param {Node|NodeList|?string} tree DOM tree of blocks, or text representation
+ * @param {Node|NodeList|?string} tree DOM tree of blocks, or text
+ *     representation
  *    of same.
  * @return {Node} DOM tree of blocks, or null.
  */

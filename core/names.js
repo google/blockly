@@ -81,7 +81,8 @@ Blockly.Names.prototype.setVariableMap = function(map) {
  */
 Blockly.Names.prototype.getNameForUserVariable_ = function(id) {
   if (!this.variableMap_) {
-    console.log('Deprecated call to Blockly.Names.prototype.getName without ' +
+    console.log(
+        'Deprecated call to Blockly.Names.prototype.getName without ' +
         'defining a variable map. To fix, add the following code in your ' +
         'generator\'s init() function:\n' +
         'Blockly.YourGeneratorName.variableDB_.setVariableMap(' +

@@ -45,7 +45,6 @@ Blockly.geras.HighlightConstantProvider = function(constants) {
    * @type {string}
    */
   this.START_POINT = Blockly.utils.svgPaths.moveBy(this.OFFSET, this.OFFSET);
-
 };
 
 /**
@@ -53,7 +52,6 @@ Blockly.geras.HighlightConstantProvider = function(constants) {
  * @package
  */
 Blockly.geras.HighlightConstantProvider.prototype.init = function() {
-
   /**
    * An object containing sizing and path information about inside corner
    * highlights.
@@ -101,7 +99,8 @@ Blockly.geras.HighlightConstantProvider.prototype.init = function() {
  *     inside corner highlights.
  * @package
  */
-Blockly.geras.HighlightConstantProvider.prototype.makeInsideCorner = function() {
+Blockly.geras.HighlightConstantProvider.prototype.makeInsideCorner =
+    function() {
   var radius = this.constantProvider.CORNER_RADIUS;
   var offset = this.OFFSET;
 
@@ -114,21 +113,21 @@ Blockly.geras.HighlightConstantProvider.prototype.makeInsideCorner = function() 
 
   var pathTopRtl =
       Blockly.utils.svgPaths.moveBy(distance45outside, distance45outside) +
-      Blockly.utils.svgPaths.arc('a', '0 0,0', radius,
+      Blockly.utils.svgPaths.arc(
+          'a', '0 0,0', radius,
           Blockly.utils.svgPaths.point(
-              -distance45outside - offset,
-              radius - distance45outside));
+              -distance45outside - offset, radius - distance45outside));
 
-  var pathBottomRtl =
-      Blockly.utils.svgPaths.arc('a', '0 0,0', radius + offset,
-          Blockly.utils.svgPaths.point(radius + offset, radius + offset));
+  var pathBottomRtl = Blockly.utils.svgPaths.arc(
+      'a', '0 0,0', radius + offset,
+      Blockly.utils.svgPaths.point(radius + offset, radius + offset));
 
   var pathBottomLtr =
-      Blockly.utils.svgPaths.moveBy(distance45outside, - distance45outside) +
-      Blockly.utils.svgPaths.arc('a', '0 0,0', radius + offset,
+      Blockly.utils.svgPaths.moveBy(distance45outside, -distance45outside) +
+      Blockly.utils.svgPaths.arc(
+          'a', '0 0,0', radius + offset,
           Blockly.utils.svgPaths.point(
-              radius - distance45outside,
-              distance45outside + offset));
+              radius - distance45outside, distance45outside + offset));
 
   return {
     width: radius + offset,
@@ -147,7 +146,8 @@ Blockly.geras.HighlightConstantProvider.prototype.makeInsideCorner = function() 
  *     outside corner highlights.
  * @package
  */
-Blockly.geras.HighlightConstantProvider.prototype.makeOutsideCorner = function() {
+Blockly.geras.HighlightConstantProvider.prototype.makeOutsideCorner =
+    function() {
   var radius = this.constantProvider.CORNER_RADIUS;
   var offset = this.OFFSET;
 
@@ -162,24 +162,28 @@ Blockly.geras.HighlightConstantProvider.prototype.makeOutsideCorner = function()
   var topLeftStartY = distance45inside;
   var topLeftCornerHighlightRtl =
       Blockly.utils.svgPaths.moveBy(topLeftStartX, topLeftStartY) +
-      Blockly.utils.svgPaths.arc('a', '0 0,1', radius - offset,
-          Blockly.utils.svgPaths.point(radius - topLeftStartX, -topLeftStartY + offset));
+      Blockly.utils.svgPaths.arc(
+          'a', '0 0,1', radius - offset,
+          Blockly.utils.svgPaths.point(
+              radius - topLeftStartX, -topLeftStartY + offset));
   /**
    * SVG path for drawing the highlight on the rounded top-left corner.
    * @const
    */
   var topLeftCornerHighlightLtr =
       Blockly.utils.svgPaths.moveBy(offset, radius) +
-      Blockly.utils.svgPaths.arc('a', '0 0,1', radius - offset,
+      Blockly.utils.svgPaths.arc(
+          'a', '0 0,1', radius - offset,
           Blockly.utils.svgPaths.point(radius, -radius + offset));
 
   var bottomLeftStartX = distance45inside;
   var bottomLeftStartY = -distance45inside;
-  var bottomLeftPath = Blockly.utils.svgPaths.moveBy(
-      bottomLeftStartX, bottomLeftStartY) +
-          Blockly.utils.svgPaths.arc('a', '0 0,1', radius - offset,
-              Blockly.utils.svgPaths.point(-bottomLeftStartX + offset,
-                  -bottomLeftStartY - radius));
+  var bottomLeftPath =
+      Blockly.utils.svgPaths.moveBy(bottomLeftStartX, bottomLeftStartY) +
+      Blockly.utils.svgPaths.arc(
+          'a', '0 0,1', radius - offset,
+          Blockly.utils.svgPaths.point(
+              -bottomLeftStartX + offset, -bottomLeftStartY - radius));
 
   return {
     height: radius,
@@ -212,7 +216,8 @@ Blockly.geras.HighlightConstantProvider.prototype.makePuzzleTab = function() {
   var highlightRtlDown =
       Blockly.utils.svgPaths.lineOnAxis('v', verticalOverlap) +
       Blockly.utils.svgPaths.moveBy(-width * 0.97, 2.5) +
-      Blockly.utils.svgPaths.curve('q',
+      Blockly.utils.svgPaths.curve(
+          'q',
           [
             Blockly.utils.svgPaths.point(-width * 0.05, 10),
             Blockly.utils.svgPaths.point(width * 0.3, 9.5)
@@ -220,18 +225,17 @@ Blockly.geras.HighlightConstantProvider.prototype.makePuzzleTab = function() {
       Blockly.utils.svgPaths.moveBy(width * 0.67, -1.9) +
       Blockly.utils.svgPaths.lineOnAxis('v', verticalOverlap);
 
-  var highlightLtrUp =
-      Blockly.utils.svgPaths.lineOnAxis('v', -1.5) +
+  var highlightLtrUp = Blockly.utils.svgPaths.lineOnAxis('v', -1.5) +
       Blockly.utils.svgPaths.moveBy(width * -0.92, -0.5) +
-      Blockly.utils.svgPaths.curve('q',
+      Blockly.utils.svgPaths.curve(
+          'q',
           [
             Blockly.utils.svgPaths.point(width * -0.19, -5.5),
-            Blockly.utils.svgPaths.point(0,-11)
+            Blockly.utils.svgPaths.point(0, -11)
           ]) +
       Blockly.utils.svgPaths.moveBy(width * 0.92, 1);
 
-  var highlightLtrDown =
-      Blockly.utils.svgPaths.moveBy(-5, height - 0.7) +
+  var highlightLtrDown = Blockly.utils.svgPaths.moveBy(-5, height - 0.7) +
       Blockly.utils.svgPaths.lineTo(width * 0.46, -2.1);
 
   return {
@@ -253,13 +257,9 @@ Blockly.geras.HighlightConstantProvider.prototype.makePuzzleTab = function() {
  */
 Blockly.geras.HighlightConstantProvider.prototype.makeNotch = function() {
   // This is only for the previous connection.
-  var pathLeft =
-      Blockly.utils.svgPaths.lineOnAxis(
-          'h', this.OFFSET) +
+  var pathLeft = Blockly.utils.svgPaths.lineOnAxis('h', this.OFFSET) +
       this.constantProvider.NOTCH.pathLeft;
-  return {
-    pathLeft: pathLeft
-  };
+  return {pathLeft: pathLeft};
 };
 
 /**
@@ -268,15 +268,10 @@ Blockly.geras.HighlightConstantProvider.prototype.makeNotch = function() {
  * @package
  */
 Blockly.geras.HighlightConstantProvider.prototype.makeJaggedTeeth = function() {
-  var pathLeft =
-      Blockly.utils.svgPaths.lineTo(5.1, 2.6) +
+  var pathLeft = Blockly.utils.svgPaths.lineTo(5.1, 2.6) +
       Blockly.utils.svgPaths.moveBy(-10.2, 6.8) +
       Blockly.utils.svgPaths.lineTo(5.1, 2.6);
-  return {
-    pathLeft: pathLeft,
-    height: 12,
-    width: 10.2
-  };
+  return {pathLeft: pathLeft, height: 12, width: 10.2};
 };
 
 /**
@@ -286,23 +281,18 @@ Blockly.geras.HighlightConstantProvider.prototype.makeJaggedTeeth = function() {
  */
 Blockly.geras.HighlightConstantProvider.prototype.makeStartHat = function() {
   var hatHeight = this.constantProvider.START_HAT.height;
-  var pathRtl =
-      Blockly.utils.svgPaths.moveBy(25, -8.7) +
-      Blockly.utils.svgPaths.curve('c',
-          [
-            Blockly.utils.svgPaths.point(29.7, -6.2),
-            Blockly.utils.svgPaths.point(57.2, -0.5),
-            Blockly.utils.svgPaths.point(75, 8.7)
-          ]);
+  var pathRtl = Blockly.utils.svgPaths.moveBy(25, -8.7) +
+      Blockly.utils.svgPaths.curve('c', [
+        Blockly.utils.svgPaths.point(29.7, -6.2),
+        Blockly.utils.svgPaths.point(57.2, -0.5),
+        Blockly.utils.svgPaths.point(75, 8.7)
+      ]);
 
-  var pathLtr =
-      Blockly.utils.svgPaths.curve('c',
-          [
-            Blockly.utils.svgPaths.point(17.8, -9.2),
-            Blockly.utils.svgPaths.point(45.3, -14.9),
-            Blockly.utils.svgPaths.point(75, -8.7)
-          ]) +
-      Blockly.utils.svgPaths.moveTo(100.5, hatHeight + 0.5);
+  var pathLtr = Blockly.utils.svgPaths.curve('c', [
+    Blockly.utils.svgPaths.point(17.8, -9.2),
+    Blockly.utils.svgPaths.point(45.3, -14.9),
+    Blockly.utils.svgPaths.point(75, -8.7)
+  ]) + Blockly.utils.svgPaths.moveTo(100.5, hatHeight + 0.5);
   return {
     path: function(rtl) {
       return rtl ? pathRtl : pathLtr;

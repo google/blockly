@@ -87,7 +87,8 @@ Blockly.utils.toolbox.ToolboxDefinition;
 
 /**
  * Parse the provided toolbox definition into a consistent format.
- * @param {Blockly.utils.toolbox.ToolboxDefinition} toolboxDef The definition of the
+ * @param {Blockly.utils.toolbox.ToolboxDefinition} toolboxDef The definition of
+ *     the
  *    toolbox in one of its many forms.
  * @return {Array.<Blockly.utils.toolbox.Toolbox>} Array of JSON holding
  *    information on toolbox contents.
@@ -98,10 +99,12 @@ Blockly.utils.toolbox.convertToolboxToJSON = function(toolboxDef) {
     return null;
   }
   // If it is an array of JSON, then it is already in the correct format.
-  if (Array.isArray(toolboxDef) && toolboxDef.length && !(toolboxDef[0].nodeType)) {
+  if (Array.isArray(toolboxDef) && toolboxDef.length &&
+      !(toolboxDef[0].nodeType)) {
     if (Blockly.utils.toolbox.hasCategories(toolboxDef)) {
       // TODO: Remove after #3985 has been looked into.
-      console.warn('Due to some performance issues, defining a toolbox using' +
+      console.warn(
+          'Due to some performance issues, defining a toolbox using' +
           'JSON is not ready yet. Please define your toolbox using xml.');
     }
     return /** @type {!Array.<Blockly.utils.toolbox.Toolbox>} */ (toolboxDef);
@@ -162,7 +165,8 @@ Blockly.utils.toolbox.toolboxXmlToJson_ = function(toolboxDef) {
 Blockly.utils.toolbox.hasCategories = function(toolboxDef) {
   if (Array.isArray(toolboxDef)) {
     // Search for categories
-    return !!(toolboxDef.length && toolboxDef[0]['kind'].toUpperCase() == 'CATEGORY');
+    return !!(
+        toolboxDef.length && toolboxDef[0]['kind'].toUpperCase() == 'CATEGORY');
   } else {
     return !!(toolboxDef && toolboxDef.getElementsByTagName('category').length);
   }

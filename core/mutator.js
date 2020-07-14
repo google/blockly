@@ -80,8 +80,8 @@ Blockly.Mutator.prototype.getWorkspace = function() {
  */
 Blockly.Mutator.prototype.drawIcon_ = function(group) {
   // Square with rounded corners.
-  Blockly.utils.dom.createSvgElement('rect',
-      {
+  Blockly.utils.dom.createSvgElement(
+      'rect', {
         'class': 'blocklyIconShape',
         'rx': '4',
         'ry': '4',
@@ -90,27 +90,21 @@ Blockly.Mutator.prototype.drawIcon_ = function(group) {
       },
       group);
   // Gear teeth.
-  Blockly.utils.dom.createSvgElement('path',
-      {
+  Blockly.utils.dom.createSvgElement(
+      'path', {
         'class': 'blocklyIconSymbol',
         'd': 'm4.203,7.296 0,1.368 -0.92,0.677 -0.11,0.41 0.9,1.559 0.41,' +
-             '0.11 1.043,-0.457 1.187,0.683 0.127,1.134 0.3,0.3 1.8,0 0.3,' +
-             '-0.299 0.127,-1.138 1.185,-0.682 1.046,0.458 0.409,-0.11 0.9,' +
-             '-1.559 -0.11,-0.41 -0.92,-0.677 0,-1.366 0.92,-0.677 0.11,' +
-             '-0.41 -0.9,-1.559 -0.409,-0.109 -1.046,0.458 -1.185,-0.682 ' +
-             '-0.127,-1.138 -0.3,-0.299 -1.8,0 -0.3,0.3 -0.126,1.135 -1.187,' +
-             '0.682 -1.043,-0.457 -0.41,0.11 -0.899,1.559 0.108,0.409z'
+            '0.11 1.043,-0.457 1.187,0.683 0.127,1.134 0.3,0.3 1.8,0 0.3,' +
+            '-0.299 0.127,-1.138 1.185,-0.682 1.046,0.458 0.409,-0.11 0.9,' +
+            '-1.559 -0.11,-0.41 -0.92,-0.677 0,-1.366 0.92,-0.677 0.11,' +
+            '-0.41 -0.9,-1.559 -0.409,-0.109 -1.046,0.458 -1.185,-0.682 ' +
+            '-0.127,-1.138 -0.3,-0.299 -1.8,0 -0.3,0.3 -0.126,1.135 -1.187,' +
+            '0.682 -1.043,-0.457 -0.41,0.11 -0.899,1.559 0.108,0.409z'
       },
       group);
   // Axle hole.
   Blockly.utils.dom.createSvgElement(
-      'circle',
-      {
-        'class': 'blocklyIconShape',
-        'r': '2.7',
-        'cx': '8',
-        'cy': '8'
-      },
+      'circle', {'class': 'blocklyIconShape', 'r': '2.7', 'cx': '8', 'cy': '8'},
       group);
 };
 
@@ -138,7 +132,8 @@ Blockly.Mutator.prototype.createEditor_ = function() {
     [Workspace]
   </svg>
   */
-  this.svgDialog_ = Blockly.utils.dom.createSvgElement('svg',
+  this.svgDialog_ = Blockly.utils.dom.createSvgElement(
+      'svg',
       {'x': Blockly.Bubble.BORDER_WIDTH, 'y': Blockly.Bubble.BORDER_WIDTH},
       null);
   // Convert the list of names into a list of XML objects for the flyout.
@@ -165,8 +160,8 @@ Blockly.Mutator.prototype.createEditor_ = function() {
         'renderer': this.block_.workspace.options.renderer,
         'rendererOverrides': this.block_.workspace.options.rendererOverrides
       }));
-  workspaceOptions.toolboxPosition = this.block_.RTL ? Blockly.TOOLBOX_AT_RIGHT :
-      Blockly.TOOLBOX_AT_LEFT;
+  workspaceOptions.toolboxPosition =
+      this.block_.RTL ? Blockly.TOOLBOX_AT_RIGHT : Blockly.TOOLBOX_AT_LEFT;
   var hasFlyout = !!quarkXml;
   if (hasFlyout) {
     workspaceOptions.languageTree =
@@ -320,8 +315,8 @@ Blockly.Mutator.prototype.setVisible = function(visible) {
     if (this.block_.saveConnections) {
       var thisMutator = this;
       var mutatorBlock =
-        /** @type {{saveConnections: function(!Blockly.Block)}} */ (
-          this.block_);
+          /** @type {{saveConnections: function(!Blockly.Block)}} */ (
+              this.block_);
       mutatorBlock.saveConnections(this.rootBlock_);
       this.sourceListener_ = function() {
         mutatorBlock.saveConnections(thisMutator.rootBlock_);
@@ -387,7 +382,7 @@ Blockly.Mutator.prototype.workspaceChanged_ = function(e) {
     block.render();
 
     if ((/** @type {!Blockly.WorkspaceSvg} */ (Blockly.getMainWorkspace()))
-        .keyboardAccessibilityMode) {
+            .keyboardAccessibilityMode) {
       Blockly.navigation.moveCursorOnBlockMutation(block);
     }
     var newMutationDom = block.mutationToDom();
@@ -434,7 +429,7 @@ Blockly.Mutator.prototype.getFlyoutMetrics_ = function() {
 
     absoluteTop: unsupported,
     absoluteLeft: this.workspace_.RTL ? 0 :
-        this.workspace_.getFlyout().getWidth()
+                                        this.workspace_.getFlyout().getWidth()
   };
 };
 

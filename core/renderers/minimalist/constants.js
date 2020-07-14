@@ -25,5 +25,6 @@ goog.require('Blockly.utils.object');
 Blockly.minimalist.ConstantProvider = function() {
   Blockly.minimalist.ConstantProvider.superClass_.constructor.call(this);
 };
-Blockly.utils.object.inherits(Blockly.minimalist.ConstantProvider,
+Blockly.utils.object.inherits(
+    Blockly.minimalist.ConstantProvider,
     Blockly.blockRendering.ConstantProvider);

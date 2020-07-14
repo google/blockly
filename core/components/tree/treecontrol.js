@@ -119,8 +119,8 @@ Blockly.tree.TreeControl.prototype.updateExpandIcon = function() {
 
 /** @override */
 Blockly.tree.TreeControl.prototype.getRowClassName = function() {
-  return Blockly.tree.TreeControl.superClass_.getRowClassName.call(this) +
-      ' ' + this.config_.cssHideRoot;
+  return Blockly.tree.TreeControl.superClass_.getRowClassName.call(this) + ' ' +
+      this.config_.cssHideRoot;
 };
 
 /**
@@ -151,7 +151,7 @@ Blockly.tree.TreeControl.prototype.setSelectedItem = function(node) {
   }
 
   if (this.onBeforeSelected_ &&
-    !this.onBeforeSelected_.call(this.toolbox_, node)) {
+      !this.onBeforeSelected_.call(this.toolbox_, node)) {
     return;
   }
 
@@ -210,8 +210,8 @@ Blockly.tree.TreeControl.prototype.initAccessibility = function() {
 
   var el = /** @type {!Element} */ (this.getElement());
   Blockly.utils.aria.setRole(el, Blockly.utils.aria.Role.TREE);
-  Blockly.utils.aria.setState(el,
-      Blockly.utils.aria.State.LABELLEDBY, this.getLabelElement().id);
+  Blockly.utils.aria.setState(
+      el, Blockly.utils.aria.State.LABELLEDBY, this.getLabelElement().id);
 };
 
 /** @override */
@@ -238,10 +238,10 @@ Blockly.tree.TreeControl.prototype.attachEvents_ = function() {
   var el = this.getElement();
   el.tabIndex = 0;
 
-  this.onClickWrapper_ = Blockly.bindEventWithChecks_(el,
-      'click', this, this.handleMouseEvent_);
-  this.onKeydownWrapper_ = Blockly.bindEvent_(el,
-      'keydown', this, this.handleKeyEvent_);
+  this.onClickWrapper_ =
+      Blockly.bindEventWithChecks_(el, 'click', this, this.handleMouseEvent_);
+  this.onKeydownWrapper_ =
+      Blockly.bindEvent_(el, 'keydown', this, this.handleKeyEvent_);
 };
 
 /**

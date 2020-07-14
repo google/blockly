@@ -37,8 +37,8 @@ Blockly.WorkspaceDragger = function(workspace) {
    * @type {!Blockly.utils.Coordinate}
    * @protected
    */
-  this.startScrollXY_ = new Blockly.utils.Coordinate(
-      workspace.scrollX, workspace.scrollY);
+  this.startScrollXY_ =
+      new Blockly.utils.Coordinate(workspace.scrollX, workspace.scrollY);
 };
 
 /**
@@ -80,6 +80,7 @@ Blockly.WorkspaceDragger.prototype.endDrag = function(currentDragDeltaXY) {
  * @package
  */
 Blockly.WorkspaceDragger.prototype.drag = function(currentDragDeltaXY) {
-  var newXY = Blockly.utils.Coordinate.sum(this.startScrollXY_, currentDragDeltaXY);
+  var newXY =
+      Blockly.utils.Coordinate.sum(this.startScrollXY_, currentDragDeltaXY);
   this.workspace_.scroll(newXY.x, newXY.y);
 };

@@ -94,20 +94,16 @@ Blockly.Toolbox = function(workspace) {
    * @type {!Object.<string,*>}
    * @private
    */
-  this.treeSeparatorConfig_ = {
-    cssTreeRow: 'blocklyTreeSeparator'
-  };
+  this.treeSeparatorConfig_ = {cssTreeRow: 'blocklyTreeSeparator'};
 
   if (this.horizontalLayout_) {
-    this.config_['cssTreeRow'] =
-        this.config_['cssTreeRow'] +
-        (workspace.RTL ?
-        ' blocklyHorizontalTreeRtl' : ' blocklyHorizontalTree');
+    this.config_['cssTreeRow'] = this.config_['cssTreeRow'] +
+        (workspace.RTL ? ' blocklyHorizontalTreeRtl' :
+                         ' blocklyHorizontalTree');
 
     this.treeSeparatorConfig_['cssTreeRow'] =
         'blocklyTreeSeparatorHorizontal ' +
-        (workspace.RTL ?
-        'blocklyHorizontalTreeRtl' : 'blocklyHorizontalTree');
+        (workspace.RTL ? 'blocklyHorizontalTreeRtl' : 'blocklyHorizontalTree');
     this.config_['cssTreeIcon'] = '';
   }
 
@@ -156,22 +152,21 @@ Blockly.Toolbox.prototype.init = function() {
   this.HtmlDiv.setAttribute('dir', workspace.RTL ? 'RTL' : 'LTR');
   svg.parentNode.insertBefore(this.HtmlDiv, svg);
   var themeManager = workspace.getThemeManager();
-  themeManager.subscribe(this.HtmlDiv, 'toolboxBackgroundColour',
-      'background-color');
+  themeManager.subscribe(
+      this.HtmlDiv, 'toolboxBackgroundColour', 'background-color');
   themeManager.subscribe(this.HtmlDiv, 'toolboxForegroundColour', 'color');
 
   // Clicking on toolbox closes popups.
-  Blockly.bindEventWithChecks_(this.HtmlDiv, 'mousedown', this,
-      function(e) {
-        if (Blockly.utils.isRightButton(e) || e.target == this.HtmlDiv) {
-          // Close flyout.
-          Blockly.hideChaff(false);
-        } else {
-          // Just close popups.
-          Blockly.hideChaff(true);
-        }
-        Blockly.Touch.clearTouchIdentifier();  // Don't block future drags.
-      }, /* opt_noCaptureIdentifier */ false, /* opt_noPreventDefault */ true);
+  Blockly.bindEventWithChecks_(this.HtmlDiv, 'mousedown', this, function(e) {
+    if (Blockly.utils.isRightButton(e) || e.target == this.HtmlDiv) {
+      // Close flyout.
+      Blockly.hideChaff(false);
+    } else {
+      // Just close popups.
+      Blockly.hideChaff(true);
+    }
+    Blockly.Touch.clearTouchIdentifier();  // Don't block future drags.
+  }, /* opt_noCaptureIdentifier */ false, /* opt_noPreventDefault */ true);
   var workspaceOptions = new Blockly.Options(
       /** @type {!Blockly.BlocklyOptions} */
       ({
@@ -196,7 +191,8 @@ Blockly.Toolbox.prototype.init = function() {
     this.flyout_ = new Blockly.VerticalFlyout(workspaceOptions);
   }
   if (!this.flyout_) {
-    throw Error('One of Blockly.VerticalFlyout or Blockly.Horizontal must be' +
+    throw Error(
+        'One of Blockly.VerticalFlyout or Blockly.Horizontal must be' +
         'required.');
   }
 
@@ -211,7 +207,8 @@ Blockly.Toolbox.prototype.init = function() {
 
 /**
  * Fill the toolbox with categories and blocks.
- * @param {Array.<Blockly.utils.toolbox.Toolbox>} toolboxDef Array holding objects
+ * @param {Array.<Blockly.utils.toolbox.Toolbox>} toolboxDef Array holding
+ *     objects
  *    containing information on the contents of the toolbox.
  * @package
  */
@@ -220,7 +217,8 @@ Blockly.Toolbox.prototype.render = function(toolboxDef) {
     this.tree_.dispose();  // Delete any existing content.
     this.lastCategory_ = null;
   }
-  var tree = new Blockly.tree.TreeControl(this,
+  var tree = new Blockly.tree.TreeControl(
+      this,
       /** @type {!Blockly.tree.BaseNode.Config} */ (this.config_));
   this.tree_ = tree;
   tree.setSelectedItem(null);
@@ -233,7 +231,8 @@ Blockly.Toolbox.prototype.render = function(toolboxDef) {
     openNode = this.createTree_(toolboxDef, this.tree_);
 
     if (this.tree_.contents.length) {
-      throw Error('Toolbox cannot have both blocks and categories ' +
+      throw Error(
+          'Toolbox cannot have both blocks and categories ' +
           'in the root level.');
     }
     // Fire a resize event since the toolbox may have changed width and height.
@@ -260,8 +259,8 @@ Blockly.Toolbox.prototype.render = function(toolboxDef) {
  * @param {Array.<Blockly.utils.toolbox.Toolbox>} toolboxDef List of objects
  *    holding information on toolbox contents.
  * @param {!Blockly.tree.BaseNode} treeOut The output tree for the toolbox. Due
- *    to the recursive nature of this function, treeOut can be either the root of
- *    the tree (Blockly.tree.TreeControl) or a child node of the tree
+ *    to the recursive nature of this function, treeOut can be either the root
+ * of the tree (Blockly.tree.TreeControl) or a child node of the tree
  *    (Blockly.tree.TreeNode). These nodes are built from the toolboxDef.
  * @return {Blockly.tree.BaseNode} The TreeNode to expand when the toolbox is
  *    first loaded (or null).
@@ -277,13 +276,16 @@ Blockly.Toolbox.prototype.createTree_ = function(toolboxDef, treeOut) {
   for (var i = 0, childIn; (childIn = toolboxDef[i]); i++) {
     switch (childIn['kind'].toUpperCase()) {
       case 'CATEGORY':
-        var categoryInfo = /** @type {Blockly.utils.toolbox.Category} */ (childIn);
+        var categoryInfo =
+            /** @type {Blockly.utils.toolbox.Category} */ (childIn);
         openNode = this.addCategory_(categoryInfo, treeOut) || openNode;
         lastElement = childIn;
         break;
       case 'SEP':
-        var separatorInfo = /** @type {Blockly.utils.toolbox.Separator} */ (childIn);
-        lastElement = this.addSeparator_(separatorInfo, treeOut, lastElement) || lastElement;
+        var separatorInfo =
+            /** @type {Blockly.utils.toolbox.Separator} */ (childIn);
+        lastElement = this.addSeparator_(separatorInfo, treeOut, lastElement) ||
+            lastElement;
         break;
       case 'BLOCK':
       case 'SHADOW':
@@ -310,7 +312,8 @@ Blockly.Toolbox.prototype.addCategory_ = function(categoryInfo, treeOut) {
   var openNode = null;
   // Decode the category name for any potential message references
   // (eg. `%{BKY_CATEGORY_NAME_LOGIC}`).
-  var categoryName = Blockly.utils.replaceMessageReferences(categoryInfo['name']);
+  var categoryName =
+      Blockly.utils.replaceMessageReferences(categoryInfo['name']);
 
   // Create and add the tree node for the category.
   var childOut = this.tree_.createNode(categoryName);
@@ -346,7 +349,8 @@ Blockly.Toolbox.prototype.setColourOrStyle_ = function(
 
   if (colour && styleName) {
     childOut.hexColour = '';
-    console.warn('Toolbox category "' + categoryName +
+    console.warn(
+        'Toolbox category "' + categoryName +
         '" must not have both a style and a colour');
   } else if (styleName) {
     this.setColourFromStyle_(styleName, childOut, categoryName);
@@ -454,8 +458,9 @@ Blockly.Toolbox.prototype.handleAfterTreeSelected_ = function(
     }
   }
   if (oldNode != newNode && oldNode != this) {
-    var event = new Blockly.Events.Ui(null, 'category',
-        oldNode && oldNode.content, newNode && newNode.content);
+    var event = new Blockly.Events.Ui(
+        null, 'category', oldNode && oldNode.content,
+        newNode && newNode.content);
     event.workspaceId = this.workspace_.id;
     Blockly.Events.fire(event);
   }
@@ -583,8 +588,8 @@ Blockly.Toolbox.prototype.position = function() {
  * @param {string} categoryName Name of the toolbox category.
  * @private
  */
-Blockly.Toolbox.prototype.setColour_ = function(colourValue, childOut,
-    categoryName) {
+Blockly.Toolbox.prototype.setColour_ = function(
+    colourValue, childOut, categoryName) {
   // Decode the colour for any potential message references
   // (eg. `%{BKY_MATH_HUE}`).
   var colour = Blockly.utils.replaceMessageReferences(colourValue);
@@ -603,7 +608,8 @@ Blockly.Toolbox.prototype.setColour_ = function(colourValue, childOut,
         this.hasColours_ = true;
       } else {
         childOut.hexColour = '';
-        console.warn('Toolbox category "' + categoryName +
+        console.warn(
+            'Toolbox category "' + categoryName +
             '" has unrecognized colour attribute: ' + colour);
       }
     }
@@ -627,8 +633,8 @@ Blockly.Toolbox.prototype.setColourFromStyle_ = function(
     if (style && style.colour) {
       this.setColour_(style.colour, childOut, categoryName);
     } else {
-      console.warn('Style "' + styleName +
-          '" must exist and contain a colour value');
+      console.warn(
+          'Style "' + styleName + '" must exist and contain a colour value');
     }
   }
 };
@@ -798,133 +804,79 @@ Blockly.Toolbox.prototype.selectFirstCategory = function() {
 Blockly.Toolbox.TreeSeparator = function(config) {
   Blockly.tree.TreeNode.call(this, null, '', config);
 };
-Blockly.utils.object.inherits(Blockly.Toolbox.TreeSeparator,
-    Blockly.tree.TreeNode);
+Blockly.utils.object.inherits(
+    Blockly.Toolbox.TreeSeparator, Blockly.tree.TreeNode);
 
 /**
  * CSS for Toolbox.  See css.js for use.
  */
 Blockly.Css.register([
   /* eslint-disable indent */
-  '.blocklyToolboxDelete {',
-    'cursor: url("<<<PATH>>>/handdelete.cur"), auto;',
+  '.blocklyToolboxDelete {', 'cursor: url("<<<PATH>>>/handdelete.cur"), auto;',
   '}',
 
-  '.blocklyToolboxGrab {',
-    'cursor: url("<<<PATH>>>/handclosed.cur"), auto;',
-    'cursor: grabbing;',
-    'cursor: -webkit-grabbing;',
-  '}',
+  '.blocklyToolboxGrab {', 'cursor: url("<<<PATH>>>/handclosed.cur"), auto;',
+  'cursor: grabbing;', 'cursor: -webkit-grabbing;', '}',
 
   /* Category tree in Toolbox. */
-  '.blocklyToolboxDiv {',
-    'background-color: #ddd;',
-    'overflow-x: visible;',
-    'overflow-y: auto;',
-    'position: absolute;',
-    'z-index: 70;', /* so blocks go under toolbox when dragging */
-    '-webkit-tap-highlight-color: transparent;', /* issue #1345 */
+  '.blocklyToolboxDiv {', 'background-color: #ddd;', 'overflow-x: visible;',
+  'overflow-y: auto;', 'position: absolute;',
+  'z-index: 70;', /* so blocks go under toolbox when dragging */
+  '-webkit-tap-highlight-color: transparent;', /* issue #1345 */
   '}',
 
-  '.blocklyTreeRoot {',
-    'padding: 4px 0;',
-  '}',
+  '.blocklyTreeRoot {', 'padding: 4px 0;', '}',
 
-  '.blocklyTreeRoot:focus {',
-    'outline: none;',
-  '}',
+  '.blocklyTreeRoot:focus {', 'outline: none;', '}',
 
-  '.blocklyTreeRow {',
-    'height: 22px;',
-    'line-height: 22px;',
-    'margin-bottom: 3px;',
-    'padding-right: 8px;',
-    'white-space: nowrap;',
-  '}',
+  '.blocklyTreeRow {', 'height: 22px;', 'line-height: 22px;',
+  'margin-bottom: 3px;', 'padding-right: 8px;', 'white-space: nowrap;', '}',
 
-  '.blocklyHorizontalTree {',
-    'float: left;',
-    'margin: 1px 5px 8px 0;',
-  '}',
+  '.blocklyHorizontalTree {', 'float: left;', 'margin: 1px 5px 8px 0;', '}',
 
-  '.blocklyHorizontalTreeRtl {',
-    'float: right;',
-    'margin: 1px 0 8px 5px;',
-  '}',
+  '.blocklyHorizontalTreeRtl {', 'float: right;', 'margin: 1px 0 8px 5px;', '}',
 
-  '.blocklyToolboxDiv[dir="RTL"] .blocklyTreeRow {',
-    'margin-left: 8px;',
-  '}',
+  '.blocklyToolboxDiv[dir="RTL"] .blocklyTreeRow {', 'margin-left: 8px;', '}',
 
   '.blocklyTreeRow:not(.blocklyTreeSelected):hover {',
-    'background-color: rgba(255, 255, 255, 0.2);',
-  '}',
+  'background-color: rgba(255, 255, 255, 0.2);', '}',
 
-  '.blocklyTreeSeparator {',
-    'border-bottom: solid #e5e5e5 1px;',
-    'height: 0;',
-    'margin: 5px 0;',
-  '}',
+  '.blocklyTreeSeparator {', 'border-bottom: solid #e5e5e5 1px;', 'height: 0;',
+  'margin: 5px 0;', '}',
 
-  '.blocklyTreeSeparatorHorizontal {',
-    'border-right: solid #e5e5e5 1px;',
-    'width: 0;',
-    'padding: 5px 0;',
-    'margin: 0 5px;',
-  '}',
+  '.blocklyTreeSeparatorHorizontal {', 'border-right: solid #e5e5e5 1px;',
+  'width: 0;', 'padding: 5px 0;', 'margin: 0 5px;', '}',
 
-  '.blocklyTreeIcon {',
-    'background-image: url(<<<PATH>>>/sprites.png);',
-    'height: 16px;',
-    'vertical-align: middle;',
-    'width: 16px;',
-  '}',
+  '.blocklyTreeIcon {', 'background-image: url(<<<PATH>>>/sprites.png);',
+  'height: 16px;', 'vertical-align: middle;', 'width: 16px;', '}',
 
-  '.blocklyTreeIconClosedLtr {',
-    'background-position: -32px -1px;',
-  '}',
+  '.blocklyTreeIconClosedLtr {', 'background-position: -32px -1px;', '}',
 
-  '.blocklyTreeIconClosedRtl {',
-    'background-position: 0 -1px;',
-  '}',
+  '.blocklyTreeIconClosedRtl {', 'background-position: 0 -1px;', '}',
 
-  '.blocklyTreeIconOpen {',
-    'background-position: -16px -1px;',
-  '}',
+  '.blocklyTreeIconOpen {', 'background-position: -16px -1px;', '}',
 
   '.blocklyTreeSelected>.blocklyTreeIconClosedLtr {',
-    'background-position: -32px -17px;',
-  '}',
+  'background-position: -32px -17px;', '}',
 
   '.blocklyTreeSelected>.blocklyTreeIconClosedRtl {',
-    'background-position: 0 -17px;',
-  '}',
+  'background-position: 0 -17px;', '}',
 
   '.blocklyTreeSelected>.blocklyTreeIconOpen {',
-    'background-position: -16px -17px;',
-  '}',
+  'background-position: -16px -17px;', '}',
 
-  '.blocklyTreeIconNone,',
-  '.blocklyTreeSelected>.blocklyTreeIconNone {',
-    'background-position: -48px -1px;',
-  '}',
+  '.blocklyTreeIconNone,', '.blocklyTreeSelected>.blocklyTreeIconNone {',
+  'background-position: -48px -1px;', '}',
 
-  '.blocklyTreeLabel {',
-    'cursor: default;',
-    'font: 16px sans-serif;',
-    'padding: 0 3px;',
-    'vertical-align: middle;',
-  '}',
+  '.blocklyTreeLabel {', 'cursor: default;', 'font: 16px sans-serif;',
+  'padding: 0 3px;', 'vertical-align: middle;', '}',
 
   '.blocklyToolboxDelete .blocklyTreeLabel {',
-    'cursor: url("<<<PATH>>>/handdelete.cur"), auto;',
-  '}',
+  'cursor: url("<<<PATH>>>/handdelete.cur"), auto;', '}',
 
-  '.blocklyTreeSelected .blocklyTreeLabel {',
-    'color: #fff;',
-  '}'
+  '.blocklyTreeSelected .blocklyTreeLabel {', 'color: #fff;', '}'
   /* eslint-enable indent */
 ]);
 
-Blockly.registry.register(Blockly.registry.Type.TOOLBOX,
-    Blockly.registry.DEFAULT, Blockly.Toolbox);
+Blockly.registry.register(
+    Blockly.registry.Type.TOOLBOX, Blockly.registry.DEFAULT, Blockly.Toolbox);

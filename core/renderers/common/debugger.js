@@ -88,7 +88,8 @@ Blockly.blockRendering.Debug.prototype.clearElems = function() {
  * @param {boolean} isRtl Whether the block is rendered RTL.
  * @package
  */
-Blockly.blockRendering.Debug.prototype.drawSpacerRow = function(row, cursorY, isRtl) {
+Blockly.blockRendering.Debug.prototype.drawSpacerRow = function(
+    row, cursorY, isRtl) {
   if (!Blockly.blockRendering.Debug.config.rowSpacers) {
     return;
   }
@@ -99,8 +100,8 @@ Blockly.blockRendering.Debug.prototype.drawSpacerRow = function(row, cursorY, is
     cursorY -= height;
   }
 
-  this.debugElements_.push(Blockly.utils.dom.createSvgElement('rect',
-      {
+  this.debugElements_.push(Blockly.utils.dom.createSvgElement(
+      'rect', {
         'class': 'rowSpacerRect blockRenderDebug',
         'x': isRtl ? -(row.xPos + row.width) : row.xPos,
         'y': cursorY,
@@ -121,7 +122,8 @@ Blockly.blockRendering.Debug.prototype.drawSpacerRow = function(row, cursorY, is
  * @param {boolean} isRtl Whether the block is rendered RTL.
  * @package
  */
-Blockly.blockRendering.Debug.prototype.drawSpacerElem = function(elem, rowHeight, isRtl) {
+Blockly.blockRendering.Debug.prototype.drawSpacerElem = function(
+    elem, rowHeight, isRtl) {
   if (!Blockly.blockRendering.Debug.config.elemSpacers) {
     return;
   }
@@ -133,8 +135,8 @@ Blockly.blockRendering.Debug.prototype.drawSpacerElem = function(elem, rowHeight
     xPos = -(xPos + width);
   }
   var yPos = elem.centerline - elem.height / 2;
-  this.debugElements_.push(Blockly.utils.dom.createSvgElement('rect',
-      {
+  this.debugElements_.push(Blockly.utils.dom.createSvgElement(
+      'rect', {
         'class': 'elemSpacerRect blockRenderDebug',
         'x': xPos,
         'y': yPos,
@@ -154,15 +156,16 @@ Blockly.blockRendering.Debug.prototype.drawSpacerElem = function(elem, rowHeight
  * @param {boolean} isRtl Whether the block is rendered RTL.
  * @package
  */
-Blockly.blockRendering.Debug.prototype.drawRenderedElem = function(elem, isRtl) {
+Blockly.blockRendering.Debug.prototype.drawRenderedElem = function(
+    elem, isRtl) {
   if (Blockly.blockRendering.Debug.config.elems) {
     var xPos = elem.xPos;
     if (isRtl) {
       xPos = -(xPos + elem.width);
     }
     var yPos = elem.centerline - elem.height / 2;
-    this.debugElements_.push(Blockly.utils.dom.createSvgElement('rect',
-        {
+    this.debugElements_.push(Blockly.utils.dom.createSvgElement(
+        'rect', {
           'class': 'rowRenderingRect blockRenderDebug',
           'x': xPos,
           'y': yPos,
@@ -177,8 +180,8 @@ Blockly.blockRendering.Debug.prototype.drawRenderedElem = function(elem, isRtl) 
     if (Blockly.blockRendering.Types.isField(elem) &&
         elem.field instanceof Blockly.FieldLabel) {
       var baseline = this.constants_.FIELD_TEXT_BASELINE;
-      this.debugElements_.push(Blockly.utils.dom.createSvgElement('rect',
-          {
+      this.debugElements_.push(Blockly.utils.dom.createSvgElement(
+          'rect', {
             'class': 'rowRenderingRect blockRenderDebug',
             'x': xPos,
             'y': yPos + baseline,
@@ -233,8 +236,8 @@ Blockly.blockRendering.Debug.prototype.drawConnection = function(conn) {
     colour = 'goldenrod';
     fill = colour;
   }
-  this.debugElements_.push(Blockly.utils.dom.createSvgElement('circle',
-      {
+  this.debugElements_.push(Blockly.utils.dom.createSvgElement(
+      'circle', {
         'class': 'blockRenderDebug',
         'cx': conn.offsetInBlock_.x,
         'cy': conn.offsetInBlock_.y,
@@ -252,12 +255,13 @@ Blockly.blockRendering.Debug.prototype.drawConnection = function(conn) {
  * @param {boolean} isRtl Whether the block is rendered RTL.
  * @package
  */
-Blockly.blockRendering.Debug.prototype.drawRenderedRow = function(row, cursorY, isRtl) {
+Blockly.blockRendering.Debug.prototype.drawRenderedRow = function(
+    row, cursorY, isRtl) {
   if (!Blockly.blockRendering.Debug.config.rows) {
     return;
   }
-  this.debugElements_.push(Blockly.utils.dom.createSvgElement('rect',
-      {
+  this.debugElements_.push(Blockly.utils.dom.createSvgElement(
+      'rect', {
         'class': 'elemRenderingRect blockRenderDebug',
         'x': isRtl ? -(row.xPos + row.width) : row.xPos,
         'y': row.yPos,
@@ -274,8 +278,8 @@ Blockly.blockRendering.Debug.prototype.drawRenderedRow = function(row, cursorY, 
   }
 
   if (Blockly.blockRendering.Debug.config.connectedBlockBounds) {
-    this.debugElements_.push(Blockly.utils.dom.createSvgElement('rect',
-        {
+    this.debugElements_.push(Blockly.utils.dom.createSvgElement(
+        'rect', {
           'class': 'connectedBlockWidth blockRenderDebug',
           'x': isRtl ? -(row.xPos + row.widthWithConnectedBlocks) : row.xPos,
           'y': row.yPos,
@@ -297,7 +301,8 @@ Blockly.blockRendering.Debug.prototype.drawRenderedRow = function(row, cursorY, 
  * @param {boolean} isRtl Whether the block is rendered RTL.
  * @package
  */
-Blockly.blockRendering.Debug.prototype.drawRowWithElements = function(row, cursorY, isRtl) {
+Blockly.blockRendering.Debug.prototype.drawRowWithElements = function(
+    row, cursorY, isRtl) {
   for (var i = 0, l = row.elements.length; i < l; i++) {
     var elem = row.elements[i];
     if (!elem) {
@@ -306,8 +311,8 @@ Blockly.blockRendering.Debug.prototype.drawRowWithElements = function(row, curso
     }
     if (Blockly.blockRendering.Types.isSpacer(elem)) {
       this.drawSpacerElem(
-          /** @type {!Blockly.blockRendering.InRowSpacer} */ (elem),
-          row.height, isRtl);
+          /** @type {!Blockly.blockRendering.InRowSpacer} */ (elem), row.height,
+          isRtl);
     } else {
       this.drawRenderedElem(elem, isRtl);
     }
@@ -328,8 +333,8 @@ Blockly.blockRendering.Debug.prototype.drawBoundingBox = function(info) {
   // Bounding box without children.
   var xPos = info.RTL ? -info.width : 0;
   var yPos = 0;
-  this.debugElements_.push(Blockly.utils.dom.createSvgElement('rect',
-      {
+  this.debugElements_.push(Blockly.utils.dom.createSvgElement(
+      'rect', {
         'class': 'blockBoundingBox blockRenderDebug',
         'x': xPos,
         'y': yPos,
@@ -345,8 +350,8 @@ Blockly.blockRendering.Debug.prototype.drawBoundingBox = function(info) {
   if (Blockly.blockRendering.Debug.config.connectedBlockBounds) {
     // Bounding box with children.
     xPos = info.RTL ? -info.widthWithChildren : 0;
-    this.debugElements_.push(Blockly.utils.dom.createSvgElement('rect',
-        {
+    this.debugElements_.push(Blockly.utils.dom.createSvgElement(
+        'rect', {
           'class': 'blockRenderDebug',
           'x': xPos,
           'y': yPos,
@@ -412,8 +417,7 @@ Blockly.blockRendering.Debug.prototype.drawRender = function(svgPath) {
   if (!Blockly.blockRendering.Debug.config.render) {
     return;
   }
-  svgPath.setAttribute('filter',
-      'url(#' + this.constants_.debugFilterId + ')');
+  svgPath.setAttribute('filter', 'url(#' + this.constants_.debugFilterId + ')');
   setTimeout(function() {
     svgPath.setAttribute('filter', '');
   }, 100);

@@ -55,21 +55,22 @@ Blockly.WorkspaceDragSurfaceSvg.prototype.createDom = function() {
   }
 
   /**
-  * Dom structure when the workspace is being dragged. If there is no drag in
-  * progress, the SVG is empty and display: none.
-  * <svg class="blocklyWsDragSurface" style=transform:translate3d(...)>
-  *   <g class="blocklyBlockCanvas"></g>
-  *   <g class="blocklyBubbleCanvas">/g>
-  * </svg>
-  */
-  this.SVG_ = Blockly.utils.dom.createSvgElement('svg',
-      {
+   * Dom structure when the workspace is being dragged. If there is no drag in
+   * progress, the SVG is empty and display: none.
+   * <svg class="blocklyWsDragSurface" style=transform:translate3d(...)>
+   *   <g class="blocklyBlockCanvas"></g>
+   *   <g class="blocklyBubbleCanvas">/g>
+   * </svg>
+   */
+  this.SVG_ = Blockly.utils.dom.createSvgElement(
+      'svg', {
         'xmlns': Blockly.utils.dom.SVG_NS,
         'xmlns:html': Blockly.utils.dom.HTML_NS,
         'xmlns:xlink': Blockly.utils.dom.XLINK_NS,
         'version': '1.1',
         'class': 'blocklyWsDragSurface blocklyOverflowVisible'
-      }, null);
+      },
+      null);
   this.container_.appendChild(this.SVG_);
 };
 
@@ -112,7 +113,8 @@ Blockly.WorkspaceDragSurfaceSvg.prototype.getSurfaceTranslation = function() {
  */
 Blockly.WorkspaceDragSurfaceSvg.prototype.clearAndHide = function(newSurface) {
   if (!newSurface) {
-    throw Error('Couldn\'t clear and hide the drag surface: missing ' +
+    throw Error(
+        'Couldn\'t clear and hide the drag surface: missing ' +
         'new surface.');
   }
   var blockCanvas = /** @type {!Element} */ (this.SVG_.childNodes[0]);
@@ -120,7 +122,8 @@ Blockly.WorkspaceDragSurfaceSvg.prototype.clearAndHide = function(newSurface) {
   if (!blockCanvas || !bubbleCanvas ||
       !Blockly.utils.dom.hasClass(blockCanvas, 'blocklyBlockCanvas') ||
       !Blockly.utils.dom.hasClass(bubbleCanvas, 'blocklyBubbleCanvas')) {
-    throw Error('Couldn\'t clear and hide the drag surface. ' +
+    throw Error(
+        'Couldn\'t clear and hide the drag surface. ' +
         'A node was missing.');
   }
 

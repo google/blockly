@@ -61,12 +61,13 @@ Blockly.Procedures.ProcedureBlock;
  */
 Blockly.Procedures.allProcedures = function(root) {
   var proceduresNoReturn = root.getBlocksByType('procedures_defnoreturn', false)
-      .map(function(block) {
-        return /** @type {!Blockly.Procedures.ProcedureBlock} */ (block).getProcedureDef();
-      });
-  var proceduresReturn = root.getBlocksByType('procedures_defreturn', false).map(function(block) {
-    return /** @type {!Blockly.Procedures.ProcedureBlock} */ (block).getProcedureDef();
-  });
+                               .map(function(block) {
+                                 return /** @type {!Blockly.Procedures.ProcedureBlock} */ (block).getProcedureDef();
+                               });
+  var proceduresReturn = root.getBlocksByType('procedures_defreturn', false)
+                             .map(function(block) {
+                               return /** @type {!Blockly.Procedures.ProcedureBlock} */ (block).getProcedureDef();
+                             });
   proceduresNoReturn.sort(Blockly.Procedures.procTupleComparator_);
   proceduresReturn.sort(Blockly.Procedures.procTupleComparator_);
   return [proceduresNoReturn, proceduresReturn];
@@ -140,8 +141,8 @@ Blockly.Procedures.isNameUsed = function(name, workspace, opt_exclude) {
       continue;
     }
     if (blocks[i].getProcedureDef) {
-      var procedureBlock = /** @type {!Blockly.Procedures.ProcedureBlock} */ (
-        blocks[i]);
+      var procedureBlock =
+          /** @type {!Blockly.Procedures.ProcedureBlock} */ (blocks[i]);
       var procName = procedureBlock.getProcedureDef();
       if (Blockly.Names.equals(procName[0], name)) {
         return true;
@@ -161,7 +162,8 @@ Blockly.Procedures.rename = function(name) {
   // Strip leading and trailing whitespace.  Beyond this, all names are legal.
   name = name.trim();
 
-  var legalName = Blockly.Procedures.findLegalName(name,
+  var legalName = Blockly.Procedures.findLegalName(
+      name,
       /** @type {!Blockly.Block} */ (this.getSourceBlock()));
   var oldName = this.getValue();
   if (oldName != name && oldName != legalName) {
@@ -169,8 +171,8 @@ Blockly.Procedures.rename = function(name) {
     var blocks = this.getSourceBlock().workspace.getAllBlocks(false);
     for (var i = 0; i < blocks.length; i++) {
       if (blocks[i].renameProcedure) {
-        var procedureBlock = /** @type {!Blockly.Procedures.ProcedureBlock} */ (
-          blocks[i]);
+        var procedureBlock =
+            /** @type {!Blockly.Procedures.ProcedureBlock} */ (blocks[i]);
         procedureBlock.renameProcedure(
             /** @type {string} */ (oldName), legalName);
       }
@@ -298,8 +300,7 @@ Blockly.Procedures.mutatorOpenListener = function(e) {
     return;
   }
   var workspaceId = /** @type {string} */ (e.workspaceId);
-  var block = Blockly.Workspace.getById(workspaceId)
-      .getBlockById(e.blockId);
+  var block = Blockly.Workspace.getById(workspaceId).getBlockById(e.blockId);
   var type = block.type;
   if (type != 'procedures_defnoreturn' && type != 'procedures_defreturn') {
     return;
@@ -339,8 +340,8 @@ Blockly.Procedures.getCallers = function(name, workspace) {
   // Iterate through every block and check the name.
   for (var i = 0; i < blocks.length; i++) {
     if (blocks[i].getProcedureCall) {
-      var procedureBlock = /** @type {!Blockly.Procedures.ProcedureBlock} */ (
-        blocks[i]);
+      var procedureBlock =
+          /** @type {!Blockly.Procedures.ProcedureBlock} */ (blocks[i]);
       var procName = procedureBlock.getProcedureCall();
       // Procedure name may be null if the block is only half-built.
       if (procName && Blockly.Names.equals(procName, name)) {
@@ -358,8 +359,8 @@ Blockly.Procedures.getCallers = function(name, workspace) {
  */
 Blockly.Procedures.mutateCallers = function(defBlock) {
   var oldRecordUndo = Blockly.Events.recordUndo;
-  var procedureBlock = /** @type {!Blockly.Procedures.ProcedureBlock} */ (
-    defBlock);
+  var procedureBlock =
+      /** @type {!Blockly.Procedures.ProcedureBlock} */ (defBlock);
   var name = procedureBlock.getProcedureDef()[0];
   var xmlElement = defBlock.mutationToDom(true);
   var callers = Blockly.Procedures.getCallers(name, defBlock.workspace);
@@ -392,8 +393,8 @@ Blockly.Procedures.getDefinition = function(name, workspace) {
   var blocks = workspace.getTopBlocks(false);
   for (var i = 0; i < blocks.length; i++) {
     if (blocks[i].getProcedureDef) {
-      var procedureBlock = /** @type {!Blockly.Procedures.ProcedureBlock} */ (
-        blocks[i]);
+      var procedureBlock =
+          /** @type {!Blockly.Procedures.ProcedureBlock} */ (blocks[i]);
       var tuple = procedureBlock.getProcedureDef();
       if (tuple && Blockly.Names.equals(tuple[0], name)) {
         return blocks[i];

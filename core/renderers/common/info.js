@@ -65,10 +65,11 @@ Blockly.blockRendering.RenderInfo = function(renderer, block) {
    * Otherwise null.
    * @type {Blockly.blockRendering.OutputConnection}
    */
-  this.outputConnection = !block.outputConnection ? null :
+  this.outputConnection = !block.outputConnection ?
+      null :
       new Blockly.blockRendering.OutputConnection(
           this.constants_,
-          /** @type {Blockly.RenderedConnection} */(block.outputConnection));
+          /** @type {Blockly.RenderedConnection} */ (block.outputConnection));
 
   /**
    * Whether the block should be rendered as a single line, either because it's
@@ -251,9 +252,9 @@ Blockly.blockRendering.RenderInfo.prototype.createRows_ = function() {
  */
 Blockly.blockRendering.RenderInfo.prototype.populateTopRow_ = function() {
   var hasPrevious = !!this.block_.previousConnection;
-  var hasHat = (this.block_.hat ?
-    this.block_.hat === 'cap' : this.constants_.ADD_START_HATS) &&
-    !this.outputConnection && !hasPrevious;
+  var hasHat = (this.block_.hat ? this.block_.hat === 'cap' :
+                                  this.constants_.ADD_START_HATS) &&
+      !this.outputConnection && !hasPrevious;
   var leftSquareCorner = this.topRow.hasLeftSquareCorner(this.block_);
 
   if (leftSquareCorner) {
@@ -307,16 +308,15 @@ Blockly.blockRendering.RenderInfo.prototype.populateTopRow_ = function() {
 Blockly.blockRendering.RenderInfo.prototype.populateBottomRow_ = function() {
   this.bottomRow.hasNextConnection = !!this.block_.nextConnection;
 
-  var followsStatement =
-      this.block_.inputList.length &&
-      this.block_.inputList[this.block_.inputList.length - 1]
-          .type == Blockly.NEXT_STATEMENT;
+  var followsStatement = this.block_.inputList.length &&
+      this.block_.inputList[this.block_.inputList.length - 1].type ==
+          Blockly.NEXT_STATEMENT;
 
   // This is the minimum height for the row. If one of its elements has a
   // greater height it will be overwritten in the compute pass.
   if (followsStatement) {
     this.bottomRow.minHeight =
-      this.constants_.BOTTOM_ROW_AFTER_STATEMENT_MIN_HEIGHT;
+        this.constants_.BOTTOM_ROW_AFTER_STATEMENT_MIN_HEIGHT;
   } else {
     this.bottomRow.minHeight = this.constants_.BOTTOM_ROW_MIN_HEIGHT;
   }
@@ -353,11 +353,12 @@ Blockly.blockRendering.RenderInfo.prototype.populateBottomRow_ = function() {
  * Add an input element to the active row, if needed, and record the type of the
  * input on the row.
  * @param {!Blockly.Input} input The input to record information about.
- * @param {!Blockly.blockRendering.Row} activeRow The row that is currently being
- *     populated.
+ * @param {!Blockly.blockRendering.Row} activeRow The row that is currently
+ *     being populated.
  * @protected
  */
-Blockly.blockRendering.RenderInfo.prototype.addInput_ = function(input, activeRow) {
+Blockly.blockRendering.RenderInfo.prototype.addInput_ = function(
+    input, activeRow) {
   // Non-dummy inputs have visual representations onscreen.
   if (this.isInline && input.type == Blockly.INPUT_VALUE) {
     activeRow.elements.push(
@@ -374,10 +375,11 @@ Blockly.blockRendering.RenderInfo.prototype.addInput_ = function(input, activeRo
   } else if (input.type == Blockly.DUMMY_INPUT) {
     // Dummy inputs have no visual representation, but the information is still
     // important.
-    activeRow.minHeight = Math.max(activeRow.minHeight,
+    activeRow.minHeight = Math.max(
+        activeRow.minHeight,
         input.getSourceBlock() && input.getSourceBlock().isShadow() ?
-        this.constants_.DUMMY_INPUT_SHADOW_MIN_HEIGHT :
-        this.constants_.DUMMY_INPUT_MIN_HEIGHT);
+            this.constants_.DUMMY_INPUT_SHADOW_MIN_HEIGHT :
+            this.constants_.DUMMY_INPUT_MIN_HEIGHT);
     activeRow.hasDummyInput = true;
   }
   if (activeRow.align == null) {
@@ -392,7 +394,8 @@ Blockly.blockRendering.RenderInfo.prototype.addInput_ = function(input, activeRo
  * @return {boolean} True if the next input should be rendered on a new row.
  * @protected
  */
-Blockly.blockRendering.RenderInfo.prototype.shouldStartNewRow_ = function(input, lastInput) {
+Blockly.blockRendering.RenderInfo.prototype.shouldStartNewRow_ = function(
+    input, lastInput) {
   // If this is the first input, just add to the existing row.
   // That row is either empty or has some icons in it.
   if (!lastInput) {
@@ -453,7 +456,8 @@ Blockly.blockRendering.RenderInfo.prototype.addElemSpacing_ = function() {
  * @return {number} The size of the spacing between the two elements.
  * @protected
  */
-Blockly.blockRendering.RenderInfo.prototype.getInRowSpacing_ = function(prev, next) {
+Blockly.blockRendering.RenderInfo.prototype.getInRowSpacing_ = function(
+    prev, next) {
   if (!prev) {
     // Statement input padding.
     if (next && Blockly.blockRendering.Types.isStatementInput(next)) {
@@ -482,7 +486,7 @@ Blockly.blockRendering.RenderInfo.prototype.getInRowSpacing_ = function(prev, ne
   // Spacing between a rounded corner and a previous or next connection.
   if (prev && Blockly.blockRendering.Types.isLeftRoundedCorner(prev) && next) {
     if (Blockly.blockRendering.Types.isPreviousConnection(next) ||
-      Blockly.blockRendering.Types.isNextConnection(next)) {
+        Blockly.blockRendering.Types.isNextConnection(next)) {
       return next.notchOffset - this.constants_.CORNER_RADIUS;
     }
   }
@@ -491,8 +495,8 @@ Blockly.blockRendering.RenderInfo.prototype.getInRowSpacing_ = function(prev, ne
 };
 
 /**
- * Figure out where the right edge of the block and right edge of statement inputs
- * should be placed.
+ * Figure out where the right edge of the block and right edge of statement
+ * inputs should be placed.
  * @protected
  */
 // TODO: More cleanup.
@@ -574,8 +578,8 @@ Blockly.blockRendering.RenderInfo.prototype.getDesiredRowWidth_ = function(
  * @param {number} missingSpace How much padding to add.
  * @protected
  */
-Blockly.blockRendering.RenderInfo.prototype.addAlignmentPadding_ = function(row,
-    missingSpace) {
+Blockly.blockRendering.RenderInfo.prototype.addAlignmentPadding_ = function(
+    row, missingSpace) {
   var firstSpacer = row.getFirstSpacer();
   var lastSpacer = row.getLastSpacer();
   if (row.hasExternalInput || row.hasStatement) {
@@ -622,8 +626,8 @@ Blockly.blockRendering.RenderInfo.prototype.alignStatementRow_ = function(row) {
   statementInput.width += (desiredWidth - currentWidth);
   statementInput.height = Math.max(statementInput.height, row.height);
   row.width += (desiredWidth - currentWidth);
-  row.widthWithConnectedBlocks = Math.max(row.width,
-      this.statementEdge + row.connectedBlockWidths);
+  row.widthWithConnectedBlocks =
+      Math.max(row.width, this.statementEdge + row.connectedBlockWidths);
 };
 
 /**
@@ -649,11 +653,12 @@ Blockly.blockRendering.RenderInfo.prototype.addRowSpacing_ = function() {
  * @return {!Blockly.blockRendering.SpacerRow} The newly created spacer row.
  * @protected
  */
-Blockly.blockRendering.RenderInfo.prototype.makeSpacerRow_ = function(prev, next) {
+Blockly.blockRendering.RenderInfo.prototype.makeSpacerRow_ = function(
+    prev, next) {
   var height = this.getSpacerRowHeight_(prev, next);
   var width = this.getSpacerRowWidth_(prev, next);
-  var spacer = new Blockly.blockRendering.SpacerRow(
-      this.constants_, height, width);
+  var spacer =
+      new Blockly.blockRendering.SpacerRow(this.constants_, height, width);
   if (prev.hasStatement) {
     spacer.followsStatement = true;
   }
@@ -698,8 +703,8 @@ Blockly.blockRendering.RenderInfo.prototype.getSpacerRowHeight_ = function(
  *     from the top left of the block.
  * @protected
  */
-Blockly.blockRendering.RenderInfo.prototype.getElemCenterline_ = function(row,
-    elem) {
+Blockly.blockRendering.RenderInfo.prototype.getElemCenterline_ = function(
+    row, elem) {
   if (Blockly.blockRendering.Types.isSpacer(elem)) {
     return row.yPos + elem.height / 2;
   }
@@ -762,9 +767,9 @@ Blockly.blockRendering.RenderInfo.prototype.finalize_ = function() {
   if (this.outputConnection && this.block_.nextConnection &&
       this.block_.nextConnection.isConnected()) {
     // Include width of connected block in value to stack width measurement.
-    widestRowWithConnectedBlocks =
-        Math.max(widestRowWithConnectedBlocks,
-            this.block_.nextConnection.targetBlock().getHeightWidth().width);
+    widestRowWithConnectedBlocks = Math.max(
+        widestRowWithConnectedBlocks,
+        this.block_.nextConnection.targetBlock().getHeightWidth().width);
   }
 
   this.widthWithChildren = widestRowWithConnectedBlocks + this.startX;

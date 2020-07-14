@@ -32,7 +32,7 @@ goog.requireType('Blockly.utils.Metrics');
  */
 Blockly.HorizontalFlyout = function(workspaceOptions) {
   Blockly.HorizontalFlyout.superClass_.constructor.call(this, workspaceOptions);
-  
+
   this.horizontalLayout = true;
 };
 Blockly.utils.object.inherits(Blockly.HorizontalFlyout, Blockly.Flyout);
@@ -83,12 +83,12 @@ Blockly.HorizontalFlyout.prototype.getMetrics_ = function() {
     contentWidth: (optionBox.width + 2 * this.MARGIN) * this.workspace_.scale,
     contentTop: 0,
     contentLeft: 0,
-    
+
     viewHeight: viewHeight,
     viewWidth: viewWidth,
     viewTop: -this.workspace_.scrollY,
     viewLeft: -this.workspace_.scrollX,
-    
+
     absoluteTop: absoluteTop,
     absoluteLeft: absoluteLeft
   };
@@ -113,7 +113,8 @@ Blockly.HorizontalFlyout.prototype.setMetrics_ = function(xyRatio) {
     this.workspace_.scrollX = -metrics.contentWidth * xyRatio.x;
   }
 
-  this.workspace_.translate(this.workspace_.scrollX + metrics.absoluteLeft,
+  this.workspace_.translate(
+      this.workspace_.scrollX + metrics.absoluteLeft,
       this.workspace_.scrollY + metrics.absoluteTop);
 };
 
@@ -177,8 +178,8 @@ Blockly.HorizontalFlyout.prototype.position = function() {
  *     rounded corners.
  * @private
  */
-Blockly.HorizontalFlyout.prototype.setBackgroundPath_ = function(width,
-    height) {
+Blockly.HorizontalFlyout.prototype.setBackgroundPath_ = function(
+    width, height) {
   var atTop = this.toolboxPosition_ == Blockly.TOOLBOX_AT_TOP;
   // Start at top left.
   var path = ['M 0,' + (atTop ? 0 : this.CORNER_RADIUS)];
@@ -189,20 +190,24 @@ Blockly.HorizontalFlyout.prototype.setBackgroundPath_ = function(width,
     // Right.
     path.push('v', height);
     // Bottom.
-    path.push('a', this.CORNER_RADIUS, this.CORNER_RADIUS, 0, 0, 1,
+    path.push(
+        'a', this.CORNER_RADIUS, this.CORNER_RADIUS, 0, 0, 1,
         -this.CORNER_RADIUS, this.CORNER_RADIUS);
     path.push('h', -width);
     // Left.
-    path.push('a', this.CORNER_RADIUS, this.CORNER_RADIUS, 0, 0, 1,
+    path.push(
+        'a', this.CORNER_RADIUS, this.CORNER_RADIUS, 0, 0, 1,
         -this.CORNER_RADIUS, -this.CORNER_RADIUS);
     path.push('z');
   } else {
     // Top.
-    path.push('a', this.CORNER_RADIUS, this.CORNER_RADIUS, 0, 0, 1,
+    path.push(
+        'a', this.CORNER_RADIUS, this.CORNER_RADIUS, 0, 0, 1,
         this.CORNER_RADIUS, -this.CORNER_RADIUS);
     path.push('h', width);
     // Right.
-    path.push('a', this.CORNER_RADIUS, this.CORNER_RADIUS, 0, 0, 1,
+    path.push(
+        'a', this.CORNER_RADIUS, this.CORNER_RADIUS, 0, 0, 1,
         this.CORNER_RADIUS, this.CORNER_RADIUS);
     path.push('v', height);
     // Bottom.

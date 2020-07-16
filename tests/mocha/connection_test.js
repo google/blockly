@@ -6,7 +6,7 @@
 
 suite('Connection type checker', function() {
   suiteSetup(function() {
-    this.checker = new Blockly.ConnectionTypeChecker();
+    this.checker = new Blockly.ConnectionChecker();
   });
   suite('Safety checks', function() {
     function assertReasonHelper(checker, one, two, reason) {

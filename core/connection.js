@@ -16,7 +16,7 @@ goog.require('Blockly.Events');
 goog.require('Blockly.Events.BlockMove');
 goog.require('Blockly.Xml');
 
-goog.requireType('Blockly.ConnectionTypeChecker');
+goog.requireType('Blockly.ConnectionChecker');
 goog.requireType('Blockly.IASTNodeLocationWithBlock');
 
 
@@ -147,8 +147,8 @@ Blockly.Connection.prototype.connect_ = function(childConnection) {
         if (nextBlock && !nextBlock.isShadow()) {
           newBlock = nextBlock;
         } else {
-          var typeChecker = orphanBlock.workspace.connectionTypeChecker;
-          if (typeChecker.canConnect(
+          var checker = orphanBlock.workspace.connectionChecker;
+          if (checker.canConnect(
               orphanBlock.previousConnection, newBlock.nextConnection, false)) {
             newBlock.nextConnection.connect(orphanBlock.previousConnection);
             orphanBlock = null;
@@ -252,7 +252,7 @@ Blockly.Connection.prototype.isConnected = function() {
  */
 Blockly.Connection.prototype.canConnectWithReason = function(target) {
   // TODO: deprecation warning with date, plus tests.
-  return this.getConnectionTypeChecker().canConnectWithReason(
+  return this.getConnectionChecker().canConnectWithReason(
       this, target);
 };
 
@@ -267,7 +267,7 @@ Blockly.Connection.prototype.canConnectWithReason = function(target) {
 Blockly.Connection.prototype.checkConnection = function(target) {
 // TODO: Add deprecation warning notices *and* add tests to make sure these
 // still work (for any blocks that use them).
-  var checker = this.getConnectionTypeChecker();
+  var checker = this.getConnectionChecker();
   var reason = !checker.canConnectWithReason(this, target, false);
   if (reason != Blockly.Connection.CAN_CONNECT) {
     throw new Error(checker.getErrorMessage(this, target, reason));
@@ -276,12 +276,12 @@ Blockly.Connection.prototype.checkConnection = function(target) {
 
 /**
  * Get the workspace's connection type checker object.
- * @return {!Blockly.ConnectionTypeChecker} The connection type checker for the
+ * @return {!Blockly.ConnectionChecker} The connection type checker for the
  *     source block's workspace.
  * @package
  */
-Blockly.Connection.prototype.getConnectionTypeChecker = function() {
-  return this.sourceBlock_.workspace.connectionTypeChecker;
+Blockly.Connection.prototype.getConnectionChecker = function() {
+  return this.sourceBlock_.workspace.connectionChecker;
 };
 
 /**
@@ -291,7 +291,7 @@ Blockly.Connection.prototype.getConnectionTypeChecker = function() {
  * @deprecated July 2020
  */
 Blockly.Connection.prototype.isConnectionAllowed = function(candidate) {
-  return this.getConnectionTypeChecker().canConnect(this, candidate, true);
+  return this.getConnectionChecker().canConnect(this, candidate, true);
 };
 
 /**
@@ -314,7 +314,7 @@ Blockly.Connection.prototype.connect = function(otherConnection) {
     return;
   }
 
-  var checker = this.getConnectionTypeChecker();
+  var checker = this.getConnectionChecker();
   if (checker.canConnect(this, otherConnection, false)) {
     var eventGroup = Blockly.Events.getGroup();
     if (!eventGroup) {
@@ -362,7 +362,7 @@ Blockly.Connection.singleConnection_ = function(block, orphanBlock) {
   var output = orphanBlock.outputConnection;
   for (var i = 0; i < block.inputList.length; i++) {
     var thisConnection = block.inputList[i].connection;
-    var typeChecker = output.getConnectionTypeChecker();
+    var typeChecker = output.getConnectionChecker();
     if (thisConnection && thisConnection.type == Blockly.INPUT_VALUE &&
         typeChecker.canConnect(output, thisConnection, false)) {
       if (connection) {
@@ -495,7 +495,7 @@ Blockly.Connection.prototype.targetBlock = function() {
  */
 Blockly.Connection.prototype.checkType = function(otherConnection) {
   // TODO (fenichel): Add deprecation warnings.
-  return this.getConnectionTypeChecker().canConnect(this, otherConnection,
+  return this.getConnectionChecker().canConnect(this, otherConnection,
       false);
 };
 
@@ -521,7 +521,7 @@ Blockly.Connection.prototype.checkType_ = function(otherConnection) {
 Blockly.Connection.prototype.onCheckChanged_ = function() {
   // The new value type may not be compatible with the existing connection.
   if (this.isConnected() && (!this.targetConnection ||
-      !this.getConnectionTypeChecker().canConnect(
+      !this.getConnectionChecker().canConnect(
           this, this.targetConnection, false))) {
     var child = this.isSuperior() ? this.targetBlock() : this.sourceBlock_;
     child.unplug();

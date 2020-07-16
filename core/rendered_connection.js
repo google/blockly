@@ -19,7 +19,7 @@ goog.require('Blockly.utils.Coordinate');
 goog.require('Blockly.utils.dom');
 goog.require('Blockly.utils.object');
 
-goog.requireType('Blockly.ConnectionTypeChecker');
+goog.requireType('Blockly.ConnectionChecker');
 
 
 /**
@@ -552,7 +552,7 @@ Blockly.RenderedConnection.prototype.connect_ = function(childConnection) {
 Blockly.RenderedConnection.prototype.onCheckChanged_ = function() {
   // The new value type may not be compatible with the existing connection.
   if (this.isConnected() && (!this.targetConnection ||
-      !this.getConnectionTypeChecker().canConnect(
+      !this.getConnectionChecker().canConnect(
           this, this.targetConnection, false))) {
     var child = this.isSuperior() ? this.targetBlock() : this.sourceBlock_;
     child.unplug();

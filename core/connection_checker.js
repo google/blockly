@@ -11,7 +11,7 @@
  */
 'use strict';
 
-goog.provide('Blockly.ConnectionTypeChecker');
+goog.provide('Blockly.ConnectionChecker');
 
 goog.requireType('Blockly.Connection');
 
@@ -19,7 +19,7 @@ goog.requireType('Blockly.Connection');
  * Class for connection type checking logic.
  * @constructor
  */
-Blockly.ConnectionTypeChecker = function() {
+Blockly.ConnectionChecker = function() {
 };
 
 /**
@@ -32,7 +32,7 @@ Blockly.ConnectionTypeChecker = function() {
  * @return {boolean} Whether the connection is legal.
  * @public
  */
-Blockly.ConnectionTypeChecker.prototype.canConnect = function(one, two,
+Blockly.ConnectionChecker.prototype.canConnect = function(one, two,
     isDragging) {
   return this.canConnectWithReason(one, two, isDragging) ==
       Blockly.Connection.CAN_CONNECT;
@@ -40,7 +40,7 @@ Blockly.ConnectionTypeChecker.prototype.canConnect = function(one, two,
 
 /**
  * Checks whether the current connection can connect with the target
- * connection.
+ * connection, and return an error code if there are problems.
  * @param {Blockly.Connection} one Connection to check compatibility with.
  * @param {Blockly.Connection} two Connection to check compatibility with.
  * @param {boolean} isDragging [description]
@@ -48,13 +48,14 @@ Blockly.ConnectionTypeChecker.prototype.canConnect = function(one, two,
  *    an error code otherwise.
  * @public
  */
-Blockly.ConnectionTypeChecker.prototype.canConnectWithReason = function(
+Blockly.ConnectionChecker.prototype.canConnectWithReason = function(
     one, two, isDragging) {
   var safety = this.doSafetyChecks(one, two);
   if (safety != Blockly.Connection.CAN_CONNECT) {
     return safety;
   }
 
+  // If the safety checks passed, both connections are non-null.
   var connOne = /** @type {!Blockly.Connection} **/ (one);
   var connTwo = /** @type {!Blockly.Connection} **/ (two);
   if (!this.doTypeChecks(connOne, connTwo)) {
@@ -77,7 +78,7 @@ Blockly.ConnectionTypeChecker.prototype.canConnectWithReason = function(
  * @return {string} A developer-readable error string.
  * @public
  */
-Blockly.ConnectionTypeChecker.prototype.getErrorMessage = function(errorCode,
+Blockly.ConnectionChecker.prototype.getErrorMessage = function(errorCode,
     one, two) {
   switch (errorCode) {
     case Blockly.Connection.REASON_SELF_CONNECTION:
@@ -90,8 +91,10 @@ Blockly.ConnectionTypeChecker.prototype.getErrorMessage = function(errorCode,
     case Blockly.Connection.REASON_TARGET_NULL:
       return 'Target connection is null.';
     case Blockly.Connection.REASON_CHECKS_FAILED:
+      var connOne = /** @type {!Blockly.Connection} **/ (one);
+      var connTwo = /** @type {!Blockly.Connection} **/ (two);
       var msg = 'Connection checks failed. ';
-      msg += one + ' expected ' + one.getCheck() + ', found ' + two.getCheck();
+      msg += connOne + ' expected ' + connOne.getCheck() + ', found ' + connTwo.getCheck();
       return msg;
     case Blockly.Connection.REASON_SHADOW_PARENT:
       return 'Connecting non-shadow to shadow block.';
@@ -104,13 +107,13 @@ Blockly.ConnectionTypeChecker.prototype.getErrorMessage = function(errorCode,
 
 /**
  * Check that connecting the given connections is safe, meaning that it would
- * not break any of Blockly's basic assumptions--no self connections, etc.
+ * not break any of Blockly's basic assumptions (e.g. no self connections).
  * @param {Blockly.Connection} one The first of the connections to check.
  * @param {Blockly.Connection} two The second of the connections to check.
  * @return {number} An enum with the reason this connection is safe or unsafe.
  * @public
  */
-Blockly.ConnectionTypeChecker.prototype.doSafetyChecks = function(one, two) {
+Blockly.ConnectionChecker.prototype.doSafetyChecks = function(one, two) {
   if (!one || !two) {
     return Blockly.Connection.REASON_TARGET_NULL;
   }
@@ -142,7 +145,7 @@ Blockly.ConnectionTypeChecker.prototype.doSafetyChecks = function(one, two) {
  * @return {boolean} True if the connections share a type.
  * @public
  */
-Blockly.ConnectionTypeChecker.prototype.doTypeChecks = function(one, two) {
+Blockly.ConnectionChecker.prototype.doTypeChecks = function(one, two) {
   var checkArrayOne = one.getCheck();
   var checkArrayTwo = two.getCheck();
 
@@ -167,7 +170,7 @@ Blockly.ConnectionTypeChecker.prototype.doTypeChecks = function(one, two) {
  * @return {boolean} True if the connections share a type.
  * @public
  */
-Blockly.ConnectionTypeChecker.prototype.doDragChecks = function(one, two) {
+Blockly.ConnectionChecker.prototype.doDragChecks = function(one, two) {
   // Don't consider insertion markers.
   if (two.getSourceBlock().isInsertionMarker()) {
     return false;
@@ -224,7 +227,7 @@ Blockly.ConnectionTypeChecker.prototype.doDragChecks = function(one, two) {
 };
 
 /**
- * Helper function for drag checking
+ * Helper function for drag checking.
  * @param {!Blockly.Connection} one The connection to check, which must be a
  *     statement input or next connection.
  * @param {!Blockly.Connection} two A nearby connection to check, which
@@ -232,7 +235,7 @@ Blockly.ConnectionTypeChecker.prototype.doDragChecks = function(one, two) {
  * @return {boolean} True if the connection is allowed, false otherwise.
  * @protected
  */
-Blockly.ConnectionTypeChecker.prototype.canConnectToPrevious_ = function(one, two) {
+Blockly.ConnectionChecker.prototype.canConnectToPrevious_ = function(one, two) {
   if (one.targetConnection) {
     // This connection is already occupied.
     // A next connection will never disconnect itself mid-drag.

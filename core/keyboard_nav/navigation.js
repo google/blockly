@@ -18,7 +18,6 @@ goog.require('Blockly.ASTNode');
 goog.require('Blockly.utils.Coordinate');
 goog.require('Blockly.user.keyMap');
 
-goog.requireType('Blockly.ConnectionTypeChecker');
 
 /**
  * A function to call to give feedback to the user about logs, warnings, and
@@ -411,7 +410,7 @@ Blockly.navigation.moveAndConnect_ = function(movingConnection, destConnection) 
   }
   var movingBlock = movingConnection.getSourceBlock();
 
-  var checker = movingConnection.getConnectionTypeChecker();
+  var checker = movingConnection.getConnectionChecker();
 
   if (checker.canConnect(movingConnection, destConnection, false)) {
     Blockly.navigation.disconnectChild_(movingConnection, destConnection);
@@ -501,7 +500,7 @@ Blockly.navigation.connect_ = function(movingConnection, destConnection) {
   } else if (Blockly.navigation.moveAndConnect_(movingConnection, destConnection)){
     return true;
   } else {
-    var checker = movingConnection.getConnectionTypeChecker();
+    var checker = movingConnection.getConnectionChecker();
     var reason = checker.canConnectWithReason(
         movingConnection, destConnection, false);
     Blockly.navigation.warn_('Connection failed with error: ' +

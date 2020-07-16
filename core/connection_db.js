@@ -16,24 +16,26 @@ goog.provide('Blockly.ConnectionDB');
 
 goog.require('Blockly.RenderedConnection');
 
+goog.requireType('Blockly.ConnectionChecker');
+
 
 /**
  * Database of connections.
  * Connections are stored in order of their vertical component.  This way
  * connections in an area may be looked up quickly using a binary search.
- * @param {!Blockly.ConnectionTypeChecker} typeChecker The workspace's
+ * @param {!Blockly.ConnectionChecker} checker The workspace's
  *     connection type checker, used to decide if connections are valid during a
  *     drag.
  * @constructor
  */
-Blockly.ConnectionDB = function(typeChecker) {
+Blockly.ConnectionDB = function(checker) {
   /**
    * Array of connections sorted by y position in workspace units.
    * @type {!Array.<!Blockly.RenderedConnection>}
    * @private
    */
   this.connections_ = [];
-  this.typeChecker_ = typeChecker;
+  this.connectionChecker_ = checker;
 };
 
 /**
@@ -247,7 +249,7 @@ Blockly.ConnectionDB.prototype.searchForClosest = function(conn, maxRadius,
     temp = this.connections_[pointerMin];
     curDistance = temp.distanceFrom(conn);
     if (curDistance <= bestRadius &&
-        this.typeChecker_.canConnect(conn, temp, true)) {
+        this.connectionChecker_.canConnect(conn, temp, true)) {
       bestConnection = temp;
       bestRadius = curDistance;
     }
@@ -260,7 +262,7 @@ Blockly.ConnectionDB.prototype.searchForClosest = function(conn, maxRadius,
     temp = this.connections_[pointerMax];
     curDistance = temp.distanceFrom(conn);
     if (curDistance <= bestRadius &&
-        this.typeChecker_.canConnect(conn, temp, true)) {
+        this.connectionChecker_.canConnect(conn, temp, true)) {
       bestConnection = temp;
       bestRadius = curDistance;
     }
@@ -277,17 +279,16 @@ Blockly.ConnectionDB.prototype.searchForClosest = function(conn, maxRadius,
 
 /**
  * Initialize a set of connection DBs for a workspace.
- * @param {!Blockly.ConnectionTypeChecker} typeChecker The workspace's
- *     connection type checker, used to decide if connections are valid during a
- *     drag.
+ * @param {!Blockly.ConnectionChecker} checker The workspace's
+ *     connection checker, used to decide if connections are valid during a drag.
  * @return {!Array.<!Blockly.ConnectionDB>} Array of databases.
  */
-Blockly.ConnectionDB.init = function(typeChecker) {
+Blockly.ConnectionDB.init = function(checker) {
   // Create four databases, one for each connection type.
   var dbList = [];
-  dbList[Blockly.INPUT_VALUE] = new Blockly.ConnectionDB(typeChecker);
-  dbList[Blockly.OUTPUT_VALUE] = new Blockly.ConnectionDB(typeChecker);
-  dbList[Blockly.NEXT_STATEMENT] = new Blockly.ConnectionDB(typeChecker);
-  dbList[Blockly.PREVIOUS_STATEMENT] = new Blockly.ConnectionDB(typeChecker);
+  dbList[Blockly.INPUT_VALUE] = new Blockly.ConnectionDB(checker);
+  dbList[Blockly.OUTPUT_VALUE] = new Blockly.ConnectionDB(checker);
+  dbList[Blockly.NEXT_STATEMENT] = new Blockly.ConnectionDB(checker);
+  dbList[Blockly.PREVIOUS_STATEMENT] = new Blockly.ConnectionDB(checker);
   return dbList;
 };

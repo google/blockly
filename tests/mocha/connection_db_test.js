@@ -6,7 +6,7 @@
 
 suite('Connection Database', function() {
   setup(function() {
-    this.database = new Blockly.ConnectionDB(new Blockly.ConnectionTypeChecker());
+    this.database = new Blockly.ConnectionDB(new Blockly.ConnectionChecker());
 
     this.assertOrder = function() {
       var length = this.database.connections_.length;
@@ -194,8 +194,8 @@ suite('Connection Database', function() {
   suite('Search For Closest', function() {
     setup(function() {
       this.allowedStub = null;
-      this.allowedStub = sinon.stub(this.database.typeChecker_, 'canConnect')
-          .callsFake(function(dragging, candidate) {
+      this.allowedStub = sinon.stub(this.database.connectionChecker_, 'canConnect')
+          .callsFake(function(_dragging, _candidate) {
             return true;
           });
       this.createCheckConnection = function(x, y) {

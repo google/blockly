@@ -12,7 +12,7 @@
 
 goog.provide('Blockly.Workspace');
 
-goog.require('Blockly.ConnectionTypeChecker');
+goog.require('Blockly.ConnectionChecker');
 goog.require('Blockly.Events');
 goog.require('Blockly.Options');
 goog.require('Blockly.utils');
@@ -42,6 +42,12 @@ Blockly.Workspace = function(opt_options) {
   this.horizontalLayout = !!this.options.horizontalLayout;
   /** @type {number} */
   this.toolboxPosition = this.options.toolboxPosition;
+
+  /**
+   * An object that encapsulates logic for safety, type, and dragging checks.
+   * @type {Blockly}
+   */
+  this.connectionChecker = new Blockly.ConnectionChecker();
 
   /**
    * @type {!Array.<!Blockly.Block>}
@@ -104,8 +110,6 @@ Blockly.Workspace = function(opt_options) {
    * @private
    */
   this.potentialVariableMap_ = null;
-  /** @type {!Blockly.ConnectionTypeChecker} [description] */
-  this.connectionTypeChecker = new Blockly.ConnectionTypeChecker();
 };
 
 /**

@@ -456,7 +456,7 @@ Blockly.Block.prototype.unplugFromRow_ = function(opt_healStack) {
   // Disconnect the child block.
   childConnection.disconnect();
   // Connect child to the parent if possible, otherwise bump away.
-  if (this.workspace.connectionTypeChecker.canConnect(
+  if (this.workspace.connectionChecker.canConnect(
       childConnection, parentConnection, false)) {
     parentConnection.connect(childConnection);
   } else {
@@ -510,7 +510,7 @@ Blockly.Block.prototype.unplugFromStack_ = function(opt_healStack) {
     var nextTarget = this.nextConnection.targetConnection;
     nextTarget.disconnect();
     if (previousTarget &&
-        this.workspace.connectionTypeChecker.canConnect(
+        this.workspace.connectionChecker.canConnect(
             previousTarget, nextTarget, false)) {
       // Attach the next statement to the previous statement.
       previousTarget.connect(nextTarget);

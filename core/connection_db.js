@@ -16,14 +16,14 @@ goog.provide('Blockly.ConnectionDB');
 
 goog.require('Blockly.RenderedConnection');
 
-goog.requireType('Blockly.ConnectionChecker');
+goog.requireType('Blockly.IConnectionChecker');
 
 
 /**
  * Database of connections.
  * Connections are stored in order of their vertical component.  This way
  * connections in an area may be looked up quickly using a binary search.
- * @param {!Blockly.ConnectionChecker} checker The workspace's
+ * @param {!Blockly.IConnectionChecker} checker The workspace's
  *     connection type checker, used to decide if connections are valid during a
  *     drag.
  * @constructor
@@ -35,6 +35,12 @@ Blockly.ConnectionDB = function(checker) {
    * @private
    */
   this.connections_ = [];
+  /**
+   * The workspace's connection type checker, used to decide if connections are
+   * valid during a drag.
+   * @type {!Blockly.IConnectionChecker}
+   * @private
+   */
   this.connectionChecker_ = checker;
 };
 
@@ -279,7 +285,7 @@ Blockly.ConnectionDB.prototype.searchForClosest = function(conn, maxRadius,
 
 /**
  * Initialize a set of connection DBs for a workspace.
- * @param {!Blockly.ConnectionChecker} checker The workspace's
+ * @param {!Blockly.IConnectionChecker} checker The workspace's
  *     connection checker, used to decide if connections are valid during a drag.
  * @return {!Array.<!Blockly.ConnectionDB>} Array of databases.
  */

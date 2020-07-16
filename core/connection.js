@@ -16,7 +16,7 @@ goog.require('Blockly.Events');
 goog.require('Blockly.Events.BlockMove');
 goog.require('Blockly.Xml');
 
-goog.requireType('Blockly.ConnectionChecker');
+goog.requireType('Blockly.IConnectionChecker');
 goog.requireType('Blockly.IASTNodeLocationWithBlock');
 
 
@@ -253,7 +253,7 @@ Blockly.Connection.prototype.isConnected = function() {
 Blockly.Connection.prototype.canConnectWithReason = function(target) {
   // TODO: deprecation warning with date, plus tests.
   return this.getConnectionChecker().canConnectWithReason(
-      this, target);
+      this, target, false);
 };
 
 /**
@@ -268,15 +268,15 @@ Blockly.Connection.prototype.checkConnection = function(target) {
 // TODO: Add deprecation warning notices *and* add tests to make sure these
 // still work (for any blocks that use them).
   var checker = this.getConnectionChecker();
-  var reason = !checker.canConnectWithReason(this, target, false);
+  var reason = checker.canConnectWithReason(this, target, false);
   if (reason != Blockly.Connection.CAN_CONNECT) {
-    throw new Error(checker.getErrorMessage(this, target, reason));
+    throw new Error(checker.getErrorMessage(reason, this, target));
   }
 };
 
 /**
  * Get the workspace's connection type checker object.
- * @return {!Blockly.ConnectionChecker} The connection type checker for the
+ * @return {!Blockly.IConnectionChecker} The connection type checker for the
  *     source block's workspace.
  * @package
  */

@@ -75,6 +75,7 @@ goog.addDependency('../../core/input.js', ['Blockly.Input'], ['Blockly.Connectio
 goog.addDependency('../../core/insertion_marker_manager.js', ['Blockly.InsertionMarkerManager'], ['Blockly.Events', 'Blockly.blockAnimations'], {'lang': 'es5'});
 goog.addDependency('../../core/interfaces/i_accessibility.js', ['Blockly.IASTNodeLocation', 'Blockly.IASTNodeLocationSvg', 'Blockly.IASTNodeLocationWithBlock', 'Blockly.IBlocklyActionable'], [], {});
 goog.addDependency('../../core/interfaces/i_bounded_element.js', ['Blockly.IBoundedElement'], [], {});
+goog.addDependency('../../core/interfaces/i_connection_checker.js', ['Blockly.IConnectionChecker'], [], {});
 goog.addDependency('../../core/interfaces/i_copyable.js', ['Blockly.ICopyable'], [], {});
 goog.addDependency('../../core/interfaces/i_deletable.js', ['Blockly.IDeletable'], [], {});
 goog.addDependency('../../core/interfaces/i_deletearea.js', ['Blockly.IDeleteArea'], [], {});

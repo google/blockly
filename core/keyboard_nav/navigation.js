@@ -504,7 +504,7 @@ Blockly.navigation.connect_ = function(movingConnection, destConnection) {
     var reason = checker.canConnectWithReason(
         movingConnection, destConnection, false);
     Blockly.navigation.warn_('Connection failed with error: ' +
-        checker.getErrorMessage(movingConnection, destConnection, reason));
+        checker.getErrorMessage(reason, movingConnection, destConnection));
     return false;
   }
 };

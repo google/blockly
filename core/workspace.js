@@ -20,6 +20,7 @@ goog.require('Blockly.utils.math');
 goog.require('Blockly.VariableMap');
 
 goog.requireType('Blockly.IASTNodeLocation');
+goog.requireType('Blockly.IConnectionChecker');
 
 
 /**
@@ -45,7 +46,7 @@ Blockly.Workspace = function(opt_options) {
 
   /**
    * An object that encapsulates logic for safety, type, and dragging checks.
-   * @type {Blockly}
+   * @type {!Blockly.IConnectionChecker}
    */
   this.connectionChecker = new Blockly.ConnectionChecker();
 

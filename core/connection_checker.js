@@ -13,10 +13,12 @@
 
 goog.provide('Blockly.ConnectionChecker');
 
+goog.requireType('Blockly.IConnectionChecker');
 goog.requireType('Blockly.Connection');
 
 /**
  * Class for connection type checking logic.
+ * @implements {Blockly.IConnectionChecker}
  * @constructor
  */
 Blockly.ConnectionChecker = function() {
@@ -62,8 +64,8 @@ Blockly.ConnectionChecker.prototype.canConnectWithReason = function(
     return Blockly.Connection.REASON_CHECKS_FAILED;
   }
 
-  if (isDragging && this.doDragChecks(connOne, connTwo, false)) {
-    return Blockly.REASON_DRAG_CHECKS_FAILED;
+  if (isDragging && this.doDragChecks(connOne, connTwo)) {
+    return Blockly.Connection.REASON_DRAG_CHECKS_FAILED;
   }
 
   return Blockly.Connection.CAN_CONNECT;

@@ -16,8 +16,8 @@ goog.require('Blockly.Events');
 goog.require('Blockly.Events.BlockMove');
 goog.require('Blockly.Xml');
 
-goog.requireType('Blockly.IConnectionChecker');
 goog.requireType('Blockly.IASTNodeLocationWithBlock');
+goog.requireType('Blockly.IConnectionChecker');
 
 
 /**

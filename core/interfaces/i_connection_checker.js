@@ -15,6 +15,7 @@ goog.provide('Blockly.IConnectionChecker');
 
 goog.requireType('Blockly.Connection');
 
+
 /**
  * Class for connection type checking logic.
  * @interface
@@ -38,7 +39,8 @@ Blockly.IConnectionChecker.prototype.canConnect;
  * connection, and return an error code if there are problems.
  * @param {Blockly.Connection} one Connection to check compatibility with.
  * @param {Blockly.Connection} two Connection to check compatibility with.
- * @param {boolean} isDragging [description]
+ * @param {boolean} isDragging True if the connection is being made by dragging
+ *     a block.
  * @return {number} Blockly.Connection.CAN_CONNECT if the connection is legal,
  *    an error code otherwise.
  * @public

@@ -6,11 +6,15 @@
 
 suite('Connection', function() {
   suiteSetup(function() {
-    this.workspace = = {
-        connectionChecker: new Blockly.ConnectionChecker()
-      };
+    this.workspace = {
+      connectionChecker: new Blockly.ConnectionChecker()
+    };
     this.createConnection = function(type) {
-      var connection = new Blockly.Connection({workspace: this.workspace}, type);
+      var block = {
+        workspace: this.workspace,
+        isShadow: function() { return false; }
+      };
+      var connection = new Blockly.Connection(block, type);
       return connection;
     };
   });
@@ -29,11 +33,15 @@ suite('Connection', function() {
   test('checkConnection passes', function() {
     var conn1 = this.createConnection(Blockly.PREVIOUS_STATEMENT);
     var conn2 = this.createConnection(Blockly.NEXT_STATEMENT);
-    chai.assert.doesNotThrow(conn1.checkConnection(conn2));
+    chai.assert.doesNotThrow(function() {
+      conn1.checkConnection(conn2);
+    });
   });
   test('checkConnection fails', function() {
     var conn1 = this.createConnection(Blockly.PREVIOUS_STATEMENT);
     var conn2 = this.createConnection(Blockly.OUTPUT_VALUE);
-    chai.assert.throws(conn1.checkConnection(conn2));
+    chai.assert.throws(function() {
+      conn1.checkConnection(conn2);
+    });
   });
 });

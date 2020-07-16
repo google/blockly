@@ -20,7 +20,7 @@ goog.provide('Blockly.utils.deprecation');
  *     Prefer 'month yyyy' or 'quarter yyyy' format.
  * @param {string} deletionDate The date when the function will be deleted, in
  *     the same format as the deprecation date.
- * @param {?string} opt_use The name of a function to use instead, if any.
+ * @param {string=} opt_use The name of a function to use instead, if any.
  * @package
  */
 Blockly.utils.deprecation.warn = function(

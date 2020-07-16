@@ -1244,7 +1244,7 @@ Blockly.Block.prototype.getOutputShape = function() {
  */
 Blockly.Block.prototype.setDisabled = function(disabled) {
   Blockly.utils.deprecation.warn(
-      'Blockly.Block.prototype.setDisabled',
+      'Block.prototype.setDisabled',
       'May 2019',
       'May 2020',
       'Blockly.Block.prototype.setEnabled');

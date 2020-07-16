@@ -240,6 +240,11 @@ Blockly.BlockSvg.prototype.getColourTertiary = function() {
  * @deprecated Use style.colourSecondary. (2020 January 21)
  */
 Blockly.BlockSvg.prototype.getColourShadow = function() {
+  Blockly.utils.deprecation.warn(
+      'BlockSvg.prototype.getColourShadow',
+      'January 2020',
+      'January 2021',
+      'style.colourSecondary');
   return this.getColourSecondary();
 };
 
@@ -253,6 +258,11 @@ Blockly.BlockSvg.prototype.getColourShadow = function() {
  * @deprecated Use style.colourTertiary. (2020 January 21)
  */
 Blockly.BlockSvg.prototype.getColourBorder = function() {
+  Blockly.utils.deprecation.warn(
+      'BlockSvg.prototype.getColourBorder',
+      'January 2020',
+      'January 2021',
+      'style.colourTertiary');
   var colourTertiary = this.getColourTertiary();
   return {
     colourBorder: colourTertiary,
@@ -1122,7 +1132,7 @@ Blockly.BlockSvg.prototype.setMutator = function(mutator) {
  */
 Blockly.BlockSvg.prototype.setDisabled = function(disabled) {
   Blockly.utils.deprecation.warn(
-      'Blockly.BlockSvg.prototype.setDisabled',
+      'BlockSvg.prototype.setDisabled',
       'May 2019',
       'May 2020',
       'Blockly.BlockSvg.prototype.setEnabled');

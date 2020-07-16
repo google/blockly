@@ -508,8 +508,15 @@ Blockly.Connection.prototype.targetBlock = function() {
  * value type system.  E.g. square_root("Hello") is not compatible.
  * @param {!Blockly.Connection} otherConnection Connection to compare against.
  * @return {boolean} True if the connections share a type.
+ * @deprecated July 2020. Will be deleted July 2021. Use the workspace's
+ *     connectionChecker instead.
  */
 Blockly.Connection.prototype.checkType = function(otherConnection) {
+  Blockly.utils.deprecation.warn(
+      'Connection.prototype.checkType',
+      'October 2019',
+      'January 2021',
+      'the workspace\'s connection checker');
   return this.getConnectionChecker().canConnect(this, otherConnection,
       false);
 };
@@ -520,7 +527,8 @@ Blockly.Connection.prototype.checkType = function(otherConnection) {
  * @param {!Blockly.Connection} otherConnection Connection to compare against.
  * @return {boolean} True if the connections share a type.
  * @private
- * @deprecated October 2019, use connection.checkType instead.
+ * @deprecated October 2019. Will be deleted January 2021. Use the workspace's
+ *     connectionChecker instead.
  * @suppress {unusedPrivateMembers}
  */
 Blockly.Connection.prototype.checkType_ = function(otherConnection) {
@@ -528,7 +536,7 @@ Blockly.Connection.prototype.checkType_ = function(otherConnection) {
       'Connection.prototype.checkType_',
       'October 2019',
       'January 2021',
-      'Connection.prototype.checkType');
+      'the workspace\'s connection checker');
   return this.checkType(otherConnection);
 };
 

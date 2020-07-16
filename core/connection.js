@@ -248,10 +248,11 @@ Blockly.Connection.prototype.isConnected = function() {
  * @param {Blockly.Connection} target Connection to check compatibility with.
  * @return {number} Blockly.Connection.CAN_CONNECT if the connection is legal,
  *    an error code otherwise.
- * @deprecated July 2020
+ * @deprecated July 2020. Use the workspace's connectionChecker.
  */
 Blockly.Connection.prototype.canConnectWithReason = function(target) {
-  // TODO: deprecation warning with date, plus tests.
+  console.warn('Connection.prototype.canConnectWithReason was deprecated in ' +
+      'July 2020 and will be deleted in July 2021.');
   return this.getConnectionChecker().canConnectWithReason(
       this, target, false);
 };
@@ -262,11 +263,11 @@ Blockly.Connection.prototype.canConnectWithReason = function(target) {
  * @param {Blockly.Connection} target The connection to check compatibility
  *    with.
  * @package
- * @deprecated July 2020
+ * @deprecated July 2020. Use the workspace's connectionChecker.
  */
 Blockly.Connection.prototype.checkConnection = function(target) {
-// TODO: Add deprecation warning notices *and* add tests to make sure these
-// still work (for any blocks that use them).
+  console.warn('Connection.prototype.checkConnection was deprecated in ' +
+      'July 2020 and will be deleted in July 2021.');
   var checker = this.getConnectionChecker();
   var reason = checker.canConnectWithReason(this, target, false);
   if (reason != Blockly.Connection.CAN_CONNECT) {
@@ -288,9 +289,11 @@ Blockly.Connection.prototype.getConnectionChecker = function() {
  * Check if the two connections can be dragged to connect to each other.
  * @param {!Blockly.Connection} candidate A nearby connection to check.
  * @return {boolean} True if the connection is allowed, false otherwise.
- * @deprecated July 2020
+ * @deprecated July 2020. Use the workspace's connectionChecker.
  */
 Blockly.Connection.prototype.isConnectionAllowed = function(candidate) {
+  console.warn('Connection.prototype.isConnectionAllowed was deprecated in ' +
+      'July 2020 and will be deleted in July 2021.');
   return this.getConnectionChecker().canConnect(this, candidate, true);
 };
 

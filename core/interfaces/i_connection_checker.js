@@ -29,6 +29,8 @@ Blockly.IConnectionChecker = function() {};
  * @param {Blockly.Connection} b Connection to check compatibility with.
  * @param {boolean} isDragging True if the connection is being made by dragging
  *     a block.
+ * @param {number=} opt_distance The max allowable distance between the
+ *     connections for drag checks.
  * @return {boolean} Whether the connection is legal.
  * @public
  */
@@ -41,6 +43,8 @@ Blockly.IConnectionChecker.prototype.canConnect;
  * @param {Blockly.Connection} b Connection to check compatibility with.
  * @param {boolean} isDragging True if the connection is being made by dragging
  *     a block.
+ * @param {number=} opt_distance The max allowable distance between the
+ *     connections for drag checks.
  * @return {number} Blockly.Connection.CAN_CONNECT if the connection is legal,
  *    an error code otherwise.
  * @public
@@ -81,9 +85,10 @@ Blockly.IConnectionChecker.prototype.doTypeChecks;
 
 /**
  * Check whether this connection can be made by dragging.
- * @param {!Blockly.Connection} a Connection to compare.
- * @param {!Blockly.Connection} b Connection to compare against.
- * @return {boolean} True if the connections share a type.
+ * @param {!Blockly.RenderedConnection} a Connection to compare.
+ * @param {!Blockly.RenderedConnection} b Connection to compare against.
+ * @param {number} distance The maximum allowable distance between connections.
+ * @return {boolean} True if the connection is allowed during a drag.
  * @public
  */
 Blockly.IConnectionChecker.prototype.doDragChecks;

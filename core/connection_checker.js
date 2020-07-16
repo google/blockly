@@ -32,12 +32,14 @@ Blockly.ConnectionChecker = function() {
  * @param {Blockly.Connection} b Connection to check compatibility with.
  * @param {boolean} isDragging True if the connection is being made by dragging
  *     a block.
+ * @param {number=} opt_distance The max allowable distance between the
+ *     connections for drag checks.
  * @return {boolean} Whether the connection is legal.
  * @public
  */
 Blockly.ConnectionChecker.prototype.canConnect = function(a, b,
-    isDragging) {
-  return this.canConnectWithReason(a, b, isDragging) ==
+    isDragging, opt_distance) {
+  return this.canConnectWithReason(a, b, isDragging, opt_distance) ==
       Blockly.Connection.CAN_CONNECT;
 };
 
@@ -48,12 +50,14 @@ Blockly.ConnectionChecker.prototype.canConnect = function(a, b,
  * @param {Blockly.Connection} b Connection to check compatibility with.
  * @param {boolean} isDragging True if the connection is being made by dragging
  *     a block.
+ * @param {number=} opt_distance The max allowable distance between the
+ *     connections for drag checks.
  * @return {number} Blockly.Connection.CAN_CONNECT if the connection is legal,
  *    an error code otherwise.
  * @public
  */
 Blockly.ConnectionChecker.prototype.canConnectWithReason = function(
-    a, b, isDragging) {
+    a, b, isDragging, opt_distance) {
   var safety = this.doSafetyChecks(a, b);
   if (safety != Blockly.Connection.CAN_CONNECT) {
     return safety;
@@ -66,7 +70,11 @@ Blockly.ConnectionChecker.prototype.canConnectWithReason = function(
     return Blockly.Connection.REASON_CHECKS_FAILED;
   }
 
-  if (isDragging && this.doDragChecks(connOne, connTwo)) {
+  if (isDragging &&
+      !this.doDragChecks(
+          /** @type {!Blockly.RenderedConnection} **/ (a),
+          /** @type {!Blockly.RenderedConnection} **/ (b),
+          opt_distance || 0)) {
     return Blockly.Connection.REASON_DRAG_CHECKS_FAILED;
   }
 
@@ -169,12 +177,17 @@ Blockly.ConnectionChecker.prototype.doTypeChecks = function(a, b) {
 
 /**
  * Check whether this connection can be made by dragging.
- * @param {!Blockly.Connection} a Connection to compare.
- * @param {!Blockly.Connection} b Connection to compare against.
- * @return {boolean} True if the connections share a type.
+ * @param {!Blockly.RenderedConnection} a Connection to compare.
+ * @param {!Blockly.RenderedConnection} b Connection to compare against.
+ * @param {number} distance The maximum allowable distance between connections.
+ * @return {boolean} True if the connection is allowed during a drag.
  * @public
  */
-Blockly.ConnectionChecker.prototype.doDragChecks = function(a, b) {
+Blockly.ConnectionChecker.prototype.doDragChecks = function(a, b, distance) {
+  if (a.distanceFrom(b) > distance) {
+    return false;
+  }
+
   // Don't consider insertion markers.
   if (b.getSourceBlock().isInsertionMarker()) {
     return false;

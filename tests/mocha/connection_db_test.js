@@ -190,14 +190,26 @@ suite('Connection Database', function() {
       this.assertOrder();
     });
   });
-  // Does not cover logic for isConnectionAllowed
+
   suite('Search For Closest', function() {
     setup(function() {
-      this.allowedStub = null;
-      this.allowedStub = sinon.stub(this.database.connectionChecker_, 'canConnect')
-          .callsFake(function(_dragging, _candidate) {
+      this.allowedStubs = [];
+      // Ignore type checks.
+      this.allowedStubs.push(sinon.stub(this.database.connectionChecker_, 'doTypeChecks')
+          .callsFake(function(_a, _b) {
             return true;
-          });
+          }));
+      // Ignore safety checks.
+      this.allowedStubs.push(sinon.stub(this.database.connectionChecker_, 'doSafetyChecks')
+          .callsFake(function(_a, _b) {
+            return Blockly.Connection.CAN_CONNECT;
+          }));
+      // Skip everything but the distance checks.
+      this.allowedStubs.push(sinon.stub(this.database.connectionChecker_, 'doDragChecks')
+          .callsFake(function(a, b, distance) {
+            return a.distanceFrom(b) <= distance;
+          }));
+
       this.createCheckConnection = function(x, y) {
         var checkConnection = this.createConnection(x, y, Blockly.NEXT_STATEMENT,
             new Blockly.ConnectionDB());
@@ -205,9 +217,7 @@ suite('Connection Database', function() {
       };
     });
     teardown(function() {
-      if (this.allowedStub) {
-        this.allowedStub.restore();
-      }
+      this.allowedStubs.forEach(stub => stub.restore());
     });
     test('Empty Database', function() {
       var checkConnection = this.createConnection(0, 0, Blockly.NEXT_STATEMENT,

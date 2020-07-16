@@ -28,24 +28,24 @@ Blockly.ConnectionChecker = function() {
 /**
  * Check whether the current connection can connect with the target
  * connection.
- * @param {Blockly.Connection} one Connection to check compatibility with.
- * @param {Blockly.Connection} two Connection to check compatibility with.
+ * @param {Blockly.Connection} a Connection to check compatibility with.
+ * @param {Blockly.Connection} b Connection to check compatibility with.
  * @param {boolean} isDragging True if the connection is being made by dragging
  *     a block.
  * @return {boolean} Whether the connection is legal.
  * @public
  */
-Blockly.ConnectionChecker.prototype.canConnect = function(one, two,
+Blockly.ConnectionChecker.prototype.canConnect = function(a, b,
     isDragging) {
-  return this.canConnectWithReason(one, two, isDragging) ==
+  return this.canConnectWithReason(a, b, isDragging) ==
       Blockly.Connection.CAN_CONNECT;
 };
 
 /**
  * Checks whether the current connection can connect with the target
  * connection, and return an error code if there are problems.
- * @param {Blockly.Connection} one Connection to check compatibility with.
- * @param {Blockly.Connection} two Connection to check compatibility with.
+ * @param {Blockly.Connection} a Connection to check compatibility with.
+ * @param {Blockly.Connection} b Connection to check compatibility with.
  * @param {boolean} isDragging True if the connection is being made by dragging
  *     a block.
  * @return {number} Blockly.Connection.CAN_CONNECT if the connection is legal,
@@ -53,15 +53,15 @@ Blockly.ConnectionChecker.prototype.canConnect = function(one, two,
  * @public
  */
 Blockly.ConnectionChecker.prototype.canConnectWithReason = function(
-    one, two, isDragging) {
-  var safety = this.doSafetyChecks(one, two);
+    a, b, isDragging) {
+  var safety = this.doSafetyChecks(a, b);
   if (safety != Blockly.Connection.CAN_CONNECT) {
     return safety;
   }
 
   // If the safety checks passed, both connections are non-null.
-  var connOne = /** @type {!Blockly.Connection} **/ (one);
-  var connTwo = /** @type {!Blockly.Connection} **/ (two);
+  var connOne = /** @type {!Blockly.Connection} **/ (a);
+  var connTwo = /** @type {!Blockly.Connection} **/ (b);
   if (!this.doTypeChecks(connOne, connTwo)) {
     return Blockly.Connection.REASON_CHECKS_FAILED;
   }
@@ -76,14 +76,14 @@ Blockly.ConnectionChecker.prototype.canConnectWithReason = function(
 /**
  * Helper method that translates a connection error code into a string.
  * @param {number} errorCode The error code.
- * @param {Blockly.Connection} one One of the two connections being checked.
- * @param {Blockly.Connection} two The second of the two connections being
+ * @param {Blockly.Connection} a One of the two connections being checked.
+ * @param {Blockly.Connection} b The second of the two connections being
  *     checked.
  * @return {string} A developer-readable error string.
  * @public
  */
 Blockly.ConnectionChecker.prototype.getErrorMessage = function(errorCode,
-    one, two) {
+    a, b) {
   switch (errorCode) {
     case Blockly.Connection.REASON_SELF_CONNECTION:
       return 'Attempted to connect a block to itself.';
@@ -95,8 +95,8 @@ Blockly.ConnectionChecker.prototype.getErrorMessage = function(errorCode,
     case Blockly.Connection.REASON_TARGET_NULL:
       return 'Target connection is null.';
     case Blockly.Connection.REASON_CHECKS_FAILED:
-      var connOne = /** @type {!Blockly.Connection} **/ (one);
-      var connTwo = /** @type {!Blockly.Connection} **/ (two);
+      var connOne = /** @type {!Blockly.Connection} **/ (a);
+      var connTwo = /** @type {!Blockly.Connection} **/ (b);
       var msg = 'Connection checks failed. ';
       msg += connOne + ' expected ' + connOne.getCheck() + ', found ' + connTwo.getCheck();
       return msg;
@@ -112,25 +112,25 @@ Blockly.ConnectionChecker.prototype.getErrorMessage = function(errorCode,
 /**
  * Check that connecting the given connections is safe, meaning that it would
  * not break any of Blockly's basic assumptions (e.g. no self connections).
- * @param {Blockly.Connection} one The first of the connections to check.
- * @param {Blockly.Connection} two The second of the connections to check.
+ * @param {Blockly.Connection} a The first of the connections to check.
+ * @param {Blockly.Connection} b The second of the connections to check.
  * @return {number} An enum with the reason this connection is safe or unsafe.
  * @public
  */
-Blockly.ConnectionChecker.prototype.doSafetyChecks = function(one, two) {
-  if (!one || !two) {
+Blockly.ConnectionChecker.prototype.doSafetyChecks = function(a, b) {
+  if (!a || !b) {
     return Blockly.Connection.REASON_TARGET_NULL;
   }
-  if (one.isSuperior()) {
-    var blockA = one.getSourceBlock();
-    var blockB = two.getSourceBlock();
+  if (a.isSuperior()) {
+    var blockA = a.getSourceBlock();
+    var blockB = b.getSourceBlock();
   } else {
-    var blockB = one.getSourceBlock();
-    var blockA = two.getSourceBlock();
+    var blockB = a.getSourceBlock();
+    var blockA = b.getSourceBlock();
   }
   if (blockA == blockB) {
     return Blockly.Connection.REASON_SELF_CONNECTION;
-  } else if (two.type != Blockly.OPPOSITE_TYPE[one.type]) {
+  } else if (b.type != Blockly.OPPOSITE_TYPE[a.type]) {
     return Blockly.Connection.REASON_WRONG_TYPE;
   } else if (blockA.workspace !== blockB.workspace) {
     return Blockly.Connection.REASON_DIFFERENT_WORKSPACES;
@@ -144,14 +144,14 @@ Blockly.ConnectionChecker.prototype.doSafetyChecks = function(one, two) {
  * Check whether this connection is compatible with another connection with
  * respect to the value type system.  E.g. square_root("Hello") is not
  * compatible.
- * @param {!Blockly.Connection} one Connection to compare.
- * @param {!Blockly.Connection} two Connection to compare against.
+ * @param {!Blockly.Connection} a Connection to compare.
+ * @param {!Blockly.Connection} b Connection to compare against.
  * @return {boolean} True if the connections share a type.
  * @public
  */
-Blockly.ConnectionChecker.prototype.doTypeChecks = function(one, two) {
-  var checkArrayOne = one.getCheck();
-  var checkArrayTwo = two.getCheck();
+Blockly.ConnectionChecker.prototype.doTypeChecks = function(a, b) {
+  var checkArrayOne = a.getCheck();
+  var checkArrayTwo = b.getCheck();
 
   if (!checkArrayOne || !checkArrayTwo) {
     // One or both sides are promiscuous enough that anything will fit.
@@ -169,26 +169,26 @@ Blockly.ConnectionChecker.prototype.doTypeChecks = function(one, two) {
 
 /**
  * Check whether this connection can be made by dragging.
- * @param {!Blockly.Connection} one Connection to compare.
- * @param {!Blockly.Connection} two Connection to compare against.
+ * @param {!Blockly.Connection} a Connection to compare.
+ * @param {!Blockly.Connection} b Connection to compare against.
  * @return {boolean} True if the connections share a type.
  * @public
  */
-Blockly.ConnectionChecker.prototype.doDragChecks = function(one, two) {
+Blockly.ConnectionChecker.prototype.doDragChecks = function(a, b) {
   // Don't consider insertion markers.
-  if (two.getSourceBlock().isInsertionMarker()) {
+  if (b.getSourceBlock().isInsertionMarker()) {
     return false;
   }
 
-  switch (two.type) {
+  switch (b.type) {
     case Blockly.PREVIOUS_STATEMENT:
-      return this.canConnectToPrevious_(one, two);
+      return this.canConnectToPrevious_(a, b);
     case Blockly.OUTPUT_VALUE: {
       // Don't offer to connect an already connected left (male) value plug to
       // an available right (female) value plug.
-      if ((two.isConnected() &&
-          !two.targetBlock().isInsertionMarker()) ||
-          one.isConnected()) {
+      if ((b.isConnected() &&
+          !b.targetBlock().isInsertionMarker()) ||
+          a.isConnected()) {
         return false;
       }
       break;
@@ -197,9 +197,9 @@ Blockly.ConnectionChecker.prototype.doDragChecks = function(one, two) {
       // Offering to connect the left (male) of a value block to an already
       // connected value pair is ok, we'll splice it in.
       // However, don't offer to splice into an immovable block.
-      if (two.isConnected() &&
-          !two.targetBlock().isMovable() &&
-          !two.targetBlock().isShadow()) {
+      if (b.isConnected() &&
+          !b.targetBlock().isMovable() &&
+          !b.targetBlock().isShadow()) {
         return false;
       }
       break;
@@ -209,10 +209,10 @@ Blockly.ConnectionChecker.prototype.doDragChecks = function(one, two) {
       // stack.  But covering up a shadow block or stack of shadow blocks is
       // fine.  Similarly, replacing a terminal statement with another terminal
       // statement is allowed.
-      if (two.isConnected() &&
-          !one.getSourceBlock().nextConnection &&
-          !two.targetBlock().isShadow() &&
-          two.targetBlock().nextConnection) {
+      if (b.isConnected() &&
+          !a.getSourceBlock().nextConnection &&
+          !b.targetBlock().isShadow() &&
+          b.targetBlock().nextConnection) {
         return false;
       }
       break;
@@ -223,7 +223,7 @@ Blockly.ConnectionChecker.prototype.doDragChecks = function(one, two) {
   }
 
   // Don't let blocks try to connect to themselves or ones they nest.
-  if (Blockly.draggingConnections.indexOf(two) != -1) {
+  if (Blockly.draggingConnections.indexOf(b) != -1) {
     return false;
   }
 
@@ -232,30 +232,30 @@ Blockly.ConnectionChecker.prototype.doDragChecks = function(one, two) {
 
 /**
  * Helper function for drag checking.
- * @param {!Blockly.Connection} one The connection to check, which must be a
+ * @param {!Blockly.Connection} a The connection to check, which must be a
  *     statement input or next connection.
- * @param {!Blockly.Connection} two A nearby connection to check, which
+ * @param {!Blockly.Connection} b A nearby connection to check, which
  *     must be a previous connection.
  * @return {boolean} True if the connection is allowed, false otherwise.
  * @protected
  */
-Blockly.ConnectionChecker.prototype.canConnectToPrevious_ = function(one, two) {
-  if (one.targetConnection) {
+Blockly.ConnectionChecker.prototype.canConnectToPrevious_ = function(a, b) {
+  if (a.targetConnection) {
     // This connection is already occupied.
     // A next connection will never disconnect itself mid-drag.
     return false;
   }
 
   // Don't let blocks try to connect to themselves or ones they nest.
-  if (Blockly.draggingConnections.indexOf(two) != -1) {
+  if (Blockly.draggingConnections.indexOf(b) != -1) {
     return false;
   }
 
-  if (!two.targetConnection) {
+  if (!b.targetConnection) {
     return true;
   }
 
-  var targetBlock = two.targetBlock();
+  var targetBlock = b.targetBlock();
   // If it is connected to a real block, game over.
   if (!targetBlock.isInsertionMarker()) {
     return false;

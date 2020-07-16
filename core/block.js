@@ -1247,7 +1247,7 @@ Blockly.Block.prototype.setDisabled = function(disabled) {
       'Block.prototype.setDisabled',
       'May 2019',
       'May 2020',
-      'Blockly.Block.prototype.setEnabled');
+      'Block.prototype.setEnabled');
   this.setEnabled(!disabled);
 };
 

@@ -1135,7 +1135,7 @@ Blockly.BlockSvg.prototype.setDisabled = function(disabled) {
       'BlockSvg.prototype.setDisabled',
       'May 2019',
       'May 2020',
-      'Blockly.BlockSvg.prototype.setEnabled');
+      'BlockSvg.prototype.setEnabled');
   this.setEnabled(!disabled);
 };
 

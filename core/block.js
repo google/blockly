@@ -25,6 +25,7 @@ goog.require('Blockly.fieldRegistry');
 goog.require('Blockly.Input');
 goog.require('Blockly.navigation');
 goog.require('Blockly.utils');
+goog.require('Blockly.utils.deprecation');
 goog.require('Blockly.utils.Coordinate');
 goog.require('Blockly.utils.object');
 goog.require('Blockly.utils.string');
@@ -1242,8 +1243,11 @@ Blockly.Block.prototype.getOutputShape = function() {
  * @deprecated May 2019
  */
 Blockly.Block.prototype.setDisabled = function(disabled) {
-  console.warn('Deprecated call to Blockly.Block.prototype.setDisabled, ' +
-               'use Blockly.Block.prototype.setEnabled instead.');
+  Blockly.utils.deprecation.warn(
+      'Blockly.Block.prototype.setDisabled',
+      'May 2019',
+      'May 2020',
+      'Blockly.Block.prototype.setEnabled');
   this.setEnabled(!disabled);
 };
 

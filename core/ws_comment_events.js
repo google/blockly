@@ -18,6 +18,7 @@ goog.provide('Blockly.Events.CommentMove');
 
 goog.require('Blockly.Events');
 goog.require('Blockly.Events.Abstract');
+goog.require('Blockly.registry');
 goog.require('Blockly.utils.Coordinate');
 goog.require('Blockly.utils.object');
 goog.require('Blockly.utils.xml');
@@ -110,6 +111,21 @@ Blockly.utils.object.inherits(Blockly.Events.CommentChange,
 Blockly.Events.CommentChange.prototype.type = Blockly.Events.COMMENT_CHANGE;
 
 /**
+ * Construct a Blockly.Events.CommentChange from a JSON arg object.
+ * @param {!Object} json JSON representation.
+ * @param {!Blockly.Workspace} workspace Target workspace for event.
+ * @return {!Blockly.Events.CommentChange} The new event instance.
+ * @package
+ * @nocollapse
+ */
+Blockly.Events.CommentChange.fromJson = function(json, workspace) {
+  var event = new Blockly.Events.CommentChange(null, '', '');
+  event.fromJson(json);
+  event.workspaceId = workspace.id;
+  return event;
+};
+
+/**
  * Encode the event as JSON.
  * @return {!Object} JSON representation.
  */
@@ -175,6 +191,21 @@ Blockly.utils.object.inherits(Blockly.Events.CommentCreate,
  * @type {string}
  */
 Blockly.Events.CommentCreate.prototype.type = Blockly.Events.COMMENT_CREATE;
+
+/**
+ * Construct a Blockly.Events.CommentCreate from a JSON arg object.
+ * @param {!Object} json JSON representation.
+ * @param {!Blockly.Workspace} workspace Target workspace for event.
+ * @return {!Blockly.Events.CommentCreate} The new event instance.
+ * @package
+ * @nocollapse
+ */
+Blockly.Events.CommentCreate.fromJson = function(json, workspace) {
+  var event = new Blockly.Events.CommentCreate(null);
+  event.fromJson(json);
+  event.workspaceId = workspace.id;
+  return event;
+};
 
 /**
  * Encode the event as JSON.
@@ -249,6 +280,21 @@ Blockly.utils.object.inherits(Blockly.Events.CommentDelete,
  * @type {string}
  */
 Blockly.Events.CommentDelete.prototype.type = Blockly.Events.COMMENT_DELETE;
+
+/**
+ * Construct a Blockly.Events.CommentDelete from a JSON arg object.
+ * @param {!Object} json JSON representation.
+ * @param {!Blockly.Workspace} workspace Target workspace for event.
+ * @return {!Blockly.Events.CommentDelete} The new event instance.
+ * @package
+ * @nocollapse
+ */
+Blockly.Events.CommentDelete.fromJson = function(json, workspace) {
+  var event = new Blockly.Events.CommentDelete(null);
+  event.fromJson(json);
+  event.workspaceId = workspace.id;
+  return event;
+};
 
 /**
  * Encode the event as JSON.
@@ -331,6 +377,21 @@ Blockly.Events.CommentMove.prototype.recordNew = function() {
 Blockly.Events.CommentMove.prototype.type = Blockly.Events.COMMENT_MOVE;
 
 /**
+ * Construct a Blockly.Events.CommentMove from a JSON arg object.
+ * @param {!Object} json JSON representation.
+ * @param {!Blockly.Workspace} workspace Target workspace for event.
+ * @return {!Blockly.Events.CommentMove} The new event instance.
+ * @package
+ * @nocollapse
+ */
+Blockly.Events.CommentMove.fromJson = function(json, workspace) {
+  var event = new Blockly.Events.CommentMove(null);
+  event.fromJson(json);
+  event.workspaceId = workspace.id;
+  return event;
+};
+
+/**
  * Override the location before the move.  Use this if you don't create the
  * event until the end of the move, but you know the original location.
  * @param {!Blockly.utils.Coordinate} xy The location before the move,
@@ -394,3 +455,12 @@ Blockly.Events.CommentMove.prototype.run = function(forward) {
   var current = comment.getXY();
   comment.moveBy(target.x - current.x, target.y - current.y);
 };
+
+Blockly.registry.register(Blockly.registry.Type.EVENT,
+    Blockly.Events.COMMENT_CREATE, Blockly.Events.CommentCreate);
+Blockly.registry.register(Blockly.registry.Type.EVENT,
+    Blockly.Events.COMMENT_CHANGE, Blockly.Events.CommentChange);
+Blockly.registry.register(Blockly.registry.Type.EVENT,
+    Blockly.Events.COMMENT_MOVE, Blockly.Events.CommentMove);
+Blockly.registry.register(Blockly.registry.Type.EVENT,
+    Blockly.Events.COMMENT_DELETE, Blockly.Events.CommentDelete);

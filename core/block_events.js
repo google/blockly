@@ -22,6 +22,7 @@ goog.provide('Blockly.Events.Move');  // Deprecated.
 
 goog.require('Blockly.Events');
 goog.require('Blockly.Events.Abstract');
+goog.require('Blockly.registry');
 goog.require('Blockly.utils.Coordinate');
 goog.require('Blockly.utils.object');
 goog.require('Blockly.utils.xml');
@@ -106,6 +107,21 @@ Blockly.Events.BlockChange = Blockly.Events.Change;
  * @type {string}
  */
 Blockly.Events.Change.prototype.type = Blockly.Events.CHANGE;
+
+/**
+ * Construct a Blockly.Events.Change from a JSON arg object.
+ * @param {!Object} json JSON representation.
+ * @param {!Blockly.Workspace} workspace Target workspace for event.
+ * @return {!Blockly.Events.Change} The new event instance.
+ * @package
+ * @nocollapse
+ */
+Blockly.Events.Change.fromJson = function(json, workspace) {
+  var event = new Blockly.Events.Change(null, '', '', '', '');
+  event.fromJson(json);
+  event.workspaceId = workspace.id;
+  return event;
+};
 
 /**
  * Encode the event as JSON.
@@ -231,6 +247,21 @@ Blockly.Events.BlockCreate = Blockly.Events.Create;
 Blockly.Events.Create.prototype.type = Blockly.Events.CREATE;
 
 /**
+ * Construct a Blockly.Events.Create from a JSON arg object.
+ * @param {!Object} json JSON representation.
+ * @param {!Blockly.Workspace} workspace Target workspace for event.
+ * @return {!Blockly.Events.Create} The new event instance.
+ * @package
+ * @nocollapse
+ */
+Blockly.Events.Create.fromJson = function(json, workspace) {
+  var event = new Blockly.Events.Create(null);
+  event.fromJson(json);
+  event.workspaceId = workspace.id;
+  return event;
+};
+
+/**
  * Encode the event as JSON.
  * @return {!Object} JSON representation.
  */
@@ -305,6 +336,21 @@ Blockly.utils.object.inherits(Blockly.Events.Delete, Blockly.Events.BlockBase);
  * @constructor
  */
 Blockly.Events.BlockDelete = Blockly.Events.Delete;
+
+/**
+ * Construct a Blockly.Events.Delete from a JSON arg object.
+ * @param {!Object} json JSON representation.
+ * @param {!Blockly.Workspace} workspace Target workspace for event.
+ * @return {!Blockly.Events.Delete} The new event instance.
+ * @package
+ * @nocollapse
+ */
+Blockly.Events.Delete.fromJson = function(json, workspace) {
+  var event = new Blockly.Events.Delete(null);
+  event.fromJson(json);
+  event.workspaceId = workspace.id;
+  return event;
+};
 
 /**
  * Type of this event.
@@ -385,6 +431,21 @@ Blockly.Events.BlockMove = Blockly.Events.Move;
  * @type {string}
  */
 Blockly.Events.Move.prototype.type = Blockly.Events.MOVE;
+
+/**
+ * Construct a Blockly.Events.Move from a JSON arg object.
+ * @param {!Object} json JSON representation.
+ * @param {!Blockly.Workspace} workspace Target workspace for event.
+ * @return {!Blockly.Events.Move} The new event instance.
+ * @package
+ * @nocollapse
+ */
+Blockly.Events.Move.fromJson = function(json, workspace) {
+  var event = new Blockly.Events.Move(null);
+  event.fromJson(json);
+  event.workspaceId = workspace.id;
+  return event;
+};
 
 /**
  * Encode the event as JSON.
@@ -509,3 +570,12 @@ Blockly.Events.Move.prototype.run = function(forward) {
     }
   }
 };
+
+Blockly.registry.register(Blockly.registry.Type.EVENT, Blockly.Events.CREATE,
+    Blockly.Events.Create);
+Blockly.registry.register(Blockly.registry.Type.EVENT, Blockly.Events.DELETE,
+    Blockly.Events.Delete);
+Blockly.registry.register(Blockly.registry.Type.EVENT, Blockly.Events.CHANGE,
+    Blockly.Events.Change);
+Blockly.registry.register(Blockly.registry.Type.EVENT, Blockly.Events.MOVE,
+    Blockly.Events.Move);

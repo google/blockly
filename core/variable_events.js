@@ -17,6 +17,7 @@ goog.provide('Blockly.Events.VarRename');
 
 goog.require('Blockly.Events');
 goog.require('Blockly.Events.Abstract');
+goog.require('Blockly.registry');
 goog.require('Blockly.utils.object');
 
 
@@ -82,6 +83,21 @@ Blockly.utils.object.inherits(Blockly.Events.VarCreate, Blockly.Events.VarBase);
 Blockly.Events.VarCreate.prototype.type = Blockly.Events.VAR_CREATE;
 
 /**
+ * Construct a Blockly.Events.VarCreate from a JSON arg object.
+ * @param {!Object} json JSON representation.
+ * @param {!Blockly.Workspace} workspace Target workspace for event.
+ * @return {!Blockly.Events.VarCreate} The new event instance.
+ * @package
+ * @nocollapse
+ */
+Blockly.Events.VarCreate.fromJson = function(json, workspace) {
+  var event = new Blockly.Events.VarCreate(null);
+  event.fromJson(json);
+  event.workspaceId = workspace.id;
+  return event;
+};
+
+/**
  * Encode the event as JSON.
  * @return {!Object} JSON representation.
  */
@@ -137,6 +153,21 @@ Blockly.utils.object.inherits(Blockly.Events.VarDelete, Blockly.Events.VarBase);
  * @type {string}
  */
 Blockly.Events.VarDelete.prototype.type = Blockly.Events.VAR_DELETE;
+
+/**
+ * Construct a Blockly.Events.VarDelete from a JSON arg object.
+ * @param {!Object} json JSON representation.
+ * @param {!Blockly.Workspace} workspace Target workspace for event.
+ * @return {!Blockly.Events.VarDelete} The new event instance.
+ * @package
+ * @nocollapse
+ */
+Blockly.Events.VarDelete.fromJson = function(json, workspace) {
+  var event = new Blockly.Events.VarDelete(null);
+  event.fromJson(json);
+  event.workspaceId = workspace.id;
+  return event;
+};
 
 /**
  * Encode the event as JSON.
@@ -197,6 +228,21 @@ Blockly.utils.object.inherits(Blockly.Events.VarRename, Blockly.Events.VarBase);
 Blockly.Events.VarRename.prototype.type = Blockly.Events.VAR_RENAME;
 
 /**
+ * Construct a Blockly.Events.VarRename from a JSON arg object.
+ * @param {!Object} json JSON representation.
+ * @param {!Blockly.Workspace} workspace Target workspace for event.
+ * @return {!Blockly.Events.VarRename} The new event instance.
+ * @package
+ * @nocollapse
+ */
+Blockly.Events.VarRename.fromJson = function(json, workspace) {
+  var event = new Blockly.Events.VarRename(null, '');
+  event.fromJson(json);
+  event.workspaceId = workspace.id;
+  return event;
+};
+
+/**
  * Encode the event as JSON.
  * @return {!Object} JSON representation.
  */
@@ -229,3 +275,10 @@ Blockly.Events.VarRename.prototype.run = function(forward) {
     workspace.renameVariableById(this.varId, this.oldName);
   }
 };
+
+Blockly.registry.register(Blockly.registry.Type.EVENT,
+    Blockly.Events.VAR_CREATE, Blockly.Events.VarCreate);
+Blockly.registry.register(Blockly.registry.Type.EVENT,
+    Blockly.Events.VAR_DELETE, Blockly.Events.VarDelete);
+Blockly.registry.register(Blockly.registry.Type.EVENT,
+    Blockly.Events.VAR_RENAME, Blockly.Events.VarRename);

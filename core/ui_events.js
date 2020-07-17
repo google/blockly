@@ -14,6 +14,7 @@ goog.provide('Blockly.Events.Ui');
 
 goog.require('Blockly.Events');
 goog.require('Blockly.Events.Abstract');
+goog.require('Blockly.registry');
 goog.require('Blockly.utils.object');
 
 
@@ -49,6 +50,21 @@ Blockly.utils.object.inherits(Blockly.Events.Ui, Blockly.Events.Abstract);
 Blockly.Events.Ui.prototype.type = Blockly.Events.UI;
 
 /**
+ * Construct a Blockly.Events.Ui from a JSON arg object.
+ * @param {!Object} json JSON representation.
+ * @param {!Blockly.Workspace} workspace Target workspace for event.
+ * @return {!Blockly.Events.Ui} The new event instance.
+ * @package
+ * @nocollapse
+ */
+Blockly.Events.Ui.fromJson = function(json, workspace) {
+  var event = new Blockly.Events.Ui(null, '', '', '');
+  event.fromJson(json);
+  event.workspaceId = workspace.id;
+  return event;
+};
+
+/**
  * Encode the event as JSON.
  * @return {!Object} JSON representation.
  */
@@ -74,3 +90,6 @@ Blockly.Events.Ui.prototype.fromJson = function(json) {
   this.newValue = json['newValue'];
   this.blockId = json['blockId'];
 };
+
+Blockly.registry.register(Blockly.registry.Type.EVENT, Blockly.Events.UI,
+    Blockly.Events.Ui);

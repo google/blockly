@@ -217,7 +217,9 @@ suite('Connection Database', function() {
       };
     });
     teardown(function() {
-      this.allowedStubs.forEach(stub => stub.restore());
+      for (var i = 0; i < this.allowedStubs.length; i++) {
+        this.allowedStubs[i].restore();
+      }
     });
     test('Empty Database', function() {
       var checkConnection = this.createConnection(0, 0, Blockly.NEXT_STATEMENT,

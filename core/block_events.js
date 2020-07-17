@@ -109,7 +109,7 @@ Blockly.Events.BlockChange = Blockly.Events.Change;
 Blockly.Events.Change.prototype.type = Blockly.Events.CHANGE;
 
 /**
- * Construct a Blockly.Events.Change from a JSON arg object.
+ * Construct a Blockly.Events.Change from a JSON event object.
  * @param {!Object} json JSON representation.
  * @param {!Blockly.Workspace} workspace Target workspace for event.
  * @return {!Blockly.Events.Change} The new event instance.
@@ -247,7 +247,7 @@ Blockly.Events.BlockCreate = Blockly.Events.Create;
 Blockly.Events.Create.prototype.type = Blockly.Events.CREATE;
 
 /**
- * Construct a Blockly.Events.Create from a JSON arg object.
+ * Construct a Blockly.Events.Create from a JSON event object.
  * @param {!Object} json JSON representation.
  * @param {!Blockly.Workspace} workspace Target workspace for event.
  * @return {!Blockly.Events.Create} The new event instance.
@@ -338,7 +338,7 @@ Blockly.utils.object.inherits(Blockly.Events.Delete, Blockly.Events.BlockBase);
 Blockly.Events.BlockDelete = Blockly.Events.Delete;
 
 /**
- * Construct a Blockly.Events.Delete from a JSON arg object.
+ * Construct a Blockly.Events.Delete from a JSON event object.
  * @param {!Object} json JSON representation.
  * @param {!Blockly.Workspace} workspace Target workspace for event.
  * @return {!Blockly.Events.Delete} The new event instance.
@@ -433,7 +433,7 @@ Blockly.Events.BlockMove = Blockly.Events.Move;
 Blockly.Events.Move.prototype.type = Blockly.Events.MOVE;
 
 /**
- * Construct a Blockly.Events.Move from a JSON arg object.
+ * Construct a Blockly.Events.Move from a JSON event object.
  * @param {!Object} json JSON representation.
  * @param {!Blockly.Workspace} workspace Target workspace for event.
  * @return {!Blockly.Events.Move} The new event instance.

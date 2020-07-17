@@ -111,7 +111,7 @@ Blockly.utils.object.inherits(Blockly.Events.CommentChange,
 Blockly.Events.CommentChange.prototype.type = Blockly.Events.COMMENT_CHANGE;
 
 /**
- * Construct a Blockly.Events.CommentChange from a JSON arg object.
+ * Construct a Blockly.Events.CommentChange from a JSON event object.
  * @param {!Object} json JSON representation.
  * @param {!Blockly.Workspace} workspace Target workspace for event.
  * @return {!Blockly.Events.CommentChange} The new event instance.
@@ -193,7 +193,7 @@ Blockly.utils.object.inherits(Blockly.Events.CommentCreate,
 Blockly.Events.CommentCreate.prototype.type = Blockly.Events.COMMENT_CREATE;
 
 /**
- * Construct a Blockly.Events.CommentCreate from a JSON arg object.
+ * Construct a Blockly.Events.CommentCreate from a JSON event object.
  * @param {!Object} json JSON representation.
  * @param {!Blockly.Workspace} workspace Target workspace for event.
  * @return {!Blockly.Events.CommentCreate} The new event instance.
@@ -282,7 +282,7 @@ Blockly.utils.object.inherits(Blockly.Events.CommentDelete,
 Blockly.Events.CommentDelete.prototype.type = Blockly.Events.COMMENT_DELETE;
 
 /**
- * Construct a Blockly.Events.CommentDelete from a JSON arg object.
+ * Construct a Blockly.Events.CommentDelete from a JSON event object.
  * @param {!Object} json JSON representation.
  * @param {!Blockly.Workspace} workspace Target workspace for event.
  * @return {!Blockly.Events.CommentDelete} The new event instance.
@@ -377,7 +377,7 @@ Blockly.Events.CommentMove.prototype.recordNew = function() {
 Blockly.Events.CommentMove.prototype.type = Blockly.Events.COMMENT_MOVE;
 
 /**
- * Construct a Blockly.Events.CommentMove from a JSON arg object.
+ * Construct a Blockly.Events.CommentMove from a JSON event object.
  * @param {!Object} json JSON representation.
  * @param {!Blockly.Workspace} workspace Target workspace for event.
  * @return {!Blockly.Events.CommentMove} The new event instance.

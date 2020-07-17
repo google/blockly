@@ -83,7 +83,7 @@ Blockly.utils.object.inherits(Blockly.Events.VarCreate, Blockly.Events.VarBase);
 Blockly.Events.VarCreate.prototype.type = Blockly.Events.VAR_CREATE;
 
 /**
- * Construct a Blockly.Events.VarCreate from a JSON arg object.
+ * Construct a Blockly.Events.VarCreate from a JSON event object.
  * @param {!Object} json JSON representation.
  * @param {!Blockly.Workspace} workspace Target workspace for event.
  * @return {!Blockly.Events.VarCreate} The new event instance.
@@ -155,7 +155,7 @@ Blockly.utils.object.inherits(Blockly.Events.VarDelete, Blockly.Events.VarBase);
 Blockly.Events.VarDelete.prototype.type = Blockly.Events.VAR_DELETE;
 
 /**
- * Construct a Blockly.Events.VarDelete from a JSON arg object.
+ * Construct a Blockly.Events.VarDelete from a JSON event object.
  * @param {!Object} json JSON representation.
  * @param {!Blockly.Workspace} workspace Target workspace for event.
  * @return {!Blockly.Events.VarDelete} The new event instance.
@@ -228,7 +228,7 @@ Blockly.utils.object.inherits(Blockly.Events.VarRename, Blockly.Events.VarBase);
 Blockly.Events.VarRename.prototype.type = Blockly.Events.VAR_RENAME;
 
 /**
- * Construct a Blockly.Events.VarRename from a JSON arg object.
+ * Construct a Blockly.Events.VarRename from a JSON event object.
  * @param {!Object} json JSON representation.
  * @param {!Blockly.Workspace} workspace Target workspace for event.
  * @return {!Blockly.Events.VarRename} The new event instance.

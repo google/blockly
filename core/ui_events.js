@@ -50,7 +50,7 @@ Blockly.utils.object.inherits(Blockly.Events.Ui, Blockly.Events.Abstract);
 Blockly.Events.Ui.prototype.type = Blockly.Events.UI;
 
 /**
- * Construct a Blockly.Events.Ui from a JSON arg object.
+ * Construct a Blockly.Events.Ui from a JSON event object.
  * @param {!Object} json JSON representation.
  * @param {!Blockly.Workspace} workspace Target workspace for event.
  * @return {!Blockly.Events.Ui} The new event instance.

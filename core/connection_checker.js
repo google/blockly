@@ -13,6 +13,8 @@
 
 goog.provide('Blockly.ConnectionChecker');
 
+goog.require('Blockly.registry');
+
 goog.requireType('Blockly.Connection');
 goog.requireType('Blockly.IConnectionChecker');
 
@@ -278,3 +280,6 @@ Blockly.ConnectionChecker.prototype.canConnectToPrevious_ = function(a, b) {
   // marker is in the middle of a stack, it won't work.
   return !targetBlock.getPreviousBlock();
 };
+
+Blockly.registry.register(Blockly.registry.Type.CONNECTION_CHECKER,
+    Blockly.registry.DEFAULT, Blockly.ConnectionChecker);

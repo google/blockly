@@ -44,11 +44,13 @@ Blockly.Workspace = function(opt_options) {
   /** @type {number} */
   this.toolboxPosition = this.options.toolboxPosition;
 
+  var connectionCheckerClass = Blockly.registry.getClassFromOptions(
+      Blockly.registry.Type.CONNECTION_CHECKER, this.options);
   /**
    * An object that encapsulates logic for safety, type, and dragging checks.
    * @type {!Blockly.IConnectionChecker}
    */
-  this.connectionChecker = new Blockly.ConnectionChecker();
+  this.connectionChecker = new connectionCheckerClass(this);
 
   /**
    * @type {!Array.<!Blockly.Block>}

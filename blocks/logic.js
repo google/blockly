@@ -543,7 +543,8 @@ Blockly.Constants.Logic.LOGIC_COMPARE_ONCHANGE_MIXIN = {
     var blockB = this.getInputTargetBlock('B');
     // Disconnect blocks that existed prior to this change if they don't match.
     if (blockA && blockB &&
-        !blockA.outputConnection.checkType(blockB.outputConnection)) {
+      !this.workspace.connectionChecker.doTypeChecks(
+          blockA.outputConnection, blockB.outputConnection)) {
       // Mismatch between two inputs.  Revert the block connections,
       // bumping away the newly connected block(s).
       Blockly.Events.setGroup(e.group);
@@ -610,7 +611,9 @@ Blockly.Constants.Logic.LOGIC_TERNARY_ONCHANGE_MIXIN = {
     if ((blockA || blockB) && parentConnection) {
       for (var i = 0; i < 2; i++) {
         var block = (i == 1) ? blockA : blockB;
-        if (block && !block.outputConnection.checkType(parentConnection)) {
+        if (block &&
+            !block.workspace.connectionChecker.doTypeChecks(
+                block.outputConnection, parentConnection)) {
           // Ensure that any disconnections are grouped with the causing event.
           Blockly.Events.setGroup(e.group);
           if (parentConnection === this.prevParentConnection_) {

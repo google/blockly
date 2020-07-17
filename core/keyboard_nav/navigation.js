@@ -18,6 +18,7 @@ goog.require('Blockly.ASTNode');
 goog.require('Blockly.utils.Coordinate');
 goog.require('Blockly.user.keyMap');
 
+
 /**
  * A function to call to give feedback to the user about logs, warnings, and
  * errors.  You can override this to customize feedback (e.g. warning sounds,
@@ -409,9 +410,9 @@ Blockly.navigation.moveAndConnect_ = function(movingConnection, destConnection) 
   }
   var movingBlock = movingConnection.getSourceBlock();
 
-  if (destConnection.canConnectWithReason(movingConnection) ==
-      Blockly.Connection.CAN_CONNECT) {
+  var checker = movingConnection.getConnectionChecker();
 
+  if (checker.canConnect(movingConnection, destConnection, false)) {
     Blockly.navigation.disconnectChild_(movingConnection, destConnection);
 
     if (!destConnection.isSuperior()) {
@@ -499,13 +500,11 @@ Blockly.navigation.connect_ = function(movingConnection, destConnection) {
   } else if (Blockly.navigation.moveAndConnect_(movingConnection, destConnection)){
     return true;
   } else {
-    try {
-      destConnection.checkConnection(movingConnection);
-    }
-    catch (e) {
-      // If nothing worked report the error from the original connections.
-      Blockly.navigation.warn_('Connection failed with error: ' + e);
-    }
+    var checker = movingConnection.getConnectionChecker();
+    var reason = checker.canConnectWithReason(
+        movingConnection, destConnection, false);
+    Blockly.navigation.warn_('Connection failed with error: ' +
+        checker.getErrorMessage(reason, movingConnection, destConnection));
     return false;
   }
 };

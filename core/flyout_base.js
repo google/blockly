@@ -765,11 +765,12 @@ Blockly.Flyout.prototype.createBlock = function(originalBlock) {
   this.targetWorkspace.setResizesEnabled(false);
   try {
     newBlock = this.placeNewBlock_(originalBlock);
-    // Close the flyout.
-    Blockly.hideChaff();
   } finally {
     Blockly.Events.enable();
   }
+
+  // Close the flyout.
+  Blockly.hideChaff();
 
   var newVariables = Blockly.Variables.getAddedVariables(this.targetWorkspace,
       variablesBeforeCreation);

@@ -147,10 +147,10 @@ function start() {
       document.getElementById('importExport').value = text;
     }
     // Restore event logging state.
-    var state = sessionStorage.getItem('logEvents');
-    logEvents(Boolean(Number(state)));
-    state = sessionStorage.getItem('logFlyoutEvents');
-    logFlyoutEvents(Boolean(Number(state)));
+    var logMainEventsState = sessionStorage.getItem('logEvents');
+    logEvents(Boolean(Number(logMainEventsState)));
+    var logToolboxFlyoutEventsState = sessionStorage.getItem('logFlyoutEvents');
+    logFlyoutEvents(Boolean(Number(logToolboxFlyoutEventsState)));
   } else {
     // MSIE 11 does not support sessionStorage on file:// URLs.
     logEvents(false);

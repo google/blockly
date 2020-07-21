@@ -223,11 +223,11 @@ Blockly.registry.getObject = function(type, name) {
 Blockly.registry.getClassFromOptions = function(type, options) {
   var typeName = type.toString();
   var typePrefix = typeName.split('_')[0];
-  var typeSuffix = typeName.split('_')[1];
   var plugin;
 
-  if (typePrefix && typeSuffix && typePrefix in options.plugins) {
-    plugin = options.plugins[typePrefix][typeSuffix] || Blockly.registry.DEFAULT;
+  if (typePrefix && typePrefix in options.plugins) {
+    typeName = typeName.split('_')[1];
+    plugin = options.plugins[typePrefix][typeName] || Blockly.registry.DEFAULT;
   } else {
     plugin = options.plugins[typeName] || Blockly.registry.DEFAULT;
   }

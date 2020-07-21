@@ -77,7 +77,7 @@ Blockly.registry.Type.CONNECTION_CHECKER =
     new Blockly.registry.Type('connectionChecker');
 
 /** @type {!Blockly.registry.Type<Blockly.IFlyout>} */
-Blockly.registry.Type.TOOLBOX_FLYOUT = new Blockly.registry.Type('toolboxFlyout');
+Blockly.registry.Type.TOOLBOX_FLYOUT = new Blockly.registry.Type('flyout_toolbox');
 
 /**
  * Registers a class based on a type and name.
@@ -222,7 +222,15 @@ Blockly.registry.getObject = function(type, name) {
  */
 Blockly.registry.getClassFromOptions = function(type, options) {
   var typeName = type.toString();
-  var plugin = options.plugins[typeName] || Blockly.registry.DEFAULT;
+  var typePrefix = typeName.split('_')[0];
+  var typeSuffix = typeName.split('_')[1];
+  var plugin;
+
+  if (typePrefix && typeSuffix && typePrefix in options.plugins) {
+    plugin = options.plugins[typePrefix][typeSuffix] || Blockly.registry.DEFAULT;
+  } else {
+    plugin = options.plugins[typeName] || Blockly.registry.DEFAULT;
+  }
 
   // If the user passed in a plugin class instead of a registered plugin name.
   if (typeof plugin == 'function') {

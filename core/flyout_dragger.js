@@ -15,6 +15,8 @@ goog.provide('Blockly.FlyoutDragger');
 goog.require('Blockly.utils.object');
 goog.require('Blockly.WorkspaceDragger');
 
+goog.requireType('Blockly.IFlyout');
+
 
 /**
  * Class for a flyout dragger.  It moves a flyout workspace around when it is

@@ -192,15 +192,13 @@ Blockly.Toolbox.prototype.init = function() {
       !workspace.horizontalLayout) {
     FlyoutClass = Blockly.registry.getClassFromOptions(
         Blockly.registry.Type.TOOLBOX_FLYOUT, this.workspace_.options);
-    if (!FlyoutClass) {
-      throw Error('Missing require for Blockly.VerticalFlyout');
-    }
   } else {
     FlyoutClass = Blockly.registry.getClass(Blockly.registry.Type.TOOLBOX_FLYOUT,
         Blockly.HorizontalFlyout.registryName);
-    if (!FlyoutClass) {
-      throw Error('Missing require for Blockly.HorizontalFlyout');
-    }
+  }
+  if (!FlyoutClass) {
+    throw Error('Blockly.VerticalFlyout, Blockly.HorizontalFlyout or your own' +
+        ' custom flyout must be required.');
   }
 
   this.flyout_ = new FlyoutClass(workspaceOptions);

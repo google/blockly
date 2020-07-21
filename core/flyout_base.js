@@ -483,7 +483,6 @@ Blockly.Flyout.prototype.show = function(flyoutDef) {
     }
   }
   this.setVisible(true);
-
   // Parse the Array or NodeList passed in into an Array of
   // Blockly.utils.toolbox.Toolbox.
   var parsedContent = Blockly.utils.toolbox.convertToolboxToJSON(flyoutDef);

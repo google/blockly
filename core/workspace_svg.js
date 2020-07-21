@@ -44,6 +44,7 @@ goog.require('Blockly.Xml');
 goog.requireType('Blockly.blockRendering.Renderer');
 goog.requireType('Blockly.IASTNodeLocationSvg');
 goog.requireType('Blockly.IBoundedElement');
+goog.requireType('Blockly.IFlyout');
 
 
 /**

@@ -13,6 +13,7 @@
 
 goog.provide('Blockly.IToolbox');
 
+goog.requireType('Blockly.IFlyout');
 goog.requireType('Blockly.IRegistrable');
 
 

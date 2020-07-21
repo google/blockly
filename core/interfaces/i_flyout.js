@@ -59,7 +59,7 @@ Blockly.IFlyout.prototype.autoClose;
  * @type {number}
  * @const
  */
-Blockly.IFlyout.prototype.CORNER_RADIUS = 8;
+Blockly.IFlyout.prototype.CORNER_RADIUS;
 
 /**
  * Creates the flyout's DOM.  Only needs to be called once.  The flyout can

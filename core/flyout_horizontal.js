@@ -33,7 +33,6 @@ goog.requireType('Blockly.utils.Metrics');
  */
 Blockly.HorizontalFlyout = function(workspaceOptions) {
   Blockly.HorizontalFlyout.superClass_.constructor.call(this, workspaceOptions);
-
   this.horizontalLayout = true;
 };
 Blockly.utils.object.inherits(Blockly.HorizontalFlyout, Blockly.Flyout);

@@ -18,6 +18,7 @@ goog.require('Blockly.utils.Rect');
 goog.require('Blockly.Xml');
 
 goog.requireType('Blockly.IDeleteArea');
+goog.requireType('Blockly.IFlyout');
 
 
 /**

@@ -43,7 +43,7 @@ Blockly.Trashcan = function(workspace) {
 
   /**
    * The trashcan flyout.
-   * @type {Blockly.Flyout}
+   * @type {Blockly.IFlyout}
    * @package
    */
   this.flyout = null;

@@ -190,7 +190,7 @@ Blockly.Gesture = function(e, creatorWorkspace) {
 
   /**
    * The flyout a gesture started in, if any.
-   * @type {Blockly.Flyout}
+   * @type {Blockly.IFlyout}
    * @private
    */
   this.flyout_ = null;
@@ -670,7 +670,7 @@ Blockly.Gesture.prototype.fireWorkspaceClick_ = function(ws) {
 /**
  * Handle a mousedown/touchstart event on a flyout.
  * @param {!Event} e A mouse down or touch start event.
- * @param {!Blockly.Flyout} flyout The flyout the event hit.
+ * @param {!Blockly.IFlyout} flyout The flyout the event hit.
  * @package
  */
 Blockly.Gesture.prototype.handleFlyoutStart = function(e, flyout) {
@@ -867,7 +867,7 @@ Blockly.Gesture.prototype.setStartWorkspace_ = function(ws) {
 
 /**
  * Record the flyout that a gesture started on.
- * @param {Blockly.Flyout} flyout The flyout the gesture started on.
+ * @param {Blockly.IFlyout} flyout The flyout the gesture started on.
  * @private
  */
 Blockly.Gesture.prototype.setStartFlyout_ = function(flyout) {

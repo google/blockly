@@ -14,6 +14,7 @@ goog.provide('Blockly.VerticalFlyout');
 
 goog.require('Blockly.Block');
 goog.require('Blockly.Flyout');
+goog.require('Blockly.registry');
 goog.require('Blockly.Scrollbar');
 goog.require('Blockly.utils');
 goog.require('Blockly.utils.object');
@@ -374,3 +375,6 @@ Blockly.VerticalFlyout.prototype.reflowInternal_ = function() {
     this.position();
   }
 };
+
+Blockly.registry.register(Blockly.registry.Type.TOOLBOX_FLYOUT,
+    Blockly.registry.DEFAULT, Blockly.VerticalFlyout);

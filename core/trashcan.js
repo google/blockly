@@ -373,6 +373,34 @@ Blockly.Trashcan.prototype.contentsIsOpen = function() {
 };
 
 /**
+ * Opens the trashcan flyout.
+ */
+Blockly.Trashcan.prototype.openFlyout = function() {
+  if (this.contentsIsOpen()) {
+    return;
+  }
+
+  var xml = [];
+  for (var i = 0, text; (text = this.contents_[i]); i++) {
+    xml[i] = Blockly.Xml.textToDom(text);
+  }
+  this.flyout.show(xml);
+  this.fireUiEvent_(true);
+};
+
+/**
+ * Closes the trashcan flyout.
+ */
+Blockly.Trashcan.prototype.closeFlyout = function() {
+  if (!this.contentsIsOpen()) {
+    return;
+  }
+
+  this.flyout.hide();
+  this.fireUiEvent_(false);
+};
+
+/**
  * Empties the trashcan's contents. If the contents-flyout is currently open
  * it will be closed.
  */
@@ -382,9 +410,7 @@ Blockly.Trashcan.prototype.emptyContents = function() {
   }
   this.contents_.length = 0;
   this.setMinOpenness_(0);
-  if (this.contentsIsOpen()) {
-    this.flyout.hide();
-  }
+  this.closeFlyout();
 };
 
 /**
@@ -523,22 +549,16 @@ Blockly.Trashcan.prototype.click = function() {
   if (!this.hasContents_()) {
     return;
   }
-
-  var xml = [];
-  for (var i = 0, text; (text = this.contents_[i]); i++) {
-    xml[i] = Blockly.Xml.textToDom(text);
-  }
-  this.flyout.show(xml);
-
-  this.fireUiEvent_();
+  this.openFlyout();
 };
 
 /**
- * Fires a ui event for trashcan flyout opening.
+ * Fires a ui event for trashcan flyout open or close.
+ * @param {boolean} trashcanOpen Whether the flyout is opening.
  * @private
  */
-Blockly.Trashcan.prototype.fireUiEvent_ = function() {
-  var uiEvent = new Blockly.Events.Ui(null, 'trashcanOpen', null, true);
+Blockly.Trashcan.prototype.fireUiEvent_ = function(trashcanOpen) {
+  var uiEvent = new Blockly.Events.Ui(null, 'trashcanOpen', null, trashcanOpen);
   uiEvent.workspaceId = this.workspace_.id;
   Blockly.Events.fire(uiEvent);
 };

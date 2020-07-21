@@ -323,7 +323,7 @@ Blockly.hideChaff = function(opt_allowToolbox) {
     // trashcan UI (no trashcan to click to close it).
     if (workspace.trashcan &&
       workspace.trashcan.flyout) {
-      workspace.trashcan.closeContents();
+      workspace.trashcan.closeFlyout();
     }
     var toolbox = workspace.getToolbox();
     if (toolbox &&

@@ -375,7 +375,7 @@ Blockly.Trashcan.prototype.contentsIsOpen = function() {
 /**
  * Opens the trashcan flyout.
  */
-Blockly.Trashcan.prototype.openContents = function() {
+Blockly.Trashcan.prototype.openFlyout = function() {
   if (this.contentsIsOpen()) {
     return;
   }
@@ -391,7 +391,7 @@ Blockly.Trashcan.prototype.openContents = function() {
 /**
  * Closes the trashcan flyout.
  */
-Blockly.Trashcan.prototype.closeContents = function() {
+Blockly.Trashcan.prototype.closeFlyout = function() {
   if (!this.contentsIsOpen()) {
     return;
   }
@@ -410,7 +410,7 @@ Blockly.Trashcan.prototype.emptyContents = function() {
   }
   this.contents_.length = 0;
   this.setMinOpenness_(0);
-  this.closeContents();
+  this.closeFlyout();
 };
 
 /**
@@ -549,7 +549,7 @@ Blockly.Trashcan.prototype.click = function() {
   if (!this.hasContents_()) {
     return;
   }
-  this.openContents();
+  this.openFlyout();
 };
 
 /**

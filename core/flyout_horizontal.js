@@ -42,6 +42,7 @@ Blockly.utils.object.inherits(Blockly.HorizontalFlyout, Blockly.Flyout);
  * @type {string}
  */
 Blockly.HorizontalFlyout.registryName = 'horizontalFlyout';
+
 /**
  * Return an object with all the metrics required to size scrollbars for the
  * flyout.  The following properties are computed:
@@ -378,5 +379,5 @@ Blockly.HorizontalFlyout.prototype.reflowInternal_ = function() {
   }
 };
 
-Blockly.registry.register(Blockly.registry.Type.TOOLBOX_FLYOUT,
+Blockly.registry.register(Blockly.registry.Type.FLYOUTS_TOOLBOX,
     Blockly.HorizontalFlyout.registryName, Blockly.HorizontalFlyout);

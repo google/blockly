@@ -185,18 +185,17 @@ Blockly.Toolbox.prototype.init = function() {
       }));
   workspaceOptions.toolboxPosition = workspace.options.toolboxPosition;
 
-  var FlyoutClass = null;
 
-  // If they have defined a plugin or it is the vertical flyout.
-  if (this.workspace_.options.plugins[
-      Blockly.registry.Type.TOOLBOX_FLYOUT.toString()] ||
-      !workspace.horizontalLayout) {
-    FlyoutClass = Blockly.registry.getClassFromOptions(
-        Blockly.registry.Type.TOOLBOX_FLYOUT, this.workspace_.options);
-  } else {
-    FlyoutClass = Blockly.registry.getClass(Blockly.registry.Type.TOOLBOX_FLYOUT,
+  var FlyoutClass = Blockly.registry.getClassFromOptions(
+      Blockly.registry.Type.FLYOUTS_TOOLBOX, this.workspace_.options);
+  var defaultClass = Blockly.registry.getClass(
+      Blockly.registry.Type.FLYOUTS_TOOLBOX, Blockly.registry.DEFAULT)
+
+  if (FlyoutClass == defaultClass && workspace.horizontalLayout) {
+    FlyoutClass = Blockly.registry.getClass(Blockly.registry.Type.FLYOUTS_TOOLBOX,
         Blockly.HorizontalFlyout.registryName);
   }
+
   if (!FlyoutClass) {
     throw Error('Blockly.VerticalFlyout, Blockly.HorizontalFlyout or your own' +
         ' custom flyout must be required.');

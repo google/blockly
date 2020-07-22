@@ -81,7 +81,7 @@ Blockly.registry.Type.FLYOUTS_TOOLBOX = new Blockly.registry.Type('flyoutsToolbo
 
 /**
  * The list of all registry types that are flyouts.
- * @type {!Blockly.registry.Type<Blockly.IFlyout>[]}
+ * @type {!Array<Blockly.registry.Type<Blockly.IFlyout>>}
  * @private
  */
 Blockly.registry.flyoutTypes_ = [Blockly.registry.Type.FLYOUTS_TOOLBOX];

@@ -382,5 +382,5 @@ Blockly.VerticalFlyout.prototype.reflowInternal_ = function() {
   }
 };
 
-Blockly.registry.register(Blockly.registry.Type.FLYOUTS_TOOLBOX,
+Blockly.registry.register(Blockly.registry.Type.FLYOUTS_VERTICAL_TOOLBOX,
     Blockly.registry.DEFAULT, Blockly.VerticalFlyout);

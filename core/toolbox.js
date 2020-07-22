@@ -185,15 +185,13 @@ Blockly.Toolbox.prototype.init = function() {
       }));
   workspaceOptions.toolboxPosition = workspace.options.toolboxPosition;
 
-
-  var FlyoutClass = Blockly.registry.getClassFromOptions(
-      Blockly.registry.Type.FLYOUTS_TOOLBOX, this.workspace_.options);
-  var defaultClass = Blockly.registry.getClass(
-      Blockly.registry.Type.FLYOUTS_TOOLBOX, Blockly.registry.DEFAULT)
-
-  if (FlyoutClass == defaultClass && workspace.horizontalLayout) {
-    FlyoutClass = Blockly.registry.getClass(Blockly.registry.Type.FLYOUTS_TOOLBOX,
-        Blockly.HorizontalFlyout.registryName);
+  var FlyoutClass = null;
+  if (workspace.horizontalLayout) {
+    FlyoutClass = Blockly.registry.getClassFromOptions(
+        Blockly.registry.Type.FLYOUTS_HORIZONTAL_TOOLBOX, workspace.options);
+  } else {
+    FlyoutClass = Blockly.registry.getClassFromOptions(
+        Blockly.registry.Type.FLYOUTS_VERTICAL_TOOLBOX, workspace.options);
   }
 
   if (!FlyoutClass) {

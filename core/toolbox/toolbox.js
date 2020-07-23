@@ -240,20 +240,18 @@ Blockly.Toolbox.prototype.createFlyout_ = function() {
       }));
   workspaceOptions.toolboxPosition = workspace.options.toolboxPosition;
 
+  var FlyoutClass = null;
   if (workspace.horizontalLayout) {
-    if (!Blockly.HorizontalFlyout) {
-      throw Error('Missing require for Blockly.HorizontalFlyout');
-    }
-    flyout = new Blockly.HorizontalFlyout(workspaceOptions);
+    FlyoutClass = Blockly.registry.getClassFromOptions(
+        Blockly.registry.Type.FLYOUTS_HORIZONTAL_TOOLBOX, workspace.options);
   } else {
-    if (!Blockly.VerticalFlyout) {
-      throw Error('Missing require for Blockly.VerticalFlyout');
-    }
-    flyout = new Blockly.VerticalFlyout(workspaceOptions);
+    FlyoutClass = Blockly.registry.getClassFromOptions(
+        Blockly.registry.Type.FLYOUTS_VERTICAL_TOOLBOX, workspace.options);
   }
-  if (!flyout) {
-    throw Error('One of Blockly.VerticalFlyout or Blockly.Horizontal must be' +
-        'required.');
+
+  if (!FlyoutClass) {
+    throw Error('Blockly.VerticalFlyout, Blockly.HorizontalFlyout or your own' +
+        ' custom flyout must be required.');
   }
   return flyout;
 };

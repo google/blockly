@@ -18,6 +18,7 @@ goog.require('Blockly.utils.Rect');
 goog.require('Blockly.Xml');
 
 goog.requireType('Blockly.IDeleteArea');
+goog.requireType('Blockly.IFlyout');
 
 
 /**
@@ -43,7 +44,7 @@ Blockly.Trashcan = function(workspace) {
 
   /**
    * The trashcan flyout.
-   * @type {Blockly.Flyout}
+   * @type {Blockly.IFlyout}
    * @package
    */
   this.flyout = null;
@@ -258,21 +259,25 @@ Blockly.Trashcan.prototype.createDom = function() {
         clip-path="url(#blocklyTrashLidClipPath837493)"></image>
   </g>
   */
-  this.svgGroup_ = Blockly.utils.dom.createSvgElement('g',
+  this.svgGroup_ = Blockly.utils.dom.createSvgElement(
+      Blockly.utils.dom.SvgElementType.G,
       {'class': 'blocklyTrash'}, null);
   var clip;
   var rnd = String(Math.random()).substring(2);
-  clip = Blockly.utils.dom.createSvgElement('clipPath',
+  clip = Blockly.utils.dom.createSvgElement(
+      Blockly.utils.dom.SvgElementType.CLIPPATH,
       {'id': 'blocklyTrashBodyClipPath' + rnd},
       this.svgGroup_);
-  Blockly.utils.dom.createSvgElement('rect',
+  Blockly.utils.dom.createSvgElement(
+      Blockly.utils.dom.SvgElementType.RECT,
       {
         'width': this.WIDTH_,
         'height': this.BODY_HEIGHT_,
         'y': this.LID_HEIGHT_
       },
       clip);
-  var body = Blockly.utils.dom.createSvgElement('image',
+  var body = Blockly.utils.dom.createSvgElement(
+      Blockly.utils.dom.SvgElementType.IMAGE,
       {
         'width': Blockly.SPRITE.width,
         'x': -this.SPRITE_LEFT_,
@@ -284,12 +289,15 @@ Blockly.Trashcan.prototype.createDom = function() {
   body.setAttributeNS(Blockly.utils.dom.XLINK_NS, 'xlink:href',
       this.workspace_.options.pathToMedia + Blockly.SPRITE.url);
 
-  clip = Blockly.utils.dom.createSvgElement('clipPath',
+  clip = Blockly.utils.dom.createSvgElement(
+      Blockly.utils.dom.SvgElementType.CLIPPATH,
       {'id': 'blocklyTrashLidClipPath' + rnd},
       this.svgGroup_);
-  Blockly.utils.dom.createSvgElement('rect',
+  Blockly.utils.dom.createSvgElement(
+      Blockly.utils.dom.SvgElementType.RECT,
       {'width': this.WIDTH_, 'height': this.LID_HEIGHT_}, clip);
-  this.svgLid_ = Blockly.utils.dom.createSvgElement('image',
+  this.svgLid_ = Blockly.utils.dom.createSvgElement(
+      Blockly.utils.dom.SvgElementType.IMAGE,
       {
         'width': Blockly.SPRITE.width,
         'x': -this.SPRITE_LEFT_,
@@ -301,6 +309,8 @@ Blockly.Trashcan.prototype.createDom = function() {
   this.svgLid_.setAttributeNS(Blockly.utils.dom.XLINK_NS, 'xlink:href',
       this.workspace_.options.pathToMedia + Blockly.SPRITE.url);
 
+  Blockly.bindEventWithChecks_(
+      this.svgGroup_, 'mousedown', this, this.blockMouseDownWhenFull_);
   Blockly.bindEventWithChecks_(this.svgGroup_, 'mouseup', this, this.click);
   // bindEventWithChecks_ quashes events too aggressively. See:
   // https://groups.google.com/forum/#!topic/blockly/QF4yB9Wx00s
@@ -320,7 +330,8 @@ Blockly.Trashcan.prototype.createDom = function() {
  */
 Blockly.Trashcan.prototype.init = function(verticalSpacing) {
   if (this.workspace_.options.maxTrashcanContents > 0) {
-    Blockly.utils.dom.insertAfter(this.flyout.createDom('svg'),
+    Blockly.utils.dom.insertAfter(
+        this.flyout.createDom(Blockly.utils.dom.SvgElementType.SVG),
         this.workspace_.getParentSvg());
     this.flyout.init(this.workspace_);
   }
@@ -346,6 +357,15 @@ Blockly.Trashcan.prototype.dispose = function() {
 };
 
 /**
+ * Whether the trashcan has contents.
+ * @return {boolean} True if the trashcan has contents.
+ * @private
+ */
+Blockly.Trashcan.prototype.hasContents_ = function() {
+  return !!this.contents_.length;
+};
+
+/**
  * Returns true if the trashcan contents-flyout is currently open.
  * @return {boolean} True if the trashcan contents-flyout is currently open.
  */
@@ -354,18 +374,44 @@ Blockly.Trashcan.prototype.contentsIsOpen = function() {
 };
 
 /**
+ * Opens the trashcan flyout.
+ */
+Blockly.Trashcan.prototype.openFlyout = function() {
+  if (this.contentsIsOpen()) {
+    return;
+  }
+
+  var xml = [];
+  for (var i = 0, text; (text = this.contents_[i]); i++) {
+    xml[i] = Blockly.Xml.textToDom(text);
+  }
+  this.flyout.show(xml);
+  this.fireUiEvent_(true);
+};
+
+/**
+ * Closes the trashcan flyout.
+ */
+Blockly.Trashcan.prototype.closeFlyout = function() {
+  if (!this.contentsIsOpen()) {
+    return;
+  }
+
+  this.flyout.hide();
+  this.fireUiEvent_(false);
+};
+
+/**
  * Empties the trashcan's contents. If the contents-flyout is currently open
  * it will be closed.
  */
 Blockly.Trashcan.prototype.emptyContents = function() {
-  if (!this.contents_.length) {
+  if (!this.hasContents_()) {
     return;
   }
   this.contents_.length = 0;
   this.setMinOpenness_(0);
-  if (this.contentsIsOpen()) {
-    this.flyout.hide();
-  }
+  this.closeFlyout();
 };
 
 /**
@@ -501,23 +547,41 @@ Blockly.Trashcan.prototype.close = function() {
  * Inspect the contents of the trash.
  */
 Blockly.Trashcan.prototype.click = function() {
-  if (!this.contents_.length) {
+  if (!this.hasContents_()) {
     return;
   }
-
-  var xml = [];
-  for (var i = 0, text; (text = this.contents_[i]); i++) {
-    xml[i] = Blockly.Xml.textToDom(text);
-  }
-  this.flyout.show(xml);
+  this.openFlyout();
 };
+
+/**
+ * Fires a ui event for trashcan flyout open or close.
+ * @param {boolean} trashcanOpen Whether the flyout is opening.
+ * @private
+ */
+Blockly.Trashcan.prototype.fireUiEvent_ = function(trashcanOpen) {
+  var uiEvent = new Blockly.Events.Ui(null, 'trashcanOpen', null, trashcanOpen);
+  uiEvent.workspaceId = this.workspace_.id;
+  Blockly.Events.fire(uiEvent);
+};
+
+/**
+ * Prevents a workspace scroll and click event if the trashcan has blocks.
+ * @param {!Event} e A mouse down event.
+ * @private
+ */
+Blockly.Trashcan.prototype.blockMouseDownWhenFull_ = function(e) {
+  if (this.hasContents_()) {
+    e.stopPropagation();  // Don't start a workspace scroll.
+  }
+};
+
 
 /**
  * Indicate that the trashcan can be clicked (by opening it) if it has blocks.
  * @private
  */
 Blockly.Trashcan.prototype.mouseOver_ = function() {
-  if (this.contents_.length) {
+  if (this.hasContents_()) {
     this.setOpen(true);
   }
 };

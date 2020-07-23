@@ -226,7 +226,7 @@ def test_count_by():
   x_start = float(1 + 0)
   x_end = float(8 + 0)
   x_inc = float(1 - 2)
-  for x in (x_start <= x_end) and upRange(x_start, x_end, 1 - 2) or downRange(x_start, x_end, 1 - 2):
+  for x in (x_start <= x_end) and upRange(x_start, x_end, x_inc) or downRange(x_start, x_end, x_inc):
     loglist.append(x)
   assertEquals(loglist, [1, 2, 3, 4, 5, 6, 7, 8], 'count up non-trivial ints')
   loglist = []
@@ -239,7 +239,7 @@ def test_count_by():
   x_start3 = float(5 + 0.5)
   x_end3 = float(1 + 0)
   x_inc2 = float(1 + 0)
-  for x in (x_start3 <= x_end3) and upRange(x_start3, x_end3, 1 + 0) or downRange(x_start3, x_end3, 1 + 0):
+  for x in (x_start3 <= x_end3) and upRange(x_start3, x_end3, x_inc2) or downRange(x_start3, x_end3, x_inc2):
     loglist.append(x)
   assertEquals(loglist, [5.5, 4.5, 3.5, 2.5, 1.5], 'count with floats')
 

@@ -80,7 +80,8 @@ Blockly.Mutator.prototype.getWorkspace = function() {
  */
 Blockly.Mutator.prototype.drawIcon_ = function(group) {
   // Square with rounded corners.
-  Blockly.utils.dom.createSvgElement('rect',
+  Blockly.utils.dom.createSvgElement(
+      Blockly.utils.dom.SvgElementType.RECT,
       {
         'class': 'blocklyIconShape',
         'rx': '4',
@@ -90,7 +91,8 @@ Blockly.Mutator.prototype.drawIcon_ = function(group) {
       },
       group);
   // Gear teeth.
-  Blockly.utils.dom.createSvgElement('path',
+  Blockly.utils.dom.createSvgElement(
+      Blockly.utils.dom.SvgElementType.PATH,
       {
         'class': 'blocklyIconSymbol',
         'd': 'm4.203,7.296 0,1.368 -0.92,0.677 -0.11,0.41 0.9,1.559 0.41,' +
@@ -104,7 +106,7 @@ Blockly.Mutator.prototype.drawIcon_ = function(group) {
       group);
   // Axle hole.
   Blockly.utils.dom.createSvgElement(
-      'circle',
+      Blockly.utils.dom.SvgElementType.CIRCLE,
       {
         'class': 'blocklyIconShape',
         'r': '2.7',
@@ -138,7 +140,8 @@ Blockly.Mutator.prototype.createEditor_ = function() {
     [Workspace]
   </svg>
   */
-  this.svgDialog_ = Blockly.utils.dom.createSvgElement('svg',
+  this.svgDialog_ = Blockly.utils.dom.createSvgElement(
+      Blockly.utils.dom.SvgElementType.SVG,
       {'x': Blockly.Bubble.BORDER_WIDTH, 'y': Blockly.Bubble.BORDER_WIDTH},
       null);
   // Convert the list of names into a list of XML objects for the flyout.
@@ -181,7 +184,8 @@ Blockly.Mutator.prototype.createEditor_ = function() {
   // a top level svg. Instead of handling scale themselves, mutators
   // inherit scale from the parent workspace.
   // To fix this, scale needs to be applied at a different level in the dom.
-  var flyoutSvg = hasFlyout ? this.workspace_.addFlyout('g') : null;
+  var flyoutSvg = hasFlyout ?
+      this.workspace_.addFlyout(Blockly.utils.dom.SvgElementType.G) : null;
   var background = this.workspace_.createDom('blocklyMutatorBackground');
 
   if (flyoutSvg) {

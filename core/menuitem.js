@@ -20,15 +20,15 @@ goog.require('Blockly.utils.IdGenerator');
 /**
  * Class representing an item in a menu.
  *
- * @param {string} content Text caption to display as the content of
- *     the item.
+ * @param {string|!HTMLElement} content Text caption to display as the content
+ *     of the item, or a HTML element to display.
  * @param {string=} opt_value Data/model associated with the menu item.
  * @constructor
  */
 Blockly.MenuItem = function(content, opt_value) {
   /**
-   * Human-readable text of this menu item.
-   * @type {string}
+   * Human-readable text of this menu item, or the HTML element to display.
+   * @type {string|!HTMLElement}
    * @private
    */
   this.content_ = content;
@@ -125,7 +125,11 @@ Blockly.MenuItem.prototype.createDom = function() {
     content.appendChild(checkbox);
   }
 
-  content.appendChild(document.createTextNode(this.content_));
+  var contentDom = /** @type {!HTMLElement} */ (this.content_);
+  if (typeof this.content_ == 'string') {
+    contentDom = document.createTextNode(this.content_);
+  }
+  content.appendChild(contentDom);
   element.appendChild(content);
 
   // Initialize ARIA role and state.

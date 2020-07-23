@@ -28,6 +28,8 @@ goog.require('Blockly.utils');
 goog.require('Blockly.utils.Coordinate');
 goog.require('Blockly.WorkspaceDragger');
 
+goog.requireType('Blockly.IFlyout');
+
 
 /**
  * Note: In this file "start" refers to touchstart, mousedown, and pointerstart
@@ -190,7 +192,7 @@ Blockly.Gesture = function(e, creatorWorkspace) {
 
   /**
    * The flyout a gesture started in, if any.
-   * @type {Blockly.Flyout}
+   * @type {Blockly.IFlyout}
    * @private
    */
   this.flyout_ = null;
@@ -662,7 +664,7 @@ Blockly.Gesture.prototype.handleWsStart = function(e, ws) {
  * @private
  */
 Blockly.Gesture.prototype.fireWorkspaceClick_ = function(ws) {
-  var clickEvent = new Blockly.Events.Ui(null, 'workspaceClick', null, null);
+  var clickEvent = new Blockly.Events.Ui(null, 'click', null, 'workspace');
   clickEvent.workspaceId = ws.id;
   Blockly.Events.fire(clickEvent);
 };
@@ -670,7 +672,7 @@ Blockly.Gesture.prototype.fireWorkspaceClick_ = function(ws) {
 /**
  * Handle a mousedown/touchstart event on a flyout.
  * @param {!Event} e A mouse down or touch start event.
- * @param {!Blockly.Flyout} flyout The flyout the event hit.
+ * @param {!Blockly.IFlyout} flyout The flyout the event hit.
  * @package
  */
 Blockly.Gesture.prototype.handleFlyoutStart = function(e, flyout) {
@@ -752,15 +754,15 @@ Blockly.Gesture.prototype.doBlockClick_ = function() {
   } else {
     // Clicks events are on the start block, even if it was a shadow.
     Blockly.Events.fire(
-        new Blockly.Events.Ui(this.startBlock_, 'click', undefined, undefined));
+        new Blockly.Events.Ui(this.startBlock_, 'click', undefined, 'block'));
   }
   this.bringBlockToFront_();
   Blockly.Events.setGroup(false);
 };
 
 /**
- * Execute a workspace click. Shift clicking puts the workspace in accessibility
- * mode.
+ * Execute a workspace click. When in accessibility mode shift clicking will
+ * move the cursor.
  * @param {!Event} e A mouse up or touch end event.
  * @private
  */
@@ -774,7 +776,7 @@ Blockly.Gesture.prototype.doWorkspaceClick_ = function(e) {
   } else if (Blockly.selected) {
     Blockly.selected.unselect();
   }
-  this.fireWorkspaceClick_(ws);
+  this.fireWorkspaceClick_(this.startWorkspace_ || ws);
 };
 
 /* End functions defining what actions to take to execute clicks on each type
@@ -867,7 +869,7 @@ Blockly.Gesture.prototype.setStartWorkspace_ = function(ws) {
 
 /**
  * Record the flyout that a gesture started on.
- * @param {Blockly.Flyout} flyout The flyout the gesture started on.
+ * @param {Blockly.IFlyout} flyout The flyout the gesture started on.
  * @private
  */
 Blockly.Gesture.prototype.setStartFlyout_ = function(flyout) {

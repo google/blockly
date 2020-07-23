@@ -6,7 +6,7 @@
 
 suite('Connection Database', function() {
   setup(function() {
-    this.database = new Blockly.ConnectionDB();
+    this.database = new Blockly.ConnectionDB(new Blockly.ConnectionChecker());
 
     this.assertOrder = function() {
       var length = this.database.connections_.length;
@@ -190,28 +190,35 @@ suite('Connection Database', function() {
       this.assertOrder();
     });
   });
-  // Does not cover logic for isConnectionAllowed
+
   suite('Search For Closest', function() {
     setup(function() {
-      this.allowedStub = null;
+      this.allowedStubs = [];
+      // Ignore type checks.
+      this.allowedStubs.push(sinon.stub(this.database.connectionChecker_, 'doTypeChecks')
+          .callsFake(function(_a, _b) {
+            return true;
+          }));
+      // Ignore safety checks.
+      this.allowedStubs.push(sinon.stub(this.database.connectionChecker_, 'doSafetyChecks')
+          .callsFake(function(_a, _b) {
+            return Blockly.Connection.CAN_CONNECT;
+          }));
+      // Skip everything but the distance checks.
+      this.allowedStubs.push(sinon.stub(this.database.connectionChecker_, 'doDragChecks')
+          .callsFake(function(a, b, distance) {
+            return a.distanceFrom(b) <= distance;
+          }));
 
       this.createCheckConnection = function(x, y) {
         var checkConnection = this.createConnection(x, y, Blockly.NEXT_STATEMENT,
             new Blockly.ConnectionDB());
-        this.allowedStub = sinon.stub(checkConnection, 'isConnectionAllowed')
-            .callsFake(function(candidate, maxRadius) {
-              if (this.distanceFrom(candidate) > maxRadius) {
-                return false;
-              }
-              // Ignore non-distance parameters.
-              return true;
-            });
         return checkConnection;
       };
     });
     teardown(function() {
-      if (this.allowedStub) {
-        this.allowedStub.restore();
+      for (var i = 0; i < this.allowedStubs.length; i++) {
+        this.allowedStubs[i].restore();
       }
     });
     test('Empty Database', function() {

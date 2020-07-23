@@ -109,21 +109,20 @@ var JSCOMP_ERROR = [
  *     as errors.
  */
 function compile(compilerOptions, opt_verbose, opt_warnings_as_error) {
-  compilerOptions = compilerOptions || {};
-  compilerOptions.compilation_level = 'SIMPLE_OPTIMIZATIONS';
-  compilerOptions.warning_level = opt_verbose ? 'VERBOSE' : 'DEFAULT';
-  compilerOptions.language_in =
-    compilerOptions.language_in || 'ECMASCRIPT5_STRICT';
-  compilerOptions.language_out = 'ECMASCRIPT5_STRICT';
-  compilerOptions.rewrite_polyfills = false;
-  compilerOptions.hide_warnings_for = 'node_modules';
+  const options = {};
+  options.compilation_level = 'SIMPLE_OPTIMIZATIONS';
+  options.warning_level = opt_verbose ? 'VERBOSE' : 'DEFAULT';
+  options.language_in = 'ECMASCRIPT5_STRICT';
+  options.language_out = 'ECMASCRIPT5_STRICT';
+  options.rewrite_polyfills = false;
+  options.hide_warnings_for = 'node_modules';
   if (opt_warnings_as_error) {
-    compilerOptions.jscomp_error = JSCOMP_ERROR;
+    options.jscomp_error = JSCOMP_ERROR;
   }
 
   const platform = ['native', 'java', 'javascript'];
 
-  return closureCompiler(compilerOptions, { platform });
+  return closureCompiler({...options, ...compilerOptions}, { platform });
 }
 
 /**
@@ -408,7 +407,7 @@ goog.require('Blockly.requires')
  */
 function buildLangfiles(done) {
   // Run js_to_json.py
-  const jsToJsonCmd = `python ./i18n/js_to_json.py \
+  const jsToJsonCmd = `python ./scripts/i18n/js_to_json.py \
 --input_file ${path.join('msg', 'messages.js')} \
 --output_dir ${path.join('msg', 'json')} \
 --quiet`;
@@ -419,7 +418,7 @@ function buildLangfiles(done) {
   json_files = json_files.filter(file => file.endsWith('json') &&
     !(new RegExp(/(keys|synonyms|qqq|constants)\.json$/).test(file)));
   json_files = json_files.map(file => path.join('msg', 'json', file));
-  const createMessagesCmd = `python ./i18n/create_messages.py \
+  const createMessagesCmd = `python ./scripts/i18n/create_messages.py \
   --source_lang_file ${path.join('msg', 'json', 'en.json')} \
   --source_synonym_file ${path.join('msg', 'json', 'synonyms.json')} \
   --source_constants_file ${path.join('msg', 'json', 'constants.json')} \
@@ -430,6 +429,53 @@ function buildLangfiles(done) {
 
   done();
 };
+
+/**
+ * This task builds Blockly core, blocks and generators together and uses
+ * closure compiler's ADVANCED_COMPILATION mode.
+ */
+function buildAdvancedCompilationTest() {
+  const srcs = [
+    'tests/compile/main.js',
+    'tests/blocks/test_blocks.js',
+    'core/**/**/*.js',
+    'blocks/*.js',
+    'generators/**/*.js'];
+  return gulp.src(maybeAddClosureLibrary(srcs), {base: './'})
+    .pipe(stripApacheLicense())
+    .pipe(gulp.sourcemaps.init())
+    // Directories in Blockly are used to group similar files together
+    // but are not used to limit access with @package, instead the
+    // method means something is internal to Blockly and not a public
+    // API.
+    // Flatten all files so they're in the same directory, but ensure that
+    // files with the same name don't conflict.
+    .pipe(gulp.rename(function (p) {
+      if (p.dirname.indexOf('core') === 0) {
+        var dirname = p.dirname.replace(
+          new RegExp(path.sep.replace(/\\/, '\\\\'), "g"), "-");
+        p.dirname = "";
+        p.basename = dirname + "-" + p.basename;
+      }
+    }))
+    .pipe(compile({
+      dependency_mode: 'PRUNE',
+      compilation_level: 'ADVANCED_OPTIMIZATIONS',
+      entry_point: './tests/compile/main.js',
+      js_output_file: 'main_compressed.js',
+      externs: ['./externs/svg-externs.js', './externs/goog-externs.js'],
+      language_in:
+        argv.closureLibrary ? 'ECMASCRIPT_2015' : 'ECMASCRIPT5_STRICT'
+    }, argv.verbose, argv.strict))
+    .pipe(gulp.sourcemaps.mapSources(function (sourcePath, file) {
+      return sourcePath.replace(/-/g, '/');
+    }))
+    .pipe(gulp.sourcemaps.write('.', {
+      includeContent: false,
+      sourceRoot: '../../'
+    }))
+    .pipe(gulp.dest('./tests/compile/'));
+}
 
 /**
  * This tasks builds Blockly's core files:
@@ -469,4 +515,5 @@ module.exports = {
   uncompressed: buildUncompressed,
   compressed: buildCompressed,
   generators: buildGenerators,
+  advancedCompilationTest: buildAdvancedCompilationTest,
 }

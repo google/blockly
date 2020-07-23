@@ -111,17 +111,19 @@ Blockly.zelos.MarkerSvg.prototype.createDomInternal_ = function() {
 
   Blockly.zelos.MarkerSvg.superClass_.createDomInternal_.call(this);
 
-  this.markerCircle_ = Blockly.utils.dom.createSvgElement('circle', {
-    'r': this.constants_.CURSOR_RADIUS,
-    'style': 'display: none',
-    'stroke-width': this.constants_.CURSOR_STROKE_WIDTH
-  },
-  this.markerSvg_);
+  this.markerCircle_ = Blockly.utils.dom.createSvgElement(
+      Blockly.utils.dom.SvgElementType.CIRCLE, {
+        'r': this.constants_.CURSOR_RADIUS,
+        'style': 'display: none',
+        'stroke-width': this.constants_.CURSOR_STROKE_WIDTH
+      },
+      this.markerSvg_);
 
   // Markers and stack cursors don't blink.
   if (this.isCursor()) {
     var blinkProperties = this.getBlinkProperties_();
-    Blockly.utils.dom.createSvgElement('animate', blinkProperties,
+    Blockly.utils.dom.createSvgElement(
+        Blockly.utils.dom.SvgElementType.ANIMATE, blinkProperties,
         this.markerCircle_);
   }
 

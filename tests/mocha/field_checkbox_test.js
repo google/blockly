@@ -159,7 +159,8 @@ suite('Checkbox Fields', function() {
   suite('Customizations', function() {
     suite('Check Character', function() {
       function assertCharacter(field, char) {
-        field.fieldGroup_ = Blockly.utils.dom.createSvgElement('g', {}, null);
+        field.fieldGroup_ = Blockly.utils.dom.createSvgElement(
+            Blockly.utils.dom.SvgElementType.G, {}, null);
         field.sourceBlock_ = {
           RTL: false,
           rendered: true,

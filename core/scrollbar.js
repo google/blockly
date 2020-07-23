@@ -37,7 +37,7 @@ Blockly.ScrollbarPair = function(workspace) {
   this.vScroll = new Blockly.Scrollbar(
       workspace, false, true, 'blocklyMainWorkspaceScrollbar');
   this.corner_ = Blockly.utils.dom.createSvgElement(
-      'rect',
+      Blockly.utils.dom.SvgElementType.RECT,
       {
         'height': Blockly.Scrollbar.scrollbarThickness,
         'width': Blockly.Scrollbar.scrollbarThickness,
@@ -610,13 +610,16 @@ Blockly.Scrollbar.prototype.createDom_ = function(opt_class) {
     className += ' ' + opt_class;
   }
   this.outerSvg_ = Blockly.utils.dom.createSvgElement(
-      'svg', {'class': className}, null);
-  this.svgGroup_ = Blockly.utils.dom.createSvgElement('g', {}, this.outerSvg_);
+      Blockly.utils.dom.SvgElementType.SVG, {'class': className}, null);
+  this.svgGroup_ = Blockly.utils.dom.createSvgElement(
+      Blockly.utils.dom.SvgElementType.G, {}, this.outerSvg_);
   this.svgBackground_ = Blockly.utils.dom.createSvgElement(
-      'rect', {'class': 'blocklyScrollbarBackground'}, this.svgGroup_);
+      Blockly.utils.dom.SvgElementType.RECT, {
+        'class': 'blocklyScrollbarBackground'
+      }, this.svgGroup_);
   var radius = Math.floor((Blockly.Scrollbar.scrollbarThickness - 5) / 2);
   this.svgHandle_ = Blockly.utils.dom.createSvgElement(
-      'rect',
+      Blockly.utils.dom.SvgElementType.RECT,
       {
         'class': 'blocklyScrollbarHandle',
         'rx': radius,

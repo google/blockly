@@ -13,6 +13,7 @@
 
 goog.provide('Blockly.IToolbox');
 
+goog.requireType('Blockly.IFlyout');
 goog.requireType('Blockly.IRegistrable');
 
 
@@ -56,7 +57,7 @@ Blockly.IToolbox.prototype.getHeight;
 
 /**
  * Get the toolbox flyout.
- * @return {Blockly.Flyout} The toolbox flyout.
+ * @return {Blockly.IFlyout} The toolbox flyout.
  */
 Blockly.IToolbox.prototype.getFlyout;
 

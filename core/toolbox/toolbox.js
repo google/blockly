@@ -178,7 +178,6 @@ Blockly.Toolbox.prototype.createContainer_ = function() {
   var toolboxContainer = document.createElement('div');
   toolboxContainer.setAttribute('layout', this.isHorizontal() ? 'h' : 'v');
   Blockly.utils.dom.addClass(toolboxContainer, 'blocklyToolboxDiv');
-  Blockly.utils.dom.addClass(toolboxContainer, 'blocklyNonSelectable');
   toolboxContainer.setAttribute('dir', this.RTL ? 'RTL' : 'LTR');
   return toolboxContainer;
 };
@@ -220,14 +219,13 @@ Blockly.Toolbox.prototype.addToolboxListeners_ = function(container,
 
 /**
  * Creates the flyout based on the toolbox layout.
- * @return {Blockly.Flyout} The flyout for the toolbox.
- * @throws {Error} If missing a require for both `Blockly.HorizontalFlyout` and
- *     `Blockly.VerticalFlyout`.
+ * @return {!Blockly.Flyout} The flyout for the toolbox.
+ * @throws {Error} If missing a require for `Blockly.HorizontalFlyout`,
+ *     `Blockly.VerticalFlyout`, and no flyout plugin is specified.
  * @protected
  */
 Blockly.Toolbox.prototype.createFlyout_ = function() {
   var workspace = this.workspace_;
-  var flyout = null;
   var workspaceOptions = new Blockly.Options(
       /** @type {!Blockly.BlocklyOptions} */
       ({
@@ -253,7 +251,7 @@ Blockly.Toolbox.prototype.createFlyout_ = function() {
     throw Error('Blockly.VerticalFlyout, Blockly.HorizontalFlyout or your own' +
         ' custom flyout must be required.');
   }
-  return flyout;
+  return new FlyoutClass(workspaceOptions);
 };
 
 /**

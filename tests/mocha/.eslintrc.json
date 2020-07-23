@@ -22,7 +22,7 @@
         "getCategoryJSON": true
     },
     "rules": {
-        "no-unused-vars": "off",
+        "no-unused-vars": ["off"],
         "es5/no-arrow-functions": ["off"],
         "es5/no-binary-and-octal-literals": ["off"],
         "es5/no-block-scoping": ["off"],

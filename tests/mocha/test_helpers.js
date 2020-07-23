@@ -72,6 +72,9 @@ function createGenUidStubWithReturns(returnIds) {
  * @return {!SinonStub} The created stub.
  */
 function createEventsFireStub() {
+  // TODO(#4064): Remove clearing of event clear here in favor of adding cleanup
+  // to other tests that cause events to be added to the queue even after they
+  // end.
   Blockly.Events.FIRE_QUEUE_.length = 0;
   var stub = sinon.stub(Blockly.Events, 'fire');
   stub.callsFake(function(event) {

@@ -83,7 +83,6 @@ function createEventsFireStub() {
     }
     Blockly.Events.FIRE_QUEUE_.push(event);
     Blockly.Events.fireNow_();
-    console.log(arguments);
   });
   return stub;
 }

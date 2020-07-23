@@ -166,15 +166,6 @@ function assertNthCallEventArgEquals(spy, n, expectedType,
       expectedProperties, message);
 }
 
-/**
- * Asserts that the last event fired by the given stub has the expected values.
- * @param {!SinonStub} eventsFireStub The events fire stub to use.
- * @param {string} type Expected type of event fired.
- * @param {string} element Expected element of event fired.
- * @param {*} oldValue Expected oldValue of event fired.
- * @param {*} newValue Expected newValue of event fired.
- */
-
 function defineStackBlock() {
   Blockly.defineBlocksWithJsonArray([{
     "type": "stack_block",

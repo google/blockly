@@ -14,6 +14,7 @@ goog.provide('Blockly.HorizontalFlyout');
 
 goog.require('Blockly.Block');
 goog.require('Blockly.Flyout');
+goog.require('Blockly.registry');
 goog.require('Blockly.Scrollbar');
 goog.require('Blockly.utils');
 goog.require('Blockly.utils.object');
@@ -32,7 +33,6 @@ goog.requireType('Blockly.utils.Metrics');
  */
 Blockly.HorizontalFlyout = function(workspaceOptions) {
   Blockly.HorizontalFlyout.superClass_.constructor.call(this, workspaceOptions);
-  
   this.horizontalLayout = true;
 };
 Blockly.utils.object.inherits(Blockly.HorizontalFlyout, Blockly.Flyout);
@@ -83,12 +83,12 @@ Blockly.HorizontalFlyout.prototype.getMetrics_ = function() {
     contentWidth: (optionBox.width + 2 * this.MARGIN) * this.workspace_.scale,
     contentTop: 0,
     contentLeft: 0,
-    
+
     viewHeight: viewHeight,
     viewWidth: viewWidth,
     viewTop: -this.workspace_.scrollY,
     viewLeft: -this.workspace_.scrollX,
-    
+
     absoluteTop: absoluteTop,
     absoluteLeft: absoluteLeft
   };
@@ -372,3 +372,6 @@ Blockly.HorizontalFlyout.prototype.reflowInternal_ = function() {
     this.position();
   }
 };
+
+Blockly.registry.register(Blockly.registry.Type.FLYOUTS_HORIZONTAL_TOOLBOX,
+    Blockly.registry.DEFAULT, Blockly.HorizontalFlyout);

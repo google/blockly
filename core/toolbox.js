@@ -30,6 +30,7 @@ goog.require('Blockly.utils.toolbox');
 
 goog.requireType('Blockly.IBlocklyActionable');
 goog.requireType('Blockly.IDeleteArea');
+goog.requireType('Blockly.IFlyout');
 goog.requireType('Blockly.IStyleable');
 goog.requireType('Blockly.IToolbox');
 
@@ -113,7 +114,7 @@ Blockly.Toolbox = function(workspace) {
 
   /**
    * The toolbox flyout.
-   * @type {Blockly.Flyout}
+   * @type {Blockly.IFlyout}
    * @private
    */
   this.flyout_ = null;
@@ -184,24 +185,25 @@ Blockly.Toolbox.prototype.init = function() {
       }));
   workspaceOptions.toolboxPosition = workspace.options.toolboxPosition;
 
+  var FlyoutClass = null;
   if (workspace.horizontalLayout) {
-    if (!Blockly.HorizontalFlyout) {
-      throw Error('Missing require for Blockly.HorizontalFlyout');
-    }
-    this.flyout_ = new Blockly.HorizontalFlyout(workspaceOptions);
+    FlyoutClass = Blockly.registry.getClassFromOptions(
+        Blockly.registry.Type.FLYOUTS_HORIZONTAL_TOOLBOX, workspace.options);
   } else {
-    if (!Blockly.VerticalFlyout) {
-      throw Error('Missing require for Blockly.VerticalFlyout');
-    }
-    this.flyout_ = new Blockly.VerticalFlyout(workspaceOptions);
-  }
-  if (!this.flyout_) {
-    throw Error('One of Blockly.VerticalFlyout or Blockly.Horizontal must be' +
-        'required.');
+    FlyoutClass = Blockly.registry.getClassFromOptions(
+        Blockly.registry.Type.FLYOUTS_VERTICAL_TOOLBOX, workspace.options);
   }
 
+  if (!FlyoutClass) {
+    throw Error('Blockly.VerticalFlyout, Blockly.HorizontalFlyout or your own' +
+        ' custom flyout must be required.');
+  }
+
+  this.flyout_ = new FlyoutClass(workspaceOptions);
+
   // Insert the flyout after the workspace.
-  Blockly.utils.dom.insertAfter(this.flyout_.createDom('svg'), svg);
+  Blockly.utils.dom.insertAfter(
+      this.flyout_.createDom(Blockly.utils.dom.SvgElementType.SVG), svg);
   this.flyout_.init(workspace);
 
   this.config_['cssCollapsedFolderIcon'] =
@@ -439,7 +441,8 @@ Blockly.Toolbox.prototype.handleAfterTreeSelected_ = function(
   if (newNode && newNode.contents && newNode.contents.length) {
     this.flyout_.show(newNode.contents);
     // Scroll the flyout to the top if the category has changed.
-    if (this.lastCategory_ != newNode) {
+    if (this.lastCategory_ != newNode &&
+        typeof this.flyout_.scrollToStart == 'function') {
       this.flyout_.scrollToStart();
     }
     if (this.workspace_.keyboardAccessibilityMode) {
@@ -537,7 +540,7 @@ Blockly.Toolbox.prototype.getHeight = function() {
 
 /**
  * Get the toolbox flyout.
- * @return {Blockly.Flyout} The toolbox flyout.
+ * @return {Blockly.IFlyout} The toolbox flyout.
  */
 Blockly.Toolbox.prototype.getFlyout = function() {
   return this.flyout_;

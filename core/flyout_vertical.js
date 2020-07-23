@@ -14,6 +14,7 @@ goog.provide('Blockly.VerticalFlyout');
 
 goog.require('Blockly.Block');
 goog.require('Blockly.Flyout');
+goog.require('Blockly.registry');
 goog.require('Blockly.Scrollbar');
 goog.require('Blockly.utils');
 goog.require('Blockly.utils.object');
@@ -35,6 +36,12 @@ Blockly.VerticalFlyout = function(workspaceOptions) {
   Blockly.VerticalFlyout.superClass_.constructor.call(this, workspaceOptions);
 };
 Blockly.utils.object.inherits(Blockly.VerticalFlyout, Blockly.Flyout);
+
+/**
+ * The name of the vertical flyout in the registry.
+ * @type {string}
+ */
+Blockly.VerticalFlyout.registryName = 'verticalFlyout';
 
 /**
  * Return an object with all the metrics required to size scrollbars for the
@@ -374,3 +381,6 @@ Blockly.VerticalFlyout.prototype.reflowInternal_ = function() {
     this.position();
   }
 };
+
+Blockly.registry.register(Blockly.registry.Type.FLYOUTS_VERTICAL_TOOLBOX,
+    Blockly.registry.DEFAULT, Blockly.VerticalFlyout);

@@ -150,7 +150,6 @@ suite('Inputs', function() {
         chai.assert(setBlockSpy.calledOnce);
         chai.assert.equal(setBlockSpy.getCall(0).args[0], this.block);
         chai.assert(initSpy.calledOnce);
-        console.log(this.renderStub.callCount);
         chai.assert(this.renderStub.calledOnce);
         chai.assert(this.bumpNeighboursStub.calledOnce);
 

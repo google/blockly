@@ -91,8 +91,8 @@ suite('Label Fields', function() {
 
   suite('Customizations', function() {
     function assertHasClass(labelField, cssClass) {
-      labelField.fieldGroup_ =
-          Blockly.utils.dom.createSvgElement('g', {}, null);
+      labelField.fieldGroup_ = Blockly.utils.dom.createSvgElement(
+          Blockly.utils.dom.SvgElementType.G, {}, null);
       labelField.constants_ = {
         FIELD_TEXT_BASELINE_Y: 13
       };
@@ -101,8 +101,8 @@ suite('Label Fields', function() {
           labelField.textElement_, cssClass));
     }
     function assertDoesNotHaveClass(labelField, cssClass) {
-      labelField.fieldGroup_ =
-          Blockly.utils.dom.createSvgElement('g', {}, null);
+      labelField.fieldGroup_ = Blockly.utils.dom.createSvgElement(
+          Blockly.utils.dom.SvgElementType.G, {}, null);
       labelField.constants_ = {
         FIELD_TEXT_BASELINE_Y: 13
       };
@@ -149,7 +149,8 @@ suite('Label Fields', function() {
     suite('setClass', function() {
       test('setClass', function() {
         var field = new Blockly.FieldLabel();
-        field.fieldGroup_ = Blockly.utils.dom.createSvgElement('g', {}, null);
+        field.fieldGroup_ = Blockly.utils.dom.createSvgElement(
+            Blockly.utils.dom.SvgElementType.G, {}, null);
         field.constants_ = {
           FIELD_TEXT_BASELINE_Y: 13
         };

@@ -62,7 +62,8 @@ Blockly.WorkspaceDragSurfaceSvg.prototype.createDom = function() {
   *   <g class="blocklyBubbleCanvas">/g>
   * </svg>
   */
-  this.SVG_ = Blockly.utils.dom.createSvgElement('svg',
+  this.SVG_ = Blockly.utils.dom.createSvgElement(
+      Blockly.utils.dom.SvgElementType.SVG,
       {
         'xmlns': Blockly.utils.dom.SVG_NS,
         'xmlns:html': Blockly.utils.dom.HTML_NS,

@@ -382,7 +382,7 @@ suite('Abstract Fields', function() {
       });
       suite('setTooltip', function() {
         setup(function() {
-          this.workspace = new Blockly.WorkspaceSvg({});
+          this.workspace = new Blockly.WorkspaceSvg(new Blockly.Options({}));
           this.workspace.createDom();
         });
         teardown(function() {

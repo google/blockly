@@ -99,7 +99,8 @@ Blockly.blockRendering.Debug.prototype.drawSpacerRow = function(row, cursorY, is
     cursorY -= height;
   }
 
-  this.debugElements_.push(Blockly.utils.dom.createSvgElement('rect',
+  this.debugElements_.push(Blockly.utils.dom.createSvgElement(
+      Blockly.utils.dom.SvgElementType.RECT,
       {
         'class': 'rowSpacerRect blockRenderDebug',
         'x': isRtl ? -(row.xPos + row.width) : row.xPos,
@@ -133,7 +134,8 @@ Blockly.blockRendering.Debug.prototype.drawSpacerElem = function(elem, rowHeight
     xPos = -(xPos + width);
   }
   var yPos = elem.centerline - elem.height / 2;
-  this.debugElements_.push(Blockly.utils.dom.createSvgElement('rect',
+  this.debugElements_.push(Blockly.utils.dom.createSvgElement(
+      Blockly.utils.dom.SvgElementType.RECT,
       {
         'class': 'elemSpacerRect blockRenderDebug',
         'x': xPos,
@@ -161,7 +163,8 @@ Blockly.blockRendering.Debug.prototype.drawRenderedElem = function(elem, isRtl) 
       xPos = -(xPos + elem.width);
     }
     var yPos = elem.centerline - elem.height / 2;
-    this.debugElements_.push(Blockly.utils.dom.createSvgElement('rect',
+    this.debugElements_.push(Blockly.utils.dom.createSvgElement(
+        Blockly.utils.dom.SvgElementType.RECT,
         {
           'class': 'rowRenderingRect blockRenderDebug',
           'x': xPos,
@@ -177,7 +180,8 @@ Blockly.blockRendering.Debug.prototype.drawRenderedElem = function(elem, isRtl) 
     if (Blockly.blockRendering.Types.isField(elem) &&
         elem.field instanceof Blockly.FieldLabel) {
       var baseline = this.constants_.FIELD_TEXT_BASELINE;
-      this.debugElements_.push(Blockly.utils.dom.createSvgElement('rect',
+      this.debugElements_.push(Blockly.utils.dom.createSvgElement(
+          Blockly.utils.dom.SvgElementType.RECT,
           {
             'class': 'rowRenderingRect blockRenderDebug',
             'x': xPos,
@@ -233,7 +237,8 @@ Blockly.blockRendering.Debug.prototype.drawConnection = function(conn) {
     colour = 'goldenrod';
     fill = colour;
   }
-  this.debugElements_.push(Blockly.utils.dom.createSvgElement('circle',
+  this.debugElements_.push(Blockly.utils.dom.createSvgElement(
+      Blockly.utils.dom.SvgElementType.CIRCLE,
       {
         'class': 'blockRenderDebug',
         'cx': conn.offsetInBlock_.x,
@@ -256,7 +261,8 @@ Blockly.blockRendering.Debug.prototype.drawRenderedRow = function(row, cursorY, 
   if (!Blockly.blockRendering.Debug.config.rows) {
     return;
   }
-  this.debugElements_.push(Blockly.utils.dom.createSvgElement('rect',
+  this.debugElements_.push(Blockly.utils.dom.createSvgElement(
+      Blockly.utils.dom.SvgElementType.RECT,
       {
         'class': 'elemRenderingRect blockRenderDebug',
         'x': isRtl ? -(row.xPos + row.width) : row.xPos,
@@ -274,7 +280,8 @@ Blockly.blockRendering.Debug.prototype.drawRenderedRow = function(row, cursorY, 
   }
 
   if (Blockly.blockRendering.Debug.config.connectedBlockBounds) {
-    this.debugElements_.push(Blockly.utils.dom.createSvgElement('rect',
+    this.debugElements_.push(Blockly.utils.dom.createSvgElement(
+        Blockly.utils.dom.SvgElementType.RECT,
         {
           'class': 'connectedBlockWidth blockRenderDebug',
           'x': isRtl ? -(row.xPos + row.widthWithConnectedBlocks) : row.xPos,
@@ -328,7 +335,8 @@ Blockly.blockRendering.Debug.prototype.drawBoundingBox = function(info) {
   // Bounding box without children.
   var xPos = info.RTL ? -info.width : 0;
   var yPos = 0;
-  this.debugElements_.push(Blockly.utils.dom.createSvgElement('rect',
+  this.debugElements_.push(Blockly.utils.dom.createSvgElement(
+      Blockly.utils.dom.SvgElementType.RECT,
       {
         'class': 'blockBoundingBox blockRenderDebug',
         'x': xPos,
@@ -345,7 +353,8 @@ Blockly.blockRendering.Debug.prototype.drawBoundingBox = function(info) {
   if (Blockly.blockRendering.Debug.config.connectedBlockBounds) {
     // Bounding box with children.
     xPos = info.RTL ? -info.widthWithChildren : 0;
-    this.debugElements_.push(Blockly.utils.dom.createSvgElement('rect',
+    this.debugElements_.push(Blockly.utils.dom.createSvgElement(
+        Blockly.utils.dom.SvgElementType.RECT,
         {
           'class': 'blockRenderDebug',
           'x': xPos,

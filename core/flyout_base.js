@@ -31,6 +31,7 @@ goog.require('Blockly.Xml');
 
 goog.requireType('Blockly.IBlocklyActionable');
 goog.requireType('Blockly.IDeleteArea');
+goog.requireType('Blockly.IFlyout');
 goog.requireType('Blockly.utils.Metrics');
 
 
@@ -42,6 +43,7 @@ goog.requireType('Blockly.utils.Metrics');
  * @abstract
  * @implements {Blockly.IBlocklyActionable}
  * @implements {Blockly.IDeleteArea}
+ * @implements {Blockly.IFlyout}
  */
 Blockly.Flyout = function(workspaceOptions) {
   workspaceOptions.getMetrics =
@@ -223,8 +225,10 @@ Blockly.Flyout.prototype.dragAngleRange_ = 70;
  * Creates the flyout's DOM.  Only needs to be called once.  The flyout can
  * either exist as its own svg element or be a g element nested inside a
  * separate svg element.
- * @param {string} tagName The type of tag to put the flyout in. This
- *     should be <svg> or <g>.
+ * @param {string|
+ * !Blockly.utils.dom.SvgElementType<!SVGSVGElement>|
+ * !Blockly.utils.dom.SvgElementType<!SVGGElement>} tagName The type of tag to
+ *     put the flyout in. This should be <svg> or <g>.
  * @return {!SVGElement} The flyout's SVG group.
  */
 Blockly.Flyout.prototype.createDom = function(tagName) {
@@ -238,7 +242,8 @@ Blockly.Flyout.prototype.createDom = function(tagName) {
   // hide/show code will set up proper visibility and size later.
   this.svgGroup_ = Blockly.utils.dom.createSvgElement(tagName,
       {'class': 'blocklyFlyout', 'style': 'display: none'}, null);
-  this.svgBackground_ = Blockly.utils.dom.createSvgElement('path',
+  this.svgBackground_ = Blockly.utils.dom.createSvgElement(
+      Blockly.utils.dom.SvgElementType.PATH,
       {'class': 'blocklyFlyoutBackground'}, this.svgGroup_);
   this.svgGroup_.appendChild(this.workspace_.createDom());
   this.workspace_.getThemeManager().subscribe(
@@ -478,7 +483,6 @@ Blockly.Flyout.prototype.show = function(flyoutDef) {
     }
   }
   this.setVisible(true);
-  
   // Parse the Array or NodeList passed in into an Array of
   // Blockly.utils.toolbox.Toolbox.
   var parsedContent = Blockly.utils.toolbox.convertToolboxToJSON(flyoutDef);
@@ -762,11 +766,12 @@ Blockly.Flyout.prototype.createBlock = function(originalBlock) {
   this.targetWorkspace.setResizesEnabled(false);
   try {
     newBlock = this.placeNewBlock_(originalBlock);
-    // Close the flyout.
-    Blockly.hideChaff();
   } finally {
     Blockly.Events.enable();
   }
+
+  // Close the flyout.
+  Blockly.hideChaff();
 
   var newVariables = Blockly.Variables.getAddedVariables(this.targetWorkspace,
       variablesBeforeCreation);
@@ -825,7 +830,8 @@ Blockly.Flyout.prototype.initFlyoutButton_ = function(button, x, y) {
 Blockly.Flyout.prototype.createRect_ = function(block, x, y, blockHW, index) {
   // Create an invisible rectangle under the block to act as a button.  Just
   // using the block as a button is poor, since blocks have holes in them.
-  var rect = Blockly.utils.dom.createSvgElement('rect',
+  var rect = Blockly.utils.dom.createSvgElement(
+      Blockly.utils.dom.SvgElementType.RECT,
       {
         'fill-opacity': 0,
         'x': x,

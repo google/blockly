@@ -86,7 +86,7 @@ Blockly.Events.Change = function(block, element, name, oldValue, newValue) {
   Blockly.Events.Change.superClass_.constructor.call(this, block);
   this.element = typeof element == 'undefined' ? '' : element;
   this.name = typeof name == 'undefined' ? '' : name;
-  this.oldValue = typeof oldValue == 'undefined' ? '' : newValue;
+  this.oldValue = typeof oldValue == 'undefined' ? '' : oldValue;
   this.newValue = typeof newValue == 'undefined' ? '' : newValue;
 };
 Blockly.utils.object.inherits(Blockly.Events.Change, Blockly.Events.BlockBase);

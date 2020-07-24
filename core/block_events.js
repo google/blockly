@@ -32,7 +32,7 @@ goog.require('Blockly.utils.xml');
 
 /**
  * Abstract class for a block event.
- * @param {Blockly.Block} block The block this event corresponds to.
+ * @param {!Blockly.Block} block The block this event corresponds to.
  * @extends {Blockly.Events.Abstract}
  * @constructor
  */
@@ -70,11 +70,12 @@ Blockly.Events.BlockBase.prototype.fromJson = function(json) {
 
 /**
  * Class for a block change event.
- * @param {Blockly.Block} block The changed block.  Null for a blank event.
- * @param {string} element One of 'field', 'comment', 'disabled', etc.
- * @param {?string} name Name of input or field affected, or null.
- * @param {*} oldValue Previous value of element.
- * @param {*} newValue New value of element.
+ * @param {!Blockly.Block=} block The changed block.  Undefined for a blank
+ *     event.
+ * @param {string=} element One of 'field', 'comment', 'disabled', etc.
+ * @param {?string=} name Name of input or field affected, or null.
+ * @param {*=} oldValue Previous value of element.
+ * @param {*=} newValue New value of element.
  * @extends {Blockly.Events.BlockBase}
  * @constructor
  */
@@ -83,20 +84,21 @@ Blockly.Events.Change = function(block, element, name, oldValue, newValue) {
     return;  // Blank event to be populated by fromJson.
   }
   Blockly.Events.Change.superClass_.constructor.call(this, block);
-  this.element = element;
-  this.name = name;
-  this.oldValue = oldValue;
-  this.newValue = newValue;
+  this.element = typeof element == 'undefined' ? '' : element;
+  this.name = typeof name == 'undefined' ? '' : name;
+  this.oldValue = typeof oldValue == 'undefined' ? '' : newValue;
+  this.newValue = typeof newValue == 'undefined' ? '' : newValue;
 };
 Blockly.utils.object.inherits(Blockly.Events.Change, Blockly.Events.BlockBase);
 
 /**
  * Class for a block change event.
- * @param {Blockly.Block} block The changed block.  Null for a blank event.
- * @param {string} element One of 'field', 'comment', 'disabled', etc.
- * @param {?string} name Name of input or field affected, or null.
- * @param {*} oldValue Previous value of element.
- * @param {*} newValue New value of element.
+ * @param {!Blockly.Block=} block The changed block.  Undefined for a blank
+ *     event.
+ * @param {string=} element One of 'field', 'comment', 'disabled', etc.
+ * @param {?string=} name Name of input or field affected, or null.
+ * @param {*=} oldValue Previous value of element.
+ * @param {*=} newValue New value of element.
  * @extends {Blockly.Events.BlockBase}
  * @constructor
  */
@@ -107,21 +109,6 @@ Blockly.Events.BlockChange = Blockly.Events.Change;
  * @type {string}
  */
 Blockly.Events.Change.prototype.type = Blockly.Events.CHANGE;
-
-/**
- * Construct a Blockly.Events.Change from a JSON event object.
- * @param {!Object} json JSON representation.
- * @param {!Blockly.Workspace} workspace Target workspace for event.
- * @return {!Blockly.Events.Change} The new event instance.
- * @package
- * @nocollapse
- */
-Blockly.Events.Change.fromJson = function(json, workspace) {
-  var event = new Blockly.Events.Change(null, '', '', '', '');
-  event.fromJson(json);
-  event.workspaceId = workspace.id;
-  return event;
-};
 
 /**
  * Encode the event as JSON.
@@ -213,7 +200,8 @@ Blockly.Events.Change.prototype.run = function(forward) {
 
 /**
  * Class for a block creation event.
- * @param {Blockly.Block} block The created block.  Null for a blank event.
+ * @param {!Blockly.Block=} block The created block.  Undefined for a blank
+ *     event.
  * @extends {Blockly.Events.BlockBase}
  * @constructor
  */
@@ -234,7 +222,8 @@ Blockly.utils.object.inherits(Blockly.Events.Create, Blockly.Events.BlockBase);
 
 /**
  * Class for a block creation event.
- * @param {Blockly.Block} block The created block. Null for a blank event.
+ * @param {!Blockly.Block=} block The created block. Undefined for a blank
+ *     event.
  * @extends {Blockly.Events.BlockBase}
  * @constructor
  */
@@ -245,21 +234,6 @@ Blockly.Events.BlockCreate = Blockly.Events.Create;
  * @type {string}
  */
 Blockly.Events.Create.prototype.type = Blockly.Events.CREATE;
-
-/**
- * Construct a Blockly.Events.Create from a JSON event object.
- * @param {!Object} json JSON representation.
- * @param {!Blockly.Workspace} workspace Target workspace for event.
- * @return {!Blockly.Events.Create} The new event instance.
- * @package
- * @nocollapse
- */
-Blockly.Events.Create.fromJson = function(json, workspace) {
-  var event = new Blockly.Events.Create(null);
-  event.fromJson(json);
-  event.workspaceId = workspace.id;
-  return event;
-};
 
 /**
  * Encode the event as JSON.
@@ -307,7 +281,8 @@ Blockly.Events.Create.prototype.run = function(forward) {
 
 /**
  * Class for a block deletion event.
- * @param {Blockly.Block} block The deleted block.  Null for a blank event.
+ * @param {!Blockly.Block=} block The deleted block.  Undefined for a blank
+ *     event.
  * @extends {Blockly.Events.BlockBase}
  * @constructor
  */
@@ -336,21 +311,6 @@ Blockly.utils.object.inherits(Blockly.Events.Delete, Blockly.Events.BlockBase);
  * @constructor
  */
 Blockly.Events.BlockDelete = Blockly.Events.Delete;
-
-/**
- * Construct a Blockly.Events.Delete from a JSON event object.
- * @param {!Object} json JSON representation.
- * @param {!Blockly.Workspace} workspace Target workspace for event.
- * @return {!Blockly.Events.Delete} The new event instance.
- * @package
- * @nocollapse
- */
-Blockly.Events.Delete.fromJson = function(json, workspace) {
-  var event = new Blockly.Events.Delete(null);
-  event.fromJson(json);
-  event.workspaceId = workspace.id;
-  return event;
-};
 
 /**
  * Type of this event.
@@ -402,7 +362,7 @@ Blockly.Events.Delete.prototype.run = function(forward) {
 
 /**
  * Class for a block move event.  Created before the move.
- * @param {Blockly.Block} block The moved block.  Null for a blank event.
+ * @param {!Blockly.Block=} block The moved block.  Undefined for a blank event.
  * @extends {Blockly.Events.BlockBase}
  * @constructor
  */
@@ -431,21 +391,6 @@ Blockly.Events.BlockMove = Blockly.Events.Move;
  * @type {string}
  */
 Blockly.Events.Move.prototype.type = Blockly.Events.MOVE;
-
-/**
- * Construct a Blockly.Events.Move from a JSON event object.
- * @param {!Object} json JSON representation.
- * @param {!Blockly.Workspace} workspace Target workspace for event.
- * @return {!Blockly.Events.Move} The new event instance.
- * @package
- * @nocollapse
- */
-Blockly.Events.Move.fromJson = function(json, workspace) {
-  var event = new Blockly.Events.Move(null);
-  event.fromJson(json);
-  event.workspaceId = workspace.id;
-  return event;
-};
 
 /**
  * Encode the event as JSON.

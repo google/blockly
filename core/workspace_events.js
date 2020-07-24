@@ -23,8 +23,8 @@ goog.require('Blockly.utils.object');
  * Used to notify the developer when the workspace has finished loading (i.e
  * domToWorkspace).
  * Finished loading events do not record undo or redo.
- * @param {!Blockly.Workspace} workspace The workspace that has finished
- *    loading.
+ * @param {!Blockly.Workspace=} workspace The workspace that has finished
+ *    loading.  Undefined for a blank event.
  * @extends {Blockly.Events.Abstract}
  * @constructor
  */
@@ -33,7 +33,7 @@ Blockly.Events.FinishedLoading = function(workspace) {
    * The workspace identifier for this event.
    * @type {string}
    */
-  this.workspaceId = workspace.id;
+  this.workspaceId = workspace ? workspace.id : '';
 
   /**
    * The event group ID for the group this event belongs to. Groups define
@@ -54,21 +54,6 @@ Blockly.utils.object.inherits(Blockly.Events.FinishedLoading,
  * @type {string}
  */
 Blockly.Events.FinishedLoading.prototype.type = Blockly.Events.FINISHED_LOADING;
-
-/**
- * Construct a Blockly.Events.FinishedLoading from a JSON arg object.
- * @param {!Object} json JSON representation.
- * @param {!Blockly.Workspace} workspace Target workspace for event.
- * @return {!Blockly.Events.FinishedLoading} The new event instance.
- * @package
- * @nocollapse
- */
-Blockly.Events.FinishedLoading.fromJson = function(json, workspace) {
-  var event = new Blockly.Events.FinishedLoading(workspace);
-  event.fromJson(json);
-  event.workspaceId = workspace.id;
-  return event;
-};
 
 /**
  * Encode the event as JSON.

@@ -24,10 +24,11 @@ goog.require('Blockly.utils.object');
  * editing to work (e.g. scrolling the workspace, zooming, opening toolbox
  * categories).
  * UI events do not undo or redo.
- * @param {Blockly.Block} block The affected block.
- * @param {string} element One of 'selected', 'comment', 'mutatorOpen', etc.
- * @param {*} oldValue Previous value of element.
- * @param {*} newValue New value of element.
+ * @param {!Blockly.Block=} block The affected block.  Undefined for a blank
+ *     event.
+ * @param {string=} element One of 'selected', 'comment', 'mutatorOpen', etc.
+ * @param {*=} oldValue Previous value of element.
+ * @param {*=} newValue New value of element.
  * @extends {Blockly.Events.Abstract}
  * @constructor
  */
@@ -35,9 +36,9 @@ Blockly.Events.Ui = function(block, element, oldValue, newValue) {
   Blockly.Events.Ui.superClass_.constructor.call(this);
   this.blockId = block ? block.id : null;
   this.workspaceId = block ? block.workspace.id : undefined;
-  this.element = element;
-  this.oldValue = oldValue;
-  this.newValue = newValue;
+  this.element = typeof element == 'undefined' ? '' : element;
+  this.oldValue = typeof oldValue == 'undefined' ? '' : oldValue;
+  this.newValue = typeof newValue == 'undefined' ? '' : newValue;
   // UI events do not undo or redo.
   this.recordUndo = false;
 };
@@ -48,21 +49,6 @@ Blockly.utils.object.inherits(Blockly.Events.Ui, Blockly.Events.Abstract);
  * @type {string}
  */
 Blockly.Events.Ui.prototype.type = Blockly.Events.UI;
-
-/**
- * Construct a Blockly.Events.Ui from a JSON event object.
- * @param {!Object} json JSON representation.
- * @param {!Blockly.Workspace} workspace Target workspace for event.
- * @return {!Blockly.Events.Ui} The new event instance.
- * @package
- * @nocollapse
- */
-Blockly.Events.Ui.fromJson = function(json, workspace) {
-  var event = new Blockly.Events.Ui(null, '', '', '');
-  event.fromJson(json);
-  event.workspaceId = workspace.id;
-  return event;
-};
 
 /**
  * Encode the event as JSON.

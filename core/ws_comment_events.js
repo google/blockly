@@ -28,8 +28,8 @@ goog.require('Blockly.utils.xml');
 
 /**
  * Abstract class for a comment event.
- * @param {Blockly.WorkspaceComment} comment The comment this event corresponds
- *     to.
+ * @param {!Blockly.WorkspaceComment} comment The comment this event
+ *     corresponds to.
  * @extends {Blockly.Events.Abstract}
  * @constructor
  */
@@ -86,10 +86,10 @@ Blockly.Events.CommentBase.prototype.fromJson = function(json) {
 
 /**
  * Class for a comment change event.
- * @param {Blockly.WorkspaceComment} comment The comment that is being changed.
- *     Null for a blank event.
- * @param {string} oldContents Previous contents of the comment.
- * @param {string} newContents New contents of the comment.
+ * @param {!Blockly.WorkspaceComment=} comment The comment that is being
+ *     changed.  Undefined for a blank event.
+ * @param {string=} oldContents Previous contents of the comment.
+ * @param {string=} newContents New contents of the comment.
  * @extends {Blockly.Events.CommentBase}
  * @constructor
  */
@@ -98,8 +98,8 @@ Blockly.Events.CommentChange = function(comment, oldContents, newContents) {
     return;  // Blank event to be populated by fromJson.
   }
   Blockly.Events.CommentChange.superClass_.constructor.call(this, comment);
-  this.oldContents_ = oldContents;
-  this.newContents_ = newContents;
+  this.oldContents_ = typeof oldContents == 'undefined' ? '' : oldContents;
+  this.newContents_ = typeof newContents == 'undefined' ? '' : newContents;
 };
 Blockly.utils.object.inherits(Blockly.Events.CommentChange,
     Blockly.Events.CommentBase);
@@ -109,21 +109,6 @@ Blockly.utils.object.inherits(Blockly.Events.CommentChange,
  * @type {string}
  */
 Blockly.Events.CommentChange.prototype.type = Blockly.Events.COMMENT_CHANGE;
-
-/**
- * Construct a Blockly.Events.CommentChange from a JSON event object.
- * @param {!Object} json JSON representation.
- * @param {!Blockly.Workspace} workspace Target workspace for event.
- * @return {!Blockly.Events.CommentChange} The new event instance.
- * @package
- * @nocollapse
- */
-Blockly.Events.CommentChange.fromJson = function(json, workspace) {
-  var event = new Blockly.Events.CommentChange(null, '', '');
-  event.fromJson(json);
-  event.workspaceId = workspace.id;
-  return event;
-};
 
 /**
  * Encode the event as JSON.
@@ -170,8 +155,8 @@ Blockly.Events.CommentChange.prototype.run = function(forward) {
 
 /**
  * Class for a comment creation event.
- * @param {Blockly.WorkspaceComment} comment The created comment.
- *     Null for a blank event.
+ * @param {!Blockly.WorkspaceComment=} comment The created comment.  Undefined
+ *     for a blank event.
  * @extends {Blockly.Events.CommentBase}
  * @constructor
  */
@@ -191,21 +176,6 @@ Blockly.utils.object.inherits(Blockly.Events.CommentCreate,
  * @type {string}
  */
 Blockly.Events.CommentCreate.prototype.type = Blockly.Events.COMMENT_CREATE;
-
-/**
- * Construct a Blockly.Events.CommentCreate from a JSON event object.
- * @param {!Object} json JSON representation.
- * @param {!Blockly.Workspace} workspace Target workspace for event.
- * @return {!Blockly.Events.CommentCreate} The new event instance.
- * @package
- * @nocollapse
- */
-Blockly.Events.CommentCreate.fromJson = function(json, workspace) {
-  var event = new Blockly.Events.CommentCreate(null);
-  event.fromJson(json);
-  event.workspaceId = workspace.id;
-  return event;
-};
 
 /**
  * Encode the event as JSON.
@@ -259,8 +229,8 @@ Blockly.Events.CommentCreateDeleteHelper = function(event, create) {
 };
 /**
  * Class for a comment deletion event.
- * @param {Blockly.WorkspaceComment} comment The deleted comment.
- *     Null for a blank event.
+ * @param {!Blockly.WorkspaceComment=} comment The deleted comment.  Undefined
+ *     for a blank event.
  * @extends {Blockly.Events.CommentBase}
  * @constructor
  */
@@ -280,21 +250,6 @@ Blockly.utils.object.inherits(Blockly.Events.CommentDelete,
  * @type {string}
  */
 Blockly.Events.CommentDelete.prototype.type = Blockly.Events.COMMENT_DELETE;
-
-/**
- * Construct a Blockly.Events.CommentDelete from a JSON event object.
- * @param {!Object} json JSON representation.
- * @param {!Blockly.Workspace} workspace Target workspace for event.
- * @return {!Blockly.Events.CommentDelete} The new event instance.
- * @package
- * @nocollapse
- */
-Blockly.Events.CommentDelete.fromJson = function(json, workspace) {
-  var event = new Blockly.Events.CommentDelete(null);
-  event.fromJson(json);
-  event.workspaceId = workspace.id;
-  return event;
-};
 
 /**
  * Encode the event as JSON.
@@ -324,8 +279,8 @@ Blockly.Events.CommentDelete.prototype.run = function(forward) {
 
 /**
  * Class for a comment move event.  Created before the move.
- * @param {Blockly.WorkspaceComment} comment The comment that is being moved.
- *     Null for a blank event.
+ * @param {!Blockly.WorkspaceComment=} comment The comment that is being moved.
+ *     Undefined for a blank event.
  * @extends {Blockly.Events.CommentBase}
  * @constructor
  */
@@ -375,21 +330,6 @@ Blockly.Events.CommentMove.prototype.recordNew = function() {
  * @type {string}
  */
 Blockly.Events.CommentMove.prototype.type = Blockly.Events.COMMENT_MOVE;
-
-/**
- * Construct a Blockly.Events.CommentMove from a JSON event object.
- * @param {!Object} json JSON representation.
- * @param {!Blockly.Workspace} workspace Target workspace for event.
- * @return {!Blockly.Events.CommentMove} The new event instance.
- * @package
- * @nocollapse
- */
-Blockly.Events.CommentMove.fromJson = function(json, workspace) {
-  var event = new Blockly.Events.CommentMove(null);
-  event.fromJson(json);
-  event.workspaceId = workspace.id;
-  return event;
-};
 
 /**
  * Override the location before the move.  Use this if you don't create the

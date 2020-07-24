@@ -342,13 +342,15 @@ Blockly.Events.getDescendantIds = function(block) {
  * @throws {Error} if an event type is not found in the registry.
  */
 Blockly.Events.fromJson = function(json, workspace) {
-  var eventClass = /** @type {{
-    fromJson:function(!Object,!Blockly.Workspace):!Blockly.Events.Abstract
-  }} */ (Blockly.registry.getClass(Blockly.registry.Type.EVENT, json.type));
+  var eventClass = Blockly.registry.getClass(Blockly.registry.Type.EVENT,
+      json.type);
   if (!eventClass) {
     throw Error('Unknown event type.');
   }
-  return eventClass.fromJson(json, workspace);
+  var event = new eventClass();
+  event.fromJson(json);
+  event.workspaceId = workspace.id;
+  return event;
 };
 
 /**

@@ -23,24 +23,24 @@ goog.require('Blockly.utils.object');
  * Used to notify the developer when the workspace has finished loading (i.e
  * domToWorkspace).
  * Finished loading events do not record undo or redo.
- * @param {!Blockly.Workspace=} workspace The workspace that has finished
+ * @param {!Blockly.Workspace=} opt_workspace The workspace that has finished
  *    loading.  Undefined for a blank event.
  * @extends {Blockly.Events.Ui}
  * @constructor
  */
-Blockly.Events.FinishedLoading = function(workspace) {
+Blockly.Events.FinishedLoading = function(opt_workspace) {
 
   /**
    * Whether or not the event is blank (to be populated by fromJson).
    * @type {boolean}
    */
-  this.isBlank = typeof workspace == 'undefined';
+  this.isBlank = typeof opt_workspace == 'undefined';
 
   /**
    * The workspace identifier for this event.
    * @type {string}
    */
-  this.workspaceId = workspace ? workspace.id : '';
+  this.workspaceId = opt_workspace ? opt_workspace.id : '';
 
   /**
    * The event group ID for the group this event belongs to. Groups define

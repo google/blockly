@@ -28,30 +28,30 @@ goog.require('Blockly.utils.xml');
 
 /**
  * Abstract class for a comment event.
- * @param {!Blockly.WorkspaceComment=} comment The comment this event
+ * @param {!Blockly.WorkspaceComment=} opt_comment The comment this event
  *     corresponds to.  Undefined for a blank event.
  * @extends {Blockly.Events.Abstract}
  * @constructor
  */
-Blockly.Events.CommentBase = function(comment) {
+Blockly.Events.CommentBase = function(opt_comment) {
 
   /**
    * Whether or not an event is blank.
    * @type {boolean}
    */
-  this.isBlank = typeof comment == 'undefined';
+  this.isBlank = typeof opt_comment == 'undefined';
 
   /**
    * The ID of the comment this event pertains to.
    * @type {string}
    */
-  this.commentId = this.isBlank ? '' : comment.id;
+  this.commentId = this.isBlank ? '' : opt_comment.id;
 
   /**
    * The workspace identifier for this event.
    * @type {string}
    */
-  this.workspaceId = this.isBlank ? '' : comment.workspace.id;
+  this.workspaceId = this.isBlank ? '' : opt_comment.workspace.id;
 
   /**
    * The event group id for the group this event belongs to. Groups define
@@ -93,21 +93,24 @@ Blockly.Events.CommentBase.prototype.fromJson = function(json) {
 
 /**
  * Class for a comment change event.
- * @param {!Blockly.WorkspaceComment=} comment The comment that is being
+ * @param {!Blockly.WorkspaceComment=} opt_comment The comment that is being
  *     changed.  Undefined for a blank event.
- * @param {string=} oldContents Previous contents of the comment.
- * @param {string=} newContents New contents of the comment.
+ * @param {string=} opt_oldContents Previous contents of the comment.
+ * @param {string=} opt_newContents New contents of the comment.
  * @extends {Blockly.Events.CommentBase}
  * @constructor
  */
-Blockly.Events.CommentChange = function(comment, oldContents, newContents) {
-  Blockly.Events.CommentChange.superClass_.constructor.call(this, comment);
-  if (!comment) {
+Blockly.Events.CommentChange = function(opt_comment, opt_oldContents,
+    opt_newContents) {
+  Blockly.Events.CommentChange.superClass_.constructor.call(this, opt_comment);
+  if (!opt_comment) {
     return;  // Blank event to be populated by fromJson.
   }
 
-  this.oldContents_ = typeof oldContents == 'undefined' ? '' : oldContents;
-  this.newContents_ = typeof newContents == 'undefined' ? '' : newContents;
+  this.oldContents_ = typeof opt_oldContents == 'undefined' ? '' :
+      opt_oldContents;
+  this.newContents_ = typeof opt_newContents == 'undefined' ? '' :
+      opt_newContents;
 };
 Blockly.utils.object.inherits(Blockly.Events.CommentChange,
     Blockly.Events.CommentBase);
@@ -163,18 +166,18 @@ Blockly.Events.CommentChange.prototype.run = function(forward) {
 
 /**
  * Class for a comment creation event.
- * @param {!Blockly.WorkspaceComment=} comment The created comment.  Undefined
- *     for a blank event.
+ * @param {!Blockly.WorkspaceComment=} opt_comment The created comment.
+ *     Undefined for a blank event.
  * @extends {Blockly.Events.CommentBase}
  * @constructor
  */
-Blockly.Events.CommentCreate = function(comment) {
-  Blockly.Events.CommentCreate.superClass_.constructor.call(this, comment);
-  if (!comment) {
+Blockly.Events.CommentCreate = function(opt_comment) {
+  Blockly.Events.CommentCreate.superClass_.constructor.call(this, opt_comment);
+  if (!opt_comment) {
     return;  // Blank event to be populated by fromJson.
   }
 
-  this.xml = comment.toXmlWithXY();
+  this.xml = opt_comment.toXmlWithXY();
 };
 Blockly.utils.object.inherits(Blockly.Events.CommentCreate,
     Blockly.Events.CommentBase);
@@ -237,18 +240,18 @@ Blockly.Events.CommentCreateDeleteHelper = function(event, create) {
 };
 /**
  * Class for a comment deletion event.
- * @param {!Blockly.WorkspaceComment=} comment The deleted comment.  Undefined
- *     for a blank event.
+ * @param {!Blockly.WorkspaceComment=} opt_comment The deleted comment.
+ *     Undefined for a blank event.
  * @extends {Blockly.Events.CommentBase}
  * @constructor
  */
-Blockly.Events.CommentDelete = function(comment) {
-  Blockly.Events.CommentDelete.superClass_.constructor.call(this, comment);
-  if (!comment) {
+Blockly.Events.CommentDelete = function(opt_comment) {
+  Blockly.Events.CommentDelete.superClass_.constructor.call(this, opt_comment);
+  if (!opt_comment) {
     return;  // Blank event to be populated by fromJson.
   }
 
-  this.xml = comment.toXmlWithXY();
+  this.xml = opt_comment.toXmlWithXY();
 };
 Blockly.utils.object.inherits(Blockly.Events.CommentDelete,
     Blockly.Events.CommentBase);
@@ -287,14 +290,14 @@ Blockly.Events.CommentDelete.prototype.run = function(forward) {
 
 /**
  * Class for a comment move event.  Created before the move.
- * @param {!Blockly.WorkspaceComment=} comment The comment that is being moved.
- *     Undefined for a blank event.
+ * @param {!Blockly.WorkspaceComment=} opt_comment The comment that is being
+ *     moved.  Undefined for a blank event.
  * @extends {Blockly.Events.CommentBase}
  * @constructor
  */
-Blockly.Events.CommentMove = function(comment) {
-  Blockly.Events.CommentMove.superClass_.constructor.call(this, comment);
-  if (!comment) {
+Blockly.Events.CommentMove = function(opt_comment) {
+  Blockly.Events.CommentMove.superClass_.constructor.call(this, opt_comment);
+  if (!opt_comment) {
     return;  // Blank event to be populated by fromJson.
   }
 
@@ -303,13 +306,13 @@ Blockly.Events.CommentMove = function(comment) {
    * location.
    * @type {Blockly.WorkspaceComment}
    */
-  this.comment_ = comment;
+  this.comment_ = opt_comment;
 
   /**
    * The location before the move, in workspace coordinates.
    * @type {!Blockly.utils.Coordinate}
    */
-  this.oldCoordinate_ = comment.getXY();
+  this.oldCoordinate_ = opt_comment.getXY();
 
   /**
    * The location after the move, in workspace coordinates.

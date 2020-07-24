@@ -18,6 +18,7 @@ goog.require('Blockly.utils.Rect');
 goog.require('Blockly.Xml');
 
 goog.requireType('Blockly.IDeleteArea');
+goog.requireType('Blockly.IFlyout');
 
 
 /**
@@ -43,7 +44,7 @@ Blockly.Trashcan = function(workspace) {
 
   /**
    * The trashcan flyout.
-   * @type {Blockly.Flyout}
+   * @type {Blockly.IFlyout}
    * @package
    */
   this.flyout = null;

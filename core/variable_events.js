@@ -177,7 +177,7 @@ Blockly.Events.VarDelete.prototype.run = function(forward) {
  * Class for a variable rename event.
  * @param {!Blockly.VariableModel=} variable The renamed variable. Undefined for
  *     a blank event.
- * @param {string} newName The new name the variable will be changed to.
+ * @param {string=} newName The new name the variable will be changed to.
  * @extends {Blockly.Events.VarBase}
  * @constructor
  */
@@ -187,7 +187,7 @@ Blockly.Events.VarRename = function(variable, newName) {
   }
   Blockly.Events.VarRename.superClass_.constructor.call(this, variable);
   this.oldName = variable.name;
-  this.newName = newName;
+  this.newName = typeof newName == 'undefined' ? '' : newName;
 };
 Blockly.utils.object.inherits(Blockly.Events.VarRename, Blockly.Events.VarBase);
 

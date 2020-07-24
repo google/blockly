@@ -24,8 +24,7 @@ goog.require('Blockly.utils.object');
  * editing to work (e.g. scrolling the workspace, zooming, opening toolbox
  * categories).
  * UI events do not undo or redo.
- * @param {!Blockly.Block=} block The affected block.  Undefined for a blank
- *     event.
+ * @param {Blockly.Block=} block The affected block.
  * @param {string=} element One of 'selected', 'comment', 'mutatorOpen', etc.
  * @param {*=} oldValue Previous value of element.
  * @param {*=} newValue New value of element.

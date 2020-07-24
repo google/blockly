@@ -31,7 +31,7 @@ goog.require('Blockly.utils.object');
 Blockly.Events.FinishedLoading = function(workspace) {
 
   /**
-   * Whether or not the event is blank.
+   * Whether or not the event is blank (to be populated by fromJson).
    * @type {boolean}
    */
   this.isBlank = typeof workspace == 'undefined';

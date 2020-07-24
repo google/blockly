@@ -101,10 +101,11 @@ Blockly.Events.CommentBase.prototype.fromJson = function(json) {
  * @constructor
  */
 Blockly.Events.CommentChange = function(comment, oldContents, newContents) {
+  Blockly.Events.CommentChange.superClass_.constructor.call(this, comment);
   if (!comment) {
     return;  // Blank event to be populated by fromJson.
   }
-  Blockly.Events.CommentChange.superClass_.constructor.call(this, comment);
+
   this.oldContents_ = typeof oldContents == 'undefined' ? '' : oldContents;
   this.newContents_ = typeof newContents == 'undefined' ? '' : newContents;
 };
@@ -168,10 +169,10 @@ Blockly.Events.CommentChange.prototype.run = function(forward) {
  * @constructor
  */
 Blockly.Events.CommentCreate = function(comment) {
+  Blockly.Events.CommentCreate.superClass_.constructor.call(this, comment);
   if (!comment) {
     return;  // Blank event to be populated by fromJson.
   }
-  Blockly.Events.CommentCreate.superClass_.constructor.call(this, comment);
 
   this.xml = comment.toXmlWithXY();
 };
@@ -242,10 +243,10 @@ Blockly.Events.CommentCreateDeleteHelper = function(event, create) {
  * @constructor
  */
 Blockly.Events.CommentDelete = function(comment) {
+  Blockly.Events.CommentDelete.superClass_.constructor.call(this, comment);
   if (!comment) {
     return;  // Blank event to be populated by fromJson.
   }
-  Blockly.Events.CommentDelete.superClass_.constructor.call(this, comment);
 
   this.xml = comment.toXmlWithXY();
 };
@@ -292,10 +293,10 @@ Blockly.Events.CommentDelete.prototype.run = function(forward) {
  * @constructor
  */
 Blockly.Events.CommentMove = function(comment) {
+  Blockly.Events.CommentMove.superClass_.constructor.call(this, comment);
   if (!comment) {
     return;  // Blank event to be populated by fromJson.
   }
-  Blockly.Events.CommentMove.superClass_.constructor.call(this, comment);
 
   /**
    * The comment that is being moved.  Will be cleared after recording the new

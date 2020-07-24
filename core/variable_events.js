@@ -73,10 +73,11 @@ Blockly.Events.VarBase.prototype.fromJson = function(json) {
  * @constructor
  */
 Blockly.Events.VarCreate = function(variable) {
+  Blockly.Events.VarCreate.superClass_.constructor.call(this, variable);
   if (!variable) {
     return;  // Blank event to be populated by fromJson.
   }
-  Blockly.Events.VarCreate.superClass_.constructor.call(this, variable);
+
   this.varType = variable.type;
   this.varName = variable.name;
 };
@@ -130,10 +131,11 @@ Blockly.Events.VarCreate.prototype.run = function(forward) {
  * @constructor
  */
 Blockly.Events.VarDelete = function(variable) {
+  Blockly.Events.VarDelete.superClass_.constructor.call(this, variable);
   if (!variable) {
     return;  // Blank event to be populated by fromJson.
   }
-  Blockly.Events.VarDelete.superClass_.constructor.call(this, variable);
+
   this.varType = variable.type;
   this.varName = variable.name;
 };
@@ -188,10 +190,11 @@ Blockly.Events.VarDelete.prototype.run = function(forward) {
  * @constructor
  */
 Blockly.Events.VarRename = function(variable, newName) {
+  Blockly.Events.VarRename.superClass_.constructor.call(this, variable);
   if (!variable) {
     return;  // Blank event to be populated by fromJson.
   }
-  Blockly.Events.VarRename.superClass_.constructor.call(this, variable);
+
   this.oldName = variable.name;
   this.newName = typeof newName == 'undefined' ? '' : newName;
 };

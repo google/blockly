@@ -87,10 +87,10 @@ Blockly.Events.BlockBase.prototype.fromJson = function(json) {
  * @constructor
  */
 Blockly.Events.Change = function(block, element, name, oldValue, newValue) {
+  Blockly.Events.Change.superClass_.constructor.call(this, block);
   if (!block) {
     return;  // Blank event to be populated by fromJson.
   }
-  Blockly.Events.Change.superClass_.constructor.call(this, block);
   this.element = typeof element == 'undefined' ? '' : element;
   this.name = typeof name == 'undefined' ? '' : name;
   this.oldValue = typeof oldValue == 'undefined' ? '' : oldValue;
@@ -213,10 +213,10 @@ Blockly.Events.Change.prototype.run = function(forward) {
  * @constructor
  */
 Blockly.Events.Create = function(block) {
+  Blockly.Events.Create.superClass_.constructor.call(this, block);
   if (!block) {
     return;  // Blank event to be populated by fromJson.
   }
-  Blockly.Events.Create.superClass_.constructor.call(this, block);
 
   if (block.workspace.rendered) {
     this.xml = Blockly.Xml.blockToDomWithXY(block);
@@ -294,13 +294,13 @@ Blockly.Events.Create.prototype.run = function(forward) {
  * @constructor
  */
 Blockly.Events.Delete = function(block) {
+  Blockly.Events.Delete.superClass_.constructor.call(this, block);
   if (!block) {
     return;  // Blank event to be populated by fromJson.
   }
   if (block.getParent()) {
     throw Error('Connected blocks cannot be deleted.');
   }
-  Blockly.Events.Delete.superClass_.constructor.call(this, block);
 
   if (block.workspace.rendered) {
     this.oldXml = Blockly.Xml.blockToDomWithXY(block);
@@ -374,10 +374,11 @@ Blockly.Events.Delete.prototype.run = function(forward) {
  * @constructor
  */
 Blockly.Events.Move = function(block) {
+  Blockly.Events.Move.superClass_.constructor.call(this, block);
   if (!block) {
     return;  // Blank event to be populated by fromJson.
   }
-  Blockly.Events.Move.superClass_.constructor.call(this, block);
+
   var location = this.currentLocation_();
   this.oldParentId = location.parentId;
   this.oldInputName = location.inputName;

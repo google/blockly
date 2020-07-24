@@ -23,7 +23,7 @@ goog.require('Blockly.Events');
 Blockly.Events.Abstract = function() {
 
   /**
-   * Whether or not the event is blank.
+   * Whether or not the event is blank (to be populated by fromJson).
    * @type {?boolean}
    */
   this.isBlank = null;

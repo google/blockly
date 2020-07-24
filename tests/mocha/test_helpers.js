@@ -4,9 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/* exported assertVariableValues, captureWarnings, defineRowBlock,
-   defineStackBlock, defineStatementBlock, createTestBlock, createEventsFireStub */
-
 /**
  * Check if a variable with the given values exists.
  * @param {Blockly.Workspace|Blockly.VariableMap} container The workspace  or

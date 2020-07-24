@@ -23,20 +23,26 @@ goog.require('Blockly.utils.object');
 
 /**
  * Abstract class for a variable event.
- * @param {!Blockly.VariableModel} variable The variable this event corresponds
- *     to.
+ * @param {!Blockly.VariableModel=} variable The variable this event corresponds
+ *     to.  Undefined for a blank event.
  * @extends {Blockly.Events.Abstract}
  * @constructor
  */
 Blockly.Events.VarBase = function(variable) {
   Blockly.Events.VarBase.superClass_.constructor.call(this);
+  this.isBlank = typeof variable == 'undefined';
 
   /**
    * The variable id for the variable this event pertains to.
    * @type {string}
    */
-  this.varId = variable.getId();
-  this.workspaceId = variable.workspace.id;
+  this.varId = this.isBlank ? '' : variable.getId();
+
+  /**
+   * The workspace identifier for this event.
+   * @type {string}
+   */
+  this.workspaceId = this.isBlank ? '' : variable.workspace.id;
 };
 Blockly.utils.object.inherits(Blockly.Events.VarBase, Blockly.Events.Abstract);
 

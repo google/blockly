@@ -32,19 +32,26 @@ goog.require('Blockly.utils.xml');
 
 /**
  * Abstract class for a block event.
- * @param {!Blockly.Block} block The block this event corresponds to.
+ * @param {!Blockly.Block=} block The block this event corresponds to.
+ *     Undefined for a blank event.
  * @extends {Blockly.Events.Abstract}
  * @constructor
  */
 Blockly.Events.BlockBase = function(block) {
   Blockly.Events.BlockBase.superClass_.constructor.call(this);
+  this.isBlank = typeof block == 'undefined';
 
   /**
    * The block id for the block this event pertains to
    * @type {string}
    */
-  this.blockId = block.id;
-  this.workspaceId = block.workspace.id;
+  this.blockId = this.isBlank ? '' : block.id;
+
+  /**
+   * The workspace identifier for this event.
+   * @type {string}
+   */
+  this.workspaceId = this.isBlank ? '' : block.workspace.id;
 };
 Blockly.utils.object.inherits(Blockly.Events.BlockBase,
     Blockly.Events.Abstract);

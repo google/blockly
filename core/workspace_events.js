@@ -25,10 +25,17 @@ goog.require('Blockly.utils.object');
  * Finished loading events do not record undo or redo.
  * @param {!Blockly.Workspace=} workspace The workspace that has finished
  *    loading.  Undefined for a blank event.
- * @extends {Blockly.Events.Abstract}
+ * @extends {Blockly.Events.Ui}
  * @constructor
  */
 Blockly.Events.FinishedLoading = function(workspace) {
+
+  /**
+   * Whether or not the event is blank.
+   * @type {boolean}
+   */
+  this.isBlank = typeof workspace == 'undefined';
+
   /**
    * The workspace identifier for this event.
    * @type {string}
@@ -77,6 +84,7 @@ Blockly.Events.FinishedLoading.prototype.toJson = function() {
  * @param {!Object} json JSON representation.
  */
 Blockly.Events.FinishedLoading.prototype.fromJson = function(json) {
+  this.isBlank = false;
   this.workspaceId = json['workspaceId'];
   this.group = json['group'];
 };

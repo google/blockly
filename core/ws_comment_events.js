@@ -28,23 +28,30 @@ goog.require('Blockly.utils.xml');
 
 /**
  * Abstract class for a comment event.
- * @param {!Blockly.WorkspaceComment} comment The comment this event
- *     corresponds to.
+ * @param {!Blockly.WorkspaceComment=} comment The comment this event
+ *     corresponds to.  Undefined for a blank event.
  * @extends {Blockly.Events.Abstract}
  * @constructor
  */
 Blockly.Events.CommentBase = function(comment) {
+
+  /**
+   * Whether or not an event is blank.
+   * @type {boolean}
+   */
+  this.isBlank = typeof comment == 'undefined';
+
   /**
    * The ID of the comment this event pertains to.
    * @type {string}
    */
-  this.commentId = comment.id;
+  this.commentId = this.isBlank ? '' : comment.id;
 
   /**
    * The workspace identifier for this event.
    * @type {string}
    */
-  this.workspaceId = comment.workspace.id;
+  this.workspaceId = this.isBlank ? '' : comment.workspace.id;
 
   /**
    * The event group id for the group this event belongs to. Groups define

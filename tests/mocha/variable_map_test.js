@@ -70,13 +70,13 @@ suite('Variable Map', function() {
     });
 
     test('Null id', function() {
-      sinon.stub(Blockly.utils, "genUid").returns('1');
+      createGenUidStubWithReturns('1');
       this.variableMap.createVariable('name1', 'type1', null);
       assertVariableValues(this.variableMap, 'name1', 'type1', '1');
     });
 
     test('Undefined id', function() {
-      sinon.stub(Blockly.utils, "genUid").returns('1');
+      createGenUidStubWithReturns('1');
       this.variableMap.createVariable('name1', 'type1', undefined);
       assertVariableValues(this.variableMap, 'name1', 'type1', '1');
     });

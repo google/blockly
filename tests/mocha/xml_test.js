@@ -299,7 +299,7 @@ suite('XML', function() {
           assertVariableDomField(resultFieldDom, 'VAR', 'string', 'id1', 'name1');
         });
         test('Variable Default Case', function() {
-          sinon.stub(Blockly.utils, 'genUid').returns('1');
+          createGenUidStubWithReturns('1');
           this.workspace.createVariable('name1');
 
           Blockly.Events.disable();
@@ -409,7 +409,7 @@ suite('XML', function() {
       this.workspace.dispose();
     });
     test('One Variable', function() {
-      sinon.stub(Blockly.utils, 'genUid').returns('1');
+      createGenUidStubWithReturns('1');
       this.workspace.createVariable('name1');
       var resultDom =
           Blockly.Xml.variablesToDom(this.workspace.getAllVariables());
@@ -685,7 +685,7 @@ suite('XML', function() {
       this.workspace.dispose();
     });
     test('Backwards compatibility', function() {
-      sinon.stub(Blockly.utils, 'genUid').returns('1');
+      createGenUidStubWithReturns('1');
       var dom = Blockly.Xml.textToDom(
           '<xml xmlns="https://developers.google.com/blockly/xml">' +
           '  <block type="field_variable_test_block" id="block_id">' +

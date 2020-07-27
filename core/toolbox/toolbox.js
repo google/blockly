@@ -17,6 +17,8 @@ goog.require('Blockly.Events');
 goog.require('Blockly.Events.Ui');
 goog.require('Blockly.navigation');
 goog.require('Blockly.registry');
+goog.require('Blockly.ToolboxCategory');
+goog.require('Blockly.ToolboxSeparator');
 goog.require('Blockly.Touch');
 goog.require('Blockly.utils');
 goog.require('Blockly.utils.aria');

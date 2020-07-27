@@ -156,6 +156,9 @@ Blockly.Toolbox.prototype.init = function() {
   this.flyout_ = this.createFlyout_();
 
   this.HtmlDiv = this.createDom_(this.workspace_);
+  Blockly.utils.dom.insertAfter(this.flyout_.createDom('svg'), svg);
+  this.flyout_.init(workspace);
+
   this.render(this.toolboxDef_);
   var themeManager = workspace.getThemeManager();
   themeManager.subscribe(this.HtmlDiv, 'toolboxBackgroundColour',
@@ -163,8 +166,6 @@ Blockly.Toolbox.prototype.init = function() {
   themeManager.subscribe(this.HtmlDiv, 'toolboxForegroundColour', 'color');
 
   // Insert the flyout after the workspace.
-  Blockly.utils.dom.insertAfter(this.flyout_.createDom('svg'), svg);
-  this.flyout_.init(workspace);
 };
 
 /**

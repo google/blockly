@@ -12,8 +12,26 @@
 
 goog.provide('Blockly.Toolbox');
 
-goog.require('Blockly.ToolboxCategory');
-goog.require('Blockly.ToolboxSeparator');
+goog.require('Blockly.Css');
+goog.require('Blockly.Events');
+goog.require('Blockly.Events.Ui');
+goog.require('Blockly.navigation');
+goog.require('Blockly.registry');
+goog.require('Blockly.Touch');
+goog.require('Blockly.utils');
+goog.require('Blockly.utils.aria');
+goog.require('Blockly.utils.dom');
+goog.require('Blockly.utils.Rect');
+goog.require('Blockly.utils.toolbox');
+
+goog.requireType('Blockly.CollapsibleToolboxItem');
+goog.requireType('Blockly.IBlocklyActionable');
+goog.requireType('Blockly.IDeleteArea');
+goog.requireType('Blockly.IStyleable');
+goog.requireType('Blockly.IToolbox');
+goog.requireType('Blockly.SelectableToolboxItem');
+goog.requireType('Blockly.ToolboxItem');
+
 
 /**
  * Class for a Toolbox.
@@ -96,7 +114,7 @@ Blockly.Toolbox = function(workspace) {
   this.flyout_ = null;
 
   /**
-   * The id of the toolbox item as the key and the toolbox item as the value.
+   * A map from toolbox item IDs to toolbox items.
    * @type {!Object<string, Blockly.ToolboxItem>}
    * @protected
    */
@@ -119,7 +137,7 @@ Blockly.Toolbox = function(workspace) {
    * Array holding info needed to unbind events.
    * Used for disposing.
    * Ex: [[node, name, func], [node, name, func]].
-   * @type {!Array<!Array<?>>}
+   * @type {!Array<!Blockly.EventData>}
    * @protected
    */
   this.boundEvents_ = [];
@@ -165,7 +183,7 @@ Blockly.Toolbox.prototype.createDom_ = function(workspace) {
 
   svg.parentNode.insertBefore(container, svg);
 
-  this.addToolboxListeners_(container, this.contentsDiv_);
+  this.attachEvents_(container, this.contentsDiv_);
   return container;
 };
 
@@ -203,7 +221,7 @@ Blockly.Toolbox.prototype.createContentsContainer_ = function() {
  *     of the toolbox.
  * @protected
  */
-Blockly.Toolbox.prototype.addToolboxListeners_ = function(container,
+Blockly.Toolbox.prototype.attachEvents_ = function(container,
     contentsContainer) {
   // Clicking on toolbox closes popups.
   var clickEvent = Blockly.bindEventWithChecks_(container, 'mousedown', this,
@@ -234,9 +252,9 @@ Blockly.Toolbox.prototype.createFlyout_ = function() {
         'oneBasedIndex': workspace.options.oneBasedIndex,
         'horizontalLayout': workspace.horizontalLayout,
         'renderer': workspace.options.renderer,
-        'rendererOverrides': workspace.options.rendererOverrides
+        'rendererOverrides': workspace.options.rendererOverrides,
+        'toolboxPosition': workspace.options.toolboxPosition
       }));
-  workspaceOptions.toolboxPosition = workspace.options.toolboxPosition;
 
   var FlyoutClass = null;
   if (workspace.horizontalLayout) {
@@ -260,7 +278,7 @@ Blockly.Toolbox.prototype.createFlyout_ = function() {
  *     holding objects containing information on the contents of the toolbox.
  * @protected
  */
-Blockly.Toolbox.prototype.addContents_ = function(toolboxDef) {
+Blockly.Toolbox.prototype.renderContents_ = function(toolboxDef) {
   for (var i = 0, childIn; (childIn = toolboxDef[i]); i++) {
     // TODO: Add classes to registry so we can avoid this switch statement.
     switch (childIn['kind'].toUpperCase()) {
@@ -304,14 +322,14 @@ Blockly.Toolbox.prototype.render = function(toolboxDef) {
   }
   this.contents_ = [];
   this.contentIds_ = {};
-  this.addContents_(toolboxDef);
+  this.renderContents_(toolboxDef);
   this.position();
 };
 
 /**
  * Adds an item to the toolbox.
  * @param {!Blockly.ToolboxItem} toolboxItem The item in the toolbox.
- * @private
+ * @protected
  */
 Blockly.Toolbox.prototype.addToolboxItem_ = function(toolboxItem) {
   this.contents_.push(toolboxItem);

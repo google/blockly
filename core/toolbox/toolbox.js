@@ -347,6 +347,202 @@ Blockly.Toolbox.prototype.addToolboxItem_ = function(toolboxItem) {
 };
 
 /**
+ * Adds a style on the toolbox. Usually used to change the cursor.
+ * @param {string} style The name of the class to add.
+ * @package
+ */
+Blockly.Toolbox.prototype.addStyle = function(style) {
+  Blockly.utils.dom.addClass(/** @type {!Element} */ (this.HtmlDiv), style);
+};
+
+/**
+ * Removes a style from the toolbox. Usually used to change the cursor.
+ * @param {string} style The name of the class to remove.
+ * @package
+ */
+Blockly.Toolbox.prototype.removeStyle = function(style) {
+  Blockly.utils.dom.removeClass(/** @type {!Element} */ (this.HtmlDiv), style);
+};
+
+/**
+ * Return the deletion rectangle for this toolbox.
+ * @return {?Blockly.utils.Rect} Rectangle in which to delete.
+ * @public
+ */
+Blockly.Toolbox.prototype.getClientRect = function() {
+  if (!this.HtmlDiv) {
+    return null;
+  }
+
+  // BIG_NUM is offscreen padding so that blocks dragged beyond the toolbox
+  // area are still deleted.  Must be smaller than Infinity, but larger than
+  // the largest screen size.
+  var BIG_NUM = 10000000;
+  var toolboxRect = this.HtmlDiv.getBoundingClientRect();
+
+  var top = toolboxRect.top;
+  var bottom = top + toolboxRect.height;
+  var left = toolboxRect.left;
+  var right = left + toolboxRect.width;
+
+  // Assumes that the toolbox is on the SVG edge.  If this changes
+  // (e.g. toolboxes in mutators) then this code will need to be more complex.
+  if (this.toolboxPosition == Blockly.TOOLBOX_AT_TOP) {
+    return new Blockly.utils.Rect(-BIG_NUM, bottom, -BIG_NUM, BIG_NUM);
+  } else if (this.toolboxPosition == Blockly.TOOLBOX_AT_BOTTOM) {
+    return new Blockly.utils.Rect(top, BIG_NUM, -BIG_NUM, BIG_NUM);
+  } else if (this.toolboxPosition == Blockly.TOOLBOX_AT_LEFT) {
+    return new Blockly.utils.Rect(-BIG_NUM, BIG_NUM, -BIG_NUM, right);
+  } else {  // Right
+    return new Blockly.utils.Rect(-BIG_NUM, BIG_NUM, left, BIG_NUM);
+  }
+};
+
+/**
+ * Gets the toolbox item with the given id.
+ * @param {string} id The id of the toolbox item.
+ * @return {?Blockly.ToolboxItem} The toolbox item with the given id, or null if
+ *     no item exists.
+ * @public
+ */
+Blockly.Toolbox.prototype.getToolboxItemById = function(id) {
+  return this.contentIds_[id];
+};
+
+/**
+ * Gets the width of the toolbox.
+ * @return {number} The width of the toolbox.
+ * @public
+ */
+Blockly.Toolbox.prototype.getWidth = function() {
+  return this.width_;
+};
+
+/**
+ * Gets the height of the toolbox.
+ * @return {number} The width of the toolbox.
+ * @public
+ */
+Blockly.Toolbox.prototype.getHeight = function() {
+  return this.height_;
+};
+
+/**
+ * Gets the toolbox flyout.
+ * @return {?Blockly.Flyout} The toolbox flyout.
+ * @public
+ */
+Blockly.Toolbox.prototype.getFlyout = function() {
+  return this.flyout_;
+};
+
+/**
+ * Gets the workspace for the toolbox.
+ * @return {!Blockly.WorkspaceSvg} The parent workspace for the toolbox.
+ * @public
+ */
+Blockly.Toolbox.prototype.getWorkspace = function() {
+  return this.workspace_;
+};
+
+/**
+ * Gets the selected item.
+ * @return {?Blockly.ToolboxItem} The selected item, or null if no item is
+ *     currently selected.
+ * @public
+ */
+Blockly.Toolbox.prototype.getSelectedItem = function() {
+  return this.selectedItem_;
+};
+
+/**
+ * Gets whether or not the toolbox is horizontal.
+ * @return {boolean} True if the toolbox is horizontal, false if the toolbox is
+ *     vertical.
+ * @public
+ */
+Blockly.Toolbox.prototype.isHorizontal = function() {
+  return this.horizontalLayout_;
+};
+
+/**
+ * Positions the toolbox based on whether it is a horizontal toolbox and whether
+ * the workspace is in rtl.
+ * @public
+ */
+Blockly.Toolbox.prototype.position = function() {
+  var toolboxDiv = this.HtmlDiv;
+  if (!toolboxDiv) {
+    // Not initialized yet.
+    return;
+  }
+
+  if (this.horizontalLayout_) {
+    toolboxDiv.style.left = '0';
+    toolboxDiv.style.height = 'auto';
+    toolboxDiv.style.width = '100%';
+    this.height_ = toolboxDiv.offsetHeight;
+    if (this.toolboxPosition == Blockly.TOOLBOX_AT_TOP) {  // Top
+      toolboxDiv.style.top = '0';
+    } else {  // Bottom
+      toolboxDiv.style.bottom = '0';
+    }
+  } else {
+    if (this.toolboxPosition == Blockly.TOOLBOX_AT_RIGHT) {  // Right
+      toolboxDiv.style.right = '0';
+    } else {  // Left
+      toolboxDiv.style.left = '0';
+    }
+    toolboxDiv.style.height = '100%';
+    this.width_ = toolboxDiv.offsetWidth;
+  }
+  this.flyout_.position();
+};
+
+/**
+ * Unhighlights any previously selected item.
+ * @public
+ */
+Blockly.Toolbox.prototype.clearSelection = function() {
+  this.setSelectedItem(null);
+};
+
+/**
+ * Updates the category colours and background colour of selected categories.
+ * @package
+ */
+Blockly.Toolbox.prototype.refreshTheme = function() {
+  for (var i = 0; i < this.contents_.length; i++) {
+    var child = this.contents_[i];
+    if (child.refreshTheme) {
+      child.refreshTheme();
+    }
+  }
+};
+
+/**
+ * Updates the flyout's content without closing it.  Should be used in response
+ * to a change in one of the dynamic categories, such as variables or
+ * procedures.
+ * @public
+ */
+Blockly.Toolbox.prototype.refreshSelection = function() {
+  if (this.selectedItem_ && this.selectedItem_.isSelectable() &&
+      !this.selectedItem_.isCollapsible()) {
+    this.flyout_.show(this.selectedItem_.getContents());
+  }
+};
+
+/**
+ * Sets the visibility of the toolbox.
+ * @param {boolean} isVisible True if toolbox should be visible.
+ * @public
+ */
+Blockly.Toolbox.prototype.setVisible = function(isVisible) {
+  this.HtmlDiv.style.display = isVisible ? 'block' : 'none';
+};
+
+/**
  * CSS for Toolbox.  See css.js for use.
  */
 Blockly.Css.register([

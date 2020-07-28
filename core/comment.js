@@ -368,7 +368,7 @@ Blockly.Comment.prototype.getText = function() {
   Blockly.utils.deprecation.warn(
       'Comment.prototype.getText',
       'August 2019',
-      'August 2020',
+      'December 2020',
       'block.getCommentText');
   return this.model_.text || '';
 };
@@ -385,7 +385,7 @@ Blockly.Comment.prototype.setText = function(text) {
   Blockly.utils.deprecation.warn(
       'Comment.prototype.setText',
       'August 2019',
-      'August 2020',
+      'December 2020',
       'block.setCommentText');
   if (this.model_.text == text) {
     return;

@@ -239,6 +239,68 @@ Blockly.Toolbox.prototype.attachEvents_ = function(container,
 };
 
 /**
+ * Handles on click events for when the toolbox or toolbox items are clicked.
+ * @param {!Event} e Click event to handle.
+ * @protected
+ */
+Blockly.Toolbox.prototype.onClick_ = function(e) {
+  if (Blockly.utils.isRightButton(e) || e.target == this.HtmlDiv) {
+    // Close flyout.
+    Blockly.hideChaff(false);
+  } else {
+    var srcElement = e.srcElement;
+    var itemId = srcElement.getAttribute('id');
+    if (itemId) {
+      var item = this.getToolboxItemById(itemId);
+      if (item.isSelectable()) {
+        this.setSelectedItem(item);
+        item.onClick();
+      }
+    }
+    // Just close popups.
+    Blockly.hideChaff(true);
+  }
+  Blockly.Touch.clearTouchIdentifier();  // Don't block future drags.
+};
+
+/**
+ * Handles key down events for the toolbox.
+ * @param {!KeyboardEvent} e The key down event.
+ * @protected
+ */
+Blockly.Toolbox.prototype.onKeyDown_ = function(e) {
+  var handled = false;
+  switch (e.keyCode) {
+    case Blockly.utils.KeyCodes.DOWN:
+      handled = this.selectNext_();
+      break;
+    case Blockly.utils.KeyCodes.UP:
+      handled = this.selectPrevious_();
+      break;
+    case Blockly.utils.KeyCodes.LEFT:
+      handled = this.selectParent_();
+      break;
+    case Blockly.utils.KeyCodes.RIGHT:
+      handled = this.selectChild_();
+      break;
+    case Blockly.utils.KeyCodes.ENTER:
+    case Blockly.utils.KeyCodes.SPACE:
+      if (this.selectedItem_ && this.selectedItem_.isCollapsible()) {
+        this.selectedItem_.toggleExpanded();
+        handled = true;
+      }
+      break;
+    default:
+      handled = false;
+      break;
+  }
+
+  if (handled) {
+    e.preventDefault();
+  }
+};
+
+/**
  * Creates the flyout based on the toolbox layout.
  * @return {!Blockly.Flyout} The flyout for the toolbox.
  * @throws {Error} If missing a require for `Blockly.HorizontalFlyout`,
@@ -627,6 +689,141 @@ Blockly.Toolbox.prototype.fireSelectEvent_ = function(oldItem, newItem) {
       oldElement, newElement);
   event.workspaceId = this.workspace_.id;
   Blockly.Events.fire(event);
+};
+
+/**
+ * Handles the given Blockly action on a toolbox.
+ * This is only triggered when keyboard accessibility mode is enabled.
+ * @param {!Blockly.Action} action The action to be handled.
+ * @return {boolean} True if the field handled the action, false otherwise.
+ * @package
+ */
+Blockly.Toolbox.prototype.onBlocklyAction = function(action) {
+  var selected = this.selectedItem_;
+  if (!selected) {
+    return false;
+  }
+  switch (action.name) {
+    case Blockly.navigation.actionNames.PREVIOUS:
+      return this.selectPrevious_();
+    case Blockly.navigation.actionNames.OUT:
+      return this.selectParent_();
+    case Blockly.navigation.actionNames.NEXT:
+      return this.selectNext_();
+    case Blockly.navigation.actionNames.IN:
+      return this.selectChild_();
+    default:
+      return false;
+  }
+};
+
+/**
+ * Selects the parent if it exists, or closes the current item.
+ * @return {boolean} True if a parent category was selected, false otherwise.
+ * @private
+ */
+Blockly.Toolbox.prototype.selectParent_ = function() {
+  if (!this.selectedItem_) {
+    return false;
+  }
+
+  if (this.selectedItem_.isCollapsible() && this.selectedItem_.isExpanded()) {
+    this.selectedItem_.setExpanded(false);
+    return true;
+  } else if (this.selectedItem_.getParent() &&
+      this.selectedItem_.getParent().isSelectable()) {
+    this.setSelectedItem(this.selectedItem_.getParent());
+    return true;
+  }
+  return false;
+};
+
+/**
+ * Selects the previous visible toolbox item.
+ * @return {boolean} True if a child category was selected, false otherwise.
+ * @private
+ */
+Blockly.Toolbox.prototype.selectChild_ = function() {
+  if (!this.selectedItem_ || !this.selectedItem_.isCollapsible()) {
+    return false;
+  }
+  var collapsibleItem = /** @type {Blockly.CollapsibleToolboxItem} */
+      (this.selectedItem_);
+  if (!collapsibleItem.isExpanded()) {
+    collapsibleItem.setExpanded(true);
+    return true;
+  } else {
+    this.selectNext_();
+    return true;
+  }
+};
+
+/**
+ * Selects the next visible toolbox item.
+ * @return {boolean} True if a next category was selected, false otherwise.
+ * @private
+ */
+Blockly.Toolbox.prototype.selectNext_ = function() {
+  if (!this.selectedItem_) {
+    return false;
+  }
+
+  var nextItemIdx = this.contents_.indexOf(this.selectedItem_) + 1;
+  if (nextItemIdx > -1 && nextItemIdx < this.contents_.length) {
+    var nextItem = this.contents_[nextItemIdx];
+    while (nextItem && !nextItem.isSelectable()) {
+      nextItem = this.contents_[++nextItemIdx];
+    }
+    if (nextItem && nextItem.isSelectable()) {
+      this.setSelectedItem(nextItem);
+      return true;
+    }
+  }
+  return false;
+};
+
+/**
+ * Selects the previous visible toolbox item.
+ * @return {boolean} True if a previous category was selected, false otherwise.
+ * @private
+ */
+Blockly.Toolbox.prototype.selectPrevious_ = function() {
+  if (!this.selectedItem_) {
+    return false;
+  }
+
+  var prevItemIdx = this.contents_.indexOf(this.selectedItem_) - 1;
+  if (prevItemIdx > -1 && prevItemIdx < this.contents_.length) {
+    var prevItem = this.contents_[prevItemIdx];
+    while (prevItem && !prevItem.isSelectable()) {
+      prevItem = this.contents_[--prevItemIdx];
+    }
+    if (prevItem && prevItem.isSelectable()) {
+      this.setSelectedItem(prevItem);
+      return true;
+    }
+  }
+  return false;
+};
+
+/**
+ * Disposes of this toolbox.
+ * @public
+ */
+Blockly.Toolbox.prototype.dispose = function() {
+  this.flyout_.dispose();
+  for (var i = 0; i < this.contents_.length; i++) {
+    var toolboxItem = this.contents_[i];
+    toolboxItem.dispose();
+  }
+
+  for (var j = 0; j < this.boundEvents_.length; j++) {
+    Blockly.unbindEvent_(this.boundEvents_[j]);
+  }
+  this.boundEvents_ = [];
+
+  this.workspace_.getThemeManager().unsubscribe(this.HtmlDiv);
+  Blockly.utils.dom.removeNode(this.HtmlDiv);
 };
 
 /**

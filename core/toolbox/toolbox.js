@@ -509,7 +509,7 @@ Blockly.Toolbox.prototype.clearSelection = function() {
 
 /**
  * Updates the category colours and background colour of selected categories.
- * @package
+ * @protected
  */
 Blockly.Toolbox.prototype.refreshTheme = function() {
   for (var i = 0; i < this.contents_.length; i++) {

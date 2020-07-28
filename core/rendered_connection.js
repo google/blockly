@@ -16,6 +16,7 @@ goog.require('Blockly.Connection');
 goog.require('Blockly.Events');
 goog.require('Blockly.utils');
 goog.require('Blockly.utils.Coordinate');
+goog.require('Blockly.utils.deprecation');
 goog.require('Blockly.utils.dom');
 goog.require('Blockly.utils.object');
 
@@ -424,6 +425,11 @@ Blockly.RenderedConnection.prototype.startTrackingAll = function() {
  */
 Blockly.RenderedConnection.prototype.isConnectionAllowed = function(candidate,
     maxRadius) {
+  Blockly.utils.deprecation.warn(
+      'RenderedConnection.prototype.isConnectionAllowed',
+      'July 2020',
+      'July 2021',
+      'the workspace\'s connection checker');
   if (this.distanceFrom(candidate) > maxRadius) {
     return false;
   }

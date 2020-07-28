@@ -18,6 +18,7 @@ goog.require('Blockly.Events');
 goog.require('Blockly.Events.BlockChange');
 goog.require('Blockly.Events.Ui');
 goog.require('Blockly.Icon');
+goog.require('Blockly.utils.deprecation');
 goog.require('Blockly.utils.dom');
 goog.require('Blockly.utils.object');
 goog.require('Blockly.utils.userAgent');
@@ -364,6 +365,11 @@ Blockly.Comment.prototype.setBubbleSize = function(width, height) {
  * @deprecated August 2019 Use block.getCommentText() instead.
  */
 Blockly.Comment.prototype.getText = function() {
+  Blockly.utils.deprecation.warn(
+      'Comment.prototype.getText',
+      'August 2019',
+      'August 2020',
+      'block.getCommentText');
   return this.model_.text || '';
 };
 
@@ -376,6 +382,11 @@ Blockly.Comment.prototype.getText = function() {
  * @deprecated August 2019 Use block.setCommentText() instead.
  */
 Blockly.Comment.prototype.setText = function(text) {
+  Blockly.utils.deprecation.warn(
+      'Comment.prototype.setText',
+      'August 2019',
+      'August 2020',
+      'block.setCommentText');
   if (this.model_.text == text) {
     return;
   }

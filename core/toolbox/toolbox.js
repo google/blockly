@@ -411,7 +411,7 @@ Blockly.Toolbox.prototype.addToolboxItem_ = function(toolboxItem) {
 /**
  * Adds a style on the toolbox. Usually used to change the cursor.
  * @param {string} style The name of the class to add.
- * @protected
+ * @package
  */
 Blockly.Toolbox.prototype.addStyle = function(style) {
   Blockly.utils.dom.addClass(/** @type {!Element} */ (this.HtmlDiv), style);
@@ -420,7 +420,7 @@ Blockly.Toolbox.prototype.addStyle = function(style) {
 /**
  * Removes a style from the toolbox. Usually used to change the cursor.
  * @param {string} style The name of the class to remove.
- * @protected
+ * @package
  */
 Blockly.Toolbox.prototype.removeStyle = function(style) {
   Blockly.utils.dom.removeClass(/** @type {!Element} */ (this.HtmlDiv), style);
@@ -573,7 +573,7 @@ Blockly.Toolbox.prototype.clearSelection = function() {
 
 /**
  * Updates the category colours and background colour of selected categories.
- * @protected
+ * @package
  */
 Blockly.Toolbox.prototype.refreshTheme = function() {
   for (var i = 0; i < this.contents_.length; i++) {

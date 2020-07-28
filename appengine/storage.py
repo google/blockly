@@ -23,6 +23,7 @@ __author__ = "q.neutron@gmail.com (Quynh Neutron)"
 import cgi
 import hashlib
 from random import randint
+from datetime import timezone
 from google.cloud import ndb
 
 
@@ -30,6 +31,7 @@ class Xml(ndb.Model):
   # A row in the database.
   xml_hash = ndb.IntegerProperty()
   xml_content = ndb.TextProperty()
+  last_accessed = ndb.DateTimeProperty(auto_now = true)
 
 
 def keyGen():
@@ -72,10 +74,19 @@ def keyToXml(key_provided):
   client = ndb.Client()
   with client.context():
     result = Xml.get_by_id(key_provided)
+
   if not result:
     xml = ""
   else:
     xml = result.xml_content
+    # Update row to include last accessed time--because last_accessed is set to
+    # auto_now, any write updates the time.
+    with client.context():
+      row = Xml(id = key_provided,
+        xml_hash = result.xml_hash,
+        xml_content = result.xml_content)
+      row.put();
+
   return xml
 
 

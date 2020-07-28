@@ -543,6 +543,90 @@ Blockly.Toolbox.prototype.setVisible = function(isVisible) {
 };
 
 /**
+ * Sets the given item as selected.
+ * @param {?Blockly.ToolboxItem} newItem The toolbox item to select.
+ * @public
+ */
+Blockly.Toolbox.prototype.setSelectedItem = function(newItem) {
+  var oldItem = this.selectedItem_;
+
+  if ((!newItem && !oldItem) || (newItem && !newItem.isSelectable())) {
+    return;
+  }
+  newItem = /** @type {Blockly.SelectableToolboxItem} */ (newItem);
+  // Do not deselect if the oldItem has children and has been previously clicked
+  // on.
+  if (oldItem && (!oldItem.isCollapsible() || oldItem != newItem)) {
+    this.selectedItem_ = null;
+    oldItem.setSelected(false);
+    Blockly.utils.aria.setState(/** @type {!Element} */ (this.contentsDiv_),
+        Blockly.utils.aria.State.ACTIVEDESCENDANT, '');
+  }
+
+  if (newItem && newItem != oldItem ) {
+    this.selectedItem_ = newItem;
+    newItem.setSelected(true);
+    Blockly.utils.aria.setState(/** @type {!Element} */ (this.contentsDiv_),
+        Blockly.utils.aria.State.ACTIVEDESCENDANT, newItem.getId());
+  }
+
+  this.updateFlyout_(oldItem, newItem);
+  this.fireEvent_(oldItem, newItem);
+};
+
+/**
+ * Selects the toolbox item by it's position in the list of toolbox items.
+ * @param {number} position The position of the item to select.
+ * @public
+ */
+Blockly.Toolbox.prototype.selectItemByPosition = function(position) {
+  if (position > -1 && position < this.contents_.length) {
+    var item = this.contents_[position];
+    if (item.isSelectable()) {
+      this.setSelectedItem(item);
+    }
+  }
+};
+
+/**
+ * Decides whether to hide or show the flyout depending on the selected item.
+ * @param {?Blockly.ToolboxItem} oldItem The previously selected toolbox item.
+ * @param {?Blockly.ToolboxItem} newItem The newly selected toolbox item.
+ * @private
+ */
+Blockly.Toolbox.prototype.updateFlyout_ = function(oldItem, newItem) {
+  if (oldItem == newItem || !newItem || newItem.isCollapsible()) {
+    this.flyout_.hide();
+  } else if (newItem.isSelectable()) {
+    var selectableItem = /** @type {!Blockly.SelectableToolboxItem} */ (newItem);
+    this.flyout_.show(selectableItem.getContents());
+    this.flyout_.scrollToStart();
+  }
+};
+
+/**
+ * Emits an event when a new toolbox item is selected.
+ * @param {?Blockly.SelectableToolboxItem} oldItem The previously selected
+ *     toolbox item.
+ * @param {?Blockly.SelectableToolboxItem} newItem The newly selected toolbox
+ *     item.
+ * @private
+ */
+Blockly.Toolbox.prototype.fireEvent_ = function(oldItem, newItem) {
+  var oldElement = oldItem && oldItem.getName();
+  var newElement = newItem && newItem.getName();
+  // In this case the toolbox closes, so the newElement should be null.
+  if (oldItem == newItem) {
+    newElement = null;
+  }
+  // TODO: Add toolbox events
+  var event = new Blockly.Events.Ui(null, 'category',
+      oldElement, newElement);
+  event.workspaceId = this.workspace_.id;
+  Blockly.Events.fire(event);
+};
+
+/**
  * CSS for Toolbox.  See css.js for use.
  */
 Blockly.Css.register([

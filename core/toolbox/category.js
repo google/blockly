@@ -1,3 +1,5 @@
+   * @type {string|
+   *        !Array<!Blockly.utils.toolbox.FlyoutItemDef>}
 /**
  * @license
  * Copyright 2020 Google LLC

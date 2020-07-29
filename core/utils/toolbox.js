@@ -60,6 +60,7 @@ Blockly.utils.toolbox.Label;
  *            name:string,
  *            categorystyle:?string,
  *            colour:?string,
+ *            custom:?string,
  *            contents:Array.<Blockly.utils.toolbox.Toolbox>
  *          }}
  */

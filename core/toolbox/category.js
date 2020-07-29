@@ -118,7 +118,7 @@ Blockly.ToolboxCategory = function(categoryDef, toolbox, opt_parent) {
   Blockly.utils.object.mixin(this.classConfig_, categoryDef['classConfig']);
 
   /**
-   * Whether or not the category should display it's children.
+   * Whether or not the category should display its children.
    * @type {boolean}
    * @protected
    */
@@ -161,12 +161,13 @@ Blockly.ToolboxCategory.ClassConfig;
 /**
  * The number of pixels to move the category over at each nested level.
  * @type {number}
+ * @const {number}
  */
-Blockly.ToolboxCategory.NestedValue = 19;
+Blockly.ToolboxCategory.NESTED_PADDING = 19;
 
 /**
- * Parse the contents array depending on if the category has children, is a
- * dynamic category, or if it's contents are meant to be shown in the flyout.
+ * Parses the contents array depending on if the category has children, is a
+ * dynamic category, or if its contents are meant to be shown in the flyout.
  * @param {!Blockly.utils.toolbox.Category} categoryDef The information needed
  *     to create a category.
  * @param {boolean} hasChildren True if this category has subcategories, false
@@ -195,10 +196,10 @@ Blockly.ToolboxCategory.prototype.parseContents_ = function(categoryDef,
 };
 
 /**
- * Add either the colour or the style for a category.
+ * Adds either the colour or the style for a category.
  * @param {!Blockly.utils.toolbox.Category} categoryDef The object holding
  *    information on the category.
- * @return {string} The hex color for the category.
+ * @return {string} The hex colour for the category.
  * @protected
  */
 Blockly.ToolboxCategory.prototype.getColour_ = function(categoryDef) {
@@ -220,7 +221,7 @@ Blockly.ToolboxCategory.prototype.getColour_ = function(categoryDef) {
  * Retrieves and sets the colour for the category using the style name.
  * The category colour is set from the colour style attribute.
  * @param {string} styleName Name of the style.
- * @return {string} The hex color for the category.
+ * @return {string} The hex colour for the category.
  * @private
  */
 Blockly.ToolboxCategory.prototype.getColourfromStyle_ = function(styleName) {
@@ -241,7 +242,7 @@ Blockly.ToolboxCategory.prototype.getColourfromStyle_ = function(styleName) {
  * Sets the colour on the category.
  * @param {number|string} colourValue HSV hue value (0 to 360), #RRGGBB string,
  *     or a message reference string pointing to one of those two values.
- * @return {string} The hex color for the category.
+ * @return {string} The hex colour for the category.
  * @private
  */
 Blockly.ToolboxCategory.prototype.parseColour_ = function(colourValue) {

@@ -161,9 +161,8 @@ Blockly.ToolboxCategory.ClassConfig;
 /**
  * The number of pixels to move the category over at each nested level.
  * @type {number}
- * @const {number}
  */
-Blockly.ToolboxCategory.NESTED_PADDING = 19;
+Blockly.ToolboxCategory.nestedPadding = 19;
 
 /**
  * Parses the contents array depending on if the category has children, is a

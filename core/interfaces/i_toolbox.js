@@ -108,7 +108,7 @@ Blockly.IToolbox.prototype.selectItemByPosition;
 
 /**
  * Gets the selected item.
- * @return {Blockly.ToolboxItem} The selected item, or null if no item is
+ * @return {?Blockly.ToolboxItem} The selected item, or null if no item is
  *     currently selected.
  */
 Blockly.IToolbox.prototype.getSelectedItem;

@@ -30,7 +30,7 @@ Blockly.ToolboxSeparator = function(toolboxSeparatorDef, toolbox) {
   Blockly.ToolboxSeparator.superClass_.constructor.call(
       this, toolboxSeparatorDef, toolbox);
   /**
-   * The config for all the separator classes.
+   * All the css class names that are used to create a separator.
    * @type {!Blockly.ToolboxSeparator.ClassConfig}
    * @protected
    */
@@ -44,6 +44,7 @@ Blockly.ToolboxSeparator = function(toolboxSeparatorDef, toolbox) {
 Blockly.utils.object.inherits(Blockly.ToolboxSeparator, Blockly.ToolboxItem);
 
 /**
+ * All the css class names that are used to create a separator.
  * @typedef {{
  *            container:?string,
  *          }}

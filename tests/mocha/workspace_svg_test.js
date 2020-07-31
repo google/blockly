@@ -6,6 +6,7 @@
 
 suite('WorkspaceSvg', function() {
   setup(function() {
+    sharedTestSetup.call(this);
     var toolbox = document.getElementById('toolbox-categories');
     this.workspace = Blockly.inject('blocklyDiv', {toolbox: toolbox});
     Blockly.defineBlocksWithJsonArray([{
@@ -26,10 +27,9 @@ suite('WorkspaceSvg', function() {
   });
 
   teardown(function() {
+    sharedTestCleanup.call(this);
     delete Blockly.Blocks['simple_test_block'];
     delete Blockly.Blocks['test_val_in'];
-    this.workspace.dispose();
-    sinon.restore();
   });
 
   test('appendDomToWorkspace alignment', function() {

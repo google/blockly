@@ -40,6 +40,61 @@ function captureWarnings(innerFunc) {
 }
 
 /**
+ *
+ */
+function sharedTestSetup(options = {}) {
+  this.sharedSetupCalled_ = true;
+  this.clock = sinon.useFakeTimers();
+  if (options['fireEventsNow'] === undefined || options['fireEventsNow']) {
+    // Stubs event firing unless passed option "fireEventsNow: false"
+    this.eventsFireStub = createEventsFireStubFireImmediately_(this.clock);
+  }
+}
+
+/**
+ *
+ */
+function sharedTestCleanup() {
+  if (!this.sharedSetupCalled_) {
+    console.warn('"' + this.currentTest.fullTitle() +
+        '" did not call sharedTestSetup');
+  }
+
+  if (this.clock) {
+    this.clock.runAll();  // Run all queued setTimeout calls.
+  }
+
+  if (this.workspace) {
+    this.workspace.dispose();
+    this.workspace = null;
+    if (this.clock) {
+      this.clock.runAll();  // Run all remaining queued setTimeout calls.
+    }
+  }
+  // Some tests have a second workspace defined
+  if (this.workspaceSvg) {
+    this.workspaceSvg.dispose();
+    this.workspaceSvg = null;
+    if (this.clock) {
+      this.clock.runAll();  // Run all remaining queued setTimeout calls.
+    }
+  }
+
+  // Clear Blockly.Event state.
+  Blockly.Events.setGroup(false);
+  Blockly.Events.disabled_ = 0;
+  if (Blockly.Events.FIRE_QUEUE_.length) {
+    // Should never happen because
+    Blockly.Events.FIRE_QUEUE_.length = 0;
+    console.warn('"' + this.currentTest.fullTitle() +
+        '" needed cleanup of Blockly.Events.FIRE_QUEUE_');
+  }
+
+  // Restore all stubbed methods.
+  sinon.restore();
+}
+
+/**
  * Creates stub for Blockly.utils.genUid that returns the provided id or ids.
  *    Recommended to also assert that the stub is called the expected number of
  *    times.
@@ -60,19 +115,21 @@ function createGenUidStubWithReturns(returnIds) {
   return stub;
 }
 
+
 /**
- * Creates stub for Blockly.Events.fire that fires events immediately instead of
- * with timeout.
+ * Creates stub for Blockly.Events.fire that advances the clock forward after
+ *    the event fires so it is processed immediately instead of on a timeout.
+ * @param {!SinonClock} clock The sinon clock.
  * @return {!SinonStub} The created stub.
+ * @private
  */
-function createEventsFireStub() {
+function createEventsFireStubFireImmediately_(clock) {
   var stub = sinon.stub(Blockly.Events, 'fire');
-  stub.callsFake(function(event) {
-    if (!Blockly.Events.isEnabled()) {
-      return;
-    }
-    Blockly.Events.FIRE_QUEUE_.push(event);
-    Blockly.Events.fireNow_();
+  stub.callsFake(function() {
+    // Call original method.
+    stub.wrappedMethod.call(this, ...arguments);
+    // Advance clock forward to run any queued events.
+    clock.runAll();
   });
   return stub;
 }

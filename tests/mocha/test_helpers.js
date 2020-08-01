@@ -44,10 +44,13 @@ function captureWarnings(innerFunc) {
  */
 function sharedTestSetup(options = {}) {
   this.sharedSetupCalled_ = true;
-  this.clock = sinon.useFakeTimers();
+  // Sandbox created for greater control when stubs are cleared.
+  this.sharedSandbox_ = sinon.createSandbox();
+  this.clock = this.sharedSandbox_.useFakeTimers();
   if (options['fireEventsNow'] === undefined || options['fireEventsNow']) {
     // Stubs event firing unless passed option "fireEventsNow: false"
-    this.eventsFireStub = createEventsFireStubFireImmediately_(this.clock);
+    this.eventsFireStub =
+        createEventsFireStubFireImmediately_(this.clock, this.sharedSandbox_);
   }
 }
 
@@ -60,38 +63,46 @@ function sharedTestCleanup() {
         '" did not call sharedTestSetup');
   }
 
-  if (this.clock) {
-    this.clock.runAll();  // Run all queued setTimeout calls.
-  }
-
-  if (this.workspace) {
-    this.workspace.dispose();
-    this.workspace = null;
+  try {
     if (this.clock) {
-      this.clock.runAll();  // Run all remaining queued setTimeout calls.
+      this.clock.runAll();  // Run all queued setTimeout calls.
     }
-  }
-  // Some tests have a second workspace defined
-  if (this.workspaceSvg) {
-    this.workspaceSvg.dispose();
-    this.workspaceSvg = null;
-    if (this.clock) {
-      this.clock.runAll();  // Run all remaining queued setTimeout calls.
+
+    if (this.workspace) {
+      this.workspace.dispose();
+      this.workspace = null;
+      if (this.clock) {
+        this.clock.runAll();  // Run all remaining queued setTimeout calls.
+      }
     }
-  }
+    // Some tests have a second workspace defined
+    if (this.workspaceSvg) {
+      this.workspaceSvg.dispose();
+      this.workspaceSvg = null;
+      if (this.clock) {
+        this.clock.runAll();  // Run all remaining queued setTimeout calls.
+      }
+    }
+  } catch (e) {
+    console.error(this.currentTest.fullTitle() + '\n', e);
+  } finally {
+    // Clear Blockly.Event state.
+    Blockly.Events.setGroup(false);
+    Blockly.Events.disabled_ = 0;
+    if (Blockly.Events.FIRE_QUEUE_.length) {
+      // If this happens, it may mean that some previous test is missing cleanup
+      // (i.e. a previous test added an event to the queue on a timeout that
+      // did not use a stubbed clock).
+      Blockly.Events.FIRE_QUEUE_.length = 0;
+      console.warn('"' + this.currentTest.fullTitle() +
+          '" needed cleanup of Blockly.Events.FIRE_QUEUE_. This may indicate' +
+          'leakage from an earlier test');
+    }
 
-  // Clear Blockly.Event state.
-  Blockly.Events.setGroup(false);
-  Blockly.Events.disabled_ = 0;
-  if (Blockly.Events.FIRE_QUEUE_.length) {
-    // Should never happen because
-    Blockly.Events.FIRE_QUEUE_.length = 0;
-    console.warn('"' + this.currentTest.fullTitle() +
-        '" needed cleanup of Blockly.Events.FIRE_QUEUE_');
+    // Restore all stubbed methods.
+    this.sharedSandbox_.restore();
+    sinon.restore();
   }
-
-  // Restore all stubbed methods.
-  sinon.restore();
 }
 
 /**
@@ -120,16 +131,29 @@ function createGenUidStubWithReturns(returnIds) {
  * Creates stub for Blockly.Events.fire that advances the clock forward after
  *    the event fires so it is processed immediately instead of on a timeout.
  * @param {!SinonClock} clock The sinon clock.
+ * @param {SinonSandbox=} sandbox Optional sandbox to define stub on.
  * @return {!SinonStub} The created stub.
  * @private
  */
-function createEventsFireStubFireImmediately_(clock) {
-  var stub = sinon.stub(Blockly.Events, 'fire');
-  stub.callsFake(function() {
-    // Call original method.
-    stub.wrappedMethod.call(this, ...arguments);
-    // Advance clock forward to run any queued events.
-    clock.runAll();
+function createEventsFireStubFireImmediately_(clock, sandbox) {
+  sandbox = sandbox || sinon;
+  var stub = sandbox.stub(Blockly.Events, 'fire');
+  stub.callsFake(function(event) {
+    // TODO(#4070) Replace the fake function content with the following code
+    // that uses wrappedMethod after cleanup is added to ALL tests.
+    // Calling the original method will not consistently work if other tests
+    // add things to the event queue because the setTimeout call will not be
+    // added to the stubbed clock (so runAll cannot be used to control).
+    // // Call original method.
+    // stub.wrappedMethod.call(this, ...arguments);
+    // // Advance clock forward to run any queued events.
+    // clock.runAll();
+    //
+    if (!Blockly.Events.isEnabled()) {
+      return;
+    }
+    Blockly.Events.FIRE_QUEUE_.push(event);
+    Blockly.Events.fireNow_();
   });
   return stub;
 }

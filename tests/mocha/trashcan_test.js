@@ -33,7 +33,6 @@ suite("Trashcan", function() {
     this.trashcan = new Blockly.Trashcan(this.workspace);
     // Stub the trashcan dom.
     this.trashcan.svgLid_ = sinon.createStubInstance(SVGElement);
-    this.clock.runAll();
   });
   teardown(function() {
     sharedTestCleanup.call(this);

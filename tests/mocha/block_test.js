@@ -393,8 +393,6 @@ suite('Blocks', function() {
   });
   suite('Connection Tracking', function() {
     setup(function() {
-      this.workspace.dispose();
-      // The new rendered workspace will get disposed by the parent teardown.
       this.workspace = Blockly.inject('blocklyDiv');
 
       this.getInputs = function() {
@@ -420,6 +418,11 @@ suite('Blocks', function() {
         chai.assert.isEmpty(this.getNext());
         chai.assert.isEmpty(this.getPrevious());
       };
+    });
+    teardown(function() {
+      this.clock.runAll();
+      this.workspace.dispose();
+      this.clock.runAll();
     });
 
     suite('Deserialization', function() {

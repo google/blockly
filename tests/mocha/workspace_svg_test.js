@@ -27,7 +27,7 @@ suite('WorkspaceSvg', function() {
   });
 
   teardown(function() {
-    sharedTestCleanup.call(this);
+    sharedTestTeardown.call(this);
     delete Blockly.Blocks['simple_test_block'];
     delete Blockly.Blocks['test_val_in'];
   });

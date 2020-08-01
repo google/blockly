@@ -17,14 +17,16 @@
         "defineRowBlock": true,
         "defineStackBlock": true,
         "defineStatementBlock": true,
-        "createEventsFireStub": true,
         "createFireChangeListenerSpy": true,
         "createGenUidStubWithReturns": true,
-        "testAWorkspace": true,
-        "testHelpers" : true,
+        "getCategoryJSON": true,
         "getSimpleJSON": true,
         "getXmlArray": true,
-        "getCategoryJSON": true
+        "sharedTestSetup": true,
+        "sharedTestTeardown": true,
+        "testAWorkspace": true,
+        "testHelpers" : true,
+        "workspaceTeardown": true
     },
     "rules": {
         "no-unused-vars": ["off"],

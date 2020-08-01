@@ -13,7 +13,7 @@ suite('Workspace comment', function() {
   });
 
   teardown(function() {
-    sharedTestCleanup.call(this);
+    sharedTestTeardown.call(this);
   });
 
   suite('getTopComments(ordered=true)', function() {

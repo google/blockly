@@ -44,7 +44,7 @@ suite('Blocks', function() {
       }]);
   });
   teardown(function() {
-    sharedTestCleanup.call(this);
+    sharedTestTeardown.call(this);
     delete Blockly.Blocks['empty_block'];
     delete Blockly.Blocks['stack_block'];
     delete Blockly.Blocks['row_block'];
@@ -420,7 +420,7 @@ suite('Blocks', function() {
       };
     });
     teardown(function() {
-      workspaceTeardown.call(this, workspace);
+      workspaceTeardown.call(this, this.workspace);
     });
 
     suite('Deserialization', function() {
@@ -1113,7 +1113,7 @@ suite('Blocks', function() {
         });
         test('Set While Visible - NonEditable', function() {
           this.block.setCommentText('test1');
-          // Restored up by call to sinon.restore() in sharedTestCleanup()
+          // Restored up by call to sinon.restore() in sharedTestTeardown()
           sinon.stub(this.block, 'isEditable').returns(false);
           var icon = this.block.getCommentIcon();
           icon.setVisible(true);

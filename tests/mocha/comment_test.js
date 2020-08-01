@@ -26,7 +26,7 @@ suite('Comments', function() {
     this.comment.computeIconLocation();
   });
   teardown(function() {
-    sharedTestCleanup.call(this);
+    sharedTestTeardown.call(this);
     delete Blockly.Blocks['empty_block'];
   });
   suite('Visibility and Editability', function() {

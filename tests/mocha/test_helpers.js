@@ -40,11 +40,58 @@ function captureWarnings(innerFunc) {
 }
 
 /**
+ * Safely disposes of Blockly workspace, logging any errors.
+ * Assumes that sharedTestSetup has also been called. This should be called
+ * using workspaceTeardown.call(this).
+ * @param {!Blockly.Workspace} workspace The workspace to dispose.
+ */
+function workspaceTeardown(workspace) {
+  try {
+    this.clock.runAll();  // Run all queued setTimeout calls.
+    workspace.dispose();
+    this.clock.runAll();  // Run all remaining queued setTimeout calls.
+  } catch (e) {
+    console.error(this.currentTest.fullTitle() + '\n', e);
+  }
+}
+
+/**
+ * Creates stub for Blockly.Events.fire that advances the clock forward after
+ * the event fires so it is processed immediately instead of on a timeout.
+ * @param {!SinonClock} clock The sinon clock.
+ * @param {SinonSandbox=} sandbox Optional sandbox to define stub on.
+ * @return {!SinonStub} The created stub.
+ * @private
+ */
+function createEventsFireStubFireImmediately_(clock, sandbox) {
+  sandbox = sandbox || sinon;
+  var stub = sandbox.stub(Blockly.Events, 'fire');
+  stub.callsFake(function(event) {
+    // TODO(#4070) Replace the fake function content with the following code
+    // that uses wrappedMethod after cleanup is added to ALL tests.
+    // Calling the original method will not consistently work if other tests
+    // add things to the event queue because the setTimeout call will not be
+    // added to the stubbed clock (so runAll cannot be used to control).
+    // // Call original method.
+    // stub.wrappedMethod.call(this, ...arguments);
+    // // Advance clock forward to run any queued events.
+    // clock.runAll();
+    //
+    if (!Blockly.Events.isEnabled()) {
+      return;
+    }
+    Blockly.Events.FIRE_QUEUE_.push(event);
+    Blockly.Events.fireNow_();
+  });
+  return stub;
+}
+
+/**
  * Shared setup method that sets up fake timer for clock so that pending
  * setTimeout calls can be cleared in test teardown along with other common
  * stubs. Should be called in setup of outermost suite using
  * sharedTestSetup.call(this).
- * @param {Object<string, boolean>>} options Options to enable/disable setup
+ * @param {Object<string, boolean>} options Options to enable/disable setup
  *    of certain stubs.
  */
 function sharedTestSetup(options = {}) {
@@ -62,9 +109,9 @@ function sharedTestSetup(options = {}) {
 /**
  * Shared cleanup method that clears up pending setTimeout calls, disposes of
  * workspace, and resets global variables. Should be called in setup of
- * outermost suite using sharedTestCleanup.call(this).
+ * outermost suite using sharedTestTeardown.call(this).
  */
-function sharedTestCleanup() {
+function sharedTestTeardown() {
   if (!this.sharedSetupCalled_) {
     console.error('"' + this.currentTest.fullTitle() +
         '" did not call sharedTestSetup');
@@ -100,22 +147,6 @@ function sharedTestCleanup() {
 }
 
 /**
- * Safely disposes of Blockly workspace, logging any errors.
- * Assumes that sharedTestSetup has also been called. This should be called
- * using workspaceTeardown.call(this).
- * @param {!Blockly.Workspace} workspace
- */
-function workspaceTeardown(workspace) {
-  try {
-    this.clock.runAll();  // Run all queued setTimeout calls.
-    workspace.dispose();
-    this.clock.runAll();  // Run all remaining queued setTimeout calls.
-  } catch (e) {
-    console.error(this.currentTest.fullTitle() + '\n', e);
-  }
-}
-
-/**
  * Creates stub for Blockly.utils.genUid that returns the provided id or ids.
  * Recommended to also assert that the stub is called the expected number of
  * times.
@@ -133,38 +164,6 @@ function createGenUidStubWithReturns(returnIds) {
   } else {
     stub.returns(returnIds);
   }
-  return stub;
-}
-
-
-/**
- * Creates stub for Blockly.Events.fire that advances the clock forward after
- * the event fires so it is processed immediately instead of on a timeout.
- * @param {!SinonClock} clock The sinon clock.
- * @param {SinonSandbox=} sandbox Optional sandbox to define stub on.
- * @return {!SinonStub} The created stub.
- * @private
- */
-function createEventsFireStubFireImmediately_(clock, sandbox) {
-  sandbox = sandbox || sinon;
-  var stub = sandbox.stub(Blockly.Events, 'fire');
-  stub.callsFake(function(event) {
-    // TODO(#4070) Replace the fake function content with the following code
-    // that uses wrappedMethod after cleanup is added to ALL tests.
-    // Calling the original method will not consistently work if other tests
-    // add things to the event queue because the setTimeout call will not be
-    // added to the stubbed clock (so runAll cannot be used to control).
-    // // Call original method.
-    // stub.wrappedMethod.call(this, ...arguments);
-    // // Advance clock forward to run any queued events.
-    // clock.runAll();
-    //
-    if (!Blockly.Events.isEnabled()) {
-      return;
-    }
-    Blockly.Events.FIRE_QUEUE_.push(event);
-    Blockly.Events.fireNow_();
-  });
   return stub;
 }
 

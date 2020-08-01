@@ -38,7 +38,7 @@ suite('Procedures', function() {
     };
   });
   teardown(function() {
-    sharedTestCleanup.call(this);
+    sharedTestTeardown.call(this);
   });
 
   suite('allProcedures', function() {

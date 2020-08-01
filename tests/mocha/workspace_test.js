@@ -11,7 +11,7 @@ suite('Workspace', function() {
   });
 
   teardown(function() {
-    sharedTestCleanup.call(this);
+    sharedTestTeardown.call(this);
   });
 
   // eslint-disable-next-line no-use-before-define

@@ -35,7 +35,7 @@ suite("Trashcan", function() {
     this.trashcan.svgLid_ = sinon.createStubInstance(SVGElement);
   });
   teardown(function() {
-    sharedTestCleanup.call(this);
+    sharedTestTeardown.call(this);
   });
 
   suite("Events", function() {

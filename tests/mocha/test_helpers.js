@@ -40,7 +40,12 @@ function captureWarnings(innerFunc) {
 }
 
 /**
- *
+ * Shared setup method that sets up fake timer for clock so that pending
+ * setTimeout calls can be cleared in test teardown along with other common
+ * stubs. Should be called in setup of outermost suite using
+ * sharedTestSetup.call(this).
+ * @param {Object<string, boolean>>} options Options to enable/disable setup
+ *    of certain stubs.
  */
 function sharedTestSetup(options = {}) {
   this.sharedSetupCalled_ = true;
@@ -55,7 +60,9 @@ function sharedTestSetup(options = {}) {
 }
 
 /**
- *
+ * Shared cleanup method that clears up pending setTimeout calls, disposes of
+ * workspace, and resets global variables. Should be called in setup of
+ * outermost suite using sharedTestCleanup.call(this).
  */
 function sharedTestCleanup() {
   if (!this.sharedSetupCalled_) {
@@ -94,7 +101,7 @@ function sharedTestCleanup() {
       // (i.e. a previous test added an event to the queue on a timeout that
       // did not use a stubbed clock).
       Blockly.Events.FIRE_QUEUE_.length = 0;
-      console.warn('"' + this.currentTest.fullTitle() +
+      console.warn(this.currentTest.fullTitle() +
           '" needed cleanup of Blockly.Events.FIRE_QUEUE_. This may indicate' +
           'leakage from an earlier test');
     }
@@ -107,8 +114,8 @@ function sharedTestCleanup() {
 
 /**
  * Creates stub for Blockly.utils.genUid that returns the provided id or ids.
- *    Recommended to also assert that the stub is called the expected number of
- *    times.
+ * Recommended to also assert that the stub is called the expected number of
+ * times.
  * @param {string|!Array<string>} returnIds The return values to use for the
  *    created stub. If a single value is passed, then the stub always returns
  *    that value.
@@ -129,7 +136,7 @@ function createGenUidStubWithReturns(returnIds) {
 
 /**
  * Creates stub for Blockly.Events.fire that advances the clock forward after
- *    the event fires so it is processed immediately instead of on a timeout.
+ * the event fires so it is processed immediately instead of on a timeout.
  * @param {!SinonClock} clock The sinon clock.
  * @param {SinonSandbox=} sandbox Optional sandbox to define stub on.
  * @return {!SinonStub} The created stub.
@@ -201,7 +208,7 @@ function assertEventEquals(event, expectedType,
 
 /**
  * Asserts that the event passed to the last call of the given spy has the
- *    expected values. Assumes that the event is passed as the first argument.
+ * expected values. Assumes that the event is passed as the first argument.
  * @param {!SinonSpy} spy The spy to use.
  * @param {string} expectedType Expected type of event fired.
  * @param {string} expectedWorkspaceId Expected workspace id of event fired.
@@ -219,7 +226,7 @@ function assertLastCallEventArgEquals(spy, expectedType,
 
 /**
  * Asserts that the event passed to the nth call of the given spy has the
- *    expected values. Assumes that the event is passed as the first argument.
+ * expected values. Assumes that the event is passed as the first argument.
  * @param {!SinonSpy} spy The spy to use.
  * @param {number} n Which call to check.
  * @param {string} expectedType Expected type of event fired.

@@ -59,13 +59,11 @@ function workspaceTeardown(workspace) {
  * Creates stub for Blockly.Events.fire that advances the clock forward after
  * the event fires so it is processed immediately instead of on a timeout.
  * @param {!SinonClock} clock The sinon clock.
- * @param {SinonSandbox=} sandbox Optional sandbox to define stub on.
  * @return {!SinonStub} The created stub.
  * @private
  */
-function createEventsFireStubFireImmediately_(clock, sandbox) {
-  sandbox = sandbox || sinon;
-  var stub = sandbox.stub(Blockly.Events, 'fire');
+function createEventsFireStubFireImmediately_(clock) {
+  var stub = sinon.stub(Blockly.Events, 'fire');
   stub.callsFake(function(event) {
     // TODO(#4070) Replace the fake function content with the following code
     // that uses wrappedMethod after cleanup is added to ALL tests.
@@ -96,13 +94,12 @@ function createEventsFireStubFireImmediately_(clock, sandbox) {
  */
 function sharedTestSetup(options = {}) {
   this.sharedSetupCalled_ = true;
-  // Sandbox created for greater control when stubs are cleared.
-  this.sharedSandbox_ = sinon.createSandbox();
-  this.clock = this.sharedSandbox_.useFakeTimers();
+  // Sandbox created for greater control when certain stubs are cleared.
+  this.sharedSetupSandbox_ = sinon.createSandbox();
+  this.clock = this.sharedSetupSandbox_.useFakeTimers();
   if (options['fireEventsNow'] === undefined || options['fireEventsNow']) {
     // Stubs event firing unless passed option "fireEventsNow: false"
-    this.eventsFireStub =
-        createEventsFireStubFireImmediately_(this.clock, this.sharedSandbox_);
+    this.eventsFireStub = createEventsFireStubFireImmediately_(this.clock);
   }
 }
 
@@ -141,7 +138,7 @@ function sharedTestTeardown() {
     }
 
     // Restore all stubbed methods.
-    this.sharedSandbox_.restore();
+    this.sharedSetupSandbox_.restore();
     sinon.restore();
   }
 }

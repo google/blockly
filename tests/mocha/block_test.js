@@ -1115,19 +1115,16 @@ suite('Blocks', function() {
         });
         test('Set While Visible - NonEditable', function() {
           this.block.setCommentText('test1');
-          var editableStub = sinon.stub(this.block, 'isEditable').returns(false);
-          try {
-            var icon = this.block.getCommentIcon();
-            icon.setVisible(true);
+          // Restored up by call to sinon.restore() in sharedTestCleanup()
+          sinon.stub(this.block, 'isEditable').returns(false);
+          var icon = this.block.getCommentIcon();
+          icon.setVisible(true);
 
-            this.block.setCommentText('test2');
-            chai.assert.equal(this.block.getCommentText(), 'test2');
-            assertCommentEvent(this.eventsFireSpy, 'test1', 'test2');
-            chai.assert.equal(icon.paragraphElement_.firstChild.textContent,
-                'test2');
-          } finally {
-            editableStub.restore();
-          }
+          this.block.setCommentText('test2');
+          chai.assert.equal(this.block.getCommentText(), 'test2');
+          assertCommentEvent(this.eventsFireSpy, 'test1', 'test2');
+          chai.assert.equal(icon.paragraphElement_.firstChild.textContent,
+              'test2');
         });
         test('Get Text While Editing', function() {
           this.block.setCommentText('test1');

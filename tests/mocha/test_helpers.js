@@ -102,7 +102,7 @@ function sharedTestCleanup() {
       // did not use a stubbed clock).
       Blockly.Events.FIRE_QUEUE_.length = 0;
       console.warn(this.currentTest.fullTitle() +
-          '" needed cleanup of Blockly.Events.FIRE_QUEUE_. This may indicate' +
+          '" needed cleanup of Blockly.Events.FIRE_QUEUE_. This may indicate ' +
           'leakage from an earlier test');
     }
 

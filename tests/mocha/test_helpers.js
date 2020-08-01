@@ -66,29 +66,16 @@ function sharedTestSetup(options = {}) {
  */
 function sharedTestCleanup() {
   if (!this.sharedSetupCalled_) {
-    console.warn('"' + this.currentTest.fullTitle() +
+    console.error('"' + this.currentTest.fullTitle() +
         '" did not call sharedTestSetup');
   }
 
   try {
-    if (this.clock) {
-      this.clock.runAll();  // Run all queued setTimeout calls.
-    }
-
     if (this.workspace) {
-      this.workspace.dispose();
+      workspaceTeardown.call(this, this.workspace);
       this.workspace = null;
-      if (this.clock) {
-        this.clock.runAll();  // Run all remaining queued setTimeout calls.
-      }
-    }
-    // Some tests have a second workspace defined
-    if (this.workspaceSvg) {
-      this.workspaceSvg.dispose();
-      this.workspaceSvg = null;
-      if (this.clock) {
-        this.clock.runAll();  // Run all remaining queued setTimeout calls.
-      }
+    } else {
+      this.clock.runAll();  // Run all queued setTimeout calls.
     }
   } catch (e) {
     console.error(this.currentTest.fullTitle() + '\n', e);
@@ -109,6 +96,22 @@ function sharedTestCleanup() {
     // Restore all stubbed methods.
     this.sharedSandbox_.restore();
     sinon.restore();
+  }
+}
+
+/**
+ * Safely disposes of Blockly workspace, logging any errors.
+ * Assumes that sharedTestSetup has also been called. This should be called
+ * using workspaceTeardown.call(this).
+ * @param {!Blockly.Workspace} workspace
+ */
+function workspaceTeardown(workspace) {
+  try {
+    this.clock.runAll();  // Run all queued setTimeout calls.
+    workspace.dispose();
+    this.clock.runAll();  // Run all remaining queued setTimeout calls.
+  } catch (e) {
+    console.error(this.currentTest.fullTitle() + '\n', e);
   }
 }
 

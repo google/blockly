@@ -420,9 +420,7 @@ suite('Blocks', function() {
       };
     });
     teardown(function() {
-      this.clock.runAll();
-      this.workspace.dispose();
-      this.clock.runAll();
+      workspaceTeardown.call(this, workspace);
     });
 
     suite('Deserialization', function() {

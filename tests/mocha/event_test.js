@@ -73,9 +73,6 @@ suite('Events', function() {
             [this.TEST_BLOCK_ID, this.TEST_PARENT_ID]);
         this.block = createSimpleTestBlock(this.workspace);
       });
-      teardown(function() {
-        sinon.restore();
-      });
 
       test('Block base', function() {
         var event = new Blockly.Events.BlockBase(this.block);
@@ -229,9 +226,6 @@ suite('Events', function() {
         this.genUidStub = createGenUidStubWithReturns(this.TEST_BLOCK_ID);
         this.block =
             createSimpleTestBlock(this.workspace, 'field_variable_test_block');
-      });
-      teardown(function() {
-        sinon.restore();
       });
 
       test('Change', function() {
@@ -624,10 +618,6 @@ suite('Events', function() {
   suite('Firing', function() {
     setup(function() {
       this.changeListenerSpy = createFireChangeListenerSpy(this.workspace);
-    });
-
-    teardown(function() {
-      sinon.restore();
     });
 
     test('Block dispose triggers Delete', function() {

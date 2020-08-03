@@ -165,6 +165,12 @@ Blockly.ToolboxCategory.ClassConfig;
 Blockly.ToolboxCategory.nestedPadding = 19;
 
 /**
+ * The width in pixels of the strip of colour next to each category.
+ * @type {number}
+ */
+Blockly.ToolboxCategory.borderWidth = 8;
+
+/**
  * Parses the contents array depending on if the category has children, is a
  * dynamic category, or if its contents are meant to be shown in the flyout.
  * @param {!Blockly.utils.toolbox.Category} categoryDef The information needed
@@ -243,6 +249,7 @@ Blockly.ToolboxCategory.prototype.createContainer_ = function() {
   Blockly.utils.dom.addClass(container, this.classConfig_['container']);
   return container;
 };
+
 /**
  * Creates the container for the icon and the label.
  * @return {!Element} The div that holds the icon and the label.
@@ -326,7 +333,8 @@ Blockly.ToolboxCategory.prototype.refreshTheme = function() {
  */
 Blockly.ToolboxCategory.prototype.addColour_ = function(colour) {
   if (colour) {
-    var border = '8px solid ' + (colour || '#ddd');
+    var border = Blockly.ToolboxCategory.borderWidth + 'px solid ' +
+        (colour || '#ddd');
     if (this.workspace_.RTL) {
       this.rowDiv_.style.borderRight = border;
     } else {

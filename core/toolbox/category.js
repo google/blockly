@@ -431,6 +431,7 @@ Blockly.ToolboxCategory.prototype.parseColour_ = function(colourValue) {
   }
 };
 
+};
 /**
  * Opens or closes the current category if it has children.
  * @param {boolean} isExpanded True to expand the category, false to close.

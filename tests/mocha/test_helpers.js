@@ -74,7 +74,6 @@ function createEventsFireStubFireImmediately_(clock) {
     // stub.wrappedMethod.call(this, ...arguments);
     // // Advance clock forward to run any queued events.
     // clock.runAll();
-    //
     if (!Blockly.Events.isEnabled()) {
       return;
     }

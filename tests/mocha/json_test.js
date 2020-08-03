@@ -6,6 +6,7 @@
 
 suite('JSON Block Definitions', function() {
   setup(function() {
+    sharedTestSetup.call(this);
     this.workspace_ = new Blockly.Workspace();
     this.blocks_ = [];
     this.blockTypes_ = [];
@@ -13,6 +14,7 @@ suite('JSON Block Definitions', function() {
   });
 
   teardown(function() {
+    sharedTestTeardown.call(this);
     for (var i = 0; i < this.blocks_.length; i++) {
       var block = this.blocks_[i];
       block.dispose();
@@ -23,7 +25,6 @@ suite('JSON Block Definitions', function() {
     for (var i = 0, message; (message = this.messages_[i]); i++) {
       delete Blockly.Msg[message];
     }
-    this.workspace_.dispose();
   });
 
   suite('defineBlocksWithJsonArray', function() {

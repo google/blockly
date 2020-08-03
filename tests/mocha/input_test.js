@@ -6,6 +6,7 @@
 
 suite('Inputs', function() {
   setup(function() {
+    sharedTestSetup.call(this);
     Blockly.defineBlocksWithJsonArray([
       {
         "type": "empty_block",
@@ -30,11 +31,8 @@ suite('Inputs', function() {
     this.bumpNeighboursStub.resetHistory();
   });
   teardown(function() {
-    this.renderStub.restore();
-    this.bumpNeighboursStub.restore();
-
+    sharedTestTeardown.call(this);
     delete Blockly.Blocks['empty_block'];
-    this.workspace.dispose();
   });
   suite('Insert Field At', function() {
     suite('Index Bounds', function() {

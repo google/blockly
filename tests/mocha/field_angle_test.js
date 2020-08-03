@@ -5,6 +5,12 @@
  */
 
 suite('Angle Fields', function() {
+  setup(function() {
+    sharedTestSetup.call(this);
+  });
+  teardown(function() {
+    sharedTestTeardown.call(this);
+  });
   /**
    * Configuration for field tests with invalid values.
    * @type {!Array<!FieldCreationTestCase>}

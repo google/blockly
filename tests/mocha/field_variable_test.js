@@ -44,14 +44,14 @@ suite('Variable Fields', function() {
   }
 
   setup(function() {
+    sharedTestSetup.call(this);
     this.workspace = new Blockly.Workspace();
     createGenUidStubWithReturns(FAKE_ID);
     sinon.stub(Blockly.Variables, 'generateUniqueName')
         .returns(FAKE_VARIABLE_NAME);
   });
   teardown(function() {
-    this.workspace.dispose();
-    sinon.restore();
+    sharedTestTeardown.call(this);
   });
 
   test('Dropdown contains variables', function() {

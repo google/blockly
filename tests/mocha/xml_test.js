@@ -28,6 +28,7 @@ suite('XML', function() {
     chai.assert.equal(fieldDom.textContent, text);
   };
   setup(function() {
+    sharedTestSetup.call(this);
     Blockly.defineBlocksWithJsonArray([
       {
         "type": "empty_block",
@@ -65,14 +66,11 @@ suite('XML', function() {
       '</xml>'].join('\n');
   });
   teardown(function() {
+    sharedTestTeardown.call(this);
     for (var i = 0; i < this.blockTypes_.length; i++) {
       delete Blockly.Blocks[this.blockTypes_[i]];
     }
     this.blockTypes_.length = 0;
-    // Clear Blockly.Event state.
-    Blockly.Events.setGroup(false);
-    Blockly.Events.disabled_ = 0;
-    sinon.restore();
   });
   suite('textToDom', function() {
     test('Basic', function() {
@@ -625,16 +623,13 @@ suite('XML', function() {
               {width: 100, height: 200});
         });
         suite('Pinned', function() {
-          setup(function() {
-            this.clock = sinon.useFakeTimers();
-          });
           test('Pinned True', function() {
             var block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
                 '<block type="empty_block">' +
                 '  <comment pinned="true">test text</comment>' +
                 '</block>'
             ), this.workspace);
-            this.clock.tick(1);
+            this.clock.runAll();
             chai.assert.isTrue(block.commentModel.pinned);
             chai.assert.isNotNull(block.getCommentIcon());
             chai.assert.isTrue(block.getCommentIcon().isVisible());
@@ -645,7 +640,7 @@ suite('XML', function() {
                 '  <comment pinned="false">test text</comment>' +
                 '</block>'
             ), this.workspace);
-            this.clock.tick(1);
+            this.clock.runAll();
             chai.assert.isFalse(block.commentModel.pinned);
             chai.assert.isNotNull(block.getCommentIcon());
             chai.assert.isFalse(block.getCommentIcon().isVisible());
@@ -656,7 +651,7 @@ suite('XML', function() {
                 '  <comment>test text</comment>' +
                 '</block>'
             ), this.workspace);
-            this.clock.tick(1);
+            this.clock.runAll();
             chai.assert.isFalse(block.commentModel.pinned);
             chai.assert.isNotNull(block.getCommentIcon());
             chai.assert.isFalse(block.getCommentIcon().isVisible());

@@ -5,7 +5,8 @@
  */
 
 suite('Connection', function() {
-  suiteSetup(function() {
+  setup(function() {
+    sharedTestSetup.call(this);
     this.workspace = {
       connectionChecker: new Blockly.ConnectionChecker()
     };
@@ -17,6 +18,9 @@ suite('Connection', function() {
       var connection = new Blockly.Connection(block, type);
       return connection;
     };
+  });
+  teardown(function() {
+    sharedTestTeardown.call(this);
   });
   test('canConnectWithReason passes', function() {
     var conn1 = this.createConnection(Blockly.PREVIOUS_STATEMENT);

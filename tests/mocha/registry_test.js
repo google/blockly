@@ -16,7 +16,11 @@ suite('Registry', function() {
     return 'something';
   };
 
+  setup(function() {
+    sharedTestSetup.call(this);
+  });
   teardown(function() {
+    sharedTestTeardown.call(this);
     if (Blockly.registry.typeMap_['test'] &&
         Blockly.registry.typeMap_['test']['test_name']) {
       delete Blockly.registry.typeMap_['test']['test_name'];

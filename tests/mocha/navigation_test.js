@@ -22,6 +22,13 @@ suite('Navigation', function() {
     return workspace;
   }
 
+  setup(function() {
+    sharedTestSetup.call(this);
+  });
+  teardown(function() {
+    sharedTestTeardown.call(this);
+  });
+
   // Test that toolbox key handlers call through to the right functions and
   // transition correctly between toolbox, workspace, and flyout.
   suite('Tests toolbox keys', function() {

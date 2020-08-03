@@ -134,7 +134,7 @@ Blockly.Options = function(options) {
   this.pathToMedia = pathToMedia;
   /** @type {boolean} */
   this.hasCategories = hasCategories;
-  /** @type {!Object} */
+  /** @type {!Blockly.Options.MoveOptions} */
   this.moveOptions = Blockly.Options.parseMoveOptions(options, hasCategories);
   /** @deprecated  January 2019 */
   this.hasScrollbars = this.moveOptions.scrollbars;
@@ -150,9 +150,9 @@ Blockly.Options = function(options) {
   this.horizontalLayout = horizontalLayout;
   /** @type {Array.<Blockly.utils.toolbox.Toolbox>} */
   this.languageTree = toolboxContents;
-  /** @type {!Object} */
+  /** @type {!Blockly.Options.GridOptions} */
   this.gridOptions = Blockly.Options.parseGridOptions_(options);
-  /** @type {!Object} */
+  /** @type {!Blockly.Options.ZoomOptions} */
   this.zoomOptions = Blockly.Options.parseZoomOptions_(options);
   /** @type {number} */
   this.toolboxPosition = toolboxPosition;
@@ -168,7 +168,7 @@ Blockly.Options = function(options) {
   /**
    * The SVG element for the grid pattern.
    * Created during injection.
-   * @type {SVGElement}
+   * @type {?SVGElement}
    */
   this.gridPattern = null;
 
@@ -195,6 +195,41 @@ Blockly.Options = function(options) {
 Blockly.BlocklyOptions = function() {};
 
 /**
+ * Grid Options.
+ * @typedef {{
+ *     colour: string,
+ *     length: number,
+ *     snap: boolean,
+ *     spacing: number,
+ * }}
+ */
+Blockly.Options.GridOptions;
+
+/**
+ * Move Options.
+ * @typedef {{
+ *     drag: boolean,
+ *     scrollbars: boolean,
+ *     wheel: boolean,
+ * }}
+ */
+Blockly.Options.MoveOptions;
+
+/**
+ * Zoom Options.
+ * @typedef {{
+ *     controls: boolean,
+ *     maxScale: number,
+ *     minScale: number,
+ *     pinch: boolean,
+ *     scaleSpeed: number,
+ *     startScale: number,
+ *     wheel: boolean,
+ * }}
+ */
+Blockly.Options.ZoomOptions;
+
+/**
  * If set, sets the translation of the workspace to match the scrollbars.
  * @param {!{x:number,y:number}} xyRatio Contains an x and/or y property which
  *     is a float between 0 and 1 specifying the degree of scrolling.
@@ -213,7 +248,7 @@ Blockly.Options.prototype.getMetrics;
  *    behaviour is unspecified.
  * @param {!Object} options Dictionary of options.
  * @param {boolean} hasCategories Whether the workspace has categories or not.
- * @return {!Object} A dictionary of normalized options.
+ * @return {!Blockly.Options.MoveOptions} Normalized move options.
  * @private
  */
 Blockly.Options.parseMoveOptions = function(options, hasCategories) {
@@ -246,7 +281,7 @@ Blockly.Options.parseMoveOptions = function(options, hasCategories) {
  * behaviour is unspecified.  See zoom documentation:
  *   https://developers.google.com/blockly/guides/configure/web/zoom
  * @param {!Object} options Dictionary of options.
- * @return {!Object} A dictionary of normalized options.
+ * @return {!Blockly.Options.ZoomOptions} Normalized zoom options.
  * @private
  */
 Blockly.Options.parseZoomOptions_ = function(options) {
@@ -295,7 +330,7 @@ Blockly.Options.parseZoomOptions_ = function(options) {
  * behaviour is unspecified. See grid documentation:
  *   https://developers.google.com/blockly/guides/configure/web/grid
  * @param {!Object} options Dictionary of options.
- * @return {!Object} A dictionary of normalized options.
+ * @return {!Blockly.Options.GridOptions} Normalized grid options.
  * @private
  */
 Blockly.Options.parseGridOptions_ = function(options) {

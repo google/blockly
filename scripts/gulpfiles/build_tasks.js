@@ -111,7 +111,7 @@ var JSCOMP_ERROR = [
  *     type checking.
  */
 function compile(compilerOptions, opt_verbose, opt_warnings_as_error,
-    opt_enable_strict_typechecker) {
+    opt_strict_typechecker) {
   const options = {};
   options.compilation_level = 'SIMPLE_OPTIMIZATIONS';
   options.warning_level = opt_verbose ? 'VERBOSE' : 'DEFAULT';
@@ -119,9 +119,9 @@ function compile(compilerOptions, opt_verbose, opt_warnings_as_error,
   options.language_out = 'ECMASCRIPT5_STRICT';
   options.rewrite_polyfills = false;
   options.hide_warnings_for = 'node_modules';
-  if (opt_warnings_as_error || opt_enable_strict_typechecker) {
+  if (opt_warnings_as_error || opt_strict_typechecker) {
     options.jscomp_error = JSCOMP_ERROR;
-    if (opt_enable_strict_typechecker) {
+    if (opt_strict_typechecker) {
       options.jscomp_error.push('strictCheckTypes');
     }
   }

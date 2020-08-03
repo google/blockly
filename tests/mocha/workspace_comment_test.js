@@ -8,11 +8,12 @@ goog.require('Blockly.WorkspaceComment');
 
 suite('Workspace comment', function() {
   setup(function() {
+    sharedTestSetup.call(this);
     this.workspace = new Blockly.Workspace();
   });
 
   teardown(function() {
-    this.workspace.dispose();
+    sharedTestTeardown.call(this);
   });
 
   suite('getTopComments(ordered=true)', function() {
@@ -163,7 +164,6 @@ suite('Workspace comment', function() {
 
   suite('Content', function() {
     setup(function() {
-      createEventsFireStub();
 
       this.comment = new Blockly.WorkspaceComment(
           this.workspace, 'comment text', 0, 0, 'comment id');

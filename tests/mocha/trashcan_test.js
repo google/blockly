@@ -26,7 +26,7 @@ suite("Trashcan", function() {
   }
 
   setup(function() {
-    this.eventsStub = createEventsFireStub();
+    sharedTestSetup.call(this);
     var options = new Blockly.Options(
         {'trashcan': true, 'maxTrashcanContents': Infinity});
     this.workspace = new Blockly.WorkspaceSvg(options);
@@ -35,7 +35,7 @@ suite("Trashcan", function() {
     this.trashcan.svgLid_ = sinon.createStubInstance(SVGElement);
   });
   teardown(function() {
-    sinon.restore();
+    sharedTestTeardown.call(this);
   });
 
   suite("Events", function() {
@@ -63,7 +63,7 @@ suite("Trashcan", function() {
     });
     test("Click without contents - fires no events", function() {
       this.trashcan.click();
-      var lastFireCall = this.eventsStub.lastCall;
+      var lastFireCall = this.eventsFireStub.lastCall;
       chai.assert.notExists(lastFireCall);
     });
     test("Click with contents - fires trashcanOpen", function() {
@@ -73,7 +73,7 @@ suite("Trashcan", function() {
       var showFlyoutStub = sinon.stub(this.trashcan.flyout, "show");
       this.trashcan.click();
       assertLastCallEventArgEquals(
-          this.eventsStub, Blockly.Events.UI, this.workspace.id, undefined,
+          this.eventsFireStub, Blockly.Events.UI, this.workspace.id, undefined,
           {element: 'trashcanOpen', oldValue: null, newValue: true});
       sinon.assert.calledOnce(showFlyoutStub);
     });

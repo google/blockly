@@ -6,6 +6,8 @@
 
 suite('Events', function() {
   setup(function() {
+    sharedTestSetup.call(this, {fireEventsNow: false});
+    this.eventsFireSpy = sinon.spy(Blockly.Events, 'fire');
     this.workspace = new Blockly.Workspace();
     Blockly.defineBlocksWithJsonArray([{
       'type': 'field_variable_test_block',
@@ -25,13 +27,9 @@ suite('Events', function() {
   });
 
   teardown(function() {
+    sharedTestTeardown.call(this);
     delete Blockly.Blocks['field_variable_test_block'];
     delete Blockly.Blocks['simple_test_block'];
-    this.workspace.dispose();
-
-    // Clear Blockly.Event state.
-    Blockly.Events.setGroup(false);
-    Blockly.Events.disabled_ = 0;
   });
 
   function createSimpleTestBlock(workspace, opt_prototypeName) {
@@ -74,9 +72,6 @@ suite('Events', function() {
         this.genUidStub = createGenUidStubWithReturns(
             [this.TEST_BLOCK_ID, this.TEST_PARENT_ID]);
         this.block = createSimpleTestBlock(this.workspace);
-      });
-      teardown(function() {
-        sinon.restore();
       });
 
       test('Block base', function() {
@@ -231,9 +226,6 @@ suite('Events', function() {
         this.genUidStub = createGenUidStubWithReturns(this.TEST_BLOCK_ID);
         this.block =
             createSimpleTestBlock(this.workspace, 'field_variable_test_block');
-      });
-      teardown(function() {
-        sinon.restore();
       });
 
       test('Change', function() {
@@ -625,18 +617,17 @@ suite('Events', function() {
 
   suite('Firing', function() {
     setup(function() {
-      this.eventsStub = createEventsFireStub();
       this.changeListenerSpy = createFireChangeListenerSpy(this.workspace);
-    });
-
-    teardown(function() {
-      sinon.restore();
     });
 
     test('Block dispose triggers Delete', function() {
       try {
         var toolbox = document.getElementById('toolbox-categories');
         var workspaceSvg = Blockly.inject('blocklyDiv', {toolbox: toolbox});
+        var changeListenerSpy = createFireChangeListenerSpy(workspaceSvg);
+        var TEST_BLOCK_ID = 'test_block_id';
+        var genUidStub = createGenUidStubWithReturns(
+            [TEST_BLOCK_ID, 'test_group_id']);
 
         var block = workspaceSvg.newBlock('');
         block.initSvg();
@@ -646,9 +637,22 @@ suite('Events', function() {
 
         block.dispose();
 
+        // Run all queued events.
+        this.clock.runAll();
+
+        // Expect two calls to genUid: one to set the block's ID, and one for
+        // the event group's ID for creating block.
+        sinon.assert.calledTwice(genUidStub);
+
         assertLastCallEventArgEquals(
-            this.eventsStub, Blockly.Events.DELETE, workspaceSvg.id,
-            expectedId, {oldXml: expectedOldXml});
+            this.eventsFireSpy, Blockly.Events.DELETE, workspaceSvg.id,
+            expectedId, {oldXml: expectedOldXml, group: ''});
+        assertLastCallEventArgEquals(
+            changeListenerSpy, Blockly.Events.DELETE, workspaceSvg.id,
+            expectedId, {oldXml: expectedOldXml, group: ''});
+
+        // Expect the workspace to not have a variable with ID 'test_block_id'.
+        chai.assert.isNull(this.workspace.getVariableById(TEST_BLOCK_ID));
       } finally {
         workspaceSvg.dispose();
       }
@@ -663,12 +667,15 @@ suite('Events', function() {
       var _ = this.workspace.newBlock('field_variable_test_block');
       var TEST_VAR_NAME = 'item';  //  As defined in block's json.
 
+      // Run all queued events.
+      this.clock.runAll();
+
       // Expect three calls to genUid: one to set the block's ID, one for the event
-      // group's id, and one for the variable's ID.
+      // group's ID, and one for the variable's ID.
       sinon.assert.calledThrice(genUidStub);
 
       // Expect two events fired: varCreate and block create.
-      sinon.assert.calledTwice(this.eventsStub);
+      sinon.assert.calledTwice(this.eventsFireSpy);
       // Expect both events to trigger change listener.
       sinon.assert.calledTwice(this.changeListenerSpy);
       // Both events should be on undo stack
@@ -701,6 +708,9 @@ suite('Events', function() {
       var TEST_VAR_ID = 'test_var_id';
       var TEST_VAR_NAME = 'name1';
 
+      // Run all queued events.
+      this.clock.runAll();
+
       // Expect one call to genUid: for the event group's id
       sinon.assert.calledOnce(genUidStub);
 
@@ -710,7 +720,7 @@ suite('Events', function() {
       // 3. block create
       // 4. move (no-op, is filtered out)
       // 5. finished loading
-      sinon.assert.callCount(this.eventsStub, 5);
+      sinon.assert.callCount(this.eventsFireSpy, 5);
       // The first varCreate and move event should have been ignored.
       sinon.assert.callCount(this.changeListenerSpy, 3);
       // Expect two events on undo stack: varCreate and block create.

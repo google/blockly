@@ -31,15 +31,15 @@ Blockly.ToolboxSeparator = function(toolboxSeparatorDef, toolbox) {
       this, toolboxSeparatorDef, toolbox);
   /**
    * All the css class names that are used to create a separator.
-   * @type {!Blockly.ToolboxSeparator.ClassConfig}
+   * @type {!Blockly.ToolboxSeparator.CssConfig}
    * @protected
    */
-  this.classConfig_ = {
+  this.cssConfig_ = {
     'container': 'blocklyTreeSeparator'
   };
 
-  Blockly.utils.object.mixin(this.classConfig_,
-      toolboxSeparatorDef['classConfig']);
+  Blockly.utils.object.mixin(this.cssConfig_,
+      toolboxSeparatorDef['cssConfig']);
 };
 Blockly.utils.object.inherits(Blockly.ToolboxSeparator, Blockly.ToolboxItem);
 
@@ -49,14 +49,14 @@ Blockly.utils.object.inherits(Blockly.ToolboxSeparator, Blockly.ToolboxItem);
  *            container:?string,
  *          }}
  */
-Blockly.ToolboxSeparator.ClassConfig;
+Blockly.ToolboxSeparator.CssConfig;
 
 /**
  * @override
  */
 Blockly.ToolboxSeparator.prototype.createDom = function() {
   var container = document.createElement('div');
-  Blockly.utils.dom.addClass(container, this.classConfig_['container']);
+  Blockly.utils.dom.addClass(container, this.cssConfig_['container']);
   this.htmlDiv_ = container;
   return container;
 };

@@ -18,7 +18,6 @@ suite('Gesture', function() {
   });
 
   teardown(function() {
-    this.e = null;
     this.workspace.dispose();
   });
 
@@ -70,7 +69,7 @@ suite('Gesture', function() {
     gestureIsFieldClick_InFlyoutHelper.call(this, flyout, true);
   });
 
-  test('Workspace click - Shift click enters accessibility mode', function() {
+  test('Workspace click in accessibility mode - moves the cursor', function() {
     var event = {
       shiftKey : true,
       clientX : 10,

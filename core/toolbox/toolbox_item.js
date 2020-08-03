@@ -56,11 +56,11 @@ Blockly.ToolboxItem = function(toolboxItemDef, toolbox) {
 
 /**
  * Creates the dom for a toolbox item.
- * @return {?Element} The div for the toolbox item.
+ * @return {!Element} The div for the toolbox item.
  * @public
  */
 Blockly.ToolboxItem.prototype.createDom = function() {
-  return null;
+  return document.createElement('div');
 };
 
 /**
@@ -75,6 +75,7 @@ Blockly.ToolboxItem.prototype.getDiv = function() {
 /**
  * Gets a unique identifier for this toolbox item.
  * @return {string} The id for the toolbox item.
+ * @public
  */
 Blockly.ToolboxItem.prototype.getId = function() {
   return this.id_;
@@ -92,6 +93,7 @@ Blockly.ToolboxItem.prototype.isSelectable = function() {
 /**
  * Whether the toolbox item is collapsible.
  * @return {boolean} True if the toolbox item is collapsible.
+ * @public
  */
 Blockly.ToolboxItem.prototype.isCollapsible = function() {
   return false;
@@ -205,6 +207,7 @@ Blockly.CollapsibleToolboxItem.prototype.getContents = function() {
  * Gets the parent if the toolbox item is nested.
  * @return {?Blockly.CollapsibleToolboxItem} The parent toolbox item, or null if
  *     there are no nested items.
+ * @public
  */
 Blockly.CollapsibleToolboxItem.prototype.getParent = function() {
   return null;
@@ -222,5 +225,6 @@ Blockly.CollapsibleToolboxItem.prototype.isExpanded = function() {
 
 /**
  * Toggles whether or not the toolbox item is expanded.
+ * @public
  */
 Blockly.CollapsibleToolboxItem.prototype.toggleExpanded = function() {};

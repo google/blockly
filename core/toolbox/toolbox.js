@@ -320,8 +320,10 @@ Blockly.Toolbox.prototype.render = function(toolboxDef) {
   // TODO: Future improvement to compare the new toolboxDef with the old and
   //  only re render what has changed.
   for (var i = 0; i < this.contents_.length; i++) {
-    var child = this.contents_[i];
-    child.getDiv().remove();
+    var childDiv = this.contents_[i].getDiv();
+    if (childDiv) {
+      childDiv.remove();
+    }
   }
   this.contents_ = [];
   this.contentIds_ = {};

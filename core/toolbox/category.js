@@ -171,6 +171,13 @@ Blockly.ToolboxCategory.nestedPadding = 19;
 Blockly.ToolboxCategory.borderWidth = 8;
 
 /**
+ * The default colour of the category. This is used as the background colour of
+ * the category when it is selected.
+ * @type {string}
+ */
+Blockly.ToolboxCategory.defaultBackgroundColour = '#57e';
+
+/**
  * Parses the contents array depending on if the category has children, is a
  * dynamic category, or if its contents are meant to be shown in the flyout.
  * @param {!Blockly.utils.toolbox.Category} categoryDef The information needed
@@ -415,4 +422,187 @@ Blockly.ToolboxCategory.prototype.parseColour_ = function(colourValue) {
       }
     }
   }
+};
+
+/**
+ * Opens or closes the current category if it has children.
+ * @param {boolean} isExpanded True to expand the category, false to close.
+ * @public
+ */
+Blockly.ToolboxCategory.prototype.setExpanded = function(isExpanded) {
+  if (!this.hasChildren() || this.expanded_ == isExpanded) {
+    return;
+  }
+  this.expanded_ = isExpanded;
+  if (isExpanded) {
+    this.subcategoriesDiv_.style.display = 'block';
+    this.openIcon_(this.iconSpan_);
+  } else {
+    this.subcategoriesDiv_.style.display = 'none';
+    this.closeIcon_(this.iconSpan_);
+  }
+  Blockly.utils.aria.setState(/** @type {!Element} */ (this.htmlDiv_),
+      Blockly.utils.aria.State.EXPANDED, isExpanded);
+
+  if (this.hasChildren()) {
+    for (var i = 0; i < this.contents_.length; i++) {
+      var child = this.contents_[i];
+      child.setVisible(isExpanded);
+    }
+  }
+
+  Blockly.svgResize(this.workspace_);
+};
+
+/**
+ * Adds appropriate classes to display an open icon.
+ * @param {?Element} iconDiv The div that holds the icon.
+ * @protected
+ */
+Blockly.ToolboxCategory.prototype.openIcon_ = function(iconDiv) {
+  if (!iconDiv) {
+    return;
+  }
+
+  Blockly.utils.dom.removeClass(iconDiv, this.classConfig_['closedIcon']);
+  Blockly.utils.dom.addClass(iconDiv, this.classConfig_['openIcon']);
+};
+
+/**
+ * Adds appropriate classes to display a closed icon.
+ * @param {?Element} iconDiv The div that holds the icon.
+ * @protected
+ */
+Blockly.ToolboxCategory.prototype.closeIcon_ = function(iconDiv) {
+  if (!iconDiv) {
+    return;
+  }
+  Blockly.utils.dom.removeClass(iconDiv, this.classConfig_['openIcon']);
+  Blockly.utils.dom.addClass(iconDiv, this.classConfig_['closedIcon']);
+};
+
+/**
+ * Whether or not this category has subcategories.
+ * @return {boolean} True if this category has subcategories, false otherwise.
+ * @public
+ */
+Blockly.ToolboxCategory.prototype.hasChildren = function() {
+  return this.hasChildren_;
+};
+
+/**
+ * Sets whether the category is visible or not. Categories are not visible if
+ * they are the child of a parent who has been collapsed.
+ * @param {boolean} isVisible True if category should be visible.
+ * @public
+ */
+Blockly.ToolboxCategory.prototype.setVisible = function(isVisible) {
+  // TODO: Add ability to hide the category when this is false.
+  //  This causes problems for nested categories.
+  this.isVisible_ = isVisible;
+};
+
+/**
+ * Whether the category is visible.
+ * @return {boolean} True if the category is visible, false otherwise.
+ * @public
+ */
+Blockly.ToolboxCategory.prototype.isVisible = function() {
+  return this.isVisible_;
+};
+
+/**
+ * @override
+ */
+Blockly.ToolboxCategory.prototype.isExpanded = function() {
+  return this.expanded_;
+};
+
+/**
+ * @override
+ */
+Blockly.ToolboxCategory.prototype.isSelectable = function() {
+  // TODO: Add && isSelectable_
+  return this.isVisible();
+};
+
+/**
+ * @override
+ */
+Blockly.ToolboxCategory.prototype.isCollapsible = function() {
+  return this.hasChildren();
+};
+
+/**
+ * @override
+ */
+Blockly.ToolboxCategory.prototype.onClick = function(_e) {
+  this.toggleExpanded();
+};
+
+/**
+ * @override
+ */
+Blockly.ToolboxCategory.prototype.setSelected = function(isSelected) {
+  if (isSelected) {
+    var defaultColour = this.parseColour_(
+        Blockly.ToolboxCategory.defaultBackgroundColour);
+    this.rowDiv_.style.backgroundColor = this.colour_ || defaultColour;
+    Blockly.utils.dom.addClass(this.rowDiv_, this.classConfig_['selected']);
+  } else {
+    this.rowDiv_.style.backgroundColor = '';
+    Blockly.utils.dom.removeClass(this.rowDiv_, this.classConfig_['selected']);
+  }
+  Blockly.utils.aria.setState(/** @type {!Element} */ (this.htmlDiv_),
+      Blockly.utils.aria.State.SELECTED, isSelected);
+};
+
+/**
+ * @override
+ */
+Blockly.ToolboxCategory.prototype.toggleExpanded = function() {
+  this.setExpanded(!this.expanded_);
+};
+
+/**
+ * Gets the nested level of the category
+ * @return {number} The nested level of the category.
+ */
+Blockly.ToolboxCategory.prototype.getLevel = function() {
+  return this.level_;
+};
+
+/**
+ * @override
+ */
+Blockly.ToolboxCategory.prototype.getName = function() {
+  return this.name_;
+};
+
+/**
+ * @override
+ */
+Blockly.ToolboxCategory.prototype.getParent = function() {
+  return this.parent_;
+};
+
+/**
+ * @override
+ */
+Blockly.ToolboxCategory.prototype.getDiv = function() {
+  return this.htmlDiv_;
+};
+
+/**
+ * @override
+ */
+Blockly.ToolboxCategory.prototype.getContents = function() {
+  return this.contents_;
+};
+
+/**
+ * @override
+ */
+Blockly.ToolboxCategory.prototype.dispose = function() {
+  Blockly.utils.dom.removeNode(this.htmlDiv_);
 };

@@ -344,7 +344,7 @@ suite('Events', function() {
     suite('fromJson', function() {
       test('Var create', function() {
         var event = new Blockly.Events.VarCreate(this.variable);
-        var event2 = new Blockly.Events.VarCreate(null);
+        var event2 = new Blockly.Events.VarCreate();
         var json = event.toJson();
         event2.fromJson(json);
 
@@ -352,7 +352,7 @@ suite('Events', function() {
       });
       test('Var delete', function() {
         var event = new Blockly.Events.VarDelete(this.variable);
-        var event2 = new Blockly.Events.VarDelete(null);
+        var event2 = new Blockly.Events.VarDelete();
         var json = event.toJson();
         event2.fromJson(json);
 
@@ -360,7 +360,7 @@ suite('Events', function() {
       });
       test('Var rename', function() {
         var event = new Blockly.Events.VarRename(this.variable, '');
-        var event2 = new Blockly.Events.VarRename(null);
+        var event2 = new Blockly.Events.VarRename();
         var json = event.toJson();
         event2.fromJson(json);
 

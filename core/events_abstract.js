@@ -21,6 +21,13 @@ goog.require('Blockly.Events');
  * @constructor
  */
 Blockly.Events.Abstract = function() {
+
+  /**
+   * Whether or not the event is blank (to be populated by fromJson).
+   * @type {?boolean}
+   */
+  this.isBlank = null;
+
   /**
    * The workspace identifier for this event.
    * @type {string|undefined}
@@ -61,6 +68,7 @@ Blockly.Events.Abstract.prototype.toJson = function() {
  * @param {!Object} json JSON representation.
  */
 Blockly.Events.Abstract.prototype.fromJson = function(json) {
+  this.isBlank = false;
   this.group = json['group'];
 };
 

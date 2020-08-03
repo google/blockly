@@ -135,7 +135,7 @@ Blockly.Options = function(options) {
   /** @type {boolean} */
   this.hasCategories = hasCategories;
   /** @type {!Blockly.Options.MoveOptions} */
-  this.moveOptions = Blockly.Options.parseMoveOptions(options, hasCategories);
+  this.moveOptions = Blockly.Options.parseMoveOptions_(options, hasCategories);
   /** @deprecated  January 2019 */
   this.hasScrollbars = this.moveOptions.scrollbars;
   /** @type {boolean} */
@@ -251,7 +251,7 @@ Blockly.Options.prototype.getMetrics;
  * @return {!Blockly.Options.MoveOptions} Normalized move options.
  * @private
  */
-Blockly.Options.parseMoveOptions = function(options, hasCategories) {
+Blockly.Options.parseMoveOptions_ = function(options, hasCategories) {
   var move = options['move'] || {};
   var moveOptions = {};
   if (move['scrollbars'] === undefined && options['scrollbars'] === undefined) {

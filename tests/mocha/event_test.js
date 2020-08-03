@@ -469,7 +469,7 @@ suite('Events', function() {
         new Blockly.Events.Ui(block, 'click', undefined, undefined)
       ];
       var filteredEvents = Blockly.Events.filter(events, true);
-      chai.assert.equal(4, filteredEvents.length);  // no event should have been removed.
+      chai.assert.equal(filteredEvents.length, 4);  // no event should have been removed.
       // test that the order hasn't changed
       chai.assert.isTrue(filteredEvents[0] instanceof Blockly.Events.BlockCreate);
       chai.assert.isTrue(filteredEvents[1] instanceof Blockly.Events.BlockMove);
@@ -487,7 +487,7 @@ suite('Events', function() {
         new Blockly.Events.BlockMove(block2)
       ];
       var filteredEvents = Blockly.Events.filter(events, true);
-      chai.assert.equal(4, filteredEvents.length);  // no event should have been removed.
+      chai.assert.equal(filteredEvents.length, 4);  // no event should have been removed.
     });
 
     test('Forward', function() {
@@ -497,12 +497,12 @@ suite('Events', function() {
       addMoveEvent(events, block, 2, 2);
       addMoveEvent(events, block, 3, 3);
       var filteredEvents = Blockly.Events.filter(events, true);
-      chai.assert.equal(2, filteredEvents.length);  // duplicate moves should have been removed.
+      chai.assert.equal(filteredEvents.length, 2);  // duplicate moves should have been removed.
       // test that the order hasn't changed
       chai.assert.isTrue(filteredEvents[0] instanceof Blockly.Events.BlockCreate);
       chai.assert.isTrue(filteredEvents[1] instanceof Blockly.Events.BlockMove);
-      chai.assert.equal(3, filteredEvents[1].newCoordinate.x);
-      chai.assert.equal(3, filteredEvents[1].newCoordinate.y);
+      chai.assert.equal(filteredEvents[1].newCoordinate.x, 3);
+      chai.assert.equal(filteredEvents[1].newCoordinate.y, 3);
     });
 
     test('Backward', function() {
@@ -512,12 +512,12 @@ suite('Events', function() {
       addMoveEvent(events, block, 2, 2);
       addMoveEvent(events, block, 3, 3);
       var filteredEvents = Blockly.Events.filter(events, false);
-      chai.assert.equal(2, filteredEvents.length);  // duplicate event should have been removed.
+      chai.assert.equal(filteredEvents.length, 2);  // duplicate event should have been removed.
       // test that the order hasn't changed
       chai.assert.isTrue(filteredEvents[0] instanceof Blockly.Events.BlockCreate);
       chai.assert.isTrue(filteredEvents[1] instanceof Blockly.Events.BlockMove);
-      chai.assert.equal(1, filteredEvents[1].newCoordinate.x);
-      chai.assert.equal(1, filteredEvents[1].newCoordinate.y);
+      chai.assert.equal(filteredEvents[1].newCoordinate.x, 1);
+      chai.assert.equal(filteredEvents[1].newCoordinate.y, 1);
     });
 
     test('Merge move events', function() {
@@ -526,9 +526,9 @@ suite('Events', function() {
       addMoveEvent(events, block, 0, 0);
       addMoveEvent(events, block, 1, 1);
       var filteredEvents = Blockly.Events.filter(events, true);
-      chai.assert.equal(1, filteredEvents.length);  // second move event merged into first
-      chai.assert.equal(1, filteredEvents[0].newCoordinate.x);
-      chai.assert.equal(1, filteredEvents[0].newCoordinate.y);
+      chai.assert.equal(filteredEvents.length, 1);  // second move event merged into first
+      chai.assert.equal(filteredEvents[0].newCoordinate.x, 1);
+      chai.assert.equal(filteredEvents[0].newCoordinate.y, 1);
     });
 
     test('Merge change events', function() {
@@ -538,7 +538,7 @@ suite('Events', function() {
         new Blockly.Events.Change(block1, 'field', 'VAR', 'item1', 'item2')
       ];
       var filteredEvents = Blockly.Events.filter(events, true);
-      chai.assert.equal(1, filteredEvents.length);  // second change event merged into first
+      chai.assert.equal(filteredEvents.length, 1);  // second change event merged into first
       chai.assert.equal(filteredEvents[0].oldValue, 'item');
       chai.assert.equal(filteredEvents[0].newValue, 'item2');
     });
@@ -573,7 +573,7 @@ suite('Events', function() {
       ];
       var filteredEvents = Blockly.Events.filter(events, true);
       // click and stackclick should both exist
-      chai.assert.equal(2, filteredEvents.length);
+      chai.assert.equal(filteredEvents.length, 2);
       chai.assert.equal(filteredEvents[0].element, 'click');
       chai.assert.equal(filteredEvents[1].element, 'stackclick');
     });
@@ -594,7 +594,7 @@ suite('Events', function() {
       var filteredEvents = Blockly.Events.filter(events, true);
       // The two events should be merged, but because nothing has changed
       // they will be filtered out.
-      chai.assert.equal(0, filteredEvents.length);
+      chai.assert.equal(filteredEvents.length, 0);
     });
 
     test('Move events different blocks not merged', function() {
@@ -614,7 +614,7 @@ suite('Events', function() {
 
       var filteredEvents = Blockly.Events.filter(events, true);
       // Nothing should have merged.
-      chai.assert.equal(4, filteredEvents.length);
+      chai.assert.equal(filteredEvents.length, 4);
       // test that the order hasn't changed
       chai.assert.isTrue(filteredEvents[0] instanceof Blockly.Events.BlockMove);
       chai.assert.isTrue(filteredEvents[1] instanceof Blockly.Events.BlockMove);

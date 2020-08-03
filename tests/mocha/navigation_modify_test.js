@@ -249,8 +249,8 @@ suite('Insert/Modify', function() {
               this.row_block_1));
       chai.assert.isTrue(Blockly.navigation.modify_());
       var pos = this.row_block_1.getRelativeToSurfaceXY();
-      chai.assert.equal(100, pos.x);
-      chai.assert.equal(200, pos.y);
+      chai.assert.equal(pos.x, 100);
+      chai.assert.equal(pos.y, 200);
     });
 
     test('Cursor on output connection', function() {
@@ -259,8 +259,8 @@ suite('Insert/Modify', function() {
               this.row_block_1.outputConnection));
       chai.assert.isTrue(Blockly.navigation.modify_());
       var pos = this.row_block_1.getRelativeToSurfaceXY();
-      chai.assert.equal(100, pos.x);
-      chai.assert.equal(200, pos.y);
+      chai.assert.equal(pos.x, 100);
+      chai.assert.equal(pos.y, 200);
     });
 
     test('Cursor on previous connection', function() {
@@ -269,8 +269,8 @@ suite('Insert/Modify', function() {
               this.stack_block_1.previousConnection));
       chai.assert.isTrue(Blockly.navigation.modify_());
       var pos = this.stack_block_1.getRelativeToSurfaceXY();
-      chai.assert.equal(100, pos.x);
-      chai.assert.equal(200, pos.y);
+      chai.assert.equal(pos.x, 100);
+      chai.assert.equal(pos.y, 200);
     });
 
     test('Cursor on input connection', function() {
@@ -300,8 +300,8 @@ suite('Insert/Modify', function() {
       chai.assert.isTrue(Blockly.navigation.modify_());
       chai.assert.isNull(this.row_block_2.getParent());
       var pos = this.row_block_2.getRelativeToSurfaceXY();
-      chai.assert.equal(100, pos.x);
-      chai.assert.equal(200, pos.y);
+      chai.assert.equal(pos.x, 100);
+      chai.assert.equal(pos.y, 200);
     });
 
     test('Cursor on child block (stack)', function() {
@@ -315,8 +315,8 @@ suite('Insert/Modify', function() {
       chai.assert.isTrue(Blockly.navigation.modify_());
       chai.assert.isNull(this.stack_block_2.getParent());
       var pos = this.stack_block_2.getRelativeToSurfaceXY();
-      chai.assert.equal(100, pos.x);
-      chai.assert.equal(200, pos.y);
+      chai.assert.equal(pos.x, 100);
+      chai.assert.equal(pos.y, 200);
     });
 
     test('Cursor on workspace', function() {

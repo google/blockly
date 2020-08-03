@@ -165,6 +165,12 @@ Blockly.ToolboxCategory.ClassConfig;
 Blockly.ToolboxCategory.nestedPadding = 19;
 
 /**
+ * The width in pixels of the strip of colour next to each category.
+ * @type {number}
+ */
+Blockly.ToolboxCategory.borderWidth = 8;
+
+/**
  * Parses the contents array depending on if the category has children, is a
  * dynamic category, or if its contents are meant to be shown in the flyout.
  * @param {!Blockly.utils.toolbox.Category} categoryDef The information needed
@@ -192,6 +198,149 @@ Blockly.ToolboxCategory.prototype.parseContents_ = function(categoryDef,
   }
 
   return toolboxItems;
+};
+
+/**
+ * @override
+ */
+Blockly.ToolboxCategory.prototype.createDom = function() {
+  this.htmlDiv_ = this.createContainer_();
+  Blockly.utils.aria.setRole(this.htmlDiv_, Blockly.utils.aria.Role.TREEITEM);
+  Blockly.utils.aria.setState(/** @type {!Element} */ (this.htmlDiv_),
+      Blockly.utils.aria.State.SELECTED,false);
+  Blockly.utils.aria.setState(/** @type {!Element} */ (this.htmlDiv_),
+      Blockly.utils.aria.State.LEVEL, this.level_);
+  this.htmlDiv_.setAttribute('id', this.id_);
+
+  this.rowDiv_ = this.createRowContainer_();
+  this.htmlDiv_.appendChild(this.rowDiv_);
+
+  this.iconSpan_ = this.createIconSpan_();
+  Blockly.utils.aria.setRole(this.iconSpan_, Blockly.utils.aria.Role.PRESENTATION);
+  this.rowDiv_.appendChild(this.iconSpan_);
+
+  var labelSpan = this.createLabelSpan_();
+  this.rowDiv_.appendChild(labelSpan);
+  Blockly.utils.aria.setState(/** @type {!Element} */ (this.htmlDiv_),
+      Blockly.utils.aria.State.LABELLEDBY, labelSpan.getAttribute('id'));
+
+  if (this.hasChildren()) {
+    var contents = /** @type {!Array<!Blockly.ToolboxItem>} */ (this.contents_);
+    this.subcategoriesDiv_ = this.createSubCategories_(contents);
+    Blockly.utils.aria.setRole(this.subcategoriesDiv_,
+        Blockly.utils.aria.Role.GROUP);
+    this.htmlDiv_.appendChild(this.subcategoriesDiv_);
+  }
+
+  this.addColour_(this.colour_);
+
+  this.setExpanded(this.expanded_);
+
+  return this.htmlDiv_;
+};
+
+/**
+ * Creates the container that holds the row and any sub categories.
+ * @return {!Element} The div that holds the icon and the label.
+ * @protected
+ */
+Blockly.ToolboxCategory.prototype.createContainer_ = function() {
+  var container = document.createElement('div');
+  Blockly.utils.dom.addClass(container, this.classConfig_['container']);
+  return container;
+};
+
+/**
+ * Creates the container for the icon and the label.
+ * @return {!Element} The div that holds the icon and the label.
+ * @protected
+ */
+Blockly.ToolboxCategory.prototype.createRowContainer_ = function() {
+  var rowDiv = document.createElement('div');
+  Blockly.utils.dom.addClass(rowDiv, this.classConfig_['row']);
+  var nestedPadding = Blockly.ToolboxCategory.nestedPadding * this.getLevel();
+  nestedPadding = nestedPadding.toString() + 'px';
+  this.workspace_.RTL ? rowDiv.style.paddingRight = nestedPadding :
+      rowDiv.style.paddingLeft = nestedPadding;
+  rowDiv.style.pointerEvents = 'none';
+  return rowDiv;
+};
+
+/**
+ * Creates the span that holds the category icon.
+ * @return {!Element} The span that holds the category icon.
+ * @protected
+ */
+Blockly.ToolboxCategory.prototype.createIconSpan_ = function() {
+  var toolboxIcon = document.createElement('span');
+  if (!this.parentToolbox_.isHorizontal()) {
+    Blockly.utils.dom.addClass(toolboxIcon, this.classConfig_['icon']);
+    if (this.hasChildren()) {
+      toolboxIcon.style.visibility = 'visible';
+    }
+  }
+
+  toolboxIcon.style.display = 'inline-block';
+  return toolboxIcon;
+};
+
+/**
+ * Creates the span that holds the category label.
+ * This should have an id for accessibility purposes.
+ * @return {!Element} The span that holds the category label.
+ * @protected
+ */
+Blockly.ToolboxCategory.prototype.createLabelSpan_ = function() {
+  var toolboxLabel = document.createElement('span');
+  toolboxLabel.setAttribute('id', this.getId() + '.label');
+  toolboxLabel.textContent = this.name_;
+  Blockly.utils.dom.addClass(toolboxLabel, this.classConfig_['label']);
+  return toolboxLabel;
+};
+
+/**
+ * Create the dom for all subcategories.
+ * @param {!Array<!Blockly.ToolboxItem>} contents The category contents.
+ * @return {!Element} The div holding all the subcategories.
+ * @protected
+ */
+Blockly.ToolboxCategory.prototype.createSubCategories_ = function(contents) {
+  var contentsContainer = document.createElement('div');
+  Blockly.utils.dom.addClass(contentsContainer, this.classConfig_['contents']);
+
+  for (var i = 0; i < contents.length; i++) {
+    var newCategory = contents[i];
+    var dom = newCategory.createDom();
+    contentsContainer.appendChild(dom);
+  }
+  return contentsContainer;
+};
+
+/**
+ * Updates the colour for this category.
+ * @public
+ */
+Blockly.ToolboxCategory.prototype.refreshTheme = function() {
+  this.colour_ = this.getColour_(/** @type {Blockly.utils.toolbox.Category} **/
+      (this.toolboxItemDef_));
+  this.addColour_(this.colour_);
+};
+
+/**
+ * Add the strip of colour to the toolbox category.
+ * @param {string} colour The category colour.
+ * @protected
+ */
+Blockly.ToolboxCategory.prototype.addColour_ = function(colour) {
+  if (colour) {
+    var border = Blockly.ToolboxCategory.borderWidth + 'px solid ' +
+        (colour || '#ddd');
+    if (this.workspace_.RTL) {
+      this.rowDiv_.style.borderRight = border;
+    } else {
+      this.rowDiv_.style.borderLeft = border;
+    }
+  }
 };
 
 /**

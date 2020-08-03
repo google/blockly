@@ -171,6 +171,13 @@ Blockly.ToolboxCategory.nestedPadding = 19;
 Blockly.ToolboxCategory.borderWidth = 8;
 
 /**
+ * The default colour of the category. This is used if a category is selected
+ * and does not have a colour defined.
+ * @type {string}
+ */
+Blockly.ToolboxCategory.defaultSelectedColour = '#57e';
+
+/**
  * Parses the contents array depending on if the category has children, is a
  * dynamic category, or if its contents are meant to be shown in the flyout.
  * @param {!Blockly.utils.toolbox.Category} categoryDef The information needed
@@ -423,7 +430,7 @@ Blockly.ToolboxCategory.prototype.parseColour_ = function(colourValue) {
  * @public
  */
 Blockly.ToolboxCategory.prototype.setExpanded = function(isExpanded) {
-  if (!this.hasChildren()) {
+  if (!this.hasChildren() || this.expanded_ == isExpanded) {
     return;
   }
   this.expanded_ = isExpanded;
@@ -538,7 +545,9 @@ Blockly.ToolboxCategory.prototype.onClick = function(_e) {
  */
 Blockly.ToolboxCategory.prototype.setSelected = function(isSelected) {
   if (isSelected) {
-    this.rowDiv_.style.backgroundColor = this.colour_ || '#57e';
+    var defaultColour = this.parseColour_(
+        Blockly.ToolboxCategory.defaultSelectedColour);
+    this.rowDiv_.style.backgroundColor = this.colour_ || defaultColour;
     Blockly.utils.dom.addClass(this.rowDiv_, this.classConfig_['selected']);
   } else {
     this.rowDiv_.style.backgroundColor = '';

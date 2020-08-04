@@ -483,9 +483,11 @@ Blockly.Flyout.prototype.show = function(flyoutDef) {
     }
   }
   this.setVisible(true);
+
   // Parse the Array or NodeList passed in into an Array of
   // Blockly.utils.toolbox.Toolbox.
-  var parsedContent = Blockly.utils.toolbox.convertToolboxToJSON(flyoutDef);
+  var parsedContent = /** @type {!Array<!Blockly.utils.toolbox.FlyoutItemDef>} */
+      (Blockly.utils.toolbox.convertToolboxToJSON(flyoutDef));
   var flyoutInfo =
     /** @type {{contents:!Array.<!Object>, gaps:!Array.<number>}} */ (
       this.createFlyoutInfo_(parsedContent));
@@ -524,10 +526,10 @@ Blockly.Flyout.prototype.show = function(flyoutDef) {
 /**
  * Create the contents array and gaps array necessary to create the layout for
  * the flyout.
- * @param {Array.<Blockly.utils.toolbox.Toolbox>} parsedContent The array
- *   of objects to show in the flyout.
+ * @param {!Array.<Blockly.utils.toolbox.FlyoutItemDef>} parsedContent The array
+ *     of objects to show in the flyout.
  * @return {{contents:Array.<Object>, gaps:Array.<number>}} The list of contents
- *   and gaps needed to lay out the flyout.
+ *     and gaps needed to lay out the flyout.
  * @private
  */
 Blockly.Flyout.prototype.createFlyoutInfo_ = function(parsedContent) {

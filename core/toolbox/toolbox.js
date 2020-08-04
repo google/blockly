@@ -739,7 +739,8 @@ Blockly.Toolbox.prototype.selectParent_ = function() {
 };
 
 /**
- * Selects the previous visible toolbox item.
+ * Selects the first child of the currently selected item, or nothing if the
+ * toolbox item has no children.
  * @return {boolean} True if a child category was selected, false otherwise.
  * @private
  */

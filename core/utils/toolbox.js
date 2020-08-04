@@ -163,9 +163,8 @@ Blockly.utils.toolbox.toolboxXmlToJson_ = function(toolboxDef) {
     for (var j = 0; j < child.attributes.length; j++) {
       var attr = child.attributes[j];
       if (attr.nodeName.indexOf('css-') > -1) {
-        var cssConfig = obj['cssConfig'] || {};
-        cssConfig[attr.nodeName.replace('css-', '')] = attr.value;
-        obj['cssConfig'] = cssConfig;
+        obj['cssConfig'] = obj['cssConfig'] || {};
+        obj['cssConfig'][attr.nodeName.replace('css-', '')] = attr.value;
       } else {
         obj[attr.nodeName] = attr.value;
       }

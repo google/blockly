@@ -15,6 +15,8 @@ goog.provide('Blockly.ToolboxSeparator');
 
 goog.require('Blockly.ToolboxItem');
 
+goog.requireType('Blockly.utils.toolbox');
+
 
 /**
  * Class for a toolbox separator. This is the thin visual line that appears on

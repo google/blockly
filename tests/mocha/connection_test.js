@@ -7,9 +7,8 @@
 suite('Connection', function() {
   setup(function() {
     sharedTestSetup.call(this);
-    this.workspace = {
-      connectionChecker: new Blockly.ConnectionChecker()
-    };
+    this.workspace = sinon.createStubInstance(Blockly.Workspace);
+    this.workspace.connectionChecker = new Blockly.ConnectionChecker();
     this.createConnection = function(type) {
       var block = {
         workspace: this.workspace,

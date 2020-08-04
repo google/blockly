@@ -57,8 +57,8 @@ suite('Navigation', function() {
     });
 
     teardown(function() {
+      workspaceTeardown.call(this, this.workspace);
       delete Blockly.Blocks['basic_block'];
-      this.workspace.dispose();
     });
 
     test('Next', function() {
@@ -173,8 +173,8 @@ suite('Navigation', function() {
     });
 
     teardown(function() {
+      workspaceTeardown.call(this, this.workspace);
       delete Blockly.Blocks['basic_block'];
-      this.workspace.dispose();
     });
 
     // Should be a no-op
@@ -264,8 +264,8 @@ suite('Navigation', function() {
     });
 
     teardown(function() {
+      workspaceTeardown.call(this, this.workspace);
       delete Blockly.Blocks['basic_block'];
-      this.workspace.dispose();
     });
 
     test('Previous', function() {
@@ -375,8 +375,8 @@ suite('Navigation', function() {
       };
     });
     teardown(function() {
+      workspaceTeardown.call(this, this.workspace);
       delete Blockly.Blocks['basic_block'];
-      this.workspace.dispose();
     });
     test('Action does not exist', function() {
       var block = this.workspace.getTopBlocks()[0];
@@ -488,8 +488,8 @@ suite('Navigation', function() {
       });
 
       teardown(function() {
+        workspaceTeardown.call(this, this.workspace);
         delete Blockly.Blocks['field_block'];
-        this.workspace.dispose();
       });
 
       test('Perform valid action for read only', function() {
@@ -535,8 +535,8 @@ suite('Navigation', function() {
     });
 
     teardown(function() {
+      workspaceTeardown.call(this, this.workspace);
       delete Blockly.Blocks['basic_block'];
-      this.workspace.dispose();
     });
 
     test('Insert from flyout with a valid connection marked', function() {
@@ -640,9 +640,9 @@ suite('Navigation', function() {
     });
 
     teardown(function() {
+      workspaceTeardown.call(this, this.workspace);
       delete Blockly.Blocks['inline_block'];
       delete Blockly.Blocks['basic_block'];
-      this.workspace.dispose();
     });
 
     test('Connect cursor on previous into stack', function() {
@@ -711,8 +711,8 @@ suite('Navigation', function() {
     });
 
     teardown(function() {
+      workspaceTeardown.call(this, this.workspace);
       delete Blockly.Blocks['basic_block'];
-      this.workspace.dispose();
     });
 
     test('Delete block - has parent ', function() {

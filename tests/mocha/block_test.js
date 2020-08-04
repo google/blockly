@@ -1077,7 +1077,7 @@ suite('Blocks', function() {
           ), this.workspace);
         });
         teardown(function() {
-          this.workspace.dispose();
+          workspaceTeardown.call(this, this.workspace);
         });
         test('Text', function() {
           this.block.setCommentText('test text');
@@ -1139,11 +1139,11 @@ suite('Blocks', function() {
   suite('Icon Management', function() {
     suite('Bubbles and Collapsing', function() {
       setup(function() {
-        this.workspace.dispose();
+        workspaceTeardown.call(this, this.workspace);
         this.workspace = Blockly.inject('blocklyDiv');
       });
       teardown(function() {
-        this.workspace.dispose();
+        workspaceTeardown.call(this, this.workspace);
       });
 
       test('Has Icon', function() {
@@ -1653,7 +1653,7 @@ suite('Blocks', function() {
         }), {});
       });
       teardown(function() {
-        this.workspace.dispose();
+        workspaceTeardown.call(this, this.workspace);
         // Clear all registered themes.
         Blockly.registry.typeMap_['theme'] = {};
       });

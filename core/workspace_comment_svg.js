@@ -550,7 +550,14 @@ Blockly.WorkspaceCommentSvg.prototype.setDeleteStyle = function(enable) {
   }
 };
 
-Blockly.WorkspaceCommentSvg.prototype.setAutoLayout = function() {
+/**
+ * Set whether auto-layout of this bubble is enabled.  The first time a bubble
+ * is shown it positions itself to not cover any blocks.  Once a user has
+ * dragged it to reposition, it renders where the user put it.
+ * @param {boolean} _enable True if auto-layout should be enabled, false
+ *     otherwise.
+ */
+Blockly.WorkspaceCommentSvg.prototype.setAutoLayout = function(_enable) {
   // NOP for compatibility with the bubble dragger.
 };
 

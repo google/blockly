@@ -556,6 +556,7 @@ Blockly.WorkspaceCommentSvg.prototype.setDeleteStyle = function(enable) {
  * dragged it to reposition, it renders where the user put it.
  * @param {boolean} _enable True if auto-layout should be enabled, false
  *     otherwise.
+ * @package
  */
 Blockly.WorkspaceCommentSvg.prototype.setAutoLayout = function(_enable) {
   // NOP for compatibility with the bubble dragger.

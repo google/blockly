@@ -628,63 +628,65 @@ Blockly.WorkspaceCommentSvg.prototype.toCopyData = function() {
  * CSS for workspace comment.  See css.js for use.
  */
 Blockly.Css.register([
+  // clang-format off
   /* eslint-disable indent */
   '.blocklyCommentForeignObject {',
-  'position: relative;',
-  'z-index: 0;',
+    'position: relative;',
+    'z-index: 0;',
   '}',
 
   '.blocklyCommentRect {',
-  'fill: #E7DE8E;',
-  'stroke: #bcA903;',
-  'stroke-width: 1px;',
+    'fill: #E7DE8E;',
+    'stroke: #bcA903;',
+    'stroke-width: 1px;',
   '}',
 
   '.blocklyCommentTarget {',
-  'fill: transparent;',
-  'stroke: #bcA903;',
+    'fill: transparent;',
+    'stroke: #bcA903;',
   '}',
 
   '.blocklyCommentTargetFocused {',
-  'fill: none;',
+    'fill: none;',
   '}',
 
   '.blocklyCommentHandleTarget {',
-  'fill: none;',
+    'fill: none;',
   '}',
 
   '.blocklyCommentHandleTargetFocused {',
-  'fill: transparent;',
+    'fill: transparent;',
   '}',
 
   '.blocklyFocused>.blocklyCommentRect {',
-  'fill: #B9B272;',
-  'stroke: #B9B272;',
+    'fill: #B9B272;',
+    'stroke: #B9B272;',
   '}',
 
   '.blocklySelected>.blocklyCommentTarget {',
-  'stroke: #fc3;',
-  'stroke-width: 3px;',
+    'stroke: #fc3;',
+    'stroke-width: 3px;',
   '}',
 
   '.blocklyCommentDeleteIcon {',
-  'cursor: pointer;',
-  'fill: #000;',
-  'display: none;',
+    'cursor: pointer;',
+    'fill: #000;',
+    'display: none;',
   '}',
 
   '.blocklySelected > .blocklyCommentDeleteIcon {',
-  'display: block;',
+    'display: block;',
   '}',
 
   '.blocklyDeleteIconShape {',
-  'fill: #000;',
-  'stroke: #000;',
-  'stroke-width: 1px;',
+    'fill: #000;',
+    'stroke: #000;',
+    'stroke-width: 1px;',
   '}',
 
   '.blocklyDeleteIconShape.blocklyDeleteIconHighlighted {',
-  'stroke: #fc3;',
+    'stroke: #fc3;',
   '}'
   /* eslint-enable indent */
+  // clang-format on
 ]);

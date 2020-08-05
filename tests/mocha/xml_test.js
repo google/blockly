@@ -28,6 +28,7 @@ suite('XML', function() {
     chai.assert.equal(fieldDom.textContent, text);
   };
   setup(function() {
+    sharedTestSetup.call(this);
     Blockly.defineBlocksWithJsonArray([
       {
         "type": "empty_block",
@@ -65,14 +66,11 @@ suite('XML', function() {
       '</xml>'].join('\n');
   });
   teardown(function() {
+    sharedTestTeardown.call(this);
     for (var i = 0; i < this.blockTypes_.length; i++) {
       delete Blockly.Blocks[this.blockTypes_[i]];
     }
     this.blockTypes_.length = 0;
-    // Clear Blockly.Event state.
-    Blockly.Events.setGroup(false);
-    Blockly.Events.disabled_ = 0;
-    sinon.restore();
   });
   suite('textToDom', function() {
     test('Basic', function() {

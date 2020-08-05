@@ -164,8 +164,6 @@ Blockly.Toolbox.prototype.init = function() {
   themeManager.subscribe(this.HtmlDiv, 'toolboxBackgroundColour',
       'background-color');
   themeManager.subscribe(this.HtmlDiv, 'toolboxForegroundColour', 'color');
-
-  // Insert the flyout after the workspace.
 };
 
 /**
@@ -383,9 +381,9 @@ Blockly.Toolbox.prototype.render = function(toolboxDef) {
   // TODO: Future improvement to compare the new toolboxDef with the old and
   //  only re render what has changed.
   for (var i = 0; i < this.contents_.length; i++) {
-    var childDiv = this.contents_[i].getDiv();
-    if (childDiv) {
-      childDiv.remove();
+    var toolboxItem = this.contents_[i]
+    if (toolboxItem) {
+      toolboxItem.dispose();
     }
   }
   this.contents_ = [];
@@ -545,6 +543,7 @@ Blockly.Toolbox.prototype.position = function() {
   if (this.horizontalLayout_) {
     toolboxDiv.style.left = '0';
     toolboxDiv.style.height = 'auto';
+    // TODO: Double check that 100% instead of the svgSize.width is not a problem.
     toolboxDiv.style.width = '100%';
     this.height_ = toolboxDiv.offsetHeight;
     if (this.toolboxPosition == Blockly.TOOLBOX_AT_TOP) {  // Top
@@ -558,6 +557,7 @@ Blockly.Toolbox.prototype.position = function() {
     } else {  // Left
       toolboxDiv.style.left = '0';
     }
+    // TODO: Double check that 100% instead of the svgSize.width is not a problem.
     toolboxDiv.style.height = '100%';
     this.width_ = toolboxDiv.offsetWidth;
   }
@@ -659,7 +659,7 @@ Blockly.Toolbox.prototype.selectItemByPosition = function(position) {
 /**
  * Decides whether to hide or show the flyout depending on the selected item.
  * @param {?Blockly.ToolboxItem} oldItem The previously selected toolbox item.
- * @param {?Blockly.ToolboxItem} newItem The newly selected toolbox item.
+ * @param {?Blockly.SelectableToolboxItem} newItem The newly selected toolbox item.
  * @private
  */
 Blockly.Toolbox.prototype.updateFlyout_ = function(oldItem, newItem) {

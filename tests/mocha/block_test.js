@@ -6,7 +6,6 @@
 
 suite('Blocks', function() {
   setup(function() {
-    sharedTestSetup.call(this, {fireEventsNow: false});
     this.workspace = new Blockly.Workspace();
     Blockly.defineBlocksWithJsonArray([
       {
@@ -44,7 +43,7 @@ suite('Blocks', function() {
       }]);
   });
   teardown(function() {
-    sharedTestTeardown.call(this);
+    this.workspace.dispose();
     delete Blockly.Blocks['empty_block'];
     delete Blockly.Blocks['stack_block'];
     delete Blockly.Blocks['row_block'];
@@ -393,6 +392,8 @@ suite('Blocks', function() {
   });
   suite('Connection Tracking', function() {
     setup(function() {
+      this.workspace.dispose();
+      // The new rendered workspace will get disposed by the parent teardown.
       this.workspace = Blockly.inject('blocklyDiv');
 
       this.getInputs = function() {
@@ -418,11 +419,12 @@ suite('Blocks', function() {
         chai.assert.isEmpty(this.getNext());
         chai.assert.isEmpty(this.getPrevious());
       };
+
+      this.clock = sinon.useFakeTimers();
     });
     teardown(function() {
-      workspaceTeardown.call(this, this.workspace);
+      this.clock.restore();
     });
-
     suite('Deserialization', function() {
       test('Stack', function() {
         Blockly.Xml.appendDomToWorkspace(Blockly.Xml.textToDom(
@@ -431,7 +433,7 @@ suite('Blocks', function() {
             '</xml>'
         ), this.workspace);
         this.assertConnectionsEmpty();
-        this.clock.runAll();
+        this.clock.tick(1);
         chai.assert.equal(this.getPrevious().length, 1);
         chai.assert.equal(this.getNext().length, 1);
       });
@@ -450,7 +452,7 @@ suite('Blocks', function() {
             '</xml>'
         ), this.workspace);
         this.assertConnectionsEmpty();
-        this.clock.runAll();
+        this.clock.tick(1);
         chai.assert.equal(this.getPrevious().length, 3);
         chai.assert.equal(this.getNext().length, 3);
       });
@@ -461,7 +463,7 @@ suite('Blocks', function() {
             '</xml>'
         ), this.workspace);
         this.assertConnectionsEmpty();
-        this.clock.runAll();
+        this.clock.tick(1);
         chai.assert.equal(this.getPrevious().length, 1);
         chai.assert.equal(this.getNext().length, 1);
       });
@@ -480,7 +482,7 @@ suite('Blocks', function() {
             '</xml>'
         ), this.workspace);
         this.assertConnectionsEmpty();
-        this.clock.runAll();
+        this.clock.tick(1);
         chai.assert.equal(this.getPrevious().length, 3);
         chai.assert.equal(this.getNext().length, 3);
       });
@@ -491,7 +493,7 @@ suite('Blocks', function() {
             '</xml>'
         ), this.workspace);
         this.assertConnectionsEmpty();
-        this.clock.runAll();
+        this.clock.tick(1);
         chai.assert.equal(this.getOutputs().length, 1);
         chai.assert.equal(this.getInputs().length, 1);
       });
@@ -510,7 +512,7 @@ suite('Blocks', function() {
             '</xml>'
         ), this.workspace);
         this.assertConnectionsEmpty();
-        this.clock.runAll();
+        this.clock.tick(1);
         chai.assert.equal(this.getOutputs().length, 3);
         chai.assert.equal(this.getInputs().length, 3);
       });
@@ -521,7 +523,7 @@ suite('Blocks', function() {
             '</xml>'
         ), this.workspace);
         this.assertConnectionsEmpty();
-        this.clock.runAll();
+        this.clock.tick(1);
         chai.assert.equal(this.getOutputs().length, 1);
         chai.assert.equal(this.getInputs().length, 0);
       });
@@ -540,7 +542,7 @@ suite('Blocks', function() {
             '</xml>'
         ), this.workspace);
         this.assertConnectionsEmpty();
-        this.clock.runAll();
+        this.clock.tick(1);
         chai.assert.equal(this.getOutputs().length, 1);
         chai.assert.equal(this.getInputs().length, 0);
       });
@@ -559,7 +561,7 @@ suite('Blocks', function() {
             '</xml>'
         ), this.workspace);
         this.assertConnectionsEmpty();
-        this.clock.runAll();
+        this.clock.tick(1);
         chai.assert.equal(this.getOutputs().length, 2);
         chai.assert.equal(this.getInputs().length, 1);
       });
@@ -570,7 +572,7 @@ suite('Blocks', function() {
             '</xml>'
         ), this.workspace);
         this.assertConnectionsEmpty();
-        this.clock.runAll();
+        this.clock.tick(1);
         chai.assert.equal(this.getPrevious().length, 1);
         chai.assert.equal(this.getNext().length, 2);
       });
@@ -589,7 +591,7 @@ suite('Blocks', function() {
             '</xml>'
         ), this.workspace);
         this.assertConnectionsEmpty();
-        this.clock.runAll();
+        this.clock.tick(1);
         chai.assert.equal(this.getPrevious().length, 3);
         chai.assert.equal(this.getNext().length, 6);
       });
@@ -600,7 +602,7 @@ suite('Blocks', function() {
             '</xml>'
         ), this.workspace);
         this.assertConnectionsEmpty();
-        this.clock.runAll();
+        this.clock.tick(1);
         chai.assert.equal(this.getPrevious().length, 1);
         chai.assert.equal(this.getNext().length, 1);
       });
@@ -619,7 +621,7 @@ suite('Blocks', function() {
             '</xml>'
         ), this.workspace);
         this.assertConnectionsEmpty();
-        this.clock.runAll();
+        this.clock.tick(1);
         chai.assert.equal(this.getPrevious().length, 1);
         chai.assert.equal(this.getNext().length, 1);
       });
@@ -638,7 +640,7 @@ suite('Blocks', function() {
             '</xml>'
         ), this.workspace);
         this.assertConnectionsEmpty();
-        this.clock.runAll();
+        this.clock.tick(1);
         chai.assert.equal(this.getPrevious().length, 2);
         chai.assert.equal(this.getNext().length, 3);
       });
@@ -677,7 +679,7 @@ suite('Blocks', function() {
         var block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
             '<block type="stack_block"/>'
         ), this.workspace);
-        this.clock.runAll();
+        this.clock.tick(1);
         chai.assert.equal(this.getPrevious().length, 1);
         chai.assert.equal(this.getNext().length, 1);
 
@@ -702,7 +704,7 @@ suite('Blocks', function() {
             '</block>'
         ), this.workspace);
         this.assertConnectionsEmpty();
-        this.clock.runAll();
+        this.clock.tick(1);
         chai.assert.equal(this.getPrevious().length, 3);
         chai.assert.equal(this.getNext().length, 3);
 
@@ -718,7 +720,7 @@ suite('Blocks', function() {
         var block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
             '<block type="row_block"/>'
         ), this.workspace);
-        this.clock.runAll();
+        this.clock.tick(1);
         chai.assert.equal(this.getOutputs().length, 1);
         chai.assert.equal(this.getInputs().length, 1);
 
@@ -742,7 +744,7 @@ suite('Blocks', function() {
             '  </value>' +
             '</block>'
         ), this.workspace);
-        this.clock.runAll();
+        this.clock.tick(1);
         chai.assert.equal(this.getOutputs().length, 3);
         chai.assert.equal(this.getInputs().length, 3);
 
@@ -766,7 +768,7 @@ suite('Blocks', function() {
             '  </value>' +
             '</block>'
         ), this.workspace);
-        this.clock.runAll();
+        this.clock.tick(1);
         chai.assert.equal(this.getOutputs().length, 3);
         chai.assert.equal(this.getInputs().length, 3);
 
@@ -793,7 +795,7 @@ suite('Blocks', function() {
             '  </value>' +
             '</block>'
         ), this.workspace);
-        this.clock.runAll();
+        this.clock.tick(1);
         chai.assert.equal(this.getOutputs().length, 3);
         chai.assert.equal(this.getInputs().length, 3);
 
@@ -818,7 +820,7 @@ suite('Blocks', function() {
         var block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
             '<block type="statement_block"/>'
         ), this.workspace);
-        this.clock.runAll();
+        this.clock.tick(1);
         chai.assert.equal(this.getPrevious().length, 1);
         chai.assert.equal(this.getNext().length, 2);
 
@@ -843,7 +845,7 @@ suite('Blocks', function() {
             '</block>'
         ), this.workspace);
         this.assertConnectionsEmpty();
-        this.clock.runAll();
+        this.clock.tick(1);
         chai.assert.equal(this.getPrevious().length, 3);
         chai.assert.equal(this.getNext().length, 6);
 
@@ -868,7 +870,7 @@ suite('Blocks', function() {
             '</block>'
         ), this.workspace);
         this.assertConnectionsEmpty();
-        this.clock.runAll();
+        this.clock.tick(1);
         chai.assert.equal(this.getPrevious().length, 3);
         chai.assert.equal(this.getNext().length, 6);
 
@@ -894,7 +896,7 @@ suite('Blocks', function() {
             '</block>'
         ), this.workspace);
         this.assertConnectionsEmpty();
-        this.clock.runAll();
+        this.clock.tick(1);
         chai.assert.equal(this.getPrevious().length, 3);
         chai.assert.equal(this.getNext().length, 6);
 
@@ -1017,6 +1019,12 @@ suite('Blocks', function() {
     });
   });
   suite('Comments', function() {
+    setup(function() {
+      this.eventSpy = sinon.spy(Blockly.Events, 'fire');
+    });
+    teardown(function() {
+      this.eventSpy.restore();
+    });
     suite('Set/Get Text', function() {
       function assertCommentEvent(eventSpy, oldValue, newValue) {
         var calls = eventSpy.getCalls();
@@ -1031,12 +1039,6 @@ suite('Blocks', function() {
         var event = calls[calls.length - 1].args[0];
         chai.assert.notEqual(event.type, Blockly.Events.BLOCK_CHANGE);
       }
-      setup(function() {
-        this.eventsFireSpy = sinon.spy(Blockly.Events, 'fire');
-      });
-      teardown(function() {
-        this.eventsFireSpy.restore();
-      });
       suite('Headless', function() {
         setup(function() {
           this.block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
@@ -1046,24 +1048,24 @@ suite('Blocks', function() {
         test('Text', function() {
           this.block.setCommentText('test text');
           chai.assert.equal(this.block.getCommentText(), 'test text');
-          assertCommentEvent(this.eventsFireSpy, null, 'test text');
+          assertCommentEvent(this.eventSpy, null, 'test text');
         });
         test('Text Empty', function() {
           this.block.setCommentText('');
           chai.assert.equal(this.block.getCommentText(), '');
-          assertCommentEvent(this.eventsFireSpy, null, '');
+          assertCommentEvent(this.eventSpy, null, '');
         });
         test('Text Null', function() {
           this.block.setCommentText(null);
           chai.assert.isNull(this.block.getCommentText());
-          assertNoCommentEvent(this.eventsFireSpy);
+          assertNoCommentEvent(this.eventSpy);
         });
         test('Text -> Null', function() {
           this.block.setCommentText('first text');
 
           this.block.setCommentText(null);
           chai.assert.isNull(this.block.getCommentText());
-          assertCommentEvent(this.eventsFireSpy, 'first text', null);
+          assertCommentEvent(this.eventSpy, 'first text', null);
         });
       });
       suite('Rendered', function() {
@@ -1082,24 +1084,24 @@ suite('Blocks', function() {
         test('Text', function() {
           this.block.setCommentText('test text');
           chai.assert.equal(this.block.getCommentText(), 'test text');
-          assertCommentEvent(this.eventsFireSpy, null, 'test text');
+          assertCommentEvent(this.eventSpy, null, 'test text');
         });
         test('Text Empty', function() {
           this.block.setCommentText('');
           chai.assert.equal(this.block.getCommentText(), '');
-          assertCommentEvent(this.eventsFireSpy, null, '');
+          assertCommentEvent(this.eventSpy, null, '');
         });
         test('Text Null', function() {
           this.block.setCommentText(null);
           chai.assert.isNull(this.block.getCommentText());
-          assertNoCommentEvent(this.eventsFireSpy);
+          assertNoCommentEvent(this.eventSpy);
         });
         test('Text -> Null', function() {
           this.block.setCommentText('first text');
 
           this.block.setCommentText(null);
           chai.assert.isNull(this.block.getCommentText());
-          assertCommentEvent(this.eventsFireSpy, 'first text', null);
+          assertCommentEvent(this.eventSpy, 'first text', null);
         });
         test('Set While Visible - Editable', function() {
           this.block.setCommentText('test1');
@@ -1108,21 +1110,22 @@ suite('Blocks', function() {
 
           this.block.setCommentText('test2');
           chai.assert.equal(this.block.getCommentText(), 'test2');
-          assertCommentEvent(this.eventsFireSpy, 'test1', 'test2');
+          assertCommentEvent(this.eventSpy, 'test1', 'test2');
           chai.assert.equal(icon.textarea_.value, 'test2');
         });
         test('Set While Visible - NonEditable', function() {
           this.block.setCommentText('test1');
-          // Restored up by call to sinon.restore() in sharedTestTeardown()
-          sinon.stub(this.block, 'isEditable').returns(false);
+          var editableStub = sinon.stub(this.block, 'isEditable').returns(false);
           var icon = this.block.getCommentIcon();
           icon.setVisible(true);
 
           this.block.setCommentText('test2');
           chai.assert.equal(this.block.getCommentText(), 'test2');
-          assertCommentEvent(this.eventsFireSpy, 'test1', 'test2');
+          assertCommentEvent(this.eventSpy, 'test1', 'test2');
           chai.assert.equal(icon.paragraphElement_.firstChild.textContent,
               'test2');
+
+          editableStub.restore();
         });
         test('Get Text While Editing', function() {
           this.block.setCommentText('test1');

@@ -45,7 +45,9 @@ suite('Variable Fields', function() {
 
   setup(function() {
     this.workspace = new Blockly.Workspace();
-    createGenUidStubWithReturns(FAKE_ID);
+
+    sinon.stub(Blockly.utils, 'genUid')
+        .returns(FAKE_ID);
     sinon.stub(Blockly.Variables, 'generateUniqueName')
         .returns(FAKE_VARIABLE_NAME);
   });
@@ -323,6 +325,8 @@ suite('Variable Fields', function() {
     });
     teardown(function() {
       this.variableBlock.dispose();
+      this.variableBlock = null;
+      this.variableField = null;
       delete Blockly.Blocks['field_variable_test_block'];
     });
     test('Rename & Keep Old ID', function() {

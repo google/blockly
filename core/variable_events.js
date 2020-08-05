@@ -17,32 +17,25 @@ goog.provide('Blockly.Events.VarRename');
 
 goog.require('Blockly.Events');
 goog.require('Blockly.Events.Abstract');
-goog.require('Blockly.registry');
 goog.require('Blockly.utils.object');
 
 
 /**
  * Abstract class for a variable event.
- * @param {!Blockly.VariableModel=} opt_variable The variable this event
- *     corresponds to.  Undefined for a blank event.
+ * @param {Blockly.VariableModel} variable The variable this event corresponds
+ *     to.
  * @extends {Blockly.Events.Abstract}
  * @constructor
  */
-Blockly.Events.VarBase = function(opt_variable) {
+Blockly.Events.VarBase = function(variable) {
   Blockly.Events.VarBase.superClass_.constructor.call(this);
-  this.isBlank = typeof opt_variable == 'undefined';
 
   /**
    * The variable id for the variable this event pertains to.
    * @type {string}
    */
-  this.varId = this.isBlank ? '' : opt_variable.getId();
-
-  /**
-   * The workspace identifier for this event.
-   * @type {string}
-   */
-  this.workspaceId = this.isBlank ? '' : opt_variable.workspace.id;
+  this.varId = variable.getId();
+  this.workspaceId = variable.workspace.id;
 };
 Blockly.utils.object.inherits(Blockly.Events.VarBase, Blockly.Events.Abstract);
 
@@ -67,19 +60,18 @@ Blockly.Events.VarBase.prototype.fromJson = function(json) {
 
 /**
  * Class for a variable creation event.
- * @param {!Blockly.VariableModel=} opt_variable The created variable. Undefined
- *     for a blank event.
+ * @param {Blockly.VariableModel} variable The created variable.
+ *     Null for a blank event.
  * @extends {Blockly.Events.VarBase}
  * @constructor
  */
-Blockly.Events.VarCreate = function(opt_variable) {
-  Blockly.Events.VarCreate.superClass_.constructor.call(this, opt_variable);
-  if (!opt_variable) {
+Blockly.Events.VarCreate = function(variable) {
+  if (!variable) {
     return;  // Blank event to be populated by fromJson.
   }
-
-  this.varType = opt_variable.type;
-  this.varName = opt_variable.name;
+  Blockly.Events.VarCreate.superClass_.constructor.call(this, variable);
+  this.varType = variable.type;
+  this.varName = variable.name;
 };
 Blockly.utils.object.inherits(Blockly.Events.VarCreate, Blockly.Events.VarBase);
 
@@ -125,19 +117,18 @@ Blockly.Events.VarCreate.prototype.run = function(forward) {
 
 /**
  * Class for a variable deletion event.
- * @param {!Blockly.VariableModel=} opt_variable The deleted variable. Undefined
- *     for a blank event.
+ * @param {Blockly.VariableModel} variable The deleted variable.
+ *     Null for a blank event.
  * @extends {Blockly.Events.VarBase}
  * @constructor
  */
-Blockly.Events.VarDelete = function(opt_variable) {
-  Blockly.Events.VarDelete.superClass_.constructor.call(this, opt_variable);
-  if (!opt_variable) {
+Blockly.Events.VarDelete = function(variable) {
+  if (!variable) {
     return;  // Blank event to be populated by fromJson.
   }
-
-  this.varType = opt_variable.type;
-  this.varName = opt_variable.name;
+  Blockly.Events.VarDelete.superClass_.constructor.call(this, variable);
+  this.varType = variable.type;
+  this.varName = variable.name;
 };
 Blockly.utils.object.inherits(Blockly.Events.VarDelete, Blockly.Events.VarBase);
 
@@ -183,20 +174,19 @@ Blockly.Events.VarDelete.prototype.run = function(forward) {
 
 /**
  * Class for a variable rename event.
- * @param {!Blockly.VariableModel=} opt_variable The renamed variable. Undefined
- *     for a blank event.
- * @param {string=} newName The new name the variable will be changed to.
+ * @param {Blockly.VariableModel} variable The renamed variable.
+ *     Null for a blank event.
+ * @param {string} newName The new name the variable will be changed to.
  * @extends {Blockly.Events.VarBase}
  * @constructor
  */
-Blockly.Events.VarRename = function(opt_variable, newName) {
-  Blockly.Events.VarRename.superClass_.constructor.call(this, opt_variable);
-  if (!opt_variable) {
+Blockly.Events.VarRename = function(variable, newName) {
+  if (!variable) {
     return;  // Blank event to be populated by fromJson.
   }
-
-  this.oldName = opt_variable.name;
-  this.newName = typeof newName == 'undefined' ? '' : newName;
+  Blockly.Events.VarRename.superClass_.constructor.call(this, variable);
+  this.oldName = variable.name;
+  this.newName = newName;
 };
 Blockly.utils.object.inherits(Blockly.Events.VarRename, Blockly.Events.VarBase);
 
@@ -239,10 +229,3 @@ Blockly.Events.VarRename.prototype.run = function(forward) {
     workspace.renameVariableById(this.varId, this.oldName);
   }
 };
-
-Blockly.registry.register(Blockly.registry.Type.EVENT,
-    Blockly.Events.VAR_CREATE, Blockly.Events.VarCreate);
-Blockly.registry.register(Blockly.registry.Type.EVENT,
-    Blockly.Events.VAR_DELETE, Blockly.Events.VarDelete);
-Blockly.registry.register(Blockly.registry.Type.EVENT,
-    Blockly.Events.VAR_RENAME, Blockly.Events.VarRename);

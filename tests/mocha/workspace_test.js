@@ -6,12 +6,11 @@
 
 suite('Workspace', function() {
   setup(function() {
-    sharedTestSetup.call(this);
     this.workspace = new Blockly.Workspace();
   });
 
   teardown(function() {
-    sharedTestTeardown.call(this);
+    this.workspace.dispose();
   });
 
   // eslint-disable-next-line no-use-before-define
@@ -664,6 +663,10 @@ function testAWorkspace() {
   });
 
   suite('Undo/Redo', function() {
+    setup(function() {
+      createEventsFireStub();
+    });
+
     function createTwoVarsDifferentTypes(workspace) {
       workspace.createVariable('name1', 'type1', 'id1');
       workspace.createVariable('name2', 'type2', 'id2');

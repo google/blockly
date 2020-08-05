@@ -22,7 +22,6 @@ goog.provide('Blockly.Events.Move');  // Deprecated.
 
 goog.require('Blockly.Events');
 goog.require('Blockly.Events.Abstract');
-goog.require('Blockly.registry');
 goog.require('Blockly.utils.Coordinate');
 goog.require('Blockly.utils.object');
 goog.require('Blockly.utils.xml');
@@ -32,26 +31,19 @@ goog.require('Blockly.utils.xml');
 
 /**
  * Abstract class for a block event.
- * @param {!Blockly.Block=} opt_block The block this event corresponds to.
- *     Undefined for a blank event.
+ * @param {Blockly.Block} block The block this event corresponds to.
  * @extends {Blockly.Events.Abstract}
  * @constructor
  */
-Blockly.Events.BlockBase = function(opt_block) {
+Blockly.Events.BlockBase = function(block) {
   Blockly.Events.BlockBase.superClass_.constructor.call(this);
-  this.isBlank = typeof opt_block == 'undefined';
 
   /**
    * The block id for the block this event pertains to
    * @type {string}
    */
-  this.blockId = this.isBlank ? '' : opt_block.id;
-
-  /**
-   * The workspace identifier for this event.
-   * @type {string}
-   */
-  this.workspaceId = this.isBlank ? '' : opt_block.workspace.id;
+  this.blockId = block.id;
+  this.workspaceId = block.workspace.id;
 };
 Blockly.utils.object.inherits(Blockly.Events.BlockBase,
     Blockly.Events.Abstract);
@@ -77,36 +69,33 @@ Blockly.Events.BlockBase.prototype.fromJson = function(json) {
 
 /**
  * Class for a block change event.
- * @param {!Blockly.Block=} opt_block The changed block.  Undefined for a blank
- *     event.
- * @param {string=} opt_element One of 'field', 'comment', 'disabled', etc.
- * @param {?string=} opt_name Name of input or field affected, or null.
- * @param {*=} opt_oldValue Previous value of element.
- * @param {*=} opt_newValue New value of element.
+ * @param {Blockly.Block} block The changed block.  Null for a blank event.
+ * @param {string} element One of 'field', 'comment', 'disabled', etc.
+ * @param {?string} name Name of input or field affected, or null.
+ * @param {*} oldValue Previous value of element.
+ * @param {*} newValue New value of element.
  * @extends {Blockly.Events.BlockBase}
  * @constructor
  */
-Blockly.Events.Change = function(opt_block, opt_element, opt_name, opt_oldValue,
-    opt_newValue) {
-  Blockly.Events.Change.superClass_.constructor.call(this, opt_block);
-  if (!opt_block) {
+Blockly.Events.Change = function(block, element, name, oldValue, newValue) {
+  if (!block) {
     return;  // Blank event to be populated by fromJson.
   }
-  this.element = typeof opt_element == 'undefined' ? '' : opt_element;
-  this.name = typeof opt_name == 'undefined' ? '' : opt_name;
-  this.oldValue = typeof opt_oldValue == 'undefined' ? '' : opt_oldValue;
-  this.newValue = typeof opt_newValue == 'undefined' ? '' : opt_newValue;
+  Blockly.Events.Change.superClass_.constructor.call(this, block);
+  this.element = element;
+  this.name = name;
+  this.oldValue = oldValue;
+  this.newValue = newValue;
 };
 Blockly.utils.object.inherits(Blockly.Events.Change, Blockly.Events.BlockBase);
 
 /**
  * Class for a block change event.
- * @param {!Blockly.Block=} opt_block The changed block.  Undefined for a blank
- *     event.
- * @param {string=} opt_element One of 'field', 'comment', 'disabled', etc.
- * @param {?string=} opt_name Name of input or field affected, or null.
- * @param {*=} opt_oldValue Previous value of element.
- * @param {*=} opt_newValue New value of element.
+ * @param {Blockly.Block} block The changed block.  Null for a blank event.
+ * @param {string} element One of 'field', 'comment', 'disabled', etc.
+ * @param {?string} name Name of input or field affected, or null.
+ * @param {*} oldValue Previous value of element.
+ * @param {*} newValue New value of element.
  * @extends {Blockly.Events.BlockBase}
  * @constructor
  */
@@ -208,30 +197,28 @@ Blockly.Events.Change.prototype.run = function(forward) {
 
 /**
  * Class for a block creation event.
- * @param {!Blockly.Block=} opt_block The created block.  Undefined for a blank
- *     event.
+ * @param {Blockly.Block} block The created block.  Null for a blank event.
  * @extends {Blockly.Events.BlockBase}
  * @constructor
  */
-Blockly.Events.Create = function(opt_block) {
-  Blockly.Events.Create.superClass_.constructor.call(this, opt_block);
-  if (!opt_block) {
+Blockly.Events.Create = function(block) {
+  if (!block) {
     return;  // Blank event to be populated by fromJson.
   }
+  Blockly.Events.Create.superClass_.constructor.call(this, block);
 
-  if (opt_block.workspace.rendered) {
-    this.xml = Blockly.Xml.blockToDomWithXY(opt_block);
+  if (block.workspace.rendered) {
+    this.xml = Blockly.Xml.blockToDomWithXY(block);
   } else {
-    this.xml = Blockly.Xml.blockToDom(opt_block);
+    this.xml = Blockly.Xml.blockToDom(block);
   }
-  this.ids = Blockly.Events.getDescendantIds(opt_block);
+  this.ids = Blockly.Events.getDescendantIds(block);
 };
 Blockly.utils.object.inherits(Blockly.Events.Create, Blockly.Events.BlockBase);
 
 /**
  * Class for a block creation event.
- * @param {!Blockly.Block=} block The created block. Undefined for a blank
- *     event.
+ * @param {Blockly.Block} block The created block. Null for a blank event.
  * @extends {Blockly.Events.BlockBase}
  * @constructor
  */
@@ -289,26 +276,25 @@ Blockly.Events.Create.prototype.run = function(forward) {
 
 /**
  * Class for a block deletion event.
- * @param {!Blockly.Block=} opt_block The deleted block.  Undefined for a blank
- *     event.
+ * @param {Blockly.Block} block The deleted block.  Null for a blank event.
  * @extends {Blockly.Events.BlockBase}
  * @constructor
  */
-Blockly.Events.Delete = function(opt_block) {
-  Blockly.Events.Delete.superClass_.constructor.call(this, opt_block);
-  if (!opt_block) {
+Blockly.Events.Delete = function(block) {
+  if (!block) {
     return;  // Blank event to be populated by fromJson.
   }
-  if (opt_block.getParent()) {
+  if (block.getParent()) {
     throw Error('Connected blocks cannot be deleted.');
   }
+  Blockly.Events.Delete.superClass_.constructor.call(this, block);
 
-  if (opt_block.workspace.rendered) {
-    this.oldXml = Blockly.Xml.blockToDomWithXY(opt_block);
+  if (block.workspace.rendered) {
+    this.oldXml = Blockly.Xml.blockToDomWithXY(block);
   } else {
-    this.oldXml = Blockly.Xml.blockToDom(opt_block);
+    this.oldXml = Blockly.Xml.blockToDom(block);
   }
-  this.ids = Blockly.Events.getDescendantIds(opt_block);
+  this.ids = Blockly.Events.getDescendantIds(block);
 };
 Blockly.utils.object.inherits(Blockly.Events.Delete, Blockly.Events.BlockBase);
 
@@ -370,17 +356,15 @@ Blockly.Events.Delete.prototype.run = function(forward) {
 
 /**
  * Class for a block move event.  Created before the move.
- * @param {!Blockly.Block=} opt_block The moved block.  Undefined for a blank
- *     event.
+ * @param {Blockly.Block} block The moved block.  Null for a blank event.
  * @extends {Blockly.Events.BlockBase}
  * @constructor
  */
-Blockly.Events.Move = function(opt_block) {
-  Blockly.Events.Move.superClass_.constructor.call(this, opt_block);
-  if (!opt_block) {
+Blockly.Events.Move = function(block) {
+  if (!block) {
     return;  // Blank event to be populated by fromJson.
   }
-
+  Blockly.Events.Move.superClass_.constructor.call(this, block);
   var location = this.currentLocation_();
   this.oldParentId = location.parentId;
   this.oldInputName = location.inputName;
@@ -525,12 +509,3 @@ Blockly.Events.Move.prototype.run = function(forward) {
     }
   }
 };
-
-Blockly.registry.register(Blockly.registry.Type.EVENT, Blockly.Events.CREATE,
-    Blockly.Events.Create);
-Blockly.registry.register(Blockly.registry.Type.EVENT, Blockly.Events.DELETE,
-    Blockly.Events.Delete);
-Blockly.registry.register(Blockly.registry.Type.EVENT, Blockly.Events.CHANGE,
-    Blockly.Events.Change);
-Blockly.registry.register(Blockly.registry.Type.EVENT, Blockly.Events.MOVE,
-    Blockly.Events.Move);

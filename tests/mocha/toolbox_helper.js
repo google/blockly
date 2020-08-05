@@ -4,6 +4,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+
+/* exported getCategoryJSON, getSimpleJSON, getXmlArray */
+
 /**
  * Get JSON for a toolbox that contains categories.
  * @return {Array.<Blockly.utils.toolbox.Toolbox>} The array holding information

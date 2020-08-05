@@ -14,7 +14,6 @@
 goog.provide('Blockly.registry');
 
 goog.requireType('Blockly.blockRendering.Renderer');
-goog.requireType('Blockly.Events.Abstract');
 goog.requireType('Blockly.Field');
 goog.requireType('Blockly.IConnectionChecker');
 goog.requireType('Blockly.IFlyout');
@@ -61,18 +60,11 @@ Blockly.registry.Type.prototype.toString = function() {
   return this.name_;
 };
 
-/** @type {!Blockly.registry.Type<Blockly.IConnectionChecker>} */
-Blockly.registry.Type.CONNECTION_CHECKER =
-    new Blockly.registry.Type('connectionChecker');
-
-/** @type {!Blockly.registry.Type<Blockly.Events.Abstract>} */
-Blockly.registry.Type.EVENT = new Blockly.registry.Type('event');
+/** @type {!Blockly.registry.Type<Blockly.blockRendering.Renderer>} */
+Blockly.registry.Type.RENDERER = new Blockly.registry.Type('renderer');
 
 /** @type {!Blockly.registry.Type<Blockly.Field>} */
 Blockly.registry.Type.FIELD = new Blockly.registry.Type('field');
-
-/** @type {!Blockly.registry.Type<Blockly.blockRendering.Renderer>} */
-Blockly.registry.Type.RENDERER = new Blockly.registry.Type('renderer');
 
 /** @type {!Blockly.registry.Type<Blockly.IToolbox>} */
 Blockly.registry.Type.TOOLBOX = new Blockly.registry.Type('toolbox');
@@ -80,6 +72,9 @@ Blockly.registry.Type.TOOLBOX = new Blockly.registry.Type('toolbox');
 /** @type {!Blockly.registry.Type<Blockly.Theme>} */
 Blockly.registry.Type.THEME = new Blockly.registry.Type('theme');
 
+/** @type {!Blockly.registry.Type<Blockly.IConnectionChecker>} */
+Blockly.registry.Type.CONNECTION_CHECKER =
+    new Blockly.registry.Type('connectionChecker');
 
 /** @type {!Blockly.registry.Type<Blockly.IFlyout>} */
 Blockly.registry.Type.FLYOUTS_VERTICAL_TOOLBOX =

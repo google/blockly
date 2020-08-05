@@ -6,6 +6,7 @@
 
 suite('Insert/Modify', function() {
   setup(function() {
+    sharedTestSetup.call(this);
     var xmlText = '<xml xmlns="https://developers.google.com/blockly/xml">' +
       '<block type="stack_block" id="stack_block_1" x="12" y="38"></block>' +
       '<block type="stack_block" id="stack_block_2" x="12" y="113"></block>' +
@@ -33,10 +34,10 @@ suite('Insert/Modify', function() {
   });
 
   teardown(function() {
+    sharedTestTeardown.call(this);
     delete Blockly.Blocks['stack_block'];
     delete Blockly.Blocks['row_block'];
     delete Blockly.Blocks['statement_block'];
-    this.workspace.dispose();
   });
 
   suite('Marked Connection', function() {

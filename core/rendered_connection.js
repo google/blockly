@@ -429,7 +429,7 @@ Blockly.RenderedConnection.prototype.isConnectionAllowed = function(candidate,
       'RenderedConnection.prototype.isConnectionAllowed',
       'July 2020',
       'July 2021',
-      'the workspace\'s connection checker');
+      'Blockly.Workspace.prototype.getConnectionChecker().canConnect');
   if (this.distanceFrom(candidate) > maxRadius) {
     return false;
   }

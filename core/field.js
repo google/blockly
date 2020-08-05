@@ -542,7 +542,7 @@ Blockly.Field.prototype.classValidator = function(text) {
       'Field.prototype.classValidator',
       'May 2019',
       'December 2020',
-      'doClassValidation');
+      'Blockly.Field.prototype.doClassValidation_');
   return text;
 };
 
@@ -634,7 +634,7 @@ Blockly.Field.prototype.updateWidth = function() {
       'Field.prototype.updateWidth',
       'May 2019',
       'December 2020',
-      'Blockly.Field.updateSize_ or Blockly.utils.dom.getTextWidth()');
+      'Blockly.Field.prototype.updateSize_ or Blockly.utils.dom.getTextWidth');
   this.updateSize_();
 };
 

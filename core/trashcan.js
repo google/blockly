@@ -149,7 +149,7 @@ Blockly.Trashcan.prototype.SPRITE_TOP_ = 32;
 Blockly.Trashcan.prototype.HAS_BLOCKS_LID_ANGLE_ = 0.1;
 
 /**
- * The length of the open/close animation in milliseconds.
+ * The length of the lid open/close animation in milliseconds.
  * @const {number}
  * @private
  */
@@ -188,7 +188,7 @@ Blockly.Trashcan.MAX_LID_ANGLE_ = 45;
  * Current open/close state of the lid.
  * @type {boolean}
  */
-Blockly.Trashcan.prototype.isOpen = false;
+Blockly.Trashcan.prototype.isLidOpen = false;
 
 /**
  * The minimum openness of the lid. Used to indicate if the trashcan contains
@@ -337,7 +337,7 @@ Blockly.Trashcan.prototype.init = function(verticalSpacing) {
   }
 
   this.verticalSpacing_ = this.MARGIN_BOTTOM_ + verticalSpacing;
-  this.setOpen(false);
+  this.setLidOpen(false);
   return this.verticalSpacing_ + this.BODY_HEIGHT_ + this.LID_HEIGHT_;
 };
 
@@ -473,12 +473,12 @@ Blockly.Trashcan.prototype.getClientRect = function() {
  * @param {boolean} state True if open.
  * @package
  */
-Blockly.Trashcan.prototype.setOpen = function(state) {
-  if (this.isOpen == state) {
+Blockly.Trashcan.prototype.setLidOpen = function(state) {
+  if (this.isLidOpen == state) {
     return;
   }
   clearTimeout(this.lidTask_);
-  this.isOpen = state;
+  this.isLidOpen = state;
   this.animateLid_();
 };
 
@@ -490,7 +490,7 @@ Blockly.Trashcan.prototype.animateLid_ = function() {
   var frames = Blockly.Trashcan.ANIMATION_FRAMES_;
 
   var delta = 1 / (frames + 1);
-  this.lidOpen_ += this.isOpen ? delta : -delta;
+  this.lidOpen_ += this.isLidOpen ? delta : -delta;
   this.lidOpen_ = Math.min(Math.max(this.lidOpen_, this.minOpenness_), 1);
 
   this.setLidAngle_(this.lidOpen_ * Blockly.Trashcan.MAX_LID_ANGLE_);
@@ -530,7 +530,7 @@ Blockly.Trashcan.prototype.setLidAngle_ = function(lidAngle) {
  */
 Blockly.Trashcan.prototype.setMinOpenness_ = function(newMin) {
   this.minOpenness_ = newMin;
-  if (!this.isOpen) {
+  if (!this.isLidOpen) {
     this.setLidAngle_(newMin * Blockly.Trashcan.MAX_LID_ANGLE_);
   }
 };
@@ -539,8 +539,8 @@ Blockly.Trashcan.prototype.setMinOpenness_ = function(newMin) {
  * Flip the lid shut.
  * Called externally after a drag.
  */
-Blockly.Trashcan.prototype.close = function() {
-  this.setOpen(false);
+Blockly.Trashcan.prototype.closeLid = function() {
+  this.setLidOpen(false);
 };
 
 /**
@@ -582,7 +582,7 @@ Blockly.Trashcan.prototype.blockMouseDownWhenFull_ = function(e) {
  */
 Blockly.Trashcan.prototype.mouseOver_ = function() {
   if (this.hasContents_()) {
-    this.setOpen(true);
+    this.setLidOpen(true);
   }
 };
 
@@ -594,7 +594,7 @@ Blockly.Trashcan.prototype.mouseOver_ = function() {
 Blockly.Trashcan.prototype.mouseOut_ = function() {
   // No need to do a .hasBlocks check here because if it doesn't the trashcan
   // won't be open in the first place, and setOpen won't run.
-  this.setOpen(false);
+  this.setLidOpen(false);
 };
 
 /**

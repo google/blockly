@@ -85,6 +85,12 @@ Blockly.FlyoutButton = function(workspace, targetWorkspace, json, isLabel) {
    * @private
    */
   this.onMouseUpWrapper_ = null;
+
+  /**
+   * The JSON specifying the label / button.
+   * @type {!Blockly.utils.toolbox.Button|!Blockly.utils.toolbox.Label}
+   */
+  this.info = json;
 };
 
 /**

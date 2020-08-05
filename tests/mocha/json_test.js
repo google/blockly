@@ -144,8 +144,8 @@ suite('JSON Block Definitions', function() {
       }]);
 
       var block = new Blockly.Block(this.workspace_, BLOCK_TYPE);
-      chai.assert.equal(1, block.inputList.length);
-      chai.assert.equal(1, block.inputList[0].fieldRow.length);
+      chai.assert.equal(block.inputList.length, 1);
+      chai.assert.equal(block.inputList[0].fieldRow.length, 1);
       var textField = block.inputList[0].fieldRow[0];
       chai.assert.equal(Blockly.FieldLabel, textField.constructor);
       chai.assert.equal(MESSAGE0, textField.getText());
@@ -165,14 +165,14 @@ suite('JSON Block Definitions', function() {
 
       var block = new Blockly.Block(this.workspace_, BLOCK_TYPE);
       this.blocks_.push(block);
-      chai.assert.equal(2, block.inputList.length);
+      chai.assert.equal(block.inputList.length, 2);
 
-      chai.assert.equal(1, block.inputList[0].fieldRow.length);
+      chai.assert.equal(block.inputList[0].fieldRow.length, 1);
       var textField = block.inputList[0].fieldRow[0];
       chai.assert.equal(Blockly.FieldLabel, textField.constructor);
       chai.assert.equal(MESSAGE0, textField.getText());
 
-      chai.assert.equal(1, block.inputList[1].fieldRow.length);
+      chai.assert.equal(block.inputList[1].fieldRow.length, 1);
       var textField = block.inputList[1].fieldRow[0];
       chai.assert.equal(Blockly.FieldLabel, textField.constructor);
       chai.assert.equal(MESSAGE1, textField.getText());
@@ -193,8 +193,8 @@ suite('JSON Block Definitions', function() {
 
       var block = new Blockly.Block(this.workspace_, BLOCK_TYPE);
       this.blocks_.push(block);
-      chai.assert.equal(1, block.inputList.length);
-      chai.assert.equal(1, block.inputList[0].fieldRow.length);
+      chai.assert.equal(block.inputList.length, 1);
+      chai.assert.equal(block.inputList[0].fieldRow.length, 1);
       var textField = block.inputList[0].fieldRow[0];
       chai.assert.equal(Blockly.FieldLabel, textField.constructor);
       chai.assert.equal(MESSAGE, textField.getText());
@@ -225,8 +225,8 @@ suite('JSON Block Definitions', function() {
 
       var block = new Blockly.Block(this.workspace_, BLOCK_TYPE);
       this.blocks_.push(block);
-      chai.assert.equal(1, block.inputList.length);
-      chai.assert.equal(1, block.inputList[0].fieldRow.length);
+      chai.assert.equal(block.inputList.length, 1);
+      chai.assert.equal(block.inputList[0].fieldRow.length, 1);
       var dropdown = block.inputList[0].fieldRow[0];
       chai.assert.equal(dropdown, block.getField(FIELD_NAME));
       chai.assert.equal(Blockly.FieldDropdown, dropdown.constructor);
@@ -286,8 +286,8 @@ suite('JSON Block Definitions', function() {
 
       var block = new Blockly.Block(this.workspace_, BLOCK_TYPE);
       this.blocks_.push(block);
-      chai.assert.equal(1, block.inputList.length);
-      chai.assert.equal(1, block.inputList[0].fieldRow.length);
+      chai.assert.equal(block.inputList.length, 1);
+      chai.assert.equal(block.inputList[0].fieldRow.length, 1);
       var dropdown = block.inputList[0].fieldRow[0];
       chai.assert.equal(dropdown, block.getField(FIELD_NAME));
       chai.assert.equal(Blockly.FieldDropdown, dropdown.constructor);

@@ -85,7 +85,6 @@ goog.addDependency('../../core/interfaces/i_registrable.js', ['Blockly.IRegistra
 goog.addDependency('../../core/interfaces/i_selectable.js', ['Blockly.ISelectable'], [], {});
 goog.addDependency('../../core/interfaces/i_styleable.js', ['Blockly.IStyleable'], [], {});
 goog.addDependency('../../core/interfaces/i_toolbox.js', ['Blockly.IToolbox'], [], {});
-goog.addDependency('../../core/interfaces/i_toolbox_item.js', ['Blockly.IToolboxItem'], [], {});
 goog.addDependency('../../core/keyboard_nav/action.js', ['Blockly.Action'], [], {});
 goog.addDependency('../../core/keyboard_nav/ast_node.js', ['Blockly.ASTNode'], ['Blockly.utils.Coordinate'], {'lang': 'es5'});
 goog.addDependency('../../core/keyboard_nav/basic_cursor.js', ['Blockly.BasicCursor'], ['Blockly.ASTNode', 'Blockly.Cursor'], {'lang': 'es5'});

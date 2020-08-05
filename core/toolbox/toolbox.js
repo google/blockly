@@ -197,6 +197,7 @@ Blockly.Toolbox.prototype.createContainer_ = function() {
   var toolboxContainer = document.createElement('div');
   toolboxContainer.setAttribute('layout', this.isHorizontal() ? 'h' : 'v');
   Blockly.utils.dom.addClass(toolboxContainer, 'blocklyToolboxDiv');
+  Blockly.utils.dom.addClass(toolboxContainer, 'blocklyNonSelectable');
   toolboxContainer.setAttribute('dir', this.RTL ? 'RTL' : 'LTR');
   return toolboxContainer;
 };

@@ -6,6 +6,7 @@
 
 suite('InsertionMarkers', function() {
   setup(function() {
+    sharedTestSetup.call(this);
     this.workspace = Blockly.inject('blocklyDiv', {});
     Blockly.defineBlocksWithJsonArray([
       {
@@ -39,7 +40,7 @@ suite('InsertionMarkers', function() {
       }]);
   });
   teardown(function() {
-    this.workspace.dispose();
+    sharedTestTeardown.call(this);
     delete Blockly.Blocks['stack_block'];
     delete Blockly.Blocks['row_block'];
     delete Blockly.Blocks['statement_block'];

@@ -79,7 +79,6 @@ goog.require('Blockly.Themes.Modern');
 goog.require('Blockly.Themes.Zelos');
 goog.require('Blockly.thrasos.Renderer');
 goog.require('Blockly.zelos.Renderer');
-goog.require('Blockly.NewToolbox');
 
 // Other.
 goog.require('Blockly.WorkspaceCommentSvg');
@@ -137,11 +136,7 @@ function start() {
             maxScale: 4,
             minScale: 0.25,
             scaleSpeed: 1.1
-          },
-      plugins: {
-        'toolbox' : 'newToolbox'
-      }
-
+          }
       });
   workspace.configureContextMenu = configureContextMenu;
   addToolboxButtonCallbacks();

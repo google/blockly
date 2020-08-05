@@ -17,6 +17,7 @@ goog.require('Blockly.utils.aria');
 goog.require('Blockly.utils.object');
 
 goog.requireType('Blockly.ToolboxItem');
+goog.requireType('Blockly.utils.toolbox');
 
 
 /**
@@ -122,7 +123,7 @@ Blockly.ToolboxCategory = function(categoryDef, toolbox, opt_parent) {
    * @type {boolean}
    * @protected
    */
-  this.expanded_ = categoryDef['expanded'] == 'true' || categoryDef['expanded'];
+  this.expanded_ = false;
 
   /**
    * True if the category is visible, false otherwise.
@@ -242,7 +243,8 @@ Blockly.ToolboxCategory.prototype.createDom = function() {
 
   this.addColour_(this.colour_);
 
-  this.setExpanded(this.expanded_);
+  this.setExpanded(this.toolboxItemDef_['expanded'] == 'true' ||
+      this.toolboxItemDef_['expanded']);
 
   return this.htmlDiv_;
 };
@@ -465,8 +467,8 @@ Blockly.ToolboxCategory.prototype.openIcon_ = function(iconDiv) {
     return;
   }
 
-  Blockly.utils.dom.removeClass(iconDiv, this.classConfig_['closedIcon']);
-  Blockly.utils.dom.addClass(iconDiv, this.classConfig_['openIcon']);
+  Blockly.utils.dom.removeClass(iconDiv, this.cssConfig_['closedIcon']);
+  Blockly.utils.dom.addClass(iconDiv, this.cssConfig_['openIcon']);
 };
 
 /**
@@ -478,8 +480,8 @@ Blockly.ToolboxCategory.prototype.closeIcon_ = function(iconDiv) {
   if (!iconDiv) {
     return;
   }
-  Blockly.utils.dom.removeClass(iconDiv, this.classConfig_['openIcon']);
-  Blockly.utils.dom.addClass(iconDiv, this.classConfig_['closedIcon']);
+  Blockly.utils.dom.removeClass(iconDiv, this.cssConfig_['openIcon']);
+  Blockly.utils.dom.addClass(iconDiv, this.cssConfig_['closedIcon']);
 };
 
 /**
@@ -549,10 +551,10 @@ Blockly.ToolboxCategory.prototype.setSelected = function(isSelected) {
     var defaultColour = this.parseColour_(
         Blockly.ToolboxCategory.defaultBackgroundColour);
     this.rowDiv_.style.backgroundColor = this.colour_ || defaultColour;
-    Blockly.utils.dom.addClass(this.rowDiv_, this.classConfig_['selected']);
+    Blockly.utils.dom.addClass(this.rowDiv_, this.cssConfig_['selected']);
   } else {
     this.rowDiv_.style.backgroundColor = '';
-    Blockly.utils.dom.removeClass(this.rowDiv_, this.classConfig_['selected']);
+    Blockly.utils.dom.removeClass(this.rowDiv_, this.cssConfig_['selected']);
   }
   Blockly.utils.aria.setState(/** @type {!Element} */ (this.htmlDiv_),
       Blockly.utils.aria.State.SELECTED, isSelected);

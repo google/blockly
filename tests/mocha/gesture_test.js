@@ -18,7 +18,6 @@ suite('Gesture', function() {
   });
 
   teardown(function() {
-    this.e = null;
     this.workspace.dispose();
   });
 

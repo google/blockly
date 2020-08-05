@@ -18,6 +18,7 @@ goog.require('Blockly.Events');
 goog.require('Blockly.Events.BlockChange');
 goog.require('Blockly.Gesture');
 goog.require('Blockly.utils');
+goog.require('Blockly.utils.deprecation');
 goog.require('Blockly.utils.dom');
 goog.require('Blockly.utils.Rect');
 goog.require('Blockly.utils.Size');
@@ -537,6 +538,11 @@ Blockly.Field.prototype.getValidator = function() {
  *  functions instead.
  */
 Blockly.Field.prototype.classValidator = function(text) {
+  Blockly.utils.deprecation.warn(
+      'Field.prototype.classValidator',
+      'May 2019',
+      'December 2020',
+      'Blockly.Field.prototype.doClassValidation_');
   return text;
 };
 
@@ -548,6 +554,10 @@ Blockly.Field.prototype.classValidator = function(text) {
  * @deprecated May 2019. setValue now contains all relevant logic.
  */
 Blockly.Field.prototype.callValidator = function(text) {
+  Blockly.utils.deprecation.warn(
+      'Field.prototype.callValidator',
+      'May 2019',
+      'December 2020');
   var classResult = this.classValidator(text);
   if (classResult === null) {
     // Class validator rejects value.  Game over.
@@ -619,10 +629,12 @@ Blockly.Field.prototype.showEditor = function(opt_e) {
  * check the size of the field.
  */
 Blockly.Field.prototype.updateWidth = function() {
-  console.warn('Deprecated call to updateWidth, call' +
-    ' Blockly.Field.updateSize_ to force an update to the size of the' +
-    ' field, or Blockly.utils.dom.getTextWidth() to check the size' +
-    ' of the field.');
+
+  Blockly.utils.deprecation.warn(
+      'Field.prototype.updateWidth',
+      'May 2019',
+      'December 2020',
+      'Blockly.Field.prototype.updateSize_ or Blockly.utils.dom.getTextWidth');
   this.updateSize_();
 };
 
@@ -809,6 +821,11 @@ Blockly.Field.prototype.getText = function() {
  * @deprecated 2019 setText should not be used directly. Use setValue instead.
  */
 Blockly.Field.prototype.setText = function(_newText) {
+  Blockly.utils.deprecation.warn(
+      'Field.prototype.setText',
+      'May 2019',
+      'December 2020',
+      'Blockly.Field.prototype.setValue');
   throw Error('setText method is deprecated');
 };
 

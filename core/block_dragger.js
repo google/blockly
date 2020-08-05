@@ -294,7 +294,7 @@ Blockly.BlockDragger.prototype.maybeDeleteBlock_ = function() {
     this.draggingBlock_.dispose(false, true);
     Blockly.draggingConnections = [];
   } else if (trashcan) {
-    // Make sure the trash can is closed.
+    // Make sure the trash can lid is closed.
     trashcan.closeLid();
   }
   return this.wouldDeleteBlock_;

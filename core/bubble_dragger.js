@@ -151,7 +151,7 @@ Blockly.BubbleDragger.prototype.maybeDeleteBubble_ = function() {
     this.fireMoveEvent_();
     this.draggingBubble_.dispose(false, true);
   } else if (trashcan) {
-    // Make sure the trash can is closed.
+    // Make sure the trash can lid is closed.
     trashcan.closeLid();
   }
   return this.wouldDeleteBubble_;

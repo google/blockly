@@ -5,6 +5,12 @@
  */
 
 suite('Connection checker', function() {
+  setup(function() {
+    sharedTestSetup.call(this);
+  });
+  teardown(function() {
+    sharedTestTeardown.call(this);
+  });
   suiteSetup(function() {
     this.checker = new Blockly.ConnectionChecker();
   });

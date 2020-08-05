@@ -6,13 +6,13 @@
 
 suite('Variable Map', function() {
   setup(function() {
+    sharedTestSetup.call(this);
     this.workspace = new Blockly.Workspace();
     this.variableMap = new Blockly.VariableMap(this.workspace);
   });
 
   teardown(function() {
-    this.workspace.dispose();
-    sinon.restore();
+    sharedTestTeardown.call(this);
   });
 
   suite('createVariable', function() {

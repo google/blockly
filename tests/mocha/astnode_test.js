@@ -6,6 +6,7 @@
 
 suite('ASTNode', function() {
   setup(function() {
+    sharedTestSetup.call(this);
     Blockly.defineBlocksWithJsonArray([{
       "type": "input_statement",
       "message0": "%1 %2 %3 %4",
@@ -90,12 +91,10 @@ suite('ASTNode', function() {
     sinon.stub(Blockly, "getMainWorkspace").returns(new Blockly.Workspace());
   });
   teardown(function() {
+    sharedTestTeardown.call(this);
     delete Blockly.Blocks['input_statement'];
     delete Blockly.Blocks['field_input'];
     delete Blockly.Blocks['value_input'];
-
-    this.workspace.dispose();
-    sinon.restore();
   });
 
   suite('HelperFunctions', function() {

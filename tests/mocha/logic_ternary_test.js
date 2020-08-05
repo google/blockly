@@ -6,12 +6,13 @@
 
 suite('Logic ternary', function() {
   setup(function() {
+    sharedTestSetup.call(this);
     this.workspace = new Blockly.Workspace();
     this.block = this.workspace.newBlock('logic_ternary');
   });
 
   teardown(function() {
-    this.workspace.dispose();
+    sharedTestTeardown.call(this);
   });
 
   test('Structure', function() {

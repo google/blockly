@@ -6,7 +6,11 @@
 
 suite('Key Map Tests', function() {
   setup(function() {
+    sharedTestSetup.call(this);
     Blockly.user.keyMap.setKeyMap(Blockly.user.keyMap.createDefaultKeyMap());
+  });
+  teardown(function() {
+    sharedTestTeardown.call(this);
   });
 
   test('Test adding a new action to key map', function() {

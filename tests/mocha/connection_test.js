@@ -5,10 +5,10 @@
  */
 
 suite('Connection', function() {
-  suiteSetup(function() {
-    this.workspace = {
-      connectionChecker: new Blockly.ConnectionChecker()
-    };
+  setup(function() {
+    sharedTestSetup.call(this);
+    this.workspace = sinon.createStubInstance(Blockly.Workspace);
+    this.workspace.connectionChecker = new Blockly.ConnectionChecker();
     this.createConnection = function(type) {
       var block = {
         workspace: this.workspace,
@@ -17,6 +17,9 @@ suite('Connection', function() {
       var connection = new Blockly.Connection(block, type);
       return connection;
     };
+  });
+  teardown(function() {
+    sharedTestTeardown.call(this);
   });
   test('canConnectWithReason passes', function() {
     var conn1 = this.createConnection(Blockly.PREVIOUS_STATEMENT);

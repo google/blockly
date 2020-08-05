@@ -5,6 +5,12 @@
  */
 
 suite('Abstract Fields', function() {
+  setup(function() {
+    sharedTestSetup.call(this);
+  });
+  teardown(function() {
+    sharedTestTeardown.call(this);
+  });
   suite('Is Serializable', function() {
     // Both EDITABLE and SERIALIZABLE are default.
     function FieldDefault() {

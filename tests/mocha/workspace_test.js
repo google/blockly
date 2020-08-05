@@ -256,7 +256,7 @@ function testAWorkspace() {
       // Have to dispose of the main workspace after the flyout workspace
       // because it holds the variable map.
       // Normally the main workspace disposes of the flyout workspace.
-      this.targetWorkspace.dispose();
+      workspaceTeardown.call(this, this.targetWorkspace);
     });
 
     test('Trivial Flyout is True', function() {

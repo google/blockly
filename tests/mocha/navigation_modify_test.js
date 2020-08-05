@@ -310,6 +310,7 @@ suite('Insert/Modify', function() {
     });
 
     test.skip('Cursor on child block (stack)', function() {
+      // TODO(#4113): Un-skip after fixing bug or test.
       this.stack_block_1.nextConnection.connect(
           this.stack_block_2.previousConnection);
 

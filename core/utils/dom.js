@@ -236,6 +236,20 @@ Blockly.utils.dom.addClass = function(element, className) {
 };
 
 /**
+ * Removes multiple calsses from an element.
+ * @param {!Element} element DOM element to remove classes from.
+ * @param {string} classNames A string of one or multiple class names for an
+ *    element.
+ */
+Blockly.utils.dom.removeClasses = function(element, classNames) {
+  var classList = classNames.split(' ');
+  for (var i = 0; i < classList.length; i++) {
+    var cssName = classList[i];
+    Blockly.utils.dom.removeClass(element, cssName);
+  }
+};
+
+/**
  * Remove a CSS class from a element.
  * Similar to Closure's goog.dom.classes.remove, except it handles SVG elements.
  * @param {!Element} element DOM element to remove class from.

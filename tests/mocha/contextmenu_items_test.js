@@ -5,7 +5,6 @@
  */
 
 suite('Context Menu Items', function() {
-  var clock;
   var workspace;
   var registry;
 
@@ -19,14 +18,13 @@ suite('Context Menu Items', function() {
     registry = Blockly.ContextMenuRegistry.registry;
 
     sinon.stub(Blockly.Events, "setGroup").returns(null);
-    createEventsFireStub();
-    clock = sinon.useFakeTimers();
+    sharedTestSetup.call(this);
   });
   
   teardown(function() {
     workspace.dispose();
-    clock.restore();
     sinon.restore();
+    sharedTestTeardown.call(this);
   });
   
   suite('Workspace Items', function() {
@@ -192,8 +190,7 @@ suite('Context Menu Items', function() {
         block1.setCollapsed(true);
 
         collapseOption.callback(scope);
-        // Needs to tick past delay value.
-        clock.tick(100);
+        this.clock.runAll();
 
         chai.assert.isTrue(block1.isCollapsed(),
             'Previously collapsed block should still be collapsed');
@@ -247,7 +244,7 @@ suite('Context Menu Items', function() {
         block2.setCollapsed(true);
 
         expandOption.callback(scope);
-        clock.runAll();
+        this.clock.runAll();
 
         chai.assert.isFalse(block1.isCollapsed(),
             'Previously expanded block should still be expanded');
@@ -282,7 +279,7 @@ suite('Context Menu Items', function() {
         workspace.newBlock('text');
         workspace.newBlock('text');
         deleteOption.callback(scope);
-        clock.runAll();
+        this.clock.runAll();
         chai.assert.equal(workspace.getTopBlocks(false).length, 0);
       });
 
@@ -293,7 +290,7 @@ suite('Context Menu Items', function() {
         workspace.newBlock('text');
         workspace.newBlock('text');
         deleteOption.callback(scope);
-        clock.runAll();
+        this.clock.runAll();
         chai.assert.equal(workspace.getTopBlocks(false).length, 2);
       });
 
@@ -301,7 +298,7 @@ suite('Context Menu Items', function() {
         var confirmStub = sinon.stub(Blockly, 'confirm');
         workspace.newBlock('text');
         deleteOption.callback(scope);
-        clock.runAll();
+        this.clock.runAll();
 
         sinon.assert.notCalled(confirmStub);
         chai.assert.equal(workspace.getTopBlocks(false).length, 0);

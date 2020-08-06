@@ -424,19 +424,24 @@ suite('Blocks', function() {
     });
 
     suite('Deserialization', function() {
+      setup() {
+        this.deserializationHelper = function(text) {
+          let dom = Blockly.Xml.textToDom(text);
+          Blockly.Xml.appendDomToWorkspace(dom, this.workspace);
+          this.assertConnectionsEmpty();
+          this.clock.runAll();
+        }
+      }
       test('Stack', function() {
-        Blockly.Xml.appendDomToWorkspace(Blockly.Xml.textToDom(
+        this.deserializationHelper(
             '<xml>' +
             '  <block type="stack_block"/>' +
-            '</xml>'
-        ), this.workspace);
-        this.assertConnectionsEmpty();
-        this.clock.runAll();
+            '</xml>');
         chai.assert.equal(this.getPrevious().length, 1);
         chai.assert.equal(this.getNext().length, 1);
       });
       test('Multi-Stack', function() {
-        Blockly.Xml.appendDomToWorkspace(Blockly.Xml.textToDom(
+        this.deserializationHelper(
             '<xml>' +
             '  <block type="stack_block">' +
             '    <next>' +
@@ -448,25 +453,21 @@ suite('Blocks', function() {
             '    </next>' +
             '  </block>' +
             '</xml>'
-        ), this.workspace);
-        this.assertConnectionsEmpty();
-        this.clock.runAll();
+        );
         chai.assert.equal(this.getPrevious().length, 3);
         chai.assert.equal(this.getNext().length, 3);
       });
       test('Collapsed Stack', function() {
-        Blockly.Xml.appendDomToWorkspace(Blockly.Xml.textToDom(
+        this.deserializationHelper(
             '<xml>' +
             '  <block type="stack_block" collapsed="true"/>' +
             '</xml>'
-        ), this.workspace);
-        this.assertConnectionsEmpty();
-        this.clock.runAll();
+        );
         chai.assert.equal(this.getPrevious().length, 1);
         chai.assert.equal(this.getNext().length, 1);
       });
       test('Collapsed Multi-Stack', function() {
-        Blockly.Xml.appendDomToWorkspace(Blockly.Xml.textToDom(
+        this.deserializationHelper(
             '<xml>' +
             '  <block type="stack_block" collapsed="true">' +
             '    <next>' +
@@ -478,25 +479,21 @@ suite('Blocks', function() {
             '    </next>' +
             '  </block>' +
             '</xml>'
-        ), this.workspace);
-        this.assertConnectionsEmpty();
-        this.clock.runAll();
+        );
         chai.assert.equal(this.getPrevious().length, 3);
         chai.assert.equal(this.getNext().length, 3);
       });
       test('Row', function() {
-        Blockly.Xml.appendDomToWorkspace(Blockly.Xml.textToDom(
+        this.deserializationHelper(
             '<xml>' +
             '  <block type="row_block"/>' +
             '</xml>'
-        ), this.workspace);
-        this.assertConnectionsEmpty();
-        this.clock.runAll();
+        );
         chai.assert.equal(this.getOutputs().length, 1);
         chai.assert.equal(this.getInputs().length, 1);
       });
       test('Multi-Row', function() {
-        Blockly.Xml.appendDomToWorkspace(Blockly.Xml.textToDom(
+        this.deserializationHelper(
             '<xml>' +
             '  <block type="row_block">' +
             '    <value name="INPUT">' +
@@ -508,25 +505,21 @@ suite('Blocks', function() {
             '    </value>' +
             '  </block>' +
             '</xml>'
-        ), this.workspace);
-        this.assertConnectionsEmpty();
-        this.clock.runAll();
+        );
         chai.assert.equal(this.getOutputs().length, 3);
         chai.assert.equal(this.getInputs().length, 3);
       });
       test('Collapsed Row', function() {
-        Blockly.Xml.appendDomToWorkspace(Blockly.Xml.textToDom(
+        this.deserializationHelper(
             '<xml>' +
             '  <block type="row_block" collapsed="true"/>' +
             '</xml>'
-        ), this.workspace);
-        this.assertConnectionsEmpty();
-        this.clock.runAll();
+        );
         chai.assert.equal(this.getOutputs().length, 1);
         chai.assert.equal(this.getInputs().length, 0);
       });
       test('Collapsed Multi-Row', function() {
-        Blockly.Xml.appendDomToWorkspace(Blockly.Xml.textToDom(
+        this.deserializationHelper(
             '<xml>' +
             '  <block type="row_block" collapsed="true">' +
             '    <value name="INPUT">' +
@@ -538,9 +531,7 @@ suite('Blocks', function() {
             '    </value>' +
             '  </block>' +
             '</xml>'
-        ), this.workspace);
-        this.assertConnectionsEmpty();
-        this.clock.runAll();
+        );
         chai.assert.equal(this.getOutputs().length, 1);
         chai.assert.equal(this.getInputs().length, 0);
       });
@@ -564,18 +555,16 @@ suite('Blocks', function() {
         chai.assert.equal(this.getInputs().length, 1);
       });
       test('Statement', function() {
-        Blockly.Xml.appendDomToWorkspace(Blockly.Xml.textToDom(
+        this.deserializationHelper(
             '<xml>' +
             '  <block type="statement_block"/>' +
             '</xml>'
-        ), this.workspace);
-        this.assertConnectionsEmpty();
-        this.clock.runAll();
+        );
         chai.assert.equal(this.getPrevious().length, 1);
         chai.assert.equal(this.getNext().length, 2);
       });
       test('Multi-Statement', function() {
-        Blockly.Xml.appendDomToWorkspace(Blockly.Xml.textToDom(
+       this.deserializationHelper(
             '<xml>' +
             '  <block type="statement_block">' +
             '    <statement name="STATEMENT">' +
@@ -587,25 +576,21 @@ suite('Blocks', function() {
             '    </statement>' +
             '  </block>' +
             '</xml>'
-        ), this.workspace);
-        this.assertConnectionsEmpty();
-        this.clock.runAll();
+        );
         chai.assert.equal(this.getPrevious().length, 3);
         chai.assert.equal(this.getNext().length, 6);
       });
       test('Collapsed Statement', function() {
-        Blockly.Xml.appendDomToWorkspace(Blockly.Xml.textToDom(
+        this.deserializationHelper(
             '<xml>' +
             '  <block type="statement_block" collapsed="true"/>' +
             '</xml>'
-        ), this.workspace);
-        this.assertConnectionsEmpty();
-        this.clock.runAll();
+        );
         chai.assert.equal(this.getPrevious().length, 1);
         chai.assert.equal(this.getNext().length, 1);
       });
       test('Collapsed Multi-Statement', function() {
-        Blockly.Xml.appendDomToWorkspace(Blockly.Xml.textToDom(
+        this.deserializationHelper(
             '<xml>' +
             '  <block type="statement_block" collapsed="true">' +
             '    <statement name="STATEMENT">' +
@@ -617,14 +602,12 @@ suite('Blocks', function() {
             '    </statement>' +
             '  </block>' +
             '</xml>'
-        ), this.workspace);
-        this.assertConnectionsEmpty();
-        this.clock.runAll();
+        );
         chai.assert.equal(this.getPrevious().length, 1);
         chai.assert.equal(this.getNext().length, 1);
       });
       test('Collapsed Multi-Statement Middle', function() {
-        Blockly.Xml.appendDomToWorkspace(Blockly.Xml.textToDom(
+        this.deserializationHelper(
             '<xml>' +
             '  <block type="statement_block">' +
             '    <statement name="STATEMENT">' +
@@ -636,9 +619,7 @@ suite('Blocks', function() {
             '    </statement>' +
             '  </block>' +
             '</xml>'
-        ), this.workspace);
-        this.assertConnectionsEmpty();
-        this.clock.runAll();
+        );
         chai.assert.equal(this.getPrevious().length, 2);
         chai.assert.equal(this.getNext().length, 3);
       });
@@ -917,10 +898,16 @@ suite('Blocks', function() {
       });
     });
     suite('Remove Connections Programmatically', function() {
+      setup() {
+        this.makeBlock = function(type) {
+          var block = this.workspace.newBlock(type);
+          block.initSvg();
+          block.render();
+          return block;
+        }
+      }
       test('Output', function() {
-        var block = this.workspace.newBlock('row_block');
-        block.initSvg();
-        block.render();
+        var block = this.makeBlock('row_block');
 
         block.setOutput(false);
 
@@ -928,9 +915,7 @@ suite('Blocks', function() {
         chai.assert.equal(this.getInputs().length, 1);
       });
       test('Value', function() {
-        var block = this.workspace.newBlock('row_block');
-        block.initSvg();
-        block.render();
+        var block = this.makeBlock('row_block');
 
         block.removeInput('INPUT');
 
@@ -938,9 +923,7 @@ suite('Blocks', function() {
         chai.assert.equal(this.getInputs().length, 0);
       });
       test('Previous', function() {
-        var block = this.workspace.newBlock('stack_block');
-        block.initSvg();
-        block.render();
+        var block = this.makeBlock('stack_block');
 
         block.setPreviousStatement(false);
 
@@ -948,9 +931,7 @@ suite('Blocks', function() {
         chai.assert.equal(this.getNext().length, 1);
       });
       test('Next', function() {
-        var block = this.workspace.newBlock('stack_block');
-        block.initSvg();
-        block.render();
+        var block = this.makeBlock('stack_block');
 
         block.setNextStatement(false);
 
@@ -958,9 +939,7 @@ suite('Blocks', function() {
         chai.assert.equal(this.getNext().length, 0);
       });
       test('Statement', function() {
-        var block = this.workspace.newBlock('statement_block');
-        block.initSvg();
-        block.render();
+        var block = this.makeBlock('statement_block');
 
         block.removeInput('STATEMENT');
 

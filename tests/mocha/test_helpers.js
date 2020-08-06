@@ -51,7 +51,8 @@ function workspaceTeardown(workspace) {
     workspace.dispose();
     this.clock.runAll();  // Run all remaining queued setTimeout calls.
   } catch (e) {
-    console.error(this.currentTest.fullTitle() + '\n', e);
+    var testRef = this.currentTest || this.test;
+    console.error(testRef.fullTitle() + '\n', e);
   }
 }
 
@@ -108,8 +109,9 @@ function sharedTestSetup(options = {}) {
  * outermost suite using sharedTestTeardown.call(this).
  */
 function sharedTestTeardown() {
+  var testRef = this.currentTest || this.test;
   if (!this.sharedSetupCalled_) {
-    console.error('"' + this.currentTest.fullTitle() +
+    console.error('"' + testRef.fullTitle() +
         '" did not call sharedTestSetup');
   }
 
@@ -121,7 +123,7 @@ function sharedTestTeardown() {
       this.clock.runAll();  // Run all queued setTimeout calls.
     }
   } catch (e) {
-    console.error(this.currentTest.fullTitle() + '\n', e);
+    console.error(testRef.fullTitle() + '\n', e);
   } finally {
     // Clear Blockly.Event state.
     Blockly.Events.setGroup(false);
@@ -131,7 +133,7 @@ function sharedTestTeardown() {
       // (i.e. a previous test added an event to the queue on a timeout that
       // did not use a stubbed clock).
       Blockly.Events.FIRE_QUEUE_.length = 0;
-      console.warn(this.currentTest.fullTitle() +
+      console.warn(testRef.fullTitle() +
           '" needed cleanup of Blockly.Events.FIRE_QUEUE_. This may indicate ' +
           'leakage from an earlier test');
     }

@@ -13,13 +13,13 @@
 suite('Gesture', function() {
 
   setup(function() {
+    sharedTestSetup.call(this);
     this.workspace = new Blockly.Workspace();
     this.e = {};
   });
 
   teardown(function() {
-    this.e = null;
-    this.workspace.dispose();
+    sharedTestTeardown.call(this);
   });
 
   test('Constructor', function() {
@@ -35,7 +35,7 @@ suite('Gesture', function() {
     field.showEditor_ = function() {};
     var gesture = new Blockly.Gesture(this.e, this.workspace);
     gesture.setStartField(field);
-  
+
     var isFieldClick = gesture.isFieldClick_();
     chai.assert.isTrue(isFieldClick);
   });
@@ -53,24 +53,24 @@ suite('Gesture', function() {
     // Populate gesture with click start information
     gesture.setStartField(field);
     gesture.setStartFlyout_(this.workspace.flyout_);
-  
+
     var isFieldClick = gesture.isFieldClick_();
     chai.assert.equal(isFieldClick, expectedResult);
   }
 
   test('Field click - Auto close flyout', function() {
-    var flyout = new Blockly.VerticalFlyout({});
+    var flyout = new Blockly.VerticalFlyout(new Blockly.Options({}));
     flyout.autoClose = false;
     gestureIsFieldClick_InFlyoutHelper.call(this, flyout, true);
   });
 
   test('Field click - Always open flyout', function() {
-    var flyout = new Blockly.VerticalFlyout({});
+    var flyout = new Blockly.VerticalFlyout(new Blockly.Options({}));
     flyout.autoClose = false;
     gestureIsFieldClick_InFlyoutHelper.call(this, flyout, true);
   });
 
-  test('Workspace click - Shift click enters accessibility mode', function() {
+  test('Workspace click in accessibility mode - moves the cursor', function() {
     var event = {
       shiftKey : true,
       clientX : 10,

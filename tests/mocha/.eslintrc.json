@@ -1,4 +1,5 @@
 {
+    "parser": "babel-eslint",
     "env": {
         "browser": true,
         "mocha": true
@@ -7,18 +8,48 @@
         "chai": false,
         "sinon": false,
         "assertArrayEquals": true,
+        "assertEventEquals": true,
+        "assertLastCallEventArgEquals": true,
+        "assertNthCallEventArgEquals": true,
         "assertVariableValues": true,
         "captureWarnings": true,
         "createTestBlock": true,
         "defineRowBlock": true,
         "defineStackBlock": true,
         "defineStatementBlock": true,
-        "createEventsFireStub": true,
-        "testAWorkspace": true,
-        "testHelpers" : true,
+        "createFireChangeListenerSpy": true,
+        "createGenUidStubWithReturns": true,
+        "getCategoryJSON": true,
         "getSimpleJSON": true,
         "getXmlArray": true,
-        "getCategoryJSON": true
+        "sharedTestSetup": true,
+        "sharedTestTeardown": true,
+        "testAWorkspace": true,
+        "testHelpers" : true,
+        "workspaceTeardown": true
+    },
+    "rules": {
+        "no-unused-vars": ["off"],
+        "es5/no-arrow-functions": ["off"],
+        "es5/no-binary-and-octal-literals": ["off"],
+        "es5/no-block-scoping": ["off"],
+        "es5/no-classes": ["off"],
+        "es5/no-computed-properties": ["off"],
+        "es5/no-default-parameters": ["off"],
+        "es5/no-destructuring": ["off"],
+        "es5/no-es6-methods": ["off"],
+        "es5/no-es6-static-methods": ["off"],
+        "es5/no-for-of": ["off"],
+        "es5/no-generators": ["off"],
+        "es5/no-modules": ["off"],
+        "es5/no-object-super": ["off"],
+        "es5/no-rest-parameters": ["off"],
+        "es5/no-shorthand-properties": ["off"],
+        "es5/no-spread": ["off"],
+        "es5/no-template-literals": ["off"],
+        "es5/no-typeof-symbol": ["off"],
+        "es5/no-unicode-code-point-escape": ["off"],
+        "es5/no-unicode-regex": ["off"]
     },
     "extends": "../../.eslintrc.json"
 }

@@ -5,6 +5,12 @@
  */
 
 suite('Image Fields', function() {
+  setup(function() {
+    sharedTestSetup.call(this);
+  });
+  teardown(function() {
+    sharedTestTeardown.call(this);
+  });
   function assertValue(imageField, expectedValue, expectedText) {
     var actualValue = imageField.getValue();
     var actualText = imageField.getText();

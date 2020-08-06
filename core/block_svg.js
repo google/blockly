@@ -28,6 +28,7 @@ goog.require('Blockly.TabNavigateCursor');
 goog.require('Blockly.Tooltip');
 goog.require('Blockly.Touch');
 goog.require('Blockly.utils');
+goog.require('Blockly.utils.deprecation');
 goog.require('Blockly.utils.Coordinate');
 goog.require('Blockly.utils.dom');
 goog.require('Blockly.utils.object');
@@ -239,6 +240,11 @@ Blockly.BlockSvg.prototype.getColourTertiary = function() {
  * @deprecated Use style.colourSecondary. (2020 January 21)
  */
 Blockly.BlockSvg.prototype.getColourShadow = function() {
+  Blockly.utils.deprecation.warn(
+      'BlockSvg.prototype.getColourShadow',
+      'January 2020',
+      'January 2021',
+      'style.colourSecondary');
   return this.getColourSecondary();
 };
 
@@ -252,6 +258,11 @@ Blockly.BlockSvg.prototype.getColourShadow = function() {
  * @deprecated Use style.colourTertiary. (2020 January 21)
  */
 Blockly.BlockSvg.prototype.getColourBorder = function() {
+  Blockly.utils.deprecation.warn(
+      'BlockSvg.prototype.getColourBorder',
+      'January 2020',
+      'January 2021',
+      'style.colourTertiary');
   var colourTertiary = this.getColourTertiary();
   return {
     colourBorder: colourTertiary,
@@ -1066,7 +1077,7 @@ Blockly.BlockSvg.prototype.setWarningText = function(text, opt_id) {
       collapsedParent.setWarningText(Blockly.Msg['COLLAPSED_WARNINGS_WARNING'],
           Blockly.BlockSvg.COLLAPSED_WARNING_ID);
     }
-    
+
     if (!this.warning) {
       this.warning = new Blockly.Warning(this);
       changedState = true;
@@ -1120,8 +1131,11 @@ Blockly.BlockSvg.prototype.setMutator = function(mutator) {
  * @deprecated May 2019
  */
 Blockly.BlockSvg.prototype.setDisabled = function(disabled) {
-  console.warn('Deprecated call to Blockly.BlockSvg.prototype.setDisabled, ' +
-  'use Blockly.BlockSvg.prototype.setEnabled instead.');
+  Blockly.utils.deprecation.warn(
+      'BlockSvg.prototype.setDisabled',
+      'May 2019',
+      'May 2020',
+      'BlockSvg.prototype.setEnabled');
   this.setEnabled(!disabled);
 };
 

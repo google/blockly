@@ -6,6 +6,7 @@
 
 suite('Toolbox', function() {
   setup(function() {
+    sharedTestSetup.call(this);
     Blockly.defineBlocksWithJsonArray([{
       "type": "basic_block",
       "message0": "%1",
@@ -26,9 +27,8 @@ suite('Toolbox', function() {
   });
 
   teardown(function() {
-    this.workspace.dispose();
+    sharedTestTeardown.call(this);
     delete Blockly.Blocks['basic_block'];
-    sinon.restore();
   });
 
   suite('init', function() {
@@ -184,9 +184,9 @@ suite('Toolbox', function() {
       sinon.assert.calledOnce(flyoutHideStub);
     });
     test('UI Event is fired when new category is selected', function() {
-      var eventsFireStub = sinon.stub(Blockly.Events, 'fire');
+      this.eventsFireStub.resetHistory();
       this.toolbox.handleAfterTreeSelected_(this.firstChild);
-      sinon.assert.calledOnce(eventsFireStub);
+      sinon.assert.calledOnce(this.eventsFireStub);
     });
     test('Last category is updated when there is a new node', function() {
       this.toolbox.handleAfterTreeSelected_(this.firstChild, this.secondChild);

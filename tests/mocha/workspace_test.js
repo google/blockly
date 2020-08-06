@@ -6,11 +6,12 @@
 
 suite('Workspace', function() {
   setup(function() {
+    sharedTestSetup.call(this);
     this.workspace = new Blockly.Workspace();
   });
 
   teardown(function() {
-    this.workspace.dispose();
+    sharedTestTeardown.call(this);
   });
 
   // eslint-disable-next-line no-use-before-define
@@ -255,7 +256,7 @@ function testAWorkspace() {
       // Have to dispose of the main workspace after the flyout workspace
       // because it holds the variable map.
       // Normally the main workspace disposes of the flyout workspace.
-      this.targetWorkspace.dispose();
+      workspaceTeardown.call(this, this.targetWorkspace);
     });
 
     test('Trivial Flyout is True', function() {
@@ -663,10 +664,6 @@ function testAWorkspace() {
   });
 
   suite('Undo/Redo', function() {
-    setup(function() {
-      createEventsFireStub();
-    });
-
     function createTwoVarsDifferentTypes(workspace) {
       workspace.createVariable('name1', 'type1', 'id1');
       workspace.createVariable('name2', 'type2', 'id2');

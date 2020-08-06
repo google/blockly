@@ -44,6 +44,7 @@ goog.require('Blockly.Xml');
 goog.requireType('Blockly.blockRendering.Renderer');
 goog.requireType('Blockly.IASTNodeLocationSvg');
 goog.requireType('Blockly.IBoundedElement');
+goog.requireType('Blockly.IFlyout');
 
 
 /**
@@ -68,7 +69,8 @@ Blockly.WorkspaceSvg = function(options,
   this.setMetrics =
       options.setMetrics || Blockly.WorkspaceSvg.setTopLevelWorkspaceMetrics_;
 
-  this.connectionDBList = Blockly.ConnectionDB.init();
+
+  this.connectionDBList = Blockly.ConnectionDB.init(this.connectionChecker);
 
   if (opt_blockDragSurface) {
     this.blockDragSurface_ = opt_blockDragSurface;
@@ -335,7 +337,7 @@ Blockly.WorkspaceSvg.prototype.scrollbar = null;
 
 /**
  * Fixed flyout providing blocks which may be dragged into this workspace.
- * @type {Blockly.Flyout}
+ * @type {Blockly.IFlyout}
  * @private
  */
 Blockly.WorkspaceSvg.prototype.flyout_ = null;
@@ -945,7 +947,7 @@ Blockly.WorkspaceSvg.prototype.addFlyout = function(tagName) {
  * owned by either the toolbox or the workspace, depending on toolbox
  * configuration.  It will be null if there is no flyout.
  * @param {boolean=} opt_own Only return the workspace's own flyout if True.
- * @return {Blockly.Flyout} The flyout on this workspace.
+ * @return {Blockly.IFlyout} The flyout on this workspace.
  * @package
  */
 Blockly.WorkspaceSvg.prototype.getFlyout = function(opt_own) {
@@ -2106,7 +2108,7 @@ Blockly.WorkspaceSvg.prototype.scroll = function(x, y) {
 
 /**
  * Get the dimensions of the given workspace component, in pixels.
- * @param {Blockly.IToolbox|Blockly.Flyout} elem The element to get the
+ * @param {Blockly.IToolbox|Blockly.IFlyout} elem The element to get the
  *     dimensions of, or null.  It should be a toolbox or flyout, and should
  *     implement getWidth() and getHeight().
  * @return {!Blockly.utils.Size} An object containing width and height

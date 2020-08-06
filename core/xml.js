@@ -311,17 +311,6 @@ Blockly.Xml.cloneShadow_ = function(shadow, opt_noId) {
  */
 Blockly.Xml.domToText = function(dom) {
   var text = Blockly.utils.xml.domToText(dom);
-  // Replace line breaks in text content with '&#10;' to make them single line.
-  // E.g. <foo>hello\nworld</foo> -> <foo>hello&#10;world</foo>
-  // Do not replace line breaks between tags.
-  // E.g. ...</foo>\n</bar> is unchanged.
-  // Can't use global flag on regexp since backtracking is needed.
-  var regexp = /(<[^/](?:[^>]*[^/])?>[^<]*)\n([^<]*<\/)/;
-  var oldText;
-  do {
-    oldText = text;
-    text = text.replace(regexp, '$1&#10;$2');
-  } while (text != oldText);
   // Unpack self-closing tags.  These tags fail when embedded in HTML.
   // <block name="foo"/> -> <block name="foo"></block>
   return text.replace(/<(\w+)([^<]*)\/>/g, '<$1$2></$1>');

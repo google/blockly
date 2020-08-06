@@ -16,6 +16,7 @@ goog.require('Blockly.Connection');
 goog.require('Blockly.Events');
 goog.require('Blockly.utils');
 goog.require('Blockly.utils.Coordinate');
+goog.require('Blockly.utils.deprecation');
 goog.require('Blockly.utils.dom');
 goog.require('Blockly.utils.object');
 
@@ -420,9 +421,15 @@ Blockly.RenderedConnection.prototype.startTrackingAll = function() {
  * @param {number=} maxRadius The maximum radius allowed for connections, in
  *     workspace units.
  * @return {boolean} True if the connection is allowed, false otherwise.
+ * @deprecated July 2020
  */
 Blockly.RenderedConnection.prototype.isConnectionAllowed = function(candidate,
     maxRadius) {
+  Blockly.utils.deprecation.warn(
+      'RenderedConnection.prototype.isConnectionAllowed',
+      'July 2020',
+      'July 2021',
+      'Blockly.Workspace.prototype.getConnectionChecker().canConnect');
   if (this.distanceFrom(candidate) > maxRadius) {
     return false;
   }
@@ -549,7 +556,8 @@ Blockly.RenderedConnection.prototype.connect_ = function(childConnection) {
 Blockly.RenderedConnection.prototype.onCheckChanged_ = function() {
   // The new value type may not be compatible with the existing connection.
   if (this.isConnected() && (!this.targetConnection ||
-      !this.checkType(this.targetConnection))) {
+      !this.getConnectionChecker().canConnect(
+          this, this.targetConnection, false))) {
     var child = this.isSuperior() ? this.targetBlock() : this.sourceBlock_;
     child.unplug();
     // Bump away.

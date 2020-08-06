@@ -6,25 +6,21 @@
 
 suite('Extensions', function() {
   setup(function() {
+    sharedTestSetup.call(this);
     this.workspace = new Blockly.Workspace();
     this.blockTypesCleanup_ = [];
     this.extensionsCleanup_ = [];
   });
   teardown(function() {
-    var i;
-    for (i = 0; i < this.blockTypesCleanup_.length; i++) {
+    sharedTestTeardown.call(this);
+    for (let i = 0; i < this.blockTypesCleanup_.length; i++) {
       var blockType = this.blockTypesCleanup_[i];
       delete Blockly.Blocks[blockType];
     }
-    for (i = 0; i < this.extensionsCleanup_.length; i++) {
+    for (let i = 0; i < this.extensionsCleanup_.length; i++) {
       var extension = this.extensionsCleanup_[i];
       delete Blockly.Extensions.ALL_[extension];
     }
-    this.workspace.dispose();
-    // Clear Blockly.Event state.
-    Blockly.Events.setGroup(false);
-    Blockly.Events.disabled_ = 0;
-    sinon.restore();
   });
 
   test('Definition before and after block type', function() {

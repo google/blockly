@@ -31,6 +31,7 @@ goog.require('Blockly.Xml');
 
 goog.requireType('Blockly.IBlocklyActionable');
 goog.requireType('Blockly.IDeleteArea');
+goog.requireType('Blockly.IFlyout');
 goog.requireType('Blockly.utils.Metrics');
 
 
@@ -42,6 +43,7 @@ goog.requireType('Blockly.utils.Metrics');
  * @abstract
  * @implements {Blockly.IBlocklyActionable}
  * @implements {Blockly.IDeleteArea}
+ * @implements {Blockly.IFlyout}
  */
 Blockly.Flyout = function(workspaceOptions) {
   workspaceOptions.getMetrics =
@@ -481,7 +483,6 @@ Blockly.Flyout.prototype.show = function(flyoutDef) {
     }
   }
   this.setVisible(true);
-  
   // Parse the Array or NodeList passed in into an Array of
   // Blockly.utils.toolbox.Toolbox.
   var parsedContent = Blockly.utils.toolbox.convertToolboxToJSON(flyoutDef);
@@ -765,11 +766,12 @@ Blockly.Flyout.prototype.createBlock = function(originalBlock) {
   this.targetWorkspace.setResizesEnabled(false);
   try {
     newBlock = this.placeNewBlock_(originalBlock);
-    // Close the flyout.
-    Blockly.hideChaff();
   } finally {
     Blockly.Events.enable();
   }
+
+  // Close the flyout.
+  Blockly.hideChaff();
 
   var newVariables = Blockly.Variables.getAddedVariables(this.targetWorkspace,
       variablesBeforeCreation);

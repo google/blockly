@@ -5,6 +5,12 @@
  */
 
 suite('Abstract Fields', function() {
+  setup(function() {
+    sharedTestSetup.call(this);
+  });
+  teardown(function() {
+    sharedTestTeardown.call(this);
+  });
   suite('Is Serializable', function() {
     // Both EDITABLE and SERIALIZABLE are default.
     function FieldDefault() {
@@ -382,7 +388,7 @@ suite('Abstract Fields', function() {
       });
       suite('setTooltip', function() {
         setup(function() {
-          this.workspace = new Blockly.WorkspaceSvg({});
+          this.workspace = new Blockly.WorkspaceSvg(new Blockly.Options({}));
           this.workspace.createDom();
         });
         teardown(function() {

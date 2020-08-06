@@ -13,6 +13,7 @@
         "assertNthCallEventArgEquals": true,
         "assertVariableValues": true,
         "captureWarnings": true,
+        "createRenderedBlock": true,
         "createTestBlock": true,
         "defineRowBlock": true,
         "defineStackBlock": true,

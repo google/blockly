@@ -424,19 +424,24 @@ suite('Blocks', function() {
     });
 
     suite('Deserialization', function() {
+      setup(function() {
+        this.deserializationHelper = function(text) {
+          let dom = Blockly.Xml.textToDom(text);
+          Blockly.Xml.appendDomToWorkspace(dom, this.workspace);
+          this.assertConnectionsEmpty();
+          this.clock.runAll();
+        };
+      });
       test('Stack', function() {
-        Blockly.Xml.appendDomToWorkspace(Blockly.Xml.textToDom(
+        this.deserializationHelper(
             '<xml>' +
             '  <block type="stack_block"/>' +
-            '</xml>'
-        ), this.workspace);
-        this.assertConnectionsEmpty();
-        this.clock.runAll();
+            '</xml>');
         chai.assert.equal(this.getPrevious().length, 1);
         chai.assert.equal(this.getNext().length, 1);
       });
       test('Multi-Stack', function() {
-        Blockly.Xml.appendDomToWorkspace(Blockly.Xml.textToDom(
+        this.deserializationHelper(
             '<xml>' +
             '  <block type="stack_block">' +
             '    <next>' +
@@ -448,25 +453,21 @@ suite('Blocks', function() {
             '    </next>' +
             '  </block>' +
             '</xml>'
-        ), this.workspace);
-        this.assertConnectionsEmpty();
-        this.clock.runAll();
+        );
         chai.assert.equal(this.getPrevious().length, 3);
         chai.assert.equal(this.getNext().length, 3);
       });
       test('Collapsed Stack', function() {
-        Blockly.Xml.appendDomToWorkspace(Blockly.Xml.textToDom(
+        this.deserializationHelper(
             '<xml>' +
             '  <block type="stack_block" collapsed="true"/>' +
             '</xml>'
-        ), this.workspace);
-        this.assertConnectionsEmpty();
-        this.clock.runAll();
+        );
         chai.assert.equal(this.getPrevious().length, 1);
         chai.assert.equal(this.getNext().length, 1);
       });
       test('Collapsed Multi-Stack', function() {
-        Blockly.Xml.appendDomToWorkspace(Blockly.Xml.textToDom(
+        this.deserializationHelper(
             '<xml>' +
             '  <block type="stack_block" collapsed="true">' +
             '    <next>' +
@@ -478,25 +479,21 @@ suite('Blocks', function() {
             '    </next>' +
             '  </block>' +
             '</xml>'
-        ), this.workspace);
-        this.assertConnectionsEmpty();
-        this.clock.runAll();
+        );
         chai.assert.equal(this.getPrevious().length, 3);
         chai.assert.equal(this.getNext().length, 3);
       });
       test('Row', function() {
-        Blockly.Xml.appendDomToWorkspace(Blockly.Xml.textToDom(
+        this.deserializationHelper(
             '<xml>' +
             '  <block type="row_block"/>' +
             '</xml>'
-        ), this.workspace);
-        this.assertConnectionsEmpty();
-        this.clock.runAll();
+        );
         chai.assert.equal(this.getOutputs().length, 1);
         chai.assert.equal(this.getInputs().length, 1);
       });
       test('Multi-Row', function() {
-        Blockly.Xml.appendDomToWorkspace(Blockly.Xml.textToDom(
+        this.deserializationHelper(
             '<xml>' +
             '  <block type="row_block">' +
             '    <value name="INPUT">' +
@@ -508,25 +505,21 @@ suite('Blocks', function() {
             '    </value>' +
             '  </block>' +
             '</xml>'
-        ), this.workspace);
-        this.assertConnectionsEmpty();
-        this.clock.runAll();
+        );
         chai.assert.equal(this.getOutputs().length, 3);
         chai.assert.equal(this.getInputs().length, 3);
       });
       test('Collapsed Row', function() {
-        Blockly.Xml.appendDomToWorkspace(Blockly.Xml.textToDom(
+        this.deserializationHelper(
             '<xml>' +
             '  <block type="row_block" collapsed="true"/>' +
             '</xml>'
-        ), this.workspace);
-        this.assertConnectionsEmpty();
-        this.clock.runAll();
+        );
         chai.assert.equal(this.getOutputs().length, 1);
         chai.assert.equal(this.getInputs().length, 0);
       });
       test('Collapsed Multi-Row', function() {
-        Blockly.Xml.appendDomToWorkspace(Blockly.Xml.textToDom(
+        this.deserializationHelper(
             '<xml>' +
             '  <block type="row_block" collapsed="true">' +
             '    <value name="INPUT">' +
@@ -538,9 +531,7 @@ suite('Blocks', function() {
             '    </value>' +
             '  </block>' +
             '</xml>'
-        ), this.workspace);
-        this.assertConnectionsEmpty();
-        this.clock.runAll();
+        );
         chai.assert.equal(this.getOutputs().length, 1);
         chai.assert.equal(this.getInputs().length, 0);
       });
@@ -564,18 +555,16 @@ suite('Blocks', function() {
         chai.assert.equal(this.getInputs().length, 1);
       });
       test('Statement', function() {
-        Blockly.Xml.appendDomToWorkspace(Blockly.Xml.textToDom(
+        this.deserializationHelper(
             '<xml>' +
             '  <block type="statement_block"/>' +
             '</xml>'
-        ), this.workspace);
-        this.assertConnectionsEmpty();
-        this.clock.runAll();
+        );
         chai.assert.equal(this.getPrevious().length, 1);
         chai.assert.equal(this.getNext().length, 2);
       });
       test('Multi-Statement', function() {
-        Blockly.Xml.appendDomToWorkspace(Blockly.Xml.textToDom(
+        this.deserializationHelper(
             '<xml>' +
             '  <block type="statement_block">' +
             '    <statement name="STATEMENT">' +
@@ -587,25 +576,21 @@ suite('Blocks', function() {
             '    </statement>' +
             '  </block>' +
             '</xml>'
-        ), this.workspace);
-        this.assertConnectionsEmpty();
-        this.clock.runAll();
+        );
         chai.assert.equal(this.getPrevious().length, 3);
         chai.assert.equal(this.getNext().length, 6);
       });
       test('Collapsed Statement', function() {
-        Blockly.Xml.appendDomToWorkspace(Blockly.Xml.textToDom(
+        this.deserializationHelper(
             '<xml>' +
             '  <block type="statement_block" collapsed="true"/>' +
             '</xml>'
-        ), this.workspace);
-        this.assertConnectionsEmpty();
-        this.clock.runAll();
+        );
         chai.assert.equal(this.getPrevious().length, 1);
         chai.assert.equal(this.getNext().length, 1);
       });
       test('Collapsed Multi-Statement', function() {
-        Blockly.Xml.appendDomToWorkspace(Blockly.Xml.textToDom(
+        this.deserializationHelper(
             '<xml>' +
             '  <block type="statement_block" collapsed="true">' +
             '    <statement name="STATEMENT">' +
@@ -617,14 +602,12 @@ suite('Blocks', function() {
             '    </statement>' +
             '  </block>' +
             '</xml>'
-        ), this.workspace);
-        this.assertConnectionsEmpty();
-        this.clock.runAll();
+        );
         chai.assert.equal(this.getPrevious().length, 1);
         chai.assert.equal(this.getNext().length, 1);
       });
       test('Collapsed Multi-Statement Middle', function() {
-        Blockly.Xml.appendDomToWorkspace(Blockly.Xml.textToDom(
+        this.deserializationHelper(
             '<xml>' +
             '  <block type="statement_block">' +
             '    <statement name="STATEMENT">' +
@@ -636,9 +619,7 @@ suite('Blocks', function() {
             '    </statement>' +
             '  </block>' +
             '</xml>'
-        ), this.workspace);
-        this.assertConnectionsEmpty();
-        this.clock.runAll();
+        );
         chai.assert.equal(this.getPrevious().length, 2);
         chai.assert.equal(this.getNext().length, 3);
       });
@@ -918,9 +899,7 @@ suite('Blocks', function() {
     });
     suite('Remove Connections Programmatically', function() {
       test('Output', function() {
-        var block = this.workspace.newBlock('row_block');
-        block.initSvg();
-        block.render();
+        var block = createRenderedBlock(this.workspace, 'row_block');
 
         block.setOutput(false);
 
@@ -928,9 +907,7 @@ suite('Blocks', function() {
         chai.assert.equal(this.getInputs().length, 1);
       });
       test('Value', function() {
-        var block = this.workspace.newBlock('row_block');
-        block.initSvg();
-        block.render();
+        var block = createRenderedBlock(this.workspace, 'row_block');
 
         block.removeInput('INPUT');
 
@@ -938,9 +915,7 @@ suite('Blocks', function() {
         chai.assert.equal(this.getInputs().length, 0);
       });
       test('Previous', function() {
-        var block = this.workspace.newBlock('stack_block');
-        block.initSvg();
-        block.render();
+        var block = createRenderedBlock(this.workspace, 'stack_block');
 
         block.setPreviousStatement(false);
 
@@ -948,9 +923,7 @@ suite('Blocks', function() {
         chai.assert.equal(this.getNext().length, 1);
       });
       test('Next', function() {
-        var block = this.workspace.newBlock('stack_block');
-        block.initSvg();
-        block.render();
+        var block = createRenderedBlock(this.workspace, 'stack_block');
 
         block.setNextStatement(false);
 
@@ -958,9 +931,7 @@ suite('Blocks', function() {
         chai.assert.equal(this.getNext().length, 0);
       });
       test('Statement', function() {
-        var block = this.workspace.newBlock('statement_block');
-        block.initSvg();
-        block.render();
+        var block = createRenderedBlock(this.workspace, 'statement_block');
 
         block.removeInput('STATEMENT');
 
@@ -970,9 +941,10 @@ suite('Blocks', function() {
     });
     suite('Add Connections Programmatically', function() {
       test('Output', function() {
-        var block = this.workspace.newBlock('empty_block');
-        block.initSvg();
-        block.render();
+        var block = createRenderedBlock(this.workspace, 'empty_block');
+        // this.workspace.newBlock('empty_block');
+        // block.initSvg();
+        // block.render();
 
         block.setOutput(true);
 
@@ -1259,12 +1231,6 @@ suite('Blocks', function() {
           ],
         }
       ]);
-      this.createBlock = function(type) {
-        var block = this.workspace.newBlock(type);
-        block.initSvg();
-        block.render();
-        return block;
-      };
     });
     teardown(function() {
       Blockly.Events.enable();
@@ -1272,8 +1238,8 @@ suite('Blocks', function() {
     });
     suite('Connecting and Disconnecting', function() {
       test('Connect Block to Next', function() {
-        var blockA = this.createBlock('stack_block');
-        var blockB = this.createBlock('stack_block');
+        var blockA = createRenderedBlock(this.workspace,'stack_block');
+        var blockB = createRenderedBlock(this.workspace,'stack_block');
 
         blockA.setCollapsed(true);
         assertCollapsed(blockA);
@@ -1281,8 +1247,8 @@ suite('Blocks', function() {
         assertNotCollapsed(blockB);
       });
       test('Connect Block to Value Input', function() {
-        var blockA = this.createBlock('row_block');
-        var blockB = this.createBlock('row_block');
+        var blockA = createRenderedBlock(this.workspace,'row_block');
+        var blockB = createRenderedBlock(this.workspace,'row_block');
 
         blockA.setCollapsed(true);
         assertCollapsed(blockA);
@@ -1293,8 +1259,8 @@ suite('Blocks', function() {
         chai.assert.isFalse(isBlockHidden(blockB));
       });
       test('Connect Block to Statement Input', function() {
-        var blockA = this.createBlock('statement_block');
-        var blockB = this.createBlock('stack_block');
+        var blockA = createRenderedBlock(this.workspace,'statement_block');
+        var blockB = createRenderedBlock(this.workspace,'stack_block');
 
         blockA.setCollapsed(true);
         assertCollapsed(blockA);
@@ -1306,9 +1272,9 @@ suite('Blocks', function() {
         chai.assert.isFalse(isBlockHidden(blockB));
       });
       test('Connect Block to Child of Collapsed - Input', function() {
-        var blockA = this.createBlock('row_block');
-        var blockB = this.createBlock('row_block');
-        var blockC = this.createBlock('row_block');
+        var blockA = createRenderedBlock(this.workspace,'row_block');
+        var blockB = createRenderedBlock(this.workspace,'row_block');
+        var blockC = createRenderedBlock(this.workspace,'row_block');
 
         blockA.getInput('INPUT').connection.connect(blockB.outputConnection);
         blockA.setCollapsed(true);
@@ -1323,9 +1289,9 @@ suite('Blocks', function() {
         chai.assert.isFalse(isBlockHidden(blockC));
       });
       test('Connect Block to Child of Collapsed - Next', function() {
-        var blockA = this.createBlock('statement_block');
-        var blockB = this.createBlock('stack_block');
-        var blockC = this.createBlock('stack_block');
+        var blockA = createRenderedBlock(this.workspace,'statement_block');
+        var blockB = createRenderedBlock(this.workspace,'stack_block');
+        var blockC = createRenderedBlock(this.workspace,'stack_block');
 
         blockA.getInput('STATEMENT').connection
             .connect(blockB.previousConnection);
@@ -1341,9 +1307,9 @@ suite('Blocks', function() {
         chai.assert.isFalse(isBlockHidden(blockC));
       });
       test('Connect Block to Value Input Already Taken', function() {
-        var blockA = this.createBlock('row_block');
-        var blockB = this.createBlock('row_block');
-        var blockC = this.createBlock('row_block');
+        var blockA = createRenderedBlock(this.workspace,'row_block');
+        var blockB = createRenderedBlock(this.workspace,'row_block');
+        var blockC = createRenderedBlock(this.workspace,'row_block');
 
         blockA.getInput('INPUT').connection.connect(blockB.outputConnection);
         blockA.setCollapsed(true);
@@ -1360,9 +1326,9 @@ suite('Blocks', function() {
         chai.assert.isFalse(isBlockHidden(blockC));
       });
       test('Connect Block to Statement Input Already Taken', function() {
-        var blockA = this.createBlock('statement_block');
-        var blockB = this.createBlock('stack_block');
-        var blockC = this.createBlock('stack_block');
+        var blockA = createRenderedBlock(this.workspace,'statement_block');
+        var blockB = createRenderedBlock(this.workspace,'stack_block');
+        var blockC = createRenderedBlock(this.workspace,'stack_block');
 
         blockA.getInput('STATEMENT').connection
             .connect(blockB.previousConnection);
@@ -1381,9 +1347,9 @@ suite('Blocks', function() {
         chai.assert.isFalse(isBlockHidden(blockC));
       });
       test('Connect Block with Child - Input', function() {
-        var blockA = this.createBlock('row_block');
-        var blockB = this.createBlock('row_block');
-        var blockC = this.createBlock('row_block');
+        var blockA = createRenderedBlock(this.workspace,'row_block');
+        var blockB = createRenderedBlock(this.workspace,'row_block');
+        var blockC = createRenderedBlock(this.workspace,'row_block');
 
         blockB.getInput('INPUT').connection.connect(blockC.outputConnection);
         blockA.setCollapsed(true);
@@ -1398,9 +1364,9 @@ suite('Blocks', function() {
         chai.assert.isFalse(isBlockHidden(blockC));
       });
       test('Connect Block with Child - Statement', function() {
-        var blockA = this.createBlock('statement_block');
-        var blockB = this.createBlock('stack_block');
-        var blockC = this.createBlock('stack_block');
+        var blockA = createRenderedBlock(this.workspace,'statement_block');
+        var blockB = createRenderedBlock(this.workspace,'stack_block');
+        var blockC = createRenderedBlock(this.workspace,'stack_block');
 
         blockB.nextConnection.connect(blockC.previousConnection);
         blockA.setCollapsed(true);
@@ -1416,8 +1382,8 @@ suite('Blocks', function() {
         chai.assert.isFalse(isBlockHidden(blockC));
       });
       test('Disconnect Block from Value Input', function() {
-        var blockA = this.createBlock('row_block');
-        var blockB = this.createBlock('row_block');
+        var blockA = createRenderedBlock(this.workspace,'row_block');
+        var blockB = createRenderedBlock(this.workspace,'row_block');
 
         blockA.getInput('INPUT').connection.connect(blockB.outputConnection);
         blockA.setCollapsed(true);
@@ -1427,8 +1393,8 @@ suite('Blocks', function() {
         chai.assert.isFalse(isBlockHidden(blockB));
       });
       test('Disconnect Block from Statement Input', function() {
-        var blockA = this.createBlock('statement_block');
-        var blockB = this.createBlock('stack_block');
+        var blockA = createRenderedBlock(this.workspace,'statement_block');
+        var blockB = createRenderedBlock(this.workspace,'stack_block');
 
         blockA.getInput('STATEMENT').connection
             .connect(blockB.previousConnection);
@@ -1439,9 +1405,9 @@ suite('Blocks', function() {
         chai.assert.isFalse(isBlockHidden(blockB));
       });
       test('Disconnect Block from Child of Collapsed - Input', function() {
-        var blockA = this.createBlock('row_block');
-        var blockB = this.createBlock('row_block');
-        var blockC = this.createBlock('row_block');
+        var blockA = createRenderedBlock(this.workspace,'row_block');
+        var blockB = createRenderedBlock(this.workspace,'row_block');
+        var blockC = createRenderedBlock(this.workspace,'row_block');
 
         blockA.getInput('INPUT').connection.connect(blockB.outputConnection);
         blockB.getInput('INPUT').connection.connect(blockC.outputConnection);
@@ -1454,9 +1420,9 @@ suite('Blocks', function() {
         chai.assert.isFalse(isBlockHidden(blockC));
       });
       test('Disconnect Block from Child of Collapsed - Next', function() {
-        var blockA = this.createBlock('statement_block');
-        var blockB = this.createBlock('stack_block');
-        var blockC = this.createBlock('stack_block');
+        var blockA = createRenderedBlock(this.workspace,'statement_block');
+        var blockB = createRenderedBlock(this.workspace,'stack_block');
+        var blockC = createRenderedBlock(this.workspace,'stack_block');
 
         blockA.getInput('STATEMENT').connection
             .connect(blockB.previousConnection);
@@ -1470,9 +1436,9 @@ suite('Blocks', function() {
         chai.assert.isFalse(isBlockHidden(blockC));
       });
       test('Disconnect Block with Child - Input', function() {
-        var blockA = this.createBlock('row_block');
-        var blockB = this.createBlock('row_block');
-        var blockC = this.createBlock('row_block');
+        var blockA = createRenderedBlock(this.workspace,'row_block');
+        var blockB = createRenderedBlock(this.workspace,'row_block');
+        var blockC = createRenderedBlock(this.workspace,'row_block');
 
         blockB.getInput('INPUT').connection.connect(blockC.outputConnection);
         blockA.getInput('INPUT').connection.connect(blockB.outputConnection);
@@ -1486,9 +1452,9 @@ suite('Blocks', function() {
         chai.assert.isFalse(isBlockHidden(blockC));
       });
       test('Disconnect Block with Child - Statement', function() {
-        var blockA = this.createBlock('statement_block');
-        var blockB = this.createBlock('stack_block');
-        var blockC = this.createBlock('stack_block');
+        var blockA = createRenderedBlock(this.workspace,'statement_block');
+        var blockB = createRenderedBlock(this.workspace,'stack_block');
+        var blockC = createRenderedBlock(this.workspace,'stack_block');
 
         blockB.nextConnection.connect(blockC.previousConnection);
         blockA.getInput('STATEMENT').connection
@@ -1505,7 +1471,7 @@ suite('Blocks', function() {
     });
     suite('Adding and Removing Block Parts', function() {
       test('Add Previous Connection', function() {
-        var blockA = this.createBlock('empty_block');
+        var blockA = createRenderedBlock(this.workspace,'empty_block');
         blockA.setCollapsed(true);
         assertCollapsed(blockA);
         blockA.setPreviousStatement(true);
@@ -1513,7 +1479,7 @@ suite('Blocks', function() {
         chai.assert.isNotNull(blockA.previousConnection);
       });
       test('Add Next Connection', function() {
-        var blockA = this.createBlock('empty_block');
+        var blockA = createRenderedBlock(this.workspace,'empty_block');
         blockA.setCollapsed(true);
         assertCollapsed(blockA);
         blockA.setNextStatement(true);
@@ -1521,7 +1487,7 @@ suite('Blocks', function() {
         chai.assert.isNotNull(blockA.nextConnection);
       });
       test('Add Input', function() {
-        var blockA = this.createBlock('empty_block');
+        var blockA = createRenderedBlock(this.workspace,'empty_block');
         blockA.setCollapsed(true);
         assertCollapsed(blockA);
         blockA.appendDummyInput('NAME');
@@ -1529,7 +1495,7 @@ suite('Blocks', function() {
         chai.assert.isNotNull(blockA.getInput('NAME'));
       });
       test('Add Field', function() {
-        var blockA = this.createBlock('empty_block');
+        var blockA = createRenderedBlock(this.workspace,'empty_block');
         var input = blockA.appendDummyInput('NAME');
         blockA.setCollapsed(true);
         assertCollapsed(blockA);
@@ -1540,14 +1506,14 @@ suite('Blocks', function() {
         chai.assert.equal(field.getText(), 'test');
       });
       test('Add Icon', function() {
-        var blockA = this.createBlock('empty_block');
+        var blockA = createRenderedBlock(this.workspace,'empty_block');
         blockA.setCollapsed(true);
         assertCollapsed(blockA);
         blockA.setCommentText('test');
         assertCollapsed(blockA);
       });
       test('Remove Previous Connection', function() {
-        var blockA = this.createBlock('empty_block');
+        var blockA = createRenderedBlock(this.workspace,'empty_block');
         blockA.setPreviousStatement(true);
         blockA.setCollapsed(true);
         assertCollapsed(blockA);
@@ -1556,7 +1522,7 @@ suite('Blocks', function() {
         chai.assert.isNull(blockA.previousConnection);
       });
       test('Remove Next Connection', function() {
-        var blockA = this.createBlock('empty_block');
+        var blockA = createRenderedBlock(this.workspace,'empty_block');
         blockA.setNextStatement(true);
         blockA.setCollapsed(true);
         assertCollapsed(blockA);
@@ -1565,7 +1531,7 @@ suite('Blocks', function() {
         chai.assert.isNull(blockA.nextConnection);
       });
       test('Remove Input', function() {
-        var blockA = this.createBlock('empty_block');
+        var blockA = createRenderedBlock(this.workspace,'empty_block');
         blockA.appendDummyInput('NAME');
         blockA.setCollapsed(true);
         assertCollapsed(blockA);
@@ -1574,7 +1540,7 @@ suite('Blocks', function() {
         chai.assert.isNull(blockA.getInput('NAME'));
       });
       test('Remove Field', function() {
-        var blockA = this.createBlock('empty_block');
+        var blockA = createRenderedBlock(this.workspace,'empty_block');
         var input = blockA.appendDummyInput('NAME');
         input.appendField(new Blockly.FieldLabel('test'), 'FIELD');
         blockA.setCollapsed(true);
@@ -1585,7 +1551,7 @@ suite('Blocks', function() {
         chai.assert.isNull(field);
       });
       test('Remove Icon', function() {
-        var blockA = this.createBlock('empty_block');
+        var blockA = createRenderedBlock(this.workspace,'empty_block');
         blockA.setCommentText('test');
         blockA.setCollapsed(true);
         assertCollapsed(blockA);
@@ -1595,7 +1561,7 @@ suite('Blocks', function() {
     });
     suite('Renaming Vars', function() {
       test('Simple Rename', function() {
-        var blockA = this.createBlock('variable_block');
+        var blockA = createRenderedBlock(this.workspace,'variable_block');
 
         blockA.setCollapsed(true);
         assertCollapsed(blockA, 'x');
@@ -1605,7 +1571,7 @@ suite('Blocks', function() {
         assertCollapsed(blockA, 'y');
       });
       test('Coalesce, Different Case', function() {
-        var blockA = this.createBlock('variable_block');
+        var blockA = createRenderedBlock(this.workspace,'variable_block');
 
         blockA.setCollapsed(true);
         assertCollapsed(blockA, 'x');

@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-suite('Context Menu Items', function() {
+suite.only('Context Menu Items', function() {
   setup(function() {
     sharedTestSetup.call(this);
 
@@ -15,8 +15,6 @@ suite('Context Menu Items', function() {
     // Declare a new registry to ensure default options are called.
     new Blockly.ContextMenuRegistry();
     this.registry = Blockly.ContextMenuRegistry.registry;
-
-    sinon.stub(Blockly.Events, "setGroup").returns(null);
   });
   
   teardown(function() {
@@ -58,7 +56,6 @@ suite('Context Menu Items', function() {
       test('Has correct label', function() {
         chai.assert.equal(this.undoOption.displayText(), 'Undo');
       });
-
     });
 
     suite('Redo', function() {
@@ -155,10 +152,12 @@ suite('Context Menu Items', function() {
         var workspaceWithOptions = new Blockly.Workspace(new Blockly.Options({collapse: false}));
         this.scope.workspace = workspaceWithOptions;
 
-        chai.assert.equal(this.collapseOption.preconditionFn(this.scope), 'hidden',
-            'Should be hidden if collapse is disabled in options');
-
-        workspaceWithOptions.dispose();
+        try {
+          chai.assert.equal(this.collapseOption.preconditionFn(this.scope), 'hidden',
+              'Should be hidden if collapse is disabled in options');
+        } finally {
+          workspaceTeardown.call(this, workspaceWithOptions);
+        }
       });
 
       test('Collapses all blocks', function() {
@@ -208,10 +207,12 @@ suite('Context Menu Items', function() {
         var workspaceWithOptions = new Blockly.Workspace(new Blockly.Options({collapse: false}));
         this.scope.workspace = workspaceWithOptions;
 
-        chai.assert.equal(this.expandOption.preconditionFn(this.scope), 'hidden',
-            'Should be hidden if collapse is disabled in options');
-
-        workspaceWithOptions.dispose();
+        try {
+          chai.assert.equal(this.expandOption.preconditionFn(this.scope), 'hidden',
+              'Should be hidden if collapse is disabled in options');
+        } finally {
+          workspaceTeardown.call(this, workspaceWithOptions);
+        }
       });
 
       test('Expands all blocks', function() {
@@ -253,23 +254,25 @@ suite('Context Menu Items', function() {
 
       test('Deletes all blocks after confirming', function() {
         // Mocks the confirmation dialog and calls the callback with 'true' simulating ok.
-        sinon.stub(Blockly, 'confirm').callsArgWith(1, true);
+        var confirmStub = sinon.stub(Blockly, 'confirm').callsArgWith(1, true);
 
         this.workspace.newBlock('text');
         this.workspace.newBlock('text');
         this.deleteOption.callback(this.scope);
         this.clock.runAll();
+        sinon.assert.calledOnce(confirmStub);
         chai.assert.equal(this.workspace.getTopBlocks(false).length, 0);
       });
 
       test('Does not delete blocks if not confirmed', function() {
-        // Mocks the confirmation dialog and calls the callback with 'true' simulating ok.
-        sinon.stub(Blockly, 'confirm').callsArgWith(1, false);
+        // Mocks the confirmation dialog and calls the callback with 'false' simulating cancel.
+        var confirmStub = sinon.stub(Blockly, 'confirm').callsArgWith(1, false);
 
         this.workspace.newBlock('text');
         this.workspace.newBlock('text');
         this.deleteOption.callback(this.scope);
         this.clock.runAll();
+        sinon.assert.calledOnce(confirmStub);
         chai.assert.equal(this.workspace.getTopBlocks(false).length, 2);
       });
 
@@ -347,8 +350,13 @@ suite('Context Menu Items', function() {
       });
 
       test('Hidden for IE', function() {
-        Blockly.utils.userAgent.IE = true;
-        chai.assert.equal(this.commentOption.preconditionFn(this.scope), 'hidden');
+        var oldState = Blockly.utils.userAgent.IE;
+        try {
+          Blockly.utils.userAgent.IE = true;
+          chai.assert.equal(this.commentOption.preconditionFn(this.scope), 'hidden');
+        } finally {
+          Blockly.utils.userAgent.IE = oldState;
+        }
       });
 
       test('Hidden for collapsed block', function() {
@@ -363,6 +371,7 @@ suite('Context Menu Items', function() {
       test('Creates comment if one did not exist', function() {
         chai.assert.isNull(this.block.getCommentIcon(), 'New block should not have a comment');
         this.commentOption.callback(this.scope);
+        chai.assert.exists(this.block.getCommentIcon());
         chai.assert.isEmpty(this.block.getCommentText(), 'Block should have empty comment text');
       });
 

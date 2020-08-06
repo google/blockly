@@ -623,9 +623,6 @@ suite('XML', function() {
               {width: 100, height: 200});
         });
         suite('Pinned', function() {
-          setup(function() {
-            this.clock = sinon.useFakeTimers();
-          });
           test('Pinned True', function() {
             var block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
                 '<block type="empty_block">' +
@@ -816,20 +813,17 @@ suite('XML', function() {
       });
     });
     suite('Headless -> XML -> Rendered -> XML', function() {
-      test('Comment', function(done) {
+      test('Comment', function() {
         var block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
             '<block type="empty_block"/>'
         ), this.headlessWorkspace);
         block.setCommentText('test text');
         block.commentModel.size = new Blockly.utils.Size(100, 100);
         block.commentModel.pinned = true;
+
+        this.clock.runAll();
         
         assertRoundTrip(this.headlessWorkspace, this.renderedWorkspace);
-
-        // domToBlockHeadless_ triggers setTimeout call we need to wait for.
-        setTimeout(function() {
-          done();
-        }, 10);
       });
     });
   });

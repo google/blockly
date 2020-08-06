@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-suite.only('Context Menu Items', function() {
+suite('Context Menu Items', function() {
   setup(function() {
     sharedTestSetup.call(this);
 

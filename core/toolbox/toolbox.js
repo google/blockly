@@ -721,7 +721,7 @@ Blockly.Toolbox.prototype.onBlocklyAction = function(action) {
 };
 
 /**
- * Selects the parent if it exists, or closes the current item.
+ * Closes the current item if it is expanded, or selects the parent.
  * @return {boolean} True if a parent category was selected, false otherwise.
  * @private
  */

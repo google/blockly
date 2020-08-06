@@ -5,191 +5,172 @@
  */
 
 suite('Context Menu Items', function() {
-  var workspace;
-  var registry;
-
   setup(function() {
+    sharedTestSetup.call(this);
+
     // Creates a WorkspaceSVG
     var toolbox = document.getElementById('toolbox-categories');
-    workspace = Blockly.inject('blocklyDiv', {toolbox: toolbox});
+    this.workspace = Blockly.inject('blocklyDiv', {toolbox: toolbox});
 
     // Declare a new registry to ensure default options are called.
     new Blockly.ContextMenuRegistry();
-    registry = Blockly.ContextMenuRegistry.registry;
+    this.registry = Blockly.ContextMenuRegistry.registry;
 
     sinon.stub(Blockly.Events, "setGroup").returns(null);
-    sharedTestSetup.call(this);
   });
   
   teardown(function() {
-    workspace.dispose();
-    sinon.restore();
     sharedTestTeardown.call(this);
   });
   
   suite('Workspace Items', function() {
-    var scope;
     setup(function() {
-      scope = {workspace: workspace};
+      this.scope = {workspace: this.workspace};
     });
 
     suite('undo', function() {
-      var undoOption;
-
       setup(function() {
-        undoOption = registry.getItem('undoWorkspace');
+        this.undoOption = this.registry.getItem('undoWorkspace');
       });
 
       test('Disabled when nothing to undo', function() {
-        var precondition = undoOption.preconditionFn(scope);
+        var precondition = this.undoOption.preconditionFn(this.scope);
         chai.assert.equal(precondition, 'disabled',
             'Should be disabled when there is nothing to undo');
       });
 
       test('Enabled when something to undo', function() {
         // Create a new block, which should be undoable.
-        workspace.newBlock('text');
-        var precondition = undoOption.preconditionFn(scope);
+        this.workspace.newBlock('text');
+        var precondition = this.undoOption.preconditionFn(this.scope);
         chai.assert.equal(precondition, 'enabled',
             'Should be enabled when there are actions to undo');
       });
 
       test('Undoes adding a new block', function() {
-        workspace.newBlock('text');
-        chai.assert.equal(workspace.getTopBlocks(false).length, 1);
-        undoOption.callback(scope);
-        chai.assert.equal(workspace.getTopBlocks(false).length, 0,
+        this.workspace.newBlock('text');
+        chai.assert.equal(this.workspace.getTopBlocks(false).length, 1);
+        this.undoOption.callback(this.scope);
+        chai.assert.equal(this.workspace.getTopBlocks(false).length, 0,
             'Should be no blocks after undo');
       });
 
       test('Has correct label', function() {
-        chai.assert.equal(undoOption.displayText(), 'Undo');
+        chai.assert.equal(this.undoOption.displayText(), 'Undo');
       });
 
     });
 
     suite('Redo', function() {
-      var redoOption;
-        
       setup(function() {
-        redoOption = registry.getItem('redoWorkspace');
+        this.redoOption = this.registry.getItem('redoWorkspace');
       });
 
       test('Disabled when nothing to redo', function() {
         // Create a new block. There should be something to undo, but not redo.
-        workspace.newBlock('text');
-        var precondition = redoOption.preconditionFn(scope);
+        this.workspace.newBlock('text');
+        var precondition = this.redoOption.preconditionFn(this.scope);
         chai.assert.equal(precondition, 'disabled',
             'Should be disabled when there is nothing to redo');
       });
 
       test('Enabled when something to redo', function() {
         // Create a new block, then undo it, which means there is something to redo.
-        workspace.newBlock('text');
-        workspace.undo(false);
-        var precondition = redoOption.preconditionFn(scope);
+        this.workspace.newBlock('text');
+        this.workspace.undo(false);
+        var precondition = this.redoOption.preconditionFn(this.scope);
         chai.assert.equal(precondition, 'enabled',
             'Should be enabled when there are actions to redo');
       });
 
       test('Redoes adding new block', function() {
         // Add a new block, then undo it, then redo it.
-        workspace.newBlock('text');
-        workspace.undo(false);
-        chai.assert.equal(workspace.getTopBlocks(false).length, 0);
-        redoOption.callback(scope);
-        chai.assert.equal(workspace.getTopBlocks(false).length, 1,
+        this.workspace.newBlock('text');
+        this.workspace.undo(false);
+        chai.assert.equal(this.workspace.getTopBlocks(false).length, 0);
+        this.redoOption.callback(this.scope);
+        chai.assert.equal(this.workspace.getTopBlocks(false).length, 1,
             'Should be 1 block after redo');
       });
 
       test('Has correct label', function() {
-        chai.assert.equal(redoOption.displayText(), 'Redo');
+        chai.assert.equal(this.redoOption.displayText(), 'Redo');
       });
     });
 
     suite('Cleanup', function() {
-      var cleanupOption;
-      var cleanupStub;
-
       setup(function() {
-        cleanupOption = registry.getItem('cleanWorkspace');
-        cleanupStub = sinon.stub(workspace, 'cleanUp');
-      });
-
-      teardown(function() {
-        cleanupStub.restore();
+        this.cleanupOption = this.registry.getItem('cleanWorkspace');
+        this.cleanupStub = sinon.stub(this.workspace, 'cleanUp');
       });
 
       test('Enabled when multiple blocks', function() {
-        workspace.newBlock('text');
-        workspace.newBlock('text');
-        chai.assert.equal(cleanupOption.preconditionFn(scope), 'enabled',
+        this.workspace.newBlock('text');
+        this.workspace.newBlock('text');
+        chai.assert.equal(this.cleanupOption.preconditionFn(this.scope), 'enabled',
             'Should be enabled if there are multiple blocks');
       });
 
       test('Disabled when no blocks', function() {
-        chai.assert.equal(cleanupOption.preconditionFn(scope), 'disabled',
+        chai.assert.equal(this.cleanupOption.preconditionFn(this.scope), 'disabled',
             'Should be disabled if there are no blocks');
       });
 
       test('Hidden when not movable', function() {
-        sinon.stub(workspace, 'isMovable').returns(false);
-        chai.assert.equal(cleanupOption.preconditionFn(scope), 'hidden',
+        sinon.stub(this.workspace, 'isMovable').returns(false);
+        chai.assert.equal(this.cleanupOption.preconditionFn(this.scope), 'hidden',
             'Should be hidden if the workspace is not movable');
       });
 
       test('Calls workspace cleanup', function() {
-        cleanupOption.callback(scope);
-        sinon.assert.calledOnce(cleanupStub);
+        this.cleanupOption.callback(this.scope);
+        sinon.assert.calledOnce(this.cleanupStub);
       });
 
       test('Has correct label', function() {
-        chai.assert.equal(cleanupOption.displayText(), 'Clean up Blocks');
+        chai.assert.equal(this.cleanupOption.displayText(), 'Clean up Blocks');
       });
     });
 
     suite('Collapse', function() {
-      var collapseOption;
-
       setup(function() {
-        collapseOption = registry.getItem('collapseWorkspace');
+        this.collapseOption = this.registry.getItem('collapseWorkspace');
       });
 
       test('Enabled when uncollapsed blocks', function() {
-        workspace.newBlock('text');
-        var block2 = workspace.newBlock('text');
+        this.workspace.newBlock('text');
+        var block2 = this.workspace.newBlock('text');
         block2.setCollapsed(true);
-        chai.assert.equal(collapseOption.preconditionFn(scope), 'enabled',
+        chai.assert.equal(this.collapseOption.preconditionFn(this.scope), 'enabled',
             'Should be enabled when any blocks are expanded');
       });
 
       test('Disabled when all blocks collapsed', function() {
-        workspace.newBlock('text').setCollapsed(true);
-        chai.assert.equal(collapseOption.preconditionFn(scope), 'disabled',
+        this.workspace.newBlock('text').setCollapsed(true);
+        chai.assert.equal(this.collapseOption.preconditionFn(this.scope), 'disabled',
             'Should be disabled when no blocks are expanded');
       });
 
       test('Hidden when no collapse option', function() {
         var workspaceWithOptions = new Blockly.Workspace(new Blockly.Options({collapse: false}));
-        scope.workspace = workspaceWithOptions;
+        this.scope.workspace = workspaceWithOptions;
 
-        chai.assert.equal(collapseOption.preconditionFn(scope), 'hidden',
+        chai.assert.equal(this.collapseOption.preconditionFn(this.scope), 'hidden',
             'Should be hidden if collapse is disabled in options');
 
         workspaceWithOptions.dispose();
-
       });
 
       test('Collapses all blocks', function() {
         // All blocks should be collapsed, even if some already were.
-        var block1 = workspace.newBlock('text');
-        var block2 = workspace.newBlock('text');
+        var block1 = this.workspace.newBlock('text');
+        var block2 = this.workspace.newBlock('text');
         // Need to render block to properly collapse it.
         block1.initSvg();
         block1.render();
         block1.setCollapsed(true);
 
-        collapseOption.callback(scope);
+        this.collapseOption.callback(this.scope);
         this.clock.runAll();
 
         chai.assert.isTrue(block1.isCollapsed(),
@@ -199,36 +180,35 @@ suite('Context Menu Items', function() {
       });
 
       test('Has correct label', function() {
-        chai.assert.equal(collapseOption.displayText(), 'Collapse Blocks');
+        chai.assert.equal(this.collapseOption.displayText(), 'Collapse Blocks');
       });
     });
 
     suite('Expand', function() {
-      var expandOption;
       setup(function() {
-        expandOption = registry.getItem('expandWorkspace');
+        this.expandOption = this.registry.getItem('expandWorkspace');
       });
 
       test('Enabled when collapsed blocks', function() {
-        workspace.newBlock('text');
-        var block2 = workspace.newBlock('text');
+        this.workspace.newBlock('text');
+        var block2 = this.workspace.newBlock('text');
         block2.setCollapsed(true);
 
-        chai.assert.equal(expandOption.preconditionFn(scope), 'enabled',
+        chai.assert.equal(this.expandOption.preconditionFn(this.scope), 'enabled',
             'Should be enabled when any blocks are collapsed');
       });
 
       test('Disabled when no collapsed blocks', function() {
-        workspace.newBlock('text');
-        chai.assert.equal(expandOption.preconditionFn(scope), 'disabled',
+        this.workspace.newBlock('text');
+        chai.assert.equal(this.expandOption.preconditionFn(this.scope), 'disabled',
             'Should be disabled when no blocks are collapsed');
       });
 
       test('Hidden when no collapse option', function() {
         var workspaceWithOptions = new Blockly.Workspace(new Blockly.Options({collapse: false}));
-        scope.workspace = workspaceWithOptions;
+        this.scope.workspace = workspaceWithOptions;
 
-        chai.assert.equal(expandOption.preconditionFn(scope), 'hidden',
+        chai.assert.equal(this.expandOption.preconditionFn(this.scope), 'hidden',
             'Should be hidden if collapse is disabled in options');
 
         workspaceWithOptions.dispose();
@@ -236,14 +216,14 @@ suite('Context Menu Items', function() {
 
       test('Expands all blocks', function() {
         // All blocks should be expanded, even if some already were.
-        var block1 = workspace.newBlock('text');
-        var block2 = workspace.newBlock('text');
+        var block1 = this.workspace.newBlock('text');
+        var block2 = this.workspace.newBlock('text');
         // Need to render block to properly collapse it.
         block2.initSvg();
         block2.render();
         block2.setCollapsed(true);
 
-        expandOption.callback(scope);
+        this.expandOption.callback(this.scope);
         this.clock.runAll();
 
         chai.assert.isFalse(block1.isCollapsed(),
@@ -253,177 +233,165 @@ suite('Context Menu Items', function() {
       });
 
       test('Has correct label', function() {
-        chai.assert.equal(expandOption.displayText(), 'Expand Blocks');
+        chai.assert.equal(this.expandOption.displayText(), 'Expand Blocks');
       });
     });
 
     suite('Delete', function() {
-      var deleteOption;
       setup(function() {
-        deleteOption = registry.getItem('workspaceDelete');
+        this.deleteOption = this.registry.getItem('workspaceDelete');
       });
 
       test('Enabled when blocks to delete', function() {
-        workspace.newBlock('text');
-        chai.assert.equal(deleteOption.preconditionFn(scope), 'enabled');
+        this.workspace.newBlock('text');
+        chai.assert.equal(this.deleteOption.preconditionFn(this.scope), 'enabled');
       });
 
       test('Disabled when no blocks to delete', function() {
-        chai.assert.equal(deleteOption.preconditionFn(scope), 'disabled');
+        chai.assert.equal(this.deleteOption.preconditionFn(this.scope), 'disabled');
       });
 
       test('Deletes all blocks after confirming', function() {
         // Mocks the confirmation dialog and calls the callback with 'true' simulating ok.
         sinon.stub(Blockly, 'confirm').callsArgWith(1, true);
 
-        workspace.newBlock('text');
-        workspace.newBlock('text');
-        deleteOption.callback(scope);
+        this.workspace.newBlock('text');
+        this.workspace.newBlock('text');
+        this.deleteOption.callback(this.scope);
         this.clock.runAll();
-        chai.assert.equal(workspace.getTopBlocks(false).length, 0);
+        chai.assert.equal(this.workspace.getTopBlocks(false).length, 0);
       });
 
       test('Does not delete blocks if not confirmed', function() {
         // Mocks the confirmation dialog and calls the callback with 'true' simulating ok.
         sinon.stub(Blockly, 'confirm').callsArgWith(1, false);
 
-        workspace.newBlock('text');
-        workspace.newBlock('text');
-        deleteOption.callback(scope);
+        this.workspace.newBlock('text');
+        this.workspace.newBlock('text');
+        this.deleteOption.callback(this.scope);
         this.clock.runAll();
-        chai.assert.equal(workspace.getTopBlocks(false).length, 2);
+        chai.assert.equal(this.workspace.getTopBlocks(false).length, 2);
       });
 
       test('No dialog for single block', function() {
         var confirmStub = sinon.stub(Blockly, 'confirm');
-        workspace.newBlock('text');
-        deleteOption.callback(scope);
+        this.workspace.newBlock('text');
+        this.deleteOption.callback(this.scope);
         this.clock.runAll();
 
         sinon.assert.notCalled(confirmStub);
-        chai.assert.equal(workspace.getTopBlocks(false).length, 0);
+        chai.assert.equal(this.workspace.getTopBlocks(false).length, 0);
       });
 
       test('Has correct label for multiple blocks', function() {
-        workspace.newBlock('text');
-        workspace.newBlock('text');
+        this.workspace.newBlock('text');
+        this.workspace.newBlock('text');
 
-        chai.assert.equal(deleteOption.displayText(scope), 'Delete 2 Blocks');
+        chai.assert.equal(this.deleteOption.displayText(this.scope), 'Delete 2 Blocks');
       });
 
       test('Has correct label for single block', function() {
-        workspace.newBlock('text');
-        chai.assert.equal(deleteOption.displayText(scope), 'Delete Block');
+        this.workspace.newBlock('text');
+        chai.assert.equal(this.deleteOption.displayText(this.scope), 'Delete Block');
       });
     });
   });
 
   suite('Block Items', function() {
-    var scope;
-    var block;
-
     setup(function() {
-      block = workspace.newBlock('text');
-      scope = {block: block};
-    });
-
-    teardown(function() {
-      block.dispose();
+      this.block = this.workspace.newBlock('text');
+      this.scope = {block: this.block};
     });
 
     suite('Duplicate', function() {
-      var duplicateOption;
-      
       setup(function() {
-        duplicateOption = registry.getItem('blockDuplicate');
+        this.duplicateOption = this.registry.getItem('blockDuplicate');
       });
 
       test('Enabled when block is duplicatable', function() {
         // Block is duplicatable by default
-        chai.assert.equal(duplicateOption.preconditionFn(scope), 'enabled');
+        chai.assert.equal(this.duplicateOption.preconditionFn(this.scope), 'enabled');
       });
 
       test('Disabled when block is not dupicatable', function() {
-        sinon.stub(block, 'isDuplicatable').returns(false);
-        chai.assert.equal(duplicateOption.preconditionFn(scope), 'disabled');
+        sinon.stub(this.block, 'isDuplicatable').returns(false);
+        chai.assert.equal(this.duplicateOption.preconditionFn(this.scope), 'disabled');
       });
 
       test('Hidden when in flyout', function() {
-        block.isInFlyout = true;
-        chai.assert.equal(duplicateOption.preconditionFn(scope), 'hidden');
+        this.block.isInFlyout = true;
+        chai.assert.equal(this.duplicateOption.preconditionFn(this.scope), 'hidden');
       });
 
       test('Calls duplicate', function() {
         var stub = sinon.stub(Blockly, 'duplicate');
 
-        duplicateOption.callback(scope);
+        this.duplicateOption.callback(this.scope);
 
         sinon.assert.calledOnce(stub);
-        sinon.assert.calledWith(stub, block);
+        sinon.assert.calledWith(stub, this.block);
       });
 
       test('Has correct label', function() {
-        chai.assert.equal(duplicateOption.displayText(), 'Duplicate');
+        chai.assert.equal(this.duplicateOption.displayText(), 'Duplicate');
       });
     });
 
     suite('Comment', function() {
-      var commentOption;
-
       setup(function() {
-        commentOption = registry.getItem('blockComment');
+        this.commentOption = this.registry.getItem('blockComment');
       });
 
       test('Enabled for normal block', function() {
-        chai.assert.equal(commentOption.preconditionFn(scope), 'enabled');
+        chai.assert.equal(this.commentOption.preconditionFn(this.scope), 'enabled');
       });
 
       test('Hidden for IE', function() {
         Blockly.utils.userAgent.IE = true;
-        chai.assert.equal(commentOption.preconditionFn(scope), 'hidden');
+        chai.assert.equal(this.commentOption.preconditionFn(this.scope), 'hidden');
       });
 
       test('Hidden for collapsed block', function() {
         // Must render block to collapse it properly.
-        block.initSvg();
-        block.render();
-        block.setCollapsed(true);
+        this.block.initSvg();
+        this.block.render();
+        this.block.setCollapsed(true);
 
-        chai.assert.equal(commentOption.preconditionFn(scope), 'hidden');
+        chai.assert.equal(this.commentOption.preconditionFn(this.scope), 'hidden');
       });
 
       test('Creates comment if one did not exist', function() {
-        chai.assert.isNull(block.getCommentIcon(), 'New block should not have a comment');
-        commentOption.callback(scope);
-        chai.assert.isEmpty(block.getCommentText(), 'Block should have empty comment text');
+        chai.assert.isNull(this.block.getCommentIcon(), 'New block should not have a comment');
+        this.commentOption.callback(this.scope);
+        chai.assert.isEmpty(this.block.getCommentText(), 'Block should have empty comment text');
       });
 
       test('Removes comment if block had one', function() {
-        block.setCommentText('Test comment');
-        commentOption.callback(scope);
-        chai.assert.isNull(block.getCommentText(), 'Block should not have comment after removal');
+        this.block.setCommentText('Test comment');
+        this.commentOption.callback(this.scope);
+        chai.assert.isNull(this.block.getCommentText(),
+            'Block should not have comment after removal');
       });
 
       test('Has correct label for add comment', function() {
-        chai.assert.equal(commentOption.displayText(scope), 'Add Comment');
+        chai.assert.equal(this.commentOption.displayText(this.scope), 'Add Comment');
       });
 
       test('Has correct label for remove comment', function() {
-        block.setCommentText('Test comment');
-        chai.assert.equal(commentOption.displayText(scope), 'Remove Comment');
+        this.block.setCommentText('Test comment');
+        chai.assert.equal(this.commentOption.displayText(this.scope), 'Remove Comment');
       });
     });
 
     suite('Inline Variables', function() {
-      var inlineOption;
       setup(function() {
-        inlineOption = registry.getItem('blockInline');
+        this.inlineOption = this.registry.getItem('blockInline');
       });
 
       test('Enabled when inputs to inline', function() {
-        block.appendValueInput('test1');
-        block.appendValueInput('test2');
-        chai.assert.equal(inlineOption.preconditionFn(scope), 'enabled');
+        this.block.appendValueInput('test1');
+        this.block.appendValueInput('test2');
+        chai.assert.equal(this.inlineOption.preconditionFn(this.scope), 'enabled');
       });
     });
   });

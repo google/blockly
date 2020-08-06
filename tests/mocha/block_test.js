@@ -564,7 +564,7 @@ suite('Blocks', function() {
         chai.assert.equal(this.getNext().length, 2);
       });
       test('Multi-Statement', function() {
-       this.deserializationHelper(
+        this.deserializationHelper(
             '<xml>' +
             '  <block type="statement_block">' +
             '    <statement name="STATEMENT">' +

@@ -174,3 +174,10 @@ button {
     display: table-cell;
   }
 }
+
+/* Privacy link */
+.privacyLink {
+  font-family: Roboto, Arial, Helvetica, sans-serif;
+  font-size: small;
+  text-decoration: none;
+}

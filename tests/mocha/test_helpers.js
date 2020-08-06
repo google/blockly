@@ -300,3 +300,29 @@ function createRenderedBlock(workspaceSvg, type) {
   block.render();
   return block;
 }
+
+/**
+ * Triggers mouse event on document.
+ * @param {EventTarget} target The object receiving the event
+ * @param {string} type The type of mouse event (eg: mousedown, mouseup,
+ *    click).
+ */
+function triggerMouseEvent(target, type) {
+  var event = document.createEvent('MouseEvents');
+  event.initEvent(type, true, true);
+  target.dispatchEvent(event);
+}
+
+/**
+ * Simulates mouse click by triggering relevant mouse events.
+ * @param {EventTarget} target The object receiving the event
+ * @param {boolean=} triggerMouseEnter Whether to also trigger mouseenter.
+ */
+function simulateMouseClick(target, triggerMouseEnter = false) {
+  if (triggerMouseEnter) {
+    triggerMouseEvent(target, 'mouseenter');
+  }
+  triggerMouseEvent(target, 'mousedown');
+  triggerMouseEvent(target, 'mouseup');
+  triggerMouseEvent(target, 'click');
+}

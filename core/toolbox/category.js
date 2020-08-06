@@ -39,7 +39,7 @@ Blockly.ToolboxCategory = function(categoryDef, toolbox, opt_parent) {
    * @type {string}
    * @protected
    */
-  this.name_ = categoryDef['name'];
+  this.name_ = Blockly.utils.replaceMessageReferences(categoryDef['name']);
 
   var contents = categoryDef['contents'];
 
@@ -466,8 +466,7 @@ Blockly.ToolboxCategory.prototype.openIcon_ = function(iconDiv) {
   if (!iconDiv) {
     return;
   }
-
-  Blockly.utils.dom.removeClass(iconDiv, this.cssConfig_['closedIcon']);
+  Blockly.utils.dom.removeClasses(iconDiv, this.cssConfig_['closedIcon']);
   Blockly.utils.dom.addClass(iconDiv, this.cssConfig_['openIcon']);
 };
 
@@ -480,7 +479,7 @@ Blockly.ToolboxCategory.prototype.closeIcon_ = function(iconDiv) {
   if (!iconDiv) {
     return;
   }
-  Blockly.utils.dom.removeClass(iconDiv, this.cssConfig_['openIcon']);
+  Blockly.utils.dom.removeClasses(iconDiv, this.cssConfig_['openIcon']);
   Blockly.utils.dom.addClass(iconDiv, this.cssConfig_['closedIcon']);
 };
 

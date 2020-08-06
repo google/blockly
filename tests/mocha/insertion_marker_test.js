@@ -202,7 +202,7 @@ suite('InsertionMarkers', function() {
     });
   });
   suite.skip('Serialization', function() {
-    // TODO(4116): Re-enable after addressing bug
+    // TODO(#4116): Re-enable after addressing bug
     setup(function() {
       this.assertXml = function(xml, expectXml) {
         Blockly.Xml.domToWorkspace(xml, this.workspace);

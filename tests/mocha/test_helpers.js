@@ -291,3 +291,10 @@ function createTestBlock() {
     }
   };
 }
+
+function createRenderedBlock(workspaceSvg, type) {
+  var block = workspaceSvg.newBlock(type);
+  block.initSvg();
+  block.render();
+  return block;
+}

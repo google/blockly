@@ -6,7 +6,7 @@
 
 suite('New Toolbox', function() {
 
-  var getInjectedToolbox = function() {
+  function getInjectedToolbox () {
     /**
      * Category: First
      *   sep
@@ -27,7 +27,7 @@ suite('New Toolbox', function() {
     return workspace.getToolbox();
   };
 
-  var getBasicToolbox = function() {
+  function getBasicToolbox() {
     var workspace = new Blockly.WorkspaceSvg(new Blockly.Options({}));
     var toolbox = new Blockly.Toolbox(workspace);
     toolbox.HtmlDiv = document.createElement('div');
@@ -109,7 +109,6 @@ suite('New Toolbox', function() {
       sinon.assert.calledOnce(renderSpy);
     });
     test('Flyout is initialized', function() {
-      // TODO: Can this use the basic toolbox instead of the injected toolbox?
       this.toolbox.init();
       chai.assert.isDefined(this.toolbox.flyout_);
     });
@@ -469,7 +468,6 @@ suite('New Toolbox', function() {
       this.toolbox = getInjectedToolbox();
     });
     teardown(function() {
-      // TODO: Cleanup sinon.
       delete this.toolbox;
     });
 

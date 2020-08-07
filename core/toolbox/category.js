@@ -161,6 +161,12 @@ Blockly.utils.object.inherits(Blockly.ToolboxCategory,
 Blockly.ToolboxCategory.CssConfig;
 
 /**
+ * Name used for registering a toolbox category.
+ * @const {string}
+ */
+Blockly.ToolboxCategory.registrationName = 'category';
+
+/**
  * The number of pixels to move the category over at each nested level.
  * @type {number}
  */
@@ -608,3 +614,6 @@ Blockly.ToolboxCategory.prototype.getContents = function() {
 Blockly.ToolboxCategory.prototype.dispose = function() {
   Blockly.utils.dom.removeNode(this.htmlDiv_);
 };
+
+Blockly.registry.register(Blockly.registry.Type.TOOLBOX_ITEM,
+    Blockly.ToolboxCategory.registrationName, Blockly.ToolboxCategory);

@@ -344,28 +344,14 @@ Blockly.Toolbox.prototype.createFlyout_ = function() {
  */
 Blockly.Toolbox.prototype.renderContents_ = function(toolboxDef) {
   for (var i = 0, childIn; (childIn = toolboxDef[i]); i++) {
-    // TODO: Add classes to registry so we can avoid this switch statement.
-    switch (childIn['kind'].toUpperCase()) {
-      case 'CATEGORY':
-        childIn = /** @type {Blockly.utils.toolbox.Category} */ (childIn);
-        var category = new Blockly.ToolboxCategory(childIn, this);
-        this.addToolboxItem_(category);
-        var categoryDom = category.createDom();
-        if (categoryDom) {
-          this.contentsDiv_.appendChild(categoryDom);
-        }
-        break;
-      case 'SEP':
-        childIn = /** @type {Blockly.utils.toolbox.Separator} */ (childIn);
-        var separator = new Blockly.ToolboxSeparator(childIn, this);
-        this.addToolboxItem_(separator);
-        var separatorDom = separator.createDom();
-        if (separatorDom) {
-          this.contentsDiv_.appendChild(separatorDom);
-        }
-        break;
-      default:
-        // TODO: Handle someone adding a custom component.
+    var ToolboxItemClass = Blockly.registry.getClass(
+        Blockly.registry.Type.TOOLBOX_ITEM, childIn['kind'].toLowerCase());
+    var toolboxItem = new ToolboxItemClass(childIn, this);
+
+    this.addToolboxItem_(toolboxItem);
+    var toolboxItemDom = toolboxItem.createDom();
+    if (toolboxItemDom) {
+      this.contentsDiv_.appendChild(toolboxItemDom);
     }
   }
 };

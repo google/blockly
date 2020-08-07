@@ -6,7 +6,7 @@
 
 suite('New Toolbox', function() {
 
-  var injectedToolbox = function() {
+  var getInjectedToolbox = function() {
     /**
      * Category: First
      *   sep
@@ -27,7 +27,7 @@ suite('New Toolbox', function() {
     return workspace.getToolbox();
   };
 
-  var basicToolbox = function() {
+  var getBasicToolbox = function() {
     var workspace = new Blockly.WorkspaceSvg(new Blockly.Options({}));
     var toolbox = new Blockly.Toolbox(workspace);
     toolbox.HtmlDiv = document.createElement('div');
@@ -79,7 +79,7 @@ suite('New Toolbox', function() {
 
   suite('init', function() {
     setup(function() {
-      this.toolbox = injectedToolbox();
+      this.toolbox = getInjectedToolbox();
     });
     teardown(function() {
       this.toolbox.dispose();
@@ -117,7 +117,7 @@ suite('New Toolbox', function() {
 
   suite('render', function() {
     setup(function() {
-      this.toolbox = injectedToolbox();
+      this.toolbox = getInjectedToolbox();
     });
     teardown(function() {
       this.toolbox.dispose();
@@ -196,7 +196,7 @@ suite('New Toolbox', function() {
 
   suite('onClick_', function() {
     setup(function() {
-      this.toolbox = injectedToolbox();
+      this.toolbox = getInjectedToolbox();
     });
     teardown(function() {
       this.toolbox.dispose();
@@ -225,7 +225,7 @@ suite('New Toolbox', function() {
 
   suite('onKeyDown_', function() {
     setup(function() {
-      this.toolbox = injectedToolbox();
+      this.toolbox = getInjectedToolbox();
     });
     teardown(function() {
       this.toolbox.dispose();
@@ -281,7 +281,7 @@ suite('New Toolbox', function() {
 
   suite('Select Methods', function() {
     setup(function() {
-      this.toolbox = injectedToolbox();
+      this.toolbox = getInjectedToolbox();
     });
     teardown(function() {
       this.toolbox.dispose();
@@ -414,7 +414,7 @@ suite('New Toolbox', function() {
 
   suite('setSelectedItem', function() {
     setup(function() {
-      this.toolbox = injectedToolbox();
+      this.toolbox = getInjectedToolbox();
     });
     teardown(function() {
       delete this.toolbox;
@@ -466,7 +466,7 @@ suite('New Toolbox', function() {
 
   suite('updateFlyout_', function() {
     setup(function() {
-      this.toolbox = injectedToolbox();
+      this.toolbox = getInjectedToolbox();
     });
     teardown(function() {
       // TODO: Cleanup sinon.
@@ -503,8 +503,8 @@ suite('New Toolbox', function() {
 
   suite('position', function() {
     setup(function() {
-      this.basicToolbox = basicToolbox();
-      this.injectedToolbox = injectedToolbox();
+      this.basicToolbox = getBasicToolbox();
+      this.injectedToolbox = getInjectedToolbox();
     });
     teardown(function() {
     });

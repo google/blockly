@@ -52,8 +52,8 @@ suite('Navigation', function() {
         }
       };
 
-      this.firstCategory_ = this.workspace.getToolbox().tree_.getChildAt(0);
-      this.secondCategory_ = this.firstCategory_.getNextShownNode();
+      this.firstCategory_ = this.workspace.getToolbox().contents_[0];
+      this.secondCategory_ = this.firstCategory_.contents_[1];
     });
 
     teardown(function() {
@@ -66,45 +66,45 @@ suite('Navigation', function() {
       chai.assert.isTrue(Blockly.navigation.onKeyPress(this.mockEvent));
       chai.assert.equal(Blockly.navigation.currentState_,
           Blockly.navigation.STATE_TOOLBOX);
-      chai.assert.equal(this.workspace.getToolbox().tree_.getSelectedItem(),
+      chai.assert.equal(this.workspace.getToolbox().getSelectedItem(),
           this.secondCategory_);
     });
 
     // Should be a no-op.
     test('Next at end', function() {
-      this.workspace.getToolbox().tree_.getSelectedItem().selectNext();
+      this.workspace.getToolbox().getSelectedItem().selectNext();
       this.mockEvent.keyCode = Blockly.utils.KeyCodes.S;
       // Go forward one so that we can go back one.
       Blockly.navigation.onKeyPress(this.mockEvent);
-      var startCategory = this.workspace.getToolbox().tree_.getSelectedItem();
+      var startCategory = this.workspace.getToolbox().getSelectedItem();
       chai.assert.isTrue(Blockly.navigation.onKeyPress(this.mockEvent));
       chai.assert.equal(Blockly.navigation.currentState_,
           Blockly.navigation.STATE_TOOLBOX);
-      chai.assert.equal(this.workspace.getToolbox().tree_.getSelectedItem(),
+      chai.assert.equal(this.workspace.getToolbox().getSelectedItem(),
           startCategory);
     });
 
     test('Previous', function() {
       // Go forward one so that we can go back one:
-      this.workspace.getToolbox().tree_.getSelectedItem().selectNext();
+      this.workspace.getToolbox().getSelectedItem().selectNext();
       this.mockEvent.keyCode = Blockly.utils.KeyCodes.W;
-      chai.assert.equal(this.workspace.getToolbox().tree_.getSelectedItem(),
+      chai.assert.equal(this.workspace.getToolbox().getSelectedItem(),
           this.secondCategory_);
       chai.assert.isTrue(Blockly.navigation.onKeyPress(this.mockEvent));
       chai.assert.equal(Blockly.navigation.currentState_,
           Blockly.navigation.STATE_TOOLBOX);
-      chai.assert.equal(this.workspace.getToolbox().tree_.getSelectedItem(),
+      chai.assert.equal(this.workspace.getToolbox().getSelectedItem(),
           this.firstCategory_);
     });
 
     // Should be a no-op.
     test('Previous at start', function() {
-      var startCategory = this.workspace.getToolbox().tree_.getSelectedItem();
+      var startCategory = this.workspace.getToolbox().getSelectedItem();
       this.mockEvent.keyCode = Blockly.utils.KeyCodes.W;
       chai.assert.isTrue(Blockly.navigation.onKeyPress(this.mockEvent));
       chai.assert.equal(Blockly.navigation.currentState_,
           Blockly.navigation.STATE_TOOLBOX);
-      chai.assert.equal(this.workspace.getToolbox().tree_.getSelectedItem(),
+      chai.assert.equal(this.workspace.getToolbox().getSelectedItem(),
           startCategory);
     });
 
@@ -255,7 +255,7 @@ suite('Navigation', function() {
       }]);
       this.workspace = createNavigationWorkspace(true);
       this.basicBlock = this.workspace.newBlock('basic_block');
-      this.firstCategory_ = this.workspace.getToolbox().tree_.getChildAt(0);
+      this.firstCategory_ = this.workspace.getToolbox().contents_[0];
       this.mockEvent = {
         getModifierState: function() {
           return false;
@@ -335,7 +335,7 @@ suite('Navigation', function() {
     test('Toolbox', function() {
       this.mockEvent.keyCode = Blockly.utils.KeyCodes.T;
       chai.assert.isTrue(Blockly.navigation.onKeyPress(this.mockEvent));
-      chai.assert.equal(this.workspace.getToolbox().tree_.getSelectedItem(), this.firstCategory_);
+      chai.assert.equal(this.workspace.getToolbox().getSelectedItem(), this.firstCategory_);
       chai.assert.equal(Blockly.navigation.currentState_,
           Blockly.navigation.STATE_TOOLBOX);
     });

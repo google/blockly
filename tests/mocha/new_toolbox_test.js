@@ -68,10 +68,12 @@ suite('New Toolbox', function() {
 
 
   setup(function() {
+    sharedTestSetup.call(this);
     defineStackBlock();
   });
 
   teardown(function() {
+    sharedTestTeardown.call(this);
     delete Blockly.Blocks['row_block'];
   });
 
@@ -294,7 +296,7 @@ suite('New Toolbox', function() {
         chai.assert.isFalse(handled);
       });
       test('SelectedItemIsNotCollapsible_ShouldDoNothing', function() {
-        this.toolbox.selectedItem_ = getCollapsibleItem(this.toolbox);
+        this.toolbox.selectedItem_ = getNonCollapsibleItem(this.toolbox);
         var handled = this.toolbox.selectChild_();
         chai.assert.isFalse(handled);
       });
@@ -440,13 +442,13 @@ suite('New Toolbox', function() {
     test('SelectCategoryWithNoChildren_ShouldSelectItem', function() {
       var oldItem = getCollapsibleItem(this.toolbox);
       var oldItemStub = sinon.stub(oldItem, 'setSelected');
-      var newItem = getCollapsibleItem(this.toolbox);
+      var newItem = getNonCollapsibleItem(this.toolbox);
       var newItemStub = setupSetSelected(this.toolbox, oldItem, newItem);
       sinon.assert.calledWith(oldItemStub, false);
       sinon.assert.calledWith(newItemStub, true);
     });
     test('SelectSelectedCategoryWithNoChildren_ShouldDeselectItem', function() {
-      var newItem = getCollapsibleItem(this.toolbox);
+      var newItem = getNonCollapsibleItem(this.toolbox);
       var newItemStub = setupSetSelected(this.toolbox, newItem, newItem);
       sinon.assert.calledWith(newItemStub, false);
     });
@@ -473,13 +475,13 @@ suite('New Toolbox', function() {
 
     function testHideFlyout(toolbox, oldItem, newItem) {
       var updateFlyoutStub = sinon.stub(toolbox.flyout_, 'hide');
-      var newItem = getNonCollapsibleItem(toolbox.contents_);
+      var newItem = getNonCollapsibleItem(toolbox);
       toolbox.updateFlyout_(oldItem, newItem);
       sinon.assert.called(updateFlyoutStub);
     }
 
     test('OldItemEqualsNewItem_ShouldCloseFlyout', function() {
-      var newItem = getCollapsibleItem(this.toolbox);
+      var newItem = getNonCollapsibleItem(this.toolbox);
       testHideFlyout(this.toolbox, newItem, newItem);
     });
     test('NoNewItem_ShouldCloseFlyout', function() {
@@ -490,11 +492,11 @@ suite('New Toolbox', function() {
       testHideFlyout(this.toolbox,null, newItem);
     });
     test('NewItemIsSelectable_ShouldOpenFlyout', function() {
-      var updateFlyoutStub = sinon.stub(this.toolbox.flyout_, 'show');
+      var showFlyoutstub = sinon.stub(this.toolbox.flyout_, 'show');
       var scrollToStartFlyout = sinon.stub(this.toolbox.flyout_, 'scrollToStart');
-      var newItem = getCollapsibleItem(this.toolbox);
+      var newItem = getNonCollapsibleItem(this.toolbox);
       this.toolbox.updateFlyout_(null, newItem);
-      sinon.assert.called(updateFlyoutStub);
+      sinon.assert.called(showFlyoutstub);
       sinon.assert.called(scrollToStartFlyout);
     });
   });

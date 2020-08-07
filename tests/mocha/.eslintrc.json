@@ -18,6 +18,7 @@
         "defineRowBlock": true,
         "defineStackBlock": true,
         "defineStatementBlock": true,
+        "dispatchPointerEvent":true,
         "createFireChangeListenerSpy": true,
         "createGenUidStubWithReturns": true,
         "getCategoryJSON": true,
@@ -25,10 +26,9 @@
         "getXmlArray": true,
         "sharedTestSetup": true,
         "sharedTestTeardown": true,
-        "simulateMouseClick":true,
+        "simulateClick":true,
         "testAWorkspace": true,
         "testHelpers": true,
-        "triggerMouseEvent":true,
         "workspaceTeardown": true
     },
     "rules": {

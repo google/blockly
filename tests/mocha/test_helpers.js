@@ -283,6 +283,19 @@ function defineStatementBlock() {
     "helpUrl": ""
   }]);
 }
+function defineBasicBlockWithField() {
+  Blockly.defineBlocksWithJsonArray([{
+    "type": "test_field_block",
+    "message0": "%1",
+    "args0": [
+      {
+        "type": "field_input",
+        "name": "NAME"
+      }
+    ],
+    "output": null
+  }]);
+}
 
 function createTestBlock() {
   return {
@@ -302,27 +315,37 @@ function createRenderedBlock(workspaceSvg, type) {
 }
 
 /**
- * Triggers mouse event on document.
- * @param {EventTarget} target The object receiving the event
+ * Triggers pointer event on target.
+ * @param {!EventTarget} target The object receiving the event
  * @param {string} type The type of mouse event (eg: mousedown, mouseup,
  *    click).
+ * @param {Object<string, string>=} properties Properties to pass into event
+ *    constructor.
  */
-function triggerMouseEvent(target, type) {
-  var event = document.createEvent('MouseEvents');
-  event.initEvent(type, true, true);
+function dispatchPointerEvent(target, type, properties) {
+  const eventInitDict = {
+    cancelable: true,
+    bubbles: true,
+    isPrimary: true,
+    pressure: 0.5,
+    clientX: 10,
+    clientY: 10,
+  };
+  if (properties) {
+    Object.assign(eventInitDict, properties);
+  }
+  const event = new PointerEvent(type, eventInitDict);
   target.dispatchEvent(event);
 }
 
 /**
  * Simulates mouse click by triggering relevant mouse events.
- * @param {EventTarget} target The object receiving the event
- * @param {boolean=} triggerMouseEnter Whether to also trigger mouseenter.
+ * @param {!EventTarget} target The object receiving the event
+ * @param {Object<string, string>=} properties Properties to pass into event
+ *    constructor.
  */
-function simulateMouseClick(target, triggerMouseEnter = false) {
-  if (triggerMouseEnter) {
-    triggerMouseEvent(target, 'mouseenter');
-  }
-  triggerMouseEvent(target, 'mousedown');
-  triggerMouseEvent(target, 'mouseup');
-  triggerMouseEvent(target, 'click');
+function simulateClick(target, properties) {
+  dispatchPointerEvent(target, 'pointerdown', properties);
+  dispatchPointerEvent(target, 'pointerup', properties);
+  dispatchPointerEvent(target, 'click', properties);
 }

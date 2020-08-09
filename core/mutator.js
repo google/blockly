@@ -234,7 +234,8 @@ Blockly.Mutator.prototype.resizeBubble_ = function() {
   if (this.block_.RTL) {
     width = -workspaceSize.x;
   } else {
-    width = workspaceSize.width + workspaceSize.x;
+    width = workspaceSize.width + workspaceSize.x +
+        this.workspace_.flyout_.getWidth();
   }
   var height = workspaceSize.height + doubleBorderWidth * 3;
   var flyout = this.workspace_.getFlyout();
@@ -311,7 +312,7 @@ Blockly.Mutator.prototype.setVisible = function(visible) {
     this.rootBlock_.setDeletable(false);
     if (flyout) {
       var margin = flyout.CORNER_RADIUS * 2;
-      var x = flyout.getWidth() + margin;
+      var x = this.rootBlock_.RTL ? flyout.getWidth() + margin : margin;
     } else {
       var margin = 16;
       var x = margin;
@@ -369,12 +370,22 @@ Blockly.Mutator.prototype.workspaceChanged_ = function(e) {
   if (!this.workspace_.isDragging()) {
     var blocks = this.workspace_.getTopBlocks(false);
     var MARGIN = 20;
+
     for (var b = 0, block; (block = blocks[b]); b++) {
       var blockXY = block.getRelativeToSurfaceXY();
-      var blockHW = block.getHeightWidth();
-      if (blockXY.y + blockHW.height < MARGIN) {
-        // Bump any block that's above the top back inside.
-        block.moveBy(0, MARGIN - blockHW.height - blockXY.y);
+
+      // Bump any block that's above the top back inside.
+      if (blockXY.y < MARGIN) {
+        block.moveBy(0, MARGIN - blockXY.y);
+      }
+      // Bump any block overlapping the flyout back inside.
+      if (block.RTL) {
+        var right = -(this.workspace_.getFlyout().getWidth() + MARGIN);
+        if (blockXY.x > right) {
+          block.moveBy(right - blockXY.x, 0);
+        }
+      } else if (blockXY.x < MARGIN) {
+        block.moveBy(MARGIN - blockXY.x, 0);
       }
     }
   }

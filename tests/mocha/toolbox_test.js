@@ -6,7 +6,7 @@
 
 suite('New Toolbox', function() {
 
-  function getInjectedToolbox () {
+  function getInjectedToolbox() {
     /**
      * Category: First
      *   sep
@@ -25,7 +25,7 @@ suite('New Toolbox', function() {
           toolbox: toolboxXml
         });
     return workspace.getToolbox();
-  };
+  }
 
   function getBasicToolbox() {
     var workspace = new Blockly.WorkspaceSvg(new Blockly.Options({}));
@@ -36,7 +36,7 @@ suite('New Toolbox', function() {
     };
     toolbox.flyout_ = flyout;
     return toolbox;
-  };
+  }
 
   function getCollapsibleItem(toolbox) {
     var contents = toolbox.contents_;

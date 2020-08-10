@@ -58,7 +58,7 @@ suite('Navigation', function() {
       delete Blockly.Blocks['basic_block'];
     });
 
-    function testToolboxSelectMethodCalled (ws, mockEvent, keyCode, selectMethodName) {
+    function testToolboxSelectMethodCalled(ws, mockEvent, keyCode, selectMethodName) {
       mockEvent.keyCode = keyCode;
       var toolbox = ws.getToolbox();
       toolbox.selectedItem_ = toolbox.contents_[0];

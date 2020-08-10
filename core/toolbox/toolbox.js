@@ -381,7 +381,7 @@ Blockly.Toolbox.prototype.render = function(toolboxDef) {
   // TODO: Future improvement to compare the new toolboxDef with the old and
   //  only re render what has changed.
   for (var i = 0; i < this.contents_.length; i++) {
-    var toolboxItem = this.contents_[i]
+    var toolboxItem = this.contents_[i];
     if (toolboxItem) {
       toolboxItem.dispose();
     }

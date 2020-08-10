@@ -95,7 +95,6 @@ var JSCOMP_ERROR = [
   'unknownDefines',
   'unusedLocalVariables',
   'unusedPrivateMembers',
-  'useOfGoogBase',
   'uselessCode',
   'untranspilableFeatures',
   'visibility'

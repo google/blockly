@@ -276,7 +276,6 @@ suite('New Toolbox', function() {
       delete this.toolbox;
     });
 
-    // TODO: Check multiple nested category
     suite('selectChild_', function() {
       test('No item is selected -> Should do nothing', function() {
         this.toolbox.selectedItem_ = null;
@@ -308,7 +307,6 @@ suite('New Toolbox', function() {
       });
     });
 
-    // TODO: Check multiple nested category
     suite('selectParent_', function() {
       test('No item selected -> Should do nothing', function() {
         this.toolbox.selectedItem_ = null;

@@ -146,15 +146,6 @@ Blockly.SelectableToolboxItem.prototype.isSelectable = function() {
 };
 
 /**
- * Gets the name of the toolbox item. Used for emitting events.
- * @return {string} The name of the toolbox item.
- * @public
- */
-Blockly.SelectableToolboxItem.prototype.getName = function() {
-  return '';
-};
-
-/**
  * Gets the contents of the toolbox item. These are items that are meant to be
  * displayed in the flyout.
  * @return {!Array<!Blockly.utils.toolbox.FlyoutItemDef>|string} The definition

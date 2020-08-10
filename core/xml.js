@@ -487,7 +487,7 @@ Blockly.Xml.appendDomToWorkspace = function(xml, workspace) {
   var bbox;  // Bounding box of the current blocks.
   // First check if we have a workspaceSvg, otherwise the blocks have no shape
   // and the position does not matter.
-  if (workspace.hasOwnProperty('scale')) {
+  if (Object.prototype.hasOwnProperty.call(workspace, 'scale')) {
     bbox = workspace.getBlocksBoundingBox();
   }
   // Load the new blocks into the workspace and get the IDs of the new blocks.

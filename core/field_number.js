@@ -231,7 +231,7 @@ Blockly.FieldNumber.prototype.setPrecisionInternal_ = function(precision) {
     }
   }
 
-  var precisionString = this.precision_.toString();
+  var precisionString = this.precision_.toLocaleString("en-US", {maximumFractionDigits: 20});
   var decimalIndex = precisionString.indexOf('.');
   if (decimalIndex == -1) {
     // If the precision is 0 (float) allow any number of decimals,

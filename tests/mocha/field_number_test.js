@@ -112,9 +112,8 @@ suite('Number Fields', function() {
         {title: 'Float', json: {}, value: 123.456, expectedValue: 123.456},
         {title: '0.01', json: {precision: .01}, value: 123.456,
           expectedValue: 123.46},
-        // TODO(#4105): Un-skip after fixing bug.
         {title: '1e-7', json: {precision: .0000001}, value: 123.00000456,
-          expectedValue: 123.0000046, skip: true},
+          expectedValue: 123.0000046},
         {title: '0.5', json: {precision: .5}, value: 123.456,
           expectedValue: 123.5},
         {title: '1', json: {precision: 1}, value: 123.456,

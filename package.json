@@ -73,7 +73,7 @@
     "jshint": "^2.11.0",
     "mocha": "^6.2.3",
     "pixelmatch": "^4.0.2",
-    "pngjs": "^3.4.0",
+    "pngjs": "^5.0.0",
     "rimraf": "^2.6.3",
     "selenium-standalone": "^6.17.0",
     "through2": "^3.0.1",

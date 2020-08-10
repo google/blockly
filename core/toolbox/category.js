@@ -576,7 +576,9 @@ Blockly.ToolboxCategory.prototype.getLevel = function() {
 };
 
 /**
- * @override
+ * Gets the name of the toolbox category.
+ * @return {string} The name of the toolbox item.
+ * @public
  */
 Blockly.ToolboxCategory.prototype.getName = function() {
   return this.name_;

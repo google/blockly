@@ -21,10 +21,10 @@ goog.require('Blockly.utils.object');
 /**
  * Class for a toolbox changed event.
  * Used to notify the developer when a user has clicked on a new toolbox item.
- * @param {string} oldType The type of the previously selected toolbox item.
- * @param {string} oldId The id of the previously selected toolbox item.
- * @param {string} newType The type of the currently selected toolbox item.
- * @param {string} newId The id of the currently selected toolbox item.
+ * @param {?string} oldType The type of the previously selected toolbox item.
+ * @param {?string} oldId The id of the previously selected toolbox item.
+ * @param {?string} newType The type of the currently selected toolbox item.
+ * @param {?string} newId The id of the currently selected toolbox item.
  * @param {Blockly.Workspace} workspace The workspace the toolbox is on.
  * @extends {Blockly.Events.Abstract}
  * @constructor
@@ -32,25 +32,25 @@ goog.require('Blockly.utils.object');
 Blockly.Events.ToolboxChange = function(oldType, oldId, newType, newId, workspace) {
   /**
    * The type of the previously selected toolbox item.
-   * @type {string}
+   * @type {?string}
    */
   this.oldType = oldType;
 
   /**
    * The id of the previously selected toolbox item.
-   * @type {string}
+   * @type {?string}
    */
   this.oldValue = oldId;
 
   /**
    * The type of the currently selected toolbox item.
-   * @type {string}
+   * @type {?string}
    */
   this.newType = newType;
 
   /**
    * The id of the currently selected toolbox item.
-   * @type {string}
+   * @type {?string}
    */
   this.newValue = newId;
 

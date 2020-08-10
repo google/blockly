@@ -131,6 +131,7 @@ suite('New Toolbox', function() {
       chai.assert.lengthOf(this.toolbox.contents_, 2);
       sinon.assert.called(positionStub);
     });
+    // TODO: Uncomment once implemented.
     test.skip('Toolbox definition with both blocks and categories -> Should throw an error', function() {
       var toolbox = this.toolbox;
       var badToolboxDef = [
@@ -145,6 +146,7 @@ suite('New Toolbox', function() {
         toolbox.render(badToolboxDef);
       }, 'Toolbox cannot have both blocks and categories in the root level.');
     });
+    // TODO: Uncomment once implemented.
     test.skip('Expanded set to true for a non collapsible toolbox item -> Should open flyout', function() {
       this.toolbox.render(this.toolboxXml);
       var selectedNode = this.toolbox.tree_.children_[0];

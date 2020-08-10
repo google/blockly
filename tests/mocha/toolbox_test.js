@@ -6,67 +6,6 @@
 
 suite('New Toolbox', function() {
 
-  function getInjectedToolbox() {
-    /**
-     * Category: First
-     *   sep
-     *   basic_block
-     *   basic_block
-     * Category: second
-     *   basic_block
-     * Category: Variables
-     *   custom: VARIABLE
-     * Category: NestedCategory
-     *   Category: NestedItemOne
-     */
-    var toolboxXml = document.getElementById('toolbox-test');
-    var workspace = Blockly.inject('blocklyDiv',
-        {
-          toolbox: toolboxXml
-        });
-    return workspace.getToolbox();
-  }
-
-  function getBasicToolbox() {
-    var workspace = new Blockly.WorkspaceSvg(new Blockly.Options({}));
-    var toolbox = new Blockly.Toolbox(workspace);
-    toolbox.HtmlDiv = document.createElement('div');
-    var flyout = {
-      position: function() {}
-    };
-    toolbox.flyout_ = flyout;
-    return toolbox;
-  }
-
-  function getCollapsibleItem(toolbox) {
-    var contents = toolbox.contents_;
-    for (var i = 0; i < contents.length; i++) {
-      var item = contents[i];
-      if (item.isCollapsible()) {
-        return item;
-      }
-    }
-  }
-
-  function getNonCollapsibleItem(toolbox) {
-    var contents = toolbox.contents_;
-    for (var i = 0; i < contents.length; i++) {
-      var item = contents[i];
-      if (!item.isCollapsible()) {
-        return item;
-      }
-    }
-  }
-
-  function getChildItem(toolbox) {
-    return toolbox.getToolboxItemById('nestedCategory');
-  }
-
-  function getSeparator(toolbox) {
-    return toolbox.getToolboxItemById('separator');
-  }
-
-
   setup(function() {
     sharedTestSetup.call(this);
     defineStackBlock();
@@ -83,7 +22,6 @@ suite('New Toolbox', function() {
     });
     teardown(function() {
       this.toolbox.dispose();
-      delete this.toolbox;
     });
 
     test('Init called -> HtmlDiv is created', function() {
@@ -120,7 +58,6 @@ suite('New Toolbox', function() {
     });
     teardown(function() {
       this.toolbox.dispose();
-      delete this.toolbox;
     });
     test('Render called with valid toolboxDef -> Contents are created', function() {
       var positionStub = sinon.stub(this.toolbox, 'position');
@@ -190,7 +127,6 @@ suite('New Toolbox', function() {
     });
     teardown(function() {
       this.toolbox.dispose();
-      delete this.toolbox;
     });
 
     test('Toolbox clicked -> Should close flyout', function() {
@@ -219,7 +155,6 @@ suite('New Toolbox', function() {
     });
     teardown(function() {
       this.toolbox.dispose();
-      delete this.toolbox;
     });
 
     function createKeyDownMock(keyCode) {
@@ -275,16 +210,15 @@ suite('New Toolbox', function() {
     });
     teardown(function() {
       this.toolbox.dispose();
-      delete this.toolbox;
     });
 
     suite('selectChild_', function() {
-      test('No item is selected -> Should do nothing', function() {
+      test('No item is selected -> Should not handle event', function() {
         this.toolbox.selectedItem_ = null;
         var handled = this.toolbox.selectChild_();
         chai.assert.isFalse(handled);
       });
-      test('Selected item is not collapsible -> Should do nothing', function() {
+      test('Selected item is not collapsible -> Should not handle event', function() {
         this.toolbox.selectedItem_ = getNonCollapsibleItem(this.toolbox);
         var handled = this.toolbox.selectChild_();
         chai.assert.isFalse(handled);
@@ -310,7 +244,7 @@ suite('New Toolbox', function() {
     });
 
     suite('selectParent_', function() {
-      test('No item selected -> Should do nothing', function() {
+      test('No item selected -> Should not handle event', function() {
         this.toolbox.selectedItem_ = null;
         var handled = this.toolbox.selectParent_();
         chai.assert.isFalse(handled);
@@ -334,7 +268,7 @@ suite('New Toolbox', function() {
     });
 
     suite('selectNext_', function() {
-      test('No item is selected -> Should do nothing', function() {
+      test('No item is selected -> Should not handle event', function() {
         this.toolbox.selectedItem_ = null;
         var handled = this.toolbox.selectNext_();
         chai.assert.isFalse(handled);
@@ -346,7 +280,7 @@ suite('New Toolbox', function() {
         chai.assert.isTrue(handled);
         chai.assert.equal(this.toolbox.selectedItem_, this.toolbox.contents_[1]);
       });
-      test('Selected item is last item -> Should do nothing', function() {
+      test('Selected item is last item -> Should not handle event', function() {
         var item = this.toolbox.contents_[this.toolbox.contents_.length - 1];
         this.toolbox.selectedItem_ = item;
         var handled = this.toolbox.selectNext_();
@@ -365,12 +299,12 @@ suite('New Toolbox', function() {
     });
 
     suite('selectPrevious', function() {
-      test('No item is selected -> Should do nothing', function() {
+      test('No item is selected -> Should not handle event', function() {
         this.toolbox.selectedItem_ = null;
         var handled = this.toolbox.selectPrevious_();
         chai.assert.isFalse(handled);
       });
-      test('Selected item is first item -> Should do nothing', function() {
+      test('Selected item is first item -> Should not handle event', function() {
         var item = this.toolbox.contents_[0];
         this.toolbox.selectedItem_ = item;
         var handled = this.toolbox.selectPrevious_();
@@ -397,7 +331,6 @@ suite('New Toolbox', function() {
         chai.assert.notEqual(this.toolbox.selectedItem_, childItem);
       });
     });
-
   });
 
   suite('setSelectedItem', function() {
@@ -406,7 +339,6 @@ suite('New Toolbox', function() {
     });
     teardown(function() {
       this.toolbox.dispose();
-      delete this.toolbox;
     });
 
     function setupSetSelected(toolbox, oldItem, newItem) {
@@ -416,13 +348,13 @@ suite('New Toolbox', function() {
       return newItemStub;
     }
 
-    test('Selected item and new item are null -> Should do nothing', function() {
+    test('Selected item and new item are null -> Should not update the flyout', function() {
       this.selectedItem_ = null;
       this.toolbox.setSelectedItem(null);
       var updateFlyoutStub = sinon.stub(this.toolbox, 'updateFlyout_');
       sinon.assert.notCalled(updateFlyoutStub);
     });
-    test('New item is not selectable -> Should do nothing', function() {
+    test('New item is not selectable -> Should not update the flyout', function() {
       var separator = getSeparator(this.toolbox);
       this.toolbox.setSelectedItem(separator);
       var updateFlyoutStub = sinon.stub(this.toolbox, 'updateFlyout_');
@@ -459,7 +391,6 @@ suite('New Toolbox', function() {
     });
     teardown(function() {
       this.toolbox.dispose();
-      delete this.toolbox;
     });
 
     function testHideFlyout(toolbox, oldItem, newItem) {
@@ -488,7 +419,7 @@ suite('New Toolbox', function() {
       sinon.assert.called(showFlyoutstub);
       sinon.assert.called(scrollToStartFlyout);
     });
-    test('Select non selectable item -> Should do nothing', function() {
+    test('Select non selectable item -> Should not update the flyout', function() {
       var showFlyoutstub = sinon.stub(this.toolbox.flyout_, 'show');
       var hideFlyoutStub = sinon.stub(this.toolbox.flyout_, 'hide');
       var nonSelectableItem = getSeparator(this.toolbox);
@@ -502,10 +433,6 @@ suite('New Toolbox', function() {
     setup(function() {
       this.toolbox = getBasicToolbox();
     });
-    teardown(function() {
-      // Don't need to dispose, init never called on basic toolbox.
-      delete this.toolbox;
-    });
 
     function checkHorizontalToolbox(toolbox) {
       chai.assert.equal(toolbox.HtmlDiv.style.left, '0px', 'Check left position');
@@ -517,7 +444,7 @@ suite('New Toolbox', function() {
       chai.assert.equal(toolbox.HtmlDiv.style.height, '100%', 'Check height');
       chai.assert.equal(toolbox.width_, toolbox.HtmlDiv.offsetWidth, 'Check width');
     }
-    test('HtmlDiv is not created -> Should do nothing', function() {
+    test('HtmlDiv is not created -> Should not resize', function() {
       var toolbox = this.toolbox;
       toolbox.HtmlDiv = null;
       toolbox.horizontalLayout_ = true;
@@ -567,17 +494,19 @@ suite('New Toolbox', function() {
     function checkValue(actual, expected, value) {
       var actualVal = actual[value];
       var expectedVal = expected[value];
-      chai.assert.equal(actualVal.toUpperCase(), expectedVal.toUpperCase(), 'Checknig value for: ' + value);
+      chai.assert.equal(actualVal.toUpperCase(), expectedVal.toUpperCase(), 'Checking value for: ' + value);
     }
     function checkContents(actualContents, expectedContents) {
       chai.assert.equal(actualContents.length, expectedContents.length);
       for (var i = 0; i < actualContents.length; i++) {
+        // TODO: Check the values as well as all the keys.
         chai.assert.containsAllKeys(actualContents[i], Object.keys(expectedContents[i]));
       }
     }
     function checkCategory(actual, expected) {
       checkValue(actual, expected, 'kind');
       checkValue(actual, expected, 'name');
+      chai.assert.deepEqual(actual['cssConfig'], expected['cssConfig']);
       checkContents(actual.contents, expected.contents);
     }
     function checkCategoryToolbox(actual, expected) {
@@ -596,7 +525,7 @@ suite('New Toolbox', function() {
       checkSimpleToolbox(toolboxDef, this.simpleToolboxJSON);
     });
     test('Category Toolbox: Array with xml', function() {
-      var categoryOne = Blockly.Xml.textToDom('<category name="First"><block type="basic_block"><field name="TEXT">FirstCategory-FirstBlock</field></block><block type="basic_block"><field name="TEXT">FirstCategory-SecondBlock</field></block></category>');
+      var categoryOne = Blockly.Xml.textToDom('<category name="First" css-container="something"><block type="basic_block"><field name="TEXT">FirstCategory-FirstBlock</field></block><block type="basic_block"><field name="TEXT">FirstCategory-SecondBlock</field></block></category>');
       var categoryTwo = Blockly.Xml.textToDom('<category name="Second"><block type="basic_block"><field name="TEXT">SecondCategory-FirstBlock</field></block></category>');
       var xmlList = [categoryOne, categoryTwo];
       var toolboxDef = Blockly.utils.toolbox.convertToolboxToJSON(xmlList);
@@ -635,5 +564,4 @@ suite('New Toolbox', function() {
       checkSimpleToolbox(toolboxDef, this.simpleToolboxJSON);
     });
   });
-
 });

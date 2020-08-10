@@ -346,12 +346,13 @@ Blockly.Toolbox.prototype.renderContents_ = function(toolboxDef) {
   for (var i = 0, childIn; (childIn = toolboxDef[i]); i++) {
     var ToolboxItemClass = Blockly.registry.getClass(
         Blockly.registry.Type.TOOLBOX_ITEM, childIn['kind'].toLowerCase());
-    var toolboxItem = new ToolboxItemClass(childIn, this);
-
-    this.addToolboxItem_(toolboxItem);
-    var toolboxItemDom = toolboxItem.createDom();
-    if (toolboxItemDom) {
-      this.contentsDiv_.appendChild(toolboxItemDom);
+    if (ToolboxItemClass) {
+      var toolboxItem = new ToolboxItemClass(childIn, this);
+      this.addToolboxItem_(toolboxItem);
+      var toolboxItemDom = toolboxItem.createDom();
+      if (toolboxItemDom) {
+        this.contentsDiv_.appendChild(toolboxItemDom);
+      }
     }
   }
 };

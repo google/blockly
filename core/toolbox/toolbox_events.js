@@ -40,7 +40,7 @@ Blockly.Events.ToolboxChange = function(oldType, oldId, newType, newId, workspac
    * The id of the previously selected toolbox item.
    * @type {string}
    */
-  this.oldId = oldId;
+  this.oldValue = oldId;
 
   /**
    * The type of the currently selected toolbox item.
@@ -52,7 +52,7 @@ Blockly.Events.ToolboxChange = function(oldType, oldId, newType, newId, workspac
    * The id of the currently selected toolbox item.
    * @type {string}
    */
-  this.newId = newId;
+  this.newValue = newId;
 
   /**
    * The type of the previously selected toolbox item.
@@ -61,7 +61,7 @@ Blockly.Events.ToolboxChange = function(oldType, oldId, newType, newId, workspac
   this.workspaceId = workspace ? workspace.id : '';
 };
 Blockly.utils.object.inherits(Blockly.Events.ToolboxChange,
-    Blockly.Events.Ui);
+    Blockly.Events.Abstract);
 
 /**
  * Type of this event.
@@ -76,9 +76,10 @@ Blockly.Events.ToolboxChange.prototype.type = Blockly.Events.TOOLBOX_CHANGE;
 Blockly.Events.ToolboxChange.prototype.toJson = function() {
   return {
     'oldType': this.oldType,
-    'oldName': this.oldName,
+    'oldValue': this.oldValue,
     'newType': this.newType,
-    'newName': this.newName,
+    'newValue': this.newValue,
+    'workspaceId': this.workspaceId
   };
 };
 
@@ -87,11 +88,11 @@ Blockly.Events.ToolboxChange.prototype.toJson = function() {
  * @param {!Object} json JSON representation.
  */
 Blockly.Events.ToolboxChange.prototype.fromJson = function(json) {
-  this.workspaceId = json['workspaceId'];
   this.oldType = json['oldType'];
-  this.oldId = json['oldId'];
+  this.oldValue = json['oldValue'];
   this.newType = json['newType'];
-  this.newId = json['newId'];
+  this.newValue = json['newValue'];
+  this.workspaceId = json['workspaceId'];
 };
 
 Blockly.registry.register(Blockly.registry.Type.EVENT,

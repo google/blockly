@@ -74,7 +74,7 @@
     "mocha": "^6.2.3",
     "rimraf": "^2.6.3",
     "selenium-standalone": "^6.17.0",
-    "through2": "^3.0.1",
+    "through2": "^4.0.2",
     "typescript-closure-tools": "^0.0.7",
     "webdriverio": "^5.22.4",
     "yargs": "^14.2.3"

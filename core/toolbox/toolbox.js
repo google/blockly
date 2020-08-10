@@ -14,7 +14,7 @@ goog.provide('Blockly.Toolbox');
 
 goog.require('Blockly.Css');
 goog.require('Blockly.Events');
-goog.require('Blockly.Events.Ui');
+goog.require('Blockly.Events.ToolboxChange');
 goog.require('Blockly.navigation');
 goog.require('Blockly.registry');
 goog.require('Blockly.ToolboxCategory');
@@ -681,16 +681,18 @@ Blockly.Toolbox.prototype.updateFlyout_ = function(oldItem, newItem) {
  * @private
  */
 Blockly.Toolbox.prototype.fireSelectEvent_ = function(oldItem, newItem) {
-  var oldElement = oldItem && oldItem.getName();
-  var newElement = newItem && newItem.getName();
-  // In this case the toolbox closes, so the newElement should be null.
-  if (oldItem == newItem) {
-    newElement = null;
+  var oldId = oldItem && oldItem.getId();
+  var newId = newItem && newItem.getId();
+
+  var oldType = oldItem && oldItem.getType();
+  var newType = newItem && newItem.getType();
+  // In this case the toolbox closes, so the newId and newType should be null.
+  if (oldId == newId) {
+    newId = null;
+    newType = null;
   }
-  // TODO: Add toolbox events
-  var event = new Blockly.Events.Ui(null, 'category',
-      oldElement, newElement);
-  event.workspaceId = this.workspace_.id;
+  var event = new Blockly.Events.ToolboxChange(
+      oldType, oldId, newType, newId, this.workspace_);
   Blockly.Events.fire(event);
 };
 

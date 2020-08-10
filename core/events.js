@@ -142,6 +142,12 @@ Blockly.Events.COMMENT_MOVE = 'comment_move';
 Blockly.Events.FINISHED_LOADING = 'finished_loading';
 
 /**
+ * Name of event that selects a different toolbox item.
+ * @const
+ */
+Blockly.Events.TOOLBOX_CHANGE = 'toolbox_change';
+
+/**
  * List of events that cause objects to be bumped back into the visible
  * portion of the workspace (only used for non-movable workspaces).
  *

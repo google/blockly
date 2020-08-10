@@ -52,6 +52,13 @@ Blockly.ToolboxItem = function(toolboxItemDef, toolbox) {
    * @protected
    */
   this.workspace_ = this.parentToolbox_.getWorkspace();
+
+  /**
+   * The type of the toolbox item.
+   * @type {string}
+   * @private
+   */
+  this.type_ = toolboxItemDef['kind'].toLowerCase();
 };
 
 /**
@@ -79,6 +86,15 @@ Blockly.ToolboxItem.prototype.getDiv = function() {
  */
 Blockly.ToolboxItem.prototype.getId = function() {
   return this.id_;
+};
+
+/**
+ * Gets the type of the toolbox item.
+ * @return {string} The type of the toolbox item.
+ * @public
+ */
+Blockly.ToolboxItem.prototype.getType = function() {
+  return this.type_;
 };
 
 /**

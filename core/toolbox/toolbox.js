@@ -643,6 +643,20 @@ Blockly.Toolbox.prototype.setSelectedItem = function(newItem) {
 };
 
 /**
+ * Clears the flyout if the selected item has been hidden.
+ */
+Blockly.Toolbox.prototype.updateSelected = function() {
+  var selectedItem = this.getSelectedItem();
+  if (!selectedItem) {
+    return;
+  }
+
+  if (!selectedItem.isSelectable()) {
+    this.clearSelection();
+  }
+};
+
+/**
  * Selects the toolbox item by its position in the list of toolbox items.
  * @param {number} position The position of the item to select.
  * @public

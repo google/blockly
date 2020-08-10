@@ -133,6 +133,13 @@ Blockly.ToolboxCategory = function(categoryDef, toolbox, opt_parent) {
   this.isVisible_ = true;
 
   /**
+   * True if the parent category is expanded, false otherwise.
+   * @type {boolean}
+   * @private
+   */
+  this.isParentExpanded_ = true;
+
+  /**
    * Parse the contents for this category.
    * @type {string|
    *        !Array<!Blockly.ToolboxItem>|
@@ -451,7 +458,7 @@ Blockly.ToolboxCategory.prototype.setExpanded = function(isExpanded) {
   if (this.hasChildren()) {
     for (var i = 0; i < this.contents_.length; i++) {
       var child = this.contents_[i];
-      child.setVisible(isExpanded);
+      child.isParentExpanded_ = isExpanded;
     }
   }
 
@@ -500,9 +507,15 @@ Blockly.ToolboxCategory.prototype.hasChildren = function() {
  * @public
  */
 Blockly.ToolboxCategory.prototype.setVisible = function(isVisible) {
-  // TODO: Add ability to hide the category when this is false.
-  //  This causes problems for nested categories.
+  this.htmlDiv_.style.display = isVisible ? 'block' : 'none';
+  if (this.hasChildren()) {
+    for (var i = 0, child; (child = this.contents_[i]); i++) {
+      child.setVisible(isVisible);
+    }
+  }
   this.isVisible_ = isVisible;
+  // TODO: Unsure about this.
+  this.parentToolbox_.updateSelected();
 };
 
 /**
@@ -511,7 +524,8 @@ Blockly.ToolboxCategory.prototype.setVisible = function(isVisible) {
  * @public
  */
 Blockly.ToolboxCategory.prototype.isVisible = function() {
-  return this.isVisible_;
+  // TODO: This seems strange.
+  return this.isVisible_ && this.isParentExpanded_;
 };
 
 /**
@@ -525,7 +539,6 @@ Blockly.ToolboxCategory.prototype.isExpanded = function() {
  * @override
  */
 Blockly.ToolboxCategory.prototype.isSelectable = function() {
-  // TODO: Add && isSelectable_
   return this.isVisible();
 };
 

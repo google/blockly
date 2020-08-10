@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-suite('New Toolbox', function() {
+suite('Toolbox', function() {
 
   setup(function() {
     sharedTestSetup.call(this);

@@ -12,7 +12,7 @@
 
 suite('Gesture', function() {
   function testGestureIsFieldClick(block, isFieldClick){
-    var field  = block.getField('NAME');
+    var field = block.getField('NAME');
     var eventTarget = field.getClickTarget_();
     chai.assert.exists(eventTarget,
         'Precondition: missing click target for field');
@@ -34,7 +34,7 @@ suite('Gesture', function() {
   }
 
   function getTopFlyoutBlock(flyout) {
-    return  flyout.workspace_.topBlocks_[0];
+    return flyout.workspace_.topBlocks_[0];
   }
 
   setup(function() {

@@ -72,7 +72,7 @@
     "js-green-licenses": "^2.0.1",
     "jshint": "^2.11.0",
     "mocha": "^6.2.3",
-    "rimraf": "^2.6.3",
+    "rimraf": "^3.0.2",
     "selenium-standalone": "^6.17.0",
     "through2": "^4.0.2",
     "typescript-closure-tools": "^0.0.7",

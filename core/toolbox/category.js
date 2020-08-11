@@ -126,11 +126,27 @@ Blockly.ToolboxCategory = function(categoryDef, toolbox, opt_parent) {
   this.expanded_ = false;
 
   /**
-   * True if the category is visible, false otherwise.
+   * True if the category is meant to be hidden, false otherwise.
    * @type {boolean}
    * @private
    */
-  this.isVisible_ = true;
+  this.isHidden_ = false;
+
+  /**
+   * True if the parent category is expanded, false otherwise.
+   * Children categories can only be visible if their parent category is
+   * expanded.
+   * @type {boolean}
+   * @private
+   */
+  this.isParentExpanded_ = true;
+
+  /**
+   * True if this category is disabled, false otherwise.
+   * @type {boolean}
+   * @public
+   */
+  this.isDisabled = false;
 
   /**
    * Parse the contents for this category.
@@ -159,6 +175,12 @@ Blockly.utils.object.inherits(Blockly.ToolboxCategory,
  *          }}
  */
 Blockly.ToolboxCategory.CssConfig;
+
+/**
+ * Name used for registering a toolbox category.
+ * @const {string}
+ */
+Blockly.ToolboxCategory.registrationName = 'category';
 
 /**
  * The number of pixels to move the category over at each nested level.
@@ -451,7 +473,7 @@ Blockly.ToolboxCategory.prototype.setExpanded = function(isExpanded) {
   if (this.hasChildren()) {
     for (var i = 0; i < this.contents_.length; i++) {
       var child = this.contents_[i];
-      child.setVisible(isExpanded);
+      child.isParentExpanded_ = isExpanded;
     }
   }
 
@@ -494,24 +516,48 @@ Blockly.ToolboxCategory.prototype.hasChildren = function() {
 };
 
 /**
- * Sets whether the category is visible or not. Categories are not visible if
- * they are the child of a parent who has been collapsed.
+ * Sets whether the category is visible or not.
+ * For a category to be visible its parent category must also be expanded.
  * @param {boolean} isVisible True if category should be visible.
- * @public
+ * @private
  */
-Blockly.ToolboxCategory.prototype.setVisible = function(isVisible) {
-  // TODO: Add ability to hide the category when this is false.
-  //  This causes problems for nested categories.
-  this.isVisible_ = isVisible;
+Blockly.ToolboxCategory.prototype.setVisible_ = function(isVisible) {
+  this.htmlDiv_.style.display = isVisible ? 'block' : 'none';
+  if (this.hasChildren()) {
+    for (var i = 0, child; (child = this.contents_[i]); i++) {
+      child.setVisible_(isVisible);
+    }
+  }
+  this.isHidden_ = !isVisible;
+
+  if (this.parentToolbox_.getSelectedItem() == this) {
+    this.parentToolbox_.clearSelection();
+  }
+};
+
+/**
+ * Hide the category.
+ */
+Blockly.ToolboxCategory.prototype.hide = function() {
+  this.setVisible_(false);
+};
+
+/**
+ * Show the category. Category will only appear if its parent category is also
+ * expanded.
+ */
+Blockly.ToolboxCategory.prototype.show = function() {
+  this.setVisible_(true);
 };
 
 /**
  * Whether the category is visible.
+ * A category is only visible if its parent is expanded and isHidden_ is false.
  * @return {boolean} True if the category is visible, false otherwise.
  * @public
  */
 Blockly.ToolboxCategory.prototype.isVisible = function() {
-  return this.isVisible_;
+  return !this.isHidden_ && this.isParentExpanded_;
 };
 
 /**
@@ -525,8 +571,7 @@ Blockly.ToolboxCategory.prototype.isExpanded = function() {
  * @override
  */
 Blockly.ToolboxCategory.prototype.isSelectable = function() {
-  // TODO: Add && isSelectable_
-  return this.isVisible();
+  return this.isVisible() && !this.isDisabled;
 };
 
 /**
@@ -611,3 +656,6 @@ Blockly.ToolboxCategory.prototype.getContents = function() {
 Blockly.ToolboxCategory.prototype.dispose = function() {
   Blockly.utils.dom.removeNode(this.htmlDiv_);
 };
+
+Blockly.registry.register(Blockly.registry.Type.TOOLBOX_ITEM,
+    Blockly.ToolboxCategory.registrationName, Blockly.ToolboxCategory);

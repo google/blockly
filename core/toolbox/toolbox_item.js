@@ -21,7 +21,6 @@ goog.provide('Blockly.ToolboxItem');
  *     toolbox item.
  * @param {!Blockly.IToolbox} toolbox The toolbox that holds the toolbox item.
  * @constructor
- * @abstract
  */
 Blockly.ToolboxItem = function(toolboxItemDef, toolbox) {
 
@@ -128,7 +127,6 @@ Blockly.ToolboxItem.prototype.dispose = function() {
  *     defining the toolbox item.
  * @param {!Blockly.IToolbox} toolbox The toolbox that holds the toolbox item.
  * @constructor
- * @abstract
  * @extends {Blockly.ToolboxItem}
  */
 Blockly.SelectableToolboxItem = function(toolboxItemDef, toolbox) {
@@ -148,8 +146,9 @@ Blockly.SelectableToolboxItem.prototype.isSelectable = function() {
 /**
  * Gets the contents of the toolbox item. These are items that are meant to be
  * displayed in the flyout.
- * @return {!Array<!Blockly.utils.toolbox.FlyoutItemDef>|string} The definition
- *     of items to be displayed in the flyout.
+ * @return {!Array<!Blockly.utils.toolbox.FlyoutItemDef>|
+ *          !Array<!Blockly.ToolboxItem>|
+ *          string} The definition of items to be displayed in the flyout.
  * @public
  */
 Blockly.SelectableToolboxItem.prototype.getContents = function() {
@@ -178,7 +177,6 @@ Blockly.SelectableToolboxItem.prototype.onClick = function(_e) {};
  *     defining the toolbox item.
  * @param {!Blockly.IToolbox} toolbox The toolbox that holds the toolbox item.
  * @constructor
- * @abstract
  * @extends {Blockly.SelectableToolboxItem}
  */
 Blockly.CollapsibleToolboxItem = function(toolboxItemDef, toolbox) {

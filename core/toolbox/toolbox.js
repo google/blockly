@@ -344,28 +344,24 @@ Blockly.Toolbox.prototype.createFlyout_ = function() {
  */
 Blockly.Toolbox.prototype.renderContents_ = function(toolboxDef) {
   for (var i = 0, childIn; (childIn = toolboxDef[i]); i++) {
-    // TODO: Add classes to registry so we can avoid this switch statement.
-    switch (childIn['kind'].toUpperCase()) {
-      case 'CATEGORY':
-        childIn = /** @type {Blockly.utils.toolbox.Category} */ (childIn);
-        var category = new Blockly.ToolboxCategory(childIn, this);
-        this.addToolboxItem_(category);
-        var categoryDom = category.createDom();
-        if (categoryDom) {
-          this.contentsDiv_.appendChild(categoryDom);
-        }
-        break;
-      case 'SEP':
-        childIn = /** @type {Blockly.utils.toolbox.Separator} */ (childIn);
-        var separator = new Blockly.ToolboxSeparator(childIn, this);
-        this.addToolboxItem_(separator);
-        var separatorDom = separator.createDom();
-        if (separatorDom) {
-          this.contentsDiv_.appendChild(separatorDom);
-        }
-        break;
-      default:
-        // TODO: Handle someone adding a custom component.
+    this.createToolboxItem_(childIn);
+  }
+};
+
+/**
+ * Creates and renders the toolbox item.
+ * @param {Blockly.utils.toolbox.ToolboxItemDef} childIn Any information that
+ *    can be used to create an item in the toolbox.
+ */
+Blockly.Toolbox.prototype.createToolboxItem_ = function(childIn) {
+  var ToolboxItemClass = Blockly.registry.getClass(
+      Blockly.registry.Type.TOOLBOX_ITEM, childIn['kind'].toLowerCase());
+  if (ToolboxItemClass) {
+    var toolboxItem = new ToolboxItemClass(childIn, this);
+    this.addToolboxItem_(toolboxItem);
+    var toolboxItemDom = toolboxItem.createDom();
+    if (toolboxItemDom) {
+      this.contentsDiv_.appendChild(toolboxItemDom);
     }
   }
 };
@@ -381,7 +377,7 @@ Blockly.Toolbox.prototype.render = function(toolboxDef) {
   // TODO: Future improvement to compare the new toolboxDef with the old and
   //  only re render what has changed.
   for (var i = 0; i < this.contents_.length; i++) {
-    var toolboxItem = this.contents_[i]
+    var toolboxItem = this.contents_[i];
     if (toolboxItem) {
       toolboxItem.dispose();
     }
@@ -723,7 +719,7 @@ Blockly.Toolbox.prototype.onBlocklyAction = function(action) {
 };
 
 /**
- * Selects the parent if it exists, or closes the current item.
+ * Closes the current item if it is expanded, or selects the parent.
  * @return {boolean} True if a parent category was selected, false otherwise.
  * @private
  */

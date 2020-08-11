@@ -54,6 +54,12 @@ Blockly.utils.object.inherits(Blockly.ToolboxSeparator, Blockly.ToolboxItem);
 Blockly.ToolboxSeparator.CssConfig;
 
 /**
+ * Name used for registering a toolbox separator.
+ * @const {string}
+ */
+Blockly.ToolboxSeparator.registrationName = 'sep';
+
+/**
  * @override
  */
 Blockly.ToolboxSeparator.prototype.createDom = function() {
@@ -76,3 +82,6 @@ Blockly.ToolboxSeparator.prototype.getDiv = function() {
 Blockly.ToolboxSeparator.prototype.dispose = function() {
   Blockly.utils.dom.removeNode(this.htmlDiv_);
 };
+
+Blockly.registry.register(Blockly.registry.Type.TOOLBOX_ITEM,
+    Blockly.ToolboxSeparator.registrationName, Blockly.ToolboxSeparator);

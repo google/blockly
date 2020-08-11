@@ -604,6 +604,20 @@ Blockly.ToolboxCategory.prototype.getContents = function() {
 };
 
 /**
+ * Update the contents of this category.
+ * @param {!Blockly.utils.toolbox.ToolboxDefinition|string} contents The contents
+ *         for this category.
+ */
+Blockly.ToolboxCategory.prototype.updateContents = function(contents) {
+  if (typeof contents == 'string') {
+    this.contents_ = contents;
+    return;
+  }
+  var contentInfo = Blockly.utils.toolbox.convertToolboxToJSON(contents);
+  this.contents_ = this.parseContents_(contentInfo);
+};
+
+/**
  * @override
  */
 Blockly.ToolboxCategory.prototype.dispose = function() {

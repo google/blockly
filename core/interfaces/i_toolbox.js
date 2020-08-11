@@ -14,6 +14,7 @@
 goog.provide('Blockly.IToolbox');
 
 goog.requireType('Blockly.IRegistrable');
+goog.requireType('Blockly.ToolboxItem');
 
 
 /**

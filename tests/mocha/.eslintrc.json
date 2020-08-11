@@ -15,9 +15,11 @@
         "captureWarnings": true,
         "createRenderedBlock": true,
         "createTestBlock": true,
+        "defineBasicBlockWithField": true,
         "defineRowBlock": true,
         "defineStackBlock": true,
         "defineStatementBlock": true,
+        "dispatchPointerEvent": true,
         "createFireChangeListenerSpy": true,
         "createGenUidStubWithReturns": true,
         "getCategoryJSON": true,
@@ -25,8 +27,9 @@
         "getXmlArray": true,
         "sharedTestSetup": true,
         "sharedTestTeardown": true,
+        "simulateClick": true,
         "testAWorkspace": true,
-        "testHelpers" : true,
+        "testHelpers": true,
         "workspaceTeardown": true
     },
     "rules": {

@@ -624,7 +624,6 @@ suite('Events', function() {
       try {
         var toolbox = document.getElementById('toolbox-categories');
         var workspaceSvg = Blockly.inject('blocklyDiv', {toolbox: toolbox});
-        var changeListenerSpy = createFireChangeListenerSpy(workspaceSvg);
         var TEST_BLOCK_ID = 'test_block_id';
         var genUidStub = createGenUidStubWithReturns(
             [TEST_BLOCK_ID, 'test_group_id']);
@@ -635,6 +634,11 @@ suite('Events', function() {
         var expectedOldXml = Blockly.Xml.blockToDomWithXY(block);
         var expectedId = block.id;
 
+        // Run all queued events.
+        this.clock.runAll();
+
+        this.eventsFireSpy.resetHistory();
+        var changeListenerSpy = createFireChangeListenerSpy(workspaceSvg);
         block.dispose();
 
         // Run all queued events.
@@ -644,12 +648,14 @@ suite('Events', function() {
         // the event group's ID for creating block.
         sinon.assert.calledTwice(genUidStub);
 
-        assertLastCallEventArgEquals(
-            this.eventsFireSpy, Blockly.Events.DELETE, workspaceSvg.id,
-            expectedId, {oldXml: expectedOldXml, group: ''});
-        assertLastCallEventArgEquals(
-            changeListenerSpy, Blockly.Events.DELETE, workspaceSvg.id,
-            expectedId, {oldXml: expectedOldXml, group: ''});
+        assertNthCallEventArgEquals(
+            this.eventsFireSpy, 0, Blockly.Events.Delete,
+            {oldXml: expectedOldXml, group: ''},
+            workspaceSvg.id, expectedId);
+        assertNthCallEventArgEquals(
+            changeListenerSpy, 0, Blockly.Events.Delete,
+            {oldXml: expectedOldXml, group: ''},
+            workspaceSvg.id, expectedId);
 
         // Expect the workspace to not have a variable with ID 'test_block_id'.
         chai.assert.isNull(this.workspace.getVariableById(TEST_BLOCK_ID));
@@ -683,12 +689,12 @@ suite('Events', function() {
           'Undo stack length');
 
       assertNthCallEventArgEquals(
-          this.changeListenerSpy, 0, Blockly.Events.VAR_CREATE, this.workspace.id,
-          undefined, {group: TEST_GROUP_ID, varId: TEST_VAR_ID,
-            varName: TEST_VAR_NAME}, 'varCreate:');
+          this.changeListenerSpy, 0, Blockly.Events.VarCreate,
+          {group: TEST_GROUP_ID, varId: TEST_VAR_ID, varName: TEST_VAR_NAME},
+          this.workspace.id, undefined);
       assertNthCallEventArgEquals(
-          this.changeListenerSpy, 1, Blockly.Events.CREATE, this.workspace.id,
-          TEST_BLOCK_ID, {group: TEST_GROUP_ID}, 'block create:');
+          this.changeListenerSpy, 1, Blockly.Events.Create,
+          {group: TEST_GROUP_ID}, this.workspace.id, TEST_BLOCK_ID);
 
       // Expect the workspace to have a variable with ID 'test_var_id'.
       chai.assert.isNotNull(this.workspace.getVariableById(TEST_VAR_ID));
@@ -728,17 +734,17 @@ suite('Events', function() {
           'Undo stack length');
 
       assertNthCallEventArgEquals(
-          this.changeListenerSpy, 0, Blockly.Events.VAR_CREATE, this.workspace.id,
-          undefined, {group: TEST_GROUP_ID, varId: TEST_VAR_ID,
-            varName: TEST_VAR_NAME}, 'varCreate:');
+          this.changeListenerSpy, 0, Blockly.Events.VarCreate,
+          {group: TEST_GROUP_ID, varId: TEST_VAR_ID, varName: TEST_VAR_NAME},
+          this.workspace.id, undefined);
       assertNthCallEventArgEquals(
-          this.changeListenerSpy, 1, Blockly.Events.CREATE, this.workspace.id,
-          TEST_BLOCK_ID, {group: TEST_GROUP_ID}, 'block create:');
+          this.changeListenerSpy, 1, Blockly.Events.Create,
+          {group: TEST_GROUP_ID}, this.workspace.id, TEST_BLOCK_ID);
 
       // Finished loading event should not be part of event group.
       assertNthCallEventArgEquals(
-          this.changeListenerSpy, 2, Blockly.Events.FINISHED_LOADING, this.workspace.id,
-          undefined, {group: ''}, 'finished loading:');
+          this.changeListenerSpy, 2, Blockly.Events.FinishedLoading,
+          {group: ''}, this.workspace.id, undefined);
 
       // Expect the workspace to have a variable with ID 'test_var_id'.
       chai.assert.isNotNull(this.workspace.getVariableById(TEST_VAR_ID));

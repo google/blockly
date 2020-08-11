@@ -72,9 +72,11 @@ suite("Trashcan", function() {
       // Stub flyout interaction.
       var showFlyoutStub = sinon.stub(this.trashcan.flyout, "show");
       this.trashcan.click();
-      assertLastCallEventArgEquals(
-          this.eventsFireStub, Blockly.Events.UI, this.workspace.id, undefined,
-          {element: 'trashcanOpen', oldValue: null, newValue: true});
+
+      assertEventFired(
+          this.eventsFireStub, Blockly.Events.Ui,
+          {element: 'trashcanOpen', oldValue: null, newValue: true},
+          this.workspace.id, null);
       sinon.assert.calledOnce(showFlyoutStub);
     });
   });

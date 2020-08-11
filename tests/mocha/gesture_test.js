@@ -11,12 +11,13 @@
 'use strict';
 
 suite('Gesture', function() {
-  function testGestureIsFieldClick(block, isFieldClick){
+  function testGestureIsFieldClick(block, isFieldClick, eventsFireStub){
     var field = block.getField('NAME');
     var eventTarget = field.getClickTarget_();
     chai.assert.exists(eventTarget,
         'Precondition: missing click target for field');
 
+    eventsFireStub.resetHistory();
     dispatchPointerEvent(eventTarget, 'pointerdown');
 
     var fieldWorkspace = field.sourceBlock_.workspace;
@@ -31,6 +32,12 @@ suite('Gesture', function() {
 
     sinon.assert.called(isFieldClickSpy);
     chai.assert.isTrue(isFieldClickSpy.alwaysReturned(isFieldClick));
+
+
+    assertEventFired(eventsFireStub, Blockly.Events.Ui,
+        {element: 'selected', oldValue: null, newValue: block.id},
+        fieldWorkspace.id, null);
+    assertEventNotFired(eventsFireStub, Blockly.Events.Ui, {element: 'click'});
   }
 
   function getTopFlyoutBlock(flyout) {
@@ -61,7 +68,7 @@ suite('Gesture', function() {
     block.initSvg();
     block.render();
 
-    testGestureIsFieldClick(block, true);
+    testGestureIsFieldClick(block, true, this.eventsFireStub);
   });
 
   test('Field click - Auto close flyout', function() {
@@ -71,7 +78,7 @@ suite('Gesture', function() {
     flyout.autoClose = true;
 
     var block = getTopFlyoutBlock(flyout);
-    testGestureIsFieldClick(block, false);
+    testGestureIsFieldClick(block, false, this.eventsFireStub);
   });
 
   test('Field click - Always open flyout', function() {
@@ -81,7 +88,7 @@ suite('Gesture', function() {
     flyout.autoClose = false;
 
     var block = getTopFlyoutBlock(flyout);
-    testGestureIsFieldClick(block, true);
+    testGestureIsFieldClick(block, true, this.eventsFireStub);
   });
 
   test('Shift click in accessibility mode - moves the cursor', function() {

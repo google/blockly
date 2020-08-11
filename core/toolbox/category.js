@@ -126,18 +126,27 @@ Blockly.ToolboxCategory = function(categoryDef, toolbox, opt_parent) {
   this.expanded_ = false;
 
   /**
-   * True if the category is visible, false otherwise.
+   * True if the category is meant to be hidden, false otherwise.
    * @type {boolean}
    * @private
    */
-  this.isVisible_ = true;
+  this.isHidden_ = true;
 
   /**
    * True if the parent category is expanded, false otherwise.
+   * Children categories can only be visible if their parent category is
+   * expanded.
    * @type {boolean}
    * @private
    */
   this.isParentExpanded_ = true;
+
+  /**
+   * True if this category is not disabled, false otherwise.
+   * @type {boolean}
+   * @public
+   */
+  this.isDisabled = false;
 
   /**
    * Parse the contents for this category.
@@ -501,8 +510,8 @@ Blockly.ToolboxCategory.prototype.hasChildren = function() {
 };
 
 /**
- * Sets whether the category is visible or not. Categories are not visible if
- * they are the child of a parent who has been collapsed.
+ * Sets whether the category is visible or not.
+ * For a category to be visible its parent category must also be expanded.
  * @param {boolean} isVisible True if category should be visible.
  * @public
  */
@@ -513,19 +522,17 @@ Blockly.ToolboxCategory.prototype.setVisible = function(isVisible) {
       child.setVisible(isVisible);
     }
   }
-  this.isVisible_ = isVisible;
-  // TODO: Unsure about this.
-  this.parentToolbox_.updateSelected();
+  this.isHidden_ = !isVisible;
 };
 
 /**
  * Whether the category is visible.
+ * A category is only visible if its parent is expanded and isVisible is true.
  * @return {boolean} True if the category is visible, false otherwise.
  * @public
  */
 Blockly.ToolboxCategory.prototype.isVisible = function() {
-  // TODO: This seems strange.
-  return this.isVisible_ && this.isParentExpanded_;
+  return this.isHidden_ && this.isParentExpanded_;
 };
 
 /**
@@ -539,7 +546,7 @@ Blockly.ToolboxCategory.prototype.isExpanded = function() {
  * @override
  */
 Blockly.ToolboxCategory.prototype.isSelectable = function() {
-  return this.isVisible();
+  return this.isVisible() && !this.isDisabled;
 };
 
 /**

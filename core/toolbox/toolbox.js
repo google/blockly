@@ -414,8 +414,6 @@ Blockly.Toolbox.prototype.getToolboxItems = function() {
   return this.contents_;
 };
 
-Blockly.too
-
 /**
  * Adds a style on the toolbox. Usually used to change the cursor.
  * @param {string} style The name of the class to add.

@@ -608,14 +608,20 @@ Blockly.ToolboxCategory.prototype.getContents = function() {
  * @param {!Blockly.utils.toolbox.ToolboxDefinition|string} contents The contents
  *         for this category.
  */
-Blockly.ToolboxCategory.prototype.updateContents = function(contents) {
-  if (typeof contents == 'string') {
-    this.contents_ = contents;
+Blockly.ToolboxCategory.prototype.updateFlyoutContent = function(contents) {
+  if (this.hasChildren()) {
+    console.warn('Category can not have both flyout contents and sub categories');
     return;
   }
-  var contentInfo = Blockly.utils.toolbox.convertToolboxToJSON(contents);
-  this.contents_ = this.parseContents_(contentInfo);
+  if (typeof contents == 'string') {
+    // TODO: Should I be checking for a string of xml?
+    this.toolboxItemDef_['custom'] = contents;
+  } else {
+    this.toolboxItemDef_['contents'] = Blockly.utils.toolbox.convertToolboxToJSON(contents);
+  }
+  this.contents_ = this.parseContents_(this.toolboxItemDef_, this.hasChildren());
 };
+
 
 /**
  * @override

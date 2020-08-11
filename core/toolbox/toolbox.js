@@ -344,15 +344,24 @@ Blockly.Toolbox.prototype.createFlyout_ = function() {
  */
 Blockly.Toolbox.prototype.renderContents_ = function(toolboxDef) {
   for (var i = 0, childIn; (childIn = toolboxDef[i]); i++) {
-    var ToolboxItemClass = Blockly.registry.getClass(
-        Blockly.registry.Type.TOOLBOX_ITEM, childIn['kind'].toLowerCase());
-    if (ToolboxItemClass) {
-      var toolboxItem = new ToolboxItemClass(childIn, this);
-      this.addToolboxItem_(toolboxItem);
-      var toolboxItemDom = toolboxItem.createDom();
-      if (toolboxItemDom) {
-        this.contentsDiv_.appendChild(toolboxItemDom);
-      }
+    this.createToolboxItem_(childIn);
+  }
+};
+
+/**
+ * Creates and renders the toolbox item.
+ * @param {Blockly.utils.toolbox.ToolboxItemDef} childIn Any information that
+ *    can be used to create an item in the toolbox.
+ */
+Blockly.Toolbox.prototype.createToolboxItem_ = function(childIn) {
+  var ToolboxItemClass = Blockly.registry.getClass(
+      Blockly.registry.Type.TOOLBOX_ITEM, childIn['kind'].toLowerCase());
+  if (ToolboxItemClass) {
+    var toolboxItem = new ToolboxItemClass(childIn, this);
+    this.addToolboxItem_(toolboxItem);
+    var toolboxItemDom = toolboxItem.createDom();
+    if (toolboxItemDom) {
+      this.contentsDiv_.appendChild(toolboxItemDom);
     }
   }
 };

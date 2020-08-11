@@ -316,7 +316,7 @@ function createRenderedBlock(workspaceSvg, type) {
 
 /**
  * Triggers pointer event on target.
- * @param {!EventTarget} target The object receiving the event
+ * @param {!EventTarget} target The object receiving the event.
  * @param {string} type The type of mouse event (eg: mousedown, mouseup,
  *    click).
  * @param {Object<string, string>=} properties Properties to pass into event
@@ -340,7 +340,7 @@ function dispatchPointerEvent(target, type, properties) {
 
 /**
  * Simulates mouse click by triggering relevant mouse events.
- * @param {!EventTarget} target The object receiving the event
+ * @param {!EventTarget} target The object receiving the event.
  * @param {Object<string, string>=} properties Properties to pass into event
  *    constructor.
  */

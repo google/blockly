@@ -142,7 +142,7 @@ Blockly.ToolboxCategory = function(categoryDef, toolbox, opt_parent) {
   this.isParentExpanded_ = true;
 
   /**
-   * True if this category is not disabled, false otherwise.
+   * True if this category is disabled, false otherwise.
    * @type {boolean}
    * @public
    */
@@ -523,6 +523,10 @@ Blockly.ToolboxCategory.prototype.setVisible_ = function(isVisible) {
     }
   }
   this.isHidden_ = !isVisible;
+
+  if (this.parentToolbox_.getSelectedItem() == this) {
+    this.parentToolbox_.clearSelection();
+  }
 };
 
 /**

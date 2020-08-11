@@ -130,7 +130,7 @@ Blockly.ToolboxCategory = function(categoryDef, toolbox, opt_parent) {
    * @type {boolean}
    * @private
    */
-  this.isHidden_ = true;
+  this.isHidden_ = false;
 
   /**
    * True if the parent category is expanded, false otherwise.
@@ -527,12 +527,12 @@ Blockly.ToolboxCategory.prototype.setVisible = function(isVisible) {
 
 /**
  * Whether the category is visible.
- * A category is only visible if its parent is expanded and isVisible is true.
+ * A category is only visible if its parent is expanded and isHidden_ is false.
  * @return {boolean} True if the category is visible, false otherwise.
  * @public
  */
 Blockly.ToolboxCategory.prototype.isVisible = function() {
-  return this.isHidden_ && this.isParentExpanded_;
+  return !this.isHidden_ && this.isParentExpanded_;
 };
 
 /**

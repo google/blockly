@@ -13,6 +13,9 @@ function getCategoryJSON() {
   return [
     {
       "kind": "CATEGORY",
+      "cssConfig": {
+        "container": "something"
+      },
       "contents": [
         {
           "kind": "BLOCK",
@@ -78,4 +81,61 @@ function getXmlArray() {
   var button = Blockly.Xml.textToDom('<button text="insert" callbackkey="insertConnectionRows"></button>');
   var label = Blockly.Xml.textToDom('<label text="tooltips"></label>');
   return [block, separator, button, label];
+}
+
+function getInjectedToolbox() {
+  /**
+   * Category: First
+   *   sep
+   *   basic_block
+   *   basic_block
+   * Category: second
+   *   basic_block
+   * Category: Variables
+   *   custom: VARIABLE
+   * Category: NestedCategory
+   *   Category: NestedItemOne
+   */
+  var toolboxXml = document.getElementById('toolbox-test');
+  var workspace = Blockly.inject('blocklyDiv',
+      {
+        toolbox: toolboxXml
+      });
+  return workspace.getToolbox();
+}
+
+function getBasicToolbox() {
+  var workspace = new Blockly.WorkspaceSvg(new Blockly.Options({}));
+  var toolbox = new Blockly.Toolbox(workspace);
+  toolbox.HtmlDiv = document.createElement('div');
+  toolbox.flyout_ = sinon.createStubInstance(Blockly.VerticalFlyout);
+  return toolbox;
+}
+
+function getCollapsibleItem(toolbox) {
+  var contents = toolbox.contents_;
+  for (var i = 0; i < contents.length; i++) {
+    var item = contents[i];
+    if (item.isCollapsible()) {
+      return item;
+    }
+  }
+}
+
+function getNonCollapsibleItem(toolbox) {
+  var contents = toolbox.contents_;
+  for (var i = 0; i < contents.length; i++) {
+    var item = contents[i];
+    if (!item.isCollapsible()) {
+      return item;
+    }
+  }
+}
+
+function getChildItem(toolbox) {
+  return toolbox.getToolboxItemById('nestedCategory');
+}
+
+function getSeparator(toolbox) {
+  return toolbox.getToolboxItemById('separator');
 }

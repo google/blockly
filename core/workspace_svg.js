@@ -1073,6 +1073,24 @@ Blockly.WorkspaceSvg.prototype.getParentSvg = function() {
   return /** @type {!SVGElement} */ (this.cachedParentSvg_);
 };
 
+Blockly.WorkspaceSvg.prototype.fireViewportChangeEvent_ = function() {
+  // Event should include:
+  // - scale of workspace
+  // - upper left corner of visible workspace, in workspace coordinates
+  var scale = this.scale;
+  var top = -this.scrollY;
+  var left = -this.scrollX;
+  var viewProperties = {
+    scale: scale,
+    top: top,
+    left: left
+  };
+  var event = new Blockly.Events.Ui(null, 'viewport', null, viewProperties);
+  event.workspaceId = this.id;
+  // var event = new Blockly.Events.Viewport(scale, top, left, this.id);
+  Blockly.Events.fire(event);
+};
+
 /**
  * Translate this workspace to new coordinates.
  * @param {number} x Horizontal translation, in pixel units relative to the
@@ -1097,6 +1115,8 @@ Blockly.WorkspaceSvg.prototype.translate = function(x, y) {
   if (this.grid_) {
     this.grid_.moveTo(x, y);
   }
+
+  this.fireViewportChangeEvent_();
 };
 
 /**

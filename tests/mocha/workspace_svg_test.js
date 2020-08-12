@@ -116,6 +116,126 @@ suite('WorkspaceSvg', function() {
     });
   });
 
+  suite.only('Viewport change events', function() {
+    function assertViewportEvent(eventTriggerFunc, eventsFireStub,
+        changeListenerSpy, workspace, expectedEventCount = 1) {
+      eventsFireStub.resetHistory();
+      changeListenerSpy.resetHistory();
+      eventTriggerFunc();
+      // Check viewport event was fired
+      assertEventFired(
+          eventsFireStub, Blockly.Events.Ui, {element: 'viewport'},
+          workspace.id, null);
+      assertEventFired(
+          changeListenerSpy, Blockly.Events.Ui, {element: 'viewport'},
+          workspace.id, null);
+      // Check viewport event was fired with correct properties.
+      var metrics = workspace.getMetrics();
+      var expectedProperties = {
+        element: 'viewport',
+        newValue: {scale: workspace.scale, top: metrics.viewTop,
+          left: metrics.viewLeft}
+      };
+      assertEventFired(eventsFireStub, Blockly.Events.Ui, expectedProperties,
+          workspace.id, null);
+      assertEventFired(changeListenerSpy, Blockly.Events.Ui, expectedProperties,
+          workspace.id, null);
+      // Assert that only one event was listened to.
+      sinon.assert.callCount(changeListenerSpy, expectedEventCount);
+    }
+    setup(function() {
+      defineStackBlock();
+      this.changeListenerSpy = createFireChangeListenerSpy(this.workspace);
+    });
+    teardown(function() {
+      delete Blockly.Blocks['stack_block'];
+    });
+
+    test('inject?', function() {
+      // trigger scroll
+      // expect event
+      // compare metrics value
+    });
+    test('createDom?', function() {
+      // trigger scroll
+      // expect event
+      // compare metrics value
+    });
+    test('dispose?', function() {
+      // trigger scroll
+      // expect event
+      // compare metrics value
+    });
+
+    suite('zoom', function() {
+      test('setScale', function() {
+        assertViewportEvent(() => this.workspace.setScale(2),
+            this.eventsFireStub, this.changeListenerSpy, this.workspace);
+      });
+      test('zoom(50, 50, 1)', function() {
+        assertViewportEvent(() => this.workspace.zoom(50, 50, 1),
+            this.eventsFireStub, this.changeListenerSpy, this.workspace);
+      });
+      test('zoom(50, 50, -1)', function() {
+        assertViewportEvent(() => this.workspace.zoom(50, 50, -1),
+            this.eventsFireStub, this.changeListenerSpy, this.workspace);
+      });
+      test('zoomCenter(1)', function() {
+        assertViewportEvent(() => this.workspace.zoomCenter(1),
+            this.eventsFireStub, this.changeListenerSpy, this.workspace);
+      });
+      test('zoomCenter(-1)', function() {
+        assertViewportEvent(() => this.workspace.zoomCenter(-1),
+            this.eventsFireStub, this.changeListenerSpy, this.workspace);
+      });
+      test('zoomToFit', function() {
+        var block = this.workspace.newBlock('stack_block');
+        block.initSvg();
+        block.render();
+        assertViewportEvent(() => this.workspace.zoomToFit(),
+            this.eventsFireStub, this.changeListenerSpy, this.workspace);
+      });
+    });
+    suite('scroll', function() {
+      test('centerOnBlock', function() {
+        var block = this.workspace.newBlock('stack_block');
+        block.initSvg();
+        block.render();
+        assertViewportEvent(() => this.workspace.zoomToFit(block.id),
+            this.eventsFireStub, this.changeListenerSpy, this.workspace);
+      });
+      test('scroll', function() {
+        assertViewportEvent(() => this.workspace.scrollCenter(),
+            this.eventsFireStub, this.changeListenerSpy, this.workspace);
+      });
+      test('scrollCenter', function() {
+        assertViewportEvent(() => this.workspace.scrollCenter(),
+            this.eventsFireStub, this.changeListenerSpy, this.workspace);
+      });
+      test('translate', function() {
+        assertViewportEvent(() => this.workspace.translate(50, 50),
+            this.eventsFireStub, this.changeListenerSpy, this.workspace);
+      });
+      test.skip('newBlock that triggers scroll', function() {
+        // TODO
+      });
+      test.skip('paste that triggers scroll', function() {
+        // TODO
+      });
+    });
+    suite('resize', function() {
+      test('resize', function() {
+        assertViewportEvent(() => this.workspace.resize(),
+            this.eventsFireStub, this.changeListenerSpy, this.workspace);
+      });
+      test('resizeContents', function() {
+        assertViewportEvent(() => this.workspace.resizeContents(),
+            this.eventsFireStub, this.changeListenerSpy, this.workspace);
+      });
+
+    });
+  });
+
   suite('Workspace Base class', function() {
     testAWorkspace();
   });

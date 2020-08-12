@@ -268,6 +268,10 @@ Blockly.ToolboxCategory.prototype.createDom = function() {
   this.setExpanded(this.toolboxItemDef_['expanded'] == 'true' ||
       this.toolboxItemDef_['expanded']);
 
+  if (this.toolboxItemDef_['hidden'] == 'true') {
+    this.hide();
+  }
+
   return this.htmlDiv_;
 };
 

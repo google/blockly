@@ -70,7 +70,6 @@
     "gulp-sourcemaps": "^2.6.5",
     "gulp-umd": "^2.0.0",
     "js-green-licenses": "^2.0.1",
-    "jshint": "^2.11.0",
     "mocha": "^6.2.3",
     "rimraf": "^3.0.2",
     "selenium-standalone": "^6.17.0",
@@ -78,20 +77,6 @@
     "typescript-closure-tools": "^0.0.7",
     "webdriverio": "^5.22.4",
     "yargs": "^14.2.3"
-  },
-  "jshintConfig": {
-    "globalstrict": true,
-    "predef": [
-      "Blockly",
-      "goog",
-      "window",
-      "document",
-      "soy",
-      "XMLHttpRequest"
-    ],
-    "sub": true,
-    "undef": true,
-    "unused": true
   },
   "dependencies": {
     "jsdom": "^15.2.1"

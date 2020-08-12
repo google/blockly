@@ -197,7 +197,7 @@ function assertXmlPropertyEqual_(xmlValue, expectedValue, message) {
  *    properties.
  * @private
  */
-function assertXmlProperties(obj, expectedXmlProperties) {
+function assertXmlProperties_(obj, expectedXmlProperties) {
   Object.keys(expectedXmlProperties).map((key) => {
     var value = obj[key];
     var expectedValue = expectedXmlProperties[key];
@@ -348,7 +348,7 @@ function assertNthCallEventArgEquals(spy, n, instanceType, expectedProperties,
   assertEventFired(nthCall, instanceType, nonXmlProperties, expectedWorkspaceId,
       expectedBlockId);
   var eventArg = nthCall.firstArg;
-  assertXmlProperties(eventArg, xmlProperties);
+  assertXmlProperties_(eventArg, xmlProperties);
 }
 
 function defineStackBlock() {

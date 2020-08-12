@@ -49,9 +49,10 @@ suite('Comments', function() {
       this.comment.setVisible(true);
       chai.assert.isTrue(this.comment.isVisible());
       assertEditable(this.comment);
-      assertLastCallEventArgEquals(
-          this.eventsFireStub, Blockly.Events.UI, this.workspace.id, this.block.id,
-          {element: 'commentOpen', oldValue: false, newValue: true});
+      assertEventFired(
+          this.eventsFireStub, Blockly.Events.Ui,
+          {element: 'commentOpen', oldValue: false, newValue: true},
+          this.workspace.id, this.block.id);
     });
     test('Not Editable', function() {
       sinon.stub(this.block, 'isEditable').returns(false);
@@ -59,9 +60,10 @@ suite('Comments', function() {
       this.comment.setVisible(true);
       chai.assert.isTrue(this.comment.isVisible());
       assertNotEditable(this.comment);
-      assertLastCallEventArgEquals(
-          this.eventsFireStub, Blockly.Events.UI, this.workspace.id, this.block.id,
-          {element: 'commentOpen', oldValue: false, newValue: true});
+      assertEventFired(
+          this.eventsFireStub, Blockly.Events.Ui,
+          {element: 'commentOpen', oldValue: false, newValue: true},
+          this.workspace.id, this.block.id);
     });
     test('Editable -> Not Editable', function() {
       this.comment.setVisible(true);
@@ -69,12 +71,11 @@ suite('Comments', function() {
 
       this.comment.updateEditable();
       chai.assert.isTrue(this.comment.isVisible());
-      assertNotEditable(this.comment);assertLastCallEventArgEquals(
-          this.eventsFireStub, Blockly.Events.UI, this.workspace.id, this.block.id,
-          {element: 'commentOpen', oldValue: false, newValue: true});
-      assertLastCallEventArgEquals(
-          this.eventsFireStub, Blockly.Events.UI, this.workspace.id, this.block.id,
-          {element: 'commentOpen', oldValue: false, newValue: true});
+      assertNotEditable(this.comment);
+      assertEventFired(
+          this.eventsFireStub, Blockly.Events.Ui,
+          {element: 'commentOpen', oldValue: false, newValue: true},
+          this.workspace.id, this.block.id);
     });
     test('Not Editable -> Editable', function() {
       var editableStub = sinon.stub(this.block, 'isEditable').returns(false);
@@ -84,9 +85,10 @@ suite('Comments', function() {
       this.comment.updateEditable();
       chai.assert.isTrue(this.comment.isVisible());
       assertEditable(this.comment);
-      assertLastCallEventArgEquals(
-          this.eventsFireStub, Blockly.Events.UI, this.workspace.id, this.block.id,
-          {element: 'commentOpen', oldValue: false, newValue: true});
+      assertEventFired(
+          this.eventsFireStub, Blockly.Events.Ui,
+          {element: 'commentOpen', oldValue: false, newValue: true},
+          this.workspace.id, this.block.id);
     });
   });
   suite('Set/Get Bubble Size', function() {

@@ -149,9 +149,9 @@ suite('Theme', function() {
       // Checks that the toolbox refreshed method was called
       sinon.assert.calledOnce(refreshToolboxSelectionStub);
 
-      assertLastCallEventArgEquals(
-          this.eventsFireStub, Blockly.Events.UI, workspace.id,
-          null, {element: 'theme'});
+      assertEventFired(
+          this.eventsFireStub, Blockly.Events.Ui, {element: 'theme'},
+          workspace.id, null);
     } finally {
       workspaceTeardown.call(this, workspace);
       undefineThemeTestBlocks();

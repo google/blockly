@@ -176,6 +176,52 @@ function createFireChangeListenerSpy(workspace) {
 }
 
 /**
+ * Asserts whether the given xml property has the expected property.
+ * @param {!Node} xmlValue The xml value to check.
+ * @param {!Node|string} expectedValue The expected value.
+ * @param {string=} message Optional message to use in assert message.
+ * @private
+ */
+function assertXmlPropertyEqual_(xmlValue, expectedValue, message) {
+  var value = Blockly.Xml.domToText(xmlValue);
+  if (expectedValue instanceof Node) {
+    expectedValue = Blockly.Xml.domToText(expectedValue);
+  }
+  chai.assert.equal(value, expectedValue, message);
+}
+
+/**
+ * Asserts that the given object has the expected xml properties.
+ * @param {Object} obj The object to check.
+ * @param {Object<string, Node|string>} expectedXmlProperties The expected xml
+ *    properties.
+ * @private
+ */
+function assertXmlProperties_(obj, expectedXmlProperties) {
+  Object.keys(expectedXmlProperties).map((key) => {
+    var value = obj[key];
+    var expectedValue = expectedXmlProperties[key];
+    if (expectedValue === undefined) {
+      chai.assert.isUndefined(value,
+          'Expected ' + key + ' property to be undefined');
+      return;
+    }
+    chai.assert.exists(value, 'Expected ' + key + ' property to exist');
+    assertXmlPropertyEqual_(value, expectedValue, 'Checking property ' + key);
+  });
+}
+
+/**
+ * Whether given key indicates that the property is xml.
+ * @param {string} key The key to check.
+ * @return {boolean} Whether the given key is for xml property.
+ * @private
+ */
+function isXmlProperty_(key) {
+  return key.toLowerCase().endsWith('xml');
+}
+
+/**
  * Asserts that the given event has the expected values.
  * @param {!Blockly.Event.Abstract} event The event to check.
  * @param {string} expectedType Expected type of event fired.
@@ -184,44 +230,100 @@ function createFireChangeListenerSpy(workspace) {
  * @param {!Object<string, *>} expectedProperties Map of of additional expected
  *    properties to check on fired event.
  * @param {string=} message Optional message to prepend assert messages.
- * @private
  */
 function assertEventEquals(event, expectedType,
     expectedWorkspaceId, expectedBlockId, expectedProperties, message) {
   var prependMessage = message ? message + ' ' : '';
+  prependMessage += 'Event fired ';
   chai.assert.equal(event.type, expectedType,
-      prependMessage + 'Event fired type');
+      prependMessage + 'type');
   chai.assert.equal(event.workspaceId, expectedWorkspaceId,
-      prependMessage + 'Event fired workspace id');
+      prependMessage + 'workspace id');
   chai.assert.equal(event.blockId, expectedBlockId,
-      prependMessage + 'Event fired block id');
+      prependMessage + 'block id');
   Object.keys(expectedProperties).map((key) => {
     var value = event[key];
     var expectedValue = expectedProperties[key];
-    if (key.endsWith('Xml')) {
-      value = Blockly.Xml.domToText(value);
-      expectedValue = Blockly.Xml.domToText(expectedValue);
+    if (expectedValue === undefined) {
+      chai.assert.isUndefined(value, prependMessage + key);
+      return;
     }
-    chai.assert.equal(value, expectedValue, prependMessage + 'Event fired ' + key);
+    chai.assert.exists(value, prependMessage + key);
+    if (isXmlProperty_(key)) {
+      assertXmlPropertyEqual_(value, expectedValue,
+          prependMessage + key);
+    } else {
+      chai.assert.equal(value, expectedValue,
+          prependMessage + key);
+    }
   });
 }
 
 /**
- * Asserts that the event passed to the last call of the given spy has the
- * expected values. Assumes that the event is passed as the first argument.
- * @param {!SinonSpy} spy The spy to use.
- * @param {string} expectedType Expected type of event fired.
- * @param {string} expectedWorkspaceId Expected workspace id of event fired.
- * @param {string} expectedBlockId Expected block id of event fired.
+ * Asserts that an event with the given values was fired.
+ * @param {!SinonSpy|!SinonSpyCall} spy The spy or spy call to use.
+ * @param {function(new:Blockly.Events.Abstract)} instanceType Expected instance
+ *    type of event fired.
  * @param {!Object<string, *>} expectedProperties Map of of expected properties
  *    to check on fired event.
- * @param {string=} message Optional message to prepend assert messages.
+ * @param {string} expectedWorkspaceId Expected workspace id of event fired.
+ * @param {?string=} expectedBlockId Expected block id of event fired.
  */
-function assertLastCallEventArgEquals(spy, expectedType,
-    expectedWorkspaceId, expectedBlockId, expectedProperties, message) {
-  var event = spy.lastCall.firstArg;
-  assertEventEquals(event, expectedType, expectedWorkspaceId, expectedBlockId,
-      expectedProperties, message);
+function assertEventFired(spy, instanceType, expectedProperties,
+    expectedWorkspaceId, expectedBlockId) {
+  expectedProperties = Object.assign({
+    type: instanceType.prototype.type,
+    workspaceId: expectedWorkspaceId,
+    blockId: expectedBlockId,
+  }, expectedProperties);
+  var expectedEvent =
+      sinon.match.instanceOf(instanceType).and(sinon.match(expectedProperties));
+  sinon.assert.calledWith(spy, expectedEvent);
+}
+
+/**
+ * Asserts that an event with the given values was not fired.
+ * @param {!SpyCall} spy The spy to use.
+ * @param {function(new:Blockly.Events.Abstract)} instanceType Expected instance
+ *    type of event fired.
+ * @param {!Object<string, *>} expectedProperties Map of of expected properties
+ *    to check on fired event.
+ * @param {string=} expectedWorkspaceId Expected workspace id of event fired.
+ * @param {?string=} expectedBlockId Expected block id of event fired.
+ */
+function assertEventNotFired(spy, instanceType, expectedProperties,
+    expectedWorkspaceId, expectedBlockId) {
+  expectedProperties.type = instanceType.prototype.type;
+  if (expectedWorkspaceId !== undefined) {
+    expectedProperties.workspaceId = expectedWorkspaceId;
+  }
+  if (expectedBlockId !== undefined) {
+    expectedProperties.blockId = expectedBlockId;
+  }
+  var expectedEvent =
+      sinon.match.instanceOf(instanceType).and(sinon.match(expectedProperties));
+  sinon.assert.neverCalledWith(spy, expectedEvent);
+}
+
+/**
+ * Filters out xml properties from given object based on key.
+ * @param {Object<string, *>} properties The properties to filter.
+ * @return {[Object<string, *>, Object<string, *>]} A list containing split non
+ *    xml properties and xml properties.
+ * @private
+ */
+function splitByXmlProperties_(properties) {
+  var xmlProperties = {};
+  var nonXmlProperties = {};
+  Object.keys(properties).forEach((key) => {
+    if (isXmlProperty_(key)) {
+      xmlProperties[key] = properties[key];
+      return false;
+    } else {
+      nonXmlProperties[key] = properties[key];
+    }
+  });
+  return [nonXmlProperties, xmlProperties];
 }
 
 /**
@@ -229,18 +331,24 @@ function assertLastCallEventArgEquals(spy, expectedType,
  * expected values. Assumes that the event is passed as the first argument.
  * @param {!SinonSpy} spy The spy to use.
  * @param {number} n Which call to check.
- * @param {string} expectedType Expected type of event fired.
- * @param {string} expectedWorkspaceId Expected workspace id of event fired.
- * @param {string} expectedBlockId Expected block id of event fired.
+ * @param {function(new:Blockly.Events.Abstract)} instanceType Expected instance
+ *    type of event fired.
  * @param {Object<string, *>} expectedProperties Map of of expected properties
  *    to check on fired event.
- * @param {string=} message Optional message to prepend assert messages.
+ * @param {string} expectedWorkspaceId Expected workspace id of event fired.
+ * @param {?string=} expectedBlockId Expected block id of event fired.
  */
-function assertNthCallEventArgEquals(spy, n, expectedType,
-    expectedWorkspaceId, expectedBlockId, expectedProperties, message) {
-  var event = spy.getCall(n).firstArg;
-  assertEventEquals(event, expectedType, expectedWorkspaceId, expectedBlockId,
-      expectedProperties, message);
+function assertNthCallEventArgEquals(spy, n, instanceType, expectedProperties,
+    expectedWorkspaceId, expectedBlockId) {
+  var nthCall = spy.getCall(n);
+  var splitProperties = splitByXmlProperties_(expectedProperties);
+  var nonXmlProperties = splitProperties[0];
+  var xmlProperties = splitProperties[1];
+
+  assertEventFired(nthCall, instanceType, nonXmlProperties, expectedWorkspaceId,
+      expectedBlockId);
+  var eventArg = nthCall.firstArg;
+  assertXmlProperties_(eventArg, xmlProperties);
 }
 
 function defineStackBlock() {

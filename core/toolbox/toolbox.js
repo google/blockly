@@ -405,7 +405,11 @@ Blockly.Toolbox.prototype.addToolboxItem_ = function(toolboxItem) {
   }
 };
 
-
+/**
+ * Gets the items in the toolbox.
+ * @return {!Array<!Blockly.ToolboxItem>} The list of items in the toolbox.
+ * @public
+ */
 Blockly.Toolbox.prototype.getToolboxItems = function() {
   return this.contents_;
 };

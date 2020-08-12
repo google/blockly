@@ -66,20 +66,10 @@ function workspaceTeardown(workspace) {
 function createEventsFireStubFireImmediately_(clock) {
   var stub = sinon.stub(Blockly.Events, 'fire');
   stub.callsFake(function(event) {
-    // TODO(#4070) Replace the fake function content with the following code
-    // that uses wrappedMethod after cleanup is added to ALL tests.
-    // Calling the original method will not consistently work if other tests
-    // add things to the event queue because the setTimeout call will not be
-    // added to the stubbed clock (so runAll cannot be used to control).
-    // // Call original method.
-    // stub.wrappedMethod.call(this, ...arguments);
-    // // Advance clock forward to run any queued events.
-    // clock.runAll();
-    if (!Blockly.Events.isEnabled()) {
-      return;
-    }
-    Blockly.Events.FIRE_QUEUE_.push(event);
-    Blockly.Events.fireNow_();
+    // Call original method.
+    stub.wrappedMethod.call(this, ...arguments);
+    // Advance clock forward to run any queued events.
+    clock.runAll();
   });
   return stub;
 }

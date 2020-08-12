@@ -21,7 +21,6 @@ goog.provide('Blockly.ToolboxItem');
  *     toolbox item.
  * @param {!Blockly.IToolbox} toolbox The toolbox that holds the toolbox item.
  * @constructor
- * @abstract
  */
 Blockly.ToolboxItem = function(toolboxItemDef, toolbox) {
 
@@ -112,7 +111,6 @@ Blockly.ToolboxItem.prototype.dispose = function() {
  *     defining the toolbox item.
  * @param {!Blockly.IToolbox} toolbox The toolbox that holds the toolbox item.
  * @constructor
- * @abstract
  * @extends {Blockly.ToolboxItem}
  */
 Blockly.SelectableToolboxItem = function(toolboxItemDef, toolbox) {
@@ -172,7 +170,6 @@ Blockly.SelectableToolboxItem.prototype.onClick = function(_e) {};
  *     defining the toolbox item.
  * @param {!Blockly.IToolbox} toolbox The toolbox that holds the toolbox item.
  * @constructor
- * @abstract
  * @extends {Blockly.SelectableToolboxItem}
  */
 Blockly.CollapsibleToolboxItem = function(toolboxItemDef, toolbox) {

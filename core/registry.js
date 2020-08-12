@@ -80,6 +80,8 @@ Blockly.registry.Type.TOOLBOX = new Blockly.registry.Type('toolbox');
 /** @type {!Blockly.registry.Type<Blockly.Theme>} */
 Blockly.registry.Type.THEME = new Blockly.registry.Type('theme');
 
+/** @type {!Blockly.registry.Type<Blockly.ToolboxItem>} */
+Blockly.registry.Type.TOOLBOX_ITEM = new Blockly.registry.Type('toolbox-item');
 
 /** @type {!Blockly.registry.Type<Blockly.IFlyout>} */
 Blockly.registry.Type.FLYOUTS_VERTICAL_TOOLBOX =
@@ -124,8 +126,9 @@ Blockly.registry.register = function(type, name, registryItem) {
   // Validate that the given class has all the required properties.
   Blockly.registry.validate_(type, registryItem);
 
-  // If the name already exists throw an error.
-  if (typeRegistry[name]) {
+  // Don't throw an error if it is a toolbox item. We expect developers to override
+  // categories and separators.
+  if (type != Blockly.registry.Type.TOOLBOX_ITEM && typeRegistry[name]) {
     throw Error('Name "' + name + '" with type "' + type + '" already registered.');
   }
   typeRegistry[name] = registryItem;

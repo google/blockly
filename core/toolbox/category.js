@@ -144,9 +144,9 @@ Blockly.ToolboxCategory = function(categoryDef, toolbox, opt_parent) {
   /**
    * True if this category is disabled, false otherwise.
    * @type {boolean}
-   * @public
+   * @protected
    */
-  this.isDisabled = false;
+  this.isDisabled_ = false;
 
   /**
    * Parse the contents for this category.
@@ -575,7 +575,7 @@ Blockly.ToolboxCategory.prototype.isExpanded = function() {
  * @override
  */
 Blockly.ToolboxCategory.prototype.isSelectable = function() {
-  return this.isVisible() && !this.isDisabled;
+  return this.isVisible() && !this.isDisabled_;
 };
 
 /**
@@ -607,6 +607,17 @@ Blockly.ToolboxCategory.prototype.setSelected = function(isSelected) {
   }
   Blockly.utils.aria.setState(/** @type {!Element} */ (this.htmlDiv_),
       Blockly.utils.aria.State.SELECTED, isSelected);
+};
+
+/**
+ * Sets whether the category is disabled.
+ * @param {boolean} isDisabled True to disable the category, false otherwise.
+ */
+Blockly.ToolboxCategory.prototype.setDisabled = function(isDisabled) {
+  this.isDisabled_ = isDisabled;
+  this.getDiv().setAttribute('disabled', isDisabled);
+  isDisabled ? this.getDiv().setAttribute('disabled', 'true') :
+      this.getDiv().removeAttribute('disabled');
 };
 
 /**
@@ -653,17 +664,20 @@ Blockly.ToolboxCategory.prototype.getContents = function() {
 };
 
 /**
- * Update the contents of this category.
+ * Updates the contents to be displayed in the flyout.
+ * If the flyout is open when the contents are updated, refreshSelection on the
+ * toolbox must also be called.
  * @param {!Blockly.utils.toolbox.ToolboxDefinition|string} contents The contents
- *         for this category.
+ *     to be displayed in the flyout. A string can be supplied to create a
+ *     dynamic category.
+ * @public
  */
-Blockly.ToolboxCategory.prototype.updateFlyoutContent = function(contents) {
+Blockly.ToolboxCategory.prototype.updateFlyoutContents = function(contents) {
   if (this.hasChildren()) {
     console.warn('Category can not have both flyout contents and sub categories');
     return;
   }
   if (typeof contents == 'string') {
-    // TODO: Should I be checking for a string of xml?
     this.toolboxItemDef_['custom'] = contents;
   } else {
     this.toolboxItemDef_['contents'] = Blockly.utils.toolbox.convertToolboxToJSON(contents);

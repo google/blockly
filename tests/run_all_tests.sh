@@ -56,7 +56,7 @@ run_test_command "eslint" "eslint ."
 run_test_command "mocha" "node tests/mocha/run_mocha_tests_in_browser.js"
 
 # Run Node tests.
-run_test_command "node" "./node_modules/.bin/mocha tests/node --opts tests/node/mocha.opts"
+run_test_command "node" "./node_modules/.bin/mocha tests/node --config tests/node/.mocharc.js"
 
 # Run generator tests inside a browser and check the results.
 run_test_command "generators" "tests/scripts/run_generators.sh"

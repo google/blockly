@@ -406,6 +406,15 @@ Blockly.Toolbox.prototype.addToolboxItem_ = function(toolboxItem) {
 };
 
 /**
+ * Gets the items in the toolbox.
+ * @return {!Array<!Blockly.ToolboxItem>} The list of items in the toolbox.
+ * @public
+ */
+Blockly.Toolbox.prototype.getToolboxItems = function() {
+  return this.contents_;
+};
+
+/**
  * Adds a style on the toolbox. Usually used to change the cursor.
  * @param {string} style The name of the class to add.
  * @package

@@ -399,7 +399,7 @@ Blockly.Toolbox.prototype.addToolboxItem_ = function(toolboxItem) {
   if (toolboxItem.isCollapsible()) {
     var collapsibleItem = /** @type {Blockly.CollapsibleToolboxItem} */
         (toolboxItem);
-    for (var i = 0, child; (child = collapsibleItem.getContents()[i]); i++) {
+    for (var i = 0, child; (child = collapsibleItem.getSubCategories()[i]); i++) {
       this.addToolboxItem_(child);
     }
   }
@@ -635,7 +635,7 @@ Blockly.Toolbox.prototype.setSelectedItem = function(newItem) {
         Blockly.utils.aria.State.ACTIVEDESCENDANT, '');
   }
 
-  if (newItem && newItem != oldItem ) {
+  if (newItem && newItem != oldItem) {
     // Select the new item unless the old item equals the new item.
     this.selectedItem_ = newItem;
     newItem.setSelected(true);
@@ -668,7 +668,7 @@ Blockly.Toolbox.prototype.selectItemByPosition = function(position) {
  * @private
  */
 Blockly.Toolbox.prototype.updateFlyout_ = function(oldItem, newItem) {
-  if (oldItem == newItem || !newItem || newItem.isCollapsible()) {
+  if (oldItem == newItem || !newItem || (newItem.isCollapsible() && newItem.getContents().length == 0)) {
     this.flyout_.hide();
   } else if (newItem.isSelectable()) {
     var selectableItem = /** @type {!Blockly.SelectableToolboxItem} */ (newItem);

@@ -345,7 +345,7 @@ suite('Procedures', function() {
       this.workspaceSvg = Blockly.inject('blocklyDiv', {toolbox: toolbox});
     });
     teardown(function() {
-      this.workspaceSvg.dispose();
+      workspaceTeardown.call(this, this.workspaceSvg);
       sinon.restore();
     });
     suite('Inherited disabled', function() {

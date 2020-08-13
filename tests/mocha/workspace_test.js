@@ -247,7 +247,9 @@ function testAWorkspace() {
 
   suite('addTopBlock', function() {
     setup(function() {
-      this.targetWorkspace = new Blockly.Workspace();
+      this.targetWorkspace = this.workspace.rendered ?
+          new Blockly.WorkspaceSvg(new Blockly.Options({})) :
+          new Blockly.Workspace();
       this.workspace.isFlyout = true;
       this.workspace.targetWorkspace = this.targetWorkspace;
     });
@@ -595,11 +597,13 @@ function testAWorkspace() {
 
   suite('getById', function() {
     setup(function() {
-      this.workspaceB = new Blockly.Workspace();
+      this.workspaceB = this.workspace.rendered ?
+          new Blockly.WorkspaceSvg(new Blockly.Options({})) :
+          new Blockly.Workspace();
     });
 
     teardown(function() {
-      this.workspaceB.dispose();
+      workspaceTeardown.call(this, this.workspaceB);
     });
 
     test('Trivial', function() {
@@ -627,11 +631,13 @@ function testAWorkspace() {
     setup(function() {
       this.blockA = this.workspace.newBlock('');
       this.blockB = this.workspace.newBlock('');
-      this.workspaceB = new Blockly.Workspace();
+      this.workspaceB = this.workspace.rendered ?
+          new Blockly.WorkspaceSvg(new Blockly.Options({})) :
+          new Blockly.Workspace();
     });
 
     teardown(function() {
-      this.workspaceB.dispose();
+      workspaceTeardown.call(this, this.workspaceB);
     });
 
     test('Trivial', function() {

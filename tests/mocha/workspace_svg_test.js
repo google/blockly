@@ -32,6 +32,11 @@ suite('WorkspaceSvg', function() {
     delete Blockly.Blocks['test_val_in'];
   });
 
+  test('dispose of WorkspaceSvg without dom throws no error', function() {
+    var ws = new Blockly.WorkspaceSvg(new Blockly.Options({}));
+    ws.dispose();
+  });
+
   test('appendDomToWorkspace alignment', function() {
     var dom = Blockly.Xml.textToDom(
         '<xml xmlns="https://developers.google.com/blockly/xml">' +

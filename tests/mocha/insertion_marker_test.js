@@ -73,7 +73,6 @@ suite('InsertionMarkers', function() {
       delete Blockly.JavaScript['stack_block'];
       delete Blockly.JavaScript['row_block'];
       delete Blockly.JavaScript['statement_block'];
-      delete this.assertGen;
     });
     test('Marker Surrounds', function() {
       var xml = Blockly.Xml.textToDom(
@@ -213,9 +212,6 @@ suite('InsertionMarkers', function() {
         xml = Blockly.Xml.domToText(xml);
         chai.assert.equal(xml, expectXml);
       };
-    });
-    teardown(function() {
-      delete this.assertXml;
     });
     test('Marker Surrounds', function() {
       var xml = Blockly.Xml.textToDom(

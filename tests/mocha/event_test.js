@@ -660,7 +660,7 @@ suite('Events', function() {
         // Expect the workspace to not have a variable with ID 'test_block_id'.
         chai.assert.isNull(this.workspace.getVariableById(TEST_BLOCK_ID));
       } finally {
-        workspaceSvg.dispose();
+        workspaceTeardown.call(this, workspaceSvg);
       }
     });
 

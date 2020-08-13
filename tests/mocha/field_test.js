@@ -392,7 +392,7 @@ suite('Abstract Fields', function() {
           this.workspace.createDom();
         });
         teardown(function() {
-          this.workspace = null;
+          workspaceTeardown.call(this, this.workspace);
         });
         test('Before Append', function() {
           Blockly.Blocks['tooltip'] = {

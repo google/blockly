@@ -146,9 +146,9 @@ Blockly.ToolboxCategory = function(categoryDef, toolbox, opt_parent) {
   /**
    * True if this category is disabled, false otherwise.
    * @type {boolean}
-   * @public
+   * @protected
    */
-  this.isDisabled = false;
+  this.isDisabled_ = false;
 
   /**
    * Parse the contents for this category.
@@ -580,7 +580,7 @@ Blockly.ToolboxCategory.prototype.isExpanded = function() {
  * @override
  */
 Blockly.ToolboxCategory.prototype.isSelectable = function() {
-  return this.isVisible() && !this.isDisabled;
+  return this.isVisible() && !this.isDisabled_;
 };
 
 /**
@@ -612,6 +612,17 @@ Blockly.ToolboxCategory.prototype.setSelected = function(isSelected) {
   }
   Blockly.utils.aria.setState(/** @type {!Element} */ (this.htmlDiv_),
       Blockly.utils.aria.State.SELECTED, isSelected);
+};
+
+/**
+ * Sets whether the category is disabled.
+ * @param {boolean} isDisabled True to disable the category, false otherwise.
+ */
+Blockly.ToolboxCategory.prototype.setDisabled = function(isDisabled) {
+  this.isDisabled_ = isDisabled;
+  this.getDiv().setAttribute('disabled', isDisabled);
+  isDisabled ? this.getDiv().setAttribute('disabled', 'true') :
+      this.getDiv().removeAttribute('disabled');
 };
 
 /**
@@ -656,6 +667,31 @@ Blockly.ToolboxCategory.prototype.getDiv = function() {
 Blockly.ToolboxCategory.prototype.getContents = function() {
   return this.contents_;
 };
+
+/**
+ * Updates the contents to be displayed in the flyout.
+ * If the flyout is open when the contents are updated, refreshSelection on the
+ * toolbox must also be called.
+ * @param {!Blockly.utils.toolbox.ToolboxDefinition|string} contents The contents
+ *     to be displayed in the flyout. A string can be supplied to create a
+ *     dynamic category.
+ * @public
+ */
+Blockly.ToolboxCategory.prototype.updateFlyoutContents = function(contents) {
+  if (this.hasChildren()) {
+    console.warn('Category can not have both flyout contents and sub categories');
+    return;
+  }
+  if (typeof contents == 'string') {
+    this.toolboxItemDef_['custom'] = contents;
+  } else {
+    this.toolboxItemDef_['contents'] = Blockly.utils.toolbox.convertToolboxToJSON(contents);
+  }
+  this.contents_ = this.parseContents_(
+      /** @type {Blockly.utils.toolbox.Category} */ (this.toolboxItemDef_),
+      this.hasChildren());
+};
+
 
 /**
  * @override

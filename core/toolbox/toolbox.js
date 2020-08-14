@@ -14,7 +14,7 @@ goog.provide('Blockly.Toolbox');
 
 goog.require('Blockly.Css');
 goog.require('Blockly.Events');
-goog.require('Blockly.Events.ToolboxChange');
+goog.require('Blockly.Events.ToolboxItemChange');
 goog.require('Blockly.navigation');
 goog.require('Blockly.registry');
 goog.require('Blockly.ToolboxCategory');
@@ -687,8 +687,8 @@ Blockly.Toolbox.prototype.fireSelectEvent_ = function(oldItem, newItem) {
     newId = null;
     newType = null;
   }
-  var event = new Blockly.Events.ToolboxChange(
-      oldType, oldId, newType, newId, this.workspace_);
+  var event = new Blockly.Events.ToolboxItemChange(
+      this, oldType, oldId, newType, newId, this.workspace_);
   Blockly.Events.fire(event);
 };
 

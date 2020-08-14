@@ -145,7 +145,7 @@ Blockly.Events.FINISHED_LOADING = 'finished_loading';
  * Name of event that selects a different toolbox item.
  * @const
  */
-Blockly.Events.TOOLBOX_CHANGE = 'toolbox_change';
+Blockly.Events.TOOLBOX_ITEM_CHANGE = 'toolbox_item_change';
 
 /**
  * List of events that cause objects to be bumped back into the visible

@@ -44,6 +44,14 @@ Blockly.ToolboxCategory = function(categoryDef, toolbox, opt_parent) {
   var contents = categoryDef['contents'];
 
   /**
+   * True if this category has subcategories, false otherwise.
+   * @type {boolean}
+   * @private
+   */
+  this.hasChildren_ = contents && contents.length &&
+    typeof contents != 'string' &&
+    contents[0].kind.toUpperCase() == 'CATEGORY';
+  /**
    * The parent of the category.
    * @type {?Blockly.ToolboxCategory}
    * @protected
@@ -147,19 +155,7 @@ Blockly.ToolboxCategory = function(categoryDef, toolbox, opt_parent) {
    *        !Array<!Blockly.utils.toolbox.FlyoutItemDef>}
    * @protected
    */
-  // this.contents_ = this.parseContents_(categoryDef);
-
-  this.flyoutItems_ = [];
-
-  this.toolboxItems_ = [];
-
-  this.parseContents_(categoryDef);
-  /**
-   * True if this category has subcategories, false otherwise.
-   * @type {boolean}
-   * @private
-   */
-  this.hasChildren_ = this.toolboxItems_.length;
+  this.contents_ = this.parseContents_(categoryDef, this.hasChildren_);
 };
 
 Blockly.utils.object.inherits(Blockly.ToolboxCategory,
@@ -217,23 +213,21 @@ Blockly.ToolboxCategory.defaultBackgroundColour = '#57e';
  *     The contents for this category.
  * @private
  */
-Blockly.ToolboxCategory.prototype.parseContents_ = function(categoryDef) {
+Blockly.ToolboxCategory.prototype.parseContents_ = function(categoryDef,
+    hasChildren) {
+  var toolboxItems = [];
   var contents = categoryDef['contents'];
-  if (categoryDef['custom']) {
-    this.flyoutItems_ = categoryDef['custom'];
-  } else {
+  if (hasChildren) {
     for (var i = 0; i < contents.length; i++) {
-      var child = contents[i];
-      var ToolboxItemClass = Blockly.registry.getClass(
-          Blockly.registry.Type.TOOLBOX_ITEM, child['kind'].toLowerCase());
-      if (ToolboxItemClass) {
-        var toolboxItem = new ToolboxItemClass(child, this.parentToolbox_, this);
-        this.toolboxItems_.push(toolboxItem);
-      } else {
-        this.flyoutItems_.push(child);
-      }
+      var child = new Blockly.ToolboxCategory(contents[i], this.parentToolbox_, this);
+      toolboxItems.push(child);
     }
+  } else if (categoryDef['custom']) {
+    toolboxItems = categoryDef['custom'];
+  } else {
+    toolboxItems = contents;
   }
+  return toolboxItems;
 };
 
 /**
@@ -261,8 +255,8 @@ Blockly.ToolboxCategory.prototype.createDom = function() {
       Blockly.utils.aria.State.LABELLEDBY, labelDom.getAttribute('id'));
 
   if (this.hasChildren()) {
-    // var contents = /** @type {!Array<!Blockly.ToolboxItem>} */ (this.toolboxItems_);
-    this.subcategoriesDiv_ = this.createSubCategoriesDom_(this.toolboxItems_);
+    var subCategories = /** @type {!Array<!Blockly.ToolboxItem>} */ (this.getSubCategories());
+    this.subcategoriesDiv_ = this.createSubCategoriesDom_(subCategories);
     Blockly.utils.aria.setRole(this.subcategoriesDiv_,
         Blockly.utils.aria.Role.GROUP);
     this.htmlDiv_.appendChild(this.subcategoriesDiv_);
@@ -480,8 +474,8 @@ Blockly.ToolboxCategory.prototype.setExpanded = function(isExpanded) {
       Blockly.utils.aria.State.EXPANDED, isExpanded);
 
   if (this.hasChildren()) {
-    for (var i = 0; i < this.toolboxItems_.length; i++) {
-      var child = this.toolboxItems_[i];
+    for (var i = 0; i < this.contents_.length; i++) {
+      var child = this.contents_[i];
       child.isParentExpanded_ = isExpanded;
     }
   }
@@ -533,7 +527,7 @@ Blockly.ToolboxCategory.prototype.hasChildren = function() {
 Blockly.ToolboxCategory.prototype.setVisible_ = function(isVisible) {
   this.htmlDiv_.style.display = isVisible ? 'block' : 'none';
   if (this.hasChildren()) {
-    for (var i = 0, child; (child = this.toolboxItems_[i]); i++) {
+    for (var i = 0, child; (child = this.contents_[i]); i++) {
       child.setVisible_(isVisible);
     }
   }
@@ -665,11 +659,11 @@ Blockly.ToolboxCategory.prototype.getDiv = function() {
  * @override
  */
 Blockly.ToolboxCategory.prototype.getContents = function() {
-  return this.flyoutItems_;
+  return this.contents_;
 };
 
 Blockly.ToolboxCategory.prototype.getSubCategories = function() {
-  return this.toolboxItems_;
+  return this.contents_;
 };
 
 /**

@@ -637,8 +637,7 @@ Blockly.Toolbox.prototype.setVisible = function(isVisible) {
  */
 Blockly.Toolbox.prototype.setSelectedItem = function(newItem) {
   var oldItem = this.selectedItem_;
-  // TODO: Check this.
-  this.previouslySelectedItem_ = oldItem;
+
   if ((!newItem && !oldItem) || (newItem && !newItem.isSelectable())) {
     return;
   }
@@ -648,6 +647,7 @@ Blockly.Toolbox.prototype.setSelectedItem = function(newItem) {
     // Deselect the old item unless the old item is collapsible and has been
     // previously clicked on.
     this.selectedItem_ = null;
+    this.previouslySelectedItem_ = oldItem;
     oldItem.setSelected(false);
     Blockly.utils.aria.setState(/** @type {!Element} */ (this.contentsDiv_),
         Blockly.utils.aria.State.ACTIVEDESCENDANT, '');
@@ -656,6 +656,7 @@ Blockly.Toolbox.prototype.setSelectedItem = function(newItem) {
   if (this.shouldSelectItem_(oldItem, newItem)) {
     // Select the new item unless the old item equals the new item.
     this.selectedItem_ = newItem;
+    this.previouslySelectedItem_ = oldItem;
     newItem.setSelected(true);
     Blockly.utils.aria.setState(/** @type {!Element} */ (this.contentsDiv_),
         Blockly.utils.aria.State.ACTIVEDESCENDANT, newItem.getId());

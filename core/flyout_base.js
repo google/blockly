@@ -457,10 +457,12 @@ Blockly.Flyout.prototype.hide = function() {
 
 /**
  * Show and populate the flyout.
- * @param {!Blockly.utils.toolbox.ToolboxDefinition|string} flyoutDef
- *    List of contents to display in the flyout as an array of xml an
- *    array of Nodes, a NodeList or a string with the name of the dynamic category.
- *    Variables and procedures have a custom set of blocks.
+ * @param {!Blockly.utils.toolbox.ToolboxDefinition|
+ *         !Array<Blockly.utils.toolbox.FlyoutItemDef>|
+ *         string} flyoutDef List of contents to display in the flyout as an
+ *         array of xml an array of Nodes, a NodeList or a string with the name
+ *         of the dynamic category. Variables and procedures have a custom set
+ *         of blocks.
  */
 Blockly.Flyout.prototype.show = function(flyoutDef) {
   this.workspace_.setResizesEnabled(false);
@@ -487,7 +489,7 @@ Blockly.Flyout.prototype.show = function(flyoutDef) {
   // Parse the Array or NodeList passed in into an Array of
   // Blockly.utils.toolbox.Toolbox.
   var parsedContent = /** @type {!Array<!Blockly.utils.toolbox.FlyoutItemDef>} */
-      (Blockly.utils.toolbox.convertToolboxToJSON(flyoutDef));
+      (Blockly.utils.toolbox.convertToolboxContentsToJSON(flyoutDef));
   var flyoutInfo =
     /** @type {{contents:!Array.<!Object>, gaps:!Array.<number>}} */ (
       this.createFlyoutInfo_(parsedContent));

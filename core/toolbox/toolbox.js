@@ -56,10 +56,10 @@ Blockly.Toolbox = function(workspace) {
 
   /**
    * The JSON describing the contents of this toolbox.
-   * @type {!Array<!Blockly.utils.toolbox.ToolboxItemDef>}
+   * @type {!Blockly.utils.toolbox.Toolbox}
    * @protected
    */
-  this.toolboxDef_ = workspace.options.languageTree || [];
+  this.toolboxDef_ = workspace.options.languageTree || {'contents': []};
 
   /**
    * Whether the toolbox should be laid out horizontally.
@@ -338,8 +338,8 @@ Blockly.Toolbox.prototype.createFlyout_ = function() {
 
 /**
  * Fills the toolbox with new toolbox items and removes any old contents.
- * @param {!Array<!Blockly.utils.toolbox.ToolboxItemDef>} toolboxDef Array
- *     holding objects containing information on the contents of the toolbox.
+ * @param {!Blockly.utils.toolbox.Toolbox} toolboxDef Object holding information
+ *     for creating a toolbox.
  * @package
  */
 Blockly.Toolbox.prototype.render = function(toolboxDef) {
@@ -354,7 +354,7 @@ Blockly.Toolbox.prototype.render = function(toolboxDef) {
   }
   this.contents_ = [];
   this.contentIds_ = {};
-  this.renderContents_(toolboxDef);
+  this.renderContents_(toolboxDef['contents']);
   this.position();
 };
 
@@ -665,7 +665,7 @@ Blockly.Toolbox.prototype.selectItemByPosition = function(position) {
  * Decides whether to hide or show the flyout depending on the selected item.
  * @param {?Blockly.ToolboxItem} oldItem The previously selected toolbox item.
  * @param {?Blockly.SelectableToolboxItem} newItem The newly selected toolbox item.
- * @private
+ * @protected
  */
 Blockly.Toolbox.prototype.updateFlyout_ = function(oldItem, newItem) {
   if (oldItem == newItem || !newItem || newItem.isCollapsible()) {

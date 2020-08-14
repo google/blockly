@@ -61,10 +61,10 @@ suite('Toolbox', function() {
     });
     test('Render called with valid toolboxDef -> Contents are created', function() {
       var positionStub = sinon.stub(this.toolbox, 'position');
-      this.toolbox.render([
+      this.toolbox.render({'contents': [
         {'kind': 'category'},
         {'kind': 'category'}
-      ]);
+      ]});
       chai.assert.lengthOf(this.toolbox.contents_, 2);
       sinon.assert.called(positionStub);
     });
@@ -80,7 +80,7 @@ suite('Toolbox', function() {
         }
       ];
       chai.assert.throws(function() {
-        toolbox.render(badToolboxDef);
+        toolbox.render({'contents' : badToolboxDef});
       }, 'Toolbox cannot have both blocks and categories in the root level.');
     });
     // TODO: Uncomment once implemented.
@@ -90,7 +90,7 @@ suite('Toolbox', function() {
       chai.assert.isTrue(selectedNode.selected_);
     });
     test('JSON toolbox definition -> Should create toolbox with contents', function() {
-      var jsonDef = [
+      var jsonDef = {'contents' : [
         {
           "kind": "category",
           "contents": [
@@ -115,7 +115,7 @@ suite('Toolbox', function() {
             }
           ]
         }
-      ];
+      ]};
       this.toolbox.render(jsonDef);
       chai.assert.lengthOf(this.toolbox.contents_, 1);
     });
@@ -510,13 +510,14 @@ suite('Toolbox', function() {
       checkContents(actual.contents, expected.contents);
     }
     function checkCategoryToolbox(actual, expected) {
-      chai.assert.equal(actual.length, expected.length);
+      var contents = actual['contents'];
+      chai.assert.equal(contents.length, expected.length);
       for (var i = 0; i < expected.length; i++) {
-        checkCategory(actual[i], expected[i]);
+        checkCategory(contents[i], expected[i]);
       }
     }
     function checkSimpleToolbox(actual, expected) {
-      checkContents(actual, expected);
+      checkContents(actual['contents'], expected);
     }
 
     test('Simple Toolbox: Array with xml', function() {

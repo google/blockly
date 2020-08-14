@@ -42,7 +42,7 @@ Blockly.Options = function(options) {
     var hasSounds = false;
   } else {
     var toolboxDef = options['toolbox'];
-    if (!Array.isArray(toolboxDef)) {
+    if (toolboxDef && !Array.isArray(toolboxDef['contents'])) {
       toolboxDef = Blockly.Options.parseToolboxTree(toolboxDef || null);
     }
     var toolboxContents = Blockly.utils.toolbox.convertToolboxToJSON(toolboxDef);
@@ -148,7 +148,7 @@ Blockly.Options = function(options) {
   this.hasCss = hasCss;
   /** @type {boolean} */
   this.horizontalLayout = horizontalLayout;
-  /** @type {Array.<Blockly.utils.toolbox.ToolboxItemDef>} */
+  /** @type {?Blockly.utils.toolbox.Toolbox} */
   this.languageTree = toolboxContents;
   /** @type {!Blockly.Options.GridOptions} */
   this.gridOptions = Blockly.Options.parseGridOptions_(options);

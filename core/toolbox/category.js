@@ -255,7 +255,7 @@ Blockly.ToolboxCategory.prototype.createDom = function() {
       Blockly.utils.aria.State.LABELLEDBY, labelDom.getAttribute('id'));
 
   if (this.hasChildren()) {
-    var subCategories = /** @type {!Array<!Blockly.ToolboxItem>} */ (this.getSubCategories());
+    var subCategories = this.getChildToolboxItems();
     this.subcategoriesDiv_ = this.createSubCategoriesDom_(subCategories);
     Blockly.utils.aria.setRole(this.subcategoriesDiv_,
         Blockly.utils.aria.Role.GROUP);
@@ -474,8 +474,8 @@ Blockly.ToolboxCategory.prototype.setExpanded = function(isExpanded) {
       Blockly.utils.aria.State.EXPANDED, isExpanded);
 
   if (this.hasChildren()) {
-    for (var i = 0; i < this.contents_.length; i++) {
-      var child = this.contents_[i];
+    for (var i = 0; i < this.getChildToolboxItems().length; i++) {
+      var child = this.getChildToolboxItems()[i];
       child.isParentExpanded_ = isExpanded;
     }
   }
@@ -527,7 +527,7 @@ Blockly.ToolboxCategory.prototype.hasChildren = function() {
 Blockly.ToolboxCategory.prototype.setVisible_ = function(isVisible) {
   this.htmlDiv_.style.display = isVisible ? 'block' : 'none';
   if (this.hasChildren()) {
-    for (var i = 0, child; (child = this.contents_[i]); i++) {
+    for (var i = 0, child; (child = this.getContents()[i]); i++) {
       child.setVisible_(isVisible);
     }
   }
@@ -662,7 +662,10 @@ Blockly.ToolboxCategory.prototype.getContents = function() {
   return this.contents_;
 };
 
-Blockly.ToolboxCategory.prototype.getSubCategories = function() {
+/**
+ * @override
+ */
+Blockly.ToolboxCategory.prototype.getChildToolboxItems = function() {
   return this.contents_;
 };
 

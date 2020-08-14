@@ -406,7 +406,7 @@ Blockly.Toolbox.prototype.addToolboxItem_ = function(toolboxItem) {
   if (toolboxItem.isCollapsible()) {
     var collapsibleItem = /** @type {Blockly.CollapsibleToolboxItem} */
         (toolboxItem);
-    for (var i = 0, child; (child = collapsibleItem.getSubCategories()[i]); i++) {
+    for (var i = 0, child; (child = collapsibleItem.getChildToolboxItems()[i]); i++) {
       this.addToolboxItem_(child);
     }
   }

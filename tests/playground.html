@@ -66,8 +66,6 @@
 <script src="../blocks/procedures.js"></script>
 <script src="themes/test_themes.js"></script>
 <script src="./playgrounds/screenshot.js"></script>
-<script src="./playgrounds/test_blocks_toolbox.js"></script>
-<script src="./playgrounds/test.js"></script>
 
 <script>
 // Custom requires for the playground.
@@ -75,33 +73,6 @@ goog.require('Blockly.WorkspaceCommentSvg');
 goog.require('Blockly.WorkspaceCommentSvg.render');
 </script>
 <script>
-var toolboxTest = [
-  {
-    'kind': 'category',
-    'name': 'something',
-    'contents': [
-      {
-        'kind': 'category',
-        'name': 'nestedLevel2',
-        'contents': [
-          dragCategory,
-          dragCategory,
-          dragCategory
-        ]
-      }
-    ]
-  },
-  {
-    'kind': 'category',
-    'name': 'SomethingTwo',
-    'contents': [
-      dragCategory,
-      dragCategory,
-      dragCategory,
-    ]
-  }
-];
-
 'use strict';
 var workspace = null;
 
@@ -142,7 +113,7 @@ function start() {
           drag: true,
           wheel: false,
         },
-        toolbox: toolboxTest,
+        toolbox: toolbox,
         toolboxPosition: 'start',
         renderer: 'geras',
         zoom:

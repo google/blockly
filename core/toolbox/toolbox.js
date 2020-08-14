@@ -667,12 +667,12 @@ Blockly.Toolbox.prototype.setSelectedItem = function(newItem) {
 };
 
 /**
- * Decides whether the newItem
+ * Decides whether the old item should be deselected.
  * @param {?Blockly.SelectableToolboxItem} oldItem The previously selected
  *     toolbox item.
  * @param {?Blockly.SelectableToolboxItem} newItem The newly selected toolbox
  *     item.
- * @return {boolean} True if the oldItem should be deselected, false otherwise.
+ * @return {boolean} True if the old item should be deselected, false otherwise.
  * @protected
  */
 Blockly.Toolbox.prototype.shouldDeSelectItem_ = function(oldItem, newItem) {
@@ -680,12 +680,12 @@ Blockly.Toolbox.prototype.shouldDeSelectItem_ = function(oldItem, newItem) {
 };
 
 /**
- * Decides whether the new item should be selected or not.
+ * Decides whether the new item should be selected.
  * @param {?Blockly.SelectableToolboxItem} oldItem The previously selected
  *     toolbox item.
  * @param {?Blockly.SelectableToolboxItem} newItem The newly selected toolbox
  *     item.
- * @return {boolean} True if the oldItem should be deselected, false otherwise.
+ * @return {boolean} True if the new item should be deselected, false otherwise.
  * @protected
  */
 Blockly.Toolbox.prototype.shouldSelectItem_ = function(oldItem, newItem) {

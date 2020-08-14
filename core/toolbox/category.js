@@ -158,7 +158,7 @@ Blockly.ToolboxCategory = function(categoryDef, toolbox, opt_parent) {
   /**
    * The child toolbox items for this category.
    * @type {!Array<!Blockly.ToolboxItem>}
-   * @private
+   * @protected
    */
   this.toolboxItems_ = [];
 

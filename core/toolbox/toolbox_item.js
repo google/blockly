@@ -97,6 +97,16 @@ Blockly.ToolboxItem.prototype.getType = function() {
 };
 
 /**
+ * Gets the parent if the toolbox item is nested.
+ * @return {?Blockly.ToolboxItem} The parent toolbox item, or null if
+ *     this toolbox item is not nested.
+ * @public
+ */
+Blockly.ToolboxItem.prototype.getParent = function() {
+  return null;
+};
+
+/**
  * Whether the toolbox item is selectable.
  * @return {boolean} True if the toolbox item can be selected.
  * @public
@@ -206,16 +216,6 @@ Blockly.CollapsibleToolboxItem.prototype.isCollapsible = function() {
  */
 Blockly.CollapsibleToolboxItem.prototype.getContents = function() {
   return [];
-};
-
-/**
- * Gets the parent if the toolbox item is nested.
- * @return {?Blockly.CollapsibleToolboxItem} The parent toolbox item, or null if
- *     there are no nested items.
- * @public
- */
-Blockly.CollapsibleToolboxItem.prototype.getParent = function() {
-  return null;
 };
 
 /**

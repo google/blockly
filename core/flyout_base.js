@@ -625,6 +625,7 @@ Blockly.Flyout.prototype.getBlockXml_ = function(blockInfo) {
     blockElement = blockXml;
   } else if (blockXml && typeof blockXml == 'string') {
     blockElement = Blockly.Xml.textToDom(blockXml);
+    blockInfo['blockxml'] = blockElement;
   } else if (blockInfo['type']) {
     blockElement = Blockly.utils.xml.createElement('xml');
     blockElement.setAttribute('type', blockInfo['type']);

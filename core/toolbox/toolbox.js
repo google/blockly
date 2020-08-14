@@ -337,36 +337,6 @@ Blockly.Toolbox.prototype.createFlyout_ = function() {
 };
 
 /**
- * Adds all the toolbox items to the toolbox.
- * @param {!Array<!Blockly.utils.toolbox.ToolboxItemDef>} toolboxDef Array
- *     holding objects containing information on the contents of the toolbox.
- * @protected
- */
-Blockly.Toolbox.prototype.renderContents_ = function(toolboxDef) {
-  for (var i = 0, childIn; (childIn = toolboxDef[i]); i++) {
-    this.createToolboxItem_(childIn);
-  }
-};
-
-/**
- * Creates and renders the toolbox item.
- * @param {Blockly.utils.toolbox.ToolboxItemDef} childIn Any information that
- *    can be used to create an item in the toolbox.
- */
-Blockly.Toolbox.prototype.createToolboxItem_ = function(childIn) {
-  var ToolboxItemClass = Blockly.registry.getClass(
-      Blockly.registry.Type.TOOLBOX_ITEM, childIn['kind'].toLowerCase());
-  if (ToolboxItemClass) {
-    var toolboxItem = new ToolboxItemClass(childIn, this);
-    this.addToolboxItem_(toolboxItem);
-    var toolboxItemDom = toolboxItem.createDom();
-    if (toolboxItemDom) {
-      this.contentsDiv_.appendChild(toolboxItemDom);
-    }
-  }
-};
-
-/**
  * Fills the toolbox with new toolbox items and removes any old contents.
  * @param {!Array<!Blockly.utils.toolbox.ToolboxItemDef>} toolboxDef Array
  *     holding objects containing information on the contents of the toolbox.
@@ -389,6 +359,36 @@ Blockly.Toolbox.prototype.render = function(toolboxDef) {
 };
 
 /**
+ * Adds all the toolbox items to the toolbox.
+ * @param {!Array<!Blockly.utils.toolbox.ToolboxItemDef>} toolboxDef Array
+ *     holding objects containing information on the contents of the toolbox.
+ * @protected
+ */
+Blockly.Toolbox.prototype.renderContents_ = function(toolboxDef) {
+  for (var i = 0, childIn; (childIn = toolboxDef[i]); i++) {
+    this.renderToolboxItem_(childIn);
+  }
+};
+
+/**
+ * Creates and renders the toolbox item.
+ * @param {Blockly.utils.toolbox.ToolboxItemDef} childIn Any information that
+ *    can be used to create an item in the toolbox.
+ */
+Blockly.Toolbox.prototype.renderToolboxItem_ = function(childIn) {
+  var ToolboxItemClass = Blockly.registry.getClass(
+      Blockly.registry.Type.TOOLBOX_ITEM, childIn['kind'].toLowerCase());
+  if (ToolboxItemClass) {
+    var toolboxItem = new ToolboxItemClass(childIn, this);
+    this.addToolboxItem_(toolboxItem);
+    var toolboxItemDom = toolboxItem.createDom();
+    if (toolboxItemDom) {
+      this.contentsDiv_.appendChild(toolboxItemDom);
+    }
+  }
+};
+
+/**
  * Adds an item to the toolbox.
  * @param {!Blockly.ToolboxItem} toolboxItem The item in the toolbox.
  * @protected
@@ -403,6 +403,15 @@ Blockly.Toolbox.prototype.addToolboxItem_ = function(toolboxItem) {
       this.addToolboxItem_(child);
     }
   }
+};
+
+/**
+ * Gets the items in the toolbox.
+ * @return {!Array<!Blockly.ToolboxItem>} The list of items in the toolbox.
+ * @public
+ */
+Blockly.Toolbox.prototype.getToolboxItems = function() {
+  return this.contents_;
 };
 
 /**

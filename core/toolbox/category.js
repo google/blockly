@@ -149,13 +149,20 @@ Blockly.ToolboxCategory = function(categoryDef, toolbox, opt_parent) {
   this.isDisabled_ = false;
 
   /**
-   * Parse the contents for this category.
-   * @type {string|
-   *        !Array<!Blockly.ToolboxItem>|
-   *        !Array<!Blockly.utils.toolbox.FlyoutItemDef>}
+   * The flyout items for this category.
+   * @type {string|!Array<!Blockly.utils.toolbox.FlyoutItemDef>}
    * @protected
    */
-  this.contents_ = this.parseContents_(categoryDef, this.hasChildren_);
+  this.contents_ = [];
+
+  /**
+   * The child toolbox items for this category.
+   * @type {Array<!Blockly.ToolboxItem>}
+   * @private
+   */
+  this.toolboxItems_ = [];
+
+  this.parseContents_(categoryDef, this.hasChildren_);
 };
 
 Blockly.utils.object.inherits(Blockly.ToolboxCategory,
@@ -208,26 +215,21 @@ Blockly.ToolboxCategory.defaultBackgroundColour = '#57e';
  *     to create a category.
  * @param {boolean} hasChildren True if this category has subcategories, false
  *     otherwise.
- * @return {string|!Array<!Blockly.ToolboxItem>|
- *          !Array<!Blockly.utils.toolbox.FlyoutItemDef>}
- *     The contents for this category.
- * @private
+ * @protected
  */
 Blockly.ToolboxCategory.prototype.parseContents_ = function(categoryDef,
     hasChildren) {
-  var toolboxItems = [];
   var contents = categoryDef['contents'];
   if (hasChildren) {
     for (var i = 0; i < contents.length; i++) {
       var child = new Blockly.ToolboxCategory(contents[i], this.parentToolbox_, this);
-      toolboxItems.push(child);
+      this.toolboxItems_.push(child);
     }
   } else if (categoryDef['custom']) {
-    toolboxItems = categoryDef['custom'];
+    this.contents_ = categoryDef['custom'];
   } else {
-    toolboxItems = contents;
+    this.contents_ = contents;
   }
-  return toolboxItems;
 };
 
 /**
@@ -666,7 +668,7 @@ Blockly.ToolboxCategory.prototype.getContents = function() {
  * @override
  */
 Blockly.ToolboxCategory.prototype.getChildToolboxItems = function() {
-  return this.contents_;
+  return this.toolboxItems_;
 };
 
 /**

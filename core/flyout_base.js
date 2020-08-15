@@ -468,19 +468,8 @@ Blockly.Flyout.prototype.show = function(flyoutDef) {
   this.clearOldBlocks_();
 
   // Handle dynamic categories, represented by a name instead of a list.
-  // Look up the correct category generation function and call that to get a
-  // valid XML list.
   if (typeof flyoutDef == 'string') {
-    var fnToApply = this.workspace_.targetWorkspace.getToolboxCategoryCallback(
-        flyoutDef);
-    if (typeof fnToApply != 'function') {
-      throw TypeError('Couldn\'t find a callback function when opening' +
-          ' a toolbox category.');
-    }
-    flyoutDef = fnToApply(this.workspace_.targetWorkspace);
-    if (!Array.isArray(flyoutDef)) {
-      throw TypeError('Result of toolbox category callback must be an array.');
-    }
+    flyoutDef = this.getDynamicCategoryContents_(flyoutDef);
   }
   this.setVisible(true);
 
@@ -567,9 +556,43 @@ Blockly.Flyout.prototype.createFlyoutInfo_ = function(parsedContent) {
         contents.push({type: 'button', button: button});
         gaps.push(defaultGap);
         break;
+      case 'DYNAMIC':
+        var customInfo = /** @type {Blockly.utils.toolbox.DynamicCategory} */ (contentInfo);
+        var categoryName = customInfo['name'];
+        var flyoutDef = this.getDynamicCategoryContents_(categoryName);
+        if (flyoutDef) {
+          var parsedFlyoutDef = /** @type {!Array<Blockly.utils.toolbox.FlyoutItemDef>} */
+            (Blockly.utils.toolbox.convertToolboxToJSON(flyoutDef));
+          var flyoutInfo = this.createFlyoutInfo_(parsedFlyoutDef);
+          contents = contents.concat(flyoutInfo['contents']);
+          gaps = gaps.concat(flyoutInfo['gaps']);
+        }
+        break;
     }
   }
   return {contents: contents, gaps: gaps};
+};
+
+/**
+ * Gets the flyout definition for the dynamic category.
+ * @param {string} categoryName The name of the dynamic category.
+ * @return {!Array.<!Element>} The array of flyout items.
+ * @private
+ */
+Blockly.Flyout.prototype.getDynamicCategoryContents_ = function(categoryName) {
+  // Look up the correct category generation function and call that to get a
+  // valid XML list.
+  var fnToApply = this.workspace_.targetWorkspace.getToolboxCategoryCallback(
+      categoryName);
+  if (typeof fnToApply != 'function') {
+    throw TypeError('Couldn\'t find a callback function when opening' +
+        ' a toolbox category.');
+  }
+  var flyoutDef = fnToApply(this.workspace_.targetWorkspace);
+  if (!Array.isArray(flyoutDef)) {
+    throw TypeError('Result of toolbox category callback must be an array.');
+  }
+  return flyoutDef;
 };
 
 /**

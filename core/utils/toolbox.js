@@ -76,12 +76,22 @@ Blockly.utils.toolbox.Label;
 Blockly.utils.toolbox.Category;
 
 /**
+ * The information needed to create a dynamic category.
+ * @typedef {{
+ *            kind:string,
+ *            name:string
+ *          }}
+ */
+Blockly.utils.toolbox.DynamicCategory;
+
+/**
  * Any information that can be used to create an item in the toolbox.
  * @typedef {Blockly.utils.toolbox.Block|
  *           Blockly.utils.toolbox.Separator|
  *           Blockly.utils.toolbox.Button|
  *           Blockly.utils.toolbox.Label|
- *           Blockly.utils.toolbox.Category}
+ *           Blockly.utils.toolbox.Category|
+ *           Blockly.utils.toolbox.DynamicCategory}
  */
 Blockly.utils.toolbox.ToolboxItemDef;
 
@@ -99,7 +109,8 @@ Blockly.utils.toolbox.ToolboxDefinition;
  * @typedef {Blockly.utils.toolbox.Block|
  *           Blockly.utils.toolbox.Separator|
  *           Blockly.utils.toolbox.Button|
- *           Blockly.utils.toolbox.Label}
+ *           Blockly.utils.toolbox.Label|
+ *           Blockly.utils.toolbox.DynamicCategory}
  */
 Blockly.utils.toolbox.FlyoutItemDef;
 

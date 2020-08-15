@@ -1074,20 +1074,13 @@ Blockly.WorkspaceSvg.prototype.getParentSvg = function() {
 };
 
 Blockly.WorkspaceSvg.prototype.fireViewportChangeEvent_ = function() {
-  // Event should include:
-  // - scale of workspace
-  // - upper left corner of visible workspace, in workspace coordinates
-  var scale = this.scale;
-  var top = -this.scrollY;
-  var left = -this.scrollX;
   var viewProperties = {
-    scale: scale,
-    top: top,
-    left: left
+    scale: this.scale,
+    top: -this.scrollY,
+    left: -this.scrollX
   };
   var event = new Blockly.Events.Ui(null, 'viewport', null, viewProperties);
   event.workspaceId = this.id;
-  // var event = new Blockly.Events.Viewport(scale, top, left, this.id);
   Blockly.Events.fire(event);
 };
 
@@ -1116,7 +1109,9 @@ Blockly.WorkspaceSvg.prototype.translate = function(x, y) {
     this.grid_.moveTo(x, y);
   }
 
-  this.fireViewportChangeEvent_();
+  if (Blockly.Events.isEnabled()) {
+    this.fireViewportChangeEvent_();
+  }
 };
 
 /**
@@ -1911,8 +1906,16 @@ Blockly.WorkspaceSvg.prototype.zoomToFit = function() {
   // Scale Units: (pixels / workspaceUnit)
   var ratioX = workspaceWidth / blocksWidth;
   var ratioY = workspaceHeight / blocksHeight;
-  this.setScale(Math.min(ratioX, ratioY));
-  this.scrollCenter();
+  Blockly.Events.disable();
+  try {
+    this.setScale(Math.min(ratioX, ratioY));
+    this.scrollCenter();
+  } finally {
+    Blockly.Events.enable();
+  }
+  if (Blockly.Events.isEnabled()) {
+    this.fireViewportChangeEvent_();
+  }
 };
 
 /**

@@ -223,6 +223,7 @@ Blockly.ToolboxCategory.prototype.parseContents_ = function(categoryDef,
       toolboxItems.push(child);
     }
   } else if (categoryDef['custom']) {
+    // TODO: Fix this to use the new definition.
     toolboxItems = categoryDef['custom'];
   } else {
     toolboxItems = contents;

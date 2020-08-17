@@ -105,6 +105,7 @@ Blockly.Input.prototype.insertFieldAt = function(index, field, opt_name) {
   field.setSourceBlock(this.sourceBlock_);
   if (this.sourceBlock_.rendered) {
     field.init();
+    field.applyColour();
   }
   field.name = opt_name;
   field.setVisible(this.isVisible());

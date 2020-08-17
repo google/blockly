@@ -466,6 +466,7 @@ Blockly.Flyout.prototype.show = function(flyoutDef) {
   this.workspace_.setResizesEnabled(false);
   this.hide();
   this.clearOldBlocks_();
+  flyoutDef = flyoutDef.slice(); // Shallow copy of flyoutDef.
 
   // Handle dynamic categories, represented by a name instead of a list.
   if (typeof flyoutDef == 'string') {
@@ -528,9 +529,9 @@ Blockly.Flyout.prototype.createFlyoutInfo_ = function(parsedContent) {
   var defaultGap = this.horizontalLayout ? this.GAP_X : this.GAP_Y;
   for (var i = 0, contentInfo; (contentInfo = parsedContent[i]); i++) {
 
-    if (contentInfo['kind'].toUpperCase() == 'DYNAMIC') {
-      var customInfo = /** @type {Blockly.utils.toolbox.DynamicCategory} */ (contentInfo);
-      var categoryName = customInfo['name'];
+    if (contentInfo['custom']) {
+      var customInfo = /** @type {Blockly.utils.toolbox.Category} */ (contentInfo);
+      var categoryName = customInfo['custom'];
       var flyoutDef = this.getDynamicCategoryContents_(categoryName);
       var parsedDynamicContent = /** @type {!Array<Blockly.utils.toolbox.FlyoutItemDef>} */
         (Blockly.utils.toolbox.convertToolboxToJSON(flyoutDef));

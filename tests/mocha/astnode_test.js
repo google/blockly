@@ -88,7 +88,6 @@ suite('ASTNode', function() {
       fieldWithOutput: fieldWithOutput,
       valueInput: valueInput
     };
-    sinon.stub(Blockly, "getMainWorkspace").returns(new Blockly.Workspace());
   });
   teardown(function() {
     sharedTestTeardown.call(this);
@@ -308,19 +307,8 @@ suite('ASTNode', function() {
       var outputNextBlock = this.workspace.newBlock('output_next');
       this.blocks.secondBlock = secondBlock;
       this.blocks.outputNextBlock = outputNextBlock;
-
-
     });
     teardown(function() {
-      delete this.blocks.noNextConnection;
-      delete this.blocks.fieldAndInputs;
-      delete this.blocks.twoFields;
-      delete this.blocks.fieldAndInputs2;
-      delete this.blocks.noPrevConnection;
-      delete this.blocks.dummyInput;
-      delete this.blocks.dummyInputValue;
-      delete this.blocks.fieldWithOutput2;
-
       delete Blockly.Blocks['output_next'];
       delete Blockly.Blocks['fields_and_input2'];
       delete Blockly.Blocks['two_fields'];
@@ -337,7 +325,7 @@ suite('ASTNode', function() {
         this.blocks.singleBlock = singleBlock;
       });
       teardown(function() {
-        delete this.blocks.singleBlock;
+        workspaceTeardown.call(this, this.singleBlockWorkspace);
       });
 
       test('fromPreviousToBlock', function() {
@@ -537,7 +525,7 @@ suite('ASTNode', function() {
         this.emptyWorkspace = new Blockly.Workspace();
       });
       teardown(function() {
-        delete this.emptyWorkspace;
+        workspaceTeardown.call(this, this.emptyWorkspace);
       });
 
       test('fromInputToOutput', function() {

@@ -245,34 +245,6 @@ function testAWorkspace() {
     });
   });
 
-  suite('addTopBlock', function() {
-    setup(function() {
-      this.targetWorkspace = new Blockly.Workspace();
-      this.workspace.isFlyout = true;
-      this.workspace.targetWorkspace = this.targetWorkspace;
-    });
-
-    teardown(function() {
-      // Have to dispose of the main workspace after the flyout workspace
-      // because it holds the variable map.
-      // Normally the main workspace disposes of the flyout workspace.
-      workspaceTeardown.call(this, this.targetWorkspace);
-    });
-
-    test('Trivial Flyout is True', function() {
-      this.targetWorkspace.createVariable('name1', '', '1');
-
-      // Flyout.init usually does this binding.
-      this.workspace.variableMap_ = this.targetWorkspace.getVariableMap();
-
-      var block = createVarBlocksNoEvents(this.workspace, ['1'])[0];
-
-      this.workspace.removeTopBlock(block);
-      this.workspace.addTopBlock(block);
-      assertVariableValues(this.workspace, 'name1', '', '1');
-    });
-  });
-
   suite('getTopBlocks(ordered=true)', function() {
     test('Empty workspace', function() {
       chai.assert.equal(this.workspace.getTopBlocks(true).length, 0);
@@ -595,11 +567,13 @@ function testAWorkspace() {
 
   suite('getById', function() {
     setup(function() {
-      this.workspaceB = new Blockly.Workspace();
+      this.workspaceB = this.workspace.rendered ?
+          new Blockly.WorkspaceSvg(new Blockly.Options({})) :
+          new Blockly.Workspace();
     });
 
     teardown(function() {
-      this.workspaceB.dispose();
+      workspaceTeardown.call(this, this.workspaceB);
     });
 
     test('Trivial', function() {
@@ -627,11 +601,13 @@ function testAWorkspace() {
     setup(function() {
       this.blockA = this.workspace.newBlock('');
       this.blockB = this.workspace.newBlock('');
-      this.workspaceB = new Blockly.Workspace();
+      this.workspaceB = this.workspace.rendered ?
+          new Blockly.WorkspaceSvg(new Blockly.Options({})) :
+          new Blockly.Workspace();
     });
 
     teardown(function() {
-      this.workspaceB.dispose();
+      workspaceTeardown.call(this, this.workspaceB);
     });
 
     test('Trivial', function() {

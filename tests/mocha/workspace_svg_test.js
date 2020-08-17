@@ -32,6 +32,11 @@ suite('WorkspaceSvg', function() {
     delete Blockly.Blocks['test_val_in'];
   });
 
+  test('dispose of WorkspaceSvg without dom throws no error', function() {
+    var ws = new Blockly.WorkspaceSvg(new Blockly.Options({}));
+    ws.dispose();
+  });
+
   test('appendDomToWorkspace alignment', function() {
     var dom = Blockly.Xml.textToDom(
         '<xml xmlns="https://developers.google.com/blockly/xml">' +
@@ -113,6 +118,49 @@ suite('WorkspaceSvg', function() {
       var parseToolboxFake = sinon.spy(Blockly.Options, 'parseToolboxTree');
       this.workspace.updateToolbox('<xml><category name="something"></category></xml>');
       sinon.assert.calledOnce(parseToolboxFake);
+    });
+  });
+
+  suite('addTopBlock', function() {
+    setup(function() {
+      this.targetWorkspace = new Blockly.Workspace();
+      this.workspace.isFlyout = true;
+      this.workspace.targetWorkspace = this.targetWorkspace;
+      Blockly.defineBlocksWithJsonArray([{
+        "type": "get_var_block",
+        "message0": "%1",
+        "args0": [
+          {
+            "type": "field_variable",
+            "name": "VAR",
+            "variableTypes": ["", "type1", "type2"]
+          }
+        ]
+      }]);
+    });
+
+    teardown(function() {
+      // Have to dispose of the main workspace after the flyout workspace
+      // because it holds the variable map.
+      // Normally the main workspace disposes of the flyout workspace.
+      workspaceTeardown.call(this, this.targetWorkspace);
+      delete Blockly.Blocks['get_var_block'];
+    });
+
+    test('Trivial Flyout is True', function() {
+      this.targetWorkspace.createVariable('name1', '', '1');
+
+      // Flyout.init usually does this binding.
+      this.workspace.variableMap_ = this.targetWorkspace.getVariableMap();
+
+      Blockly.Events.disable();
+      var block = new Blockly.Block(this.workspace, 'get_var_block');
+      block.inputList[0].fieldRow[0].setValue('1');
+      Blockly.Events.enable();
+
+      this.workspace.removeTopBlock(block);
+      this.workspace.addTopBlock(block);
+      assertVariableValues(this.workspace, 'name1', '', '1');
     });
   });
 

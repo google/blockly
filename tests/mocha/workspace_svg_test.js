@@ -207,31 +207,6 @@ suite('WorkspaceSvg', function() {
       delete Blockly.Blocks['stack_block'];
     });
 
-    test.skip('inject', function() {
-      // TODO: Address and remove before merging PR
-      // How do we want this to behave?
-      // Change listeners are attached after resizes, but events are disabled
-      // so viewport event is fired, but not listened to (at this time).
-      workspaceTeardown.call(this, this.workspace);
-      var workspace = Blockly.inject('blocklyDiv');
-      try {
-        this.clock.runAll();
-        assertViewportEventFired(
-            this.eventsFireStub, this.changeListenerSpy, workspace);
-      } finally {
-        workspaceTeardown.call(this, workspace);
-      }
-    });
-    test('dispose fires no viewport event', function() {
-      // TODO: Address and remove before merging PR
-      // Do we want this test?
-      this.eventsFireStub.resetHistory();
-      this.changeListenerSpy.resetHistory();
-      this.workspace.dispose();
-      assertEventNotFired(
-          this.changeListenerSpy, Blockly.Events.Ui, {element: 'viewport'});
-    });
-
     suite('zoom', function() {
       test('setScale', function() {
         runViewportEventTest(() => this.workspace.setScale(2),
@@ -301,6 +276,8 @@ suite('WorkspaceSvg', function() {
             this.changeListenerSpy, this.workspace, this.clock);
       });
       test.skip('block render that doesn\'t trigger scroll' , function() {
+        // 4 blocks, and 1 block in center and nothing should change
+        // use xml
         // TODO: implement before merging
         var block = this.workspace.newBlock('stack_block');
         var initAndRenderBlock = () => {
@@ -309,12 +286,6 @@ suite('WorkspaceSvg', function() {
         };
         runViewportEventTest(initAndRenderBlock, this.eventsFireStub,
             this.changeListenerSpy, this.workspace, this.clock);
-      });
-      test.skip('paste that triggers scroll', function() {
-        // TODO: implement before merging
-      });
-      test.skip('paste that doesn\'t triggers scroll', function() {
-        // TODO: implement before merging
       });
     });
     suite('resize', function() {

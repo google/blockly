@@ -127,9 +127,6 @@ suite('Image Fields', function() {
           console.log('on click');
         };
       });
-      teardown(function() {
-        delete this.onClick;
-      });
       test('JS Constructor', function() {
         var field = new Blockly.FieldImage('src', 10, 10, null, this.onClick);
         chai.assert.equal(field.clickHandler_, this.onClick);

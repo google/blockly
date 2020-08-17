@@ -849,9 +849,9 @@ Blockly.WorkspaceSvg.prototype.dispose = function() {
   if (!this.options.parentWorkspace) {
     // Top-most workspace.  Dispose of the div that the
     // SVG is injected into (i.e. injectionDiv).
-    var div = this.getParentSvg().parentNode;
-    if (div) {
-      Blockly.utils.dom.removeNode(div);
+    var parentSvg = this.getParentSvg();
+    if (parentSvg && parentSvg.parentNode) {
+      Blockly.utils.dom.removeNode(parentSvg.parentNode);
     }
   }
   if (this.resizeHandlerWrapper_) {

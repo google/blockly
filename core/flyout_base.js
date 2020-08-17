@@ -527,6 +527,17 @@ Blockly.Flyout.prototype.createFlyoutInfo_ = function(parsedContent) {
   this.permanentlyDisabled_.length = 0;
   var defaultGap = this.horizontalLayout ? this.GAP_X : this.GAP_Y;
   for (var i = 0, contentInfo; (contentInfo = parsedContent[i]); i++) {
+
+    if (contentInfo['kind'].toUpperCase() == 'DYNAMIC') {
+      var customInfo = /** @type {Blockly.utils.toolbox.DynamicCategory} */ (contentInfo);
+      var categoryName = customInfo['name'];
+      var flyoutDef = this.getDynamicCategoryContents_(categoryName);
+      var parsedDynamicContent = /** @type {!Array<Blockly.utils.toolbox.FlyoutItemDef>} */
+        (Blockly.utils.toolbox.convertToolboxToJSON(flyoutDef));
+      parsedContent.splice.apply(parsedContent, [i, 1].concat(parsedDynamicContent));
+      contentInfo = parsedContent[i];
+    }
+
     switch (contentInfo['kind'].toUpperCase()) {
       case 'BLOCK':
         var blockInfo = /** @type {Blockly.utils.toolbox.Block} */ (contentInfo);
@@ -555,18 +566,6 @@ Blockly.Flyout.prototype.createFlyoutInfo_ = function(parsedContent) {
         var button = this.createButton_(buttonInfo, /** isLabel */ false);
         contents.push({type: 'button', button: button});
         gaps.push(defaultGap);
-        break;
-      case 'DYNAMIC':
-        var customInfo = /** @type {Blockly.utils.toolbox.DynamicCategory} */ (contentInfo);
-        var categoryName = customInfo['name'];
-        var flyoutDef = this.getDynamicCategoryContents_(categoryName);
-        if (flyoutDef) {
-          var parsedFlyoutDef = /** @type {!Array<Blockly.utils.toolbox.FlyoutItemDef>} */
-            (Blockly.utils.toolbox.convertToolboxToJSON(flyoutDef));
-          var flyoutInfo = this.createFlyoutInfo_(parsedFlyoutDef);
-          contents = contents.concat(flyoutInfo['contents']);
-          gaps = gaps.concat(flyoutInfo['gaps']);
-        }
         break;
     }
   }

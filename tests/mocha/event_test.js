@@ -730,7 +730,7 @@ suite('Events', function() {
       // The first varCreate and move event should have been ignored.
       sinon.assert.callCount(this.changeListenerSpy, 3);
       // Expect two events on undo stack: varCreate and block create.
-      chai.assert.equal(2, this.workspace.undoStack_.length,
+      chai.assert.equal(this.workspace.undoStack_.length, 2,
           'Undo stack length');
 
       assertNthCallEventArgEquals(

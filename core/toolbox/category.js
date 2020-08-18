@@ -258,6 +258,7 @@ Blockly.ToolboxCategory.prototype.createDom = function() {
   this.htmlDiv_.appendChild(this.rowDiv_);
 
   this.rowContents_ = this.createRowContentsContainer_();
+  this.rowContents_.style.pointerEvents = 'none';
   this.rowDiv_.appendChild(this.rowContents_);
 
   this.iconDom_ = this.createIconDom_();
@@ -301,8 +302,8 @@ Blockly.ToolboxCategory.prototype.createContainer_ = function() {
 };
 
 /**
- * Creates the parent of the contents container. All pointer events will focus here??
- * TODO: FIx this comment
+ * Creates the parent of the contents container. All clicks will happen on this
+ * div.
  * @return {!Element} The div that holds the contents container.
  * @protected
  */
@@ -318,14 +319,13 @@ Blockly.ToolboxCategory.prototype.createRowContainer_ = function() {
 
 /**
  * Creates the container for the label and icon.
- * TODO: Mention something about pointer events.
+ * This is necessary so we can set all children pointer events to none.
  * @return {!Element} The div that holds the icon and the label.
  * @protected
  */
 Blockly.ToolboxCategory.prototype.createRowContentsContainer_ = function() {
   var contentsContainer = document.createElement('div');
   Blockly.utils.dom.addClass(contentsContainer, this.cssConfig_['rowContentContainer']);
-  contentsContainer.style.pointerEvents = 'none';
   return contentsContainer;
 };
 

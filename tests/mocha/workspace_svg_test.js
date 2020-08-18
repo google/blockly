@@ -304,7 +304,7 @@ suite('WorkspaceSvg', function() {
         this.clock, 2);
       });
       test.skip('domToWorkspace that doesn\'t trigger scroll' , function() {
-        // TODO(#): un-skip after fixing bug with unintentional scroll.
+        // TODO(#4192): un-skip after fixing bug with unintentional scroll.
         // 4 blocks with space in center.
         Blockly.Xml.domToWorkspace(
             Blockly.Xml.textToDom(
@@ -320,7 +320,8 @@ suite('WorkspaceSvg', function() {
         this.clock.runAll();
         resetEventHistory(this.eventsFireStub, this.changeListenerSpy);
         // Add block in center of other blocks, not triggering scroll.
-        Blockly.Xml.domToWorkspace(xmlDom, this.workspace);
+        Blockly.Xml.domToWorkspace(Blockly.Xml.textToDom(
+            '<block type="controls_if" x="188" y="163"></block>'), this.workspace);
         this.clock.runAll();
         assertEventNotFired(
             this.eventsFireStub, Blockly.Events.Ui, {element: 'viewport'});

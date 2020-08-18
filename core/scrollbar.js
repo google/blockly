@@ -122,7 +122,6 @@ Blockly.ScrollbarPair.prototype.resize = function() {
     this.workspace_.maybeFireViewportChangeEvent();
   }
 
-
   // Reposition the corner square.
   if (!this.oldHostMetrics_ ||
       this.oldHostMetrics_.viewWidth != hostMetrics.viewWidth ||

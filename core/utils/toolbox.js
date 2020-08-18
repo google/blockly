@@ -135,8 +135,8 @@ Blockly.utils.toolbox.convertToolboxToJSON = function(toolboxDef) {
  * Converts the toolbox contents to JSON.
  * @param {Blockly.utils.toolbox.ToolboxDefinition} toolboxDef The definition
  *     of the toolbox in one of its many forms.
- * @return {!Array<Blockly.utils.toolbox.FlyoutItems>|
- *          !Array<Blockly.utils.toolbox.ToolboxItems>} The contents of the
+ * @return {Array<Blockly.utils.toolbox.FlyoutItems>|
+ *          Array<Blockly.utils.toolbox.ToolboxItems>} The contents of the
  *          toolbox.
  */
 Blockly.utils.toolbox.convertToolboxContentsToJSON = function(toolboxDef) {

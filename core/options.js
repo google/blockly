@@ -367,13 +367,13 @@ Blockly.Options.parseThemeOptions_ = function(options) {
 
 /**
  * Parse the provided toolbox tree into a consistent DOM format.
- * @param {Node|NodeList|?string} toolboxDef DOM tree of blocks, or text representation
+ * @param {?Node|?string} toolboxDef DOM tree of blocks, or text representation
  *    of same.
- * @return {Node} DOM tree of blocks, or null.
+ * @return {?Node} DOM tree of blocks, or null.
  */
 Blockly.Options.parseToolboxTree = function(toolboxDef) {
   if (toolboxDef) {
-    if (typeof tree != 'string') {
+    if (typeof toolboxDef != 'string') {
       if (Blockly.utils.userAgent.IE && toolboxDef.outerHTML) {
         // In this case the tree will not have been properly built by the
         // browser. The HTML will be contained in the element, but it will

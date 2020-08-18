@@ -542,16 +542,6 @@ suite('Toolbox', function() {
       chai.assert.isNotNull(toolboxDef);
       checkSimpleToolbox(toolboxDef, this.simpleToolboxJSON);
     });
-    test('Category Toolbox: NodeList', function() {
-      var nodeList = document.getElementById('toolbox-categories').childNodes;
-      var toolboxDef = Blockly.utils.toolbox.convertToolboxToJSON(nodeList);
-      checkCategoryToolbox(toolboxDef, this.categoryToolboxJSON);
-    });
-    test('Simple Toolbox: NodeList', function() {
-      var nodeList = document.getElementById('toolbox-simple').childNodes;
-      var toolboxDef = Blockly.utils.toolbox.convertToolboxToJSON(nodeList);
-      checkSimpleToolbox(toolboxDef, this.simpleToolboxJSON);
-    });
     test('Category Toolbox: xml', function() {
       var toolboxXml = document.getElementById('toolbox-categories');
       var toolboxDef = Blockly.utils.toolbox.convertToolboxToJSON(toolboxXml);

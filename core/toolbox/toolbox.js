@@ -344,8 +344,6 @@ Blockly.Toolbox.prototype.createFlyout_ = function() {
  */
 Blockly.Toolbox.prototype.render = function(toolboxDef) {
   this.toolboxDef_ = toolboxDef;
-  // TODO: Future improvement to compare the new toolboxDef with the old and
-  //  only re render what has changed.
   for (var i = 0; i < this.contents_.length; i++) {
     var toolboxItem = this.contents_[i];
     if (toolboxItem) {
@@ -365,17 +363,21 @@ Blockly.Toolbox.prototype.render = function(toolboxDef) {
  * @protected
  */
 Blockly.Toolbox.prototype.renderContents_ = function(toolboxDef) {
+  var fragment = document.createDocumentFragment();
   for (var i = 0, childIn; (childIn = toolboxDef[i]); i++) {
-    this.renderToolboxItem_(childIn);
+    this.renderToolboxItem_(childIn, fragment);
   }
+  this.contentsDiv_.appendChild(fragment);
 };
 
 /**
  * Creates and renders the toolbox item.
  * @param {Blockly.utils.toolbox.ToolboxItemDef} childIn Any information that
- *    can be used to create an item in the toolbox.
+ *     can be used to create an item in the toolbox.
+ * @param {!DocumentFragment} fragment The document fragment to add the child
+ *     toolbox elements to.
  */
-Blockly.Toolbox.prototype.renderToolboxItem_ = function(childIn) {
+Blockly.Toolbox.prototype.renderToolboxItem_ = function(childIn, fragment) {
   var ToolboxItemClass = Blockly.registry.getClass(
       Blockly.registry.Type.TOOLBOX_ITEM, childIn['kind'].toLowerCase());
   if (ToolboxItemClass) {
@@ -383,7 +385,7 @@ Blockly.Toolbox.prototype.renderToolboxItem_ = function(childIn) {
     this.addToolboxItem_(toolboxItem);
     var toolboxItemDom = toolboxItem.createDom();
     if (toolboxItemDom) {
-      this.contentsDiv_.appendChild(toolboxItemDom);
+      fragment.appendChild(toolboxItemDom);
     }
   }
 };
@@ -692,7 +694,7 @@ Blockly.Toolbox.prototype.fireSelectEvent_ = function(oldItem, newItem) {
   if (oldItem == newItem) {
     newElement = null;
   }
-  // TODO: Add toolbox events
+  // TODO (#4187): Update Toolbox Events.
   var event = new Blockly.Events.Ui(null, 'category',
       oldElement, newElement);
   event.workspaceId = this.workspace_.id;

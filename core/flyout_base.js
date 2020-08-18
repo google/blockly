@@ -470,19 +470,8 @@ Blockly.Flyout.prototype.show = function(flyoutDef) {
   this.clearOldBlocks_();
 
   // Handle dynamic categories, represented by a name instead of a list.
-  // Look up the correct category generation function and call that to get a
-  // valid XML list.
   if (typeof flyoutDef == 'string') {
-    var fnToApply = this.workspace_.targetWorkspace.getToolboxCategoryCallback(
-        flyoutDef);
-    if (typeof fnToApply != 'function') {
-      throw TypeError('Couldn\'t find a callback function when opening' +
-          ' a toolbox category.');
-    }
-    flyoutDef = fnToApply(this.workspace_.targetWorkspace);
-    if (!Array.isArray(flyoutDef)) {
-      throw TypeError('Result of toolbox category callback must be an array.');
-    }
+    flyoutDef = this.getDynamicCategoryContents_(flyoutDef);
   }
   this.setVisible(true);
 
@@ -490,6 +479,7 @@ Blockly.Flyout.prototype.show = function(flyoutDef) {
   // Blockly.utils.toolbox.Toolbox.
   var parsedContent = /** @type {!Array<!Blockly.utils.toolbox.FlyoutItemDef>} */
       (Blockly.utils.toolbox.convertToolboxContentsToJSON(flyoutDef));
+  parsedContent = parsedContent.slice(); // Shallow copy of parsedContent.
   var flyoutInfo =
     /** @type {{contents:!Array.<!Object>, gaps:!Array.<number>}} */ (
       this.createFlyoutInfo_(parsedContent));
@@ -540,6 +530,17 @@ Blockly.Flyout.prototype.createFlyoutInfo_ = function(parsedContent) {
   this.permanentlyDisabled_.length = 0;
   var defaultGap = this.horizontalLayout ? this.GAP_X : this.GAP_Y;
   for (var i = 0, contentInfo; (contentInfo = parsedContent[i]); i++) {
+
+    if (contentInfo['custom']) {
+      var customInfo = /** @type {Blockly.utils.toolbox.Category} */ (contentInfo);
+      var categoryName = customInfo['custom'];
+      var flyoutDef = this.getDynamicCategoryContents_(categoryName);
+      var parsedDynamicContent = /** @type {!Array<Blockly.utils.toolbox.FlyoutItemDef>} */
+        (Blockly.utils.toolbox.convertToolboxToJSON(flyoutDef));
+      parsedContent.splice.apply(parsedContent, [i, 1].concat(parsedDynamicContent));
+      contentInfo = parsedContent[i];
+    }
+
     switch (contentInfo['kind'].toUpperCase()) {
       case 'BLOCK':
         var blockInfo = /** @type {Blockly.utils.toolbox.Block} */ (contentInfo);
@@ -572,6 +573,28 @@ Blockly.Flyout.prototype.createFlyoutInfo_ = function(parsedContent) {
     }
   }
   return {contents: contents, gaps: gaps};
+};
+
+/**
+ * Gets the flyout definition for the dynamic category.
+ * @param {string} categoryName The name of the dynamic category.
+ * @return {!Array.<!Element>} The array of flyout items.
+ * @private
+ */
+Blockly.Flyout.prototype.getDynamicCategoryContents_ = function(categoryName) {
+  // Look up the correct category generation function and call that to get a
+  // valid XML list.
+  var fnToApply = this.workspace_.targetWorkspace.getToolboxCategoryCallback(
+      categoryName);
+  if (typeof fnToApply != 'function') {
+    throw TypeError('Couldn\'t find a callback function when opening' +
+        ' a toolbox category.');
+  }
+  var flyoutDef = fnToApply(this.workspace_.targetWorkspace);
+  if (!Array.isArray(flyoutDef)) {
+    throw TypeError('Result of toolbox category callback must be an array.');
+  }
+  return flyoutDef;
 };
 
 /**

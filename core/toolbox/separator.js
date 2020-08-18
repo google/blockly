@@ -21,16 +21,16 @@ goog.requireType('Blockly.utils.toolbox');
 /**
  * Class for a toolbox separator. This is the thin visual line that appears on
  * the toolbox. This item is not interactable.
- * @param {!Blockly.utils.toolbox.Separator} toolboxSeparatorDef The information
+ * @param {!Blockly.utils.toolbox.Separator} separatorDef The information
  *     needed to create a separator.
  * @param {!Blockly.IToolbox} toolbox The parent toolbox for the separator.
  * @constructor
  * @extends {Blockly.ToolboxItem}
  */
-Blockly.ToolboxSeparator = function(toolboxSeparatorDef, toolbox) {
+Blockly.ToolboxSeparator = function(separatorDef, toolbox) {
 
   Blockly.ToolboxSeparator.superClass_.constructor.call(
-      this, toolboxSeparatorDef, toolbox);
+      this, separatorDef, toolbox);
   /**
    * All the css class names that are used to create a separator.
    * @type {!Blockly.ToolboxSeparator.CssConfig}
@@ -40,8 +40,8 @@ Blockly.ToolboxSeparator = function(toolboxSeparatorDef, toolbox) {
     'container': 'blocklyTreeSeparator'
   };
 
-  Blockly.utils.object.mixin(this.cssConfig_,
-      toolboxSeparatorDef['cssConfig']);
+  var cssConfig = separatorDef['cssConfig'] || separatorDef['cssconfig'];
+  Blockly.utils.object.mixin(this.cssConfig_, cssConfig);
 };
 Blockly.utils.object.inherits(Blockly.ToolboxSeparator, Blockly.ToolboxItem);
 

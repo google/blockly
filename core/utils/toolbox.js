@@ -34,7 +34,7 @@ Blockly.utils.toolbox.Block;
  *            kind:string,
  *            id:?string,
  *            gap:?number,
- *            cssConfig:?Blockly.ToolboxSeparator.CssConfig
+ *            cssconfig:?Blockly.ToolboxSeparator.CssConfig
  *          }}
  */
 Blockly.utils.toolbox.Separator;
@@ -67,7 +67,7 @@ Blockly.utils.toolbox.Label;
  *            id:?string,
  *            categorystyle:?string,
  *            colour:?string,
- *            cssConfig:?Blockly.ToolboxCategory.CssConfig,
+ *            cssconfig:?Blockly.ToolboxCategory.CssConfig,
  *            custom:?string,
  *            contents:Array.<Blockly.utils.toolbox.ToolboxItemDef>,
  *            hidden:?string
@@ -164,8 +164,8 @@ Blockly.utils.toolbox.toolboxXmlToJson_ = function(toolboxDef) {
     for (var j = 0; j < child.attributes.length; j++) {
       var attr = child.attributes[j];
       if (attr.nodeName.indexOf('css-') > -1) {
-        obj['cssConfig'] = obj['cssConfig'] || {};
-        obj['cssConfig'][attr.nodeName.replace('css-', '')] = attr.value;
+        obj['cssconfig'] = obj['cssconfig'] || {};
+        obj['cssconfig'][attr.nodeName.replace('css-', '')] = attr.value;
       } else {
         obj[attr.nodeName] = attr.value;
       }

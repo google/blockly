@@ -87,6 +87,13 @@ Blockly.ToolboxCategory = function(categoryDef, toolbox, opt_parent) {
   this.rowDiv_ = null;
 
   /**
+   * The html elmeent that holds children of the category row.
+   * @type {?Element}
+   * @protected
+   */
+  this.rowContents_ = null;
+
+  /**
    * The html element for the toolbox icon.
    * @type {?Element}
    * @protected
@@ -108,15 +115,17 @@ Blockly.ToolboxCategory = function(categoryDef, toolbox, opt_parent) {
   this.cssConfig_ = {
     'container': 'blocklyToolboxCategory',
     'row': 'blocklyTreeRow',
+    'rowContentContainer': 'blocklyTreeRowContentContainer',
     'icon': 'blocklyTreeIcon',
     'label': 'blocklyTreeLabel',
     'contents': 'blocklyToolboxContents',
     'selected': 'blocklyTreeSelected',
     'openIcon': 'blocklyTreeIconOpen',
-    'closedIcon': 'blocklyTreeIconClosed'
+    'closedIcon': 'blocklyTreeIconClosed',
   };
 
-  Blockly.utils.object.mixin(this.cssConfig_, categoryDef['cssConfig']);
+  var cssConfig = categoryDef['cssConfig'] || categoryDef['cssconfig'];
+  Blockly.utils.object.mixin(this.cssConfig_, cssConfig);
 
   /**
    * Whether or not the category should display its children.
@@ -242,17 +251,21 @@ Blockly.ToolboxCategory.prototype.createDom = function() {
       Blockly.utils.aria.State.SELECTED,false);
   Blockly.utils.aria.setState(/** @type {!Element} */ (this.htmlDiv_),
       Blockly.utils.aria.State.LEVEL, this.level_);
-  this.htmlDiv_.setAttribute('id', this.id_);
 
   this.rowDiv_ = this.createRowContainer_();
+  this.rowDiv_.setAttribute('id', this.id_);
+  this.rowDiv_.style.pointerEvents = 'auto';
   this.htmlDiv_.appendChild(this.rowDiv_);
+
+  this.rowContents_ = this.createRowContentsContainer_();
+  this.rowDiv_.appendChild(this.rowContents_);
 
   this.iconDom_ = this.createIconDom_();
   Blockly.utils.aria.setRole(this.iconDom_, Blockly.utils.aria.Role.PRESENTATION);
-  this.rowDiv_.appendChild(this.iconDom_);
+  this.rowContents_.appendChild(this.iconDom_);
 
   var labelDom = this.createLabelDom_(this.name_);
-  this.rowDiv_.appendChild(labelDom);
+  this.rowContents_.appendChild(labelDom);
   Blockly.utils.aria.setState(/** @type {!Element} */ (this.htmlDiv_),
       Blockly.utils.aria.State.LABELLEDBY, labelDom.getAttribute('id'));
 
@@ -288,8 +301,9 @@ Blockly.ToolboxCategory.prototype.createContainer_ = function() {
 };
 
 /**
- * Creates the container for the icon and the label.
- * @return {!Element} The div that holds the icon and the label.
+ * Creates the parent of the contents container. All pointer events will focus here??
+ * TODO: FIx this comment
+ * @return {!Element} The div that holds the contents container.
  * @protected
  */
 Blockly.ToolboxCategory.prototype.createRowContainer_ = function() {
@@ -299,8 +313,20 @@ Blockly.ToolboxCategory.prototype.createRowContainer_ = function() {
   nestedPadding = nestedPadding.toString() + 'px';
   this.workspace_.RTL ? rowDiv.style.paddingRight = nestedPadding :
       rowDiv.style.paddingLeft = nestedPadding;
-  rowDiv.style.pointerEvents = 'none';
   return rowDiv;
+};
+
+/**
+ * Creates the container for the label and icon.
+ * TODO: Mention something about pointer events.
+ * @return {!Element} The div that holds the icon and the label.
+ * @protected
+ */
+Blockly.ToolboxCategory.prototype.createRowContentsContainer_ = function() {
+  var contentsContainer = document.createElement('div');
+  Blockly.utils.dom.addClass(contentsContainer, this.cssConfig_['rowContentContainer']);
+  contentsContainer.style.pointerEvents = 'none';
+  return contentsContainer;
 };
 
 /**
@@ -389,7 +415,7 @@ Blockly.ToolboxCategory.prototype.addColourBorder_ = function(colour) {
  * @protected
  */
 Blockly.ToolboxCategory.prototype.getColour_ = function(categoryDef) {
-  var styleName = categoryDef['categorystyle'];
+  var styleName = categoryDef['categorystyle'] || categoryDef['categoryStyle'];
   var colour = categoryDef['colour'];
 
   if (colour && styleName) {

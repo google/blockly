@@ -13,7 +13,7 @@ function getCategoryJSON() {
   return [
     {
       "kind": "CATEGORY",
-      "cssConfig": {
+      "cssconfig": {
         "container": "something"
       },
       "contents": [

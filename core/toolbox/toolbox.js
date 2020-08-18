@@ -910,7 +910,7 @@ Blockly.Css.register([
     'padding-bottom: 3px',
   '}',
 
-  '.blocklyToolboxCategory:not(.blocklyTreeSelected):hover {',
+  '.blocklyTreeRow:not(.blocklyTreeSelected):hover {',
     'background-color: rgba(255, 255, 255, 0.2);',
   '}',
 
@@ -926,6 +926,7 @@ Blockly.Css.register([
     'display: flex;',
     'flex-wrap: wrap;',
     'flex-direction: column;',
+    'pointer-events: none;',
   '}',
 
   '.blocklyToolboxContents:focus {',
@@ -936,7 +937,6 @@ Blockly.Css.register([
     'height: 22px;',
     'line-height: 22px;',
     'padding-right: 8px;',
-    'pointer-events: none',
     'white-space: nowrap;',
   '}',
 
@@ -944,7 +944,6 @@ Blockly.Css.register([
     'margin-left: 8px;',
     'padding-right: 0px',
   '}',
-
 
   '.blocklyTreeSeparator {',
     'border-bottom: solid #e5e5e5 1px;',

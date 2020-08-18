@@ -149,13 +149,20 @@ Blockly.ToolboxCategory = function(categoryDef, toolbox, opt_parent) {
   this.isDisabled_ = false;
 
   /**
-   * Parse the contents for this category.
-   * @type {string|
-   *        !Array<!Blockly.ToolboxItem>|
-   *        !Array<!Blockly.utils.toolbox.FlyoutItemDef>}
+   * The flyout items for this category.
+   * @type {string|!Array<!Blockly.utils.toolbox.FlyoutItemDef>}
    * @protected
    */
-  this.contents_ = this.parseContents_(categoryDef, this.hasChildren_);
+  this.contents_ = [];
+
+  /**
+   * The child toolbox items for this category.
+   * @type {!Array<!Blockly.ToolboxItem>}
+   * @protected
+   */
+  this.toolboxItems_ = [];
+
+  this.parseContents_(categoryDef, this.hasChildren_);
 };
 
 Blockly.utils.object.inherits(Blockly.ToolboxCategory,
@@ -208,27 +215,21 @@ Blockly.ToolboxCategory.defaultBackgroundColour = '#57e';
  *     to create a category.
  * @param {boolean} hasChildren True if this category has subcategories, false
  *     otherwise.
- * @return {string|!Array<!Blockly.ToolboxItem>|
- *          !Array<!Blockly.utils.toolbox.FlyoutItemDef>}
- *     The contents for this category.
- * @private
+ * @protected
  */
 Blockly.ToolboxCategory.prototype.parseContents_ = function(categoryDef,
     hasChildren) {
-  var toolboxItems = [];
   var contents = categoryDef['contents'];
   if (hasChildren) {
     for (var i = 0; i < contents.length; i++) {
       var child = new Blockly.ToolboxCategory(contents[i], this.parentToolbox_, this);
-      toolboxItems.push(child);
+      this.toolboxItems_.push(child);
     }
   } else if (categoryDef['custom']) {
-    toolboxItems = categoryDef['custom'];
+    this.contents_ = categoryDef['custom'];
   } else {
-    toolboxItems = contents;
+    this.contents_ = contents;
   }
-
-  return toolboxItems;
 };
 
 /**
@@ -256,8 +257,8 @@ Blockly.ToolboxCategory.prototype.createDom = function() {
       Blockly.utils.aria.State.LABELLEDBY, labelDom.getAttribute('id'));
 
   if (this.hasChildren()) {
-    var contents = /** @type {!Array<!Blockly.ToolboxItem>} */ (this.contents_);
-    this.subcategoriesDiv_ = this.createSubCategoriesDom_(contents);
+    var subCategories = this.getChildToolboxItems();
+    this.subcategoriesDiv_ = this.createSubCategoriesDom_(subCategories);
     Blockly.utils.aria.setRole(this.subcategoriesDiv_,
         Blockly.utils.aria.Role.GROUP);
     this.htmlDiv_.appendChild(this.subcategoriesDiv_);
@@ -475,8 +476,8 @@ Blockly.ToolboxCategory.prototype.setExpanded = function(isExpanded) {
       Blockly.utils.aria.State.EXPANDED, isExpanded);
 
   if (this.hasChildren()) {
-    for (var i = 0; i < this.contents_.length; i++) {
-      var child = this.contents_[i];
+    for (var i = 0; i < this.getChildToolboxItems().length; i++) {
+      var child = this.getChildToolboxItems()[i];
       child.isParentExpanded_ = isExpanded;
     }
   }
@@ -528,7 +529,7 @@ Blockly.ToolboxCategory.prototype.hasChildren = function() {
 Blockly.ToolboxCategory.prototype.setVisible_ = function(isVisible) {
   this.htmlDiv_.style.display = isVisible ? 'block' : 'none';
   if (this.hasChildren()) {
-    for (var i = 0, child; (child = this.contents_[i]); i++) {
+    for (var i = 0, child; (child = this.getChildToolboxItems()[i]); i++) {
       child.setVisible_(isVisible);
     }
   }
@@ -664,6 +665,13 @@ Blockly.ToolboxCategory.prototype.getContents = function() {
 };
 
 /**
+ * @override
+ */
+Blockly.ToolboxCategory.prototype.getChildToolboxItems = function() {
+  return this.toolboxItems_;
+};
+
+/**
  * Updates the contents to be displayed in the flyout.
  * If the flyout is open when the contents are updated, refreshSelection on the
  * toolbox must also be called.
@@ -682,11 +690,10 @@ Blockly.ToolboxCategory.prototype.updateFlyoutContents = function(contents) {
   } else {
     this.toolboxItemDef_['contents'] = Blockly.utils.toolbox.convertToolboxToJSON(contents);
   }
-  this.contents_ = this.parseContents_(
+  this.parseContents_(
       /** @type {Blockly.utils.toolbox.Category} */ (this.toolboxItemDef_),
       this.hasChildren());
 };
-
 
 /**
  * @override

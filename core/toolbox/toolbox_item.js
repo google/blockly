@@ -149,9 +149,8 @@ Blockly.SelectableToolboxItem.prototype.getName = function() {
 /**
  * Gets the contents of the toolbox item. These are items that are meant to be
  * displayed in the flyout.
- * @return {!Array<!Blockly.utils.toolbox.FlyoutItemDef>|
- *          !Array<!Blockly.ToolboxItem>|
- *          string} The definition of items to be displayed in the flyout.
+ * @return {!Array<!Blockly.utils.toolbox.FlyoutItemDef>| string} The definition
+ *     of items to be displayed in the flyout.
  * @public
  */
 Blockly.SelectableToolboxItem.prototype.getContents = function() {
@@ -198,16 +197,10 @@ Blockly.CollapsibleToolboxItem.prototype.isCollapsible = function() {
 };
 
 /**
- * Gets the contents of the toolbox item. These are items that are meant to be
- * displayed in the flyout or nested children.
- * @return {!Array<!Blockly.utils.toolbox.FlyoutItemDef>|
- *          !Array<!Blockly.ToolboxItem>|
- *          string}
- *    The definition of items to be displayed in the flyout or the nested
- *    children of the collapsed category.
- * @public
+ * Gets any children toolbox items. (ex. Gets the sub categories)
+ * @return {!Array<!Blockly.ToolboxItem>} The child toolbox items.
  */
-Blockly.CollapsibleToolboxItem.prototype.getContents = function() {
+Blockly.CollapsibleToolboxItem.prototype.getChildToolboxItems = function() {
   return [];
 };
 

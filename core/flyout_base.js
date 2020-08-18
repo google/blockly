@@ -457,9 +457,9 @@ Blockly.Flyout.prototype.hide = function() {
 
 /**
  * Show and populate the flyout.
- * @param {!Blockly.utils.toolbox.FlyoutDefinition} flyoutDef List of contents
- *    to display in the flyout as an array of xml, an array of Nodes, a NodeList
- *    or a string with the name of the dynamic category.
+ * @param {!Blockly.utils.toolbox.FlyoutDefinition} flyoutDef Contents to display
+ *     in the flyout. This is either an array of Nodes, a Node, a
+ *     toolbox definition, or a string with the name of the dynamic category.
  */
 Blockly.Flyout.prototype.show = function(flyoutDef) {
   this.workspace_.setResizesEnabled(false);
@@ -472,8 +472,8 @@ Blockly.Flyout.prototype.show = function(flyoutDef) {
   }
   this.setVisible(true);
 
-  // Parse the Array or NodeList passed in into a Blockly.utils.toolbox.ToolboxJson.
-  var parsedContent = /** @type {!Array<!Blockly.utils.toolbox.FlyoutItemDef>} */
+  // Parse the Array or Node passed in into a a list of flyout items.
+  var parsedContent = /** @type {!Array<!Blockly.utils.toolbox.FlyoutItems>} */
       (Blockly.utils.toolbox.convertToolboxContentsToJSON(flyoutDef));
   parsedContent = parsedContent.slice(); // Shallow copy of parsedContent.
   var flyoutInfo =
@@ -514,7 +514,7 @@ Blockly.Flyout.prototype.show = function(flyoutDef) {
 /**
  * Create the contents array and gaps array necessary to create the layout for
  * the flyout.
- * @param {!Array.<Blockly.utils.toolbox.FlyoutItemDef>} parsedContent The array
+ * @param {!Array<Blockly.utils.toolbox.FlyoutItems>} parsedContent The array
  *     of objects to show in the flyout.
  * @return {{contents:Array.<Object>, gaps:Array.<number>}} The list of contents
  *     and gaps needed to lay out the flyout.
@@ -531,7 +531,7 @@ Blockly.Flyout.prototype.createFlyoutInfo_ = function(parsedContent) {
       var customInfo = /** @type {Blockly.utils.toolbox.CategoryJson} */ (contentInfo);
       var categoryName = customInfo['custom'];
       var flyoutDef = this.getDynamicCategoryContents_(categoryName);
-      var parsedDynamicContent = /** @type {!Array<Blockly.utils.toolbox.FlyoutItemDef>} */
+      var parsedDynamicContent = /** @type {!Array<Blockly.utils.toolbox.FlyoutItems>} */
         (Blockly.utils.toolbox.convertToolboxToJSON(flyoutDef));
       parsedContent.splice.apply(parsedContent, [i, 1].concat(parsedDynamicContent));
       contentInfo = parsedContent[i];

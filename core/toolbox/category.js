@@ -150,7 +150,7 @@ Blockly.ToolboxCategory = function(categoryDef, toolbox, opt_parent) {
 
   /**
    * The flyout items for this category.
-   * @type {string|!Array<!Blockly.utils.toolbox.FlyoutItemDef>}
+   * @type {string|!Array<!Blockly.utils.toolbox.FlyoutItems>}
    * @protected
    */
   this.contents_ = [];

@@ -26,7 +26,7 @@ goog.requireType('Blockly.ToolboxSeparator');
  *            disabled: (?string|?boolean)
  *          }}
  */
-Blockly.utils.toolbox.Block;
+Blockly.utils.toolbox.BlockJson;
 
 /**
  * The information needed to create a separator in the toolbox.
@@ -37,7 +37,7 @@ Blockly.utils.toolbox.Block;
  *            cssConfig:?Blockly.ToolboxSeparator.CssConfig
  *          }}
  */
-Blockly.utils.toolbox.Separator;
+Blockly.utils.toolbox.SeparatorJson;
 
 /**
  * The information needed to create a button in the toolbox.
@@ -47,7 +47,7 @@ Blockly.utils.toolbox.Separator;
  *            callbackkey:string
  *          }}
  */
-Blockly.utils.toolbox.Button;
+Blockly.utils.toolbox.ButtonJson;
 
 /**
  * The information needed to create a label in the toolbox.
@@ -57,7 +57,7 @@ Blockly.utils.toolbox.Button;
  *            text:string
  *          }}
  */
-Blockly.utils.toolbox.Label;
+Blockly.utils.toolbox.LabelJson;
 
 /**
  * The information needed to create a category in the toolbox.
@@ -69,46 +69,53 @@ Blockly.utils.toolbox.Label;
  *            colour:?string,
  *            cssConfig:?Blockly.ToolboxCategory.CssConfig,
  *            custom:?string,
- *            contents:Array.<Blockly.utils.toolbox.ToolboxItemDef>,
+ *            contents:Array<Blockly.utils.toolbox.ToolboxItemDef>,
  *            hidden:?string
  *          }}
  */
-Blockly.utils.toolbox.Category;
+Blockly.utils.toolbox.CategoryJson;
 
 /**
  * Any information that can be used to create an item in the toolbox.
- * @typedef {Blockly.utils.toolbox.Block|
- *           Blockly.utils.toolbox.Separator|
- *           Blockly.utils.toolbox.Button|
- *           Blockly.utils.toolbox.Label|
- *           Blockly.utils.toolbox.Category}
+ * @typedef {Blockly.utils.toolbox.BlockJson|
+ *           Blockly.utils.toolbox.SeparatorJson|
+ *           Blockly.utils.toolbox.ButtonJson|
+ *           Blockly.utils.toolbox.LabelJson|
+ *           Blockly.utils.toolbox.CategoryJson}
  */
 Blockly.utils.toolbox.ToolboxItemDef;
 
 /**
  * The JSON definition of a toolbox.
- * TODO: Maybe change all of these to _JsonDef ?
  * @typedef {{
- *            contents:!Array.<Blockly.utils.toolbox.ToolboxItemDef>
+ *            contents:!Array<Blockly.utils.toolbox.ToolboxItemDef>
  *          }}
  */
-Blockly.utils.toolbox.Toolbox;
+Blockly.utils.toolbox.ToolboxJson;
 
 /**
  * All of the different types that can create a toolbox.
  * @typedef {Node|
  *           NodeList|
- *           Blockly.utils.toolbox.Toolbox|
- *           Array.<Node>}
+ *           Blockly.utils.toolbox.ToolboxJson|
+ *           Array<Node>}
  */
 Blockly.utils.toolbox.ToolboxDefinition;
 
 /**
+ * All of the different types that can be used to show items in a flyout.
+ * @typedef {Array<Blockly.utils.toolbox.FlyoutItemDef>|
+ *           Blockly.utils.toolbox.ToolboxDefinition|
+ *           string}
+ */
+Blockly.utils.toolbox.FlyoutDefinition;
+
+/**
  * All the different types that can be displayed in a flyout.
- * @typedef {Blockly.utils.toolbox.Block|
- *           Blockly.utils.toolbox.Separator|
- *           Blockly.utils.toolbox.Button|
- *           Blockly.utils.toolbox.Label}
+ * @typedef {Blockly.utils.toolbox.BlockJson|
+ *           Blockly.utils.toolbox.SeparatorJson|
+ *           Blockly.utils.toolbox.ButtonJson|
+ *           Blockly.utils.toolbox.LabelJson}
  */
 Blockly.utils.toolbox.FlyoutItemDef;
 
@@ -116,7 +123,7 @@ Blockly.utils.toolbox.FlyoutItemDef;
  * Parse the provided toolbox definition into a consistent format.
  * @param {Blockly.utils.toolbox.ToolboxDefinition} toolboxDef The definition
  *     of the toolbox in one of its many forms.
- * @return {!Blockly.utils.toolbox.Toolbox} Object holding information
+ * @return {!Blockly.utils.toolbox.ToolboxJson} Object holding information
  *     for creating a toolbox.
  * @package
  */
@@ -145,11 +152,11 @@ Blockly.utils.toolbox.convertToolboxContentsToJSON = function(toolboxDef) {
       console.warn('Due to some performance issues, defining a toolbox using' +
           ' JSON is not ready yet. Please define your toolbox using xml.');
     }
-    return /** @type {!Array.<Blockly.utils.toolbox.ToolboxItemDef>} */ (contents);
+    return /** @type {!Array<Blockly.utils.toolbox.ToolboxItemDef>} */ (contents);
   }
 
   return Blockly.utils.toolbox.toolboxXmlToJson_(
-      /** @type {!NodeList|!Node|!Array.<Node>} */ (toolboxDef));
+      /** @type {!NodeList|!Node|!Array<Node>} */ (toolboxDef));
 };
 
 /**
@@ -168,7 +175,7 @@ Blockly.utils.toolbox.isCorrectFormat = function(toolboxDef) {
 
 /**
  * Convert the xml for a toolbox to JSON.
- * @param {!NodeList|!Node|!Array.<Node>} toolboxDef The
+ * @param {!NodeList|!Node|!Array<Node>} toolboxDef The
  *     definition of the toolbox in one of its many forms.
  * @return {!Array<Blockly.utils.toolbox.FlyoutItemDef>|
  *          !Array<Blockly.utils.toolbox.ToolboxItemDef>} A list of objects in

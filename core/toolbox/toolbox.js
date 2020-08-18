@@ -56,7 +56,7 @@ Blockly.Toolbox = function(workspace) {
 
   /**
    * The JSON describing the contents of this toolbox.
-   * @type {!Blockly.utils.toolbox.Toolbox}
+   * @type {!Blockly.utils.toolbox.ToolboxJson}
    * @protected
    */
   this.toolboxDef_ = workspace.options.languageTree || {'contents': []};
@@ -345,7 +345,7 @@ Blockly.Toolbox.prototype.createFlyout_ = function() {
 
 /**
  * Fills the toolbox with new toolbox items and removes any old contents.
- * @param {!Blockly.utils.toolbox.Toolbox} toolboxDef Object holding information
+ * @param {!Blockly.utils.toolbox.ToolboxJson} toolboxDef Object holding information
  *     for creating a toolbox.
  * @package
  */

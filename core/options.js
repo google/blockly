@@ -33,7 +33,7 @@ goog.require('Blockly.Xml');
 Blockly.Options = function(options) {
   var readOnly = !!options['readOnly'];
   if (readOnly) {
-    var toolboxContents = null;
+    var toolboxJsonDef = null;
     var hasCategories = false;
     var hasTrashcan = false;
     var hasCollapse = false;
@@ -43,10 +43,12 @@ Blockly.Options = function(options) {
   } else {
     var toolboxDef = options['toolbox'];
     if (toolboxDef && !Array.isArray(toolboxDef['contents'])) {
-      toolboxDef = Blockly.Options.parseToolboxTree(toolboxDef || null);
+      toolboxDef = /** @type {Node} */
+          (Blockly.Options.parseToolboxTree(toolboxDef || null));
     }
-    var toolboxContents = Blockly.utils.toolbox.convertToolboxToJSON(toolboxDef);
-    var hasCategories = Blockly.utils.toolbox.hasCategories(toolboxContents);
+    var toolboxJsonDef = /** @type {!Blockly.utils.toolbox.ToolboxJson} */
+        (Blockly.utils.toolbox.convertToolboxToJSON(toolboxDef));
+    var hasCategories = Blockly.utils.toolbox.hasCategories(toolboxJsonDef);
     var hasTrashcan = options['trashcan'];
     if (hasTrashcan === undefined) {
       hasTrashcan = hasCategories;
@@ -148,8 +150,8 @@ Blockly.Options = function(options) {
   this.hasCss = hasCss;
   /** @type {boolean} */
   this.horizontalLayout = horizontalLayout;
-  /** @type {?Blockly.utils.toolbox.Toolbox} */
-  this.languageTree = toolboxContents;
+  /** @type {?Blockly.utils.toolbox.ToolboxJson} */
+  this.languageTree = toolboxJsonDef;
   /** @type {!Blockly.Options.GridOptions} */
   this.gridOptions = Blockly.Options.parseGridOptions_(options);
   /** @type {!Blockly.Options.ZoomOptions} */

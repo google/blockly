@@ -324,6 +324,24 @@ Blockly.WorkspaceSvg.prototype.dragDeltaXY_ = null;
 Blockly.WorkspaceSvg.prototype.scale = 1;
 
 /**
+ * Cached scale value. Used to detect changes in viewport.
+ * @type {number}
+ */
+Blockly.WorkspaceSvg.prototype.oldScale_ = 1;
+
+/**
+ * Cached viewport top value. Used to detect changes in viewport.
+ * @type {number}
+ */
+Blockly.WorkspaceSvg.prototype.oldTop_ = 0;
+
+/**
+ * Cached viewport left value. Used to detect changes in viewport.
+ * @type {number}
+ */
+Blockly.WorkspaceSvg.prototype.oldLeft_ = 0;
+
+/**
  * The workspace's trashcan (if any).
  * @type {Blockly.Trashcan}
  */
@@ -1074,16 +1092,25 @@ Blockly.WorkspaceSvg.prototype.getParentSvg = function() {
 };
 
 /**
- *
+ * Fires a viewport event if events are enabled and there is a change in
+ * viewport values.
  * @package
  */
-Blockly.WorkspaceSvg.prototype.fireViewportChangeEvent_ = function() {
-  var viewProperties = {
-    scale: this.scale,
-    top: -this.scrollY,
-    left: -this.scrollX
-  };
-  var event = new Blockly.Events.Ui(null, 'viewport', null, viewProperties);
+Blockly.WorkspaceSvg.prototype.maybeFireViewportChangeEvent = function() {
+  if (!Blockly.Events.isEnabled()) {
+    return;
+  }
+  var scale = this.scale;
+  var top = -this.scrollY;
+  var left = -this.scrollX;
+  if (scale == this.oldScale_ && top == this.oldTop_ && left == this.oldLeft_) {
+    return;
+  }
+  this.oldScale_ = scale;
+  this.oldTop_ = top;
+  this.oldLeft_ = left;
+  var event = new Blockly.Events.Ui(null, 'viewport', null,
+      { scale: scale, top: top, left: left });
   event.workspaceId = this.id;
   Blockly.Events.fire(event);
 };
@@ -1113,9 +1140,7 @@ Blockly.WorkspaceSvg.prototype.translate = function(x, y) {
     this.grid_.moveTo(x, y);
   }
 
-  if (Blockly.Events.isEnabled()) {
-    this.fireViewportChangeEvent_();
-  }
+  this.maybeFireViewportChangeEvent();
 };
 
 /**
@@ -1917,9 +1942,7 @@ Blockly.WorkspaceSvg.prototype.zoomToFit = function() {
   } finally {
     Blockly.Events.enable();
   }
-  if (Blockly.Events.isEnabled()) {
-    this.fireViewportChangeEvent_();
-  }
+  this.maybeFireViewportChangeEvent();
 };
 
 /**

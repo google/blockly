@@ -119,9 +119,7 @@ Blockly.ScrollbarPair.prototype.resize = function() {
     } finally {
       Blockly.Events.enable();
     }
-    if (Blockly.Events.isEnabled()) {
-      this.workspace_.fireViewportChangeEvent_();
-    }
+    this.workspace_.maybeFireViewportChangeEvent();
   }
 
 

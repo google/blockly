@@ -194,7 +194,7 @@ suite('WorkspaceSvg', function() {
     function runViewportEventTest(eventTriggerFunc, eventsFireStub,
         changeListenerSpy, workspace, clock, expectedEventCount = 1) {
       clock.runAll();
-      resetEventHistory(eventsFireStub, changeListenerSpy, this.clock);
+      resetEventHistory(eventsFireStub, changeListenerSpy);
       eventTriggerFunc();
       assertViewportEventFired(
           eventsFireStub, changeListenerSpy, workspace, expectedEventCount);
@@ -266,65 +266,6 @@ suite('WorkspaceSvg', function() {
             this.eventsFireStub, this.changeListenerSpy, this.workspace,
             this.clock);
       });
-      test('block render that triggers scroll', function() {
-        var block = this.workspace.newBlock('stack_block');
-        var initAndRenderBlock = () => {
-          block.initSvg();
-          block.render();
-        };
-        runViewportEventTest(initAndRenderBlock, this.eventsFireStub,
-            this.changeListenerSpy, this.workspace, this.clock);
-      });
-      test.skip('block render that doesn\'t trigger scroll' , function() {
-        // 4 blocks with space in center.
-        Blockly.Xml.domToWorkspace(
-            Blockly.Xml.textToDom(
-                '<xml xmlns="https://developers.google.com/blockly/xml">' +
-                '<block type="controls_if" x="88" y="88"></block>' +
-                '<block type="controls_if" x="288" y="88"></block>' +
-                '<block type="controls_if" x="88" y="238"></block>' +
-                '<block type="controls_if" x="288" y="238"></block>' +
-                '</xml>'),
-            this.workspace);
-        // var xmlDom = Blockly.Xml.textToDom(
-        //     '<block type="controls_if" x="188" y="163"></block>');
-        var xmlDom = Blockly.Xml.textToDom(
-            '<xml xmlns="https://developers.google.com/blockly/xml"><block type="controls_if" x="188" y="163"></block></xml>');
-        resetEventHistory(
-            this.eventsFireStub, this.changeListenerSpy, this.clock);
-        // Add block in center of other blocks, not triggering scroll.
-        Blockly.Xml.domToWorkspace(xmlDom, this.workspace);
-        this.clock.runAll();
-        // assertEventNotFired(
-        //     this.eventsFireStub, Blockly.Events.Ui, {element: 'viewport'});
-        assertEventNotFired(
-            this.changeListenerSpy, Blockly.Events.Ui, {element: 'viewport'});
-      });
-      test.skip('block render that doesn\'t trigger scroll' , function() {
-        // 4 blocks with space in center.
-        Blockly.Xml.domToWorkspace(
-            Blockly.Xml.textToDom(
-                '<xml xmlns="https://developers.google.com/blockly/xml">' +
-                '<block type="controls_if" x="-75" y="-72"></block>' +
-                '<block type="controls_if" x="75" y="-72"></block>' +
-                '<block type="controls_if" x="-75" y="75"></block>' +
-                '<block type="controls_if" x="75" y="75"></block>' +
-                '</xml>'),
-            this.workspace);
-        // var xmlDom = Blockly.Xml.textToDom(
-        //     '<block type="controls_if" x="0" y="0"></block>');
-        var xmlDom = Blockly.Xml.textToDom(
-            '<xml xmlns="https://developers.google.com/blockly/xml"><block type="controls_if" x="0" y="0"></block></xml>');
-        resetEventHistory(
-            this.eventsFireStub, this.changeListenerSpy, this.clock);
-        // Add block in center of other blocks, not triggering scroll.
-        Blockly.Xml.domToWorkspace(xmlDom, this.workspace);
-        this.clock.runAll();
-        assertEventNotFired(
-            this.eventsFireStub, Blockly.Events.Ui, {element: 'viewport'});
-        assertEventNotFired(
-            this.changeListenerSpy, Blockly.Events.Ui, {element: 'viewport'});
-      });
     });
     suite('resize', function() {
       setup(function() {
@@ -342,6 +283,93 @@ suite('WorkspaceSvg', function() {
         runViewportEventTest(() => this.workspace.resizeContents(),
             this.eventsFireStub, this.changeListenerSpy, this.workspace,
             this.clock);
+      });
+    });
+    suite.only('Blocks triggering viewport changes', function() {
+      test('block render that doesn\'t trigger scroll', function() {
+        this.clock.runAll();
+        resetEventHistory(this.eventsFireStub, this.changeListenerSpy);
+        var block = this.workspace.newBlock('stack_block');
+        block.initSvg();
+        block.render();
+        this.clock.runAll();
+        assertEventNotFired(
+            this.eventsFireStub, Blockly.Events.Ui, {element: 'viewport'});
+      });
+      test('block move that triggers scroll', function() {
+        var block = this.workspace.newBlock('stack_block');
+        block.initSvg();
+        block.render();
+        this.clock.runAll();
+        resetEventHistory(this.eventsFireStub, this.changeListenerSpy);
+        // Expect 2 events, 1 move, 1 viewport
+        runViewportEventTest(() => {
+          block.moveBy(1000, 1000);
+        }, this.eventsFireStub, this.changeListenerSpy, this.workspace,
+        this.clock, 2);
+      });
+      test.skip('domToWorkspace that doesn\'t trigger scroll' , function() {
+        // TODO(#): un-skip after fixing bug with unintentional scroll.
+        // 4 blocks with space in center.
+        Blockly.Xml.domToWorkspace(
+            Blockly.Xml.textToDom(
+                '<xml xmlns="https://developers.google.com/blockly/xml">' +
+                '<block type="controls_if" x="88" y="88"></block>' +
+                '<block type="controls_if" x="288" y="88"></block>' +
+                '<block type="controls_if" x="88" y="238"></block>' +
+                '<block type="controls_if" x="288" y="238"></block>' +
+                '</xml>'),
+            this.workspace);
+        var xmlDom = Blockly.Xml.textToDom(
+            '<block type="controls_if" x="188" y="163"></block>');
+        this.clock.runAll();
+        resetEventHistory(this.eventsFireStub, this.changeListenerSpy);
+        // Add block in center of other blocks, not triggering scroll.
+        Blockly.Xml.domToWorkspace(xmlDom, this.workspace);
+        this.clock.runAll();
+        assertEventNotFired(
+            this.eventsFireStub, Blockly.Events.Ui, {element: 'viewport'});
+        assertEventNotFired(
+            this.changeListenerSpy, Blockly.Events.Ui, {element: 'viewport'});
+      });
+      test('domToWorkspace at 0,0 that doesn\'t trigger scroll' , function() {
+        // 4 blocks with space in center.
+        Blockly.Xml.domToWorkspace(
+            Blockly.Xml.textToDom(
+                '<xml xmlns="https://developers.google.com/blockly/xml">' +
+                '<block type="controls_if" x="-75" y="-72"></block>' +
+                '<block type="controls_if" x="75" y="-72"></block>' +
+                '<block type="controls_if" x="-75" y="75"></block>' +
+                '<block type="controls_if" x="75" y="75"></block>' +
+                '</xml>'),
+            this.workspace);
+        var xmlDom = Blockly.Xml.textToDom(
+            '<block type="controls_if" x="0" y="0"></block>');
+        this.clock.runAll();
+        resetEventHistory(this.eventsFireStub, this.changeListenerSpy);
+        // Add block in center of other blocks, not triggering scroll.
+        Blockly.Xml.domToWorkspace(xmlDom, this.workspace);
+        this.clock.runAll();
+        assertEventNotFired(
+            this.eventsFireStub, Blockly.Events.Ui, {element: 'viewport'});
+        assertEventNotFired(
+            this.changeListenerSpy, Blockly.Events.Ui, {element: 'viewport'});
+      });
+      test('domToWorkspace multiple blocks triggers one viewport event', function() {
+        var addingMultipleBlocks = () => {
+          Blockly.Xml.domToWorkspace(
+              Blockly.Xml.textToDom(
+                  '<xml xmlns="https://developers.google.com/blockly/xml">' +
+                  '<block type="controls_if" x="88" y="88"></block>' +
+                  '<block type="controls_if" x="288" y="88"></block>' +
+                  '<block type="controls_if" x="88" y="238"></block>' +
+                  '<block type="controls_if" x="288" y="238"></block>' +
+                  '</xml>'),
+              this.workspace);
+        };
+        // Expect 10 events, 4 create, 4 move, 1 viewport, 1 finished loading
+        runViewportEventTest(addingMultipleBlocks, this.eventsFireStub,
+            this.changeListenerSpy, this.workspace, this.clock, 10);
       });
     });
   });

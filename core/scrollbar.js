@@ -107,12 +107,23 @@ Blockly.ScrollbarPair.prototype.resize = function() {
       resizeV = true;
     }
   }
-  if (resizeH) {
-    this.hScroll.resize(hostMetrics);
+  if (resizeH || resizeV) {
+    try {
+      Blockly.Events.disable();
+      if (resizeH) {
+        this.hScroll.resize(hostMetrics);
+      }
+      if (resizeV) {
+        this.vScroll.resize(hostMetrics);
+      }
+    } finally {
+      Blockly.Events.enable();
+    }
+    if (Blockly.Events.isEnabled()) {
+      this.workspace_.fireViewportChangeEvent_();
+    }
   }
-  if (resizeV) {
-    this.vScroll.resize(hostMetrics);
-  }
+
 
   // Reposition the corner square.
   if (!this.oldHostMetrics_ ||

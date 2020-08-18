@@ -276,27 +276,69 @@ suite('WorkspaceSvg', function() {
             this.changeListenerSpy, this.workspace, this.clock);
       });
       test.skip('block render that doesn\'t trigger scroll' , function() {
-        // 4 blocks, and 1 block in center and nothing should change
-        // use xml
-        // TODO: implement before merging
-        var block = this.workspace.newBlock('stack_block');
-        var initAndRenderBlock = () => {
-          block.initSvg();
-          block.render();
-        };
-        runViewportEventTest(initAndRenderBlock, this.eventsFireStub,
-            this.changeListenerSpy, this.workspace, this.clock);
+        // 4 blocks with space in center.
+        Blockly.Xml.domToWorkspace(
+            Blockly.Xml.textToDom(
+                '<xml xmlns="https://developers.google.com/blockly/xml">' +
+                '<block type="controls_if" x="88" y="88"></block>' +
+                '<block type="controls_if" x="288" y="88"></block>' +
+                '<block type="controls_if" x="88" y="238"></block>' +
+                '<block type="controls_if" x="288" y="238"></block>' +
+                '</xml>'),
+            this.workspace);
+        // var xmlDom = Blockly.Xml.textToDom(
+        //     '<block type="controls_if" x="188" y="163"></block>');
+        var xmlDom = Blockly.Xml.textToDom(
+            '<xml xmlns="https://developers.google.com/blockly/xml"><block type="controls_if" x="188" y="163"></block></xml>');
+        resetEventHistory(
+            this.eventsFireStub, this.changeListenerSpy, this.clock);
+        // Add block in center of other blocks, not triggering scroll.
+        Blockly.Xml.domToWorkspace(xmlDom, this.workspace);
+        this.clock.runAll();
+        // assertEventNotFired(
+        //     this.eventsFireStub, Blockly.Events.Ui, {element: 'viewport'});
+        assertEventNotFired(
+            this.changeListenerSpy, Blockly.Events.Ui, {element: 'viewport'});
+      });
+      test.skip('block render that doesn\'t trigger scroll' , function() {
+        // 4 blocks with space in center.
+        Blockly.Xml.domToWorkspace(
+            Blockly.Xml.textToDom(
+                '<xml xmlns="https://developers.google.com/blockly/xml">' +
+                '<block type="controls_if" x="-75" y="-72"></block>' +
+                '<block type="controls_if" x="75" y="-72"></block>' +
+                '<block type="controls_if" x="-75" y="75"></block>' +
+                '<block type="controls_if" x="75" y="75"></block>' +
+                '</xml>'),
+            this.workspace);
+        // var xmlDom = Blockly.Xml.textToDom(
+        //     '<block type="controls_if" x="0" y="0"></block>');
+        var xmlDom = Blockly.Xml.textToDom(
+            '<xml xmlns="https://developers.google.com/blockly/xml"><block type="controls_if" x="0" y="0"></block></xml>');
+        resetEventHistory(
+            this.eventsFireStub, this.changeListenerSpy, this.clock);
+        // Add block in center of other blocks, not triggering scroll.
+        Blockly.Xml.domToWorkspace(xmlDom, this.workspace);
+        this.clock.runAll();
+        assertEventNotFired(
+            this.eventsFireStub, Blockly.Events.Ui, {element: 'viewport'});
+        assertEventNotFired(
+            this.changeListenerSpy, Blockly.Events.Ui, {element: 'viewport'});
       });
     });
     suite('resize', function() {
-      test.skip('resize', function() {
-        // TODO: implement before merging
+      setup(function() {
+        sinon.stub(Blockly, 'svgSize').callsFake((svg) => {
+          return new Blockly.utils.Size(
+              svg.cachedWidth_ + 10, svg.cachedHeight_ + 10);
+        });
+      });
+      test('resize', function() {
         runViewportEventTest(() => this.workspace.resize(),
             this.eventsFireStub, this.changeListenerSpy, this.workspace,
             this.clock);
       });
-      test.skip('resizeContents', function() {
-        // TODO: implement before merging
+      test('resizeContents', function() {
         runViewportEventTest(() => this.workspace.resizeContents(),
             this.eventsFireStub, this.changeListenerSpy, this.workspace,
             this.clock);

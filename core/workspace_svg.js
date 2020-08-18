@@ -1073,6 +1073,10 @@ Blockly.WorkspaceSvg.prototype.getParentSvg = function() {
   return /** @type {!SVGElement} */ (this.cachedParentSvg_);
 };
 
+/**
+ *
+ * @package
+ */
 Blockly.WorkspaceSvg.prototype.fireViewportChangeEvent_ = function() {
   var viewProperties = {
     scale: this.scale,

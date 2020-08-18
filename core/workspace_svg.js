@@ -1097,22 +1097,23 @@ Blockly.WorkspaceSvg.prototype.getParentSvg = function() {
  * @package
  */
 Blockly.WorkspaceSvg.prototype.maybeFireViewportChangeEvent = function() {
-  if (!Blockly.Events.isEnabled()) {
-    return;
-  }
-  var scale = this.scale;
-  var top = -this.scrollY;
-  var left = -this.scrollX;
-  if (scale == this.oldScale_ && top == this.oldTop_ && left == this.oldLeft_) {
-    return;
-  }
-  this.oldScale_ = scale;
-  this.oldTop_ = top;
-  this.oldLeft_ = left;
-  var event = new Blockly.Events.Ui(null, 'viewport', null,
-      { scale: scale, top: top, left: left });
-  event.workspaceId = this.id;
-  Blockly.Events.fire(event);
+  // TODO(#) Enable viewport events after ui events refactor.
+  // if (!Blockly.Events.isEnabled()) {
+  //   return;
+  // }
+  // var scale = this.scale;
+  // var top = -this.scrollY;
+  // var left = -this.scrollX;
+  // if (scale == this.oldScale_ && top == this.oldTop_ && left == this.oldLeft_) {
+  //   return;
+  // }
+  // this.oldScale_ = scale;
+  // this.oldTop_ = top;
+  // this.oldLeft_ = left;
+  // var event = new Blockly.Events.Ui(null, 'viewport', null,
+  //     { scale: scale, top: top, left: left });
+  // event.workspaceId = this.id;
+  // Blockly.Events.fire(event);
 };
 
 /**

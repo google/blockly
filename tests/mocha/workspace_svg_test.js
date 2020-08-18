@@ -164,7 +164,7 @@ suite('WorkspaceSvg', function() {
     });
   });
 
-  suite.only('Viewport change events', function() {
+  suite.skip('Viewport change events', function() {
     function resetEventHistory(eventsFireStub, changeListenerSpy) {
       eventsFireStub.resetHistory();
       changeListenerSpy.resetHistory();
@@ -261,11 +261,6 @@ suite('WorkspaceSvg', function() {
             this.eventsFireStub, this.changeListenerSpy, this.workspace,
             this.clock);
       });
-      test('translate', function() {
-        runViewportEventTest(() => this.workspace.translate(50, 50),
-            this.eventsFireStub, this.changeListenerSpy, this.workspace,
-            this.clock);
-      });
     });
     suite('resize', function() {
       setup(function() {
@@ -285,7 +280,7 @@ suite('WorkspaceSvg', function() {
             this.clock);
       });
     });
-    suite.only('Blocks triggering viewport changes', function() {
+    suite('Blocks triggering viewport changes', function() {
       test('block render that doesn\'t trigger scroll', function() {
         this.clock.runAll();
         resetEventHistory(this.eventsFireStub, this.changeListenerSpy);

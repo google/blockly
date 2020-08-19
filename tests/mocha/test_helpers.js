@@ -41,7 +41,7 @@ function captureWarnings(innerFunc) {
 
 /**
  * Stubs Blockly.utils.deprecation.warn call.
- * @return {!SinonStub}
+ * @return {!SinonStub} The created stub.
  */
 function createDeprecationWarningStub() {
   return sinon.stub(Blockly.utils.deprecation, 'warn');

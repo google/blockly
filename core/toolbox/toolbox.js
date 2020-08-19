@@ -367,7 +367,7 @@ Blockly.Toolbox.prototype.render = function(toolboxDef) {
 
 /**
  * Adds all the toolbox items to the toolbox.
- * @param {!Array<!Blockly.utils.toolbox.ToolboxItems>} toolboxDef Array
+ * @param {!Array<!Blockly.utils.toolbox.ToolboxItem>} toolboxDef Array
  *     holding objects containing information on the contents of the toolbox.
  * @protected
  */
@@ -379,7 +379,7 @@ Blockly.Toolbox.prototype.renderContents_ = function(toolboxDef) {
 
 /**
  * Creates and renders the toolbox item.
- * @param {Blockly.utils.toolbox.ToolboxItems} childIn Any information that
+ * @param {Blockly.utils.toolbox.ToolboxItem} childIn Any information that
  *    can be used to create an item in the toolbox.
  */
 Blockly.Toolbox.prototype.renderToolboxItem_ = function(childIn) {

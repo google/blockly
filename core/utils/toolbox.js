@@ -69,7 +69,7 @@ Blockly.utils.toolbox.LabelJson;
  *            colour:?string,
  *            cssConfig:?Blockly.ToolboxCategory.CssConfig,
  *            custom:?string,
- *            contents:Array<Blockly.utils.toolbox.ToolboxItems>,
+ *            contents:Array<Blockly.utils.toolbox.ToolboxItem>,
  *            hidden:?string
  *          }}
  */
@@ -83,12 +83,12 @@ Blockly.utils.toolbox.CategoryJson;
  *           Blockly.utils.toolbox.LabelJson|
  *           Blockly.utils.toolbox.CategoryJson}
  */
-Blockly.utils.toolbox.ToolboxItems;
+Blockly.utils.toolbox.ToolboxItem;
 
 /**
  * The JSON definition of a toolbox.
  * @typedef {{
- *            contents:!Array<Blockly.utils.toolbox.ToolboxItems>
+ *            contents:!Array<Blockly.utils.toolbox.ToolboxItem>
  *          }}
  */
 Blockly.utils.toolbox.ToolboxJson;
@@ -104,7 +104,7 @@ Blockly.utils.toolbox.ToolboxDefinition;
 
 /**
  * All of the different types that can be used to show items in a flyout.
- * @typedef {Array<Blockly.utils.toolbox.FlyoutItems>|
+ * @typedef {Array<Blockly.utils.toolbox.FlyoutItem>|
  *           Blockly.utils.toolbox.ToolboxDefinition}
  */
 Blockly.utils.toolbox.FlyoutDefinition;
@@ -116,7 +116,7 @@ Blockly.utils.toolbox.FlyoutDefinition;
  *           Blockly.utils.toolbox.ButtonJson|
  *           Blockly.utils.toolbox.LabelJson}
  */
-Blockly.utils.toolbox.FlyoutItems;
+Blockly.utils.toolbox.FlyoutItem;
 
 /**
  * Parse the provided toolbox definition into a consistent format.
@@ -135,8 +135,8 @@ Blockly.utils.toolbox.convertToolboxToJSON = function(toolboxDef) {
  * Converts the toolbox contents to JSON.
  * @param {Blockly.utils.toolbox.ToolboxDefinition} toolboxDef The definition
  *     of the toolbox in one of its many forms.
- * @return {Array<Blockly.utils.toolbox.FlyoutItems>|
- *          Array<Blockly.utils.toolbox.ToolboxItems>} The contents of the
+ * @return {Array<Blockly.utils.toolbox.FlyoutItem>|
+ *          Array<Blockly.utils.toolbox.ToolboxItem>} The contents of the
  *          toolbox.
  */
 Blockly.utils.toolbox.convertToolboxContentsToJSON = function(toolboxDef) {
@@ -151,7 +151,7 @@ Blockly.utils.toolbox.convertToolboxContentsToJSON = function(toolboxDef) {
       console.warn('Due to some performance issues, defining a toolbox using' +
           ' JSON is not ready yet. Please define your toolbox using xml.');
     }
-    return /** @type {!Array<Blockly.utils.toolbox.FlyoutItems>|!Array<Blockly.utils.toolbox.ToolboxItems>} */ (contents);
+    return contents;
   }
 
   return Blockly.utils.toolbox.toolboxXmlToJson_(
@@ -176,8 +176,8 @@ Blockly.utils.toolbox.isCorrectFormat = function(toolboxDef) {
  * Convert the xml for a toolbox to JSON.
  * @param {!Node|!Array<Node>} toolboxDef The
  *     definition of the toolbox in one of its many forms.
- * @return {!Array<Blockly.utils.toolbox.FlyoutItems>|
- *          !Array<Blockly.utils.toolbox.ToolboxItems>} A list of objects in
+ * @return {!Array<Blockly.utils.toolbox.FlyoutItem>|
+ *          !Array<Blockly.utils.toolbox.ToolboxItem>} A list of objects in
  *     the toolbox.
  * @private
  */

@@ -1707,10 +1707,11 @@ Blockly.WorkspaceSvg.prototype.showContextMenu = function(e) {
  *    representing toolbox contents.
  */
 Blockly.WorkspaceSvg.prototype.updateToolbox = function(toolboxDef) {
-  if (!Array.isArray(toolboxDef)) {
-    toolboxDef = Blockly.Options.parseToolboxTree(toolboxDef);
+  var toolboxContents = (toolboxDef && toolboxDef['contents']) || toolboxDef;
+  if (!Array.isArray(toolboxContents)) {
+    toolboxContents = Blockly.Options.parseToolboxTree(toolboxContents);
   }
-  toolboxDef = Blockly.utils.toolbox.convertToolboxToJSON(toolboxDef);
+  var parsedToolboxDef = Blockly.utils.toolbox.convertToolboxToJSON(toolboxContents);
   if (!toolboxDef) {
     if (this.options.languageTree) {
       throw Error('Can\'t nullify an existing toolbox.');
@@ -1720,18 +1721,19 @@ Blockly.WorkspaceSvg.prototype.updateToolbox = function(toolboxDef) {
   if (!this.options.languageTree) {
     throw Error('Existing toolbox is null.  Can\'t create new toolbox.');
   }
-  if (Blockly.utils.toolbox.hasCategories(toolboxDef)) {
+
+  if (Blockly.utils.toolbox.hasCategories(parsedToolboxDef)) {
     if (!this.toolbox_) {
       throw Error('Existing toolbox has no categories.  Can\'t change mode.');
     }
-    this.options.languageTree = toolboxDef;
-    this.toolbox_.render(toolboxDef);
+    this.options.languageTree = parsedToolboxDef;
+    this.toolbox_.render(parsedToolboxDef);
   } else {
     if (!this.flyout_) {
       throw Error('Existing toolbox has categories.  Can\'t change mode.');
     }
-    this.options.languageTree = toolboxDef;
-    this.flyout_.show(toolboxDef);
+    this.options.languageTree = parsedToolboxDef;
+    this.flyout_.show(parsedToolboxDef);
   }
 };
 

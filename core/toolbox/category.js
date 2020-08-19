@@ -24,7 +24,7 @@ goog.requireType('Blockly.utils.toolbox');
 
 /**
  * Class for a category in a toolbox.
- * @param {!Blockly.utils.toolbox.Category} categoryDef The information needed
+ * @param {!Blockly.utils.toolbox.CategoryJson} categoryDef The information needed
  *     to create a category in the toolbox.
  * @param {!Blockly.IToolbox} toolbox The parent toolbox for the category.
  * @param {Blockly.ToolboxCategory=} opt_parent The parent category or null if
@@ -152,7 +152,7 @@ Blockly.ToolboxCategory = function(categoryDef, toolbox, opt_parent) {
 
   /**
    * The flyout items for this category.
-   * @type {string|!Array<!Blockly.utils.toolbox.FlyoutItemDef>}
+   * @type {string|!Array<!Blockly.utils.toolbox.FlyoutItem>}
    * @protected
    */
   this.contents_ = [];
@@ -213,7 +213,7 @@ Blockly.ToolboxCategory.defaultBackgroundColour = '#57e';
 /**
  * Parses the contents array depending on if the category has children, is a
  * dynamic category, or if its contents are meant to be shown in the flyout.
- * @param {!Blockly.utils.toolbox.Category} categoryDef The information needed
+ * @param {!Blockly.utils.toolbox.CategoryJson} categoryDef The information needed
  *     to create a category.
  * @param {boolean} hasChildren True if this category has subcategories, false
  *     otherwise.
@@ -363,7 +363,7 @@ Blockly.ToolboxCategory.prototype.createSubCategoriesDom_ = function(contents) {
  * @public
  */
 Blockly.ToolboxCategory.prototype.refreshTheme = function() {
-  this.colour_ = this.getColour_(/** @type {Blockly.utils.toolbox.Category} **/
+  this.colour_ = this.getColour_(/** @type {Blockly.utils.toolbox.CategoryJson} **/
       (this.toolboxItemDef_));
   this.addColourBorder_(this.colour_);
 };
@@ -387,7 +387,7 @@ Blockly.ToolboxCategory.prototype.addColourBorder_ = function(colour) {
 
 /**
  * Adds either the colour or the style for a category.
- * @param {!Blockly.utils.toolbox.Category} categoryDef The object holding
+ * @param {!Blockly.utils.toolbox.CategoryJson} categoryDef The object holding
  *    information on the category.
  * @return {string} The hex colour for the category.
  * @protected
@@ -696,7 +696,7 @@ Blockly.ToolboxCategory.prototype.updateFlyoutContents = function(contents) {
     this.toolboxItemDef_['contents'] = Blockly.utils.toolbox.convertToolboxToJSON(contents);
   }
   this.parseContents_(
-      /** @type {Blockly.utils.toolbox.Category} */ (this.toolboxItemDef_),
+      /** @type {Blockly.utils.toolbox.CategoryJson} */ (this.toolboxItemDef_),
       this.hasChildren());
 };
 

@@ -38,7 +38,7 @@ suite('Procedures XML', function() {
       };
     });
     teardown(function() {
-      this.workspace.dispose();
+      workspaceTeardown.call(this, this.workspace);
     });
 
     suite('Definition Blocks', function() {

@@ -40,6 +40,37 @@ function captureWarnings(innerFunc) {
 }
 
 /**
+ * Stubs Blockly.utils.deprecation.warn call.
+ * @return {!SinonStub}
+ */
+function createDeprecationWarningStub() {
+  return sinon.stub(Blockly.utils.deprecation, 'warn');
+}
+
+/**
+ * Asserts whether the given deprecation warning stub or call was called with
+ * the expected functionName.
+ * @param {!SinonSpy|!SinonSpyCall} spyOrSpyCall The spy or spy call to use.
+ * @param {string} functionName The function name to check that the given spy or
+ *    spy call was called with.
+ */
+function assertDeprecationWarningCall(spyOrSpyCall, functionName) {
+  sinon.assert.calledWith(spyOrSpyCall, functionName);
+}
+
+/**
+ * Asserts that there was a single deprecation warning call with the given
+ * functionName passed.
+ * @param {!SinonSpy} spy The spy to use.
+ * @param {string} functionName The function name to check that the given spy
+ *    was called with.
+ */
+function assertSingleDeprecationWarningCall(spy, functionName) {
+  sinon.assert.calledOnce(spy);
+  assertDeprecationWarningCall(spy.getCall(0), functionName);
+}
+
+/**
  * Safely disposes of Blockly workspace, logging any errors.
  * Assumes that sharedTestSetup has also been called. This should be called
  * using workspaceTeardown.call(this).

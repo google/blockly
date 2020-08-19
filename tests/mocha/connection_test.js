@@ -21,30 +21,42 @@ suite('Connection', function() {
   teardown(function() {
     sharedTestTeardown.call(this);
   });
-  test('canConnectWithReason passes', function() {
+  test('Deprecated - canConnectWithReason passes', function() {
+    var deprecateWarnSpy = createDeprecationWarningStub();
     var conn1 = this.createConnection(Blockly.PREVIOUS_STATEMENT);
     var conn2 = this.createConnection(Blockly.NEXT_STATEMENT);
     chai.assert.equal(conn1.canConnectWithReason(conn2),
         Blockly.Connection.CAN_CONNECT);
+    assertSingleDeprecationWarningCall(deprecateWarnSpy,
+        'Connection.prototype.canConnectWithReason');
   });
-  test('canConnectWithReason fails', function() {
+  test('Deprecated - canConnectWithReason fails', function() {
+    var deprecateWarnSpy = createDeprecationWarningStub();
     var conn1 = this.createConnection(Blockly.PREVIOUS_STATEMENT);
     var conn2 = this.createConnection(Blockly.OUTPUT_VALUE);
     chai.assert.equal(conn1.canConnectWithReason(conn2),
         Blockly.Connection.REASON_WRONG_TYPE);
+    assertSingleDeprecationWarningCall(deprecateWarnSpy,
+        'Connection.prototype.canConnectWithReason');
   });
-  test('checkConnection passes', function() {
+  test('Deprecated - checkConnection passes', function() {
+    var deprecateWarnSpy = createDeprecationWarningStub();
     var conn1 = this.createConnection(Blockly.PREVIOUS_STATEMENT);
     var conn2 = this.createConnection(Blockly.NEXT_STATEMENT);
     chai.assert.doesNotThrow(function() {
       conn1.checkConnection(conn2);
     });
+    assertSingleDeprecationWarningCall(deprecateWarnSpy,
+        'Connection.prototype.checkConnection');
   });
-  test('checkConnection fails', function() {
+  test('Deprecated - checkConnection fails', function() {
+    var deprecateWarnSpy = createDeprecationWarningStub();
     var conn1 = this.createConnection(Blockly.PREVIOUS_STATEMENT);
     var conn2 = this.createConnection(Blockly.OUTPUT_VALUE);
     chai.assert.throws(function() {
       conn1.checkConnection(conn2);
     });
+    assertSingleDeprecationWarningCall(deprecateWarnSpy,
+        'Connection.prototype.checkConnection');
   });
 });

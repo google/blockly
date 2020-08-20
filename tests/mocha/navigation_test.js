@@ -395,9 +395,7 @@ suite('Navigation', function() {
       var block = this.workspace.getTopBlocks()[0];
       var field = block.inputList[0].fieldRow[0];
 
-      sinon.stub(field, 'onBlocklyAction').callsFake(function(){
-        return true;
-      });
+      sinon.stub(field, 'onBlocklyAction').returns(true);
       this.workspace.getCursor().setCurNode(Blockly.ASTNode.createFieldNode(field));
 
       var isHandled = Blockly.navigation.onBlocklyAction(Blockly.navigation.ACTION_OUT);

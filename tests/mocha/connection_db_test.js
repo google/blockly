@@ -199,14 +199,10 @@ suite('Connection Database', function() {
     setup(function() {
       // Ignore type checks.
       sinon.stub(this.database.connectionChecker_, 'doTypeChecks')
-          .callsFake(function(_a, _b) {
-            return true;
-          });
+          .returns(true);
       // Ignore safety checks.
       sinon.stub(this.database.connectionChecker_, 'doSafetyChecks')
-          .callsFake(function(_a, _b) {
-            return Blockly.Connection.CAN_CONNECT;
-          });
+          .returns(Blockly.Connection.CAN_CONNECT);
       // Skip everything but the distance checks.
       sinon.stub(this.database.connectionChecker_, 'doDragChecks')
           .callsFake(function(a, b, distance) {

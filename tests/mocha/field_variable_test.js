@@ -125,7 +125,7 @@ suite('Variable Fields', function() {
       var stub = sinon.stub(console, 'warn');
       variableField.setValue(undefined);
       assertValue(variableField, 'name1');
-      chai.assert(stub.calledOnce);
+      sinon.assert.calledOnce(stub);
       stub.restore();
     });
     test('New Variable ID', function() {
@@ -147,7 +147,7 @@ suite('Variable Fields', function() {
       var stub = sinon.stub(console, 'warn');
       variableField.setValue('id1');
       assertValue(variableField, 'name1');
-      chai.assert(stub.calledOnce);
+      sinon.assert.calledOnce(stub);
       stub.restore();
     });
   });

@@ -386,7 +386,7 @@ suite('Navigation', function() {
       this.mockEvent.keyCode = Blockly.utils.KeyCodes.N;
       var isHandled = Blockly.navigation.onKeyPress(this.mockEvent);
       chai.assert.isFalse(isHandled);
-      chai.assert.isFalse(field.onBlocklyAction.calledOnce);
+      sinon.assert.notCalled(field.onBlocklyAction);
 
       field.onBlocklyAction.restore();
     });

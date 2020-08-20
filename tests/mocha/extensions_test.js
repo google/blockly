@@ -94,7 +94,7 @@ suite('Extensions', function() {
     // Tooltip is normal before connected to parent.
     var parent = new Blockly.Block(this.workspace, 'test_parent');
     chai.assert.equal(parent.tooltip, parentTooltip);
-    chai.assert.isFalse(!!parent.inputsInline);
+    chai.assert.notExists(parent.inputsInline);
 
     // Tooltip is normal when parent is not inline.
     parent.getInput('INPUT').connection.connect(block.outputConnection);

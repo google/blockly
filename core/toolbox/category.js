@@ -46,7 +46,7 @@ Blockly.ToolboxCategory = function(categoryDef, toolbox, opt_parent) {
    * @type {boolean}
    * @private
    */
-  this.hasChildren_ = Blockly.utils.toolbox.hasCategories(categoryDef['contents']);;
+  this.hasChildren_ = Blockly.utils.toolbox.hasCategories(categoryDef['contents'] || []);
 
   /**
    * The parent of the category.

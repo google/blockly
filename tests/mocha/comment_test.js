@@ -31,7 +31,7 @@ suite('Comments', function() {
   });
   suite('Visibility and Editability', function() {
     setup(function() {
-      this.comment.setText('test text');
+      this.block.setCommentText('test text');
     });
 
     function assertEditable(comment) {

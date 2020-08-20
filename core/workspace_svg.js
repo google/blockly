@@ -1709,7 +1709,7 @@ Blockly.WorkspaceSvg.prototype.showContextMenu = function(e) {
 Blockly.WorkspaceSvg.prototype.updateToolbox = function(toolboxDef) {
   var toolboxContents = (toolboxDef && toolboxDef['contents']) || toolboxDef;
   if (!Array.isArray(toolboxContents)) {
-    toolboxContents = Blockly.Options.parseToolboxTree(toolboxContents);
+    toolboxContents = Blockly.utils.toolbox.parseToolboxTree(toolboxContents);
   }
   var parsedToolboxDef = Blockly.utils.toolbox.convertToolboxToJSON(toolboxContents);
   if (!toolboxDef) {

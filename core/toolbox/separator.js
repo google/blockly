@@ -83,5 +83,27 @@ Blockly.ToolboxSeparator.prototype.dispose = function() {
   Blockly.utils.dom.removeNode(this.htmlDiv_);
 };
 
+/**
+ * CSS for Toolbox.  See css.js for use.
+ */
+Blockly.Css.register([
+  /* eslint-disable indent */
+  '.blocklyTreeSeparator {',
+    'border-bottom: solid #e5e5e5 1px;',
+    'height: 0;',
+    'margin: 5px 0;',
+  '}',
+
+  '.blocklyToolboxDiv[layout="h"] .blocklyTreeSeparator {',
+    'border-right: solid #e5e5e5 1px;',
+    'border-bottom: none;',
+    'height: auto;',
+    'margin: 0 5px 0 5px;',
+    'padding: 5px 0;',
+    'width: 0;',
+  '}',
+  /* eslint-enable indent */
+]);
+
 Blockly.registry.register(Blockly.registry.Type.TOOLBOX_ITEM,
     Blockly.ToolboxSeparator.registrationName, Blockly.ToolboxSeparator);

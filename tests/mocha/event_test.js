@@ -32,12 +32,12 @@ suite('Events', function() {
     delete Blockly.Blocks['simple_test_block'];
   });
 
-  function createSimpleTestBlock(workspace, opt_prototypeName) {
+  function createSimpleTestBlock(workspace) {
     // Disable events while constructing the block: this is a test of the
     // Blockly.Event constructors, not the block constructor.s
     Blockly.Events.disable();
     var block = new Blockly.Block(
-        workspace, opt_prototypeName || 'simple_test_block');
+        workspace, 'simple_test_block');
     Blockly.Events.enable();
     return block;
   }

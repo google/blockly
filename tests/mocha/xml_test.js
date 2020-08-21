@@ -36,7 +36,7 @@ suite('XML', function() {
         "args0": []
       },
     ]);
-    this.blockTypes_ = ['empty_block'];
+    this.blockTypes_.push('empty_block');
     this.complexXmlText = [
       '<xml xmlns="https://developers.google.com/blockly/xml">',
       '  <block type="controls_repeat_ext" inline="true" x="21" y="23">',
@@ -67,10 +67,6 @@ suite('XML', function() {
   });
   teardown(function() {
     sharedTestTeardown.call(this);
-    for (var i = 0; i < this.blockTypes_.length; i++) {
-      delete Blockly.Blocks[this.blockTypes_[i]];
-    }
-    this.blockTypes_.length = 0;
   });
   suite('textToDom', function() {
     test('Basic', function() {

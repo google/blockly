@@ -147,6 +147,8 @@ function sharedTestSetup(options = {}) {
     // Stubs event firing unless passed option "fireEventsNow: false"
     this.eventsFireStub = createEventsFireStubFireImmediately_(this.clock);
   }
+  this.blockTypes_ = [];
+  this.messages_ = [];
 }
 
 /**
@@ -187,6 +189,13 @@ function sharedTestTeardown() {
     // Restore all stubbed methods.
     this.sharedSetupSandbox_.restore();
     sinon.restore();
+
+    for (var i = 0, blockType; (blockType = this.blockTypes_[i]); i++) {
+      delete Blockly.Blocks[blockType];
+    }
+    for (var i = 0, message; (message = this.messages_[i]); i++) {
+      delete Blockly.Msg[message];
+    }
   }
 }
 

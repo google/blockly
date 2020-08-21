@@ -8,18 +8,10 @@ suite('JSON Block Definitions', function() {
   setup(function() {
     sharedTestSetup.call(this);
     this.workspace_ = new Blockly.Workspace();
-    this.blockTypes_ = [];
-    this.messages_ = [];
   });
 
   teardown(function() {
     sharedTestTeardown.call(this);
-    for (var i = 0, blockType; (blockType = this.blockTypes_[i]); i++) {
-      delete Blockly.Blocks[blockType];
-    }
-    for (var i = 0, message; (message = this.messages_[i]); i++) {
-      delete Blockly.Msg[message];
-    }
   });
 
   suite('defineBlocksWithJsonArray', function() {

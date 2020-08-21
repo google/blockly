@@ -412,9 +412,12 @@ function assertNthCallEventArgEquals(spy, n, instanceType, expectedProperties,
 }
 
 /**
- * Add messages to shared cleanup object.
- * @param sharedCleanupObj
- * @param blockTypeOrTypes
+ * Add messages to shared cleanup object so that they are cleaned from
+ *    Blockly.Messages global in sharedTestTeardown.
+ * @param {!Object} sharedCleanupObj The shared cleanup object created in
+ *    sharedTestSetup.
+ * @param {Array<string>|string} messageOrMessages The messages to add to
+ *    shared cleanup object.
  */
 function addMessagesToCleanup(sharedCleanupObj, messageOrMessages) {
   if (Array.isArray(messageOrMessages)) {
@@ -426,9 +429,12 @@ function addMessagesToCleanup(sharedCleanupObj, messageOrMessages) {
 }
 
 /**
- * Add block types to shared cleanup object.
- * @param sharedCleanupObj
- * @param blockTypeOrTypes
+ * Add block types to shared cleanup object so that they are cleaned from
+ *    Blockly.Blocks global in sharedTestTeardown.
+ * @param {!Object} sharedCleanupObj The shared cleanup object created in
+ *    sharedTestSetup.
+ * @param {Array<string>|string} blockTypeOrTypes The block types to add to
+ *    shared cleanup object.
  */
 function addBlockTypesToCleanup(sharedCleanupObj, blockTypeOrTypes) {
   if (Array.isArray(blockTypeOrTypes)) {
@@ -439,6 +445,15 @@ function addBlockTypesToCleanup(sharedCleanupObj, blockTypeOrTypes) {
   }
 }
 
+/**
+ * Calls Blockly.defineBlocksWithJsonArray with provided jsonArray and adds
+ *    block types to shared cleanup object so that they are cleaned from
+ *    Blockly.Blocks global in sharedTestTeardown.
+ * @param {!Object} sharedCleanupObj The shared cleanup object created in
+ *    sharedTestSetup.
+ * @param {!Array.<!Object>} jsonArray An array of JSON block definitions to
+ *    use in Blockly.defineBlocksWithJsonArray call.
+ */
 function defineBlocksWithJsonArrayWithCleanup(sharedCleanupObj, jsonArray) {
   jsonArray.forEach((jsonBlock) => {
     if (jsonBlock) {

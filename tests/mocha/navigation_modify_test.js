@@ -24,12 +24,9 @@ suite('Insert/Modify', function() {
       '<block type="statement_block" id="statement_block_1" x="12" y="288"></block>' +
       '<block type="statement_block" id="statement_block_2" x="12" y="288"></block>' +
     '</xml>';
-    defineStackBlock();
-    defineRowBlock();
-    defineStatementBlock();
-    Array.prototype.push.apply(
-        this.blockTypesCleanup_,
-        ['stack_block', 'row_block', 'statement_block']);
+    defineStackBlock(this.blockTypesCleanup_);
+    defineRowBlock(this.blockTypesCleanup_);
+    defineStatementBlock(this.blockTypesCleanup_);
 
     var toolbox = document.getElementById('toolbox-connections');
     this.workspace = Blockly.inject('blocklyDiv', {toolbox: toolbox});

@@ -7,6 +7,7 @@
 suite('Toolbox', function() {
   setup(function() {
     sharedTestSetup.call(this);
+    addBlockTypesToCleanup(this.sharedCleanup, 'basic_block');
     Blockly.defineBlocksWithJsonArray([{
       "type": "basic_block",
       "message0": "%1",
@@ -18,7 +19,6 @@ suite('Toolbox', function() {
         }
       ]
     }]);
-    this.blockTypesCleanup_.push('basic_block');
     this.toolboxXml = document.getElementById('toolbox-test');
     this.workspace = Blockly.inject('blocklyDiv',
         {

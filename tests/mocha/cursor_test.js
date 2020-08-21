@@ -7,6 +7,8 @@
 suite('Cursor', function() {
   setup(function() {
     sharedTestSetup.call(this);
+    addBlockTypesToCleanup(this.sharedCleanup,
+        ['input_statement', 'field_input']);
     Blockly.defineBlocksWithJsonArray([{
       "type": "input_statement",
       "message0": "%1 %2 %3 %4",
@@ -52,9 +54,6 @@ suite('Cursor', function() {
       "helpUrl": ""
     }
     ]);
-    Array.prototype.push.apply(
-        this.blockTypesCleanup_,
-        ['input_statement', 'field_input']);
     this.workspace = Blockly.inject('blocklyDiv', {});
     this.cursor = this.workspace.getCursor();
     var blockA = this.workspace.newBlock('input_statement');

@@ -8,6 +8,8 @@ suite('InsertionMarkers', function() {
   setup(function() {
     sharedTestSetup.call(this);
     this.workspace = Blockly.inject('blocklyDiv', {});
+    addBlockTypesToCleanup(this.sharedCleanup,
+        ['stack_block', 'row_block', 'statement_block']);
     Blockly.defineBlocksWithJsonArray([
       {
         "type": "stack_block",
@@ -38,9 +40,6 @@ suite('InsertionMarkers', function() {
         "previousStatement": null,
         "nextStatement": null
       }]);
-    Array.prototype.push.apply(
-        this.blockTypesCleanup_,
-        ['stack_block', 'row_block', 'statement_block']);
   });
   teardown(function() {
     sharedTestTeardown.call(this);

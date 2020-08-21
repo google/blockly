@@ -7,6 +7,7 @@
 suite('Comments', function() {
   setup(function() {
     sharedTestSetup.call(this);
+    addBlockTypesToCleanup(this.sharedCleanup, 'empty_block');
     Blockly.defineBlocksWithJsonArray([
       {
         "type": "empty_block",
@@ -14,8 +15,6 @@ suite('Comments', function() {
         "args0": []
       },
     ]);
-    this.blockTypesCleanup_.push('empty_block');
-
     this.workspace = Blockly.inject('blocklyDiv', {
       comments: true,
       scrollbars: true

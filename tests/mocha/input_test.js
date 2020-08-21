@@ -7,6 +7,7 @@
 suite('Inputs', function() {
   setup(function() {
     sharedTestSetup.call(this);
+    addBlockTypesToCleanup(this.sharedCleanup, 'empty_block');
     Blockly.defineBlocksWithJsonArray([
       {
         "type": "empty_block",
@@ -14,7 +15,6 @@ suite('Inputs', function() {
         "args0": []
       },
     ]);
-    this.blockTypesCleanup_.push('empty_block');
 
     this.workspace = Blockly.inject('blocklyDiv');
     this.block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(

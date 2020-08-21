@@ -8,6 +8,8 @@ suite('Blocks', function() {
   setup(function() {
     sharedTestSetup.call(this, {fireEventsNow: false});
     this.workspace = new Blockly.Workspace();
+    addBlockTypesToCleanup(this.sharedCleanup,
+        ['empty_block', 'stack_block', 'row_block', 'statement_block']);
     Blockly.defineBlocksWithJsonArray([
       {
         "type": "empty_block",
@@ -42,9 +44,6 @@ suite('Blocks', function() {
         "previousStatement": null,
         "nextStatement": null
       }]);
-    Array.prototype.push.apply(
-        this.blockTypesCleanup_,
-        ['empty_block', 'stack_block', 'row_block', 'statement_block']);
   });
   teardown(function() {
     sharedTestTeardown.call(this);
@@ -314,6 +313,7 @@ suite('Blocks', function() {
   });
   suite('Remove Input', function() {
     setup(function() {
+      addBlockTypesToCleanup(this.sharedCleanup, 'value_block');
       Blockly.defineBlocksWithJsonArray([
         {
           "type": "value_block",
@@ -326,7 +326,6 @@ suite('Blocks', function() {
           ]
         },
       ]);
-      this.blockTypesCleanup_.push('value_block');
     });
 
     suite('Value', function() {
@@ -1215,6 +1214,7 @@ suite('Blocks', function() {
       Blockly.Events.disable();
       // We need a visible workspace.
       this.workspace = Blockly.inject('blocklyDiv', {});
+      addBlockTypesToCleanup(this.sharedCleanup, 'variable_block');
       Blockly.defineBlocksWithJsonArray([
         {
           "type": "variable_block",
@@ -1228,7 +1228,6 @@ suite('Blocks', function() {
           ],
         }
       ]);
-      this.blockTypesCleanup_.push('variable_block');
     });
     teardown(function() {
       Blockly.Events.enable();

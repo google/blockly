@@ -24,9 +24,9 @@ suite('Insert/Modify', function() {
       '<block type="statement_block" id="statement_block_1" x="12" y="288"></block>' +
       '<block type="statement_block" id="statement_block_2" x="12" y="288"></block>' +
     '</xml>';
-    defineStackBlock(this.blockTypesCleanup_);
-    defineRowBlock(this.blockTypesCleanup_);
-    defineStatementBlock(this.blockTypesCleanup_);
+    defineStackBlock(this.sharedCleanup);
+    defineRowBlock(this.sharedCleanup);
+    defineStatementBlock(this.sharedCleanup);
 
     var toolbox = document.getElementById('toolbox-connections');
     this.workspace = Blockly.inject('blocklyDiv', {toolbox: toolbox});

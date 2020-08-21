@@ -21,13 +21,13 @@ suite('Extensions', function() {
   test('Definition before and after block type', function() {
     this.extensionsCleanup_.push('extensions_test_before');
     this.extensionsCleanup_.push('extensions_test_after');
-    this.blockTypesCleanup_.push('extension_test_block');
 
     chai.assert.isUndefined(Blockly.Extensions.ALL_['extensions_test_before']);
     var beforeCallback = sinon.spy();
     // Extension defined before the block type is defined.
     Blockly.Extensions.register('extensions_test_before', beforeCallback);
 
+    addBlockTypesToCleanup(this.sharedCleanup, 'extension_test_block');
     Blockly.defineBlocksWithJsonArray([{
       "type": "extension_test_block",
       "message0": "extension_test_block",
@@ -53,11 +53,10 @@ suite('Extensions', function() {
   });
 
   test('Parent tooltip when inline', function() {
-    this.blockTypesCleanup_.push('test_parent_tooltip_when_inline');
-    this.blockTypesCleanup_.push('test_parent');
-
     var defaultTooltip = "defaultTooltip";
     var parentTooltip = "parentTooltip";
+    addBlockTypesToCleanup(this.sharedCleanup,
+        ['test_parent_tooltip_when_inline', 'test_parent']);
     Blockly.defineBlocksWithJsonArray([
       {
         "type": "test_parent_tooltip_when_inline",
@@ -109,7 +108,6 @@ suite('Extensions', function() {
   suite('Mixin', function() {
     test('Basic', function() {
       this.extensionsCleanup_.push('mixin_test');
-      this.blockTypesCleanup_.push('test_block_mixin');
 
       var testMixin = {
         field: 'FIELD',
@@ -124,6 +122,8 @@ suite('Extensions', function() {
 
       chai.assert.typeOf(Blockly.Extensions.ALL_['mixin_test'], 'function');
 
+
+      addBlockTypesToCleanup(this.sharedCleanup, 'test_block_mixin');
       Blockly.defineBlocksWithJsonArray([{
         "type": "test_block_mixin",
         "message0": "test_block_mixin",
@@ -139,8 +139,8 @@ suite('Extensions', function() {
     suite('Mutator', function() {
       test('Basic', function() {
         this.extensionsCleanup_.push('mutator_test');
-        this.blockTypesCleanup_.push('mutator_test_block');
 
+        addBlockTypesToCleanup(this.sharedCleanup, 'mutator_test_block');
         Blockly.defineBlocksWithJsonArray([{
           "type": "mutator_test_block",
           "message0": "mutator_test_block",
@@ -177,8 +177,8 @@ suite('Extensions', function() {
 
       test('With helper function', function() {
         this.extensionsCleanup_.push('extensions_test');
-        this.blockTypesCleanup_.push('mutator_test_block');
 
+        addBlockTypesToCleanup(this.sharedCleanup, 'mutator_test_block');
         Blockly.defineBlocksWithJsonArray([{
           "type": "mutator_test_block",
           "message0": "mutator_test_block",
@@ -209,8 +209,8 @@ suite('Extensions', function() {
 
       test('No dialog', function() {
         this.extensionsCleanup_.push('mutator_test');
-        this.blockTypesCleanup_.push('mutator_test_block');
 
+        addBlockTypesToCleanup(this.sharedCleanup, 'mutator_test_block');
         Blockly.defineBlocksWithJsonArray([{
           "type": "mutator_test_block",
           "message0": "mutator_test_block",
@@ -244,8 +244,7 @@ suite('Extensions', function() {
 
   suite('Error cases', function() {
     test('Missing extension', function() {
-      this.blockTypesCleanup_.push('missing_extension_block');
-
+      addBlockTypesToCleanup(this.sharedCleanup, 'missing_extension_block');
       Blockly.defineBlocksWithJsonArray([{
         "type": "missing_extension_block",
         "message0": "missing_extension_block",
@@ -261,7 +260,6 @@ suite('Extensions', function() {
 
     test('Mixin overwrites local value', function() {
       this.extensionsCleanup_.push('mixin_bad_inputList');
-      this.blockTypesCleanup_.push('test_block_bad_inputList');
 
       var TEST_MIXIN_BAD_INPUTLIST = {
         inputList: 'bad inputList'  // Defined in constructor
@@ -272,6 +270,7 @@ suite('Extensions', function() {
       Blockly.Extensions.registerMixin('mixin_bad_inputList', TEST_MIXIN_BAD_INPUTLIST);
       chai.assert.typeOf(Blockly.Extensions.ALL_['mixin_bad_inputList'], 'function');
 
+      addBlockTypesToCleanup(this.sharedCleanup, 'test_block_bad_inputList');
       Blockly.defineBlocksWithJsonArray([{
         "type": "test_block_bad_inputList",
         "message0": "test_block_bad_inputList",
@@ -286,7 +285,6 @@ suite('Extensions', function() {
 
     test('Mixin overwrites prototype', function() {
       this.extensionsCleanup_.push('mixin_bad_colour_');
-      this.blockTypesCleanup_.push('test_block_bad_colour');
 
       var TEST_MIXIN_BAD_COLOUR = {
         colour_: 'bad colour_' // Defined on prototype
@@ -297,6 +295,7 @@ suite('Extensions', function() {
       Blockly.Extensions.registerMixin('mixin_bad_colour_', TEST_MIXIN_BAD_COLOUR);
       chai.assert.typeOf(Blockly.Extensions.ALL_['mixin_bad_colour_'], 'function');
 
+      addBlockTypesToCleanup(this.sharedCleanup, 'test_block_bad_colour');
       Blockly.defineBlocksWithJsonArray([{
         "type": "test_block_bad_colour",
         "message0": "test_block_bad_colour",
@@ -311,8 +310,8 @@ suite('Extensions', function() {
 
     test('Use mutator as extension', function() {
       this.extensionsCleanup_.push('mutator_test');
-      this.blockTypesCleanup_.push('mutator_test_block');
 
+      addBlockTypesToCleanup(this.sharedCleanup, 'mutator_test_block');
       Blockly.defineBlocksWithJsonArray([{
         "type": "mutator_test_block",
         "message0": "mutator_test_block",
@@ -343,8 +342,8 @@ suite('Extensions', function() {
 
     test('Use mutator mixin as extension', function() {
       this.extensionsCleanup_.push('mutator_test');
-      this.blockTypesCleanup_.push('mutator_test_block');
 
+      addBlockTypesToCleanup(this.sharedCleanup, 'mutator_test_block');
       Blockly.defineBlocksWithJsonArray([{
         "type": "mutator_test_block",
         "message0": "mutator_test_block",
@@ -375,8 +374,8 @@ suite('Extensions', function() {
 
     test('Use extension as mutator', function() {
       this.extensionsCleanup_.push('extensions_test');
-      this.blockTypesCleanup_.push('mutator_test_block');
 
+      addBlockTypesToCleanup(this.sharedCleanup, 'mutator_test_block');
       Blockly.defineBlocksWithJsonArray([{
         "type": "mutator_test_block",
         "message0": "mutator_test_block",

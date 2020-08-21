@@ -44,6 +44,7 @@ suite('Generator', function() {
 
   suite('blockToCode', function() {
     setup(function() {
+      addBlockTypesToCleanup(this.sharedCleanup, ['stack_block', 'row_block']);
       Blockly.defineBlocksWithJsonArray([{
         "type": "stack_block",
         "message0": "",
@@ -62,9 +63,6 @@ suite('Generator', function() {
         "output": null,
         "nextStatement": null
       }]);
-      Array.prototype.push.apply(
-          this.blockTypesCleanup_,
-          ['stack_block', 'row_block']);
       var rowBlock = this.workspace.newBlock('row_block');
       var stackBlock = this.workspace.newBlock('stack_block');
 
@@ -113,6 +111,7 @@ suite('Generator', function() {
 
     suite('Nested block', function() {
       setup(function() {
+        addBlockTypesToCleanup(this.sharedCleanup, 'test_loop_block');
         Blockly.defineBlocksWithJsonArray([ {
           "type": "test_loop_block",
           "message0": "Repeat Loop",
@@ -124,7 +123,6 @@ suite('Generator', function() {
           "previousStatement": null,
           "nextStatement": null
         }]);
-        this.blockTypesCleanup_.push('test_loop_block');
         var blockA = this.workspace.newBlock('test_loop_block');
         var blockB = this.workspace.newBlock('test_loop_block');
         var blockC = this.workspace.newBlock('test_loop_block');

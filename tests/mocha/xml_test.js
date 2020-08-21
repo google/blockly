@@ -29,6 +29,7 @@ suite('XML', function() {
   };
   setup(function() {
     sharedTestSetup.call(this);
+    addBlockTypesToCleanup(this.sharedCleanup,'empty_block');
     Blockly.defineBlocksWithJsonArray([
       {
         "type": "empty_block",
@@ -36,7 +37,6 @@ suite('XML', function() {
         "args0": []
       },
     ]);
-    this.blockTypesCleanup_.push('empty_block');
     this.complexXmlText = [
       '<xml xmlns="https://developers.google.com/blockly/xml">',
       '  <block type="controls_repeat_ext" inline="true" x="21" y="23">',
@@ -84,6 +84,7 @@ suite('XML', function() {
     });
     suite('Fields', function() {
       test('Angle', function() {
+        addBlockTypesToCleanup(this.sharedCleanup, 'field_angle_test_block');
         Blockly.defineBlocksWithJsonArray([{
           "type": "field_angle_test_block",
           "message0": "%1",
@@ -95,13 +96,13 @@ suite('XML', function() {
             }
           ],
         }]);
-        this.blockTypesCleanup_.push('field_angle_test_block');
         var block = new Blockly.Block(this.workspace,
             'field_angle_test_block');
         var resultFieldDom = Blockly.Xml.blockToDom(block).childNodes[0];
         assertNonVariableField(resultFieldDom, 'ANGLE', '90');
       });
       test('Checkbox', function() {
+        addBlockTypesToCleanup(this.sharedCleanup, 'field_checkbox_test_block');
         Blockly.defineBlocksWithJsonArray([{
           "type": "field_checkbox_test_block",
           "message0": "%1",
@@ -113,13 +114,13 @@ suite('XML', function() {
             }
           ],
         }]);
-        this.blockTypesCleanup_.push('field_checkbox_test_block');
         var block = new Blockly.Block(this.workspace,
             'field_checkbox_test_block');
         var resultFieldDom = Blockly.Xml.blockToDom(block).childNodes[0];
         assertNonVariableField(resultFieldDom, 'CHECKBOX', 'TRUE');
       });
       test('Colour', function() {
+        addBlockTypesToCleanup(this.sharedCleanup, 'field_colour_test_block');
         Blockly.defineBlocksWithJsonArray([{
           "type": "field_colour_test_block",
           "message0": "%1",
@@ -131,13 +132,13 @@ suite('XML', function() {
             }
           ],
         }]);
-        this.blockTypesCleanup_.push('field_colour_test_block');
         var block = new Blockly.Block(this.workspace,
             'field_colour_test_block');
         var resultFieldDom = Blockly.Xml.blockToDom(block).childNodes[0];
         assertNonVariableField(resultFieldDom, 'COLOUR', '#000099');
       });
       test('Dropdown', function() {
+        addBlockTypesToCleanup(this.sharedCleanup, 'field_dropdown_test_block');
         Blockly.defineBlocksWithJsonArray([{
           "type": "field_dropdown_test_block",
           "message0": "%1",
@@ -162,13 +163,13 @@ suite('XML', function() {
             }
           ],
         }]);
-        this.blockTypesCleanup_.push('field_dropdown_test_block');
         var block = new Blockly.Block(this.workspace,
             'field_dropdown_test_block');
         var resultFieldDom = Blockly.Xml.blockToDom(block).childNodes[0];
         assertNonVariableField(resultFieldDom, 'DROPDOWN', 'A');
       });
       test('Image', function() {
+        addBlockTypesToCleanup(this.sharedCleanup, 'field_image_test_block');
         Blockly.defineBlocksWithJsonArray([{
           "type": "field_image_test_block",
           "message0": "%1",
@@ -183,13 +184,13 @@ suite('XML', function() {
             }
           ],
         }]);
-        this.blockTypesCleanup_.push('field_image_test_block');
         var block = new Blockly.Block(this.workspace,
             'field_image_test_block');
         var resultFieldDom = Blockly.Xml.blockToDom(block);
         assertNonSerializingFieldDom(resultFieldDom);
       });
       test('Label', function() {
+        addBlockTypesToCleanup(this.sharedCleanup, 'field_label_test_block');
         Blockly.defineBlocksWithJsonArray([{
           "type": "field_label_test_block",
           "message0": "%1",
@@ -201,13 +202,13 @@ suite('XML', function() {
             }
           ],
         }]);
-        this.blockTypesCleanup_.push('field_label_test_block');
         var block = new Blockly.Block(this.workspace,
             'field_label_test_block');
         var resultFieldDom = Blockly.Xml.blockToDom(block);
         assertNonSerializingFieldDom(resultFieldDom);
       });
       test('Label Serializable', function() {
+        addBlockTypesToCleanup(this.sharedCleanup, 'field_label_serializable_test_block');
         Blockly.defineBlocksWithJsonArray([{
           "type": "field_label_serializable_test_block",
           "message0": "%1",
@@ -219,13 +220,13 @@ suite('XML', function() {
             }
           ],
         }]);
-        this.blockTypesCleanup_.push('field_label_serializable_test_block');
         var block = new Blockly.Block(this.workspace,
             'field_label_serializable_test_block');
         var resultFieldDom = Blockly.Xml.blockToDom(block).childNodes[0];
         assertNonVariableField(resultFieldDom, 'LABEL', 'default');
       });
       test('Number', function() {
+        addBlockTypesToCleanup(this.sharedCleanup,'field_number_test_block');
         Blockly.defineBlocksWithJsonArray([{
           "type": "field_number_test_block",
           "message0": "%1",
@@ -237,13 +238,13 @@ suite('XML', function() {
             }
           ],
         }]);
-        this.blockTypesCleanup_.push('field_number_test_block');
         var block = new Blockly.Block(this.workspace,
             'field_number_test_block');
         var resultFieldDom = Blockly.Xml.blockToDom(block).childNodes[0];
         assertNonVariableField(resultFieldDom, 'NUMBER', '97');
       });
       test('Text Input', function() {
+        addBlockTypesToCleanup(this.sharedCleanup,'field_text_input_test_block');
         Blockly.defineBlocksWithJsonArray([{
           "type": "field_text_input_test_block",
           "message0": "%1",
@@ -255,7 +256,6 @@ suite('XML', function() {
             }
           ],
         }]);
-        this.blockTypesCleanup_.push('field_text_input_test_block');
         var block = new Blockly.Block(this.workspace,
             'field_text_input_test_block');
         var resultFieldDom = Blockly.Xml.blockToDom(block).childNodes[0];
@@ -263,6 +263,7 @@ suite('XML', function() {
       });
       suite('Variable Fields', function() {
         setup(function() {
+          addBlockTypesToCleanup(this.sharedCleanup,'field_variable_test_block');
           Blockly.defineBlocksWithJsonArray([{
             'type': 'field_variable_test_block',
             'message0': '%1',
@@ -274,7 +275,6 @@ suite('XML', function() {
               }
             ]
           }]);
-          this.blockTypesCleanup_.push('field_variable_test_block');
         });
         test('Variable Trivial', function() {
           this.workspace.createVariable('name1', '', 'id1');
@@ -389,6 +389,7 @@ suite('XML', function() {
   suite('variablesToDom', function() {
     setup(function() {
       this.workspace = new Blockly.Workspace();
+      addBlockTypesToCleanup(this.sharedCleanup,'field_variable_test_block');
       Blockly.defineBlocksWithJsonArray([{
         'type': 'field_variable_test_block',
         'message0': '%1',
@@ -400,7 +401,6 @@ suite('XML', function() {
           }
         ]
       }]);
-      this.blockTypesCleanup_.push('field_variable_test_block');
     });
     teardown(function() {
       workspaceTeardown.call(this, this.workspace);
@@ -458,6 +458,8 @@ suite('XML', function() {
   suite('domToBlock', function() {
     setup(function() {
       this.workspace = new Blockly.Workspace();
+      addBlockTypesToCleanup(this.sharedCleanup,
+          ['variables_get', 'variables_set']);
       Blockly.defineBlocksWithJsonArray([{
         "type": "variables_get",
         "message0": "%1",
@@ -482,9 +484,6 @@ suite('XML', function() {
           }
         ]
       }]);
-      Array.prototype.push.apply(
-          this.blockTypesCleanup_,
-          ['variables_get', 'variables_set']);
     });
     teardown(function() {
       workspaceTeardown.call(this, this.workspace);
@@ -640,6 +639,7 @@ suite('XML', function() {
   suite('domToWorkspace', function() {
     setup(function() {
       this.workspace = new Blockly.Workspace();
+      addBlockTypesToCleanup(this.sharedCleanup,'field_variable_test_block');
       Blockly.defineBlocksWithJsonArray([{
         'type': 'field_variable_test_block',
         'message0': '%1',
@@ -651,7 +651,6 @@ suite('XML', function() {
           }
         ]
       }]);
-      this.blockTypesCleanup_.push('field_variable_test_block');
     });
     teardown(function() {
       workspaceTeardown.call(this, this.workspace);
@@ -729,6 +728,7 @@ suite('XML', function() {
   });
   suite('appendDomToWorkspace', function() {
     setup(function() {
+      addBlockTypesToCleanup(this.sharedCleanup,'test_block');
       Blockly.Blocks['test_block'] = {
         init: function() {
           this.jsonInit({
@@ -736,7 +736,6 @@ suite('XML', function() {
           });
         }
       };
-      this.blockTypesCleanup_.push('test_block');
       this.workspace = new Blockly.Workspace();
     });
     teardown(function() {

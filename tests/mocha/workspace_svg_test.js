@@ -9,6 +9,8 @@ suite('WorkspaceSvg', function() {
     sharedTestSetup.call(this);
     var toolbox = document.getElementById('toolbox-categories');
     this.workspace = Blockly.inject('blocklyDiv', {toolbox: toolbox});
+    addBlockTypesToCleanup(this.sharedCleanup,
+        ['simple_test_block', 'test_val_in']);
     Blockly.defineBlocksWithJsonArray([{
       'type': 'simple_test_block',
       'message0': 'simple test block',
@@ -24,9 +26,6 @@ suite('WorkspaceSvg', function() {
         }
       ]
     }]);
-    Array.prototype.push.apply(
-        this.blockTypesCleanup_,
-        ['simple_test_block', 'test_val_in']);
   });
 
   teardown(function() {
@@ -127,6 +126,7 @@ suite('WorkspaceSvg', function() {
       this.targetWorkspace = new Blockly.Workspace();
       this.workspace.isFlyout = true;
       this.workspace.targetWorkspace = this.targetWorkspace;
+      addBlockTypesToCleanup(this.sharedCleanup, 'get_var_block');
       Blockly.defineBlocksWithJsonArray([{
         "type": "get_var_block",
         "message0": "%1",
@@ -138,7 +138,6 @@ suite('WorkspaceSvg', function() {
           }
         ]
       }]);
-      this.blockTypesCleanup_.push('get_var_block');
     });
 
     teardown(function() {

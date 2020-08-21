@@ -33,6 +33,7 @@ suite('Navigation', function() {
   // transition correctly between toolbox, workspace, and flyout.
   suite('Tests toolbox keys', function() {
     setup(function() {
+      addBlockTypesToCleanup(this.sharedCleanup, 'basic_block');
       Blockly.defineBlocksWithJsonArray([{
         "type": "basic_block",
         "message0": "%1",
@@ -44,7 +45,6 @@ suite('Navigation', function() {
           }
         ]
       }]);
-      this.blockTypesCleanup_.push('basic_block');
       this.workspace = createNavigationWorkspace(true);
       Blockly.navigation.focusToolbox_();
       this.mockEvent = {
@@ -150,6 +150,7 @@ suite('Navigation', function() {
   // transition correctly between toolbox, workspace, and flyout.
   suite('Tests flyout keys', function() {
     setup(function() {
+      addBlockTypesToCleanup(this.sharedCleanup, 'basic_block');
       Blockly.defineBlocksWithJsonArray([{
         "type": "basic_block",
         "message0": "%1",
@@ -161,7 +162,6 @@ suite('Navigation', function() {
           }
         ]
       }]);
-      this.blockTypesCleanup_.push('basic_block');
       this.workspace = createNavigationWorkspace(true);
       Blockly.mainWorkspace = this.workspace;
       Blockly.navigation.focusToolbox_();
@@ -240,6 +240,7 @@ suite('Navigation', function() {
   // transition correctly between toolbox, workspace, and flyout.
   suite('Tests workspace keys', function() {
     setup(function() {
+      addBlockTypesToCleanup(this.sharedCleanup, 'basic_block');
       Blockly.defineBlocksWithJsonArray([{
         "type": "basic_block",
         "message0": "%1",
@@ -253,7 +254,6 @@ suite('Navigation', function() {
         "previousStatement": null,
         "nextStatement": null
       }]);
-      this.blockTypesCleanup_.push('basic_block');
       this.workspace = createNavigationWorkspace(true);
       this.basicBlock = this.workspace.newBlock('basic_block');
       this.firstCategory_ = this.workspace.getToolbox().tree_.getChildAt(0);
@@ -343,6 +343,7 @@ suite('Navigation', function() {
 
   suite('Test key press', function() {
     setup(function() {
+      addBlockTypesToCleanup(this.sharedCleanup, 'basic_block');
       Blockly.defineBlocksWithJsonArray([{
         "type": "basic_block",
         "message0": "%1",
@@ -360,7 +361,6 @@ suite('Navigation', function() {
           }
         ]
       }]);
-      this.blockTypesCleanup_.push('basic_block');
       this.workspace = createNavigationWorkspace(true);
       this.workspace.getCursor().drawer_ = null;
       this.basicBlock = this.workspace.newBlock('basic_block');
@@ -445,6 +445,7 @@ suite('Navigation', function() {
 
     suite('Test key press in read only mode', function() {
       setup(function() {
+        addBlockTypesToCleanup(this.sharedCleanup, 'field_block');
         Blockly.defineBlocksWithJsonArray([{
           "type": "field_block",
           "message0": "%1 %2",
@@ -470,7 +471,6 @@ suite('Navigation', function() {
           "tooltip": "",
           "helpUrl": ""
         }]);
-        this.blockTypesCleanup_.push('field_block');
         this.workspace = Blockly.inject('blocklyDiv', {readOnly: true});
 
         Blockly.mainWorkspace = this.workspace;
@@ -516,6 +516,7 @@ suite('Navigation', function() {
 
   suite('Insert Functions', function() {
     setup(function() {
+      addBlockTypesToCleanup(this.sharedCleanup, 'basic_block');
       Blockly.defineBlocksWithJsonArray([{
         "type": "basic_block",
         "message0": "%1",
@@ -529,7 +530,6 @@ suite('Navigation', function() {
         "previousStatement": null,
         "nextStatement": null,
       }]);
-      this.blockTypesCleanup_.push('basic_block');
 
       this.workspace = createNavigationWorkspace(true);
 
@@ -593,6 +593,8 @@ suite('Navigation', function() {
 
   suite('Connect Blocks', function() {
     setup(function() {
+      addBlockTypesToCleanup(this.sharedCleanup,
+          ['inline_block', 'basic_block']);
       Blockly.defineBlocksWithJsonArray([{
         "type": "basic_block",
         "message0": "",
@@ -617,9 +619,6 @@ suite('Navigation', function() {
         "tooltip": "",
         "helpUrl": ""
       }]);
-      Array.prototype.push.apply(
-          this.blockTypesCleanup_,
-          ['inline_block', 'basic_block']);
 
       this.workspace = createNavigationWorkspace(true);
 
@@ -705,13 +704,13 @@ suite('Navigation', function() {
 
   suite('Test cursor move on block delete', function() {
     setup(function() {
+      addBlockTypesToCleanup(this.sharedCleanup, 'basic_block');
       Blockly.defineBlocksWithJsonArray([{
         "type": "basic_block",
         "message0": "",
         "previousStatement": null,
         "nextStatement": null,
       }]);
-      this.blockTypesCleanup_.push('basic_block');
       this.workspace = createNavigationWorkspace(true);
       this.basicBlockA = this.workspace.newBlock('basic_block');
       this.basicBlockB = this.workspace.newBlock('basic_block');

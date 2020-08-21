@@ -147,8 +147,13 @@ function sharedTestSetup(options = {}) {
     // Stubs event firing unless passed option "fireEventsNow: false"
     this.eventsFireStub = createEventsFireStubFireImmediately_(this.clock);
   }
-  this.blockTypesCleanup_ = [];
-  this.messagesCleanup_ = [];
+  this.sharedCleanup = {
+    blockTypesCleanup_: [],
+    messagesCleanup_: []
+
+  };
+  this.blockTypesCleanup_ = this.sharedCleanup.blockTypesCleanup_;
+  this.messagesCleanup_ = this.sharedCleanup.messagesCleanup_;
 }
 
 /**
@@ -406,17 +411,46 @@ function assertNthCallEventArgEquals(spy, n, instanceType, expectedProperties,
   assertXmlProperties_(eventArg, xmlProperties);
 }
 
-function defineStackBlock(blockTypeCleanupArray) {
+/**
+ * Add messages to shared cleanup object.
+ * @param sharedCleanupObj
+ * @param blockTypeOrTypes
+ */
+function addMessagesToCleanup(sharedCleanupObj, messageOrMessages) {
+  if (Array.isArray(messageOrMessages)) {
+    Array.prototype.push.apply(
+        sharedCleanupObj.messagesCleanup_,messageOrMessages);
+  } else {
+    sharedCleanupObj.messagesCleanup_.push(messageOrMessages)
+  }
+}
+
+/**
+ * Add block types to shared cleanup object.
+ * @param sharedCleanupObj
+ * @param blockTypeOrTypes
+ */
+function addBlockTypesToCleanup(sharedCleanupObj, blockTypeOrTypes) {
+  if (Array.isArray(blockTypeOrTypes)) {
+    Array.prototype.push.apply(
+        sharedCleanupObj.blockTypesCleanup_,blockTypeOrTypes);
+  } else {
+    sharedCleanupObj.blockTypesCleanup_.push(blockTypeOrTypes)
+  }
+}
+
+function defineStackBlock(sharedCleanupObj) {
   Blockly.defineBlocksWithJsonArray([{
     "type": "stack_block",
     "message0": "",
     "previousStatement": null,
     "nextStatement": null
   }]);
-  blockTypeCleanupArray.push('stack_block');
+  addBlockTypesToCleanup(sharedCleanupObj, 'stack_block');
 }
 
-function defineRowBlock(blockTypeCleanupArray) {
+function defineRowBlock(sharedCleanupObj) {
+  addBlockTypesToCleanup(sharedCleanupObj, 'row_block');
   Blockly.defineBlocksWithJsonArray([{
     "type": "row_block",
     "message0": "%1",
@@ -428,10 +462,10 @@ function defineRowBlock(blockTypeCleanupArray) {
     ],
     "output": null
   }]);
-  blockTypeCleanupArray.push('row_block');
 }
 
-function defineStatementBlock(blockTypeCleanupArray) {
+function defineStatementBlock(sharedCleanupObj) {
+  addBlockTypesToCleanup(sharedCleanupObj, 'statement_block');
   Blockly.defineBlocksWithJsonArray([{
     "type": "statement_block",
     "message0": "%1",
@@ -447,9 +481,9 @@ function defineStatementBlock(blockTypeCleanupArray) {
     "tooltip": "",
     "helpUrl": ""
   }]);
-  blockTypeCleanupArray.push('statement_block');
 }
-function defineBasicBlockWithField(blockTypeCleanupArray) {
+function defineBasicBlockWithField(sharedCleanupObj) {
+  addBlockTypesToCleanup(sharedCleanupObj, 'test_field_block');
   Blockly.defineBlocksWithJsonArray([{
     "type": "test_field_block",
     "message0": "%1",
@@ -461,7 +495,6 @@ function defineBasicBlockWithField(blockTypeCleanupArray) {
     ],
     "output": null
   }]);
-  blockTypeCleanupArray.push('test_field_block');
 }
 
 function createTestBlock() {

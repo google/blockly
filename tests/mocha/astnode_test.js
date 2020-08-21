@@ -7,6 +7,8 @@
 suite('ASTNode', function() {
   setup(function() {
     sharedTestSetup.call(this);
+    addBlockTypesToCleanup(this.sharedCleanup,
+        ['input_statement', 'value_input', 'field_input']);
     Blockly.defineBlocksWithJsonArray([{
       "type": "input_statement",
       "message0": "%1 %2 %3 %4",
@@ -65,9 +67,6 @@ suite('ASTNode', function() {
       "helpUrl": ""
     }
     ]);
-    Array.prototype.push.apply(
-        this.blockTypesCleanup_,
-        ['input_statement', 'value_input', 'field_input']);
     this.workspace = new Blockly.Workspace();
     this.cursor = this.workspace.cursor;
     var statementInput1 = this.workspace.newBlock('input_statement');
@@ -168,6 +167,10 @@ suite('ASTNode', function() {
 
   suite('NavigationFunctions', function() {
     setup(function() {
+      addBlockTypesToCleanup(this.sharedCleanup,
+          ['output_next', 'fields_and_input2', 'two_fields',
+            'fields_and_input', 'top_connection', 'start_block', 'dummy_input',
+            'dummy_inputValue']);
       Blockly.defineBlocksWithJsonArray([{
         "type": "top_connection",
         "message0": "",
@@ -284,12 +287,6 @@ suite('ASTNode', function() {
         "helpUrl": "",
         "nextStatement": null
       }]);
-      Array.prototype.push.apply(
-          this.blockTypesCleanup_,
-          ['output_next', 'fields_and_input2', 'two_fields',
-            'fields_and_input', 'top_connection', 'start_block', 'dummy_input',
-            'dummy_inputValue']);
-
       var noNextConnection = this.workspace.newBlock('top_connection');
       var fieldAndInputs = this.workspace.newBlock('fields_and_input');
       var twoFields = this.workspace.newBlock('two_fields');

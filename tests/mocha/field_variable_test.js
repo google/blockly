@@ -306,6 +306,7 @@ suite('Variable Fields', function() {
   suite('Renaming Variables', function() {
     setup(function() {
       this.workspace.createVariable('name1', null, 'id1');
+      addBlockTypesToCleanup(this.sharedCleanup, 'field_variable_test_block');
       Blockly.defineBlocksWithJsonArray([{
         "type": "field_variable_test_block",
         "message0": "%1",
@@ -317,7 +318,6 @@ suite('Variable Fields', function() {
           }
         ],
       }]);
-      this.blockTypesCleanup_.push('field_variable_test_block');
       this.variableBlock = new Blockly.Block(this.workspace,
           'field_variable_test_block');
       this.variableField = this.variableBlock.getField('VAR');

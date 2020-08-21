@@ -195,11 +195,13 @@ function sharedTestTeardown() {
     this.sharedSetupSandbox_.restore();
     sinon.restore();
 
-    for (var i = 0, blockType; (blockType = this.blockTypesCleanup_[i]); i++) {
-      delete Blockly.Blocks[blockType];
+    var blockTypes = this.sharedCleanup.blockTypesCleanup_;
+    for (let i = 0; i < blockTypes.length; i++) {
+      delete Blockly.Blocks[blockTypes[i]];
     }
-    for (var i = 0, message; (message = this.messagesCleanup_[i]); i++) {
-      delete Blockly.Msg[message];
+    var messages = this.sharedCleanup.messagesCleanup_;
+    for (let i = 0; i < messages.length; i++) {
+      delete Blockly.Msg[messages[i]];
     }
   }
 }
@@ -412,37 +414,25 @@ function assertNthCallEventArgEquals(spy, n, instanceType, expectedProperties,
 }
 
 /**
- * Add messages to shared cleanup object so that they are cleaned from
+ * Adds message to shared cleanup object so that it is cleaned from
  *    Blockly.Messages global in sharedTestTeardown.
  * @param {!Object} sharedCleanupObj The shared cleanup object created in
  *    sharedTestSetup.
- * @param {Array<string>|string} messageOrMessages The messages to add to
- *    shared cleanup object.
+ * @param {string} message The message to add to shared cleanup object.
  */
-function addMessagesToCleanup(sharedCleanupObj, messageOrMessages) {
-  if (Array.isArray(messageOrMessages)) {
-    Array.prototype.push.apply(
-        sharedCleanupObj.messagesCleanup_,messageOrMessages);
-  } else {
-    sharedCleanupObj.messagesCleanup_.push(messageOrMessages)
-  }
+function addMessageToCleanup(sharedCleanupObj, message) {
+  sharedCleanupObj.messagesCleanup_.push(message)
 }
 
 /**
- * Add block types to shared cleanup object so that they are cleaned from
+ * Adds block type to shared cleanup object so that it is cleaned from
  *    Blockly.Blocks global in sharedTestTeardown.
  * @param {!Object} sharedCleanupObj The shared cleanup object created in
  *    sharedTestSetup.
- * @param {Array<string>|string} blockTypeOrTypes The block types to add to
- *    shared cleanup object.
+ * @param {string} blockType The block type to add to shared cleanup object.
  */
-function addBlockTypesToCleanup(sharedCleanupObj, blockTypeOrTypes) {
-  if (Array.isArray(blockTypeOrTypes)) {
-    Array.prototype.push.apply(
-        sharedCleanupObj.blockTypesCleanup_,blockTypeOrTypes);
-  } else {
-    sharedCleanupObj.blockTypesCleanup_.push(blockTypeOrTypes)
-  }
+function addBlockTypeToCleanup(sharedCleanupObj, blockType) {
+  sharedCleanupObj.blockTypesCleanup_.push(blockType)
 }
 
 /**
@@ -457,7 +447,7 @@ function addBlockTypesToCleanup(sharedCleanupObj, blockTypeOrTypes) {
 function defineBlocksWithJsonArrayWithCleanup(sharedCleanupObj, jsonArray) {
   jsonArray.forEach((jsonBlock) => {
     if (jsonBlock) {
-      addBlockTypesToCleanup(sharedCleanupObj, jsonBlock['type']);
+      addBlockTypeToCleanup(sharedCleanupObj, jsonBlock['type']);
     }
   });
   Blockly.defineBlocksWithJsonArray(jsonArray);

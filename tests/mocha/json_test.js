@@ -151,7 +151,7 @@ suite('JSON Block Definitions', function() {
       var MESSAGE0 = '%{BKY_MESSAGE}';
       var MESSAGE = 'message';
 
-      addMessagesToCleanup(this.sharedCleanup, 'MESSAGE');
+      addMessageToCleanup(this.sharedCleanup, 'MESSAGE');
       Blockly.Msg['MESSAGE'] = MESSAGE;
       defineBlocksWithJsonArrayWithCleanup(this.sharedCleanup, [{
         "type": BLOCK_TYPE,
@@ -208,7 +208,7 @@ suite('JSON Block Definitions', function() {
       var BLOCK_TYPE = 'test_json_dropdown';
       var FIELD_NAME = 'FIELD_NAME';
       var IMAGE1_ALT_TEXT = 'Localized message.';
-      addMessagesToCleanup(this.sharedCleanup, 'ALT_TEXT');
+      addMessageToCleanup(this.sharedCleanup, 'ALT_TEXT');
       Blockly.Msg['ALT_TEXT'] = IMAGE1_ALT_TEXT;
       var IMAGE0 = {
         'width': 12,

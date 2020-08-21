@@ -443,7 +443,10 @@ Blockly.Connection.prototype.disconnect = function() {
     Blockly.Events.setGroup(true);
   }
   this.disconnectInternal_(parentBlock, childBlock);
-  parentConnection.respawnShadow_();
+  if (!childBlock.isShadow()) {
+    // If we were disconnecting a shadow, no need to spawn a new one.
+    parentConnection.respawnShadow_();
+  }
   if (!eventGroup) {
     Blockly.Events.setGroup(false);
   }
@@ -596,6 +599,7 @@ Blockly.Connection.prototype.setShadowDom = function(shadow) {
   } else if (target.isShadow()) {
     // The disconnect from dispose will automatically generate the new shadow.
     target.dispose(false);
+    this.respawnShadow_();
   }
 };
 

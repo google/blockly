@@ -9,7 +9,7 @@ suite('Toolbox', function() {
     // TODO(#3985): Remove after warning log has been removed.
     var toolboxJson;
     filterWarnings(() => {
-      toolboxJson = Blockly.utils.toolbox.convertToolboxToJSON(toolboxXml)
+      toolboxJson = Blockly.utils.toolbox.convertToolboxToJSON(toolboxXml);
     }, /defining a toolbox using JSON is not ready yet/);
     return toolboxJson;
   }

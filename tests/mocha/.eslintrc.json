@@ -26,6 +26,7 @@
         "dispatchPointerEvent": true,
         "createFireChangeListenerSpy": true,
         "createGenUidStubWithReturns": true,
+        "filterWarnings": true,
         "getCategoryJSON": true,
         "getSimpleJSON": true,
         "getXmlArray": true,

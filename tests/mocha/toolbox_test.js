@@ -8,16 +8,9 @@ suite('Toolbox', function() {
   function convertToolBoxToJSONCaptureWarnings(toolboxXml) {
     // TODO(#3985): Remove after warning log has been removed.
     var toolboxJson;
-    var warnings = captureWarnings(() => {
+    filterWarnings(() => {
       toolboxJson = Blockly.utils.toolbox.convertToolboxToJSON(toolboxXml)
-    });
-    // convertToolboxToJSON doesn't always log a warning.
-    chai.assert.isTrue(warnings.length <= 1);
-    if (warnings.length) {
-      // Only allow expected warning.
-      chai.assert.match(warnings[0],
-          /defining a toolbox using JSON is not ready yet/);
-    }
+    }, /defining a toolbox using JSON is not ready yet/);
     return toolboxJson;
   }
   setup(function() {

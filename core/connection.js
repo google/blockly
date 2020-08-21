@@ -478,7 +478,7 @@ Blockly.Connection.prototype.disconnectInternal_ = function(parentBlock,
 Blockly.Connection.prototype.respawnShadow_ = function() {
   var parentBlock = this.getSourceBlock();
   var shadow = this.getShadowDom();
-  if (parentBlock.workspace && shadow && Blockly.Events.recordUndo) {
+  if (parentBlock.workspace && shadow) {
     var blockShadow =
         Blockly.Xml.domToBlock(shadow, parentBlock.workspace);
     if (blockShadow.outputConnection) {

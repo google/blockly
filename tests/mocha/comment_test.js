@@ -14,7 +14,7 @@ suite('Comments', function() {
         "args0": []
       },
     ]);
-    this.blockTypes_.push('empty_block');
+    this.blockTypesCleanup_.push('empty_block');
 
     this.workspace = Blockly.inject('blocklyDiv', {
       comments: true,

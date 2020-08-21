@@ -386,7 +386,7 @@ suite('Abstract Fields', function() {
                   .appendField(field, 'TOOLTIP');
             },
           };
-          this.blockTypes_.push('tooltip');
+          this.blockTypesCleanup_.push('tooltip');
           var block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
               '<xml xmlns="https://developers.google.com/blockly/xml">' +
               '  <block type="tooltip"></block>' +
@@ -404,7 +404,7 @@ suite('Abstract Fields', function() {
               field.setTooltip('tooltip');
             },
           };
-          this.blockTypes_.push('tooltip');
+          this.blockTypesCleanup_.push('tooltip');
           var block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
               '<xml xmlns="https://developers.google.com/blockly/xml">' +
               '  <block type="tooltip"></block>' +
@@ -421,7 +421,7 @@ suite('Abstract Fields', function() {
                   .appendField(field, 'TOOLTIP');
             },
           };
-          this.blockTypes_.push('tooltip');
+          this.blockTypesCleanup_.push('tooltip');
           var block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
               '<xml xmlns="https://developers.google.com/blockly/xml">' +
               '  <block type="tooltip"></block>' +
@@ -444,7 +444,7 @@ suite('Abstract Fields', function() {
               return this.getFieldValue('TOOLTIP');
             }
           };
-          this.blockTypes_.push('tooltip');
+          this.blockTypesCleanup_.push('tooltip');
           var block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
               '<xml xmlns="https://developers.google.com/blockly/xml">' +
               '  <block type="tooltip"></block>' +
@@ -465,7 +465,7 @@ suite('Abstract Fields', function() {
               tooltip: 'tooltip'
             }
           };
-          this.blockTypes_.push('tooltip');
+          this.blockTypesCleanup_.push('tooltip');
           var block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
               '<xml xmlns="https://developers.google.com/blockly/xml">' +
               '  <block type="tooltip"></block>' +
@@ -483,7 +483,7 @@ suite('Abstract Fields', function() {
                   .appendField(field, 'TOOLTIP');
             },
           };
-          this.blockTypes_.push('tooltip');
+          this.blockTypesCleanup_.push('tooltip');
           var block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
               '<xml xmlns="https://developers.google.com/blockly/xml">' +
               '  <block type="tooltip"></block>' +
@@ -500,7 +500,7 @@ suite('Abstract Fields', function() {
                   .appendField(field, 'TOOLTIP');
             },
           };
-          this.blockTypes_.push('tooltip');
+          this.blockTypesCleanup_.push('tooltip');
           var block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
               '<xml xmlns="https://developers.google.com/blockly/xml">' +
               '  <block type="tooltip"></block>' +

@@ -14,7 +14,7 @@ suite('Inputs', function() {
         "args0": []
       },
     ]);
-    this.blockTypes_.push('empty_block');
+    this.blockTypesCleanup_.push('empty_block');
 
     this.workspace = Blockly.inject('blocklyDiv');
     this.block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(

@@ -66,7 +66,7 @@ suite('ASTNode', function() {
     }
     ]);
     Array.prototype.push.apply(
-        this.blockTypes_,
+        this.blockTypesCleanup_,
         ['input_statement', 'value_input', 'field_input']);
     this.workspace = new Blockly.Workspace();
     this.cursor = this.workspace.cursor;
@@ -285,7 +285,7 @@ suite('ASTNode', function() {
         "nextStatement": null
       }]);
       Array.prototype.push.apply(
-          this.blockTypes_,
+          this.blockTypesCleanup_,
           ['output_next', 'fields_and_input2', 'two_fields',
             'fields_and_input', 'top_connection', 'start_block', 'dummy_input',
             'dummy_inputValue']);

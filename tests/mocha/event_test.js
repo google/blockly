@@ -25,7 +25,7 @@ suite('Events', function() {
       'message0': 'simple test block'
     }]);
     Array.prototype.push.apply(
-        this.blockTypes_,
+        this.blockTypesCleanup_,
         ['field_variable_test_block', 'simple_test_block']);
   });
 

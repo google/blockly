@@ -147,8 +147,8 @@ function sharedTestSetup(options = {}) {
     // Stubs event firing unless passed option "fireEventsNow: false"
     this.eventsFireStub = createEventsFireStubFireImmediately_(this.clock);
   }
-  this.blockTypes_ = [];
-  this.messages_ = [];
+  this.blockTypesCleanup_ = [];
+  this.messagesCleanup_ = [];
 }
 
 /**
@@ -190,10 +190,10 @@ function sharedTestTeardown() {
     this.sharedSetupSandbox_.restore();
     sinon.restore();
 
-    for (var i = 0, blockType; (blockType = this.blockTypes_[i]); i++) {
+    for (var i = 0, blockType; (blockType = this.blockTypesCleanup_[i]); i++) {
       delete Blockly.Blocks[blockType];
     }
-    for (var i = 0, message; (message = this.messages_[i]); i++) {
+    for (var i = 0, message; (message = this.messagesCleanup_[i]); i++) {
       delete Blockly.Msg[message];
     }
   }

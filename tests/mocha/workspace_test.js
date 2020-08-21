@@ -31,7 +31,7 @@ function testAWorkspace() {
         }
       ]
     }]);
-    this.blockTypes_.push('get_var_block');
+    this.blockTypesCleanup_.push('get_var_block');
   });
 
   teardown(function() {

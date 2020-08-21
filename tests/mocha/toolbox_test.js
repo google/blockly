@@ -18,7 +18,7 @@ suite('Toolbox', function() {
         }
       ]
     }]);
-    this.blockTypes_.push('basic_block');
+    this.blockTypesCleanup_.push('basic_block');
     this.toolboxXml = document.getElementById('toolbox-test');
     this.workspace = Blockly.inject('blocklyDiv',
         {

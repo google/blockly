@@ -120,7 +120,7 @@ suite('Theme', function() {
   });
 
   test('Set Theme', function() {
-    defineThemeTestBlocks(this.blockTypes_);
+    defineThemeTestBlocks(this.blockTypesCleanup_);
     try {
       var blockStyles = createBlockStyles();
       var workspace = new Blockly.WorkspaceSvg(new Blockly.Options({}));

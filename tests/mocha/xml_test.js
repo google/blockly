@@ -36,7 +36,7 @@ suite('XML', function() {
         "args0": []
       },
     ]);
-    this.blockTypes_.push('empty_block');
+    this.blockTypesCleanup_.push('empty_block');
     this.complexXmlText = [
       '<xml xmlns="https://developers.google.com/blockly/xml">',
       '  <block type="controls_repeat_ext" inline="true" x="21" y="23">',
@@ -95,7 +95,7 @@ suite('XML', function() {
             }
           ],
         }]);
-        this.blockTypes_.push('field_angle_test_block');
+        this.blockTypesCleanup_.push('field_angle_test_block');
         var block = new Blockly.Block(this.workspace,
             'field_angle_test_block');
         var resultFieldDom = Blockly.Xml.blockToDom(block).childNodes[0];
@@ -113,7 +113,7 @@ suite('XML', function() {
             }
           ],
         }]);
-        this.blockTypes_.push('field_checkbox_test_block');
+        this.blockTypesCleanup_.push('field_checkbox_test_block');
         var block = new Blockly.Block(this.workspace,
             'field_checkbox_test_block');
         var resultFieldDom = Blockly.Xml.blockToDom(block).childNodes[0];
@@ -131,7 +131,7 @@ suite('XML', function() {
             }
           ],
         }]);
-        this.blockTypes_.push('field_colour_test_block');
+        this.blockTypesCleanup_.push('field_colour_test_block');
         var block = new Blockly.Block(this.workspace,
             'field_colour_test_block');
         var resultFieldDom = Blockly.Xml.blockToDom(block).childNodes[0];
@@ -162,7 +162,7 @@ suite('XML', function() {
             }
           ],
         }]);
-        this.blockTypes_.push('field_dropdown_test_block');
+        this.blockTypesCleanup_.push('field_dropdown_test_block');
         var block = new Blockly.Block(this.workspace,
             'field_dropdown_test_block');
         var resultFieldDom = Blockly.Xml.blockToDom(block).childNodes[0];
@@ -183,7 +183,7 @@ suite('XML', function() {
             }
           ],
         }]);
-        this.blockTypes_.push('field_image_test_block');
+        this.blockTypesCleanup_.push('field_image_test_block');
         var block = new Blockly.Block(this.workspace,
             'field_image_test_block');
         var resultFieldDom = Blockly.Xml.blockToDom(block);
@@ -201,7 +201,7 @@ suite('XML', function() {
             }
           ],
         }]);
-        this.blockTypes_.push('field_label_test_block');
+        this.blockTypesCleanup_.push('field_label_test_block');
         var block = new Blockly.Block(this.workspace,
             'field_label_test_block');
         var resultFieldDom = Blockly.Xml.blockToDom(block);
@@ -219,7 +219,7 @@ suite('XML', function() {
             }
           ],
         }]);
-        this.blockTypes_.push('field_label_serializable_test_block');
+        this.blockTypesCleanup_.push('field_label_serializable_test_block');
         var block = new Blockly.Block(this.workspace,
             'field_label_serializable_test_block');
         var resultFieldDom = Blockly.Xml.blockToDom(block).childNodes[0];
@@ -237,7 +237,7 @@ suite('XML', function() {
             }
           ],
         }]);
-        this.blockTypes_.push('field_number_test_block');
+        this.blockTypesCleanup_.push('field_number_test_block');
         var block = new Blockly.Block(this.workspace,
             'field_number_test_block');
         var resultFieldDom = Blockly.Xml.blockToDom(block).childNodes[0];
@@ -255,7 +255,7 @@ suite('XML', function() {
             }
           ],
         }]);
-        this.blockTypes_.push('field_text_input_test_block');
+        this.blockTypesCleanup_.push('field_text_input_test_block');
         var block = new Blockly.Block(this.workspace,
             'field_text_input_test_block');
         var resultFieldDom = Blockly.Xml.blockToDom(block).childNodes[0];
@@ -274,7 +274,7 @@ suite('XML', function() {
               }
             ]
           }]);
-          this.blockTypes_.push('field_variable_test_block');
+          this.blockTypesCleanup_.push('field_variable_test_block');
         });
         test('Variable Trivial', function() {
           this.workspace.createVariable('name1', '', 'id1');
@@ -400,7 +400,7 @@ suite('XML', function() {
           }
         ]
       }]);
-      this.blockTypes_.push('field_variable_test_block');
+      this.blockTypesCleanup_.push('field_variable_test_block');
     });
     teardown(function() {
       workspaceTeardown.call(this, this.workspace);
@@ -483,7 +483,7 @@ suite('XML', function() {
         ]
       }]);
       Array.prototype.push.apply(
-          this.blockTypes_,
+          this.blockTypesCleanup_,
           ['variables_get', 'variables_set']);
     });
     teardown(function() {
@@ -651,7 +651,7 @@ suite('XML', function() {
           }
         ]
       }]);
-      this.blockTypes_.push('field_variable_test_block');
+      this.blockTypesCleanup_.push('field_variable_test_block');
     });
     teardown(function() {
       workspaceTeardown.call(this, this.workspace);
@@ -736,7 +736,7 @@ suite('XML', function() {
           });
         }
       };
-      this.blockTypes_.push('test_block');
+      this.blockTypesCleanup_.push('test_block');
       this.workspace = new Blockly.Workspace();
     });
     teardown(function() {

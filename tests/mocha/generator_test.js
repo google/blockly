@@ -63,7 +63,7 @@ suite('Generator', function() {
         "nextStatement": null
       }]);
       Array.prototype.push.apply(
-          this.blockTypes_,
+          this.blockTypesCleanup_,
           ['stack_block', 'row_block']);
       var rowBlock = this.workspace.newBlock('row_block');
       var stackBlock = this.workspace.newBlock('stack_block');
@@ -124,7 +124,7 @@ suite('Generator', function() {
           "previousStatement": null,
           "nextStatement": null
         }]);
-        this.blockTypes_.push('test_loop_block');
+        this.blockTypesCleanup_.push('test_loop_block');
         var blockA = this.workspace.newBlock('test_loop_block');
         var blockB = this.workspace.newBlock('test_loop_block');
         var blockC = this.workspace.newBlock('test_loop_block');

@@ -18,7 +18,7 @@ suite('Flyout', function() {
         }
       ]
     }]);
-    this.blockTypes_.push('basic_block');
+    this.blockTypesCleanup_.push('basic_block');
     this.toolboxXml = document.getElementById('toolbox-simple');
     this.workspace = Blockly.inject('blocklyDiv',
         {

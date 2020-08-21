@@ -44,7 +44,7 @@ suite('Navigation', function() {
           }
         ]
       }]);
-      this.blockTypes_.push('basic_block');
+      this.blockTypesCleanup_.push('basic_block');
       this.workspace = createNavigationWorkspace(true);
       Blockly.navigation.focusToolbox_();
       this.mockEvent = {
@@ -161,7 +161,7 @@ suite('Navigation', function() {
           }
         ]
       }]);
-      this.blockTypes_.push('basic_block');
+      this.blockTypesCleanup_.push('basic_block');
       this.workspace = createNavigationWorkspace(true);
       Blockly.mainWorkspace = this.workspace;
       Blockly.navigation.focusToolbox_();
@@ -253,7 +253,7 @@ suite('Navigation', function() {
         "previousStatement": null,
         "nextStatement": null
       }]);
-      this.blockTypes_.push('basic_block');
+      this.blockTypesCleanup_.push('basic_block');
       this.workspace = createNavigationWorkspace(true);
       this.basicBlock = this.workspace.newBlock('basic_block');
       this.firstCategory_ = this.workspace.getToolbox().tree_.getChildAt(0);
@@ -360,7 +360,7 @@ suite('Navigation', function() {
           }
         ]
       }]);
-      this.blockTypes_.push('basic_block');
+      this.blockTypesCleanup_.push('basic_block');
       this.workspace = createNavigationWorkspace(true);
       this.workspace.getCursor().drawer_ = null;
       this.basicBlock = this.workspace.newBlock('basic_block');
@@ -470,7 +470,7 @@ suite('Navigation', function() {
           "tooltip": "",
           "helpUrl": ""
         }]);
-        this.blockTypes_.push('field_block');
+        this.blockTypesCleanup_.push('field_block');
         this.workspace = Blockly.inject('blocklyDiv', {readOnly: true});
 
         Blockly.mainWorkspace = this.workspace;
@@ -529,7 +529,7 @@ suite('Navigation', function() {
         "previousStatement": null,
         "nextStatement": null,
       }]);
-      this.blockTypes_.push('basic_block');
+      this.blockTypesCleanup_.push('basic_block');
 
       this.workspace = createNavigationWorkspace(true);
 
@@ -618,7 +618,7 @@ suite('Navigation', function() {
         "helpUrl": ""
       }]);
       Array.prototype.push.apply(
-          this.blockTypes_,
+          this.blockTypesCleanup_,
           ['inline_block', 'basic_block']);
 
       this.workspace = createNavigationWorkspace(true);
@@ -711,7 +711,7 @@ suite('Navigation', function() {
         "previousStatement": null,
         "nextStatement": null,
       }]);
-      this.blockTypes_.push('basic_block');
+      this.blockTypesCleanup_.push('basic_block');
       this.workspace = createNavigationWorkspace(true);
       this.basicBlockA = this.workspace.newBlock('basic_block');
       this.basicBlockB = this.workspace.newBlock('basic_block');

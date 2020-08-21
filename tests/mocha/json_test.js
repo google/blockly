@@ -18,7 +18,7 @@ suite('JSON Block Definitions', function() {
     test('Basic block', function() {
       /**  Ensure a block can be instantiated from a JSON definition.  */
       var BLOCK_TYPE = 'test_json_minimal';
-      this.blockTypes_.push(BLOCK_TYPE);
+      this.blockTypesCleanup_.push(BLOCK_TYPE);
       var workspace = this.workspace_;
       var block;
       assertNoWarnings(() => {
@@ -35,8 +35,8 @@ suite('JSON Block Definitions', function() {
     test('Null or undefined type id', function() {
       var BLOCK_TYPE1 = 'test_json_before_bad_blocks';
       var BLOCK_TYPE2 = 'test_json_after_bad_blocks';
-      this.blockTypes_.push(BLOCK_TYPE1);
-      this.blockTypes_.push(BLOCK_TYPE2);
+      this.blockTypesCleanup_.push(BLOCK_TYPE1);
+      this.blockTypesCleanup_.push(BLOCK_TYPE2);
 
       chai.assert.isUndefined(Blockly.Blocks[BLOCK_TYPE1]);
       chai.assert.isUndefined(Blockly.Blocks[BLOCK_TYPE2]);
@@ -59,8 +59,8 @@ suite('JSON Block Definitions', function() {
     test('Null item', function() {
       var BLOCK_TYPE1 = 'test_block_before_null';
       var BLOCK_TYPE2 = 'test_block_after_null';
-      this.blockTypes_.push(BLOCK_TYPE1);
-      this.blockTypes_.push(BLOCK_TYPE2);
+      this.blockTypesCleanup_.push(BLOCK_TYPE1);
+      this.blockTypesCleanup_.push(BLOCK_TYPE2);
 
       chai.assert.isUndefined(Blockly.Blocks[BLOCK_TYPE1]);
       chai.assert.isUndefined(Blockly.Blocks[BLOCK_TYPE2]);
@@ -88,8 +88,8 @@ suite('JSON Block Definitions', function() {
     test('Undefined item', function() {
       var BLOCK_TYPE1 = 'test_block_before_undefined';
       var BLOCK_TYPE2 = 'test_block_after_undefined';
-      this.blockTypes_.push(BLOCK_TYPE1);
-      this.blockTypes_.push(BLOCK_TYPE2);
+      this.blockTypesCleanup_.push(BLOCK_TYPE1);
+      this.blockTypesCleanup_.push(BLOCK_TYPE2);
 
       chai.assert.isUndefined(Blockly.Blocks[BLOCK_TYPE1]);
       chai.assert.isUndefined(Blockly.Blocks[BLOCK_TYPE2]);
@@ -115,7 +115,7 @@ suite('JSON Block Definitions', function() {
 
     test('message0 creates input', function() {
       var BLOCK_TYPE = 'test_json_message0';
-      this.blockTypes_.push(BLOCK_TYPE);
+      this.blockTypesCleanup_.push(BLOCK_TYPE);
       var MESSAGE0 = 'message0';
       Blockly.defineBlocksWithJsonArray([{
         "type": BLOCK_TYPE,
@@ -133,7 +133,7 @@ suite('JSON Block Definitions', function() {
     test('message1 and message0 creates two inputs', function() {
       /**  Ensure message1 creates a new input.  */
       var BLOCK_TYPE = 'test_json_message1';
-      this.blockTypes_.push(BLOCK_TYPE);
+      this.blockTypesCleanup_.push(BLOCK_TYPE);
       var MESSAGE0 = 'message0';
       var MESSAGE1 = 'message1';
       Blockly.defineBlocksWithJsonArray([{
@@ -158,12 +158,12 @@ suite('JSON Block Definitions', function() {
 
     test('Message string is dereferenced', function() {
       var BLOCK_TYPE = 'test_json_message0_i18n';
-      this.blockTypes_.push(BLOCK_TYPE);
+      this.blockTypesCleanup_.push(BLOCK_TYPE);
       var MESSAGE0 = '%{BKY_MESSAGE}';
       var MESSAGE = 'message';
 
       Blockly.Msg['MESSAGE'] = MESSAGE;
-      this.messages_.push('MESSAGE');
+      this.messagesCleanup_.push('MESSAGE');
       Blockly.defineBlocksWithJsonArray([{
         "type": BLOCK_TYPE,
         "message0": MESSAGE0
@@ -179,7 +179,7 @@ suite('JSON Block Definitions', function() {
 
     test('Dropdown', function() {
       var BLOCK_TYPE = 'test_json_dropdown';
-      this.blockTypes_.push(BLOCK_TYPE);
+      this.blockTypesCleanup_.push(BLOCK_TYPE);
       var FIELD_NAME = 'FIELD_NAME';
       var LABEL0 = 'LABEL0';
       var VALUE0 = 'VALUE0';
@@ -218,11 +218,11 @@ suite('JSON Block Definitions', function() {
 
     test('Dropdown with images', function() {
       var BLOCK_TYPE = 'test_json_dropdown';
-      this.blockTypes_.push(BLOCK_TYPE);
+      this.blockTypesCleanup_.push(BLOCK_TYPE);
       var FIELD_NAME = 'FIELD_NAME';
       var IMAGE1_ALT_TEXT = 'Localized message.';
       Blockly.Msg['ALT_TEXT'] = IMAGE1_ALT_TEXT;
-      this.messages_.push('ALT_TEXT');
+      this.messagesCleanup_.push('ALT_TEXT');
       var IMAGE0 = {
         'width': 12,
         'height': 34,

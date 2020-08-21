@@ -43,7 +43,7 @@ suite('Blocks', function() {
         "nextStatement": null
       }]);
     Array.prototype.push.apply(
-        this.blockTypes_,
+        this.blockTypesCleanup_,
         ['empty_block', 'stack_block', 'row_block', 'statement_block']);
   });
   teardown(function() {
@@ -326,7 +326,7 @@ suite('Blocks', function() {
           ]
         },
       ]);
-      this.blockTypes_.push('value_block');
+      this.blockTypesCleanup_.push('value_block');
     });
 
     suite('Value', function() {
@@ -1228,7 +1228,7 @@ suite('Blocks', function() {
           ],
         }
       ]);
-      this.blockTypes_.push('variable_block');
+      this.blockTypesCleanup_.push('variable_block');
     });
     teardown(function() {
       Blockly.Events.enable();

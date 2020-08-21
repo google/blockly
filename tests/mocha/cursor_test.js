@@ -53,7 +53,7 @@ suite('Cursor', function() {
     }
     ]);
     Array.prototype.push.apply(
-        this.blockTypes_,
+        this.blockTypesCleanup_,
         ['input_statement', 'field_input']);
     this.workspace = Blockly.inject('blocklyDiv', {});
     this.cursor = this.workspace.getCursor();

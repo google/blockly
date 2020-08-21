@@ -39,7 +39,7 @@ suite('InsertionMarkers', function() {
         "nextStatement": null
       }]);
     Array.prototype.push.apply(
-        this.blockTypes_,
+        this.blockTypesCleanup_,
         ['stack_block', 'row_block', 'statement_block']);
   });
   teardown(function() {

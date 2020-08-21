@@ -28,7 +28,7 @@ suite('Insert/Modify', function() {
     defineRowBlock();
     defineStatementBlock();
     Array.prototype.push.apply(
-        this.blockTypes_,
+        this.blockTypesCleanup_,
         ['stack_block', 'row_block', 'statement_block']);
 
     var toolbox = document.getElementById('toolbox-connections');

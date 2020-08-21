@@ -25,7 +25,7 @@ suite('WorkspaceSvg', function() {
       ]
     }]);
     Array.prototype.push.apply(
-        this.blockTypes_,
+        this.blockTypesCleanup_,
         ['simple_test_block', 'test_val_in']);
   });
 
@@ -138,7 +138,7 @@ suite('WorkspaceSvg', function() {
           }
         ]
       }]);
-      this.blockTypes_.push('get_var_block');
+      this.blockTypesCleanup_.push('get_var_block');
     });
 
     teardown(function() {

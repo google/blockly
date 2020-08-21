@@ -317,7 +317,7 @@ suite('Variable Fields', function() {
           }
         ],
       }]);
-      this.blockTypes_.push('field_variable_test_block');
+      this.blockTypesCleanup_.push('field_variable_test_block');
       this.variableBlock = new Blockly.Block(this.workspace,
           'field_variable_test_block');
       this.variableField = this.variableBlock.getField('VAR');

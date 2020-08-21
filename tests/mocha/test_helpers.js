@@ -40,6 +40,31 @@ function captureWarnings(innerFunc) {
 }
 
 /**
+ * Asserts that the given function logs the provided warning messages.
+ * @param {function} innerFunc The function to call.
+ * @param {Array<!RegExp>|!RegExp} messages A list of regex for the expected
+ *    messages (in the expected order).
+ */
+function assertWarnings(innerFunc, messages) {
+  if (!Array.isArray(messages)) {
+    messages = [messages];
+  }
+  var warnings = captureWarnings(innerFunc);
+  chai.assert.lengthOf(warnings, messages.length);
+  messages.forEach((message, i) => {
+    chai.assert.match(warnings[i], message);
+  });
+}
+
+/**
+ * Asserts that the given function logs no warning messages.
+ * @param {function} innerFunc The function to call.
+ */
+function assertNoWarnings(innerFunc) {
+  assertWarnings(innerFunc, []);
+}
+
+/**
  * Stubs Blockly.utils.deprecation.warn call.
  * @return {!SinonStub} The created stub.
  */

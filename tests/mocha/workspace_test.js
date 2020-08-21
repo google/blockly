@@ -778,12 +778,9 @@ function testAWorkspace() {
         this.workspace.createVariable('name1', 'type1', 'id1');
         this.workspace.deleteVariableById('id1');
         var workspace = this.workspace;
-        var warnings = captureWarnings(function() {
+        assertWarnings(() => {
           workspace.deleteVariableById('id1');
-        });
-        chai.assert.equal(warnings.length, 1,
-            'Expected 1 warning for second deleteVariableById call.');
-
+        }, [/Can't delete non-existent variable/]);
         // Check the undoStack only recorded one delete event.
         var undoStack = this.workspace.undoStack_;
         chai.assert.equal(undoStack[undoStack.length - 1].type, 'var_delete');
@@ -807,12 +804,9 @@ function testAWorkspace() {
         createVarBlocksNoEvents(this.workspace, ['id1']);
         this.workspace.deleteVariableById('id1');
         var workspace = this.workspace;
-        var warnings = captureWarnings(function() {
+        assertWarnings(() => {
           workspace.deleteVariableById('id1');
-        });
-        chai.assert.equal(warnings.length, 1,
-            'Expected 1 warning for second deleteVariableById call.');
-
+        }, [/Can't delete non-existent variable/]);
         // Check the undoStack only recorded one delete event.
         var undoStack = this.workspace.undoStack_;
         chai.assert.equal(undoStack[undoStack.length - 1].type, 'var_delete');

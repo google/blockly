@@ -29,7 +29,7 @@ suite('JSON Block Definitions', function() {
       this.blockTypes_.push(BLOCK_TYPE);
       var workspace = this.workspace_;
       var block;
-      var warnings = captureWarnings(function() {
+      assertNoWarnings(() => {
         Blockly.defineBlocksWithJsonArray([{
           "type": BLOCK_TYPE
         }]);
@@ -38,8 +38,6 @@ suite('JSON Block Definitions', function() {
 
       chai.assert.isNotNull(block);
       chai.assert.equal(BLOCK_TYPE, block.type);
-      chai.assert.equal(warnings.length, 0,
-          'Expecting no warnings when defining and creating a simple block.');
     });
 
     test('Null or undefined type id', function() {
@@ -52,21 +50,18 @@ suite('JSON Block Definitions', function() {
       chai.assert.isUndefined(Blockly.Blocks[BLOCK_TYPE2]);
       var blockTypeCount = Object.keys(Blockly.Blocks).length;
 
-      var warnings = captureWarnings(function() {
+      assertWarnings(() => {
         Blockly.defineBlocksWithJsonArray([
           {"type": BLOCK_TYPE1},
           {"type": undefined},
           {"type": null},
           {"type": BLOCK_TYPE2}]);
-      });
-
+      }, [/missing a type attribute/, /missing a type attribute/]);
       chai.assert.isNotNull(Blockly.Blocks[BLOCK_TYPE1],
           'Block before bad blocks should be defined.');
       chai.assert.isNotNull(Blockly.Blocks[BLOCK_TYPE2],
           'Block after bad blocks should be defined.');
       chai.assert.equal(Object.keys(Blockly.Blocks).length, blockTypeCount + 2);
-      chai.assert.equal(warnings.length, 2,
-          'Expecting 2 warnings, one for each bad block.');
     });
 
     test('Null item', function() {
@@ -79,7 +74,7 @@ suite('JSON Block Definitions', function() {
       chai.assert.isUndefined(Blockly.Blocks[BLOCK_TYPE2]);
       var blockTypeCount = Object.keys(Blockly.Blocks).length;
 
-      var warnings = captureWarnings(function() {
+      assertWarnings(() => {
         Blockly.defineBlocksWithJsonArray([
           {
             "type": BLOCK_TYPE1,
@@ -90,13 +85,12 @@ suite('JSON Block Definitions', function() {
             "type": BLOCK_TYPE2,
             "message0": 'after'
           }]);
-      });
+      }, /is null/);
       chai.assert.isNotNull(Blockly.Blocks[BLOCK_TYPE1],
           'Block before null in array should be defined.');
       chai.assert.isNotNull(Blockly.Blocks[BLOCK_TYPE2],
           'Block after null in array should be defined.');
       chai.assert.equal(Object.keys(Blockly.Blocks).length, blockTypeCount + 2);
-      chai.assert.equal(warnings.length, 1, 'Expected 1 warning for the bad block.');
     });
 
     test('Undefined item', function() {
@@ -108,7 +102,7 @@ suite('JSON Block Definitions', function() {
       chai.assert.isUndefined(Blockly.Blocks[BLOCK_TYPE1]);
       chai.assert.isUndefined(Blockly.Blocks[BLOCK_TYPE2]);
       var blockTypeCount = Object.keys(Blockly.Blocks).length;
-      var warnings = captureWarnings(function() {
+      assertWarnings(() => {
         Blockly.defineBlocksWithJsonArray([
           {
             "type": BLOCK_TYPE1,
@@ -119,13 +113,12 @@ suite('JSON Block Definitions', function() {
             "type": BLOCK_TYPE2,
             "message0": 'after'
           }]);
-      });
+      }, /is undefined/);
       chai.assert.isNotNull(Blockly.Blocks[BLOCK_TYPE1],
           'Block before undefined in array should be defined.');
       chai.assert.isNotNull(Blockly.Blocks[BLOCK_TYPE2],
           'Block after undefined in array should be defined.');
       chai.assert.equal(Object.keys(Blockly.Blocks).length, blockTypeCount + 2);
-      chai.assert.equal( warnings.length, 1, 'Expected 1 warning for the bad block.');
     });
 
     test('message0 creates input', function() {

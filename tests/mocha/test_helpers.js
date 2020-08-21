@@ -42,8 +42,8 @@ function captureWarnings(innerFunc) {
 /**
  * Asserts that the given function logs the provided warning messages.
  * @param {function} innerFunc The function to call.
- * @param {Array<RegExp>} messages A list of regex for the expected messages
- *    (in the expected order).
+ * @param {Array<!RegExp>|!RegExp} messages A list of regex for the expected
+ *    messages (in the expected order).
  */
 function assertWarnings(innerFunc, messages) {
   if (!Array.isArray(messages)) {

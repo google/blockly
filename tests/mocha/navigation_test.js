@@ -518,7 +518,14 @@ suite('Navigation', function() {
     setup(function() {
       Blockly.defineBlocksWithJsonArray([{
         "type": "basic_block",
-        "message0": "",
+        "message0": "%1",
+        "args0": [
+          {
+            "type": "field_input",
+            "name": "TEXT",
+            "text": "default"
+          }
+        ],
         "previousStatement": null,
         "nextStatement": null,
       }]);

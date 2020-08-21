@@ -15,10 +15,6 @@ suite('JSON Block Definitions', function() {
 
   teardown(function() {
     sharedTestTeardown.call(this);
-    for (var i = 0; i < this.blocks_.length; i++) {
-      var block = this.blocks_[i];
-      block.dispose();
-    }
     for (var i = 0, blockType; (blockType = this.blockTypes_[i]); i++) {
       delete Blockly.Blocks[blockType];
     }

@@ -54,7 +54,7 @@ function filterWarnings(innerFunc, pattern) {
       if (msg.match(pattern)) {
         msgs.push(msg);
       } else {
-        nativeConsoleWarn(msg);
+        nativeConsoleWarn(...arguments);
       }
     };
     innerFunc();

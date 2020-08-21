@@ -221,7 +221,7 @@ suite('Events', function() {
       });
     });
 
-    suite.only('With variable getter blocks', function() {
+    suite('With variable getter blocks', function() {
       setup(function() {
         this.genUidStub = createGenUidStubWithReturns(
             [this.TEST_BLOCK_ID, 'test_var_id', 'test_group_id']);

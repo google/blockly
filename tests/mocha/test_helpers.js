@@ -21,6 +21,25 @@ function assertVariableValues(container, name, type, id) {
 }
 
 /**
+ * Captures the strings sent to console.warn() when calling a function.
+ * @param {function} innerFunc The function where warnings may called.
+ * @return {string[]} The warning messages (only the first arguments).
+ */
+function captureWarnings(innerFunc) {
+  var msgs = [];
+  var nativeConsoleWarn = console.warn;
+  try {
+    console.warn = function(msg) {
+      msgs.push(msg);
+    };
+    innerFunc();
+  } finally {
+    console.warn = nativeConsoleWarn;
+  }
+  return msgs;
+}
+
+/**
  * Asserts that the given function logs the provided warning messages.
  * @param {function} innerFunc The function to call.
  * @param {Array<RegExp>} messages A list of regex for the expected messages
@@ -43,25 +62,6 @@ function assertWarnings(innerFunc, messages) {
  */
 function assertNoWarnings(innerFunc) {
   assertWarnings(innerFunc, []);
-}
-
-/**
- * Captures the strings sent to console.warn() when calling a function.
- * @param {function} innerFunc The function where warnings may called.
- * @return {string[]} The warning messages (only the first arguments).
- */
-function captureWarnings(innerFunc) {
-  var msgs = [];
-  var nativeConsoleWarn = console.warn;
-  try {
-    console.warn = function(msg) {
-      msgs.push(msg);
-    };
-    innerFunc();
-  } finally {
-    console.warn = nativeConsoleWarn;
-  }
-  return msgs;
 }
 
 /**

@@ -780,7 +780,7 @@ function testAWorkspace() {
         var workspace = this.workspace;
         assertWarnings(() => {
           workspace.deleteVariableById('id1');
-        }, [/Can\'t delete non-existent variable/]);
+        }, [/Can't delete non-existent variable/]);
         // Check the undoStack only recorded one delete event.
         var undoStack = this.workspace.undoStack_;
         chai.assert.equal(undoStack[undoStack.length - 1].type, 'var_delete');
@@ -806,7 +806,7 @@ function testAWorkspace() {
         var workspace = this.workspace;
         assertWarnings(() => {
           workspace.deleteVariableById('id1');
-        }, [/Can\'t delete non-existent variable/]);
+        }, [/Can't delete non-existent variable/]);
         // Check the undoStack only recorded one delete event.
         var undoStack = this.workspace.undoStack_;
         chai.assert.equal(undoStack[undoStack.length - 1].type, 'var_delete');

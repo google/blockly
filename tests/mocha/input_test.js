@@ -7,14 +7,11 @@
 suite('Inputs', function() {
   setup(function() {
     sharedTestSetup.call(this);
-    addBlockTypesToCleanup(this.sharedCleanup, 'empty_block');
-    Blockly.defineBlocksWithJsonArray([
-      {
-        "type": "empty_block",
-        "message0": "",
-        "args0": []
-      },
-    ]);
+    defineBlocksWithJsonArrayWithCleanup(this.sharedCleanup, [{
+      "type": "empty_block",
+      "message0": "",
+      "args0": []
+    }]);
 
     this.workspace = Blockly.inject('blocklyDiv');
     this.block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(

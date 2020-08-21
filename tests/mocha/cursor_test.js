@@ -7,9 +7,7 @@
 suite('Cursor', function() {
   setup(function() {
     sharedTestSetup.call(this);
-    addBlockTypesToCleanup(this.sharedCleanup,
-        ['input_statement', 'field_input']);
-    Blockly.defineBlocksWithJsonArray([{
+    defineBlocksWithJsonArrayWithCleanup(this.sharedCleanup, [{
       "type": "input_statement",
       "message0": "%1 %2 %3 %4",
       "args0": [

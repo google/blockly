@@ -439,19 +439,26 @@ function addBlockTypesToCleanup(sharedCleanupObj, blockTypeOrTypes) {
   }
 }
 
+function defineBlocksWithJsonArrayWithCleanup(sharedCleanupObj, jsonArray) {
+  jsonArray.forEach((jsonBlock) => {
+    if (jsonBlock) {
+      addBlockTypesToCleanup(sharedCleanupObj, jsonBlock['type']);
+    }
+  });
+  Blockly.defineBlocksWithJsonArray(jsonArray);
+}
+
 function defineStackBlock(sharedCleanupObj) {
-  Blockly.defineBlocksWithJsonArray([{
+  defineBlocksWithJsonArrayWithCleanup(sharedCleanupObj, [{
     "type": "stack_block",
     "message0": "",
     "previousStatement": null,
     "nextStatement": null
   }]);
-  addBlockTypesToCleanup(sharedCleanupObj, 'stack_block');
 }
 
 function defineRowBlock(sharedCleanupObj) {
-  addBlockTypesToCleanup(sharedCleanupObj, 'row_block');
-  Blockly.defineBlocksWithJsonArray([{
+  defineBlocksWithJsonArrayWithCleanup(sharedCleanupObj, [{
     "type": "row_block",
     "message0": "%1",
     "args0": [
@@ -465,8 +472,7 @@ function defineRowBlock(sharedCleanupObj) {
 }
 
 function defineStatementBlock(sharedCleanupObj) {
-  addBlockTypesToCleanup(sharedCleanupObj, 'statement_block');
-  Blockly.defineBlocksWithJsonArray([{
+  defineBlocksWithJsonArrayWithCleanup(sharedCleanupObj, [{
     "type": "statement_block",
     "message0": "%1",
     "args0": [
@@ -483,8 +489,7 @@ function defineStatementBlock(sharedCleanupObj) {
   }]);
 }
 function defineBasicBlockWithField(sharedCleanupObj) {
-  addBlockTypesToCleanup(sharedCleanupObj, 'test_field_block');
-  Blockly.defineBlocksWithJsonArray([{
+  defineBlocksWithJsonArrayWithCleanup(sharedCleanupObj, [{
     "type": "test_field_block",
     "message0": "%1",
     "args0": [

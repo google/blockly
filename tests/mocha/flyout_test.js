@@ -7,8 +7,7 @@
 suite('Flyout', function() {
   setup(function() {
     sharedTestSetup.call(this);
-    addBlockTypesToCleanup(this.sharedCleanup, 'basic_block');
-    Blockly.defineBlocksWithJsonArray([{
+    defineBlocksWithJsonArrayWithCleanup(this.sharedCleanup, [{
       "type": "basic_block",
       "message0": "%1",
       "args0": [

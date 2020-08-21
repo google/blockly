@@ -8,9 +8,7 @@ suite('InsertionMarkers', function() {
   setup(function() {
     sharedTestSetup.call(this);
     this.workspace = Blockly.inject('blocklyDiv', {});
-    addBlockTypesToCleanup(this.sharedCleanup,
-        ['stack_block', 'row_block', 'statement_block']);
-    Blockly.defineBlocksWithJsonArray([
+    defineBlocksWithJsonArrayWithCleanup(this.sharedCleanup, [
       {
         "type": "stack_block",
         "message0": "",

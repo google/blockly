@@ -21,7 +21,7 @@ suite('Theme', function() {
   });
 
   function defineThemeTestBlocks(sharedCleanupObj) {
-    Blockly.defineBlocksWithJsonArray([{
+    defineBlocksWithJsonArrayWithCleanup(sharedCleanupObj, [{
       "type": "stack_block",
       "message0": "",
       "previousStatement": null,
@@ -38,8 +38,6 @@ suite('Theme', function() {
       ],
       "output": null
     }]);
-    addBlockTypesToCleanup(sharedCleanupObj,
-        ['stack_block', 'row_block']);
   }
 
   function createBlockStyles() {

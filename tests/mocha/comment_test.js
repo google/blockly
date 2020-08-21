@@ -7,8 +7,7 @@
 suite('Comments', function() {
   setup(function() {
     sharedTestSetup.call(this);
-    addBlockTypesToCleanup(this.sharedCleanup, 'empty_block');
-    Blockly.defineBlocksWithJsonArray([
+    defineBlocksWithJsonArrayWithCleanup(this.sharedCleanup, [
       {
         "type": "empty_block",
         "message0": "",

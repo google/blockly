@@ -29,8 +29,7 @@ suite('XML', function() {
   };
   setup(function() {
     sharedTestSetup.call(this);
-    addBlockTypesToCleanup(this.sharedCleanup,'empty_block');
-    Blockly.defineBlocksWithJsonArray([
+    defineBlocksWithJsonArrayWithCleanup(this.sharedCleanup, [
       {
         "type": "empty_block",
         "message0": "",
@@ -84,8 +83,7 @@ suite('XML', function() {
     });
     suite('Fields', function() {
       test('Angle', function() {
-        addBlockTypesToCleanup(this.sharedCleanup, 'field_angle_test_block');
-        Blockly.defineBlocksWithJsonArray([{
+        defineBlocksWithJsonArrayWithCleanup(this.sharedCleanup, [{
           "type": "field_angle_test_block",
           "message0": "%1",
           "args0": [
@@ -102,8 +100,7 @@ suite('XML', function() {
         assertNonVariableField(resultFieldDom, 'ANGLE', '90');
       });
       test('Checkbox', function() {
-        addBlockTypesToCleanup(this.sharedCleanup, 'field_checkbox_test_block');
-        Blockly.defineBlocksWithJsonArray([{
+        defineBlocksWithJsonArrayWithCleanup(this.sharedCleanup, [{
           "type": "field_checkbox_test_block",
           "message0": "%1",
           "args0": [
@@ -120,8 +117,7 @@ suite('XML', function() {
         assertNonVariableField(resultFieldDom, 'CHECKBOX', 'TRUE');
       });
       test('Colour', function() {
-        addBlockTypesToCleanup(this.sharedCleanup, 'field_colour_test_block');
-        Blockly.defineBlocksWithJsonArray([{
+        defineBlocksWithJsonArrayWithCleanup(this.sharedCleanup, [{
           "type": "field_colour_test_block",
           "message0": "%1",
           "args0": [
@@ -138,8 +134,7 @@ suite('XML', function() {
         assertNonVariableField(resultFieldDom, 'COLOUR', '#000099');
       });
       test('Dropdown', function() {
-        addBlockTypesToCleanup(this.sharedCleanup, 'field_dropdown_test_block');
-        Blockly.defineBlocksWithJsonArray([{
+        defineBlocksWithJsonArrayWithCleanup(this.sharedCleanup, [{
           "type": "field_dropdown_test_block",
           "message0": "%1",
           "args0": [
@@ -169,8 +164,7 @@ suite('XML', function() {
         assertNonVariableField(resultFieldDom, 'DROPDOWN', 'A');
       });
       test('Image', function() {
-        addBlockTypesToCleanup(this.sharedCleanup, 'field_image_test_block');
-        Blockly.defineBlocksWithJsonArray([{
+        defineBlocksWithJsonArrayWithCleanup(this.sharedCleanup, [{
           "type": "field_image_test_block",
           "message0": "%1",
           "args0": [
@@ -190,8 +184,7 @@ suite('XML', function() {
         assertNonSerializingFieldDom(resultFieldDom);
       });
       test('Label', function() {
-        addBlockTypesToCleanup(this.sharedCleanup, 'field_label_test_block');
-        Blockly.defineBlocksWithJsonArray([{
+        defineBlocksWithJsonArrayWithCleanup(this.sharedCleanup, [{
           "type": "field_label_test_block",
           "message0": "%1",
           "args0": [
@@ -208,8 +201,7 @@ suite('XML', function() {
         assertNonSerializingFieldDom(resultFieldDom);
       });
       test('Label Serializable', function() {
-        addBlockTypesToCleanup(this.sharedCleanup, 'field_label_serializable_test_block');
-        Blockly.defineBlocksWithJsonArray([{
+        defineBlocksWithJsonArrayWithCleanup(this.sharedCleanup, [{
           "type": "field_label_serializable_test_block",
           "message0": "%1",
           "args0": [
@@ -226,8 +218,7 @@ suite('XML', function() {
         assertNonVariableField(resultFieldDom, 'LABEL', 'default');
       });
       test('Number', function() {
-        addBlockTypesToCleanup(this.sharedCleanup,'field_number_test_block');
-        Blockly.defineBlocksWithJsonArray([{
+        defineBlocksWithJsonArrayWithCleanup(this.sharedCleanup, [{
           "type": "field_number_test_block",
           "message0": "%1",
           "args0": [
@@ -244,8 +235,7 @@ suite('XML', function() {
         assertNonVariableField(resultFieldDom, 'NUMBER', '97');
       });
       test('Text Input', function() {
-        addBlockTypesToCleanup(this.sharedCleanup,'field_text_input_test_block');
-        Blockly.defineBlocksWithJsonArray([{
+        defineBlocksWithJsonArrayWithCleanup(this.sharedCleanup, [{
           "type": "field_text_input_test_block",
           "message0": "%1",
           "args0": [
@@ -263,8 +253,7 @@ suite('XML', function() {
       });
       suite('Variable Fields', function() {
         setup(function() {
-          addBlockTypesToCleanup(this.sharedCleanup,'field_variable_test_block');
-          Blockly.defineBlocksWithJsonArray([{
+          defineBlocksWithJsonArrayWithCleanup(this.sharedCleanup, [{
             'type': 'field_variable_test_block',
             'message0': '%1',
             'args0': [
@@ -389,8 +378,7 @@ suite('XML', function() {
   suite('variablesToDom', function() {
     setup(function() {
       this.workspace = new Blockly.Workspace();
-      addBlockTypesToCleanup(this.sharedCleanup,'field_variable_test_block');
-      Blockly.defineBlocksWithJsonArray([{
+      defineBlocksWithJsonArrayWithCleanup(this.sharedCleanup, [{
         'type': 'field_variable_test_block',
         'message0': '%1',
         'args0': [
@@ -458,9 +446,7 @@ suite('XML', function() {
   suite('domToBlock', function() {
     setup(function() {
       this.workspace = new Blockly.Workspace();
-      addBlockTypesToCleanup(this.sharedCleanup,
-          ['variables_get', 'variables_set']);
-      Blockly.defineBlocksWithJsonArray([{
+      defineBlocksWithJsonArrayWithCleanup(this.sharedCleanup, [{
         "type": "variables_get",
         "message0": "%1",
         "args0": [
@@ -639,8 +625,7 @@ suite('XML', function() {
   suite('domToWorkspace', function() {
     setup(function() {
       this.workspace = new Blockly.Workspace();
-      addBlockTypesToCleanup(this.sharedCleanup,'field_variable_test_block');
-      Blockly.defineBlocksWithJsonArray([{
+      defineBlocksWithJsonArrayWithCleanup(this.sharedCleanup, [{
         'type': 'field_variable_test_block',
         'message0': '%1',
         'args0': [

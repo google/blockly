@@ -20,8 +20,7 @@ suite('JSON Block Definitions', function() {
       var BLOCK_TYPE = 'test_json_minimal';
       var block;
       assertNoWarnings(() => {
-        addBlockTypesToCleanup(this.sharedCleanup, BLOCK_TYPE);
-        Blockly.defineBlocksWithJsonArray([{
+        defineBlocksWithJsonArrayWithCleanup(this.sharedCleanup, [{
           "type": BLOCK_TYPE
         }]);
         block = new Blockly.Block(this.workspace_, BLOCK_TYPE);
@@ -40,9 +39,7 @@ suite('JSON Block Definitions', function() {
       var blockTypeCount = Object.keys(Blockly.Blocks).length;
 
       assertWarnings(() => {
-        addBlockTypesToCleanup(this.sharedCleanup,
-            [BLOCK_TYPE1, BLOCK_TYPE2]);
-        Blockly.defineBlocksWithJsonArray([
+        defineBlocksWithJsonArrayWithCleanup(this.sharedCleanup, [
           {"type": BLOCK_TYPE1},
           {"type": undefined},
           {"type": null},
@@ -64,9 +61,7 @@ suite('JSON Block Definitions', function() {
       var blockTypeCount = Object.keys(Blockly.Blocks).length;
 
       assertWarnings(() => {
-        addBlockTypesToCleanup(this.sharedCleanup,
-            [BLOCK_TYPE1, BLOCK_TYPE2]);
-        Blockly.defineBlocksWithJsonArray([
+        defineBlocksWithJsonArrayWithCleanup(this.sharedCleanup, [
           {
             "type": BLOCK_TYPE1,
             "message0": 'before'
@@ -92,9 +87,7 @@ suite('JSON Block Definitions', function() {
       chai.assert.isUndefined(Blockly.Blocks[BLOCK_TYPE2]);
       var blockTypeCount = Object.keys(Blockly.Blocks).length;
       assertWarnings(() => {
-        addBlockTypesToCleanup(this.sharedCleanup,
-            [BLOCK_TYPE1, BLOCK_TYPE2]);
-        Blockly.defineBlocksWithJsonArray([
+        defineBlocksWithJsonArrayWithCleanup(this.sharedCleanup, [
           {
             "type": BLOCK_TYPE1,
             "message0": 'before'
@@ -115,8 +108,7 @@ suite('JSON Block Definitions', function() {
     test('message0 creates input', function() {
       var BLOCK_TYPE = 'test_json_message0';
       var MESSAGE0 = 'message0';
-      addBlockTypesToCleanup(this.sharedCleanup, BLOCK_TYPE);
-      Blockly.defineBlocksWithJsonArray([{
+      defineBlocksWithJsonArrayWithCleanup(this.sharedCleanup, [{
         "type": BLOCK_TYPE,
         "message0": MESSAGE0
       }]);
@@ -134,8 +126,7 @@ suite('JSON Block Definitions', function() {
       var BLOCK_TYPE = 'test_json_message1';
       var MESSAGE0 = 'message0';
       var MESSAGE1 = 'message1';
-      addBlockTypesToCleanup(this.sharedCleanup, BLOCK_TYPE);
-      Blockly.defineBlocksWithJsonArray([{
+      defineBlocksWithJsonArrayWithCleanup(this.sharedCleanup, [{
         "type": BLOCK_TYPE,
         "message0": MESSAGE0,
         "message1": MESSAGE1
@@ -162,8 +153,7 @@ suite('JSON Block Definitions', function() {
 
       addMessagesToCleanup(this.sharedCleanup, 'MESSAGE');
       Blockly.Msg['MESSAGE'] = MESSAGE;
-      addBlockTypesToCleanup(this.sharedCleanup, BLOCK_TYPE);
-      Blockly.defineBlocksWithJsonArray([{
+      defineBlocksWithJsonArrayWithCleanup(this.sharedCleanup, [{
         "type": BLOCK_TYPE,
         "message0": MESSAGE0
       }]);
@@ -183,8 +173,7 @@ suite('JSON Block Definitions', function() {
       var VALUE0 = 'VALUE0';
       var LABEL1 = 'LABEL1';
       var VALUE1 = 'VALUE1';
-      addBlockTypesToCleanup(this.sharedCleanup, BLOCK_TYPE);
-      Blockly.defineBlocksWithJsonArray([{
+      defineBlocksWithJsonArrayWithCleanup(this.sharedCleanup, [{
         "type": BLOCK_TYPE,
         "message0": "%1",
         "args0": [
@@ -242,8 +231,7 @@ suite('JSON Block Definitions', function() {
       };
       var VALUE2 = 'VALUE2';
 
-      addBlockTypesToCleanup(this.sharedCleanup, BLOCK_TYPE);
-      Blockly.defineBlocksWithJsonArray([{
+      defineBlocksWithJsonArrayWithCleanup(this.sharedCleanup, [{
         "type": BLOCK_TYPE,
         "message0": "%1",
         "args0": [

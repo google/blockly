@@ -20,8 +20,7 @@ suite('Workspace', function() {
 
 function testAWorkspace() {
   setup(function() {
-    addBlockTypesToCleanup(this.sharedCleanup, 'get_var_block');
-    Blockly.defineBlocksWithJsonArray([{
+    defineBlocksWithJsonArrayWithCleanup(this.sharedCleanup, [{
       "type": "get_var_block",
       "message0": "%1",
       "args0": [

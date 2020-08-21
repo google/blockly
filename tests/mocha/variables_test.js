@@ -8,8 +8,7 @@ suite('Variables', function() {
   setup(function() {
     sharedTestSetup.call(this);
     this.workspace = new Blockly.Workspace();
-    addBlockTypesToCleanup(this.sharedCleanup, 'get_var_block');
-    Blockly.defineBlocksWithJsonArray([{
+    defineBlocksWithJsonArrayWithCleanup(this.sharedCleanup, [{
       "type": "get_var_block",
       "message0": "%1",
       "args0": [

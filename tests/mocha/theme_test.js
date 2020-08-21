@@ -20,7 +20,7 @@ suite('Theme', function() {
     Blockly.registry.typeMap_['theme'] = {};
   });
 
-  function defineThemeTestBlocks() {
+  function defineThemeTestBlocks(blockTypeCleanupArray) {
     Blockly.defineBlocksWithJsonArray([{
       "type": "stack_block",
       "message0": "",
@@ -38,13 +38,10 @@ suite('Theme', function() {
       ],
       "output": null
     }]);
+    Array.prototype.push.apply(
+        blockTypeCleanupArray,
+        ['stack_block', 'row_block']);
   }
-
-  function undefineThemeTestBlocks() {
-    delete Blockly.Blocks['stack_block'];
-    delete Blockly.Blocks['row_block'];
-  }
-
 
   function createBlockStyles() {
     return {
@@ -123,7 +120,7 @@ suite('Theme', function() {
   });
 
   test('Set Theme', function() {
-    defineThemeTestBlocks();
+    defineThemeTestBlocks(this.blockTypes_);
     try {
       var blockStyles = createBlockStyles();
       var workspace = new Blockly.WorkspaceSvg(new Blockly.Options({}));
@@ -154,7 +151,6 @@ suite('Theme', function() {
           workspace.id, null);
     } finally {
       workspaceTeardown.call(this, workspace);
-      undefineThemeTestBlocks();
     }
   });
 

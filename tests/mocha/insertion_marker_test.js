@@ -38,12 +38,12 @@ suite('InsertionMarkers', function() {
         "previousStatement": null,
         "nextStatement": null
       }]);
+    Array.prototype.push.apply(
+        this.blockTypes_,
+        ['stack_block', 'row_block', 'statement_block']);
   });
   teardown(function() {
     sharedTestTeardown.call(this);
-    delete Blockly.Blocks['stack_block'];
-    delete Blockly.Blocks['row_block'];
-    delete Blockly.Blocks['statement_block'];
   });
   suite('Code Generation', function() {
     setup(function() {

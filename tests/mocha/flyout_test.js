@@ -18,6 +18,7 @@ suite('Flyout', function() {
         }
       ]
     }]);
+    this.blockTypes_.push('basic_block');
     this.toolboxXml = document.getElementById('toolbox-simple');
     this.workspace = Blockly.inject('blocklyDiv',
         {
@@ -27,7 +28,6 @@ suite('Flyout', function() {
 
   teardown(function() {
     sharedTestTeardown.call(this);
-    delete Blockly.Blocks['basic_block'];
   });
 
   suite('createFlyoutInfo_', function() {

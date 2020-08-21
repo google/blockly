@@ -62,6 +62,9 @@ suite('Generator', function() {
         "output": null,
         "nextStatement": null
       }]);
+      Array.prototype.push.apply(
+          this.blockTypes_,
+          ['stack_block', 'row_block']);
       var rowBlock = this.workspace.newBlock('row_block');
       var stackBlock = this.workspace.newBlock('stack_block');
 
@@ -76,11 +79,6 @@ suite('Generator', function() {
         var code = generator.blockToCode(rowBlock, opt_thisOnly);
         chai.assert.equal(code, expectedCode, opt_message);
       };
-    });
-
-    teardown(function() {
-      delete Blockly.Blocks['stack_block'];
-      delete Blockly.Blocks['row_block'];
     });
 
     var testCase = [
@@ -126,6 +124,7 @@ suite('Generator', function() {
           "previousStatement": null,
           "nextStatement": null
         }]);
+        this.blockTypes_.push('test_loop_block');
         var blockA = this.workspace.newBlock('test_loop_block');
         var blockB = this.workspace.newBlock('test_loop_block');
         var blockC = this.workspace.newBlock('test_loop_block');
@@ -140,10 +139,6 @@ suite('Generator', function() {
           var code = generator.blockToCode(blockA, opt_thisOnly);
           chai.assert.equal(code, expectedCode, opt_message);
         };
-      });
-
-      teardown(function() {
-        delete Blockly.Blocks['test_loop_block'];
       });
 
       testCase.forEach(function(testCase) {

@@ -65,6 +65,9 @@ suite('ASTNode', function() {
       "helpUrl": ""
     }
     ]);
+    Array.prototype.push.apply(
+        this.blockTypes_,
+        ['input_statement', 'value_input', 'field_input']);
     this.workspace = new Blockly.Workspace();
     this.cursor = this.workspace.cursor;
     var statementInput1 = this.workspace.newBlock('input_statement');
@@ -91,9 +94,6 @@ suite('ASTNode', function() {
   });
   teardown(function() {
     sharedTestTeardown.call(this);
-    delete Blockly.Blocks['input_statement'];
-    delete Blockly.Blocks['field_input'];
-    delete Blockly.Blocks['value_input'];
   });
 
   suite('HelperFunctions', function() {
@@ -284,6 +284,11 @@ suite('ASTNode', function() {
         "helpUrl": "",
         "nextStatement": null
       }]);
+      Array.prototype.push.apply(
+          this.blockTypes_,
+          ['output_next', 'fields_and_input2', 'two_fields',
+            'fields_and_input', 'top_connection', 'start_block', 'dummy_input',
+            'dummy_inputValue']);
 
       var noNextConnection = this.workspace.newBlock('top_connection');
       var fieldAndInputs = this.workspace.newBlock('fields_and_input');
@@ -307,16 +312,6 @@ suite('ASTNode', function() {
       var outputNextBlock = this.workspace.newBlock('output_next');
       this.blocks.secondBlock = secondBlock;
       this.blocks.outputNextBlock = outputNextBlock;
-    });
-    teardown(function() {
-      delete Blockly.Blocks['output_next'];
-      delete Blockly.Blocks['fields_and_input2'];
-      delete Blockly.Blocks['two_fields'];
-      delete Blockly.Blocks['fields_and_input'];
-      delete Blockly.Blocks['top_connection'];
-      delete Blockly.Blocks['start_block'];
-      delete Blockly.Blocks['dummy_input'];
-      delete Blockly.Blocks['dummy_inputValue'];
     });
     suite('Next', function() {
       setup(function() {

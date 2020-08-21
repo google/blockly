@@ -24,12 +24,13 @@ suite('WorkspaceSvg', function() {
         }
       ]
     }]);
+    Array.prototype.push.apply(
+        this.blockTypes_,
+        ['simple_test_block', 'test_val_in']);
   });
 
   teardown(function() {
     sharedTestTeardown.call(this);
-    delete Blockly.Blocks['simple_test_block'];
-    delete Blockly.Blocks['test_val_in'];
   });
 
   test('dispose of WorkspaceSvg without dom throws no error', function() {
@@ -137,6 +138,7 @@ suite('WorkspaceSvg', function() {
           }
         ]
       }]);
+      this.blockTypes_.push('get_var_block');
     });
 
     teardown(function() {
@@ -144,7 +146,6 @@ suite('WorkspaceSvg', function() {
       // because it holds the variable map.
       // Normally the main workspace disposes of the flyout workspace.
       workspaceTeardown.call(this, this.targetWorkspace);
-      delete Blockly.Blocks['get_var_block'];
     });
 
     test('Trivial Flyout is True', function() {

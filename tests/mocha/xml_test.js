@@ -754,18 +754,18 @@ suite('XML', function() {
   });
   suite('appendDomToWorkspace', function() {
     setup(function() {
-      Blockly.Blocks.test_block = {
+      Blockly.Blocks['test_block'] = {
         init: function() {
           this.jsonInit({
             message0: 'test',
           });
         }
       };
+      this.blockTypes_.push('test_block');
       this.workspace = new Blockly.Workspace();
     });
     teardown(function() {
       workspaceTeardown.call(this, this.workspace);
-      delete Blockly.Blocks.test_block;
     });
     test('Headless', function() {
       var dom = Blockly.Xml.textToDom(

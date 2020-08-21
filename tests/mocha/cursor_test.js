@@ -52,6 +52,9 @@ suite('Cursor', function() {
       "helpUrl": ""
     }
     ]);
+    Array.prototype.push.apply(
+        this.blockTypes_,
+        ['input_statement', 'field_input']);
     this.workspace = Blockly.inject('blocklyDiv', {});
     this.cursor = this.workspace.getCursor();
     var blockA = this.workspace.newBlock('input_statement');
@@ -74,8 +77,6 @@ suite('Cursor', function() {
   });
   teardown(function() {
     sharedTestTeardown.call(this);
-    delete Blockly.Blocks['input_statement'];
-    delete Blockly.Blocks['field_input'];
   });
 
   test('Next - From a Previous skip over next connection and block', function() {

@@ -14,6 +14,7 @@ suite('Comments', function() {
         "args0": []
       },
     ]);
+    this.blockTypes_.push('empty_block');
 
     this.workspace = Blockly.inject('blocklyDiv', {
       comments: true,
@@ -27,7 +28,6 @@ suite('Comments', function() {
   });
   teardown(function() {
     sharedTestTeardown.call(this);
-    delete Blockly.Blocks['empty_block'];
   });
   suite('Visibility and Editability', function() {
     setup(function() {

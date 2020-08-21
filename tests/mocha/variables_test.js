@@ -19,6 +19,7 @@ suite('Variables', function() {
         }
       ]
     }]);
+    this.blockTypes_.push('get_var_block');
     this.workspace.createVariable('foo', 'type1', '1');
     this.workspace.createVariable('bar', 'type1', '2');
     this.workspace.createVariable('baz', 'type1', '3');
@@ -26,7 +27,6 @@ suite('Variables', function() {
 
   teardown(function() {
     sharedTestTeardown.call(this);
-    delete Blockly.Blocks['get_var_block'];
   });
 
   /**

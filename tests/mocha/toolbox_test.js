@@ -18,6 +18,7 @@ suite('Toolbox', function() {
         }
       ]
     }]);
+    this.blockTypes_.push('basic_block');
     this.toolboxXml = document.getElementById('toolbox-test');
     this.workspace = Blockly.inject('blocklyDiv',
         {
@@ -28,7 +29,6 @@ suite('Toolbox', function() {
 
   teardown(function() {
     sharedTestTeardown.call(this);
-    delete Blockly.Blocks['basic_block'];
   });
 
   suite('init', function() {

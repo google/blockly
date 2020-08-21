@@ -317,13 +317,10 @@ suite('Variable Fields', function() {
           }
         ],
       }]);
+      this.blockTypes_.push('field_variable_test_block');
       this.variableBlock = new Blockly.Block(this.workspace,
           'field_variable_test_block');
       this.variableField = this.variableBlock.getField('VAR');
-    });
-    teardown(function() {
-      this.variableBlock.dispose();
-      delete Blockly.Blocks['field_variable_test_block'];
     });
     test('Rename & Keep Old ID', function() {
       this.workspace.renameVariableById('id1', 'name2');

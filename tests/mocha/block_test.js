@@ -42,13 +42,12 @@ suite('Blocks', function() {
         "previousStatement": null,
         "nextStatement": null
       }]);
+    Array.prototype.push.apply(
+        this.blockTypes_,
+        ['empty_block', 'stack_block', 'row_block', 'statement_block']);
   });
   teardown(function() {
     sharedTestTeardown.call(this);
-    delete Blockly.Blocks['empty_block'];
-    delete Blockly.Blocks['stack_block'];
-    delete Blockly.Blocks['row_block'];
-    delete Blockly.Blocks['statement_block'];
   });
 
   function createTestBlocks(workspace, isRow) {
@@ -327,9 +326,7 @@ suite('Blocks', function() {
           ]
         },
       ]);
-    });
-    teardown(function() {
-      delete Blockly.Blocks['value_block'];
+      this.blockTypes_.push('value_block');
     });
 
     suite('Value', function() {
@@ -1231,11 +1228,11 @@ suite('Blocks', function() {
           ],
         }
       ]);
+      this.blockTypes_.push('variable_block');
     });
     teardown(function() {
       Blockly.Events.enable();
       workspaceTeardown.call(this, this.workspace);
-      delete Blockly.Blocks['variable_block'];
     });
     suite('Connecting and Disconnecting', function() {
       test('Connect Block to Next', function() {

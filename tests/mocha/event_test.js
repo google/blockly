@@ -24,12 +24,13 @@ suite('Events', function() {
       'type': 'simple_test_block',
       'message0': 'simple test block'
     }]);
+    Array.prototype.push.apply(
+        this.blockTypes_,
+        ['field_variable_test_block', 'simple_test_block']);
   });
 
   teardown(function() {
     sharedTestTeardown.call(this);
-    delete Blockly.Blocks['field_variable_test_block'];
-    delete Blockly.Blocks['simple_test_block'];
   });
 
   function createSimpleTestBlock(workspace, opt_prototypeName) {

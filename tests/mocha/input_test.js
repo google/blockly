@@ -14,6 +14,7 @@ suite('Inputs', function() {
         "args0": []
       },
     ]);
+    this.blockTypes_.push('empty_block');
 
     this.workspace = Blockly.inject('blocklyDiv');
     this.block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
@@ -32,7 +33,6 @@ suite('Inputs', function() {
   });
   teardown(function() {
     sharedTestTeardown.call(this);
-    delete Blockly.Blocks['empty_block'];
   });
   suite('Insert Field At', function() {
     suite('Index Bounds', function() {

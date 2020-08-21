@@ -44,6 +44,7 @@ suite('Navigation', function() {
           }
         ]
       }]);
+      this.blockTypes_.push('basic_block');
       this.workspace = createNavigationWorkspace(true);
       Blockly.navigation.focusToolbox_();
       this.mockEvent = {
@@ -58,7 +59,6 @@ suite('Navigation', function() {
 
     teardown(function() {
       workspaceTeardown.call(this, this.workspace);
-      delete Blockly.Blocks['basic_block'];
     });
 
     test('Next', function() {
@@ -161,6 +161,7 @@ suite('Navigation', function() {
           }
         ]
       }]);
+      this.blockTypes_.push('basic_block');
       this.workspace = createNavigationWorkspace(true);
       Blockly.mainWorkspace = this.workspace;
       Blockly.navigation.focusToolbox_();
@@ -174,7 +175,6 @@ suite('Navigation', function() {
 
     teardown(function() {
       workspaceTeardown.call(this, this.workspace);
-      delete Blockly.Blocks['basic_block'];
     });
 
     // Should be a no-op
@@ -253,6 +253,7 @@ suite('Navigation', function() {
         "previousStatement": null,
         "nextStatement": null
       }]);
+      this.blockTypes_.push('basic_block');
       this.workspace = createNavigationWorkspace(true);
       this.basicBlock = this.workspace.newBlock('basic_block');
       this.firstCategory_ = this.workspace.getToolbox().tree_.getChildAt(0);
@@ -265,7 +266,6 @@ suite('Navigation', function() {
 
     teardown(function() {
       workspaceTeardown.call(this, this.workspace);
-      delete Blockly.Blocks['basic_block'];
     });
 
     test('Previous', function() {
@@ -360,6 +360,7 @@ suite('Navigation', function() {
           }
         ]
       }]);
+      this.blockTypes_.push('basic_block');
       this.workspace = createNavigationWorkspace(true);
       this.workspace.getCursor().drawer_ = null;
       this.basicBlock = this.workspace.newBlock('basic_block');
@@ -376,7 +377,6 @@ suite('Navigation', function() {
     });
     teardown(function() {
       workspaceTeardown.call(this, this.workspace);
-      delete Blockly.Blocks['basic_block'];
     });
     test('Action does not exist', function() {
       var block = this.workspace.getTopBlocks()[0];
@@ -470,6 +470,7 @@ suite('Navigation', function() {
           "tooltip": "",
           "helpUrl": ""
         }]);
+        this.blockTypes_.push('field_block');
         this.workspace = Blockly.inject('blocklyDiv', {readOnly: true});
 
         Blockly.mainWorkspace = this.workspace;
@@ -487,7 +488,6 @@ suite('Navigation', function() {
 
       teardown(function() {
         workspaceTeardown.call(this, this.workspace);
-        delete Blockly.Blocks['field_block'];
       });
 
       test('Perform valid action for read only', function() {
@@ -529,6 +529,7 @@ suite('Navigation', function() {
         "previousStatement": null,
         "nextStatement": null,
       }]);
+      this.blockTypes_.push('basic_block');
 
       this.workspace = createNavigationWorkspace(true);
 
@@ -541,7 +542,6 @@ suite('Navigation', function() {
 
     teardown(function() {
       workspaceTeardown.call(this, this.workspace);
-      delete Blockly.Blocks['basic_block'];
     });
 
     test('Insert from flyout with a valid connection marked', function() {
@@ -617,6 +617,9 @@ suite('Navigation', function() {
         "tooltip": "",
         "helpUrl": ""
       }]);
+      Array.prototype.push.apply(
+          this.blockTypes_,
+          ['inline_block', 'basic_block']);
 
       this.workspace = createNavigationWorkspace(true);
 
@@ -646,8 +649,6 @@ suite('Navigation', function() {
 
     teardown(function() {
       workspaceTeardown.call(this, this.workspace);
-      delete Blockly.Blocks['inline_block'];
-      delete Blockly.Blocks['basic_block'];
     });
 
     test('Connect cursor on previous into stack', function() {
@@ -710,6 +711,7 @@ suite('Navigation', function() {
         "previousStatement": null,
         "nextStatement": null,
       }]);
+      this.blockTypes_.push('basic_block');
       this.workspace = createNavigationWorkspace(true);
       this.basicBlockA = this.workspace.newBlock('basic_block');
       this.basicBlockB = this.workspace.newBlock('basic_block');
@@ -717,7 +719,6 @@ suite('Navigation', function() {
 
     teardown(function() {
       workspaceTeardown.call(this, this.workspace);
-      delete Blockly.Blocks['basic_block'];
     });
 
     test('Delete block - has parent ', function() {

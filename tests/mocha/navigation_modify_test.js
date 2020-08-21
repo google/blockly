@@ -27,6 +27,9 @@ suite('Insert/Modify', function() {
     defineStackBlock();
     defineRowBlock();
     defineStatementBlock();
+    Array.prototype.push.apply(
+        this.blockTypes_,
+        ['stack_block', 'row_block', 'statement_block']);
 
     var toolbox = document.getElementById('toolbox-connections');
     this.workspace = Blockly.inject('blocklyDiv', {toolbox: toolbox});
@@ -44,9 +47,6 @@ suite('Insert/Modify', function() {
 
   teardown(function() {
     sharedTestTeardown.call(this);
-    delete Blockly.Blocks['stack_block'];
-    delete Blockly.Blocks['row_block'];
-    delete Blockly.Blocks['statement_block'];
   });
 
   suite('Marked Connection', function() {

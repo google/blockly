@@ -8,17 +8,12 @@ suite('JSON Block Definitions', function() {
   setup(function() {
     sharedTestSetup.call(this);
     this.workspace_ = new Blockly.Workspace();
-    this.blocks_ = [];
     this.blockTypes_ = [];
     this.messages_ = [];
   });
 
   teardown(function() {
     sharedTestTeardown.call(this);
-    for (var i = 0; i < this.blocks_.length; i++) {
-      var block = this.blocks_[i];
-      block.dispose();
-    }
     for (var i = 0, blockType; (blockType = this.blockTypes_[i]); i++) {
       delete Blockly.Blocks[blockType];
     }
@@ -40,7 +35,6 @@ suite('JSON Block Definitions', function() {
         }]);
         block = new Blockly.Block(workspace, BLOCK_TYPE);
       });
-      this.blocks_.push(block);
 
       chai.assert.isNotNull(block);
       chai.assert.equal(BLOCK_TYPE, block.type);
@@ -164,7 +158,6 @@ suite('JSON Block Definitions', function() {
       }]);
 
       var block = new Blockly.Block(this.workspace_, BLOCK_TYPE);
-      this.blocks_.push(block);
       chai.assert.equal(block.inputList.length, 2);
 
       chai.assert.equal(block.inputList[0].fieldRow.length, 1);
@@ -192,7 +185,6 @@ suite('JSON Block Definitions', function() {
       }]);
 
       var block = new Blockly.Block(this.workspace_, BLOCK_TYPE);
-      this.blocks_.push(block);
       chai.assert.equal(block.inputList.length, 1);
       chai.assert.equal(block.inputList[0].fieldRow.length, 1);
       var textField = block.inputList[0].fieldRow[0];
@@ -224,7 +216,6 @@ suite('JSON Block Definitions', function() {
       }]);
 
       var block = new Blockly.Block(this.workspace_, BLOCK_TYPE);
-      this.blocks_.push(block);
       chai.assert.equal(block.inputList.length, 1);
       chai.assert.equal(block.inputList[0].fieldRow.length, 1);
       var dropdown = block.inputList[0].fieldRow[0];
@@ -285,7 +276,6 @@ suite('JSON Block Definitions', function() {
       }]);
 
       var block = new Blockly.Block(this.workspace_, BLOCK_TYPE);
-      this.blocks_.push(block);
       chai.assert.equal(block.inputList.length, 1);
       chai.assert.equal(block.inputList[0].fieldRow.length, 1);
       var dropdown = block.inputList[0].fieldRow[0];

@@ -481,35 +481,10 @@ suite('XML', function() {
             "name": "VALUE"
           }
         ]
-      },
-      {
-        "type": "math_change",
-        "message0": "%1 %2",
-        "args0": [
-          {
-            "type": "field_variable",
-            "name": "VAR"
-          },
-          {
-            "type": "input_value",
-            "name": "DELTA",
-            "check": "Number"
-          }
-        ]
-      },
-      {
-        "type": "math_number",
-        "message0": "%1",
-        "args0": [{
-          "type": "field_number",
-          "name": "NUM",
-          "value": 0
-        }],
-        "output": "Number"
       }]);
       Array.prototype.push.apply(
           this.blockTypes_,
-          ['variables_get', 'variables_set', 'math_change', 'math_number']);
+          ['variables_get', 'variables_set']);
     });
     teardown(function() {
       workspaceTeardown.call(this, this.workspace);

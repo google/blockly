@@ -421,7 +421,7 @@ function assertNthCallEventArgEquals(spy, n, instanceType, expectedProperties,
  * @param {string} message The message to add to shared cleanup object.
  */
 function addMessageToCleanup(sharedCleanupObj, message) {
-  sharedCleanupObj.messagesCleanup_.push(message)
+  sharedCleanupObj.messagesCleanup_.push(message);
 }
 
 /**
@@ -432,7 +432,7 @@ function addMessageToCleanup(sharedCleanupObj, message) {
  * @param {string} blockType The block type to add to shared cleanup object.
  */
 function addBlockTypeToCleanup(sharedCleanupObj, blockType) {
-  sharedCleanupObj.blockTypesCleanup_.push(blockType)
+  sharedCleanupObj.blockTypesCleanup_.push(blockType);
 }
 
 /**

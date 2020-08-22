@@ -5,6 +5,15 @@
  */
 
 suite('Insert/Modify', function() {
+  function assertModifyFails() {
+    var modifyResult;
+    var warnings = captureWarnings(function() {
+      modifyResult = Blockly.navigation.modify_();
+    });
+    chai.assert.isFalse(modifyResult);
+    chai.assert.equal(warnings.length, 1,
+        'Expecting 1 warnings for why modify failed.');
+  }
   setup(function() {
     sharedTestSetup.call(this);
     var xmlText = '<xml xmlns="https://developers.google.com/blockly/xml">' +
@@ -52,7 +61,7 @@ suite('Insert/Modify', function() {
         this.workspace.getCursor().setCurNode(
             Blockly.ASTNode.createWorkspaceNode(this.workspace,
                 new Blockly.utils.Coordinate(0, 0)));
-        chai.assert.isFalse(Blockly.navigation.modify_());
+        assertModifyFails();
       });
       test('Cursor on compatible connection', function() {
         this.workspace.getCursor().setCurNode(
@@ -74,7 +83,7 @@ suite('Insert/Modify', function() {
         this.workspace.getCursor().setCurNode(
             Blockly.ASTNode.createConnectionNode(
                 this.row_block_1.outputConnection));
-        chai.assert.isFalse(Blockly.navigation.modify_());
+        assertModifyFails();
         chai.assert.isNull(this.stack_block_1.getNextBlock());
       });
       test('Cursor on block', function() {
@@ -103,14 +112,14 @@ suite('Insert/Modify', function() {
         this.workspace.getCursor().setCurNode(
             Blockly.ASTNode.createConnectionNode(
                 this.stack_block_2.previousConnection));
-        chai.assert.isFalse(Blockly.navigation.modify_());
+        assertModifyFails();
         chai.assert.isNull(this.stack_block_1.getPreviousBlock());
       });
       test('Cursor on really incompatible connection', function() {
         this.workspace.getCursor().setCurNode(
             Blockly.ASTNode.createConnectionNode(
                 this.row_block_1.outputConnection));
-        chai.assert.isFalse(Blockly.navigation.modify_());
+        assertModifyFails();
         chai.assert.isNull(this.stack_block_1.getNextBlock());
       });
       test('Cursor on block', function() {
@@ -124,7 +133,7 @@ suite('Insert/Modify', function() {
         this.workspace.getCursor().setCurNode(
             Blockly.ASTNode.createBlockNode(
                 this.row_block_1));
-        chai.assert.isFalse(Blockly.navigation.modify_());
+        assertModifyFails();
         chai.assert.isNull(this.stack_block_1.getPreviousBlock());
       });
     });
@@ -156,7 +165,7 @@ suite('Insert/Modify', function() {
         this.workspace.getCursor().setCurNode(
             Blockly.ASTNode.createConnectionNode(
                 this.stack_block_1.previousConnection));
-        chai.assert.isFalse(Blockly.navigation.modify_());
+        assertModifyFails();
       });
       test('Cursor on block', function() {
         this.workspace.getCursor().setCurNode(
@@ -195,7 +204,7 @@ suite('Insert/Modify', function() {
         this.workspace.getCursor().setCurNode(
             Blockly.ASTNode.createConnectionNode(
                 this.row_block_1.outputConnection));
-        chai.assert.isFalse(Blockly.navigation.modify_());
+        assertModifyFails();
         chai.assert.isNull(this.row_block_1.getParent());
       });
 
@@ -218,13 +227,13 @@ suite('Insert/Modify', function() {
         this.workspace.getCursor().setCurNode(
             Blockly.ASTNode.createConnectionNode(
                 this.row_block_2.outputConnection));
-        chai.assert.isFalse(Blockly.navigation.modify_());
+        assertModifyFails();
       });
       test('Cursor on really incompatible connection', function() {
         this.workspace.getCursor().setCurNode(
             Blockly.ASTNode.createConnectionNode(
                 this.stack_block_1.previousConnection));
-        chai.assert.isFalse(Blockly.navigation.modify_());
+        assertModifyFails();
       });
       test('Cursor on block', function() {
         this.workspace.getCursor().setCurNode(
@@ -329,7 +338,7 @@ suite('Insert/Modify', function() {
       this.workspace.getCursor().setCurNode(
           Blockly.ASTNode.createWorkspaceNode(
               this.workspace, new Blockly.utils.Coordinate(100, 100)));
-      chai.assert.isFalse(Blockly.navigation.modify_());
+      assertModifyFails();
     });
   });
 
@@ -348,8 +357,7 @@ suite('Insert/Modify', function() {
         this.workspace.getCursor().setCurNode(
             Blockly.ASTNode.createWorkspaceNode(
                 this.workspace, new Blockly.utils.Coordinate(100, 100)));
-        chai.assert.isFalse(Blockly.navigation.modify_());
-
+        assertModifyFails();
       });
     });
     suite('Marked stack block', function() {
@@ -362,25 +370,25 @@ suite('Insert/Modify', function() {
         this.workspace.getCursor().setCurNode(
             Blockly.ASTNode.createBlockNode(
                 this.row_block_1));
-        chai.assert.isFalse(Blockly.navigation.modify_());
+        assertModifyFails();
       });
       test('Cursor on stack block', function() {
         this.workspace.getCursor().setCurNode(
             Blockly.ASTNode.createBlockNode(
                 this.stack_block_1));
-        chai.assert.isFalse(Blockly.navigation.modify_());
+        assertModifyFails();
       });
       test('Cursor on next connection', function() {
         this.workspace.getCursor().setCurNode(
             Blockly.ASTNode.createConnectionNode(
                 this.stack_block_2.nextConnection));
-        chai.assert.isFalse(Blockly.navigation.modify_());
+        assertModifyFails();
       });
       test('Cursor on previous connection', function() {
         this.workspace.getCursor().setCurNode(
             Blockly.ASTNode.createConnectionNode(
                 this.stack_block_2.previousConnection));
-        chai.assert.isFalse(Blockly.navigation.modify_());
+        assertModifyFails();
       });
     });
     suite('Marked row block', function() {
@@ -393,25 +401,25 @@ suite('Insert/Modify', function() {
         this.workspace.getCursor().setCurNode(
             Blockly.ASTNode.createBlockNode(
                 this.stack_block_1));
-        chai.assert.isFalse(Blockly.navigation.modify_());
+        assertModifyFails();
       });
       test('Cursor on row block', function() {
         this.workspace.getCursor().setCurNode(
             Blockly.ASTNode.createBlockNode(
                 this.row_block_1));
-        chai.assert.isFalse(Blockly.navigation.modify_());
+        assertModifyFails();
       });
       test('Cursor on value input connection', function() {
         this.workspace.getCursor().setCurNode(
             Blockly.ASTNode.createConnectionNode(
                 this.row_block_2.inputList[0].connection));
-        chai.assert.isFalse(Blockly.navigation.modify_());
+        assertModifyFails();
       });
       test('Cursor on output connection', function() {
         this.workspace.getCursor().setCurNode(
             Blockly.ASTNode.createConnectionNode(
                 this.row_block_2.outputConnection));
-        chai.assert.isFalse(Blockly.navigation.modify_());
+        assertModifyFails();
       });
     });
   });

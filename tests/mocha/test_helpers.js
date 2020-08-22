@@ -50,7 +50,7 @@ function filterWarnings(innerFunc, pattern) {
   var msgs = [];
   var nativeConsoleWarn = console.warn;
   try {
-    console.warn = function(msg) {
+    console.warn = function (msg) {
       if (msg.match(pattern)) {
         msgs.push(msg);
       } else {
@@ -62,6 +62,31 @@ function filterWarnings(innerFunc, pattern) {
     console.warn = nativeConsoleWarn;
   }
   return msgs;
+}
+
+/**
+ * Asserts that the given function logs the provided warning messages.
+ * @param {function} innerFunc The function to call.
+ * @param {Array<!RegExp>|!RegExp} messages A list of regex for the expected
+ *    messages (in the expected order).
+ */
+function assertWarnings(innerFunc, messages) {
+  if (!Array.isArray(messages)) {
+    messages = [messages];
+  }
+  var warnings = captureWarnings(innerFunc);
+  chai.assert.lengthOf(warnings, messages.length);
+  messages.forEach((message, i) => {
+    chai.assert.match(warnings[i], message);
+  });
+}
+
+/**
+ * Asserts that the given function logs no warning messages.
+ * @param {function} innerFunc The function to call.
+ */
+function assertNoWarnings(innerFunc) {
+  assertWarnings(innerFunc, []);
 }
 
 /**

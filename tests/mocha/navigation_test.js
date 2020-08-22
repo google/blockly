@@ -272,7 +272,7 @@ suite('Navigation', function() {
       sinon.spy(this.workspace.getCursor(), 'prev');
       this.mockEvent.keyCode = Blockly.utils.KeyCodes.W;
       chai.assert.isTrue(Blockly.navigation.onKeyPress(this.mockEvent));
-      chai.assert.isTrue(this.workspace.getCursor().prev.calledOnce);
+      sinon.assert.calledOnce(this.workspace.getCursor().prev);
       chai.assert.equal(Blockly.navigation.currentState_,
           Blockly.navigation.STATE_WS);
       this.workspace.getCursor().prev.restore();
@@ -283,7 +283,7 @@ suite('Navigation', function() {
       sinon.spy(cursor, 'next');
       this.mockEvent.keyCode = Blockly.utils.KeyCodes.S;
       chai.assert.isTrue(Blockly.navigation.onKeyPress(this.mockEvent));
-      chai.assert.isTrue(cursor.next.calledOnce);
+      sinon.assert.calledOnce(cursor.next);
       chai.assert.equal(Blockly.navigation.currentState_,
           Blockly.navigation.STATE_WS);
       cursor.next.restore();
@@ -294,7 +294,7 @@ suite('Navigation', function() {
       sinon.spy(cursor, 'out');
       this.mockEvent.keyCode = Blockly.utils.KeyCodes.A;
       chai.assert.isTrue(Blockly.navigation.onKeyPress(this.mockEvent));
-      chai.assert.isTrue(cursor.out.calledOnce);
+      sinon.assert.calledOnce(cursor.out);
       chai.assert.equal(Blockly.navigation.currentState_,
           Blockly.navigation.STATE_WS);
       cursor.out.restore();
@@ -305,7 +305,7 @@ suite('Navigation', function() {
       sinon.spy(cursor, 'in');
       this.mockEvent.keyCode = Blockly.utils.KeyCodes.D;
       chai.assert.isTrue(Blockly.navigation.onKeyPress(this.mockEvent));
-      chai.assert.isTrue(cursor.in.calledOnce);
+      sinon.assert.calledOnce(cursor.in);
       chai.assert.equal(Blockly.navigation.currentState_,
           Blockly.navigation.STATE_WS);
       cursor.in.restore();
@@ -315,7 +315,7 @@ suite('Navigation', function() {
       sinon.spy(Blockly.navigation, 'modify_');
       this.mockEvent.keyCode = Blockly.utils.KeyCodes.I;
       chai.assert.isTrue(Blockly.navigation.onKeyPress(this.mockEvent));
-      chai.assert.isTrue(Blockly.navigation.modify_.calledOnce);
+      sinon.assert.calledOnce(Blockly.navigation.modify_);
       chai.assert.equal(Blockly.navigation.currentState_,
           Blockly.navigation.STATE_WS);
       Blockly.navigation.modify_.restore();
@@ -386,7 +386,7 @@ suite('Navigation', function() {
       this.mockEvent.keyCode = Blockly.utils.KeyCodes.N;
       var isHandled = Blockly.navigation.onKeyPress(this.mockEvent);
       chai.assert.isFalse(isHandled);
-      chai.assert.isFalse(field.onBlocklyAction.calledOnce);
+      sinon.assert.notCalled(field.onBlocklyAction);
 
       field.onBlocklyAction.restore();
     });
@@ -400,7 +400,7 @@ suite('Navigation', function() {
 
       var isHandled = Blockly.navigation.onBlocklyAction(Blockly.navigation.ACTION_OUT);
       chai.assert.isTrue(isHandled);
-      chai.assert.isTrue(field.onBlocklyAction.calledOnce);
+      sinon.assert.calledOnce(field.onBlocklyAction);
 
       field.onBlocklyAction.restore();
     });
@@ -414,7 +414,7 @@ suite('Navigation', function() {
       this.mockEvent.keyCode = Blockly.utils.KeyCodes.A;
       var isHandled = Blockly.navigation.onBlocklyAction(Blockly.navigation.ACTION_OUT);
       chai.assert.isTrue(isHandled);
-      chai.assert.isTrue(field.onBlocklyAction.calledOnce);
+      sinon.assert.calledOnce(field.onBlocklyAction);
 
       field.onBlocklyAction.restore();
     });
@@ -426,7 +426,7 @@ suite('Navigation', function() {
 
       var isHandled = Blockly.navigation.onKeyPress(this.mockEvent);
       chai.assert.isTrue(isHandled);
-      chai.assert.isTrue(Blockly.navigation.onBlocklyAction.calledOnce);
+      sinon.assert.calledOnce(Blockly.navigation.onBlocklyAction);
       chai.assert.isFalse(Blockly.getMainWorkspace().keyboardAccessibilityMode);
       Blockly.navigation.onBlocklyAction.restore();
     });
@@ -438,7 +438,7 @@ suite('Navigation', function() {
 
       var isHandled = Blockly.navigation.onKeyPress(this.mockEvent);
       chai.assert.isTrue(isHandled);
-      chai.assert.isTrue(Blockly.navigation.focusWorkspace_.calledOnce);
+      sinon.assert.calledOnce(Blockly.navigation.focusWorkspace_);
       chai.assert.isTrue(Blockly.getMainWorkspace().keyboardAccessibilityMode);
       Blockly.navigation.focusWorkspace_.restore();
     });
@@ -518,7 +518,14 @@ suite('Navigation', function() {
     setup(function() {
       Blockly.defineBlocksWithJsonArray([{
         "type": "basic_block",
-        "message0": "",
+        "message0": "%1",
+        "args0": [
+          {
+            "type": "field_input",
+            "name": "TEXT",
+            "text": "default"
+          }
+        ],
         "previousStatement": null,
         "nextStatement": null,
       }]);

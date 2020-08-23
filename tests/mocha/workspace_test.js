@@ -640,369 +640,523 @@ function testAWorkspace() {
   });
 
   suite('Undo/Redo', function() {
-    function createTwoVarsDifferentTypes(workspace) {
-      workspace.createVariable('name1', 'type1', 'id1');
-      workspace.createVariable('name2', 'type2', 'id2');
-    }
 
-    suite('createVariable', function() {
-      test('Undo only', function() {
-        createTwoVarsDifferentTypes(this.workspace);
-
-        this.workspace.undo();
-        assertVariableValues(this.workspace, 'name1', 'type1', 'id1');
-        chai.assert.isNull(this.workspace.getVariableById('id2'));
-
-        this.workspace.undo();
-        chai.assert.isNull(this.workspace.getVariableById('id1'));
-        chai.assert.isNull(this.workspace.getVariableById('id2'));
-      });
-
-      test('Undo and redo', function() {
-        createTwoVarsDifferentTypes(this.workspace);
-
-        this.workspace.undo();
-        assertVariableValues(this.workspace, 'name1', 'type1', 'id1');
-        chai.assert.isNull(this.workspace.getVariableById('id2'));
-
-        this.workspace.undo(true);
-
-        // Expect that variable 'id2' is recreated
-        assertVariableValues(this.workspace, 'name1', 'type1', 'id1');
-        assertVariableValues(this.workspace, 'name2', 'type2', 'id2');
-
-        this.workspace.undo();
-        this.workspace.undo();
-        chai.assert.isNull(this.workspace.getVariableById('id1'));
-        chai.assert.isNull(this.workspace.getVariableById('id2'));
-        this.workspace.undo(true);
-
-        // Expect that variable 'id1' is recreated
-        assertVariableValues(this.workspace, 'name1', 'type1', 'id1');
-        chai.assert.isNull(this.workspace.getVariableById('id2'));
-      });
-    });
-
-    suite('deleteVariableById', function() {
-      test('Undo only no usages', function() {
-        createTwoVarsDifferentTypes(this.workspace);
-        this.workspace.deleteVariableById('id1');
-        this.workspace.deleteVariableById('id2');
-
-        this.workspace.undo();
-        chai.assert.isNull(this.workspace.getVariableById('id1'));
-        assertVariableValues(this.workspace, 'name2', 'type2', 'id2');
-
-        this.workspace.undo();
-        assertVariableValues(this.workspace, 'name1', 'type1', 'id1');
-        assertVariableValues(this.workspace, 'name2', 'type2', 'id2');
-      });
-
-      test('Undo only with usages', function() {
-        createTwoVarsDifferentTypes(this.workspace);
-        // Create blocks to refer to both of them.
-        createVarBlocksNoEvents(this.workspace, ['id1', 'id2']);
-        this.workspace.deleteVariableById('id1');
-        this.workspace.deleteVariableById('id2');
-
-        this.workspace.undo();
-        assertBlockVarModelName(this.workspace, 0, 'name2');
-        chai.assert.isNull(this.workspace.getVariableById('id1'));
-        assertVariableValues(this.workspace, 'name2', 'type2', 'id2');
-
-        this.workspace.undo();
-        assertBlockVarModelName(this.workspace, 0, 'name2');
-        assertBlockVarModelName(this.workspace, 1, 'name1');
-        assertVariableValues(this.workspace, 'name1', 'type1', 'id1');
-        assertVariableValues(this.workspace, 'name2', 'type2', 'id2');
-      });
-
-      test('Reference exists no usages', function() {
-        createTwoVarsDifferentTypes(this.workspace);
-        this.workspace.deleteVariableById('id1');
-        this.workspace.deleteVariableById('id2');
-
-        this.workspace.undo();
-        chai.assert.isNull(this.workspace.getVariableById('id1'));
-        assertVariableValues(this.workspace, 'name2', 'type2', 'id2');
-
-        this.workspace.undo(true);
-        // Expect that both variables are deleted
-        chai.assert.isNull(this.workspace.getVariableById('id1'));
-        chai.assert.isNull(this.workspace.getVariableById('id2'));
-
-        this.workspace.undo();
-        this.workspace.undo();
-        assertVariableValues(this.workspace, 'name1', 'type1', 'id1');
-        assertVariableValues(this.workspace, 'name2', 'type2', 'id2');
-
-        this.workspace.undo(true);
-        // Expect that variable 'id2' is recreated
-        chai.assert.isNull(this.workspace.getVariableById('id1'));
-        assertVariableValues(this.workspace, 'name2', 'type2', 'id2');
-      });
-
-      test('Reference exists with usages', function() {
-        createTwoVarsDifferentTypes(this.workspace);
-        // Create blocks to refer to both of them.
-        createVarBlocksNoEvents(this.workspace, ['id1', 'id2']);
-        this.workspace.deleteVariableById('id1');
-        this.workspace.deleteVariableById('id2');
-
-        this.workspace.undo();
-        assertBlockVarModelName(this.workspace, 0, 'name2');
-        chai.assert.isNull(this.workspace.getVariableById('id1'));
-        assertVariableValues(this.workspace, 'name2', 'type2', 'id2');
-
-        this.workspace.undo(true);
-        // Expect that both variables are deleted
-        chai.assert.equal(this.workspace.topBlocks_.length, 0);
-        chai.assert.isNull(this.workspace.getVariableById('id1'));
-        chai.assert.isNull(this.workspace.getVariableById('id2'));
-
-        this.workspace.undo();
-        this.workspace.undo();
-        assertBlockVarModelName(this.workspace, 0, 'name2');
-        assertBlockVarModelName(this.workspace, 1, 'name1');
-        assertVariableValues(this.workspace, 'name1', 'type1', 'id1');
-        assertVariableValues(this.workspace, 'name2', 'type2', 'id2');
-
-        this.workspace.undo(true);
-        // Expect that variable 'id2' is recreated
-        assertBlockVarModelName(this.workspace,0, 'name2');
-        chai.assert.isNull(this.workspace.getVariableById('id1'));
-        assertVariableValues(this.workspace, 'name2', 'type2', 'id2');
-      });
-
-      test('Delete same variable twice no usages', function() {
-        this.workspace.createVariable('name1', 'type1', 'id1');
-        this.workspace.deleteVariableById('id1');
-        var workspace = this.workspace;
-        assertWarnings(() => {
-          workspace.deleteVariableById('id1');
-        }, [/Can't delete non-existent variable/]);
-        // Check the undoStack only recorded one delete event.
-        var undoStack = this.workspace.undoStack_;
-        chai.assert.equal(undoStack[undoStack.length - 1].type, 'var_delete');
-        chai.assert.notEqual(undoStack[undoStack.length - 2].type, 'var_delete');
-
-        // Undo delete
-        this.workspace.undo();
-        assertVariableValues(this.workspace, 'name1', 'type1', 'id1');
-
-        // Redo delete
-        this.workspace.undo(true);
-        chai.assert.isNull(this.workspace.getVariableById('id1'));
-
-        // Redo delete, nothing should happen
-        this.workspace.undo(true);
-        chai.assert.isNull(this.workspace.getVariableById('id1'));
-      });
-
-      test('Delete same variable twice with usages', function() {
-        this.workspace.createVariable('name1', 'type1', 'id1');
-        createVarBlocksNoEvents(this.workspace, ['id1']);
-        this.workspace.deleteVariableById('id1');
-        var workspace = this.workspace;
-        assertWarnings(() => {
-          workspace.deleteVariableById('id1');
-        }, [/Can't delete non-existent variable/]);
-        // Check the undoStack only recorded one delete event.
-        var undoStack = this.workspace.undoStack_;
-        chai.assert.equal(undoStack[undoStack.length - 1].type, 'var_delete');
-        chai.assert.equal(undoStack[undoStack.length - 2].type, 'delete');
-        chai.assert.notEqual(undoStack[undoStack.length - 3].type, 'var_delete');
-
-        // Undo delete
-        this.workspace.undo();
-        assertBlockVarModelName(this.workspace, 0, 'name1');
-        assertVariableValues(this.workspace, 'name1', 'type1', 'id1');
-
-        // Redo delete
-        this.workspace.undo(true);
-        chai.assert.equal(this.workspace.topBlocks_.length, 0);
-        chai.assert.isNull(this.workspace.getVariableById('id1'));
-
-        // Redo delete, nothing should happen
-        this.workspace.undo(true);
-        chai.assert.equal(this.workspace.topBlocks_.length, 0);
-        chai.assert.isNull(this.workspace.getVariableById('id1'));
-      });
-    });
-
-    suite('renameVariableById', function() {
+    suite('Undo Delete', function() {
       setup(function() {
-        this.workspace.createVariable('name1', 'type1', 'id1');
+        Blockly.defineBlocksWithJsonArray([
+          {
+            "type": "stack_block",
+            "message0": "",
+            "previousStatement": null,
+            "nextStatement": null
+          },
+          {
+            "type": "row_block",
+            "message0": "%1",
+            "args0": [
+              {
+                "type": "input_value",
+                "name": "INPUT"
+              }
+            ],
+            "output": null
+          },
+          {
+            "type": "statement_block",
+            "message0": "%1",
+            "args0": [
+              {
+                "type": "input_statement",
+                "name": "STATEMENT"
+              }
+            ],
+            "previousStatement": null,
+            "nextStatement": null
+          }]);
       });
 
-      test('Reference exists no usages rename to name2', function() {
-        this.workspace.renameVariableById('id1', 'name2');
+      teardown(function() {
+        delete Blockly.Blocks['stack_block'];
+        delete Blockly.Blocks['row_block'];
+        delete Blockly.Blocks['statement_block'];
+      });
 
+      /**
+       * Assert that two nodes are equal.
+       * @param {!Element} actual the actual node.
+       * @param {!Element} expected the expected node.
+       */
+      function assertNodesEqual(actual, expected) {
+        var actualId = actual.getAttribute('id');
+        var expectedId = expected.getAttribute('id');
+
+        chai.assert.equal(actual.tagName, expected.tagName);
+        for (var i = 0, attr; (attr = expected.attributes[i]); i++) {
+          chai.assert.equal(actual.getAttribute(attr.name), attr.value,
+              `expected attribute ${attr.name} on ${actualId} to match ` +
+              `${expectedId}`);
+        }
+        chai.assert.equal(actual.childElementCount, expected.childElementCount,
+            `expected block ${actualId} to have the same children as  block ` +
+            `${expectedId}`);
+        for (var i = 0; i < expected.childElementCount; i++) {
+          assertNodesEqual(actual.children[i], expected.children[i]);
+        }
+      }
+
+      function testUndoDelete(xmlText) {
+        var xml = Blockly.Xml.textToDom(xmlText);
+        Blockly.Xml.domToBlock(xml, this.workspace);
+        this.workspace.getTopBlocks()[0].dispose(false);
         this.workspace.undo();
-        assertVariableValues(this.workspace, 'name1', 'type1', 'id1');
+        var newXml = Blockly.Xml.workspaceToDom(this.workspace);
+        assertNodesEqual(newXml.firstChild, xml);
+      }
 
-        this.workspace.undo(true);
-        assertVariableValues(this.workspace, 'name2', 'type1', 'id1');
-
+      test('Stack', function() {
+        testUndoDelete.call(this, '<block type="stack_block" id="1"/>');
       });
 
-      test('Reference exists with usages rename to name2', function() {
-        createVarBlocksNoEvents(this.workspace, ['id1']);
-        this.workspace.renameVariableById('id1', 'name2');
-
-        this.workspace.undo();
-        assertBlockVarModelName(this.workspace, 0, 'name1');
-        assertVariableValues(this.workspace, 'name1', 'type1', 'id1');
-
-        this.workspace.undo(true);
-        assertBlockVarModelName(this.workspace, 0, 'name2');
-        assertVariableValues(this.workspace, 'name2', 'type1', 'id1');
+      test('Row', function() {
+        testUndoDelete.call(this, '<block type="row_block" id="1"/>');
       });
 
-      test('Reference exists different capitalization no usages rename to Name1', function() {
-        this.workspace.renameVariableById('id1', 'Name1');
-
-        this.workspace.undo();
-        assertVariableValues(this.workspace, 'name1', 'type1', 'id1');
-
-        this.workspace.undo(true);
-        assertVariableValues(this.workspace, 'Name1', 'type1', 'id1');
+      test('Statement', function() {
+        testUndoDelete.call(this, '<block type="statement_block" id="1"/>');
       });
 
-      test('Reference exists different capitalization with usages rename to Name1', function() {
-        createVarBlocksNoEvents(this.workspace, ['id1']);
-        this.workspace.renameVariableById('id1', 'Name1');
-
-        this.workspace.undo();
-        assertBlockVarModelName(this.workspace, 0, 'name1');
-        assertVariableValues(this.workspace, 'name1', 'type1', 'id1');
-
-        this.workspace.undo(true);
-        assertBlockVarModelName(this.workspace, 0, 'Name1');
-        assertVariableValues(this.workspace, 'Name1', 'type1', 'id1');
+      test('Stack w/ child', function() {
+        testUndoDelete.call(this,
+            '<block type="stack_block" id="1">' +
+            '  <next>' +
+            '    <block type="stack_block" id="2"></block>' +
+            '  </next>' +
+            '</block>'
+        );
       });
 
-      suite('Two variables rename overlap', function() {
-        test('Same type no usages rename variable with id1 to name2', function() {
-          this.workspace.createVariable('name2', 'type1', 'id2');
-          this.workspace.renameVariableById('id1', 'name2');
+      test('Row w/ child', function() {
+        testUndoDelete.call(this,
+            '<block type="row_block" id="1">' +
+            '  <value name="INPUT">' +
+            '    <block type="row_block" id="2"></block>' +
+            '  </value>' +
+            '</block>'
+        );
+      });
+
+      test('Statement w/ child', function() {
+        testUndoDelete.call(this,
+            '<block type="statement_block" id="1">' +
+            '  <statement name="STATEMENT">' +
+            '    <block type="stack_block" id="2"></block>' +
+            '  </statement>' +
+            '</block>'
+        );
+      });
+
+      test('Stack w/ shadow', function() {
+        testUndoDelete.call(this,
+            '<block type="stack_block" id="1">' +
+            '  <next>' +
+            '    <shadow type="stack_block" id="2"></shadow>' +
+            '  </next>' +
+            '</block>'
+        );
+      });
+
+      test('Row w/ shadow', function() {
+        testUndoDelete.call(this,
+            '<block type="row_block" id="1">' +
+            '  <value name="INPUT">' +
+            '    <shadow type="row_block" id="2"></shadow>' +
+            '  </value>' +
+            '</block>'
+        );
+      });
+
+      test('Statement w/ shadow', function() {
+        testUndoDelete.call(this,
+            '<block type="statement_block" id="1">' +
+            '  <statement name="STATEMENT">' +
+            '    <shadow type="stack_block" id="2"></shadow>' +
+            '  </statement>' +
+            '</block>'
+        );
+      });
+    });
+
+    suite('Variables', function() {
+      function createTwoVarsDifferentTypes(workspace) {
+        workspace.createVariable('name1', 'type1', 'id1');
+        workspace.createVariable('name2', 'type2', 'id2');
+      }
+
+      suite('createVariable', function() {
+        test('Undo only', function() {
+          createTwoVarsDifferentTypes(this.workspace);
 
           this.workspace.undo();
           assertVariableValues(this.workspace, 'name1', 'type1', 'id1');
-          assertVariableValues(this.workspace, 'name2', 'type1', 'id2');
+          chai.assert.isNull(this.workspace.getVariableById('id2'));
 
-          this.workspace.undo(true);
-          assertVariableValues(this.workspace, 'name2', 'type1', 'id2');
+          this.workspace.undo();
           chai.assert.isNull(this.workspace.getVariableById('id1'));
+          chai.assert.isNull(this.workspace.getVariableById('id2'));
         });
 
-        test('Same type with usages rename variable with id1 to name2', function() {
-          this.workspace.createVariable('name2', 'type1', 'id2');
-          createVarBlocksNoEvents(this.workspace, ['id1', 'id2']);
-          this.workspace.renameVariableById('id1', 'name2');
+        test('Undo and redo', function() {
+          createTwoVarsDifferentTypes(this.workspace);
 
           this.workspace.undo();
-          assertBlockVarModelName(this.workspace, 0, 'name1');
-          assertBlockVarModelName(this.workspace, 1, 'name2');
           assertVariableValues(this.workspace, 'name1', 'type1', 'id1');
-          assertVariableValues(this.workspace, 'name2', 'type1', 'id2');
+          chai.assert.isNull(this.workspace.getVariableById('id2'));
 
           this.workspace.undo(true);
-          assertVariableValues(this.workspace, 'name2', 'type1', 'id2');
+
+          // Expect that variable 'id2' is recreated
+          assertVariableValues(this.workspace, 'name1', 'type1', 'id1');
+          assertVariableValues(this.workspace, 'name2', 'type2', 'id2');
+
+          this.workspace.undo();
+          this.workspace.undo();
           chai.assert.isNull(this.workspace.getVariableById('id1'));
-        });
+          chai.assert.isNull(this.workspace.getVariableById('id2'));
+          this.workspace.undo(true);
 
-        test('Same type different capitalization no usages rename variable with id1 to Name2', function() {
-          this.workspace.createVariable('name2', 'type1', 'id2');
-          this.workspace.renameVariableById('id1', 'Name2');
+          // Expect that variable 'id1' is recreated
+          assertVariableValues(this.workspace, 'name1', 'type1', 'id1');
+          chai.assert.isNull(this.workspace.getVariableById('id2'));
+        });
+      });
+
+      suite('deleteVariableById', function() {
+        test('Undo only no usages', function() {
+          createTwoVarsDifferentTypes(this.workspace);
+          this.workspace.deleteVariableById('id1');
+          this.workspace.deleteVariableById('id2');
 
           this.workspace.undo();
-          assertVariableValues(this.workspace, 'name1', 'type1', 'id1');
-          assertVariableValues(this.workspace, 'name2', 'type1', 'id2');
-
-          this.workspace.undo(true);
-          assertVariableValues(this.workspace, 'Name2', 'type1', 'id2');
-          chai.assert.isNull(this.workspace.getVariable('name1'));
-        });
-
-        test('Same type different capitalization with usages rename variable with id1 to Name2', function() {
-          this.workspace.createVariable('name2', 'type1', 'id2');
-          createVarBlocksNoEvents(this.workspace, ['id1', 'id2']);
-          this.workspace.renameVariableById('id1', 'Name2');
-
-          this.workspace.undo();
-          assertBlockVarModelName(this.workspace, 0, 'name1');
-          assertBlockVarModelName(this.workspace, 1, 'name2');
-          assertVariableValues(this.workspace, 'name1', 'type1', 'id1');
-          assertVariableValues(this.workspace, 'name2', 'type1', 'id2');
-
-          this.workspace.undo(true);
-          assertVariableValues(this.workspace, 'Name2', 'type1', 'id2');
           chai.assert.isNull(this.workspace.getVariableById('id1'));
-          assertBlockVarModelName(this.workspace, 0, 'Name2');
-          assertBlockVarModelName(this.workspace, 1, 'Name2');
-        });
-
-        test('Different type no usages rename variable with id1 to name2', function() {
-          this.workspace.createVariable('name2', 'type2', 'id2');
-          this.workspace.renameVariableById('id1', 'name2');
+          assertVariableValues(this.workspace, 'name2', 'type2', 'id2');
 
           this.workspace.undo();
           assertVariableValues(this.workspace, 'name1', 'type1', 'id1');
           assertVariableValues(this.workspace, 'name2', 'type2', 'id2');
-
-          this.workspace.undo(true);
-          assertVariableValues(this.workspace, 'name2', 'type1', 'id1');
-          assertVariableValues(this.workspace, 'name2', 'type2', 'id2');
         });
 
-        test('Different type with usages rename variable with id1 to name2', function() {
-          this.workspace.createVariable('name2', 'type2', 'id2');
+        test('Undo only with usages', function() {
+          createTwoVarsDifferentTypes(this.workspace);
+          // Create blocks to refer to both of them.
           createVarBlocksNoEvents(this.workspace, ['id1', 'id2']);
-          this.workspace.renameVariableById('id1', 'name2');
+          this.workspace.deleteVariableById('id1');
+          this.workspace.deleteVariableById('id2');
 
           this.workspace.undo();
-          assertVariableValues(this.workspace, 'name1', 'type1', 'id1');
-          assertVariableValues(this.workspace, 'name2', 'type2', 'id2');
-          assertBlockVarModelName(this.workspace, 0, 'name1');
-          assertBlockVarModelName(this.workspace, 1, 'name2');
-
-          this.workspace.undo(true);
-          assertVariableValues(this.workspace, 'name2', 'type1', 'id1');
-          assertVariableValues(this.workspace, 'name2', 'type2', 'id2');
           assertBlockVarModelName(this.workspace, 0, 'name2');
-          assertBlockVarModelName(this.workspace, 1, 'name2');
+          chai.assert.isNull(this.workspace.getVariableById('id1'));
+          assertVariableValues(this.workspace, 'name2', 'type2', 'id2');
+
+          this.workspace.undo();
+          assertBlockVarModelName(this.workspace, 0, 'name2');
+          assertBlockVarModelName(this.workspace, 1, 'name1');
+          assertVariableValues(this.workspace, 'name1', 'type1', 'id1');
+          assertVariableValues(this.workspace, 'name2', 'type2', 'id2');
         });
 
-        test('Different type different capitalization no usages rename variable with id1 to Name2', function() {
-          this.workspace.createVariable('name2', 'type2', 'id2');
-          this.workspace.renameVariableById('id1', 'Name2');
+        test('Reference exists no usages', function() {
+          createTwoVarsDifferentTypes(this.workspace);
+          this.workspace.deleteVariableById('id1');
+          this.workspace.deleteVariableById('id2');
 
+          this.workspace.undo();
+          chai.assert.isNull(this.workspace.getVariableById('id1'));
+          assertVariableValues(this.workspace, 'name2', 'type2', 'id2');
+
+          this.workspace.undo(true);
+          // Expect that both variables are deleted
+          chai.assert.isNull(this.workspace.getVariableById('id1'));
+          chai.assert.isNull(this.workspace.getVariableById('id2'));
+
+          this.workspace.undo();
           this.workspace.undo();
           assertVariableValues(this.workspace, 'name1', 'type1', 'id1');
           assertVariableValues(this.workspace, 'name2', 'type2', 'id2');
 
           this.workspace.undo(true);
-          assertVariableValues(this.workspace, 'Name2', 'type1', 'id1');
+          // Expect that variable 'id2' is recreated
+          chai.assert.isNull(this.workspace.getVariableById('id1'));
           assertVariableValues(this.workspace, 'name2', 'type2', 'id2');
         });
 
-        test('Different type different capitalization with usages rename variable with id1 to Name2', function() {
-          this.workspace.createVariable('name2', 'type2', 'id2');
+        test('Reference exists with usages', function() {
+          createTwoVarsDifferentTypes(this.workspace);
+          // Create blocks to refer to both of them.
           createVarBlocksNoEvents(this.workspace, ['id1', 'id2']);
-          this.workspace.renameVariableById('id1', 'Name2');
+          this.workspace.deleteVariableById('id1');
+          this.workspace.deleteVariableById('id2');
+
+          this.workspace.undo();
+          assertBlockVarModelName(this.workspace, 0, 'name2');
+          chai.assert.isNull(this.workspace.getVariableById('id1'));
+          assertVariableValues(this.workspace, 'name2', 'type2', 'id2');
+
+          this.workspace.undo(true);
+          // Expect that both variables are deleted
+          chai.assert.equal(this.workspace.topBlocks_.length, 0);
+          chai.assert.isNull(this.workspace.getVariableById('id1'));
+          chai.assert.isNull(this.workspace.getVariableById('id2'));
+
+          this.workspace.undo();
+          this.workspace.undo();
+          assertBlockVarModelName(this.workspace, 0, 'name2');
+          assertBlockVarModelName(this.workspace, 1, 'name1');
+          assertVariableValues(this.workspace, 'name1', 'type1', 'id1');
+          assertVariableValues(this.workspace, 'name2', 'type2', 'id2');
+
+          this.workspace.undo(true);
+          // Expect that variable 'id2' is recreated
+          assertBlockVarModelName(this.workspace,0, 'name2');
+          chai.assert.isNull(this.workspace.getVariableById('id1'));
+          assertVariableValues(this.workspace, 'name2', 'type2', 'id2');
+        });
+
+        test('Delete same variable twice no usages', function() {
+          this.workspace.createVariable('name1', 'type1', 'id1');
+          this.workspace.deleteVariableById('id1');
+          var workspace = this.workspace;
+          var warnings = captureWarnings(function() {
+            workspace.deleteVariableById('id1');
+          });
+          chai.assert.equal(warnings.length, 1,
+              'Expected 1 warning for second deleteVariableById call.');
+
+          // Check the undoStack only recorded one delete event.
+          var undoStack = this.workspace.undoStack_;
+          chai.assert.equal(undoStack[undoStack.length - 1].type, 'var_delete');
+          chai.assert.notEqual(undoStack[undoStack.length - 2].type, 'var_delete');
+
+          // Undo delete
+          this.workspace.undo();
+          assertVariableValues(this.workspace, 'name1', 'type1', 'id1');
+
+          // Redo delete
+          this.workspace.undo(true);
+          chai.assert.isNull(this.workspace.getVariableById('id1'));
+
+          // Redo delete, nothing should happen
+          this.workspace.undo(true);
+          chai.assert.isNull(this.workspace.getVariableById('id1'));
+        });
+
+        test('Delete same variable twice with usages', function() {
+          this.workspace.createVariable('name1', 'type1', 'id1');
+          createVarBlocksNoEvents(this.workspace, ['id1']);
+          this.workspace.deleteVariableById('id1');
+          var workspace = this.workspace;
+          var warnings = captureWarnings(function() {
+            workspace.deleteVariableById('id1');
+          });
+          chai.assert.equal(warnings.length, 1,
+              'Expected 1 warning for second deleteVariableById call.');
+
+          // Check the undoStack only recorded one delete event.
+          var undoStack = this.workspace.undoStack_;
+          chai.assert.equal(undoStack[undoStack.length - 1].type, 'var_delete');
+          chai.assert.equal(undoStack[undoStack.length - 2].type, 'delete');
+          chai.assert.notEqual(undoStack[undoStack.length - 3].type, 'var_delete');
+
+          // Undo delete
+          this.workspace.undo();
+          assertBlockVarModelName(this.workspace, 0, 'name1');
+          assertVariableValues(this.workspace, 'name1', 'type1', 'id1');
+
+          // Redo delete
+          this.workspace.undo(true);
+          chai.assert.equal(this.workspace.topBlocks_.length, 0);
+          chai.assert.isNull(this.workspace.getVariableById('id1'));
+
+          // Redo delete, nothing should happen
+          this.workspace.undo(true);
+          chai.assert.equal(this.workspace.topBlocks_.length, 0);
+          chai.assert.isNull(this.workspace.getVariableById('id1'));
+        });
+      });
+
+      suite('renameVariableById', function() {
+        setup(function() {
+          this.workspace.createVariable('name1', 'type1', 'id1');
+        });
+
+        test('Reference exists no usages rename to name2', function() {
+          this.workspace.renameVariableById('id1', 'name2');
 
           this.workspace.undo();
           assertVariableValues(this.workspace, 'name1', 'type1', 'id1');
-          assertVariableValues(this.workspace, 'name2', 'type2', 'id2');
-          assertBlockVarModelName(this.workspace, 0, 'name1');
-          assertBlockVarModelName(this.workspace, 1, 'name2');
 
           this.workspace.undo(true);
-          assertVariableValues(this.workspace, 'Name2', 'type1', 'id1');
-          assertVariableValues(this.workspace, 'name2', 'type2', 'id2');
-          assertBlockVarModelName(this.workspace, 0, 'Name2');
-          assertBlockVarModelName(this.workspace, 1, 'name2');
+          assertVariableValues(this.workspace, 'name2', 'type1', 'id1');
+
+        });
+
+        test('Reference exists with usages rename to name2', function() {
+          createVarBlocksNoEvents(this.workspace, ['id1']);
+          this.workspace.renameVariableById('id1', 'name2');
+
+          this.workspace.undo();
+          assertBlockVarModelName(this.workspace, 0, 'name1');
+          assertVariableValues(this.workspace, 'name1', 'type1', 'id1');
+
+          this.workspace.undo(true);
+          assertBlockVarModelName(this.workspace, 0, 'name2');
+          assertVariableValues(this.workspace, 'name2', 'type1', 'id1');
+        });
+
+        test('Reference exists different capitalization no usages rename to Name1', function() {
+          this.workspace.renameVariableById('id1', 'Name1');
+
+          this.workspace.undo();
+          assertVariableValues(this.workspace, 'name1', 'type1', 'id1');
+
+          this.workspace.undo(true);
+          assertVariableValues(this.workspace, 'Name1', 'type1', 'id1');
+        });
+
+        test('Reference exists different capitalization with usages rename to Name1', function() {
+          createVarBlocksNoEvents(this.workspace, ['id1']);
+          this.workspace.renameVariableById('id1', 'Name1');
+
+          this.workspace.undo();
+          assertBlockVarModelName(this.workspace, 0, 'name1');
+          assertVariableValues(this.workspace, 'name1', 'type1', 'id1');
+
+          this.workspace.undo(true);
+          assertBlockVarModelName(this.workspace, 0, 'Name1');
+          assertVariableValues(this.workspace, 'Name1', 'type1', 'id1');
+        });
+
+        suite('Two variables rename overlap', function() {
+          test('Same type no usages rename variable with id1 to name2', function() {
+            this.workspace.createVariable('name2', 'type1', 'id2');
+            this.workspace.renameVariableById('id1', 'name2');
+
+            this.workspace.undo();
+            assertVariableValues(this.workspace, 'name1', 'type1', 'id1');
+            assertVariableValues(this.workspace, 'name2', 'type1', 'id2');
+
+            this.workspace.undo(true);
+            assertVariableValues(this.workspace, 'name2', 'type1', 'id2');
+            chai.assert.isNull(this.workspace.getVariableById('id1'));
+          });
+
+          test('Same type with usages rename variable with id1 to name2', function() {
+            this.workspace.createVariable('name2', 'type1', 'id2');
+            createVarBlocksNoEvents(this.workspace, ['id1', 'id2']);
+            this.workspace.renameVariableById('id1', 'name2');
+
+            this.workspace.undo();
+            assertBlockVarModelName(this.workspace, 0, 'name1');
+            assertBlockVarModelName(this.workspace, 1, 'name2');
+            assertVariableValues(this.workspace, 'name1', 'type1', 'id1');
+            assertVariableValues(this.workspace, 'name2', 'type1', 'id2');
+
+            this.workspace.undo(true);
+            assertVariableValues(this.workspace, 'name2', 'type1', 'id2');
+            chai.assert.isNull(this.workspace.getVariableById('id1'));
+          });
+
+          test('Same type different capitalization no usages rename variable with id1 to Name2', function() {
+            this.workspace.createVariable('name2', 'type1', 'id2');
+            this.workspace.renameVariableById('id1', 'Name2');
+
+            this.workspace.undo();
+            assertVariableValues(this.workspace, 'name1', 'type1', 'id1');
+            assertVariableValues(this.workspace, 'name2', 'type1', 'id2');
+
+            this.workspace.undo(true);
+            assertVariableValues(this.workspace, 'Name2', 'type1', 'id2');
+            chai.assert.isNull(this.workspace.getVariable('name1'));
+          });
+
+          test('Same type different capitalization with usages rename variable with id1 to Name2', function() {
+            this.workspace.createVariable('name2', 'type1', 'id2');
+            createVarBlocksNoEvents(this.workspace, ['id1', 'id2']);
+            this.workspace.renameVariableById('id1', 'Name2');
+
+            this.workspace.undo();
+            assertBlockVarModelName(this.workspace, 0, 'name1');
+            assertBlockVarModelName(this.workspace, 1, 'name2');
+            assertVariableValues(this.workspace, 'name1', 'type1', 'id1');
+            assertVariableValues(this.workspace, 'name2', 'type1', 'id2');
+
+            this.workspace.undo(true);
+            assertVariableValues(this.workspace, 'Name2', 'type1', 'id2');
+            chai.assert.isNull(this.workspace.getVariableById('id1'));
+            assertBlockVarModelName(this.workspace, 0, 'Name2');
+            assertBlockVarModelName(this.workspace, 1, 'Name2');
+          });
+
+          test('Different type no usages rename variable with id1 to name2', function() {
+            this.workspace.createVariable('name2', 'type2', 'id2');
+            this.workspace.renameVariableById('id1', 'name2');
+
+            this.workspace.undo();
+            assertVariableValues(this.workspace, 'name1', 'type1', 'id1');
+            assertVariableValues(this.workspace, 'name2', 'type2', 'id2');
+
+            this.workspace.undo(true);
+            assertVariableValues(this.workspace, 'name2', 'type1', 'id1');
+            assertVariableValues(this.workspace, 'name2', 'type2', 'id2');
+          });
+
+          test('Different type with usages rename variable with id1 to name2', function() {
+            this.workspace.createVariable('name2', 'type2', 'id2');
+            createVarBlocksNoEvents(this.workspace, ['id1', 'id2']);
+            this.workspace.renameVariableById('id1', 'name2');
+
+            this.workspace.undo();
+            assertVariableValues(this.workspace, 'name1', 'type1', 'id1');
+            assertVariableValues(this.workspace, 'name2', 'type2', 'id2');
+            assertBlockVarModelName(this.workspace, 0, 'name1');
+            assertBlockVarModelName(this.workspace, 1, 'name2');
+
+            this.workspace.undo(true);
+            assertVariableValues(this.workspace, 'name2', 'type1', 'id1');
+            assertVariableValues(this.workspace, 'name2', 'type2', 'id2');
+            assertBlockVarModelName(this.workspace, 0, 'name2');
+            assertBlockVarModelName(this.workspace, 1, 'name2');
+          });
+
+          test('Different type different capitalization no usages rename variable with id1 to Name2', function() {
+            this.workspace.createVariable('name2', 'type2', 'id2');
+            this.workspace.renameVariableById('id1', 'Name2');
+
+            this.workspace.undo();
+            assertVariableValues(this.workspace, 'name1', 'type1', 'id1');
+            assertVariableValues(this.workspace, 'name2', 'type2', 'id2');
+
+            this.workspace.undo(true);
+            assertVariableValues(this.workspace, 'Name2', 'type1', 'id1');
+            assertVariableValues(this.workspace, 'name2', 'type2', 'id2');
+          });
+
+          test('Different type different capitalization with usages rename variable with id1 to Name2', function() {
+            this.workspace.createVariable('name2', 'type2', 'id2');
+            createVarBlocksNoEvents(this.workspace, ['id1', 'id2']);
+            this.workspace.renameVariableById('id1', 'Name2');
+
+            this.workspace.undo();
+            assertVariableValues(this.workspace, 'name1', 'type1', 'id1');
+            assertVariableValues(this.workspace, 'name2', 'type2', 'id2');
+            assertBlockVarModelName(this.workspace, 0, 'name1');
+            assertBlockVarModelName(this.workspace, 1, 'name2');
+
+            this.workspace.undo(true);
+            assertVariableValues(this.workspace, 'Name2', 'type1', 'id1');
+            assertVariableValues(this.workspace, 'name2', 'type2', 'id2');
+            assertBlockVarModelName(this.workspace, 0, 'Name2');
+            assertBlockVarModelName(this.workspace, 1, 'name2');
+          });
         });
       });
     });

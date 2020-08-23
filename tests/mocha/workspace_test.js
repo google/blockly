@@ -976,6 +976,195 @@ function testAWorkspace() {
       });
     });
 
+    suite('Undo Disconnect', function() {
+
+      setup(function() {
+        Blockly.defineBlocksWithJsonArray([
+          {
+            "type": "stack_block",
+            "message0": "",
+            "previousStatement": null,
+            "nextStatement": null
+          },
+          {
+            "type": "row_block",
+            "message0": "%1",
+            "args0": [
+              {
+                "type": "input_value",
+                "name": "INPUT"
+              }
+            ],
+            "output": null
+          },
+          {
+            "type": "statement_block",
+            "message0": "%1",
+            "args0": [
+              {
+                "type": "input_statement",
+                "name": "STATEMENT"
+              }
+            ],
+            "previousStatement": null,
+            "nextStatement": null
+          }]);
+      });
+
+      teardown(function() {
+        delete Blockly.Blocks['stack_block'];
+        delete Blockly.Blocks['row_block'];
+        delete Blockly.Blocks['statement_block'];
+      });
+
+      function testUndoDisconnect(xmlText, childId) {
+        var xml = Blockly.Xml.textToDom(xmlText);
+        Blockly.Xml.domToWorkspace(xml, this.workspace);
+
+        var child = this.workspace.getBlockById(childId);
+        if (child.outputConnection) {
+          child.outputConnection.disconnect();
+        } else {
+          child.previousConnection.disconnect();
+        }
+        this.workspace.undo();
+
+        var newXml = Blockly.Xml.workspaceToDom(this.workspace);
+        assertNodesEqual(newXml, xml);
+      }
+
+      test('Stack', function() {
+        var xml =
+            '<xml>' +
+            '  <block type="stack_block" id="1">' +
+            '    <next>' +
+            '      <block type="stack_block" id="2"></block>' +
+            '    </next>' +
+            '  </block>' +
+            '</xml>';
+        testUndoDisconnect.call(this, xml, 2);
+      });
+
+      test('Row', function() {
+        var xml =
+            '<xml>' +
+            '  <block type="row_block" id="1">' +
+            '    <value name="INPUT">' +
+            '      <block type="row_block" id="2"></block>' +
+            '    </value>' +
+            '  </block>' +
+            '</xml>';
+        testUndoDisconnect.call(this, xml, 2);
+      });
+
+      test('Statement', function() {
+        var xml =
+            '<xml>' +
+            '  <block type="statement_block" id="1">' +
+            '    <statement name="STATEMENT">' +
+            '      <block type="stack_block" id="2"></block>' +
+            '    </statement>' +
+            '  </block>' +
+            '</xml>';
+        testUndoDisconnect.call(this, xml, 2);
+      });
+
+      test('Stack w/ child', function() {
+        var xml =
+            '<xml>' +
+            '  <block type="stack_block" id="1">' +
+            '    <next>' +
+            '      <block type="stack_block" id="2">' +
+            '        <next>' +
+            '          <block type="stack_block" id="3"></block>' +
+            '        </next>' +
+            '      </block>' +
+            '    </next>' +
+            '  </block>' +
+            '</xml>';
+        testUndoDisconnect.call(this, xml, 2);
+      });
+
+      test('Row w/ child', function() {
+        var xml =
+            '<xml>' +
+            '  <block type="row_block" id="1">' +
+            '    <value name="INPUT">' +
+            '      <block type="row_block" id="2">' +
+            '        <value name="INPUT">' +
+            '          <block type="row_block" id="3"></block>' +
+            '        </value>' +
+            '      </block>' +
+            '    </value>' +
+            '  </block>' +
+            '</xml>';
+        testUndoDisconnect.call(this, xml, 2);
+      });
+
+      test('Statement w/ child', function() {
+        var xml =
+            '<xml>' +
+            '  <block type="statement_block" id="1">' +
+            '    <statement name="STATEMENT">' +
+            '      <block type="statement_block" id="2">' +
+            '        <statement name="STATEMENT">' +
+            '          <block type="stack_block" id="3"></block>' +
+            '        </statement>' +
+            '      </block>' +
+            '    </statement>' +
+            '  </block>' +
+            '</xml>';
+        testUndoDisconnect.call(this, xml, 2);
+      });
+
+      test('Stack w/ shadow', function() {
+        // TODO: For some reason on next connections shadows are
+        //   serialized second.
+        var xml =
+            '<xml>' +
+            '  <block type="stack_block" id="1">' +
+            '    <next>' +
+            '      <block type="stack_block" id="2"></block>' +
+            '      <shadow type="stack_block" id="3"></shadow>' +
+            '    </next>' +
+            '  </block>' +
+            '</xml>';
+        testUndoDisconnect.call(this, xml, 2);
+        chai.assert.equal(this.workspace.getAllBlocks().length, 2,
+            'expected there to only be 2 blocks on the workspace ' +
+            '(check for shadows)');
+      });
+
+      test('Row w/ shadow', function() {
+        var xml =
+            '<xml>' +
+            '  <block type="row_block" id="1">' +
+            '    <value name="INPUT">' +
+            '      <shadow type="row_block" id="3"></shadow>' +
+            '      <block type="row_block" id="2"></block>' +
+            '    </value>' +
+            '  </block>' +
+            '</xml>';
+        testUndoDisconnect.call(this, xml, 2);
+        chai.assert.equal(this.workspace.getAllBlocks().length, 2,
+            'expected there to only be 2 blocks on the workspace ' +
+            '(check for shadows)');
+      });
+
+      test('Statement w/ shadow', function() {
+        var xml =
+            '<xml>' +
+            '  <block type="statement_block" id="1">' +
+            '    <statement name="STATEMENT">' +
+            '      <shadow type="stack_block" id="3"></shadow>' +
+            '      <block type="stack_block" id="2"></block>' +
+            '    </statement>' +
+            '  </block>' +
+            '</xml>';
+        testUndoDisconnect.call(this, xml, 2);
+      });
+    });
+
     suite('Variables', function() {
       function createTwoVarsDifferentTypes(workspace) {
         workspace.createVariable('name1', 'type1', 'id1');

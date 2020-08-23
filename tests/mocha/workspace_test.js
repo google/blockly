@@ -641,6 +641,29 @@ function testAWorkspace() {
 
   suite('Undo/Redo', function() {
 
+    /**
+     * Assert that two nodes are equal.
+     * @param {!Element} actual the actual node.
+     * @param {!Element} expected the expected node.
+     */
+    function assertNodesEqual(actual, expected) {
+      var actualString = '\n' + Blockly.Xml.domToPrettyText(actual) + '\n';
+      var expectedString = '\n' + Blockly.Xml.domToPrettyText(expected) + '\n';
+
+      chai.assert.equal(actual.tagName, expected.tagName);
+      for (var i = 0, attr; (attr = expected.attributes[i]); i++) {
+        chai.assert.equal(actual.getAttribute(attr.name), attr.value,
+            `expected attribute ${attr.name} on ${actualString} to match ` +
+            `${expectedString}`);
+      }
+      chai.assert.equal(actual.childElementCount, expected.childElementCount,
+          `expected node ${actualString} to have the same children as node ` +
+          `${expectedString}`);
+      for (var i = 0; i < expected.childElementCount; i++) {
+        assertNodesEqual(actual.children[i], expected.children[i]);
+      }
+    }
+
     suite('Undo Delete', function() {
       setup(function() {
         Blockly.defineBlocksWithJsonArray([
@@ -680,29 +703,6 @@ function testAWorkspace() {
         delete Blockly.Blocks['row_block'];
         delete Blockly.Blocks['statement_block'];
       });
-
-      /**
-       * Assert that two nodes are equal.
-       * @param {!Element} actual the actual node.
-       * @param {!Element} expected the expected node.
-       */
-      function assertNodesEqual(actual, expected) {
-        var actualId = actual.getAttribute('id');
-        var expectedId = expected.getAttribute('id');
-
-        chai.assert.equal(actual.tagName, expected.tagName);
-        for (var i = 0, attr; (attr = expected.attributes[i]); i++) {
-          chai.assert.equal(actual.getAttribute(attr.name), attr.value,
-              `expected attribute ${attr.name} on ${actualId} to match ` +
-              `${expectedId}`);
-        }
-        chai.assert.equal(actual.childElementCount, expected.childElementCount,
-            `expected block ${actualId} to have the same children as  block ` +
-            `${expectedId}`);
-        for (var i = 0; i < expected.childElementCount; i++) {
-          assertNodesEqual(actual.children[i], expected.children[i]);
-        }
-      }
 
       function testUndoDelete(xmlText) {
         var xml = Blockly.Xml.textToDom(xmlText);
@@ -783,6 +783,196 @@ function testAWorkspace() {
             '  </statement>' +
             '</block>'
         );
+      });
+    });
+
+    suite('Undo Connect', function() {
+
+      setup(function() {
+        Blockly.defineBlocksWithJsonArray([
+          {
+            "type": "stack_block",
+            "message0": "",
+            "previousStatement": null,
+            "nextStatement": null
+          },
+          {
+            "type": "row_block",
+            "message0": "%1",
+            "args0": [
+              {
+                "type": "input_value",
+                "name": "INPUT"
+              }
+            ],
+            "output": null
+          },
+          {
+            "type": "statement_block",
+            "message0": "%1",
+            "args0": [
+              {
+                "type": "input_statement",
+                "name": "STATEMENT"
+              }
+            ],
+            "previousStatement": null,
+            "nextStatement": null
+          }]);
+      });
+
+      teardown(function() {
+        delete Blockly.Blocks['stack_block'];
+        delete Blockly.Blocks['row_block'];
+        delete Blockly.Blocks['statement_block'];
+      });
+
+      function testUndoConnect(xmlText, parentId, childId, func) {
+        var xml = Blockly.Xml.textToDom(xmlText);
+        Blockly.Xml.domToWorkspace(xml, this.workspace);
+
+        var parent = this.workspace.getBlockById(parentId);
+        var child = this.workspace.getBlockById(childId);
+        func.call(this, parent, child);
+        this.workspace.undo();
+
+        var newXml = Blockly.Xml.workspaceToDom(this.workspace);
+        assertNodesEqual(newXml, xml);
+      }
+
+      test('Stack', function() {
+        var xml =
+            '<xml>' +
+            '  <block type="stack_block" id="1"></block>' +
+            '  <block type="stack_block" id="2"></block>' +
+            '</xml>';
+
+        testUndoConnect.call(this, xml, 1, 2, (parent, child) => {
+          parent.nextConnection.connect(child.previousConnection);
+        });
+      });
+
+      test('Row', function() {
+        var xml =
+            '<xml>' +
+            '  <block type="row_block" id="1"></block>' +
+            '  <block type="row_block" id="2"></block>' +
+            '</xml>';
+
+        testUndoConnect.call(this, xml, 1, 2, (parent, child) => {
+          parent.getInput('INPUT').connection.connect(child.outputConnection);
+        });
+      });
+
+      test('Statement', function() {
+        var xml =
+            '<xml>' +
+            '  <block type="statement_block" id="1"></block>' +
+            '  <block type="stack_block" id="2"></block>' +
+            '</xml>';
+
+        testUndoConnect.call(this, xml, 1, 2, (parent, child) => {
+          parent.getInput('STATEMENT').connection
+              .connect(child.previousConnection);
+        });
+      });
+
+      test('Stack w/ child', function() {
+        var xml =
+            '<xml>' +
+            '  <block type="stack_block" id="1">' +
+            '    <next>' +
+            '      <block type="stack_block" id="3"></block>' +
+            '    </next>' +
+            '  </block>' +
+            '  <block type="stack_block" id="2"></block>' +
+            '</xml>';
+
+        testUndoConnect.call(this, xml, 1, 2, (parent, child) => {
+          parent.nextConnection.connect(child.previousConnection);
+        });
+      });
+
+      test('Row w/ child', function() {
+        var xml =
+            '<xml>' +
+            '  <block type="row_block" id="1">' +
+            '    <value name="INPUT">' +
+            '      <block type="row_block" id="3"></block>' +
+            '    </value>' +
+            '  </block>' +
+            '  <block type="row_block" id="2"></block>' +
+            '</xml>';
+
+        testUndoConnect.call(this, xml, 1, 2, (parent, child) => {
+          parent.getInput('INPUT').connection.connect(child.outputConnection);
+        });
+      });
+
+      test('Statement w/ child', function() {
+        var xml =
+            '<xml>' +
+            '  <block type="statement_block" id="1">' +
+            '    <statement name="STATEMENT">' +
+            '      <block type="stack_block" id="3"></block>' +
+            '    </statement>' +
+            '  </block>' +
+            '  <block type="stack_block" id="2"></block>' +
+            '</xml>';
+
+        testUndoConnect.call(this, xml, 1, 2, (parent, child) => {
+          parent.getInput('STATEMENT').connection
+              .connect(child.previousConnection);
+        });
+      });
+
+      test('Stack w/ shadow', function() {
+        var xml =
+            '<xml>' +
+            '  <block type="stack_block" id="1">' +
+            '    <next>' +
+            '      <shadow type="stack_block" id="3"></shadow>' +
+            '    </next>' +
+            '  </block>' +
+            '  <block type="stack_block" id="2"></block>' +
+            '</xml>';
+
+        testUndoConnect.call(this, xml, 1, 2, (parent, child) => {
+          parent.nextConnection.connect(child.previousConnection);
+        });
+      });
+
+      test('Row w/ shadow', function() {
+        var xml =
+            '<xml>' +
+            '  <block type="row_block" id="1">' +
+            '    <value name="INPUT">' +
+            '      <shadow type="row_block" id="3"></shadow>' +
+            '    </value>' +
+            '  </block>' +
+            '  <block type="row_block" id="2"></block>' +
+            '</xml>';
+
+        testUndoConnect.call(this, xml, 1, 2, (parent, child) => {
+          parent.getInput('INPUT').connection.connect(child.outputConnection);
+        });
+      });
+
+      test('Statement w/ shadow', function() {
+        var xml =
+            '<xml>' +
+            '  <block type="statement_block" id="1">' +
+            '    <statement name="STATEMENT">' +
+            '      <shadow type="stack_block" id="3"></shadow>' +
+            '    </statement>' +
+            '  </block>' +
+            '  <block type="stack_block" id="2"></block>' +
+            '</xml>';
+
+        testUndoConnect.call(this, xml, 1, 2, (parent, child) => {
+          parent.getInput('STATEMENT').connection
+              .connect(child.previousConnection);
+        });
       });
     });
 

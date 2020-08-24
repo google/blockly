@@ -121,7 +121,7 @@ Blockly.ToolboxCategory = function(categoryDef, toolbox, opt_parent) {
     'closedIcon': 'blocklyTreeIconClosed',
   };
 
-  var cssConfig = categoryDef['cssConfig'] || categoryDef['cssconfig'];
+  var cssConfig = categoryDef['cssconfig'] || categoryDef['cssConfig'];
   Blockly.utils.object.mixin(this.cssConfig_, cssConfig);
 
   /**

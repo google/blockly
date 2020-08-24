@@ -40,7 +40,7 @@ Blockly.ToolboxSeparator = function(separatorDef, toolbox) {
     'container': 'blocklyTreeSeparator'
   };
 
-  var cssConfig = separatorDef['cssConfig'] || separatorDef['cssconfig'];
+  var cssConfig = separatorDef['cssconfig'] || separatorDef['cssConfig'];
   Blockly.utils.object.mixin(this.cssConfig_, cssConfig);
 };
 Blockly.utils.object.inherits(Blockly.ToolboxSeparator, Blockly.ToolboxItem);

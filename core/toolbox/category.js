@@ -15,14 +15,14 @@ goog.provide('Blockly.ToolboxCategory');
 goog.require('Blockly.CollapsibleToolboxItem');
 goog.require('Blockly.utils.aria');
 goog.require('Blockly.utils.object');
+goog.require('Blockly.utils.toolbox');
 
 goog.requireType('Blockly.ToolboxItem');
-goog.requireType('Blockly.utils.toolbox');
 
 
 /**
  * Class for a category in a toolbox.
- * @param {!Blockly.utils.toolbox.Category} categoryDef The information needed
+ * @param {!Blockly.utils.toolbox.CategoryJson} categoryDef The information needed
  *     to create a category in the toolbox.
  * @param {!Blockly.IToolbox} toolbox The parent toolbox for the category.
  * @param {Blockly.ToolboxCategory=} opt_parent The parent category or null if
@@ -41,16 +41,13 @@ Blockly.ToolboxCategory = function(categoryDef, toolbox, opt_parent) {
    */
   this.name_ = Blockly.utils.replaceMessageReferences(categoryDef['name']);
 
-  var contents = categoryDef['contents'];
-
   /**
    * True if this category has subcategories, false otherwise.
    * @type {boolean}
    * @private
    */
-  this.hasChildren_ = contents && contents.length &&
-    typeof contents != 'string' &&
-    contents[0].kind.toUpperCase() == 'CATEGORY';
+  this.hasChildren_ = Blockly.utils.toolbox.hasCategories(categoryDef['contents'] || []);
+
   /**
    * The parent of the category.
    * @type {?Blockly.ToolboxCategory}
@@ -159,7 +156,7 @@ Blockly.ToolboxCategory = function(categoryDef, toolbox, opt_parent) {
 
   /**
    * The flyout items for this category.
-   * @type {string|!Array<!Blockly.utils.toolbox.FlyoutItemDef>}
+   * @type {string|!Array<!Blockly.utils.toolbox.FlyoutItem>}
    * @protected
    */
   this.contents_ = [];
@@ -220,7 +217,7 @@ Blockly.ToolboxCategory.defaultBackgroundColour = '#57e';
 /**
  * Parses the contents array depending on if the category has children, is a
  * dynamic category, or if its contents are meant to be shown in the flyout.
- * @param {!Blockly.utils.toolbox.Category} categoryDef The information needed
+ * @param {!Blockly.utils.toolbox.CategoryJson} categoryDef The information needed
  *     to create a category.
  * @param {boolean} hasChildren True if this category has subcategories, false
  *     otherwise.
@@ -385,7 +382,7 @@ Blockly.ToolboxCategory.prototype.createSubCategoriesDom_ = function(contents) {
  * @public
  */
 Blockly.ToolboxCategory.prototype.refreshTheme = function() {
-  this.colour_ = this.getColour_(/** @type {Blockly.utils.toolbox.Category} **/
+  this.colour_ = this.getColour_(/** @type {Blockly.utils.toolbox.CategoryJson} **/
       (this.toolboxItemDef_));
   this.addColourBorder_(this.colour_);
 };
@@ -409,7 +406,7 @@ Blockly.ToolboxCategory.prototype.addColourBorder_ = function(colour) {
 
 /**
  * Adds either the colour or the style for a category.
- * @param {!Blockly.utils.toolbox.Category} categoryDef The object holding
+ * @param {!Blockly.utils.toolbox.CategoryJson} categoryDef The object holding
  *    information on the category.
  * @return {string} The hex colour for the category.
  * @protected
@@ -701,7 +698,7 @@ Blockly.ToolboxCategory.prototype.getChildToolboxItems = function() {
  * Updates the contents to be displayed in the flyout.
  * If the flyout is open when the contents are updated, refreshSelection on the
  * toolbox must also be called.
- * @param {!Blockly.utils.toolbox.ToolboxDefinition|string} contents The contents
+ * @param {!Blockly.utils.toolbox.ToolboxDefinition} contents The contents
  *     to be displayed in the flyout. A string can be supplied to create a
  *     dynamic category.
  * @public
@@ -717,7 +714,7 @@ Blockly.ToolboxCategory.prototype.updateFlyoutContents = function(contents) {
     this.toolboxItemDef_['contents'] = Blockly.utils.toolbox.convertToolboxToJSON(contents);
   }
   this.parseContents_(
-      /** @type {Blockly.utils.toolbox.Category} */ (this.toolboxItemDef_),
+      /** @type {Blockly.utils.toolbox.CategoryJson} */ (this.toolboxItemDef_),
       this.hasChildren());
 };
 
@@ -727,6 +724,88 @@ Blockly.ToolboxCategory.prototype.updateFlyoutContents = function(contents) {
 Blockly.ToolboxCategory.prototype.dispose = function() {
   Blockly.utils.dom.removeNode(this.htmlDiv_);
 };
+
+/**
+ * CSS for Toolbox.  See css.js for use.
+ */
+Blockly.Css.register([
+  /* eslint-disable indent */
+  '.blocklyToolboxCategory {',
+    'padding-bottom: 3px',
+  '}',
+
+  '.blocklyTreeRow:not(.blocklyTreeSelected):hover {',
+    'background-color: rgba(255, 255, 255, 0.2);',
+  '}',
+
+  '.blocklyToolboxDiv[layout="h"] .blocklyToolboxCategory {',
+    'margin: 1px 5px 1px 0;',
+  '}',
+
+  '.blocklyToolboxDiv[dir="RTL"][layout="h"] .blocklyToolboxCategory {',
+    'margin: 1px 0 1px 5px;',
+  '}',
+
+  '.blocklyTreeRow {',
+    'height: 22px;',
+    'line-height: 22px;',
+    'padding-right: 8px;',
+    'white-space: nowrap;',
+  '}',
+
+  '.blocklyToolboxDiv[dir="RTL"] .blocklyTreeRow {',
+    'margin-left: 8px;',
+    'padding-right: 0px',
+  '}',
+
+  '.blocklyTreeIcon {',
+    'background-image: url(<<<PATH>>>/sprites.png);',
+    'height: 16px;',
+    'vertical-align: middle;',
+    'visibility: hidden;',
+    'width: 16px;',
+  '}',
+
+  '.blocklyTreeIconClosed {',
+    'background-position: -32px -1px;',
+  '}',
+
+  '.blocklyToolboxDiv[dir="RTL"] .blocklyTreeIconClosed {',
+    'background-position: 0 -1px;',
+  '}',
+
+  '.blocklyTreeSelected>.blocklyTreeIconClosed {',
+    'background-position: -32px -17px;',
+  '}',
+
+  '.blocklyToolboxDiv[dir="RTL"] .blocklyTreeSelected>.blocklyTreeIconClosed {',
+    'background-position: 0 -17px;',
+  '}',
+
+  '.blocklyTreeIconOpen {',
+    'background-position: -16px -1px;',
+  '}',
+
+  '.blocklyTreeSelected>.blocklyTreeIconOpen {',
+    'background-position: -16px -17px;',
+  '}',
+
+  '.blocklyTreeLabel {',
+    'cursor: default;',
+    'font: 16px sans-serif;',
+    'padding: 0 3px;',
+    'vertical-align: middle;',
+  '}',
+
+  '.blocklyToolboxDelete .blocklyTreeLabel {',
+    'cursor: url("<<<PATH>>>/handdelete.cur"), auto;',
+  '}',
+
+  '.blocklyTreeSelected .blocklyTreeLabel {',
+    'color: #fff;',
+  '}'
+  /* eslint-enable indent */
+]);
 
 Blockly.registry.register(Blockly.registry.Type.TOOLBOX_ITEM,
     Blockly.ToolboxCategory.registrationName, Blockly.ToolboxCategory);

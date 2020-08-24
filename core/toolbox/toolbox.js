@@ -56,10 +56,10 @@ Blockly.Toolbox = function(workspace) {
 
   /**
    * The JSON describing the contents of this toolbox.
-   * @type {!Array<!Blockly.utils.toolbox.ToolboxItemDef>}
+   * @type {!Blockly.utils.toolbox.ToolboxJson}
    * @protected
    */
-  this.toolboxDef_ = workspace.options.languageTree || [];
+  this.toolboxDef_ = workspace.options.languageTree || {'contents': []};
 
   /**
    * Whether the toolbox should be laid out horizontally.
@@ -345,14 +345,12 @@ Blockly.Toolbox.prototype.createFlyout_ = function() {
 
 /**
  * Fills the toolbox with new toolbox items and removes any old contents.
- * @param {!Array<!Blockly.utils.toolbox.ToolboxItemDef>} toolboxDef Array
- *     holding objects containing information on the contents of the toolbox.
+ * @param {!Blockly.utils.toolbox.ToolboxJson} toolboxDef Object holding information
+ *     for creating a toolbox.
  * @package
  */
 Blockly.Toolbox.prototype.render = function(toolboxDef) {
   this.toolboxDef_ = toolboxDef;
-  // TODO: Future improvement to compare the new toolboxDef with the old and
-  //  only re render what has changed.
   for (var i = 0; i < this.contents_.length; i++) {
     var toolboxItem = this.contents_[i];
     if (toolboxItem) {
@@ -361,28 +359,32 @@ Blockly.Toolbox.prototype.render = function(toolboxDef) {
   }
   this.contents_ = [];
   this.contentIds_ = {};
-  this.renderContents_(toolboxDef);
+  this.renderContents_(toolboxDef['contents']);
   this.position();
 };
 
 /**
  * Adds all the toolbox items to the toolbox.
- * @param {!Array<!Blockly.utils.toolbox.ToolboxItemDef>} toolboxDef Array
+ * @param {!Array<!Blockly.utils.toolbox.ToolboxItem>} toolboxDef Array
  *     holding objects containing information on the contents of the toolbox.
  * @protected
  */
 Blockly.Toolbox.prototype.renderContents_ = function(toolboxDef) {
+  var fragment = document.createDocumentFragment();
   for (var i = 0, childIn; (childIn = toolboxDef[i]); i++) {
-    this.renderToolboxItem_(childIn);
+    this.renderToolboxItem_(childIn, fragment);
   }
+  this.contentsDiv_.appendChild(fragment);
 };
 
 /**
  * Creates and renders the toolbox item.
- * @param {Blockly.utils.toolbox.ToolboxItemDef} childIn Any information that
+ * @param {Blockly.utils.toolbox.ToolboxItem} childIn Any information that
  *    can be used to create an item in the toolbox.
+ * @param {!DocumentFragment} fragment The document fragment to add the child
+ *     toolbox elements to.
  */
-Blockly.Toolbox.prototype.renderToolboxItem_ = function(childIn) {
+Blockly.Toolbox.prototype.renderToolboxItem_ = function(childIn, fragment) {
   var ToolboxItemClass = Blockly.registry.getClass(
       Blockly.registry.Type.TOOLBOX_ITEM, childIn['kind'].toLowerCase());
   if (ToolboxItemClass) {
@@ -390,7 +392,7 @@ Blockly.Toolbox.prototype.renderToolboxItem_ = function(childIn) {
     this.addToolboxItem_(toolboxItem);
     var toolboxItemDom = toolboxItem.createDom();
     if (toolboxItemDom) {
-      this.contentsDiv_.appendChild(toolboxItemDom);
+      fragment.appendChild(toolboxItemDom);
     }
   }
 };
@@ -710,7 +712,7 @@ Blockly.Toolbox.prototype.selectItemByPosition = function(position) {
  * Decides whether to hide or show the flyout depending on the selected item.
  * @param {?Blockly.SelectableToolboxItem} oldItem The previously selected toolbox item.
  * @param {?Blockly.SelectableToolboxItem} newItem The newly selected toolbox item.
- * @private
+ * @protected
  */
 Blockly.Toolbox.prototype.updateFlyout_ = function(oldItem, newItem) {
   if (oldItem == newItem || !newItem || newItem.isCollapsible()) {
@@ -737,7 +739,7 @@ Blockly.Toolbox.prototype.fireSelectEvent_ = function(oldItem, newItem) {
   if (oldItem == newItem) {
     newElement = null;
   }
-  // TODO: Add toolbox events
+  // TODO (#4187): Update Toolbox Events.
   var event = new Blockly.Events.Ui(null, 'category',
       oldElement, newElement);
   event.workspaceId = this.workspace_.id;
@@ -905,22 +907,6 @@ Blockly.Css.register([
     '-webkit-tap-highlight-color: transparent;', /* issue #1345 */
   '}',
 
-  '.blocklyToolboxCategory {',
-    'padding-bottom: 3px',
-  '}',
-
-  '.blocklyTreeRow:not(.blocklyTreeSelected):hover {',
-    'background-color: rgba(255, 255, 255, 0.2);',
-  '}',
-
-  '.blocklyToolboxDiv[layout="h"] .blocklyToolboxCategory {',
-    'margin: 1px 5px 1px 0;',
-  '}',
-
-  '.blocklyToolboxDiv[dir="RTL"][layout="h"] .blocklyToolboxCategory {',
-    'margin: 1px 0 1px 5px;',
-  '}',
-
   '.blocklyToolboxContents {',
     'display: flex;',
     'flex-wrap: wrap;',
@@ -931,80 +917,6 @@ Blockly.Css.register([
   '.blocklyToolboxContents:focus {',
     'outline: none;',
   '}',
-
-  '.blocklyTreeRow {',
-    'height: 22px;',
-    'line-height: 22px;',
-    'padding-right: 8px;',
-    'white-space: nowrap;',
-  '}',
-
-  '.blocklyToolboxDiv[dir="RTL"] .blocklyTreeRow {',
-    'margin-left: 8px;',
-    'padding-right: 0px',
-  '}',
-
-  '.blocklyTreeSeparator {',
-    'border-bottom: solid #e5e5e5 1px;',
-    'height: 0;',
-    'margin: 5px 0;',
-  '}',
-
-  '.blocklyToolboxDiv[layout="h"] .blocklyTreeSeparator {',
-    'border-right: solid #e5e5e5 1px;',
-    'border-bottom: none;',
-    'height: auto;',
-    'margin: 0 5px 0 5px;',
-    'padding: 5px 0;',
-    'width: 0;',
-  '}',
-
-  '.blocklyTreeIcon {',
-    'background-image: url(<<<PATH>>>/sprites.png);',
-    'height: 16px;',
-    'vertical-align: middle;',
-    'visibility: hidden;',
-    'width: 16px;',
-  '}',
-
-  '.blocklyTreeIconClosed {',
-    'background-position: -32px -1px;',
-  '}',
-
-  '.blocklyToolboxDiv[dir="RTL"] .blocklyTreeIconClosed {',
-    'background-position: 0 -1px;',
-  '}',
-
-  '.blocklyTreeSelected>.blocklyTreeIconClosed {',
-    'background-position: -32px -17px;',
-  '}',
-
-  '.blocklyToolboxDiv[dir="RTL"] .blocklyTreeSelected>.blocklyTreeIconClosed {',
-    'background-position: 0 -17px;',
-  '}',
-
-  '.blocklyTreeIconOpen {',
-    'background-position: -16px -1px;',
-  '}',
-
-  '.blocklyTreeSelected>.blocklyTreeIconOpen {',
-    'background-position: -16px -17px;',
-  '}',
-
-  '.blocklyTreeLabel {',
-    'cursor: default;',
-    'font: 16px sans-serif;',
-    'padding: 0 3px;',
-    'vertical-align: middle;',
-  '}',
-
-  '.blocklyToolboxDelete .blocklyTreeLabel {',
-    'cursor: url("<<<PATH>>>/handdelete.cur"), auto;',
-  '}',
-
-  '.blocklyTreeSelected .blocklyTreeLabel {',
-    'color: #fff;',
-  '}'
   /* eslint-enable indent */
 ]);
 

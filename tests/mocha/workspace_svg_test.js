@@ -110,7 +110,7 @@ suite('WorkspaceSvg', function() {
       }.bind(this), 'Existing toolbox has categories.  Can\'t change mode.');
     });
     test('Passing in string as toolboxdef', function() {
-      var parseToolboxFake = sinon.spy(Blockly.Options, 'parseToolboxTree');
+      var parseToolboxFake = sinon.spy(Blockly.utils.toolbox, 'parseToolboxTree');
       this.workspace.updateToolbox('<xml><category name="something"></category></xml>');
       sinon.assert.calledOnce(parseToolboxFake);
     });

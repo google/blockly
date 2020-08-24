@@ -136,7 +136,7 @@ suite('Toolbox', function() {
       sinon.assert.calledOnce(hideChaffStub);
     });
     test('Category clicked -> Should select category', function() {
-      var categoryXml = document.getElementsByClassName('blocklyToolboxCategory')[0];
+      var categoryXml = document.getElementsByClassName('blocklyTreeRow')[0];
       var evt = {
         'srcElement': categoryXml
       };
@@ -506,7 +506,7 @@ suite('Toolbox', function() {
     function checkCategory(actual, expected) {
       checkValue(actual, expected, 'kind');
       checkValue(actual, expected, 'name');
-      chai.assert.deepEqual(actual['cssConfig'], expected['cssConfig']);
+      chai.assert.deepEqual(actual['cssconfig'], expected['cssconfig']);
       checkContents(actual.contents, expected.contents);
     }
     function checkCategoryToolbox(actual, expected) {

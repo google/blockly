@@ -902,7 +902,6 @@ Blockly.Css.register([
     'background-color: #ddd;',
     'overflow-x: visible;',
     'overflow-y: auto;',
-    'padding: 4px 0 4px 0;',
     'position: absolute;',
     'z-index: 70;', /* so blocks go under toolbox when dragging */
     '-webkit-tap-highlight-color: transparent;', /* issue #1345 */
@@ -912,6 +911,7 @@ Blockly.Css.register([
     'display: flex;',
     'flex-wrap: wrap;',
     'flex-direction: column;',
+    'padding: 4px 0;',
   '}',
 
   '.blocklyToolboxContents:focus {',

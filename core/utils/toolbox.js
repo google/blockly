@@ -256,7 +256,7 @@ Blockly.utils.toolbox.addAttributes_ = function(node, obj) {
 };
 
 /**
- * Whether or not the toolbox definition has categories or not.
+ * Whether or not the toolbox definition has categories.
  * @param {!Blockly.utils.toolbox.ToolboxDefinition} toolboxDef The
  *     definition of the toolbox. Either in xml or JSON.
  * @return {boolean} True if the toolbox has categories.

@@ -1,5 +1,3 @@
-   * @type {string|
-   *        !Array<!Blockly.utils.toolbox.FlyoutItemDef>}
 /**
  * @license
  * Copyright 2020 Google LLC
@@ -255,8 +253,6 @@ Blockly.ToolboxCategory.prototype.createDom = function() {
   this.rowDiv_.setAttribute('id', this.id_);
   this.rowDiv_.style.pointerEvents = 'auto';
   this.htmlDiv_.appendChild(this.rowDiv_);
-  // TODO: Should this be on the htmlDiv_ or the rowDiv_?
-  this.rowDiv_.tabIndex = 0;
 
   this.rowContents_ = this.createRowContentsContainer_();
   this.rowContents_.style.pointerEvents = 'none';
@@ -482,7 +478,6 @@ Blockly.ToolboxCategory.prototype.parseColour_ = function(colourValue) {
   }
 };
 
-};
 /**
  * Opens or closes the current category if it has children.
  * @param {boolean} isExpanded True to expand the category, false to close.

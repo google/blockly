@@ -56,10 +56,10 @@ Blockly.Toolbox = function(workspace) {
 
   /**
    * The JSON describing the contents of this toolbox.
-   * @type {!Array<!Blockly.utils.toolbox.ToolboxItemDef>}
+   * @type {!Blockly.utils.toolbox.ToolboxJson}
    * @protected
    */
-  this.toolboxDef_ = workspace.options.languageTree || [];
+  this.toolboxDef_ = workspace.options.languageTree || {'contents': []};
 
   /**
    * Whether the toolbox should be laid out horizontally.
@@ -134,6 +134,13 @@ Blockly.Toolbox = function(workspace) {
    * @protected
    */
   this.selectedItem_ = null;
+
+  /**
+   * The previously selected item.
+   * @type {?Blockly.SelectableToolboxItem}
+   * @protected
+   */
+  this.previouslySelectedItem_ = null;
 
   /**
    * Array holding info needed to unbind events.
@@ -253,7 +260,7 @@ Blockly.Toolbox.prototype.onClick_ = function(e) {
       var item = this.getToolboxItemById(itemId);
       if (item.isSelectable()) {
         this.setSelectedItem(item);
-        item.onClick();
+        item.onClick(e);
       }
     }
     // Just close popups.
@@ -338,8 +345,8 @@ Blockly.Toolbox.prototype.createFlyout_ = function() {
 
 /**
  * Fills the toolbox with new toolbox items and removes any old contents.
- * @param {!Array<!Blockly.utils.toolbox.ToolboxItemDef>} toolboxDef Array
- *     holding objects containing information on the contents of the toolbox.
+ * @param {!Blockly.utils.toolbox.ToolboxJson} toolboxDef Object holding information
+ *     for creating a toolbox.
  * @package
  */
 Blockly.Toolbox.prototype.render = function(toolboxDef) {
@@ -352,13 +359,13 @@ Blockly.Toolbox.prototype.render = function(toolboxDef) {
   }
   this.contents_ = [];
   this.contentIds_ = {};
-  this.renderContents_(toolboxDef);
+  this.renderContents_(toolboxDef['contents']);
   this.position();
 };
 
 /**
  * Adds all the toolbox items to the toolbox.
- * @param {!Array<!Blockly.utils.toolbox.ToolboxItemDef>} toolboxDef Array
+ * @param {!Array<!Blockly.utils.toolbox.ToolboxItem>} toolboxDef Array
  *     holding objects containing information on the contents of the toolbox.
  * @protected
  */
@@ -372,10 +379,8 @@ Blockly.Toolbox.prototype.renderContents_ = function(toolboxDef) {
 
 /**
  * Creates and renders the toolbox item.
- * @param {Blockly.utils.toolbox.ToolboxItemDef} childIn Any information that
- *     can be used to create an item in the toolbox.
- * @param {!DocumentFragment} fragment The document fragment to add the child
- *     toolbox elements to.
+ * @param {Blockly.utils.toolbox.ToolboxItem} childIn Any information that
+ *    can be used to create an item in the toolbox.
  */
 Blockly.Toolbox.prototype.renderToolboxItem_ = function(childIn, fragment) {
   var ToolboxItemClass = Blockly.registry.getClass(
@@ -401,7 +406,7 @@ Blockly.Toolbox.prototype.addToolboxItem_ = function(toolboxItem) {
   if (toolboxItem.isCollapsible()) {
     var collapsibleItem = /** @type {Blockly.CollapsibleToolboxItem} */
         (toolboxItem);
-    for (var i = 0, child; (child = collapsibleItem.getContents()[i]); i++) {
+    for (var i = 0, child; (child = collapsibleItem.getChildToolboxItems()[i]); i++) {
       this.addToolboxItem_(child);
     }
   }
@@ -526,6 +531,16 @@ Blockly.Toolbox.prototype.getSelectedItem = function() {
 };
 
 /**
+ * Gets the previously selected item.
+ * @return {?Blockly.ToolboxItem} The previously selected item, or null if no
+ *     item was previously selected.
+ * @public
+ */
+Blockly.Toolbox.prototype.getPreviouslySelectedItem = function() {
+  return this.previouslySelectedItem_;
+};
+
+/**
  * Gets whether or not the toolbox is horizontal.
  * @return {boolean} True if the toolbox is horizontal, false if the toolbox is
  *     vertical.
@@ -628,18 +643,20 @@ Blockly.Toolbox.prototype.setSelectedItem = function(newItem) {
   }
   newItem = /** @type {Blockly.SelectableToolboxItem} */ (newItem);
 
-  if (oldItem && (!oldItem.isCollapsible() || oldItem != newItem)) {
+  if (this.shouldDeSelectItem_(oldItem, newItem)) {
     // Deselect the old item unless the old item is collapsible and has been
     // previously clicked on.
     this.selectedItem_ = null;
+    this.previouslySelectedItem_ = oldItem;
     oldItem.setSelected(false);
     Blockly.utils.aria.setState(/** @type {!Element} */ (this.contentsDiv_),
         Blockly.utils.aria.State.ACTIVEDESCENDANT, '');
   }
 
-  if (newItem && newItem != oldItem ) {
+  if (this.shouldSelectItem_(oldItem, newItem)) {
     // Select the new item unless the old item equals the new item.
     this.selectedItem_ = newItem;
+    this.previouslySelectedItem_ = oldItem;
     newItem.setSelected(true);
     Blockly.utils.aria.setState(/** @type {!Element} */ (this.contentsDiv_),
         Blockly.utils.aria.State.ACTIVEDESCENDANT, newItem.getId());
@@ -647,6 +664,32 @@ Blockly.Toolbox.prototype.setSelectedItem = function(newItem) {
 
   this.updateFlyout_(oldItem, newItem);
   this.fireSelectEvent_(oldItem, newItem);
+};
+
+/**
+ * Decides whether the old item should be deselected.
+ * @param {?Blockly.SelectableToolboxItem} oldItem The previously selected
+ *     toolbox item.
+ * @param {?Blockly.SelectableToolboxItem} newItem The newly selected toolbox
+ *     item.
+ * @return {boolean} True if the old item should be deselected, false otherwise.
+ * @protected
+ */
+Blockly.Toolbox.prototype.shouldDeSelectItem_ = function(oldItem, newItem) {
+  return !!(oldItem && (!oldItem.isCollapsible() || oldItem != newItem));
+};
+
+/**
+ * Decides whether the new item should be selected.
+ * @param {?Blockly.SelectableToolboxItem} oldItem The previously selected
+ *     toolbox item.
+ * @param {?Blockly.SelectableToolboxItem} newItem The newly selected toolbox
+ *     item.
+ * @return {boolean} True if the new item should be deselected, false otherwise.
+ * @protected
+ */
+Blockly.Toolbox.prototype.shouldSelectItem_ = function(oldItem, newItem) {
+  return !!(newItem && newItem != oldItem);
 };
 
 /**
@@ -665,9 +708,9 @@ Blockly.Toolbox.prototype.selectItemByPosition = function(position) {
 
 /**
  * Decides whether to hide or show the flyout depending on the selected item.
- * @param {?Blockly.ToolboxItem} oldItem The previously selected toolbox item.
+ * @param {?Blockly.SelectableToolboxItem} oldItem The previously selected toolbox item.
  * @param {?Blockly.SelectableToolboxItem} newItem The newly selected toolbox item.
- * @private
+ * @protected
  */
 Blockly.Toolbox.prototype.updateFlyout_ = function(oldItem, newItem) {
   if (oldItem == newItem || !newItem || newItem.isCollapsible()) {

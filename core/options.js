@@ -44,7 +44,7 @@ Blockly.Options = function(options) {
     var toolboxDef = options['toolbox'];
     if (toolboxDef && !Array.isArray(toolboxDef['contents'])) {
       toolboxDef = /** @type {Node} */
-          (Blockly.Options.parseToolboxTree(toolboxDef || null));
+          (Blockly.utils.toolbox.parseToolboxTree(toolboxDef || null));
     }
     var toolboxJsonDef = /** @type {!Blockly.utils.toolbox.ToolboxJson} */
         (Blockly.utils.toolbox.convertToolboxToJSON(toolboxDef));
@@ -363,35 +363,4 @@ Blockly.Options.parseThemeOptions_ = function(options) {
   }
   return Blockly.Theme.defineTheme(theme.name ||
       ('builtin' + Blockly.utils.IdGenerator.getNextUniqueId()), theme);
-};
-
-/**
- * Parse the provided toolbox tree into a consistent DOM format.
- * @param {?Node|?string} toolboxDef DOM tree of blocks, or text representation
- *    of same.
- * @return {?Node} DOM tree of blocks, or null.
- */
-Blockly.Options.parseToolboxTree = function(toolboxDef) {
-  if (toolboxDef) {
-    if (typeof toolboxDef != 'string') {
-      if (Blockly.utils.userAgent.IE && toolboxDef.outerHTML) {
-        // In this case the tree will not have been properly built by the
-        // browser. The HTML will be contained in the element, but it will
-        // not have the proper DOM structure since the browser doesn't support
-        // XSLTProcessor (XML -> HTML).
-        toolboxDef = toolboxDef.outerHTML;
-      } else if (!(toolboxDef instanceof Element)) {
-        toolboxDef = null;
-      }
-    }
-    if (typeof toolboxDef == 'string') {
-      toolboxDef = Blockly.Xml.textToDom(toolboxDef);
-      if (toolboxDef.nodeName.toLowerCase() != 'xml') {
-        throw TypeError('Toolbox should be an <xml> document.');
-      }
-    }
-  } else {
-    toolboxDef = null;
-  }
-  return toolboxDef;
 };

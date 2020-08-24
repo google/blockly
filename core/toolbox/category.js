@@ -15,9 +15,9 @@ goog.provide('Blockly.ToolboxCategory');
 goog.require('Blockly.CollapsibleToolboxItem');
 goog.require('Blockly.utils.aria');
 goog.require('Blockly.utils.object');
+goog.require('Blockly.utils.toolbox');
 
 goog.requireType('Blockly.ToolboxItem');
-goog.requireType('Blockly.utils.toolbox');
 
 
 /**
@@ -41,16 +41,13 @@ Blockly.ToolboxCategory = function(categoryDef, toolbox, opt_parent) {
    */
   this.name_ = Blockly.utils.replaceMessageReferences(categoryDef['name']);
 
-  var contents = categoryDef['contents'];
-
   /**
    * True if this category has subcategories, false otherwise.
    * @type {boolean}
    * @private
    */
-  this.hasChildren_ = contents && contents.length &&
-    typeof contents != 'string' &&
-    contents[0].kind.toUpperCase() == 'CATEGORY';
+  this.hasChildren_ = Blockly.utils.toolbox.hasCategories(categoryDef['contents'] || []);
+
   /**
    * The parent of the category.
    * @type {?Blockly.ToolboxCategory}
@@ -675,7 +672,7 @@ Blockly.ToolboxCategory.prototype.getChildToolboxItems = function() {
  * Updates the contents to be displayed in the flyout.
  * If the flyout is open when the contents are updated, refreshSelection on the
  * toolbox must also be called.
- * @param {!Blockly.utils.toolbox.ToolboxDefinition|string} contents The contents
+ * @param {!Blockly.utils.toolbox.ToolboxDefinition} contents The contents
  *     to be displayed in the flyout. A string can be supplied to create a
  *     dynamic category.
  * @public
@@ -701,6 +698,89 @@ Blockly.ToolboxCategory.prototype.updateFlyoutContents = function(contents) {
 Blockly.ToolboxCategory.prototype.dispose = function() {
   Blockly.utils.dom.removeNode(this.htmlDiv_);
 };
+
+/**
+ * CSS for Toolbox.  See css.js for use.
+ */
+Blockly.Css.register([
+  /* eslint-disable indent */
+  '.blocklyToolboxCategory {',
+    'padding-bottom: 3px',
+  '}',
+
+  '.blocklyToolboxCategory:not(.blocklyTreeSelected):hover {',
+    'background-color: rgba(255, 255, 255, 0.2);',
+  '}',
+
+  '.blocklyToolboxDiv[layout="h"] .blocklyToolboxCategory {',
+    'margin: 1px 5px 1px 0;',
+  '}',
+
+  '.blocklyToolboxDiv[dir="RTL"][layout="h"] .blocklyToolboxCategory {',
+    'margin: 1px 0 1px 5px;',
+  '}',
+
+  '.blocklyTreeRow {',
+    'height: 22px;',
+    'line-height: 22px;',
+    'padding-right: 8px;',
+    'pointer-events: none',
+    'white-space: nowrap;',
+  '}',
+
+  '.blocklyToolboxDiv[dir="RTL"] .blocklyTreeRow {',
+    'margin-left: 8px;',
+    'padding-right: 0px',
+  '}',
+
+  '.blocklyTreeIcon {',
+    'background-image: url(<<<PATH>>>/sprites.png);',
+    'height: 16px;',
+    'vertical-align: middle;',
+    'visibility: hidden;',
+    'width: 16px;',
+  '}',
+
+  '.blocklyTreeIconClosed {',
+    'background-position: -32px -1px;',
+  '}',
+
+  '.blocklyToolboxDiv[dir="RTL"] .blocklyTreeIconClosed {',
+    'background-position: 0 -1px;',
+  '}',
+
+  '.blocklyTreeSelected>.blocklyTreeIconClosed {',
+    'background-position: -32px -17px;',
+  '}',
+
+  '.blocklyToolboxDiv[dir="RTL"] .blocklyTreeSelected>.blocklyTreeIconClosed {',
+    'background-position: 0 -17px;',
+  '}',
+
+  '.blocklyTreeIconOpen {',
+    'background-position: -16px -1px;',
+  '}',
+
+  '.blocklyTreeSelected>.blocklyTreeIconOpen {',
+    'background-position: -16px -17px;',
+  '}',
+
+  '.blocklyTreeLabel {',
+    'cursor: default;',
+    'font: 16px sans-serif;',
+    'padding: 0 3px;',
+    'vertical-align: middle;',
+  '}',
+
+  '.blocklyToolboxDelete .blocklyTreeLabel {',
+    'cursor: url("<<<PATH>>>/handdelete.cur"), auto;',
+  '}',
+
+  '.blocklyTreeSelected .blocklyTreeLabel {',
+    'color: #fff;',
+  '}'
+  /* eslint-enable indent */
+]);
 
 Blockly.registry.register(Blockly.registry.Type.TOOLBOX_ITEM,
     Blockly.ToolboxCategory.registrationName, Blockly.ToolboxCategory);

@@ -25,11 +25,13 @@ import datetime
 
 from google.cloud import ndb
 
+
+EXPIRATION_DAYS = 365
+# Limit the query to avoid timeouts.
+QUERY_LIMIT = 1000
+
 def delete_expired():
-  # Delete entries that have not been accessed in more than a year.
-  EXPIRATION_DAYS = 365
-  # Limit the query to avoid timeouts.
-  QUERY_LIMIT = 1000
+  """Deletes entries that have not been accessed in more than a year."""
   bestBefore = datetime.datetime.utcnow() - datetime.timedelta(days=EXPIRATION_DAYS)
   client = ndb.Client()
   with client.context():

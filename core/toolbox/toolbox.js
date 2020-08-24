@@ -381,6 +381,8 @@ Blockly.Toolbox.prototype.renderContents_ = function(toolboxDef) {
  * Creates and renders the toolbox item.
  * @param {Blockly.utils.toolbox.ToolboxItem} childIn Any information that
  *    can be used to create an item in the toolbox.
+ * @param {!DocumentFragment} fragment The document fragment to add the child
+ *     toolbox elements to.
  */
 Blockly.Toolbox.prototype.renderToolboxItem_ = function(childIn, fragment) {
   var ToolboxItemClass = Blockly.registry.getClass(
@@ -906,22 +908,6 @@ Blockly.Css.register([
     '-webkit-tap-highlight-color: transparent;', /* issue #1345 */
   '}',
 
-  '.blocklyToolboxCategory {',
-    'padding-bottom: 3px',
-  '}',
-
-  '.blocklyToolboxCategory:not(.blocklyTreeSelected):hover {',
-    'background-color: rgba(255, 255, 255, 0.2);',
-  '}',
-
-  '.blocklyToolboxDiv[layout="h"] .blocklyToolboxCategory {',
-    'margin: 1px 5px 1px 0;',
-  '}',
-
-  '.blocklyToolboxDiv[dir="RTL"][layout="h"] .blocklyToolboxCategory {',
-    'margin: 1px 0 1px 5px;',
-  '}',
-
   '.blocklyToolboxContents {',
     'display: flex;',
     'flex-wrap: wrap;',
@@ -931,82 +917,6 @@ Blockly.Css.register([
   '.blocklyToolboxContents:focus {',
     'outline: none;',
   '}',
-
-  '.blocklyTreeRow {',
-    'height: 22px;',
-    'line-height: 22px;',
-    'padding-right: 8px;',
-    'pointer-events: none',
-    'white-space: nowrap;',
-  '}',
-
-  '.blocklyToolboxDiv[dir="RTL"] .blocklyTreeRow {',
-    'margin-left: 8px;',
-    'padding-right: 0px',
-  '}',
-
-
-  '.blocklyTreeSeparator {',
-    'border-bottom: solid #e5e5e5 1px;',
-    'height: 0;',
-    'margin: 5px 0;',
-  '}',
-
-  '.blocklyToolboxDiv[layout="h"] .blocklyTreeSeparator {',
-    'border-right: solid #e5e5e5 1px;',
-    'border-bottom: none;',
-    'height: auto;',
-    'margin: 0 5px 0 5px;',
-    'padding: 5px 0;',
-    'width: 0;',
-  '}',
-
-  '.blocklyTreeIcon {',
-    'background-image: url(<<<PATH>>>/sprites.png);',
-    'height: 16px;',
-    'vertical-align: middle;',
-    'visibility: hidden;',
-    'width: 16px;',
-  '}',
-
-  '.blocklyTreeIconClosed {',
-    'background-position: -32px -1px;',
-  '}',
-
-  '.blocklyToolboxDiv[dir="RTL"] .blocklyTreeIconClosed {',
-    'background-position: 0 -1px;',
-  '}',
-
-  '.blocklyTreeSelected>.blocklyTreeIconClosed {',
-    'background-position: -32px -17px;',
-  '}',
-
-  '.blocklyToolboxDiv[dir="RTL"] .blocklyTreeSelected>.blocklyTreeIconClosed {',
-    'background-position: 0 -17px;',
-  '}',
-
-  '.blocklyTreeIconOpen {',
-    'background-position: -16px -1px;',
-  '}',
-
-  '.blocklyTreeSelected>.blocklyTreeIconOpen {',
-    'background-position: -16px -17px;',
-  '}',
-
-  '.blocklyTreeLabel {',
-    'cursor: default;',
-    'font: 16px sans-serif;',
-    'padding: 0 3px;',
-    'vertical-align: middle;',
-  '}',
-
-  '.blocklyToolboxDelete .blocklyTreeLabel {',
-    'cursor: url("<<<PATH>>>/handdelete.cur"), auto;',
-  '}',
-
-  '.blocklyTreeSelected .blocklyTreeLabel {',
-    'color: #fff;',
-  '}'
   /* eslint-enable indent */
 ]);
 

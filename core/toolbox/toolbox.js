@@ -381,6 +381,8 @@ Blockly.Toolbox.prototype.renderContents_ = function(toolboxDef) {
  * Creates and renders the toolbox item.
  * @param {Blockly.utils.toolbox.ToolboxItem} childIn Any information that
  *    can be used to create an item in the toolbox.
+ * @param {!DocumentFragment} fragment The document fragment to add the child
+ *     toolbox elements to.
  */
 Blockly.Toolbox.prototype.renderToolboxItem_ = function(childIn, fragment) {
   var ToolboxItemClass = Blockly.registry.getClass(

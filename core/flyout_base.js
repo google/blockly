@@ -457,10 +457,9 @@ Blockly.Flyout.prototype.hide = function() {
 
 /**
  * Show and populate the flyout.
- * @param {!Blockly.utils.toolbox.ToolboxDefinition|string} flyoutDef
- *    List of contents to display in the flyout as an array of xml an
- *    array of Nodes, a NodeList or a string with the name of the dynamic category.
- *    Variables and procedures have a custom set of blocks.
+ * @param {!Blockly.utils.toolbox.FlyoutDefinition} flyoutDef Contents to display
+ *     in the flyout. This is either an array of Nodes, a Node, a
+ *     toolbox definition, or a string with the name of the dynamic category.
  */
 Blockly.Flyout.prototype.show = function(flyoutDef) {
   this.workspace_.setResizesEnabled(false);
@@ -468,24 +467,15 @@ Blockly.Flyout.prototype.show = function(flyoutDef) {
   this.clearOldBlocks_();
 
   // Handle dynamic categories, represented by a name instead of a list.
-  // Look up the correct category generation function and call that to get a
-  // valid XML list.
   if (typeof flyoutDef == 'string') {
-    var fnToApply = this.workspace_.targetWorkspace.getToolboxCategoryCallback(
-        flyoutDef);
-    if (typeof fnToApply != 'function') {
-      throw TypeError('Couldn\'t find a callback function when opening' +
-          ' a toolbox category.');
-    }
-    flyoutDef = fnToApply(this.workspace_.targetWorkspace);
-    if (!Array.isArray(flyoutDef)) {
-      throw TypeError('Result of toolbox category callback must be an array.');
-    }
+    flyoutDef = this.getDynamicCategoryContents_(flyoutDef);
   }
   this.setVisible(true);
-  // Parse the Array or NodeList passed in into an Array of
-  // Blockly.utils.toolbox.Toolbox.
-  var parsedContent = Blockly.utils.toolbox.convertToolboxToJSON(flyoutDef);
+
+  // Parse the Array or Node passed in into a a list of flyout items.
+  var parsedContent = /** @type {!Array<!Blockly.utils.toolbox.FlyoutItem>} */
+      (Blockly.utils.toolbox.convertToolboxContentsToJSON(flyoutDef));
+  parsedContent = parsedContent.slice(); // Shallow copy of parsedContent.
   var flyoutInfo =
     /** @type {{contents:!Array.<!Object>, gaps:!Array.<number>}} */ (
       this.createFlyoutInfo_(parsedContent));
@@ -524,10 +514,10 @@ Blockly.Flyout.prototype.show = function(flyoutDef) {
 /**
  * Create the contents array and gaps array necessary to create the layout for
  * the flyout.
- * @param {Array.<Blockly.utils.toolbox.Toolbox>} parsedContent The array
- *   of objects to show in the flyout.
+ * @param {!Array<Blockly.utils.toolbox.FlyoutItem>} parsedContent The array
+ *     of objects to show in the flyout.
  * @return {{contents:Array.<Object>, gaps:Array.<number>}} The list of contents
- *   and gaps needed to lay out the flyout.
+ *     and gaps needed to lay out the flyout.
  * @private
  */
 Blockly.Flyout.prototype.createFlyoutInfo_ = function(parsedContent) {
@@ -536,9 +526,20 @@ Blockly.Flyout.prototype.createFlyoutInfo_ = function(parsedContent) {
   this.permanentlyDisabled_.length = 0;
   var defaultGap = this.horizontalLayout ? this.GAP_X : this.GAP_Y;
   for (var i = 0, contentInfo; (contentInfo = parsedContent[i]); i++) {
+
+    if (contentInfo['custom']) {
+      var customInfo = /** @type {Blockly.utils.toolbox.CategoryJson} */ (contentInfo);
+      var categoryName = customInfo['custom'];
+      var flyoutDef = this.getDynamicCategoryContents_(categoryName);
+      var parsedDynamicContent = /** @type {!Array<Blockly.utils.toolbox.FlyoutItem>} */
+        (Blockly.utils.toolbox.convertToolboxContentsToJSON(flyoutDef));
+      parsedContent.splice.apply(parsedContent, [i, 1].concat(parsedDynamicContent));
+      contentInfo = parsedContent[i];
+    }
+
     switch (contentInfo['kind'].toUpperCase()) {
       case 'BLOCK':
-        var blockInfo = /** @type {Blockly.utils.toolbox.Block} */ (contentInfo);
+        var blockInfo = /** @type {Blockly.utils.toolbox.BlockJson} */ (contentInfo);
         var blockXml = this.getBlockXml_(blockInfo);
         var block = this.createBlock_(blockXml);
         // This is a deprecated method for adding gap to a block.
@@ -548,11 +549,11 @@ Blockly.Flyout.prototype.createFlyoutInfo_ = function(parsedContent) {
         contents.push({type: 'block', block: block});
         break;
       case 'SEP':
-        var sepInfo = /** @type {Blockly.utils.toolbox.Separator} */ (contentInfo);
+        var sepInfo = /** @type {Blockly.utils.toolbox.SeparatorJson} */ (contentInfo);
         this.addSeparatorGap_(sepInfo, gaps, defaultGap);
         break;
       case 'LABEL':
-        var labelInfo = /** @type {Blockly.utils.toolbox.Label} */ (contentInfo);
+        var labelInfo = /** @type {Blockly.utils.toolbox.LabelJson} */ (contentInfo);
         // A label is a button with different styling.
         // Rename this function.
         var label = this.createButton_(labelInfo, /** isLabel */ true);
@@ -560,7 +561,7 @@ Blockly.Flyout.prototype.createFlyoutInfo_ = function(parsedContent) {
         gaps.push(defaultGap);
         break;
       case 'BUTTON':
-        var buttonInfo = /** @type {Blockly.utils.toolbox.Button} */ (contentInfo);
+        var buttonInfo = /** @type {Blockly.utils.toolbox.ButtonJson} */ (contentInfo);
         var button = this.createButton_(buttonInfo, /** isLabel */ false);
         contents.push({type: 'button', button: button});
         gaps.push(defaultGap);
@@ -571,8 +572,30 @@ Blockly.Flyout.prototype.createFlyoutInfo_ = function(parsedContent) {
 };
 
 /**
+ * Gets the flyout definition for the dynamic category.
+ * @param {string} categoryName The name of the dynamic category.
+ * @return {!Array.<!Element>} The array of flyout items.
+ * @private
+ */
+Blockly.Flyout.prototype.getDynamicCategoryContents_ = function(categoryName) {
+  // Look up the correct category generation function and call that to get a
+  // valid XML list.
+  var fnToApply = this.workspace_.targetWorkspace.getToolboxCategoryCallback(
+      categoryName);
+  if (typeof fnToApply != 'function') {
+    throw TypeError('Couldn\'t find a callback function when opening' +
+        ' a toolbox category.');
+  }
+  var flyoutDef = fnToApply(this.workspace_.targetWorkspace);
+  if (!Array.isArray(flyoutDef)) {
+    throw TypeError('Result of toolbox category callback must be an array.');
+  }
+  return flyoutDef;
+};
+
+/**
  * Creates a flyout button or a flyout label.
- * @param {!Blockly.utils.toolbox.Button|!Blockly.utils.toolbox.Label} btnInfo
+ * @param {!Blockly.utils.toolbox.ButtonJson|!Blockly.utils.toolbox.LabelJson} btnInfo
  *    The object holding information about a button or a label.
  * @param {boolean} isLabel True if the button is a label, false otherwise.
  * @return {!Blockly.FlyoutButton} The object used to display the button in the
@@ -609,7 +632,7 @@ Blockly.Flyout.prototype.createBlock_ = function(blockXml) {
 
 /**
  * Get the xml from the block info object.
- * @param {!Blockly.utils.toolbox.Block}  blockInfo The object holding
+ * @param {!Blockly.utils.toolbox.BlockJson}  blockInfo The object holding
  *    information about a block.
  * @return {!Element} The xml for the block.
  * @throws {Error} if the xml is not a valid block definition.
@@ -623,6 +646,7 @@ Blockly.Flyout.prototype.getBlockXml_ = function(blockInfo) {
     blockElement = blockXml;
   } else if (blockXml && typeof blockXml == 'string') {
     blockElement = Blockly.Xml.textToDom(blockXml);
+    blockInfo['blockxml'] = blockElement;
   } else if (blockInfo['type']) {
     blockElement = Blockly.utils.xml.createElement('xml');
     blockElement.setAttribute('type', blockInfo['type']);
@@ -637,7 +661,7 @@ Blockly.Flyout.prototype.getBlockXml_ = function(blockInfo) {
 
 /**
  * Add the necessary gap in the flyout for a separator.
- * @param {!Blockly.utils.toolbox.Separator} sepInfo The object holding
+ * @param {!Blockly.utils.toolbox.SeparatorJson} sepInfo The object holding
  *    information about a separator.
  * @param {!Array.<number>} gaps The list gaps between items in the flyout.
  * @param {number} defaultGap The default gap between the button and next element.

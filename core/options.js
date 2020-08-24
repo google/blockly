@@ -33,7 +33,7 @@ goog.require('Blockly.Xml');
 Blockly.Options = function(options) {
   var readOnly = !!options['readOnly'];
   if (readOnly) {
-    var toolboxContents = null;
+    var toolboxJsonDef = null;
     var hasCategories = false;
     var hasTrashcan = false;
     var hasCollapse = false;
@@ -42,11 +42,13 @@ Blockly.Options = function(options) {
     var hasSounds = false;
   } else {
     var toolboxDef = options['toolbox'];
-    if (!Array.isArray(toolboxDef)) {
-      toolboxDef = Blockly.Options.parseToolboxTree(toolboxDef || null);
+    if (toolboxDef && !Array.isArray(toolboxDef['contents'])) {
+      toolboxDef = /** @type {Node} */
+          (Blockly.utils.toolbox.parseToolboxTree(toolboxDef || null));
     }
-    var toolboxContents = Blockly.utils.toolbox.convertToolboxToJSON(toolboxDef);
-    var hasCategories = Blockly.utils.toolbox.hasCategories(toolboxContents);
+    var toolboxJsonDef = /** @type {!Blockly.utils.toolbox.ToolboxJson} */
+        (Blockly.utils.toolbox.convertToolboxToJSON(toolboxDef));
+    var hasCategories = Blockly.utils.toolbox.hasCategories(toolboxJsonDef);
     var hasTrashcan = options['trashcan'];
     if (hasTrashcan === undefined) {
       hasTrashcan = hasCategories;
@@ -148,8 +150,8 @@ Blockly.Options = function(options) {
   this.hasCss = hasCss;
   /** @type {boolean} */
   this.horizontalLayout = horizontalLayout;
-  /** @type {Array.<Blockly.utils.toolbox.Toolbox>} */
-  this.languageTree = toolboxContents;
+  /** @type {?Blockly.utils.toolbox.ToolboxJson} */
+  this.languageTree = toolboxJsonDef;
   /** @type {!Blockly.Options.GridOptions} */
   this.gridOptions = Blockly.Options.parseGridOptions_(options);
   /** @type {!Blockly.Options.ZoomOptions} */
@@ -361,35 +363,4 @@ Blockly.Options.parseThemeOptions_ = function(options) {
   }
   return Blockly.Theme.defineTheme(theme.name ||
       ('builtin' + Blockly.utils.IdGenerator.getNextUniqueId()), theme);
-};
-
-/**
- * Parse the provided toolbox tree into a consistent DOM format.
- * @param {Node|NodeList|?string} tree DOM tree of blocks, or text representation
- *    of same.
- * @return {Node} DOM tree of blocks, or null.
- */
-Blockly.Options.parseToolboxTree = function(tree) {
-  if (tree) {
-    if (typeof tree != 'string') {
-      if (Blockly.utils.userAgent.IE && tree.outerHTML) {
-        // In this case the tree will not have been properly built by the
-        // browser. The HTML will be contained in the element, but it will
-        // not have the proper DOM structure since the browser doesn't support
-        // XSLTProcessor (XML -> HTML).
-        tree = tree.outerHTML;
-      } else if (!(tree instanceof Element)) {
-        tree = null;
-      }
-    }
-    if (typeof tree == 'string') {
-      tree = Blockly.Xml.textToDom(tree);
-      if (tree.nodeName.toLowerCase() != 'xml') {
-        throw TypeError('Toolbox should be an <xml> document.');
-      }
-    }
-  } else {
-    tree = null;
-  }
-  return tree;
 };

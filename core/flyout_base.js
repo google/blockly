@@ -532,7 +532,7 @@ Blockly.Flyout.prototype.createFlyoutInfo_ = function(parsedContent) {
       var categoryName = customInfo['custom'];
       var flyoutDef = this.getDynamicCategoryContents_(categoryName);
       var parsedDynamicContent = /** @type {!Array<Blockly.utils.toolbox.FlyoutItem>} */
-        (Blockly.utils.toolbox.convertToolboxToJSON(flyoutDef));
+        (Blockly.utils.toolbox.convertToolboxContentsToJSON(flyoutDef));
       parsedContent.splice.apply(parsedContent, [i, 1].concat(parsedDynamicContent));
       contentInfo = parsedContent[i];
     }

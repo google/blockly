@@ -169,7 +169,7 @@ Blockly.ToolboxCategory = function(categoryDef, toolbox, opt_parent) {
    */
   this.toolboxItems_ = [];
 
-  this.parseContents_(categoryDef, this.hasChildren_);
+  this.parseContents_(categoryDef);
 };
 
 Blockly.utils.object.inherits(Blockly.ToolboxCategory,
@@ -226,17 +226,28 @@ Blockly.ToolboxCategory.prototype.parseContents_ = function(categoryDef) {
   var contents = categoryDef['contents'];
   if (categoryDef['custom']) {
     this.contents_ = categoryDef['custom'];
-  } else {
+  } else if (contents) {
     for (var i = 0, item; (item = contents[i]); i++) {
-      var ToolboxItemClass = Blockly.registry.getClass(
-          Blockly.registry.Type.TOOLBOX_ITEM, item['kind'].toLowerCase());
-      if (ToolboxItemClass) {
-        var toolboxItem = new ToolboxItemClass(item, this.parentToolbox_, this);
-        this.toolboxItems_.push(toolboxItem);
-      } else {
-        this.contents_.push(item);
-      }
+      this.addItem_(item);
     }
+  }
+};
+
+/**
+ * Adds either a toolbox item or a flyout item to their respective lists.
+ * @param {!Blockly.utils.toolbox.ToolboxItem} itemDef The information needed
+ *     to create a toolbox item.
+ */
+Blockly.ToolboxCategory.prototype.addItem_ = function(itemDef) {
+  if (Blockly.registry.hasItem(
+      Blockly.registry.Type.TOOLBOX_ITEM, itemDef['kind'])) {
+    var ToolboxItemClass = Blockly.registry.getClass(
+        Blockly.registry.Type.TOOLBOX_ITEM, itemDef['kind']);
+    var toolboxItem = new ToolboxItemClass(itemDef, this.parentToolbox_, this);
+    this.toolboxItems_.push(toolboxItem);
+  } else {
+    var flyoutItem = /** @type {Blockly.utils.toolbox.FlyoutItem} */ (itemDef);
+    this.contents_.push(flyoutItem);
   }
 };
 
@@ -715,8 +726,7 @@ Blockly.ToolboxCategory.prototype.updateFlyoutContents = function(contents) {
     this.toolboxItemDef_['contents'] = Blockly.utils.toolbox.convertToolboxToJSON(contents);
   }
   this.parseContents_(
-      /** @type {Blockly.utils.toolbox.CategoryJson} */ (this.toolboxItemDef_),
-      this.hasChildren());
+      /** @type {Blockly.utils.toolbox.CategoryJson} */ (this.toolboxItemDef_));
 };
 
 /**

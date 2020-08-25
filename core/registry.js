@@ -176,7 +176,7 @@ Blockly.registry.unregister = function(type, name) {
 
 /**
  * Gets the registry item for the given name and type. This can be either a
- * class or an object.l
+ * class or an object.
  * @param {string|Blockly.registry.Type<T>} type The type of the plugin.
  *     (e.g. Field, Renderer)
  * @param {string} name The plugin's name. (Ex. field_angle, geras)
@@ -197,6 +197,25 @@ Blockly.registry.getItem_ = function(type, name) {
     return null;
   }
   return typeRegistry[name];
+};
+
+/**
+ * Returns whether or not the registry contains an item with the given type and
+ * name.
+ * @param {string|Blockly.registry.Type<T>} type The type of the plugin.
+ *     (e.g. Field, Renderer)
+ * @param {string} name The plugin's name. (Ex. field_angle, geras)
+ * @return {boolean} True if the registry has an item with the given type and
+ *     name, false otherwise.
+ */
+Blockly.registry.hasItem = function(type, name) {
+  type = String(type).toLowerCase();
+  name = name.toLowerCase();
+  var typeRegistry = Blockly.registry.typeMap_[type];
+  if (!typeRegistry) {
+    return false;
+  }
+  return !!(typeRegistry[name]);
 };
 
 /**

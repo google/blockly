@@ -419,14 +419,6 @@ suite('Toolbox', function() {
       sinon.assert.called(showFlyoutstub);
       sinon.assert.called(scrollToStartFlyout);
     });
-    test('Select non selectable item -> Should not update the flyout', function() {
-      var showFlyoutstub = sinon.stub(this.toolbox.flyout_, 'show');
-      var hideFlyoutStub = sinon.stub(this.toolbox.flyout_, 'hide');
-      var nonSelectableItem = getSeparator(this.toolbox);
-      this.toolbox.updateFlyout_(null, nonSelectableItem);
-      sinon.assert.notCalled(showFlyoutstub);
-      sinon.assert.notCalled(hideFlyoutStub);
-    });
   });
 
   suite('position', function() {

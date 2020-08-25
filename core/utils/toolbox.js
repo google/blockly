@@ -278,7 +278,7 @@ Blockly.utils.toolbox.hasCategories = function(toolboxDef) {
   var toolboxContents = toolboxDef['contents'] || toolboxDef;
   if (Array.isArray(toolboxContents)) {
     var categories = toolboxContents.filter(function(item) {
-      return item['kind'].toUpperCase() == 'CATEGORY';
+      return item['kind'] && item['kind'].toUpperCase() == 'CATEGORY';
     });
     return !!categories.length;
   } else {

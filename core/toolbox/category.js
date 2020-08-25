@@ -504,8 +504,7 @@ Blockly.ToolboxCategory.prototype.setExpanded = function(isExpanded) {
       child.isParentExpanded_ = isExpanded;
     }
   }
-
-  Blockly.svgResize(this.workspace_);
+  this.parentToolbox_.handleToolboxItemResize();
 };
 
 /**

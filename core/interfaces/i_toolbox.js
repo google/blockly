@@ -71,8 +71,15 @@ Blockly.IToolbox.prototype.isHorizontal;
 /**
  * Positions the toolbox based on whether it is a horizontal toolbox and whether
  * the workspace is in rtl.
+ * @return {void}
  */
 Blockly.IToolbox.prototype.position;
+
+/**
+ * Handles resizing the toolbox when a toolbox item resizes.
+ * @return {void}
+ */
+Blockly.IToolbox.prototype.handleToolboxItemResize;
 
 /**
  * Unhighlights any previously selected item.

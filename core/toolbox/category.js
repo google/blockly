@@ -160,7 +160,7 @@ Blockly.ToolboxCategory = function(categoryDef, toolbox, opt_parent) {
    * @type {string|!Array<!Blockly.utils.toolbox.FlyoutItem>}
    * @protected
    */
-  this.contents_ = [];
+  this.flyoutItems_ = [];
 
   /**
    * The child toolbox items for this category.
@@ -225,7 +225,7 @@ Blockly.ToolboxCategory.defaultBackgroundColour = '#57e';
 Blockly.ToolboxCategory.prototype.parseContents_ = function(categoryDef) {
   var contents = categoryDef['contents'];
   if (categoryDef['custom']) {
-    this.contents_ = categoryDef['custom'];
+    this.flyoutItems_ = categoryDef['custom'];
   } else if (contents) {
     for (var i = 0, item; (item = contents[i]); i++) {
       this.addItem_(item);
@@ -247,7 +247,7 @@ Blockly.ToolboxCategory.prototype.addItem_ = function(itemDef) {
     this.toolboxItems_.push(toolboxItem);
   } else {
     var flyoutItem = /** @type {Blockly.utils.toolbox.FlyoutItem} */ (itemDef);
-    this.contents_.push(flyoutItem);
+    this.flyoutItems_.push(flyoutItem);
   }
 };
 
@@ -696,7 +696,7 @@ Blockly.ToolboxCategory.prototype.getDiv = function() {
  * @override
  */
 Blockly.ToolboxCategory.prototype.getContents = function() {
-  return this.contents_;
+  return this.flyoutItems_;
 };
 
 /**

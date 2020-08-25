@@ -207,6 +207,7 @@ Blockly.registry.getItem_ = function(type, name) {
  * @param {string} name The plugin's name. (Ex. field_angle, geras)
  * @return {boolean} True if the registry has an item with the given type and
  *     name, false otherwise.
+ * @template T
  */
 Blockly.registry.hasItem = function(type, name) {
   type = String(type).toLowerCase();

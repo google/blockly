@@ -13,6 +13,7 @@
 goog.provide('Blockly.ToolboxCategory');
 
 goog.require('Blockly.CollapsibleToolboxItem');
+goog.require('Blockly.registry');
 goog.require('Blockly.utils.aria');
 goog.require('Blockly.utils.object');
 goog.require('Blockly.utils.toolbox');
@@ -219,22 +220,23 @@ Blockly.ToolboxCategory.defaultBackgroundColour = '#57e';
  * dynamic category, or if its contents are meant to be shown in the flyout.
  * @param {!Blockly.utils.toolbox.CategoryJson} categoryDef The information needed
  *     to create a category.
- * @param {boolean} hasChildren True if this category has subcategories, false
- *     otherwise.
  * @protected
  */
-Blockly.ToolboxCategory.prototype.parseContents_ = function(categoryDef,
-    hasChildren) {
+Blockly.ToolboxCategory.prototype.parseContents_ = function(categoryDef) {
   var contents = categoryDef['contents'];
-  if (hasChildren) {
-    for (var i = 0; i < contents.length; i++) {
-      var child = new Blockly.ToolboxCategory(contents[i], this.parentToolbox_, this);
-      this.toolboxItems_.push(child);
-    }
-  } else if (categoryDef['custom']) {
+  if (categoryDef['custom']) {
     this.contents_ = categoryDef['custom'];
   } else {
-    this.contents_ = contents;
+    for (var i = 0, item; (item = contents[i]); i++) {
+      var ToolboxItemClass = Blockly.registry.getClass(
+          Blockly.registry.Type.TOOLBOX_ITEM, item['kind'].toLowerCase());
+      if (ToolboxItemClass) {
+        var toolboxItem = new ToolboxItemClass(item, this.parentToolbox_, this);
+        this.toolboxItems_.push(toolboxItem);
+      } else {
+        this.contents_.push(item);
+      }
+    }
   }
 };
 

@@ -734,7 +734,8 @@ Blockly.Toolbox.prototype.selectItemByPosition = function(position) {
  * @protected
  */
 Blockly.Toolbox.prototype.updateFlyout_ = function(oldItem, newItem) {
-  if (oldItem == newItem || !newItem || newItem.isCollapsible()) {
+  if ((oldItem == newItem && !newItem.isCollapsible()) || !newItem ||
+      !newItem.getContents().length) {
     this.flyout_.hide();
   } else if (newItem.isSelectable()) {
     var selectableItem = /** @type {!Blockly.SelectableToolboxItem} */ (newItem);

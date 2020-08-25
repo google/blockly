@@ -587,6 +587,25 @@ Blockly.Toolbox.prototype.position = function() {
   }
   this.flyout_.position();
 };
+/**
+ * Handles resizing the toolbox when a toolbox item resizes.
+ * @package
+ */
+Blockly.Toolbox.prototype.handleToolboxItemResize = function() {
+  // Reposition the workspace so that (0,0) is in the correct position relative
+  // to the new absolute edge (ie toolbox edge).
+  var workspace = this.workspace_;
+  var rect = this.HtmlDiv.getBoundingClientRect();
+  var newX = this.toolboxPosition == Blockly.TOOLBOX_AT_LEFT ?
+      workspace.scrollX + rect.width : 0;
+  var newY = this.toolboxPosition == Blockly.TOOLBOX_AT_TOP ?
+      workspace.scrollY + rect.height : 0;
+  workspace.translate(newX, newY);
+
+  // Even though the div hasn't changed size, the visible workspace
+  // surface of the workspace has, so we may need to reposition everything.
+  Blockly.svgResize(workspace);
+};
 
 /**
  * Unhighlights any previously selected item.

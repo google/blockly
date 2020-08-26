@@ -239,7 +239,7 @@ Blockly.ToolboxCategory.prototype.parseContents_ = function(categoryDef) {
 
 /**
  * Adds either a toolbox item or a flyout item to their respective lists.
- * @param {!Blockly.utils.toolbox.ToolboxItem} itemDef The information needed
+ * @param {!Blockly.utils.toolbox.ToolboxItemJson} itemDef The information needed
  *     to create a toolbox item.
  */
 Blockly.ToolboxCategory.prototype.addItem_ = function(itemDef) {
@@ -250,7 +250,7 @@ Blockly.ToolboxCategory.prototype.addItem_ = function(itemDef) {
     var toolboxItem = new ToolboxItemClass(itemDef, this.parentToolbox_, this);
     this.toolboxItems_.push(toolboxItem);
   } else {
-    var flyoutItem = /** @type {Blockly.utils.toolbox.FlyoutItem} */ (itemDef);
+    var flyoutItem = /** @type {Blockly.utils.toolbox.FlyoutItemJson} */ (itemDef);
     this.flyoutItems_.push(flyoutItem);
   }
 };

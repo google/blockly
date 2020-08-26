@@ -128,7 +128,8 @@ Blockly.registry.register = function(type, name, registryItem) {
 
   // Don't throw an error if it is a toolbox item. We expect developers to override
   // categories and separators.
-  if (type != Blockly.registry.Type.TOOLBOX_ITEM && typeRegistry[name]) {
+  if (type != Blockly.registry.Type.TOOLBOX_ITEM.toString().toLowerCase() &&
+      typeRegistry[name]) {
     throw Error('Name "' + name + '" with type "' + type + '" already registered.');
   }
   typeRegistry[name] = registryItem;

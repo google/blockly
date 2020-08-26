@@ -228,12 +228,26 @@ Blockly.FlyoutButton.prototype.moveTo = function(x, y) {
 };
 
 /**
+ * @returns {boolean} Whether or not the button is a label.
+ */
+Blockly.FlyoutButton.prototype.isLabel = function() {
+  return this.isLabel_;
+};
+
+/**
  * Location of the button.
  * @return {!Blockly.utils.Coordinate} x, y coordinates.
  * @package
  */
 Blockly.FlyoutButton.prototype.getPosition = function() {
   return this.position_;
+};
+
+/**
+ * @returns {string} Text of the button.
+ */
+Blockly.FlyoutButton.prototype.getText = function() {
+  return this.text_;
 };
 
 /**

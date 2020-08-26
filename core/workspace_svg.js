@@ -1702,17 +1702,14 @@ Blockly.WorkspaceSvg.prototype.showContextMenu = function(e) {
 
 /**
  * Modify the block tree on the existing toolbox.
- * @param {Blockly.utils.toolbox.ToolboxDefinition|string} toolboxDef
- *    DOM tree of toolbox contents, string of toolbox contents, or array of JSON
- *    representing toolbox contents.
+ * @param {?Blockly.utils.toolbox.ToolboxDefinition} toolboxDef
+ *    DOM tree of toolbox contents, string of toolbox contents, or JSON
+ *    representing toolbox definition.
  */
 Blockly.WorkspaceSvg.prototype.updateToolbox = function(toolboxDef) {
-  var toolboxContents = (toolboxDef && toolboxDef['contents']) || toolboxDef;
-  if (!Array.isArray(toolboxContents)) {
-    toolboxContents = Blockly.utils.toolbox.parseToolboxTree(toolboxContents);
-  }
-  var parsedToolboxDef = Blockly.utils.toolbox.convertToolboxToJSON(toolboxContents);
-  if (!toolboxDef) {
+  var parsedToolboxDef = Blockly.utils.toolbox.convertToolboxDefToJson(toolboxDef);
+
+  if (!parsedToolboxDef) {
     if (this.options.languageTree) {
       throw Error('Can\'t nullify an existing toolbox.');
     }

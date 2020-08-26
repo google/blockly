@@ -62,8 +62,8 @@ suite('Toolbox', function() {
     test('Render called with valid toolboxDef -> Contents are created', function() {
       var positionStub = sinon.stub(this.toolbox, 'position');
       this.toolbox.render({'contents': [
-        {'kind': 'category'},
-        {'kind': 'category'}
+        {'kind': 'category', 'contents': []},
+        {'kind': 'category', 'contents': []}
       ]});
       chai.assert.lengthOf(this.toolbox.contents_, 2);
       sinon.assert.called(positionStub);
@@ -477,7 +477,7 @@ suite('Toolbox', function() {
     });
   });
 
-  suite('parseToolbox', function() {
+  suite('parseMethods', function() {
     setup(function() {
       this.categoryToolboxJSON = getCategoryJSON();
       this.simpleToolboxJSON = getSimpleJSON();
@@ -502,49 +502,107 @@ suite('Toolbox', function() {
       checkContents(actual.contents, expected.contents);
     }
     function checkCategoryToolbox(actual, expected) {
-      var contents = actual['contents'];
-      chai.assert.equal(contents.length, expected.length);
+      var actualContents = actual['contents'];
+      var expectedContents = expected['contents'];
+      chai.assert.equal(actualContents.length, expectedContents.length);
       for (var i = 0; i < expected.length; i++) {
-        checkCategory(contents[i], expected[i]);
+        checkCategory(actualContents[i], expected[i]);
       }
     }
     function checkSimpleToolbox(actual, expected) {
-      checkContents(actual['contents'], expected);
+      checkContents(actual['contents'], expected['contents']);
     }
 
-    test('Simple Toolbox: Array with xml', function() {
-      var xmlList = getXmlArray();
-      var toolboxDef = Blockly.utils.toolbox.convertToolboxToJSON(xmlList);
-      checkSimpleToolbox(toolboxDef, this.simpleToolboxJSON);
+    suite('parseToolbox', function() {
+      test('Category Toolbox: JSON', function() {
+        var toolboxDef = Blockly.utils.toolbox.convertToolboxDefToJson(this.categoryToolboxJSON);
+        chai.assert.isNotNull(toolboxDef);
+        checkCategoryToolbox(toolboxDef, this.categoryToolboxJSON);
+      });
+      test('Simple Toolbox: JSON', function() {
+        var toolboxDef = Blockly.utils.toolbox.convertToolboxDefToJson(this.simpleToolboxJSON);
+        chai.assert.isNotNull(toolboxDef);
+        checkSimpleToolbox(toolboxDef, this.simpleToolboxJSON);
+      });
+      test('Category Toolbox: xml', function() {
+        var toolboxXml = document.getElementById('toolbox-categories');
+        var toolboxDef = Blockly.utils.toolbox.convertToolboxDefToJson(toolboxXml);
+        chai.assert.isNotNull(toolboxDef);
+        checkCategoryToolbox(toolboxDef, this.categoryToolboxJSON);
+      });
+      test('Simple Toolbox: xml', function() {
+        var toolboxXml = document.getElementById('toolbox-simple');
+        var toolboxDef = Blockly.utils.toolbox.convertToolboxDefToJson(toolboxXml);
+        chai.assert.isNotNull(toolboxDef);
+        checkSimpleToolbox(toolboxDef, this.simpleToolboxJSON);
+      });
+      test('Simple Toolbox: string', function() {
+        var toolbox = '<xml>';
+        toolbox += '  <block type="controls_if"></block>';
+        toolbox += '  <block type="controls_whileUntil"></block>';
+        toolbox += '</xml>';
+
+        var toolboxJson = {
+          'contents': [
+            {
+              'kind': 'block',
+              'type': 'controls_if'
+            },
+            {
+              'kind': 'block',
+              'type': 'controls_if'
+            }
+          ]
+        };
+
+        var toolboxDef = Blockly.utils.toolbox.convertToolboxDefToJson(toolbox);
+        chai.assert.isNotNull(toolboxDef);
+        checkSimpleToolbox(toolboxDef, toolboxJson);
+      });
+      test('Category Toolbox: string', function() {
+        var toolbox = '<xml>';
+        toolbox += '  <category name="a"></category>';
+        toolbox += '  <category name="b"></category>';
+        toolbox += '</xml>';
+
+        var toolboxJson = {
+          'contents': [
+            {
+              'kind': 'category',
+              'name': 'a'
+            },
+            {
+              'kind': 'category',
+              'name': 'b'
+            }
+          ]
+        };
+
+        var toolboxDef = Blockly.utils.toolbox.convertToolboxDefToJson(toolbox);
+        chai.assert.isNotNull(toolboxDef);
+        checkSimpleToolbox(toolboxDef, toolboxJson);
+      });
     });
-    test('Category Toolbox: Array with xml', function() {
-      var categoryOne = Blockly.Xml.textToDom('<category name="First" css-container="something"><block type="basic_block"><field name="TEXT">FirstCategory-FirstBlock</field></block><block type="basic_block"><field name="TEXT">FirstCategory-SecondBlock</field></block></category>');
-      var categoryTwo = Blockly.Xml.textToDom('<category name="Second"><block type="basic_block"><field name="TEXT">SecondCategory-FirstBlock</field></block></category>');
-      var xmlList = [categoryOne, categoryTwo];
-      var toolboxDef = Blockly.utils.toolbox.convertToolboxToJSON(xmlList);
-      checkCategoryToolbox(toolboxDef, this.categoryToolboxJSON);
-    });
-    test('Category Toolbox: Array with JSON', function() {
-      var toolboxDef = Blockly.utils.toolbox.convertToolboxToJSON(this.categoryToolboxJSON);
-      chai.assert.isNotNull(toolboxDef);
-      checkCategoryToolbox(toolboxDef, this.categoryToolboxJSON);
-    });
-    test('Simple Toolbox: Array with JSON', function() {
-      var toolboxDef = Blockly.utils.toolbox.convertToolboxToJSON(this.simpleToolboxJSON);
-      chai.assert.isNotNull(toolboxDef);
-      checkSimpleToolbox(toolboxDef, this.simpleToolboxJSON);
-    });
-    test('Category Toolbox: xml', function() {
-      var toolboxXml = document.getElementById('toolbox-categories');
-      var toolboxDef = Blockly.utils.toolbox.convertToolboxToJSON(toolboxXml);
-      chai.assert.isNotNull(toolboxDef);
-      checkCategoryToolbox(toolboxDef, this.categoryToolboxJSON);
-    });
-    test('Simple Toolbox: xml', function() {
-      var toolboxXml = document.getElementById('toolbox-simple');
-      var toolboxDef = Blockly.utils.toolbox.convertToolboxToJSON(toolboxXml);
-      chai.assert.isNotNull(toolboxDef);
-      checkSimpleToolbox(toolboxDef, this.simpleToolboxJSON);
+    suite('parseFlyout', function() {
+      test('Array of Nodes', function() {
+        var xmlList = getXmlArray();
+        var flyoutDef = Blockly.utils.toolbox.convertFlyoutDefToJsonArray(xmlList);
+        checkContents(flyoutDef, this.simpleToolboxJSON['contents']);
+      });
+      test('NodeList', function() {
+        var nodeList = document.getElementById('toolbox-simple').childNodes;
+        var flyoutDef = Blockly.utils.toolbox.convertFlyoutDefToJsonArray(nodeList);
+        checkContents(flyoutDef, this.simpleToolboxJSON['contents']);
+      });
+      test('List of json', function() {
+        var jsonList = this.simpleToolboxJSON['contents'];
+        var flyoutDef = Blockly.utils.toolbox.convertFlyoutDefToJsonArray(jsonList);
+        checkContents(flyoutDef, this.simpleToolboxJSON['contents']);
+      });
+      test('Json', function() {
+        var flyoutDef = Blockly.utils.toolbox.convertFlyoutDefToJsonArray(this.simpleToolboxJSON);
+        checkContents(flyoutDef, this.simpleToolboxJSON['contents']);
+      });
     });
   });
 });

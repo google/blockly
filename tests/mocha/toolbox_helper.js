@@ -10,7 +10,7 @@
  *    for a toolbox.
  */
 function getCategoryJSON() {
-  return [
+  return {'contents': [
     {
       "kind": "CATEGORY",
       "cssconfig": {
@@ -37,7 +37,7 @@ function getCategoryJSON() {
         }
       ],
       "name": "Second"
-    }];
+    }]};
 }
 
 /**
@@ -46,7 +46,7 @@ function getCategoryJSON() {
  *    for a simple toolbox.
  */
 function getSimpleJSON() {
-  return [
+  return {'contents':[
     {
       "kind":"BLOCK",
       "blockxml": "<block type=\"logic_operation\"></block>",
@@ -65,7 +65,7 @@ function getSimpleJSON() {
       "kind":"LABEL",
       "text":"tooltips"
     }
-  ];
+  ]};
 }
 
 /**

@@ -228,7 +228,7 @@ Blockly.FlyoutButton.prototype.moveTo = function(x, y) {
 };
 
 /**
- * @returns {boolean} Whether or not the button is a label.
+ * @return {boolean} Whether or not the button is a label.
  */
 Blockly.FlyoutButton.prototype.isLabel = function() {
   return this.isLabel_;
@@ -244,9 +244,9 @@ Blockly.FlyoutButton.prototype.getPosition = function() {
 };
 
 /**
- * @returns {string} Text of the button.
+ * @return {string} Text of the button.
  */
-Blockly.FlyoutButton.prototype.getText = function() {
+Blockly.FlyoutButton.prototype.getButtonText = function() {
   return this.text_;
 };
 

@@ -17,7 +17,7 @@ goog.provide('Blockly.ToolboxItem');
 
 /**
  * Class for an item in the toolbox.
- * @param {!Blockly.utils.toolbox.ToolboxItem} toolboxItemDef The JSON defining the
+ * @param {!Blockly.utils.toolbox.ToolboxItemJson} toolboxItemDef The JSON defining the
  *     toolbox item.
  * @param {!Blockly.IToolbox} toolbox The toolbox that holds the toolbox item.
  * @constructor
@@ -33,7 +33,7 @@ Blockly.ToolboxItem = function(toolboxItemDef, toolbox) {
 
   /**
    * The JSON definition of the toolbox item.
-   * @type {!Blockly.utils.toolbox.ToolboxItem}
+   * @type {!Blockly.utils.toolbox.ToolboxItemJson}
    * @protected
    */
   this.toolboxItemDef_ = toolboxItemDef;
@@ -117,7 +117,7 @@ Blockly.ToolboxItem.prototype.dispose = function() {
 
 /**
  * Class for an item in the toolbox that can be selected.
- * @param {!Blockly.utils.toolbox.ToolboxItem} toolboxItemDef The JSON
+ * @param {!Blockly.utils.toolbox.ToolboxItemJson} toolboxItemDef The JSON
  *     defining the toolbox item.
  * @param {!Blockly.IToolbox} toolbox The toolbox that holds the toolbox item.
  * @constructor
@@ -149,7 +149,7 @@ Blockly.SelectableToolboxItem.prototype.getName = function() {
 /**
  * Gets the contents of the toolbox item. These are items that are meant to be
  * displayed in the flyout.
- * @return {!Array<!Blockly.utils.toolbox.FlyoutItem>|string} The definition
+ * @return {!Array<!Blockly.utils.toolbox.FlyoutItemJson>|string} The definition
  *     of items to be displayed in the flyout.
  * @public
  */
@@ -175,7 +175,7 @@ Blockly.SelectableToolboxItem.prototype.onClick = function(_e) {};
 
 /**
  * Class for an item in the toolbox that is collapsible.
- * @param {!Blockly.utils.toolbox.ToolboxItem} toolboxItemDef The JSON
+ * @param {!Blockly.utils.toolbox.ToolboxItemJson} toolboxItemDef The JSON
  *     defining the toolbox item.
  * @param {!Blockly.IToolbox} toolbox The toolbox that holds the toolbox item.
  * @constructor

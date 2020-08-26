@@ -42,12 +42,16 @@ Blockly.ToolboxCategory = function(categoryDef, toolbox, opt_parent) {
    */
   this.name_ = Blockly.utils.replaceMessageReferences(categoryDef['name']);
 
+  var categories = categoryDef['contents'].filter(function(item) {
+    return item['kind'].toUpperCase() == 'CATEGORY';
+  });
+
   /**
    * True if this category has subcategories, false otherwise.
    * @type {boolean}
    * @private
    */
-  this.hasChildren_ = Blockly.utils.toolbox.hasCategories(categoryDef['contents'] || []);
+  this.hasChildren_ = !!categories.length;
 
   /**
    * The parent of the category.
@@ -157,7 +161,7 @@ Blockly.ToolboxCategory = function(categoryDef, toolbox, opt_parent) {
 
   /**
    * The flyout items for this category.
-   * @type {string|!Array<!Blockly.utils.toolbox.FlyoutItem>}
+   * @type {string|!Array<!Blockly.utils.toolbox.FlyoutItemJson>}
    * @protected
    */
   this.flyoutItems_ = [];
@@ -710,7 +714,7 @@ Blockly.ToolboxCategory.prototype.getChildToolboxItems = function() {
  * Updates the contents to be displayed in the flyout.
  * If the flyout is open when the contents are updated, refreshSelection on the
  * toolbox must also be called.
- * @param {!Blockly.utils.toolbox.ToolboxDefinition} contents The contents
+ * @param {!Blockly.utils.toolbox.FlyoutDefinition} contents The contents
  *     to be displayed in the flyout. A string can be supplied to create a
  *     dynamic category.
  * @public
@@ -723,7 +727,7 @@ Blockly.ToolboxCategory.prototype.updateFlyoutContents = function(contents) {
   if (typeof contents == 'string') {
     this.toolboxItemDef_['custom'] = contents;
   } else {
-    this.toolboxItemDef_['contents'] = Blockly.utils.toolbox.convertToolboxToJSON(contents);
+    this.toolboxItemDef_['contents'] = Blockly.utils.toolbox.parseFlyoutDef(contents);
   }
   this.parseContents_(
       /** @type {Blockly.utils.toolbox.CategoryJson} */ (this.toolboxItemDef_));

@@ -173,7 +173,7 @@ Blockly.Mutator.prototype.createEditor_ = function() {
   var hasFlyout = !!quarkXml;
   if (hasFlyout) {
     workspaceOptions.languageTree =
-        Blockly.utils.toolbox.convertToolboxToJSON(quarkXml);
+        Blockly.utils.toolbox.parseToolboxDef(quarkXml);
     workspaceOptions.getMetrics = this.getFlyoutMetrics_.bind(this);
   }
   this.workspace_ = new Blockly.WorkspaceSvg(workspaceOptions);

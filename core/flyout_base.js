@@ -513,7 +513,7 @@ Blockly.Flyout.prototype.show = function(flyoutDef) {
 /**
  * Create the contents array and gaps array necessary to create the layout for
  * the flyout.
- * @param {!Array<Blockly.utils.toolbox.FlyoutItemJson>} parsedContent The array
+ * @param {!Blockly.utils.toolbox.FlyoutItemJsonArray} parsedContent The array
  *     of objects to show in the flyout.
  * @return {{contents:Array.<Object>, gaps:Array.<number>}} The list of contents
  *     and gaps needed to lay out the flyout.
@@ -530,7 +530,7 @@ Blockly.Flyout.prototype.createFlyoutInfo_ = function(parsedContent) {
       var customInfo = /** @type {Blockly.utils.toolbox.CategoryJson} */ (contentInfo);
       var categoryName = customInfo['custom'];
       var flyoutDef = this.getDynamicCategoryContents_(categoryName);
-      var parsedDynamicContent = /** @type {!Array<Blockly.utils.toolbox.FlyoutItemJson>} */
+      var parsedDynamicContent = /** @type {!Blockly.utils.toolbox.FlyoutItemJsonArray} */
         (Blockly.utils.toolbox.convertFlyoutDefToJsonArray(flyoutDef));
       parsedContent.splice.apply(parsedContent, [i, 1].concat(parsedDynamicContent));
       contentInfo = parsedContent[i];

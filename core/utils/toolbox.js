@@ -103,7 +103,7 @@ Blockly.utils.toolbox.ToolboxDefinition;
 
 /**
  * All of the different types that can be used to show items in a flyout.
- * @typedef {Array<!Blockly.utils.toolbox.FlyoutItemJson>|
+ * @typedef {Blockly.utils.toolbox.FlyoutItemJsonArray|
  *           NodeList|
  *           Blockly.utils.toolbox.ToolboxJson|
  *           Array<!Node>}
@@ -118,6 +118,14 @@ Blockly.utils.toolbox.FlyoutDefinition;
  *           Blockly.utils.toolbox.LabelJson}
  */
 Blockly.utils.toolbox.FlyoutItemJson;
+
+/**
+ * An array holding flyout items.
+ * @typedef {
+ *            Array<!Blockly.utils.toolbox.FlyoutItemJson>
+ *          }
+ */
+Blockly.utils.toolbox.FlyoutItemJsonArray;
 
 /**
  * The name used to identify a toolbox that has category like items.
@@ -187,7 +195,7 @@ Blockly.utils.toolbox.validateToolbox_ = function(toolboxJson){
  * Converts the flyout definition into a list of flyout items.
  * @param {?Blockly.utils.toolbox.FlyoutDefinition} flyoutDef The definition of
  *    the flyout in one of its many forms.
- * @return {!Array<Blockly.utils.toolbox.FlyoutItemJson>} A list of flyout items.
+ * @return {!Blockly.utils.toolbox.FlyoutItemJsonArray} A list of flyout items.
  * @package
  */
 Blockly.utils.toolbox.convertFlyoutDefToJsonArray = function(flyoutDef) {
@@ -253,7 +261,7 @@ Blockly.utils.toolbox.convertToToolboxJson_ = function(toolboxDef) {
  * Converts the xml for a toolbox to JSON.
  * @param {!Node|!Array<Node>|!NodeList} toolboxDef The
  *     definition of the toolbox in one of its many forms.
- * @return {!Array<Blockly.utils.toolbox.FlyoutItemJson>|
+ * @return {!Blockly.utils.toolbox.FlyoutItemJsonArray|
  *          !Array<Blockly.utils.toolbox.ToolboxItemJson>} A list of objects in
  *          the toolbox.
  * @private

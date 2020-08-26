@@ -149,7 +149,7 @@ Blockly.SelectableToolboxItem.prototype.getName = function() {
 /**
  * Gets the contents of the toolbox item. These are items that are meant to be
  * displayed in the flyout.
- * @return {!Array<!Blockly.utils.toolbox.FlyoutItemJson>|string} The definition
+ * @return {!Blockly.utils.toolbox.FlyoutItemJsonArray|string} The definition
  *     of items to be displayed in the flyout.
  * @public
  */

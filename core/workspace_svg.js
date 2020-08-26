@@ -1707,7 +1707,7 @@ Blockly.WorkspaceSvg.prototype.showContextMenu = function(e) {
  *    representing toolbox definition.
  */
 Blockly.WorkspaceSvg.prototype.updateToolbox = function(toolboxDef) {
-  var parsedToolboxDef = Blockly.utils.toolbox.parseToolboxDef(toolboxDef);
+  var parsedToolboxDef = Blockly.utils.toolbox.convertToolboxDefToJson(toolboxDef);
 
   if (!parsedToolboxDef) {
     if (this.options.languageTree) {

@@ -136,7 +136,104 @@ Blockly.utils.toolbox.CATEGORY_TOOLBOX_KIND = 'categoryToolbox';
 Blockly.utils.toolbox.FLYOUT_TOOLBOX_KIND = 'flyoutToolbox';
 
 /**
- * Parse the provided toolbox definition into a consistent format.
+ * Converts the toolbox definition into toolbox JSON.
+ * @param {?Blockly.utils.toolbox.ToolboxDefinition} toolboxDef The definition
+ *     of the toolbox in one of its many forms.
+ * @return {?Blockly.utils.toolbox.ToolboxJson} Object holding information
+ *     for creating a toolbox.
+ * @package
+ */
+Blockly.utils.toolbox.convertToolboxDefToJson = function(toolboxDef) {
+  if (!toolboxDef) {
+    return null;
+  }
+
+  if (toolboxDef instanceof Element || typeof toolboxDef == 'string') {
+    toolboxDef = Blockly.utils.toolbox.parseToolboxTree(toolboxDef);
+    toolboxDef = Blockly.utils.toolbox.convertToToolboxJson_(toolboxDef);
+  }
+
+  var toolboxJson = /** @type {Blockly.utils.toolbox.ToolboxJson} */ (toolboxDef);
+  Blockly.utils.toolbox.validateToolbox_(toolboxJson);
+  return toolboxJson;
+};
+
+/**
+ * Validates the toolbox JSON fields have been set correctly.
+ * @param {Blockly.utils.toolbox.ToolboxJson} toolboxJson Object holding
+ *     information for creating a toolbox.
+ * @throws {Error} if the toolbox is not the correct format.
+ * @private
+ */
+Blockly.utils.toolbox.validateToolbox_ = function(toolboxJson){
+  var toolboxKind = toolboxJson['kind'];
+  var toolboxContents = toolboxJson['contents'];
+
+  if (toolboxKind) {
+    if (toolboxKind != Blockly.utils.toolbox.FLYOUT_TOOLBOX_KIND &&
+      toolboxKind != Blockly.utils.toolbox.CATEGORY_TOOLBOX_KIND) {
+      throw Error('Invalid toolbox kind ' + toolboxKind + '.' +
+        ' Please supply either ' +
+        Blockly.utils.toolbox.FLYOUT_TOOLBOX_KIND + ' or ' +
+        Blockly.utils.toolbox.CATEGORY_TOOLBOX_KIND);
+    }
+  }
+  if (!toolboxContents) {
+    throw Error('Toolbox must have a contents attribute.');
+  }
+};
+
+/**
+ * Converts the flyout definition into a list of flyout items.
+ * @param {?Blockly.utils.toolbox.FlyoutDefinition} flyoutDef The definition of
+ *    the flyout in one of its many forms.
+ * @return {!Array<Blockly.utils.toolbox.FlyoutItemJson>} A list of flyout items.
+ * @package
+ */
+Blockly.utils.toolbox.convertFlyoutDefToJsonArray = function(flyoutDef) {
+  if (!flyoutDef) {
+    return [];
+  }
+
+  if (flyoutDef['contents']) {
+    return flyoutDef['contents'];
+  }
+
+  // If it is already in the correct format return the flyoutDef.
+  if (Array.isArray(flyoutDef) && flyoutDef.length > 0 &&
+      !flyoutDef[0].nodeType) {
+    return flyoutDef;
+  }
+
+  return Blockly.utils.toolbox.toolboxXmlToJson_(
+      /** @type {!Array<Node>|!NodeList} */ (flyoutDef));
+};
+
+/**
+ * Whether or not the toolbox definition has categories.
+ * @param {?Blockly.utils.toolbox.ToolboxJson} toolboxJson Object holding
+ *     information for creating a toolbox.
+ * @return {boolean} True if the toolbox has categories.
+ * @package
+ */
+Blockly.utils.toolbox.hasCategories = function(toolboxJson) {
+  if (!toolboxJson) {
+    return false;
+  }
+
+  var toolboxKind = toolboxJson['kind'];
+  if (toolboxKind) {
+    return toolboxKind == Blockly.utils.toolbox.CATEGORY_TOOLBOX_KIND;
+  }
+
+  var categories = toolboxJson['contents'].filter(function(item) {
+    return item['kind'].toUpperCase() == 'CATEGORY';
+  });
+  return !!categories.length;
+};
+
+/**
+ * Parses the provided toolbox definition into a consistent format.
  * @param {Node} toolboxDef The definition of the toolbox in one of its many forms.
  * @return {!Blockly.utils.toolbox.ToolboxJson} Object holding information
  *     for creating a toolbox.
@@ -153,12 +250,12 @@ Blockly.utils.toolbox.convertToToolboxJson_ = function(toolboxDef) {
 };
 
 /**
- * Convert the xml for a toolbox to JSON.
+ * Converts the xml for a toolbox to JSON.
  * @param {!Node|!Array<Node>|!NodeList} toolboxDef The
  *     definition of the toolbox in one of its many forms.
  * @return {!Array<Blockly.utils.toolbox.FlyoutItemJson>|
  *          !Array<Blockly.utils.toolbox.ToolboxItemJson>} A list of objects in
- *     the toolbox.
+ *          the toolbox.
  * @private
  */
 Blockly.utils.toolbox.toolboxXmlToJson_ = function(toolboxDef) {
@@ -207,102 +304,6 @@ Blockly.utils.toolbox.addAttributes_ = function(node, obj) {
     } else {
       obj[attr.nodeName] = attr.value;
     }
-  }
-};
-
-/**
- * Whether or not the toolbox definition has categories.
- * @param {?Blockly.utils.toolbox.ToolboxJson} toolboxDef Object holding
- *     information for creating a toolbox.
- * @return {boolean} True if the toolbox has categories.
- * @package
- */
-Blockly.utils.toolbox.hasCategories = function(toolboxDef) {
-  if (!toolboxDef) {
-    return false;
-  }
-
-  var toolboxKind = toolboxDef['kind'];
-  if (toolboxKind) {
-    return toolboxKind == Blockly.utils.toolbox.CATEGORY_TOOLBOX_KIND;
-  }
-
-  var categories = toolboxDef['contents'].filter(function(item) {
-    return item['kind'].toUpperCase() == 'CATEGORY';
-  });
-  return !!categories.length;
-};
-
-/**
- * Converts the toolbox definition into toolbox JSON.
- * @param {?Blockly.utils.toolbox.ToolboxDefinition} toolboxDef The definition
- *     of the toolbox in one of its many forms.
- * @return {?Blockly.utils.toolbox.ToolboxJson} Object holding information
- *     for creating a toolbox.
- * @package
- */
-Blockly.utils.toolbox.parseToolboxDef = function(toolboxDef) {
-  if (!toolboxDef) {
-    return null;
-  }
-
-  if (toolboxDef instanceof Element || typeof toolboxDef == 'string') {
-    toolboxDef = Blockly.utils.toolbox.parseToolboxTree(toolboxDef);
-    toolboxDef = Blockly.utils.toolbox.convertToToolboxJson_(toolboxDef);
-  }
-
-  toolboxDef = /** @type {Blockly.utils.toolbox.ToolboxJson} */ (toolboxDef);
-  Blockly.utils.toolbox.validateToolbox_(toolboxDef);
-  return toolboxDef;
-};
-
-/**
- * Converts the flyout definition into a list of flyout items.
- * @param {?Blockly.utils.toolbox.FlyoutDefinition} flyoutDef The definition of
- *    the flyout in one of its many forms.
- * @return {!Array<Blockly.utils.toolbox.FlyoutItemJson>} A list of flyout items.
- * @package
- */
-Blockly.utils.toolbox.parseFlyoutDef = function(flyoutDef) {
-  if (!flyoutDef) {
-    return [];
-  }
-
-  if (flyoutDef['contents']) {
-    return flyoutDef['contents'];
-  }
-
-  if (Array.isArray(flyoutDef) && flyoutDef.length > 0 &&
-      !flyoutDef[0].nodeType) {
-    return flyoutDef;
-  }
-
-  return Blockly.utils.toolbox.toolboxXmlToJson_(
-      /** @type {!Array<Node>|!NodeList} */ (flyoutDef));
-};
-
-/**
- * Validates the toolbox JSON fields have been set correctly.
- * @param {Blockly.utils.toolbox.ToolboxJson} toolboxDef Object holding
- *     information for creating a toolbox.
- * @throws {Error} if the toolbox is not the correct format.
- * @private
- */
-Blockly.utils.toolbox.validateToolbox_ = function(toolboxDef){
-  var toolboxKind = toolboxDef['kind'];
-  var toolboxContents = toolboxDef['contents'];
-
-  if (toolboxKind) {
-    if (toolboxKind != Blockly.utils.toolbox.FLYOUT_TOOLBOX_KIND &&
-      toolboxKind != Blockly.utils.toolbox.CATEGORY_TOOLBOX_KIND) {
-      throw Error('Invalid toolbox kind ' + toolboxKind + '.' +
-        ' Please supply either ' +
-        Blockly.utils.toolbox.FLYOUT_TOOLBOX_KIND + ' or ' +
-        Blockly.utils.toolbox.CATEGORY_TOOLBOX_KIND);
-    }
-  }
-  if (!toolboxContents) {
-    throw Error('Toolbox must have a contents attribute.');
   }
 };
 

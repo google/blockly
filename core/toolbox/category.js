@@ -727,7 +727,7 @@ Blockly.ToolboxCategory.prototype.updateFlyoutContents = function(contents) {
   if (typeof contents == 'string') {
     this.toolboxItemDef_['custom'] = contents;
   } else {
-    this.toolboxItemDef_['contents'] = Blockly.utils.toolbox.parseFlyoutDef(contents);
+    this.toolboxItemDef_['contents'] = Blockly.utils.toolbox.convertFlyoutDefToJsonArray(contents);
   }
   this.parseContents_(
       /** @type {Blockly.utils.toolbox.CategoryJson} */ (this.toolboxItemDef_));

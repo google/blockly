@@ -472,8 +472,8 @@ Blockly.Flyout.prototype.show = function(flyoutDef) {
   }
   this.setVisible(true);
 
-  // Parse the Array, Node, NodeList into a a list of flyout items.
-  var parsedContent = Blockly.utils.toolbox.parseFlyoutDef(flyoutDef);
+  // Parse the Array, Node or NodeList into a a list of flyout items.
+  var parsedContent = Blockly.utils.toolbox.convertFlyoutDefToJsonArray(flyoutDef);
   parsedContent = parsedContent.slice(); // Shallow copy of parsedContent.
   var flyoutInfo =
     /** @type {{contents:!Array.<!Object>, gaps:!Array.<number>}} */ (
@@ -531,7 +531,7 @@ Blockly.Flyout.prototype.createFlyoutInfo_ = function(parsedContent) {
       var categoryName = customInfo['custom'];
       var flyoutDef = this.getDynamicCategoryContents_(categoryName);
       var parsedDynamicContent = /** @type {!Array<Blockly.utils.toolbox.FlyoutItemJson>} */
-        (Blockly.utils.toolbox.parseFlyoutDef(flyoutDef));
+        (Blockly.utils.toolbox.convertFlyoutDefToJsonArray(flyoutDef));
       parsedContent.splice.apply(parsedContent, [i, 1].concat(parsedDynamicContent));
       contentInfo = parsedContent[i];
     }

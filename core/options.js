@@ -41,7 +41,7 @@ Blockly.Options = function(options) {
     var hasDisable = false;
     var hasSounds = false;
   } else {
-    var toolboxJsonDef = Blockly.utils.toolbox.parseToolboxDef(options['toolbox']);
+    var toolboxJsonDef = Blockly.utils.toolbox.convertToolboxDefToJson(options['toolbox']);
     var hasCategories = Blockly.utils.toolbox.hasCategories(toolboxJsonDef);
     var hasTrashcan = options['trashcan'];
     if (hasTrashcan === undefined) {

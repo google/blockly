@@ -205,7 +205,7 @@ Blockly.utils.toolbox.convertFlyoutDefToJsonArray = function(flyoutDef) {
     return flyoutDef;
   }
 
-  return Blockly.utils.toolbox.toolboxXmlToJson_(
+  return Blockly.utils.toolbox.xmlToJsonArray_(
       /** @type {!Array<Node>|!NodeList} */ (flyoutDef));
 };
 
@@ -240,7 +240,7 @@ Blockly.utils.toolbox.hasCategories = function(toolboxJson) {
  * @private
  */
 Blockly.utils.toolbox.convertToToolboxJson_ = function(toolboxDef) {
-  var contents = Blockly.utils.toolbox.toolboxXmlToJson_(
+  var contents = Blockly.utils.toolbox.xmlToJsonArray_(
       /** @type {!Node|!Array<Node>} */ (toolboxDef));
   var toolboxJson = {'contents': contents};
   if (toolboxDef instanceof Node) {
@@ -258,7 +258,7 @@ Blockly.utils.toolbox.convertToToolboxJson_ = function(toolboxDef) {
  *          the toolbox.
  * @private
  */
-Blockly.utils.toolbox.toolboxXmlToJson_ = function(toolboxDef) {
+Blockly.utils.toolbox.xmlToJsonArray_ = function(toolboxDef) {
   var arr = [];
   // If it is a node it will have children.
   var childNodes = toolboxDef.childNodes;
@@ -279,7 +279,7 @@ Blockly.utils.toolbox.toolboxXmlToJson_ = function(toolboxDef) {
       obj['blockxml'] = child;
     } else if (tagName == 'CATEGORY') {
       // Get the contents of a category
-      obj['contents'] = Blockly.utils.toolbox.toolboxXmlToJson_(child);
+      obj['contents'] = Blockly.utils.toolbox.xmlToJsonArray_(child);
     }
 
     // Add xml attributes to object

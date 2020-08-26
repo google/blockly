@@ -714,7 +714,7 @@ Blockly.ToolboxCategory.prototype.getChildToolboxItems = function() {
  * Updates the contents to be displayed in the flyout.
  * If the flyout is open when the contents are updated, refreshSelection on the
  * toolbox must also be called.
- * @param {!Blockly.utils.toolbox.FlyoutDefinition} contents The contents
+ * @param {!Blockly.utils.toolbox.FlyoutDefinition|string} contents The contents
  *     to be displayed in the flyout. A string can be supplied to create a
  *     dynamic category.
  * @public

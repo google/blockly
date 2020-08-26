@@ -289,7 +289,7 @@ suite('Toolbox', function() {
       });
       test('Selected item is collapsed -> Should skip over its children', function() {
         var item = getCollapsibleItem(this.toolbox);
-        var childItem = item.contents_[0];
+        var childItem = item.flyoutItems_[0];
         item.expanded_ = false;
         this.toolbox.selectedItem_ = item;
         var handled = this.toolbox.selectNext_();
@@ -418,14 +418,6 @@ suite('Toolbox', function() {
       this.toolbox.updateFlyout_(null, newItem);
       sinon.assert.called(showFlyoutstub);
       sinon.assert.called(scrollToStartFlyout);
-    });
-    test('Select non selectable item -> Should not update the flyout', function() {
-      var showFlyoutstub = sinon.stub(this.toolbox.flyout_, 'show');
-      var hideFlyoutStub = sinon.stub(this.toolbox.flyout_, 'hide');
-      var nonSelectableItem = getSeparator(this.toolbox);
-      this.toolbox.updateFlyout_(null, nonSelectableItem);
-      sinon.assert.notCalled(showFlyoutstub);
-      sinon.assert.notCalled(hideFlyoutStub);
     });
   });
 

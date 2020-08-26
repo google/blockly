@@ -734,11 +734,11 @@ Blockly.Toolbox.prototype.selectItemByPosition = function(position) {
  * @protected
  */
 Blockly.Toolbox.prototype.updateFlyout_ = function(oldItem, newItem) {
-  if (oldItem == newItem || !newItem || newItem.isCollapsible()) {
+  if ((oldItem == newItem && !newItem.isCollapsible()) || !newItem ||
+      !newItem.getContents().length) {
     this.flyout_.hide();
-  } else if (newItem.isSelectable()) {
-    var selectableItem = /** @type {!Blockly.SelectableToolboxItem} */ (newItem);
-    this.flyout_.show(selectableItem.getContents());
+  } else {
+    this.flyout_.show(newItem.getContents());
     this.flyout_.scrollToStart();
   }
 };

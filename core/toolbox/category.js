@@ -13,6 +13,7 @@
 goog.provide('Blockly.ToolboxCategory');
 
 goog.require('Blockly.CollapsibleToolboxItem');
+goog.require('Blockly.registry');
 goog.require('Blockly.utils.aria');
 goog.require('Blockly.utils.object');
 goog.require('Blockly.utils.toolbox');
@@ -159,7 +160,7 @@ Blockly.ToolboxCategory = function(categoryDef, toolbox, opt_parent) {
    * @type {string|!Array<!Blockly.utils.toolbox.FlyoutItem>}
    * @protected
    */
-  this.contents_ = [];
+  this.flyoutItems_ = [];
 
   /**
    * The child toolbox items for this category.
@@ -168,7 +169,7 @@ Blockly.ToolboxCategory = function(categoryDef, toolbox, opt_parent) {
    */
   this.toolboxItems_ = [];
 
-  this.parseContents_(categoryDef, this.hasChildren_);
+  this.parseContents_(categoryDef);
 };
 
 Blockly.utils.object.inherits(Blockly.ToolboxCategory,
@@ -219,22 +220,34 @@ Blockly.ToolboxCategory.defaultBackgroundColour = '#57e';
  * dynamic category, or if its contents are meant to be shown in the flyout.
  * @param {!Blockly.utils.toolbox.CategoryJson} categoryDef The information needed
  *     to create a category.
- * @param {boolean} hasChildren True if this category has subcategories, false
- *     otherwise.
  * @protected
  */
-Blockly.ToolboxCategory.prototype.parseContents_ = function(categoryDef,
-    hasChildren) {
+Blockly.ToolboxCategory.prototype.parseContents_ = function(categoryDef) {
   var contents = categoryDef['contents'];
-  if (hasChildren) {
-    for (var i = 0; i < contents.length; i++) {
-      var child = new Blockly.ToolboxCategory(contents[i], this.parentToolbox_, this);
-      this.toolboxItems_.push(child);
+  if (categoryDef['custom']) {
+    this.flyoutItems_ = categoryDef['custom'];
+  } else if (contents) {
+    for (var i = 0, item; (item = contents[i]); i++) {
+      this.addItem_(item);
     }
-  } else if (categoryDef['custom']) {
-    this.contents_ = categoryDef['custom'];
+  }
+};
+
+/**
+ * Adds either a toolbox item or a flyout item to their respective lists.
+ * @param {!Blockly.utils.toolbox.ToolboxItem} itemDef The information needed
+ *     to create a toolbox item.
+ */
+Blockly.ToolboxCategory.prototype.addItem_ = function(itemDef) {
+  if (Blockly.registry.hasItem(
+      Blockly.registry.Type.TOOLBOX_ITEM, itemDef['kind'])) {
+    var ToolboxItemClass = Blockly.registry.getClass(
+        Blockly.registry.Type.TOOLBOX_ITEM, itemDef['kind']);
+    var toolboxItem = new ToolboxItemClass(itemDef, this.parentToolbox_, this);
+    this.toolboxItems_.push(toolboxItem);
   } else {
-    this.contents_ = contents;
+    var flyoutItem = /** @type {Blockly.utils.toolbox.FlyoutItem} */ (itemDef);
+    this.flyoutItems_.push(flyoutItem);
   }
 };
 
@@ -683,7 +696,7 @@ Blockly.ToolboxCategory.prototype.getDiv = function() {
  * @override
  */
 Blockly.ToolboxCategory.prototype.getContents = function() {
-  return this.contents_;
+  return this.flyoutItems_;
 };
 
 /**
@@ -713,8 +726,7 @@ Blockly.ToolboxCategory.prototype.updateFlyoutContents = function(contents) {
     this.toolboxItemDef_['contents'] = Blockly.utils.toolbox.convertToolboxToJSON(contents);
   }
   this.parseContents_(
-      /** @type {Blockly.utils.toolbox.CategoryJson} */ (this.toolboxItemDef_),
-      this.hasChildren());
+      /** @type {Blockly.utils.toolbox.CategoryJson} */ (this.toolboxItemDef_));
 };
 
 /**

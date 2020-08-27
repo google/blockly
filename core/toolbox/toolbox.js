@@ -323,10 +323,11 @@ Blockly.Toolbox.prototype.createFlyout_ = function() {
         'oneBasedIndex': workspace.options.oneBasedIndex,
         'horizontalLayout': workspace.horizontalLayout,
         'renderer': workspace.options.renderer,
-        'rendererOverrides': workspace.options.rendererOverrides,
-        'toolboxPosition': workspace.options.toolboxPosition
+        'rendererOverrides': workspace.options.rendererOverrides
       }));
-
+  // Options takes in either 'end' or 'start'. This has already been parsed to
+  // be either 0 or 1, so set it after.
+  workspaceOptions.toolboxPosition = workspace.options.toolboxPosition;
   var FlyoutClass = null;
   if (workspace.horizontalLayout) {
     FlyoutClass = Blockly.registry.getClassFromOptions(

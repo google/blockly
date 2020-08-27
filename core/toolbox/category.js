@@ -42,16 +42,17 @@ Blockly.ToolboxCategory = function(categoryDef, toolbox, opt_parent) {
    */
   this.name_ = Blockly.utils.replaceMessageReferences(categoryDef['name']);
 
-  var categories = categoryDef['contents'].filter(function(item) {
-    return item['kind'].toUpperCase() == 'CATEGORY';
-  });
+  var categories = categoryDef['contents'] &&
+      categoryDef['contents'].filter(function(item) {
+        return item['kind'].toUpperCase() == 'CATEGORY';
+      });
 
   /**
    * True if this category has subcategories, false otherwise.
    * @type {boolean}
    * @private
    */
-  this.hasChildren_ = !!categories.length;
+  this.hasChildren_ = !!(categories && categories.length);
 
   /**
    * The parent of the category.

@@ -98,7 +98,7 @@ Blockly.utils.toolbox.CategoryJson;
 /**
  * Any information that can be used to create an item in the toolbox.
  * @typedef {Blockly.utils.toolbox.FlyoutItemJson|
- *           Blockly.utils.toolbox.CategoryJson}
+ *           Blockly.utils.toolbox.StaticCategoryJson}
  */
 Blockly.utils.toolbox.ToolboxItemJson;
 

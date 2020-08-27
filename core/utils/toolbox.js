@@ -68,20 +68,37 @@ Blockly.utils.toolbox.LabelJson;
  *            categorystyle:?string,
  *            colour:?string,
  *            cssconfig:?Blockly.ToolboxCategory.CssConfig,
- *            custom:?string,
  *            contents:!Array<Blockly.utils.toolbox.ToolboxItemJson>,
  *            hidden:?string
  *          }}
+ */
+Blockly.utils.toolbox.StaticCategoryJson;
+
+/**
+ * The information needed to create a custom category.
+ * @typedef {{
+ *            kind:string,
+ *            custom:string,
+ *            id:?string,
+ *            categorystyle:?string,
+ *            colour:?string,
+ *            cssconfig:?Blockly.ToolboxCategory.CssConfig,
+ *            hidden:?string
+ *          }}
+ */
+Blockly.utils.toolbox.DynamicCategoryJson;
+
+/**
+ * The information needed to create either a dynamic or static category.
+ * @typedef {Blockly.utils.toolbox.StaticCategoryJson|
+ *           Blockly.utils.toolbox.DynamicCategoryJson}
  */
 Blockly.utils.toolbox.CategoryJson;
 
 /**
  * Any information that can be used to create an item in the toolbox.
- * @typedef {Blockly.utils.toolbox.BlockJson|
- *           Blockly.utils.toolbox.SeparatorJson|
- *           Blockly.utils.toolbox.ButtonJson|
- *           Blockly.utils.toolbox.LabelJson|
- *           Blockly.utils.toolbox.CategoryJson}
+ * @typedef {Blockly.utils.toolbox.FlyoutItemJson|
+ *           Blockly.utils.toolbox.StaticCategoryJson}
  */
 Blockly.utils.toolbox.ToolboxItemJson;
 
@@ -115,7 +132,8 @@ Blockly.utils.toolbox.FlyoutDefinition;
  * @typedef {Blockly.utils.toolbox.BlockJson|
  *           Blockly.utils.toolbox.SeparatorJson|
  *           Blockly.utils.toolbox.ButtonJson|
- *           Blockly.utils.toolbox.LabelJson}
+ *           Blockly.utils.toolbox.LabelJson|
+ *           Blockly.utils.toolbox.DynamicCategoryJson}
  */
 Blockly.utils.toolbox.FlyoutItemJson;
 

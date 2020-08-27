@@ -474,7 +474,6 @@ Blockly.Flyout.prototype.show = function(flyoutDef) {
 
   // Parse the Array, Node or NodeList into a a list of flyout items.
   var parsedContent = Blockly.utils.toolbox.convertFlyoutDefToJsonArray(flyoutDef);
-  parsedContent = parsedContent.slice(); // Shallow copy of parsedContent.
   var flyoutInfo =
     /** @type {{contents:!Array.<!Object>, gaps:!Array.<number>}} */ (
       this.createFlyoutInfo_(parsedContent));
@@ -527,7 +526,7 @@ Blockly.Flyout.prototype.createFlyoutInfo_ = function(parsedContent) {
   for (var i = 0, contentInfo; (contentInfo = parsedContent[i]); i++) {
 
     if (contentInfo['custom']) {
-      var customInfo = /** @type {Blockly.utils.toolbox.CategoryJson} */ (contentInfo);
+      var customInfo = /** @type {Blockly.utils.toolbox.DynamicCategoryJson} */ (contentInfo);
       var categoryName = customInfo['custom'];
       var flyoutDef = this.getDynamicCategoryContents_(categoryName);
       var parsedDynamicContent = /** @type {!Blockly.utils.toolbox.FlyoutItemJsonArray} */
@@ -650,6 +649,7 @@ Blockly.Flyout.prototype.getBlockXml_ = function(blockInfo) {
     blockElement = Blockly.utils.xml.createElement('xml');
     blockElement.setAttribute('type', blockInfo['type']);
     blockElement.setAttribute('disabled', blockInfo['disabled']);
+    blockInfo['blockxml'] = blockElement;
   }
 
   if (!blockElement) {

@@ -474,7 +474,6 @@ Blockly.Flyout.prototype.show = function(flyoutDef) {
 
   // Parse the Array, Node or NodeList into a a list of flyout items.
   var parsedContent = Blockly.utils.toolbox.convertFlyoutDefToJsonArray(flyoutDef);
-  parsedContent = parsedContent.slice(); // Shallow copy of parsedContent.
   var flyoutInfo =
     /** @type {{contents:!Array.<!Object>, gaps:!Array.<number>}} */ (
       this.createFlyoutInfo_(parsedContent));

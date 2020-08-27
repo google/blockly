@@ -646,7 +646,7 @@ Blockly.Toolbox.prototype.refreshSelection = function() {
 };
 
 /**
- * Sets the visibility of the toolbox.
+ * Shows or hides the toolbox.
  * @param {boolean} isVisible True if toolbox should be visible.
  * @public
  */

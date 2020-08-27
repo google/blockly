@@ -55,7 +55,7 @@ Blockly.ToolboxCategory = function(categoryDef, toolbox, opt_parent) {
    * @type {boolean}
    * @private
    */
-  this.hasChildren_ = !!(categories && categories.length);
+  this.hasSubcategories_ = !!(categories && categories.length);
 
   /**
    * The parent of the category.
@@ -93,7 +93,7 @@ Blockly.ToolboxCategory = function(categoryDef, toolbox, opt_parent) {
   this.rowDiv_ = null;
 
   /**
-   * The html elmeent that holds children of the category row.
+   * The html element that holds children elements of the category row.
    * @type {?Element}
    * @protected
    */
@@ -107,7 +107,7 @@ Blockly.ToolboxCategory = function(categoryDef, toolbox, opt_parent) {
   this.iconDom_ = null;
 
   /**
-   * Container for any children categories.
+   * Container for any child categories.
    * @type {?Element}
    * @protected
    */
@@ -134,7 +134,7 @@ Blockly.ToolboxCategory = function(categoryDef, toolbox, opt_parent) {
   Blockly.utils.object.mixin(this.cssConfig_, cssConfig);
 
   /**
-   * Whether or not the category should display its children.
+   * Whether or not the category should display its subcategories.
    * @type {boolean}
    * @protected
    */
@@ -224,7 +224,7 @@ Blockly.ToolboxCategory.borderWidth = 8;
 Blockly.ToolboxCategory.defaultBackgroundColour = '#57e';
 
 /**
- * Parses the contents array depending on if the category has children, is a
+ * Parses the contents array depending on if the category has subcategories, is a
  * dynamic category, or if its contents are meant to be shown in the flyout.
  * @param {!Blockly.utils.toolbox.CategoryJson} categoryDef The information needed
  *     to create a category.
@@ -288,7 +288,7 @@ Blockly.ToolboxCategory.prototype.createDom = function() {
   Blockly.utils.aria.setState(/** @type {!Element} */ (this.htmlDiv_),
       Blockly.utils.aria.State.LABELLEDBY, labelDom.getAttribute('id'));
 
-  if (this.hasChildren()) {
+  if (this.hasSubcategories()) {
     var subCategories = this.getChildToolboxItems();
     this.subcategoriesDiv_ = this.createSubCategoriesDom_(subCategories);
     Blockly.utils.aria.setRole(this.subcategoriesDiv_,
@@ -309,7 +309,7 @@ Blockly.ToolboxCategory.prototype.createDom = function() {
 };
 
 /**
- * Creates the container that holds the row and any sub categories.
+ * Creates the container that holds the row and any subcategories.
  * @return {!Element} The div that holds the icon and the label.
  * @protected
  */
@@ -337,7 +337,7 @@ Blockly.ToolboxCategory.prototype.createRowContainer_ = function() {
 
 /**
  * Creates the container for the label and icon.
- * This is necessary so we can set all children pointer events to none.
+ * This is necessary so we can set all subcategory pointer events to none.
  * @return {!Element} The div that holds the icon and the label.
  * @protected
  */
@@ -356,7 +356,7 @@ Blockly.ToolboxCategory.prototype.createIconDom_ = function() {
   var toolboxIcon = document.createElement('span');
   if (!this.parentToolbox_.isHorizontal()) {
     Blockly.utils.dom.addClass(toolboxIcon, this.cssConfig_['icon']);
-    if (this.hasChildren()) {
+    if (this.hasSubcategories()) {
       toolboxIcon.style.visibility = 'visible';
     }
   }
@@ -426,7 +426,7 @@ Blockly.ToolboxCategory.prototype.addColourBorder_ = function(colour) {
 };
 
 /**
- * Adds either the colour or the style for a category.
+ * Gets either the colour or the style for a category.
  * @param {!Blockly.utils.toolbox.CategoryJson} categoryDef The object holding
  *    information on the category.
  * @return {string} The hex colour for the category.
@@ -448,8 +448,8 @@ Blockly.ToolboxCategory.prototype.getColour_ = function(categoryDef) {
 };
 
 /**
- * Retrieves and sets the colour for the category using the style name.
- * The category colour is set from the colour style attribute.
+ * Sets the colour for the category using the style name and returns the new
+ * colour as a hex string.
  * @param {string} styleName Name of the style.
  * @return {string} The hex colour for the category.
  * @private
@@ -500,12 +500,12 @@ Blockly.ToolboxCategory.prototype.parseColour_ = function(colourValue) {
 };
 
 /**
- * Opens or closes the current category if it has children.
+ * Opens or closes the current category if it has subcategory.
  * @param {boolean} isExpanded True to expand the category, false to close.
  * @public
  */
 Blockly.ToolboxCategory.prototype.setExpanded = function(isExpanded) {
-  if (!this.hasChildren() || this.expanded_ == isExpanded) {
+  if (!this.hasSubcategories() || this.expanded_ == isExpanded) {
     return;
   }
   this.expanded_ = isExpanded;
@@ -519,7 +519,7 @@ Blockly.ToolboxCategory.prototype.setExpanded = function(isExpanded) {
   Blockly.utils.aria.setState(/** @type {!Element} */ (this.htmlDiv_),
       Blockly.utils.aria.State.EXPANDED, isExpanded);
 
-  if (this.hasChildren()) {
+  if (this.hasSubcategories()) {
     for (var i = 0; i < this.getChildToolboxItems().length; i++) {
       var child = this.getChildToolboxItems()[i];
       child.isParentExpanded_ = isExpanded;
@@ -559,8 +559,8 @@ Blockly.ToolboxCategory.prototype.closeIcon_ = function(iconDiv) {
  * @return {boolean} True if this category has subcategories, false otherwise.
  * @public
  */
-Blockly.ToolboxCategory.prototype.hasChildren = function() {
-  return this.hasChildren_;
+Blockly.ToolboxCategory.prototype.hasSubcategories = function() {
+  return this.hasSubcategories_;
 };
 
 /**
@@ -571,7 +571,7 @@ Blockly.ToolboxCategory.prototype.hasChildren = function() {
  */
 Blockly.ToolboxCategory.prototype.setVisible_ = function(isVisible) {
   this.htmlDiv_.style.display = isVisible ? 'block' : 'none';
-  if (this.hasChildren()) {
+  if (this.hasSubcategories()) {
     for (var i = 0, child; (child = this.getChildToolboxItems()[i]); i++) {
       child.setVisible_(isVisible);
     }
@@ -626,7 +626,7 @@ Blockly.ToolboxCategory.prototype.isSelectable = function() {
  * @override
  */
 Blockly.ToolboxCategory.prototype.isCollapsible = function() {
-  return this.hasChildren();
+  return this.hasSubcategories();
 };
 
 /**
@@ -724,8 +724,8 @@ Blockly.ToolboxCategory.prototype.getChildToolboxItems = function() {
  * @public
  */
 Blockly.ToolboxCategory.prototype.updateFlyoutContents = function(contents) {
-  if (this.hasChildren()) {
-    console.warn('Category can not have both flyout contents and sub categories');
+  if (this.hasSubcategories()) {
+    console.warn('Category can not have both flyout contents and subcategories');
     return;
   }
   if (typeof contents == 'string') {

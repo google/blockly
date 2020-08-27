@@ -20,7 +20,6 @@ goog.requireType('Blockly.IConnectionChecker');
 goog.requireType('Blockly.IFlyout');
 goog.requireType('Blockly.IToolbox');
 goog.requireType('Blockly.Theme');
-goog.requireType('Blockly.utils.toolbox');
 
 
 /**

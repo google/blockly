@@ -13,7 +13,12 @@
 
 goog.provide('Blockly.IFlyout');
 
+goog.requireType('Blockly.BlockSvg');
 goog.requireType('Blockly.IRegistrable');
+goog.requireType('Blockly.utils.dom');
+goog.requireType('Blockly.utils.Coordinate');
+goog.requireType('Blockly.utils.toolbox');
+goog.requireType('Blockly.WorkspaceSvg');
 
 
 /**

@@ -14,10 +14,13 @@ goog.provide('Blockly.ToolboxCategory');
 
 goog.require('Blockly.CollapsibleToolboxItem');
 goog.require('Blockly.registry');
+goog.require('Blockly.utils');
 goog.require('Blockly.utils.aria');
+goog.require('Blockly.utils.dom');
 goog.require('Blockly.utils.object');
 goog.require('Blockly.utils.toolbox');
 
+goog.requireType('Blockly.IToolbox');
 goog.requireType('Blockly.ToolboxItem');
 
 

@@ -25,14 +25,17 @@ goog.require('Blockly.utils.aria');
 goog.require('Blockly.utils.dom');
 goog.require('Blockly.utils.Rect');
 
+goog.requireType('Blockly.Action');
 goog.requireType('Blockly.CollapsibleToolboxItem');
 goog.requireType('Blockly.IBlocklyActionable');
 goog.requireType('Blockly.IDeleteArea');
+goog.requireType('Blockly.IFlyout');
 goog.requireType('Blockly.IStyleable');
 goog.requireType('Blockly.IToolbox');
 goog.requireType('Blockly.SelectableToolboxItem');
 goog.requireType('Blockly.ToolboxItem');
 goog.requireType('Blockly.utils.toolbox');
+goog.requireType('Blockly.WorkspaceSvg');
 
 
 /**
@@ -110,7 +113,7 @@ Blockly.Toolbox = function(workspace) {
 
   /**
    * The flyout for the toolbox.
-   * @type {?Blockly.Flyout}
+   * @type {?Blockly.IFlyout}
    * @private
    */
   this.flyout_ = null;
@@ -308,7 +311,7 @@ Blockly.Toolbox.prototype.onKeyDown_ = function(e) {
 
 /**
  * Creates the flyout based on the toolbox layout.
- * @return {!Blockly.Flyout} The flyout for the toolbox.
+ * @return {!Blockly.IFlyout} The flyout for the toolbox.
  * @throws {Error} If missing a require for `Blockly.HorizontalFlyout`,
  *     `Blockly.VerticalFlyout`, and no flyout plugin is specified.
  * @protected
@@ -507,7 +510,7 @@ Blockly.Toolbox.prototype.getHeight = function() {
 
 /**
  * Gets the toolbox flyout.
- * @return {?Blockly.Flyout} The toolbox flyout.
+ * @return {?Blockly.IFlyout} The toolbox flyout.
  * @public
  */
 Blockly.Toolbox.prototype.getFlyout = function() {

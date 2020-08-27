@@ -649,6 +649,7 @@ Blockly.Flyout.prototype.getBlockXml_ = function(blockInfo) {
     blockElement = Blockly.utils.xml.createElement('xml');
     blockElement.setAttribute('type', blockInfo['type']);
     blockElement.setAttribute('disabled', blockInfo['disabled']);
+    blockInfo['blockxml'] = blockElement;
   }
 
   if (!blockElement) {

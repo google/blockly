@@ -123,7 +123,7 @@ Blockly.Toolbox = function(workspace) {
    * @type {!Object<string, Blockly.ToolboxItem>}
    * @protected
    */
-  this.contentIds_ = {};
+  this.contentMap_ = {};
 
   /**
    * Position of the toolbox and flyout relative to the workspace.
@@ -146,7 +146,7 @@ Blockly.Toolbox = function(workspace) {
   this.previouslySelectedItem_ = null;
 
   /**
-   * Array holding info needed to unbind events.
+   * Array holding info needed to unbind event handlers.
    * Used for disposing.
    * Ex: [[node, name, func], [node, name, func]].
    * @type {!Array<!Blockly.EventData>}
@@ -362,7 +362,7 @@ Blockly.Toolbox.prototype.render = function(toolboxDef) {
     }
   }
   this.contents_ = [];
-  this.contentIds_ = {};
+  this.contentMap_ = {};
   this.renderContents_(toolboxDef['contents']);
   this.position();
 };
@@ -374,25 +374,28 @@ Blockly.Toolbox.prototype.render = function(toolboxDef) {
  * @protected
  */
 Blockly.Toolbox.prototype.renderContents_ = function(toolboxDef) {
+  // This is for performance reasons. By using document fragment we only have to
+  // add to the dom once.
   var fragment = document.createDocumentFragment();
-  for (var i = 0, childIn; (childIn = toolboxDef[i]); i++) {
-    this.renderToolboxItem_(childIn, fragment);
+  for (var i = 0, toolboxItemDef; (toolboxItemDef = toolboxDef[i]); i++) {
+    this.renderToolboxItem_(toolboxItemDef, fragment);
   }
   this.contentsDiv_.appendChild(fragment);
 };
 
 /**
  * Creates and renders the toolbox item.
- * @param {Blockly.utils.toolbox.ToolboxItemJson} childIn Any information that
- *    can be used to create an item in the toolbox.
+ * @param {Blockly.utils.toolbox.ToolboxItemJson} toolboxItemDef Any information
+ *    that can be used to create an item in the toolbox.
  * @param {!DocumentFragment} fragment The document fragment to add the child
  *     toolbox elements to.
+ * @private
  */
-Blockly.Toolbox.prototype.renderToolboxItem_ = function(childIn, fragment) {
+Blockly.Toolbox.prototype.renderToolboxItem_ = function(toolboxItemDef, fragment) {
   var ToolboxItemClass = Blockly.registry.getClass(
-      Blockly.registry.Type.TOOLBOX_ITEM, childIn['kind'].toLowerCase());
+      Blockly.registry.Type.TOOLBOX_ITEM, toolboxItemDef['kind'].toLowerCase());
   if (ToolboxItemClass) {
-    var toolboxItem = new ToolboxItemClass(childIn, this);
+    var toolboxItem = new ToolboxItemClass(toolboxItemDef, this);
     this.addToolboxItem_(toolboxItem);
     var toolboxItemDom = toolboxItem.createDom();
     if (toolboxItemDom) {
@@ -408,7 +411,7 @@ Blockly.Toolbox.prototype.renderToolboxItem_ = function(childIn, fragment) {
  */
 Blockly.Toolbox.prototype.addToolboxItem_ = function(toolboxItem) {
   this.contents_.push(toolboxItem);
-  this.contentIds_[toolboxItem.getId()] = toolboxItem;
+  this.contentMap_[toolboxItem.getId()] = toolboxItem;
   if (toolboxItem.isCollapsible()) {
     var collapsibleItem = /** @type {Blockly.CollapsibleToolboxItem} */
         (toolboxItem);
@@ -487,7 +490,7 @@ Blockly.Toolbox.prototype.getClientRect = function() {
  * @public
  */
 Blockly.Toolbox.prototype.getToolboxItemById = function(id) {
-  return this.contentIds_[id];
+  return this.contentMap_[id];
 };
 
 /**
@@ -900,6 +903,7 @@ Blockly.Toolbox.prototype.dispose = function() {
     Blockly.unbindEvent_(this.boundEvents_[j]);
   }
   this.boundEvents_ = [];
+  this.contents_ = [];
 
   this.workspace_.getThemeManager().unsubscribe(this.HtmlDiv);
   Blockly.utils.dom.removeNode(this.HtmlDiv);

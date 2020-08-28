@@ -118,17 +118,7 @@ Blockly.ToolboxCategory = function(categoryDef, toolbox, opt_parent) {
    * @type {!Blockly.ToolboxCategory.CssConfig}
    * @protected
    */
-  this.cssConfig_ = {
-    'container': 'blocklyToolboxCategory',
-    'row': 'blocklyTreeRow',
-    'rowContentContainer': 'blocklyTreeRowContentContainer',
-    'icon': 'blocklyTreeIcon',
-    'label': 'blocklyTreeLabel',
-    'contents': 'blocklyToolboxContents',
-    'selected': 'blocklyTreeSelected',
-    'openIcon': 'blocklyTreeIconOpen',
-    'closedIcon': 'blocklyTreeIconClosed',
-  };
+  this.cssConfig_ = this.makeDefaultCssConfig_();
 
   var cssConfig = categoryDef['cssconfig'] || categoryDef['cssConfig'];
   Blockly.utils.object.mixin(this.cssConfig_, cssConfig);
@@ -222,6 +212,26 @@ Blockly.ToolboxCategory.borderWidth = 8;
  * @type {string}
  */
 Blockly.ToolboxCategory.defaultBackgroundColour = '#57e';
+
+/**
+ * Creates an object holding the default classes for a category.
+ * @return {!Blockly.ToolboxCategory.CssConfig} The configuration object holding
+ *    all the CSS classes for a category.
+ * @protected
+ */
+Blockly.ToolboxCategory.prototype.makeDefaultCssConfig_ = function() {
+  return {
+    'container': 'blocklyToolboxCategory',
+    'row': 'blocklyTreeRow',
+    'rowContentContainer': 'blocklyTreeRowContentContainer',
+    'icon': 'blocklyTreeIcon',
+    'label': 'blocklyTreeLabel',
+    'contents': 'blocklyToolboxContents',
+    'selected': 'blocklyTreeSelected',
+    'openIcon': 'blocklyTreeIconOpen',
+    'closedIcon': 'blocklyTreeIconClosed',
+  };
+};
 
 /**
  * Parses the contents array depending on if the category has subcategories, is a
@@ -469,7 +479,7 @@ Blockly.ToolboxCategory.prototype.getColourfromStyle_ = function(styleName) {
 };
 
 /**
- * Sets the colour on the category.
+ * Parses the colour on the category.
  * @param {number|string} colourValue HSV hue value (0 to 360), #RRGGBB string,
  *     or a message reference string pointing to one of those two values.
  * @return {string} The hex colour for the category.

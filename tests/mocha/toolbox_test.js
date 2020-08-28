@@ -140,7 +140,7 @@ suite('Toolbox', function() {
       var evt = {
         'srcElement': categoryXml
       };
-      var item = this.toolbox.contentIds_[categoryXml.getAttribute('id')];
+      var item = this.toolbox.contentMap_[categoryXml.getAttribute('id')];
       var setSelectedSpy = sinon.spy(this.toolbox, 'setSelectedItem');
       var onClickSpy = sinon.spy(item, 'onClick');
       this.toolbox.onClick_(evt);

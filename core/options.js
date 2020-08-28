@@ -144,7 +144,7 @@ Blockly.Options = function(options) {
   this.hasCss = hasCss;
   /** @type {boolean} */
   this.horizontalLayout = horizontalLayout;
-  /** @type {?Blockly.utils.toolbox.ToolboxJson} */
+  /** @type {?Blockly.utils.toolbox.ToolboxInfo} */
   this.languageTree = toolboxJsonDef;
   /** @type {!Blockly.Options.GridOptions} */
   this.gridOptions = Blockly.Options.parseGridOptions_(options);

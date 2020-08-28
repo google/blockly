@@ -127,8 +127,7 @@ Blockly.registry.register = function(type, name, registryItem, opt_quiet) {
   // Validate that the given class has all the required properties.
   Blockly.registry.validate_(type, registryItem);
 
-  // Don't throw an error if it is a toolbox item. We expect developers to override
-  // categories and separators.
+  // Don't throw an error if opt_quiet is true.
   if (!opt_quiet && typeRegistry[name]) {
     throw Error('Name "' + name + '" with type "' + type + '" already registered.');
   }

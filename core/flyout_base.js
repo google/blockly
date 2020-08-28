@@ -527,7 +527,7 @@ Blockly.Flyout.prototype.createFlyoutInfo_ = function(parsedContent) {
   for (var i = 0, contentInfo; (contentInfo = parsedContent[i]); i++) {
 
     if (contentInfo['custom']) {
-      var customInfo = /** @type {Blockly.utils.toolbox.DynamicCategoryJson} */ (contentInfo);
+      var customInfo = /** @type {!Blockly.utils.toolbox.DynamicCategoryJson} */ (contentInfo);
       var categoryName = customInfo['custom'];
       var flyoutDef = this.getDynamicCategoryContents_(categoryName);
       var parsedDynamicContent = /** @type {!Blockly.utils.toolbox.FlyoutItemJsonArray} */
@@ -538,7 +538,7 @@ Blockly.Flyout.prototype.createFlyoutInfo_ = function(parsedContent) {
 
     switch (contentInfo['kind'].toUpperCase()) {
       case 'BLOCK':
-        var blockInfo = /** @type {Blockly.utils.toolbox.BlockJson} */ (contentInfo);
+        var blockInfo = /** @type {!Blockly.utils.toolbox.BlockJson} */ (contentInfo);
         var blockXml = this.getBlockXml_(blockInfo);
         var block = this.createBlock_(blockXml);
         // This is a deprecated method for adding gap to a block.
@@ -548,11 +548,11 @@ Blockly.Flyout.prototype.createFlyoutInfo_ = function(parsedContent) {
         contents.push({type: 'block', block: block});
         break;
       case 'SEP':
-        var sepInfo = /** @type {Blockly.utils.toolbox.SeparatorJson} */ (contentInfo);
+        var sepInfo = /** @type {!Blockly.utils.toolbox.SeparatorJson} */ (contentInfo);
         this.addSeparatorGap_(sepInfo, gaps, defaultGap);
         break;
       case 'LABEL':
-        var labelInfo = /** @type {Blockly.utils.toolbox.LabelJson} */ (contentInfo);
+        var labelInfo = /** @type {!Blockly.utils.toolbox.LabelJson} */ (contentInfo);
         // A label is a button with different styling.
         // Rename this function.
         var label = this.createButton_(labelInfo, /** isLabel */ true);
@@ -560,7 +560,7 @@ Blockly.Flyout.prototype.createFlyoutInfo_ = function(parsedContent) {
         gaps.push(defaultGap);
         break;
       case 'BUTTON':
-        var buttonInfo = /** @type {Blockly.utils.toolbox.ButtonJson} */ (contentInfo);
+        var buttonInfo = /** @type {!Blockly.utils.toolbox.ButtonJson} */ (contentInfo);
         var button = this.createButton_(buttonInfo, /** isLabel */ false);
         contents.push({type: 'button', button: button});
         gaps.push(defaultGap);
@@ -587,7 +587,7 @@ Blockly.Flyout.prototype.getDynamicCategoryContents_ = function(categoryName) {
   }
   var flyoutDef = fnToApply(this.workspace_.targetWorkspace);
   if (!Array.isArray(flyoutDef)) {
-    throw TypeError('Result of toolbox category callback must be an array.');
+    throw new TypeError('Result of toolbox category callback must be an array.');
   }
   return flyoutDef;
 };

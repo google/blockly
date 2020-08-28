@@ -758,10 +758,6 @@ Blockly.ToolboxCategory.prototype.dispose = function() {
  */
 Blockly.Css.register([
   /* eslint-disable indent */
-  '.blocklyToolboxCategory {',
-    'padding-bottom: 3px',
-  '}',
-
   '.blocklyTreeRow:not(.blocklyTreeSelected):hover {',
     'background-color: rgba(255, 255, 255, 0.2);',
   '}',
@@ -777,6 +773,7 @@ Blockly.Css.register([
   '.blocklyTreeRow {',
     'height: 22px;',
     'line-height: 22px;',
+    'margin-bottom: 3px;',
     'padding-right: 8px;',
     'white-space: nowrap;',
   '}',

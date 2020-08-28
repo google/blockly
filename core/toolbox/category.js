@@ -26,7 +26,7 @@ goog.requireType('Blockly.ToolboxItem');
 
 /**
  * Class for a category in a toolbox.
- * @param {!Blockly.utils.toolbox.CategoryJson} categoryDef The information needed
+ * @param {!Blockly.utils.toolbox.CategoryInfo} categoryDef The information needed
  *     to create a category in the toolbox.
  * @param {!Blockly.IToolbox} toolbox The parent toolbox for the category.
  * @param {Blockly.ToolboxCategory=} opt_parent The parent category or null if
@@ -155,7 +155,7 @@ Blockly.ToolboxCategory = function(categoryDef, toolbox, opt_parent) {
 
   /**
    * The flyout items for this category.
-   * @type {string|!Blockly.utils.toolbox.FlyoutItemJsonArray}
+   * @type {string|!Blockly.utils.toolbox.FlyoutItemInfoArray}
    * @protected
    */
   this.flyoutItems_ = [];
@@ -236,7 +236,7 @@ Blockly.ToolboxCategory.prototype.makeDefaultCssConfig_ = function() {
 /**
  * Parses the contents array depending on if the category has subcategories, is a
  * dynamic category, or if its contents are meant to be shown in the flyout.
- * @param {!Blockly.utils.toolbox.CategoryJson} categoryDef The information needed
+ * @param {!Blockly.utils.toolbox.CategoryInfo} categoryDef The information needed
  *     to create a category.
  * @protected
  */
@@ -253,7 +253,7 @@ Blockly.ToolboxCategory.prototype.parseContents_ = function(categoryDef) {
       if (!Blockly.registry.hasItem(Blockly.registry.Type.TOOLBOX_ITEM, itemDef['kind']) ||
           (itemDef['kind'].toLowerCase() == Blockly.ToolboxSeparator.registrationName &&
           prevIsFlyoutItem)) {
-        var flyoutItem = /** @type {Blockly.utils.toolbox.FlyoutItemJson} */ (itemDef);
+        var flyoutItem = /** @type {Blockly.utils.toolbox.FlyoutItemInfo} */ (itemDef);
         this.flyoutItems_.push(flyoutItem);
         prevIsFlyoutItem = true;
       } else {
@@ -266,7 +266,7 @@ Blockly.ToolboxCategory.prototype.parseContents_ = function(categoryDef) {
 
 /**
  * Creates a toolbox item and adds it to the list of toolbox items.
- * @param {!Blockly.utils.toolbox.ToolboxItemJson} itemDef The information needed
+ * @param {!Blockly.utils.toolbox.ToolboxItemInfo} itemDef The information needed
  *     to create a toolbox item.
  * @private
  */
@@ -421,7 +421,7 @@ Blockly.ToolboxCategory.prototype.createSubCategoriesDom_ = function(contents) {
  * @public
  */
 Blockly.ToolboxCategory.prototype.refreshTheme = function() {
-  this.colour_ = this.getColour_(/** @type {Blockly.utils.toolbox.CategoryJson} **/
+  this.colour_ = this.getColour_(/** @type {Blockly.utils.toolbox.CategoryInfo} **/
       (this.toolboxItemDef_));
   this.addColourBorder_(this.colour_);
 };
@@ -445,7 +445,7 @@ Blockly.ToolboxCategory.prototype.addColourBorder_ = function(colour) {
 
 /**
  * Gets either the colour or the style for a category.
- * @param {!Blockly.utils.toolbox.CategoryJson} categoryDef The object holding
+ * @param {!Blockly.utils.toolbox.CategoryInfo} categoryDef The object holding
  *    information on the category.
  * @return {string} The hex colour for the category.
  * @protected
@@ -753,7 +753,7 @@ Blockly.ToolboxCategory.prototype.updateFlyoutContents = function(contents) {
         Blockly.utils.toolbox.convertFlyoutDefToJsonArray(contents);
   }
   this.parseContents_(
-      /** @type {Blockly.utils.toolbox.CategoryJson} */ (this.toolboxItemDef_));
+      /** @type {Blockly.utils.toolbox.CategoryInfo} */ (this.toolboxItemDef_));
 };
 
 /**

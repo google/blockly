@@ -242,31 +242,39 @@ Blockly.ToolboxCategory.prototype.makeDefaultCssConfig_ = function() {
  */
 Blockly.ToolboxCategory.prototype.parseContents_ = function(categoryDef) {
   var contents = categoryDef['contents'];
+  var prevIsFlyoutItem = true;
+
   if (categoryDef['custom']) {
     this.flyoutItems_ = categoryDef['custom'];
   } else if (contents) {
-    for (var i = 0, item; (item = contents[i]); i++) {
-      this.addItem_(item);
+    for (var i = 0, itemDef; (itemDef = contents[i]); i++) {
+      // Separators can exist as either a flyout item or a toolbox item so
+      // decide where it goes based on the type of the previous item.
+      if (!Blockly.registry.hasItem(Blockly.registry.Type.TOOLBOX_ITEM, itemDef['kind']) ||
+          (itemDef['kind'].toLowerCase() == Blockly.ToolboxSeparator.registrationName &&
+          prevIsFlyoutItem)) {
+        var flyoutItem = /** @type {Blockly.utils.toolbox.FlyoutItemJson} */ (itemDef);
+        this.flyoutItems_.push(flyoutItem);
+        prevIsFlyoutItem = true;
+      } else {
+        this.createToolboxItem_(itemDef);
+        prevIsFlyoutItem = false;
+      }
     }
   }
 };
 
 /**
- * Adds either a toolbox item or a flyout item to their respective lists.
+ * Creates a toolbox item and adds it to the list of toolbox items.
  * @param {!Blockly.utils.toolbox.ToolboxItemJson} itemDef The information needed
  *     to create a toolbox item.
+ * @private
  */
-Blockly.ToolboxCategory.prototype.addItem_ = function(itemDef) {
-  if (Blockly.registry.hasItem(
-      Blockly.registry.Type.TOOLBOX_ITEM, itemDef['kind'])) {
-    var ToolboxItemClass = Blockly.registry.getClass(
-        Blockly.registry.Type.TOOLBOX_ITEM, itemDef['kind']);
-    var toolboxItem = new ToolboxItemClass(itemDef, this.parentToolbox_, this);
-    this.toolboxItems_.push(toolboxItem);
-  } else {
-    var flyoutItem = /** @type {Blockly.utils.toolbox.FlyoutItemJson} */ (itemDef);
-    this.flyoutItems_.push(flyoutItem);
-  }
+Blockly.ToolboxCategory.prototype.createToolboxItem_ = function(itemDef) {
+  var ToolboxItemClass = Blockly.registry.getClass(
+      Blockly.registry.Type.TOOLBOX_ITEM, itemDef['kind']);
+  var toolboxItem = new ToolboxItemClass(itemDef, this.parentToolbox_, this);
+  this.toolboxItems_.push(toolboxItem);
 };
 
 /**
@@ -734,14 +742,15 @@ Blockly.ToolboxCategory.prototype.getChildToolboxItems = function() {
  * @public
  */
 Blockly.ToolboxCategory.prototype.updateFlyoutContents = function(contents) {
-  if (this.hasSubcategories()) {
-    console.warn('Category can not have both flyout contents and subcategories');
-    return;
-  }
+  this.flyoutItems_ = [];
+
   if (typeof contents == 'string') {
     this.toolboxItemDef_['custom'] = contents;
   } else {
-    this.toolboxItemDef_['contents'] = Blockly.utils.toolbox.convertFlyoutDefToJsonArray(contents);
+    // Removes old custom field when contents is updated.
+    delete this.toolboxItemDef_['custom'];
+    this.toolboxItemDef_['contents'] =
+        Blockly.utils.toolbox.convertFlyoutDefToJsonArray(contents);
   }
   this.parseContents_(
       /** @type {Blockly.utils.toolbox.CategoryJson} */ (this.toolboxItemDef_));
@@ -759,10 +768,6 @@ Blockly.ToolboxCategory.prototype.dispose = function() {
  */
 Blockly.Css.register([
   /* eslint-disable indent */
-  '.blocklyToolboxCategory {',
-    'padding-bottom: 3px',
-  '}',
-
   '.blocklyTreeRow:not(.blocklyTreeSelected):hover {',
     'background-color: rgba(255, 255, 255, 0.2);',
   '}',
@@ -778,6 +783,7 @@ Blockly.Css.register([
   '.blocklyTreeRow {',
     'height: 22px;',
     'line-height: 22px;',
+    'margin-bottom: 3px;',
     'padding-right: 8px;',
     'white-space: nowrap;',
   '}',

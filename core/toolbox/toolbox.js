@@ -640,7 +640,7 @@ Blockly.Toolbox.prototype.refreshTheme = function() {
  */
 Blockly.Toolbox.prototype.refreshSelection = function() {
   if (this.selectedItem_ && this.selectedItem_.isSelectable() &&
-      !this.selectedItem_.isCollapsible()) {
+      this.selectedItem_.getContents().length) {
     this.flyout_.show(this.selectedItem_.getContents());
   }
 };

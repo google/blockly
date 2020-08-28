@@ -247,7 +247,7 @@ Blockly.ToolboxCategory.prototype.parseContents_ = function(categoryDef) {
         this.flyoutItems_.push(flyoutItem);
         prevIsFlyoutItem = true;
       } else {
-        this.addToolboxItem_(itemDef);
+        this.createToolboxItem_(itemDef);
         prevIsFlyoutItem = false;
       }
     }
@@ -255,11 +255,12 @@ Blockly.ToolboxCategory.prototype.parseContents_ = function(categoryDef) {
 };
 
 /**
- * Adds a child toolbox item.
+ * Creates a toolbox item and adds it to the list of toolbox items.
  * @param {!Blockly.utils.toolbox.ToolboxItemJson} itemDef The information needed
  *     to create a toolbox item.
+ * @private
  */
-Blockly.ToolboxCategory.prototype.addToolboxItem_ = function(itemDef) {
+Blockly.ToolboxCategory.prototype.createToolboxItem_ = function(itemDef) {
   var ToolboxItemClass = Blockly.registry.getClass(
       Blockly.registry.Type.TOOLBOX_ITEM, itemDef['kind']);
   var toolboxItem = new ToolboxItemClass(itemDef, this.parentToolbox_, this);
@@ -731,13 +732,10 @@ Blockly.ToolboxCategory.prototype.getChildToolboxItems = function() {
  * @public
  */
 Blockly.ToolboxCategory.prototype.updateFlyoutContents = function(contents) {
-  if (this.hasSubcategories()) {
-    console.warn('Category can not have both flyout contents and subcategories');
-    return;
-  }
   if (typeof contents == 'string') {
     this.toolboxItemDef_['custom'] = contents;
   } else {
+    // Removes old custom field when contents is updated.
     delete this.toolboxItemDef_['custom'];
     this.toolboxItemDef_['contents'] =
         Blockly.utils.toolbox.convertFlyoutDefToJsonArray(contents);

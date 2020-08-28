@@ -233,7 +233,7 @@ Blockly.ToolboxCategory.defaultBackgroundColour = '#57e';
 Blockly.ToolboxCategory.prototype.parseContents_ = function(categoryDef) {
   var contents = categoryDef['contents'];
   var prevIsFlyoutItem = true;
-  this.flyoutItems_ = [];
+
   if (categoryDef['custom']) {
     this.flyoutItems_ = categoryDef['custom'];
   } else if (contents) {
@@ -732,6 +732,8 @@ Blockly.ToolboxCategory.prototype.getChildToolboxItems = function() {
  * @public
  */
 Blockly.ToolboxCategory.prototype.updateFlyoutContents = function(contents) {
+  this.flyoutItems_ = [];
+
   if (typeof contents == 'string') {
     this.toolboxItemDef_['custom'] = contents;
   } else {

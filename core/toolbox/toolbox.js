@@ -59,7 +59,7 @@ Blockly.Toolbox = function(workspace) {
 
   /**
    * The JSON describing the contents of this toolbox.
-   * @type {!Blockly.utils.toolbox.ToolboxJson}
+   * @type {!Blockly.utils.toolbox.ToolboxInfo}
    * @protected
    */
   this.toolboxDef_ = workspace.options.languageTree || {'contents': []};
@@ -349,7 +349,7 @@ Blockly.Toolbox.prototype.createFlyout_ = function() {
 
 /**
  * Fills the toolbox with new toolbox items and removes any old contents.
- * @param {!Blockly.utils.toolbox.ToolboxJson} toolboxDef Object holding information
+ * @param {!Blockly.utils.toolbox.ToolboxInfo} toolboxDef Object holding information
  *     for creating a toolbox.
  * @package
  */
@@ -369,7 +369,7 @@ Blockly.Toolbox.prototype.render = function(toolboxDef) {
 
 /**
  * Adds all the toolbox items to the toolbox.
- * @param {!Array<!Blockly.utils.toolbox.ToolboxItemJson>} toolboxDef Array
+ * @param {!Array<!Blockly.utils.toolbox.ToolboxItemInfo>} toolboxDef Array
  *     holding objects containing information on the contents of the toolbox.
  * @protected
  */
@@ -385,7 +385,7 @@ Blockly.Toolbox.prototype.renderContents_ = function(toolboxDef) {
 
 /**
  * Creates and renders the toolbox item.
- * @param {Blockly.utils.toolbox.ToolboxItemJson} toolboxItemDef Any information
+ * @param {Blockly.utils.toolbox.ToolboxItemInfo} toolboxItemDef Any information
  *    that can be used to create an item in the toolbox.
  * @param {!DocumentFragment} fragment The document fragment to add the child
  *     toolbox elements to.
@@ -643,7 +643,7 @@ Blockly.Toolbox.prototype.refreshTheme = function() {
  */
 Blockly.Toolbox.prototype.refreshSelection = function() {
   if (this.selectedItem_ && this.selectedItem_.isSelectable() &&
-      !this.selectedItem_.isCollapsible()) {
+      this.selectedItem_.getContents().length) {
     this.flyout_.show(this.selectedItem_.getContents());
   }
 };
@@ -929,6 +929,7 @@ Blockly.Css.register([
     'background-color: #ddd;',
     'overflow-x: visible;',
     'overflow-y: auto;',
+    'padding: 4px 0 4px 0;',
     'position: absolute;',
     'z-index: 70;', /* so blocks go under toolbox when dragging */
     '-webkit-tap-highlight-color: transparent;', /* issue #1345 */
@@ -938,7 +939,6 @@ Blockly.Css.register([
     'display: flex;',
     'flex-wrap: wrap;',
     'flex-direction: column;',
-    'padding: 4px 0;',
   '}',
 
   '.blocklyToolboxContents:focus {',

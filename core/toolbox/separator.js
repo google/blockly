@@ -24,7 +24,7 @@ goog.requireType('Blockly.utils.toolbox');
 /**
  * Class for a toolbox separator. This is the thin visual line that appears on
  * the toolbox. This item is not interactable.
- * @param {!Blockly.utils.toolbox.SeparatorJson} separatorDef The information
+ * @param {!Blockly.utils.toolbox.SeparatorInfo} separatorDef The information
  *     needed to create a separator.
  * @param {!Blockly.IToolbox} toolbox The parent toolbox for the separator.
  * @constructor

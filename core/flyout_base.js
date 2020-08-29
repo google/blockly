@@ -513,7 +513,7 @@ Blockly.Flyout.prototype.show = function(flyoutDef) {
 /**
  * Create the contents array and gaps array necessary to create the layout for
  * the flyout.
- * @param {!Blockly.utils.toolbox.FlyoutItemJsonArray} parsedContent The array
+ * @param {!Blockly.utils.toolbox.FlyoutItemInfoArray} parsedContent The array
  *     of objects to show in the flyout.
  * @return {{contents:Array.<Object>, gaps:Array.<number>}} The list of contents
  *     and gaps needed to lay out the flyout.
@@ -527,10 +527,10 @@ Blockly.Flyout.prototype.createFlyoutInfo_ = function(parsedContent) {
   for (var i = 0, contentInfo; (contentInfo = parsedContent[i]); i++) {
 
     if (contentInfo['custom']) {
-      var customInfo = /** @type {!Blockly.utils.toolbox.DynamicCategoryJson} */ (contentInfo);
+      var customInfo = /** @type {!Blockly.utils.toolbox.DynamicCategoryInfo} */ (contentInfo);
       var categoryName = customInfo['custom'];
       var flyoutDef = this.getDynamicCategoryContents_(categoryName);
-      var parsedDynamicContent = /** @type {!Blockly.utils.toolbox.FlyoutItemJsonArray} */
+      var parsedDynamicContent = /** @type {!Blockly.utils.toolbox.FlyoutItemInfoArray} */
         (Blockly.utils.toolbox.convertFlyoutDefToJsonArray(flyoutDef));
       parsedContent.splice.apply(parsedContent, [i, 1].concat(parsedDynamicContent));
       contentInfo = parsedContent[i];
@@ -538,7 +538,7 @@ Blockly.Flyout.prototype.createFlyoutInfo_ = function(parsedContent) {
 
     switch (contentInfo['kind'].toUpperCase()) {
       case 'BLOCK':
-        var blockInfo = /** @type {!Blockly.utils.toolbox.BlockJson} */ (contentInfo);
+        var blockInfo = /** @type {!Blockly.utils.toolbox.BlockInfo} */ (contentInfo);
         var blockXml = this.getBlockXml_(blockInfo);
         var block = this.createBlock_(blockXml);
         // This is a deprecated method for adding gap to a block.
@@ -548,19 +548,18 @@ Blockly.Flyout.prototype.createFlyoutInfo_ = function(parsedContent) {
         contents.push({type: 'block', block: block});
         break;
       case 'SEP':
-        var sepInfo = /** @type {!Blockly.utils.toolbox.SeparatorJson} */ (contentInfo);
+        var sepInfo = /** @type {!Blockly.utils.toolbox.SeparatorInfo} */ (contentInfo);
         this.addSeparatorGap_(sepInfo, gaps, defaultGap);
         break;
       case 'LABEL':
-        var labelInfo = /** @type {!Blockly.utils.toolbox.LabelJson} */ (contentInfo);
+        var labelInfo = /** @type {!Blockly.utils.toolbox.LabelInfo} */ (contentInfo);
         // A label is a button with different styling.
-        // Rename this function.
         var label = this.createButton_(labelInfo, /** isLabel */ true);
         contents.push({type: 'button', button: label});
         gaps.push(defaultGap);
         break;
       case 'BUTTON':
-        var buttonInfo = /** @type {!Blockly.utils.toolbox.ButtonJson} */ (contentInfo);
+        var buttonInfo = /** @type {!Blockly.utils.toolbox.ButtonInfo} */ (contentInfo);
         var button = this.createButton_(buttonInfo, /** isLabel */ false);
         contents.push({type: 'button', button: button});
         gaps.push(defaultGap);
@@ -594,7 +593,7 @@ Blockly.Flyout.prototype.getDynamicCategoryContents_ = function(categoryName) {
 
 /**
  * Creates a flyout button or a flyout label.
- * @param {!Blockly.utils.toolbox.ButtonJson|!Blockly.utils.toolbox.LabelJson} btnInfo
+ * @param {!Blockly.utils.toolbox.ButtonInfo|!Blockly.utils.toolbox.LabelInfo} btnInfo
  *    The object holding information about a button or a label.
  * @param {boolean} isLabel True if the button is a label, false otherwise.
  * @return {!Blockly.FlyoutButton} The object used to display the button in the
@@ -631,7 +630,7 @@ Blockly.Flyout.prototype.createBlock_ = function(blockXml) {
 
 /**
  * Get the xml from the block info object.
- * @param {!Blockly.utils.toolbox.BlockJson}  blockInfo The object holding
+ * @param {!Blockly.utils.toolbox.BlockInfo}  blockInfo The object holding
  *    information about a block.
  * @return {!Element} The xml for the block.
  * @throws {Error} if the xml is not a valid block definition.
@@ -661,7 +660,7 @@ Blockly.Flyout.prototype.getBlockXml_ = function(blockInfo) {
 
 /**
  * Add the necessary gap in the flyout for a separator.
- * @param {!Blockly.utils.toolbox.SeparatorJson} sepInfo The object holding
+ * @param {!Blockly.utils.toolbox.SeparatorInfo} sepInfo The object holding
  *    information about a separator.
  * @param {!Array.<number>} gaps The list gaps between items in the flyout.
  * @param {number} defaultGap The default gap between the button and next element.

@@ -341,7 +341,7 @@ Blockly.Toolbox.prototype.createFlyout_ = function() {
   }
 
   if (!FlyoutClass) {
-    throw Error('Blockly.VerticalFlyout, Blockly.HorizontalFlyout or your own' +
+    throw new Error('Blockly.VerticalFlyout, Blockly.HorizontalFlyout or your own' +
         ' custom flyout must be required.');
   }
   return new FlyoutClass(workspaceOptions);

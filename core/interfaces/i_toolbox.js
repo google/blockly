@@ -28,7 +28,7 @@ goog.requireType('Blockly.WorkspaceSvg');
 Blockly.IToolbox = function() {};
 
 /**
- * Initializes the toolbox
+ * Initializes the toolbox.
  * @return {void}
  */
 Blockly.IToolbox.prototype.init;

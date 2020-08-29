@@ -191,7 +191,7 @@ Blockly.utils.toolbox.convertToolboxDefToJson = function(toolboxDef) {
  * @throws {Error} if the toolbox is not the correct format.
  * @private
  */
-Blockly.utils.toolbox.validateToolbox_ = function(toolboxJson){
+Blockly.utils.toolbox.validateToolbox_ = function(toolboxJson) {
   var toolboxKind = toolboxJson['kind'];
   var toolboxContents = toolboxJson['contents'];
 

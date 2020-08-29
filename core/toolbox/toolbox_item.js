@@ -32,7 +32,7 @@ Blockly.ToolboxItem = function(toolboxItemDef, toolbox) {
    * @type {string}
    * @protected
    */
-  this.id_ = toolboxItemDef['id'] || Blockly.utils.genUid();
+  this.id_ = toolboxItemDef['id'] || Blockly.utils.IdGenerator.getNextUniqueId();
 
   /**
    * The JSON definition of the toolbox item.

@@ -6,11 +6,11 @@
 
 /**
  * Get JSON for a toolbox that contains categories.
- * @return {Array.<Blockly.utils.toolbox.Toolbox>} The array holding information
+ * @return {Blockly.utils.toolbox.ToolboxJson} The array holding information
  *    for a toolbox.
  */
 function getCategoryJSON() {
-  return {'contents': [
+  return {"contents": [
     {
       "kind": "CATEGORY",
       "cssconfig": {
@@ -42,11 +42,11 @@ function getCategoryJSON() {
 
 /**
  * Get JSON for a simple toolbox.
- * @return {Array.<Blockly.utils.toolbox.Toolbox>} The array holding information
+ * @return {Blockly.utils.toolbox.ToolboxJson} The array holding information
  *    for a simple toolbox.
  */
 function getSimpleJSON() {
-  return {'contents':[
+  return {"contents":[
     {
       "kind":"BLOCK",
       "blockxml": "<block type=\"logic_operation\"></block>",
@@ -69,8 +69,52 @@ function getSimpleJSON() {
 }
 
 /**
+ * Get JSON for a toolbox that contains categories that contain categories.
+ * @return {Blockly.utils.toolbox.ToolboxJson} The array holding information
+ *    for a toolbox.
+ */
+function getDeeplyNestedJSON() {
+  return {"contents": [
+    {
+      "kind": "CATEGORY",
+      "cssconfig": {
+        "container": "something"
+      },
+      "contents": [{
+        "kind": "CATEGORY",
+        "contents": [{
+          "kind": "CATEGORY",
+          "contents": [
+            {
+              "kind": "BLOCK",
+              "blockxml": '<block type="basic_block"><field name="TEXT">NestedCategory-FirstBlock</field></block>'
+            },
+            {
+              "kind": "BLOCK",
+              "blockxml": '<block type="basic_block"><field name="TEXT">NestedCategory-SecondBlock</field></block>'
+            }
+          ],
+          "name": "NestedCategoryInner"
+        }],
+        "name": "NestedCategoryMiddle",
+      }],
+      "name": "NestedCategoryOuter"
+    },
+    {
+      "kind": "CATEGORY",
+      "contents": [
+        {
+          "kind": "BLOCK",
+          "blockxml": '<block type="basic_block"><field name="TEXT">SecondCategory-FirstBlock</field></block>'
+        }
+      ],
+      "name": "Second"
+    }]};
+}
+
+/**
  * Get an array filled with xml elements.
- * @return {Array.<Nodde>} Array holding xml elements for a toolbox.
+ * @return {Array<Node>} Array holding xml elements for a toolbox.
  */
 function getXmlArray() {
   // Need to use HTMLElement instead of Element so parser output is

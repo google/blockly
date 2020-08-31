@@ -140,15 +140,6 @@ Blockly.ToolboxCategory = function(categoryDef, toolbox, opt_parent) {
   this.isHidden_ = false;
 
   /**
-   * True if the parent category is expanded, false otherwise.
-   * Children categories can only be visible if their parent category is
-   * expanded.
-   * @type {boolean}
-   * @private
-   */
-  this.isParentExpanded_ = true;
-
-  /**
    * True if this category is disabled, false otherwise.
    * @type {boolean}
    * @protected
@@ -538,12 +529,6 @@ Blockly.ToolboxCategory.prototype.setExpanded = function(isExpanded) {
   Blockly.utils.aria.setState(/** @type {!Element} */ (this.htmlDiv_),
       Blockly.utils.aria.State.EXPANDED, isExpanded);
 
-  if (this.hasSubcategories()) {
-    for (var i = 0; i < this.getChildToolboxItems().length; i++) {
-      var child = this.getChildToolboxItems()[i];
-      child.isParentExpanded_ = isExpanded;
-    }
-  }
   this.parentToolbox_.handleToolboxItemResize();
 };
 
@@ -619,12 +604,28 @@ Blockly.ToolboxCategory.prototype.show = function() {
 
 /**
  * Whether the category is visible.
- * A category is only visible if its parent is expanded and isHidden_ is false.
+ * A category is only visible if all of its ancestors are expanded and isHidden_ is false.
  * @return {boolean} True if the category is visible, false otherwise.
  * @public
  */
 Blockly.ToolboxCategory.prototype.isVisible = function() {
-  return !this.isHidden_ && this.isParentExpanded_;
+  return !this.isHidden_ && this.allAncestorsExpanded_();
+};
+
+/**
+ * Whether all ancestors of a category (parent and parent's parent, etc.) are expanded.
+ * @return {boolean} True only if every ancestor is expanded
+ * @protected
+ */
+Blockly.ToolboxCategory.prototype.allAncestorsExpanded_ = function() {
+  var category = this;
+  while (category.getParent()) {
+    category = category.getParent();
+    if (!category.isExpanded()) {
+      return false;
+    }
+  }
+  return true;
 };
 
 /**

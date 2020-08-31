@@ -605,4 +605,41 @@ suite('Toolbox', function() {
       });
     });
   });
+  suite('Nested Categories', function() {
+    setup(function() {
+      this.toolbox = getInjectedToolbox();
+    });
+    teardown(function() {
+      this.toolbox.dispose();
+    });
+    test('Child categories visible if all ancestors expanded', function() {
+      this.toolbox.render(getDeeplyNestedJSON());
+      var outerCategory = this.toolbox.contents_[0];
+      var middleCategory = this.toolbox.contents_[1];
+      var innerCategory = this.toolbox.contents_[2];
+ 
+      outerCategory.toggleExpanded();
+      middleCategory.toggleExpanded();
+      innerCategory.toggleExpanded();
+      innerCategory.show();
+
+      chai.assert.isTrue(innerCategory.isVisible(),
+          'All ancestors are expanded, so category should be visible');
+    });
+    test('Child categories not visible if any ancestor not expanded', function() {
+      this.toolbox.render(getDeeplyNestedJSON());
+      var middleCategory = this.toolbox.contents_[1];
+      var innerCategory = this.toolbox.contents_[2];
+ 
+      // Don't expand the outermost category
+      // Even though the direct parent of inner is expanded, it shouldn't be visible
+      // because all ancestor categories need to be visible, not just parent
+      middleCategory.toggleExpanded();
+      innerCategory.toggleExpanded();
+      innerCategory.show();
+
+      chai.assert.isFalse(innerCategory.isVisible(),
+          'Not all ancestors are expanded, so category should not be visible');
+    });
+  });
 });

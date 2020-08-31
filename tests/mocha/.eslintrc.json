@@ -32,6 +32,7 @@
         "getCategoryJSON": true,
         "getChildItem": true,
         "getCollapsibleItem": true,
+        "getDeeplyNestedJSON": true,
         "getInjectedToolbox": true,
         "getNonCollapsibleItem": true,
         "getSeparator": true,

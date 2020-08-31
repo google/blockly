@@ -312,7 +312,9 @@ suite('Navigation', function() {
     });
 
     test('Insert', function() {
-      sinon.spy(Blockly.navigation, 'modify_');
+      // Stub modify as we are not testing its behavior, only if it was called.
+      // Otherwise, there is a warning because there is no marked node.
+      sinon.stub(Blockly.navigation, 'modify_');
       this.mockEvent.keyCode = Blockly.utils.KeyCodes.I;
       chai.assert.isTrue(Blockly.navigation.onKeyPress(this.mockEvent));
       sinon.assert.calledOnce(Blockly.navigation.modify_);

@@ -12,16 +12,17 @@
 
 goog.provide('Blockly.ToolboxCategory');
 
-goog.require('Blockly.CollapsibleToolboxItem');
 goog.require('Blockly.registry');
 goog.require('Blockly.utils');
 goog.require('Blockly.utils.aria');
 goog.require('Blockly.utils.dom');
 goog.require('Blockly.utils.object');
 goog.require('Blockly.utils.toolbox');
+goog.require('Blockly.ToolboxItem');
 
+goog.requireType('Blockly.ICollapsibleToolboxItem');
 goog.requireType('Blockly.IToolbox');
-goog.requireType('Blockly.ToolboxItem');
+goog.requireType('Blockly.IToolboxItem');
 
 
 /**
@@ -29,10 +30,11 @@ goog.requireType('Blockly.ToolboxItem');
  * @param {!Blockly.utils.toolbox.CategoryInfo} categoryDef The information needed
  *     to create a category in the toolbox.
  * @param {!Blockly.IToolbox} toolbox The parent toolbox for the category.
- * @param {Blockly.ToolboxCategory=} opt_parent The parent category or null if
+ * @param {Blockly.ICollapsibleToolboxItem=} opt_parent The parent category or null if
  *     the category does not have a parent.
  * @constructor
- * @extends {Blockly.CollapsibleToolboxItem}
+ * @extends {Blockly.ToolboxItem}
+ * @implements {Blockly.ICollapsibleToolboxItem}
  */
 Blockly.ToolboxCategory = function(categoryDef, toolbox, opt_parent) {
   Blockly.ToolboxCategory.superClass_.constructor.call(
@@ -59,7 +61,7 @@ Blockly.ToolboxCategory = function(categoryDef, toolbox, opt_parent) {
 
   /**
    * The parent of the category.
-   * @type {?Blockly.ToolboxCategory}
+   * @type {?Blockly.ICollapsibleToolboxItem}
    * @protected
    */
   this.parent_ = opt_parent || null;
@@ -170,8 +172,7 @@ Blockly.ToolboxCategory = function(categoryDef, toolbox, opt_parent) {
   this.parseContents_(categoryDef);
 };
 
-Blockly.utils.object.inherits(Blockly.ToolboxCategory,
-    Blockly.CollapsibleToolboxItem);
+Blockly.utils.object.inherits(Blockly.ToolboxCategory, Blockly.ToolboxItem);
 
 /**
  * All the css class names that are used to create a category.
@@ -627,7 +628,10 @@ Blockly.ToolboxCategory.prototype.isVisible = function() {
 };
 
 /**
- * @override
+ * Whether the category is expanded to show its child subcategories.
+ * @return {boolean} True if the toolbox item shows its children, false if it
+ *     is collapsed.
+ * @public
  */
 Blockly.ToolboxCategory.prototype.isExpanded = function() {
   return this.expanded_;
@@ -648,14 +652,19 @@ Blockly.ToolboxCategory.prototype.isCollapsible = function() {
 };
 
 /**
- * @override
+ * Handles when the toolbox item is clicked.
+ * @param {!Event} _e Click event to handle.
+ * @public
  */
 Blockly.ToolboxCategory.prototype.onClick = function(_e) {
   this.toggleExpanded();
 };
 
 /**
- * @override
+ * Set the current category as selected.
+ * @param {boolean} isSelected True if this category is selected, false
+ *     otherwise.
+ * @public
  */
 Blockly.ToolboxCategory.prototype.setSelected = function(isSelected) {
   if (isSelected) {
@@ -683,7 +692,8 @@ Blockly.ToolboxCategory.prototype.setDisabled = function(isDisabled) {
 };
 
 /**
- * @override
+ * Toggles whether or not the category is expanded.
+ * @public
  */
 Blockly.ToolboxCategory.prototype.toggleExpanded = function() {
   this.setExpanded(!this.expanded_);
@@ -698,7 +708,9 @@ Blockly.ToolboxCategory.prototype.getLevel = function() {
 };
 
 /**
- * @override
+ * Gets the name of the category. Used for emitting events.
+ * @return {string} The name of the toolbox item.
+ * @public
  */
 Blockly.ToolboxCategory.prototype.getName = function() {
   return this.name_;
@@ -719,14 +731,19 @@ Blockly.ToolboxCategory.prototype.getDiv = function() {
 };
 
 /**
- * @override
+ * Gets the contents of the category. These are items that are meant to be
+ * displayed in the flyout.
+ * @return {!Blockly.utils.toolbox.FlyoutItemInfoArray|string} The definition
+ *     of items to be displayed in the flyout.
+ * @public
  */
 Blockly.ToolboxCategory.prototype.getContents = function() {
   return this.flyoutItems_;
 };
 
 /**
- * @override
+ * Gets any children toolbox items. (ex. Gets the subcategories)
+ * @return {!Array<!Blockly.IToolboxItem>} The child toolbox items.
  */
 Blockly.ToolboxCategory.prototype.getChildToolboxItems = function() {
   return this.toolboxItems_;

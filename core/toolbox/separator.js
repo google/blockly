@@ -18,6 +18,7 @@ goog.require('Blockly.ToolboxItem');
 goog.require('Blockly.utils.dom');
 
 goog.requireType('Blockly.IToolbox');
+goog.requireType('Blockly.IToolboxItem');
 goog.requireType('Blockly.utils.toolbox');
 
 
@@ -29,6 +30,7 @@ goog.requireType('Blockly.utils.toolbox');
  * @param {!Blockly.IToolbox} toolbox The parent toolbox for the separator.
  * @constructor
  * @extends {Blockly.ToolboxItem}
+ * @implements {Blockly.IToolboxItem}
  */
 Blockly.ToolboxSeparator = function(separatorDef, toolbox) {
 

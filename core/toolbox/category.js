@@ -138,15 +138,6 @@ Blockly.ToolboxCategory = function(categoryDef, toolbox, opt_parent) {
   this.isHidden_ = false;
 
   /**
-   * True if the parent category is expanded, false otherwise.
-   * Children categories can only be visible if their parent category is
-   * expanded.
-   * @type {boolean}
-   * @private
-   */
-  this.isParentExpanded_ = true;
-
-  /**
    * True if this category is disabled, false otherwise.
    * @type {boolean}
    * @protected
@@ -529,12 +520,6 @@ Blockly.ToolboxCategory.prototype.setExpanded = function(isExpanded) {
   Blockly.utils.aria.setState(/** @type {!Element} */ (this.htmlDiv_),
       Blockly.utils.aria.State.EXPANDED, isExpanded);
 
-  if (this.hasSubcategories()) {
-    for (var i = 0; i < this.getChildToolboxItems().length; i++) {
-      var child = this.getChildToolboxItems()[i];
-      child.isParentExpanded_ = isExpanded;
-    }
-  }
   this.parentToolbox_.handleToolboxItemResize();
 };
 

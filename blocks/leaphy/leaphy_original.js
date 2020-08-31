@@ -98,7 +98,7 @@ Blockly.Blocks['leaphy_original_digital_read'] = {
         this.appendDummyInput()
             .appendField(Blockly.Msg.LEAPHY_DIGITAL_READ)
             .appendField(new Blockly.FieldDropdown(digitalPinOptions), "PIN");
-        this.setOutput(true, 'Boolean');
+        this.setOutput(true, 'Number');
         this.setStyle('leaphy_blocks');
     }
 };

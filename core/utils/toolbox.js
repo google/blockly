@@ -60,6 +60,13 @@ Blockly.utils.toolbox.ButtonInfo;
 Blockly.utils.toolbox.LabelInfo;
 
 /**
+ * The information needed to create either a button or a label in the flyout.
+ * @typedef {Blockly.utils.toolbox.ButtonInfo|
+ *           Blockly.utils.toolbox.LabelInfo}
+ */
+Blockly.utils.toolbox.ButtonOrLabelInfo;
+
+/**
  * The information needed to create a category in the toolbox.
  * @typedef {{
  *            kind:string,

@@ -126,6 +126,7 @@ Blockly.Toolbox = function(workspace) {
 
   /**
    * Position of the toolbox and flyout relative to the workspace.
+   * TODO (#4246): Add an enum for toolbox types.
    * @type {number}
    */
   this.toolboxPosition = workspace.options.toolboxPosition;
@@ -318,6 +319,7 @@ Blockly.Toolbox.prototype.onKeyDown_ = function(e) {
  */
 Blockly.Toolbox.prototype.createFlyout_ = function() {
   var workspace = this.workspace_;
+  // TODO (#4247): Look into adding a makeFlyout method to Blockly Options.
   var workspaceOptions = new Blockly.Options(
       /** @type {!Blockly.BlocklyOptions} */
       ({
@@ -378,7 +380,7 @@ Blockly.Toolbox.prototype.renderContents_ = function(toolboxDef) {
   // add to the dom once.
   var fragment = document.createDocumentFragment();
   for (var i = 0, toolboxItemDef; (toolboxItemDef = toolboxDef[i]); i++) {
-    this.renderToolboxItem_(toolboxItemDef, fragment);
+    this.createToolboxItem_(toolboxItemDef, fragment);
   }
   this.contentsDiv_.appendChild(fragment);
 };
@@ -391,7 +393,7 @@ Blockly.Toolbox.prototype.renderContents_ = function(toolboxDef) {
  *     toolbox elements to.
  * @private
  */
-Blockly.Toolbox.prototype.renderToolboxItem_ = function(toolboxItemDef, fragment) {
+Blockly.Toolbox.prototype.createToolboxItem_ = function(toolboxItemDef, fragment) {
   var registryName = toolboxItemDef['kind'];
 
   // Categories that are collapsible are created using a class registered under
@@ -585,7 +587,6 @@ Blockly.Toolbox.prototype.position = function() {
   if (this.horizontalLayout_) {
     toolboxDiv.style.left = '0';
     toolboxDiv.style.height = 'auto';
-    // TODO: Double check that 100% instead of the svgSize.width is not a problem.
     toolboxDiv.style.width = '100%';
     this.height_ = toolboxDiv.offsetHeight;
     if (this.toolboxPosition == Blockly.TOOLBOX_AT_TOP) {  // Top
@@ -599,7 +600,6 @@ Blockly.Toolbox.prototype.position = function() {
     } else {  // Left
       toolboxDiv.style.left = '0';
     }
-    // TODO: Double check that 100% instead of the svgSize.width is not a problem.
     toolboxDiv.style.height = '100%';
     this.width_ = toolboxDiv.offsetWidth;
   }

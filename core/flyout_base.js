@@ -593,7 +593,7 @@ Blockly.Flyout.prototype.getDynamicCategoryContents_ = function(categoryName) {
 
 /**
  * Creates a flyout button or a flyout label.
- * @param {!Blockly.utils.toolbox.ButtonInfo|!Blockly.utils.toolbox.LabelInfo} btnInfo
+ * @param {!Blockly.utils.toolbox.ButtonOrLabelInfo} btnInfo
  *    The object holding information about a button or a label.
  * @param {boolean} isLabel True if the button is a label, false otherwise.
  * @return {!Blockly.FlyoutButton} The object used to display the button in the

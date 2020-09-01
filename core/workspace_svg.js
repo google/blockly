@@ -323,26 +323,27 @@ Blockly.WorkspaceSvg.prototype.dragDeltaXY_ = null;
  */
 Blockly.WorkspaceSvg.prototype.scale = 1;
 
-/**
- * Cached scale value. Used to detect changes in viewport.
- * @type {number}
- * @private
- */
-Blockly.WorkspaceSvg.prototype.oldScale_ = 1;
-
-/**
- * Cached viewport top value. Used to detect changes in viewport.
- * @type {number}
- * @private
- */
-Blockly.WorkspaceSvg.prototype.oldTop_ = 0;
-
-/**
- * Cached viewport left value. Used to detect changes in viewport.
- * @type {number}
- * @private
- */
-Blockly.WorkspaceSvg.prototype.oldLeft_ = 0;
+// TODO(#4203) Enable viewport events after ui events refactor.
+// /**
+//  * Cached scale value. Used to detect changes in viewport.
+//  * @type {number}
+//  * @private
+//  */
+// Blockly.WorkspaceSvg.prototype.oldScale_ = 1;
+//
+// /**
+//  * Cached viewport top value. Used to detect changes in viewport.
+//  * @type {number}
+//  * @private
+//  */
+// Blockly.WorkspaceSvg.prototype.oldTop_ = 0;
+//
+// /**
+//  * Cached viewport left value. Used to detect changes in viewport.
+//  * @type {number}
+//  * @private
+//  */
+// Blockly.WorkspaceSvg.prototype.oldLeft_ = 0;
 
 /**
  * The workspace's trashcan (if any).

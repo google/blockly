@@ -74,6 +74,7 @@ td.tabon {
   border-bottom-color: #ddd !important;
   background-color: #ddd;
   padding: 5px 19px;
+  white-space: nowrap;
 }
 td.taboff {
   cursor: pointer;

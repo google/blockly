@@ -97,12 +97,6 @@ Blockly.CollapsibleToolboxCategory.prototype.makeDefaultCssConfig_ = function() 
 };
 
 /**
- * Parses the contents array depending on if the category has subcategories, is a
- * dynamic category, or if its contents are meant to be shown in the flyout.
- * @param {!Blockly.utils.toolbox.CategoryInfo} categoryDef The information needed
- *     to create a category.
- * @protected
- * TODO: Check on this.
  * @override
  */
 Blockly.CollapsibleToolboxCategory.prototype.parseContents_ = function(categoryDef) {
@@ -136,15 +130,17 @@ Blockly.CollapsibleToolboxCategory.prototype.parseContents_ = function(categoryD
  * @private
  */
 Blockly.CollapsibleToolboxCategory.prototype.createToolboxItem_ = function(itemDef) {
-  var kind = itemDef['kind'];
+  var registryName = itemDef['kind'];
   var categoryDef = /** @type {!Blockly.utils.toolbox.CategoryInfo} */ (itemDef);
 
-  if (kind.toUpperCase() == 'CATEGORY' &&
+  // Categories that are collapsible are created using a class registered under
+  // a diffferent name.
+  if (registryName.toUpperCase() == 'CATEGORY' &&
       Blockly.utils.toolbox.isCategoryCollapsible(categoryDef)) {
-    kind = Blockly.CollapsibleToolboxCategory.registrationName;
+    registryName = Blockly.CollapsibleToolboxCategory.registrationName;
   }
   var ToolboxItemClass = Blockly.registry.getClass(
-      Blockly.registry.Type.TOOLBOX_ITEM, kind);
+      Blockly.registry.Type.TOOLBOX_ITEM, registryName);
   var toolboxItem = new ToolboxItemClass(itemDef, this.parentToolbox_, this);
   this.toolboxItems_.push(toolboxItem);
 };
@@ -175,9 +171,7 @@ Blockly.CollapsibleToolboxCategory.prototype.createDom_ = function() {
 };
 
 /**
- * Creates the span that holds the category icon.
- * @return {!Element} The span that holds the category icon.
- * @protected
+ * @override
  */
 Blockly.CollapsibleToolboxCategory.prototype.createIconDom_ = function() {
   var toolboxIcon = document.createElement('span');
@@ -266,9 +260,7 @@ Blockly.CollapsibleToolboxCategory.prototype.isCollapsible = function() {
 };
 
 /**
- * Handles when the toolbox item is clicked.
- * @param {!Event} _e Click event to handle.
- * @public
+ * @override
  */
 Blockly.CollapsibleToolboxCategory.prototype.onClick = function(_e) {
   this.toggleExpanded();

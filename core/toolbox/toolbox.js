@@ -392,16 +392,18 @@ Blockly.Toolbox.prototype.renderContents_ = function(toolboxDef) {
  * @private
  */
 Blockly.Toolbox.prototype.renderToolboxItem_ = function(toolboxItemDef, fragment) {
-  var kind = toolboxItemDef['kind'];
+  var registryName = toolboxItemDef['kind'];
 
-  if (kind.toUpperCase() == 'CATEGORY' &&
+  // Categories that are collapsible are created using a class registered under
+  // a diffferent name.
+  if (registryName.toUpperCase() == 'CATEGORY' &&
       Blockly.utils.toolbox.isCategoryCollapsible(
       /** @type {!Blockly.utils.toolbox.CategoryInfo} */(toolboxItemDef))) {
-    kind = Blockly.CollapsibleToolboxCategory.registrationName;
+    registryName = Blockly.CollapsibleToolboxCategory.registrationName;
   }
 
   var ToolboxItemClass = Blockly.registry.getClass(
-      Blockly.registry.Type.TOOLBOX_ITEM, kind.toLowerCase());
+      Blockly.registry.Type.TOOLBOX_ITEM, registryName.toLowerCase());
   if (ToolboxItemClass) {
     var toolboxItem = new ToolboxItemClass(toolboxItemDef, this);
     this.addToolboxItem_(toolboxItem);
@@ -540,7 +542,7 @@ Blockly.Toolbox.prototype.getWorkspace = function() {
 
 /**
  * Gets the selected item.
- * @return {?Blockly.IToolboxItem} The selected item, or null if no item is
+ * @return {?Blockly.ISelectableToolboxItem} The selected item, or null if no item is
  *     currently selected.
  * @public
  */
@@ -550,7 +552,7 @@ Blockly.Toolbox.prototype.getSelectedItem = function() {
 
 /**
  * Gets the previously selected item.
- * @return {?Blockly.IToolboxItem} The previously selected item, or null if no
+ * @return {?Blockly.ISelectableToolboxItem} The previously selected item, or null if no
  *     item was previously selected.
  * @public
  */

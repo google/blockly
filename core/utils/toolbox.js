@@ -237,6 +237,7 @@ Blockly.utils.toolbox.convertFlyoutDefToJsonArray = function(flyoutDef) {
 
 /**
  * Whether or not the toolbox definition has categories.
+ * TODO: Change these to ToolboxInfo
  * @param {?Blockly.utils.toolbox.ToolboxInfo} toolboxJson Object holding
  *     information for creating a toolbox.
  * @return {boolean} True if the toolbox has categories.
@@ -253,6 +254,17 @@ Blockly.utils.toolbox.hasCategories = function(toolboxJson) {
   }
 
   var categories = toolboxJson['contents'].filter(function(item) {
+    return item['kind'].toUpperCase() == 'CATEGORY';
+  });
+  return !!categories.length;
+};
+
+Blockly.utils.toolbox.isCollapsibleCategory = function(categoryJson) {
+  if (!categoryJson || !categoryJson['contents']) {
+    return false;
+  }
+
+  var categories = categoryJson['contents'].filter(function(item) {
     return item['kind'].toUpperCase() == 'CATEGORY';
   });
   return !!categories.length;

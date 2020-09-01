@@ -22,10 +22,12 @@ goog.requireType('Blockly.WorkspaceSvg');
  * @param {!Blockly.utils.toolbox.ToolboxItemInfo} toolboxItemDef The JSON defining the
  *     toolbox item.
  * @param {!Blockly.IToolbox} toolbox The toolbox that holds the toolbox item.
+ * @param {Blockly.ICollapsibleToolboxItem=} opt_parent The parent toolbox item
+ *     or null if the category does not have a parent.
  * @constructor
  * @implements {Blockly.IToolboxItem}
  */
-Blockly.ToolboxItem = function(toolboxItemDef, toolbox) {
+Blockly.ToolboxItem = function(toolboxItemDef, toolbox, opt_parent) {
 
   /**
    * The id for the category.
@@ -33,6 +35,20 @@ Blockly.ToolboxItem = function(toolboxItemDef, toolbox) {
    * @protected
    */
   this.id_ = toolboxItemDef['id'] || Blockly.utils.IdGenerator.getNextUniqueId();
+
+  /**
+   * The parent of the category.
+   * @type {?Blockly.ICollapsibleToolboxItem}
+   * @protected
+   */
+  this.parent_ = opt_parent || null;
+
+  /**
+   * The level that the category is nested at.
+   * @type {number}
+   * @protected
+   */
+  this.level_ = this.parent_ ? this.parent_.getLevel() + 1 : 0;
 
   /**
    * The JSON definition of the toolbox item.
@@ -57,12 +73,13 @@ Blockly.ToolboxItem = function(toolboxItemDef, toolbox) {
 };
 
 /**
- * Creates the dom for a toolbox item.
- * @return {!Element} The div for the toolbox item.
+ * Initializes the toolbox item.
+ * This includes creating the dom and updating the state of any items based
+ * on the info object.
  * @public
  */
-Blockly.ToolboxItem.prototype.createDom = function() {
-  return document.createElement('div');
+Blockly.ToolboxItem.prototype.init = function() {
+  // No-op by default.
 };
 
 /**
@@ -91,6 +108,15 @@ Blockly.ToolboxItem.prototype.getId = function() {
  */
 Blockly.ToolboxItem.prototype.getParent = function() {
   return null;
+};
+
+/**
+ * Gets the nested level of the category.
+ * @return {number} The nested level of the category.
+ * @package
+ */
+Blockly.ToolboxItem.prototype.getLevel = function() {
+  return this.level_;
 };
 
 /**

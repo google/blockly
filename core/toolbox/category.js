@@ -34,11 +34,11 @@ goog.requireType('Blockly.IToolboxItem');
  *     the category does not have a parent.
  * @constructor
  * @extends {Blockly.ToolboxItem}
- * @implements {Blockly.ICollapsibleToolboxItem}
+ * @implements {Blockly.ISelectableToolboxItem}
  */
 Blockly.ToolboxCategory = function(categoryDef, toolbox, opt_parent) {
   Blockly.ToolboxCategory.superClass_.constructor.call(
-      this, categoryDef, toolbox);
+      this, categoryDef, toolbox, opt_parent);
 
   /**
    * The name that will be displayed on the category.
@@ -46,32 +46,6 @@ Blockly.ToolboxCategory = function(categoryDef, toolbox, opt_parent) {
    * @protected
    */
   this.name_ = Blockly.utils.replaceMessageReferences(categoryDef['name']);
-
-  var categories = categoryDef['contents'] &&
-      categoryDef['contents'].filter(function(item) {
-        return item['kind'].toUpperCase() == 'CATEGORY';
-      });
-
-  /**
-   * True if this category has subcategories, false otherwise.
-   * @type {boolean}
-   * @private
-   */
-  this.hasSubcategories_ = !!(categories && categories.length);
-
-  /**
-   * The parent of the category.
-   * @type {?Blockly.ICollapsibleToolboxItem}
-   * @protected
-   */
-  this.parent_ = opt_parent || null;
-
-  /**
-   * The level that the category is nested at.
-   * @type {number}
-   * @protected
-   */
-  this.level_ = this.parent_ ? this.parent_.getLevel() + 1 : 0;
 
   /**
    * The colour of the category.
@@ -109,13 +83,6 @@ Blockly.ToolboxCategory = function(categoryDef, toolbox, opt_parent) {
   this.iconDom_ = null;
 
   /**
-   * Container for any child categories.
-   * @type {?Element}
-   * @protected
-   */
-  this.subcategoriesDiv_ = null;
-
-  /**
    * All the css class names that are used to create a category.
    * @type {!Blockly.ToolboxCategory.CssConfig}
    * @protected
@@ -126,16 +93,9 @@ Blockly.ToolboxCategory = function(categoryDef, toolbox, opt_parent) {
   Blockly.utils.object.mixin(this.cssConfig_, cssConfig);
 
   /**
-   * Whether or not the category should display its subcategories.
-   * @type {boolean}
-   * @protected
-   */
-  this.expanded_ = false;
-
-  /**
    * True if the category is meant to be hidden, false otherwise.
    * @type {boolean}
-   * @private
+   * @protected
    */
   this.isHidden_ = false;
 
@@ -153,13 +113,6 @@ Blockly.ToolboxCategory = function(categoryDef, toolbox, opt_parent) {
    */
   this.flyoutItems_ = [];
 
-  /**
-   * The child toolbox items for this category.
-   * @type {!Array<!Blockly.ToolboxItem>}
-   * @protected
-   */
-  this.toolboxItems_ = [];
-
   this.parseContents_(categoryDef);
 };
 
@@ -172,7 +125,6 @@ Blockly.utils.object.inherits(Blockly.ToolboxCategory, Blockly.ToolboxItem);
  *            row:?string,
  *            icon:?string,
  *            label:?string,
- *            contents:?string,
  *            selected:?string,
  *            openIcon:?string,
  *            closedIcon:?string,
@@ -226,53 +178,41 @@ Blockly.ToolboxCategory.prototype.makeDefaultCssConfig_ = function() {
 };
 
 /**
- * Parses the contents array depending on if the category has subcategories, is a
- * dynamic category, or if its contents are meant to be shown in the flyout.
+ * Parses the contents array depending on if the category is a dynamic category,
+ * or if its contents are meant to be shown in the flyout.
  * @param {!Blockly.utils.toolbox.CategoryInfo} categoryDef The information needed
  *     to create a category.
  * @protected
  */
 Blockly.ToolboxCategory.prototype.parseContents_ = function(categoryDef) {
   var contents = categoryDef['contents'];
-  var prevIsFlyoutItem = true;
 
   if (categoryDef['custom']) {
     this.flyoutItems_ = categoryDef['custom'];
   } else if (contents) {
     for (var i = 0, itemDef; (itemDef = contents[i]); i++) {
-      // Separators can exist as either a flyout item or a toolbox item so
-      // decide where it goes based on the type of the previous item.
-      if (!Blockly.registry.hasItem(Blockly.registry.Type.TOOLBOX_ITEM, itemDef['kind']) ||
-          (itemDef['kind'].toLowerCase() == Blockly.ToolboxSeparator.registrationName &&
-          prevIsFlyoutItem)) {
-        var flyoutItem = /** @type {Blockly.utils.toolbox.FlyoutItemInfo} */ (itemDef);
-        this.flyoutItems_.push(flyoutItem);
-        prevIsFlyoutItem = true;
-      } else {
-        this.createToolboxItem_(itemDef);
-        prevIsFlyoutItem = false;
-      }
+      var flyoutItem = /** @type {Blockly.utils.toolbox.FlyoutItemInfo} */ (itemDef);
+      this.flyoutItems_.push(flyoutItem);
     }
   }
 };
 
 /**
- * Creates a toolbox item and adds it to the list of toolbox items.
- * @param {!Blockly.utils.toolbox.ToolboxItemInfo} itemDef The information needed
- *     to create a toolbox item.
- * @private
+ * @override
  */
-Blockly.ToolboxCategory.prototype.createToolboxItem_ = function(itemDef) {
-  var ToolboxItemClass = Blockly.registry.getClass(
-      Blockly.registry.Type.TOOLBOX_ITEM, itemDef['kind']);
-  var toolboxItem = new ToolboxItemClass(itemDef, this.parentToolbox_, this);
-  this.toolboxItems_.push(toolboxItem);
+Blockly.ToolboxCategory.prototype.init = function() {
+  this.createDom_();
+  if (this.toolboxItemDef_['hidden'] == 'true') {
+    this.hide();
+  }
 };
 
 /**
- * @override
+ * Creates the dom for the category.
+ * @return {!Element} The parent element for the category.
+ * @protected
  */
-Blockly.ToolboxCategory.prototype.createDom = function() {
+Blockly.ToolboxCategory.prototype.createDom_ = function() {
   this.htmlDiv_ = this.createContainer_();
   Blockly.utils.aria.setRole(this.htmlDiv_, Blockly.utils.aria.Role.TREEITEM);
   Blockly.utils.aria.setState(/** @type {!Element} */ (this.htmlDiv_),
@@ -298,22 +238,7 @@ Blockly.ToolboxCategory.prototype.createDom = function() {
   Blockly.utils.aria.setState(/** @type {!Element} */ (this.htmlDiv_),
       Blockly.utils.aria.State.LABELLEDBY, labelDom.getAttribute('id'));
 
-  if (this.hasSubcategories()) {
-    var subCategories = this.getChildToolboxItems();
-    this.subcategoriesDiv_ = this.createSubCategoriesDom_(subCategories);
-    Blockly.utils.aria.setRole(this.subcategoriesDiv_,
-        Blockly.utils.aria.Role.GROUP);
-    this.htmlDiv_.appendChild(this.subcategoriesDiv_);
-  }
-
   this.addColourBorder_(this.colour_);
-
-  this.setExpanded(this.toolboxItemDef_['expanded'] == 'true' ||
-      this.toolboxItemDef_['expanded']);
-
-  if (this.toolboxItemDef_['hidden'] == 'true') {
-    this.hide();
-  }
 
   return this.htmlDiv_;
 };
@@ -366,9 +291,6 @@ Blockly.ToolboxCategory.prototype.createIconDom_ = function() {
   var toolboxIcon = document.createElement('span');
   if (!this.parentToolbox_.isHorizontal()) {
     Blockly.utils.dom.addClass(toolboxIcon, this.cssConfig_['icon']);
-    if (this.hasSubcategories()) {
-      toolboxIcon.style.visibility = 'visible';
-    }
   }
 
   toolboxIcon.style.display = 'inline-block';
@@ -388,24 +310,6 @@ Blockly.ToolboxCategory.prototype.createLabelDom_ = function(name) {
   toolboxLabel.textContent = name;
   Blockly.utils.dom.addClass(toolboxLabel, this.cssConfig_['label']);
   return toolboxLabel;
-};
-
-/**
- * Create the dom for all subcategories.
- * @param {!Array<!Blockly.ToolboxItem>} contents The category contents.
- * @return {!Element} The div holding all the subcategories.
- * @protected
- */
-Blockly.ToolboxCategory.prototype.createSubCategoriesDom_ = function(contents) {
-  var contentsContainer = document.createElement('div');
-  Blockly.utils.dom.addClass(contentsContainer, this.cssConfig_['contents']);
-
-  for (var i = 0; i < contents.length; i++) {
-    var newCategory = contents[i];
-    var dom = newCategory.createDom();
-    contentsContainer.appendChild(dom);
-  }
-  return contentsContainer;
 };
 
 /**
@@ -510,29 +414,6 @@ Blockly.ToolboxCategory.prototype.parseColour_ = function(colourValue) {
 };
 
 /**
- * Opens or closes the current category if it has subcategory.
- * @param {boolean} isExpanded True to expand the category, false to close.
- * @public
- */
-Blockly.ToolboxCategory.prototype.setExpanded = function(isExpanded) {
-  if (!this.hasSubcategories() || this.expanded_ == isExpanded) {
-    return;
-  }
-  this.expanded_ = isExpanded;
-  if (isExpanded) {
-    this.subcategoriesDiv_.style.display = 'block';
-    this.openIcon_(this.iconDom_);
-  } else {
-    this.subcategoriesDiv_.style.display = 'none';
-    this.closeIcon_(this.iconDom_);
-  }
-  Blockly.utils.aria.setState(/** @type {!Element} */ (this.htmlDiv_),
-      Blockly.utils.aria.State.EXPANDED, isExpanded);
-
-  this.parentToolbox_.handleToolboxItemResize();
-};
-
-/**
  * Adds appropriate classes to display an open icon.
  * @param {?Element} iconDiv The div that holds the icon.
  * @protected
@@ -559,27 +440,13 @@ Blockly.ToolboxCategory.prototype.closeIcon_ = function(iconDiv) {
 };
 
 /**
- * Whether or not this category has subcategories.
- * @return {boolean} True if this category has subcategories, false otherwise.
- * @public
- */
-Blockly.ToolboxCategory.prototype.hasSubcategories = function() {
-  return this.hasSubcategories_;
-};
-
-/**
  * Sets whether the category is visible or not.
  * For a category to be visible its parent category must also be expanded.
  * @param {boolean} isVisible True if category should be visible.
- * @private
+ * @protected
  */
 Blockly.ToolboxCategory.prototype.setVisible_ = function(isVisible) {
   this.htmlDiv_.style.display = isVisible ? 'block' : 'none';
-  if (this.hasSubcategories()) {
-    for (var i = 0, child; (child = this.getChildToolboxItems()[i]); i++) {
-      child.setVisible_(isVisible);
-    }
-  }
   this.isHidden_ = !isVisible;
 
   if (this.parentToolbox_.getSelectedItem() == this) {
@@ -629,27 +496,10 @@ Blockly.ToolboxCategory.prototype.allAncestorsExpanded_ = function() {
 };
 
 /**
- * Whether the category is expanded to show its child subcategories.
- * @return {boolean} True if the toolbox item shows its children, false if it
- *     is collapsed.
- * @public
- */
-Blockly.ToolboxCategory.prototype.isExpanded = function() {
-  return this.expanded_;
-};
-
-/**
  * @override
  */
 Blockly.ToolboxCategory.prototype.isSelectable = function() {
   return this.isVisible() && !this.isDisabled_;
-};
-
-/**
- * @override
- */
-Blockly.ToolboxCategory.prototype.isCollapsible = function() {
-  return this.hasSubcategories();
 };
 
 /**
@@ -658,7 +508,7 @@ Blockly.ToolboxCategory.prototype.isCollapsible = function() {
  * @public
  */
 Blockly.ToolboxCategory.prototype.onClick = function(_e) {
-  this.toggleExpanded();
+  // No-op
 };
 
 /**
@@ -693,22 +543,6 @@ Blockly.ToolboxCategory.prototype.setDisabled = function(isDisabled) {
 };
 
 /**
- * Toggles whether or not the category is expanded.
- * @public
- */
-Blockly.ToolboxCategory.prototype.toggleExpanded = function() {
-  this.setExpanded(!this.expanded_);
-};
-
-/**
- * Gets the nested level of the category
- * @return {number} The nested level of the category.
- */
-Blockly.ToolboxCategory.prototype.getLevel = function() {
-  return this.level_;
-};
-
-/**
  * Gets the name of the category. Used for emitting events.
  * @return {string} The name of the toolbox item.
  * @public
@@ -740,14 +574,6 @@ Blockly.ToolboxCategory.prototype.getDiv = function() {
  */
 Blockly.ToolboxCategory.prototype.getContents = function() {
   return this.flyoutItems_;
-};
-
-/**
- * Gets any children toolbox items. (ex. Gets the subcategories)
- * @return {!Array<!Blockly.IToolboxItem>} The child toolbox items.
- */
-Blockly.ToolboxCategory.prototype.getChildToolboxItems = function() {
-  return this.toolboxItems_;
 };
 
 /**

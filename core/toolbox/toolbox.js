@@ -12,6 +12,7 @@
 
 goog.provide('Blockly.Toolbox');
 
+goog.require('Blockly.CollapsibleToolboxCategory');
 goog.require('Blockly.Css');
 goog.require('Blockly.Events');
 goog.require('Blockly.Events.Ui');
@@ -392,12 +393,20 @@ Blockly.Toolbox.prototype.renderContents_ = function(toolboxDef) {
  * @private
  */
 Blockly.Toolbox.prototype.renderToolboxItem_ = function(toolboxItemDef, fragment) {
+  var kind = toolboxItemDef['kind'];
+
+  if (kind.toUpperCase() == 'CATEGORY' &&
+      Blockly.utils.toolbox.isCollapsibleCategory(toolboxItemDef)) {
+    kind = Blockly.CollapsibleToolboxCategory.registrationName;
+  }
+
   var ToolboxItemClass = Blockly.registry.getClass(
-      Blockly.registry.Type.TOOLBOX_ITEM, toolboxItemDef['kind'].toLowerCase());
+      Blockly.registry.Type.TOOLBOX_ITEM, kind.toLowerCase());
   if (ToolboxItemClass) {
     var toolboxItem = new ToolboxItemClass(toolboxItemDef, this);
     this.addToolboxItem_(toolboxItem);
-    var toolboxItemDom = toolboxItem.createDom();
+    toolboxItem.init();
+    var toolboxItemDom = toolboxItem.getDiv();
     if (toolboxItemDom) {
       fragment.appendChild(toolboxItemDom);
     }

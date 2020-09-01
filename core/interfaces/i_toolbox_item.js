@@ -25,11 +25,13 @@ goog.requireType('Blockly.utils.toolbox');
 Blockly.IToolboxItem = function() {};
 
 /**
- * Creates the dom for a toolbox item.
- * @return {!Element} The div for the toolbox item.
+ * Initializes the toolbox item.
+ * This includes creating the dom and updating the state of any items based
+ * on the info object.
+ * @return {void}
  * @public
  */
-Blockly.IToolboxItem.prototype.createDom;
+Blockly.IToolboxItem.prototype.init;
 
 /**
  * Gets the div for the toolbox item.
@@ -52,6 +54,13 @@ Blockly.IToolboxItem.prototype.getId;
  * @public
  */
 Blockly.IToolboxItem.prototype.getParent;
+
+/**
+ * Gets the nested level of the category.
+ * @return {number} The nested level of the category.
+ * @package
+ */
+Blockly.IToolboxItem.prototype.getLevel;
 
 /**
  * Whether the toolbox item is selectable.

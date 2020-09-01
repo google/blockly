@@ -617,10 +617,9 @@ suite('Toolbox', function() {
       var outerCategory = this.toolbox.contents_[0];
       var middleCategory = this.toolbox.contents_[1];
       var innerCategory = this.toolbox.contents_[2];
- 
+
       outerCategory.toggleExpanded();
       middleCategory.toggleExpanded();
-      innerCategory.toggleExpanded();
       innerCategory.show();
 
       chai.assert.isTrue(innerCategory.isVisible(),
@@ -630,12 +629,11 @@ suite('Toolbox', function() {
       this.toolbox.render(getDeeplyNestedJSON());
       var middleCategory = this.toolbox.contents_[1];
       var innerCategory = this.toolbox.contents_[2];
- 
+
       // Don't expand the outermost category
       // Even though the direct parent of inner is expanded, it shouldn't be visible
       // because all ancestor categories need to be visible, not just parent
       middleCategory.toggleExpanded();
-      innerCategory.toggleExpanded();
       innerCategory.show();
 
       chai.assert.isFalse(innerCategory.isVisible(),

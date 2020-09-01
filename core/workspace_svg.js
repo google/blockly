@@ -326,18 +326,21 @@ Blockly.WorkspaceSvg.prototype.scale = 1;
 /**
  * Cached scale value. Used to detect changes in viewport.
  * @type {number}
+ * @private
  */
 Blockly.WorkspaceSvg.prototype.oldScale_ = 1;
 
 /**
  * Cached viewport top value. Used to detect changes in viewport.
  * @type {number}
+ * @private
  */
 Blockly.WorkspaceSvg.prototype.oldTop_ = 0;
 
 /**
  * Cached viewport left value. Used to detect changes in viewport.
  * @type {number}
+ * @private
  */
 Blockly.WorkspaceSvg.prototype.oldLeft_ = 0;
 
@@ -1097,7 +1100,7 @@ Blockly.WorkspaceSvg.prototype.getParentSvg = function() {
  * @package
  */
 Blockly.WorkspaceSvg.prototype.maybeFireViewportChangeEvent = function() {
-  // TODO(#) Enable viewport events after ui events refactor.
+  // TODO(#4203) Enable viewport events after ui events refactor.
   // if (!Blockly.Events.isEnabled()) {
   //   return;
   // }

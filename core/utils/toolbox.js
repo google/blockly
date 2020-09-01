@@ -237,7 +237,6 @@ Blockly.utils.toolbox.convertFlyoutDefToJsonArray = function(flyoutDef) {
 
 /**
  * Whether or not the toolbox definition has categories.
- * TODO: Change these to ToolboxInfo
  * @param {?Blockly.utils.toolbox.ToolboxInfo} toolboxJson Object holding
  *     information for creating a toolbox.
  * @return {boolean} True if the toolbox has categories.

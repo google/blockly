@@ -323,6 +323,28 @@ Blockly.WorkspaceSvg.prototype.dragDeltaXY_ = null;
  */
 Blockly.WorkspaceSvg.prototype.scale = 1;
 
+// TODO(#4203) Enable viewport events after ui events refactor.
+// /**
+//  * Cached scale value. Used to detect changes in viewport.
+//  * @type {number}
+//  * @private
+//  */
+// Blockly.WorkspaceSvg.prototype.oldScale_ = 1;
+//
+// /**
+//  * Cached viewport top value. Used to detect changes in viewport.
+//  * @type {number}
+//  * @private
+//  */
+// Blockly.WorkspaceSvg.prototype.oldTop_ = 0;
+//
+// /**
+//  * Cached viewport left value. Used to detect changes in viewport.
+//  * @type {number}
+//  * @private
+//  */
+// Blockly.WorkspaceSvg.prototype.oldLeft_ = 0;
+
 /**
  * The workspace's trashcan (if any).
  * @type {Blockly.Trashcan}
@@ -1074,6 +1096,31 @@ Blockly.WorkspaceSvg.prototype.getParentSvg = function() {
 };
 
 /**
+ * Fires a viewport event if events are enabled and there is a change in
+ * viewport values.
+ * @package
+ */
+Blockly.WorkspaceSvg.prototype.maybeFireViewportChangeEvent = function() {
+  // TODO(#4203) Enable viewport events after ui events refactor.
+  // if (!Blockly.Events.isEnabled()) {
+  //   return;
+  // }
+  // var scale = this.scale;
+  // var top = -this.scrollY;
+  // var left = -this.scrollX;
+  // if (scale == this.oldScale_ && top == this.oldTop_ && left == this.oldLeft_) {
+  //   return;
+  // }
+  // this.oldScale_ = scale;
+  // this.oldTop_ = top;
+  // this.oldLeft_ = left;
+  // var event = new Blockly.Events.Ui(null, 'viewport', null,
+  //     { scale: scale, top: top, left: left });
+  // event.workspaceId = this.id;
+  // Blockly.Events.fire(event);
+};
+
+/**
  * Translate this workspace to new coordinates.
  * @param {number} x Horizontal translation, in pixel units relative to the
  *    top left of the Blockly div.
@@ -1097,6 +1144,8 @@ Blockly.WorkspaceSvg.prototype.translate = function(x, y) {
   if (this.grid_) {
     this.grid_.moveTo(x, y);
   }
+
+  this.maybeFireViewportChangeEvent();
 };
 
 /**
@@ -1891,8 +1940,14 @@ Blockly.WorkspaceSvg.prototype.zoomToFit = function() {
   // Scale Units: (pixels / workspaceUnit)
   var ratioX = workspaceWidth / blocksWidth;
   var ratioY = workspaceHeight / blocksHeight;
-  this.setScale(Math.min(ratioX, ratioY));
-  this.scrollCenter();
+  Blockly.Events.disable();
+  try {
+    this.setScale(Math.min(ratioX, ratioY));
+    this.scrollCenter();
+  } finally {
+    Blockly.Events.enable();
+  }
+  this.maybeFireViewportChangeEvent();
 };
 
 /**

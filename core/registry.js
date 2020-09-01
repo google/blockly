@@ -80,14 +80,13 @@ Blockly.registry.Type.TOOLBOX = new Blockly.registry.Type('toolbox');
 /** @type {!Blockly.registry.Type<Blockly.Theme>} */
 Blockly.registry.Type.THEME = new Blockly.registry.Type('theme');
 
-
 /** @type {!Blockly.registry.Type<Blockly.IFlyout>} */
 Blockly.registry.Type.FLYOUTS_VERTICAL_TOOLBOX =
-    new Blockly.registry.Type('flyouts-vertical-toolbox');
+    new Blockly.registry.Type('flyoutsVerticalToolbox');
 
 /** @type {!Blockly.registry.Type<Blockly.IFlyout>} */
 Blockly.registry.Type.FLYOUTS_HORIZONTAL_TOOLBOX =
-    new Blockly.registry.Type('flyouts-horizontal-toolbox');
+    new Blockly.registry.Type('flyoutsHorizontalToolbox');
 
 /**
  * Registers a class based on a type and name.

@@ -32,12 +32,12 @@ suite('Events', function() {
     delete Blockly.Blocks['simple_test_block'];
   });
 
-  function createSimpleTestBlock(workspace, opt_prototypeName) {
+  function createSimpleTestBlock(workspace) {
     // Disable events while constructing the block: this is a test of the
     // Blockly.Event constructors, not the block constructor.s
     Blockly.Events.disable();
     var block = new Blockly.Block(
-        workspace, opt_prototypeName || 'simple_test_block');
+        workspace, 'simple_test_block');
     Blockly.Events.enable();
     return block;
   }
@@ -223,15 +223,17 @@ suite('Events', function() {
 
     suite('With variable getter blocks', function() {
       setup(function() {
-        this.genUidStub = createGenUidStubWithReturns(this.TEST_BLOCK_ID);
-        this.block =
-            createSimpleTestBlock(this.workspace, 'field_variable_test_block');
+        this.genUidStub = createGenUidStubWithReturns(
+            [this.TEST_BLOCK_ID, 'test_var_id', 'test_group_id']);
+        // Disabling events when creating a block with variable can cause issues
+        // at workspace dispose.
+        this.block = new Blockly.Block(
+            this.workspace, 'field_variable_test_block');
       });
 
       test('Change', function() {
         var event = new Blockly.Events.Change(
             this.block, 'field', 'VAR', 'id1', 'id2');
-        sinon.assert.calledOnce(this.genUidStub);
         assertEventEquals(event, Blockly.Events.CHANGE, this.workspace.id,
             this.TEST_BLOCK_ID,
             {
@@ -247,7 +249,6 @@ suite('Events', function() {
       test('Block change', function() {
         var event = new Blockly.Events.BlockChange(
             this.block, 'field', 'VAR', 'id1', 'id2');
-        sinon.assert.calledOnce(this.genUidStub);
         assertEventEquals(event, Blockly.Events.CHANGE, this.workspace.id,
             this.TEST_BLOCK_ID,
             {
@@ -660,7 +661,7 @@ suite('Events', function() {
         // Expect the workspace to not have a variable with ID 'test_block_id'.
         chai.assert.isNull(this.workspace.getVariableById(TEST_BLOCK_ID));
       } finally {
-        workspaceSvg.dispose();
+        workspaceTeardown.call(this, workspaceSvg);
       }
     });
 
@@ -730,7 +731,7 @@ suite('Events', function() {
       // The first varCreate and move event should have been ignored.
       sinon.assert.callCount(this.changeListenerSpy, 3);
       // Expect two events on undo stack: varCreate and block create.
-      chai.assert.equal(2, this.workspace.undoStack_.length,
+      chai.assert.equal(this.workspace.undoStack_.length, 2,
           'Undo stack length');
 
       assertNthCallEventArgEquals(

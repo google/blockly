@@ -178,7 +178,12 @@ suite('Checkbox Fields', function() {
         };
         field.constants_ = {
           FIELD_CHECKBOX_X_OFFSET: 2,
-          FIELD_CHECKBOX_Y_OFFSET: 2
+          FIELD_CHECKBOX_Y_OFFSET: 2,
+          FIELD_BORDER_RECT_RADIUS: 4,
+          FIELD_BORDER_RECT_HEIGHT: 16,
+          FIELD_TEXT_BASELINE_CENTER: false,
+          FIELD_TEXT_HEIGHT: 16,
+          FIELD_TEXT_BASELINE: 13,
         };
         field.initView();
         field.render_();

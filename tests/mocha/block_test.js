@@ -1234,6 +1234,7 @@ suite('Blocks', function() {
     });
     teardown(function() {
       Blockly.Events.enable();
+      workspaceTeardown.call(this, this.workspace);
       delete Blockly.Blocks['variable_block'];
     });
     suite('Connecting and Disconnecting', function() {

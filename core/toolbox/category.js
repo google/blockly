@@ -512,7 +512,7 @@ Blockly.ToolboxCategory.prototype.onClick = function(_e) {
 };
 
 /**
- * Set the current category as selected.
+ * Sets the current category as selected.
  * @param {boolean} isSelected True if this category is selected, false
  *     otherwise.
  * @public

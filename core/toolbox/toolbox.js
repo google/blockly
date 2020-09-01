@@ -294,7 +294,8 @@ Blockly.Toolbox.prototype.onKeyDown_ = function(e) {
     case Blockly.utils.KeyCodes.ENTER:
     case Blockly.utils.KeyCodes.SPACE:
       if (this.selectedItem_ && this.selectedItem_.isCollapsible()) {
-        this.selectedItem_.toggleExpanded();
+        var collapsibleItem = /** @type {!Blockly.ICollapsibleToolboxItem} */ (this.selectedItem_);
+        collapsibleItem.toggleExpanded();
         handled = true;
       }
       break;
@@ -394,7 +395,8 @@ Blockly.Toolbox.prototype.renderToolboxItem_ = function(toolboxItemDef, fragment
   var kind = toolboxItemDef['kind'];
 
   if (kind.toUpperCase() == 'CATEGORY' &&
-      Blockly.utils.toolbox.isCategoryCollapsible(toolboxItemDef)) {
+      Blockly.utils.toolbox.isCategoryCollapsible(
+      /** @type {!Blockly.utils.toolbox.CategoryInfo} */(toolboxItemDef))) {
     kind = Blockly.CollapsibleToolboxCategory.registrationName;
   }
 
@@ -816,7 +818,8 @@ Blockly.Toolbox.prototype.selectParent_ = function() {
   }
 
   if (this.selectedItem_.isCollapsible() && this.selectedItem_.isExpanded()) {
-    this.selectedItem_.setExpanded(false);
+    var collapsibleItem = /** @type {!Blockly.ICollapsibleToolboxItem} */ (this.selectedItem_);
+    collapsibleItem.setExpanded(false);
     return true;
   } else if (this.selectedItem_.getParent() &&
       this.selectedItem_.getParent().isSelectable()) {

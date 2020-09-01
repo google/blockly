@@ -5,7 +5,7 @@
  */
 
 /**
- * @fileoverview The interface for a toolbox.
+ * @fileoverview The interface for a toolbox item.
  * @author aschmiedt@google.com (Abby Schmiedt)
  */
 
@@ -106,7 +106,7 @@ Blockly.ISelectableToolboxItem.prototype.getName;
 Blockly.ISelectableToolboxItem.prototype.getContents;
 
 /**
- * Set the current toolbox item as selected.
+ * Sets the current toolbox item as selected.
  * @param {boolean} _isSelected True if this category is selected, false
  *     otherwise.
  * @public
@@ -128,14 +128,14 @@ Blockly.ISelectableToolboxItem.prototype.onClick;
 Blockly.ICollapsibleToolboxItem = function() {};
 
 /**
- * Gets any children toolbox items. (ex. Gets the sub categories)
+ * Gets any children toolbox items. (ex. Gets the subcategories)
  * @return {!Array<!Blockly.IToolboxItem>} The child toolbox items.
  */
 Blockly.ICollapsibleToolboxItem.prototype.getChildToolboxItems;
 
 /**
- * Whether the toolbox item is expanded to show it's child subcategories.
- * @return {boolean} True if the toolbox item shows it's children, false if it
+ * Whether the toolbox item is expanded to show its child subcategories.
+ * @return {boolean} True if the toolbox item shows its children, false if it
  *     is collapsed.
  * @public
  */

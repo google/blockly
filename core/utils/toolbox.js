@@ -259,12 +259,19 @@ Blockly.utils.toolbox.hasCategories = function(toolboxJson) {
   return !!categories.length;
 };
 
-Blockly.utils.toolbox.isCollapsibleCategory = function(categoryJson) {
-  if (!categoryJson || !categoryJson['contents']) {
+/**
+ * Whether or not the category is collapsible.
+ * @param {!Blockly.utils.toolbox.CategoryInfo} categoryInfo Object holing
+ *    information for creating a category.
+ * @return {boolean} True if the category has subcategories.
+ * @package
+ */
+Blockly.utils.toolbox.isCategoryCollapsible = function(categoryInfo) {
+  if (!categoryInfo || !categoryInfo['contents']) {
     return false;
   }
 
-  var categories = categoryJson['contents'].filter(function(item) {
+  var categories = categoryInfo['contents'].filter(function(item) {
     return item['kind'].toUpperCase() == 'CATEGORY';
   });
   return !!categories.length;

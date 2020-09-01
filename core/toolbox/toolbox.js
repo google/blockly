@@ -18,8 +18,6 @@ goog.require('Blockly.Events');
 goog.require('Blockly.Events.Ui');
 goog.require('Blockly.navigation');
 goog.require('Blockly.registry');
-goog.require('Blockly.ToolboxCategory');
-goog.require('Blockly.ToolboxSeparator');
 goog.require('Blockly.Touch');
 goog.require('Blockly.utils');
 goog.require('Blockly.utils.aria');
@@ -396,7 +394,7 @@ Blockly.Toolbox.prototype.renderToolboxItem_ = function(toolboxItemDef, fragment
   var kind = toolboxItemDef['kind'];
 
   if (kind.toUpperCase() == 'CATEGORY' &&
-      Blockly.utils.toolbox.isCollapsibleCategory(toolboxItemDef)) {
+      Blockly.utils.toolbox.isCategoryCollapsible(toolboxItemDef)) {
     kind = Blockly.CollapsibleToolboxCategory.registrationName;
   }
 

@@ -139,7 +139,7 @@ Blockly.CollapsibleToolboxCategory.prototype.createToolboxItem_ = function(itemD
   var kind = itemDef['kind'];
 
   if (kind.toUpperCase() == 'CATEGORY' &&
-      Blockly.utils.toolbox.isCollapsibleCategory(itemDef)) {
+      Blockly.utils.toolbox.isCategoryCollapsible(itemDef)) {
     kind = Blockly.CollapsibleToolboxCategory.registrationName;
   }
   var ToolboxItemClass = Blockly.registry.getClass(

@@ -884,7 +884,11 @@ Blockly.WorkspaceSvg.prototype.dispose = function() {
 
 /**
  * Obtain a newly created block.
- * @param {?string} prototypeName Name of the language object containing
+ *
+ * This block's svg must still be initialized
+ * ([initSvg]{@link Blockly.BlockSvg#initSvg}) and it must be rendered
+ * ([render]{@link Blockly.BlockSvg#render}) before the block will be visible.
+ * @param {!string} prototypeName Name of the language object containing
  *     type-specific functions for this block.
  * @param {string=} opt_id Optional ID.  Use this ID if provided, otherwise
  *     create a new ID.

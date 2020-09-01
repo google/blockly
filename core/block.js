@@ -38,13 +38,13 @@ goog.requireType('Blockly.IASTNodeLocation');
  * Class for one block.
  * Not normally called directly, workspace.newBlock() is preferred.
  * @param {!Blockly.Workspace} workspace The block's workspace.
- * @param {?string} prototypeName Name of the language object containing
+ * @param {!string} prototypeName Name of the language object containing
  *     type-specific functions for this block.
  * @param {string=} opt_id Optional ID.  Use this ID if provided, otherwise
  *     create a new ID.
  * @constructor
  * @implements {Blockly.IASTNodeLocation}
- * @throws When block is not valid or block name is not allowed.
+ * @throws When the prototypeName is not valid or not allowed.
  */
 Blockly.Block = function(workspace, prototypeName, opt_id) {
   if (Blockly.Generator &&
@@ -1070,9 +1070,9 @@ Blockly.Block.prototype.renameVarById = function(oldId, newId) {
 };
 
 /**
- * Returns the language-neutral value from the field of a block.
+ * Returns the language-neutral value of the given field.
  * @param {string} name The name of the field.
- * @return {*} Value from the field or null if field does not exist.
+ * @return {*} Value of the field or null if field does not exist.
  */
 Blockly.Block.prototype.getFieldValue = function(name) {
   var field = this.getField(name);
@@ -1083,9 +1083,9 @@ Blockly.Block.prototype.getFieldValue = function(name) {
 };
 
 /**
- * Change the field value for a block (e.g. 'CHOOSE' or 'REMOVE').
- * @param {string} newValue Value to be the new field.
- * @param {string} name The name of the field.
+ * Sets the value of the given field for this block.
+ * @param {*} newValue The value to set.
+ * @param {!string} name The name of the field to set the value of.
  */
 Blockly.Block.prototype.setFieldValue = function(newValue, name) {
   var field = this.getField(name);

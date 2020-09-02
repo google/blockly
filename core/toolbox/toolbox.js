@@ -725,7 +725,7 @@ Blockly.Toolbox.prototype.shouldSelectItem_ = function(oldItem, newItem) {
 
 /**
  * Deselects the given item, marks it as unselected, and updates aria state.
- * @param {!Blockly.SelectableToolboxItem} item The previously selected
+ * @param {!Blockly.ISelectableToolboxItem} item The previously selected
  *     toolbox item which should be deselected.
  * @protected
  */
@@ -739,9 +739,9 @@ Blockly.Toolbox.prototype.deselectItem_ = function(item) {
 
 /**
  * Selects the given item, marks it selected, and updates aria state.
- * @param {?Blockly.SelectableToolboxItem} oldItem The previously selected
+ * @param {?Blockly.ISelectableToolboxItem} oldItem The previously selected
  *     toolbox item.
- * @param {!Blockly.SelectableToolboxItem} newItem The newly selected toolbox
+ * @param {!Blockly.ISelectableToolboxItem} newItem The newly selected toolbox
  *     item.
  * @protected
  */

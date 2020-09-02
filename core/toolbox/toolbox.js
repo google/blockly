@@ -682,23 +682,12 @@ Blockly.Toolbox.prototype.setSelectedItem = function(newItem) {
   }
   newItem = /** @type {Blockly.ISelectableToolboxItem} */ (newItem);
 
-  if (this.shouldDeSelectItem_(oldItem, newItem)) {
-    // Deselect the old item unless the old item is collapsible and has been
-    // previously clicked on.
-    this.selectedItem_ = null;
-    this.previouslySelectedItem_ = oldItem;
-    oldItem.setSelected(false);
-    Blockly.utils.aria.setState(/** @type {!Element} */ (this.contentsDiv_),
-        Blockly.utils.aria.State.ACTIVEDESCENDANT, '');
+  if (this.shouldDeselectItem_(oldItem, newItem) && oldItem != null) {
+    this.deselectItem_(oldItem);
   }
 
-  if (this.shouldSelectItem_(oldItem, newItem)) {
-    // Select the new item unless the old item equals the new item.
-    this.selectedItem_ = newItem;
-    this.previouslySelectedItem_ = oldItem;
-    newItem.setSelected(true);
-    Blockly.utils.aria.setState(/** @type {!Element} */ (this.contentsDiv_),
-        Blockly.utils.aria.State.ACTIVEDESCENDANT, newItem.getId());
+  if (this.shouldSelectItem_(oldItem, newItem) && newItem != null) {
+    this.selectItem_(oldItem, newItem);
   }
 
   this.updateFlyout_(oldItem, newItem);
@@ -714,8 +703,10 @@ Blockly.Toolbox.prototype.setSelectedItem = function(newItem) {
  * @return {boolean} True if the old item should be deselected, false otherwise.
  * @protected
  */
-Blockly.Toolbox.prototype.shouldDeSelectItem_ = function(oldItem, newItem) {
-  return !!(oldItem && (!oldItem.isCollapsible() || oldItem != newItem));
+Blockly.Toolbox.prototype.shouldDeselectItem_ = function(oldItem, newItem) {
+  // Deselect the old item unless the old item is collapsible and has been
+  // previously clicked on.
+  return oldItem != null && (!oldItem.isCollapsible() || oldItem != newItem);
 };
 
 /**
@@ -724,11 +715,42 @@ Blockly.Toolbox.prototype.shouldDeSelectItem_ = function(oldItem, newItem) {
  *     toolbox item.
  * @param {?Blockly.ISelectableToolboxItem} newItem The newly selected toolbox
  *     item.
- * @return {boolean} True if the new item should be deselected, false otherwise.
+ * @return {boolean} True if the new item should be selected, false otherwise.
  * @protected
  */
 Blockly.Toolbox.prototype.shouldSelectItem_ = function(oldItem, newItem) {
-  return !!(newItem && newItem != oldItem);
+  // Select the new item unless the old item equals the new item.
+  return newItem != null && newItem != oldItem;
+};
+
+/**
+ * Deselects the given item, marks it as unselected, and updates aria state.
+ * @param {!Blockly.ISelectableToolboxItem} item The previously selected
+ *     toolbox item which should be deselected.
+ * @protected
+ */
+Blockly.Toolbox.prototype.deselectItem_ = function(item) {
+  this.selectedItem_ = null;
+  this.previouslySelectedItem_ = item;
+  item.setSelected(false);
+  Blockly.utils.aria.setState(/** @type {!Element} */ (this.contentsDiv_),
+      Blockly.utils.aria.State.ACTIVEDESCENDANT, '');
+};
+
+/**
+ * Selects the given item, marks it selected, and updates aria state.
+ * @param {?Blockly.ISelectableToolboxItem} oldItem The previously selected
+ *     toolbox item.
+ * @param {!Blockly.ISelectableToolboxItem} newItem The newly selected toolbox
+ *     item.
+ * @protected
+ */
+Blockly.Toolbox.prototype.selectItem_ = function(oldItem, newItem) {
+  this.selectedItem_ = newItem;
+  this.previouslySelectedItem_ = oldItem;
+  newItem.setSelected(true);
+  Blockly.utils.aria.setState(/** @type {!Element} */ (this.contentsDiv_),
+      Blockly.utils.aria.State.ACTIVEDESCENDANT, newItem.getId());
 };
 
 /**

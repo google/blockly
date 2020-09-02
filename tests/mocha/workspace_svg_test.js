@@ -97,25 +97,25 @@ suite('WorkspaceSvg', function() {
     test('Passes in toolbox def when current toolbox is null', function() {
       this.workspace.options.languageTree = null;
       chai.assert.throws(function() {
-        this.workspace.updateToolbox([]);
+        this.workspace.updateToolbox({'contents': []});
       }.bind(this), 'Existing toolbox is null.  Can\'t create new toolbox.');
     });
     test('Existing toolbox has no categories', function() {
       sinon.stub(Blockly.utils.toolbox, 'hasCategories').returns(true);
       this.workspace.toolbox_ = null;
       chai.assert.throws(function() {
-        this.workspace.updateToolbox([]);
+        this.workspace.updateToolbox({'contents': []});
       }.bind(this), 'Existing toolbox has no categories.  Can\'t change mode.');
     });
     test('Existing toolbox has categories', function() {
       sinon.stub(Blockly.utils.toolbox, 'hasCategories').returns(false);
       this.workspace.flyout_ = null;
       chai.assert.throws(function() {
-        this.workspace.updateToolbox([]);
+        this.workspace.updateToolbox({'contents': []});
       }.bind(this), 'Existing toolbox has categories.  Can\'t change mode.');
     });
     test('Passing in string as toolboxdef', function() {
-      var parseToolboxFake = sinon.spy(Blockly.Options, 'parseToolboxTree');
+      var parseToolboxFake = sinon.spy(Blockly.utils.toolbox, 'parseToolboxTree');
       this.workspace.updateToolbox('<xml><category name="something"></category></xml>');
       sinon.assert.calledOnce(parseToolboxFake);
     });

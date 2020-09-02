@@ -23,7 +23,7 @@ goog.require('Blockly.utils.dom');
  * @param {!Blockly.WorkspaceSvg} workspace The workspace in which to place this
  *     button.
  * @param {!Blockly.WorkspaceSvg} targetWorkspace The flyout's target workspace.
- * @param {!Blockly.utils.toolbox.Button|!Blockly.utils.toolbox.Label} json
+ * @param {!Blockly.utils.toolbox.ButtonOrLabelInfo} json
  *    The JSON specifying the label/button.
  * @param {boolean} isLabel Whether this button should be styled as a label.
  * @constructor
@@ -88,7 +88,7 @@ Blockly.FlyoutButton = function(workspace, targetWorkspace, json, isLabel) {
 
   /**
    * The JSON specifying the label / button.
-   * @type {!Blockly.utils.toolbox.Button|!Blockly.utils.toolbox.Label}
+   * @type {!Blockly.utils.toolbox.ButtonOrLabelInfo}
    */
   this.info = json;
 };
@@ -228,12 +228,26 @@ Blockly.FlyoutButton.prototype.moveTo = function(x, y) {
 };
 
 /**
+ * @return {boolean} Whether or not the button is a label.
+ */
+Blockly.FlyoutButton.prototype.isLabel = function() {
+  return this.isLabel_;
+};
+
+/**
  * Location of the button.
  * @return {!Blockly.utils.Coordinate} x, y coordinates.
  * @package
  */
 Blockly.FlyoutButton.prototype.getPosition = function() {
   return this.position_;
+};
+
+/**
+ * @return {string} Text of the button.
+ */
+Blockly.FlyoutButton.prototype.getButtonText = function() {
+  return this.text_;
 };
 
 /**

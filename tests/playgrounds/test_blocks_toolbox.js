@@ -16,6 +16,11 @@
 var alignCategory = {
   "kind": "CATEGORY",
   "name": "Align",
+  "classConfig": {
+    "container": "containerSomething",
+    "row": "rowSomething",
+    "icon": "iconSomething"
+  },
   "contents": [
     {
       "kind": "BLOCK",

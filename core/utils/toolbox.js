@@ -60,6 +60,13 @@ Blockly.utils.toolbox.ButtonInfo;
 Blockly.utils.toolbox.LabelInfo;
 
 /**
+ * The information needed to create either a button or a label in the flyout.
+ * @typedef {Blockly.utils.toolbox.ButtonInfo|
+ *           Blockly.utils.toolbox.LabelInfo}
+ */
+Blockly.utils.toolbox.ButtonOrLabelInfo;
+
+/**
  * The information needed to create a category in the toolbox.
  * @typedef {{
  *            kind:string,
@@ -253,6 +260,24 @@ Blockly.utils.toolbox.hasCategories = function(toolboxJson) {
   }
 
   var categories = toolboxJson['contents'].filter(function(item) {
+    return item['kind'].toUpperCase() == 'CATEGORY';
+  });
+  return !!categories.length;
+};
+
+/**
+ * Whether or not the category is collapsible.
+ * @param {!Blockly.utils.toolbox.CategoryInfo} categoryInfo Object holing
+ *    information for creating a category.
+ * @return {boolean} True if the category has subcategories.
+ * @package
+ */
+Blockly.utils.toolbox.isCategoryCollapsible = function(categoryInfo) {
+  if (!categoryInfo || !categoryInfo['contents']) {
+    return false;
+  }
+
+  var categories = categoryInfo['contents'].filter(function(item) {
     return item['kind'].toUpperCase() == 'CATEGORY';
   });
   return !!categories.length;

@@ -18,6 +18,7 @@ goog.require('Blockly.ToolboxItem');
 goog.require('Blockly.utils.dom');
 
 goog.requireType('Blockly.IToolbox');
+goog.requireType('Blockly.IToolboxItem');
 goog.requireType('Blockly.utils.toolbox');
 
 
@@ -29,6 +30,7 @@ goog.requireType('Blockly.utils.toolbox');
  * @param {!Blockly.IToolbox} toolbox The parent toolbox for the separator.
  * @constructor
  * @extends {Blockly.ToolboxItem}
+ * @implements {Blockly.IToolboxItem}
  */
 Blockly.ToolboxSeparator = function(separatorDef, toolbox) {
 
@@ -65,7 +67,16 @@ Blockly.ToolboxSeparator.registrationName = 'sep';
 /**
  * @override
  */
-Blockly.ToolboxSeparator.prototype.createDom = function() {
+Blockly.ToolboxSeparator.prototype.init = function() {
+  this.createDom_();
+};
+
+/**
+ * Creates the dom for a separator.
+ * @return {!Element} The parent element for the separator.
+ * @protected
+ */
+Blockly.ToolboxSeparator.prototype.createDom_ = function() {
   var container = document.createElement('div');
   Blockly.utils.dom.addClass(container, this.cssConfig_['container']);
   this.htmlDiv_ = container;

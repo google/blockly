@@ -113,7 +113,7 @@ Blockly.Tooltip.DIV = null;
 
 /**
  * Returns the tooltip text for the given element.
- * @param {!{tooltip}} object The object to get the the tooltip text of.
+ * @param {?Object} object The object to get the the tooltip text of.
  * @returns {!string} The tooltip text of the element.
  */
 Blockly.Tooltip.getTooltipOfObject = function(object) {
@@ -206,8 +206,8 @@ Blockly.Tooltip.onMouseOver_ = function(e) {
   }
   // If the tooltip is an object, treat it as a pointer to the next object in
   // the chain to look at.  Terminate when a string or function is found.
-  var element = /** @type {Element} */ Blockly.Tooltip.getTargetObject_(
-      e.currentTarget);
+  var element = /** @type {Element} */ (Blockly.Tooltip.getTargetObject_(
+      e.currentTarget));
   if (Blockly.Tooltip.element_ != element) {
     Blockly.Tooltip.hide();
     Blockly.Tooltip.poisonedElement_ = null;

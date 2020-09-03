@@ -66,7 +66,7 @@ Blockly.Field = function(value, opt_validator, opt_config) {
   /**
    * Used to cache the field's tooltip value if setTooltip is called when the
    * field is not yet initialized. Is *not* guaranteed to be accurate.
-   * @type {!string|!function(): (!string|!Function)|!SVGElement|null}
+   * @type {!string|!function(): (!string|!Function)|!{tooltip}|null}
    * @private
    */
   this.tooltip_ = null;
@@ -1020,12 +1020,12 @@ Blockly.Field.prototype.setTooltip = function(newTip) {
  * @returns {!string} The tooltip text for this block.
  */
 Blockly.Field.prototype.getTooltip = function() {
-  var tooltipObj = this.getClickTarget_();
-  if (!tooltipObj) {
-    // Field has not been initialized yet. Return stashed this.tooltip_ value.
-    tooltipObj = {tooltip: this.tooltip_};
+  var clickTarget = this.getClickTarget_();
+  if (clickTarget) {
+    return Blockly.Tooltip.getTooltipOfObject({tooltip: clickTarget.tooltip});
   }
-  return Blockly.Tooltip.getTooltipOfObject(tooltipObj);
+  // Field has not been initialized yet. Return stashed this.tooltip_ value.
+  return Blockly.Tooltip.getTooltipOfObject({tooltip: this.tooltip_});
 };
 
 /**

@@ -113,11 +113,11 @@ Blockly.Tooltip.DIV = null;
 
 /**
  * Returns the tooltip text for the given element.
- * @param {!{tooltip}} obj The object to get the the tooltip text of.
+ * @param {!{tooltip}} object The object to get the the tooltip text of.
  * @returns {!string} The tooltip text of the element.
  */
-Blockly.Tooltip.getTooltipOfObject = function(obj) {
-  obj = Blockly.Tooltip.getTargetObject_(obj);
+Blockly.Tooltip.getTooltipOfObject = function(object) {
+  var obj = Blockly.Tooltip.getTargetObject_(object);
   if (obj) {
     var tooltip = obj.tooltip;
     while (typeof tooltip == 'function') {
@@ -134,13 +134,13 @@ Blockly.Tooltip.getTooltipOfObject = function(obj) {
 /**
  * Returns the target object that the given object is targeting for its
  * tooltip. Could be the object itself.
- * @param {!{tooltip}} obj The object are trying to find the target tooltip
+ * @param {?Object} obj The object are trying to find the target tooltip
  *     object of.
  * @returns {!{tooltip}|null} The target tooltip object.
  * @private
  */
 Blockly.Tooltip.getTargetObject_ = function(obj) {
-  while (obj.tooltip) {
+  while (obj && obj.tooltip) {
     if ((typeof obj.tooltip == 'string') ||
         (typeof obj.tooltip == 'function')) {
       return obj;
@@ -206,7 +206,8 @@ Blockly.Tooltip.onMouseOver_ = function(e) {
   }
   // If the tooltip is an object, treat it as a pointer to the next object in
   // the chain to look at.  Terminate when a string or function is found.
-  var element = Blockly.Tooltip.getTargetObject_(e.currentTarget);
+  var element = /** @type {Element} */ Blockly.Tooltip.getTargetObject_(
+      e.currentTarget);
   if (Blockly.Tooltip.element_ != element) {
     Blockly.Tooltip.hide();
     Blockly.Tooltip.poisonedElement_ = null;

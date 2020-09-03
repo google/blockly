@@ -66,7 +66,7 @@ Blockly.Field = function(value, opt_validator, opt_config) {
   /**
    * Used to cache the field's tooltip value if setTooltip is called when the
    * field is not yet initialized. Is *not* guaranteed to be accurate.
-   * @type {string|Function|!SVGElement}
+   * @type {!string|!function(): (!string|!Function)|!SVGElement|null}
    * @private
    */
   this.tooltip_ = null;
@@ -996,23 +996,36 @@ Blockly.Field.prototype.onMouseDown_ = function(e) {
 };
 
 /**
- * Change the tooltip text for this field.
- * @param {string|Function|!SVGElement} newTip Text for tooltip or a parent
- *    element to link to for its tooltip.
+ * Sets the tooltip for this field.
+ * @param {!string|!function(): (!string|!Function)|!{tooltip}|null} newTip The
+ *     text for the tooltip, a function that returns the text for the tooltip, a
+ *     parent object whose tooltip will be used, or null to display the tooltip
+ *     of the parent block. To not display a tooltip pass the empty string.
  */
 Blockly.Field.prototype.setTooltip = function(newTip) {
+  if (!newTip && newTip !== '') {  // If null or undefined.
+    newTip = this.sourceBlock_;
+  }
   var clickTarget = this.getClickTarget_();
-  if (!clickTarget) {
+  if (clickTarget) {
+    clickTarget.tooltip = newTip;
+  } else {
     // Field has not been initialized yet.
     this.tooltip_ = newTip;
-    return;
   }
+};
 
-  if (!newTip && newTip !== '') {  // If null or undefined.
-    clickTarget.tooltip = this.sourceBlock_;
-  } else {
-    clickTarget.tooltip = newTip;
+/**
+ * Returns the tooltip text for this block.
+ * @returns {!string} The tooltip text for this block.
+ */
+Blockly.Field.prototype.getTooltip = function() {
+  var tooltipObj = this.getClickTarget_();
+  if (!tooltipObj) {
+    // Field has not been initialized yet. Return stashed this.tooltip_ value.
+    tooltipObj = {tooltip: this.tooltip_};
   }
+  return Blockly.Tooltip.getTooltipOfObject(tooltipObj);
 };
 
 /**

@@ -112,6 +112,45 @@ Blockly.Tooltip.MARGINS = 5;
 Blockly.Tooltip.DIV = null;
 
 /**
+ * Returns the tooltip text for the given element.
+ * @param {!{tooltip}} obj The object to get the the tooltip text of.
+ * @returns {!string} The tooltip text of the element.
+ */
+Blockly.Tooltip.getTooltipOfObject = function(obj) {
+  obj = Blockly.Tooltip.getTargetObject_(obj);
+  if (obj) {
+    var tooltip = obj.tooltip;
+    while (typeof tooltip == 'function') {
+      tooltip = tooltip();
+    }
+    if (typeof tooltip != 'string') {
+      throw Error('Tooltip function must return a string.');
+    }
+    return tooltip;
+  }
+  return '';
+};
+
+/**
+ * Returns the target object that the given object is targeting for its
+ * tooltip. Could be the object itself.
+ * @param {!{tooltip}} obj The object are trying to find the target tooltip
+ *     object of.
+ * @returns {!{tooltip}|null} The target tooltip object.
+ * @private
+ */
+Blockly.Tooltip.getTargetObject_ = function(obj) {
+  while (obj.tooltip) {
+    if ((typeof obj.tooltip == 'string') ||
+        (typeof obj.tooltip == 'function')) {
+      return obj;
+    }
+    obj = obj.tooltip;
+  }
+  return null;
+};
+
+/**
  * Create the tooltip div and inject it onto the page.
  */
 Blockly.Tooltip.createDom = function() {
@@ -167,11 +206,7 @@ Blockly.Tooltip.onMouseOver_ = function(e) {
   }
   // If the tooltip is an object, treat it as a pointer to the next object in
   // the chain to look at.  Terminate when a string or function is found.
-  var element = e.currentTarget;
-  while ((typeof element.tooltip != 'string') &&
-         (typeof element.tooltip != 'function')) {
-    element = element.tooltip;
-  }
+  var element = Blockly.Tooltip.getTargetObject_(e.currentTarget);
   if (Blockly.Tooltip.element_ != element) {
     Blockly.Tooltip.hide();
     Blockly.Tooltip.poisonedElement_ = null;
@@ -296,11 +331,7 @@ Blockly.Tooltip.show_ = function() {
   }
   // Erase all existing text.
   Blockly.Tooltip.DIV.textContent = '';
-  // Get the new text.
-  var tip = Blockly.Tooltip.element_.tooltip;
-  while (typeof tip == 'function') {
-    tip = tip();
-  }
+  var tip = Blockly.Tooltip.getTooltipOfObject(Blockly.Tooltip.element_);
   tip = Blockly.utils.string.wrap(tip, Blockly.Tooltip.LIMIT);
   // Create new text, line by line.
   var lines = tip.split('\n');

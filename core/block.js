@@ -905,12 +905,22 @@ Blockly.Block.prototype.setHelpUrl = function(url) {
 };
 
 /**
- * Change the tooltip text for a block.
- * @param {string|!Function} newTip Text for tooltip or a parent element to
- *     link to for its tooltip.  May be a function that returns a string.
+ * Sets the tooltip for this block.
+ * @param {!string|!function(): (!string|!Function)|!{tooltip}} newTip The text
+ *     for the tooltip, a function that returns the text for the tooltip, or a
+ *     parent object whose tooltip will be used. To not display a tooltip pass
+ *     the empty string.
  */
 Blockly.Block.prototype.setTooltip = function(newTip) {
   this.tooltip = newTip;
+};
+
+/**
+ * Returns the tooltip text for this block.
+ * @returns {!string} The tooltip text for this block.
+ */
+Blockly.Block.prototype.getTooltip = function() {
+  return Blockly.Tooltip.getTooltipOfObject(this);
 };
 
 /**

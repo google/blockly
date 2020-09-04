@@ -19,7 +19,7 @@ Blockly.Themes.Leaphy = {};
 
 Blockly.Themes.Leaphy.defaultBlockStyles = {
   "leaphy_blocks": {
-    "colourPrimary": "188",
+    "colourPrimary": "#1d2f6e",
     "hat": "cap"
   },
   "situation_blocks": {
@@ -38,7 +38,7 @@ Blockly.Themes.Leaphy.defaultBlockStyles = {
 
 Blockly.Themes.Leaphy.categoryStyles = {
   "leaphy_category": {
-    "colour": "#188697"
+    "colour": "#1d2f6e"
   },
   "situation_category": {
     "colour": "#E0A830"

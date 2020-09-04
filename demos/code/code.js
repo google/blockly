@@ -448,7 +448,8 @@ Code.init = function () {
       {
         controls: true,
         wheel: true
-      }      
+      },
+      renderer: 'zelos',
     });
 
   Code.loadBlocks('<xml xmlns="https://developers.google.com/blockly/xml"><block type="leaphy_start" id="rzE0Ve:6bHB~8aIqyj-U" deletable="false" x="250" y="10"/></xml>');

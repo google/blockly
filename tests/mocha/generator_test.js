@@ -44,7 +44,7 @@ suite('Generator', function() {
 
   suite('blockToCode', function() {
     setup(function() {
-      defineBlocksWithJsonArrayWithCleanup(this.sharedCleanup, [{
+      Blockly.defineBlocksWithJsonArray([{
         "type": "stack_block",
         "message0": "",
         "previousStatement": null,
@@ -110,7 +110,7 @@ suite('Generator', function() {
 
     suite('Nested block', function() {
       setup(function() {
-        defineBlocksWithJsonArrayWithCleanup(this.sharedCleanup, [{
+        Blockly.defineBlocksWithJsonArray([{
           "type": "test_loop_block",
           "message0": "Repeat Loop",
           "message1": "%1",

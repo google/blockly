@@ -33,7 +33,7 @@ suite('Navigation', function() {
   // transition correctly between toolbox, workspace, and flyout.
   suite('Tests toolbox keys', function() {
     setup(function() {
-      defineBlocksWithJsonArrayWithCleanup(this.sharedCleanup, [{
+      Blockly.defineBlocksWithJsonArray([{
         "type": "basic_block",
         "message0": "%1",
         "args0": [
@@ -112,7 +112,7 @@ suite('Navigation', function() {
   // transition correctly between toolbox, workspace, and flyout.
   suite('Tests flyout keys', function() {
     setup(function() {
-      defineBlocksWithJsonArrayWithCleanup(this.sharedCleanup, [{
+      Blockly.defineBlocksWithJsonArray([{
         "type": "basic_block",
         "message0": "%1",
         "args0": [
@@ -201,7 +201,7 @@ suite('Navigation', function() {
   // transition correctly between toolbox, workspace, and flyout.
   suite('Tests workspace keys', function() {
     setup(function() {
-      defineBlocksWithJsonArrayWithCleanup(this.sharedCleanup, [{
+      Blockly.defineBlocksWithJsonArray([{
         "type": "basic_block",
         "message0": "%1",
         "args0": [
@@ -305,7 +305,7 @@ suite('Navigation', function() {
 
   suite('Test key press', function() {
     setup(function() {
-      defineBlocksWithJsonArrayWithCleanup(this.sharedCleanup, [{
+      Blockly.defineBlocksWithJsonArray([{
         "type": "basic_block",
         "message0": "%1",
         "args0": [
@@ -406,7 +406,7 @@ suite('Navigation', function() {
 
     suite('Test key press in read only mode', function() {
       setup(function() {
-        defineBlocksWithJsonArrayWithCleanup(this.sharedCleanup, [{
+        Blockly.defineBlocksWithJsonArray([{
           "type": "field_block",
           "message0": "%1 %2",
           "args0": [
@@ -476,7 +476,7 @@ suite('Navigation', function() {
 
   suite('Insert Functions', function() {
     setup(function() {
-      defineBlocksWithJsonArrayWithCleanup(this.sharedCleanup, [{
+      Blockly.defineBlocksWithJsonArray([{
         "type": "basic_block",
         "message0": "%1",
         "args0": [
@@ -552,7 +552,7 @@ suite('Navigation', function() {
 
   suite('Connect Blocks', function() {
     setup(function() {
-      defineBlocksWithJsonArrayWithCleanup(this.sharedCleanup, [{
+      Blockly.defineBlocksWithJsonArray([{
         "type": "basic_block",
         "message0": "",
         "previousStatement": null,
@@ -661,7 +661,7 @@ suite('Navigation', function() {
 
   suite('Test cursor move on block delete', function() {
     setup(function() {
-      defineBlocksWithJsonArrayWithCleanup(this.sharedCleanup, [{
+      Blockly.defineBlocksWithJsonArray([{
         "type": "basic_block",
         "message0": "",
         "previousStatement": null,

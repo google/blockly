@@ -7,7 +7,7 @@
 suite('ASTNode', function() {
   setup(function() {
     sharedTestSetup.call(this);
-    defineBlocksWithJsonArrayWithCleanup(this.sharedCleanup, [{
+    Blockly.defineBlocksWithJsonArray([{
       "type": "input_statement",
       "message0": "%1 %2 %3 %4",
       "args0": [
@@ -165,7 +165,7 @@ suite('ASTNode', function() {
 
   suite('NavigationFunctions', function() {
     setup(function() {
-      defineBlocksWithJsonArrayWithCleanup(this.sharedCleanup, [{
+      Blockly.defineBlocksWithJsonArray([{
         "type": "top_connection",
         "message0": "",
         "previousStatement": null,

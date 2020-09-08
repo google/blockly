@@ -9,7 +9,7 @@ suite('WorkspaceSvg', function() {
     sharedTestSetup.call(this);
     var toolbox = document.getElementById('toolbox-categories');
     this.workspace = Blockly.inject('blocklyDiv', {toolbox: toolbox});
-    defineBlocksWithJsonArrayWithCleanup(this.sharedCleanup, [{
+    Blockly.defineBlocksWithJsonArray([{
       'type': 'simple_test_block',
       'message0': 'simple test block',
       'output': null
@@ -124,7 +124,7 @@ suite('WorkspaceSvg', function() {
       this.targetWorkspace = new Blockly.Workspace();
       this.workspace.isFlyout = true;
       this.workspace.targetWorkspace = this.targetWorkspace;
-      defineBlocksWithJsonArrayWithCleanup(this.sharedCleanup, [{
+      Blockly.defineBlocksWithJsonArray([{
         "type": "get_var_block",
         "message0": "%1",
         "args0": [

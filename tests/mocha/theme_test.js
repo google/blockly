@@ -21,7 +21,7 @@ suite('Theme', function() {
   });
 
   function defineThemeTestBlocks(sharedCleanupObj) {
-    defineBlocksWithJsonArrayWithCleanup(sharedCleanupObj, [{
+    Blockly.defineBlocksWithJsonArray([{
       "type": "stack_block",
       "message0": "",
       "previousStatement": null,

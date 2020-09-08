@@ -9,7 +9,7 @@ suite('Events', function() {
     sharedTestSetup.call(this, {fireEventsNow: false});
     this.eventsFireSpy = sinon.spy(Blockly.Events, 'fire');
     this.workspace = new Blockly.Workspace();
-    defineBlocksWithJsonArrayWithCleanup(this.sharedCleanup, [{
+    Blockly.defineBlocksWithJsonArray([{
       'type': 'field_variable_test_block',
       'message0': '%1',
       'args0': [

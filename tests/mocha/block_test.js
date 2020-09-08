@@ -8,7 +8,7 @@ suite('Blocks', function() {
   setup(function() {
     sharedTestSetup.call(this, {fireEventsNow: false});
     this.workspace = new Blockly.Workspace();
-    defineBlocksWithJsonArrayWithCleanup(this.sharedCleanup, [
+    Blockly.defineBlocksWithJsonArray([
       {
         "type": "empty_block",
         "message0": ""
@@ -311,7 +311,7 @@ suite('Blocks', function() {
   });
   suite('Remove Input', function() {
     setup(function() {
-      defineBlocksWithJsonArrayWithCleanup(this.sharedCleanup, [
+      Blockly.defineBlocksWithJsonArray([
         {
           "type": "value_block",
           "message0": "%1",
@@ -1211,7 +1211,7 @@ suite('Blocks', function() {
       Blockly.Events.disable();
       // We need a visible workspace.
       this.workspace = Blockly.inject('blocklyDiv', {});
-      defineBlocksWithJsonArrayWithCleanup(this.sharedCleanup, [
+      Blockly.defineBlocksWithJsonArray([
         {
           "type": "variable_block",
           "message0": "%1",

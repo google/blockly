@@ -27,7 +27,7 @@ suite('Extensions', function() {
     // Extension defined before the block type is defined.
     Blockly.Extensions.register('extensions_test_before', beforeCallback);
 
-    defineBlocksWithJsonArrayWithCleanup(this.sharedCleanup, [{
+    Blockly.defineBlocksWithJsonArray([{
       "type": "extension_test_block",
       "message0": "extension_test_block",
       "extensions": ["extensions_test_before", "extensions_test_after"]
@@ -54,7 +54,7 @@ suite('Extensions', function() {
   test('Parent tooltip when inline', function() {
     var defaultTooltip = "defaultTooltip";
     var parentTooltip = "parentTooltip";
-    defineBlocksWithJsonArrayWithCleanup(this.sharedCleanup, [
+    Blockly.defineBlocksWithJsonArray([
       {
         "type": "test_parent_tooltip_when_inline",
         "message0": "test_parent_tooltip_when_inline",
@@ -120,7 +120,7 @@ suite('Extensions', function() {
       chai.assert.typeOf(Blockly.Extensions.ALL_['mixin_test'], 'function');
 
 
-      defineBlocksWithJsonArrayWithCleanup(this.sharedCleanup, [{
+      Blockly.defineBlocksWithJsonArray([{
         "type": "test_block_mixin",
         "message0": "test_block_mixin",
         "extensions": ["mixin_test"]
@@ -136,7 +136,7 @@ suite('Extensions', function() {
       test('Basic', function() {
         this.extensionsCleanup_.push('mutator_test');
 
-        defineBlocksWithJsonArrayWithCleanup(this.sharedCleanup, [{
+        Blockly.defineBlocksWithJsonArray([{
           "type": "mutator_test_block",
           "message0": "mutator_test_block",
           "mutator": "mutator_test"
@@ -173,7 +173,7 @@ suite('Extensions', function() {
       test('With helper function', function() {
         this.extensionsCleanup_.push('extensions_test');
 
-        defineBlocksWithJsonArrayWithCleanup(this.sharedCleanup, [{
+        Blockly.defineBlocksWithJsonArray([{
           "type": "mutator_test_block",
           "message0": "mutator_test_block",
           "mutator": ["extensions_test"]
@@ -204,7 +204,7 @@ suite('Extensions', function() {
       test('No dialog', function() {
         this.extensionsCleanup_.push('mutator_test');
 
-        defineBlocksWithJsonArrayWithCleanup(this.sharedCleanup, [{
+        Blockly.defineBlocksWithJsonArray([{
           "type": "mutator_test_block",
           "message0": "mutator_test_block",
           "mutator": "mutator_test"
@@ -237,7 +237,7 @@ suite('Extensions', function() {
 
   suite('Error cases', function() {
     test('Missing extension', function() {
-      defineBlocksWithJsonArrayWithCleanup(this.sharedCleanup, [{
+      Blockly.defineBlocksWithJsonArray([{
         "type": "missing_extension_block",
         "message0": "missing_extension_block",
         "extensions": ["missing_extension"]
@@ -262,7 +262,7 @@ suite('Extensions', function() {
       Blockly.Extensions.registerMixin('mixin_bad_inputList', TEST_MIXIN_BAD_INPUTLIST);
       chai.assert.typeOf(Blockly.Extensions.ALL_['mixin_bad_inputList'], 'function');
 
-      defineBlocksWithJsonArrayWithCleanup(this.sharedCleanup, [{
+      Blockly.defineBlocksWithJsonArray([{
         "type": "test_block_bad_inputList",
         "message0": "test_block_bad_inputList",
         "extensions": ["mixin_bad_inputList"]
@@ -286,7 +286,7 @@ suite('Extensions', function() {
       Blockly.Extensions.registerMixin('mixin_bad_colour_', TEST_MIXIN_BAD_COLOUR);
       chai.assert.typeOf(Blockly.Extensions.ALL_['mixin_bad_colour_'], 'function');
 
-      defineBlocksWithJsonArrayWithCleanup(this.sharedCleanup, [{
+      Blockly.defineBlocksWithJsonArray([{
         "type": "test_block_bad_colour",
         "message0": "test_block_bad_colour",
         "extensions": ["mixin_bad_colour_"]
@@ -301,7 +301,7 @@ suite('Extensions', function() {
     test('Use mutator as extension', function() {
       this.extensionsCleanup_.push('mutator_test');
 
-      defineBlocksWithJsonArrayWithCleanup(this.sharedCleanup, [{
+      Blockly.defineBlocksWithJsonArray([{
         "type": "mutator_test_block",
         "message0": "mutator_test_block",
         "extensions": ["mutator_test"]
@@ -332,7 +332,7 @@ suite('Extensions', function() {
     test('Use mutator mixin as extension', function() {
       this.extensionsCleanup_.push('mutator_test');
 
-      defineBlocksWithJsonArrayWithCleanup(this.sharedCleanup, [{
+      Blockly.defineBlocksWithJsonArray([{
         "type": "mutator_test_block",
         "message0": "mutator_test_block",
         "extensions": ["mutator_test"]
@@ -363,7 +363,7 @@ suite('Extensions', function() {
     test('Use extension as mutator', function() {
       this.extensionsCleanup_.push('extensions_test');
 
-      defineBlocksWithJsonArrayWithCleanup(this.sharedCleanup, [{
+      Blockly.defineBlocksWithJsonArray([{
         "type": "mutator_test_block",
         "message0": "mutator_test_block",
         "mutator": ["extensions_test"]

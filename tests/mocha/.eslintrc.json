@@ -23,7 +23,6 @@
         "createDeprecationWarningStub": true,
         "createRenderedBlock": true,
         "createTestBlock": true,
-        "defineBlocksWithJsonArrayWithCleanup": true,
         "defineBasicBlockWithField": true,
         "defineRowBlock": true,
         "defineStackBlock": true,

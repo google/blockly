@@ -28,6 +28,7 @@ goog.require('Blockly.WorkspaceSvg');
 goog.require('Blockly.Xml');
 
 goog.requireType('Blockly.utils.Metrics');
+goog.requireType('Blockly.utils.toolbox');
 
 
 /**
@@ -173,7 +174,7 @@ Blockly.Mutator.prototype.createEditor_ = function() {
   var hasFlyout = !!quarkXml;
   if (hasFlyout) {
     workspaceOptions.languageTree =
-        Blockly.utils.toolbox.convertToolboxToJSON(quarkXml);
+        Blockly.utils.toolbox.convertToolboxDefToJson(quarkXml);
     workspaceOptions.getMetrics = this.getFlyoutMetrics_.bind(this);
   }
   this.workspace_ = new Blockly.WorkspaceSvg(workspaceOptions);

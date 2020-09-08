@@ -13,7 +13,12 @@
 
 goog.provide('Blockly.IFlyout');
 
+goog.requireType('Blockly.BlockSvg');
 goog.requireType('Blockly.IRegistrable');
+goog.requireType('Blockly.utils.dom');
+goog.requireType('Blockly.utils.Coordinate');
+goog.requireType('Blockly.utils.toolbox');
+goog.requireType('Blockly.WorkspaceSvg');
 
 
 /**
@@ -130,10 +135,9 @@ Blockly.IFlyout.prototype.hide;
 
 /**
  * Show and populate the flyout.
- * @param {!Blockly.utils.toolbox.ToolboxDefinition|string} flyoutDef
- *    List of contents to display in the flyout as an array of xml an
- *    array of Nodes, a NodeList or a string with the name of the dynamic category.
- *    Variables and procedures have a custom set of blocks.
+ * @param {!Blockly.utils.toolbox.FlyoutDefinition|string} flyoutDef Contents to
+ *     display in the flyout. This is either an array of Nodes, a NodeList, a
+ *     toolbox definition, or a string with the name of the dynamic category.
  */
 Blockly.IFlyout.prototype.show;
 

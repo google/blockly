@@ -218,6 +218,10 @@ Blockly.Events.Create = function(opt_block) {
   if (!opt_block) {
     return;  // Blank event to be populated by fromJson.
   }
+  if (opt_block.isShadow()) {
+    // Moving shadow blocks is handled via disconnection.
+    this.recordUndo = false;
+  }
 
   if (opt_block.workspace.rendered) {
     this.xml = Blockly.Xml.blockToDomWithXY(opt_block);
@@ -302,6 +306,10 @@ Blockly.Events.Delete = function(opt_block) {
   if (opt_block.getParent()) {
     throw Error('Connected blocks cannot be deleted.');
   }
+  if (opt_block.isShadow()) {
+    // Respawning shadow blocks is handled via disconnection.
+    this.recordUndo = false;
+  }
 
   if (opt_block.workspace.rendered) {
     this.oldXml = Blockly.Xml.blockToDomWithXY(opt_block);
@@ -379,6 +387,10 @@ Blockly.Events.Move = function(opt_block) {
   Blockly.Events.Move.superClass_.constructor.call(this, opt_block);
   if (!opt_block) {
     return;  // Blank event to be populated by fromJson.
+  }
+  if (opt_block.isShadow()) {
+    // Moving shadow blocks is handled via disconnection.
+    this.recordUndo = false;
   }
 
   var location = this.currentLocation_();

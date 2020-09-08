@@ -226,15 +226,12 @@ Blockly.Blocks['lists_create_with'] = {
     var itemBlock = containerBlock.getInputTargetBlock('STACK');
     // Count number of inputs.
     var connections = [];
-    var counter = 0;
     while (itemBlock) {
       connections.push(itemBlock.valueConnection_);
       itemBlock = itemBlock.nextConnection &&
           itemBlock.nextConnection.targetBlock();
-      counter++;
     }
-    console.log(`COMPOSE: the number of attached blocks in the mutator is ${counter}`);
-    console.log(`The itemCount_ is ${this.itemCount_}`);
+
     // Disconnect any children that don't belong.
     for (var i = 0; i < this.itemCount_; i++) {
       var connection = this.getInput('ADD' + i).connection.targetConnection;
@@ -244,15 +241,15 @@ Blockly.Blocks['lists_create_with'] = {
         connection.disconnect();
         // SHAPE: When a child is about to be disconnected, save the reference of the block
         // that was attached to the input.
-        console.log(`Possible disconnection at input ADD${i}`);
         this.disconnectedChildBlocks.push(disconnectedChild);
       }
     }
+
     // SHAPE: Set flag to true if a new item was added to the list (from mutator bubble).
     this.addShadowBlocks = connections.length > this.itemCount_;
     this.itemCount_ = connections.length;
-    console.log(`The itemCount_ NOW is ${this.itemCount_}\n`);
     this.updateShape_();
+
     // Reconnect any child blocks.
     for (var i = 0; i < this.itemCount_; i++) {
       if (connections[i]) {
@@ -331,6 +328,7 @@ Blockly.Blocks['lists_create_with'] = {
    * @private
    * @this Blockly.Block
    * @author ShapeRoboticsApS
+   * @ignore
    */
   connectShadowBlock_: function () {
     // Spawn a shadow math blocks on empty inputs.

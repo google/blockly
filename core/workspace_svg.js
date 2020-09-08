@@ -323,6 +323,28 @@ Blockly.WorkspaceSvg.prototype.dragDeltaXY_ = null;
  */
 Blockly.WorkspaceSvg.prototype.scale = 1;
 
+// TODO(#4203) Enable viewport events after ui events refactor.
+// /**
+//  * Cached scale value. Used to detect changes in viewport.
+//  * @type {number}
+//  * @private
+//  */
+// Blockly.WorkspaceSvg.prototype.oldScale_ = 1;
+//
+// /**
+//  * Cached viewport top value. Used to detect changes in viewport.
+//  * @type {number}
+//  * @private
+//  */
+// Blockly.WorkspaceSvg.prototype.oldTop_ = 0;
+//
+// /**
+//  * Cached viewport left value. Used to detect changes in viewport.
+//  * @type {number}
+//  * @private
+//  */
+// Blockly.WorkspaceSvg.prototype.oldLeft_ = 0;
+
 /**
  * The workspace's trashcan (if any).
  * @type {Blockly.Trashcan}
@@ -862,7 +884,11 @@ Blockly.WorkspaceSvg.prototype.dispose = function() {
 
 /**
  * Obtain a newly created block.
- * @param {?string} prototypeName Name of the language object containing
+ *
+ * This block's svg must still be initialized
+ * ([initSvg]{@link Blockly.BlockSvg#initSvg}) and it must be rendered
+ * ([render]{@link Blockly.BlockSvg#render}) before the block will be visible.
+ * @param {!string} prototypeName Name of the language object containing
  *     type-specific functions for this block.
  * @param {string=} opt_id Optional ID.  Use this ID if provided, otherwise
  *     create a new ID.
@@ -1074,6 +1100,31 @@ Blockly.WorkspaceSvg.prototype.getParentSvg = function() {
 };
 
 /**
+ * Fires a viewport event if events are enabled and there is a change in
+ * viewport values.
+ * @package
+ */
+Blockly.WorkspaceSvg.prototype.maybeFireViewportChangeEvent = function() {
+  // TODO(#4203) Enable viewport events after ui events refactor.
+  // if (!Blockly.Events.isEnabled()) {
+  //   return;
+  // }
+  // var scale = this.scale;
+  // var top = -this.scrollY;
+  // var left = -this.scrollX;
+  // if (scale == this.oldScale_ && top == this.oldTop_ && left == this.oldLeft_) {
+  //   return;
+  // }
+  // this.oldScale_ = scale;
+  // this.oldTop_ = top;
+  // this.oldLeft_ = left;
+  // var event = new Blockly.Events.Ui(null, 'viewport', null,
+  //     { scale: scale, top: top, left: left });
+  // event.workspaceId = this.id;
+  // Blockly.Events.fire(event);
+};
+
+/**
  * Translate this workspace to new coordinates.
  * @param {number} x Horizontal translation, in pixel units relative to the
  *    top left of the Blockly div.
@@ -1097,6 +1148,8 @@ Blockly.WorkspaceSvg.prototype.translate = function(x, y) {
   if (this.grid_) {
     this.grid_.moveTo(x, y);
   }
+
+  this.maybeFireViewportChangeEvent();
 };
 
 /**
@@ -1702,16 +1755,14 @@ Blockly.WorkspaceSvg.prototype.showContextMenu = function(e) {
 
 /**
  * Modify the block tree on the existing toolbox.
- * @param {Blockly.utils.toolbox.ToolboxDefinition|string} toolboxDef
- *    DOM tree of toolbox contents, string of toolbox contents, or array of JSON
- *    representing toolbox contents.
+ * @param {?Blockly.utils.toolbox.ToolboxDefinition} toolboxDef
+ *    DOM tree of toolbox contents, string of toolbox contents, or JSON
+ *    representing toolbox definition.
  */
 Blockly.WorkspaceSvg.prototype.updateToolbox = function(toolboxDef) {
-  if (!Array.isArray(toolboxDef)) {
-    toolboxDef = Blockly.Options.parseToolboxTree(toolboxDef);
-  }
-  toolboxDef = Blockly.utils.toolbox.convertToolboxToJSON(toolboxDef);
-  if (!toolboxDef) {
+  var parsedToolboxDef = Blockly.utils.toolbox.convertToolboxDefToJson(toolboxDef);
+
+  if (!parsedToolboxDef) {
     if (this.options.languageTree) {
       throw Error('Can\'t nullify an existing toolbox.');
     }
@@ -1720,18 +1771,19 @@ Blockly.WorkspaceSvg.prototype.updateToolbox = function(toolboxDef) {
   if (!this.options.languageTree) {
     throw Error('Existing toolbox is null.  Can\'t create new toolbox.');
   }
-  if (Blockly.utils.toolbox.hasCategories(toolboxDef)) {
+
+  if (Blockly.utils.toolbox.hasCategories(parsedToolboxDef)) {
     if (!this.toolbox_) {
       throw Error('Existing toolbox has no categories.  Can\'t change mode.');
     }
-    this.options.languageTree = toolboxDef;
-    this.toolbox_.render(toolboxDef);
+    this.options.languageTree = parsedToolboxDef;
+    this.toolbox_.render(parsedToolboxDef);
   } else {
     if (!this.flyout_) {
       throw Error('Existing toolbox has categories.  Can\'t change mode.');
     }
-    this.options.languageTree = toolboxDef;
-    this.flyout_.show(toolboxDef);
+    this.options.languageTree = parsedToolboxDef;
+    this.flyout_.show(parsedToolboxDef);
   }
 };
 
@@ -1891,8 +1943,14 @@ Blockly.WorkspaceSvg.prototype.zoomToFit = function() {
   // Scale Units: (pixels / workspaceUnit)
   var ratioX = workspaceWidth / blocksWidth;
   var ratioY = workspaceHeight / blocksHeight;
-  this.setScale(Math.min(ratioX, ratioY));
-  this.scrollCenter();
+  Blockly.Events.disable();
+  try {
+    this.setScale(Math.min(ratioX, ratioY));
+    this.scrollCenter();
+  } finally {
+    Blockly.Events.enable();
+  }
+  this.maybeFireViewportChangeEvent();
 };
 
 /**

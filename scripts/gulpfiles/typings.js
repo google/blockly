@@ -27,11 +27,11 @@ function typings() {
   const blocklySrcs = [
     "core/",
     "core/components",
-    "core/components/tree",
     "core/keyboard_nav",
     "core/renderers/common",
     "core/renderers/measurables",
     "core/theme",
+    "core/toolbox",
     "core/interfaces",
     "core/utils",
     "msg/"

@@ -135,6 +135,12 @@ function createEventsFireStubFireImmediately_(clock) {
  * setTimeout calls can be cleared in test teardown along with other common
  * stubs. Should be called in setup of outermost suite using
  * sharedTestSetup.call(this).
+ * The sinon fake timer defined on this.clock_ should not be reset in tests to
+ * avoid causing issues with cleanup in sharedTestTeardown.
+ *
+ * Stubs created in this setup (unless disabled by options passed):
+ *  - this.eventsFireStub - Blockly.Events.fire
+ *
  * @param {Object<string, boolean>} options Options to enable/disable setup
  *    of certain stubs.
  */

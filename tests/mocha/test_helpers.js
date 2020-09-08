@@ -40,9 +40,160 @@ function captureWarnings(innerFunc) {
 }
 
 /**
+ * Asserts that the given function logs the provided warning messages.
+ * @param {function} innerFunc The function to call.
+ * @param {Array<!RegExp>|!RegExp} messages A list of regex for the expected
+ *    messages (in the expected order).
+ */
+function assertWarnings(innerFunc, messages) {
+  if (!Array.isArray(messages)) {
+    messages = [messages];
+  }
+  var warnings = captureWarnings(innerFunc);
+  chai.assert.lengthOf(warnings, messages.length);
+  messages.forEach((message, i) => {
+    chai.assert.match(warnings[i], message);
+  });
+}
+
+/**
+ * Asserts that the given function logs no warning messages.
+ * @param {function} innerFunc The function to call.
+ */
+function assertNoWarnings(innerFunc) {
+  assertWarnings(innerFunc, []);
+}
+
+/**
+ * Stubs Blockly.utils.deprecation.warn call.
+ * @return {!SinonStub} The created stub.
+ */
+function createDeprecationWarningStub() {
+  return sinon.stub(Blockly.utils.deprecation, 'warn');
+}
+
+/**
+ * Asserts whether the given deprecation warning stub or call was called with
+ * the expected functionName.
+ * @param {!SinonSpy|!SinonSpyCall} spyOrSpyCall The spy or spy call to use.
+ * @param {string} functionName The function name to check that the given spy or
+ *    spy call was called with.
+ */
+function assertDeprecationWarningCall(spyOrSpyCall, functionName) {
+  sinon.assert.calledWith(spyOrSpyCall, functionName);
+}
+
+/**
+ * Asserts that there was a single deprecation warning call with the given
+ * functionName passed.
+ * @param {!SinonSpy} spy The spy to use.
+ * @param {string} functionName The function name to check that the given spy
+ *    was called with.
+ */
+function assertSingleDeprecationWarningCall(spy, functionName) {
+  sinon.assert.calledOnce(spy);
+  assertDeprecationWarningCall(spy.getCall(0), functionName);
+}
+
+/**
+ * Safely disposes of Blockly workspace, logging any errors.
+ * Assumes that sharedTestSetup has also been called. This should be called
+ * using workspaceTeardown.call(this).
+ * @param {!Blockly.Workspace} workspace The workspace to dispose.
+ */
+function workspaceTeardown(workspace) {
+  try {
+    this.clock.runAll();  // Run all queued setTimeout calls.
+    workspace.dispose();
+    this.clock.runAll();  // Run all remaining queued setTimeout calls.
+  } catch (e) {
+    var testRef = this.currentTest || this.test;
+    console.error(testRef.fullTitle() + '\n', e);
+  }
+}
+
+/**
+ * Creates stub for Blockly.Events.fire that advances the clock forward after
+ * the event fires so it is processed immediately instead of on a timeout.
+ * @param {!SinonClock} clock The sinon clock.
+ * @return {!SinonStub} The created stub.
+ * @private
+ */
+function createEventsFireStubFireImmediately_(clock) {
+  var stub = sinon.stub(Blockly.Events, 'fire');
+  stub.callsFake(function(event) {
+    // Call original method.
+    stub.wrappedMethod.call(this, ...arguments);
+    // Advance clock forward to run any queued events.
+    clock.runAll();
+  });
+  return stub;
+}
+
+/**
+ * Shared setup method that sets up fake timer for clock so that pending
+ * setTimeout calls can be cleared in test teardown along with other common
+ * stubs. Should be called in setup of outermost suite using
+ * sharedTestSetup.call(this).
+ * @param {Object<string, boolean>} options Options to enable/disable setup
+ *    of certain stubs.
+ */
+function sharedTestSetup(options = {}) {
+  this.sharedSetupCalled_ = true;
+  // Sandbox created for greater control when certain stubs are cleared.
+  this.sharedSetupSandbox_ = sinon.createSandbox();
+  this.clock = this.sharedSetupSandbox_.useFakeTimers();
+  if (options['fireEventsNow'] === undefined || options['fireEventsNow']) {
+    // Stubs event firing unless passed option "fireEventsNow: false"
+    this.eventsFireStub = createEventsFireStubFireImmediately_(this.clock);
+  }
+}
+
+/**
+ * Shared cleanup method that clears up pending setTimeout calls, disposes of
+ * workspace, and resets global variables. Should be called in setup of
+ * outermost suite using sharedTestTeardown.call(this).
+ */
+function sharedTestTeardown() {
+  var testRef = this.currentTest || this.test;
+  if (!this.sharedSetupCalled_) {
+    console.error('"' + testRef.fullTitle() +
+        '" did not call sharedTestSetup');
+  }
+
+  try {
+    if (this.workspace) {
+      workspaceTeardown.call(this, this.workspace);
+      this.workspace = null;
+    } else {
+      this.clock.runAll();  // Run all queued setTimeout calls.
+    }
+  } catch (e) {
+    console.error(testRef.fullTitle() + '\n', e);
+  } finally {
+    // Clear Blockly.Event state.
+    Blockly.Events.setGroup(false);
+    Blockly.Events.disabled_ = 0;
+    if (Blockly.Events.FIRE_QUEUE_.length) {
+      // If this happens, it may mean that some previous test is missing cleanup
+      // (i.e. a previous test added an event to the queue on a timeout that
+      // did not use a stubbed clock).
+      Blockly.Events.FIRE_QUEUE_.length = 0;
+      console.warn(testRef.fullTitle() +
+          '" needed cleanup of Blockly.Events.FIRE_QUEUE_. This may indicate ' +
+          'leakage from an earlier test');
+    }
+
+    // Restore all stubbed methods.
+    this.sharedSetupSandbox_.restore();
+    sinon.restore();
+  }
+}
+
+/**
  * Creates stub for Blockly.utils.genUid that returns the provided id or ids.
- *    Recommended to also assert that the stub is called the expected number of
- *    times.
+ * Recommended to also assert that the stub is called the expected number of
+ * times.
  * @param {string|!Array<string>} returnIds The return values to use for the
  *    created stub. If a single value is passed, then the stub always returns
  *    that value.
@@ -61,27 +212,6 @@ function createGenUidStubWithReturns(returnIds) {
 }
 
 /**
- * Creates stub for Blockly.Events.fire that fires events immediately instead of
- * with timeout.
- * @return {!SinonStub} The created stub.
- */
-function createEventsFireStub() {
-  // TODO(#4064): Remove clearing of event clear here in favor of adding cleanup
-  // to other tests that cause events to be added to the queue even after they
-  // end.
-  Blockly.Events.FIRE_QUEUE_.length = 0;
-  var stub = sinon.stub(Blockly.Events, 'fire');
-  stub.callsFake(function(event) {
-    if (!Blockly.Events.isEnabled()) {
-      return;
-    }
-    Blockly.Events.FIRE_QUEUE_.push(event);
-    Blockly.Events.fireNow_();
-  });
-  return stub;
-}
-
-/**
  * Creates spy for workspace fireChangeListener
  * @param {!Blockly.Workspace} workspace The workspace to spy fireChangeListener
  *    calls on.
@@ -89,6 +219,52 @@ function createEventsFireStub() {
  */
 function createFireChangeListenerSpy(workspace) {
   return sinon.spy(workspace, 'fireChangeListener');
+}
+
+/**
+ * Asserts whether the given xml property has the expected property.
+ * @param {!Node} xmlValue The xml value to check.
+ * @param {!Node|string} expectedValue The expected value.
+ * @param {string=} message Optional message to use in assert message.
+ * @private
+ */
+function assertXmlPropertyEqual_(xmlValue, expectedValue, message) {
+  var value = Blockly.Xml.domToText(xmlValue);
+  if (expectedValue instanceof Node) {
+    expectedValue = Blockly.Xml.domToText(expectedValue);
+  }
+  chai.assert.equal(value, expectedValue, message);
+}
+
+/**
+ * Asserts that the given object has the expected xml properties.
+ * @param {Object} obj The object to check.
+ * @param {Object<string, Node|string>} expectedXmlProperties The expected xml
+ *    properties.
+ * @private
+ */
+function assertXmlProperties_(obj, expectedXmlProperties) {
+  Object.keys(expectedXmlProperties).map((key) => {
+    var value = obj[key];
+    var expectedValue = expectedXmlProperties[key];
+    if (expectedValue === undefined) {
+      chai.assert.isUndefined(value,
+          'Expected ' + key + ' property to be undefined');
+      return;
+    }
+    chai.assert.exists(value, 'Expected ' + key + ' property to exist');
+    assertXmlPropertyEqual_(value, expectedValue, 'Checking property ' + key);
+  });
+}
+
+/**
+ * Whether given key indicates that the property is xml.
+ * @param {string} key The key to check.
+ * @return {boolean} Whether the given key is for xml property.
+ * @private
+ */
+function isXmlProperty_(key) {
+  return key.toLowerCase().endsWith('xml');
 }
 
 /**
@@ -100,63 +276,125 @@ function createFireChangeListenerSpy(workspace) {
  * @param {!Object<string, *>} expectedProperties Map of of additional expected
  *    properties to check on fired event.
  * @param {string=} message Optional message to prepend assert messages.
- * @private
  */
 function assertEventEquals(event, expectedType,
     expectedWorkspaceId, expectedBlockId, expectedProperties, message) {
   var prependMessage = message ? message + ' ' : '';
+  prependMessage += 'Event fired ';
   chai.assert.equal(event.type, expectedType,
-      prependMessage + 'Event fired type');
+      prependMessage + 'type');
   chai.assert.equal(event.workspaceId, expectedWorkspaceId,
-      prependMessage + 'Event fired workspace id');
+      prependMessage + 'workspace id');
   chai.assert.equal(event.blockId, expectedBlockId,
-      prependMessage + 'Event fired block id');
+      prependMessage + 'block id');
   Object.keys(expectedProperties).map((key) => {
     var value = event[key];
     var expectedValue = expectedProperties[key];
-    if (key.endsWith('Xml')) {
-      value = Blockly.Xml.domToText(value);
-      expectedValue = Blockly.Xml.domToText(expectedValue);
+    if (expectedValue === undefined) {
+      chai.assert.isUndefined(value, prependMessage + key);
+      return;
     }
-    chai.assert.equal(value, expectedValue, prependMessage + 'Event fired ' + key);
+    chai.assert.exists(value, prependMessage + key);
+    if (isXmlProperty_(key)) {
+      assertXmlPropertyEqual_(value, expectedValue,
+          prependMessage + key);
+    } else {
+      chai.assert.equal(value, expectedValue,
+          prependMessage + key);
+    }
   });
 }
 
 /**
- * Asserts that the event passed to the last call of the given spy has the
- *    expected values. Assumes that the event is passed as the first argument.
- * @param {!SinonSpy} spy The spy to use.
- * @param {string} expectedType Expected type of event fired.
- * @param {string} expectedWorkspaceId Expected workspace id of event fired.
- * @param {string} expectedBlockId Expected block id of event fired.
+ * Asserts that an event with the given values was fired.
+ * @param {!SinonSpy|!SinonSpyCall} spy The spy or spy call to use.
+ * @param {function(new:Blockly.Events.Abstract)} instanceType Expected instance
+ *    type of event fired.
  * @param {!Object<string, *>} expectedProperties Map of of expected properties
  *    to check on fired event.
- * @param {string=} message Optional message to prepend assert messages.
+ * @param {string} expectedWorkspaceId Expected workspace id of event fired.
+ * @param {?string=} expectedBlockId Expected block id of event fired.
  */
-function assertLastCallEventArgEquals(spy, expectedType,
-    expectedWorkspaceId, expectedBlockId, expectedProperties, message) {
-  var event = spy.lastCall.firstArg;
-  assertEventEquals(event, expectedType, expectedWorkspaceId, expectedBlockId,
-      expectedProperties, message);
+function assertEventFired(spy, instanceType, expectedProperties,
+    expectedWorkspaceId, expectedBlockId) {
+  expectedProperties = Object.assign({
+    type: instanceType.prototype.type,
+    workspaceId: expectedWorkspaceId,
+    blockId: expectedBlockId,
+  }, expectedProperties);
+  var expectedEvent =
+      sinon.match.instanceOf(instanceType).and(sinon.match(expectedProperties));
+  sinon.assert.calledWith(spy, expectedEvent);
+}
+
+/**
+ * Asserts that an event with the given values was not fired.
+ * @param {!SpyCall} spy The spy to use.
+ * @param {function(new:Blockly.Events.Abstract)} instanceType Expected instance
+ *    type of event fired.
+ * @param {!Object<string, *>} expectedProperties Map of of expected properties
+ *    to check on fired event.
+ * @param {string=} expectedWorkspaceId Expected workspace id of event fired.
+ * @param {?string=} expectedBlockId Expected block id of event fired.
+ */
+function assertEventNotFired(spy, instanceType, expectedProperties,
+    expectedWorkspaceId, expectedBlockId) {
+  expectedProperties.type = instanceType.prototype.type;
+  if (expectedWorkspaceId !== undefined) {
+    expectedProperties.workspaceId = expectedWorkspaceId;
+  }
+  if (expectedBlockId !== undefined) {
+    expectedProperties.blockId = expectedBlockId;
+  }
+  var expectedEvent =
+      sinon.match.instanceOf(instanceType).and(sinon.match(expectedProperties));
+  sinon.assert.neverCalledWith(spy, expectedEvent);
+}
+
+/**
+ * Filters out xml properties from given object based on key.
+ * @param {Object<string, *>} properties The properties to filter.
+ * @return {[Object<string, *>, Object<string, *>]} A list containing split non
+ *    xml properties and xml properties.
+ * @private
+ */
+function splitByXmlProperties_(properties) {
+  var xmlProperties = {};
+  var nonXmlProperties = {};
+  Object.keys(properties).forEach((key) => {
+    if (isXmlProperty_(key)) {
+      xmlProperties[key] = properties[key];
+      return false;
+    } else {
+      nonXmlProperties[key] = properties[key];
+    }
+  });
+  return [nonXmlProperties, xmlProperties];
 }
 
 /**
  * Asserts that the event passed to the nth call of the given spy has the
- *    expected values. Assumes that the event is passed as the first argument.
+ * expected values. Assumes that the event is passed as the first argument.
  * @param {!SinonSpy} spy The spy to use.
  * @param {number} n Which call to check.
- * @param {string} expectedType Expected type of event fired.
- * @param {string} expectedWorkspaceId Expected workspace id of event fired.
- * @param {string} expectedBlockId Expected block id of event fired.
+ * @param {function(new:Blockly.Events.Abstract)} instanceType Expected instance
+ *    type of event fired.
  * @param {Object<string, *>} expectedProperties Map of of expected properties
  *    to check on fired event.
- * @param {string=} message Optional message to prepend assert messages.
+ * @param {string} expectedWorkspaceId Expected workspace id of event fired.
+ * @param {?string=} expectedBlockId Expected block id of event fired.
  */
-function assertNthCallEventArgEquals(spy, n, expectedType,
-    expectedWorkspaceId, expectedBlockId, expectedProperties, message) {
-  var event = spy.getCall(n).firstArg;
-  assertEventEquals(event, expectedType, expectedWorkspaceId, expectedBlockId,
-      expectedProperties, message);
+function assertNthCallEventArgEquals(spy, n, instanceType, expectedProperties,
+    expectedWorkspaceId, expectedBlockId) {
+  var nthCall = spy.getCall(n);
+  var splitProperties = splitByXmlProperties_(expectedProperties);
+  var nonXmlProperties = splitProperties[0];
+  var xmlProperties = splitProperties[1];
+
+  assertEventFired(nthCall, instanceType, nonXmlProperties, expectedWorkspaceId,
+      expectedBlockId);
+  var eventArg = nthCall.firstArg;
+  assertXmlProperties_(eventArg, xmlProperties);
 }
 
 function defineStackBlock() {
@@ -199,6 +437,19 @@ function defineStatementBlock() {
     "helpUrl": ""
   }]);
 }
+function defineBasicBlockWithField() {
+  Blockly.defineBlocksWithJsonArray([{
+    "type": "test_field_block",
+    "message0": "%1",
+    "args0": [
+      {
+        "type": "field_input",
+        "name": "NAME"
+      }
+    ],
+    "output": null
+  }]);
+}
 
 function createTestBlock() {
   return {
@@ -208,4 +459,47 @@ function createTestBlock() {
       rendered: false
     }
   };
+}
+
+function createRenderedBlock(workspaceSvg, type) {
+  var block = workspaceSvg.newBlock(type);
+  block.initSvg();
+  block.render();
+  return block;
+}
+
+/**
+ * Triggers pointer event on target.
+ * @param {!EventTarget} target The object receiving the event.
+ * @param {string} type The type of mouse event (eg: mousedown, mouseup,
+ *    click).
+ * @param {Object<string, string>=} properties Properties to pass into event
+ *    constructor.
+ */
+function dispatchPointerEvent(target, type, properties) {
+  const eventInitDict = {
+    cancelable: true,
+    bubbles: true,
+    isPrimary: true,
+    pressure: 0.5,
+    clientX: 10,
+    clientY: 10,
+  };
+  if (properties) {
+    Object.assign(eventInitDict, properties);
+  }
+  const event = new PointerEvent(type, eventInitDict);
+  target.dispatchEvent(event);
+}
+
+/**
+ * Simulates mouse click by triggering relevant mouse events.
+ * @param {!EventTarget} target The object receiving the event.
+ * @param {Object<string, string>=} properties Properties to pass into event
+ *    constructor.
+ */
+function simulateClick(target, properties) {
+  dispatchPointerEvent(target, 'pointerdown', properties);
+  dispatchPointerEvent(target, 'pointerup', properties);
+  dispatchPointerEvent(target, 'click', properties);
 }

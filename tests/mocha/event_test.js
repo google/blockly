@@ -6,6 +6,8 @@
 
 suite('Events', function() {
   setup(function() {
+    sharedTestSetup.call(this, {fireEventsNow: false});
+    this.eventsFireSpy = sinon.spy(Blockly.Events, 'fire');
     this.workspace = new Blockly.Workspace();
     Blockly.defineBlocksWithJsonArray([{
       'type': 'field_variable_test_block',
@@ -25,21 +27,17 @@ suite('Events', function() {
   });
 
   teardown(function() {
+    sharedTestTeardown.call(this);
     delete Blockly.Blocks['field_variable_test_block'];
     delete Blockly.Blocks['simple_test_block'];
-    this.workspace.dispose();
-
-    // Clear Blockly.Event state.
-    Blockly.Events.setGroup(false);
-    Blockly.Events.disabled_ = 0;
   });
 
-  function createSimpleTestBlock(workspace, opt_prototypeName) {
+  function createSimpleTestBlock(workspace) {
     // Disable events while constructing the block: this is a test of the
     // Blockly.Event constructors, not the block constructor.s
     Blockly.Events.disable();
     var block = new Blockly.Block(
-        workspace, opt_prototypeName || 'simple_test_block');
+        workspace, 'simple_test_block');
     Blockly.Events.enable();
     return block;
   }
@@ -74,9 +72,6 @@ suite('Events', function() {
         this.genUidStub = createGenUidStubWithReturns(
             [this.TEST_BLOCK_ID, this.TEST_PARENT_ID]);
         this.block = createSimpleTestBlock(this.workspace);
-      });
-      teardown(function() {
-        sinon.restore();
       });
 
       test('Block base', function() {
@@ -226,20 +221,161 @@ suite('Events', function() {
       });
     });
 
+    suite('With shadow blocks', function() {
+      setup(function() {
+        this.TEST_BLOCK_ID = 'test_block_id';
+        this.TEST_PARENT_ID = 'parent';
+        // genUid is expected to be called either once or twice in this suite.
+        this.genUidStub = createGenUidStubWithReturns(
+            [this.TEST_BLOCK_ID, this.TEST_PARENT_ID]);
+        this.block = createSimpleTestBlock(this.workspace);
+        this.block.setShadow(true);
+      });
+
+      test('Block base', function() {
+        var event = new Blockly.Events.BlockBase(this.block);
+        sinon.assert.calledOnce(this.genUidStub);
+        assertEventEquals(event, undefined,
+            this.workspace.id, this.TEST_BLOCK_ID,
+            {
+              'varId': undefined,
+              'recordUndo': true,
+              'group': '',
+            });
+      });
+
+      test('Change', function() {
+        var event = new Blockly.Events.Change(
+            this.block, 'field', 'FIELD_NAME', 'old', 'new');
+        sinon.assert.calledOnce(this.genUidStub);
+        assertEventEquals(event, Blockly.Events.CHANGE,
+            this.workspace.id, this.TEST_BLOCK_ID,
+            {
+              'varId': undefined,
+              'element': 'field',
+              'name': 'FIELD_NAME',
+              'oldValue': 'old',
+              'newValue': 'new',
+              'recordUndo': true,
+              'group': '',
+            });
+      });
+
+      test('Block change', function() {
+        var event = new Blockly.Events.BlockChange(
+            this.block, 'field', 'FIELD_NAME', 'old', 'new');
+        sinon.assert.calledOnce(this.genUidStub);
+        assertEventEquals(event, Blockly.Events.CHANGE,
+            this.workspace.id, this.TEST_BLOCK_ID,
+            {
+              'varId': undefined,
+              'element': 'field',
+              'name': 'FIELD_NAME',
+              'oldValue': 'old',
+              'newValue': 'new',
+              'recordUndo': true,
+              'group': '',
+            });
+      });
+
+      test('Create', function() {
+        var event = new Blockly.Events.Create(this.block);
+        sinon.assert.calledOnce(this.genUidStub);
+        assertEventEquals(event, Blockly.Events.CREATE,
+            this.workspace.id, this.TEST_BLOCK_ID,
+            {
+              'recordUndo': false,
+              'group': '',
+            });
+      });
+
+      test('Block create', function() {
+        var event = new Blockly.Events.BlockCreate(this.block);
+        sinon.assert.calledOnce(this.genUidStub);
+        assertEventEquals(event, Blockly.Events.CREATE,
+            this.workspace.id, this.TEST_BLOCK_ID,
+            {
+              'recordUndo': false,
+              'group': '',
+            });
+      });
+
+      test('Delete', function() {
+        var event = new Blockly.Events.Delete(this.block);
+        sinon.assert.calledOnce(this.genUidStub);
+        assertEventEquals(event, Blockly.Events.DELETE,
+            this.workspace.id, this.TEST_BLOCK_ID,
+            {
+              'recordUndo': false,
+              'group': '',
+            });
+      });
+
+      test('Block delete', function() {
+        var event = new Blockly.Events.BlockDelete(this.block);
+        sinon.assert.calledOnce(this.genUidStub);
+        assertEventEquals(event, Blockly.Events.DELETE,
+            this.workspace.id, this.TEST_BLOCK_ID,
+            {
+              'recordUndo': false,
+              'group': '',
+            });
+      });
+
+      suite('Move', function() {
+        setup(function() {
+          this.parentBlock = createSimpleTestBlock(this.workspace);
+          this.block.parentBlock_ = this.parentBlock;
+          this.block.xy_ = new Blockly.utils.Coordinate(3, 4);
+        });
+
+        teardown(function() {
+          // This needs to be cleared, otherwise workspace.dispose will fail.
+          this.block.parentBlock_ = null;
+        });
+
+        test('Move', function() {
+          var event = new Blockly.Events.Move(this.block);
+          sinon.assert.calledTwice(this.genUidStub);
+          assertEventEquals(event, Blockly.Events.MOVE, this.workspace.id,
+              this.TEST_BLOCK_ID, {
+                'oldParentId': this.TEST_PARENT_ID,
+                'oldInputName': undefined,
+                'oldCoordinate': undefined,
+                'recordUndo': false,
+                'group': ''
+              });
+        });
+
+        test('Block move', function() {
+          var event = new Blockly.Events.BlockMove(this.block);
+          sinon.assert.calledTwice(this.genUidStub);
+          assertEventEquals(event, Blockly.Events.MOVE, this.workspace.id,
+              this.TEST_BLOCK_ID,
+              {
+                'oldParentId': this.TEST_PARENT_ID,
+                'oldInputName': undefined,
+                'oldCoordinate': undefined,
+                'recordUndo': false,
+                'group': ''
+              });
+        });
+      });
+    });
+
     suite('With variable getter blocks', function() {
       setup(function() {
-        this.genUidStub = createGenUidStubWithReturns(this.TEST_BLOCK_ID);
-        this.block =
-            createSimpleTestBlock(this.workspace, 'field_variable_test_block');
-      });
-      teardown(function() {
-        sinon.restore();
+        this.genUidStub = createGenUidStubWithReturns(
+            [this.TEST_BLOCK_ID, 'test_var_id', 'test_group_id']);
+        // Disabling events when creating a block with variable can cause issues
+        // at workspace dispose.
+        this.block = new Blockly.Block(
+            this.workspace, 'field_variable_test_block');
       });
 
       test('Change', function() {
         var event = new Blockly.Events.Change(
             this.block, 'field', 'VAR', 'id1', 'id2');
-        sinon.assert.calledOnce(this.genUidStub);
         assertEventEquals(event, Blockly.Events.CHANGE, this.workspace.id,
             this.TEST_BLOCK_ID,
             {
@@ -255,7 +391,6 @@ suite('Events', function() {
       test('Block change', function() {
         var event = new Blockly.Events.BlockChange(
             this.block, 'field', 'VAR', 'id1', 'id2');
-        sinon.assert.calledOnce(this.genUidStub);
         assertEventEquals(event, Blockly.Events.CHANGE, this.workspace.id,
             this.TEST_BLOCK_ID,
             {
@@ -469,7 +604,7 @@ suite('Events', function() {
         new Blockly.Events.Ui(block, 'click', undefined, undefined)
       ];
       var filteredEvents = Blockly.Events.filter(events, true);
-      chai.assert.equal(4, filteredEvents.length);  // no event should have been removed.
+      chai.assert.equal(filteredEvents.length, 4);  // no event should have been removed.
       // test that the order hasn't changed
       chai.assert.isTrue(filteredEvents[0] instanceof Blockly.Events.BlockCreate);
       chai.assert.isTrue(filteredEvents[1] instanceof Blockly.Events.BlockMove);
@@ -487,7 +622,7 @@ suite('Events', function() {
         new Blockly.Events.BlockMove(block2)
       ];
       var filteredEvents = Blockly.Events.filter(events, true);
-      chai.assert.equal(4, filteredEvents.length);  // no event should have been removed.
+      chai.assert.equal(filteredEvents.length, 4);  // no event should have been removed.
     });
 
     test('Forward', function() {
@@ -497,12 +632,12 @@ suite('Events', function() {
       addMoveEvent(events, block, 2, 2);
       addMoveEvent(events, block, 3, 3);
       var filteredEvents = Blockly.Events.filter(events, true);
-      chai.assert.equal(2, filteredEvents.length);  // duplicate moves should have been removed.
+      chai.assert.equal(filteredEvents.length, 2);  // duplicate moves should have been removed.
       // test that the order hasn't changed
       chai.assert.isTrue(filteredEvents[0] instanceof Blockly.Events.BlockCreate);
       chai.assert.isTrue(filteredEvents[1] instanceof Blockly.Events.BlockMove);
-      chai.assert.equal(3, filteredEvents[1].newCoordinate.x);
-      chai.assert.equal(3, filteredEvents[1].newCoordinate.y);
+      chai.assert.equal(filteredEvents[1].newCoordinate.x, 3);
+      chai.assert.equal(filteredEvents[1].newCoordinate.y, 3);
     });
 
     test('Backward', function() {
@@ -512,12 +647,12 @@ suite('Events', function() {
       addMoveEvent(events, block, 2, 2);
       addMoveEvent(events, block, 3, 3);
       var filteredEvents = Blockly.Events.filter(events, false);
-      chai.assert.equal(2, filteredEvents.length);  // duplicate event should have been removed.
+      chai.assert.equal(filteredEvents.length, 2);  // duplicate event should have been removed.
       // test that the order hasn't changed
       chai.assert.isTrue(filteredEvents[0] instanceof Blockly.Events.BlockCreate);
       chai.assert.isTrue(filteredEvents[1] instanceof Blockly.Events.BlockMove);
-      chai.assert.equal(1, filteredEvents[1].newCoordinate.x);
-      chai.assert.equal(1, filteredEvents[1].newCoordinate.y);
+      chai.assert.equal(filteredEvents[1].newCoordinate.x, 1);
+      chai.assert.equal(filteredEvents[1].newCoordinate.y, 1);
     });
 
     test('Merge move events', function() {
@@ -526,9 +661,9 @@ suite('Events', function() {
       addMoveEvent(events, block, 0, 0);
       addMoveEvent(events, block, 1, 1);
       var filteredEvents = Blockly.Events.filter(events, true);
-      chai.assert.equal(1, filteredEvents.length);  // second move event merged into first
-      chai.assert.equal(1, filteredEvents[0].newCoordinate.x);
-      chai.assert.equal(1, filteredEvents[0].newCoordinate.y);
+      chai.assert.equal(filteredEvents.length, 1);  // second move event merged into first
+      chai.assert.equal(filteredEvents[0].newCoordinate.x, 1);
+      chai.assert.equal(filteredEvents[0].newCoordinate.y, 1);
     });
 
     test('Merge change events', function() {
@@ -538,7 +673,7 @@ suite('Events', function() {
         new Blockly.Events.Change(block1, 'field', 'VAR', 'item1', 'item2')
       ];
       var filteredEvents = Blockly.Events.filter(events, true);
-      chai.assert.equal(1, filteredEvents.length);  // second change event merged into first
+      chai.assert.equal(filteredEvents.length, 1);  // second change event merged into first
       chai.assert.equal(filteredEvents[0].oldValue, 'item');
       chai.assert.equal(filteredEvents[0].newValue, 'item2');
     });
@@ -573,7 +708,7 @@ suite('Events', function() {
       ];
       var filteredEvents = Blockly.Events.filter(events, true);
       // click and stackclick should both exist
-      chai.assert.equal(2, filteredEvents.length);
+      chai.assert.equal(filteredEvents.length, 2);
       chai.assert.equal(filteredEvents[0].element, 'click');
       chai.assert.equal(filteredEvents[1].element, 'stackclick');
     });
@@ -594,7 +729,7 @@ suite('Events', function() {
       var filteredEvents = Blockly.Events.filter(events, true);
       // The two events should be merged, but because nothing has changed
       // they will be filtered out.
-      chai.assert.equal(0, filteredEvents.length);
+      chai.assert.equal(filteredEvents.length, 0);
     });
 
     test('Move events different blocks not merged', function() {
@@ -614,7 +749,7 @@ suite('Events', function() {
 
       var filteredEvents = Blockly.Events.filter(events, true);
       // Nothing should have merged.
-      chai.assert.equal(4, filteredEvents.length);
+      chai.assert.equal(filteredEvents.length, 4);
       // test that the order hasn't changed
       chai.assert.isTrue(filteredEvents[0] instanceof Blockly.Events.BlockMove);
       chai.assert.isTrue(filteredEvents[1] instanceof Blockly.Events.BlockMove);
@@ -625,18 +760,16 @@ suite('Events', function() {
 
   suite('Firing', function() {
     setup(function() {
-      this.eventsStub = createEventsFireStub();
       this.changeListenerSpy = createFireChangeListenerSpy(this.workspace);
-    });
-
-    teardown(function() {
-      sinon.restore();
     });
 
     test('Block dispose triggers Delete', function() {
       try {
         var toolbox = document.getElementById('toolbox-categories');
         var workspaceSvg = Blockly.inject('blocklyDiv', {toolbox: toolbox});
+        var TEST_BLOCK_ID = 'test_block_id';
+        var genUidStub = createGenUidStubWithReturns(
+            [TEST_BLOCK_ID, 'test_group_id']);
 
         var block = workspaceSvg.newBlock('');
         block.initSvg();
@@ -644,13 +777,33 @@ suite('Events', function() {
         var expectedOldXml = Blockly.Xml.blockToDomWithXY(block);
         var expectedId = block.id;
 
+        // Run all queued events.
+        this.clock.runAll();
+
+        this.eventsFireSpy.resetHistory();
+        var changeListenerSpy = createFireChangeListenerSpy(workspaceSvg);
         block.dispose();
 
-        assertLastCallEventArgEquals(
-            this.eventsStub, Blockly.Events.DELETE, workspaceSvg.id,
-            expectedId, {oldXml: expectedOldXml});
+        // Run all queued events.
+        this.clock.runAll();
+
+        // Expect two calls to genUid: one to set the block's ID, and one for
+        // the event group's ID for creating block.
+        sinon.assert.calledTwice(genUidStub);
+
+        assertNthCallEventArgEquals(
+            this.eventsFireSpy, 0, Blockly.Events.Delete,
+            {oldXml: expectedOldXml, group: ''},
+            workspaceSvg.id, expectedId);
+        assertNthCallEventArgEquals(
+            changeListenerSpy, 0, Blockly.Events.Delete,
+            {oldXml: expectedOldXml, group: ''},
+            workspaceSvg.id, expectedId);
+
+        // Expect the workspace to not have a variable with ID 'test_block_id'.
+        chai.assert.isNull(this.workspace.getVariableById(TEST_BLOCK_ID));
       } finally {
-        workspaceSvg.dispose();
+        workspaceTeardown.call(this, workspaceSvg);
       }
     });
 
@@ -663,12 +816,15 @@ suite('Events', function() {
       var _ = this.workspace.newBlock('field_variable_test_block');
       var TEST_VAR_NAME = 'item';  //  As defined in block's json.
 
+      // Run all queued events.
+      this.clock.runAll();
+
       // Expect three calls to genUid: one to set the block's ID, one for the event
-      // group's id, and one for the variable's ID.
+      // group's ID, and one for the variable's ID.
       sinon.assert.calledThrice(genUidStub);
 
       // Expect two events fired: varCreate and block create.
-      sinon.assert.calledTwice(this.eventsStub);
+      sinon.assert.calledTwice(this.eventsFireSpy);
       // Expect both events to trigger change listener.
       sinon.assert.calledTwice(this.changeListenerSpy);
       // Both events should be on undo stack
@@ -676,12 +832,12 @@ suite('Events', function() {
           'Undo stack length');
 
       assertNthCallEventArgEquals(
-          this.changeListenerSpy, 0, Blockly.Events.VAR_CREATE, this.workspace.id,
-          undefined, {group: TEST_GROUP_ID, varId: TEST_VAR_ID,
-            varName: TEST_VAR_NAME}, 'varCreate:');
+          this.changeListenerSpy, 0, Blockly.Events.VarCreate,
+          {group: TEST_GROUP_ID, varId: TEST_VAR_ID, varName: TEST_VAR_NAME},
+          this.workspace.id, undefined);
       assertNthCallEventArgEquals(
-          this.changeListenerSpy, 1, Blockly.Events.CREATE, this.workspace.id,
-          TEST_BLOCK_ID, {group: TEST_GROUP_ID}, 'block create:');
+          this.changeListenerSpy, 1, Blockly.Events.Create,
+          {group: TEST_GROUP_ID}, this.workspace.id, TEST_BLOCK_ID);
 
       // Expect the workspace to have a variable with ID 'test_var_id'.
       chai.assert.isNotNull(this.workspace.getVariableById(TEST_VAR_ID));
@@ -701,6 +857,9 @@ suite('Events', function() {
       var TEST_VAR_ID = 'test_var_id';
       var TEST_VAR_NAME = 'name1';
 
+      // Run all queued events.
+      this.clock.runAll();
+
       // Expect one call to genUid: for the event group's id
       sinon.assert.calledOnce(genUidStub);
 
@@ -710,25 +869,25 @@ suite('Events', function() {
       // 3. block create
       // 4. move (no-op, is filtered out)
       // 5. finished loading
-      sinon.assert.callCount(this.eventsStub, 5);
+      sinon.assert.callCount(this.eventsFireSpy, 5);
       // The first varCreate and move event should have been ignored.
       sinon.assert.callCount(this.changeListenerSpy, 3);
       // Expect two events on undo stack: varCreate and block create.
-      chai.assert.equal(2, this.workspace.undoStack_.length,
+      chai.assert.equal(this.workspace.undoStack_.length, 2,
           'Undo stack length');
 
       assertNthCallEventArgEquals(
-          this.changeListenerSpy, 0, Blockly.Events.VAR_CREATE, this.workspace.id,
-          undefined, {group: TEST_GROUP_ID, varId: TEST_VAR_ID,
-            varName: TEST_VAR_NAME}, 'varCreate:');
+          this.changeListenerSpy, 0, Blockly.Events.VarCreate,
+          {group: TEST_GROUP_ID, varId: TEST_VAR_ID, varName: TEST_VAR_NAME},
+          this.workspace.id, undefined);
       assertNthCallEventArgEquals(
-          this.changeListenerSpy, 1, Blockly.Events.CREATE, this.workspace.id,
-          TEST_BLOCK_ID, {group: TEST_GROUP_ID}, 'block create:');
+          this.changeListenerSpy, 1, Blockly.Events.Create,
+          {group: TEST_GROUP_ID}, this.workspace.id, TEST_BLOCK_ID);
 
       // Finished loading event should not be part of event group.
       assertNthCallEventArgEquals(
-          this.changeListenerSpy, 2, Blockly.Events.FINISHED_LOADING, this.workspace.id,
-          undefined, {group: ''}, 'finished loading:');
+          this.changeListenerSpy, 2, Blockly.Events.FinishedLoading,
+          {group: ''}, this.workspace.id, undefined);
 
       // Expect the workspace to have a variable with ID 'test_var_id'.
       chai.assert.isNotNull(this.workspace.getVariableById(TEST_VAR_ID));

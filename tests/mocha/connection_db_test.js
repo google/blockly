@@ -6,6 +6,7 @@
 
 suite('Connection Database', function() {
   setup(function() {
+    sharedTestSetup.call(this);
     this.database = new Blockly.ConnectionDB(new Blockly.ConnectionChecker());
 
     this.assertOrder = function() {
@@ -32,6 +33,9 @@ suite('Connection Database', function() {
         this.database.addConnection(connection, i);
       }
     };
+  });
+  teardown(function() {
+    sharedTestTeardown.call(this);
   });
   test('Add Connection', function() {
     var y2 = {y: 2};
@@ -193,33 +197,23 @@ suite('Connection Database', function() {
 
   suite('Search For Closest', function() {
     setup(function() {
-      this.allowedStubs = [];
       // Ignore type checks.
-      this.allowedStubs.push(sinon.stub(this.database.connectionChecker_, 'doTypeChecks')
-          .callsFake(function(_a, _b) {
-            return true;
-          }));
+      sinon.stub(this.database.connectionChecker_, 'doTypeChecks')
+          .returns(true);
       // Ignore safety checks.
-      this.allowedStubs.push(sinon.stub(this.database.connectionChecker_, 'doSafetyChecks')
-          .callsFake(function(_a, _b) {
-            return Blockly.Connection.CAN_CONNECT;
-          }));
+      sinon.stub(this.database.connectionChecker_, 'doSafetyChecks')
+          .returns(Blockly.Connection.CAN_CONNECT);
       // Skip everything but the distance checks.
-      this.allowedStubs.push(sinon.stub(this.database.connectionChecker_, 'doDragChecks')
+      sinon.stub(this.database.connectionChecker_, 'doDragChecks')
           .callsFake(function(a, b, distance) {
             return a.distanceFrom(b) <= distance;
-          }));
+          });
 
       this.createCheckConnection = function(x, y) {
         var checkConnection = this.createConnection(x, y, Blockly.NEXT_STATEMENT,
             new Blockly.ConnectionDB());
         return checkConnection;
       };
-    });
-    teardown(function() {
-      for (var i = 0; i < this.allowedStubs.length; i++) {
-        this.allowedStubs[i].restore();
-      }
     });
     test('Empty Database', function() {
       var checkConnection = this.createConnection(0, 0, Blockly.NEXT_STATEMENT,

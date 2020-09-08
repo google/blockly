@@ -5,6 +5,16 @@
  */
 
 suite('Abstract Fields', function() {
+  setup(function() {
+    sharedTestSetup.call(this);
+    // TODO(#4197): Remove stubbing of deprecation warning after fixing.
+    // field.setValue calls trigger a deprecation warning, capture to prevent
+    // console logs.
+    createDeprecationWarningStub();
+  });
+  teardown(function() {
+    sharedTestTeardown.call(this);
+  });
   suite('Is Serializable', function() {
     // Both EDITABLE and SERIALIZABLE are default.
     function FieldDefault() {
@@ -37,7 +47,7 @@ suite('Abstract Fields', function() {
       var field = new FieldDefault();
       var stub = sinon.stub(console, 'warn');
       chai.assert.isTrue(field.isSerializable());
-      chai.assert(stub.calledOnce);
+      sinon.assert.calledOnce(stub);
       stub.restore();
     });
     test('Editable False, Serializable Default(false)', function() {
@@ -59,246 +69,227 @@ suite('Abstract Fields', function() {
     });
   });
   suite('setValue', function() {
-    function addSpies(field) {
-      if (!this.isSpying) {
+    function addSpies(field, excludeSpies = []) {
+      if (!excludeSpies.includes('doValueInvalid_')) {
         sinon.spy(field, 'doValueInvalid_');
+      }
+      if (!excludeSpies.includes('doValueUpdate_')) {
         sinon.spy(field, 'doValueUpdate_');
+      }
+      if (!excludeSpies.includes('forceRerender')) {
         sinon.spy(field, 'forceRerender');
-        this.isSpying = true;
       }
     }
-    function removeSpies(field) {
-      if (this.isSpying) {
-        field.doValueInvalid_.restore();
-        field.doValueUpdate_.restore();
-        field.forceRerender.restore();
-        this.isSpying = false;
+    function stubDoValueInvalid(field, isDirty) {
+      sinon.stub(field, 'doValueInvalid_').callsFake(function(newValue) {
+        this.isDirty_ = isDirty;
+      });
+    }
+    function stubDoValueUpdate(field, isDirty) {
+      sinon.stub(field, 'doValueUpdate_').callsFake(function(newValue) {
+        this.isDirty_ = isDirty;
+      });
+    }
+    function setLocalValidatorWithReturn(field, value) {
+      field.setValidator(function() {
+        return value;
+      });
+    }
+    function setLocalValidator(field, isValid) {
+      if (isValid) {
+        field.setValidator(function(newValue) {
+          return newValue;
+        });
+      } else {
+        setLocalValidatorWithReturn(field, null);
+      }
+    }
+    function stubClassValidatorWithReturn(field, value) {
+      sinon.stub(field, 'doClassValidation_').returns(value);
+    }
+    function stubClassValidator(field, isValid) {
+      if (isValid) {
+        sinon.stub(field, 'doClassValidation_').callsFake(function(newValue) {
+          return newValue;
+        });
+      } else {
+        stubClassValidatorWithReturn(field, null);
       }
     }
     setup(function() {
       this.field = new Blockly.Field();
       this.field.isDirty_ = false;
-      this.cachedDoClassValidation = this.field.doClassValidation_;
-      this.cachedDoValueUpdate = this.field.doValueUpdate_;
-      this.cachedDoValueInvalid = this.field.doValueInvalid_;
-    });
-    teardown(function() {
-      removeSpies(this.field);
-      this.field.doClassValidation_ = this.cachedDoClassValidation;
-      this.field.doValueUpdate_ = this.cachedDoValueUpdate;
-      this.field.doValueInvalid_ = this.cachedDoValueInvalid;
-      this.field.setValidator(null);
     });
     test('Null', function() {
       addSpies(this.field);
       this.field.setValue(null);
-      chai.assert(this.field.doValueInvalid_.notCalled);
-      chai.assert(this.field.doValueUpdate_.notCalled);
-      chai.assert(this.field.forceRerender.notCalled);
+      sinon.assert.notCalled(this.field.doValueInvalid_);
+      sinon.assert.notCalled(this.field.doValueUpdate_);
+      sinon.assert.notCalled(this.field.forceRerender);
     });
     test('No Validators, Dirty (Default)', function() {
       addSpies(this.field);
       this.field.setValue('value');
-      chai.assert(this.field.doValueInvalid_.notCalled);
-      chai.assert(this.field.doValueUpdate_.calledOnce);
-      chai.assert(this.field.forceRerender.calledOnce);
+      sinon.assert.notCalled(this.field.doValueInvalid_);
+      sinon.assert.calledOnce(this.field.doValueUpdate_);
+      sinon.assert.calledOnce(this.field.forceRerender);
     });
     test('No Validators, Not Dirty', function() {
-      this.field.doValueUpdate_ = function(newValue) {
-        this.value_ = newValue;
-        this.isDirty_ = false;
-      };
-      addSpies(this.field);
+      stubDoValueUpdate(this.field, false);
+      addSpies(this.field, ['doValueUpdate_']);
       this.field.setValue('value');
-      chai.assert(this.field.doValueInvalid_.notCalled);
-      chai.assert(this.field.doValueUpdate_.calledOnce);
-      chai.assert(this.field.forceRerender.notCalled);
+      sinon.assert.notCalled(this.field.doValueInvalid_);
+      sinon.assert.calledOnce(this.field.doValueUpdate_);
+      sinon.assert.notCalled(this.field.forceRerender);
     });
     test('Class Validator Returns Invalid, Not Dirty (Default)', function() {
-      this.field.doClassValidation_ = function() {
-        return null;
-      };
+      stubClassValidator(this.field, false);
       addSpies(this.field);
       this.field.setValue('value');
-      chai.assert(this.field.doValueInvalid_.calledOnce);
-      chai.assert(this.field.doValueUpdate_.notCalled);
-      chai.assert(this.field.forceRerender.notCalled);
+      sinon.assert.calledOnce(this.field.doValueInvalid_);
+      sinon.assert.notCalled(this.field.doValueUpdate_);
+      sinon.assert.notCalled(this.field.forceRerender);
     });
     test('Class Validator Returns Invalid, Dirty', function() {
-      this.field.doClassValidation_ = function() {
-        return null;
-      };
-      this.field.doValueInvalid_ = function() {
-        this.isDirty_ = true;
-      };
-      addSpies(this.field);
+      stubClassValidator(this.field, false);
+      stubDoValueInvalid(this.field, true);
+      addSpies(this.field, ['doValueInvalid_']);
       this.field.setValue('value');
-      chai.assert(this.field.doValueInvalid_.calledOnce);
-      chai.assert(this.field.doValueUpdate_.notCalled);
-      chai.assert(this.field.forceRerender.calledOnce);
+      sinon.assert.calledOnce(this.field.doValueInvalid_);
+      sinon.assert.notCalled(this.field.doValueUpdate_);
+      sinon.assert.calledOnce(this.field.forceRerender);
     });
     test('Class Validator Returns Valid, Not Dirty', function() {
-      this.field.doClassValidation_ = function(newValue) {
-        return newValue;
-      };
-      this.field.doValueUpdate_ = function() {
-        this.isDirty_ = false;
-      };
-      addSpies(this.field);
+      stubClassValidator(this.field, true);
+      stubDoValueUpdate(this.field, false);
+      addSpies(this.field, ['doValueUpdate_']);
       this.field.setValue('value');
-      chai.assert(this.field.doValueInvalid_.notCalled);
-      chai.assert(this.field.doValueUpdate_.calledOnce);
-      chai.assert(this.field.forceRerender.notCalled);
+      sinon.assert.notCalled(this.field.doValueInvalid_);
+      sinon.assert.calledOnce(this.field.doValueUpdate_);
+      sinon.assert.notCalled(this.field.forceRerender);
     });
     test('Class Validator Returns Valid, Dirty (Default)', function() {
-      this.field.doClassValidation_ = function(newValue) {
-        return newValue;
-      };
+      stubClassValidator(this.field, true);
       addSpies(this.field);
       this.field.setValue('value');
-      chai.assert(this.field.doValueInvalid_.notCalled);
-      chai.assert(this.field.doValueUpdate_.calledOnce);
-      chai.assert(this.field.forceRerender.calledOnce);
+      sinon.assert.notCalled(this.field.doValueInvalid_);
+      sinon.assert.calledOnce(this.field.doValueUpdate_);
+      sinon.assert.calledOnce(this.field.forceRerender);
     });
     test('Local Validator Returns Invalid, Not Dirty (Default)', function() {
-      this.field.setValidator(function() {
-        return null;
-      });
+      setLocalValidator(this.field, false);
       addSpies(this.field);
       this.field.setValue('value');
-      chai.assert(this.field.doValueInvalid_.calledOnce);
-      chai.assert(this.field.doValueUpdate_.notCalled);
-      chai.assert(this.field.forceRerender.notCalled);
+      sinon.assert.calledOnce(this.field.doValueInvalid_);
+      sinon.assert.notCalled(this.field.doValueUpdate_);
+      sinon.assert.notCalled(this.field.forceRerender);
     });
     test('Local Validator Returns Invalid, Dirty', function() {
-      this.field.setValidator(function() {
-        return null;
-      });
-      this.field.doValueInvalid_ = function() {
-        this.isDirty_ = true;
-      };
-      addSpies(this.field);
+      stubDoValueInvalid(this.field, true);
+      setLocalValidator(this.field, false);
+      addSpies(this.field, ['doValueInvalid_']);
       this.field.setValue('value');
-      chai.assert(this.field.doValueInvalid_.calledOnce);
-      chai.assert(this.field.doValueUpdate_.notCalled);
-      chai.assert(this.field.forceRerender.calledOnce);
+      sinon.assert.calledOnce(this.field.doValueInvalid_);
+      sinon.assert.notCalled(this.field.doValueUpdate_);
+      sinon.assert.calledOnce(this.field.forceRerender);
     });
     test('Local Validator Returns Valid, Not Dirty', function() {
-      this.field.setValidator(function(newValue) {
-        return newValue;
-      });
-      this.field.doValueUpdate_ = function() {
-        this.isDirty_ = false;
-      };
-      addSpies(this.field);
+      stubDoValueUpdate(this.field, false);
+      setLocalValidator(this.field, true);
+      addSpies(this.field, ['doValueUpdate_']);
       this.field.setValue('value');
-      chai.assert(this.field.doValueInvalid_.notCalled);
-      chai.assert(this.field.doValueUpdate_.calledOnce);
-      chai.assert(this.field.forceRerender.notCalled);
+      sinon.assert.notCalled(this.field.doValueInvalid_);
+      sinon.assert.calledOnce(this.field.doValueUpdate_);
+      sinon.assert.notCalled(this.field.forceRerender);
     });
     test('Local Validator Returns Valid, Dirty (Default)', function() {
-      this.field.setValidator(function(newValue) {
-        return newValue;
-      });
+      setLocalValidator(this.field, true);
       addSpies(this.field);
       this.field.setValue('value');
-      chai.assert(this.field.doValueInvalid_.notCalled);
-      chai.assert(this.field.doValueUpdate_.calledOnce);
-      chai.assert(this.field.forceRerender.calledOnce);
+      sinon.assert.notCalled(this.field.doValueInvalid_);
+      sinon.assert.calledOnce(this.field.doValueUpdate_);
+      sinon.assert.calledOnce(this.field.forceRerender);
     });
     test('New Value Matches Old Value', function() {
       this.field.setValue('value');
       addSpies(this.field);
       this.field.setValue('value');
-      chai.assert(this.field.doValueInvalid_.notCalled);
-      chai.assert(this.field.doValueUpdate_.notCalled);
-      chai.assert(this.field.forceRerender.notCalled);
+      sinon.assert.notCalled(this.field.doValueInvalid_);
+      sinon.assert.notCalled(this.field.doValueUpdate_);
+      sinon.assert.notCalled(this.field.forceRerender);
     });
     test('New Value (Class)Validates to Old Value', function() {
       this.field.setValue('value');
-      this.field.doClassValidation_ = function() {
-        return 'value';
-      };
+      stubClassValidatorWithReturn(this.field, 'value');
       addSpies(this.field);
       this.field.setValue('notValue');
-      chai.assert(this.field.doValueInvalid_.notCalled);
-      chai.assert(this.field.doValueUpdate_.notCalled);
-      chai.assert(this.field.forceRerender.notCalled);
+      sinon.assert.notCalled(this.field.doValueInvalid_);
+      sinon.assert.notCalled(this.field.doValueUpdate_);
+      sinon.assert.notCalled(this.field.forceRerender);
     });
     test('New Value (Local)Validates to Old Value', function() {
       this.field.setValue('value');
-      this.field.setValidator(function() {
-        return 'value';
-      });
+      setLocalValidatorWithReturn(this.field, 'value');
       addSpies(this.field);
       this.field.setValue('notValue');
-      chai.assert(this.field.doValueInvalid_.notCalled);
-      chai.assert(this.field.doValueUpdate_.notCalled);
-      chai.assert(this.field.forceRerender.notCalled);
+      sinon.assert.notCalled(this.field.doValueInvalid_);
+      sinon.assert.notCalled(this.field.doValueUpdate_);
+      sinon.assert.notCalled(this.field.forceRerender);
     });
     test('New Value (Class)Validates to not Old Value', function() {
       this.field.setValue('value');
-      this.field.doClassValidation_ = function() {
-        return 'notValue';
-      };
+      stubClassValidatorWithReturn(this.field, 'notValue');
       addSpies(this.field);
       this.field.setValue('value');
-      chai.assert(this.field.doValueInvalid_.notCalled);
-      chai.assert(this.field.doValueUpdate_.calledOnce);
+      sinon.assert.notCalled(this.field.doValueInvalid_);
+      sinon.assert.calledOnce(this.field.doValueUpdate_);
     });
     test('New Value (Local)Validates to not Old Value', function() {
       this.field.setValue('value');
-      this.field.setValidator(function() {
-        return 'notValue';
-      });
+      setLocalValidatorWithReturn(this.field, 'notValue');
       addSpies(this.field);
       this.field.setValue('value');
-      chai.assert(this.field.doValueInvalid_.notCalled);
-      chai.assert(this.field.doValueUpdate_.calledOnce);
+      sinon.assert.notCalled(this.field.doValueInvalid_);
+      sinon.assert.calledOnce(this.field.doValueUpdate_);
     });
     test('Class Validator Returns Null', function() {
-      this.field.doClassValidation_ = function() {
-        return null;
-      };
+      stubClassValidatorWithReturn(this.field, null);
       addSpies(this.field);
       this.field.setValue('value');
-      chai.assert(this.field.doValueInvalid_.calledOnce);
-      chai.assert(this.field.doValueUpdate_.notCalled);
+      sinon.assert.calledOnce(this.field.doValueInvalid_);
+      sinon.assert.notCalled(this.field.doValueUpdate_);
     });
     test('Class Validator Returns Same', function() {
-      this.field.doClassValidation_ = function(newValue) {
-        return newValue;
-      };
+      sinon.stub(this.field, 'doClassValidation_').callsFake(
+          function(newValue) {
+            return newValue;
+          });
       addSpies(this.field);
       this.field.setValue('value');
-      chai.assert(this.field.doValueInvalid_.notCalled);
-      chai.assert(this.field.doValueUpdate_.calledOnce);
+      sinon.assert.notCalled(this.field.doValueInvalid_);
+      sinon.assert.calledOnce(this.field.doValueUpdate_);
     });
     test('Class Validator Returns Different', function() {
-      this.field.doClassValidation_ = function() {
-        return 'differentValue';
-      };
+      stubClassValidatorWithReturn(this.field, 'differentValue');
       addSpies(this.field);
       this.field.setValue('value');
-      chai.assert(this.field.doValueInvalid_.notCalled);
-      chai.assert(this.field.doValueUpdate_.calledOnce);
+      sinon.assert.notCalled(this.field.doValueInvalid_);
+      sinon.assert.calledOnce(this.field.doValueUpdate_);
     });
     test('Class Validator Returns Undefined', function() {
-      this.field.doClassValidation_ = function() {};
+      stubClassValidatorWithReturn(this.field, undefined);
       addSpies(this.field);
       this.field.setValue('value');
       chai.assert.equal(this.field.getValue(), 'value');
-      chai.assert(this.field.doValueInvalid_.notCalled);
-      chai.assert(this.field.doValueUpdate_.calledOnce);
+      sinon.assert.notCalled(this.field.doValueInvalid_);
+      sinon.assert.calledOnce(this.field.doValueUpdate_);
     });
     test('Local Validator Returns Null', function() {
-      this.field.setValidator(function() {
-        return null;
-      });
+      setLocalValidatorWithReturn(this.field, null);
       addSpies(this.field);
       this.field.setValue('value');
-      chai.assert(this.field.doValueInvalid_.calledOnce);
-      chai.assert(this.field.doValueUpdate_.notCalled);
+      sinon.assert.calledOnce(this.field.doValueInvalid_);
+      sinon.assert.notCalled(this.field.doValueUpdate_);
     });
     test('Local Validator Returns Same', function() {
       this.field.setValidator(function(newValue) {
@@ -306,25 +297,23 @@ suite('Abstract Fields', function() {
       });
       addSpies(this.field);
       this.field.setValue('value');
-      chai.assert(this.field.doValueInvalid_.notCalled);
-      chai.assert(this.field.doValueUpdate_.calledOnce);
+      sinon.assert.notCalled(this.field.doValueInvalid_);
+      sinon.assert.calledOnce(this.field.doValueUpdate_);
     });
     test('Local Validator Returns Different', function() {
-      this.field.setValidator(function() {
-        return 'differentValue';
-      });
+      setLocalValidatorWithReturn(this.field, 'differentValue');
       addSpies(this.field);
       this.field.setValue('value');
-      chai.assert(this.field.doValueInvalid_.notCalled);
-      chai.assert(this.field.doValueUpdate_.calledOnce);
+      sinon.assert.notCalled(this.field.doValueInvalid_);
+      sinon.assert.calledOnce(this.field.doValueUpdate_);
     });
     test('Local Validator Returns Undefined', function() {
-      this.field.setValidator(function() {});
+      setLocalValidatorWithReturn(this.field, undefined);
       addSpies(this.field);
       this.field.setValue('value');
       chai.assert.equal(this.field.getValue(), 'value');
-      chai.assert(this.field.doValueInvalid_.notCalled);
-      chai.assert(this.field.doValueUpdate_.calledOnce);
+      sinon.assert.notCalled(this.field.doValueInvalid_);
+      sinon.assert.calledOnce(this.field.doValueUpdate_);
     });
   });
   suite('Customization', function() {
@@ -386,7 +375,7 @@ suite('Abstract Fields', function() {
           this.workspace.createDom();
         });
         teardown(function() {
-          this.workspace = null;
+          workspaceTeardown.call(this, this.workspace);
         });
         test('Before Append', function() {
           Blockly.Blocks['tooltip'] = {

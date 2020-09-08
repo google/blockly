@@ -16,6 +16,7 @@ goog.require('Blockly.Connection');
 goog.require('Blockly.Events');
 goog.require('Blockly.utils');
 goog.require('Blockly.utils.Coordinate');
+goog.require('Blockly.utils.deprecation');
 goog.require('Blockly.utils.dom');
 goog.require('Blockly.utils.object');
 
@@ -424,6 +425,11 @@ Blockly.RenderedConnection.prototype.startTrackingAll = function() {
  */
 Blockly.RenderedConnection.prototype.isConnectionAllowed = function(candidate,
     maxRadius) {
+  Blockly.utils.deprecation.warn(
+      'RenderedConnection.prototype.isConnectionAllowed',
+      'July 2020',
+      'July 2021',
+      'Blockly.Workspace.prototype.getConnectionChecker().canConnect');
   if (this.distanceFrom(candidate) > maxRadius) {
     return false;
   }
@@ -472,20 +478,18 @@ Blockly.RenderedConnection.prototype.disconnectInternal_ = function(parentBlock,
  * @private
  */
 Blockly.RenderedConnection.prototype.respawnShadow_ = function() {
+  Blockly.RenderedConnection.superClass_.respawnShadow_.call(this);
+  var blockShadow = this.targetBlock();
+  if (!blockShadow) {
+    // This connection must not have a shadowDom_.
+    return;
+  }
+  blockShadow.initSvg();
+  blockShadow.render(false);
+
   var parentBlock = this.getSourceBlock();
-  // Respawn the shadow block if there is one.
-  var shadow = this.getShadowDom();
-  if (parentBlock.workspace && shadow && Blockly.Events.recordUndo) {
-    Blockly.RenderedConnection.superClass_.respawnShadow_.call(this);
-    var blockShadow = this.targetBlock();
-    if (!blockShadow) {
-      throw Error('Couldn\'t respawn the shadow block that should exist here.');
-    }
-    blockShadow.initSvg();
-    blockShadow.render(false);
-    if (parentBlock.rendered) {
-      parentBlock.render();
-    }
+  if (parentBlock.rendered) {
+    parentBlock.render();
   }
 };
 

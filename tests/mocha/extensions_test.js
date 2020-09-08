@@ -6,25 +6,21 @@
 
 suite('Extensions', function() {
   setup(function() {
+    sharedTestSetup.call(this);
     this.workspace = new Blockly.Workspace();
     this.blockTypesCleanup_ = [];
     this.extensionsCleanup_ = [];
   });
   teardown(function() {
-    var i;
-    for (i = 0; i < this.blockTypesCleanup_.length; i++) {
+    sharedTestTeardown.call(this);
+    for (let i = 0; i < this.blockTypesCleanup_.length; i++) {
       var blockType = this.blockTypesCleanup_[i];
       delete Blockly.Blocks[blockType];
     }
-    for (i = 0; i < this.extensionsCleanup_.length; i++) {
+    for (let i = 0; i < this.extensionsCleanup_.length; i++) {
       var extension = this.extensionsCleanup_[i];
       delete Blockly.Extensions.ALL_[extension];
     }
-    this.workspace.dispose();
-    // Clear Blockly.Event state.
-    Blockly.Events.setGroup(false);
-    Blockly.Events.disabled_ = 0;
-    sinon.restore();
   });
 
   test('Definition before and after block type', function() {
@@ -98,7 +94,7 @@ suite('Extensions', function() {
     // Tooltip is normal before connected to parent.
     var parent = new Blockly.Block(this.workspace, 'test_parent');
     chai.assert.equal(parent.tooltip, parentTooltip);
-    chai.assert.isFalse(!!parent.inputsInline);
+    chai.assert.notExists(parent.inputsInline);
 
     // Tooltip is normal when parent is not inline.
     parent.getInput('INPUT').connection.connect(block.outputConnection);
@@ -245,8 +241,8 @@ suite('Extensions', function() {
         // Make sure all of the functions were installed correctly.
         chai.assert.equal(block.domToMutation(), 'domToMutationFn');
         chai.assert.equal(block.mutationToDom(), 'mutationToDomFn');
-        chai.assert.isFalse(block.hasOwnProperty('compose'));
-        chai.assert.isFalse(block.hasOwnProperty('decompose'));
+        chai.assert.isFalse(Object.prototype.hasOwnProperty.call(block, 'compose'));
+        chai.assert.isFalse(Object.prototype.hasOwnProperty.call(block, 'decompose'));
       });
     });
   });

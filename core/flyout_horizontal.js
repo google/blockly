@@ -367,6 +367,17 @@ Blockly.HorizontalFlyout.prototype.reflowInternal_ = function() {
         this.moveRectToBlock_(block.flyoutRect_, block);
       }
     }
+
+    if (this.targetWorkspace.toolboxPosition == this.toolboxPosition_ &&
+        this.toolboxPosition_ == Blockly.TOOLBOX_AT_TOP &&
+        !this.targetWorkspace.getToolbox()) {
+      // This flyout is a simple toolbox. Reposition the workspace so that (0,0)
+      // is in the correct position relative to the new absolute edge (ie
+      // toolbox edge).
+      this.targetWorkspace.translate(
+          0, this.targetWorkspace.scrollY + flyoutHeight);
+    }
+
     // Record the height for .getMetrics_ and .position.
     this.height_ = flyoutHeight;
     this.position();

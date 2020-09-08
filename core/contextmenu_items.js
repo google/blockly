@@ -167,7 +167,7 @@ Blockly.ContextMenuItems.registerExpand = function() {
       Blockly.ContextMenuItems.toggleOption_(false, scope.workspace.getTopBlocks(true));
     },
     scopeType: Blockly.ContextMenuRegistry.ScopeType.WORKSPACE,
-    id: 'toggleWorkspace',
+    id: 'expandWorkspace',
     weight: 0,
   };
   Blockly.ContextMenuRegistry.registry.register(expandOption);

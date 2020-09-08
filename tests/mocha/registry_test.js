@@ -16,7 +16,11 @@ suite('Registry', function() {
     return 'something';
   };
 
+  setup(function() {
+    sharedTestSetup.call(this);
+  });
   teardown(function() {
+    sharedTestTeardown.call(this);
     if (Blockly.registry.typeMap_['test'] &&
         Blockly.registry.typeMap_['test']['test_name']) {
       delete Blockly.registry.typeMap_['test']['test_name'];
@@ -80,8 +84,13 @@ suite('Registry', function() {
     });
     test('Incorrect Plugin Name', function() {
       this.options['plugins']['test'] = 'random';
-      var testClass = Blockly.registry.getClassFromOptions('test', this.options);
+      var testClass;
+      var warnings = captureWarnings(() => {
+        testClass = Blockly.registry.getClassFromOptions('test', this.options);
+      });
       chai.assert.isNull(testClass);
+      chai.assert.equal(warnings.length, 1,
+          'Expecting 1 warning about no name "random" found.');
     });
   });
 });

@@ -5,6 +5,12 @@
  */
 
 suite('WidgetDiv', function() {
+  setup(function() {
+    sharedTestSetup.call(this);
+  });
+  teardown(function() {
+    sharedTestTeardown.call(this);
+  });
 
   suite('positionWithAnchor', function() {
     function makeBBox(left, top, width, height) {

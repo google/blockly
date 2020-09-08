@@ -277,7 +277,7 @@ Blockly.ZoomControls.prototype.createZoomOutSvg_ = function(rnd) {
 
   // Attach listener.
   this.onZoomOutWrapper_ = Blockly.bindEventWithChecks_(
-      zoomoutSvg, 'mousedown', null, this.zoom_.bind(this, -1));
+      this.zoomOutGroup_, 'mousedown', null, this.zoom_.bind(this, -1));
 };
 
 /**
@@ -328,7 +328,7 @@ Blockly.ZoomControls.prototype.createZoomInSvg_ = function(rnd) {
 
   // Attach listener.
   this.onZoomInWrapper_ = Blockly.bindEventWithChecks_(
-      zoominSvg, 'mousedown', null, this.zoom_.bind(this, 1));
+      this.zoomInGroup_, 'mousedown', null, this.zoom_.bind(this, 1));
 };
 
 /**
@@ -396,7 +396,7 @@ Blockly.ZoomControls.prototype.createZoomResetSvg_ = function(rnd) {
 
   // Attach event listeners.
   this.onZoomResetWrapper_ = Blockly.bindEventWithChecks_(
-      zoomresetSvg, 'mousedown', null, this.resetZoom_.bind(this));
+      this.zoomResetGroup_, 'mousedown', null, this.resetZoom_.bind(this));
 };
 
 /**

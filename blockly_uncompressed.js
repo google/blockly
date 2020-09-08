@@ -154,9 +154,9 @@ goog.addDependency('../../core/theme/tritanopia.js', ['Blockly.Themes.Tritanopia
 goog.addDependency('../../core/theme/zelos.js', ['Blockly.Themes.Zelos'], ['Blockly.Theme'], {});
 goog.addDependency('../../core/theme_manager.js', ['Blockly.ThemeManager'], ['Blockly.Theme'], {});
 goog.addDependency('../../core/toolbox/category.js', ['Blockly.ToolboxCategory'], ['Blockly.ToolboxItem', 'Blockly.registry', 'Blockly.utils', 'Blockly.utils.aria', 'Blockly.utils.dom', 'Blockly.utils.object', 'Blockly.utils.toolbox'], {'lang': 'es5'});
-goog.addDependency('../../core/toolbox/collapsible_category.js', ['Blockly.CollapsibleToolboxCategory'], ['Blockly.ToolboxCategory', 'Blockly.ToolboxItem', 'Blockly.registry', 'Blockly.utils', 'Blockly.utils.aria', 'Blockly.utils.dom', 'Blockly.utils.object', 'Blockly.utils.toolbox'], {});
+goog.addDependency('../../core/toolbox/collapsible_category.js', ['Blockly.CollapsibleToolboxCategory'], ['Blockly.ToolboxCategory', 'Blockly.ToolboxItem', 'Blockly.ToolboxSeparator', 'Blockly.registry', 'Blockly.utils.aria', 'Blockly.utils.dom', 'Blockly.utils.object', 'Blockly.utils.toolbox'], {});
 goog.addDependency('../../core/toolbox/separator.js', ['Blockly.ToolboxSeparator'], ['Blockly.ToolboxItem', 'Blockly.registry', 'Blockly.utils.dom'], {'lang': 'es5'});
-goog.addDependency('../../core/toolbox/toolbox.js', ['Blockly.Toolbox'], ['Blockly.CollapsibleToolboxCategory', 'Blockly.Css', 'Blockly.Events', 'Blockly.Events.Ui', 'Blockly.ToolboxCategory', 'Blockly.ToolboxSeparator', 'Blockly.Touch', 'Blockly.navigation', 'Blockly.registry', 'Blockly.utils', 'Blockly.utils.Rect', 'Blockly.utils.aria', 'Blockly.utils.dom'], {'lang': 'es5'});
+goog.addDependency('../../core/toolbox/toolbox.js', ['Blockly.Toolbox'], ['Blockly.CollapsibleToolboxCategory', 'Blockly.Css', 'Blockly.Events', 'Blockly.Events.Ui', 'Blockly.Touch', 'Blockly.navigation', 'Blockly.registry', 'Blockly.utils', 'Blockly.utils.Rect', 'Blockly.utils.aria', 'Blockly.utils.dom'], {'lang': 'es5'});
 goog.addDependency('../../core/toolbox/toolbox_item.js', ['Blockly.ToolboxItem'], [], {});
 goog.addDependency('../../core/tooltip.js', ['Blockly.Tooltip'], ['Blockly.utils.string'], {});
 goog.addDependency('../../core/touch.js', ['Blockly.Touch'], ['Blockly.utils', 'Blockly.utils.global', 'Blockly.utils.string'], {});

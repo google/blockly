@@ -253,7 +253,7 @@ suite('Insert/Modify', function() {
           Blockly.ASTNode.createWorkspaceNode(
               this.workspace, new Blockly.utils.Coordinate(100, 200)));
     });
-    test.skip('Cursor on row block', function() {
+    test('Cursor on row block', function() {
       // TODO(#4113): Un-skip after fixing bug or test.
       this.workspace.getCursor().setCurNode(
           Blockly.ASTNode.createBlockNode(
@@ -264,7 +264,7 @@ suite('Insert/Modify', function() {
       chai.assert.equal(pos.y, 200);
     });
 
-    test.skip('Cursor on output connection', function() {
+    test('Cursor on output connection', function() {
       // TODO(#4113): Un-skip after fixing bug or test.
       this.workspace.getCursor().setCurNode(
           Blockly.ASTNode.createConnectionNode(
@@ -275,7 +275,7 @@ suite('Insert/Modify', function() {
       chai.assert.equal(pos.y, 200);
     });
 
-    test.skip('Cursor on previous connection', function() {
+    test('Cursor on previous connection', function() {
       // TODO(#4113): Un-skip after fixing bug or test.
       this.workspace.getCursor().setCurNode(
           Blockly.ASTNode.createConnectionNode(
@@ -302,7 +302,7 @@ suite('Insert/Modify', function() {
       chai.assert.isTrue(Blockly.navigation.modify_());
     });
 
-    test.skip('Cursor on child block (row)', function() {
+    test('Cursor on child block (row)', function() {
       // TODO(#4113): Un-skip after fixing bug or test.
       this.row_block_1.inputList[0].connection.connect(
           this.row_block_2.outputConnection);
@@ -318,7 +318,7 @@ suite('Insert/Modify', function() {
       chai.assert.equal(pos.y, 200);
     });
 
-    test.skip('Cursor on child block (stack)', function() {
+    test('Cursor on child block (stack)', function() {
       // TODO(#4113): Un-skip after fixing bug or test.
       this.stack_block_1.nextConnection.connect(
           this.stack_block_2.previousConnection);

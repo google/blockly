@@ -250,8 +250,7 @@ suite('Insert/Modify', function() {
           Blockly.ASTNode.createWorkspaceNode(
               this.workspace, new Blockly.utils.Coordinate(100, 200)));
     });
-    test.skip('Cursor on row block', function() {
-      // TODO(#4113): Un-skip after fixing bug or test.
+    test('Cursor on row block', function() {
       this.workspace.getCursor().setCurNode(
           Blockly.ASTNode.createBlockNode(
               this.row_block_1));
@@ -261,8 +260,7 @@ suite('Insert/Modify', function() {
       chai.assert.equal(pos.y, 200);
     });
 
-    test.skip('Cursor on output connection', function() {
-      // TODO(#4113): Un-skip after fixing bug or test.
+    test('Cursor on output connection', function() {
       this.workspace.getCursor().setCurNode(
           Blockly.ASTNode.createConnectionNode(
               this.row_block_1.outputConnection));
@@ -272,8 +270,7 @@ suite('Insert/Modify', function() {
       chai.assert.equal(pos.y, 200);
     });
 
-    test.skip('Cursor on previous connection', function() {
-      // TODO(#4113): Un-skip after fixing bug or test.
+    test('Cursor on previous connection', function() {
       this.workspace.getCursor().setCurNode(
           Blockly.ASTNode.createConnectionNode(
               this.stack_block_1.previousConnection));
@@ -299,8 +296,7 @@ suite('Insert/Modify', function() {
       chai.assert.isTrue(Blockly.navigation.modify_());
     });
 
-    test.skip('Cursor on child block (row)', function() {
-      // TODO(#4113): Un-skip after fixing bug or test.
+    test('Cursor on child block (row)', function() {
       this.row_block_1.inputList[0].connection.connect(
           this.row_block_2.outputConnection);
 
@@ -315,8 +311,7 @@ suite('Insert/Modify', function() {
       chai.assert.equal(pos.y, 200);
     });
 
-    test.skip('Cursor on child block (stack)', function() {
-      // TODO(#4113): Un-skip after fixing bug or test.
+    test('Cursor on child block (stack)', function() {
       this.stack_block_1.nextConnection.connect(
           this.stack_block_2.previousConnection);
 

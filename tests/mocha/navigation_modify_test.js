@@ -24,9 +24,9 @@ suite('Insert/Modify', function() {
       '<block type="statement_block" id="statement_block_1" x="12" y="288"></block>' +
       '<block type="statement_block" id="statement_block_2" x="12" y="288"></block>' +
     '</xml>';
-    defineStackBlock();
-    defineRowBlock();
-    defineStatementBlock();
+    defineStackBlock(this.sharedCleanup);
+    defineRowBlock(this.sharedCleanup);
+    defineStatementBlock(this.sharedCleanup);
 
     var toolbox = document.getElementById('toolbox-connections');
     this.workspace = Blockly.inject('blocklyDiv', {toolbox: toolbox});
@@ -44,9 +44,6 @@ suite('Insert/Modify', function() {
 
   teardown(function() {
     sharedTestTeardown.call(this);
-    delete Blockly.Blocks['stack_block'];
-    delete Blockly.Blocks['row_block'];
-    delete Blockly.Blocks['statement_block'];
   });
 
   suite('Marked Connection', function() {

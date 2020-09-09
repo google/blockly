@@ -28,8 +28,6 @@ suite('WorkspaceSvg', function() {
 
   teardown(function() {
     sharedTestTeardown.call(this);
-    delete Blockly.Blocks['simple_test_block'];
-    delete Blockly.Blocks['test_val_in'];
   });
 
   test('dispose of WorkspaceSvg without dom throws no error', function() {
@@ -144,7 +142,6 @@ suite('WorkspaceSvg', function() {
       // because it holds the variable map.
       // Normally the main workspace disposes of the flyout workspace.
       workspaceTeardown.call(this, this.targetWorkspace);
-      delete Blockly.Blocks['get_var_block'];
     });
 
     test('Trivial Flyout is True', function() {

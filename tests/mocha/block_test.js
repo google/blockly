@@ -45,10 +45,6 @@ suite('Blocks', function() {
   });
   teardown(function() {
     sharedTestTeardown.call(this);
-    delete Blockly.Blocks['empty_block'];
-    delete Blockly.Blocks['stack_block'];
-    delete Blockly.Blocks['row_block'];
-    delete Blockly.Blocks['statement_block'];
   });
 
   function createTestBlocks(workspace, isRow) {
@@ -327,9 +323,6 @@ suite('Blocks', function() {
           ]
         },
       ]);
-    });
-    teardown(function() {
-      delete Blockly.Blocks['value_block'];
     });
 
     suite('Value', function() {
@@ -1235,7 +1228,6 @@ suite('Blocks', function() {
     teardown(function() {
       Blockly.Events.enable();
       workspaceTeardown.call(this, this.workspace);
-      delete Blockly.Blocks['variable_block'];
     });
     suite('Connecting and Disconnecting', function() {
       test('Connect Block to Next', function() {

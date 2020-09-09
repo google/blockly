@@ -74,8 +74,6 @@ suite('Cursor', function() {
   });
   teardown(function() {
     sharedTestTeardown.call(this);
-    delete Blockly.Blocks['input_statement'];
-    delete Blockly.Blocks['field_input'];
   });
 
   test('Next - From a Previous skip over next connection and block', function() {

@@ -351,10 +351,8 @@ suite('Abstract Fields', function() {
       });
       suite('W/ Msg References', function() {
         setup(function() {
+          addMessageToCleanup(this.sharedCleanup, 'TOOLTIP');
           Blockly.Msg['TOOLTIP'] = 'test tooltip';
-        });
-        teardown(function() {
-          delete Blockly.Msg['TOOLTIP'];
         });
         test('JS Constructor', function() {
           var field = new Blockly.Field('value', null, {
@@ -378,6 +376,7 @@ suite('Abstract Fields', function() {
           workspaceTeardown.call(this, this.workspace);
         });
         test('Before Append', function() {
+          addBlockTypeToCleanup(this.sharedCleanup, 'tooltip');
           Blockly.Blocks['tooltip'] = {
             init: function() {
               var field = new Blockly.FieldTextInput('default');
@@ -393,9 +392,9 @@ suite('Abstract Fields', function() {
           ).children[0], this.workspace);
           var field = block.getField('TOOLTIP');
           chai.assert.equal(field.getClickTarget_().tooltip, 'tooltip');
-          delete Blockly.Blocks['tooltip'];
         });
         test('After Append', function() {
+          addBlockTypeToCleanup(this.sharedCleanup, 'tooltip');
           Blockly.Blocks['tooltip'] = {
             init: function() {
               var field = new Blockly.FieldTextInput('default');
@@ -411,9 +410,9 @@ suite('Abstract Fields', function() {
           ).children[0], this.workspace);
           var field = block.getField('TOOLTIP');
           chai.assert.equal(field.getClickTarget_().tooltip, 'tooltip');
-          delete Blockly.Blocks['tooltip'];
         });
         test('After Block Creation', function() {
+          addBlockTypeToCleanup(this.sharedCleanup, 'tooltip');
           Blockly.Blocks['tooltip'] = {
             init: function() {
               var field = new Blockly.FieldTextInput('default');
@@ -429,9 +428,9 @@ suite('Abstract Fields', function() {
           var field = block.getField('TOOLTIP');
           field.setTooltip('tooltip');
           chai.assert.equal(field.getClickTarget_().tooltip, 'tooltip');
-          delete Blockly.Blocks['tooltip'];
         });
         test('Dynamic Function', function() {
+          addBlockTypeToCleanup(this.sharedCleanup, 'tooltip');
           Blockly.Blocks['tooltip'] = {
             init: function() {
               var field = new Blockly.FieldTextInput('default');
@@ -451,9 +450,9 @@ suite('Abstract Fields', function() {
           ).children[0], this.workspace);
           var field = block.getField('TOOLTIP');
           chai.assert.equal(field.getClickTarget_().tooltip, block.tooltipFunc);
-          delete Blockly.Blocks['tooltip'];
         });
         test('Element', function() {
+          addBlockTypeToCleanup(this.sharedCleanup, 'tooltip');
           Blockly.Blocks['tooltip'] = {
             init: function() {
               var field = new Blockly.FieldTextInput('default');
@@ -472,9 +471,9 @@ suite('Abstract Fields', function() {
           ).children[0], this.workspace);
           var field = block.getField('TOOLTIP');
           chai.assert.equal(field.getClickTarget_().tooltip, block.element);
-          delete Blockly.Blocks['tooltip'];
         });
         test('Null', function() {
+          addBlockTypeToCleanup(this.sharedCleanup, 'tooltip');
           Blockly.Blocks['tooltip'] = {
             init: function() {
               var field = new Blockly.FieldTextInput('default');
@@ -490,9 +489,9 @@ suite('Abstract Fields', function() {
           ).children[0], this.workspace);
           var field = block.getField('TOOLTIP');
           chai.assert.equal(field.getClickTarget_().tooltip, block);
-          delete Blockly.Blocks['tooltip'];
         });
         test('Undefined', function() {
+          addBlockTypeToCleanup(this.sharedCleanup, 'tooltip');
           Blockly.Blocks['tooltip'] = {
             init: function() {
               var field = new Blockly.FieldTextInput('default');
@@ -507,7 +506,6 @@ suite('Abstract Fields', function() {
           ).children[0], this.workspace);
           var field = block.getField('TOOLTIP');
           chai.assert.equal(field.getClickTarget_().tooltip, block);
-          delete Blockly.Blocks['tooltip'];
         });
       });
     });

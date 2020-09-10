@@ -17,6 +17,7 @@ goog.provide('Blockly.Field');
 goog.require('Blockly.Events');
 goog.require('Blockly.Events.BlockChange');
 goog.require('Blockly.Gesture');
+goog.require('Blockly.Tooltip');
 goog.require('Blockly.utils');
 goog.require('Blockly.utils.deprecation');
 goog.require('Blockly.utils.dom');
@@ -66,7 +67,7 @@ Blockly.Field = function(value, opt_validator, opt_config) {
   /**
    * Used to cache the field's tooltip value if setTooltip is called when the
    * field is not yet initialized. Is *not* guaranteed to be accurate.
-   * @type {string|Function|!SVGElement}
+   * @type {?Blockly.Tooltip.TipInfo}
    * @private
    */
   this.tooltip_ = null;
@@ -996,23 +997,36 @@ Blockly.Field.prototype.onMouseDown_ = function(e) {
 };
 
 /**
- * Change the tooltip text for this field.
- * @param {string|Function|!SVGElement} newTip Text for tooltip or a parent
- *    element to link to for its tooltip.
+ * Sets the tooltip for this field.
+ * @param {?Blockly.Tooltip.TipInfo} newTip The
+ *     text for the tooltip, a function that returns the text for the tooltip, a
+ *     parent object whose tooltip will be used, or null to display the tooltip
+ *     of the parent block. To not display a tooltip pass the empty string.
  */
 Blockly.Field.prototype.setTooltip = function(newTip) {
+  if (!newTip && newTip !== '') {  // If null or undefined.
+    newTip = this.sourceBlock_;
+  }
   var clickTarget = this.getClickTarget_();
-  if (!clickTarget) {
+  if (clickTarget) {
+    clickTarget.tooltip = newTip;
+  } else {
     // Field has not been initialized yet.
     this.tooltip_ = newTip;
-    return;
   }
+};
 
-  if (!newTip && newTip !== '') {  // If null or undefined.
-    clickTarget.tooltip = this.sourceBlock_;
-  } else {
-    clickTarget.tooltip = newTip;
+/**
+ * Returns the tooltip text for this field.
+ * @returns {string} The tooltip text for this field.
+ */
+Blockly.Field.prototype.getTooltip = function() {
+  var clickTarget = this.getClickTarget_();
+  if (clickTarget) {
+    return Blockly.Tooltip.getTooltipOfObject(clickTarget);
   }
+  // Field has not been initialized yet. Return stashed this.tooltip_ value.
+  return Blockly.Tooltip.getTooltipOfObject({tooltip: this.tooltip_});
 };
 
 /**

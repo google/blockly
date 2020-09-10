@@ -23,6 +23,14 @@ goog.provide('Blockly.Tooltip');
 
 goog.require('Blockly.utils.string');
 
+/**
+ * A type which can define a tooltip.
+ * Either a string, an object containing a tooltip property, or a function which
+ * returns either a string, or another arbitrarily nested function which
+ * eventually unwinds to a string.
+ * @typedef {string|{tooltip}|function(): (string|!Function)}
+ */
+Blockly.Tooltip.TipInfo;
 
 /**
  * Is a tooltip currently showing?
@@ -114,7 +122,7 @@ Blockly.Tooltip.DIV = null;
 /**
  * Returns the tooltip text for the given element.
  * @param {?Object} object The object to get the the tooltip text of.
- * @returns {!string} The tooltip text of the element.
+ * @returns {string} The tooltip text of the element.
  */
 Blockly.Tooltip.getTooltipOfObject = function(object) {
   var obj = Blockly.Tooltip.getTargetObject_(object);
@@ -136,7 +144,7 @@ Blockly.Tooltip.getTooltipOfObject = function(object) {
  * tooltip. Could be the object itself.
  * @param {?Object} obj The object are trying to find the target tooltip
  *     object of.
- * @returns {!{tooltip}|null} The target tooltip object.
+ * @returns {?{tooltip}} The target tooltip object.
  * @private
  */
 Blockly.Tooltip.getTargetObject_ = function(obj) {

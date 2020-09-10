@@ -24,6 +24,7 @@ goog.require('Blockly.Extensions');
 goog.require('Blockly.fieldRegistry');
 goog.require('Blockly.Input');
 goog.require('Blockly.navigation');
+goog.require('Blockly.Tooltip');
 goog.require('Blockly.utils');
 goog.require('Blockly.utils.deprecation');
 goog.require('Blockly.utils.Coordinate');
@@ -73,7 +74,7 @@ Blockly.Block = function(workspace, prototypeName, opt_id) {
    * @private
    */
   this.disabled = false;
-  /** @type {!string|!function(): (!string|!Function)|!{tooltip}} */
+  /** @type {!Blockly.Tooltip.TipInfo} */
   this.tooltip = '';
   /** @type {boolean} */
   this.contextMenu = true;
@@ -906,10 +907,9 @@ Blockly.Block.prototype.setHelpUrl = function(url) {
 
 /**
  * Sets the tooltip for this block.
- * @param {!string|!function(): (!string|!Function)|!{tooltip}} newTip The text
- *     for the tooltip, a function that returns the text for the tooltip, or a
- *     parent object whose tooltip will be used. To not display a tooltip pass
- *     the empty string.
+ * @param {!Blockly.Tooltip.TipInfo} newTip The text for the tooltip, a function
+ *     that returns the text for the tooltip, or a parent object whose tooltip
+ *     will be used. To not display a tooltip pass the empty string.
  */
 Blockly.Block.prototype.setTooltip = function(newTip) {
   this.tooltip = newTip;

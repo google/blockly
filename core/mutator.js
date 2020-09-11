@@ -231,18 +231,16 @@ Blockly.Mutator.prototype.updateEditable = function() {
 Blockly.Mutator.prototype.resizeBubble_ = function() {
   var doubleBorderWidth = 2 * Blockly.Bubble.BORDER_WIDTH;
   var workspaceSize = this.workspace_.getCanvas().getBBox();
-  var width;
-  if (this.block_.RTL) {
-    width = -workspaceSize.x;
-  } else {
-    width = workspaceSize.width + workspaceSize.x +
-        this.workspace_.getFlyout().getWidth();
-  }
+  var width = workspaceSize.width + workspaceSize.x;
   var height = workspaceSize.height + doubleBorderWidth * 3;
   var flyout = this.workspace_.getFlyout();
   if (flyout) {
     var flyoutMetrics = flyout.getMetrics_();
     height = Math.max(height, flyoutMetrics.contentHeight + 20);
+    width += flyout.getWidth();
+  }
+  if (this.block_.RTL) {
+    width = -workspaceSize.x;
   }
   width += doubleBorderWidth * 3;
   // Only resize if the size difference is significant.  Eliminates shuddering.
@@ -381,7 +379,11 @@ Blockly.Mutator.prototype.workspaceChanged_ = function(e) {
       }
       // Bump any block overlapping the flyout back inside.
       if (block.RTL) {
-        var right = -(this.workspace_.getFlyout().getWidth() + MARGIN);
+        var right = -MARGIN;
+        var flyout = this.workspace_.getFlyout();
+        if (flyout) {
+          right -= flyout.getWidth();
+        }
         if (blockXY.x > right) {
           block.moveBy(right - blockXY.x, 0);
         }
@@ -437,6 +439,8 @@ Blockly.Mutator.prototype.getFlyoutMetrics_ = function() {
   // The mutator workspace only uses a subset of Blockly.utils.Metrics
   // properties as features such as scroll and zoom are unsupported.
   var unsupported = 0;
+  var flyout = this.workspace_.getFlyout();
+  var flyoutWidth = flyout ? flyout.getWidth() : 0;
   return {
     contentHeight: unsupported,
     contentWidth: unsupported,
@@ -444,13 +448,12 @@ Blockly.Mutator.prototype.getFlyoutMetrics_ = function() {
     contentLeft: unsupported,
 
     viewHeight: this.workspaceHeight_,
-    viewWidth: this.workspaceWidth_ - this.workspace_.getFlyout().getWidth(),
+    viewWidth: this.workspaceWidth_ - flyoutWidth,
     viewTop: unsupported,
     viewLeft: unsupported,
 
     absoluteTop: unsupported,
-    absoluteLeft: this.workspace_.RTL ? 0 :
-        this.workspace_.getFlyout().getWidth()
+    absoluteLeft: this.workspace_.RTL ? 0 : flyoutWidth
   };
 };
 
@@ -476,10 +479,13 @@ Blockly.Mutator.prototype.updateBlockStyle = function() {
       block.setStyle(block.getStyleName());
     }
 
-    var flyoutBlocks = ws.getFlyout().workspace_.getAllBlocks(false);
-    for (var i = 0; i < flyoutBlocks.length; i++) {
-      var block = flyoutBlocks[i];
-      block.setStyle(block.getStyleName());
+    var flyout = ws.getFlyout();
+    if (flyout) {
+      var flyoutBlocks = flyout.workspace_.getAllBlocks(false);
+      for (var i = 0; i < flyoutBlocks.length; i++) {
+        var block = flyoutBlocks[i];
+        block.setStyle(block.getStyleName());
+      }
     }
   }
 };

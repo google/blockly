@@ -28,8 +28,6 @@ suite('Events', function() {
 
   teardown(function() {
     sharedTestTeardown.call(this);
-    delete Blockly.Blocks['field_variable_test_block'];
-    delete Blockly.Blocks['simple_test_block'];
   });
 
   function createSimpleTestBlock(workspace) {

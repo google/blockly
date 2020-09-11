@@ -14,7 +14,6 @@ suite('Comments', function() {
         "args0": []
       },
     ]);
-
     this.workspace = Blockly.inject('blocklyDiv', {
       comments: true,
       scrollbars: true
@@ -27,7 +26,6 @@ suite('Comments', function() {
   });
   teardown(function() {
     sharedTestTeardown.call(this);
-    delete Blockly.Blocks['empty_block'];
   });
   suite('Visibility and Editability', function() {
     setup(function() {

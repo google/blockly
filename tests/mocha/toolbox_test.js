@@ -13,7 +13,6 @@ suite('Toolbox', function() {
 
   teardown(function() {
     sharedTestTeardown.call(this);
-    delete Blockly.Blocks['row_block'];
   });
 
   suite('init', function() {

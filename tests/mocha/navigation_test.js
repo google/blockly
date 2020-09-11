@@ -55,7 +55,6 @@ suite('Navigation', function() {
 
     teardown(function() {
       workspaceTeardown.call(this, this.workspace);
-      delete Blockly.Blocks['basic_block'];
     });
 
     function testToolboxSelectMethodCalled(ws, mockEvent, keyCode, selectMethodName) {
@@ -137,7 +136,6 @@ suite('Navigation', function() {
 
     teardown(function() {
       workspaceTeardown.call(this, this.workspace);
-      delete Blockly.Blocks['basic_block'];
     });
 
     // Should be a no-op
@@ -228,7 +226,6 @@ suite('Navigation', function() {
 
     teardown(function() {
       workspaceTeardown.call(this, this.workspace);
-      delete Blockly.Blocks['basic_block'];
     });
 
     test('Previous', function() {
@@ -341,7 +338,6 @@ suite('Navigation', function() {
     });
     teardown(function() {
       workspaceTeardown.call(this, this.workspace);
-      delete Blockly.Blocks['basic_block'];
     });
     test('Action does not exist', function() {
       var block = this.workspace.getTopBlocks()[0];
@@ -452,7 +448,6 @@ suite('Navigation', function() {
 
       teardown(function() {
         workspaceTeardown.call(this, this.workspace);
-        delete Blockly.Blocks['field_block'];
       });
 
       test('Perform valid action for read only', function() {
@@ -506,7 +501,6 @@ suite('Navigation', function() {
 
     teardown(function() {
       workspaceTeardown.call(this, this.workspace);
-      delete Blockly.Blocks['basic_block'];
     });
 
     test('Insert from flyout with a valid connection marked', function() {
@@ -611,8 +605,6 @@ suite('Navigation', function() {
 
     teardown(function() {
       workspaceTeardown.call(this, this.workspace);
-      delete Blockly.Blocks['inline_block'];
-      delete Blockly.Blocks['basic_block'];
     });
 
     test('Connect cursor on previous into stack', function() {
@@ -682,7 +674,6 @@ suite('Navigation', function() {
 
     teardown(function() {
       workspaceTeardown.call(this, this.workspace);
-      delete Blockly.Blocks['basic_block'];
     });
 
     test('Delete block - has parent ', function() {

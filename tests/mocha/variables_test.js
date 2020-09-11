@@ -26,7 +26,6 @@ suite('Variables', function() {
 
   teardown(function() {
     sharedTestTeardown.call(this);
-    delete Blockly.Blocks['get_var_block'];
   });
 
   /**

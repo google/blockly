@@ -106,8 +106,11 @@ var JSCOMP_ERROR = [
  * @param {boolean=} opt_verbose Optional option for verbose logging
  * @param {boolean=} opt_warnings_as_error Optional option for treating warnings
  *     as errors.
+ * @param {boolean=} opt_strict_typechecker Optional option for enabling strict
+ *     type checking.
  */
-function compile(compilerOptions, opt_verbose, opt_warnings_as_error) {
+function compile(compilerOptions, opt_verbose, opt_warnings_as_error,
+    opt_strict_typechecker) {
   const options = {};
   options.compilation_level = 'SIMPLE_OPTIMIZATIONS';
   options.warning_level = opt_verbose ? 'VERBOSE' : 'DEFAULT';
@@ -115,8 +118,11 @@ function compile(compilerOptions, opt_verbose, opt_warnings_as_error) {
   options.language_out = 'ECMASCRIPT5_STRICT';
   options.rewrite_polyfills = false;
   options.hide_warnings_for = 'node_modules';
-  if (opt_warnings_as_error) {
+  if (opt_warnings_as_error || opt_strict_typechecker) {
     options.jscomp_error = JSCOMP_ERROR;
+    if (opt_strict_typechecker) {
+      options.jscomp_error.push('strictCheckTypes');
+    }
   }
 
   const platform = ['native', 'java', 'javascript'];
@@ -203,7 +209,7 @@ function buildCompressed() {
       language_in:
         argv.closureLibrary ? 'ECMASCRIPT_2015' : 'ECMASCRIPT5_STRICT',
       output_wrapper: outputWrapperUMD('Blockly', [])
-    }, argv.verbose, argv.strict))
+    }, argv.verbose, argv.debug, argv.strict))
     .pipe(gulp.sourcemaps.mapSources(function (sourcePath, file) {
       return sourcePath.replace(/-/g, '/');
     }))
@@ -231,7 +237,7 @@ function buildBlocks() {
         amd: './blockly_compressed.js',
         cjs: './blockly_compressed.js'
       }])
-    }, argv.verbose, argv.strict))
+    }, argv.verbose, argv.debug, argv.strict))
     .pipe(gulp.sourcemaps.write('.', {
       includeContent: false,
       sourceRoot: './'
@@ -257,7 +263,7 @@ function buildGenerator(language, namespace) {
         amd: './blockly_compressed.js',
         cjs: './blockly_compressed.js'
       }])
-    }, argv.verbose, argv.strict))
+    }, argv.verbose, argv.debug, argv.strict))
     .pipe(gulp.sourcemaps.write('.', {
       includeContent: false,
       sourceRoot: './'

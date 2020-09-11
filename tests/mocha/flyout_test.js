@@ -27,7 +27,6 @@ suite('Flyout', function() {
 
   teardown(function() {
     sharedTestTeardown.call(this);
-    delete Blockly.Blocks['basic_block'];
   });
 
   suite('createFlyoutInfo_', function() {

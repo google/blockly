@@ -34,7 +34,6 @@ function testAWorkspace() {
   });
 
   teardown(function() {
-    delete Blockly.Blocks['get_var_block'];
     // Clear Blockly.Event state.
     Blockly.Events.setGroup(false);
     Blockly.Events.disabled_ = 0;

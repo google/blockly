@@ -801,12 +801,17 @@ Blockly.Flyout.prototype.createBlock = function(originalBlock) {
 
   if (Blockly.Events.isEnabled()) {
     Blockly.Events.setGroup(true);
-    Blockly.Events.fire(new Blockly.Events.Create(newBlock));
     // Fire a VarCreate event for each (if any) new variable created.
     for (var i = 0; i < newVariables.length; i++) {
       var thisVariable = newVariables[i];
       Blockly.Events.fire(new Blockly.Events.VarCreate(thisVariable));
     }
+
+    // Block events come after var events, in case they refer to newly created
+    // variables.
+    Blockly.Events.fire(new Blockly.Events.Create(newBlock));
+
+    // Why don't we need to setgroup to false??
   }
   if (this.autoClose) {
     this.hide();

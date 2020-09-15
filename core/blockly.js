@@ -65,7 +65,7 @@ Blockly.draggingConnections = [];
 
 /**
  * Contents of the local clipboard.
- * @type {Element}
+ * @type {Element|DocumentFragment}
  * @private
  */
 Blockly.clipboardXml_ = null;

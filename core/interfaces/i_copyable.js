@@ -32,7 +32,7 @@ Blockly.ICopyable.prototype.toCopyData;
 /**
  * Copy Metadata.
  * @typedef {{
- *            xml:!Element,
+ *            xml:(!Element|!DocumentFragment),
  *            source:Blockly.WorkspaceSvg,
  *            typeCounts:?Object
  *          }}

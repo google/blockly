@@ -115,7 +115,7 @@ Blockly.Connection.prototype.connect_ = function(childConnection) {
     // Displaced shadow blocks dissolve rather than reattaching or bumping.
     if (orphanBlock.isShadow()) {
       // Save the shadow block so that field values are preserved.
-      shadowDom = Blockly.Xml.blockToDom(orphanBlock);
+      shadowDom = /** @type {!Element} */ (Blockly.Xml.blockToDom(orphanBlock));
       orphanBlock.dispose(false);
       orphanBlock = null;
     } else if (parentConnection.type == Blockly.INPUT_VALUE) {

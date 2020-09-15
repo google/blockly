@@ -932,12 +932,15 @@ Blockly.BlockSvg.prototype.dispose = function(healStack, animate) {
  */
 Blockly.BlockSvg.prototype.toCopyData = function() {
   var xml = Blockly.Xml.blockToDom(this, true);
-  // Copy only the selected block and internal blocks.
-  Blockly.Xml.deleteNext(xml);
-  // Encode start position in XML.
-  var xy = this.getRelativeToSurfaceXY();
-  xml.setAttribute('x', this.RTL ? -xy.x : xy.x);
-  xml.setAttribute('y', xy.y);
+  // If this block is an insertion marker the xml is an empty Document Fragment.
+  if (!this.isInsertionMarker_) {
+    // Copy only the selected block and internal blocks.
+    Blockly.Xml.deleteNext(xml);
+    // Encode start position in XML.
+    var xy = this.getRelativeToSurfaceXY();
+    xml.setAttribute('x', this.RTL ? -xy.x : xy.x);
+    xml.setAttribute('y', xy.y);
+  }
   return {
     xml: xml,
     source: this.workspace,

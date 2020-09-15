@@ -210,7 +210,6 @@ Blockly.Block = function(workspace, prototypeName, opt_id) {
   var initialUndoFlag = Blockly.Events.recordUndo;
 
   try {
-    
     // Call an initialization function, if it exists.
     if (typeof this.init == 'function') {
       Blockly.Events.recordUndo = false;

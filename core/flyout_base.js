@@ -945,6 +945,7 @@ Blockly.Flyout.prototype.placeNewBlock_ = function(oldBlock) {
   }
 
   // Create the new block by cloning the block in the flyout (via XML).
+  // This cast assumes that the oldBlock can not be an insertion marker.
   var xml = /** @type {!Element} */ (Blockly.Xml.blockToDom(oldBlock, true));
   // The target workspace would normally resize during domToBlock, which will
   // lead to weird jumps.  Save it for terminateDrag.

@@ -932,7 +932,8 @@ Blockly.BlockSvg.prototype.dispose = function(healStack, animate) {
  */
 Blockly.BlockSvg.prototype.toCopyData = function() {
   var xml = Blockly.Xml.blockToDom(this, true);
-  // If this block is an insertion marker the xml is an empty Document Fragment.
+  // If this block is an insertion marker, then the xml is an empty DocumentFragment
+  // and the below code is not needed.
   if (!this.isInsertionMarker_) {
     // Copy only the selected block and internal blocks.
     Blockly.Xml.deleteNext(xml);

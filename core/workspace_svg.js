@@ -1327,7 +1327,7 @@ Blockly.WorkspaceSvg.prototype.highlightBlock = function(id, opt_state) {
 /**
  * Paste the provided block onto the workspace.
  * @param {!Element|!DocumentFragment} xmlBlock XML block element or an empty
- *     document fragment if the block was an insertion marker.
+ *     DocumentFragment if the block was an insertion marker.
  */
 Blockly.WorkspaceSvg.prototype.paste = function(xmlBlock) {
   if (!this.rendered || !xmlBlock.tagName || xmlBlock.getElementsByTagName('block').length >=

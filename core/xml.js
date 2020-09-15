@@ -809,7 +809,7 @@ Blockly.Xml.domToField_ = function(block, fieldName, xml) {
 /**
  * Remove any 'next' block (statements in a stack).
  * @param {!Element|!DocumentFragment} xmlBlock XML block element or an empty
- *     document fragment if the block was an insertion marker.
+ *     DocumentFragment if the block was an insertion marker.
  */
 Blockly.Xml.deleteNext = function(xmlBlock) {
   for (var i = 0, child; (child = xmlBlock.childNodes[i]); i++) {

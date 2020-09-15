@@ -384,13 +384,13 @@ Blockly.Arduino.getArduinoType_ = function(typeBlockly) {
     case Blockly.Types.BOOLEAN.typeId:
       return 'boolean';
     case Blockly.Types.NULL.typeId:
-      return 'void';
+      return 'double';
     case Blockly.Types.UNDEF.typeId:
       return 'undefined';
     case Blockly.Types.CHILD_BLOCK_MISSING.typeId:
       // If no block connected default to int, change for easier debugging
       //return 'ChildBlockMissing';
-      return 'int';
+      return 'double';
     default:
       return 'Invalid Blockly Type';
     }

@@ -40,6 +40,7 @@ declare module Blockly {
     };
     renderer?: string;
     keyMap?: {[type: string]: Blockly.Action;};
+    parentWorkspace?: Blockly.WorkspaceSvg;
   }
 
   interface BlocklyThemeOptions {

@@ -22,6 +22,8 @@ goog.require('Blockly.utils.toolbox');
 goog.require('Blockly.utils.userAgent');
 goog.require('Blockly.Xml');
 
+goog.requireType('Blockly.WorkspaceSvg');
+
 
 /**
  * Parse the user-specified options, using reasonable defaults where behaviour
@@ -171,7 +173,7 @@ Blockly.Options = function(options) {
   /**
    * The parent of the current workspace, or null if there is no parent
    * workspace.
-   * @type {Blockly.Workspace}
+   * @type {Blockly.WorkspaceSvg}
    */
   this.parentWorkspace = options['parentWorkspace'];
 

@@ -24,7 +24,6 @@ goog.requireType('Blockly.Field');
 Blockly.IRegistrableField;
 
 /**
- * A registrable field.
  * @typedef {function(!Object): Blockly.Field}
  */
 Blockly.IRegistrableField.fromJson;

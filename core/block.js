@@ -207,11 +207,12 @@ Blockly.Block = function(workspace, prototypeName, opt_id) {
   if (!existingGroup) {
     Blockly.Events.setGroup(true);
   }
+  var initialUndoFlag = Blockly.Events.recordUndo;
 
   try {
+    
     // Call an initialization function, if it exists.
     if (typeof this.init == 'function') {
-      var initialUndoFlag = Blockly.Events.recordUndo;
       Blockly.Events.recordUndo = false;
       this.init();
       Blockly.Events.recordUndo = initialUndoFlag;
@@ -226,6 +227,8 @@ Blockly.Block = function(workspace, prototypeName, opt_id) {
     if (!existingGroup) {
       Blockly.Events.setGroup(false);
     }
+    // In case init threw, recordUndo flag should still be reset.
+    Blockly.Events.recordUndo = initialUndoFlag;
   }
   
   // Record initial inline state.

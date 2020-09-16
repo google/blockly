@@ -31,6 +31,12 @@ Blockly.Icon = function(block) {
    * @protected
    */
   this.block_ = block;
+
+  /**
+   * The icon SVG group.
+   * @type {?SVGGElement}
+   */
+  this.iconGroup_ = null;
 };
 
 /**
@@ -154,7 +160,8 @@ Blockly.Icon.prototype.setIconLocation = function(xy) {
 Blockly.Icon.prototype.computeIconLocation = function() {
   // Find coordinates for the centre of the icon and update the arrow.
   var blockXY = this.block_.getRelativeToSurfaceXY();
-  var iconXY = Blockly.utils.getRelativeXY(this.iconGroup_);
+  var iconXY = Blockly.utils.getRelativeXY(
+      /** @type {!SVGElement} */ (this.iconGroup_));
   var newXY = new Blockly.utils.Coordinate(
       blockXY.x + iconXY.x + this.SIZE / 2,
       blockXY.y + iconXY.y + this.SIZE / 2);
@@ -190,3 +197,9 @@ Blockly.Icon.prototype.getCorrectedSize = function() {
  * @protected
  */
 Blockly.Icon.prototype.drawIcon_;
+
+/**
+ * Show or hide the icon.
+ * @param {boolean} visible True if the icon should be visible.
+ */
+Blockly.Icon.prototype.setVisible;

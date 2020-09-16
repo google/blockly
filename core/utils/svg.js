@@ -1,14 +1,13 @@
 /**
  * @license
- * Copyright 2019 Google LLC
+ * Copyright 2020 Google LLC
  * SPDX-License-Identifier: Apache-2.0
  */
 
 /**
- * @fileoverview Utility methods for DOM manipulation.
- * These methods are not specific to Blockly, and could be factored out into
- * a JavaScript framework such as Closure.
- * @author fraser@google.com (Neil Fraser)
+ * @fileoverview Defines the Blockly.utils.Svg class. Its constants enumerate
+ * all SVG tag names used by Blockly.
+ * @author samelh@google.com (Sam El-Husseini)
  */
 'use strict';
 

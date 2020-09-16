@@ -60,7 +60,7 @@ Blockly.BlockSvg = function(workspace, prototypeName, opt_id) {
    * @private
    */
   this.svgGroup_ = Blockly.utils.dom.createSvgElement(
-      Blockly.utils.dom.SvgElementType.G, {}, null);
+      Blockly.utils.Svg.G, {}, null);
   this.svgGroup_.translate_ = '';
 
   /**

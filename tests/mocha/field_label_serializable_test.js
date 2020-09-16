@@ -98,7 +98,7 @@ suite('Label Serializable Fields', function() {
   suite('Customizations', function() {
     function assertHasClass(labelField, cssClass) {
       labelField.fieldGroup_ = Blockly.utils.dom.createSvgElement(
-          Blockly.utils.dom.SvgElementType.G, {}, null);
+          Blockly.utils.Svg.G, {}, null);
       labelField.constants_ = {
         FIELD_TEXT_BASELINE_Y: 13
       };
@@ -108,7 +108,7 @@ suite('Label Serializable Fields', function() {
     }
     function assertDoesNotHaveClass(labelField, cssClass) {
       labelField.fieldGroup_ = Blockly.utils.dom.createSvgElement(
-          Blockly.utils.dom.SvgElementType.G, {}, null);
+          Blockly.utils.Svg.G, {}, null);
       labelField.constants_ = {
         FIELD_TEXT_BASELINE_Y: 13
       };
@@ -155,7 +155,7 @@ suite('Label Serializable Fields', function() {
       test('setClass', function() {
         var field = new Blockly.FieldLabelSerializable();
         field.fieldGroup_ = Blockly.utils.dom.createSvgElement(
-            Blockly.utils.dom.SvgElementType.G, {}, null);
+            Blockly.utils.Svg.G, {}, null);
         field.constants_ = {
           FIELD_TEXT_BASELINE_Y: 13
         };

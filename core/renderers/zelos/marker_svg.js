@@ -13,6 +13,8 @@
 goog.provide('Blockly.zelos.MarkerSvg');
 
 goog.require('Blockly.blockRendering.MarkerSvg');
+goog.require('Blockly.utils.dom');
+goog.require('Blockly.utils.Svg');
 
 
 /**
@@ -112,7 +114,7 @@ Blockly.zelos.MarkerSvg.prototype.createDomInternal_ = function() {
   Blockly.zelos.MarkerSvg.superClass_.createDomInternal_.call(this);
 
   this.markerCircle_ = Blockly.utils.dom.createSvgElement(
-      Blockly.utils.dom.SvgElementType.CIRCLE, {
+      Blockly.utils.Svg.CIRCLE, {
         'r': this.constants_.CURSOR_RADIUS,
         'style': 'display: none',
         'stroke-width': this.constants_.CURSOR_STROKE_WIDTH
@@ -123,7 +125,7 @@ Blockly.zelos.MarkerSvg.prototype.createDomInternal_ = function() {
   if (this.isCursor()) {
     var blinkProperties = this.getBlinkProperties_();
     Blockly.utils.dom.createSvgElement(
-        Blockly.utils.dom.SvgElementType.ANIMATE, blinkProperties,
+        Blockly.utils.Svg.ANIMATE, blinkProperties,
         this.markerCircle_);
   }
 

@@ -17,6 +17,7 @@ goog.requireType('Blockly.BlockSvg');
 goog.requireType('Blockly.IRegistrable');
 goog.requireType('Blockly.utils.dom');
 goog.requireType('Blockly.utils.Coordinate');
+goog.requireType('Blockly.utils.Svg');
 goog.requireType('Blockly.utils.toolbox');
 goog.requireType('Blockly.WorkspaceSvg');
 
@@ -71,8 +72,8 @@ Blockly.IFlyout.prototype.CORNER_RADIUS;
  * either exist as its own svg element or be a g element nested inside a
  * separate svg element.
  * @param {string|
- * !Blockly.utils.dom.SvgElementType<!SVGSVGElement>|
- * !Blockly.utils.dom.SvgElementType<!SVGGElement>} tagName The type of tag to
+ * !Blockly.utils.Svg<!SVGSVGElement>|
+ * !Blockly.utils.Svg<!SVGGElement>} tagName The type of tag to
  *     put the flyout in. This should be <svg> or <g>.
  * @return {!SVGElement} The flyout's SVG group.
  */

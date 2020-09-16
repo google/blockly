@@ -23,6 +23,7 @@ goog.require('Blockly.utils.Coordinate');
 goog.require('Blockly.utils.dom');
 goog.require('Blockly.utils.object');
 goog.require('Blockly.utils.Rect');
+goog.require('Blockly.utils.Svg');
 goog.require('Blockly.WorkspaceComment');
 
 goog.requireType('Blockly.IBoundedElement');
@@ -65,11 +66,11 @@ Blockly.WorkspaceCommentSvg = function(
    * @private
    */
   this.svgGroup_ = Blockly.utils.dom.createSvgElement(
-      Blockly.utils.dom.SvgElementType.G, {'class': 'blocklyComment'}, null);
+      Blockly.utils.Svg.G, {'class': 'blocklyComment'}, null);
   this.svgGroup_.translate_ = '';
 
   this.svgRect_ = Blockly.utils.dom.createSvgElement(
-      Blockly.utils.dom.SvgElementType.RECT, {
+      Blockly.utils.Svg.RECT, {
         'class': 'blocklyCommentRect',
         'x': 0,
         'y': 0,

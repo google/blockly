@@ -14,6 +14,7 @@
 goog.provide('Blockly.Grid');
 
 goog.require('Blockly.utils.dom');
+goog.require('Blockly.utils.Svg');
 goog.require('Blockly.utils.userAgent');
 
 
@@ -197,25 +198,25 @@ Blockly.Grid.createDom = function(rnd, gridOptions, defs) {
     </pattern>
   */
   var gridPattern = Blockly.utils.dom.createSvgElement(
-      Blockly.utils.dom.SvgElementType.PATTERN,
+      Blockly.utils.Svg.PATTERN,
       {
         'id': 'blocklyGridPattern' + rnd,
         'patternUnits': 'userSpaceOnUse'
       }, defs);
   if (gridOptions['length'] > 0 && gridOptions['spacing'] > 0) {
     Blockly.utils.dom.createSvgElement(
-        Blockly.utils.dom.SvgElementType.LINE,
+        Blockly.utils.Svg.LINE,
         {'stroke': gridOptions['colour']}, gridPattern);
     if (gridOptions['length'] > 1) {
       Blockly.utils.dom.createSvgElement(
-          Blockly.utils.dom.SvgElementType.LINE,
+          Blockly.utils.Svg.LINE,
           {'stroke': gridOptions['colour']}, gridPattern);
     }
     // x1, y1, x1, x2 properties will be set later in update.
   } else {
     // Edge 16 doesn't handle empty patterns
     Blockly.utils.dom.createSvgElement(
-        Blockly.utils.dom.SvgElementType.LINE, {}, gridPattern);
+        Blockly.utils.Svg.LINE, {}, gridPattern);
   }
   return gridPattern;
 };

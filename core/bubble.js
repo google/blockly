@@ -18,6 +18,7 @@ goog.require('Blockly.utils');
 goog.require('Blockly.utils.Coordinate');
 goog.require('Blockly.utils.dom');
 goog.require('Blockly.utils.math');
+goog.require('Blockly.utils.Svg');
 goog.require('Blockly.utils.userAgent');
 goog.require('Blockly.Workspace');
 
@@ -237,7 +238,7 @@ Blockly.Bubble.prototype.createDom_ = function(content, hasResize) {
   </g>
   */
   this.bubbleGroup_ = Blockly.utils.dom.createSvgElement(
-      Blockly.utils.dom.SvgElementType.G, {}, null);
+      Blockly.utils.Svg.G, {}, null);
   var filter = {
     'filter': 'url(#' +
         this.workspace_.getRenderer().getConstants().embossFilterId + ')'
@@ -248,11 +249,11 @@ Blockly.Bubble.prototype.createDom_ = function(content, hasResize) {
     filter = {};
   }
   var bubbleEmboss = Blockly.utils.dom.createSvgElement(
-      Blockly.utils.dom.SvgElementType.G, filter, this.bubbleGroup_);
+      Blockly.utils.Svg.G, filter, this.bubbleGroup_);
   this.bubbleArrow_ = Blockly.utils.dom.createSvgElement(
-      Blockly.utils.dom.SvgElementType.PATH, {}, bubbleEmboss);
+      Blockly.utils.Svg.PATH, {}, bubbleEmboss);
   this.bubbleBack_ = Blockly.utils.dom.createSvgElement(
-      Blockly.utils.dom.SvgElementType.RECT, {
+      Blockly.utils.Svg.RECT, {
         'class': 'blocklyDraggable',
         'x': 0,
         'y': 0,
@@ -262,16 +263,16 @@ Blockly.Bubble.prototype.createDom_ = function(content, hasResize) {
       bubbleEmboss);
   if (hasResize) {
     this.resizeGroup_ = Blockly.utils.dom.createSvgElement(
-        Blockly.utils.dom.SvgElementType.G,
+        Blockly.utils.Svg.G,
         {'class': this.workspace_.RTL ? 'blocklyResizeSW' : 'blocklyResizeSE'},
         this.bubbleGroup_);
     var resizeSize = 2 * Blockly.Bubble.BORDER_WIDTH;
     Blockly.utils.dom.createSvgElement(
-        Blockly.utils.dom.SvgElementType.POLYGON,
+        Blockly.utils.Svg.POLYGON,
         {'points': '0,x x,x x,0'.replace(/x/g, resizeSize.toString())},
         this.resizeGroup_);
     Blockly.utils.dom.createSvgElement(
-        Blockly.utils.dom.SvgElementType.LINE, {
+        Blockly.utils.Svg.LINE, {
           'class': 'blocklyResizeLine',
           'x1': resizeSize / 3,
           'y1': resizeSize - 1,
@@ -280,7 +281,7 @@ Blockly.Bubble.prototype.createDom_ = function(content, hasResize) {
         },
         this.resizeGroup_);
     Blockly.utils.dom.createSvgElement(
-        Blockly.utils.dom.SvgElementType.LINE, {
+        Blockly.utils.Svg.LINE, {
           'class': 'blocklyResizeLine',
           'x1': resizeSize * 2 / 3,
           'y1': resizeSize - 1,

@@ -21,6 +21,7 @@ goog.require('Blockly.Icon');
 goog.require('Blockly.utils.deprecation');
 goog.require('Blockly.utils.dom');
 goog.require('Blockly.utils.object');
+goog.require('Blockly.utils.Svg');
 goog.require('Blockly.utils.userAgent');
 goog.require('Blockly.Warning');
 
@@ -92,14 +93,14 @@ Blockly.utils.object.inherits(Blockly.Comment, Blockly.Icon);
 Blockly.Comment.prototype.drawIcon_ = function(group) {
   // Circle.
   Blockly.utils.dom.createSvgElement(
-      Blockly.utils.dom.SvgElementType.CIRCLE,
+      Blockly.utils.Svg.CIRCLE,
       {'class': 'blocklyIconShape', 'r': '8', 'cx': '8', 'cy': '8'},
       group);
   // Can't use a real '?' text character since different browsers and operating
   // systems render it differently.
   // Body of question mark.
   Blockly.utils.dom.createSvgElement(
-      Blockly.utils.dom.SvgElementType.PATH,
+      Blockly.utils.Svg.PATH,
       {
         'class': 'blocklyIconSymbol',
         'd': 'm6.8,10h2c0.003,-0.617 0.271,-0.962 0.633,-1.266 2.875,-2.405' +
@@ -108,7 +109,7 @@ Blockly.Comment.prototype.drawIcon_ = function(group) {
       group);
   // Dot of question mark.
   Blockly.utils.dom.createSvgElement(
-      Blockly.utils.dom.SvgElementType.RECT,
+      Blockly.utils.Svg.RECT,
       {
         'class': 'blocklyIconSymbol',
         'x': '6.8',
@@ -138,7 +139,7 @@ Blockly.Comment.prototype.createEditor_ = function() {
    */
 
   this.foreignObject_ = Blockly.utils.dom.createSvgElement(
-      Blockly.utils.dom.SvgElementType.FOREIGNOBJECT,
+      Blockly.utils.Svg.FOREIGNOBJECT,
       {'x': Blockly.Bubble.BORDER_WIDTH, 'y': Blockly.Bubble.BORDER_WIDTH},
       null);
 

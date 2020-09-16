@@ -16,6 +16,7 @@ goog.require('Blockly.utils');
 goog.require('Blockly.utils.Coordinate');
 goog.require('Blockly.utils.dom');
 goog.require('Blockly.utils.Size');
+goog.require('Blockly.utils.Svg');
 
 
 /**
@@ -77,7 +78,7 @@ Blockly.Icon.prototype.createIcon = function() {
   </g>
   */
   this.iconGroup_ = Blockly.utils.dom.createSvgElement(
-      Blockly.utils.dom.SvgElementType.G,
+      Blockly.utils.Svg.G,
       {'class': 'blocklyIconGroup'}, null);
   if (this.block_.isInFlyout) {
     Blockly.utils.dom.addClass(

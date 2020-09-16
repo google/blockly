@@ -15,6 +15,7 @@ goog.provide('Blockly.Trashcan');
 goog.require('Blockly.Scrollbar');
 goog.require('Blockly.utils.dom');
 goog.require('Blockly.utils.Rect');
+goog.require('Blockly.utils.toolbox');
 goog.require('Blockly.Xml');
 
 goog.requireType('Blockly.IDeleteArea');
@@ -66,16 +67,16 @@ Blockly.Trashcan = function(workspace) {
   // Create vertical or horizontal flyout.
   if (this.workspace_.horizontalLayout) {
     flyoutWorkspaceOptions.toolboxPosition =
-        this.workspace_.toolboxPosition == Blockly.TOOLBOX_AT_TOP ?
-        Blockly.TOOLBOX_AT_BOTTOM : Blockly.TOOLBOX_AT_TOP;
+        this.workspace_.toolboxPosition == Blockly.utils.toolbox.Position.TOP ?
+        Blockly.utils.toolbox.Position.BOTTOM : Blockly.utils.toolbox.Position.TOP;
     if (!Blockly.HorizontalFlyout) {
       throw Error('Missing require for Blockly.HorizontalFlyout');
     }
     this.flyout = new Blockly.HorizontalFlyout(flyoutWorkspaceOptions);
   } else {
     flyoutWorkspaceOptions.toolboxPosition =
-      this.workspace_.toolboxPosition == Blockly.TOOLBOX_AT_RIGHT ?
-        Blockly.TOOLBOX_AT_LEFT : Blockly.TOOLBOX_AT_RIGHT;
+      this.workspace_.toolboxPosition == Blockly.utils.toolbox.Position.RIGHT ?
+        Blockly.utils.toolbox.Position.LEFT : Blockly.utils.toolbox.Position.RIGHT;
     if (!Blockly.VerticalFlyout) {
       throw Error('Missing require for Blockly.VerticalFlyout');
     }

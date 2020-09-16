@@ -17,6 +17,8 @@ goog.requireType('Blockly.Field');
 
 /**
  * A registrable field.
+ * Note: We are not using an interface here as we are interested in defining the
+ * static methods of a field rather than the instance methods.
  * @typedef {{
  *     fromJson:Blockly.IRegistrableField.fromJson
  * }}

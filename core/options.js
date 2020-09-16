@@ -172,7 +172,8 @@ Blockly.Options = function(options) {
 
   /**
    * The parent of the current workspace, or null if there is no parent
-   * workspace.
+   * workspace.  We can assert that this is of type WorkspaceSvg as opposed to
+   * Workspace as this is only used in a rendered workspace.
    * @type {Blockly.WorkspaceSvg}
    */
   this.parentWorkspace = options['parentWorkspace'];

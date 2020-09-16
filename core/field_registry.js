@@ -54,7 +54,7 @@ Blockly.fieldRegistry.unregister = function(type) {
  */
 Blockly.fieldRegistry.fromJson = function(options) {
   var fieldObject = /** @type {?Blockly.IRegistrableField} */ (
-      Blockly.registry.getObject(Blockly.registry.Type.FIELD, options['type']));
+    Blockly.registry.getObject(Blockly.registry.Type.FIELD, options['type']));
   if (!fieldObject) {
     console.warn('Blockly could not create a field of type ' + options['type'] +
       '. The field is probably not being registered. This could be because' +

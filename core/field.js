@@ -24,6 +24,7 @@ goog.require('Blockly.utils.dom');
 goog.require('Blockly.utils.Rect');
 goog.require('Blockly.utils.Size');
 goog.require('Blockly.utils.style');
+goog.require('Blockly.utils.Svg');
 goog.require('Blockly.utils.userAgent');
 
 goog.requireType('Blockly.blockRendering.ConstantProvider');
@@ -301,7 +302,7 @@ Blockly.Field.prototype.init = function() {
     return;
   }
   this.fieldGroup_ = Blockly.utils.dom.createSvgElement(
-      Blockly.utils.dom.SvgElementType.G, {}, null);
+      Blockly.utils.Svg.G, {}, null);
   if (!this.isVisible()) {
     this.fieldGroup_.style.display = 'none';
   }
@@ -339,7 +340,7 @@ Blockly.Field.prototype.initModel = function() {
  */
 Blockly.Field.prototype.createBorderRect_ = function() {
   this.borderRect_ = Blockly.utils.dom.createSvgElement(
-      Blockly.utils.dom.SvgElementType.RECT, {
+      Blockly.utils.Svg.RECT, {
         'rx': this.getConstants().FIELD_BORDER_RECT_RADIUS,
         'ry': this.getConstants().FIELD_BORDER_RECT_RADIUS,
         'x': 0,
@@ -358,7 +359,7 @@ Blockly.Field.prototype.createBorderRect_ = function() {
  */
 Blockly.Field.prototype.createTextElement_ = function() {
   this.textElement_ = Blockly.utils.dom.createSvgElement(
-      Blockly.utils.dom.SvgElementType.TEXT, {
+      Blockly.utils.Svg.TEXT, {
         'class': 'blocklyText',
       }, this.fieldGroup_);
   if (this.getConstants().FIELD_TEXT_BASELINE_CENTER) {

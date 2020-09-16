@@ -25,6 +25,7 @@ goog.require('Blockly.Tooltip');
 goog.require('Blockly.user.keyMap');
 goog.require('Blockly.utils');
 goog.require('Blockly.utils.dom');
+goog.require('Blockly.utils.Svg');
 goog.require('Blockly.utils.userAgent');
 goog.require('Blockly.WorkspaceDragSurfaceSvg');
 goog.require('Blockly.WorkspaceSvg');
@@ -114,7 +115,7 @@ Blockly.createDom_ = function(container, options) {
   </svg>
   */
   var svg = Blockly.utils.dom.createSvgElement(
-      Blockly.utils.dom.SvgElementType.SVG, {
+      Blockly.utils.Svg.SVG, {
         'xmlns': Blockly.utils.dom.SVG_NS,
         'xmlns:html': Blockly.utils.dom.HTML_NS,
         'xmlns:xlink': Blockly.utils.dom.XLINK_NS,
@@ -128,7 +129,7 @@ Blockly.createDom_ = function(container, options) {
   </defs>
   */
   var defs = Blockly.utils.dom.createSvgElement(
-      Blockly.utils.dom.SvgElementType.DEFS, {}, svg);
+      Blockly.utils.Svg.DEFS, {}, svg);
   // Each filter/pattern needs a unique ID for the case of multiple Blockly
   // instances on a page.  Browser behaviour becomes undefined otherwise.
   // https://neil.fraser.name/news/2015/11/01/
@@ -166,7 +167,7 @@ Blockly.createMainWorkspace_ = function(svg, options, blockDragSurface,
 
   if (!wsOptions.hasCategories && wsOptions.languageTree) {
     // Add flyout as an <svg> that is a sibling of the workspace svg.
-    var flyout = mainWorkspace.addFlyout(Blockly.utils.dom.SvgElementType.SVG);
+    var flyout = mainWorkspace.addFlyout(Blockly.utils.Svg.SVG);
     Blockly.utils.dom.insertAfter(flyout, svg);
   }
   if (wsOptions.hasTrashcan) {

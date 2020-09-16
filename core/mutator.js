@@ -23,6 +23,7 @@ goog.require('Blockly.utils');
 goog.require('Blockly.utils.dom');
 goog.require('Blockly.utils.global');
 goog.require('Blockly.utils.object');
+goog.require('Blockly.utils.Svg');
 goog.require('Blockly.utils.toolbox');
 goog.require('Blockly.utils.xml');
 goog.require('Blockly.WorkspaceSvg');
@@ -82,7 +83,7 @@ Blockly.Mutator.prototype.getWorkspace = function() {
 Blockly.Mutator.prototype.drawIcon_ = function(group) {
   // Square with rounded corners.
   Blockly.utils.dom.createSvgElement(
-      Blockly.utils.dom.SvgElementType.RECT,
+      Blockly.utils.Svg.RECT,
       {
         'class': 'blocklyIconShape',
         'rx': '4',
@@ -93,7 +94,7 @@ Blockly.Mutator.prototype.drawIcon_ = function(group) {
       group);
   // Gear teeth.
   Blockly.utils.dom.createSvgElement(
-      Blockly.utils.dom.SvgElementType.PATH,
+      Blockly.utils.Svg.PATH,
       {
         'class': 'blocklyIconSymbol',
         'd': 'm4.203,7.296 0,1.368 -0.92,0.677 -0.11,0.41 0.9,1.559 0.41,' +
@@ -107,7 +108,7 @@ Blockly.Mutator.prototype.drawIcon_ = function(group) {
       group);
   // Axle hole.
   Blockly.utils.dom.createSvgElement(
-      Blockly.utils.dom.SvgElementType.CIRCLE,
+      Blockly.utils.Svg.CIRCLE,
       {
         'class': 'blocklyIconShape',
         'r': '2.7',
@@ -142,7 +143,7 @@ Blockly.Mutator.prototype.createEditor_ = function() {
   </svg>
   */
   this.svgDialog_ = Blockly.utils.dom.createSvgElement(
-      Blockly.utils.dom.SvgElementType.SVG,
+      Blockly.utils.Svg.SVG,
       {'x': Blockly.Bubble.BORDER_WIDTH, 'y': Blockly.Bubble.BORDER_WIDTH},
       null);
   // Convert the list of names into a list of XML objects for the flyout.
@@ -187,7 +188,7 @@ Blockly.Mutator.prototype.createEditor_ = function() {
   // inherit scale from the parent workspace.
   // To fix this, scale needs to be applied at a different level in the dom.
   var flyoutSvg = hasFlyout ?
-      this.workspace_.addFlyout(Blockly.utils.dom.SvgElementType.G) : null;
+      this.workspace_.addFlyout(Blockly.utils.Svg.G) : null;
   var background = this.workspace_.createDom('blocklyMutatorBackground');
 
   if (flyoutSvg) {

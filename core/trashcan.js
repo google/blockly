@@ -15,6 +15,7 @@ goog.provide('Blockly.Trashcan');
 goog.require('Blockly.Scrollbar');
 goog.require('Blockly.utils.dom');
 goog.require('Blockly.utils.Rect');
+goog.require('Blockly.utils.Svg');
 goog.require('Blockly.utils.toolbox');
 goog.require('Blockly.Xml');
 
@@ -261,16 +262,16 @@ Blockly.Trashcan.prototype.createDom = function() {
   </g>
   */
   this.svgGroup_ = Blockly.utils.dom.createSvgElement(
-      Blockly.utils.dom.SvgElementType.G,
+      Blockly.utils.Svg.G,
       {'class': 'blocklyTrash'}, null);
   var clip;
   var rnd = String(Math.random()).substring(2);
   clip = Blockly.utils.dom.createSvgElement(
-      Blockly.utils.dom.SvgElementType.CLIPPATH,
+      Blockly.utils.Svg.CLIPPATH,
       {'id': 'blocklyTrashBodyClipPath' + rnd},
       this.svgGroup_);
   Blockly.utils.dom.createSvgElement(
-      Blockly.utils.dom.SvgElementType.RECT,
+      Blockly.utils.Svg.RECT,
       {
         'width': this.WIDTH_,
         'height': this.BODY_HEIGHT_,
@@ -278,7 +279,7 @@ Blockly.Trashcan.prototype.createDom = function() {
       },
       clip);
   var body = Blockly.utils.dom.createSvgElement(
-      Blockly.utils.dom.SvgElementType.IMAGE,
+      Blockly.utils.Svg.IMAGE,
       {
         'width': Blockly.SPRITE.width,
         'x': -this.SPRITE_LEFT_,
@@ -291,14 +292,14 @@ Blockly.Trashcan.prototype.createDom = function() {
       this.workspace_.options.pathToMedia + Blockly.SPRITE.url);
 
   clip = Blockly.utils.dom.createSvgElement(
-      Blockly.utils.dom.SvgElementType.CLIPPATH,
+      Blockly.utils.Svg.CLIPPATH,
       {'id': 'blocklyTrashLidClipPath' + rnd},
       this.svgGroup_);
   Blockly.utils.dom.createSvgElement(
-      Blockly.utils.dom.SvgElementType.RECT,
+      Blockly.utils.Svg.RECT,
       {'width': this.WIDTH_, 'height': this.LID_HEIGHT_}, clip);
   this.svgLid_ = Blockly.utils.dom.createSvgElement(
-      Blockly.utils.dom.SvgElementType.IMAGE,
+      Blockly.utils.Svg.IMAGE,
       {
         'width': Blockly.SPRITE.width,
         'x': -this.SPRITE_LEFT_,
@@ -332,7 +333,7 @@ Blockly.Trashcan.prototype.createDom = function() {
 Blockly.Trashcan.prototype.init = function(verticalSpacing) {
   if (this.workspace_.options.maxTrashcanContents > 0) {
     Blockly.utils.dom.insertAfter(
-        this.flyout.createDom(Blockly.utils.dom.SvgElementType.SVG),
+        this.flyout.createDom(Blockly.utils.Svg.SVG),
         this.workspace_.getParentSvg());
     this.flyout.init(this.workspace_);
   }

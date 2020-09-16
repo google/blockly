@@ -18,6 +18,7 @@ goog.require('Blockly.utils');
 goog.require('Blockly.utils.Coordinate');
 goog.require('Blockly.utils.dom');
 goog.require('Blockly.utils.Metrics');
+goog.require('Blockly.utils.Svg');
 
 
 /**
@@ -37,7 +38,7 @@ Blockly.ScrollbarPair = function(workspace) {
   this.vScroll = new Blockly.Scrollbar(
       workspace, false, true, 'blocklyMainWorkspaceScrollbar');
   this.corner_ = Blockly.utils.dom.createSvgElement(
-      Blockly.utils.dom.SvgElementType.RECT,
+      Blockly.utils.Svg.RECT,
       {
         'height': Blockly.Scrollbar.scrollbarThickness,
         'width': Blockly.Scrollbar.scrollbarThickness,
@@ -618,16 +619,16 @@ Blockly.Scrollbar.prototype.createDom_ = function(opt_class) {
     className += ' ' + opt_class;
   }
   this.outerSvg_ = Blockly.utils.dom.createSvgElement(
-      Blockly.utils.dom.SvgElementType.SVG, {'class': className}, null);
+      Blockly.utils.Svg.SVG, {'class': className}, null);
   this.svgGroup_ = Blockly.utils.dom.createSvgElement(
-      Blockly.utils.dom.SvgElementType.G, {}, this.outerSvg_);
+      Blockly.utils.Svg.G, {}, this.outerSvg_);
   this.svgBackground_ = Blockly.utils.dom.createSvgElement(
-      Blockly.utils.dom.SvgElementType.RECT, {
+      Blockly.utils.Svg.RECT, {
         'class': 'blocklyScrollbarBackground'
       }, this.svgGroup_);
   var radius = Math.floor((Blockly.Scrollbar.scrollbarThickness - 5) / 2);
   this.svgHandle_ = Blockly.utils.dom.createSvgElement(
-      Blockly.utils.dom.SvgElementType.RECT,
+      Blockly.utils.Svg.RECT,
       {
         'class': 'blocklyScrollbarHandle',
         'rx': radius,

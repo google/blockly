@@ -23,12 +23,12 @@ goog.require('Blockly.utils');
 goog.require('Blockly.utils.dom');
 goog.require('Blockly.utils.global');
 goog.require('Blockly.utils.object');
+goog.require('Blockly.utils.toolbox');
 goog.require('Blockly.utils.xml');
 goog.require('Blockly.WorkspaceSvg');
 goog.require('Blockly.Xml');
 
 goog.requireType('Blockly.utils.Metrics');
-goog.requireType('Blockly.utils.toolbox');
 
 
 /**
@@ -169,8 +169,9 @@ Blockly.Mutator.prototype.createEditor_ = function() {
         'renderer': this.block_.workspace.options.renderer,
         'rendererOverrides': this.block_.workspace.options.rendererOverrides
       }));
-  workspaceOptions.toolboxPosition = this.block_.RTL ? Blockly.TOOLBOX_AT_RIGHT :
-      Blockly.TOOLBOX_AT_LEFT;
+  workspaceOptions.toolboxPosition = this.block_.RTL ?
+      Blockly.utils.toolbox.Position.RIGHT :
+      Blockly.utils.toolbox.Position.LEFT;
   var hasFlyout = !!quarkXml;
   if (hasFlyout) {
     workspaceOptions.languageTree =

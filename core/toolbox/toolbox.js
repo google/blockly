@@ -23,6 +23,7 @@ goog.require('Blockly.utils');
 goog.require('Blockly.utils.aria');
 goog.require('Blockly.utils.dom');
 goog.require('Blockly.utils.Rect');
+goog.require('Blockly.utils.toolbox');
 
 goog.requireType('Blockly.Action');
 goog.requireType('Blockly.IBlocklyActionable');
@@ -33,7 +34,6 @@ goog.requireType('Blockly.ISelectableToolboxItem');
 goog.requireType('Blockly.IStyleable');
 goog.requireType('Blockly.IToolbox');
 goog.requireType('Blockly.IToolboxItem');
-goog.requireType('Blockly.utils.toolbox');
 goog.requireType('Blockly.WorkspaceSvg');
 
 
@@ -126,8 +126,7 @@ Blockly.Toolbox = function(workspace) {
 
   /**
    * Position of the toolbox and flyout relative to the workspace.
-   * TODO (#4246): Add an enum for toolbox types.
-   * @type {number}
+   * @type {!Blockly.utils.toolbox.Position}
    */
   this.toolboxPosition = workspace.options.toolboxPosition;
 
@@ -484,11 +483,11 @@ Blockly.Toolbox.prototype.getClientRect = function() {
 
   // Assumes that the toolbox is on the SVG edge.  If this changes
   // (e.g. toolboxes in mutators) then this code will need to be more complex.
-  if (this.toolboxPosition == Blockly.TOOLBOX_AT_TOP) {
+  if (this.toolboxPosition == Blockly.utils.toolbox.Position.TOP) {
     return new Blockly.utils.Rect(-BIG_NUM, bottom, -BIG_NUM, BIG_NUM);
-  } else if (this.toolboxPosition == Blockly.TOOLBOX_AT_BOTTOM) {
+  } else if (this.toolboxPosition == Blockly.utils.toolbox.Position.BOTTOM) {
     return new Blockly.utils.Rect(top, BIG_NUM, -BIG_NUM, BIG_NUM);
-  } else if (this.toolboxPosition == Blockly.TOOLBOX_AT_LEFT) {
+  } else if (this.toolboxPosition == Blockly.utils.toolbox.Position.LEFT) {
     return new Blockly.utils.Rect(-BIG_NUM, BIG_NUM, -BIG_NUM, right);
   } else {  // Right
     return new Blockly.utils.Rect(-BIG_NUM, BIG_NUM, left, BIG_NUM);

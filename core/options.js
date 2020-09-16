@@ -82,12 +82,14 @@ Blockly.Options = function(options) {
   var toolboxAtStart = options['toolboxPosition'];
   toolboxAtStart = toolboxAtStart !== 'end';
 
+  /** @type {!Blockly.utils.toolbox.Position} */
+  var toolboxPosition;
   if (horizontalLayout) {
-    var toolboxPosition = toolboxAtStart ?
-        Blockly.TOOLBOX_AT_TOP : Blockly.TOOLBOX_AT_BOTTOM;
+    toolboxPosition = toolboxAtStart ?
+        Blockly.utils.toolbox.Position.TOP : Blockly.utils.toolbox.Position.BOTTOM;
   } else {
-    var toolboxPosition = (toolboxAtStart == rtl) ?
-        Blockly.TOOLBOX_AT_RIGHT : Blockly.TOOLBOX_AT_LEFT;
+    toolboxPosition = (toolboxAtStart == rtl) ?
+        Blockly.utils.toolbox.Position.RIGHT : Blockly.utils.toolbox.Position.LEFT;
   }
 
   var hasCss = options['css'];
@@ -152,7 +154,7 @@ Blockly.Options = function(options) {
   this.gridOptions = Blockly.Options.parseGridOptions_(options);
   /** @type {!Blockly.Options.ZoomOptions} */
   this.zoomOptions = Blockly.Options.parseZoomOptions_(options);
-  /** @type {number} */
+  /** @type {!Blockly.utils.toolbox.Position} */
   this.toolboxPosition = toolboxPosition;
   /** @type {!Blockly.Theme} */
   this.theme = Blockly.Options.parseThemeOptions_(options);

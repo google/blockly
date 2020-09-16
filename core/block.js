@@ -200,29 +200,40 @@ Blockly.Block = function(workspace, prototypeName, opt_id) {
   workspace.addTopBlock(this);
   workspace.addTypedBlock(this);
 
-  // Call an initialization function, if it exists.
-  if (typeof this.init == 'function') {
-    this.init();
+  // All events fired should be part of the same group.
+  // Any events fired during init should not be undoable,
+  // so that block creation is atomic.
+  var existingGroup = Blockly.Events.getGroup();
+  if (!existingGroup) {
+    Blockly.Events.setGroup(true);
   }
+  var initialUndoFlag = Blockly.Events.recordUndo;
+
+  try {
+    // Call an initialization function, if it exists.
+    if (typeof this.init == 'function') {
+      Blockly.Events.recordUndo = false;
+      this.init();
+      Blockly.Events.recordUndo = initialUndoFlag;
+    }
+
+    // Fire a create event.
+    if (Blockly.Events.isEnabled()) {
+      Blockly.Events.fire(new Blockly.Events.BlockCreate(this));
+    }
+
+  } finally {
+    if (!existingGroup) {
+      Blockly.Events.setGroup(false);
+    }
+    // In case init threw, recordUndo flag should still be reset.
+    Blockly.Events.recordUndo = initialUndoFlag;
+  }
+  
   // Record initial inline state.
   /** @type {boolean|undefined} */
   this.inputsInlineDefault = this.inputsInline;
 
-  // Fire a create event.
-  if (Blockly.Events.isEnabled()) {
-    var existingGroup = Blockly.Events.getGroup();
-    if (!existingGroup) {
-      Blockly.Events.setGroup(true);
-    }
-    try {
-      Blockly.Events.fire(new Blockly.Events.BlockCreate(this));
-    } finally {
-      if (!existingGroup) {
-        Blockly.Events.setGroup(false);
-      }
-    }
-
-  }
   // Bind an onchange function, if it exists.
   if (typeof this.onchange == 'function') {
     this.setOnChange(this.onchange);

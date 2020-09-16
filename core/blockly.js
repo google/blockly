@@ -65,7 +65,7 @@ Blockly.draggingConnections = [];
 
 /**
  * Contents of the local clipboard.
- * @type {Element|DocumentFragment}
+ * @type {Element}
  * @private
  */
 Blockly.clipboardXml_ = null;
@@ -272,9 +272,11 @@ Blockly.onKeyDown = function(e) {
  */
 Blockly.copy_ = function(toCopy) {
   var data = toCopy.toCopyData();
-  Blockly.clipboardXml_ = data.xml;
-  Blockly.clipboardSource_ = data.source;
-  Blockly.clipboardTypeCounts_ = data.typeCounts;
+  if (data) {
+    Blockly.clipboardXml_ = data.xml;
+    Blockly.clipboardSource_ = data.source;
+    Blockly.clipboardTypeCounts_ = data.typeCounts;
+  }
 };
 
 /**

@@ -927,21 +927,21 @@ Blockly.BlockSvg.prototype.dispose = function(healStack, animate) {
 
 /**
  * Encode a block for copying.
- * @return {!Blockly.ICopyable.CopyData} Copy metadata.
+ * @return {?Blockly.ICopyable.CopyData} Copy metadata, or null if the block is
+ *     an insertion marker.
  * @package
  */
 Blockly.BlockSvg.prototype.toCopyData = function() {
-  var xml = Blockly.Xml.blockToDom(this, true);
-  // If this block is an insertion marker, then the xml is an empty DocumentFragment
-  // and the below code is not needed.
-  if (!this.isInsertionMarker_) {
-    // Copy only the selected block and internal blocks.
-    Blockly.Xml.deleteNext(xml);
-    // Encode start position in XML.
-    var xy = this.getRelativeToSurfaceXY();
-    xml.setAttribute('x', this.RTL ? -xy.x : xy.x);
-    xml.setAttribute('y', xy.y);
+  if (this.isInsertionMarker_) {
+    return null;
   }
+  var xml = /** @type {!Element} */ (Blockly.Xml.blockToDom(this, true));
+  // Copy only the selected block and internal blocks.
+  Blockly.Xml.deleteNext(xml);
+  // Encode start position in XML.
+  var xy = this.getRelativeToSurfaceXY();
+  xml.setAttribute('x', this.RTL ? -xy.x : xy.x);
+  xml.setAttribute('y', xy.y);
   return {
     xml: xml,
     source: this.workspace,

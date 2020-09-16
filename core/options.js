@@ -80,7 +80,7 @@ Blockly.Options = function(options) {
   var toolboxAtStart = options['toolboxPosition'];
   toolboxAtStart = toolboxAtStart !== 'end';
 
-  /** @type {Blockly.utils.toolbox.Position} */
+  /** @type {!Blockly.utils.toolbox.Position} */
   var toolboxPosition;
   if (horizontalLayout) {
     toolboxPosition = toolboxAtStart ?
@@ -152,7 +152,7 @@ Blockly.Options = function(options) {
   this.gridOptions = Blockly.Options.parseGridOptions_(options);
   /** @type {!Blockly.Options.ZoomOptions} */
   this.zoomOptions = Blockly.Options.parseZoomOptions_(options);
-  /** @type {Blockly.utils.toolbox.Position} */
+  /** @type {!Blockly.utils.toolbox.Position} */
   this.toolboxPosition = toolboxPosition;
   /** @type {!Blockly.Theme} */
   this.theme = Blockly.Options.parseThemeOptions_(options);

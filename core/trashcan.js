@@ -606,7 +606,8 @@ Blockly.Trashcan.prototype.onDelete_ = function(event) {
   if (this.workspace_.options.maxTrashcanContents <= 0) {
     return;
   }
-  if (event.type == Blockly.Events.BLOCK_DELETE &&
+  // Must check that the tagName exists since oldXml can be a DocumentFragment.
+  if (event.type == Blockly.Events.BLOCK_DELETE && event.oldXml.tagName &&
       event.oldXml.tagName.toLowerCase() != 'shadow') {
     var cleanedXML = this.cleanBlockXML_(event.oldXml);
     if (this.contents_.indexOf(cleanedXML) != -1) {

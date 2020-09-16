@@ -74,15 +74,15 @@ Blockly.Xml.variablesToDom = function(variableList) {
  * Encode a block subtree as XML with XY coordinates.
  * @param {!Blockly.Block} block The root block to encode.
  * @param {boolean=} opt_noId True if the encoder should skip the block ID.
- * @return {!Element} Tree of XML elements.
+ * @return {!Element|!DocumentFragment} Tree of XML elements or an empty document
+ *     fragment if the block was an insertion marker.
  */
 Blockly.Xml.blockToDomWithXY = function(block, opt_noId) {
   if (block.isInsertionMarker()) {  // Skip over insertion markers.
     block = block.getChildren(false)[0];
     if (!block) {
-      // Disappears when appended. Cast to ANY b/c DocumentFragment -> Element
-      // is invalid. We have to cast to ANY in between.
-      return /** @type{?} */ (new DocumentFragment());
+      // Disappears when appended.
+      return new DocumentFragment();
     }
   }
 
@@ -138,7 +138,8 @@ Blockly.Xml.allFieldsToDom_ = function(block, element) {
  * Encode a block subtree as XML.
  * @param {!Blockly.Block} block The root block to encode.
  * @param {boolean=} opt_noId True if the encoder should skip the block ID.
- * @return {!Element} Tree of XML elements.
+ * @return {!Element|!DocumentFragment} Tree of XML elements or an empty document
+ *     fragment if the block was an insertion marker.
  */
 Blockly.Xml.blockToDom = function(block, opt_noId) {
   // Skip over insertion markers.
@@ -147,9 +148,8 @@ Blockly.Xml.blockToDom = function(block, opt_noId) {
     if (child) {
       return Blockly.Xml.blockToDom(child);
     } else {
-      // Disappears when appended. Cast to ANY b/c DocumentFragment -> Element
-      // is invalid. We have to cast to ANY in between.
-      return /** @type{?} */ (new DocumentFragment());
+      // Disappears when appended.
+      return new DocumentFragment();
     }
   }
 
@@ -808,7 +808,8 @@ Blockly.Xml.domToField_ = function(block, fieldName, xml) {
 
 /**
  * Remove any 'next' block (statements in a stack).
- * @param {!Element} xmlBlock XML block element.
+ * @param {!Element|!DocumentFragment} xmlBlock XML block element or an empty
+ *     DocumentFragment if the block was an insertion marker.
  */
 Blockly.Xml.deleteNext = function(xmlBlock) {
   for (var i = 0, child; (child = xmlBlock.childNodes[i]); i++) {

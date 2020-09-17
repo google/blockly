@@ -565,6 +565,15 @@ Blockly.FieldDropdown.prototype.render_ = function() {
 
   // Show correct element.
   var options = this.getOptions(true);
+
+  // ##SHAPE ROBOTICS##########################################################################################################################
+  if (this.selectedIndex_ && this.selectedIndex_ >= options.length) {
+    console.warn('Field Dropdown selected index out of bounds. Setting it to point to last option.' +
+                 `Values: selectedIndex_=${this.selectedIndex_}, options.length=${options.length}.`);
+    this.selectedIndex_ = options.length - 1;
+  }
+  // ###########################################################################################################################################
+
   var selectedOption = this.selectedIndex_ >= 0 &&
       options[this.selectedIndex_][0];
   if (selectedOption && typeof selectedOption == 'object') {

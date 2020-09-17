@@ -35,6 +35,7 @@ goog.require('Blockly.utils.dom');
 goog.require('Blockly.utils.Metrics');
 goog.require('Blockly.utils.object');
 goog.require('Blockly.utils.Rect');
+goog.require('Blockly.utils.Svg');
 goog.require('Blockly.utils.toolbox');
 goog.require('Blockly.Workspace');
 goog.require('Blockly.WorkspaceAudio');
@@ -736,7 +737,7 @@ Blockly.WorkspaceSvg.prototype.createDom = function(opt_backgroundClass) {
    * @type {SVGElement}
    */
   this.svgGroup_ = Blockly.utils.dom.createSvgElement(
-      Blockly.utils.dom.SvgElementType.G,
+      Blockly.utils.Svg.G,
       {'class': 'blocklyWorkspace'}, null);
 
   // Note that a <g> alone does not receive mouse events--it must have a
@@ -745,7 +746,7 @@ Blockly.WorkspaceSvg.prototype.createDom = function(opt_backgroundClass) {
   if (opt_backgroundClass) {
     /** @type {SVGElement} */
     this.svgBackground_ = Blockly.utils.dom.createSvgElement(
-        Blockly.utils.dom.SvgElementType.RECT,
+        Blockly.utils.Svg.RECT,
         {'height': '100%', 'width': '100%', 'class': opt_backgroundClass},
         this.svgGroup_);
 
@@ -759,11 +760,11 @@ Blockly.WorkspaceSvg.prototype.createDom = function(opt_backgroundClass) {
   }
   /** @type {SVGElement} */
   this.svgBlockCanvas_ = Blockly.utils.dom.createSvgElement(
-      Blockly.utils.dom.SvgElementType.G,
+      Blockly.utils.Svg.G,
       {'class': 'blocklyBlockCanvas'}, this.svgGroup_);
   /** @type {SVGElement} */
   this.svgBubbleCanvas_ = Blockly.utils.dom.createSvgElement(
-      Blockly.utils.dom.SvgElementType.G,
+      Blockly.utils.Svg.G,
       {'class': 'blocklyBubbleCanvas'}, this.svgGroup_);
 
   if (!this.isFlyout) {
@@ -930,8 +931,8 @@ Blockly.WorkspaceSvg.prototype.addZoomControls = function() {
 /**
  * Add a flyout element in an element with the given tag name.
  * @param {string|
- * !Blockly.utils.dom.SvgElementType<!SVGSVGElement>|
- * !Blockly.utils.dom.SvgElementType<!SVGGElement>} tagName What type of tag the
+ * !Blockly.utils.Svg<!SVGSVGElement>|
+ * !Blockly.utils.Svg<!SVGGElement>} tagName What type of tag the
  *     flyout belongs in.
  * @return {!Element} The element containing the flyout DOM.
  * @package
@@ -1326,13 +1327,16 @@ Blockly.WorkspaceSvg.prototype.highlightBlock = function(id, opt_state) {
 
 /**
  * Paste the provided block onto the workspace.
- * @param {!Element} xmlBlock XML block element.
+ * @param {!Element|!DocumentFragment} xmlBlock XML block element or an empty
+ *     DocumentFragment if the block was an insertion marker.
  */
 Blockly.WorkspaceSvg.prototype.paste = function(xmlBlock) {
-  if (!this.rendered || xmlBlock.getElementsByTagName('block').length >=
+  if (!this.rendered || !xmlBlock.tagName || xmlBlock.getElementsByTagName('block').length >=
       this.remainingCapacity()) {
     return;
   }
+  // The check above for tagName rules out the possibility of this being a DocumentFragment.
+  xmlBlock = /** @type {!Element} */ (xmlBlock);
   if (this.currentGesture_) {
     this.currentGesture_.cancel();  // Dragging while pasting?  No.
   }

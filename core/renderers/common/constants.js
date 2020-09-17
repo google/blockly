@@ -15,6 +15,7 @@ goog.provide('Blockly.blockRendering.ConstantProvider');
 goog.require('Blockly.utils');
 goog.require('Blockly.utils.colour');
 goog.require('Blockly.utils.dom');
+goog.require('Blockly.utils.Svg');
 goog.require('Blockly.utils.svgPaths');
 goog.require('Blockly.utils.userAgent');
 
@@ -1020,7 +1021,7 @@ Blockly.blockRendering.ConstantProvider.prototype.createDom = function(svg,
   </defs>
   */
   var defs = Blockly.utils.dom.createSvgElement(
-      Blockly.utils.dom.SvgElementType.DEFS, {}, svg);
+      Blockly.utils.Svg.DEFS, {}, svg);
   /*
     <filter id="blocklyEmbossFilter837493">
       <feGaussianBlur in="SourceAlpha" stdDeviation="1" result="blur" />
@@ -1036,13 +1037,13 @@ Blockly.blockRendering.ConstantProvider.prototype.createDom = function(svg,
     </filter>
   */
   var embossFilter = Blockly.utils.dom.createSvgElement(
-      Blockly.utils.dom.SvgElementType.FILTER,
+      Blockly.utils.Svg.FILTER,
       {'id': 'blocklyEmbossFilter' + this.randomIdentifier}, defs);
   Blockly.utils.dom.createSvgElement(
-      Blockly.utils.dom.SvgElementType.FEGAUSSIANBLUR,
+      Blockly.utils.Svg.FEGAUSSIANBLUR,
       {'in': 'SourceAlpha', 'stdDeviation': 1, 'result': 'blur'}, embossFilter);
   var feSpecularLighting = Blockly.utils.dom.createSvgElement(
-      Blockly.utils.dom.SvgElementType.FESPECULARLIGHTING,
+      Blockly.utils.Svg.FESPECULARLIGHTING,
       {
         'in': 'blur',
         'surfaceScale': 1,
@@ -1053,10 +1054,10 @@ Blockly.blockRendering.ConstantProvider.prototype.createDom = function(svg,
       },
       embossFilter);
   Blockly.utils.dom.createSvgElement(
-      Blockly.utils.dom.SvgElementType.FEPOINTLIGHT,
+      Blockly.utils.Svg.FEPOINTLIGHT,
       {'x': -5000, 'y': -10000, 'z': 20000}, feSpecularLighting);
   Blockly.utils.dom.createSvgElement(
-      Blockly.utils.dom.SvgElementType.FECOMPOSITE,
+      Blockly.utils.Svg.FECOMPOSITE,
       {
         'in': 'specOut',
         'in2': 'SourceAlpha',
@@ -1064,7 +1065,7 @@ Blockly.blockRendering.ConstantProvider.prototype.createDom = function(svg,
         'result': 'specOut'
       }, embossFilter);
   Blockly.utils.dom.createSvgElement(
-      Blockly.utils.dom.SvgElementType.FECOMPOSITE,
+      Blockly.utils.Svg.FECOMPOSITE,
       {
         'in': 'SourceGraphic',
         'in2': 'specOut',
@@ -1085,7 +1086,7 @@ Blockly.blockRendering.ConstantProvider.prototype.createDom = function(svg,
     </pattern>
   */
   var disabledPattern = Blockly.utils.dom.createSvgElement(
-      Blockly.utils.dom.SvgElementType.PATTERN,
+      Blockly.utils.Svg.PATTERN,
       {
         'id': 'blocklyDisabledPattern' + this.randomIdentifier,
         'patternUnits': 'userSpaceOnUse',
@@ -1093,17 +1094,17 @@ Blockly.blockRendering.ConstantProvider.prototype.createDom = function(svg,
         'height': 10
       }, defs);
   Blockly.utils.dom.createSvgElement(
-      Blockly.utils.dom.SvgElementType.RECT,
+      Blockly.utils.Svg.RECT,
       {'width': 10, 'height': 10, 'fill': '#aaa'}, disabledPattern);
   Blockly.utils.dom.createSvgElement(
-      Blockly.utils.dom.SvgElementType.PATH,
+      Blockly.utils.Svg.PATH,
       {'d': 'M 0 0 L 10 10 M 10 0 L 0 10', 'stroke': '#cc0'}, disabledPattern);
   this.disabledPatternId = disabledPattern.id;
   this.disabledPattern_ = disabledPattern;
 
   if (Blockly.blockRendering.Debug) {
     var debugFilter = Blockly.utils.dom.createSvgElement(
-        Blockly.utils.dom.SvgElementType.FILTER,
+        Blockly.utils.Svg.FILTER,
         {
           'id': 'blocklyDebugFilter' + this.randomIdentifier,
           'height': '160%',
@@ -1114,18 +1115,18 @@ Blockly.blockRendering.ConstantProvider.prototype.createDom = function(svg,
         defs);
     // Set all gaussian blur pixels to 1 opacity before applying flood
     var debugComponentTransfer = Blockly.utils.dom.createSvgElement(
-        Blockly.utils.dom.SvgElementType.FECOMPONENTTRANSFER, {
+        Blockly.utils.Svg.FECOMPONENTTRANSFER, {
           'result': 'outBlur'
         }, debugFilter);
     Blockly.utils.dom.createSvgElement(
-        Blockly.utils.dom.SvgElementType.FEFUNCA,
+        Blockly.utils.Svg.FEFUNCA,
         {
           'type': 'table', 'tableValues': '0 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1'
         },
         debugComponentTransfer);
     // Color the highlight
     Blockly.utils.dom.createSvgElement(
-        Blockly.utils.dom.SvgElementType.FEFLOOD,
+        Blockly.utils.Svg.FEFLOOD,
         {
           'flood-color': '#ff0000',
           'flood-opacity': 0.5,
@@ -1133,7 +1134,7 @@ Blockly.blockRendering.ConstantProvider.prototype.createDom = function(svg,
         },
         debugFilter);
     Blockly.utils.dom.createSvgElement(
-        Blockly.utils.dom.SvgElementType.FECOMPOSITE,
+        Blockly.utils.Svg.FECOMPOSITE,
         {
           'in': 'outColor', 'in2': 'outBlur',
           'operator': 'in', 'result': 'outGlow'

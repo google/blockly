@@ -24,6 +24,7 @@ goog.require('Blockly.Extensions');
 goog.require('Blockly.fieldRegistry');
 goog.require('Blockly.Input');
 goog.require('Blockly.navigation');
+goog.require('Blockly.Tooltip');
 goog.require('Blockly.utils');
 goog.require('Blockly.utils.deprecation');
 goog.require('Blockly.utils.Coordinate');
@@ -73,7 +74,7 @@ Blockly.Block = function(workspace, prototypeName, opt_id) {
    * @private
    */
   this.disabled = false;
-  /** @type {string|!Function} */
+  /** @type {!Blockly.Tooltip.TipInfo} */
   this.tooltip = '';
   /** @type {boolean} */
   this.contextMenu = true;
@@ -199,29 +200,40 @@ Blockly.Block = function(workspace, prototypeName, opt_id) {
   workspace.addTopBlock(this);
   workspace.addTypedBlock(this);
 
-  // Call an initialization function, if it exists.
-  if (typeof this.init == 'function') {
-    this.init();
+  // All events fired should be part of the same group.
+  // Any events fired during init should not be undoable,
+  // so that block creation is atomic.
+  var existingGroup = Blockly.Events.getGroup();
+  if (!existingGroup) {
+    Blockly.Events.setGroup(true);
   }
+  var initialUndoFlag = Blockly.Events.recordUndo;
+
+  try {
+    // Call an initialization function, if it exists.
+    if (typeof this.init == 'function') {
+      Blockly.Events.recordUndo = false;
+      this.init();
+      Blockly.Events.recordUndo = initialUndoFlag;
+    }
+
+    // Fire a create event.
+    if (Blockly.Events.isEnabled()) {
+      Blockly.Events.fire(new Blockly.Events.BlockCreate(this));
+    }
+
+  } finally {
+    if (!existingGroup) {
+      Blockly.Events.setGroup(false);
+    }
+    // In case init threw, recordUndo flag should still be reset.
+    Blockly.Events.recordUndo = initialUndoFlag;
+  }
+  
   // Record initial inline state.
   /** @type {boolean|undefined} */
   this.inputsInlineDefault = this.inputsInline;
 
-  // Fire a create event.
-  if (Blockly.Events.isEnabled()) {
-    var existingGroup = Blockly.Events.getGroup();
-    if (!existingGroup) {
-      Blockly.Events.setGroup(true);
-    }
-    try {
-      Blockly.Events.fire(new Blockly.Events.BlockCreate(this));
-    } finally {
-      if (!existingGroup) {
-        Blockly.Events.setGroup(false);
-      }
-    }
-
-  }
   // Bind an onchange function, if it exists.
   if (typeof this.onchange == 'function') {
     this.setOnChange(this.onchange);
@@ -905,12 +917,21 @@ Blockly.Block.prototype.setHelpUrl = function(url) {
 };
 
 /**
- * Change the tooltip text for a block.
- * @param {string|!Function} newTip Text for tooltip or a parent element to
- *     link to for its tooltip.  May be a function that returns a string.
+ * Sets the tooltip for this block.
+ * @param {!Blockly.Tooltip.TipInfo} newTip The text for the tooltip, a function
+ *     that returns the text for the tooltip, or a parent object whose tooltip
+ *     will be used. To not display a tooltip pass the empty string.
  */
 Blockly.Block.prototype.setTooltip = function(newTip) {
   this.tooltip = newTip;
+};
+
+/**
+ * Returns the tooltip text for this block.
+ * @returns {!string} The tooltip text for this block.
+ */
+Blockly.Block.prototype.getTooltip = function() {
+  return Blockly.Tooltip.getTooltipOfObject(this);
 };
 
 /**

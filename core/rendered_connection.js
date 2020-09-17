@@ -19,6 +19,7 @@ goog.require('Blockly.utils.Coordinate');
 goog.require('Blockly.utils.deprecation');
 goog.require('Blockly.utils.dom');
 goog.require('Blockly.utils.object');
+goog.require('Blockly.utils.Svg');
 
 
 /**
@@ -302,7 +303,7 @@ Blockly.RenderedConnection.prototype.highlight = function() {
   var x = this.x - xy.x;
   var y = this.y - xy.y;
   Blockly.Connection.highlightedPath_ = Blockly.utils.dom.createSvgElement(
-      Blockly.utils.dom.SvgElementType.PATH,
+      Blockly.utils.Svg.PATH,
       {
         'class': 'blocklyHighlightedConnectionPath',
         'd': steps,

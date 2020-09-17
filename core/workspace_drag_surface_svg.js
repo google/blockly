@@ -18,6 +18,7 @@ goog.provide('Blockly.WorkspaceDragSurfaceSvg');
 
 goog.require('Blockly.utils');
 goog.require('Blockly.utils.dom');
+goog.require('Blockly.utils.Svg');
 
 
 /**
@@ -63,7 +64,7 @@ Blockly.WorkspaceDragSurfaceSvg.prototype.createDom = function() {
   * </svg>
   */
   this.SVG_ = Blockly.utils.dom.createSvgElement(
-      Blockly.utils.dom.SvgElementType.SVG,
+      Blockly.utils.Svg.SVG,
       {
         'xmlns': Blockly.utils.dom.SVG_NS,
         'xmlns:html': Blockly.utils.dom.HTML_NS,

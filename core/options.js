@@ -22,6 +22,8 @@ goog.require('Blockly.utils.toolbox');
 goog.require('Blockly.utils.userAgent');
 goog.require('Blockly.Xml');
 
+goog.requireType('Blockly.WorkspaceSvg');
+
 
 /**
  * Parse the user-specified options, using reasonable defaults where behaviour
@@ -80,12 +82,14 @@ Blockly.Options = function(options) {
   var toolboxAtStart = options['toolboxPosition'];
   toolboxAtStart = toolboxAtStart !== 'end';
 
+  /** @type {!Blockly.utils.toolbox.Position} */
+  var toolboxPosition;
   if (horizontalLayout) {
-    var toolboxPosition = toolboxAtStart ?
-        Blockly.TOOLBOX_AT_TOP : Blockly.TOOLBOX_AT_BOTTOM;
+    toolboxPosition = toolboxAtStart ?
+        Blockly.utils.toolbox.Position.TOP : Blockly.utils.toolbox.Position.BOTTOM;
   } else {
-    var toolboxPosition = (toolboxAtStart == rtl) ?
-        Blockly.TOOLBOX_AT_RIGHT : Blockly.TOOLBOX_AT_LEFT;
+    toolboxPosition = (toolboxAtStart == rtl) ?
+        Blockly.utils.toolbox.Position.RIGHT : Blockly.utils.toolbox.Position.LEFT;
   }
 
   var hasCss = options['css'];
@@ -150,7 +154,7 @@ Blockly.Options = function(options) {
   this.gridOptions = Blockly.Options.parseGridOptions_(options);
   /** @type {!Blockly.Options.ZoomOptions} */
   this.zoomOptions = Blockly.Options.parseZoomOptions_(options);
-  /** @type {number} */
+  /** @type {!Blockly.utils.toolbox.Position} */
   this.toolboxPosition = toolboxPosition;
   /** @type {!Blockly.Theme} */
   this.theme = Blockly.Options.parseThemeOptions_(options);
@@ -170,8 +174,9 @@ Blockly.Options = function(options) {
 
   /**
    * The parent of the current workspace, or null if there is no parent
-   * workspace.
-   * @type {Blockly.Workspace}
+   * workspace.  We can assert that this is of type WorkspaceSvg as opposed to
+   * Workspace as this is only used in a rendered workspace.
+   * @type {Blockly.WorkspaceSvg}
    */
   this.parentWorkspace = options['parentWorkspace'];
 

@@ -61,8 +61,11 @@ run_test_command "node" "./node_modules/.bin/mocha tests/node --config tests/nod
 # Run generator tests inside a browser and check the results.
 run_test_command "generators" "tests/scripts/run_generators.sh"
 
-# Run the closure compiler ensuring there are no errors.
-run_test_command "compile" "npm run build:debug"
+# Run the closure compiler.
+run_test_command "compile" "npm run build"
+
+# Run the closure compiler ensuring there are no compiler warnings / errors.
+run_test_command "compile:warnings" "npm run build:debug"
 
 # Generate TypeScript typings and ensure there are no errors.
 run_test_command "typings" "tests/scripts/compile_typings.sh"

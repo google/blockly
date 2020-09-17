@@ -32,10 +32,16 @@ suite('Events', function() {
 
   function createSimpleTestBlock(workspace) {
     // Disable events while constructing the block: this is a test of the
-    // Blockly.Event constructors, not the block constructor.s
+    // Blockly.Event constructors, not the block constructors.
+    // Set the group id to avoid an extra call to genUid.
     Blockly.Events.disable();
-    var block = new Blockly.Block(
-        workspace, 'simple_test_block');
+    try {
+      Blockly.Events.setGroup('unused');
+      var block = new Blockly.Block(
+          workspace, 'simple_test_block');
+    } finally {
+      Blockly.Events.setGroup(false);
+    }
     Blockly.Events.enable();
     return block;
   }

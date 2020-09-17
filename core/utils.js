@@ -49,7 +49,8 @@ Blockly.utils.isTargetInput = function(e) {
          e.target.type == 'number' || e.target.type == 'email' ||
          e.target.type == 'password' || e.target.type == 'search' ||
          e.target.type == 'tel' || e.target.type == 'url' ||
-         e.target.isContentEditable;
+         e.target.isContentEditable ||
+         (e.target.dataset && e.target.dataset.isTextInput == 'true');
 };
 
 /**

@@ -26,6 +26,7 @@ goog.require('Blockly.Touch');
 goog.require('Blockly.utils');
 goog.require('Blockly.utils.Coordinate');
 goog.require('Blockly.utils.dom');
+goog.require('Blockly.utils.Svg');
 goog.require('Blockly.utils.toolbox');
 goog.require('Blockly.WorkspaceSvg');
 goog.require('Blockly.Xml');
@@ -227,8 +228,8 @@ Blockly.Flyout.prototype.dragAngleRange_ = 70;
  * either exist as its own svg element or be a g element nested inside a
  * separate svg element.
  * @param {string|
- * !Blockly.utils.dom.SvgElementType<!SVGSVGElement>|
- * !Blockly.utils.dom.SvgElementType<!SVGGElement>} tagName The type of tag to
+ * !Blockly.utils.Svg<!SVGSVGElement>|
+ * !Blockly.utils.Svg<!SVGGElement>} tagName The type of tag to
  *     put the flyout in. This should be <svg> or <g>.
  * @return {!SVGElement} The flyout's SVG group.
  */
@@ -244,7 +245,7 @@ Blockly.Flyout.prototype.createDom = function(tagName) {
   this.svgGroup_ = Blockly.utils.dom.createSvgElement(tagName,
       {'class': 'blocklyFlyout', 'style': 'display: none'}, null);
   this.svgBackground_ = Blockly.utils.dom.createSvgElement(
-      Blockly.utils.dom.SvgElementType.PATH,
+      Blockly.utils.Svg.PATH,
       {'class': 'blocklyFlyoutBackground'}, this.svgGroup_);
   this.svgGroup_.appendChild(this.workspace_.createDom());
   this.workspace_.getThemeManager().subscribe(
@@ -801,12 +802,15 @@ Blockly.Flyout.prototype.createBlock = function(originalBlock) {
 
   if (Blockly.Events.isEnabled()) {
     Blockly.Events.setGroup(true);
-    Blockly.Events.fire(new Blockly.Events.Create(newBlock));
     // Fire a VarCreate event for each (if any) new variable created.
     for (var i = 0; i < newVariables.length; i++) {
       var thisVariable = newVariables[i];
       Blockly.Events.fire(new Blockly.Events.VarCreate(thisVariable));
     }
+
+    // Block events come after var events, in case they refer to newly created
+    // variables.
+    Blockly.Events.fire(new Blockly.Events.Create(newBlock));
   }
   if (this.autoClose) {
     this.hide();
@@ -854,7 +858,7 @@ Blockly.Flyout.prototype.createRect_ = function(block, x, y, blockHW, index) {
   // Create an invisible rectangle under the block to act as a button.  Just
   // using the block as a button is poor, since blocks have holes in them.
   var rect = Blockly.utils.dom.createSvgElement(
-      Blockly.utils.dom.SvgElementType.RECT,
+      Blockly.utils.Svg.RECT,
       {
         'fill-opacity': 0,
         'x': x,
@@ -945,7 +949,8 @@ Blockly.Flyout.prototype.placeNewBlock_ = function(oldBlock) {
   }
 
   // Create the new block by cloning the block in the flyout (via XML).
-  var xml = Blockly.Xml.blockToDom(oldBlock, true);
+  // This cast assumes that the oldBlock can not be an insertion marker.
+  var xml = /** @type {!Element} */ (Blockly.Xml.blockToDom(oldBlock, true));
   // The target workspace would normally resize during domToBlock, which will
   // lead to weird jumps.  Save it for terminateDrag.
   targetWorkspace.setResizesEnabled(false);

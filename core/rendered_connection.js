@@ -458,6 +458,12 @@ Blockly.RenderedConnection.prototype.onFailedConnect = function(
  */
 Blockly.RenderedConnection.prototype.disconnectInternal_ = function(parentBlock,
     childBlock) {
+  // The input the child block was connected to (if any).
+  var parentInput = parentBlock.getInputWithBlock(childBlock);
+  if (parentInput && !parentInput.isVisible()) {
+    childBlock.rendered = true;
+
+  }
   Blockly.RenderedConnection.superClass_.disconnectInternal_.call(this,
       parentBlock, childBlock);
   // Rerender the parent so that it may reflow.
@@ -535,6 +541,16 @@ Blockly.RenderedConnection.prototype.connect_ = function(childConnection) {
       // move its connected children into position.
       parentBlock.render();
     }
+  }
+
+  // The input the child block is connected to (if any).
+  var parentInput = parentBlock.getInputWithBlock(childBlock);
+  if (parentInput) {
+    var visible = parentInput.isVisible();
+    if (!visible) {
+      childBlock.rendered = false;
+    }
+    childBlock.getSvgRoot().style.display = visible ? 'block' : 'none';
   }
 };
 

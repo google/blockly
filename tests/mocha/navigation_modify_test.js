@@ -16,6 +16,8 @@ suite('Insert/Modify', function() {
   }
   setup(function() {
     sharedTestSetup.call(this);
+    // NOTE: block positions chosen such that they aren't unintentionally
+    // bumped out of bounds during tests.
     var xmlText = '<xml xmlns="https://developers.google.com/blockly/xml">' +
       '<block type="stack_block" id="stack_block_1" x="22" y="38"></block>' +
       '<block type="stack_block" id="stack_block_2" x="22" y="113"></block>' +

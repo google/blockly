@@ -262,25 +262,22 @@ Blockly.InsertionMarkerManager.prototype.createMarkerBlock_ = function(sourceBlo
         result.domToMutation(oldMutationDom);
       }
     }
-    // Copy field values from the other block.  These values may impact the
-    // rendered size of the insertion marker.  Note that we do not care about
-    // child blocks here.
-    for (var i = 0; i < sourceBlock.inputList.length; i++) {
-      var sourceInput = sourceBlock.inputList[i];
-      if (sourceInput.name == Blockly.Block.COLLAPSED_INPUT_NAME) {
-        continue;  // Ignore the collapsed input.
-      }
-      var resultInput = result.inputList[i];
-      for (var j = 0; j < sourceInput.fieldRow.length; j++) {
-        var sourceField = sourceInput.fieldRow[j];
-        var resultField = resultInput.fieldRow[j];
-        resultField.setValue(sourceField.getValue());
-      }
-    }
-
     result.setCollapsed(sourceBlock.isCollapsed());
     result.setInputsInline(sourceBlock.getInputsInline());
-
+    // Copy visible field values from the other block.  These values may impact
+    // the rendered size of the insertion marker.  Note that we do not care
+    // about child blocks here.
+    for (var i = 0; i < sourceBlock.inputList.length; i++) {
+      var sourceInput = sourceBlock.inputList[i];
+      if (sourceInput.isVisible()) {
+        var resultInput = result.inputList[i];
+        for (var j = 0; j < sourceInput.fieldRow.length; j++) {
+          var sourceField = sourceInput.fieldRow[j];
+          var resultField = resultInput.fieldRow[j];
+          resultField.setValue(sourceField.getValue());
+        }
+      }
+    }
     result.initSvg();
     result.getSvgRoot().setAttribute('visibility', 'hidden');
   } finally {

@@ -467,8 +467,6 @@ Blockly.RenderedConnection.prototype.disconnectInternal_ = function(parentBlock,
   if (childBlock.rendered) {
     childBlock.updateDisabled();
     childBlock.render();
-    // Reset visibility, since the child is now a top block.
-    childBlock.getSvgRoot().style.display = 'block';
   }
 };
 
@@ -537,13 +535,6 @@ Blockly.RenderedConnection.prototype.connect_ = function(childConnection) {
       // move its connected children into position.
       parentBlock.render();
     }
-  }
-
-  // The input the child block is connected to (if any).
-  var parentInput = parentBlock.getInputWithBlock(childBlock);
-  if (parentInput) {
-    var visible = parentInput.isVisible();
-    childBlock.getSvgRoot().style.display = visible ? 'block' : 'none';
   }
 };
 

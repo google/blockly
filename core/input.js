@@ -108,7 +108,6 @@ Blockly.Input.prototype.insertFieldAt = function(index, field, opt_name) {
     field.applyColour();
   }
   field.name = opt_name;
-  field.setVisible(this.isVisible());
 
   var fieldDropdown = /** @type {Blockly.FieldDropdown} */ (field);
   if (fieldDropdown.prefixField) {
@@ -200,6 +199,9 @@ Blockly.Input.prototype.setVisible = function(visible) {
     }
     var child = this.connection.targetBlock();
     if (child) {
+      if (!visible) {
+        child.rendered = false;
+      }
       child.getSvgRoot().style.display = visible ? 'block' : 'none';
     }
   }

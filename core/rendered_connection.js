@@ -474,6 +474,8 @@ Blockly.RenderedConnection.prototype.disconnectInternal_ = function(parentBlock,
   if (childBlock.rendered) {
     childBlock.updateDisabled();
     childBlock.render();
+    // Reset visibility, since the child is now a top block.
+    childBlock.getSvgRoot().style.display = 'block';
   }
 };
 

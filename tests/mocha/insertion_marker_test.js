@@ -41,9 +41,6 @@ suite('InsertionMarkers', function() {
   });
   teardown(function() {
     sharedTestTeardown.call(this);
-    delete Blockly.Blocks['stack_block'];
-    delete Blockly.Blocks['row_block'];
-    delete Blockly.Blocks['statement_block'];
   });
   suite('Code Generation', function() {
     setup(function() {

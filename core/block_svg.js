@@ -60,7 +60,7 @@ Blockly.BlockSvg = function(workspace, prototypeName, opt_id) {
    * @private
    */
   this.svgGroup_ = Blockly.utils.dom.createSvgElement(
-      Blockly.utils.dom.SvgElementType.G, {}, null);
+      Blockly.utils.Svg.G, {}, null);
   this.svgGroup_.translate_ = '';
 
   /**
@@ -927,11 +927,15 @@ Blockly.BlockSvg.prototype.dispose = function(healStack, animate) {
 
 /**
  * Encode a block for copying.
- * @return {!Blockly.ICopyable.CopyData} Copy metadata.
+ * @return {?Blockly.ICopyable.CopyData} Copy metadata, or null if the block is
+ *     an insertion marker.
  * @package
  */
 Blockly.BlockSvg.prototype.toCopyData = function() {
-  var xml = Blockly.Xml.blockToDom(this, true);
+  if (this.isInsertionMarker_) {
+    return null;
+  }
+  var xml = /** @type {!Element} */ (Blockly.Xml.blockToDom(this, true));
   // Copy only the selected block and internal blocks.
   Blockly.Xml.deleteNext(xml);
   // Encode start position in XML.

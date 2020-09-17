@@ -13,7 +13,13 @@
 
 goog.provide('Blockly.IFlyout');
 
+goog.requireType('Blockly.BlockSvg');
 goog.requireType('Blockly.IRegistrable');
+goog.requireType('Blockly.utils.dom');
+goog.requireType('Blockly.utils.Coordinate');
+goog.requireType('Blockly.utils.Svg');
+goog.requireType('Blockly.utils.toolbox');
+goog.requireType('Blockly.WorkspaceSvg');
 
 
 /**
@@ -66,8 +72,8 @@ Blockly.IFlyout.prototype.CORNER_RADIUS;
  * either exist as its own svg element or be a g element nested inside a
  * separate svg element.
  * @param {string|
- * !Blockly.utils.dom.SvgElementType<!SVGSVGElement>|
- * !Blockly.utils.dom.SvgElementType<!SVGGElement>} tagName The type of tag to
+ * !Blockly.utils.Svg<!SVGSVGElement>|
+ * !Blockly.utils.Svg<!SVGGElement>} tagName The type of tag to
  *     put the flyout in. This should be <svg> or <g>.
  * @return {!SVGElement} The flyout's SVG group.
  */
@@ -130,10 +136,9 @@ Blockly.IFlyout.prototype.hide;
 
 /**
  * Show and populate the flyout.
- * @param {!Blockly.utils.toolbox.ToolboxDefinition|string} flyoutDef
- *    List of contents to display in the flyout as an array of xml an
- *    array of Nodes, a NodeList or a string with the name of the dynamic category.
- *    Variables and procedures have a custom set of blocks.
+ * @param {!Blockly.utils.toolbox.FlyoutDefinition|string} flyoutDef Contents to
+ *     display in the flyout. This is either an array of Nodes, a NodeList, a
+ *     toolbox definition, or a string with the name of the dynamic category.
  */
 Blockly.IFlyout.prototype.show;
 

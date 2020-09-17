@@ -28,16 +28,20 @@ suite('Events', function() {
 
   teardown(function() {
     sharedTestTeardown.call(this);
-    delete Blockly.Blocks['field_variable_test_block'];
-    delete Blockly.Blocks['simple_test_block'];
   });
 
   function createSimpleTestBlock(workspace) {
     // Disable events while constructing the block: this is a test of the
-    // Blockly.Event constructors, not the block constructor.s
+    // Blockly.Event constructors, not the block constructors.
+    // Set the group id to avoid an extra call to genUid.
     Blockly.Events.disable();
-    var block = new Blockly.Block(
-        workspace, 'simple_test_block');
+    try {
+      Blockly.Events.setGroup('unused');
+      var block = new Blockly.Block(
+          workspace, 'simple_test_block');
+    } finally {
+      Blockly.Events.setGroup(false);
+    }
     Blockly.Events.enable();
     return block;
   }
@@ -217,6 +221,148 @@ suite('Events', function() {
                   'group': ''
                 });
           });
+        });
+      });
+    });
+
+    suite('With shadow blocks', function() {
+      setup(function() {
+        this.TEST_BLOCK_ID = 'test_block_id';
+        this.TEST_PARENT_ID = 'parent';
+        // genUid is expected to be called either once or twice in this suite.
+        this.genUidStub = createGenUidStubWithReturns(
+            [this.TEST_BLOCK_ID, this.TEST_PARENT_ID]);
+        this.block = createSimpleTestBlock(this.workspace);
+        this.block.setShadow(true);
+      });
+
+      test('Block base', function() {
+        var event = new Blockly.Events.BlockBase(this.block);
+        sinon.assert.calledOnce(this.genUidStub);
+        assertEventEquals(event, undefined,
+            this.workspace.id, this.TEST_BLOCK_ID,
+            {
+              'varId': undefined,
+              'recordUndo': true,
+              'group': '',
+            });
+      });
+
+      test('Change', function() {
+        var event = new Blockly.Events.Change(
+            this.block, 'field', 'FIELD_NAME', 'old', 'new');
+        sinon.assert.calledOnce(this.genUidStub);
+        assertEventEquals(event, Blockly.Events.CHANGE,
+            this.workspace.id, this.TEST_BLOCK_ID,
+            {
+              'varId': undefined,
+              'element': 'field',
+              'name': 'FIELD_NAME',
+              'oldValue': 'old',
+              'newValue': 'new',
+              'recordUndo': true,
+              'group': '',
+            });
+      });
+
+      test('Block change', function() {
+        var event = new Blockly.Events.BlockChange(
+            this.block, 'field', 'FIELD_NAME', 'old', 'new');
+        sinon.assert.calledOnce(this.genUidStub);
+        assertEventEquals(event, Blockly.Events.CHANGE,
+            this.workspace.id, this.TEST_BLOCK_ID,
+            {
+              'varId': undefined,
+              'element': 'field',
+              'name': 'FIELD_NAME',
+              'oldValue': 'old',
+              'newValue': 'new',
+              'recordUndo': true,
+              'group': '',
+            });
+      });
+
+      test('Create', function() {
+        var event = new Blockly.Events.Create(this.block);
+        sinon.assert.calledOnce(this.genUidStub);
+        assertEventEquals(event, Blockly.Events.CREATE,
+            this.workspace.id, this.TEST_BLOCK_ID,
+            {
+              'recordUndo': false,
+              'group': '',
+            });
+      });
+
+      test('Block create', function() {
+        var event = new Blockly.Events.BlockCreate(this.block);
+        sinon.assert.calledOnce(this.genUidStub);
+        assertEventEquals(event, Blockly.Events.CREATE,
+            this.workspace.id, this.TEST_BLOCK_ID,
+            {
+              'recordUndo': false,
+              'group': '',
+            });
+      });
+
+      test('Delete', function() {
+        var event = new Blockly.Events.Delete(this.block);
+        sinon.assert.calledOnce(this.genUidStub);
+        assertEventEquals(event, Blockly.Events.DELETE,
+            this.workspace.id, this.TEST_BLOCK_ID,
+            {
+              'recordUndo': false,
+              'group': '',
+            });
+      });
+
+      test('Block delete', function() {
+        var event = new Blockly.Events.BlockDelete(this.block);
+        sinon.assert.calledOnce(this.genUidStub);
+        assertEventEquals(event, Blockly.Events.DELETE,
+            this.workspace.id, this.TEST_BLOCK_ID,
+            {
+              'recordUndo': false,
+              'group': '',
+            });
+      });
+
+      suite('Move', function() {
+        setup(function() {
+          this.parentBlock = createSimpleTestBlock(this.workspace);
+          this.block.parentBlock_ = this.parentBlock;
+          this.block.xy_ = new Blockly.utils.Coordinate(3, 4);
+        });
+
+        teardown(function() {
+          // This needs to be cleared, otherwise workspace.dispose will fail.
+          this.block.parentBlock_ = null;
+        });
+
+        test('Move', function() {
+          var event = new Blockly.Events.Move(this.block);
+          sinon.assert.calledTwice(this.genUidStub);
+          assertEventEquals(event, Blockly.Events.MOVE, this.workspace.id,
+              this.TEST_BLOCK_ID, {
+                'oldParentId': this.TEST_PARENT_ID,
+                'oldInputName': undefined,
+                'oldCoordinate': undefined,
+                'recordUndo': false,
+                'group': ''
+              });
+        });
+
+        test('Block move', function() {
+          var event = new Blockly.Events.BlockMove(this.block);
+          sinon.assert.calledTwice(this.genUidStub);
+          assertEventEquals(event, Blockly.Events.MOVE, this.workspace.id,
+              this.TEST_BLOCK_ID,
+              {
+                'oldParentId': this.TEST_PARENT_ID,
+                'oldInputName': undefined,
+                'oldCoordinate': undefined,
+                'recordUndo': false,
+                'group': ''
+              });
         });
       });
     });

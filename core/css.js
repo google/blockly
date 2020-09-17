@@ -168,6 +168,7 @@ Blockly.Css.CONTENT = [
     'max-height: 300px;', // @todo: spec for maximum height.
     'overflow: auto;',
     'overflow-x: hidden;',
+    'position: relative;',
   '}',
 
   '.blocklyDropDownArrow {',

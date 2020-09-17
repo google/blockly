@@ -78,11 +78,6 @@ suite('Generator', function() {
       };
     });
 
-    teardown(function() {
-      delete Blockly.Blocks['stack_block'];
-      delete Blockly.Blocks['row_block'];
-    });
-
     var testCase = [
       [Blockly.Dart, 'Dart'],
       [Blockly.JavaScript, 'JavaScript'],
@@ -115,7 +110,7 @@ suite('Generator', function() {
 
     suite('Nested block', function() {
       setup(function() {
-        Blockly.defineBlocksWithJsonArray([ {
+        Blockly.defineBlocksWithJsonArray([{
           "type": "test_loop_block",
           "message0": "Repeat Loop",
           "message1": "%1",
@@ -140,10 +135,6 @@ suite('Generator', function() {
           var code = generator.blockToCode(blockA, opt_thisOnly);
           chai.assert.equal(code, expectedCode, opt_message);
         };
-      });
-
-      teardown(function() {
-        delete Blockly.Blocks['test_loop_block'];
       });
 
       testCase.forEach(function(testCase) {

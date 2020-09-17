@@ -46,12 +46,12 @@ var svgSpace;
 
 function addPathAt(path, x, y) {
   var group = Blockly.utils.dom.createSvgElement(
-      Blockly.utils.dom.SvgElementType.G,
+      Blockly.utils.Svg.G,
       {
         'transform': 'translate(' + (x + 50) + ', ' + y + ')'
       }, svgSpace);
   Blockly.utils.dom.createSvgElement(
-      Blockly.utils.dom.SvgElementType.PATH, {
+      Blockly.utils.Svg.PATH, {
         'd': 'M 0,0 ' + path,
         'marker-start': 'url(#startDot)',
         'marker-end': 'url(#endDot)',

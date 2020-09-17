@@ -35,6 +35,7 @@ goog.require('Blockly.utils.dom');
 goog.require('Blockly.utils.Metrics');
 goog.require('Blockly.utils.object');
 goog.require('Blockly.utils.Rect');
+goog.require('Blockly.utils.Svg');
 goog.require('Blockly.utils.toolbox');
 goog.require('Blockly.Workspace');
 goog.require('Blockly.WorkspaceAudio');
@@ -322,6 +323,28 @@ Blockly.WorkspaceSvg.prototype.dragDeltaXY_ = null;
  * @type {number}
  */
 Blockly.WorkspaceSvg.prototype.scale = 1;
+
+// TODO(#4203) Enable viewport events after ui events refactor.
+// /**
+//  * Cached scale value. Used to detect changes in viewport.
+//  * @type {number}
+//  * @private
+//  */
+// Blockly.WorkspaceSvg.prototype.oldScale_ = 1;
+//
+// /**
+//  * Cached viewport top value. Used to detect changes in viewport.
+//  * @type {number}
+//  * @private
+//  */
+// Blockly.WorkspaceSvg.prototype.oldTop_ = 0;
+//
+// /**
+//  * Cached viewport left value. Used to detect changes in viewport.
+//  * @type {number}
+//  * @private
+//  */
+// Blockly.WorkspaceSvg.prototype.oldLeft_ = 0;
 
 /**
  * The workspace's trashcan (if any).
@@ -714,7 +737,7 @@ Blockly.WorkspaceSvg.prototype.createDom = function(opt_backgroundClass) {
    * @type {SVGElement}
    */
   this.svgGroup_ = Blockly.utils.dom.createSvgElement(
-      Blockly.utils.dom.SvgElementType.G,
+      Blockly.utils.Svg.G,
       {'class': 'blocklyWorkspace'}, null);
 
   // Note that a <g> alone does not receive mouse events--it must have a
@@ -723,7 +746,7 @@ Blockly.WorkspaceSvg.prototype.createDom = function(opt_backgroundClass) {
   if (opt_backgroundClass) {
     /** @type {SVGElement} */
     this.svgBackground_ = Blockly.utils.dom.createSvgElement(
-        Blockly.utils.dom.SvgElementType.RECT,
+        Blockly.utils.Svg.RECT,
         {'height': '100%', 'width': '100%', 'class': opt_backgroundClass},
         this.svgGroup_);
 
@@ -737,11 +760,11 @@ Blockly.WorkspaceSvg.prototype.createDom = function(opt_backgroundClass) {
   }
   /** @type {SVGElement} */
   this.svgBlockCanvas_ = Blockly.utils.dom.createSvgElement(
-      Blockly.utils.dom.SvgElementType.G,
+      Blockly.utils.Svg.G,
       {'class': 'blocklyBlockCanvas'}, this.svgGroup_);
   /** @type {SVGElement} */
   this.svgBubbleCanvas_ = Blockly.utils.dom.createSvgElement(
-      Blockly.utils.dom.SvgElementType.G,
+      Blockly.utils.Svg.G,
       {'class': 'blocklyBubbleCanvas'}, this.svgGroup_);
 
   if (!this.isFlyout) {
@@ -862,7 +885,11 @@ Blockly.WorkspaceSvg.prototype.dispose = function() {
 
 /**
  * Obtain a newly created block.
- * @param {?string} prototypeName Name of the language object containing
+ *
+ * This block's svg must still be initialized
+ * ([initSvg]{@link Blockly.BlockSvg#initSvg}) and it must be rendered
+ * ([render]{@link Blockly.BlockSvg#render}) before the block will be visible.
+ * @param {!string} prototypeName Name of the language object containing
  *     type-specific functions for this block.
  * @param {string=} opt_id Optional ID.  Use this ID if provided, otherwise
  *     create a new ID.
@@ -904,8 +931,8 @@ Blockly.WorkspaceSvg.prototype.addZoomControls = function() {
 /**
  * Add a flyout element in an element with the given tag name.
  * @param {string|
- * !Blockly.utils.dom.SvgElementType<!SVGSVGElement>|
- * !Blockly.utils.dom.SvgElementType<!SVGGElement>} tagName What type of tag the
+ * !Blockly.utils.Svg<!SVGSVGElement>|
+ * !Blockly.utils.Svg<!SVGGElement>} tagName What type of tag the
  *     flyout belongs in.
  * @return {!Element} The element containing the flyout DOM.
  * @package
@@ -1074,6 +1101,31 @@ Blockly.WorkspaceSvg.prototype.getParentSvg = function() {
 };
 
 /**
+ * Fires a viewport event if events are enabled and there is a change in
+ * viewport values.
+ * @package
+ */
+Blockly.WorkspaceSvg.prototype.maybeFireViewportChangeEvent = function() {
+  // TODO(#4203) Enable viewport events after ui events refactor.
+  // if (!Blockly.Events.isEnabled()) {
+  //   return;
+  // }
+  // var scale = this.scale;
+  // var top = -this.scrollY;
+  // var left = -this.scrollX;
+  // if (scale == this.oldScale_ && top == this.oldTop_ && left == this.oldLeft_) {
+  //   return;
+  // }
+  // this.oldScale_ = scale;
+  // this.oldTop_ = top;
+  // this.oldLeft_ = left;
+  // var event = new Blockly.Events.Ui(null, 'viewport', null,
+  //     { scale: scale, top: top, left: left });
+  // event.workspaceId = this.id;
+  // Blockly.Events.fire(event);
+};
+
+/**
  * Translate this workspace to new coordinates.
  * @param {number} x Horizontal translation, in pixel units relative to the
  *    top left of the Blockly div.
@@ -1097,6 +1149,8 @@ Blockly.WorkspaceSvg.prototype.translate = function(x, y) {
   if (this.grid_) {
     this.grid_.moveTo(x, y);
   }
+
+  this.maybeFireViewportChangeEvent();
 };
 
 /**
@@ -1273,13 +1327,16 @@ Blockly.WorkspaceSvg.prototype.highlightBlock = function(id, opt_state) {
 
 /**
  * Paste the provided block onto the workspace.
- * @param {!Element} xmlBlock XML block element.
+ * @param {!Element|!DocumentFragment} xmlBlock XML block element or an empty
+ *     DocumentFragment if the block was an insertion marker.
  */
 Blockly.WorkspaceSvg.prototype.paste = function(xmlBlock) {
-  if (!this.rendered || xmlBlock.getElementsByTagName('block').length >=
+  if (!this.rendered || !xmlBlock.tagName || xmlBlock.getElementsByTagName('block').length >=
       this.remainingCapacity()) {
     return;
   }
+  // The check above for tagName rules out the possibility of this being a DocumentFragment.
+  xmlBlock = /** @type {!Element} */ (xmlBlock);
   if (this.currentGesture_) {
     this.currentGesture_.cancel();  // Dragging while pasting?  No.
   }
@@ -1702,16 +1759,14 @@ Blockly.WorkspaceSvg.prototype.showContextMenu = function(e) {
 
 /**
  * Modify the block tree on the existing toolbox.
- * @param {Blockly.utils.toolbox.ToolboxDefinition|string} toolboxDef
- *    DOM tree of toolbox contents, string of toolbox contents, or array of JSON
- *    representing toolbox contents.
+ * @param {?Blockly.utils.toolbox.ToolboxDefinition} toolboxDef
+ *    DOM tree of toolbox contents, string of toolbox contents, or JSON
+ *    representing toolbox definition.
  */
 Blockly.WorkspaceSvg.prototype.updateToolbox = function(toolboxDef) {
-  if (!Array.isArray(toolboxDef)) {
-    toolboxDef = Blockly.Options.parseToolboxTree(toolboxDef);
-  }
-  toolboxDef = Blockly.utils.toolbox.convertToolboxToJSON(toolboxDef);
-  if (!toolboxDef) {
+  var parsedToolboxDef = Blockly.utils.toolbox.convertToolboxDefToJson(toolboxDef);
+
+  if (!parsedToolboxDef) {
     if (this.options.languageTree) {
       throw Error('Can\'t nullify an existing toolbox.');
     }
@@ -1720,18 +1775,19 @@ Blockly.WorkspaceSvg.prototype.updateToolbox = function(toolboxDef) {
   if (!this.options.languageTree) {
     throw Error('Existing toolbox is null.  Can\'t create new toolbox.');
   }
-  if (Blockly.utils.toolbox.hasCategories(toolboxDef)) {
+
+  if (Blockly.utils.toolbox.hasCategories(parsedToolboxDef)) {
     if (!this.toolbox_) {
       throw Error('Existing toolbox has no categories.  Can\'t change mode.');
     }
-    this.options.languageTree = toolboxDef;
-    this.toolbox_.render(toolboxDef);
+    this.options.languageTree = parsedToolboxDef;
+    this.toolbox_.render(parsedToolboxDef);
   } else {
     if (!this.flyout_) {
       throw Error('Existing toolbox has categories.  Can\'t change mode.');
     }
-    this.options.languageTree = toolboxDef;
-    this.flyout_.show(toolboxDef);
+    this.options.languageTree = parsedToolboxDef;
+    this.flyout_.show(parsedToolboxDef);
   }
 };
 
@@ -1891,8 +1947,14 @@ Blockly.WorkspaceSvg.prototype.zoomToFit = function() {
   // Scale Units: (pixels / workspaceUnit)
   var ratioX = workspaceWidth / blocksWidth;
   var ratioY = workspaceHeight / blocksHeight;
-  this.setScale(Math.min(ratioX, ratioY));
-  this.scrollCenter();
+  Blockly.Events.disable();
+  try {
+    this.setScale(Math.min(ratioX, ratioY));
+    this.scrollCenter();
+  } finally {
+    Blockly.Events.enable();
+  }
+  this.maybeFireViewportChangeEvent();
 };
 
 /**

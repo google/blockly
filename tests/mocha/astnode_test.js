@@ -91,9 +91,6 @@ suite('ASTNode', function() {
   });
   teardown(function() {
     sharedTestTeardown.call(this);
-    delete Blockly.Blocks['input_statement'];
-    delete Blockly.Blocks['field_input'];
-    delete Blockly.Blocks['value_input'];
   });
 
   suite('HelperFunctions', function() {
@@ -284,7 +281,6 @@ suite('ASTNode', function() {
         "helpUrl": "",
         "nextStatement": null
       }]);
-
       var noNextConnection = this.workspace.newBlock('top_connection');
       var fieldAndInputs = this.workspace.newBlock('fields_and_input');
       var twoFields = this.workspace.newBlock('two_fields');
@@ -307,16 +303,6 @@ suite('ASTNode', function() {
       var outputNextBlock = this.workspace.newBlock('output_next');
       this.blocks.secondBlock = secondBlock;
       this.blocks.outputNextBlock = outputNextBlock;
-    });
-    teardown(function() {
-      delete Blockly.Blocks['output_next'];
-      delete Blockly.Blocks['fields_and_input2'];
-      delete Blockly.Blocks['two_fields'];
-      delete Blockly.Blocks['fields_and_input'];
-      delete Blockly.Blocks['top_connection'];
-      delete Blockly.Blocks['start_block'];
-      delete Blockly.Blocks['dummy_input'];
-      delete Blockly.Blocks['dummy_inputValue'];
     });
     suite('Next', function() {
       setup(function() {

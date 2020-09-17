@@ -7,13 +7,11 @@
 suite('Inputs', function() {
   setup(function() {
     sharedTestSetup.call(this);
-    Blockly.defineBlocksWithJsonArray([
-      {
-        "type": "empty_block",
-        "message0": "",
-        "args0": []
-      },
-    ]);
+    Blockly.defineBlocksWithJsonArray([{
+      "type": "empty_block",
+      "message0": "",
+      "args0": []
+    }]);
 
     this.workspace = Blockly.inject('blocklyDiv');
     this.block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
@@ -32,7 +30,6 @@ suite('Inputs', function() {
   });
   teardown(function() {
     sharedTestTeardown.call(this);
-    delete Blockly.Blocks['empty_block'];
   });
   suite('Insert Field At', function() {
     suite('Index Bounds', function() {

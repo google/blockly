@@ -23,6 +23,7 @@ goog.require('Blockly.utils.Coordinate');
 goog.require('Blockly.utils.dom');
 goog.require('Blockly.utils.KeyCodes');
 goog.require('Blockly.utils.object');
+goog.require('Blockly.utils.Svg');
 goog.require('Blockly.utils.userAgent');
 
 
@@ -103,7 +104,7 @@ Blockly.FieldMultilineInput.prototype.fromXml = function(fieldElement) {
 Blockly.FieldMultilineInput.prototype.initView = function() {
   this.createBorderRect_();
   this.textGroup_ = Blockly.utils.dom.createSvgElement(
-      Blockly.utils.dom.SvgElementType.G, {
+      Blockly.utils.Svg.G, {
         'class': 'blocklyEditableText',
       }, this.fieldGroup_);
 };
@@ -161,7 +162,7 @@ Blockly.FieldMultilineInput.prototype.render_ = function() {
     var lineHeight = this.getConstants().FIELD_TEXT_HEIGHT +
         this.getConstants().FIELD_BORDER_RECT_Y_PADDING;
     var span = Blockly.utils.dom.createSvgElement(
-        Blockly.utils.dom.SvgElementType.TEXT, {
+        Blockly.utils.Svg.TEXT, {
           'class': 'blocklyText blocklyMultilineText',
           x: this.getConstants().FIELD_BORDER_RECT_X_PADDING,
           y: y + this.getConstants().FIELD_BORDER_RECT_Y_PADDING,

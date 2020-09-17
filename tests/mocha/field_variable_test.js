@@ -321,10 +321,6 @@ suite('Variable Fields', function() {
           'field_variable_test_block');
       this.variableField = this.variableBlock.getField('VAR');
     });
-    teardown(function() {
-      this.variableBlock.dispose();
-      delete Blockly.Blocks['field_variable_test_block'];
-    });
     test('Rename & Keep Old ID', function() {
       this.workspace.renameVariableById('id1', 'name2');
       chai.assert.equal(this.variableField.getText(), 'name2');

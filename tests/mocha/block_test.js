@@ -45,10 +45,6 @@ suite('Blocks', function() {
   });
   teardown(function() {
     sharedTestTeardown.call(this);
-    delete Blockly.Blocks['empty_block'];
-    delete Blockly.Blocks['stack_block'];
-    delete Blockly.Blocks['row_block'];
-    delete Blockly.Blocks['statement_block'];
   });
 
   function createTestBlocks(workspace, isRow) {
@@ -327,9 +323,6 @@ suite('Blocks', function() {
           ]
         },
       ]);
-    });
-    teardown(function() {
-      delete Blockly.Blocks['value_block'];
     });
 
     suite('Value', function() {
@@ -1235,7 +1228,6 @@ suite('Blocks', function() {
     teardown(function() {
       Blockly.Events.enable();
       workspaceTeardown.call(this, this.workspace);
-      delete Blockly.Blocks['variable_block'];
     });
     suite('Connecting and Disconnecting', function() {
       test('Connect Block to Next', function() {
@@ -1756,6 +1748,36 @@ suite('Blocks', function() {
             this.workspace);
         chai.assert.equal(block.toString(), t.toString);
       });
+    });
+  });
+
+  suite('Initialization', function() {
+    setup(function() {
+      Blockly.defineBlocksWithJsonArray([
+        {
+          "type": "init_test_block",
+          "message0": ""
+        },
+      ]);
+    });
+    test('recordUndo is reset even if init throws', function() {
+      // The test could pass if init is never called,
+      // so we assert init was called to be safe.
+      var initCalled = false;
+      var recordUndoDuringInit;
+      Blockly.Blocks['init_test_block'].init = function() {
+        initCalled = true;
+        recordUndoDuringInit = Blockly.Events.recordUndo;
+        throw new Error();
+      };
+      chai.assert.throws(function() {
+        this.workspace.newBlock('init_test_block');
+      }.bind(this));
+      chai.assert.isFalse(recordUndoDuringInit,
+          'recordUndo should be false during block init function');
+      chai.assert.isTrue(Blockly.Events.recordUndo,
+          'recordUndo should be reset to true after init');
+      chai.assert.isTrue(initCalled, 'expected init function to be called');
     });
   });
 });

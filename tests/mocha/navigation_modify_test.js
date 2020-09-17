@@ -16,13 +16,15 @@ suite('Insert/Modify', function() {
   }
   setup(function() {
     sharedTestSetup.call(this);
+    // NOTE: block positions chosen such that they aren't unintentionally
+    // bumped out of bounds during tests.
     var xmlText = '<xml xmlns="https://developers.google.com/blockly/xml">' +
-      '<block type="stack_block" id="stack_block_1" x="12" y="38"></block>' +
-      '<block type="stack_block" id="stack_block_2" x="12" y="113"></block>' +
-      '<block type="row_block" id="row_block_1" x="13" y="213"></block>' +
-      '<block type="row_block" id="row_block_2" x="12" y="288"></block>' +
-      '<block type="statement_block" id="statement_block_1" x="12" y="288"></block>' +
-      '<block type="statement_block" id="statement_block_2" x="12" y="288"></block>' +
+      '<block type="stack_block" id="stack_block_1" x="22" y="38"></block>' +
+      '<block type="stack_block" id="stack_block_2" x="22" y="113"></block>' +
+      '<block type="row_block" id="row_block_1" x="23" y="213"></block>' +
+      '<block type="row_block" id="row_block_2" x="22" y="288"></block>' +
+      '<block type="statement_block" id="statement_block_1" x="22" y="288"></block>' +
+      '<block type="statement_block" id="statement_block_2" x="22" y="288"></block>' +
     '</xml>';
     defineStackBlock(this.sharedCleanup);
     defineRowBlock(this.sharedCleanup);

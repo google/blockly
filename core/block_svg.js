@@ -87,7 +87,6 @@ Blockly.BlockSvg = function(workspace, prototypeName, opt_id) {
    */
   this.renderIsInProgress_ = false;
 
-
   /** @type {!Blockly.WorkspaceSvg} */
   this.workspace = workspace;
 
@@ -643,14 +642,21 @@ Blockly.BlockSvg.prototype.updateCollapsed_ = function() {
   var collapsedInputName = Blockly.Block.COLLAPSED_INPUT_NAME;
   var collapsedFieldName = Blockly.Block.COLLAPSED_FIELD_NAME;
 
+  var renderList = [];
+  // Show/hide the inputs.
   for (var i = 0, input; (input = this.inputList[i]); i++) {
     if (input.name != collapsedInputName) {
-      input.setVisible(!collapsed);
+      renderList.push.apply(renderList, input.setVisible(!collapsed));
     }
   }
 
   if (!collapsed) {
     this.removeInput(collapsedInputName);
+    if (this.rendered) {
+      for (var i = 0, block; (block = renderList[i]); i++) {
+        block.render();
+      }
+    }
     return;
   }
 
@@ -975,7 +981,9 @@ Blockly.BlockSvg.prototype.updateDisabled = function() {
   var children = this.getChildren(false);
   this.applyColour();
   for (var i = 0, child; (child = children[i]); i++) {
-    child.updateDisabled();
+    if (child.rendered) {
+      child.updateDisabled();
+    }
   }
 };
 
@@ -1626,10 +1634,12 @@ Blockly.BlockSvg.prototype.render = function(opt_bubble) {
     if (this.isCollapsed()) {
       this.updateCollapsed_();
     }
+
     this.workspace.getRenderer().render(this);
     this.updateConnectionLocations_();
 
     if (opt_bubble !== false) {
+      // Render all blocks above this one (propogate a reflow).
       var parentBlock = this.getParent();
       if (parentBlock) {
         parentBlock.render(true);

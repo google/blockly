@@ -108,6 +108,7 @@ Blockly.Input.prototype.insertFieldAt = function(index, field, opt_name) {
     field.applyColour();
   }
   field.name = opt_name;
+  field.setVisible(this.isVisible());
 
   var fieldDropdown = /** @type {Blockly.FieldDropdown} */ (field);
   if (fieldDropdown.prefixField) {

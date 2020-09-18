@@ -1,6 +1,8 @@
 {
 	"LEAPHY_START": "leaphy start block title - The text that appears in the Leaphy start block.",
 	"LEAPHY_ORIGINAL_CATEGORY": "leaphy Original Category title - The text that appears in the Leaphy Original Category.",
+	"LEAPHY_FLITZ_CATEGORY": "leaphy Flitz Category title - The text that appears in the Leaphy Flitz Category.",
+	"LEAPHY_EXTRA_CATEGORY": "leaphy Extra Category title - The text that appears in the Leaphy Extra Category.",
 	"LEAPHY_MOTOR_FORWARD": "leaphy Motor Forward.",
 	"LEAPHY_MOTOR_BACKWARD": "leaphy Motor Backward.",
 	"LEAPHY_MOTOR_LEFT": "leaphy Motor Left.",

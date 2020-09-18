@@ -463,7 +463,6 @@ Blockly.RenderedConnection.prototype.disconnectInternal_ = function(parentBlock,
   var parentInput = parentBlock.getInputWithBlock(childBlock);
   if (parentInput && !parentInput.isVisible()) {
     childBlock.rendered = true;
-
   }
   Blockly.RenderedConnection.superClass_.disconnectInternal_.call(this,
       parentBlock, childBlock);

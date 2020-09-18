@@ -206,8 +206,12 @@ Blockly.PHP.quote_ = function(string) {
  * @return {string} PHP string.
  * @private
  */
-Blockly.PHP.multiline_quote_ = function(string) {
-  return '<<<EOT\n' + string + '\nEOT';
+Blockly.PHP.multiline_quote_ = function (string) {
+  var lines = string.split(/\n/g).map(Blockly.PHP.quote_);
+  // Join with the following, plus a newline:
+  // . "\n" .
+  // Newline escaping only works in double-quoted strings.
+  return lines.join(' . \"\\n\" .\n');
 };
 
 /**

@@ -176,10 +176,11 @@ Blockly.Dart.quote_ = function(string) {
  * @return {string} Dart string.
  * @private
  */
-Blockly.Dart.multiline_quote_ = function(string) {
-  // Can't use goog.string.quote since $ must also be escaped.
-  string = string.replace(/'''/g, '\\\'\\\'\\\'');
-  return '\'\'\'' + string + '\'\'\'';
+Blockly.Dart.multiline_quote_ = function (string) {
+  var lines = string.split(/\n/g).map(Blockly.Dart.quote_);
+  // Join with the following, plus a newline:
+  // + '\n' +
+  return lines.join(' + \'\\n\' + \n');
 };
 
 

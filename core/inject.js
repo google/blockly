@@ -145,7 +145,7 @@ Blockly.createDom_ = function(container, options) {
  * @param {!Blockly.Options} options Dictionary of options.
  * @param {!Blockly.BlockDragSurfaceSvg} blockDragSurface Drag surface SVG
  *     for the blocks.
- * @param {!Blockly.WorkspaceDragSurfaceSvg} workspaceDragSurface Drag surface
+ * @param {Blockly.WorkspaceDragSurfaceSvg|null} workspaceDragSurface Drag surface
  *     SVG for the workspace.
  * @return {!Blockly.WorkspaceSvg} Newly created main workspace.
  * @private

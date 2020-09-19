@@ -844,7 +844,9 @@ Blockly.Scrollbar.prototype.onScroll_ = function() {
 
   var scrollbar = this;
   requestAnimationFrame( function() {
-    scrollbar.workspace_.setMetrics(xyRatio);
+    if (scrollbar.workspace_) {
+      scrollbar.workspace_.setMetrics(xyRatio);
+    }
   });
 };
 

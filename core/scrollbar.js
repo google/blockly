@@ -853,7 +853,12 @@ Blockly.Scrollbar.prototype.onScroll_ = function() {
   } else {
     xyRatio.y = ratio;
   }
-  this.workspace_.setMetrics(xyRatio);
+  var scrollbar = this;
+  window.requestAnimationFrame( function() {
+    if (scrollbar.workspace_) {
+      scrollbar.workspace_.setMetrics(xyRatio);
+    }
+  });
 };
 
 /**

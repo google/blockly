@@ -65,7 +65,10 @@ Blockly.inject = function(container, opt_options) {
   // Create surfaces for dragging things. These are optimizations
   // so that the browser does not repaint during the drag.
   var blockDragSurface = new Blockly.BlockDragSurfaceSvg(subContainer);
-  var workspaceDragSurface = new Blockly.WorkspaceDragSurfaceSvg(subContainer);
+
+  // September 19, 2020, the trick with dragSurface shows bad fps
+  // in all modern browsers this is the reason why it is disabled
+  var workspaceDragSurface = null;
 
   var workspace = Blockly.createMainWorkspace_(svg, options, blockDragSurface,
       workspaceDragSurface);
@@ -145,7 +148,7 @@ Blockly.createDom_ = function(container, options) {
  * @param {!Blockly.Options} options Dictionary of options.
  * @param {!Blockly.BlockDragSurfaceSvg} blockDragSurface Drag surface SVG
  *     for the blocks.
- * @param {!Blockly.WorkspaceDragSurfaceSvg} workspaceDragSurface Drag surface
+ * @param {Blockly.WorkspaceDragSurfaceSvg|null} workspaceDragSurface Drag surface
  *     SVG for the workspace.
  * @return {!Blockly.WorkspaceSvg} Newly created main workspace.
  * @private

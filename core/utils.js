@@ -653,7 +653,7 @@ Blockly.utils.parseBlockColour = function(colour) {
 
 /**
  * Get version of desktop Google Chrome
- * @return {number|false} Version of desktop Google Chrome or false if it is not Chrome
+ * @return {number|boolean} Version of desktop Google Chrome or false if it is not Chrome
  */
 Blockly.utils.getChromeVersion = function() {
   var userAgent = Blockly.utils.userAgent;

@@ -66,9 +66,15 @@ Blockly.inject = function(container, opt_options) {
   // so that the browser does not repaint during the drag.
   var blockDragSurface = new Blockly.BlockDragSurfaceSvg(subContainer);
 
+  var workspaceDragSurface;
+
   // September 19, 2020, the trick with dragSurface shows bad fps
-  // in all modern browsers this is the reason why it is disabled
-  var workspaceDragSurface = null;
+  // in last Google Chrome this is the reason why it is disabled
+  if (Blockly.utils.getChromeVersion() >= 85) {
+    workspaceDragSurface = null;
+  } else {
+    workspaceDragSurface = new Blockly.WorkspaceDragSurfaceSvg(subContainer);
+  }
 
   var workspace = Blockly.createMainWorkspace_(svg, options, blockDragSurface,
       workspaceDragSurface);

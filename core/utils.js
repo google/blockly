@@ -650,3 +650,17 @@ Blockly.utils.parseBlockColour = function(colour) {
     }
   }
 };
+
+/**
+ * Get version of desktop Google Chrome
+ * @return {number|false} Version of desktop Google Chrome or false if it is not Chrome
+ */
+Blockly.utils.getChromeVersion = function() {
+  var userAgent = Blockly.utils.userAgent;
+  if (userAgent.MOBILE || !userAgent.CHROME) {
+    return false;
+  }
+
+  var raw = userAgent.raw.match(/Chrom(e|ium)\/([0-9]+)\./);
+  return raw ? parseInt(raw[2], 10) : false;
+};

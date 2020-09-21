@@ -974,6 +974,9 @@ Blockly.BlockSvg.prototype.applyColour = function() {
 Blockly.BlockSvg.prototype.updateDisabled = function() {
   var children = this.getChildren(false);
   this.applyColour();
+  if (this.isCollapsed()) {
+    return;
+  }
   for (var i = 0, child; (child = children[i]); i++) {
     if (child.rendered) {
       child.updateDisabled();

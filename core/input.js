@@ -200,9 +200,6 @@ Blockly.Input.prototype.setVisible = function(visible) {
     }
     var child = this.connection.targetBlock();
     if (child) {
-      if (!visible) {
-        child.rendered = false;
-      }
       child.getSvgRoot().style.display = visible ? 'block' : 'none';
     }
   }

@@ -311,8 +311,6 @@ Blockly.Trashcan.prototype.createDom = function() {
   this.svgLid_.setAttributeNS(Blockly.utils.dom.XLINK_NS, 'xlink:href',
       this.workspace_.options.pathToMedia + Blockly.SPRITE.url);
 
-  Blockly.bindEventWithChecks_(
-      this.svgGroup_, 'mousedown', this, this.blockMouseDownWhenFull_);
   Blockly.bindEventWithChecks_(this.svgGroup_, 'mouseup', this, this.click);
   // bindEventWithChecks_ quashes events too aggressively. See:
   // https://groups.google.com/forum/#!topic/blockly/QF4yB9Wx00s
@@ -565,18 +563,6 @@ Blockly.Trashcan.prototype.fireUiEvent_ = function(trashcanOpen) {
   uiEvent.workspaceId = this.workspace_.id;
   Blockly.Events.fire(uiEvent);
 };
-
-/**
- * Prevents a workspace scroll and click event if the trashcan has blocks.
- * @param {!Event} e A mouse down event.
- * @private
- */
-Blockly.Trashcan.prototype.blockMouseDownWhenFull_ = function(e) {
-  if (this.hasContents_()) {
-    e.stopPropagation();  // Don't start a workspace scroll.
-  }
-};
-
 
 /**
  * Indicate that the trashcan can be clicked (by opening it) if it has blocks.

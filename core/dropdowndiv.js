@@ -350,7 +350,6 @@ Blockly.DropDownDiv.show = function(owner, rtl, primaryX, primaryY,
 
   // # SHAPE ####################################################################################################################
   // When showing (opening) the dropdown, wait for 100 ms and modify the colors of recent modules.
-  console.log(Blockly.DropDownDiv.sourceFieldID_);
   // Only do so for the DynamicIDDropDowns.
   if (Blockly.DropDownDiv.sourceFieldID_ === 'ID') {
     setTimeout(function () {

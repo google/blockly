@@ -651,6 +651,7 @@ Blockly.Xml.domToBlockHeadless_ = function(xmlBlock, workspace) {
       }
     }
 
+    var callInitSvg = false;
     var name = xmlChild.getAttribute('name');
     var xmlChildElement = /** @type {!Element} */ (xmlChild);
     switch (xmlChild.nodeName.toLowerCase()) {
@@ -660,7 +661,7 @@ Blockly.Xml.domToBlockHeadless_ = function(xmlBlock, workspace) {
           block.domToMutation(xmlChildElement);
           if (block.initSvg) {
             // Mutation may have added some elements that need initializing.
-            block.initSvg();
+            callInitSvg = true;
           }
         }
         break;
@@ -746,6 +747,11 @@ Blockly.Xml.domToBlockHeadless_ = function(xmlBlock, workspace) {
         // Unknown tag; ignore.  Same principle as HTML parsers.
         console.warn('Ignoring unknown tag: ' + xmlChild.nodeName);
     }
+  }
+
+  if (callInitSvg) {
+    // InitSvg needs to be called after variable fields are loaded.
+    block.initSvg();
   }
 
   var inline = xmlBlock.getAttribute('inline');

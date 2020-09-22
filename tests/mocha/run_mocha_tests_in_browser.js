@@ -41,8 +41,7 @@ async function runMochaTestsInBrowser() {
     var elem = await browser.$('#failureCount');
     var text = await elem.getAttribute('tests_failed');
     return text != 'unset';
-  }
-  , {
+  }, {
     timeout: 50000
   });
 

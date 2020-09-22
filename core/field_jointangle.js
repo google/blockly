@@ -235,7 +235,11 @@ Blockly.FieldJointAngle.prototype.showEditor_ = function () {
 
   var border = this.sourceBlock_.getColourBorder();
   border = border.colourBorder || border.colourLight;
-  Blockly.DropDownDiv.setColour(this.sourceBlock_.getColour(), border);
+
+  // # SHAPE ##############################################################################################################
+  // Blockly.DropDownDiv.setColour(this.sourceBlock_.getColour(), border);
+  Blockly.DropDownDiv.setColour('#ffffff', border);
+  // ######################################################################################################################
 
   Blockly.DropDownDiv.showPositionedByField(
     this, this.dropdownDispose_.bind(this));
@@ -297,8 +301,12 @@ Blockly.FieldJointAngle.prototype.dropdownCreate_ = function () {
     transform: 'rotate(0,' + Blockly.FieldJointAngle.HALF + ',' + Blockly.FieldJointAngle.HALF + ')'
   }, svg);
 
-  Blockly.DropDownDiv.setColour(this.sourceBlock_.getColour(),
-    this.sourceBlock_.getColour());
+  // # SHAPE ##############################################################################################################
+  // Blockly.DropDownDiv.setColour(this.sourceBlock_.getColour(),
+      // this.sourceBlock_.getColour());
+  Blockly.DropDownDiv.setColour('#ffffff', this.sourceBlock_.getColour());
+  // ######################################################################################################################
+
   Blockly.DropDownDiv.showPositionedByField(this);
   // The angle picker is different from other fields in that it updates on
   // mousemove even if it's not in the middle of a drag.  In future we may

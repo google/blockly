@@ -77,7 +77,7 @@
     "selenium-standalone": "^6.17.0",
     "through2": "^4.0.2",
     "typescript-closure-tools": "^0.0.7",
-    "webdriverio": "^5.22.4",
+    "webdriverio": "^6.5.2",
     "yargs": "^16.0.3"
   },
   "dependencies": {

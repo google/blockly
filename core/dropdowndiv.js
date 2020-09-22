@@ -130,6 +130,12 @@ Blockly.DropDownDiv.animateOutTimer_ = null;
 Blockly.DropDownDiv.onHide_ = null;
 
 /**
+ * Stores the Field name reference this DrodDownDiv is attached to.
+ * @author Shape Robotics
+ */
+Blockly.DropDownDiv.sourceFieldID_ = null;
+
+/**
  * Create and insert the DOM element for this div.
  */
 Blockly.DropDownDiv.createDom = function() {
@@ -211,6 +217,14 @@ Blockly.DropDownDiv.setColour = function(backgroundColour, borderColour) {
  */
 Blockly.DropDownDiv.setCategory = function(category) {
   Blockly.DropDownDiv.DIV_.setAttribute('data-category', category);
+};
+
+/**
+ * Returns the source Field name this DropDownDiv is 'attached' to.
+ * @author Shape Robotics
+ */
+Blockly.DropDownDiv.getSourceFieldID = function () {
+  return Blockly.DropDownDiv.sourceFieldID_;
 };
 
 /**
@@ -334,17 +348,20 @@ Blockly.DropDownDiv.show = function(owner, rtl, primaryX, primaryY,
       metrics.initialX, metrics.initialY,
       metrics.finalX, metrics.finalY);
 
-  // SHAPE: Added from blockly_changes
-  // When showing (aka opening) the dropdown, wait for 100 ms and modify the colors of recent modules.
-  setTimeout(function () {
-    Blockly.FieldDropdown.changeRecentModuleColors(Fable.Data.Modules.activeModules, Fable.Data.Modules.recentModules);
-  }, 100);
+  // # SHAPE ####################################################################################################################
+  // When showing (opening) the dropdown, wait for 100 ms and modify the colors of recent modules.
+  // Only do so for the DynamicIDDropDowns.
+  if (Blockly.DropDownDiv.sourceFieldID_ === 'ID') {
+    setTimeout(function () {
+      Blockly.FieldDropdown.changeRecentModuleColors(Fable.Data.Modules.activeModules, Fable.Data.Modules.recentModules);
+    }, 100);
 
-  // SHAPE: Added from blockly_changes
-  // After opening the dropdown, check the recent module colors every 1000 ms for changes.
-  Blockly.DropDownDiv.intervalID = setInterval(function () {
-    Blockly.FieldDropdown.changeRecentModuleColors(Fable.Data.Modules.activeModules, Fable.Data.Modules.recentModules);
-  }, 1000);
+    // After opening the dropdown, check the recent module colors every 1000 ms for changes.
+    Blockly.DropDownDiv.intervalID = setInterval(function () {
+      Blockly.FieldDropdown.changeRecentModuleColors(Fable.Data.Modules.activeModules, Fable.Data.Modules.recentModules);
+    }, 1000);
+  }
+  // ##########################################################################################################################
 
   return metrics.arrowAtTop;
 };
@@ -593,12 +610,13 @@ Blockly.DropDownDiv.hide = function() {
     Blockly.DropDownDiv.onHide_ = null;
   }
 
-  // SHAPE: Added from blockly_changes
-  // Stop the iterative execution of the changeRecentModuleColors function, if the dropdown was just opened. See Blockly.DropDownDiv.show overload in this file.
+  // # SHAPE ####################################################################################################################
+  // Stop the iterative execution of the changeRecentModuleColors function, if the dropdown was just opened.
   if (Blockly.DropDownDiv.intervalID > 0) {
     clearInterval(Blockly.DropDownDiv.intervalID);
     Blockly.DropDownDiv.intervalID = -1;
   }
+  // ##########################################################################################################################
 };
 
 /**
@@ -611,6 +629,14 @@ Blockly.DropDownDiv.hideWithoutAnimation = function() {
   if (Blockly.DropDownDiv.animateOutTimer_) {
     clearTimeout(Blockly.DropDownDiv.animateOutTimer_);
   }
+
+  // # SHAPE ####################################################################################################################
+  // Stop the iterative execution of the changeRecentModuleColors function.
+  if (Blockly.DropDownDiv.intervalID > 0) {
+    clearInterval(Blockly.DropDownDiv.intervalID);
+    Blockly.DropDownDiv.intervalID = -1;
+  }
+  // ##########################################################################################################################
 
   // Reset style properties in case this gets called directly
   // instead of hide() - see discussion on #2551.

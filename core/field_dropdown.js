@@ -225,6 +225,10 @@ Blockly.FieldDropdown.prototype.showEditor_ = function() {
   Blockly.utils.dom.addClass(
       /** @type {!Element} */ (this.menu_.getElement()), 'blocklyDropdownMenu');
 
+  // # SHAPE ####################################################################################################################
+  Blockly.DropDownDiv.sourceFieldID_ = this.name; // Store a reference of this Field name.
+  // ############################################################################################################################
+
   Blockly.DropDownDiv.showPositionedByField(
       this, this.dropdownDispose_.bind(this));
 
@@ -670,10 +674,12 @@ Blockly.FieldDropdown.prototype.getText_ = function() {
   return selectedOption;
 };
 
-/*
-* SHAPE: Added from blockly_changes
-* Iterates through a dropdown and changes the colors of recent modules to grey them out.
-*/
+/**
+ * Iterates through a dropdown and changes the colors of recent modules to grey them out.
+ * @param activeIDsDict The list of current active modules.
+ * @param recentIDsDict The list of 'seen' modules.
+ * @author Shape Robotics
+ */
 Blockly.FieldDropdown.changeRecentModuleColors = function (activeIDsDict, recentIDsDict) {
   // Find the dropdown HTML element
   var dropdownDiv = document.getElementsByClassName('blocklyDropDownDiv');
@@ -702,7 +708,7 @@ Blockly.FieldDropdown.changeRecentModuleColors = function (activeIDsDict, recent
     return;
   }
 
-  // The following 30 or lines generate two lists for the active and recent modules.
+  // The following lines generate two lists for the active and recent modules.
   // Those lists contain ALL active/recent modules as strings. Makes for easier search later.
   var listOfActiveModules = [];
   var listOfRecentModules = [];

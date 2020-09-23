@@ -127,7 +127,7 @@ Blockly.utils.object.inherits(Blockly.ToolboxCategory, Blockly.ToolboxItem);
  *            label:?string,
  *            selected:?string,
  *            openIcon:?string,
- *            closedIcon:?string,
+ *            closedIcon:?string
  *          }}
  */
 Blockly.ToolboxCategory.CssConfig;

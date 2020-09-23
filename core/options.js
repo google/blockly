@@ -201,7 +201,7 @@ Blockly.BlocklyOptions = function() {};
  *     colour: string,
  *     length: number,
  *     snap: boolean,
- *     spacing: number,
+ *     spacing: number
  * }}
  */
 Blockly.Options.GridOptions;
@@ -211,7 +211,7 @@ Blockly.Options.GridOptions;
  * @typedef {{
  *     drag: boolean,
  *     scrollbars: boolean,
- *     wheel: boolean,
+ *     wheel: boolean
  * }}
  */
 Blockly.Options.MoveOptions;
@@ -225,7 +225,7 @@ Blockly.Options.MoveOptions;
  *     pinch: boolean,
  *     scaleSpeed: number,
  *     startScale: number,
- *     wheel: boolean,
+ *     wheel: boolean
  * }}
  */
 Blockly.Options.ZoomOptions;

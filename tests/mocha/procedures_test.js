@@ -631,46 +631,33 @@ suite('Procedures', function() {
                 chai.assert.equal(this.callBlock.arguments_[i], argArray[i]);
               }
             }
-            function clearVariables() {
-              // TODO: Update this for typed vars.
-              var variables = this.workspace.getVariablesOfType('');
-              var variableMap = this.workspace.getVariableMap();
-              for (var i = 0, variable; (variable = variables[i]); i++) {
-                variableMap.deleteVariable(variable);
-              }
-            }
             test('Simple Add Arg', function() {
               var args = ['arg1'];
               createMutator.call(this, args);
               assertArgs.call(this, args);
-              clearVariables.call(this);
             });
             test('Multiple Args', function() {
               var args = ['arg1', 'arg2', 'arg3'];
               createMutator.call(this, args);
               assertArgs.call(this, args);
-              clearVariables.call(this);
             });
             test('Simple Change Arg', function() {
               createMutator.call(this, ['arg1']);
               this.argBlock.setFieldValue('arg2', 'NAME');
               this.defBlock.compose(this.containerBlock);
               assertArgs.call(this, ['arg2']);
-              clearVariables.call(this);
             });
             test('lower -> CAPS', function() {
               createMutator.call(this, ['arg']);
               this.argBlock.setFieldValue('ARG', 'NAME');
               this.defBlock.compose(this.containerBlock);
               assertArgs.call(this, ['ARG']);
-              clearVariables.call(this);
             });
             test('CAPS -> lower', function() {
               createMutator.call(this, ['ARG']);
               this.argBlock.setFieldValue('arg', 'NAME');
               this.defBlock.compose(this.containerBlock);
               assertArgs.call(this, ['arg']);
-              clearVariables.call(this);
             });
             // Test case for #1958
             test('Set Arg Empty', function() {
@@ -679,7 +666,6 @@ suite('Procedures', function() {
               this.argBlock.setFieldValue('', 'NAME');
               this.defBlock.compose(this.containerBlock);
               assertArgs.call(this, args);
-              clearVariables.call(this);
             });
             test('Whitespace', function() {
               var args = ['arg1'];
@@ -687,20 +673,17 @@ suite('Procedures', function() {
               this.argBlock.setFieldValue(' ', 'NAME');
               this.defBlock.compose(this.containerBlock);
               assertArgs.call(this, args);
-              clearVariables.call(this);
             });
             test('Whitespace and Text', function() {
               createMutator.call(this, ['arg1']);
               this.argBlock.setFieldValue(' text ', 'NAME');
               this.defBlock.compose(this.containerBlock);
               assertArgs.call(this, ['text']);
-              clearVariables.call(this);
             });
             test('<>', function() {
               var args = ['<>'];
               createMutator.call(this, args);
               assertArgs.call(this, args);
-              clearVariables.call(this);
             });
           });
         });

@@ -5,6 +5,12 @@
  */
 
 suite('Checkbox Fields', function() {
+  setup(function() {
+    sharedTestSetup.call(this);
+  });
+  teardown(function() {
+    sharedTestTeardown.call(this);
+  });
   /**
    * Configuration for field tests with invalid values.
    * @type {!Array<!FieldCreationTestCase>}
@@ -159,7 +165,8 @@ suite('Checkbox Fields', function() {
   suite('Customizations', function() {
     suite('Check Character', function() {
       function assertCharacter(field, char) {
-        field.fieldGroup_ = Blockly.utils.dom.createSvgElement('g', {}, null);
+        field.fieldGroup_ = Blockly.utils.dom.createSvgElement(
+            Blockly.utils.Svg.G, {}, null);
         field.sourceBlock_ = {
           RTL: false,
           rendered: true,
@@ -171,7 +178,12 @@ suite('Checkbox Fields', function() {
         };
         field.constants_ = {
           FIELD_CHECKBOX_X_OFFSET: 2,
-          FIELD_CHECKBOX_Y_OFFSET: 2
+          FIELD_CHECKBOX_Y_OFFSET: 2,
+          FIELD_BORDER_RECT_RADIUS: 4,
+          FIELD_BORDER_RECT_HEIGHT: 16,
+          FIELD_TEXT_BASELINE_CENTER: false,
+          FIELD_TEXT_HEIGHT: 16,
+          FIELD_TEXT_BASELINE: 13,
         };
         field.initView();
         field.render_();

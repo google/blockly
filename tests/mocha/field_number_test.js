@@ -5,6 +5,12 @@
  */
 
 suite('Number Fields', function() {
+  setup(function() {
+    sharedTestSetup.call(this);
+  });
+  teardown(function() {
+    sharedTestTeardown.call(this);
+  });
   /**
    * Configuration for field tests with invalid values.
    * @type {!Array<!FieldCreationTestCase>}
@@ -106,6 +112,8 @@ suite('Number Fields', function() {
         {title: 'Float', json: {}, value: 123.456, expectedValue: 123.456},
         {title: '0.01', json: {precision: .01}, value: 123.456,
           expectedValue: 123.46},
+        {title: '1e-7', json: {precision: .0000001}, value: 123.00000456,
+          expectedValue: 123.0000046},
         {title: '0.5', json: {precision: .5}, value: 123.456,
           expectedValue: 123.5},
         {title: '1', json: {precision: 1}, value: 123.456,

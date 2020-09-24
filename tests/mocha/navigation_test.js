@@ -22,6 +22,13 @@ suite('Navigation', function() {
     return workspace;
   }
 
+  setup(function() {
+    sharedTestSetup.call(this);
+  });
+  teardown(function() {
+    sharedTestTeardown.call(this);
+  });
+
   // Test that toolbox key handlers call through to the right functions and
   // transition correctly between toolbox, workspace, and flyout.
   suite('Tests toolbox keys', function() {
@@ -44,70 +51,32 @@ suite('Navigation', function() {
           return false;
         }
       };
-
-      this.firstCategory_ = this.workspace.getToolbox().tree_.getChildAt(0);
-      this.secondCategory_ = this.firstCategory_.getNextShownNode();
     });
 
     teardown(function() {
-      delete Blockly.Blocks['basic_block'];
-      this.workspace.dispose();
+      workspaceTeardown.call(this, this.workspace);
     });
 
-    test('Next', function() {
-      this.mockEvent.keyCode = Blockly.utils.KeyCodes.S;
-      chai.assert.isTrue(Blockly.navigation.onKeyPress(this.mockEvent));
-      chai.assert.equal(Blockly.navigation.currentState_,
-          Blockly.navigation.STATE_TOOLBOX);
-      chai.assert.equal(this.workspace.getToolbox().tree_.getSelectedItem(),
-          this.secondCategory_);
-    });
+    function testToolboxSelectMethodCalled(ws, mockEvent, keyCode, selectMethodName) {
+      mockEvent.keyCode = keyCode;
+      var toolbox = ws.getToolbox();
+      toolbox.selectedItem_ = toolbox.contents_[0];
+      var selectNextStub = sinon.stub(toolbox, selectMethodName);
+      Blockly.navigation.onKeyPress(mockEvent);
+      sinon.assert.called(selectNextStub);
+    }
 
-    // Should be a no-op.
-    test('Next at end', function() {
-      this.workspace.getToolbox().tree_.getSelectedItem().selectNext();
-      this.mockEvent.keyCode = Blockly.utils.KeyCodes.S;
-      // Go forward one so that we can go back one.
-      Blockly.navigation.onKeyPress(this.mockEvent);
-      var startCategory = this.workspace.getToolbox().tree_.getSelectedItem();
-      chai.assert.isTrue(Blockly.navigation.onKeyPress(this.mockEvent));
-      chai.assert.equal(Blockly.navigation.currentState_,
-          Blockly.navigation.STATE_TOOLBOX);
-      chai.assert.equal(this.workspace.getToolbox().tree_.getSelectedItem(),
-          startCategory);
+    test('Calls toolbox selectNext_', function() {
+      testToolboxSelectMethodCalled(this.workspace, this.mockEvent, Blockly.utils.KeyCodes.S, 'selectNext_');
     });
-
-    test('Previous', function() {
-      // Go forward one so that we can go back one:
-      this.workspace.getToolbox().tree_.getSelectedItem().selectNext();
-      this.mockEvent.keyCode = Blockly.utils.KeyCodes.W;
-      chai.assert.equal(this.workspace.getToolbox().tree_.getSelectedItem(),
-          this.secondCategory_);
-      chai.assert.isTrue(Blockly.navigation.onKeyPress(this.mockEvent));
-      chai.assert.equal(Blockly.navigation.currentState_,
-          Blockly.navigation.STATE_TOOLBOX);
-      chai.assert.equal(this.workspace.getToolbox().tree_.getSelectedItem(),
-          this.firstCategory_);
+    test('Calls toolbox selectPrevious_', function() {
+      testToolboxSelectMethodCalled(this.workspace, this.mockEvent, Blockly.utils.KeyCodes.W, 'selectPrevious_');
     });
-
-    // Should be a no-op.
-    test('Previous at start', function() {
-      var startCategory = this.workspace.getToolbox().tree_.getSelectedItem();
-      this.mockEvent.keyCode = Blockly.utils.KeyCodes.W;
-      chai.assert.isTrue(Blockly.navigation.onKeyPress(this.mockEvent));
-      chai.assert.equal(Blockly.navigation.currentState_,
-          Blockly.navigation.STATE_TOOLBOX);
-      chai.assert.equal(this.workspace.getToolbox().tree_.getSelectedItem(),
-          startCategory);
+    test('Calls toolbox selectParent_', function() {
+      testToolboxSelectMethodCalled(this.workspace, this.mockEvent, Blockly.utils.KeyCodes.D, 'selectChild_');
     });
-
-    test('Out', function() {
-      this.mockEvent.keyCode = Blockly.utils.KeyCodes.A;
-      chai.assert.isTrue(Blockly.navigation.onKeyPress(this.mockEvent));
-      // TODO (fenichel/aschmiedt): Decide whether out should go to the
-      // workspace.
-      chai.assert.equal(Blockly.navigation.currentState_,
-          Blockly.navigation.STATE_TOOLBOX);
+    test('Calls toolbox selectChild_', function() {
+      testToolboxSelectMethodCalled(this.workspace, this.mockEvent, Blockly.utils.KeyCodes.A, 'selectParent_');
     });
 
     test('Go to flyout', function() {
@@ -166,8 +135,7 @@ suite('Navigation', function() {
     });
 
     teardown(function() {
-      delete Blockly.Blocks['basic_block'];
-      this.workspace.dispose();
+      workspaceTeardown.call(this, this.workspace);
     });
 
     // Should be a no-op
@@ -248,7 +216,7 @@ suite('Navigation', function() {
       }]);
       this.workspace = createNavigationWorkspace(true);
       this.basicBlock = this.workspace.newBlock('basic_block');
-      this.firstCategory_ = this.workspace.getToolbox().tree_.getChildAt(0);
+      this.firstCategory_ = this.workspace.getToolbox().contents_[0];
       this.mockEvent = {
         getModifierState: function() {
           return false;
@@ -257,15 +225,14 @@ suite('Navigation', function() {
     });
 
     teardown(function() {
-      delete Blockly.Blocks['basic_block'];
-      this.workspace.dispose();
+      workspaceTeardown.call(this, this.workspace);
     });
 
     test('Previous', function() {
       sinon.spy(this.workspace.getCursor(), 'prev');
       this.mockEvent.keyCode = Blockly.utils.KeyCodes.W;
       chai.assert.isTrue(Blockly.navigation.onKeyPress(this.mockEvent));
-      chai.assert.isTrue(this.workspace.getCursor().prev.calledOnce);
+      sinon.assert.calledOnce(this.workspace.getCursor().prev);
       chai.assert.equal(Blockly.navigation.currentState_,
           Blockly.navigation.STATE_WS);
       this.workspace.getCursor().prev.restore();
@@ -276,7 +243,7 @@ suite('Navigation', function() {
       sinon.spy(cursor, 'next');
       this.mockEvent.keyCode = Blockly.utils.KeyCodes.S;
       chai.assert.isTrue(Blockly.navigation.onKeyPress(this.mockEvent));
-      chai.assert.isTrue(cursor.next.calledOnce);
+      sinon.assert.calledOnce(cursor.next);
       chai.assert.equal(Blockly.navigation.currentState_,
           Blockly.navigation.STATE_WS);
       cursor.next.restore();
@@ -287,7 +254,7 @@ suite('Navigation', function() {
       sinon.spy(cursor, 'out');
       this.mockEvent.keyCode = Blockly.utils.KeyCodes.A;
       chai.assert.isTrue(Blockly.navigation.onKeyPress(this.mockEvent));
-      chai.assert.isTrue(cursor.out.calledOnce);
+      sinon.assert.calledOnce(cursor.out);
       chai.assert.equal(Blockly.navigation.currentState_,
           Blockly.navigation.STATE_WS);
       cursor.out.restore();
@@ -298,17 +265,19 @@ suite('Navigation', function() {
       sinon.spy(cursor, 'in');
       this.mockEvent.keyCode = Blockly.utils.KeyCodes.D;
       chai.assert.isTrue(Blockly.navigation.onKeyPress(this.mockEvent));
-      chai.assert.isTrue(cursor.in.calledOnce);
+      sinon.assert.calledOnce(cursor.in);
       chai.assert.equal(Blockly.navigation.currentState_,
           Blockly.navigation.STATE_WS);
       cursor.in.restore();
     });
 
     test('Insert', function() {
-      sinon.spy(Blockly.navigation, 'modify_');
+      // Stub modify as we are not testing its behavior, only if it was called.
+      // Otherwise, there is a warning because there is no marked node.
+      sinon.stub(Blockly.navigation, 'modify_');
       this.mockEvent.keyCode = Blockly.utils.KeyCodes.I;
       chai.assert.isTrue(Blockly.navigation.onKeyPress(this.mockEvent));
-      chai.assert.isTrue(Blockly.navigation.modify_.calledOnce);
+      sinon.assert.calledOnce(Blockly.navigation.modify_);
       chai.assert.equal(Blockly.navigation.currentState_,
           Blockly.navigation.STATE_WS);
       Blockly.navigation.modify_.restore();
@@ -328,7 +297,7 @@ suite('Navigation', function() {
     test('Toolbox', function() {
       this.mockEvent.keyCode = Blockly.utils.KeyCodes.T;
       chai.assert.isTrue(Blockly.navigation.onKeyPress(this.mockEvent));
-      chai.assert.equal(this.workspace.getToolbox().tree_.getSelectedItem(), this.firstCategory_);
+      chai.assert.equal(this.workspace.getToolbox().getSelectedItem(), this.firstCategory_);
       chai.assert.equal(Blockly.navigation.currentState_,
           Blockly.navigation.STATE_TOOLBOX);
     });
@@ -368,8 +337,7 @@ suite('Navigation', function() {
       };
     });
     teardown(function() {
-      delete Blockly.Blocks['basic_block'];
-      this.workspace.dispose();
+      workspaceTeardown.call(this, this.workspace);
     });
     test('Action does not exist', function() {
       var block = this.workspace.getTopBlocks()[0];
@@ -379,7 +347,7 @@ suite('Navigation', function() {
       this.mockEvent.keyCode = Blockly.utils.KeyCodes.N;
       var isHandled = Blockly.navigation.onKeyPress(this.mockEvent);
       chai.assert.isFalse(isHandled);
-      chai.assert.isFalse(field.onBlocklyAction.calledOnce);
+      sinon.assert.notCalled(field.onBlocklyAction);
 
       field.onBlocklyAction.restore();
     });
@@ -388,14 +356,12 @@ suite('Navigation', function() {
       var block = this.workspace.getTopBlocks()[0];
       var field = block.inputList[0].fieldRow[0];
 
-      sinon.stub(field, 'onBlocklyAction').callsFake(function(){
-        return true;
-      });
+      sinon.stub(field, 'onBlocklyAction').returns(true);
       this.workspace.getCursor().setCurNode(Blockly.ASTNode.createFieldNode(field));
 
       var isHandled = Blockly.navigation.onBlocklyAction(Blockly.navigation.ACTION_OUT);
       chai.assert.isTrue(isHandled);
-      chai.assert.isTrue(field.onBlocklyAction.calledOnce);
+      sinon.assert.calledOnce(field.onBlocklyAction);
 
       field.onBlocklyAction.restore();
     });
@@ -409,7 +375,7 @@ suite('Navigation', function() {
       this.mockEvent.keyCode = Blockly.utils.KeyCodes.A;
       var isHandled = Blockly.navigation.onBlocklyAction(Blockly.navigation.ACTION_OUT);
       chai.assert.isTrue(isHandled);
-      chai.assert.isTrue(field.onBlocklyAction.calledOnce);
+      sinon.assert.calledOnce(field.onBlocklyAction);
 
       field.onBlocklyAction.restore();
     });
@@ -421,7 +387,7 @@ suite('Navigation', function() {
 
       var isHandled = Blockly.navigation.onKeyPress(this.mockEvent);
       chai.assert.isTrue(isHandled);
-      chai.assert.isTrue(Blockly.navigation.onBlocklyAction.calledOnce);
+      sinon.assert.calledOnce(Blockly.navigation.onBlocklyAction);
       chai.assert.isFalse(Blockly.getMainWorkspace().keyboardAccessibilityMode);
       Blockly.navigation.onBlocklyAction.restore();
     });
@@ -433,7 +399,7 @@ suite('Navigation', function() {
 
       var isHandled = Blockly.navigation.onKeyPress(this.mockEvent);
       chai.assert.isTrue(isHandled);
-      chai.assert.isTrue(Blockly.navigation.focusWorkspace_.calledOnce);
+      sinon.assert.calledOnce(Blockly.navigation.focusWorkspace_);
       chai.assert.isTrue(Blockly.getMainWorkspace().keyboardAccessibilityMode);
       Blockly.navigation.focusWorkspace_.restore();
     });
@@ -481,8 +447,7 @@ suite('Navigation', function() {
       });
 
       teardown(function() {
-        delete Blockly.Blocks['field_block'];
-        this.workspace.dispose();
+        workspaceTeardown.call(this, this.workspace);
       });
 
       test('Perform valid action for read only', function() {
@@ -513,7 +478,14 @@ suite('Navigation', function() {
     setup(function() {
       Blockly.defineBlocksWithJsonArray([{
         "type": "basic_block",
-        "message0": "",
+        "message0": "%1",
+        "args0": [
+          {
+            "type": "field_input",
+            "name": "TEXT",
+            "text": "default"
+          }
+        ],
         "previousStatement": null,
         "nextStatement": null,
       }]);
@@ -528,8 +500,7 @@ suite('Navigation', function() {
     });
 
     teardown(function() {
-      delete Blockly.Blocks['basic_block'];
-      this.workspace.dispose();
+      workspaceTeardown.call(this, this.workspace);
     });
 
     test('Insert from flyout with a valid connection marked', function() {
@@ -633,9 +604,7 @@ suite('Navigation', function() {
     });
 
     teardown(function() {
-      delete Blockly.Blocks['inline_block'];
-      delete Blockly.Blocks['basic_block'];
-      this.workspace.dispose();
+      workspaceTeardown.call(this, this.workspace);
     });
 
     test('Connect cursor on previous into stack', function() {
@@ -704,8 +673,7 @@ suite('Navigation', function() {
     });
 
     teardown(function() {
-      delete Blockly.Blocks['basic_block'];
-      this.workspace.dispose();
+      workspaceTeardown.call(this, this.workspace);
     });
 
     test('Delete block - has parent ', function() {

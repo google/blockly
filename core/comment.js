@@ -18,8 +18,10 @@ goog.require('Blockly.Events');
 goog.require('Blockly.Events.BlockChange');
 goog.require('Blockly.Events.Ui');
 goog.require('Blockly.Icon');
+goog.require('Blockly.utils.deprecation');
 goog.require('Blockly.utils.dom');
 goog.require('Blockly.utils.object');
+goog.require('Blockly.utils.Svg');
 goog.require('Blockly.utils.userAgent');
 goog.require('Blockly.Warning');
 
@@ -90,13 +92,15 @@ Blockly.utils.object.inherits(Blockly.Comment, Blockly.Icon);
  */
 Blockly.Comment.prototype.drawIcon_ = function(group) {
   // Circle.
-  Blockly.utils.dom.createSvgElement('circle',
+  Blockly.utils.dom.createSvgElement(
+      Blockly.utils.Svg.CIRCLE,
       {'class': 'blocklyIconShape', 'r': '8', 'cx': '8', 'cy': '8'},
       group);
   // Can't use a real '?' text character since different browsers and operating
   // systems render it differently.
   // Body of question mark.
-  Blockly.utils.dom.createSvgElement('path',
+  Blockly.utils.dom.createSvgElement(
+      Blockly.utils.Svg.PATH,
       {
         'class': 'blocklyIconSymbol',
         'd': 'm6.8,10h2c0.003,-0.617 0.271,-0.962 0.633,-1.266 2.875,-2.405' +
@@ -104,7 +108,8 @@ Blockly.Comment.prototype.drawIcon_ = function(group) {
           '-1.201,0.998 -1.201,1.528 -1.204,2.19z'},
       group);
   // Dot of question mark.
-  Blockly.utils.dom.createSvgElement('rect',
+  Blockly.utils.dom.createSvgElement(
+      Blockly.utils.Svg.RECT,
       {
         'class': 'blocklyIconSymbol',
         'x': '6.8',
@@ -133,7 +138,8 @@ Blockly.Comment.prototype.createEditor_ = function() {
    * For non-editable mode see Warning.textToDom_.
    */
 
-  this.foreignObject_ = Blockly.utils.dom.createSvgElement('foreignObject',
+  this.foreignObject_ = Blockly.utils.dom.createSvgElement(
+      Blockly.utils.Svg.FOREIGNOBJECT,
       {'x': Blockly.Bubble.BORDER_WIDTH, 'y': Blockly.Bubble.BORDER_WIDTH},
       null);
 
@@ -360,6 +366,11 @@ Blockly.Comment.prototype.setBubbleSize = function(width, height) {
  * @deprecated August 2019 Use block.getCommentText() instead.
  */
 Blockly.Comment.prototype.getText = function() {
+  Blockly.utils.deprecation.warn(
+      'Comment.prototype.getText',
+      'August 2019',
+      'December 2020',
+      'block.getCommentText');
   return this.model_.text || '';
 };
 
@@ -372,6 +383,11 @@ Blockly.Comment.prototype.getText = function() {
  * @deprecated August 2019 Use block.setCommentText() instead.
  */
 Blockly.Comment.prototype.setText = function(text) {
+  Blockly.utils.deprecation.warn(
+      'Comment.prototype.setText',
+      'August 2019',
+      'December 2020',
+      'block.setCommentText');
   if (this.model_.text == text) {
     return;
   }

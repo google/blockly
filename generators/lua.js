@@ -151,10 +151,10 @@ Blockly.Lua.quote_ = function(string) {
  * @private
  */
 Blockly.Lua.multiline_quote_ = function(string) {
-  string = string.replace(/\\/g, '\\\\')
-                 .replace(/\n/g, '\\\n')
-                 .replace(/'/g, '\\\'');
-  return '[===' + string + '===]';
+  var lines = string.split(/\n/g).map(Blockly.Lua.quote_);
+  // Join with the following, plus a newline:
+  // .. '\n' ..
+  return lines.join(' .. \'\\n\' ..\n');
 };
 
 /**

@@ -9,6 +9,7 @@ goog.require('Blockly.Msg');
 
 suite('Procedures', function() {
   setup(function() {
+    sharedTestSetup.call(this);
     this.workspace = new Blockly.Workspace();
 
     this.callForAllTypes = function(func, startName) {
@@ -37,7 +38,7 @@ suite('Procedures', function() {
     };
   });
   teardown(function() {
-    this.workspace.dispose();
+    sharedTestTeardown.call(this);
   });
 
   suite('allProcedures', function() {
@@ -340,7 +341,6 @@ suite('Procedures', function() {
   });
   suite('Enable/Disable', function() {
     setup(function() {
-      createEventsFireStub();
       var toolbox = document.getElementById('toolbox-categories');
       this.workspaceSvg = Blockly.inject('blocklyDiv', {toolbox: toolbox});
     });

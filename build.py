@@ -1,4 +1,9 @@
 #!/usr/bin/python2.7
+#
+# Deprecation warning: (July 2020)
+# This build script has been deprecated, please use 'npm run build' instead.
+# The script will be removed from Blockly core in Q4 of 2020.
+#
 # Compresses the core Blockly files into a single JavaScript file.
 #
 # Copyright 2012 Google LLC
@@ -403,14 +408,14 @@ class Gen_langfiles(threading.Thread):
     try:
       subprocess.check_call([
           "python",
-          os.path.join("i18n", "js_to_json.py"),
+          os.path.join("scripts", "i18n", "js_to_json.py"),
           "--input_file", "msg/messages.js",
           "--output_dir", "msg/json/",
           "--quiet"])
     except (subprocess.CalledProcessError, OSError) as e:
       # Documentation for subprocess.check_call says that CalledProcessError
       # will be raised on failure, but I found that OSError is also possible.
-      print("Error running i18n/js_to_json.py: ", e)
+      print("Error running scripts/i18n/js_to_json.py: ", e)
       sys.exit(1)
 
     # Checking whether it is necessary to rebuild the js files would be a lot of
@@ -420,7 +425,7 @@ class Gen_langfiles(threading.Thread):
       # Use create_messages.py to create .js files from .json files.
       cmd = [
           "python",
-          os.path.join("i18n", "create_messages.py"),
+          os.path.join("scripts", "i18n", "create_messages.py"),
           "--source_lang_file", os.path.join("msg", "json", "en.json"),
           "--source_synonym_file", os.path.join("msg", "json", "synonyms.json"),
           "--source_constants_file", os.path.join("msg", "json", "constants.json"),
@@ -433,7 +438,7 @@ class Gen_langfiles(threading.Thread):
       cmd.extend(json_files)
       subprocess.check_call(cmd)
     except (subprocess.CalledProcessError, OSError) as e:
-      print("Error running i18n/create_messages.py: ", e)
+      print("Error running scripts/i18n/create_messages.py: ", e)
       sys.exit(1)
 
     # Output list of .js files created.
@@ -484,6 +489,10 @@ if __name__ == "__main__":
   calcdeps = import_path(os.path.join("closure", "bin", "calcdeps.py"))
   full_search_paths = calcdeps.ExpandDirectories(["core", "closure"])
   full_search_paths = sorted(full_search_paths)  # Deterministic build.
+
+  print("Deprecation Warning: (July 2020)\n This build script has been " +
+    "deprecated, please use 'npm run build' instead. \n The script will be " +
+    "removed from Blockly core in Q4 of 2020.\n")
 
   # Uncompressed and compressed are run in parallel threads.
   # Uncompressed is limited by processor speed.

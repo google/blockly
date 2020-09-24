@@ -234,9 +234,10 @@ Blockly.Python.quote_ = function(string) {
  * @private
  */
 Blockly.Python.multiline_quote_ = function(string) {
-  // Can't use goog.string.quote since % must also be escaped.
-  string = string.replace(/'''/g, '\\\'\\\'\\\'');
-  return '\'\'\'' + string + '\'\'\'';
+  var lines = string.split(/\n/g).map(Blockly.Python.quote_);
+  // Join with the following, plus a newline:
+  // + '\n' +
+  return lines.join(' + \'\\n\' + \n');
 };
 
 /**

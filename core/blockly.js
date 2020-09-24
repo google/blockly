@@ -272,9 +272,11 @@ Blockly.onKeyDown = function(e) {
  */
 Blockly.copy_ = function(toCopy) {
   var data = toCopy.toCopyData();
-  Blockly.clipboardXml_ = data.xml;
-  Blockly.clipboardSource_ = data.source;
-  Blockly.clipboardTypeCounts_ = data.typeCounts;
+  if (data) {
+    Blockly.clipboardXml_ = data.xml;
+    Blockly.clipboardSource_ = data.source;
+    Blockly.clipboardTypeCounts_ = data.typeCounts;
+  }
 };
 
 /**
@@ -323,7 +325,7 @@ Blockly.hideChaff = function(opt_allowToolbox) {
     // trashcan UI (no trashcan to click to close it).
     if (workspace.trashcan &&
       workspace.trashcan.flyout) {
-      workspace.trashcan.flyout.hide();
+      workspace.trashcan.closeFlyout();
     }
     var toolbox = workspace.getToolbox();
     if (toolbox &&

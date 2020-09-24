@@ -23,6 +23,7 @@ goog.require('Blockly.utils.Coordinate');
 goog.require('Blockly.utils.dom');
 goog.require('Blockly.utils.KeyCodes');
 goog.require('Blockly.utils.object');
+goog.require('Blockly.utils.Svg');
 goog.require('Blockly.utils.userAgent');
 
 
@@ -70,16 +71,42 @@ Blockly.FieldMultilineInput.fromJson = function(options) {
 };
 
 /**
+ * Serializes this field's value to XML. Should only be called by Blockly.Xml.
+ * @param {!Element} fieldElement The element to populate with info about the
+ *    field's state.
+ * @return {!Element} The element containing info about the field's state.
+ * @package
+ */
+Blockly.FieldMultilineInput.prototype.toXml = function(fieldElement) {
+  // Replace '\n' characters with html-escaped equivalent '&#10'. This is
+  // needed so the plain-text representation of the xml produced by
+  // `Blockly.Xml.domToText` will appear on a single line (this is a limitation
+  // of the plain-text format).
+  fieldElement.textContent = this.getValue().replace(/\n/g, '&#10;');
+  return fieldElement;
+};
+
+/**
+ * Sets the field's value based on the given XML element. Should only be
+ * called by Blockly.Xml.
+ * @param {!Element} fieldElement The element containing info about the
+ *    field's state.
+ * @package
+ */
+Blockly.FieldMultilineInput.prototype.fromXml = function(fieldElement) {
+  this.setValue(fieldElement.textContent.replace(/&#10;/g, '\n'));
+};
+
+/**
  * Create the block UI for this field.
  * @package
  */
 Blockly.FieldMultilineInput.prototype.initView = function() {
   this.createBorderRect_();
-  this.textGroup_ = /** @type {!SVGGElement} **/
-      (Blockly.utils.dom.createSvgElement('g',
-          {
-            'class': 'blocklyEditableText',
-          }, this.fieldGroup_));
+  this.textGroup_ = Blockly.utils.dom.createSvgElement(
+      Blockly.utils.Svg.G, {
+        'class': 'blocklyEditableText',
+      }, this.fieldGroup_);
 };
 
 /**
@@ -134,12 +161,13 @@ Blockly.FieldMultilineInput.prototype.render_ = function() {
   for (var i = 0; i < lines.length; i++) {
     var lineHeight = this.getConstants().FIELD_TEXT_HEIGHT +
         this.getConstants().FIELD_BORDER_RECT_Y_PADDING;
-    var span = Blockly.utils.dom.createSvgElement('text', {
-      'class': 'blocklyText blocklyMultilineText',
-      x: this.getConstants().FIELD_BORDER_RECT_X_PADDING,
-      y: y + this.getConstants().FIELD_BORDER_RECT_Y_PADDING,
-      dy: this.getConstants().FIELD_TEXT_BASELINE
-    }, this.textGroup_);
+    var span = Blockly.utils.dom.createSvgElement(
+        Blockly.utils.Svg.TEXT, {
+          'class': 'blocklyText blocklyMultilineText',
+          x: this.getConstants().FIELD_BORDER_RECT_X_PADDING,
+          y: y + this.getConstants().FIELD_BORDER_RECT_Y_PADDING,
+          dy: this.getConstants().FIELD_TEXT_BASELINE
+        }, this.textGroup_);
     span.appendChild(document.createTextNode(lines[i]));
     y += lineHeight;
   }

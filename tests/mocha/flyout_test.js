@@ -6,6 +6,7 @@
 
 suite('Flyout', function() {
   setup(function() {
+    sharedTestSetup.call(this);
     Blockly.defineBlocksWithJsonArray([{
       "type": "basic_block",
       "message0": "%1",
@@ -25,9 +26,7 @@ suite('Flyout', function() {
   });
 
   teardown(function() {
-    this.workspace.dispose();
-    delete Blockly.Blocks['basic_block'];
-    sinon.restore();
+    sharedTestTeardown.call(this);
   });
 
   suite('createFlyoutInfo_', function() {

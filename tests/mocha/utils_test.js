@@ -5,6 +5,13 @@
  */
 
 suite('Utils', function() {
+  setup(function() {
+    sharedTestSetup.call(this);
+  });
+  teardown(function() {
+    sharedTestTeardown.call(this);
+  });
+
   test('genUid', function() {
     var uuids = {};
     chai.assert.equal([1,2,3].indexOf(4), -1);

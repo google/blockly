@@ -6,6 +6,7 @@
 
 suite('Cursor', function() {
   setup(function() {
+    sharedTestSetup.call(this);
     Blockly.defineBlocksWithJsonArray([{
       "type": "input_statement",
       "message0": "%1 %2 %3 %4",
@@ -72,10 +73,7 @@ suite('Cursor', function() {
     };
   });
   teardown(function() {
-    delete Blockly.Blocks['input_statement'];
-    delete Blockly.Blocks['field_input'];
-
-    this.workspace.dispose();
+    sharedTestTeardown.call(this);
   });
 
   test('Next - From a Previous skip over next connection and block', function() {

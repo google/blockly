@@ -6,31 +6,21 @@
 
 suite('Extensions', function() {
   setup(function() {
+    sharedTestSetup.call(this);
     this.workspace = new Blockly.Workspace();
-    this.blockTypesCleanup_ = [];
     this.extensionsCleanup_ = [];
   });
   teardown(function() {
-    var i;
-    for (i = 0; i < this.blockTypesCleanup_.length; i++) {
-      var blockType = this.blockTypesCleanup_[i];
-      delete Blockly.Blocks[blockType];
-    }
-    for (i = 0; i < this.extensionsCleanup_.length; i++) {
+    sharedTestTeardown.call(this);
+    for (let i = 0; i < this.extensionsCleanup_.length; i++) {
       var extension = this.extensionsCleanup_[i];
       delete Blockly.Extensions.ALL_[extension];
     }
-    this.workspace.dispose();
-    // Clear Blockly.Event state.
-    Blockly.Events.setGroup(false);
-    Blockly.Events.disabled_ = 0;
-    sinon.restore();
   });
 
   test('Definition before and after block type', function() {
     this.extensionsCleanup_.push('extensions_test_before');
     this.extensionsCleanup_.push('extensions_test_after');
-    this.blockTypesCleanup_.push('extension_test_block');
 
     chai.assert.isUndefined(Blockly.Extensions.ALL_['extensions_test_before']);
     var beforeCallback = sinon.spy();
@@ -62,9 +52,6 @@ suite('Extensions', function() {
   });
 
   test('Parent tooltip when inline', function() {
-    this.blockTypesCleanup_.push('test_parent_tooltip_when_inline');
-    this.blockTypesCleanup_.push('test_parent');
-
     var defaultTooltip = "defaultTooltip";
     var parentTooltip = "parentTooltip";
     Blockly.defineBlocksWithJsonArray([
@@ -98,7 +85,7 @@ suite('Extensions', function() {
     // Tooltip is normal before connected to parent.
     var parent = new Blockly.Block(this.workspace, 'test_parent');
     chai.assert.equal(parent.tooltip, parentTooltip);
-    chai.assert.isFalse(!!parent.inputsInline);
+    chai.assert.notExists(parent.inputsInline);
 
     // Tooltip is normal when parent is not inline.
     parent.getInput('INPUT').connection.connect(block.outputConnection);
@@ -118,7 +105,6 @@ suite('Extensions', function() {
   suite('Mixin', function() {
     test('Basic', function() {
       this.extensionsCleanup_.push('mixin_test');
-      this.blockTypesCleanup_.push('test_block_mixin');
 
       var testMixin = {
         field: 'FIELD',
@@ -132,6 +118,7 @@ suite('Extensions', function() {
       Blockly.Extensions.registerMixin('mixin_test', testMixin);
 
       chai.assert.typeOf(Blockly.Extensions.ALL_['mixin_test'], 'function');
+
 
       Blockly.defineBlocksWithJsonArray([{
         "type": "test_block_mixin",
@@ -148,7 +135,6 @@ suite('Extensions', function() {
     suite('Mutator', function() {
       test('Basic', function() {
         this.extensionsCleanup_.push('mutator_test');
-        this.blockTypesCleanup_.push('mutator_test_block');
 
         Blockly.defineBlocksWithJsonArray([{
           "type": "mutator_test_block",
@@ -186,7 +172,6 @@ suite('Extensions', function() {
 
       test('With helper function', function() {
         this.extensionsCleanup_.push('extensions_test');
-        this.blockTypesCleanup_.push('mutator_test_block');
 
         Blockly.defineBlocksWithJsonArray([{
           "type": "mutator_test_block",
@@ -218,7 +203,6 @@ suite('Extensions', function() {
 
       test('No dialog', function() {
         this.extensionsCleanup_.push('mutator_test');
-        this.blockTypesCleanup_.push('mutator_test_block');
 
         Blockly.defineBlocksWithJsonArray([{
           "type": "mutator_test_block",
@@ -245,16 +229,14 @@ suite('Extensions', function() {
         // Make sure all of the functions were installed correctly.
         chai.assert.equal(block.domToMutation(), 'domToMutationFn');
         chai.assert.equal(block.mutationToDom(), 'mutationToDomFn');
-        chai.assert.isFalse(block.hasOwnProperty('compose'));
-        chai.assert.isFalse(block.hasOwnProperty('decompose'));
+        chai.assert.isFalse(Object.prototype.hasOwnProperty.call(block, 'compose'));
+        chai.assert.isFalse(Object.prototype.hasOwnProperty.call(block, 'decompose'));
       });
     });
   });
 
   suite('Error cases', function() {
     test('Missing extension', function() {
-      this.blockTypesCleanup_.push('missing_extension_block');
-
       Blockly.defineBlocksWithJsonArray([{
         "type": "missing_extension_block",
         "message0": "missing_extension_block",
@@ -270,7 +252,6 @@ suite('Extensions', function() {
 
     test('Mixin overwrites local value', function() {
       this.extensionsCleanup_.push('mixin_bad_inputList');
-      this.blockTypesCleanup_.push('test_block_bad_inputList');
 
       var TEST_MIXIN_BAD_INPUTLIST = {
         inputList: 'bad inputList'  // Defined in constructor
@@ -295,7 +276,6 @@ suite('Extensions', function() {
 
     test('Mixin overwrites prototype', function() {
       this.extensionsCleanup_.push('mixin_bad_colour_');
-      this.blockTypesCleanup_.push('test_block_bad_colour');
 
       var TEST_MIXIN_BAD_COLOUR = {
         colour_: 'bad colour_' // Defined on prototype
@@ -320,7 +300,6 @@ suite('Extensions', function() {
 
     test('Use mutator as extension', function() {
       this.extensionsCleanup_.push('mutator_test');
-      this.blockTypesCleanup_.push('mutator_test_block');
 
       Blockly.defineBlocksWithJsonArray([{
         "type": "mutator_test_block",
@@ -352,7 +331,6 @@ suite('Extensions', function() {
 
     test('Use mutator mixin as extension', function() {
       this.extensionsCleanup_.push('mutator_test');
-      this.blockTypesCleanup_.push('mutator_test_block');
 
       Blockly.defineBlocksWithJsonArray([{
         "type": "mutator_test_block",
@@ -384,7 +362,6 @@ suite('Extensions', function() {
 
     test('Use extension as mutator', function() {
       this.extensionsCleanup_.push('extensions_test');
-      this.blockTypesCleanup_.push('mutator_test_block');
 
       Blockly.defineBlocksWithJsonArray([{
         "type": "mutator_test_block",

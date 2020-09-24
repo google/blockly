@@ -3,6 +3,12 @@
  * Copyright 2020 Google LLC
  * SPDX-License-Identifier: Apache-2.0
  */
+import * as coreTestHelpers from './test_helpers.js';
+import {getSimpleJSON, getXmlArray} from './toolbox_helper.js';
+
+const {
+  sharedTestSetup, sharedTestTeardown, workspaceTeardown
+} = coreTestHelpers;
 
 suite('Flyout', function() {
   setup(function() {

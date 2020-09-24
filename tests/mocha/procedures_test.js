@@ -3,9 +3,13 @@
  * Copyright 2019 Google LLC
  * SPDX-License-Identifier: Apache-2.0
  */
+import * as coreTestHelpers from './test_helpers.js';
+import * as procTestHelpers from './procedures_test_helpers.js';
 
-goog.require('Blockly.Blocks.procedures');
-goog.require('Blockly.Msg');
+const {
+  sharedTestSetup, sharedTestTeardown, workspaceTeardown
+} = coreTestHelpers;
+const {assertCallBlockStructure, assertDefBlockStructure} = procTestHelpers;
 
 suite('Procedures', function() {
   setup(function() {

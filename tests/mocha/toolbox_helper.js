@@ -183,3 +183,16 @@ function getChildItem(toolbox) {
 function getSeparator(toolbox) {
   return toolbox.getToolboxItemById('separator');
 }
+
+export {
+  getBasicToolbox,
+  getCategoryJSON,
+  getChildItem,
+  getCollapsibleItem,
+  getDeeplyNestedJSON,
+  getInjectedToolbox,
+  getNonCollapsibleItem,
+  getSeparator,
+  getSimpleJSON,
+  getXmlArray
+};

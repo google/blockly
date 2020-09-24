@@ -3,12 +3,9 @@
  * Copyright 2020 Google LLC
  * SPDX-License-Identifier: Apache-2.0
  */
+import * as coreTestHelpers from './test_helpers.js';
 
-goog.require('Blockly.Dart');
-goog.require('Blockly.JavaScript');
-goog.require('Blockly.Lua');
-goog.require('Blockly.PHP');
-goog.require('Blockly.Python');
+const {sharedTestSetup, sharedTestTeardown} = coreTestHelpers;
 
 suite('Generator', function() {
   setup(function() {

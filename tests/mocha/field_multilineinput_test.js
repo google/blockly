@@ -4,6 +4,12 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import * as coreTestHelpers from './test_helpers.js';
+
+const {
+  createTestBlock, sharedTestSetup, sharedTestTeardown
+} = coreTestHelpers;
+
 suite('Multiline Input Fields', function() {
   setup(function() {
     sharedTestSetup.call(this);

@@ -3,6 +3,9 @@
  * Copyright 2020 Google LLC
  * SPDX-License-Identifier: Apache-2.0
  */
+import * as coreTestHelpers from './test_helpers.js';
+
+const {sharedTestSetup, sharedTestTeardown} = coreTestHelpers;
 
 suite('Variables', function() {
   setup(function() {

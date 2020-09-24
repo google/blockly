@@ -3,6 +3,17 @@
  * Copyright 2020 Google LLC
  * SPDX-License-Identifier: Apache-2.0
  */
+import * as coreTestHelpers from './test_helpers.js';
+import * as toolboxHelpers from './toolbox_helper.js';
+
+const {
+  defineStackBlock, sharedTestSetup, sharedTestTeardown
+} = coreTestHelpers;
+const {
+  getBasicToolbox, getCategoryJSON, getChildItem, getCollapsibleItem,
+  getDeeplyNestedJSON, getInjectedToolbox, getNonCollapsibleItem, getSeparator,
+  getSimpleJSON, getXmlArray
+} = toolboxHelpers;
 
 suite('Toolbox', function() {
 

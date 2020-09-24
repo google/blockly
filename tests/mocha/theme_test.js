@@ -8,7 +8,11 @@
  * @fileoverview Blockly Theme tests.
  * @author samelh@google.com (Sam El-Husseini)
  */
-'use strict';
+import * as coreTestHelpers from './test_helpers.js';
+
+const {
+  assertEventFired, sharedTestSetup, sharedTestTeardown, workspaceTeardown
+} = coreTestHelpers;
 
 suite('Theme', function() {
   setup(function() {

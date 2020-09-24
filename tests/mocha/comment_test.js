@@ -4,6 +4,13 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import * as coreTestHelpers from './test_helpers.js';
+
+const {
+  assertEventFired, createDeprecationWarningStub, sharedTestSetup,
+  sharedTestTeardown
+} = coreTestHelpers;
+
 suite('Comments', function() {
   setup(function() {
     sharedTestSetup.call(this);

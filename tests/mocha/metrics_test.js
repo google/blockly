@@ -8,7 +8,9 @@
  * @fileoverview Test for the metrics manager.
  * @author aschmiedt@google.com (Abby Schmiedt)
  */
-'use strict';
+import * as coreTestHelpers from './test_helpers.js';
+
+const {sharedTestSetup, sharedTestTeardown} = coreTestHelpers;
 
 suite('Metrics', function() {
   var SCROLL_X = 10;

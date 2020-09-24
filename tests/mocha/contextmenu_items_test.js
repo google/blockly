@@ -3,6 +3,11 @@
  * Copyright 2020 Google LLC
  * SPDX-License-Identifier: Apache-2.0
  */
+import * as coreTestHelpers from './test_helpers.js';
+
+const {
+  sharedTestSetup, sharedTestTeardown, workspaceTeardown
+} = coreTestHelpers;
 
 suite('Context Menu Items', function() {
   setup(function() {

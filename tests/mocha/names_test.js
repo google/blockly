@@ -8,7 +8,9 @@
  * @fileoverview Blockly names tests.
  * @author samelh@google.com (Sam El-Husseini)
  */
-'use strict';
+import * as coreTestHelpers from './test_helpers.js';
+
+const {sharedTestSetup, sharedTestTeardown} = coreTestHelpers;
 
 suite('Names', function() {
   setup(function() {

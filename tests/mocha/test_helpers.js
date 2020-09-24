@@ -456,7 +456,7 @@ function assertNthCallEventArgEquals(spy, n, instanceType, expectedProperties,
   assertXmlProperties_(eventArg, xmlProperties);
 }
 
-function defineStackBlock(sharedCleanupObj) {
+function defineStackBlock() {
   Blockly.defineBlocksWithJsonArray([{
     "type": "stack_block",
     "message0": "",
@@ -604,3 +604,32 @@ function simulateClick(target, properties) {
   dispatchPointerEvent(target, 'pointerup', properties);
   dispatchPointerEvent(target, 'click', properties);
 }
+
+export {
+  addBlockTypeToCleanup,
+  addMessageToCleanup,
+  assertDeprecationWarningCall,
+  assertEventEquals,
+  assertEventFired,
+  assertEventNotFired,
+  assertNthCallEventArgEquals,
+  assertNoWarnings,
+  assertSingleDeprecationWarningCall,
+  assertVariableValues,
+  assertWarnings,
+  createDeprecationWarningStub,
+  createFireChangeListenerSpy,
+  createGenUidStubWithReturns,
+  createKeyDownEvent,
+  createRenderedBlock,
+  createTestBlock,
+  defineBasicBlockWithField,
+  defineRowBlock,
+  defineStackBlock,
+  defineStatementBlock,
+  dispatchPointerEvent,
+  sharedTestSetup,
+  sharedTestTeardown,
+  simulateClick,
+  workspaceTeardown
+};

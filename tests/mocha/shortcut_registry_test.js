@@ -4,6 +4,12 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import * as coreTestHelpers from './test_helpers.js';
+
+const {
+  createKeyDownEvent, sharedTestSetup, sharedTestTeardown
+} = coreTestHelpers;
+
 suite('Keyboard Shortcut Registry Test', function() {
   setup(function() {
     sharedTestSetup.call(this);

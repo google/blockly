@@ -133,3 +133,10 @@ function createProcCallBlock(
       '</block>'
   ), workspace);
 }
+
+export {
+  assertCallBlockStructure,
+  assertDefBlockStructure,
+  createProcDefBlock,
+  createProcCallBlock
+};

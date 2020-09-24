@@ -3,6 +3,12 @@
  * Copyright 2020 Google LLC
  * SPDX-License-Identifier: Apache-2.0
  */
+import * as coreTestHelpers from './test_helpers.js';
+
+const {
+  addMessageToCleanup, assertNoWarnings, assertWarnings, sharedTestSetup,
+  sharedTestTeardown
+} = coreTestHelpers;
 
 suite('JSON Block Definitions', function() {
   setup(function() {

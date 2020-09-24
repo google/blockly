@@ -3,6 +3,12 @@
  * Copyright 2020 Google LLC
  * SPDX-License-Identifier: Apache-2.0
  */
+import * as coreTestHelpers from './test_helpers.js';
+
+const {
+  assertEventFired, assertEventNotFired, sharedTestSetup, sharedTestTeardown,
+  simulateClick
+} = coreTestHelpers;
 
 suite("Zoom Controls", function() {
   setup(function() {

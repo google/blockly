@@ -4,6 +4,10 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import * as coreTestHelpers from './test_helpers.js';
+
+const {sharedTestSetup, sharedTestTeardown} = coreTestHelpers;
+
 suite('Connection checker', function() {
   setup(function() {
     sharedTestSetup.call(this);

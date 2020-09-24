@@ -4,6 +4,13 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import * as coreTestHelpers from './test_helpers.js';
+
+const {
+  createGenUidStubWithReturns, createTestBlock, sharedTestSetup,
+  sharedTestTeardown
+} = coreTestHelpers;
+
 suite('Variable Fields', function() {
   var FAKE_VARIABLE_NAME = 'default_name';
   var FAKE_ID = 'id1';

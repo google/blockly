@@ -4,6 +4,13 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import * as coreTestHelpers from './test_helpers.js';
+
+const {
+  assertSingleDeprecationWarningCall, createDeprecationWarningStub,
+  sharedTestSetup, sharedTestTeardown
+} = coreTestHelpers;
+
 suite('Image Fields', function() {
   setup(function() {
     sharedTestSetup.call(this);

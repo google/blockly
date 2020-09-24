@@ -3,6 +3,12 @@
  * Copyright 2019 Google LLC
  * SPDX-License-Identifier: Apache-2.0
  */
+import * as coreTestHelpers from './test_helpers.js';
+
+const {
+  createDeprecationWarningStub, createRenderedBlock, createTestBlocks,
+  sharedTestSetup, sharedTestTeardown, workspaceTeardown
+} = coreTestHelpers;
 
 suite('Blocks', function() {
   setup(function() {

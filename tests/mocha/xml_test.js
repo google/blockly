@@ -3,6 +3,12 @@
  * Copyright 2019 Google LLC
  * SPDX-License-Identifier: Apache-2.0
  */
+import * as coreTestHelpers from './test_helpers.js';
+
+const {
+  addBlockTypeToCleanup, assertVariableValues, createGenUidStubWithReturns,
+  sharedTestSetup, sharedTestTeardown, workspaceTeardown
+} = coreTestHelpers;
 
 suite('XML', function() {
   var assertSimpleFieldDom = function(fieldDom, name, text) {

@@ -3,6 +3,14 @@
  * Copyright 2020 Google LLC
  * SPDX-License-Identifier: Apache-2.0
  */
+import * as coreTestHelpers from './test_helpers.js';
+import {testAWorkspace} from './workspace_test_helpers.js';
+
+const {
+  assertEventFired, assertEventNotFired, assertVariableValues,
+  createFireChangeListenerSpy, defineStackBlock, sharedTestSetup,
+  sharedTestTeardown, workspaceTeardown
+} = coreTestHelpers;
 
 suite('WorkspaceSvg', function() {
   setup(function() {

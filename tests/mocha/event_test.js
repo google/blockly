@@ -4,7 +4,14 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-goog.require('Blockly.WorkspaceComment');
+import * as coreTestHelpers from './test_helpers.js';
+
+const {
+  assertEventEquals, assertNthCallEventArgEquals,
+  assertVariableValues, createFireChangeListenerSpy,
+  createGenUidStubWithReturns, sharedTestSetup, sharedTestTeardown,
+  workspaceTeardown
+} = coreTestHelpers;
 
 suite('Events', function() {
   setup(function() {

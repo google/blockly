@@ -8,7 +8,12 @@
  * @fileoverview Tests for gesture.
  * @author marisaleung@google.com (Marisa Leung)
  */
-'use strict';
+import * as coreTestHelpers from './test_helpers.js';
+
+const {
+  assertEventFired, assertEventNotFired, defineBasicBlockWithField,
+  dispatchPointerEvent, sharedTestSetup, sharedTestTeardown, simulateClick
+} = coreTestHelpers;
 
 suite('Gesture', function() {
   function testGestureIsFieldClick(block, isFieldClick, eventsFireStub){

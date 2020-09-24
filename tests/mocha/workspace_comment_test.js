@@ -3,8 +3,9 @@
  * Copyright 2020 Google LLC
  * SPDX-License-Identifier: Apache-2.0
  */
+import * as coreTestHelpers from './test_helpers.js';
 
-goog.require('Blockly.WorkspaceComment');
+const {sharedTestSetup, sharedTestTeardown} = coreTestHelpers;
 
 suite('Workspace comment', function() {
   setup(function() {

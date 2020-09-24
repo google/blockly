@@ -4,6 +4,13 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import * as coreTestHelpers from './test_helpers.js';
+
+const {
+  createKeyDownEvent, defineStackBlock, sharedTestSetup,
+  sharedTestTeardown
+} = coreTestHelpers;
+
 suite('Key Down', function() {
   setup(function() {
     sharedTestSetup.call(this);
@@ -18,7 +25,7 @@ suite('Key Down', function() {
    * @param {Blockly.Workspace} workspace The workspace to create a new block on.
    */
   function setSelectedBlock(workspace) {
-    defineStackBlock(this.sharedCleanup);
+    defineStackBlock();
     Blockly.selected = workspace.newBlock('stack_block');
   }
 

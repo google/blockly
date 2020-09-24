@@ -8,7 +8,11 @@
  * @fileoverview Tests for Blockly.fieldRegistry
  * @author bekawestberg@gmail.com (Beka Westberg)
  */
-'use strict';
+import * as coreTestHelpers from './test_helpers.js';
+
+const {
+  createDeprecationWarningStub, sharedTestSetup, sharedTestTeardown
+} = coreTestHelpers;
 
 suite('Field Registry', function() {
   function CustomFieldType(value) {

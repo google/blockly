@@ -484,7 +484,7 @@ suite('Procedures', function() {
           this.workspaceSvg.clearUndo();
           Blockly.Events.setGroup('g1');
           this.barDef.setEnabled(false);
-          // Blockly.Events.setGroup(false);
+          Blockly.Events.setGroup(false);
 
           for (var i = 0; i < 2; i++) {
             chai.assert.isFalse(this.barCalls[i].isEnabled(),

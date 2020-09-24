@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-suite.only('Multiline Input Fields', function() {
+suite('Multiline Input Fields', function() {
   /**
    * Configuration for field tests with invalid values.
    * @type {!Array<!FieldCreationTestCase>}

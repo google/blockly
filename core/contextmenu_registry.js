@@ -52,7 +52,7 @@ Blockly.ContextMenuRegistry.ScopeType = {
  * displayText functions that depend on this information.
  * @typedef {{
  *    block: (Blockly.BlockSvg|undefined),
- *    workspace: (Blockly.WorkspaceSvg|undefined),
+ *    workspace: (Blockly.WorkspaceSvg|undefined)
  * }}
  */
 Blockly.ContextMenuRegistry.Scope;
@@ -65,7 +65,7 @@ Blockly.ContextMenuRegistry.Scope;
  *    displayText: ((function(!Blockly.ContextMenuRegistry.Scope):string)|string),
  *    preconditionFn: function(!Blockly.ContextMenuRegistry.Scope):string,
  *    weight: number,
- *    id: string,
+ *    id: string
  * }}
 */
 Blockly.ContextMenuRegistry.RegistryItem;
@@ -77,7 +77,7 @@ Blockly.ContextMenuRegistry.RegistryItem;
  *    enabled: boolean,
  *    callback: function(!Blockly.ContextMenuRegistry.Scope),
  *    scope: !Blockly.ContextMenuRegistry.Scope,
- *    weight: number,
+ *    weight: number
  * }}
  */
 Blockly.ContextMenuRegistry.ContextMenuOption;

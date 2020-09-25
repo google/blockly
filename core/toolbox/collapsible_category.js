@@ -76,7 +76,7 @@ Blockly.utils.object.inherits(Blockly.CollapsibleToolboxCategory, Blockly.Toolbo
  *            selected:?string,
  *            openIcon:?string,
  *            closedIcon:?string,
- *            contents:?string,
+ *            contents:?string
  *          }}
  */
 Blockly.CollapsibleToolboxCategory.CssConfig;

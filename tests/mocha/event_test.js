@@ -897,4 +897,106 @@ suite('Events', function() {
       chai.assert.isNotNull(this.workspace.getVariableById(TEST_VAR_ID));
     });
   });
+  suite('Disable orphans', function() {
+    setup(function() {
+      // disableOrphans needs a WorkspaceSVG
+      var toolbox = document.getElementById('toolbox-categories');
+      this.workspace = Blockly.inject('blocklyDiv', {toolbox: toolbox});
+    });
+    teardown(function() {
+      workspaceTeardown.call(this, this.workspace);
+    });
+    test('Created orphan block is disabled', function() {
+      this.workspace.addChangeListener(Blockly.Events.disableOrphans);
+      var block = this.workspace.newBlock('controls_for');
+      block.initSvg();
+      block.render();
+
+      // Fire all events
+      this.clock.runAll();
+
+      chai.assert.isFalse(block.isEnabled(),
+          'Expected orphan block to be disabled after creation');
+    });
+    test('Created procedure block is enabled', function() {
+      this.workspace.addChangeListener(Blockly.Events.disableOrphans);
+
+      // Procedure block is never an orphan
+      var functionBlock = this.workspace.newBlock('procedures_defnoreturn');
+      functionBlock.initSvg();
+      functionBlock.render();
+
+      // Fire all events
+      this.clock.runAll();
+
+      chai.assert.isTrue(functionBlock.isEnabled(),
+          'Expected top-level procedure block to be enabled');
+    });
+    test('Moving a block to top-level disables it', function() {
+      this.workspace.addChangeListener(Blockly.Events.disableOrphans);
+      var functionBlock = this.workspace.newBlock('procedures_defnoreturn');
+      functionBlock.initSvg();
+      functionBlock.render();
+
+      var block = this.workspace.newBlock('controls_for');
+      block.initSvg();
+      block.render();
+
+      // Connect the block to the function block input stack
+      functionBlock.inputList[1].connection.connect(block.previousConnection);
+
+      // Disconnect it again
+      block.unplug(false);
+
+      // Fire all events
+      this.clock.runAll();
+
+      chai.assert.isFalse(block.isEnabled(),
+          'Expected disconnected block to be disabled');
+    });
+    test('Giving block a parent enables it', function() {
+      this.workspace.addChangeListener(Blockly.Events.disableOrphans);
+      var functionBlock = this.workspace.newBlock('procedures_defnoreturn');
+      functionBlock.initSvg();
+      functionBlock.render();
+
+      var block = this.workspace.newBlock('controls_for');
+      block.initSvg();
+      block.render();
+
+      // Connect the block to the function block input stack
+      functionBlock.inputList[1].connection.connect(block.previousConnection);
+
+      // Fire all events
+      this.clock.runAll();
+
+      chai.assert.isTrue(block.isEnabled(),
+          'Expected block to be enabled after connecting to parent');
+    });
+    test('disableOrphans events are not undoable', function() {
+      this.workspace.addChangeListener(Blockly.Events.disableOrphans);
+      var functionBlock = this.workspace.newBlock('procedures_defnoreturn');
+      functionBlock.initSvg();
+      functionBlock.render();
+
+      var block = this.workspace.newBlock('controls_for');
+      block.initSvg();
+      block.render();
+
+      // Connect the block to the function block input stack
+      functionBlock.inputList[1].connection.connect(block.previousConnection);
+
+      // Disconnect it again
+      block.unplug(false);
+
+      // Fire all events
+      this.clock.runAll();
+
+      var disabledEvents = this.workspace.getUndoStack().filter(function(e) {
+        return e.element === 'disabled';
+      });
+      chai.assert.isEmpty(disabledEvents,
+          'Undo stack should not contain any disabled events');
+    });
+  });
 });

@@ -369,18 +369,25 @@ Blockly.Events.disableOrphans = function(event) {
     var workspace = Blockly.Workspace.getById(event.workspaceId);
     var block = workspace.getBlockById(event.blockId);
     if (block) {
-      var parent = block.getParent();
-      if (parent && parent.isEnabled()) {
-        var children = block.getDescendants(false);
-        for (var i = 0, child; (child = children[i]); i++) {
-          child.setEnabled(true);
+      // Changing blocks as part of this event shouldn't be undoable.
+      var initialUndoFlag = Blockly.Events.recordUndo;
+      try {
+        Blockly.Events.recordUndo = false;
+        var parent = block.getParent();
+        if (parent && parent.isEnabled()) {
+          var children = block.getDescendants(false);
+          for (var i = 0, child; (child = children[i]); i++) {
+            child.setEnabled(true);
+          }
+        } else if ((block.outputConnection || block.previousConnection) &&
+                  !workspace.isDragging()) {
+          do {
+            block.setEnabled(false);
+            block = block.getNextBlock();
+          } while (block);
         }
-      } else if ((block.outputConnection || block.previousConnection) &&
-                 !workspace.isDragging()) {
-        do {
-          block.setEnabled(false);
-          block = block.getNextBlock();
-        } while (block);
+      } finally {
+        Blockly.Events.recordUndo = initialUndoFlag;
       }
     }
   }

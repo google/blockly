@@ -50,7 +50,7 @@ Blockly.Dart.addReservedWords(
 
 /**
  * Order of operation ENUMs.
- * https://www.dartlang.org/docs/dart-up-and-running/ch02.html#operator_table
+ * https://dart.dev/guides/language/language-tour#operators
  */
 Blockly.Dart.ORDER_ATOMIC = 0;         // 0 "" ...
 Blockly.Dart.ORDER_UNARY_POSTFIX = 1;  // expr++ expr-- () [] . ?.

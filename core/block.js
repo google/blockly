@@ -229,7 +229,7 @@ Blockly.Block = function(workspace, prototypeName, opt_id) {
     // In case init threw, recordUndo flag should still be reset.
     Blockly.Events.recordUndo = initialUndoFlag;
   }
-  
+
   // Record initial inline state.
   /** @type {boolean|undefined} */
   this.inputsInlineDefault = this.inputsInline;
@@ -1259,20 +1259,6 @@ Blockly.Block.prototype.setOutputShape = function(outputShape) {
  */
 Blockly.Block.prototype.getOutputShape = function() {
   return this.outputShape_;
-};
-
-/**
- * Set whether the block is disabled or not.
- * @param {boolean} disabled True if disabled.
- * @deprecated May 2019
- */
-Blockly.Block.prototype.setDisabled = function(disabled) {
-  Blockly.utils.deprecation.warn(
-      'Block.prototype.setDisabled',
-      'May 2019',
-      'May 2020',
-      'Block.prototype.setEnabled');
-  this.setEnabled(!disabled);
 };
 
 /**

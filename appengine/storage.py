@@ -30,7 +30,7 @@ class Xml(ndb.Model):
   # A row in the database.
   xml_hash = ndb.IntegerProperty()
   xml_content = ndb.TextProperty()
-
+  last_accessed = ndb.DateTimeProperty(auto_now=True)
 
 def keyGen():
   # Generate a random string of length KEY_LEN.
@@ -75,6 +75,10 @@ def keyToXml(key_provided):
   if not result:
     xml = ""
   else:
+    # Put it back into the datastore immediately, which updates the last
+    # accessed time.
+    with client.context():
+      result.put()
     xml = result.xml_content
   return xml
 

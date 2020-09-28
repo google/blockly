@@ -12,6 +12,7 @@
 
 goog.provide('Blockly.Workspace');
 
+goog.require('Blockly.ConnectionChecker');
 goog.require('Blockly.Events');
 goog.require('Blockly.Options');
 goog.require('Blockly.utils');
@@ -19,6 +20,7 @@ goog.require('Blockly.utils.math');
 goog.require('Blockly.VariableMap');
 
 goog.requireType('Blockly.IASTNodeLocation');
+goog.requireType('Blockly.IConnectionChecker');
 
 
 /**
@@ -41,6 +43,14 @@ Blockly.Workspace = function(opt_options) {
   this.horizontalLayout = !!this.options.horizontalLayout;
   /** @type {number} */
   this.toolboxPosition = this.options.toolboxPosition;
+
+  var connectionCheckerClass = Blockly.registry.getClassFromOptions(
+      Blockly.registry.Type.CONNECTION_CHECKER, this.options);
+  /**
+   * An object that encapsulates logic for safety, type, and dragging checks.
+   * @type {!Blockly.IConnectionChecker}
+   */
+  this.connectionChecker = new connectionCheckerClass(this);
 
   /**
    * @type {!Array.<!Blockly.Block>}
@@ -410,21 +420,6 @@ Blockly.Workspace.prototype.deleteVariableById = function(id) {
 };
 
 /**
- * Check whether a variable exists with the given name.  The check is
- * case-insensitive.
- * @param {string} _name The name to check for.
- * @return {number} The index of the name in the variable list, or -1 if it is
- *     not present.
- * @deprecated April 2017
- */
-
-Blockly.Workspace.prototype.variableIndexOf = function(_name) {
-  console.warn(
-      'Deprecated call to Blockly.Workspace.prototype.variableIndexOf');
-  return -1;
-};
-
-/**
  * Find the variable by the given name and return it. Return null if it is not
  *     found.
  * @param {string} name The name to check for.
@@ -497,7 +492,7 @@ Blockly.Workspace.prototype.getWidth = function() {
 
 /**
  * Obtain a newly created block.
- * @param {?string} prototypeName Name of the language object containing
+ * @param {!string} prototypeName Name of the language object containing
  *     type-specific functions for this block.
  * @param {string=} opt_id Optional ID.  Use this ID if provided, otherwise
  *     create a new ID.
@@ -571,6 +566,24 @@ Blockly.Workspace.prototype.isCapacityAvailable = function(typeCountsMap) {
  */
 Blockly.Workspace.prototype.hasBlockLimits = function() {
   return this.options.maxBlocks != Infinity || !!this.options.maxInstances;
+};
+
+/**
+ * Gets the undo stack for workplace.
+ * @return {!Array.<!Blockly.Events.Abstract>} undo stack
+ * @package
+ */
+Blockly.Workspace.prototype.getUndoStack = function() {
+  return this.undoStack_;
+};
+
+/**
+ * Gets the redo stack for workplace.
+ * @return {!Array.<!Blockly.Events.Abstract>} redo stack
+ * @package
+ */
+Blockly.Workspace.prototype.getRedoStack = function() {
+  return this.redoStack_;
 };
 
 /**

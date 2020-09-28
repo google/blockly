@@ -6,13 +6,13 @@
 
 suite('Variable Map', function() {
   setup(function() {
+    sharedTestSetup.call(this);
     this.workspace = new Blockly.Workspace();
     this.variableMap = new Blockly.VariableMap(this.workspace);
   });
 
   teardown(function() {
-    this.workspace.dispose();
-    sinon.restore();
+    sharedTestTeardown.call(this);
   });
 
   suite('createVariable', function() {
@@ -70,13 +70,13 @@ suite('Variable Map', function() {
     });
 
     test('Null id', function() {
-      sinon.stub(Blockly.utils, "genUid").returns('1');
+      createGenUidStubWithReturns('1');
       this.variableMap.createVariable('name1', 'type1', null);
       assertVariableValues(this.variableMap, 'name1', 'type1', '1');
     });
 
     test('Undefined id', function() {
-      sinon.stub(Blockly.utils, "genUid").returns('1');
+      createGenUidStubWithReturns('1');
       this.variableMap.createVariable('name1', 'type1', undefined);
       assertVariableValues(this.variableMap, 'name1', 'type1', '1');
     });

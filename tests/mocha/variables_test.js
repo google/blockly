@@ -6,6 +6,7 @@
 
 suite('Variables', function() {
   setup(function() {
+    sharedTestSetup.call(this);
     this.workspace = new Blockly.Workspace();
     Blockly.defineBlocksWithJsonArray([{
       "type": "get_var_block",
@@ -24,13 +25,7 @@ suite('Variables', function() {
   });
 
   teardown(function() {
-    delete Blockly.Blocks['get_var_block'];
-    this.workspace.dispose();
-
-    // Clear Blockly.Event state.
-    Blockly.Events.setGroup(false);
-    Blockly.Events.disabled_ = 0;
-    sinon.restore();
+    sharedTestTeardown.call(this);
   });
 
   /**

@@ -8,6 +8,13 @@ goog.require('Blockly.Blocks.procedures');
 goog.require('Blockly.Msg');
 
 suite('Procedures XML', function() {
+  setup(function() {
+    sharedTestSetup.call(this);
+  });
+  teardown(function() {
+    sharedTestTeardown.call(this);
+  });
+
   suite('Deserialization', function() {
     setup(function() {
       this.workspace = new Blockly.Workspace();
@@ -31,7 +38,7 @@ suite('Procedures XML', function() {
       };
     });
     teardown(function() {
-      this.workspace.dispose();
+      workspaceTeardown.call(this, this.workspace);
     });
 
     suite('Definition Blocks', function() {

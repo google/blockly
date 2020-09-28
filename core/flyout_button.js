@@ -16,6 +16,7 @@ goog.require('Blockly.Css');
 goog.require('Blockly.utils');
 goog.require('Blockly.utils.Coordinate');
 goog.require('Blockly.utils.dom');
+goog.require('Blockly.utils.Svg');
 
 
 /**
@@ -23,7 +24,7 @@ goog.require('Blockly.utils.dom');
  * @param {!Blockly.WorkspaceSvg} workspace The workspace in which to place this
  *     button.
  * @param {!Blockly.WorkspaceSvg} targetWorkspace The flyout's target workspace.
- * @param {!Blockly.utils.toolbox.Button|!Blockly.utils.toolbox.Label} json
+ * @param {!Blockly.utils.toolbox.ButtonOrLabelInfo} json
  *    The JSON specifying the label/button.
  * @param {boolean} isLabel Whether this button should be styled as a label.
  * @constructor
@@ -85,6 +86,12 @@ Blockly.FlyoutButton = function(workspace, targetWorkspace, json, isLabel) {
    * @private
    */
   this.onMouseUpWrapper_ = null;
+
+  /**
+   * The JSON specifying the label / button.
+   * @type {!Blockly.utils.toolbox.ButtonOrLabelInfo}
+   */
+  this.info = json;
 };
 
 /**
@@ -119,12 +126,14 @@ Blockly.FlyoutButton.prototype.createDom = function() {
     cssClass += ' ' + this.cssClass_;
   }
 
-  this.svgGroup_ = Blockly.utils.dom.createSvgElement('g', {'class': cssClass},
+  this.svgGroup_ = Blockly.utils.dom.createSvgElement(
+      Blockly.utils.Svg.G, {'class': cssClass},
       this.workspace_.getCanvas());
 
   if (!this.isLabel_) {
     // Shadow rectangle (light source does not mirror in RTL).
-    var shadow = Blockly.utils.dom.createSvgElement('rect',
+    var shadow = Blockly.utils.dom.createSvgElement(
+        Blockly.utils.Svg.RECT,
         {
           'class': 'blocklyFlyoutButtonShadow',
           'rx': 4, 'ry': 4, 'x': 1, 'y': 1
@@ -132,7 +141,8 @@ Blockly.FlyoutButton.prototype.createDom = function() {
         this.svgGroup_);
   }
   // Background rectangle.
-  var rect = Blockly.utils.dom.createSvgElement('rect',
+  var rect = Blockly.utils.dom.createSvgElement(
+      Blockly.utils.Svg.RECT,
       {
         'class': this.isLabel_ ?
             'blocklyFlyoutLabelBackground' : 'blocklyFlyoutButtonBackground',
@@ -140,7 +150,8 @@ Blockly.FlyoutButton.prototype.createDom = function() {
       },
       this.svgGroup_);
 
-  var svgText = Blockly.utils.dom.createSvgElement('text',
+  var svgText = Blockly.utils.dom.createSvgElement(
+      Blockly.utils.Svg.TEXT,
       {
         'class': this.isLabel_ ? 'blocklyFlyoutLabelText' : 'blocklyText',
         'x': 0,
@@ -218,12 +229,26 @@ Blockly.FlyoutButton.prototype.moveTo = function(x, y) {
 };
 
 /**
+ * @return {boolean} Whether or not the button is a label.
+ */
+Blockly.FlyoutButton.prototype.isLabel = function() {
+  return this.isLabel_;
+};
+
+/**
  * Location of the button.
  * @return {!Blockly.utils.Coordinate} x, y coordinates.
  * @package
  */
 Blockly.FlyoutButton.prototype.getPosition = function() {
   return this.position_;
+};
+
+/**
+ * @return {string} Text of the button.
+ */
+Blockly.FlyoutButton.prototype.getButtonText = function() {
+  return this.text_;
 };
 
 /**

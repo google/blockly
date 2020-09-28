@@ -14,6 +14,7 @@ goog.provide('Blockly.VerticalFlyout');
 
 goog.require('Blockly.Block');
 goog.require('Blockly.Flyout');
+goog.require('Blockly.registry');
 goog.require('Blockly.Scrollbar');
 goog.require('Blockly.utils');
 goog.require('Blockly.utils.object');
@@ -35,6 +36,12 @@ Blockly.VerticalFlyout = function(workspaceOptions) {
   Blockly.VerticalFlyout.superClass_.constructor.call(this, workspaceOptions);
 };
 Blockly.utils.object.inherits(Blockly.VerticalFlyout, Blockly.Flyout);
+
+/**
+ * The name of the vertical flyout in the registry.
+ * @type {string}
+ */
+Blockly.VerticalFlyout.registryName = 'verticalFlyout';
 
 /**
  * Return an object with all the metrics required to size scrollbars for the
@@ -369,8 +376,22 @@ Blockly.VerticalFlyout.prototype.reflowInternal_ = function() {
         button.moveTo(x, y);
       }
     }
+
+    if (this.targetWorkspace.toolboxPosition == this.toolboxPosition_ &&
+        this.toolboxPosition_ == Blockly.TOOLBOX_AT_LEFT &&
+        !this.targetWorkspace.getToolbox()) {
+      // This flyout is a simple toolbox. Reposition the workspace so that (0,0)
+      // is in the correct position relative to the new absolute edge (ie
+      // toolbox edge).
+      this.targetWorkspace.translate(
+          this.targetWorkspace.scrollX + flyoutWidth, 0);
+    }
+
     // Record the width for .getMetrics_ and .position.
     this.width_ = flyoutWidth;
     this.position();
   }
 };
+
+Blockly.registry.register(Blockly.registry.Type.FLYOUTS_VERTICAL_TOOLBOX,
+    Blockly.registry.DEFAULT, Blockly.VerticalFlyout);

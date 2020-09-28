@@ -44,16 +44,14 @@ suite('Variable Fields', function() {
   }
 
   setup(function() {
+    sharedTestSetup.call(this);
     this.workspace = new Blockly.Workspace();
-
-    sinon.stub(Blockly.utils, 'genUid')
-        .returns(FAKE_ID);
+    createGenUidStubWithReturns(FAKE_ID);
     sinon.stub(Blockly.Variables, 'generateUniqueName')
         .returns(FAKE_VARIABLE_NAME);
   });
   teardown(function() {
-    this.workspace.dispose();
-    sinon.restore();
+    sharedTestTeardown.call(this);
   });
 
   test('Dropdown contains variables', function() {
@@ -127,7 +125,7 @@ suite('Variable Fields', function() {
       var stub = sinon.stub(console, 'warn');
       variableField.setValue(undefined);
       assertValue(variableField, 'name1');
-      chai.assert(stub.calledOnce);
+      sinon.assert.calledOnce(stub);
       stub.restore();
     });
     test('New Variable ID', function() {
@@ -149,7 +147,7 @@ suite('Variable Fields', function() {
       var stub = sinon.stub(console, 'warn');
       variableField.setValue('id1');
       assertValue(variableField, 'name1');
-      chai.assert(stub.calledOnce);
+      sinon.assert.calledOnce(stub);
       stub.restore();
     });
   });
@@ -322,12 +320,6 @@ suite('Variable Fields', function() {
       this.variableBlock = new Blockly.Block(this.workspace,
           'field_variable_test_block');
       this.variableField = this.variableBlock.getField('VAR');
-    });
-    teardown(function() {
-      this.variableBlock.dispose();
-      this.variableBlock = null;
-      this.variableField = null;
-      delete Blockly.Blocks['field_variable_test_block'];
     });
     test('Rename & Keep Old ID', function() {
       this.workspace.renameVariableById('id1', 'name2');

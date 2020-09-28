@@ -25,7 +25,7 @@ Blockly.ICopyable = function() {};
 
 /**
  * Encode for copying.
- * @return {!Blockly.ICopyable.CopyData} Copy metadata.
+ * @return {?Blockly.ICopyable.CopyData} Copy metadata.
  */
 Blockly.ICopyable.prototype.toCopyData;
 

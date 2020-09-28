@@ -24,7 +24,9 @@ goog.require('Blockly.Extensions');
 goog.require('Blockly.fieldRegistry');
 goog.require('Blockly.Input');
 goog.require('Blockly.navigation');
+goog.require('Blockly.Tooltip');
 goog.require('Blockly.utils');
+goog.require('Blockly.utils.deprecation');
 goog.require('Blockly.utils.Coordinate');
 goog.require('Blockly.utils.object');
 goog.require('Blockly.utils.string');
@@ -37,13 +39,13 @@ goog.requireType('Blockly.IASTNodeLocation');
  * Class for one block.
  * Not normally called directly, workspace.newBlock() is preferred.
  * @param {!Blockly.Workspace} workspace The block's workspace.
- * @param {?string} prototypeName Name of the language object containing
+ * @param {!string} prototypeName Name of the language object containing
  *     type-specific functions for this block.
  * @param {string=} opt_id Optional ID.  Use this ID if provided, otherwise
  *     create a new ID.
  * @constructor
  * @implements {Blockly.IASTNodeLocation}
- * @throws When block is not valid or block name is not allowed.
+ * @throws When the prototypeName is not valid or not allowed.
  */
 Blockly.Block = function(workspace, prototypeName, opt_id) {
   if (Blockly.Generator &&
@@ -72,7 +74,7 @@ Blockly.Block = function(workspace, prototypeName, opt_id) {
    * @private
    */
   this.disabled = false;
-  /** @type {string|!Function} */
+  /** @type {!Blockly.Tooltip.TipInfo} */
   this.tooltip = '';
   /** @type {boolean} */
   this.contextMenu = true;
@@ -198,29 +200,40 @@ Blockly.Block = function(workspace, prototypeName, opt_id) {
   workspace.addTopBlock(this);
   workspace.addTypedBlock(this);
 
-  // Call an initialization function, if it exists.
-  if (typeof this.init == 'function') {
-    this.init();
+  // All events fired should be part of the same group.
+  // Any events fired during init should not be undoable,
+  // so that block creation is atomic.
+  var existingGroup = Blockly.Events.getGroup();
+  if (!existingGroup) {
+    Blockly.Events.setGroup(true);
   }
+  var initialUndoFlag = Blockly.Events.recordUndo;
+
+  try {
+    // Call an initialization function, if it exists.
+    if (typeof this.init == 'function') {
+      Blockly.Events.recordUndo = false;
+      this.init();
+      Blockly.Events.recordUndo = initialUndoFlag;
+    }
+
+    // Fire a create event.
+    if (Blockly.Events.isEnabled()) {
+      Blockly.Events.fire(new Blockly.Events.BlockCreate(this));
+    }
+
+  } finally {
+    if (!existingGroup) {
+      Blockly.Events.setGroup(false);
+    }
+    // In case init threw, recordUndo flag should still be reset.
+    Blockly.Events.recordUndo = initialUndoFlag;
+  }
+  
   // Record initial inline state.
   /** @type {boolean|undefined} */
   this.inputsInlineDefault = this.inputsInline;
 
-  // Fire a create event.
-  if (Blockly.Events.isEnabled()) {
-    var existingGroup = Blockly.Events.getGroup();
-    if (!existingGroup) {
-      Blockly.Events.setGroup(true);
-    }
-    try {
-      Blockly.Events.fire(new Blockly.Events.BlockCreate(this));
-    } finally {
-      if (!existingGroup) {
-        Blockly.Events.setGroup(false);
-      }
-    }
-
-  }
   // Bind an onchange function, if it exists.
   if (typeof this.onchange == 'function') {
     this.setOnChange(this.onchange);
@@ -455,7 +468,8 @@ Blockly.Block.prototype.unplugFromRow_ = function(opt_healStack) {
   // Disconnect the child block.
   childConnection.disconnect();
   // Connect child to the parent if possible, otherwise bump away.
-  if (childConnection.checkType(parentConnection)) {
+  if (this.workspace.connectionChecker.canConnect(
+      childConnection, parentConnection, false)) {
     parentConnection.connect(childConnection);
   } else {
     childConnection.onFailedConnect(parentConnection);
@@ -507,7 +521,9 @@ Blockly.Block.prototype.unplugFromStack_ = function(opt_healStack) {
     // Disconnect the next statement.
     var nextTarget = this.nextConnection.targetConnection;
     nextTarget.disconnect();
-    if (previousTarget && previousTarget.checkType(nextTarget)) {
+    if (previousTarget &&
+        this.workspace.connectionChecker.canConnect(
+            previousTarget, nextTarget, false)) {
       // Attach the next statement to the previous statement.
       previousTarget.connect(nextTarget);
     }
@@ -901,12 +917,21 @@ Blockly.Block.prototype.setHelpUrl = function(url) {
 };
 
 /**
- * Change the tooltip text for a block.
- * @param {string|!Function} newTip Text for tooltip or a parent element to
- *     link to for its tooltip.  May be a function that returns a string.
+ * Sets the tooltip for this block.
+ * @param {!Blockly.Tooltip.TipInfo} newTip The text for the tooltip, a function
+ *     that returns the text for the tooltip, or a parent object whose tooltip
+ *     will be used. To not display a tooltip pass the empty string.
  */
 Blockly.Block.prototype.setTooltip = function(newTip) {
   this.tooltip = newTip;
+};
+
+/**
+ * Returns the tooltip text for this block.
+ * @returns {!string} The tooltip text for this block.
+ */
+Blockly.Block.prototype.getTooltip = function() {
+  return Blockly.Tooltip.getTooltipOfObject(this);
 };
 
 /**
@@ -1066,9 +1091,9 @@ Blockly.Block.prototype.renameVarById = function(oldId, newId) {
 };
 
 /**
- * Returns the language-neutral value from the field of a block.
+ * Returns the language-neutral value of the given field.
  * @param {string} name The name of the field.
- * @return {*} Value from the field or null if field does not exist.
+ * @return {*} Value of the field or null if field does not exist.
  */
 Blockly.Block.prototype.getFieldValue = function(name) {
   var field = this.getField(name);
@@ -1079,9 +1104,9 @@ Blockly.Block.prototype.getFieldValue = function(name) {
 };
 
 /**
- * Change the field value for a block (e.g. 'CHOOSE' or 'REMOVE').
- * @param {string} newValue Value to be the new field.
- * @param {string} name The name of the field.
+ * Sets the value of the given field for this block.
+ * @param {*} newValue The value to set.
+ * @param {!string} name The name of the field to set the value of.
  */
 Blockly.Block.prototype.setFieldValue = function(newValue, name) {
   var field = this.getField(name);
@@ -1242,8 +1267,11 @@ Blockly.Block.prototype.getOutputShape = function() {
  * @deprecated May 2019
  */
 Blockly.Block.prototype.setDisabled = function(disabled) {
-  console.warn('Deprecated call to Blockly.Block.prototype.setDisabled, ' +
-               'use Blockly.Block.prototype.setEnabled instead.');
+  Blockly.utils.deprecation.warn(
+      'Block.prototype.setDisabled',
+      'May 2019',
+      'May 2020',
+      'Block.prototype.setEnabled');
   this.setEnabled(!disabled);
 };
 

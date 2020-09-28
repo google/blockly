@@ -195,18 +195,20 @@ Blockly.JavaScript['text_getSubstring'] = function(block) {
   // Get substring.
   var where1 = block.getFieldValue('WHERE1');
   var where2 = block.getFieldValue('WHERE2');
+  var requiresLengthCall = (where1 != 'FROM_END' && where1 != 'LAST' &&
+      where2 != 'FROM_END' && where2 != 'LAST');
+  var textOrder = requiresLengthCall ? Blockly.JavaScript.ORDER_MEMBER :
+      Blockly.JavaScript.ORDER_NONE;
+  var text = Blockly.JavaScript.valueToCode(block, 'STRING',
+      textOrder) || '\'\'';
   if (where1 == 'FIRST' && where2 == 'LAST') {
     var text = Blockly.JavaScript.valueToCode(block, 'STRING',
         Blockly.JavaScript.ORDER_NONE) || '\'\'';
     var code = text;
     return [code, Blockly.JavaScript.ORDER_NONE];
-  } else if (text.match(/^'?\w+'?$/) ||
-      (where1 != 'FROM_END' && where1 != 'LAST' &&
-      where2 != 'FROM_END' && where2 != 'LAST')) {
+  } else if (text.match(/^'?\w+'?$/) || requiresLengthCall) {
     // If the text is a variable or literal or doesn't require a call for
     // length, don't generate a helper function.
-    var text = Blockly.JavaScript.valueToCode(block, 'STRING',
-        Blockly.JavaScript.ORDER_MEMBER) || '\'\'';
     switch (where1) {
       case 'FROM_START':
         var at1 = Blockly.JavaScript.getAdjusted(block, 'AT1');
@@ -239,8 +241,6 @@ Blockly.JavaScript['text_getSubstring'] = function(block) {
     }
     code = text + '.slice(' + at1 + ', ' + at2 + ')';
   } else {
-    var text = Blockly.JavaScript.valueToCode(block, 'STRING',
-        Blockly.JavaScript.ORDER_NONE) || '\'\'';
     var at1 = Blockly.JavaScript.getAdjusted(block, 'AT1');
     var at2 = Blockly.JavaScript.getAdjusted(block, 'AT2');
     var getIndex_ = Blockly.JavaScript.text.getIndex_;

@@ -152,17 +152,16 @@ Blockly.Dart['text_getSubstring'] = function(block) {
   // Get substring.
   var where1 = block.getFieldValue('WHERE1');
   var where2 = block.getFieldValue('WHERE2');
+  var requiresLengthCall = (where1 != 'FROM_END' && where2 == 'FROM_START');
+  var textOrder = requiresLengthCall ? Blockly.Dart.ORDER_UNARY_POSTFIX :
+      Blockly.Dart.ORDER_NONE;
+  var text = Blockly.Dart.valueToCode(block, 'STRING', textOrder) || '\'\'';
   if (where1 == 'FIRST' && where2 == 'LAST') {
-    var text = Blockly.Dart.valueToCode(block, 'STRING',
-        Blockly.Dart.ORDER_NONE) || '\'\'';
     var code = text;
     return [code, Blockly.Dart.ORDER_NONE];
-  } else if (text.match(/^'?\w+'?$/) ||
-      (where1 != 'FROM_END' && where2 == 'FROM_START')) {
+  } else if (text.match(/^'?\w+'?$/) || requiresLengthCall) {
     // If the text is a variable or literal or doesn't require a call for
     // length, don't generate a helper function.
-    var text = Blockly.Dart.valueToCode(block, 'STRING',
-        Blockly.Dart.ORDER_UNARY_POSTFIX) || '\'\'';
     switch (where1) {
       case 'FROM_START':
         var at1 = Blockly.Dart.getAdjusted(block, 'AT1');
@@ -198,8 +197,6 @@ Blockly.Dart['text_getSubstring'] = function(block) {
       var code = text + '.substring(' + at1 + ', ' + at2 + ')';
     }
   } else {
-    var text = Blockly.Dart.valueToCode(block, 'STRING',
-        Blockly.Dart.ORDER_NONE) || '\'\'';
     var at1 = Blockly.Dart.getAdjusted(block, 'AT1');
     var at2 = Blockly.Dart.getAdjusted(block, 'AT2');
     var functionName = Blockly.Dart.provideFunction_(

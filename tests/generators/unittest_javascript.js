@@ -104,7 +104,7 @@ Blockly.JavaScript['unittest_main'].defineAssert_ = function(block) {
 Blockly.JavaScript['unittest_assertequals'] = function(block) {
   // Asserts that a value equals another value.
   var message = Blockly.JavaScript.valueToCode(block, 'MESSAGE',
-      Blockly.JavaScript.ORDER_NONE) || '';
+      Blockly.JavaScript.ORDER_COMMA) || '';
   var actual = Blockly.JavaScript.valueToCode(block, 'ACTUAL',
       Blockly.JavaScript.ORDER_COMMA) || 'null';
   var expected = Blockly.JavaScript.valueToCode(block, 'EXPECTED',
@@ -116,7 +116,7 @@ Blockly.JavaScript['unittest_assertequals'] = function(block) {
 Blockly.JavaScript['unittest_assertvalue'] = function(block) {
   // Asserts that a value is true, false, or null.
   var message = Blockly.JavaScript.valueToCode(block, 'MESSAGE',
-      Blockly.JavaScript.ORDER_NONE) || '';
+      Blockly.JavaScript.ORDER_COMMA) || '';
   var actual = Blockly.JavaScript.valueToCode(block, 'ACTUAL',
       Blockly.JavaScript.ORDER_COMMA) || 'null';
   var expected = block.getFieldValue('EXPECTED');

@@ -90,7 +90,7 @@ Blockly.PHP['unittest_main'].defineAssert_ = function(block) {
 Blockly.PHP['unittest_assertequals'] = function(block) {
   // Asserts that a value equals another value.
   var message = Blockly.PHP.valueToCode(block, 'MESSAGE',
-    Blockly.PHP.ORDER_NONE) || '';
+    Blockly.PHP.ORDER_COMMA) || '';
   var actual = Blockly.PHP.valueToCode(block, 'ACTUAL',
           Blockly.PHP.ORDER_COMMA) || 'null';
   var expected = Blockly.PHP.valueToCode(block, 'EXPECTED',
@@ -102,7 +102,7 @@ Blockly.PHP['unittest_assertequals'] = function(block) {
 Blockly.PHP['unittest_assertvalue'] = function(block) {
   // Asserts that a value is true, false, or null.
   var message = Blockly.PHP.valueToCode(block, 'MESSAGE',
-    Blockly.PHP.ORDER_NONE) || '';
+    Blockly.PHP.ORDER_COMMA) || '';
   var actual = Blockly.PHP.valueToCode(block, 'ACTUAL',
           Blockly.PHP.ORDER_COMMA) || 'null';
   var expected = block.getFieldValue('EXPECTED');

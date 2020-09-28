@@ -10,11 +10,11 @@
  *
  * After modifying this file, either run "build.py" from the parent directory,
  * or run (from this directory):
- * ../i18n/js_to_json.py
+ * ../scripts/i18n/js_to_json.py
  * to regenerate json/{en,qqq,synonyms}.json.
  *
  * To convert all of the json files to .js files, run:
- * ../i18n/create_messages.py json/*.json
+ * ../scripts/i18n/create_messages.py json/*.json
  */
 'use strict';
 

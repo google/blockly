@@ -49,7 +49,8 @@ Blockly.utils.isTargetInput = function(e) {
          e.target.type == 'number' || e.target.type == 'email' ||
          e.target.type == 'password' || e.target.type == 'search' ||
          e.target.type == 'tel' || e.target.type == 'url' ||
-         e.target.isContentEditable;
+         e.target.isContentEditable ||
+         (e.target.dataset && e.target.dataset.isTextInput == 'true');
 };
 
 /**
@@ -250,7 +251,7 @@ Blockly.utils.checkMessageReferences = function(message) {
   for (var i = 0; i < m.length; i++) {
     var msgKey = m[i].toUpperCase();
     if (msgTable[msgKey.slice(6, -1)] == undefined) {
-      console.log('WARNING: No message string for ' + m[i] + ' in ' + message);
+      console.warn('No message string for ' + m[i] + ' in ' + message);
       validSoFar = false;  // Continue to report other errors.
     }
   }

@@ -16,6 +16,7 @@
  */
 goog.provide('Blockly.Events');
 
+goog.require('Blockly.registry');
 goog.require('Blockly.utils');
 
 
@@ -338,53 +339,15 @@ Blockly.Events.getDescendantIds = function(block) {
  * @param {!Object} json JSON representation.
  * @param {!Blockly.Workspace} workspace Target workspace for event.
  * @return {!Blockly.Events.Abstract} The event represented by the JSON.
+ * @throws {Error} if an event type is not found in the registry.
  */
 Blockly.Events.fromJson = function(json, workspace) {
-  // TODO: Should I have a way to register a new event into here?
-  var event;
-  switch (json.type) {
-    case Blockly.Events.CREATE:
-      event = new Blockly.Events.Create(null);
-      break;
-    case Blockly.Events.DELETE:
-      event = new Blockly.Events.Delete(null);
-      break;
-    case Blockly.Events.CHANGE:
-      event = new Blockly.Events.Change(null, '', '', '', '');
-      break;
-    case Blockly.Events.MOVE:
-      event = new Blockly.Events.Move(null);
-      break;
-    case Blockly.Events.VAR_CREATE:
-      event = new Blockly.Events.VarCreate(null);
-      break;
-    case Blockly.Events.VAR_DELETE:
-      event = new Blockly.Events.VarDelete(null);
-      break;
-    case Blockly.Events.VAR_RENAME:
-      event = new Blockly.Events.VarRename(null, '');
-      break;
-    case Blockly.Events.UI:
-      event = new Blockly.Events.Ui(null, '', '', '');
-      break;
-    case Blockly.Events.COMMENT_CREATE:
-      event = new Blockly.Events.CommentCreate(null);
-      break;
-    case Blockly.Events.COMMENT_CHANGE:
-      event = new Blockly.Events.CommentChange(null, '', '');
-      break;
-    case Blockly.Events.COMMENT_MOVE:
-      event = new Blockly.Events.CommentMove(null);
-      break;
-    case Blockly.Events.COMMENT_DELETE:
-      event = new Blockly.Events.CommentDelete(null);
-      break;
-    case Blockly.Events.FINISHED_LOADING:
-      event = new Blockly.Events.FinishedLoading(workspace);
-      break;
-    default:
-      throw Error('Unknown event type.');
+  var eventClass = Blockly.registry.getClass(Blockly.registry.Type.EVENT,
+      json.type);
+  if (!eventClass) {
+    throw Error('Unknown event type.');
   }
+  var event = new eventClass();
   event.fromJson(json);
   event.workspaceId = workspace.id;
   return event;

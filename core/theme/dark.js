@@ -18,7 +18,7 @@ Blockly.Themes.Dark = Blockly.Theme.defineTheme('dark', {
   'base': Blockly.Themes.Classic,
   'componentStyles': {
     'workspaceBackgroundColour': '#1e1e1e',
-    'toolboxBackgroundColour': '#333',
+    'toolboxBackgroundColour': 'blackBackground',
     'toolboxForegroundColour': '#fff',
     'flyoutBackgroundColour': '#252526',
     'flyoutForegroundColour': '#ccc',
@@ -27,6 +27,7 @@ Blockly.Themes.Dark = Blockly.Theme.defineTheme('dark', {
     'insertionMarkerColour': '#fff',
     'insertionMarkerOpacity': 0.3,
     'scrollbarOpacity': 0.4,
-    'cursorColour': '#d0d0d0'
+    'cursorColour': '#d0d0d0',
+    'blackBackground': '#333'
   }
 });

@@ -1,6 +1,6 @@
 {
   "name": "blockly",
-  "version": "3.20200625.2",
+  "version": "3.20200924.0",
   "description": "Blockly is a library for building visual programming editors.",
   "keywords": [
     "blockly"
@@ -21,8 +21,10 @@
     "build:blocks": "gulp buildBlocks",
     "build:compressed": "gulp buildCompressed",
     "build:core": "gulp buildCore",
-    "build:debug": "gulp buildCompressed --verbose --strict",
+    "build:debug": "gulp buildCompressed --verbose --debug",
     "build:debug:log": "npm run build:debug > build-debug.log 2>&1 && tail -3 build-debug.log",
+    "build:strict": "gulp buildCompressed --verbose --strict",
+    "build:strict:log": "npm run build:strict > build-debug.log 2>&1 && tail -3 build-debug.log",
     "build:generators": "gulp buildGenerators",
     "build:langfiles": "gulp buildLangfiles",
     "build:uncompressed": "gulp buildUncompressed",
@@ -38,6 +40,7 @@
     "test:run": "tests/run_all_tests.sh",
     "test:setupselenium": "selenium-standalone install --config=./tests/scripts/selenium-config.js",
     "test:startselenium": "selenium-standalone start --config=./tests/scripts/selenium-config.js",
+    "test:compile:advanced": "gulp buildAdvancedCompilationTest",
     "typings": "gulp typings",
     "updateGithubPages": "gulp gitUpdateGithubPages"
   },
@@ -52,46 +55,30 @@
   },
   "license": "Apache-2.0",
   "devDependencies": {
+    "babel-eslint": "^10.1.0",
     "chai": "^4.2.0",
-    "concurrently": "^4.1.2",
-    "eslint": "^5.13.0",
+    "concurrently": "^5.3.0",
+    "eslint": "^7.6.0",
     "eslint-plugin-es5": "^1.5.0",
-    "google-closure-compiler": "^20200101.0.0",
-    "google-closure-deps": "^20200101.0.0",
+    "google-closure-compiler": "^20200830.0.0",
+    "google-closure-deps": "^20200719.0.0",
     "gulp": "^4.0.2",
     "gulp-concat": "^2.6.1",
     "gulp-insert": "^0.5.0",
-    "gulp-rename": "^1.4.0",
+    "gulp-rename": "^2.0.0",
     "gulp-replace": "^1.0.0",
     "gulp-series": "^1.0.2",
-    "gulp-shell": "^0.7.1",
+    "gulp-shell": "^0.8.0",
     "gulp-sourcemaps": "^2.6.5",
     "gulp-umd": "^2.0.0",
-    "js-green-licenses": "^1.1.0",
-    "jshint": "^2.11.0",
-    "mocha": "^6.2.3",
-    "pixelmatch": "^4.0.2",
-    "pngjs": "^3.4.0",
-    "rimraf": "^2.6.3",
+    "js-green-licenses": "^2.0.1",
+    "mocha": "^8.1.1",
+    "rimraf": "^3.0.2",
     "selenium-standalone": "^6.17.0",
-    "through2": "^3.0.1",
+    "through2": "^4.0.2",
     "typescript-closure-tools": "^0.0.7",
-    "webdriverio": "^5.22.4",
-    "yargs": "^14.2.3"
-  },
-  "jshintConfig": {
-    "globalstrict": true,
-    "predef": [
-      "Blockly",
-      "goog",
-      "window",
-      "document",
-      "soy",
-      "XMLHttpRequest"
-    ],
-    "sub": true,
-    "undef": true,
-    "unused": true
+    "webdriverio": "^6.5.2",
+    "yargs": "^16.0.3"
   },
   "dependencies": {
     "jsdom": "^15.2.1"

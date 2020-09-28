@@ -14,6 +14,8 @@
 goog.provide('Blockly.blockRendering.MarkerSvg');
 
 goog.require('Blockly.ASTNode');
+goog.require('Blockly.utils.dom');
+goog.require('Blockly.utils.Svg');
 
 
 /**
@@ -124,8 +126,8 @@ Blockly.blockRendering.MarkerSvg.prototype.createDom = function() {
       Blockly.blockRendering.MarkerSvg.CURSOR_CLASS :
       Blockly.blockRendering.MarkerSvg.MARKER_CLASS;
 
-  this.svgGroup_ =
-      Blockly.utils.dom.createSvgElement('g', {
+  this.svgGroup_ = Blockly.utils.dom.createSvgElement(
+      Blockly.utils.Svg.G, {
         'class': className
       }, null);
 
@@ -588,7 +590,8 @@ Blockly.blockRendering.MarkerSvg.prototype.createDomInternal_ = function() {
   </g>
   */
 
-  this.markerSvg_ = Blockly.utils.dom.createSvgElement('g',
+  this.markerSvg_ = Blockly.utils.dom.createSvgElement(
+      Blockly.utils.Svg.G,
       {
         'width': this.constants_.CURSOR_WS_WIDTH,
         'height': this.constants_.WS_CURSOR_HEIGHT
@@ -596,7 +599,8 @@ Blockly.blockRendering.MarkerSvg.prototype.createDomInternal_ = function() {
 
   // A horizontal line used to represent a workspace coordinate or next
   // connection.
-  this.markerSvgLine_ = Blockly.utils.dom.createSvgElement('rect',
+  this.markerSvgLine_ = Blockly.utils.dom.createSvgElement(
+      Blockly.utils.Svg.RECT,
       {
         'width': this.constants_.CURSOR_WS_WIDTH,
         'height': this.constants_.WS_CURSOR_HEIGHT,
@@ -605,7 +609,8 @@ Blockly.blockRendering.MarkerSvg.prototype.createDomInternal_ = function() {
       this.markerSvg_);
 
   // A filled in rectangle used to represent a stack.
-  this.markerSvgRect_ = Blockly.utils.dom.createSvgElement('rect',
+  this.markerSvgRect_ = Blockly.utils.dom.createSvgElement(
+      Blockly.utils.Svg.RECT,
       {
         'class': 'blocklyVerticalMarker',
         'rx': 10, 'ry': 10,
@@ -614,7 +619,8 @@ Blockly.blockRendering.MarkerSvg.prototype.createDomInternal_ = function() {
       this.markerSvg_);
 
   // A filled in puzzle piece used to represent an input value.
-  this.markerInput_ = Blockly.utils.dom.createSvgElement('path',
+  this.markerInput_ = Blockly.utils.dom.createSvgElement(
+      Blockly.utils.Svg.PATH,
       {
         'transform': '',
         'style': 'display: none'
@@ -623,7 +629,8 @@ Blockly.blockRendering.MarkerSvg.prototype.createDomInternal_ = function() {
 
   // A path used to represent a previous connection and a block, an output
   // connection and a block, or a block.
-  this.markerBlock_ = Blockly.utils.dom.createSvgElement('path',
+  this.markerBlock_ = Blockly.utils.dom.createSvgElement(
+      Blockly.utils.Svg.PATH,
       {
         'transform': '',
         'style': 'display: none',
@@ -635,12 +642,15 @@ Blockly.blockRendering.MarkerSvg.prototype.createDomInternal_ = function() {
   // Markers and stack markers don't blink.
   if (this.isCursor()) {
     var blinkProperties = this.getBlinkProperties_();
-    Blockly.utils.dom.createSvgElement('animate', blinkProperties,
+    Blockly.utils.dom.createSvgElement(
+        Blockly.utils.Svg.ANIMATE, blinkProperties,
         this.markerSvgLine_);
-    Blockly.utils.dom.createSvgElement('animate', blinkProperties,
+    Blockly.utils.dom.createSvgElement(
+        Blockly.utils.Svg.ANIMATE, blinkProperties,
         this.markerInput_);
     blinkProperties['attributeName'] = 'stroke';
-    Blockly.utils.dom.createSvgElement('animate', blinkProperties,
+    Blockly.utils.dom.createSvgElement(
+        Blockly.utils.Svg.ANIMATE, blinkProperties,
         this.markerBlock_);
   }
 

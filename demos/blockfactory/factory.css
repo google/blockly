@@ -566,3 +566,14 @@ td.taboff:hover {
 .shadowBlock>.blocklyPathDark {
   display: none;
 }
+
+/* Privacy link */
+.privacyLink {
+  font-family: Roboto, Arial, Helvetica, sans-serif;
+  font-size: small;
+  text-decoration: none;
+}
+
+.privacyButton {
+  float: right;
+}

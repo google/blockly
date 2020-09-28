@@ -227,20 +227,6 @@ Blockly.Python.quote_ = function(string) {
 };
 
 /**
- * Encode a string as a properly escaped multiline Python string, complete
- * with quotes.
- * @param {string} string Text to encode.
- * @return {string} Python string.
- * @private
- */
-Blockly.Python.multiline_quote_ = function(string) {
-  var lines = string.split(/\n/g).map(Blockly.Python.quote_);
-  // Join with the following, plus a newline:
-  // + '\n' +
-  return lines.join(' + \'\\n\' + \n');
-};
-
-/**
  * Common tasks for generating Python from blocks.
  * Handles comments for the specified block and any connected value blocks.
  * Calls any statements following this block.

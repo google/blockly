@@ -23,6 +23,20 @@ Blockly.Dart['text'] = function(block) {
   return [code, Blockly.Dart.ORDER_ATOMIC];
 };
 
+/**
+ * Encode a string as a properly escaped multiline Dart string, complete with
+ * quotes.
+ * @param {string} string Text to encode.
+ * @return {string} Dart string.
+ * @private
+ */
+Blockly.Dart.multiline_quote_ = function (string) {
+  var lines = string.split(/\n/g).map(Blockly.Dart.quote_);
+  // Join with the following, plus a newline:
+  // + '\n' +
+  return lines.join(' + \'\\n\' + \n');
+};
+
 Blockly.Dart['text_multiline'] = function(block) {
   // Text value.
   var code = Blockly.Dart.multiline_quote_(block.getFieldValue('TEXT'));

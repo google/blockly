@@ -34,7 +34,7 @@ Blockly.ToolboxItem = function(toolboxItemDef, toolbox, opt_parent) {
    * @type {string}
    * @protected
    */
-  this.id_ = toolboxItemDef['id'] || Blockly.utils.IdGenerator.getNextUniqueId();
+  this.id_ = toolboxItemDef['toolboxitemid'] || Blockly.utils.IdGenerator.getNextUniqueId();
 
   /**
    * The parent of the category.

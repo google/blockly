@@ -398,7 +398,7 @@ WorkspaceFactoryController.prototype.updatePreview = function() {
   // Only update the toolbox if not in read only mode.
   if (!this.model.options['readOnly']) {
     // Get toolbox XML.
-    var tree = Blockly.Options.parseToolboxTree(
+    var tree = Blockly.utils.toolbox.parseToolboxTree(
         this.generator.generateToolboxXml());
 
     // No categories, creates a simple flyout.
@@ -1084,7 +1084,7 @@ WorkspaceFactoryController.prototype.setStandardOptionsAndUpdate = function() {
 WorkspaceFactoryController.prototype.generateNewOptions = function() {
   this.model.setOptions(this.readOptions_());
 
-  this.reinjectPreview(Blockly.Options.parseToolboxTree(
+  this.reinjectPreview(Blockly.utils.toolbox.parseToolboxTree(
       this.generator.generateToolboxXml()));
 };
 

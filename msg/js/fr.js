@@ -5,8 +5,8 @@
 Blockly.Msg["ADD_COMMENT"] = "Ajouter un commentaire";
 Blockly.Msg["ARD_TIME_DELAY"] = "wait (ms)";  // untranslated
 Blockly.Msg["ARD_TIME_DELAY_TIP"] = "Wait specific time in milliseconds";  // untranslated
-Blockly.Msg["CANNOT_DELETE_VARIABLE_PROCEDURE"] = "Impossible de supprimer la variable « %1 » parce qu’elle fait partie de la définition de la fonction « %2 »";
-Blockly.Msg["CHANGE_VALUE_TITLE"] = "Modifier la valeur :";
+Blockly.Msg["CANNOT_DELETE_VARIABLE_PROCEDURE"] = "Impossible de supprimer la variable « %1 » parce qu’elle fait partie de la définition de la fonction « %2 »";
+Blockly.Msg["CHANGE_VALUE_TITLE"] = "Modifier la valeur :";
 Blockly.Msg["CLEAN_UP"] = "Nettoyer les blocs";
 Blockly.Msg["COLLAPSED_WARNINGS_WARNING"] = "Les blocs repliés contiennent des avertissements.";
 Blockly.Msg["COLLAPSE_ALL"] = "Réduire les blocs";

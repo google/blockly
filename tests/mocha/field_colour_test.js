@@ -105,81 +105,27 @@ suite('Colour Fields', function() {
   suite('setValue', function() {
     suite('Empty -> New Value', function() {
       setup(function() {
-        this.colourField = new Blockly.FieldColour();
+        this.field = new Blockly.FieldColour();
       });
-      test('Null', function() {
-        this.colourField.setValue(null);
-        assertFieldDefault(this.colourField);
-      });
-      test('Undefined', function() {
-        this.colourField.setValue(undefined);
-        assertFieldDefault(this.colourField);
-      });
-      test('Non-Parsable String', function() {
-        this.colourField.setValue('not_a_colour');
-        assertFieldDefault(this.colourField);
-      });
-      test('#000000', function() {
-        this.colourField.setValue('#000000');
-        testHelpers.assertFieldValue(this.colourField, '#000000', '#000');
-      });
-      test('#bcbcbc', function() {
-        this.colourField.setValue('#bcbcbc');
-        testHelpers.assertFieldValue(this.colourField, '#bcbcbc', '#bcbcbc');
-      });
-      test('#aa0', function() {
-        this.colourField.setValue('#aa0');
-        testHelpers.assertFieldValue(this.colourField, '#aaaa00', '#aa0');
-      });
-      test('rgb(170, 170, 0)', function() {
-        this.colourField.setValue('rgb(170, 170, 0)');
-        testHelpers.assertFieldValue(this.colourField, '#aaaa00', '#aa0');
-      });
-      test('red', function() {
-        this.colourField.setValue('red');
-        testHelpers.assertFieldValue(this.colourField, '#ff0000', '#f00');
-      });
+      testHelpers.runSetValueTests(
+          validValueTestCases, invalidValueTestCases, defaultFieldValue,
+          defaultTextValue);
       test('With source block', function() {
-        this.colourField.setSourceBlock(createTestBlock());
-        this.colourField.setValue('#bcbcbc');
-        testHelpers.assertFieldValue(this.colourField, '#bcbcbc', '#bcbcbc');
+        this.field.setSourceBlock(createTestBlock());
+        this.field.setValue('#bcbcbc');
+        testHelpers.assertFieldValue(this.field, '#bcbcbc', '#bcbcbc');
       });
     });
     suite('Value -> New Value', function() {
       setup(function() {
-        this.colourField = new Blockly.FieldColour('#aaaaaa');
+        this.field = new Blockly.FieldColour('#aaaaaa');
       });
-      test('Null', function() {
-        this.colourField.setValue(null);
-        testHelpers.assertFieldValue(this.colourField, '#aaaaaa', '#aaa');
-      });
-      test('Undefined', function() {
-        this.colourField.setValue(undefined);
-        testHelpers.assertFieldValue(this.colourField, '#aaaaaa', '#aaa');
-      });
-      test('Non-Parsable String', function() {
-        this.colourField.setValue('not_a_colour');
-        testHelpers.assertFieldValue(this.colourField, '#aaaaaa', '#aaa');
-      });
-      test('#000000', function() {
-        this.colourField.setValue('#000000');
-        testHelpers.assertFieldValue(this.colourField, '#000000', '#000');
-      });
-      test('#bcbcbc', function() {
-        this.colourField.setValue('#bcbcbc');
-        testHelpers.assertFieldValue(this.colourField, '#bcbcbc', '#bcbcbc');
-      });
-      test('#aa0', function() {
-        this.colourField.setValue('#aa0');
-        testHelpers.assertFieldValue(this.colourField, '#aaaa00', '#aa0');
-      });
-      test('rgb(170, 170, 0)', function() {
-        this.colourField.setValue('rgb(170, 170, 0)');
-        testHelpers.assertFieldValue(this.colourField, '#aaaa00', '#aa0');
-      });
-      test('red', function() {
-        this.colourField.setValue('red');
-        testHelpers.assertFieldValue(this.colourField, '#ff0000', '#f00');
+      testHelpers.runSetValueTests(
+          validValueTestCases, invalidValueTestCases, '#aaaaaa', '#aaa');
+      test('With source block', function() {
+        this.field.setSourceBlock(createTestBlock());
+        this.field.setValue('#bcbcbc');
+        testHelpers.assertFieldValue(this.field, '#bcbcbc', '#bcbcbc');
       });
     });
   });

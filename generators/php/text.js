@@ -153,14 +153,12 @@ Blockly.PHP['text_getSubstring'] = function(block) {
   // Get substring.
   var where1 = block.getFieldValue('WHERE1');
   var where2 = block.getFieldValue('WHERE2');
+  var text = Blockly.PHP.valueToCode(block, 'STRING',
+      Blockly.PHP.ORDER_NONE) || '\'\'';
   if (where1 == 'FIRST' && where2 == 'LAST') {
-    var text = Blockly.PHP.valueToCode(block, 'STRING',
-        Blockly.PHP.ORDER_NONE) || '\'\'';
     var code = text;
     return [code, Blockly.PHP.ORDER_NONE];
   } else {
-    var text = Blockly.PHP.valueToCode(block, 'STRING',
-        Blockly.PHP.ORDER_NONE) || '\'\'';
     var at1 = Blockly.PHP.getAdjusted(block, 'AT1');
     var at2 = Blockly.PHP.getAdjusted(block, 'AT2');
     var functionName = Blockly.PHP.provideFunction_(

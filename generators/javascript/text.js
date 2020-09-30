@@ -188,8 +188,6 @@ Blockly.JavaScript['text_getSubstring'] = function(block) {
   var text = Blockly.JavaScript.valueToCode(block, 'STRING',
       textOrder) || '\'\'';
   if (where1 == 'FIRST' && where2 == 'LAST') {
-    var text = Blockly.JavaScript.valueToCode(block, 'STRING',
-        Blockly.JavaScript.ORDER_NONE) || '\'\'';
     var code = text;
     return [code, Blockly.JavaScript.ORDER_NONE];
   } else if (text.match(/^'?\w+'?$/) || requiresLengthCall) {

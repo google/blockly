@@ -123,11 +123,12 @@ Blockly.utils.object.inherits(Blockly.ToolboxCategory, Blockly.ToolboxItem);
  * @typedef {{
  *            container:?string,
  *            row:?string,
+ *            rowcontentcontainer:?string,
  *            icon:?string,
  *            label:?string,
  *            selected:?string,
- *            openIcon:?string,
- *            closedIcon:?string
+ *            openicon:?string,
+ *            closedicon:?string
  *          }}
  */
 Blockly.ToolboxCategory.CssConfig;
@@ -167,13 +168,13 @@ Blockly.ToolboxCategory.prototype.makeDefaultCssConfig_ = function() {
   return {
     'container': 'blocklyToolboxCategory',
     'row': 'blocklyTreeRow',
-    'rowContentContainer': 'blocklyTreeRowContentContainer',
+    'rowcontentcontainer': 'blocklyTreeRowContentContainer',
     'icon': 'blocklyTreeIcon',
     'label': 'blocklyTreeLabel',
     'contents': 'blocklyToolboxContents',
     'selected': 'blocklyTreeSelected',
-    'openIcon': 'blocklyTreeIconOpen',
-    'closedIcon': 'blocklyTreeIconClosed',
+    'openicon': 'blocklyTreeIconOpen',
+    'closedicon': 'blocklyTreeIconClosed',
   };
 };
 
@@ -278,7 +279,7 @@ Blockly.ToolboxCategory.prototype.createRowContainer_ = function() {
  */
 Blockly.ToolboxCategory.prototype.createRowContentsContainer_ = function() {
   var contentsContainer = document.createElement('div');
-  Blockly.utils.dom.addClass(contentsContainer, this.cssConfig_['rowContentContainer']);
+  Blockly.utils.dom.addClass(contentsContainer, this.cssConfig_['rowcontentcontainer']);
   return contentsContainer;
 };
 
@@ -422,8 +423,8 @@ Blockly.ToolboxCategory.prototype.openIcon_ = function(iconDiv) {
   if (!iconDiv) {
     return;
   }
-  Blockly.utils.dom.removeClasses(iconDiv, this.cssConfig_['closedIcon']);
-  Blockly.utils.dom.addClass(iconDiv, this.cssConfig_['openIcon']);
+  Blockly.utils.dom.removeClasses(iconDiv, this.cssConfig_['closedicon']);
+  Blockly.utils.dom.addClass(iconDiv, this.cssConfig_['openicon']);
 };
 
 /**
@@ -435,8 +436,8 @@ Blockly.ToolboxCategory.prototype.closeIcon_ = function(iconDiv) {
   if (!iconDiv) {
     return;
   }
-  Blockly.utils.dom.removeClasses(iconDiv, this.cssConfig_['openIcon']);
-  Blockly.utils.dom.addClass(iconDiv, this.cssConfig_['closedIcon']);
+  Blockly.utils.dom.removeClasses(iconDiv, this.cssConfig_['openicon']);
+  Blockly.utils.dom.addClass(iconDiv, this.cssConfig_['closedicon']);
 };
 
 /**

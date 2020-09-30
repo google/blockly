@@ -71,11 +71,12 @@ Blockly.utils.object.inherits(Blockly.CollapsibleToolboxCategory, Blockly.Toolbo
  * @typedef {{
  *            container:?string,
  *            row:?string,
+ *            rowcontentcontainer:?string,
  *            icon:?string,
  *            label:?string,
  *            selected:?string,
- *            openIcon:?string,
- *            closedIcon:?string,
+ *            openicon:?string,
+ *            closedicon:?string,
  *            contents:?string
  *          }}
  */

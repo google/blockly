@@ -21,20 +21,6 @@ Blockly.JavaScript['text'] = function(block) {
   return [code, Blockly.JavaScript.ORDER_ATOMIC];
 };
 
-/**
- * Encode a string as a properly escaped multiline JavaScript string, complete
- * with quotes.
- * @param {string} string Text to encode.
- * @return {string} JavaScript string.
- * @private
- */
-Blockly.JavaScript.multiline_quote_ = function(string) {
-  // Can't use goog.string.quote since Google's style guide recommends
-  // JS string literals use single quotes.
-  var lines = string.split(/\n/g).map(Blockly.JavaScript.quote_);
-  return lines.join(' + \'\\n\' +\n');
-};
-
 Blockly.JavaScript['text_multiline'] = function(block) {
   // Text value.
   var code = Blockly.JavaScript.multiline_quote_(block.getFieldValue('TEXT'));

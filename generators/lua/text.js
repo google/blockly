@@ -21,20 +21,6 @@ Blockly.Lua['text'] = function(block) {
   return [code, Blockly.Lua.ORDER_ATOMIC];
 };
 
-/**
- * Encode a string as a properly escaped multiline Lua string, complete with
- * quotes.
- * @param {string} string Text to encode.
- * @return {string} Lua string.
- * @private
- */
-Blockly.Lua.multiline_quote_ = function(string) {
-  var lines = string.split(/\n/g).map(Blockly.Lua.quote_);
-  // Join with the following, plus a newline:
-  // .. '\n' ..
-  return lines.join(' .. \'\\n\' ..\n');
-};
-
 Blockly.Lua['text_multiline'] = function(block) {
   // Text value.
   var code = Blockly.Lua.multiline_quote_(block.getFieldValue('TEXT'));

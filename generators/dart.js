@@ -158,7 +158,7 @@ Blockly.Dart.scrubNakedValue = function(line) {
  * Encode a string as a properly escaped Dart string, complete with quotes.
  * @param {string} string Text to encode.
  * @return {string} Dart string.
- * @private
+ * @protected
  */
 Blockly.Dart.quote_ = function(string) {
   // Can't use goog.string.quote since $ must also be escaped.
@@ -170,6 +170,20 @@ Blockly.Dart.quote_ = function(string) {
 };
 
 /**
+ * Encode a string as a properly escaped multiline Dart string, complete with
+ * quotes.
+ * @param {string} string Text to encode.
+ * @return {string} Dart string.
+ * @protected
+ */
+Blockly.Dart.multiline_quote_ = function (string) {
+  var lines = string.split(/\n/g).map(Blockly.Dart.quote_);
+  // Join with the following, plus a newline:
+  // + '\n' +
+  return lines.join(' + \'\\n\' + \n');
+};
+
+/**
  * Common tasks for generating Dart from blocks.
  * Handles comments for the specified block and any connected value blocks.
  * Calls any statements following this block.
@@ -177,7 +191,7 @@ Blockly.Dart.quote_ = function(string) {
  * @param {string} code The Dart code created for this block.
  * @param {boolean=} opt_thisOnly True to generate code for only this statement.
  * @return {string} Dart code with comments and subsequent blocks added.
- * @private
+ * @protected
  */
 Blockly.Dart.scrub_ = function(block, code, opt_thisOnly) {
   var commentCode = '';

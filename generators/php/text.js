@@ -21,21 +21,6 @@ Blockly.PHP['text'] = function(block) {
   return [code, Blockly.PHP.ORDER_ATOMIC];
 };
 
-/**
- * Encode a string as a properly escaped multiline PHP string, complete with
- * quotes.
- * @param {string} string Text to encode.
- * @return {string} PHP string.
- * @private
- */
-Blockly.PHP.multiline_quote_ = function (string) {
-  var lines = string.split(/\n/g).map(Blockly.PHP.quote_);
-  // Join with the following, plus a newline:
-  // . "\n" .
-  // Newline escaping only works in double-quoted strings.
-  return lines.join(' . \"\\n\" .\n');
-};
-
 Blockly.PHP['text_multiline'] = function(block) {
   // Text value.
   var code = Blockly.PHP.multiline_quote_(block.getFieldValue('TEXT'));

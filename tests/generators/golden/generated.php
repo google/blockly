@@ -602,8 +602,8 @@ function check_number_of_calls($test_name) {
 function test_create_text() {
   global $test_name, $naked, $proc_x, $proc_y, $func_x, $func_y, $func_a, $n, $ok, $log, $count, $varToChange, $rand, $item, $text, $number_of_calls, $list2, $proc_z, $func_z, $x, $proc_w, $func_c, $if2, $i, $loglist, $changing_list, $list_copy, $unittestResults;
   assertEquals('', '', 'no text');
-  assertEquals(('Hello'), 'Hello', 'create single');
-  assertEquals((-1), '-1', 'create single number');
+  assertEquals('Hello', 'Hello', 'create single');
+  assertEquals(-1, '-1', 'create single number');
   assertEquals('K' . 9, 'K9', 'create double text');
   assertEquals(4 . 2, '42', 'create double text numbers');
   assertEquals(implode('', array(1,2,3)), '123', 'create triple');
@@ -803,7 +803,7 @@ function test_substring_simple() {
   assertEquals(text_get_substring($text, 'FROM_END', 2, 'FROM_END', 1), '78', 'substring #-end simple');
   // The order for index for #-end is addition because this will catch errors in generators where most perform the operation ... - index.
   assertEquals(text_get_substring($text, 'FROM_END', ((0 + 3) - 1), 'FROM_END', ((0 + 2) - 1)), '78', 'substring #-end simple order');
-  assertEquals(($text), $text, 'substring first-last simple');
+  assertEquals($text, $text, 'substring first-last simple');
   assertEquals(text_get_substring($text, 'FROM_START', 1, 'FROM_END', 1), '2345678', 'substring # #-end simple');
   assertEquals(text_get_substring($text, 'FROM_END', 6, 'FROM_START', 3), '34', 'substring #-end # simple');
   assertEquals(text_get_substring($text, 'FIRST', 0, 'FROM_START', 3), '1234', 'substring first # simple');
@@ -833,7 +833,7 @@ function test_substring_complex() {
   assertEquals(text_get_substring(true ? get_numbers() : null, 'FROM_END', ((0 + 3) - 1), 'FROM_END', ((0 + 2) - 1)), '78', 'substring #-end order order');
   check_number_of_calls('substring #-end order order');
   $number_of_calls = 0;
-  assertEquals((get_numbers()), $text, 'substring first-last');
+  assertEquals(get_numbers(), $text, 'substring first-last');
   check_number_of_calls('substring first-last');
   $number_of_calls = 0;
   assertEquals(text_get_substring(get_numbers(), 'FROM_START', 1, 'FROM_END', 1), '2345678', 'substring # #-end complex');

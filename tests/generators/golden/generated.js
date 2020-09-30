@@ -745,7 +745,7 @@ function test_substring_simple() {
   assertEquals(text.slice(text.length - 3, text.length - 1), '78', 'substring #-end simple');
   // The order for index for #-end is addition because this will catch errors in generators where most perform the operation ... - index.
   assertEquals(text.slice(text.length - (0 + 3), text.length - ((0 + 2) - 1)), '78', 'substring #-end simple order');
-  assertEquals((text), text, 'substring first-last simple');
+  assertEquals(text, text, 'substring first-last simple');
   assertEquals(text.slice(1, text.length - 1), '2345678', 'substring # #-end simple');
   assertEquals(text.slice(text.length - 7, 4), '34', 'substring #-end # simple');
   assertEquals(text.slice(0, 4), '1234', 'substring first # simple');
@@ -810,7 +810,7 @@ function test_substring_complex() {
   assertEquals(subsequenceFromEndFromEnd(true ? get_numbers() : null, ((0 + 3) - 1), ((0 + 2) - 1)), '78', 'substring #-end order order');
   check_number_of_calls('substring #-end order order');
   number_of_calls = 0;
-  assertEquals((get_numbers()), text, 'substring first-last');
+  assertEquals(get_numbers(), text, 'substring first-last');
   check_number_of_calls('substring first-last');
   number_of_calls = 0;
   assertEquals(subsequenceFromStartFromEnd(get_numbers(), 1, 1), '2345678', 'substring # #-end complex');

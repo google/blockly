@@ -188,7 +188,7 @@ Blockly.JavaScript.scrubNakedValue = function(line) {
  * quotes.
  * @param {string} string Text to encode.
  * @return {string} JavaScript string.
- * @private
+ * @protected
  */
 Blockly.JavaScript.quote_ = function(string) {
   // Can't use goog.string.quote since Google's style guide recommends
@@ -204,7 +204,7 @@ Blockly.JavaScript.quote_ = function(string) {
  * with quotes.
  * @param {string} string Text to encode.
  * @return {string} JavaScript string.
- * @private
+ * @protected
  */
 Blockly.JavaScript.multiline_quote_ = function(string) {
   // Can't use goog.string.quote since Google's style guide recommends
@@ -221,7 +221,7 @@ Blockly.JavaScript.multiline_quote_ = function(string) {
  * @param {string} code The JavaScript code created for this block.
  * @param {boolean=} opt_thisOnly True to generate code for only this statement.
  * @return {string} JavaScript code with comments and subsequent blocks added.
- * @private
+ * @protected
  */
 Blockly.JavaScript.scrub_ = function(block, code, opt_thisOnly) {
   var commentCode = '';

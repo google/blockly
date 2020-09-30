@@ -807,7 +807,7 @@ function test_substring_complex() {
   assertEquals(subsequenceFromEndFromEnd(get_numbers(), 2, 1), '78', 'substring #-end complex');
   check_number_of_calls('substring #-end complex');
   number_of_calls = 0;
-  assertEquals(subsequenceFromEndFromEnd((true ? get_numbers() : null), ((0 + 3) - 1), ((0 + 2) - 1)), '78', 'substring #-end order order');
+  assertEquals(subsequenceFromEndFromEnd(true ? get_numbers() : null, ((0 + 3) - 1), ((0 + 2) - 1)), '78', 'substring #-end order order');
   check_number_of_calls('substring #-end order order');
   number_of_calls = 0;
   assertEquals(get_numbers(), text, 'substring first-last');

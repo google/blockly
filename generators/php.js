@@ -190,7 +190,7 @@ Blockly.PHP.scrubNakedValue = function(line) {
  * quotes.
  * @param {string} string Text to encode.
  * @return {string} PHP string.
- * @private
+ * @protected
  */
 Blockly.PHP.quote_ = function(string) {
   string = string.replace(/\\/g, '\\\\')
@@ -204,7 +204,7 @@ Blockly.PHP.quote_ = function(string) {
  * quotes.
  * @param {string} string Text to encode.
  * @return {string} PHP string.
- * @private
+ * @protected
  */
 Blockly.PHP.multiline_quote_ = function (string) {
   var lines = string.split(/\n/g).map(Blockly.PHP.quote_);
@@ -222,7 +222,7 @@ Blockly.PHP.multiline_quote_ = function (string) {
  * @param {string} code The PHP code created for this block.
  * @param {boolean=} opt_thisOnly True to generate code for only this statement.
  * @return {string} PHP code with comments and subsequent blocks added.
- * @private
+ * @protected
  */
 Blockly.PHP.scrub_ = function(block, code, opt_thisOnly) {
   var commentCode = '';

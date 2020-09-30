@@ -24,21 +24,24 @@ Blockly.Python['text'] = function(block) {
 Blockly.Python['text_multiline'] = function(block) {
   // Text value.
   var code = Blockly.Python.multiline_quote_(block.getFieldValue('TEXT'));
-  return [code, Blockly.Python.ORDER_ATOMIC];
+  var order = code.indexOf('+') != -1 ? Blockly.Python.ORDER_ADDITIVE :
+      Blockly.Python.ORDER_ATOMIC;
+  return [code, order];
 };
 
 /**
  * Enclose the provided value in 'str(...)' function.
  * Leave string literals alone.
  * @param {string} value Code evaluating to a value.
- * @return {string} Code evaluating to a string.
+ * @return {[string, number]} Array containing code evaluating to a string and
+ *    the order of the returned code.
  * @private
  */
 Blockly.Python.text.forceString_ = function(value) {
   if (Blockly.Python.text.forceString_.strRegExp.test(value)) {
-    return value;
+    return [value, Blockly.Python.ORDER_ATOMIC];
   }
-  return 'str(' + value + ')';
+  return ['str(' + value + ')', Blockly.Python.ORDER_FUNCTION_CALL];
 };
 
 /**
@@ -56,16 +59,16 @@ Blockly.Python['text_join'] = function(block) {
     case 1:
       var element = Blockly.Python.valueToCode(block, 'ADD0',
               Blockly.Python.ORDER_NONE) || '\'\'';
-      var code = Blockly.Python.text.forceString_(element);
-      return [code, Blockly.Python.ORDER_FUNCTION_CALL];
+      var codeAndOrder = Blockly.Python.text.forceString_(element);
+      return codeAndOrder;
       break;
     case 2:
       var element0 = Blockly.Python.valueToCode(block, 'ADD0',
           Blockly.Python.ORDER_NONE) || '\'\'';
       var element1 = Blockly.Python.valueToCode(block, 'ADD1',
           Blockly.Python.ORDER_NONE) || '\'\'';
-      var code = Blockly.Python.text.forceString_(element0) + ' + ' +
-          Blockly.Python.text.forceString_(element1);
+      var code = Blockly.Python.text.forceString_(element0)[0] + ' + ' +
+          Blockly.Python.text.forceString_(element1)[0];
       return [code, Blockly.Python.ORDER_ADDITIVE];
       break;
     default:
@@ -89,7 +92,7 @@ Blockly.Python['text_append'] = function(block) {
   var value = Blockly.Python.valueToCode(block, 'TEXT',
       Blockly.Python.ORDER_NONE) || '\'\'';
   return varName + ' = str(' + varName + ') + ' +
-      Blockly.Python.text.forceString_(value) + '\n';
+      Blockly.Python.text.forceString_(value)[0] + '\n';
 };
 
 Blockly.Python['text_length'] = function(block) {
@@ -126,8 +129,9 @@ Blockly.Python['text_charAt'] = function(block) {
   // Get letter at index.
   // Note: Until January 2013 this block did not have the WHERE input.
   var where = block.getFieldValue('WHERE') || 'FROM_START';
-  var text = Blockly.Python.valueToCode(block, 'VALUE',
-      Blockly.Python.ORDER_MEMBER) || '\'\'';
+  var textOrder = (where == 'RANDOM') ? Blockly.Python.ORDER_NONE :
+      Blockly.Python.ORDER_MEMBER;
+  var text = Blockly.Python.valueToCode(block, 'VALUE', textOrder) || '\'\'';
   switch (where) {
     case 'FIRST':
       var code = text + '[0]';
@@ -271,7 +275,7 @@ Blockly.Python['text_count'] = function(block) {
   var sub = Blockly.Python.valueToCode(block, 'SUB',
       Blockly.Python.ORDER_NONE) || '\'\'';
   var code = text + '.count(' + sub + ')';
-  return [code, Blockly.Python.ORDER_MEMBER];
+  return [code, Blockly.Python.ORDER_FUNCTION_CALL];
 };
 
 Blockly.Python['text_replace'] = function(block) {

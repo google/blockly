@@ -106,9 +106,9 @@ Blockly.JavaScript['unittest_assertequals'] = function(block) {
   var message = Blockly.JavaScript.valueToCode(block, 'MESSAGE',
       Blockly.JavaScript.ORDER_NONE) || '';
   var actual = Blockly.JavaScript.valueToCode(block, 'ACTUAL',
-      Blockly.JavaScript.ORDER_COMMA) || 'null';
+      Blockly.JavaScript.ORDER_NONE) || 'null';
   var expected = Blockly.JavaScript.valueToCode(block, 'EXPECTED',
-      Blockly.JavaScript.ORDER_COMMA) || 'null';
+      Blockly.JavaScript.ORDER_NONE) || 'null';
   return Blockly.JavaScript['unittest_main'].defineAssert_() +
       '(' + actual + ', ' + expected + ', ' + message + ');\n';
 };
@@ -118,7 +118,7 @@ Blockly.JavaScript['unittest_assertvalue'] = function(block) {
   var message = Blockly.JavaScript.valueToCode(block, 'MESSAGE',
       Blockly.JavaScript.ORDER_NONE) || '';
   var actual = Blockly.JavaScript.valueToCode(block, 'ACTUAL',
-      Blockly.JavaScript.ORDER_COMMA) || 'null';
+      Blockly.JavaScript.ORDER_NONE) || 'null';
   var expected = block.getFieldValue('EXPECTED');
   if (expected == 'TRUE') {
     expected = 'true';

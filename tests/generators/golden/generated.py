@@ -636,7 +636,7 @@ def test_get_text_complex():
   assertEquals(text.find(text_random_letter(get_Blockly())) + 1 > 0, True, 'get random complex')
   check_number_of_calls('get random complex')
   number_of_calls = 0
-  assertEquals(text.find(text_random_letter((get_Blockly() if True else None))) + 1 > 0, True, 'get random order complex')
+  assertEquals(text.find(text_random_letter(get_Blockly() if True else None)) + 1 > 0, True, 'get random order complex')
   check_number_of_calls('get random order complex')
   number_of_calls = 0
   assertEquals(get_Blockly()[2], 'o', 'get # complex')

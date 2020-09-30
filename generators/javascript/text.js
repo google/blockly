@@ -85,7 +85,7 @@ Blockly.JavaScript['text_join'] = function(block) {
       var elements = new Array(block.itemCount_);
       for (var i = 0; i < block.itemCount_; i++) {
         elements[i] = Blockly.JavaScript.valueToCode(block, 'ADD' + i,
-            Blockly.JavaScript.ORDER_COMMA) || '\'\'';
+            Blockly.JavaScript.ORDER_NONE) || '\'\'';
       }
       var code = '[' + elements.join(',') + '].join(\'\')';
       return [code, Blockly.JavaScript.ORDER_FUNCTION_CALL];

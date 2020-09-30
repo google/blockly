@@ -64,7 +64,7 @@ Blockly.PHP['text_join'] = function(block) {
     var elements = new Array(block.itemCount_);
     for (var i = 0; i < block.itemCount_; i++) {
       elements[i] = Blockly.PHP.valueToCode(block, 'ADD' + i,
-          Blockly.PHP.ORDER_COMMA) || '\'\'';
+          Blockly.PHP.ORDER_NONE) || '\'\'';
     }
     var code = 'implode(\'\', array(' + elements.join(',') + '))';
     return [code, Blockly.PHP.ORDER_FUNCTION_CALL];
@@ -108,9 +108,9 @@ Blockly.PHP['text_indexOf'] = function(block) {
   var operator = block.getFieldValue('END') == 'FIRST' ?
       'strpos' : 'strrpos';
   var substring = Blockly.PHP.valueToCode(block, 'FIND',
-      Blockly.PHP.ORDER_COMMA) || '\'\'';
+      Blockly.PHP.ORDER_NONE) || '\'\'';
   var text = Blockly.PHP.valueToCode(block, 'VALUE',
-      Blockly.PHP.ORDER_COMMA) || '\'\'';
+      Blockly.PHP.ORDER_NONE) || '\'\'';
   if (block.workspace.options.oneBasedIndex) {
     var errorIndex = ' 0';
     var indexAdjustment = ' + 1';
@@ -135,7 +135,7 @@ Blockly.PHP['text_charAt'] = function(block) {
   // Get letter at index.
   var where = block.getFieldValue('WHERE') || 'FROM_START';
   var textOrder = (where == 'RANDOM') ? Blockly.PHP.ORDER_NONE :
-      Blockly.PHP.ORDER_COMMA;
+      Blockly.PHP.ORDER_NONE;
   var text = Blockly.PHP.valueToCode(block, 'VALUE', textOrder) || '\'\'';
   switch (where) {
     case 'FIRST':
@@ -175,7 +175,7 @@ Blockly.PHP['text_getSubstring'] = function(block) {
     return [code, Blockly.PHP.ORDER_NONE];
   } else {
     var text = Blockly.PHP.valueToCode(block, 'STRING',
-        Blockly.PHP.ORDER_COMMA) || '\'\'';
+        Blockly.PHP.ORDER_NONE) || '\'\'';
     var at1 = Blockly.PHP.getAdjusted(block, 'AT1');
     var at2 = Blockly.PHP.getAdjusted(block, 'AT2');
     var functionName = Blockly.PHP.provideFunction_(
@@ -263,9 +263,9 @@ Blockly.PHP['text_prompt'] = Blockly.PHP['text_prompt_ext'];
 
 Blockly.PHP['text_count'] = function(block) {
   var text = Blockly.PHP.valueToCode(block, 'TEXT',
-      Blockly.PHP.ORDER_COMMA) || '\'\'';
+      Blockly.PHP.ORDER_NONE) || '\'\'';
   var sub = Blockly.PHP.valueToCode(block, 'SUB',
-      Blockly.PHP.ORDER_COMMA) || '\'\'';
+      Blockly.PHP.ORDER_NONE) || '\'\'';
   var code = 'strlen(' + sub + ') === 0'
     + ' ? strlen(' + text + ') + 1'
     + ' : substr_count(' + text + ', ' + sub + ')';
@@ -274,11 +274,11 @@ Blockly.PHP['text_count'] = function(block) {
 
 Blockly.PHP['text_replace'] = function(block) {
   var text = Blockly.PHP.valueToCode(block, 'TEXT',
-      Blockly.PHP.ORDER_COMMA) || '\'\'';
+      Blockly.PHP.ORDER_NONE) || '\'\'';
   var from = Blockly.PHP.valueToCode(block, 'FROM',
-      Blockly.PHP.ORDER_COMMA) || '\'\'';
+      Blockly.PHP.ORDER_NONE) || '\'\'';
   var to = Blockly.PHP.valueToCode(block, 'TO',
-      Blockly.PHP.ORDER_COMMA) || '\'\'';
+      Blockly.PHP.ORDER_NONE) || '\'\'';
   var code = 'str_replace(' + from + ', ' + to + ', ' + text + ')';
   return [code, Blockly.PHP.ORDER_FUNCTION_CALL];
 };

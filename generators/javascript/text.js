@@ -25,7 +25,7 @@ Blockly.JavaScript['text'] = function(block) {
  * Encode a string as a properly escaped multiline JavaScript string, complete
  * with quotes.
  * @param {string} string Text to encode.
- * @return {[string, } JavaScript string.
+ * @return {string} JavaScript string.
  * @private
  */
 Blockly.JavaScript.multiline_quote_ = function(string) {

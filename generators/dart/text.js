@@ -94,7 +94,7 @@ Blockly.Dart['text_charAt'] = function(block) {
   // Get letter at index.
   // Note: Until January 2013 this block did not have the WHERE input.
   var where = block.getFieldValue('WHERE') || 'FROM_START';
-  var textOrder = (where == 'FIRST' | where == 'FROM_START') ?
+  var textOrder = (where == 'FIRST' || where == 'FROM_START') ?
       Blockly.Dart.ORDER_UNARY_POSTFIX : Blockly.Dart.ORDER_NONE;
   var text = Blockly.Dart.valueToCode(block, 'VALUE', textOrder) || '\'\'';
   switch (where) {

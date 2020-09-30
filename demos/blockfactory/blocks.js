@@ -87,7 +87,9 @@ Blockly.Blocks['factory_base'] = {
     type.setShadow(true);
     type.outputConnection.connect(this.getInput(outputType).connection);
     type.initSvg();
-    type.render();
+    if (this.rendered) {
+      type.render();
+    }
   },
   updateShape_: function(option) {
     var outputExists = this.getInput('OUTPUTTYPE');

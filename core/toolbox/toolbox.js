@@ -614,9 +614,9 @@ Blockly.Toolbox.prototype.handleToolboxItemResize = function() {
   var workspace = this.workspace_;
   var rect = this.HtmlDiv.getBoundingClientRect();
   var newX = this.toolboxPosition == Blockly.TOOLBOX_AT_LEFT ?
-      workspace.scrollX + rect.width : 0;
+      workspace.scrollX + rect.width : workspace.scrollX;
   var newY = this.toolboxPosition == Blockly.TOOLBOX_AT_TOP ?
-      workspace.scrollY + rect.height : 0;
+      workspace.scrollY + rect.height : workspace.scrollY;
   workspace.translate(newX, newY);
 
   // Even though the div hasn't changed size, the visible workspace

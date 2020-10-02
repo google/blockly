@@ -36,7 +36,7 @@ Blockly.ContextMenuItems.registerUndo = function() {
     },
     scopeType: Blockly.ContextMenuRegistry.ScopeType.WORKSPACE,
     id: 'undoWorkspace',
-    weight: 0,
+    weight: 1,
   };
   Blockly.ContextMenuRegistry.registry.register(undoOption);
 };
@@ -57,7 +57,7 @@ Blockly.ContextMenuItems.registerRedo = function() {
     },
     scopeType: Blockly.ContextMenuRegistry.ScopeType.WORKSPACE,
     id: 'redoWorkspace',
-    weight: 0,
+    weight: 2,
   };
   Blockly.ContextMenuRegistry.registry.register(redoOption);
 };
@@ -83,7 +83,7 @@ Blockly.ContextMenuItems.registerCleanup = function() {
     },
     scopeType: Blockly.ContextMenuRegistry.ScopeType.WORKSPACE,
     id: 'cleanWorkspace',
-    weight: 0,
+    weight: 3,
   };
   Blockly.ContextMenuRegistry.registry.register(cleanOption);
 };
@@ -135,7 +135,7 @@ Blockly.ContextMenuItems.registerCollapse = function() {
     },
     scopeType:  Blockly.ContextMenuRegistry.ScopeType.WORKSPACE,
     id:  'collapseWorkspace',
-    weight:  0,
+    weight:  4,
   };
   Blockly.ContextMenuRegistry.registry.register(collapseOption);
 };
@@ -168,7 +168,7 @@ Blockly.ContextMenuItems.registerExpand = function() {
     },
     scopeType: Blockly.ContextMenuRegistry.ScopeType.WORKSPACE,
     id: 'expandWorkspace',
-    weight: 0,
+    weight: 5,
   };
   Blockly.ContextMenuRegistry.registry.register(expandOption);
 };
@@ -271,7 +271,7 @@ Blockly.ContextMenuItems.registerDeleteAll = function() {
     },
     scopeType: Blockly.ContextMenuRegistry.ScopeType.WORKSPACE,
     id: 'workspaceDelete',
-    weight: 0,
+    weight: 6,
   };
   Blockly.ContextMenuRegistry.registry.register(deleteOption);
 };
@@ -313,7 +313,7 @@ Blockly.ContextMenuItems.registerDuplicate = function() {
     },
     scopeType: Blockly.ContextMenuRegistry.ScopeType.BLOCK,
     id: 'blockDuplicate',
-    weight: 0,
+    weight: 1,
   };
   Blockly.ContextMenuRegistry.registry.register(duplicateOption);
 };
@@ -349,7 +349,7 @@ Blockly.ContextMenuItems.registerComment = function() {
     },
     scopeType: Blockly.ContextMenuRegistry.ScopeType.BLOCK,
     id: 'blockComment',
-    weight: 0,
+    weight: 2,
   };
   Blockly.ContextMenuRegistry.registry.register(commentOption);
 };
@@ -380,7 +380,7 @@ Blockly.ContextMenuItems.registerInline = function() {
     },
     scopeType: Blockly.ContextMenuRegistry.ScopeType.BLOCK,
     id: 'blockInline',
-    weight: 0,
+    weight: 3,
   };
   Blockly.ContextMenuRegistry.registry.register(inlineOption);
 };
@@ -407,7 +407,7 @@ Blockly.ContextMenuItems.registerCollapseExpandBlock = function() {
     },
     scopeType: Blockly.ContextMenuRegistry.ScopeType.BLOCK,
     id: 'blockCollapseExpand',
-    weight: 0,
+    weight: 4,
   };
   Blockly.ContextMenuRegistry.registry.register(collapseExpandOption);
 };
@@ -443,7 +443,7 @@ Blockly.ContextMenuItems.registerDisable = function() {
     },
     scopeType: Blockly.ContextMenuRegistry.ScopeType.BLOCK,
     id: 'blockDisable',
-    weight: 0,
+    weight: 5,
   };
   Blockly.ContextMenuRegistry.registry.register(disableOption);
 };
@@ -477,7 +477,7 @@ Blockly.ContextMenuItems.registerDelete = function() {
     },
     scopeType: Blockly.ContextMenuRegistry.ScopeType.BLOCK,
     id: 'blockDelete',
-    weight: 0,
+    weight: 6,
   };
   Blockly.ContextMenuRegistry.registry.register(deleteOption);
 };
@@ -503,7 +503,7 @@ Blockly.ContextMenuItems.registerHelp = function() {
     },
     scopeType: Blockly.ContextMenuRegistry.ScopeType.BLOCK,
     id: 'blockHelp',
-    weight: 0,
+    weight: 7,
   };
   Blockly.ContextMenuRegistry.registry.register(helpOption);
 };

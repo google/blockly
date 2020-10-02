@@ -38,22 +38,30 @@ Blockly.Themes.Leaphy.defaultBlockStyles = {
 
 Blockly.Themes.Leaphy.categoryStyles = {
   "leaphy_category": {
-    "colour": "#1d2f6e"
+    "colour": "#444458"
   },
   "situation_category": {
-    "colour": "#E0A830"
+    "colour": "#444458"
   },
   "numbers_category": {
-    "colour": "#5FB627"
+    "colour": "#444458"
   },
   "variables_category": {
-    "colour": "#EC7D2A"
+    "colour": "#444458"
   },
   "functions_category": {
-    "colour": "#658FD7"
+    "colour": "#444458"
   }
+};
+
+Blockly.Themes.Leaphy.componentStyles = {
+  'toolboxBackgroundColour': '#24253F',
+    'toolboxForegroundColour': '#fff',
+    'flyoutBackgroundColour': '#444458',
+    'flyoutForegroundColour': '#ccc',
+    'flyoutOpacity': 1
 };
 
 Blockly.Themes.Classic =
     new Blockly.Theme('leaphy', Blockly.Themes.Leaphy.defaultBlockStyles,
-        Blockly.Themes.Leaphy.categoryStyles);
+        Blockly.Themes.Leaphy.categoryStyles, Blockly.Themes.Leaphy.componentStyles);

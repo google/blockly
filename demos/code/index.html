@@ -64,7 +64,7 @@
   <textarea id="content_xml" class="content" wrap="off"></textarea>
 
   <xml xmlns="https://developers.google.com/blockly/xml" id="toolbox" style="display: none">
-    <category name="%{BKY_LEAPHY_SITUATION_CATEGORY}" categorystyle="situation_category">
+    <category id="l_situation" name="%{BKY_LEAPHY_SITUATION_CATEGORY}" categorystyle="situation_category">
       <block type="controls_repeat_ext">
         <value name="TIMES">
           <shadow type="math_number">
@@ -86,7 +86,7 @@
         </value>
       </block>
     </category>
-    <category name="%{BKY_LEAPHY_NUMBERS_CATEGORY}" categorystyle="numbers_category">
+    <category id="l_numbers" name="%{BKY_LEAPHY_NUMBERS_CATEGORY}" categorystyle="numbers_category">
       <block type="math_number">
         <field name="NUM">123</field>
       </block>
@@ -133,8 +133,8 @@
         </value>
       </block>
     </category>  
-    <category name="%{BKY_LEAPHY_VARIABLES_CATEGORY}" categorystyle="variables_category" custom="VARIABLE"></category>
-    <category name="%{BKY_LEAPHY_FUNCTIONS_CATEGORY}" categorystyle="functions_category" custom="PROCEDURE"></category>
+    <category id="l_variables" name="%{BKY_LEAPHY_VARIABLES_CATEGORY}" categorystyle="variables_category" custom="VARIABLE"></category>
+    <category id="l_functions" name="%{BKY_LEAPHY_FUNCTIONS_CATEGORY}" categorystyle="functions_category" custom="PROCEDURE"></category>
     <category id="l_original" name="%{BKY_LEAPHY_ORIGINAL_CATEGORY}" categorystyle="leaphy_category">
       <block type="leaphy_original_set_led">
         <value name="LED_RED">

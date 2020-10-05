@@ -931,6 +931,8 @@ Blockly.Field.prototype.processValidation_ = function(newValue,
   }
   if (validatedValue !== undefined) {
     newValue = validatedValue;
+    this.doValueUpdate_(newValue);
+    this.forceRerender();
   }
   return newValue;
 };

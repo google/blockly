@@ -258,6 +258,7 @@ Blockly.Comment.prototype.createBubble_ = function() {
     this.createNonEditableBubble_();
   } else {
     this.createEditableBubble_();
+    this.textarea_.select();
   }
 };
 

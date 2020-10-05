@@ -259,6 +259,7 @@ Blockly.Comment.prototype.createBubble_ = function() {
   } else {
     this.createEditableBubble_();
   }
+  this.textarea_.select();
 };
 
 /**
@@ -275,6 +276,7 @@ Blockly.Comment.prototype.createEditableBubble_ = function() {
   this.bubble_.setSvgId(this.block_.id);
   this.bubble_.registerResizeEvent(this.onBubbleResize_.bind(this));
   this.applyColour();
+
 };
 
 /**

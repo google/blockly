@@ -899,6 +899,7 @@ Blockly.Field.prototype.setValue = function(newValue) {
   var oldValue = this.getValue();
   if (oldValue === newValue) {
     doLogging && console.log('same, return');
+    this.doValueUpdate_(newValue);
     return;
   }
 
@@ -931,8 +932,6 @@ Blockly.Field.prototype.processValidation_ = function(newValue,
   }
   if (validatedValue !== undefined) {
     newValue = validatedValue;
-    this.doValueUpdate_(newValue);
-    this.forceRerender();
   }
   return newValue;
 };

@@ -898,7 +898,8 @@ Blockly.Field.prototype.setValue = function(newValue) {
   }
   var oldValue = this.getValue();
   if (oldValue === newValue) {
-    doLogging && console.log('same, return');
+    doLogging && console.log('same, doValueUpdate_, return');
+    this.doValueUpdate_(newValue);
     return;
   }
 

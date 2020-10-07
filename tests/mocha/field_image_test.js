@@ -31,6 +31,10 @@ suite('Image Fields', function() {
     {title: 'Without Alt', value: 'src', expectedValue: 'src',
       args: ['src', 1, 1], expectedText: ''},
   ];
+  /**
+   * Adds json property to test cases based on args property.
+   * @param {!Array<!FieldCreationTestCase>} testCase The test case to modify.
+   */
   var addJson = function(testCase) {
     testCase.json = {'src': testCase.args[0], 'width': testCase.args[1],
       'height': testCase.args[2]};

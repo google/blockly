@@ -53,8 +53,8 @@ Blockly.utils.toolbox.ButtonInfo;
  * The information needed to create a label in the toolbox.
  * @typedef {{
  *            kind:string,
- *            id:(string|undefined),
- *            text:string
+ *            text:string,
+ *            id:(string|undefined)
  *          }}
  */
 Blockly.utils.toolbox.LabelInfo;
@@ -71,11 +71,11 @@ Blockly.utils.toolbox.ButtonOrLabelInfo;
  * @typedef {{
  *            kind:string,
  *            name:string,
+ *            contents:!Array<!Blockly.utils.toolbox.ToolboxItemInfo>,
  *            id:(string|undefined),
  *            categorystyle:(string|undefined),
  *            colour:(string|undefined),
  *            cssconfig:(!Blockly.ToolboxCategory.CssConfig|undefined),
- *            contents:!Array<!Blockly.utils.toolbox.ToolboxItemInfo>,
  *            hidden:(string|undefined)
  *          }}
  */

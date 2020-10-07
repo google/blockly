@@ -531,8 +531,11 @@ Blockly.FieldTextInput.prototype.resizeEditor_ = function() {
  * @deprecated
  */
 Blockly.FieldTextInput.numberValidator = function(text) {
-  console.warn('Blockly.FieldTextInput.numberValidator is deprecated. ' +
-               'Use Blockly.FieldNumber instead.');
+  Blockly.utils.deprecation.warn(
+    'FieldTextInput.numberValidator',
+    'May 2019',
+    'October 2020',
+    'Blockly.FieldNumber');
   if (text === null) {
     return null;
   }

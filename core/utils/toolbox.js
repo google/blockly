@@ -75,7 +75,7 @@ Blockly.utils.toolbox.ButtonOrLabelInfo;
  *            categorystyle:(string|undefined),
  *            colour:(string|undefined),
  *            cssconfig:(!Blockly.ToolboxCategory.CssConfig|undefined),
- *            contents:!Array<Blockly.utils.toolbox.ToolboxItemInfo>,
+ *            contents:!Array<!Blockly.utils.toolbox.ToolboxItemInfo>,
  *            hidden:(string|undefined)
  *          }}
  */
@@ -122,7 +122,8 @@ Blockly.utils.toolbox.FlyoutItemInfo;
 /**
  * The JSON definition of a toolbox.
  * @typedef {{
- *            contents:!Array<Blockly.utils.toolbox.ToolboxItemInfo>
+ *            kind:(string|undefined),
+ *            contents:!Array<!Blockly.utils.toolbox.ToolboxItemInfo>
  *          }}
  */
 Blockly.utils.toolbox.ToolboxInfo;

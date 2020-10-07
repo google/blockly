@@ -92,7 +92,6 @@ Blockly.PHP.ORDER_ASSIGNMENT = 20;        // = += -= *= /= %= <<= >>= ...
 Blockly.PHP.ORDER_LOGICAL_AND_WEAK = 21;  // and
 Blockly.PHP.ORDER_LOGICAL_XOR = 22;       // xor
 Blockly.PHP.ORDER_LOGICAL_OR_WEAK = 23;   // or
-Blockly.PHP.ORDER_COMMA = 24;             // ,
 Blockly.PHP.ORDER_NONE = 99;              // (...)
 
 /**

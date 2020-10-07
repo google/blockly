@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,6 +13,7 @@
   <script src="../../arduino_compressed.js"></script>
   <script src="code.js"></script>
 </head>
+
 <body>
   <table width="100%" height="100%">
     <tr>
@@ -75,8 +77,8 @@
       <block type="controls_repeat_forever"></block>
       <block type="controls_if"></block>
       <block type="controls_if">
-            <mutation else="1"/>
-          </block>
+        <mutation else="1" />
+      </block>
       <block type="controls_whileUntil"></block>
       <block type="time_delay">
         <value name="DELAY_TIME_MILI">
@@ -132,9 +134,11 @@
           </shadow>
         </value>
       </block>
-    </category>  
-    <category id="l_variables" name="%{BKY_LEAPHY_VARIABLES_CATEGORY}" categorystyle="variables_category" custom="VARIABLE"></category>
-    <category id="l_functions" name="%{BKY_LEAPHY_FUNCTIONS_CATEGORY}" categorystyle="functions_category" custom="PROCEDURE"></category>
+    </category>
+    <category id="l_variables" name="%{BKY_LEAPHY_VARIABLES_CATEGORY}" categorystyle="variables_category"
+      custom="VARIABLE"></category>
+    <category id="l_functions" name="%{BKY_LEAPHY_FUNCTIONS_CATEGORY}" categorystyle="functions_category"
+      custom="PROCEDURE"></category>
     <category id="l_original" name="%{BKY_LEAPHY_ORIGINAL_CATEGORY}" categorystyle="leaphy_category">
       <block type="leaphy_original_set_led">
         <value name="LED_RED">
@@ -171,6 +175,10 @@
       <block type="leaphy_original_digital_read"></block>
       <block type="leaphy_original_analog_read"></block>
     </category>
-    </xml>
+    <category id="l_flitz" name="%{BKY_LEAPHY_FLITZ_CATEGORY}" categorystyle="leaphy_category">
+      <block type="leaphy_flitz_read_stomach_sensor"></block>
+      <block type="leaphy_flitz_read_hand_sensor"></block>
+    </category>
+  </xml>
 </body>
 </html>

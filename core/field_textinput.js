@@ -532,10 +532,10 @@ Blockly.FieldTextInput.prototype.resizeEditor_ = function() {
  */
 Blockly.FieldTextInput.numberValidator = function(text) {
   Blockly.utils.deprecation.warn(
-    'FieldTextInput.numberValidator',
-    'May 2019',
-    'October 2020',
-    'Blockly.FieldNumber');
+      'FieldTextInput.numberValidator',
+      'May 2019',
+      'December 2020',
+      'Blockly.FieldNumber');
   if (text === null) {
     return null;
   }

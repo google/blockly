@@ -163,6 +163,10 @@ Blockly.WorkspaceCommentSvg.prototype.initSvg = function() {
   if (!this.getSvgRoot().parentNode) {
     this.workspace.getBubbleCanvas().appendChild(this.getSvgRoot());
   }
+
+  if (this.textarea_) {
+    this.textarea_.select();
+  }
 };
 
 /**

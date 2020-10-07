@@ -121,14 +121,14 @@ Blockly.utils.object.inherits(Blockly.ToolboxCategory, Blockly.ToolboxItem);
 /**
  * All the css class names that are used to create a category.
  * @typedef {{
- *            container:?string,
- *            row:?string,
- *            rowcontentcontainer:?string,
- *            icon:?string,
- *            label:?string,
- *            selected:?string,
- *            openicon:?string,
- *            closedicon:?string
+ *            container:(string|undefined),
+ *            row:(string|undefined),
+ *            rowcontentcontainer:(string|undefined),
+ *            icon:(string|undefined),
+ *            label:(string|undefined),
+ *            selected:(string|undefined),
+ *            openicon:(string|undefined),
+ *            closedicon:(string|undefined)
  *          }}
  */
 Blockly.ToolboxCategory.CssConfig;

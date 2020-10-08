@@ -150,7 +150,7 @@ Blockly.WorkspaceCommentSvg.prototype.dispose = function() {
  *
  * @package
  */
-Blockly.WorkspaceCommentSvg.prototype.initSvg = function(selectText) {
+Blockly.WorkspaceCommentSvg.prototype.initSvg = function(deSelectText) {
   if (!this.workspace.rendered) {
     throw TypeError('Workspace is headless.');
   }
@@ -167,7 +167,7 @@ Blockly.WorkspaceCommentSvg.prototype.initSvg = function(selectText) {
     this.workspace.getBubbleCanvas().appendChild(this.getSvgRoot());
   }
 
-  if (selectText && this.textarea_) {
+  if (!deSelectText && this.textarea_) {
     this.textarea_.select();
   }
 };
@@ -588,7 +588,7 @@ Blockly.WorkspaceCommentSvg.fromXml = function(
     var comment = new Blockly.WorkspaceCommentSvg(
         workspace, info.content, info.h, info.w, info.id);
     if (workspace.rendered) {
-      comment.initSvg(false);
+      comment.initSvg(true);
       comment.render(false);
     }
     // Position the comment correctly, taking into account the width of a

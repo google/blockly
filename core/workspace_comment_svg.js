@@ -147,7 +147,7 @@ Blockly.WorkspaceCommentSvg.prototype.dispose = function() {
  * May be called more than once.
  * @package
  */
-Blockly.WorkspaceCommentSvg.prototype.initSvg = function(selectText = true) {
+Blockly.WorkspaceCommentSvg.prototype.initSvg = function(selectText) {
   if (!this.workspace.rendered) {
     throw TypeError('Workspace is headless.');
   }

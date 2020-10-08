@@ -385,7 +385,7 @@ Blockly.FieldTextInput.prototype.widgetCreate_ = function() {
 /**
  * Closes the editor, saves the results, and disposes of any events or
  * dom-references belonging to the editor.
- * @private
+ * @protected
  */
 Blockly.FieldTextInput.prototype.widgetDispose_ = function() {
   // Non-disposal related things that we do when the editor closes.
@@ -430,7 +430,7 @@ Blockly.FieldTextInput.prototype.bindInputEvents_ = function(htmlInput) {
 
 /**
  * Unbind handlers for user input and workspace size changes.
- * @private
+ * @protected
  */
 Blockly.FieldTextInput.prototype.unbindInputEvents_ = function() {
   if (this.onKeyDownWrapper_) {

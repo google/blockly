@@ -146,11 +146,11 @@ Blockly.WorkspaceCommentSvg.prototype.dispose = function() {
  * Create and initialize the SVG representation of a workspace comment.
  * May be called more than once.
  *
- * @param {boolean} deSelectText Text inside text area will be selected if false
+ * @param {boolean=} deSelectText Text inside text area will be selected if false
  *
  * @package
  */
-Blockly.WorkspaceCommentSvg.prototype.initSvg = function(deSelectText) {
+Blockly.WorkspaceCommentSvg.prototype.initSvg = function(opt_noSelect) {
   if (!this.workspace.rendered) {
     throw TypeError('Workspace is headless.');
   }
@@ -167,7 +167,7 @@ Blockly.WorkspaceCommentSvg.prototype.initSvg = function(deSelectText) {
     this.workspace.getBubbleCanvas().appendChild(this.getSvgRoot());
   }
 
-  if (!deSelectText && this.textarea_) {
+  if (!opt_noSelect && this.textarea_) {
     this.textarea_.select();
   }
 };

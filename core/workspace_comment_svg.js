@@ -146,7 +146,7 @@ Blockly.WorkspaceCommentSvg.prototype.dispose = function() {
  * Create and initialize the SVG representation of a workspace comment.
  * May be called more than once.
  *
- * @param {boolean=} deSelectText Text inside text area will be selected if false
+ * @param {boolean=} opt_noSelect Text inside text area will be selected if false
  *
  * @package
  */

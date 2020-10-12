@@ -12,11 +12,11 @@
 
 goog.provide('Blockly.utils.toolbox');
 
+goog.require('Blockly.constants');
 
 goog.requireType('Blockly.ToolboxCategory');
 goog.requireType('Blockly.ToolboxSeparator');
 
-goog.require("Blockly.constants");
 
 /**
  * The information needed to create a block in the toolbox.

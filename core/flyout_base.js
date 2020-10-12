@@ -616,7 +616,7 @@ Blockly.Flyout.prototype.createButton_ = function(btnInfo, isLabel) {
  * defined as disabled.
  * @param {!Element} blockXml The xml of the block.
  * @return {!Blockly.BlockSvg} The block created from the blockXml.
- * @private
+ * @protected
  */
 Blockly.Flyout.prototype.createBlock_ = function(blockXml) {
   var curBlock = /** @type {!Blockly.BlockSvg} */ (
@@ -683,7 +683,7 @@ Blockly.Flyout.prototype.addSeparatorGap_ = function(sepInfo, gaps, defaultGap) 
 
 /**
  * Delete blocks, mats and buttons from a previous showing of the flyout.
- * @private
+ * @protected
  */
 Blockly.Flyout.prototype.clearOldBlocks_ = function() {
   // Delete any blocks from a previous showing.

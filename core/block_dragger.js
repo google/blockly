@@ -13,6 +13,7 @@
 goog.provide('Blockly.BlockDragger');
 
 goog.require('Blockly.blockAnimations');
+goog.require('Blockly.constants');
 goog.require('Blockly.Events');
 goog.require('Blockly.Events.BlockMove');
 goog.require('Blockly.Events.Ui');

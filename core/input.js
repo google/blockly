@@ -13,6 +13,7 @@
 goog.provide('Blockly.Input');
 
 goog.require('Blockly.Connection');
+goog.require('Blockly.constants');
 goog.require('Blockly.FieldLabel');
 
 

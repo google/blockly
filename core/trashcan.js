@@ -12,6 +12,7 @@
 
 goog.provide('Blockly.Trashcan');
 
+goog.require('Blockly.constants');
 goog.require('Blockly.Scrollbar');
 goog.require('Blockly.utils.dom');
 goog.require('Blockly.utils.Rect');

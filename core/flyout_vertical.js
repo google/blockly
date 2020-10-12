@@ -13,6 +13,7 @@
 goog.provide('Blockly.VerticalFlyout');
 
 goog.require('Blockly.Block');
+goog.require('Blockly.constants');
 goog.require('Blockly.Flyout');
 goog.require('Blockly.registry');
 goog.require('Blockly.Scrollbar');

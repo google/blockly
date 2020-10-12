@@ -29,6 +29,7 @@ goog.require('Blockly.blockRendering.SquareCorner');
 goog.require('Blockly.blockRendering.SpacerRow');
 goog.require('Blockly.blockRendering.TopRow');
 goog.require('Blockly.blockRendering.Types');
+goog.require('Blockly.constants');
 goog.require('Blockly.utils.object');
 goog.require('Blockly.zelos.BottomRow');
 goog.require('Blockly.zelos.RightConnectionShape');

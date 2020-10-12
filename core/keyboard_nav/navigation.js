@@ -15,6 +15,7 @@ goog.provide('Blockly.navigation');
 
 goog.require('Blockly.Action');
 goog.require('Blockly.ASTNode');
+goog.require('Blockly.constants');
 goog.require('Blockly.utils.Coordinate');
 goog.require('Blockly.user.keyMap');
 

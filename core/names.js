@@ -12,6 +12,7 @@
 
 goog.provide('Blockly.Names');
 
+goog.require('Blockly.constants');
 goog.require('Blockly.Msg');
 
 

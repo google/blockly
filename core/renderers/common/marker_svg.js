@@ -14,6 +14,7 @@
 goog.provide('Blockly.blockRendering.MarkerSvg');
 
 goog.require('Blockly.ASTNode');
+goog.require('Blockly.constants');
 goog.require('Blockly.utils.dom');
 goog.require('Blockly.utils.Svg');
 

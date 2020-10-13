@@ -15,6 +15,7 @@ goog.provide('Blockly.Block');
 goog.require('Blockly.ASTNode');
 goog.require('Blockly.Blocks');
 goog.require('Blockly.Connection');
+goog.require('Blockly.constants');
 goog.require('Blockly.Events');
 goog.require('Blockly.Events.BlockChange');
 goog.require('Blockly.Events.BlockCreate');

@@ -13,6 +13,7 @@
 
 goog.provide('Blockly.Generator');
 
+goog.require('Blockly.constants');
 goog.require('Blockly.Block');
 
 

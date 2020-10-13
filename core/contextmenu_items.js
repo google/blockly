@@ -16,6 +16,8 @@
  */
 goog.provide('Blockly.ContextMenuItems');
 
+goog.require('Blockly.constants');
+
 goog.requireType('Blockly.BlockSvg');
 
 /** Option to undo previous action. */

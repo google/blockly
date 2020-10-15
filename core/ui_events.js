@@ -49,6 +49,12 @@ Blockly.Events.Ui = function(opt_block, opt_element, opt_oldValue,
 Blockly.utils.object.inherits(Blockly.Events.Ui, Blockly.Events.Abstract);
 
 /**
+ * Whether or not the event is a UI event.
+ * @type {boolean}
+ */
+Blockly.Events.Ui.prototype.IS_UI_EVENT = true;
+
+/**
  * Type of this event.
  * @type {string}
  */

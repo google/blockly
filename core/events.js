@@ -110,7 +110,61 @@ Blockly.Events.VAR_RENAME = 'var_rename';
  * Name of event that records a UI change.
  * @const
  */
-Blockly.Events.UI = 'ui';
+Blockly.Events.UI = 'ui';  // TODO remove
+
+/**
+ * Name of event that record a block drags a block.
+ * @const
+ */
+Blockly.Events.BLOCK_DRAG = 'drag';
+
+/**
+ * Name of event that records a change in selected block.
+ * @const
+ */
+Blockly.Events.BLOCK_SELECTED = 'selected';
+
+/**
+ * Name of event that records a click.
+ * @const
+ */
+Blockly.Events.CLICK = 'click';
+
+/**
+ * Name of event that records a marker move.
+ * @const
+ */
+Blockly.Events.MARKER_MOVE = 'marker_move';
+
+/**
+ * Name of event that records a bubble open.
+ * @const
+ */
+Blockly.Events.BUBBLE_OPEN = 'bubble_open';
+
+/**
+ * Name of event that records a trashcan open.
+ * @const
+ */
+Blockly.Events.TRASHCAN_OPEN = 'trashcan_open';
+
+/**
+ * Name of event that records a toolbox item change.
+ * @const
+ */
+Blockly.Events.TOOLBOX_ITEM_CHANGE = 'toolbox_item_change';
+
+/**
+ * Name of event that records a theme change.
+ * @const
+ */
+Blockly.Events.THEME_CHANGE = 'theme_change';
+
+/**
+ * Name of event that records a viewport change.
+ * @const
+ */
+Blockly.Events.VIEWPORT_CHANGE = 'viewport_change';
 
 /**
  * Name of event that creates a comment.
@@ -234,8 +288,7 @@ Blockly.Events.filter = function(queueIn, forward) {
           event.name == lastEvent.name) {
         // Merge change events.
         lastEvent.newValue = event.newValue;
-      } else if (event.type == Blockly.Events.UI &&
-          event.element == 'click' &&
+      } else if (event.IS_UI_EVENT && event.element == 'click' &&
           (lastEvent.element == 'commentOpen' ||
            lastEvent.element == 'mutatorOpen' ||
            lastEvent.element == 'warningOpen')) {

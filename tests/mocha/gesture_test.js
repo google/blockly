@@ -37,7 +37,7 @@ suite('Gesture', function() {
     assertEventFired(eventsFireStub, Blockly.Events.Ui,
         {element: 'selected', oldValue: null, newValue: block.id},
         fieldWorkspace.id, null);
-    assertEventNotFired(eventsFireStub, Blockly.Events.Ui, {element: 'click'});
+    assertEventNotFired(eventsFireStub, Blockly.Events.Click, {});
   }
 
   function getTopFlyoutBlock(flyout) {

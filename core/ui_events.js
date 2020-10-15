@@ -13,7 +13,6 @@
 goog.provide('Blockly.Events.Ui');
 
 goog.require('Blockly.Events');
-goog.require('Blockly.Events.Abstract');
 goog.require('Blockly.Events.NewUi');
 goog.require('Blockly.registry');
 goog.require('Blockly.utils.object');
@@ -31,11 +30,12 @@ goog.require('Blockly.utils.object');
  *     etc.
  * @param {*=} opt_oldValue Previous value of element.
  * @param {*=} opt_newValue New value of element.
- * @extends {Blockly.Events.Abstract}
+ * @extends {Blockly.Events.NewUi}
  * @constructor
  */
 Blockly.Events.Ui = function(opt_block, opt_element, opt_oldValue,
     opt_newValue) {
+  // TODO(kozbial) remove
   var workspaceId = opt_block ? opt_block.workspace.id : undefined;
   Blockly.Events.Ui.superClass_.constructor.call(this, workspaceId);
 

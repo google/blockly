@@ -288,7 +288,7 @@ Blockly.Events.filter = function(queueIn, forward) {
           event.name == lastEvent.name) {
         // Merge change events.
         lastEvent.newValue = event.newValue;
-      } else if (event.IS_UI_EVENT && event.element == 'click' &&
+      } else if (event.type == Blockly.Events.CLICK &&
           (lastEvent.element == 'commentOpen' ||
            lastEvent.element == 'mutatorOpen' ||
            lastEvent.element == 'warningOpen')) {

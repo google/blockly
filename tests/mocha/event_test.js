@@ -605,7 +605,7 @@ suite('Events', function() {
         new Blockly.Events.BlockCreate(block),
         new Blockly.Events.BlockMove(block),
         new Blockly.Events.BlockChange(block, 'field', 'VAR', 'id1', 'id2'),
-        new Blockly.Events.Ui(block, 'click', undefined, undefined)
+        new Blockly.Events.Click(block)
       ];
       var filteredEvents = Blockly.Events.filter(events, true);
       chai.assert.equal(filteredEvents.length, 4);  // no event should have been removed.
@@ -688,11 +688,11 @@ suite('Events', function() {
       var block3 = this.workspace.newBlock('field_variable_test_block', '3');
       var events = [
         new Blockly.Events.Ui(block1, 'commentOpen', 'false', 'true'),
-        new Blockly.Events.Ui(block1, 'click', 'false', 'true'),
+        new Blockly.Events.Click(block1),
         new Blockly.Events.Ui(block2, 'mutatorOpen', 'false', 'true'),
-        new Blockly.Events.Ui(block2, 'click', 'false', 'true'),
+        new Blockly.Events.Click(block2),
         new Blockly.Events.Ui(block3, 'warningOpen', 'false', 'true'),
-        new Blockly.Events.Ui(block3, 'click', 'false', 'true')
+        new Blockly.Events.Click(block3)
       ];
       var filteredEvents = Blockly.Events.filter(events, true);
       // click event merged into corresponding *Open event
@@ -707,7 +707,7 @@ suite('Events', function() {
       // but cannot be merged do not get dropped during filtering.
       var block = this.workspace.newBlock('field_variable_test_block', '1');
       var events = [
-        new Blockly.Events.Ui(block, 'click', undefined, undefined),
+        new Blockly.Events.Click(block),
         new Blockly.Events.Ui(block, 'stackclick', undefined, undefined)
       ];
       var filteredEvents = Blockly.Events.filter(events, true);

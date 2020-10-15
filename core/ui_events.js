@@ -14,6 +14,7 @@ goog.provide('Blockly.Events.Ui');
 
 goog.require('Blockly.Events');
 goog.require('Blockly.Events.Abstract');
+goog.require('Blockly.Events.NewUi');
 goog.require('Blockly.registry');
 goog.require('Blockly.utils.object');
 
@@ -35,18 +36,15 @@ goog.require('Blockly.utils.object');
  */
 Blockly.Events.Ui = function(opt_block, opt_element, opt_oldValue,
     opt_newValue) {
-  Blockly.Events.Ui.superClass_.constructor.call(this);
-  this.isBlank = typeof opt_block == 'undefined';
+  var workspaceId = opt_block ? opt_block.workspace.id : undefined;
+  Blockly.Events.Ui.superClass_.constructor.call(this, workspaceId);
 
   this.blockId = opt_block ? opt_block.id : null;
-  this.workspaceId = opt_block ? opt_block.workspace.id : undefined;
   this.element = typeof opt_element == 'undefined' ? '' : opt_element;
   this.oldValue = typeof opt_oldValue == 'undefined' ? '' : opt_oldValue;
   this.newValue = typeof opt_newValue == 'undefined' ? '' : opt_newValue;
-  // UI events do not undo or redo.
-  this.recordUndo = false;
 };
-Blockly.utils.object.inherits(Blockly.Events.Ui, Blockly.Events.Abstract);
+Blockly.utils.object.inherits(Blockly.Events.Ui, Blockly.Events.NewUi);
 
 /**
  * Whether or not the event is a UI event.

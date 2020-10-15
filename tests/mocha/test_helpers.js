@@ -344,7 +344,7 @@ function isXmlProperty_(key) {
  * @param {!Blockly.Events.Abstract} event The event to check.
  * @param {string} expectedType Expected type of event fired.
  * @param {string} expectedWorkspaceId Expected workspace id of event fired.
- * @param {string} expectedBlockId Expected block id of event fired.
+ * @param {?string} expectedBlockId Expected block id of event fired.
  * @param {!Object<string, *>} expectedProperties Map of of additional expected
  *    properties to check on fired event.
  * @param {boolean=} [isUiEvent=false] Whether the event is a UI event.

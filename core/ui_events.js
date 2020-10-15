@@ -62,13 +62,21 @@ Blockly.Events.Ui.prototype.IS_UI_EVENT = true;
  *     that do not have an associated block (i.e. workspace click). Undefined
  *     for a blank event.
  * @param {string=} opt_workspaceId The workspace identifier for this event.
+ * @param {string=} opt_element One of 'block' or 'workspace'
  * @extends {Blockly.Events.Ui}
  * @constructor
  */
-Blockly.Events.Click = function(opt_block, opt_workspaceId) {
+Blockly.Events.Click = function(opt_block, opt_workspaceId, opt_element) {
   var workspaceId = opt_block ? opt_block.workspace.id : opt_workspaceId;
   Blockly.Events.Click.superClass_.constructor.call(this, workspaceId);
   this.blockId = opt_block ? opt_block.id : null;
+
+  /**
+   * The category of element targeted by this click event.
+   * @type {string}
+   */
+  this.element = opt_element ? opt_element :
+      this.isBlank ? '' : opt_block ? 'block' : 'workspace';
 };
 Blockly.utils.object.inherits(Blockly.Events.Click, Blockly.Events.Ui);
 
@@ -84,6 +92,7 @@ Blockly.Events.Click.prototype.type = Blockly.Events.CLICK;
  */
 Blockly.Events.Click.prototype.toJson = function() {
   var json = Blockly.Events.Click.superClass_.toJson.call(this);
+  json['element'] = this.element;
   if (this.blockId) {
     json['blockId'] = this.blockId;
   }
@@ -96,6 +105,7 @@ Blockly.Events.Click.prototype.toJson = function() {
  */
 Blockly.Events.Click.prototype.fromJson = function(json) {
   Blockly.Events.Click.superClass_.fromJson.call(this, json);
+  this.element = json['element'];
   this.blockId = json['blockId'];
 };
 

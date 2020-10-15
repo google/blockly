@@ -64,7 +64,7 @@ suite("Trashcan", function() {
       assertEventNotFired(
           this.eventsFireStub, Blockly.Events.OldUi, {element: 'trashcanOpen'});
       assertEventFired(
-          this.eventsFireStub, Blockly.Events.Click, {},
+          this.eventsFireStub, Blockly.Events.Click, {element: 'workspace'},
           this.workspace.id, null);
     });
     test("Click with contents - fires trashcanOpen", function() {
@@ -98,7 +98,7 @@ suite("Trashcan", function() {
           {element: 'trashcanOpen', oldValue: null, newValue: false},
           this.workspace.id, null);
       assertEventFired(
-          this.eventsFireStub, Blockly.Events.Click, {},
+          this.eventsFireStub, Blockly.Events.Click, {element: 'workspace'},
           this.workspace.id, null);
     });
   });

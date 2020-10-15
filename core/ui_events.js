@@ -11,9 +11,10 @@
 'use strict';
 
 goog.provide('Blockly.Events.Ui');
+goog.provide('Blockly.Events.Click');
 
 goog.require('Blockly.Events');
-goog.require('Blockly.Events.NewUi');
+goog.require('Blockly.Events.Abstract');
 goog.require('Blockly.registry');
 goog.require('Blockly.utils.object');
 
@@ -24,27 +25,29 @@ goog.require('Blockly.utils.object');
  * editing to work (e.g. scrolling the workspace, zooming, opening toolbox
  * categories).
  * UI events do not undo or redo.
- * @param {?Blockly.Block=} opt_block The affected block.  Null for UI events
- *     that do not have an associated block.  Undefined for a blank event.
- * @param {string=} opt_element One of 'selected', 'comment', 'mutatorOpen',
- *     etc.
- * @param {*=} opt_oldValue Previous value of element.
- * @param {*=} opt_newValue New value of element.
- * @extends {Blockly.Events.NewUi}
+ * @param {*=} opt_workspaceId The workspace identifier for this event.
+ * @extends {Blockly.Events.Abstract}
  * @constructor
  */
-Blockly.Events.Ui = function(opt_block, opt_element, opt_oldValue,
-    opt_newValue) {
-  // TODO(kozbial) remove
-  var workspaceId = opt_block ? opt_block.workspace.id : undefined;
-  Blockly.Events.Ui.superClass_.constructor.call(this, workspaceId);
+Blockly.Events.Ui = function(opt_workspaceId) {
+  Blockly.Events.Ui.superClass_.constructor.call(this);
 
-  this.blockId = opt_block ? opt_block.id : null;
-  this.element = typeof opt_element == 'undefined' ? '' : opt_element;
-  this.oldValue = typeof opt_oldValue == 'undefined' ? '' : opt_oldValue;
-  this.newValue = typeof opt_newValue == 'undefined' ? '' : opt_newValue;
+  /**
+   * Whether or not the event is blank (to be populated by fromJson).
+   * @type {boolean}
+   */
+  this.isBlank = typeof opt_workspaceId == 'undefined';
+
+  /**
+   * The workspace identifier for this event.
+   * @type {string}
+   */
+  this.workspaceId = opt_workspaceId ? opt_workspaceId : '';
+
+  // UI events do not undo or redo.
+  this.recordUndo = false;
 };
-Blockly.utils.object.inherits(Blockly.Events.Ui, Blockly.Events.NewUi);
+Blockly.utils.object.inherits(Blockly.Events.Ui, Blockly.Events.Abstract);
 
 /**
  * Whether or not the event is a UI event.
@@ -53,21 +56,32 @@ Blockly.utils.object.inherits(Blockly.Events.Ui, Blockly.Events.NewUi);
 Blockly.Events.Ui.prototype.IS_UI_EVENT = true;
 
 /**
+ * Class for a Click event.
+ * @param {?Blockly.Block=} opt_block The affected block.  Null for UI events
+ *     that do not have an associated block.  Undefined for a blank event.
+ * @param {*=} opt_workspaceId The workspace identifier for this event.
+ * @extends {Blockly.Events.Ui}
+ * @constructor
+ */
+Blockly.Events.Click = function(opt_block, opt_workspaceId) {
+  var workspaceId = opt_block ? opt_block.workspace.id : opt_workspaceId;
+  Blockly.Events.Click.superClass_.constructor.call(this, workspaceId);
+  this.blockId = opt_block ? opt_block.id : null;
+};
+Blockly.utils.object.inherits(Blockly.Events.Click, Blockly.Events.Ui);
+
+/**
  * Type of this event.
  * @type {string}
  */
-Blockly.Events.Ui.prototype.type = Blockly.Events.UI;
+Blockly.Events.Click.prototype.type = Blockly.Events.CLICK;
 
 /**
  * Encode the event as JSON.
  * @return {!Object} JSON representation.
  */
-Blockly.Events.Ui.prototype.toJson = function() {
-  var json = Blockly.Events.Ui.superClass_.toJson.call(this);
-  json['element'] = this.element;
-  if (this.newValue !== undefined) {
-    json['newValue'] = this.newValue;
-  }
+Blockly.Events.Click.prototype.toJson = function() {
+  var json = Blockly.Events.Click.superClass_.toJson.call(this);
   if (this.blockId) {
     json['blockId'] = this.blockId;
   }
@@ -78,12 +92,10 @@ Blockly.Events.Ui.prototype.toJson = function() {
  * Decode the JSON event.
  * @param {!Object} json JSON representation.
  */
-Blockly.Events.Ui.prototype.fromJson = function(json) {
-  Blockly.Events.Ui.superClass_.fromJson.call(this, json);
-  this.element = json['element'];
-  this.newValue = json['newValue'];
+Blockly.Events.Click.prototype.fromJson = function(json) {
+  Blockly.Events.Click.superClass_.fromJson.call(this, json);
   this.blockId = json['blockId'];
 };
 
-Blockly.registry.register(Blockly.registry.Type.EVENT, Blockly.Events.UI,
-    Blockly.Events.Ui);
+Blockly.registry.register(Blockly.registry.Type.EVENT, Blockly.Events.CLICK,
+    Blockly.Events.Click);

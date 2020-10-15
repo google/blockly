@@ -55,8 +55,8 @@ suite('Events', function() {
       });
     });
 
-    test('NewUi', function() {
-      var event = new Blockly.Events.NewUi(this.workspace.id);
+    test('UI event without block', function() {
+      var event = new Blockly.Events.Ui(this.workspace.id);
       assertEventEquals(event, undefined, this.workspace.id, undefined, {
         'recordUndo': false,
         'group': '',
@@ -74,8 +74,8 @@ suite('Events', function() {
     test('Old UI event without block', function() {
       var TEST_GROUP_ID = 'testGroup';
       Blockly.Events.setGroup(TEST_GROUP_ID);
-      var event = new Blockly.Events.Ui(null, 'foo', 'bar', 'baz');
-      assertEventEquals(event, Blockly.Events.UI, null, null, {
+      var event = new Blockly.Events.OldUi(null, 'foo', 'bar', 'baz');
+      assertEventEquals(event, Blockly.Events.UI, '', null, {
         'element': 'foo',
         'oldValue': 'bar',
         'newValue': 'baz',
@@ -153,7 +153,7 @@ suite('Events', function() {
       test('Old UI event with block', function() {
         var TEST_GROUP_ID = 'testGroup';
         Blockly.Events.setGroup(TEST_GROUP_ID);
-        var event = new Blockly.Events.Ui(this.block, 'foo', 'bar', 'baz');
+        var event = new Blockly.Events.OldUi(this.block, 'foo', 'bar', 'baz');
         sinon.assert.calledOnce(this.genUidStub);
         assertEventEquals(event, Blockly.Events.UI, this.workspace.id,
             this.TEST_BLOCK_ID,
@@ -715,11 +715,11 @@ suite('Events', function() {
       var block2 = this.workspace.newBlock('field_variable_test_block', '2');
       var block3 = this.workspace.newBlock('field_variable_test_block', '3');
       var events = [
-        new Blockly.Events.Ui(block1, 'commentOpen', 'false', 'true'),
+        new Blockly.Events.OldUi(block1, 'commentOpen', 'false', 'true'),
         new Blockly.Events.Click(block1),
-        new Blockly.Events.Ui(block2, 'mutatorOpen', 'false', 'true'),
+        new Blockly.Events.OldUi(block2, 'mutatorOpen', 'false', 'true'),
         new Blockly.Events.Click(block2),
-        new Blockly.Events.Ui(block3, 'warningOpen', 'false', 'true'),
+        new Blockly.Events.OldUi(block3, 'warningOpen', 'false', 'true'),
         new Blockly.Events.Click(block3)
       ];
       var filteredEvents = Blockly.Events.filter(events, true);
@@ -736,7 +736,7 @@ suite('Events', function() {
       var block = this.workspace.newBlock('field_variable_test_block', '1');
       var events = [
         new Blockly.Events.Click(block),
-        new Blockly.Events.Ui(block, 'stackclick', undefined, undefined)
+        new Blockly.Events.OldUi(block, 'stackclick', undefined, undefined)
       ];
       var filteredEvents = Blockly.Events.filter(events, true);
       // click and stackclick should both exist

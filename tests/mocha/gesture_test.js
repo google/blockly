@@ -34,7 +34,7 @@ suite('Gesture', function() {
     chai.assert.isTrue(isFieldClickSpy.alwaysReturned(isFieldClick));
 
 
-    assertEventFired(eventsFireStub, Blockly.Events.Ui,
+    assertEventFired(eventsFireStub, Blockly.Events.OldUi,
         {element: 'selected', oldValue: null, newValue: block.id},
         fieldWorkspace.id, null);
     assertEventNotFired(eventsFireStub, Blockly.Events.Click, {});

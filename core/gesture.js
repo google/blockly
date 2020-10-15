@@ -20,7 +20,6 @@ goog.require('Blockly.BubbleDragger');
 goog.require('Blockly.constants');
 goog.require('Blockly.Events');
 goog.require('Blockly.Events.Click');
-goog.require('Blockly.Events.Ui');
 goog.require('Blockly.FlyoutDragger');
 goog.require('Blockly.navigation');
 goog.require('Blockly.Tooltip');

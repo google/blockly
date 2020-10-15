@@ -62,7 +62,7 @@ suite("Trashcan", function() {
       simulateClick(this.trashcan.svgGroup_);
 
       assertEventNotFired(
-          this.eventsFireStub, Blockly.Events.Ui, {element: 'trashcanOpen'});
+          this.eventsFireStub, Blockly.Events.OldUi, {element: 'trashcanOpen'});
       assertEventFired(
           this.eventsFireStub, Blockly.Events.Click, {},
           this.workspace.id, null);
@@ -78,7 +78,7 @@ suite("Trashcan", function() {
       sinon.assert.calledOnce(showFlyoutStub);
 
       assertEventFired(
-          this.eventsFireStub, Blockly.Events.Ui,
+          this.eventsFireStub, Blockly.Events.OldUi,
           {element: 'trashcanOpen', oldValue: null, newValue: true},
           this.workspace.id, null);
       assertEventNotFired(
@@ -94,7 +94,7 @@ suite("Trashcan", function() {
       sinon.assert.calledOnce(hideFlyoutStub);
 
       assertEventFired(
-          this.eventsFireStub, Blockly.Events.Ui,
+          this.eventsFireStub, Blockly.Events.OldUi,
           {element: 'trashcanOpen', oldValue: null, newValue: false},
           this.workspace.id, null);
       assertEventFired(

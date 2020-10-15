@@ -30,7 +30,7 @@ goog.require('Blockly.utils.object');
  *     etc.
  * @param {*=} opt_oldValue Previous value of element.
  * @param {*=} opt_newValue New value of element.
- * @extends {Blockly.Events.NewUi}
+ * @extends {Blockly.Events.Ui}
  * @constructor
  */
 Blockly.Events.OldUi = function(opt_block, opt_element, opt_oldValue,

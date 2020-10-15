@@ -55,7 +55,23 @@ suite('Events', function() {
       });
     });
 
-    test('UI event without block', function() {
+    test('NewUi', function() {
+      var event = new Blockly.Events.NewUi(this.workspace.id);
+      assertEventEquals(event, undefined, this.workspace.id, undefined, {
+        'recordUndo': false,
+        'group': '',
+      }, true);
+    });
+
+    test('Click without block', function() {
+      var event = new Blockly.Events.Click(null, this.workspace.id);
+      assertEventEquals(event, Blockly.Events.CLICK, this.workspace.id, null, {
+        'recordUndo': false,
+        'group': ''
+      }, true);
+    });
+
+    test('Old UI event without block', function() {
       var TEST_GROUP_ID = 'testGroup';
       Blockly.Events.setGroup(TEST_GROUP_ID);
       var event = new Blockly.Events.Ui(null, 'foo', 'bar', 'baz');
@@ -65,7 +81,7 @@ suite('Events', function() {
         'newValue': 'baz',
         'recordUndo': false,
         'group': TEST_GROUP_ID
-      });
+      }, true);
     });
 
     suite('With simple blocks', function() {
@@ -134,7 +150,7 @@ suite('Events', function() {
             });
       });
 
-      test('UI event with block', function() {
+      test('Old UI event with block', function() {
         var TEST_GROUP_ID = 'testGroup';
         Blockly.Events.setGroup(TEST_GROUP_ID);
         var event = new Blockly.Events.Ui(this.block, 'foo', 'bar', 'baz');
@@ -147,7 +163,18 @@ suite('Events', function() {
               'newValue': 'baz',
               'recordUndo': false,
               'group': TEST_GROUP_ID
-            });
+            }, true);
+      });
+
+      test('Click with block', function() {
+        var TEST_GROUP_ID = 'testGroup';
+        Blockly.Events.setGroup(TEST_GROUP_ID);
+        var event = new Blockly.Events.Click(this.block);
+        assertEventEquals(event, Blockly.Events.CLICK, this.workspace.id,
+            this.TEST_BLOCK_ID, {
+              'recordUndo': false,
+              'group': TEST_GROUP_ID
+            }, true);
       });
 
       suite('Move', function() {
@@ -613,7 +640,7 @@ suite('Events', function() {
       chai.assert.isTrue(filteredEvents[0] instanceof Blockly.Events.BlockCreate);
       chai.assert.isTrue(filteredEvents[1] instanceof Blockly.Events.BlockMove);
       chai.assert.isTrue(filteredEvents[2] instanceof Blockly.Events.BlockChange);
-      chai.assert.isTrue(filteredEvents[3] instanceof Blockly.Events.Ui);
+      chai.assert.isTrue(filteredEvents[3] instanceof Blockly.Events.Click);
     });
 
     test('Different blocks no removed', function() {
@@ -682,7 +709,8 @@ suite('Events', function() {
       chai.assert.equal(filteredEvents[0].newValue, 'item2');
     });
 
-    test('Merge ui events', function() {
+    test.skip('Merge ui events', function() {
+      // TODO(kozbial): Add support for merging UI events.
       var block1 = this.workspace.newBlock('field_variable_test_block', '1');
       var block2 = this.workspace.newBlock('field_variable_test_block', '2');
       var block3 = this.workspace.newBlock('field_variable_test_block', '3');
@@ -713,7 +741,7 @@ suite('Events', function() {
       var filteredEvents = Blockly.Events.filter(events, true);
       // click and stackclick should both exist
       chai.assert.equal(filteredEvents.length, 2);
-      chai.assert.equal(filteredEvents[0].element, 'click');
+      chai.assert.isTrue(filteredEvents[0] instanceof Blockly.Events.Click);
       chai.assert.equal(filteredEvents[1].element, 'stackclick');
     });
 

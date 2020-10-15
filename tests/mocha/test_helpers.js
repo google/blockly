@@ -341,16 +341,17 @@ function isXmlProperty_(key) {
 
 /**
  * Asserts that the given event has the expected values.
- * @param {!Blockly.Event.Abstract} event The event to check.
+ * @param {!Blockly.Events.Abstract} event The event to check.
  * @param {string} expectedType Expected type of event fired.
  * @param {string} expectedWorkspaceId Expected workspace id of event fired.
  * @param {string} expectedBlockId Expected block id of event fired.
  * @param {!Object<string, *>} expectedProperties Map of of additional expected
  *    properties to check on fired event.
+ * @param {boolean=} [isUiEvent=false] Whether the event is a UI event.
  * @param {string=} message Optional message to prepend assert messages.
  */
 function assertEventEquals(event, expectedType,
-    expectedWorkspaceId, expectedBlockId, expectedProperties, message) {
+    expectedWorkspaceId, expectedBlockId, expectedProperties, isUiEvent = false, message) {
   var prependMessage = message ? message + ' ' : '';
   prependMessage += 'Event fired ';
   chai.assert.equal(event.type, expectedType,
@@ -375,6 +376,11 @@ function assertEventEquals(event, expectedType,
           prependMessage + key);
     }
   });
+  if (isUiEvent) {
+    chai.assert.isTrue(event.IS_UI_EVENT);
+  } else {
+    chai.assert.isFalse(event.IS_UI_EVENT);
+  }
 }
 
 /**

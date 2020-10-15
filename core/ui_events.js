@@ -25,7 +25,8 @@ goog.require('Blockly.utils.object');
  * editing to work (e.g. scrolling the workspace, zooming, opening toolbox
  * categories).
  * UI events do not undo or redo.
- * @param {*=} opt_workspaceId The workspace identifier for this event.
+ * @param {string=} opt_workspaceId The workspace identifier for this event.
+ *    Undefined for a blank event.
  * @extends {Blockly.Events.Abstract}
  * @constructor
  */
@@ -56,10 +57,11 @@ Blockly.utils.object.inherits(Blockly.Events.Ui, Blockly.Events.Abstract);
 Blockly.Events.Ui.prototype.IS_UI_EVENT = true;
 
 /**
- * Class for a Click event.
- * @param {?Blockly.Block=} opt_block The affected block.  Null for UI events
- *     that do not have an associated block.  Undefined for a blank event.
- * @param {*=} opt_workspaceId The workspace identifier for this event.
+ * Class for a click event.
+ * @param {?Blockly.Block=} opt_block The affected block. Null for click events
+ *     that do not have an associated block (i.e. workspace click). Undefined
+ *     for a blank event.
+ * @param {string=} opt_workspaceId The workspace identifier for this event.
  * @extends {Blockly.Events.Ui}
  * @constructor
  */

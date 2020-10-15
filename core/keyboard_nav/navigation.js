@@ -17,7 +17,7 @@ goog.require('Blockly.Action');
 goog.require('Blockly.ASTNode');
 goog.require('Blockly.constants');
 goog.require('Blockly.utils.Coordinate');
-goog.require('Blockly.user.keyMap');
+goog.require('Blockly.KeyboardShortcutRegistry');
 
 
 /**
@@ -761,8 +761,8 @@ Blockly.navigation.error_ = function(msg) {
  * @return {boolean} True if the key was handled false otherwise.
  */
 Blockly.navigation.onKeyPress = function(e) {
-  var key = Blockly.user.keyMap.serializeKeyEvent(e);
-  var action = Blockly.user.keyMap.getActionByKeyCode(key);
+  var key = Blockly.KeyboardShortcutRegistry.registry.serializeKeyEvent(e);
+  var action = Blockly.KeyboardShortcutRegistry.registry.getActionByKeyCode(key);
 
   if (action) {
     return Blockly.navigation.onBlocklyAction(action);
@@ -958,6 +958,38 @@ Blockly.navigation.handleEnterForWS_ = function() {
     Blockly.navigation.warn_('Cannot mark a stack.');
   }
 };
+
+Blockly.navigation.registerPrevious = function() {
+  var previousAction = {
+
+  };
+};
+
+Blockly.navigation.registerOut = function() {
+
+};
+
+Blockly.navigation.registerNext = function() {};
+
+Blockly.navigation.registerIn = function() {};
+
+Blockly.navigation.registerInsert = function() {};
+
+Blockly.navigation.registerMark = function() {};
+
+Blockly.navigation.registerDisconnect = function() {};
+
+Blockly.navigation.registerToolbox = function() {};
+
+Blockly.navigation.registerExit = function() {};
+
+Blockly.navigation.registerToggleKeyboardNav = function() {};
+
+Blockly.navigation.registerWorkspaceMoveLeft = function() {};
+
+Blockly.navigation.registerWorkspaceMoveRight = function() {};
+Blockly.navigation.registerWorkspaceMoveUp = function() {};
+Blockly.navigation.registerWorkspaceMoveDown = function() {};
 
 /** ******************* */
 /** Navigation Actions  */

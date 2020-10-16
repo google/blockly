@@ -12,6 +12,7 @@
 
 goog.provide('Blockly.Events.Ui');
 goog.provide('Blockly.Events.Click');
+goog.provide('Blockly.Events.MarkerMove');
 
 goog.require('Blockly.Events');
 goog.require('Blockly.Events.Abstract');
@@ -113,5 +114,78 @@ Blockly.Events.Click.prototype.fromJson = function(json) {
   this.blockId = json['blockId'];
 };
 
+/**
+ * Class for a marker move event.
+ * @param {?Blockly.Block=} opt_block The affected block. Null if current node
+ *    is of type workspace. Undefined for a blank event.
+ * @param {boolean=} isCursor Whether this is a cursor event.
+ * @param {!Blockly.ASTNode=} opt_oldNode Previous node.
+ * @param {!Blockly.ASTNode=} opt_curNode Current node.
+ * @extends {Blockly.Events.Ui}
+ * @constructor
+ */
+Blockly.Events.MarkerMove = function(opt_block, isCursor, opt_oldNode,
+    opt_curNode) {
+  var workspaceId = opt_block ? opt_block.workspace.id : undefined;
+  if (opt_curNode && opt_curNode.getType() == Blockly.ASTNode.types.WORKSPACE) {
+    workspaceId =
+        (/** @type {!Blockly.Workspace} */ (opt_curNode.getLocation())).id;
+  }
+  Blockly.Events.MarkerMove.superClass_.constructor.call(this, workspaceId);
+  this.blockId = opt_block ? opt_block.id : null;
+
+  /**
+   * The previous node.
+   * @type {Blockly.ASTNode|undefined}
+   */
+  this.oldNode = opt_oldNode;
+
+  /**
+   * The current node.
+   * @type {Blockly.ASTNode|undefined}
+   */
+  this.curNode = opt_curNode;
+
+  /**
+   * Whether this is a cursor event.
+   * @type {boolean|undefined}
+   */
+  this.isCursor = isCursor;
+};
+Blockly.utils.object.inherits(Blockly.Events.MarkerMove, Blockly.Events.Ui);
+
+/**
+ * Type of this event.
+ * @type {string}
+ */
+Blockly.Events.MarkerMove.prototype.type = Blockly.Events.MARKER_MOVE;
+
+/**
+ * Encode the event as JSON.
+ * @return {!Object} JSON representation.
+ */
+Blockly.Events.MarkerMove.prototype.toJson = function() {
+  var json = Blockly.Events.MarkerMove.superClass_.toJson.call(this);
+  json['blockId'] = this.blockId;
+  json['oldNode'] = this.oldNode;
+  json['curNode'] = this.curNode;
+  json['isCursor'] = this.isCursor;
+  return json;
+};
+
+/**
+ * Decode the JSON event.
+ * @param {!Object} json JSON representation.
+ */
+Blockly.Events.MarkerMove.prototype.fromJson = function(json) {
+  Blockly.Events.MarkerMove.superClass_.fromJson.call(this, json);
+  this.blockId = json['blockId'];
+  this.oldNode = json['oldNode'];
+  this.curNode = json['curNode'];
+  this.isCursor = json['isCursor'];
+};
+
 Blockly.registry.register(Blockly.registry.Type.EVENT, Blockly.Events.CLICK,
     Blockly.Events.Click);
+Blockly.registry.register(Blockly.registry.Type.EVENT,
+    Blockly.Events.MARKER_MOVE, Blockly.Events.MarkerMove);

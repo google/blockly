@@ -48,9 +48,9 @@ suite('Comments', function() {
       chai.assert.isTrue(this.comment.isVisible());
       assertEditable(this.comment);
       assertEventFired(
-          this.eventsFireStub, Blockly.Events.OldUi,
-          {element: 'commentOpen', oldValue: false, newValue: true},
-          this.workspace.id, this.block.id);
+          this.eventsFireStub, Blockly.Events.BubbleOpen,
+          {element: 'comment', isOpen: true}, this.workspace.id,
+          this.block.id);
     });
     test('Not Editable', function() {
       sinon.stub(this.block, 'isEditable').returns(false);
@@ -63,9 +63,9 @@ suite('Comments', function() {
       chai.assert.isTrue(this.comment.isVisible());
       assertNotEditable(this.comment);
       assertEventFired(
-          this.eventsFireStub, Blockly.Events.OldUi,
-          {element: 'commentOpen', oldValue: false, newValue: true},
-          this.workspace.id, this.block.id);
+          this.eventsFireStub, Blockly.Events.BubbleOpen,
+          {element: 'comment', isOpen: true}, this.workspace.id,
+          this.block.id);
     });
     test('Editable -> Not Editable', function() {
       this.comment.setVisible(true);
@@ -79,9 +79,9 @@ suite('Comments', function() {
       chai.assert.isTrue(this.comment.isVisible());
       assertNotEditable(this.comment);
       assertEventFired(
-          this.eventsFireStub, Blockly.Events.OldUi,
-          {element: 'commentOpen', oldValue: false, newValue: true},
-          this.workspace.id, this.block.id);
+          this.eventsFireStub, Blockly.Events.BubbleOpen,
+          {element: 'comment', isOpen: true}, this.workspace.id,
+          this.block.id);
     });
     test('Not Editable -> Editable', function() {
       var editableStub = sinon.stub(this.block, 'isEditable').returns(false);
@@ -97,9 +97,9 @@ suite('Comments', function() {
       chai.assert.isTrue(this.comment.isVisible());
       assertEditable(this.comment);
       assertEventFired(
-          this.eventsFireStub, Blockly.Events.OldUi,
-          {element: 'commentOpen', oldValue: false, newValue: true},
-          this.workspace.id, this.block.id);
+          this.eventsFireStub, Blockly.Events.BubbleOpen,
+          {element: 'comment', isOpen: true}, this.workspace.id,
+          this.block.id);
     });
   });
   suite('Set/Get Bubble Size', function() {

@@ -12,6 +12,7 @@
 
 goog.provide('Blockly.Events.Ui');
 goog.provide('Blockly.Events.Click');
+goog.provide('Blockly.Events.BubbleOpen');
 
 goog.require('Blockly.Events');
 goog.require('Blockly.Events.Abstract');
@@ -113,5 +114,65 @@ Blockly.Events.Click.prototype.fromJson = function(json) {
   this.blockId = json['blockId'];
 };
 
+/**
+ * Class for a bubble open event.
+ * @param {Blockly.BlockSvg} opt_block The associated block. Undefined for a
+ *    blank event.
+ * @param {boolean=} opt_isOpen Whether the bubble is opening (false if closing).
+ * @param {string=} opt_element The type of bubble. One of 'mutator', 'comment'
+ *    or 'warning'
+ * @extends {Blockly.Events.Ui}
+ * @constructor
+ */
+Blockly.Events.BubbleOpen = function(opt_block, opt_isOpen, opt_element) {
+  var workspaceId = opt_block ? opt_block.workspace.id : undefined;
+  Blockly.Events.BubbleOpen.superClass_.constructor.call(this, workspaceId);
+  this.blockId = opt_block ? opt_block.id : null;
+
+  /**
+   * Whether the bubble is opening (false if closing).
+   * @type {boolean|undefined}
+   */
+  this.isOpen = opt_isOpen;
+
+  /**
+   * The type of bubble. One of 'mutator', 'comment', or 'warning'.
+   * @type {string|undefined}
+   */
+  this.element = opt_element;
+};
+Blockly.utils.object.inherits(Blockly.Events.BubbleOpen, Blockly.Events.Ui);
+
+/**
+ * Type of this event.
+ * @type {string}
+ */
+Blockly.Events.BubbleOpen.prototype.type = Blockly.Events.BUBBLE_OPEN;
+
+/**
+ * Encode the event as JSON.
+ * @return {!Object} JSON representation.
+ */
+Blockly.Events.BubbleOpen.prototype.toJson = function() {
+  var json = Blockly.Events.BubbleOpen.superClass_.toJson.call(this);
+  json['isOpen'] = this.isOpen;
+  json['element'] = this.element;
+  json['blockId'] = this.blockId;
+  return json;
+};
+
+/**
+ * Decode the JSON event.
+ * @param {!Object} json JSON representation.
+ */
+Blockly.Events.BubbleOpen.prototype.fromJson = function(json) {
+  Blockly.Events.BubbleOpen.superClass_.fromJson.call(this, json);
+  this.isOpen = json['isOpen'];
+  this.element = json['element'];
+  this.blockId = json['blockId'];
+};
+
 Blockly.registry.register(Blockly.registry.Type.EVENT, Blockly.Events.CLICK,
     Blockly.Events.Click);
+Blockly.registry.register(Blockly.registry.Type.EVENT,
+    Blockly.Events.BUBBLE_OPEN, Blockly.Events.BubbleOpen);

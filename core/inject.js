@@ -13,7 +13,6 @@
 goog.provide('Blockly.inject');
 
 goog.require('Blockly.BlockDragSurfaceSvg');
-goog.require('Blockly.Component');
 goog.require('Blockly.Css');
 goog.require('Blockly.DropDownDiv');
 goog.require('Blockly.Events');
@@ -97,8 +96,6 @@ Blockly.createDom_ = function(container, options) {
   // out content in RTL mode.  Therefore Blockly forces the use of LTR,
   // then manually positions content in RTL as needed.
   container.setAttribute('dir', 'LTR');
-  // Set the default direction for Components to use.
-  Blockly.Component.defaultRightToLeft = options.RTL;
 
   // Load CSS.
   Blockly.Css.inject(options.hasCss, options.pathToMedia);

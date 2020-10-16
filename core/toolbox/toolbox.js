@@ -13,6 +13,7 @@
 goog.provide('Blockly.Toolbox');
 
 goog.require('Blockly.CollapsibleToolboxCategory');
+goog.require('Blockly.constants');
 goog.require('Blockly.Css');
 goog.require('Blockly.Events');
 goog.require('Blockly.Events.OldUi');

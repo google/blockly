@@ -21,6 +21,7 @@
         "assertWarnings": true,
         "captureWarnings": true,
         "createDeprecationWarningStub": true,
+        "createKeyDownEvent": true,
         "createRenderedBlock": true,
         "createTestBlock": true,
         "defineBasicBlockWithField": true,

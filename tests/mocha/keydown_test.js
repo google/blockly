@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-suite('Key Down Tests', function() {
+suite('Key Down', function() {
   setup(function() {
     sharedTestSetup.call(this);
     this.workspace = Blockly.inject('blocklyDiv', {});
@@ -27,7 +27,7 @@ suite('Key Down Tests', function() {
    * @param {Object} keyEvent Mocked key down event. Use createKeyDownEvent.
    * @param {string=} opt_name An optional name for the test case.
    */
-  function readOnlyTest(keyEvent, opt_name) {
+  function runReadOnlyTest(keyEvent, opt_name) {
     var name = opt_name ? opt_name : 'Not called when readOnly is true';
     test(name, function() {
       this.workspace.options.readOnly = true;
@@ -45,7 +45,7 @@ suite('Key Down Tests', function() {
       Blockly.onKeyDown(this.event);
       sinon.assert.calledOnce(this.hideChaffSpy);
     });
-    readOnlyTest(createKeyDownEvent(Blockly.utils.KeyCodes.ESC, 'NotAField'));
+    runReadOnlyTest(createKeyDownEvent(Blockly.utils.KeyCodes.ESC, 'NotAField'));
     test('Not called when focus is on an HTML input', function() {
       var event = createKeyDownEvent(this.event, 'textarea');
       Blockly.onKeyDown(event);
@@ -85,7 +85,7 @@ suite('Key Down Tests', function() {
       testCases.forEach(function(testCase) {
         var testCaseName = testCase[0];
         var keyEvent = testCase[1];
-        readOnlyTest(keyEvent, testCaseName);
+        runReadOnlyTest(keyEvent, testCaseName);
       });
     });
   });
@@ -118,7 +118,7 @@ suite('Key Down Tests', function() {
       testCases.forEach(function(testCase) {
         var testCaseName = testCase[0];
         var keyEvent = testCase[1];
-        readOnlyTest(keyEvent, testCaseName);
+        runReadOnlyTest(keyEvent, testCaseName);
       });
     });
     // Do not copy a block if a gesture is in progress.
@@ -203,7 +203,7 @@ suite('Key Down Tests', function() {
       testCases.forEach(function(testCase) {
         var testCaseName = testCase[0];
         var keyEvent = testCase[1];
-        readOnlyTest(keyEvent, testCaseName);
+        runReadOnlyTest(keyEvent, testCaseName);
       });
     });
   });
@@ -249,7 +249,7 @@ suite('Key Down Tests', function() {
       testCases.forEach(function(testCase) {
         var testCaseName = testCase[0];
         var keyEvent = testCase[1];
-        readOnlyTest(keyEvent, testCaseName);
+        runReadOnlyTest(keyEvent, testCaseName);
       });
     });
   });
@@ -272,6 +272,6 @@ suite('Key Down Tests', function() {
       sinon.assert.notCalled(this.undoSpy);
       sinon.assert.notCalled(this.hideChaffSpy);
     });
-    readOnlyTest(createKeyDownEvent(Blockly.utils.KeyCodes.Y, 'NotAField', [Blockly.utils.KeyCodes.CTRL]));
+    runReadOnlyTest(createKeyDownEvent(Blockly.utils.KeyCodes.Y, 'NotAField', [Blockly.utils.KeyCodes.CTRL]));
   });
 });

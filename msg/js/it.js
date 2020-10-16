@@ -3,8 +3,9 @@
 'use strict';
 
 Blockly.Msg["ADD_COMMENT"] = "Aggiungi commento";
-Blockly.Msg["ARD_TIME_DELAY"] = "wait (ms)";  // untranslated
+Blockly.Msg["ARD_TIME_DELAY"] = "wait";  // untranslated
 Blockly.Msg["ARD_TIME_DELAY_TIP"] = "Wait specific time in milliseconds";  // untranslated
+Blockly.Msg["ARD_TIME_MS"] = "ms";  // untranslated
 Blockly.Msg["CANNOT_DELETE_VARIABLE_PROCEDURE"] = "Non si può cancellare la variabile '%1' perché è parte della definizione della funzione '%2'";
 Blockly.Msg["CHANGE_VALUE_TITLE"] = "Modifica valore:";
 Blockly.Msg["CLEAN_UP"] = "Pulisci i blocchi";

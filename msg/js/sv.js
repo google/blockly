@@ -3,8 +3,9 @@
 'use strict';
 
 Blockly.Msg["ADD_COMMENT"] = "Lägg till kommentar";
-Blockly.Msg["ARD_TIME_DELAY"] = "wait (ms)";  // untranslated
+Blockly.Msg["ARD_TIME_DELAY"] = "wait";  // untranslated
 Blockly.Msg["ARD_TIME_DELAY_TIP"] = "Wait specific time in milliseconds";  // untranslated
+Blockly.Msg["ARD_TIME_MS"] = "ms";  // untranslated
 Blockly.Msg["CANNOT_DELETE_VARIABLE_PROCEDURE"] = "Kan inte radera variabeln '%1' eftersom den är en del av definition för funktionen '%2'";
 Blockly.Msg["CHANGE_VALUE_TITLE"] = "Ändra värde:";
 Blockly.Msg["CLEAN_UP"] = "Städa upp block";

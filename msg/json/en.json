@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2020-10-07 20:21:18.385053",
+		"lastupdated": "2020-10-16 13:43:07.400403",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -29,7 +29,8 @@
 	"LEAPHY_NUMBERS_CATEGORY": "Numbers",
 	"LEAPHY_VARIABLES_CATEGORY": "Variables",
 	"LEAPHY_FUNCTIONS_CATEGORY": "Functions",
-	"ARD_TIME_DELAY": "wait (ms)",
+	"ARD_TIME_DELAY": "wait",
+	"ARD_TIME_MS": "ms",
 	"ARD_TIME_DELAY_TIP": "Wait specific time in milliseconds",
 	"VARIABLES_DEFAULT_NAME": "item",
 	"UNNAMED_KEY": "unnamed",

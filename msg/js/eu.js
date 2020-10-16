@@ -3,8 +3,9 @@
 'use strict';
 
 Blockly.Msg["ADD_COMMENT"] = "Iruzkina gehitu";
-Blockly.Msg["ARD_TIME_DELAY"] = "wait (ms)";  // untranslated
+Blockly.Msg["ARD_TIME_DELAY"] = "wait";  // untranslated
 Blockly.Msg["ARD_TIME_DELAY_TIP"] = "Wait specific time in milliseconds";  // untranslated
+Blockly.Msg["ARD_TIME_MS"] = "ms";  // untranslated
 Blockly.Msg["CANNOT_DELETE_VARIABLE_PROCEDURE"] = "Ezin da '%1' aldagaia ezabatu '%2' funtzioaren definizioaren zati delako.";
 Blockly.Msg["CHANGE_VALUE_TITLE"] = "Aldatu balioa:";
 Blockly.Msg["CLEAN_UP"] = "Blokeak garbitu";

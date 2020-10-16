@@ -3,8 +3,9 @@
 'use strict';
 
 Blockly.Msg["ADD_COMMENT"] = "Pridať komentár";
-Blockly.Msg["ARD_TIME_DELAY"] = "wait (ms)";  // untranslated
+Blockly.Msg["ARD_TIME_DELAY"] = "wait";  // untranslated
 Blockly.Msg["ARD_TIME_DELAY_TIP"] = "Wait specific time in milliseconds";  // untranslated
+Blockly.Msg["ARD_TIME_MS"] = "ms";  // untranslated
 Blockly.Msg["CANNOT_DELETE_VARIABLE_PROCEDURE"] = "Nie je možné zmazať premennú „%1“, pretože je súčasťou definície funkcie „%2“";
 Blockly.Msg["CHANGE_VALUE_TITLE"] = "Zmeniť hodnotu:";
 Blockly.Msg["CLEAN_UP"] = "Narovnať bloky";

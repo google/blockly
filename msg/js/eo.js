@@ -3,8 +3,9 @@
 'use strict';
 
 Blockly.Msg["ADD_COMMENT"] = "Aldoni komenton";
-Blockly.Msg["ARD_TIME_DELAY"] = "wait (ms)";  // untranslated
+Blockly.Msg["ARD_TIME_DELAY"] = "wait";  // untranslated
 Blockly.Msg["ARD_TIME_DELAY_TIP"] = "Wait specific time in milliseconds";  // untranslated
+Blockly.Msg["ARD_TIME_MS"] = "ms";  // untranslated
 Blockly.Msg["CANNOT_DELETE_VARIABLE_PROCEDURE"] = "Ne povas forigi la variablon '%1' ĉar ĝi estas parto de la difino de la funkcio '%2'";
 Blockly.Msg["CHANGE_VALUE_TITLE"] = "Ŝangi valoron:";
 Blockly.Msg["CLEAN_UP"] = "Purigi blokojn";

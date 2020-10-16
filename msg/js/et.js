@@ -3,8 +3,9 @@
 'use strict';
 
 Blockly.Msg["ADD_COMMENT"] = "Lisa kommentaar";
-Blockly.Msg["ARD_TIME_DELAY"] = "wait (ms)";  // untranslated
+Blockly.Msg["ARD_TIME_DELAY"] = "wait";  // untranslated
 Blockly.Msg["ARD_TIME_DELAY_TIP"] = "Wait specific time in milliseconds";  // untranslated
+Blockly.Msg["ARD_TIME_MS"] = "ms";  // untranslated
 Blockly.Msg["CANNOT_DELETE_VARIABLE_PROCEDURE"] = "Muutujat '%1' ei saa kustutada, sest see on osa funktsiooni '%2' määratlusest";
 Blockly.Msg["CHANGE_VALUE_TITLE"] = "Muuda väärtust:";
 Blockly.Msg["CLEAN_UP"] = "Korista plokid kokku";

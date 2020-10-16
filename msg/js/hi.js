@@ -3,8 +3,9 @@
 'use strict';
 
 Blockly.Msg["ADD_COMMENT"] = "टिप्पणी छोड़ें";
-Blockly.Msg["ARD_TIME_DELAY"] = "wait (ms)";  // untranslated
+Blockly.Msg["ARD_TIME_DELAY"] = "wait";  // untranslated
 Blockly.Msg["ARD_TIME_DELAY_TIP"] = "Wait specific time in milliseconds";  // untranslated
+Blockly.Msg["ARD_TIME_MS"] = "ms";  // untranslated
 Blockly.Msg["CANNOT_DELETE_VARIABLE_PROCEDURE"] = "चर '%1' को नहीं हटा सकता क्योंकि यह फ़ंक्शन '%2' की परिभाषा का हिस्सा है";
 Blockly.Msg["CHANGE_VALUE_TITLE"] = "मान परिवर्तित करें:";
 Blockly.Msg["CLEAN_UP"] = "खानों को साफ करें";

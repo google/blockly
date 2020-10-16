@@ -38,7 +38,7 @@
 	"LEAPHY_NUMBERS_CATEGORY": "Getal blokken",
 	"LEAPHY_VARIABLES_CATEGORY": "Variabelen",
 	"LEAPHY_FUNCTIONS_CATEGORY": "Subblokken",
-	"ARD_TIME_DELAY": "wacht (ms)",
+	"ARD_TIME_DELAY": "duurt",
 	"ARD_TIME_DELAY_TIP": "Wacht het gespecificeerde aantal milliseconden",
 	"CONTROLS_REPEAT_FOREVER_TITLE": "herhaal voor altijd",
 	"VARIABLES_DEFAULT_NAME": "item",

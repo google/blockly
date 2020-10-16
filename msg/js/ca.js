@@ -3,8 +3,9 @@
 'use strict';
 
 Blockly.Msg["ADD_COMMENT"] = "Afegeix un comentari";
-Blockly.Msg["ARD_TIME_DELAY"] = "wait (ms)";  // untranslated
+Blockly.Msg["ARD_TIME_DELAY"] = "wait";  // untranslated
 Blockly.Msg["ARD_TIME_DELAY_TIP"] = "Wait specific time in milliseconds";  // untranslated
+Blockly.Msg["ARD_TIME_MS"] = "ms";  // untranslated
 Blockly.Msg["CANNOT_DELETE_VARIABLE_PROCEDURE"] = "No podem esborrar la variable '%1' perquè forma part de la definició de la funció '%2'";
 Blockly.Msg["CHANGE_VALUE_TITLE"] = "Canvia valor:";
 Blockly.Msg["CLEAN_UP"] = "Netejar blocs";

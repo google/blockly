@@ -24,6 +24,7 @@
 	"LEAPHY_VARIABLES_CATEGORY": "Variables Category Title",
 	"LEAPHY_FUNCTIONS_CATEGORY": "Functions Category Title",
 	"ARD_TIME_DELAY": "Arduino Delay in ms",
+	"ARD_TIME_MS": "Arduino ms",
 	"ARD_TIME_DELAY_TIP": "Frduino Delay in ms tooltip",
 	"VARIABLES_DEFAULT_NAME": "default name - A simple, general default name for a variable, preferably short. For more context, see [[Translating:Blockly#infrequent_message_types]].\n{{Identical|Item}}",
 	"UNNAMED_KEY": "default name - A simple, default name for an unnamed function or variable. Preferably indicates that the item is unnamed.",

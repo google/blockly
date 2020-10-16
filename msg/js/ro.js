@@ -3,8 +3,9 @@
 'use strict';
 
 Blockly.Msg["ADD_COMMENT"] = "Adaugă un comentariu";
-Blockly.Msg["ARD_TIME_DELAY"] = "wait (ms)";  // untranslated
+Blockly.Msg["ARD_TIME_DELAY"] = "wait";  // untranslated
 Blockly.Msg["ARD_TIME_DELAY_TIP"] = "Wait specific time in milliseconds";  // untranslated
+Blockly.Msg["ARD_TIME_MS"] = "ms";  // untranslated
 Blockly.Msg["CANNOT_DELETE_VARIABLE_PROCEDURE"] = "Nu se poate șterge variabila '%1' deoarece face parte din definiția funcției '%2'";
 Blockly.Msg["CHANGE_VALUE_TITLE"] = "Schimbaţi valoarea:";
 Blockly.Msg["CLEAN_UP"] = "Curăță blocări";

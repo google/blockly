@@ -3,8 +3,9 @@
 'use strict';
 
 Blockly.Msg["ADD_COMMENT"] = "Ouzhpennañ un evezhiadenn";
-Blockly.Msg["ARD_TIME_DELAY"] = "wait (ms)";  // untranslated
+Blockly.Msg["ARD_TIME_DELAY"] = "wait";  // untranslated
 Blockly.Msg["ARD_TIME_DELAY_TIP"] = "Wait specific time in milliseconds";  // untranslated
+Blockly.Msg["ARD_TIME_MS"] = "ms";  // untranslated
 Blockly.Msg["CANNOT_DELETE_VARIABLE_PROCEDURE"] = "Ne ch'aller ket dilemel an argemmenn \"%1\" dre m'eo lod eus dielfennadur an arc'hwel \"%2\"";
 Blockly.Msg["CHANGE_VALUE_TITLE"] = "Kemmañ an dalvoudenn :";
 Blockly.Msg["CLEAN_UP"] = "Naetaat ar bloc'hoù";

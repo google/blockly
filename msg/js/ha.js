@@ -3,8 +3,9 @@
 'use strict';
 
 Blockly.Msg["ADD_COMMENT"] = "Daɗa Sharhi";
-Blockly.Msg["ARD_TIME_DELAY"] = "wait (ms)";  // untranslated
+Blockly.Msg["ARD_TIME_DELAY"] = "wait";  // untranslated
 Blockly.Msg["ARD_TIME_DELAY_TIP"] = "Wait specific time in milliseconds";  // untranslated
+Blockly.Msg["ARD_TIME_MS"] = "ms";  // untranslated
 Blockly.Msg["CANNOT_DELETE_VARIABLE_PROCEDURE"] = "An kasa goge siffa '%1' sabo da tana daga sashi na bayanin aikin '%2'";
 Blockly.Msg["CHANGE_VALUE_TITLE"] = "Canza kima:";
 Blockly.Msg["CLEAN_UP"] = "A share Bululluka";

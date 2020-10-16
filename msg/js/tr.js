@@ -3,8 +3,9 @@
 'use strict';
 
 Blockly.Msg["ADD_COMMENT"] = "Yorum Ekle";
-Blockly.Msg["ARD_TIME_DELAY"] = "wait (ms)";  // untranslated
+Blockly.Msg["ARD_TIME_DELAY"] = "wait";  // untranslated
 Blockly.Msg["ARD_TIME_DELAY_TIP"] = "Wait specific time in milliseconds";  // untranslated
+Blockly.Msg["ARD_TIME_MS"] = "ms";  // untranslated
 Blockly.Msg["CANNOT_DELETE_VARIABLE_PROCEDURE"] = "'%1' değişkeni, '%2' fonksiyonunun tanımının bir parçası olduğu için silinemez";
 Blockly.Msg["CHANGE_VALUE_TITLE"] = "Değeri değiştir:";
 Blockly.Msg["CLEAN_UP"] = "Blokları Temizle";

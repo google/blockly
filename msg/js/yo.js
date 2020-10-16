@@ -3,8 +3,9 @@
 'use strict';
 
 Blockly.Msg["ADD_COMMENT"] = "Ṣe afikun ọrọ iwoye";
-Blockly.Msg["ARD_TIME_DELAY"] = "wait (ms)";  // untranslated
+Blockly.Msg["ARD_TIME_DELAY"] = "wait";  // untranslated
 Blockly.Msg["ARD_TIME_DELAY_TIP"] = "Wait specific time in milliseconds";  // untranslated
+Blockly.Msg["ARD_TIME_MS"] = "ms";  // untranslated
 Blockly.Msg["CANNOT_DELETE_VARIABLE_PROCEDURE"] = "E ko lee paa Oniruuru rẹ ' %1' nitori wipe o je ara itumọ isise eto yi '%2'";
 Blockly.Msg["CHANGE_VALUE_TITLE"] = "Ṣe ayipada iye:";
 Blockly.Msg["CLEAN_UP"] = "Nu Bulọọku kuro";

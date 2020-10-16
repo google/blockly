@@ -3,8 +3,9 @@
 'use strict';
 
 Blockly.Msg["ADD_COMMENT"] = "Dodaj komentar";
-Blockly.Msg["ARD_TIME_DELAY"] = "wait (ms)";  // untranslated
+Blockly.Msg["ARD_TIME_DELAY"] = "wait";  // untranslated
 Blockly.Msg["ARD_TIME_DELAY_TIP"] = "Wait specific time in milliseconds";  // untranslated
+Blockly.Msg["ARD_TIME_MS"] = "ms";  // untranslated
 Blockly.Msg["CANNOT_DELETE_VARIABLE_PROCEDURE"] = "Ni mogoče izbrisati spremenljivke »%1«, ker je uporabljena v definiciji funkcije »%2«";
 Blockly.Msg["CHANGE_VALUE_TITLE"] = "Spremeni vrednost:";
 Blockly.Msg["CLEAN_UP"] = "Ponastavi delčke";

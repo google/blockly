@@ -108,7 +108,10 @@ Blockly.Msg.LEAPHY_FUNCTIONS_CATEGORY = 'Functions';
 
 /** @type {string} */
 /// Arduino Delay in ms
-Blockly.Msg.ARD_TIME_DELAY = 'wait (ms)'
+Blockly.Msg.ARD_TIME_DELAY = 'wait'
+/** @type {string} */
+/// Arduino ms
+Blockly.Msg.ARD_TIME_MS = 'ms'
 /** @type {string} */
 /// Frduino Delay in ms tooltip
 Blockly.Msg.ARD_TIME_DELAY_TIP = 'Wait specific time in milliseconds';

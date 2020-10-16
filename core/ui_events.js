@@ -77,7 +77,7 @@ Blockly.Events.Click = function(opt_block, opt_workspaceId, opt_element) {
 
   /**
    * The category of element targeted by this click event.
-   * @type {string}
+   * @type {string|undefined}
    */
   this.element = opt_element;
 };

@@ -304,6 +304,9 @@ Blockly.Toolbox.prototype.onKeyDown_ = function(e) {
       handled = false;
       break;
   }
+  if (!handled && this.selectedItem_.onKeyDown) {
+    handled = this.selectedItem_.onKeyDown(e);
+  }
 
   if (handled) {
     e.preventDefault();
@@ -413,6 +416,11 @@ Blockly.Toolbox.prototype.createToolboxItem_ = function(toolboxItemDef, fragment
     var toolboxItemDom = toolboxItem.getDiv();
     if (toolboxItemDom) {
       fragment.appendChild(toolboxItemDom);
+    }
+    // Adds the id to the html element that can receive a click.
+    // This is used in onClick_ to find the toolboxItem that was clicked.
+    if (toolboxItem.getClickTarget) {
+      toolboxItem.getClickTarget().setAttribute('id', toolboxItem.getId());
     }
   }
 };

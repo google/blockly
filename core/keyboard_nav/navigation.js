@@ -133,7 +133,14 @@ Blockly.navigation.focusToolbox_ = function() {
       Blockly.navigation.markAtCursor_();
     }
     if (!toolbox.getSelectedItem()) {
-      toolbox.selectItemByPosition(0);
+      // Find the first item that is selectable.
+      var toolboxItems = toolbox.getToolboxItems();
+      for (var i = 0, toolboxItem; (toolboxItem = toolboxItems[i]); i++) {
+        if (toolboxItem.isSelectable()) {
+          toolbox.selectItemByPosition(i);
+          break;
+        }
+      }
     }
   }
 };

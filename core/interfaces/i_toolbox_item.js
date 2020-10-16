@@ -114,6 +114,15 @@ Blockly.ISelectableToolboxItem.prototype.getContents;
 Blockly.ISelectableToolboxItem.prototype.setSelected;
 
 /**
+ * Gets the html element that is clickable.
+ * The parent toolbox element receives clicks. This method makes it possible for the parent toolbox
+ * to add an id to the this element and pass the event to this items onClick method.
+ * @return {!Element} The html element that receives clicks.
+ * @public
+ */
+Blockly.ISelectableToolboxItem.prototype.getClickTarget;
+
+/**
  * Handles when the toolbox item is clicked.
  * @param {!Event} _e Click event to handle.
  * @public

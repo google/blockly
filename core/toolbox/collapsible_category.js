@@ -200,6 +200,9 @@ Blockly.CollapsibleToolboxCategory.prototype.createSubCategoriesDom_ = function(
     newCategory.init();
     var newCategoryDiv = newCategory.getDiv();
     contentsContainer.appendChild(newCategoryDiv);
+    if (newCategory.getClickTarget) {
+      newCategory.getClickTarget().setAttribute('id', newCategory.getId());
+    }
   }
   return contentsContainer;
 };

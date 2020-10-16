@@ -71,12 +71,15 @@ Blockly.Events.Click = function(opt_block, opt_workspaceId, opt_element) {
   Blockly.Events.Click.superClass_.constructor.call(this, workspaceId);
   this.blockId = opt_block ? opt_block.id : null;
 
+  if (!opt_element && !this.isBlank) {
+    opt_element = opt_block ? 'block' : 'workspace';
+  }
+
   /**
    * The category of element targeted by this click event.
    * @type {string}
    */
-  this.element = opt_element ? opt_element :
-      this.isBlank ? '' : opt_block ? 'block' : 'workspace';
+  this.element = opt_element;
 };
 Blockly.utils.object.inherits(Blockly.Events.Click, Blockly.Events.Ui);
 

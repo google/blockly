@@ -131,13 +131,13 @@ Blockly.Events.Selected = function(opt_oldElementId, opt_elementId,
 
   /**
    * The id of the last selected element.
-   * @type {?string}
+   * @type {?string|undefined}
    */
   this.oldElementId = opt_oldElementId;
 
   /**
    * The id of the selected element.
-   * @type {?string}
+   * @type {?string|undefined}
    */
   this.elementId = opt_elementId;
 };

@@ -295,7 +295,7 @@ Blockly.BlockSvg.prototype.select = function() {
       Blockly.Events.enable();
     }
   }
-  var event =  new Blockly.Events.Selected(oldId, this.id, this.workspace.id);
+  var event = new Blockly.Events.Selected(oldId, this.id, this.workspace.id);
   Blockly.Events.fire(event);
   Blockly.selected = this;
   this.addSelect();

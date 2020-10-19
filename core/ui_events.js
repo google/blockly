@@ -12,6 +12,7 @@
 
 goog.provide('Blockly.Events.Ui');
 goog.provide('Blockly.Events.Click');
+goog.provide('Blockly.Events.ThemeChange');
 
 goog.require('Blockly.Events');
 goog.require('Blockly.Events.Abstract');

@@ -96,7 +96,7 @@ Blockly.Events.Click.prototype.type = Blockly.Events.CLICK;
  */
 Blockly.Events.Click.prototype.toJson = function() {
   var json = Blockly.Events.Click.superClass_.toJson.call(this);
-  json['targetType'] = this.targeType;
+  json['targetType'] = this.targetType;
   if (this.blockId) {
     json['blockId'] = this.blockId;
   }

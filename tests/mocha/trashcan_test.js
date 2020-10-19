@@ -79,8 +79,7 @@ suite("Trashcan", function() {
 
       assertEventFired(
           this.eventsFireStub, Blockly.Events.TrashcanOpen,
-          {isOpen: true},
-          this.workspace.id);
+          {isOpen: true}, this.workspace.id);
       assertEventNotFired(
           this.eventsFireStub, Blockly.Events.Click, {});
     });
@@ -95,8 +94,7 @@ suite("Trashcan", function() {
 
       assertEventFired(
           this.eventsFireStub, Blockly.Events.TrashcanOpen,
-          {isOpen: false},
-          this.workspace.id);
+          {isOpen: false}, this.workspace.id);
       assertEventFired(
           this.eventsFireStub, Blockly.Events.Click, {targetType: 'workspace'},
           this.workspace.id, null);

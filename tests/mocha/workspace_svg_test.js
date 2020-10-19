@@ -168,9 +168,9 @@ suite('WorkspaceSvg', function() {
     }
     function assertSpyFiredViewportEvent(spy, workspace, expectedProperties) {
       assertEventFired(
-          spy, Blockly.Events.Ui, {element: 'viewport'},
+          spy, Blockly.Events.OldUi, {element: 'viewport'},
           workspace.id, null);
-      assertEventFired(spy, Blockly.Events.Ui, expectedProperties,
+      assertEventFired(spy, Blockly.Events.OldUi, expectedProperties,
           workspace.id, null);
     }
     function assertViewportEventFired(eventsFireStub, changeListenerSpy,
@@ -286,7 +286,7 @@ suite('WorkspaceSvg', function() {
         block.render();
         this.clock.runAll();
         assertEventNotFired(
-            this.eventsFireStub, Blockly.Events.Ui, {element: 'viewport'});
+            this.eventsFireStub, Blockly.Events.OldUi, {element: 'viewport'});
       });
       test('block move that triggers scroll', function() {
         var block = this.workspace.newBlock('stack_block');
@@ -321,9 +321,9 @@ suite('WorkspaceSvg', function() {
             '<block type="controls_if" x="188" y="163"></block>'), this.workspace);
         this.clock.runAll();
         assertEventNotFired(
-            this.eventsFireStub, Blockly.Events.Ui, {element: 'viewport'});
+            this.eventsFireStub, Blockly.Events.OldUi, {element: 'viewport'});
         assertEventNotFired(
-            this.changeListenerSpy, Blockly.Events.Ui, {element: 'viewport'});
+            this.changeListenerSpy, Blockly.Events.OldUi, {element: 'viewport'});
       });
       test('domToWorkspace at 0,0 that doesn\'t trigger scroll' , function() {
         // 4 blocks with space in center.
@@ -344,9 +344,9 @@ suite('WorkspaceSvg', function() {
         Blockly.Xml.domToWorkspace(xmlDom, this.workspace);
         this.clock.runAll();
         assertEventNotFired(
-            this.eventsFireStub, Blockly.Events.Ui, {element: 'viewport'});
+            this.eventsFireStub, Blockly.Events.OldUi, {element: 'viewport'});
         assertEventNotFired(
-            this.changeListenerSpy, Blockly.Events.Ui, {element: 'viewport'});
+            this.changeListenerSpy, Blockly.Events.OldUi, {element: 'viewport'});
       });
       test('domToWorkspace multiple blocks triggers one viewport event', function() {
         var addingMultipleBlocks = () => {

@@ -56,16 +56,33 @@ suite('Events', function() {
     });
 
     test('UI event without block', function() {
+      var event = new Blockly.Events.Ui(this.workspace.id);
+      assertEventEquals(event, undefined, this.workspace.id, undefined, {
+        'recordUndo': false,
+        'group': '',
+      }, true);
+    });
+
+    test('Click without block', function() {
+      var event = new Blockly.Events.Click(null, this.workspace.id);
+      assertEventEquals(event, Blockly.Events.CLICK, this.workspace.id, null, {
+        'targetType': 'workspace',
+        'recordUndo': false,
+        'group': ''
+      }, true);
+    });
+
+    test('Old UI event without block', function() {
       var TEST_GROUP_ID = 'testGroup';
       Blockly.Events.setGroup(TEST_GROUP_ID);
-      var event = new Blockly.Events.Ui(null, 'foo', 'bar', 'baz');
-      assertEventEquals(event, Blockly.Events.UI, null, null, {
+      var event = new Blockly.Events.OldUi(null, 'foo', 'bar', 'baz');
+      assertEventEquals(event, Blockly.Events.UI, '', null, {
         'element': 'foo',
         'oldValue': 'bar',
         'newValue': 'baz',
         'recordUndo': false,
         'group': TEST_GROUP_ID
-      });
+      }, true);
     });
 
     suite('With simple blocks', function() {
@@ -134,10 +151,10 @@ suite('Events', function() {
             });
       });
 
-      test('UI event with block', function() {
+      test('Old UI event with block', function() {
         var TEST_GROUP_ID = 'testGroup';
         Blockly.Events.setGroup(TEST_GROUP_ID);
-        var event = new Blockly.Events.Ui(this.block, 'foo', 'bar', 'baz');
+        var event = new Blockly.Events.OldUi(this.block, 'foo', 'bar', 'baz');
         sinon.assert.calledOnce(this.genUidStub);
         assertEventEquals(event, Blockly.Events.UI, this.workspace.id,
             this.TEST_BLOCK_ID,
@@ -147,7 +164,19 @@ suite('Events', function() {
               'newValue': 'baz',
               'recordUndo': false,
               'group': TEST_GROUP_ID
-            });
+            }, true);
+      });
+
+      test('Click with block', function() {
+        var TEST_GROUP_ID = 'testGroup';
+        Blockly.Events.setGroup(TEST_GROUP_ID);
+        var event = new Blockly.Events.Click(this.block);
+        assertEventEquals(event, Blockly.Events.CLICK, this.workspace.id,
+            this.TEST_BLOCK_ID, {
+              'targetType': 'block',
+              'recordUndo': false,
+              'group': TEST_GROUP_ID
+            }, true);
       });
 
       suite('Move', function() {
@@ -605,7 +634,7 @@ suite('Events', function() {
         new Blockly.Events.BlockCreate(block),
         new Blockly.Events.BlockMove(block),
         new Blockly.Events.BlockChange(block, 'field', 'VAR', 'id1', 'id2'),
-        new Blockly.Events.Ui(block, 'click', undefined, undefined)
+        new Blockly.Events.Click(block)
       ];
       var filteredEvents = Blockly.Events.filter(events, true);
       chai.assert.equal(filteredEvents.length, 4);  // no event should have been removed.
@@ -613,7 +642,7 @@ suite('Events', function() {
       chai.assert.isTrue(filteredEvents[0] instanceof Blockly.Events.BlockCreate);
       chai.assert.isTrue(filteredEvents[1] instanceof Blockly.Events.BlockMove);
       chai.assert.isTrue(filteredEvents[2] instanceof Blockly.Events.BlockChange);
-      chai.assert.isTrue(filteredEvents[3] instanceof Blockly.Events.Ui);
+      chai.assert.isTrue(filteredEvents[3] instanceof Blockly.Events.Click);
     });
 
     test('Different blocks no removed', function() {
@@ -682,17 +711,18 @@ suite('Events', function() {
       chai.assert.equal(filteredEvents[0].newValue, 'item2');
     });
 
-    test('Merge ui events', function() {
+    test.skip('Merge ui events', function() {
+      // TODO(kozbial): Add support for merging UI events.
       var block1 = this.workspace.newBlock('field_variable_test_block', '1');
       var block2 = this.workspace.newBlock('field_variable_test_block', '2');
       var block3 = this.workspace.newBlock('field_variable_test_block', '3');
       var events = [
-        new Blockly.Events.Ui(block1, 'commentOpen', 'false', 'true'),
-        new Blockly.Events.Ui(block1, 'click', 'false', 'true'),
-        new Blockly.Events.Ui(block2, 'mutatorOpen', 'false', 'true'),
-        new Blockly.Events.Ui(block2, 'click', 'false', 'true'),
-        new Blockly.Events.Ui(block3, 'warningOpen', 'false', 'true'),
-        new Blockly.Events.Ui(block3, 'click', 'false', 'true')
+        new Blockly.Events.OldUi(block1, 'commentOpen', 'false', 'true'),
+        new Blockly.Events.Click(block1),
+        new Blockly.Events.OldUi(block2, 'mutatorOpen', 'false', 'true'),
+        new Blockly.Events.Click(block2),
+        new Blockly.Events.OldUi(block3, 'warningOpen', 'false', 'true'),
+        new Blockly.Events.Click(block3)
       ];
       var filteredEvents = Blockly.Events.filter(events, true);
       // click event merged into corresponding *Open event
@@ -707,13 +737,13 @@ suite('Events', function() {
       // but cannot be merged do not get dropped during filtering.
       var block = this.workspace.newBlock('field_variable_test_block', '1');
       var events = [
-        new Blockly.Events.Ui(block, 'click', undefined, undefined),
-        new Blockly.Events.Ui(block, 'stackclick', undefined, undefined)
+        new Blockly.Events.Click(block),
+        new Blockly.Events.OldUi(block, 'stackclick', undefined, undefined)
       ];
       var filteredEvents = Blockly.Events.filter(events, true);
       // click and stackclick should both exist
       chai.assert.equal(filteredEvents.length, 2);
-      chai.assert.equal(filteredEvents[0].element, 'click');
+      chai.assert.isTrue(filteredEvents[0] instanceof Blockly.Events.Click);
       chai.assert.equal(filteredEvents[1].element, 'stackclick');
     });
 

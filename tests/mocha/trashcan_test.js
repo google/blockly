@@ -62,10 +62,9 @@ suite("Trashcan", function() {
       simulateClick(this.trashcan.svgGroup_);
 
       assertEventNotFired(
-          this.eventsFireStub, Blockly.Events.Ui, {element: 'trashcanOpen'});
+          this.eventsFireStub, Blockly.Events.OldUi, {element: 'trashcanOpen'});
       assertEventFired(
-          this.eventsFireStub, Blockly.Events.Ui,
-          {element: 'click', oldValue: null, newValue: 'workspace'},
+          this.eventsFireStub, Blockly.Events.Click, {targetType: 'workspace'},
           this.workspace.id, null);
     });
     test("Click with contents - fires trashcanOpen", function() {
@@ -79,11 +78,11 @@ suite("Trashcan", function() {
       sinon.assert.calledOnce(showFlyoutStub);
 
       assertEventFired(
-          this.eventsFireStub, Blockly.Events.Ui,
+          this.eventsFireStub, Blockly.Events.OldUi,
           {element: 'trashcanOpen', oldValue: null, newValue: true},
           this.workspace.id, null);
       assertEventNotFired(
-          this.eventsFireStub, Blockly.Events.Ui, {element: 'click'});
+          this.eventsFireStub, Blockly.Events.Click, {});
     });
     test("Click outside trashcan - fires trashcanClose", function() {
       sinon.stub(this.trashcan.flyout, 'isVisible').returns(true);
@@ -95,12 +94,11 @@ suite("Trashcan", function() {
       sinon.assert.calledOnce(hideFlyoutStub);
 
       assertEventFired(
-          this.eventsFireStub, Blockly.Events.Ui,
+          this.eventsFireStub, Blockly.Events.OldUi,
           {element: 'trashcanOpen', oldValue: null, newValue: false},
           this.workspace.id, null);
       assertEventFired(
-          this.eventsFireStub, Blockly.Events.Ui,
-          {element: 'click', oldValue: null, newValue: 'workspace'},
+          this.eventsFireStub, Blockly.Events.Click, {targetType: 'workspace'},
           this.workspace.id, null);
     });
   });

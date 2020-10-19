@@ -48,7 +48,7 @@ suite('Comments', function() {
       chai.assert.isTrue(this.comment.isVisible());
       assertEditable(this.comment);
       assertEventFired(
-          this.eventsFireStub, Blockly.Events.Ui,
+          this.eventsFireStub, Blockly.Events.OldUi,
           {element: 'commentOpen', oldValue: false, newValue: true},
           this.workspace.id, this.block.id);
     });
@@ -63,7 +63,7 @@ suite('Comments', function() {
       chai.assert.isTrue(this.comment.isVisible());
       assertNotEditable(this.comment);
       assertEventFired(
-          this.eventsFireStub, Blockly.Events.Ui,
+          this.eventsFireStub, Blockly.Events.OldUi,
           {element: 'commentOpen', oldValue: false, newValue: true},
           this.workspace.id, this.block.id);
     });
@@ -79,7 +79,7 @@ suite('Comments', function() {
       chai.assert.isTrue(this.comment.isVisible());
       assertNotEditable(this.comment);
       assertEventFired(
-          this.eventsFireStub, Blockly.Events.Ui,
+          this.eventsFireStub, Blockly.Events.OldUi,
           {element: 'commentOpen', oldValue: false, newValue: true},
           this.workspace.id, this.block.id);
     });
@@ -97,7 +97,7 @@ suite('Comments', function() {
       chai.assert.isTrue(this.comment.isVisible());
       assertEditable(this.comment);
       assertEventFired(
-          this.eventsFireStub, Blockly.Events.Ui,
+          this.eventsFireStub, Blockly.Events.OldUi,
           {element: 'commentOpen', oldValue: false, newValue: true},
           this.workspace.id, this.block.id);
     });

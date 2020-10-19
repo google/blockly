@@ -20,7 +20,7 @@ goog.require('Blockly.constants');
 goog.require('Blockly.ContextMenu');
 goog.require('Blockly.ContextMenuRegistry');
 goog.require('Blockly.Events');
-goog.require('Blockly.Events.Ui');
+goog.require('Blockly.Events.OldUi');
 goog.require('Blockly.Events.BlockMove');
 goog.require('Blockly.Msg');
 goog.require('Blockly.navigation');
@@ -295,7 +295,7 @@ Blockly.BlockSvg.prototype.select = function() {
       Blockly.Events.enable();
     }
   }
-  var event = new Blockly.Events.Ui(null, 'selected', oldId, this.id);
+  var event = new Blockly.Events.OldUi(null, 'selected', oldId, this.id);
   event.workspaceId = this.workspace.id;
   Blockly.Events.fire(event);
   Blockly.selected = this;
@@ -309,7 +309,7 @@ Blockly.BlockSvg.prototype.unselect = function() {
   if (Blockly.selected != this) {
     return;
   }
-  var event = new Blockly.Events.Ui(null, 'selected', this.id, null);
+  var event = new Blockly.Events.OldUi(null, 'selected', this.id, null);
   event.workspaceId = this.workspace.id;
   Blockly.Events.fire(event);
   Blockly.selected = null;

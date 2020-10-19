@@ -552,7 +552,7 @@ Blockly.blockRendering.MarkerSvg.prototype.fireMarkerEvent_ = function(
     oldNode, curNode) {
   var curBlock = curNode.getSourceBlock();
   var eventType = this.isCursor() ? 'cursorMove' : 'markerMove';
-  var event = new Blockly.Events.Ui(curBlock, eventType, oldNode, curNode);
+  var event = new Blockly.Events.OldUi(curBlock, eventType, oldNode, curNode);
   if (curNode.getType() == Blockly.ASTNode.types.WORKSPACE) {
     event.workspaceId =
       (/** @type {!Blockly.Workspace} */ (curNode.getLocation())).id;

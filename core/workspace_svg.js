@@ -576,7 +576,7 @@ Blockly.WorkspaceSvg.prototype.refreshTheme = function() {
     this.setVisible(true);
   }
 
-  var event = new Blockly.Events.Ui(null, 'theme', null, null);
+  var event = new Blockly.Events.OldUi(null, 'theme', null, null);
   event.workspaceId = this.id;
   Blockly.Events.fire(event);
 };
@@ -1119,7 +1119,7 @@ Blockly.WorkspaceSvg.prototype.maybeFireViewportChangeEvent = function() {
   // this.oldScale_ = scale;
   // this.oldTop_ = top;
   // this.oldLeft_ = left;
-  // var event = new Blockly.Events.Ui(null, 'viewport', null,
+  // var event = new Blockly.Events.OldUi(null, 'viewport', null,
   //     { scale: scale, top: top, left: left });
   // event.workspaceId = this.id;
   // Blockly.Events.fire(event);

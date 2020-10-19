@@ -16,7 +16,7 @@ goog.require('Blockly.CollapsibleToolboxCategory');
 goog.require('Blockly.constants');
 goog.require('Blockly.Css');
 goog.require('Blockly.Events');
-goog.require('Blockly.Events.Ui');
+goog.require('Blockly.Events.OldUi');
 goog.require('Blockly.navigation');
 goog.require('Blockly.registry');
 goog.require('Blockly.Touch');
@@ -799,7 +799,7 @@ Blockly.Toolbox.prototype.fireSelectEvent_ = function(oldItem, newItem) {
     newElement = null;
   }
   // TODO (#4187): Update Toolbox Events.
-  var event = new Blockly.Events.Ui(null, 'category',
+  var event = new Blockly.Events.OldUi(null, 'category',
       oldElement, newElement);
   event.workspaceId = this.workspace_.id;
   Blockly.Events.fire(event);

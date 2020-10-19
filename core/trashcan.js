@@ -560,7 +560,7 @@ Blockly.Trashcan.prototype.click = function() {
  * @private
  */
 Blockly.Trashcan.prototype.fireUiEvent_ = function(trashcanOpen) {
-  var uiEvent = new Blockly.Events.Ui(null, 'trashcanOpen', null, trashcanOpen);
+  var uiEvent = new Blockly.Events.OldUi(null, 'trashcanOpen', null, trashcanOpen);
   uiEvent.workspaceId = this.workspace_.id;
   Blockly.Events.fire(uiEvent);
 };

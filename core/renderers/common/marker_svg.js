@@ -553,7 +553,7 @@ Blockly.blockRendering.MarkerSvg.prototype.fireMarkerEvent_ = function(
     oldNode, curNode) {
   var curBlock = curNode.getSourceBlock();
   var event = new Blockly.Events.MarkerMove(
-      curBlock, this.isCursor(), oldNode,curNode);
+      curBlock, this.isCursor(), oldNode, curNode);
   Blockly.Events.fire(event);
 };
 

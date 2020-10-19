@@ -113,5 +113,25 @@ Blockly.Events.Click.prototype.fromJson = function(json) {
   this.blockId = json['blockId'];
 };
 
+/**
+ * Class for a theme change event.
+ * @param {string=} opt_workspaceId The workspace identifier for this event.
+ *    event. Undefined for a blank event.
+ * @extends {Blockly.Events.Ui}
+ * @constructor
+ */
+Blockly.Events.ThemeChange = function(opt_workspaceId) {
+  Blockly.Events.ThemeChange.superClass_.constructor.call(this, opt_workspaceId);
+};
+Blockly.utils.object.inherits(Blockly.Events.ThemeChange, Blockly.Events.Ui);
+
+/**
+ * Type of this event.
+ * @type {string}
+ */
+Blockly.Events.ThemeChange.prototype.type = Blockly.Events.THEME_CHANGE;
+
 Blockly.registry.register(Blockly.registry.Type.EVENT, Blockly.Events.CLICK,
     Blockly.Events.Click);
+Blockly.registry.register(Blockly.registry.Type.EVENT,
+    Blockly.Events.THEME_CHANGE, Blockly.Events.ThemeChange);

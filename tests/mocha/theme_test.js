@@ -144,8 +144,7 @@ suite('Theme', function() {
       sinon.assert.calledOnce(refreshToolboxSelectionStub);
 
       assertEventFired(
-          this.eventsFireStub, Blockly.Events.OldUi, {element: 'theme'},
-          workspace.id, null);
+          this.eventsFireStub, Blockly.Events.ThemeChange, {}, workspace.id);
     } finally {
       workspaceTeardown.call(this, workspace);
     }

@@ -390,9 +390,8 @@ Blockly.ToolboxCategory.prototype.getColourfromStyle_ = function(styleName) {
 };
 
 /**
- * Gets the html element that is clickable.
- * The parent toolbox element receives clicks. This method makes it possible for the parent toolbox
- * to add an id to the this element and pass the event to this items onClick method.
+ * The parent toolbox will add an id to this element so it can pass the onClick event to the correct
+ * toolboxItem.
  * @return {!Element} The html element that receives clicks.
  * @public
  */

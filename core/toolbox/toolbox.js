@@ -304,7 +304,7 @@ Blockly.Toolbox.prototype.onKeyDown_ = function(e) {
       handled = false;
       break;
   }
-  if (!handled && this.selectedItem_.onKeyDown) {
+  if (!handled && this.selectedItem_ && this.selectedItem_.onKeyDown) {
     handled = this.selectedItem_.onKeyDown(e);
   }
 

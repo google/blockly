@@ -16,7 +16,7 @@ goog.require('Blockly.blockAnimations');
 goog.require('Blockly.constants');
 goog.require('Blockly.Events');
 goog.require('Blockly.Events.BlockMove');
-goog.require('Blockly.Events.OldUi');
+goog.require('Blockly.Events.Drag');
 goog.require('Blockly.InsertionMarkerManager');
 goog.require('Blockly.utils.Coordinate');
 goog.require('Blockly.utils.dom');

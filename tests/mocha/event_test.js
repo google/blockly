@@ -66,7 +66,7 @@ suite('Events', function() {
     test('Click without block', function() {
       var event = new Blockly.Events.Click(null, this.workspace.id);
       assertEventEquals(event, Blockly.Events.CLICK, this.workspace.id, null, {
-        'element': 'workspace',
+        'targetType': 'workspace',
         'recordUndo': false,
         'group': ''
       }, true);
@@ -173,7 +173,7 @@ suite('Events', function() {
         var event = new Blockly.Events.Click(this.block);
         assertEventEquals(event, Blockly.Events.CLICK, this.workspace.id,
             this.TEST_BLOCK_ID, {
-              'element': 'block',
+              'targetType': 'block',
               'recordUndo': false,
               'group': TEST_GROUP_ID
             }, true);

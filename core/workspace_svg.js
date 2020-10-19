@@ -577,7 +577,7 @@ Blockly.WorkspaceSvg.prototype.refreshTheme = function() {
     this.setVisible(true);
   }
 
-  var event = new Blockly.Events.ThemeChange(this.id);
+  var event = new Blockly.Events.ThemeChange(this.getTheme().name, this.id);
   Blockly.Events.fire(event);
 };
 

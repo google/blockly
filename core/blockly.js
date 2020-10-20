@@ -179,11 +179,16 @@ Blockly.onKeyDown = function(e) {
     return;
   }
 
-  if (!Blockly.Gesture.inProgress() && Blockly.KeyboardShortcutRegistry.registry.onKeyDown(mainWorkspace, e)) {
+  if (Blockly.KeyboardShortcutRegistry.registry.onKeyDown(mainWorkspace, e)) {
     return;
   }
 };
 
+/**
+ * Delete the given block.
+ * @param {!Blockly.Block} selected The block to delete.
+ * @package
+ */
 Blockly.deleteBlock = function(selected) {
   if (!selected.workspace.isFlyout) {
     Blockly.Events.setGroup(true);

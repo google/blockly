@@ -579,7 +579,16 @@ function createKeyDownEvent(keyCode, type, modifiers) {
     target: {
       type: type
     },
-    getModifierState: function() {
+    getModifierState: function(name) {
+      if (name == "Shift" && this.shiftKey) {
+        return true;
+      } else if (name == "Control" && this.ctrlKey) {
+        return true;
+      } else if (name == "Meta" && this.metaKey) {
+        return true;
+      } else if (name == "Alt" && this.altKey) {
+        return true;
+      }
       return false;
     },
     preventDefault: function() {}

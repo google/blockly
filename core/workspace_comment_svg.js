@@ -17,7 +17,7 @@ goog.require('Blockly.Events');
 goog.require('Blockly.Events.CommentCreate');
 goog.require('Blockly.Events.CommentDelete');
 goog.require('Blockly.Events.CommentMove');
-goog.require('Blockly.Events.OldUi');
+goog.require('Blockly.Events.Selected');
 goog.require('Blockly.utils');
 goog.require('Blockly.utils.Coordinate');
 goog.require('Blockly.utils.dom');
@@ -224,8 +224,7 @@ Blockly.WorkspaceCommentSvg.prototype.select = function() {
       Blockly.Events.enable();
     }
   }
-  var event = new Blockly.Events.OldUi(null, 'selected', oldId, this.id);
-  event.workspaceId = this.workspace.id;
+  var event = new Blockly.Events.Selected(oldId, this.id, this.workspace.id);
   Blockly.Events.fire(event);
   Blockly.selected = this;
   this.addSelect();
@@ -239,8 +238,7 @@ Blockly.WorkspaceCommentSvg.prototype.unselect = function() {
   if (Blockly.selected != this) {
     return;
   }
-  var event = new Blockly.Events.OldUi(null, 'selected', this.id, null);
-  event.workspaceId = this.workspace.id;
+  var event = new Blockly.Events.Selected(this.id, null, this.workspace.id);
   Blockly.Events.fire(event);
   Blockly.selected = null;
   this.removeSelect();

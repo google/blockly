@@ -13,6 +13,7 @@
 goog.provide('Blockly.Trashcan');
 
 goog.require('Blockly.constants');
+goog.require('Blockly.Events.TrashcanOpen');
 goog.require('Blockly.Scrollbar');
 goog.require('Blockly.utils.dom');
 goog.require('Blockly.utils.Rect');
@@ -560,8 +561,8 @@ Blockly.Trashcan.prototype.click = function() {
  * @private
  */
 Blockly.Trashcan.prototype.fireUiEvent_ = function(trashcanOpen) {
-  var uiEvent = new Blockly.Events.OldUi(null, 'trashcanOpen', null, trashcanOpen);
-  uiEvent.workspaceId = this.workspace_.id;
+  var uiEvent =
+      new Blockly.Events.TrashcanOpen(trashcanOpen,this.workspace_.id);
   Blockly.Events.fire(uiEvent);
 };
 

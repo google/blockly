@@ -19,6 +19,7 @@ goog.require('Blockly.constants');
 goog.require('Blockly.ContextMenuRegistry');
 goog.require('Blockly.Events');
 goog.require('Blockly.Events.BlockCreate');
+goog.require('Blockly.Events.ThemeChange');
 goog.require('Blockly.Events.ViewportChange');
 goog.require('Blockly.Gesture');
 goog.require('Blockly.Grid');
@@ -576,8 +577,7 @@ Blockly.WorkspaceSvg.prototype.refreshTheme = function() {
     this.setVisible(true);
   }
 
-  var event = new Blockly.Events.OldUi(null, 'theme', null, null);
-  event.workspaceId = this.id;
+  var event = new Blockly.Events.ThemeChange(this.getTheme().name, this.id);
   Blockly.Events.fire(event);
 };
 

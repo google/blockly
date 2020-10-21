@@ -19,6 +19,7 @@ goog.require('Blockly.constants');
 goog.require('Blockly.ContextMenuRegistry');
 goog.require('Blockly.Events');
 goog.require('Blockly.Events.BlockCreate');
+goog.require('Blockly.Events.ViewportChange');
 goog.require('Blockly.Gesture');
 goog.require('Blockly.Grid');
 goog.require('Blockly.MarkerManager');
@@ -324,27 +325,26 @@ Blockly.WorkspaceSvg.prototype.dragDeltaXY_ = null;
  */
 Blockly.WorkspaceSvg.prototype.scale = 1;
 
-// TODO(#4203) Enable viewport events after ui events refactor.
-// /**
-//  * Cached scale value. Used to detect changes in viewport.
-//  * @type {number}
-//  * @private
-//  */
-// Blockly.WorkspaceSvg.prototype.oldScale_ = 1;
-//
-// /**
-//  * Cached viewport top value. Used to detect changes in viewport.
-//  * @type {number}
-//  * @private
-//  */
-// Blockly.WorkspaceSvg.prototype.oldTop_ = 0;
-//
-// /**
-//  * Cached viewport left value. Used to detect changes in viewport.
-//  * @type {number}
-//  * @private
-//  */
-// Blockly.WorkspaceSvg.prototype.oldLeft_ = 0;
+/**
+ * Cached scale value. Used to detect changes in viewport.
+ * @type {number}
+ * @private
+ */
+Blockly.WorkspaceSvg.prototype.oldScale_ = 1;
+
+/**
+ * Cached viewport top value. Used to detect changes in viewport.
+ * @type {number}
+ * @private
+ */
+Blockly.WorkspaceSvg.prototype.oldTop_ = 0;
+
+/**
+ * Cached viewport left value. Used to detect changes in viewport.
+ * @type {number}
+ * @private
+ */
+Blockly.WorkspaceSvg.prototype.oldLeft_ = 0;
 
 /**
  * The workspace's trashcan (if any).
@@ -1107,22 +1107,20 @@ Blockly.WorkspaceSvg.prototype.getParentSvg = function() {
  */
 Blockly.WorkspaceSvg.prototype.maybeFireViewportChangeEvent = function() {
   // TODO(#4203) Enable viewport events after ui events refactor.
-  // if (!Blockly.Events.isEnabled()) {
-  //   return;
-  // }
-  // var scale = this.scale;
-  // var top = -this.scrollY;
-  // var left = -this.scrollX;
-  // if (scale == this.oldScale_ && top == this.oldTop_ && left == this.oldLeft_) {
-  //   return;
-  // }
-  // this.oldScale_ = scale;
-  // this.oldTop_ = top;
-  // this.oldLeft_ = left;
-  // var event = new Blockly.Events.OldUi(null, 'viewport', null,
-  //     { scale: scale, top: top, left: left });
-  // event.workspaceId = this.id;
-  // Blockly.Events.fire(event);
+  if (!Blockly.Events.isEnabled()) {
+    return;
+  }
+  var scale = this.scale;
+  var top = -this.scrollY;
+  var left = -this.scrollX;
+  if (scale == this.oldScale_ && top == this.oldTop_ && left == this.oldLeft_) {
+    return;
+  }
+  this.oldScale_ = scale;
+  this.oldTop_ = top;
+  this.oldLeft_ = left;
+  var event = new Blockly.Events.ViewportChange(top, left, scale, this.id);
+  Blockly.Events.fire(event);
 };
 
 /**

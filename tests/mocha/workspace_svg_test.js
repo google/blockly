@@ -161,25 +161,25 @@ suite('WorkspaceSvg', function() {
     });
   });
 
-  suite.skip('Viewport change events', function() {
+  suite.only('Viewport change events', function() {
     function resetEventHistory(eventsFireStub, changeListenerSpy) {
       eventsFireStub.resetHistory();
       changeListenerSpy.resetHistory();
     }
     function assertSpyFiredViewportEvent(spy, workspace, expectedProperties) {
       assertEventFired(
-          spy, Blockly.Events.OldUi, {element: 'viewport'},
-          workspace.id, null);
-      assertEventFired(spy, Blockly.Events.OldUi, expectedProperties,
-          workspace.id, null);
+          spy, Blockly.Events.ViewportChange, expectedProperties,
+          workspace.id);
+      assertEventFired(spy, Blockly.Events.ViewportChange, expectedProperties,
+          workspace.id);
     }
     function assertViewportEventFired(eventsFireStub, changeListenerSpy,
         workspace, expectedEventCount = 1) {
       var metrics = workspace.getMetrics();
       var expectedProperties = {
-        element: 'viewport',
-        newValue: {scale: workspace.scale, top: metrics.viewTop,
-          left: metrics.viewLeft}
+        scale: workspace.scale,
+        viewTop: metrics.viewTop,
+        viewLeft: metrics.viewLeft
       };
       assertSpyFiredViewportEvent(
           eventsFireStub, workspace, expectedProperties);
@@ -286,7 +286,7 @@ suite('WorkspaceSvg', function() {
         block.render();
         this.clock.runAll();
         assertEventNotFired(
-            this.eventsFireStub, Blockly.Events.OldUi, {element: 'viewport'});
+            this.eventsFireStub, Blockly.Events.ViewportChange, {});
       });
       test('block move that triggers scroll', function() {
         var block = this.workspace.newBlock('stack_block');
@@ -321,9 +321,9 @@ suite('WorkspaceSvg', function() {
             '<block type="controls_if" x="188" y="163"></block>'), this.workspace);
         this.clock.runAll();
         assertEventNotFired(
-            this.eventsFireStub, Blockly.Events.OldUi, {element: 'viewport'});
+            this.eventsFireStub, Blockly.Events.ViewportChange, {});
         assertEventNotFired(
-            this.changeListenerSpy, Blockly.Events.OldUi, {element: 'viewport'});
+            this.changeListenerSpy, Blockly.Events.ViewportChange, {});
       });
       test('domToWorkspace at 0,0 that doesn\'t trigger scroll' , function() {
         // 4 blocks with space in center.
@@ -344,9 +344,9 @@ suite('WorkspaceSvg', function() {
         Blockly.Xml.domToWorkspace(xmlDom, this.workspace);
         this.clock.runAll();
         assertEventNotFired(
-            this.eventsFireStub, Blockly.Events.OldUi, {element: 'viewport'});
+            this.eventsFireStub, Blockly.Events.ViewportChange, {});
         assertEventNotFired(
-            this.changeListenerSpy, Blockly.Events.OldUi, {element: 'viewport'});
+            this.changeListenerSpy, Blockly.Events.ViewportChange, {});
       });
       test('domToWorkspace multiple blocks triggers one viewport event', function() {
         var addingMultipleBlocks = () => {

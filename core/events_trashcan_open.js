@@ -5,8 +5,8 @@
  */
 
 /**
- * @fileoverview Events fired as a result of UI actions in Blockly's editor.
- * @author fraser@google.com (Neil Fraser)
+ * @fileoverview Events fired as a result of trashcan flyout open and close.
+ * @author kozbial@google.com (Monica Kozbial)
  */
 'use strict';
 

@@ -48,7 +48,7 @@ goog.addDependency('../../core/events_click.js', ['Blockly.Events.Click'], ['Blo
 goog.addDependency('../../core/events_marker_move.js', ['Blockly.Events.MarkerMove'], ['Blockly.Events', 'Blockly.Events.Ui', 'Blockly.registry', 'Blockly.utils.object'], {});
 goog.addDependency('../../core/events_selected.js', ['Blockly.Events.Selected'], ['Blockly.Events', 'Blockly.Events.Ui', 'Blockly.registry', 'Blockly.utils.object'], {});
 goog.addDependency('../../core/events_theme_change.js', ['Blockly.Events.ThemeChange'], ['Blockly.Events', 'Blockly.Events.Ui', 'Blockly.registry', 'Blockly.utils.object'], {});
-goog.addDependency('../../core/events_toolbox_select.js', ['Blockly.Events.ToolboxSelect'], ['Blockly.Events', 'Blockly.Events.Ui', 'Blockly.registry', 'Blockly.utils.object'], {});
+goog.addDependency('../../core/events_toolbox_select.js', ['Blockly.Events.ToolboxItemSelect'], ['Blockly.Events', 'Blockly.Events.Ui', 'Blockly.registry', 'Blockly.utils.object'], {});
 goog.addDependency('../../core/events_trashcan_open.js', ['Blockly.Events.TrashcanOpen'], ['Blockly.Events', 'Blockly.Events.Ui', 'Blockly.registry', 'Blockly.utils.object'], {});
 goog.addDependency('../../core/extensions.js', ['Blockly.Extensions'], ['Blockly.utils'], {});
 goog.addDependency('../../core/field.js', ['Blockly.Field'], ['Blockly.Events', 'Blockly.Events.BlockChange', 'Blockly.Gesture', 'Blockly.Tooltip', 'Blockly.utils', 'Blockly.utils.Rect', 'Blockly.utils.Size', 'Blockly.utils.Svg', 'Blockly.utils.deprecation', 'Blockly.utils.dom', 'Blockly.utils.style', 'Blockly.utils.userAgent'], {'lang': 'es5'});
@@ -164,7 +164,7 @@ goog.addDependency('../../core/theme_manager.js', ['Blockly.ThemeManager'], ['Bl
 goog.addDependency('../../core/toolbox/category.js', ['Blockly.ToolboxCategory'], ['Blockly.ToolboxItem', 'Blockly.registry', 'Blockly.utils', 'Blockly.utils.aria', 'Blockly.utils.dom', 'Blockly.utils.object', 'Blockly.utils.toolbox'], {'lang': 'es5'});
 goog.addDependency('../../core/toolbox/collapsible_category.js', ['Blockly.CollapsibleToolboxCategory'], ['Blockly.ToolboxCategory', 'Blockly.ToolboxItem', 'Blockly.ToolboxSeparator', 'Blockly.registry', 'Blockly.utils.aria', 'Blockly.utils.dom', 'Blockly.utils.object', 'Blockly.utils.toolbox'], {});
 goog.addDependency('../../core/toolbox/separator.js', ['Blockly.ToolboxSeparator'], ['Blockly.ToolboxItem', 'Blockly.registry', 'Blockly.utils.dom'], {'lang': 'es5'});
-goog.addDependency('../../core/toolbox/toolbox.js', ['Blockly.Toolbox'], ['Blockly.CollapsibleToolboxCategory', 'Blockly.Css', 'Blockly.Events', 'Blockly.Events.ToolboxSelect', 'Blockly.Touch', 'Blockly.constants', 'Blockly.navigation', 'Blockly.registry', 'Blockly.utils', 'Blockly.utils.Rect', 'Blockly.utils.aria', 'Blockly.utils.dom', 'Blockly.utils.toolbox'], {'lang': 'es5'});
+goog.addDependency('../../core/toolbox/toolbox.js', ['Blockly.Toolbox'], ['Blockly.CollapsibleToolboxCategory', 'Blockly.Css', 'Blockly.Events', 'Blockly.Events.ToolboxItemSelect', 'Blockly.Touch', 'Blockly.constants', 'Blockly.navigation', 'Blockly.registry', 'Blockly.utils', 'Blockly.utils.Rect', 'Blockly.utils.aria', 'Blockly.utils.dom', 'Blockly.utils.toolbox'], {'lang': 'es5'});
 goog.addDependency('../../core/toolbox/toolbox_item.js', ['Blockly.ToolboxItem'], [], {});
 goog.addDependency('../../core/tooltip.js', ['Blockly.Tooltip'], ['Blockly.utils.string'], {});
 goog.addDependency('../../core/touch.js', ['Blockly.Touch'], ['Blockly.constants', 'Blockly.utils', 'Blockly.utils.global', 'Blockly.utils.string'], {});

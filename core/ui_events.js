@@ -12,7 +12,6 @@
 
 goog.provide('Blockly.Events.Ui');
 goog.provide('Blockly.Events.Click');
-goog.provide('Blockly.Events.ViewportChange');
 
 goog.require('Blockly.Events');
 goog.require('Blockly.Events.Abstract');
@@ -114,73 +113,5 @@ Blockly.Events.Click.prototype.fromJson = function(json) {
   this.blockId = json['blockId'];
 };
 
-/**
- * Class for a viewport change event.
- * @param {Number=} opt_top Top-edge of the visible portion of the workspace,
- *    relative to the workspace origin.
- * @param {Number=} opt_left Left-edge of the visible portion of the workspace,
- *    relative to the workspace origin.
- * @param {Number=} opt_scale The scale of the workspace.
- * @param {string=} opt_workspaceId The workspace identifier for this event.
- * @extends {Blockly.Events.Ui}
- * @constructor
- */
-Blockly.Events.ViewportChange = function(opt_top, opt_left, opt_scale,
-    opt_workspaceId) {
-  Blockly.Events.ViewportChange.superClass_.constructor.call(this, opt_workspaceId);
-
-  /**
-   * Top-edge of the visible portion of the workspace, relative to the workspace
-   * origin.
-   * @type {number|undefined}
-   */
-  this.viewTop = opt_top;
-
-  /**
-   * Left-edge of the visible portion of the workspace, relative to the
-   * workspace origin.
-   * @type {number|undefined}
-   */
-  this.viewLeft = opt_left;
-
-  /**
-   * The scale of the workspace.
-   * @type {number|undefined}
-   */
-  this.scale = opt_scale;
-};
-Blockly.utils.object.inherits(Blockly.Events.ViewportChange, Blockly.Events.Ui);
-
-/**
- * Type of this event.
- * @type {string}
- */
-Blockly.Events.ViewportChange.prototype.type = Blockly.Events.VIEWPORT_CHANGE;
-
-/**
- * Encode the event as JSON.
- * @return {!Object} JSON representation.
- */
-Blockly.Events.ViewportChange.prototype.toJson = function() {
-  var json = Blockly.Events.ViewportChange.superClass_.toJson.call(this);
-  json['viewTop'] = this.viewTop;
-  json['viewLeft'] = this.viewLeft;
-  json['scale'] = this.scale;
-  return json;
-};
-
-/**
- * Decode the JSON event.
- * @param {!Object} json JSON representation.
- */
-Blockly.Events.ViewportChange.prototype.fromJson = function(json) {
-  Blockly.Events.ViewportChange.superClass_.fromJson.call(this, json);
-  this.viewTop = json['viewTop'];
-  this.viewLeft = json['viewLeft'];
-  this.scale = json['scale'];
-};
-
 Blockly.registry.register(Blockly.registry.Type.EVENT, Blockly.Events.CLICK,
     Blockly.Events.Click);
-Blockly.registry.register(Blockly.registry.Type.EVENT,
-    Blockly.Events.VIEWPORT_CHANGE, Blockly.Events.ViewportChange);

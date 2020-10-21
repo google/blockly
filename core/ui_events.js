@@ -119,6 +119,7 @@ Blockly.Events.Click.prototype.fromJson = function(json) {
  * @param {boolean=} opt_isOpen Whether the trashcan flyout is open. Undefined
  *    for a blank event.
  * @param {string=} opt_workspaceId The workspace identifier for this event.
+ *    Undefined for a blank event.
  * @extends {Blockly.Events.Ui}
  * @constructor
  */

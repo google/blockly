@@ -17,7 +17,7 @@ goog.require('Blockly.Events');
 goog.require('Blockly.Events.CommentCreate');
 goog.require('Blockly.Events.CommentDelete');
 goog.require('Blockly.Events.CommentMove');
-goog.require('Blockly.Events.OldUi');
+goog.require('Blockly.Events.Selected');
 goog.require('Blockly.utils');
 goog.require('Blockly.utils.Coordinate');
 goog.require('Blockly.utils.dom');

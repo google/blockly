@@ -132,6 +132,11 @@ Blockly.Events.MarkerMove = function(opt_block, isCursor, opt_oldNode,
         (/** @type {!Blockly.Workspace} */ (opt_curNode.getLocation())).id;
   }
   Blockly.Events.MarkerMove.superClass_.constructor.call(this, workspaceId);
+
+  /**
+   * The workspace identifier for this event.
+   * @type {?string}
+   */
   this.blockId = opt_block ? opt_block.id : null;
 
   /**

@@ -27,6 +27,8 @@ goog.require('Blockly.utils.KeyCodes');
 goog.require('Blockly.utils.object');
 goog.require('Blockly.utils.Size');
 
+goog.requireType('Blockly.KeyboardShortcutRegistry');
+
 
 /**
  * Class for a colour input field.
@@ -384,7 +386,7 @@ Blockly.FieldColour.prototype.onKeyDown_ = function(e) {
 /**
  * Handles the given action.
  * This is only triggered when keyboard accessibility mode is enabled.
- * @param {!Blockly.Action} action The action to be handled.
+ * @param {!Blockly.KeyboardShortcutRegistry.KeyboardShortcut} action The action to be handled.
  * @return {boolean} True if the field handled the action, false otherwise.
  * @package
  */

@@ -32,6 +32,7 @@ goog.requireType('Blockly.IASTNodeLocationSvg');
 goog.requireType('Blockly.IASTNodeLocationWithBlock');
 goog.requireType('Blockly.IBlocklyActionable');
 goog.requireType('Blockly.IRegistrable');
+goog.requireType('Blockly.KeyboardShortcutRegistry');
 
 
 /**
@@ -1107,7 +1108,7 @@ Blockly.Field.prototype.isTabNavigable = function() {
 /**
  * Handles the given action.
  * This is only triggered when keyboard accessibility mode is enabled.
- * @param {!Blockly.Action} _action The action to be handled.
+ * @param {!Blockly.KeyboardShortcutRegistry.KeyboardShortcut} _action The action to be handled.
  * @return {boolean} True if the field handled the action, false otherwise.
  * @package
  */

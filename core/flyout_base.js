@@ -36,6 +36,8 @@ goog.requireType('Blockly.IDeleteArea');
 goog.requireType('Blockly.IFlyout');
 goog.requireType('Blockly.utils.Metrics');
 
+goog.requireType('Blockly.KeyboardShortcutRegistry');
+
 
 /**
  * Class for a flyout.
@@ -997,7 +999,7 @@ Blockly.Flyout.prototype.placeNewBlock_ = function(oldBlock) {
 /**
  * Handles the given action.
  * This is only triggered when keyboard accessibility mode is enabled.
- * @param {!Blockly.Action} action The action to be handled.
+ * @param {!Blockly.KeyboardShortcutRegistry.KeyboardShortcut} action The action to be handled.
  * @return {boolean} True if the flyout handled the action, false otherwise.
  * @package
  */

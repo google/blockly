@@ -95,7 +95,7 @@
     <div id="keyboard_nav" style="display:none">
       <p id="keyboard_announce" aria-live="assertive">Set key mappings below</p>
       <form id="keyboard_mappings"></form>
-    </div>    
+    </div>
   </div>
 
   <xml xmlns="https://developers.google.com/blockly/xml" id="toolbox" style="display: none">
@@ -250,7 +250,7 @@
     function stopDemo() {
       clearTimeout(timeout);
       document.getElementById('accessibilityModeCheck').disabled = false;
-    };
+    }
 
     /**
      * Sets up accessibility mode and change the cursor to basic cursor so that
@@ -311,7 +311,7 @@
      * @package
      */
     function saveKeyMap() {
-      var currentMap = Blockly.user.keyMap.getKeyMap();
+      var currentMap = Blockly.KeyboardShortcutRegistry.registry.getRegistry();
       if (sessionStorage) {
         sessionStorage.setItem('keyMap', JSON.stringify(currentMap));
       }
@@ -322,7 +322,7 @@
      * @package
      */
     function restoreKeyMap() {
-      var defaultMap = Blockly.user.keyMap.getKeyMap();
+      // TODO: FIX ALL OF THIS.
       var stringifiedMap = sessionStorage.getItem('keyMap');
       var restoredMap = {};
       if (sessionStorage && stringifiedMap) {
@@ -331,7 +331,7 @@
         for (var i = 0, key; key = keys[i]; i++) {
           restoredMap[key] = Object.assign(new Blockly.Action, keyMap[key]);
         }
-        Blockly.user.keyMap.setKeyMap(restoredMap);
+        Blockly.KeyboardShortcutRegistry.registry.setRegistry(restoredMap);
       }
     }
 
@@ -343,7 +343,7 @@
      * @package
      */
     function serializeKey(selectDivs) {
-      var modifiers = Blockly.utils.object.values(Blockly.user.keyMap.modifierKeys);
+      var modifiers = Blockly.utils.object.values(Blockly.KeyboardShortcutRegistry.registry.modifierKeys);
       var newModifiers = [];
       var newKeyCode = '';
       var keyValue = selectDivs[2].value;
@@ -366,7 +366,7 @@
           newKeyCode = keyValue.toUpperCase().charCodeAt(0);
         }
       }
-      return Blockly.user.keyMap.createSerializedKey(newKeyCode, newModifiers);
+      return Blockly.KeyboardShortcutRegistry.registry.createSerializedKey(newKeyCode, newModifiers);
     }
 
     /**
@@ -415,15 +415,15 @@
       var action = actionDiv.action;
       var selectDivs = actionDiv.getElementsByTagName('select');
       var key = serializeKey(selectDivs);
-      var oldAction = Blockly.user.keyMap.getActionByKeyCode(key);
+      var oldAction = Blockly.KeyboardShortcutRegistry.registry.getKeyboardShortcuts(key);
 
-      if (oldAction) {
+      if (oldAction[0]) {
         keyboardAnnouncerText += oldAction.name + ' action key was overwritten. \n';
         clearDropdown(oldAction);
       }
       keyboardAnnouncerText += action.name + ' key was set to ' + getReadableKey(selectDivs);
       document.getElementById('keyboard_announce').innerText = keyboardAnnouncerText;
-      Blockly.user.keyMap.setActionForKey(key, action);
+      Blockly.KeyboardShortcutRegistry.registry.register(key, action);
       saveKeyMap();
       document.activeElement.blur();
     }
@@ -454,7 +454,7 @@
      * @package
      */
     function setModifiers(actionKey, modifierDropdowns) {
-      var modifiers = Blockly.utils.object.values(Blockly.user.keyMap.modifierKeys);
+      var modifiers = Blockly.utils.object.values(Blockly.KeyboardShortcutRegistry.registry.modifierKeys);
       for (var i = 0; i < 2; i++) {
         var modifierDropdown = modifierDropdowns[i];
         for (var j = 0, modifier; modifier = modifiers[j]; j++) {
@@ -514,7 +514,7 @@
      * @package
      */
     function createDropdowns(action, actionKey, actionDiv) {
-      var modifiers = ['None'].concat(Blockly.utils.object.values(Blockly.user.keyMap.modifierKeys));
+      var modifiers = ['None'].concat(Blockly.utils.object.values(Blockly.KeyboardShortcutRegistry.registry.modifierKeys));
       var keys = ['None', 'Enter', 'Escape'].concat("ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890".split(''));
       createDropdown(action, actionDiv, modifiers);
       createDropdown(action, actionDiv, modifiers);
@@ -544,7 +544,7 @@
         actionDiv.appendChild(labelDiv);
         keyMapDiv.appendChild(actionDiv);
 
-        var actionKey = Blockly.user.keyMap.getKeyByAction(action);
+        var actionKey = Blockly.KeyboardShortcutRegistry.registry.getKeyByShorcutName(action);
         createDropdowns(action, actionKey, actionDiv);
       }
     }

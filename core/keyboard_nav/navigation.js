@@ -776,6 +776,7 @@ Blockly.navigation.moveWSCursor_ = function(workspace, xDirection, yDirection) {
 
 /**
  * Handles hitting the enter key on the workspace.
+ * TODO: Fix this to have workspace.
  * @private
  */
 Blockly.navigation.handleEnterForWS_ = function(workspace) {

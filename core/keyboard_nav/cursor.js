@@ -19,6 +19,7 @@ goog.require('Blockly.navigation');
 goog.require('Blockly.utils.object');
 
 goog.requireType('Blockly.IBlocklyActionable');
+goog.requireType('Blockly.KeyboardShortcutRegistry');
 
 
 /**
@@ -139,7 +140,7 @@ Blockly.Cursor.prototype.out = function() {
 /**
  * Handles the given action.
  * This is only triggered when keyboard navigation is enabled.
- * @param {!Blockly.Action} action The action to be handled.
+ * @param {!Blockly.KeyboardShortcutRegistry.KeyboardShortcut} action The action to be handled.
  * TODO: Fix this to not be Blockly.Action and instead be Object {}.
  * @return {boolean} True if the action has been handled, false otherwise.
  */

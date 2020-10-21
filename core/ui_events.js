@@ -116,8 +116,8 @@ Blockly.Events.Click.prototype.fromJson = function(json) {
 
 /**
  * Class for a trashcan open event.
- * @param {boolean=} opt_isOpen Whether the trashcan flyout is opening.
- *    Undefined for a blank event.
+ * @param {boolean=} opt_isOpen Whether the trashcan flyout is open. Undefined
+ *    for a blank event.
  * @param {string=} opt_workspaceId The workspace identifier for this event.
  * @extends {Blockly.Events.Ui}
  * @constructor
@@ -126,7 +126,7 @@ Blockly.Events.TrashcanOpen = function(opt_isOpen, opt_workspaceId) {
   Blockly.Events.TrashcanOpen.superClass_.constructor.call(this, opt_workspaceId);
 
   /**
-   * Whether the trashcan flyout is opening.
+   * Whether the trashcan flyout is open.
    * @type {boolean|undefined}
    */
   this.isOpen = opt_isOpen;

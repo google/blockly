@@ -117,11 +117,11 @@ Blockly.Events.Click.prototype.fromJson = function(json) {
 /**
  * Class for a Selected event.
  * @param {?string=} opt_oldElementId The id of the previously selected
- *    element. Null if no element last selected.
+ *    element. Null if no element last selected. Undefined for a blank event.
  * @param {?string=} opt_elementId The id of the selected element. Null if no
- *    element currently selected.
+ *    element currently selected (deselect). Undefined for a blank event.
  * @param {string=} opt_workspaceId The workspace identifier for this event.
- *    Undefined for a blank event.
+ *    NUll if no element previously selected. Undefined for a blank event.
  * @extends {Blockly.Events.Ui}
  * @constructor
  */

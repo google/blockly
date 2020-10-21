@@ -119,10 +119,10 @@ Blockly.Events.UI = 'ui';  // TODO remove
 Blockly.Events.BLOCK_DRAG = 'drag';
 
 /**
- * Name of event that records a change in selected block.
+ * Name of event that records a change in selected element.
  * @const
  */
-Blockly.Events.BLOCK_SELECTED = 'selected';
+Blockly.Events.SELECTED = 'selected';
 
 /**
  * Name of event that records a click.

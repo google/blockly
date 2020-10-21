@@ -118,9 +118,12 @@ Blockly.Events.Click.prototype.fromJson = function(json) {
  * Class for a marker move event.
  * @param {?Blockly.Block=} opt_block The affected block. Null if current node
  *    is of type workspace. Undefined for a blank event.
- * @param {boolean=} isCursor Whether this is a cursor event.
+ * @param {boolean=} isCursor Whether this is a cursor event. Undefined for a
+ *    blank event.
  * @param {?Blockly.ASTNode=} opt_oldNode The old node the marker used to be on.
+ *    Undefined for a blank event.
  * @param {!Blockly.ASTNode=} opt_curNode The new node the marker is now on.
+ *    Undefined for a blank event.
  * @extends {Blockly.Events.Ui}
  * @constructor
  */

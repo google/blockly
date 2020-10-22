@@ -18,8 +18,8 @@ suite('Keyboard Shortcut Registry Test', function() {
       var testShortcut = {
         'name': 'test_action'
       };
-      this.registry.register('test', testShortcut, true);
-      var shortcut = this.registry.registry_['test'][0];
+      this.registry.register(testShortcut, true);
+      var shortcut = this.registry.registry_['test_action'];
       chai.assert.equal(shortcut.name, 'test_action');
     });
     test('Registers colliding shortcut - opt_allowOverrides = true', function() {
@@ -30,7 +30,7 @@ suite('Keyboard Shortcut Registry Test', function() {
         'name': 'test_shortcut_2'
       };
       this.registry.registry_['test'] = [otherTestShortcut];
-      this.registry.register('test', testShortcut, true);
+      this.registry.register(testShortcut, true);
       var shortcuts = this.registry.registry_['test'];
       chai.assert.equal(shortcuts.length, 2);
       chai.assert.equal(shortcuts[0].name, 'test_shortcut');

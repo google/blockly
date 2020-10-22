@@ -819,7 +819,9 @@ Blockly.navigation.registerPrevious = function() {
       }
     }
   };
-  Blockly.KeyboardShortcutRegistry.registry.register(Blockly.utils.KeyCodes.W, previousShortcut);
+  Blockly.KeyboardShortcutRegistry.registry.register(previousShortcut);
+  Blockly.KeyboardShortcutRegistry.registry.addKeyMapping(Blockly.utils.KeyCodes.W, previousShortcut.name);
+
 };
 
 Blockly.navigation.registerOut = function() {
@@ -845,7 +847,9 @@ Blockly.navigation.registerOut = function() {
       }
     }
   };
-  Blockly.KeyboardShortcutRegistry.registry.register(Blockly.utils.KeyCodes.A, outShortcut);
+  Blockly.KeyboardShortcutRegistry.registry.register(outShortcut);
+  Blockly.KeyboardShortcutRegistry.registry.addKeyMapping(Blockly.utils.KeyCodes.A, outShortcut.name);
+
 };
 
 Blockly.navigation.registerNext = function() {
@@ -871,7 +875,9 @@ Blockly.navigation.registerNext = function() {
       }
     }
   };
-  Blockly.KeyboardShortcutRegistry.registry.register(Blockly.utils.KeyCodes.S, nextShortcut);
+  Blockly.KeyboardShortcutRegistry.registry.register(nextShortcut);
+  Blockly.KeyboardShortcutRegistry.registry.addKeyMapping(Blockly.utils.KeyCodes.S, nextShortcut.name);
+
 };
 
 Blockly.navigation.registerIn = function() {
@@ -897,7 +903,9 @@ Blockly.navigation.registerIn = function() {
       }
     }
   };
-  Blockly.KeyboardShortcutRegistry.registry.register(Blockly.utils.KeyCodes.D, inShortcut);
+  Blockly.KeyboardShortcutRegistry.registry.register(inShortcut);
+  Blockly.KeyboardShortcutRegistry.registry.addKeyMapping(Blockly.utils.KeyCodes.D, inShortcut.name);
+
 };
 
 Blockly.navigation.registerInsert = function() {
@@ -916,7 +924,9 @@ Blockly.navigation.registerInsert = function() {
       }
     }
   };
-  Blockly.KeyboardShortcutRegistry.registry.register(Blockly.utils.KeyCodes.I, insertShortcut);
+  Blockly.KeyboardShortcutRegistry.registry.register(insertShortcut);
+  Blockly.KeyboardShortcutRegistry.registry.addKeyMapping(Blockly.utils.KeyCodes.I, insertShortcut.name);
+
 };
 
 Blockly.navigation.registerMark = function() {
@@ -939,7 +949,9 @@ Blockly.navigation.registerMark = function() {
       }
     }
   };
-  Blockly.KeyboardShortcutRegistry.registry.register(Blockly.utils.KeyCodes.ENTER, markShortcut);
+  Blockly.KeyboardShortcutRegistry.registry.register(markShortcut);
+  Blockly.KeyboardShortcutRegistry.registry.addKeyMapping(Blockly.utils.KeyCodes.ENTER, markShortcut.name);
+
 };
 
 Blockly.navigation.registerDisconnect = function() {
@@ -958,7 +970,8 @@ Blockly.navigation.registerDisconnect = function() {
       }
     }
   };
-  Blockly.KeyboardShortcutRegistry.registry.register(Blockly.utils.KeyCodes.X, disconnectShortcut);
+  Blockly.KeyboardShortcutRegistry.registry.register(disconnectShortcut);
+  Blockly.KeyboardShortcutRegistry.registry.addKeyMapping(Blockly.utils.KeyCodes.X, disconnectShortcut.name);
 };
 
 Blockly.navigation.registerToolbox = function() {
@@ -981,7 +994,9 @@ Blockly.navigation.registerToolbox = function() {
       }
     }
   };
-  Blockly.KeyboardShortcutRegistry.registry.register(Blockly.utils.KeyCodes.T, focusToolboxShortcut);
+  Blockly.KeyboardShortcutRegistry.registry.register(focusToolboxShortcut);
+  Blockly.KeyboardShortcutRegistry.registry.addKeyMapping(Blockly.utils.KeyCodes.T, focusToolboxShortcut.name);
+
 };
 
 Blockly.navigation.registerExit = function() {
@@ -1004,8 +1019,9 @@ Blockly.navigation.registerExit = function() {
       }
     }
   };
-  Blockly.KeyboardShortcutRegistry.registry.register(Blockly.utils.KeyCodes.ESC, exitShortcut, true);
-  Blockly.KeyboardShortcutRegistry.registry.register(Blockly.utils.KeyCodes.E, exitShortcut, true);
+  Blockly.KeyboardShortcutRegistry.registry.register(exitShortcut, true);
+  Blockly.KeyboardShortcutRegistry.registry.addKeyMapping(Blockly.utils.KeyCodes.ESC, exitShortcut.name, true);
+  Blockly.KeyboardShortcutRegistry.registry.addKeyMapping(Blockly.utils.KeyCodes.E, exitShortcut.name, true);
 };
 
 Blockly.navigation.registerToggleKeyboardNav = function() {
@@ -1020,10 +1036,13 @@ Blockly.navigation.registerToggleKeyboardNav = function() {
       return true;
     }
   };
+  Blockly.KeyboardShortcutRegistry.registry.register(toggleKeyboardNavShortcut);
+
   var ctrlShiftK = Blockly.KeyboardShortcutRegistry.registry.createSerializedKey(
       Blockly.utils.KeyCodes.K, [Blockly.KeyboardShortcutRegistry.modifierKeys.CONTROL,
         Blockly.KeyboardShortcutRegistry.modifierKeys.SHIFT]);
-  Blockly.KeyboardShortcutRegistry.registry.register(ctrlShiftK, toggleKeyboardNavShortcut);
+  Blockly.KeyboardShortcutRegistry.registry.addKeyMapping(ctrlShiftK, toggleKeyboardNavShortcut.name);
+
 };
 
 Blockly.navigation.registerWorkspaceMoveLeft = function() {
@@ -1036,9 +1055,11 @@ Blockly.navigation.registerWorkspaceMoveLeft = function() {
       return Blockly.navigation.moveWSCursor_(workspace, -1, 0);
     }
   };
+  Blockly.KeyboardShortcutRegistry.registry.register(wsMoveLeftShortcut);
+
   var shiftA = Blockly.KeyboardShortcutRegistry.registry.createSerializedKey(
       Blockly.utils.KeyCodes.A, [Blockly.KeyboardShortcutRegistry.modifierKeys.SHIFT]);
-  Blockly.KeyboardShortcutRegistry.registry.register(shiftA, wsMoveLeftShortcut);
+  Blockly.KeyboardShortcutRegistry.registry.addKeyMapping(shiftA, wsMoveLeftShortcut.name);
 };
 
 Blockly.navigation.registerWorkspaceMoveRight = function() {
@@ -1051,9 +1072,10 @@ Blockly.navigation.registerWorkspaceMoveRight = function() {
       return Blockly.navigation.moveWSCursor_(workspace, 1, 0);
     }
   };
+  Blockly.KeyboardShortcutRegistry.registry.register(wsMoveRightShortcut);
   var shiftD = Blockly.KeyboardShortcutRegistry.registry.createSerializedKey(
       Blockly.utils.KeyCodes.D, [Blockly.KeyboardShortcutRegistry.modifierKeys.SHIFT]);
-  Blockly.KeyboardShortcutRegistry.registry.register(shiftD, wsMoveRightShortcut);
+  Blockly.KeyboardShortcutRegistry.registry.addKeyMapping(shiftD, wsMoveRightShortcut.name);
 };
 Blockly.navigation.registerWorkspaceMoveUp = function() {
   var wsMoveUpShortcut = {
@@ -1065,9 +1087,10 @@ Blockly.navigation.registerWorkspaceMoveUp = function() {
       return Blockly.navigation.moveWSCursor_(workspace, 0, -1);
     }
   };
+  Blockly.KeyboardShortcutRegistry.registry.register(wsMoveUpShortcut);
   var shiftW = Blockly.KeyboardShortcutRegistry.registry.createSerializedKey(
       Blockly.utils.KeyCodes.W, [Blockly.KeyboardShortcutRegistry.modifierKeys.SHIFT]);
-  Blockly.KeyboardShortcutRegistry.registry.register(shiftW, wsMoveUpShortcut);
+  Blockly.KeyboardShortcutRegistry.registry.addKeyMapping(shiftW, wsMoveUpShortcut.name);
 };
 
 Blockly.navigation.registerWorkspaceMoveDown = function() {
@@ -1080,28 +1103,27 @@ Blockly.navigation.registerWorkspaceMoveDown = function() {
       return Blockly.navigation.moveWSCursor_(workspace, 0, 1);
     }
   };
+  Blockly.KeyboardShortcutRegistry.registry.register(wsMoveDownShortcut);
   var shiftW = Blockly.KeyboardShortcutRegistry.registry.createSerializedKey(
       Blockly.utils.KeyCodes.S, [Blockly.KeyboardShortcutRegistry.modifierKeys.SHIFT]);
-  Blockly.KeyboardShortcutRegistry.registry.register(shiftW, wsMoveDownShortcut);
+  Blockly.KeyboardShortcutRegistry.registry.addKeyMapping(shiftW, wsMoveDownShortcut.name);
 };
 
 Blockly.navigation.registerNavigationShortcuts = function() {
-  // TODO: Alphabetize these.
-  Blockly.navigation.registerToggleKeyboardNav();
-  Blockly.navigation.registerToolbox();
-
-  Blockly.navigation.registerNext();
-  Blockly.navigation.registerPrevious();
-  Blockly.navigation.registerOut();
   Blockly.navigation.registerIn();
+  Blockly.navigation.registerNext();
+  Blockly.navigation.registerOut();
+  Blockly.navigation.registerPrevious();
 
+  Blockly.navigation.registerWorkspaceMoveDown();
   Blockly.navigation.registerWorkspaceMoveLeft();
   Blockly.navigation.registerWorkspaceMoveRight();
   Blockly.navigation.registerWorkspaceMoveUp();
-  Blockly.navigation.registerWorkspaceMoveDown();
 
+  Blockly.navigation.registerDisconnect();
+  Blockly.navigation.registerExit();
   Blockly.navigation.registerInsert();
   Blockly.navigation.registerMark();
-  Blockly.navigation.registerExit();
-  Blockly.navigation.registerDisconnect();
+  Blockly.navigation.registerToggleKeyboardNav();
+  Blockly.navigation.registerToolbox();
 };

@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2018 Google LLC
+ * Copyright 2020 Google LLC
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -18,7 +18,7 @@ goog.require('Blockly.registry');
 goog.require('Blockly.utils.object');
 
 /**
- * Class for a trashcan open event.
+ * Class for a toolbox item select event.
  * @param {?string=} opt_oldItem The previously selected toolbox item. Undefined
  *    for a blank event.
  * @param {?string=} opt_newItem The newly selected toolbox item. Undefined for

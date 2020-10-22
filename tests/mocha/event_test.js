@@ -717,19 +717,22 @@ suite('Events', function() {
       var block2 = this.workspace.newBlock('field_variable_test_block', '2');
       var block3 = this.workspace.newBlock('field_variable_test_block', '3');
       var events = [
-        new Blockly.Events.OldUi(block1, 'commentOpen', 'false', 'true'),
+        new Blockly.Events.BubbleOpen(block1, true, 'comment'),
         new Blockly.Events.Click(block1),
-        new Blockly.Events.OldUi(block2, 'mutatorOpen', 'false', 'true'),
+        new Blockly.Events.BubbleOpen(block2, true, 'mutator'),
         new Blockly.Events.Click(block2),
-        new Blockly.Events.OldUi(block3, 'warningOpen', 'false', 'true'),
+        new Blockly.Events.BubbleOpen(block3, true,'warning'),
         new Blockly.Events.Click(block3)
       ];
       var filteredEvents = Blockly.Events.filter(events, true);
       // click event merged into corresponding *Open event
       chai.assert.equal(filteredEvents.length, 3);
-      chai.assert.equal(filteredEvents[0].element, 'commentOpen');
-      chai.assert.equal(filteredEvents[1].element, 'mutatorOpen');
-      chai.assert.equal(filteredEvents[2].element, 'warningOpen');
+      chai.assert.isTrue(filteredEvents[0] instanceof Blockly.Events.BubbleOpen);
+      chai.assert.isTrue(filteredEvents[1] instanceof Blockly.Events.BubbleOpen);
+      chai.assert.isTrue(filteredEvents[2] instanceof Blockly.Events.BubbleOpen);
+      chai.assert.equal(filteredEvents[0].element, 'comment');
+      chai.assert.equal(filteredEvents[1].element, 'mutator');
+      chai.assert.equal(filteredEvents[2].element, 'warning');
     });
 
     test('Colliding events not dropped', function() {

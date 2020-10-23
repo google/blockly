@@ -34,9 +34,8 @@ goog.require('Blockly.Xml');
 goog.requireType('Blockly.IBlocklyActionable');
 goog.requireType('Blockly.IDeleteArea');
 goog.requireType('Blockly.IFlyout');
-goog.requireType('Blockly.utils.Metrics');
-
 goog.requireType('Blockly.KeyboardShortcutRegistry');
+goog.requireType('Blockly.utils.Metrics');
 
 
 /**

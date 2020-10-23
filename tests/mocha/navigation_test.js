@@ -287,7 +287,7 @@ suite('Navigation', function() {
     test('Insert', function() {
       // Stub modify as we are not testing its behavior, only if it was called.
       // Otherwise, there is a warning because there is no marked node.
-      var modifyStub = sinon.stub(Blockly.navigation, 'modify_');
+      var modifyStub = sinon.stub(Blockly.navigation, 'modify_').returns(true);
       var keyDownSpy = sinon.spy(Blockly.KeyboardShortcutRegistry.registry, 'onKeyDown');
       var iEvent = createKeyDownEvent(Blockly.utils.KeyCodes.I, '');
 

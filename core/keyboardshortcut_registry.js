@@ -49,7 +49,6 @@ Blockly.KeyboardShortcutRegistry = function() {
 
 /**
  * Enum of valid modifiers.
- * TODO: Should I have changed this from strings to key codes? Maybe something wrong with international keyboards?
  * @enum {!Blockly.utils.KeyCodes<number>}
  */
 Blockly.KeyboardShortcutRegistry.modifierKeys = {
@@ -62,12 +61,11 @@ Blockly.KeyboardShortcutRegistry.modifierKeys = {
 /**
  * A keyboard shortcut.
  * @typedef {{
- *    callback: ?function(!Blockly.Workspace, Event, !Blockly.KeyboardShortcutRegistry.KeyboardShortcut):boolean,
+ *    callback: ((function(!Blockly.Workspace, Event, !Blockly.KeyboardShortcutRegistry.KeyboardShortcut):boolean)|undefined),
  *    name: string,
- *    preconditionFn: ?function(!Blockly.Workspace):boolean,
- *    metadata: ?Object
+ *    preconditionFn: ((function(!Blockly.Workspace):boolean)|undefined),
+ *    metadata: (Object|undefined)
  * }}
- * TODO: Should we make an action that only has a name on it? Then we could use that in the onBlocklyAction?
 */
 Blockly.KeyboardShortcutRegistry.KeyboardShortcut;
 
@@ -77,6 +75,7 @@ Blockly.KeyboardShortcutRegistry.KeyboardShortcut;
  *     key code.
  * @param {boolean=} opt_allowOverrides True to prevent a warning when overriding an already
  *     registered item.
+ * @throws {Error} if a shortcut with the same name already exists.
  * @public
  */
 Blockly.KeyboardShortcutRegistry.prototype.register = function(shortcut, opt_allowOverrides) {
@@ -91,6 +90,7 @@ Blockly.KeyboardShortcutRegistry.prototype.register = function(shortcut, opt_all
  * Unregisters a keyboard shortcut registered with the given key code. This will also remove any key
  *     mappings that reference this shortcut.
  * @param {string} shortcutName The name of the shortcut to unregister.
+ * @return {boolean} True if an item was unregistered, false otherwise.
  * @public
  */
 Blockly.KeyboardShortcutRegistry.prototype.unregister = function(shortcutName) {
@@ -98,6 +98,7 @@ Blockly.KeyboardShortcutRegistry.prototype.unregister = function(shortcutName) {
 
   if (!shortcut) {
     console.warn('Keyboard shortcut with name "' + shortcutName + '" not found.');
+    return false;
   }
 
   // Remove all key mappings with this shortcut.
@@ -106,16 +107,18 @@ Blockly.KeyboardShortcutRegistry.prototype.unregister = function(shortcutName) {
   }
 
   delete this.registry_[shortcutName];
+  return true;
 };
 
 /**
  * Adds a mapping between a keycode and a keyboard shortcut.
  * @param {string} keyCode The key code for the keyboard shortcut. If registering a key code with a
- *     modifier (ex: ctrl + c) use Blockly.KeyboardShortcutRegistry.registry.createSerializedKey;
+ *     modifier (ex: ctrl+c) use Blockly.KeyboardShortcutRegistry.registry.createSerializedKey;
  * @param {string} shortcutName The name of the shortcut to execute when the given keycode is
  *     pressed.
- * @param {boolean=} opt_allowCollision True to prevent a warning when overriding an already
- *     registered item.
+ * @param {boolean=} opt_allowCollision True to prevent an error when adding a shortcut to a key
+ *     that is already mapped to a shortcut.
+ * @throws {Error} if the given key code is already mapped to a shortcut.
  * @public
  */
 Blockly.KeyboardShortcutRegistry.prototype.addKeyMapping = function(
@@ -133,34 +136,38 @@ Blockly.KeyboardShortcutRegistry.prototype.addKeyMapping = function(
 /**
  * Adds a mapping between a keycode and a keyboard shortcut.
  * @param {string} keyCode The key code for the keyboard shortcut. If registering a key code with a
- *     modifier (ex: ctrl + c) use Blockly.KeyboardShortcutRegistry.registry.createSerializedKey;
+ *     modifier (ex: ctrl+c) use Blockly.KeyboardShortcutRegistry.registry.createSerializedKey;
  * @param {string} shortcutName The name of the shortcut to execute when the given keycode is
  *     pressed.
  * @param {boolean=} opt_quiet True to not console warn when there is no shortcut to remove.
+ * @return {boolean} True if a key mapping was removed, false otherwise.
  * @public
  */
 Blockly.KeyboardShortcutRegistry.prototype.removeKeyMapping = function(
     keyCode, shortcutName, opt_quiet) {
   var shortcutNames = this.keyMap_[keyCode];
-  if (!shortcutNames) {
+
+  if (!shortcutNames && !opt_quiet) {
     console.warn('No keyboard shortcut with name "' + shortcutName + '" registered with key code "' + keyCode + '"');
-    return;
+    return false;
   }
+
   var shortcutIdx = shortcutNames.indexOf(shortcutName);
   if (shortcutIdx > -1) {
     shortcutNames.splice(shortcutIdx, 1);
     if (shortcutNames.length == 0) {
       delete this.keyMap_[keyCode];
+      return true;
     }
   } else if (!opt_quiet) {
     console.warn('No keyboard shortcut with name "' + shortcutName + '" registered with key code "' + keyCode + '"');
+    return false;
   }
 };
 
 /**
- * Creates a new key map.
+ * Sets the key map. Setting the key map will override any default key mappings.
  * @param {!Object<string, !Array<string>>} keyMap The object with key code to shortcut names.
- * // TODO: Should this just merge two objects together?
  * @public
  */
 Blockly.KeyboardShortcutRegistry.prototype.setKeyMap = function(keyMap) {
@@ -183,6 +190,7 @@ Blockly.KeyboardShortcutRegistry.prototype.getKeyMap = function() {
  * Gets the registry of keyboard shortcuts.
  * @return {!Object<string, !Blockly.KeyboardShortcutRegistry.KeyboardShortcut>} The registry of
  *     keyboard shortcuts.
+ * @public
  */
 Blockly.KeyboardShortcutRegistry.prototype.getRegistry = function() {
   var registry = {};
@@ -192,13 +200,13 @@ Blockly.KeyboardShortcutRegistry.prototype.getRegistry = function() {
 
 /**
  * Handles key down events.
- * @param {!Blockly.Workspace} workspace The main workspace when the event was captured.
+ * @param {!Blockly.Workspace} workspace The main workspace where the event was captured.
  * @param {!Event} e The key down event.
  * @return {boolean} True if the event was handled, false otherwise.
  * @public
  */
 Blockly.KeyboardShortcutRegistry.prototype.onKeyDown = function(workspace, e) {
-  var key = this.serializeKeyEvent(e);
+  var key = this.serializeKeyEvent_(e);
   var shortcutNames = this.getKeyboardShortcuts(key);
   if (!shortcutNames) {
     return false;
@@ -218,8 +226,8 @@ Blockly.KeyboardShortcutRegistry.prototype.onKeyDown = function(workspace, e) {
 /**
  * Gets the shortcuts registered to the given key code.
  * @param {string} keyCode The serialized key code.
- * @return {!Array<string>|undefined} The list of
- *     shortcuts to call when the given keyCode is used. Undefined if no shortcuts exist.
+ * @return {!Array<string>|undefined} The list of shortcuts to call when the given keyCode is used.
+ *     Undefined if no shortcuts exist.
  * @public
  */
 Blockly.KeyboardShortcutRegistry.prototype.getKeyboardShortcuts = function(keyCode) {
@@ -227,13 +235,12 @@ Blockly.KeyboardShortcutRegistry.prototype.getKeyboardShortcuts = function(keyCo
 };
 
 /**
- * Gets the serialized key codes that the shortcut is registered under.
+ * Gets the serialized key codes that the shortcut with the given name is registered under.
  * @param {string} shortcutName The name of the shortcut.
  * @return {!Array<string>} An array with all the key codes the shortcut is registered under.
- * TODO: Go through all the comments in this file.
  * @public
  */
-Blockly.KeyboardShortcutRegistry.prototype.getKeysByShortcutName = function(shortcutName) {
+Blockly.KeyboardShortcutRegistry.prototype.getKeyCodeByShortcutName = function(shortcutName) {
   var keys = [];
   for (var keyCode in this.keyMap_) {
     var shortcuts = this.keyMap_[keyCode];
@@ -246,12 +253,12 @@ Blockly.KeyboardShortcutRegistry.prototype.getKeysByShortcutName = function(shor
 };
 
 /**
- * Serializes the key event.
- * @param {!Event} e A key up event holding the key code.
- * @return {string} A string containing the serialized key event.
- * @package
+ * Serializes a key event.
+ * @param {!Event} e A key down event.
+ * @return {string} The serialized key code for the given event.
+ * @private
  */
-Blockly.KeyboardShortcutRegistry.prototype.serializeKeyEvent = function(e) {
+Blockly.KeyboardShortcutRegistry.prototype.serializeKeyEvent_ = function(e) {
   var serializedKey = '';
   for (var modifier in Blockly.KeyboardShortcutRegistry.modifierKeys) {
     if (e.getModifierState(modifier)) {

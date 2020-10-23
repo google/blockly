@@ -528,7 +528,7 @@
         actionDiv.appendChild(labelDiv);
         keyMapDiv.appendChild(actionDiv);
 
-        var actionKey = Blockly.KeyboardShortcutRegistry.registry.getKeysByShortcutName(action.name);
+        var actionKey = Blockly.KeyboardShortcutRegistry.registry.getKeyCodeByShortcutName(action.name);
         createDropdowns(action, actionKey[0], actionDiv);
       }
     }

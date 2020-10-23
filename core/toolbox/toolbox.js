@@ -34,6 +34,7 @@ goog.requireType('Blockly.ISelectableToolboxItem');
 goog.requireType('Blockly.IStyleable');
 goog.requireType('Blockly.IToolbox');
 goog.requireType('Blockly.IToolboxItem');
+goog.requireType('Blockly.KeyboardShortcutRegistry');
 goog.requireType('Blockly.WorkspaceSvg');
 
 

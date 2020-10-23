@@ -70,8 +70,6 @@ Blockly.navigation.currentState_ = Blockly.navigation.STATE_WS;
 /**
  * Object holding default action names.
  * @enum {string}
- * TODO: Figure out what I am doing with these names? I think I should keep, but should I also create
- * TODO: names for the default items?
  */
 Blockly.navigation.actionNames = {
   PREVIOUS: 'previous',
@@ -809,6 +807,7 @@ Blockly.navigation.handleEnterForWS_ = function(workspace) {
 
 /** Keyboard shortcut to go to the previous location when in keyboard navigation mode. */
 Blockly.navigation.registerPrevious = function() {
+  /** @type {!Blockly.KeyboardShortcutRegistry.KeyboardShortcut} */
   var previousShortcut = {
     name: Blockly.navigation.actionNames.PREVIOUS,
     preconditionFn: function(workspace) {
@@ -838,6 +837,7 @@ Blockly.navigation.registerPrevious = function() {
 
 /** Keyboard shortcut to go to the out location when in keyboard navigation mode. */
 Blockly.navigation.registerOut = function() {
+  /** @type {!Blockly.KeyboardShortcutRegistry.KeyboardShortcut} */
   var outShortcut = {
     name: Blockly.navigation.actionNames.OUT,
     preconditionFn: function(workspace) {
@@ -867,6 +867,7 @@ Blockly.navigation.registerOut = function() {
 
 /** Keyboard shortcut to go to the next location when in keyboard navigation mode. */
 Blockly.navigation.registerNext = function() {
+  /** @type {!Blockly.KeyboardShortcutRegistry.KeyboardShortcut} */
   var nextShortcut = {
     name: Blockly.navigation.actionNames.NEXT,
     preconditionFn: function(workspace) {
@@ -896,6 +897,7 @@ Blockly.navigation.registerNext = function() {
 
 /** Keyboard shortcut to go to the in location when in keyboard navigation mode. */
 Blockly.navigation.registerIn = function() {
+  /** @type {!Blockly.KeyboardShortcutRegistry.KeyboardShortcut} */
   var inShortcut = {
     name: Blockly.navigation.actionNames.IN,
     preconditionFn: function(workspace) {
@@ -926,6 +928,7 @@ Blockly.navigation.registerIn = function() {
 
 /** Keyboard shortcut to connect a block to a marked location when in keyboard navigation mode. */
 Blockly.navigation.registerInsert = function() {
+  /** @type {!Blockly.KeyboardShortcutRegistry.KeyboardShortcut} */
   var insertShortcut = {
     name: Blockly.navigation.actionNames.INSERT,
     preconditionFn: function(workspace) {
@@ -934,8 +937,7 @@ Blockly.navigation.registerInsert = function() {
     callback: function() {
       switch (Blockly.navigation.currentState_) {
         case Blockly.navigation.STATE_WS:
-          Blockly.navigation.modify_();
-          return true;
+          return Blockly.navigation.modify_();
         default:
           return false;
       }
@@ -949,6 +951,7 @@ Blockly.navigation.registerInsert = function() {
 
 /** Keyboard shortcut to mark a location when in keyboard navigation mode. */
 Blockly.navigation.registerMark = function() {
+  /** @type {!Blockly.KeyboardShortcutRegistry.KeyboardShortcut} */
   var markShortcut = {
     name: Blockly.navigation.actionNames.MARK,
     preconditionFn: function(workspace) {
@@ -975,6 +978,7 @@ Blockly.navigation.registerMark = function() {
 
 /** Keyboard shortcut to disconnect two blocks when in keyboard navigation mode. */
 Blockly.navigation.registerDisconnect = function() {
+  /** @type {!Blockly.KeyboardShortcutRegistry.KeyboardShortcut} */
   var disconnectShortcut = {
     name: Blockly.navigation.actionNames.DISCONNECT,
     preconditionFn: function(workspace) {
@@ -997,7 +1001,8 @@ Blockly.navigation.registerDisconnect = function() {
 };
 
 /** Keyboard shortcut to focus on the toolbox when in keyboard navigation mode. */
-Blockly.navigation.registerToolbox = function() {
+Blockly.navigation.registerToolboxFocus = function() {
+  /** @type {!Blockly.KeyboardShortcutRegistry.KeyboardShortcut} */
   var focusToolboxShortcut = {
     name: Blockly.navigation.actionNames.TOOLBOX,
     preconditionFn: function(workspace) {
@@ -1023,8 +1028,9 @@ Blockly.navigation.registerToolbox = function() {
       Blockly.utils.KeyCodes.T, focusToolboxShortcut.name);
 };
 
-/** Keyboard shortcut to exit the current location and focus on the workspace. */
+/** Keyboard shortcut to exit the current location and focus on the workspace when in keyboard navigation mode. */
 Blockly.navigation.registerExit = function() {
+  /** @type {!Blockly.KeyboardShortcutRegistry.KeyboardShortcut} */
   var exitShortcut = {
     name: Blockly.navigation.actionNames.EXIT,
     preconditionFn: function(workspace) {
@@ -1053,6 +1059,7 @@ Blockly.navigation.registerExit = function() {
 
 /** Keyboard shortcut to turn keyboard navigation on or off. */
 Blockly.navigation.registerToggleKeyboardNav = function() {
+  /** @type {!Blockly.KeyboardShortcutRegistry.KeyboardShortcut} */
   var toggleKeyboardNavShortcut = {
     name: Blockly.navigation.actionNames.TOGGLE_KEYBOARD_NAV,
     callback: function(workspace) {
@@ -1073,8 +1080,9 @@ Blockly.navigation.registerToggleKeyboardNav = function() {
       ctrlShiftK, toggleKeyboardNavShortcut.name);
 };
 
-/** Keyboard shortcut to move the cursor on the workspace to the left. */
+/** Keyboard shortcut to move the cursor on the workspace to the left when in keyboard navigation mode. */
 Blockly.navigation.registerWorkspaceMoveLeft = function() {
+  /** @type {!Blockly.KeyboardShortcutRegistry.KeyboardShortcut} */
   var wsMoveLeftShortcut = {
     name: Blockly.navigation.actionNames.MOVE_WS_CURSOR_LEFT,
     preconditionFn: function(workspace) {
@@ -1091,8 +1099,9 @@ Blockly.navigation.registerWorkspaceMoveLeft = function() {
   Blockly.KeyboardShortcutRegistry.registry.addKeyMapping(shiftA, wsMoveLeftShortcut.name);
 };
 
-/** Keyboard shortcut to move the cursor on the workspace to the right. */
+/** Keyboard shortcut to move the cursor on the workspace to the right when in keyboard navigation mode. */
 Blockly.navigation.registerWorkspaceMoveRight = function() {
+  /** @type {!Blockly.KeyboardShortcutRegistry.KeyboardShortcut} */
   var wsMoveRightShortcut = {
     name: Blockly.navigation.actionNames.MOVE_WS_CURSOR_RIGHT,
     preconditionFn: function(workspace) {
@@ -1109,8 +1118,9 @@ Blockly.navigation.registerWorkspaceMoveRight = function() {
   Blockly.KeyboardShortcutRegistry.registry.addKeyMapping(shiftD, wsMoveRightShortcut.name);
 };
 
-/** Keyboard shortcut to move the cursor on the workspace up. */
+/** Keyboard shortcut to move the cursor on the workspace up when in keyboard navigation mode. */
 Blockly.navigation.registerWorkspaceMoveUp = function() {
+  /** @type {!Blockly.KeyboardShortcutRegistry.KeyboardShortcut} */
   var wsMoveUpShortcut = {
     name: Blockly.navigation.actionNames.MOVE_WS_CURSOR_UP,
     preconditionFn: function(workspace) {
@@ -1127,8 +1137,9 @@ Blockly.navigation.registerWorkspaceMoveUp = function() {
   Blockly.KeyboardShortcutRegistry.registry.addKeyMapping(shiftW, wsMoveUpShortcut.name);
 };
 
-/** Keyboard shortcut to move the cursor on the workspace down. */
+/** Keyboard shortcut to move the cursor on the workspace down when in keyboard navigation mode. */
 Blockly.navigation.registerWorkspaceMoveDown = function() {
+  /** @type {!Blockly.KeyboardShortcutRegistry.KeyboardShortcut} */
   var wsMoveDownShortcut = {
     name: Blockly.navigation.actionNames.MOVE_WS_CURSOR_DOWN,
     preconditionFn: function(workspace) {
@@ -1146,7 +1157,7 @@ Blockly.navigation.registerWorkspaceMoveDown = function() {
 };
 
 /**
- * Registers all default keyboard shortcut item for keyboard navigation. This should be called once
+ * Registers all default keyboard shortcut items for keyboard navigation. This should be called once
  * per instance of KeyboardShortcutRegistry.
  * @package
  */
@@ -1166,5 +1177,5 @@ Blockly.navigation.registerNavigationShortcuts = function() {
   Blockly.navigation.registerInsert();
   Blockly.navigation.registerMark();
   Blockly.navigation.registerToggleKeyboardNav();
-  Blockly.navigation.registerToolbox();
+  Blockly.navigation.registerToolboxFocus();
 };

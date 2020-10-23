@@ -22,19 +22,36 @@ suite('Keyboard Shortcut Registry Test', function() {
       var shortcut = this.registry.registry_['test_action'];
       chai.assert.equal(shortcut.name, 'test_action');
     });
-    test('Registers colliding shortcut - opt_allowOverrides = true', function() {
+    test('Registers shortcut with same name', function() {
+      var registry = this.registry;
       var testShortcut = {
         'name': 'test_shortcut'
       };
-      var otherTestShortcut = {
-        'name': 'test_shortcut_2'
+
+      registry.registry_['test_shortcut'] = [testShortcut];
+
+      var shouldThrow = function() {
+        registry.register(testShortcut);
       };
-      this.registry.registry_['test'] = [otherTestShortcut];
-      this.registry.register(testShortcut, true);
-      var shortcuts = this.registry.registry_['test'];
-      chai.assert.equal(shortcuts.length, 2);
-      chai.assert.equal(shortcuts[0].name, 'test_shortcut');
-      chai.assert.equal(shortcuts[1].name, 'test_shortcut_2');
+      chai.assert.throws(shouldThrow, Error, 'Shortcut with name "test_shortcut" already exists.');
+    });
+    test('Registers shortcut with same name opt_allowOverrides=true', function() {
+      var registry = this.registry;
+      var testShortcut = {
+        'name': 'test_shortcut'
+      };
+      var otherShortcut = {
+        'name': 'test_shortcut',
+        'callback': function() {}
+      };
+
+      registry.registry_['test_shortcut'] = [testShortcut];
+
+      var shouldNotThrow = function() {
+        registry.register(otherShortcut, true);
+      };
+      chai.assert.doesNotThrow(shouldNotThrow);
+      chai.assert.exists(registry.registry_['test_shortcut'].callback);
     });
   });
 
@@ -52,24 +69,19 @@ suite('Keyboard Shortcut Registry Test', function() {
       chai.assert.isUndefined(this.registry.registry_['test']);
 
       var registry = this.registry;
-      var shouldThrow = function() {
-        registry.unregister('test', 'test_action');
-      };
-
-      chai.assert.throws(shouldThrow, Error, 'Keyboard shortcut with name "test_action" not found.');
+      chai.assert.isFalse(registry.unregister('test', 'test_action'));
     });
-    test('Unregistering a colliding shortcut', function() {
+    test('Unregistering a shortcut with key mappings', function() {
       var testShortcut = {
         'name': 'test_shortcut'
       };
-      var otherTestShortcut = {
-        'name': 'test_shortcut_2'
-      };
-      this.registry.registry_['test'] = [testShortcut, otherTestShortcut];
-      this.registry.unregister('test', 'test_shortcut');
+      this.registry.keyMap_['keyCode'] = ['test_shortcut'];
+      this.registry.registry_['test_shortcut'] = testShortcut;
+      this.registry.unregister('test_shortcut');
       var shortcuts = this.registry.registry_['test'];
-      chai.assert.equal(shortcuts.length, 1);
-      chai.assert.equal(shortcuts[0].name, 'test_shortcut_2');
+      var keyMappings = this.registry.keyMap_['keyCode'];
+      chai.assert.isUndefined(shortcuts);
+      chai.assert.isUndefined(keyMappings);
     });
   });
 
@@ -81,28 +93,25 @@ suite('Keyboard Shortcut Registry Test', function() {
 
     test('Serialize key code and modifier', function() {
       var serializedKey = this.registry.createSerializedKey(
-          Blockly.utils.KeyCodes.A, [Blockly.KeyboardShortcutRegistry.modifierKeys.CONTROL]);
+          Blockly.utils.KeyCodes.A, [Blockly.utils.KeyCodes.CTRL]);
       chai.assert.equal(serializedKey, 'Control+65');
     });
     test('Serialize only a modifier', function() {
       var serializedKey = this.registry.createSerializedKey(
-          null, [Blockly.KeyboardShortcutRegistry.modifierKeys.CONTROL]);
+          null, [Blockly.utils.KeyCodes.CTRL]);
       chai.assert.equal(serializedKey, 'Control');
     });
     test('Serialize multiple modifiers', function() {
       var serializedKey = this.registry.createSerializedKey(
-          null, [Blockly.KeyboardShortcutRegistry.modifierKeys.CONTROL,
-            Blockly.KeyboardShortcutRegistry.modifierKeys.SHIFT]);
+          null, [Blockly.utils.KeyCodes.CTRL, Blockly.utils.KeyCodes.SHIFT]);
       chai.assert.equal(serializedKey, 'Shift+Control');
     });
     test('Order of modifiers should result in same serialized key', function() {
       var serializedKey = this.registry.createSerializedKey(
-          null, [Blockly.KeyboardShortcutRegistry.modifierKeys.CONTROL,
-            Blockly.KeyboardShortcutRegistry.modifierKeys.SHIFT]);
+          null, [Blockly.utils.KeyCodes.CTRL, Blockly.utils.KeyCodes.SHIFT]);
       chai.assert.equal(serializedKey, 'Shift+Control');
       var serializedKeyNewOrder = this.registry.createSerializedKey(
-          null, [Blockly.KeyboardShortcutRegistry.modifierKeys.SHIFT,
-            Blockly.KeyboardShortcutRegistry.modifierKeys.CONTROL]);
+          null, [Blockly.utils.KeyCodes.SHIFT, Blockly.utils.KeyCodes.CTRL]);
       chai.assert.equal(serializedKeyNewOrder, 'Shift+Control');
     });
   });
@@ -110,22 +119,22 @@ suite('Keyboard Shortcut Registry Test', function() {
   suite('serializeKeyEvent', function() {
     test('Serialize key', function() {
       var mockEvent = createKeyDownEvent(Blockly.utils.KeyCodes.A, '');
-      var serializedKey = this.registry.serializeKeyEvent(mockEvent);
+      var serializedKey = this.registry.serializeKeyEvent_(mockEvent);
       chai.assert.equal(serializedKey, '65');
     });
     test('Serialize key code and modifier', function() {
       var mockEvent = createKeyDownEvent(Blockly.utils.KeyCodes.A, '', [Blockly.utils.KeyCodes.CTRL]);
-      var serializedKey = this.registry.serializeKeyEvent(mockEvent);
+      var serializedKey = this.registry.serializeKeyEvent_(mockEvent);
       chai.assert.equal(serializedKey, 'Control+65');
     });
     test('Serialize only a modifier', function() {
       var mockEvent = createKeyDownEvent(null, '', [Blockly.utils.KeyCodes.CTRL]);
-      var serializedKey = this.registry.serializeKeyEvent(mockEvent);
+      var serializedKey = this.registry.serializeKeyEvent_(mockEvent);
       chai.assert.equal(serializedKey, 'Control');
     });
     test('Serialize multiple modifiers', function() {
       var mockEvent = createKeyDownEvent(null, '', [Blockly.utils.KeyCodes.CTRL, Blockly.utils.KeyCodes.SHIFT]);
-      var serializedKey = this.registry.serializeKeyEvent(mockEvent);
+      var serializedKey = this.registry.serializeKeyEvent_(mockEvent);
       chai.assert.equal(serializedKey, 'Shift+Control');
     });
     test('Throw error when incorrect modifier', function() {

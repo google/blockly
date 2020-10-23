@@ -20,7 +20,7 @@ goog.require('Blockly.constants');
 goog.require('Blockly.Events');
 goog.require('Blockly.Events.Ui');
 goog.require('Blockly.inject');
-goog.require('Blockly.navigation');
+goog.require('Blockly.KeyboardShortcutRegistry');
 goog.require('Blockly.Procedures');
 goog.require('Blockly.Tooltip');
 goog.require('Blockly.Touch');
@@ -31,7 +31,6 @@ goog.require('Blockly.Variables');
 goog.require('Blockly.WidgetDiv');
 goog.require('Blockly.WorkspaceSvg');
 goog.require('Blockly.Xml');
-goog.require('Blockly.KeyboardShortcutRegistry');
 
 
 /**
@@ -193,7 +192,6 @@ Blockly.deleteBlock = function(selected) {
   if (!selected.workspace.isFlyout) {
     Blockly.Events.setGroup(true);
     Blockly.hideChaff();
-    // TODO: What to do about this type? It should technically be a Block but this function uses BlockSvg dispose?
     selected.dispose(/* heal */ true, true);
     Blockly.Events.setGroup(false);
   }

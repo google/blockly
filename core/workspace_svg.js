@@ -1106,14 +1106,16 @@ Blockly.WorkspaceSvg.prototype.getParentSvg = function() {
  * @package
  */
 Blockly.WorkspaceSvg.prototype.maybeFireViewportChangeEvent = function() {
-  // TODO(#4203) Enable viewport events after ui events refactor.
   if (!Blockly.Events.isEnabled()) {
     return;
   }
   var scale = this.scale;
   var top = -this.scrollY;
   var left = -this.scrollX;
-  if (scale == this.oldScale_ && top == this.oldTop_ && left == this.oldLeft_) {
+  if (scale == this.oldScale_ &&
+      Math.abs(top - this.oldTop_) < 1 &&
+      Math.abs(left - this.oldLeft_) < 1) {
+    // Ignore sub-pixel changes in top and left.
     return;
   }
   this.oldScale_ = scale;

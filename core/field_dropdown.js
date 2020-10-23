@@ -747,12 +747,15 @@ Blockly.FieldDropdown.validateOptions_ = function(options) {
  */
 Blockly.FieldDropdown.prototype.onBlocklyAction = function(action) {
   if (this.menu_) {
-    if (action === Blockly.navigation.ACTION_PREVIOUS) {
-      this.menu_.highlightPrevious();
-      return true;
-    } else if (action === Blockly.navigation.ACTION_NEXT) {
-      this.menu_.highlightNext();
-      return true;
+    switch (action.name) {
+      case Blockly.navigation.actionNames.PREVIOUS:
+        this.menu_.highlightPrevious();
+        return true;
+      case Blockly.navigation.actionNames.NEXT:
+        this.menu_.highlightNext();
+        return true;
+      default:
+        return false;
     }
   }
   return Blockly.FieldDropdown.superClass_.onBlocklyAction.call(this, action);

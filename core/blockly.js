@@ -186,13 +186,14 @@ Blockly.onKeyDown = function(e) {
 
 /**
  * Delete the given block.
- * @param {!Blockly.Block} selected The block to delete.
+ * @param {!Blockly.BlockSvg} selected The block to delete.
  * @package
  */
 Blockly.deleteBlock = function(selected) {
   if (!selected.workspace.isFlyout) {
     Blockly.Events.setGroup(true);
     Blockly.hideChaff();
+    // TODO: What to do about this type? It should technically be a Block but this function uses BlockSvg dispose?
     selected.dispose(/* heal */ true, true);
     Blockly.Events.setGroup(false);
   }
@@ -201,15 +202,40 @@ Blockly.deleteBlock = function(selected) {
 /**
  * Copy a block or workspace comment onto the local clipboard.
  * @param {!Blockly.ICopyable} toCopy Block or Workspace Comment to be copied.
- * @private
+ * @package
  */
-Blockly.copy_ = function(toCopy) {
+Blockly.copy = function(toCopy) {
   var data = toCopy.toCopyData();
   if (data) {
     Blockly.clipboardXml_ = data.xml;
     Blockly.clipboardSource_ = data.source;
     Blockly.clipboardTypeCounts_ = data.typeCounts;
   }
+};
+
+/**
+ * Paste a block or workspace comment on to the main workspace.
+ * @return {boolean} True if the paste was successful, false otherwise.
+ * @package
+ */
+Blockly.paste = function() {
+  if (!Blockly.clipboardXml_) {
+    return false;
+  }
+  // Pasting always pastes to the main workspace, even if the copy
+  // started in a flyout workspace.
+  var workspace = Blockly.clipboardSource_;
+  if (workspace.isFlyout) {
+    workspace = workspace.targetWorkspace;
+  }
+  if (Blockly.clipboardTypeCounts_ &&
+      workspace.isCapacityAvailable(Blockly.clipboardTypeCounts_)) {
+    Blockly.Events.setGroup(true);
+    workspace.paste(Blockly.clipboardXml_);
+    Blockly.Events.setGroup(false);
+    return true;
+  }
+  return false;
 };
 
 /**
@@ -224,7 +250,7 @@ Blockly.duplicate = function(toDuplicate) {
   var clipboardSource = Blockly.clipboardSource_;
 
   // Create a duplicate via a copy/paste operation.
-  Blockly.copy_(toDuplicate);
+  Blockly.copy(toDuplicate);
   toDuplicate.workspace.paste(Blockly.clipboardXml_);
 
   // Restore the clipboard.

@@ -392,18 +392,21 @@ Blockly.FieldColour.prototype.onKeyDown_ = function(e) {
  */
 Blockly.FieldColour.prototype.onBlocklyAction = function(action) {
   if (this.picker_) {
-    if (action === Blockly.navigation.ACTION_PREVIOUS) {
-      this.moveHighlightBy_(0, -1);
-      return true;
-    } else if (action === Blockly.navigation.ACTION_NEXT) {
-      this.moveHighlightBy_(0, 1);
-      return true;
-    } else if (action === Blockly.navigation.ACTION_OUT) {
-      this.moveHighlightBy_(-1, 0);
-      return true;
-    } else if (action === Blockly.navigation.ACTION_IN) {
-      this.moveHighlightBy_(1, 0);
-      return true;
+    switch (action.name) {
+      case Blockly.navigation.actionNames.PREVIOUS:
+        this.moveHighlightBy_(0, -1);
+        return true;
+      case Blockly.navigation.actionNames.NEXT:
+        this.moveHighlightBy_(0, 1);
+        return true;
+      case Blockly.navigation.actionNames.OUT:
+        this.moveHighlightBy_(-1, 0);
+        return true;
+      case Blockly.navigation.actionNames.IN:
+        this.moveHighlightBy_(1, 0);
+        return true;
+      default:
+        return false;
     }
   }
   return Blockly.FieldColour.superClass_.onBlocklyAction.call(this, action);

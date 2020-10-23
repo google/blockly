@@ -23,7 +23,6 @@ goog.require('Blockly.utils.object');
  * not create a new instance, and only access this class from
  * Blockly.KeyboardShortcutRegistry.registry.
  * @constructor
- * TODO: How is this not a circular dependency with KeyboardShortcutItems?
  */
 Blockly.KeyboardShortcutRegistry = function() {
 
@@ -38,7 +37,7 @@ Blockly.KeyboardShortcutRegistry = function() {
   this.registry_ = {};
 
   /**
-   * Registry of keyboard shortcut names, keyed by serialized key code.
+   * Map of key codes to an array of shortcut names.
    * @type {!Object<string, !Array<string>>}
    * @private
    */
@@ -50,24 +49,25 @@ Blockly.KeyboardShortcutRegistry = function() {
 
 /**
  * Enum of valid modifiers.
- * @enum {string}
- * TODO: Should this just be the keyCode? Instead of them having to use a name?
+ * TODO: Should I have changed this from strings to key codes? Maybe something wrong with international keyboards?
+ * @enum {!Blockly.utils.KeyCodes<number>}
  */
 Blockly.KeyboardShortcutRegistry.modifierKeys = {
-  SHIFT: 'Shift',
-  CONTROL: 'Control',
-  ALT: 'Alt',
-  META: 'Meta'
+  Shift: Blockly.utils.KeyCodes.SHIFT,
+  Control: Blockly.utils.KeyCodes.CTRL,
+  Alt: Blockly.utils.KeyCodes.ALT,
+  Meta: Blockly.utils.KeyCodes.META
 };
 
 /**
  * A keyboard shortcut.
  * @typedef {{
- *    callback: function(!Blockly.Workspace, !Blockly.KeyboardShortcutRegistry.KeyboardShortcut),
+ *    callback: ?function(!Blockly.Workspace, Event, !Blockly.KeyboardShortcutRegistry.KeyboardShortcut):boolean,
  *    name: string,
- *    preconditionFn: function(!Blockly.Workspace):boolean,
- *    metadata: Object
+ *    preconditionFn: ?function(!Blockly.Workspace):boolean,
+ *    metadata: ?Object
  * }}
+ * TODO: Should we make an action that only has a name on it? Then we could use that in the onBlocklyAction?
 */
 Blockly.KeyboardShortcutRegistry.KeyboardShortcut;
 
@@ -160,6 +160,7 @@ Blockly.KeyboardShortcutRegistry.prototype.removeKeyMapping = function(
 /**
  * Creates a new key map.
  * @param {!Object<string, !Array<string>>} keyMap The object with key code to shortcut names.
+ * // TODO: Should this just merge two objects together?
  * @public
  */
 Blockly.KeyboardShortcutRegistry.prototype.setKeyMap = function(keyMap) {
@@ -168,7 +169,7 @@ Blockly.KeyboardShortcutRegistry.prototype.setKeyMap = function(keyMap) {
 
 /**
  * Gets the current key map.
- * @return {Object<string,!Array<!Blockly.KeyboardShortcutRegistry.KeyboardShortcut>>} The object
+ * @return {!Object<string,!Array<!Blockly.KeyboardShortcutRegistry.KeyboardShortcut>>} The object
  *     holding key codes to Blockly.KeyboardShortcutRegistry.KeyboardShortcut.
  * @public
  */
@@ -206,7 +207,7 @@ Blockly.KeyboardShortcutRegistry.prototype.onKeyDown = function(workspace, e) {
     var shortcut = this.registry_[shortcutName];
     if (!shortcut.preconditionFn || shortcut.preconditionFn(workspace)) {
       // If the key has been handled, stop processing shortcuts.
-      if (shortcut.callback(workspace, e, shortcut)) {
+      if (shortcut.callback && shortcut.callback(workspace, e, shortcut)) {
         return true;
       }
     }
@@ -217,7 +218,7 @@ Blockly.KeyboardShortcutRegistry.prototype.onKeyDown = function(workspace, e) {
 /**
  * Gets the shortcuts registered to the given key code.
  * @param {string} keyCode The serialized key code.
- * @return {!Array<!Blockly.KeyboardShortcutRegistry.KeyboardShortcut>|undefined} The list of
+ * @return {!Array<string>|undefined} The list of
  *     shortcuts to call when the given keyCode is used. Undefined if no shortcuts exist.
  * @public
  */
@@ -227,9 +228,9 @@ Blockly.KeyboardShortcutRegistry.prototype.getKeyboardShortcuts = function(keyCo
 
 /**
  * Gets the serialized key codes that the shortcut is registered under.
- * @param {!Blockly.KeyboardShortcutRegistry.KeyboardShortcut} shortcutName The name of the
- *     shortcut.
+ * @param {string} shortcutName The name of the shortcut.
  * @return {!Array<string>} An array with all the key codes the shortcut is registered under.
+ * TODO: Go through all the comments in this file.
  * @public
  */
 Blockly.KeyboardShortcutRegistry.prototype.getKeysByShortcutName = function(shortcutName) {
@@ -246,14 +247,13 @@ Blockly.KeyboardShortcutRegistry.prototype.getKeysByShortcutName = function(shor
 
 /**
  * Serializes the key event.
- * @param {!KeyboardEvent} e A key up event holding the key code.
+ * @param {!Event} e A key up event holding the key code.
  * @return {string} A string containing the serialized key event.
  * @package
  */
 Blockly.KeyboardShortcutRegistry.prototype.serializeKeyEvent = function(e) {
-  var modifiers = Blockly.utils.object.values(Blockly.KeyboardShortcutRegistry.modifierKeys);
   var serializedKey = '';
-  for (var i = 0, modifier; (modifier = modifiers[i]); i++) {
+  for (var modifier in Blockly.KeyboardShortcutRegistry.modifierKeys) {
     if (e.getModifierState(modifier)) {
       if (serializedKey != '') {
         serializedKey += '+';
@@ -264,19 +264,19 @@ Blockly.KeyboardShortcutRegistry.prototype.serializeKeyEvent = function(e) {
   if (serializedKey != '' && e.keyCode) {
     serializedKey = serializedKey + '+' + e.keyCode;
   } else if (e.keyCode) {
-    serializedKey = e.keyCode;
+    serializedKey = e.keyCode.toString();
   }
   return serializedKey;
 };
 
 /**
  * Checks whether any of the given modifiers are not valid.
- * @param {!Array.<string>} modifiers List of modifiers to be used with the key.
- * @param {!Array.<string>} validModifiers List of modifiers we support.
+ * @param {!Array<string>} modifiers List of modifiers to be used with the key.
  * @throws {Error} if the modifier is not in the valid modifiers list.
  * @private
  */
-Blockly.KeyboardShortcutRegistry.prototype.checkModifiers_ = function(modifiers, validModifiers) {
+Blockly.KeyboardShortcutRegistry.prototype.checkModifiers_ = function(modifiers) {
+  var validModifiers = Blockly.utils.object.values(Blockly.KeyboardShortcutRegistry.modifierKeys);
   for (var i = 0, modifier; (modifier = modifiers[i]); i++) {
     if (validModifiers.indexOf(modifier) < 0) {
       throw Error(modifier + ' is not a valid modifier key.');
@@ -287,22 +287,23 @@ Blockly.KeyboardShortcutRegistry.prototype.checkModifiers_ = function(modifiers,
 /**
  * Creates the serialized key code that will be used in the key map.
  * @param {number} keyCode Number code representing the key.
- * @param {Array.<string>} modifiers List of modifiers to be used with the key.
+ * @param {?Array.<string>} modifiers List of modifier key codes to be used with the key.
  *     All valid modifiers can be found in the Blockly.KeyboardShortcutRegistry.modifierKeys.
  * @return {string} The serialized key code for the given modifiers and key.
  * @public
  */
 Blockly.KeyboardShortcutRegistry.prototype.createSerializedKey = function(keyCode, modifiers) {
   var serializedKey = '';
-  var validModifiers = Blockly.utils.object.values(Blockly.KeyboardShortcutRegistry.modifierKeys);
+
   if (modifiers) {
-    this.checkModifiers_(modifiers, validModifiers);
-    for (var i = 0, validModifier; (validModifier = validModifiers[i]); i++) {
-      if (modifiers.indexOf(validModifier) > -1) {
+    this.checkModifiers_(modifiers);
+    for (var modifier in Blockly.KeyboardShortcutRegistry.modifierKeys) {
+      var modifierKeyCode = Blockly.KeyboardShortcutRegistry.modifierKeys[modifier];
+      if (modifiers.indexOf(modifierKeyCode) > -1) {
         if (serializedKey != '') {
           serializedKey += '+';
         }
-        serializedKey += validModifier;
+        serializedKey += modifier;
       }
     }
   }
@@ -310,7 +311,7 @@ Blockly.KeyboardShortcutRegistry.prototype.createSerializedKey = function(keyCod
   if (serializedKey != '' && keyCode) {
     serializedKey = serializedKey + '+' + keyCode;
   } else if (keyCode) {
-    serializedKey = keyCode;
+    serializedKey = keyCode.toString();
   }
   return serializedKey;
 };

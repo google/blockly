@@ -16,7 +16,7 @@ goog.provide('Blockly.Mutator');
 goog.require('Blockly.Bubble');
 goog.require('Blockly.Events');
 goog.require('Blockly.Events.BlockChange');
-goog.require('Blockly.Events.OldUi');
+goog.require('Blockly.Events.BubbleOpen');
 goog.require('Blockly.Icon');
 goog.require('Blockly.navigation');
 goog.require('Blockly.utils');
@@ -286,7 +286,7 @@ Blockly.Mutator.prototype.setVisible = function(visible) {
     return;
   }
   Blockly.Events.fire(
-      new Blockly.Events.OldUi(this.block_, 'mutatorOpen', !visible, visible));
+      new Blockly.Events.BubbleOpen(this.block_, visible, 'mutator'));
   if (visible) {
     // Create the bubble.
     this.bubble_ = new Blockly.Bubble(

@@ -14,7 +14,7 @@ goog.provide('Blockly.Warning');
 
 goog.require('Blockly.Bubble');
 goog.require('Blockly.Events');
-goog.require('Blockly.Events.OldUi');
+goog.require('Blockly.Events.BubbleOpen');
 goog.require('Blockly.Icon');
 goog.require('Blockly.utils.dom');
 goog.require('Blockly.utils.object');
@@ -108,7 +108,7 @@ Blockly.Warning.prototype.setVisible = function(visible) {
     return;
   }
   Blockly.Events.fire(
-      new Blockly.Events.OldUi(this.block_, 'warningOpen', !visible, visible));
+      new Blockly.Events.BubbleOpen(this.block_, visible, 'warning'));
   if (visible) {
     this.createBubble();
   } else {

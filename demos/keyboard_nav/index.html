@@ -438,7 +438,7 @@
      * @package
      */
     function setModifiers(actionKey, modifierDropdowns) {
-      var modifiers = Blockly.utils.object.values(Blockly.KeyboardShortcutRegistry.modifierKeys);
+      var modifiers = Object.keys(Blockly.KeyboardShortcutRegistry.modifierKeys);
       for (var i = 0; i < 2; i++) {
         var modifierDropdown = modifierDropdowns[i];
         for (var j = 0, modifier; modifier = modifiers[j]; j++) {
@@ -498,7 +498,7 @@
      * @package
      */
     function createDropdowns(action, actionKey, actionDiv) {
-      var modifiers = ['None'].concat(Blockly.utils.object.values(Blockly.KeyboardShortcutRegistry.modifierKeys));
+      var modifiers = ['None'].concat(Object.keys(Blockly.KeyboardShortcutRegistry.modifierKeys));
       var keys = ['None', 'Enter', 'Escape'].concat("ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890".split(''));
       createDropdown(action, actionDiv, modifiers);
       createDropdown(action, actionDiv, modifiers);

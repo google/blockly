@@ -1,12 +1,12 @@
 /**
  * @license
- * Copyright 2018 Google LLC
+ * Copyright 2020 Google LLC
  * SPDX-License-Identifier: Apache-2.0
  */
 
 /**
- * @fileoverview Events fired as a result of UI actions in Blockly's editor.
- * @author fraser@google.com (Neil Fraser)
+ * @fileoverview Events fired as a block drag.
+ * @author kozbial@google.com (Monica Kozbial)
  */
 'use strict';
 

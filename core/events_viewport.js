@@ -19,11 +19,11 @@ goog.require('Blockly.utils.object');
 
 /**
  * Class for a viewport change event.
- * @param {Number=} opt_top Top-edge of the visible portion of the workspace,
+ * @param {number=} opt_top Top-edge of the visible portion of the workspace,
  *    relative to the workspace origin.
- * @param {Number=} opt_left Left-edge of the visible portion of the workspace,
+ * @param {number=} opt_left Left-edge of the visible portion of the workspace,
  *    relative to the workspace origin.
- * @param {Number=} opt_scale The scale of the workspace.
+ * @param {number=} opt_scale The scale of the workspace.
  * @param {string=} opt_workspaceId The workspace identifier for this event.
  * @extends {Blockly.Events.Ui}
  * @constructor

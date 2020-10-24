@@ -266,7 +266,9 @@ Blockly.Events.filter = function(queueIn, forward) {
   // Merge duplicates.
   for (var i = 0, event; (event = queue[i]); i++) {
     if (!event.isNull()) {
-      var key = [event.type, event.blockId, event.workspaceId].join(' ');
+      // Treat all ui events as the same type in has table.
+      var eventType = event.IS_UI_EVENT ? Blockly.Events.UI : event.type;
+      var key = [eventType, event.blockId, event.workspaceId].join(' ');
 
       var lastEntry = hash[key];
       var lastEvent = lastEntry ? lastEntry.event : null;
@@ -289,9 +291,7 @@ Blockly.Events.filter = function(queueIn, forward) {
         // Merge change events.
         lastEvent.newValue = event.newValue;
       } else if (event.type == Blockly.Events.CLICK &&
-          (lastEvent.element == 'commentOpen' ||
-           lastEvent.element == 'mutatorOpen' ||
-           lastEvent.element == 'warningOpen')) {
+          lastEvent.type == Blockly.Events.BUBBLE_OPEN) {
         // Drop click events caused by opening/closing bubbles.
       } else {
         // Collision: newer events should merge into this event to maintain

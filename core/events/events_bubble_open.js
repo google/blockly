@@ -13,7 +13,7 @@
 goog.provide('Blockly.Events.BubbleOpen');
 
 goog.require('Blockly.Events');
-goog.require('Blockly.Events.Ui');
+goog.require('Blockly.Events.UiBase');
 goog.require('Blockly.registry');
 goog.require('Blockly.utils.object');
 
@@ -24,7 +24,7 @@ goog.require('Blockly.utils.object');
  * @param {boolean=} opt_isOpen Whether the bubble is opening (false if closing).
  * @param {string=} opt_element The type of bubble. One of 'mutator', 'comment'
  *    or 'warning'
- * @extends {Blockly.Events.Ui}
+ * @extends {Blockly.Events.UiBase}
  * @constructor
  */
 Blockly.Events.BubbleOpen = function(opt_block, opt_isOpen, opt_element) {
@@ -44,7 +44,7 @@ Blockly.Events.BubbleOpen = function(opt_block, opt_isOpen, opt_element) {
    */
   this.element = opt_element;
 };
-Blockly.utils.object.inherits(Blockly.Events.BubbleOpen, Blockly.Events.Ui);
+Blockly.utils.object.inherits(Blockly.Events.BubbleOpen, Blockly.Events.UiBase);
 
 /**
  * Type of this event.

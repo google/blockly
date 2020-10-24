@@ -425,7 +425,7 @@ Blockly.ZoomControls.prototype.resetZoom_ = function(e) {
  * @private
  */
 Blockly.ZoomControls.prototype.fireZoomEvent_ = function(oldZoom) {
-  var uiEvent = new Blockly.Events.OldUi(null, 'zoom', oldZoom, this.workspace_.scale);
+  var uiEvent = new Blockly.Events.Ui(null, 'zoom', oldZoom, this.workspace_.scale);
   uiEvent.workspaceId = this.workspace_.id;
   Blockly.Events.fire(uiEvent);
 };

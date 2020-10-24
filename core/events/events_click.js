@@ -13,7 +13,7 @@
 goog.provide('Blockly.Events.Click');
 
 goog.require('Blockly.Events');
-goog.require('Blockly.Events.Ui');
+goog.require('Blockly.Events.UiBase');
 goog.require('Blockly.registry');
 goog.require('Blockly.utils.object');
 
@@ -25,7 +25,7 @@ goog.require('Blockly.utils.object');
  * @param {string=} opt_workspaceId The workspace identifier for this event.
  * @param {string=} opt_targetType The type of element targeted by this click
  *    event.
- * @extends {Blockly.Events.Ui}
+ * @extends {Blockly.Events.UiBase}
  * @constructor
  */
 Blockly.Events.Click = function(opt_block, opt_workspaceId, opt_targetType) {
@@ -43,7 +43,7 @@ Blockly.Events.Click = function(opt_block, opt_workspaceId, opt_targetType) {
    */
   this.targetType = opt_targetType;
 };
-Blockly.utils.object.inherits(Blockly.Events.Click, Blockly.Events.Ui);
+Blockly.utils.object.inherits(Blockly.Events.Click, Blockly.Events.UiBase);
 
 /**
  * Type of this event.

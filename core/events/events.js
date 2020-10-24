@@ -107,10 +107,10 @@ Blockly.Events.VAR_DELETE = 'var_delete';
 Blockly.Events.VAR_RENAME = 'var_rename';
 
 /**
- * Name of event that records a UI change.
+ * Name of generic event that records a UI change.
  * @const
  */
-Blockly.Events.UI = 'ui';  // TODO remove
+Blockly.Events.UI = 'ui';
 
 /**
  * Name of event that record a block drags a block.

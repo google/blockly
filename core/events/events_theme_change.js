@@ -13,7 +13,7 @@
 goog.provide('Blockly.Events.ThemeChange');
 
 goog.require('Blockly.Events');
-goog.require('Blockly.Events.Ui');
+goog.require('Blockly.Events.UiBase');
 goog.require('Blockly.registry');
 goog.require('Blockly.utils.object');
 
@@ -22,7 +22,7 @@ goog.require('Blockly.utils.object');
  * @param {string=} opt_themeName The theme name. Undefined for a blank event.
  * @param {string=} opt_workspaceId The workspace identifier for this event.
  *    event. Undefined for a blank event.
- * @extends {Blockly.Events.Ui}
+ * @extends {Blockly.Events.UiBase}
  * @constructor
  */
 Blockly.Events.ThemeChange = function(opt_themeName, opt_workspaceId) {
@@ -34,7 +34,7 @@ Blockly.Events.ThemeChange = function(opt_themeName, opt_workspaceId) {
    */
   this.themeName = opt_themeName;
 };
-Blockly.utils.object.inherits(Blockly.Events.ThemeChange, Blockly.Events.Ui);
+Blockly.utils.object.inherits(Blockly.Events.ThemeChange, Blockly.Events.UiBase);
 
 /**
  * Type of this event.

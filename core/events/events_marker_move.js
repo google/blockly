@@ -13,7 +13,7 @@
 goog.provide('Blockly.Events.MarkerMove');
 
 goog.require('Blockly.Events');
-goog.require('Blockly.Events.Ui');
+goog.require('Blockly.Events.UiBase');
 goog.require('Blockly.registry');
 goog.require('Blockly.utils.object');
 
@@ -27,7 +27,7 @@ goog.require('Blockly.utils.object');
  *    Undefined for a blank event.
  * @param {!Blockly.ASTNode=} opt_curNode The new node the marker is now on.
  *    Undefined for a blank event.
- * @extends {Blockly.Events.Ui}
+ * @extends {Blockly.Events.UiBase}
  * @constructor
  */
 Blockly.Events.MarkerMove = function(opt_block, isCursor, opt_oldNode,
@@ -63,7 +63,7 @@ Blockly.Events.MarkerMove = function(opt_block, isCursor, opt_oldNode,
    */
   this.isCursor = isCursor;
 };
-Blockly.utils.object.inherits(Blockly.Events.MarkerMove, Blockly.Events.Ui);
+Blockly.utils.object.inherits(Blockly.Events.MarkerMove, Blockly.Events.UiBase);
 
 /**
  * Type of this event.

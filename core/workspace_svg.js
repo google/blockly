@@ -1115,7 +1115,8 @@ Blockly.WorkspaceSvg.prototype.maybeFireViewportChangeEvent = function() {
   if (scale == this.oldScale_ &&
       Math.abs(top - this.oldTop_) < 1 &&
       Math.abs(left - this.oldLeft_) < 1) {
-    // Ignore sub-pixel changes in top and left.
+    // Ignore sub-pixel changes in top and left. Due to #4192 there are a lot of
+    // negligible changes in viewport top/left.
     return;
   }
   this.oldScale_ = scale;

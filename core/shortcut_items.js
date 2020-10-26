@@ -45,7 +45,6 @@ Blockly.ShortcutItems.registerEscape = function() {
       Blockly.hideChaff();
       return true;
     }
-    // TODO: Add meta data for keyboard shortcuts menu.
   };
   Blockly.ShortcutRegistry.registry.register(escapeAction);
   Blockly.ShortcutRegistry.registry.addKeyMapping(

@@ -64,5 +64,15 @@ Blockly.Events.Click.prototype.toJson = function() {
   return json;
 };
 
+/**
+ * Decode the JSON event.
+ * @param {!Object} json JSON representation.
+ */
+Blockly.Events.Click.prototype.fromJson = function(json) {
+  Blockly.Events.Click.superClass_.fromJson.call(this, json);
+  this.targetType = json['targetType'];
+  this.blockId = json['blockId'];
+};
+
 Blockly.registry.register(Blockly.registry.Type.EVENT, Blockly.Events.CLICK,
     Blockly.Events.Click);

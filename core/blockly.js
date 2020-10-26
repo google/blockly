@@ -20,8 +20,8 @@ goog.require('Blockly.constants');
 goog.require('Blockly.Events');
 goog.require('Blockly.Events.Ui');
 goog.require('Blockly.inject');
-goog.require('Blockly.navigation');
 goog.require('Blockly.Procedures');
+goog.require('Blockly.ShortcutRegistry');
 goog.require('Blockly.Tooltip');
 goog.require('Blockly.Touch');
 goog.require('Blockly.utils');
@@ -178,88 +178,20 @@ Blockly.onKeyDown = function(e) {
     return;
   }
 
-  if (mainWorkspace.options.readOnly) {
-    // When in read only mode handle key actions for keyboard navigation.
-    Blockly.navigation.onKeyPress(e);
+  if (Blockly.ShortcutRegistry.registry.onKeyDown(mainWorkspace, e)) {
     return;
   }
+};
 
-  var deleteBlock = false;
-  if (e.keyCode == Blockly.utils.KeyCodes.ESC) {
-    // Pressing esc closes the context menu.
-    Blockly.hideChaff();
-    Blockly.navigation.onBlocklyAction(Blockly.navigation.ACTION_EXIT);
-  } else if (!Blockly.Gesture.inProgress() && Blockly.navigation.onKeyPress(e)) {
-    // If the keyboard or field handled the key press return.
-    return;
-  } else if (e.keyCode == Blockly.utils.KeyCodes.BACKSPACE ||
-      e.keyCode == Blockly.utils.KeyCodes.DELETE) {
-    // Delete or backspace.
-    // Stop the browser from going back to the previous page.
-    // Do this first to prevent an error in the delete code from resulting in
-    // data loss.
-    e.preventDefault();
-    // Don't delete while dragging.  Jeez.
-    if (Blockly.Gesture.inProgress()) {
-      return;
-    }
-    if (Blockly.selected && Blockly.selected.isDeletable()) {
-      deleteBlock = true;
-    }
-  } else if (e.altKey || e.ctrlKey || e.metaKey) {
-    // Don't use meta keys during drags.
-    if (Blockly.Gesture.inProgress()) {
-      return;
-    }
-    if (Blockly.selected &&
-        Blockly.selected.isDeletable() && Blockly.selected.isMovable()) {
-      // Don't allow copying immovable or undeletable blocks. The next step
-      // would be to paste, which would create additional undeletable/immovable
-      // blocks on the workspace.
-      if (e.keyCode == Blockly.utils.KeyCodes.C) {
-        // 'c' for copy.
-        Blockly.hideChaff();
-        Blockly.copy_(Blockly.selected);
-      } else if (e.keyCode == Blockly.utils.KeyCodes.X &&
-          !Blockly.selected.workspace.isFlyout) {
-        // 'x' for cut, but not in a flyout.
-        // Don't even copy the selected item in the flyout.
-        Blockly.copy_(Blockly.selected);
-        deleteBlock = true;
-      }
-    }
-    if (e.keyCode == Blockly.utils.KeyCodes.V) {
-      // 'v' for paste.
-      if (Blockly.clipboardXml_) {
-        // Pasting always pastes to the main workspace, even if the copy
-        // started in a flyout workspace.
-        var workspace = Blockly.clipboardSource_;
-        if (workspace.isFlyout) {
-          workspace = workspace.targetWorkspace;
-        }
-        if (Blockly.clipboardTypeCounts_ &&
-            workspace.isCapacityAvailable(Blockly.clipboardTypeCounts_)) {
-          Blockly.Events.setGroup(true);
-          workspace.paste(Blockly.clipboardXml_);
-          Blockly.Events.setGroup(false);
-        }
-      }
-    } else if (e.keyCode == Blockly.utils.KeyCodes.Z) {
-      // 'z' for undo 'Z' is for redo.
-      Blockly.hideChaff();
-      mainWorkspace.undo(e.shiftKey);
-    } else if (e.ctrlKey && e.keyCode == Blockly.utils.KeyCodes.Y) {
-      // Ctrl-y is redo in Windows.  Command-y is never valid on Macs.
-      Blockly.hideChaff();
-      mainWorkspace.undo(true);
-    }
-  }
-  // Common code for delete and cut.
-  // Don't delete in the flyout.
-  if (deleteBlock && !Blockly.selected.workspace.isFlyout) {
+/**
+ * Delete the given block.
+ * @param {!Blockly.BlockSvg} selected The block to delete.
+ * @package
+ */
+Blockly.deleteBlock = function(selected) {
+  if (!selected.workspace.isFlyout) {
     Blockly.Events.setGroup(true);
     Blockly.hideChaff();
-    var selected = /** @type {!Blockly.BlockSvg} */ (Blockly.selected);
     selected.dispose(/* heal */ true, true);
     Blockly.Events.setGroup(false);
   }
@@ -268,15 +200,40 @@ Blockly.onKeyDown = function(e) {
 /**
  * Copy a block or workspace comment onto the local clipboard.
  * @param {!Blockly.ICopyable} toCopy Block or Workspace Comment to be copied.
- * @private
+ * @package
  */
-Blockly.copy_ = function(toCopy) {
+Blockly.copy = function(toCopy) {
   var data = toCopy.toCopyData();
   if (data) {
     Blockly.clipboardXml_ = data.xml;
     Blockly.clipboardSource_ = data.source;
     Blockly.clipboardTypeCounts_ = data.typeCounts;
   }
+};
+
+/**
+ * Paste a block or workspace comment on to the main workspace.
+ * @return {boolean} True if the paste was successful, false otherwise.
+ * @package
+ */
+Blockly.paste = function() {
+  if (!Blockly.clipboardXml_) {
+    return false;
+  }
+  // Pasting always pastes to the main workspace, even if the copy
+  // started in a flyout workspace.
+  var workspace = Blockly.clipboardSource_;
+  if (workspace.isFlyout) {
+    workspace = workspace.targetWorkspace;
+  }
+  if (Blockly.clipboardTypeCounts_ &&
+      workspace.isCapacityAvailable(Blockly.clipboardTypeCounts_)) {
+    Blockly.Events.setGroup(true);
+    workspace.paste(Blockly.clipboardXml_);
+    Blockly.Events.setGroup(false);
+    return true;
+  }
+  return false;
 };
 
 /**
@@ -291,7 +248,7 @@ Blockly.duplicate = function(toDuplicate) {
   var clipboardSource = Blockly.clipboardSource_;
 
   // Create a duplicate via a copy/paste operation.
-  Blockly.copy_(toDuplicate);
+  Blockly.copy(toDuplicate);
   toDuplicate.workspace.paste(Blockly.clipboardXml_);
 
   // Restore the clipboard.

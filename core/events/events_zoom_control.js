@@ -20,7 +20,7 @@ goog.require('Blockly.utils.object');
 /**
  * Class for a zoom control click event.
  * @param {number=} opt_oldScale The old scale value.
- * @param {string=} opt_scale The current scale value.
+ * @param {number=} opt_scale The current scale value.
  * @param {string=} opt_workspaceId The workspace identifier for this event.
  * @extends {Blockly.Events.UiBase}
  * @constructor

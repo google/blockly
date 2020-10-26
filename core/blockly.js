@@ -177,10 +177,7 @@ Blockly.onKeyDown = function(e) {
     // hidden.
     return;
   }
-
-  if (Blockly.ShortcutRegistry.registry.onKeyDown(mainWorkspace, e)) {
-    return;
-  }
+  Blockly.ShortcutRegistry.registry.onKeyDown(mainWorkspace, e);
 };
 
 /**

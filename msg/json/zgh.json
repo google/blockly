@@ -28,9 +28,9 @@
 	"DELETE_VARIABLE": "ⴽⴽⵙ ⴰⵎⵙⴽⵉⵍ '%1'",
 	"COLOUR_PICKER_HELPURL": "https://en.wikipedia.org/wiki/Color",
 	"COLOUR_RGB_TITLE": "ⴽⵍⵓ ⵙ",
-	"COLOUR_RGB_RED": "ⴰⵣⴳⴳⴰⵖ",
-	"COLOUR_RGB_GREEN": "ⴰⵣⴳⵣⴰⵡ",
-	"COLOUR_RGB_BLUE": "ⴰⵣⵏⵊⴰⵍⵉ",
+	"COLOUR_RGB_RED": "ⴰⵣⴳⴳⵯⴰⵖ",
+	"COLOUR_RGB_GREEN": "ⴰⵣⴳⵣⴰ",
+	"COLOUR_RGB_BLUE": "ⴰⵏⵉⵍⵉ",
 	"COLOUR_RGB_TOOLTIP": "ⴰⵣⴰⵍⵏ ⵉⴼⵓⴽⴽ ⴰⴷ ⵉⵍⵉⵏ ⴳⵔ 0 ⴷ 100.",
 	"COLOUR_BLEND_TITLE": "ⵙⵎⵔⴽⵙ",
 	"COLOUR_BLEND_COLOUR1": "ⴰⴽⵍⵓ 1",
@@ -71,6 +71,7 @@
 	"MATH_ARITHMETIC_HELPURL": "https://en.wikipedia.org/wiki/Arithmetic",
 	"MATH_TRIG_HELPURL": "https://en.wikipedia.org/wiki/Trigonometric_functions",
 	"MATH_CHANGE_TITLE": "ⵙⵏⴼⵍ %1 ⵙ %2",
+	"MATH_CHANGE_TOOLTIP": "ⵔⵏⵓ ⵢⴰⵏ ⵓⵎⴹⴰⵏ ⵖⵔ ⵓⵎⵙⴽⵉⵍ '%1'",
 	"MATH_ROUND_HELPURL": "https://en.wikipedia.org/wiki/Rounding",
 	"MATH_MODULO_HELPURL": "https://en.wikipedia.org/wiki/Modulo_operation",
 	"MATH_ATAN2_HELPURL": "https://en.wikipedia.org/wiki/Atan2",
@@ -96,5 +97,6 @@
 	"PROCEDURES_BEFORE_PARAMS": "ⵙ:",
 	"PROCEDURES_CALL_BEFORE_PARAMS": "ⵙ:",
 	"PROCEDURES_CALLNORETURN_HELPURL": "https://en.wikipedia.org/wiki/Subroutine",
-	"PROCEDURES_CALLRETURN_HELPURL": "https://en.wikipedia.org/wiki/Subroutine"
+	"PROCEDURES_CALLRETURN_HELPURL": "https://en.wikipedia.org/wiki/Subroutine",
+	"PROCEDURES_MUTATORARG_TOOLTIP": "ⵔⵏⵓ ⴰⵏⴽⵛⴰⵎ ⵖⵔ ⵜⵙⵖⵏⵜ."
 }

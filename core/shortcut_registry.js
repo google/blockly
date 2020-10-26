@@ -194,7 +194,7 @@ Blockly.ShortcutRegistry.prototype.setKeyMap = function(keyMap) {
  * @public
  */
 Blockly.ShortcutRegistry.prototype.getKeyMap = function() {
-  return this.keyMap_;
+  return Blockly.utils.object.deepMerge(Object.create(null), this.keyMap_);
 };
 
 /**
@@ -204,7 +204,7 @@ Blockly.ShortcutRegistry.prototype.getKeyMap = function() {
  * @public
  */
 Blockly.ShortcutRegistry.prototype.getRegistry = function() {
-  return this.registry_;
+  return Blockly.utils.object.deepMerge(Object.create(null), this.registry_);
 };
 
 /**

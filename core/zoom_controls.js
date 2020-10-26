@@ -14,6 +14,7 @@ goog.provide('Blockly.ZoomControls');
 
 goog.require('Blockly.constants');
 goog.require('Blockly.Css');
+goog.require('Blockly.Events.Zoom');
 goog.require('Blockly.Scrollbar');
 goog.require('Blockly.Touch');
 goog.require('Blockly.utils.dom');
@@ -425,8 +426,8 @@ Blockly.ZoomControls.prototype.resetZoom_ = function(e) {
  * @private
  */
 Blockly.ZoomControls.prototype.fireZoomEvent_ = function(oldZoom) {
-  var uiEvent = new Blockly.Events.Ui(null, 'zoom', oldZoom, this.workspace_.scale);
-  uiEvent.workspaceId = this.workspace_.id;
+  var uiEvent = new Blockly.Events.Zoom( oldZoom, this.workspace_.scale,
+      this.workspace_.id);
   Blockly.Events.fire(uiEvent);
 };
 

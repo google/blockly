@@ -20,7 +20,7 @@ goog.require('Blockly.constants');
 goog.require('Blockly.Events');
 goog.require('Blockly.Events.Ui');
 goog.require('Blockly.inject');
-goog.require('Blockly.KeyboardShortcutRegistry');
+goog.require('Blockly.ShortcutRegistry');
 goog.require('Blockly.Procedures');
 goog.require('Blockly.Tooltip');
 goog.require('Blockly.Touch');
@@ -178,7 +178,7 @@ Blockly.onKeyDown = function(e) {
     return;
   }
 
-  if (Blockly.KeyboardShortcutRegistry.registry.onKeyDown(mainWorkspace, e)) {
+  if (Blockly.ShortcutRegistry.registry.onKeyDown(mainWorkspace, e)) {
     return;
   }
 };

@@ -74,7 +74,7 @@ suite('Navigation', function() {
 
     test('Go to flyout', function() {
       var mockEvent = createKeyDownEvent(Blockly.utils.KeyCodes.D, 'NotAField');
-      var keyDownSpy = sinon.spy(Blockly.KeyboardShortcutRegistry.registry, 'onKeyDown');
+      var keyDownSpy = sinon.spy(Blockly.ShortcutRegistry.registry, 'onKeyDown');
 
       Blockly.onKeyDown(mockEvent);
 
@@ -89,7 +89,7 @@ suite('Navigation', function() {
     test('Focuses workspace from toolbox (e)', function() {
       Blockly.navigation.currentState_ = Blockly.navigation.STATE_TOOLBOX;
       var mockEvent = createKeyDownEvent(Blockly.utils.KeyCodes.E, 'NotAField');
-      var keyDownSpy = sinon.spy(Blockly.KeyboardShortcutRegistry.registry, 'onKeyDown');
+      var keyDownSpy = sinon.spy(Blockly.ShortcutRegistry.registry, 'onKeyDown');
 
       Blockly.onKeyDown(mockEvent);
 
@@ -99,7 +99,7 @@ suite('Navigation', function() {
     test('Focuses workspace from toolbox (escape)', function() {
       Blockly.navigation.currentState_ = Blockly.navigation.STATE_TOOLBOX;
       var mockEvent = createKeyDownEvent(Blockly.utils.KeyCodes.ESC, 'NotAField');
-      var keyDownSpy = sinon.spy(Blockly.KeyboardShortcutRegistry.registry, 'onKeyDown');
+      var keyDownSpy = sinon.spy(Blockly.ShortcutRegistry.registry, 'onKeyDown');
 
       Blockly.onKeyDown(mockEvent);
 
@@ -137,7 +137,7 @@ suite('Navigation', function() {
     // Should be a no-op
     test('Previous at beginning', function() {
       var mockEvent = createKeyDownEvent(Blockly.utils.KeyCodes.W, 'NotAField');
-      var keyDownSpy = sinon.spy(Blockly.KeyboardShortcutRegistry.registry, 'onKeyDown');
+      var keyDownSpy = sinon.spy(Blockly.ShortcutRegistry.registry, 'onKeyDown');
 
       Blockly.onKeyDown(mockEvent);
 
@@ -155,7 +155,7 @@ suite('Navigation', function() {
       chai.assert.equal(flyoutBlock.getFieldValue("TEXT"),
           "FirstCategory-SecondBlock");
       var mockEvent = createKeyDownEvent(Blockly.utils.KeyCodes.W, 'NotAField');
-      var keyDownSpy = sinon.spy(Blockly.KeyboardShortcutRegistry.registry, 'onKeyDown');
+      var keyDownSpy = sinon.spy(Blockly.ShortcutRegistry.registry, 'onKeyDown');
 
       Blockly.onKeyDown(mockEvent);
 
@@ -168,7 +168,7 @@ suite('Navigation', function() {
 
     test('Next', function() {
       var mockEvent = createKeyDownEvent(Blockly.utils.KeyCodes.S, 'NotAField');
-      var keyDownSpy = sinon.spy(Blockly.KeyboardShortcutRegistry.registry, 'onKeyDown');
+      var keyDownSpy = sinon.spy(Blockly.ShortcutRegistry.registry, 'onKeyDown');
 
       Blockly.onKeyDown(mockEvent);
 
@@ -181,7 +181,7 @@ suite('Navigation', function() {
 
     test('Out', function() {
       var mockEvent = createKeyDownEvent(Blockly.utils.KeyCodes.A, 'NotAField');
-      var keyDownSpy = sinon.spy(Blockly.KeyboardShortcutRegistry.registry, 'onKeyDown');
+      var keyDownSpy = sinon.spy(Blockly.ShortcutRegistry.registry, 'onKeyDown');
 
       Blockly.onKeyDown(mockEvent);
 
@@ -191,7 +191,7 @@ suite('Navigation', function() {
 
     test('Mark', function() {
       var mockEvent = createKeyDownEvent(Blockly.utils.KeyCodes.ENTER, 'NotAField');
-      var keyDownSpy = sinon.spy(Blockly.KeyboardShortcutRegistry.registry, 'onKeyDown');
+      var keyDownSpy = sinon.spy(Blockly.ShortcutRegistry.registry, 'onKeyDown');
 
       Blockly.onKeyDown(mockEvent);
 
@@ -202,7 +202,7 @@ suite('Navigation', function() {
 
     test('Exit', function() {
       var mockEvent = createKeyDownEvent(Blockly.utils.KeyCodes.ESC, 'NotAField');
-      var keyDownSpy = sinon.spy(Blockly.KeyboardShortcutRegistry.registry, 'onKeyDown');
+      var keyDownSpy = sinon.spy(Blockly.ShortcutRegistry.registry, 'onKeyDown');
 
       Blockly.onKeyDown(mockEvent);
 
@@ -238,7 +238,7 @@ suite('Navigation', function() {
 
     test('Previous', function() {
       var prevSpy = sinon.spy(this.workspace.getCursor(), 'prev');
-      var keyDownSpy = sinon.spy(Blockly.KeyboardShortcutRegistry.registry, 'onKeyDown');
+      var keyDownSpy = sinon.spy(Blockly.ShortcutRegistry.registry, 'onKeyDown');
       var wEvent = createKeyDownEvent(Blockly.utils.KeyCodes.W, '');
 
       Blockly.onKeyDown(wEvent);
@@ -250,7 +250,7 @@ suite('Navigation', function() {
 
     test('Next', function() {
       var nextSpy = sinon.spy(this.workspace.getCursor(), 'next');
-      var keyDownSpy = sinon.spy(Blockly.KeyboardShortcutRegistry.registry, 'onKeyDown');
+      var keyDownSpy = sinon.spy(Blockly.ShortcutRegistry.registry, 'onKeyDown');
       var sEvent = createKeyDownEvent(Blockly.utils.KeyCodes.S, '');
 
       Blockly.onKeyDown(sEvent);
@@ -262,7 +262,7 @@ suite('Navigation', function() {
 
     test('Out', function() {
       var outSpy = sinon.spy(this.workspace.getCursor(), 'out');
-      var keyDownSpy = sinon.spy(Blockly.KeyboardShortcutRegistry.registry, 'onKeyDown');
+      var keyDownSpy = sinon.spy(Blockly.ShortcutRegistry.registry, 'onKeyDown');
       var aEvent = createKeyDownEvent(Blockly.utils.KeyCodes.A, '');
 
       Blockly.onKeyDown(aEvent);
@@ -274,7 +274,7 @@ suite('Navigation', function() {
 
     test('In', function() {
       var inSpy = sinon.spy(this.workspace.getCursor(), 'in');
-      var keyDownSpy = sinon.spy(Blockly.KeyboardShortcutRegistry.registry, 'onKeyDown');
+      var keyDownSpy = sinon.spy(Blockly.ShortcutRegistry.registry, 'onKeyDown');
       var dEvent = createKeyDownEvent(Blockly.utils.KeyCodes.D, '');
 
       Blockly.onKeyDown(dEvent);
@@ -288,7 +288,7 @@ suite('Navigation', function() {
       // Stub modify as we are not testing its behavior, only if it was called.
       // Otherwise, there is a warning because there is no marked node.
       var modifyStub = sinon.stub(Blockly.navigation, 'modify_').returns(true);
-      var keyDownSpy = sinon.spy(Blockly.KeyboardShortcutRegistry.registry, 'onKeyDown');
+      var keyDownSpy = sinon.spy(Blockly.ShortcutRegistry.registry, 'onKeyDown');
       var iEvent = createKeyDownEvent(Blockly.utils.KeyCodes.I, '');
 
       Blockly.onKeyDown(iEvent);
@@ -301,7 +301,7 @@ suite('Navigation', function() {
     test('Mark', function() {
       this.workspace.getCursor().setCurNode(
           Blockly.ASTNode.createConnectionNode(this.basicBlock.previousConnection));
-      var keyDownSpy = sinon.spy(Blockly.KeyboardShortcutRegistry.registry, 'onKeyDown');
+      var keyDownSpy = sinon.spy(Blockly.ShortcutRegistry.registry, 'onKeyDown');
       var enterEvent = createKeyDownEvent(Blockly.utils.KeyCodes.ENTER, '');
 
       Blockly.onKeyDown(enterEvent);
@@ -313,7 +313,7 @@ suite('Navigation', function() {
     });
 
     test('Toolbox', function() {
-      var keyDownSpy = sinon.spy(Blockly.KeyboardShortcutRegistry.registry, 'onKeyDown');
+      var keyDownSpy = sinon.spy(Blockly.ShortcutRegistry.registry, 'onKeyDown');
       var tEvent = createKeyDownEvent(Blockly.utils.KeyCodes.T, '');
 
       Blockly.onKeyDown(tEvent);
@@ -358,7 +358,7 @@ suite('Navigation', function() {
       var field = block.inputList[0].fieldRow[0];
       var fieldSpy = sinon.spy(field, 'onBlocklyAction');
       var mockEvent = createKeyDownEvent(Blockly.utils.KeyCodes.N, '');
-      var keyDownSpy = sinon.spy(Blockly.KeyboardShortcutRegistry.registry, 'onKeyDown');
+      var keyDownSpy = sinon.spy(Blockly.ShortcutRegistry.registry, 'onKeyDown');
       this.workspace.getCursor().setCurNode(Blockly.ASTNode.createFieldNode(field));
 
       Blockly.onKeyDown(mockEvent);
@@ -372,7 +372,7 @@ suite('Navigation', function() {
       var field = block.inputList[0].fieldRow[0];
       var mockEvent = createKeyDownEvent(Blockly.utils.KeyCodes.A, '');
       var fieldSpy = sinon.stub(field, 'onBlocklyAction').returns(true);
-      var keyDownSpy = sinon.spy(Blockly.KeyboardShortcutRegistry.registry, 'onKeyDown');
+      var keyDownSpy = sinon.spy(Blockly.ShortcutRegistry.registry, 'onKeyDown');
       this.workspace.getCursor().setCurNode(Blockly.ASTNode.createFieldNode(field));
 
       Blockly.onKeyDown(mockEvent);
@@ -387,7 +387,7 @@ suite('Navigation', function() {
       var field = block.inputList[0].fieldRow[0];
       var mockEvent = createKeyDownEvent(Blockly.utils.KeyCodes.A, '');
       var fieldSpy = sinon.spy(field, 'onBlocklyAction');
-      var keyDownSpy = sinon.spy(Blockly.KeyboardShortcutRegistry.registry, 'onKeyDown');
+      var keyDownSpy = sinon.spy(Blockly.ShortcutRegistry.registry, 'onKeyDown');
       this.workspace.getCursor().setCurNode(Blockly.ASTNode.createFieldNode(field));
 
       Blockly.onKeyDown(mockEvent);
@@ -398,7 +398,7 @@ suite('Navigation', function() {
 
     test('Toggle Action Off', function() {
       var mockEvent = createKeyDownEvent(Blockly.utils.KeyCodes.K, '', [Blockly.utils.KeyCodes.SHIFT, Blockly.utils.KeyCodes.CTRL]);
-      var keyDownSpy = sinon.spy(Blockly.KeyboardShortcutRegistry.registry, 'onKeyDown');
+      var keyDownSpy = sinon.spy(Blockly.ShortcutRegistry.registry, 'onKeyDown');
       this.workspace.keyboardAccessibilityMode = true;
 
       Blockly.onKeyDown(mockEvent);
@@ -409,7 +409,7 @@ suite('Navigation', function() {
 
     test('Toggle Action On', function() {
       var mockEvent = createKeyDownEvent(Blockly.utils.KeyCodes.K, '', [Blockly.utils.KeyCodes.SHIFT, Blockly.utils.KeyCodes.CTRL]);
-      var keyDownSpy = sinon.spy(Blockly.KeyboardShortcutRegistry.registry, 'onKeyDown');
+      var keyDownSpy = sinon.spy(Blockly.ShortcutRegistry.registry, 'onKeyDown');
       this.workspace.keyboardAccessibilityMode = false;
 
       Blockly.onKeyDown(mockEvent);
@@ -461,7 +461,7 @@ suite('Navigation', function() {
         var astNode = Blockly.ASTNode.createBlockNode(this.fieldBlock1);
         var mockEvent = createKeyDownEvent(Blockly.utils.KeyCodes.S, '');
         this.workspace.getCursor().setCurNode(astNode);
-        var keyDownSpy = sinon.spy(Blockly.KeyboardShortcutRegistry.registry, 'onKeyDown');
+        var keyDownSpy = sinon.spy(Blockly.ShortcutRegistry.registry, 'onKeyDown');
 
         Blockly.onKeyDown(mockEvent);
 
@@ -472,7 +472,7 @@ suite('Navigation', function() {
         var astNode = Blockly.ASTNode.createBlockNode(this.fieldBlock1);
         var mockEvent = createKeyDownEvent(Blockly.utils.KeyCodes.I, '');
         this.workspace.getCursor().setCurNode(astNode);
-        var keyDownSpy = sinon.spy(Blockly.KeyboardShortcutRegistry.registry, 'onKeyDown');
+        var keyDownSpy = sinon.spy(Blockly.ShortcutRegistry.registry, 'onKeyDown');
 
         Blockly.onKeyDown(mockEvent);
 
@@ -484,7 +484,7 @@ suite('Navigation', function() {
         var astNode = Blockly.ASTNode.createFieldNode(field);
         var mockEvent = createKeyDownEvent(Blockly.utils.KeyCodes.ENTER, '');
         this.workspace.getCursor().setCurNode(astNode);
-        var keyDownSpy = sinon.spy(Blockly.KeyboardShortcutRegistry.registry, 'onKeyDown');
+        var keyDownSpy = sinon.spy(Blockly.ShortcutRegistry.registry, 'onKeyDown');
 
         Blockly.onKeyDown(mockEvent);
 

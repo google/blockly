@@ -7,7 +7,7 @@
 suite('Keyboard Shortcut Registry Test', function() {
   setup(function() {
     sharedTestSetup.call(this);
-    this.registry = new Blockly.KeyboardShortcutRegistry();
+    this.registry = new Blockly.ShortcutRegistry();
   });
   teardown(function() {
     sharedTestTeardown.call(this);

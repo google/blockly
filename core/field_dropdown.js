@@ -31,7 +31,7 @@ goog.require('Blockly.utils.string');
 goog.require('Blockly.utils.Svg');
 goog.require('Blockly.utils.userAgent');
 
-goog.requireType('Blockly.KeyboardShortcutRegistry');
+goog.requireType('Blockly.ShortcutRegistry');
 
 
 /**
@@ -741,7 +741,7 @@ Blockly.FieldDropdown.validateOptions_ = function(options) {
 /**
  * Handles the given action.
  * This is only triggered when keyboard accessibility mode is enabled.
- * @param {!Blockly.KeyboardShortcutRegistry.KeyboardShortcut} action The action to be handled.
+ * @param {!Blockly.ShortcutRegistry.KeyboardShortcut} action The action to be handled.
  * @return {boolean} True if the field handled the action, false otherwise.
  * @package
  */

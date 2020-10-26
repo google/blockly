@@ -17,7 +17,7 @@ goog.require('Blockly.Cursor');
 goog.require('Blockly.navigation');
 goog.require('Blockly.utils.object');
 
-goog.requireType('Blockly.KeyboardShortcutRegistry');
+goog.requireType('Blockly.ShortcutRegistry');
 
 
 /**
@@ -34,7 +34,7 @@ Blockly.utils.object.inherits(Blockly.FlyoutCursor, Blockly.Cursor);
 /**
  * Handles the given action.
  * This is only triggered when keyboard navigation is enabled.
- * @param {!Blockly.KeyboardShortcutRegistry.KeyboardShortcut} action The action to be handled.
+ * @param {!Blockly.ShortcutRegistry.KeyboardShortcut} action The action to be handled.
  * @return {boolean} True if the action has been handled, false otherwise.
  * @override
  */

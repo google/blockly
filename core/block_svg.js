@@ -684,7 +684,7 @@ Blockly.BlockSvg.prototype.tab = function(start, forward) {
       Blockly.navigation.actionNames.NEXT : Blockly.navigation.actionNames.PREVIOUS;
 
   tabCursor.onBlocklyAction(
-      /** @type {!Blockly.KeyboardShortcutRegistry.KeyboardShortcut} */ ({name: actionName}));
+      /** @type {!Blockly.ShortcutRegistry.KeyboardShortcut} */ ({name: actionName}));
 
   var nextNode = tabCursor.getCurNode();
   if (nextNode && nextNode !== currentNode) {

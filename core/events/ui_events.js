@@ -56,8 +56,7 @@ Blockly.utils.object.inherits(Blockly.Events.UiBase, Blockly.Events.Abstract);
 Blockly.Events.UiBase.prototype.IS_UI_EVENT = true;
 
 /**
- * Class for a UI event. Here for compatibility. Should instead use a more
- * specific UI event.
+ * Class for a UI event.
  * @param {?Blockly.Block=} opt_block The affected block.  Null for UI events
  *     that do not have an associated block.  Undefined for a blank event.
  * @param {string=} opt_element One of 'selected', 'comment', 'mutatorOpen',
@@ -65,6 +64,7 @@ Blockly.Events.UiBase.prototype.IS_UI_EVENT = true;
  * @param {*=} opt_oldValue Previous value of element.
  * @param {*=} opt_newValue New value of element.
  * @extends {Blockly.Events.UiBase}
+ * @deprecated Instead use a more specific UI event.
  * @constructor
  */
 Blockly.Events.Ui = function(opt_block, opt_element, opt_oldValue,

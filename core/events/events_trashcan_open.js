@@ -13,7 +13,7 @@
 goog.provide('Blockly.Events.TrashcanOpen');
 
 goog.require('Blockly.Events');
-goog.require('Blockly.Events.Ui');
+goog.require('Blockly.Events.UiBase');
 goog.require('Blockly.registry');
 goog.require('Blockly.utils.object');
 
@@ -23,7 +23,7 @@ goog.require('Blockly.utils.object');
  *    for a blank event.
  * @param {string=} opt_workspaceId The workspace identifier for this event.
  *    Undefined for a blank event.
- * @extends {Blockly.Events.Ui}
+ * @extends {Blockly.Events.UiBase}
  * @constructor
  */
 Blockly.Events.TrashcanOpen = function(opt_isOpen, opt_workspaceId) {
@@ -35,7 +35,7 @@ Blockly.Events.TrashcanOpen = function(opt_isOpen, opt_workspaceId) {
    */
   this.isOpen = opt_isOpen;
 };
-Blockly.utils.object.inherits(Blockly.Events.TrashcanOpen, Blockly.Events.Ui);
+Blockly.utils.object.inherits(Blockly.Events.TrashcanOpen, Blockly.Events.UiBase);
 
 /**
  * Type of this event.

@@ -13,7 +13,7 @@
 goog.provide('Blockly.Events.Selected');
 
 goog.require('Blockly.Events');
-goog.require('Blockly.Events.Ui');
+goog.require('Blockly.Events.UiBase');
 goog.require('Blockly.registry');
 goog.require('Blockly.utils.object');
 
@@ -25,7 +25,7 @@ goog.require('Blockly.utils.object');
  *    element currently selected (deselect). Undefined for a blank event.
  * @param {string=} opt_workspaceId The workspace identifier for this event.
  *    Null if no element previously selected. Undefined for a blank event.
- * @extends {Blockly.Events.Ui}
+ * @extends {Blockly.Events.UiBase}
  * @constructor
  */
 Blockly.Events.Selected = function(opt_oldElementId, opt_elementId,
@@ -44,7 +44,7 @@ Blockly.Events.Selected = function(opt_oldElementId, opt_elementId,
    */
   this.elementId = opt_elementId;
 };
-Blockly.utils.object.inherits(Blockly.Events.Selected, Blockly.Events.Ui);
+Blockly.utils.object.inherits(Blockly.Events.Selected, Blockly.Events.UiBase);
 
 /**
  * Type of this event.

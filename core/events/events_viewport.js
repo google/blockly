@@ -13,7 +13,7 @@
 goog.provide('Blockly.Events.ViewportChange');
 
 goog.require('Blockly.Events');
-goog.require('Blockly.Events.Ui');
+goog.require('Blockly.Events.UiBase');
 goog.require('Blockly.registry');
 goog.require('Blockly.utils.object');
 
@@ -25,7 +25,7 @@ goog.require('Blockly.utils.object');
  *    relative to the workspace origin.
  * @param {number=} opt_scale The scale of the workspace.
  * @param {string=} opt_workspaceId The workspace identifier for this event.
- * @extends {Blockly.Events.Ui}
+ * @extends {Blockly.Events.UiBase}
  * @constructor
  */
 Blockly.Events.ViewportChange = function(opt_top, opt_left, opt_scale,
@@ -52,7 +52,8 @@ Blockly.Events.ViewportChange = function(opt_top, opt_left, opt_scale,
    */
   this.scale = opt_scale;
 };
-Blockly.utils.object.inherits(Blockly.Events.ViewportChange, Blockly.Events.Ui);
+Blockly.utils.object.inherits(Blockly.Events.ViewportChange,
+    Blockly.Events.UiBase);
 
 /**
  * Type of this event.

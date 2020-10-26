@@ -711,8 +711,7 @@ suite('Events', function() {
       chai.assert.equal(filteredEvents[0].newValue, 'item2');
     });
 
-    test.skip('Merge ui events', function() {
-      // TODO(kozbial): Add support for merging UI events.
+    test('Merge ui events', function() {
       var block1 = this.workspace.newBlock('field_variable_test_block', '1');
       var block2 = this.workspace.newBlock('field_variable_test_block', '2');
       var block3 = this.workspace.newBlock('field_variable_test_block', '3');

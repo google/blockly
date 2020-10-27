@@ -66,10 +66,12 @@ suite('Keyboard Shortcut Registry Test', function() {
       chai.assert.isUndefined(this.registry.registry_['test']);
     });
     test('Unregistering a nonexistent shortcut', function() {
+      var consoleStub = sinon.stub(console, 'warn');
       chai.assert.isUndefined(this.registry.registry_['test']);
 
       var registry = this.registry;
       chai.assert.isFalse(registry.unregister('test', 'test_shortcut'));
+      sinon.assert.calledWith(consoleStub, 'Keyboard shortcut with name "test" not found.');
     });
     test('Unregistering a shortcut with key mappings', function() {
       var testShortcut = {
@@ -143,6 +145,7 @@ suite('Keyboard Shortcut Registry Test', function() {
 
       var shortcutNames = this.registry.keyMap_['keyCode'];
       chai.assert.lengthOf(shortcutNames, 1);
+      chai.assert.equal(shortcutNames[0], 'test_shortcut_2');
       chai.assert.isTrue(isRemoved);
     });
     test('Removes last key mapping for a key', function() {
@@ -155,21 +158,21 @@ suite('Keyboard Shortcut Registry Test', function() {
       chai.assert.isUndefined(shortcutNames);
     });
     test('Removes a key map that does not exist opt_quiet=false', function() {
-      var consoleSpy = sinon.spy(console, 'warn');
+      var consoleStub = sinon.stub(console, 'warn');
       this.registry.keyMap_['keyCode'] = ['test_shortcut_2'];
 
       var isRemoved = this.registry.removeKeyMapping('keyCode', 'test_shortcut');
 
       chai.assert.isFalse(isRemoved);
-      sinon.assert.calledWith(consoleSpy, 'No keyboard shortcut with name "test_shortcut" registered with key code "keyCode"');
+      sinon.assert.calledWith(consoleStub, 'No keyboard shortcut with name "test_shortcut" registered with key code "keyCode"');
     });
     test('Removes a key map that does not exist from empty key mapping opt_quiet=false', function() {
-      var consoleSpy = sinon.spy(console, 'warn');
+      var consoleStub = sinon.stub(console, 'warn');
 
       var isRemoved = this.registry.removeKeyMapping('keyCode', 'test_shortcut');
 
       chai.assert.isFalse(isRemoved);
-      sinon.assert.calledWith(consoleSpy, 'No keyboard shortcut with name "test_shortcut" registered with key code "keyCode"');
+      sinon.assert.calledWith(consoleStub, 'No keyboard shortcut with name "test_shortcut" registered with key code "keyCode"');
     });
   });
 

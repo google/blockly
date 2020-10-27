@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-suite.only('Events', function() {
+suite('Events', function() {
   setup(function() {
     sharedTestSetup.call(this, {fireEventsNow: false});
     this.eventsFireSpy = sinon.spy(Blockly.Events, 'fire');
@@ -438,7 +438,7 @@ suite.only('Events', function() {
     });
   });
 
-  suite.only('Serialization', function() {
+  suite('Serialization', function() {
     var safeStringify = (json) => {
       let cache = [];
       return JSON.stringify(json, (key, value) => {

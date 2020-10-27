@@ -343,7 +343,6 @@ Blockly.ZoomControls.prototype.createZoomInSvg_ = function(rnd) {
  */
 Blockly.ZoomControls.prototype.zoom_ = function(amount, e) {
   this.workspace_.markFocused();
-  var oldZoom = this.workspace_.scale;
   this.workspace_.zoomCenter(amount);
   this.fireZoomEvent_();
   Blockly.Touch.clearTouchIdentifier();  // Don't block future drags.
@@ -408,7 +407,6 @@ Blockly.ZoomControls.prototype.createZoomResetSvg_ = function(rnd) {
  */
 Blockly.ZoomControls.prototype.resetZoom_ = function(e) {
   this.workspace_.markFocused();
-  var oldZoom = this.workspace_.scale;
   this.workspace_.setScale(this.workspace_.options.zoomOptions.startScale);
   this.workspace_.beginCanvasTransition();
   this.workspace_.scrollCenter();

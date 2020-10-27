@@ -14,7 +14,6 @@ goog.provide('Blockly.ZoomControls');
 
 goog.require('Blockly.constants');
 goog.require('Blockly.Css');
-goog.require('Blockly.Events.Zoom');
 goog.require('Blockly.Scrollbar');
 goog.require('Blockly.Touch');
 goog.require('Blockly.utils.dom');
@@ -346,7 +345,7 @@ Blockly.ZoomControls.prototype.zoom_ = function(amount, e) {
   this.workspace_.markFocused();
   var oldZoom = this.workspace_.scale;
   this.workspace_.zoomCenter(amount);
-  this.fireZoomEvent_(oldZoom);
+  this.fireZoomEvent_();
   Blockly.Touch.clearTouchIdentifier();  // Don't block future drags.
   e.stopPropagation();  // Don't start a workspace scroll.
   e.preventDefault();  // Stop double-clicking from selecting text.
@@ -414,7 +413,7 @@ Blockly.ZoomControls.prototype.resetZoom_ = function(e) {
   this.workspace_.beginCanvasTransition();
   this.workspace_.scrollCenter();
   setTimeout(this.workspace_.endCanvasTransition.bind(this.workspace_), 500);
-  this.fireZoomEvent_(oldZoom);
+  this.fireZoomEvent_();
   Blockly.Touch.clearTouchIdentifier();  // Don't block future drags.
   e.stopPropagation();  // Don't start a workspace scroll.
   e.preventDefault();  // Stop double-clicking from selecting text.
@@ -422,12 +421,11 @@ Blockly.ZoomControls.prototype.resetZoom_ = function(e) {
 
 /**
  * Fires a zoom control ui event.
- * @param {number} oldZoom The workspace scale before zoom happened.
  * @private
  */
-Blockly.ZoomControls.prototype.fireZoomEvent_ = function(oldZoom) {
-  var uiEvent = new Blockly.Events.Zoom( oldZoom, this.workspace_.scale,
-      this.workspace_.id);
+Blockly.ZoomControls.prototype.fireZoomEvent_ = function() {
+  var uiEvent = new Blockly.Events.Click(
+      null, this.workspace_.id, 'zoom_controls');
   Blockly.Events.fire(uiEvent);
 };
 

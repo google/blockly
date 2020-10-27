@@ -148,13 +148,6 @@ Blockly.Events.BUBBLE_OPEN = 'bubble_open';
  */
 Blockly.Events.TRASHCAN_OPEN = 'trashcan_open';
 
-
-/**
- * Name of event that records a zoom.
- * @const
- */
-Blockly.Events.ZOOM = 'zoom';
-
 /**
  * Name of event that records a toolbox item change.
  * @const

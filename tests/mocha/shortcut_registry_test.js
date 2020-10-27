@@ -177,14 +177,6 @@ suite('Keyboard Shortcut Registry Test', function() {
               consoleStub,
               'No keyboard shortcut with name "test_shortcut" registered with key code "keyCode"');
         });
-    test('Removes a key map that does not exist from empty key mapping opt_quiet=false', function() {
-      var consoleStub = sinon.stub(console, 'warn');
-
-      var isRemoved = this.registry.removeKeyMapping('keyCode', 'test_shortcut');
-
-      chai.assert.isFalse(isRemoved);
-      sinon.assert.calledWith(consoleStub, 'No keyboard shortcut with name "test_shortcut" registered with key code "keyCode"');
-    });
   });
 
   suite('Setters/Getters', function() {

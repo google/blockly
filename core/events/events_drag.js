@@ -58,9 +58,9 @@ Blockly.Events.Drag.prototype.type = Blockly.Events.BLOCK_DRAG;
  */
 Blockly.Events.Drag.prototype.toJson = function() {
   var json = Blockly.Events.Drag.superClass_.toJson.call(this);
+  json['isStart'] = this.isStart;
   json['blockId'] = this.blockId;
   json['blocks'] = this.blocks;
-  json['isStart'] = this.isStart;
   return json;
 };
 
@@ -70,9 +70,9 @@ Blockly.Events.Drag.prototype.toJson = function() {
  */
 Blockly.Events.Drag.prototype.fromJson = function(json) {
   Blockly.Events.Drag.superClass_.fromJson.call(this, json);
+  this.isStart = json['isStart'];
   this.blockId = json['blockId'];
   this.blocks = json['blocks'];
-  this.isStart = json['isStart'];
 };
 
 Blockly.registry.register(Blockly.registry.Type.EVENT,

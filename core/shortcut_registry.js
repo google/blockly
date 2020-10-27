@@ -134,7 +134,7 @@ Blockly.ShortcutRegistry.prototype.addKeyMapping = function(
 };
 
 /**
- * Adds a mapping between a keycode and a keyboard shortcut.
+ * Removes a mapping between a keycode and a keyboard shortcut.
  * @param {string} keyCode The key code for the keyboard shortcut. If registering a key code with a
  *     modifier (ex: ctrl+c) use Blockly.ShortcutRegistry.registry.createSerializedKey;
  * @param {string} shortcutName The name of the shortcut to execute when the given keycode is
@@ -157,12 +157,13 @@ Blockly.ShortcutRegistry.prototype.removeKeyMapping = function(
     shortcutNames.splice(shortcutIdx, 1);
     if (shortcutNames.length == 0) {
       delete this.keyMap_[keyCode];
-      return true;
     }
+    return true;
   } else if (!opt_quiet) {
     console.warn('No keyboard shortcut with name "' + shortcutName + '" registered with key code "' + keyCode + '"');
     return false;
   }
+  return false;
 };
 
 /**

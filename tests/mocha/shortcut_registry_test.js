@@ -16,11 +16,11 @@ suite('Keyboard Shortcut Registry Test', function() {
   suite('Registering', function() {
     test('Registering a shortcut', function() {
       var testShortcut = {
-        'name': 'test_action'
+        'name': 'test_shortcut'
       };
       this.registry.register(testShortcut, true);
-      var shortcut = this.registry.registry_['test_action'];
-      chai.assert.equal(shortcut.name, 'test_action');
+      var shortcut = this.registry.registry_['test_shortcut'];
+      chai.assert.equal(shortcut.name, 'test_shortcut');
     });
     test('Registers shortcut with same name', function() {
       var registry = this.registry;
@@ -58,18 +58,18 @@ suite('Keyboard Shortcut Registry Test', function() {
   suite('Unregistering', function() {
     test('Unregistering a shortcut', function() {
       var testShortcut = {
-        'name': 'test_action'
+        'name': 'test_shortcut'
       };
       this.registry.registry_['test'] = [testShortcut];
-      chai.assert.isNotFalse(this.registry.registry_['test']);
-      this.registry.unregister('test', 'test_action');
+      chai.assert.isOk(this.registry.registry_['test']);
+      this.registry.unregister('test', 'test_shortcut');
       chai.assert.isUndefined(this.registry.registry_['test']);
     });
     test('Unregistering a nonexistent shortcut', function() {
       chai.assert.isUndefined(this.registry.registry_['test']);
 
       var registry = this.registry;
-      chai.assert.isFalse(registry.unregister('test', 'test_action'));
+      chai.assert.isFalse(registry.unregister('test', 'test_shortcut'));
     });
     test('Unregistering a shortcut with key mappings', function() {
       var testShortcut = {
@@ -77,11 +77,189 @@ suite('Keyboard Shortcut Registry Test', function() {
       };
       this.registry.keyMap_['keyCode'] = ['test_shortcut'];
       this.registry.registry_['test_shortcut'] = testShortcut;
+
       this.registry.unregister('test_shortcut');
-      var shortcuts = this.registry.registry_['test'];
+
+      var shortcut = this.registry.registry_['test'];
       var keyMappings = this.registry.keyMap_['keyCode'];
-      chai.assert.isUndefined(shortcuts);
+      chai.assert.isUndefined(shortcut);
       chai.assert.isUndefined(keyMappings);
+    });
+    test('Unregistering a shortcut with colliding key mappings', function() {
+      var testShortcut = {
+        'name': 'test_shortcut'
+      };
+      this.registry.keyMap_['keyCode'] = ['test_shortcut', 'other_shortcutt'];
+      this.registry.registry_['test_shortcut'] = testShortcut;
+
+      this.registry.unregister('test_shortcut');
+
+      var shortcut = this.registry.registry_['test'];
+      var keyMappings = this.registry.keyMap_['keyCode'];
+      chai.assert.lengthOf(keyMappings, 1);
+      chai.assert.isUndefined(shortcut);
+    });
+  });
+
+  suite('addKeyMapping', function() {
+    test('Adds a key mapping', function() {
+      this.registry.registry_['test_shortcut'] = {'name': 'test_shortcut'};
+
+      this.registry.addKeyMapping('keyCode', 'test_shortcut');
+
+      var shortcutNames = this.registry.keyMap_['keyCode'];
+      chai.assert.lengthOf(shortcutNames, 1);
+      chai.assert.equal(shortcutNames[0], 'test_shortcut');
+    });
+    test('Adds a colliding key mapping - opt_allowCollision=true', function() {
+      this.registry.registry_['test_shortcut'] = {'name': 'test_shortcut'};
+      this.registry.keyMap_['keyCode'] = ['test_shortcut_2'];
+
+      this.registry.addKeyMapping('keyCode', 'test_shortcut', true);
+
+      var shortcutNames = this.registry.keyMap_['keyCode'];
+      chai.assert.lengthOf(shortcutNames, 2);
+      chai.assert.equal(shortcutNames[0], 'test_shortcut');
+      chai.assert.equal(shortcutNames[1], 'test_shortcut_2');
+    });
+    test('Adds a colliding key mapping - opt_allowCollision=false', function() {
+      this.registry.registry_['test_shortcut'] = {'name': 'test_shortcut'};
+      this.registry.keyMap_['keyCode'] = ['test_shortcut_2'];
+
+      var registry = this.registry;
+      var shouldThrow = function() {
+        registry.addKeyMapping('keyCode', 'test_shortcut');
+      };
+      chai.assert.throws(shouldThrow, Error, 'Shortcut with name "test_shortcut" collides with shortcuts test_shortcut_2');
+    });
+  });
+
+  suite('removeKeyMapping', function() {
+    test('Removes a key mapping', function() {
+      this.registry.registry_['test_shortcut'] = {'name': 'test_shortcut'};
+      this.registry.keyMap_['keyCode'] = ['test_shortcut', 'test_shortcut_2'];
+
+      var isRemoved = this.registry.removeKeyMapping('keyCode', 'test_shortcut');
+
+      var shortcutNames = this.registry.keyMap_['keyCode'];
+      chai.assert.lengthOf(shortcutNames, 1);
+      chai.assert.isTrue(isRemoved);
+    });
+    test('Removes last key mapping for a key', function() {
+      this.registry.registry_['test_shortcut'] = {'name': 'test_shortcut'};
+      this.registry.keyMap_['keyCode'] = ['test_shortcut'];
+
+      this.registry.removeKeyMapping('keyCode', 'test_shortcut');
+
+      var shortcutNames = this.registry.keyMap_['keyCode'];
+      chai.assert.isUndefined(shortcutNames);
+    });
+    test('Removes a key map that does not exist opt_quiet=false', function() {
+      var consoleSpy = sinon.spy(console, 'warn');
+      this.registry.keyMap_['keyCode'] = ['test_shortcut_2'];
+
+      var isRemoved = this.registry.removeKeyMapping('keyCode', 'test_shortcut');
+
+      chai.assert.isFalse(isRemoved);
+      sinon.assert.calledWith(consoleSpy, 'No keyboard shortcut with name "test_shortcut" registered with key code "keyCode"');
+    });
+    test('Removes a key map that does not exist from empty key mapping opt_quiet=false', function() {
+      var consoleSpy = sinon.spy(console, 'warn');
+
+      var isRemoved = this.registry.removeKeyMapping('keyCode', 'test_shortcut');
+
+      chai.assert.isFalse(isRemoved);
+      sinon.assert.calledWith(consoleSpy, 'No keyboard shortcut with name "test_shortcut" registered with key code "keyCode"');
+    });
+  });
+
+  suite('Setters/Getters', function() {
+    test('Sets the key map', function() {
+      this.registry.setKeyMap({'keyCode': ['test_shortcut']});
+      chai.assert.lengthOf(Object.keys(this.registry.keyMap_), 1);
+      chai.assert.equal(this.registry.keyMap_['keyCode'][0], 'test_shortcut');
+    });
+    test('Gets a copy of the key map', function() {
+      this.registry.keyMap_['keyCode'] = ['a'];
+      var keyMapCopy = this.registry.getKeyMap();
+      keyMapCopy['keyCode'] = ['b'];
+      chai.assert.equal(this.registry.keyMap_['keyCode'][0], 'a');
+    });
+    test('Gets a copy of the registry', function() {
+      this.registry.registry_['shortcutName'] = {'name': 'shortcutName'};
+      var registrycopy = this.registry.getRegistry();
+      registrycopy['shortcutName']['name'] = 'shortcutName1';
+      chai.assert.equal(this.registry.registry_['shortcutName']['name'], 'shortcutName');
+    });
+    test('Gets keyboard shortcuts from a key code', function() {
+      this.registry.keyMap_['keyCode'] = ['shortcutName'];
+      var shortcutNames = this.registry.getKeyboardShortcuts('keyCode');
+      chai.assert.equal(shortcutNames[0], 'shortcutName');
+    });
+    test('Gets keycodes by shortcut name', function() {
+      this.registry.keyMap_['keyCode'] = ['shortcutName'];
+      this.registry.keyMap_['keyCode1'] = ['shortcutName'];
+      var shortcutNames = this.registry.getKeyCodeByShortcutName('shortcutName');
+      chai.assert.lengthOf(shortcutNames, 2);
+      chai.assert.equal(shortcutNames[0], 'keyCode');
+      chai.assert.equal(shortcutNames[1], 'keyCode1');
+    });
+  });
+
+  suite('onKeyDown', function() {
+
+    function addShortcut(registry, shortcut, keyCode, returns) {
+      registry.register(shortcut, true);
+      registry.addKeyMapping(keyCode, shortcut.name, true);
+      return sinon.stub(shortcut, 'callback').returns(returns);
+    }
+
+    setup(function() {
+      this.testShortcut = {
+        'name': 'test_shortcut',
+        'callback': function() {return true;},
+        'precondition': function() {return true;}
+      };
+      this.callBackStub = addShortcut(this.registry, this.testShortcut, 'keyCode', true);
+    });
+    test('Execute a shortcut from event', function() {
+      var event = createKeyDownEvent('keyCode', '');
+      chai.assert.isTrue(this.registry.onKeyDown(this.workspace, event));
+      sinon.assert.calledOnce(this.callBackStub);
+    });
+    test('No shortcut executed from event', function() {
+      var event = createKeyDownEvent('nonExistentKeyCode', '');
+      chai.assert.isFalse(this.registry.onKeyDown(this.workspace, event));
+    });
+    test('No precondition available - execute callback', function() {
+      delete this.testShortcut['precondition'];
+      var event = createKeyDownEvent('keyCode', '');
+      chai.assert.isTrue(this.registry.onKeyDown(this.workspace, event));
+      sinon.assert.calledOnce(this.callBackStub);
+    });
+    test('Execute all shortcuts in list', function() {
+      var event = createKeyDownEvent('keyCode', '');
+      var testShortcut2 = {
+        'name': 'test_shortcut_2',
+        'callback': function() {return false;},
+        'precondition': function() {return false;}
+      };
+      var testShortcut2Stub = addShortcut(this.registry, testShortcut2, 'keyCode', false);
+      chai.assert.isTrue(this.registry.onKeyDown(this.workspace, event));
+      sinon.assert.calledOnce(testShortcut2Stub);
+      sinon.assert.calledOnce(this.callBackStub);
+    });
+    test('Stop executing shortcut when event is handled', function() {
+      var event = createKeyDownEvent('keyCode', '');
+      var testShortcut2 = {
+        'name': 'test_shortcut_2',
+        'callback': function() {return false;},
+        'precondition': function() {return false;}
+      };
+      var testShortcut2Stub = addShortcut(this.registry, testShortcut2, 'keyCode', true);
+      chai.assert.isTrue(this.registry.onKeyDown(this.workspace, event));
+      sinon.assert.calledOnce(testShortcut2Stub);
+      sinon.assert.notCalled(this.callBackStub);
     });
   });
 
@@ -145,46 +323,6 @@ suite('Keyboard Shortcut Registry Test', function() {
       chai.assert.throws(shouldThrow, Error, 's is not a valid modifier key.');
     });
   });
-
-  // test('Test giving an old action a new key', function() {
-  //   Blockly.user.keyMap.setActionForKey(Blockly.utils.KeyCodes.F,
-  //       Blockly.navigation.ACTION_PREVIOUS);
-  //   chai.assert.isUndefined(Blockly.user.keyMap.map_[Blockly.utils.KeyCodes.W]);
-  //   chai.assert.equal(Blockly.user.keyMap.map_[Blockly.utils.KeyCodes.F],
-  //       Blockly.navigation.ACTION_PREVIOUS);
-  // });
-  //
-  // test('Test get key by the shortcut name', function() {
-  //   var testShortcut = {
-  //     'name': 'test_action'
-  //   };
-  //   Blockly.KeyboardShortcutRegistry.registry.register('test', testShortcut, true);
-  //   var shortcut = Blockly.KeyboardShortcutRegistry.registry.getKeyByAction()
-  //   chai.assert.equal(shortcut.name, 'test_action');
-  //
-  //   var key = Blockly.user.keyMap.getKeyByAction(Blockly.navigation.ACTION_PREVIOUS);
-  //   chai.assert.equal(key, Blockly.utils.KeyCodes.W);
-  // });
-  //
-  // test('Test get key by action not defined', function() {
-  //   var key = Blockly.user.keyMap.getKeyByAction(new Blockly.Action('something'));
-  //   chai.assert.notExists(key);
-  // });
-  //
-  // test('Test set key map', function() {
-  //   var testKeyMap = Blockly.user.keyMap.createDefaultKeyMap();
-  //   testKeyMap['randomKey'] = new Blockly.Action('test','',null);
-  //   Blockly.user.keyMap.setKeyMap(testKeyMap);
-  //   chai.assert.equal(Blockly.user.keyMap.map_['randomKey'].name, 'test');
-  // });
-  //
-  // test('Test get key map returns a clone', function() {
-  //   var keyMap = Blockly.user.keyMap.getKeyMap();
-  //   keyMap['randomKey'] = new Blockly.Action('test', '', null);
-  //   chai.assert.isUndefined(Blockly.user.keyMap.map_['randomKey']);
-  // });
-  //
-
 
   teardown(function() {});
 });

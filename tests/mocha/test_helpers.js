@@ -576,10 +576,17 @@ function dispatchPointerEvent(target, type, properties) {
 function createKeyDownEvent(keyCode, type, modifiers) {
   var event = {
     keyCode: keyCode,
-    target: {
-      type: type
-    },
+    target: {type: type},
     getModifierState: function() {
+      if (name == 'Shift' && this.shiftKey) {
+        return true;
+      } else if (name == 'Control' && this.ctrlKey) {
+        return true;
+      } else if (name == 'Meta' && this.metaKey) {
+        return true;
+      } else if (name == 'Alt' && this.altKey) {
+        return true;
+      }
       return false;
     },
     preventDefault: function() {}

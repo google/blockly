@@ -571,29 +571,29 @@ suite('Events', function() {
         getArgs: (thisObj) => [thisObj.block],
         getExpectedJson: (thisObj) => ({type: 'create',
           blockId: thisObj.block.id,
-          xml: '<block xmlns=\"https://developers.google.com/blockly/xml\"' +
-              ' type=\"simple_test_block\" id=\"testBlockId1\"></block>',
+          xml: '<block xmlns="https://developers.google.com/blockly/xml"' +
+              ' type="simple_test_block" id="testBlockId1"></block>',
           ids: [thisObj.block.id]})},
       {title: 'Block create (shadow)', class: Blockly.Events.BlockCreate,
         getArgs: (thisObj) => [thisObj.shadowBlock],
         getExpectedJson: (thisObj) => ({type: 'create',
           blockId: thisObj.shadowBlock.id,
-          xml: '<shadow xmlns=\"https://developers.google.com/blockly/xml\"' +
-              ' type=\"simple_test_block\" id=\"testBlockId2\"></shadow>',
+          xml: '<shadow xmlns="https://developers.google.com/blockly/xml"' +
+              ' type="simple_test_block" id="testBlockId2"></shadow>',
           ids: [thisObj.shadowBlock.id], recordUndo: false})},
       {title: 'Block delete', class: Blockly.Events.BlockDelete,
         getArgs: (thisObj) => [thisObj.block],
         getExpectedJson: (thisObj) => ({type: 'delete',
           blockId: thisObj.block.id,
-          oldXml: '<block xmlns=\"https://developers.google.com/blockly/xml\"' +
-              ' type=\"simple_test_block\" id=\"testBlockId1\"></block>',
+          oldXml: '<block xmlns="https://developers.google.com/blockly/xml"' +
+              ' type="simple_test_block" id="testBlockId1"></block>',
           ids: [thisObj.block.id]})},
       {title: 'Block delete (shadow)', class: Blockly.Events.BlockDelete,
         getArgs: (thisObj) => [thisObj.shadowBlock],
         getExpectedJson: (thisObj) => ({type: 'delete',
           blockId: thisObj.shadowBlock.id,
-          oldXml: '<shadow xmlns=\"https://developers.google.com/blockly/xml"' +
-              '\ type=\"simple_test_block\" id=\"testBlockId2\"></shadow>',
+          oldXml: '<shadow xmlns="https://developers.google.com/blockly/xml"' +
+              ' type="simple_test_block" id="testBlockId2"></shadow>',
           ids: [thisObj.shadowBlock.id], recordUndo: false})},
       {title: 'Block move', class: Blockly.Events.BlockMove,
         getArgs: (thisObj) => [thisObj.block],

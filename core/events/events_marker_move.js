@@ -77,10 +77,10 @@ Blockly.Events.MarkerMove.prototype.type = Blockly.Events.MARKER_MOVE;
  */
 Blockly.Events.MarkerMove.prototype.toJson = function() {
   var json = Blockly.Events.MarkerMove.superClass_.toJson.call(this);
+  json['isCursor'] = this.isCursor;
   json['blockId'] = this.blockId;
   json['oldNode'] = this.oldNode;
   json['curNode'] = this.curNode;
-  json['isCursor'] = this.isCursor;
   return json;
 };
 
@@ -90,10 +90,10 @@ Blockly.Events.MarkerMove.prototype.toJson = function() {
  */
 Blockly.Events.MarkerMove.prototype.fromJson = function(json) {
   Blockly.Events.MarkerMove.superClass_.fromJson.call(this, json);
+  this.isCursor = json['isCursor'];
   this.blockId = json['blockId'];
   this.oldNode = json['oldNode'];
   this.curNode = json['curNode'];
-  this.isCursor = json['isCursor'];
 };
 
 Blockly.registry.register(Blockly.registry.Type.EVENT,

@@ -385,7 +385,7 @@ Blockly.VerticalFlyout.prototype.reflowInternal_ = function() {
       // is in the correct position relative to the new absolute edge (ie
       // toolbox edge).
       this.targetWorkspace.translate(
-          this.targetWorkspace.scrollX + flyoutWidth, 0);
+          this.targetWorkspace.scrollX + flyoutWidth, this.targetWorkspace.scrollY);
     }
 
     // Record the width for .getMetrics_ and .position.

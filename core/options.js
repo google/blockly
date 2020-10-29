@@ -15,7 +15,6 @@ goog.provide('Blockly.Options');
 goog.require('Blockly.Theme');
 goog.require('Blockly.Themes.Classic');
 goog.require('Blockly.registry');
-goog.require('Blockly.user.keyMap');
 goog.require('Blockly.utils.IdGenerator');
 goog.require('Blockly.utils.Metrics');
 goog.require('Blockly.utils.toolbox');
@@ -108,8 +107,6 @@ Blockly.Options = function(options) {
   } else {
     var oneBasedIndex = !!options['oneBasedIndex'];
   }
-  var keyMap = options['keyMap'] || Blockly.user.keyMap.createDefaultKeyMap();
-
   var renderer = options['renderer'] || 'geras';
 
   var plugins = options['plugins'] || {};
@@ -158,8 +155,6 @@ Blockly.Options = function(options) {
   this.toolboxPosition = toolboxPosition;
   /** @type {!Blockly.Theme} */
   this.theme = Blockly.Options.parseThemeOptions_(options);
-  /** @type {!Object<string,Blockly.Action>} */
-  this.keyMap = keyMap;
   /** @type {string} */
   this.renderer = renderer;
   /** @type {?Object} */

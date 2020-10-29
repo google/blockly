@@ -27,6 +27,7 @@ goog.require('Blockly.utils.KeyCodes');
 goog.require('Blockly.utils.object');
 goog.require('Blockly.utils.Size');
 
+goog.requireType('Blockly.ShortcutRegistry');
 
 /**
  * Class for a colour input field.
@@ -384,24 +385,27 @@ Blockly.FieldColour.prototype.onKeyDown_ = function(e) {
 /**
  * Handles the given action.
  * This is only triggered when keyboard accessibility mode is enabled.
- * @param {!Blockly.Action} action The action to be handled.
+ * @param {!Blockly.ShortcutRegistry.KeyboardShortcut} action The action to be handled.
  * @return {boolean} True if the field handled the action, false otherwise.
  * @package
  */
 Blockly.FieldColour.prototype.onBlocklyAction = function(action) {
   if (this.picker_) {
-    if (action === Blockly.navigation.ACTION_PREVIOUS) {
-      this.moveHighlightBy_(0, -1);
-      return true;
-    } else if (action === Blockly.navigation.ACTION_NEXT) {
-      this.moveHighlightBy_(0, 1);
-      return true;
-    } else if (action === Blockly.navigation.ACTION_OUT) {
-      this.moveHighlightBy_(-1, 0);
-      return true;
-    } else if (action === Blockly.navigation.ACTION_IN) {
-      this.moveHighlightBy_(1, 0);
-      return true;
+    switch (action.name) {
+      case Blockly.navigation.actionNames.PREVIOUS:
+        this.moveHighlightBy_(0, -1);
+        return true;
+      case Blockly.navigation.actionNames.NEXT:
+        this.moveHighlightBy_(0, 1);
+        return true;
+      case Blockly.navigation.actionNames.OUT:
+        this.moveHighlightBy_(-1, 0);
+        return true;
+      case Blockly.navigation.actionNames.IN:
+        this.moveHighlightBy_(1, 0);
+        return true;
+      default:
+        return false;
     }
   }
   return Blockly.FieldColour.superClass_.onBlocklyAction.call(this, action);

@@ -13,8 +13,8 @@
 
 goog.provide('Blockly.ShortcutRegistry');
 
-goog.require('Blockly.KeyboardShortcutItems');
 goog.require('Blockly.navigation');
+goog.require('Blockly.ShortcutItems');
 goog.require('Blockly.utils.object');
 
 
@@ -167,14 +167,15 @@ Blockly.ShortcutRegistry.prototype.removeKeyMapping = function(
     shortcutNames.splice(shortcutIdx, 1);
     if (shortcutNames.length == 0) {
       delete this.keyMap_[keyCode];
-      return true;
     }
+    return true;
   } else if (!opt_quiet) {
     console.warn(
         'No keyboard shortcut with name "' + shortcutName +
         '" registered with key code "' + keyCode + '"');
     return false;
   }
+  return false;
 };
 
 /**

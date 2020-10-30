@@ -577,7 +577,7 @@ function createKeyDownEvent(keyCode, type, modifiers) {
   var event = {
     keyCode: keyCode,
     target: {type: type},
-    getModifierState: function() {
+    getModifierState: function(name) {
       if (name == 'Shift' && this.shiftKey) {
         return true;
       } else if (name == 'Control' && this.ctrlKey) {

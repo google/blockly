@@ -376,7 +376,7 @@ Blockly.HorizontalFlyout.prototype.reflowInternal_ = function() {
       // is in the correct position relative to the new absolute edge (ie
       // toolbox edge).
       this.targetWorkspace.translate(
-          0, this.targetWorkspace.scrollY + flyoutHeight);
+          this.targetWorkspace.scrollX, this.targetWorkspace.scrollY + flyoutHeight);
     }
 
     // Record the height for .getMetrics_ and .position.

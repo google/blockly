@@ -140,7 +140,7 @@ Blockly.ShortcutRegistry.prototype.addKeyMapping = function(
 };
 
 /**
- * Adds a mapping between a keycode and a keyboard shortcut.
+ * Removes a mapping between a keycode and a keyboard shortcut.
  * @param {string} keyCode The key code for the keyboard shortcut. If
  *     registering a key code with a modifier (ex: ctrl+c) use
  *     Blockly.ShortcutRegistry.registry.createSerializedKey;

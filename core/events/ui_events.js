@@ -64,7 +64,7 @@ Blockly.Events.UiBase.prototype.IS_UI_EVENT = true;
  * @param {*=} opt_oldValue Previous value of element.
  * @param {*=} opt_newValue New value of element.
  * @extends {Blockly.Events.UiBase}
- * @deprecated Instead use a more specific UI event.
+ * @deprecated December 2020. Instead use a more specific UI event.
  * @constructor
  */
 Blockly.Events.Ui = function(opt_block, opt_element, opt_oldValue,

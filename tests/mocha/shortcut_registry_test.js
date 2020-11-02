@@ -67,7 +67,7 @@ suite('Keyboard Shortcut Registry Test', function() {
 
       var registry = this.registry;
       chai.assert.isFalse(registry.unregister('test', 'test_shortcut'));
-      sinon.assert.calledWith(consoleStub, 'Keyboard shortcut with name "test" not found.');
+      sinon.assert.calledOnceWithExactly(consoleStub, 'Keyboard shortcut with name "test" not found.');
     });
     test('Unregistering a shortcut with key mappings', function() {
       var testShortcut = {'name': 'test_shortcut'};
@@ -160,7 +160,7 @@ suite('Keyboard Shortcut Registry Test', function() {
           this.registry.removeKeyMapping('keyCode', 'test_shortcut');
 
       chai.assert.isFalse(isRemoved);
-      sinon.assert.calledWith(
+      sinon.assert.calledOnceWithExactly(
           consoleStub,
           'No keyboard shortcut with name "test_shortcut" registered with key code "keyCode"');
     });
@@ -173,7 +173,7 @@ suite('Keyboard Shortcut Registry Test', function() {
               this.registry.removeKeyMapping('keyCode', 'test_shortcut');
 
           chai.assert.isFalse(isRemoved);
-          sinon.assert.calledWith(
+          sinon.assert.calledOnceWithExactly(
               consoleStub,
               'No keyboard shortcut with name "test_shortcut" registered with key code "keyCode"');
         });

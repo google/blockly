@@ -680,10 +680,11 @@ Blockly.BlockSvg.prototype.tab = function(start, forward) {
   var tabCursor = new Blockly.TabNavigateCursor();
   tabCursor.setCurNode(Blockly.ASTNode.createFieldNode(start));
   var currentNode = tabCursor.getCurNode();
-  var action = forward ?
-      Blockly.navigation.ACTION_NEXT : Blockly.navigation.ACTION_PREVIOUS;
+  var actionName = forward ?
+      Blockly.navigation.actionNames.NEXT : Blockly.navigation.actionNames.PREVIOUS;
 
-  tabCursor.onBlocklyAction(action);
+  tabCursor.onBlocklyAction(
+      /** @type {!Blockly.ShortcutRegistry.KeyboardShortcut} */ ({name: actionName}));
 
   var nextNode = tabCursor.getCurNode();
   if (nextNode && nextNode !== currentNode) {

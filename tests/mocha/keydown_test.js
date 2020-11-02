@@ -93,7 +93,7 @@ suite('Key Down', function() {
   suite('Copy', function() {
     setup(function() {
       setSelectedBlock(this.workspace);
-      this.copySpy = sinon.spy(Blockly, 'copy_');
+      this.copySpy = sinon.spy(Blockly, 'copy');
       this.hideChaffSpy = sinon.spy(Blockly, 'hideChaff');
     });
     var testCases = [

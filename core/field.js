@@ -856,7 +856,7 @@ Blockly.Field.prototype.forceRerender = function() {
   if (this.sourceBlock_ && this.sourceBlock_.rendered) {
     this.sourceBlock_.render();
     this.sourceBlock_.bumpNeighbours();
-    this.updateMarkers_();
+    // this.updateMarkers_();
   }
 };
 

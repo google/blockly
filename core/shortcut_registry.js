@@ -43,7 +43,7 @@ Blockly.ShortcutRegistry = function() {
   this.keyMap_ = Object.create(null);
 
   Blockly.ShortcutItems.registerDefaultShortcuts();
-  Blockly.navigation.registerNavigationShortcuts();
+  // Blockly.navigation.registerNavigationShortcuts();
 };
 
 /**

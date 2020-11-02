@@ -34,6 +34,7 @@ goog.require('Blockly.utils.Coordinate');
 goog.require('Blockly.utils.dom');
 goog.require('Blockly.utils.object');
 goog.require('Blockly.utils.Rect');
+goog.require('Blockly.utils.userAgent');
 
 goog.requireType('Blockly.IASTNodeLocationSvg');
 goog.requireType('Blockly.IBoundedElement');
@@ -117,6 +118,10 @@ Blockly.BlockSvg = function(workspace, prototypeName, opt_id) {
   // Expose this block's ID on its top-level SVG group.
   if (this.svgGroup_.dataset) {
     this.svgGroup_.dataset['id'] = this.id;
+  } else if (Blockly.utils.userAgent.IE) {
+    // SVGElement.dataset is not available on IE11, but data-* properties
+    // can be set with setAttribute().
+    this.svgGroup_.setAttribute('data-id', this.id);
   }
 };
 Blockly.utils.object.inherits(Blockly.BlockSvg, Blockly.Block);

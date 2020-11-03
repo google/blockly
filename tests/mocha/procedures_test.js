@@ -50,6 +50,24 @@ suite('Procedures', function() {
       const blocks = workspace.getAllBlocks(false);
       chai.assert.lengthOf(blocks, expectedCount);
     }
+    test('defnoreturn', function() {
+      var xml = Blockly.Xml.textToDom(`
+            <xml xmlns="https://developers.google.com/blockly/xml">
+              <block type="procedures_defnoreturn"/>
+            </xml>`);
+      Blockly.Xml.domToWorkspace(xml, this.workspace);
+      assertDefAndCallBlocks(
+          this.workspace, ['unnamed'], [], false);
+    });
+    test('defreturn', function() {
+      var xml = Blockly.Xml.textToDom(`
+            <xml xmlns="https://developers.google.com/blockly/xml">
+              <block type="procedures_defreturn"/>
+            </xml>`);
+      Blockly.Xml.domToWorkspace(xml, this.workspace);
+      assertDefAndCallBlocks(
+          this.workspace, [], ['unnamed'], false);
+    });
     test('defnoreturn and defreturn', function() {
       var xml = Blockly.Xml.textToDom(`
             <xml xmlns="https://developers.google.com/blockly/xml">
@@ -70,6 +88,38 @@ suite('Procedures', function() {
       assertDefAndCallBlocks(
           this.workspace, ['unnamed2'], ['unnamed'], false);
     });
+    test('callnoreturn (no def in xml)', function() {
+      var xml = Blockly.Xml.textToDom(`
+            <xml xmlns="https://developers.google.com/blockly/xml">
+              <block type="procedures_callnoreturn"/>
+            </xml>`);
+      Blockly.Xml.domToWorkspace(xml, this.workspace);
+      assertDefAndCallBlocks(
+          this.workspace, ['unnamed'], [], true);
+
+      var blocks = this.workspace.getAllBlocks(false);
+      chai.assert.lengthOf(blocks, 4);
+    });
+    test('callreturn (no def in xml)', function() {
+      var xml = Blockly.Xml.textToDom(`
+            <xml xmlns="https://developers.google.com/blockly/xml">
+              <block type="procedures_callnoreturn"/>
+              <block type="procedures_callreturn"/>
+            </xml>`);
+      Blockly.Xml.domToWorkspace(xml, this.workspace);
+      assertDefAndCallBlocks(
+          this.workspace, [], ['unnamed'], true);
+    });
+    test('callnoreturn and callreturn (no def in xml)', function() {
+      var xml = Blockly.Xml.textToDom(`
+            <xml xmlns="https://developers.google.com/blockly/xml">
+              <block type="procedures_callnoreturn"/>
+              <block type="procedures_callreturn"/>
+            </xml>`);
+      Blockly.Xml.domToWorkspace(xml, this.workspace);
+      assertDefAndCallBlocks(
+          this.workspace, ['unnamed'], ['unnamed2'], true);
+    });
     test('callreturn and callnoreturn (no def in xml)', function() {
       var xml = Blockly.Xml.textToDom(`
             <xml xmlns="https://developers.google.com/blockly/xml">
@@ -82,16 +132,6 @@ suite('Procedures', function() {
 
       var blocks = this.workspace.getAllBlocks(false);
       chai.assert.lengthOf(blocks, 4);
-    });
-    test('callnoreturn and callreturn (no def in xml)', function() {
-      var xml = Blockly.Xml.textToDom(`
-            <xml xmlns="https://developers.google.com/blockly/xml">
-              <block type="procedures_callnoreturn"/>
-              <block type="procedures_callreturn"/>
-            </xml>`);
-      Blockly.Xml.domToWorkspace(xml, this.workspace);
-      assertDefAndCallBlocks(
-          this.workspace, ['unnamed'], ['unnamed2'], true);
     });
   });
 

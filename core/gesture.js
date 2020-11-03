@@ -772,12 +772,13 @@ Blockly.Gesture.prototype.doBlockClick_ = function() {
  */
 Blockly.Gesture.prototype.doWorkspaceClick_ = function(e) {
   var ws = this.creatorWorkspace_;
-  if (e.shiftKey && ws.keyboardAccessibilityMode) {
-    var screenCoord = new Blockly.utils.Coordinate(e.clientX, e.clientY);
-    var wsCoord = Blockly.utils.screenToWsCoordinates(ws, screenCoord);
-    var wsNode = Blockly.ASTNode.createWorkspaceNode(ws, wsCoord);
-    ws.getCursor().setCurNode(wsNode);
-  } else if (Blockly.selected) {
+  // if (e.shiftKey && ws.keyboardAccessibilityMode) {
+  //   var screenCoord = new Blockly.utils.Coordinate(e.clientX, e.clientY);
+  //   var wsCoord = Blockly.utils.screenToWsCoordinates(ws, screenCoord);
+  //   var wsNode = Blockly.ASTNode.createWorkspaceNode(ws, wsCoord);
+  //   ws.getCursor().setCurNode(wsNode);
+  // } else
+  if (Blockly.selected) {
     Blockly.selected.unselect();
   }
   this.fireWorkspaceClick_(this.startWorkspace_ || ws);

@@ -119,7 +119,7 @@ suite('Logic ternary', function() {
       connectElseInputAndCheckConnections(block, elseInput, thenInput, opt_parent);
     }
     setup(function() {
-      this.block = this.workspace.newBlock('logic_ternary');;
+      this.block = this.workspace.newBlock('logic_ternary');
     });
     suite('No parent', function() {
       test('Attach inputs same type', function() {

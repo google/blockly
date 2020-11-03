@@ -7,7 +7,7 @@
 goog.require('Blockly.Blocks.procedures');
 goog.require('Blockly.Msg');
 
-suite('Procedures', function() {
+suite.only('Procedures', function() {
   setup(function() {
     sharedTestSetup.call(this);
     this.workspace = new Blockly.Workspace();
@@ -96,14 +96,10 @@ suite('Procedures', function() {
       Blockly.Xml.domToWorkspace(xml, this.workspace);
       assertDefAndCallBlocks(
           this.workspace, ['unnamed'], [], true);
-
-      var blocks = this.workspace.getAllBlocks(false);
-      chai.assert.lengthOf(blocks, 4);
     });
     test('callreturn (no def in xml)', function() {
       var xml = Blockly.Xml.textToDom(`
             <xml xmlns="https://developers.google.com/blockly/xml">
-              <block type="procedures_callnoreturn"/>
               <block type="procedures_callreturn"/>
             </xml>`);
       Blockly.Xml.domToWorkspace(xml, this.workspace);
@@ -129,9 +125,6 @@ suite('Procedures', function() {
       Blockly.Xml.domToWorkspace(xml, this.workspace);
       assertDefAndCallBlocks(
           this.workspace, ['unnamed2'], ['unnamed'], true);
-
-      var blocks = this.workspace.getAllBlocks(false);
-      chai.assert.lengthOf(blocks, 4);
     });
   });
 

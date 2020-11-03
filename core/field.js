@@ -1148,17 +1148,17 @@ Blockly.Field.prototype.setMarkerSvg = function(markerSvg) {
   this.markerSvg_ = markerSvg;
 };
 
-/**
- * Redraw any attached marker or cursor svgs if needed.
- * @protected
- */
-Blockly.Field.prototype.updateMarkers_ = function() {
-  var workspace =
-    /** @type {!Blockly.WorkspaceSvg} */ (this.sourceBlock_.workspace);
-  if (workspace.keyboardAccessibilityMode && this.cursorSvg_) {
-    workspace.getCursor().draw();
-  }
-  if (workspace.keyboardAccessibilityMode && this.markerSvg_) {
-    workspace.getMarker(Blockly.navigation.MARKER_NAME).draw();
-  }
-};
+// /**
+//  * Redraw any attached marker or cursor svgs if needed.
+//  * @protected
+//  */
+// Blockly.Field.prototype.updateMarkers_ = function() {
+//   var workspace =
+//     /** @type {!Blockly.WorkspaceSvg} */ (this.sourceBlock_.workspace);
+//   if (workspace.keyboardAccessibilityMode && this.cursorSvg_) {
+//     workspace.getCursor().draw();
+//   }
+//   if (workspace.keyboardAccessibilityMode && this.markerSvg_) {
+//     workspace.getMarker(Blockly.navigation.MARKER_NAME).draw();
+//   }
+// };

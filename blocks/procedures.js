@@ -28,7 +28,7 @@ Blockly.Blocks['procedures_defnoreturn'] = {
    * @this {Blockly.Block}
    */
   init: function() {
-    var nameField = new Blockly.FieldTextInput('',
+    var nameField = new Blockly.FieldTextInput(this.id,
         Blockly.Procedures.rename);
     nameField.setSpellcheck(false);
     this.appendDummyInput()
@@ -405,7 +405,7 @@ Blockly.Blocks['procedures_defreturn'] = {
    * @this {Blockly.Block}
    */
   init: function() {
-    var nameField = new Blockly.FieldTextInput('',
+    var nameField = new Blockly.FieldTextInput(this.id,
         Blockly.Procedures.rename);
     nameField.setSpellcheck(false);
     this.appendDummyInput()
@@ -949,7 +949,7 @@ Blockly.Blocks['procedures_callreturn'] = {
    */
   init: function() {
     this.appendDummyInput('TOPROW')
-        .appendField('', 'NAME');
+        .appendField(this.id, 'NAME');
     this.setOutput(true);
     this.setStyle('procedure_blocks');
     // Tooltip is set in domToMutation.

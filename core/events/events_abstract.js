@@ -52,8 +52,9 @@ Blockly.Events.Abstract = function() {
 /**
  * Whether or not the event is a ui event.
  * @type {boolean}
+ * @const
  */
-Blockly.Events.Abstract.prototype.IS_UI_EVENT = false;
+Blockly.Events.Abstract.prototype.isUiEvent = false;
 
 /**
  * Encode the event as JSON.

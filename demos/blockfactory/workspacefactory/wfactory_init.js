@@ -345,7 +345,7 @@ WorkspaceFactoryInit.addWorkspaceFactoryEventListeners_ = function(controller) {
     // Only enable "Edit Block" when a block is selected and it has a
     // surrounding parent, meaning it is nested in another block (blocks that
     // are not nested in parents cannot be shadow blocks).
-    if (e.type == Blockly.Events.BLOCK_MOVE || (e.IS_UI_EVENT &&
+    if (e.type == Blockly.Events.BLOCK_MOVE || (e.isUiEvent &&
         e.element == 'selected')) {
       var selected = Blockly.selected;
 

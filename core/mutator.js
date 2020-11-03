@@ -363,7 +363,7 @@ Blockly.Mutator.prototype.setVisible = function(visible) {
  * @private
  */
 Blockly.Mutator.prototype.workspaceChanged_ = function(e) {
-  if (e.IS_UI_EVENT ||
+  if (e.isUiEvent ||
       (e.type == Blockly.Events.CHANGE && e.element == 'disabled')) {
     return;
   }

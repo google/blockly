@@ -377,9 +377,9 @@ function assertEventEquals(event, expectedType,
     }
   });
   if (isUiEvent) {
-    chai.assert.isTrue(event.IS_UI_EVENT);
+    chai.assert.isTrue(event.isUiEvent);
   } else {
-    chai.assert.isFalse(event.IS_UI_EVENT);
+    chai.assert.isFalse(event.isUiEvent);
   }
 }
 

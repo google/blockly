@@ -293,7 +293,7 @@ Blockly.Procedures.updateMutatorFlyout_ = function(workspace) {
  * @package
  */
 Blockly.Procedures.mutatorOpenListener = function(e) {
-  if (!e.IS_UI_EVENT || e.element != 'mutatorOpen' || !e.newValue) {
+  if (!e.isUiEvent || e.element != 'mutatorOpen' || !e.newValue) {
     return;
   }
   var workspaceId = /** @type {string} */ (e.workspaceId);

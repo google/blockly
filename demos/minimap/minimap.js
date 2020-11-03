@@ -137,7 +137,7 @@ Minimap.mousemove = function(e) {
  *    workspace.
  */
 Minimap.mirrorEvent = function(event) {
-  if (event.IS_UI_EVENT) {
+  if (event.isUiEvent) {
     return;  // Don't mirror UI events.
   }
   // Convert event to JSON.  This could then be transmitted across the net.

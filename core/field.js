@@ -1133,6 +1133,24 @@ Blockly.Field.prototype.setCursorSvg = function(cursorSvg) {
 };
 
 /**
+ * Gets the cursor svg that is attached to this field, or null if the cursor is not on a field.
+ * @return {SVGElement} The svg element for the keyboard navigation cursor.
+ * @public
+ */
+Blockly.Field.prototype.getCursorSvg = function() {
+  return this.cursorSvg_;
+};
+
+/**
+ * Gets the marker svg that is attached to this field, or null if the marker is not on a field.
+ * @return {SVGElement} The svg element for the keyboard navigation marker.
+ * @public
+ */
+Blockly.Field.prototype.getMarkerSvg = function() {
+  return this.markerSvg_;
+};
+
+/**
  * Add the marker svg to this fields svg group.
  * @param {SVGElement} markerSvg The svg root of the marker to be added to the
  *     field group.

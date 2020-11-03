@@ -28,7 +28,8 @@ Blockly.Blocks['procedures_defnoreturn'] = {
    * @this {Blockly.Block}
    */
   init: function() {
-    var nameField = new Blockly.FieldTextInput(this.id,
+    var initName = Blockly.Procedures.findLegalName('', this);
+    var nameField = new Blockly.FieldTextInput(initName,
         Blockly.Procedures.rename);
     nameField.setSpellcheck(false);
     this.appendDummyInput()
@@ -405,7 +406,8 @@ Blockly.Blocks['procedures_defreturn'] = {
    * @this {Blockly.Block}
    */
   init: function() {
-    var nameField = new Blockly.FieldTextInput(this.id,
+    var initName = Blockly.Procedures.findLegalName('', this);
+    var nameField = new Blockly.FieldTextInput(initName,
         Blockly.Procedures.rename);
     nameField.setSpellcheck(false);
     this.appendDummyInput()
@@ -592,7 +594,7 @@ Blockly.Blocks['procedures_callnoreturn'] = {
    */
   init: function() {
     this.appendDummyInput('TOPROW')
-        .appendField(this.id, 'NAME');
+        .appendField('', 'NAME');
     this.setPreviousStatement(true);
     this.setNextStatement(true);
     this.setStyle('procedure_blocks');
@@ -873,8 +875,13 @@ Blockly.Blocks['procedures_callnoreturn'] = {
         block.appendChild(mutation);
         var field = Blockly.utils.xml.createElement('field');
         field.setAttribute('name', 'NAME');
-        field.appendChild(Blockly.utils.xml.createTextNode(
-            this.getProcedureCall()));
+        var callName = this.getProcedureCall();
+        if (!callName) {
+          // Rename if name is empty string.
+          callName = Blockly.Procedures.findLegalName('', this);
+          this.renameProcedure('', callName);
+        }
+        field.appendChild(Blockly.utils.xml.createTextNode(callName));
         block.appendChild(field);
         xml.appendChild(block);
         Blockly.Xml.domToWorkspace(xml, this.workspace);
@@ -949,7 +956,7 @@ Blockly.Blocks['procedures_callreturn'] = {
    */
   init: function() {
     this.appendDummyInput('TOPROW')
-        .appendField(this.id, 'NAME');
+        .appendField('', 'NAME');
     this.setOutput(true);
     this.setStyle('procedure_blocks');
     // Tooltip is set in domToMutation.

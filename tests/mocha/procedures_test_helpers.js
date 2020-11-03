@@ -73,23 +73,6 @@ function assertCallBlockStructure(callBlock, args = []) {
 }
 
 /**
- * Asserts that the procedure definition and call blocks have the expected
- *    inputs and fields.
- * @param {!Blockly.Block} def The procedure definition block.
- * @param {!Blockly.Block} call The procedure call block.
- * @param {boolean=} hasReturn If we expect the procedure def to have a return
- *     input or not.
- * @param {Array<string>=} args An array of argument names.
- * @param {boolean=} hasStatements If we expect the procedure def to have
- *     a statement input or not.
- */
-function assertProcBlocksStructure(
-    def, call, hasReturn = false, args = [], hasStatements = true) {
-  assertDefBlockStructure(def, hasReturn, args, hasStatements);
-  assertCallBlockStructure(call, args);
-}
-
-/**
  * Creates procedure definition block using domToBlock call.
  * @param {!Blockly.Workspace} workspace The Blockly workspace.
  * @param {boolean=} hasReturn Whether the procedure definition should have

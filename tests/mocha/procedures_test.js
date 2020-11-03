@@ -7,13 +7,92 @@
 goog.require('Blockly.Blocks.procedures');
 goog.require('Blockly.Msg');
 
-suite('Procedures', function() {
+suite.only('Procedures', function() {
   setup(function() {
     sharedTestSetup.call(this);
     this.workspace = new Blockly.Workspace();
   });
   teardown(function() {
     sharedTestTeardown.call(this);
+  });
+
+  suite('fromXml no name is renamed to unnamed', function() {
+    function assertDefAndCallBlocks(workspace, noReturnNames, returnNames, hasCallers) {
+      const allProcedures = Blockly.Procedures.allProcedures(workspace);
+      const defNoReturnBlocks = allProcedures[0];
+      chai.assert.lengthOf(defNoReturnBlocks, noReturnNames.length);
+      for (let i = 0; i < noReturnNames.length; i++) {
+        const expectedName = noReturnNames[i];
+        chai.assert.equal(defNoReturnBlocks[i][0], expectedName);
+        if (hasCallers) {
+          const callers =
+              Blockly.Procedures.getCallers(expectedName, workspace);
+          chai.assert.lengthOf(callers, 1);
+        }
+      }
+      const defReturnBlocks = allProcedures[1];
+      chai.assert.lengthOf(defReturnBlocks, returnNames.length);
+      for (let i = 0; i < returnNames.length; i++) {
+        const expectedName = returnNames[i];
+        chai.assert.equal(defReturnBlocks[i][0], expectedName);
+        if (hasCallers) {
+          const callers =
+              Blockly.Procedures.getCallers(expectedName, workspace);
+          chai.assert.lengthOf(callers, 1);
+        }
+      }
+
+      // Expecting def and caller blocks are the only blocks on workspace
+      let expectedCount = noReturnNames.length + returnNames.length;
+      if (hasCallers) {
+        expectedCount *= 2;
+      }
+      const blocks = workspace.getAllBlocks(false);
+      chai.assert.lengthOf(blocks, expectedCount);
+    }
+    test('defnoreturn and defreturn', function() {
+      var xml = Blockly.Xml.textToDom(`
+            <xml xmlns="https://developers.google.com/blockly/xml">
+              <block type="procedures_defnoreturn"/>
+              <block type="procedures_defreturn"/>
+            </xml>`);
+      Blockly.Xml.domToWorkspace(xml, this.workspace);
+      assertDefAndCallBlocks(
+          this.workspace, ['unnamed'], ['unnamed2'], false);
+    });
+    test('defreturn and defnoreturn', function() {
+      var xml = Blockly.Xml.textToDom(`
+            <xml xmlns="https://developers.google.com/blockly/xml">
+              <block type="procedures_defreturn"/>
+              <block type="procedures_defnoreturn"/>
+            </xml>`);
+      Blockly.Xml.domToWorkspace(xml, this.workspace);
+      assertDefAndCallBlocks(
+          this.workspace, ['unnamed2'], ['unnamed'], false);
+    });
+    test('callreturn and callnoreturn (no def in xml)', function() {
+      var xml = Blockly.Xml.textToDom(`
+            <xml xmlns="https://developers.google.com/blockly/xml">
+              <block type="procedures_callreturn"/>
+              <block type="procedures_callnoreturn"/>
+            </xml>`);
+      Blockly.Xml.domToWorkspace(xml, this.workspace);
+      assertDefAndCallBlocks(
+          this.workspace, ['unnamed2'], ['unnamed'], true);
+
+      var blocks = this.workspace.getAllBlocks(false);
+      chai.assert.lengthOf(blocks, 4);
+    });
+    test('callnoreturn and callreturn (no def in xml)', function() {
+      var xml = Blockly.Xml.textToDom(`
+            <xml xmlns="https://developers.google.com/blockly/xml">
+              <block type="procedures_callnoreturn"/>
+              <block type="procedures_callreturn"/>
+            </xml>`);
+      Blockly.Xml.domToWorkspace(xml, this.workspace);
+      assertDefAndCallBlocks(
+          this.workspace, ['unnamed'], ['unnamed2'], true);
+    });
   });
 
   suite('allProcedures', function() {
@@ -784,7 +863,7 @@ suite('Procedures', function() {
           expectedXml:
               '<block xmlns="https://developers.google.com/blockly/xml" ' +
               'type="' + testSuite.defType + '" id="1">\n' +
-              '  <field name="NAME"></field>\n' +
+              '  <field name="NAME">unnamed</field>\n' +
               '</block>',
           assertBlockStructure:
               (block) => {
@@ -855,7 +934,7 @@ suite('Procedures', function() {
           expectedXml:
               '<block xmlns="https://developers.google.com/blockly/xml" ' +
               'type="' + testSuite.callType + '" id="1">\n' +
-              '  <mutation name="1"></mutation>\n' +
+              '  <mutation name="unnamed"></mutation>\n' +
               '</block>',
           assertBlockStructure:
               (block) => {

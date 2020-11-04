@@ -149,10 +149,10 @@ Blockly.Events.BUBBLE_OPEN = 'bubble_open';
 Blockly.Events.TRASHCAN_OPEN = 'trashcan_open';
 
 /**
- * Name of event that records a toolbox item change.
+ * Name of event that records a toolbox item select.
  * @const
  */
-Blockly.Events.TOOLBOX_ITEM_CHANGE = 'toolbox_item_change';
+Blockly.Events.TOOLBOX_ITEM_SELECT = 'toolbox_item_select';
 
 /**
  * Name of event that records a theme change.

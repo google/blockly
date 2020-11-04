@@ -18,7 +18,7 @@ goog.require('Blockly.registry');
 goog.require('Blockly.utils.object');
 
 /**
- * Class for a Selected event.
+ * Class for a selected event.
  * @param {?string=} opt_oldElementId The id of the previously selected
  *    element. Null if no element last selected. Undefined for a blank event.
  * @param {?string=} opt_elementId The id of the selected element. Null if no

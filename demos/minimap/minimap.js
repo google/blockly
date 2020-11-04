@@ -133,10 +133,11 @@ Minimap.mousemove = function(e) {
 
 /**
  * Run non-UI events from the main workspace on the minimap.
- * @param {!Event} event Event that triggered in the main workspace.
+ * @param {!Blockly.Events.Abstract} event Event that triggered in the main
+ *    workspace.
  */
 Minimap.mirrorEvent = function(event) {
-  if (event.type == Blockly.Events.UI) {
+  if (event.isUiEvent) {
     return;  // Don't mirror UI events.
   }
   // Convert event to JSON.  This could then be transmitted across the net.

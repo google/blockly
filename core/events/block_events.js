@@ -128,6 +128,7 @@ Blockly.Events.Change.prototype.toJson = function() {
   if (this.name) {
     json['name'] = this.name;
   }
+  json['oldValue'] = this.oldValue;
   json['newValue'] = this.newValue;
   return json;
 };
@@ -140,6 +141,7 @@ Blockly.Events.Change.prototype.fromJson = function(json) {
   Blockly.Events.Change.superClass_.fromJson.call(this, json);
   this.element = json['element'];
   this.name = json['name'];
+  this.oldValue = json['oldValue'];
   this.newValue = json['newValue'];
 };
 
@@ -255,6 +257,9 @@ Blockly.Events.Create.prototype.toJson = function() {
   var json = Blockly.Events.Create.superClass_.toJson.call(this);
   json['xml'] = Blockly.Xml.domToText(this.xml);
   json['ids'] = this.ids;
+  if (!this.recordUndo) {
+    json['recordUndo'] = this.recordUndo;
+  }
   return json;
 };
 
@@ -266,6 +271,9 @@ Blockly.Events.Create.prototype.fromJson = function(json) {
   Blockly.Events.Create.superClass_.fromJson.call(this, json);
   this.xml = Blockly.Xml.textToDom(json['xml']);
   this.ids = json['ids'];
+  if (json['recordUndo'] !== undefined) {
+    this.recordUndo = json['recordUndo'];
+  }
 };
 
 /**
@@ -340,7 +348,11 @@ Blockly.Events.Delete.prototype.type = Blockly.Events.DELETE;
  */
 Blockly.Events.Delete.prototype.toJson = function() {
   var json = Blockly.Events.Delete.superClass_.toJson.call(this);
+  json['oldXml'] = Blockly.Xml.domToText(this.oldXml);
   json['ids'] = this.ids;
+  if (!this.recordUndo) {
+    json['recordUndo'] = this.recordUndo;
+  }
   return json;
 };
 
@@ -350,7 +362,11 @@ Blockly.Events.Delete.prototype.toJson = function() {
  */
 Blockly.Events.Delete.prototype.fromJson = function(json) {
   Blockly.Events.Delete.superClass_.fromJson.call(this, json);
+  this.oldXml = Blockly.Xml.textToDom(json['oldXml']);
   this.ids = json['ids'];
+  if (json['recordUndo'] !== undefined) {
+    this.recordUndo = json['recordUndo'];
+  }
 };
 
 /**
@@ -430,6 +446,9 @@ Blockly.Events.Move.prototype.toJson = function() {
     json['newCoordinate'] = Math.round(this.newCoordinate.x) + ',' +
         Math.round(this.newCoordinate.y);
   }
+  if (!this.recordUndo) {
+    json['recordUndo'] = this.recordUndo;
+  }
   return json;
 };
 
@@ -445,6 +464,9 @@ Blockly.Events.Move.prototype.fromJson = function(json) {
     var xy = json['newCoordinate'].split(',');
     this.newCoordinate =
         new Blockly.utils.Coordinate(Number(xy[0]), Number(xy[1]));
+  }
+  if (json['recordUndo'] !== undefined) {
+    this.recordUndo = json['recordUndo'];
   }
 };
 

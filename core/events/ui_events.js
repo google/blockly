@@ -52,7 +52,6 @@ Blockly.utils.object.inherits(Blockly.Events.UiBase, Blockly.Events.Abstract);
 /**
  * Whether or not the event is a UI event.
  * @type {boolean}
- * @const
  */
 Blockly.Events.UiBase.prototype.isUiEvent = true;
 

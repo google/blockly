@@ -15,6 +15,7 @@ goog.provide('Blockly.IASTNodeLocation');
 goog.provide('Blockly.IASTNodeLocationSvg');
 goog.provide('Blockly.IASTNodeLocationWithBlock');
 goog.provide('Blockly.IBlocklyActionable');
+goog.requireType('Blockly.ShortcutRegistry');
 
 /**
  * An AST node location interface.
@@ -66,7 +67,7 @@ Blockly.IBlocklyActionable = function() {};
 
 /**
  * Handles the given action.
- * @param {!Blockly.Action} action The action to be handled.
+ * @param {!Blockly.ShortcutRegistry.KeyboardShortcut} action The action to be handled.
  * @return {boolean} True if the action has been handled, false otherwise.
  */
 Blockly.IBlocklyActionable.prototype.onBlocklyAction;

@@ -26,7 +26,6 @@ goog.require('Blockly.utils.dom');
 goog.require('Blockly.utils.Rect');
 goog.require('Blockly.utils.toolbox');
 
-goog.requireType('Blockly.Action');
 goog.requireType('Blockly.IBlocklyActionable');
 goog.requireType('Blockly.ICollapsibleToolboxItem');
 goog.requireType('Blockly.IDeleteArea');
@@ -35,6 +34,7 @@ goog.requireType('Blockly.ISelectableToolboxItem');
 goog.requireType('Blockly.IStyleable');
 goog.requireType('Blockly.IToolbox');
 goog.requireType('Blockly.IToolboxItem');
+goog.requireType('Blockly.ShortcutRegistry');
 goog.requireType('Blockly.WorkspaceSvg');
 
 
@@ -814,7 +814,7 @@ Blockly.Toolbox.prototype.fireSelectEvent_ = function(oldItem, newItem) {
 /**
  * Handles the given Blockly action on a toolbox.
  * This is only triggered when keyboard accessibility mode is enabled.
- * @param {!Blockly.Action} action The action to be handled.
+ * @param {!Blockly.ShortcutRegistry.KeyboardShortcut} action The action to be handled.
  * @return {boolean} True if the field handled the action, false otherwise.
  * @package
  */

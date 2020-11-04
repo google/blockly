@@ -383,35 +383,6 @@ Blockly.FieldColour.prototype.onKeyDown_ = function(e) {
 };
 
 /**
- * Handles the given action.
- * This is only triggered when keyboard accessibility mode is enabled.
- * @param {!Blockly.ShortcutRegistry.KeyboardShortcut} action The action to be handled.
- * @return {boolean} True if the field handled the action, false otherwise.
- * @package
- */
-Blockly.FieldColour.prototype.onBlocklyAction = function(action) {
-  if (this.picker_) {
-    switch (action.name) {
-      case Blockly.navigation.actionNames.PREVIOUS:
-        this.moveHighlightBy_(0, -1);
-        return true;
-      case Blockly.navigation.actionNames.NEXT:
-        this.moveHighlightBy_(0, 1);
-        return true;
-      case Blockly.navigation.actionNames.OUT:
-        this.moveHighlightBy_(-1, 0);
-        return true;
-      case Blockly.navigation.actionNames.IN:
-        this.moveHighlightBy_(1, 0);
-        return true;
-      default:
-        return false;
-    }
-  }
-  return Blockly.FieldColour.superClass_.onBlocklyAction.call(this, action);
-};
-
-/**
  * Move the currently highlighted position by dx and dy.
  * @param {number} dx Change of x
  * @param {number} dy Change of y

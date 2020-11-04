@@ -901,7 +901,7 @@ Blockly.BlockSvg.prototype.dispose = function(healStack, animate) {
   }
 
   if (this.workspace.keyboardAccessibilityMode) {
-    Blockly.navigation.moveCursorOnBlockDelete(this);
+    // Blockly.navigation.moveCursorOnBlockDelete(this);
   }
 
   if (animate && this.rendered) {

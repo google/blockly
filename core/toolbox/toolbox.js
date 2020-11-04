@@ -156,6 +156,14 @@ Blockly.Toolbox = function(workspace) {
 };
 
 /**
+ * The function used to decide how the cursor used in keyboard navigation should act when focus is
+ * on the cursor.
+ * @type {function(!Blockly.ShortcutRegistry.KeyboardShortcut):boolean}
+ * @public
+ */
+Blockly.Toolbox.prototype.onBlocklyAction = null;
+
+/**
  * Initializes the toolbox
  * @public
  */
@@ -811,32 +819,6 @@ Blockly.Toolbox.prototype.fireSelectEvent_ = function(oldItem, newItem) {
       oldElement, newElement);
   event.workspaceId = this.workspace_.id;
   Blockly.Events.fire(event);
-};
-
-/**
- * Handles the given Blockly action on a toolbox.
- * This is only triggered when keyboard accessibility mode is enabled.
- * @param {!Blockly.ShortcutRegistry.KeyboardShortcut} action The action to be handled.
- * @return {boolean} True if the field handled the action, false otherwise.
- * @package
- */
-Blockly.Toolbox.prototype.onBlocklyAction = function(action) {
-  var selected = this.selectedItem_;
-  if (!selected) {
-    return false;
-  }
-  switch (action.name) {
-    case Blockly.navigation.actionNames.PREVIOUS:
-      return this.selectPrevious_();
-    case Blockly.navigation.actionNames.OUT:
-      return this.selectParent_();
-    case Blockly.navigation.actionNames.NEXT:
-      return this.selectNext_();
-    case Blockly.navigation.actionNames.IN:
-      return this.selectChild_();
-    default:
-      return false;
-  }
 };
 
 /**

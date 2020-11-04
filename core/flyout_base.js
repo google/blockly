@@ -17,7 +17,6 @@ goog.require('Blockly.blockRendering');
 goog.require('Blockly.Events');
 goog.require('Blockly.Events.BlockCreate');
 goog.require('Blockly.Events.VarCreate');
-goog.require('Blockly.FlyoutCursor');
 goog.require('Blockly.Gesture');
 goog.require('Blockly.Marker');
 goog.require('Blockly.Scrollbar');
@@ -253,7 +252,6 @@ Blockly.Flyout.prototype.createDom = function(tagName) {
       this.svgBackground_, 'flyoutBackgroundColour', 'fill');
   this.workspace_.getThemeManager().subscribe(
       this.svgBackground_, 'flyoutOpacity', 'fill-opacity');
-  this.workspace_.getMarkerManager().setCursor(new Blockly.FlyoutCursor());
   return this.svgGroup_;
 };
 
@@ -996,16 +994,12 @@ Blockly.Flyout.prototype.placeNewBlock_ = function(oldBlock) {
 };
 
 /**
- * Handles the given action.
- * This is only triggered when keyboard accessibility mode is enabled.
- * @param {!Blockly.ShortcutRegistry.KeyboardShortcut} action The action to be handled.
- * @return {boolean} True if the flyout handled the action, false otherwise.
- * @package
+ * The function used to decide how the cursor used in keyboard navigation should act when focus is
+ * on the cursor.
+ * @type {function(!Blockly.ShortcutRegistry.KeyboardShortcut):boolean}
+ * @public
  */
-Blockly.Flyout.prototype.onBlocklyAction = function(action) {
-  var cursor = this.workspace_.getCursor();
-  return cursor.onBlocklyAction(action);
-};
+Blockly.Flyout.prototype.onBlocklyAction;
 
 /**
  * Return the deletion rectangle for this flyout in viewport coordinates.

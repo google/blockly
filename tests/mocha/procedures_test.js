@@ -7,7 +7,7 @@
 goog.require('Blockly.Blocks.procedures');
 goog.require('Blockly.Msg');
 
-suite.only('Procedures', function() {
+suite('Procedures', function() {
   setup(function() {
     sharedTestSetup.call(this);
     this.workspace = new Blockly.Workspace();

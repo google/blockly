@@ -22,8 +22,8 @@ goog.require('Blockly.utils.object');
  * @param {?Blockly.Block=} opt_block The affected block. Null for click events
  *    that do not have an associated block (i.e. workspace click). Undefined
  *    for a blank event.
- * @param {string=} opt_workspaceId The workspace identifier for this event.
- *    Undefined for a blank event.
+ * @param {?string=} opt_workspaceId The workspace identifier for this event.
+ *    Not used if block is passed. Undefined for a blank event.
  * @param {string=} opt_targetType The type of element targeted by this click
  *    event. Undefined for a blank event.
  * @extends {Blockly.Events.UiBase}

@@ -64,7 +64,7 @@ suite('Events', function() {
     });
 
     test('Click without block', function() {
-      var event = new Blockly.Events.Click(null, this.workspace.id);
+      var event = new Blockly.Events.Click(null, this.workspace.id, 'workspace');
       assertEventEquals(event, Blockly.Events.CLICK, this.workspace.id, null, {
         'targetType': 'workspace',
         'recordUndo': false,
@@ -170,7 +170,7 @@ suite('Events', function() {
       test('Click with block', function() {
         var TEST_GROUP_ID = 'testGroup';
         Blockly.Events.setGroup(TEST_GROUP_ID);
-        var event = new Blockly.Events.Click(this.block);
+        var event = new Blockly.Events.Click(this.block, null, 'block');
         assertEventEquals(event, Blockly.Events.CLICK, this.workspace.id,
             this.TEST_BLOCK_ID, {
               'targetType': 'block',
@@ -473,13 +473,13 @@ suite('Events', function() {
       {title: 'Bubble open', class: Blockly.Events.BubbleOpen,
         getArgs: (thisObj) => [thisObj.block, true, 'mutator'],
         getExpectedJson: (thisObj) => ({type: 'bubble_open', isOpen: true,
-          element: 'mutator', blockId: thisObj.block.id})},
+          bubbleType: 'mutator', blockId: thisObj.block.id})},
       {title: 'Block click', class: Blockly.Events.Click,
-        getArgs: (thisObj) => [thisObj.block],
+        getArgs: (thisObj) => [thisObj.block, null, 'block'],
         getExpectedJson: (thisObj) => ({type: 'click', targetType: 'block',
           blockId: thisObj.block.id})},
       {title: 'Workspace click', class: Blockly.Events.Click,
-        getArgs: (thisObj) => [null, thisObj.workspace.id],
+        getArgs: (thisObj) => [null, thisObj.workspace.id, 'workspace'],
         getExpectedJson: (thisObj) => ({type: 'click',
           targetType: 'workspace'})},
       {title: 'Drag start', class: Blockly.Events.BlockDrag,
@@ -537,17 +537,17 @@ suite('Events', function() {
       {title: 'Toolbox item select',
         class: Blockly.Events.ToolboxItemSelect,
         getArgs: (thisObj) => ['Math', 'Loops', thisObj.workspace.id],
-        getExpectedJson: () => ({type: 'toolbox_item_change', oldItem: 'Math',
+        getExpectedJson: () => ({type: 'toolbox_item_select', oldItem: 'Math',
           newItem: 'Loops'})},
       {title: 'Toolbox item select (no previous)',
         class: Blockly.Events.ToolboxItemSelect,
         getArgs: (thisObj) => [null, 'Loops', thisObj.workspace.id],
-        getExpectedJson: () => ({type: 'toolbox_item_change', oldItem: null,
+        getExpectedJson: () => ({type: 'toolbox_item_select', oldItem: null,
           newItem: 'Loops'})},
       {title: 'Toolbox item select (deselect)',
         class: Blockly.Events.ToolboxItemSelect,
         getArgs: (thisObj) => ['Math', null, thisObj.workspace.id],
-        getExpectedJson: () => ({type: 'toolbox_item_change', oldItem: 'Math',
+        getExpectedJson: () => ({type: 'toolbox_item_select', oldItem: 'Math',
           newItem: null})},
       {title: 'Trashcan open', class: Blockly.Events.TrashcanOpen,
         getArgs: (thisObj) => [true, thisObj.workspace.id],
@@ -893,9 +893,9 @@ suite('Events', function() {
       chai.assert.isTrue(filteredEvents[0] instanceof Blockly.Events.BubbleOpen);
       chai.assert.isTrue(filteredEvents[1] instanceof Blockly.Events.BubbleOpen);
       chai.assert.isTrue(filteredEvents[2] instanceof Blockly.Events.BubbleOpen);
-      chai.assert.equal(filteredEvents[0].element, 'comment');
-      chai.assert.equal(filteredEvents[1].element, 'mutator');
-      chai.assert.equal(filteredEvents[2].element, 'warning');
+      chai.assert.equal(filteredEvents[0].bubbleType, 'comment');
+      chai.assert.equal(filteredEvents[1].bubbleType, 'mutator');
+      chai.assert.equal(filteredEvents[2].bubbleType, 'warning');
     });
 
     test('Colliding events not dropped', function() {

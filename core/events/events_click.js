@@ -20,11 +20,12 @@ goog.require('Blockly.utils.object');
 /**
  * Class for a click event.
  * @param {?Blockly.Block=} opt_block The affected block. Null for click events
- *     that do not have an associated block (i.e. workspace click). Undefined
- *     for a blank event.
- * @param {string=} opt_workspaceId The workspace identifier for this event.
+ *    that do not have an associated block (i.e. workspace click). Undefined
+ *    for a blank event.
+ * @param {?string=} opt_workspaceId The workspace identifier for this event.
+ *    Not used if block is passed. Undefined for a blank event.
  * @param {string=} opt_targetType The type of element targeted by this click
- *    event.
+ *    event. Undefined for a blank event.
  * @extends {Blockly.Events.UiBase}
  * @constructor
  */
@@ -32,10 +33,6 @@ Blockly.Events.Click = function(opt_block, opt_workspaceId, opt_targetType) {
   var workspaceId = opt_block ? opt_block.workspace.id : opt_workspaceId;
   Blockly.Events.Click.superClass_.constructor.call(this, workspaceId);
   this.blockId = opt_block ? opt_block.id : null;
-
-  if (!opt_targetType && !this.isBlank) {
-    opt_targetType = opt_block ? 'block' : 'workspace';
-  }
 
   /**
    * The type of element targeted by this click event.

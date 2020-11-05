@@ -25,17 +25,17 @@ goog.require('Blockly.utils.object');
  *    blank event.
  * @param {?Blockly.ASTNode=} opt_oldNode The old node the marker used to be on.
  *    Undefined for a blank event.
- * @param {!Blockly.ASTNode=} opt_curNode The new node the marker is now on.
+ * @param {!Blockly.ASTNode=} opt_newNode The new node the marker is now on.
  *    Undefined for a blank event.
  * @extends {Blockly.Events.UiBase}
  * @constructor
  */
 Blockly.Events.MarkerMove = function(opt_block, isCursor, opt_oldNode,
-    opt_curNode) {
+    opt_newNode) {
   var workspaceId = opt_block ? opt_block.workspace.id : undefined;
-  if (opt_curNode && opt_curNode.getType() == Blockly.ASTNode.types.WORKSPACE) {
+  if (opt_newNode && opt_newNode.getType() == Blockly.ASTNode.types.WORKSPACE) {
     workspaceId =
-        (/** @type {!Blockly.Workspace} */ (opt_curNode.getLocation())).id;
+        (/** @type {!Blockly.Workspace} */ (opt_newNode.getLocation())).id;
   }
   Blockly.Events.MarkerMove.superClass_.constructor.call(this, workspaceId);
 
@@ -55,7 +55,7 @@ Blockly.Events.MarkerMove = function(opt_block, isCursor, opt_oldNode,
    * The new node the  marker is now on.
    * @type {Blockly.ASTNode|undefined}
    */
-  this.curNode = opt_curNode;
+  this.newNode = opt_newNode;
 
   /**
    * Whether this is a cursor event.
@@ -80,7 +80,7 @@ Blockly.Events.MarkerMove.prototype.toJson = function() {
   json['isCursor'] = this.isCursor;
   json['blockId'] = this.blockId;
   json['oldNode'] = this.oldNode;
-  json['curNode'] = this.curNode;
+  json['newNode'] = this.newNode;
   return json;
 };
 
@@ -93,7 +93,7 @@ Blockly.Events.MarkerMove.prototype.fromJson = function(json) {
   this.isCursor = json['isCursor'];
   this.blockId = json['blockId'];
   this.oldNode = json['oldNode'];
-  this.curNode = json['curNode'];
+  this.newNode = json['newNode'];
 };
 
 Blockly.registry.register(Blockly.registry.Type.EVENT,

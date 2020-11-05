@@ -18,17 +18,17 @@ goog.require('Blockly.registry');
 goog.require('Blockly.utils.object');
 
 /**
- * Class for a Selected event.
+ * Class for a selected event.
  * @param {?string=} opt_oldElementId The id of the previously selected
  *    element. Null if no element last selected. Undefined for a blank event.
- * @param {?string=} opt_elementId The id of the selected element. Null if no
+ * @param {?string=} opt_newElementId The id of the selected element. Null if no
  *    element currently selected (deselect). Undefined for a blank event.
  * @param {string=} opt_workspaceId The workspace identifier for this event.
  *    Null if no element previously selected. Undefined for a blank event.
  * @extends {Blockly.Events.UiBase}
  * @constructor
  */
-Blockly.Events.Selected = function(opt_oldElementId, opt_elementId,
+Blockly.Events.Selected = function(opt_oldElementId, opt_newElementId,
     opt_workspaceId) {
   Blockly.Events.Selected.superClass_.constructor.call(this, opt_workspaceId);
 
@@ -42,7 +42,7 @@ Blockly.Events.Selected = function(opt_oldElementId, opt_elementId,
    * The id of the selected element.
    * @type {?string|undefined}
    */
-  this.elementId = opt_elementId;
+  this.newElementId = opt_newElementId;
 };
 Blockly.utils.object.inherits(Blockly.Events.Selected, Blockly.Events.UiBase);
 
@@ -59,7 +59,7 @@ Blockly.Events.Selected.prototype.type = Blockly.Events.SELECTED;
 Blockly.Events.Selected.prototype.toJson = function() {
   var json = Blockly.Events.Selected.superClass_.toJson.call(this);
   json['oldElementId'] = this.oldElementId;
-  json['elementId'] = this.elementId;
+  json['newElementId'] = this.newElementId;
   return json;
 };
 
@@ -70,7 +70,7 @@ Blockly.Events.Selected.prototype.toJson = function() {
 Blockly.Events.Selected.prototype.fromJson = function(json) {
   Blockly.Events.Selected.superClass_.fromJson.call(this, json);
   this.oldElementId = json['oldElementId'];
-  this.elementId = json['elementId'];
+  this.newElementId = json['newElementId'];
 };
 
 Blockly.registry.register(Blockly.registry.Type.EVENT, Blockly.Events.SELECTED,

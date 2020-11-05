@@ -49,7 +49,7 @@ suite('Comments', function() {
       assertEditable(this.comment);
       assertEventFired(
           this.eventsFireStub, Blockly.Events.BubbleOpen,
-          {element: 'comment', isOpen: true}, this.workspace.id,
+          {bubbleType: 'comment', isOpen: true}, this.workspace.id,
           this.block.id);
     });
     test('Not Editable', function() {
@@ -64,7 +64,7 @@ suite('Comments', function() {
       assertNotEditable(this.comment);
       assertEventFired(
           this.eventsFireStub, Blockly.Events.BubbleOpen,
-          {element: 'comment', isOpen: true}, this.workspace.id,
+          {bubbleType: 'comment', isOpen: true}, this.workspace.id,
           this.block.id);
     });
     test('Editable -> Not Editable', function() {
@@ -80,7 +80,7 @@ suite('Comments', function() {
       assertNotEditable(this.comment);
       assertEventFired(
           this.eventsFireStub, Blockly.Events.BubbleOpen,
-          {element: 'comment', isOpen: true}, this.workspace.id,
+          {bubbleType: 'comment', isOpen: true}, this.workspace.id,
           this.block.id);
     });
     test('Not Editable -> Editable', function() {
@@ -98,7 +98,7 @@ suite('Comments', function() {
       assertEditable(this.comment);
       assertEventFired(
           this.eventsFireStub, Blockly.Events.BubbleOpen,
-          {element: 'comment', isOpen: true}, this.workspace.id,
+          {bubbleType: 'comment', isOpen: true}, this.workspace.id,
           this.block.id);
     });
   });

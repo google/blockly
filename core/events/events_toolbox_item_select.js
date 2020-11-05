@@ -51,7 +51,7 @@ Blockly.utils.object.inherits(Blockly.Events.ToolboxItemSelect, Blockly.Events.U
  * Type of this event.
  * @type {string}
  */
-Blockly.Events.ToolboxItemSelect.prototype.type = Blockly.Events.TOOLBOX_ITEM_CHANGE;
+Blockly.Events.ToolboxItemSelect.prototype.type = Blockly.Events.TOOLBOX_ITEM_SELECT;
 
 /**
  * Encode the event as JSON.
@@ -75,4 +75,4 @@ Blockly.Events.ToolboxItemSelect.prototype.fromJson = function(json) {
 };
 
 Blockly.registry.register(Blockly.registry.Type.EVENT,
-    Blockly.Events.TOOLBOX_ITEM_CHANGE, Blockly.Events.ToolboxItemSelect);
+    Blockly.Events.TOOLBOX_ITEM_SELECT, Blockly.Events.ToolboxItemSelect);

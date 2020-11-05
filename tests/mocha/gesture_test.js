@@ -35,7 +35,7 @@ suite('Gesture', function() {
 
 
     assertEventFired(eventsFireStub, Blockly.Events.Selected,
-        {oldElementId: null, elementId: block.id}, fieldWorkspace.id);
+        {oldElementId: null, newElementId: block.id}, fieldWorkspace.id);
     assertEventNotFired(eventsFireStub, Blockly.Events.Click, {});
   }
 

@@ -19,8 +19,8 @@ goog.require('Blockly.utils.object');
 
 /**
  * Class for a trashcan open event.
- * @param {boolean=} opt_isOpen Whether the trashcan flyout is open. Undefined
- *    for a blank event.
+ * @param {boolean=} opt_isOpen Whether the trashcan flyout is opening (false if
+ *    opening). Undefined for a blank event.
  * @param {string=} opt_workspaceId The workspace identifier for this event.
  *    Undefined for a blank event.
  * @extends {Blockly.Events.UiBase}
@@ -30,7 +30,7 @@ Blockly.Events.TrashcanOpen = function(opt_isOpen, opt_workspaceId) {
   Blockly.Events.TrashcanOpen.superClass_.constructor.call(this, opt_workspaceId);
 
   /**
-   * Whether the trashcan flyout is open.
+   * Whether the trashcan flyout is opening (false if closing).
    * @type {boolean|undefined}
    */
   this.isOpen = opt_isOpen;

@@ -136,35 +136,3 @@ Blockly.Cursor.prototype.out = function() {
   }
   return newNode;
 };
-
-/**
- * Handles the given action.
- * This is only triggered when keyboard navigation is enabled.
- * @param {!Blockly.ShortcutRegistry.KeyboardShortcut} action The action to be handled.
- * @return {boolean} True if the action has been handled, false otherwise.
- */
-Blockly.Cursor.prototype.onBlocklyAction = function(action) {
-  // If we are on a field give it the option to handle the action
-  if (this.getCurNode() &&
-      this.getCurNode().getType() === Blockly.ASTNode.types.FIELD &&
-      (/** @type {!Blockly.Field} */ (this.getCurNode().getLocation()))
-          .onBlocklyAction(action)) {
-    return true;
-  }
-  switch (action.name) {
-    case Blockly.navigation.actionNames.PREVIOUS:
-      this.prev();
-      return true;
-    case Blockly.navigation.actionNames.OUT:
-      this.out();
-      return true;
-    case Blockly.navigation.actionNames.NEXT:
-      this.next();
-      return true;
-    case Blockly.navigation.actionNames.IN:
-      this.in();
-      return true;
-    default:
-      return false;
-  }
-};

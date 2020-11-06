@@ -11,11 +11,14 @@ suite('Procedures', function() {
   setup(function() {
     sharedTestSetup.call(this);
     this.workspace = new Blockly.Workspace();
+    this.workspace.createVariable('preCreatedVar', '', 'preCreatedVarId');
+    this.workspace.createVariable(
+        'preCreatedTypedVar', 'type', 'preCreatedTypedVarId');
   });
   teardown(function() {
     sharedTestTeardown.call(this);
   });
-
+  
   suite('allProcedures', function() {
     test('Only Procedures', function() {
       var noReturnBlock = new Blockly.Block(this.workspace, 'procedures_defnoreturn');
@@ -190,6 +193,180 @@ suite('Procedures', function() {
     });
   });
 
+  suite('Multiple block serialization', function() {
+    function assertDefAndCallBlocks(workspace, noReturnNames, returnNames, hasCallers) {
+      const allProcedures = Blockly.Procedures.allProcedures(workspace);
+      const defNoReturnBlocks = allProcedures[0];
+      chai.assert.lengthOf(defNoReturnBlocks, noReturnNames.length);
+      for (let i = 0; i < noReturnNames.length; i++) {
+        const expectedName = noReturnNames[i];
+        chai.assert.equal(defNoReturnBlocks[i][0], expectedName);
+        if (hasCallers) {
+          const callers =
+              Blockly.Procedures.getCallers(expectedName, workspace);
+          chai.assert.lengthOf(callers, 1);
+        }
+      }
+      const defReturnBlocks = allProcedures[1];
+      chai.assert.lengthOf(defReturnBlocks, returnNames.length);
+      for (let i = 0; i < returnNames.length; i++) {
+        const expectedName = returnNames[i];
+        chai.assert.equal(defReturnBlocks[i][0], expectedName);
+        if (hasCallers) {
+          const callers =
+              Blockly.Procedures.getCallers(expectedName, workspace);
+          chai.assert.lengthOf(callers, 1);
+        }
+      }
+
+      // Expecting def and caller blocks are the only blocks on workspace
+      let expectedCount = noReturnNames.length + returnNames.length;
+      if (hasCallers) {
+        expectedCount *= 2;
+      }
+      const blocks = workspace.getAllBlocks(false);
+      chai.assert.lengthOf(blocks, expectedCount);
+    }
+    suite('no name renamed to unnamed', function() {
+      test('defnoreturn and defreturn', function() {
+        var xml = Blockly.Xml.textToDom(`
+              <xml xmlns="https://developers.google.com/blockly/xml">
+                <block type="procedures_defnoreturn"/>
+                <block type="procedures_defreturn"/>
+              </xml>`);
+        Blockly.Xml.domToWorkspace(xml, this.workspace);
+        assertDefAndCallBlocks(
+            this.workspace, ['unnamed'], ['unnamed2'], false);
+      });
+      test('defreturn and defnoreturn', function() {
+        var xml = Blockly.Xml.textToDom(`
+              <xml xmlns="https://developers.google.com/blockly/xml">
+                <block type="procedures_defreturn"/>
+                <block type="procedures_defnoreturn"/>
+              </xml>`);
+        Blockly.Xml.domToWorkspace(xml, this.workspace);
+        assertDefAndCallBlocks(
+            this.workspace, ['unnamed2'], ['unnamed'], false);
+      });
+      test('callnoreturn (no def in xml)', function() {
+        var xml = Blockly.Xml.textToDom(`
+              <xml xmlns="https://developers.google.com/blockly/xml">
+                <block type="procedures_callnoreturn"/>
+              </xml>`);
+        Blockly.Xml.domToWorkspace(xml, this.workspace);
+        assertDefAndCallBlocks(
+            this.workspace, ['unnamed'], [], true);
+      });
+      test('callreturn (no def in xml)', function() {
+        var xml = Blockly.Xml.textToDom(`
+              <xml xmlns="https://developers.google.com/blockly/xml">
+                <block type="procedures_callreturn"/>
+              </xml>`);
+        Blockly.Xml.domToWorkspace(xml, this.workspace);
+        assertDefAndCallBlocks(
+            this.workspace, [], ['unnamed'], true);
+      });
+      test('callnoreturn and callreturn (no def in xml)', function() {
+        var xml = Blockly.Xml.textToDom(`
+              <xml xmlns="https://developers.google.com/blockly/xml">
+                <block type="procedures_callnoreturn"/>
+                <block type="procedures_callreturn"/>
+              </xml>`);
+        Blockly.Xml.domToWorkspace(xml, this.workspace);
+        assertDefAndCallBlocks(
+            this.workspace, ['unnamed'], ['unnamed2'], true);
+      });
+      test('callreturn and callnoreturn (no def in xml)', function() {
+        var xml = Blockly.Xml.textToDom(`
+              <xml xmlns="https://developers.google.com/blockly/xml">
+                <block type="procedures_callreturn"/>
+                <block type="procedures_callnoreturn"/>
+              </xml>`);
+        Blockly.Xml.domToWorkspace(xml, this.workspace);
+        assertDefAndCallBlocks(
+            this.workspace, ['unnamed2'], ['unnamed'], true);
+      });
+    });
+    suite('caller param mismatch', function() {
+      test.skip('callreturn with missing args', function() {
+        // TODO: How do we want it to behave in this situation?
+        var defBlock = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(`
+            <block type="procedures_defreturn">
+              <field name="NAME">do something</field>
+              <mutation>
+                <arg name="x" varid="arg"></arg>
+              </mutation>
+            </block>
+        `), this.workspace);
+        var callBlock = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
+            '<block type="procedures_callreturn">' +
+            '  <mutation name="do something"/>' +
+            '</block>'
+        ), this.workspace);
+        assertDefBlockStructure(defBlock, true, ['x'], ['arg']);
+        assertCallBlockStructure(callBlock, ['x'], ['arg']);
+      });
+      test.skip('callreturn with bad args', function() {
+        // TODO: How do we want it to behave in this situation?
+        var defBlock = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(`
+            <block type="procedures_defreturn">
+              <field name="NAME">do something</field>
+              <mutation>
+                <arg name="x" varid="arg"></arg>
+              </mutation>
+            </block>
+        `), this.workspace);
+        var callBlock = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(`
+            <block type="procedures_callreturn">
+              <mutation name="do something">
+                <arg name="y"></arg>
+              </mutation>
+            </block>
+        `), this.workspace);
+        assertDefBlockStructure(defBlock, true, ['x'], ['arg']);
+        assertCallBlockStructure(callBlock, ['x'], ['arg']);
+      });
+      test.skip('callnoreturn with missing args', function() {
+        // TODO: How do we want it to behave in this situation?
+        var defBlock = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(`
+            <block type="procedures_defnoreturn">
+              <field name="NAME">do something</field>
+              <mutation>
+                <arg name="x" varid="arg"></arg>
+              </mutation>
+            </block>
+        `), this.workspace);
+        var callBlock = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
+            '<block type="procedures_callnoreturn">' +
+            '  <mutation name="do something"/>' +
+            '</block>'
+        ), this.workspace);
+        assertDefBlockStructure(defBlock, false, ['x'], ['arg']);
+        assertCallBlockStructure(callBlock, ['x'], ['arg']);
+      });
+      test.skip('callnoreturn with bad args', function() {
+        // TODO: How do we want it to behave in this situation?
+        var defBlock = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(`
+            <block type="procedures_defnoreturn">
+              <field name="NAME">do something</field>
+              <mutation>
+                <arg name="x" varid="arg"></arg>
+              </mutation>
+            </block>
+        `), this.workspace);
+        var callBlock = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(`
+            <block type="procedures_callnoreturn">
+              <mutation name="do something">
+                <arg name="y"></arg>
+              </mutation>
+            </block>
+        `), this.workspace);
+        assertDefBlockStructure(defBlock, false, ['x'], ['arg']);
+        assertCallBlockStructure(callBlock, ['x'], ['arg']);
+      });
+    });
+  });
+
   const testSuites = [
     {title: 'procedures_defreturn', hasReturn: true,
       defType: 'procedures_defreturn', callType: 'procedures_callreturn'},
@@ -199,15 +376,30 @@ suite('Procedures', function() {
 
   testSuites.forEach((testSuite) => {
     suite(testSuite.title, function() {
-      setup(function() {
-        this.defType = testSuite.defType;
-        this.callType = testSuite.callType;
-        this.defBlock = new Blockly.Block(this.workspace, testSuite.defType);
-        this.defBlock.setFieldValue('proc name', 'NAME');
-        this.callBlock = new Blockly.Block(this.workspace, testSuite.callType);
-        this.callBlock.setFieldValue('proc name', 'NAME');
+      suite('Structure', function() {
+        setup(function() {
+          this.defBlock = new Blockly.Block(this.workspace, testSuite.defType);
+          this.defBlock.setFieldValue('proc name', 'NAME');
+        });
+        test('Definition block', function() {
+          assertDefBlockStructure(this.defBlock, testSuite.hasReturn);
+        });
+
+        test('Call block', function() {
+          this.callBlock = new Blockly.Block(
+              this.workspace, testSuite.callType);
+          this.callBlock.setFieldValue('proc name', 'NAME');
+          assertCallBlockStructure(this.callBlock);
+        });
       });
       suite('isNameUsed', function() {
+        setup(function() {
+          this.defBlock = new Blockly.Block(this.workspace, testSuite.defType);
+          this.defBlock.setFieldValue('proc name', 'NAME');
+          this.callBlock = new Blockly.Block(
+              this.workspace, testSuite.callType);
+          this.callBlock.setFieldValue('proc name', 'NAME');
+        });
         test('True', function() {
           chai.assert.isTrue(
               Blockly.Procedures.isNameUsed('proc name', this.workspace));
@@ -219,6 +411,11 @@ suite('Procedures', function() {
       });
       suite('rename', function() {
         setup(function() {
+          this.defBlock = new Blockly.Block(this.workspace, testSuite.defType);
+          this.defBlock.setFieldValue('proc name', 'NAME');
+          this.callBlock = new Blockly.Block(
+              this.workspace, testSuite.callType);
+          this.callBlock.setFieldValue('proc name', 'NAME');
           sinon.stub(this.defBlock.getField('NAME'), 'resizeEditor_');
         });
         test('Simple, Programmatic', function() {
@@ -323,7 +520,7 @@ suite('Procedures', function() {
 
           defInput.htmlInput_.value = '';
           defInput.onHtmlInputChange_(null);
-          var newDefBlock = new Blockly.Block(this.workspace, this.defType);
+          var newDefBlock = new Blockly.Block(this.workspace, testSuite.defType);
           newDefBlock.setFieldValue('new name', 'NAME');
           chai.assert.equal(
               this.defBlock.getFieldValue('NAME'),
@@ -334,6 +531,13 @@ suite('Procedures', function() {
         });
       });
       suite('getCallers', function() {
+        setup(function() {
+          this.defBlock = new Blockly.Block(this.workspace, testSuite.defType);
+          this.defBlock.setFieldValue('proc name', 'NAME');
+          this.callBlock = new Blockly.Block(
+              this.workspace, testSuite.callType);
+          this.callBlock.setFieldValue('proc name', 'NAME');
+        });
         test('Simple', function() {
           var callers =
               Blockly.Procedures.getCallers('proc name', this.workspace);
@@ -341,9 +545,9 @@ suite('Procedures', function() {
           chai.assert.equal(callers[0], this.callBlock);
         });
         test('Multiple Callers', function() {
-          var caller2 = new Blockly.Block(this.workspace, this.callType);
+          var caller2 = new Blockly.Block(this.workspace, testSuite.callType);
           caller2.setFieldValue('proc name', 'NAME');
-          var caller3 = new Blockly.Block(this.workspace, this.callType);
+          var caller3 = new Blockly.Block(this.workspace, testSuite.callType);
           caller3.setFieldValue('proc name', 'NAME');
 
           var callers =
@@ -354,9 +558,9 @@ suite('Procedures', function() {
           chai.assert.equal(callers[2], caller3);
         });
         test('Multiple Procedures', function() {
-          var def2 = new Blockly.Block(this.workspace, this.defType);
+          var def2 = new Blockly.Block(this.workspace, testSuite.defType);
           def2.setFieldValue('proc name2', 'NAME');
-          var caller2 = new Blockly.Block(this.workspace, this.callType);
+          var caller2 = new Blockly.Block(this.workspace, testSuite.callType);
           caller2.setFieldValue('proc name2', 'NAME');
 
           var callers =
@@ -382,9 +586,9 @@ suite('Procedures', function() {
         test('Multiple Workspaces', function() {
           var workspace = new Blockly.Workspace();
           try {
-            var def2 = new Blockly.Block(workspace, this.defType);
+            var def2 = new Blockly.Block(workspace, testSuite.defType);
             def2.setFieldValue('proc name', 'NAME');
-            var caller2 = new Blockly.Block(workspace, this.callType);
+            var caller2 = new Blockly.Block(workspace, testSuite.callType);
             caller2.setFieldValue('proc name', 'NAME');
 
             var callers =
@@ -401,15 +605,22 @@ suite('Procedures', function() {
         });
       });
       suite('getDefinition', function() {
+        setup(function() {
+          this.defBlock = new Blockly.Block(this.workspace, testSuite.defType);
+          this.defBlock.setFieldValue('proc name', 'NAME');
+          this.callBlock = new Blockly.Block(
+              this.workspace, testSuite.callType);
+          this.callBlock.setFieldValue('proc name', 'NAME');
+        });
         test('Simple', function() {
           var def =
               Blockly.Procedures.getDefinition('proc name', this.workspace);
           chai.assert.equal(def, this.defBlock);
         });
         test('Multiple Procedures', function() {
-          var def2 = new Blockly.Block(this.workspace, this.defType);
+          var def2 = new Blockly.Block(this.workspace, testSuite.defType);
           def2.setFieldValue('proc name2', 'NAME');
-          var caller2 = new Blockly.Block(this.workspace, this.callType);
+          var caller2 = new Blockly.Block(this.workspace, testSuite.callType);
           caller2.setFieldValue('proc name2', 'NAME');
 
           var def =
@@ -419,9 +630,9 @@ suite('Procedures', function() {
         test('Multiple Workspaces', function() {
           var workspace = new Blockly.Workspace();
           try {
-            var def2 = new Blockly.Block(workspace, this.defType);
+            var def2 = new Blockly.Block(workspace, testSuite.defType);
             def2.setFieldValue('proc name', 'NAME');
-            var caller2 = new Blockly.Block(workspace, this.callType);
+            var caller2 = new Blockly.Block(workspace, testSuite.callType);
             caller2.setFieldValue('proc name', 'NAME');
 
             var def =
@@ -555,6 +766,11 @@ suite('Procedures', function() {
       });
       suite('Mutation', function() {
         setup(function() {
+          this.defBlock = new Blockly.Block(this.workspace, testSuite.defType);
+          this.defBlock.setFieldValue('proc name', 'NAME');
+          this.callBlock = new Blockly.Block(
+              this.workspace, testSuite.callType);
+          this.callBlock.setFieldValue('proc name', 'NAME');
           this.findParentStub = sinon.stub(Blockly.Mutator, 'findParentWs')
               .returns(this.workspace);
         });
@@ -764,6 +980,180 @@ suite('Procedures', function() {
           });
         });
       });
+      /**
+       * Test cases for serialization tests.
+       * @type {Array<SerializationTestCase>}
+       */
+      const testCases = [
+        {
+          title: 'Minimal definition',
+          xml: '<block type="' + testSuite.defType + '"/>',
+          expectedXml:
+              '<block xmlns="https://developers.google.com/blockly/xml" ' +
+              'type="' + testSuite.defType + '" id="1">\n' +
+              '  <field name="NAME">unnamed</field>\n' +
+              '</block>',
+          assertBlockStructure:
+              (block) => {
+                assertDefBlockStructure(block, testSuite.hasReturn);
+              },
+        },
+        {
+          title: 'Common definition',
+          xml:
+              '<block type="' + testSuite.defType + '">' +
+              '  <field name="NAME">do something</field>' +
+              '</block>',
+          expectedXml:
+              '<block xmlns="https://developers.google.com/blockly/xml" ' +
+              'type="' + testSuite.defType + '" id="1">\n' +
+              '  <field name="NAME">do something</field>\n' +
+              '</block>',
+          assertBlockStructure:
+              (block) => {
+                assertDefBlockStructure(block, testSuite.hasReturn);
+              },
+        },
+        {
+          title: 'With vars definition',
+          xml:
+              '<block type="' + testSuite.defType + '">\n' +
+              '  <mutation>\n' +
+              '    <arg name="x" varid="arg1"></arg>\n' +
+              '    <arg name="y" varid="arg2"></arg>\n' +
+              '  </mutation>\n' +
+              '  <field name="NAME">do something</field>\n' +
+              '</block>',
+          expectedXml:
+              '<block xmlns="https://developers.google.com/blockly/xml" ' +
+              'type="' + testSuite.defType + '" id="1">\n' +
+              '  <mutation>\n' +
+              '    <arg name="x" varid="arg1"></arg>\n' +
+              '    <arg name="y" varid="arg2"></arg>\n' +
+              '  </mutation>\n' +
+              '  <field name="NAME">do something</field>\n' +
+              '</block>',
+          assertBlockStructure:
+              (block) => {
+                assertDefBlockStructure(
+                    block, testSuite.hasReturn, ['x', 'y'], ['arg1', 'arg2']);
+              },
+        },
+        {
+          title: 'With pre-created vars definition',
+          xml:
+              '<block type="' + testSuite.defType + '">\n' +
+              '  <mutation>\n' +
+              '    <arg name="preCreatedVar" varid="preCreatedVarId"></arg>\n' +
+              '  </mutation>\n' +
+              '  <field name="NAME">do something</field>\n' +
+              '</block>',
+          expectedXml:
+              '<block xmlns="https://developers.google.com/blockly/xml" ' +
+              'type="' + testSuite.defType + '" id="1">\n' +
+              '  <mutation>\n' +
+              '    <arg name="preCreatedVar" varid="preCreatedVarId"></arg>\n' +
+              '  </mutation>\n' +
+              '  <field name="NAME">do something</field>\n' +
+              '</block>',
+          assertBlockStructure:
+              (block) => {
+                assertDefBlockStructure(block, testSuite.hasReturn,
+                    ['preCreatedVar'], ['preCreatedVarId']);
+              },
+        },
+        {
+          title: 'With pre-created typed vars definition',
+          xml:
+              '<block type="' + testSuite.defType + '">\n' +
+              '  <mutation>\n' +
+              '    <arg name="preCreatedTypedVar" varid="preCreatedTypedVarId"></arg>\n' +
+              '  </mutation>\n' +
+              '  <field name="NAME">do something</field>\n' +
+              '</block>',
+          expectedXml:
+              '<block xmlns="https://developers.google.com/blockly/xml" ' +
+              'type="' + testSuite.defType + '" id="1">\n' +
+              '  <mutation>\n' +
+              '    <arg name="preCreatedTypedVar" varid="preCreatedTypedVarId"></arg>\n' +
+              '  </mutation>\n' +
+              '  <field name="NAME">do something</field>\n' +
+              '</block>',
+          assertBlockStructure:
+              (block) => {
+                assertDefBlockStructure(block, testSuite.hasReturn,
+                    ['preCreatedTypedVar'], ['preCreatedTypedVarId']);
+              },
+        },
+        {
+          title: 'No statements definition',
+          xml:
+              '<block type="procedures_defreturn">\n' +
+              '  <mutation statements="false"></mutation>\n' +
+              '  <field name="NAME">do something</field>\n' +
+              '</block>',
+          expectedXml:
+              '<block xmlns="https://developers.google.com/blockly/xml" ' +
+              'type="procedures_defreturn" id="1">\n' +
+              '  <mutation statements="false"></mutation>\n' +
+              '  <field name="NAME">do something</field>\n' +
+              '</block>',
+          assertBlockStructure:
+              (block) => {
+                assertDefBlockStructure(block, true, [], [], false);
+              },
+        },
+        {
+          title: 'Minimal caller',
+          xml: '<block type="' + testSuite.callType + '"/>',
+          expectedXml:
+              '<block xmlns="https://developers.google.com/blockly/xml" ' +
+              'type="' + testSuite.callType + '" id="1">\n' +
+              '  <mutation name="unnamed"></mutation>\n' +
+              '</block>',
+          assertBlockStructure:
+              (block) => {
+                assertCallBlockStructure(block);
+              },
+        },
+        {
+          title: 'Common caller',
+          xml:
+              '<block type="' + testSuite.callType + '">\n' +
+              '  <mutation name="do something"/>\n' +
+              '</block>',
+          expectedXml:
+              '<block xmlns="https://developers.google.com/blockly/xml" ' +
+              'type="' + testSuite.callType + '" id="1">\n' +
+              '  <mutation name="do something"></mutation>\n' +
+              '</block>',
+          assertBlockStructure:
+              (block) => {
+                assertCallBlockStructure(block);
+              },
+        },
+        {
+          title: 'With pre-created vars caller',
+          xml:
+              '<block type="' + testSuite.callType + '">\n' +
+              '  <mutation name="do something">\n' +
+              '    <arg name="preCreatedVar"></arg>\n' +
+              '  </mutation>\n' +
+              '</block>',
+          expectedXml:
+              '<block xmlns="https://developers.google.com/blockly/xml" ' +
+              'type="' + testSuite.callType + '" id="1">\n' +
+              '  <mutation name="do something">\n' +
+              '    <arg name="preCreatedVar"></arg>\n' +
+              '  </mutation>\n' +
+              '</block>',
+          assertBlockStructure:
+              (block) => {
+                assertCallBlockStructure(block, ['preCreatedVar'], ['preCreatedVarId']);
+              },
+        },
+      ];
+      testHelpers.runSerializationTestSuite(testCases);
     });
   });
 });

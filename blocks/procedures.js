@@ -962,6 +962,7 @@ Blockly.Blocks['procedures_callreturn'] = {
     // Tooltip is set in domToMutation.
     this.setHelpUrl(Blockly.Msg['PROCEDURES_CALLRETURN_HELPURL']);
     this.arguments_ = [];
+    this.argumentVarModels_ = [];
     this.quarkConnections_ = {};
     this.quarkIds_ = null;
     this.previousEnabledState_ = true;

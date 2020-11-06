@@ -1,4 +1,20 @@
 /**
+ * Asserts that the procedure definition or call block has the expected var
+ * models.
+ * @param {!Blockly.Block} block The procedure definition or call block to
+ *    check.
+ * @param {!Array<string>} varIds An array of variable ids.
+ * @private
+ */
+function assertBlockVarModels(block, varIds) {
+  const expectedVarModels = [];
+  for (let i = 0; i < varIds.length; i++) {
+    expectedVarModels.push(block.workspace.getVariableById(varIds[i]));
+  }
+  chai.assert.sameDeepOrderedMembers(block.getVarModels(), expectedVarModels);
+}
+
+/**
  * Asserts that the procedure call block has the expected arguments.
  * @param {!Blockly.Block} callBlock The procedure definition block.
  * @param {Array<string>=} args An array of argument names.
@@ -17,6 +33,7 @@ function assertCallBlockArgsStructure_(callBlock, args) {
     chai.assert.equal(callInput.fieldRow[0].getValue(), expectedName,
         'Call block consts did not match expected.');
   }
+  chai.assert.sameOrderedMembers(callBlock.getVars(), args);
 }
 
 /**
@@ -26,11 +43,12 @@ function assertCallBlockArgsStructure_(callBlock, args) {
  * @param {boolean=} hasReturn If we expect the procedure def to have a return
  *     input or not.
  * @param {Array<string>=} args An array of argument names.
+ * @param {Array<string>=} varIds An array of variable ids.
  * @param {boolean=} hasStatements If we expect the procedure def to have a
  *     statement input or not.
  */
-function assertDefBlockStructure(
-    defBlock, hasReturn = false, args = [], hasStatements = true) {
+function assertDefBlockStructure(defBlock, hasReturn = false,
+    args = [], varIds = [], hasStatements = true) {
   if (hasStatements) {
     chai.assert.isNotNull(defBlock.getInput('STACK'),
         'Def block should have STACK input');
@@ -54,6 +72,7 @@ function assertDefBlockStructure(
   }
 
   chai.assert.sameOrderedMembers(defBlock.getVars(), args);
+  assertBlockVarModels(defBlock, varIds);
 }
 
 /**
@@ -61,8 +80,9 @@ function assertDefBlockStructure(
  *    fields.
  * @param {!Blockly.Block} callBlock The procedure call block.
  * @param {Array<string>=} args An array of argument names.
+ * @param {Array<string>=} varIds An array of variable ids.
  */
-function assertCallBlockStructure(callBlock, args = []) {
+function assertCallBlockStructure(callBlock, args = [], varIds = []) {
   if (args.length) {
     chai.assert.include(callBlock.toString(), 'with');
   } else {
@@ -70,6 +90,7 @@ function assertCallBlockStructure(callBlock, args = []) {
   }
 
   assertCallBlockArgsStructure_(callBlock, args);
+  assertBlockVarModels(callBlock, varIds);
 }
 
 /**

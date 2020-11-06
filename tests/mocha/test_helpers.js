@@ -535,7 +535,12 @@ function createTestBlock() {
     rendered: false,
     workspace: {
       rendered: false
-    }
+    },
+    'isShadow': function() {
+      return false;
+    },
+    'renameVarById': Blockly.Block.prototype.renameVarById,
+    'updateVarName': Blockly.Block.prototype.updateVarName,
   };
 }
 

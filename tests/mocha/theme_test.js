@@ -120,6 +120,7 @@ suite('Theme', function() {
     defineThemeTestBlocks(this.sharedCleanup);
     try {
       var blockStyles = createBlockStyles();
+      var theme = new Blockly.Theme('themeName', blockStyles);
       var workspace = new Blockly.WorkspaceSvg(new Blockly.Options({}));
       var blockA = workspace.newBlock('stack_block');
 
@@ -132,10 +133,10 @@ suite('Theme', function() {
       sinon.stub(Blockly, "getMainWorkspace").returns(workspace);
       sinon.stub(Blockly, "hideChaff");
 
-      workspace.setTheme(blockStyles);
+      workspace.setTheme(theme);
 
       // Checks that the theme was set correctly on Blockly namespace
-      stringifyAndCompare(workspace.getTheme(), blockStyles);
+      stringifyAndCompare(workspace.getTheme(), theme);
 
       // Checks that the setTheme function was called on the block
       chai.assert.equal(blockA.getStyleName(), 'styleTwo');
@@ -144,8 +145,8 @@ suite('Theme', function() {
       sinon.assert.calledOnce(refreshToolboxSelectionStub);
 
       assertEventFired(
-          this.eventsFireStub, Blockly.Events.Ui, {element: 'theme'},
-          workspace.id, null);
+          this.eventsFireStub, Blockly.Events.ThemeChange,
+          {themeName: 'themeName'}, workspace.id);
     } finally {
       workspaceTeardown.call(this, workspace);
     }

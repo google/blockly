@@ -27,6 +27,7 @@ function typings() {
   const blocklySrcs = [
     "core/",
     "core/components",
+    "core/events",
     "core/keyboard_nav",
     "core/renderers/common",
     "core/renderers/measurables",

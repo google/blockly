@@ -498,10 +498,11 @@ Blockly.Css.CONTENT = [
   '}',
 
   '.blocklyDropDownDiv .blocklyMenu {',
-    'background: #fff;', /* Compatibility with gapi, resting from goog-menu */
+    'background: inherit;', /* Compatibility with gapi, reset from goog-menu */
+    'border: inherit;', /* Compatibility with gapi, reset from goog-menu */
     'font: normal 13px "Helvetica Neue", Helvetica, sans-serif;',
     'outline: none;',
-    'position: relative;', /* Compatibility with gapi, resting from goog-menu */
+    'position: relative;', /* Compatibility with gapi, reset from goog-menu */
     'z-index: 20000;',  /* Arbitrary, but some apps depend on it... */
   '}',
 

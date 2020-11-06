@@ -16,7 +16,7 @@ goog.require('Blockly.Bubble');
 goog.require('Blockly.Css');
 goog.require('Blockly.Events');
 goog.require('Blockly.Events.BlockChange');
-goog.require('Blockly.Events.Ui');
+goog.require('Blockly.Events.BubbleOpen');
 goog.require('Blockly.Icon');
 goog.require('Blockly.utils.deprecation');
 goog.require('Blockly.utils.dom');
@@ -236,7 +236,7 @@ Blockly.Comment.prototype.setVisible = function(visible) {
     return;
   }
   Blockly.Events.fire(
-      new Blockly.Events.Ui(this.block_, 'commentOpen', !visible, visible));
+      new Blockly.Events.BubbleOpen(this.block_, visible, 'comment'));
   this.model_.pinned = visible;
   if (visible) {
     this.createBubble_();

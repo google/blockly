@@ -18,6 +18,7 @@ suite('Procedures', function() {
   teardown(function() {
     sharedTestTeardown.call(this);
   });
+  
   suite('allProcedures', function() {
     test('Only Procedures', function() {
       var noReturnBlock = new Blockly.Block(this.workspace, 'procedures_defnoreturn');

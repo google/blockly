@@ -452,6 +452,9 @@ Blockly.Constants.Logic.CONTROLS_IF_MUTATOR_MIXIN = {
     if (this.getInput('ELSE')) {
       this.removeInput('ELSE');
     }
+    if (this.getInput('ELSELABEL')) {
+      this.removeInput('ELSELABEL');
+    }
     var i = 1;
     while (this.getInput('IF' + i)) {
       this.removeInput('IF' + i);
@@ -467,8 +470,9 @@ Blockly.Constants.Logic.CONTROLS_IF_MUTATOR_MIXIN = {
           .appendField(Blockly.Msg['CONTROLS_IF_MSG_THEN']);
     }
     if (this.elseCount_) {
-      this.appendStatementInput('ELSE')
+      this.appendDummyInput('ELSELABEL')
           .appendField(Blockly.Msg['CONTROLS_IF_MSG_ELSE']);
+      this.appendStatementInput('ELSE');
     }
   },
   /**

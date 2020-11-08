@@ -452,6 +452,9 @@ Code.init = function () {
       renderer: 'zelos',
     });
 
+  Code.workspace.getToolbox().getFlyout().autoClose = false;
+  Code.workspace.getToolbox().selectItemByPosition(0);
+  Code.workspace.getToolbox().refreshTheme();
   Code.loadBlocks('<xml xmlns="https://developers.google.com/blockly/xml"><block type="leaphy_start" id="rzE0Ve:6bHB~8aIqyj-U" deletable="false" x="250" y="10"/></xml>');
 
   if ('BlocklyStorage' in window) {

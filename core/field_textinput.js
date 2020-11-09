@@ -304,11 +304,10 @@ Blockly.FieldTextInput.prototype.showEditor_ = function(_opt_e,
  * @private
  */
 Blockly.FieldTextInput.prototype.showPromptEditor_ = function() {
-  var fieldText = this;
   Blockly.prompt(Blockly.Msg['CHANGE_VALUE_TITLE'], this.getText(),
-      function(newValue) {
-        fieldText.setValue(newValue);
-      });
+      function(text) {
+        this.setValue(this.getValueFromEditorText_(text));
+      }.bind(this));
 };
 
 /**

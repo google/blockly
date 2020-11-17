@@ -1638,7 +1638,7 @@ Blockly.BlockSvg.prototype.render = function(opt_bubble) {
     }
 
     Blockly.utils.dom.stopTextWidthCache();
-    this.updateMarkers_();
+    // this.updateMarkers_();
   } finally {
     this.renderIsInProgress_ = false;
   }

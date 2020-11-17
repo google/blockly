@@ -116,13 +116,13 @@ Blockly.FieldMultilineInput.prototype.initView = function() {
  * @private
  */
 Blockly.FieldMultilineInput.prototype.getDisplayText_ = function() {
-  var value = this.value_;
-  if (!value) {
+  var textLines = this.getText();
+  if (!textLines) {
     // Prevent the field from disappearing if empty.
     return Blockly.Field.NBSP;
   }
-  var lines = value.split('\n');
-  value = '';
+  var lines = textLines.split('\n');
+  textLines = '';
   for (var i = 0; i < lines.length; i++) {
     var text = lines[i];
     if (text.length > this.maxDisplayLength) {
@@ -132,16 +132,16 @@ Blockly.FieldMultilineInput.prototype.getDisplayText_ = function() {
     // Replace whitespace with non-breaking spaces so the text doesn't collapse.
     text = text.replace(/\s/g, Blockly.Field.NBSP);
 
-    value += text;
+    textLines += text;
     if (i !== lines.length - 1) {
-      value += '\n';
+      textLines += '\n';
     }
   }
   if (this.sourceBlock_.RTL) {
     // The SVG is LTR, force value to be RTL.
-    value += '\u200F';
+    textLines += '\u200F';
   }
-  return value;
+  return textLines;
 };
 
 /**

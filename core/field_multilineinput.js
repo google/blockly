@@ -42,8 +42,6 @@ goog.require('Blockly.utils.userAgent');
  * @constructor
  */
 Blockly.FieldMultilineInput = function(opt_value, opt_validator, opt_config) {
-  // TODO: Once this field is documented the opt_config link should point to its
-  //  creation documentation, rather than the text input field's.
   Blockly.FieldMultilineInput.superClass_.constructor.call(this,
       opt_value, opt_validator, opt_config);
 

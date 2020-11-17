@@ -54,7 +54,7 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
   // Block for if/elseif/else condition.
   {
     "type": "controls_if",
-    "message0": "%{BKY_CONTROLS_IF_MSG_IF} %1",
+    "message0": "%{BKY_CONTROLS_IF_MSG_IF} %1 %{BKY_CONTROLS_IF_MSG_THEN} ",
     "args0": [
       {
         "type": "input_value",
@@ -62,7 +62,7 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
         "check": "Boolean"
       }
     ],
-    "message1": "%{BKY_CONTROLS_IF_MSG_THEN} %1",
+    "message1": "%1",
     "args1": [
       {
         "type": "input_statement",

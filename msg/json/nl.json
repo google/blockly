@@ -95,7 +95,7 @@
 	"COLOUR_BLEND_TOOLTIP": "Mengt twee kleuren samen met een bepaalde verhouding (0.0 - 1.0).",
 	"CONTROLS_REPEAT_HELPURL": "https://nl.wikipedia.org/wiki/Repetitie_(informatica)#For_en_Foreach",
 	"CONTROLS_REPEAT_TITLE": "herhaal %1 keer",
-	"CONTROLS_REPEAT_INPUT_DO": "",
+	"CONTROLS_REPEAT_INPUT_DO": "dan",
 	"CONTROLS_REPEAT_TOOLTIP": "Voer een aantal opdrachten meerdere keren uit.",
 	"CONTROLS_WHILEUNTIL_HELPURL": "https://github.com/google/blockly/wiki/Loops#repeat",
 	"CONTROLS_WHILEUNTIL_OPERATOR_WHILE": "herhalen zolang",

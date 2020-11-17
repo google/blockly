@@ -36,7 +36,7 @@ goog.require('Blockly.utils.userAgent');
  *     text as an argument and returns either the accepted text, a replacement
  *     text, or null to abort the change.
  * @param {Object=} opt_config A map of options used to configure the field.
- *    See the [field creation documentation]{@link https://developers.google.com/blockly/guides/create-custom-blocks/fields/built-in-fields/text-input#creation}
+ *    See the [field creation documentation]{@link https://developers.google.com/blockly/guides/create-custom-blocks/fields/built-in-fields/multiline-text-input#creation}
  *    for a list of properties this parameter supports.
  * @extends {Blockly.FieldTextInput}
  * @constructor

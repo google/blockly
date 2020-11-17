@@ -72,7 +72,7 @@
     "gulp-replace": "^1.0.0",
     "gulp-series": "^1.0.2",
     "gulp-shell": "^0.8.0",
-    "gulp-sourcemaps": "^3.0.0",
+    "gulp-sourcemaps": "^2.6.5",
     "gulp-umd": "^2.0.0",
     "js-green-licenses": "^2.0.1",
     "mocha": "^8.1.1",

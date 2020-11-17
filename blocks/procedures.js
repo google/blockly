@@ -214,7 +214,7 @@ Blockly.Blocks['procedures_defnoreturn'] = {
     this.paramIds_ = [];
     this.argumentVarModels_ = [];
     var paramBlock = containerBlock.getInputTargetBlock('STACK');
-    while (paramBlock) {
+    while (paramBlock && !paramBlock.isInsertionMarker()) {
       var varName = paramBlock.getFieldValue('NAME');
       this.arguments_.push(varName);
       var variable = this.workspace.getVariable(varName, '');

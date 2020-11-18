@@ -108,7 +108,7 @@ Blockly.FieldDropdown = function(menuGenerator, opt_validator, opt_config) {
   /**
    * The dropdown menu.
    * @type {Blockly.Menu}
-   * @private
+   * @protected
    */
   this.menu_ = null;
 

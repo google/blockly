@@ -789,7 +789,10 @@ Blockly.WorkspaceSvg.prototype.createDom = function(opt_backgroundClass) {
   }
   this.recordDeleteAreas();
 
-  this.markerManager_.setCursor(new Blockly.Cursor());
+  var CursorClass = Blockly.registry.getClassFromOptions(
+      Blockly.registry.Type.CURSOR, this.options);
+
+  this.markerManager_.setCursor(new CursorClass());
   // this.markerManager_.registerMarker(Blockly.navigation.MARKER_NAME,
   //     new Blockly.Marker());
 

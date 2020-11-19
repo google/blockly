@@ -136,3 +136,6 @@ Blockly.Cursor.prototype.out = function() {
   }
   return newNode;
 };
+
+Blockly.registry.register(Blockly.registry.Type.CURSOR,
+    Blockly.registry.DEFAULT, Blockly.Cursor);

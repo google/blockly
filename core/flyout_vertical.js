@@ -122,6 +122,63 @@ Blockly.VerticalFlyout.prototype.setMetrics_ = function(xyRatio) {
 };
 
 /**
+ * Calculates the x coordinate for the flyout position.
+ * @return {number} X coordinate.
+ */
+Blockly.VerticalFlyout.prototype.getX = function() {
+  var targetWorkspaceMetrics = this.targetWorkspace.getMetrics();
+  if (!targetWorkspaceMetrics) {
+    // Hidden components will return null.
+    return 0;
+  }
+
+  var x = 0;
+
+  // If this flyout is not the trashcan flyout (e.g. toolbox or mutator).
+  if (this.targetWorkspace.toolboxPosition == this.toolboxPosition_) {
+    // If there is a category toolbox.
+    if (targetWorkspaceMetrics.toolboxWidth) {
+      if (this.toolboxPosition_ == Blockly.TOOLBOX_AT_LEFT) {
+        x = targetWorkspaceMetrics.toolboxWidth;
+      } else {
+        x = targetWorkspaceMetrics.viewWidth - this.width_;
+      }
+      // Simple (flyout-only) toolbox.
+    } else {
+      if (this.toolboxPosition_ == Blockly.TOOLBOX_AT_LEFT) {
+        x = 0;
+      } else {
+        // The simple flyout does not cover the workspace.
+        x = targetWorkspaceMetrics.viewWidth;
+      }
+    }
+    // Trashcan flyout is opposite the main flyout.
+  } else {
+    if (this.toolboxPosition_ == Blockly.TOOLBOX_AT_LEFT) {
+      x = 0;
+    } else {
+      // Because the anchor point of the flyout is on the left, but we want
+      // to align the right edge of the flyout with the right edge of the
+      // blocklyDiv, we calculate the full width of the div minus the width
+      // of the flyout.
+      x = targetWorkspaceMetrics.viewWidth +
+          targetWorkspaceMetrics.absoluteLeft - this.width_;
+    }
+  }
+
+  return x;
+};
+
+/**
+ * Calculates the y coordinate for the flyout position.
+ * @return {number} Y coordinate.
+ */
+Blockly.VerticalFlyout.prototype.getY = function() {
+  // Y is always 0 since this is a vertical flyout.
+  return 0;
+};
+
+/**
  * Move the flyout to the edge of the workspace.
  */
 Blockly.VerticalFlyout.prototype.position = function() {
@@ -140,36 +197,9 @@ Blockly.VerticalFlyout.prototype.position = function() {
   var edgeHeight = targetWorkspaceMetrics.viewHeight - 2 * this.CORNER_RADIUS;
   this.setBackgroundPath_(edgeWidth, edgeHeight);
 
-  // Y is always 0 since this is a vertical flyout.
-  var y = 0;
-  // If this flyout is the toolbox flyout.
-  if (this.targetWorkspace.toolboxPosition == this.toolboxPosition_) {
-    // If there is a category toolbox.
-    if (targetWorkspaceMetrics.toolboxWidth) {
-      if (this.toolboxPosition_ == Blockly.TOOLBOX_AT_LEFT) {
-        var x = targetWorkspaceMetrics.toolboxWidth;
-      } else {
-        var x = targetWorkspaceMetrics.viewWidth - this.width_;
-      }
-    } else {
-      if (this.toolboxPosition_ == Blockly.TOOLBOX_AT_LEFT) {
-        var x = 0;
-      } else {
-        var x = targetWorkspaceMetrics.viewWidth;
-      }
-    }
-  } else {
-    if (this.toolboxPosition_ == Blockly.TOOLBOX_AT_LEFT) {
-      var x = 0;
-    } else {
-      // Because the anchor point of the flyout is on the left, but we want
-      // to align the right edge of the flyout with the right edge of the
-      // blocklyDiv, we calculate the full width of the div minus the width
-      // of the flyout.
-      var x = targetWorkspaceMetrics.viewWidth +
-          targetWorkspaceMetrics.absoluteLeft - this.width_;
-    }
-  }
+  var x = this.getX();
+  var y = this.getY();
+  
   this.positionAt_(this.width_, this.height_, x, y);
 };
 

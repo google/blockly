@@ -488,13 +488,7 @@ Blockly.Gesture.prototype.doStart = function(e) {
   Blockly.Tooltip.block();
 
   if (this.targetBlock_) {
-    // if (!this.targetBlock_.isInFlyout && e.shiftKey &&
-    //     this.targetBlock_.workspace.keyboardAccessibilityMode) {
-    //   this.creatorWorkspace_.getCursor().setCurNode(
-    //       Blockly.ASTNode.createTopNode(this.targetBlock_));
-    // } else {
     this.targetBlock_.select();
-    // }
   }
 
   if (Blockly.utils.isRightButton(e)) {
@@ -654,9 +648,6 @@ Blockly.Gesture.prototype.handleWsStart = function(e, ws) {
   this.setStartWorkspace_(ws);
   this.mostRecentEvent_ = e;
   this.doStart(e);
-  // if (this.startWorkspace_.keyboardAccessibilityMode) {
-  //   Blockly.navigation.setState(Blockly.navigation.STATE_WS);
-  // }
 };
 
 /**

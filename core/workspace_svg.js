@@ -793,8 +793,6 @@ Blockly.WorkspaceSvg.prototype.createDom = function(opt_backgroundClass) {
       Blockly.registry.Type.CURSOR, this.options);
 
   this.markerManager_.setCursor(new CursorClass());
-  // this.markerManager_.registerMarker(Blockly.navigation.MARKER_NAME,
-  //     new Blockly.Marker());
 
   this.renderer_.createDom(this.svgGroup_, this.getTheme());
   return this.svgGroup_;
@@ -1360,17 +1358,6 @@ Blockly.WorkspaceSvg.prototype.pasteBlock_ = function(xmlBlock) {
   Blockly.Events.disable();
   try {
     var block = Blockly.Xml.domToBlock(xmlBlock, this);
-
-    // // Handle paste for keyboard navigation
-    // var markedNode = this.getMarker(Blockly.navigation.MARKER_NAME).getCurNode();
-    // if (this.keyboardAccessibilityMode && markedNode &&
-    //     markedNode.isConnection()) {
-    //   var markedLocation =
-    //     /** @type {!Blockly.RenderedConnection} */ (markedNode.getLocation());
-    //   Blockly.navigation.insertBlock(/** @type {!Blockly.BlockSvg} */ (block),
-    //       markedLocation);
-    //   return;
-    // }
 
     // Move the duplicate to original position.
     var blockX = parseInt(xmlBlock.getAttribute('x'), 10);

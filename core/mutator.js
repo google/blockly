@@ -414,11 +414,6 @@ Blockly.Mutator.prototype.workspaceChanged_ = function(e) {
     // Mutation may have added some elements that need initializing.
     block.initSvg();
 
-    // if ((/** @type {!Blockly.WorkspaceSvg} */ (Blockly.getMainWorkspace()))
-    //     .keyboardAccessibilityMode) {
-    //   Blockly.navigation.moveCursorOnBlockMutation(block);
-    // }
-
     if (block.rendered) {
       block.render();
     }

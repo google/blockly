@@ -156,8 +156,7 @@ Blockly.Toolbox = function(workspace) {
 };
 
 /**
- * The function used to decide how the cursor used in keyboard navigation should act when focus is
- * on the cursor.
+ * Decides how a cursor should act when it is on the toolbox.
  * @type {function(!Blockly.ShortcutRegistry.KeyboardShortcut):boolean}
  * @public
  */

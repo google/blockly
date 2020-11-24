@@ -994,14 +994,6 @@ Blockly.Flyout.prototype.placeNewBlock_ = function(oldBlock) {
 };
 
 /**
- * The function used to decide how the cursor used in keyboard navigation should act when focus is
- * on the cursor.
- * @type {function(!Blockly.ShortcutRegistry.KeyboardShortcut):boolean}
- * @public
- */
-Blockly.Flyout.prototype.onBlocklyAction;
-
-/**
  * Return the deletion rectangle for this flyout in viewport coordinates.
  * @return {Blockly.utils.Rect} Rectangle in which to delete.
  */

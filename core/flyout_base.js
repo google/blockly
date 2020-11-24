@@ -30,7 +30,6 @@ goog.require('Blockly.utils.toolbox');
 goog.require('Blockly.WorkspaceSvg');
 goog.require('Blockly.Xml');
 
-goog.requireType('Blockly.IBlocklyActionable');
 goog.requireType('Blockly.IDeleteArea');
 goog.requireType('Blockly.IFlyout');
 goog.requireType('Blockly.ShortcutRegistry');
@@ -43,7 +42,6 @@ goog.requireType('Blockly.utils.Metrics');
  *     workspace.
  * @constructor
  * @abstract
- * @implements {Blockly.IBlocklyActionable}
  * @implements {Blockly.IDeleteArea}
  * @implements {Blockly.IFlyout}
  */

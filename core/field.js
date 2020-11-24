@@ -30,7 +30,7 @@ goog.require('Blockly.utils.userAgent');
 goog.requireType('Blockly.blockRendering.ConstantProvider');
 goog.requireType('Blockly.IASTNodeLocationSvg');
 goog.requireType('Blockly.IASTNodeLocationWithBlock');
-goog.requireType('Blockly.IBlocklyActionable');
+goog.requireType('Blockly.IKeyboardAccessible');
 goog.requireType('Blockly.IRegistrable');
 goog.requireType('Blockly.ShortcutRegistry');
 
@@ -47,7 +47,7 @@ goog.requireType('Blockly.ShortcutRegistry');
  * @constructor
  * @implements {Blockly.IASTNodeLocationSvg}
  * @implements {Blockly.IASTNodeLocationWithBlock}
- * @implements {Blockly.IBlocklyActionable}
+ * @implements {Blockly.IKeyboardAccessible}
  * @implements {Blockly.IRegistrable}
  */
 Blockly.Field = function(value, opt_validator, opt_config) {
@@ -1112,7 +1112,7 @@ Blockly.Field.prototype.isTabNavigable = function() {
  * @return {boolean} True if the field handled the action, false otherwise.
  * @package
  */
-Blockly.Field.prototype.onBlocklyAction = function(_action) {
+Blockly.Field.prototype.onShortcut = function(_action) {
   return false;
 };
 

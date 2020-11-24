@@ -26,7 +26,7 @@ goog.require('Blockly.utils.dom');
 goog.require('Blockly.utils.Rect');
 goog.require('Blockly.utils.toolbox');
 
-goog.requireType('Blockly.IBlocklyActionable');
+goog.requireType('Blockly.IKeyboardAccessible');
 goog.requireType('Blockly.ICollapsibleToolboxItem');
 goog.requireType('Blockly.IDeleteArea');
 goog.requireType('Blockly.IFlyout');
@@ -44,7 +44,7 @@ goog.requireType('Blockly.WorkspaceSvg');
  * @param {!Blockly.WorkspaceSvg} workspace The workspace in which to create new
  *     blocks.
  * @constructor
- * @implements {Blockly.IBlocklyActionable}
+ * @implements {Blockly.IKeyboardAccessible}
  * @implements {Blockly.IDeleteArea}
  * @implements {Blockly.IStyleable}
  * @implements {Blockly.IToolbox}
@@ -160,7 +160,7 @@ Blockly.Toolbox = function(workspace) {
  * @type {function(!Blockly.ShortcutRegistry.KeyboardShortcut):boolean}
  * @public
  */
-Blockly.Toolbox.prototype.onBlocklyAction;
+Blockly.Toolbox.prototype.onShortcut;
 
 /**
  * Initializes the toolbox

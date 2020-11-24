@@ -18,7 +18,6 @@ goog.require('Blockly.Marker');
 goog.require('Blockly.navigation');
 goog.require('Blockly.utils.object');
 
-goog.requireType('Blockly.IBlocklyActionable');
 goog.requireType('Blockly.ShortcutRegistry');
 
 
@@ -27,7 +26,6 @@ goog.requireType('Blockly.ShortcutRegistry');
  * A cursor controls how a user navigates the Blockly AST.
  * @constructor
  * @extends {Blockly.Marker}
- * @implements {Blockly.IBlocklyActionable}
  */
 Blockly.Cursor = function() {
   Blockly.Cursor.superClass_.constructor.call(this);

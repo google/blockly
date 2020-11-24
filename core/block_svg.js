@@ -697,9 +697,9 @@ Blockly.BlockSvg.prototype.tab = function(start, forward) {
     nextField.showEditor();
 
     // Also move the cursor if we're in keyboard nav mode.
-    // if (this.workspace.keyboardAccessibilityMode) {
-    //   this.workspace.getCursor().setCurNode(nextNode);
-    // }
+    if (this.workspace.keyboardAccessibilityMode) {
+      this.workspace.getCursor().setCurNode(nextNode);
+    }
   }
 };
 

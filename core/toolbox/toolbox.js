@@ -160,7 +160,7 @@ Blockly.Toolbox = function(workspace) {
  * @type {function(!Blockly.ShortcutRegistry.KeyboardShortcut):boolean}
  * @public
  */
-Blockly.Toolbox.prototype.onBlocklyAction = null;
+Blockly.Toolbox.prototype.onBlocklyAction;
 
 /**
  * Initializes the toolbox

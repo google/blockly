@@ -48,6 +48,26 @@ Blockly.Blocks['leaphy_flitz_read_hand_sensor'] = {
     }
 };
 
+Blockly.Blocks['leaphy_flitz_LED'] = {
+    init: function(){
+        this.appendDummyInput()
+            .appendField(Blockly.Msg.LEAPHY_FLITZ_LED);
+        this.appendValueInput("FLITZ_LED_R")
+            .appendField(Blockly.Msg.LEAPHY_FLITZ_LED_R)
+            .setCheck('Number');
+        this.appendValueInput("FLITZ_LED_G")
+            .appendField(Blockly.Msg.LEAPHY_FLITZ_LED_G)
+            .setCheck('Number');
+        this.appendValueInput("FLITZ_LED_B")
+            .appendField(Blockly.Msg.LEAPHY_FLITZ_LED_B)
+            .setCheck('Number');
+        this.setInputsInline(true);
+        this.setPreviousStatement(true, null);
+        this.setNextStatement(true, null);
+        this.setStyle('leaphy_blocks');
+    }
+};
+
 //Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
 
 //]);  // END JSON EXTRACT (Do not delete this comment.)

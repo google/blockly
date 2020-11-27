@@ -51,9 +51,24 @@ Blockly.FieldMultilineInput = function(opt_value, opt_validator, opt_config) {
    * @type {SVGGElement}
    */
   this.textGroup_ = null;
+
+  /**
+   * Defines the maximum number of lines of field.
+   * If exceeded, scrolling functionality is enabled.
+   * @type {number}
+   */
+  this.maxLines_ = Infinity;
 };
 Blockly.utils.object.inherits(Blockly.FieldMultilineInput,
     Blockly.FieldTextInput);
+
+/**
+ * @override
+ */
+Blockly.FieldMultilineInput.prototype.configure_ = function(config) {
+  Blockly.FieldMultilineInput.superClass_.configure_.call(this, config);
+  config.maxLines && this.setMaxLines(config.maxLines);
+};
 
 /**
  * Construct a FieldMultilineInput from a JSON arg object,
@@ -121,9 +136,11 @@ Blockly.FieldMultilineInput.prototype.getDisplayText_ = function() {
   }
   var lines = textLines.split('\n');
   textLines = '';
-  for (var i = 0; i < lines.length; i++) {
+  var overflow = lines.length > this.maxLines_;
+  var displayLinesNumber = overflow ? this.maxLines_ : lines.length;
+  for (var i = 0; i < displayLinesNumber; i++) {
     var text = lines[i];
-    if (text.length > this.maxDisplayLength) {
+    if (text.length > this.maxDisplayLength || overflow && i === displayLinesNumber - 1) {
       // Truncate displayed string and add an ellipsis ('...').
       text = text.substring(0, this.maxDisplayLength - 4) + '...';
     }
@@ -131,7 +148,7 @@ Blockly.FieldMultilineInput.prototype.getDisplayText_ = function() {
     text = text.replace(/\s/g, Blockly.Field.NBSP);
 
     textLines += text;
-    if (i !== lines.length - 1) {
+    if (i !== displayLinesNumber - 1) {
       textLines += '\n';
     }
   }
@@ -211,6 +228,27 @@ Blockly.FieldMultilineInput.prototype.updateSize_ = function() {
     totalHeight += this.getConstants().FIELD_TEXT_HEIGHT +
         (i > 0 ? this.getConstants().FIELD_BORDER_RECT_Y_PADDING : 0);
   }
+  if (this.isBeingEdited_) {
+    var actualEditorLines = this.value_.split('\n');
+    var dummyTextElement = Blockly.utils.dom.createSvgElement(
+        Blockly.utils.Svg.TEXT,{'class': 'blocklyText blocklyMultilineText'});
+    var scale = this.workspace_.getScale();
+    var fontSize = this.getConstants().FIELD_TEXT_FONTSIZE * scale;
+    var fontWeight = this.getConstants().FIELD_TEXT_FONTWEIGHT;
+    var fontFamily = this.getConstants().FIELD_TEXT_FONTFAMILY;
+
+    for (var i = 0; i < actualEditorLines.length; i++) {
+      if (actualEditorLines[i].length > this.maxDisplayLength) {
+        actualEditorLines[i] = actualEditorLines[i].substring(0, this.maxDisplayLength);
+      }
+      dummyTextElement.textContent = actualEditorLines[i];
+      var lineWidth = Blockly.utils.dom.getFastTextWidth(
+          dummyTextElement, fontSize, fontWeight, fontFamily);
+      if (lineWidth > totalWidth) {
+        totalWidth = lineWidth;
+      }
+    }
+  }
   if (this.borderRect_) {
     totalHeight += this.getConstants().FIELD_BORDER_RECT_Y_PADDING * 2;
     totalWidth += this.getConstants().FIELD_BORDER_RECT_X_PADDING * 2;
@@ -221,6 +259,21 @@ Blockly.FieldMultilineInput.prototype.updateSize_ = function() {
   this.size_.height = totalHeight;
 
   this.positionBorderRect_();
+};
+
+/**
+ * Show the inline free-text editor on top of the text.
+ * Overrides the default behaviour to force rerender in order to
+ * correct block size, based on editor text.
+ * @param {Event=} _opt_e Optional mouse event that triggered the field to open,
+ *     or undefined if triggered programmatically.
+ * @param {boolean=} opt_quietInput True if editor should be created without
+ *     focus.  Defaults to false.
+ * @override
+ */
+Blockly.FieldMultilineInput.prototype.showEditor_ = function(_opt_e, opt_quietInput) {
+  Blockly.FieldMultilineInput.superClass_.showEditor_.call(this, _opt_e, opt_quietInput);
+  this.forceRerender();
 };
 
 /**
@@ -267,6 +320,26 @@ Blockly.FieldMultilineInput.prototype.widgetCreate_ = function() {
 };
 
 /**
+ * Sets the maxLines config for this field.
+ * @param {number} maxLines Defines the maximum number of lines allowed,
+ *     before scrolling functionality is enabled.
+ */
+Blockly.FieldMultilineInput.prototype.setMaxLines = function(maxLines) {
+  if (typeof maxLines === 'number' && maxLines > 0 && maxLines !== this.maxLines_) {
+    this.maxLines_ = maxLines;
+    this.forceRerender();
+  }
+};
+
+/**
+ * Returns the maxLines config of this field.
+ * @return {number} The maxLines config value.
+ */
+Blockly.FieldMultilineInput.prototype.getMaxLines = function() {
+  return this.maxLines_;
+};
+
+/**
  * Handle key down to the editor. Override the text input definition of this
  * so as to not close the editor when enter is typed in.
  * @param {!Event} e Keyboard event.
@@ -286,9 +359,14 @@ Blockly.Css.register([
   '.blocklyHtmlTextAreaInput {',
     'font-family: monospace;',
     'resize: none;',
-    'overflow: hidden;',
+    'overflow: scroll;',
+    '-ms-overflow-style: none;',
+    'scrollbar-width: none;',
     'height: 100%;',
     'text-align: left;',
+  '}',
+  '.blocklyHtmlTextAreaInput::-webkit-scrollbar {',
+    'display: none;',
   '}'
   /* eslint-enable indent */
 ]);

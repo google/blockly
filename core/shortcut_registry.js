@@ -13,7 +13,6 @@
 
 goog.provide('Blockly.ShortcutRegistry');
 
-goog.require('Blockly.navigation');
 goog.require('Blockly.ShortcutItems');
 goog.require('Blockly.utils.object');
 

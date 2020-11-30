@@ -14,7 +14,6 @@
 goog.provide('Blockly.Marker');
 
 goog.require('Blockly.ASTNode');
-goog.require('Blockly.navigation');
 
 
 /**

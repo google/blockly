@@ -47,7 +47,7 @@ goog.requireType('Blockly.ShortcutRegistry');
  * @constructor
  * @implements {Blockly.IASTNodeLocationSvg}
  * @implements {Blockly.IASTNodeLocationWithBlock}
- * @implements {Blockly.IKeyboardAccessible}
+ * @implements {Blockly.IBlocklyActionable}
  * @implements {Blockly.IRegistrable}
  */
 Blockly.Field = function(value, opt_validator, opt_config) {
@@ -1159,6 +1159,7 @@ Blockly.Field.prototype.updateMarkers_ = function() {
     workspace.getCursor().draw();
   }
   if (workspace.keyboardAccessibilityMode && this.markerSvg_) {
-    workspace.getMarker(Blockly.navigation.MARKER_NAME).draw();
+    // TODO: this should not be hard coded.
+    workspace.getMarker('local_marker_1').draw();
   }
 };

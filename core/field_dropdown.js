@@ -20,7 +20,6 @@ goog.require('Blockly.Field');
 goog.require('Blockly.fieldRegistry');
 goog.require('Blockly.Menu');
 goog.require('Blockly.MenuItem');
-goog.require('Blockly.navigation');
 goog.require('Blockly.utils');
 goog.require('Blockly.utils.aria');
 goog.require('Blockly.utils.Coordinate');

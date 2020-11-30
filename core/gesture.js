@@ -21,7 +21,6 @@ goog.require('Blockly.constants');
 goog.require('Blockly.Events');
 goog.require('Blockly.Events.Click');
 goog.require('Blockly.FlyoutDragger');
-goog.require('Blockly.navigation');
 goog.require('Blockly.Tooltip');
 goog.require('Blockly.Touch');
 goog.require('Blockly.utils');

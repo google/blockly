@@ -17,7 +17,6 @@ goog.require('Blockly.constants');
 goog.require('Blockly.Css');
 goog.require('Blockly.Events');
 goog.require('Blockly.Events.ToolboxItemSelect');
-goog.require('Blockly.navigation');
 goog.require('Blockly.registry');
 goog.require('Blockly.Touch');
 goog.require('Blockly.utils');

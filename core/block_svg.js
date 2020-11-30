@@ -23,7 +23,6 @@ goog.require('Blockly.Events');
 goog.require('Blockly.Events.BlockMove');
 goog.require('Blockly.Events.Selected');
 goog.require('Blockly.Msg');
-goog.require('Blockly.navigation');
 goog.require('Blockly.RenderedConnection');
 goog.require('Blockly.TabNavigateCursor');
 goog.require('Blockly.Tooltip');
@@ -1649,7 +1648,7 @@ Blockly.BlockSvg.prototype.updateMarkers_ = function() {
     this.workspace.getCursor().draw();
   }
   if (this.workspace.keyboardAccessibilityMode && this.pathObject.markerSvg) {
-    this.workspace.getMarker(Blockly.navigation.MARKER_NAME).draw();
+    this.workspace.getMarker('local_marker_1').draw();
   }
 };
 

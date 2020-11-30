@@ -218,7 +218,7 @@ Blockly.ShortcutRegistry.prototype.getRegistry = function() {
  */
 Blockly.ShortcutRegistry.prototype.onKeyDown = function(workspace, e) {
   var key = this.serializeKeyEvent_(e);
-  var shortcutNames = this.getKeyboardShortcuts(key);
+  var shortcutNames = this.getShortcutNamesByKeyCode(key);
   if (!shortcutNames) {
     return false;
   }
@@ -241,7 +241,7 @@ Blockly.ShortcutRegistry.prototype.onKeyDown = function(workspace, e) {
  *     given keyCode is used. Undefined if no shortcuts exist.
  * @public
  */
-Blockly.ShortcutRegistry.prototype.getKeyboardShortcuts = function(
+Blockly.ShortcutRegistry.prototype.getShortcutNamesByKeyCode = function(
     keyCode) {
   return this.keyMap_[keyCode] || [];
 };

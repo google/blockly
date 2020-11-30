@@ -445,8 +445,6 @@ suite('Events', function() {
         if (typeof value == 'object' && value != null) {
           if (cache.includes(value)) {
             // Discard duplicate reference.
-            console.log('discarding');
-            console.log(value);
             return undefined;
           }
           cache.push(value);

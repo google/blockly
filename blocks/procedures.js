@@ -244,7 +244,9 @@ Blockly.Blocks['procedures_defnoreturn'] = {
           if (this.statementConnection_) {
             var stackBlock = stackConnection.targetBlock();
             stackBlock.unplug();
-            stackBlock.bumpNeighbours();
+            if (stackBlock.rendered) {
+              stackBlock.bumpNeighbours();
+            }
           }
           this.setStatements_(false);
         }
@@ -692,7 +694,10 @@ Blockly.Blocks['procedures_callnoreturn'] = {
             paramIds.indexOf(this.quarkIds_[i]) == -1) {
           // This connection should no longer be attached to this block.
           connection.disconnect();
-          connection.getSourceBlock().bumpNeighbours();
+          var sourceBlock = connection.getSourceBlock();
+          if (sourceBlock.rendered) {
+            sourceBlock.bumpNeighbours();
+          }
         }
       }
     }

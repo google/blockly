@@ -85,26 +85,26 @@ Blockly.Msg.LEAPHY_DIGITAL_READ = 'Read digipin';
 /// leaphy Read Analog Pin.
 Blockly.Msg.LEAPHY_ANALOG_READ = 'Read anapin';
 /** @type {string} */
-// leaphy Read RGB Sensor.
+/// leaphy Read RGB Sensor.
 Blockly.Msg.LEAPHY_RGB_READ_SENSOR = 'Read RGB sensor';
 /** @type {string} */
-// leaphy color r-255
+/// leaphy color r-255
 Blockly.Msg.LEAPHY_RGB_COLOR_RED = 'Color R-255';
 /** @type {string} */
-// leaphy color g-255
+/// leaphy color g-255
 Blockly.Msg.LEAPHY_RGB_COLOR_GREEN = 'Color G-255';
 /** @type {string} */
-// leaphy color b-255
-Blockly.Msg.LEAPHY_RGB_COLOR_BLUE = 'COLOR B-255';
+/// leaphy color b-255
+Blockly.Msg.LEAPHY_RGB_COLOR_BLUE = 'Color B-255';
 /** @type {string} */
-// leaphy rawcolor red
-Blockly.Msg.LEAPHY_RGB_COLOR_RED = 'RawColor Red';
+/// leaphy rawcolor red
+Blockly.Msg.LEAPHY_RGB_RAW_COLOR_RED = 'RawColor Red';
 /** @type {string} */
-// leaphy rawcolor green
-Blockly.Msg.LEAPHY_RGB_COLOR_GREEN = 'RawColor Green';
+/// leaphy rawcolor green
+Blockly.Msg.LEAPHY_RGB_RAW_COLOR_GREEN = 'RawColor Green';
 /** @type {string} */
-// leaphy rawcolor blue
-Blockly.Msg.LEAPHY_RGB_COLOR_BLUE = 'RawCOLOR Blue';
+/// leaphy rawcolor blue
+Blockly.Msg.LEAPHY_RGB_RAW_COLOR_BLUE = 'RawColor Blue';
 /** @type {string} */
 /// leaphy Read Belly Sensor.
 Blockly.Msg.LEAPHY_READ_STOMACH = 'Read Belly sensor';
@@ -113,13 +113,13 @@ Blockly.Msg.LEAPHY_READ_STOMACH = 'Read Belly sensor';
 Blockly.Msg.LEAPHY_READ_HAND = 'Read Hand sensor';
 /// {{Notranslate}} Hue value for all Leaphy blocks.
 Blockly.Msg.LEAPHY_HUE = '188';
-// leaphy flitz set LED
+/// leaphy flitz set LED
 Blockly.Msg.LEAPHY_FLITZ_LED = 'Set LED';
-// leaphy flitz set LED red
+/// leaphy flitz set LED red
 Blockly.Msg.LEAPHY_FLITZ_LED_R = 'Set LED Red';
-// leaphy flitz set LED green
+/// leaphy flitz set LED green
 Blockly.Msg.LEAPHY_FLITZ_LED_G = 'Set LED Green';
-// leaphy flitz set LED blue
+/// leaphy flitz set LED blue
 Blockly.Msg.LEAPHY_FLITZ_LED_B = 'Set LED Blue';
 
 

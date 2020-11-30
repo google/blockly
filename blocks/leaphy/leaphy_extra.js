@@ -31,9 +31,10 @@ goog.require('Blockly.Mutator');
 
  Blockly.Blocks["leaphy_rgb_read_sensor"] = {
      init: function(){
-         this.appendDummyInput()
+        this.appendDummyInput()
              .appendField(Blockly.Msg.LEAPHY_RGB_READ_SENSOR);
-        this.setOutput(true, 'Number');
+        this.setPreviousStatement(true, null);
+        this.setNextStatement(true, null);     
         this.setStyle('leaphy_blocks');
      }
  };

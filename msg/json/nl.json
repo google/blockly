@@ -32,7 +32,7 @@
 	"LEAPHY_GET_DISTANCE": "Lees afstand",
 	"LEAPHY_DIGITAL_READ": "Lees digipin",
 	"LEAPHY_ANALOG_READ": "Lees anapin",
-	"LEAPHY_RGB_READ_SENSOR": "Lees RGB Sensor.",
+	"LEAPHY_RGB_READ_SENSOR": "Lees RGB Sensor",
 	"LEAPHY_RGB_COLOR_RED": "Kleur r-255",
 	"LEAPHY_RGB_COLOR_GREEN": "Kleur g-255",
 	"LEAPHY_RGB_COLOR_BLUE": "Kleur b-255",

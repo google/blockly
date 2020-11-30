@@ -18,8 +18,8 @@ var variablesDefinition = 'Adafruit_TCS34725 tcs = Adafruit_TCS34725(TCS34725_IN
 Blockly.Arduino['leaphy_rgb_read_sensor'] = function (block){
     Blockly.Arduino.definitions_['define_leaphy_rgb'] = includeDefinition;
     Blockly.Arduino.definitions_['define_leaphy_rgb_var'] = variablesDefinition;
-    var code = 'if (tcs.begin()) {\n  Serial.println("RGB-sensor gevonden!");\n} else {\n  Serial.println("Geen RGB-sensor gevonden... check je verbindingen...");\n}\ntcs.getRawData(&RawColor_Red, &RawColor_Green, &RawColor_Blue, &RawColor_Clear);\nColor_Red = min(RawColor_Red/5,255); Color_Green = min(RawColor_Green/5,255); Color_Blue = min(RawColor_Blue/5,255);';
-    return [code, Blockly.Arduino.ORDER_ATOMIC];
+    var code = 'if (tcs.begin()) {\n  Serial.println("RGB-sensor gevonden!");\n} else {\n  Serial.println("Geen RGB-sensor gevonden... check je verbindingen...");\n}\ntcs.getRawData(&RawColor_Red, &RawColor_Green, &RawColor_Blue, &RawColor_Clear);\nColor_Red = min(RawColor_Red/5,255); Color_Green = min(RawColor_Green/5,255); Color_Blue = min(RawColor_Blue/5,255);\n';
+    return code;
 };
 
 Blockly.Arduino['leaphy_rgb_color_red'] = function (block){

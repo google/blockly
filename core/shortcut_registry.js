@@ -254,7 +254,7 @@ Blockly.ShortcutRegistry.prototype.getKeyboardShortcuts = function(
  *     registered under.
  * @public
  */
-Blockly.ShortcutRegistry.prototype.getKeyCodeByShortcutName = function(
+Blockly.ShortcutRegistry.prototype.getKeyCodesByShortcutName = function(
     shortcutName) {
   var keys = [];
   for (var keyCode in this.keyMap_) {

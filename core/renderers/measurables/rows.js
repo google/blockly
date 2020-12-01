@@ -522,6 +522,9 @@ Blockly.blockRendering.InputRow.prototype.measure = function() {
   }
   this.connectedBlockWidths = connectedBlockWidths;
   this.widthWithConnectedBlocks = this.width + connectedBlockWidths;
+  // if (this.hasStatement && this.connectedBlockWidths > 0) {
+  //   this.height -= this.constants_.NOTCH_HEIGHT / 2;
+  // }
 };
 
 /**

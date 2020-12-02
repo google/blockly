@@ -564,9 +564,7 @@ Blockly.Constants.Logic.LOGIC_COMPARE_ONCHANGE_MIXIN = {
           this.getInput('B').connection.connect(prevB.outputConnection);
         }
       }
-      if (this.rendered) {
-        this.bumpNeighbours();
-      }
+      this.bumpNeighbours();
       Blockly.Events.setGroup(false);
     }
     this.prevBlocks_[0] = this.getInputTargetBlock('A');
@@ -620,15 +618,10 @@ Blockly.Constants.Logic.LOGIC_TERNARY_ONCHANGE_MIXIN = {
           Blockly.Events.setGroup(e.group);
           if (parentConnection === this.prevParentConnection_) {
             this.unplug();
-            var sourceBlock = parentConnection.getSourceBlock();
-            if (sourceBlock.rendered) {
-              sourceBlock.bumpNeighbours();
-            }
+            parentConnection.getSourceBlock().bumpNeighbours();
           } else {
             block.unplug();
-            if (block.rendered) {
-              block.bumpNeighbours();
-            }
+            block.bumpNeighbours();
           }
           Blockly.Events.setGroup(false);
         }

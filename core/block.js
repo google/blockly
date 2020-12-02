@@ -580,8 +580,7 @@ Blockly.Block.prototype.lastConnectionInStack = function() {
  * connected should not coincidentally line up on screen.
  */
 Blockly.Block.prototype.bumpNeighbours = function() {
-  console.warn('Not expected to reach Block.bumpNeighbours function. ' +
-      'BlockSvg.bumpNeighbours was expected to be called instead.');
+  // noop.
 };
 
 /**

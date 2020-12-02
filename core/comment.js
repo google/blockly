@@ -433,7 +433,7 @@ Blockly.Css.register([
     'padding: 3px;',
     'resize: none;',
     'display: block;',
-    'overflow: hidden;',
+    'text-overflow: hidden;',
   '}'
   /* eslint-enable indent */
 ]);

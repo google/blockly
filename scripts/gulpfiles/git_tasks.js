@@ -105,7 +105,6 @@ const createRC = gulp.series(
 // Update github pages with what is currently in develop.
 const updateGithubPages = gulp.series(
   function(done) {
-    // Stash changes
     execSync('git stash save -m "Stash for sync"', { stdio: 'inherit' });
     execSync('git checkout gh-pages || git checkout -b gh-pages', { stdio: 'inherit' });
     execSync('git fetch upstream', { stdio: 'inherit' });
@@ -115,7 +114,7 @@ const updateGithubPages = gulp.series(
   buildTasks.build,
   function(done) {
     execSync('git commit -am "Rebuild"', { stdio: 'inherit' });
-    execSync('git push ' + upstream_url + ' gh-pages', { stdio: 'inherit' });
+    execSync('git push ' + upstream_url + ' gh-pages --force', { stdio: 'inherit' });
     done();
   }
 );

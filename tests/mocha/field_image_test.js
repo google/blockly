@@ -115,15 +115,6 @@ suite('Image Fields', function() {
         });
         chai.assert.equal(field.altText_, 'alt');
       });
-      test('Deprecated - setText', function() {
-        var deprecateWarnSpy = createDeprecationWarningStub();
-        var field = new Blockly.FieldImage('src', 10, 10, 'alt');
-        chai.assert.throws(function() {
-          field.setText('newAlt');
-        });
-        assertSingleDeprecationWarningCall(deprecateWarnSpy,
-            'Field.prototype.setText');
-      });
       suite('SetAlt', function() {
         setup(function() {
           this.imageField = new Blockly.FieldImage('src', 10, 10, 'alt');

@@ -524,45 +524,6 @@ Blockly.FieldTextInput.prototype.resizeEditor_ = function() {
 };
 
 /**
- * Ensure that only a number may be entered.
- * @param {string} text The user's text.
- * @return {?string} A string representing a valid number, or null if invalid.
- * @deprecated
- */
-Blockly.FieldTextInput.numberValidator = function(text) {
-  Blockly.utils.deprecation.warn(
-      'FieldTextInput.numberValidator',
-      'May 2019',
-      'December 2020',
-      'Blockly.FieldNumber');
-  if (text === null) {
-    return null;
-  }
-  text = String(text);
-  // TODO: Handle cases like 'ten', '1.203,14', etc.
-  // 'O' is sometimes mistaken for '0' by inexperienced users.
-  text = text.replace(/O/ig, '0');
-  // Strip out thousands separators.
-  text = text.replace(/,/g, '');
-  var n = Number(text || 0);
-  return isNaN(n) ? null : String(n);
-};
-
-/**
- * Ensure that only a non-negative integer may be entered.
- * @param {string} text The user's text.
- * @return {?string} A string representing a valid int, or null if invalid.
- * @deprecated
- */
-Blockly.FieldTextInput.nonnegativeIntegerValidator = function(text) {
-  var n = Blockly.FieldTextInput.numberValidator(text);
-  if (n) {
-    n = String(Math.max(0, Math.floor(n)));
-  }
-  return n;
-};
-
-/**
  * Returns whether or not the field is tab navigable.
  * @return {boolean} True if the field is tab navigable.
  * @override

@@ -1450,7 +1450,7 @@ Blockly.WorkspaceSvg.prototype.pasteWorkspaceComment_ = function(xmlComment) {
     Blockly.Events.enable();
   }
   if (Blockly.Events.isEnabled()) {
-    // TODO: Fire a Workspace Comment Create event.
+    Blockly.WorkspaceComment.fireCreateEvent(comment);
   }
   comment.select();
 };

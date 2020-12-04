@@ -56,6 +56,7 @@ Blockly.FieldMultilineInput = function(opt_value, opt_validator, opt_config) {
    * Defines the maximum number of lines of field.
    * If exceeded, scrolling functionality is enabled.
    * @type {number}
+   * @protected
    */
   this.maxLines_ = Infinity;
 };

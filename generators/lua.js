@@ -90,7 +90,6 @@ Blockly.Lua.isInitialized = false;
  * @param {!Blockly.Workspace} workspace Workspace to generate code from.
  */
 Blockly.Lua.init = function(workspace) {
-  this.isInitialized = true;
   // Create a dictionary of definitions to be printed before the code.
   Blockly.Lua.definitions_ = Object.create(null);
   // Create a dictionary mapping desired function names in definitions_
@@ -104,6 +103,7 @@ Blockly.Lua.init = function(workspace) {
     Blockly.Lua.variableDB_.reset();
   }
   Blockly.Lua.variableDB_.setVariableMap(workspace.getVariableMap());
+  this.isInitialized = true;
 };
 
 /**

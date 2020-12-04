@@ -124,7 +124,6 @@ Blockly.JavaScript.isInitialized = false;
  * @param {!Blockly.Workspace} workspace Workspace to generate code from.
  */
 Blockly.JavaScript.init = function(workspace) {
-  this.isInitialized = true;
   // Create a dictionary of definitions to be printed before the code.
   Blockly.JavaScript.definitions_ = Object.create(null);
   // Create a dictionary mapping desired function names in definitions_
@@ -160,6 +159,7 @@ Blockly.JavaScript.init = function(workspace) {
     Blockly.JavaScript.definitions_['variables'] =
         'var ' + defvars.join(', ') + ';';
   }
+  this.isInitialized = true;
 };
 
 /**

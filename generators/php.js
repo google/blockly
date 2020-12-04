@@ -128,7 +128,6 @@ Blockly.PHP.isInitialized = false;
  * @param {!Blockly.Workspace} workspace Workspace to generate code from.
  */
 Blockly.PHP.init = function(workspace) {
-  this.isInitialized = true;
   // Create a dictionary of definitions to be printed before the code.
   Blockly.PHP.definitions_ = Object.create(null);
   // Create a dictionary mapping desired function names in definitions_
@@ -161,6 +160,7 @@ Blockly.PHP.init = function(workspace) {
 
   // Declare all of the variables.
   Blockly.PHP.definitions_['variables'] = defvars.join('\n');
+  this.isInitialized = true;
 };
 
 /**

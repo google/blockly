@@ -79,6 +79,9 @@ Blockly.Generator.prototype.ORDER_OVERRIDES = [];
 
 /**
  * Whether the init method has been called.
+ * Generators that set this flag to false after creation and true in init
+ * will cause blockToCode to emit a warning if the generator has not been
+ * initialized. If this flag is untouched, it will have no effect.
  * @type {?boolean}
  */
 Blockly.Generator.prototype.isInitialized = null;

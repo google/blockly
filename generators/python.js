@@ -137,7 +137,6 @@ Blockly.Python.isInitialized = false;
  * @this {Blockly.Generator}
  */
 Blockly.Python.init = function(workspace) {
-  this.isInitialized = true;
   /**
    * Empty loops or conditionals are not allowed in Python.
    */
@@ -173,6 +172,7 @@ Blockly.Python.init = function(workspace) {
   }
 
   Blockly.Python.definitions_['variables'] = defvars.join('\n');
+  this.isInitialized = true;
 };
 
 /**

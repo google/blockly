@@ -141,7 +141,7 @@ Blockly.FieldMultilineInput.prototype.getDisplayText_ = function() {
   var displayLinesNumber = overflow ? this.maxLines_ : lines.length;
   for (var i = 0; i < displayLinesNumber; i++) {
     var text = lines[i];
-    if (text.length > this.maxDisplayLength || overflow && i === displayLinesNumber - 1) {
+    if (text.length > this.maxDisplayLength || (overflow && i === displayLinesNumber - 1)) {
       // Truncate displayed string and add an ellipsis ('...').
       text = text.substring(0, this.maxDisplayLength - 4) + '...';
     }

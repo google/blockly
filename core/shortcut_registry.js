@@ -104,10 +104,7 @@ Blockly.ShortcutRegistry.prototype.unregister = function(shortcutName) {
     return false;
   }
 
-  // Remove all key mappings with this shortcut.
-  for (var keyCode in this.keyMap_) {
-    this.removeKeyMapping(keyCode, shortcutName, true);
-  }
+  this.removeAllKeyMappings(shortcutName);
 
   delete this.registry_[shortcutName];
   return true;

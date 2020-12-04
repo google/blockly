@@ -922,9 +922,9 @@ Blockly.Bubble.createNonEditableBubble = function(paragraphElement, block, iconX
   if (block.RTL) {
     // Right-align the paragraph.
     // This cannot be done until the bubble is rendered on screen.
-    var maxWidth = this.paragraphElement_.getBBox().width;
+    var maxWidth = paragraphElement.getBBox().width;
     for (var i = 0, textElement;
-      (textElement = this.paragraphElement_.childNodes[i]); i++) {
+      (textElement = paragraphElement.childNodes[i]); i++) {
 
       textElement.setAttribute('text-anchor', 'end');
       textElement.setAttribute('x', maxWidth + Blockly.Bubble.BORDER_WIDTH);

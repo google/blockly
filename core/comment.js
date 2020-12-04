@@ -251,7 +251,6 @@ Blockly.Comment.prototype.setVisible = function(visible) {
  */
 Blockly.Comment.prototype.createBubble_ = function() {
   if (!this.block_.isEditable() || Blockly.utils.userAgent.IE) {
-    // Steal the code from warnings to make an uneditable text bubble.
     // MSIE does not support foreignobject; textareas are impossible.
     // https://docs.microsoft.com/en-us/openspecs/ie_standards/ms-svg/56e6e04c-7c8c-44dd-8100-bd745ee42034
     // Always treat comments in IE as uneditable.
@@ -286,7 +285,8 @@ Blockly.Comment.prototype.createNonEditableBubble_ = function() {
   // TODO (#2917): It would be great if the comment could support line breaks.
   this.paragraphElement_ = Blockly.Bubble.textToDom(this.block_.getCommentText());
   this.bubble_ = Blockly.Bubble.createNonEditableBubble(
-      this.paragraphElement_, this.block_, this.iconXY_);
+      this.paragraphElement_, /** @type {!Blockly.BlockSvg} */ (this.block_),
+      /** @type {!Blockly.utils.Coordinate} */ (this.iconXY_));
   this.applyColour();
 };
 

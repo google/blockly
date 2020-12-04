@@ -98,7 +98,8 @@ Blockly.Warning.prototype.setVisible = function(visible) {
 Blockly.Warning.prototype.createBubble_ = function() {
   this.paragraphElement_ = Blockly.Bubble.textToDom(this.getText());
   this.bubble_ = Blockly.Bubble.createNonEditableBubble(
-      this.paragraphElement_, this.block_, this.iconXY_);
+      this.paragraphElement_, /** @type {!Blockly.BlockSvg} */ (this.block_),
+      /** @type {!Blockly.utils.Coordinate} */ (this.iconXY_));
   this.applyColour();
 };
 

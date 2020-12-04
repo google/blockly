@@ -917,7 +917,7 @@ Blockly.Bubble.createNonEditableBubble = function(paragraphElement, block, iconX
       /** @type {!Blockly.WorkspaceSvg} */ (block.workspace),
       paragraphElement, block.pathObject.svgPath,
       /** @type {!Blockly.utils.Coordinate} */ (iconXY), null, null);
-  // Expose this warning's block's ID on its top-level SVG group.
+  // Expose this bubble's block's ID on its top-level SVG group.
   bubble.setSvgId(block.id);
   if (block.RTL) {
     // Right-align the paragraph.

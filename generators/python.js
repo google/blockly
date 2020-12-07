@@ -126,6 +126,12 @@ Blockly.Python.ORDER_OVERRIDES = [
 ];
 
 /**
+ * Whether the init method has been called.
+ * @type {?boolean}
+ */
+Blockly.Python.isInitialized = false;
+
+/**
  * Initialise the database of variable names.
  * @param {!Blockly.Workspace} workspace Workspace to generate code from.
  * @this {Blockly.Generator}
@@ -166,6 +172,7 @@ Blockly.Python.init = function(workspace) {
   }
 
   Blockly.Python.definitions_['variables'] = defvars.join('\n');
+  this.isInitialized = true;
 };
 
 /**

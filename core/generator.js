@@ -78,6 +78,15 @@ Blockly.Generator.prototype.COMMENT_WRAP = 60;
 Blockly.Generator.prototype.ORDER_OVERRIDES = [];
 
 /**
+ * Whether the init method has been called.
+ * Generators that set this flag to false after creation and true in init
+ * will cause blockToCode to emit a warning if the generator has not been
+ * initialized. If this flag is untouched, it will have no effect.
+ * @type {?boolean}
+ */
+Blockly.Generator.prototype.isInitialized = null;
+
+/**
  * Generate code for all blocks in the workspace to the specified language.
  * @param {Blockly.Workspace} workspace Workspace to generate code from.
  * @return {string} Generated code.
@@ -167,6 +176,10 @@ Blockly.Generator.prototype.allNestedComments = function(block) {
  *     operator order value.  Returns '' if block is null.
  */
 Blockly.Generator.prototype.blockToCode = function(block, opt_thisOnly) {
+  if (this.isInitialized === false) {
+    console.warn(
+        'Generator init was not called before blockToCode was called.');
+  }
   if (!block) {
     return '';
   }

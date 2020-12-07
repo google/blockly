@@ -118,6 +118,12 @@ Blockly.PHP.ORDER_OVERRIDES = [
 ];
 
 /**
+ * Whether the init method has been called.
+ * @type {?boolean}
+ */
+Blockly.PHP.isInitialized = false;
+
+/**
  * Initialise the database of variable names.
  * @param {!Blockly.Workspace} workspace Workspace to generate code from.
  */
@@ -154,6 +160,7 @@ Blockly.PHP.init = function(workspace) {
 
   // Declare all of the variables.
   Blockly.PHP.definitions_['variables'] = defvars.join('\n');
+  this.isInitialized = true;
 };
 
 /**

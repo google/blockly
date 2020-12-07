@@ -360,41 +360,6 @@ Blockly.Comment.prototype.setBubbleSize = function(width, height) {
 };
 
 /**
- * Returns this comment's text.
- * @return {string} Comment text.
- * @deprecated August 2019 Use block.getCommentText() instead.
- */
-Blockly.Comment.prototype.getText = function() {
-  Blockly.utils.deprecation.warn(
-      'Comment.prototype.getText',
-      'August 2019',
-      'December 2020',
-      'block.getCommentText');
-  return this.model_.text || '';
-};
-
-/**
- * Set this comment's text.
- *
- * If you want to receive a comment change event, then this should not be called
- * directly. Instead call block.setCommentText();
- * @param {string} text Comment text.
- * @deprecated August 2019 Use block.setCommentText() instead.
- */
-Blockly.Comment.prototype.setText = function(text) {
-  Blockly.utils.deprecation.warn(
-      'Comment.prototype.setText',
-      'August 2019',
-      'December 2020',
-      'block.setCommentText');
-  if (this.model_.text == text) {
-    return;
-  }
-  this.model_.text = text;
-  this.updateText();
-};
-
-/**
  * Update the comment's view to match the model.
  * @package
  */

@@ -177,6 +177,8 @@ Blockly.ShortcutRegistry.prototype.removeKeyMapping = function(
 
 /**
  * Removes all the key mappings for a shortcut with the given name.
+ * Useful when changing the default key mappings and the key codes registered to the shortcut are
+ * unknown.
  * @param {string} shortcutName The name of the shortcut to remove from the key map.
  * @public
  */

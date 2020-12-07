@@ -234,7 +234,7 @@ Blockly.FieldMultilineInput.prototype.updateSize_ = function() {
     var dummyTextElement = Blockly.utils.dom.createSvgElement(
         Blockly.utils.Svg.TEXT,{'class': 'blocklyText blocklyMultilineText'});
     var scale = this.workspace_.getScale();
-    var fontSize = this.getConstants().FIELD_TEXT_FONTSIZE * scale;
+    var fontSize = this.getConstants().FIELD_TEXT_FONTSIZE;
     var fontWeight = this.getConstants().FIELD_TEXT_FONTWEIGHT;
     var fontFamily = this.getConstants().FIELD_TEXT_FONTFAMILY;
 

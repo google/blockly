@@ -147,9 +147,11 @@ Blockly.FieldMultilineInput.prototype.getDisplayText_ = function() {
   var displayLinesNumber = this.isOverflowedY_ ? this.maxLines_ : lines.length;
   for (var i = 0; i < displayLinesNumber; i++) {
     var text = lines[i];
-    if (text.length > this.maxDisplayLength || (this.isOverflowedY_ && i === displayLinesNumber - 1)) {
+    if (text.length > this.maxDisplayLength) {
       // Truncate displayed string and add an ellipsis ('...').
       text = text.substring(0, this.maxDisplayLength - 4) + '...';
+    } else if (this.isOverflowedY_ && i === displayLinesNumber - 1) {
+      text = text.substring(0, text.length - 3) + '...';
     }
     // Replace whitespace with non-breaking spaces so the text doesn't collapse.
     text = text.replace(/\s/g, Blockly.Field.NBSP);

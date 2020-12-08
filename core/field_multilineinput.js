@@ -59,6 +59,13 @@ Blockly.FieldMultilineInput = function(opt_value, opt_validator, opt_config) {
    * @protected
    */
   this.maxLines_ = Infinity;
+
+  /**
+   * Whether Y overflow is currently occuring.
+   * @type {boolean}
+   * @protected
+   */
+  this.isOverflowedY_ = false;
 };
 Blockly.utils.object.inherits(Blockly.FieldMultilineInput,
     Blockly.FieldTextInput);
@@ -137,11 +144,10 @@ Blockly.FieldMultilineInput.prototype.getDisplayText_ = function() {
   }
   var lines = textLines.split('\n');
   textLines = '';
-  var overflow = lines.length > this.maxLines_;
-  var displayLinesNumber = overflow ? this.maxLines_ : lines.length;
+  var displayLinesNumber = this.isOverflowedY_ ? this.maxLines_ : lines.length;
   for (var i = 0; i < displayLinesNumber; i++) {
     var text = lines[i];
-    if (text.length > this.maxDisplayLength || (overflow && i === displayLinesNumber - 1)) {
+    if (text.length > this.maxDisplayLength || (this.isOverflowedY_ && i === displayLinesNumber - 1)) {
       // Truncate displayed string and add an ellipsis ('...').
       text = text.substring(0, this.maxDisplayLength - 4) + '...';
     }
@@ -158,6 +164,20 @@ Blockly.FieldMultilineInput.prototype.getDisplayText_ = function() {
     textLines += '\u200F';
   }
   return textLines;
+};
+
+/**
+ * Called by setValue if the text input is valid. Updates the value of the
+ * field, and updates the text of the field if it is not currently being
+ * edited (i.e. handled by the htmlInput_). Is being redefined here to update
+ * overflow state of the field.
+ * @param {*} newValue The value to be saved. The default validator guarantees
+ * that this is a string.
+ * @protected
+ */
+Blockly.FieldMultilineInput.prototype.doValueUpdate_ = function(newValue) {
+  Blockly.FieldMultilineInput.superClass_.doValueUpdate_.call(this, newValue);
+  this.isOverflowedY_ = this.value_.split('\n').length > this.maxLines_;
 };
 
 /**
@@ -186,6 +206,15 @@ Blockly.FieldMultilineInput.prototype.render_ = function() {
         }, this.textGroup_);
     span.appendChild(document.createTextNode(lines[i]));
     y += lineHeight;
+  }
+
+  if (this.isBeingEdited_) {
+    var htmlInput = /** @type {!HTMLElement} */(this.htmlInput_);
+    if (this.isOverflowedY_) {
+      Blockly.utils.dom.addClass(htmlInput, 'blocklyHtmlTextAreaInputOverflowedY');
+    } else {
+      Blockly.utils.dom.removeClass(htmlInput, 'blocklyHtmlTextAreaInputOverflowedY');
+    }
   }
 
   this.updateSize_();
@@ -249,6 +278,9 @@ Blockly.FieldMultilineInput.prototype.updateSize_ = function() {
         totalWidth = lineWidth;
       }
     }
+
+    var scrollbarWidth = this.htmlInput_.offsetWidth - this.htmlInput_.clientWidth;
+    totalWidth += scrollbarWidth;
   }
   if (this.borderRect_) {
     totalHeight += this.getConstants().FIELD_BORDER_RECT_Y_PADDING * 2;
@@ -360,14 +392,12 @@ Blockly.Css.register([
   '.blocklyHtmlTextAreaInput {',
     'font-family: monospace;',
     'resize: none;',
-    'overflow: scroll;',
-    '-ms-overflow-style: none;',
-    'scrollbar-width: none;',
+    'overflow: hidden;',
     'height: 100%;',
     'text-align: left;',
   '}',
-  '.blocklyHtmlTextAreaInput::-webkit-scrollbar {',
-    'display: none;',
+  '.blocklyHtmlTextAreaInputOverflowedY {',
+    'overflow-y: scroll;',
   '}'
   /* eslint-enable indent */
 ]);

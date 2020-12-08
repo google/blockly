@@ -213,9 +213,9 @@ Blockly.WorkspaceCommentSvg.prototype.select = function() {
   if (Blockly.selected == this) {
     return;
   }
-  var oldId = null;
+  var oldSelected = null;
   if (Blockly.selected) {
-    oldId = Blockly.selected.id;
+    oldSelected = Blockly.selected;
     // Unselect any previously selected block.
     Blockly.Events.disable();
     try {
@@ -224,7 +224,7 @@ Blockly.WorkspaceCommentSvg.prototype.select = function() {
       Blockly.Events.enable();
     }
   }
-  var event = new Blockly.Events.Selected(oldId, this.id, this.workspace.id);
+  var event = new Blockly.Events.Selected(oldSelected, this, this.workspace.id);
   Blockly.Events.fire(event);
   Blockly.selected = this;
   this.addSelect();
@@ -238,7 +238,8 @@ Blockly.WorkspaceCommentSvg.prototype.unselect = function() {
   if (Blockly.selected != this) {
     return;
   }
-  var event = new Blockly.Events.Selected(this.id, null, this.workspace.id);
+  var event = new Blockly.Events.Selected(
+      this, null, this.workspace.id);
   Blockly.Events.fire(event);
   Blockly.selected = null;
   this.removeSelect();

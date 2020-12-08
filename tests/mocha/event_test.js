@@ -30,15 +30,16 @@ suite('Events', function() {
     sharedTestTeardown.call(this);
   });
 
-  function createSimpleTestBlock(workspace) {
+  function createSimpleTestBlock(workspace, isBlockSvg = false) {
     // Disable events while constructing the block: this is a test of the
     // Blockly.Event constructors, not the block constructors.
     // Set the group id to avoid an extra call to genUid.
     Blockly.Events.disable();
     try {
       Blockly.Events.setGroup('unused');
-      var block = new Blockly.Block(
-          workspace, 'simple_test_block');
+      var block = isBlockSvg ?
+          new Blockly.BlockSvg(workspace, 'simple_test_block') :
+          new Blockly.Block(workspace, 'simple_test_block');
     } finally {
       Blockly.Events.setGroup(false);
     }
@@ -522,13 +523,15 @@ suite('Events', function() {
           Blockly.ASTNode.createWorkspaceNode(thisObj.workspace,
               new Blockly.utils.Coordinate(0, 0))]},
       {title: 'Selected', class: Blockly.Events.Selected,
-        getArgs: (thisObj) => [null, thisObj.block.id, thisObj.workspace.id],
+        getArgs: (thisObj) => [null, thisObj.block, thisObj.workspace.id],
         getExpectedJson: (thisObj) => ({type: 'selected', oldElementId: null,
-          newElementId: thisObj.block.id})},
+          newElementId: thisObj.block.id, oldElementType: null,
+          newElementType: 'block'})},
       {title: 'Selected (deselect)', class: Blockly.Events.Selected,
-        getArgs: (thisObj) => [thisObj.block.id, null, thisObj.workspace.id],
+        getArgs: (thisObj) => [thisObj.block, null, thisObj.workspace.id],
         getExpectedJson: (thisObj) => ({type: 'selected',
-          oldElementId: thisObj.block.id, newElementId: null})},
+          oldElementId: thisObj.block.id, newElementId: null,
+          oldElementType: 'block', newElementType: null})},
       {title: 'Theme Change', class: Blockly.Events.ThemeChange,
         getArgs: (thisObj) => ['classic', thisObj.workspace.id],
         getExpectedJson: () => ({type: 'theme_change', themeName: 'classic'})},
@@ -610,8 +613,14 @@ suite('Events', function() {
         }},
       {title: 'UI events', testCases: uiEventTestCases,
         setup: (thisObj) => {
-          thisObj.block = createSimpleTestBlock(thisObj.workspace);
-        }},
+          workspaceTeardown.call(thisObj, thisObj.workspace);
+          thisObj.workspace = Blockly.inject('blocklyDiv');
+          thisObj.block = createSimpleTestBlock(thisObj.workspace, true);
+        },
+        teardown: (thisObj) => {
+          workspaceTeardown.call(thisObj, thisObj.workspace);
+        },
+      },
       {title: 'Block events', testCases: blockEventTestCases,
         setup: (thisObj) => {
           createGenUidStubWithReturns(['testBlockId1', 'testBlockId2']);
@@ -625,6 +634,11 @@ suite('Events', function() {
         setup(function() {
           testSuite.setup(this);
         });
+        if (testSuite.teardown) {
+          teardown(function() {
+            testSuite.teardown(this);
+          });
+        }
         suite('fromJson', function() {
           testSuite.testCases.forEach((testCase) => {
             test(testCase.title, function() {

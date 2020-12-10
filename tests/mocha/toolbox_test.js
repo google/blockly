@@ -130,14 +130,14 @@ suite('Toolbox', function() {
 
     test('Toolbox clicked -> Should close flyout', function() {
       var hideChaffStub = sinon.stub(Blockly, "hideChaff");
-      var evt = new MouseEvent('pointerdown', {});
+      var evt = new MouseEvent('click', {});
       this.toolbox.HtmlDiv.dispatchEvent(evt);
       sinon.assert.calledOnce(hideChaffStub);
     });
     test('Category clicked -> Should select category', function() {
       var categoryXml = document.getElementsByClassName('blocklyTreeRow')[0];
       var evt = {
-        'srcElement': categoryXml
+        'target': categoryXml
       };
       var item = this.toolbox.contentMap_[categoryXml.getAttribute('id')];
       var setSelectedSpy = sinon.spy(this.toolbox, 'setSelectedItem');

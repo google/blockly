@@ -104,10 +104,7 @@ Blockly.ShortcutRegistry.prototype.unregister = function(shortcutName) {
     return false;
   }
 
-  // Remove all key mappings with this shortcut.
-  for (var keyCode in this.keyMap_) {
-    this.removeKeyMapping(keyCode, shortcutName, true);
-  }
+  this.removeAllKeyMappings(shortcutName);
 
   delete this.registry_[shortcutName];
   return true;
@@ -176,6 +173,19 @@ Blockly.ShortcutRegistry.prototype.removeKeyMapping = function(
     return false;
   }
   return false;
+};
+
+/**
+ * Removes all the key mappings for a shortcut with the given name.
+ * Useful when changing the default key mappings and the key codes registered to the shortcut are
+ * unknown.
+ * @param {string} shortcutName The name of the shortcut to remove from the key map.
+ * @public
+ */
+Blockly.ShortcutRegistry.prototype.removeAllKeyMappings = function(shortcutName) {
+  for (var keyCode in this.keyMap_) {
+    this.removeKeyMapping(keyCode, shortcutName, true);
+  }
 };
 
 /**

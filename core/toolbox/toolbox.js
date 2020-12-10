@@ -236,7 +236,7 @@ Blockly.Toolbox.prototype.createContentsContainer_ = function() {
 Blockly.Toolbox.prototype.attachEvents_ = function(container,
     contentsContainer) {
   // Clicking on toolbox closes popups.
-  var clickEvent = Blockly.bindEventWithChecks_(container, 'mousedown', this,
+  var clickEvent = Blockly.bindEventWithChecks_(container, 'click', this,
       this.onClick_, /* opt_noCaptureIdentifier */ false,
       /* opt_noPreventDefault */ true);
   this.boundEvents_.push(clickEvent);

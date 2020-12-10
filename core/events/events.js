@@ -296,7 +296,7 @@ Blockly.Events.filter = function(queueIn, forward) {
       } else {
         // Collision: newer events should merge into this event to maintain
         // order.
-        hash[key] = {event: event, index: 1};
+        hash[key] = {event: event, index: i};
         mergedQueue.push(event);
       }
     }

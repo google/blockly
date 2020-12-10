@@ -257,8 +257,8 @@ Blockly.Toolbox.prototype.onClick_ = function(e) {
     // Close flyout.
     Blockly.hideChaff(false);
   } else {
-    var srcElement = e.srcElement;
-    var itemId = srcElement.getAttribute('id');
+    var targetElement = e.target;
+    var itemId = targetElement.getAttribute('id');
     if (itemId) {
       var item = this.getToolboxItemById(itemId);
       if (item.isSelectable()) {

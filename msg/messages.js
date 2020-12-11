@@ -121,6 +121,40 @@ Blockly.Msg.LEAPHY_FLITZ_LED_R = 'Set LED Red';
 Blockly.Msg.LEAPHY_FLITZ_LED_G = 'Set LED Green';
 /// leaphy flitz set LED blue
 Blockly.Msg.LEAPHY_FLITZ_LED_B = 'Set LED Blue';
+/// leaphy ledstrip set strip
+Blockly.Msg.LEAPHY_LED_SET_STRIP = 'Set LED Strip';
+/// leaphy ledstrip set pin
+Blockly.Msg.LEAPHY_LED_SET_PIN = 'Pin';
+/// leaphy ledstrip set leds
+Blockly.Msg.LEAPHY_LED_SET_LEDS = 'Leds';
+/// leaphy ledstrip basic led
+Blockly.Msg.LEAPHY_LED_BASIC_LED = 'Ledstrip basis - Led'
+/// leaphy ledstrip basic red
+Blockly.Msg.LEAPHY_LED_BASIC_RED = 'R'
+/// leaphy ledstrip basic green
+Blockly.Msg.LEAPHY_LED_BASIC_GREEN = 'G'
+/// leaphy ledstrip basic blue
+Blockly.Msg.LEAPHY_LED_BASIC_BLUE = 'B'
+/// leaphy ledstrip speed value
+Blockly.Msg.LEAPHY_LED_SET_SPEEDVALUE = 'Ledstrip demo - Speed'
+/// leaphy ledstrip demo
+Blockly.Msg.LEAPHY_LED_STRIP_DEMO = 'Ledstrip demo'
+/** @type {string} */
+/// leaphy ledstrip demo lightbank
+Blockly.Msg.LEAPHY_LED_STRIP_LIGHTBANK = 'Lightbank'
+/** @type {string} */
+/// leaphy ledstrip demo breathe
+Blockly.Msg.LEAPHY_LED_STRIP_BREATHE = 'Breathe'
+/** @type {string} */
+/// leaphy ledstrip demo gulf
+Blockly.Msg.LEAPHY_LED_STRIP_GULF = 'Gulf'
+/** @type {string} */
+/// leaphy ledstrip demo rainbow
+Blockly.Msg.LEAPHY_LED_STRIP_RAINBOW = 'Rainbow'
+/** @type {string} */
+/// leaphy ledstrip demo color gulf
+Blockly.Msg.LEAPHY_LED_STRIP_COLORGULF = 'Color Gulf'
+/** @type {string} */
 
 
 /** @type {string} */

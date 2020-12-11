@@ -64,3 +64,35 @@ Blockly.Arduino['leaphy_rgb_raw_color_blue'] = function (block){
     return [code, Blockly.Arduino.ORDER_ATOMIC];
 };
 
+Blockly.Arduino['leaphy_led_set_strip'] = function (block){
+    var pin = Blockly.Arduino.valueToCode(this, 'LED_SET_PIN', Blockly.Arduino.ORDER_ATOMIC) || '0'
+    var leds = Blockly.Arduino.valueToCode(this, 'LED_SET_LEDS', Blockly.Arduino.ORDER_ATOMIC) || '0'
+    Blockly.Arduino.definitions_['define_led_lib'] = '#include "ledstrip.h"';
+    Blockly.Arduino.definitions_['define_leds_pins'] = 'LEDSTRIP ledstrip(' + pin + ', ' + leds + ');';
+    var code = '';
+    return code;
+};
+
+Blockly.Arduino['leaphy_led_set_basic'] = function (block){
+    var led = Blockly.Arduino.valueToCode(this, 'LED_BASIC_LED', Blockly.Arduino.ORDER_ATOMIC) || '0'    
+    var red = Blockly.Arduino.valueToCode(this, 'LED_BASIC_RED', Blockly.Arduino.ORDER_ATOMIC) || '0'
+    var green = Blockly.Arduino.valueToCode(this, 'LED_BASIC_GREEN', Blockly.Arduino.ORDER_ATOMIC) || '0'
+    var blue = Blockly.Arduino.valueToCode(this, 'LED_BASIC_BLUE', Blockly.Arduino.ORDER_ATOMIC) || '0'
+    var code = 'ledstrip.basis('+ led + ', ' + red + ', ' + green + ', ' + blue + ');';
+    return code;
+};
+
+Blockly.Arduino['leaphy_led_set_speed'] = function (block){
+    var speedValue = Blockly.Arduino.valueToCode(this, 'LED_SET_SPEEDVALUE', Blockly.Arduino.ORDER_ATOMIC) || '0'
+    var code = '_snelHeid = ' + speedValue + ';';
+    return code;
+};
+
+Blockly.Arduino['leaphy_led_strip_demo'] = function (block){
+    var dropdownType = block.getFieldValue('DEMO_TYPE');
+    var red = Blockly.Arduino.valueToCode(this, 'LED_STRIP_DEMO_RED', Blockly.Arduino.ORDER_ATOMIC) || '0'
+    var green = Blockly.Arduino.valueToCode(this, 'LED_STRIP_DEMO_GREEN', Blockly.Arduino.ORDER_ATOMIC) || '0'
+    var blue = Blockly.Arduino.valueToCode(this, 'LED_STRIP_DEMO_BLUE', Blockly.Arduino.ORDER_ATOMIC) || '0'
+    var code = 'ledstrip.runFunction(' + dropdownType + ', ' + red + ', ' + green + ', ' + blue + ');';
+    return code;
+};

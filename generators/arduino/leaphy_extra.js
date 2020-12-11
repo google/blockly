@@ -78,13 +78,13 @@ Blockly.Arduino['leaphy_led_set_basic'] = function (block){
     var red = Blockly.Arduino.valueToCode(this, 'LED_BASIC_RED', Blockly.Arduino.ORDER_ATOMIC) || '0'
     var green = Blockly.Arduino.valueToCode(this, 'LED_BASIC_GREEN', Blockly.Arduino.ORDER_ATOMIC) || '0'
     var blue = Blockly.Arduino.valueToCode(this, 'LED_BASIC_BLUE', Blockly.Arduino.ORDER_ATOMIC) || '0'
-    var code = 'ledstrip.basis('+ led + ', ' + red + ', ' + green + ', ' + blue + ');';
+    var code = 'ledstrip.basis('+ led + ', ' + red + ', ' + green + ', ' + blue + ');\n';
     return code;
 };
 
 Blockly.Arduino['leaphy_led_set_speed'] = function (block){
     var speedValue = Blockly.Arduino.valueToCode(this, 'LED_SET_SPEEDVALUE', Blockly.Arduino.ORDER_ATOMIC) || '0'
-    var code = '_snelHeid = ' + speedValue + ';';
+    var code = '_snelHeid = ' + speedValue + ';\n';
     return code;
 };
 
@@ -93,6 +93,6 @@ Blockly.Arduino['leaphy_led_strip_demo'] = function (block){
     var red = Blockly.Arduino.valueToCode(this, 'LED_STRIP_DEMO_RED', Blockly.Arduino.ORDER_ATOMIC) || '0'
     var green = Blockly.Arduino.valueToCode(this, 'LED_STRIP_DEMO_GREEN', Blockly.Arduino.ORDER_ATOMIC) || '0'
     var blue = Blockly.Arduino.valueToCode(this, 'LED_STRIP_DEMO_BLUE', Blockly.Arduino.ORDER_ATOMIC) || '0'
-    var code = 'ledstrip.runFunction(' + dropdownType + ', ' + red + ', ' + green + ', ' + blue + ');';
+    var code = 'ledstrip.runFunction(' + dropdownType + ', ' + red + ', ' + green + ', ' + blue + ');\n';
     return code;
 };

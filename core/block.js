@@ -839,7 +839,6 @@ Blockly.Block.prototype.setShadow = function(shadow) {
 /**
  * Get whether this block is an insertion marker block or not.
  * @return {boolean} True if an insertion marker.
- * @package
  */
 Blockly.Block.prototype.isInsertionMarker = function() {
   return this.isInsertionMarker_;

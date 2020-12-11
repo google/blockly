@@ -236,7 +236,7 @@ Blockly.Toolbox.prototype.createContentsContainer_ = function() {
 Blockly.Toolbox.prototype.attachEvents_ = function(container,
     contentsContainer) {
   // Clicking on toolbox closes popups.
-  var clickEvent = Blockly.bindEventWithChecks_(container, 'mousedown', this,
+  var clickEvent = Blockly.bindEventWithChecks_(container, 'click', this,
       this.onClick_, /* opt_noCaptureIdentifier */ false,
       /* opt_noPreventDefault */ true);
   this.boundEvents_.push(clickEvent);
@@ -257,8 +257,8 @@ Blockly.Toolbox.prototype.onClick_ = function(e) {
     // Close flyout.
     Blockly.hideChaff(false);
   } else {
-    var srcElement = e.srcElement;
-    var itemId = srcElement.getAttribute('id');
+    var targetElement = e.target;
+    var itemId = targetElement.getAttribute('id');
     if (itemId) {
       var item = this.getToolboxItemById(itemId);
       if (item.isSelectable()) {

@@ -261,6 +261,11 @@ Blockly.FieldMultilineInput.prototype.updateSize_ = function() {
         (i > 0 ? this.getConstants().FIELD_BORDER_RECT_Y_PADDING : 0);
   }
   if (this.isBeingEdited_) {
+    // The default width is based on the longest line in the display text,
+    // but when it's being edited, width should be calculated based on the
+    // absolute longest line, even if it would be truncated after editing.
+    // Otherwise we would get wrong editor width when there are more
+    // lines than this.maxLines_.
     var actualEditorLines = this.value_.split('\n');
     var dummyTextElement = Blockly.utils.dom.createSvgElement(
         Blockly.utils.Svg.TEXT,{'class': 'blocklyText blocklyMultilineText'});

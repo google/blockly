@@ -84,6 +84,6 @@
     "yargs": "^16.0.3"
   },
   "dependencies": {
-    "jsdom": "15.2.1"
+    "jsdom": "16.4.0"
   }
 }

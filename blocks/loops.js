@@ -334,9 +334,8 @@ Blockly.Constants.Loops.CONTROL_FLOW_IN_LOOP_CHECK_MIXIN = {
     // Don't change state if:
     //   * It's at the start of a drag.
     //   * It's not a move event.
-    //   * Or the moving block is not this block.
     if (!this.workspace.isDragging || this.workspace.isDragging() ||
-        e.type != Blockly.Events.BLOCK_MOVE || e.blockId != this.id) {
+        e.type != Blockly.Events.BLOCK_MOVE) {
       return;
     }
     var enabled = Blockly.Constants.Loops.CONTROL_FLOW_IN_LOOP_CHECK_MIXIN

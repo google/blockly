@@ -28,7 +28,7 @@
     "build:generators": "gulp buildGenerators",
     "build:langfiles": "gulp buildLangfiles",
     "build:uncompressed": "gulp buildUncompressed",
-    "bump": "npm --no-git-tag-version version 3.$(date +'%Y%m%d').0",
+    "bump": "npm --no-git-tag-version version 4.$(date +'%Y%m%d').0",
     "license": "gulp checkLicenses",
     "lint": "eslint .",
     "package": "gulp package",

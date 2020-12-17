@@ -26,7 +26,6 @@ function typings() {
   const tmpDir = './typings/tmp';
   const blocklySrcs = [
     "core/",
-    "core/components",
     "core/events",
     "core/keyboard_nav",
     "core/renderers/common",
@@ -67,12 +66,12 @@ function typings() {
     'typings/templates/blockly-interfaces.template',
     `${tmpDir}/core/**`,
     `${tmpDir}/core/interfaces/**`,
-    `${tmpDir}/core/components/**`,
-    `${tmpDir}/core/components/tree/**`,
+    `${tmpDir}/core/events/**`,
     `${tmpDir}/core/keyboard_nav/**`,
     `${tmpDir}/core/renderers/common/**`,
     `${tmpDir}/core/renderers/measurables/**`,
     `${tmpDir}/core/utils/**`,
+    `${tmpDir}/core/toolbox/**`,
     `${tmpDir}/core/theme/**`,
     `${tmpDir}/msg/**`
   ];

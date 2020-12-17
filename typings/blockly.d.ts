@@ -51,7 +51,6 @@ declare module Blockly {
       pinch?: boolean;
     };
     renderer?: string;
-    keyMap?: {[type: string]: Blockly.Action;};
     parentWorkspace?: Blockly.WorkspaceSvg;
   }
 
@@ -6014,6 +6013,18 @@ declare module Blockly {
              * @protected
              */
             reflowInternal_(): void;
+    
+            /**
+             * Calculates the x coordinate for the flyout position.
+             * @return {number} X coordinate.
+             */
+            getX(): number;
+    
+            /**
+             * Calculates the y coordinate for the flyout position.
+             * @return {number} Y coordinate.
+             */
+            getY(): number;
     } 
     
 }

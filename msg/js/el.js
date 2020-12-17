@@ -2,7 +2,7 @@
 
 'use strict';
 
-Blockly.Msg["ADD_COMMENT"] = "Πρόσθεσε Το Σχόλιο";
+Blockly.Msg["ADD_COMMENT"] = "Προσθήκη σχολίου";
 Blockly.Msg["CANNOT_DELETE_VARIABLE_PROCEDURE"] = "Δεν μπορώ να διαγράψω την μεταβλητή '%1' διότι είναι μέρος του ορισμού της λειτουργίας '%2'";
 Blockly.Msg["CHANGE_VALUE_TITLE"] = "Άλλαξε την τιμή:";
 Blockly.Msg["CLEAN_UP"] = "Ταξινομείστε τα Μπλοκ";
@@ -58,20 +58,20 @@ Blockly.Msg["CONTROLS_WHILEUNTIL_OPERATOR_UNTIL"] = "επανάλαβε μέχρ
 Blockly.Msg["CONTROLS_WHILEUNTIL_OPERATOR_WHILE"] = "επανάλαβε ενώ";
 Blockly.Msg["CONTROLS_WHILEUNTIL_TOOLTIP_UNTIL"] = "Ενόσω μια τιμή είναι ψευδής, τότε εκτελεί κάποιες εντολές.";
 Blockly.Msg["CONTROLS_WHILEUNTIL_TOOLTIP_WHILE"] = "Ενόσω μια τιμή είναι αληθής, τότε εκτελεί κάποιες εντολές.";
-Blockly.Msg["DELETE_ALL_BLOCKS"] = "Να διαγραφούν και τα %1 μπλοκ;";
-Blockly.Msg["DELETE_BLOCK"] = "Διάγραψε Το Μπλοκ";
+Blockly.Msg["DELETE_ALL_BLOCKS"] = "Να διαγραφούν όλα τα %1 μπλοκ;";
+Blockly.Msg["DELETE_BLOCK"] = "Διαγραφή μπλοκ";
 Blockly.Msg["DELETE_VARIABLE"] = "Διαγράψτε την μεταβλητή '%1'";
 Blockly.Msg["DELETE_VARIABLE_CONFIRMATION"] = "Θέλετε να διαγράψετε το %1 που χρησιμοποιείτε της μεταβλητής '%2'?";
-Blockly.Msg["DELETE_X_BLOCKS"] = "Διάγραψε %1 Μπλοκ";
+Blockly.Msg["DELETE_X_BLOCKS"] = "Διαγραφή %1 μπλοκ";
 Blockly.Msg["DISABLE_BLOCK"] = "Απενεργοποίησε Το Μπλοκ";
 Blockly.Msg["DUPLICATE_BLOCK"] = "Διπλότυπο";
-Blockly.Msg["DUPLICATE_COMMENT"] = "Διπλότυπο σχόλιο";
+Blockly.Msg["DUPLICATE_COMMENT"] = "Αντιγραφή σχόλιου";
 Blockly.Msg["ENABLE_BLOCK"] = "Ενεργοποίησε Το Μπλοκ";
 Blockly.Msg["EXPAND_ALL"] = "Επέκτεινε Όλα Τα Μπλοκ";
 Blockly.Msg["EXPAND_BLOCK"] = "Επέκτεινε Το Μπλοκ";
-Blockly.Msg["EXTERNAL_INPUTS"] = "Εξωτερικές Είσοδοι";
+Blockly.Msg["EXTERNAL_INPUTS"] = "Εξωτερικές προσθήκες";
 Blockly.Msg["HELP"] = "Βοήθεια";
-Blockly.Msg["INLINE_INPUTS"] = "Εσωτερικές Είσοδοι";
+Blockly.Msg["INLINE_INPUTS"] = "Εσωτερικές προσθήκες";
 Blockly.Msg["IOS_CANCEL"] = "Ακυρώστε";
 Blockly.Msg["IOS_ERROR"] = "Σφάλμα";
 Blockly.Msg["IOS_OK"] = "ΟΚ";
@@ -316,7 +316,7 @@ Blockly.Msg["PROCEDURES_MUTATORARG_TOOLTIP"] = "Πρόσθεσε μια είσο
 Blockly.Msg["PROCEDURES_MUTATORCONTAINER_TITLE"] = "είσοδοι";
 Blockly.Msg["PROCEDURES_MUTATORCONTAINER_TOOLTIP"] = "Προσθέτει, αφαιρεί ή αναδιατάσσει εισόδους σε αυτήν τη λειτουργία";
 Blockly.Msg["REDO"] = "Ακύρωση αναίρεσης";
-Blockly.Msg["REMOVE_COMMENT"] = "Αφαίρεσε Το Σχόλιο";
+Blockly.Msg["REMOVE_COMMENT"] = "Αφαίρεση σχολίου";
 Blockly.Msg["RENAME_VARIABLE"] = "Μετονόμασε τη μεταβλητή...";
 Blockly.Msg["RENAME_VARIABLE_TITLE"] = "Μετονόμασε όλες τις μεταβλητές «%1» σε:";
 Blockly.Msg["TEXT_APPEND_HELPURL"] = "https://github.com/google/blockly/wiki/Text#text-modification";

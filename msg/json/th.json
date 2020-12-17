@@ -193,6 +193,8 @@
 	"MATH_RANDOM_FLOAT_HELPURL": "https://en.wikipedia.org/wiki/Random_number_generation",
 	"MATH_RANDOM_FLOAT_TITLE_RANDOM": "สุ่มเลขเศษส่วน",
 	"MATH_RANDOM_FLOAT_TOOLTIP": "สุ่มเลขเศษส่วน ตั้งแต่ 0.0 แต่ไม่เกิน 1.0",
+	"MATH_ATAN2_HELPURL": "https://en.wikipedia.org/wiki/Atan2",
+	"MATH_ATAN2_TITLE": "atan2 ของ X:%1 Y:%2",
 	"MATH_ATAN2_TOOLTIP": "เปลี่ยนอาร์กแทนเจนต์ของชุด (X, Y) จากองศา 180 เป็น -180.",
 	"TEXT_TEXT_HELPURL": "https://th.wikipedia.org/wiki/สายอักขระ",
 	"TEXT_TEXT_TOOLTIP": "ตัวหนังสือ คำ หรือข้อความ",

@@ -34,6 +34,7 @@ goog.require('Blockly.Xml');
 goog.requireType('Blockly.IBlocklyActionable');
 goog.requireType('Blockly.IDeleteArea');
 goog.requireType('Blockly.IFlyout');
+goog.requireType('Blockly.ShortcutRegistry');
 goog.requireType('Blockly.utils.Metrics');
 
 
@@ -616,7 +617,7 @@ Blockly.Flyout.prototype.createButton_ = function(btnInfo, isLabel) {
  * defined as disabled.
  * @param {!Element} blockXml The xml of the block.
  * @return {!Blockly.BlockSvg} The block created from the blockXml.
- * @private
+ * @protected
  */
 Blockly.Flyout.prototype.createBlock_ = function(blockXml) {
   var curBlock = /** @type {!Blockly.BlockSvg} */ (
@@ -683,7 +684,7 @@ Blockly.Flyout.prototype.addSeparatorGap_ = function(sepInfo, gaps, defaultGap) 
 
 /**
  * Delete blocks, mats and buttons from a previous showing of the flyout.
- * @private
+ * @protected
  */
 Blockly.Flyout.prototype.clearOldBlocks_ = function() {
   // Delete any blocks from a previous showing.
@@ -997,7 +998,7 @@ Blockly.Flyout.prototype.placeNewBlock_ = function(oldBlock) {
 /**
  * Handles the given action.
  * This is only triggered when keyboard accessibility mode is enabled.
- * @param {!Blockly.Action} action The action to be handled.
+ * @param {!Blockly.ShortcutRegistry.KeyboardShortcut} action The action to be handled.
  * @return {boolean} True if the flyout handled the action, false otherwise.
  * @package
  */
@@ -1069,3 +1070,15 @@ Blockly.Flyout.prototype.wheel_;
  * @protected
  */
 Blockly.Flyout.prototype.reflowInternal_;
+
+/**
+ * Calculates the x coordinate for the flyout position.
+ * @return {number} X coordinate.
+ */
+Blockly.Flyout.prototype.getX;
+
+/**
+ * Calculates the y coordinate for the flyout position.
+ * @return {number} Y coordinate.
+ */
+Blockly.Flyout.prototype.getY;

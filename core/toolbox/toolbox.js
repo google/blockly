@@ -16,7 +16,7 @@ goog.require('Blockly.CollapsibleToolboxCategory');
 goog.require('Blockly.constants');
 goog.require('Blockly.Css');
 goog.require('Blockly.Events');
-goog.require('Blockly.Events.Ui');
+goog.require('Blockly.Events.ToolboxItemSelect');
 goog.require('Blockly.navigation');
 goog.require('Blockly.registry');
 goog.require('Blockly.Touch');
@@ -26,7 +26,6 @@ goog.require('Blockly.utils.dom');
 goog.require('Blockly.utils.Rect');
 goog.require('Blockly.utils.toolbox');
 
-goog.requireType('Blockly.Action');
 goog.requireType('Blockly.IBlocklyActionable');
 goog.requireType('Blockly.ICollapsibleToolboxItem');
 goog.requireType('Blockly.IDeleteArea');
@@ -35,6 +34,7 @@ goog.requireType('Blockly.ISelectableToolboxItem');
 goog.requireType('Blockly.IStyleable');
 goog.requireType('Blockly.IToolbox');
 goog.requireType('Blockly.IToolboxItem');
+goog.requireType('Blockly.ShortcutRegistry');
 goog.requireType('Blockly.WorkspaceSvg');
 
 
@@ -236,7 +236,7 @@ Blockly.Toolbox.prototype.createContentsContainer_ = function() {
 Blockly.Toolbox.prototype.attachEvents_ = function(container,
     contentsContainer) {
   // Clicking on toolbox closes popups.
-  var clickEvent = Blockly.bindEventWithChecks_(container, 'mousedown', this,
+  var clickEvent = Blockly.bindEventWithChecks_(container, 'click', this,
       this.onClick_, /* opt_noCaptureIdentifier */ false,
       /* opt_noPreventDefault */ true);
   this.boundEvents_.push(clickEvent);
@@ -257,8 +257,8 @@ Blockly.Toolbox.prototype.onClick_ = function(e) {
     // Close flyout.
     Blockly.hideChaff(false);
   } else {
-    var srcElement = e.srcElement;
-    var itemId = srcElement.getAttribute('id');
+    var targetElement = e.target;
+    var itemId = targetElement.getAttribute('id');
     if (itemId) {
       var item = this.getToolboxItemById(itemId);
       if (item.isSelectable()) {
@@ -303,6 +303,9 @@ Blockly.Toolbox.prototype.onKeyDown_ = function(e) {
     default:
       handled = false;
       break;
+  }
+  if (!handled && this.selectedItem_ && this.selectedItem_.onKeyDown) {
+    handled = this.selectedItem_.onKeyDown(e);
   }
 
   if (handled) {
@@ -387,7 +390,7 @@ Blockly.Toolbox.prototype.renderContents_ = function(toolboxDef) {
 
 /**
  * Creates and renders the toolbox item.
- * @param {Blockly.utils.toolbox.ToolboxItemInfo} toolboxItemDef Any information
+ * @param {!Blockly.utils.toolbox.ToolboxItemInfo} toolboxItemDef Any information
  *    that can be used to create an item in the toolbox.
  * @param {!DocumentFragment} fragment The document fragment to add the child
  *     toolbox elements to.
@@ -413,6 +416,11 @@ Blockly.Toolbox.prototype.createToolboxItem_ = function(toolboxItemDef, fragment
     var toolboxItemDom = toolboxItem.getDiv();
     if (toolboxItemDom) {
       fragment.appendChild(toolboxItemDom);
+    }
+    // Adds the id to the html element that can receive a click.
+    // This is used in onClick_ to find the toolboxItem that was clicked.
+    if (toolboxItem.getClickTarget) {
+      toolboxItem.getClickTarget().setAttribute('id', toolboxItem.getId());
     }
   }
 };
@@ -798,17 +806,15 @@ Blockly.Toolbox.prototype.fireSelectEvent_ = function(oldItem, newItem) {
   if (oldItem == newItem) {
     newElement = null;
   }
-  // TODO (#4187): Update Toolbox Events.
-  var event = new Blockly.Events.Ui(null, 'category',
-      oldElement, newElement);
-  event.workspaceId = this.workspace_.id;
+  var event = new Blockly.Events.ToolboxItemSelect(
+      oldElement, newElement, this.workspace_.id);
   Blockly.Events.fire(event);
 };
 
 /**
  * Handles the given Blockly action on a toolbox.
  * This is only triggered when keyboard accessibility mode is enabled.
- * @param {!Blockly.Action} action The action to be handled.
+ * @param {!Blockly.ShortcutRegistry.KeyboardShortcut} action The action to be handled.
  * @return {boolean} True if the field handled the action, false otherwise.
  * @package
  */

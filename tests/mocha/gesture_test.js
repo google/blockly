@@ -34,10 +34,9 @@ suite('Gesture', function() {
     chai.assert.isTrue(isFieldClickSpy.alwaysReturned(isFieldClick));
 
 
-    assertEventFired(eventsFireStub, Blockly.Events.Ui,
-        {element: 'selected', oldValue: null, newValue: block.id},
-        fieldWorkspace.id, null);
-    assertEventNotFired(eventsFireStub, Blockly.Events.Ui, {element: 'click'});
+    assertEventFired(eventsFireStub, Blockly.Events.Selected,
+        {oldElementId: null, newElementId: block.id}, fieldWorkspace.id);
+    assertEventNotFired(eventsFireStub, Blockly.Events.Click, {});
   }
 
   function getTopFlyoutBlock(flyout) {

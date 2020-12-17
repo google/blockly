@@ -15,6 +15,7 @@ goog.provide('Blockly.blockRendering.MarkerSvg');
 
 goog.require('Blockly.ASTNode');
 goog.require('Blockly.constants');
+goog.require('Blockly.Events.MarkerMove');
 goog.require('Blockly.utils.dom');
 goog.require('Blockly.utils.Svg');
 
@@ -551,12 +552,8 @@ Blockly.blockRendering.MarkerSvg.prototype.hide = function() {
 Blockly.blockRendering.MarkerSvg.prototype.fireMarkerEvent_ = function(
     oldNode, curNode) {
   var curBlock = curNode.getSourceBlock();
-  var eventType = this.isCursor() ? 'cursorMove' : 'markerMove';
-  var event = new Blockly.Events.Ui(curBlock, eventType, oldNode, curNode);
-  if (curNode.getType() == Blockly.ASTNode.types.WORKSPACE) {
-    event.workspaceId =
-      (/** @type {!Blockly.Workspace} */ (curNode.getLocation())).id;
-  }
+  var event = new Blockly.Events.MarkerMove(
+      curBlock, this.isCursor(), oldNode, curNode);
   Blockly.Events.fire(event);
 };
 

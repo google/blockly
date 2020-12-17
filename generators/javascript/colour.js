@@ -36,11 +36,11 @@ Blockly.JavaScript['colour_random'] = function(block) {
 Blockly.JavaScript['colour_rgb'] = function(block) {
   // Compose a colour from RGB components expressed as percentages.
   var red = Blockly.JavaScript.valueToCode(block, 'RED',
-      Blockly.JavaScript.ORDER_COMMA) || 0;
+      Blockly.JavaScript.ORDER_NONE) || 0;
   var green = Blockly.JavaScript.valueToCode(block, 'GREEN',
-      Blockly.JavaScript.ORDER_COMMA) || 0;
+      Blockly.JavaScript.ORDER_NONE) || 0;
   var blue = Blockly.JavaScript.valueToCode(block, 'BLUE',
-      Blockly.JavaScript.ORDER_COMMA) || 0;
+      Blockly.JavaScript.ORDER_NONE) || 0;
   var functionName = Blockly.JavaScript.provideFunction_(
       'colourRgb',
       ['function ' + Blockly.JavaScript.FUNCTION_NAME_PLACEHOLDER_ +
@@ -60,11 +60,11 @@ Blockly.JavaScript['colour_rgb'] = function(block) {
 Blockly.JavaScript['colour_blend'] = function(block) {
   // Blend two colours together.
   var c1 = Blockly.JavaScript.valueToCode(block, 'COLOUR1',
-      Blockly.JavaScript.ORDER_COMMA) || '\'#000000\'';
+      Blockly.JavaScript.ORDER_NONE) || '\'#000000\'';
   var c2 = Blockly.JavaScript.valueToCode(block, 'COLOUR2',
-      Blockly.JavaScript.ORDER_COMMA) || '\'#000000\'';
+      Blockly.JavaScript.ORDER_NONE) || '\'#000000\'';
   var ratio = Blockly.JavaScript.valueToCode(block, 'RATIO',
-      Blockly.JavaScript.ORDER_COMMA) || 0.5;
+      Blockly.JavaScript.ORDER_NONE) || 0.5;
   var functionName = Blockly.JavaScript.provideFunction_(
       'colourBlend',
       ['function ' + Blockly.JavaScript.FUNCTION_NAME_PLACEHOLDER_ +

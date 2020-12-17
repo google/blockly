@@ -30,10 +30,14 @@ suite('Checkbox Fields', function() {
    * @type {!Array<!FieldCreationTestCase>}
    */
   var validValueTestCases = [
-    {title: 'Boolean true', value: true, expectedValue: 'TRUE'},
-    {title: 'Boolean false', value: false, expectedValue: 'FALSE'},
-    {title: 'String TRUE', value: 'TRUE', expectedValue: 'TRUE'},
-    {title: 'String FALSE', value: 'FALSE', expectedValue: 'FALSE'},
+    {title: 'Boolean true', value: true, expectedValue: 'TRUE',
+      expectedText: 'true'},
+    {title: 'Boolean false', value: false, expectedValue: 'FALSE',
+      expectedText: 'false'},
+    {title: 'String TRUE', value: 'TRUE', expectedValue: 'TRUE',
+      expectedText: 'true'},
+    {title: 'String FALSE', value: 'FALSE', expectedValue: 'FALSE',
+      expectedText: 'false'},
   ];
   var addArgsAndJson = function(testCase) {
     testCase.args = [testCase.value];
@@ -72,54 +76,21 @@ suite('Checkbox Fields', function() {
   testHelpers.runFromJsonSuiteTests(
       Blockly.FieldCheckbox, validValueTestCases,invalidValueTestCases,
       validTestCaseAssertField, assertFieldDefault);
-  
+
   suite('setValue', function() {
     suite('True -> New Value', function() {
       setup(function() {
-        this.checkboxField = new Blockly.FieldCheckbox('TRUE');
+        this.field = new Blockly.FieldCheckbox('TRUE');
       });
-      test('Null', function() {
-        this.checkboxField.setValue(null);
-        testHelpers.assertFieldValue(this.checkboxField, 'TRUE', 'true');
-      });
-      test('Undefined', function() {
-        this.checkboxField.setValue(undefined);
-        testHelpers.assertFieldValue(this.checkboxField, 'TRUE', 'true');
-      });
-      test('Non-Parsable String', function() {
-        this.checkboxField.setValue('bad');
-        testHelpers.assertFieldValue(this.checkboxField, 'TRUE', 'true');
-      });
-      test('False', function() {
-        this.checkboxField.setValue('FALSE');
-        testHelpers.assertFieldValue(this.checkboxField, 'FALSE', 'false');
-      });
-      test('With source block', function() {
-        this.checkboxField.setSourceBlock(createTestBlock());
-        this.checkboxField.setValue('FALSE');
-        testHelpers.assertFieldValue(this.checkboxField, 'FALSE', 'false');
-      });
+      testHelpers.runSetValueTests(
+          validValueTestCases, invalidValueTestCases, 'TRUE', 'true');
     });
     suite('False -> New Value', function() {
       setup(function() {
-        this.checkboxField = new Blockly.FieldCheckbox('FALSE');
+        this.field = new Blockly.FieldCheckbox('FALSE');
       });
-      test('Null', function() {
-        this.checkboxField.setValue(null);
-        testHelpers.assertFieldValue(this.checkboxField, 'FALSE', 'false');
-      });
-      test('Undefined', function() {
-        this.checkboxField.setValue(undefined);
-        testHelpers.assertFieldValue(this.checkboxField, 'FALSE', 'false');
-      });
-      test('Non-Parsable String', function() {
-        this.checkboxField.setValue('bad');
-        testHelpers.assertFieldValue(this.checkboxField, 'FALSE', 'false');
-      });
-      test('True', function() {
-        this.checkboxField.setValue('TRUE');
-        testHelpers.assertFieldValue(this.checkboxField, 'TRUE', 'true');
-      });
+      testHelpers.runSetValueTests(
+          validValueTestCases, invalidValueTestCases, 'FALSE', 'false');
     });
   });
   suite('Validators', function() {

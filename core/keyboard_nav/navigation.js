@@ -13,11 +13,9 @@
 
 goog.provide('Blockly.navigation');
 
-goog.require('Blockly.Action');
 goog.require('Blockly.ASTNode');
 goog.require('Blockly.constants');
 goog.require('Blockly.utils.Coordinate');
-goog.require('Blockly.user.keyMap');
 
 
 /**
@@ -113,6 +111,7 @@ Blockly.navigation.getMarker = function() {
 /**
  * Get the workspace that is being navigated.
  * @return {!Blockly.WorkspaceSvg} The workspace being navigated.
+ * TODO: Remove this in favor or using passed in workspaces.
  */
 Blockly.navigation.getNavigationWorkspace = function() {
   return /** @type {!Blockly.WorkspaceSvg} */ (Blockly.getMainWorkspace());
@@ -121,10 +120,11 @@ Blockly.navigation.getNavigationWorkspace = function() {
 /**
  * If a toolbox exists, set the navigation state to toolbox and select the first
  * category in the toolbox.
+ * @param {!Blockly.WorkspaceSvg} workspace The main workspace.
  * @private
  */
-Blockly.navigation.focusToolbox_ = function() {
-  var toolbox = Blockly.navigation.getNavigationWorkspace().getToolbox();
+Blockly.navigation.focusToolbox_ = function(workspace) {
+  var toolbox = workspace.getToolbox();
   if (toolbox) {
     Blockly.navigation.currentState_ = Blockly.navigation.STATE_TOOLBOX;
     Blockly.navigation.resetFlyout_(false /* shouldHide */);
@@ -140,12 +140,12 @@ Blockly.navigation.focusToolbox_ = function() {
 
 /**
  * Change focus to the flyout.
+ * @param {!Blockly.WorkspaceSvg} workspace The main workspace.
  * @private
  */
-Blockly.navigation.focusFlyout_ = function() {
+Blockly.navigation.focusFlyout_ = function(workspace) {
   var topBlock = null;
   Blockly.navigation.currentState_ = Blockly.navigation.STATE_FLYOUT;
-  var workspace = Blockly.navigation.getNavigationWorkspace();
   var toolbox = workspace.getToolbox();
   var flyout = toolbox ? toolbox.getFlyout() : workspace.getFlyout();
 
@@ -166,11 +166,11 @@ Blockly.navigation.focusFlyout_ = function() {
 /**
  * Finds where the cursor should go on the workspace. This is either the top
  * block or a set position on the workspace.
+ * @param {!Blockly.WorkspaceSvg} workspace The main workspace.
  * @private
  */
-Blockly.navigation.focusWorkspace_ = function() {
+Blockly.navigation.focusWorkspace_ = function(workspace) {
   Blockly.hideChaff();
-  var workspace = Blockly.navigation.getNavigationWorkspace();
   var cursor = workspace.getCursor();
   var reset = !!workspace.getToolbox();
   var topBlocks = workspace.getTopBlocks(true);
@@ -211,9 +211,9 @@ Blockly.navigation.getFlyoutCursor_ = function() {
  * If there is a marked connection try connecting the block from the flyout to
  * that connection. If no connection has been marked then inserting will place
  * it on the workspace.
+ * @param {!Blockly.WorkspaceSvg} workspace The main workspace.
  */
-Blockly.navigation.insertFromFlyout = function() {
-  var workspace = Blockly.navigation.getNavigationWorkspace();
+Blockly.navigation.insertFromFlyout = function(workspace) {
   var flyout = workspace.getFlyout();
   if (!flyout || !flyout.isVisible()) {
     Blockly.navigation.warn_('Trying to insert from the flyout when the flyout does not ' +
@@ -241,7 +241,7 @@ Blockly.navigation.insertFromFlyout = function() {
     Blockly.navigation.warn_('Something went wrong while inserting a block from the flyout.');
   }
 
-  Blockly.navigation.focusWorkspace_();
+  Blockly.navigation.focusWorkspace_(workspace);
   workspace.getCursor().setCurNode(Blockly.ASTNode.createTopNode(newBlock));
   Blockly.navigation.removeMark_();
 };
@@ -562,10 +562,10 @@ Blockly.navigation.insertBlock = function(block, destConnection) {
  * Disconnect the connection that the cursor is pointing to, and bump blocks.
  * This is a no-op if the connection cannot be broken or if the cursor is not
  * pointing to a connection.
+ * @param {!Blockly.WorkspaceSvg} workspace The main workspace.
  * @private
  */
-Blockly.navigation.disconnectBlocks_ = function() {
-  var workspace = Blockly.navigation.getNavigationWorkspace();
+Blockly.navigation.disconnectBlocks_ = function(workspace) {
   var curNode = workspace.getCursor().getCurNode();
   if (!curNode.isConnection()) {
     Blockly.navigation.log_('Cannot disconnect blocks when the cursor is not on a connection');
@@ -690,7 +690,7 @@ Blockly.navigation.enableKeyboardAccessibility = function() {
   var workspace = Blockly.navigation.getNavigationWorkspace();
   if (!workspace.keyboardAccessibilityMode) {
     workspace.keyboardAccessibilityMode = true;
-    Blockly.navigation.focusWorkspace_();
+    Blockly.navigation.focusWorkspace_(workspace);
   }
 };
 
@@ -756,139 +756,14 @@ Blockly.navigation.error_ = function(msg) {
 /** ***************** */
 
 /**
- * Handler for all the keyboard navigation events.
- * @param {!KeyboardEvent} e The keyboard event.
- * @return {boolean} True if the key was handled false otherwise.
- */
-Blockly.navigation.onKeyPress = function(e) {
-  var key = Blockly.user.keyMap.serializeKeyEvent(e);
-  var action = Blockly.user.keyMap.getActionByKeyCode(key);
-
-  if (action) {
-    return Blockly.navigation.onBlocklyAction(action);
-  }
-  return false;
-};
-
-/**
- * Decides which actions to handle depending on keyboard navigation and readonly
- * states.
- * @param {!Blockly.Action} action The current action.
- * @return {boolean} True if the action has been handled, false otherwise.
- */
-Blockly.navigation.onBlocklyAction = function(action) {
-  var workspace = Blockly.navigation.getNavigationWorkspace();
-  var readOnly = workspace.options.readOnly;
-  var actionHandled = false;
-
-  if (workspace.keyboardAccessibilityMode) {
-    if (!readOnly) {
-      actionHandled = Blockly.navigation.handleActions_(action);
-    // If in readonly mode only handle valid actions.
-    } else if (Blockly.navigation.READONLY_ACTION_LIST.indexOf(action) > -1) {
-      actionHandled = Blockly.navigation.handleActions_(action);
-    }
-  // If not in accessibility mode only handle turning on keyboard navigation.
-  } else if (action.name === Blockly.navigation.actionNames.TOGGLE_KEYBOARD_NAV) {
-    Blockly.navigation.enableKeyboardAccessibility();
-    actionHandled = true;
-  }
-  return actionHandled;
-};
-
-/**
- * Handles the action or dispatches to the appropriate action handler.
- * @param {!Blockly.Action} action The action to handle.
- * @return {boolean} True if the action has been handled, false otherwise.
- * @private
- */
-Blockly.navigation.handleActions_ = function(action) {
-  if (action.name == Blockly.navigation.actionNames.TOOLBOX ||
-    Blockly.navigation.currentState_ == Blockly.navigation.STATE_TOOLBOX) {
-    return Blockly.navigation.toolboxOnAction_(action);
-  } else if (action.name == Blockly.navigation.actionNames.TOGGLE_KEYBOARD_NAV) {
-    Blockly.navigation.disableKeyboardAccessibility();
-    return true;
-  } if (Blockly.navigation.currentState_ == Blockly.navigation.STATE_WS) {
-    return Blockly.navigation.workspaceOnAction_(action);
-  } else if (Blockly.navigation.currentState_ == Blockly.navigation.STATE_FLYOUT) {
-    return Blockly.navigation.flyoutOnAction_(action);
-  }
-  return false;
-};
-
-/**
- * Handles the given action for the flyout.
- * @param {!Blockly.Action} action The action to handle.
- * @return {boolean} True if the action has been handled, false otherwise.
- * @private
- */
-Blockly.navigation.flyoutOnAction_ = function(action) {
-  var workspace = Blockly.navigation.getNavigationWorkspace();
-  var toolbox = workspace.getToolbox();
-  var flyout = toolbox ? toolbox.getFlyout() : workspace.getFlyout();
-
-  if (flyout && flyout.onBlocklyAction(action)) {
-    return true;
-  }
-
-  switch (action.name) {
-    case Blockly.navigation.actionNames.OUT:
-      Blockly.navigation.focusToolbox_();
-      return true;
-    case Blockly.navigation.actionNames.MARK:
-      Blockly.navigation.insertFromFlyout();
-      return true;
-    case Blockly.navigation.actionNames.EXIT:
-      Blockly.navigation.focusWorkspace_();
-      return true;
-    default:
-      return false;
-  }
-};
-
-/**
- * Handles the given action for the toolbox.
- * @param {!Blockly.Action} action The action to handle.
- * @return {boolean} True if the action has been handled, false otherwise.
- * @private
- */
-Blockly.navigation.toolboxOnAction_ = function(action) {
-  var workspace = Blockly.navigation.getNavigationWorkspace();
-  var toolbox = workspace.getToolbox();
-  var handled = toolbox && typeof toolbox.onBlocklyAction == 'function' ?
-      toolbox.onBlocklyAction(action) : false;
-
-  if (handled) {
-    return true;
-  }
-
-  if (action.name === Blockly.navigation.actionNames.TOOLBOX) {
-    if (!workspace.getToolbox()) {
-      Blockly.navigation.focusFlyout_();
-    } else {
-      Blockly.navigation.focusToolbox_();
-    }
-    return true;
-  } else if (action.name === Blockly.navigation.actionNames.IN) {
-    Blockly.navigation.focusFlyout_();
-    return true;
-  } else if (action.name === Blockly.navigation.actionNames.EXIT) {
-    Blockly.navigation.focusWorkspace_();
-    return true;
-  }
-  return false;
-};
-
-/**
  * Move the workspace cursor in the given direction.
+ * @param {!Blockly.WorkspaceSvg} workspace The workspace the cursor is on.
  * @param {number} xDirection -1 to move cursor left. 1 to move cursor right.
  * @param {number} yDirection -1 to move cursor up. 1 to move cursor down.
  * @return {boolean} True if the current node is a workspace, false otherwise.
  * @private
  */
-Blockly.navigation.moveWSCursor_ = function(xDirection, yDirection) {
-  var workspace = Blockly.navigation.getNavigationWorkspace();
+Blockly.navigation.moveWSCursor_ = function(workspace, xDirection, yDirection) {
   var cursor = workspace.getCursor();
   var curNode = workspace.getCursor().getCurNode();
 
@@ -906,45 +781,13 @@ Blockly.navigation.moveWSCursor_ = function(xDirection, yDirection) {
 };
 
 /**
- * Handles the given action for the workspace.
- * @param {!Blockly.Action} action The action to handle.
- * @return {boolean} True if the action has been handled, false otherwise.
- * @private
- */
-Blockly.navigation.workspaceOnAction_ = function(action) {
-  var workspace = Blockly.navigation.getNavigationWorkspace();
-  if (workspace.getCursor().onBlocklyAction(action)) {
-    return true;
-  }
-  switch (action.name) {
-    case Blockly.navigation.actionNames.INSERT:
-      Blockly.navigation.modify_();
-      return true;
-    case Blockly.navigation.actionNames.MARK:
-      Blockly.navigation.handleEnterForWS_();
-      return true;
-    case Blockly.navigation.actionNames.DISCONNECT:
-      Blockly.navigation.disconnectBlocks_();
-      return true;
-    case Blockly.navigation.actionNames.MOVE_WS_CURSOR_UP:
-      return Blockly.navigation.moveWSCursor_(0, -1);
-    case Blockly.navigation.actionNames.MOVE_WS_CURSOR_DOWN:
-      return Blockly.navigation.moveWSCursor_(0, 1);
-    case Blockly.navigation.actionNames.MOVE_WS_CURSOR_LEFT:
-      return Blockly.navigation.moveWSCursor_(-1, 0);
-    case Blockly.navigation.actionNames.MOVE_WS_CURSOR_RIGHT:
-      return Blockly.navigation.moveWSCursor_(1, 0);
-    default:
-      return false;
-  }
-};
-
-/**
  * Handles hitting the enter key on the workspace.
+ * @param {!Blockly.WorkspaceSvg} workspace The workspace the enter event
+ *     originated from.
  * @private
  */
-Blockly.navigation.handleEnterForWS_ = function() {
-  var cursor = Blockly.navigation.getNavigationWorkspace().getCursor();
+Blockly.navigation.handleEnterForWS_ = function(workspace) {
+  var cursor = workspace.getCursor();
   var curNode = cursor.getCurNode();
   var nodeType = curNode.getType();
   if (nodeType == Blockly.ASTNode.types.FIELD) {
@@ -959,127 +802,423 @@ Blockly.navigation.handleEnterForWS_ = function() {
   }
 };
 
-/** ******************* */
-/** Navigation Actions  */
-/** ******************* */
+/** ***************** */
+/** Register Items    */
+/** ***************** */
 
 /**
- * The previous action.
- * @type {!Blockly.Action}
+ * Keyboard shortcut to go to the previous location when in keyboard navigation
+ * mode.
  */
-Blockly.navigation.ACTION_PREVIOUS = new Blockly.Action(
-    Blockly.navigation.actionNames.PREVIOUS, 'Go to the previous location.');
+Blockly.navigation.registerPrevious = function() {
+  /** @type {!Blockly.ShortcutRegistry.KeyboardShortcut} */
+  var previousShortcut = {
+    name: Blockly.navigation.actionNames.PREVIOUS,
+    preconditionFn: function(workspace) {
+      return workspace.keyboardAccessibilityMode;
+    },
+    callback: function(workspace, e, action) {
+      var toolbox = workspace.getToolbox();
+      switch (Blockly.navigation.currentState_) {
+        case Blockly.navigation.STATE_WS:
+          return workspace.getCursor().onBlocklyAction(action);
+        case Blockly.navigation.STATE_FLYOUT:
+          var flyout = toolbox ? toolbox.getFlyout() : workspace.getFlyout();
+          return !!(flyout && flyout.onBlocklyAction(action));
+        case Blockly.navigation.STATE_TOOLBOX:
+          return toolbox && typeof toolbox.onBlocklyAction == 'function' ?
+              toolbox.onBlocklyAction(action) :
+              false;
+        default:
+          return false;
+      }
+    }
+  };
+
+  Blockly.ShortcutRegistry.registry.register(previousShortcut);
+  Blockly.ShortcutRegistry.registry.addKeyMapping(
+      Blockly.utils.KeyCodes.W, previousShortcut.name);
+};
 
 /**
- * The out action.
- * @type {!Blockly.Action}
+ * Keyboard shortcut to go to the out location when in keyboard navigation
+ * mode.
  */
-Blockly.navigation.ACTION_OUT = new Blockly.Action(
-    Blockly.navigation.actionNames.OUT,
-    'Go to the parent of the current location.');
+Blockly.navigation.registerOut = function() {
+  /** @type {!Blockly.ShortcutRegistry.KeyboardShortcut} */
+  var outShortcut = {
+    name: Blockly.navigation.actionNames.OUT,
+    preconditionFn: function(workspace) {
+      return workspace.keyboardAccessibilityMode;
+    },
+    callback: function(workspace, e, action) {
+      switch (Blockly.navigation.currentState_) {
+        case Blockly.navigation.STATE_WS:
+          return workspace.getCursor().onBlocklyAction(action);
+        case Blockly.navigation.STATE_FLYOUT:
+          Blockly.navigation.focusToolbox_(workspace);
+          return true;
+        case Blockly.navigation.STATE_TOOLBOX:
+          var toolbox = workspace.getToolbox();
+          return toolbox && typeof toolbox.onBlocklyAction == 'function' ?
+              toolbox.onBlocklyAction(action) :
+              false;
+        default:
+          return false;
+      }
+    }
+  };
+
+  Blockly.ShortcutRegistry.registry.register(outShortcut);
+  Blockly.ShortcutRegistry.registry.addKeyMapping(
+      Blockly.utils.KeyCodes.A, outShortcut.name);
+};
 
 /**
- * The next action.
- * @type {!Blockly.Action}
+ * Keyboard shortcut to go to the next location when in keyboard navigation
+ * mode.
  */
-Blockly.navigation.ACTION_NEXT = new Blockly.Action(
-    Blockly.navigation.actionNames.NEXT, 'Go to the next location.');
+Blockly.navigation.registerNext = function() {
+  /** @type {!Blockly.ShortcutRegistry.KeyboardShortcut} */
+  var nextShortcut = {
+    name: Blockly.navigation.actionNames.NEXT,
+    preconditionFn: function(workspace) {
+      return workspace.keyboardAccessibilityMode;
+    },
+    callback: function(workspace, e, action) {
+      var toolbox = workspace.getToolbox();
+      switch (Blockly.navigation.currentState_) {
+        case Blockly.navigation.STATE_WS:
+          return workspace.getCursor().onBlocklyAction(action);
+        case Blockly.navigation.STATE_FLYOUT:
+          var flyout = toolbox ? toolbox.getFlyout() : workspace.getFlyout();
+          return !!(flyout && flyout.onBlocklyAction(action));
+        case Blockly.navigation.STATE_TOOLBOX:
+          return toolbox && typeof toolbox.onBlocklyAction == 'function' ?
+              toolbox.onBlocklyAction(action) :
+              false;
+        default:
+          return false;
+      }
+    }
+  };
+
+  Blockly.ShortcutRegistry.registry.register(nextShortcut);
+  Blockly.ShortcutRegistry.registry.addKeyMapping(
+      Blockly.utils.KeyCodes.S, nextShortcut.name);
+};
 
 /**
- * The in action.
- * @type {!Blockly.Action}
+ * Keyboard shortcut to go to the in location when in keyboard navigation mode.
  */
-Blockly.navigation.ACTION_IN = new Blockly.Action(
-    Blockly.navigation.actionNames.IN,
-    'Go to the first child of the current location.');
+Blockly.navigation.registerIn = function() {
+  /** @type {!Blockly.ShortcutRegistry.KeyboardShortcut} */
+  var inShortcut = {
+    name: Blockly.navigation.actionNames.IN,
+    preconditionFn: function(workspace) {
+      return workspace.keyboardAccessibilityMode;
+    },
+    callback: function(workspace, e, action) {
+      switch (Blockly.navigation.currentState_) {
+        case Blockly.navigation.STATE_WS:
+          return workspace.getCursor().onBlocklyAction(action);
+        case Blockly.navigation.STATE_TOOLBOX:
+          var toolbox = workspace.getToolbox();
+          var isHandled =
+              toolbox && typeof toolbox.onBlocklyAction == 'function' ?
+              toolbox.onBlocklyAction(action) :
+              false;
+          if (!isHandled) {
+            Blockly.navigation.focusFlyout_(workspace);
+          }
+          return true;
+        default:
+          return false;
+      }
+    }
+  };
+
+  Blockly.ShortcutRegistry.registry.register(inShortcut);
+  Blockly.ShortcutRegistry.registry.addKeyMapping(
+      Blockly.utils.KeyCodes.D, inShortcut.name);
+};
 
 /**
- * The action to try to insert a block.
- * @type {!Blockly.Action}
+ * Keyboard shortcut to connect a block to a marked location when in keyboard
+ * navigation mode.
  */
-Blockly.navigation.ACTION_INSERT = new Blockly.Action(
-    Blockly.navigation.actionNames.INSERT,
-    'Connect the current location to the marked location.');
+Blockly.navigation.registerInsert = function() {
+  /** @type {!Blockly.ShortcutRegistry.KeyboardShortcut} */
+  var insertShortcut = {
+    name: Blockly.navigation.actionNames.INSERT,
+    preconditionFn: function(workspace) {
+      return workspace.keyboardAccessibilityMode && !workspace.options.readOnly;
+    },
+    callback: function() {
+      switch (Blockly.navigation.currentState_) {
+        case Blockly.navigation.STATE_WS:
+          return Blockly.navigation.modify_();
+        default:
+          return false;
+      }
+    }
+  };
+
+  Blockly.ShortcutRegistry.registry.register(insertShortcut);
+  Blockly.ShortcutRegistry.registry.addKeyMapping(
+      Blockly.utils.KeyCodes.I, insertShortcut.name);
+};
+
+/** Keyboard shortcut to mark a location when in keyboard navigation mode. */
+Blockly.navigation.registerMark = function() {
+  /** @type {!Blockly.ShortcutRegistry.KeyboardShortcut} */
+  var markShortcut = {
+    name: Blockly.navigation.actionNames.MARK,
+    preconditionFn: function(workspace) {
+      return workspace.keyboardAccessibilityMode && !workspace.options.readOnly;
+    },
+    callback: function(workspace) {
+      switch (Blockly.navigation.currentState_) {
+        case Blockly.navigation.STATE_WS:
+          Blockly.navigation.handleEnterForWS_(workspace);
+          return true;
+        case Blockly.navigation.STATE_FLYOUT:
+          Blockly.navigation.insertFromFlyout(workspace);
+          return true;
+        default:
+          return false;
+      }
+    }
+  };
+
+  Blockly.ShortcutRegistry.registry.register(markShortcut);
+  Blockly.ShortcutRegistry.registry.addKeyMapping(
+      Blockly.utils.KeyCodes.ENTER, markShortcut.name);
+};
 
 /**
- * The action to mark a certain location.
- * @type {!Blockly.Action}
+ * Keyboard shortcut to disconnect two blocks when in keyboard navigation mode.
  */
-Blockly.navigation.ACTION_MARK = new Blockly.Action(
-    Blockly.navigation.actionNames.MARK, 'Mark the current location.');
+Blockly.navigation.registerDisconnect = function() {
+  /** @type {!Blockly.ShortcutRegistry.KeyboardShortcut} */
+  var disconnectShortcut = {
+    name: Blockly.navigation.actionNames.DISCONNECT,
+    preconditionFn: function(workspace) {
+      return workspace.keyboardAccessibilityMode && !workspace.options.readOnly;
+    },
+    callback: function(workspace) {
+      switch (Blockly.navigation.currentState_) {
+        case Blockly.navigation.STATE_WS:
+          Blockly.navigation.disconnectBlocks_(workspace);
+          return true;
+        default:
+          return false;
+      }
+    }
+  };
+
+  Blockly.ShortcutRegistry.registry.register(disconnectShortcut);
+  Blockly.ShortcutRegistry.registry.addKeyMapping(
+      Blockly.utils.KeyCodes.X, disconnectShortcut.name);
+};
 
 /**
- * The action to disconnect a block.
- * @type {!Blockly.Action}
+ * Keyboard shortcut to focus on the toolbox when in keyboard navigation mode.
  */
-Blockly.navigation.ACTION_DISCONNECT = new Blockly.Action(
-    Blockly.navigation.actionNames.DISCONNECT,
-    'Disconnect the block at the current location from its parent.');
+Blockly.navigation.registerToolboxFocus = function() {
+  /** @type {!Blockly.ShortcutRegistry.KeyboardShortcut} */
+  var focusToolboxShortcut = {
+    name: Blockly.navigation.actionNames.TOOLBOX,
+    preconditionFn: function(workspace) {
+      return workspace.keyboardAccessibilityMode && !workspace.options.readOnly;
+    },
+    callback: function(workspace) {
+      switch (Blockly.navigation.currentState_) {
+        case Blockly.navigation.STATE_WS:
+          if (!workspace.getToolbox()) {
+            Blockly.navigation.focusFlyout_(workspace);
+          } else {
+            Blockly.navigation.focusToolbox_(workspace);
+          }
+          return true;
+        default:
+          return false;
+      }
+    }
+  };
+
+  Blockly.ShortcutRegistry.registry.register(focusToolboxShortcut);
+  Blockly.ShortcutRegistry.registry.addKeyMapping(
+      Blockly.utils.KeyCodes.T, focusToolboxShortcut.name);
+};
 
 /**
- * The action to open the toolbox.
- * @type {!Blockly.Action}
+ * Keyboard shortcut to exit the current location and focus on the workspace
+ * when in keyboard navigation mode.
  */
-Blockly.navigation.ACTION_TOOLBOX = new Blockly.Action(
-    Blockly.navigation.actionNames.TOOLBOX, 'Open the toolbox.');
+Blockly.navigation.registerExit = function() {
+  /** @type {!Blockly.ShortcutRegistry.KeyboardShortcut} */
+  var exitShortcut = {
+    name: Blockly.navigation.actionNames.EXIT,
+    preconditionFn: function(workspace) {
+      return workspace.keyboardAccessibilityMode;
+    },
+    callback: function(workspace) {
+      switch (Blockly.navigation.currentState_) {
+        case Blockly.navigation.STATE_FLYOUT:
+          Blockly.navigation.focusWorkspace_(workspace);
+          return true;
+        case Blockly.navigation.STATE_TOOLBOX:
+          Blockly.navigation.focusWorkspace_(workspace);
+          return true;
+        default:
+          return false;
+      }
+    }
+  };
+
+  Blockly.ShortcutRegistry.registry.register(exitShortcut, true);
+  Blockly.ShortcutRegistry.registry.addKeyMapping(
+      Blockly.utils.KeyCodes.ESC, exitShortcut.name, true);
+  Blockly.ShortcutRegistry.registry.addKeyMapping(
+      Blockly.utils.KeyCodes.E, exitShortcut.name, true);
+};
+
+/** Keyboard shortcut to turn keyboard navigation on or off. */
+Blockly.navigation.registerToggleKeyboardNav = function() {
+  /** @type {!Blockly.ShortcutRegistry.KeyboardShortcut} */
+  var toggleKeyboardNavShortcut = {
+    name: Blockly.navigation.actionNames.TOGGLE_KEYBOARD_NAV,
+    callback: function(workspace) {
+      if (workspace.keyboardAccessibilityMode) {
+        Blockly.navigation.disableKeyboardAccessibility();
+      } else {
+        Blockly.navigation.enableKeyboardAccessibility();
+      }
+      return true;
+    }
+  };
+
+  Blockly.ShortcutRegistry.registry.register(toggleKeyboardNavShortcut);
+  var ctrlShiftK = Blockly.ShortcutRegistry.registry.createSerializedKey(
+      Blockly.utils.KeyCodes.K,
+      [Blockly.utils.KeyCodes.CTRL, Blockly.utils.KeyCodes.SHIFT]);
+  Blockly.ShortcutRegistry.registry.addKeyMapping(
+      ctrlShiftK, toggleKeyboardNavShortcut.name);
+};
 
 /**
- * The action to exit the toolbox or flyout.
- * @type {!Blockly.Action}
+ * Keyboard shortcut to move the cursor on the workspace to the left when in
+ * keyboard navigation mode.
  */
-Blockly.navigation.ACTION_EXIT = new Blockly.Action(
-    Blockly.navigation.actionNames.EXIT,
-    'Close the current modal, such as a toolbox or field editor.');
+Blockly.navigation.registerWorkspaceMoveLeft = function() {
+  /** @type {!Blockly.ShortcutRegistry.KeyboardShortcut} */
+  var wsMoveLeftShortcut = {
+    name: Blockly.navigation.actionNames.MOVE_WS_CURSOR_LEFT,
+    preconditionFn: function(workspace) {
+      return workspace.keyboardAccessibilityMode && !workspace.options.readOnly;
+    },
+    callback: function(workspace) {
+      return Blockly.navigation.moveWSCursor_(workspace, -1, 0);
+    }
+  };
+
+  Blockly.ShortcutRegistry.registry.register(wsMoveLeftShortcut);
+  var shiftA = Blockly.ShortcutRegistry.registry.createSerializedKey(
+      Blockly.utils.KeyCodes.A, [Blockly.utils.KeyCodes.SHIFT]);
+  Blockly.ShortcutRegistry.registry.addKeyMapping(
+      shiftA, wsMoveLeftShortcut.name);
+};
 
 /**
- * The action to toggle keyboard navigation mode on and off.
- * @type {!Blockly.Action}
+ * Keyboard shortcut to move the cursor on the workspace to the right when in
+ * keyboard navigation mode.
  */
-Blockly.navigation.ACTION_TOGGLE_KEYBOARD_NAV = new Blockly.Action(
-    Blockly.navigation.actionNames.TOGGLE_KEYBOARD_NAV,
-    'Turns on and off keyboard navigation.');
+Blockly.navigation.registerWorkspaceMoveRight = function() {
+  /** @type {!Blockly.ShortcutRegistry.KeyboardShortcut} */
+  var wsMoveRightShortcut = {
+    name: Blockly.navigation.actionNames.MOVE_WS_CURSOR_RIGHT,
+    preconditionFn: function(workspace) {
+      return workspace.keyboardAccessibilityMode && !workspace.options.readOnly;
+    },
+    callback: function(workspace) {
+      return Blockly.navigation.moveWSCursor_(workspace, 1, 0);
+    }
+  };
+
+  Blockly.ShortcutRegistry.registry.register(wsMoveRightShortcut);
+  var shiftD = Blockly.ShortcutRegistry.registry.createSerializedKey(
+      Blockly.utils.KeyCodes.D, [Blockly.utils.KeyCodes.SHIFT]);
+  Blockly.ShortcutRegistry.registry.addKeyMapping(
+      shiftD, wsMoveRightShortcut.name);
+};
 
 /**
- * The action to move the cursor to the left on a workspace.
- * @type {!Blockly.Action}
+ * Keyboard shortcut to move the cursor on the workspace up when in keyboard
+ * navigation mode.
  */
-Blockly.navigation.ACTION_MOVE_WS_CURSOR_LEFT = new Blockly.Action(
-    Blockly.navigation.actionNames.MOVE_WS_CURSOR_LEFT,
-    'Move the workspace cursor to the lefts.');
+Blockly.navigation.registerWorkspaceMoveUp = function() {
+  /** @type {!Blockly.ShortcutRegistry.KeyboardShortcut} */
+  var wsMoveUpShortcut = {
+    name: Blockly.navigation.actionNames.MOVE_WS_CURSOR_UP,
+    preconditionFn: function(workspace) {
+      return workspace.keyboardAccessibilityMode && !workspace.options.readOnly;
+    },
+    callback: function(workspace) {
+      return Blockly.navigation.moveWSCursor_(workspace, 0, -1);
+    }
+  };
+
+  Blockly.ShortcutRegistry.registry.register(wsMoveUpShortcut);
+  var shiftW = Blockly.ShortcutRegistry.registry.createSerializedKey(
+      Blockly.utils.KeyCodes.W, [Blockly.utils.KeyCodes.SHIFT]);
+  Blockly.ShortcutRegistry.registry.addKeyMapping(
+      shiftW, wsMoveUpShortcut.name);
+};
 
 /**
- * The action to move the cursor to the right on a workspace.
- * @type {!Blockly.Action}
+ * Keyboard shortcut to move the cursor on the workspace down when in keyboard
+ * navigation mode.
  */
-Blockly.navigation.ACTION_MOVE_WS_CURSOR_RIGHT = new Blockly.Action(
-    Blockly.navigation.actionNames.MOVE_WS_CURSOR_RIGHT,
-    'Move the workspace cursor to the right.');
+Blockly.navigation.registerWorkspaceMoveDown = function() {
+  /** @type {!Blockly.ShortcutRegistry.KeyboardShortcut} */
+  var wsMoveDownShortcut = {
+    name: Blockly.navigation.actionNames.MOVE_WS_CURSOR_DOWN,
+    preconditionFn: function(workspace) {
+      return workspace.keyboardAccessibilityMode && !workspace.options.readOnly;
+    },
+    callback: function(workspace) {
+      return Blockly.navigation.moveWSCursor_(workspace, 0, 1);
+    }
+  };
+
+  Blockly.ShortcutRegistry.registry.register(wsMoveDownShortcut);
+  var shiftW = Blockly.ShortcutRegistry.registry.createSerializedKey(
+      Blockly.utils.KeyCodes.S, [Blockly.utils.KeyCodes.SHIFT]);
+  Blockly.ShortcutRegistry.registry.addKeyMapping(
+      shiftW, wsMoveDownShortcut.name);
+};
 
 /**
- * The action to move the cursor up on a workspace.
- * @type {!Blockly.Action}
+ * Registers all default keyboard shortcut items for keyboard navigation. This
+ * should be called once per instance of KeyboardShortcutRegistry.
+ * @package
  */
-Blockly.navigation.ACTION_MOVE_WS_CURSOR_UP = new Blockly.Action(
-    Blockly.navigation.actionNames.MOVE_WS_CURSOR_UP,
-    'Move the workspace cursor up.');
+Blockly.navigation.registerNavigationShortcuts = function() {
+  Blockly.navigation.registerIn();
+  Blockly.navigation.registerNext();
+  Blockly.navigation.registerOut();
+  Blockly.navigation.registerPrevious();
 
-/**
- * The action to move the cursor down on a workspace.
- * @type {!Blockly.Action}
- */
-Blockly.navigation.ACTION_MOVE_WS_CURSOR_DOWN = new Blockly.Action(
-    Blockly.navigation.actionNames.MOVE_WS_CURSOR_DOWN,
-    'Move the workspace cursor down.');
+  Blockly.navigation.registerWorkspaceMoveDown();
+  Blockly.navigation.registerWorkspaceMoveLeft();
+  Blockly.navigation.registerWorkspaceMoveRight();
+  Blockly.navigation.registerWorkspaceMoveUp();
 
-
-/**
- * List of actions that can be performed in read only mode.
- * @type {!Array.<!Blockly.Action>}
- */
-Blockly.navigation.READONLY_ACTION_LIST = [
-  Blockly.navigation.ACTION_PREVIOUS,
-  Blockly.navigation.ACTION_OUT,
-  Blockly.navigation.ACTION_IN,
-  Blockly.navigation.ACTION_NEXT,
-  Blockly.navigation.ACTION_TOGGLE_KEYBOARD_NAV
-];
+  Blockly.navigation.registerDisconnect();
+  Blockly.navigation.registerExit();
+  Blockly.navigation.registerInsert();
+  Blockly.navigation.registerMark();
+  Blockly.navigation.registerToggleKeyboardNav();
+  Blockly.navigation.registerToolboxFocus();
+};

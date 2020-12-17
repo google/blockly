@@ -20,8 +20,8 @@ goog.require('Blockly.constants');
 goog.require('Blockly.ContextMenu');
 goog.require('Blockly.ContextMenuRegistry');
 goog.require('Blockly.Events');
-goog.require('Blockly.Events.Ui');
 goog.require('Blockly.Events.BlockMove');
+goog.require('Blockly.Events.Selected');
 goog.require('Blockly.Msg');
 goog.require('Blockly.navigation');
 goog.require('Blockly.RenderedConnection');
@@ -34,6 +34,7 @@ goog.require('Blockly.utils.Coordinate');
 goog.require('Blockly.utils.dom');
 goog.require('Blockly.utils.object');
 goog.require('Blockly.utils.Rect');
+goog.require('Blockly.utils.userAgent');
 
 goog.requireType('Blockly.IASTNodeLocationSvg');
 goog.requireType('Blockly.IBoundedElement');
@@ -117,6 +118,10 @@ Blockly.BlockSvg = function(workspace, prototypeName, opt_id) {
   // Expose this block's ID on its top-level SVG group.
   if (this.svgGroup_.dataset) {
     this.svgGroup_.dataset['id'] = this.id;
+  } else if (Blockly.utils.userAgent.IE) {
+    // SVGElement.dataset is not available on IE11, but data-* properties
+    // can be set with setAttribute().
+    this.svgGroup_.setAttribute('data-id', this.id);
   }
 };
 Blockly.utils.object.inherits(Blockly.BlockSvg, Blockly.Block);
@@ -295,8 +300,7 @@ Blockly.BlockSvg.prototype.select = function() {
       Blockly.Events.enable();
     }
   }
-  var event = new Blockly.Events.Ui(null, 'selected', oldId, this.id);
-  event.workspaceId = this.workspace.id;
+  var event = new Blockly.Events.Selected(oldId, this.id, this.workspace.id);
   Blockly.Events.fire(event);
   Blockly.selected = this;
   this.addSelect();
@@ -309,7 +313,7 @@ Blockly.BlockSvg.prototype.unselect = function() {
   if (Blockly.selected != this) {
     return;
   }
-  var event = new Blockly.Events.Ui(null, 'selected', this.id, null);
+  var event = new Blockly.Events.Selected(this.id, null, this.workspace.id);
   event.workspaceId = this.workspace.id;
   Blockly.Events.fire(event);
   Blockly.selected = null;
@@ -680,10 +684,11 @@ Blockly.BlockSvg.prototype.tab = function(start, forward) {
   var tabCursor = new Blockly.TabNavigateCursor();
   tabCursor.setCurNode(Blockly.ASTNode.createFieldNode(start));
   var currentNode = tabCursor.getCurNode();
-  var action = forward ?
-      Blockly.navigation.ACTION_NEXT : Blockly.navigation.ACTION_PREVIOUS;
+  var actionName = forward ?
+      Blockly.navigation.actionNames.NEXT : Blockly.navigation.actionNames.PREVIOUS;
 
-  tabCursor.onBlocklyAction(action);
+  tabCursor.onBlocklyAction(
+      /** @type {!Blockly.ShortcutRegistry.KeyboardShortcut} */ ({name: actionName}));
 
   var nextNode = tabCursor.getCurNode();
   if (nextNode && nextNode !== currentNode) {
@@ -1133,20 +1138,6 @@ Blockly.BlockSvg.prototype.setMutator = function(mutator) {
     // Adding or removing a mutator icon will cause the block to change shape.
     this.bumpNeighbours();
   }
-};
-
-/**
- * Set whether the block is disabled or not.
- * @param {boolean} disabled True if disabled.
- * @deprecated May 2019
- */
-Blockly.BlockSvg.prototype.setDisabled = function(disabled) {
-  Blockly.utils.deprecation.warn(
-      'BlockSvg.prototype.setDisabled',
-      'May 2019',
-      'May 2020',
-      'BlockSvg.prototype.setEnabled');
-  this.setEnabled(!disabled);
 };
 
 /**

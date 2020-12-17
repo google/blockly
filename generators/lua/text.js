@@ -24,7 +24,9 @@ Blockly.Lua['text'] = function(block) {
 Blockly.Lua['text_multiline'] = function(block) {
   // Text value.
   var code = Blockly.Lua.multiline_quote_(block.getFieldValue('TEXT'));
-  return [code, Blockly.Lua.ORDER_ATOMIC];
+  var order = code.indexOf('..') != -1 ? Blockly.Lua.ORDER_CONCATENATION :
+      Blockly.Lua.ORDER_ATOMIC;
+  return [code, order];
 };
 
 Blockly.Lua['text_join'] = function(block) {
@@ -347,7 +349,7 @@ Blockly.Lua['text_replace'] = function(block) {
 
 Blockly.Lua['text_reverse'] = function(block) {
   var text = Blockly.Lua.valueToCode(block, 'TEXT',
-      Blockly.Lua.ORDER_HIGH) || '\'\'';
+      Blockly.Lua.ORDER_NONE) || '\'\'';
   var code = 'string.reverse(' + text + ')';
   return [code, Blockly.Lua.ORDER_HIGH];
 };

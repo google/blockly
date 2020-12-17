@@ -11,8 +11,6 @@
 
 export = Blockly;
 
-export as namespace Blockly;
-
 declare module Blockly {
 
   interface BlocklyOptions {

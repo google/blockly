@@ -29,6 +29,7 @@
     "build:langfiles": "gulp buildLangfiles",
     "build:uncompressed": "gulp buildUncompressed",
     "bump": "npm --no-git-tag-version version 4.$(date +'%Y%m%d').0",
+    "deployDemos": "gulp deployDemos",
     "license": "gulp checkLicenses",
     "lint": "eslint .",
     "package": "gulp package",

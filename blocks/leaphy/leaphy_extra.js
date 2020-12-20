@@ -193,6 +193,7 @@ Blockly.Blocks['leaphy_servo_write'] = {
       this.setPreviousStatement(true, null);
       this.setNextStatement(true, null);
       this.setTooltip(Blockly.Msg.ARD_SERVO_WRITE_TIP);
+      this.setStyle('leaphy_blocks');
     },
     /**
      * Updates the content of the the pin related fields.
@@ -202,9 +203,9 @@ Blockly.Blocks['leaphy_servo_write'] = {
       Blockly.Arduino.Boards.refreshBlockFieldDropdown(
           this, 'SERVO_PIN', 'digitalPins');
     }
-  };
+};
   
-  Blockly.Blocks['leaphy_servo_read'] = {
+Blockly.Blocks['leaphy_servo_read'] = {
     /**
      * Block for reading an angle value of a servo pin.
      * @this Blockly.Block
@@ -218,6 +219,7 @@ Blockly.Blocks['leaphy_servo_write'] = {
               Blockly.Arduino.Boards.selected.digitalPins), 'SERVO_PIN');
       this.setOutput(true, Blockly.Types.NUMBER.output);
       this.setTooltip(Blockly.Msg.ARD_SERVO_READ_TIP);
+      this.setStyle('leaphy_blocks');
     },
     /** @return {string} The type of     return value for the block, an integer. */
     getBlockType: function() {
@@ -231,4 +233,68 @@ Blockly.Blocks['leaphy_servo_write'] = {
       Blockly.Arduino.Boards.refreshBlockFieldDropdown(
           this, 'SERVO_PIN', 'digitalPins');
     }
+};
+
+Blockly.Blocks['leaphy_io_digitalwrite'] = {
+    /**
+     * Block for creating a 'set pin' to a state.
+     * @this Blockly.Block
+     */
+    init: function() {
+      this.setHelpUrl('http://arduino.cc/en/Reference/DigitalWrite');
+      this.setColour(Blockly.Blocks.io.HUE);
+      this.appendValueInput('STATE')
+          .appendField(Blockly.Msg.ARD_DIGITALWRITE)
+          .appendField(new Blockly.FieldDropdown(
+              Blockly.Arduino.Boards.selected.digitalPins), 'PIN')
+          .appendField(Blockly.Msg.ARD_WRITE_TO)
+          .setCheck(Blockly.Types.BOOLEAN.checkList);
+      this.setInputsInline(false);
+      this.setPreviousStatement(true, null);
+      this.setNextStatement(true, null);
+      this.setTooltip(Blockly.Msg.ARD_DIGITALWRITE_TIP);
+      this.setStyle('leaphy_blocks');
+    },
+    /**
+     * Updates the content of the the pin related fields.
+     * @this Blockly.Block
+     */
+    updateFields: function() {
+      Blockly.Arduino.Boards.refreshBlockFieldDropdown(
+          this, 'PIN', 'digitalPins');
+    }
   };
+
+  Blockly.Blocks['leaphy_io_analogwrite'] = {
+    /**
+     * Block for creating a 'set pin' to an analogue value.
+     * @this Blockly.Block
+     */
+    init: function() {
+      this.setHelpUrl('http://arduino.cc/en/Reference/AnalogWrite');
+      this.setColour(Blockly.Blocks.io.HUE);
+      this.appendValueInput('NUM')
+          .appendField(Blockly.Msg.ARD_ANALOGWRITE)
+          .appendField(new Blockly.FieldDropdown(
+              Blockly.Arduino.Boards.selected.pwmPins), 'PIN')
+          .appendField(Blockly.Msg.ARD_WRITE_TO)
+          .setCheck(Blockly.Types.NUMBER.output);
+      this.setInputsInline(false);
+      this.setPreviousStatement(true, null);
+      this.setNextStatement(true, null);
+      this.setTooltip(Blockly.Msg.ARD_ANALOGWRITE_TIP);
+      this.setStyle('leaphy_blocks');
+    },
+  /**
+   * Updates the content of the the pin related fields.
+   * @this Blockly.Block
+   */
+  updateFields: function() {
+    Blockly.Arduino.Boards.refreshBlockFieldDropdown(this, 'PIN', 'pwmPins');
+  },
+  /** @return {!string} The type of input value for the block, an integer. */
+  getBlockType: function() {
+    return Blockly.Types.NUMBER;
+  },
+};
+  

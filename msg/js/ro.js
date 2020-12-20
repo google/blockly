@@ -3,9 +3,16 @@
 'use strict';
 
 Blockly.Msg["ADD_COMMENT"] = "Adaugă un comentariu";
+Blockly.Msg["ARD_ANALOGWRITE"] = "Set analog pin";  // untranslated
+Blockly.Msg["ARD_DIGITALWRITE"] = "Set digital pin";  // untranslated
+Blockly.Msg["ARD_SERVO_READ"] = "Read servo pin";  // untranslated
+Blockly.Msg["ARD_SERVO_WRITE"] = "Set servo pin";  // untranslated
+Blockly.Msg["ARD_SERVO_WRITE_DEG_180"] = "degrees";  // untranslated
+Blockly.Msg["ARD_SERVO_WRITE_TO"] = "angle to";  // untranslated
 Blockly.Msg["ARD_TIME_DELAY"] = "wait";  // untranslated
 Blockly.Msg["ARD_TIME_DELAY_TIP"] = "Wait specific time in milliseconds";  // untranslated
 Blockly.Msg["ARD_TIME_MS"] = "ms";  // untranslated
+Blockly.Msg["ARD_WRITE_TO"] = "To";  // untranslated
 Blockly.Msg["CANNOT_DELETE_VARIABLE_PROCEDURE"] = "Nu se poate șterge variabila '%1' deoarece face parte din definiția funcției '%2'";
 Blockly.Msg["CHANGE_VALUE_TITLE"] = "Schimbaţi valoarea:";
 Blockly.Msg["CLEAN_UP"] = "Curăță blocări";

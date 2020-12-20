@@ -3,9 +3,16 @@
 'use strict';
 
 Blockly.Msg["ADD_COMMENT"] = "వ్యాఖ్య చేర్చు";
+Blockly.Msg["ARD_ANALOGWRITE"] = "Set analog pin";  // untranslated
+Blockly.Msg["ARD_DIGITALWRITE"] = "Set digital pin";  // untranslated
+Blockly.Msg["ARD_SERVO_READ"] = "Read servo pin";  // untranslated
+Blockly.Msg["ARD_SERVO_WRITE"] = "Set servo pin";  // untranslated
+Blockly.Msg["ARD_SERVO_WRITE_DEG_180"] = "degrees";  // untranslated
+Blockly.Msg["ARD_SERVO_WRITE_TO"] = "angle to";  // untranslated
 Blockly.Msg["ARD_TIME_DELAY"] = "wait";  // untranslated
 Blockly.Msg["ARD_TIME_DELAY_TIP"] = "Wait specific time in milliseconds";  // untranslated
 Blockly.Msg["ARD_TIME_MS"] = "ms";  // untranslated
+Blockly.Msg["ARD_WRITE_TO"] = "To";  // untranslated
 Blockly.Msg["CANNOT_DELETE_VARIABLE_PROCEDURE"] = "Can't delete the variable '%1' because it's part of the definition of the function '%2'";  // untranslated
 Blockly.Msg["CHANGE_VALUE_TITLE"] = "విలువ మార్చు";
 Blockly.Msg["CLEAN_UP"] = "నిరోదనలను శుభ్రపరుచు";

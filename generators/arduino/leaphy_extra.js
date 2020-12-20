@@ -142,3 +142,42 @@ Blockly.Arduino['leaphy_servo_write'] = function(block) {
     var code = servoName + '.read()';
     return [code, Blockly.Arduino.ORDER_ATOMIC];
   };
+
+  Blockly.Arduino['leaphy_io_digitalwrite'] = function(block) {
+    var pin = block.getFieldValue('PIN');
+    var stateOutput = Blockly.Arduino.valueToCode(
+        block, 'STATE', Blockly.Arduino.ORDER_ATOMIC) || 'LOW';
+  
+    Blockly.Arduino.reservePin(
+        block, pin, Blockly.Arduino.PinTypes.OUTPUT, 'Digital Write');
+  
+    var pinSetupCode = 'pinMode(' + pin + ', OUTPUT);';
+    Blockly.Arduino.addSetup('io_' + pin, pinSetupCode, false);
+  
+    var code = 'digitalWrite(' + pin + ', ' + stateOutput + ');\n';
+    return code;
+  };
+  
+  Blockly.Arduino['leaphy_io_analogwrite'] = function(block) {
+    var pin = block.getFieldValue('PIN');
+    var stateOutput = Blockly.Arduino.valueToCode(
+        block, 'NUM', Blockly.Arduino.ORDER_ATOMIC) || '0';
+  
+    Blockly.Arduino.reservePin(
+        block, pin, Blockly.Arduino.PinTypes.OUTPUT, 'Analogue Write');
+  
+    var pinSetupCode = 'pinMode(' + pin + ', OUTPUT);';
+    Blockly.Arduino.addSetup('io_' + pin, pinSetupCode, false);
+  
+    // Warn if the input value is out of range
+    if ((stateOutput < 0) || (stateOutput > 255)) {
+      block.setWarningText('The analogue value set must be between 0 and 255',
+                           'pwm_value');
+    } else {
+      block.setWarningText(null, 'pwm_value');
+    }
+  
+    var code = 'analogWrite(' + pin + ', ' + stateOutput + ');\n';
+    return code;
+  };
+  

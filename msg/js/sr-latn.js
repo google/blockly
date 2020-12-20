@@ -3,9 +3,16 @@
 'use strict';
 
 Blockly.Msg["ADD_COMMENT"] = "Dodaj komentar";
+Blockly.Msg["ARD_ANALOGWRITE"] = "Set analog pin";  // untranslated
+Blockly.Msg["ARD_DIGITALWRITE"] = "Set digital pin";  // untranslated
+Blockly.Msg["ARD_SERVO_READ"] = "Read servo pin";  // untranslated
+Blockly.Msg["ARD_SERVO_WRITE"] = "Set servo pin";  // untranslated
+Blockly.Msg["ARD_SERVO_WRITE_DEG_180"] = "degrees";  // untranslated
+Blockly.Msg["ARD_SERVO_WRITE_TO"] = "angle to";  // untranslated
 Blockly.Msg["ARD_TIME_DELAY"] = "wait";  // untranslated
 Blockly.Msg["ARD_TIME_DELAY_TIP"] = "Wait specific time in milliseconds";  // untranslated
 Blockly.Msg["ARD_TIME_MS"] = "ms";  // untranslated
+Blockly.Msg["ARD_WRITE_TO"] = "To";  // untranslated
 Blockly.Msg["CANNOT_DELETE_VARIABLE_PROCEDURE"] = "Ne mogu da obrišem varijablu ’%1’ jer je deo definicije funkcije ’%2’";
 Blockly.Msg["CHANGE_VALUE_TITLE"] = "Promeni vrednost:";
 Blockly.Msg["CLEAN_UP"] = "Ukloni blokove";

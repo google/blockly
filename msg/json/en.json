@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2020-12-11 13:05:33.082232",
+		"lastupdated": "2020-12-20 15:06:45.762569",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -50,6 +50,13 @@
 	"LEAPHY_LED_STRIP_GULF": "Gulf",
 	"LEAPHY_LED_STRIP_RAINBOW": "Rainbow",
 	"LEAPHY_LED_STRIP_COLORGULF": "Color Gulf",
+	"ARD_SERVO_WRITE": "Set servo pin",
+	"ARD_SERVO_WRITE_TO": "angle to",
+	"ARD_SERVO_WRITE_DEG_180": "degrees",
+	"ARD_SERVO_READ": "Read servo pin",
+	"ARD_DIGITALWRITE": "Set digital pin",
+	"ARD_WRITE_TO": "To",
+	"ARD_ANALOGWRITE": "Set analog pin",
 	"LEAPHY_SITUATION_CATEGORY": "Situation",
 	"LEAPHY_NUMBERS_CATEGORY": "Numbers",
 	"LEAPHY_VARIABLES_CATEGORY": "Variables",

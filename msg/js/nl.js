@@ -3,9 +3,16 @@
 'use strict';
 
 Blockly.Msg["ADD_COMMENT"] = "Opmerking toevoegen";
+Blockly.Msg["ARD_ANALOGWRITE"] = "Zet PWM";
+Blockly.Msg["ARD_DIGITALWRITE"] = "Zet Digipin";
+Blockly.Msg["ARD_SERVO_READ"] = "Lees servo pin";
+Blockly.Msg["ARD_SERVO_WRITE"] = "Servo";
+Blockly.Msg["ARD_SERVO_WRITE_DEG_180"] = "°";
+Blockly.Msg["ARD_SERVO_WRITE_TO"] = "op";
 Blockly.Msg["ARD_TIME_DELAY"] = "duurt";
 Blockly.Msg["ARD_TIME_DELAY_TIP"] = "Wacht het gespecificeerde aantal milliseconden";
 Blockly.Msg["ARD_TIME_MS"] = "ms";  // untranslated
+Blockly.Msg["ARD_WRITE_TO"] = "op";
 Blockly.Msg["CANNOT_DELETE_VARIABLE_PROCEDURE"] = "De variabele \"%1\" kan niet verwijderd worden omdat die onderdeel uitmaakt van de definitie van de functie \"%2\"";
 Blockly.Msg["CHANGE_VALUE_TITLE"] = "Waarde wijzigen:";
 Blockly.Msg["CLEAN_UP"] = "Blokken opschonen";

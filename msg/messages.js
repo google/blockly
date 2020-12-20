@@ -111,32 +111,46 @@ Blockly.Msg.LEAPHY_READ_STOMACH = 'Read Belly sensor';
 /** @type {string} */
 /// leaphy Read Hand Sensor
 Blockly.Msg.LEAPHY_READ_HAND = 'Read Hand sensor';
+/** @type {string} */
 /// {{Notranslate}} Hue value for all Leaphy blocks.
 Blockly.Msg.LEAPHY_HUE = '188';
+/** @type {string} */
 /// leaphy flitz set LED
 Blockly.Msg.LEAPHY_FLITZ_LED = 'Set LED';
+/** @type {string} */
 /// leaphy flitz set LED red
 Blockly.Msg.LEAPHY_FLITZ_LED_R = 'Set LED Red';
+/** @type {string} */
 /// leaphy flitz set LED green
 Blockly.Msg.LEAPHY_FLITZ_LED_G = 'Set LED Green';
+/** @type {string} */
 /// leaphy flitz set LED blue
 Blockly.Msg.LEAPHY_FLITZ_LED_B = 'Set LED Blue';
+/** @type {string} */
 /// leaphy ledstrip set strip
 Blockly.Msg.LEAPHY_LED_SET_STRIP = 'Set LED Strip';
+/** @type {string} */
 /// leaphy ledstrip set pin
 Blockly.Msg.LEAPHY_LED_SET_PIN = 'Pin';
+/** @type {string} */
 /// leaphy ledstrip set leds
 Blockly.Msg.LEAPHY_LED_SET_LEDS = 'Leds';
+/** @type {string} */
 /// leaphy ledstrip basic led
 Blockly.Msg.LEAPHY_LED_BASIC_LED = 'Ledstrip basis - Led'
+/** @type {string} */
 /// leaphy ledstrip basic red
 Blockly.Msg.LEAPHY_LED_BASIC_RED = 'R'
+/** @type {string} */
 /// leaphy ledstrip basic green
 Blockly.Msg.LEAPHY_LED_BASIC_GREEN = 'G'
+/** @type {string} */
 /// leaphy ledstrip basic blue
 Blockly.Msg.LEAPHY_LED_BASIC_BLUE = 'B'
+/** @type {string} */
 /// leaphy ledstrip speed value
 Blockly.Msg.LEAPHY_LED_SET_SPEEDVALUE = 'Ledstrip demo - Speed'
+/** @type {string} */
 /// leaphy ledstrip demo
 Blockly.Msg.LEAPHY_LED_STRIP_DEMO = 'Ledstrip demo'
 /** @type {string} */
@@ -155,8 +169,26 @@ Blockly.Msg.LEAPHY_LED_STRIP_RAINBOW = 'Rainbow'
 /// leaphy ledstrip demo color gulf
 Blockly.Msg.LEAPHY_LED_STRIP_COLORGULF = 'Color Gulf'
 /** @type {string} */
-
-
+/// leaphy servo write
+Blockly.Msg.ARD_SERVO_WRITE = 'Set servo pin'
+/** @type {string} */
+/// leaphy servo write to
+Blockly.Msg.ARD_SERVO_WRITE_TO = 'angle to'
+/** @type {string} */
+/// leaphy servo write angle
+Blockly.Msg.ARD_SERVO_WRITE_DEG_180 = 'degrees'
+/** @type {string} */
+/// leaphy servo read angle
+Blockly.Msg.ARD_SERVO_READ = 'Read servo pin'
+/** @type {string} */
+/// leaphy write digital pin
+Blockly.Msg.ARD_DIGITALWRITE = 'Set digital pin'
+/** @type {string} */
+/// leaphy write pin value
+Blockly.Msg.ARD_WRITE_TO = 'To'
+/** @type {string} */
+/// leaphy write analog pin
+Blockly.Msg.ARD_ANALOGWRITE = 'Set analog pin'
 /** @type {string} */
 /// Sitation Category Title
 Blockly.Msg.LEAPHY_SITUATION_CATEGORY = 'Situation';

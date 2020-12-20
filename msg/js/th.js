@@ -3,9 +3,16 @@
 'use strict';
 
 Blockly.Msg["ADD_COMMENT"] = "ใส่คำอธิบาย";
+Blockly.Msg["ARD_ANALOGWRITE"] = "Set analog pin";  // untranslated
+Blockly.Msg["ARD_DIGITALWRITE"] = "Set digital pin";  // untranslated
+Blockly.Msg["ARD_SERVO_READ"] = "Read servo pin";  // untranslated
+Blockly.Msg["ARD_SERVO_WRITE"] = "Set servo pin";  // untranslated
+Blockly.Msg["ARD_SERVO_WRITE_DEG_180"] = "degrees";  // untranslated
+Blockly.Msg["ARD_SERVO_WRITE_TO"] = "angle to";  // untranslated
 Blockly.Msg["ARD_TIME_DELAY"] = "wait";  // untranslated
 Blockly.Msg["ARD_TIME_DELAY_TIP"] = "Wait specific time in milliseconds";  // untranslated
 Blockly.Msg["ARD_TIME_MS"] = "ms";  // untranslated
+Blockly.Msg["ARD_WRITE_TO"] = "To";  // untranslated
 Blockly.Msg["CANNOT_DELETE_VARIABLE_PROCEDURE"] = "ไม่สามารถลบตัวแปร '%1' ได้เนื่องจากเป็นส่วนหนึ่งของนิยามของฟังก์ชัน '%2'";
 Blockly.Msg["CHANGE_VALUE_TITLE"] = "เปลี่ยนค่า:";
 Blockly.Msg["CLEAN_UP"] = "จัดเรียงบล็อกให้เป็นแถว";

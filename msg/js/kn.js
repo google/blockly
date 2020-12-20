@@ -3,9 +3,16 @@
 'use strict';
 
 Blockly.Msg["ADD_COMMENT"] = "ಟಿಪ್ಪಣಿ ಸೇರಿಸು";
+Blockly.Msg["ARD_ANALOGWRITE"] = "Set analog pin";  // untranslated
+Blockly.Msg["ARD_DIGITALWRITE"] = "Set digital pin";  // untranslated
+Blockly.Msg["ARD_SERVO_READ"] = "Read servo pin";  // untranslated
+Blockly.Msg["ARD_SERVO_WRITE"] = "Set servo pin";  // untranslated
+Blockly.Msg["ARD_SERVO_WRITE_DEG_180"] = "degrees";  // untranslated
+Blockly.Msg["ARD_SERVO_WRITE_TO"] = "angle to";  // untranslated
 Blockly.Msg["ARD_TIME_DELAY"] = "wait";  // untranslated
 Blockly.Msg["ARD_TIME_DELAY_TIP"] = "Wait specific time in milliseconds";  // untranslated
 Blockly.Msg["ARD_TIME_MS"] = "ms";  // untranslated
+Blockly.Msg["ARD_WRITE_TO"] = "To";  // untranslated
 Blockly.Msg["CANNOT_DELETE_VARIABLE_PROCEDURE"] = "%1' ಮಾರ್ಪಡಿಸಬಹುದಾದ ಮೂಲಾಂಶವನ್ನು ಅಳಿಸಲು ಬರುವುದಿಲ್ಲ. ಏಕೆಂದರೆ ಅದು '%2' ಕೆಲಸದಲ್ಲಿ ಉಪಯೋಗಿಸಲ್ಪಟ್ಟಿದೆ";
 Blockly.Msg["CHANGE_VALUE_TITLE"] = "ಮೌಲ್ಯ ಬದಲಾಯಿಸು:";
 Blockly.Msg["CLEAN_UP"] = "ಬ್ಲಾಕ್‍ಗಳನ್ನು ಸ್ವಚ್ಛಗೊಳಿಸು";

@@ -190,6 +190,22 @@ Blockly.Msg.ARD_WRITE_TO = 'To'
 /// leaphy write analog pin
 Blockly.Msg.ARD_ANALOGWRITE = 'Set analog pin'
 /** @type {string} */
+/// Trig pin
+Blockly.Msg.LEAPHY_SONAR_READ_TRIG = 'Trig';
+/** @type {string} */
+/// Echo pin
+Blockly.Msg.LEAPHY_SONAR_READ_ECHO = 'Echo';
+/** @type {string} */
+/// Buzz buzz
+Blockly.Msg.LEAPHY_BUZZ_BUZZ = 'Buzz';
+/** @type {string} */
+/// Buzz Herz
+Blockly.Msg.LEAPHY_BUZZ_HERZ = 'Herz';
+/** @type {string} */
+/// Buzz ms
+Blockly.Msg.LEAPHY_BUZZ_MS = 'ms';
+
+/** @type {string} */
 /// Sitation Category Title
 Blockly.Msg.LEAPHY_SITUATION_CATEGORY = 'Situation';
 /** @type {string} */

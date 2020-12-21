@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2020-12-20 15:06:45.762569",
+		"lastupdated": "2020-12-21 21:12:51.083086",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -57,6 +57,11 @@
 	"ARD_DIGITALWRITE": "Set digital pin",
 	"ARD_WRITE_TO": "To",
 	"ARD_ANALOGWRITE": "Set analog pin",
+	"LEAPHY_SONAR_READ_TRIG": "Trig",
+	"LEAPHY_SONAR_READ_ECHO": "Echo",
+	"LEAPHY_BUZZ_BUZZ": "Buzz",
+	"LEAPHY_BUZZ_HERZ": "Herz",
+	"LEAPHY_BUZZ_MS": "ms",
 	"LEAPHY_SITUATION_CATEGORY": "Situation",
 	"LEAPHY_NUMBERS_CATEGORY": "Numbers",
 	"LEAPHY_VARIABLES_CATEGORY": "Variables",

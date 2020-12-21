@@ -297,4 +297,57 @@ Blockly.Blocks['leaphy_io_digitalwrite'] = {
     return Blockly.Types.NUMBER;
   },
 };
-  
+
+Blockly.Blocks['leaphy_sonar_read'] = {
+    /**
+     * Block for reading sonar value.
+     * @this Blockly.Block
+     */
+    init: function() {
+      this.appendDummyInput()
+        .appendField(Blockly.Msg.LEAPHY_SONAR_READ_TRIG)
+        .appendField(new Blockly.FieldDropdown(
+            Blockly.Arduino.Boards.selected.digitalPins), 'TRIG_PIN')          
+        .appendField(Blockly.Msg.LEAPHY_SONAR_READ_ECHO)
+        .appendField(new Blockly.FieldDropdown(
+            Blockly.Arduino.Boards.selected.digitalPins), 'ECHO_PIN');
+      this.setOutput(true, Blockly.Types.NUMBER.output);
+      this.setTooltip(Blockly.Msg.LEAPHY_SONAR_READ_TIP);
+      this.setStyle('leaphy_blocks');
+    },
+    /** @return {string} The type of return value for the block, an integer. */
+    getBlockType: function() {
+      return Blockly.Types.NUMBER;
+    },
+    /**
+     * Updates the content of the the pin related fields.
+     * @this Blockly.Block
+     */
+    updateFields: function() {
+      Blockly.Arduino.Boards.refreshBlockFieldDropdown(
+          this, 'TRIG_PIN', 'digitalPins');
+    }
+};
+
+var frequencyOptions = [["220", "220"], ["247", "247"], ["262", "262"], ["292", "292"], ["330", "330"], ["349", "349"], ["392", "392"], ["440", "440"], ["494", "494"], ["523", "523"], ["587", "587"], ["659", "659"], ["698", "698"], ["784", "784"], ["880", "880"]];
+
+Blockly.Blocks['leaphy_buzz'] = {
+    /**
+     * Block for making some noise!
+     * @this Blockly.Block
+     */
+    init: function() {
+      this.appendDummyInput()
+        .appendField(Blockly.Msg.LEAPHY_BUZZ_BUZZ)
+        .appendField(new Blockly.FieldDropdown(frequencyOptions), 'FREQUENCY');       
+        this.appendValueInput("DURATION", 'Number')
+            .appendField(Blockly.Msg.LEAPHY_BUZZ_HERZ)
+            .setCheck('Number');
+        this.appendDummyInput()
+            .appendField(Blockly.Msg.LEAPHY_BUZZ_MS);
+        this.setInputsInline(true);
+        this.setPreviousStatement(true, null);
+        this.setNextStatement(true, null);
+      this.setStyle('leaphy_blocks');
+    },
+};

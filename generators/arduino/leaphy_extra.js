@@ -180,4 +180,23 @@ Blockly.Arduino['leaphy_servo_write'] = function(block) {
     var code = 'analogWrite(' + pin + ', ' + stateOutput + ');\n';
     return code;
   };
+
+  Blockly.Arduino['leaphy_sonar_read'] = function(block) {
+    Blockly.Arduino.addInclude('leaphy_extra', '#include Leaphy_Extra.h');
+    var trigPin = block.getFieldValue('TRIG_PIN');
+    var echoPin = block.getFieldValue('ECHO_PIN');
+    var code = 'getDistanceSonar(' + trigPin + ', ' + echoPin + ')';
+    return [code, Blockly.Arduino.ORDER_ATOMIC];
+  };
+
+  Blockly.Arduino['leaphy_buzz'] = function(block) {
+    Blockly.Arduino.addInclude('arduino', '#include <arduino.h>');
+    Blockly.Arduino.addSetup('tone', 'pinMode(4, OUTPUT);', false);
+    var frequency = block.getFieldValue('FREQUENCY');
+    var duration = Blockly.Arduino.valueToCode(this, 'DURATION', Blockly.Arduino.ORDER_ATOMIC) || '0'
+    var code = 'tone(4, ' + frequency + ', ' + duration + ');\n';
+    return code;
+  };
+
+
   

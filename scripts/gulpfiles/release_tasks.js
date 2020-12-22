@@ -86,9 +86,9 @@ const recompile = gulp.series(
   typings.typings,
   function(done) {
     console.log('push-rebuild-branch: committing rebuild');
-    // execSync('git commit -am "Rebuild"', { stdio: 'inherit' });
+    execSync('git commit -am "Rebuild"', { stdio: 'inherit' });
     var branchName = getRebuildBranchName();
-    // execSync('git push origin ' + branchName, { stdio: 'inherit' });
+    execSync('git push origin ' + branchName, { stdio: 'inherit' });
     console.log('Branch ' + branchName + ' pushed to GitHub.');
     console.log('Next step: create a pull request against develop.');
     done();

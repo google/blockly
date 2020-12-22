@@ -30,7 +30,7 @@ function getMajorVersion() {
   return parseInt(match[0]);
 }
 
-function updateVersion(done, updateType) {
+function updateVersion(updateType) {
   var majorVersion = getMajorVersion();
   if (!majorVersion) {
     // TODO: What to do here? I think just exit?
@@ -52,15 +52,14 @@ function updateVersion(done, updateType) {
       console.log('Cancelling process.');
       process.exit();
   }
-  done();
 }
 
 // TODO: rename the name of this function.
 function updateVersionPrompt(done) {
   var releaseTypes = ['Major', 'Minor', 'Patch'];
   var index = readlineSync.keyInSelect(releaseTypes, 'Which version?');
-  updateVersion(done, releaseTypes[index]);
-  // done();
+  updateVersion(releaseTypes[index]);
+  done();
 }
 
 // Helper function: get a name for a rebuild branch. Format: rebuild_mm_dd_yyyy.

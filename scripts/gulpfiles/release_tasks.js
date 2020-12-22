@@ -74,11 +74,11 @@ function getRebuildBranchName() {
 
 // Switch to a new rebuild branch.
 const recompile = gulp.series(
-  gitTasks.syncDevelop,
+  gitTasks.syncDevelop(),
   function(done) {
     var branchName = getRebuildBranchName();
     console.log('make-rebuild-branch: creating branch ' + branchName);
-    // execSync('git checkout -b ' + branchName, { stdio: 'inherit' });
+    execSync('git checkout -b ' + branchName, { stdio: 'inherit' });
     done();
   },
   updateVersionPrompt,

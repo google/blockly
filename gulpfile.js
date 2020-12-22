@@ -16,6 +16,7 @@ var buildTasks = require('./scripts/gulpfiles/build_tasks');
 var packageTasks = require('./scripts/gulpfiles/package_tasks');
 var gitTasks = require('./scripts/gulpfiles/git_tasks');
 var licenseTasks = require('./scripts/gulpfiles/license_tasks');
+var releaseTasks = require('./scripts/gulpfiles/release_tasks');
 
 module.exports = {
   default: buildTasks.build,
@@ -35,5 +36,6 @@ module.exports = {
   gitUpdateGithubPages: gitTasks.updateGithubPages,
   typings: gulp.series(typings.typings, typings.msgTypings),
   package: packageTasks.package,
-  checkLicenses: licenseTasks.checkLicenses
+  checkLicenses: licenseTasks.checkLicenses,
+  recompile: releaseTasks.recompile,
 };

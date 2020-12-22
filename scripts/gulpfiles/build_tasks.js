@@ -20,7 +20,6 @@ var through2 = require('through2');
 
 var closureCompiler = require('google-closure-compiler').gulp();
 var closureDeps = require('google-closure-deps');
-var packageJson = require('../../package.json');
 var argv = require('yargs').argv;
 
 
@@ -184,6 +183,9 @@ return ${namespace};
  *     blockly_compressed.js
  */
 function buildCompressed() {
+  delete require.cache[require.resolve('../../package.json')]
+  var packageJson = require('../../package.json');
+  // console.log(JSON.parse(fs.readFileSync('./package.json')).version);
   const defines = 'Blockly.VERSION="' + packageJson.version + '"';
   return gulp.src(maybeAddClosureLibrary(['core/**/**/*.js']), {base: './'})
     .pipe(stripApacheLicense())

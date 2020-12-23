@@ -33,6 +33,8 @@
     "lint": "eslint .",
     "package": "gulp package",
     "prepare": "npm run package",
+    "publish": "gulp publish",
+    "publish:beta": "gulp publishBeta",
     "recompile": "gulp recompile",
     "release": "gulp gitCreateRC",
     "test": "concurrently 'npm run test:prepare' 'sleep 5 && npm run test:run'",

@@ -98,18 +98,30 @@ function checkDist(done) {
   }
 }
 
-// Check with the user that the version number is correc, then login and publish to npm.
-function loginAndPublish(done) {
+// Check with the user that the version number is correct, then login and publish to npm.
+function loginAndPublish_(done, isBeta) {
   delete require.cache[require.resolve('../../dist/package.json')]
   var { version } = require('../../dist/package.json');
   if(readlineSync.keyInYN(`You are about to publish blockly with the version number:${version}. Do you want to continue?`)) {
     execSync(`npm login --registry https://wombat-dressing-room.appspot.com`, {stdio: 'inherit'});
-    // TODO: Update this to be npm install.
     execSync('npm pack', {cwd: RELEASE_DIR, stdio: 'inherit'});
+    console.log(`npm publish --registry https://wombat-dressing-room.appspot.com ${isBeta ? '--tag beta' : ''}`);
+    // TODO: Uncomment this line and test.
+    // execSync('npm publish --registry https://wombat-dressing-room.appspot.com', {cwd: RELEASE_DIR, stdio: 'inherit'});
     done();
   } else {
     done(new Error('User quit due to the version number not being correct.'));
   }
+}
+
+// Login and publish.
+function loginAndPublish(done) {
+  return loginAndPublish_(done, false);
+}
+
+// Login and publish the beta version.
+function loginAndPublishBeta(done) {
+  return loginAndPublish_(done, true);
 }
 
 // Package and publish to npm.
@@ -147,7 +159,10 @@ function updateBetaVersion(done) {
 const publishBeta = gulp.series(
   updateBetaVersion,
   buildTasks.build,
-  publish
+  packageTasks.package,
+  checkBranch,
+  checkDist,
+  loginAndPublishBeta
 );
 
 // Switch to a new branch, update the version number, and build Blockly.

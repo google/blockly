@@ -38,4 +38,6 @@ module.exports = {
   package: packageTasks.package,
   checkLicenses: licenseTasks.checkLicenses,
   recompile: releaseTasks.recompile,
+  publish: releaseTasks.publish,
+  publishBeta: releaseTasks.publishBeta,
 };

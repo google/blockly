@@ -8,92 +8,160 @@
  * @fileoverview Gulp script to build Blockly for Node & NPM.
  */
 
+var execSync = require('child_process').execSync;
+var exec = require('child_process').exec;
+var fs = require('fs');
 var gulp = require('gulp');
 var readlineSync = require('readline-sync');
-var execSync = require('child_process').execSync;
-var gitTasks = require('./git_tasks');
 var typings = require('./typings');
-var buildTasks = require('./build_tasks');
-const execa = require('execa');
-const stdio = 'inherit';
-var fs = require('fs');
-var bump = require('gulp-bump');
 
+var buildTasks = require('./build_tasks');
+var gitTasks = require('./git_tasks');
+var packageTasks = require('./package_tasks');
+
+const RELEASE_DIR = 'dist';
+
+// Gets the current major version.
 function getMajorVersion() {
+  delete require.cache[require.resolve('../../package.json')]
   var { version } = require('../../package.json');
-  var re = new RegExp('^(\d*?).');
+  var re = new RegExp(/^(\d)./);
   var match = re.exec(version);
   if (!match[0]) {
-    console.log('Something went wrong when getting the major version number.');
     return null;
   }
+  console.log(match[0]);
   return parseInt(match[0]);
 }
 
-function updateVersion(updateType) {
+// Updates the version depending on user input.
+function updateVersion(done, updateType) {
   var majorVersion = getMajorVersion();
   if (!majorVersion) {
-    // TODO: What to do here? I think just exit?
+    done(new Error('Something went wrong when getting the major version number.'));
+  } else if (!updateType) {
+    // User selected to cancel.
+    done(new Error('Cancelling process.'));
   }
 
-  switch (updateType) {
-    case 'Major':
+  switch (updateType.toLowerCase()) {
+    case 'major':
       majorVersion++;
       execSync(`npm --no-git-tag-version version ${majorVersion}.$(date +'%Y%m%d').0`, {stdio: 'inherit'});
+      done();
       break;
-    case 'Minor':
-      execSync(`npm --no-git-tag-version version ${majorVersion}.$(date +'%Y%m%d').0`);
+    case 'minor':
+      execSync(`npm --no-git-tag-version version ${majorVersion}.$(date +'%Y%m%d').0`, {stdio: 'inherit'});
+      done();
       break;
-    case 'Patch':
-      execSync(`npm --no-git-tag-version version patch`);
+    case 'patch':
+      execSync(`npm --no-git-tag-version version patch`, {stdio: 'inherit'});
+      done();
       break;
     default:
-      // TODO: I think I should make this only happen if they hit cancel.
-      console.log('Cancelling process.');
-      process.exit();
+      done(new Error('In unexpected place in switch statement.'))
   }
 }
 
-// TODO: rename the name of this function.
+// Prompt the user to figure out what kind of version update we should do.
 function updateVersionPrompt(done) {
   var releaseTypes = ['Major', 'Minor', 'Patch'];
-  var index = readlineSync.keyInSelect(releaseTypes, 'Which version?');
-  updateVersion(releaseTypes[index]);
+  var index = readlineSync.keyInSelect(releaseTypes, 'Which version type?');
+  updateVersion(done, releaseTypes[index]);
+}
+
+// Checks with the user that they are on the correct git branch.
+function checkBranch(done) {
+  var gitBranchName = execSync('git rev-parse --abbrev-ref HEAD').toString();
+  if (readlineSync.keyInYN(`You are on '${gitBranchName.trim()}'. Is this the correct branch?`)) {
+    done();
+  } else {
+    done(new Error('Not on correct branch'));
+  }
+}
+
+
+// Sanity check that the dist folder exists, and that certain files are in the dist folder.
+function checkDist(done) {
+  const sanityFiles = ['blockly_compressed.js', 'blocks_compressed.js', 'core', 'blocks', 'generators'];
+  // Check that dist exists.
+  if (fs.existsSync(RELEASE_DIR)) {
+    // Sanity check that certain files exist in dist.
+    sanityFiles.forEach((fileName) => {
+      if (!fs.existsSync(`${RELEASE_DIR}/${fileName}`)) {
+        done(new Error(`Your dist folder does not contain:${fileName}`));
+      }
+    });
+    done();
+  } else {
+    done(new Error('The dist directory does not exist. Is npm run package being run?'));
+  }
+}
+
+// Check with the user that the version number is correc, then login and publish to npm.
+function loginAndPublish(done) {
+  delete require.cache[require.resolve('../../dist/package.json')]
+  var { version } = require('../../dist/package.json');
+  if(readlineSync.keyInYN(`You are about to publish blockly with the version number:${version}. Do you want to continue?`)) {
+    execSync(`npm login --registry https://wombat-dressing-room.appspot.com`, {stdio: 'inherit'});
+    // TODO: Update this to be npm install.
+    execSync('npm pack', {cwd: RELEASE_DIR, stdio: 'inherit'});
+    done();
+  } else {
+    done(new Error('User quit due to the version number not being correct.'));
+  }
+}
+
+// Package and publish to npm.
+const publish = gulp.series(
+  packageTasks.package,
+  checkBranch,
+  checkDist,
+  loginAndPublish
+);
+
+// Repeatedly prompts the user for a beta version number until a valid one is given.
+// A valid version number must have '-beta.x' and can not have already been used to publish to npm.
+function updateBetaVersion(done) {
+  var isValid = false;
+  var newVersion = null;
+  var blocklyVersions = JSON.parse(execSync('npm view blockly versions --json').toString());
+  var re = new RegExp(/-beta\.(\d)/);
+  while(!isValid) {
+    newVersion = readlineSync.question('What is the new beta version? (ex: 3.20201217.0-beta.0)');
+    var existsOnNpm = blocklyVersions.indexOf(newVersion) > -1;
+    var isFormatted = newVersion.search(re) > -1;
+    if (!existsOnNpm && isFormatted) {
+      isValid = true;
+    } else if (existsOnNpm) {
+      console.log("This version already exists. Please enter a new version.");
+    } else if (!isFormatted) {
+      console.log("To publish a beta version you must have -beta.x in the version.");
+    }
+  }
+  execSync(`npm --no-git-tag-version version ${newVersion}`, {stdio: 'inherit'});
   done();
 }
 
-// Helper function: get a name for a rebuild branch. Format: rebuild_mm_dd_yyyy.
-function getRebuildBranchName() {
-  var date = new Date();
-  var mm = date.getMonth() + 1; // Month, 0-11
-  var dd = date.getDate(); // Day of the month, 1-31
-  var yyyy = date.getFullYear();
-  return 'rebuild_' + mm + '_' + dd + '_' + yyyy;
-}
+// Publish a beta version of Blockly.
+const publishBeta = gulp.series(
+  updateBetaVersion,
+  buildTasks.build,
+  publish
+);
 
-// Switch to a new rebuild branch.
+// Switch to a new branch, update the version number, and build Blockly.
 const recompile = gulp.series(
   gitTasks.syncDevelop(),
-  function(done) {
-    var branchName = getRebuildBranchName();
-    console.log('make-rebuild-branch: creating branch ' + branchName);
-    execSync('git checkout -b ' + branchName, { stdio: 'inherit' });
-    done();
-  },
+  gitTasks.createRebuildBranch,
   updateVersionPrompt,
   buildTasks.build,
   typings.typings,
-  function(done) {
-    console.log('push-rebuild-branch: committing rebuild');
-    execSync('git commit -am "Rebuild"', { stdio: 'inherit' });
-    var branchName = getRebuildBranchName();
-    execSync('git push origin ' + branchName, { stdio: 'inherit' });
-    console.log('Branch ' + branchName + ' pushed to GitHub.');
-    console.log('Next step: create a pull request against develop.');
-    done();
-  }
-);
+  gitTasks.pushRebuildBranch
+  );
 
 module.exports = {
-  recompile: recompile
+  recompile: recompile,
+  publishBeta: publishBeta,
+  publish: publish
 }

@@ -18,8 +18,6 @@ gulp.umd = require('gulp-umd');
 var path = require('path');
 var fs = require('fs');
 
-var packageJson = require('../../package.json');
-
 const blocklyRoot = '../../';
 
 // The destination path where all the NPM distribution files will go.
@@ -337,6 +335,8 @@ function packageMedia() {
  * This task copies the package.json file into the distribution directory.
  */
 function packageJSON(cb) {
+  delete require.cache[require.resolve('../../package.json')]
+  const packageJson = require('../../package.json');
   const json = Object.assign({}, packageJson);
   delete json['scripts'];
   if (!fs.existsSync(packageDistribution)) {

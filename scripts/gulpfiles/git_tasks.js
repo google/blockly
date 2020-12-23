@@ -75,6 +75,25 @@ const createRC = gulp.series(
   }
 );
 
+// Create the rebuild branch.
+function createRebuildBranch(done) {
+  var branchName = getRebuildBranchName();
+  console.log('make-rebuild-branch: creating branch ' + branchName);
+  execSync('git checkout -b ' + branchName, { stdio: 'inherit' });
+  done();
+}
+
+// Push the rebuild branch to origin.
+function pushRebuildBranch(done) {
+  console.log('push-rebuild-branch: committing rebuild');
+  execSync('git commit -am "Rebuild"', { stdio: 'inherit' });
+  var branchName = getRebuildBranchName();
+  execSync('git push origin ' + branchName, { stdio: 'inherit' });
+  console.log('Branch ' + branchName + ' pushed to GitHub.');
+  console.log('Next step: create a pull request against develop.');
+  done();
+}
+
 // Update github pages with what is currently in develop.
 const updateGithubPages = gulp.series(
   function(done) {
@@ -96,7 +115,7 @@ module.exports = {
   syncDevelop: syncDevelop,
   syncMaster: syncMaster,
   createRC: createRC,
-  preCompile: preCompile,
-  postCompile: postCompile,
-  updateGithubPages: updateGithubPages
+  updateGithubPages: updateGithubPages,
+  createRebuildBranch: createRebuildBranch,
+  pushRebuildBranch: pushRebuildBranch
 }

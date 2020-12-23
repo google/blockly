@@ -182,7 +182,7 @@ Blockly.Arduino['leaphy_servo_write'] = function(block) {
   };
 
   Blockly.Arduino['leaphy_sonar_read'] = function(block) {
-    Blockly.Arduino.addInclude('leaphy_extra', '#include Leaphy_Extra.h');
+    Blockly.Arduino.addInclude('leaphy_extra', '#include "Leaphy_Extra.h"');
     var trigPin = block.getFieldValue('TRIG_PIN');
     var echoPin = block.getFieldValue('ECHO_PIN');
     var code = 'getDistanceSonar(' + trigPin + ', ' + echoPin + ')';

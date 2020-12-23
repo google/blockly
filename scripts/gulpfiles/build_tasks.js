@@ -185,7 +185,6 @@ return ${namespace};
 function buildCompressed() {
   delete require.cache[require.resolve('../../package.json')]
   var packageJson = require('../../package.json');
-  // console.log(JSON.parse(fs.readFileSync('./package.json')).version);
   const defines = 'Blockly.VERSION="' + packageJson.version + '"';
   return gulp.src(maybeAddClosureLibrary(['core/**/**/*.js']), {base: './'})
     .pipe(stripApacheLicense())

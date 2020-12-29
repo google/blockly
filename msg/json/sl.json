@@ -3,6 +3,7 @@
 		"authors": [
 			"Anzeljg",
 			"Dbc334",
+			"Eleassar",
 			"HairyFotr",
 			"Igor.pesek",
 			"LoveMortuus",
@@ -47,7 +48,7 @@
 	"CANNOT_DELETE_VARIABLE_PROCEDURE": "Ni mogoče izbrisati spremenljivke »%1«, ker je uporabljena v definiciji funkcije »%2«",
 	"DELETE_VARIABLE": "Izbriši spremenljivko »%1«",
 	"COLOUR_PICKER_HELPURL": "https://en.wikipedia.org/wiki/Color",
-	"COLOUR_PICKER_TOOLTIP": "Izberi barvo s palete.",
+	"COLOUR_PICKER_TOOLTIP": "Izberite barvo s palete.",
 	"COLOUR_RANDOM_TITLE": "naključna barva",
 	"COLOUR_RANDOM_TOOLTIP": "Izbere naključno barvo.",
 	"COLOUR_RGB_HELPURL": "http://www.december.com/html/spec/colorper.html",

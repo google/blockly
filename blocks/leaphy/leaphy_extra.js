@@ -328,26 +328,3 @@ Blockly.Blocks['leaphy_sonar_read'] = {
           this, 'TRIG_PIN', 'digitalPins');
     }
 };
-
-var frequencyOptions = [["220", "220"], ["247", "247"], ["262", "262"], ["292", "292"], ["330", "330"], ["349", "349"], ["392", "392"], ["440", "440"], ["494", "494"], ["523", "523"], ["587", "587"], ["659", "659"], ["698", "698"], ["784", "784"], ["880", "880"]];
-
-Blockly.Blocks['leaphy_buzz'] = {
-    /**
-     * Block for making some noise!
-     * @this Blockly.Block
-     */
-    init: function() {
-      this.appendDummyInput()
-        .appendField(Blockly.Msg.LEAPHY_BUZZ_BUZZ)
-        .appendField(new Blockly.FieldDropdown(frequencyOptions), 'FREQUENCY');       
-        this.appendValueInput("DURATION", 'Number')
-            .appendField(Blockly.Msg.LEAPHY_BUZZ_HERZ)
-            .setCheck('Number');
-        this.appendDummyInput()
-            .appendField(Blockly.Msg.LEAPHY_BUZZ_MS);
-        this.setInputsInline(true);
-        this.setPreviousStatement(true, null);
-        this.setNextStatement(true, null);
-      this.setStyle('leaphy_blocks');
-    },
-};

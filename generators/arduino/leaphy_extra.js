@@ -189,14 +189,4 @@ Blockly.Arduino['leaphy_servo_write'] = function(block) {
     return [code, Blockly.Arduino.ORDER_ATOMIC];
   };
 
-  Blockly.Arduino['leaphy_buzz'] = function(block) {
-    Blockly.Arduino.addInclude('arduino', '#include <arduino.h>');
-    Blockly.Arduino.addSetup('tone', 'pinMode(4, OUTPUT);', false);
-    var frequency = block.getFieldValue('FREQUENCY');
-    var duration = Blockly.Arduino.valueToCode(this, 'DURATION', Blockly.Arduino.ORDER_ATOMIC) || '0'
-    var code = 'tone(4, ' + frequency + ', ' + duration + ');\n';
-    return code;
-  };
-
-
   

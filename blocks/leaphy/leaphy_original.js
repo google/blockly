@@ -113,7 +113,26 @@ Blockly.Blocks['leaphy_original_analog_read'] = {
     }
 };
 
-
+Blockly.Blocks['leaphy_original_buzz'] = {
+    /**
+     * Block for making some noise!
+     * @this Blockly.Block
+     */
+    init: function() {
+        this.appendValueInput("FREQUENCY", 'Number')
+            .appendField(Blockly.Msg.LEAPHY_BUZZ_BUZZ)
+            .setCheck('Number');
+        this.appendValueInput("DURATION", 'Number')
+            .appendField(Blockly.Msg.LEAPHY_BUZZ_HERZ)
+            .setCheck('Number');
+        this.appendDummyInput()
+            .appendField(Blockly.Msg.LEAPHY_BUZZ_MS);
+        this.setInputsInline(true);
+        this.setPreviousStatement(true, null);
+        this.setNextStatement(true, null);
+      this.setStyle('leaphy_blocks');
+    },
+};
 //Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
 
 //]);  // END JSON EXTRACT (Do not delete this comment.)

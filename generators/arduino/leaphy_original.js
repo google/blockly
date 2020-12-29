@@ -58,3 +58,11 @@ Blockly.Arduino['leaphy_original_analog_read'] = function (block) {
     return [code, Blockly.Arduino.ORDER_ATOMIC];
 };
 
+Blockly.Arduino['leaphy_original_buzz'] = function(block) {
+    Blockly.Arduino.addInclude('arduino', '#include <arduino.h>');
+    Blockly.Arduino.addSetup('tone', 'pinMode(4, OUTPUT);', false);
+    var frequency = Blockly.Arduino.valueToCode(this, 'FREQUENCY', Blockly.Arduino.ORDER_ATOMIC) || '0';
+    var duration = Blockly.Arduino.valueToCode(this, 'DURATION', Blockly.Arduino.ORDER_ATOMIC) || '0';
+    var code = 'tone(4, ' + frequency + ', ' + duration + ');\n';
+    return code;
+  };

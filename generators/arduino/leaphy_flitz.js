@@ -26,9 +26,9 @@ Blockly.Arduino['leaphy_flitz_read_hand_sensor'] = function (block){
 
 Blockly.Arduino['leaphy_flitz_led'] = function (block){
     Blockly.Arduino.setups_['setup_flitz_led'] = ''
-    var flitz_red = Blockly.Arduino.valueToCode(this, 'FLITZ_LED_RED', Blockly.Arduino.ORDER_ATOMIC) || '0'
-    var flitz_green = Blockly.Arduiono.valueToCode(this, 'FLITZ_LED_GREEN', Blockly.Arduino.ORDER_ATOMIC) || '0'
-    var flitz_blue = Blockly.Arduino.valueToCode(this, 'FLITZ_LED_BLUE', Blockly.Arduino.ORDER_ATOMIC) || '0' 
+    var flitz_red = Blockly.Arduino.valueToCode(this, 'FLITZ_LED_R', Blockly.Arduino.ORDER_ATOMIC) || '0'
+    var flitz_green = Blockly.Arduino.valueToCode(this, 'FLITZ_LED_G', Blockly.Arduino.ORDER_ATOMIC) || '0'
+    var flitz_blue = Blockly.Arduino.valueToCode(this, 'FLITZ_LED_B', Blockly.Arduino.ORDER_ATOMIC) || '0' 
     var code = 'setLedd(' + flitz_red + ', ' + flitz_green + ', ' + flitz_blue + ');\n';
     return code;
 };

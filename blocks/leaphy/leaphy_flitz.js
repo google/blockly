@@ -48,7 +48,7 @@ Blockly.Blocks['leaphy_flitz_read_hand_sensor'] = {
     }
 };
 
-Blockly.Blocks['leaphy_flitz_LED'] = {
+Blockly.Blocks['leaphy_flitz_led'] = {
     init: function(){
         this.appendDummyInput()
             .appendField(Blockly.Msg.LEAPHY_FLITZ_LED);

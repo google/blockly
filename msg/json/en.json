@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2020-12-29 21:08:48.224435",
+		"lastupdated": "2020-12-30 19:55:50.276509",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -33,9 +33,9 @@
 	"LEAPHY_READ_STOMACH": "Read Belly sensor",
 	"LEAPHY_READ_HAND": "Read Hand sensor",
 	"LEAPHY_FLITZ_LED": "Set LED",
-	"LEAPHY_FLITZ_LED_R": "Set LED Red",
-	"LEAPHY_FLITZ_LED_G": "Set LED Green",
-	"LEAPHY_FLITZ_LED_B": "Set LED Blue",
+	"LEAPHY_FLITZ_LED_R": "Red",
+	"LEAPHY_FLITZ_LED_G": "Green",
+	"LEAPHY_FLITZ_LED_B": "Blue",
 	"LEAPHY_LED_SET_STRIP": "Set LED Strip",
 	"LEAPHY_LED_SET_PIN": "Pin",
 	"LEAPHY_LED_SET_LEDS": "Leds",
@@ -57,7 +57,7 @@
 	"ARD_DIGITALWRITE": "Set digital pin",
 	"ARD_WRITE_TO": "To",
 	"ARD_ANALOGWRITE": "Set analog pin",
-	"LEAPHY_SONAR_READ_TRIG": "Trig",
+	"LEAPHY_SONAR_READ_TRIG": "Sonar Trig",
 	"LEAPHY_SONAR_READ_ECHO": "Echo",
 	"LEAPHY_BUZZ_BUZZ": "Buzz",
 	"LEAPHY_BUZZ_HERZ": "Herz",

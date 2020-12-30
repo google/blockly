@@ -119,13 +119,13 @@ Blockly.Msg.LEAPHY_HUE = '188';
 Blockly.Msg.LEAPHY_FLITZ_LED = 'Set LED';
 /** @type {string} */
 /// leaphy flitz set LED red
-Blockly.Msg.LEAPHY_FLITZ_LED_R = 'Set LED Red';
+Blockly.Msg.LEAPHY_FLITZ_LED_R = 'Red';
 /** @type {string} */
 /// leaphy flitz set LED green
-Blockly.Msg.LEAPHY_FLITZ_LED_G = 'Set LED Green';
+Blockly.Msg.LEAPHY_FLITZ_LED_G = 'Green';
 /** @type {string} */
 /// leaphy flitz set LED blue
-Blockly.Msg.LEAPHY_FLITZ_LED_B = 'Set LED Blue';
+Blockly.Msg.LEAPHY_FLITZ_LED_B = 'Blue';
 /** @type {string} */
 /// leaphy ledstrip set strip
 Blockly.Msg.LEAPHY_LED_SET_STRIP = 'Set LED Strip';
@@ -191,7 +191,7 @@ Blockly.Msg.ARD_WRITE_TO = 'To'
 Blockly.Msg.ARD_ANALOGWRITE = 'Set analog pin'
 /** @type {string} */
 /// Trig pin
-Blockly.Msg.LEAPHY_SONAR_READ_TRIG = 'Trig';
+Blockly.Msg.LEAPHY_SONAR_READ_TRIG = 'Sonar Trig';
 /** @type {string} */
 /// Echo pin
 Blockly.Msg.LEAPHY_SONAR_READ_ECHO = 'Echo';

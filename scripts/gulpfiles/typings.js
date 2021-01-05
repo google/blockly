@@ -67,7 +67,6 @@ function typings() {
     `${tmpDir}/core/**`,
     `${tmpDir}/core/interfaces/**`,
     `${tmpDir}/core/events/**`,
-    `${tmpDir}/core/components/tree/**`,
     `${tmpDir}/core/keyboard_nav/**`,
     `${tmpDir}/core/renderers/common/**`,
     `${tmpDir}/core/renderers/measurables/**`,

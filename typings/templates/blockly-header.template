@@ -10,5 +10,3 @@
  */
 
 export = Blockly;
-
-export as namespace Blockly;

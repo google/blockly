@@ -16,8 +16,10 @@ var buildTasks = require('./scripts/gulpfiles/build_tasks');
 var packageTasks = require('./scripts/gulpfiles/package_tasks');
 var gitTasks = require('./scripts/gulpfiles/git_tasks');
 var licenseTasks = require('./scripts/gulpfiles/license_tasks');
+var appengineTasks = require('./scripts/gulpfiles/appengine_tasks');
 
 module.exports = {
+  deployDemos: appengineTasks.deployDemos,
   default: buildTasks.build,
   build: buildTasks.build,
   buildCore: buildTasks.core,

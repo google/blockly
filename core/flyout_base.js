@@ -1070,3 +1070,15 @@ Blockly.Flyout.prototype.wheel_;
  * @protected
  */
 Blockly.Flyout.prototype.reflowInternal_;
+
+/**
+ * Calculates the x coordinate for the flyout position.
+ * @return {number} X coordinate.
+ */
+Blockly.Flyout.prototype.getX;
+
+/**
+ * Calculates the y coordinate for the flyout position.
+ * @return {number} Y coordinate.
+ */
+Blockly.Flyout.prototype.getY;

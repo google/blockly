@@ -33,8 +33,6 @@ module.exports = {
   gitSyncDevelop: gitTasks.syncDevelop,
   gitSyncMaster: gitTasks.syncMaster,
   gitCreateRC: gitTasks.createRC,
-  gitPreCompile: gitTasks.preCompile,
-  gitPostCompile: gitTasks.postCompile,
   gitUpdateGithubPages: gitTasks.updateGithubPages,
   typings: gulp.series(typings.typings, typings.msgTypings),
   package: packageTasks.package,

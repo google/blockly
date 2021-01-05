@@ -5,11 +5,10 @@
  */
 
 /**
- * @fileoverview Gulp script to build Blockly for Node & NPM.
+ * @fileoverview Gulp scripts for releasing Blockly.
  */
 
 var execSync = require('child_process').execSync;
-var exec = require('child_process').exec;
 var fs = require('fs');
 var gulp = require('gulp');
 var readlineSync = require('readline-sync');
@@ -18,13 +17,13 @@ var typings = require('./typings');
 var buildTasks = require('./build_tasks');
 var gitTasks = require('./git_tasks');
 var packageTasks = require('./package_tasks');
+var { getPackageJson } = require('./helper_tasks');
 
 const RELEASE_DIR = 'dist';
 
 // Gets the current major version.
 function getMajorVersion() {
-  delete require.cache[require.resolve('../../package.json')]
-  var { version } = require('../../package.json');
+  var { version } = getPackageJson();
   var re = new RegExp(/^(\d)./);
   var match = re.exec(version);
   if (!match[0]) {
@@ -59,7 +58,7 @@ function updateVersion(done, updateType) {
       done();
       break;
     default:
-      done(new Error('In unexpected place in switch statement.'))
+      done(new Error('Unexpected update type was chosen.'))
   }
 }
 
@@ -100,8 +99,7 @@ function checkDist(done) {
 
 // Check with the user that the version number is correct, then login and publish to npm.
 function loginAndPublish_(done, isBeta) {
-  delete require.cache[require.resolve('../../dist/package.json')]
-  var { version } = require('../../dist/package.json');
+  var { version } = getPackageJson();
   if(readlineSync.keyInYN(`You are about to publish blockly with the version number:${version}. Do you want to continue?`)) {
     execSync(`npm login --registry https://wombat-dressing-room.appspot.com`, {stdio: 'inherit'});
     execSync('npm pack', {cwd: RELEASE_DIR, stdio: 'inherit'});

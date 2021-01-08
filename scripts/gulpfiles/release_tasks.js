@@ -102,10 +102,7 @@ function loginAndPublish_(done, isBeta) {
   var { version } = getPackageJson();
   if(readlineSync.keyInYN(`You are about to publish blockly with the version number:${version}. Do you want to continue?`)) {
     execSync(`npm login --registry https://wombat-dressing-room.appspot.com`, {stdio: 'inherit'});
-    execSync('npm pack', {cwd: RELEASE_DIR, stdio: 'inherit'});
-    console.log(`npm publish --registry https://wombat-dressing-room.appspot.com ${isBeta ? '--tag beta' : ''}`);
-    // TODO: Uncomment this line and test.
-    // execSync('npm publish --registry https://wombat-dressing-room.appspot.com', {cwd: RELEASE_DIR, stdio: 'inherit'});
+    execSync(`npm publish --registry https://wombat-dressing-room.appspot.com ${isBeta ? '--tag beta' : ''}`, {cwd: RELEASE_DIR, stdio: 'inherit'});
     done();
   } else {
     done(new Error('User quit due to the version number not being correct.'));

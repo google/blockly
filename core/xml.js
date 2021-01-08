@@ -615,6 +615,71 @@ Blockly.Xml.domToVariables = function(xmlVariables, workspace) {
 };
 
 /**
+ * A mapping of nodeName to node for child nodes of xmlBlock.
+ * @typedef {{
+ *      next: Array<Element>,
+ *      mutation: Array<Element>,
+ *      input: Array<Element>,
+ *      data: Array<Element>,
+ *      field: Array<Element>,
+ *      comment: Array<Element>
+ *    }}
+ */
+Blockly.Xml.childNodeTagMap;
+
+/**
+ * Creates a mapping of nodeName to node for child nodes of the provided
+ * xmlBlock.
+ * @param {!Element} xmlBlock XML block element.
+ * @return {childNodeTagMap} The childNode map from nodeName to node.
+ */
+Blockly.Xml.mapXmlTags_ = function(xmlBlock) {
+  var childNodeMap = {
+    mutation: [], comment: [], data: [], field: [], input: [],
+    next: []
+  };
+  for (var i = 0, xmlChild; (xmlChild = xmlBlock.childNodes[i]); i++) {
+    if (xmlChild.nodeType == Blockly.utils.dom.NodeType.TEXT_NODE) {
+      // Ignore any text at the <block> level.  It's all whitespace anyway.
+      continue;
+    }
+    switch (xmlChild.nodeName.toLowerCase()) {
+      case 'mutation':
+        childNodeMap.mutation.push(xmlChild);
+        break;
+      case 'comment':
+        if (!Blockly.Comment) {
+          console.warn('Missing require for Blockly.Comment, ' +
+              'ignoring block comment.');
+          break;
+        }
+        childNodeMap.comment.push(xmlChild);
+        break;
+      case 'data':
+        childNodeMap.data.push(xmlChild);
+        break;
+      case 'title':
+        // Titles were renamed to field in December 2013.
+        // Fall through.
+      case 'field':
+        childNodeMap.field.push(xmlChild);
+        break;
+      case 'value':
+      case 'statement':
+        childNodeMap.input.push(xmlChild);
+        break;
+      case 'next':
+        childNodeMap.next.push(xmlChild);
+        break;
+      default:
+        // Unknown tag; ignore.  Same principle as HTML parsers.
+        console.warn('Ignoring unknown tag: ' + xmlChild.nodeName);
+    }
+  }
+  return childNodeMap;
+};
+
+/**
  * Decode an XML block tag and create a block (and possibly sub blocks) on the
  * workspace.
  * @param {!Element} xmlBlock XML block element.
@@ -632,54 +697,7 @@ Blockly.Xml.domToBlockHeadless_ = function(xmlBlock, workspace) {
   block = workspace.newBlock(prototypeName, id);
 
   // Preprocess childNodes so tags can be processed in a consistent order.
-  /**
-   * A mapping of nodeName to node for child nodes of xmlBlock.
-   * @type {{next: Array<Element>, mutation: Array<Element>,
-   *    input: Array<Element>, data: Array<Element>, field: Array<Element>,
-   *    comment: Array<Element>}}
-   */
-  var xmlChildNameMap = {
-    mutation: [], comment: [], data: [], field: [], input: [],
-    next: []
-  };
-  for (var i = 0, xmlChild; (xmlChild = xmlBlock.childNodes[i]); i++) {
-    if (xmlChild.nodeType == Blockly.utils.dom.NodeType.TEXT_NODE) {
-      // Ignore any text at the <block> level.  It's all whitespace anyway.
-      continue;
-    }
-    switch (xmlChild.nodeName.toLowerCase()) {
-      case 'mutation':
-        xmlChildNameMap.mutation.push(xmlChild);
-        break;
-      case 'comment':
-        if (!Blockly.Comment) {
-          console.warn('Missing require for Blockly.Comment, ' +
-              'ignoring block comment.');
-          break;
-        }
-        xmlChildNameMap.comment.push(xmlChild);
-        break;
-      case 'data':
-        xmlChildNameMap.data.push(xmlChild);
-        break;
-      case 'title':
-        // Titles were renamed to field in December 2013.
-        // Fall through.
-      case 'field':
-        xmlChildNameMap.field.push(xmlChild);
-        break;
-      case 'value':
-      case 'statement':
-        xmlChildNameMap.input.push(xmlChild);
-        break;
-      case 'next':
-        xmlChildNameMap.next.push(xmlChild);
-        break;
-      default:
-        // Unknown tag; ignore.  Same principle as HTML parsers.
-        console.warn('Ignoring unknown tag: ' + xmlChild.nodeName);
-    }
-  }
+  var xmlChildNameMap = Blockly.Xml.mapXmlTags_(xmlBlock);
 
   var callInitSvg = false;
   for (var i = 0, xmlChild; (xmlChild = xmlChildNameMap.mutation[i]); i++) {
@@ -692,6 +710,7 @@ Blockly.Xml.domToBlockHeadless_ = function(xmlBlock, workspace) {
       }
     }
   }
+
   for (var i = 0, xmlChild; (xmlChild = xmlChildNameMap.comment[i]); i++) {
     var text = xmlChild.textContent;
     var pinned = xmlChild.getAttribute('pinned') == 'true';
@@ -776,7 +795,7 @@ Blockly.Xml.domToBlockHeadless_ = function(xmlBlock, workspace) {
         throw TypeError('Next statement is already connected.');
       }
       var blockChild = Blockly.Xml.domToBlockHeadless_(childBlockElement,
-          workspace, block.nextConnection);
+          workspace);
       if (!blockChild.previousConnection) {
         throw TypeError('Next block does not have previous statement.');
       }

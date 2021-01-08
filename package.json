@@ -38,6 +38,7 @@
     "recompile": "gulp gitPreCompile && npm run bump && gulp gitPostCompile",
     "release": "gulp gitCreateRC",
     "test": "concurrently 'npm run test:prepare' 'sleep 5 && npm run test:run'",
+    "test:generators": "concurrently 'npm run test:prepare' 'sleep 25 && tests/scripts/run_generators.sh'",
     "test:prepare": "npm run test:setupselenium && npm run test:startselenium",
     "test:run": "tests/run_all_tests.sh",
     "test:setupselenium": "selenium-standalone install --config=./tests/scripts/selenium-config.js",

@@ -148,6 +148,7 @@
 	"CONTROLS_IF_MSG_IF": "block text - See [https://github.com/google/blockly/wiki/IfElse https://github.com/google/blockly/wiki/IfElse]. It is recommended, but not essential, that this have text in common with the translation of 'else if'\n{{Identical|If}}",
 	"CONTROLS_IF_MSG_ELSEIF": "block text - See [https://github.com/google/blockly/wiki/IfElse https://github.com/google/blockly/wiki/IfElse].  The English words 'otherwise if' would probably be clearer than 'else if', but the latter is used because it is traditional and shorter.",
 	"CONTROLS_IF_MSG_ELSE": "block text - See [https://github.com/google/blockly/wiki/IfElse https://github.com/google/blockly/wiki/IfElse].  The English word 'otherwise' would probably be superior to 'else', but the latter is used because it is traditional and shorter.",
+	"CONTROLS_IF_MSG_THEN": "",
 	"CONTROLS_IF_IF_TOOLTIP": "tooltip - Describes [https://github.com/google/blockly/wiki/IfElse#block-modification if block modification].",
 	"CONTROLS_IF_ELSEIF_TOOLTIP": "tooltip - Describes the 'else if' subblock during [https://github.com/google/blockly/wiki/IfElse#block-modification if block modification].",
 	"CONTROLS_IF_ELSE_TOOLTIP": "tooltip - Describes the 'else' subblock during [https://github.com/google/blockly/wiki/IfElse#block-modification if block modification].",

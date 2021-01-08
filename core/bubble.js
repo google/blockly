@@ -24,6 +24,7 @@ goog.require('Blockly.Workspace');
 
 goog.requireType('Blockly.IBubble');
 goog.requireType('Blockly.utils.Metrics');
+goog.requireType('Blockly.WorkspaceSvg');
 
 
 /**

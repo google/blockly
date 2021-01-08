@@ -21,6 +21,9 @@ goog.require('Blockly.InsertionMarkerManager');
 goog.require('Blockly.utils.Coordinate');
 goog.require('Blockly.utils.dom');
 
+goog.requireType('Blockly.BlockSvg');
+goog.requireType('Blockly.WorkspaceSvg');
+
 
 /**
  * Class for a block dragger.  It moves blocks around the workspace when they

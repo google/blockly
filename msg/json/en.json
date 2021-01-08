@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2021-01-08 11:23:27.270123",
+		"lastupdated": "2021-01-08 13:03:14.977224",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -154,6 +154,7 @@
 	"CONTROLS_IF_MSG_IF": "if",
 	"CONTROLS_IF_MSG_ELSEIF": "else if",
 	"CONTROLS_IF_MSG_ELSE": "else",
+	"CONTROLS_IF_MSG_THEN": "then",
 	"CONTROLS_IF_IF_TOOLTIP": "Add, remove, or reorder sections to reconfigure this if block.",
 	"CONTROLS_IF_ELSEIF_TOOLTIP": "Add a condition to the if block.",
 	"CONTROLS_IF_ELSE_TOOLTIP": "Add a final, catch-all condition to the if block.",

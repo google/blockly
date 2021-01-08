@@ -40,6 +40,9 @@ Blockly.Msg.LEAPHY_ORIGINAL_CATEGORY = 'Leaphy Original';
 /// leaphy Flitz Category title - The text that appears in the Leaphy Flitz Category.
 Blockly.Msg.LEAPHY_FLITZ_CATEGORY = 'Leaphy Flitz';
 /** @type {string} */
+/// leaphy Arduino Uno Category title - The text that appears in the Leaphy Arduino Uno Category.
+Blockly.Msg.LEAPHY_UNO_CATEGORY = 'Arduino Uno';
+/** @type {string} */
 /// leaphy Extra Category title - The text that appears in the Leaphy Extra Category.
 Blockly.Msg.LEAPHY_EXTRA_CATEGORY = 'Leaphy Extra';
 /** @type {string} */

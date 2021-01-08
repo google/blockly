@@ -150,6 +150,7 @@ Blockly.Msg["LEAPHY_SITUATION_CATEGORY"] = "Situation";
 Blockly.Msg["LEAPHY_SONAR_READ_ECHO"] = "Echo";
 Blockly.Msg["LEAPHY_SONAR_READ_TRIG"] = "Sonar Trig";
 Blockly.Msg["LEAPHY_START"] = "Leaphy";
+Blockly.Msg["LEAPHY_UNO_CATEGORY"] = "Arduino Uno";
 Blockly.Msg["LEAPHY_VARIABLES_CATEGORY"] = "Variables";
 Blockly.Msg["LISTS_CREATE_EMPTY_HELPURL"] = "https://github.com/google/blockly/wiki/Lists#create-empty-list";
 Blockly.Msg["LISTS_CREATE_EMPTY_TITLE"] = "create empty list";

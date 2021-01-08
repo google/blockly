@@ -150,6 +150,7 @@ Blockly.Msg["LEAPHY_SITUATION_CATEGORY"] = "Denk stappen";
 Blockly.Msg["LEAPHY_SONAR_READ_ECHO"] = "Echo";  // untranslated
 Blockly.Msg["LEAPHY_SONAR_READ_TRIG"] = "Sonar Trig";  // untranslated
 Blockly.Msg["LEAPHY_START"] = "Leaphy";  // untranslated
+Blockly.Msg["LEAPHY_UNO_CATEGORY"] = "Arduino Uno";  // untranslated
 Blockly.Msg["LEAPHY_VARIABLES_CATEGORY"] = "Variabelen";
 Blockly.Msg["LISTS_CREATE_EMPTY_HELPURL"] = "https://github.com/google/blockly/wiki/Lists#create-empty-list";
 Blockly.Msg["LISTS_CREATE_EMPTY_TITLE"] = "maak een lege lijst";

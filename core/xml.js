@@ -741,6 +741,7 @@ Blockly.Xml.applyDataTagNodes_ = function(xmlChildren, block) {
     block.data = xmlChild.textContent;
   }
 };
+
 /**
  * Applies field tag child nodes to the given block.
  * @param {Array<!Element>} xmlChildren Child nodes.
@@ -797,16 +798,8 @@ Blockly.Xml.applyInputTagNodes_ = function(xmlChildren, workspace, block,
     var childBlockInfo = Blockly.Xml.findChildBlocks_(xmlChild);
     if (childBlockInfo.childBlockElement) {
       // Create child block.
-      var blockChild = Blockly.Xml.domToBlockHeadless_(
-          childBlockInfo.childBlockElement, workspace);
-      if (blockChild.outputConnection) {
-        input.connection.connect(blockChild.outputConnection);
-      } else if (blockChild.previousConnection) {
-        input.connection.connect(blockChild.previousConnection);
-      } else {
-        throw TypeError(
-            'Child block does not have output or previous statement.');
-      }
+      Blockly.Xml.domToBlockHeadless_(
+          childBlockInfo.childBlockElement, workspace, input.connection);
     }
     // Set shadow after so we don't create a shadow we delete immediately.
     if (childBlockInfo.childShadowElement) {
@@ -834,12 +827,9 @@ Blockly.Xml.applyNextTagNodes_ = function(xmlChildren, workspace, block) {
       if (block.nextConnection.isConnected()) {
         throw TypeError('Next statement is already connected.');
       }
-      var blockChild = Blockly.Xml.domToBlockHeadless_(
-          childBlockInfo.childBlockElement, workspace);
-      if (!blockChild.previousConnection) {
-        throw TypeError('Next block does not have previous statement.');
-      }
-      block.nextConnection.connect(blockChild.previousConnection);
+      // Create child block.
+      Blockly.Xml.domToBlockHeadless_(
+          childBlockInfo.childBlockElement, workspace, block.nextConnection);
     }
     // Set shadow after so we don't create a shadow we delete immediately.
     if (childBlockInfo.childShadowElement && block.nextConnection) {
@@ -854,10 +844,13 @@ Blockly.Xml.applyNextTagNodes_ = function(xmlChildren, workspace, block) {
  * workspace.
  * @param {!Element} xmlBlock XML block element.
  * @param {!Blockly.Workspace} workspace The workspace.
+ * @param {!Blockly.Connection=} parentConnection The parent connection to
+ *    to connect this block to after instantiating.
  * @return {!Blockly.Block} The root block created.
  * @private
  */
-Blockly.Xml.domToBlockHeadless_ = function(xmlBlock, workspace) {
+Blockly.Xml.domToBlockHeadless_ = function(xmlBlock, workspace,
+    parentConnection) {
   var block = null;
   var prototypeName = xmlBlock.getAttribute('type');
   if (!prototypeName) {
@@ -873,6 +866,19 @@ Blockly.Xml.domToBlockHeadless_ = function(xmlBlock, workspace) {
       Blockly.Xml.applyMutationTagNodes_(xmlChildNameMap.mutation, block);
   Blockly.Xml.applyCommentTagNodes_(xmlChildNameMap.comment, block);
   Blockly.Xml.applyDataTagNodes_(xmlChildNameMap.data, block);
+
+  // Connect parent after processing mutation and before setting fields.
+  if (parentConnection) {
+    if (block.outputConnection) {
+      parentConnection.connect(block.outputConnection);
+    } else if (block.previousConnection) {
+      parentConnection.connect(block.previousConnection);
+    } else {
+      throw TypeError(
+          'Child block does not have output or previous statement.');
+    }
+  }
+
   Blockly.Xml.applyFieldTagNodes_(xmlChildNameMap.field, block);
   Blockly.Xml.applyInputTagNodes_(
       xmlChildNameMap.input, workspace, block, prototypeName);

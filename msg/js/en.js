@@ -5,6 +5,7 @@
 Blockly.Msg["ADD_COMMENT"] = "Add Comment";
 Blockly.Msg["ARD_ANALOGWRITE"] = "Set analog pin";
 Blockly.Msg["ARD_DIGITALWRITE"] = "Set digital pin";
+Blockly.Msg["ARD_PIN_WARN1"] = "Pin %1 is needed for %2 as pin %3. Already in use as %4.";
 Blockly.Msg["ARD_SERVO_READ"] = "Read servo pin";
 Blockly.Msg["ARD_SERVO_WRITE"] = "Set servo pin";
 Blockly.Msg["ARD_SERVO_WRITE_DEG_180"] = "degrees";
@@ -149,6 +150,7 @@ Blockly.Msg["LEAPHY_SITUATION_CATEGORY"] = "Situation";
 Blockly.Msg["LEAPHY_SONAR_READ_ECHO"] = "Echo";
 Blockly.Msg["LEAPHY_SONAR_READ_TRIG"] = "Sonar Trig";
 Blockly.Msg["LEAPHY_START"] = "Leaphy";
+Blockly.Msg["LEAPHY_UNO_CATEGORY"] = "Arduino Uno";
 Blockly.Msg["LEAPHY_VARIABLES_CATEGORY"] = "Variables";
 Blockly.Msg["LISTS_CREATE_EMPTY_HELPURL"] = "https://github.com/google/blockly/wiki/Lists#create-empty-list";
 Blockly.Msg["LISTS_CREATE_EMPTY_TITLE"] = "create empty list";

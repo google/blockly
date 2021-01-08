@@ -40,6 +40,9 @@ Blockly.Msg.LEAPHY_ORIGINAL_CATEGORY = 'Leaphy Original';
 /// leaphy Flitz Category title - The text that appears in the Leaphy Flitz Category.
 Blockly.Msg.LEAPHY_FLITZ_CATEGORY = 'Leaphy Flitz';
 /** @type {string} */
+/// leaphy Arduino Uno Category title - The text that appears in the Leaphy Arduino Uno Category.
+Blockly.Msg.LEAPHY_UNO_CATEGORY = 'Arduino Uno';
+/** @type {string} */
 /// leaphy Extra Category title - The text that appears in the Leaphy Extra Category.
 Blockly.Msg.LEAPHY_EXTRA_CATEGORY = 'Leaphy Extra';
 /** @type {string} */
@@ -186,6 +189,9 @@ Blockly.Msg.ARD_DIGITALWRITE = 'Set digital pin'
 /** @type {string} */
 /// leaphy write pin value
 Blockly.Msg.ARD_WRITE_TO = 'To'
+/** @type {string} */
+/// leaphy arduino pin warning
+Blockly.Msg.ARD_PIN_WARN1 = 'Pin %1 is needed for %2 as pin %3. Already in use as %4.'
 /** @type {string} */
 /// leaphy write analog pin
 Blockly.Msg.ARD_ANALOGWRITE = 'Set analog pin'

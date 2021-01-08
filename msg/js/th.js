@@ -5,6 +5,7 @@
 Blockly.Msg["ADD_COMMENT"] = "ใส่คำอธิบาย";
 Blockly.Msg["ARD_ANALOGWRITE"] = "Set analog pin";  // untranslated
 Blockly.Msg["ARD_DIGITALWRITE"] = "Set digital pin";  // untranslated
+Blockly.Msg["ARD_PIN_WARN1"] = "Pin %1 is needed for %2 as pin %3. Already in use as %4.";  // untranslated
 Blockly.Msg["ARD_SERVO_READ"] = "Read servo pin";  // untranslated
 Blockly.Msg["ARD_SERVO_WRITE"] = "Set servo pin";  // untranslated
 Blockly.Msg["ARD_SERVO_WRITE_DEG_180"] = "degrees";  // untranslated
@@ -149,6 +150,7 @@ Blockly.Msg["LEAPHY_SITUATION_CATEGORY"] = "Situation";  // untranslated
 Blockly.Msg["LEAPHY_SONAR_READ_ECHO"] = "Echo";  // untranslated
 Blockly.Msg["LEAPHY_SONAR_READ_TRIG"] = "Sonar Trig";  // untranslated
 Blockly.Msg["LEAPHY_START"] = "Leaphy";  // untranslated
+Blockly.Msg["LEAPHY_UNO_CATEGORY"] = "Arduino Uno";  // untranslated
 Blockly.Msg["LEAPHY_VARIABLES_CATEGORY"] = "Variables";  // untranslated
 Blockly.Msg["LISTS_CREATE_EMPTY_HELPURL"] = "https://github.com/google/blockly/wiki/Lists#create-empty-list";  // untranslated
 Blockly.Msg["LISTS_CREATE_EMPTY_TITLE"] = "สร้างรายการเปล่า";

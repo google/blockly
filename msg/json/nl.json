@@ -69,6 +69,7 @@
 	"ARD_SERVO_READ": "Lees servo pin",
 	"ARD_DIGITALWRITE": "Zet Digipin",
 	"ARD_WRITE_TO": "op",
+	"ARD_PIN_WARN1": "Pin %1 is nodig voor %2 als pin %3. Al gebruikt als %4.",
 	"ARD_ANALOGWRITE": "Zet PWM",
 	"ARD_TIME_DELAY": "duurt",
 	"ARD_TIME_DELAY_TIP": "Wacht het gespecificeerde aantal milliseconden",

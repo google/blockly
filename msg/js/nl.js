@@ -5,6 +5,7 @@
 Blockly.Msg["ADD_COMMENT"] = "Opmerking toevoegen";
 Blockly.Msg["ARD_ANALOGWRITE"] = "Zet PWM";
 Blockly.Msg["ARD_DIGITALWRITE"] = "Zet Digipin";
+Blockly.Msg["ARD_PIN_WARN1"] = "Pin %1 is nodig voor %2 als pin %3. Al gebruikt als %4.";
 Blockly.Msg["ARD_SERVO_READ"] = "Lees servo pin";
 Blockly.Msg["ARD_SERVO_WRITE"] = "Servo";
 Blockly.Msg["ARD_SERVO_WRITE_DEG_180"] = "°";
@@ -149,6 +150,7 @@ Blockly.Msg["LEAPHY_SITUATION_CATEGORY"] = "Denk stappen";
 Blockly.Msg["LEAPHY_SONAR_READ_ECHO"] = "Echo";  // untranslated
 Blockly.Msg["LEAPHY_SONAR_READ_TRIG"] = "Sonar Trig";  // untranslated
 Blockly.Msg["LEAPHY_START"] = "Leaphy";  // untranslated
+Blockly.Msg["LEAPHY_UNO_CATEGORY"] = "Arduino Uno";  // untranslated
 Blockly.Msg["LEAPHY_VARIABLES_CATEGORY"] = "Variabelen";
 Blockly.Msg["LISTS_CREATE_EMPTY_HELPURL"] = "https://github.com/google/blockly/wiki/Lists#create-empty-list";
 Blockly.Msg["LISTS_CREATE_EMPTY_TITLE"] = "maak een lege lijst";

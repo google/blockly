@@ -28,8 +28,9 @@ goog.require('Blockly.Mutator');
  * Unused constant for the common HSV hue for all blocks in this category.
  * @deprecated Use Blockly.Msg['COLOUR_HUE']. (2018 April 5)
  */
-
 Blockly.Constants.Colour.HUE = 20;
+
+var digitalPinOptions = [["2", "2"], ["3", "3"], ["4", "4"], ["5", "5"], ["6", "6"], ["7", "7"], ["8", "8"], ["9", "9"], ["10", "10"], ["11", "11"], ["12", "12"], ["13", "13"], ["14", "14"], ["15", "15"], ["16", "16"], ["17", "17"], ["18", "18"], ["19", "19"]];
 var ledstripDemoOptions = [["%{BKY_LEAPHY_LED_STRIP_LIGHTBANK}", "0"], ["%{BKY_LEAPHY_LED_STRIP_BREATHE}", "1"], ["%{BKY_LEAPHY_LED_STRIP_GULF}", "3"], ["%{BKY_LEAPHY_LED_STRIP_RAINBOW}", "4"], ["%{BKY_LEAPHY_LED_STRIP_COLORGULF}", "5"]];
 
  Blockly.Blocks["leaphy_rgb_read_sensor"] = {
@@ -181,8 +182,7 @@ Blockly.Blocks['leaphy_servo_write'] = {
       this.setColour(Blockly.Blocks.servo.HUE);
       this.appendDummyInput()
           .appendField(Blockly.Msg.ARD_SERVO_WRITE)
-          .appendField(new Blockly.FieldDropdown(
-              Blockly.Arduino.Boards.selected.digitalPins), 'SERVO_PIN');
+          .appendField(new Blockly.FieldDropdown(digitalPinOptions), 'SERVO_PIN');
       this.setInputsInline(false);
       this.appendValueInput('SERVO_ANGLE')
           .setCheck(Blockly.Types.NUMBER.checkList)
@@ -245,8 +245,7 @@ Blockly.Blocks['leaphy_io_digitalwrite'] = {
       this.setColour(Blockly.Blocks.io.HUE);
       this.appendValueInput('STATE')
           .appendField(Blockly.Msg.ARD_DIGITALWRITE)
-          .appendField(new Blockly.FieldDropdown(
-              Blockly.Arduino.Boards.selected.digitalPins), 'PIN')
+          .appendField(new Blockly.FieldDropdown(digitalPinOptions), 'PIN')
           .appendField(Blockly.Msg.ARD_WRITE_TO)
           .setCheck(Blockly.Types.BOOLEAN.checkList);
       this.setInputsInline(false);
@@ -306,11 +305,9 @@ Blockly.Blocks['leaphy_sonar_read'] = {
     init: function() {
       this.appendDummyInput()
         .appendField(Blockly.Msg.LEAPHY_SONAR_READ_TRIG)
-        .appendField(new Blockly.FieldDropdown(
-            Blockly.Arduino.Boards.selected.digitalPins), 'TRIG_PIN')          
+        .appendField(new Blockly.FieldDropdown(digitalPinOptions), 'TRIG_PIN')          
         .appendField(Blockly.Msg.LEAPHY_SONAR_READ_ECHO)
-        .appendField(new Blockly.FieldDropdown(
-            Blockly.Arduino.Boards.selected.digitalPins), 'ECHO_PIN');
+        .appendField(new Blockly.FieldDropdown(digitalPinOptions), 'ECHO_PIN');
       this.setOutput(true, Blockly.Types.NUMBER.output);
       this.setTooltip(Blockly.Msg.LEAPHY_SONAR_READ_TIP);
       this.setStyle('leaphy_blocks');

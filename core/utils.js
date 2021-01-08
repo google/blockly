@@ -434,7 +434,7 @@ Blockly.utils.is3dSupported = function() {
   }
   // CC-BY-SA Lorenzo Polidori
   // stackoverflow.com/questions/5661671/detecting-transform-translate3d-support
-  if (!Blockly.utils.global.getComputedStyle) {
+  if (!Blockly.utils.global['getComputedStyle']) {
     return false;
   }
 
@@ -454,7 +454,7 @@ Blockly.utils.is3dSupported = function() {
   for (var t in transforms) {
     if (el.style[t] !== undefined) {
       el.style[t] = 'translate3d(1px,1px,1px)';
-      var computedStyle = Blockly.utils.global.getComputedStyle(el);
+      var computedStyle = Blockly.utils.global['getComputedStyle'](el);
       if (!computedStyle) {
         // getComputedStyle in Firefox returns null when Blockly is loaded
         // inside an iframe with display: none.  Returning false and not

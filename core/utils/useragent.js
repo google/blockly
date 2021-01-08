@@ -107,4 +107,4 @@ Blockly.utils.userAgent.MOBILE;
   Blockly.utils.userAgent.MOBILE = !Blockly.utils.userAgent.TABLET &&
       (Blockly.utils.userAgent.IPOD || Blockly.utils.userAgent.IPHONE ||
        Blockly.utils.userAgent.ANDROID || has('IEMobile'));
-})((Blockly.utils.global.navigator && Blockly.utils.global.navigator.userAgent) || '');
+})((Blockly.utils.global['navigator'] && Blockly.utils.global['navigator']['userAgent']) || '');

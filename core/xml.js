@@ -631,7 +631,8 @@ Blockly.Xml.childNodeTagMap;
  * Creates a mapping of childNodes for each supported xml tag for the provided
  * xmlBlock. Logs a warning for any encountered unsupported tags.
  * @param {!Element} xmlBlock XML block element.
- * @return {childNodeTagMap} The childNode map from nodeName to node.
+ * @return {Blockly.Xml.childNodeTagMap} The childNode map from nodeName to
+ *    node.
  */
 Blockly.Xml.mapSupportedXmlTags_ = function(xmlBlock) {
   var childNodeMap = {

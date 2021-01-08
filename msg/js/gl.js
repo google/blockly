@@ -5,6 +5,7 @@
 Blockly.Msg["ADD_COMMENT"] = "Engadir un comentario";
 Blockly.Msg["ARD_ANALOGWRITE"] = "Set analog pin";  // untranslated
 Blockly.Msg["ARD_DIGITALWRITE"] = "Set digital pin";  // untranslated
+Blockly.Msg["ARD_PIN_WARN1"] = "Pin %1 is needed for %2 as pin %3. Already in use as %4.";  // untranslated
 Blockly.Msg["ARD_SERVO_READ"] = "Read servo pin";  // untranslated
 Blockly.Msg["ARD_SERVO_WRITE"] = "Set servo pin";  // untranslated
 Blockly.Msg["ARD_SERVO_WRITE_DEG_180"] = "degrees";  // untranslated

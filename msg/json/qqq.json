@@ -50,6 +50,7 @@
 	"ARD_SERVO_READ": "leaphy servo read angle",
 	"ARD_DIGITALWRITE": "leaphy write digital pin",
 	"ARD_WRITE_TO": "leaphy write pin value",
+	"ARD_PIN_WARN1": "leaphy arduino pin warning",
 	"ARD_ANALOGWRITE": "leaphy write analog pin",
 	"LEAPHY_SONAR_READ_TRIG": "Trig pin",
 	"LEAPHY_SONAR_READ_ECHO": "Echo pin",

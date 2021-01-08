@@ -187,6 +187,9 @@ Blockly.Msg.ARD_DIGITALWRITE = 'Set digital pin'
 /// leaphy write pin value
 Blockly.Msg.ARD_WRITE_TO = 'To'
 /** @type {string} */
+/// leaphy arduino pin warning
+Blockly.Msg.ARD_PIN_WARN1 = 'Pin %1 is needed for %2 as pin %3. Already in use as %4.'
+/** @type {string} */
 /// leaphy write analog pin
 Blockly.Msg.ARD_ANALOGWRITE = 'Set analog pin'
 /** @type {string} */

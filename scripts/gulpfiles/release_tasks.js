@@ -93,7 +93,7 @@ function checkDist(done) {
     });
     done();
   } else {
-    done(new Error('The dist directory does not exist. Is npm run package being run?'));
+    done(new Error('The dist directory does not exist. Is packageTasks.package being run?'));
   }
 }
 
@@ -122,14 +122,6 @@ function loginAndPublishBeta(done) {
   return loginAndPublish_(done, true);
 }
 
-// Package and publish to npm.
-const publish = gulp.series(
-  packageTasks.package,
-  checkBranch,
-  checkDist,
-  loginAndPublish
-);
-
 // Repeatedly prompts the user for a beta version number until a valid one is given.
 // A valid version number must have '-beta.x' and can not have already been used to publish to npm.
 function updateBetaVersion(done) {
@@ -149,9 +141,18 @@ function updateBetaVersion(done) {
       console.log("To publish a beta version you must have -beta.x in the version.");
     }
   }
-  execSync(`npm --no-git-tag-version version ${newVersion}`, {stdio: 'inherit'});
+  // Allow the same version here, since we already check the version does not exist on npm.
+  execSync(`npm --no-git-tag-version --allow-same-version version ${newVersion}`, {stdio: 'inherit'});
   done();
 }
+
+// Package and publish to npm.
+const publish = gulp.series(
+  packageTasks.package,
+  checkBranch,
+  checkDist,
+  loginAndPublish
+);
 
 // Publish a beta version of Blockly.
 const publishBeta = gulp.series(

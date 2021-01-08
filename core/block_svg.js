@@ -36,9 +36,16 @@ goog.require('Blockly.utils.object');
 goog.require('Blockly.utils.Rect');
 goog.require('Blockly.utils.userAgent');
 
+goog.requireType('Blockly.Comment');
+goog.requireType('Blockly.Connection');
+goog.requireType('Blockly.Field');
 goog.requireType('Blockly.IASTNodeLocationSvg');
 goog.requireType('Blockly.IBoundedElement');
 goog.requireType('Blockly.ICopyable');
+goog.requireType('Blockly.Input');
+goog.requireType('Blockly.ShortcutRegistry');
+goog.requireType('Blockly.Warning');
+goog.requireType('Blockly.WorkspaceSvg');
 
 
 /**

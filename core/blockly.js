@@ -33,6 +33,11 @@ goog.require('Blockly.WidgetDiv');
 goog.require('Blockly.WorkspaceSvg');
 goog.require('Blockly.Xml');
 
+goog.requireType('Blockly.BlockSvg');
+goog.requireType('Blockly.Connection');
+goog.requireType('Blockly.ICopyable');
+goog.requireType('Blockly.Workspace');
+
 
 /**
  * Blockly core version.

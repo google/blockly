@@ -30,10 +30,17 @@ goog.require('Blockly.utils');
 goog.require('Blockly.utils.deprecation');
 goog.require('Blockly.utils.Coordinate');
 goog.require('Blockly.utils.object');
+goog.require('Blockly.utils.Size');
 goog.require('Blockly.utils.string');
 goog.require('Blockly.Workspace');
 
+goog.requireType('Blockly.Comment');
+goog.requireType('Blockly.Events.Abstract');
+goog.requireType('Blockly.Field');
 goog.requireType('Blockly.IASTNodeLocation');
+goog.requireType('Blockly.Mutator');
+goog.requireType('Blockly.utils.Size');
+goog.requireType('Blockly.VariableModel');
 
 
 /**

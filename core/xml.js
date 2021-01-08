@@ -617,23 +617,23 @@ Blockly.Xml.domToVariables = function(xmlVariables, workspace) {
 /**
  * A mapping of nodeName to node for child nodes of xmlBlock.
  * @typedef {{
- *      next: Array<Element>,
- *      mutation: Array<Element>,
- *      input: Array<Element>,
- *      data: Array<Element>,
- *      field: Array<Element>,
- *      comment: Array<Element>
+ *      next: !Array<!Element>,
+ *      mutation: !Array<!Element>,
+ *      input: !Array<!Element>,
+ *      data: !Array<!Element>,
+ *      field: !Array<!Element>,
+ *      comment: !Array<!Element>
  *    }}
  */
 Blockly.Xml.childNodeTagMap;
 
 /**
- * Creates a mapping of nodeName to node for child nodes of the provided
- * xmlBlock.
+ * Creates a mapping of childNodes for each supported xml tag for the provided
+ * xmlBlock. Logs a warning for any encountered unsupported tags.
  * @param {!Element} xmlBlock XML block element.
  * @return {childNodeTagMap} The childNode map from nodeName to node.
  */
-Blockly.Xml.mapXmlTags_ = function(xmlBlock) {
+Blockly.Xml.mapSupportedXmlTags_ = function(xmlBlock) {
   var childNodeMap = {
     mutation: [], comment: [], data: [], field: [], input: [],
     next: []
@@ -689,7 +689,7 @@ Blockly.Xml.mapXmlTags_ = function(xmlBlock) {
  */
 Blockly.Xml.applyMutationTagNodes_ = function(xmlChildren, block) {
   var shouldCallInitSvg = false;
-  for (var i = 0, xmlChild; (xmlChild = xmlChildren); i++) {
+  for (var i = 0, xmlChild; (xmlChild = xmlChildren[i]); i++) {
     // Custom data for an advanced block.
     if (block.domToMutation) {
       block.domToMutation(xmlChild);
@@ -709,7 +709,7 @@ Blockly.Xml.applyMutationTagNodes_ = function(xmlChildren, block) {
  * @private
  */
 Blockly.Xml.applyCommentTagNodes_ = function(xmlChildren, block) {
-  for (var i = 0, xmlChild; (xmlChild = xmlChildren); i++) {
+  for (var i = 0, xmlChild; (xmlChild = xmlChildren[i]); i++) {
     var text = xmlChild.textContent;
     var pinned = xmlChild.getAttribute('pinned') == 'true';
     var width = parseInt(xmlChild.getAttribute('w'), 10);
@@ -736,7 +736,7 @@ Blockly.Xml.applyCommentTagNodes_ = function(xmlChildren, block) {
  * @private
  */
 Blockly.Xml.applyDataTagNodes_ = function(xmlChildren, block) {
-  for (var i = 0, xmlChild; (xmlChild = xmlChildren); i++) {
+  for (var i = 0, xmlChild; (xmlChild = xmlChildren[i]); i++) {
     block.data = xmlChild.textContent;
   }
 };
@@ -747,7 +747,7 @@ Blockly.Xml.applyDataTagNodes_ = function(xmlChildren, block) {
  * @private
  */
 Blockly.Xml.applyFieldTagNodes_ = function(xmlChildren, block) {
-  for (var i = 0, xmlChild; (xmlChild = xmlChildren); i++) {
+  for (var i = 0, xmlChild; (xmlChild = xmlChildren[i]); i++) {
     var nodeName = xmlChild.getAttribute('name');
     Blockly.Xml.domToField_(block, nodeName, xmlChild);
   }
@@ -760,25 +760,26 @@ Blockly.Xml.applyFieldTagNodes_ = function(xmlChildren, block) {
  * @private
  */
 Blockly.Xml.applyDataTagNodes_ = function(xmlChildren, block) {
-  for (var i = 0, xmlChild; (xmlChild = xmlChildren); i++) {
+  for (var i = 0, xmlChild; (xmlChild = xmlChildren[i]); i++) {
     block.data = xmlChild.textContent;
   }
 };
 
 /**
- * Applies input child nodes (value or statement) to the given block.
+ * Finds any enclosed blocks or shadows within this xml node.
  * @param {!Element} xmlNode The xml node to extract child block info from.
- * @return {{childBlockElement: ?Element, childShadowElement: ?Element}}
+ * @return {{childBlockElement: ?Element, childShadowElement: ?Element}} Any
+ *    found child block.
  * @private
  */
-Blockly.Xml.getChildBlockNodeInfo = function(xmlNode) {
+Blockly.Xml.findChildBlocks_ = function(xmlNode) {
   var childBlockInfo = {childBlockElement: null, childShadowElement: null};
-  for (var i = 0, grandchild; (grandchild = xmlNode.childNodes[i]); i++) {
-    if (grandchild.nodeType == Blockly.utils.dom.NodeType.ELEMENT_NODE) {
-      if (grandchild.nodeName.toLowerCase() == 'block') {
-        childBlockInfo.childBlockElement = grandchild;
-      } else if (grandchild.nodeName.toLowerCase() == 'shadow') {
-        childBlockInfo.childShadowElement = grandchild;
+  for (var i = 0, child; (child = xmlNode.childNodes[i]); i++) {
+    if (child.nodeType == Blockly.utils.dom.NodeType.ELEMENT_NODE) {
+      if (child.nodeName.toLowerCase() == 'block') {
+        childBlockInfo.childBlockElement = child;
+      } else if (child.nodeName.toLowerCase() == 'shadow') {
+        childBlockInfo.childShadowElement = child;
       }
     }
   }
@@ -796,7 +797,7 @@ Blockly.Xml.getChildBlockNodeInfo = function(xmlNode) {
  */
 Blockly.Xml.applyInputTagNodes_ = function(xmlChildren, workspace, block,
     prototypeName) {
-  for (var i = 0, xmlChild; (xmlChild = xmlChildren); i++) {
+  for (var i = 0, xmlChild; (xmlChild = xmlChildren[i]); i++) {
     var nodeName = xmlChild.getAttribute('name');
     var input = block.getInput(nodeName);
     if (!input) {
@@ -804,7 +805,7 @@ Blockly.Xml.applyInputTagNodes_ = function(xmlChildren, workspace, block,
           prototypeName);
       break;
     }
-    var childBlockInfo = Blockly.Xml.getChildBlockNodeInfo(xmlChild);
+    var childBlockInfo = Blockly.Xml.findChildBlocks_(xmlChild);
     if (childBlockInfo.childBlockElement) {
       // Create child block.
       var blockChild = Blockly.Xml.domToBlockHeadless_(
@@ -834,8 +835,8 @@ Blockly.Xml.applyInputTagNodes_ = function(xmlChildren, workspace, block,
  * @private
  */
 Blockly.Xml.applyNextTagNodes_ = function(xmlChildren, workspace, block) {
-  for (var i = 0, xmlChild; (xmlChild = xmlChildren); i++) {
-    var childBlockInfo = Blockly.Xml.getChildBlockNodeInfo(xmlChild);
+  for (var i = 0, xmlChild; (xmlChild = xmlChildren[i]); i++) {
+    var childBlockInfo = Blockly.Xml.findChildBlocks_(xmlChild);
     if (childBlockInfo.childBlockElement) {
       if (!block.nextConnection) {
         throw TypeError('Next statement does not exist.');
@@ -877,8 +878,8 @@ Blockly.Xml.domToBlockHeadless_ = function(xmlBlock, workspace) {
   block = workspace.newBlock(prototypeName, id);
 
   // Preprocess childNodes so tags can be processed in a consistent order.
-  var xmlChildNameMap = Blockly.Xml.mapXmlTags_(xmlBlock);
-  
+  var xmlChildNameMap = Blockly.Xml.mapSupportedXmlTags_(xmlBlock);
+
   var shouldCallInitSvg =
       Blockly.Xml.applyMutationTagNodes_(xmlChildNameMap.mutation, block);
   Blockly.Xml.applyCommentTagNodes_(xmlChildNameMap.comment, block);

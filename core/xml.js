@@ -617,12 +617,12 @@ Blockly.Xml.domToVariables = function(xmlVariables, workspace) {
 /**
  * A mapping of nodeName to node for child nodes of xmlBlock.
  * @typedef {{
- *      next: !Array<!Element>,
  *      mutation: !Array<!Element>,
- *      input: !Array<!Element>,
+ *      comment: !Array<!Element>
  *      data: !Array<!Element>,
  *      field: !Array<!Element>,
- *      comment: !Array<!Element>
+ *      input: !Array<!Element>,
+ *      next: !Array<!Element>
  *    }}
  */
 Blockly.Xml.childNodeTagMap;

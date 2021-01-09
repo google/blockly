@@ -438,7 +438,7 @@ suite('Events', function() {
     });
   });
 
-  suite.only('Serialization', function() {
+  suite('Serialization', function() {
     var safeStringify = (json) => {
       let cache = [];
       return JSON.stringify(json, (key, value) => {

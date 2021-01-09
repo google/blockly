@@ -797,9 +797,8 @@ Blockly.Xml.applyInputTagNodes_ = function(xmlChildren, workspace, block,
     }
     var childBlockInfo = Blockly.Xml.findChildBlocks_(xmlChild);
     if (childBlockInfo.childBlockElement) {
-      // Create child block.
-      Blockly.Xml.domToBlockHeadless_(
-          childBlockInfo.childBlockElement, workspace, input.connection);
+      Blockly.Xml.domToBlockHeadless_(childBlockInfo.childBlockElement,
+          workspace, input.connection, false);
     }
     // Set shadow after so we don't create a shadow we delete immediately.
     if (childBlockInfo.childShadowElement) {
@@ -828,8 +827,8 @@ Blockly.Xml.applyNextTagNodes_ = function(xmlChildren, workspace, block) {
         throw TypeError('Next statement is already connected.');
       }
       // Create child block.
-      Blockly.Xml.domToBlockHeadless_(
-          childBlockInfo.childBlockElement, workspace, block.nextConnection);
+      Blockly.Xml.domToBlockHeadless_(childBlockInfo.childBlockElement,
+          workspace, block.nextConnection, true);
     }
     // Set shadow after so we don't create a shadow we delete immediately.
     if (childBlockInfo.childShadowElement && block.nextConnection) {
@@ -846,11 +845,13 @@ Blockly.Xml.applyNextTagNodes_ = function(xmlChildren, workspace, block) {
  * @param {!Blockly.Workspace} workspace The workspace.
  * @param {!Blockly.Connection=} parentConnection The parent connection to
  *    to connect this block to after instantiating.
+ * @param {boolean} connectedToParentNext Whether the provided parent connection
+ *    is a next connection, rather than output or statement.
  * @return {!Blockly.Block} The root block created.
  * @private
  */
 Blockly.Xml.domToBlockHeadless_ = function(xmlBlock, workspace,
-    parentConnection) {
+    parentConnection, connectedToParentNext) {
   var block = null;
   var prototypeName = xmlBlock.getAttribute('type');
   if (!prototypeName) {
@@ -869,13 +870,22 @@ Blockly.Xml.domToBlockHeadless_ = function(xmlBlock, workspace,
 
   // Connect parent after processing mutation and before setting fields.
   if (parentConnection) {
-    if (block.outputConnection) {
-      parentConnection.connect(block.outputConnection);
-    } else if (block.previousConnection) {
-      parentConnection.connect(block.previousConnection);
+    if (connectedToParentNext) {
+      if (block.previousConnection) {
+        parentConnection.connect(block.previousConnection);
+      } else {
+        throw TypeError(
+            'Next block does not have previous statement.');
+      }
     } else {
-      throw TypeError(
-          'Child block does not have output or previous statement.');
+      if (block.outputConnection) {
+        parentConnection.connect(block.outputConnection);
+      } else if (block.previousConnection) {
+        parentConnection.connect(block.previousConnection);
+      } else {
+        throw TypeError(
+            'Child block does not have output or previous statement.');
+      }
     }
   }
 

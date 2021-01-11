@@ -618,7 +618,7 @@ Blockly.Xml.domToVariables = function(xmlVariables, workspace) {
  * A mapping of nodeName to node for child nodes of xmlBlock.
  * @typedef {{
  *      mutation: !Array<!Element>,
- *      comment: !Array<!Element>
+ *      comment: !Array<!Element>,
  *      data: !Array<!Element>,
  *      field: !Array<!Element>,
  *      input: !Array<!Element>,
@@ -755,18 +755,6 @@ Blockly.Xml.applyFieldTagNodes_ = function(xmlChildren, block) {
 };
 
 /**
- * Applies data child nodes to the given block.
- * @param {Array<!Element>} xmlChildren Child nodes.
- * @param {!Blockly.Block} block The block to apply the child nodes on.
- * @private
- */
-Blockly.Xml.applyDataTagNodes_ = function(xmlChildren, block) {
-  for (var i = 0, xmlChild; (xmlChild = xmlChildren[i]); i++) {
-    block.data = xmlChild.textContent;
-  }
-};
-
-/**
  * Finds any enclosed blocks or shadows within this xml node.
  * @param {!Element} xmlNode The xml node to extract child block info from.
  * @return {{childBlockElement: ?Element, childShadowElement: ?Element}} Any
@@ -775,12 +763,12 @@ Blockly.Xml.applyDataTagNodes_ = function(xmlChildren, block) {
  */
 Blockly.Xml.findChildBlocks_ = function(xmlNode) {
   var childBlockInfo = {childBlockElement: null, childShadowElement: null};
-  for (var i = 0, child; (child = xmlNode.childNodes[i]); i++) {
-    if (child.nodeType == Blockly.utils.dom.NodeType.ELEMENT_NODE) {
-      if (child.nodeName.toLowerCase() == 'block') {
-        childBlockInfo.childBlockElement = child;
-      } else if (child.nodeName.toLowerCase() == 'shadow') {
-        childBlockInfo.childShadowElement = child;
+  for (var i = 0, xmlChild; (xmlChild = xmlNode.childNodes[i]); i++) {
+    if (xmlChild.nodeType == Blockly.utils.dom.NodeType.ELEMENT_NODE) {
+      if (xmlChild.nodeName.toLowerCase() == 'block') {
+        childBlockInfo.childBlockElement = /** @type {!Element} */ (xmlChild);
+      } else if (xmlChild.nodeName.toLowerCase() == 'shadow') {
+        childBlockInfo.childShadowElement = /** @type {!Element} */ (xmlChild);
       }
     }
   }
@@ -790,7 +778,7 @@ Blockly.Xml.findChildBlocks_ = function(xmlNode) {
 /**
  * Applies input child nodes (value or statement) to the given block.
  * @param {Array<!Element>} xmlChildren Child nodes.
- * @param {Blockly.Workspace} workspace The workspace containing the given
+ * @param {!Blockly.Workspace} workspace The workspace containing the given
  *    block.
  * @param {!Blockly.Block} block The block to apply the child nodes on.
  * @param {string} prototypeName The prototype name of the block.
@@ -810,7 +798,7 @@ Blockly.Xml.applyInputTagNodes_ = function(xmlChildren, workspace, block,
     if (childBlockInfo.childBlockElement) {
       // Create child block.
       var blockChild = Blockly.Xml.domToBlockHeadless_(
-          childBlockInfo.childBlockElement, workspace, input.connection);
+          childBlockInfo.childBlockElement, workspace);
       if (blockChild.outputConnection) {
         input.connection.connect(blockChild.outputConnection);
       } else if (blockChild.previousConnection) {
@@ -830,7 +818,7 @@ Blockly.Xml.applyInputTagNodes_ = function(xmlChildren, workspace, block,
 /**
  * Applies next child nodes to the given block.
  * @param {Array<!Element>} xmlChildren Child nodes.
- * @param {Blockly.Workspace} workspace The workspace containing the given
+ * @param {!Blockly.Workspace} workspace The workspace containing the given
  *    block.
  * @param {!Blockly.Block} block The block to apply the child nodes on.
  * @private

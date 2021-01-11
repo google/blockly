@@ -662,6 +662,7 @@ Blockly.BlockSvg.prototype.updateCollapsed_ = function() {
   }
 
   if (!collapsed) {
+    this.updateDisabled();
     this.removeInput(collapsedInputName);
     return;
   }

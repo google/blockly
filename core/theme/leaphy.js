@@ -19,48 +19,52 @@ Blockly.Themes.Leaphy = {};
 
 Blockly.Themes.Leaphy.defaultBlockStyles = {
   "leaphy_blocks": {
-    "colourPrimary": "#1d2f6e",
+    "colourPrimary": "#06778F",
     "hat": "cap"
   },
   "situation_blocks": {
-    "colourPrimary": "#E0A830"
+    "colourPrimary": "#D9B53F"
   },
   "numbers_blocks": {
-    "colourPrimary": "#5FB627"
+    "colourPrimary": "#75B342"
   },
   "variables_blocks": {
-    "colourPrimary": "#EC7D2A"
+    "colourPrimary": "#DE7C3B"
   },
   "functions_blocks": {
-    "colourPrimary": "#658FD7"
+    "colourPrimary": "#4095CE"
   }
 };
 
 Blockly.Themes.Leaphy.categoryStyles = {
   "leaphy_category": {
-    "colour": "#444458"
+    "colour": "#06778F"
   },
   "situation_category": {
-    "colour": "#444458"
+    "colour": "#D9B53F"
   },
   "numbers_category": {
-    "colour": "#444458"
+    "colour": "#75B342"
   },
   "variables_category": {
-    "colour": "#444458"
+    "colour": "#DE7C3B"
   },
   "functions_category": {
-    "colour": "#444458"
+    "colour": "#4095CE"
   }
 };
 
 Blockly.Themes.Leaphy.componentStyles = {
-  'toolboxBackgroundColour': '#24253F',
-    'toolboxForegroundColour': '#fff',
-    'flyoutBackgroundColour': '#444458',
-    'flyoutForegroundColour': '#ccc',
-    'flyoutOpacity': 1
+  'workspaceBackgroundColour': "#E5E5E5",
+  'toolboxBackgroundColour': '#343444',
+  'toolboxForegroundColour': '#fff',
+  'flyoutBackgroundColour': '#FFFFFF',
+  'flyoutForegroundColour': '#ccc',
+  'flyoutOpacity': 1
 };
+
+
+
 
 Blockly.Themes.Classic =
     new Blockly.Theme('leaphy', Blockly.Themes.Leaphy.defaultBlockStyles,

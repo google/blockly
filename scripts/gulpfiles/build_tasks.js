@@ -74,7 +74,7 @@ var JSCOMP_ERROR = [
   'missingPolyfill',
   'missingProperties',
   'missingProvide',
-  // 'missingRequire', As of Jan 8 2020, this enables the strict require check.
+  // 'missingRequire', As of Jan 8 2021, this enables the strict require check.
   // Disabling this until we have fixed all the require issues. 
   'missingReturn',
   // 'missingSourcesWarnings',

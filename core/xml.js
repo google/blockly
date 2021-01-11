@@ -615,6 +615,241 @@ Blockly.Xml.domToVariables = function(xmlVariables, workspace) {
 };
 
 /**
+ * A mapping of nodeName to node for child nodes of xmlBlock.
+ * @typedef {{
+ *      mutation: !Array<!Element>,
+ *      comment: !Array<!Element>,
+ *      data: !Array<!Element>,
+ *      field: !Array<!Element>,
+ *      input: !Array<!Element>,
+ *      next: !Array<!Element>
+ *    }}
+ */
+Blockly.Xml.childNodeTagMap;
+
+/**
+ * Creates a mapping of childNodes for each supported xml tag for the provided
+ * xmlBlock. Logs a warning for any encountered unsupported tags.
+ * @param {!Element} xmlBlock XML block element.
+ * @return {Blockly.Xml.childNodeTagMap} The childNode map from nodeName to
+ *    node.
+ */
+Blockly.Xml.mapSupportedXmlTags_ = function(xmlBlock) {
+  var childNodeMap = {
+    mutation: [], comment: [], data: [], field: [], input: [],
+    next: []
+  };
+  for (var i = 0, xmlChild; (xmlChild = xmlBlock.childNodes[i]); i++) {
+    if (xmlChild.nodeType == Blockly.utils.dom.NodeType.TEXT_NODE) {
+      // Ignore any text at the <block> level.  It's all whitespace anyway.
+      continue;
+    }
+    switch (xmlChild.nodeName.toLowerCase()) {
+      case 'mutation':
+        childNodeMap.mutation.push(xmlChild);
+        break;
+      case 'comment':
+        if (!Blockly.Comment) {
+          console.warn('Missing require for Blockly.Comment, ' +
+              'ignoring block comment.');
+          break;
+        }
+        childNodeMap.comment.push(xmlChild);
+        break;
+      case 'data':
+        childNodeMap.data.push(xmlChild);
+        break;
+      case 'title':
+        // Titles were renamed to field in December 2013.
+        // Fall through.
+      case 'field':
+        childNodeMap.field.push(xmlChild);
+        break;
+      case 'value':
+      case 'statement':
+        childNodeMap.input.push(xmlChild);
+        break;
+      case 'next':
+        childNodeMap.next.push(xmlChild);
+        break;
+      default:
+        // Unknown tag; ignore.  Same principle as HTML parsers.
+        console.warn('Ignoring unknown tag: ' + xmlChild.nodeName);
+    }
+  }
+  return childNodeMap;
+};
+
+/**
+ * Applies mutation tag child nodes to the given block.
+ * @param {Array<!Element>} xmlChildren Child nodes.
+ * @param {!Blockly.Block} block The block to apply the child nodes on.
+ * @return {boolean} True if mutation may have added some elements that need
+ *    initialization (requiring initSvg call).
+ * @private
+ */
+Blockly.Xml.applyMutationTagNodes_ = function(xmlChildren, block) {
+  var shouldCallInitSvg = false;
+  for (var i = 0, xmlChild; (xmlChild = xmlChildren[i]); i++) {
+    // Custom data for an advanced block.
+    if (block.domToMutation) {
+      block.domToMutation(xmlChild);
+      if (block.initSvg) {
+        // Mutation may have added some elements that need initializing.
+        shouldCallInitSvg = true;
+      }
+    }
+  }
+  return shouldCallInitSvg;
+};
+
+/**
+ * Applies comment tag child nodes to the given block.
+ * @param {Array<!Element>} xmlChildren Child nodes.
+ * @param {!Blockly.Block} block The block to apply the child nodes on.
+ * @private
+ */
+Blockly.Xml.applyCommentTagNodes_ = function(xmlChildren, block) {
+  for (var i = 0, xmlChild; (xmlChild = xmlChildren[i]); i++) {
+    var text = xmlChild.textContent;
+    var pinned = xmlChild.getAttribute('pinned') == 'true';
+    var width = parseInt(xmlChild.getAttribute('w'), 10);
+    var height = parseInt(xmlChild.getAttribute('h'), 10);
+
+    block.setCommentText(text);
+    block.commentModel.pinned = pinned;
+    if (!isNaN(width) && !isNaN(height)) {
+      block.commentModel.size = new Blockly.utils.Size(width, height);
+    }
+
+    if (pinned && block.getCommentIcon && !block.isInFlyout) {
+      setTimeout(function() {
+        block.getCommentIcon().setVisible(true);
+      }, 1);
+    }
+  }
+};
+
+/**
+ * Applies data tag child nodes to the given block.
+ * @param {Array<!Element>} xmlChildren Child nodes.
+ * @param {!Blockly.Block} block The block to apply the child nodes on.
+ * @private
+ */
+Blockly.Xml.applyDataTagNodes_ = function(xmlChildren, block) {
+  for (var i = 0, xmlChild; (xmlChild = xmlChildren[i]); i++) {
+    block.data = xmlChild.textContent;
+  }
+};
+/**
+ * Applies field tag child nodes to the given block.
+ * @param {Array<!Element>} xmlChildren Child nodes.
+ * @param {!Blockly.Block} block The block to apply the child nodes on.
+ * @private
+ */
+Blockly.Xml.applyFieldTagNodes_ = function(xmlChildren, block) {
+  for (var i = 0, xmlChild; (xmlChild = xmlChildren[i]); i++) {
+    var nodeName = xmlChild.getAttribute('name');
+    Blockly.Xml.domToField_(block, nodeName, xmlChild);
+  }
+};
+
+/**
+ * Finds any enclosed blocks or shadows within this xml node.
+ * @param {!Element} xmlNode The xml node to extract child block info from.
+ * @return {{childBlockElement: ?Element, childShadowElement: ?Element}} Any
+ *    found child block.
+ * @private
+ */
+Blockly.Xml.findChildBlocks_ = function(xmlNode) {
+  var childBlockInfo = {childBlockElement: null, childShadowElement: null};
+  for (var i = 0, xmlChild; (xmlChild = xmlNode.childNodes[i]); i++) {
+    if (xmlChild.nodeType == Blockly.utils.dom.NodeType.ELEMENT_NODE) {
+      if (xmlChild.nodeName.toLowerCase() == 'block') {
+        childBlockInfo.childBlockElement = /** @type {!Element} */ (xmlChild);
+      } else if (xmlChild.nodeName.toLowerCase() == 'shadow') {
+        childBlockInfo.childShadowElement = /** @type {!Element} */ (xmlChild);
+      }
+    }
+  }
+  return childBlockInfo;
+};
+
+/**
+ * Applies input child nodes (value or statement) to the given block.
+ * @param {Array<!Element>} xmlChildren Child nodes.
+ * @param {!Blockly.Workspace} workspace The workspace containing the given
+ *    block.
+ * @param {!Blockly.Block} block The block to apply the child nodes on.
+ * @param {string} prototypeName The prototype name of the block.
+ * @private
+ */
+Blockly.Xml.applyInputTagNodes_ = function(xmlChildren, workspace, block,
+    prototypeName) {
+  for (var i = 0, xmlChild; (xmlChild = xmlChildren[i]); i++) {
+    var nodeName = xmlChild.getAttribute('name');
+    var input = block.getInput(nodeName);
+    if (!input) {
+      console.warn('Ignoring non-existent input ' + nodeName + ' in block ' +
+          prototypeName);
+      break;
+    }
+    var childBlockInfo = Blockly.Xml.findChildBlocks_(xmlChild);
+    if (childBlockInfo.childBlockElement) {
+      // Create child block.
+      var blockChild = Blockly.Xml.domToBlockHeadless_(
+          childBlockInfo.childBlockElement, workspace);
+      if (blockChild.outputConnection) {
+        input.connection.connect(blockChild.outputConnection);
+      } else if (blockChild.previousConnection) {
+        input.connection.connect(blockChild.previousConnection);
+      } else {
+        throw TypeError(
+            'Child block does not have output or previous statement.');
+      }
+    }
+    // Set shadow after so we don't create a shadow we delete immediately.
+    if (childBlockInfo.childShadowElement) {
+      input.connection.setShadowDom(childBlockInfo.childShadowElement);
+    }
+  }
+};
+
+/**
+ * Applies next child nodes to the given block.
+ * @param {Array<!Element>} xmlChildren Child nodes.
+ * @param {!Blockly.Workspace} workspace The workspace containing the given
+ *    block.
+ * @param {!Blockly.Block} block The block to apply the child nodes on.
+ * @private
+ */
+Blockly.Xml.applyNextTagNodes_ = function(xmlChildren, workspace, block) {
+  for (var i = 0, xmlChild; (xmlChild = xmlChildren[i]); i++) {
+    var childBlockInfo = Blockly.Xml.findChildBlocks_(xmlChild);
+    if (childBlockInfo.childBlockElement) {
+      if (!block.nextConnection) {
+        throw TypeError('Next statement does not exist.');
+      }
+      // If there is more than one XML 'next' tag.
+      if (block.nextConnection.isConnected()) {
+        throw TypeError('Next statement is already connected.');
+      }
+      var blockChild = Blockly.Xml.domToBlockHeadless_(
+          childBlockInfo.childBlockElement, workspace);
+      if (!blockChild.previousConnection) {
+        throw TypeError('Next block does not have previous statement.');
+      }
+      block.nextConnection.connect(blockChild.previousConnection);
+    }
+    // Set shadow after so we don't create a shadow we delete immediately.
+    if (childBlockInfo.childShadowElement && block.nextConnection) {
+      block.nextConnection.setShadowDom(childBlockInfo.childShadowElement);
+    }
+  }
+};
+
+
+/**
  * Decode an XML block tag and create a block (and possibly sub blocks) on the
  * workspace.
  * @param {!Element} xmlBlock XML block element.
@@ -631,126 +866,19 @@ Blockly.Xml.domToBlockHeadless_ = function(xmlBlock, workspace) {
   var id = xmlBlock.getAttribute('id');
   block = workspace.newBlock(prototypeName, id);
 
-  var blockChild = null;
-  for (var i = 0, xmlChild; (xmlChild = xmlBlock.childNodes[i]); i++) {
-    if (xmlChild.nodeType == Blockly.utils.dom.NodeType.TEXT_NODE) {
-      // Ignore any text at the <block> level.  It's all whitespace anyway.
-      continue;
-    }
-    var input;
+  // Preprocess childNodes so tags can be processed in a consistent order.
+  var xmlChildNameMap = Blockly.Xml.mapSupportedXmlTags_(xmlBlock);
 
-    // Find any enclosed blocks or shadows in this tag.
-    var childBlockElement = null;
-    var childShadowElement = null;
-    for (var j = 0, grandchild; (grandchild = xmlChild.childNodes[j]); j++) {
-      if (grandchild.nodeType == Blockly.utils.dom.NodeType.ELEMENT_NODE) {
-        if (grandchild.nodeName.toLowerCase() == 'block') {
-          childBlockElement = /** @type {!Element} */ (grandchild);
-        } else if (grandchild.nodeName.toLowerCase() == 'shadow') {
-          childShadowElement = /** @type {!Element} */ (grandchild);
-        }
-      }
-    }
+  var shouldCallInitSvg =
+      Blockly.Xml.applyMutationTagNodes_(xmlChildNameMap.mutation, block);
+  Blockly.Xml.applyCommentTagNodes_(xmlChildNameMap.comment, block);
+  Blockly.Xml.applyDataTagNodes_(xmlChildNameMap.data, block);
+  Blockly.Xml.applyFieldTagNodes_(xmlChildNameMap.field, block);
+  Blockly.Xml.applyInputTagNodes_(
+      xmlChildNameMap.input, workspace, block, prototypeName);
+  Blockly.Xml.applyNextTagNodes_(xmlChildNameMap.next, workspace, block);
 
-    var callInitSvg = false;
-    var name = xmlChild.getAttribute('name');
-    var xmlChildElement = /** @type {!Element} */ (xmlChild);
-    switch (xmlChild.nodeName.toLowerCase()) {
-      case 'mutation':
-        // Custom data for an advanced block.
-        if (block.domToMutation) {
-          block.domToMutation(xmlChildElement);
-          if (block.initSvg) {
-            // Mutation may have added some elements that need initializing.
-            callInitSvg = true;
-          }
-        }
-        break;
-      case 'comment':
-        if (!Blockly.Comment) {
-          console.warn('Missing require for Blockly.Comment, ' +
-              'ignoring block comment.');
-          break;
-        }
-        var text = xmlChildElement.textContent;
-        var pinned = xmlChildElement.getAttribute('pinned') == 'true';
-        var width = parseInt(xmlChildElement.getAttribute('w'), 10);
-        var height = parseInt(xmlChildElement.getAttribute('h'), 10);
-
-        block.setCommentText(text);
-        block.commentModel.pinned = pinned;
-        if (!isNaN(width) && !isNaN(height)) {
-          block.commentModel.size = new Blockly.utils.Size(width, height);
-        }
-
-        if (pinned && block.getCommentIcon && !block.isInFlyout) {
-          setTimeout(function() {
-            block.getCommentIcon().setVisible(true);
-          }, 1);
-        }
-        break;
-      case 'data':
-        block.data = xmlChild.textContent;
-        break;
-      case 'title':
-        // Titles were renamed to field in December 2013.
-        // Fall through.
-      case 'field':
-        Blockly.Xml.domToField_(block, name, xmlChildElement);
-        break;
-      case 'value':
-      case 'statement':
-        input = block.getInput(name);
-        if (!input) {
-          console.warn('Ignoring non-existent input ' + name + ' in block ' +
-                       prototypeName);
-          break;
-        }
-        if (childBlockElement) {
-          blockChild = Blockly.Xml.domToBlockHeadless_(childBlockElement,
-              workspace);
-          if (blockChild.outputConnection) {
-            input.connection.connect(blockChild.outputConnection);
-          } else if (blockChild.previousConnection) {
-            input.connection.connect(blockChild.previousConnection);
-          } else {
-            throw TypeError(
-                'Child block does not have output or previous statement.');
-          }
-        }
-        // Set shadow after so we don't create a shadow we delete immediately.
-        if (childShadowElement) {
-          input.connection.setShadowDom(childShadowElement);
-        }
-        break;
-      case 'next':
-        if (childBlockElement) {
-          if (!block.nextConnection) {
-            throw TypeError('Next statement does not exist.');
-          }
-          // If there is more than one XML 'next' tag.
-          if (block.nextConnection.isConnected()) {
-            throw TypeError('Next statement is already connected.');
-          }
-          blockChild = Blockly.Xml.domToBlockHeadless_(childBlockElement,
-              workspace);
-          if (!blockChild.previousConnection) {
-            throw TypeError('Next block does not have previous statement.');
-          }
-          block.nextConnection.connect(blockChild.previousConnection);
-        }
-        // Set shadow after so we don't create a shadow we delete immediately.
-        if (childShadowElement && block.nextConnection) {
-          block.nextConnection.setShadowDom(childShadowElement);
-        }
-        break;
-      default:
-        // Unknown tag; ignore.  Same principle as HTML parsers.
-        console.warn('Ignoring unknown tag: ' + xmlChild.nodeName);
-    }
-  }
-
-  if (callInitSvg) {
+  if (shouldCallInitSvg) {
     // InitSvg needs to be called after variable fields are loaded.
     block.initSvg();
   }

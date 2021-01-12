@@ -593,7 +593,7 @@ suite('Events', function() {
           oldXml: '<shadow xmlns="https://developers.google.com/blockly/xml"' +
               ' type="simple_test_block" id="testBlockId2"></shadow>',
           ids: [thisObj.shadowBlock.id], recordUndo: false})},
-      // TODO(4577) Test serialization of move event coordinate properties.
+      // TODO(#4577) Test serialization of move event coordinate properties.
       {title: 'Block move', class: Blockly.Events.BlockMove,
         getArgs: (thisObj) => [thisObj.block],
         getExpectedJson: (thisObj) => ({type: 'move',
@@ -623,7 +623,7 @@ suite('Events', function() {
         getArgs: (thisObj) => [thisObj.comment],
         getExpectedJson: (thisObj) => ({type: 'comment_delete',
           commentId: thisObj.comment.id})},
-      // TODO(4577) Test serialization of move event coordinate properties.
+      // TODO(#4577) Test serialization of move event coordinate properties.
       {title: 'Comment move', class: Blockly.Events.CommentMove,
         getArgs: (thisObj) => [thisObj.comment],
         getExpectedJson: (thisObj) => ({type: 'comment_move',

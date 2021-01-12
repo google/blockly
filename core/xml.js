@@ -797,9 +797,11 @@ Blockly.Xml.applyInputTagNodes_ = function(xmlChildren, workspace, block,
     }
     var childBlockInfo = Blockly.Xml.findChildBlocks_(xmlChild);
     if (childBlockInfo.childBlockElement) {
+      if (!input.connection) {
+        throw TypeError('Input connection does not exist.');
+      }
       Blockly.Xml.domToBlockHeadless_(childBlockInfo.childBlockElement,
-          workspace, /** @type {!Blockly.Connection} */ (input.connection),
-          false);
+          workspace, input.connection, false);
     }
     // Set shadow after so we don't create a shadow we delete immediately.
     if (childBlockInfo.childShadowElement) {
@@ -829,7 +831,7 @@ Blockly.Xml.applyNextTagNodes_ = function(xmlChildren, workspace, block) {
       }
       // Create child block.
       Blockly.Xml.domToBlockHeadless_(childBlockInfo.childBlockElement,
-          workspace, /** @type {!Blockly.Connection} */ (block.nextConnection),
+          workspace, block.nextConnection,
           true);
     }
     // Set shadow after so we don't create a shadow we delete immediately.

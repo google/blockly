@@ -798,7 +798,8 @@ Blockly.Xml.applyInputTagNodes_ = function(xmlChildren, workspace, block,
     var childBlockInfo = Blockly.Xml.findChildBlocks_(xmlChild);
     if (childBlockInfo.childBlockElement) {
       Blockly.Xml.domToBlockHeadless_(childBlockInfo.childBlockElement,
-          workspace, input.connection, false);
+          workspace, /** @type {!Blockly.Connection} */ (input.connection),
+          false);
     }
     // Set shadow after so we don't create a shadow we delete immediately.
     if (childBlockInfo.childShadowElement) {
@@ -828,7 +829,8 @@ Blockly.Xml.applyNextTagNodes_ = function(xmlChildren, workspace, block) {
       }
       // Create child block.
       Blockly.Xml.domToBlockHeadless_(childBlockInfo.childBlockElement,
-          workspace, block.nextConnection, true);
+          workspace, /** @type {!Blockly.Connection} */ (block.nextConnection),
+          true);
     }
     // Set shadow after so we don't create a shadow we delete immediately.
     if (childBlockInfo.childShadowElement && block.nextConnection) {
@@ -843,7 +845,7 @@ Blockly.Xml.applyNextTagNodes_ = function(xmlChildren, workspace, block) {
  * workspace.
  * @param {!Element} xmlBlock XML block element.
  * @param {!Blockly.Workspace} workspace The workspace.
- * @param {?Blockly.Connection=} parentConnection The parent connection to
+ * @param {!Blockly.Connection=} parentConnection The parent connection to
  *    to connect this block to after instantiating.
  * @param {boolean=} connectedToParentNext Whether the provided parent connection
  *    is a next connection, rather than output or statement.

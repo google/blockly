@@ -137,7 +137,7 @@ Blockly.Events.CommentChange.prototype.toJson = function() {
  */
 Blockly.Events.CommentChange.prototype.fromJson = function(json) {
   Blockly.Events.CommentChange.superClass_.fromJson.call(this, json);
-  this.newContents_ = json['newValue'];
+  this.newContents_ = json['newContents'];
 };
 
 /**

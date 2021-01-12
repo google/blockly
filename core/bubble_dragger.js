@@ -19,7 +19,10 @@ goog.require('Blockly.Events.CommentMove');
 goog.require('Blockly.utils');
 goog.require('Blockly.utils.Coordinate');
 
+goog.requireType('Blockly.BlockDragSurfaceSvg');
+goog.requireType('Blockly.BlockSvg');
 goog.requireType('Blockly.IBubble');
+goog.requireType('Blockly.WorkspaceSvg');
 
 
 /**

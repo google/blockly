@@ -13,11 +13,12 @@
 
 goog.provide('Blockly.ConnectionChecker');
 
+goog.require('Blockly.Connection');
 goog.require('Blockly.constants');
 goog.require('Blockly.registry');
 
-goog.requireType('Blockly.Connection');
 goog.requireType('Blockly.IConnectionChecker');
+goog.requireType('Blockly.RenderedConnection');
 
 
 /**

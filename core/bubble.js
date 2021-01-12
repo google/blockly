@@ -18,10 +18,13 @@ goog.require('Blockly.utils');
 goog.require('Blockly.utils.Coordinate');
 goog.require('Blockly.utils.dom');
 goog.require('Blockly.utils.math');
+goog.require('Blockly.utils.Size');
 goog.require('Blockly.utils.Svg');
 goog.require('Blockly.utils.userAgent');
 goog.require('Blockly.Workspace');
 
+goog.requireType('Blockly.BlockDragSurfaceSvg');
+goog.requireType('Blockly.BlockSvg');
 goog.requireType('Blockly.IBubble');
 goog.requireType('Blockly.utils.Metrics');
 goog.requireType('Blockly.WorkspaceSvg');

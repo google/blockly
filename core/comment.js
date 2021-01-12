@@ -25,6 +25,12 @@ goog.require('Blockly.utils.Svg');
 goog.require('Blockly.utils.userAgent');
 goog.require('Blockly.Warning');
 
+goog.requireType('Blockly.Block');
+goog.requireType('Blockly.BlockSvg');
+goog.requireType('Blockly.utils.Coordinate');
+goog.requireType('Blockly.utils.Size');
+goog.requireType('Blockly.WorkspaceSvg');
+
 
 /**
  * Class for a comment.

@@ -217,6 +217,25 @@ suite('Block JSON initialization', function() {
           ]);
     });
 
+    test.skip('Add last dummy for no_field_prefix_field', function() {
+      this.assertInterpolation(
+          [
+            {
+              'type': 'no_field_prefix_field',
+            }
+          ],
+          [],
+          undefined,
+          [
+            {
+              'type': 'no_field_prefix_field',
+            },
+            {
+              'type': 'input_dummy',
+            }
+          ]);
+    });
+
     test('Set last dummy alignment', function() {
       this.assertInterpolation(
           ['test1', 'test2', 'test3'],

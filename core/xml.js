@@ -843,7 +843,7 @@ Blockly.Xml.applyNextTagNodes_ = function(xmlChildren, workspace, block) {
  * workspace.
  * @param {!Element} xmlBlock XML block element.
  * @param {!Blockly.Workspace} workspace The workspace.
- * @param {!Blockly.Connection=} parentConnection The parent connection to
+ * @param {?Blockly.Connection=} parentConnection The parent connection to
  *    to connect this block to after instantiating.
  * @param {boolean=} connectedToParentNext Whether the provided parent connection
  *    is a next connection, rather than output or statement.

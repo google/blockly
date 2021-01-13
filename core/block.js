@@ -1698,8 +1698,8 @@ Blockly.Block.prototype.validateTokens_ = function(tokens, argsCount) {
  * the end of the elements.
  * @param {!Array<!string|number>} tokens The tokens to interpolate
  * @param {!Array<!Object|string>} args The arguments to insert.
- * @param {string} lastDummyAlign The alignment the added dummy input should
- *     have, if we are required to add one.
+ * @param {string|undefined} lastDummyAlign The alignment the added dummy input
+ *     should have, if we are required to add one.
  * @return {!Array<!Object>} The JSON definitions of field and inputs to add
  *     to the block.
  * @private

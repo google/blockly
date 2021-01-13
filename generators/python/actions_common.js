@@ -39,7 +39,7 @@ Blockly.Python.fable_speak = function (block) {
 
   var code = 'api.fableSpeak(str(' + text + '), "' + lang + '")\n';
 
-  if (croppedText.length && croppedText.length > 250) {
+  if (croppedText.length && croppedText.length > 200) {
     // 666 is a special ID in order to support easily removing the warning later, without clearing OTHER warnings on the block
     block.setWarningText(Blockly.Msg.FABLE_FIELD_WRN_TEXT_TOO_LONG, 666);
   } else {
@@ -60,7 +60,7 @@ Blockly.Python.fable_speak_lang = function (block) {
     croppedText = matchGroups[2] + matchGroups[4];
   }
 
-  if (croppedText.length && croppedText.length > 30) {
+  if (croppedText.length && croppedText.length > 200) {
     // 666 is a special ID in order to support easily removing the warning later, without clearing OTHER warnings on the block
     block.setWarningText(Blockly.Msg.FABLE_FIELD_WRN_TEXT_TOO_LONG, 666);
   } else {

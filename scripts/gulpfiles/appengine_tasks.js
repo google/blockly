@@ -62,7 +62,7 @@ function copyPlaygroundDeps() {
       './node_modules/@blockly/theme-modern/dist/index.js',
       './node_modules/@blockly/block-test/dist/index.js',
   ];
-  return gulp.src(playgroundDeps).pipe(gulp.dest(demoStaticTmpDir));
+  return gulp.src(playgroundDeps, {base: '.'}).pipe(gulp.dest(demoStaticTmpDir));
 }
 
 /**

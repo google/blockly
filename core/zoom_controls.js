@@ -19,6 +19,7 @@ goog.require('Blockly.Touch');
 goog.require('Blockly.utils.dom');
 goog.require('Blockly.utils.Svg');
 
+goog.requireType('Blockly.WorkspaceSvg');
 
 /**
  * Class for a zoom controls.

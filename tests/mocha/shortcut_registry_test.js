@@ -200,14 +200,14 @@ suite('Keyboard Shortcut Registry Test', function() {
     });
     test('Gets keyboard shortcuts from a key code', function() {
       this.registry.keyMap_['keyCode'] = ['shortcutName'];
-      var shortcutNames = this.registry.getKeyboardShortcuts('keyCode');
+      var shortcutNames = this.registry.getShortcutNamesByKeyCode('keyCode');
       chai.assert.equal(shortcutNames[0], 'shortcutName');
     });
     test('Gets keycodes by shortcut name', function() {
       this.registry.keyMap_['keyCode'] = ['shortcutName'];
       this.registry.keyMap_['keyCode1'] = ['shortcutName'];
       var shortcutNames =
-          this.registry.getKeyCodeByShortcutName('shortcutName');
+          this.registry.getKeyCodesByShortcutName('shortcutName');
       chai.assert.lengthOf(shortcutNames, 2);
       chai.assert.equal(shortcutNames[0], 'keyCode');
       chai.assert.equal(shortcutNames[1], 'keyCode1');

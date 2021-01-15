@@ -72,6 +72,12 @@ Blockly.Dart.ORDER_ASSIGNMENT = 16;    // = *= /= ~/= %= += -= <<= >>= &= ^= |=
 Blockly.Dart.ORDER_NONE = 99;          // (...)
 
 /**
+ * Whether the init method has been called.
+ * @type {?boolean}
+ */
+Blockly.Dart.isInitialized = false;
+
+/**
  * Initialise the database of variable names.
  * @param {!Blockly.Workspace} workspace Workspace to generate code from.
  */
@@ -111,6 +117,7 @@ Blockly.Dart.init = function(workspace) {
     Blockly.Dart.definitions_['variables'] =
         'var ' + defvars.join(', ') + ';';
   }
+  this.isInitialized = true;
 };
 
 /**

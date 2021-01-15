@@ -422,6 +422,13 @@ Blockly.Mutator.prototype.workspaceChanged_ = function(e) {
     if (oldMutation != newMutation) {
       Blockly.Events.fire(new Blockly.Events.BlockChange(
           block, 'mutation', null, oldMutation, newMutation));
+      // Ensure that any bump is part of this mutation's event group.
+      var group = Blockly.Events.getGroup();
+      setTimeout(function() {
+        Blockly.Events.setGroup(group);
+        block.bumpNeighbours();
+        Blockly.Events.setGroup(false);
+      }, Blockly.BUMP_DELAY);
     }
 
     // Don't update the bubble until the drag has ended, to avoid moving blocks

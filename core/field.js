@@ -19,7 +19,6 @@ goog.require('Blockly.Events.BlockChange');
 goog.require('Blockly.Gesture');
 goog.require('Blockly.Tooltip');
 goog.require('Blockly.utils');
-goog.require('Blockly.utils.deprecation');
 goog.require('Blockly.utils.dom');
 goog.require('Blockly.utils.Rect');
 goog.require('Blockly.utils.Size');
@@ -534,54 +533,6 @@ Blockly.Field.prototype.getValidator = function() {
 };
 
 /**
- * Validates a change.  Does nothing.  Subclasses may override this.
- * @param {string} text The user's text.
- * @return {string} No change needed.
- * @deprecated May 2019. Override doClassValidation and other relevant 'do'
- *  functions instead.
- */
-Blockly.Field.prototype.classValidator = function(text) {
-  Blockly.utils.deprecation.warn(
-      'Field.prototype.classValidator',
-      'May 2019',
-      'December 2020',
-      'Blockly.Field.prototype.doClassValidation_');
-  return text;
-};
-
-/**
- * Calls the validation function for this field, as well as all the validation
- * function for the field's class and its parents.
- * @param {string} text Proposed text.
- * @return {?string} Revised text, or null if invalid.
- * @deprecated May 2019. setValue now contains all relevant logic.
- */
-Blockly.Field.prototype.callValidator = function(text) {
-  Blockly.utils.deprecation.warn(
-      'Field.prototype.callValidator',
-      'May 2019',
-      'December 2020');
-  var classResult = this.classValidator(text);
-  if (classResult === null) {
-    // Class validator rejects value.  Game over.
-    return null;
-  } else if (classResult !== undefined) {
-    text = classResult;
-  }
-  var userValidator = this.getValidator();
-  if (userValidator) {
-    var userResult = userValidator.call(this, text);
-    if (userResult === null) {
-      // User validator rejects value.  Game over.
-      return null;
-    } else if (userResult !== undefined) {
-      text = userResult;
-    }
-  }
-  return text;
-};
-
-/**
  * Gets the group element for this editable field.
  * Used for measuring the size and for positioning.
  * @return {!SVGGElement} The group element.
@@ -623,22 +574,6 @@ Blockly.Field.prototype.showEditor = function(opt_e) {
   if (this.isClickable()) {
     this.showEditor_(opt_e);
   }
-};
-
-/**
- * Updates the width of the field. Redirects to updateSize_().
- * @deprecated May 2019  Use Blockly.Field.updateSize_() to force an update
- * to the size of the field, or Blockly.utils.dom.getTextWidth() to
- * check the size of the field.
- */
-Blockly.Field.prototype.updateWidth = function() {
-
-  Blockly.utils.deprecation.warn(
-      'Field.prototype.updateWidth',
-      'May 2019',
-      'December 2020',
-      'Blockly.Field.prototype.updateSize_ or Blockly.utils.dom.getTextWidth');
-  this.updateSize_();
 };
 
 /**
@@ -819,20 +754,6 @@ Blockly.Field.prototype.getText = function() {
 };
 
 /**
- * Set the text in this field.  Trigger a rerender of the source block.
- * @param {*} _newText New text.
- * @deprecated 2019 setText should not be used directly. Use setValue instead.
- */
-Blockly.Field.prototype.setText = function(_newText) {
-  Blockly.utils.deprecation.warn(
-      'Field.prototype.setText',
-      'May 2019',
-      'December 2020',
-      'Blockly.Field.prototype.setValue');
-  throw Error('setText method is deprecated');
-};
-
-/**
  * Force a rerender of the block that this field is installed on, which will
  * rerender this field and adjust for any sizing changes.
  * Other fields on the same block will not rerender, because their sizes have
@@ -951,14 +872,11 @@ Blockly.Field.prototype.getValue = function() {
  * @param {*=} opt_newValue The value to be validated.
  * @return {*} The validated value, same as input by default.
  * @protected
- * @suppress {deprecated} Suppress deprecated this.classValidator call.
  */
 Blockly.Field.prototype.doClassValidation_ = function(opt_newValue) {
   if (opt_newValue === null || opt_newValue === undefined) {
     return null;
   }
-  // For backwards compatibility.
-  opt_newValue = this.classValidator(/** @type {string} */ (opt_newValue));
   return opt_newValue;
 };
 

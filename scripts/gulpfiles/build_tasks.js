@@ -20,8 +20,8 @@ var through2 = require('through2');
 
 var closureCompiler = require('google-closure-compiler').gulp();
 var closureDeps = require('google-closure-deps');
-var packageJson = require('../../package.json');
 var argv = require('yargs').argv;
+var { getPackageJson } = require('./helper_tasks');
 
 
 ////////////////////////////////////////////////////////////
@@ -70,12 +70,12 @@ var JSCOMP_ERROR = [
   'globalThis',
   'invalidCasts',
   'misplacedTypeAnnotation',
-  'missingGetCssName',
   // 'missingOverride',
   'missingPolyfill',
   'missingProperties',
   'missingProvide',
-  'missingRequire',
+  // 'missingRequire', As of Jan 8 2021, this enables the strict require check.
+  // Disabling this until we have fixed all the require issues. 
   'missingReturn',
   // 'missingSourcesWarnings',
   'moduleLoad',
@@ -87,6 +87,7 @@ var JSCOMP_ERROR = [
   // 'strictMissingProperties',
   'strictModuleDepCheck',
   // 'strictPrimitiveOperators',
+  // 'stricterMissingRequire',
   'suspiciousCode',
   'typeInvalidation',
   'undefinedNames',
@@ -184,6 +185,7 @@ return ${namespace};
  *     blockly_compressed.js
  */
 function buildCompressed() {
+  var packageJson = getPackageJson();
   const defines = 'Blockly.VERSION="' + packageJson.version + '"';
   return gulp.src(maybeAddClosureLibrary(['core/**/**/*.js']), {base: './'})
     .pipe(stripApacheLicense())
@@ -391,7 +393,9 @@ return gulp.src(maybeAddClosureLibrary(['core/**/**/*.js']))
       dep.setClosurePath(closurePath);
     }
 
-    const addDependency = closureDeps.depFile.getDepFileText(closurePath, deps);
+    const addDependency = closureDeps.depFile
+        .getDepFileText(closurePath, deps)
+        .replace(/\\/g, '\/');
 
     const requires = `goog.addDependency("base.js", [], []);
 

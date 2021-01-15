@@ -29,6 +29,176 @@ suite('Flyout', function() {
     sharedTestTeardown.call(this);
   });
 
+  suite('position', function() {
+    suite('vertical flyout', function() {
+      suite('simple flyout', function() {
+        setup(function() {
+          this.flyout = this.workspace.getFlyout();
+        });
+        test('y is always 0', function() {
+          chai.assert.equal(this.flyout.getY(), 0, 'y coordinate in vertical flyout should be 0');
+        });
+        test('x is right of workspace if flyout at right', function() {
+          sinon.stub(this.flyout.targetWorkspace, 'getMetrics').returns({
+            viewWidth: 100,
+          });
+          this.flyout.targetWorkspace.toolboxPosition = Blockly.TOOLBOX_AT_RIGHT;
+          this.flyout.toolboxPosition_ = Blockly.TOOLBOX_AT_RIGHT;
+          chai.assert.equal(this.flyout.getX(), 100, 'x should be right of workspace');
+        });
+        test('x is 0 if flyout at left', function() {
+          this.flyout.targetWorkspace.toolboxPosition = Blockly.TOOLBOX_AT_LEFT;
+          this.flyout.toolboxPosition_ = Blockly.TOOLBOX_AT_LEFT;
+          chai.assert.equal(this.flyout.getX(), 0, 'x should be 0 if the flyout is on the left');
+        });
+      });
+      suite('toolbox flyout', function() {
+        setup(function() {
+          var toolbox = document.getElementById('toolbox-categories');
+          this.workspace = Blockly.inject('blocklyDiv',
+              {
+                toolbox: toolbox
+              });
+          this.flyout = this.workspace.getToolbox().getFlyout();
+        });
+        teardown(function() {
+          workspaceTeardown.call(this, this.workspace);
+        });
+        test('x is aligned with toolbox at left', function() {
+          sinon.stub(this.flyout.targetWorkspace, 'getMetrics').returns({
+            toolboxWidth: 20,
+          });
+          this.flyout.targetWorkspace.toolboxPosition = Blockly.TOOLBOX_AT_LEFT;
+          this.flyout.toolboxPosition_ = Blockly.TOOLBOX_AT_LEFT;
+          chai.assert.equal(this.flyout.getX(), 20, 'x should be aligned with toolbox');
+        });
+        test('x is aligned with toolbox at right', function() {
+          sinon.stub(this.flyout.targetWorkspace, 'getMetrics').returns({
+            toolboxWidth: 20,
+            viewWidth: 100,
+          });
+          this.flyout.width_ = 10;
+          this.flyout.targetWorkspace.toolboxPosition = Blockly.TOOLBOX_AT_RIGHT;
+          this.flyout.toolboxPosition_ = Blockly.TOOLBOX_AT_RIGHT;
+          chai.assert.equal(this.flyout.getX(), 90,'x + width should be aligned with toolbox');
+        });
+      });
+      // These tests simulate a trashcan flyout, i.e. the flyout under test is on the
+      // opposite side of the workspace toolbox setting.
+      suite('trashcan flyout', function() {
+        setup(function() {
+          this.flyout = this.workspace.getFlyout();
+        });
+        test('x is 0 if trashcan on left', function() {
+          sinon.stub(this.flyout.targetWorkspace, 'getMetrics').returns({
+            viewWidth: 100,
+          });
+          this.flyout.targetWorkspace.toolboxPosition = Blockly.TOOLBOX_AT_RIGHT;
+          this.flyout.toolboxPosition_ = Blockly.TOOLBOX_AT_LEFT;
+          chai.assert.equal(this.flyout.getX(), 0, 'x should be aligned with left edge');
+        });
+        test('trashcan on right covers right edge of workspace', function() {
+          this.flyout.width_ = 20;
+          sinon.stub(this.flyout.targetWorkspace, 'getMetrics').returns({
+            viewWidth: 100,
+            absoluteLeft: 10,
+          });
+          this.flyout.targetWorkspace.toolboxPosition = Blockly.TOOLBOX_AT_LEFT;
+          this.flyout.toolboxPosition_ = Blockly.TOOLBOX_AT_RIGHT;
+          chai.assert.equal(this.flyout.getX(), 90, 'x + width should be aligned with right edge');
+        });
+      });
+    });
+
+    suite('horizontal flyout', function() {
+      setup(function() {
+        this.workspace = Blockly.inject('blocklyDiv',
+            {
+              toolbox: this.toolboxXml,
+              horizontalLayout: true,
+            });
+      });
+      teardown(function() {
+        workspaceTeardown.call(this, this.workspace);
+      });
+      suite('simple flyout', function() {
+        setup(function() {
+          this.flyout = this.workspace.getFlyout();
+        });
+        test('x is always 0', function() {
+          chai.assert.equal(this.flyout.getX(), 0, 'x coordinate in horizontal flyout should be 0');
+        });
+        test('y is 0 if flyout at top', function() {
+          this.flyout.targetWorkspace.toolboxPosition = Blockly.TOOLBOX_AT_TOP;
+          this.flyout.toolboxPosition_ = Blockly.TOOLBOX_AT_TOP;
+          chai.assert.equal(this.flyout.getY(), 0, 'y should be 0 if flyout is at the top');
+        });
+        test('y is below workspace if flyout at bottom', function() {
+          this.flyout.targetWorkspace.toolboxPosition = Blockly.TOOLBOX_AT_BOTTOM;
+          this.flyout.toolboxPosition_ = Blockly.TOOLBOX_AT_BOTTOM;
+          sinon.stub(this.flyout.targetWorkspace, 'getMetrics').returns({
+            viewHeight: 50,
+          });
+          chai.assert.equal(this.flyout.getY(), 50, 'y should be below the workspace');
+        });
+      });
+      suite('toolbox flyout', function() {
+        setup(function() {
+          var toolbox = document.getElementById('toolbox-categories');
+          this.workspace = Blockly.inject('blocklyDiv',
+              {
+                toolbox: toolbox,
+                horizontalLayout: true,
+              });
+          this.flyout = this.workspace.getToolbox().getFlyout();
+        });
+        teardown(function() {
+          workspaceTeardown.call(this, this.workspace);
+        });
+        test('y is aligned with toolbox at top', function() {
+          sinon.stub(this.flyout.targetWorkspace, 'getMetrics').returns({
+            toolboxHeight: 20,
+          });
+          this.flyout.targetWorkspace.toolboxPosition = Blockly.TOOLBOX_AT_TOP;
+          this.flyout.toolboxPosition_ = Blockly.TOOLBOX_AT_TOP;
+          chai.assert.equal(this.flyout.getY(), 20, 'y should be aligned with toolbox');
+        });
+        test('y is aligned with toolbox at bottom', function() {
+          sinon.stub(this.flyout.targetWorkspace, 'getMetrics').returns({
+            toolboxHeight: 20,
+            viewHeight: 100,
+          });
+          this.flyout.height_ = 30;
+          this.flyout.targetWorkspace.toolboxPosition = Blockly.TOOLBOX_AT_BOTTOM;
+          this.flyout.toolboxPosition_ = Blockly.TOOLBOX_AT_BOTTOM;
+          chai.assert.equal(this.flyout.getY(), 70, 'y + height should be aligned with toolbox');
+        });
+      });
+      // These tests simulate a trashcan flyout, i.e. the flyout under test is on the
+      // opposite side of the workspace toolbox setting.
+      suite('trashcan flyout', function() {
+        setup(function() {
+          this.flyout = this.workspace.getFlyout();
+        });
+        test('y is 0 if trashcan at top', function() {
+          this.flyout.targetWorkspace.toolboxPosition = Blockly.TOOLBOX_AT_BOTTOM;
+          this.flyout.toolboxPosition_ = Blockly.TOOLBOX_AT_TOP;
+          chai.assert.equal(this.flyout.getY(), 0, 'y should be aligned with top');
+        });
+        test('trashcan on bottom covers bottom of workspace', function() {
+          this.flyout.targetWorkspace.toolboxPosition = Blockly.TOOLBOX_AT_TOP;
+          this.flyout.toolboxPosition_ = Blockly.TOOLBOX_AT_BOTTOM;
+          sinon.stub(this.flyout.targetWorkspace, 'getMetrics').returns({
+            viewHeight: 50,
+            absoluteTop: 10,
+          });
+          this.flyout.height_ = 20;
+          chai.assert.equal(this.flyout.getY(), 40, 'y + height should be aligned with bottom');
+        });
+      });
+    });
+  });
+
   suite('createFlyoutInfo_', function() {
     setup(function() {
       this.simpleToolboxJSON = getSimpleJSON();

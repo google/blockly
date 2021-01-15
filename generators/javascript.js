@@ -114,6 +114,12 @@ Blockly.JavaScript.ORDER_OVERRIDES = [
 ];
 
 /**
+ * Whether the init method has been called.
+ * @type {?boolean}
+ */
+Blockly.JavaScript.isInitialized = false;
+
+/**
  * Initialise the database of variable names.
  * @param {!Blockly.Workspace} workspace Workspace to generate code from.
  */
@@ -153,6 +159,7 @@ Blockly.JavaScript.init = function(workspace) {
     Blockly.JavaScript.definitions_['variables'] =
         'var ' + defvars.join(', ') + ';';
   }
+  this.isInitialized = true;
 };
 
 /**

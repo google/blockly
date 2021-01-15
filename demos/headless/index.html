@@ -103,7 +103,7 @@
       // Parse the XML into a tree.
       var xmlText = document.getElementById('xml_input').value;
       try {
-        var xml = Blockly.Xml.textToDom(xmlText)
+        var xml = Blockly.Xml.textToDom(xmlText);
       } catch (e) {
         alert(e);
         return;

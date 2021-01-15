@@ -11,7 +11,6 @@
 var gulp = require('gulp');
 var execSync = require('child_process').execSync;
 
-var typings = require('./typings');
 var buildTasks = require('./build_tasks');
 
 const upstream_url = "https://github.com/google/blockly.git";
@@ -63,32 +62,6 @@ function checkoutBranch(branchName) {
    { stdio: 'inherit' });
 }
 
-// Switch to a new rebuild branch.
-const preCompile = gulp.series(
-  syncDevelop(),
-  function(done) {
-    var branchName = getRebuildBranchName();
-    console.log('make-rebuild-branch: creating branch ' + branchName);
-    execSync('git checkout -b ' + branchName, { stdio: 'inherit' });
-    done();
-  }
-);
-
-// Build all files, types, and push to rebuild branch.
-const postCompile = gulp.series(
-  buildTasks.build,
-  typings.typings,
-  function(done) {
-    console.log('push-rebuild-branch: committing rebuild');
-    execSync('git commit -am "Rebuild"', { stdio: 'inherit' });
-    var branchName = getRebuildBranchName();
-    execSync('git push origin ' + branchName, { stdio: 'inherit' });
-    console.log('Branch ' + branchName + ' pushed to GitHub.');
-    console.log('Next step: create a pull request against develop.');
-    done();
-  }
-);
-
 // Create and push an RC branch.
 // Note that this pushes to google/blockly.
 const createRC = gulp.series(
@@ -102,18 +75,38 @@ const createRC = gulp.series(
   }
 );
 
+// Create the rebuild branch.
+function createRebuildBranch(done) {
+  var branchName = getRebuildBranchName();
+  console.log('make-rebuild-branch: creating branch ' + branchName);
+  execSync('git checkout -b ' + branchName, { stdio: 'inherit' });
+  done();
+}
+
+// Push the rebuild branch to origin.
+function pushRebuildBranch(done) {
+  console.log('push-rebuild-branch: committing rebuild');
+  execSync('git commit -am "Rebuild"', { stdio: 'inherit' });
+  var branchName = getRebuildBranchName();
+  execSync('git push origin ' + branchName, { stdio: 'inherit' });
+  console.log('Branch ' + branchName + ' pushed to GitHub.');
+  console.log('Next step: create a pull request against develop.');
+  done();
+}
+
 // Update github pages with what is currently in develop.
 const updateGithubPages = gulp.series(
-  syncBranch('gh-pages'),
   function(done) {
-    execSync('git pull ' + upstream_url + ' develop', { stdio: 'inherit' });
+    execSync('git stash save -m "Stash for sync"', { stdio: 'inherit' });
+    execSync('git checkout gh-pages || git checkout -b gh-pages', { stdio: 'inherit' });
+    execSync('git fetch upstream', { stdio: 'inherit' });
+    execSync('git reset --hard upstream/develop', { stdio: 'inherit' });
     done();
   },
   buildTasks.build,
   function(done) {
     execSync('git commit -am "Rebuild"', { stdio: 'inherit' });
-    execSync('git push ' + upstream_url + ' gh-pages', { stdio: 'inherit' });
-    execSync('git push origin gh-pages', { stdio: 'inherit' });
+    execSync('git push ' + upstream_url + ' gh-pages --force', { stdio: 'inherit' });
     done();
   }
 );
@@ -122,7 +115,7 @@ module.exports = {
   syncDevelop: syncDevelop,
   syncMaster: syncMaster,
   createRC: createRC,
-  preCompile: preCompile,
-  postCompile: postCompile,
-  updateGithubPages: updateGithubPages
+  updateGithubPages: updateGithubPages,
+  createRebuildBranch: createRebuildBranch,
+  pushRebuildBranch: pushRebuildBranch
 }

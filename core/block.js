@@ -29,10 +29,17 @@ goog.require('Blockly.utils');
 goog.require('Blockly.utils.deprecation');
 goog.require('Blockly.utils.Coordinate');
 goog.require('Blockly.utils.object');
+goog.require('Blockly.utils.Size');
 goog.require('Blockly.utils.string');
 goog.require('Blockly.Workspace');
 
+goog.requireType('Blockly.Comment');
+goog.requireType('Blockly.Events.Abstract');
+goog.requireType('Blockly.Field');
 goog.requireType('Blockly.IASTNodeLocation');
+goog.requireType('Blockly.Mutator');
+goog.requireType('Blockly.utils.Size');
+goog.requireType('Blockly.VariableModel');
 
 
 /**
@@ -579,8 +586,7 @@ Blockly.Block.prototype.lastConnectionInStack = function() {
  * connected should not coincidentally line up on screen.
  */
 Blockly.Block.prototype.bumpNeighbours = function() {
-  console.warn('Not expected to reach Block.bumpNeighbours function. ' +
-      'BlockSvg.bumpNeighbours was expected to be called instead.');
+  // noop.
 };
 
 /**
@@ -839,7 +845,6 @@ Blockly.Block.prototype.setShadow = function(shadow) {
 /**
  * Get whether this block is an insertion marker block or not.
  * @return {boolean} True if an insertion marker.
- * @package
  */
 Blockly.Block.prototype.isInsertionMarker = function() {
   return this.isInsertionMarker_;

@@ -18,8 +18,10 @@ goog.require('Blockly.Events.BlockMove');
 goog.require('Blockly.utils.deprecation');
 goog.require('Blockly.Xml');
 
+goog.requireType('Blockly.Block');
 goog.requireType('Blockly.IASTNodeLocationWithBlock');
 goog.requireType('Blockly.IConnectionChecker');
+goog.requireType('Blockly.Input');
 
 
 /**

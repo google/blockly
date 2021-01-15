@@ -12,6 +12,7 @@
 
 goog.provide('Blockly.CollapsibleToolboxCategory');
 
+goog.require('Bockly.ICollapsibleToolboxItem');
 goog.require('Blockly.registry');
 goog.require('Blockly.ToolboxCategory');
 goog.require('Blockly.ToolboxSeparator');

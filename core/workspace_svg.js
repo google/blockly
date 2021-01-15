@@ -16,6 +16,7 @@ goog.require('Blockly.BlockSvg');
 goog.require('Blockly.blockRendering');
 goog.require('Blockly.ConnectionDB');
 goog.require('Blockly.constants');
+goog.require('Blockly.ContextMenu');
 goog.require('Blockly.ContextMenuRegistry');
 goog.require('Blockly.Events');
 goog.require('Blockly.Events.BlockCreate');
@@ -36,6 +37,7 @@ goog.require('Blockly.utils.dom');
 goog.require('Blockly.utils.Metrics');
 goog.require('Blockly.utils.object');
 goog.require('Blockly.utils.Rect');
+goog.require('Blockly.utils.Size');
 goog.require('Blockly.utils.Svg');
 goog.require('Blockly.utils.toolbox');
 goog.require('Blockly.Workspace');
@@ -44,9 +46,15 @@ goog.require('Blockly.WorkspaceDragSurfaceSvg');
 goog.require('Blockly.Xml');
 
 goog.requireType('Blockly.blockRendering.Renderer');
+goog.requireType('Blockly.Block');
+goog.requireType('Blockly.BlockDragSurfaceSvg');
+goog.requireType('Blockly.FlyoutButton');
 goog.requireType('Blockly.IASTNodeLocationSvg');
 goog.requireType('Blockly.IBoundedElement');
 goog.requireType('Blockly.IFlyout');
+goog.requireType('Blockly.IToolbox');
+goog.requireType('Blockly.RenderedConnection');
+goog.requireType('Blockly.VariableModel');
 
 
 /**

@@ -12,15 +12,20 @@
 
 goog.provide('Blockly.Workspace');
 
-goog.require('Blockly.ConnectionChecker');
 goog.require('Blockly.Events');
+goog.require('Blockly.IASTNodeLocation');
 goog.require('Blockly.Options');
+goog.require('Blockly.registry');
 goog.require('Blockly.utils');
 goog.require('Blockly.utils.math');
 goog.require('Blockly.VariableMap');
 
-goog.requireType('Blockly.IASTNodeLocation');
+goog.requireType('Blockly.Block');
+goog.requireType('Blockly.ConnectionDB');
+goog.requireType('Blockly.Events.Abstract');
 goog.requireType('Blockly.IConnectionChecker');
+goog.requireType('Blockly.VariableModel');
+goog.requireType('Blockly.WorkspaceComment');
 
 
 /**

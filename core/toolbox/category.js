@@ -12,9 +12,12 @@
 
 goog.provide('Blockly.ToolboxCategory');
 
+goog.require('Blockly.Css');
+goog.require('Blockly.ISelectableToolboxItem');
 goog.require('Blockly.registry');
 goog.require('Blockly.utils');
 goog.require('Blockly.utils.aria');
+goog.require('Blockly.utils.colour');
 goog.require('Blockly.utils.dom');
 goog.require('Blockly.utils.object');
 goog.require('Blockly.utils.toolbox');

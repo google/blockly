@@ -18,6 +18,8 @@ goog.require('Blockly.utils.dom');
 goog.require('Blockly.utils.KeyCodes');
 goog.require('Blockly.utils.style');
 
+goog.requireType('Blockly.utils.Size');
+
 
 /**
  * A basic menu class.

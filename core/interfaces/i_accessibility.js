@@ -17,6 +17,7 @@ goog.provide('Blockly.IASTNodeLocationWithBlock');
 goog.provide('Blockly.IKeyboardAccessible');
 goog.requireType('Blockly.ShortcutRegistry');
 
+
 /**
  * An AST node location interface.
  * @interface
@@ -66,7 +67,8 @@ Blockly.IKeyboardAccessible = function() {};
 
 /**
  * Handles the given keyboard shortcut.
- * @param {!Blockly.ShortcutRegistry.KeyboardShortcut} shortcut The shortcut to be handled.
+ * @param {!Blockly.ShortcutRegistry.KeyboardShortcut} shortcut The shortcut to
+ *     be handled.
  * @return {boolean} True if the shortcut has been handled, false otherwise.
  */
 Blockly.IKeyboardAccessible.prototype.onShortcut;

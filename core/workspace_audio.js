@@ -18,6 +18,8 @@ goog.require('Blockly.utils');
 goog.require('Blockly.utils.global');
 goog.require('Blockly.utils.userAgent');
 
+goog.requireType('Blockly.WorkspaceSvg');
+
 
 /**
  * Class for loading, storing, and playing audio for a workspace.

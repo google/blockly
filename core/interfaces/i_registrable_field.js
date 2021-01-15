@@ -15,6 +15,7 @@ goog.provide('Blockly.IRegistrableField');
 
 goog.requireType('Blockly.Field');
 
+
 /**
  * A registrable field.
  * Note: We are not using an interface here as we are interested in defining the

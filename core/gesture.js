@@ -575,7 +575,7 @@ Blockly.Gesture.prototype.handleUp = function(e) {
   } else if (this.isBlockClick_()) {
     this.doBlockClick_();
   } else if (this.isWorkspaceClick_()) {
-    this.doWorkspaceClick_(e);
+    this.doWorkspaceClick_();
   }
 
   e.preventDefault();

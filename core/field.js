@@ -46,7 +46,7 @@ goog.requireType('Blockly.ShortcutRegistry');
  * @constructor
  * @implements {Blockly.IASTNodeLocationSvg}
  * @implements {Blockly.IASTNodeLocationWithBlock}
- * @implements {Blockly.IBlocklyActionable}
+ * @implements {Blockly.IKeyboardAccessible}
  * @implements {Blockly.IRegistrable}
  */
 Blockly.Field = function(value, opt_validator, opt_config) {

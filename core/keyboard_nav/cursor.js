@@ -40,7 +40,7 @@ Blockly.utils.object.inherits(Blockly.Cursor, Blockly.Marker);
  * Find the next connection, field, or block.
  * @return {Blockly.ASTNode} The next element, or null if the current node is
  *     not set or there is no next value.
- * @protected
+ * @public
  */
 Blockly.Cursor.prototype.next = function() {
   var curNode = this.getCurNode();
@@ -65,7 +65,7 @@ Blockly.Cursor.prototype.next = function() {
  * Find the in connection or field.
  * @return {Blockly.ASTNode} The in element, or null if the current node is
  *     not set or there is no in value.
- * @protected
+ * @public
  */
 Blockly.Cursor.prototype.in = function() {
   var curNode = this.getCurNode();
@@ -90,7 +90,7 @@ Blockly.Cursor.prototype.in = function() {
  * Find the previous connection, field, or block.
  * @return {Blockly.ASTNode} The previous element, or null if the current node
  *     is not set or there is no previous value.
- * @protected
+ * @public
  */
 Blockly.Cursor.prototype.prev = function() {
   var curNode = this.getCurNode();
@@ -115,7 +115,7 @@ Blockly.Cursor.prototype.prev = function() {
  * Find the out connection, field, or block.
  * @return {Blockly.ASTNode} The out element, or null if the current node is
  *     not set or there is no out value.
- * @protected
+ * @public
  */
 Blockly.Cursor.prototype.out = function() {
   var curNode = this.getCurNode();

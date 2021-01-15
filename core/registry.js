@@ -82,9 +82,6 @@ Blockly.registry.Type.THEME = new Blockly.registry.Type('theme');
 /** @type {!Blockly.registry.Type<Blockly.ToolboxItem>} */
 Blockly.registry.Type.TOOLBOX_ITEM = new Blockly.registry.Type('toolboxItem');
 
-/** @type {!Blockly.registry.Type<Blockly.Cursor>} */
-Blockly.registry.Type.CURSOR = new Blockly.registry.Type('cursor');
-
 /** @type {!Blockly.registry.Type<Blockly.IFlyout>} */
 Blockly.registry.Type.FLYOUTS_VERTICAL_TOOLBOX =
     new Blockly.registry.Type('flyoutsVerticalToolbox');

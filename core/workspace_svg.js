@@ -788,10 +788,7 @@ Blockly.WorkspaceSvg.prototype.createDom = function(opt_backgroundClass) {
   }
   this.recordDeleteAreas();
 
-  var CursorClass = Blockly.registry.getClassFromOptions(
-      Blockly.registry.Type.CURSOR, this.options);
-
-  this.markerManager_.setCursor(new CursorClass());
+  this.markerManager_.setCursor(new Blockly.Cursor());
 
   this.renderer_.createDom(this.svgGroup_, this.getTheme());
   return this.svgGroup_;

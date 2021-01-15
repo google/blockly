@@ -54,6 +54,18 @@ function copyAppengineSrc() {
 }
 
 /**
+ * Copies playground deps into deploy directory.
+ */
+function copyPlaygroundDeps() {
+  const playgroundDeps = [
+      './node_modules/@blockly/dev-tools/dist/index.js',
+      './node_modules/@blockly/theme-modern/dist/index.js',
+      './node_modules/@blockly/block-test/dist/index.js',
+  ];
+  return gulp.src(playgroundDeps).pipe(gulp.dest(demoStaticTmpDir));
+}
+
+/**
  * Deploys files from tmp directory to appengine to version based on the version
  * specified in package.json and then cleans the tmp directory.
  */
@@ -82,6 +94,7 @@ const deployDemos = gulp.series(
     prepareDeployDir,
     copyStaticSrc,
     copyAppengineSrc,
+    copyPlaygroundDeps,
     deployAndClean
 );
 

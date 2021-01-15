@@ -1656,7 +1656,8 @@ Blockly.BlockSvg.prototype.updateMarkers_ = function() {
     this.workspace.getCursor().draw();
   }
   if (this.workspace.keyboardAccessibilityMode && this.pathObject.markerSvg) {
-    this.workspace.getMarker('local_marker_1').draw();
+    // TODO(#4592): Update all markers on the block.
+    this.workspace.getMarker(Blockly.MarkerManager.LOCAL_MARKER).draw();
   }
 };
 

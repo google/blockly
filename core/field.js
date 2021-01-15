@@ -1077,7 +1077,7 @@ Blockly.Field.prototype.updateMarkers_ = function() {
     workspace.getCursor().draw();
   }
   if (workspace.keyboardAccessibilityMode && this.markerSvg_) {
-    // TODO: this should not be hard coded.
-    workspace.getMarker('local_marker_1').draw();
+    // TODO(#4592): Update all markers on the field.
+    workspace.getMarker(Blockly.MarkerManager.LOCAL_MARKER).draw();
   }
 };

@@ -21,6 +21,9 @@ goog.require('Blockly');
 // configuration must be false, and no blocks may be loaded from XML which
 // define comments.
 goog.require('Blockly.Comment');
+// The default connection checker. You could implement your own and use it
+// through the registry.
+goog.require('Blockly.ConnectionChecker');
 // One of these two will almost certainly be needed (usually VerticalFlyout).
 goog.require('Blockly.HorizontalFlyout');
 goog.require('Blockly.VerticalFlyout');

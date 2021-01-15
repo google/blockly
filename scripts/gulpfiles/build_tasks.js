@@ -53,34 +53,18 @@ function stripApacheLicense() {
  * https://github.com/google/closure-compiler/blob/master/src/com/google/javascript/jscomp/DiagnosticGroups.java#L113
  */
 var JSCOMP_ERROR = [
-  'accessControls',
-  'checkPrototypalTypes',
-  'checkRegExp',
-  'checkTypes',
-  'checkVars',
-  'conformanceViolations',
-  'const',
-  'constantProperty',
-  'deprecated',
-  'deprecatedAnnotations',
-  'duplicateMessage',
-  'es5Strict',
-  'externsValidation',
-  'functionParams',
-  'globalThis',
-  'invalidCasts',
+  'accessControls', 'checkPrototypalTypes', 'checkRegExp', 'checkTypes',
+  'checkVars', 'conformanceViolations', 'const', 'constantProperty',
+  'deprecated', 'deprecatedAnnotations', 'duplicateMessage', 'es5Strict',
+  'externsValidation', 'functionParams', 'globalThis', 'invalidCasts',
   'misplacedTypeAnnotation',
   // 'missingOverride',
-  'missingPolyfill',
-  'missingProperties',
-  'missingProvide',
-  // 'missingRequire', As of Jan 8 2021, this enables the strict require check.
-  // Disabling this until we have fixed all the require issues. 
+  'missingPolyfill', 'missingProperties', 'missingProvide',
+  // 'missingRequire',  // As of Jan 8 2021, this enables the strict require
+  // check. Disabling this until we have fixed all the require issues.
   'missingReturn',
   // 'missingSourcesWarnings',
-  'moduleLoad',
-  'msgDescriptions',
-  'nonStandardJsDocs',
+  'moduleLoad', 'msgDescriptions', 'nonStandardJsDocs',
   // 'polymer',
   // 'reportUnknownTypes',
   // 'strictCheckTypes',
@@ -88,17 +72,9 @@ var JSCOMP_ERROR = [
   'strictModuleDepCheck',
   // 'strictPrimitiveOperators',
   // 'stricterMissingRequire',
-  'suspiciousCode',
-  'typeInvalidation',
-  'undefinedNames',
-  'undefinedVars',
-  'underscore',
-  'unknownDefines',
-  'unusedLocalVariables',
-  'unusedPrivateMembers',
-  'uselessCode',
-  'untranspilableFeatures',
-  'visibility'
+  'suspiciousCode', 'typeInvalidation', 'undefinedNames', 'undefinedVars',
+  'underscore', 'unknownDefines', 'unusedLocalVariables',
+  'unusedPrivateMembers', 'uselessCode', 'untranspilableFeatures', 'visibility'
 ];
 
 /**

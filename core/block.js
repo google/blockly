@@ -1743,7 +1743,7 @@ Blockly.Block.prototype.interpolateArguments_ =
  * the 'alt' property of the json definition (if it exists).
  * @param {{alt:(string|undefined)}} element The element to try to turn into a
  *     field.
- * @return {!Blockly.Field|null} The field defined by the JSON, or null if one
+ * @return {?Blockly.Field} The field defined by the JSON, or null if one
  *     couldn't be created.
  * @private
  */
@@ -1765,7 +1765,7 @@ Blockly.Block.prototype.fieldFromJson_ = function(element) {
  * @param {!Object} element The JSON to turn into an input.
  * @param {string} warningPrefix The prefix to add to warnings to help the
  *     developer debug.
- * @return {!Blockly.Input|null} The input that has been created, or null if one
+ * @return {?Blockly.Input} The input that has been created, or null if one
  *     could not be created for some reason (should never happen).
  * @private
  */
@@ -1813,7 +1813,7 @@ Blockly.Block.prototype.inputFromJson_ = function(element, warningPrefix) {
  * Turns a string into the JSON definition of a label field. If the string
  * becomes an empty string when trimmed, this returns null.
  * @param {string} str String to turn into the JSON definition of a label field.
- * @return {null|{text: *, type: string}} The JSON definition or null.
+ * @return {?{text: string, type: string}} The JSON definition or null.
  * @private
  */
 Blockly.Block.prototype.stringToFieldJson_ = function(str) {

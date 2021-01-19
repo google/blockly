@@ -33,7 +33,7 @@ Blockly.utils.object.inherits(Blockly.BasicCursor, Blockly.Cursor);
  * Name used for registering a basic cursor.
  * @const {string}
  */
-Blockly.BasicCursor.registrationName = 'BasicCursor';
+Blockly.BasicCursor.registrationName = 'basicCursor';
 
 /**
  * Find the next node in the pre order traversal.

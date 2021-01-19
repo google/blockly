@@ -30,6 +30,12 @@ Blockly.BasicCursor = function() {
 Blockly.utils.object.inherits(Blockly.BasicCursor, Blockly.Cursor);
 
 /**
+ * Name used for registering a basic cursor.
+ * @const {string}
+ */
+Blockly.BasicCursor.registrationName = 'BasicCursor';
+
+/**
  * Find the next node in the pre order traversal.
  * @return {Blockly.ASTNode} The next node, or null if the current node is
  *     not set or there is no next value.
@@ -204,5 +210,8 @@ Blockly.BasicCursor.prototype.getRightMostChild_ = function(node) {
     newNode = newNode.next();
   }
   return this.getRightMostChild_(newNode);
-
 };
+
+Blockly.registry.register(
+    Blockly.registry.Type.CURSOR, Blockly.BasicCursor.registrationName,
+    Blockly.BasicCursor);

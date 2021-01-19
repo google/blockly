@@ -64,6 +64,9 @@ Blockly.registry.Type.prototype.toString = function() {
 Blockly.registry.Type.CONNECTION_CHECKER =
     new Blockly.registry.Type('connectionChecker');
 
+/** @type {!Blockly.registry.Type<Blockly.Cursor>} */
+Blockly.registry.Type.CURSOR = new Blockly.registry.Type('cursor');
+
 /** @type {!Blockly.registry.Type<Blockly.Events.Abstract>} */
 Blockly.registry.Type.EVENT = new Blockly.registry.Type('event');
 

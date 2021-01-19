@@ -21,7 +21,6 @@ goog.require('Blockly.constants');
 goog.require('Blockly.Events');
 goog.require('Blockly.Events.Click');
 goog.require('Blockly.FlyoutDragger');
-goog.require('Blockly.navigation');
 goog.require('Blockly.Tooltip');
 goog.require('Blockly.Touch');
 goog.require('Blockly.utils');
@@ -488,13 +487,7 @@ Blockly.Gesture.prototype.doStart = function(e) {
   Blockly.Tooltip.block();
 
   if (this.targetBlock_) {
-    if (!this.targetBlock_.isInFlyout && e.shiftKey &&
-        this.targetBlock_.workspace.keyboardAccessibilityMode) {
-      this.creatorWorkspace_.getCursor().setCurNode(
-          Blockly.ASTNode.createTopNode(this.targetBlock_));
-    } else {
-      this.targetBlock_.select();
-    }
+    this.targetBlock_.select();
   }
 
   if (Blockly.utils.isRightButton(e)) {
@@ -582,7 +575,7 @@ Blockly.Gesture.prototype.handleUp = function(e) {
   } else if (this.isBlockClick_()) {
     this.doBlockClick_();
   } else if (this.isWorkspaceClick_()) {
-    this.doWorkspaceClick_(e);
+    this.doWorkspaceClick_();
   }
 
   e.preventDefault();
@@ -654,9 +647,6 @@ Blockly.Gesture.prototype.handleWsStart = function(e, ws) {
   this.setStartWorkspace_(ws);
   this.mostRecentEvent_ = e;
   this.doStart(e);
-  if (this.startWorkspace_.keyboardAccessibilityMode) {
-    Blockly.navigation.setState(Blockly.navigation.STATE_WS);
-  }
 };
 
 /**
@@ -767,17 +757,11 @@ Blockly.Gesture.prototype.doBlockClick_ = function() {
 /**
  * Execute a workspace click. When in accessibility mode shift clicking will
  * move the cursor.
- * @param {!Event} e A mouse up or touch end event.
  * @private
  */
-Blockly.Gesture.prototype.doWorkspaceClick_ = function(e) {
+Blockly.Gesture.prototype.doWorkspaceClick_ = function() {
   var ws = this.creatorWorkspace_;
-  if (e.shiftKey && ws.keyboardAccessibilityMode) {
-    var screenCoord = new Blockly.utils.Coordinate(e.clientX, e.clientY);
-    var wsCoord = Blockly.utils.screenToWsCoordinates(ws, screenCoord);
-    var wsNode = Blockly.ASTNode.createWorkspaceNode(ws, wsCoord);
-    ws.getCursor().setCurNode(wsNode);
-  } else if (Blockly.selected) {
+  if (Blockly.selected) {
     Blockly.selected.unselect();
   }
   this.fireWorkspaceClick_(this.startWorkspace_ || ws);

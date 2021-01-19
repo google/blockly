@@ -23,7 +23,6 @@ goog.require('Blockly.Events');
 goog.require('Blockly.Events.BlockMove');
 goog.require('Blockly.Events.Selected');
 goog.require('Blockly.Msg');
-goog.require('Blockly.navigation');
 goog.require('Blockly.RenderedConnection');
 goog.require('Blockly.TabNavigateCursor');
 goog.require('Blockly.Tooltip');
@@ -692,11 +691,12 @@ Blockly.BlockSvg.prototype.tab = function(start, forward) {
   var tabCursor = new Blockly.TabNavigateCursor();
   tabCursor.setCurNode(Blockly.ASTNode.createFieldNode(start));
   var currentNode = tabCursor.getCurNode();
-  var actionName = forward ?
-      Blockly.navigation.actionNames.NEXT : Blockly.navigation.actionNames.PREVIOUS;
 
-  tabCursor.onBlocklyAction(
-      /** @type {!Blockly.ShortcutRegistry.KeyboardShortcut} */ ({name: actionName}));
+  if (forward) {
+    tabCursor.next();
+  } else {
+    tabCursor.prev();
+  }
 
   var nextNode = tabCursor.getCurNode();
   if (nextNode && nextNode !== currentNode) {
@@ -905,10 +905,6 @@ Blockly.BlockSvg.prototype.dispose = function(healStack, animate) {
   // If this block has a context menu open, close it.
   if (Blockly.ContextMenu.currentBlock == this) {
     Blockly.ContextMenu.hide();
-  }
-
-  if (this.workspace.keyboardAccessibilityMode) {
-    Blockly.navigation.moveCursorOnBlockDelete(this);
   }
 
   if (animate && this.rendered) {
@@ -1660,7 +1656,8 @@ Blockly.BlockSvg.prototype.updateMarkers_ = function() {
     this.workspace.getCursor().draw();
   }
   if (this.workspace.keyboardAccessibilityMode && this.pathObject.markerSvg) {
-    this.workspace.getMarker(Blockly.navigation.MARKER_NAME).draw();
+    // TODO(#4592): Update all markers on the block.
+    this.workspace.getMarker(Blockly.MarkerManager.LOCAL_MARKER).draw();
   }
 };
 

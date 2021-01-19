@@ -29,7 +29,7 @@ goog.require('Blockly.utils.userAgent');
 goog.requireType('Blockly.blockRendering.ConstantProvider');
 goog.requireType('Blockly.IASTNodeLocationSvg');
 goog.requireType('Blockly.IASTNodeLocationWithBlock');
-goog.requireType('Blockly.IBlocklyActionable');
+goog.requireType('Blockly.IKeyboardAccessible');
 goog.requireType('Blockly.IRegistrable');
 goog.requireType('Blockly.ShortcutRegistry');
 
@@ -46,7 +46,7 @@ goog.requireType('Blockly.ShortcutRegistry');
  * @constructor
  * @implements {Blockly.IASTNodeLocationSvg}
  * @implements {Blockly.IASTNodeLocationWithBlock}
- * @implements {Blockly.IBlocklyActionable}
+ * @implements {Blockly.IKeyboardAccessible}
  * @implements {Blockly.IRegistrable}
  */
 Blockly.Field = function(value, opt_validator, opt_config) {
@@ -1024,13 +1024,12 @@ Blockly.Field.prototype.isTabNavigable = function() {
 };
 
 /**
- * Handles the given action.
- * This is only triggered when keyboard accessibility mode is enabled.
- * @param {!Blockly.ShortcutRegistry.KeyboardShortcut} _action The action to be handled.
- * @return {boolean} True if the field handled the action, false otherwise.
- * @package
+ * Handles the given keyboard shortcut.
+ * @param {!Blockly.ShortcutRegistry.KeyboardShortcut} _shortcut The shortcut to be handled.
+ * @return {boolean} True if the shortcut has been handled, false otherwise.
+ * @public
  */
-Blockly.Field.prototype.onBlocklyAction = function(_action) {
+Blockly.Field.prototype.onShortcut = function(_shortcut) {
   return false;
 };
 
@@ -1077,6 +1076,7 @@ Blockly.Field.prototype.updateMarkers_ = function() {
     workspace.getCursor().draw();
   }
   if (workspace.keyboardAccessibilityMode && this.markerSvg_) {
-    workspace.getMarker(Blockly.navigation.MARKER_NAME).draw();
+    // TODO(#4592): Update all markers on the field.
+    workspace.getMarker(Blockly.MarkerManager.LOCAL_MARKER).draw();
   }
 };

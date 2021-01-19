@@ -53,6 +53,13 @@ Blockly.MarkerManager = function(workspace){
 };
 
 /**
+ * The name of the local marker.
+ * @type {string}
+ * @const
+ */
+Blockly.MarkerManager.LOCAL_MARKER = 'local_marker_1';
+
+/**
  * Register the marker by adding it to the map of markers.
  * @param {string} id A unique identifier for the marker.
  * @param {!Blockly.Marker} marker The marker to register.

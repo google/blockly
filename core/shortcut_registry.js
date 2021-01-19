@@ -13,7 +13,6 @@
 
 goog.provide('Blockly.ShortcutRegistry');
 
-goog.require('Blockly.navigation');
 goog.require('Blockly.ShortcutItems');
 goog.require('Blockly.utils.object');
 
@@ -43,7 +42,6 @@ Blockly.ShortcutRegistry = function() {
   this.keyMap_ = Object.create(null);
 
   Blockly.ShortcutItems.registerDefaultShortcuts();
-  Blockly.navigation.registerNavigationShortcuts();
 };
 
 /**

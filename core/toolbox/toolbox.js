@@ -17,7 +17,6 @@ goog.require('Blockly.constants');
 goog.require('Blockly.Css');
 goog.require('Blockly.Events');
 goog.require('Blockly.Events.ToolboxItemSelect');
-goog.require('Blockly.navigation');
 goog.require('Blockly.registry');
 goog.require('Blockly.Touch');
 goog.require('Blockly.utils');
@@ -26,7 +25,7 @@ goog.require('Blockly.utils.dom');
 goog.require('Blockly.utils.Rect');
 goog.require('Blockly.utils.toolbox');
 
-goog.requireType('Blockly.IBlocklyActionable');
+goog.requireType('Blockly.IKeyboardAccessible');
 goog.requireType('Blockly.ICollapsibleToolboxItem');
 goog.requireType('Blockly.IDeleteArea');
 goog.requireType('Blockly.IFlyout');
@@ -44,7 +43,7 @@ goog.requireType('Blockly.WorkspaceSvg');
  * @param {!Blockly.WorkspaceSvg} workspace The workspace in which to create new
  *     blocks.
  * @constructor
- * @implements {Blockly.IBlocklyActionable}
+ * @implements {Blockly.IKeyboardAccessible}
  * @implements {Blockly.IDeleteArea}
  * @implements {Blockly.IStyleable}
  * @implements {Blockly.IToolbox}
@@ -153,6 +152,16 @@ Blockly.Toolbox = function(workspace) {
    * @protected
    */
   this.boundEvents_ = [];
+};
+
+/**
+ * Handles the given keyboard shortcut.
+ * @param {!Blockly.ShortcutRegistry.KeyboardShortcut} _shortcut The shortcut to be handled.
+ * @return {boolean} True if the shortcut has been handled, false otherwise.
+ * @public
+ */
+Blockly.Toolbox.prototype.onShortcut = function(_shortcut) {
+  return false;
 };
 
 /**
@@ -809,32 +818,6 @@ Blockly.Toolbox.prototype.fireSelectEvent_ = function(oldItem, newItem) {
   var event = new Blockly.Events.ToolboxItemSelect(
       oldElement, newElement, this.workspace_.id);
   Blockly.Events.fire(event);
-};
-
-/**
- * Handles the given Blockly action on a toolbox.
- * This is only triggered when keyboard accessibility mode is enabled.
- * @param {!Blockly.ShortcutRegistry.KeyboardShortcut} action The action to be handled.
- * @return {boolean} True if the field handled the action, false otherwise.
- * @package
- */
-Blockly.Toolbox.prototype.onBlocklyAction = function(action) {
-  var selected = this.selectedItem_;
-  if (!selected) {
-    return false;
-  }
-  switch (action.name) {
-    case Blockly.navigation.actionNames.PREVIOUS:
-      return this.selectPrevious_();
-    case Blockly.navigation.actionNames.OUT:
-      return this.selectParent_();
-    case Blockly.navigation.actionNames.NEXT:
-      return this.selectNext_();
-    case Blockly.navigation.actionNames.IN:
-      return this.selectChild_();
-    default:
-      return false;
-  }
 };
 
 /**

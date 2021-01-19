@@ -15,10 +15,8 @@ goog.provide('Blockly.Cursor');
 
 goog.require('Blockly.ASTNode');
 goog.require('Blockly.Marker');
-goog.require('Blockly.navigation');
 goog.require('Blockly.utils.object');
 
-goog.requireType('Blockly.IBlocklyActionable');
 goog.requireType('Blockly.ShortcutRegistry');
 
 
@@ -27,7 +25,6 @@ goog.requireType('Blockly.ShortcutRegistry');
  * A cursor controls how a user navigates the Blockly AST.
  * @constructor
  * @extends {Blockly.Marker}
- * @implements {Blockly.IBlocklyActionable}
  */
 Blockly.Cursor = function() {
   Blockly.Cursor.superClass_.constructor.call(this);
@@ -43,7 +40,7 @@ Blockly.utils.object.inherits(Blockly.Cursor, Blockly.Marker);
  * Find the next connection, field, or block.
  * @return {Blockly.ASTNode} The next element, or null if the current node is
  *     not set or there is no next value.
- * @protected
+ * @public
  */
 Blockly.Cursor.prototype.next = function() {
   var curNode = this.getCurNode();
@@ -68,7 +65,7 @@ Blockly.Cursor.prototype.next = function() {
  * Find the in connection or field.
  * @return {Blockly.ASTNode} The in element, or null if the current node is
  *     not set or there is no in value.
- * @protected
+ * @public
  */
 Blockly.Cursor.prototype.in = function() {
   var curNode = this.getCurNode();
@@ -93,7 +90,7 @@ Blockly.Cursor.prototype.in = function() {
  * Find the previous connection, field, or block.
  * @return {Blockly.ASTNode} The previous element, or null if the current node
  *     is not set or there is no previous value.
- * @protected
+ * @public
  */
 Blockly.Cursor.prototype.prev = function() {
   var curNode = this.getCurNode();
@@ -118,7 +115,7 @@ Blockly.Cursor.prototype.prev = function() {
  * Find the out connection, field, or block.
  * @return {Blockly.ASTNode} The out element, or null if the current node is
  *     not set or there is no out value.
- * @protected
+ * @public
  */
 Blockly.Cursor.prototype.out = function() {
   var curNode = this.getCurNode();
@@ -135,36 +132,4 @@ Blockly.Cursor.prototype.out = function() {
     this.setCurNode(newNode);
   }
   return newNode;
-};
-
-/**
- * Handles the given action.
- * This is only triggered when keyboard navigation is enabled.
- * @param {!Blockly.ShortcutRegistry.KeyboardShortcut} action The action to be handled.
- * @return {boolean} True if the action has been handled, false otherwise.
- */
-Blockly.Cursor.prototype.onBlocklyAction = function(action) {
-  // If we are on a field give it the option to handle the action
-  if (this.getCurNode() &&
-      this.getCurNode().getType() === Blockly.ASTNode.types.FIELD &&
-      (/** @type {!Blockly.Field} */ (this.getCurNode().getLocation()))
-          .onBlocklyAction(action)) {
-    return true;
-  }
-  switch (action.name) {
-    case Blockly.navigation.actionNames.PREVIOUS:
-      this.prev();
-      return true;
-    case Blockly.navigation.actionNames.OUT:
-      this.out();
-      return true;
-    case Blockly.navigation.actionNames.NEXT:
-      this.next();
-      return true;
-    case Blockly.navigation.actionNames.IN:
-      this.in();
-      return true;
-    default:
-      return false;
-  }
 };

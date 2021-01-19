@@ -18,7 +18,6 @@ goog.require('Blockly.Events');
 goog.require('Blockly.Events.BlockChange');
 goog.require('Blockly.Events.BubbleOpen');
 goog.require('Blockly.Icon');
-goog.require('Blockly.navigation');
 goog.require('Blockly.utils');
 goog.require('Blockly.utils.dom');
 goog.require('Blockly.utils.global');
@@ -413,11 +412,6 @@ Blockly.Mutator.prototype.workspaceChanged_ = function(e) {
     block.rendered = savedRendered;
     // Mutation may have added some elements that need initializing.
     block.initSvg();
-
-    if ((/** @type {!Blockly.WorkspaceSvg} */ (Blockly.getMainWorkspace()))
-        .keyboardAccessibilityMode) {
-      Blockly.navigation.moveCursorOnBlockMutation(block);
-    }
 
     if (block.rendered) {
       block.render();

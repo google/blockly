@@ -17,7 +17,6 @@ goog.require('Blockly.blockRendering');
 goog.require('Blockly.Events');
 goog.require('Blockly.Events.BlockCreate');
 goog.require('Blockly.Events.VarCreate');
-goog.require('Blockly.FlyoutCursor');
 goog.require('Blockly.Gesture');
 goog.require('Blockly.Marker');
 goog.require('Blockly.Scrollbar');
@@ -31,7 +30,6 @@ goog.require('Blockly.utils.toolbox');
 goog.require('Blockly.WorkspaceSvg');
 goog.require('Blockly.Xml');
 
-goog.requireType('Blockly.IBlocklyActionable');
 goog.requireType('Blockly.IDeleteArea');
 goog.requireType('Blockly.IFlyout');
 goog.requireType('Blockly.ShortcutRegistry');
@@ -44,7 +42,6 @@ goog.requireType('Blockly.utils.Metrics');
  *     workspace.
  * @constructor
  * @abstract
- * @implements {Blockly.IBlocklyActionable}
  * @implements {Blockly.IDeleteArea}
  * @implements {Blockly.IFlyout}
  */
@@ -253,7 +250,6 @@ Blockly.Flyout.prototype.createDom = function(tagName) {
       this.svgBackground_, 'flyoutBackgroundColour', 'fill');
   this.workspace_.getThemeManager().subscribe(
       this.svgBackground_, 'flyoutOpacity', 'fill-opacity');
-  this.workspace_.getMarkerManager().setCursor(new Blockly.FlyoutCursor());
   return this.svgGroup_;
 };
 
@@ -993,18 +989,6 @@ Blockly.Flyout.prototype.placeNewBlock_ = function(oldBlock) {
 
   block.moveBy(finalOffset.x, finalOffset.y);
   return block;
-};
-
-/**
- * Handles the given action.
- * This is only triggered when keyboard accessibility mode is enabled.
- * @param {!Blockly.ShortcutRegistry.KeyboardShortcut} action The action to be handled.
- * @return {boolean} True if the flyout handled the action, false otherwise.
- * @package
- */
-Blockly.Flyout.prototype.onBlocklyAction = function(action) {
-  var cursor = this.workspace_.getCursor();
-  return cursor.onBlocklyAction(action);
 };
 
 /**

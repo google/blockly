@@ -65,8 +65,8 @@ Blockly.IASTNodeLocationWithBlock.prototype.getSourceBlock;
 Blockly.IKeyboardAccessible = function() {};
 
 /**
- * Handles the given action.
- * @param {!Blockly.ShortcutRegistry.KeyboardShortcut} action The action to be handled.
- * @return {boolean} True if the action has been handled, false otherwise.
+ * Handles the given keyboard shortcut.
+ * @param {!Blockly.ShortcutRegistry.KeyboardShortcut} shortcut The shortcut to be handled.
+ * @return {boolean} True if the shortcut has been handled, false otherwise.
  */
 Blockly.IKeyboardAccessible.prototype.onShortcut;

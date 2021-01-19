@@ -55,6 +55,7 @@ Blockly.MarkerManager = function(workspace){
 /**
  * The name of the local marker.
  * @type {string}
+ * @const
  */
 Blockly.MarkerManager.LOCAL_MARKER = 'local_marker_1';
 

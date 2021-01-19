@@ -155,11 +155,14 @@ Blockly.Toolbox = function(workspace) {
 };
 
 /**
- * Decides how a cursor should act when it is on the toolbox.
- * @type {function(!Blockly.ShortcutRegistry.KeyboardShortcut):boolean}
+ * Handles the given keyboard shortcut.
+ * @param {!Blockly.ShortcutRegistry.KeyboardShortcut} _shortcut The shortcut to be handled.
+ * @return {boolean} True if the shortcut has been handled, false otherwise.
  * @public
  */
-Blockly.Toolbox.prototype.onShortcut;
+Blockly.Toolbox.prototype.onShortcut = function(_shortcut) {
+  return false;
+};
 
 /**
  * Initializes the toolbox

@@ -1024,13 +1024,12 @@ Blockly.Field.prototype.isTabNavigable = function() {
 };
 
 /**
- * Handles the given action.
- * This is only triggered when keyboard accessibility mode is enabled.
- * @param {!Blockly.ShortcutRegistry.KeyboardShortcut} _action The action to be handled.
- * @return {boolean} True if the field handled the action, false otherwise.
- * @package
+ * Handles the given keyboard shortcut.
+ * @param {!Blockly.ShortcutRegistry.KeyboardShortcut} _shortcut The shortcut to be handled.
+ * @return {boolean} True if the shortcut has been handled, false otherwise.
+ * @public
  */
-Blockly.Field.prototype.onShortcut = function(_action) {
+Blockly.Field.prototype.onShortcut = function(_shortcut) {
   return false;
 };
 

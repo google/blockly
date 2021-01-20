@@ -157,6 +157,20 @@ Blockly.FieldDropdown.fromJson = function(options) {
 };
 
 /**
+ * Sets the field's value based on the given XML element. Should only be
+ * called by Blockly.Xml.
+ * @param {!Element} fieldElement The element containing info about the
+ *    field's state.
+ * @package
+ */
+Blockly.FieldDropdown.prototype.fromXml = function(fieldElement) {
+  if (this.isOptionListDynamic()) {
+    this.getOptions(false);
+  }
+  this.setValue(fieldElement.textContent);
+};
+
+/**
  * Serializable fields are saved by the XML renderer, non-serializable fields
  * are not. Editable fields should also be serializable.
  * @type {boolean}

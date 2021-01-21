@@ -210,14 +210,9 @@ Blockly.Msg.LEAPHY_BUZZ_HERZ = 'Herz';
 /** @type {string} */
 /// Buzz ms
 Blockly.Msg.LEAPHY_BUZZ_MS = 'ms';
+/** @type {string} */
 /// Print print
 Blockly.Msg.LEAPHY_SERIAL_PRINT = 'Print';
-/// Print line ending
-Blockly.Msg.LEAPHY_SERIAL_PRINT_LINE_END = 'line ending';
-/// Print with
-Blockly.Msg.LEAPHY_WITH = 'with';
-/// Print without
-Blockly.Msg.LEAPHY_WITHOUT = 'without';
 
 /** @type {string} */
 /// Sitation Category Title

@@ -210,6 +210,14 @@ Blockly.Msg.LEAPHY_BUZZ_HERZ = 'Herz';
 /** @type {string} */
 /// Buzz ms
 Blockly.Msg.LEAPHY_BUZZ_MS = 'ms';
+/// Print print
+Blockly.Msg.LEAPHY_SERIAL_PRINT = 'Print';
+/// Print line ending
+Blockly.Msg.LEAPHY_SERIAL_PRINT_LINE_END = 'line ending';
+/// Print with
+Blockly.Msg.LEAPHY_WITH = 'with';
+/// Print without
+Blockly.Msg.LEAPHY_WITHOUT = 'without';
 
 /** @type {string} */
 /// Sitation Category Title
@@ -1835,4 +1843,3 @@ Blockly.Msg.WORKSPACE_ARIA_LABEL = 'Blockly Workspace';
 /// that block have warnings attached to them. It should inform the user that the
 /// block they collapsed contains blocks that have warnings.
 Blockly.Msg.COLLAPSED_WARNINGS_WARNING = 'Collapsed blocks contain warnings.';
-

@@ -65,4 +65,11 @@ Blockly.Arduino['leaphy_original_buzz'] = function(block) {
     var duration = Blockly.Arduino.valueToCode(this, 'DURATION', Blockly.Arduino.ORDER_ATOMIC) || '0';
     var code = 'tone(4, ' + frequency + ', ' + duration + ');\n';
     return code;
-  };
+};
+
+Blockly.Arduino['leaphy_original_serial_print'] = function(block) {
+    Blockly.Arduino.addSetup('serial', 'Serial.begin(115200);', false);
+    var value = Blockly.Arduino.valueToCode(this, 'VALUE', Blockly.Arduino.ORDER_ATOMIC) || '0';
+    var code = 'Serial.println(' + value + ');\n';
+    return code;
+};

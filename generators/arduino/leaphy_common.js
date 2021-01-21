@@ -13,7 +13,7 @@ goog.provide('Blockly.Arduino.LeaphyCommon');
 goog.require('Blockly.Arduino');
 
 Blockly.Arduino['leaphy_start'] = function (block) {
-    // Define the Start procedure 
+    // Define the Start procedure
     var funcName = 'leaphyProgram';
     var branch = Blockly.Arduino.statementToCode(block, 'STACK');
     if (Blockly.Arduino.STATEMENT_PREFIX) {
@@ -34,4 +34,20 @@ Blockly.Arduino['leaphy_start'] = function (block) {
     Blockly.Arduino.definitions_['%' + funcName] = code;
     Blockly.Arduino.setups_['setup_leaphy_start'] = funcName + '();';
     return null;
+};
+
+
+Blockly.Arduino['leaphy_serial_print_line'] = function(block) {
+    Blockly.Arduino.addSetup('serial', 'Serial.begin(115200);', false);
+    var value = Blockly.Arduino.valueToCode(this, 'VALUE', Blockly.Arduino.ORDER_ATOMIC) || '0';
+    var code = 'Serial.println(' + value + ');\n';
+    return code;
+};
+
+Blockly.Arduino['leaphy_serial_print_value'] = function(block) {
+    Blockly.Arduino.addSetup('serial', 'Serial.begin(115200);', false);
+    var name = Blockly.Arduino.valueToCode(this, 'NAME', Blockly.Arduino.ORDER_ATOMIC) || '0';
+    var value = Blockly.Arduino.valueToCode(this, 'VALUE', Blockly.Arduino.ORDER_ATOMIC) || '0';
+    var code = 'Serial.println(' + name + ' + " = " + ' + value + ');\n';
+    return code;
 };

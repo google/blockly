@@ -41,6 +41,41 @@ Blockly.Blocks['leaphy_start'] = {
     }
 };
 
+Blockly.Blocks['leaphy_serial_print_line'] = {
+    /**
+     * Block for printing to serial output
+     * @this Blockly.Block
+     */
+    init: function() {
+        this.appendDummyInput()
+            .appendField(Blockly.Msg.LEAPHY_SERIAL_PRINT)
+        this.appendValueInput('VALUE');
+        this.setInputsInline(true);
+        this.setPreviousStatement(true, null);
+        this.setNextStatement(true, null);
+        this.setStyle('leaphy_blocks');
+    },
+};
+
+Blockly.Blocks['leaphy_serial_print_value'] = {
+    /**
+     * Block for printing to serial output
+     * @this Blockly.Block
+     */
+    init: function() {
+        this.appendDummyInput()
+            .appendField(Blockly.Msg.LEAPHY_SERIAL_PRINT)
+        this.appendValueInput('NAME');
+        this.appendDummyInput()
+            .appendField("=");
+        this.appendValueInput('VALUE');
+        this.setInputsInline(true);
+        this.setPreviousStatement(true, null);
+        this.setNextStatement(true, null);
+        this.setStyle('leaphy_blocks');
+    },
+};
+
 //Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
 
 //]);  // END JSON EXTRACT (Do not delete this comment.)

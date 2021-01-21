@@ -33,7 +33,6 @@ var digitalPinOptions = [["2", "2"], ["3", "3"], ["4", "4"], ["5", "5"], ["6", "
 var analogPinOptions = [["A0", "A0"], ["A1", "A1"], ["A2", "A2"], ["A3", "A3"], ["A4", "A4"], ["A5", "A5"]];
 var motorTypeOptions = [["M_L", "9"], ["M_R", "10"]];
 var motorDirectionOptions = [["%{BKY_LEAPHY_MOTOR_FORWARD}", "1"], ["%{BKY_LEAPHY_MOTOR_BACKWARD}", "2"], ["%{BKY_LEAPHY_MOTOR_LEFT}", "3"], ["%{BKY_LEAPHY_MOTOR_RIGHT}", "4"]];
-var withWithoutOptions = [["%{BKY_LEAPHY_WITH}", "true"], ["%{BKY_LEAPHY_WITHOUT}", "false"]];
 
 Blockly.Blocks['leaphy_original_set_led'] = {
     init: function () {
@@ -135,7 +134,7 @@ Blockly.Blocks['leaphy_original_buzz'] = {
     },
 };
 
-Blockly.Blocks['leaphy_original_serial_print'] = {
+Blockly.Blocks['leaphy_original_serial_print_line'] = {
     /**
      * Block for printing to serial output
      * @this Blockly.Block
@@ -144,14 +143,29 @@ Blockly.Blocks['leaphy_original_serial_print'] = {
         this.appendDummyInput()
             .appendField(Blockly.Msg.LEAPHY_SERIAL_PRINT)
         this.appendValueInput('VALUE');
-        this.appendDummyInput()
-            .appendField(new Blockly.FieldDropdown(withWithoutOptions), "WITH_WITHOUT")
-        this.appendDummyInput()
-            .appendField(Blockly.Msg.LEAPHY_SERIAL_PRINT_LINE_END);
         this.setInputsInline(true);
         this.setPreviousStatement(true, null);
         this.setNextStatement(true, null);
-      this.setStyle('leaphy_blocks');
+        this.setStyle('leaphy_blocks');
+    },
+};
+
+Blockly.Blocks['leaphy_original_serial_print_value'] = {
+    /**
+     * Block for printing to serial output
+     * @this Blockly.Block
+     */
+    init: function() {
+        this.appendDummyInput()
+            .appendField(Blockly.Msg.LEAPHY_SERIAL_PRINT)
+        this.appendValueInput('NAME');
+        this.appendDummyInput()
+            .appendField("=");
+        this.appendValueInput('VALUE');
+        this.setInputsInline(true);
+        this.setPreviousStatement(true, null);
+        this.setNextStatement(true, null);
+        this.setStyle('leaphy_blocks');
     },
 };
 //Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT

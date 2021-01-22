@@ -1629,111 +1629,201 @@ Blockly.Block.prototype.mixin = function(mixinObj, opt_disableCheck) {
 Blockly.Block.prototype.interpolate_ = function(message, args, lastDummyAlign,
     warningPrefix) {
   var tokens = Blockly.utils.tokenizeInterpolation(message);
-  // Interpolate the arguments.  Build a list of elements.
-  var indexDup = [];
-  var indexCount = 0;
-  var elements = [];
+  this.validateTokens_(tokens, args.length);
+  var elements = this.interpolateArguments_(tokens, args, lastDummyAlign);
+
+  // An array of [field, fieldName] tuples.
+  var fieldStack = [];
+  for (var i = 0, element; (element = elements[i]); i++) {
+    switch (element['type']) {
+      case 'input_value':
+      case 'input_statement':
+      case 'input_dummy':
+        var input = this.inputFromJson_(element, warningPrefix);
+        // Should never be null, but just in case.
+        if (input) {
+          for (var j = 0, tuple; (tuple = fieldStack[j]); j++) {
+            input.appendField(tuple[0], tuple[1]);
+          }
+          fieldStack.length = 0;
+        }
+        break;
+      // All other types, including ones starting with 'input_' get routed here.
+      default:
+        var field = this.fieldFromJson_(element);
+        if (field) {
+          fieldStack.push([field, element['name']]);
+        }
+    }
+  }
+};
+
+/**
+ * Validates that the tokens are within the correct bounds, with no duplicates,
+ * and that all of the arguments are referred to. Throws errors if any of these
+ * things are not true.
+ * @param {!Array<string|number>} tokens An array of tokens to validate
+ * @param {number} argsCount The number of args that need to be referred to.
+ * @private
+ */
+Blockly.Block.prototype.validateTokens_ = function(tokens, argsCount) {
+  var visitedArgsHash = [];
+  var visitedArgsCount = 0;
   for (var i = 0; i < tokens.length; i++) {
     var token = tokens[i];
-    if (typeof token == 'number') {
-      if (token <= 0 || token > args.length) {
-        throw Error('Block "' + this.type + '": ' +
-            'Message index %' + token + ' out of range.');
-      }
-      if (indexDup[token]) {
-        throw Error('Block "' + this.type + '": ' +
-            'Message index %' + token + ' duplicated.');
-      }
-      indexDup[token] = true;
-      indexCount++;
-      elements.push(args[token - 1]);
-    } else {
-      token = token.trim();
-      if (token) {
-        elements.push(token);
-      }
+    if (typeof token != 'number') {
+      continue;
     }
+    if (token < 1 || token > argsCount) {
+      throw Error('Block "' + this.type + '": ' +
+          'Message index %' + token + ' out of range.');
+    }
+    if (visitedArgsHash[token]) {
+      throw Error('Block "' + this.type + '": ' +
+          'Message index %' + token + ' duplicated.');
+    }
+    visitedArgsHash[token] = true;
+    visitedArgsCount++;
   }
-  if (indexCount != args.length) {
+  if (visitedArgsCount != argsCount) {
     throw Error('Block "' + this.type + '": ' +
-        'Message does not reference all ' + args.length + ' arg(s).');
+        'Message does not reference all ' + argsCount + ' arg(s).');
   }
-  // Add last dummy input if needed.
-  if (elements.length && (typeof elements[elements.length - 1] == 'string' ||
-      Blockly.utils.string.startsWith(
-          elements[elements.length - 1]['type'], 'field_'))) {
-    var dummyInput = {type: 'input_dummy'};
-    if (lastDummyAlign) {
-      dummyInput['align'] = lastDummyAlign;
+};
+
+/**
+ * Inserts args in place of numerical tokens. String args are converted to json
+ * that defines a label field. If necessary an extra dummy input is added to
+ * the end of the elements.
+ * @param {!Array<!string|number>} tokens The tokens to interpolate
+ * @param {!Array<!Object|string>} args The arguments to insert.
+ * @param {string|undefined} lastDummyAlign The alignment the added dummy input
+ *     should have, if we are required to add one.
+ * @return {!Array<!Object>} The JSON definitions of field and inputs to add
+ *     to the block.
+ * @private
+ */
+Blockly.Block.prototype.interpolateArguments_ =
+    function(tokens, args, lastDummyAlign) {
+      var elements = [];
+      for (var i = 0; i < tokens.length; i++) {
+        var element = tokens[i];
+        if (typeof element == 'number') {
+          element = args[element - 1];
+        }
+        // Args can be strings, which is why this isn't elseif.
+        if (typeof element == 'string') {
+          element = this.stringToFieldJson_(element);
+          if (!element) {
+            continue;
+          }
+        }
+        elements.push(element);
+      }
+
+      var length = elements.length;
+      var startsWith = Blockly.utils.string.startsWith;
+      // TODO: This matches the old behavior, but it doesn't work for fields
+      //   that don't start with 'field_'.
+      if (length && startsWith(elements[length - 1]['type'], 'field_')) {
+        var dummyInput = {'type': 'input_dummy'};
+        if (lastDummyAlign) {
+          dummyInput['align'] = lastDummyAlign;
+        }
+        elements.push(dummyInput);
+      }
+
+      return elements;
+    };
+
+/**
+ * Creates a field from the json definition of a field. If a field with the
+ * given type cannot be found, this attempts to create a different field using
+ * the 'alt' property of the json definition (if it exists).
+ * @param {{alt:(string|undefined)}} element The element to try to turn into a
+ *     field.
+ * @return {?Blockly.Field} The field defined by the JSON, or null if one
+ *     couldn't be created.
+ * @private
+ */
+Blockly.Block.prototype.fieldFromJson_ = function(element) {
+  var field = Blockly.fieldRegistry.fromJson(element);
+  if (!field && element['alt']) {
+    if (typeof element['alt'] == 'string') {
+      var json = this.stringToFieldJson_(element['alt']);
+      return json ? this.fieldFromJson_(json) : null;
     }
-    elements.push(dummyInput);
+    return this.fieldFromJson_(element['alt']);
   }
-  // Lookup of alignment constants.
+  return field;
+};
+
+/**
+ * Creates an input from the json definition of an input. Sets the input's check
+ * and alignment if they are provided.
+ * @param {!Object} element The JSON to turn into an input.
+ * @param {string} warningPrefix The prefix to add to warnings to help the
+ *     developer debug.
+ * @return {?Blockly.Input} The input that has been created, or null if one
+ *     could not be created for some reason (should never happen).
+ * @private
+ */
+Blockly.Block.prototype.inputFromJson_ = function(element, warningPrefix) {
   var alignmentLookup = {
     'LEFT': Blockly.ALIGN_LEFT,
     'RIGHT': Blockly.ALIGN_RIGHT,
     'CENTRE': Blockly.ALIGN_CENTRE,
     'CENTER': Blockly.ALIGN_CENTRE
   };
-  // Populate block with inputs and fields.
-  var fieldStack = [];
-  for (var i = 0; i < elements.length; i++) {
-    var element = elements[i];
-    if (typeof element == 'string') {
-      fieldStack.push([element, undefined]);
-    } else {
-      var field = null;
-      var input = null;
-      do {
-        var altRepeat = false;
-        if (typeof element == 'string') {
-          field = new Blockly.FieldLabel(element);
-        } else {
-          switch (element['type']) {
-            case 'input_value':
-              input = this.appendValueInput(element['name']);
-              break;
-            case 'input_statement':
-              input = this.appendStatementInput(element['name']);
-              break;
-            case 'input_dummy':
-              input = this.appendDummyInput(element['name']);
-              break;
-            default:
-              // This should handle all field JSON parsing, including
-              // options that can be applied to any field type.
-              field = Blockly.fieldRegistry.fromJson(element);
 
-              // Unknown field.
-              if (!field && element['alt']) {
-                element = element['alt'];
-                altRepeat = true;
-              }
-          }
-        }
-      } while (altRepeat);
-      if (field) {
-        fieldStack.push([field, element['name']]);
-      } else if (input) {
-        if (element['check']) {
-          input.setCheck(element['check']);
-        }
-        if (element['align']) {
-          var alignment = alignmentLookup[element['align'].toUpperCase()];
-          if (alignment === undefined) {
-            console.warn(warningPrefix + 'Illegal align value: ',
-                element['align']);
-          } else {
-            input.setAlign(alignment);
-          }
-        }
-        for (var j = 0; j < fieldStack.length; j++) {
-          input.appendField(fieldStack[j][0], fieldStack[j][1]);
-        }
-        fieldStack.length = 0;
-      }
+  var input = null;
+  switch (element['type']) {
+    case 'input_value':
+      input = this.appendValueInput(element['name']);
+      break;
+    case 'input_statement':
+      input = this.appendStatementInput(element['name']);
+      break;
+    case 'input_dummy':
+      input = this.appendDummyInput(element['name']);
+      break;
+  }
+  // Should never be hit because of interpolate_'s checks, but just in case.
+  if (!input) {
+    return null;
+  }
+
+  if (element['check']) {
+    input.setCheck(element['check']);
+  }
+  if (element['align']) {
+    var alignment = alignmentLookup[element['align'].toUpperCase()];
+    if (alignment === undefined) {
+      console.warn(warningPrefix + 'Illegal align value: ',
+          element['align']);
+    } else {
+      input.setAlign(alignment);
     }
   }
+  return input;
+};
+
+/**
+ * Turns a string into the JSON definition of a label field. If the string
+ * becomes an empty string when trimmed, this returns null.
+ * @param {string} str String to turn into the JSON definition of a label field.
+ * @return {?{text: string, type: string}} The JSON definition or null.
+ * @private
+ */
+Blockly.Block.prototype.stringToFieldJson_ = function(str) {
+  str = str.trim();
+  if (str) {
+    return {
+      'type': 'field_label',
+      'text': str,
+    };
+  }
+  return null;
 };
 
 /**

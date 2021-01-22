@@ -65,4 +65,4 @@ Blockly.Arduino['leaphy_original_buzz'] = function(block) {
     var duration = Blockly.Arduino.valueToCode(this, 'DURATION', Blockly.Arduino.ORDER_ATOMIC) || '0';
     var code = 'tone(4, ' + frequency + ', ' + duration + ');\n';
     return code;
-  };
+};

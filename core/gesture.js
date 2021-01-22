@@ -575,7 +575,7 @@ Blockly.Gesture.prototype.handleUp = function(e) {
   } else if (this.isBlockClick_()) {
     this.doBlockClick_();
   } else if (this.isWorkspaceClick_()) {
-    this.doWorkspaceClick_();
+    this.doWorkspaceClick_(e);
   }
 
   e.preventDefault();
@@ -757,9 +757,10 @@ Blockly.Gesture.prototype.doBlockClick_ = function() {
 /**
  * Execute a workspace click. When in accessibility mode shift clicking will
  * move the cursor.
+ * @param {!Event} _e A mouse up or touch end event.
  * @private
  */
-Blockly.Gesture.prototype.doWorkspaceClick_ = function() {
+Blockly.Gesture.prototype.doWorkspaceClick_ = function(_e) {
   var ws = this.creatorWorkspace_;
   if (Blockly.selected) {
     Blockly.selected.unselect();

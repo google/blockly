@@ -160,10 +160,36 @@ Blockly.Variables.flyoutCategoryBlocks = function(workspace) {
     var mostRecentVariable = variableModelList[variableModelList.length - 1];
     
     if (Blockly.Blocks['variables_set']) {
+      // Addition of the variables_set block with number 0 in the xml variable category
       var block = Blockly.utils.xml.createElement('block');
       block.setAttribute('type', 'variables_set');
       block.setAttribute('gap', 12);
       block.appendChild(Blockly.Variables.generateVariableFieldDom(mostRecentVariable));
+      if (Blockly.Blocks['math_number']) {
+        var value = Blockly.Xml.textToDom(
+            '<value name="VALUE">' +
+            '<shadow type="math_number">' +
+            '<field name="NUM">0</field>' +
+            '</shadow>' +
+            '</value>');
+        block.appendChild(value);
+      }
+      xmlList.push(block);
+
+      // Addition of the variables_set block with string "" in the xml variable category
+      block = Blockly.utils.xml.createElement('block');
+      block.setAttribute('type', 'variables_set');
+      block.setAttribute('gap', 12);
+      block.appendChild(Blockly.Variables.generateVariableFieldDom(mostRecentVariable));
+      if (Blockly.Blocks['text']) {
+        var value = Blockly.Xml.textToDom(
+            '<value name="VALUE">' +
+            '<shadow type="text">' +
+            '<field name="TEXT"></field>' +
+            '</shadow>' +
+            '</value>');
+        block.appendChild(value);
+      }
       xmlList.push(block);
     }
 

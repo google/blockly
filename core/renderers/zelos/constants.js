@@ -15,6 +15,7 @@ goog.provide('Blockly.zelos.ConstantProvider');
 
 goog.require('Blockly.blockRendering.ConstantProvider');
 goog.require('Blockly.constants');
+goog.require('Blockly.utils.colour');
 goog.require('Blockly.utils.dom');
 goog.require('Blockly.utils.object');
 goog.require('Blockly.utils.Svg');

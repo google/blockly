@@ -18,6 +18,7 @@ goog.require('Blockly.blockRendering.BottomRow');
 goog.require('Blockly.blockRendering.ExternalValueInput');
 goog.require('Blockly.blockRendering.InlineInput');
 goog.require('Blockly.blockRendering.InputRow');
+goog.require('Blockly.blockRendering.InRowSpacer');
 goog.require('Blockly.blockRendering.Measurable');
 goog.require('Blockly.blockRendering.NextConnection');
 goog.require('Blockly.blockRendering.OutputConnection');
@@ -30,11 +31,18 @@ goog.require('Blockly.blockRendering.SpacerRow');
 goog.require('Blockly.blockRendering.TopRow');
 goog.require('Blockly.blockRendering.Types');
 goog.require('Blockly.constants');
+goog.require('Blockly.FieldImage');
+goog.require('Blockly.FieldLabel');
+goog.require('Blockly.FieldTextInput');
 goog.require('Blockly.utils.object');
 goog.require('Blockly.zelos.BottomRow');
 goog.require('Blockly.zelos.RightConnectionShape');
 goog.require('Blockly.zelos.StatementInput');
 goog.require('Blockly.zelos.TopRow');
+
+goog.requireType('Blockly.BlockSvg');
+goog.requireType('Blockly.zelos.ConstantProvider');
+goog.requireType('Blockly.zelos.Renderer');
 
 
 /**

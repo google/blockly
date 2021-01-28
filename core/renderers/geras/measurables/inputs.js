@@ -15,6 +15,11 @@ goog.provide('Blockly.geras.InlineInput');
 goog.provide('Blockly.geras.StatementInput');
 
 goog.require('Blockly.utils.object');
+goog.require('Blockly.blockRendering.InlineInput');
+goog.require('Blockly.blockRendering.StatementInput');
+
+goog.requireType('Blockly.blockRendering.ConstantProvider');
+goog.requireType('Blockly.Input');
 
 
 /**

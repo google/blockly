@@ -17,6 +17,9 @@ goog.require('Blockly.blockRendering.Renderer');
 goog.require('Blockly.thrasos.RenderInfo');
 goog.require('Blockly.utils.object');
 
+goog.requireType('Blockly.BlockSvg');
+
+
 /**
  * The thrasos renderer.
  * @param {string} name The renderer name.

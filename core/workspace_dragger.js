@@ -32,6 +32,21 @@ Blockly.WorkspaceDragger = function(workspace) {
   this.workspace_ = workspace;
 
   /**
+   * Whether horizontal scroll is enabled.
+   * @type {boolean}
+   * @private
+   */
+  this.horizontalScrollEnabled_ =
+      this.workspace_.scrollbar.canScrollHorizontally();
+
+  /**
+   * Whether vertical scroll is enabled.
+   * @type {boolean}
+   * @private
+   */
+  this.verticalScrollEnabled_ = this.workspace_.scrollbar.canScrollVertically();
+
+  /**
    * The scroll position of the workspace at the beginning of the drag.
    * Coordinate system: pixel coordinates.
    * @type {!Blockly.utils.Coordinate}
@@ -81,5 +96,14 @@ Blockly.WorkspaceDragger.prototype.endDrag = function(currentDragDeltaXY) {
  */
 Blockly.WorkspaceDragger.prototype.drag = function(currentDragDeltaXY) {
   var newXY = Blockly.utils.Coordinate.sum(this.startScrollXY_, currentDragDeltaXY);
-  this.workspace_.scroll(newXY.x, newXY.y);
+
+  if (this.horizontalScrollEnabled_ && this.verticalScrollEnabled_) {
+    this.workspace_.scroll(newXY.x, newXY.y);
+  } else if (this.horizontalScrollEnabled_) {
+    this.workspace_.scroll(newXY.x, this.workspace_.scrollY);
+  } else if (this.verticalScrollEnabled_) {
+    this.workspace_.scroll(this.workspace_.scrollX, newXY.y);
+  } else {
+    throw new TypeError('Invalid state.');
+  }
 };

@@ -176,6 +176,8 @@ Blockly.MarkerManager.prototype.dispose = function() {
     this.unregisterMarker(markerId);
   }
   this.markers_ = null;
-  this.cursor_.dispose();
-  this.cursor_ = null;
+  if (this.cursor_) {
+    this.cursor_.dispose();
+    this.cursor_ = null;
+  }
 };

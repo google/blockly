@@ -50,6 +50,8 @@
     <button id="helpButton" title="View documentation in new window.">
       <span>Help</span>
     </button>
+    <button class="privacyButton" title="Open Google privacy policy"><a class="privacyLink" href="https://policies.google.com/privacy">Privacy</a>
+    </button>
   </h1>
   <div id="tabContainer">
     <div id="blockFactory_tab" class="tab tabon">Block Factory</div>
@@ -430,11 +432,6 @@
       <block type="field_dropdown"></block>
       <block type="field_checkbox"></block>
       <block type="field_colour"></block>
-      <!--
-      Date picker commented out since it increases footprint by 60%.
-      Add it only if you need it.  See also goog.require in blockly.js.
-      <block type="field_date"></block>
-      -->
       <block type="field_variable"></block>
       <block type="field_image"></block>
     </category>

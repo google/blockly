@@ -18,6 +18,7 @@ goog.require('Blockly.geras.ConstantProvider');
 goog.require('Blockly.Theme');
 goog.require('Blockly.utils.dom');
 goog.require('Blockly.utils.object');
+goog.require('Blockly.utils.Svg');
 
 
 /**
@@ -48,16 +49,18 @@ Blockly.geras.PathObject = function(root, style, constants) {
    * @type {SVGElement}
    * @package
    */
-  this.svgPathDark = Blockly.utils.dom.createSvgElement('path',
+  this.svgPathDark = Blockly.utils.dom.createSvgElement(
+      Blockly.utils.Svg.PATH,
       {'class': 'blocklyPathDark', 'transform': 'translate(1,1)'},
       this.svgRoot);
 
   /**
    * The primary path of the block.
-   * @type {SVGElement}
+   * @type {!SVGElement}
    * @package
    */
-  this.svgPath = Blockly.utils.dom.createSvgElement('path',
+  this.svgPath = Blockly.utils.dom.createSvgElement(
+      Blockly.utils.Svg.PATH,
       {'class': 'blocklyPath'}, this.svgRoot);
 
   /**
@@ -65,7 +68,8 @@ Blockly.geras.PathObject = function(root, style, constants) {
    * @type {SVGElement}
    * @package
    */
-  this.svgPathLight = Blockly.utils.dom.createSvgElement('path',
+  this.svgPathLight = Blockly.utils.dom.createSvgElement(
+      Blockly.utils.Svg.PATH,
       {'class': 'blocklyPathLight'}, this.svgRoot);
 
   /**
@@ -122,7 +126,7 @@ Blockly.geras.PathObject.prototype.applyColour = function(block) {
   this.svgPathDark.setAttribute('fill', this.colourDark);
 
   Blockly.geras.PathObject.superClass_.applyColour.call(this, block);
-  
+
   this.svgPath.setAttribute('stroke', 'none');
 };
 

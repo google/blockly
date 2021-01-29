@@ -3,12 +3,13 @@
 		"authors": [
 			"Aivarannamaa",
 			"Hasso",
-			"Puik",
 			"Ilmarine",
-			"Masavi"
+			"Masavi",
+			"Puik"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "objekt",
+	"UNNAMED_KEY": "nimetu",
 	"TODAY": "Täna",
 	"DUPLICATE_BLOCK": "Tekita duplikaat",
 	"ADD_COMMENT": "Lisa kommentaar",
@@ -89,6 +90,7 @@
 	"IOS_ERROR": "Viga",
 	"IOS_PROCEDURES_INPUTS": "SISEND",
 	"IOS_PROCEDURES_ADD_INPUT": "+ Lisa sisend",
+	"IOS_PROCEDURES_DUPLICATE_INPUTS_ERROR": "Sellel funktsioonil on dubleerivad sisendid.",
 	"IOS_VARIABLES_ADD_VARIABLE": "+ Lisa muutuja",
 	"IOS_VARIABLES_ADD_BUTTON": "Lisa",
 	"IOS_VARIABLES_RENAME_BUTTON": "Nimeta ümber",
@@ -241,6 +243,7 @@
 	"TEXT_REPLACE_MESSAGE0": "asenda %1 %2-ga %3-s",
 	"TEXT_REPLACE_TOOLTIP": "Asenda mõne teksti esinemine mõnes muus tekstis.",
 	"TEXT_REVERSE_MESSAGE0": "ümberpöördud %1",
+	"TEXT_REVERSE_TOOLTIP": "Pöörab tekstis tähemärkide järjestuse ümber.",
 	"LISTS_CREATE_EMPTY_TITLE": "tühi loend",
 	"LISTS_CREATE_EMPTY_TOOLTIP": "Tagastab loendi, mille pikkus on 0 ja milles pole ühtegi elementi.",
 	"LISTS_CREATE_WITH_TOOLTIP": "Tekitab mistahes arvust elementidest loendi.",
@@ -311,6 +314,7 @@
 	"LISTS_SPLIT_WITH_DELIMITER": "eraldajaga",
 	"LISTS_SPLIT_TOOLTIP_SPLIT": "Tükeldab teksti eraldajade kohalt ja asetab tükid tekstide loendisse.",
 	"LISTS_SPLIT_TOOLTIP_JOIN": "Ühendab tekstide loendis olevad tükid üheks tekstiks, asetades tükkide vahele eraldaja.",
+	"LISTS_REVERSE_TOOLTIP": "Loendi koopia ümberpööramine.",
 	"VARIABLES_GET_TOOLTIP": "Tagastab selle muutuja väärtuse.",
 	"VARIABLES_GET_CREATE_SET": "Tekita 'määra „%1“ väärtuseks' plokk",
 	"VARIABLES_SET": "määra %1 väärtuseks %2",
@@ -337,5 +341,8 @@
 	"PROCEDURES_HIGHLIGHT_DEF": "Tõsta funktsiooni definitsioon esile",
 	"PROCEDURES_CREATE_DO": "Tekita '%1' plokk",
 	"PROCEDURES_IFRETURN_TOOLTIP": "Kui väärtus on tõene, tagastatakse teine väärtus.",
-	"PROCEDURES_IFRETURN_WARNING": "Hoiatus: Seda plokki saab kasutada ainult funktsiooni definitsioonis."
+	"PROCEDURES_IFRETURN_WARNING": "Hoiatus: Seda plokki saab kasutada ainult funktsiooni definitsioonis.",
+	"WORKSPACE_COMMENT_DEFAULT_TEXT": "Ütle midagi...",
+	"WORKSPACE_ARIA_LABEL": "Blockly tööruum",
+	"COLLAPSED_WARNINGS_WARNING": "Kokkuvajunud plokid sisaldavad hoiatusi."
 }

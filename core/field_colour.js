@@ -27,6 +27,7 @@ goog.require('Blockly.utils.KeyCodes');
 goog.require('Blockly.utils.object');
 goog.require('Blockly.utils.Size');
 
+goog.requireType('Blockly.ShortcutRegistry');
 
 /**
  * Class for a colour input field.
@@ -43,8 +44,7 @@ goog.require('Blockly.utils.Size');
  */
 Blockly.FieldColour = function(opt_value, opt_validator, opt_config) {
   Blockly.FieldColour.superClass_.constructor.call(
-      this, opt_value || Blockly.FieldColour.COLOURS[0],
-      opt_validator, opt_config);
+      this, opt_value, opt_validator, opt_config);
 
   /**
    * The field's colour picker element.
@@ -220,7 +220,7 @@ Blockly.FieldColour.prototype.doValueUpdate_ = function(newValue) {
   this.value_ = newValue;
   if (this.borderRect_) {
     this.borderRect_.style.fill = newValue;
-  } else if (this.sourceBlock_) {
+  } else if (this.sourceBlock_ && this.sourceBlock_.rendered) {
     this.sourceBlock_.pathObject.svgPath.setAttribute('fill', newValue);
     this.sourceBlock_.pathObject.svgPath.setAttribute('stroke', '#fff');
   }
@@ -269,6 +269,13 @@ Blockly.FieldColour.COLOURS = [
 ];
 
 /**
+ * The default value for this field.
+ * @type {*}
+ * @protected
+ */
+Blockly.FieldColour.prototype.DEFAULT_VALUE = Blockly.FieldColour.COLOURS[0];
+
+/**
  * An array of tooltip strings for the palette.  If not the same length as
  * COLOURS, the colour's hex code will be used for any missing titles.
  * All colour pickers use this unless overridden with setColours.
@@ -311,7 +318,7 @@ Blockly.FieldColour.prototype.setColumns = function(columns) {
 
 /**
  * Create and show the colour field's editor.
- * @private
+ * @protected
  */
 Blockly.FieldColour.prototype.showEditor_ = function() {
   this.picker_ = this.dropdownCreate_();
@@ -378,24 +385,27 @@ Blockly.FieldColour.prototype.onKeyDown_ = function(e) {
 /**
  * Handles the given action.
  * This is only triggered when keyboard accessibility mode is enabled.
- * @param {!Blockly.Action} action The action to be handled.
+ * @param {!Blockly.ShortcutRegistry.KeyboardShortcut} action The action to be handled.
  * @return {boolean} True if the field handled the action, false otherwise.
  * @package
  */
 Blockly.FieldColour.prototype.onBlocklyAction = function(action) {
   if (this.picker_) {
-    if (action === Blockly.navigation.ACTION_PREVIOUS) {
-      this.moveHighlightBy_(0, -1);
-      return true;
-    } else if (action === Blockly.navigation.ACTION_NEXT) {
-      this.moveHighlightBy_(0, 1);
-      return true;
-    } else if (action === Blockly.navigation.ACTION_OUT) {
-      this.moveHighlightBy_(-1, 0);
-      return true;
-    } else if (action === Blockly.navigation.ACTION_IN) {
-      this.moveHighlightBy_(1, 0);
-      return true;
+    switch (action.name) {
+      case Blockly.navigation.actionNames.PREVIOUS:
+        this.moveHighlightBy_(0, -1);
+        return true;
+      case Blockly.navigation.actionNames.NEXT:
+        this.moveHighlightBy_(0, 1);
+        return true;
+      case Blockly.navigation.actionNames.OUT:
+        this.moveHighlightBy_(-1, 0);
+        return true;
+      case Blockly.navigation.actionNames.IN:
+        this.moveHighlightBy_(1, 0);
+        return true;
+      default:
+        return false;
     }
   }
   return Blockly.FieldColour.superClass_.onBlocklyAction.call(this, action);

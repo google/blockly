@@ -2,13 +2,14 @@
 	"@metadata": {
 		"authors": [
 			"Fohanno",
-			"Y-M D",
-			"Gwenn-Ael",
 			"Fulup",
-			"Vicng"
+			"Gwenn-Ael",
+			"Vicng",
+			"Y-M D"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "elfenn",
+	"UNNAMED_KEY": "dizanv",
 	"TODAY": "Hiziv",
 	"DUPLICATE_BLOCK": "Eiladuriñ",
 	"ADD_COMMENT": "Ouzhpennañ un evezhiadenn",
@@ -234,7 +235,7 @@
 	"TEXT_TRIM_OPERATOR_RIGHT": "Lemel an esaouennoù eus an tu dehou",
 	"TEXT_PRINT_TITLE": "moullañ %1",
 	"TEXT_PRINT_TOOLTIP": "Moullañ an destenn, an niverenn pe un dalvoudenn spisaet all",
-	"TEXT_PROMPT_TYPE_TEXT": "pedadenn evit un destenn gant ur c'hemennad",
+	"TEXT_PROMPT_TYPE_TEXT": "goulenn un destenn gant ur gemennadenn",
 	"TEXT_PROMPT_TYPE_NUMBER": "pedadenn evit un niver gant ur c'hemennad",
 	"TEXT_PROMPT_TOOLTIP_NUMBER": "Goulenn un niver gant an implijer.",
 	"TEXT_PROMPT_TOOLTIP_TEXT": "Goulenn un destenn gant an implijer.",
@@ -349,5 +350,6 @@
 	"PROCEDURES_IFRETURN_TOOLTIP": "Ma'z eo gwir un dalvoudenn, distreiñ un eil talvoudenn neuze.",
 	"PROCEDURES_IFRETURN_WARNING": "Diwallit : Gallout a rafe ar bloc'h bezañ implijet e termenadur un arc'hwel hepken.",
 	"WORKSPACE_COMMENT_DEFAULT_TEXT": "Lavaret un dra bennak...",
+	"WORKSPACE_ARIA_LABEL": "Takad labour Blockly",
 	"COLLAPSED_WARNINGS_WARNING": "Kemennoù-diwall zo er bloc'hadoù pleget."
 }

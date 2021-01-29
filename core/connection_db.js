@@ -14,22 +14,35 @@
 
 goog.provide('Blockly.ConnectionDB');
 
+goog.require('Blockly.constants');
 goog.require('Blockly.RenderedConnection');
+
+goog.requireType('Blockly.IConnectionChecker');
 
 
 /**
  * Database of connections.
  * Connections are stored in order of their vertical component.  This way
  * connections in an area may be looked up quickly using a binary search.
+ * @param {!Blockly.IConnectionChecker} checker The workspace's
+ *     connection type checker, used to decide if connections are valid during a
+ *     drag.
  * @constructor
  */
-Blockly.ConnectionDB = function() {
+Blockly.ConnectionDB = function(checker) {
   /**
    * Array of connections sorted by y position in workspace units.
    * @type {!Array.<!Blockly.RenderedConnection>}
    * @private
    */
   this.connections_ = [];
+  /**
+   * The workspace's connection type checker, used to decide if connections are
+   * valid during a drag.
+   * @type {!Blockly.IConnectionChecker}
+   * @private
+   */
+  this.connectionChecker_ = checker;
 };
 
 /**
@@ -240,7 +253,7 @@ Blockly.ConnectionDB.prototype.searchForClosest = function(conn, maxRadius,
   var pointerMin = closestIndex - 1;
   while (pointerMin >= 0 && this.isInYRange_(pointerMin, conn.y, maxRadius)) {
     temp = this.connections_[pointerMin];
-    if (conn.isConnectionAllowed(temp, bestRadius)) {
+    if (this.connectionChecker_.canConnect(conn, temp, true, bestRadius)) {
       bestConnection = temp;
       bestRadius = temp.distanceFrom(conn);
     }
@@ -251,7 +264,7 @@ Blockly.ConnectionDB.prototype.searchForClosest = function(conn, maxRadius,
   while (pointerMax < this.connections_.length &&
       this.isInYRange_(pointerMax, conn.y, maxRadius)) {
     temp = this.connections_[pointerMax];
-    if (conn.isConnectionAllowed(temp, bestRadius)) {
+    if (this.connectionChecker_.canConnect(conn, temp, true, bestRadius)) {
       bestConnection = temp;
       bestRadius = temp.distanceFrom(conn);
     }
@@ -268,14 +281,16 @@ Blockly.ConnectionDB.prototype.searchForClosest = function(conn, maxRadius,
 
 /**
  * Initialize a set of connection DBs for a workspace.
+ * @param {!Blockly.IConnectionChecker} checker The workspace's
+ *     connection checker, used to decide if connections are valid during a drag.
  * @return {!Array.<!Blockly.ConnectionDB>} Array of databases.
  */
-Blockly.ConnectionDB.init = function() {
+Blockly.ConnectionDB.init = function(checker) {
   // Create four databases, one for each connection type.
   var dbList = [];
-  dbList[Blockly.INPUT_VALUE] = new Blockly.ConnectionDB();
-  dbList[Blockly.OUTPUT_VALUE] = new Blockly.ConnectionDB();
-  dbList[Blockly.NEXT_STATEMENT] = new Blockly.ConnectionDB();
-  dbList[Blockly.PREVIOUS_STATEMENT] = new Blockly.ConnectionDB();
+  dbList[Blockly.INPUT_VALUE] = new Blockly.ConnectionDB(checker);
+  dbList[Blockly.OUTPUT_VALUE] = new Blockly.ConnectionDB(checker);
+  dbList[Blockly.NEXT_STATEMENT] = new Blockly.ConnectionDB(checker);
+  dbList[Blockly.PREVIOUS_STATEMENT] = new Blockly.ConnectionDB(checker);
   return dbList;
 };

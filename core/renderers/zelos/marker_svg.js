@@ -13,6 +13,8 @@
 goog.provide('Blockly.zelos.MarkerSvg');
 
 goog.require('Blockly.blockRendering.MarkerSvg');
+goog.require('Blockly.utils.dom');
+goog.require('Blockly.utils.Svg');
 
 
 /**
@@ -32,16 +34,32 @@ Blockly.utils.object.inherits(Blockly.zelos.MarkerSvg,
     Blockly.blockRendering.MarkerSvg);
 
 /**
- * @override
+ * Position and display the marker for an input or an output connection.
+ * @param {!Blockly.ASTNode} curNode The node to draw the marker for.
+ * @private
  */
-Blockly.zelos.MarkerSvg.prototype.showWithInput_ = function(curNode) {
+Blockly.zelos.MarkerSvg.prototype.showWithInputOutput_ = function(curNode) {
   var block = /** @type {!Blockly.BlockSvg} */ (curNode.getSourceBlock());
-  var connection = curNode.getLocation();
+  var connection = /** @type {!Blockly.Connection} */ (curNode.getLocation());
   var offsetInBlock = connection.getOffsetInBlock();
 
   this.positionCircle_(offsetInBlock.x, offsetInBlock.y);
   this.setParent_(block);
   this.showCurrent_();
+};
+
+/**
+ * @override
+ */
+Blockly.zelos.MarkerSvg.prototype.showWithOutput_ = function(curNode) {
+  this.showWithInputOutput_(curNode);
+};
+
+/**
+ * @override
+ */
+Blockly.zelos.MarkerSvg.prototype.showWithInput_ = function(curNode) {
+  this.showWithInputOutput_(curNode);
 };
 
 /**
@@ -75,25 +93,6 @@ Blockly.zelos.MarkerSvg.prototype.positionCircle_ = function(x, y) {
 /**
  * @override
  */
-Blockly.zelos.MarkerSvg.prototype.showAtLocation_ = function(curNode) {
-  var handled = false;
-  if (curNode.getType() == Blockly.ASTNode.types.OUTPUT) {
-    // Inputs and outputs are drawn the same.
-    this.showWithInput_(curNode);
-    handled = true;
-  } else if (curNode.getType() == Blockly.ASTNode.types.BLOCK) {
-    this.showWithBlock_(curNode);
-    handled = true;
-  }
-
-  if (!handled) {
-    Blockly.zelos.MarkerSvg.superClass_.showAtLocation_.call(this, curNode);
-  }
-};
-
-/**
- * @override
- */
 Blockly.zelos.MarkerSvg.prototype.hide = function() {
   Blockly.zelos.MarkerSvg.superClass_.hide.call(this);
   this.markerCircle_.style.display = 'none';
@@ -114,17 +113,19 @@ Blockly.zelos.MarkerSvg.prototype.createDomInternal_ = function() {
 
   Blockly.zelos.MarkerSvg.superClass_.createDomInternal_.call(this);
 
-  this.markerCircle_ = Blockly.utils.dom.createSvgElement('circle', {
-    'r': this.constants_.CURSOR_RADIUS,
-    'style': 'display: none',
-    'stroke-width': this.constants_.CURSOR_STROKE_WIDTH
-  },
-  this.markerSvg_);
+  this.markerCircle_ = Blockly.utils.dom.createSvgElement(
+      Blockly.utils.Svg.CIRCLE, {
+        'r': this.constants_.CURSOR_RADIUS,
+        'style': 'display: none',
+        'stroke-width': this.constants_.CURSOR_STROKE_WIDTH
+      },
+      this.markerSvg_);
 
   // Markers and stack cursors don't blink.
   if (this.isCursor()) {
     var blinkProperties = this.getBlinkProperties_();
-    Blockly.utils.dom.createSvgElement('animate', blinkProperties,
+    Blockly.utils.dom.createSvgElement(
+        Blockly.utils.Svg.ANIMATE, blinkProperties,
         this.markerCircle_);
   }
 
@@ -134,8 +135,8 @@ Blockly.zelos.MarkerSvg.prototype.createDomInternal_ = function() {
 /**
  * @override
  */
-Blockly.zelos.MarkerSvg.prototype.applyColour_ = function() {
-  Blockly.zelos.MarkerSvg.superClass_.applyColour_.call(this);
+Blockly.zelos.MarkerSvg.prototype.applyColour_ = function(curNode) {
+  Blockly.zelos.MarkerSvg.superClass_.applyColour_.call(this, curNode);
 
   this.markerCircle_.setAttribute('fill', this.colour_);
   this.markerCircle_.setAttribute('stroke', this.colour_);

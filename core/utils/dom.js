@@ -18,6 +18,7 @@
  */
 goog.provide('Blockly.utils.dom');
 
+goog.require('Blockly.utils.Svg');
 goog.require('Blockly.utils.userAgent');
 
 
@@ -44,7 +45,7 @@ Blockly.utils.dom.XLINK_NS = 'http://www.w3.org/1999/xlink';
  * https://developer.mozilla.org/en-US/docs/Web/API/Node/nodeType
  * @enum {number}
  */
-Blockly.utils.dom.Node = {
+Blockly.utils.dom.NodeType = {
   ELEMENT_NODE: 1,
   TEXT_NODE: 3,
   COMMENT_NODE: 8,
@@ -74,14 +75,17 @@ Blockly.utils.dom.canvasContext_ = null;
 
 /**
  * Helper method for creating SVG elements.
- * @param {string} name Element's tag name.
+ * @param {string|Blockly.utils.Svg<T>} name Element's tag name.
  * @param {!Object} attrs Dictionary of attribute names and values.
- * @param {Element} parent Optional parent on which to append the element.
- * @return {!SVGElement} Newly created SVG element.
+ * @param {Element=} opt_parent Optional parent on which to append the element.
+ * @return {T} Newly created SVG element.  The return type is {!SVGElement} if
+ *     name is a string or a more specific type if it a member of
+ *     Blockly.utils.Svg
+ * @template T
  */
-Blockly.utils.dom.createSvgElement = function(name, attrs, parent) {
-  var e = /** @type {!SVGElement} */
-      (document.createElementNS(Blockly.utils.dom.SVG_NS, name));
+Blockly.utils.dom.createSvgElement = function(name, attrs, opt_parent) {
+  var e = /** @type {T} */
+      (document.createElementNS(Blockly.utils.dom.SVG_NS, String(name)));
   for (var key in attrs) {
     e.setAttribute(key, attrs[key]);
   }
@@ -91,8 +95,8 @@ Blockly.utils.dom.createSvgElement = function(name, attrs, parent) {
   if (document.body.runtimeStyle) {  // Indicates presence of IE-only attr.
     e.runtimeStyle = e.currentStyle = e.style;
   }
-  if (parent) {
-    parent.appendChild(e);
+  if (opt_parent) {
+    opt_parent.appendChild(e);
   }
   return e;
 };
@@ -114,6 +118,20 @@ Blockly.utils.dom.addClass = function(element, className) {
   }
   element.setAttribute('class', classes + className);
   return true;
+};
+
+/**
+ * Removes multiple calsses from an element.
+ * @param {!Element} element DOM element to remove classes from.
+ * @param {string} classNames A string of one or multiple class names for an
+ *    element.
+ */
+Blockly.utils.dom.removeClasses = function(element, classNames) {
+  var classList = classNames.split(' ');
+  for (var i = 0; i < classList.length; i++) {
+    var cssName = classList[i];
+    Blockly.utils.dom.removeClass(element, cssName);
+  }
 };
 
 /**
@@ -192,7 +210,7 @@ Blockly.utils.dom.insertAfter = function(newNode, refNode) {
  */
 Blockly.utils.dom.containsNode = function(parent, descendant) {
   return !!(parent.compareDocumentPosition(descendant) &
-            Blockly.utils.dom.Node.DOCUMENT_POSITION_CONTAINED_BY);
+            Blockly.utils.dom.NodeType.DOCUMENT_POSITION_CONTAINED_BY);
 };
 
 /**

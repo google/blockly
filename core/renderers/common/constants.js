@@ -21,7 +21,8 @@ goog.require('Blockly.utils.svgPaths');
 goog.require('Blockly.utils.userAgent');
 
 goog.requireType('Blockly.blockRendering.Debug');
-
+goog.requireType('Blockly.RenderedConnection');
+goog.requireType('Blockly.Theme');
 
 /**
  * An object that provides constants for rendering blocks.

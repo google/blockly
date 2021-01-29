@@ -19,6 +19,9 @@ goog.provide('Blockly.blockRendering');
 goog.require('Blockly.registry');
 goog.require('Blockly.utils.object');
 
+goog.requireType('Blockly.blockRendering.Renderer');
+goog.requireType('Blockly.Theme');
+
 
 /**
  * Whether or not the debugger is turned on.

@@ -19,6 +19,14 @@ goog.require('Blockly.Events.MarkerMove');
 goog.require('Blockly.utils.dom');
 goog.require('Blockly.utils.Svg');
 
+goog.requireType('Blockly.blockRendering.ConstantProvider');
+goog.requireType('Blockly.BlockSvg');
+goog.requireType('Blockly.Connection');
+goog.requireType('Blockly.Field');
+goog.requireType('Blockly.Marker');
+goog.requireType('Blockly.RenderedConnection');
+goog.requireType('Blockly.WorkspaceSvg');
+
 
 /**
  * Class for a marker.

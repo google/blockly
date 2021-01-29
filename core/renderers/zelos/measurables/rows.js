@@ -19,6 +19,8 @@ goog.require('Blockly.blockRendering.TopRow');
 goog.require('Blockly.blockRendering.SpacerRow');
 goog.require('Blockly.utils.object');
 
+goog.requireType('Blockly.blockRendering.ConstantProvider');
+
 
 /**
  * An object containing information about what elements are in the top row of a

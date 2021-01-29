@@ -23,6 +23,12 @@ goog.require('Blockly.zelos.PathObject');
 goog.require('Blockly.zelos.RenderInfo');
 goog.require('Blockly.zelos.MarkerSvg');
 
+goog.requireType('Blockly.blockRendering.MarkerSvg');
+goog.requireType('Blockly.blockRendering.RenderInfo');
+goog.requireType('Blockly.BlockSvg');
+goog.requireType('Blockly.Marker');
+goog.requireType('Blockly.WorkspaceSvg');
+
 
 /**
  * The zelos renderer.

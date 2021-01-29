@@ -19,6 +19,8 @@ goog.require('Blockly.utils.dom');
 goog.require('Blockly.utils.object');
 goog.require('Blockly.utils.Svg');
 
+goog.requireType('Blockly.Theme');
+
 
 /**
  * An object that handles creating and setting each of the SVG elements

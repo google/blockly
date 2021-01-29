@@ -16,6 +16,12 @@ goog.require('Blockly.blockRendering.MarkerSvg');
 goog.require('Blockly.utils.dom');
 goog.require('Blockly.utils.Svg');
 
+goog.requireType('Blockly.blockRendering.ConstantProvider');
+goog.requireType('Blockly.BlockSvg');
+goog.requireType('Blockly.Connection');
+goog.requireType('Blockly.Marker');
+goog.requireType('Blockly.WorkspaceSvg');
+
 
 /**
  * Class to draw a marker.

@@ -188,6 +188,7 @@ Blockly.ScrollbarPair.prototype.canScrollVertically = function() {
  * (e.g. in a flyout.)
  * @param {number} x The x coordinate of the scrollbar's origin, in CSS pixels.
  * @param {number} y The y coordinate of the scrollbar's origin, in CSS pixels.
+ * @package
  */
 Blockly.ScrollbarPair.prototype.setOrigin = function(x, y) {
   if (this.hScroll) {
@@ -224,10 +225,10 @@ Blockly.ScrollbarPair.prototype.set = function(x, y, updateMetrics) {
     // Update metrics.
     var xyRatio = {};
     if (this.hScroll) {
-      xyRatio = this.hScroll.getRatio_();
+      xyRatio.x = this.hScroll.getRatio_();
     }
     if (this.vScroll) {
-      xyRatio = this.vScroll.getRatio_();
+      xyRatio.y = this.vScroll.getRatio_();
     }
     this.workspace_.setMetrics(xyRatio);
   }
@@ -292,7 +293,7 @@ Blockly.ScrollbarPair.prototype.isVisible = function() {
  */
 Blockly.ScrollbarPair.prototype.resizeContent = function(hostMetrics) {
   if (this.hScroll) {
-    this.scrollbar.hScroll.resizeContentHorizontal(hostMetrics);
+    this.hScroll.resizeContentHorizontal(hostMetrics);
   }
   if (this.vScroll) {
     this.vScroll.resizeContentVertical(hostMetrics);

@@ -820,48 +820,48 @@ function test_substring_simple() {
 function test_substring_complex() {
   global $test_name, $naked, $proc_x, $proc_y, $func_x, $func_y, $func_a, $n, $ok, $log, $count, $varToChange, $rand, $item, $text, $number_of_calls, $list2, $proc_z, $func_z, $x, $proc_w, $func_c, $if2, $i, $loglist, $changing_list, $list_copy, $unittestResults;
   $number_of_calls = 0;
-  assertEquals(text_get_substring((get_numbers()), 'FROM_START', 1, 'FROM_START', 2), '23', 'substring # complex');
+  assertEquals(text_get_substring(get_numbers(), 'FROM_START', 1, 'FROM_START', 2), '23', 'substring # complex');
   check_number_of_calls('substring # complex');
   $number_of_calls = 0;
-  assertEquals(text_get_substring((true ? get_numbers() : null), 'FROM_START', ((true ? 2 : null) - 1), 'FROM_START', ((true ? 3 : null) - 1)), '23', 'substring # complex order');
+  assertEquals(text_get_substring(true ? get_numbers() : null, 'FROM_START', ((true ? 2 : null) - 1), 'FROM_START', ((true ? 3 : null) - 1)), '23', 'substring # complex order');
   check_number_of_calls('substring # complex order');
   $number_of_calls = 0;
   // The order for index for #-end is addition because this will catch errors in generators where most perform the operation ... - index.
-  assertEquals(text_get_substring((get_numbers()), 'FROM_END', 2, 'FROM_END', 1), '78', 'substring #-end complex');
+  assertEquals(text_get_substring(get_numbers(), 'FROM_END', 2, 'FROM_END', 1), '78', 'substring #-end complex');
   check_number_of_calls('substring #-end complex');
   $number_of_calls = 0;
-  assertEquals(text_get_substring((true ? get_numbers() : null), 'FROM_END', ((0 + 3) - 1), 'FROM_END', ((0 + 2) - 1)), '78', 'substring #-end order order');
+  assertEquals(text_get_substring(true ? get_numbers() : null, 'FROM_END', ((0 + 3) - 1), 'FROM_END', ((0 + 2) - 1)), '78', 'substring #-end order order');
   check_number_of_calls('substring #-end order order');
   $number_of_calls = 0;
-  assertEquals((get_numbers()), $text, 'substring first-last');
+  assertEquals(get_numbers(), $text, 'substring first-last');
   check_number_of_calls('substring first-last');
   $number_of_calls = 0;
-  assertEquals(text_get_substring((get_numbers()), 'FROM_START', 1, 'FROM_END', 1), '2345678', 'substring # #-end complex');
+  assertEquals(text_get_substring(get_numbers(), 'FROM_START', 1, 'FROM_END', 1), '2345678', 'substring # #-end complex');
   check_number_of_calls('substring # #-end complex');
   $number_of_calls = 0;
-  assertEquals(text_get_substring((get_numbers()), 'FROM_END', 6, 'FROM_START', 3), '34', 'substring #-end # complex');
+  assertEquals(text_get_substring(get_numbers(), 'FROM_END', 6, 'FROM_START', 3), '34', 'substring #-end # complex');
   check_number_of_calls('substring #-end # complex');
   $number_of_calls = 0;
-  assertEquals(text_get_substring((get_numbers()), 'FIRST', 0, 'FROM_START', 3), '1234', 'substring first # complex');
+  assertEquals(text_get_substring(get_numbers(), 'FIRST', 0, 'FROM_START', 3), '1234', 'substring first # complex');
   check_number_of_calls('substring first # complex');
   $number_of_calls = 0;
-  assertEquals(text_get_substring((get_numbers()), 'FIRST', 0, 'FROM_END', 1), '12345678', 'substring first #-end complex');
+  assertEquals(text_get_substring(get_numbers(), 'FIRST', 0, 'FROM_END', 1), '12345678', 'substring first #-end complex');
   check_number_of_calls('substring first #-end complex');
   $number_of_calls = 0;
-  assertEquals(text_get_substring((get_numbers()), 'FROM_START', 6, 'LAST', 0), '789', 'substring # last complex');
+  assertEquals(text_get_substring(get_numbers(), 'FROM_START', 6, 'LAST', 0), '789', 'substring # last complex');
   check_number_of_calls('substring # last complex');
   $number_of_calls = 0;
-  assertEquals(text_get_substring((get_numbers()), 'FROM_END', 2, 'LAST', 0), '789', 'substring #-end last complex');
+  assertEquals(text_get_substring(get_numbers(), 'FROM_END', 2, 'LAST', 0), '789', 'substring #-end last complex');
   check_number_of_calls('substring #-end last complex');
   $number_of_calls = 0;
-  assertEquals(text_get_substring((get_numbers()), 'FROM_START', 0, 'FROM_END', 0), '123456789', 'substring all with # #-end complex');
+  assertEquals(text_get_substring(get_numbers(), 'FROM_START', 0, 'FROM_END', 0), '123456789', 'substring all with # #-end complex');
   check_number_of_calls('substring all with # #-end complex');
   $number_of_calls = 0;
-  assertEquals(text_get_substring((get_numbers()), 'FROM_END', 8, 'FROM_START', 8), '123456789', 'substring all with #-end # complex');
+  assertEquals(text_get_substring(get_numbers(), 'FROM_END', 8, 'FROM_START', 8), '123456789', 'substring all with #-end # complex');
   check_number_of_calls('substring all with #-end # complex');
   $number_of_calls = 0;
   // Checks that the whole string is properly retrieved even if the value for start and end is not a simple number. This is especially important in generators where substring uses [x:length - y] for # #-end.
-  assertEquals(text_get_substring((get_numbers()), 'FROM_START', ((0 + 1) - 1), 'FROM_END', ((0 + 1) - 1)), '123456789', 'substring all with # #-end math complex');
+  assertEquals(text_get_substring(get_numbers(), 'FROM_START', ((0 + 1) - 1), 'FROM_END', ((0 + 1) - 1)), '123456789', 'substring all with # #-end math complex');
   check_number_of_calls('substring all with # #-end math complex');
 }
 
@@ -923,6 +923,23 @@ function test_replace() {
   assertEquals(str_replace('aaaaa', '', 'aaaaa'), '', 'empty replacement 2');
   assertEquals(str_replace('a', '', 'aaaaa'), '', 'empty replacement 3');
   assertEquals(str_replace('a', 'chicken', ''), '', 'empty source');
+}
+
+// Tests the "multiline" block.
+function test_multiline() {
+  global $test_name, $naked, $proc_x, $proc_y, $func_x, $func_y, $func_a, $n, $ok, $log, $count, $varToChange, $rand, $item, $text, $number_of_calls, $list2, $proc_z, $func_z, $x, $proc_w, $func_c, $if2, $i, $loglist, $changing_list, $list_copy, $unittestResults;
+  assertEquals('', '', 'no text');
+  assertEquals('Google', 'Google', 'simple');
+  assertEquals('paragraph' . "\n" .
+  'with newlines' . "\n" .
+  'yup', 'paragraph' . "\n" .
+  'with newlines' . "\n" .
+  'yup', 'no compile error with newlines');
+  assertEquals(strlen('bark') === 0 ? strlen('bark bark' . "\n" .
+  'bark bark bark' . "\n" .
+  'bark bark bark bark') + 1 : substr_count('bark bark' . "\n" .
+  'bark bark bark' . "\n" .
+  'bark bark bark bark', 'bark'), 9, 'count with newlines');
 }
 
 // Checks that the number of calls is one in order
@@ -1652,6 +1669,7 @@ test_trim();
 test_count_text();
 test_text_reverse();
 test_replace();
+test_multiline();
 print(unittest_report());
 $unittestResults = null;
 

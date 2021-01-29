@@ -16,16 +16,20 @@ goog.provide('Blockly.Mutator');
 goog.require('Blockly.Bubble');
 goog.require('Blockly.Events');
 goog.require('Blockly.Events.BlockChange');
-goog.require('Blockly.Events.Ui');
+goog.require('Blockly.Events.BubbleOpen');
 goog.require('Blockly.Icon');
 goog.require('Blockly.navigation');
 goog.require('Blockly.utils');
 goog.require('Blockly.utils.dom');
 goog.require('Blockly.utils.global');
 goog.require('Blockly.utils.object');
+goog.require('Blockly.utils.Svg');
+goog.require('Blockly.utils.toolbox');
 goog.require('Blockly.utils.xml');
 goog.require('Blockly.WorkspaceSvg');
 goog.require('Blockly.Xml');
+
+goog.requireType('Blockly.utils.Metrics');
 
 
 /**
@@ -74,11 +78,12 @@ Blockly.Mutator.prototype.getWorkspace = function() {
 /**
  * Draw the mutator icon.
  * @param {!Element} group The icon group.
- * @private
+ * @protected
  */
 Blockly.Mutator.prototype.drawIcon_ = function(group) {
   // Square with rounded corners.
-  Blockly.utils.dom.createSvgElement('rect',
+  Blockly.utils.dom.createSvgElement(
+      Blockly.utils.Svg.RECT,
       {
         'class': 'blocklyIconShape',
         'rx': '4',
@@ -88,7 +93,8 @@ Blockly.Mutator.prototype.drawIcon_ = function(group) {
       },
       group);
   // Gear teeth.
-  Blockly.utils.dom.createSvgElement('path',
+  Blockly.utils.dom.createSvgElement(
+      Blockly.utils.Svg.PATH,
       {
         'class': 'blocklyIconSymbol',
         'd': 'm4.203,7.296 0,1.368 -0.92,0.677 -0.11,0.41 0.9,1.559 0.41,' +
@@ -102,7 +108,7 @@ Blockly.Mutator.prototype.drawIcon_ = function(group) {
       group);
   // Axle hole.
   Blockly.utils.dom.createSvgElement(
-      'circle',
+      Blockly.utils.Svg.CIRCLE,
       {
         'class': 'blocklyIconShape',
         'r': '2.7',
@@ -136,7 +142,8 @@ Blockly.Mutator.prototype.createEditor_ = function() {
     [Workspace]
   </svg>
   */
-  this.svgDialog_ = Blockly.utils.dom.createSvgElement('svg',
+  this.svgDialog_ = Blockly.utils.dom.createSvgElement(
+      Blockly.utils.Svg.SVG,
       {'x': Blockly.Bubble.BORDER_WIDTH, 'y': Blockly.Bubble.BORDER_WIDTH},
       null);
   // Convert the list of names into a list of XML objects for the flyout.
@@ -163,10 +170,15 @@ Blockly.Mutator.prototype.createEditor_ = function() {
         'renderer': this.block_.workspace.options.renderer,
         'rendererOverrides': this.block_.workspace.options.rendererOverrides
       }));
-  workspaceOptions.toolboxPosition = this.block_.RTL ? Blockly.TOOLBOX_AT_RIGHT :
-      Blockly.TOOLBOX_AT_LEFT;
-  workspaceOptions.languageTree = quarkXml;
-  workspaceOptions.getMetrics = this.getFlyoutMetrics_.bind(this);
+  workspaceOptions.toolboxPosition = this.block_.RTL ?
+      Blockly.utils.toolbox.Position.RIGHT :
+      Blockly.utils.toolbox.Position.LEFT;
+  var hasFlyout = !!quarkXml;
+  if (hasFlyout) {
+    workspaceOptions.languageTree =
+        Blockly.utils.toolbox.convertToolboxDefToJson(quarkXml);
+    workspaceOptions.getMetrics = this.getFlyoutMetrics_.bind(this);
+  }
   this.workspace_ = new Blockly.WorkspaceSvg(workspaceOptions);
   this.workspace_.isMutator = true;
   this.workspace_.addChangeListener(Blockly.Events.disableOrphans);
@@ -175,13 +187,16 @@ Blockly.Mutator.prototype.createEditor_ = function() {
   // a top level svg. Instead of handling scale themselves, mutators
   // inherit scale from the parent workspace.
   // To fix this, scale needs to be applied at a different level in the dom.
-  var flyoutSvg = this.workspace_.addFlyout('g');
+  var flyoutSvg = hasFlyout ?
+      this.workspace_.addFlyout(Blockly.utils.Svg.G) : null;
   var background = this.workspace_.createDom('blocklyMutatorBackground');
 
-  // Insert the flyout after the <rect> but before the block canvas so that
-  // the flyout is underneath in z-order.  This makes blocks layering during
-  // dragging work properly.
-  background.insertBefore(flyoutSvg, this.workspace_.svgBlockCanvas_);
+  if (flyoutSvg) {
+    // Insert the flyout after the <rect> but before the block canvas so that
+    // the flyout is underneath in z-order.  This makes blocks layering during
+    // dragging work properly.
+    background.insertBefore(flyoutSvg, this.workspace_.svgBlockCanvas_);
+  }
   this.svgDialog_.appendChild(background);
 
   return this.svgDialog_;
@@ -218,17 +233,16 @@ Blockly.Mutator.prototype.updateEditable = function() {
 Blockly.Mutator.prototype.resizeBubble_ = function() {
   var doubleBorderWidth = 2 * Blockly.Bubble.BORDER_WIDTH;
   var workspaceSize = this.workspace_.getCanvas().getBBox();
-  var width;
-  if (this.block_.RTL) {
-    width = -workspaceSize.x;
-  } else {
-    width = workspaceSize.width + workspaceSize.x;
-  }
+  var width = workspaceSize.width + workspaceSize.x;
   var height = workspaceSize.height + doubleBorderWidth * 3;
   var flyout = this.workspace_.getFlyout();
   if (flyout) {
     var flyoutMetrics = flyout.getMetrics_();
     height = Math.max(height, flyoutMetrics.contentHeight + 20);
+    width += flyout.getWidth();
+  }
+  if (this.block_.RTL) {
+    width = -workspaceSize.x;
   }
   width += doubleBorderWidth * 3;
   // Only resize if the size difference is significant.  Eliminates shuddering.
@@ -272,7 +286,7 @@ Blockly.Mutator.prototype.setVisible = function(visible) {
     return;
   }
   Blockly.Events.fire(
-      new Blockly.Events.Ui(this.block_, 'mutatorOpen', !visible, visible));
+      new Blockly.Events.BubbleOpen(this.block_, visible, 'mutator'));
   if (visible) {
     // Create the bubble.
     this.bubble_ = new Blockly.Bubble(
@@ -286,7 +300,7 @@ Blockly.Mutator.prototype.setVisible = function(visible) {
     var flyout = this.workspace_.getFlyout();
     if (tree) {
       flyout.init(this.workspace_);
-      flyout.show(tree.childNodes);
+      flyout.show(tree);
     }
 
     this.rootBlock_ = this.block_.decompose(this.workspace_);
@@ -299,7 +313,7 @@ Blockly.Mutator.prototype.setVisible = function(visible) {
     this.rootBlock_.setDeletable(false);
     if (flyout) {
       var margin = flyout.CORNER_RADIUS * 2;
-      var x = flyout.getWidth() + margin;
+      var x = this.rootBlock_.RTL ? flyout.getWidth() + margin : margin;
     } else {
       var margin = 16;
       var x = margin;
@@ -349,7 +363,7 @@ Blockly.Mutator.prototype.setVisible = function(visible) {
  * @private
  */
 Blockly.Mutator.prototype.workspaceChanged_ = function(e) {
-  if (e.type == Blockly.Events.UI ||
+  if (e.isUiEvent ||
       (e.type == Blockly.Events.CHANGE && e.element == 'disabled')) {
     return;
   }
@@ -357,12 +371,26 @@ Blockly.Mutator.prototype.workspaceChanged_ = function(e) {
   if (!this.workspace_.isDragging()) {
     var blocks = this.workspace_.getTopBlocks(false);
     var MARGIN = 20;
+
     for (var b = 0, block; (block = blocks[b]); b++) {
       var blockXY = block.getRelativeToSurfaceXY();
-      var blockHW = block.getHeightWidth();
-      if (blockXY.y + blockHW.height < MARGIN) {
-        // Bump any block that's above the top back inside.
-        block.moveBy(0, MARGIN - blockHW.height - blockXY.y);
+
+      // Bump any block that's above the top back inside.
+      if (blockXY.y < MARGIN) {
+        block.moveBy(0, MARGIN - blockXY.y);
+      }
+      // Bump any block overlapping the flyout back inside.
+      if (block.RTL) {
+        var right = -MARGIN;
+        var flyout = this.workspace_.getFlyout();
+        if (flyout) {
+          right -= flyout.getWidth();
+        }
+        if (blockXY.x > right) {
+          block.moveBy(right - blockXY.x, 0);
+        }
+      } else if (blockXY.x < MARGIN) {
+        block.moveBy(MARGIN - blockXY.x, 0);
       }
     }
   }
@@ -373,14 +401,28 @@ Blockly.Mutator.prototype.workspaceChanged_ = function(e) {
     var block = this.block_;
     var oldMutationDom = block.mutationToDom();
     var oldMutation = oldMutationDom && Blockly.Xml.domToText(oldMutationDom);
+
+    // Switch off rendering while the source block is rebuilt.
+    var savedRendered = block.rendered;
+    // TODO(#4288): We should not be setting the rendered property to false.
+    block.rendered = false;
+
     // Allow the source block to rebuild itself.
     block.compose(this.rootBlock_);
+    // Restore rendering and show the changes.
+    block.rendered = savedRendered;
+    // Mutation may have added some elements that need initializing.
     block.initSvg();
-    block.render();
 
-    if (Blockly.getMainWorkspace().keyboardAccessibilityMode) {
+    if ((/** @type {!Blockly.WorkspaceSvg} */ (Blockly.getMainWorkspace()))
+        .keyboardAccessibilityMode) {
       Blockly.navigation.moveCursorOnBlockMutation(block);
     }
+
+    if (block.rendered) {
+      block.render();
+    }
+
     var newMutationDom = block.mutationToDom();
     var newMutation = newMutationDom && Blockly.Xml.domToText(newMutationDom);
     if (oldMutation != newMutation) {
@@ -411,17 +453,29 @@ Blockly.Mutator.prototype.workspaceChanged_ = function(e) {
  * .viewWidth: Width of the visible rectangle,
  * .absoluteTop: Top-edge of view.
  * .absoluteLeft: Left-edge of view.
- * @return {!Object} Contains size and position metrics of mutator dialog's
- *     workspace.
+ * @return {!Blockly.utils.Metrics} Contains size and position metrics of
+ *     mutator dialog's workspace.
  * @private
  */
 Blockly.Mutator.prototype.getFlyoutMetrics_ = function() {
+  // The mutator workspace only uses a subset of Blockly.utils.Metrics
+  // properties as features such as scroll and zoom are unsupported.
+  var unsupported = 0;
+  var flyout = this.workspace_.getFlyout();
+  var flyoutWidth = flyout ? flyout.getWidth() : 0;
   return {
+    contentHeight: unsupported,
+    contentWidth: unsupported,
+    contentTop: unsupported,
+    contentLeft: unsupported,
+
     viewHeight: this.workspaceHeight_,
-    viewWidth: this.workspaceWidth_ - this.workspace_.getFlyout().getWidth(),
-    absoluteTop: 0,
-    absoluteLeft: this.workspace_.RTL ? 0 :
-        this.workspace_.getFlyout().getWidth()
+    viewWidth: this.workspaceWidth_ - flyoutWidth,
+    viewTop: unsupported,
+    viewLeft: unsupported,
+
+    absoluteTop: unsupported,
+    absoluteLeft: this.workspace_.RTL ? 0 : flyoutWidth
   };
 };
 
@@ -447,10 +501,13 @@ Blockly.Mutator.prototype.updateBlockStyle = function() {
       block.setStyle(block.getStyleName());
     }
 
-    var flyoutBlocks = ws.getFlyout().workspace_.getAllBlocks(false);
-    for (var i = 0; i < flyoutBlocks.length; i++) {
-      var block = flyoutBlocks[i];
-      block.setStyle(block.getStyleName());
+    var flyout = ws.getFlyout();
+    if (flyout) {
+      var flyoutBlocks = flyout.workspace_.getAllBlocks(false);
+      for (var i = 0; i < flyoutBlocks.length; i++) {
+        var block = flyoutBlocks[i];
+        block.setStyle(block.getStyleName());
+      }
     }
   }
 };

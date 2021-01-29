@@ -1,4 +1,18 @@
 #!/bin/bash
+#
+# Deprecation warning: (July 2020)
+# This advanced compilation test script has been deprecated in favour of
+#   npm run test:compile:advanced
+#
+# The script will be removed from Blockly core in Q4 of 2020.
+#
+echo "Deprecation warning: (July 2020)"
+echo "This advanced compilation test script has been deprecated in favour of"
+echo "  npm run test:compile:advanced"
+echo ""
+echo "The script will be removed from Blockly core in Q4 of 2020."
+echo ""
+
 echo "Executing compile.sh from $(pwd)"
 
 # Find the Blockly project root if pwd is the root
@@ -57,7 +71,6 @@ tempPath="$BLOCKLY_ROOT/temp_core"
 corePath="$BLOCKLY_ROOT/core/*"
 mkdir $tempPath
 cp $corePath $tempPath
-cp "$BLOCKLY_ROOT/tests/compile/test_blocks.js" "$tempPath/test_blocks.js"
 # Copy over all files in core and any subdirectories to the temp_core directory.
 for dir in "$corePath/" ; do
   # For all files in the directory and any subdirectories rename them to
@@ -75,6 +88,7 @@ done
 echo "Compiling Blockly..."
 COMPILATION_COMMAND="java -jar $COMPILER --js='$BLOCKLY_ROOT/tests/compile/main.js' \
   --js='$tempPath/**.js' \
+  --js='$BLOCKLY_ROOT/tests/blocks/**.js' \
   --js='$BLOCKLY_ROOT/blocks/**.js' \
   --js='$BLOCKLY_ROOT/generators/**.js' \
   --generate_exports \

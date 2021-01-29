@@ -7,6 +7,7 @@
 suite('DropDownDiv', function() {
   suite('Positioning', function() {
     setup(function() {
+      sharedTestSetup.call(this);
       this.boundsStub = sinon.stub(Blockly.DropDownDiv, 'getBoundsInfo_')
           .returns({
             left: 0,
@@ -27,10 +28,7 @@ suite('DropDownDiv', function() {
           .get(function() { return 0; });
     });
     teardown(function() {
-      this.boundsStub.restore();
-      this.sizeStub.restore();
-      this.clientHeightStub.restore();
-      this.clientTopStub.restore();
+      sharedTestTeardown.call(this);
     });
     test('Below, in Bounds', function() {
       var metrics = Blockly.DropDownDiv.getPositionMetrics_(50, 0, 50, -10);

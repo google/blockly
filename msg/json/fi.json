@@ -1,19 +1,20 @@
 {
 	"@metadata": {
 		"authors": [
-			"Nike",
-			"Silvonen",
-			"Espertus",
-			"Pettevi",
-			"McSalama",
+			"Actuallyisjoha",
 			"Espeox",
-			"SNuutti",
-			"PStudios",
-			"Mikahama",
-			"Pyscowicz",
-			"Pahkiqaz",
+			"Espertus",
 			"Hopea",
-			"KK"
+			"KK",
+			"McSalama",
+			"Mikahama",
+			"Nike",
+			"PStudios",
+			"Pahkiqaz",
+			"Pettevi",
+			"Pyscowicz",
+			"SNuutti",
+			"Silvonen"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "kohde",
@@ -366,5 +367,6 @@
 	"PROCEDURES_IFRETURN_HELPURL": "http://c2.com/cgi/wiki?GuardClause",
 	"PROCEDURES_IFRETURN_WARNING": "Varoitus: tätä lohkoa voi käyttää vain funktion määrityksessä.",
 	"WORKSPACE_COMMENT_DEFAULT_TEXT": "Sano jotakin...",
+	"WORKSPACE_ARIA_LABEL": "Blocklyn työnäkymä",
 	"COLLAPSED_WARNINGS_WARNING": "Supistetut lohkot sisältävät varoituksia."
 }

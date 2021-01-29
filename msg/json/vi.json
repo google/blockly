@@ -2,16 +2,18 @@
 	"@metadata": {
 		"authors": [
 			"Baonguyen21022003",
-			"Espertus",
-			"Qneutron",
-			"Withoutaname",
 			"Dstream",
-			"Nguyenvanduocit",
+			"Espertus",
 			"Leducthn",
-			"SierraNguyen"
+			"Nguyenvanduocit",
+			"Nguyễn Mạnh An",
+			"Qneutron",
+			"SierraNguyen",
+			"Withoutaname"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "vật",
+	"UNNAMED_KEY": "không tên",
 	"TODAY": "Hôm nay",
 	"DUPLICATE_BLOCK": "Tạo Bản Sao",
 	"ADD_COMMENT": "Thêm Chú Giải",
@@ -350,5 +352,6 @@
 	"PROCEDURES_IFRETURN_TOOLTIP": "Khi điều kiện đúng thì hoàn trả một giá trị.",
 	"PROCEDURES_IFRETURN_WARNING": "Chú ý: Mảnh này chỉ có thể dùng trong một thủ tục.",
 	"WORKSPACE_COMMENT_DEFAULT_TEXT": "Hãy nói gì đó...",
+	"WORKSPACE_ARIA_LABEL": "Không gian làm việc Blockly",
 	"COLLAPSED_WARNINGS_WARNING": "Các khối bị sập có chứa cảnh báo."
 }

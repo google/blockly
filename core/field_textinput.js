@@ -48,9 +48,6 @@ Blockly.FieldTextInput = function(opt_value, opt_validator, opt_config) {
    */
   this.spellcheck_ = true;
 
-  if (opt_value == null) {
-    opt_value = '';
-  }
   Blockly.FieldTextInput.superClass_.constructor.call(this,
       opt_value, opt_validator, opt_config);
 
@@ -80,8 +77,22 @@ Blockly.FieldTextInput = function(opt_value, opt_validator, opt_config) {
    * @type {?boolean}
    */
   this.fullBlockClickTarget_ = false;
+
+  /**
+   * The workspace that this field belongs to.
+   * @type {?Blockly.WorkspaceSvg}
+   * @protected
+   */
+  this.workspace_ = null;
 };
 Blockly.utils.object.inherits(Blockly.FieldTextInput, Blockly.Field);
+
+/**
+ * The default value for this field.
+ * @type {*}
+ * @protected
+ */
+Blockly.FieldTextInput.prototype.DEFAULT_VALUE = '';
 
 /**
  * Construct a FieldTextInput from a JSON arg object,
@@ -275,7 +286,8 @@ Blockly.FieldTextInput.prototype.setSpellcheck = function(check) {
  */
 Blockly.FieldTextInput.prototype.showEditor_ = function(_opt_e,
     opt_quietInput) {
-  this.workspace_ = this.sourceBlock_.workspace;
+  this.workspace_ =
+    (/** @type {!Blockly.BlockSvg} */ (this.sourceBlock_)).workspace;
   var quietInput = opt_quietInput || false;
   if (!quietInput && (Blockly.utils.userAgent.MOBILE ||
                       Blockly.utils.userAgent.ANDROID ||
@@ -292,11 +304,10 @@ Blockly.FieldTextInput.prototype.showEditor_ = function(_opt_e,
  * @private
  */
 Blockly.FieldTextInput.prototype.showPromptEditor_ = function() {
-  var fieldText = this;
   Blockly.prompt(Blockly.Msg['CHANGE_VALUE_TITLE'], this.getText(),
-      function(newValue) {
-        fieldText.setValue(newValue);
-      });
+      function(text) {
+        this.setValue(this.getValueFromEditorText_(text));
+      }.bind(this));
 };
 
 /**
@@ -373,7 +384,7 @@ Blockly.FieldTextInput.prototype.widgetCreate_ = function() {
 /**
  * Closes the editor, saves the results, and disposes of any events or
  * dom-references belonging to the editor.
- * @private
+ * @protected
  */
 Blockly.FieldTextInput.prototype.widgetDispose_ = function() {
   // Non-disposal related things that we do when the editor closes.
@@ -418,7 +429,7 @@ Blockly.FieldTextInput.prototype.bindInputEvents_ = function(htmlInput) {
 
 /**
  * Unbind handlers for user input and workspace size changes.
- * @private
+ * @protected
  */
 Blockly.FieldTextInput.prototype.unbindInputEvents_ = function() {
   if (this.onKeyDownWrapper_) {
@@ -510,42 +521,6 @@ Blockly.FieldTextInput.prototype.resizeEditor_ = function() {
 
   div.style.left = xy.x + 'px';
   div.style.top = xy.y + 'px';
-};
-
-/**
- * Ensure that only a number may be entered.
- * @param {string} text The user's text.
- * @return {?string} A string representing a valid number, or null if invalid.
- * @deprecated
- */
-Blockly.FieldTextInput.numberValidator = function(text) {
-  console.warn('Blockly.FieldTextInput.numberValidator is deprecated. ' +
-               'Use Blockly.FieldNumber instead.');
-  if (text === null) {
-    return null;
-  }
-  text = String(text);
-  // TODO: Handle cases like 'ten', '1.203,14', etc.
-  // 'O' is sometimes mistaken for '0' by inexperienced users.
-  text = text.replace(/O/ig, '0');
-  // Strip out thousands separators.
-  text = text.replace(/,/g, '');
-  var n = Number(text || 0);
-  return isNaN(n) ? null : String(n);
-};
-
-/**
- * Ensure that only a non-negative integer may be entered.
- * @param {string} text The user's text.
- * @return {?string} A string representing a valid int, or null if invalid.
- * @deprecated
- */
-Blockly.FieldTextInput.nonnegativeIntegerValidator = function(text) {
-  var n = Blockly.FieldTextInput.numberValidator(text);
-  if (n) {
-    n = String(Math.max(0, Math.floor(n)));
-  }
-  return n;
 };
 
 /**

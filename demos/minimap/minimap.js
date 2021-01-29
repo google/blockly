@@ -35,7 +35,7 @@ Minimap.init = function(workspace, minimap) {
     // New code starts from here.
 
     // Get the absolutePosition.
-    var absolutePosition = (this.handlePosition_ / this.ratio_);
+    var absolutePosition = (this.handlePosition_ / this.ratio);
 
     // Firing the scroll change listener.
     Minimap.onScrollChange(absolutePosition, this.horizontal_);
@@ -50,7 +50,7 @@ Minimap.init = function(workspace, minimap) {
     // New code starts from here.
 
     // Get the absolutePosition.
-    var absolutePosition = (this.handlePosition_ / this.ratio_);
+    var absolutePosition = (this.handlePosition_ / this.ratio);
 
     // Firing the scroll change listener.
     Minimap.onScrollChange(absolutePosition, this.horizontal_);
@@ -133,10 +133,11 @@ Minimap.mousemove = function(e) {
 
 /**
  * Run non-UI events from the main workspace on the minimap.
- * @param {!Event} event Event that triggered in the main workspace.
+ * @param {!Blockly.Events.Abstract} event Event that triggered in the main
+ *    workspace.
  */
 Minimap.mirrorEvent = function(event) {
-  if (event.type == Blockly.Events.UI) {
+  if (event.isUiEvent) {
     return;  // Don't mirror UI events.
   }
   // Convert event to JSON.  This could then be transmitted across the net.

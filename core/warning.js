@@ -14,10 +14,11 @@ goog.provide('Blockly.Warning');
 
 goog.require('Blockly.Bubble');
 goog.require('Blockly.Events');
-goog.require('Blockly.Events.Ui');
+goog.require('Blockly.Events.BubbleOpen');
 goog.require('Blockly.Icon');
 goog.require('Blockly.utils.dom');
 goog.require('Blockly.utils.object');
+goog.require('Blockly.utils.Svg');
 
 
 /**
@@ -42,11 +43,12 @@ Blockly.Warning.prototype.collapseHidden = false;
 /**
  * Draw the warning icon.
  * @param {!Element} group The icon group.
- * @private
+ * @protected
  */
 Blockly.Warning.prototype.drawIcon_ = function(group) {
   // Triangle with rounded corners.
-  Blockly.utils.dom.createSvgElement('path',
+  Blockly.utils.dom.createSvgElement(
+      Blockly.utils.Svg.PATH,
       {
         'class': 'blocklyIconShape',
         'd': 'M2,15Q-1,15 0.5,12L6.5,1.7Q8,-1 9.5,1.7L15.5,12Q17,15 14,15z'
@@ -55,45 +57,21 @@ Blockly.Warning.prototype.drawIcon_ = function(group) {
   // Can't use a real '!' text character since different browsers and operating
   // systems render it differently.
   // Body of exclamation point.
-  Blockly.utils.dom.createSvgElement('path',
+  Blockly.utils.dom.createSvgElement(
+      Blockly.utils.Svg.PATH,
       {
         'class': 'blocklyIconSymbol',
         'd': 'm7,4.8v3.16l0.27,2.27h1.46l0.27,-2.27v-3.16z'
       },
       group);
   // Dot of exclamation point.
-  Blockly.utils.dom.createSvgElement('rect',
+  Blockly.utils.dom.createSvgElement(
+      Blockly.utils.Svg.RECT,
       {
         'class': 'blocklyIconSymbol',
         'x': '7', 'y': '11', 'height': '2', 'width': '2'
       },
       group);
-};
-
-/**
- * Create the text for the warning's bubble.
- * @param {string} text The text to display.
- * @return {!SVGTextElement} The top-level node of the text.
- * @private
- */
-Blockly.Warning.textToDom_ = function(text) {
-  var paragraph = /** @type {!SVGTextElement} */
-      (Blockly.utils.dom.createSvgElement(
-          'text',
-          {
-            'class': 'blocklyText blocklyBubbleText blocklyNoPointerEvents',
-            'y': Blockly.Bubble.BORDER_WIDTH
-          },
-          null)
-      );
-  var lines = text.split('\n');
-  for (var i = 0; i < lines.length; i++) {
-    var tspanElement = Blockly.utils.dom.createSvgElement('tspan',
-        {'dy': '1em', 'x': Blockly.Bubble.BORDER_WIDTH}, paragraph);
-    var textNode = document.createTextNode(lines[i]);
-    tspanElement.appendChild(textNode);
-  }
-  return paragraph;
 };
 
 /**
@@ -105,63 +83,34 @@ Blockly.Warning.prototype.setVisible = function(visible) {
     return;
   }
   Blockly.Events.fire(
-      new Blockly.Events.Ui(this.block_, 'warningOpen', !visible, visible));
+      new Blockly.Events.BubbleOpen(this.block_, visible, 'warning'));
   if (visible) {
-    this.createBubble();
+    this.createBubble_();
   } else {
-    this.disposeBubble();
+    this.disposeBubble_();
   }
 };
 
 /**
  * Show the bubble.
- * @package
+ * @private
  */
-Blockly.Warning.prototype.createBubble = function() {
-  // TODO (#2943): This is package because comments steal this UI for
-  //  non-editable comments, but really this should be private.
-  this.paragraphElement_ = Blockly.Warning.textToDom_(this.getText());
-  this.bubble_ = new Blockly.Bubble(
-      /** @type {!Blockly.WorkspaceSvg} */ (this.block_.workspace),
-      this.paragraphElement_, this.block_.pathObject.svgPath,
-      /** @type {!Blockly.utils.Coordinate} */ (this.iconXY_), null, null);
-  // Expose this warning's block's ID on its top-level SVG group.
-  this.bubble_.setSvgId(this.block_.id);
-  if (this.block_.RTL) {
-    // Right-align the paragraph.
-    // This cannot be done until the bubble is rendered on screen.
-    var maxWidth = this.paragraphElement_.getBBox().width;
-    for (var i = 0, textElement;
-      (textElement = this.paragraphElement_.childNodes[i]); i++) {
-
-      textElement.setAttribute('text-anchor', 'end');
-      textElement.setAttribute('x', maxWidth + Blockly.Bubble.BORDER_WIDTH);
-    }
-  }
+Blockly.Warning.prototype.createBubble_ = function() {
+  this.paragraphElement_ = Blockly.Bubble.textToDom(this.getText());
+  this.bubble_ = Blockly.Bubble.createNonEditableBubble(
+      this.paragraphElement_, /** @type {!Blockly.BlockSvg} */ (this.block_),
+      /** @type {!Blockly.utils.Coordinate} */ (this.iconXY_));
   this.applyColour();
 };
 
 /**
  * Dispose of the bubble and references to it.
- * @package
- */
-Blockly.Warning.prototype.disposeBubble = function() {
-  // TODO (#2943): This is package because comments steal this UI for
-  //  non-editable comments, but really this should be private.
-  this.bubble_.dispose();
-  this.bubble_ = null;
-  this.body_ = null;
-  this.paragraphElement_ = null;
-};
-
-/**
- * Bring the warning to the top of the stack when clicked on.
- * @param {!Event} _e Mouse up event.
  * @private
  */
-
-Blockly.Warning.prototype.bodyFocus_ = function(_e) {
-  this.bubble_.promote();
+Blockly.Warning.prototype.disposeBubble_ = function() {
+  this.bubble_.dispose();
+  this.bubble_ = null;
+  this.paragraphElement_ = null;
 };
 
 /**

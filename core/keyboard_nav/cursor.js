@@ -13,11 +13,13 @@
 
 goog.provide('Blockly.Cursor');
 
-goog.require('Blockly.Action');
 goog.require('Blockly.ASTNode');
 goog.require('Blockly.Marker');
 goog.require('Blockly.navigation');
 goog.require('Blockly.utils.object');
+
+goog.requireType('Blockly.IBlocklyActionable');
+goog.requireType('Blockly.ShortcutRegistry');
 
 
 /**
@@ -25,6 +27,7 @@ goog.require('Blockly.utils.object');
  * A cursor controls how a user navigates the Blockly AST.
  * @constructor
  * @extends {Blockly.Marker}
+ * @implements {Blockly.IBlocklyActionable}
  */
 Blockly.Cursor = function() {
   Blockly.Cursor.superClass_.constructor.call(this);
@@ -137,14 +140,15 @@ Blockly.Cursor.prototype.out = function() {
 /**
  * Handles the given action.
  * This is only triggered when keyboard navigation is enabled.
- * @param {!Blockly.Action} action The action to be handled.
+ * @param {!Blockly.ShortcutRegistry.KeyboardShortcut} action The action to be handled.
  * @return {boolean} True if the action has been handled, false otherwise.
  */
 Blockly.Cursor.prototype.onBlocklyAction = function(action) {
   // If we are on a field give it the option to handle the action
   if (this.getCurNode() &&
       this.getCurNode().getType() === Blockly.ASTNode.types.FIELD &&
-      this.getCurNode().getLocation().onBlocklyAction(action)) {
+      (/** @type {!Blockly.Field} */ (this.getCurNode().getLocation()))
+          .onBlocklyAction(action)) {
     return true;
   }
   switch (action.name) {

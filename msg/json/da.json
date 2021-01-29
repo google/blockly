@@ -2,13 +2,13 @@
 	"@metadata": {
 		"authors": [
 			"Christian List",
-			"RickiRunge",
+			"Joedalton",
+			"JonNPoulsen",
 			"MGA73",
 			"Mads Haupt",
-			"Tjernobyl",
-			"Joedalton",
+			"RickiRunge",
 			"Saederup92",
-			"JonNPoulsen"
+			"Tjernobyl"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "element",

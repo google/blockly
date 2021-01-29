@@ -19,6 +19,7 @@ goog.require('Blockly.FieldTextInput');
 goog.require('Blockly.utils.dom');
 goog.require('Blockly.utils.math');
 goog.require('Blockly.utils.object');
+goog.require('Blockly.utils.Svg');
 goog.require('Blockly.utils.userAgent');
 
 
@@ -71,7 +72,7 @@ Blockly.FieldAngle = function(opt_value, opt_validator, opt_config) {
   this.round_ = Blockly.FieldAngle.ROUND;
 
   Blockly.FieldAngle.superClass_.constructor.call(
-      this, opt_value || 0, opt_validator, opt_config);
+      this, opt_value, opt_validator, opt_config);
 
   /**
    * The angle picker's gauge path depending on the value.
@@ -107,6 +108,14 @@ Blockly.FieldAngle = function(opt_value, opt_validator, opt_config) {
   this.moveSurfaceWrapper_ = null;
 };
 Blockly.utils.object.inherits(Blockly.FieldAngle, Blockly.FieldTextInput);
+
+
+/**
+ * The default value for this field.
+ * @type {*}
+ * @protected
+ */
+Blockly.FieldAngle.prototype.DEFAULT_VALUE = 0;
 
 /**
  * Construct a FieldAngle from a JSON arg object.
@@ -228,7 +237,8 @@ Blockly.FieldAngle.prototype.configure_ = function(config) {
 Blockly.FieldAngle.prototype.initView = function() {
   Blockly.FieldAngle.superClass_.initView.call(this);
   // Add the degree symbol to the left of the number, even in RTL (issue #2380)
-  this.symbol_ = Blockly.utils.dom.createSvgElement('tspan', {}, null);
+  this.symbol_ = Blockly.utils.dom.createSvgElement(
+      Blockly.utils.Svg.TSPAN, {}, null);
   this.symbol_.appendChild(document.createTextNode('\u00B0'));
   this.textElement_.appendChild(this.symbol_);
 };
@@ -247,7 +257,7 @@ Blockly.FieldAngle.prototype.render_ = function() {
  * Create and show the angle field's editor.
  * @param {Event=} opt_e Optional mouse event that triggered the field to open,
  *     or undefined if triggered programmatically.
- * @private
+ * @protected
  */
 Blockly.FieldAngle.prototype.showEditor_ = function(opt_e) {
   // Mobile browsers have issues with in-line textareas (focus & keyboards).
@@ -275,41 +285,46 @@ Blockly.FieldAngle.prototype.showEditor_ = function(opt_e) {
  * @private
  */
 Blockly.FieldAngle.prototype.dropdownCreate_ = function() {
-  var svg = Blockly.utils.dom.createSvgElement('svg', {
-    'xmlns': Blockly.utils.dom.SVG_NS,
-    'xmlns:html': Blockly.utils.dom.HTML_NS,
-    'xmlns:xlink': Blockly.utils.dom.XLINK_NS,
-    'version': '1.1',
-    'height': (Blockly.FieldAngle.HALF * 2) + 'px',
-    'width': (Blockly.FieldAngle.HALF * 2) + 'px',
-    'style': 'touch-action: none'
-  }, null);
-  var circle = Blockly.utils.dom.createSvgElement('circle', {
-    'cx': Blockly.FieldAngle.HALF,
-    'cy': Blockly.FieldAngle.HALF,
-    'r': Blockly.FieldAngle.RADIUS,
-    'class': 'blocklyAngleCircle'
-  }, svg);
-  this.gauge_ = Blockly.utils.dom.createSvgElement('path', {
-    'class': 'blocklyAngleGauge'
-  }, svg);
-  this.line_ = Blockly.utils.dom.createSvgElement('line', {
-    'x1': Blockly.FieldAngle.HALF,
-    'y1': Blockly.FieldAngle.HALF,
-    'class': 'blocklyAngleLine'
-  }, svg);
+  var svg = Blockly.utils.dom.createSvgElement(
+      Blockly.utils.Svg.SVG, {
+        'xmlns': Blockly.utils.dom.SVG_NS,
+        'xmlns:html': Blockly.utils.dom.HTML_NS,
+        'xmlns:xlink': Blockly.utils.dom.XLINK_NS,
+        'version': '1.1',
+        'height': (Blockly.FieldAngle.HALF * 2) + 'px',
+        'width': (Blockly.FieldAngle.HALF * 2) + 'px',
+        'style': 'touch-action: none'
+      }, null);
+  var circle = Blockly.utils.dom.createSvgElement(
+      Blockly.utils.Svg.CIRCLE, {
+        'cx': Blockly.FieldAngle.HALF,
+        'cy': Blockly.FieldAngle.HALF,
+        'r': Blockly.FieldAngle.RADIUS,
+        'class': 'blocklyAngleCircle'
+      }, svg);
+  this.gauge_ = Blockly.utils.dom.createSvgElement(
+      Blockly.utils.Svg.PATH, {
+        'class': 'blocklyAngleGauge'
+      }, svg);
+  this.line_ = Blockly.utils.dom.createSvgElement(
+      Blockly.utils.Svg.LINE, {
+        'x1': Blockly.FieldAngle.HALF,
+        'y1': Blockly.FieldAngle.HALF,
+        'class': 'blocklyAngleLine'
+      }, svg);
   // Draw markers around the edge.
   for (var angle = 0; angle < 360; angle += 15) {
-    Blockly.utils.dom.createSvgElement('line', {
-      'x1': Blockly.FieldAngle.HALF + Blockly.FieldAngle.RADIUS,
-      'y1': Blockly.FieldAngle.HALF,
-      'x2': Blockly.FieldAngle.HALF + Blockly.FieldAngle.RADIUS -
-          (angle % 45 == 0 ? 10 : 5),
-      'y2': Blockly.FieldAngle.HALF,
-      'class': 'blocklyAngleMarks',
-      'transform': 'rotate(' + angle + ',' +
-          Blockly.FieldAngle.HALF + ',' + Blockly.FieldAngle.HALF + ')'
-    }, svg);
+    Blockly.utils.dom.createSvgElement(
+        Blockly.utils.Svg.LINE, {
+          'x1': Blockly.FieldAngle.HALF + Blockly.FieldAngle.RADIUS,
+          'y1': Blockly.FieldAngle.HALF,
+          'x2': Blockly.FieldAngle.HALF + Blockly.FieldAngle.RADIUS -
+              (angle % 45 == 0 ? 10 : 5),
+          'y2': Blockly.FieldAngle.HALF,
+          'class': 'blocklyAngleMarks',
+          'transform': 'rotate(' + angle + ',' +
+              Blockly.FieldAngle.HALF + ',' + Blockly.FieldAngle.HALF + ')'
+        }, svg);
   }
 
   // The angle picker is different from other fields in that it updates on

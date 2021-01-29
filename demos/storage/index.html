@@ -21,6 +21,11 @@
       background-color: #f9edbe;
       border: solid 1px #f0c36d;
     }
+    .privacyLink {
+      font-family: Roboto, Arial, Helvetica, sans-serif;
+      font-size: small;
+      text-decoration: none;
+    }
   </style>
 </head>
 <body>
@@ -32,7 +37,7 @@
   <script>
     if ('BlocklyStorage' in window) {
       BlocklyStorage.HTTPREQUEST_ERROR = 'There was a problem with the request.\n';
-      BlocklyStorage.LINK_ALERT = 'Share your blocks with this link:\n\n%1';
+      BlocklyStorage.LINK_ALERT = 'Share your blocks with the below public link. We\'ll delete them if not used for a year. They are not associated with your account and handled as per Google\'s Privacy Policy. Please be sure not to include any private information.\n\n%1';
       BlocklyStorage.HASH_ERROR = 'Sorry, "%1" doesn\'t correspond with any saved Blockly file.';
       BlocklyStorage.XML_ERROR = 'Could not load your saved file.\n'+
           'Perhaps it was created with a different version of Blockly?';
@@ -93,4 +98,7 @@
   </script>
 
 </body>
+<footer>
+  <a class="privacyLink" href="https://policies.google.com/privacy">Privacy</a>
+</footer>
 </html>

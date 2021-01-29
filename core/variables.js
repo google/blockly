@@ -17,6 +17,7 @@
 goog.provide('Blockly.Variables');
 
 goog.require('Blockly.Blocks');
+goog.require('Blockly.constants');
 goog.require('Blockly.Msg');
 goog.require('Blockly.utils');
 goog.require('Blockly.utils.xml');
@@ -61,20 +62,6 @@ Blockly.Variables.allUsedVarModels = function(ws) {
     variableList.push(variableHash[id]);
   }
   return variableList;
-};
-
-/**
- * Find all user-created variables that are in use in the workspace and return
- * only their names.
- * For use by generators.
- * To get a list of all variables on a workspace, including unused variables,
- * call Workspace.getAllVariables.
- * @deprecated January 2018
- */
-Blockly.Variables.allUsedVariables = function() {
-  console.warn('Deprecated call to Blockly.Variables.allUsedVariables. ' +
-      'Use Blockly.Variables.allUsedVarModels instead.\nIf this is a major ' +
-      'issue please file a bug on GitHub.');
 };
 
 /**
@@ -274,7 +261,7 @@ Blockly.Variables.generateUniqueName = function(workspace) {
  * will try to generate single letter names in the range a -> z (skip l). It
  * will start with the character passed to startChar.
  * @param {string} startChar The character to start the search at.
- * @param {!Array<string>} usedNames A list of all of the used names.
+ * @param {!Array.<string>} usedNames A list of all of the used names.
  * @return {string} A unique name that is not present in the usedNames array.
  */
 Blockly.Variables.generateUniqueNameFromOptions = function(startChar, usedNames) {
@@ -336,7 +323,7 @@ Blockly.Variables.createVariableButtonHandler = function(
         function(text) {
           if (text) {
             var existing =
-                Blockly.Variables.nameUsedWithAnyType_(text, workspace);
+                Blockly.Variables.nameUsedWithAnyType(text, workspace);
             if (existing) {
               if (existing.type == type) {
                 var msg = Blockly.Msg['VARIABLE_ALREADY_EXISTS'].replace(
@@ -384,7 +371,9 @@ Blockly.Variables.createVariable =
     Blockly.Variables.createVariableButtonHandler;
 
 /**
- * Rename a variable with the given workspace, variableType, and oldName.
+ * Opens a prompt that allows the user to enter a new name for a variable.
+ * Triggers a rename if the new name is valid. Or re-prompts if there is a
+ * collision.
  * @param {!Blockly.Workspace} workspace The workspace on which to rename the
  *     variable.
  * @param {Blockly.VariableModel} variable Variable to rename.
@@ -481,9 +470,8 @@ Blockly.Variables.nameUsedWithOtherType_ = function(name, type, workspace) {
  *     variable.
  * @return {Blockly.VariableModel} The variable with the given name,
  *     or null if none was found.
- * @private
  */
-Blockly.Variables.nameUsedWithAnyType_ = function(name, workspace) {
+Blockly.Variables.nameUsedWithAnyType = function(name, workspace) {
   var allVariables = workspace.getVariableMap().getAllVariables();
 
   name = name.toLowerCase();

@@ -29,6 +29,7 @@ goog.require('Blockly.blockRendering.StatementInput');
 goog.require('Blockly.blockRendering.SquareCorner');
 goog.require('Blockly.blockRendering.TopRow');
 goog.require('Blockly.blockRendering.Types');
+goog.require('Blockly.constants');
 
 
 /**
@@ -581,7 +582,7 @@ Blockly.blockRendering.RenderInfo.prototype.addAlignmentPadding_ = function(row,
   if (row.hasExternalInput || row.hasStatement) {
     row.widthWithConnectedBlocks += missingSpace;
   }
-  
+
   // Decide where the extra padding goes.
   if (row.align == Blockly.ALIGN_LEFT) {
     // Add padding to the end of the row.

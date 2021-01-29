@@ -13,11 +13,14 @@
 goog.provide('Blockly.RenderedConnection');
 
 goog.require('Blockly.Connection');
+goog.require('Blockly.constants');
 goog.require('Blockly.Events');
 goog.require('Blockly.utils');
 goog.require('Blockly.utils.Coordinate');
+goog.require('Blockly.utils.deprecation');
 goog.require('Blockly.utils.dom');
 goog.require('Blockly.utils.object');
+goog.require('Blockly.utils.Svg');
 
 
 /**
@@ -59,6 +62,12 @@ Blockly.RenderedConnection = function(source, type) {
    * @private
    */
   this.trackedState_ = Blockly.RenderedConnection.TrackedState.WILL_TRACK;
+
+  /**
+   * Connection this connection connects to.  Null if not connected.
+   * @type {Blockly.RenderedConnection}
+   */
+  this.targetConnection = null;
 };
 Blockly.utils.object.inherits(Blockly.RenderedConnection, Blockly.Connection);
 
@@ -295,7 +304,7 @@ Blockly.RenderedConnection.prototype.highlight = function() {
   var x = this.x - xy.x;
   var y = this.y - xy.y;
   Blockly.Connection.highlightedPath_ = Blockly.utils.dom.createSvgElement(
-      'path',
+      Blockly.utils.Svg.PATH,
       {
         'class': 'blocklyHighlightedConnectionPath',
         'd': steps,
@@ -414,9 +423,15 @@ Blockly.RenderedConnection.prototype.startTrackingAll = function() {
  * @param {number=} maxRadius The maximum radius allowed for connections, in
  *     workspace units.
  * @return {boolean} True if the connection is allowed, false otherwise.
+ * @deprecated July 2020
  */
 Blockly.RenderedConnection.prototype.isConnectionAllowed = function(candidate,
     maxRadius) {
+  Blockly.utils.deprecation.warn(
+      'RenderedConnection.prototype.isConnectionAllowed',
+      'July 2020',
+      'July 2021',
+      'Blockly.Workspace.prototype.getConnectionChecker().canConnect');
   if (this.distanceFrom(candidate) > maxRadius) {
     return false;
   }
@@ -454,6 +469,8 @@ Blockly.RenderedConnection.prototype.disconnectInternal_ = function(parentBlock,
   if (childBlock.rendered) {
     childBlock.updateDisabled();
     childBlock.render();
+    // Reset visibility, since the child is now a top block.
+    childBlock.getSvgRoot().style.display = 'block';
   }
 };
 
@@ -463,20 +480,18 @@ Blockly.RenderedConnection.prototype.disconnectInternal_ = function(parentBlock,
  * @private
  */
 Blockly.RenderedConnection.prototype.respawnShadow_ = function() {
+  Blockly.RenderedConnection.superClass_.respawnShadow_.call(this);
+  var blockShadow = this.targetBlock();
+  if (!blockShadow) {
+    // This connection must not have a shadowDom_.
+    return;
+  }
+  blockShadow.initSvg();
+  blockShadow.render(false);
+
   var parentBlock = this.getSourceBlock();
-  // Respawn the shadow block if there is one.
-  var shadow = this.getShadowDom();
-  if (parentBlock.workspace && shadow && Blockly.Events.recordUndo) {
-    Blockly.RenderedConnection.superClass_.respawnShadow_.call(this);
-    var blockShadow = this.targetBlock();
-    if (!blockShadow) {
-      throw Error('Couldn\'t respawn the shadow block that should exist here.');
-    }
-    blockShadow.initSvg();
-    blockShadow.render(false);
-    if (parentBlock.rendered) {
-      parentBlock.render();
-    }
+  if (parentBlock.rendered) {
+    parentBlock.render();
   }
 };
 
@@ -504,14 +519,16 @@ Blockly.RenderedConnection.prototype.connect_ = function(childConnection) {
   var parentConnection = this;
   var parentBlock = parentConnection.getSourceBlock();
   var childBlock = childConnection.getSourceBlock();
+  var parentRendered = parentBlock.rendered;
+  var childRendered = childBlock.rendered;
 
-  if (parentBlock.rendered) {
+  if (parentRendered) {
     parentBlock.updateDisabled();
   }
-  if (childBlock.rendered) {
+  if (childRendered) {
     childBlock.updateDisabled();
   }
-  if (parentBlock.rendered && childBlock.rendered) {
+  if (parentRendered && childRendered) {
     if (parentConnection.type == Blockly.NEXT_STATEMENT ||
         parentConnection.type == Blockly.PREVIOUS_STATEMENT) {
       // Child block may need to square off its corners if it is in a stack.
@@ -523,6 +540,13 @@ Blockly.RenderedConnection.prototype.connect_ = function(childConnection) {
       parentBlock.render();
     }
   }
+
+  // The input the child block is connected to (if any).
+  var parentInput = parentBlock.getInputWithBlock(childBlock);
+  if (parentInput) {
+    var visible = parentInput.isVisible();
+    childBlock.getSvgRoot().style.display = visible ? 'block' : 'none';
+  }
 };
 
 /**
@@ -532,7 +556,8 @@ Blockly.RenderedConnection.prototype.connect_ = function(childConnection) {
 Blockly.RenderedConnection.prototype.onCheckChanged_ = function() {
   // The new value type may not be compatible with the existing connection.
   if (this.isConnected() && (!this.targetConnection ||
-      !this.checkType(this.targetConnection))) {
+      !this.getConnectionChecker().canConnect(
+          this, this.targetConnection, false))) {
     var child = this.isSuperior() ? this.targetBlock() : this.sourceBlock_;
     child.unplug();
     // Bump away.

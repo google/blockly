@@ -67,13 +67,20 @@ Blockly.FieldNumber = function(opt_value, opt_min, opt_max, opt_precision,
   this.decimalPlaces_ = null;
 
   Blockly.FieldNumber.superClass_.constructor.call(
-      this, opt_value || 0, opt_validator, opt_config);
+      this, opt_value, opt_validator, opt_config);
 
   if (!opt_config) {  // Only do one kind of configuration or the other.
     this.setConstraints(opt_min, opt_max, opt_precision);
   }
 };
 Blockly.utils.object.inherits(Blockly.FieldNumber, Blockly.FieldTextInput);
+
+/**
+ * The default value for this field.
+ * @type {*}
+ * @protected
+ */
+Blockly.FieldNumber.prototype.DEFAULT_VALUE = 0;
 
 /**
  * Construct a FieldNumber from a JSON arg object.
@@ -224,7 +231,7 @@ Blockly.FieldNumber.prototype.setPrecisionInternal_ = function(precision) {
     }
   }
 
-  var precisionString = this.precision_.toString();
+  var precisionString = this.precision_.toLocaleString("en-US", {maximumFractionDigits: 20});
   var decimalIndex = precisionString.indexOf('.');
   if (decimalIndex == -1) {
     // If the precision is 0 (float) allow any number of decimals,

@@ -14,39 +14,24 @@
 
 goog.provide('Blockly.fieldRegistry');
 
+goog.require('Blockly.registry');
 
-/**
- * The set of all registered fields, keyed by field type as used in the JSON
- * definition of a block.
- * @type {!Object<string, !{fromJson: Function}>}
- * @private
- */
-Blockly.fieldRegistry.typeMap_ = {};
+goog.requireType('Blockly.IRegistrableField');
+
 
 /**
  * Registers a field type.
  * Blockly.fieldRegistry.fromJson uses this registry to
  * find the appropriate field type.
  * @param {string} type The field type name as used in the JSON definition.
- * @param {!{fromJson: Function}} fieldClass The field class containing a
+ * @param {!Blockly.IRegistrableField} fieldClass The field class containing a
  *     fromJson function that can construct an instance of the field.
  * @throws {Error} if the type name is empty, the field is already
  *     registered, or the fieldClass is not an object containing a fromJson
  *     function.
  */
 Blockly.fieldRegistry.register = function(type, fieldClass) {
-  if ((typeof type != 'string') || (type.trim() == '')) {
-    throw Error('Invalid field type "' + type + '". The type must be a' +
-      ' non-empty string.');
-  }
-  if (Blockly.fieldRegistry.typeMap_[type]) {
-    throw Error('Error: Field "' + type + '" is already registered.');
-  }
-  if (!fieldClass || (typeof fieldClass.fromJson != 'function')) {
-    throw Error('Field "' + fieldClass + '" must have a fromJson function');
-  }
-  type = type.toLowerCase();
-  Blockly.fieldRegistry.typeMap_[type] = fieldClass;
+  Blockly.registry.register(Blockly.registry.Type.FIELD, type, fieldClass);
 };
 
 /**
@@ -54,12 +39,7 @@ Blockly.fieldRegistry.register = function(type, fieldClass) {
  * @param {string} type The field type name as used in the JSON definition.
  */
 Blockly.fieldRegistry.unregister = function(type) {
-  if (Blockly.fieldRegistry.typeMap_[type]) {
-    delete Blockly.fieldRegistry.typeMap_[type];
-  } else {
-    console.warn('No field mapping for type "' + type +
-        '" found to unregister');
-  }
+  Blockly.registry.unregister(Blockly.registry.Type.FIELD, type);
 };
 
 /**
@@ -73,14 +53,14 @@ Blockly.fieldRegistry.unregister = function(type) {
  * @package
  */
 Blockly.fieldRegistry.fromJson = function(options) {
-  var type = options['type'].toLowerCase();
-  var fieldClass = Blockly.fieldRegistry.typeMap_[type];
-  if (!fieldClass) {
+  var fieldObject = /** @type {?Blockly.IRegistrableField} */ (
+    Blockly.registry.getObject(Blockly.registry.Type.FIELD, options['type']));
+  if (!fieldObject) {
     console.warn('Blockly could not create a field of type ' + options['type'] +
       '. The field is probably not being registered. This could be because' +
       ' the file is not loaded, the field does not register itself (Issue' +
       ' #1584), or the registration is not being reached.');
     return null;
   }
-  return fieldClass.fromJson(options);
+  return fieldObject.fromJson(options);
 };

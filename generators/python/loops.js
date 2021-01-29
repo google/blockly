@@ -156,13 +156,14 @@ Blockly.Python['controls_for'] = function(block) {
 
     if (typeof startVar == 'number' && typeof endVar == 'number') {
       if (startVar < endVar) {
-        range = defineUpRange(startVar, endVar, increment);
+        range = defineUpRange();
       } else {
-        range = defineDownRange(startVar, endVar, increment);
+        range = defineDownRange();
       }
+      range += '(' + startVar + ', ' + endVar + ', ' + incVar + ')';
     } else {
       // We cannot determine direction statically.
-      range = generateUpDownRange(startVar, endVar, increment);
+      range = generateUpDownRange(startVar, endVar, incVar);
     }
   }
   code += 'for ' + variable0 + ' in ' + range + ':\n' + branch;

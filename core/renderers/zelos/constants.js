@@ -14,8 +14,10 @@
 goog.provide('Blockly.zelos.ConstantProvider');
 
 goog.require('Blockly.blockRendering.ConstantProvider');
+goog.require('Blockly.constants');
 goog.require('Blockly.utils.dom');
 goog.require('Blockly.utils.object');
+goog.require('Blockly.utils.Svg');
 goog.require('Blockly.utils.svgPaths');
 
 
@@ -69,7 +71,7 @@ Blockly.zelos.ConstantProvider = function() {
    * @override
    */
   this.NOTCH_OFFSET_LEFT = 3 * this.GRID_UNIT;
-  
+
   /**
    * @override
    */
@@ -259,7 +261,7 @@ Blockly.zelos.ConstantProvider = function() {
    * @override
    */
   this.FIELD_BORDER_RECT_X_PADDING = 2 * this.GRID_UNIT;
-  
+
   /**
    * @override
    */
@@ -806,10 +808,12 @@ Blockly.zelos.ConstantProvider.prototype.createDom = function(svg,
     ... filters go here ...
   </defs>
   */
-  var defs = Blockly.utils.dom.createSvgElement('defs', {}, svg);
+  var defs = Blockly.utils.dom.createSvgElement(
+      Blockly.utils.Svg.DEFS, {}, svg);
   // Using a dilate distorts the block shape.
   // Instead use a gaussian blur, and then set all alpha to 1 with a transfer.
-  var selectedGlowFilter = Blockly.utils.dom.createSvgElement('filter',
+  var selectedGlowFilter = Blockly.utils.dom.createSvgElement(
+      Blockly.utils.Svg.FILTER,
       {
         'id': 'blocklySelectedGlowFilter' + this.randomIdentifier,
         'height': '160%',
@@ -818,7 +822,8 @@ Blockly.zelos.ConstantProvider.prototype.createDom = function(svg,
         x: '-40%'
       },
       defs);
-  Blockly.utils.dom.createSvgElement('feGaussianBlur',
+  Blockly.utils.dom.createSvgElement(
+      Blockly.utils.Svg.FEGAUSSIANBLUR,
       {
         'in': 'SourceGraphic',
         'stdDeviation': this.SELECTED_GLOW_SIZE
@@ -826,21 +831,26 @@ Blockly.zelos.ConstantProvider.prototype.createDom = function(svg,
       selectedGlowFilter);
   // Set all gaussian blur pixels to 1 opacity before applying flood
   var selectedComponentTransfer = Blockly.utils.dom.createSvgElement(
-      'feComponentTransfer', {'result': 'outBlur'}, selectedGlowFilter);
-  Blockly.utils.dom.createSvgElement('feFuncA',
+      Blockly.utils.Svg.FECOMPONENTTRANSFER, {
+        'result': 'outBlur'
+      }, selectedGlowFilter);
+  Blockly.utils.dom.createSvgElement(
+      Blockly.utils.Svg.FEFUNCA,
       {
         'type': 'table', 'tableValues': '0 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1'
       },
       selectedComponentTransfer);
   // Color the highlight
-  Blockly.utils.dom.createSvgElement('feFlood',
+  Blockly.utils.dom.createSvgElement(
+      Blockly.utils.Svg.FEFLOOD,
       {
         'flood-color': this.SELECTED_GLOW_COLOUR,
         'flood-opacity': 1,
         'result': 'outColor'
       },
       selectedGlowFilter);
-  Blockly.utils.dom.createSvgElement('feComposite',
+  Blockly.utils.dom.createSvgElement(
+      Blockly.utils.Svg.FECOMPOSITE,
       {
         'in': 'outColor', 'in2': 'outBlur',
         'operator': 'in', 'result': 'outGlow'
@@ -851,7 +861,8 @@ Blockly.zelos.ConstantProvider.prototype.createDom = function(svg,
 
   // Using a dilate distorts the block shape.
   // Instead use a gaussian blur, and then set all alpha to 1 with a transfer.
-  var replacementGlowFilter = Blockly.utils.dom.createSvgElement('filter',
+  var replacementGlowFilter = Blockly.utils.dom.createSvgElement(
+      Blockly.utils.Svg.FILTER,
       {
         'id': 'blocklyReplacementGlowFilter' + this.randomIdentifier,
         'height': '160%',
@@ -860,7 +871,8 @@ Blockly.zelos.ConstantProvider.prototype.createDom = function(svg,
         x: '-40%'
       },
       defs);
-  Blockly.utils.dom.createSvgElement('feGaussianBlur',
+  Blockly.utils.dom.createSvgElement(
+      Blockly.utils.Svg.FEGAUSSIANBLUR,
       {
         'in': 'SourceGraphic',
         'stdDeviation': this.REPLACEMENT_GLOW_SIZE
@@ -868,27 +880,33 @@ Blockly.zelos.ConstantProvider.prototype.createDom = function(svg,
       replacementGlowFilter);
   // Set all gaussian blur pixels to 1 opacity before applying flood
   var replacementComponentTransfer = Blockly.utils.dom.createSvgElement(
-      'feComponentTransfer', {'result': 'outBlur'}, replacementGlowFilter);
-  Blockly.utils.dom.createSvgElement('feFuncA',
+      Blockly.utils.Svg.FECOMPONENTTRANSFER, {
+        'result': 'outBlur'
+      }, replacementGlowFilter);
+  Blockly.utils.dom.createSvgElement(
+      Blockly.utils.Svg.FEFUNCA,
       {
         'type': 'table', 'tableValues': '0 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1'
       },
       replacementComponentTransfer);
   // Color the highlight
-  Blockly.utils.dom.createSvgElement('feFlood',
+  Blockly.utils.dom.createSvgElement(
+      Blockly.utils.Svg.FEFLOOD,
       {
         'flood-color': this.REPLACEMENT_GLOW_COLOUR,
         'flood-opacity': 1,
         'result': 'outColor'
       },
       replacementGlowFilter);
-  Blockly.utils.dom.createSvgElement('feComposite',
+  Blockly.utils.dom.createSvgElement(
+      Blockly.utils.Svg.FECOMPOSITE,
       {
         'in': 'outColor', 'in2': 'outBlur',
         'operator': 'in', 'result': 'outGlow'
       },
       replacementGlowFilter);
-  Blockly.utils.dom.createSvgElement('feComposite',
+  Blockly.utils.dom.createSvgElement(
+      Blockly.utils.Svg.FECOMPOSITE,
       {
         'in': 'SourceGraphic', 'in2': 'outGlow',
         'operator': 'over',
@@ -905,13 +923,12 @@ Blockly.zelos.ConstantProvider.prototype.getCSS_ = function(selector) {
   return [
     /* eslint-disable indent */
     // Text.
-    selector + ' .blocklyText, ',
+    selector + ' .blocklyText,',
     selector + ' .blocklyFlyoutLabelText {',
-      'font-family: ' + this.FIELD_TEXT_FONTFAMILY + ';',
-      'font-size: ' + this.FIELD_TEXT_FONTSIZE + 'pt;',
-      'font-weight: ' + this.FIELD_TEXT_FONTWEIGHT + ';',
+      'font: ' + this.FIELD_TEXT_FONTWEIGHT + ' ' +
+          this.FIELD_TEXT_FONTSIZE + 'pt ' + this.FIELD_TEXT_FONTFAMILY + ';',
     '}',
-  
+
     // Fields.
     selector + ' .blocklyText {',
       'fill: #fff;',
@@ -926,7 +943,7 @@ Blockly.zelos.ConstantProvider.prototype.getCSS_ = function(selector) {
     selector + ' .blocklyEditableText>g>text {',
       'fill: #575E75;',
     '}',
-  
+
     // Flyout labels.
     selector + ' .blocklyFlyoutLabelText {',
       'fill: #575E75;',
@@ -939,7 +956,7 @@ Blockly.zelos.ConstantProvider.prototype.getCSS_ = function(selector) {
 
     // Editable field hover.
     selector + ' .blocklyDraggable:not(.blocklyDisabled)',
-    ' .blocklyEditableText:not(.editing):hover>rect ,',
+    ' .blocklyEditableText:not(.editing):hover>rect,',
     selector + ' .blocklyDraggable:not(.blocklyDisabled)',
     ' .blocklyEditableText:not(.editing):hover>.blocklyPath {',
       'stroke: #fff;',
@@ -952,7 +969,7 @@ Blockly.zelos.ConstantProvider.prototype.getCSS_ = function(selector) {
       'font-weight: ' + this.FIELD_TEXT_FONTWEIGHT + ';',
       'color: #575E75;',
     '}',
-  
+
     // Dropdown field.
     selector + ' .blocklyDropdownText {',
       'fill: #fff !important;',
@@ -979,7 +996,7 @@ Blockly.zelos.ConstantProvider.prototype.getCSS_ = function(selector) {
     // Insertion marker.
     selector + ' .blocklyInsertionMarker>.blocklyPath {',
       'fill-opacity: ' + this.INSERTION_MARKER_OPACITY + ';',
-      'stroke: none',
+      'stroke: none;',
     '}',
     /* eslint-enable indent */
   ];

@@ -17,6 +17,7 @@ goog.require('Blockly.blockRendering.ConstantProvider');
 goog.require('Blockly.blockRendering.IPathObject');
 goog.require('Blockly.Theme');
 goog.require('Blockly.utils.dom');
+goog.require('Blockly.utils.Svg');
 
 
 /**
@@ -43,10 +44,11 @@ Blockly.blockRendering.PathObject = function(root, style, constants) {
 
   /**
    * The primary path of the block.
-   * @type {SVGElement}
+   * @type {!SVGElement}
    * @package
    */
-  this.svgPath = Blockly.utils.dom.createSvgElement('path',
+  this.svgPath = Blockly.utils.dom.createSvgElement(
+      Blockly.utils.Svg.PATH,
       {'class': 'blocklyPath'}, this.svgRoot);
 
   /**

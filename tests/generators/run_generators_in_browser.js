@@ -39,9 +39,10 @@ async function runLangGeneratorInBrowser(browser, filename, codegenFn) {
  */
 async function runGeneratorsInBrowser() {
   var options = {
-      capabilities: {
-          browserName: 'firefox'
-      }
+    capabilities: {
+      browserName: 'firefox'
+    },
+    path: '/wd/hub'
   };
   // Run in headless mode on Travis.
   if (process.env.TRAVIS_CI) {

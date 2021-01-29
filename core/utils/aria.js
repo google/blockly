@@ -86,6 +86,9 @@ Blockly.utils.aria.State = {
   // Value: integer.
   COLCOUNT: 'colcount',
 
+  // ARIA state for a disabled item. Value: one of {true, false}.
+  DISABLED: 'disabled',
+
   // ARIA state for setting whether the element like a tree node is expanded.
   // Value: one of {true, false, undefined}.
   EXPANDED: 'expanded',

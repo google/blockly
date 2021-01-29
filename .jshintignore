@@ -1,6 +1,0 @@
-node_modules/
-tests/
-demos/
-**/*_compressed.js
-**/*_uncompressed.js
-**/*_test.js

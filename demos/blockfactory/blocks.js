@@ -87,7 +87,9 @@ Blockly.Blocks['factory_base'] = {
     type.setShadow(true);
     type.outputConnection.connect(this.getInput(outputType).connection);
     type.initSvg();
-    type.render();
+    if (this.rendered) {
+      type.render();
+    }
   },
   updateShape_: function(option) {
     var outputExists = this.getInput('OUTPUTTYPE');
@@ -553,24 +555,6 @@ Blockly.Blocks['field_colour'] = {
     this.setNextStatement(true, 'Field');
     this.setTooltip('Colour input field.');
     this.setHelpUrl('https://www.youtube.com/watch?v=s2_xaEvcVI0#t=495');
-  },
-  onchange: function() {
-    fieldNameCheck(this);
-  }
-};
-
-Blockly.Blocks['field_date'] = {
-  // Date input.
-  init: function() {
-    this.setColour(160);
-    this.appendDummyInput()
-        .appendField('date')
-        .appendField(new Blockly.FieldDate(), 'DATE')
-        .appendField(',')
-        .appendField(new Blockly.FieldTextInput('NAME'), 'FIELDNAME');
-    this.setPreviousStatement(true, 'Field');
-    this.setNextStatement(true, 'Field');
-    this.setTooltip('Date input field.');
   },
   onchange: function() {
     fieldNameCheck(this);

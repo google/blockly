@@ -2,17 +2,18 @@
 	"@metadata": {
 		"authors": [
 			"Chmee2",
-			"Rosnicka.kacka",
-			"Matěj Grabovský",
-			"Espertus",
-			"Utar",
 			"Clon",
-			"Koo6",
-			"Vtmarvin",
-			"Dvorapa",
 			"Dita",
+			"Dvorapa",
+			"Espertus",
 			"Ilimanaq29",
-			"Patriccck"
+			"Koo6",
+			"Matěj Grabovský",
+			"Patriccck",
+			"Robins7",
+			"Rosnicka.kacka",
+			"Utar",
+			"Vtmarvin"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "položka",
@@ -86,6 +87,8 @@
 	"CONTROLS_IF_IF_TOOLTIP": "Přidej, odstraň či uspořádej sekce k přenastavení tohoto bloku \"pokud\".",
 	"CONTROLS_IF_ELSEIF_TOOLTIP": "Přidat podmínku do \"pokud\" bloku.",
 	"CONTROLS_IF_ELSE_TOOLTIP": "Přidej konečnou podmínku zahrnující ostatní případy do bloku \"pokud\".",
+	"IOS_OK": "OK",
+	"IOS_CANCEL": "Storno",
 	"IOS_ERROR": "Chyba",
 	"IOS_PROCEDURES_INPUTS": "vstupy",
 	"IOS_VARIABLES_ADD_BUTTON": "Přidat",

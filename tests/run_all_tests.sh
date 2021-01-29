@@ -52,26 +52,26 @@ run_test_command () {
 # Lint the codebase.
 run_test_command "eslint" "eslint ."
 
-# Run JSUnit tests inside a browser.
-run_test_command "jsunit" "node tests/jsunit/run_jsunit_tests_in_browser.js"
+# Run the closure compiler.
+run_test_command "compile" "npm run build"
 
-# Run Mocha tests inside a browser.
-run_test_command "mocha" "node tests/mocha/run_mocha_tests_in_browser.js"
-
-# Run Node tests.
-run_test_command "node" "./node_modules/.bin/mocha tests/node --opts tests/node/mocha.opts"
-
-# Run generator tests inside a browser and check the results.
-run_test_command "generators" "tests/scripts/run_generators.sh"
-
-# Run the closure compiler ensuring there are no errors.
-run_test_command "compile" "npm run build:debug"
+# Run the closure compiler ensuring there are no compiler warnings / errors.
+run_test_command "compile:warnings" "npm run build:debug"
 
 # Generate TypeScript typings and ensure there are no errors.
 run_test_command "typings" "tests/scripts/compile_typings.sh"
 
 # Check the sizes of built files for unexpected growth.
 run_test_command "metadata" "tests/scripts/check_metadata.sh"
+
+# Run Mocha tests inside a browser.
+run_test_command "mocha" "node tests/mocha/run_mocha_tests_in_browser.js"
+
+# Run generator tests inside a browser and check the results.
+run_test_command "generators" "tests/scripts/run_generators.sh"
+
+# Run Node tests.
+run_test_command "node" "./node_modules/.bin/mocha tests/node --config tests/node/.mocharc.js"
 
 # # Attempt advanced compilation of a Blockly app.
 # run_test_command "advanced_compile" "tests/compile/compile.sh"

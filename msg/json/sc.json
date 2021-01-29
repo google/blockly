@@ -1,9 +1,9 @@
 {
 	"@metadata": {
 		"authors": [
-			"Via maxima",
 			"Taxandru",
-			"Uharteko"
+			"Uharteko",
+			"Via maxima"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "item",

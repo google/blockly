@@ -20,6 +20,9 @@ goog.require('Blockly.blockRendering.Measurable');
 goog.require('Blockly.blockRendering.Types');
 goog.require('Blockly.utils.object');
 
+goog.requireType('Blockly.blockRendering.ConstantProvider');
+goog.requireType('Blockly.Input');
+
 
 /**
  * The base class to represent an input that takes up space on a block

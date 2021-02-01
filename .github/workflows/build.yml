@@ -41,6 +41,9 @@ jobs:
     - name: Npm Install
       run: npm install
 
+    - name: Pre Install
+      run: source ./before_install.sh
+
     - name: Run
       run: source ./tests/scripts/run_generators.sh
       env:

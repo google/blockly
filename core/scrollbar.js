@@ -241,7 +241,7 @@ Blockly.ScrollbarPair.prototype.set = function(x, y, updateMetrics) {
  */
 Blockly.ScrollbarPair.prototype.setX = function(x) {
   if (this.hScroll) {
-    this.hScroll.set(x);
+    this.hScroll.set(x, true);
   }
 };
 
@@ -252,7 +252,7 @@ Blockly.ScrollbarPair.prototype.setX = function(x) {
  */
 Blockly.ScrollbarPair.prototype.setY = function(y) {
   if (this.vScroll) {
-    this.vScroll.set(y);
+    this.vScroll.set(y, true);
   }
 };
 
@@ -995,7 +995,7 @@ Blockly.Scrollbar.prototype.updateMetrics_ = function() {
  * @param {number} value The distance from the top/left end of the bar, in CSS
  *    pixels.  It may be larger than the maximum allowable position of the
  *    scrollbar handle.
- * @param {boolean} updateMetrics Whether to update metrics on this set call.
+ * @param {boolean=} updateMetrics Whether to update metrics on this set call.
  *    Defaults to true.
  */
 Blockly.Scrollbar.prototype.set = function(value, updateMetrics) {

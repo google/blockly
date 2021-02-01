@@ -68,7 +68,7 @@ run_test_command "metadata" "tests/scripts/check_metadata.sh"
 run_test_command "mocha" "node tests/mocha/run_mocha_tests_in_browser.js"
 
 # Run generator tests inside a browser and check the results.
-run_test_command "generators" "tests/scripts/run_generators.sh"
+#run_test_command "generators" "tests/scripts/run_generators.sh"
 
 # Run Node tests.
 run_test_command "node" "./node_modules/.bin/mocha tests/node --config tests/node/.mocharc.js"

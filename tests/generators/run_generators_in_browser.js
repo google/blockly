@@ -40,14 +40,14 @@ async function runLangGeneratorInBrowser(browser, filename, codegenFn) {
 async function runGeneratorsInBrowser() {
   var options = {
     capabilities: {
-      browserName: 'chrome'
+      browserName: 'firefox'
     },
     path: '/wd/hub'
   };
   // Run in headless mode on Travis.
   if (process.env.GITHUB_ACTIONS) {
-    options.capabilities['goog:chromeOptions'] = {
-      args: ['--headless', '--no-sandbox', '--disable-dev-shm-usage']
+    options.capabilities['moz:firefoxOptions'] = {
+      args: ['-headless']
     };
   }
 

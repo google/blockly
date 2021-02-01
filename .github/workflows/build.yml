@@ -24,8 +24,8 @@ jobs:
     - name: Npm Install
       run: npm install
 
-#    - name: Pre Install
-#      run: source ./before_install.sh
+    - name: Pre Install
+      run: source ./before_install.sh
 
     - name: Run
-      run: npm run test
+      run: npm run test:run

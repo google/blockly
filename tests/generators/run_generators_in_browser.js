@@ -45,7 +45,7 @@ async function runGeneratorsInBrowser() {
     path: '/wd/hub'
   };
   // Run in headless mode on Travis.
-  if (process.env.TRAVIS_CI) {
+  if (process.env.GITHUB_ACTIONS) {
     options.capabilities['goog:chromeOptions'] = {
       args: ['--headless', '--no-sandbox', '--disable-dev-shm-usage']
     };

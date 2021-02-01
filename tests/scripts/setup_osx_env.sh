@@ -1,6 +1,6 @@
 #!/bin/bash
-
-if [ "${RUNNER_OS}" == "osx" ]
+echo "IN MAC OS SETUP"
+if [ "${RUNNER_OS}" == "macOS" ]
   then
     brew cask install google-chrome
     sudo Xvfb :99 -ac -screen 0 1024x768x8 &

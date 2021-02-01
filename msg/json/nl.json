@@ -63,7 +63,7 @@
 	"LEAPHY_NUMBERS_CATEGORY": "Getal blokken",
 	"LEAPHY_VARIABLES_CATEGORY": "Variabelen",
 	"LEAPHY_FUNCTIONS_CATEGORY": "Eigen blokken",
-	"LEAPHY_SERIAL_PRINT": "Schrijf",
+	"LEAPHY_SERIAL_PRINT": "Laat zien",
 	"ARD_SERVO_WRITE": "Servo",
 	"ARD_SERVO_WRITE_TO": "op",
 	"ARD_SERVO_WRITE_DEG_180": "°",

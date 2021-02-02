@@ -1,7 +1,7 @@
 # This workflow will do a clean install, start the selenium server, and run
 # all of our tests.
 
-name: Node.js CI
+name: Lint and Run Tests
 
 on: [pull_request]
 
@@ -10,18 +10,13 @@ jobs:
     # TODO (#2114): re-enable osx build.
     runs-on: ubuntu-latest
 
-    strategy:
-      matrix:
-        node-version: [10.x, 12.x, 14.x]
-        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
-
     steps:
     - uses: actions/checkout@v2
 
-    - name: Use Node.js ${{ matrix.node-version }}
+    - name: Setup Node
       uses: actions/setup-node@v1
       with:
-        node-version: ${{ matrix.node-version }}
+        node-version: '14'
 
     - name: Npm Install
       run: npm install
@@ -34,8 +29,11 @@ jobs:
       if: runner.os == 'macOS'
       run: source ./tests/scripts/setup_osx_env.sh
 
-    - name: Run
-      run: npm run test:run
+    - name: Mocha Tests
+      run: node tests/mocha/run_mocha_tests_in_browser.js
+
+    - name: Generator Tests
+      run: source ./tests/scripts/run_generators.sh
 
       env:
         CI: true

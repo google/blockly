@@ -17,16 +17,18 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v1
       with:
         node-version: ${{ matrix.node-version }}
+
     - name: Npm Install
       run: npm install
 
     - name: Linux Test Setup
       if: runner.os == 'Linux'
-      run: source ./tests/scripts/setup_linux_env.sh
+      run: npm run test:prepare
 
     - name: MacOS Test Setup
       if: runner.os == 'macOS'

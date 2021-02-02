@@ -101,6 +101,7 @@ suite('ASTNode', function() {
       var node = Blockly.ASTNode.createConnectionNode(connection);
       var newASTNode = node.findNextForInput_(input);
       chai.assert.equal(newASTNode.getLocation(), input2.connection);
+      chai.assert.equal(true, false);
     });
 
     test('findPrevForInput_', function() {

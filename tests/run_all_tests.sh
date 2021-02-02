@@ -7,7 +7,7 @@ BOLD_GREEN='\033[1;32m'
 BOLD_RED='\033[1;31m'
 ANSI_RESET='\033[0m'
 
-travis_fold () {
+gh_actions_fold () {
   local startOrEnd=$1 # Either "start" or "end"
   local id=$2         # The fold id. No spaces.
 
@@ -37,10 +37,10 @@ run_test_command () {
 
   echo "======================================="
   echo "== $test_id"
-  travis_fold group $test_id
+  gh_actions_fold group $test_id
   $command
   local test_result=$?
-  travis_fold endgroup $test_id
+  gh_actions_fold endgroup $test_id
   if [ $test_result -eq 0 ]; then
     echo -e "${BOLD_GREEN}SUCCESS:${ANSI_RESET} ${test_id}"
   else

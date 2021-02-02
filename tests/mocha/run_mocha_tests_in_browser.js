@@ -25,9 +25,7 @@ async function runMochaTestsInBrowser() {
     path: '/wd/hub'
   };
   // Run in headless mode on Github Actions.
-  console.log(process.env);
-  if (process.env.GITHUB_ACTIONS) {
-    console.log("IN MOCHA TESTS")
+  if (process.env.CI) {
     options.capabilities['goog:chromeOptions'] = {
       args: ['--headless', '--no-sandbox', '--disable-dev-shm-usage']
     };

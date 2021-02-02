@@ -1,6 +1,6 @@
 #!/bin/bash
 
-if [ ! -z $TRAVIS ]; then echo "Executing run_all_tests.sh from $(pwd)"; fi
+if [ ! -z $CI ]; then echo "Executing run_all_tests.sh from $(pwd)"; fi
 
 # ANSI colors
 BOLD_GREEN='\033[1;32m'
@@ -11,8 +11,8 @@ travis_fold () {
   local startOrEnd=$1 # Either "start" or "end"
   local id=$2         # The fold id. No spaces.
 
-  if [ ! -z $TRAVIS ]; then
-    echo "travis_fold:$startOrEnd:$id"
+  if [ ! -z $CI ]; then
+    echo "::$startOrEnd::"
   fi
 }
 
@@ -37,10 +37,10 @@ run_test_command () {
 
   echo "======================================="
   echo "== $test_id"
-  travis_fold start $test_id
+  travis_fold group $test_id
   $command
   local test_result=$?
-  travis_fold end $test_id
+  travis_fold endgroup $test_id
   if [ $test_result -eq 0 ]; then
     echo -e "${BOLD_GREEN}SUCCESS:${ANSI_RESET} ${test_id}"
   else

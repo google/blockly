@@ -45,7 +45,7 @@ async function runGeneratorsInBrowser() {
     path: '/wd/hub'
   };
   // Run in headless mode on Travis.
-  if (process.env.GITHUB_ACTIONS) {
+  if (process.env.CI) {
     options.capabilities['moz:firefoxOptions'] = {
       args: ['-headless']
     };

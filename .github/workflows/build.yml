@@ -7,7 +7,7 @@ on: push
 
 jobs:
   build:
-
+    # TODO (#2114): re-enable osx build.
     runs-on: ubuntu-latest
 
     strategy:
@@ -29,3 +29,6 @@ jobs:
 
     - name: Run
       run: npm run test:run
+
+      env:
+        CI: true

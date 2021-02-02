@@ -23,6 +23,12 @@ goog.require('Blockly.blockRendering.TopRow');
 goog.require('Blockly.blockRendering.Types');
 goog.require('Blockly.utils.svgPaths');
 
+goog.requireType('Blockly.blockRendering.ConstantProvider');
+goog.requireType('Blockly.geras.ConstantProvider');
+goog.requireType('Blockly.geras.HighlightConstantProvider');
+goog.requireType('Blockly.geras.Renderer');
+goog.requireType('Blockly.geras.RenderInfo');
+
 
 /**
  * An object that adds highlights to a block based on the given rendering

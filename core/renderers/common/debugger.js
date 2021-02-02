@@ -24,6 +24,10 @@ goog.require('Blockly.constants');
 goog.require('Blockly.utils.dom');
 goog.require('Blockly.utils.Svg');
 
+goog.requireType('Blockly.blockRendering.ConstantProvider');
+goog.requireType('Blockly.BlockSvg');
+goog.requireType('Blockly.RenderedConnection');
+
 
 /**
  * An object that renders rectangles and dots for debugging rendering code.

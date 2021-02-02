@@ -31,6 +31,11 @@ goog.require('Blockly.blockRendering.TopRow');
 goog.require('Blockly.blockRendering.Types');
 goog.require('Blockly.constants');
 
+goog.requireType('Blockly.blockRendering.Renderer');
+goog.requireType('Blockly.BlockSvg');
+goog.requireType('Blockly.Input');
+goog.requireType('Blockly.RenderedConnection');
+
 
 /**
  * An object containing all sizing information needed to draw this block.

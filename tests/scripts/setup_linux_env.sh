@@ -2,6 +2,7 @@
 
 if [ "${RUNNER_OS}" == "Linux" ]
   then
-    sh -e /etc/init.d/xvfb start &
+    Xvfb :99 &
+    export DISPLAY=:99 &
     npm run test:prepare > /dev/null &
 fi

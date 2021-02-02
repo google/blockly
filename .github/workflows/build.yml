@@ -28,7 +28,7 @@ jobs:
 
     - name: Linux Test Setup
       if: runner.os == 'Linux'
-      run: xvfb-run -a npm run test:prepare
+      run: source ./tests/scripts/setup_linux_env.sh
 
     - name: MacOS Test Setup
       if: runner.os == 'macOS'

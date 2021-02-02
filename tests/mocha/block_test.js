@@ -78,6 +78,7 @@ suite('Blocks', function() {
       chai.assert.equal(blocks.C.getParent(), blocks.B);
       // B is the top of its stack.
       chai.assert.isNull(blocks.B.getParent());
+      chai.assert.isTrue(false);
     }
     function assertUnpluggedHealed(blocks) {
       // A and C are connected.

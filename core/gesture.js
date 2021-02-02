@@ -20,7 +20,6 @@ goog.require('Blockly.BubbleDragger');
 goog.require('Blockly.constants');
 goog.require('Blockly.Events');
 goog.require('Blockly.Events.Click');
-goog.require('Blockly.FlyoutDragger');
 goog.require('Blockly.Tooltip');
 goog.require('Blockly.Touch');
 goog.require('Blockly.utils');
@@ -383,7 +382,7 @@ Blockly.Gesture.prototype.updateIsDraggingBlock_ = function() {
  * This function should be called on a mouse/touch move event the first time the
  * drag radius is exceeded.  It should be called no more than once per gesture.
  * If a workspace is being dragged this function creates the necessary
- * WorkspaceDragger or FlyoutDragger and starts the drag.
+ * WorkspaceDragger and starts the drag.
  * @private
  */
 Blockly.Gesture.prototype.updateIsDraggingWorkspace_ = function() {
@@ -395,12 +394,8 @@ Blockly.Gesture.prototype.updateIsDraggingWorkspace_ = function() {
     return;
   }
 
-  if (this.flyout_) {
-    this.workspaceDragger_ = new Blockly.FlyoutDragger(this.flyout_);
-  } else {
-    this.workspaceDragger_ = new Blockly.WorkspaceDragger(
-        /** @type {!Blockly.WorkspaceSvg} */ (this.startWorkspace_));
-  }
+  this.workspaceDragger_ = new Blockly.WorkspaceDragger(
+      /** @type {!Blockly.WorkspaceSvg} */ (this.startWorkspace_));
 
   this.isDraggingWorkspace_ = true;
   this.workspaceDragger_.startDrag();

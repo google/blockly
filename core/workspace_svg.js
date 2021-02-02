@@ -2089,11 +2089,9 @@ Blockly.WorkspaceSvg.prototype.setScale = function(newScale) {
   this.scroll(this.scrollX, this.scrollY);
   if (this.scrollbar) {
     if (this.flyout_) {
-      this.scrollbar.hScroll.resizeViewHorizontal(metrics);
-      this.scrollbar.vScroll.resizeViewVertical(metrics);
+      this.scrollbar.resizeView(metrics);
     } else {
-      this.scrollbar.hScroll.resizeContentHorizontal(metrics);
-      this.scrollbar.vScroll.resizeContentVertical(metrics);
+      this.scrollbar.resizeContent(metrics);
     }
   }
 };
@@ -2147,11 +2145,8 @@ Blockly.WorkspaceSvg.prototype.scroll = function(x, y) {
     // content's top-left. Then we negate this so we get the displacement from
     // the content's top-left to the view's top-left, matching the
     // directionality of the scrollbars.
-
-    this.scrollbar.hScroll.setHandlePosition(-(x + metrics.contentLeft) *
-        this.scrollbar.hScroll.ratio);
-    this.scrollbar.vScroll.setHandlePosition(-(y + metrics.contentTop) *
-        this.scrollbar.vScroll.ratio);
+    this.scrollbar.set(
+        -(x + metrics.contentLeft), -(y + metrics.contentTop), false);
   }
   // We have to shift the translation so that when the canvas is at 0, 0 the
   // workspace origin is not underneath the toolbox.

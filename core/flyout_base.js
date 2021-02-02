@@ -262,12 +262,9 @@ Blockly.Flyout.prototype.init = function(targetWorkspace) {
   this.targetWorkspace = targetWorkspace;
   this.workspace_.targetWorkspace = targetWorkspace;
 
-  /**
-   * @type {!Blockly.Scrollbar}
-   * @package
-   */
-  this.scrollbar = new Blockly.Scrollbar(this.workspace_,
-      this.horizontalLayout, false, 'blocklyFlyoutScrollbar');
+  this.workspace_.scrollbar = new Blockly.ScrollbarPair(
+      this.workspace_, this.horizontalLayout, !this.horizontalLayout,
+      'blocklyFlyoutScrollbar');
 
   this.hide();
 
@@ -304,10 +301,6 @@ Blockly.Flyout.prototype.dispose = function() {
   if (this.filterWrapper_) {
     this.targetWorkspace.removeChangeListener(this.filterWrapper_);
     this.filterWrapper_ = null;
-  }
-  if (this.scrollbar) {
-    this.scrollbar.dispose();
-    this.scrollbar = null;
   }
   if (this.workspace_) {
     this.workspace_.getThemeManager().unsubscribe(this.svgBackground_);
@@ -397,7 +390,7 @@ Blockly.Flyout.prototype.updateDisplay_ = function() {
   this.svgGroup_.style.display = show ? 'block' : 'none';
   // Update the scrollbar's visibility too since it should mimic the
   // flyout's visibility.
-  this.scrollbar.setContainerVisible(show);
+  this.workspace_.scrollbar.setContainerVisible(show);
 };
 
 /**
@@ -422,14 +415,11 @@ Blockly.Flyout.prototype.positionAt_ = function(width, height, x, y) {
   }
 
   // Update the scrollbar (if one exists).
-  if (this.scrollbar) {
+  var scrollbar = this.workspace_.scrollbar;
+  if (scrollbar) {
     // Set the scrollbars origin to be the top left of the flyout.
-    this.scrollbar.setOrigin(x, y);
-    this.scrollbar.resize();
-    // Set the position again so that if the metrics were the same (and the
-    // resize failed) our position is still updated.
-    this.scrollbar.setPosition(
-        this.scrollbar.position.x, this.scrollbar.position.y);
+    scrollbar.setOrigin(x, y);
+    scrollbar.resize();
   }
 };
 
@@ -929,7 +919,8 @@ Blockly.Flyout.prototype.reflow = function() {
  * @package
  */
 Blockly.Flyout.prototype.isScrollable = function() {
-  return this.scrollbar ? this.scrollbar.isVisible() : false;
+  return this.workspace_.scrollbar ?
+      this.workspace_.scrollbar.isVisible() : false;
 };
 
 /**

@@ -80,7 +80,7 @@
     "gulp-shell": "^0.8.0",
     "gulp-sourcemaps": "^3.0.0",
     "gulp-umd": "^2.0.0",
-    "js-green-licenses": "^2.0.1",
+    "js-green-licenses": "^3.0.0",
     "mocha": "^8.1.1",
     "readline-sync": "^1.4.10",
     "rimraf": "^3.0.2",

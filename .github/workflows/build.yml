@@ -24,8 +24,12 @@ jobs:
     - name: Npm Install
       run: npm install
 
-    - name: Pre Install
-      run: source ./before_install.sh
+    - name: Test Setup
+      run: |
+        export DISPLAY=:99.0
+        if [ "${RUNNER_OS}" == "Linux" ]; then ( tests/scripts/setup_linux_env.sh ) fi
+        if [ "${RUNNER_OS}" == "macOS" ]; then ( tests/scripts/setup_osx_env.sh ) fi
+        sleep 2
 
     - name: Run
       run: npm run test:run

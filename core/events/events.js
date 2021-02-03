@@ -200,6 +200,12 @@ Blockly.Events.COMMENT_MOVE = 'comment_move';
 Blockly.Events.FINISHED_LOADING = 'finished_loading';
 
 /**
+ * @typedef {!Blockly.Events.BlockCreate|!Blockly.Events.BlockMove|
+ * !Blockly.Events.CommentCreate|!Blockly.Events.CommentMove}
+ */
+Blockly.Events.BumpEvent;
+
+/**
  * List of events that cause objects to be bumped back into the visible
  * portion of the workspace (only used for non-movable workspaces).
  *

@@ -301,19 +301,144 @@ Blockly.MetricsManager.prototype.getViewMetrics = function(
 Blockly.MetricsManager.prototype.getContentMetrics = function(
     opt_getWorkspaceCoordinates, opt_viewMetrics) {
   var scale = opt_getWorkspaceCoordinates ? this.workspace_.scale : 1;
-  var contentDimensions = null;
-  if (this.workspace_.isContentBounded()) {
-    opt_viewMetrics = opt_viewMetrics || this.getViewMetrics(false);
-    contentDimensions = this.getContentDimensionsBounded_(opt_viewMetrics);
-  } else {
-    contentDimensions = this.getContentDimensionsExact_();
-  }
+  var contentDimensions = this.getContentDimensionsExact_();
   return {
     height: contentDimensions.height / scale,
     width: contentDimensions.width / scale,
     top: contentDimensions.top / scale,
     left: contentDimensions.left / scale,
   };
+};
+
+// TODO maybe update name of function to include the word "fixed"
+/**
+ * Whether the scroll area has "fixed" edges.
+ * @return {boolean}
+ */
+Blockly.MetricsManager.prototype.hasScrollEdges = function() {
+  // TODO: Note. This would need to be overridden to support fixed sides.
+  // TODO: Note. This exists for optimization of bump logic.
+
+  // TODO: do i need to check if isMovable? can it be movable without scrollbar?
+  var vScrollEnabled = this.workspace_.scrollbar &&
+      this.workspace_.scrollbar.canScrollVertically();
+  var hScrollEnabled = this.workspace_.scrollbar &&
+      this.workspace_.scrollbar.canScrollHorizontally();
+
+  return !vScrollEnabled || !hScrollEnabled;
+};
+
+/**
+ * Returns the "fixed" edges of the scroll area.
+ * @param {!Blockly.MetricsManager.ContainerRegion=} opt_viewMetrics The view
+ *     metrics if they have been previously computed. Passing in null may cause
+ *     the view metrics to be computed again, if it is needed.
+ * @return {{
+ *    top: number=,
+ *    bottom: number=,
+ *    left: number=,
+ *    right: number=
+ * }} The fixed edges of the scroll area.
+ * @protected
+ */
+Blockly.MetricsManager.prototype.computeScrollEdges_ = function(
+    opt_viewMetrics) {
+  // TODO: Note. This would need to be overridden to support fixed sides.
+  if (!this.hasScrollEdges()) {
+    // Return early if there are no edges.
+    return {};
+  }
+
+  var vScrollEnabled = this.workspace_.scrollbar &&
+      this.workspace_.scrollbar.canScrollVertically();
+  var hScrollEnabled = this.workspace_.scrollbar &&
+      this.workspace_.scrollbar.canScrollHorizontally();
+
+  var viewMetrics = opt_viewMetrics || this.getViewMetrics(false);
+
+  var edges = {};
+  if (!vScrollEnabled) {
+    if (edges.top !== undefined) {
+      edges.bottom = edges.top + viewMetrics.height;
+    } else if (edges.bottom !== undefined) {
+      edges.top = edges.bottom - viewMetrics.height;
+    } else {
+      edges.top = viewMetrics.top;
+      edges.bottom = viewMetrics.top + viewMetrics.height;
+    }
+  }
+  if (!hScrollEnabled) {
+    if (edges.left !== undefined) {
+      edges.right = edges.left + viewMetrics.width;
+    } else if (edges.bottom !== undefined) {
+      edges.left = edges.right - viewMetrics.width;
+    } else {
+      edges.left = viewMetrics.left;
+      edges.right = viewMetrics.left + viewMetrics.width;
+    }
+  }
+  return edges;
+};
+
+/**
+ * Returns the metrics for the scrollable area of the workspace.
+ * @param {!Blockly.MetricsManager.ContainerRegion=} opt_viewMetrics The view
+ *     metrics if they have been previously computed. Passing in null may cause
+ *     the view metrics to be computed again, if it is needed.
+ * @param {!Blockly.MetricsManager.ContainerRegion=} opt_contentMetrics The
+ *     content metrics if they have been previously computed. Passing in null
+ *     may cause the content metrics to be computed again, if it is needed.
+ * @param {boolean=} opt_getWorkspaceCoordinates True to get the content metrics
+ *     in workspace coordinates, false to get them in pixel coordinates.
+ * @return {!Blockly.MetricsManager.ContainerRegion} The metrics for scroll
+ *    container
+ */
+Blockly.MetricsManager.prototype.getScrollMetrics = function(
+    opt_viewMetrics, opt_contentMetrics, opt_getWorkspaceCoordinates) {
+  var scale = opt_getWorkspaceCoordinates ? this.workspace_.scale : 1;
+  var viewMetrics = this.getViewMetrics(false);
+  var contentMetrics = opt_contentMetrics || this.getContentMetrics();
+  var scrollBounds = this.computeScrollEdges_(viewMetrics);
+
+  // TODO: Note. This would be overridden to change padding logic.
+  // Is there a better way to refactor this logic out?
+
+  // Add padding around content
+  var contentBottom = contentMetrics.top + contentMetrics.height;
+  var contentRight = contentMetrics.left + contentMetrics.width;
+  var viewWidth = viewMetrics.width;
+  var viewHeight = viewMetrics.height;
+  var halfWidth = viewWidth / 2;
+  var halfHeight = viewHeight / 2;
+  // Add a padding around the content that is at least half a screen wide.
+  // Ensure padding is wide enough that blocks can scroll over entire screen.
+  var paddedTop =
+      Math.min(contentMetrics.top - halfHeight, contentBottom - viewHeight);
+  var paddedLeft =
+      Math.min(contentMetrics.left - halfWidth, contentRight - viewWidth);
+  var paddedBottom =
+      Math.max(contentBottom + halfHeight, contentMetrics.top + viewHeight);
+  var paddedRight =
+      Math.max(contentRight + halfWidth, contentMetrics.left + viewWidth);
+
+  // Used combination of fixed bounds and padded content to make scroll area.
+  var top = scrollBounds.top !== undefined ?
+      scrollBounds.top : paddedTop;
+  var left = scrollBounds.left !== undefined ?
+      scrollBounds.left : paddedLeft;
+  var bottom = scrollBounds.bottom !== undefined ?
+      scrollBounds.bottom : paddedBottom;
+  var right = scrollBounds.right !== undefined ?
+      scrollBounds.right : paddedRight;
+
+  var scrollableArea = {
+    top: top / scale,
+    left: left / scale,
+    width: (right - left) / scale,
+    height: (bottom - top) / scale,
+  };
+
+  return scrollableArea;
 };
 
 /**

@@ -166,6 +166,14 @@ Blockly.ScrollbarPair.prototype.resize = function() {
   this.oldHostMetrics_ = hostMetrics;
 };
 
+// TODO come up with better name?
+/**
+ * Returns true if only a single direction of scrolling is enabled.
+ * @return {boolean}
+ */
+Blockly.ScrollbarPair.prototype.hasSingleDirectionScroll = function() {
+  return this.hScroll ? !this.vScroll : !!this.vScroll;
+};
 
 /**
  * Returns whether scrolling horizontally is enabled.
@@ -637,14 +645,28 @@ Blockly.Scrollbar.prototype.resizeViewHorizontal = function(hostMetrics) {
  *     the required dimensions, possibly fetched from the host object.
  */
 Blockly.Scrollbar.prototype.resizeContentHorizontal = function(hostMetrics) {
+  var extractedViewMetrics = {
+    top: hostMetrics.viewTop,
+    left: hostMetrics.viewLeft,
+    width: hostMetrics.viewWidth,
+    height: hostMetrics.viewHeight,
+  };
+  var extractedContentMetrics = {
+    top: hostMetrics.contentTop,
+    left: hostMetrics.contentLeft,
+    width: hostMetrics.contentWidth,
+    height: hostMetrics.contentHeight,
+  };
+  var scrollMetrics = this.workspace_.getMetricsManager()
+      .getScrollMetrics(extractedViewMetrics, extractedContentMetrics);
   if (!this.pair_) {
     // Only show the scrollbar if needed.
     // Ideally this would also apply to scrollbar pairs, but that's a bigger
     // headache (due to interactions with the corner square).
-    this.setVisible(this.scrollViewSize_ < hostMetrics.contentWidth);
+    this.setVisible(this.scrollViewSize_ < scrollMetrics.width);
   }
 
-  this.ratio = this.scrollViewSize_ / hostMetrics.contentWidth;
+  this.ratio = this.scrollViewSize_ / scrollMetrics.width;
   if (this.ratio == -Infinity || this.ratio == Infinity ||
       isNaN(this.ratio)) {
     this.ratio = 0;
@@ -653,7 +675,7 @@ Blockly.Scrollbar.prototype.resizeContentHorizontal = function(hostMetrics) {
   var handleLength = hostMetrics.viewWidth * this.ratio;
   this.setHandleLength_(Math.max(0, handleLength));
 
-  var handlePosition = (hostMetrics.viewLeft - hostMetrics.contentLeft) *
+  var handlePosition = (hostMetrics.viewLeft - scrollMetrics.left) *
       this.ratio;
   this.setHandlePosition(this.constrainHandle_(handlePosition));
 };
@@ -704,12 +726,26 @@ Blockly.Scrollbar.prototype.resizeViewVertical = function(hostMetrics) {
  *     the required dimensions, possibly fetched from the host object.
  */
 Blockly.Scrollbar.prototype.resizeContentVertical = function(hostMetrics) {
+  var extractedViewMetrics = {
+    top: hostMetrics.viewTop,
+    left: hostMetrics.viewLeft,
+    width: hostMetrics.viewWidth,
+    height: hostMetrics.viewHeight,
+  };
+  var extractedContentMetrics = {
+    top: hostMetrics.contentTop,
+    left: hostMetrics.contentLeft,
+    width: hostMetrics.contentWidth,
+    height: hostMetrics.contentHeight,
+  };
+  var scrollMetrics = this.workspace_.getMetricsManager()
+      .getScrollMetrics(extractedViewMetrics, extractedContentMetrics);
   if (!this.pair_) {
     // Only show the scrollbar if needed.
-    this.setVisible(this.scrollViewSize_ < hostMetrics.contentHeight);
+    this.setVisible(this.scrollViewSize_ < scrollMetrics.height);
   }
 
-  this.ratio = this.scrollViewSize_ / hostMetrics.contentHeight;
+  this.ratio = this.scrollViewSize_ / scrollMetrics.height;
   if (this.ratio == -Infinity || this.ratio == Infinity ||
       isNaN(this.ratio)) {
     this.ratio = 0;
@@ -718,7 +754,7 @@ Blockly.Scrollbar.prototype.resizeContentVertical = function(hostMetrics) {
   var handleLength = hostMetrics.viewHeight * this.ratio;
   this.setHandleLength_(Math.max(0, handleLength));
 
-  var handlePosition = (hostMetrics.viewTop - hostMetrics.contentTop) *
+  var handlePosition = (hostMetrics.viewTop - scrollMetrics.top) *
       this.ratio;
   this.setHandlePosition(this.constrainHandle_(handlePosition));
 };

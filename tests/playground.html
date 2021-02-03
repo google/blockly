@@ -117,15 +117,16 @@ function start() {
         toolbox: toolbox,
         toolboxPosition: 'start',
         renderer: 'geras',
-        zoom:
-          {
-            controls: true,
-            wheel: true,
-            startScale: 1.0,
-            maxScale: 4,
-            minScale: 0.25,
-            scaleSpeed: 1.1
-          }
+        // TODO: uncomment
+        // zoom:
+        //   {
+        //     controls: true,
+        //     wheel: true,
+        //     startScale: 1.0,
+        //     maxScale: 4,
+        //     minScale: 0.25,
+        //     scaleSpeed: 1.1
+        //   }
       });
   initToolbox(workspace);
   workspace.configureContextMenu = configureContextMenu;

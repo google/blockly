@@ -28,30 +28,25 @@ goog.requireType('Blockly.utils.Size');
 Blockly.IMetricsManager = function() {};
 
 /**
- * Gets the width and the height of the flyout on the workspace in pixel
- * coordinates.
- * @param {!Blockly.MetricsManager.ContainerRegion} viewMetrics An object
- *     containing height and width attributes in CSS pixels.  Together they
- *     specify the size of the visible workspace, not including areas covered up
- *     by the toolbox.
- * @return {!Blockly.MetricsManager.ContainerRegion} The dimensions of the
- *     contents of the given workspace, as an object containing
- *     - height and width in pixels
- *     - left and top in pixels relative to the workspace origin.
- * @protected
+ * Whether the scroll area has "fixed" edges.
+ * @return {boolean}
  */
-Blockly.IMetricsManager.prototype.getContentDimensionsBounded_;
+Blockly.IMetricsManager.prototype.hasScrollEdges;
 
 /**
- * Gets the bounding box for all workspace contents, in pixel coordinates.
- * @return {!Blockly.MetricsManager.ContainerRegion} The dimensions of the
- *     contents of the given workspace in pixel coordinates, as an object
- *     containing
- *     - height and width in pixels
- *     - left and top in pixels relative to the workspace origin.
- * @protected
+ * Returns the metrics for the scrollable area of the workspace.
+ * @param {!Blockly.MetricsManager.ContainerRegion=} opt_viewMetrics The view
+ *     metrics if they have been previously computed. Passing in null may cause
+ *     the view metrics to be computed again, if it is needed.
+ * @param {!Blockly.MetricsManager.ContainerRegion=} opt_contentMetrics The
+ *     content metrics if they have been previously computed. Passing in null
+ *     may cause the content metrics to be computed again, if it is needed.
+ * @param {boolean=} opt_getWorkspaceCoordinates True to get the content metrics
+ *     in workspace coordinates, false to get them in pixel coordinates.
+ * @return {!Blockly.MetricsManager.ContainerRegion} The metrics for scroll
+ *    container
  */
-Blockly.IMetricsManager.prototype.getContentDimensionsExact_;
+Blockly.IMetricsManager.prototype.getScrollMetrics;
 
 /**
  * Gets the width and the height of the flyout on the workspace in pixel

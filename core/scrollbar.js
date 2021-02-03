@@ -126,15 +126,15 @@ Blockly.ScrollbarPair.prototype.resize = function() {
   } else {
     // Has the content been resized or moved?
     if (!this.oldHostMetrics_ ||
-        this.oldHostMetrics_.contentWidth != hostMetrics.contentWidth ||
+        this.oldHostMetrics_.scrollWidth != hostMetrics.scrollWidth ||
         this.oldHostMetrics_.viewLeft != hostMetrics.viewLeft ||
-        this.oldHostMetrics_.contentLeft != hostMetrics.contentLeft) {
+        this.oldHostMetrics_.scrollLeft != hostMetrics.scrollLeft) {
       resizeH = true;
     }
     if (!this.oldHostMetrics_ ||
-        this.oldHostMetrics_.contentHeight != hostMetrics.contentHeight ||
+        this.oldHostMetrics_.scrollHeight != hostMetrics.scrollHeight ||
         this.oldHostMetrics_.viewTop != hostMetrics.viewTop ||
-        this.oldHostMetrics_.contentTop != hostMetrics.contentTop) {
+        this.oldHostMetrics_.scrollTop != hostMetrics.scrollTop) {
       resizeV = true;
     }
   }
@@ -171,7 +171,6 @@ Blockly.ScrollbarPair.prototype.resize = function() {
   // Cache the current metrics to potentially short-cut the next resize event.
   this.oldHostMetrics_ = hostMetrics;
 };
-
 
 /**
  * Returns whether scrolling horizontally is enabled.
@@ -483,7 +482,7 @@ Blockly.Scrollbar.SCROLLBAR_MARGIN = 0.5;
 /**
  * @param {Blockly.utils.Metrics} first An object containing computed
  *     measurements of a workspace.
- * @param {Blockly.utils.Metrics} second Another object containing computed
+ * @param {?Blockly.utils.Metrics} second Another object containing computed
  *     measurements of a workspace.
  * @return {boolean} Whether the two sets of metrics are equivalent.
  * @private
@@ -499,10 +498,10 @@ Blockly.Scrollbar.metricsAreEquivalent_ = function(first, second) {
       first.viewTop != second.viewTop ||
       first.absoluteTop != second.absoluteTop ||
       first.absoluteLeft != second.absoluteLeft ||
-      first.contentWidth != second.contentWidth ||
-      first.contentHeight != second.contentHeight ||
-      first.contentLeft != second.contentLeft ||
-      first.contentTop != second.contentTop) {
+      first.scrollWidth != second.scrollWidth ||
+      first.scrollHeight != second.scrollHeight ||
+      first.scrollLeft != second.scrollLeft ||
+      first.scrollTop != second.scrollTop) {
     return false;
   }
 
@@ -571,7 +570,7 @@ Blockly.Scrollbar.prototype.constrainPosition_ = function(value) {
     value = 0;
   } else {
     // Handle length should never be greater than this.scrollViewSize_.
-    // If the viewSize is greater than or equal to the contentSize, the
+    // If the viewSize is greater than or equal to the scrollSize, the
     // handleLength will end up equal to this.scrollViewSize_.
     value = Math.min(value, this.scrollViewSize_ - this.handleLength_);
   }
@@ -700,8 +699,8 @@ Blockly.Scrollbar.prototype.resizeViewHorizontal = function(hostMetrics) {
  *     the required dimensions, possibly fetched from the host object.
  */
 Blockly.Scrollbar.prototype.resizeContentHorizontal = function(hostMetrics) {
-  if (hostMetrics.viewWidth >= hostMetrics.contentWidth) {
-    // viewWidth is often greater than contentWidth in flyouts and
+  if (hostMetrics.viewWidth >= hostMetrics.scrollWidth) {
+    // viewWidth is often greater than scrollWidth in flyouts and
     // non-scrollable workspaces.
     this.setHandleLength_(this.scrollViewSize_);
     this.setHandlePosition(0);
@@ -719,21 +718,21 @@ Blockly.Scrollbar.prototype.resizeContentHorizontal = function(hostMetrics) {
 
   // Resize the handle.
   var handleLength =
-      this.scrollViewSize_ * hostMetrics.viewWidth / hostMetrics.contentWidth;
+      this.scrollViewSize_ * hostMetrics.viewWidth / hostMetrics.scrollWidth;
   handleLength = this.constrainLength_(handleLength);
   this.setHandleLength_(handleLength);
 
   // Compute the handle offset.
   // The position of the handle can be between:
   //     0 and this.scrollViewSize_ - handleLength
-  // If viewLeft == contentLeft
+  // If viewLeft == scrollLeft
   //     then the offset should be 0
-  // If viewRight == contentRight
-  //     then viewLeft = contentLeft + contentWidth - viewWidth
+  // If viewRight == scrollRight
+  //     then viewLeft = scrollLeft + scrollWidth - viewWidth
   //     then the offset should be max offset
 
-  var maxScrollDistance = hostMetrics.contentWidth - hostMetrics.viewWidth;
-  var contentDisplacement = hostMetrics.viewLeft - hostMetrics.contentLeft;
+  var maxScrollDistance = hostMetrics.scrollWidth - hostMetrics.viewWidth;
+  var contentDisplacement = hostMetrics.viewLeft - hostMetrics.scrollLeft;
   // Percent of content to the left of our current position.
   var offsetRatio = contentDisplacement / maxScrollDistance;
   // Area available to scroll * percent to the left
@@ -793,8 +792,8 @@ Blockly.Scrollbar.prototype.resizeViewVertical = function(hostMetrics) {
  *     the required dimensions, possibly fetched from the host object.
  */
 Blockly.Scrollbar.prototype.resizeContentVertical = function(hostMetrics) {
-  if (hostMetrics.viewHeight >= hostMetrics.contentHeight) {
-    // viewHeight is often greater than contentHeight in flyouts and
+  if (hostMetrics.viewHeight >= hostMetrics.scrollHeight) {
+    // viewHeight is often greater than scrollHeight in flyouts and
     // non-scrollable workspaces.
     this.setHandleLength_(this.scrollViewSize_);
     this.setHandlePosition(0);
@@ -812,21 +811,21 @@ Blockly.Scrollbar.prototype.resizeContentVertical = function(hostMetrics) {
 
   // Resize the handle.
   var handleLength =
-      this.scrollViewSize_ * hostMetrics.viewHeight / hostMetrics.contentHeight;
+      this.scrollViewSize_ * hostMetrics.viewHeight / hostMetrics.scrollHeight;
   handleLength = this.constrainLength_(handleLength);
   this.setHandleLength_(handleLength);
 
   // Compute the handle offset.
   // The position of the handle can be between:
   //     0 and this.scrollViewSize_ - handleLength
-  // If viewTop == contentTop
+  // If viewTop == scrollTop
   //     then the offset should be 0
-  // If viewBottom == contentBottom
-  //     then viewTop = contentTop + contentHeight - viewHeight
+  // If viewBottom == scrollBottom
+  //     then viewTop = scrollTop + scrollHeight - viewHeight
   //     then the offset should be max offset
 
-  var maxScrollDistance = hostMetrics.contentHeight - hostMetrics.viewHeight;
-  var contentDisplacement = hostMetrics.viewTop - hostMetrics.contentTop;
+  var maxScrollDistance = hostMetrics.scrollHeight - hostMetrics.viewHeight;
+  var contentDisplacement = hostMetrics.viewTop - hostMetrics.scrollTop;
   // Percent of content to the left of our current position.
   var offsetRatio = contentDisplacement / maxScrollDistance;
   // Area available to scroll * percent to the left

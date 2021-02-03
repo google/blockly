@@ -43,6 +43,18 @@ Blockly.utils.Metrics.prototype.contentHeight;
 Blockly.utils.Metrics.prototype.contentWidth;
 
 /**
+ * Height of the scroll area.
+ * @type {number}
+ */
+Blockly.utils.Metrics.prototype.scrollHeight;
+
+/**
+ * Width of the scroll area.
+ * @type {number}
+ */
+Blockly.utils.Metrics.prototype.scrollWidth;
+
+/**
  * Top-edge of the visible portion of the workspace, relative to the workspace
  * origin.
  * @type {number}
@@ -67,6 +79,18 @@ Blockly.utils.Metrics.prototype.contentTop;
  * @type {number}
  */
 Blockly.utils.Metrics.prototype.contentLeft;
+
+/**
+ * Top-edge of the scroll area, relative to the workspace origin.
+ * @type {number}
+ */
+Blockly.utils.Metrics.prototype.scrollTop;
+
+/**
+ * Left-edge of the scroll area relative to the workspace origin.
+ * @type {number}
+ */
+Blockly.utils.Metrics.prototype.scrollLeft;
 
 /**
  * Top-edge of the visible portion of the workspace, relative to the blocklyDiv.

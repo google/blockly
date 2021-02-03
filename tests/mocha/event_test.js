@@ -551,13 +551,13 @@ suite('Events', function() {
         getArgs: (thisObj) => [true, thisObj.workspace.id],
         getExpectedJson: () => ({type: 'trashcan_open', isOpen: true})},
       {title: 'Viewport change', class: Blockly.Events.ViewportChange,
-        getArgs: (thisObj) => [2.666, 1.333, 1.2, thisObj.workspace.id],
+        getArgs: (thisObj) => [2.666, 1.333, 1.2, thisObj.workspace.id, 1],
         getExpectedJson: () => ({type: 'viewport_change', viewTop: 2.666,
-          viewLeft: 1.333, scale: 1.2})},
+          viewLeft: 1.333, scale: 1.2, oldScale: 1})},
       {title: 'Viewport change (0,0)', class: Blockly.Events.ViewportChange,
-        getArgs: (thisObj) => [0, 0, 1.2, thisObj.workspace.id],
+        getArgs: (thisObj) => [0, 0, 1.2, thisObj.workspace.id, 1],
         getExpectedJson: () => ({type: 'viewport_change', viewTop: 0,
-          viewLeft: 0, scale: 1.2})},
+          viewLeft: 0, scale: 1.2, oldScale: 1})},
     ];
     var blockEventTestCases = [
       {title: 'Block change', class: Blockly.Events.BlockChange,

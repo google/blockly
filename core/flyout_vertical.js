@@ -55,9 +55,11 @@ Blockly.VerticalFlyout.registryName = 'verticalFlyout';
  * .contentWidth: Width of the contents,
  * .viewTop: Offset of top edge of visible rectangle from parent,
  * .contentTop: Offset of the top-most content from the y=0 coordinate,
+ * .scrollTop: Offset of the scroll area top from the y=0 coordinate,
  * .absoluteTop: Top-edge of view.
  * .viewLeft: Offset of the left edge of visible rectangle from parent,
  * .contentLeft: Offset of the left-most content from the x=0 coordinate,
+ * .scrollLeft:  Offset of the scroll area left from the x=0 coordinate,
  * .absoluteLeft: Left-edge of view.
  * @return {Blockly.utils.Metrics} Contains size and position metrics of the
  *     flyout.
@@ -87,10 +89,15 @@ Blockly.VerticalFlyout.prototype.getMetrics_ = function() {
   }
 
   var metrics = {
-    contentHeight: optionBox.height * this.workspace_.scale + 2 * this.MARGIN,
-    contentWidth: optionBox.width * this.workspace_.scale + 2 * this.MARGIN,
+    contentHeight: optionBox.height * this.workspace_.scale,
+    contentWidth: optionBox.width * this.workspace_.scale,
     contentTop: optionBox.y,
     contentLeft: optionBox.x,
+
+    scrollHeight: (optionBox.height + 2 * this.MARGIN) * this.workspace_.scale,
+    scrollWidth: (optionBox.width + 2 * this.MARGIN) * this.workspace_.scale,
+    scrollTop: optionBox.y,
+    scrollLeft: optionBox.x,
 
     viewHeight: viewHeight,
     viewWidth: viewWidth,

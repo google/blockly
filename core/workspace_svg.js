@@ -24,7 +24,7 @@ goog.require('Blockly.Events.ViewportChange');
 goog.require('Blockly.Gesture');
 goog.require('Blockly.Grid');
 goog.require('Blockly.MarkerManager');
-goog.require('Blockly.Metrics');
+goog.require('Blockly.MetricsManager');
 goog.require('Blockly.Msg');
 goog.require('Blockly.Options');
 goog.require('Blockly.registry');
@@ -66,9 +66,16 @@ Blockly.WorkspaceSvg = function(options,
     opt_blockDragSurface, opt_wsDragSurface) {
   Blockly.WorkspaceSvg.superClass_.constructor.call(this, options);
 
-  this.metricsManager = new Blockly.Metrics(this);
+  /**
+   * The manager in charge of calculating metrics for the workspace.
+   * TODO: Update this.
+   * @type {!Blockly.MetricsManager}
+   */
+  this.metricsManager = new Blockly.MetricsManager(this);
 
   /** @type {function():!Blockly.utils.Metrics} */
+  // TODO: Options.getMetrics ? What should this be?
+  // TODO: Should this still support just setting a function directly?
   this.getMetrics =
       options.getMetrics || this.metricsManager.getMetrics.bind(this.metricsManager);
   /** @type {function(!{x:number, y:number}):void} */

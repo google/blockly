@@ -83,6 +83,13 @@ Blockly.ToolboxCategory = function (categoryDef, toolbox, opt_parent) {
   this.iconDom_ = null;
 
   /**
+   * The html element for the toolbox label.
+   * @type {?Element}
+   * @protected
+   */
+  this.labelDom_ = null;
+
+  /**
    * All the css class names that are used to create a category.
    * @type {!Blockly.ToolboxCategory.CssConfig}
    * @protected
@@ -121,13 +128,14 @@ Blockly.utils.object.inherits(Blockly.ToolboxCategory, Blockly.ToolboxItem);
 /**
  * All the css class names that are used to create a category.
  * @typedef {{
- *            container:?string,
- *            row:?string,
- *            icon:?string,
- *            label:?string,
- *            selected:?string,
- *            openIcon:?string,
- *            closedIcon:?string
+ *            container:(string|undefined),
+ *            row:(string|undefined),
+ *            rowcontentcontainer:(string|undefined),
+ *            icon:(string|undefined),
+ *            label:(string|undefined),
+ *            selected:(string|undefined),
+ *            openicon:(string|undefined),
+ *            closedicon:(string|undefined)
  *          }}
  */
 Blockly.ToolboxCategory.CssConfig;
@@ -167,13 +175,13 @@ Blockly.ToolboxCategory.prototype.makeDefaultCssConfig_ = function () {
   return {
     'container': 'blocklyToolboxCategory',
     'row': 'blocklyTreeRow',
-    'rowContentContainer': 'blocklyTreeRowContentContainer',
+    'rowcontentcontainer': 'blocklyTreeRowContentContainer',
     'icon': 'blocklyTreeIcon',
     'label': 'blocklyTreeLabel',
     'contents': 'blocklyToolboxContents',
     'selected': 'blocklyTreeSelected',
-    'openIcon': 'blocklyTreeIconOpen',
-    'closedIcon': 'blocklyTreeIconClosed',
+    'openicon': 'blocklyTreeIconOpen',
+    'closedicon': 'blocklyTreeIconClosed',
   };
 };
 
@@ -221,7 +229,6 @@ Blockly.ToolboxCategory.prototype.createDom_ = function () {
     Blockly.utils.aria.State.LEVEL, this.level_);
 
   this.rowDiv_ = this.createRowContainer_();
-  this.rowDiv_.setAttribute('id', this.id_);
   this.rowDiv_.style.pointerEvents = 'auto';
   this.htmlDiv_.appendChild(this.rowDiv_);
 
@@ -233,10 +240,10 @@ Blockly.ToolboxCategory.prototype.createDom_ = function () {
   // Blockly.utils.aria.setRole(this.iconDom_, Blockly.utils.aria.Role.PRESENTATION);
   // this.rowContents_.appendChild(this.iconDom_);
 
-  var labelDom = this.createLabelDom_(this.name_);
-  this.rowContents_.appendChild(labelDom);
-  Blockly.utils.aria.setState(/** @type {!Element} */(this.htmlDiv_),
-    Blockly.utils.aria.State.LABELLEDBY, labelDom.getAttribute('id'));
+  this.labelDom_ = this.createLabelDom_(this.name_);
+  this.rowContents_.appendChild(this.labelDom_);
+  Blockly.utils.aria.setState(/** @type {!Element} */ (this.htmlDiv_),
+      Blockly.utils.aria.State.LABELLEDBY, this.labelDom_.getAttribute('id'));
 
   this.addColourBorder_(this.colour_);
 
@@ -278,7 +285,7 @@ Blockly.ToolboxCategory.prototype.createRowContainer_ = function () {
  */
 Blockly.ToolboxCategory.prototype.createRowContentsContainer_ = function () {
   var contentsContainer = document.createElement('div');
-  Blockly.utils.dom.addClass(contentsContainer, this.cssConfig_['rowContentContainer']);
+  Blockly.utils.dom.addClass(contentsContainer, this.cssConfig_['rowcontentcontainer']);
   return contentsContainer;
 };
 
@@ -427,6 +434,17 @@ Blockly.ToolboxCategory.prototype.getColourfromStyle_ = function (styleName) {
 };
 
 /**
+ * Gets the html element that is clickable.
+ * The parent toolbox element receives clicks. The parent toolbox will add an id to this element so
+ * it can pass the onClick event to the correct toolboxItem.
+ * @return {!Element} The html element that receives clicks.
+ * @public
+ */
+Blockly.ToolboxCategory.prototype.getClickTarget = function() {
+  return /** @type {!Element} */(this.rowDiv_);
+};
+
+/**
  * Parses the colour on the category.
  * @param {number|string} colourValue HSV hue value (0 to 360), #RRGGBB string,
  *     or a message reference string pointing to one of those two values.
@@ -466,8 +484,8 @@ Blockly.ToolboxCategory.prototype.openIcon_ = function (iconDiv) {
   if (!iconDiv) {
     return;
   }
-  Blockly.utils.dom.removeClasses(iconDiv, this.cssConfig_['closedIcon']);
-  Blockly.utils.dom.addClass(iconDiv, this.cssConfig_['openIcon']);
+  Blockly.utils.dom.removeClasses(iconDiv, this.cssConfig_['closedicon']);
+  Blockly.utils.dom.addClass(iconDiv, this.cssConfig_['openicon']);
 };
 
 /**
@@ -479,8 +497,8 @@ Blockly.ToolboxCategory.prototype.closeIcon_ = function (iconDiv) {
   if (!iconDiv) {
     return;
   }
-  Blockly.utils.dom.removeClasses(iconDiv, this.cssConfig_['openIcon']);
-  Blockly.utils.dom.addClass(iconDiv, this.cssConfig_['closedIcon']);
+  Blockly.utils.dom.removeClasses(iconDiv, this.cssConfig_['openicon']);
+  Blockly.utils.dom.addClass(iconDiv, this.cssConfig_['closedicon']);
 };
 
 /**

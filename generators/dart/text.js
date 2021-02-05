@@ -26,7 +26,9 @@ Blockly.Dart['text'] = function(block) {
 Blockly.Dart['text_multiline'] = function(block) {
   // Text value.
   var code = Blockly.Dart.multiline_quote_(block.getFieldValue('TEXT'));
-  return [code, Blockly.Dart.ORDER_ATOMIC];
+  var order = code.indexOf('+') != -1 ? Blockly.Dart.ORDER_ADDITIVE :
+      Blockly.Dart.ORDER_ATOMIC;
+  return [code, order];
 };
 
 Blockly.Dart['text_join'] = function(block) {
@@ -92,8 +94,9 @@ Blockly.Dart['text_charAt'] = function(block) {
   // Get letter at index.
   // Note: Until January 2013 this block did not have the WHERE input.
   var where = block.getFieldValue('WHERE') || 'FROM_START';
-  var text = Blockly.Dart.valueToCode(block, 'VALUE',
-      Blockly.Dart.ORDER_UNARY_POSTFIX) || '\'\'';
+  var textOrder = (where == 'FIRST' || where == 'FROM_START') ?
+      Blockly.Dart.ORDER_UNARY_POSTFIX : Blockly.Dart.ORDER_NONE;
+  var text = Blockly.Dart.valueToCode(block, 'VALUE', textOrder) || '\'\'';
   switch (where) {
     case 'FIRST':
       var code = text + '[0]';
@@ -133,14 +136,16 @@ Blockly.Dart['text_charAt'] = function(block) {
 
 Blockly.Dart['text_getSubstring'] = function(block) {
   // Get substring.
-  var text = Blockly.Dart.valueToCode(block, 'STRING',
-      Blockly.Dart.ORDER_UNARY_POSTFIX) || '\'\'';
   var where1 = block.getFieldValue('WHERE1');
   var where2 = block.getFieldValue('WHERE2');
+  var requiresLengthCall = (where1 != 'FROM_END' && where2 == 'FROM_START');
+  var textOrder = requiresLengthCall ? Blockly.Dart.ORDER_UNARY_POSTFIX :
+      Blockly.Dart.ORDER_NONE;
+  var text = Blockly.Dart.valueToCode(block, 'STRING', textOrder) || '\'\'';
   if (where1 == 'FIRST' && where2 == 'LAST') {
     var code = text;
-  } else if (text.match(/^'?\w+'?$/) ||
-      (where1 != 'FROM_END' && where2 == 'FROM_START')) {
+    return [code, Blockly.Dart.ORDER_NONE];
+  } else if (text.match(/^'?\w+'?$/) || requiresLengthCall) {
     // If the text is a variable or literal or doesn't require a call for
     // length, don't generate a helper function.
     switch (where1) {
@@ -290,7 +295,7 @@ Blockly.Dart['text_prompt'] = Blockly.Dart['text_prompt_ext'];
 
 Blockly.Dart['text_count'] = function(block) {
   var text = Blockly.Dart.valueToCode(block, 'TEXT',
-      Blockly.Dart.ORDER_UNARY_POSTFIX) || '\'\'';
+      Blockly.Dart.ORDER_NONE) || '\'\'';
   var sub = Blockly.Dart.valueToCode(block, 'SUB',
       Blockly.Dart.ORDER_NONE) || '\'\'';
   // Substring count is not a native Dart function.  Define one.
@@ -334,6 +339,5 @@ Blockly.Dart['text_reverse'] = function(block) {
   var text = Blockly.Dart.valueToCode(block, 'TEXT',
       Blockly.Dart.ORDER_UNARY_POSTFIX) || '\'\'';
   var code = 'new String.fromCharCodes(' + text + '.runes.toList().reversed)';
-  // XXX What should the operator precedence be for a `new`?
-  return [code, Blockly.Dart.ORDER_UNARY_POSTFIX];
+  return [code, Blockly.Dart.ORDER_UNARY_PREFIX];
 };

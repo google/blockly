@@ -41,6 +41,11 @@ Blockly.geras.ConstantProvider = function() {
    * @type {number}
    */
   this.MAX_BOTTOM_WIDTH = 30;
+
+  /**
+   * @override
+   */
+  this.STATEMENT_BOTTOM_SPACER = -this.NOTCH_HEIGHT / 2;
 };
 Blockly.utils.object.inherits(Blockly.geras.ConstantProvider,
     Blockly.blockRendering.ConstantProvider);

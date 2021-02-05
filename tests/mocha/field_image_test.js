@@ -11,115 +11,74 @@ suite('Image Fields', function() {
   teardown(function() {
     sharedTestTeardown.call(this);
   });
-  function assertValue(imageField, expectedValue, expectedText) {
-    var actualValue = imageField.getValue();
-    var actualText = imageField.getText();
-    chai.assert.equal(actualValue, expectedValue);
-    chai.assert.equal(actualText, expectedText);
-  }
-  suite('Constructor', function() {
-    test('Empty', function() {
-      chai.assert.throws(function() {
-        new Blockly.FieldImage();
-      });
-    });
-    test('Undefined Src', function() {
-      chai.assert.throws(function() {
-        new Blockly.FieldImage(undefined, 1, 1);
-      });
-    });
-    test('Undefined Size', function() {
-      chai.assert.throws(function() {
-        new Blockly.FieldImage('src', undefined, undefined);
-      });
-    });
-    test('Zero Size', function() {
-      chai.assert.throws(function() {
-        new Blockly.FieldImage('src', 0, 0);
-      });
-    });
-    test('Non-Parsable String for Size', function() {
-      chai.assert.throws(function() {
-        new Blockly.FieldImage('src', 'bad', 'bad');
-      });
-    });
-    test('With Alt', function() {
-      var imageField = new Blockly.FieldImage('src', 1, 1, 'alt');
-      assertValue(imageField, 'src', 'alt');
-    });
-    test('Without Alt', function() {
-      var imageField = new Blockly.FieldImage('src', 1, 1);
-      assertValue(imageField, 'src', '');
-    });
-  });
-  suite('fromJson', function() {
-    test('Empty', function() {
-      chai.assert.throws(function() {
-        Blockly.FieldImage.fromJson({});
-      });
-    });
-    test('Undefined Src', function() {
-      chai.assert.throws(function() {
-        Blockly.FieldImage.fromJson({
-          src: undefined,
-          width: 1,
-          height: 1
-        });
-      });
-    });
-    test('Undefined Size', function() {
-      chai.assert.throws(function() {
-        Blockly.FieldImage.fromJson({
-          src: 'src',
-          width: undefined,
-          height: undefined
-        });
-      });
-    });
-    test('Non-Parsable String for Size', function() {
-      chai.assert.throws(function() {
-        Blockly.FieldImage.fromJson({
-          src: 'src',
-          width: 'bad',
-          height: 'bad'
-        });
-      });
-    });
-    test('With Alt', function() {
-      var imageField = Blockly.FieldImage.fromJson({
-        src: 'src',
-        width: 1,
-        height: 1,
-        alt: 'alt'
-      });
-      assertValue(imageField, 'src', 'alt');
-    });
-    test('Without Alt', function() {
-      var imageField = Blockly.FieldImage.fromJson({
-        src: 'src',
-        width: 1,
-        height: 1
-      });
-      assertValue(imageField, 'src', '');
-    });
-  });
+  /**
+   * Configuration for field tests with invalid values.
+   * @type {!Array<!FieldCreationTestCase>}
+   */
+  var invalidValueTestCases = [
+    {title: 'Undefined Src', value: undefined, args: [undefined, 1, 1]},
+    {title: 'Undefined Size', value: 'src', args: ['src', undefined, undefined]},
+    {title: 'Zero Size', value: 'src', args: ['src', 0, 0]},
+    {title: 'Non-Parsable String for Size', value: 'src', args: ['src', 'bad', 'bad']},
+  ];
+  /**
+   * Configuration for field tests with valid values.
+   * @type {!Array<!FieldCreationTestCase>}
+   */
+  var validValueCreationTestCases = [
+    {title: 'With Alt', value: 'src', expectedValue: 'src',
+      args: ['src', 1, 1, 'alt'], expectedText: 'alt'},
+    {title: 'Without Alt', value: 'src', expectedValue: 'src',
+      args: ['src', 1, 1], expectedText: ''},
+  ];
+  /**
+   * Adds json property to test cases based on args property.
+   * @param {!Array<!FieldCreationTestCase>} testCase The test case to modify.
+   */
+  var addJson = function(testCase) {
+    testCase.json = {'src': testCase.args[0], 'width': testCase.args[1],
+      'height': testCase.args[2]};
+    if (testCase.args[3]) {
+      testCase.json['alt'] = testCase.args[3];
+    }
+  };
+  invalidValueTestCases.forEach(addJson);
+  validValueCreationTestCases.forEach(addJson);
+
+  /**
+   * Asserts that the field properties are correct based on the test case.
+   * @param {!Blockly.FieldNumber} field The field to check.
+   * @param {!FieldValueTestCase} testCase The test case.
+   */
+  var validTestCaseAssertField = function(field, testCase) {
+    testHelpers.assertFieldValue(field, testCase.expectedValue, testCase.expectedText);
+  };
+
+  testHelpers.runConstructorSuiteTests(
+      Blockly.FieldImage, validValueCreationTestCases, invalidValueTestCases,
+      validTestCaseAssertField);
+
+  testHelpers.runFromJsonSuiteTests(
+      Blockly.FieldImage, validValueCreationTestCases,invalidValueTestCases,
+      validTestCaseAssertField);
+
+  /**
+   * Configuration for field tests with valid values.
+   * @type {!Array<!FieldValueTestCase>}
+   */
+  var validValueSetValueTestCases = [
+    {title: 'Good src', value: 'newSrc', expectedValue: 'newSrc',
+      expectedText: 'alt'},
+  ];
+
   suite('setValue', function() {
     setup(function() {
-      this.imageField = new Blockly.FieldImage('src', 1, 1, 'alt');
+      this.field = new Blockly.FieldImage('src', 1, 1, 'alt');
     });
-    test('Null', function() {
-      this.imageField.setValue(null);
-      assertValue(this.imageField, 'src', 'alt');
-    });
-    test('Undefined', function() {
-      this.imageField.setValue(undefined);
-      assertValue(this.imageField, 'src', 'alt');
-    });
-    test('Good Src', function() {
-      this.imageField.setValue('newSrc');
-      assertValue(this.imageField, 'newSrc', 'alt');
-    });
+    testHelpers.runSetValueTests(
+        validValueSetValueTestCases, invalidValueTestCases, 'src', 'alt');
   });
+
   suite('Customizations', function() {
     suite('On Click Handler', function() {
       setup(function() {
@@ -156,30 +115,21 @@ suite('Image Fields', function() {
         });
         chai.assert.equal(field.altText_, 'alt');
       });
-      test('Deprecated - setText', function() {
-        var deprecateWarnSpy = createDeprecationWarningStub();
-        var field = new Blockly.FieldImage('src', 10, 10, 'alt');
-        chai.assert.throws(function() {
-          field.setText('newAlt');
-        });
-        assertSingleDeprecationWarningCall(deprecateWarnSpy,
-            'Field.prototype.setText');
-      });
       suite('SetAlt', function() {
         setup(function() {
           this.imageField = new Blockly.FieldImage('src', 10, 10, 'alt');
         });
         test('Null', function() {
           this.imageField.setAlt(null);
-          assertValue(this.imageField, 'src', '');
+          testHelpers.assertFieldValue(this.imageField, 'src', '');
         });
         test('Empty String', function() {
           this.imageField.setAlt('');
-          assertValue(this.imageField, 'src', '');
+          testHelpers.assertFieldValue(this.imageField, 'src', '');
         });
         test('Good Alt', function() {
           this.imageField.setAlt('newAlt');
-          assertValue(this.imageField, 'src', 'newAlt');
+          testHelpers.assertFieldValue(this.imageField, 'src', 'newAlt');
         });
       });
       test('JS Configuration - Simple', function() {

@@ -12,6 +12,7 @@
 
 goog.provide('Blockly.blockRendering.ConstantProvider');
 
+goog.require('Blockly.constants');
 goog.require('Blockly.utils');
 goog.require('Blockly.utils.colour');
 goog.require('Blockly.utils.dom');

@@ -636,7 +636,7 @@ def test_get_text_complex():
   assertEquals(text.find(text_random_letter(get_Blockly())) + 1 > 0, True, 'get random complex')
   check_number_of_calls('get random complex')
   number_of_calls = 0
-  assertEquals(text.find(text_random_letter((get_Blockly() if True else None))) + 1 > 0, True, 'get random order complex')
+  assertEquals(text.find(text_random_letter(get_Blockly() if True else None)) + 1 > 0, True, 'get random order complex')
   check_number_of_calls('get random order complex')
   number_of_calls = 0
   assertEquals(get_Blockly()[2], 'o', 'get # complex')
@@ -781,6 +781,20 @@ def test_replace():
   assertEquals('aaaaa'.replace('aaaaa', ''), '', 'empty replacement 2')
   assertEquals('aaaaa'.replace('a', ''), '', 'empty replacement 3')
   assertEquals(''.replace('a', 'chicken'), '', 'empty source')
+
+# Tests the "multiline" block.
+def test_multiline():
+  global test_name, naked, proc_x, proc_y, func_x, func_y, func_a, n, ok, log, count, varToChange, rand, item, text, number_of_calls, list2, proc_z, func_z, x, proc_w, func_c, if2, i, loglist, changing_list, list_copy, unittestResults
+  assertEquals('', '', 'no text')
+  assertEquals('Google', 'Google', 'simple')
+  assertEquals('paragraph' + '\n' +
+  'with newlines' + '\n' +
+  'yup', 'paragraph' + '\n' +
+  'with newlines' + '\n' +
+  'yup', 'no compile error with newlines')
+  assertEquals(('bark bark' + '\n' +
+  'bark bark bark' + '\n' +
+  'bark bark bark bark').count('bark'), 9, 'count with newlines')
 
 # Checks that the number of calls is one in order
 # to confirm that a function was only called once.
@@ -1396,6 +1410,7 @@ test_trim()
 test_count_text()
 test_text_reverse()
 test_replace()
+test_multiline()
 print(unittest_report())
 unittestResults = None
 

@@ -12,18 +12,20 @@
 
 goog.provide('Blockly.utils.toolbox');
 
+goog.require('Blockly.constants');
 
 goog.requireType('Blockly.ToolboxCategory');
 goog.requireType('Blockly.ToolboxSeparator');
+
 
 /**
  * The information needed to create a block in the toolbox.
  * @typedef {{
  *            kind:string,
- *            blockxml:(?string|Node),
- *            type: ?string,
- *            gap: (?string|?number),
- *            disabled: (?string|?boolean)
+ *            blockxml:(string|!Node|undefined),
+ *            type:(string|undefined),
+ *            gap:(string|number|undefined),
+ *            disabled: (string|boolean|undefined)
  *          }}
  */
 Blockly.utils.toolbox.BlockInfo;
@@ -32,9 +34,9 @@ Blockly.utils.toolbox.BlockInfo;
  * The information needed to create a separator in the toolbox.
  * @typedef {{
  *            kind:string,
- *            id:?string,
- *            gap:?number,
- *            cssconfig:?Blockly.ToolboxSeparator.CssConfig
+ *            id:(string|undefined),
+ *            gap:(number|undefined),
+ *            cssconfig:(!Blockly.ToolboxSeparator.CssConfig|undefined)
  *          }}
  */
 Blockly.utils.toolbox.SeparatorInfo;
@@ -53,8 +55,8 @@ Blockly.utils.toolbox.ButtonInfo;
  * The information needed to create a label in the toolbox.
  * @typedef {{
  *            kind:string,
- *            id:?string,
- *            text:string
+ *            text:string,
+ *            id:(string|undefined)
  *          }}
  */
 Blockly.utils.toolbox.LabelInfo;
@@ -71,12 +73,12 @@ Blockly.utils.toolbox.ButtonOrLabelInfo;
  * @typedef {{
  *            kind:string,
  *            name:string,
- *            id:?string,
- *            categorystyle:?string,
- *            colour:?string,
- *            cssconfig:?Blockly.ToolboxCategory.CssConfig,
- *            contents:!Array<Blockly.utils.toolbox.ToolboxItemInfo>,
- *            hidden:?string
+ *            contents:!Array<!Blockly.utils.toolbox.ToolboxItemInfo>,
+ *            id:(string|undefined),
+ *            categorystyle:(string|undefined),
+ *            colour:(string|undefined),
+ *            cssconfig:(!Blockly.ToolboxCategory.CssConfig|undefined),
+ *            hidden:(string|undefined)
  *          }}
  */
 Blockly.utils.toolbox.StaticCategoryInfo;
@@ -86,11 +88,11 @@ Blockly.utils.toolbox.StaticCategoryInfo;
  * @typedef {{
  *            kind:string,
  *            custom:string,
- *            id:?string,
- *            categorystyle:?string,
- *            colour:?string,
- *            cssconfig:?Blockly.ToolboxCategory.CssConfig,
- *            hidden:?string
+ *            id:(string|undefined),
+ *            categorystyle:(string|undefined),
+ *            colour:(string|undefined),
+ *            cssconfig:(!Blockly.ToolboxCategory.CssConfig|undefined),
+ *            hidden:(string|undefined)
  *          }}
  */
 Blockly.utils.toolbox.DynamicCategoryInfo;
@@ -122,7 +124,8 @@ Blockly.utils.toolbox.FlyoutItemInfo;
 /**
  * The JSON definition of a toolbox.
  * @typedef {{
- *            contents:!Array<Blockly.utils.toolbox.ToolboxItemInfo>
+ *            kind:(string|undefined),
+ *            contents:!Array<!Blockly.utils.toolbox.ToolboxItemInfo>
  *          }}
  */
 Blockly.utils.toolbox.ToolboxInfo;
@@ -339,7 +342,7 @@ Blockly.utils.toolbox.xmlToJsonArray_ = function(toolboxDef) {
     // Store the xml for a block
     if (tagName == 'BLOCK') {
       obj['blockxml'] = child;
-    } else if (tagName == 'CATEGORY') {
+    } else if (child.childNodes && child.childNodes.length > 0) {
       // Get the contents of a category
       obj['contents'] = Blockly.utils.toolbox.xmlToJsonArray_(child);
     }

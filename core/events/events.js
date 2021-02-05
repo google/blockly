@@ -107,10 +107,64 @@ Blockly.Events.VAR_DELETE = 'var_delete';
 Blockly.Events.VAR_RENAME = 'var_rename';
 
 /**
- * Name of event that records a UI change.
+ * Name of generic event that records a UI change.
  * @const
  */
 Blockly.Events.UI = 'ui';
+
+/**
+ * Name of event that record a block drags a block.
+ * @const
+ */
+Blockly.Events.BLOCK_DRAG = 'drag';
+
+/**
+ * Name of event that records a change in selected element.
+ * @const
+ */
+Blockly.Events.SELECTED = 'selected';
+
+/**
+ * Name of event that records a click.
+ * @const
+ */
+Blockly.Events.CLICK = 'click';
+
+/**
+ * Name of event that records a marker move.
+ * @const
+ */
+Blockly.Events.MARKER_MOVE = 'marker_move';
+
+/**
+ * Name of event that records a bubble open.
+ * @const
+ */
+Blockly.Events.BUBBLE_OPEN = 'bubble_open';
+
+/**
+ * Name of event that records a trashcan open.
+ * @const
+ */
+Blockly.Events.TRASHCAN_OPEN = 'trashcan_open';
+
+/**
+ * Name of event that records a toolbox item select.
+ * @const
+ */
+Blockly.Events.TOOLBOX_ITEM_SELECT = 'toolbox_item_select';
+
+/**
+ * Name of event that records a theme change.
+ * @const
+ */
+Blockly.Events.THEME_CHANGE = 'theme_change';
+
+/**
+ * Name of event that records a viewport change.
+ * @const
+ */
+Blockly.Events.VIEWPORT_CHANGE = 'viewport_change';
 
 /**
  * Name of event that creates a comment.
@@ -212,7 +266,9 @@ Blockly.Events.filter = function(queueIn, forward) {
   // Merge duplicates.
   for (var i = 0, event; (event = queue[i]); i++) {
     if (!event.isNull()) {
-      var key = [event.type, event.blockId, event.workspaceId].join(' ');
+      // Treat all ui events as the same type in hash table.
+      var eventType = event.isUiEvent ? Blockly.Events.UI : event.type;
+      var key = [eventType, event.blockId, event.workspaceId].join(' ');
 
       var lastEntry = hash[key];
       var lastEvent = lastEntry ? lastEntry.event : null;
@@ -234,16 +290,13 @@ Blockly.Events.filter = function(queueIn, forward) {
           event.name == lastEvent.name) {
         // Merge change events.
         lastEvent.newValue = event.newValue;
-      } else if (event.type == Blockly.Events.UI &&
-          event.element == 'click' &&
-          (lastEvent.element == 'commentOpen' ||
-           lastEvent.element == 'mutatorOpen' ||
-           lastEvent.element == 'warningOpen')) {
+      } else if (event.type == Blockly.Events.CLICK &&
+          lastEvent.type == Blockly.Events.BUBBLE_OPEN) {
         // Drop click events caused by opening/closing bubbles.
       } else {
         // Collision: newer events should merge into this event to maintain
         // order.
-        hash[key] = {event: event, index: 1};
+        hash[key] = {event: event, index: i};
         mergedQueue.push(event);
       }
     }
@@ -369,18 +422,25 @@ Blockly.Events.disableOrphans = function(event) {
     var workspace = Blockly.Workspace.getById(event.workspaceId);
     var block = workspace.getBlockById(event.blockId);
     if (block) {
-      var parent = block.getParent();
-      if (parent && parent.isEnabled()) {
-        var children = block.getDescendants(false);
-        for (var i = 0, child; (child = children[i]); i++) {
-          child.setEnabled(true);
+      // Changing blocks as part of this event shouldn't be undoable.
+      var initialUndoFlag = Blockly.Events.recordUndo;
+      try {
+        Blockly.Events.recordUndo = false;
+        var parent = block.getParent();
+        if (parent && parent.isEnabled()) {
+          var children = block.getDescendants(false);
+          for (var i = 0, child; (child = children[i]); i++) {
+            child.setEnabled(true);
+          }
+        } else if ((block.outputConnection || block.previousConnection) &&
+                  !workspace.isDragging()) {
+          do {
+            block.setEnabled(false);
+            block = block.getNextBlock();
+          } while (block);
         }
-      } else if ((block.outputConnection || block.previousConnection) &&
-                 !workspace.isDragging()) {
-        do {
-          block.setEnabled(false);
-          block = block.getNextBlock();
-        } while (block);
+      } finally {
+        Blockly.Events.recordUndo = initialUndoFlag;
       }
     }
   }

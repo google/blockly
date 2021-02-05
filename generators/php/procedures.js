@@ -94,7 +94,7 @@ Blockly.PHP['procedures_callreturn'] = function(block) {
   var variables = block.getVars();
   for (var i = 0; i < variables.length; i++) {
     args[i] = Blockly.PHP.valueToCode(block, 'ARG' + i,
-        Blockly.PHP.ORDER_COMMA) || 'null';
+        Blockly.PHP.ORDER_NONE) || 'null';
   }
   var code = funcName + '(' + args.join(', ') + ')';
   return [code, Blockly.PHP.ORDER_FUNCTION_CALL];

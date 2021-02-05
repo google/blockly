@@ -20,6 +20,7 @@ goog.require('Blockly.blockRendering.Row');
 goog.require('Blockly.blockRendering.SpacerRow');
 goog.require('Blockly.blockRendering.TopRow');
 goog.require('Blockly.blockRendering.Types');
+goog.require('Blockly.constants');
 goog.require('Blockly.utils.dom');
 goog.require('Blockly.utils.Svg');
 

@@ -52,15 +52,6 @@ run_test_command () {
 # Lint the codebase.
 run_test_command "eslint" "eslint ."
 
-# Run Mocha tests inside a browser.
-run_test_command "mocha" "node tests/mocha/run_mocha_tests_in_browser.js"
-
-# Run Node tests.
-run_test_command "node" "./node_modules/.bin/mocha tests/node --config tests/node/.mocharc.js"
-
-# Run generator tests inside a browser and check the results.
-run_test_command "generators" "tests/scripts/run_generators.sh"
-
 # Run the closure compiler.
 run_test_command "compile" "npm run build"
 
@@ -72,6 +63,15 @@ run_test_command "typings" "tests/scripts/compile_typings.sh"
 
 # Check the sizes of built files for unexpected growth.
 run_test_command "metadata" "tests/scripts/check_metadata.sh"
+
+# Run Mocha tests inside a browser.
+run_test_command "mocha" "node tests/mocha/run_mocha_tests_in_browser.js"
+
+# Run generator tests inside a browser and check the results.
+run_test_command "generators" "tests/scripts/run_generators.sh"
+
+# Run Node tests.
+run_test_command "node" "./node_modules/.bin/mocha tests/node --config tests/node/.mocharc.js"
 
 # # Attempt advanced compilation of a Blockly app.
 # run_test_command "advanced_compile" "tests/compile/compile.sh"

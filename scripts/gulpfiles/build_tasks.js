@@ -232,6 +232,7 @@ function buildBlocks() {
     .pipe(gulp.sourcemaps.init())
     .pipe(compile({
       dependency_mode: 'NONE',
+      language_in: 'ECMASCRIPT6_STRICT',
       externs: ['./externs/goog-externs.js', './externs/block-externs.js'],
       js_output_file: 'blocks_compressed.js',
       output_wrapper: outputWrapperUMD('Blockly.Blocks', [{

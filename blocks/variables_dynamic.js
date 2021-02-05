@@ -15,19 +15,13 @@
  */
 'use strict';
 
-goog.provide('Blockly.Constants.VariablesDynamic');
+goog.module('Blockly.Constants.VariablesDynamic');
 
-goog.require('Blockly');
+const Blockly = goog.require('Blockly');
 goog.require('Blockly.Blocks');
 goog.require('Blockly.FieldLabel');
 goog.require('Blockly.FieldVariable');
 
-
-/**
- * Unused constant for the common HSV hue for all blocks in this category.
- * @deprecated Use Blockly.Msg['VARIABLES_DYNAMIC_HUE']. (2018 April 5)
- */
-Blockly.Constants.VariablesDynamic.HUE = 310;
 
 Blockly.defineBlocksWithJsonArray([ // BEGIN JSON EXTRACT
   // Block for variable getter.
@@ -77,7 +71,7 @@ Blockly.defineBlocksWithJsonArray([ // BEGIN JSON EXTRACT
  * @package
  * @readonly
  */
-Blockly.Constants.VariablesDynamic.CUSTOM_CONTEXT_MENU_VARIABLE_GETTER_SETTER_MIXIN = {
+const CUSTOM_CONTEXT_MENU_VARIABLE_GETTER_SETTER_MIXIN = {
   /**
    * Add menu option to create getter/setter block for this setter/getter.
    * @param {!Array} options List of menu options to add to.
@@ -153,7 +147,7 @@ Blockly.Constants.VariablesDynamic.CUSTOM_CONTEXT_MENU_VARIABLE_GETTER_SETTER_MI
   * @param {!Blockly.Block} block The block with the variable to rename.
   * @return {!function()} A function that renames the variable.
   */
-Blockly.Constants.VariablesDynamic.RENAME_OPTION_CALLBACK_FACTORY = function(block) {
+const RENAME_OPTION_CALLBACK_FACTORY = function(block) {
   return function() {
     var workspace = block.workspace;
     var variable = block.getField('VAR').getVariable();
@@ -167,7 +161,7 @@ Blockly.Constants.VariablesDynamic.RENAME_OPTION_CALLBACK_FACTORY = function(blo
  * @param {!Blockly.Block} block The block with the variable to delete.
  * @return {!function()} A function that deletes the variable.
  */
-Blockly.Constants.VariablesDynamic.DELETE_OPTION_CALLBACK_FACTORY = function(block) {
+const DELETE_OPTION_CALLBACK_FACTORY = function(block) {
   return function() {
     var workspace = block.workspace;
     var variable = block.getField('VAR').getVariable();
@@ -177,4 +171,4 @@ Blockly.Constants.VariablesDynamic.DELETE_OPTION_CALLBACK_FACTORY = function(blo
 };
 
 Blockly.Extensions.registerMixin('contextMenu_variableDynamicSetterGetter',
-    Blockly.Constants.VariablesDynamic.CUSTOM_CONTEXT_MENU_VARIABLE_GETTER_SETTER_MIXIN);
+    CUSTOM_CONTEXT_MENU_VARIABLE_GETTER_SETTER_MIXIN);

@@ -10,33 +10,33 @@
  */
 'use strict';
 
-goog.provide('Blockly.Blocks.procedures');
+goog.module('Blocks.procedures');
 
-goog.require('Blockly');
-goog.require('Blockly.Blocks');
+const Blockly = goog.require('Blockly');
+const Blocks = goog.require('Blockly.Blocks');
 goog.require('Blockly.Comment');
-goog.require('Blockly.FieldCheckbox');
-goog.require('Blockly.FieldLabel');
-goog.require('Blockly.FieldTextInput');
-goog.require('Blockly.Mutator');
+const FieldCheckbox = goog.require('Blockly.FieldCheckbox');
+const FieldLabel = goog.require('Blockly.FieldLabel');
+const FieldTextInput = goog.require('Blockly.FieldTextInput');
+const Mutator = goog.require('Blockly.Mutator');
 goog.require('Blockly.Warning');
 
 
-Blockly.Blocks['procedures_defnoreturn'] = {
+Blocks['procedures_defnoreturn'] = {
   /**
    * Block for defining a procedure with no return value.
    * @this {Blockly.Block}
    */
   init: function() {
     var initName = Blockly.Procedures.findLegalName('', this);
-    var nameField = new Blockly.FieldTextInput(initName,
+    var nameField = new FieldTextInput(initName,
         Blockly.Procedures.rename);
     nameField.setSpellcheck(false);
     this.appendDummyInput()
         .appendField(Blockly.Msg['PROCEDURES_DEFNORETURN_TITLE'])
         .appendField(nameField, 'NAME')
         .appendField('', 'PARAMS');
-    this.setMutator(new Blockly.Mutator(['procedures_mutatorarg']));
+    this.setMutator(new Mutator(['procedures_mutatorarg']));
     if ((this.workspace.options.comments ||
          (this.workspace.options.parentWorkspace &&
           this.workspace.options.parentWorkspace.options.comments)) &&
@@ -235,7 +235,7 @@ Blockly.Blocks['procedures_defnoreturn'] = {
         if (hasStatements) {
           this.setStatements_(true);
           // Restore the stack, if one was saved.
-          Blockly.Mutator.reconnect(this.statementConnection_, this, 'STACK');
+          Mutator.reconnect(this.statementConnection_, this, 'STACK');
           this.statementConnection_ = null;
         } else {
           // Save the stack, then disconnect it.
@@ -400,14 +400,14 @@ Blockly.Blocks['procedures_defnoreturn'] = {
   callType_: 'procedures_callnoreturn'
 };
 
-Blockly.Blocks['procedures_defreturn'] = {
+Blocks['procedures_defreturn'] = {
   /**
    * Block for defining a procedure with a return value.
    * @this {Blockly.Block}
    */
   init: function() {
     var initName = Blockly.Procedures.findLegalName('', this);
-    var nameField = new Blockly.FieldTextInput(initName,
+    var nameField = new FieldTextInput(initName,
         Blockly.Procedures.rename);
     nameField.setSpellcheck(false);
     this.appendDummyInput()
@@ -417,7 +417,7 @@ Blockly.Blocks['procedures_defreturn'] = {
     this.appendValueInput('RETURN')
         .setAlign(Blockly.ALIGN_RIGHT)
         .appendField(Blockly.Msg['PROCEDURES_DEFRETURN_RETURN']);
-    this.setMutator(new Blockly.Mutator(['procedures_mutatorarg']));
+    this.setMutator(new Mutator(['procedures_mutatorarg']));
     if ((this.workspace.options.comments ||
          (this.workspace.options.parentWorkspace &&
           this.workspace.options.parentWorkspace.options.comments)) &&
@@ -432,12 +432,12 @@ Blockly.Blocks['procedures_defreturn'] = {
     this.setStatements_(true);
     this.statementConnection_ = null;
   },
-  setStatements_: Blockly.Blocks['procedures_defnoreturn'].setStatements_,
-  updateParams_: Blockly.Blocks['procedures_defnoreturn'].updateParams_,
-  mutationToDom: Blockly.Blocks['procedures_defnoreturn'].mutationToDom,
-  domToMutation: Blockly.Blocks['procedures_defnoreturn'].domToMutation,
-  decompose: Blockly.Blocks['procedures_defnoreturn'].decompose,
-  compose: Blockly.Blocks['procedures_defnoreturn'].compose,
+  setStatements_: Blocks['procedures_defnoreturn'].setStatements_,
+  updateParams_: Blocks['procedures_defnoreturn'].updateParams_,
+  mutationToDom: Blocks['procedures_defnoreturn'].mutationToDom,
+  domToMutation: Blocks['procedures_defnoreturn'].domToMutation,
+  decompose: Blocks['procedures_defnoreturn'].decompose,
+  compose: Blocks['procedures_defnoreturn'].compose,
   /**
    * Return the signature of this procedure definition.
    * @return {!Array} Tuple containing three elements:
@@ -449,16 +449,16 @@ Blockly.Blocks['procedures_defreturn'] = {
   getProcedureDef: function() {
     return [this.getFieldValue('NAME'), this.arguments_, true];
   },
-  getVars: Blockly.Blocks['procedures_defnoreturn'].getVars,
-  getVarModels: Blockly.Blocks['procedures_defnoreturn'].getVarModels,
-  renameVarById: Blockly.Blocks['procedures_defnoreturn'].renameVarById,
-  updateVarName: Blockly.Blocks['procedures_defnoreturn'].updateVarName,
-  displayRenamedVar_: Blockly.Blocks['procedures_defnoreturn'].displayRenamedVar_,
-  customContextMenu: Blockly.Blocks['procedures_defnoreturn'].customContextMenu,
+  getVars: Blocks['procedures_defnoreturn'].getVars,
+  getVarModels: Blocks['procedures_defnoreturn'].getVarModels,
+  renameVarById: Blocks['procedures_defnoreturn'].renameVarById,
+  updateVarName: Blocks['procedures_defnoreturn'].updateVarName,
+  displayRenamedVar_: Blocks['procedures_defnoreturn'].displayRenamedVar_,
+  customContextMenu: Blocks['procedures_defnoreturn'].customContextMenu,
   callType_: 'procedures_callreturn'
 };
 
-Blockly.Blocks['procedures_mutatorcontainer'] = {
+Blocks['procedures_mutatorcontainer'] = {
   /**
    * Mutator block for procedure container.
    * @this {Blockly.Block}
@@ -469,20 +469,20 @@ Blockly.Blocks['procedures_mutatorcontainer'] = {
     this.appendStatementInput('STACK');
     this.appendDummyInput('STATEMENT_INPUT')
         .appendField(Blockly.Msg['PROCEDURES_ALLOW_STATEMENTS'])
-        .appendField(new Blockly.FieldCheckbox('TRUE'), 'STATEMENTS');
+        .appendField(new FieldCheckbox('TRUE'), 'STATEMENTS');
     this.setStyle('procedure_blocks');
     this.setTooltip(Blockly.Msg['PROCEDURES_MUTATORCONTAINER_TOOLTIP']);
     this.contextMenu = false;
   },
 };
 
-Blockly.Blocks['procedures_mutatorarg'] = {
+Blocks['procedures_mutatorarg'] = {
   /**
    * Mutator block for procedure argument.
    * @this {Blockly.Block}
    */
   init: function() {
-    var field = new Blockly.FieldTextInput(
+    var field = new FieldTextInput(
         Blockly.Procedures.DEFAULT_ARG, this.validator_);
     // Hack: override showEditor to do just a little bit more work.
     // We don't have a good place to hook into the start of a text edit.
@@ -519,11 +519,11 @@ Blockly.Blocks['procedures_mutatorarg'] = {
    * @param {string} varName User-supplied name.
    * @return {?string} Valid name, or null if a name was not specified.
    * @private
-   * @this Blockly.FieldTextInput
+   * @this FieldTextInput
    */
   validator_: function(varName) {
     var sourceBlock = this.getSourceBlock();
-    var outerWs = Blockly.Mutator.findParentWs(sourceBlock.workspace);
+    var outerWs = Mutator.findParentWs(sourceBlock.workspace);
     varName = varName.replace(/[\s\xa0]+/g, ' ').replace(/^ | $/g, '');
     if (!varName) {
       return null;
@@ -571,10 +571,10 @@ Blockly.Blocks['procedures_mutatorarg'] = {
    * variable name.
    * @param {string} newText The new variable name.
    * @private
-   * @this Blockly.FieldTextInput
+   * @this FieldTextInput
    */
   deleteIntermediateVars_: function(newText) {
-    var outerWs = Blockly.Mutator.findParentWs(this.getSourceBlock().workspace);
+    var outerWs = Mutator.findParentWs(this.getSourceBlock().workspace);
     if (!outerWs) {
       return;
     }
@@ -587,7 +587,7 @@ Blockly.Blocks['procedures_mutatorarg'] = {
   }
 };
 
-Blockly.Blocks['procedures_callnoreturn'] = {
+Blocks['procedures_callnoreturn'] = {
   /**
    * Block for calling a procedure with no return value.
    * @this {Blockly.Block}
@@ -714,7 +714,7 @@ Blockly.Blocks['procedures_callnoreturn'] = {
         var quarkId = this.quarkIds_[i];
         if (quarkId in this.quarkConnections_) {
           var connection = this.quarkConnections_[quarkId];
-          if (!Blockly.Mutator.reconnect(connection, this, 'ARG' + i)) {
+          if (!Mutator.reconnect(connection, this, 'ARG' + i)) {
             // Block no longer exists or has been attached elsewhere.
             delete this.quarkConnections_[quarkId];
           }
@@ -747,7 +747,7 @@ Blockly.Blocks['procedures_callnoreturn'] = {
         }
       } else {
         // Add new input.
-        field = new Blockly.FieldLabel(this.arguments_[i]);
+        field = new FieldLabel(this.arguments_[i]);
         var input = this.appendValueInput('ARG' + i)
             .setAlign(Blockly.ALIGN_RIGHT)
             .appendField(field, 'ARGNAME' + i);
@@ -949,7 +949,7 @@ Blockly.Blocks['procedures_callnoreturn'] = {
   defType_: 'procedures_defnoreturn'
 };
 
-Blockly.Blocks['procedures_callreturn'] = {
+Blocks['procedures_callreturn'] = {
   /**
    * Block for calling a procedure with a return value.
    * @this {Blockly.Block}
@@ -968,22 +968,22 @@ Blockly.Blocks['procedures_callreturn'] = {
     this.previousEnabledState_ = true;
   },
 
-  getProcedureCall: Blockly.Blocks['procedures_callnoreturn'].getProcedureCall,
-  renameProcedure: Blockly.Blocks['procedures_callnoreturn'].renameProcedure,
+  getProcedureCall: Blocks['procedures_callnoreturn'].getProcedureCall,
+  renameProcedure: Blocks['procedures_callnoreturn'].renameProcedure,
   setProcedureParameters_:
-      Blockly.Blocks['procedures_callnoreturn'].setProcedureParameters_,
-  updateShape_: Blockly.Blocks['procedures_callnoreturn'].updateShape_,
-  mutationToDom: Blockly.Blocks['procedures_callnoreturn'].mutationToDom,
-  domToMutation: Blockly.Blocks['procedures_callnoreturn'].domToMutation,
-  getVars: Blockly.Blocks['procedures_callnoreturn'].getVars,
-  getVarModels: Blockly.Blocks['procedures_callnoreturn'].getVarModels,
-  onchange: Blockly.Blocks['procedures_callnoreturn'].onchange,
+      Blocks['procedures_callnoreturn'].setProcedureParameters_,
+  updateShape_: Blocks['procedures_callnoreturn'].updateShape_,
+  mutationToDom: Blocks['procedures_callnoreturn'].mutationToDom,
+  domToMutation: Blocks['procedures_callnoreturn'].domToMutation,
+  getVars: Blocks['procedures_callnoreturn'].getVars,
+  getVarModels: Blocks['procedures_callnoreturn'].getVarModels,
+  onchange: Blocks['procedures_callnoreturn'].onchange,
   customContextMenu:
-      Blockly.Blocks['procedures_callnoreturn'].customContextMenu,
+      Blocks['procedures_callnoreturn'].customContextMenu,
   defType_: 'procedures_defreturn'
 };
 
-Blockly.Blocks['procedures_ifreturn'] = {
+Blocks['procedures_ifreturn'] = {
   /**
    * Block for conditionally returning a value from a procedure.
    * @this {Blockly.Block}
@@ -1074,7 +1074,7 @@ Blockly.Blocks['procedures_ifreturn'] = {
   /**
    * List of block types that are functions and thus do not need warnings.
    * To add a new function type add this to your code:
-   * Blockly.Blocks['procedures_ifreturn'].FUNCTION_TYPES.push('custom_func');
+   * Blocks['procedures_ifreturn'].FUNCTION_TYPES.push('custom_func');
    */
   FUNCTION_TYPES: ['procedures_defnoreturn', 'procedures_defreturn']
 };

@@ -15,21 +15,14 @@
  */
 'use strict';
 
-goog.provide('Blockly.Blocks.lists');  // Deprecated
-goog.provide('Blockly.Constants.Lists');
+goog.module('Blockly.Constants.Lists');
 
-goog.require('Blockly');
-goog.require('Blockly.Blocks');
+const Blockly = goog.require('Blockly');
+const Blocks = goog.require('Blockly.Blocks');
 goog.require('Blockly.FieldDropdown');
 goog.require('Blockly.FieldLabel');
-goog.require('Blockly.Mutator');
+const Mutator = goog.require('Blockly.Mutator');
 
-
-/**
- * Unused constant for the common HSV hue for all blocks in this category.
- * @deprecated Use Blockly.Msg['LISTS_HUE']. (2018 April 5)
- */
-Blockly.Constants.Lists.HUE = 260;
 
 Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
   // Block for creating an empty list
@@ -116,7 +109,7 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
   }
 ]);  // END JSON EXTRACT (Do not delete this comment.)
 
-Blockly.Blocks['lists_create_with'] = {
+Blocks['lists_create_with'] = {
   /**
    * Block for creating a list with any number of elements of any type.
    * @this {Blockly.Block}
@@ -127,7 +120,7 @@ Blockly.Blocks['lists_create_with'] = {
     this.itemCount_ = 3;
     this.updateShape_();
     this.setOutput(true, 'Array');
-    this.setMutator(new Blockly.Mutator(['lists_create_with_item']));
+    this.setMutator(new Mutator(['lists_create_with_item']));
     this.setTooltip(Blockly.Msg['LISTS_CREATE_WITH_TOOLTIP']);
   },
   /**
@@ -192,7 +185,7 @@ Blockly.Blocks['lists_create_with'] = {
     this.updateShape_();
     // Reconnect any child blocks.
     for (var i = 0; i < this.itemCount_; i++) {
-      Blockly.Mutator.reconnect(connections[i], this, 'ADD' + i);
+      Mutator.reconnect(connections[i], this, 'ADD' + i);
     }
   },
   /**
@@ -241,7 +234,7 @@ Blockly.Blocks['lists_create_with'] = {
   }
 };
 
-Blockly.Blocks['lists_create_with_container'] = {
+Blocks['lists_create_with_container'] = {
   /**
    * Mutator block for list container.
    * @this {Blockly.Block}
@@ -256,7 +249,7 @@ Blockly.Blocks['lists_create_with_container'] = {
   }
 };
 
-Blockly.Blocks['lists_create_with_item'] = {
+Blocks['lists_create_with_item'] = {
   /**
    * Mutator block for adding items.
    * @this {Blockly.Block}
@@ -272,7 +265,7 @@ Blockly.Blocks['lists_create_with_item'] = {
   }
 };
 
-Blockly.Blocks['lists_indexOf'] = {
+Blocks['lists_indexOf'] = {
   /**
    * Block for finding an item in the list.
    * @this {Blockly.Block}
@@ -301,7 +294,7 @@ Blockly.Blocks['lists_indexOf'] = {
   }
 };
 
-Blockly.Blocks['lists_getIndex'] = {
+Blocks['lists_getIndex'] = {
   /**
    * Block for getting element at index.
    * @this {Blockly.Block}
@@ -486,7 +479,7 @@ Blockly.Blocks['lists_getIndex'] = {
   }
 };
 
-Blockly.Blocks['lists_setIndex'] = {
+Blocks['lists_setIndex'] = {
   /**
    * Block for setting the element at index.
    * @this {Blockly.Block}
@@ -626,7 +619,7 @@ Blockly.Blocks['lists_setIndex'] = {
   }
 };
 
-Blockly.Blocks['lists_getSublist'] = {
+Blocks['lists_getSublist'] = {
   /**
    * Block for getting sublist.
    * @this {Blockly.Block}
@@ -736,7 +729,7 @@ Blockly.Blocks['lists_getSublist'] = {
   }
 };
 
-Blockly.Blocks['lists_sort'] = {
+Blocks['lists_sort'] = {
   /**
    * Block for sorting a list.
    * @this {Blockly.Block}
@@ -776,7 +769,7 @@ Blockly.Blocks['lists_sort'] = {
   }
 };
 
-Blockly.Blocks['lists_split'] = {
+Blocks['lists_split'] = {
   /**
    * Block for splitting text into a list, or joining a list into text.
    * @this {Blockly.Block}

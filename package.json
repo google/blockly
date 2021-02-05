@@ -47,7 +47,9 @@
     "test:startselenium": "selenium-standalone start --config=./tests/scripts/selenium-config.js",
     "test:compile:advanced": "gulp buildAdvancedCompilationTest",
     "typings": "gulp typings",
-    "updateGithubPages": "gulp gitUpdateGithubPages"
+    "updateGithubPages": "gulp gitUpdateGithubPages",
+    "start": "http-server ./",
+    "deps": "closure-make-deps --closure-path=closure/goog/base.js --root core --root blocks > tests/deps.js"
   },
   "main": "./index.js",
   "umd": "./blockly.min.js",
@@ -91,6 +93,7 @@
     "yargs": "^16.0.3"
   },
   "dependencies": {
+    "http-server": "^0.12.3",
     "jsdom": "16.4.0"
   }
 }

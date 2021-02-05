@@ -19,6 +19,8 @@ goog.require('Blockly.constants');
 goog.require('Blockly.ContextMenuRegistry');
 goog.require('Blockly.Events');
 goog.require('Blockly.Events.BlockCreate');
+goog.require('Blockly.Events.ThemeChange');
+goog.require('Blockly.Events.ViewportChange');
 goog.require('Blockly.Gesture');
 goog.require('Blockly.Grid');
 goog.require('Blockly.MarkerManager');
@@ -324,27 +326,26 @@ Blockly.WorkspaceSvg.prototype.dragDeltaXY_ = null;
  */
 Blockly.WorkspaceSvg.prototype.scale = 1;
 
-// TODO(#4203) Enable viewport events after ui events refactor.
-// /**
-//  * Cached scale value. Used to detect changes in viewport.
-//  * @type {number}
-//  * @private
-//  */
-// Blockly.WorkspaceSvg.prototype.oldScale_ = 1;
-//
-// /**
-//  * Cached viewport top value. Used to detect changes in viewport.
-//  * @type {number}
-//  * @private
-//  */
-// Blockly.WorkspaceSvg.prototype.oldTop_ = 0;
-//
-// /**
-//  * Cached viewport left value. Used to detect changes in viewport.
-//  * @type {number}
-//  * @private
-//  */
-// Blockly.WorkspaceSvg.prototype.oldLeft_ = 0;
+/**
+ * Cached scale value. Used to detect changes in viewport.
+ * @type {number}
+ * @private
+ */
+Blockly.WorkspaceSvg.prototype.oldScale_ = 1;
+
+/**
+ * Cached viewport top value. Used to detect changes in viewport.
+ * @type {number}
+ * @private
+ */
+Blockly.WorkspaceSvg.prototype.oldTop_ = 0;
+
+/**
+ * Cached viewport left value. Used to detect changes in viewport.
+ * @type {number}
+ * @private
+ */
+Blockly.WorkspaceSvg.prototype.oldLeft_ = 0;
 
 /**
  * The workspace's trashcan (if any).
@@ -576,8 +577,7 @@ Blockly.WorkspaceSvg.prototype.refreshTheme = function() {
     this.setVisible(true);
   }
 
-  var event = new Blockly.Events.Ui(null, 'theme', null, null);
-  event.workspaceId = this.id;
+  var event = new Blockly.Events.ThemeChange(this.getTheme().name, this.id);
   Blockly.Events.fire(event);
 };
 
@@ -1106,23 +1106,24 @@ Blockly.WorkspaceSvg.prototype.getParentSvg = function() {
  * @package
  */
 Blockly.WorkspaceSvg.prototype.maybeFireViewportChangeEvent = function() {
-  // TODO(#4203) Enable viewport events after ui events refactor.
-  // if (!Blockly.Events.isEnabled()) {
-  //   return;
-  // }
-  // var scale = this.scale;
-  // var top = -this.scrollY;
-  // var left = -this.scrollX;
-  // if (scale == this.oldScale_ && top == this.oldTop_ && left == this.oldLeft_) {
-  //   return;
-  // }
-  // this.oldScale_ = scale;
-  // this.oldTop_ = top;
-  // this.oldLeft_ = left;
-  // var event = new Blockly.Events.Ui(null, 'viewport', null,
-  //     { scale: scale, top: top, left: left });
-  // event.workspaceId = this.id;
-  // Blockly.Events.fire(event);
+  if (!Blockly.Events.isEnabled()) {
+    return;
+  }
+  var scale = this.scale;
+  var top = -this.scrollY;
+  var left = -this.scrollX;
+  if (scale == this.oldScale_ &&
+      Math.abs(top - this.oldTop_) < 1 &&
+      Math.abs(left - this.oldLeft_) < 1) {
+    // Ignore sub-pixel changes in top and left. Due to #4192 there are a lot of
+    // negligible changes in viewport top/left.
+    return;
+  }
+  this.oldScale_ = scale;
+  this.oldTop_ = top;
+  this.oldLeft_ = left;
+  var event = new Blockly.Events.ViewportChange(top, left, scale, this.id);
+  Blockly.Events.fire(event);
 };
 
 /**
@@ -1449,7 +1450,7 @@ Blockly.WorkspaceSvg.prototype.pasteWorkspaceComment_ = function(xmlComment) {
     Blockly.Events.enable();
   }
   if (Blockly.Events.isEnabled()) {
-    // TODO: Fire a Workspace Comment Create event.
+    Blockly.WorkspaceComment.fireCreateEvent(comment);
   }
   comment.select();
 };
@@ -1813,7 +1814,10 @@ Blockly.WorkspaceSvg.prototype.markFocused = function() {
 Blockly.WorkspaceSvg.prototype.setBrowserFocus = function() {
   // Blur whatever was focused since explicitly grabbing focus below does not
   // work in Edge.
-  if (document.activeElement) {
+  // In IE, SVGs can't be blurred or focused. Check to make sure the current
+  // focus can be blurred before doing so.
+  // See https://github.com/google/blockly/issues/4440
+  if (document.activeElement && document.activeElement.blur) {
     document.activeElement.blur();
   }
   try {

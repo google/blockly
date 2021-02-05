@@ -80,6 +80,12 @@ Blockly.Lua.ORDER_NONE = 99;
  */
 
 /**
+ * Whether the init method has been called.
+ * @type {?boolean}
+ */
+Blockly.Lua.isInitialized = false;
+
+/**
  * Initialise the database of variable names.
  * @param {!Blockly.Workspace} workspace Workspace to generate code from.
  */
@@ -97,6 +103,7 @@ Blockly.Lua.init = function(workspace) {
     Blockly.Lua.variableDB_.reset();
   }
   Blockly.Lua.variableDB_.setVariableMap(workspace.getVariableMap());
+  this.isInitialized = true;
 };
 
 /**
@@ -134,7 +141,7 @@ Blockly.Lua.scrubNakedValue = function(line) {
  * quotes.
  * @param {string} string Text to encode.
  * @return {string} Lua string.
- * @private
+ * @protected
  */
 Blockly.Lua.quote_ = function(string) {
   string = string.replace(/\\/g, '\\\\')
@@ -148,7 +155,7 @@ Blockly.Lua.quote_ = function(string) {
  * quotes.
  * @param {string} string Text to encode.
  * @return {string} Lua string.
- * @private
+ * @protected
  */
 Blockly.Lua.multiline_quote_ = function(string) {
   var lines = string.split(/\n/g).map(Blockly.Lua.quote_);
@@ -165,7 +172,7 @@ Blockly.Lua.multiline_quote_ = function(string) {
  * @param {string} code The Lua code created for this block.
  * @param {boolean=} opt_thisOnly True to generate code for only this statement.
  * @return {string} Lua code with comments and subsequent blocks added.
- * @private
+ * @protected
  */
 Blockly.Lua.scrub_ = function(block, code, opt_thisOnly) {
   var commentCode = '';

@@ -85,7 +85,7 @@
 	"CONTROLS_IF_ELSEIF_TOOLTIP": "Дадаць умову да блёку «калі».",
 	"CONTROLS_IF_ELSE_TOOLTIP": "Дадаць заключную ўмову для ўсіх астатніх варыянтаў блёку «калі».",
 	"IOS_OK": "Добра",
-	"IOS_CANCEL": "Адмяніць",
+	"IOS_CANCEL": "Скасаваць",
 	"IOS_ERROR": "Памылка",
 	"IOS_PROCEDURES_INPUTS": "УВАХОДНЫЯ ЗЬВЕСТКІ",
 	"IOS_PROCEDURES_ADD_INPUT": "+ Дадаць уваходныя зьвесткі",

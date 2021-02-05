@@ -66,8 +66,8 @@
 <script src="../../blocks/procedures.js"></script>
 <script src="../themes/test_themes.js"></script>
 <script src="./screenshot.js"></script>
-<script src="https://unpkg.com/@blockly/dev-tools@2.0.0/dist/index.js"></script>
-<script src="https://unpkg.com/@blockly/theme-modern/dist/index.js"></script>
+<script src="../../node_modules/@blockly/dev-tools/dist/index.js"></script>
+<script src="../../node_modules/@blockly/theme-modern/dist/index.js"></script>
 
 <script>
 // Custom requires for the playground.
@@ -113,6 +113,10 @@ function configurePlayground(playground) {
 }
 
 function initPlayground() {
+  if (typeof window.createPlayground === 'undefined') {
+    alert('You need to run \'npm install\' in order to use this playground.');
+    return;
+  }
   var defaultOptions = {
         comments: true,
         collapse: true,

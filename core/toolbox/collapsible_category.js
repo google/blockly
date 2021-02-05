@@ -71,11 +71,12 @@ Blockly.utils.object.inherits(Blockly.CollapsibleToolboxCategory, Blockly.Toolbo
  * @typedef {{
  *            container:?string,
  *            row:?string,
+ *            rowcontentcontainer:?string,
  *            icon:?string,
  *            label:?string,
  *            selected:?string,
- *            openIcon:?string,
- *            closedIcon:?string,
+ *            openicon:?string,
+ *            closedicon:?string,
  *            contents:?string
  *          }}
  */
@@ -199,6 +200,9 @@ Blockly.CollapsibleToolboxCategory.prototype.createSubCategoriesDom_ = function(
     newCategory.init();
     var newCategoryDiv = newCategory.getDiv();
     contentsContainer.appendChild(newCategoryDiv);
+    if (newCategory.getClickTarget) {
+      newCategory.getClickTarget().setAttribute('id', newCategory.getId());
+    }
   }
   return contentsContainer;
 };

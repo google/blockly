@@ -66,6 +66,7 @@
 <script src="../blocks/procedures.js"></script>
 <script src="themes/test_themes.js"></script>
 <script src="./playgrounds/screenshot.js"></script>
+<script src="../node_modules/@blockly/block-test/dist/index.js"></script>
 
 <script>
 // Custom requires for the playground.
@@ -126,6 +127,7 @@ function start() {
             scaleSpeed: 1.1
           }
       });
+  initToolbox(workspace);
   workspace.configureContextMenu = configureContextMenu;
   // Restore previously displayed text.
   if (sessionStorage) {
@@ -164,9 +166,18 @@ function getToolboxSuffix() {
 }
 
 function getToolboxElement() {
+  var toolboxSuffix = getToolboxSuffix();
+  if (toolboxSuffix == 'test-blocks') {
+    if (typeof window.toolboxTestBlocks !== 'undefined') {
+      return toolboxTestBlocks;
+    } else {
+      alert('You need to run \'npm install\' in order to use the test blocks.');
+      toolboxSuffix = 'categories';
+    }
+  }
   // The three possible values are: "simple", "categories",
   // "categories-typed-variables".
-  return document.getElementById('toolbox-' + getToolboxSuffix());
+  return document.getElementById('toolbox-' + toolboxSuffix);
 }
 
 function setToolboxDropdown() {
@@ -174,10 +185,19 @@ function setToolboxDropdown() {
       'toolbox-categories',
       'toolbox-categories-typed-variables',
       'toolbox-simple',
+      'toolbox-test-blocks'
   ];
   var toolboxSuffix = getToolboxSuffix();
   document.forms.options.elements.toolbox.selectedIndex =
       toolboxNames.indexOf('toolbox-' + toolboxSuffix);
+}
+
+function initToolbox(workspace) {
+  var toolboxSuffix = getToolboxSuffix();
+  if (toolboxSuffix == 'test-blocks' &&
+      typeof window.toolboxTestBlocksInit !== 'undefined') {
+    toolboxTestBlocksInit(workspace);
+  }
 }
 
 function toXml() {
@@ -395,6 +415,7 @@ var spaghettiXml = [
       <option value="categories">Categories (untyped variables)</option>
       <option value="categories-typed-variables">Categories (typed variables)</option>
       <option value="simple">Simple</option>
+      <option value="test-blocks">Test Blocks</option>
     </select>
   </form>
   <p>

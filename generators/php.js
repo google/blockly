@@ -92,7 +92,6 @@ Blockly.PHP.ORDER_ASSIGNMENT = 20;        // = += -= *= /= %= <<= >>= ...
 Blockly.PHP.ORDER_LOGICAL_AND_WEAK = 21;  // and
 Blockly.PHP.ORDER_LOGICAL_XOR = 22;       // xor
 Blockly.PHP.ORDER_LOGICAL_OR_WEAK = 23;   // or
-Blockly.PHP.ORDER_COMMA = 24;             // ,
 Blockly.PHP.ORDER_NONE = 99;              // (...)
 
 /**
@@ -117,6 +116,12 @@ Blockly.PHP.ORDER_OVERRIDES = [
   // a || (b || c) -> a || b || c
   [Blockly.PHP.ORDER_LOGICAL_OR, Blockly.PHP.ORDER_LOGICAL_OR]
 ];
+
+/**
+ * Whether the init method has been called.
+ * @type {?boolean}
+ */
+Blockly.PHP.isInitialized = false;
 
 /**
  * Initialise the database of variable names.
@@ -155,6 +160,7 @@ Blockly.PHP.init = function(workspace) {
 
   // Declare all of the variables.
   Blockly.PHP.definitions_['variables'] = defvars.join('\n');
+  this.isInitialized = true;
 };
 
 /**
@@ -190,7 +196,7 @@ Blockly.PHP.scrubNakedValue = function(line) {
  * quotes.
  * @param {string} string Text to encode.
  * @return {string} PHP string.
- * @private
+ * @protected
  */
 Blockly.PHP.quote_ = function(string) {
   string = string.replace(/\\/g, '\\\\')
@@ -204,7 +210,7 @@ Blockly.PHP.quote_ = function(string) {
  * quotes.
  * @param {string} string Text to encode.
  * @return {string} PHP string.
- * @private
+ * @protected
  */
 Blockly.PHP.multiline_quote_ = function (string) {
   var lines = string.split(/\n/g).map(Blockly.PHP.quote_);
@@ -222,7 +228,7 @@ Blockly.PHP.multiline_quote_ = function (string) {
  * @param {string} code The PHP code created for this block.
  * @param {boolean=} opt_thisOnly True to generate code for only this statement.
  * @return {string} PHP code with comments and subsequent blocks added.
- * @private
+ * @protected
  */
 Blockly.PHP.scrub_ = function(block, code, opt_thisOnly) {
   var commentCode = '';

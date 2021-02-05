@@ -92,9 +92,9 @@ Blockly.PHP['unittest_assertequals'] = function(block) {
   var message = Blockly.PHP.valueToCode(block, 'MESSAGE',
     Blockly.PHP.ORDER_NONE) || '';
   var actual = Blockly.PHP.valueToCode(block, 'ACTUAL',
-          Blockly.PHP.ORDER_COMMA) || 'null';
+          Blockly.PHP.ORDER_NONE) || 'null';
   var expected = Blockly.PHP.valueToCode(block, 'EXPECTED',
-          Blockly.PHP.ORDER_COMMA) || 'null';
+          Blockly.PHP.ORDER_NONE) || 'null';
   return Blockly.PHP['unittest_main'].defineAssert_() +
       '(' + actual + ', ' + expected + ', ' + message + ');\n';
 };
@@ -104,7 +104,7 @@ Blockly.PHP['unittest_assertvalue'] = function(block) {
   var message = Blockly.PHP.valueToCode(block, 'MESSAGE',
     Blockly.PHP.ORDER_NONE) || '';
   var actual = Blockly.PHP.valueToCode(block, 'ACTUAL',
-          Blockly.PHP.ORDER_COMMA) || 'null';
+          Blockly.PHP.ORDER_NONE) || 'null';
   var expected = block.getFieldValue('EXPECTED');
   if (expected == 'TRUE') {
       expected = 'true';

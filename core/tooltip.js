@@ -121,7 +121,7 @@ Blockly.Tooltip.DIV = null;
 
 /**
  * Returns the tooltip text for the given element.
- * @param {?Object} object The object to get the the tooltip text of.
+ * @param {?Object} object The object to get the tooltip text of.
  * @returns {string} The tooltip text of the element.
  */
 Blockly.Tooltip.getTooltipOfObject = function(object) {

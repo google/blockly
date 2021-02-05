@@ -1081,7 +1081,10 @@ suite('Blocks', function() {
           // Restored up by call to sinon.restore() in sharedTestTeardown()
           sinon.stub(this.block, 'isEditable').returns(false);
           var icon = this.block.getCommentIcon();
+          // TODO(#4186): Remove stubbing of deprecation warning after fixing.
+          var deprecationWarnStub = createDeprecationWarningStub();
           icon.setVisible(true);
+          deprecationWarnStub.restore();
 
           this.block.setCommentText('test2');
           chai.assert.equal(this.block.getCommentText(), 'test2');

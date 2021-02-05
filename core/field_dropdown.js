@@ -31,6 +31,8 @@ goog.require('Blockly.utils.string');
 goog.require('Blockly.utils.Svg');
 goog.require('Blockly.utils.userAgent');
 
+goog.requireType('Blockly.ShortcutRegistry');
+
 
 /**
  * Class for an editable dropdown field.
@@ -106,7 +108,7 @@ Blockly.FieldDropdown = function(menuGenerator, opt_validator, opt_config) {
   /**
    * The dropdown menu.
    * @type {Blockly.Menu}
-   * @private
+   * @protected
    */
   this.menu_ = null;
 
@@ -739,18 +741,21 @@ Blockly.FieldDropdown.validateOptions_ = function(options) {
 /**
  * Handles the given action.
  * This is only triggered when keyboard accessibility mode is enabled.
- * @param {!Blockly.Action} action The action to be handled.
+ * @param {!Blockly.ShortcutRegistry.KeyboardShortcut} action The action to be handled.
  * @return {boolean} True if the field handled the action, false otherwise.
  * @package
  */
 Blockly.FieldDropdown.prototype.onBlocklyAction = function(action) {
   if (this.menu_) {
-    if (action === Blockly.navigation.ACTION_PREVIOUS) {
-      this.menu_.highlightPrevious();
-      return true;
-    } else if (action === Blockly.navigation.ACTION_NEXT) {
-      this.menu_.highlightNext();
-      return true;
+    switch (action.name) {
+      case Blockly.navigation.actionNames.PREVIOUS:
+        this.menu_.highlightPrevious();
+        return true;
+      case Blockly.navigation.actionNames.NEXT:
+        this.menu_.highlightNext();
+        return true;
+      default:
+        return false;
     }
   }
   return Blockly.FieldDropdown.superClass_.onBlocklyAction.call(this, action);

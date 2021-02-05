@@ -36,14 +36,12 @@ goog.require('Blockly.utils.userAgent');
  *     text as an argument and returns either the accepted text, a replacement
  *     text, or null to abort the change.
  * @param {Object=} opt_config A map of options used to configure the field.
- *    See the [field creation documentation]{@link https://developers.google.com/blockly/guides/create-custom-blocks/fields/built-in-fields/text-input#creation}
+ *    See the [field creation documentation]{@link https://developers.google.com/blockly/guides/create-custom-blocks/fields/built-in-fields/multiline-text-input#creation}
  *    for a list of properties this parameter supports.
  * @extends {Blockly.FieldTextInput}
  * @constructor
  */
 Blockly.FieldMultilineInput = function(opt_value, opt_validator, opt_config) {
-  // TODO: Once this field is documented the opt_config link should point to its
-  //  creation documentation, rather than the text input field's.
   Blockly.FieldMultilineInput.superClass_.constructor.call(this,
       opt_value, opt_validator, opt_config);
 
@@ -116,13 +114,13 @@ Blockly.FieldMultilineInput.prototype.initView = function() {
  * @private
  */
 Blockly.FieldMultilineInput.prototype.getDisplayText_ = function() {
-  var value = this.value_;
-  if (!value) {
+  var textLines = this.getText();
+  if (!textLines) {
     // Prevent the field from disappearing if empty.
     return Blockly.Field.NBSP;
   }
-  var lines = value.split('\n');
-  value = '';
+  var lines = textLines.split('\n');
+  textLines = '';
   for (var i = 0; i < lines.length; i++) {
     var text = lines[i];
     if (text.length > this.maxDisplayLength) {
@@ -132,16 +130,16 @@ Blockly.FieldMultilineInput.prototype.getDisplayText_ = function() {
     // Replace whitespace with non-breaking spaces so the text doesn't collapse.
     text = text.replace(/\s/g, Blockly.Field.NBSP);
 
-    value += text;
+    textLines += text;
     if (i !== lines.length - 1) {
-      value += '\n';
+      textLines += '\n';
     }
   }
   if (this.sourceBlock_.RTL) {
     // The SVG is LTR, force value to be RTL.
-    value += '\u200F';
+    textLines += '\u200F';
   }
-  return value;
+  return textLines;
 };
 
 /**

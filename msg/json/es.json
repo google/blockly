@@ -104,7 +104,7 @@
 	"IOS_PROCEDURES_DUPLICATE_INPUTS_ERROR": "Esta función tiene entradas duplicadas.",
 	"IOS_VARIABLES_ADD_VARIABLE": "+ Añadir variable",
 	"IOS_VARIABLES_ADD_BUTTON": "Añadir",
-	"IOS_VARIABLES_RENAME_BUTTON": "Renombrar",
+	"IOS_VARIABLES_RENAME_BUTTON": "Cambiar nombre",
 	"IOS_VARIABLES_DELETE_BUTTON": "Borrar",
 	"IOS_VARIABLES_VARIABLE_NAME": "Nombre de la variable",
 	"IOS_VARIABLES_EMPTY_NAME_ERROR": "No puedes usar un nombre de variable vacío.",

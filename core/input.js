@@ -100,7 +100,7 @@ Blockly.Input.prototype.insertFieldAt = function(index, field, opt_name) {
 
   // Generate a FieldLabel when given a plain text field.
   if (typeof field == 'string') {
-    field = new Blockly.fieldRegistry.fromJson({
+    field = Blockly.fieldRegistry.fromJson({
       'type': 'field_label',
       'text': field,
     });

@@ -398,7 +398,7 @@ WorkspaceFactoryController.prototype.updatePreview = function() {
   // Only update the toolbox if not in read only mode.
   if (!this.model.options['readOnly']) {
     // Get toolbox XML.
-    var tree = Blockly.Options.parseToolboxTree(
+    var tree = Blockly.utils.toolbox.parseToolboxTree(
         this.generator.generateToolboxXml());
 
     // No categories, creates a simple flyout.
@@ -550,7 +550,8 @@ WorkspaceFactoryController.prototype.loadCategory = function() {
   // Prompt user for the name of the standard category to load.
   do {
     var name = prompt('Enter the name of the category you would like to import '
-        + '(Logic, Loops, Math, Text, Lists, Colour, Variables, or Functions)');
+        + '(Logic, Loops, Math, Text, Lists, Colour, Variables, TypedVariables '
+        + 'or Functions)');
     if (!name) {
       return;  // Exit if cancelled.
     }
@@ -1084,7 +1085,7 @@ WorkspaceFactoryController.prototype.setStandardOptionsAndUpdate = function() {
 WorkspaceFactoryController.prototype.generateNewOptions = function() {
   this.model.setOptions(this.readOptions_());
 
-  this.reinjectPreview(Blockly.Options.parseToolboxTree(
+  this.reinjectPreview(Blockly.utils.toolbox.parseToolboxTree(
       this.generator.generateToolboxXml()));
 };
 

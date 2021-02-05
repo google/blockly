@@ -50,7 +50,7 @@ Blockly.Dart.addReservedWords(
 
 /**
  * Order of operation ENUMs.
- * https://www.dartlang.org/docs/dart-up-and-running/ch02.html#operator_table
+ * https://dart.dev/guides/language/language-tour#operators
  */
 Blockly.Dart.ORDER_ATOMIC = 0;         // 0 "" ...
 Blockly.Dart.ORDER_UNARY_POSTFIX = 1;  // expr++ expr-- () [] . ?.
@@ -70,6 +70,12 @@ Blockly.Dart.ORDER_CONDITIONAL = 14;   // expr ? expr : expr
 Blockly.Dart.ORDER_CASCADE = 15;       // ..
 Blockly.Dart.ORDER_ASSIGNMENT = 16;    // = *= /= ~/= %= += -= <<= >>= &= ^= |=
 Blockly.Dart.ORDER_NONE = 99;          // (...)
+
+/**
+ * Whether the init method has been called.
+ * @type {?boolean}
+ */
+Blockly.Dart.isInitialized = false;
 
 /**
  * Initialise the database of variable names.
@@ -111,6 +117,7 @@ Blockly.Dart.init = function(workspace) {
     Blockly.Dart.definitions_['variables'] =
         'var ' + defvars.join(', ') + ';';
   }
+  this.isInitialized = true;
 };
 
 /**
@@ -158,7 +165,7 @@ Blockly.Dart.scrubNakedValue = function(line) {
  * Encode a string as a properly escaped Dart string, complete with quotes.
  * @param {string} string Text to encode.
  * @return {string} Dart string.
- * @private
+ * @protected
  */
 Blockly.Dart.quote_ = function(string) {
   // Can't use goog.string.quote since $ must also be escaped.
@@ -174,7 +181,7 @@ Blockly.Dart.quote_ = function(string) {
  * quotes.
  * @param {string} string Text to encode.
  * @return {string} Dart string.
- * @private
+ * @protected
  */
 Blockly.Dart.multiline_quote_ = function (string) {
   var lines = string.split(/\n/g).map(Blockly.Dart.quote_);
@@ -182,7 +189,6 @@ Blockly.Dart.multiline_quote_ = function (string) {
   // + '\n' +
   return lines.join(' + \'\\n\' + \n');
 };
-
 
 /**
  * Common tasks for generating Dart from blocks.
@@ -192,7 +198,7 @@ Blockly.Dart.multiline_quote_ = function (string) {
  * @param {string} code The Dart code created for this block.
  * @param {boolean=} opt_thisOnly True to generate code for only this statement.
  * @return {string} Dart code with comments and subsequent blocks added.
- * @private
+ * @protected
  */
 Blockly.Dart.scrub_ = function(block, code, opt_thisOnly) {
   var commentCode = '';

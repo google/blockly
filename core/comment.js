@@ -16,7 +16,7 @@ goog.require('Blockly.Bubble');
 goog.require('Blockly.Css');
 goog.require('Blockly.Events');
 goog.require('Blockly.Events.BlockChange');
-goog.require('Blockly.Events.Ui');
+goog.require('Blockly.Events.BubbleOpen');
 goog.require('Blockly.Icon');
 goog.require('Blockly.utils.deprecation');
 goog.require('Blockly.utils.dom');
@@ -236,7 +236,7 @@ Blockly.Comment.prototype.setVisible = function(visible) {
     return;
   }
   Blockly.Events.fire(
-      new Blockly.Events.Ui(this.block_, 'commentOpen', !visible, visible));
+      new Blockly.Events.BubbleOpen(this.block_, visible, 'comment'));
   this.model_.pinned = visible;
   if (visible) {
     this.createBubble_();
@@ -251,7 +251,6 @@ Blockly.Comment.prototype.setVisible = function(visible) {
  */
 Blockly.Comment.prototype.createBubble_ = function() {
   if (!this.block_.isEditable() || Blockly.utils.userAgent.IE) {
-    // Steal the code from warnings to make an uneditable text bubble.
     // MSIE does not support foreignobject; textareas are impossible.
     // https://docs.microsoft.com/en-us/openspecs/ie_standards/ms-svg/56e6e04c-7c8c-44dd-8100-bd745ee42034
     // Always treat comments in IE as uneditable.
@@ -284,7 +283,11 @@ Blockly.Comment.prototype.createEditableBubble_ = function() {
  */
 Blockly.Comment.prototype.createNonEditableBubble_ = function() {
   // TODO (#2917): It would be great if the comment could support line breaks.
-  Blockly.Warning.prototype.createBubble.call(this);
+  this.paragraphElement_ = Blockly.Bubble.textToDom(this.block_.getCommentText());
+  this.bubble_ = Blockly.Bubble.createNonEditableBubble(
+      this.paragraphElement_, /** @type {!Blockly.BlockSvg} */ (this.block_),
+      /** @type {!Blockly.utils.Coordinate} */ (this.iconXY_));
+  this.applyColour();
 };
 
 /**
@@ -293,11 +296,6 @@ Blockly.Comment.prototype.createNonEditableBubble_ = function() {
  * @suppress {checkTypes} Suppress `this` type mismatch.
  */
 Blockly.Comment.prototype.disposeBubble_ = function() {
-  if (this.paragraphElement_) {
-    // We're using the warning UI so we have to let it dispose.
-    Blockly.Warning.prototype.disposeBubble.call(this);
-    return;
-  }
   if (this.onMouseUpWrapper_) {
     Blockly.unbindEvent_(this.onMouseUpWrapper_);
     this.onMouseUpWrapper_ = null;
@@ -318,6 +316,7 @@ Blockly.Comment.prototype.disposeBubble_ = function() {
   this.bubble_ = null;
   this.textarea_ = null;
   this.foreignObject_ = null;
+  this.paragraphElement_ = null;
 };
 
 /**
@@ -361,41 +360,6 @@ Blockly.Comment.prototype.setBubbleSize = function(width, height) {
 };
 
 /**
- * Returns this comment's text.
- * @return {string} Comment text.
- * @deprecated August 2019 Use block.getCommentText() instead.
- */
-Blockly.Comment.prototype.getText = function() {
-  Blockly.utils.deprecation.warn(
-      'Comment.prototype.getText',
-      'August 2019',
-      'December 2020',
-      'block.getCommentText');
-  return this.model_.text || '';
-};
-
-/**
- * Set this comment's text.
- *
- * If you want to receive a comment change event, then this should not be called
- * directly. Instead call block.setCommentText();
- * @param {string} text Comment text.
- * @deprecated August 2019 Use block.setCommentText() instead.
- */
-Blockly.Comment.prototype.setText = function(text) {
-  Blockly.utils.deprecation.warn(
-      'Comment.prototype.setText',
-      'August 2019',
-      'December 2020',
-      'block.setCommentText');
-  if (this.model_.text == text) {
-    return;
-  }
-  this.model_.text = text;
-  this.updateText();
-};
-
-/**
  * Update the comment's view to match the model.
  * @package
  */
@@ -433,7 +397,7 @@ Blockly.Css.register([
     'padding: 3px;',
     'resize: none;',
     'display: block;',
-    'overflow: hidden;',
+    'text-overflow: hidden;',
   '}'
   /* eslint-enable indent */
 ]);

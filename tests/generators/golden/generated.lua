@@ -1012,6 +1012,21 @@ function test_replace()
 end
 
 
+-- Tests the "multiline" block.
+function test_multiline()
+  assertEquals('', '', 'no text')
+  assertEquals('Google', 'Google', 'simple')
+  assertEquals('paragraph' .. '\n' ..
+  'with newlines' .. '\n' ..
+  'yup', 'paragraph' .. '\n' ..
+  'with newlines' .. '\n' ..
+  'yup', 'no compile error with newlines')
+  assertEquals(text_count('bark bark' .. '\n' ..
+  'bark bark bark' .. '\n' ..
+  'bark bark bark bark', 'bark'), 9, 'count with newlines')
+end
+
+
 -- Checks that the number of calls is one in order
 -- to confirm that a function was only called once.
 function check_number_of_calls2(test_name)
@@ -1828,6 +1843,7 @@ test_trim()
 test_count_text()
 test_text_reverse()
 test_replace()
+test_multiline()
 print(unittest_report())
 unittestResults = nil
 

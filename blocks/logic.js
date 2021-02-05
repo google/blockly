@@ -365,7 +365,7 @@ Blockly.Constants.Logic.CONTROLS_IF_MUTATOR_MIXIN = {
     var valueConnections = [null];
     var statementConnections = [null];
     var elseStatementConnection = null;
-    while (clauseBlock) {
+    while (clauseBlock && !clauseBlock.isInsertionMarker()) {
       switch (clauseBlock.type) {
         case 'controls_if_elseif':
           this.elseifCount_++;

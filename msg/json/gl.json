@@ -1,6 +1,7 @@
 {
 	"@metadata": {
 		"authors": [
+			"Antón Méixome",
 			"Chairego apc",
 			"Elisardojm",
 			"Iváns",
@@ -9,10 +10,12 @@
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "elemento",
+	"UNNAMED_KEY": "innominada",
 	"TODAY": "Hoxe",
 	"DUPLICATE_BLOCK": "Duplicar",
 	"ADD_COMMENT": "Engadir un comentario",
 	"REMOVE_COMMENT": "Eliminar o comentario",
+	"DUPLICATE_COMMENT": "Duplicar o comentario",
 	"EXTERNAL_INPUTS": "Entradas externas",
 	"INLINE_INPUTS": "Entradas en liña",
 	"DELETE_BLOCK": "Borrar o bloque",
@@ -32,6 +35,7 @@
 	"RENAME_VARIABLE": "Renomear a variable...",
 	"RENAME_VARIABLE_TITLE": "Renomear todas as variables \"%1\" a:",
 	"NEW_VARIABLE": "Crear a variable...",
+	"NEW_STRING_VARIABLE": "Crar unha variábel de cadea...",
 	"NEW_VARIABLE_TITLE": "Nome da nova variable:",
 	"COLOUR_PICKER_HELPURL": "https://gl.wikipedia.org/wiki/Cor",
 	"COLOUR_PICKER_TOOLTIP": "Escolle unha cor da paleta.",

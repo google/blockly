@@ -22,7 +22,7 @@ Want to contribute? Great! First, read [our guidelines for contributors](https:/
 
 ## Releases
 
-The next major release will be **September 25th, 2020**.
+The next major release will be **December 17th, 2020**.
 
 We release by pushing the latest code to the master branch, followed by updating our [docs](https://developers.google.com/blockly) and [demo pages](https://blockly-demo.appspot.com). We typically release a new version of Blockly once a quarter (every 3 months). If there are breaking bugs, such as a crash when performing a standard action or a rendering issue that makes Blockly unusable, we will cherry-pick fixes to master between releases to fix them. The [releases page](https://github.com/google/blockly/releases) has a list of all releases.
 

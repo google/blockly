@@ -162,6 +162,18 @@ Blockly.IFlyout.prototype.reflow;
 Blockly.IFlyout.prototype.isScrollable;
 
 /**
+ * Calculates the x coordinate for the flyout position.
+ * @return {number} X coordinate.
+ */
+Blockly.IFlyout.prototype.getX;
+
+/**
+ * Calculates the y coordinate for the flyout position.
+ * @return {number} Y coordinate.
+ */
+Blockly.IFlyout.prototype.getY;
+
+/**
  * Position the flyout.
  * @return {void}
  */

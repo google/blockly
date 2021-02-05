@@ -53,7 +53,7 @@ Blockly.utils.object.inherits(Blockly.ToolboxSeparator, Blockly.ToolboxItem);
 /**
  * All the css class names that are used to create a separator.
  * @typedef {{
- *            container:?string
+ *            container:(string|undefined)
  *          }}
  */
 Blockly.ToolboxSeparator.CssConfig;

@@ -48,45 +48,58 @@ suite('Comments', function() {
       chai.assert.isTrue(this.comment.isVisible());
       assertEditable(this.comment);
       assertEventFired(
-          this.eventsFireStub, Blockly.Events.Ui,
-          {element: 'commentOpen', oldValue: false, newValue: true},
-          this.workspace.id, this.block.id);
+          this.eventsFireStub, Blockly.Events.BubbleOpen,
+          {bubbleType: 'comment', isOpen: true}, this.workspace.id,
+          this.block.id);
     });
     test('Not Editable', function() {
       sinon.stub(this.block, 'isEditable').returns(false);
 
+      // TODO(#4186): Remove stubbing of deprecation warning after fixing.
+      var deprecationWarnStub = createDeprecationWarningStub();
       this.comment.setVisible(true);
+      deprecationWarnStub.restore();
+
       chai.assert.isTrue(this.comment.isVisible());
       assertNotEditable(this.comment);
       assertEventFired(
-          this.eventsFireStub, Blockly.Events.Ui,
-          {element: 'commentOpen', oldValue: false, newValue: true},
-          this.workspace.id, this.block.id);
+          this.eventsFireStub, Blockly.Events.BubbleOpen,
+          {bubbleType: 'comment', isOpen: true}, this.workspace.id,
+          this.block.id);
     });
     test('Editable -> Not Editable', function() {
       this.comment.setVisible(true);
       sinon.stub(this.block, 'isEditable').returns(false);
 
+      // TODO(#4186): Remove stubbing of deprecation warning after fixing.
+      var deprecationWarnStub = createDeprecationWarningStub();
       this.comment.updateEditable();
+      deprecationWarnStub.restore();
+
       chai.assert.isTrue(this.comment.isVisible());
       assertNotEditable(this.comment);
       assertEventFired(
-          this.eventsFireStub, Blockly.Events.Ui,
-          {element: 'commentOpen', oldValue: false, newValue: true},
-          this.workspace.id, this.block.id);
+          this.eventsFireStub, Blockly.Events.BubbleOpen,
+          {bubbleType: 'comment', isOpen: true}, this.workspace.id,
+          this.block.id);
     });
     test('Not Editable -> Editable', function() {
       var editableStub = sinon.stub(this.block, 'isEditable').returns(false);
+
+      // TODO(#4186): Remove stubbing of deprecation warning after fixing.
+      var deprecationWarnStub = createDeprecationWarningStub();
       this.comment.setVisible(true);
+      deprecationWarnStub.restore();
+
       editableStub.returns(true);
 
       this.comment.updateEditable();
       chai.assert.isTrue(this.comment.isVisible());
       assertEditable(this.comment);
       assertEventFired(
-          this.eventsFireStub, Blockly.Events.Ui,
-          {element: 'commentOpen', oldValue: false, newValue: true},
-          this.workspace.id, this.block.id);
+          this.eventsFireStub, Blockly.Events.BubbleOpen,
+          {bubbleType: 'comment', isOpen: true}, this.workspace.id,
+          this.block.id);
     });
   });
   suite('Set/Get Bubble Size', function() {

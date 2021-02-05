@@ -97,13 +97,13 @@ Blockly.registry.Type.FLYOUTS_HORIZONTAL_TOOLBOX =
  * @param {string} name The plugin's name. (Ex. field_angle, geras)
  * @param {?function(new:T, ...?)|Object} registryItem The class or object to
  *     register.
- * @param {boolean=} opt_quiet True to prevent an error when overriding an
+ * @param {boolean=} opt_allowOverrides True to prevent an error when overriding an
  *     already registered item.
  * @throws {Error} if the type or name is empty, a name with the given type has
  *     already been registered, or if the given class or object is not valid for it's type.
  * @template T
  */
-Blockly.registry.register = function(type, name, registryItem, opt_quiet) {
+Blockly.registry.register = function(type, name, registryItem, opt_allowOverrides) {
   if ((!(type instanceof Blockly.registry.Type) && typeof type != 'string') || String(type).trim() == '') {
     throw Error('Invalid type "' + type + '". The type must be a' +
       ' non-empty string or a Blockly.registry.Type.');
@@ -127,8 +127,8 @@ Blockly.registry.register = function(type, name, registryItem, opt_quiet) {
   // Validate that the given class has all the required properties.
   Blockly.registry.validate_(type, registryItem);
 
-  // Don't throw an error if opt_quiet is true.
-  if (!opt_quiet && typeRegistry[name]) {
+  // Don't throw an error if opt_allowOverrides is true.
+  if (!opt_allowOverrides && typeRegistry[name]) {
     throw Error('Name "' + name + '" with type "' + type + '" already registered.');
   }
   typeRegistry[name] = registryItem;

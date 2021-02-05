@@ -215,7 +215,7 @@ suite('Abstract Fields', function() {
       addSpies(this.field);
       this.field.setValue('value');
       sinon.assert.notCalled(this.field.doValueInvalid_);
-      sinon.assert.notCalled(this.field.doValueUpdate_);
+      sinon.assert.calledOnce(this.field.doValueUpdate_);
       sinon.assert.notCalled(this.field.forceRerender);
     });
     test('New Value (Class)Validates to Old Value', function() {
@@ -224,7 +224,7 @@ suite('Abstract Fields', function() {
       addSpies(this.field);
       this.field.setValue('notValue');
       sinon.assert.notCalled(this.field.doValueInvalid_);
-      sinon.assert.notCalled(this.field.doValueUpdate_);
+      sinon.assert.calledOnce(this.field.doValueUpdate_);
       sinon.assert.notCalled(this.field.forceRerender);
     });
     test('New Value (Local)Validates to Old Value', function() {
@@ -233,7 +233,7 @@ suite('Abstract Fields', function() {
       addSpies(this.field);
       this.field.setValue('notValue');
       sinon.assert.notCalled(this.field.doValueInvalid_);
-      sinon.assert.notCalled(this.field.doValueUpdate_);
+      sinon.assert.calledOnce(this.field.doValueUpdate_);
       sinon.assert.notCalled(this.field.forceRerender);
     });
     test('New Value (Class)Validates to not Old Value', function() {

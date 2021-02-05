@@ -25,7 +25,7 @@ Blockly.JavaScript['lists_create_with'] = function(block) {
   var elements = new Array(block.itemCount_);
   for (var i = 0; i < block.itemCount_; i++) {
     elements[i] = Blockly.JavaScript.valueToCode(block, 'ADD' + i,
-        Blockly.JavaScript.ORDER_COMMA) || 'null';
+        Blockly.JavaScript.ORDER_NONE) || 'null';
   }
   var code = '[' + elements.join(', ') + ']';
   return [code, Blockly.JavaScript.ORDER_ATOMIC];
@@ -44,9 +44,9 @@ Blockly.JavaScript['lists_repeat'] = function(block) {
        '  return array;',
        '}']);
   var element = Blockly.JavaScript.valueToCode(block, 'ITEM',
-      Blockly.JavaScript.ORDER_COMMA) || 'null';
+      Blockly.JavaScript.ORDER_NONE) || 'null';
   var repeatCount = Blockly.JavaScript.valueToCode(block, 'NUM',
-      Blockly.JavaScript.ORDER_COMMA) || '0';
+      Blockly.JavaScript.ORDER_NONE) || '0';
   var code = functionName + '(' + element + ', ' + repeatCount + ')';
   return [code, Blockly.JavaScript.ORDER_FUNCTION_CALL];
 };
@@ -85,7 +85,7 @@ Blockly.JavaScript['lists_getIndex'] = function(block) {
   // Note: Until January 2013 this block did not have MODE or WHERE inputs.
   var mode = block.getFieldValue('MODE') || 'GET';
   var where = block.getFieldValue('WHERE') || 'FROM_START';
-  var listOrder = (where == 'RANDOM') ? Blockly.JavaScript.ORDER_COMMA :
+  var listOrder = (where == 'RANDOM') ? Blockly.JavaScript.ORDER_NONE :
       Blockly.JavaScript.ORDER_MEMBER;
   var list = Blockly.JavaScript.valueToCode(block, 'VALUE', listOrder) || '[]';
 

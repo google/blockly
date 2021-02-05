@@ -24,7 +24,9 @@ Blockly.PHP['text'] = function(block) {
 Blockly.PHP['text_multiline'] = function(block) {
   // Text value.
   var code = Blockly.PHP.multiline_quote_(block.getFieldValue('TEXT'));
-  return [code, Blockly.PHP.ORDER_ATOMIC];
+  var order = code.indexOf('.') != -1 ? Blockly.PHP.ORDER_STRING_CONCAT :
+      Blockly.PHP.ORDER_ATOMIC;
+  return [code, order];
 };
 
 Blockly.PHP['text_join'] = function(block) {
@@ -35,19 +37,19 @@ Blockly.PHP['text_join'] = function(block) {
     var element = Blockly.PHP.valueToCode(block, 'ADD0',
         Blockly.PHP.ORDER_NONE) || '\'\'';
     var code = element;
-    return [code, Blockly.PHP.ORDER_FUNCTION_CALL];
+    return [code, Blockly.PHP.ORDER_NONE];
   } else if (block.itemCount_ == 2) {
     var element0 = Blockly.PHP.valueToCode(block, 'ADD0',
-        Blockly.PHP.ORDER_ATOMIC) || '\'\'';
+        Blockly.PHP.ORDER_STRING_CONCAT) || '\'\'';
     var element1 = Blockly.PHP.valueToCode(block, 'ADD1',
-        Blockly.PHP.ORDER_ATOMIC) || '\'\'';
+        Blockly.PHP.ORDER_STRING_CONCAT) || '\'\'';
     var code = element0 + ' . ' + element1;
     return [code, Blockly.PHP.ORDER_STRING_CONCAT];
   } else {
     var elements = new Array(block.itemCount_);
     for (var i = 0; i < block.itemCount_; i++) {
       elements[i] = Blockly.PHP.valueToCode(block, 'ADD' + i,
-          Blockly.PHP.ORDER_COMMA) || '\'\'';
+          Blockly.PHP.ORDER_NONE) || '\'\'';
     }
     var code = 'implode(\'\', array(' + elements.join(',') + '))';
     return [code, Blockly.PHP.ORDER_FUNCTION_CALL];
@@ -118,7 +120,7 @@ Blockly.PHP['text_charAt'] = function(block) {
   // Get letter at index.
   var where = block.getFieldValue('WHERE') || 'FROM_START';
   var textOrder = (where == 'RANDOM') ? Blockly.PHP.ORDER_NONE :
-      Blockly.PHP.ORDER_COMMA;
+      Blockly.PHP.ORDER_NONE;
   var text = Blockly.PHP.valueToCode(block, 'VALUE', textOrder) || '\'\'';
   switch (where) {
     case 'FIRST':
@@ -149,12 +151,13 @@ Blockly.PHP['text_charAt'] = function(block) {
 
 Blockly.PHP['text_getSubstring'] = function(block) {
   // Get substring.
-  var text = Blockly.PHP.valueToCode(block, 'STRING',
-      Blockly.PHP.ORDER_FUNCTION_CALL) || '\'\'';
   var where1 = block.getFieldValue('WHERE1');
   var where2 = block.getFieldValue('WHERE2');
+  var text = Blockly.PHP.valueToCode(block, 'STRING',
+      Blockly.PHP.ORDER_NONE) || '\'\'';
   if (where1 == 'FIRST' && where2 == 'LAST') {
     var code = text;
+    return [code, Blockly.PHP.ORDER_NONE];
   } else {
     var at1 = Blockly.PHP.getAdjusted(block, 'AT1');
     var at2 = Blockly.PHP.getAdjusted(block, 'AT2');
@@ -183,8 +186,8 @@ Blockly.PHP['text_getSubstring'] = function(block) {
          '}']);
     var code = functionName + '(' + text + ', \'' +
         where1 + '\', ' + at1 + ', \'' + where2 + '\', ' + at2 + ')';
+    return [code, Blockly.PHP.ORDER_FUNCTION_CALL];
   }
-  return [code, Blockly.PHP.ORDER_FUNCTION_CALL];
 };
 
 Blockly.PHP['text_changeCase'] = function(block) {
@@ -243,7 +246,7 @@ Blockly.PHP['text_prompt'] = Blockly.PHP['text_prompt_ext'];
 
 Blockly.PHP['text_count'] = function(block) {
   var text = Blockly.PHP.valueToCode(block, 'TEXT',
-      Blockly.PHP.ORDER_MEMBER) || '\'\'';
+      Blockly.PHP.ORDER_NONE) || '\'\'';
   var sub = Blockly.PHP.valueToCode(block, 'SUB',
       Blockly.PHP.ORDER_NONE) || '\'\'';
   var code = 'strlen(' + sub + ') === 0'
@@ -254,7 +257,7 @@ Blockly.PHP['text_count'] = function(block) {
 
 Blockly.PHP['text_replace'] = function(block) {
   var text = Blockly.PHP.valueToCode(block, 'TEXT',
-      Blockly.PHP.ORDER_MEMBER) || '\'\'';
+      Blockly.PHP.ORDER_NONE) || '\'\'';
   var from = Blockly.PHP.valueToCode(block, 'FROM',
       Blockly.PHP.ORDER_NONE) || '\'\'';
   var to = Blockly.PHP.valueToCode(block, 'TO',
@@ -265,7 +268,7 @@ Blockly.PHP['text_replace'] = function(block) {
 
 Blockly.PHP['text_reverse'] = function(block) {
   var text = Blockly.PHP.valueToCode(block, 'TEXT',
-      Blockly.PHP.ORDER_MEMBER) || '\'\'';
+      Blockly.PHP.ORDER_NONE) || '\'\'';
   var code = 'strrev(' + text + ')';
   return [code, Blockly.PHP.ORDER_FUNCTION_CALL];
 };

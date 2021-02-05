@@ -14,6 +14,7 @@
 
 goog.provide('Blockly.ConnectionDB');
 
+goog.require('Blockly.constants');
 goog.require('Blockly.RenderedConnection');
 
 goog.requireType('Blockly.IConnectionChecker');

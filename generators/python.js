@@ -126,6 +126,12 @@ Blockly.Python.ORDER_OVERRIDES = [
 ];
 
 /**
+ * Whether the init method has been called.
+ * @type {?boolean}
+ */
+Blockly.Python.isInitialized = false;
+
+/**
  * Initialise the database of variable names.
  * @param {!Blockly.Workspace} workspace Workspace to generate code from.
  * @this {Blockly.Generator}
@@ -166,6 +172,7 @@ Blockly.Python.init = function(workspace) {
   }
 
   Blockly.Python.definitions_['variables'] = defvars.join('\n');
+  this.isInitialized = true;
 };
 
 /**
@@ -207,7 +214,7 @@ Blockly.Python.scrubNakedValue = function(line) {
  * Encode a string as a properly escaped Python string, complete with quotes.
  * @param {string} string Text to encode.
  * @return {string} Python string.
- * @private
+ * @protected
  */
 Blockly.Python.quote_ = function(string) {
   // Can't use goog.string.quote since % must also be escaped.
@@ -222,7 +229,7 @@ Blockly.Python.quote_ = function(string) {
     } else {
       string = string.replace(/'/g, '\\\'');
     }
-  };
+  }
   return quote + string + quote;
 };
 
@@ -231,7 +238,7 @@ Blockly.Python.quote_ = function(string) {
  * with quotes.
  * @param {string} string Text to encode.
  * @return {string} Python string.
- * @private
+ * @protected
  */
 Blockly.Python.multiline_quote_ = function(string) {
   var lines = string.split(/\n/g).map(Blockly.Python.quote_);
@@ -248,7 +255,7 @@ Blockly.Python.multiline_quote_ = function(string) {
  * @param {string} code The Python code created for this block.
  * @param {boolean=} opt_thisOnly True to generate code for only this statement.
  * @return {string} Python code with comments and subsequent blocks added.
- * @private
+ * @protected
  */
 Blockly.Python.scrub_ = function(block, code, opt_thisOnly) {
   var commentCode = '';

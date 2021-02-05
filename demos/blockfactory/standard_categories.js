@@ -362,6 +362,11 @@ StandardCategories.categoryMap['variables'] =
 StandardCategories.categoryMap['variables'].hue = 330;
 StandardCategories.categoryMap['variables'].custom = 'VARIABLE';
 
+StandardCategories.categoryMap['typedvariables'] =
+    new ListElement(ListElement.TYPE_CATEGORY, 'TypedVariables');
+StandardCategories.categoryMap['typedvariables'].custom = 'VARIABLE_DYNAMIC';
+StandardCategories.categoryMap['typedvariables'].hue = 290;
+
 // All standard block types in provided in Blockly core.
 StandardCategories.coreBlockTypes =  ["controls_if", "logic_compare",
     "logic_operation", "logic_negate", "logic_boolean", "logic_null",

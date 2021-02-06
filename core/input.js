@@ -14,7 +14,7 @@ goog.provide('Blockly.Input');
 
 goog.require('Blockly.Connection');
 goog.require('Blockly.constants');
-goog.require('Blockly.FieldLabel');
+goog.require('Blockly.fieldRegistry');
 
 
 /**
@@ -100,7 +100,10 @@ Blockly.Input.prototype.insertFieldAt = function(index, field, opt_name) {
 
   // Generate a FieldLabel when given a plain text field.
   if (typeof field == 'string') {
-    field = new Blockly.FieldLabel(/** @type {string} */ (field));
+    field = /** @type {!Blockly.Field} **/ (Blockly.fieldRegistry.fromJson({
+      'type': 'field_label',
+      'text': field,
+    }));
   }
 
   field.setSourceBlock(this.sourceBlock_);

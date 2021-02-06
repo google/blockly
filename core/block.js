@@ -1635,25 +1635,21 @@ Blockly.Block.prototype.interpolate_ = function(message, args, lastDummyAlign,
   // An array of [field, fieldName] tuples.
   var fieldStack = [];
   for (var i = 0, element; (element = elements[i]); i++) {
-    switch (element['type']) {
-      case 'input_value':
-      case 'input_statement':
-      case 'input_dummy':
-        var input = this.inputFromJson_(element, warningPrefix);
-        // Should never be null, but just in case.
-        if (input) {
-          for (var j = 0, tuple; (tuple = fieldStack[j]); j++) {
-            input.appendField(tuple[0], tuple[1]);
-          }
-          fieldStack.length = 0;
+    if (this.isInputKeyword_(element['type'])) {
+      var input = this.inputFromJson_(element, warningPrefix);
+      // Should never be null, but just in case.
+      if (input) {
+        for (var j = 0, tuple; (tuple = fieldStack[j]); j++) {
+          input.appendField(tuple[0], tuple[1]);
         }
-        break;
+        fieldStack.length = 0;
+      }
+    } else {
       // All other types, including ones starting with 'input_' get routed here.
-      default:
-        var field = this.fieldFromJson_(element);
-        if (field) {
-          fieldStack.push([field, element['name']]);
-        }
+      var field = this.fieldFromJson_(element);
+      if (field) {
+        fieldStack.push([field, element['name']]);
+      }
     }
   }
 };
@@ -1722,10 +1718,7 @@ Blockly.Block.prototype.interpolateArguments_ =
       }
 
       var length = elements.length;
-      var startsWith = Blockly.utils.string.startsWith;
-      // TODO: This matches the old behavior, but it doesn't work for fields
-      //   that don't start with 'field_'.
-      if (length && startsWith(elements[length - 1]['type'], 'field_')) {
+      if (length && !this.isInputKeyword_(elements[length - 1]['type'])) {
         var dummyInput = {'type': 'input_dummy'};
         if (lastDummyAlign) {
           dummyInput['align'] = lastDummyAlign;
@@ -1806,6 +1799,19 @@ Blockly.Block.prototype.inputFromJson_ = function(element, warningPrefix) {
     }
   }
   return input;
+};
+
+/**
+ * Returns true if the given string matches one of the input keywords.
+ * @param {string} str The string to check.
+ * @return {boolean} True if the given string matches one of the input keywords,
+ *     false otherwise.
+ * @private
+ */
+Blockly.Block.prototype.isInputKeyword_ = function(str) {
+  return str == 'input_value' ||
+      str == 'input_statement' ||
+      str == 'input_dummy';
 };
 
 /**

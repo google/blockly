@@ -20,6 +20,14 @@
 
 <!-- TODO: Describe what this Pull Request does.  Include screenshots if applicable. -->
 
+#### Behavior Before Change
+
+<!--TODO: Image, gif or explanation of behavior before this pull request. -->
+
+#### Behavior After Change
+
+<!--TODO: Image, gif or explanation of behavior after this pull request. -->
+
 ### Reason for Changes
 
 <!--TODO: Explain why these changes should be made.  Include screenshots if applicable. -->
@@ -57,12 +65,3 @@
 ### Additional Information
 
 <!-- Anything else we should know? -->
-
-## Summary
-### Behavior Before Change
-
-<!--TODO: Image, gif or explanation of behavior before this pull request. -->
-
-### Behavior After Change 
-
-<!--TODO: Image, gif or explanation of behavior after this pull request. -->

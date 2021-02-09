@@ -43,10 +43,20 @@ goog.require('Blockly.WorkspaceAudio');
 goog.require('Blockly.WorkspaceDragSurfaceSvg');
 goog.require('Blockly.Xml');
 
+goog.requireType('Blockly.Block');
+goog.requireType('Blockly.BlockDragSurfaceSvg');
 goog.requireType('Blockly.blockRendering.Renderer');
+goog.requireType('Blockly.FlyoutButton');
 goog.requireType('Blockly.IASTNodeLocationSvg');
 goog.requireType('Blockly.IBoundedElement');
 goog.requireType('Blockly.IFlyout');
+goog.requireType('Blockly.IToolbox');
+goog.requireType('Blockly.Marker');
+goog.requireType('Blockly.Theme');
+goog.requireType('Blockly.Trashcan');
+goog.requireType('Blockly.utils.Size');
+goog.requireType('Blockly.VariableModel');
+goog.requireType('Blockly.ZoomControls');
 
 
 /**

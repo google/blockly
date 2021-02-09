@@ -12,9 +12,15 @@
 
 goog.provide('Blockly.InsertionMarkerManager');
 
+goog.require('Blockly.Block');
 goog.require('Blockly.blockAnimations');
 goog.require('Blockly.constants');
 goog.require('Blockly.Events');
+
+goog.requireType('Blockly.BlockSvg');
+goog.requireType('Blockly.RenderedConnection');
+goog.requireType('Blockly.utils.Coordinate');
+goog.requireType('Blockly.WorkspaceSvg');
 
 
 /**

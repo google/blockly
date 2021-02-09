@@ -265,8 +265,7 @@ Blockly.MetricsManager.prototype.getViewMetrics = function(
     if (toolboxPosition == Blockly.TOOLBOX_AT_TOP ||
         toolboxPosition == Blockly.TOOLBOX_AT_BOTTOM) {
       svgMetrics.height -= toolboxMetrics.height;
-    } else if (
-        toolboxPosition == Blockly.TOOLBOX_AT_LEFT ||
+    } else if (toolboxPosition == Blockly.TOOLBOX_AT_LEFT ||
         toolboxPosition == Blockly.TOOLBOX_AT_RIGHT) {
       svgMetrics.width -= toolboxMetrics.width;
     }
@@ -274,8 +273,7 @@ Blockly.MetricsManager.prototype.getViewMetrics = function(
     if (toolboxPosition == Blockly.TOOLBOX_AT_TOP ||
         toolboxPosition == Blockly.TOOLBOX_AT_BOTTOM) {
       svgMetrics.height -= flyoutMetrics.height;
-    } else if (
-        toolboxPosition == Blockly.TOOLBOX_AT_LEFT ||
+    } else if (toolboxPosition == Blockly.TOOLBOX_AT_LEFT ||
         toolboxPosition == Blockly.TOOLBOX_AT_RIGHT) {
       svgMetrics.width -= flyoutMetrics.width;
     }

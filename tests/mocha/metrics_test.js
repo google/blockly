@@ -49,13 +49,13 @@ suite('Metrics', function() {
   });
   test('GetContentDimensionsExact - empty zoom in', function() {
     var ws = makeMockWs(2, 0, 0, 0, 0);
-    var metricsManager = new Blockly.MetricsManager(ws)
+    var metricsManager = new Blockly.MetricsManager(ws);
     var zoomIn = metricsManager.getContentDimensionsExact_(ws);
     assertDimensionsMatch(zoomIn, 0, 0, 0, 0);
   });
   test('GetContentDimensionsExact - empty zoom out', function() {
     var ws = makeMockWs(.5, 0, 0, 0, 0);
-    var metricsManager = new Blockly.MetricsManager(ws)
+    var metricsManager = new Blockly.MetricsManager(ws);
     var zoomOut = metricsManager.getContentDimensionsExact_(ws);
     assertDimensionsMatch(zoomOut, 0, 0, 0, 0);
   });

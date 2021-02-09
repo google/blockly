@@ -36,8 +36,6 @@ Blockly.MetricsManager = function(workspace) {
 /**
  * Describes the width, height and location of the toolbox on the main
  * workspace.
- * TODO: Would migrating to modules change how we do this? Should I be doing
- * this in a different way?
  * @typedef {{
  *            width:number,
  *            height:number,
@@ -58,7 +56,6 @@ Blockly.MetricsManager.AbsoluteMetrics;
 
 /**
  * All the measurements needed to describe the size and location of a container.
- * TODO: Look into a name other than container.
  * @typedef {{
  *            height:number,
  *            width:number,
@@ -69,9 +66,9 @@ Blockly.MetricsManager.AbsoluteMetrics;
 Blockly.MetricsManager.ContainerRegion;
 
 /**
- * TODO: Fix comment.
  * Gets the content dimensions of the given workspace, taking into account
- * whether or not it is scrollable and what size the workspace div is on screen.
+ * whether or not it is scrollable and what size the workspace div is on the
+ * screen.
  * @param {!Blockly.MetricsManager.ContainerRegion} viewMetrics  An object
  *     containing height and width attributes in CSS pixels.  Together they
  *     specify the size of the visible workspace, not including areas covered up
@@ -144,7 +141,6 @@ Blockly.MetricsManager.prototype.getContentDimensionsBounded_ = function(
 
   return {left: left, top: top, height: bottom - top, width: right - left};
 };
-
 
 /**
  * Gets the bounding box for all workspace contents, in pixels.

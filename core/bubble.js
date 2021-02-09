@@ -458,7 +458,7 @@ Blockly.Bubble.prototype.setAnchorLocation = function(xy) {
  */
 Blockly.Bubble.prototype.layoutBubble_ = function() {
   // Get the metrics in workspace units.
-  var viewMetrics = this.workspace_.metricsManager.getViewMetrics(true);
+  var viewMetrics = this.workspace_.getMetricsManager().getViewMetrics(true);
 
   var optimalLeft = this.getOptimalRelativeLeft_(viewMetrics);
   var optimalTop = this.getOptimalRelativeTop_(viewMetrics);

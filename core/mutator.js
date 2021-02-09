@@ -441,8 +441,8 @@ Blockly.Mutator.prototype.workspaceChanged_ = function(e) {
 };
 
 /**
- * Return an object with all the metrics required to size scrollbars for the
- * mutator flyout.  The following properties are computed:
+ * Returns an object with all the metrics required to correctly position the
+ * mutator's flyout. The following properties are computed:
  * .viewHeight: Height of the visible rectangle,
  * .viewWidth: Width of the visible rectangle,
  * .absoluteTop: Top-edge of view.

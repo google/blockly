@@ -62,26 +62,32 @@ goog.requireType('Blockly.IFlyout');
  * @implements {Blockly.IASTNodeLocationSvg}
  * @constructor
  */
-Blockly.WorkspaceSvg = function(options,
-    opt_blockDragSurface, opt_wsDragSurface) {
+Blockly.WorkspaceSvg = function(
+    options, opt_blockDragSurface, opt_wsDragSurface) {
   Blockly.WorkspaceSvg.superClass_.constructor.call(this, options);
 
   /**
-   * The manager in charge of calculating metrics for the workspace.
-   * TODO: Update this.
+   * Object in charge of calculating metrics for the workspace.
    * @type {!Blockly.MetricsManager}
+   * @private
    */
-  this.metricsManager = new Blockly.MetricsManager(this);
+  this.metricsManager_ = new Blockly.MetricsManager(this);
 
-  /** @type {function():!Blockly.utils.Metrics} */
-  // TODO: Options.getMetrics ? What should this be?
-  // TODO: Should this still support just setting a function directly?
-  this.getMetrics =
-      options.getMetrics || this.metricsManager.getMetrics.bind(this.metricsManager);
-  /** @type {function(!{x:number, y:number}):void} */
+  /**
+   * Method to get all the metrics that have to do with a workspace.
+   * @type {function():!Blockly.utils.Metrics}
+   * @package
+   */
+  this.getMetrics = options.getMetrics ||
+      this.metricsManager_.getMetrics.bind(this.metricsManager_);
+
+  /**
+   * Translates the workspace.
+   * @type {function(!{x:number, y:number}):void}
+   * @package
+   */
   this.setMetrics =
       options.setMetrics || Blockly.WorkspaceSvg.setTopLevelWorkspaceMetrics_;
-
 
   this.connectionDBList = Blockly.ConnectionDB.init(this.connectionChecker);
 
@@ -479,6 +485,15 @@ Blockly.WorkspaceSvg.prototype.getMarkerManager = function() {
 };
 
 /**
+ * Gets the metrics manager for this workspace.
+ * @return {Blockly.MarkerManager} The marker manager.
+ * @public
+ */
+Blockly.WorkspaceSvg.prototype.getMetricsManager = function() {
+  return this.markerManager_;
+};
+
+/**
  * Add the cursor svg to this workspaces svg group.
  * @param {SVGElement} cursorSvg The svg root of the cursor to be added to the
  *     workspace svg group.
@@ -614,7 +629,6 @@ Blockly.WorkspaceSvg.prototype.updateBlockStyles_ = function(blocks) {
  * @return {SVGMatrix} The matrix to use in mouseToSvg
  */
 Blockly.WorkspaceSvg.prototype.getInverseScreenCTM = function() {
-
   // Defer getting the screen CTM until we actually need it, this should
   // avoid forced reflows from any calls to updateInverseScreenCTM.
   if (this.inverseScreenCTMDirty_) {

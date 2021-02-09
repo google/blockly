@@ -26,7 +26,6 @@ goog.require('Blockly.utils.dom');
 goog.require('Blockly.utils.global');
 goog.require('Blockly.utils.Size');
 goog.require('Blockly.utils.xml');
-goog.require('Blockly.Variables');
 
 goog.requireType('Blockly.Block');
 goog.requireType('Blockly.Comment');

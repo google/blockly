@@ -17,10 +17,13 @@ goog.provide('Blockly.DropDownDiv');
 
 goog.require('Blockly.utils.dom');
 goog.require('Blockly.utils.math');
+goog.require('Blockly.utils.Rect');
 goog.require('Blockly.utils.style');
 
-goog.requireType('Blockly.utils.Rect');
+goog.requireType('Blockly.BlockSvg');
+goog.requireType('Blockly.Field');
 goog.requireType('Blockly.utils.Size');
+goog.requireType('Blockly.WorkspaceSvg');
 
 
 /**
@@ -148,7 +151,7 @@ Blockly.DropDownDiv.BoundsInfo;
  * }}
  */
 Blockly.DropDownDiv.PositionMetrics;
- 
+
 /**
  * Create and insert the DOM element for this div.
  * @package

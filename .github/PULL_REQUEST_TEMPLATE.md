@@ -31,7 +31,7 @@
   -        uncomment the systems in the list below.
   -->
 
-Tested on:
+<!-- Tested on: -->
 <!-- * Desktop Chrome -->
 <!-- * Desktop Firefox -->
 <!-- * Desktop Safari -->
@@ -57,3 +57,12 @@ Tested on:
 ### Additional Information
 
 <!-- Anything else we should know? -->
+
+## Summary
+### Behavior Before Change
+
+<!--TODO: Image, gif or explanation of behavior before this pull request. -->
+
+### Behavior After Change 
+
+<!--TODO: Image, gif or explanation of behavior after this pull request. -->

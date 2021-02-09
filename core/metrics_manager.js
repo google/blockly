@@ -5,7 +5,7 @@
  */
 
 /**
- * @fileoverview Manager for metrics.
+ * @fileoverview Calculates and reports workspace metrics.
  * @author aschmiedt@google.com (Abby Schmiedt)
  */
 'use strict';
@@ -66,9 +66,9 @@ Blockly.MetricsManager.AbsoluteMetrics;
 Blockly.MetricsManager.ContainerRegion;
 
 /**
- * Gets the content dimensions of the given workspace, taking into account
- * whether or not it is scrollable and what size the workspace div is on the
- * screen.
+ * Gets the content dimensions of the given workspace in pixel coordinates,
+ * taking into account whether or not it is scrollable and what size the
+ * workspace div is on the screen.
  * @param {!Blockly.MetricsManager.ContainerRegion} viewMetrics  An object
  *     containing height and width attributes in CSS pixels.  Together they
  *     specify the size of the visible workspace, not including areas covered up
@@ -88,7 +88,7 @@ Blockly.MetricsManager.prototype.getContentDimensions_ = function(viewMetrics) {
 };
 
 /**
- * Gets the dimensions of the given workspace component, in pixels.
+ * Gets the dimensions of the given workspace component, in pixel coordinates.
  * @param {?Blockly.IToolbox|?Blockly.IFlyout} elem The element to get the
  *     dimensions of, or null.  It should be a toolbox or flyout, and should
  *     implement getWidth() and getHeight().
@@ -107,8 +107,9 @@ Blockly.MetricsManager.prototype.getDimensionsPx_ = function(elem) {
 };
 
 /**
- * Calculates the size of a scrollable workspace, which should include room for
- * a half screen border around the workspace contents.
+ * Calculates the size of a scrollable workspace, which should include
+ * room for a half screen border around the workspace contents. In pixel
+ * coordinates.
  * @param {!Blockly.MetricsManager.ContainerRegion} viewMetrics An object
  *     containing height and width attributes in CSS pixels.  Together they
  *     specify the size of the visible workspace, not including areas covered up
@@ -143,9 +144,10 @@ Blockly.MetricsManager.prototype.getContentDimensionsBounded_ = function(
 };
 
 /**
- * Gets the bounding box for all workspace contents, in pixels.
+ * Gets the bounding box for all workspace contents, in pixel coordinates.
  * @return {!Blockly.MetricsManager.ContainerRegion} The dimensions of the
- *     contents of the given workspace, as an object containing
+ *     contents of the given workspace in pixel coordinates, as an object
+ *     containing
  *     - height and width in pixels
  *     - left and top in pixels relative to the workspace origin.
  * @protected
@@ -165,9 +167,9 @@ Blockly.MetricsManager.prototype.getContentDimensionsExact_ = function() {
 };
 
 /**
- * Gets the width and the height of the flyout on the workspace. Returns 0
- * for the width and height if the workspace has a category toolbox instead of
- * a simple toolbox.
+ * Gets the width and the height of the flyout on the workspace in pixel
+ * coordinates. Returns 0 for the width and height if the workspace has a
+ * category toolbox instead of a simple toolbox.
  * @return {!Blockly.utils.Size} The width and height of the flyout.
  * @public
  */
@@ -178,10 +180,10 @@ Blockly.MetricsManager.prototype.getFlyoutMetrics = function() {
 };
 
 /**
- * Gets the width, height and position of the toolbox on the workspace. Returns
- * 0 for the width and height if the workspace has a simple toolbox instead of a
- * category toolbox. To get the width and height of a simple toolbox see
- * getFlyoutMetrics.
+ * Gets the width, height and position of the toolbox on the workspace in pixel
+ * coordinates. Returns 0 for the width and height if the workspace has a simple
+ * toolbox instead of a category toolbox. To get the width and height of a
+ * simple toolbox see getFlyoutMetrics.
  * @return {!Blockly.MetricsManager.ToolboxMetrics} The object with the width,
  *     height and position of the toolbox.
  * @public
@@ -197,8 +199,8 @@ Blockly.MetricsManager.prototype.getToolboxMetrics = function() {
 };
 
 /**
- * Gets the width and height of the workspace's parent svg element. This area
- * includes the toolbox and the visible workspace area.
+ * Gets the width and height of the workspace's parent svg element in pixel
+ * coordinates. This area includes the toolbox and the visible workspace area.
  * @return {!Blockly.utils.Size} The width and height of the workspace's parent
  *     svg element.
  * @public
@@ -209,7 +211,7 @@ Blockly.MetricsManager.prototype.getSvgMetrics = function() {
 };
 
 /**
- * Gets the absolute left and absolute top.
+ * Gets the absolute left and absolute top in pixel coordinates.
  * This is where the visible workspace starts in relation to the svg container.
  * @return {!Blockly.MetricsManager.AbsoluteMetrics} The absolute metrics for
  *     the workspace.
@@ -242,8 +244,8 @@ Blockly.MetricsManager.prototype.getAbsoluteMetrics = function() {
 };
 
 /**
- * Gets the metrics for the visible workspace. The visible workspace does not
- * include the toolbox or flyout.
+ * Gets the metrics for the visible workspace in either pixel or workspace
+ * coordinates. The visible workspace does not include the toolbox or flyout.
  * @param {boolean=} opt_getWorkspaceCoordinates True to get the view metrics in
  *     workspace coordinates, false to get them in pixel coordinates.
  * @return {!Blockly.MetricsManager.ContainerRegion} The width, height, top and
@@ -287,10 +289,12 @@ Blockly.MetricsManager.prototype.getViewMetrics = function(
 };
 
 /**
- * Gets content metrics. This can mean two things:
- * If the workspace has a fixed width and height then the content area is
- * rectangle around all the top bounded elements on the workspace (workspace
- * comments and blocks).
+ * Gets content metrics in either pixel or workspace coordinates.
+ *
+ * This can mean two things:
+ * If the workspace has a fixed width and height then the content
+ * area is rectangle around all the top bounded elements on the workspace
+ * (workspace comments and blocks).
  *
  * If the workspace does not have a fixed width and height then it is the
  * metrics of the area that content can be placed. This area is computed by

@@ -24,7 +24,15 @@ goog.require('Blockly.Events.VarCreate');
 goog.require('Blockly.utils');
 goog.require('Blockly.utils.dom');
 goog.require('Blockly.utils.global');
+goog.require('Blockly.utils.Size');
 goog.require('Blockly.utils.xml');
+
+goog.requireType('Blockly.Block');
+goog.requireType('Blockly.Comment');
+goog.requireType('Blockly.Connection');
+goog.requireType('Blockly.Field');
+goog.requireType('Blockly.Workspace');
+goog.requireType('Blockly.VariableModel');
 
 
 /**

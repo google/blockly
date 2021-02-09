@@ -513,7 +513,7 @@ Blockly.Bubble.prototype.layoutBubble_ = function() {
  * workspace (what percentage of the bubble is visible).
  * @param {!{x: number, y: number}} relativeMin The position of the top-left
  *     corner of the bubble relative to the anchor point.
- * @param {!Blockly.MetricsManager.ContainerSize} viewMetrics The metrics of the
+ * @param {!Blockly.MetricsManager.ContainerRegion} viewMetrics The metrics of the
  *     workspace the bubble will appear in.
  * @return {number} The percentage of the bubble that is visible.
  * @private
@@ -555,7 +555,7 @@ Blockly.Bubble.prototype.getOverlap_ = function(relativeMin, viewMetrics) {
  * Calculate what the optimal horizontal position of the top-left corner of the
  * bubble is (relative to the anchor point) so that the most area of the
  * bubble is shown.
- * @param {!Blockly.MetricsManager.ContainerSize} viewMetrics The view metrics of the
+ * @param {!Blockly.MetricsManager.ContainerRegion} viewMetrics The view metrics of the
  *     workspace the bubble will appear in.
  * @return {number} The optimal horizontal position of the top-left corner
  *     of the bubble.
@@ -613,7 +613,7 @@ Blockly.Bubble.prototype.getOptimalRelativeLeft_ = function(viewMetrics) {
  * Calculate what the optimal vertical position of the top-left corner of
  * the bubble is (relative to the anchor point) so that the most area of the
  * bubble is shown.
- * @param {!Blockly.MetricsManager.ContainerSize} viewMetrics The view metrics of the
+ * @param {!Blockly.MetricsManager.ContainerRegion} viewMetrics The view metrics of the
  *     workspace the bubble will appear in.
  * @return {number} The optimal vertical position of the top-left corner
  *     of the bubble.

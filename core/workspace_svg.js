@@ -486,11 +486,11 @@ Blockly.WorkspaceSvg.prototype.getMarkerManager = function() {
 
 /**
  * Gets the metrics manager for this workspace.
- * @return {Blockly.MarkerManager} The marker manager.
+ * @return {!Blockly.MetricsManager} The marker manager.
  * @public
  */
 Blockly.WorkspaceSvg.prototype.getMetricsManager = function() {
-  return this.markerManager_;
+  return this.metricsManager_;
 };
 
 /**

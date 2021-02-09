@@ -66,17 +66,17 @@ Blockly.MetricsManager.AbsoluteMetrics;
  *            left:number
  *          }}
  */
-Blockly.MetricsManager.ContainerSize;
+Blockly.MetricsManager.ContainerRegion;
 
 /**
  * TODO: Fix comment.
  * Gets the content dimensions of the given workspace, taking into account
  * whether or not it is scrollable and what size the workspace div is on screen.
- * @param {!Blockly.MetricsManager.ContainerSize} viewMetrics  An object
+ * @param {!Blockly.MetricsManager.ContainerRegion} viewMetrics  An object
  *     containing height and width attributes in CSS pixels.  Together they
  *     specify the size of the visible workspace, not including areas covered up
  *     by the toolbox.
- * @return {!Blockly.MetricsManager.ContainerSize} The dimensions of the
+ * @return {!Blockly.MetricsManager.ContainerRegion} The dimensions of the
  *     contents of the given workspace, as an object containing at least
  *     - height and width in pixels
  *     - left and top in pixels relative to the workspace origin.
@@ -112,11 +112,11 @@ Blockly.MetricsManager.prototype.getDimensionsPx_ = function(elem) {
 /**
  * Calculates the size of a scrollable workspace, which should include room for
  * a half screen border around the workspace contents.
- * @param {!Blockly.MetricsManager.ContainerSize} viewMetrics An object
+ * @param {!Blockly.MetricsManager.ContainerRegion} viewMetrics An object
  *     containing height and width attributes in CSS pixels.  Together they
  *     specify the size of the visible workspace, not including areas covered up
  *     by the toolbox.
- * @return {!Blockly.MetricsManager.ContainerSize} The dimensions of the
+ * @return {!Blockly.MetricsManager.ContainerRegion} The dimensions of the
  *     contents of the given workspace, as an object containing
  *     - height and width in pixels
  *     - left and top in pixels relative to the workspace origin.
@@ -148,7 +148,7 @@ Blockly.MetricsManager.prototype.getContentDimensionsBounded_ = function(
 
 /**
  * Gets the bounding box for all workspace contents, in pixels.
- * @return {!Blockly.MetricsManager.ContainerSize} The dimensions of the
+ * @return {!Blockly.MetricsManager.ContainerRegion} The dimensions of the
  *     contents of the given workspace, as an object containing
  *     - height and width in pixels
  *     - left and top in pixels relative to the workspace origin.
@@ -176,7 +176,7 @@ Blockly.MetricsManager.prototype.getContentDimensionsExact_ = function() {
  * @public
  */
 Blockly.MetricsManager.prototype.getFlyoutMetrics = function() {
-  var flyoutDimensions = this.getDimensionsPx_(this.workspace_.flyout_);
+  var flyoutDimensions = this.getDimensionsPx_(this.workspace_.getFlyout(true));
   return new Blockly.utils.Size(
       flyoutDimensions.width, flyoutDimensions.height);
 };
@@ -191,7 +191,7 @@ Blockly.MetricsManager.prototype.getFlyoutMetrics = function() {
  * @public
  */
 Blockly.MetricsManager.prototype.getToolboxMetrics = function() {
-  var toolboxDimensions = this.getDimensionsPx_(this.workspace_.toolbox_);
+  var toolboxDimensions = this.getDimensionsPx_(this.workspace_.getToolbox());
 
   return {
     width: toolboxDimensions.width,
@@ -223,9 +223,9 @@ Blockly.MetricsManager.prototype.getAbsoluteMetrics = function() {
   var absoluteLeft = 0;
   var toolboxMetrics = this.getToolboxMetrics();
   var flyoutMetrics = this.getFlyoutMetrics();
-  var doesToolboxExist = !!this.workspace_.toolbox_;
+  var doesToolboxExist = !!this.workspace_.getToolbox();
   var toolboxPosition = this.workspace_.toolboxPosition;
-  var doesFlyoutExist = !!this.workspace_.flyout_;
+  var doesFlyoutExist = !!this.workspace_.getFlyout(true);
 
   if (doesToolboxExist && toolboxPosition == Blockly.TOOLBOX_AT_LEFT) {
     absoluteLeft = toolboxMetrics.width;
@@ -250,7 +250,7 @@ Blockly.MetricsManager.prototype.getAbsoluteMetrics = function() {
  * include the toolbox or flyout.
  * @param {boolean=} opt_getWorkspaceCoordinates True to get the view metrics in
  *     workspace coordinates, false to get them in pixel coordinates.
- * @return {!Blockly.MetricsManager.ContainerSize} The width, height, top and
+ * @return {!Blockly.MetricsManager.ContainerRegion} The width, height, top and
  *     left of the viewport in either workspace coordinates or pixel
  *     coordinates.
  * @public
@@ -263,7 +263,7 @@ Blockly.MetricsManager.prototype.getViewMetrics = function(
   var flyoutMetrics = this.getFlyoutMetrics();
   var toolboxPosition = this.workspace_.toolboxPosition;
 
-  if (this.workspace_.toolbox_) {
+  if (this.workspace_.getToolbox()) {
     if (toolboxPosition == Blockly.TOOLBOX_AT_TOP ||
         toolboxPosition == Blockly.TOOLBOX_AT_BOTTOM) {
       svgMetrics.height -= toolboxMetrics.height;
@@ -272,7 +272,7 @@ Blockly.MetricsManager.prototype.getViewMetrics = function(
         toolboxPosition == Blockly.TOOLBOX_AT_RIGHT) {
       svgMetrics.width -= toolboxMetrics.width;
     }
-  } else if (this.workspace_.flyout_) {
+  } else if (this.workspace_.getFlyout(true)) {
     if (toolboxPosition == Blockly.TOOLBOX_AT_TOP ||
         toolboxPosition == Blockly.TOOLBOX_AT_BOTTOM) {
       svgMetrics.height -= flyoutMetrics.height;
@@ -302,7 +302,7 @@ Blockly.MetricsManager.prototype.getViewMetrics = function(
  * adding padding to all sides.
  * @param {boolean=} opt_getWorkspaceCoordinates True to get the content metrics
  *     in workspace coordinates, false to get them in pixel coordinates.
- * @return {!Blockly.MetricsManager.ContainerSize} The
+ * @return {!Blockly.MetricsManager.ContainerRegion} The
  *     metrics for the content container.
  * @public
  */

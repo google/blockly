@@ -370,3 +370,6 @@ Blockly.MetricsManager.prototype.getMetrics = function() {
     flyoutHeight: flyoutMetrics.height
   };
 };
+
+Blockly.registry.register(Blockly.registry.Type.METRICS_MANAGER,
+    Blockly.registry.DEFAULT, Blockly.MetricsManager);

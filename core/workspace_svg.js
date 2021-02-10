@@ -76,12 +76,14 @@ Blockly.WorkspaceSvg = function(
     options, opt_blockDragSurface, opt_wsDragSurface) {
   Blockly.WorkspaceSvg.superClass_.constructor.call(this, options);
 
+  var MetricsManagerClass = Blockly.registry.getClassFromOptions(
+        Blockly.registry.Type.METRICS_MANAGER, options);
   /**
    * Object in charge of calculating metrics for the workspace.
    * @type {!Blockly.MetricsManager}
    * @private
    */
-  this.metricsManager_ = new Blockly.MetricsManager(this);
+  this.metricsManager_ = new MetricsManagerClass(this);
 
   /**
    * Method to get all the metrics that have to do with a workspace.

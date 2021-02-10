@@ -513,8 +513,8 @@ Blockly.Bubble.prototype.layoutBubble_ = function() {
  * workspace (what percentage of the bubble is visible).
  * @param {!{x: number, y: number}} relativeMin The position of the top-left
  *     corner of the bubble relative to the anchor point.
- * @param {!Blockly.MetricsManager.ContainerRegion} viewMetrics The metrics of the
- *     workspace the bubble will appear in.
+ * @param {!Blockly.MetricsManager.ContainerRegion} viewMetrics The view metrics
+ *     of the workspace the bubble will appear in.
  * @return {number} The percentage of the bubble that is visible.
  * @private
  */

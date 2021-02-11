@@ -14,6 +14,8 @@ goog.provide('Blockly.MetricsManager');
 
 goog.require('Blockly.utils.Size');
 
+goog.requireType('Blockly.IFlyout');
+goog.requireType('Blockly.IToolbox');
 goog.requireType('Blockly.utils.Metrics');
 goog.requireType('Blockly.utils.toolbox');
 
@@ -371,5 +373,6 @@ Blockly.MetricsManager.prototype.getMetrics = function() {
   };
 };
 
-Blockly.registry.register(Blockly.registry.Type.METRICS_MANAGER,
-    Blockly.registry.DEFAULT, Blockly.MetricsManager);
+Blockly.registry.register(
+    Blockly.registry.Type.METRICS_MANAGER, Blockly.registry.DEFAULT,
+    Blockly.MetricsManager);

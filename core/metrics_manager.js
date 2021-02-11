@@ -15,6 +15,7 @@ goog.provide('Blockly.MetricsManager');
 goog.require('Blockly.utils.Size');
 
 goog.requireType('Blockly.IFlyout');
+goog.requireType('Blockly.IMetricsManager');
 goog.requireType('Blockly.IToolbox');
 goog.requireType('Blockly.utils.Metrics');
 goog.requireType('Blockly.utils.toolbox');
@@ -24,6 +25,7 @@ goog.requireType('Blockly.utils.toolbox');
  * The manager for all workspace metrics calculations.
  * @param {!Blockly.WorkspaceSvg} workspace The workspace to calculate metrics
  *     for.
+ * @implements {Blockly.IMetricsManager}
  * @constructor
  */
 Blockly.MetricsManager = function(workspace) {

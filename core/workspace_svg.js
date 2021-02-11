@@ -51,6 +51,7 @@ goog.requireType('Blockly.FlyoutButton');
 goog.requireType('Blockly.IASTNodeLocationSvg');
 goog.requireType('Blockly.IBoundedElement');
 goog.requireType('Blockly.IFlyout');
+goog.requireType('Blockly.IMetricsManager');
 goog.requireType('Blockly.IToolbox');
 goog.requireType('Blockly.Marker');
 goog.requireType('Blockly.Theme');
@@ -80,7 +81,7 @@ Blockly.WorkspaceSvg = function(
         Blockly.registry.Type.METRICS_MANAGER, options);
   /**
    * Object in charge of calculating metrics for the workspace.
-   * @type {!Blockly.MetricsManager}
+   * @type {!Blockly.IMetricsManager}
    * @private
    */
   this.metricsManager_ = new MetricsManagerClass(this);
@@ -498,7 +499,7 @@ Blockly.WorkspaceSvg.prototype.getMarkerManager = function() {
 
 /**
  * Gets the metrics manager for this workspace.
- * @return {!Blockly.MetricsManager} The marker manager.
+ * @return {!Blockly.IMetricsManager} The metrics manager.
  * @public
  */
 Blockly.WorkspaceSvg.prototype.getMetricsManager = function() {

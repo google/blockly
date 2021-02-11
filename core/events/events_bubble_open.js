@@ -17,6 +17,9 @@ goog.require('Blockly.Events.UiBase');
 goog.require('Blockly.registry');
 goog.require('Blockly.utils.object');
 
+goog.requireType('Blockly.BlockSvg');
+
+
 /**
  * Class for a bubble open event.
  * @param {Blockly.BlockSvg} opt_block The associated block. Undefined for a

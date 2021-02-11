@@ -14,6 +14,8 @@ goog.provide('Blockly.WorkspaceDragger');
 
 goog.require('Blockly.utils.Coordinate');
 
+goog.requireType('Blockly.WorkspaceSvg');
+
 
 /**
  * Class for a workspace dragger.  It moves the workspace around when it is

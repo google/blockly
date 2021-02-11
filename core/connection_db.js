@@ -18,6 +18,7 @@ goog.require('Blockly.constants');
 goog.require('Blockly.RenderedConnection');
 
 goog.requireType('Blockly.IConnectionChecker');
+goog.requireType('Blockly.utils.Coordinate');
 
 
 /**

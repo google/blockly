@@ -148,15 +148,17 @@ Blockly.MetricsManager.prototype.getContentDimensionsExact_ = function() {
  * Gets the width and the height of the flyout on the workspace in pixel
  * coordinates. Returns 0 for the width and height if the workspace has a
  * category toolbox instead of a simple toolbox.
- * @param {boolean=} opt_own Only return the workspace's own flyout if True.
- * @return {!Blockly.utils.Size} The width and height of the flyout.
+ * @return {!Blockly.MetricsManager.ToolboxMetrics} The width and height of the
+ *     flyout.
  * @public
  */
-Blockly.MetricsManager.prototype.getFlyoutMetrics = function(opt_own) {
-  var flyoutDimensions =
-      this.getDimensionsPx_(this.workspace_.getFlyout(opt_own));
-  return new Blockly.utils.Size(
-      flyoutDimensions.width, flyoutDimensions.height);
+Blockly.MetricsManager.prototype.getFlyoutMetrics = function() {
+  var flyoutDimensions = this.getDimensionsPx_(this.workspace_.getFlyout(true));
+  return {
+    width: flyoutDimensions.width,
+    height: flyoutDimensions.height,
+    position: this.workspace_.toolboxPosition
+  };
 };
 
 /**
@@ -202,8 +204,9 @@ Blockly.MetricsManager.prototype.getAbsoluteMetrics = function() {
   var toolboxMetrics = this.getToolboxMetrics();
   var flyoutMetrics = this.getFlyoutMetrics(true);
   var doesToolboxExist = !!this.workspace_.getToolbox();
-  var toolboxPosition = this.workspace_.toolboxPosition;
   var doesFlyoutExist = !!this.workspace_.getFlyout(true);
+  var toolboxPosition =
+      doesToolboxExist ? toolboxMetrics.position : flyoutMetrics.position;
 
   if (doesToolboxExist && toolboxPosition == Blockly.TOOLBOX_AT_LEFT) {
     absoluteLeft = toolboxMetrics.width;
@@ -239,7 +242,9 @@ Blockly.MetricsManager.prototype.getViewMetrics = function(
   var svgMetrics = this.getSvgMetrics();
   var toolboxMetrics = this.getToolboxMetrics();
   var flyoutMetrics = this.getFlyoutMetrics(true);
-  var toolboxPosition = this.workspace_.toolboxPosition;
+  var doesToolboxExist = !!this.workspace_.getToolbox();
+  var toolboxPosition =
+      doesToolboxExist ? toolboxMetrics.position : flyoutMetrics.position;
 
   if (this.workspace_.getToolbox()) {
     if (toolboxPosition == Blockly.TOOLBOX_AT_TOP ||

@@ -27,7 +27,10 @@ suite('Metrics', function() {
       },
       getToolbox: function() {},
       getFlyout: function() {},
-      scale: scale
+      scale: scale,
+      scrollX: 10,
+      scrollY: 10,
+      isContentBounded: function() {}
     };
   }
 
@@ -38,11 +41,29 @@ suite('Metrics', function() {
     var getToolboxStub = sinon.stub(metricsManager.workspace_, 'getToolbox');
     var getFlyoutStub = sinon.stub(metricsManager.workspace_, 'getFlyout');
 
-    toolboxMetricsStub.onCall(0).returns(toolboxMetrics);
-    flyoutMetricsStub.onCall(0).returns(flyoutMetrics);
-    getToolboxStub.onCall(0).returns(getToolbox);
-    getFlyoutStub.onCall(0).returns(getFlyout);
+    toolboxMetricsStub.returns(toolboxMetrics);
+    flyoutMetricsStub.returns(flyoutMetrics);
+    getToolboxStub.returns(getToolbox);
+    getFlyoutStub.returns(getFlyout);
   }
+
+  function viewMetricsSetup(
+      metricsManager, toolboxMetrics, flyoutMetrics, getToolbox, getFlyout,
+      svgMetrics) {
+    var toolboxMetricsStub = sinon.stub(metricsManager, 'getToolboxMetrics');
+    var flyoutMetricsStub = sinon.stub(metricsManager, 'getFlyoutMetrics');
+    var getToolboxStub = sinon.stub(metricsManager.workspace_, 'getToolbox');
+    var getFlyoutStub = sinon.stub(metricsManager.workspace_, 'getFlyout');
+    var svgMetricsStub = sinon.stub(metricsManager, 'getSvgMetrics');
+
+    toolboxMetricsStub.returns(toolboxMetrics);
+    flyoutMetricsStub.returns(flyoutMetrics);
+    getToolboxStub.returns(getToolbox);
+    getFlyoutStub.returns(getFlyout);
+    svgMetricsStub.returns(svgMetrics);
+  }
+
+
 
   setup(function() {
     sharedTestSetup.call(this);
@@ -188,58 +209,109 @@ suite('Metrics', function() {
       var ws = makeMockWs();
       var metricsManager = new Blockly.MetricsManager(ws);
       var toolboxMetrics = {};
-      var flyoutMetrics = {width: 107, height: 0};
+      var flyoutMetrics = {width: 107, height: 0, position: 2};
       absoluteSetup(metricsManager, toolboxMetrics, flyoutMetrics, false, true);
       var absoluteMetrics = metricsManager.getAbsoluteMetrics();
       assertDimensionsMatch(absoluteMetrics, 107, 0);
     });
     test('Flyout at top', function() {
-      var ws = makeMockWs(1, 0, 0, 0, 0);
+      var ws = makeMockWs();
       var metricsManager = new Blockly.MetricsManager(ws);
-      var defaultZoom = metricsManager.getContentDimensionsExact_(ws);
-      assertDimensionsMatch(defaultZoom, 0, 0, 0, 0);
+      var toolboxMetrics = {};
+      var flyoutMetrics = {width: 0, height: 107, position: 0};
+      absoluteSetup(metricsManager, toolboxMetrics, flyoutMetrics, false, true);
+      var absoluteMetrics = metricsManager.getAbsoluteMetrics();
+      assertDimensionsMatch(absoluteMetrics, 0, 107);
     });
   });
   suite('getViewMetrics', function() {
     test('Toolbox at left', function() {
-      var ws = makeMockWs(1, 0, 0, 0, 0);
+      var ws = makeMockWs();
       var metricsManager = new Blockly.MetricsManager(ws);
-      var defaultZoom = metricsManager.getContentDimensionsExact_(ws);
-      assertDimensionsMatch(defaultZoom, 0, 0, 0, 0);
+      var toolboxMetrics = {width: 107, height: 0, position: 2};
+      var flyoutMetrics = {};
+      var svgMetrics = {width: 500, height: 500};
+      viewMetricsSetup(
+          metricsManager, toolboxMetrics, flyoutMetrics, true, false,
+          svgMetrics);
+      var viewMetrics = metricsManager.getViewMetrics();
+      assertDimensionsMatch(viewMetrics, -10, -10, 393, 500);
     });
     test('Toolbox at top', function() {
-      var ws = makeMockWs(1, 0, 0, 0, 0);
+      var ws = makeMockWs();
       var metricsManager = new Blockly.MetricsManager(ws);
-      var defaultZoom = metricsManager.getContentDimensionsExact_(ws);
-      assertDimensionsMatch(defaultZoom, 0, 0, 0, 0);
+      var toolboxMetrics = {width: 0, height: 107, position: 0};
+      var flyoutMetrics = {};
+      var svgMetrics = {width: 500, height: 500};
+      viewMetricsSetup(
+          metricsManager, toolboxMetrics, flyoutMetrics, true, false,
+          svgMetrics);
+      var viewMetrics = metricsManager.getViewMetrics();
+      assertDimensionsMatch(viewMetrics, -10, -10, 500, 393);
     });
     test('Flyout at left', function() {
-      var ws = makeMockWs(1, 0, 0, 0, 0);
+      var ws = makeMockWs();
       var metricsManager = new Blockly.MetricsManager(ws);
-      var defaultZoom = metricsManager.getContentDimensionsExact_(ws);
-      assertDimensionsMatch(defaultZoom, 0, 0, 0, 0);
+      var toolboxMetrics = {};
+      var flyoutMetrics = {width: 107, height: 0, position: 2};
+      var svgMetrics = {width: 500, height: 500};
+      viewMetricsSetup(
+          metricsManager, toolboxMetrics, flyoutMetrics, false, true,
+          svgMetrics);
+      var viewMetrics = metricsManager.getViewMetrics();
+      assertDimensionsMatch(viewMetrics, -10, -10, 393, 500);
     });
     test('Flyout at top', function() {
-      var ws = makeMockWs(1, 0, 0, 0, 0);
+      var ws = makeMockWs();
       var metricsManager = new Blockly.MetricsManager(ws);
-      var defaultZoom = metricsManager.getContentDimensionsExact_(ws);
-      assertDimensionsMatch(defaultZoom, 0, 0, 0, 0);
+      var toolboxMetrics = {};
+      var flyoutMetrics = {width: 0, height: 107, position: 0};
+      var svgMetrics = {width: 500, height: 500};
+      viewMetricsSetup(
+          metricsManager, toolboxMetrics, flyoutMetrics, false, true,
+          svgMetrics);
+      var viewMetrics = metricsManager.getViewMetrics();
+      assertDimensionsMatch(viewMetrics, -10, -10, 500, 393);
     });
     test('Get in workspace coordinates ', function() {
-      var ws = makeMockWs(1, 0, 0, 0, 0);
+      var ws = makeMockWs(2, 0, 0, 0, 0);
       var metricsManager = new Blockly.MetricsManager(ws);
-      var defaultZoom = metricsManager.getContentDimensionsExact_(ws);
-      assertDimensionsMatch(defaultZoom, 0, 0, 0, 0);
+      var toolboxMetrics = {};
+      var flyoutMetrics = {width: 0, height: 107, position: 0};
+      var svgMetrics = {width: 500, height: 500};
+      viewMetricsSetup(
+          metricsManager, toolboxMetrics, flyoutMetrics, false, true,
+          svgMetrics);
+      var viewMetrics = metricsManager.getViewMetrics(true);
+      assertDimensionsMatch(viewMetrics, -10 / 2, -10 / 2, 500 / 2, 393 / 2);
     });
   });
   suite('getContentMetrics', function() {
-    test('Content Dimensions in pixel coordinates', function() {
+    test('Content Dimensions in pixel coordinates bounded ws', function() {
+      // TODO: getContentDimensionsBounded_ called if the workspace is bounded
+      // TODO: correct pixel co
+      var ws = makeMockWs(1, 0, 0, 0, 0);
+      var metricsManager = new Blockly.MetricsManager(ws);
+      var isContentBoundedStub =
+          sinon.stub(metricsManager.workspace_, 'isContentBounded');
+      isContentBoundedStub.returns(true);
+      var boundedMetrics =
+          sinon.stub(metricsManager, 'getContentDimensionsBounded_');
+      boundedMetrics.returns({height: 0, width: 0, left: 0, top: 0});
+
+      var contentMetrics = metricsManager.getContentMetrics(false);
+      assertDimensionsMatch(contentMetrics, 0, 0, 0, 0);
+      sinon.assert.calledOnce(boundedMetrics);
+    });
+    test('Content Dimensions in pixel coordinates exact ws', function() {
+      // TODO: getContentDimensionsBounded_ called if the workspace is bounded
+      // TODO: correct pixel co
       var ws = makeMockWs(1, 0, 0, 0, 0);
       var metricsManager = new Blockly.MetricsManager(ws);
       var defaultZoom = metricsManager.getContentDimensionsExact_(ws);
       assertDimensionsMatch(defaultZoom, 0, 0, 0, 0);
     });
-    test('Content Dimensions in workspace coordinates', function() {
+    test('Content Dimensions in ws coordinates bounded ws', function() {
       var ws = makeMockWs(1, 0, 0, 0, 0);
       var metricsManager = new Blockly.MetricsManager(ws);
       var defaultZoom = metricsManager.getContentDimensionsExact_(ws);

@@ -285,17 +285,17 @@ Blockly.MetricsManager.prototype.getViewMetrics = function(
  * metrics of the area that content can be placed. This area is computed by
  * getting the rectangle around the top bounded elements on the workspace and
  * adding padding to all sides.
+ * @param {boolean=} opt_getWorkspaceCoordinates True to get the content metrics
+ *     in workspace coordinates, false to get them in pixel coordinates.
  * @param {!Blockly.MetricsManager.ContainerRegion=} opt_viewMetrics The view
  *     metrics if they have been previously computed. Passing in null will cause
  *     the view metrics to be computed again.
- * @param {boolean=} opt_getWorkspaceCoordinates True to get the content metrics
- *     in workspace coordinates, false to get them in pixel coordinates.
  * @return {!Blockly.MetricsManager.ContainerRegion} The
  *     metrics for the content container.
  * @public
  */
 Blockly.MetricsManager.prototype.getContentMetrics = function(
-    opt_viewMetrics, opt_getWorkspaceCoordinates) {
+    opt_getWorkspaceCoordinates, opt_viewMetrics) {
   var scale = opt_getWorkspaceCoordinates ? this.workspace_.scale : 1;
   var contentDimensions = null;
   if (this.workspace_.isContentBounded()) {
@@ -350,7 +350,7 @@ Blockly.MetricsManager.prototype.getMetrics = function() {
   var svgMetrics = this.getSvgMetrics();
   var absoluteMetrics = this.getAbsoluteMetrics();
   var viewMetrics = this.getViewMetrics();
-  var contentMetrics = this.getContentMetrics(viewMetrics);
+  var contentMetrics = this.getContentMetrics(false, viewMetrics);
 
   return {
     contentHeight: contentMetrics.height,

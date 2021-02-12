@@ -29,6 +29,8 @@ goog.require('Blockly.utils.xml');
 // TODO: Fix recursive dependency.
 // goog.require('Blockly.Xml');
 
+goog.requireType('Blockly.Block');
+
 
 /**
  * Abstract class for a block event.

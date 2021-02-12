@@ -18,10 +18,12 @@
  */
 goog.provide('Blockly.WidgetDiv');
 
+goog.require('Blockly.utils.dom');
 goog.require('Blockly.utils.style');
 
 goog.requireType('Blockly.utils.Rect');
 goog.requireType('Blockly.utils.Size');
+goog.requireType('Blockly.WorkspaceSvg');
 
 
 /**

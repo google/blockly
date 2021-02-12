@@ -23,11 +23,16 @@ goog.require('Blockly.Menu');
 goog.require('Blockly.MenuItem');
 goog.require('Blockly.Msg');
 goog.require('Blockly.utils');
+goog.require('Blockly.utils.aria');
 goog.require('Blockly.utils.Coordinate');
 goog.require('Blockly.utils.dom');
 goog.require('Blockly.utils.Rect');
 goog.require('Blockly.utils.userAgent');
+goog.require('Blockly.WidgetDiv');
 goog.require('Blockly.Xml');
+
+goog.requireType('Blockly.Block');
+goog.requireType('Blockly.WorkspaceSvg');
 
 
 /**

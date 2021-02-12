@@ -19,6 +19,10 @@ goog.provide('Blockly.Events');
 goog.require('Blockly.registry');
 goog.require('Blockly.utils');
 
+goog.requireType('Blockly.Block');
+goog.requireType('Blockly.Events.Abstract');
+goog.requireType('Blockly.Workspace');
+
 
 /**
  * Group ID for new events.  Grouped events are indivisible.

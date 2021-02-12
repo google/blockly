@@ -513,8 +513,8 @@ Blockly.Bubble.prototype.layoutBubble_ = function() {
  * workspace (what percentage of the bubble is visible).
  * @param {!{x: number, y: number}} relativeMin The position of the top-left
  *     corner of the bubble relative to the anchor point.
- * @param {!Blockly.MetricsManager.ContainerRegion} viewMetrics The metrics of the
- *     workspace the bubble will appear in.
+ * @param {!Blockly.MetricsManager.ContainerRegion} viewMetrics The view metrics
+ *     of the workspace the bubble will appear in.
  * @return {number} The percentage of the bubble that is visible.
  * @private
  */
@@ -555,8 +555,8 @@ Blockly.Bubble.prototype.getOverlap_ = function(relativeMin, viewMetrics) {
  * Calculate what the optimal horizontal position of the top-left corner of the
  * bubble is (relative to the anchor point) so that the most area of the
  * bubble is shown.
- * @param {!Blockly.MetricsManager.ContainerRegion} viewMetrics The view metrics of the
- *     workspace the bubble will appear in.
+ * @param {!Blockly.MetricsManager.ContainerRegion} viewMetrics The view metrics
+ *     of the workspace the bubble will appear in.
  * @return {number} The optimal horizontal position of the top-left corner
  *     of the bubble.
  * @private
@@ -613,8 +613,8 @@ Blockly.Bubble.prototype.getOptimalRelativeLeft_ = function(viewMetrics) {
  * Calculate what the optimal vertical position of the top-left corner of
  * the bubble is (relative to the anchor point) so that the most area of the
  * bubble is shown.
- * @param {!Blockly.MetricsManager.ContainerRegion} viewMetrics The view metrics of the
- *     workspace the bubble will appear in.
+ * @param {!Blockly.MetricsManager.ContainerRegion} viewMetrics The view metrics
+ *     of the workspace the bubble will appear in.
  * @return {number} The optimal vertical position of the top-left corner
  *     of the bubble.
  * @private
@@ -925,7 +925,7 @@ Blockly.Bubble.createNonEditableBubble = function(
     // This cannot be done until the bubble is rendered on screen.
     var maxWidth = paragraphElement.getBBox().width;
     for (var i = 0, textElement; (textElement = paragraphElement.childNodes[i]);
-      i++) {
+         i++) {
       textElement.setAttribute('text-anchor', 'end');
       textElement.setAttribute('x', maxWidth + Blockly.Bubble.BORDER_WIDTH);
     }

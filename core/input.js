@@ -16,6 +16,12 @@ goog.require('Blockly.Connection');
 goog.require('Blockly.constants');
 goog.require('Blockly.fieldRegistry');
 
+goog.requireType('Blockly.Block');
+goog.requireType('Blockly.BlockSvg');
+goog.requireType('Blockly.Field');
+goog.requireType('Blockly.FieldDropdown');
+goog.requireType('Blockly.RenderedConnection');
+
 
 /**
  * Class for an input with an optional field.

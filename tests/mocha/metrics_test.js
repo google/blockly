@@ -31,7 +31,8 @@ suite('Metrics', function() {
     };
   }
 
-  function absoluteSetup(metricsManager, toolboxMetrics, flyoutMetrics, getToolbox, getFlyout) {
+  function absoluteSetup(
+      metricsManager, toolboxMetrics, flyoutMetrics, getToolbox, getFlyout) {
     var toolboxMetricsStub = sinon.stub(metricsManager, 'getToolboxMetrics');
     var flyoutMetricsStub = sinon.stub(metricsManager, 'getFlyoutMetrics');
     var getToolboxStub = sinon.stub(metricsManager.workspace_, 'getToolbox');
@@ -158,7 +159,8 @@ suite('Metrics', function() {
       // The bounding box around the blocks on the screen.
       var mockContentDimensions = {top: 100, left: 100, width: 50, height: 50};
       contentDimensionsStub.onCall(0).returns(mockContentDimensions);
-      var contentMetrics = metricsManager.getContentDimensionsBounded_(mockViewMetrics);
+      var contentMetrics =
+          metricsManager.getContentDimensionsBounded_(mockViewMetrics);
       // Should add half of the view width to all sides.
       assertDimensionsMatch(contentMetrics, -50, -50, 350, 350);
     });
@@ -167,7 +169,7 @@ suite('Metrics', function() {
     test('Toolbox at left', function() {
       var ws = makeMockWs();
       var metricsManager = new Blockly.MetricsManager(ws);
-      var toolboxMetrics = {width:107, height:0, position:2};
+      var toolboxMetrics = {width: 107, height: 0, position: 2};
       var flyoutMetrics = {};
       absoluteSetup(metricsManager, toolboxMetrics, flyoutMetrics, true, false);
       var absoluteMetrics = metricsManager.getAbsoluteMetrics();
@@ -176,7 +178,7 @@ suite('Metrics', function() {
     test('Toolbox at top', function() {
       var ws = makeMockWs();
       var metricsManager = new Blockly.MetricsManager(ws);
-      var toolboxMetrics = {width:0, height:107, position:0};
+      var toolboxMetrics = {width: 0, height: 107, position: 0};
       var flyoutMetrics = {};
       absoluteSetup(metricsManager, toolboxMetrics, flyoutMetrics, true, false);
       var absoluteMetrics = metricsManager.getAbsoluteMetrics();
@@ -186,7 +188,7 @@ suite('Metrics', function() {
       var ws = makeMockWs();
       var metricsManager = new Blockly.MetricsManager(ws);
       var toolboxMetrics = {};
-      var flyoutMetrics = {width:107, height:0};
+      var flyoutMetrics = {width: 107, height: 0};
       absoluteSetup(metricsManager, toolboxMetrics, flyoutMetrics, false, true);
       var absoluteMetrics = metricsManager.getAbsoluteMetrics();
       assertDimensionsMatch(absoluteMetrics, 107, 0);

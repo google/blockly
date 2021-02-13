@@ -6,11 +6,12 @@
 
 suite('Variable Model', function() {
   setup(function() {
+    sharedTestSetup.call(this);
     this.workspace = new Blockly.Workspace();
   });
 
   teardown(function() {
-    this.workspace.dispose();
+    sharedTestTeardown.call(this);
   });
 
   test('Trivial', function() {

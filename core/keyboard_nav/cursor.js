@@ -13,13 +13,13 @@
 
 goog.provide('Blockly.Cursor');
 
-goog.require('Blockly.Action');
 goog.require('Blockly.ASTNode');
 goog.require('Blockly.Marker');
 goog.require('Blockly.navigation');
 goog.require('Blockly.utils.object');
 
 goog.requireType('Blockly.IBlocklyActionable');
+goog.requireType('Blockly.ShortcutRegistry');
 
 
 /**
@@ -140,7 +140,7 @@ Blockly.Cursor.prototype.out = function() {
 /**
  * Handles the given action.
  * This is only triggered when keyboard navigation is enabled.
- * @param {!Blockly.Action} action The action to be handled.
+ * @param {!Blockly.ShortcutRegistry.KeyboardShortcut} action The action to be handled.
  * @return {boolean} True if the action has been handled, false otherwise.
  */
 Blockly.Cursor.prototype.onBlocklyAction = function(action) {

@@ -162,5 +162,5 @@ Blockly.Lua['unittest_adjustindex'] = function(block) {
     return [Number(index) + 1, Blockly.Lua.ORDER_ATOMIC];
   }
   // If the index is dynamic, adjust it in code.
-  return [index + ' + 1', Blockly.Lua.ORDER_ATOMIC];
+  return [index + ' + 1', Blockly.Lua.ORDER_ADDITIVE];
 };

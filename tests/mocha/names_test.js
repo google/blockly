@@ -11,6 +11,12 @@
 'use strict';
 
 suite('Names', function() {
+  setup(function() {
+    sharedTestSetup.call(this);
+  });
+  teardown(function() {
+    sharedTestTeardown.call(this);
+  });
 
   test('Safe name', function() {
     var varDB = new Blockly.Names('window,door');

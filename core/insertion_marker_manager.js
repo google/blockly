@@ -13,6 +13,7 @@
 goog.provide('Blockly.InsertionMarkerManager');
 
 goog.require('Blockly.blockAnimations');
+goog.require('Blockly.constants');
 goog.require('Blockly.Events');
 
 
@@ -306,6 +307,14 @@ Blockly.InsertionMarkerManager.prototype.initAvailableConnections_ = function() 
   if (lastOnStack && lastOnStack != this.topBlock_.nextConnection) {
     available.push(lastOnStack);
     this.lastOnStack_ = lastOnStack;
+    if (this.lastMarker_) {
+      Blockly.Events.disable();
+      try {
+        this.lastMarker_.dispose();
+      } finally {
+        Blockly.Events.enable();
+      }
+    }
     this.lastMarker_ = this.createMarkerBlock_(lastOnStack.getSourceBlock());
   }
   return available;

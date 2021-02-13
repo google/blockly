@@ -1,18 +1,17 @@
 #!/bin/bash
 
-if [ ! -z $TRAVIS ]; then echo "Executing run_all_tests.sh from $(pwd)"; fi
+if [ ! -z $CI ]; then echo "Executing run_all_tests.sh from $(pwd)"; fi
 
 # ANSI colors
 BOLD_GREEN='\033[1;32m'
 BOLD_RED='\033[1;31m'
 ANSI_RESET='\033[0m'
 
-travis_fold () {
+gh_actions_fold () {
   local startOrEnd=$1 # Either "start" or "end"
-  local id=$2         # The fold id. No spaces.
 
-  if [ ! -z $TRAVIS ]; then
-    echo "travis_fold:$startOrEnd:$id"
+  if [ ! -z $CI ]; then
+    echo "::$startOrEnd::"
   fi
 }
 
@@ -37,10 +36,10 @@ run_test_command () {
 
   echo "======================================="
   echo "== $test_id"
-  travis_fold start $test_id
+  gh_actions_fold group
   $command
   local test_result=$?
-  travis_fold end $test_id
+  gh_actions_fold endgroup
   if [ $test_result -eq 0 ]; then
     echo -e "${BOLD_GREEN}SUCCESS:${ANSI_RESET} ${test_id}"
   else
@@ -52,23 +51,26 @@ run_test_command () {
 # Lint the codebase.
 run_test_command "eslint" "eslint ."
 
-# Run Mocha tests inside a browser.
-run_test_command "mocha" "node tests/mocha/run_mocha_tests_in_browser.js"
+# Run the closure compiler.
+run_test_command "compile" "npm run build"
 
-# Run Node tests.
-run_test_command "node" "./node_modules/.bin/mocha tests/node --opts tests/node/mocha.opts"
-
-# Run generator tests inside a browser and check the results.
-run_test_command "generators" "tests/scripts/run_generators.sh"
-
-# Run the closure compiler ensuring there are no errors.
-run_test_command "compile" "npm run build:debug"
+# Run the closure compiler ensuring there are no compiler warnings / errors.
+run_test_command "compile:warnings" "npm run build:debug"
 
 # Generate TypeScript typings and ensure there are no errors.
 run_test_command "typings" "tests/scripts/compile_typings.sh"
 
 # Check the sizes of built files for unexpected growth.
 run_test_command "metadata" "tests/scripts/check_metadata.sh"
+
+# Run Mocha tests inside a browser.
+run_test_command "mocha" "node tests/mocha/run_mocha_tests_in_browser.js"
+
+# Run generator tests inside a browser and check the results.
+run_test_command "generators" "tests/scripts/run_generators.sh"
+
+# Run Node tests.
+run_test_command "node" "./node_modules/.bin/mocha tests/node --config tests/node/.mocharc.js"
 
 # # Attempt advanced compilation of a Blockly app.
 # run_test_command "advanced_compile" "tests/compile/compile.sh"

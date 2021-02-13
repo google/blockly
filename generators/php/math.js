@@ -325,11 +325,11 @@ Blockly.PHP['math_modulo'] = function(block) {
 Blockly.PHP['math_constrain'] = function(block) {
   // Constrain a number between two limits.
   var argument0 = Blockly.PHP.valueToCode(block, 'VALUE',
-      Blockly.PHP.ORDER_COMMA) || '0';
+      Blockly.PHP.ORDER_NONE) || '0';
   var argument1 = Blockly.PHP.valueToCode(block, 'LOW',
-      Blockly.PHP.ORDER_COMMA) || '0';
+      Blockly.PHP.ORDER_NONE) || '0';
   var argument2 = Blockly.PHP.valueToCode(block, 'HIGH',
-      Blockly.PHP.ORDER_COMMA) || 'Infinity';
+      Blockly.PHP.ORDER_NONE) || 'Infinity';
   var code = 'min(max(' + argument0 + ', ' + argument1 + '), ' +
       argument2 + ')';
   return [code, Blockly.PHP.ORDER_FUNCTION_CALL];
@@ -338,9 +338,9 @@ Blockly.PHP['math_constrain'] = function(block) {
 Blockly.PHP['math_random_int'] = function(block) {
   // Random integer between [X] and [Y].
   var argument0 = Blockly.PHP.valueToCode(block, 'FROM',
-      Blockly.PHP.ORDER_COMMA) || '0';
+      Blockly.PHP.ORDER_NONE) || '0';
   var argument1 = Blockly.PHP.valueToCode(block, 'TO',
-      Blockly.PHP.ORDER_COMMA) || '0';
+      Blockly.PHP.ORDER_NONE) || '0';
   var functionName = Blockly.PHP.provideFunction_(
       'math_random_int',
       ['function ' + Blockly.PHP.FUNCTION_NAME_PLACEHOLDER_ +
@@ -362,9 +362,9 @@ Blockly.PHP['math_random_float'] = function(block) {
 Blockly.PHP['math_atan2'] = function(block) {
   // Arctangent of point (X, Y) in degrees from -180 to 180.
   var argument0 = Blockly.PHP.valueToCode(block, 'X',
-      Blockly.PHP.ORDER_COMMA) || '0';
+      Blockly.PHP.ORDER_NONE) || '0';
   var argument1 = Blockly.PHP.valueToCode(block, 'Y',
-      Blockly.PHP.ORDER_COMMA) || '0';
+      Blockly.PHP.ORDER_NONE) || '0';
   return ['atan2(' + argument1 + ', ' + argument0 + ') / pi() * 180',
       Blockly.PHP.ORDER_DIVISION];
 };

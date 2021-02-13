@@ -18,6 +18,7 @@ goog.require('Blockly.utils');
 goog.require('Blockly.utils.dom');
 goog.require('Blockly.utils.object');
 goog.require('Blockly.utils.Size');
+goog.require('Blockly.utils.Svg');
 
 
 /**
@@ -176,15 +177,14 @@ Blockly.FieldImage.prototype.configure_ = function(config) {
  * @package
  */
 Blockly.FieldImage.prototype.initView = function() {
-  this.imageElement_ = /** @type {!SVGImageElement} */
-      (Blockly.utils.dom.createSvgElement(
-          'image',
-          {
-            'height': this.imageHeight_ + 'px',
-            'width': this.size_.width + 'px',
-            'alt': this.altText_
-          },
-          this.fieldGroup_));
+  this.imageElement_ = Blockly.utils.dom.createSvgElement(
+      Blockly.utils.Svg.IMAGE,
+      {
+        'height': this.imageHeight_ + 'px',
+        'width': this.size_.width + 'px',
+        'alt': this.altText_
+      },
+      this.fieldGroup_);
   this.imageElement_.setAttributeNS(Blockly.utils.dom.XLINK_NS,
       'xlink:href', /** @type {string} */ (this.value_));
 

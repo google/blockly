@@ -18,5 +18,5 @@ goog.provide('Blockly.IRegistrable');
 /**
  * The interface for a Blockly component that can be registered.
  * @interface
- * */
+ */
 Blockly.IRegistrable = function() {};

@@ -17,6 +17,7 @@
 goog.provide('Blockly.Variables');
 
 goog.require('Blockly.Blocks');
+goog.require('Blockly.constants');
 goog.require('Blockly.Msg');
 goog.require('Blockly.utils');
 goog.require('Blockly.utils.xml');
@@ -61,20 +62,6 @@ Blockly.Variables.allUsedVarModels = function(ws) {
     variableList.push(variableHash[id]);
   }
   return variableList;
-};
-
-/**
- * Find all user-created variables that are in use in the workspace and return
- * only their names.
- * For use by generators.
- * To get a list of all variables on a workspace, including unused variables,
- * call Workspace.getAllVariables.
- * @deprecated January 2018
- */
-Blockly.Variables.allUsedVariables = function() {
-  console.warn('Deprecated call to Blockly.Variables.allUsedVariables. ' +
-      'Use Blockly.Variables.allUsedVarModels instead.\nIf this is a major ' +
-      'issue please file a bug on GitHub.');
 };
 
 /**

@@ -17,11 +17,13 @@ goog.provide('Blockly.Field');
 goog.require('Blockly.Events');
 goog.require('Blockly.Events.BlockChange');
 goog.require('Blockly.Gesture');
+goog.require('Blockly.Tooltip');
 goog.require('Blockly.utils');
 goog.require('Blockly.utils.dom');
 goog.require('Blockly.utils.Rect');
 goog.require('Blockly.utils.Size');
 goog.require('Blockly.utils.style');
+goog.require('Blockly.utils.Svg');
 goog.require('Blockly.utils.userAgent');
 
 goog.requireType('Blockly.blockRendering.ConstantProvider');
@@ -29,6 +31,7 @@ goog.requireType('Blockly.IASTNodeLocationSvg');
 goog.requireType('Blockly.IASTNodeLocationWithBlock');
 goog.requireType('Blockly.IBlocklyActionable');
 goog.requireType('Blockly.IRegistrable');
+goog.requireType('Blockly.ShortcutRegistry');
 
 
 /**
@@ -65,7 +68,7 @@ Blockly.Field = function(value, opt_validator, opt_config) {
   /**
    * Used to cache the field's tooltip value if setTooltip is called when the
    * field is not yet initialized. Is *not* guaranteed to be accurate.
-   * @type {string|Function|!SVGElement}
+   * @type {?Blockly.Tooltip.TipInfo}
    * @private
    */
   this.tooltip_ = null;
@@ -298,8 +301,8 @@ Blockly.Field.prototype.init = function() {
     // Field has already been initialized once.
     return;
   }
-  this.fieldGroup_ = /** @type {!SVGGElement} **/
-      (Blockly.utils.dom.createSvgElement('g', {}, null));
+  this.fieldGroup_ = Blockly.utils.dom.createSvgElement(
+      Blockly.utils.Svg.G, {}, null);
   if (!this.isVisible()) {
     this.fieldGroup_.style.display = 'none';
   }
@@ -336,17 +339,16 @@ Blockly.Field.prototype.initModel = function() {
  * @protected
  */
 Blockly.Field.prototype.createBorderRect_ = function() {
-  this.borderRect_ = /** @type {!SVGRectElement} **/
-      (Blockly.utils.dom.createSvgElement('rect',
-          {
-            'rx': this.getConstants().FIELD_BORDER_RECT_RADIUS,
-            'ry': this.getConstants().FIELD_BORDER_RECT_RADIUS,
-            'x': 0,
-            'y': 0,
-            'height': this.size_.height,
-            'width': this.size_.width,
-            'class': 'blocklyFieldRect'
-          }, this.fieldGroup_));
+  this.borderRect_ = Blockly.utils.dom.createSvgElement(
+      Blockly.utils.Svg.RECT, {
+        'rx': this.getConstants().FIELD_BORDER_RECT_RADIUS,
+        'ry': this.getConstants().FIELD_BORDER_RECT_RADIUS,
+        'x': 0,
+        'y': 0,
+        'height': this.size_.height,
+        'width': this.size_.width,
+        'class': 'blocklyFieldRect'
+      }, this.fieldGroup_);
 };
 
 /**
@@ -356,11 +358,10 @@ Blockly.Field.prototype.createBorderRect_ = function() {
  * @protected
  */
 Blockly.Field.prototype.createTextElement_ = function() {
-  this.textElement_ = /** @type {!SVGTextElement} **/
-      (Blockly.utils.dom.createSvgElement('text',
-          {
-            'class': 'blocklyText',
-          }, this.fieldGroup_));
+  this.textElement_ = Blockly.utils.dom.createSvgElement(
+      Blockly.utils.Svg.TEXT, {
+        'class': 'blocklyText',
+      }, this.fieldGroup_);
   if (this.getConstants().FIELD_TEXT_BASELINE_CENTER) {
     this.textElement_.setAttribute('dominant-baseline', 'central');
   }
@@ -532,45 +533,6 @@ Blockly.Field.prototype.getValidator = function() {
 };
 
 /**
- * Validates a change.  Does nothing.  Subclasses may override this.
- * @param {string} text The user's text.
- * @return {string} No change needed.
- * @deprecated May 2019. Override doClassValidation and other relevant 'do'
- *  functions instead.
- */
-Blockly.Field.prototype.classValidator = function(text) {
-  return text;
-};
-
-/**
- * Calls the validation function for this field, as well as all the validation
- * function for the field's class and its parents.
- * @param {string} text Proposed text.
- * @return {?string} Revised text, or null if invalid.
- * @deprecated May 2019. setValue now contains all relevant logic.
- */
-Blockly.Field.prototype.callValidator = function(text) {
-  var classResult = this.classValidator(text);
-  if (classResult === null) {
-    // Class validator rejects value.  Game over.
-    return null;
-  } else if (classResult !== undefined) {
-    text = classResult;
-  }
-  var userValidator = this.getValidator();
-  if (userValidator) {
-    var userResult = userValidator.call(this, text);
-    if (userResult === null) {
-      // User validator rejects value.  Game over.
-      return null;
-    } else if (userResult !== undefined) {
-      text = userResult;
-    }
-  }
-  return text;
-};
-
-/**
  * Gets the group element for this editable field.
  * Used for measuring the size and for positioning.
  * @return {!SVGGElement} The group element.
@@ -612,20 +574,6 @@ Blockly.Field.prototype.showEditor = function(opt_e) {
   if (this.isClickable()) {
     this.showEditor_(opt_e);
   }
-};
-
-/**
- * Updates the width of the field. Redirects to updateSize_().
- * @deprecated May 2019  Use Blockly.Field.updateSize_() to force an update
- * to the size of the field, or Blockly.utils.dom.getTextWidth() to
- * check the size of the field.
- */
-Blockly.Field.prototype.updateWidth = function() {
-  console.warn('Deprecated call to updateWidth, call' +
-    ' Blockly.Field.updateSize_ to force an update to the size of the' +
-    ' field, or Blockly.utils.dom.getTextWidth() to check the size' +
-    ' of the field.');
-  this.updateSize_();
 };
 
 /**
@@ -806,15 +754,6 @@ Blockly.Field.prototype.getText = function() {
 };
 
 /**
- * Set the text in this field.  Trigger a rerender of the source block.
- * @param {*} _newText New text.
- * @deprecated 2019 setText should not be used directly. Use setValue instead.
- */
-Blockly.Field.prototype.setText = function(_newText) {
-  throw Error('setText method is deprecated');
-};
-
-/**
  * Force a rerender of the block that this field is installed on, which will
  * rerender this field and adjust for any sizing changes.
  * Other fields on the same block will not rerender, because their sizes have
@@ -881,7 +820,8 @@ Blockly.Field.prototype.setValue = function(newValue) {
   }
   var oldValue = this.getValue();
   if (oldValue === newValue) {
-    doLogging && console.log('same, return');
+    doLogging && console.log('same, doValueUpdate_, return');
+    this.doValueUpdate_(newValue);
     return;
   }
 
@@ -932,14 +872,11 @@ Blockly.Field.prototype.getValue = function() {
  * @param {*=} opt_newValue The value to be validated.
  * @return {*} The validated value, same as input by default.
  * @protected
- * @suppress {deprecated} Suppress deprecated this.classValidator call.
  */
 Blockly.Field.prototype.doClassValidation_ = function(opt_newValue) {
   if (opt_newValue === null || opt_newValue === undefined) {
     return null;
   }
-  // For backwards compatibility.
-  opt_newValue = this.classValidator(/** @type {string} */ (opt_newValue));
   return opt_newValue;
 };
 
@@ -981,23 +918,36 @@ Blockly.Field.prototype.onMouseDown_ = function(e) {
 };
 
 /**
- * Change the tooltip text for this field.
- * @param {string|Function|!SVGElement} newTip Text for tooltip or a parent
- *    element to link to for its tooltip.
+ * Sets the tooltip for this field.
+ * @param {?Blockly.Tooltip.TipInfo} newTip The
+ *     text for the tooltip, a function that returns the text for the tooltip, a
+ *     parent object whose tooltip will be used, or null to display the tooltip
+ *     of the parent block. To not display a tooltip pass the empty string.
  */
 Blockly.Field.prototype.setTooltip = function(newTip) {
+  if (!newTip && newTip !== '') {  // If null or undefined.
+    newTip = this.sourceBlock_;
+  }
   var clickTarget = this.getClickTarget_();
-  if (!clickTarget) {
+  if (clickTarget) {
+    clickTarget.tooltip = newTip;
+  } else {
     // Field has not been initialized yet.
     this.tooltip_ = newTip;
-    return;
   }
+};
 
-  if (!newTip && newTip !== '') {  // If null or undefined.
-    clickTarget.tooltip = this.sourceBlock_;
-  } else {
-    clickTarget.tooltip = newTip;
+/**
+ * Returns the tooltip text for this field.
+ * @returns {string} The tooltip text for this field.
+ */
+Blockly.Field.prototype.getTooltip = function() {
+  var clickTarget = this.getClickTarget_();
+  if (clickTarget) {
+    return Blockly.Tooltip.getTooltipOfObject(clickTarget);
   }
+  // Field has not been initialized yet. Return stashed this.tooltip_ value.
+  return Blockly.Tooltip.getTooltipOfObject({tooltip: this.tooltip_});
 };
 
 /**
@@ -1076,7 +1026,7 @@ Blockly.Field.prototype.isTabNavigable = function() {
 /**
  * Handles the given action.
  * This is only triggered when keyboard accessibility mode is enabled.
- * @param {!Blockly.Action} _action The action to be handled.
+ * @param {!Blockly.ShortcutRegistry.KeyboardShortcut} _action The action to be handled.
  * @return {boolean} True if the field handled the action, false otherwise.
  * @package
  */

@@ -34,6 +34,13 @@ suite('Metrics', function() {
     };
   }
 
+  setup(function() {
+    sharedTestSetup.call(this);
+  });
+  teardown(function() {
+    sharedTestTeardown.call(this);
+  });
+
   test('GetContentDimensionsExact - empty', function() {
     var ws = makeMockWs(1, 0, 0, 0, 0);
     var defaultZoom = Blockly.WorkspaceSvg.getContentDimensionsExact_(ws);

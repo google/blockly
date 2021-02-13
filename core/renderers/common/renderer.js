@@ -18,6 +18,7 @@ goog.require('Blockly.blockRendering.Drawer');
 goog.require('Blockly.blockRendering.IPathObject');
 goog.require('Blockly.blockRendering.PathObject');
 goog.require('Blockly.blockRendering.RenderInfo');
+goog.require('Blockly.constants');
 goog.require('Blockly.InsertionMarkerManager');
 
 goog.requireType('Blockly.blockRendering.Debug');
@@ -254,7 +255,8 @@ Blockly.blockRendering.Renderer.prototype.orphanCanConnectAtEnd =
       if (!lastConnection) {
         return false;
       }
-      return orphanConnection.checkType(lastConnection);
+      return orphanConnection.getConnectionChecker().canConnect(
+          lastConnection, orphanConnection, false);
     };
 
 /**

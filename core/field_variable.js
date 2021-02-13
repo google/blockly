@@ -12,6 +12,7 @@
 
 goog.provide('Blockly.FieldVariable');
 
+goog.require('Blockly.constants');
 goog.require('Blockly.Events');
 goog.require('Blockly.Events.BlockChange');
 goog.require('Blockly.FieldDropdown');
@@ -64,7 +65,7 @@ Blockly.FieldVariable = function(varName, opt_validator, opt_variableTypes,
    * variable.
    * @type {string}
    */
-  this.defaultVariableName = varName || '';
+  this.defaultVariableName = typeof varName === 'string' ? varName : '';
 
   /**
    * The size of the area rendered by the field.

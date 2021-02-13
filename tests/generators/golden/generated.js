@@ -807,7 +807,7 @@ function test_substring_complex() {
   assertEquals(subsequenceFromEndFromEnd(get_numbers(), 2, 1), '78', 'substring #-end complex');
   check_number_of_calls('substring #-end complex');
   number_of_calls = 0;
-  assertEquals(subsequenceFromEndFromEnd((true ? get_numbers() : null), ((0 + 3) - 1), ((0 + 2) - 1)), '78', 'substring #-end order order');
+  assertEquals(subsequenceFromEndFromEnd(true ? get_numbers() : null, ((0 + 3) - 1), ((0 + 2) - 1)), '78', 'substring #-end order order');
   check_number_of_calls('substring #-end order order');
   number_of_calls = 0;
   assertEquals(get_numbers(), text, 'substring first-last');
@@ -914,6 +914,20 @@ function test_replace() {
   assertEquals(textReplace('aaaaa', 'aaaaa', ''), '', 'empty replacement 2');
   assertEquals(textReplace('aaaaa', 'a', ''), '', 'empty replacement 3');
   assertEquals(textReplace('', 'a', 'chicken'), '', 'empty source');
+}
+
+// Tests the "multiline" block.
+function test_multiline() {
+  assertEquals('', '', 'no text');
+  assertEquals('Google', 'Google', 'simple');
+  assertEquals('paragraph' + '\n' +
+  'with newlines' + '\n' +
+  'yup', 'paragraph' + '\n' +
+  'with newlines' + '\n' +
+  'yup', 'no compile error with newlines');
+  assertEquals(textCount('bark bark' + '\n' +
+  'bark bark bark' + '\n' +
+  'bark bark bark bark', 'bark'), 9, 'count with newlines');
 }
 
 // Checks that the number of calls is one in order
@@ -1558,6 +1572,7 @@ test_trim();
 test_count_text();
 test_text_reverse();
 test_replace();
+test_multiline();
 console.log(unittest_report());
 unittestResults = null;
 

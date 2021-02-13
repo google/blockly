@@ -11,12 +11,16 @@
 'use strict';
 
 suite('Theme', function() {
+  setup(function() {
+    sharedTestSetup.call(this);
+  });
   teardown(function() {
+    sharedTestTeardown.call(this);
     // Clear all registered themes.
     Blockly.registry.typeMap_['theme'] = {};
   });
 
-  function defineThemeTestBlocks() {
+  function defineThemeTestBlocks(sharedCleanupObj) {
     Blockly.defineBlocksWithJsonArray([{
       "type": "stack_block",
       "message0": "",
@@ -35,12 +39,6 @@ suite('Theme', function() {
       "output": null
     }]);
   }
-
-  function undefineThemeTestBlocks() {
-    delete Blockly.Blocks['stack_block'];
-    delete Blockly.Blocks['row_block'];
-  }
-
 
   function createBlockStyles() {
     return {
@@ -119,38 +117,39 @@ suite('Theme', function() {
   });
 
   test('Set Theme', function() {
-    defineThemeTestBlocks();
-    var blockStyles = createBlockStyles();
-    var workspace = new Blockly.WorkspaceSvg({});
-    var blockA = workspace.newBlock('stack_block');
+    defineThemeTestBlocks(this.sharedCleanup);
+    try {
+      var blockStyles = createBlockStyles();
+      var theme = new Blockly.Theme('themeName', blockStyles);
+      var workspace = new Blockly.WorkspaceSvg(new Blockly.Options({}));
+      var blockA = workspace.newBlock('stack_block');
 
-    blockA.setStyle = function() {this.styleName_ = 'styleTwo';};
-    var callCount = 1;
-    workspace.refreshToolboxSelection = function() {
-      return ++callCount;
-    };
-    blockA.styleName_ = 'styleOne';
+      blockA.setStyle = function() {this.styleName_ = 'styleTwo';};
+      var refreshToolboxSelectionStub =
+          sinon.stub(workspace, 'refreshToolboxSelection');
+      blockA.styleName_ = 'styleOne';
 
-    var stub = sinon.stub(Blockly, "getMainWorkspace").returns(workspace);
-    var hideStub = sinon.stub(Blockly, "hideChaff");
+      // Stubs are cleaned up in sharedTestTeardown
+      sinon.stub(Blockly, "getMainWorkspace").returns(workspace);
+      sinon.stub(Blockly, "hideChaff");
 
-    workspace.setTheme(blockStyles);
+      workspace.setTheme(theme);
 
-    // Checks that the theme was set correctly on Blockly namespace
-    stringifyAndCompare(workspace.getTheme(), blockStyles);
+      // Checks that the theme was set correctly on Blockly namespace
+      stringifyAndCompare(workspace.getTheme(), theme);
 
-    // Checks that the setTheme function was called on the block
-    chai.assert.equal(blockA.getStyleName(), 'styleTwo');
+      // Checks that the setTheme function was called on the block
+      chai.assert.equal(blockA.getStyleName(), 'styleTwo');
 
-    // check that the toolbox refreshed method was called
-    chai.assert.equal(workspace.refreshToolboxSelection(), 3);
+      // Checks that the toolbox refreshed method was called
+      sinon.assert.calledOnce(refreshToolboxSelectionStub);
 
-    chai.assert.equal(Blockly.Events.FIRE_QUEUE_.pop().element, 'theme');
-
-    undefineThemeTestBlocks();
-
-    stub.restore();
-    hideStub.restore();
+      assertEventFired(
+          this.eventsFireStub, Blockly.Events.ThemeChange,
+          {themeName: 'themeName'}, workspace.id);
+    } finally {
+      workspaceTeardown.call(this, workspace);
+    }
   });
 
   suite('Validate block styles', function() {

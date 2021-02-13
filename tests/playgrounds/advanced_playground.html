@@ -64,12 +64,10 @@
 <script src="../../blocks/variables.js"></script>
 <script src="../../blocks/variables_dynamic.js"></script>
 <script src="../../blocks/procedures.js"></script>
-<script src="../blocks/test_blocks.js"></script>
 <script src="../themes/test_themes.js"></script>
 <script src="./screenshot.js"></script>
-<script src="./test_blocks_toolbox.js"></script>
-<script src="https://unpkg.com/@blockly/dev-tools/dist/index.js"></script>
-<script src="https://unpkg.com/@blockly/theme-modern/dist/index.js"></script>
+<script src="../../node_modules/@blockly/dev-tools/dist/index.js"></script>
+<script src="../../node_modules/@blockly/theme-modern/dist/index.js"></script>
 
 <script>
 // Custom requires for the playground.
@@ -92,26 +90,10 @@ function start() {
 function createWorkspace(blocklyDiv, options) {
   var workspace = Blockly.inject(blocklyDiv, options);
   workspace.configureContextMenu = configureContextMenu.bind(workspace);
-  addToolboxButtonCallbacks(workspace);
   return workspace;
 }
 
 function configurePlayground(playground) {
-  // Add custom actions.
-  playground.addAction('Random Blocks!', function(ws) {
-    populateRandom(ws, 100);
-  }, 'Stress Test');
-  playground.addAction('Spaghetti!', function(ws) {
-    spaghetti(ws, 8);
-  }, 'Stress Test');
-  playground.addCheckboxAction('Log Events', function(ws, value) {
-    if (value) {
-      ws.addChangeListener(logger);
-    } else {
-      ws.removeChangeListener(logger);
-    }
-  }, 'Logging');
-
   // Rendering options.
   var gui = playground.getGUI();
   var renderingFolder = gui.addFolder('Rendering');
@@ -131,6 +113,10 @@ function configurePlayground(playground) {
 }
 
 function initPlayground() {
+  if (typeof window.createPlayground === 'undefined') {
+    alert('You need to run \'npm install\' in order to use this playground.');
+    return;
+  }
   var defaultOptions = {
         comments: true,
         collapse: true,
@@ -173,7 +159,7 @@ function initPlayground() {
     toolboxes: {
       'categories': toolboxCategories,
       'simple': toolboxSimple,
-      'test blocks': testBlocksToolbox,
+      'test blocks': toolboxTestBlocks,
     }
   }
 
@@ -183,116 +169,6 @@ function initPlayground() {
       .then(function(playground) {
         configurePlayground(playground);
       });
-}
-
-function addToolboxButtonCallbacks(workspace) {
-  var addAllBlocksToWorkspace = function(button) {
-    var workspace = button.getTargetWorkspace();
-    var blocks = button.workspace_.getTopBlocks();
-    for(var i = 0, block; block = blocks[i]; i++) {
-      var xml = Blockly.utils.xml.createElement('xml');
-      xml.appendChild(Blockly.Xml.blockToDom(block));
-      Blockly.Xml.appendDomToWorkspace(xml, workspace);
-    }
-  };
-  var randomizeLabelText = function(button) {
-    var blocks = button.targetWorkspace_
-        .getBlocksByType('test_fields_label_serializable');
-    var possible = 'AB';
-    for (var i = 0, block; block = blocks[i]; i++) {
-      var text = '';
-      for (var j = 0; j < 4; j++) {
-        text += possible.charAt(Math.floor(Math.random() * possible.length));
-      }
-      block.setFieldValue(text, 'LABEL');
-    }
-  };
-  var setRandomStyle = function(button) {
-    var blocks = button.workspace_.getAllBlocks(false);
-    var styles =
-        Object.keys(workspace.getRenderer().getConstants().blockStyles);
-    styles.splice(styles.indexOf(blocks[0].getStyleName()), 1);
-    var style = styles[Math.floor(Math.random() * styles.length)];
-    for(var i = 0, block; block = blocks[i]; i++) {
-      block.setStyle(style);
-    }
-  };
-  var toggleEnabled = function(button) {
-    var blocks = button.workspace_.getAllBlocks(false);
-    for(var i = 0, block; block = blocks[i]; i++) {
-      block.setEnabled(!block.isEnabled());
-    }
-  };
-  var toggleShadow = function(button) {
-    var blocks = button.workspace_.getAllBlocks(false);
-    for(var i = 0, block; block = blocks[i]; i++) {
-      block.setShadow(!block.isShadow());
-    }
-  };
-  var toggleCollapsed = function(button) {
-    var blocks = button.workspace_.getAllBlocks(false);
-    for(var i = 0, block; block = blocks[i]; i++) {
-      block.setCollapsed(!block.isCollapsed());
-    }
-  };
-  var setInput = function(button) {
-    Blockly.prompt('Input text to set.', 'ab', function(input) {
-      var blocks = button.getTargetWorkspace().getAllBlocks(false);
-      for(var i = 0, block; block = blocks[i]; i++) {
-        if (block.getField('INPUT')) {
-          block.setFieldValue(input, 'INPUT');
-        }
-      }
-    })
-  };
-  var changeImage = function(button) {
-    var blocks = button.workspace_.getBlocksByType('test_fields_image');
-    var possible = 'abcdefghijklm';
-    var image = possible.charAt(Math.floor(Math.random() * possible.length));
-    var src = 'https://blockly-demo.appspot.com/static/tests/media/'
-      + image + '.png';
-    for (var i = 0, block; block = blocks[i]; i++) {
-      var imageField = block.getField('IMAGE');
-      imageField.setValue(src);
-    }
-  };
-  var addVariables = function(button) {
-    workspace.createVariable('1b', '', '1B');
-    workspace.createVariable('1c', '', '1C');
-    workspace.createVariable('2a', '', '2A');
-    workspace.createVariable('2b', '', '2B');
-    workspace.createVariable('2c', '', '2C');
-  };
-
-  workspace.registerButtonCallback(
-      'addVariables', addVariables);
-  workspace.registerButtonCallback(
-      'changeImage', changeImage);
-  workspace.registerButtonCallback(
-      'addAllBlocksToWorkspace', addAllBlocksToWorkspace);
-  workspace.registerButtonCallback(
-      'setInput', setInput);
-  workspace.registerButtonCallback(
-      'setRandomStyle', setRandomStyle);
-  workspace.registerButtonCallback(
-      'toggleEnabled', toggleEnabled);
-  workspace.registerButtonCallback(
-      'toggleShadow', toggleShadow);
-  workspace.registerButtonCallback(
-    'toggleCollapsed', toggleCollapsed);
-  workspace.registerButtonCallback(
-      'randomizeLabelText', randomizeLabelText);
-  workspace.registerButtonCallback(
-      'addDynamicOption', Blockly.TestBlocks.addDynamicDropdownOption);
-  workspace.registerButtonCallback(
-      'removeDynamicOption', Blockly.TestBlocks.removeDynamicDropdownOption);
-  workspace.registerButtonCallback(
-      'insertConnectionRows', Blockly.TestBlocks.insertConnectionRows);
-  workspace.registerButtonCallback(
-      'insertConnectionStacks', Blockly.TestBlocks.insertConnectionStacks);
-  workspace.registerButtonCallback(
-      'insertConnectionStatements',
-          Blockly.TestBlocks.insertConnectionStatements);
 }
 
 function setBackgroundColour() {
@@ -318,70 +194,6 @@ function configureContextMenu(menuOptions, e) {
   // Adds a default-sized workspace comment to the workspace.
   menuOptions.push(Blockly.ContextMenu.workspaceCommentOption(workspace, e));
 }
-
-function logger(e) {
-  console.log(e);
-}
-
-function populateRandom(ws, n) {
-  var names = [];
-  for (var blockName in Blockly.Blocks) {
-    names.push(blockName);
-  }
-
-  for (var i = 0; i < n; i++) {
-    var name = names[Math.floor(Math.random() * names.length)];
-    var block = ws.newBlock(name);
-    block.initSvg();
-    block.getSvgRoot().setAttribute('transform', 'translate(' +
-        Math.round(Math.random() * 450 + 40) + ', ' +
-        Math.round(Math.random() * 600 + 40) + ')');
-    block.render();
-  }
-}
-
-function spaghetti(ws, n) {
-  var xml = spaghettiXml;
-  for(var i = 0; i < n; i++) {
-    xml = xml.replace(/(<(statement|next)( name="DO0")?>)<\//g,
-        '$1' + spaghettiXml + '</');
-  }
-  xml = '<xml xmlns="https://developers.google.com/blockly/xml">' + xml + '</xml>';
-  var dom = Blockly.Xml.textToDom(xml);
-  console.time('Spaghetti domToWorkspace');
-  Blockly.Xml.domToWorkspace(dom, ws);
-  console.timeEnd('Spaghetti domToWorkspace');
-}
-var spaghettiXml = [
-  '  <block type="controls_if">',
-  '    <value name="IF0">',
-  '      <block type="logic_compare">',
-  '        <field name="OP">EQ</field>',
-  '        <value name="A">',
-  '          <block type="math_arithmetic">',
-  '            <field name="OP">MULTIPLY</field>',
-  '            <value name="A">',
-  '              <block type="math_number">',
-  '                <field name="NUM">6</field>',
-  '              </block>',
-  '            </value>',
-  '            <value name="B">',
-  '              <block type="math_number">',
-  '                <field name="NUM">7</field>',
-  '              </block>',
-  '            </value>',
-  '          </block>',
-  '        </value>',
-  '        <value name="B">',
-  '          <block type="math_number">',
-  '            <field name="NUM">42</field>',
-  '          </block>',
-  '        </value>',
-  '      </block>',
-  '    </value>',
-  '    <statement name="DO0"></statement>',
-  '    <next></next>',
-  '  </block>'].join('\n');
 
 </script>
 

@@ -12,8 +12,11 @@
 
 goog.provide('Blockly.MetricsManager');
 
+goog.require('Blockly.IMetricsManager');
 goog.require('Blockly.utils.Size');
 
+goog.requireType('Blockly.IFlyout');
+goog.requireType('Blockly.IToolbox');
 goog.requireType('Blockly.utils.Metrics');
 goog.requireType('Blockly.utils.toolbox');
 
@@ -22,6 +25,7 @@ goog.requireType('Blockly.utils.toolbox');
  * The manager for all workspace metrics calculations.
  * @param {!Blockly.WorkspaceSvg} workspace The workspace to calculate metrics
  *     for.
+ * @implements {Blockly.IMetricsManager}
  * @constructor
  */
 Blockly.MetricsManager = function(workspace) {
@@ -148,12 +152,13 @@ Blockly.MetricsManager.prototype.getContentDimensionsExact_ = function() {
  * Gets the width and the height of the flyout on the workspace in pixel
  * coordinates. Returns 0 for the width and height if the workspace has a
  * category toolbox instead of a simple toolbox.
+ * @param {boolean=} opt_own Whether to only return the workspace's own flyout.
  * @return {!Blockly.MetricsManager.ToolboxMetrics} The width and height of the
  *     flyout.
  * @public
  */
-Blockly.MetricsManager.prototype.getFlyoutMetrics = function() {
-  var flyoutDimensions = this.getDimensionsPx_(this.workspace_.getFlyout(true));
+Blockly.MetricsManager.prototype.getFlyoutMetrics = function(opt_own) {
+  var flyoutDimensions = this.getDimensionsPx_(this.workspace_.getFlyout(opt_own));
   return {
     width: flyoutDimensions.width,
     height: flyoutDimensions.height,
@@ -250,8 +255,7 @@ Blockly.MetricsManager.prototype.getViewMetrics = function(
     if (toolboxPosition == Blockly.TOOLBOX_AT_TOP ||
         toolboxPosition == Blockly.TOOLBOX_AT_BOTTOM) {
       svgMetrics.height -= toolboxMetrics.height;
-    } else if (
-        toolboxPosition == Blockly.TOOLBOX_AT_LEFT ||
+    } else if (toolboxPosition == Blockly.TOOLBOX_AT_LEFT ||
         toolboxPosition == Blockly.TOOLBOX_AT_RIGHT) {
       svgMetrics.width -= toolboxMetrics.width;
     }
@@ -259,8 +263,7 @@ Blockly.MetricsManager.prototype.getViewMetrics = function(
     if (toolboxPosition == Blockly.TOOLBOX_AT_TOP ||
         toolboxPosition == Blockly.TOOLBOX_AT_BOTTOM) {
       svgMetrics.height -= flyoutMetrics.height;
-    } else if (
-        toolboxPosition == Blockly.TOOLBOX_AT_LEFT ||
+    } else if (toolboxPosition == Blockly.TOOLBOX_AT_LEFT ||
         toolboxPosition == Blockly.TOOLBOX_AT_RIGHT) {
       svgMetrics.width -= flyoutMetrics.width;
     }
@@ -288,8 +291,8 @@ Blockly.MetricsManager.prototype.getViewMetrics = function(
  * @param {boolean=} opt_getWorkspaceCoordinates True to get the content metrics
  *     in workspace coordinates, false to get them in pixel coordinates.
  * @param {!Blockly.MetricsManager.ContainerRegion=} opt_viewMetrics The view
- *     metrics if they have been previously computed. Passing in null will cause
- *     the view metrics to be computed again.
+ *     metrics if they have been previously computed. Passing in null may cause
+ *     the view metrics to be computed again, if it is needed.
  * @return {!Blockly.MetricsManager.ContainerRegion} The
  *     metrics for the content container.
  * @public
@@ -377,3 +380,7 @@ Blockly.MetricsManager.prototype.getMetrics = function() {
     flyoutHeight: flyoutMetrics.height
   };
 };
+
+Blockly.registry.register(
+    Blockly.registry.Type.METRICS_MANAGER, Blockly.registry.DEFAULT,
+    Blockly.MetricsManager);

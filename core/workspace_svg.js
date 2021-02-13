@@ -51,6 +51,7 @@ goog.requireType('Blockly.FlyoutButton');
 goog.requireType('Blockly.IASTNodeLocationSvg');
 goog.requireType('Blockly.IBoundedElement');
 goog.requireType('Blockly.IFlyout');
+goog.requireType('Blockly.IMetricsManager');
 goog.requireType('Blockly.IToolbox');
 goog.requireType('Blockly.Marker');
 goog.requireType('Blockly.Theme');
@@ -76,12 +77,14 @@ Blockly.WorkspaceSvg = function(
     options, opt_blockDragSurface, opt_wsDragSurface) {
   Blockly.WorkspaceSvg.superClass_.constructor.call(this, options);
 
+  var MetricsManagerClass = Blockly.registry.getClassFromOptions(
+      Blockly.registry.Type.METRICS_MANAGER, options);
   /**
    * Object in charge of calculating metrics for the workspace.
-   * @type {!Blockly.MetricsManager}
+   * @type {!Blockly.IMetricsManager}
    * @private
    */
-  this.metricsManager_ = new Blockly.MetricsManager(this);
+  this.metricsManager_ = new MetricsManagerClass(this);
 
   /**
    * Method to get all the metrics that have to do with a workspace.
@@ -496,7 +499,7 @@ Blockly.WorkspaceSvg.prototype.getMarkerManager = function() {
 
 /**
  * Gets the metrics manager for this workspace.
- * @return {!Blockly.MetricsManager} The marker manager.
+ * @return {!Blockly.IMetricsManager} The metrics manager.
  * @public
  */
 Blockly.WorkspaceSvg.prototype.getMetricsManager = function() {
@@ -1007,7 +1010,7 @@ Blockly.WorkspaceSvg.prototype.addFlyout = function(tagName) {
  * Getter for the flyout associated with this workspace.  This flyout may be
  * owned by either the toolbox or the workspace, depending on toolbox
  * configuration.  It will be null if there is no flyout.
- * @param {boolean=} opt_own Only return the workspace's own flyout if True.
+ * @param {boolean=} opt_own Whether to only return the workspace's own flyout.
  * @return {Blockly.IFlyout} The flyout on this workspace.
  * @package
  */

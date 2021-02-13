@@ -93,6 +93,10 @@ Blockly.registry.Type.FLYOUTS_VERTICAL_TOOLBOX =
 Blockly.registry.Type.FLYOUTS_HORIZONTAL_TOOLBOX =
     new Blockly.registry.Type('flyoutsHorizontalToolbox');
 
+/** @type {!Blockly.registry.Type<Blockly.MetricsManager>} */
+Blockly.registry.Type.METRICS_MANAGER =
+    new Blockly.registry.Type('metricsManager');
+
 /**
  * Registers a class based on a type and name.
  * @param {string|!Blockly.registry.Type<T>} type The type of the plugin.

@@ -27,19 +27,7 @@ goog.requireType('Blockly.utils.toolbox');
 Blockly.IMetricsManager = function() {};
 
 /**
- * Gets the dimensions of the given workspace component, in pixel coordinates.
- * @param {?Blockly.IToolbox|?Blockly.IFlyout} elem The element to get the
- *     dimensions of, or null.  It should be a toolbox or flyout, and should
- *     implement getWidth() and getHeight().
- * @return {!Blockly.utils.Size} An object containing width and height
- *     attributes, which will both be zero if elem did not exist.
- * @protected
- */
-Blockly.IMetricsManager.prototype.getDimensionsPx_;
-
-/**
- * Calculates the size of a scrollable workspace, which should include
- * room for a half screen border around the workspace contents. In pixel
+ * Gets the width and the height of the flyout on the workspace in pixel
  * coordinates.
  * @param {!Blockly.MetricsManager.ContainerRegion} viewMetrics An object
  *     containing height and width attributes in CSS pixels.  Together they
@@ -68,7 +56,7 @@ Blockly.IMetricsManager.prototype.getContentDimensionsExact_;
  * Gets the width and the height of the flyout on the workspace in pixel
  * coordinates. Returns 0 for the width and height if the workspace has a
  * category toolbox instead of a simple toolbox.
- * @param {boolean=} opt_own Only return the workspace's own flyout if True.
+ * @param {boolean=} opt_own Whether to only return the workspace's own flyout.
  * @return {!Blockly.utils.Size} The width and height of the flyout.
  * @public
  */
@@ -124,12 +112,10 @@ Blockly.IMetricsManager.prototype.getViewMetrics;
  * (workspace comments and blocks).
  *
  * If the workspace does not have a fixed width and height then it is the
- * metrics of the area that content can be placed. This area is computed by
- * getting the rectangle around the top bounded elements on the workspace and
- * adding padding to all sides.
+ * metrics of the area that content can be placed.
  * @param {!Blockly.MetricsManager.ContainerRegion=} opt_viewMetrics The view
- *     metrics if they have been previously computed. Passing in null will cause
- *     the view metrics to be computed again.
+ *     metrics if they have been previously computed. Passing in null may cause
+ *     the view metrics to be computed again, if it is needed.
  * @param {boolean=} opt_getWorkspaceCoordinates True to get the content metrics
  *     in workspace coordinates, false to get them in pixel coordinates.
  * @return {!Blockly.MetricsManager.ContainerRegion} The

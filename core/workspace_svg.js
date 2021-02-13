@@ -1010,7 +1010,7 @@ Blockly.WorkspaceSvg.prototype.addFlyout = function(tagName) {
  * Getter for the flyout associated with this workspace.  This flyout may be
  * owned by either the toolbox or the workspace, depending on toolbox
  * configuration.  It will be null if there is no flyout.
- * @param {boolean=} opt_own Only return the workspace's own flyout if True.
+ * @param {boolean=} opt_own Whether to only return the workspace's own flyout.
  * @return {Blockly.IFlyout} The flyout on this workspace.
  * @package
  */

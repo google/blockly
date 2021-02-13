@@ -12,8 +12,11 @@
 
 goog.provide('Blockly.MetricsManager');
 
+goog.require('Blockly.IMetricsManager');
 goog.require('Blockly.utils.Size');
 
+goog.requireType('Blockly.IFlyout');
+goog.requireType('Blockly.IToolbox');
 goog.requireType('Blockly.utils.Metrics');
 goog.requireType('Blockly.utils.toolbox');
 
@@ -22,6 +25,7 @@ goog.requireType('Blockly.utils.toolbox');
  * The manager for all workspace metrics calculations.
  * @param {!Blockly.WorkspaceSvg} workspace The workspace to calculate metrics
  *     for.
+ * @implements {Blockly.IMetricsManager}
  * @constructor
  */
 Blockly.MetricsManager = function(workspace) {
@@ -148,7 +152,7 @@ Blockly.MetricsManager.prototype.getContentDimensionsExact_ = function() {
  * Gets the width and the height of the flyout on the workspace in pixel
  * coordinates. Returns 0 for the width and height if the workspace has a
  * category toolbox instead of a simple toolbox.
- * @param {boolean=} opt_own Only return the workspace's own flyout if True.
+ * @param {boolean=} opt_own Whether to only return the workspace's own flyout.
  * @return {!Blockly.utils.Size} The width and height of the flyout.
  * @public
  */
@@ -279,8 +283,8 @@ Blockly.MetricsManager.prototype.getViewMetrics = function(
  * getting the rectangle around the top bounded elements on the workspace and
  * adding padding to all sides.
  * @param {!Blockly.MetricsManager.ContainerRegion=} opt_viewMetrics The view
- *     metrics if they have been previously computed. Passing in null will cause
- *     the view metrics to be computed again.
+ *     metrics if they have been previously computed. Passing in null may cause
+ *     the view metrics to be computed again, if it is needed.
  * @param {boolean=} opt_getWorkspaceCoordinates True to get the content metrics
  *     in workspace coordinates, false to get them in pixel coordinates.
  * @return {!Blockly.MetricsManager.ContainerRegion} The
@@ -370,3 +374,7 @@ Blockly.MetricsManager.prototype.getMetrics = function() {
     flyoutHeight: flyoutMetrics.height
   };
 };
+
+Blockly.registry.register(
+    Blockly.registry.Type.METRICS_MANAGER, Blockly.registry.DEFAULT,
+    Blockly.MetricsManager);

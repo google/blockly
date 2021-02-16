@@ -1,15 +1,17 @@
 /**
  * @license
- * Copyright 2019 Google LLC
+ * Copyright 2021 Google LLC
  * SPDX-License-Identifier: Apache-2.0
  */
 
 /**
- * @fileoverview Metrics tests.
- * @author samelh@google.com (Sam El-Husseini)
+ * @fileoverview Test for the metrics manager.
+ * @author aschmiedt@google.com (Abby Schmiedt)
  */
 'use strict';
 
+var SCROLL_X = 10;
+var SCROLL_Y = 10;
 suite('Metrics', function() {
   function assertDimensionsMatch(toCheck, left, top, width, height) {
     chai.assert.equal(top, toCheck.top, 'Top did not match.');
@@ -28,8 +30,8 @@ suite('Metrics', function() {
       getToolbox: function() {},
       getFlyout: function() {},
       scale: scale,
-      scrollX: 10,
-      scrollY: 10,
+      scrollX: SCROLL_X,
+      scrollY: SCROLL_Y,
       isContentBounded: function() {}
     };
   }
@@ -159,6 +161,7 @@ suite('Metrics', function() {
       assertDimensionsMatch(contentMetrics, -50, -50, 350, 350);
     });
   });
+
   suite('getAbsoluteMetrics', function() {
     setup(function() {
       this.ws = makeMockWs(1, 0, 0, 0, 0);
@@ -193,7 +196,7 @@ suite('Metrics', function() {
       assertDimensionsMatch(absoluteMetrics, 0, 107);
     });
     test('Flyout at left', function() {
-      this.toolboxMetricsStub.returns({width: 107, height: 0, position: 2});
+      this.toolboxMetricsStub.returns({});
       this.flyoutMetricsStub.returns({width: 107, height: 0, position: 2});
       this.getToolboxStub.returns(false);
       this.getFlyoutStub.returns(true);
@@ -203,7 +206,7 @@ suite('Metrics', function() {
       assertDimensionsMatch(absoluteMetrics, 107, 0);
     });
     test('Flyout at top', function() {
-      this.toolboxMetricsStub.returns({width: 0, height: 107, position: 0});
+      this.toolboxMetricsStub.returns({});
       this.flyoutMetricsStub.returns({width: 0, height: 107, position: 0});
       this.getToolboxStub.returns(false);
       this.getFlyoutStub.returns(true);
@@ -213,6 +216,7 @@ suite('Metrics', function() {
       assertDimensionsMatch(absoluteMetrics, 0, 107);
     });
   });
+
   suite('getViewMetrics', function() {
     setup(function() {
       this.ws = makeMockWs(1, 0, 0, 0, 0);
@@ -236,7 +240,7 @@ suite('Metrics', function() {
 
       var viewMetrics = this.metricsManager.getViewMetrics();
 
-      assertDimensionsMatch(viewMetrics, -10, -10, 393, 500);
+      assertDimensionsMatch(viewMetrics, -SCROLL_X, -SCROLL_Y, 393, 500);
     });
     test('Toolbox at top', function() {
       this.toolboxMetricsStub.returns({width: 0, height: 107, position: 0});
@@ -247,7 +251,7 @@ suite('Metrics', function() {
 
       var viewMetrics = this.metricsManager.getViewMetrics();
 
-      assertDimensionsMatch(viewMetrics, -10, -10, 500, 393);
+      assertDimensionsMatch(viewMetrics, -SCROLL_X, -SCROLL_Y, 500, 393);
     });
     test('Flyout at left', function() {
       this.toolboxMetricsStub.returns({});
@@ -258,7 +262,7 @@ suite('Metrics', function() {
 
       var viewMetrics = this.metricsManager.getViewMetrics();
 
-      assertDimensionsMatch(viewMetrics, -10, -10, 393, 500);
+      assertDimensionsMatch(viewMetrics, -SCROLL_X, -SCROLL_Y, 393, 500);
     });
     test('Flyout at top', function() {
       this.toolboxMetricsStub.returns({});
@@ -269,11 +273,12 @@ suite('Metrics', function() {
 
       var viewMetrics = this.metricsManager.getViewMetrics();
 
-      assertDimensionsMatch(viewMetrics, -10, -10, 500, 393);
+      assertDimensionsMatch(viewMetrics, -SCROLL_X, -SCROLL_Y, 500, 393);
     });
-    test('Get in workspace coordinates ', function() {
+    test('Get view metrics in workspace coordinates ', function() {
       var scale = 2;
       var getWorkspaceCoordinates = true;
+
       this.ws.scale = scale;
       this.toolboxMetricsStub.returns({});
       this.flyoutMetricsStub.returns({width: 0, height: 107, position: 0});
@@ -285,9 +290,11 @@ suite('Metrics', function() {
           this.metricsManager.getViewMetrics(getWorkspaceCoordinates);
 
       assertDimensionsMatch(
-          viewMetrics, -10 / scale, -10 / scale, 500 / scale, 393 / scale);
+          viewMetrics, -SCROLL_X / scale, -SCROLL_Y / scale, 500 / scale,
+          393 / scale);
     });
   });
+
   suite('getContentMetrics', function() {
     setup(function() {
       this.ws = makeMockWs(1, 0, 0, 0, 0);
@@ -303,21 +310,24 @@ suite('Metrics', function() {
     test('Content Dimensions in pixel coordinates bounded ws', function() {
       this.isContentBoundedStub.returns(true);
       this.getBoundedMetricsStub.returns(
-          {height: 0, width: 0, left: 0, top: 0});
+          {height: 100, width: 100, left: 100, top: 100});
 
       var contentMetrics = this.metricsManager.getContentMetrics(false);
 
-      assertDimensionsMatch(contentMetrics, 0, 0, 0, 0);
+      // Should return what getContentDimensionsBounded_ returns.
+      assertDimensionsMatch(contentMetrics, 100, 100, 100, 100);
       sinon.assert.calledOnce(this.getBoundedMetricsStub);
       sinon.assert.calledOnce(this.viewMetricsStub);
     });
     test('Content Dimensions in pixel coordinates exact ws', function() {
       this.isContentBoundedStub.returns(false);
-      this.getExactMetricsStub.returns({height: 0, width: 0, left: 0, top: 0});
+      this.getExactMetricsStub.returns(
+          {height: 100, width: 100, left: 100, top: 100});
 
       var contentMetrics = this.metricsManager.getContentMetrics(false);
 
-      assertDimensionsMatch(contentMetrics, 0, 0, 0, 0);
+      // Should return what getContentDimensionsExact_ returns.
+      assertDimensionsMatch(contentMetrics, 100, 100, 100, 100);
       sinon.assert.calledOnce(this.getExactMetricsStub);
       sinon.assert.notCalled(this.viewMetricsStub);
     });

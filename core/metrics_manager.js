@@ -291,8 +291,8 @@ Blockly.MetricsManager.prototype.getViewMetrics = function(
  * @param {boolean=} opt_getWorkspaceCoordinates True to get the content metrics
  *     in workspace coordinates, false to get them in pixel coordinates.
  * @param {!Blockly.MetricsManager.ContainerRegion=} opt_viewMetrics The view
- *     metrics if they have been previously computed. Passing in null may cause
- *     the view metrics to be computed again, if it is needed.
+ *     metrics if they have been previously computed. Not passing in view
+ *     metrics may cause them to be computed again.
  * @return {!Blockly.MetricsManager.ContainerRegion} The
  *     metrics for the content container.
  * @public

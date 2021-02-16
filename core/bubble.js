@@ -925,7 +925,7 @@ Blockly.Bubble.createNonEditableBubble = function(
     // This cannot be done until the bubble is rendered on screen.
     var maxWidth = paragraphElement.getBBox().width;
     for (var i = 0, textElement; (textElement = paragraphElement.childNodes[i]);
-         i++) {
+      i++) {
       textElement.setAttribute('text-anchor', 'end');
       textElement.setAttribute('x', maxWidth + Blockly.Bubble.BORDER_WIDTH);
     }

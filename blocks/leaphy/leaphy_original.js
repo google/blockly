@@ -31,7 +31,7 @@ goog.require('Blockly.Mutator');
 Blockly.Constants.Colour.HUE = 20;
 var digitalPinOptions = [["2", "2"], ["3", "3"], ["4", "4"], ["5", "5"], ["6", "6"], ["7", "7"], ["8", "8"], ["9", "9"], ["10", "10"], ["11", "11"], ["12", "12"], ["13", "13"], ["14", "14"], ["15", "15"], ["16", "16"], ["17", "17"], ["18", "18"], ["19", "19"]];
 var analogPinOptions = [["A0", "A0"], ["A1", "A1"], ["A2", "A2"], ["A3", "A3"], ["A4", "A4"], ["A5", "A5"]];
-var motorTypeOptions = [["M_L", "9"], ["M_R", "10"]];
+var motorTypeOptions = [["%{BKY_LEAPHY_MOTOR_LEFT_DROPDOWN}", "9"], ["%{BKY_LEAPHY_MOTOR_RIGHT_DROPDOWN}", "10"]];
 var motorDirectionOptions = [["%{BKY_LEAPHY_MOTOR_FORWARD}", "1"], ["%{BKY_LEAPHY_MOTOR_BACKWARD}", "2"], ["%{BKY_LEAPHY_MOTOR_LEFT}", "3"], ["%{BKY_LEAPHY_MOTOR_RIGHT}", "4"]];
 
 Blockly.Blocks['leaphy_original_set_led'] = {

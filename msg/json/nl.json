@@ -27,6 +27,7 @@
 	"LEAPHY_LED_RED": "Rood",
 	"LEAPHY_LED_BLUE": "Blauw",
 	"LEAPHY_LED_GREEN": "Groen",
+	"LEAPHY_MOTOR_TYPE": "Zet",
 	"LEAPHY_MOTOR_SPEED": "Snelheid",
 	"LEAPHY_MOTOR_DIRECTION": "Richting",
 	"LEAPHY_GET_DISTANCE": "Lees afstand",

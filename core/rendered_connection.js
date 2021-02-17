@@ -22,6 +22,10 @@ goog.require('Blockly.utils.dom');
 goog.require('Blockly.utils.object');
 goog.require('Blockly.utils.Svg');
 
+goog.requireType('Blockly.Block');
+goog.requireType('Blockly.BlockSvg');
+goog.requireType('Blockly.ConnectionDB');
+
 
 /**
  * Class for a connection between blocks that may be rendered on screen.

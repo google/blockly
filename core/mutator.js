@@ -28,7 +28,13 @@ goog.require('Blockly.utils.xml');
 goog.require('Blockly.WorkspaceSvg');
 goog.require('Blockly.Xml');
 
+goog.requireType('Blockly.Block');
+goog.requireType('Blockly.BlockSvg');
+goog.requireType('Blockly.Connection');
+goog.requireType('Blockly.Events.Abstract');
+goog.requireType('Blockly.utils.Coordinate');
 goog.requireType('Blockly.utils.Metrics');
+goog.requireType('Blockly.Workspace');
 
 
 /**

@@ -18,6 +18,10 @@ goog.provide('Blockly.ShortcutItems');
 
 goog.require('Blockly.utils.KeyCodes');
 
+goog.requireType('Blockly.BlockSvg');
+goog.requireType('Blockly.ICopyable');
+goog.requireType('Blockly.ShortcutRegistry');
+
 
 /**
  * Object holding the names of the default shortcut items.

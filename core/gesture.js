@@ -26,8 +26,11 @@ goog.require('Blockly.utils');
 goog.require('Blockly.utils.Coordinate');
 goog.require('Blockly.WorkspaceDragger');
 
+goog.requireType('Blockly.BlockSvg');
+goog.requireType('Blockly.Field');
 goog.requireType('Blockly.IBubble');
 goog.requireType('Blockly.IFlyout');
+goog.requireType('Blockly.WorkspaceSvg');
 
 
 /**

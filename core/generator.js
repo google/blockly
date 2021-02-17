@@ -16,6 +16,9 @@ goog.provide('Blockly.Generator');
 goog.require('Blockly.constants');
 goog.require('Blockly.Block');
 
+goog.requireType('Blockly.Names');
+goog.requireType('Blockly.Workspace');
+
 
 /**
  * Class for a code generator that translates the blocks into a language.

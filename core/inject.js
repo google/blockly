@@ -29,6 +29,7 @@ goog.require('Blockly.WorkspaceDragSurfaceSvg');
 goog.require('Blockly.WorkspaceSvg');
 
 goog.requireType('Blockly.utils.Metrics');
+goog.requireType('Blockly.Workspace');
 
 
 /**

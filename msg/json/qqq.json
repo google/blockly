@@ -28,6 +28,8 @@
 	"LEAPHY_RGB_RAW_COLOR_GREEN": "leaphy rawcolor green",
 	"LEAPHY_RGB_RAW_COLOR_BLUE": "leaphy rawcolor blue",
 	"LEAPHY_READ_STOMACH": "leaphy Read Belly Sensor.",
+	"LEAPHY_STOMACH_SENSOR_TYPE1": "leaphy Belly Sensor Type 1.",
+	"LEAPHY_STOMACH_SENSOR_TYPE2": "leaphy Belly Sensor Type 2.",
 	"LEAPHY_READ_HAND": "leaphy Read Hand Sensor",
 	"LEAPHY_FLITZ_LED": "leaphy flitz set LED",
 	"LEAPHY_FLITZ_LED_R": "leaphy flitz set LED red",

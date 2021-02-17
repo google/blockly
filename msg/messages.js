@@ -118,6 +118,12 @@ Blockly.Msg.LEAPHY_RGB_RAW_COLOR_BLUE = 'RawColor Blue';
 /// leaphy Read Belly Sensor.
 Blockly.Msg.LEAPHY_READ_STOMACH = 'Read Belly sensor';
 /** @type {string} */
+/// leaphy Belly Sensor Type 1.
+Blockly.Msg.LEAPHY_STOMACH_SENSOR_TYPE1 = 'Type 1';
+/** @type {string} */
+/// leaphy Belly Sensor Type 2.
+Blockly.Msg.LEAPHY_STOMACH_SENSOR_TYPE2 = 'Type 2';
+/** @type {string} */
 /// leaphy Read Hand Sensor
 Blockly.Msg.LEAPHY_READ_HAND = 'Read Hand sensor';
 /** @type {string} */

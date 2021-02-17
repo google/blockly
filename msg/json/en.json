@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2021-02-17 20:05:10.226284",
+		"lastupdated": "2021-02-17 20:27:57.099266",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -34,6 +34,8 @@
 	"LEAPHY_RGB_RAW_COLOR_GREEN": "RawColor Green",
 	"LEAPHY_RGB_RAW_COLOR_BLUE": "RawColor Blue",
 	"LEAPHY_READ_STOMACH": "Read Belly sensor",
+	"LEAPHY_STOMACH_SENSOR_TYPE1": "Type 1",
+	"LEAPHY_STOMACH_SENSOR_TYPE2": "Type 2",
 	"LEAPHY_READ_HAND": "Read Hand sensor",
 	"LEAPHY_FLITZ_LED": "Set LED",
 	"LEAPHY_FLITZ_LED_R": "Red",

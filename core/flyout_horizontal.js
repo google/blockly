@@ -22,7 +22,10 @@ goog.require('Blockly.utils.object');
 goog.require('Blockly.utils.Rect');
 goog.require('Blockly.WidgetDiv');
 
+goog.requireType('Blockly.Options');
+goog.requireType('Blockly.utils.Coordinate');
 goog.requireType('Blockly.utils.Metrics');
+goog.requireType('Blockly.WorkspaceSvg');
 
 
 /**
@@ -195,7 +198,7 @@ Blockly.HorizontalFlyout.prototype.position = function() {
 
   var x = this.getX();
   var y = this.getY();
-  
+
   this.positionAt_(this.width_, this.height_, x, y);
 };
 

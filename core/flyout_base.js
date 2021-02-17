@@ -30,10 +30,14 @@ goog.require('Blockly.utils.toolbox');
 goog.require('Blockly.WorkspaceSvg');
 goog.require('Blockly.Xml');
 
+goog.requireType('Blockly.BlockSvg');
+goog.requireType('Blockly.FlyoutButton');
 goog.requireType('Blockly.IDeleteArea');
 goog.requireType('Blockly.IFlyout');
+goog.requireType('Blockly.Options');
 goog.requireType('Blockly.ShortcutRegistry');
 goog.requireType('Blockly.utils.Metrics');
+goog.requireType('Blockly.utils.Rect');
 
 
 /**

@@ -123,7 +123,7 @@ Blockly.Blocks['leaphy_original_buzz'] = {
             .appendField(Blockly.Msg.LEAPHY_BUZZ_BUZZ)
             .setCheck('Number');
         this.appendValueInput("DURATION", 'Number')
-            .appendField(Blockly.Msg.LEAPHY_BUZZ_HERZ)
+            .appendField(Blockly.Msg.LEAPHY_BUZZ_HERTZ)
             .setCheck('Number');
         this.appendDummyInput()
             .appendField(Blockly.Msg.LEAPHY_BUZZ_MS);

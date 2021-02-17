@@ -56,7 +56,7 @@
 	"LEAPHY_SONAR_READ_TRIG": "Trig pin",
 	"LEAPHY_SONAR_READ_ECHO": "Echo pin",
 	"LEAPHY_BUZZ_BUZZ": "Buzz buzz",
-	"LEAPHY_BUZZ_HERZ": "Buzz Herz",
+	"LEAPHY_BUZZ_HERTZ": "Buzz Herz",
 	"LEAPHY_BUZZ_MS": "Buzz ms",
 	"LEAPHY_SERIAL_PRINT": "Print print",
 	"LEAPHY_SITUATION_CATEGORY": "Sitation Category Title",

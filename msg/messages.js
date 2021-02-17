@@ -206,7 +206,7 @@ Blockly.Msg.LEAPHY_SONAR_READ_ECHO = 'Echo';
 Blockly.Msg.LEAPHY_BUZZ_BUZZ = 'Buzz';
 /** @type {string} */
 /// Buzz Herz
-Blockly.Msg.LEAPHY_BUZZ_HERZ = 'Herz';
+Blockly.Msg.LEAPHY_BUZZ_HERTZ = 'Hertz';
 /** @type {string} */
 /// Buzz ms
 Blockly.Msg.LEAPHY_BUZZ_MS = 'ms';

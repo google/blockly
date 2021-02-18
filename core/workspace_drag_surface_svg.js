@@ -72,6 +72,7 @@ Blockly.WorkspaceDragSurfaceSvg.prototype.createDom = function() {
         'version': '1.1',
         'class': 'blocklyWsDragSurface blocklyOverflowVisible'
       }, null);
+  this.SVG_.setAttribute('style', 'background: pink;opacity:0.4;');
   this.container_.appendChild(this.SVG_);
 };
 

@@ -498,7 +498,7 @@ Blockly.BlockSvg.prototype.moveToDragSurface = function() {
   // to keep the position in sync as it move on/off the surface.
   // This is in workspace coordinates.
   var xy = this.getRelativeToSurfaceXY();
-  this.clearTransformAttributes_();
+  this.translate(-1 * this.workspace.scrollX, -1 * this.workspace.scrollY)
   this.workspace.getBlockDragSurface().translateSurface(xy.x, xy.y);
   // Execute the move on the top-level SVG component
   var svg = this.getSvgRoot();

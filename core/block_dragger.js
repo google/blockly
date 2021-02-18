@@ -203,6 +203,8 @@ Blockly.BlockDragger.prototype.fireDragStartEvent_ = function() {
 Blockly.BlockDragger.prototype.dragBlock = function(e, currentDragDeltaXY) {
   var delta = this.pixelsToWorkspaceUnits_(currentDragDeltaXY);
   var newLoc = Blockly.utils.Coordinate.sum(this.startXY_, delta);
+  newLoc.x += this.workspace_.scrollX;
+  newLoc.y += this.workspace_.scrollY;
 
   this.draggingBlock_.moveDuringDrag(newLoc);
   this.dragIcons_(delta);

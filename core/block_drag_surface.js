@@ -91,6 +91,7 @@ Blockly.BlockDragSurfaceSvg.prototype.createDom = function() {
         'version': '1.1',
         'class': 'blocklyBlockDragSurface'
       }, this.container_);
+  this.SVG_.setAttribute('style', 'background: skyblue;opacity:0.4;');
   this.dragGroup_ = Blockly.utils.dom.createSvgElement(
       Blockly.utils.Svg.G, {}, this.SVG_);
 };

@@ -956,7 +956,7 @@ Blockly.Scrollbar.prototype.constrainHandle_ = function(value) {
   if (value <= 0 || isNaN(value) || this.scrollViewSize_ < this.handleLength_) {
     value = 0;
   } else {
-    value = Math.min(value, this.scrollViewSize_);
+    value = Math.min(value, this.scrollViewSize_ - this.handleLength_);
   }
   return value;
 };

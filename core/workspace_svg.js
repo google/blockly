@@ -1170,7 +1170,7 @@ Blockly.WorkspaceSvg.prototype.maybeFireViewportChangeEvent = function() {
  * @param {number} y Vertical translation, in pixel units relative to the
  *    top left of the Blockly div.
  */
-Blockly.WorkspaceSvg.prototype.translate = function(x, y, noMove) {
+Blockly.WorkspaceSvg.prototype.translate = function(x, y) {
   if (this.useWorkspaceDragSurface_ && this.isDragSurfaceActive_) {
     this.workspaceDragSurface_.translateSurface(x,y);
   } else {
@@ -1678,24 +1678,21 @@ Blockly.WorkspaceSvg.prototype.onMouseWheel_ = function(e) {
   var x = this.scrollX - scrollDelta.x;
   var y = this.scrollY - scrollDelta.y;
 
+  // The amount the block dragger group was updated before we scroll the workspace.
   var oldX = this.blockDragSurface_.getGroup().transform.baseVal.consolidate().matrix.e;
   var oldY = this.blockDragSurface_.getGroup().transform.baseVal.consolidate().matrix.f;
+
+  // The amount the block dragger group was updated after we scroll the workspace.
   var newCoord = this.scroll(x,y);
 
   var deltaX = newCoord.x.toFixed() - oldX;
   var deltaY = newCoord.y.toFixed() - oldY;
 
-  // console.log("New Delta");
-  // console.log(`newCoord.x = ${newCoord.x.toFixed()}, newCoord.y = ${newCoord.y.toFixed()}, oldX = ${oldX}, oldY = ${oldY}`);
-  // console.log(newCoord.x.toFixed() - oldX, newCoord.y.toFixed() - oldY);
-  // this.currentGesture_.updateDragDelta_(newCoord);
-  // // console.log(this.currentGesture_.updateDragDelta_(newCoord));
-  // console.log("onMouseWheel_");
-  // console.log(x, y);
+  // Negative because we are trying to offset the amount child block dragger
+  // group is being dragged.
   this.blockDragSurface_.translateBy(-deltaX, -deltaY);
   this.currentGesture_.blockDragger_.updateStartXY(-deltaX, -deltaY);
 
-  // this.blockDragSurface_.translateBy(-scrollCoord.x, -scrollCoord.y);
   e.preventDefault();
 };
 

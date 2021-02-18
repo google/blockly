@@ -35,6 +35,7 @@ Blockly.MetricsManager = function(workspace) {
    * @protected
    */
   this.workspace_ = workspace;
+  this.stopCalculating = false;
 };
 
 /**
@@ -347,13 +348,15 @@ Blockly.MetricsManager.prototype.getMetrics = function() {
   var svgMetrics = this.getSvgMetrics();
   var absoluteMetrics = this.getAbsoluteMetrics();
   var viewMetrics = this.getViewMetrics();
-  var contentMetrics = this.getContentMetrics(viewMetrics);
+  if (!this.stopCalculating || !this.contentMetrics) {
+    this.contentMetrics = this.getContentMetrics(viewMetrics);
+  }
 
   return {
-    contentHeight: contentMetrics.height,
-    contentWidth: contentMetrics.width,
-    contentTop: contentMetrics.top,
-    contentLeft: contentMetrics.left,
+    contentHeight: this.contentMetrics.height,
+    contentWidth: this.contentMetrics.width,
+    contentTop: this.contentMetrics.top,
+    contentLeft: this.contentMetrics.left,
 
     viewHeight: viewMetrics.height,
     viewWidth: viewMetrics.width,

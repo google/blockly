@@ -93,6 +93,13 @@ Blockly.BlockDragSurfaceSvg.prototype.createDom = function() {
       }, this.container_);
   this.dragGroup_ = Blockly.utils.dom.createSvgElement(
       Blockly.utils.Svg.G, {}, this.SVG_);
+  this.SVG_.setAttribute('style', 'background: skyblue');
+  Blockly.bindEventWithChecks_(this.SVG_, 'wheel', this, this.onMouseWheel_);
+};
+
+// Listen for mouse wheel events and pass through to the main workspace
+Blockly.BlockDragSurfaceSvg.prototype.onMouseWheel_ = function(e) {
+  Blockly.getMainWorkspace().onMouseWheel_(e);
 };
 
 /**
@@ -141,7 +148,6 @@ Blockly.BlockDragSurfaceSvg.prototype.translateSurfaceInternal_ = function() {
   x = x.toFixed(0);
   y = y.toFixed(0);
   this.SVG_.style.display = 'block';
-
   Blockly.utils.dom.setCssTransform(this.SVG_,
       'translate3d(' + x + 'px, ' + y + 'px, 0px)');
 };
@@ -167,6 +173,13 @@ Blockly.BlockDragSurfaceSvg.prototype.translateSurface = function(x, y) {
 Blockly.BlockDragSurfaceSvg.prototype.getSurfaceTranslation = function() {
   var xy = Blockly.utils.getRelativeXY(/** @type {!SVGElement} */ (this.SVG_));
   return new Blockly.utils.Coordinate(xy.x / this.scale_, xy.y / this.scale_);
+};
+
+Blockly.BlockDragSurfaceSvg.prototype.translateBy = function(deltaX, deltaY) {
+  console.log("HERE", deltaX, deltaY);
+  var x = this.surfaceXY_.x;
+  var y = this.surfaceXY_.y + deltaY;
+  this.translateSurface(x, y);
 };
 
 /**

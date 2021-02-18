@@ -225,7 +225,8 @@ Blockly.BlockDragger.prototype.endBlockDrag = function(e, currentDragDeltaXY) {
   this.dragBlock(e, currentDragDeltaXY);
   this.dragIconData_ = [];
   this.fireDragEndEvent_();
-
+  console.log("IN END BLOCK DRAG");
+  console.log(currentDragDeltaXY);
   Blockly.utils.dom.stopTextWidthCache();
 
   Blockly.blockAnimations.disconnectUiStop();

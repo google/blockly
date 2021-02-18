@@ -1170,7 +1170,7 @@ Blockly.WorkspaceSvg.prototype.maybeFireViewportChangeEvent = function() {
  * @param {number} y Vertical translation, in pixel units relative to the
  *    top left of the Blockly div.
  */
-Blockly.WorkspaceSvg.prototype.translate = function(x, y) {
+Blockly.WorkspaceSvg.prototype.translate = function(x, y, noMove) {
   if (this.useWorkspaceDragSurface_ && this.isDragSurfaceActive_) {
     this.workspaceDragSurface_.translateSurface(x,y);
   } else {
@@ -1667,41 +1667,35 @@ Blockly.WorkspaceSvg.prototype.isMovable = function() {
  */
 Blockly.WorkspaceSvg.prototype.onMouseWheel_ = function(e) {
   // Don't scroll or zoom anything if drag is in progress.
-  if (Blockly.Gesture.inProgress()) {
-    e.preventDefault();
-    e.stopPropagation();
-    return;
-  }
-  var canWheelZoom = this.options.zoomOptions && this.options.zoomOptions.wheel;
-  var canWheelMove = this.options.moveOptions && this.options.moveOptions.wheel;
-  if (!canWheelZoom && !canWheelMove) {
+  var canWheelMove =
+  this.options.moveOptions && this.options.moveOptions.wheel;
+  if (!canWheelMove) {
     return;
   }
 
   var scrollDelta = Blockly.utils.getScrollDeltaPixels(e);
-  if (canWheelZoom && (e.ctrlKey || !canWheelMove)) {
-    // Zoom.
-    // The vertical scroll distance that corresponds to a click of a zoom
-    // button.
-    var PIXELS_PER_ZOOM_STEP = 50;
-    var delta = -scrollDelta.y / PIXELS_PER_ZOOM_STEP;
-    var position = Blockly.utils.mouseToSvg(e, this.getParentSvg(),
-        this.getInverseScreenCTM());
-    this.zoom(position.x, position.y, delta);
-  } else {
-    // Scroll.
-    var x = this.scrollX - scrollDelta.x;
-    var y = this.scrollY - scrollDelta.y;
+  // Scroll.
+  var x = this.scrollX - scrollDelta.x;
+  var y = this.scrollY - scrollDelta.y;
 
-    if (e.shiftKey && !scrollDelta.x) {
-      // Scroll horizontally (based on vertical scroll delta).
-      // This is needed as for some browser/system combinations which do not
-      // set deltaX.
-      x = this.scrollX - scrollDelta.y;
-      y = this.scrollY; // Don't scroll vertically
-    }
-    this.scroll(x, y);
-  }
+  var oldX = this.blockDragSurface_.getGroup().transform.baseVal.consolidate().matrix.e;
+  var oldY = this.blockDragSurface_.getGroup().transform.baseVal.consolidate().matrix.f;
+  var newCoord = this.scroll(x,y);
+
+  var deltaX = newCoord.x.toFixed() - oldX;
+  var deltaY = newCoord.y.toFixed() - oldY;
+
+  // console.log("New Delta");
+  // console.log(`newCoord.x = ${newCoord.x.toFixed()}, newCoord.y = ${newCoord.y.toFixed()}, oldX = ${oldX}, oldY = ${oldY}`);
+  // console.log(newCoord.x.toFixed() - oldX, newCoord.y.toFixed() - oldY);
+  // this.currentGesture_.updateDragDelta_(newCoord);
+  // // console.log(this.currentGesture_.updateDragDelta_(newCoord));
+  // console.log("onMouseWheel_");
+  // console.log(x, y);
+  this.currentGesture_.updateDrag(-deltaX, -deltaY);
+  this.blockDragSurface_.translateBy(-deltaX, -deltaY);
+
+  // this.blockDragSurface_.translateBy(-scrollCoord.x, -scrollCoord.y);
   e.preventDefault();
 };
 
@@ -2159,7 +2153,9 @@ Blockly.WorkspaceSvg.prototype.scroll = function(x, y) {
   Blockly.hideChaff(/* opt_allowToolbox */ true);
 
   // Keep scrolling within the bounds of the content.
+  this.metricsManager_.stopCalculating = true;
   var metrics = this.getMetrics();
+  this.metricsManager_.stopCalculating = false;
   // This is the offset of the top-left corner of the view from the
   // workspace origin when the view is "seeing" the bottom-right corner of
   // the content.
@@ -2190,7 +2186,8 @@ Blockly.WorkspaceSvg.prototype.scroll = function(x, y) {
   // workspace origin is not underneath the toolbox.
   x += metrics.absoluteLeft;
   y += metrics.absoluteTop;
-  this.translate(x, y);
+  this.translate(x, y, true);
+  return new Blockly.utils.Coordinate(x, y);
 };
 
 /**

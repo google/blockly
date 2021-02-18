@@ -2150,6 +2150,7 @@ Blockly.WorkspaceSvg.prototype.scroll = function(x, y) {
   Blockly.hideChaff(/* opt_allowToolbox */ true);
 
   // Keep scrolling within the bounds of the content.
+  // Turns off updating the content size while scrolling.
   this.metricsManager_.stopCalculating = true;
   var metrics = this.getMetrics();
   this.metricsManager_.stopCalculating = false;

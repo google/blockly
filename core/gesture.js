@@ -278,13 +278,9 @@ Blockly.Gesture.prototype.updateFromEvent_ = function(e) {
  * @private
  */
 Blockly.Gesture.prototype.updateDragDelta_ = function(currentXY) {
-  console.log('In updateDragDelta_');
-  console.log(this.mouseDownXY_);
-  console.log(currentXY);
   this.currentDragDeltaXY_ = Blockly.utils.Coordinate.difference(
       currentXY,
       /** @type {!Blockly.utils.Coordinate} */ (this.mouseDownXY_));
-  console.log(this.currentDragDeltaXY_);
   if (!this.hasExceededDragRadius_) {
     var currentDragDelta =
         Blockly.utils.Coordinate.magnitude(this.currentDragDeltaXY_);
@@ -297,12 +293,6 @@ Blockly.Gesture.prototype.updateDragDelta_ = function(currentXY) {
     return this.hasExceededDragRadius_;
   }
   return false;
-};
-
-Blockly.Gesture.prototype.updateDrag = function(deltaX, deltaY) {
-  this.currentDragDeltaXY_.x += deltaX;
-  this.currentDragDeltaXY_.y += deltaY;
-  console.log(this.currentDragDeltaXY_);
 };
 
 /**

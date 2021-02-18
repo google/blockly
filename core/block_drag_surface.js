@@ -176,8 +176,7 @@ Blockly.BlockDragSurfaceSvg.prototype.getSurfaceTranslation = function() {
 };
 
 Blockly.BlockDragSurfaceSvg.prototype.translateBy = function(deltaX, deltaY) {
-  console.log("HERE", deltaX, deltaY);
-  var x = this.surfaceXY_.x;
+  var x = this.surfaceXY_.x + deltaX;
   var y = this.surfaceXY_.y + deltaY;
   this.translateSurface(x, y);
 };

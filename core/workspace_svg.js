@@ -1692,8 +1692,8 @@ Blockly.WorkspaceSvg.prototype.onMouseWheel_ = function(e) {
   // // console.log(this.currentGesture_.updateDragDelta_(newCoord));
   // console.log("onMouseWheel_");
   // console.log(x, y);
-  this.currentGesture_.updateDrag(-deltaX, -deltaY);
   this.blockDragSurface_.translateBy(-deltaX, -deltaY);
+  this.currentGesture_.blockDragger_.updateStartXY(-deltaX, -deltaY);
 
   // this.blockDragSurface_.translateBy(-scrollCoord.x, -scrollCoord.y);
   e.preventDefault();

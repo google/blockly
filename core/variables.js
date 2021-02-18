@@ -24,6 +24,8 @@ goog.require('Blockly.utils.xml');
 goog.require('Blockly.VariableModel');
 goog.require('Blockly.Xml');
 
+goog.requireType('Blockly.Workspace');
+
 
 /**
  * Constant to separate variable names from procedures and generated functions

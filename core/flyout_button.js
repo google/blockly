@@ -18,6 +18,9 @@ goog.require('Blockly.utils.Coordinate');
 goog.require('Blockly.utils.dom');
 goog.require('Blockly.utils.Svg');
 
+goog.requireType('Blockly.utils.toolbox');
+goog.requireType('Blockly.WorkspaceSvg');
+
 
 /**
  * Class for a button in the flyout.

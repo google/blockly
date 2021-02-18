@@ -21,8 +21,10 @@ goog.require('Blockly.utils.Svg');
 goog.require('Blockly.utils.toolbox');
 goog.require('Blockly.Xml');
 
+goog.requireType('Blockly.Events.Abstract');
 goog.requireType('Blockly.IDeleteArea');
 goog.requireType('Blockly.IFlyout');
+goog.requireType('Blockly.WorkspaceSvg');
 
 
 /**

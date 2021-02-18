@@ -23,6 +23,7 @@ goog.require('Blockly.constants');
 goog.require('Blockly.InsertionMarkerManager');
 goog.require('Blockly.IRegistrable');
 
+goog.requireType('Blockly.Block');
 goog.requireType('Blockly.BlockSvg');
 goog.requireType('Blockly.Connection');
 goog.requireType('Blockly.Marker');

@@ -15,6 +15,8 @@ goog.provide('Blockly.Names');
 goog.require('Blockly.constants');
 goog.require('Blockly.Msg');
 
+goog.requireType('Blockly.VariableMap');
+
 
 /**
  * Class for a database of entity names (variables, functions, etc).

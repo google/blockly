@@ -18,6 +18,9 @@ goog.require('Blockly.utils.dom');
 goog.require('Blockly.utils.Size');
 goog.require('Blockly.utils.Svg');
 
+goog.requireType('Blockly.BlockSvg');
+goog.requireType('Blockly.Bubble');
+
 
 /**
  * Class for an icon.

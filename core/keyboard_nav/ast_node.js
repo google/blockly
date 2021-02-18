@@ -15,8 +15,13 @@ goog.provide('Blockly.ASTNode');
 goog.require('Blockly.constants');
 goog.require('Blockly.utils.Coordinate');
 
+goog.requireType('Blockly.Block');
+goog.requireType('Blockly.Connection');
+goog.requireType('Blockly.Field');
 goog.requireType('Blockly.IASTNodeLocation');
 goog.requireType('Blockly.IASTNodeLocationWithBlock');
+goog.requireType('Blockly.Input');
+goog.requireType('Blockly.Workspace');
 
 
 /**

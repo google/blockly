@@ -15,7 +15,10 @@ goog.provide('Blockly.IASTNodeLocation');
 goog.provide('Blockly.IASTNodeLocationSvg');
 goog.provide('Blockly.IASTNodeLocationWithBlock');
 goog.provide('Blockly.IKeyboardAccessible');
+
+goog.requireType('Blockly.Block');
 goog.requireType('Blockly.ShortcutRegistry');
+
 
 /**
  * An AST node location interface.

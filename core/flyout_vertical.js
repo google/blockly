@@ -23,6 +23,8 @@ goog.require('Blockly.utils.Rect');
 goog.require('Blockly.utils.userAgent');
 goog.require('Blockly.WidgetDiv');
 
+goog.requireType('Blockly.Options');
+goog.requireType('Blockly.utils.Coordinate');
 goog.requireType('Blockly.utils.Metrics');
 
 
@@ -199,7 +201,7 @@ Blockly.VerticalFlyout.prototype.position = function() {
 
   var x = this.getX();
   var y = this.getY();
-  
+
   this.positionAt_(this.width_, this.height_, x, y);
 };
 

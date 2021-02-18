@@ -27,6 +27,10 @@ goog.require('Blockly.utils.xml');
 goog.require('Blockly.Workspace');
 goog.require('Blockly.Xml');
 
+goog.requireType('Blockly.Block');
+goog.requireType('Blockly.Events.Abstract');
+goog.requireType('Blockly.WorkspaceSvg');
+
 
 /**
  * Constant to separate procedure names from variables and generated functions

@@ -16,6 +16,9 @@ goog.provide('Blockly.ShortcutRegistry');
 goog.require('Blockly.ShortcutItems');
 goog.require('Blockly.utils.object');
 
+goog.requireType('Blockly.utils.KeyCodes');
+goog.requireType('Blockly.Workspace');
+
 
 /**
  * Class for the registry of keyboard shortcuts. This is intended to be a

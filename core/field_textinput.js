@@ -26,6 +26,9 @@ goog.require('Blockly.utils.object');
 goog.require('Blockly.utils.Size');
 goog.require('Blockly.utils.userAgent');
 
+goog.requireType('Blockly.BlockSvg');
+goog.requireType('Blockly.WorkspaceSvg');
+
 
 /**
  * Class for an editable text field.

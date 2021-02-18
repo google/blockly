@@ -10,9 +10,9 @@
  */
 'use strict';
 
-var SCROLL_X = 10;
-var SCROLL_Y = 10;
 suite('Metrics', function() {
+  var SCROLL_X = 10;
+  var SCROLL_Y = 10;
   function assertDimensionsMatch(toCheck, left, top, width, height) {
     chai.assert.equal(top, toCheck.top, 'Top did not match.');
     chai.assert.equal(left, toCheck.left, 'Left did not match.');

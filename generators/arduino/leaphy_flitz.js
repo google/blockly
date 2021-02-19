@@ -13,8 +13,17 @@ goog.provide('Blockly.Arduino.LeaphyFlitz');
 goog.require('Blockly.Arduino');
 
 Blockly.Arduino['leaphy_flitz_read_stomach_sensor'] = function (block){
-    Blockly.Arduino.setups_['setup_flitz_stomach'] = 'pinMode(8, OUTPUT);\n pinMode(9, OUTPUT);\n pinMode(10, OUTPUT);\n digitalWrite(8, LOW);\n digitalWrite(9, HIGH);\n'
-    var code = 'digitalRead(10)'
+    var sensorType = block.getFieldValue('SENSOR_TYPE');
+    var code = '';
+    var setup = '';
+    if(sensorType == "1"){
+        setup = 'pinMode(8, OUTPUT);\n  pinMode(9, OUTPUT);\n  pinMode(10, INPUT);\n  digitalWrite(8, LOW);\n  digitalWrite(9, HIGH);\n'    
+        code = 'digitalRead(10)'
+    } else if(sensorType == "2"){
+        setup = 'pinMode(8, INPUT);\n  pinMode(9, OUTPUT);\n  pinMode(10, OUTPUT);\n  digitalWrite(8, LOW);\n  digitalWrite(9, HIGH);\n'
+        code = 'digitalRead(8)'
+    }
+    Blockly.Arduino.setups_['setup_flitz_stomach'] = setup;    
     return [code, Blockly.Arduino.ORDER_ATOMIC];
 };
 

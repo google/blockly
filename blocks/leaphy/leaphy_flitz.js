@@ -24,16 +24,13 @@ goog.require('Blockly.FieldDropdown');
 goog.require('Blockly.FieldLabel');
 goog.require('Blockly.Mutator');
 
-/**
- * Unused constant for the common HSV hue for all blocks in this category.
- * @deprecated Use Blockly.Msg['COLOUR_HUE']. (2018 April 5)
- */
-Blockly.Constants.Colour.HUE = 20;
+var stomachSensorTypes = [["%{BKY_LEAPHY_STOMACH_SENSOR_TYPE1}", "1"], ["%{BKY_LEAPHY_STOMACH_SENSOR_TYPE2}", "2"]];
 
 Blockly.Blocks['leaphy_flitz_read_stomach_sensor'] = {
     init: function(){
         this.appendDummyInput()
-                .appendField(Blockly.Msg.LEAPHY_READ_STOMACH);
+                .appendField(Blockly.Msg.LEAPHY_READ_STOMACH)
+                .appendField(new Blockly.FieldDropdown(stomachSensorTypes), "SENSOR_TYPE");
             this.setOutput(true, 'Number');
             this.setStyle('leaphy_blocks');
     }

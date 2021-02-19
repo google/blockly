@@ -229,31 +229,42 @@ Blockly.bumpIntoBoundsHandler = function(workspace) {
   return function(e) {
     var metricsManager = workspace.getMetricsManager();
     if (!metricsManager.hasScrollEdges() || workspace.isDragging() ||
-        (Blockly.Events.BUMP_EVENTS.indexOf(e.type) == -1)) {
-      return;
-    }
-
-    var object = Blockly.extractObjectFromEvent_(workspace, e);
-    if (!object) {
+        (e.type !== Blockly.Events.VIEWPORT_CHANGE &&
+            Blockly.Events.BUMP_EVENTS.indexOf(e.type) === -1)) {
       return;
     }
 
     var scrollMetricsInWsCoords =
         metricsManager.getScrollMetrics(null, null, true);
 
-    // Handle undo.
-    var oldGroup = Blockly.Events.getGroup();
-    Blockly.Events.setGroup(e.group);
+    if (e.type === Blockly.Events.VIEWPORT_CHANGE) {
+      // Triggered by ViewportChange
+      // getTopBoundedElements
+      var topBlocks = workspace.getTopBlocks(false, false);
+      for (var i = 0, block; (block = topBlocks[i]); i++) {
+        Blockly.bumpObjectIntoBounds_(
+            workspace, scrollMetricsInWsCoords, block);
+      }
+    } else {
+      // Triggered by move/create event
+      var object = Blockly.extractObjectFromEvent_(workspace, e);
+      if (!object) {
+        return;
+      }
+      // Handle undo.
+      var oldGroup = Blockly.Events.getGroup();
+      Blockly.Events.setGroup(e.group);
 
-    var wasBumped = Blockly.bumpObjectIntoBounds_(
-        workspace, scrollMetricsInWsCoords, object);
+      var wasBumped = Blockly.bumpObjectIntoBounds_(
+          workspace, scrollMetricsInWsCoords, object);
 
-    if (wasBumped && !e.group) {
-      console.warn('Moved object in bounds but there was no' +
-          ' event group. This may break undo.');
-    }
-    if (oldGroup !== null) {
-      Blockly.Events.setGroup(oldGroup);
+      if (wasBumped && !e.group) {
+        console.warn('Moved object in bounds but there was no' +
+            ' event group. This may break undo.');
+      }
+      if (oldGroup !== null) {
+        Blockly.Events.setGroup(oldGroup);
+      }
     }
   };
 };

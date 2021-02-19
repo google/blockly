@@ -1158,13 +1158,13 @@ Blockly.WorkspaceSvg.prototype.maybeFireViewportChangeEvent = function() {
   var scale = this.scale;
   var top = -this.scrollY;
   var left = -this.scrollX;
-  if (scale == this.oldScale_ &&
-      Math.abs(top - this.oldTop_) < 1 &&
-      Math.abs(left - this.oldLeft_) < 1) {
-    // Ignore sub-pixel changes in top and left. Due to #4192 there are a lot of
-    // negligible changes in viewport top/left.
-    return;
-  }
+  // if (scale == this.oldScale_ &&
+  //     Math.abs(top - this.oldTop_) < 1 &&
+  //     Math.abs(left - this.oldLeft_) < 1) {
+  //   // Ignore sub-pixel changes in top and left. Due to #4192 there are a lot of
+  //   // negligible changes in viewport top/left.
+  //   return;
+  // }
   this.oldScale_ = scale;
   this.oldTop_ = top;
   this.oldLeft_ = left;
@@ -2169,7 +2169,8 @@ Blockly.WorkspaceSvg.prototype.scroll = function(x, y) {
 
   // Keep scrolling within the bounds of the content.
   var viewMetrics = this.getMetricsManager().getViewMetrics();
-  var scrollMetrics = this.getMetricsManager().getScrollMetrics(viewMetrics);
+  var scrollMetrics =
+      this.getMetricsManager().getScrollMetrics(viewMetrics);
   // Canvas coordinates (aka scroll coordinates) have inverse directionality
   // to workspace coordinates so we have to inverse them.
   x = Math.min(x, -scrollMetrics.left);
@@ -2180,22 +2181,6 @@ Blockly.WorkspaceSvg.prototype.scroll = function(x, y) {
   x = Math.max(x, -maxXScroll);
   y = Math.max(y, -maxYScroll);
 
-  // var metrics = this.getMetrics();
-  // // This is the offset of the top-left corner of the view from the
-  // // workspace origin when the view is "seeing" the bottom-right corner of
-  // // the content.
-  // var maxOffsetOfViewFromOriginX = metrics.contentWidth + metrics.contentLeft -
-  //     metrics.viewWidth;
-  // var maxOffsetOfViewFromOriginY = metrics.contentHeight + metrics.contentTop -
-  //     metrics.viewHeight;
-  // // Canvas coordinates (aka scroll coordinates) have inverse directionality
-  // // to workspace coordinates so we have to inverse them.
-  // x = Math.min(x, -metrics.contentLeft);
-  // y = Math.min(y, -metrics.contentTop);
-  // x = Math.max(x, -maxOffsetOfViewFromOriginX);
-  // y = Math.max(y, -maxOffsetOfViewFromOriginY);
-
-  //TODO fix
   this.scrollX = x;
   this.scrollY = y;
   if (this.scrollbar) {
@@ -2206,12 +2191,13 @@ Blockly.WorkspaceSvg.prototype.scroll = function(x, y) {
     // the content's top-left to the view's top-left, matching the
     // directionality of the scrollbars.
     this.scrollbar.set(
-        -(x + metrics.contentLeft), -(y + metrics.contentTop), false);
+        -(x + scrollMetrics.left), -(y + scrollMetrics.top), false);
   }
   // We have to shift the translation so that when the canvas is at 0, 0 the
   // workspace origin is not underneath the toolbox.
-  x += metrics.absoluteLeft;
-  y += metrics.absoluteTop;
+  var absMetrics = this.getMetricsManager().getAbsoluteMetrics();
+  x += absMetrics.left;
+  y += absMetrics.top;
   this.translate(x, y);
 };
 

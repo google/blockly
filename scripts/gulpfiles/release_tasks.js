@@ -126,8 +126,9 @@ function updateBetaVersion(done) {
   var newVersion = null;
   var blocklyVersions = JSON.parse(execSync('npm view blockly versions --json').toString());
   var re = new RegExp(/-beta\.(\d)/);
+  var latestBetaVersion = execSync('npm show blockly version --tag beta').toString().trim();
   while(!isValid) {
-    newVersion = readlineSync.question('What is the new beta version? (ex: 3.20201217.0-beta.0)');
+    newVersion = readlineSync.question(`What is the new beta version? (latest beta version: ${latestBetaVersion})`);
     var existsOnNpm = blocklyVersions.indexOf(newVersion) > -1;
     var isFormatted = newVersion.search(re) > -1;
     if (!existsOnNpm && isFormatted) {

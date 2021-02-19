@@ -111,7 +111,9 @@ Blockly.HorizontalFlyout.prototype.setMetrics_ = function(xyRatio) {
   }
 
   if (typeof xyRatio.x == 'number') {
-    this.workspace_.scrollX = -metrics.contentWidth * xyRatio.x;
+    this.workspace_.scrollX =
+        -(metrics.contentLeft +
+            (metrics.contentWidth - metrics.viewWidth) * xyRatio.x);
   }
 
   this.workspace_.translate(this.workspace_.scrollX + metrics.absoluteLeft,

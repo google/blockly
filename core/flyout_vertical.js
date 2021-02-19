@@ -115,7 +115,9 @@ Blockly.VerticalFlyout.prototype.setMetrics_ = function(xyRatio) {
     return;
   }
   if (typeof xyRatio.y == 'number') {
-    this.workspace_.scrollY = -metrics.contentHeight * xyRatio.y;
+    this.workspace_.scrollY =
+        -(metrics.contentTop +
+            (metrics.contentHeight - metrics.viewHeight) * xyRatio.y);
   }
   this.workspace_.translate(this.workspace_.scrollX + metrics.absoluteLeft,
       this.workspace_.scrollY + metrics.absoluteTop);

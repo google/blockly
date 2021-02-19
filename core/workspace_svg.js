@@ -1724,6 +1724,9 @@ Blockly.WorkspaceSvg.prototype.getBlocksBoundingBox = function() {
 
   // Start at 1 since the 0th block was used for initialization.
   for (var i = 1; i < topElements.length; i++) {
+    if (topElements[i].isInsertionMarker_) {
+      continue;
+    }
     var blockBoundary = topElements[i].getBoundingRectangle();
     if (blockBoundary.top < boundary.top) {
       boundary.top = blockBoundary.top;
@@ -2184,7 +2187,7 @@ Blockly.WorkspaceSvg.prototype.scroll = function(x, y) {
     // the content's top-left to the view's top-left, matching the
     // directionality of the scrollbars.
     this.scrollbar.set(
-        -(x + metrics.contentLeft), -(y + metrics.contentTop), false);
+        -(x + metrics.contentLeft), -(y + metrics.contentTop) , false);
   }
   // We have to shift the translation so that when the canvas is at 0, 0 the
   // workspace origin is not underneath the toolbox.
@@ -2202,11 +2205,16 @@ Blockly.WorkspaceSvg.prototype.scroll = function(x, y) {
  */
 Blockly.WorkspaceSvg.setTopLevelWorkspaceMetrics_ = function(xyRatio) {
   var metrics = this.getMetrics();
+
   if (typeof xyRatio.x == 'number') {
-    this.scrollX = -metrics.contentWidth * xyRatio.x - metrics.contentLeft;
+    this.scrollX =
+        -(metrics.contentLeft +
+            (metrics.contentWidth - metrics.viewWidth) * xyRatio.x);
   }
   if (typeof xyRatio.y == 'number') {
-    this.scrollY = -metrics.contentHeight * xyRatio.y - metrics.contentTop;
+    this.scrollY =
+        -(metrics.contentTop +
+            (metrics.contentHeight - metrics.viewHeight) * xyRatio.y);
   }
   // We have to shift the translation so that when the canvas is at 0, 0 the
   // workspace origin is not underneath the toolbox.

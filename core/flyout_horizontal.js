@@ -384,7 +384,7 @@ Blockly.HorizontalFlyout.prototype.getClientRect = function() {
  * @protected
  */
 Blockly.HorizontalFlyout.prototype.reflowInternal_ = function() {
-  this.workspace_.scale = this.targetWorkspace.scale;
+  this.workspace_.scale = this.getFlyoutScale();
   var flyoutHeight = 0;
   var blocks = this.workspace_.getTopBlocks(false);
   for (var i = 0, block; (block = blocks[i]); i++) {

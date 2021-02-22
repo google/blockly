@@ -337,6 +337,15 @@ Blockly.Flyout.prototype.getHeight = function() {
 };
 
 /**
+ * Get the scale (zoom level) of the flyout. By default,
+ * this matches the target workspace scale, but this can be overridden.
+ * @return {number} Flyout workspace scale.
+ */
+Blockly.Flyout.prototype.getFlyoutScale = function() {
+  return this.targetWorkspace.scale;
+};
+
+/**
  * Get the workspace inside the flyout.
  * @return {!Blockly.WorkspaceSvg} The workspace inside the flyout.
  * @package

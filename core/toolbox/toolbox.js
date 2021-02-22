@@ -148,7 +148,7 @@ Blockly.Toolbox = function(workspace) {
    * Array holding info needed to unbind event handlers.
    * Used for disposing.
    * Ex: [[node, name, func], [node, name, func]].
-   * @type {!Array<!Blockly.EventData>}
+   * @type {!Array<!Blockly.browserEvents.Data>}
    * @protected
    */
   this.boundEvents_ = [];

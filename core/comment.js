@@ -61,28 +61,28 @@ Blockly.Comment = function(block) {
 
   /**
    * Mouse up event data.
-   * @type {?Blockly.EventData}
+   * @type {?Blockly.browserEvents.Data}
    * @private
    */
   this.onMouseUpWrapper_ = null;
 
   /**
    * Wheel event data.
-   * @type {?Blockly.EventData}
+   * @type {?Blockly.browserEvents.Data}
    * @private
    */
   this.onWheelWrapper_ = null;
 
   /**
    * Change event data.
-   * @type {?Blockly.EventData}
+   * @type {?Blockly.browserEvents.Data}
    * @private
    */
   this.onChangeWrapper_ = null;
 
   /**
    * Input event data.
-   * @type {?Blockly.EventData}
+   * @type {?Blockly.browserEvents.Data}
    * @private
    */
   this.onInputWrapper_ = null;

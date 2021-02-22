@@ -48,14 +48,14 @@ Blockly.WorkspaceCommentSvg = function(
     workspace, content, height, width, opt_id) {
   /**
    * Mouse up event data.
-   * @type {?Blockly.EventData}
+   * @type {?Blockly.browserEvents.Data}
    * @private
    */
   this.onMouseUpWrapper_ = null;
 
   /**
    * Mouse move event data.
-   * @type {?Blockly.EventData}
+   * @type {?Blockly.browserEvents.Data}
    * @private
    */
   this.onMouseMoveWrapper_ = null;

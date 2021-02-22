@@ -10,18 +10,18 @@
  */
 'use strict';
 
-goog.provide('Blockly.eventHandling');
+goog.provide('Blockly.browserEvents');
 
 goog.require('Blockly.Touch');
 
 
 /**
  * Blockly opaque event data used to unbind events when using
- * `Blockly.eventHandling.bindEvent_` and
- * `Blockly.eventHandling.bindEventWithChecks_`.
+ * `Blockly.browserEvents.bindEvent_` and
+ * `Blockly.browserEvents.bindEventWithChecks_`.
  * @typedef {!Array.<!Array>}
  */
-Blockly.eventHandling.Data;
+Blockly.browserEvents.Data;
 
 /**
  * Bind an event to a function call.  When calling the function, verifies that
@@ -38,11 +38,11 @@ Blockly.eventHandling.Data;
  *     should prevent the default handler.  False by default.  If
  *     opt_noPreventDefault is provided, opt_noCaptureIdentifier must also be
  *     provided.
- * @return {!Blockly.eventHandling.Data} Opaque data that can be passed to
+ * @return {!Blockly.browserEvents.Data} Opaque data that can be passed to
  *     unbindEvent_.
  * @public
  */
-Blockly.eventHandling.checkAndBind = function(
+Blockly.browserEvents.checkAndBind = function(
     node, name, thisObject, func, opt_noCaptureIdentifier,
     opt_noPreventDefault) {
   var handled = false;
@@ -106,11 +106,11 @@ Blockly.eventHandling.checkAndBind = function(
  * @param {string} name Event name to listen to (e.g. 'mousedown').
  * @param {Object} thisObject The value of 'this' in the function.
  * @param {!Function} func Function to call when event is triggered.
- * @return {!Blockly.eventHandling.Data} Opaque data that can be passed to
+ * @return {!Blockly.browserEvents.Data} Opaque data that can be passed to
  *     unbindEvent_.
  * @public
  */
-Blockly.eventHandling.bind = function(node, name, thisObject, func) {
+Blockly.browserEvents.bind = function(node, name, thisObject, func) {
   var wrapFunc = function(e) {
     if (thisObject) {
       func.call(thisObject, e);
@@ -156,12 +156,12 @@ Blockly.eventHandling.bind = function(node, name, thisObject, func) {
 
 /**
  * Unbind one or more events event from a function call.
- * @param {!Blockly.eventHandling.Data} bindData Opaque data from bindEvent_.
+ * @param {!Blockly.browserEvents.Data} bindData Opaque data from bindEvent_.
  *     This list is emptied during the course of calling this function.
  * @return {!Function} The function call.
  * @public
  */
-Blockly.eventHandling.unbind = function(bindData) {
+Blockly.browserEvents.unbind = function(bindData) {
   while (bindData.length) {
     var bindDatum = bindData.pop();
     var node = bindDatum[0];

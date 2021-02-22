@@ -62,14 +62,14 @@ Blockly.FieldTextInput = function(opt_value, opt_validator, opt_config) {
 
   /**
    * Key down event data.
-   * @type {?Blockly.EventData}
+   * @type {?Blockly.browserEvents.Data}
    * @private
    */
   this.onKeyDownWrapper_ = null;
 
   /**
    * Key input event data.
-   * @type {?Blockly.EventData}
+   * @type {?Blockly.browserEvents.Data}
    * @private
    */
   this.onKeyInputWrapper_ = null;

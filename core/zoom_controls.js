@@ -36,7 +36,7 @@ Blockly.ZoomControls = function(workspace) {
   /**
    * A handle to use to unbind the mouse down event handler for zoom reset
    *    button. Opaque data returned from Blockly.bindEventWithChecks_.
-   * @type {?Blockly.EventData}
+   * @type {?Blockly.browserEvents.Data}
    * @private
    */
   this.onZoomResetWrapper_ = null;
@@ -44,7 +44,7 @@ Blockly.ZoomControls = function(workspace) {
   /**
    * A handle to use to unbind the mouse down event handler for zoom in button.
    * Opaque data returned from Blockly.bindEventWithChecks_.
-   * @type {?Blockly.EventData}
+   * @type {?Blockly.browserEvents.Data}
    * @private
    */
   this.onZoomInWrapper_ = null;
@@ -52,7 +52,7 @@ Blockly.ZoomControls = function(workspace) {
   /**
    * A handle to use to unbind the mouse down event handler for zoom out button.
    * Opaque data returned from Blockly.bindEventWithChecks_.
-   * @type {?Blockly.EventData}
+   * @type {?Blockly.browserEvents.Data}
    * @private
    */
   this.onZoomOutWrapper_ = null;

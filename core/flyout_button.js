@@ -85,7 +85,7 @@ Blockly.FlyoutButton = function(workspace, targetWorkspace, json, isLabel) {
 
   /**
    * Mouse up event data.
-   * @type {?Blockly.EventData}
+   * @type {?Blockly.browserEvents.Data}
    * @private
    */
   this.onMouseUpWrapper_ = null;

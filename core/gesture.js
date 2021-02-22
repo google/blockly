@@ -156,7 +156,7 @@ Blockly.Gesture = function(e, creatorWorkspace) {
   /**
    * A handle to use to unbind a mouse move listener at the end of a drag.
    * Opaque data returned from Blockly.bindEventWithChecks_.
-   * @type {?Blockly.EventData}
+   * @type {?Blockly.browserEvents.Data}
    * @protected
    */
   this.onMoveWrapper_ = null;
@@ -164,7 +164,7 @@ Blockly.Gesture = function(e, creatorWorkspace) {
   /**
    * A handle to use to unbind a mouse up listener at the end of a drag.
    * Opaque data returned from Blockly.bindEventWithChecks_.
-   * @type {?Blockly.EventData}
+   * @type {?Blockly.browserEvents.Data}
    * @protected
    */
   this.onUpWrapper_ = null;

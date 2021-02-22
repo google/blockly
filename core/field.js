@@ -131,7 +131,7 @@ Blockly.Field = function(value, opt_validator, opt_config) {
 
   /**
    * Mouse down event listener data.
-   * @type {?Blockly.EventData}
+   * @type {?Blockly.browserEvents.Data}
    * @private
    */
   this.mouseDownWrapper_ = null;

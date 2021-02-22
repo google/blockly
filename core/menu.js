@@ -55,35 +55,35 @@ Blockly.Menu = function() {
 
   /**
    * Mouse over event data.
-   * @type {?Blockly.EventData}
+   * @type {?Blockly.browserEvents.Data}
    * @private
    */
   this.mouseOverHandler_ = null;
 
   /**
    * Click event data.
-   * @type {?Blockly.EventData}
+   * @type {?Blockly.browserEvents.Data}
    * @private
    */
   this.clickHandler_ = null;
 
   /**
    * Mouse enter event data.
-   * @type {?Blockly.EventData}
+   * @type {?Blockly.browserEvents.Data}
    * @private
    */
   this.mouseEnterHandler_ = null;
 
   /**
    * Mouse leave event data.
-   * @type {?Blockly.EventData}
+   * @type {?Blockly.browserEvents.Data}
    * @private
    */
   this.mouseLeaveHandler_ = null;
 
   /**
    * Key down event data.
-   * @type {?Blockly.EventData}
+   * @type {?Blockly.browserEvents.Data}
    * @private
    */
   this.onKeyDownHandler_ = null;

@@ -17,7 +17,7 @@
 goog.provide('Blockly');
 
 goog.require('Blockly.constants');
-goog.require('Blockly.eventHandling');
+goog.require('Blockly.browserEvents');
 goog.require('Blockly.Events');
 goog.require('Blockly.Events.Ui');
 goog.require('Blockly.Events.UiBase');
@@ -485,6 +485,6 @@ Blockly.setParentContainer = function(container) {
 };
 
 /** Aliases. */
-Blockly.bindEvent_ = Blockly.eventHandling.bind;
-Blockly.unbindEvent_ = Blockly.eventHandling.unbind;
-Blockly.bindEventWithChecks_ = Blockly.eventHandling.checkAndBind;
+Blockly.bindEvent_ = Blockly.browserEvents.bind;
+Blockly.unbindEvent_ = Blockly.browserEvents.unbind;
+Blockly.bindEventWithChecks_ = Blockly.browserEvents.checkAndBind;

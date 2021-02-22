@@ -145,7 +145,7 @@ Blockly.HorizontalFlyout.prototype.getY = function() {
   // If this flyout is not the trashcan flyout (e.g. toolbox or mutator).
   if (this.targetWorkspace.toolboxPosition == this.toolboxPosition_) {
     // If there is a category toolbox.
-    if (targetWorkspaceMetrics.toolboxHeight) {
+    if (this.targetWorkspace.getToolbox()) {
       if (this.toolboxPosition_ == Blockly.TOOLBOX_AT_TOP) {
         y = targetWorkspaceMetrics.toolboxHeight;
       } else {

@@ -147,7 +147,7 @@ Blockly.HorizontalFlyout.prototype.getY = function() {
     // If there is a category toolbox.
     if (this.targetWorkspace.getToolbox()) {
       if (this.toolboxPosition_ == Blockly.TOOLBOX_AT_TOP) {
-        y = targetWorkspaceMetrics.toolboxHeight;
+        y = /** @type {number} */ (targetWorkspaceMetrics.toolboxHeight);
       } else {
         y = targetWorkspaceMetrics.viewHeight - this.height_;
       }

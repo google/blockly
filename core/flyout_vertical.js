@@ -141,7 +141,7 @@ Blockly.VerticalFlyout.prototype.getX = function() {
     // If there is a category toolbox.
     if (this.targetWorkspace.getToolbox()) {
       if (this.toolboxPosition_ == Blockly.TOOLBOX_AT_LEFT) {
-        x = targetWorkspaceMetrics.toolboxWidth;
+        x = /** @type {number} */ (targetWorkspaceMetrics.toolboxWidth);
       } else {
         x = targetWorkspaceMetrics.viewWidth - this.width_;
       }

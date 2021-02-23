@@ -423,6 +423,8 @@ suite('Toolbox', function() {
   suite('position', function() {
     setup(function() {
       this.toolbox = getBasicToolbox();
+      var metricsStub = sinon.stub(this.toolbox.workspace_, 'getMetrics');
+      metricsStub.returns({});
     });
 
     function checkHorizontalToolbox(toolbox) {

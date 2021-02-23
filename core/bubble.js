@@ -300,10 +300,10 @@ Blockly.Bubble.prototype.createDom_ = function(content, hasResize) {
   }
 
   if (!this.workspace_.options.readOnly) {
-    this.onMouseDownBubbleWrapper_ = Blockly.browserEvents.bindFilterable(
+    this.onMouseDownBubbleWrapper_ = Blockly.browserEvents.conditionalBind(
         this.bubbleBack_, 'mousedown', this, this.bubbleMouseDown_);
     if (this.resizeGroup_) {
-      this.onMouseDownResizeWrapper_ = Blockly.browserEvents.bindFilterable(
+      this.onMouseDownResizeWrapper_ = Blockly.browserEvents.conditionalBind(
           this.resizeGroup_, 'mousedown', this, this.resizeMouseDown_);
     }
   }
@@ -388,9 +388,9 @@ Blockly.Bubble.prototype.resizeMouseDown_ = function(e) {
       new Blockly.utils.Coordinate(
           this.workspace_.RTL ? -this.width_ : this.width_, this.height_));
 
-  Blockly.Bubble.onMouseUpWrapper_ = Blockly.browserEvents.bindFilterable(
+  Blockly.Bubble.onMouseUpWrapper_ = Blockly.browserEvents.conditionalBind(
       document, 'mouseup', this, Blockly.Bubble.bubbleMouseUp_);
-  Blockly.Bubble.onMouseMoveWrapper_ = Blockly.browserEvents.bindFilterable(
+  Blockly.Bubble.onMouseMoveWrapper_ = Blockly.browserEvents.conditionalBind(
       document, 'mousemove', this, this.resizeMouseMove_);
   Blockly.hideChaff();
   // This event has been handled.  No need to bubble up to the document.

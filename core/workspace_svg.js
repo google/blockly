@@ -809,9 +809,9 @@ Blockly.WorkspaceSvg.prototype.createDom = function(opt_backgroundClass) {
       {'class': 'blocklyBubbleCanvas'}, this.svgGroup_);
 
   if (!this.isFlyout) {
-    Blockly.browserEvents.bindFilterable(
+    Blockly.browserEvents.conditionalBind(
         this.svgGroup_, 'mousedown', this, this.onMouseDown_, false, true);
-    Blockly.browserEvents.bindFilterable(
+    Blockly.browserEvents.conditionalBind(
         this.svgGroup_, 'wheel', this, this.onMouseWheel_);
   }
 

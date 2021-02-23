@@ -487,4 +487,4 @@ Blockly.setParentContainer = function(container) {
 /** Aliases. */
 Blockly.bindEvent_ = Blockly.browserEvents.bind;
 Blockly.unbindEvent_ = Blockly.browserEvents.unbind;
-Blockly.bindEventWithChecks_ = Blockly.browserEvents.bindFilterable;
+Blockly.bindEventWithChecks_ = Blockly.browserEvents.conditionalBind;

@@ -18,7 +18,7 @@ goog.require('Blockly.Touch');
 /**
  * Blockly opaque event data used to unbind events when using
  * `Blockly.browserEvents.bind` and
- * `Blockly.browserEvents.bindFilterable`.
+ * `Blockly.browserEvents.conditionalBind`.
  * @typedef {!Array.<!Array>}
  */
 Blockly.browserEvents.Data;
@@ -43,7 +43,7 @@ Blockly.browserEvents.Data;
  *     unbindEvent_.
  * @public
  */
-Blockly.browserEvents.bindFilterable = function(
+Blockly.browserEvents.conditionalBind = function(
     node, name, thisObject, func, opt_noCaptureIdentifier,
     opt_noPreventDefault) {
   var handled = false;

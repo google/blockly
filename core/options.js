@@ -206,6 +206,8 @@ Blockly.Options.GridOptions;
  * @typedef {{
  *     drag: boolean,
  *     scrollbars: boolean,
+ *     hasHorizontalScrollbars: boolean,
+ *     hasVerticalScrollbars: boolean,
  *     wheel: boolean
  * }}
  */
@@ -250,10 +252,19 @@ Blockly.Options.prototype.getMetrics;
 Blockly.Options.parseMoveOptions_ = function(options, hasCategories) {
   var move = options['move'] || {};
   var moveOptions = {};
-  if (move['scrollbars'] === undefined && options['scrollbars'] === undefined) {
+  if (move['hasVerticalScrollbars'] !== undefined || move['hasHorizontalScrollbars'] !== undefined) {
+    moveOptions.hasVerticalScrollbars = !!move['hasVerticalScrollbars'];
+    moveOptions.hasHorizontalScrollbars = !!move['hasHorizontalScrollbars'];
+    moveOptions.scrollbars =
+        moveOptions.hasVerticalScrollbars || moveOptions.hasHorizontalScrollbars;
+  } else if (move['scrollbars'] === undefined && options['scrollbars'] === undefined) {
     moveOptions.scrollbars = hasCategories;
+    moveOptions.hasVerticalScrollbars = moveOptions.scrollbars;
+    moveOptions.hasHorizontalScrollbars = moveOptions.scrollbars;
   } else {
     moveOptions.scrollbars = !!move['scrollbars'] || !!options['scrollbars'];
+    moveOptions.hasVerticalScrollbars = moveOptions.scrollbars;
+    moveOptions.hasHorizontalScrollbars = moveOptions.scrollbars;
   }
   if (!moveOptions.scrollbars || move['wheel'] === undefined) {
     // Defaults to false so that developers' settings don't appear to change.

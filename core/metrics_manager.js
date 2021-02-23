@@ -383,6 +383,8 @@ Blockly.MetricsManager.prototype.getScrollMetrics = function(
  * .viewWidth: Width of the visible portion of the workspace.
  * .contentHeight: Height of the content.
  * .contentWidth: Width of the content.
+ * .scrollHeight: Height of the scroll area.
+ * .scrollWidth: Width of the scroll area.
  * .svgHeight: Height of the Blockly div (the view + the toolbox,
  *    simple or otherwise),
  * .svgWidth: Width of the Blockly div (the view + the toolbox,
@@ -393,6 +395,8 @@ Blockly.MetricsManager.prototype.getScrollMetrics = function(
  *     the workspace origin.
  * .contentTop: Top-edge of the content, relative to the workspace origin.
  * .contentLeft: Left-edge of the content relative to the workspace origin.
+ * .scrollTop: Top-edge of the scroll area, relative to the workspace origin.
+ * .scrollLeft: Left-edge of the scroll area relative to the workspace origin.
  * .absoluteTop: Top-edge of the visible portion of the workspace, relative
  *     to the blocklyDiv.
  * .absoluteLeft: Left-edge of the visible portion of the workspace, relative
@@ -414,12 +418,19 @@ Blockly.MetricsManager.prototype.getMetrics = function() {
   var absoluteMetrics = this.getAbsoluteMetrics();
   var viewMetrics = this.getViewMetrics();
   var contentMetrics = this.getContentMetrics();
+  var scrollMetrics =
+      this.getScrollMetrics(false, viewMetrics, contentMetrics);
 
   return {
     contentHeight: contentMetrics.height,
     contentWidth: contentMetrics.width,
     contentTop: contentMetrics.top,
     contentLeft: contentMetrics.left,
+
+    scrollHeight: scrollMetrics.height,
+    scrollWidth: scrollMetrics.width,
+    scrollTop: scrollMetrics.top,
+    scrollLeft: scrollMetrics.left,
 
     viewHeight: viewMetrics.height,
     viewWidth: viewMetrics.width,

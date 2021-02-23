@@ -985,7 +985,10 @@ Blockly.WorkspaceSvg.prototype.addFlyout = function(tagName) {
         'oneBasedIndex': this.options.oneBasedIndex,
         'horizontalLayout': this.horizontalLayout,
         'renderer': this.options.renderer,
-        'rendererOverrides': this.options.rendererOverrides
+        'rendererOverrides': this.options.rendererOverrides,
+        'move': {
+          'scrollbars': true,
+        }
       }));
   workspaceOptions.toolboxPosition = this.options.toolboxPosition;
   if (this.horizontalLayout) {
@@ -2185,16 +2188,14 @@ Blockly.WorkspaceSvg.prototype.scroll = function(x, y) {
   Blockly.hideChaff(/* opt_allowToolbox */ true);
 
   // Keep scrolling within the bounds of the content.
-  var viewMetrics = this.getMetricsManager().getViewMetrics();
-  var scrollMetrics =
-      this.getMetricsManager().getScrollMetrics(false, viewMetrics);
+  var metrics = this.getMetrics();
   // Canvas coordinates (aka scroll coordinates) have inverse directionality
   // to workspace coordinates so we have to inverse them.
-  x = Math.min(x, -scrollMetrics.left);
-  y = Math.min(y, -scrollMetrics.top);
-  var maxXScroll = scrollMetrics.left + scrollMetrics.width - viewMetrics.width;
+  x = Math.min(x, -metrics.scrollLeft);
+  y = Math.min(y, -metrics.scrollTop);
+  var maxXScroll = metrics.scrollLeft + metrics.scrollWidth - metrics.viewWidth;
   var maxYScroll =
-      scrollMetrics.top + scrollMetrics.height - viewMetrics.height;
+      metrics.scrollTop + metrics.scrollHeight - metrics.viewHeight;
   x = Math.max(x, -maxXScroll);
   y = Math.max(y, -maxYScroll);
 
@@ -2208,13 +2209,12 @@ Blockly.WorkspaceSvg.prototype.scroll = function(x, y) {
     // the content's top-left to the view's top-left, matching the
     // directionality of the scrollbars.
     this.scrollbar.set(
-        -(x + scrollMetrics.left), -(y + scrollMetrics.top), false);
+        -(x + metrics.scrollLeft), -(y + metrics.scrollTop), false);
   }
   // We have to shift the translation so that when the canvas is at 0, 0 the
   // workspace origin is not underneath the toolbox.
-  var absMetrics = this.getMetricsManager().getAbsoluteMetrics();
-  x += absMetrics.left;
-  y += absMetrics.top;
+  x += metrics.absoluteLeft;
+  y += metrics.absoluteTop;
   this.translate(x, y);
 };
 
@@ -2226,18 +2226,17 @@ Blockly.WorkspaceSvg.prototype.scroll = function(x, y) {
  * @this {Blockly.WorkspaceSvg}
  */
 Blockly.WorkspaceSvg.setTopLevelWorkspaceMetrics_ = function(xyRatio) {
-  var scrollMetrics = this.getMetricsManager().getScrollMetrics();
+  var metrics = this.getMetrics();
   if (typeof xyRatio.x == 'number') {
-    this.scrollX = -scrollMetrics.width * xyRatio.x - scrollMetrics.left;
+    this.scrollX = -metrics.scrollWidth * xyRatio.x - metrics.scrollLeft;
   }
   if (typeof xyRatio.y == 'number') {
-    this.scrollY = -scrollMetrics.height * xyRatio.y - scrollMetrics.top;
+    this.scrollY = -metrics.scrollHeight * xyRatio.y - metrics.scrollTop;
   }
-  var absMetrics = this.getMetricsManager().getAbsoluteMetrics();
   // We have to shift the translation so that when the canvas is at 0, 0 the
   // workspace origin is not underneath the toolbox.
-  var x = this.scrollX + absMetrics.left;
-  var y = this.scrollY + absMetrics.top;
+  var x = this.scrollX + metrics.absoluteLeft;
+  var y = this.scrollY + metrics.absoluteTop;
   // We could call scroll here, but that has extra checks we don't need to do.
   this.translate(x, y);
 };

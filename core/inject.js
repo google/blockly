@@ -242,34 +242,58 @@ Blockly.bumpTopObjectsIntoBounds = function(workspace) {
 Blockly.bumpIntoBoundsHandler = function(workspace) {
   return function(e) {
     var metricsManager = workspace.getMetricsManager();
-    if (!metricsManager.hasScrollEdges() || workspace.isDragging() ||
-        Blockly.Events.BUMP_EVENTS.indexOf(e.type) === -1) {
+    if (!metricsManager.hasScrollEdges() || workspace.isDragging()) {
       return;
     }
 
-    var scrollMetricsInWsCoords = metricsManager.getScrollMetrics(true);
+    if (Blockly.Events.BUMP_EVENTS.indexOf(e.type) !== -1) {
+      var scrollMetricsInWsCoords = metricsManager.getScrollMetrics(true);
 
-    // Triggered by move/create event
-    var object = Blockly.extractObjectFromEvent_(workspace, e);
-    if (!object) {
-      return;
-    }
-    // Handle undo.
-    var oldGroup = Blockly.Events.getGroup();
-    Blockly.Events.setGroup(e.group);
+      // Triggered by move/create event
+      var object = Blockly.extractObjectFromEvent_(workspace, e);
+      if (!object) {
+        return;
+      }
+      // Handle undo.
+      var oldGroup = Blockly.Events.getGroup();
+      Blockly.Events.setGroup(e.group);
 
-    var wasBumped = Blockly.bumpObjectIntoBounds_(
-        workspace, scrollMetricsInWsCoords,
-        /** @type {!Blockly.IBoundedElement} */ (object));
+      var wasBumped = Blockly.bumpObjectIntoBounds_(
+          workspace, scrollMetricsInWsCoords,
+          /** @type {!Blockly.IBoundedElement} */ (object));
 
-    if (wasBumped && !e.group) {
-      console.warn('Moved object in bounds but there was no' +
-          ' event group. This may break undo.');
-    }
-    if (oldGroup !== null) {
-      Blockly.Events.setGroup(oldGroup);
+      if (wasBumped && !e.group) {
+        console.warn('Moved object in bounds but there was no' +
+            ' event group. This may break undo.');
+      }
+      if (oldGroup !== null) {
+        Blockly.Events.setGroup(oldGroup);
+      }
+    } else if (e.type === Blockly.Events.VIEWPORT_CHANGE) {
+      var viewportEvent = /** @type {!Blockly.Events.ViewportChange} */ (e);
+      if (viewportEvent.scale !== viewportEvent.oldScale) {
+        Blockly.bumpTopObjectsIntoBounds(workspace);
+      }
     }
   };
+};
+
+/**
+ * Bumps the top objects in the given workspace into bounds.
+ * @param {!Blockly.WorkspaceSvg} workspace The workspace.
+ */
+Blockly.bumpTopObjectsIntoBounds = function(workspace) {
+  var metricsManager = workspace.getMetricsManager();
+  if (!metricsManager.hasScrollEdges() || workspace.isDragging()) {
+    return;
+  }
+
+  var scrollMetricsInWsCoords = metricsManager.getScrollMetrics(true);
+  var topBlocks = workspace.getTopBoundedElements();
+  for (var i = 0, block; (block = topBlocks[i]); i++) {
+    Blockly.bumpObjectIntoBounds_(
+        workspace, scrollMetricsInWsCoords, block);
+  }
 };
 
 /**

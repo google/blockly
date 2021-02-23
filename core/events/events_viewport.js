@@ -27,7 +27,7 @@ goog.require('Blockly.utils.object');
  *    event.
  * @param {string=} opt_workspaceId The workspace identifier for this event.
  *    Undefined for a blank event.
- * @param {number=} opt_scale The old scale of the workspace. Undefined for a
+ * @param {number=} opt_oldScale The old scale of the workspace. Undefined for a
  *    blank event.
  * @extends {Blockly.Events.UiBase}
  * @constructor

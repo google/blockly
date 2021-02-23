@@ -14,6 +14,7 @@
 
 goog.provide('Blockly.Field');
 
+goog.require('Blockly.browserEvents');
 goog.require('Blockly.Events');
 goog.require('Blockly.Events.BlockChange');
 goog.require('Blockly.Gesture');
@@ -381,9 +382,8 @@ Blockly.Field.prototype.createTextElement_ = function() {
  */
 Blockly.Field.prototype.bindEvents_ = function() {
   Blockly.Tooltip.bindMouseEvents(this.getClickTarget_());
-  this.mouseDownWrapper_ =
-      Blockly.bindEventWithChecks_(
-          this.getClickTarget_(), 'mousedown', this, this.onMouseDown_);
+  this.mouseDownWrapper_ = Blockly.browserEvents.conditionalBind(
+      this.getClickTarget_(), 'mousedown', this, this.onMouseDown_);
 };
 
 /**
@@ -419,7 +419,7 @@ Blockly.Field.prototype.dispose = function() {
   Blockly.Tooltip.unbindMouseEvents(this.getClickTarget_());
 
   if (this.mouseDownWrapper_) {
-    Blockly.unbindEvent_(this.mouseDownWrapper_);
+    Blockly.browserEvents.unbind(this.mouseDownWrapper_);
   }
 
   Blockly.utils.dom.removeNode(this.fieldGroup_);

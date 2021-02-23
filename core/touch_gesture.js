@@ -13,6 +13,7 @@
 
 goog.provide('Blockly.TouchGesture');
 
+goog.require('Blockly.browserEvents');
 goog.require('Blockly.Gesture');
 goog.require('Blockly.utils');
 goog.require('Blockly.utils.Coordinate');
@@ -123,13 +124,13 @@ Blockly.TouchGesture.prototype.doStart = function(e) {
  * @package
  */
 Blockly.TouchGesture.prototype.bindMouseEvents = function(e) {
-  this.onStartWrapper_ = Blockly.bindEventWithChecks_(
+  this.onStartWrapper_ = Blockly.browserEvents.conditionalBind(
       document, 'mousedown', null, this.handleStart.bind(this),
       /* opt_noCaptureIdentifier */ true);
-  this.onMoveWrapper_ = Blockly.bindEventWithChecks_(
+  this.onMoveWrapper_ = Blockly.browserEvents.conditionalBind(
       document, 'mousemove', null, this.handleMove.bind(this),
       /* opt_noCaptureIdentifier */ true);
-  this.onUpWrapper_ = Blockly.bindEventWithChecks_(
+  this.onUpWrapper_ = Blockly.browserEvents.conditionalBind(
       document, 'mouseup', null, this.handleUp.bind(this),
       /* opt_noCaptureIdentifier */ true);
 
@@ -218,7 +219,7 @@ Blockly.TouchGesture.prototype.dispose = function() {
   Blockly.TouchGesture.superClass_.dispose.call(this);
 
   if (this.onStartWrapper_) {
-    Blockly.unbindEvent_(this.onStartWrapper_);
+    Blockly.browserEvents.unbind(this.onStartWrapper_);
   }
 };
 

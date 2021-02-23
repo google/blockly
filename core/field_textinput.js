@@ -12,6 +12,7 @@
 
 goog.provide('Blockly.FieldTextInput');
 
+goog.require('Blockly.browserEvents');
 goog.require('Blockly.Events');
 goog.require('Blockly.Events.BlockChange');
 goog.require('Blockly.Field');
@@ -421,13 +422,11 @@ Blockly.FieldTextInput.prototype.widgetDispose_ = function() {
  */
 Blockly.FieldTextInput.prototype.bindInputEvents_ = function(htmlInput) {
   // Trap Enter without IME and Esc to hide.
-  this.onKeyDownWrapper_ =
-      Blockly.bindEventWithChecks_(
-          htmlInput, 'keydown', this, this.onHtmlInputKeyDown_);
+  this.onKeyDownWrapper_ = Blockly.browserEvents.conditionalBind(
+      htmlInput, 'keydown', this, this.onHtmlInputKeyDown_);
   // Resize after every input change.
-  this.onKeyInputWrapper_ =
-      Blockly.bindEventWithChecks_(
-          htmlInput, 'input', this, this.onHtmlInputChange_);
+  this.onKeyInputWrapper_ = Blockly.browserEvents.conditionalBind(
+      htmlInput, 'input', this, this.onHtmlInputChange_);
 };
 
 /**
@@ -436,11 +435,11 @@ Blockly.FieldTextInput.prototype.bindInputEvents_ = function(htmlInput) {
  */
 Blockly.FieldTextInput.prototype.unbindInputEvents_ = function() {
   if (this.onKeyDownWrapper_) {
-    Blockly.unbindEvent_(this.onKeyDownWrapper_);
+    Blockly.browserEvents.unbind(this.onKeyDownWrapper_);
     this.onKeyDownWrapper_ = null;
   }
   if (this.onKeyInputWrapper_) {
-    Blockly.unbindEvent_(this.onKeyInputWrapper_);
+    Blockly.browserEvents.unbind(this.onKeyInputWrapper_);
     this.onKeyInputWrapper_ = null;
   }
 };

@@ -13,6 +13,7 @@
 goog.provide('Blockly.Scrollbar');
 goog.provide('Blockly.ScrollbarPair');
 
+goog.require('Blockly.browserEvents');
 goog.require('Blockly.Touch');
 goog.require('Blockly.utils');
 goog.require('Blockly.utils.Coordinate');
@@ -372,10 +373,10 @@ Blockly.Scrollbar = function(workspace, horizontal, opt_pair, opt_class) {
     this.positionAttribute_ = 'y';
   }
   var scrollbar = this;
-  this.onMouseDownBarWrapper_ = Blockly.bindEventWithChecks_(
+  this.onMouseDownBarWrapper_ = Blockly.browserEvents.conditionalBind(
       this.svgBackground_, 'mousedown', scrollbar, scrollbar.onMouseDownBar_);
-  this.onMouseDownHandleWrapper_ = Blockly.bindEventWithChecks_(this.svgHandle_,
-      'mousedown', scrollbar, scrollbar.onMouseDownHandle_);
+  this.onMouseDownHandleWrapper_ = Blockly.browserEvents.conditionalBind(
+      this.svgHandle_, 'mousedown', scrollbar, scrollbar.onMouseDownHandle_);
 };
 
 /**
@@ -479,9 +480,9 @@ Blockly.Scrollbar.metricsAreEquivalent_ = function(first, second) {
  */
 Blockly.Scrollbar.prototype.dispose = function() {
   this.cleanUp_();
-  Blockly.unbindEvent_(this.onMouseDownBarWrapper_);
+  Blockly.browserEvents.unbind(this.onMouseDownBarWrapper_);
   this.onMouseDownBarWrapper_ = null;
-  Blockly.unbindEvent_(this.onMouseDownHandleWrapper_);
+  Blockly.browserEvents.unbind(this.onMouseDownHandleWrapper_);
   this.onMouseDownHandleWrapper_ = null;
 
   Blockly.utils.dom.removeNode(this.outerSvg_);
@@ -897,10 +898,10 @@ Blockly.Scrollbar.prototype.onMouseDownHandle_ = function(e) {
 
   // Record the current mouse position.
   this.startDragMouse_ = this.horizontal_ ? e.clientX : e.clientY;
-  Blockly.Scrollbar.onMouseUpWrapper_ = Blockly.bindEventWithChecks_(document,
-      'mouseup', this, this.onMouseUpHandle_);
-  Blockly.Scrollbar.onMouseMoveWrapper_ = Blockly.bindEventWithChecks_(document,
-      'mousemove', this, this.onMouseMoveHandle_);
+  Blockly.Scrollbar.onMouseUpWrapper_ = Blockly.browserEvents.conditionalBind(
+      document, 'mouseup', this, this.onMouseUpHandle_);
+  Blockly.Scrollbar.onMouseMoveWrapper_ = Blockly.browserEvents.conditionalBind(
+      document, 'mousemove', this, this.onMouseMoveHandle_);
   e.stopPropagation();
   e.preventDefault();
 };
@@ -938,11 +939,11 @@ Blockly.Scrollbar.prototype.onMouseUpHandle_ = function() {
 Blockly.Scrollbar.prototype.cleanUp_ = function() {
   Blockly.hideChaff(true);
   if (Blockly.Scrollbar.onMouseUpWrapper_) {
-    Blockly.unbindEvent_(Blockly.Scrollbar.onMouseUpWrapper_);
+    Blockly.browserEvents.unbind(Blockly.Scrollbar.onMouseUpWrapper_);
     Blockly.Scrollbar.onMouseUpWrapper_ = null;
   }
   if (Blockly.Scrollbar.onMouseMoveWrapper_) {
-    Blockly.unbindEvent_(Blockly.Scrollbar.onMouseMoveWrapper_);
+    Blockly.browserEvents.unbind(Blockly.Scrollbar.onMouseMoveWrapper_);
     Blockly.Scrollbar.onMouseMoveWrapper_ = null;
   }
 };

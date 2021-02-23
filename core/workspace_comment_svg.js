@@ -155,9 +155,9 @@ Blockly.WorkspaceCommentSvg.prototype.initSvg = function(opt_noSelect) {
     throw TypeError('Workspace is headless.');
   }
   if (!this.workspace.options.readOnly && !this.eventsInit_) {
-    Blockly.bindEventWithChecks_(
+    Blockly.browserEvents.conditionalBind(
         this.svgRectTarget_, 'mousedown', this, this.pathMouseDown_);
-    Blockly.bindEventWithChecks_(
+    Blockly.browserEvents.conditionalBind(
         this.svgHandleTarget_, 'mousedown', this, this.pathMouseDown_);
   }
   this.eventsInit_ = true;

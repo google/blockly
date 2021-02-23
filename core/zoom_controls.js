@@ -12,6 +12,7 @@
 
 goog.provide('Blockly.ZoomControls');
 
+goog.require('Blockly.browserEvents');
 goog.require('Blockly.constants');
 goog.require('Blockly.Css');
 goog.require('Blockly.Scrollbar');
@@ -180,13 +181,13 @@ Blockly.ZoomControls.prototype.dispose = function() {
     Blockly.utils.dom.removeNode(this.svgGroup_);
   }
   if (this.onZoomResetWrapper_) {
-    Blockly.unbindEvent_(this.onZoomResetWrapper_);
+    Blockly.browserEvents.unbind(this.onZoomResetWrapper_);
   }
   if (this.onZoomInWrapper_) {
-    Blockly.unbindEvent_(this.onZoomInWrapper_);
+    Blockly.browserEvents.unbind(this.onZoomInWrapper_);
   }
   if (this.onZoomOutWrapper_) {
-    Blockly.unbindEvent_(this.onZoomOutWrapper_);
+    Blockly.browserEvents.unbind(this.onZoomOutWrapper_);
   }
 };
 
@@ -279,7 +280,7 @@ Blockly.ZoomControls.prototype.createZoomOutSvg_ = function(rnd) {
       this.workspace_.options.pathToMedia + Blockly.SPRITE.url);
 
   // Attach listener.
-  this.onZoomOutWrapper_ = Blockly.bindEventWithChecks_(
+  this.onZoomOutWrapper_ = Blockly.browserEvents.conditionalBind(
       this.zoomOutGroup_, 'mousedown', null, this.zoom_.bind(this, -1));
 };
 
@@ -330,7 +331,7 @@ Blockly.ZoomControls.prototype.createZoomInSvg_ = function(rnd) {
       this.workspace_.options.pathToMedia + Blockly.SPRITE.url);
 
   // Attach listener.
-  this.onZoomInWrapper_ = Blockly.bindEventWithChecks_(
+  this.onZoomInWrapper_ = Blockly.browserEvents.conditionalBind(
       this.zoomInGroup_, 'mousedown', null, this.zoom_.bind(this, 1));
 };
 
@@ -397,7 +398,7 @@ Blockly.ZoomControls.prototype.createZoomResetSvg_ = function(rnd) {
       this.workspace_.options.pathToMedia + Blockly.SPRITE.url);
 
   // Attach event listeners.
-  this.onZoomResetWrapper_ = Blockly.bindEventWithChecks_(
+  this.onZoomResetWrapper_ = Blockly.browserEvents.conditionalBind(
       this.zoomResetGroup_, 'mousedown', null, this.resetZoom_.bind(this));
 };
 

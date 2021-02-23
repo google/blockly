@@ -12,6 +12,7 @@
 
 goog.provide('Blockly.Toolbox');
 
+goog.require('Blockly.browserEvents');
 goog.require('Blockly.CollapsibleToolboxCategory');
 goog.require('Blockly.constants');
 goog.require('Blockly.Css');
@@ -245,13 +246,15 @@ Blockly.Toolbox.prototype.createContentsContainer_ = function() {
 Blockly.Toolbox.prototype.attachEvents_ = function(container,
     contentsContainer) {
   // Clicking on toolbox closes popups.
-  var clickEvent = Blockly.bindEventWithChecks_(container, 'click', this,
-      this.onClick_, /* opt_noCaptureIdentifier */ false,
+  var clickEvent = Blockly.browserEvents.conditionalBind(
+      container, 'click', this, this.onClick_,
+      /* opt_noCaptureIdentifier */ false,
       /* opt_noPreventDefault */ true);
   this.boundEvents_.push(clickEvent);
 
-  var keyDownEvent = Blockly.bindEventWithChecks_(contentsContainer, 'keydown',
-      this, this.onKeyDown_, /* opt_noCaptureIdentifier */ false,
+  var keyDownEvent = Blockly.browserEvents.conditionalBind(
+      contentsContainer, 'keydown', this, this.onKeyDown_,
+      /* opt_noCaptureIdentifier */ false,
       /* opt_noPreventDefault */ true);
   this.boundEvents_.push(keyDownEvent);
 };
@@ -923,7 +926,7 @@ Blockly.Toolbox.prototype.dispose = function() {
   }
 
   for (var j = 0; j < this.boundEvents_.length; j++) {
-    Blockly.unbindEvent_(this.boundEvents_[j]);
+    Blockly.browserEvents.unbind(this.boundEvents_[j]);
   }
   this.boundEvents_ = [];
   this.contents_ = [];

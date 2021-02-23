@@ -13,6 +13,7 @@
 goog.provide('Blockly.inject');
 
 goog.require('Blockly.BlockDragSurfaceSvg');
+goog.require('Blockly.browserEvents');
 goog.require('Blockly.Css');
 goog.require('Blockly.DropDownDiv');
 goog.require('Blockly.Events');
@@ -339,7 +340,7 @@ Blockly.init_ = function(mainWorkspace) {
   var svg = mainWorkspace.getParentSvg();
 
   // Suppress the browser's context menu.
-  Blockly.bindEventWithChecks_(
+  Blockly.browserEvents.conditionalBind(
       /** @type {!Element} */ (svg.parentNode), 'contextmenu', null,
       function(e) {
         if (!Blockly.utils.isTargetInput(e)) {
@@ -347,9 +348,8 @@ Blockly.init_ = function(mainWorkspace) {
         }
       });
 
-  var workspaceResizeHandler = Blockly.bindEventWithChecks_(window, 'resize',
-      null,
-      function() {
+  var workspaceResizeHandler =
+      Blockly.browserEvents.conditionalBind(window, 'resize', null, function() {
         Blockly.hideChaff(true);
         Blockly.svgResize(mainWorkspace);
       });
@@ -408,7 +408,7 @@ Blockly.init_ = function(mainWorkspace) {
  */
 Blockly.inject.bindDocumentEvents_ = function() {
   if (!Blockly.documentEventsBound_) {
-    Blockly.bindEventWithChecks_(document, 'scroll', null, function() {
+    Blockly.browserEvents.conditionalBind(document, 'scroll', null, function() {
       var workspaces = Blockly.Workspace.getAll();
       for (var i = 0, workspace; (workspace = workspaces[i]); i++) {
         if (workspace.updateInverseScreenCTM) {
@@ -416,15 +416,17 @@ Blockly.inject.bindDocumentEvents_ = function() {
         }
       }
     });
-    Blockly.bindEventWithChecks_(document, 'keydown', null, Blockly.onKeyDown);
+    Blockly.browserEvents.conditionalBind(
+        document, 'keydown', null, Blockly.onKeyDown);
     // longStop needs to run to stop the context menu from showing up.  It
     // should run regardless of what other touch event handlers have run.
-    Blockly.bindEvent_(document, 'touchend', null, Blockly.longStop_);
-    Blockly.bindEvent_(document, 'touchcancel', null, Blockly.longStop_);
+    Blockly.browserEvents.bind(document, 'touchend', null, Blockly.longStop_);
+    Blockly.browserEvents.bind(
+        document, 'touchcancel', null, Blockly.longStop_);
     // Some iPad versions don't fire resize after portrait to landscape change.
     if (Blockly.utils.userAgent.IPAD) {
-      Blockly.bindEventWithChecks_(window, 'orientationchange', document,
-          function() {
+      Blockly.browserEvents.conditionalBind(
+          window, 'orientationchange', document, function() {
             // TODO (#397): Fix for multiple Blockly workspaces.
             Blockly.svgResize(/** @type {!Blockly.WorkspaceSvg} */
                 (Blockly.getMainWorkspace()));
@@ -465,7 +467,7 @@ Blockly.inject.loadSounds_ = function(pathToMedia, workspace) {
   var soundBinds = [];
   var unbindSounds = function() {
     while (soundBinds.length) {
-      Blockly.unbindEvent_(soundBinds.pop());
+      Blockly.browserEvents.unbind(soundBinds.pop());
     }
     audioMgr.preload();
   };
@@ -476,10 +478,8 @@ Blockly.inject.loadSounds_ = function(pathToMedia, workspace) {
   // necessary.
 
   // Android ignores any sound not loaded as a result of a user action.
-  soundBinds.push(
-      Blockly.bindEventWithChecks_(document, 'mousemove', null, unbindSounds,
-          true));
-  soundBinds.push(
-      Blockly.bindEventWithChecks_(document, 'touchstart', null, unbindSounds,
-          true));
+  soundBinds.push(Blockly.browserEvents.conditionalBind(
+      document, 'mousemove', null, unbindSounds, true));
+  soundBinds.push(Blockly.browserEvents.conditionalBind(
+      document, 'touchstart', null, unbindSounds, true));
 };

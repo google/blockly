@@ -248,12 +248,8 @@ Blockly.MetricsManager.prototype.getContentMetrics = function(
  */
 Blockly.MetricsManager.prototype.hasScrollEdges = function() {
   // This exists for optimization of bump logic.
-  var vScrollEnabled = this.workspace_.scrollbar &&
-      this.workspace_.scrollbar.canScrollVertically();
-  var hScrollEnabled = this.workspace_.scrollbar &&
-      this.workspace_.scrollbar.canScrollHorizontally();
-
-  return !vScrollEnabled || !hScrollEnabled;
+  return !this.workspace_.isMovableHorizontally() ||
+      !this.workspace_.isMovableVertically();
 };
 
 /**
@@ -273,10 +269,8 @@ Blockly.MetricsManager.prototype.getScrollEdges_ = function(
     return {};
   }
 
-  var vScrollEnabled = this.workspace_.scrollbar &&
-      this.workspace_.scrollbar.canScrollVertically();
-  var hScrollEnabled = this.workspace_.scrollbar &&
-      this.workspace_.scrollbar.canScrollHorizontally();
+  var hScrollEnabled = this.workspace_.isMovableHorizontally();
+  var vScrollEnabled = this.workspace_.isMovableVertically();
 
   var viewMetrics = opt_viewMetrics || this.getViewMetrics(false);
 
@@ -294,7 +288,7 @@ Blockly.MetricsManager.prototype.getScrollEdges_ = function(
   if (!hScrollEnabled) {
     if (edges.left !== undefined) {
       edges.right = edges.left + viewMetrics.width;
-    } else if (edges.bottom !== undefined) {
+    } else if (edges.right !== undefined) {
       edges.left = edges.right - viewMetrics.width;
     } else {
       edges.left = viewMetrics.left;

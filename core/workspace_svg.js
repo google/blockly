@@ -1657,15 +1657,33 @@ Blockly.WorkspaceSvg.prototype.isContentBounded = function() {
  * @return {boolean} True if the workspace is movable, false otherwise.
  */
 Blockly.WorkspaceSvg.prototype.isMovable = function() {
-  // TODO: should this be simplified? Currently in parsing moveOptions wheel,
-  // drag, and pinch can't be true if scrollbars is false.
-  // If it's not changed, should other logic be changed to use this instead of
-  // checking for scrollbars true.
   return (this.options.moveOptions && this.options.moveOptions.scrollbars) ||
       (this.options.moveOptions && this.options.moveOptions.wheel) ||
       (this.options.moveOptions && this.options.moveOptions.drag) ||
       (this.options.zoomOptions && this.options.zoomOptions.wheel) ||
       (this.options.zoomOptions && this.options.zoomOptions.pinch);
+};
+
+/**
+ * Is this workspace movable horizontally?
+ * @return {boolean} True if the workspace is movable horizontally, false
+ *    otherwise.
+ */
+Blockly.WorkspaceSvg.prototype.isMovableHorizontally = function() {
+  var hasScrollbars = !!this.scrollbar;
+  return this.isMovable() && (!hasScrollbars ||
+      (hasScrollbars && this.scrollbar.canScrollHorizontally()));
+};
+
+/**
+ * Is this workspace movable vertically?
+ * @return {boolean} True if the workspace is movable vertically, false
+ *    otherwise.
+ */
+Blockly.WorkspaceSvg.prototype.isMovableVertically = function() {
+  var hasScrollbars = !!this.scrollbar;
+  return this.isMovable() && (!hasScrollbars ||
+      (hasScrollbars && this.scrollbar.canScrollVertically()));
 };
 
 /**

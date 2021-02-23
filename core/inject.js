@@ -279,24 +279,6 @@ Blockly.bumpIntoBoundsHandler = function(workspace) {
 };
 
 /**
- * Bumps the top objects in the given workspace into bounds.
- * @param {!Blockly.WorkspaceSvg} workspace The workspace.
- */
-Blockly.bumpTopObjectsIntoBounds = function(workspace) {
-  var metricsManager = workspace.getMetricsManager();
-  if (!metricsManager.hasScrollEdges() || workspace.isDragging()) {
-    return;
-  }
-
-  var scrollMetricsInWsCoords = metricsManager.getScrollMetrics(true);
-  var topBlocks = workspace.getTopBoundedElements();
-  for (var i = 0, block; (block = topBlocks[i]); i++) {
-    Blockly.bumpObjectIntoBounds_(
-        workspace, scrollMetricsInWsCoords, block);
-  }
-};
-
-/**
  * Bumps the given object that has passed out of bounds.
  * @param {!Blockly.WorkspaceSvg} workspace The workspace containing the object.
  * @param {!Blockly.MetricsManager.ContainerRegion} scrollMetrics Scroll metrics
@@ -308,12 +290,12 @@ Blockly.bumpTopObjectsIntoBounds = function(workspace) {
 Blockly.bumpObjectIntoBounds_ = function(workspace, scrollMetrics, object) {
   // Compute new top/left position for object.
   var objectMetrics = object.getBoundingRectangle();
-  objectMetrics.height = objectMetrics.bottom - objectMetrics.top;
-  objectMetrics.width = objectMetrics.right - objectMetrics.left;
+  var height = objectMetrics.bottom - objectMetrics.top;
+  var width = objectMetrics.right - objectMetrics.left;
 
   var topClamp = scrollMetrics.top;
   var scrollMetricsBottom = scrollMetrics.top + scrollMetrics.height;
-  var bottomClamp = scrollMetricsBottom - objectMetrics.height;
+  var bottomClamp = scrollMetricsBottom - height;
   // If the object is taller than the workspace we want to
   // top-align the block
   var newYPosition =
@@ -324,7 +306,7 @@ Blockly.bumpObjectIntoBounds_ = function(workspace, scrollMetrics, object) {
   // top-left corner of the object.
   var leftClamp = scrollMetrics.left;
   var scrollMetricsRight = scrollMetrics.left + scrollMetrics.width;
-  var rightClamp = scrollMetricsRight - objectMetrics.width;
+  var rightClamp = scrollMetricsRight - width;
   if (workspace.RTL) {
     // If the object is wider than the workspace and we're in RTL
     // mode we want to right-align the block, which means setting

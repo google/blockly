@@ -631,34 +631,15 @@ Blockly.Scrollbar.prototype.resize = function(opt_metrics) {
 };
 
 /**
- * Returns whether the a resizeView is necessary by comparing the passed
- * hostMetrics with cached old host metrics.
- * @param {!Blockly.utils.Metrics} hostMetrics A data structure describing all
- *     the required dimensions, possibly fetched from the host object.
- * @return {boolean} Whether a resizeView is necesssary.
- */
-Blockly.Scrollbar.prototype.requiresViewResize_ = function(hostMetrics) {
-  if (!this.oldHostMetrics_) {
-    return true;
-  }
-  return this.oldHostMetrics_.viewWidth !== hostMetrics.viewWidth ||
-      this.oldHostMetrics_.viewHeight !== hostMetrics.viewHeight ||
-      this.oldHostMetrics_.absoluteLeft !== hostMetrics.absoluteLeft ||
-      this.oldHostMetrics_.absoluteTop !== hostMetrics.absoluteTop;
-};
-
-/**
  * Recalculate a horizontal scrollbar's location and length.
  * @param {!Blockly.utils.Metrics} hostMetrics A data structure describing all
  *     the required dimensions, possibly fetched from the host object.
  * @private
  */
 Blockly.Scrollbar.prototype.resizeHorizontal_ = function(hostMetrics) {
-  if (this.requiresViewResize_(hostMetrics)) {
-    this.resizeViewHorizontal(hostMetrics);
-  } else {
-    this.resizeContentHorizontal(hostMetrics);
-  }
+  // TODO: Inspect metrics to determine if we can get away with just a content
+  // resize.
+  this.resizeViewHorizontal(hostMetrics);
 };
 
 /**
@@ -745,11 +726,9 @@ Blockly.Scrollbar.prototype.resizeContentHorizontal = function(hostMetrics) {
  * @private
  */
 Blockly.Scrollbar.prototype.resizeVertical_ = function(hostMetrics) {
-  if (this.requiresViewResize_(hostMetrics)) {
-    this.resizeViewVertical(hostMetrics);
-  } else {
-    this.resizeContentVertical(hostMetrics);
-  }
+  // TODO: Inspect metrics to determine if we can get away with just a content
+  // resize.
+  this.resizeViewVertical(hostMetrics);
 };
 
 /**

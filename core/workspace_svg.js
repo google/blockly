@@ -1726,7 +1726,11 @@ Blockly.WorkspaceSvg.prototype.getBlocksBoundingBox = function() {
 
   // Start at 1 since the 0th block was used for initialization.
   for (var i = 1; i < topElements.length; i++) {
-    var blockBoundary = topElements[i].getBoundingRectangle();
+    var topElement = topElements[i];
+    if (topElement.isInsertionMarker && topElement.isInsertionMarker()) {
+      continue;
+    }
+    var blockBoundary = topElement.getBoundingRectangle();
     if (blockBoundary.top < boundary.top) {
       boundary.top = blockBoundary.top;
     }

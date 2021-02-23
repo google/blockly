@@ -17,16 +17,17 @@ goog.require('Blockly.Touch');
 
 /**
  * Blockly opaque event data used to unbind events when using
- * `Blockly.browserEvents.bindEvent_` and
- * `Blockly.browserEvents.bindEventWithChecks_`.
+ * `Blockly.browserEvents.bind` and
+ * `Blockly.browserEvents.bindFilterable`.
  * @typedef {!Array.<!Array>}
  */
 Blockly.browserEvents.Data;
 
 /**
- * Bind an event to a function call.  When calling the function, verifies that
- * it belongs to the touch stream that is currently being processed, and splits
- * multitouch events into multiple events as needed.
+ * Bind an event handler that can be ignored if it is not part of the active
+ * touch stream.
+ * Use this for events that either start or continue a multi-part gesture (e.g.
+ * mousedown or mousemove, which may be part of a drag or click).
  * @param {!EventTarget} node Node upon which to listen.
  * @param {string} name Event name to listen to (e.g. 'mousedown').
  * @param {Object} thisObject The value of 'this' in the function.
@@ -42,7 +43,7 @@ Blockly.browserEvents.Data;
  *     unbindEvent_.
  * @public
  */
-Blockly.browserEvents.checkAndBind = function(
+Blockly.browserEvents.bindFilterable = function(
     node, name, thisObject, func, opt_noCaptureIdentifier,
     opt_noPreventDefault) {
   var handled = false;
@@ -98,10 +99,10 @@ Blockly.browserEvents.checkAndBind = function(
 
 
 /**
- * Bind an event to a function call.  Handles multitouch events by using the
- * coordinates of the first changed touch, and doesn't do any safety checks for
- * simultaneous event processing.  In most cases prefer is to use
- * `Blockly.bindEventWithChecks_`.
+ * Bind an event handler that should be called regardless of whether it is part
+ * of the active touch stream.
+ * Use this for events that are not part of a multi-part gesture (e.g.
+ * mouseover for tooltips).
  * @param {!EventTarget} node Node upon which to listen.
  * @param {string} name Event name to listen to (e.g. 'mousedown').
  * @param {Object} thisObject The value of 'this' in the function.

@@ -348,7 +348,7 @@ Blockly.MetricsManager.prototype.getPaddedContent_ = function(
 Blockly.MetricsManager.prototype.getScrollMetrics = function(
     opt_getWorkspaceCoordinates, opt_viewMetrics, opt_contentMetrics) {
   var scale = opt_getWorkspaceCoordinates ? this.workspace_.scale : 1;
-  var viewMetrics = this.getViewMetrics(false);
+  var viewMetrics = opt_viewMetrics || this.getViewMetrics(false);
   var contentMetrics = opt_contentMetrics || this.getContentMetrics();
   var scrollEdges = this.getScrollEdges_(viewMetrics);
 

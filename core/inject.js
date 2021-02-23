@@ -151,11 +151,6 @@ Blockly.createMainWorkspace_ = function(svg, options, blockDragSurface,
   options.parentWorkspace = null;
   var mainWorkspace =
       new Blockly.WorkspaceSvg(options, blockDragSurface, workspaceDragSurface);
-  // TODO rm override of fixedSides property.
-  mainWorkspace.fixedSides = {
-    top: 0,
-    left: 0
-  };
   var wsOptions = mainWorkspace.options;
   mainWorkspace.scale = wsOptions.zoomOptions.startScale;
   svg.appendChild(mainWorkspace.createDom('blocklyMainBackground'));
@@ -222,49 +217,57 @@ Blockly.extractObjectFromEvent_ = function(workspace, e) {
 };
 
 /**
+ * Bumps the top objects in the given workspace into bounds.
+ * @param {!Blockly.WorkspaceSvg} workspace The workspace.
+ */
+Blockly.bumpTopObjectsIntoBounds = function(workspace) {
+  var metricsManager = workspace.getMetricsManager();
+  if (!metricsManager.hasScrollEdges() || workspace.isDragging()) {
+    return;
+  }
+
+  var scrollMetricsInWsCoords = metricsManager.getScrollMetrics(true);
+  var topBlocks = workspace.getTopBoundedElements();
+  for (var i = 0, block; (block = topBlocks[i]); i++) {
+    Blockly.bumpObjectIntoBounds_(
+        workspace, scrollMetricsInWsCoords, block);
+  }
+};
+
+/**
  * Creates a handler for bumping objects when they cross fixed bounds.
  * @param {!Blockly.WorkspaceSvg} workspace The workspace to handle.
+ * @return {function(Blockly.Events.Abstract)} The event handler.
  */
 Blockly.bumpIntoBoundsHandler = function(workspace) {
   return function(e) {
     var metricsManager = workspace.getMetricsManager();
     if (!metricsManager.hasScrollEdges() || workspace.isDragging() ||
-        (e.type !== Blockly.Events.VIEWPORT_CHANGE &&
-            Blockly.Events.BUMP_EVENTS.indexOf(e.type) === -1)) {
+        Blockly.Events.BUMP_EVENTS.indexOf(e.type) === -1) {
       return;
     }
 
-    var scrollMetricsInWsCoords =
-        metricsManager.getScrollMetrics(null, null, true);
+    var scrollMetricsInWsCoords = metricsManager.getScrollMetrics(true);
 
-    if (e.type === Blockly.Events.VIEWPORT_CHANGE) {
-      // Triggered by ViewportChange
-      // getTopBoundedElements
-      var topBlocks = workspace.getTopBlocks(false, false);
-      for (var i = 0, block; (block = topBlocks[i]); i++) {
-        Blockly.bumpObjectIntoBounds_(
-            workspace, scrollMetricsInWsCoords, block);
-      }
-    } else {
-      // Triggered by move/create event
-      var object = Blockly.extractObjectFromEvent_(workspace, e);
-      if (!object) {
-        return;
-      }
-      // Handle undo.
-      var oldGroup = Blockly.Events.getGroup();
-      Blockly.Events.setGroup(e.group);
+    // Triggered by move/create event
+    var object = Blockly.extractObjectFromEvent_(workspace, e);
+    if (!object) {
+      return;
+    }
+    // Handle undo.
+    var oldGroup = Blockly.Events.getGroup();
+    Blockly.Events.setGroup(e.group);
 
-      var wasBumped = Blockly.bumpObjectIntoBounds_(
-          workspace, scrollMetricsInWsCoords, object);
+    var wasBumped = Blockly.bumpObjectIntoBounds_(
+        workspace, scrollMetricsInWsCoords,
+        /** @type {!Blockly.IBoundedElement} */ (object));
 
-      if (wasBumped && !e.group) {
-        console.warn('Moved object in bounds but there was no' +
-            ' event group. This may break undo.');
-      }
-      if (oldGroup !== null) {
-        Blockly.Events.setGroup(oldGroup);
-      }
+    if (wasBumped && !e.group) {
+      console.warn('Moved object in bounds but there was no' +
+          ' event group. This may break undo.');
+    }
+    if (oldGroup !== null) {
+      Blockly.Events.setGroup(oldGroup);
     }
   };
 };
@@ -274,8 +277,7 @@ Blockly.bumpIntoBoundsHandler = function(workspace) {
  * @param {!Blockly.WorkspaceSvg} workspace The workspace containing the object.
  * @param {!Blockly.MetricsManager.ContainerRegion} scrollMetrics Scroll metrics
  *    in workspace coordinates.
- * @param {!Blockly.WorkspaceCommentSvg|!Blockly.BlockSvg} object The object to
- *    bump.
+ * @param {!Blockly.IBoundedElement} object The object to bump.
  * @return {boolean} True if block was bumped.
  * @private
  */
@@ -344,6 +346,7 @@ Blockly.init_ = function(mainWorkspace) {
       function() {
         Blockly.hideChaff(true);
         Blockly.svgResize(mainWorkspace);
+        Blockly.bumpTopObjectsIntoBounds(mainWorkspace);
       });
   mainWorkspace.setResizeHandlerWrapper(workspaceResizeHandler);
 
@@ -373,10 +376,9 @@ Blockly.init_ = function(mainWorkspace) {
   }
 
   if (options.moveOptions && options.moveOptions.scrollbars) {
-    // TODO change addHorizontal back to true.
     mainWorkspace.scrollbar =
         new Blockly.ScrollbarPair(
-            mainWorkspace, false, true, 'blocklyMainWorkspaceScrollbar');
+            mainWorkspace, true, true, 'blocklyMainWorkspaceScrollbar');
     mainWorkspace.scrollbar.resize();
   } else {
     mainWorkspace.setMetrics({x: 0.5, y: 0.5});

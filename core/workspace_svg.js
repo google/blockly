@@ -220,13 +220,6 @@ Blockly.WorkspaceSvg = function(
 Blockly.utils.object.inherits(Blockly.WorkspaceSvg, Blockly.Workspace);
 
 /**
- * The fixed sides.
- * @type {!Blockly.fixedSidesType}
- * @protected
- */
-Blockly.WorkspaceSvg.prototype.fixedSides = {};
-
-/**
  * A wrapper function called when a resize event occurs.
  * You can pass the result to `unbindEvent_`.
  * @type {Array.<!Array>}
@@ -1158,13 +1151,13 @@ Blockly.WorkspaceSvg.prototype.maybeFireViewportChangeEvent = function() {
   var scale = this.scale;
   var top = -this.scrollY;
   var left = -this.scrollX;
-  // if (scale == this.oldScale_ &&
-  //     Math.abs(top - this.oldTop_) < 1 &&
-  //     Math.abs(left - this.oldLeft_) < 1) {
-  //   // Ignore sub-pixel changes in top and left. Due to #4192 there are a lot of
-  //   // negligible changes in viewport top/left.
-  //   return;
-  // }
+  if (scale == this.oldScale_ &&
+      Math.abs(top - this.oldTop_) < 1 &&
+      Math.abs(left - this.oldLeft_) < 1) {
+    // Ignore sub-pixel changes in top and left. Due to #4192 there are a lot of
+    // negligible changes in viewport top/left.
+    return;
+  }
   this.oldScale_ = scale;
   this.oldTop_ = top;
   this.oldLeft_ = left;
@@ -1643,6 +1636,7 @@ Blockly.WorkspaceSvg.prototype.isDraggable = function() {
  * @package
  */
 Blockly.WorkspaceSvg.prototype.isContentBounded = function() {
+  // TODO: should this be removed/updated? what is it for?
   return (this.options.moveOptions && this.options.moveOptions.scrollbars) ||
       (this.options.moveOptions && this.options.moveOptions.wheel) ||
       (this.options.moveOptions && this.options.moveOptions.drag) ||
@@ -1662,6 +1656,10 @@ Blockly.WorkspaceSvg.prototype.isContentBounded = function() {
  * @return {boolean} True if the workspace is movable, false otherwise.
  */
 Blockly.WorkspaceSvg.prototype.isMovable = function() {
+  // TODO: should this be simplified? Currently in parsing moveOptions wheel,
+  // drag, and pinch can't be true if scrollbars is false.
+  // If it's not changed, should other logic be changed to use this instead of
+  // checking for scrollbars true.
   return (this.options.moveOptions && this.options.moveOptions.scrollbars) ||
       (this.options.moveOptions && this.options.moveOptions.wheel) ||
       (this.options.moveOptions && this.options.moveOptions.drag) ||
@@ -2170,7 +2168,7 @@ Blockly.WorkspaceSvg.prototype.scroll = function(x, y) {
   // Keep scrolling within the bounds of the content.
   var viewMetrics = this.getMetricsManager().getViewMetrics();
   var scrollMetrics =
-      this.getMetricsManager().getScrollMetrics(viewMetrics);
+      this.getMetricsManager().getScrollMetrics(false, viewMetrics);
   // Canvas coordinates (aka scroll coordinates) have inverse directionality
   // to workspace coordinates so we have to inverse them.
   x = Math.min(x, -scrollMetrics.left);

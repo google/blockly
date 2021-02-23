@@ -90,66 +90,6 @@ Blockly.MetricsManager.prototype.getDimensionsPx_ = function(elem) {
 };
 
 /**
- * Calculates the size of a scrollable workspace, which should include
- * room for a half screen border around the workspace contents. In pixel
- * coordinates.
- * @param {!Blockly.MetricsManager.ContainerRegion} viewMetrics An object
- *     containing height and width attributes in CSS pixels.  Together they
- *     specify the size of the visible workspace, not including areas covered up
- *     by the toolbox.
- * @return {!Blockly.MetricsManager.ContainerRegion} The dimensions of the
- *     contents of the given workspace, as an object containing
- *     - height and width in pixels
- *     - left and top in pixels relative to the workspace origin.
- * @protected
- */
-Blockly.MetricsManager.prototype.getContentDimensionsBounded_ = function(
-    viewMetrics) {
-  var content = this.getContentDimensionsExact_();
-  var contentRight = content.left + content.width;
-  var contentBottom = content.top + content.height;
-
-  // View height and width are both in pixels, and are the same as the SVG size.
-  var viewWidth = viewMetrics.width;
-  var viewHeight = viewMetrics.height;
-  var halfWidth = viewWidth / 2;
-  var halfHeight = viewHeight / 2;
-
-  // Add a border around the content that is at least half a screen wide.
-  // Ensure border is wide enough that blocks can scroll over entire screen.
-  var left = Math.min(content.left - halfWidth, contentRight - viewWidth);
-  var right = Math.max(contentRight + halfWidth, content.left + viewWidth);
-
-  var top = Math.min(content.top - halfHeight, contentBottom - viewHeight);
-  var bottom = Math.max(contentBottom + halfHeight, content.top + viewHeight);
-
-  return {left: left, top: top, height: bottom - top, width: right - left};
-};
-
-/**
- * Gets the bounding box for all workspace contents, in pixel coordinates.
- * @return {!Blockly.MetricsManager.ContainerRegion} The dimensions of the
- *     contents of the given workspace in pixel coordinates, as an object
- *     containing
- *     - height and width in pixels
- *     - left and top in pixels relative to the workspace origin.
- * @protected
- */
-Blockly.MetricsManager.prototype.getContentDimensionsExact_ = function() {
-  // Block bounding box is in workspace coordinates.
-  var blockBox = this.workspace_.getBlocksBoundingBox();
-  var scale = this.workspace_.scale;
-
-  // Convert to pixels.
-  var top = blockBox.top * scale;
-  var bottom = blockBox.bottom * scale;
-  var left = blockBox.left * scale;
-  var right = blockBox.right * scale;
-
-  return {top: top, left: left, width: right - left, height: bottom - top};
-};
-
-/**
  * Gets the width and the height of the flyout on the workspace in pixel
  * coordinates. Returns 0 for the width and height if the workspace has a
  * category toolbox instead of a simple toolbox.
@@ -279,47 +219,35 @@ Blockly.MetricsManager.prototype.getViewMetrics = function(
 
 /**
  * Gets content metrics in either pixel or workspace coordinates.
- *
- * This can mean two things:
- * If the workspace has a fixed width and height then the content
- * area is rectangle around all the top bounded elements on the workspace
- * (workspace comments and blocks).
- *
- * If the workspace does not have a fixed width and height then it is the
- * metrics of the area that content can be placed. This area is computed by
- * getting the rectangle around the top bounded elements on the workspace and
- * adding padding to all sides.
+ * The content area is a rectangle around all the top bounded elements on the
+ * workspace (workspace comments and blocks).
  * @param {boolean=} opt_getWorkspaceCoordinates True to get the content metrics
  *     in workspace coordinates, false to get them in pixel coordinates.
- * @param {!Blockly.MetricsManager.ContainerRegion=} opt_viewMetrics The view
- *     metrics if they have been previously computed. Not passing in view
- *     metrics may cause them to be computed again.
  * @return {!Blockly.MetricsManager.ContainerRegion} The
  *     metrics for the content container.
  * @public
  */
 Blockly.MetricsManager.prototype.getContentMetrics = function(
-    opt_getWorkspaceCoordinates, opt_viewMetrics) {
-  var scale = opt_getWorkspaceCoordinates ? this.workspace_.scale : 1;
-  var contentDimensions = this.getContentDimensionsExact_();
+    opt_getWorkspaceCoordinates) {
+  var scale = opt_getWorkspaceCoordinates ? 1 : this.workspace_.scale;
+
+  // Block bounding box is in workspace coordinates.
+  var blockBox = this.workspace_.getBlocksBoundingBox();
+
   return {
-    height: contentDimensions.height / scale,
-    width: contentDimensions.width / scale,
-    top: contentDimensions.top / scale,
-    left: contentDimensions.left / scale,
+    height: (blockBox.bottom - blockBox.top) * scale,
+    width: (blockBox.right - blockBox.left) * scale,
+    top: blockBox.top * scale,
+    left: blockBox.left * scale,
   };
 };
 
-// TODO maybe update name of function to include the word "fixed"
 /**
- * Whether the scroll area has "fixed" edges.
- * @return {boolean}
+ * Returns whether the scroll area has "fixed" edges.
+ * @return {boolean} Whether the scroll area has "fixed" edges.
  */
 Blockly.MetricsManager.prototype.hasScrollEdges = function() {
-  // TODO: Note. This would need to be overridden to support fixed sides.
-  // TODO: Note. This exists for optimization of bump logic.
-
-  // TODO: do i need to check if isMovable? can it be movable without scrollbar?
+  // This exists for optimization of bump logic.
   var vScrollEnabled = this.workspace_.scrollbar &&
       this.workspace_.scrollbar.canScrollVertically();
   var hScrollEnabled = this.workspace_.scrollbar &&
@@ -333,17 +261,13 @@ Blockly.MetricsManager.prototype.hasScrollEdges = function() {
  * @param {!Blockly.MetricsManager.ContainerRegion=} opt_viewMetrics The view
  *     metrics if they have been previously computed. Passing in null may cause
  *     the view metrics to be computed again, if it is needed.
- * @return {{
- *    top: number=,
- *    bottom: number=,
- *    left: number=,
- *    right: number=
- * }} The fixed edges of the scroll area.
+ * @return {{top: (number|undefined), bottom: (number|undefined),
+ *     left: (number|undefined), right: (number|undefined)}} The fixed edges of
+ *     the scroll area.
  * @protected
  */
-Blockly.MetricsManager.prototype.computeScrollEdges_ = function(
+Blockly.MetricsManager.prototype.getScrollEdges_ = function(
     opt_viewMetrics) {
-  // TODO: Note. This would need to be overridden to support fixed sides.
   if (!this.hasScrollEdges()) {
     // Return early if there are no edges.
     return {};
@@ -381,55 +305,71 @@ Blockly.MetricsManager.prototype.computeScrollEdges_ = function(
 };
 
 /**
+ * Returns the content area with added padding.
+ * @param {!Blockly.MetricsManager.ContainerRegion} viewMetrics The view
+ *     metrics.
+ * @param {!Blockly.MetricsManager.ContainerRegion} contentMetrics The content
+ *     metrics.
+ * @return {{top: number, bottom: number, left: number, right: number}} The
+ *     padded content area.
+ * @protected
+ */
+Blockly.MetricsManager.prototype.getPaddedContent_ = function(
+    viewMetrics, contentMetrics) {
+  var contentBottom = contentMetrics.top + contentMetrics.height;
+  var contentRight = contentMetrics.left + contentMetrics.width;
+
+  var viewWidth = viewMetrics.width;
+  var viewHeight = viewMetrics.height;
+  var halfWidth = viewWidth / 2;
+  var halfHeight = viewHeight / 2;
+
+  // Add a padding around the content that is at least half a screen wide.
+  // Ensure padding is wide enough that blocks can scroll over entire screen.
+  var top =
+      Math.min(contentMetrics.top - halfHeight, contentBottom - viewHeight);
+  var left =
+      Math.min(contentMetrics.left - halfWidth, contentRight - viewWidth);
+  var bottom =
+      Math.max(contentBottom + halfHeight, contentMetrics.top + viewHeight);
+  var right =
+      Math.max(contentRight + halfWidth, contentMetrics.left + viewWidth);
+
+  return {top: top, bottom: bottom, left: left, right: right};
+};
+
+/**
  * Returns the metrics for the scrollable area of the workspace.
+ * @param {boolean=} opt_getWorkspaceCoordinates True to get the content metrics
+ *     in workspace coordinates, false to get them in pixel coordinates.
  * @param {!Blockly.MetricsManager.ContainerRegion=} opt_viewMetrics The view
  *     metrics if they have been previously computed. Passing in null may cause
  *     the view metrics to be computed again, if it is needed.
  * @param {!Blockly.MetricsManager.ContainerRegion=} opt_contentMetrics The
  *     content metrics if they have been previously computed. Passing in null
  *     may cause the content metrics to be computed again, if it is needed.
- * @param {boolean=} opt_getWorkspaceCoordinates True to get the content metrics
- *     in workspace coordinates, false to get them in pixel coordinates.
  * @return {!Blockly.MetricsManager.ContainerRegion} The metrics for scroll
  *    container
  */
 Blockly.MetricsManager.prototype.getScrollMetrics = function(
-    opt_viewMetrics, opt_contentMetrics, opt_getWorkspaceCoordinates) {
+    opt_getWorkspaceCoordinates, opt_viewMetrics, opt_contentMetrics) {
   var scale = opt_getWorkspaceCoordinates ? this.workspace_.scale : 1;
   var viewMetrics = this.getViewMetrics(false);
   var contentMetrics = opt_contentMetrics || this.getContentMetrics();
-  var scrollBounds = this.computeScrollEdges_(viewMetrics);
-
-  // TODO: Note. This would be overridden to change padding logic.
-  // Is there a better way to refactor this logic out?
+  var scrollEdges = this.getScrollEdges_(viewMetrics);
 
   // Add padding around content
-  var contentBottom = contentMetrics.top + contentMetrics.height;
-  var contentRight = contentMetrics.left + contentMetrics.width;
-  var viewWidth = viewMetrics.width;
-  var viewHeight = viewMetrics.height;
-  var halfWidth = viewWidth / 2;
-  var halfHeight = viewHeight / 2;
-  // Add a padding around the content that is at least half a screen wide.
-  // Ensure padding is wide enough that blocks can scroll over entire screen.
-  var paddedTop =
-      Math.min(contentMetrics.top - halfHeight, contentBottom - viewHeight);
-  var paddedLeft =
-      Math.min(contentMetrics.left - halfWidth, contentRight - viewWidth);
-  var paddedBottom =
-      Math.max(contentBottom + halfHeight, contentMetrics.top + viewHeight);
-  var paddedRight =
-      Math.max(contentRight + halfWidth, contentMetrics.left + viewWidth);
+  var paddedContent = this.getPaddedContent_(viewMetrics, contentMetrics);
 
-  // Used combination of fixed bounds and padded content to make scroll area.
-  var top = scrollBounds.top !== undefined ?
-      scrollBounds.top : paddedTop;
-  var left = scrollBounds.left !== undefined ?
-      scrollBounds.left : paddedLeft;
-  var bottom = scrollBounds.bottom !== undefined ?
-      scrollBounds.bottom : paddedBottom;
-  var right = scrollBounds.right !== undefined ?
-      scrollBounds.right : paddedRight;
+  // Use combination of fixed bounds and padded content to make scroll area.
+  var top = scrollEdges.top !== undefined ?
+      scrollEdges.top : paddedContent.top;
+  var left = scrollEdges.left !== undefined ?
+      scrollEdges.left : paddedContent.left;
+  var bottom = scrollEdges.bottom !== undefined ?
+      scrollEdges.bottom : paddedContent.bottom;
+  var right = scrollEdges.right !== undefined ?
+      scrollEdges.right : paddedContent.right;
 
   var scrollableArea = {
     top: top / scale,
@@ -479,7 +419,7 @@ Blockly.MetricsManager.prototype.getMetrics = function() {
   var svgMetrics = this.getSvgMetrics();
   var absoluteMetrics = this.getAbsoluteMetrics();
   var viewMetrics = this.getViewMetrics();
-  var contentMetrics = this.getContentMetrics(false, viewMetrics);
+  var contentMetrics = this.getContentMetrics();
 
   return {
     contentHeight: contentMetrics.height,

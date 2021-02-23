@@ -166,15 +166,6 @@ Blockly.ScrollbarPair.prototype.resize = function() {
   this.oldHostMetrics_ = hostMetrics;
 };
 
-// TODO come up with better name?
-/**
- * Returns true if only a single direction of scrolling is enabled.
- * @return {boolean}
- */
-Blockly.ScrollbarPair.prototype.hasSingleDirectionScroll = function() {
-  return this.hScroll ? !this.vScroll : !!this.vScroll;
-};
-
 /**
  * Returns whether scrolling horizontally is enabled.
  * @return {boolean} True if horizontal scroll is enabled.
@@ -658,7 +649,7 @@ Blockly.Scrollbar.prototype.resizeContentHorizontal = function(hostMetrics) {
     height: hostMetrics.contentHeight,
   };
   var scrollMetrics = this.workspace_.getMetricsManager()
-      .getScrollMetrics(extractedViewMetrics, extractedContentMetrics);
+      .getScrollMetrics(false, extractedViewMetrics, extractedContentMetrics);
   if (!this.pair_) {
     // Only show the scrollbar if needed.
     // Ideally this would also apply to scrollbar pairs, but that's a bigger
@@ -739,7 +730,7 @@ Blockly.Scrollbar.prototype.resizeContentVertical = function(hostMetrics) {
     height: hostMetrics.contentHeight,
   };
   var scrollMetrics = this.workspace_.getMetricsManager()
-      .getScrollMetrics(extractedViewMetrics, extractedContentMetrics);
+      .getScrollMetrics(false, extractedViewMetrics, extractedContentMetrics);
   if (!this.pair_) {
     // Only show the scrollbar if needed.
     this.setVisible(this.scrollViewSize_ < scrollMetrics.height);

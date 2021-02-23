@@ -28,21 +28,21 @@ goog.requireType('Blockly.utils.Size');
 Blockly.IMetricsManager = function() {};
 
 /**
- * Whether the scroll area has "fixed" edges.
- * @return {boolean}
+ * Returns whether the scroll area has "fixed" edges.
+ * @return {boolean} Whether the scroll area has "fixed" edges.
  */
 Blockly.IMetricsManager.prototype.hasScrollEdges;
 
 /**
  * Returns the metrics for the scrollable area of the workspace.
+ * @param {boolean=} opt_getWorkspaceCoordinates True to get the content metrics
+ *     in workspace coordinates, false to get them in pixel coordinates.
  * @param {!Blockly.MetricsManager.ContainerRegion=} opt_viewMetrics The view
  *     metrics if they have been previously computed. Passing in null may cause
  *     the view metrics to be computed again, if it is needed.
  * @param {!Blockly.MetricsManager.ContainerRegion=} opt_contentMetrics The
  *     content metrics if they have been previously computed. Passing in null
  *     may cause the content metrics to be computed again, if it is needed.
- * @param {boolean=} opt_getWorkspaceCoordinates True to get the content metrics
- *     in workspace coordinates, false to get them in pixel coordinates.
  * @return {!Blockly.MetricsManager.ContainerRegion} The metrics for scroll
  *    container
  */
@@ -102,19 +102,10 @@ Blockly.IMetricsManager.prototype.getViewMetrics;
 
 /**
  * Gets content metrics in either pixel or workspace coordinates.
- *
- * This can mean two things:
- * If the workspace has a fixed width and height then the content
- * area is rectangle around all the top bounded elements on the workspace
- * (workspace comments and blocks).
- *
- * If the workspace does not have a fixed width and height then it is the
- * metrics of the area that content can be placed.
+ * The content area is a rectangle around all the top bounded elements on the
+ * workspace (workspace comments and blocks).
  * @param {boolean=} opt_getWorkspaceCoordinates True to get the content metrics
  *     in workspace coordinates, false to get them in pixel coordinates.
- * @param {!Blockly.MetricsManager.ContainerRegion=} opt_viewMetrics The view
- *     metrics if they have been previously computed. Passing in null may cause
- *     the view metrics to be computed again, if it is needed.
  * @return {!Blockly.MetricsManager.ContainerRegion} The
  *     metrics for the content container.
  * @public

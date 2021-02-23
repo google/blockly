@@ -200,6 +200,11 @@ Blockly.Events.COMMENT_MOVE = 'comment_move';
 Blockly.Events.FINISHED_LOADING = 'finished_loading';
 
 /**
+ * An event that cause objects to be bumped back into the visible
+ * portion of the workspace.
+ *
+ * Not to be confused with bumping so that disconnected connections to do
+ * not appear connected.
  * @typedef {!Blockly.Events.BlockCreate|!Blockly.Events.BlockMove|
  * !Blockly.Events.CommentCreate|!Blockly.Events.CommentMove}
  */
@@ -207,7 +212,7 @@ Blockly.Events.BumpEvent;
 
 /**
  * List of events that cause objects to be bumped back into the visible
- * portion of the workspace (only used for non-movable workspaces).
+ * portion of the workspace.
  *
  * Not to be confused with bumping so that disconnected connections to do
  * not appear connected.

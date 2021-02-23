@@ -349,7 +349,7 @@ Blockly.Tooltip.show_ = function() {
     div.appendChild(document.createTextNode(lines[i]));
     Blockly.Tooltip.DIV.appendChild(div);
   }
-  var rtl = Blockly.Tooltip.element_.RTL;
+  var rtl = /** @type {!Object} */ (Blockly.Tooltip.element_).RTL;
   var windowWidth = document.documentElement.clientWidth;
   var windowHeight = document.documentElement.clientHeight;
   // Display the tooltip.

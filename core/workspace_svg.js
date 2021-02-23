@@ -1633,23 +1633,6 @@ Blockly.WorkspaceSvg.prototype.isDraggable = function() {
 };
 
 /**
- * Should the workspace have bounded content? Used to tell if the
- * workspace's content should be sized so that it can move (bounded) or not
- * (exact sizing).
- * @return {boolean} True if the workspace should be bounded, false otherwise.
- * @package
- */
-Blockly.WorkspaceSvg.prototype.isContentBounded = function() {
-  // TODO: should this be removed/updated? what is it for?
-  return (this.options.moveOptions && this.options.moveOptions.scrollbars) ||
-      (this.options.moveOptions && this.options.moveOptions.wheel) ||
-      (this.options.moveOptions && this.options.moveOptions.drag) ||
-      (this.options.zoomOptions && this.options.zoomOptions.controls) ||
-      (this.options.zoomOptions && this.options.zoomOptions.wheel) ||
-      (this.options.zoomOptions && this.options.zoomOptions.pinch);
-};
-
-/**
  * Is this workspace movable?
  *
  * This means the user can reposition the X Y coordinates of the workspace

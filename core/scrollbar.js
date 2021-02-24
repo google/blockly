@@ -38,6 +38,11 @@ goog.require('Blockly.utils.Svg');
  */
 Blockly.ScrollbarPair = function(
     workspace, addHorizontal, addVertical, opt_class) {
+  /**
+   * The workspace this scrollbar pair is bound to.
+   * @type {!Blockly.WorkspaceSvg}
+   * @private
+   */
   this.workspace_ = workspace;
 
   addHorizontal = addHorizontal === undefined ? true : addHorizontal;
@@ -505,6 +510,7 @@ Blockly.Scrollbar.metricsAreEquivalent_ = function(first, second) {
 /**
  * Dispose of this scrollbar.
  * Unlink from all DOM elements to prevent memory leaks.
+ * @suppress {checkTypes}
  */
 Blockly.Scrollbar.prototype.dispose = function() {
   this.cleanUp_();

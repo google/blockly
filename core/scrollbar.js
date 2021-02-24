@@ -353,6 +353,12 @@ Blockly.Scrollbar = function(workspace, horizontal, opt_pair, opt_class) {
    * @private
    */
   this.oldHostMetrics_ = null;
+  /**
+   * The ratio of handle position offset to workspace content displacement.
+   * @type {?number}
+   * @package
+   */
+  this.ratio = null;
 
   this.createDom_(opt_class);
 
@@ -730,14 +736,18 @@ Blockly.Scrollbar.prototype.resizeContentHorizontal = function(hostMetrics) {
   //     then viewLeft = contentLeft + contentWidth - viewWidth
   //     then the offset should be max offset
 
+  var maxScrollDistance = hostMetrics.contentWidth - hostMetrics.viewWidth;
+  var contentDisplacement = hostMetrics.viewLeft - hostMetrics.contentLeft;
   // Percent of content to the left of our current position.
-  var offsetRatio =
-      (hostMetrics.viewLeft - hostMetrics.contentLeft) /
-      (hostMetrics.contentWidth - hostMetrics.viewWidth);
+  var offsetRatio = contentDisplacement / maxScrollDistance;
   // Area available to scroll * percent to the left
-  var handleOffset = (this.scrollViewSize_ - this.handleLength_) * offsetRatio;
+  var maxHandleOffset = this.scrollViewSize_ - this.handleLength_;
+  var handleOffset = maxHandleOffset * offsetRatio;
   handleOffset = this.constrainPosition_(handleOffset);
   this.setHandlePosition(handleOffset);
+
+  // Compute ratio (for use with set calls, which pass in content displacement).
+  this.ratio = maxHandleOffset / maxScrollDistance;
 };
 
 /**
@@ -818,14 +828,18 @@ Blockly.Scrollbar.prototype.resizeContentVertical = function(hostMetrics) {
   //     then viewTop = contentTop + contentHeight - viewHeight
   //     then the offset should be max offset
 
+  var maxScrollDistance = hostMetrics.contentHeight - hostMetrics.viewHeight;
+  var contentDisplacement = hostMetrics.viewTop - hostMetrics.contentTop;
   // Percent of content to the left of our current position.
-  var offsetRatio =
-      (hostMetrics.viewTop - hostMetrics.contentTop) /
-      (hostMetrics.contentHeight - hostMetrics.viewHeight);
+  var offsetRatio = contentDisplacement / maxScrollDistance;
   // Area available to scroll * percent to the left
-  var handleOffset = (this.scrollViewSize_ - this.handleLength_) * offsetRatio;
-  handleOffset = this.constrainPosition_(handleOffset);  // TODO is this needed?
+  var maxHandleOffset = this.scrollViewSize_ - this.handleLength_;
+  var handleOffset = maxHandleOffset * offsetRatio;
+  handleOffset = this.constrainPosition_(handleOffset);
   this.setHandlePosition(handleOffset);
+
+  // Compute ratio (for use with set calls, which pass in content displacement).
+  this.ratio = maxHandleOffset / maxScrollDistance;
 };
 
 /**
@@ -1090,11 +1104,7 @@ Blockly.Scrollbar.prototype.updateMetrics_ = function() {
  *    Defaults to true.
  */
 Blockly.Scrollbar.prototype.set = function(value, updateMetrics) {
-  var maxScrollDistance = this.horizontal_ ?
-      this.oldHostMetrics_.contentWidth - this.oldHostMetrics_.viewWidth :
-      this.oldHostMetrics_.contentHeight - this.oldHostMetrics_.viewHeight;
-  var ratio = (this.scrollViewSize_ - this.handleLength_) / maxScrollDistance;
-  this.setHandlePosition(this.constrainPosition_(value * ratio));
+  this.setHandlePosition(this.constrainPosition_(value * this.ratio));
   if (updateMetrics || updateMetrics === undefined) {
     this.updateMetrics_();
   }

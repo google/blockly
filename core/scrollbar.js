@@ -1084,7 +1084,8 @@ Blockly.Scrollbar.prototype.updateMetrics_ = function() {
 
 /**
  * Set the scrollbar handle's position.
- * @param {number} value TBD
+ * @param {number} value The content displacement, relative to the view in
+ *    pixels.
  * @param {boolean=} updateMetrics Whether to update metrics on this set call.
  *    Defaults to true.
  */

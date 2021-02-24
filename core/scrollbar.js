@@ -76,6 +76,7 @@ Blockly.ScrollbarPair = function(
 /**
  * Dispose of this pair of scrollbars.
  * Unlink from all DOM elements to prevent memory leaks.
+ * @suppress {checkTypes}
  */
 Blockly.ScrollbarPair.prototype.dispose = function() {
   Blockly.utils.dom.removeNode(this.corner_);

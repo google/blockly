@@ -23,6 +23,7 @@ goog.requireType('Blockly.blockRendering.ConstantProvider');
 goog.requireType('Blockly.BlockSvg');
 goog.requireType('Blockly.Connection');
 goog.requireType('Blockly.Field');
+goog.requireType('Blockly.IASTNodeLocationSvg');
 goog.requireType('Blockly.Marker');
 goog.requireType('Blockly.RenderedConnection');
 goog.requireType('Blockly.WorkspaceSvg');

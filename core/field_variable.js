@@ -25,6 +25,9 @@ goog.require('Blockly.VariableModel');
 goog.require('Blockly.Variables');
 goog.require('Blockly.Xml');
 
+goog.requireType('Blockly.Block');
+goog.requireType('Blockly.Menu');
+goog.requireType('Blockly.MenuItem');
 
 
 /**

@@ -18,6 +18,8 @@ goog.require('Blockly.utils');
 goog.require('Blockly.utils.Coordinate');
 goog.require('Blockly.utils.object');
 
+goog.requireType('Blockly.WorkspaceSvg');
+
 
 /*
  * Note: In this file "start" refers to touchstart, mousedown, and pointerstart

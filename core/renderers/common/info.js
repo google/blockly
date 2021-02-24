@@ -31,6 +31,8 @@ goog.require('Blockly.blockRendering.TopRow');
 goog.require('Blockly.blockRendering.Types');
 goog.require('Blockly.constants');
 
+goog.requireType('Blockly.blockRendering.ConstantProvider');
+goog.requireType('Blockly.blockRendering.Icon');
 goog.requireType('Blockly.blockRendering.Renderer');
 goog.requireType('Blockly.BlockSvg');
 goog.requireType('Blockly.Input');

@@ -16,6 +16,8 @@ goog.require('Blockly.Events');
 goog.require('Blockly.Events.VarCreate');
 goog.require('Blockly.utils');
 
+goog.requireType('Blockly.Workspace');
+
 
 /**
  * Class for a variable model.

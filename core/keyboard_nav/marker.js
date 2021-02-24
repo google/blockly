@@ -15,6 +15,8 @@ goog.provide('Blockly.Marker');
 
 goog.require('Blockly.ASTNode');
 
+goog.requireType('Blockly.blockRendering.MarkerSvg');
+
 
 /**
  * Class for a marker.

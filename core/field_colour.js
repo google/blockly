@@ -188,7 +188,7 @@ Blockly.FieldColour.prototype.initView = function() {
 Blockly.FieldColour.prototype.applyColour = function() {
   if (!this.getConstants().FIELD_COLOUR_FULL_BLOCK) {
     if (this.borderRect_) {
-      this.borderRect_.style.fill = this.getValue();
+      this.borderRect_.style.fill = /** @type {string} */ (this.getValue());
     }
   } else {
     this.sourceBlock_.pathObject.svgPath.setAttribute('fill', this.getValue());
@@ -218,7 +218,7 @@ Blockly.FieldColour.prototype.doClassValidation_ = function(opt_newValue) {
 Blockly.FieldColour.prototype.doValueUpdate_ = function(newValue) {
   this.value_ = newValue;
   if (this.borderRect_) {
-    this.borderRect_.style.fill = newValue;
+    this.borderRect_.style.fill = /** @type {string} */ (newValue);
   } else if (this.sourceBlock_ && this.sourceBlock_.rendered) {
     this.sourceBlock_.pathObject.svgPath.setAttribute('fill', newValue);
     this.sourceBlock_.pathObject.svgPath.setAttribute('stroke', '#fff');

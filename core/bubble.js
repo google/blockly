@@ -26,6 +26,7 @@ goog.require('Blockly.Workspace');
 goog.requireType('Blockly.BlockDragSurfaceSvg');
 goog.requireType('Blockly.BlockSvg');
 goog.requireType('Blockly.IBubble');
+goog.requireType('Blockly.MetricsManager');
 goog.requireType('Blockly.utils.Metrics');
 goog.requireType('Blockly.WorkspaceSvg');
 
@@ -555,8 +556,8 @@ Blockly.Bubble.prototype.getOverlap_ = function(relativeMin, viewMetrics) {
  * Calculate what the optimal horizontal position of the top-left corner of the
  * bubble is (relative to the anchor point) so that the most area of the
  * bubble is shown.
- * @param {!Blockly.MetricsManager.ContainerRegion} viewMetrics The view metrics of the
- *     workspace the bubble will appear in.
+ * @param {!Blockly.MetricsManager.ContainerRegion} viewMetrics The view metrics
+ *     of the workspace the bubble will appear in.
  * @return {number} The optimal horizontal position of the top-left corner
  *     of the bubble.
  * @private
@@ -613,8 +614,8 @@ Blockly.Bubble.prototype.getOptimalRelativeLeft_ = function(viewMetrics) {
  * Calculate what the optimal vertical position of the top-left corner of
  * the bubble is (relative to the anchor point) so that the most area of the
  * bubble is shown.
- * @param {!Blockly.MetricsManager.ContainerRegion} viewMetrics The view metrics of the
- *     workspace the bubble will appear in.
+ * @param {!Blockly.MetricsManager.ContainerRegion} viewMetrics The view metrics
+ *     of the workspace the bubble will appear in.
  * @return {number} The optimal vertical position of the top-left corner
  *     of the bubble.
  * @private

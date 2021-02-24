@@ -26,12 +26,17 @@ goog.require('Blockly.utils.style');
 goog.require('Blockly.utils.Svg');
 goog.require('Blockly.utils.userAgent');
 
+goog.requireType('Blockly.Block');
 goog.requireType('Blockly.blockRendering.ConstantProvider');
+goog.requireType('Blockly.BlockSvg');
 goog.requireType('Blockly.IASTNodeLocationSvg');
 goog.requireType('Blockly.IASTNodeLocationWithBlock');
 goog.requireType('Blockly.IKeyboardAccessible');
+goog.requireType('Blockly.Input');
 goog.requireType('Blockly.IRegistrable');
 goog.requireType('Blockly.ShortcutRegistry');
+goog.requireType('Blockly.utils.Coordinate');
+goog.requireType('Blockly.WorkspaceSvg');
 
 
 /**

@@ -19,6 +19,7 @@ goog.requireType('Blockly.MetricsManager');
 goog.requireType('Blockly.utils.Metrics');
 goog.requireType('Blockly.utils.toolbox');
 
+goog.requireType('Blockly.utils.Size');
 
 /**
  * Interface for a metrics manager.
@@ -57,7 +58,8 @@ Blockly.IMetricsManager.prototype.getContentDimensionsExact_;
  * coordinates. Returns 0 for the width and height if the workspace has a
  * category toolbox instead of a simple toolbox.
  * @param {boolean=} opt_own Whether to only return the workspace's own flyout.
- * @return {!Blockly.utils.Size} The width and height of the flyout.
+ * @return {!Blockly.MetricsManager.ToolboxMetrics} The width and height of the
+ *     flyout.
  * @public
  */
 Blockly.IMetricsManager.prototype.getFlyoutMetrics;
@@ -113,11 +115,11 @@ Blockly.IMetricsManager.prototype.getViewMetrics;
  *
  * If the workspace does not have a fixed width and height then it is the
  * metrics of the area that content can be placed.
+ * @param {boolean=} opt_getWorkspaceCoordinates True to get the content metrics
+ *     in workspace coordinates, false to get them in pixel coordinates.
  * @param {!Blockly.MetricsManager.ContainerRegion=} opt_viewMetrics The view
  *     metrics if they have been previously computed. Passing in null may cause
  *     the view metrics to be computed again, if it is needed.
- * @param {boolean=} opt_getWorkspaceCoordinates True to get the content metrics
- *     in workspace coordinates, false to get them in pixel coordinates.
  * @return {!Blockly.MetricsManager.ContainerRegion} The
  *     metrics for the content container.
  * @public

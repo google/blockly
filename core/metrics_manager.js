@@ -19,6 +19,7 @@ goog.requireType('Blockly.IFlyout');
 goog.requireType('Blockly.IToolbox');
 goog.requireType('Blockly.utils.Metrics');
 goog.requireType('Blockly.utils.toolbox');
+goog.requireType('Blockly.WorkspaceSvg');
 
 
 /**
@@ -153,14 +154,17 @@ Blockly.MetricsManager.prototype.getContentDimensionsExact_ = function() {
  * coordinates. Returns 0 for the width and height if the workspace has a
  * category toolbox instead of a simple toolbox.
  * @param {boolean=} opt_own Whether to only return the workspace's own flyout.
- * @return {!Blockly.utils.Size} The width and height of the flyout.
+ * @return {!Blockly.MetricsManager.ToolboxMetrics} The width and height of the
+ *     flyout.
  * @public
  */
 Blockly.MetricsManager.prototype.getFlyoutMetrics = function(opt_own) {
-  var flyoutDimensions =
-      this.getDimensionsPx_(this.workspace_.getFlyout(opt_own));
-  return new Blockly.utils.Size(
-      flyoutDimensions.width, flyoutDimensions.height);
+  var flyoutDimensions = this.getDimensionsPx_(this.workspace_.getFlyout(opt_own));
+  return {
+    width: flyoutDimensions.width,
+    height: flyoutDimensions.height,
+    position: this.workspace_.toolboxPosition
+  };
 };
 
 /**
@@ -206,8 +210,9 @@ Blockly.MetricsManager.prototype.getAbsoluteMetrics = function() {
   var toolboxMetrics = this.getToolboxMetrics();
   var flyoutMetrics = this.getFlyoutMetrics(true);
   var doesToolboxExist = !!this.workspace_.getToolbox();
-  var toolboxPosition = this.workspace_.toolboxPosition;
   var doesFlyoutExist = !!this.workspace_.getFlyout(true);
+  var toolboxPosition =
+      doesToolboxExist ? toolboxMetrics.position : flyoutMetrics.position;
 
   if (doesToolboxExist && toolboxPosition == Blockly.TOOLBOX_AT_LEFT) {
     absoluteLeft = toolboxMetrics.width;
@@ -243,7 +248,9 @@ Blockly.MetricsManager.prototype.getViewMetrics = function(
   var svgMetrics = this.getSvgMetrics();
   var toolboxMetrics = this.getToolboxMetrics();
   var flyoutMetrics = this.getFlyoutMetrics(true);
-  var toolboxPosition = this.workspace_.toolboxPosition;
+  var doesToolboxExist = !!this.workspace_.getToolbox();
+  var toolboxPosition =
+      doesToolboxExist ? toolboxMetrics.position : flyoutMetrics.position;
 
   if (this.workspace_.getToolbox()) {
     if (toolboxPosition == Blockly.TOOLBOX_AT_TOP ||
@@ -282,17 +289,17 @@ Blockly.MetricsManager.prototype.getViewMetrics = function(
  * metrics of the area that content can be placed. This area is computed by
  * getting the rectangle around the top bounded elements on the workspace and
  * adding padding to all sides.
- * @param {!Blockly.MetricsManager.ContainerRegion=} opt_viewMetrics The view
- *     metrics if they have been previously computed. Passing in null may cause
- *     the view metrics to be computed again, if it is needed.
  * @param {boolean=} opt_getWorkspaceCoordinates True to get the content metrics
  *     in workspace coordinates, false to get them in pixel coordinates.
+ * @param {!Blockly.MetricsManager.ContainerRegion=} opt_viewMetrics The view
+ *     metrics if they have been previously computed. Not passing in view
+ *     metrics may cause them to be computed again.
  * @return {!Blockly.MetricsManager.ContainerRegion} The
  *     metrics for the content container.
  * @public
  */
 Blockly.MetricsManager.prototype.getContentMetrics = function(
-    opt_viewMetrics, opt_getWorkspaceCoordinates) {
+    opt_getWorkspaceCoordinates, opt_viewMetrics) {
   var scale = opt_getWorkspaceCoordinates ? this.workspace_.scale : 1;
   var contentDimensions = null;
   if (this.workspace_.isContentBounded()) {
@@ -347,7 +354,7 @@ Blockly.MetricsManager.prototype.getMetrics = function() {
   var svgMetrics = this.getSvgMetrics();
   var absoluteMetrics = this.getAbsoluteMetrics();
   var viewMetrics = this.getViewMetrics();
-  var contentMetrics = this.getContentMetrics(viewMetrics);
+  var contentMetrics = this.getContentMetrics(false, viewMetrics);
 
   return {
     contentHeight: contentMetrics.height,

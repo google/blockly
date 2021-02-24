@@ -21,6 +21,11 @@ goog.requireType('Blockly.IFlyout');
 goog.requireType('Blockly.IToolbox');
 goog.requireType('Blockly.Theme');
 
+goog.requireType('Blockly.Cursor');
+goog.requireType('Blockly.MetricsManager');
+goog.requireType('Blockly.Options');
+goog.requireType('Blockly.ToolboxItem');
+
 
 /**
  * A map of maps. With the keys being the type and name of the class we are

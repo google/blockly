@@ -19,6 +19,10 @@ goog.require('Blockly.Msg');
 goog.require('Blockly.utils');
 goog.require('Blockly.utils.object');
 
+goog.requireType('Blockly.Block');
+goog.requireType('Blockly.VariableModel');
+goog.requireType('Blockly.Workspace');
+
 
 /**
  * Class for a variable map.  This contains a dictionary data structure with

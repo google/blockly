@@ -28,6 +28,9 @@ goog.require('Blockly.utils.string');
 goog.require('Blockly.utils.style');
 goog.require('Blockly.utils.userAgent');
 
+goog.requireType('Blockly.Block');
+goog.requireType('Blockly.WorkspaceSvg');
+
 
 /**
  * Don't do anything for this event, just halt propagation.

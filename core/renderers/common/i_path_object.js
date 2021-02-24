@@ -16,6 +16,7 @@ goog.provide('Blockly.blockRendering.IPathObject');
 
 goog.requireType('Blockly.blockRendering.ConstantProvider');
 goog.requireType('Blockly.Theme');
+goog.requireType('Blockly.Block');
 
 
 /**

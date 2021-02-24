@@ -27,6 +27,7 @@ goog.requireType('Blockly.blockRendering.MarkerSvg');
 goog.requireType('Blockly.blockRendering.RenderInfo');
 goog.requireType('Blockly.BlockSvg');
 goog.requireType('Blockly.Marker');
+goog.requireType('Blockly.Theme');
 goog.requireType('Blockly.WorkspaceSvg');
 
 

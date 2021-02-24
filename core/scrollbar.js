@@ -20,6 +20,8 @@ goog.require('Blockly.utils.dom');
 goog.require('Blockly.utils.Metrics');
 goog.require('Blockly.utils.Svg');
 
+goog.requireType('Blockly.WorkspaceSvg');
+
 
 /**
  * A note on units: most of the numbers that are in CSS pixels are scaled if the

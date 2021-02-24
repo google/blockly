@@ -571,7 +571,7 @@ Blockly.Scrollbar.prototype.constrainPosition_ = function(value) {
     value = 0;
   } else {
     // Handle length should never be greater than this.scrollViewSize_.
-    // If the viewSize is greater than or equal to than the contentSize, the
+    // If the viewSize is greater than or equal to the contentSize, the
     // handleLength will end up equal to this.scrollViewSize_.
     value = Math.min(value, this.scrollViewSize_ - this.handleLength_);
   }
@@ -639,18 +639,6 @@ Blockly.Scrollbar.prototype.resize = function(opt_metrics) {
     return;
   }
 
-  /* hostMetrics is an object with the following properties.
-   * .viewHeight: Height of the visible rectangle,
-   * .viewWidth: Width of the visible rectangle,
-   * .contentHeight: Height of the contents,
-   * .contentWidth: Width of the content,
-   * .viewTop: Offset of top edge of visible rectangle from parent,
-   * .viewLeft: Offset of left edge of visible rectangle from parent,
-   * .contentTop: Offset of the top-most content from the y=0 coordinate,
-   * .contentLeft: Offset of the left-most content from the x=0 coordinate,
-   * .absoluteTop: Top-edge of view.
-   * .absoluteLeft: Left-edge of view.
-   */
   if (this.horizontal_) {
     this.resizeHorizontal_(hostMetrics);
   } else {
@@ -806,7 +794,8 @@ Blockly.Scrollbar.prototype.resizeViewVertical = function(hostMetrics) {
  */
 Blockly.Scrollbar.prototype.resizeContentVertical = function(hostMetrics) {
   if (hostMetrics.viewHeight >= hostMetrics.contentHeight) {
-    // viewWidth is often greater than contentWidth in flyouts.
+    // viewHeight is often greater than contentHeight in flyouts and
+    // non-scrollable workspaces.
     this.setHandleLength_(this.scrollViewSize_);
     this.setHandlePosition(0);
     if (!this.pair_) {
@@ -824,7 +813,7 @@ Blockly.Scrollbar.prototype.resizeContentVertical = function(hostMetrics) {
   // Resize the handle.
   var handleLength =
       this.scrollViewSize_ * hostMetrics.viewHeight / hostMetrics.contentHeight;
-  handleLength = this.constrainLength_(handleLength);  // TODO is this needed?
+  handleLength = this.constrainLength_(handleLength);
   this.setHandleLength_(handleLength);
 
   // Compute the handle offset.

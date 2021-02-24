@@ -200,9 +200,11 @@ Blockly.ScrollbarPair.prototype.setOrigin = function(x, y) {
 };
 
 /**
- * Set the handles of both scrollbars to TBD
- * @param {number} x TBD
- * @param {number} y TBD
+ * Set the handles of both scrollbars.
+ * @param {number} x The horizontal content displacement, relative to the view
+ *    in pixels.
+ * @param {number} y The vertical content displacement, relative to the view in
+ *    pixels.
  * @param {boolean} updateMetrics Whether to update metrics on this set call.
  *    Defaults to true.
  */
@@ -327,9 +329,29 @@ Blockly.ScrollbarPair.prototype.resizeView = function(hostMetrics) {
  * @constructor
  */
 Blockly.Scrollbar = function(workspace, horizontal, opt_pair, opt_class) {
+  /**
+   * The workspace this scrollbar is bound to.
+   * @type {!Blockly.WorkspaceSvg}
+   * @private
+   */
   this.workspace_ = workspace;
+  /**
+   * Whether this scrollbar is part of a pair.
+   * @type {boolean}
+   * @private
+   */
   this.pair_ = opt_pair || false;
+  /**
+   * Whether this is a horizontal scrollbar.
+   * @type {boolean}
+   * @private
+   */
   this.horizontal_ = horizontal;
+  /**
+   * Previously recorded metrics from the workspace.
+   * @type {?Blockly.utils.Metrics}
+   * @private
+   */
   this.oldHostMetrics_ = null;
 
   this.createDom_(opt_class);
@@ -437,7 +459,7 @@ if (Blockly.Touch.TOUCH_ENABLED) {
 
 /**
  * Margin around the scrollbar (between the scrollbar and the edge of the
- * viewport in pixels.
+ * viewport in pixels).
  * @type {number}
  * @const
  */
@@ -534,13 +556,10 @@ Blockly.Scrollbar.prototype.constrainPosition_ = function(value) {
     value = 0;
   } else {
     // Handle length should never be greater than this.scrollViewSize_.
-    // If the viewSize is greater or equal to than the contentSize, the
+    // If the viewSize is greater than or equal to than the contentSize, the
     // handleLength will end up equal to this.scrollViewSize_.
     var oldValue = value;
     value = Math.min(value, this.scrollViewSize_ - this.handleLength_);
-    if (!this.horizontal_ && value != oldValue) {
-      console.warn('was constrained');
-    }
   }
   return value;
 };
@@ -680,7 +699,8 @@ Blockly.Scrollbar.prototype.resizeViewHorizontal = function(hostMetrics) {
  */
 Blockly.Scrollbar.prototype.resizeContentHorizontal = function(hostMetrics) {
   if (hostMetrics.viewWidth >= hostMetrics.contentWidth) {
-    // viewWidth is often greater than contentWidth in flyouts.
+    // viewWidth is often greater than contentWidth in flyouts and
+    // non-scrollable workspaces.
     this.setHandleLength_(this.scrollViewSize_);
     this.setHandlePosition(0);
     if (!this.pair_) {
@@ -702,12 +722,13 @@ Blockly.Scrollbar.prototype.resizeContentHorizontal = function(hostMetrics) {
   this.setHandleLength_(handleLength);
 
   // Compute the handle offset.
-  // The handle can be between 0 and this.scrollViewSize_ - handleLength
+  // The position of the handle can be between:
+  //     0 and this.scrollViewSize_ - handleLength
   // If viewLeft == contentLeft
-  //     then the value should be 0
+  //     then the offset should be 0
   // If viewRight == contentRight
   //     then viewLeft = contentLeft + contentWidth - viewWidth
-  //     then the value should be max offset
+  //     then the offset should be max offset
 
   // Percent of content to the left of our current position.
   var offsetRatio =
@@ -789,12 +810,13 @@ Blockly.Scrollbar.prototype.resizeContentVertical = function(hostMetrics) {
   this.setHandleLength_(handleLength);
 
   // Compute the handle offset.
-  // The handle can be between 0 and this.scrollViewSize_ - handleLength
+  // The position of the handle can be between:
+  //     0 and this.scrollViewSize_ - handleLength
   // If viewTop == contentTop
-  //     then the value should be 0
+  //     then the offset should be 0
   // If viewBottom == contentBottom
   //     then viewTop = contentTop + contentHeight - viewHeight
-  //     then the value should be max offset
+  //     then the offset should be max offset
 
   // Percent of content to the left of our current position.
   var offsetRatio =

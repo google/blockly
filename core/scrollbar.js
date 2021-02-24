@@ -564,7 +564,6 @@ Blockly.Scrollbar.prototype.constrainPosition_ = function(value) {
     // Handle length should never be greater than this.scrollViewSize_.
     // If the viewSize is greater than or equal to than the contentSize, the
     // handleLength will end up equal to this.scrollViewSize_.
-    var oldValue = value;
     value = Math.min(value, this.scrollViewSize_ - this.handleLength_);
   }
   return value;

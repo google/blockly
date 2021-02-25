@@ -16,6 +16,7 @@ goog.require('Blockly.ASTNode');
 goog.require('Blockly.Block');
 goog.require('Blockly.blockAnimations');
 goog.require('Blockly.blockRendering.IPathObject');
+goog.require('Blockly.browserEvents');
 goog.require('Blockly.constants');
 goog.require('Blockly.ContextMenu');
 goog.require('Blockly.ContextMenuRegistry');
@@ -223,7 +224,7 @@ Blockly.BlockSvg.prototype.initSvg = function() {
   this.pathObject.updateMovable(this.isMovable());
   var svg = this.getSvgRoot();
   if (!this.workspace.options.readOnly && !this.eventsInit_ && svg) {
-    Blockly.bindEventWithChecks_(
+    Blockly.browserEvents.conditionalBind(
         svg, 'mousedown', this, this.onMouseDown_);
   }
   this.eventsInit_ = true;

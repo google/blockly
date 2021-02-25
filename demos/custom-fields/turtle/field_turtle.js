@@ -404,47 +404,53 @@ CustomFields.FieldTurtle.prototype.dropdownCreate_ = function() {
   var leftArrow = createLeftArrow(row);
   widget.patternText = createTextNode(row, this.displayValue_.pattern);
   var rightArrow = createRightArrow(row);
-  this.editorListeners_.push(Blockly.bindEvent_(leftArrow, 'mouseup', this,
+  this.editorListeners_.push(Blockly.browserEvents.bind(
+      leftArrow, 'mouseup', this,
       createArrowListener('pattern', CustomFields.FieldTurtle.PATTERNS, -1)));
-  this.editorListeners_.push(Blockly.bindEvent_(rightArrow, 'mouseup', this,
+  this.editorListeners_.push(Blockly.browserEvents.bind(
+      rightArrow, 'mouseup', this,
       createArrowListener('pattern', CustomFields.FieldTurtle.PATTERNS, 1)));
 
   row = createRow(table);
   leftArrow = createLeftArrow(row);
   widget.hatText = createTextNode(row, this.displayValue_.hat);
   rightArrow = createRightArrow(row);
-  this.editorListeners_.push(Blockly.bindEvent_(leftArrow, 'mouseup', this,
+  this.editorListeners_.push(Blockly.browserEvents.bind(
+      leftArrow, 'mouseup', this,
       createArrowListener('hat', CustomFields.FieldTurtle.HATS, -1)));
-  this.editorListeners_.push(Blockly.bindEvent_(rightArrow, 'mouseup', this,
+  this.editorListeners_.push(Blockly.browserEvents.bind(
+      rightArrow, 'mouseup', this,
       createArrowListener('hat', CustomFields.FieldTurtle.HATS, 1)));
 
   row = createRow(table);
   leftArrow = createLeftArrow(row);
   widget.turtleNameText = createTextNode(row, this.displayValue_.turtleName);
   rightArrow = createRightArrow(row);
-  this.editorListeners_.push(Blockly.bindEvent_(leftArrow, 'mouseup', this,
+  this.editorListeners_.push(Blockly.browserEvents.bind(
+      leftArrow, 'mouseup', this,
       createArrowListener('turtleName', CustomFields.FieldTurtle.NAMES, -1)));
-  this.editorListeners_.push(Blockly.bindEvent_(rightArrow, 'mouseup', this,
+  this.editorListeners_.push(Blockly.browserEvents.bind(
+      rightArrow, 'mouseup', this,
       createArrowListener('turtleName', CustomFields.FieldTurtle.NAMES, 1)));
 
   var randomizeButton = document.createElement('button');
   randomizeButton.className = 'randomize';
   randomizeButton.setAttribute('type', 'button');
   randomizeButton.textContent = 'randomize turtle';
-  this.editorListeners_.push(Blockly.bindEvent_(randomizeButton, 'mouseup', this,
-    function() {
-    var value = {};
-    value.pattern = CustomFields.FieldTurtle.PATTERNS[
-        Math.floor(Math.random() * CustomFields.FieldTurtle.PATTERNS.length)];
+  this.editorListeners_.push(
+      Blockly.browserEvents.bind(randomizeButton, 'mouseup', this, function() {
+        var value = {};
+        value.pattern = CustomFields.FieldTurtle.PATTERNS[Math.floor(
+            Math.random() * CustomFields.FieldTurtle.PATTERNS.length)];
 
-    value.hat = CustomFields.FieldTurtle.HATS[
-      Math.floor(Math.random() * CustomFields.FieldTurtle.HATS.length)];
+        value.hat = CustomFields.FieldTurtle.HATS[Math.floor(
+            Math.random() * CustomFields.FieldTurtle.HATS.length)];
 
-    value.turtleName = CustomFields.FieldTurtle.NAMES[
-      Math.floor(Math.random() * CustomFields.FieldTurtle.NAMES.length)];
+        value.turtleName = CustomFields.FieldTurtle.NAMES[Math.floor(
+            Math.random() * CustomFields.FieldTurtle.NAMES.length)];
 
-    this.setValue(value);
-  }));
+        this.setValue(value);
+      }));
   widget.appendChild(randomizeButton);
 
   return widget;
@@ -454,7 +460,7 @@ CustomFields.FieldTurtle.prototype.dropdownCreate_ = function() {
 CustomFields.FieldTurtle.prototype.dropdownDispose_ = function() {
   for (var i = this.editorListeners_.length, listener;
       listener = this.editorListeners_[i]; i--) {
-    Blockly.unbindEvent_(listener);
+    Blockly.browserEvents.unbind(listener);
     this.editorListeners_.pop();
   }
 };

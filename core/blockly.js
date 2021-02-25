@@ -18,6 +18,9 @@ goog.provide('Blockly');
 
 goog.require('Blockly.constants');
 goog.require('Blockly.Events');
+goog.require('Blockly.Events.BlockCreate');
+goog.require('Blockly.Events.FinishedLoading');
+goog.require('Blockly.Events.VarCreate');
 goog.require('Blockly.Events.Ui');
 goog.require('Blockly.Events.UiBase');
 goog.require('Blockly.inject');

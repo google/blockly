@@ -15,6 +15,7 @@ goog.provide('Blockly.Workspace');
 goog.require('Blockly.ConnectionChecker');
 goog.require('Blockly.Events');
 goog.require('Blockly.Options');
+goog.require('Blockly.registry');
 goog.require('Blockly.utils');
 goog.require('Blockly.utils.math');
 goog.require('Blockly.VariableMap');

@@ -177,7 +177,8 @@ Blockly.Comment.prototype.createEditor_ = function() {
   this.onChangeWrapper_ = Blockly.bindEventWithChecks_(
       textarea, 'change', this, function(_e) {
         if (this.cachedText_ != this.model_.text) {
-          Blockly.Events.fire(new Blockly.Events.BlockChange(
+          Blockly.Events.fire(
+              new (Blockly.Events.get(Blockly.Events.BLOCK_CHANGE))(
               this.block_, 'comment', null, this.cachedText_, this.model_.text));
         }
       });
@@ -241,8 +242,8 @@ Blockly.Comment.prototype.setVisible = function(visible) {
   if (visible == this.isVisible()) {
     return;
   }
-  Blockly.Events.fire(
-      new Blockly.Events.BubbleOpen(this.block_, visible, 'comment'));
+  Blockly.Events.fire(new (Blockly.Events.get(Blockly.Events.BUBBLE_OPEN))(
+      this.block_, visible, 'comment'));
   this.model_.pinned = visible;
   if (visible) {
     this.createBubble_();

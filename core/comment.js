@@ -179,7 +179,8 @@ Blockly.Comment.prototype.createEditor_ = function() {
         if (this.cachedText_ != this.model_.text) {
           Blockly.Events.fire(
               new (Blockly.Events.get(Blockly.Events.BLOCK_CHANGE))(
-              this.block_, 'comment', null, this.cachedText_, this.model_.text));
+                  this.block_, 'comment', null, this.cachedText_,
+                  this.model_.text));
         }
       });
   this.onInputWrapper_ = Blockly.bindEventWithChecks_(

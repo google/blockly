@@ -226,8 +226,8 @@ Blockly.Block = function(workspace, prototypeName, opt_id) {
 
     // Fire a create event.
     if (Blockly.Events.isEnabled()) {
-      Blockly.Events.fire(
-          new (Blockly.Events.get(Blockly.Events.BLOCK_CREATE))(this));
+      Blockly.Events.fire(new (Blockly.Events.get(Blockly.Events.BLOCK_CREATE))(
+          this));
     }
 
   } finally {
@@ -366,8 +366,8 @@ Blockly.Block.prototype.dispose = function(healStack) {
 
   this.unplug(healStack);
   if (Blockly.Events.isEnabled()) {
-    Blockly.Events.fire(
-        new (Blockly.Events.get(Blockly.Events.BLOCK_DELETE))(this));
+    Blockly.Events.fire(new (Blockly.Events.get(Blockly.Events.BLOCK_DELETE))(
+        this));
   }
   Blockly.Events.disable();
 

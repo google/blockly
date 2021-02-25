@@ -13,6 +13,7 @@
 goog.provide('Blockly.FieldCheckbox');
 
 goog.require('Blockly.Events');
+goog.require('Blockly.Events.BlockChange');
 goog.require('Blockly.Field');
 goog.require('Blockly.fieldRegistry');
 goog.require('Blockly.utils.dom');

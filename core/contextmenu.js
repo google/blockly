@@ -18,6 +18,7 @@ goog.provide('Blockly.ContextMenu');
 
 goog.require('Blockly.constants');
 goog.require('Blockly.Events');
+goog.require('Blockly.Events.BlockCreate');
 goog.require('Blockly.Menu');
 goog.require('Blockly.MenuItem');
 goog.require('Blockly.Msg');
@@ -199,7 +200,7 @@ Blockly.ContextMenu.callbackFactory = function(block, xml) {
     } finally {
       Blockly.Events.enable();
     }
-    if (Blockly.Events.isEnabled() && !newBlock.isShadow()) {;
+    if (Blockly.Events.isEnabled() && !newBlock.isShadow()) {
       Blockly.Events.fire(
           new (Blockly.Events.get(Blockly.Events.BLOCK_CREATE))(newBlock));
     }

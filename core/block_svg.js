@@ -35,6 +35,7 @@ goog.require('Blockly.utils.dom');
 goog.require('Blockly.utils.object');
 goog.require('Blockly.utils.Rect');
 goog.require('Blockly.utils.userAgent');
+goog.require('Blockly.Xml');
 
 goog.requireType('Blockly.blockRendering.Debug');
 goog.requireType('Blockly.Comment');
@@ -310,7 +311,8 @@ Blockly.BlockSvg.prototype.select = function() {
       Blockly.Events.enable();
     }
   }
-  var event = new Blockly.Events.Selected(oldId, this.id, this.workspace.id);
+  var event = new (Blockly.Events.get(Blockly.Events.SELECTED))(oldId, this.id,
+      this.workspace.id);
   Blockly.Events.fire(event);
   Blockly.selected = this;
   this.addSelect();
@@ -323,7 +325,8 @@ Blockly.BlockSvg.prototype.unselect = function() {
   if (Blockly.selected != this) {
     return;
   }
-  var event = new Blockly.Events.Selected(this.id, null, this.workspace.id);
+  var event = new (Blockly.Events.get(Blockly.Events.SELECTED))(this.id, null,
+      this.workspace.id);
   event.workspaceId = this.workspace.id;
   Blockly.Events.fire(event);
   Blockly.selected = null;
@@ -464,7 +467,7 @@ Blockly.BlockSvg.prototype.moveBy = function(dx, dy) {
   }
   var eventsEnabled = Blockly.Events.isEnabled();
   if (eventsEnabled) {
-    var event = new Blockly.Events.BlockMove(this);
+    var event = new (Blockly.Events.get(Blockly.Events.BLOCK_MOVE))(this);
   }
   var xy = this.getRelativeToSurfaceXY();
   this.translate(xy.x + dx, xy.y + dy);

@@ -15,7 +15,6 @@
 goog.provide('Blockly.FieldDropdown');
 
 goog.require('Blockly.Events');
-goog.require('Blockly.Events.BlockChange');
 goog.require('Blockly.Field');
 goog.require('Blockly.fieldRegistry');
 goog.require('Blockly.Menu');

@@ -187,8 +187,8 @@ Blockly.BlockDragger.prototype.startBlockDrag = function(currentDragDeltaXY,
  * @private
  */
 Blockly.BlockDragger.prototype.fireDragStartEvent_ = function() {
-  var event = new Blockly.Events.BlockDrag(this.draggingBlock_, true,
-      this.draggingBlock_.getDescendants(false));
+  var event = new (Blockly.Events.get(Blockly.Events.BLOCK_DRAG))(
+      this.draggingBlock_, true, this.draggingBlock_.getDescendants(false));
   Blockly.Events.fire(event);
 };
 
@@ -264,8 +264,8 @@ Blockly.BlockDragger.prototype.endBlockDrag = function(e, currentDragDeltaXY) {
  * @private
  */
 Blockly.BlockDragger.prototype.fireDragEndEvent_ = function() {
-  var event = new Blockly.Events.BlockDrag(this.draggingBlock_, false,
-      this.draggingBlock_.getDescendants(false));
+  var event = new (Blockly.Events.get(Blockly.Events.BLOCK_DRAG))(
+      this.draggingBlock_, false, this.draggingBlock_.getDescendants(false));
   Blockly.Events.fire(event);
 };
 
@@ -274,7 +274,8 @@ Blockly.BlockDragger.prototype.fireDragEndEvent_ = function() {
  * @private
  */
 Blockly.BlockDragger.prototype.fireMoveEvent_ = function() {
-  var event = new Blockly.Events.BlockMove(this.draggingBlock_);
+  var event = new (Blockly.Events.get(Blockly.Events.BLOCK_MOVE))(
+      this.draggingBlock_);
   event.oldCoordinate = this.startXY_;
   event.recordNew();
   Blockly.Events.fire(event);

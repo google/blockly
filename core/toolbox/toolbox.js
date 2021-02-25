@@ -818,7 +818,7 @@ Blockly.Toolbox.prototype.fireSelectEvent_ = function(oldItem, newItem) {
   if (oldItem == newItem) {
     newElement = null;
   }
-  var event = new Blockly.Events.ToolboxItemSelect(
+  var event = new (Blockly.Events.get(Blockly.Events.TOOLBOX_ITEM_SELECT))(
       oldElement, newElement, this.workspace_.id);
   Blockly.Events.fire(event);
 };

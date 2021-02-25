@@ -618,7 +618,8 @@ Blockly.WorkspaceSvg.prototype.refreshTheme = function() {
     this.setVisible(true);
   }
 
-  var event = new Blockly.Events.ThemeChange(this.getTheme().name, this.id);
+  var event = new (Blockly.Events.get(Blockly.Events.THEME_CHANGE))(
+      this.getTheme().name, this.id);
   Blockly.Events.fire(event);
 };
 
@@ -1163,7 +1164,8 @@ Blockly.WorkspaceSvg.prototype.maybeFireViewportChangeEvent = function() {
   this.oldScale_ = scale;
   this.oldTop_ = top;
   this.oldLeft_ = left;
-  var event = new Blockly.Events.ViewportChange(top, left, scale, this.id);
+  var event = new (Blockly.Events.get(Blockly.Events.VIEWPORT_CHANGE))(top,
+      left, scale, this.id);
   Blockly.Events.fire(event);
 };
 
@@ -1446,7 +1448,8 @@ Blockly.WorkspaceSvg.prototype.pasteBlock_ = function(xmlBlock) {
     Blockly.Events.enable();
   }
   if (Blockly.Events.isEnabled() && !block.isShadow()) {
-    Blockly.Events.fire(new Blockly.Events.BlockCreate(block));
+    Blockly.Events.fire(
+        new (Blockly.Events.get(Blockly.Events.BLOCK_CREATE))(block));
   }
   block.select();
 };

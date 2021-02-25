@@ -203,7 +203,7 @@ Blockly.FieldTextInput.prototype.doValueInvalid_ = function(_invalidValue) {
     // Revert value when the text becomes invalid.
     this.value_ = this.htmlInput_.untypedDefaultValue_;
     if (this.sourceBlock_ && Blockly.Events.isEnabled()) {
-      Blockly.Events.fire(new Blockly.Events.BlockChange(
+      Blockly.Events.fire(new (Blockly.Events.get(Blockly.Events.BLOCK_CHANGE))(
           this.sourceBlock_, 'field', this.name || null, oldValue, this.value_));
     }
   }

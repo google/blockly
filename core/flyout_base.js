@@ -28,6 +28,7 @@ goog.require('Blockly.utils.Coordinate');
 goog.require('Blockly.utils.dom');
 goog.require('Blockly.utils.Svg');
 goog.require('Blockly.utils.toolbox');
+goog.require('Blockly.utils.xml');
 goog.require('Blockly.WorkspaceSvg');
 goog.require('Blockly.Xml');
 
@@ -800,12 +801,14 @@ Blockly.Flyout.prototype.createBlock = function(originalBlock) {
     // Fire a VarCreate event for each (if any) new variable created.
     for (var i = 0; i < newVariables.length; i++) {
       var thisVariable = newVariables[i];
-      Blockly.Events.fire(new Blockly.Events.VarCreate(thisVariable));
+      Blockly.Events.fire(
+          new (Blockly.Events.get(Blockly.Events.VAR_CREATE))(thisVariable));
     }
 
     // Block events come after var events, in case they refer to newly created
     // variables.
-    Blockly.Events.fire(new Blockly.Events.Create(newBlock));
+    Blockly.Events.fire(
+        new (Blockly.Events.get(Blockly.Events.BLOCK_CREATE))(newBlock));
   }
   if (this.autoClose) {
     this.hide();

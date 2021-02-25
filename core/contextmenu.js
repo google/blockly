@@ -203,7 +203,8 @@ Blockly.ContextMenu.callbackFactory = function(block, xml) {
       Blockly.Events.enable();
     }
     if (Blockly.Events.isEnabled() && !newBlock.isShadow()) {
-      Blockly.Events.fire(new Blockly.Events.BlockCreate(newBlock));
+      Blockly.Events.fire(
+          new (Blockly.Events.get(Blockly.Events.BLOCK_CREATE))(newBlock));
     }
     newBlock.select();
   };

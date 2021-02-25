@@ -1161,8 +1161,7 @@ Blockly.WorkspaceSvg.prototype.maybeFireViewportChangeEvent = function() {
     // negligible changes in viewport top/left.
     return;
   }
-  var event = new Blockly.Events.ViewportChange(
-      top, left, scale, this.id, this.oldScale_);
+  var event = new Blockly.Events.ViewportChange(top, left, scale, this.id);
   this.oldScale_ = scale;
   this.oldTop_ = top;
   this.oldLeft_ = left;

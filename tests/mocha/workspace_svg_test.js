@@ -178,7 +178,6 @@ suite('WorkspaceSvg', function() {
       var metrics = workspace.getMetrics();
       var expectedProperties = {
         scale: workspace.scale,
-        oldScale: 1,
         viewTop: metrics.viewTop,
         viewLeft: metrics.viewLeft
       };

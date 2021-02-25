@@ -9,6 +9,7 @@
  */
 
 const gulp = require('gulp');
+const path = require('path');
 const through2 = require('through2');
 
 /**
@@ -16,6 +17,7 @@ const through2 = require('through2');
  */
 function sortRequires() {
   const srcs = ['core/**/**/*.js', 'blocks/*.js', 'generators/**/*.js'];
+  const excludes = ['core/requires.js'];
   return gulp.src(srcs, {base: './'})
       .pipe(through2.obj((file, _enc, next) => {
         if (file.isNull() || file.isDirectory()) {
@@ -24,6 +26,12 @@ function sortRequires() {
         }
 
         if (file.extname !== '.js' && path.extname(file.history[0]) !== '.js') {
+          next(null, file);
+          return;
+        }
+
+        const relPath = path.relative(path.join(file.cwd, file.base), file.path);
+        if (excludes.indexOf(relPath) > -1) {
           next(null, file);
           return;
         }

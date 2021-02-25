@@ -91,13 +91,13 @@ Blockly.VerticalFlyout.prototype.getMetrics_ = function() {
   var metrics = {
     contentHeight: optionBox.height * this.workspace_.scale,
     contentWidth: optionBox.width * this.workspace_.scale,
-    contentTop: optionBox.y - this.MARGIN,
-    contentLeft: optionBox.x - this.MARGIN,
+    contentTop: optionBox.y,
+    contentLeft: optionBox.x,
 
     scrollHeight: (optionBox.height + 2 * this.MARGIN) * this.workspace_.scale,
     scrollWidth: (optionBox.width + 2 * this.MARGIN) * this.workspace_.scale,
-    scrollTop: optionBox.y,
-    scrollLeft: optionBox.x,
+    scrollTop: optionBox.y - this.MARGIN,
+    scrollLeft: optionBox.x - this.MARGIN,
 
     viewHeight: viewHeight,
     viewWidth: viewWidth,
@@ -125,8 +125,8 @@ Blockly.VerticalFlyout.prototype.setMetrics_ = function(xyRatio) {
   }
   if (typeof xyRatio.y == 'number') {
     this.workspace_.scrollY =
-        -(metrics.contentTop +
-            (metrics.contentHeight - metrics.viewHeight) * xyRatio.y);
+        -(metrics.scrollTop +
+            (metrics.scrollHeight - metrics.viewHeight) * xyRatio.y);
   }
   this.workspace_.translate(this.workspace_.scrollX + metrics.absoluteLeft,
       this.workspace_.scrollY + metrics.absoluteTop);
@@ -265,8 +265,8 @@ Blockly.VerticalFlyout.prototype.wheel_ = function(e) {
 
   if (scrollDelta.y) {
     var metrics = this.getMetrics_();
-    var pos = (metrics.viewTop - metrics.contentTop) + scrollDelta.y;
-    var limit = metrics.contentHeight - metrics.viewHeight;
+    var pos = (metrics.viewTop - metrics.scrollTop) + scrollDelta.y;
+    var limit = metrics.scrollHeight - metrics.viewHeight;
     pos = Math.min(pos, limit);
     pos = Math.max(pos, 0);
     this.workspace_.scrollbar.setY(pos);

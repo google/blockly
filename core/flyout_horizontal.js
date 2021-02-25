@@ -124,8 +124,8 @@ Blockly.HorizontalFlyout.prototype.setMetrics_ = function(xyRatio) {
 
   if (typeof xyRatio.x == 'number') {
     this.workspace_.scrollX =
-        -(metrics.contentLeft +
-            (metrics.contentWidth - metrics.viewWidth) * xyRatio.x);
+        -(metrics.scrollLeft +
+            (metrics.scrollWidth - metrics.viewWidth) * xyRatio.x);
   }
 
   this.workspace_.translate(this.workspace_.scrollX + metrics.absoluteLeft,
@@ -276,7 +276,7 @@ Blockly.HorizontalFlyout.prototype.wheel_ = function(e) {
   if (delta) {
     var metrics = this.getMetrics_();
     var pos = metrics.viewLeft + delta;
-    var limit = metrics.contentWidth - metrics.viewWidth;
+    var limit = metrics.scrollWidth - metrics.viewWidth;
     pos = Math.min(pos, limit);
     pos = Math.max(pos, 0);
     this.workspace_.scrollbar.setX(pos);

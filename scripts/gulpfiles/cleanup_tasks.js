@@ -29,7 +29,8 @@ function sortRequires() {
         }
 
         const contents = file.contents.toString();
-        // Collect requires.
+
+        // Capture requires.
         const re = /goog\.(require|requireType)\('(.*)'\);/gm;
         const requiresList = [];
         const requireTypesList = [];

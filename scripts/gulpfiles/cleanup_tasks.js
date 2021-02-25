@@ -42,10 +42,17 @@ function sortRequires() {
         const re = /goog\.(require|requireType)\('(.*)'\);/gm;
         const requiresList = [];
         const requireTypesList = [];
-        contents.replace(re, (match, g1, g2) => {
-          if (g1 == 'require') requiresList.push(g2);
-          if (g1 == 'requireType') requireTypesList.push(g2);
-        });
+        let firstIndex;
+        let lastIndex;
+        while ((match = re.exec(contents)) != null) {
+          if (match[1] == 'require') requiresList.push(match[2]);
+          if (match[1] == 'requireType') requireTypesList.push(match[2]);
+          if (firstIndex == undefined) {
+            firstIndex = match.index;
+          } else {
+            lastIndex = re.lastIndex;
+          }
+        }
 
         // Sort requires.
         requiresList.sort(
@@ -63,16 +70,6 @@ function sortRequires() {
             '';
         const requires = `${requiresSection}${requireTypesSection}\n`;
 
-        // Find first and last line index of requires.
-        let firstIndex;
-        let lastIndex;
-        while ((match = re.exec(contents)) != null) {
-          if (firstIndex == undefined) {
-            firstIndex = match.index;
-          } else {
-            lastIndex = re.lastIndex;
-          }
-        }
         if (firstIndex != undefined & lastIndex != undefined) {
           file.contents = Buffer.from(
               contents.substring(0, firstIndex) + requires +

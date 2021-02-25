@@ -12,6 +12,7 @@
 
 goog.provide('Blockly.Trashcan');
 
+goog.require('Blockly.browserEvents');
 goog.require('Blockly.constants');
 goog.require('Blockly.Events');
 goog.require('Blockly.Events.TrashcanOpen');
@@ -320,12 +321,12 @@ Blockly.Trashcan.prototype.createDom = function() {
   // https://groups.google.com/forum/#!topic/blockly/QF4yB9Wx00s
   // Using bindEventWithChecks_ for blocking mousedown causes issue in mobile.
   // See #4303
-  Blockly.bindEvent_(
+  Blockly.browserEvents.bind(
       this.svgGroup_, 'mousedown', this, this.blockMouseDownWhenOpenable_);
-  Blockly.bindEvent_(this.svgGroup_, 'mouseup', this, this.click);
+  Blockly.browserEvents.bind(this.svgGroup_, 'mouseup', this, this.click);
   // Bind to body instead of this.svgGroup_ so that we don't get lid jitters
-  Blockly.bindEvent_(body, 'mouseover', this, this.mouseOver_);
-  Blockly.bindEvent_(body, 'mouseout', this, this.mouseOut_);
+  Blockly.browserEvents.bind(body, 'mouseover', this, this.mouseOver_);
+  Blockly.browserEvents.bind(body, 'mouseout', this, this.mouseOut_);
   this.animateLid_();
   return this.svgGroup_;
 };

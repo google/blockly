@@ -91,8 +91,9 @@ Minimap.init = function(workspace, minimap) {
   this.mapDragger = this.svg.childNodes[0];
 
   // Adding mouse events to the rectangle, to make it Draggable.
-  // Using Blockly.bindEvent_ to attach mouse/touch listeners.
-  Blockly.bindEvent_(this.mapDragger, 'mousedown', null, Minimap.mousedown);
+  // Using Blockly.browserEvents.bind to attach mouse/touch listeners.
+  Blockly.browserEvents.bind(
+      this.mapDragger, 'mousedown', null, Minimap.mousedown);
 
   //When the window change, we need to resize the minimap window.
   window.addEventListener('resize', Minimap.repositionMinimap);
@@ -105,11 +106,11 @@ Minimap.init = function(workspace, minimap) {
 };
 
 Minimap.mousedown = function(e) {
-  // Using Blockly.bindEvent_ to attach mouse/touch listeners.
-  Minimap.mouseMoveBindData =
-      Blockly.bindEvent_(document, 'mousemove', null, Minimap.mousemove);
+  // Using Blockly.browserEvents.bind to attach mouse/touch listeners.
+  Minimap.mouseMoveBindData = Blockly.browserEvents.bind(
+      document, 'mousemove', null, Minimap.mousemove);
   Minimap.mouseUpBindData =
-      Blockly.bindEvent_(document, 'mouseup', null, Minimap.mouseup);
+      Blockly.browserEvents.bind(document, 'mouseup', null, Minimap.mouseup);
 
   Minimap.isDragging = true;
   e.stopPropagation();
@@ -118,8 +119,8 @@ Minimap.mousedown = function(e) {
 Minimap.mouseup = function(e) {
   Minimap.isDragging = false;
   // Removing listeners.
-  Blockly.unbindEvent_(Minimap.mouseUpBindData);
-  Blockly.unbindEvent_(Minimap.mouseMoveBindData);
+  Blockly.browserEvents.unbind(Minimap.mouseUpBindData);
+  Blockly.browserEvents.unbind(Minimap.mouseMoveBindData);
   Minimap.updateMapDragger(e);
   e.stopPropagation();
 };

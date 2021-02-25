@@ -48,14 +48,14 @@ Blockly.WorkspaceCommentSvg = function(
     workspace, content, height, width, opt_id) {
   /**
    * Mouse up event data.
-   * @type {?Blockly.EventData}
+   * @type {?Blockly.browserEvents.Data}
    * @private
    */
   this.onMouseUpWrapper_ = null;
 
   /**
    * Mouse move event data.
-   * @type {?Blockly.EventData}
+   * @type {?Blockly.browserEvents.Data}
    * @private
    */
   this.onMouseMoveWrapper_ = null;
@@ -156,9 +156,9 @@ Blockly.WorkspaceCommentSvg.prototype.initSvg = function(opt_noSelect) {
     throw TypeError('Workspace is headless.');
   }
   if (!this.workspace.options.readOnly && !this.eventsInit_) {
-    Blockly.bindEventWithChecks_(
+    Blockly.browserEvents.conditionalBind(
         this.svgRectTarget_, 'mousedown', this, this.pathMouseDown_);
-    Blockly.bindEventWithChecks_(
+    Blockly.browserEvents.conditionalBind(
         this.svgHandleTarget_, 'mousedown', this, this.pathMouseDown_);
   }
   this.eventsInit_ = true;

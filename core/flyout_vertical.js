@@ -89,8 +89,8 @@ Blockly.VerticalFlyout.prototype.getMetrics_ = function() {
   var metrics = {
     contentHeight: optionBox.height * this.workspace_.scale + 2 * this.MARGIN,
     contentWidth: optionBox.width * this.workspace_.scale + 2 * this.MARGIN,
-    contentTop: optionBox.y,
-    contentLeft: optionBox.x,
+    contentTop: optionBox.y - this.MARGIN,
+    contentLeft: optionBox.x - this.MARGIN,
 
     viewHeight: viewHeight,
     viewWidth: viewWidth,

@@ -412,8 +412,8 @@ Blockly.Events.fromJson = function(json, workspace) {
 /**
  * Gets the class for a specific event type from the registry.
  * @param {string} eventType The type of the event to get.
- * @return {?function(new:T, ...?)} The event class with the given type or null
- *     if none exists.
+ * @return {?function(new:Blockly.Events.Abstract, ...?)} The event class with
+ *     the given type or null if none exists.
  */
 Blockly.Events.get = function(eventType) {
   return Blockly.registry.getClass(Blockly.registry.Type.EVENT, eventType);

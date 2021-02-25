@@ -110,7 +110,11 @@ function start() {
         readOnly: false,
         rtl: rtl,
         move: {
-          scrollbars: true,
+          scrollbars: {
+            // TODO: change back before merging.
+            horizontal: false,
+            vertical: true
+          },
           drag: true,
           wheel: false,
         },

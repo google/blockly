@@ -24,6 +24,7 @@ goog.require('Blockly.utils.Svg');
 
 goog.requireType('Blockly.WorkspaceSvg');
 
+
 /**
  * Class for a zoom controls.
  * @param {!Blockly.WorkspaceSvg} workspace The workspace to sit in.

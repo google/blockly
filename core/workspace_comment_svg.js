@@ -30,6 +30,7 @@ goog.requireType('Blockly.IBoundedElement');
 goog.requireType('Blockly.IBubble');
 goog.requireType('Blockly.ICopyable');
 
+
 /**
  * Class for a workspace comment's SVG representation.
  * @param {!Blockly.Workspace} workspace The block's workspace.

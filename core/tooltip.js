@@ -24,6 +24,7 @@ goog.provide('Blockly.Tooltip');
 goog.require('Blockly.browserEvents');
 goog.require('Blockly.utils.string');
 
+
 /**
  * A type which can define a tooltip.
  * Either a string, an object containing a tooltip property, or a function which

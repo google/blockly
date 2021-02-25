@@ -26,10 +26,10 @@ goog.require('Blockly.utils.dom');
 goog.require('Blockly.utils.Rect');
 goog.require('Blockly.utils.toolbox');
 
-goog.requireType('Blockly.IKeyboardAccessible');
 goog.requireType('Blockly.ICollapsibleToolboxItem');
 goog.requireType('Blockly.IDeleteArea');
 goog.requireType('Blockly.IFlyout');
+goog.requireType('Blockly.IKeyboardAccessible');
 goog.requireType('Blockly.ISelectableToolboxItem');
 goog.requireType('Blockly.IStyleable');
 goog.requireType('Blockly.IToolbox');

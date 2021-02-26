@@ -17,6 +17,7 @@
 goog.provide('Blockly.ContextMenuItems');
 
 goog.require('Blockly.constants');
+goog.require('Blockly.ContextMenuRegistry');
 goog.require('Blockly.Events');
 
 goog.requireType('Blockly.BlockSvg');

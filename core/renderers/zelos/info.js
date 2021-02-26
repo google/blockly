@@ -277,8 +277,8 @@ Blockly.zelos.RenderInfo.prototype.addInput_ = function(input, activeRow) {
   // right, keep track of the right aligned dummy input so we can add padding
   // later.
   if (input.type == Blockly.DUMMY_INPUT && activeRow.hasDummyInput &&
-      activeRow.align == Blockly.ALIGN_LEFT &&
-      input.align == Blockly.ALIGN_RIGHT) {
+      activeRow.align == Blockly.constants.ALIGN.LEFT &&
+      input.align == Blockly.constants.ALIGN.RIGHT) {
     activeRow.rightAlignedDummyInput = input;
   }
   Blockly.zelos.RenderInfo.superClass_.addInput_.call(this, input, activeRow);

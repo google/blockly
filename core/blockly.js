@@ -503,3 +503,18 @@ Blockly.unbindEvent_ = Blockly.browserEvents.unbind;
  * @see Blockly.browserEvents.conditionalBind
  */
 Blockly.bindEventWithChecks_ = Blockly.browserEvents.conditionalBind;
+
+/**
+ * @see Blockly.constants.ALIGN.LEFT
+ */
+Blockly.ALIGN_LEFT = Blockly.constants.ALIGN.LEFT;
+
+/**
+ * @see Blockly.constants.ALIGN.CENTRE
+ */
+Blockly.ALIGN_CENTRE = Blockly.constants.ALIGN.CENTRE;
+
+/**
+ * @see Blockly.constants.ALIGN.RIGHT
+ */
+Blockly.ALIGN_RIGHT = Blockly.constants.ALIGN.RIGHT;

@@ -221,6 +221,7 @@ Blockly.extractObjectFromEvent_ = function(workspace, e) {
 /**
  * Bumps the top objects in the given workspace into bounds.
  * @param {!Blockly.WorkspaceSvg} workspace The workspace.
+ * @private
  */
 Blockly.bumpTopObjectsIntoBounds = function(workspace) {
   var metricsManager = workspace.getMetricsManager();
@@ -240,6 +241,7 @@ Blockly.bumpTopObjectsIntoBounds = function(workspace) {
  * Creates a handler for bumping objects when they cross fixed bounds.
  * @param {!Blockly.WorkspaceSvg} workspace The workspace to handle.
  * @return {function(Blockly.Events.Abstract)} The event handler.
+ * @private
  */
 Blockly.bumpIntoBoundsHandler = function(workspace) {
   return function(e) {

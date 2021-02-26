@@ -18,6 +18,7 @@ goog.require('Blockly.browserEvents');
 goog.require('Blockly.ConnectionDB');
 goog.require('Blockly.constants');
 goog.require('Blockly.ContextMenuRegistry');
+goog.require('Blockly.ContextMenuItems');
 goog.require('Blockly.Events');
 goog.require('Blockly.Events.BlockCreate');
 goog.require('Blockly.Events.ThemeChange');

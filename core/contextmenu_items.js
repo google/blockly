@@ -536,4 +536,5 @@ Blockly.ContextMenuItems.registerDefaultOptions = function() {
   Blockly.ContextMenuItems.registerWorkspaceOptions_();
   Blockly.ContextMenuItems.registerBlockOptions_();
 };
-  
+
+Blockly.ContextMenuItems.registerDefaultOptions();

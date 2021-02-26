@@ -16,8 +16,6 @@
  */
 goog.provide('Blockly.ContextMenuRegistry');
 
-goog.require('Blockly.ContextMenuItems');
-
 /**
  * Class for the registry of context menu items. This is intended to be a singleton. You should
  * not create a new instance, and only access this class from Blockly.ContextMenuRegistry.registry.
@@ -34,7 +32,6 @@ Blockly.ContextMenuRegistry = function() {
    * @private
    */
   this.registry_ = {};
-  Blockly.ContextMenuItems.registerDefaultOptions();
 };
 
 /**

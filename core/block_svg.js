@@ -20,6 +20,7 @@ goog.require('Blockly.browserEvents');
 goog.require('Blockly.constants');
 goog.require('Blockly.ContextMenu');
 goog.require('Blockly.ContextMenuRegistry');
+goog.require('Blockly.ContextMenuItems');
 goog.require('Blockly.Events');
 goog.require('Blockly.Events.BlockMove');
 goog.require('Blockly.Events.Selected');

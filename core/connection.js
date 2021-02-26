@@ -188,7 +188,7 @@ Blockly.Connection.prototype.connect_ = function(childConnection) {
 
   var event;
   if (Blockly.Events.isEnabled()) {
-    event = new Blockly.Events.BlockMove(childBlock);
+    event = new (Blockly.Events.get(Blockly.Events.BLOCK_MOVE))(childBlock);
   }
   // Establish the connections.
   Blockly.Connection.connectReciprocally_(parentConnection, childConnection);
@@ -466,7 +466,7 @@ Blockly.Connection.prototype.disconnectInternal_ = function(parentBlock,
     childBlock) {
   var event;
   if (Blockly.Events.isEnabled()) {
-    event = new Blockly.Events.BlockMove(childBlock);
+    event = new (Blockly.Events.get(Blockly.Events.BLOCK_MOVE))(childBlock);
   }
   var otherConnection = this.targetConnection;
   otherConnection.targetConnection = null;

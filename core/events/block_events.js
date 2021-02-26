@@ -26,8 +26,7 @@ goog.require('Blockly.registry');
 goog.require('Blockly.utils.Coordinate');
 goog.require('Blockly.utils.object');
 goog.require('Blockly.utils.xml');
-// TODO: Fix recursive dependency.
-// goog.require('Blockly.Xml');
+goog.require('Blockly.Xml');
 
 goog.requireType('Blockly.Block');
 
@@ -202,7 +201,7 @@ Blockly.Events.Change.prototype.run = function(forward) {
         var dom = Blockly.Xml.textToDom(/** @type {string} */ (value) || '<mutation/>');
         block.domToMutation(dom);
       }
-      Blockly.Events.fire(new Blockly.Events.Change(
+      Blockly.Events.fire(new (Blockly.Events.get(Blockly.Events.CHANGE))(
           block, 'mutation', null, oldMutation, value));
       break;
     default:

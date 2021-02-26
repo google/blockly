@@ -290,8 +290,8 @@ Blockly.Mutator.prototype.setVisible = function(visible) {
     // No change.
     return;
   }
-  Blockly.Events.fire(
-      new Blockly.Events.BubbleOpen(this.block_, visible, 'mutator'));
+  Blockly.Events.fire(new (Blockly.Events.get(Blockly.Events.BUBBLE_OPEN))(
+      this.block_, visible, 'mutator'));
   if (visible) {
     // Create the bubble.
     this.bubble_ = new Blockly.Bubble(
@@ -426,7 +426,7 @@ Blockly.Mutator.prototype.workspaceChanged_ = function(e) {
     var newMutationDom = block.mutationToDom();
     var newMutation = newMutationDom && Blockly.Xml.domToText(newMutationDom);
     if (oldMutation != newMutation) {
-      Blockly.Events.fire(new Blockly.Events.BlockChange(
+      Blockly.Events.fire(new (Blockly.Events.get(Blockly.Events.BLOCK_CHANGE))(
           block, 'mutation', null, oldMutation, newMutation));
       // Ensure that any bump is part of this mutation's event group.
       var group = Blockly.Events.getGroup();

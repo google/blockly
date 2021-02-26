@@ -17,6 +17,7 @@ goog.require('Blockly.Events.UiBase');
 goog.require('Blockly.registry');
 goog.require('Blockly.utils.object');
 
+
 /**
  * Class for a viewport change event.
  * @param {number=} opt_top Top-edge of the visible portion of the workspace,

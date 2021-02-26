@@ -24,6 +24,7 @@ goog.requireType('Blockly.blockRendering.Debug');
 goog.requireType('Blockly.RenderedConnection');
 goog.requireType('Blockly.Theme');
 
+
 /**
  * An object that provides constants for rendering blocks.
  * @constructor

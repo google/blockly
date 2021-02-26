@@ -13,6 +13,7 @@
 goog.provide('Blockly.utils.toolbox');
 
 goog.require('Blockly.constants');
+goog.require('Blockly.Xml');
 
 goog.requireType('Blockly.ToolboxCategory');
 goog.requireType('Blockly.ToolboxSeparator');

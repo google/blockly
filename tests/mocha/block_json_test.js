@@ -561,9 +561,7 @@ suite('Block JSON initialization', function() {
             'type': 'input_dummy',
             'align': 'LEFT',
           },
-          'input_dummy',
-          undefined,
-          Blockly.ALIGN_LEFT);
+          'input_dummy', undefined, Blockly.constants.ALIGN.LEFT);
     });
 
     test('"Right" align', function() {
@@ -572,9 +570,7 @@ suite('Block JSON initialization', function() {
             'type': 'input_dummy',
             'align': 'RIGHT',
           },
-          'input_dummy',
-          undefined,
-          Blockly.ALIGN_RIGHT);
+          'input_dummy', undefined, Blockly.constants.ALIGN.RIGHT);
     });
 
     test('"Center" align', function() {
@@ -583,9 +579,7 @@ suite('Block JSON initialization', function() {
             'type': 'input_dummy',
             'align': 'CENTER',
           },
-          'input_dummy',
-          undefined,
-          Blockly.ALIGN_CENTRE);
+          'input_dummy', undefined, Blockly.constants.ALIGN.CENTRE);
     });
 
     test('"Centre" align', function() {
@@ -594,9 +588,7 @@ suite('Block JSON initialization', function() {
             'type': 'input_dummy',
             'align': 'CENTRE',
           },
-          'input_dummy',
-          undefined,
-          Blockly.ALIGN_CENTRE);
+          'input_dummy', undefined, Blockly.constants.ALIGN.CENTRE);
     });
   });
 });

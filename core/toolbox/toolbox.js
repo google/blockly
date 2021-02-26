@@ -12,6 +12,7 @@
 
 goog.provide('Blockly.Toolbox');
 
+goog.require('Blockly.browserEvents');
 goog.require('Blockly.CollapsibleToolboxCategory');
 goog.require('Blockly.constants');
 goog.require('Blockly.Css');
@@ -25,10 +26,10 @@ goog.require('Blockly.utils.dom');
 goog.require('Blockly.utils.Rect');
 goog.require('Blockly.utils.toolbox');
 
-goog.requireType('Blockly.IKeyboardAccessible');
 goog.requireType('Blockly.ICollapsibleToolboxItem');
 goog.requireType('Blockly.IDeleteArea');
 goog.requireType('Blockly.IFlyout');
+goog.requireType('Blockly.IKeyboardAccessible');
 goog.requireType('Blockly.ISelectableToolboxItem');
 goog.requireType('Blockly.IStyleable');
 goog.requireType('Blockly.IToolbox');
@@ -148,7 +149,7 @@ Blockly.Toolbox = function(workspace) {
    * Array holding info needed to unbind event handlers.
    * Used for disposing.
    * Ex: [[node, name, func], [node, name, func]].
-   * @type {!Array<!Blockly.EventData>}
+   * @type {!Array<!Blockly.browserEvents.Data>}
    * @protected
    */
   this.boundEvents_ = [];
@@ -245,13 +246,15 @@ Blockly.Toolbox.prototype.createContentsContainer_ = function() {
 Blockly.Toolbox.prototype.attachEvents_ = function(container,
     contentsContainer) {
   // Clicking on toolbox closes popups.
-  var clickEvent = Blockly.bindEventWithChecks_(container, 'click', this,
-      this.onClick_, /* opt_noCaptureIdentifier */ false,
+  var clickEvent = Blockly.browserEvents.conditionalBind(
+      container, 'click', this, this.onClick_,
+      /* opt_noCaptureIdentifier */ false,
       /* opt_noPreventDefault */ true);
   this.boundEvents_.push(clickEvent);
 
-  var keyDownEvent = Blockly.bindEventWithChecks_(contentsContainer, 'keydown',
-      this, this.onKeyDown_, /* opt_noCaptureIdentifier */ false,
+  var keyDownEvent = Blockly.browserEvents.conditionalBind(
+      contentsContainer, 'keydown', this, this.onKeyDown_,
+      /* opt_noCaptureIdentifier */ false,
       /* opt_noPreventDefault */ true);
   this.boundEvents_.push(keyDownEvent);
 };
@@ -818,7 +821,7 @@ Blockly.Toolbox.prototype.fireSelectEvent_ = function(oldItem, newItem) {
   if (oldItem == newItem) {
     newElement = null;
   }
-  var event = new Blockly.Events.ToolboxItemSelect(
+  var event = new (Blockly.Events.get(Blockly.Events.TOOLBOX_ITEM_SELECT))(
       oldElement, newElement, this.workspace_.id);
   Blockly.Events.fire(event);
 };
@@ -926,7 +929,7 @@ Blockly.Toolbox.prototype.dispose = function() {
   }
 
   for (var j = 0; j < this.boundEvents_.length; j++) {
-    Blockly.unbindEvent_(this.boundEvents_[j]);
+    Blockly.browserEvents.unbind(this.boundEvents_[j]);
   }
   this.boundEvents_ = [];
   this.contents_ = [];

@@ -30,6 +30,7 @@ goog.requireType('Blockly.IBoundedElement');
 goog.requireType('Blockly.IBubble');
 goog.requireType('Blockly.ICopyable');
 
+
 /**
  * Class for a workspace comment's SVG representation.
  * @param {!Blockly.Workspace} workspace The block's workspace.
@@ -48,14 +49,14 @@ Blockly.WorkspaceCommentSvg = function(
     workspace, content, height, width, opt_id) {
   /**
    * Mouse up event data.
-   * @type {?Blockly.EventData}
+   * @type {?Blockly.browserEvents.Data}
    * @private
    */
   this.onMouseUpWrapper_ = null;
 
   /**
    * Mouse move event data.
-   * @type {?Blockly.EventData}
+   * @type {?Blockly.browserEvents.Data}
    * @private
    */
   this.onMouseMoveWrapper_ = null;
@@ -127,7 +128,8 @@ Blockly.WorkspaceCommentSvg.prototype.dispose = function() {
   }
 
   if (Blockly.Events.isEnabled()) {
-    Blockly.Events.fire(new Blockly.Events.CommentDelete(this));
+    Blockly.Events.fire(
+        new (Blockly.Events.get(Blockly.Events.COMMENT_DELETE))(this));
   }
 
   Blockly.utils.dom.removeNode(this.svgGroup_);
@@ -155,9 +157,9 @@ Blockly.WorkspaceCommentSvg.prototype.initSvg = function(opt_noSelect) {
     throw TypeError('Workspace is headless.');
   }
   if (!this.workspace.options.readOnly && !this.eventsInit_) {
-    Blockly.bindEventWithChecks_(
+    Blockly.browserEvents.conditionalBind(
         this.svgRectTarget_, 'mousedown', this, this.pathMouseDown_);
-    Blockly.bindEventWithChecks_(
+    Blockly.browserEvents.conditionalBind(
         this.svgHandleTarget_, 'mousedown', this, this.pathMouseDown_);
   }
   this.eventsInit_ = true;
@@ -224,7 +226,8 @@ Blockly.WorkspaceCommentSvg.prototype.select = function() {
       Blockly.Events.enable();
     }
   }
-  var event = new Blockly.Events.Selected(oldId, this.id, this.workspace.id);
+  var event = new (Blockly.Events.get(Blockly.Events.SELECTED))(oldId, this.id,
+      this.workspace.id);
   Blockly.Events.fire(event);
   Blockly.selected = this;
   this.addSelect();
@@ -238,7 +241,8 @@ Blockly.WorkspaceCommentSvg.prototype.unselect = function() {
   if (Blockly.selected != this) {
     return;
   }
-  var event = new Blockly.Events.Selected(this.id, null, this.workspace.id);
+  var event = new (Blockly.Events.get(Blockly.Events.SELECTED))(this.id, null,
+      this.workspace.id);
   Blockly.Events.fire(event);
   Blockly.selected = null;
   this.removeSelect();
@@ -331,7 +335,7 @@ Blockly.WorkspaceCommentSvg.prototype.getRelativeToSurfaceXY = function() {
  * @package
  */
 Blockly.WorkspaceCommentSvg.prototype.moveBy = function(dx, dy) {
-  var event = new Blockly.Events.CommentMove(this);
+  var event = new (Blockly.Events.get(Blockly.Events.COMMENT_MOVE))(this);
   // TODO: Do I need to look up the relative to surface XY position here?
   var xy = this.getRelativeToSurfaceXY();
   this.translate(xy.x + dx, xy.y + dy);

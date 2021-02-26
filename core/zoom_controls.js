@@ -12,14 +12,18 @@
 
 goog.provide('Blockly.ZoomControls');
 
+goog.require('Blockly.browserEvents');
 goog.require('Blockly.constants');
 goog.require('Blockly.Css');
+goog.require('Blockly.Events');
+goog.require('Blockly.Events.Click');
 goog.require('Blockly.Scrollbar');
 goog.require('Blockly.Touch');
 goog.require('Blockly.utils.dom');
 goog.require('Blockly.utils.Svg');
 
 goog.requireType('Blockly.WorkspaceSvg');
+
 
 /**
  * Class for a zoom controls.
@@ -36,7 +40,7 @@ Blockly.ZoomControls = function(workspace) {
   /**
    * A handle to use to unbind the mouse down event handler for zoom reset
    *    button. Opaque data returned from Blockly.bindEventWithChecks_.
-   * @type {?Blockly.EventData}
+   * @type {?Blockly.browserEvents.Data}
    * @private
    */
   this.onZoomResetWrapper_ = null;
@@ -44,7 +48,7 @@ Blockly.ZoomControls = function(workspace) {
   /**
    * A handle to use to unbind the mouse down event handler for zoom in button.
    * Opaque data returned from Blockly.bindEventWithChecks_.
-   * @type {?Blockly.EventData}
+   * @type {?Blockly.browserEvents.Data}
    * @private
    */
   this.onZoomInWrapper_ = null;
@@ -52,7 +56,7 @@ Blockly.ZoomControls = function(workspace) {
   /**
    * A handle to use to unbind the mouse down event handler for zoom out button.
    * Opaque data returned from Blockly.bindEventWithChecks_.
-   * @type {?Blockly.EventData}
+   * @type {?Blockly.browserEvents.Data}
    * @private
    */
   this.onZoomOutWrapper_ = null;
@@ -180,13 +184,13 @@ Blockly.ZoomControls.prototype.dispose = function() {
     Blockly.utils.dom.removeNode(this.svgGroup_);
   }
   if (this.onZoomResetWrapper_) {
-    Blockly.unbindEvent_(this.onZoomResetWrapper_);
+    Blockly.browserEvents.unbind(this.onZoomResetWrapper_);
   }
   if (this.onZoomInWrapper_) {
-    Blockly.unbindEvent_(this.onZoomInWrapper_);
+    Blockly.browserEvents.unbind(this.onZoomInWrapper_);
   }
   if (this.onZoomOutWrapper_) {
-    Blockly.unbindEvent_(this.onZoomOutWrapper_);
+    Blockly.browserEvents.unbind(this.onZoomOutWrapper_);
   }
 };
 
@@ -279,7 +283,7 @@ Blockly.ZoomControls.prototype.createZoomOutSvg_ = function(rnd) {
       this.workspace_.options.pathToMedia + Blockly.SPRITE.url);
 
   // Attach listener.
-  this.onZoomOutWrapper_ = Blockly.bindEventWithChecks_(
+  this.onZoomOutWrapper_ = Blockly.browserEvents.conditionalBind(
       this.zoomOutGroup_, 'mousedown', null, this.zoom_.bind(this, -1));
 };
 
@@ -330,7 +334,7 @@ Blockly.ZoomControls.prototype.createZoomInSvg_ = function(rnd) {
       this.workspace_.options.pathToMedia + Blockly.SPRITE.url);
 
   // Attach listener.
-  this.onZoomInWrapper_ = Blockly.bindEventWithChecks_(
+  this.onZoomInWrapper_ = Blockly.browserEvents.conditionalBind(
       this.zoomInGroup_, 'mousedown', null, this.zoom_.bind(this, 1));
 };
 
@@ -397,7 +401,7 @@ Blockly.ZoomControls.prototype.createZoomResetSvg_ = function(rnd) {
       this.workspace_.options.pathToMedia + Blockly.SPRITE.url);
 
   // Attach event listeners.
-  this.onZoomResetWrapper_ = Blockly.bindEventWithChecks_(
+  this.onZoomResetWrapper_ = Blockly.browserEvents.conditionalBind(
       this.zoomResetGroup_, 'mousedown', null, this.resetZoom_.bind(this));
 };
 
@@ -423,7 +427,7 @@ Blockly.ZoomControls.prototype.resetZoom_ = function(e) {
  * @private
  */
 Blockly.ZoomControls.prototype.fireZoomEvent_ = function() {
-  var uiEvent = new Blockly.Events.Click(
+  var uiEvent = new (Blockly.Events.get(Blockly.Events.CLICK))(
       null, this.workspace_.id, 'zoom_controls');
   Blockly.Events.fire(uiEvent);
 };

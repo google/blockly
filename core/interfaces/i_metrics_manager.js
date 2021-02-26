@@ -17,9 +17,9 @@ goog.requireType('Blockly.IFlyout');
 goog.requireType('Blockly.IToolbox');
 goog.requireType('Blockly.MetricsManager');
 goog.requireType('Blockly.utils.Metrics');
+goog.requireType('Blockly.utils.Size');
 goog.requireType('Blockly.utils.toolbox');
 
-goog.requireType('Blockly.utils.Size');
 
 /**
  * Interface for a metrics manager.

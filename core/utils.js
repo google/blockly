@@ -18,8 +18,8 @@
  */
 goog.provide('Blockly.utils');
 
-goog.require('Blockly.Msg');
 goog.require('Blockly.constants');
+goog.require('Blockly.Msg');
 goog.require('Blockly.utils.colour');
 goog.require('Blockly.utils.Coordinate');
 goog.require('Blockly.utils.global');

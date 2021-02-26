@@ -13,6 +13,8 @@
 goog.provide('Blockly.Scrollbar');
 goog.provide('Blockly.ScrollbarPair');
 
+goog.require('Blockly.browserEvents');
+goog.require('Blockly.Events');
 goog.require('Blockly.Touch');
 goog.require('Blockly.utils');
 goog.require('Blockly.utils.Coordinate');
@@ -398,10 +400,10 @@ Blockly.Scrollbar = function(workspace, horizontal, opt_pair, opt_class) {
     this.positionAttribute_ = 'y';
   }
   var scrollbar = this;
-  this.onMouseDownBarWrapper_ = Blockly.bindEventWithChecks_(
+  this.onMouseDownBarWrapper_ = Blockly.browserEvents.conditionalBind(
       this.svgBackground_, 'mousedown', scrollbar, scrollbar.onMouseDownBar_);
-  this.onMouseDownHandleWrapper_ = Blockly.bindEventWithChecks_(this.svgHandle_,
-      'mousedown', scrollbar, scrollbar.onMouseDownHandle_);
+  this.onMouseDownHandleWrapper_ = Blockly.browserEvents.conditionalBind(
+      this.svgHandle_, 'mousedown', scrollbar, scrollbar.onMouseDownHandle_);
 };
 
 /**
@@ -515,9 +517,9 @@ Blockly.Scrollbar.metricsAreEquivalent_ = function(first, second) {
  */
 Blockly.Scrollbar.prototype.dispose = function() {
   this.cleanUp_();
-  Blockly.unbindEvent_(this.onMouseDownBarWrapper_);
+  Blockly.browserEvents.unbind(this.onMouseDownBarWrapper_);
   this.onMouseDownBarWrapper_ = null;
-  Blockly.unbindEvent_(this.onMouseDownHandleWrapper_);
+  Blockly.browserEvents.unbind(this.onMouseDownHandleWrapper_);
   this.onMouseDownHandleWrapper_ = null;
 
   Blockly.utils.dom.removeNode(this.outerSvg_);
@@ -651,15 +653,35 @@ Blockly.Scrollbar.prototype.resize = function(opt_metrics) {
 };
 
 /**
+ * Returns whether the a resizeView is necessary by comparing the passed
+ * hostMetrics with cached old host metrics.
+ * @param {!Blockly.utils.Metrics} hostMetrics A data structure describing all
+ *     the required dimensions, possibly fetched from the host object.
+ * @return {boolean} Whether a resizeView is necesssary.
+ * @private
+ */
+Blockly.Scrollbar.prototype.requiresViewResize_ = function(hostMetrics) {
+  if (!this.oldHostMetrics_) {
+    return true;
+  }
+  return this.oldHostMetrics_.viewWidth !== hostMetrics.viewWidth ||
+      this.oldHostMetrics_.viewHeight !== hostMetrics.viewHeight ||
+      this.oldHostMetrics_.absoluteLeft !== hostMetrics.absoluteLeft ||
+      this.oldHostMetrics_.absoluteTop !== hostMetrics.absoluteTop;
+};
+
+/**
  * Recalculate a horizontal scrollbar's location and length.
  * @param {!Blockly.utils.Metrics} hostMetrics A data structure describing all
  *     the required dimensions, possibly fetched from the host object.
  * @private
  */
 Blockly.Scrollbar.prototype.resizeHorizontal_ = function(hostMetrics) {
-  // TODO: Inspect metrics to determine if we can get away with just a content
-  // resize.
-  this.resizeViewHorizontal(hostMetrics);
+  if (this.requiresViewResize_(hostMetrics)) {
+    this.resizeViewHorizontal(hostMetrics);
+  } else {
+    this.resizeContentHorizontal(hostMetrics);
+  }
 };
 
 /**
@@ -752,9 +774,11 @@ Blockly.Scrollbar.prototype.resizeContentHorizontal = function(hostMetrics) {
  * @private
  */
 Blockly.Scrollbar.prototype.resizeVertical_ = function(hostMetrics) {
-  // TODO: Inspect metrics to determine if we can get away with just a content
-  // resize.
-  this.resizeViewVertical(hostMetrics);
+  if (this.requiresViewResize_(hostMetrics)) {
+    this.resizeViewVertical(hostMetrics);
+  } else {
+    this.resizeContentVertical(hostMetrics);
+  }
 };
 
 /**
@@ -1012,10 +1036,10 @@ Blockly.Scrollbar.prototype.onMouseDownHandle_ = function(e) {
 
   // Record the current mouse position.
   this.startDragMouse_ = this.horizontal_ ? e.clientX : e.clientY;
-  Blockly.Scrollbar.onMouseUpWrapper_ = Blockly.bindEventWithChecks_(document,
-      'mouseup', this, this.onMouseUpHandle_);
-  Blockly.Scrollbar.onMouseMoveWrapper_ = Blockly.bindEventWithChecks_(document,
-      'mousemove', this, this.onMouseMoveHandle_);
+  Blockly.Scrollbar.onMouseUpWrapper_ = Blockly.browserEvents.conditionalBind(
+      document, 'mouseup', this, this.onMouseUpHandle_);
+  Blockly.Scrollbar.onMouseMoveWrapper_ = Blockly.browserEvents.conditionalBind(
+      document, 'mousemove', this, this.onMouseMoveHandle_);
   e.stopPropagation();
   e.preventDefault();
 };
@@ -1053,11 +1077,11 @@ Blockly.Scrollbar.prototype.onMouseUpHandle_ = function() {
 Blockly.Scrollbar.prototype.cleanUp_ = function() {
   Blockly.hideChaff(true);
   if (Blockly.Scrollbar.onMouseUpWrapper_) {
-    Blockly.unbindEvent_(Blockly.Scrollbar.onMouseUpWrapper_);
+    Blockly.browserEvents.unbind(Blockly.Scrollbar.onMouseUpWrapper_);
     Blockly.Scrollbar.onMouseUpWrapper_ = null;
   }
   if (Blockly.Scrollbar.onMouseMoveWrapper_) {
-    Blockly.unbindEvent_(Blockly.Scrollbar.onMouseMoveWrapper_);
+    Blockly.browserEvents.unbind(Blockly.Scrollbar.onMouseMoveWrapper_);
     Blockly.Scrollbar.onMouseMoveWrapper_ = null;
   }
 };

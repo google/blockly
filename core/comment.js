@@ -12,6 +12,7 @@
 
 goog.provide('Blockly.Comment');
 
+goog.require('Blockly.browserEvents');
 goog.require('Blockly.Bubble');
 goog.require('Blockly.Css');
 goog.require('Blockly.Events');
@@ -61,28 +62,28 @@ Blockly.Comment = function(block) {
 
   /**
    * Mouse up event data.
-   * @type {?Blockly.EventData}
+   * @type {?Blockly.browserEvents.Data}
    * @private
    */
   this.onMouseUpWrapper_ = null;
 
   /**
    * Wheel event data.
-   * @type {?Blockly.EventData}
+   * @type {?Blockly.browserEvents.Data}
    * @private
    */
   this.onWheelWrapper_ = null;
 
   /**
    * Change event data.
-   * @type {?Blockly.EventData}
+   * @type {?Blockly.browserEvents.Data}
    * @private
    */
   this.onChangeWrapper_ = null;
 
   /**
    * Input event data.
-   * @type {?Blockly.EventData}
+   * @type {?Blockly.browserEvents.Data}
    * @private
    */
   this.onInputWrapper_ = null;
@@ -167,21 +168,23 @@ Blockly.Comment.prototype.createEditor_ = function() {
   // Ideally this would be hooked to the focus event for the comment.
   // However doing so in Firefox swallows the cursor for unknown reasons.
   // So this is hooked to mouseup instead.  No big deal.
-  this.onMouseUpWrapper_ = Blockly.bindEventWithChecks_(
+  this.onMouseUpWrapper_ = Blockly.browserEvents.conditionalBind(
       textarea, 'mouseup', this, this.startEdit_, true, true);
   // Don't zoom with mousewheel.
-  this.onWheelWrapper_ = Blockly.bindEventWithChecks_(
+  this.onWheelWrapper_ = Blockly.browserEvents.conditionalBind(
       textarea, 'wheel', this, function(e) {
         e.stopPropagation();
       });
-  this.onChangeWrapper_ = Blockly.bindEventWithChecks_(
+  this.onChangeWrapper_ = Blockly.browserEvents.conditionalBind(
       textarea, 'change', this, function(_e) {
         if (this.cachedText_ != this.model_.text) {
-          Blockly.Events.fire(new Blockly.Events.BlockChange(
-              this.block_, 'comment', null, this.cachedText_, this.model_.text));
+          Blockly.Events.fire(
+              new (Blockly.Events.get(Blockly.Events.BLOCK_CHANGE))(
+                  this.block_, 'comment', null, this.cachedText_,
+                  this.model_.text));
         }
       });
-  this.onInputWrapper_ = Blockly.bindEventWithChecks_(
+  this.onInputWrapper_ = Blockly.browserEvents.conditionalBind(
       textarea, 'input', this, function(_e) {
         this.model_.text = textarea.value;
       });
@@ -241,8 +244,8 @@ Blockly.Comment.prototype.setVisible = function(visible) {
   if (visible == this.isVisible()) {
     return;
   }
-  Blockly.Events.fire(
-      new Blockly.Events.BubbleOpen(this.block_, visible, 'comment'));
+  Blockly.Events.fire(new (Blockly.Events.get(Blockly.Events.BUBBLE_OPEN))(
+      this.block_, visible, 'comment'));
   this.model_.pinned = visible;
   if (visible) {
     this.createBubble_();
@@ -303,19 +306,19 @@ Blockly.Comment.prototype.createNonEditableBubble_ = function() {
  */
 Blockly.Comment.prototype.disposeBubble_ = function() {
   if (this.onMouseUpWrapper_) {
-    Blockly.unbindEvent_(this.onMouseUpWrapper_);
+    Blockly.browserEvents.unbind(this.onMouseUpWrapper_);
     this.onMouseUpWrapper_ = null;
   }
   if (this.onWheelWrapper_) {
-    Blockly.unbindEvent_(this.onWheelWrapper_);
+    Blockly.browserEvents.unbind(this.onWheelWrapper_);
     this.onWheelWrapper_ = null;
   }
   if (this.onChangeWrapper_) {
-    Blockly.unbindEvent_(this.onChangeWrapper_);
+    Blockly.browserEvents.unbind(this.onChangeWrapper_);
     this.onChangeWrapper_ = null;
   }
   if (this.onInputWrapper_) {
-    Blockly.unbindEvent_(this.onInputWrapper_);
+    Blockly.browserEvents.unbind(this.onInputWrapper_);
     this.onInputWrapper_ = null;
   }
   this.bubble_.dispose();

@@ -16,6 +16,7 @@
  */
 goog.provide('Blockly.ContextMenu');
 
+goog.require('Blockly.browserEvents');
 goog.require('Blockly.constants');
 goog.require('Blockly.Events');
 goog.require('Blockly.Events.BlockCreate');
@@ -152,8 +153,9 @@ Blockly.ContextMenu.createWidget_ = function(menu) {
   Blockly.utils.dom.addClass(
       /** @type {!Element} */ (menuDom), 'blocklyContextMenu');
   // Prevent system context menu when right-clicking a Blockly context menu.
-  Blockly.bindEventWithChecks_(/** @type {!EventTarget} */ (menuDom),
-      'contextmenu', null, Blockly.utils.noEvent);
+  Blockly.browserEvents.conditionalBind(
+      /** @type {!EventTarget} */ (menuDom), 'contextmenu', null,
+      Blockly.utils.noEvent);
   // Focus only after the initial render to avoid issue #1329.
   menu.focus();
 };
@@ -201,7 +203,8 @@ Blockly.ContextMenu.callbackFactory = function(block, xml) {
       Blockly.Events.enable();
     }
     if (Blockly.Events.isEnabled() && !newBlock.isShadow()) {
-      Blockly.Events.fire(new Blockly.Events.BlockCreate(newBlock));
+      Blockly.Events.fire(
+          new (Blockly.Events.get(Blockly.Events.BLOCK_CREATE))(newBlock));
     }
     newBlock.select();
   };

@@ -18,9 +18,6 @@ goog.provide('Blockly.Xml');
 
 goog.require('Blockly.constants');
 goog.require('Blockly.Events');
-goog.require('Blockly.Events.BlockCreate');
-goog.require('Blockly.Events.FinishedLoading');
-goog.require('Blockly.Events.VarCreate');
 goog.require('Blockly.utils');
 goog.require('Blockly.utils.dom');
 goog.require('Blockly.utils.global');
@@ -31,8 +28,8 @@ goog.requireType('Blockly.Block');
 goog.requireType('Blockly.Comment');
 goog.requireType('Blockly.Connection');
 goog.requireType('Blockly.Field');
-goog.requireType('Blockly.Workspace');
 goog.requireType('Blockly.VariableModel');
+goog.requireType('Blockly.Workspace');
 
 
 /**
@@ -481,7 +478,8 @@ Blockly.Xml.domToWorkspace = function(xml, workspace) {
   if (workspace.setResizesEnabled) {
     workspace.setResizesEnabled(true);
   }
-  Blockly.Events.fire(new Blockly.Events.FinishedLoading(workspace));
+  Blockly.Events.fire(new (Blockly.Events.get(Blockly.Events.FINISHED_LOADING))(
+      workspace));
   return newBlockIds;
 };
 
@@ -593,11 +591,13 @@ Blockly.Xml.domToBlock = function(xmlBlock, workspace) {
     // Fire a VarCreate event for each (if any) new variable created.
     for (var i = 0; i < newVariables.length; i++) {
       var thisVariable = newVariables[i];
-      Blockly.Events.fire(new Blockly.Events.VarCreate(thisVariable));
+      Blockly.Events.fire(new (Blockly.Events.get(Blockly.Events.VAR_CREATE))(
+          thisVariable));
     }
     // Block events come after var events, in case they refer to newly created
     // variables.
-    Blockly.Events.fire(new Blockly.Events.BlockCreate(topBlock));
+    Blockly.Events.fire(new (Blockly.Events.get(Blockly.Events.CREATE))(
+        topBlock));
   }
   return topBlock;
 };

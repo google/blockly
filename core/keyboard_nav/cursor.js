@@ -15,6 +15,7 @@ goog.provide('Blockly.Cursor');
 
 goog.require('Blockly.ASTNode');
 goog.require('Blockly.Marker');
+goog.require('Blockly.registry');
 goog.require('Blockly.utils.object');
 
 goog.requireType('Blockly.ShortcutRegistry');

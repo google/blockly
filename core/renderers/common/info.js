@@ -16,8 +16,8 @@ goog.require('Blockly.blockRendering.BottomRow');
 goog.require('Blockly.blockRendering.ExternalValueInput');
 goog.require('Blockly.blockRendering.Hat');
 goog.require('Blockly.blockRendering.InlineInput');
-goog.require('Blockly.blockRendering.InRowSpacer');
 goog.require('Blockly.blockRendering.InputRow');
+goog.require('Blockly.blockRendering.InRowSpacer');
 goog.require('Blockly.blockRendering.Measurable');
 goog.require('Blockly.blockRendering.NextConnection');
 goog.require('Blockly.blockRendering.OutputConnection');
@@ -25,8 +25,8 @@ goog.require('Blockly.blockRendering.PreviousConnection');
 goog.require('Blockly.blockRendering.RoundCorner');
 goog.require('Blockly.blockRendering.Row');
 goog.require('Blockly.blockRendering.SpacerRow');
-goog.require('Blockly.blockRendering.StatementInput');
 goog.require('Blockly.blockRendering.SquareCorner');
+goog.require('Blockly.blockRendering.StatementInput');
 goog.require('Blockly.blockRendering.TopRow');
 goog.require('Blockly.blockRendering.Types');
 goog.require('Blockly.constants');
@@ -591,14 +591,14 @@ Blockly.blockRendering.RenderInfo.prototype.addAlignmentPadding_ = function(row,
   }
 
   // Decide where the extra padding goes.
-  if (row.align == Blockly.ALIGN_LEFT) {
+  if (row.align == Blockly.constants.ALIGN.LEFT) {
     // Add padding to the end of the row.
     lastSpacer.width += missingSpace;
-  } else if (row.align == Blockly.ALIGN_CENTRE) {
+  } else if (row.align == Blockly.constants.ALIGN.CENTRE) {
     // Split the padding between the beginning and end of the row.
     firstSpacer.width += missingSpace / 2;
     lastSpacer.width += missingSpace / 2;
-  } else if (row.align == Blockly.ALIGN_RIGHT) {
+  } else if (row.align == Blockly.constants.ALIGN.RIGHT) {
     // Add padding at the beginning of the row.
     firstSpacer.width += missingSpace;
   } else {

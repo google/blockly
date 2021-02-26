@@ -1074,12 +1074,18 @@ Blockly.WorkspaceSvg.prototype.resize = function() {
   if (this.flyout_) {
     this.flyout_.position();
   }
-  if (this.trashcan) {
-    this.trashcan.position();
+  if (this.trashcan || this.zoomControls_) {
+    // TODO when does getMetrics return null or empty? trash and zoom has checks for this.
+    // TODO these positionables probably don't need scroll or content metrics, but everything else. Probably want a typedef that has that.
+    var metrics = this.getMetrics();
+    if (this.trashcan) {
+      this.trashcan.position(metrics, []);
+    }
+    if (this.zoomControls_) {
+      this.zoomControls_.position(metrics, []);
+    }
   }
-  if (this.zoomControls_) {
-    this.zoomControls_.position();
-  }
+
   if (this.scrollbar) {
     this.scrollbar.resize();
   }

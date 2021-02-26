@@ -20,6 +20,7 @@ goog.require('Blockly.Events.Click');
 goog.require('Blockly.Scrollbar');
 goog.require('Blockly.Touch');
 goog.require('Blockly.utils.dom');
+goog.require('Blockly.utils.Rect');
 goog.require('Blockly.utils.Svg');
 
 goog.requireType('Blockly.WorkspaceSvg');
@@ -29,6 +30,7 @@ goog.requireType('Blockly.WorkspaceSvg');
  * Class for a zoom controls.
  * @param {!Blockly.WorkspaceSvg} workspace The workspace to sit in.
  * @constructor
+ * @implements {Blockly.IPositionable}
  */
 Blockly.ZoomControls = function(workspace) {
   /**
@@ -195,16 +197,30 @@ Blockly.ZoomControls.prototype.dispose = function() {
 };
 
 /**
+ * Returns the bounding rectangle of the UI element in pixel units relative to
+ * the Blockly injection div.
+ * @returns {Blockly.utils.Rect} The plugin’s bounding box.
+ */
+Blockly.ZoomControls.prototype.getBoundingRectangle = function() {
+  var bottom = this.top_ + this.HEIGHT_;
+  var right = this.left_ + this.WIDTH_;
+  return new Blockly.utils.Rect(this.top_, bottom, this.left_, right);
+};
+
+
+/**
  * Position the zoom controls.
  * It is positioned in the opposite corner to the corner the
  * categories/toolbox starts at.
+ * @param {!Blockly.utils.Metrics} metrics The workspace metrics.
+ * @param {Array<Blockly.utils.Rect>} _savedPositions List of rectangles that
+ *     are already on the workspace.
  */
-Blockly.ZoomControls.prototype.position = function() {
+Blockly.ZoomControls.prototype.position = function(metrics, _savedPositions) {
   // Not yet initialized.
   if (!this.verticalSpacing_) {
     return;
   }
-  var metrics = this.workspace_.getMetrics();
   if (!metrics) {
     // There are no metrics available (workspace is probably not visible).
     return;

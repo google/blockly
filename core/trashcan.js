@@ -34,6 +34,7 @@ goog.requireType('Blockly.WorkspaceSvg');
  * @param {!Blockly.WorkspaceSvg} workspace The workspace to sit in.
  * @constructor
  * @implements {Blockly.IDeleteArea}
+ * @implements {Blockly.IPositionable}
  */
 Blockly.Trashcan = function(workspace) {
   /**
@@ -428,17 +429,17 @@ Blockly.Trashcan.prototype.emptyContents = function() {
  * Position the trashcan.
  * It is positioned in the opposite corner to the corner the
  * categories/toolbox starts at.
+ * @param {!Blockly.utils.Metrics} metrics The workspace metrics.
+ * @param {Array<Blockly.utils.Rect>} _savedPositions List of rectangles that
+ *     are already on the workspace.
  */
-Blockly.Trashcan.prototype.position = function() {
+Blockly.Trashcan.prototype.position = function(metrics, _savedPositions) {
   // Not yet initialized.
   if (!this.verticalSpacing_) {
     return;
   }
-  var metrics = this.workspace_.getMetrics();
-  if (!metrics) {
-    // There are no metrics available (workspace is probably not visible).
-    return;
-  }
+
+  // Determine which corner to place the trashcan in.
   if (metrics.toolboxPosition == Blockly.TOOLBOX_AT_LEFT ||
       (this.workspace_.horizontalLayout && !this.workspace_.RTL)) {
     // Toolbox starts in the left corner.
@@ -449,6 +450,10 @@ Blockly.Trashcan.prototype.position = function() {
     this.left_ = this.MARGIN_SIDE_ + Blockly.Scrollbar.scrollbarThickness;
   }
 
+
+  // the bounding box is:
+  // top = this.top
+
   if (metrics.toolboxPosition == Blockly.TOOLBOX_AT_BOTTOM) {
     this.top_ = this.verticalSpacing_;
   } else {
@@ -458,6 +463,18 @@ Blockly.Trashcan.prototype.position = function() {
 
   this.svgGroup_.setAttribute('transform',
       'translate(' + this.left_ + ',' + this.top_ + ')');
+  console.log(this.top_);
+};
+
+/**
+ * Returns the bounding rectangle of the UI element in pixel units relative to
+ * the Blockly injection div.
+ * @returns {Blockly.utils.Rect} The plugin’s bounding box.
+ */
+Blockly.Trashcan.prototype.getBoundingRectangle = function() {
+  var bottom = this.top_ + this.BODY_HEIGHT_ + this.LID_HEIGHT_;
+  var right = this.left_ + this.WIDTH_;
+  return new Blockly.utils.Rect(this.top_, bottom, this.left_, right);
 };
 
 /**

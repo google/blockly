@@ -29,6 +29,7 @@ goog.require('Blockly.utils.Size');
 
 goog.requireType('Blockly.ShortcutRegistry');
 
+
 /**
  * Class for a colour input field.
  * @param {string=} opt_value The initial value of the field. Should be in

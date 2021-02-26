@@ -21,6 +21,7 @@ goog.require('Blockly.Events');
 
 goog.requireType('Blockly.BlockSvg');
 
+
 /** Option to undo previous action. */
 Blockly.ContextMenuItems.registerUndo = function() {
   /** @type {!Blockly.ContextMenuRegistry.RegistryItem} */

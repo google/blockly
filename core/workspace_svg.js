@@ -12,12 +12,12 @@
 
 goog.provide('Blockly.WorkspaceSvg');
 
-goog.require('Blockly.BlockSvg');
 goog.require('Blockly.blockRendering');
+goog.require('Blockly.BlockSvg');
+goog.require('Blockly.browserEvents');
 goog.require('Blockly.ConnectionDB');
 goog.require('Blockly.constants');
 goog.require('Blockly.ContextMenuRegistry');
-goog.require('Blockly.browserEvents');
 goog.require('Blockly.Events');
 goog.require('Blockly.Events.BlockCreate');
 goog.require('Blockly.Events.ThemeChange');

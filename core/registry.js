@@ -14,16 +14,15 @@
 goog.provide('Blockly.registry');
 
 goog.requireType('Blockly.blockRendering.Renderer');
+goog.requireType('Blockly.Cursor');
 goog.requireType('Blockly.Events.Abstract');
 goog.requireType('Blockly.Field');
 goog.requireType('Blockly.IConnectionChecker');
 goog.requireType('Blockly.IFlyout');
 goog.requireType('Blockly.IToolbox');
-goog.requireType('Blockly.Theme');
-
-goog.requireType('Blockly.Cursor');
 goog.requireType('Blockly.MetricsManager');
 goog.requireType('Blockly.Options');
+goog.requireType('Blockly.Theme');
 goog.requireType('Blockly.ToolboxItem');
 
 

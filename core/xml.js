@@ -28,8 +28,8 @@ goog.requireType('Blockly.Block');
 goog.requireType('Blockly.Comment');
 goog.requireType('Blockly.Connection');
 goog.requireType('Blockly.Field');
-goog.requireType('Blockly.Workspace');
 goog.requireType('Blockly.VariableModel');
+goog.requireType('Blockly.Workspace');
 
 
 /**

@@ -30,6 +30,7 @@ goog.require('Blockly.blockRendering.StatementInput');
 goog.require('Blockly.blockRendering.TopRow');
 goog.require('Blockly.blockRendering.Types');
 goog.require('Blockly.constants');
+goog.require('Blockly.inputTypes');
 
 goog.requireType('Blockly.blockRendering.ConstantProvider');
 goog.requireType('Blockly.blockRendering.Icon');
@@ -286,7 +287,7 @@ Blockly.blockRendering.RenderInfo.prototype.populateTopRow_ = function() {
   }
 
   var precedesStatement = this.block_.inputList.length &&
-      this.block_.inputList[0].type == Blockly.NEXT_STATEMENT;
+      this.block_.inputList[0].type == Blockly.inputTypes.STATEMENT;
 
   // This is the minimum height for the row. If one of its elements has a
   // greater height it will be overwritten in the compute pass.
@@ -315,10 +316,9 @@ Blockly.blockRendering.RenderInfo.prototype.populateTopRow_ = function() {
 Blockly.blockRendering.RenderInfo.prototype.populateBottomRow_ = function() {
   this.bottomRow.hasNextConnection = !!this.block_.nextConnection;
 
-  var followsStatement =
-      this.block_.inputList.length &&
-      this.block_.inputList[this.block_.inputList.length - 1]
-          .type == Blockly.NEXT_STATEMENT;
+  var followsStatement = this.block_.inputList.length &&
+      this.block_.inputList[this.block_.inputList.length - 1].type ==
+          Blockly.inputTypes.STATEMENT;
 
   // This is the minimum height for the row. If one of its elements has a
   // greater height it will be overwritten in the compute pass.
@@ -367,19 +367,19 @@ Blockly.blockRendering.RenderInfo.prototype.populateBottomRow_ = function() {
  */
 Blockly.blockRendering.RenderInfo.prototype.addInput_ = function(input, activeRow) {
   // Non-dummy inputs have visual representations onscreen.
-  if (this.isInline && input.type == Blockly.INPUT_VALUE) {
+  if (this.isInline && input.type == Blockly.inputTypes.VALUE) {
     activeRow.elements.push(
         new Blockly.blockRendering.InlineInput(this.constants_, input));
     activeRow.hasInlineInput = true;
-  } else if (input.type == Blockly.NEXT_STATEMENT) {
+  } else if (input.type == Blockly.inputTypes.STATEMENT) {
     activeRow.elements.push(
         new Blockly.blockRendering.StatementInput(this.constants_, input));
     activeRow.hasStatement = true;
-  } else if (input.type == Blockly.INPUT_VALUE) {
+  } else if (input.type == Blockly.inputTypes.VALUE) {
     activeRow.elements.push(
         new Blockly.blockRendering.ExternalValueInput(this.constants_, input));
     activeRow.hasExternalInput = true;
-  } else if (input.type == Blockly.DUMMY_INPUT) {
+  } else if (input.type == Blockly.inputTypes.DUMMY) {
     // Dummy inputs have no visual representation, but the information is still
     // important.
     activeRow.minHeight = Math.max(activeRow.minHeight,
@@ -407,12 +407,13 @@ Blockly.blockRendering.RenderInfo.prototype.shouldStartNewRow_ = function(input,
     return false;
   }
   // A statement input or an input following one always gets a new row.
-  if (input.type == Blockly.NEXT_STATEMENT ||
-      lastInput.type == Blockly.NEXT_STATEMENT) {
+  if (input.type == Blockly.inputTypes.STATEMENT ||
+      lastInput.type == Blockly.inputTypes.STATEMENT) {
     return true;
   }
   // Value and dummy inputs get new row if inputs are not inlined.
-  if (input.type == Blockly.INPUT_VALUE || input.type == Blockly.DUMMY_INPUT) {
+  if (input.type == Blockly.inputTypes.VALUE ||
+      input.type == Blockly.inputTypes.DUMMY) {
     return !this.isInline;
   }
   return false;

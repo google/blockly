@@ -17,6 +17,7 @@ goog.require('Blockly.Block');
 goog.require('Blockly.blockAnimations');
 goog.require('Blockly.blockRendering.IPathObject');
 goog.require('Blockly.browserEvents');
+goog.require('Blockly.connectionTypes');
 goog.require('Blockly.constants');
 goog.require('Blockly.ContextMenu');
 goog.require('Blockly.ContextMenuRegistry');
@@ -159,7 +160,7 @@ Blockly.BlockSvg.prototype.warningTextDb_ = null;
 
 /**
  * Constant for identifying rows that are to be rendered inline.
- * Don't collide with Blockly.INPUT_VALUE and friends.
+ * Don't collide with Blockly.inputTypes.
  * @const
  */
 Blockly.BlockSvg.INLINE = -1;
@@ -1372,8 +1373,7 @@ Blockly.BlockSvg.prototype.moveNumberedInputBefore = function(
 
 /**
  * Add a value input, statement input or local variable to this block.
- * @param {number} type Either Blockly.INPUT_VALUE or Blockly.NEXT_STATEMENT or
- *     Blockly.DUMMY_INPUT.
+ * @param {number} type One of Blockly.inputTypes.
  * @param {string} name Language-neutral identifier which may used to find this
  *     input again.  Should be unique to this block.
  * @return {!Blockly.Input} The input object created.
@@ -1587,8 +1587,8 @@ Blockly.BlockSvg.prototype.positionNearConnection = function(sourceConnection,
     targetConnection) {
   // We only need to position the new block if it's before the existing one,
   // otherwise its position is set by the previous block.
-  if (sourceConnection.type == Blockly.NEXT_STATEMENT ||
-      sourceConnection.type == Blockly.INPUT_VALUE) {
+  if (sourceConnection.type == Blockly.connectionTypes.NEXT_STATEMENT ||
+      sourceConnection.type == Blockly.connectionTypes.INPUT_VALUE) {
     var dx = targetConnection.x - sourceConnection.x;
     var dy = targetConnection.y - sourceConnection.y;
 

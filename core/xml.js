@@ -18,6 +18,7 @@ goog.provide('Blockly.Xml');
 
 goog.require('Blockly.constants');
 goog.require('Blockly.Events');
+goog.require('Blockly.inputTypes');
 goog.require('Blockly.utils');
 goog.require('Blockly.utils.dom');
 goog.require('Blockly.utils.global');
@@ -201,13 +202,13 @@ Blockly.Xml.blockToDom = function(block, opt_noId) {
   for (var i = 0, input; (input = block.inputList[i]); i++) {
     var container;
     var empty = true;
-    if (input.type == Blockly.DUMMY_INPUT) {
+    if (input.type == Blockly.inputTypes.DUMMY) {
       continue;
     } else {
       var childBlock = input.connection.targetBlock();
-      if (input.type == Blockly.INPUT_VALUE) {
+      if (input.type == Blockly.inputTypes.VALUE) {
         container = Blockly.utils.xml.createElement('value');
-      } else if (input.type == Blockly.NEXT_STATEMENT) {
+      } else if (input.type == Blockly.inputTypes.STATEMENT) {
         container = Blockly.utils.xml.createElement('statement');
       }
       var shadow = input.connection.getShadowDom();

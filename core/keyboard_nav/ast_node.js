@@ -12,6 +12,7 @@
 
 goog.provide('Blockly.ASTNode');
 
+goog.require('Blockly.connectionTypes');
 goog.require('Blockly.constants');
 goog.require('Blockly.utils.Coordinate');
 
@@ -147,16 +148,17 @@ Blockly.ASTNode.createConnectionNode = function(connection) {
   if (!connection) {
     return null;
   }
-  if (connection.type == Blockly.INPUT_VALUE) {
+  if (connection.type == Blockly.connectionTypes.INPUT_VALUE) {
     return Blockly.ASTNode.createInputNode(connection.getParentInput());
-  } else if (connection.type == Blockly.NEXT_STATEMENT &&
+  } else if (
+      connection.type == Blockly.connectionTypes.NEXT_STATEMENT &&
       connection.getParentInput()) {
     return Blockly.ASTNode.createInputNode(connection.getParentInput());
-  } else if (connection.type == Blockly.NEXT_STATEMENT) {
+  } else if (connection.type == Blockly.connectionTypes.NEXT_STATEMENT) {
     return new Blockly.ASTNode(Blockly.ASTNode.types.NEXT, connection);
-  } else if (connection.type == Blockly.OUTPUT_VALUE) {
+  } else if (connection.type == Blockly.connectionTypes.OUTPUT_VALUE) {
     return new Blockly.ASTNode(Blockly.ASTNode.types.OUTPUT, connection);
-  } else if (connection.type == Blockly.PREVIOUS_STATEMENT) {
+  } else if (connection.type == Blockly.connectionTypes.PREVIOUS_STATEMENT) {
     return new Blockly.ASTNode(Blockly.ASTNode.types.PREVIOUS, connection);
   }
   return null;

@@ -22,6 +22,7 @@ goog.provide('Blockly.Events.Move');  // Deprecated.
 
 goog.require('Blockly.Events');
 goog.require('Blockly.Events.Abstract');
+goog.require('Blockly.connectionTypes');
 goog.require('Blockly.registry');
 goog.require('Blockly.utils.Coordinate');
 goog.require('Blockly.utils.object');
@@ -550,7 +551,8 @@ Blockly.Events.Move.prototype.run = function(forward) {
       if (input) {
         parentConnection = input.connection;
       }
-    } else if (blockConnection.type == Blockly.PREVIOUS_STATEMENT) {
+    } else if (
+        blockConnection.type == Blockly.connectionTypes.PREVIOUS_STATEMENT) {
       parentConnection = parentBlock.nextConnection;
     }
     if (parentConnection) {

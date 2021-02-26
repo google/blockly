@@ -140,22 +140,14 @@ Blockly.PREVIOUS_STATEMENT = 4;
 Blockly.DUMMY_INPUT = 5;
 
 /**
- * ENUM for left alignment.
- * @const
+ * Enum for alignment of inputs.
+ * @enum {number}
  */
-Blockly.ALIGN_LEFT = -1;
-
-/**
- * ENUM for centre alignment.
- * @const
- */
-Blockly.ALIGN_CENTRE = 0;
-
-/**
- * ENUM for right alignment.
- * @const
- */
-Blockly.ALIGN_RIGHT = 1;
+Blockly.constants.ALIGN = {
+  LEFT: -1,
+  CENTRE: 0,
+  RIGHT: 1
+};
 
 /**
  * ENUM for no drag operation.

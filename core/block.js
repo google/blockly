@@ -1765,10 +1765,10 @@ Blockly.Block.prototype.fieldFromJson_ = function(element) {
  */
 Blockly.Block.prototype.inputFromJson_ = function(element, warningPrefix) {
   var alignmentLookup = {
-    'LEFT': Blockly.ALIGN_LEFT,
-    'RIGHT': Blockly.ALIGN_RIGHT,
-    'CENTRE': Blockly.ALIGN_CENTRE,
-    'CENTER': Blockly.ALIGN_CENTRE
+    'LEFT': Blockly.constants.ALIGN.LEFT,
+    'RIGHT': Blockly.constants.ALIGN.RIGHT,
+    'CENTRE': Blockly.constants.ALIGN.CENTRE,
+    'CENTER': Blockly.constants.ALIGN.CENTRE
   };
 
   var input = null;

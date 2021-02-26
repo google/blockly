@@ -35,7 +35,7 @@ Blockly.IMetricsManager.prototype.hasScrollEdges;
 
 /**
  * Returns the metrics for the scrollable area of the workspace.
- * @param {boolean=} opt_getWorkspaceCoordinates True to get the content metrics
+ * @param {boolean=} opt_getWorkspaceCoordinates True to get the scroll metrics
  *     in workspace coordinates, false to get them in pixel coordinates.
  * @param {!Blockly.MetricsManager.ContainerRegion=} opt_viewMetrics The view
  *     metrics if they have been previously computed. Passing in null may cause
@@ -43,7 +43,7 @@ Blockly.IMetricsManager.prototype.hasScrollEdges;
  * @param {!Blockly.MetricsManager.ContainerRegion=} opt_contentMetrics The
  *     content metrics if they have been previously computed. Passing in null
  *     may cause the content metrics to be computed again, if it is needed.
- * @return {!Blockly.MetricsManager.ContainerRegion} The metrics for scroll
+ * @return {!Blockly.MetricsManager.ContainerRegion} The metrics for the scroll
  *    container
  */
 Blockly.IMetricsManager.prototype.getScrollMetrics;

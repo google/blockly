@@ -570,7 +570,7 @@ suite('Block JSON initialization', function() {
             'type': 'input_dummy',
             'align': 'RIGHT',
           },
-          'input_dummy', undefined, Blockly.constants.ALIGN);
+          'input_dummy', undefined, Blockly.constants.ALIGN.RIGHT);
     });
 
     test('"Center" align', function() {
@@ -579,7 +579,7 @@ suite('Block JSON initialization', function() {
             'type': 'input_dummy',
             'align': 'CENTER',
           },
-          'input_dummy', undefined, Blockly.constants..);
+          'input_dummy', undefined, Blockly.constants.ALIGN.CENTRE);
     });
 
     test('"Centre" align', function() {

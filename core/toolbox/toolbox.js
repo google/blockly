@@ -351,15 +351,12 @@ Blockly.Toolbox.prototype.createFlyout_ = function() {
   var FlyoutClass = null;
   if (workspace.horizontalLayout) {
     FlyoutClass = Blockly.registry.getClassFromOptions(
-        Blockly.registry.Type.FLYOUTS_HORIZONTAL_TOOLBOX, workspace.options);
+        Blockly.registry.Type.FLYOUTS_HORIZONTAL_TOOLBOX, workspace.options,
+        true);
   } else {
     FlyoutClass = Blockly.registry.getClassFromOptions(
-        Blockly.registry.Type.FLYOUTS_VERTICAL_TOOLBOX, workspace.options);
-  }
-
-  if (!FlyoutClass) {
-    throw new Error('Blockly.VerticalFlyout, Blockly.HorizontalFlyout or your own' +
-        ' custom flyout must be required.');
+        Blockly.registry.Type.FLYOUTS_VERTICAL_TOOLBOX, workspace.options,
+        true);
   }
   return new FlyoutClass(workspaceOptions);
 };

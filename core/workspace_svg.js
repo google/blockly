@@ -82,7 +82,7 @@ Blockly.WorkspaceSvg = function(
   Blockly.WorkspaceSvg.superClass_.constructor.call(this, options);
 
   var MetricsManagerClass = Blockly.registry.getClassFromOptions(
-      Blockly.registry.Type.METRICS_MANAGER, options);
+      Blockly.registry.Type.METRICS_MANAGER, options, true);
   /**
    * Object in charge of calculating metrics for the workspace.
    * @type {!Blockly.IMetricsManager}
@@ -821,7 +821,7 @@ Blockly.WorkspaceSvg.prototype.createDom = function(opt_backgroundClass) {
   // blocks.  This cannot be changed later, since the UI is very different.
   if (this.options.hasCategories) {
     var ToolboxClass = Blockly.registry.getClassFromOptions(
-        Blockly.registry.Type.TOOLBOX, this.options);
+        Blockly.registry.Type.TOOLBOX, this.options, true);
     this.toolbox_ = new ToolboxClass(this);
   }
   if (this.grid_) {
@@ -831,7 +831,7 @@ Blockly.WorkspaceSvg.prototype.createDom = function(opt_backgroundClass) {
   var CursorClass = Blockly.registry.getClassFromOptions(
       Blockly.registry.Type.CURSOR, this.options);
 
-  this.markerManager_.setCursor(new CursorClass());
+  CursorClass && this.markerManager_.setCursor(new CursorClass());
 
   this.renderer_.createDom(this.svgGroup_, this.getTheme());
   return this.svgGroup_;
@@ -991,11 +991,11 @@ Blockly.WorkspaceSvg.prototype.addFlyout = function(tagName) {
   workspaceOptions.toolboxPosition = this.options.toolboxPosition;
   if (this.horizontalLayout) {
     var HorizontalFlyout = Blockly.registry.getClassFromOptions(
-        Blockly.registry.Type.FLYOUTS_HORIZONTAL_TOOLBOX, this.options);
+        Blockly.registry.Type.FLYOUTS_HORIZONTAL_TOOLBOX, this.options, true);
     this.flyout_ = new HorizontalFlyout(workspaceOptions);
   } else {
     var VerticalFlyout = Blockly.registry.getClassFromOptions(
-        Blockly.registry.Type.FLYOUTS_VERTICAL_TOOLBOX, this.options);
+        Blockly.registry.Type.FLYOUTS_VERTICAL_TOOLBOX, this.options, true);
     this.flyout_ = new VerticalFlyout(workspaceOptions);
   }
   this.flyout_.autoClose = false;

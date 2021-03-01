@@ -379,10 +379,9 @@ Blockly.init_ = function(mainWorkspace) {
   }
 
   if (options.moveOptions && options.moveOptions.scrollbars) {
-    // TODO change back to addHorizontal=true before merge.
     mainWorkspace.scrollbar =
         new Blockly.ScrollbarPair(
-            mainWorkspace, false, true, 'blocklyMainWorkspaceScrollbar');
+            mainWorkspace, true, true, 'blocklyMainWorkspaceScrollbar');
     mainWorkspace.scrollbar.resize();
   } else {
     mainWorkspace.setMetrics({x: 0, y: 0});

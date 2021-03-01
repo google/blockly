@@ -72,6 +72,17 @@ Blockly.MetricsManager.AbsoluteMetrics;
 Blockly.MetricsManager.ContainerRegion;
 
 /**
+ * Describes fixed edges of the workspace.
+ * @typedef {{
+ *            top: (number|undefined),
+ *            bottom: (number|undefined),
+ *            left: (number|undefined),
+ *            right: (number|undefined)
+ *          }}
+ */
+Blockly.MetricsManager.FixedEdges;
+
+/**
  * Gets the dimensions of the given workspace component, in pixel coordinates.
  * @param {?Blockly.IToolbox|?Blockly.IFlyout} elem The element to get the
  *     dimensions of, or null.  It should be a toolbox or flyout, and should
@@ -244,8 +255,9 @@ Blockly.MetricsManager.prototype.getContentMetrics = function(
 };
 
 /**
- * Returns whether the scroll area has "fixed" edges.
- * @return {boolean} Whether the scroll area has "fixed" edges.
+ * Returns whether the scroll area has fixed edges.
+ * @return {boolean} Whether the scroll area has fixed edges.
+ * @package
  */
 Blockly.MetricsManager.prototype.hasScrollEdges = function() {
   // This exists for optimization of bump logic.
@@ -254,16 +266,15 @@ Blockly.MetricsManager.prototype.hasScrollEdges = function() {
 };
 
 /**
- * Returns the "fixed" edges of the scroll area.
+ * Computes the fixed edges of the scroll area.
  * @param {!Blockly.MetricsManager.ContainerRegion=} opt_viewMetrics The view
  *     metrics if they have been previously computed. Passing in null may cause
  *     the view metrics to be computed again, if it is needed.
- * @return {{top: (number|undefined), bottom: (number|undefined),
- *     left: (number|undefined), right: (number|undefined)}} The fixed edges of
- *     the scroll area.
+ * @return {Blockly.MetricsManager.FixedEdges} The fixed edges of the scroll
+ *     area.
  * @protected
  */
-Blockly.MetricsManager.prototype.getScrollEdges_ = function(
+Blockly.MetricsManager.prototype.computeFixedEdges_ = function(
     opt_viewMetrics) {
   if (!this.hasScrollEdges()) {
     // Return early if there are no edges.
@@ -277,24 +288,12 @@ Blockly.MetricsManager.prototype.getScrollEdges_ = function(
 
   var edges = {};
   if (!vScrollEnabled) {
-    if (edges.top !== undefined) {
-      edges.bottom = edges.top + viewMetrics.height;
-    } else if (edges.bottom !== undefined) {
-      edges.top = edges.bottom - viewMetrics.height;
-    } else {
-      edges.top = viewMetrics.top;
-      edges.bottom = viewMetrics.top + viewMetrics.height;
-    }
+    edges.top = viewMetrics.top;
+    edges.bottom = viewMetrics.top + viewMetrics.height;
   }
   if (!hScrollEnabled) {
-    if (edges.left !== undefined) {
-      edges.right = edges.left + viewMetrics.width;
-    } else if (edges.right !== undefined) {
-      edges.left = edges.right - viewMetrics.width;
-    } else {
-      edges.left = viewMetrics.left;
-      edges.right = viewMetrics.left + viewMetrics.width;
-    }
+    edges.left = viewMetrics.left;
+    edges.right = viewMetrics.left + viewMetrics.width;
   }
   return edges;
 };
@@ -334,7 +333,7 @@ Blockly.MetricsManager.prototype.getPaddedContent_ = function(
 };
 
 /**
- * Returns the metrics for the scrollable area of the workspace.
+ * Returns the metrics for the scroll area of the workspace.
  * @param {boolean=} opt_getWorkspaceCoordinates True to get the scroll metrics
  *     in workspace coordinates, false to get them in pixel coordinates.
  * @param {!Blockly.MetricsManager.ContainerRegion=} opt_viewMetrics The view
@@ -351,7 +350,7 @@ Blockly.MetricsManager.prototype.getScrollMetrics = function(
   var scale = opt_getWorkspaceCoordinates ? this.workspace_.scale : 1;
   var viewMetrics = opt_viewMetrics || this.getViewMetrics(false);
   var contentMetrics = opt_contentMetrics || this.getContentMetrics();
-  var scrollEdges = this.getScrollEdges_(viewMetrics);
+  var scrollEdges = this.computeFixedEdges_(viewMetrics);
 
   // Add padding around content
   var paddedContent = this.getPaddedContent_(viewMetrics, contentMetrics);

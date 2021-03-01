@@ -427,12 +427,13 @@ Blockly.Scrollbar.prototype.origin_ = new Blockly.utils.Coordinate(0, 0);
 Blockly.Scrollbar.prototype.startDragMouse_ = 0;
 
 /**
- * The size of the area within which the scrollbar handle can move, in CSS
- * pixels (the size of the scrollbar background).
+ * The length of the scrollbars (including the handle and the background), in
+ * CSS pixels. This is equivalent to scrollbar background length and the area
+ * within which the scrollbar handle can move.
  * @type {number}
  * @private
  */
-Blockly.Scrollbar.prototype.scrollViewSize_ = 0;
+Blockly.Scrollbar.prototype.scrollbarLength_ = 0;
 
 /**
  * The length of the scrollbar handle in CSS pixels.
@@ -540,11 +541,11 @@ Blockly.Scrollbar.prototype.dispose = function() {
  * @return {number} Constrained value, in CSS pixels.
  * @private
  */
-Blockly.Scrollbar.prototype.constrainLength_ = function(value) {
+Blockly.Scrollbar.prototype.constrainHandleLength_ = function(value) {
   if (value <= 0 || isNaN(value)) {
     value = 0;
   } else {
-    value = Math.min(value, this.scrollViewSize_);
+    value = Math.min(value, this.scrollbarLength_);
   }
   return value;
 };
@@ -567,14 +568,14 @@ Blockly.Scrollbar.prototype.setHandleLength_ = function(newLength) {
  * @return {number} Constrained value, in CSS pixels.
  * @private
  */
-Blockly.Scrollbar.prototype.constrainPosition_ = function(value) {
+Blockly.Scrollbar.prototype.constrainHandlePosition_ = function(value) {
   if (value <= 0 || isNaN(value)) {
     value = 0;
   } else {
-    // Handle length should never be greater than this.scrollViewSize_.
+    // Handle length should never be greater than this.scrollbarLength_.
     // If the viewSize is greater than or equal to the scrollSize, the
-    // handleLength will end up equal to this.scrollViewSize_.
-    value = Math.min(value, this.scrollViewSize_ - this.handleLength_);
+    // handleLength will end up equal to this.scrollbarLength_.
+    value = Math.min(value, this.scrollbarLength_ - this.handleLength_);
   }
   return value;
 };
@@ -595,10 +596,10 @@ Blockly.Scrollbar.prototype.setHandlePosition = function(newPosition) {
  * @param {number} newSize The new scrollbar background length in CSS pixels.
  * @private
  */
-Blockly.Scrollbar.prototype.setScrollViewSize_ = function(newSize) {
-  this.scrollViewSize_ = newSize;
-  this.outerSvg_.setAttribute(this.lengthAttribute_, this.scrollViewSize_);
-  this.svgBackground_.setAttribute(this.lengthAttribute_, this.scrollViewSize_);
+Blockly.Scrollbar.prototype.setScrollbarLength_ = function(newSize) {
+  this.scrollbarLength_ = newSize;
+  this.outerSvg_.setAttribute(this.lengthAttribute_, this.scrollbarLength_);
+  this.svgBackground_.setAttribute(this.lengthAttribute_, this.scrollbarLength_);
 };
 
 /**
@@ -696,7 +697,7 @@ Blockly.Scrollbar.prototype.resizeViewHorizontal = function(hostMetrics) {
     // Shorten the scrollbar to make room for the corner square.
     viewSize -= Blockly.Scrollbar.scrollbarThickness;
   }
-  this.setScrollViewSize_(Math.max(0, viewSize));
+  this.setScrollbarLength_(Math.max(0, viewSize));
 
   var xCoordinate =
       hostMetrics.absoluteLeft + Blockly.Scrollbar.SCROLLBAR_MARGIN;
@@ -724,7 +725,7 @@ Blockly.Scrollbar.prototype.resizeContentHorizontal = function(hostMetrics) {
   if (hostMetrics.viewWidth >= hostMetrics.scrollWidth) {
     // viewWidth is often greater than scrollWidth in flyouts and
     // non-scrollable workspaces.
-    this.setHandleLength_(this.scrollViewSize_);
+    this.setHandleLength_(this.scrollbarLength_);
     this.setHandlePosition(0);
     if (!this.pair_) {
       // The scrollbar isn't needed.
@@ -740,13 +741,13 @@ Blockly.Scrollbar.prototype.resizeContentHorizontal = function(hostMetrics) {
 
   // Resize the handle.
   var handleLength =
-      this.scrollViewSize_ * hostMetrics.viewWidth / hostMetrics.scrollWidth;
-  handleLength = this.constrainLength_(handleLength);
+      this.scrollbarLength_ * hostMetrics.viewWidth / hostMetrics.scrollWidth;
+  handleLength = this.constrainHandleLength_(handleLength);
   this.setHandleLength_(handleLength);
 
   // Compute the handle offset.
   // The position of the handle can be between:
-  //     0 and this.scrollViewSize_ - handleLength
+  //     0 and this.scrollbarLength_ - handleLength
   // If viewLeft == scrollLeft
   //     then the offset should be 0
   // If viewRight == scrollRight
@@ -758,9 +759,9 @@ Blockly.Scrollbar.prototype.resizeContentHorizontal = function(hostMetrics) {
   // Percent of content to the left of our current position.
   var offsetRatio = contentDisplacement / maxScrollDistance;
   // Area available to scroll * percent to the left
-  var maxHandleOffset = this.scrollViewSize_ - this.handleLength_;
+  var maxHandleOffset = this.scrollbarLength_ - this.handleLength_;
   var handleOffset = maxHandleOffset * offsetRatio;
-  handleOffset = this.constrainPosition_(handleOffset);
+  handleOffset = this.constrainHandlePosition_(handleOffset);
   this.setHandlePosition(handleOffset);
 
   // Compute ratio (for use with set calls, which pass in content displacement).
@@ -793,7 +794,7 @@ Blockly.Scrollbar.prototype.resizeViewVertical = function(hostMetrics) {
     // Shorten the scrollbar to make room for the corner square.
     viewSize -= Blockly.Scrollbar.scrollbarThickness;
   }
-  this.setScrollViewSize_(Math.max(0, viewSize));
+  this.setScrollbarLength_(Math.max(0, viewSize));
 
   var xCoordinate = this.workspace_.RTL ?
       hostMetrics.absoluteLeft + Blockly.Scrollbar.SCROLLBAR_MARGIN :
@@ -819,7 +820,7 @@ Blockly.Scrollbar.prototype.resizeContentVertical = function(hostMetrics) {
   if (hostMetrics.viewHeight >= hostMetrics.scrollHeight) {
     // viewHeight is often greater than scrollHeight in flyouts and
     // non-scrollable workspaces.
-    this.setHandleLength_(this.scrollViewSize_);
+    this.setHandleLength_(this.scrollbarLength_);
     this.setHandlePosition(0);
     if (!this.pair_) {
       // The scrollbar isn't needed.
@@ -835,13 +836,13 @@ Blockly.Scrollbar.prototype.resizeContentVertical = function(hostMetrics) {
 
   // Resize the handle.
   var handleLength =
-      this.scrollViewSize_ * hostMetrics.viewHeight / hostMetrics.scrollHeight;
-  handleLength = this.constrainLength_(handleLength);
+      this.scrollbarLength_ * hostMetrics.viewHeight / hostMetrics.scrollHeight;
+  handleLength = this.constrainHandleLength_(handleLength);
   this.setHandleLength_(handleLength);
 
   // Compute the handle offset.
   // The position of the handle can be between:
-  //     0 and this.scrollViewSize_ - handleLength
+  //     0 and this.scrollbarLength_ - handleLength
   // If viewTop == scrollTop
   //     then the offset should be 0
   // If viewBottom == scrollBottom
@@ -853,9 +854,9 @@ Blockly.Scrollbar.prototype.resizeContentVertical = function(hostMetrics) {
   // Percent of content to the left of our current position.
   var offsetRatio = contentDisplacement / maxScrollDistance;
   // Area available to scroll * percent to the left
-  var maxHandleOffset = this.scrollViewSize_ - this.handleLength_;
+  var maxHandleOffset = this.scrollbarLength_ - this.handleLength_;
   var handleOffset = maxHandleOffset * offsetRatio;
-  handleOffset = this.constrainPosition_(handleOffset);
+  handleOffset = this.constrainHandlePosition_(handleOffset);
   this.setHandlePosition(handleOffset);
 
   // Compute ratio (for use with set calls, which pass in content displacement).
@@ -1004,7 +1005,7 @@ Blockly.Scrollbar.prototype.onMouseDownBar_ = function(e) {
     handlePosition += pageLength;
   }
 
-  this.setHandlePosition(this.constrainPosition_(handlePosition));
+  this.setHandlePosition(this.constrainHandlePosition_(handlePosition));
 
   this.updateMetrics_();
   e.stopPropagation();
@@ -1054,7 +1055,7 @@ Blockly.Scrollbar.prototype.onMouseMoveHandle_ = function(e) {
   var mouseDelta = currentMouse - this.startDragMouse_;
   var handlePosition = this.startDragHandle + mouseDelta;
   // Position the bar.
-  this.setHandlePosition(this.constrainPosition_(handlePosition));
+  this.setHandlePosition(this.constrainHandlePosition_(handlePosition));
   this.updateMetrics_();
 };
 
@@ -1092,7 +1093,7 @@ Blockly.Scrollbar.prototype.cleanUp_ = function() {
  * @protected
  */
 Blockly.Scrollbar.prototype.getRatio_ = function() {
-  var scrollHandleRange = this.scrollViewSize_ - this.handleLength_;
+  var scrollHandleRange = this.scrollbarLength_ - this.handleLength_;
   var ratio = this.handlePosition_ / scrollHandleRange;
   if (isNaN(ratio)) {
     ratio = 0;
@@ -1124,7 +1125,7 @@ Blockly.Scrollbar.prototype.updateMetrics_ = function() {
  *    Defaults to true.
  */
 Blockly.Scrollbar.prototype.set = function(value, updateMetrics) {
-  this.setHandlePosition(this.constrainPosition_(value * this.ratio));
+  this.setHandlePosition(this.constrainHandlePosition_(value * this.ratio));
   if (updateMetrics || updateMetrics === undefined) {
     this.updateMetrics_();
   }

@@ -28,13 +28,14 @@ goog.requireType('Blockly.utils.toolbox');
 Blockly.IMetricsManager = function() {};
 
 /**
- * Returns whether the scroll area has "fixed" edges.
- * @return {boolean} Whether the scroll area has "fixed" edges.
+ * Returns whether the scroll area has fixed edges.
+ * @return {boolean} Whether the scroll area has fixed edges.
+ * @package
  */
 Blockly.IMetricsManager.prototype.hasScrollEdges;
 
 /**
- * Returns the metrics for the scrollable area of the workspace.
+ * Returns the metrics for the scroll area of the workspace.
  * @param {boolean=} opt_getWorkspaceCoordinates True to get the scroll metrics
  *     in workspace coordinates, false to get them in pixel coordinates.
  * @param {!Blockly.MetricsManager.ContainerRegion=} opt_viewMetrics The view

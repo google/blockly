@@ -17,6 +17,7 @@ goog.require('Blockly.BlockSvg');
 goog.require('Blockly.browserEvents');
 goog.require('Blockly.ConnectionDB');
 goog.require('Blockly.constants');
+goog.require('Blockly.ContextMenu');
 goog.require('Blockly.ContextMenuRegistry');
 goog.require('Blockly.Events');
 goog.require('Blockly.Events.BlockCreate');
@@ -81,7 +82,7 @@ Blockly.WorkspaceSvg = function(
   Blockly.WorkspaceSvg.superClass_.constructor.call(this, options);
 
   var MetricsManagerClass = Blockly.registry.getClassFromOptions(
-      Blockly.registry.Type.METRICS_MANAGER, options);
+      Blockly.registry.Type.METRICS_MANAGER, options, true);
   /**
    * Object in charge of calculating metrics for the workspace.
    * @type {!Blockly.IMetricsManager}
@@ -819,11 +820,8 @@ Blockly.WorkspaceSvg.prototype.createDom = function(opt_backgroundClass) {
   // Determine if there needs to be a category tree, or a simple list of
   // blocks.  This cannot be changed later, since the UI is very different.
   if (this.options.hasCategories) {
-    if (!Blockly.Toolbox) {
-      throw Error('Missing require for Blockly.Toolbox');
-    }
     var ToolboxClass = Blockly.registry.getClassFromOptions(
-        Blockly.registry.Type.TOOLBOX, this.options);
+        Blockly.registry.Type.TOOLBOX, this.options, true);
     this.toolbox_ = new ToolboxClass(this);
   }
   if (this.grid_) {
@@ -833,7 +831,7 @@ Blockly.WorkspaceSvg.prototype.createDom = function(opt_backgroundClass) {
   var CursorClass = Blockly.registry.getClassFromOptions(
       Blockly.registry.Type.CURSOR, this.options);
 
-  this.markerManager_.setCursor(new CursorClass());
+  CursorClass && this.markerManager_.setCursor(new CursorClass());
 
   this.renderer_.createDom(this.svgGroup_, this.getTheme());
   return this.svgGroup_;
@@ -992,15 +990,13 @@ Blockly.WorkspaceSvg.prototype.addFlyout = function(tagName) {
       }));
   workspaceOptions.toolboxPosition = this.options.toolboxPosition;
   if (this.horizontalLayout) {
-    if (!Blockly.HorizontalFlyout) {
-      throw Error('Missing require for Blockly.HorizontalFlyout');
-    }
-    this.flyout_ = new Blockly.HorizontalFlyout(workspaceOptions);
+    var HorizontalFlyout = Blockly.registry.getClassFromOptions(
+        Blockly.registry.Type.FLYOUTS_HORIZONTAL_TOOLBOX, this.options, true);
+    this.flyout_ = new HorizontalFlyout(workspaceOptions);
   } else {
-    if (!Blockly.VerticalFlyout) {
-      throw Error('Missing require for Blockly.VerticalFlyout');
-    }
-    this.flyout_ = new Blockly.VerticalFlyout(workspaceOptions);
+    var VerticalFlyout = Blockly.registry.getClassFromOptions(
+        Blockly.registry.Type.FLYOUTS_VERTICAL_TOOLBOX, this.options, true);
+    this.flyout_ = new VerticalFlyout(workspaceOptions);
   }
   this.flyout_.autoClose = false;
   this.flyout_.getWorkspace().setVisible(true);

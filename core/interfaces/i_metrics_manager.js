@@ -32,7 +32,7 @@ Blockly.IMetricsManager = function() {};
  * @return {boolean} Whether the scroll area has fixed edges.
  * @package
  */
-Blockly.IMetricsManager.prototype.hasScrollEdges;
+Blockly.IMetricsManager.prototype.hasFixedEdges;
 
 /**
  * Returns the metrics for the scroll area of the workspace.

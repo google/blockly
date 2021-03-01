@@ -181,7 +181,7 @@ Blockly.createMainWorkspace_ = function(svg, options, blockDragSurface,
   // A null translation will also apply the correct initial scale.
   mainWorkspace.translate(0, 0);
 
-  mainWorkspace.addChangeListener(Blockly.bumpIntoBoundsHandler(mainWorkspace));
+  mainWorkspace.addChangeListener(Blockly.bumpIntoBoundsHandler_(mainWorkspace));
 
   // The SVG is now fully assembled.
   Blockly.svgResize(mainWorkspace);
@@ -223,9 +223,9 @@ Blockly.extractObjectFromEvent_ = function(workspace, e) {
  * @param {!Blockly.WorkspaceSvg} workspace The workspace.
  * @private
  */
-Blockly.bumpTopObjectsIntoBounds = function(workspace) {
+Blockly.bumpTopObjectsIntoBounds_ = function(workspace) {
   var metricsManager = workspace.getMetricsManager();
-  if (!metricsManager.hasScrollEdges() || workspace.isDragging()) {
+  if (!metricsManager.hasFixedEdges() || workspace.isDragging()) {
     return;
   }
 
@@ -243,10 +243,10 @@ Blockly.bumpTopObjectsIntoBounds = function(workspace) {
  * @return {function(Blockly.Events.Abstract)} The event handler.
  * @private
  */
-Blockly.bumpIntoBoundsHandler = function(workspace) {
+Blockly.bumpIntoBoundsHandler_ = function(workspace) {
   return function(e) {
     var metricsManager = workspace.getMetricsManager();
-    if (!metricsManager.hasScrollEdges() || workspace.isDragging() ||
+    if (!metricsManager.hasFixedEdges() || workspace.isDragging() ||
         Blockly.Events.BUMP_EVENTS.indexOf(e.type) === -1) {
       return;
     }
@@ -349,7 +349,7 @@ Blockly.init_ = function(mainWorkspace) {
       Blockly.browserEvents.conditionalBind(window, 'resize', null, function() {
         Blockly.hideChaff(true);
         Blockly.svgResize(mainWorkspace);
-        Blockly.bumpTopObjectsIntoBounds(mainWorkspace);
+        Blockly.bumpTopObjectsIntoBounds_(mainWorkspace);
       });
   mainWorkspace.setResizeHandlerWrapper(workspaceResizeHandler);
 
@@ -384,7 +384,7 @@ Blockly.init_ = function(mainWorkspace) {
             mainWorkspace, true, true, 'blocklyMainWorkspaceScrollbar');
     mainWorkspace.scrollbar.resize();
   } else {
-    mainWorkspace.setMetrics({x: 0, y: 0});
+    mainWorkspace.setMetrics({x: 0.5, y: 0.5});
   }
 
   // Load the sounds.

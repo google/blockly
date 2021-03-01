@@ -259,7 +259,7 @@ Blockly.MetricsManager.prototype.getContentMetrics = function(
  * @return {boolean} Whether the scroll area has fixed edges.
  * @package
  */
-Blockly.MetricsManager.prototype.hasScrollEdges = function() {
+Blockly.MetricsManager.prototype.hasFixedEdges = function() {
   // This exists for optimization of bump logic.
   return !this.workspace_.isMovableHorizontally() ||
       !this.workspace_.isMovableVertically();
@@ -274,9 +274,9 @@ Blockly.MetricsManager.prototype.hasScrollEdges = function() {
  *     area.
  * @protected
  */
-Blockly.MetricsManager.prototype.computeFixedEdges_ = function(
+Blockly.MetricsManager.prototype.getComputedFixedEdges_ = function(
     opt_viewMetrics) {
-  if (!this.hasScrollEdges()) {
+  if (!this.hasFixedEdges()) {
     // Return early if there are no edges.
     return {};
   }
@@ -350,7 +350,7 @@ Blockly.MetricsManager.prototype.getScrollMetrics = function(
   var scale = opt_getWorkspaceCoordinates ? this.workspace_.scale : 1;
   var viewMetrics = opt_viewMetrics || this.getViewMetrics(false);
   var contentMetrics = opt_contentMetrics || this.getContentMetrics();
-  var scrollEdges = this.computeFixedEdges_(viewMetrics);
+  var scrollEdges = this.getComputedFixedEdges_(viewMetrics);
 
   // Add padding around content
   var paddedContent = this.getPaddedContent_(viewMetrics, contentMetrics);

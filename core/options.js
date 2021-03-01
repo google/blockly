@@ -134,7 +134,8 @@ Blockly.Options = function(options) {
   /** @type {!Blockly.Options.MoveOptions} */
   this.moveOptions = Blockly.Options.parseMoveOptions_(options, hasCategories);
   /** @deprecated  January 2019 */
-  this.hasScrollbars = this.moveOptions.scrollbars;
+  this.hasScrollbars = this.moveOptions.scrollbars.horizontal ||
+      this.moveOptions.scrollbars.vertical;
   /** @type {boolean} */
   this.hasTrashcan = hasTrashcan;
   /** @type {number} */
@@ -205,13 +206,22 @@ Blockly.Options.GridOptions;
  * Move Options.
  * @typedef {{
  *     drag: boolean,
- *     scrollbars: boolean,
+ *     scrollbars: boolean | Blockly.Options.ScrollbarOptions,
  *     hasHorizontalScrollbars: boolean,
  *     hasVerticalScrollbars: boolean,
  *     wheel: boolean
  * }}
  */
 Blockly.Options.MoveOptions;
+
+/**
+ * Move Options.
+ * @typedef {{
+ *     horizontal: boolean,
+ *     vertical: boolean
+ * }}
+ */
+Blockly.Options.ScrollbarOptions;
 
 /**
  * Zoom Options.
@@ -252,27 +262,28 @@ Blockly.Options.prototype.getMetrics;
 Blockly.Options.parseMoveOptions_ = function(options, hasCategories) {
   var move = options['move'] || {};
   var moveOptions = {};
-  if (move['hasVerticalScrollbars'] !== undefined || move['hasHorizontalScrollbars'] !== undefined) {
-    moveOptions.hasVerticalScrollbars = !!move['hasVerticalScrollbars'];
-    moveOptions.hasHorizontalScrollbars = !!move['hasHorizontalScrollbars'];
-    moveOptions.scrollbars =
-        moveOptions.hasVerticalScrollbars || moveOptions.hasHorizontalScrollbars;
-  } else if (move['scrollbars'] === undefined && options['scrollbars'] === undefined) {
-    moveOptions.scrollbars = hasCategories;
-    moveOptions.hasVerticalScrollbars = moveOptions.scrollbars;
-    moveOptions.hasHorizontalScrollbars = moveOptions.scrollbars;
+  if (move['scrollbars'] === undefined) {
+    moveOptions.scrollbars.horizontal = hasCategories;
+    moveOptions.scrollbars.vertical = hasCategories;
+  } else if (move['scrollbars'] &&
+      move['scrollbars']['horizontal'] !== undefined &&
+      move['scrollbars']['vertical'] !== undefined) {
+    moveOptions.scrollbars.horizontal = !!move['scrollbars']['horizontal'];
+    moveOptions.scrollbars.vertical = !!move['scrollbars']['vertical'];
   } else {
-    moveOptions.scrollbars = !!move['scrollbars'] || !!options['scrollbars'];
-    moveOptions.hasVerticalScrollbars = moveOptions.scrollbars;
-    moveOptions.hasHorizontalScrollbars = moveOptions.scrollbars;
+    moveOptions.scrollbars.horizontal = !!move['scrollbars'];
+    moveOptions.scrollbars.vertical = !!move['scrollbars'];
   }
-  if (!moveOptions.scrollbars || move['wheel'] === undefined) {
+  var hasScrollbars =
+      moveOptions.scrollbars.horizontal || moveOptions.scrollbars.vertical;
+
+  if (!hasScrollbars || move['wheel'] === undefined) {
     // Defaults to false so that developers' settings don't appear to change.
     moveOptions.wheel = false;
   } else {
     moveOptions.wheel = !!move['wheel'];
   }
-  if (!moveOptions.scrollbars) {
+  if (!hasScrollbars) {
     moveOptions.drag = false;
   } else if (move['drag'] === undefined) {
     // Defaults to true if scrollbars is true.

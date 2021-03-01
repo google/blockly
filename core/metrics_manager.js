@@ -350,20 +350,20 @@ Blockly.MetricsManager.prototype.getScrollMetrics = function(
   var scale = opt_getWorkspaceCoordinates ? this.workspace_.scale : 1;
   var viewMetrics = opt_viewMetrics || this.getViewMetrics(false);
   var contentMetrics = opt_contentMetrics || this.getContentMetrics();
-  var scrollEdges = this.getComputedFixedEdges_(viewMetrics);
+  var fixedEdges = this.getComputedFixedEdges_(viewMetrics);
 
   // Add padding around content
   var paddedContent = this.getPaddedContent_(viewMetrics, contentMetrics);
 
   // Use combination of fixed bounds and padded content to make scroll area.
-  var top = scrollEdges.top !== undefined ?
-      scrollEdges.top : paddedContent.top;
-  var left = scrollEdges.left !== undefined ?
-      scrollEdges.left : paddedContent.left;
-  var bottom = scrollEdges.bottom !== undefined ?
-      scrollEdges.bottom : paddedContent.bottom;
-  var right = scrollEdges.right !== undefined ?
-      scrollEdges.right : paddedContent.right;
+  var top = fixedEdges.top !== undefined ?
+      fixedEdges.top : paddedContent.top;
+  var left = fixedEdges.left !== undefined ?
+      fixedEdges.left : paddedContent.left;
+  var bottom = fixedEdges.bottom !== undefined ?
+      fixedEdges.bottom : paddedContent.bottom;
+  var right = fixedEdges.right !== undefined ?
+      fixedEdges.right : paddedContent.right;
 
   return {
     top: top / scale,

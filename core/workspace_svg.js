@@ -986,7 +986,10 @@ Blockly.WorkspaceSvg.prototype.addFlyout = function(tagName) {
         'oneBasedIndex': this.options.oneBasedIndex,
         'horizontalLayout': this.horizontalLayout,
         'renderer': this.options.renderer,
-        'rendererOverrides': this.options.rendererOverrides
+        'rendererOverrides': this.options.rendererOverrides,
+        'move': {
+          'scrollbars': true,
+        }
       }));
   workspaceOptions.toolboxPosition = this.options.toolboxPosition;
   if (this.horizontalLayout) {
@@ -1157,11 +1160,11 @@ Blockly.WorkspaceSvg.prototype.maybeFireViewportChangeEvent = function() {
     // negligible changes in viewport top/left.
     return;
   }
+  var event = new (Blockly.Events.get(Blockly.Events.VIEWPORT_CHANGE))(top,
+      left, scale, this.id);
   this.oldScale_ = scale;
   this.oldTop_ = top;
   this.oldLeft_ = left;
-  var event = new (Blockly.Events.get(Blockly.Events.VIEWPORT_CHANGE))(top,
-      left, scale, this.id);
   Blockly.Events.fire(event);
 };
 
@@ -1630,22 +1633,6 @@ Blockly.WorkspaceSvg.prototype.isDraggable = function() {
 };
 
 /**
- * Should the workspace have bounded content? Used to tell if the
- * workspace's content should be sized so that it can move (bounded) or not
- * (exact sizing).
- * @return {boolean} True if the workspace should be bounded, false otherwise.
- * @package
- */
-Blockly.WorkspaceSvg.prototype.isContentBounded = function() {
-  return (this.options.moveOptions && this.options.moveOptions.scrollbars) ||
-      (this.options.moveOptions && this.options.moveOptions.wheel) ||
-      (this.options.moveOptions && this.options.moveOptions.drag) ||
-      (this.options.zoomOptions && this.options.zoomOptions.controls) ||
-      (this.options.zoomOptions && this.options.zoomOptions.wheel) ||
-      (this.options.zoomOptions && this.options.zoomOptions.pinch);
-};
-
-/**
  * Is this workspace movable?
  *
  * This means the user can reposition the X Y coordinates of the workspace
@@ -1661,6 +1648,28 @@ Blockly.WorkspaceSvg.prototype.isMovable = function() {
       (this.options.moveOptions && this.options.moveOptions.drag) ||
       (this.options.zoomOptions && this.options.zoomOptions.wheel) ||
       (this.options.zoomOptions && this.options.zoomOptions.pinch);
+};
+
+/**
+ * Is this workspace movable horizontally?
+ * @return {boolean} True if the workspace is movable horizontally, false
+ *    otherwise.
+ */
+Blockly.WorkspaceSvg.prototype.isMovableHorizontally = function() {
+  var hasScrollbars = !!this.scrollbar;
+  return this.isMovable() && (!hasScrollbars ||
+      (hasScrollbars && this.scrollbar.canScrollHorizontally()));
+};
+
+/**
+ * Is this workspace movable vertically?
+ * @return {boolean} True if the workspace is movable vertically, false
+ *    otherwise.
+ */
+Blockly.WorkspaceSvg.prototype.isMovableVertically = function() {
+  var hasScrollbars = !!this.scrollbar;
+  return this.isMovable() && (!hasScrollbars ||
+      (hasScrollbars && this.scrollbar.canScrollVertically()));
 };
 
 /**
@@ -2032,12 +2041,12 @@ Blockly.WorkspaceSvg.prototype.scrollCenter = function() {
   }
 
   var metrics = this.getMetrics();
-  var x = (metrics.contentWidth - metrics.viewWidth) / 2;
-  var y = (metrics.contentHeight - metrics.viewHeight) / 2;
+  var x = (metrics.scrollWidth - metrics.viewWidth) / 2;
+  var y = (metrics.scrollHeight - metrics.viewHeight) / 2;
 
   // Convert from workspace directions to canvas directions.
-  x = -x - metrics.contentLeft;
-  y = -y - metrics.contentTop;
+  x = -x - metrics.scrollLeft;
+  y = -y - metrics.scrollTop;
   this.scroll(x, y);
 };
 
@@ -2124,10 +2133,11 @@ Blockly.WorkspaceSvg.prototype.setScale = function(newScale) {
   // zoom correctly without scrollbars, but scroll does not resize the
   // scrollbars so we have to call resizeView/resizeContent as well.
   var metrics = this.getMetrics();
-  // The scroll values and the view values are additive inverses of
-  // each other, so when we subtract from one we have to add to the other.
+
   this.scrollX -= metrics.absoluteLeft;
   this.scrollY -= metrics.absoluteTop;
+  // // The scroll values and the view values are additive inverses of
+  // // each other, so when we subtract from one we have to add to the other.
   metrics.viewLeft += metrics.absoluteLeft;
   metrics.viewTop += metrics.absoluteTop;
 
@@ -2167,22 +2177,18 @@ Blockly.WorkspaceSvg.prototype.scroll = function(x, y) {
 
   // Keep scrolling within the bounds of the content.
   var metrics = this.getMetrics();
-  // This is the offset of the top-left corner of the view from the
-  // workspace origin when the view is "seeing" the bottom-right corner of
-  // the content.
-  var maxOffsetOfViewFromOriginX = metrics.contentWidth + metrics.contentLeft -
-      metrics.viewWidth;
-  var maxOffsetOfViewFromOriginY = metrics.contentHeight + metrics.contentTop -
-      metrics.viewHeight;
   // Canvas coordinates (aka scroll coordinates) have inverse directionality
   // to workspace coordinates so we have to inverse them.
-  x = Math.min(x, -metrics.contentLeft);
-  y = Math.min(y, -metrics.contentTop);
-  x = Math.max(x, -maxOffsetOfViewFromOriginX);
-  y = Math.max(y, -maxOffsetOfViewFromOriginY);
-
+  x = Math.min(x, -metrics.scrollLeft);
+  y = Math.min(y, -metrics.scrollTop);
+  var maxXScroll = metrics.scrollLeft + metrics.scrollWidth - metrics.viewWidth;
+  var maxYScroll =
+      metrics.scrollTop + metrics.scrollHeight - metrics.viewHeight;
+  x = Math.max(x, -maxXScroll);
+  y = Math.max(y, -maxYScroll);
   this.scrollX = x;
   this.scrollY = y;
+
   if (this.scrollbar) {
     // The content position (displacement from the content's top-left to the
     // origin) plus the scroll position (displacement from the view's top-left
@@ -2191,7 +2197,7 @@ Blockly.WorkspaceSvg.prototype.scroll = function(x, y) {
     // the content's top-left to the view's top-left, matching the
     // directionality of the scrollbars.
     this.scrollbar.set(
-        -(x + metrics.contentLeft), -(y + metrics.contentTop), false);
+        -(x + metrics.scrollLeft), -(y + metrics.scrollTop), false);
   }
   // We have to shift the translation so that when the canvas is at 0, 0 the
   // workspace origin is not underneath the toolbox.
@@ -2212,13 +2218,13 @@ Blockly.WorkspaceSvg.setTopLevelWorkspaceMetrics_ = function(xyRatio) {
 
   if (typeof xyRatio.x == 'number') {
     this.scrollX =
-        -(metrics.contentLeft +
-            (metrics.contentWidth - metrics.viewWidth) * xyRatio.x);
+        -(metrics.scrollLeft +
+            (metrics.scrollWidth - metrics.viewWidth) * xyRatio.x);
   }
   if (typeof xyRatio.y == 'number') {
     this.scrollY =
-        -(metrics.contentTop +
-            (metrics.contentHeight - metrics.viewHeight) * xyRatio.y);
+        -(metrics.scrollTop +
+            (metrics.scrollHeight - metrics.viewHeight) * xyRatio.y);
   }
   // We have to shift the translation so that when the canvas is at 0, 0 the
   // workspace origin is not underneath the toolbox.

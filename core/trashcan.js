@@ -69,7 +69,10 @@ Blockly.Trashcan = function(workspace) {
         'rtl': this.workspace_.RTL,
         'oneBasedIndex': this.workspace_.options.oneBasedIndex,
         'renderer': this.workspace_.options.renderer,
-        'rendererOverrides': this.workspace_.options.rendererOverrides
+        'rendererOverrides': this.workspace_.options.rendererOverrides,
+        'move': {
+          'scrollbars': true,
+        }
       }));
   // Create vertical or horizontal flyout.
   if (this.workspace_.horizontalLayout) {

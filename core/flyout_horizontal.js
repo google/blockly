@@ -48,11 +48,15 @@ Blockly.utils.object.inherits(Blockly.HorizontalFlyout, Blockly.Flyout);
  * .viewWidth: Width of the visible rectangle,
  * .contentHeight: Height of the contents,
  * .contentWidth: Width of the contents,
+ * .scrollHeight: Height of the scroll area,
+ * .scrollWidth: Width of the scroll area,
  * .viewTop: Offset of top edge of visible rectangle from parent,
  * .contentTop: Offset of the top-most content from the y=0 coordinate,
+ * .scrollTop: Offset of the scroll area top from the y=0 coordinate,
  * .absoluteTop: Top-edge of view.
  * .viewLeft: Offset of the left edge of visible rectangle from parent,
  * .contentLeft: Offset of the left-most content from the x=0 coordinate,
+ * .scrollLeft:  Offset of the scroll area left from the x=0 coordinate,
  * .absoluteLeft: Left-edge of view.
  * @return {Blockly.utils.Metrics} Contains size and position metrics of the
  *     flyout.
@@ -83,10 +87,15 @@ Blockly.HorizontalFlyout.prototype.getMetrics_ = function() {
   var viewWidth = this.width_ - 2 * this.SCROLLBAR_PADDING;
 
   var metrics = {
-    contentHeight: (optionBox.height + 2 * this.MARGIN) * this.workspace_.scale,
-    contentWidth: (optionBox.width + 2 * this.MARGIN) * this.workspace_.scale,
+    contentHeight: optionBox.height * this.workspace_.scale,
+    contentWidth: optionBox.width * this.workspace_.scale,
     contentTop: 0,
     contentLeft: 0,
+
+    scrollHeight: (optionBox.height + 2 * this.MARGIN) * this.workspace_.scale,
+    scrollWidth: (optionBox.width + 2 * this.MARGIN) * this.workspace_.scale,
+    scrollTop: 0,
+    scrollLeft: 0,
 
     viewHeight: viewHeight,
     viewWidth: viewWidth,
@@ -115,8 +124,8 @@ Blockly.HorizontalFlyout.prototype.setMetrics_ = function(xyRatio) {
 
   if (typeof xyRatio.x == 'number') {
     this.workspace_.scrollX =
-        -(metrics.contentLeft +
-            (metrics.contentWidth - metrics.viewWidth) * xyRatio.x);
+        -(metrics.scrollLeft +
+            (metrics.scrollWidth - metrics.viewWidth) * xyRatio.x);
   }
 
   this.workspace_.translate(this.workspace_.scrollX + metrics.absoluteLeft,
@@ -267,7 +276,7 @@ Blockly.HorizontalFlyout.prototype.wheel_ = function(e) {
   if (delta) {
     var metrics = this.getMetrics_();
     var pos = metrics.viewLeft + delta;
-    var limit = metrics.contentWidth - metrics.viewWidth;
+    var limit = metrics.scrollWidth - metrics.viewWidth;
     pos = Math.min(pos, limit);
     pos = Math.max(pos, 0);
     this.workspace_.scrollbar.setX(pos);

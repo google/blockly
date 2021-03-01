@@ -38,15 +38,14 @@ Blockly.WorkspaceDragger = function(workspace) {
    * @type {boolean}
    * @private
    */
-  this.horizontalScrollEnabled_ =
-      this.workspace_.scrollbar.canScrollHorizontally();
+  this.horizontalScrollEnabled_ = this.workspace_.isMovableHorizontally();
 
   /**
    * Whether vertical scroll is enabled.
    * @type {boolean}
    * @private
    */
-  this.verticalScrollEnabled_ = this.workspace_.scrollbar.canScrollVertically();
+  this.verticalScrollEnabled_ = this.workspace_.isMovableVertically();
 
   /**
    * The scroll position of the workspace at the beginning of the drag.

@@ -469,6 +469,11 @@ Blockly.Mutator.prototype.getFlyoutMetrics_ = function() {
     contentTop: unsupported,
     contentLeft: unsupported,
 
+    scrollHeight: unsupported,
+    scrollWidth: unsupported,
+    scrollTop: unsupported,
+    scrollLeft: unsupported,
+
     viewHeight: this.workspaceHeight_,
     viewWidth: this.workspaceWidth_ - flyoutWidth,
     viewTop: unsupported,

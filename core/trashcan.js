@@ -16,8 +16,10 @@ goog.require('Blockly.browserEvents');
 goog.require('Blockly.constants');
 goog.require('Blockly.Events');
 goog.require('Blockly.Events.TrashcanOpen');
+goog.require('Blockly.IPositionable');
 goog.require('Blockly.Scrollbar');
 goog.require('Blockly.utils.dom');
+goog.require('Blockly.utils.math');
 goog.require('Blockly.utils.Rect');
 goog.require('Blockly.utils.Svg');
 goog.require('Blockly.utils.toolbox');
@@ -430,16 +432,15 @@ Blockly.Trashcan.prototype.emptyContents = function() {
  * It is positioned in the opposite corner to the corner the
  * categories/toolbox starts at.
  * @param {!Blockly.utils.Metrics} metrics The workspace metrics.
- * @param {Array<Blockly.utils.Rect>} _savedPositions List of rectangles that
+ * @param {Array<Blockly.utils.Rect>} savedPositions List of rectangles that
  *     are already on the workspace.
  */
-Blockly.Trashcan.prototype.position = function(metrics, _savedPositions) {
+Blockly.Trashcan.prototype.position = function(metrics, savedPositions) {
   // Not yet initialized.
   if (!this.verticalSpacing_) {
     return;
   }
 
-  // Determine which corner to place the trashcan in.
   if (metrics.toolboxPosition == Blockly.TOOLBOX_AT_LEFT ||
       (this.workspace_.horizontalLayout && !this.workspace_.RTL)) {
     // Toolbox starts in the left corner.
@@ -450,20 +451,35 @@ Blockly.Trashcan.prototype.position = function(metrics, _savedPositions) {
     this.left_ = this.MARGIN_SIDE_ + Blockly.Scrollbar.scrollbarThickness;
   }
 
+  var height = this.BODY_HEIGHT_ + this.LID_HEIGHT_;
+  // Upper corner placement
+  var minTop = this.top_ = this.verticalSpacing_;
+  // Bottom corner placement
+  var maxTop = metrics.viewHeight + metrics.absoluteTop - height -
+      this.verticalSpacing_;
+  var placeBottom = metrics.toolboxPosition !== Blockly.TOOLBOX_AT_BOTTOM;
+  this.top_ = placeBottom ? maxTop : minTop;
 
-  // the bounding box is:
-  // top = this.top
-
-  if (metrics.toolboxPosition == Blockly.TOOLBOX_AT_BOTTOM) {
-    this.top_ = this.verticalSpacing_;
-  } else {
-    this.top_ = metrics.viewHeight + metrics.absoluteTop -
-        (this.BODY_HEIGHT_ + this.LID_HEIGHT_) - this.verticalSpacing_;
+  // Check for collision and bump if needed.
+  var boundingRect = this.getBoundingRectangle();
+  for (var i = 0, otherEl; (otherEl = savedPositions[i]); i++) {
+    if (boundingRect.intersects(otherEl)) {
+      if (placeBottom) {
+        // Bump up
+        this.top_ = otherEl.top - height - this.MARGIN_BOTTOM_;
+      } else {
+        this.top_ = otherEl.bottom + this.MARGIN_BOTTOM_;
+      }
+      // Recheck other savedPositions
+      boundingRect = this.getBoundingRectangle();
+      i = -1;
+    }
   }
+  // Clamp top value within valid range.
+  this.top_ = Blockly.utils.math.clamp(minTop, this.top_, maxTop);
 
   this.svgGroup_.setAttribute('transform',
       'translate(' + this.left_ + ',' + this.top_ + ')');
-  console.log(this.top_);
 };
 
 /**

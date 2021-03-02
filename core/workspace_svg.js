@@ -55,6 +55,7 @@ goog.requireType('Blockly.IASTNodeLocationSvg');
 goog.requireType('Blockly.IBoundedElement');
 goog.requireType('Blockly.IFlyout');
 goog.requireType('Blockly.IMetricsManager');
+goog.requireType('Blockly.IPositionable');
 goog.requireType('Blockly.IToolbox');
 goog.requireType('Blockly.Marker');
 goog.requireType('Blockly.ScrollbarPair');
@@ -1074,15 +1075,20 @@ Blockly.WorkspaceSvg.prototype.resize = function() {
   if (this.flyout_) {
     this.flyout_.position();
   }
-  if (this.trashcan || this.zoomControls_) {
-    // TODO when does getMetrics return null or empty? trash and zoom has checks for this.
-    // TODO these positionables probably don't need scroll or content metrics, but everything else. Probably want a typedef that has that.
+  /** @type {Array<Blockly.IPositionable>} */
+  var positionableEls = [];
+  if (this.trashcan) {
+    positionableEls.push(this.trashcan);
+  }
+  if (this.zoomControls_) {
+    positionableEls.push(this.zoomControls_);
+  }
+  if (positionableEls) {
     var metrics = this.getMetrics();
-    if (this.trashcan) {
-      this.trashcan.position(metrics, []);
-    }
-    if (this.zoomControls_) {
-      this.zoomControls_.position(metrics, []);
+    var savedPositions = [];
+    for (var i = 0, uiElement; (uiElement = positionableEls[i]); i++) {
+      uiElement.position(metrics, savedPositions);
+      savedPositions.push(uiElement.getBoundingRectangle());
     }
   }
 

@@ -22,6 +22,7 @@ goog.require('Blockly.Touch');
 goog.require('Blockly.utils.dom');
 goog.require('Blockly.utils.Rect');
 goog.require('Blockly.utils.Svg');
+goog.require('Blockly.IPositionable');
 
 goog.requireType('Blockly.WorkspaceSvg');
 
@@ -213,16 +214,12 @@ Blockly.ZoomControls.prototype.getBoundingRectangle = function() {
  * It is positioned in the opposite corner to the corner the
  * categories/toolbox starts at.
  * @param {!Blockly.utils.Metrics} metrics The workspace metrics.
- * @param {Array<Blockly.utils.Rect>} _savedPositions List of rectangles that
+ * @param {Array<Blockly.utils.Rect>} savedPositions List of rectangles that
  *     are already on the workspace.
  */
-Blockly.ZoomControls.prototype.position = function(metrics, _savedPositions) {
+Blockly.ZoomControls.prototype.position = function(metrics, savedPositions) {
   // Not yet initialized.
   if (!this.verticalSpacing_) {
-    return;
-  }
-  if (!metrics) {
-    // There are no metrics available (workspace is probably not visible).
     return;
   }
   if (metrics.toolboxPosition == Blockly.TOOLBOX_AT_LEFT ||
@@ -247,6 +244,41 @@ Blockly.ZoomControls.prototype.position = function(metrics, _savedPositions) {
     this.zoomInGroup_.setAttribute('transform', 'translate(0, 43)');
     this.zoomOutGroup_.setAttribute('transform', 'translate(0, 77)');
   }
+
+  // Upper corner placement
+  var minTop = this.top_ = this.verticalSpacing_;
+  // Bottom corner placement
+  var maxTop = metrics.viewHeight + metrics.absoluteTop -
+      this.HEIGHT_ - this.verticalSpacing_;
+  var placeBottom = metrics.toolboxPosition !== Blockly.TOOLBOX_AT_BOTTOM;
+  this.top_ = placeBottom ? maxTop : minTop;
+  if (placeBottom) {
+    this.zoomInGroup_.setAttribute('transform', 'translate(0, 43)');
+    this.zoomOutGroup_.setAttribute('transform', 'translate(0, 77)');
+  } else {
+    this.zoomInGroup_.setAttribute('transform', 'translate(0, 34)');
+    if (this.zoomResetGroup_) {
+      this.zoomResetGroup_.setAttribute('transform', 'translate(0, 77)');
+    }
+  }
+
+  // Check for collision and bump if needed.
+  var boundingRect = this.getBoundingRectangle();
+  for (var i = 0, otherEl; (otherEl = savedPositions[i]); i++) {
+    if (boundingRect.intersects(otherEl)) {
+      if (placeBottom) {
+        // Bump up
+        this.top_ = otherEl.top - this.HEIGHT_ - this.MARGIN_BOTTOM_;
+      } else {
+        this.top_ = otherEl.bottom + this.MARGIN_BOTTOM_;
+      }
+      // Recheck other savedPositions
+      boundingRect = this.getBoundingRectangle();
+      i = -1;
+    }
+  }
+  // Clamp top value within valid range.
+  this.top_ = Blockly.utils.math.clamp(minTop, this.top_, maxTop);
 
   this.svgGroup_.setAttribute('transform',
       'translate(' + this.left_ + ',' + this.top_ + ')');

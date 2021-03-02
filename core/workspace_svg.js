@@ -1679,6 +1679,7 @@ Blockly.WorkspaceSvg.prototype.onMouseWheel_ = function(e) {
   var y = this.scrollY - scrollDelta.y;
 
   // The amount the block dragger group was updated before we scroll the workspace.
+  // TODO: Complete hack here.
   var oldX = this.blockDragSurface_.getGroup().transform.baseVal.consolidate().matrix.e;
   var oldY = this.blockDragSurface_.getGroup().transform.baseVal.consolidate().matrix.f;
 
@@ -1687,13 +1688,19 @@ Blockly.WorkspaceSvg.prototype.onMouseWheel_ = function(e) {
 
   var deltaX = newCoord.x.toFixed() - oldX;
   var deltaY = newCoord.y.toFixed() - oldY;
+  if (this.currentGesture_ && this.currentGesture_.isDraggingBlock_) {
+    // Negative because we are trying to offset the amount child block dragger
+    // group is being dragged.
+    this.blockDragSurface_.translateBy(-deltaX, -deltaY);
+    this.currentGesture_.startBlock_.moveConnections(-deltaX, -deltaY);
+    // TODO: Complete hack here.
+    this.currentGesture_.blockDragger_.updateStartXY(-deltaX, -deltaY);
+    var delta = new Blockly.utils.Coordinate(-deltaX, -deltaY);
+    // TODO: Update from null.
+    this.currentGesture_.blockDragger_.draggedConnectionManager_.update(delta, null);
 
-  // Negative because we are trying to offset the amount child block dragger
-  // group is being dragged.
-  this.blockDragSurface_.translateBy(-deltaX, -deltaY);
-  this.currentGesture_.blockDragger_.updateStartXY(-deltaX, -deltaY);
-
-  e.preventDefault();
+    e.preventDefault();
+  }
 };
 
 /**

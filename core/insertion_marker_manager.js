@@ -628,8 +628,7 @@ Blockly.InsertionMarkerManager.prototype.hideInsertionMarker_ = function() {
     imConn.targetBlock().unplug(false);
   }
   // Inside of a C-block, first statement connection.
-  else if (
-      imConn.type == Blockly.connectionTypes.NEXT_STATEMENT &&
+  else if (imConn.type == Blockly.connectionTypes.NEXT_STATEMENT &&
       imConn != markerNext) {
     var innerConnection = imConn.targetConnection;
     innerConnection.getSourceBlock().unplug(false);

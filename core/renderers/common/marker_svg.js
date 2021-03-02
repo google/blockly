@@ -207,14 +207,14 @@ Blockly.blockRendering.MarkerSvg.prototype.draw = function(oldNode, curNode) {
 Blockly.blockRendering.MarkerSvg.prototype.showAtLocation_ = function(curNode) {
   var curNodeAsConnection =
     /** @type {!Blockly.Connection} */ (curNode.getLocation());
+  var connectionType = curNodeAsConnection.type;
   if (curNode.getType() == Blockly.ASTNode.types.BLOCK) {
     this.showWithBlock_(curNode);
   } else if (curNode.getType() == Blockly.ASTNode.types.OUTPUT) {
     this.showWithOutput_(curNode);
-  } else if (curNodeAsConnection.type == Blockly.connectionTypes.INPUT_VALUE) {
+  } else if (connectionType == Blockly.connectionTypes.INPUT_VALUE) {
     this.showWithInput_(curNode);
-  } else if (
-      curNodeAsConnection.type == Blockly.connectionTypes.NEXT_STATEMENT) {
+  } else if (connectionType == Blockly.connectionTypes.NEXT_STATEMENT) {
     this.showWithNext_(curNode);
   } else if (curNode.getType() == Blockly.ASTNode.types.PREVIOUS) {
     this.showWithPrevious_(curNode);

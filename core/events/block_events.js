@@ -546,13 +546,13 @@ Blockly.Events.Move.prototype.run = function(forward) {
   } else {
     var blockConnection = block.outputConnection || block.previousConnection;
     var parentConnection;
+    var connectionType = blockConnection.type;
     if (inputName) {
       var input = parentBlock.getInput(inputName);
       if (input) {
         parentConnection = input.connection;
       }
-    } else if (
-        blockConnection.type == Blockly.connectionTypes.PREVIOUS_STATEMENT) {
+    } else if (connectionType == Blockly.connectionTypes.PREVIOUS_STATEMENT) {
       parentConnection = parentBlock.nextConnection;
     }
     if (parentConnection) {

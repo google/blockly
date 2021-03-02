@@ -139,7 +139,7 @@ Blockly.Connection.prototype.connect_ = function(childConnection) {
         orphanBlock = null;
       }
     } else if (
-        parentConnection.type == Blockly.connectionTypes.NEXT_STATEMENT) {
+      parentConnection.type == Blockly.connectionTypes.NEXT_STATEMENT) {
       // Statement connections.
       // Statement blocks may be inserted into the middle of a stack.
       // Split the stack.

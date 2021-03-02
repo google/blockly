@@ -145,20 +145,20 @@ Blockly.ASTNode.createFieldNode = function(field) {
  * @return {Blockly.ASTNode} An AST node pointing to a connection.
  */
 Blockly.ASTNode.createConnectionNode = function(connection) {
+  var type = connection.type;
   if (!connection) {
     return null;
   }
-  if (connection.type == Blockly.connectionTypes.INPUT_VALUE) {
+  if (type == Blockly.connectionTypes.INPUT_VALUE) {
     return Blockly.ASTNode.createInputNode(connection.getParentInput());
-  } else if (
-      connection.type == Blockly.connectionTypes.NEXT_STATEMENT &&
+  } else if (type == Blockly.connectionTypes.NEXT_STATEMENT &&
       connection.getParentInput()) {
     return Blockly.ASTNode.createInputNode(connection.getParentInput());
-  } else if (connection.type == Blockly.connectionTypes.NEXT_STATEMENT) {
+  } else if (type == Blockly.connectionTypes.NEXT_STATEMENT) {
     return new Blockly.ASTNode(Blockly.ASTNode.types.NEXT, connection);
-  } else if (connection.type == Blockly.connectionTypes.OUTPUT_VALUE) {
+  } else if (type == Blockly.connectionTypes.OUTPUT_VALUE) {
     return new Blockly.ASTNode(Blockly.ASTNode.types.OUTPUT, connection);
-  } else if (connection.type == Blockly.connectionTypes.PREVIOUS_STATEMENT) {
+  } else if (type == Blockly.connectionTypes.PREVIOUS_STATEMENT) {
     return new Blockly.ASTNode(Blockly.ASTNode.types.PREVIOUS, connection);
   }
   return null;

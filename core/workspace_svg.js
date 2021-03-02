@@ -1643,7 +1643,7 @@ Blockly.WorkspaceSvg.prototype.isDraggable = function() {
  * @return {boolean} True if the workspace is movable, false otherwise.
  */
 Blockly.WorkspaceSvg.prototype.isMovable = function() {
-  return (this.options.moveOptions && this.options.moveOptions.scrollbars) ||
+  return (this.options.moveOptions && !!this.options.moveOptions.scrollbars) ||
       (this.options.moveOptions && this.options.moveOptions.wheel) ||
       (this.options.moveOptions && this.options.moveOptions.drag) ||
       (this.options.zoomOptions && this.options.zoomOptions.wheel) ||

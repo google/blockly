@@ -431,20 +431,26 @@ Blockly.Trashcan.prototype.emptyContents = function() {
  * Position the trashcan.
  * It is positioned in the opposite corner to the corner the
  * categories/toolbox starts at.
- * @param {!Blockly.utils.Metrics} metrics The workspace metrics.
+ * @param {!Blockly.MetricsManager.ContainerRegion} viewMetrics The workspace
+ *     viewMetrics.
+ * @param {!Blockly.MetricsManager.AbsoluteMetrics} absoluteMetrics The absolute
+ *     metrics for the workspace.
+ * @param {!Blockly.MetricsManager.ToolboxMetrics} toolboxMetrics The toolbox
+ *     metrics for the workspace.
  * @param {!Array<Blockly.utils.Rect>} savedPositions List of rectangles that
  *     are already on the workspace.
  */
-Blockly.Trashcan.prototype.position = function(metrics, savedPositions) {
+Blockly.Trashcan.prototype.position = function(
+    viewMetrics, absoluteMetrics, toolboxMetrics, savedPositions) {
   // Not yet initialized.
   if (!this.verticalSpacing_) {
     return;
   }
 
-  if (metrics.toolboxPosition == Blockly.TOOLBOX_AT_LEFT ||
+  if (toolboxMetrics.position == Blockly.TOOLBOX_AT_LEFT ||
       (this.workspace_.horizontalLayout && !this.workspace_.RTL)) {
     // Toolbox starts in the left corner.
-    this.left_ = metrics.viewWidth + metrics.absoluteLeft -
+    this.left_ = viewMetrics.width + absoluteMetrics.left -
         this.WIDTH_ - this.MARGIN_SIDE_ - Blockly.Scrollbar.scrollbarThickness;
   } else {
     // Toolbox starts in the right corner.
@@ -455,9 +461,9 @@ Blockly.Trashcan.prototype.position = function(metrics, savedPositions) {
   // Upper corner placement
   var minTop = this.top_ = this.verticalSpacing_;
   // Bottom corner placement
-  var maxTop = metrics.viewHeight + metrics.absoluteTop - height -
+  var maxTop = viewMetrics.height + absoluteMetrics.top - height -
       this.verticalSpacing_;
-  var placeBottom = metrics.toolboxPosition !== Blockly.TOOLBOX_AT_BOTTOM;
+  var placeBottom = toolboxMetrics.position !== Blockly.TOOLBOX_AT_BOTTOM;
   this.top_ = placeBottom ? maxTop : minTop;
 
   // Check for collision and bump if needed.

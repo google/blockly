@@ -1084,10 +1084,14 @@ Blockly.WorkspaceSvg.prototype.resize = function() {
     positionableEls.push(this.zoomControls_);
   }
   if (positionableEls) {
-    var metrics = this.getMetrics();
+    var metricsManager = this.getMetricsManager();
+    var viewMetrics = metricsManager.getViewMetrics();
+    var absoluteMetrics = metricsManager.getAbsoluteMetrics();
+    var toolboxMetrics = metricsManager.getToolboxMetrics();
     var savedPositions = [];
     for (var i = 0, uiElement; (uiElement = positionableEls[i]); i++) {
-      uiElement.position(metrics, savedPositions);
+      uiElement.position(
+          viewMetrics, absoluteMetrics, toolboxMetrics, savedPositions);
       savedPositions.push(uiElement.getBoundingRectangle());
     }
   }

@@ -28,7 +28,7 @@ Blockly.IPositionable = function() {};
  *     viewMetrics.
  * @param {!Blockly.MetricsManager.AbsoluteMetrics} absoluteMetrics The absolute
  *     metrics for the workspace.
- * @param {Array<Blockly.utils.Rect>} savedPositions List of rectangles that are
+ * @param {!Array<Blockly.utils.Rect>} savedPositions List of rectangles that are
  *     already on the workspace.
  */
 Blockly.IPositionable.prototype.position;

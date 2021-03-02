@@ -432,7 +432,7 @@ Blockly.Trashcan.prototype.emptyContents = function() {
  * It is positioned in the opposite corner to the corner the
  * categories/toolbox starts at.
  * @param {!Blockly.utils.Metrics} metrics The workspace metrics.
- * @param {Array<Blockly.utils.Rect>} savedPositions List of rectangles that
+ * @param {!Array<Blockly.utils.Rect>} savedPositions List of rectangles that
  *     are already on the workspace.
  */
 Blockly.Trashcan.prototype.position = function(metrics, savedPositions) {

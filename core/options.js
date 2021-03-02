@@ -134,8 +134,7 @@ Blockly.Options = function(options) {
   /** @type {!Blockly.Options.MoveOptions} */
   this.moveOptions = Blockly.Options.parseMoveOptions_(options, hasCategories);
   /** @deprecated  January 2019 */
-  this.hasScrollbars = this.moveOptions.scrollbars.horizontal ||
-      this.moveOptions.scrollbars.vertical;
+  this.hasScrollbars = !!this.moveOptions.scrollbars;
   /** @type {boolean} */
   this.hasTrashcan = hasTrashcan;
   /** @type {number} */
@@ -207,8 +206,6 @@ Blockly.Options.GridOptions;
  * @typedef {{
  *     drag: boolean,
  *     scrollbars: boolean | Blockly.Options.ScrollbarOptions,
- *     hasHorizontalScrollbars: boolean,
- *     hasVerticalScrollbars: boolean,
  *     wheel: boolean
  * }}
  */
@@ -263,27 +260,29 @@ Blockly.Options.parseMoveOptions_ = function(options, hasCategories) {
   var move = options['move'] || {};
   var moveOptions = {};
   if (move['scrollbars'] === undefined) {
-    moveOptions.scrollbars.horizontal = hasCategories;
-    moveOptions.scrollbars.vertical = hasCategories;
+    moveOptions.scrollbars = hasCategories;
   } else if (move['scrollbars'] &&
       move['scrollbars']['horizontal'] !== undefined &&
       move['scrollbars']['vertical'] !== undefined) {
     moveOptions.scrollbars.horizontal = !!move['scrollbars']['horizontal'];
     moveOptions.scrollbars.vertical = !!move['scrollbars']['vertical'];
+    if (moveOptions.scrollbars.horizontal && moveOptions.scrollbars.vertical) {
+      moveOptions.scrollbars = true;
+    } else if (!moveOptions.scrollbars.horizontal &&
+        !moveOptions.scrollbars.vertical) {
+      moveOptions.scrollbars = false;
+    }
   } else {
-    moveOptions.scrollbars.horizontal = !!move['scrollbars'];
-    moveOptions.scrollbars.vertical = !!move['scrollbars'];
+    moveOptions.scrollbars = !!move['scrollbars'];
   }
-  var hasScrollbars =
-      moveOptions.scrollbars.horizontal || moveOptions.scrollbars.vertical;
 
-  if (!hasScrollbars || move['wheel'] === undefined) {
+  if (!moveOptions.scrollbars || move['wheel'] === undefined) {
     // Defaults to false so that developers' settings don't appear to change.
     moveOptions.wheel = false;
   } else {
     moveOptions.wheel = !!move['wheel'];
   }
-  if (!hasScrollbars) {
+  if (!moveOptions.scrollbars) {
     moveOptions.drag = false;
   } else if (move['drag'] === undefined) {
     // Defaults to true if scrollbars is true.

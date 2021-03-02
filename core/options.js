@@ -212,7 +212,7 @@ Blockly.Options.GridOptions;
 Blockly.Options.MoveOptions;
 
 /**
- * Move Options.
+ * Scrollbar Options.
  * @typedef {{
  *     horizontal: boolean,
  *     vertical: boolean
@@ -259,9 +259,7 @@ Blockly.Options.prototype.getMetrics;
 Blockly.Options.parseMoveOptions_ = function(options, hasCategories) {
   var move = options['move'] || {};
   var moveOptions = {};
-  if (move['scrollbars'] === undefined) {
-    moveOptions.scrollbars = hasCategories;
-  } else if (move['scrollbars'] &&
+  if (move['scrollbars'] &&
       move['scrollbars']['horizontal'] !== undefined &&
       move['scrollbars']['vertical'] !== undefined) {
     moveOptions.scrollbars.horizontal = !!move['scrollbars']['horizontal'];
@@ -272,8 +270,11 @@ Blockly.Options.parseMoveOptions_ = function(options, hasCategories) {
         !moveOptions.scrollbars.vertical) {
       moveOptions.scrollbars = false;
     }
+  } else if (move['scrollbars'] === undefined &&
+      options['scrollbars'] === undefined) {
+    moveOptions.scrollbars = hasCategories;
   } else {
-    moveOptions.scrollbars = !!move['scrollbars'];
+    moveOptions.scrollbars = !!move['scrollbars'] || !!options['scrollbars'];
   }
 
   if (!moveOptions.scrollbars || move['wheel'] === undefined) {

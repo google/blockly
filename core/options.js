@@ -205,7 +205,7 @@ Blockly.Options.GridOptions;
  * Move Options.
  * @typedef {{
  *     drag: boolean,
- *     scrollbars: boolean | Blockly.Options.ScrollbarOptions,
+ *     scrollbars: (boolean | !Blockly.Options.ScrollbarOptions),
  *     wheel: boolean
  * }}
  */

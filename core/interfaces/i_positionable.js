@@ -28,6 +28,8 @@ Blockly.IPositionable = function() {};
  *     metrics for the workspace.
  * @param {!Blockly.MetricsManager.ToolboxMetrics} toolboxMetrics The toolbox
  *     metrics for the workspace.
+ * @param {!Array<Blockly.utils.Rect>} savedPositions List of rectangles that
+ *     are already on the workspace.
  */
 Blockly.IPositionable.prototype.position;
 

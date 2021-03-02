@@ -14,12 +14,10 @@
 goog.provide('Blockly.IPositionable');
 
 
-
 /**
  * Interface for a component that is positioned on top of the workspace.
  * @interface
  */
-
 Blockly.IPositionable = function() {};
 
 /**
@@ -36,7 +34,7 @@ Blockly.IPositionable.prototype.position;
 /**
  * Returns the bounding rectangle of the UI element in pixel units relative to
  * the Blockly injection div.
- * @returns {Blockly.utils.Rect} The plugin’s bounding box.
+ * @returns {!Blockly.utils.Rect} The plugin’s bounding box.
  */
 Blockly.IPositionable.prototype.getBoundingRectangle;
 

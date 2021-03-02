@@ -491,7 +491,7 @@ Blockly.Trashcan.prototype.position = function(
 /**
  * Returns the bounding rectangle of the UI element in pixel units relative to
  * the Blockly injection div.
- * @returns {Blockly.utils.Rect} The plugin’s bounding box.
+ * @returns {!Blockly.utils.Rect} The plugin’s bounding box.
  */
 Blockly.Trashcan.prototype.getBoundingRectangle = function() {
   var bottom = this.top_ + this.BODY_HEIGHT_ + this.LID_HEIGHT_;

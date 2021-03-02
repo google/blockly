@@ -378,20 +378,16 @@ Blockly.init_ = function(mainWorkspace) {
     mainWorkspace.zoomControls_.init(verticalSpacing);
   }
 
-  if (options.moveOptions) {
+  if (options.moveOptions && options.moveOptions.scrollbars) {
     var horizontalScroll = options.moveOptions.scrollbars === true ||
         options.moveOptions.scrollbars.horizontal;
     var verticalScroll = options.moveOptions.scrollbars === true ||
         options.moveOptions.scrollbars.vertical;
-    if (horizontalScroll || verticalScroll) {
-      mainWorkspace.scrollbar =
-          new Blockly.ScrollbarPair(
-              mainWorkspace, horizontalScroll, verticalScroll,
-              'blocklyMainWorkspaceScrollbar');
-      mainWorkspace.scrollbar.resize();
-    } else {
-      mainWorkspace.setMetrics({x: 0.5, y: 0.5});
-    }
+    mainWorkspace.scrollbar =
+        new Blockly.ScrollbarPair(
+            mainWorkspace, horizontalScroll, verticalScroll,
+            'blocklyMainWorkspaceScrollbar');
+    mainWorkspace.scrollbar.resize();
   } else {
     mainWorkspace.setMetrics({x: 0.5, y: 0.5});
   }

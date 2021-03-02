@@ -549,4 +549,4 @@ Blockly.PREVIOUS_STATEMENT = Blockly.connectionTypes.PREVIOUS_STATEMENT;
 /**
  * @see Blockly.inputTypes.DUMMY_INPUT
  */
-Blockly.DUMMY_INPUT = Blockly.inputTypes.DUMMY_INPUT;
+Blockly.DUMMY_INPUT = Blockly.inputTypes.DUMMY;

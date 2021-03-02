@@ -112,23 +112,6 @@ Blockly.SPRITE = {
 
 // Constants below this point are not intended to be changed.
 
-// /**
-//  * Enum for the type of a connection or input.
-//  * @enum {number}
-//  */
-// Blockly.constants.CONNECTION_TYPE = {
-//   // A right-facing value input.  E.g. 'set item to' or 'return'.
-//   INPUT_VALUE: 1,
-//   // A left-facing value output.  E.g. 'random fraction'.
-//   OUTPUT_VALUE: 2,
-//   // A down-facing block stack.  E.g. 'if-do' or 'else'.
-//   NEXT_STATEMENT: 3,
-//   // An up-facing block stack.  E.g. 'break out of loop'.
-//   PREVIOUS_STATEMENT: 4,
-//   // A dummy input.  Used to add field(s) with no input.
-//   DUMMY_INPUT: 5
-// };
-
 /**
  * Enum for alignment of inputs.
  * @enum {number}

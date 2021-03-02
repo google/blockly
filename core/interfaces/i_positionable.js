@@ -39,5 +39,3 @@ Blockly.IPositionable.prototype.position;
  * @returns {!Blockly.utils.Rect} The plugin’s bounding box.
  */
 Blockly.IPositionable.prototype.getBoundingRectangle;
-
-

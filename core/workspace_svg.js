@@ -25,10 +25,12 @@ goog.require('Blockly.Events.ThemeChange');
 goog.require('Blockly.Events.ViewportChange');
 goog.require('Blockly.Gesture');
 goog.require('Blockly.Grid');
+goog.require('Blockly.IPositionable');
 goog.require('Blockly.MarkerManager');
 goog.require('Blockly.MetricsManager');
 goog.require('Blockly.Msg');
 goog.require('Blockly.Options');
+goog.require('Blockly.PluginManager');
 goog.require('Blockly.registry');
 goog.require('Blockly.ThemeManager');
 goog.require('Blockly.Themes.Classic');
@@ -55,7 +57,6 @@ goog.requireType('Blockly.IASTNodeLocationSvg');
 goog.requireType('Blockly.IBoundedElement');
 goog.requireType('Blockly.IFlyout');
 goog.requireType('Blockly.IMetricsManager');
-goog.requireType('Blockly.IPositionable');
 goog.requireType('Blockly.IToolbox');
 goog.requireType('Blockly.Marker');
 goog.requireType('Blockly.ScrollbarPair');
@@ -106,6 +107,12 @@ Blockly.WorkspaceSvg = function(
    */
   this.setMetrics =
       options.setMetrics || Blockly.WorkspaceSvg.setTopLevelWorkspaceMetrics_;
+
+  /**
+   * @type {!Blockly.PluginManager}
+   * @private
+   */
+  this.pluginManager_ = new Blockly.PluginManager(this);
 
   this.connectionDBList = Blockly.ConnectionDB.init(this.connectionChecker);
 
@@ -509,6 +516,15 @@ Blockly.WorkspaceSvg.prototype.getMarkerManager = function() {
  */
 Blockly.WorkspaceSvg.prototype.getMetricsManager = function() {
   return this.metricsManager_;
+};
+
+/**
+ * Gets the plugin manager for this workspace.
+ * @return {!Blockly.PluginManager} The metrics manager.
+ * @public
+ */
+Blockly.WorkspaceSvg.prototype.getPluginManager = function() {
+  return this.pluginManager_;
 };
 
 /**
@@ -953,6 +969,12 @@ Blockly.WorkspaceSvg.prototype.addTrashcan = function() {
   this.trashcan = new Blockly.Trashcan(this);
   var svgTrashcan = this.trashcan.createDom();
   this.svgGroup_.insertBefore(svgTrashcan, this.svgBlockCanvas_);
+  this.pluginManager_.addPlugin({
+    id: 'trashcan',
+    plugin: this.trashcan,
+    weight: 0,
+    types: [Blockly.IPositionable]
+  });
 };
 
 /**
@@ -967,6 +989,12 @@ Blockly.WorkspaceSvg.prototype.addZoomControls = function() {
   this.zoomControls_ = new Blockly.ZoomControls(this);
   var svgZoomControls = this.zoomControls_.createDom();
   this.svgGroup_.appendChild(svgZoomControls);
+  this.pluginManager_.addPlugin({
+    id: 'zoomControls',
+    plugin: this.zoomControls_,
+    weight: 0,
+    types: [Blockly.IPositionable]
+  });
 };
 
 /**
@@ -1078,25 +1106,18 @@ Blockly.WorkspaceSvg.prototype.resize = function() {
   if (this.flyout_) {
     this.flyout_.position();
   }
-  /** @type {Array<Blockly.IPositionable>} */
-  var positionableEls = [];
-  if (this.trashcan) {
-    positionableEls.push(this.trashcan);
-  }
-  if (this.zoomControls_) {
-    positionableEls.push(this.zoomControls_);
-  }
-  if (positionableEls) {
-    var metricsManager = this.getMetricsManager();
-    var viewMetrics = metricsManager.getViewMetrics();
-    var absoluteMetrics = metricsManager.getAbsoluteMetrics();
-    var toolboxMetrics = metricsManager.getToolboxMetrics();
-    var savedPositions = [];
-    for (var i = 0, uiElement; (uiElement = positionableEls[i]); i++) {
-      uiElement.position(
-          viewMetrics, absoluteMetrics, toolboxMetrics, savedPositions);
-      savedPositions.push(uiElement.getBoundingRectangle());
-    }
+
+  var positionables =
+      this.pluginManager_.getPlugins(Blockly.IPositionable, true);
+  var metricsManager = this.getMetricsManager();
+  var viewMetrics = metricsManager.getViewMetrics();
+  var absoluteMetrics = metricsManager.getAbsoluteMetrics();
+  var toolboxMetrics = metricsManager.getToolboxMetrics();
+  var savedPositions = [];
+  for (var i = 0, positionable; (positionable = positionables[i]); i++) {
+    positionable.position(
+        viewMetrics, absoluteMetrics, toolboxMetrics, savedPositions);
+    savedPositions.push(positionable.getBoundingRectangle());
   }
 
   if (this.scrollbar) {

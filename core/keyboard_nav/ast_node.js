@@ -145,10 +145,10 @@ Blockly.ASTNode.createFieldNode = function(field) {
  * @return {Blockly.ASTNode} An AST node pointing to a connection.
  */
 Blockly.ASTNode.createConnectionNode = function(connection) {
-  var type = connection.type;
   if (!connection) {
     return null;
   }
+  var type = connection.type;
   if (type == Blockly.connectionTypes.INPUT_VALUE) {
     return Blockly.ASTNode.createInputNode(connection.getParentInput());
   } else if (type == Blockly.connectionTypes.NEXT_STATEMENT &&

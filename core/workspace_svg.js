@@ -112,7 +112,7 @@ Blockly.WorkspaceSvg = function(
    * @type {!Blockly.PluginManager}
    * @private
    */
-  this.pluginManager_ = new Blockly.PluginManager(this);
+  this.pluginManager_ = new Blockly.PluginManager();
 
   this.connectionDBList = Blockly.ConnectionDB.init(this.connectionChecker);
 
@@ -1106,9 +1106,9 @@ Blockly.WorkspaceSvg.prototype.resize = function() {
   if (this.flyout_) {
     this.flyout_.position();
   }
-
-  var positionables =
-      this.pluginManager_.getPlugins(Blockly.IPositionable, true);
+  
+  var positionables = /** @type {!Array<!Blockly.IPositionable>} */
+      (this.pluginManager_.getPlugins(Blockly.IPositionable, true));
   var metrics = this.getMetricsManager().getUiMetrics();
   var savedPositions = [];
   for (var i = 0, positionable; (positionable = positionables[i]); i++) {

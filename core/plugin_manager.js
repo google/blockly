@@ -29,7 +29,7 @@ Blockly.PluginManager = function() {
 
   /**
    * A map of types to plugin ids.
-   * @type {!Object<string, string>}
+   * @type {!Object<string, Array<string>>}
    */
   this.typeToPluginId_ = {};
 };
@@ -38,7 +38,7 @@ Blockly.PluginManager = function() {
  * @typedef {{
  *            id: string,
  *            plugin: !Blockly.IPlugin,
- *            types: !Array<!function(new:?, ...?)>,
+ *            types: !Array<typeof Blockly.IPlugin>,
  *            weight: number
  *          }}
  */
@@ -67,15 +67,14 @@ Blockly.PluginManager.prototype.addPlugin = function(pluginDataObject) {
  *    or undefined if not found.
  */
 Blockly.PluginManager.prototype.getPlugin = function(id) {
-  return this.pluginData_[id];
+  return this.pluginData_[id] && this.pluginData_[id].plugin;
 };
 
 /**
  * Gets all the plugins of the specified type.
- * @param {function(new:T, ...?)} type The type of the plugin.
+ * @param {typeof Blockly.IPlugin} type The type of the plugin.
  * @param {boolean} sorted Whether to return list ordered by weights.
- * @return {Array<T>} The plugins that match the specified type.
- * @template T
+ * @return {!Array<!Blockly.IPlugin>} The plugins that match the specified type.
  */
 Blockly.PluginManager.prototype.getPlugins = function(type, sorted) {
   var plugins = [];

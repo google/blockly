@@ -259,9 +259,9 @@ Blockly.Options.prototype.getMetrics;
 Blockly.Options.parseMoveOptions_ = function(options, hasCategories) {
   var move = options['move'] || {};
   var moveOptions = {};
-  if (move['scrollbars'] &&
-      move['scrollbars']['horizontal'] !== undefined &&
-      move['scrollbars']['vertical'] !== undefined) {
+  if (move['scrollbars'] === undefined && options['scrollbars'] === undefined) {
+    moveOptions.scrollbars = hasCategories;
+  } else if (typeof move['scrollbars'] == 'object') {
     moveOptions.scrollbars.horizontal = !!move['scrollbars']['horizontal'];
     moveOptions.scrollbars.vertical = !!move['scrollbars']['vertical'];
     if (moveOptions.scrollbars.horizontal && moveOptions.scrollbars.vertical) {
@@ -270,9 +270,6 @@ Blockly.Options.parseMoveOptions_ = function(options, hasCategories) {
         !moveOptions.scrollbars.vertical) {
       moveOptions.scrollbars = false;
     }
-  } else if (move['scrollbars'] === undefined &&
-      options['scrollbars'] === undefined) {
-    moveOptions.scrollbars = hasCategories;
   } else {
     moveOptions.scrollbars = !!move['scrollbars'] || !!options['scrollbars'];
   }

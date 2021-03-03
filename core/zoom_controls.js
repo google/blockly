@@ -213,25 +213,19 @@ Blockly.ZoomControls.prototype.getBoundingRectangle = function() {
  * Position the zoom controls.
  * It is positioned in the opposite corner to the corner the
  * categories/toolbox starts at.
- * @param {!Blockly.MetricsManager.ContainerRegion} viewMetrics The workspace
- *     viewMetrics.
- * @param {!Blockly.MetricsManager.AbsoluteMetrics} absoluteMetrics The absolute
- *     metrics for the workspace.
- * @param {!Blockly.MetricsManager.ToolboxMetrics} toolboxMetrics The toolbox
- *     metrics for the workspace.
+ * @param {!Blockly.MetricsManager.UiMetrics} metrics The workspace metrics.
  * @param {!Array<Blockly.utils.Rect>} savedPositions List of rectangles that
  *     are already on the workspace.
  */
-Blockly.ZoomControls.prototype.position = function(
-    viewMetrics, absoluteMetrics, toolboxMetrics, savedPositions) {
+Blockly.ZoomControls.prototype.position = function(metrics, savedPositions) {
   // Not yet initialized.
   if (!this.verticalSpacing_) {
     return;
   }
-  if (toolboxMetrics.position == Blockly.TOOLBOX_AT_LEFT ||
+  if (metrics.toolboxMetrics.position == Blockly.TOOLBOX_AT_LEFT ||
       (this.workspace_.horizontalLayout && !this.workspace_.RTL)) {
     // Toolbox starts in the left corner.
-    this.left_ = viewMetrics.width + absoluteMetrics.left -
+    this.left_ = metrics.viewMetrics.width + metrics.absoluteMetrics.left -
         this.WIDTH_ - this.MARGIN_SIDE_ - Blockly.Scrollbar.scrollbarThickness;
   } else {
     // Toolbox starts in the right corner.
@@ -241,9 +235,10 @@ Blockly.ZoomControls.prototype.position = function(
   // Upper corner placement
   var minTop = this.top_ = this.verticalSpacing_;
   // Bottom corner placement
-  var maxTop = viewMetrics.height + absoluteMetrics.top -
+  var maxTop = metrics.viewMetrics.height + metrics.absoluteMetrics.top -
       this.HEIGHT_ - this.verticalSpacing_;
-  var placeBottom = toolboxMetrics.position !== Blockly.TOOLBOX_AT_BOTTOM;
+  var placeBottom =
+      metrics.toolboxMetrics.position !== Blockly.TOOLBOX_AT_BOTTOM;
   this.top_ = placeBottom ? maxTop : minTop;
   if (placeBottom) {
     this.zoomInGroup_.setAttribute('transform', 'translate(0, 43)');

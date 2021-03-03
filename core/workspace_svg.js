@@ -1109,14 +1109,10 @@ Blockly.WorkspaceSvg.prototype.resize = function() {
 
   var positionables =
       this.pluginManager_.getPlugins(Blockly.IPositionable, true);
-  var metricsManager = this.getMetricsManager();
-  var viewMetrics = metricsManager.getViewMetrics();
-  var absoluteMetrics = metricsManager.getAbsoluteMetrics();
-  var toolboxMetrics = metricsManager.getToolboxMetrics();
+  var metrics = this.getMetricsManager().getUiMetrics();
   var savedPositions = [];
   for (var i = 0, positionable; (positionable = positionables[i]); i++) {
-    positionable.position(
-        viewMetrics, absoluteMetrics, toolboxMetrics, savedPositions);
+    positionable.position(metrics, savedPositions);
     savedPositions.push(positionable.getBoundingRectangle());
   }
 

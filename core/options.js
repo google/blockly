@@ -264,6 +264,9 @@ Blockly.Options.parseMoveOptions_ = function(options, hasCategories) {
   } else if (typeof move['scrollbars'] == 'object') {
     moveOptions.scrollbars.horizontal = !!move['scrollbars']['horizontal'];
     moveOptions.scrollbars.vertical = !!move['scrollbars']['vertical'];
+    // Convert scrollbars object to boolean if they have the same value.
+    // This allows us to easily check for whether any scrollbars exist using
+    // !!moveOptions.scrollbars.
     if (moveOptions.scrollbars.horizontal && moveOptions.scrollbars.vertical) {
       moveOptions.scrollbars = true;
     } else if (!moveOptions.scrollbars.horizontal &&

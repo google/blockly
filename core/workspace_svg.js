@@ -55,6 +55,7 @@ goog.requireType('Blockly.IASTNodeLocationSvg');
 goog.requireType('Blockly.IBoundedElement');
 goog.requireType('Blockly.IFlyout');
 goog.requireType('Blockly.IMetricsManager');
+goog.requireType('Blockly.IPositionable');
 goog.requireType('Blockly.IToolbox');
 goog.requireType('Blockly.Marker');
 goog.requireType('Blockly.ScrollbarPair');
@@ -1077,12 +1078,27 @@ Blockly.WorkspaceSvg.prototype.resize = function() {
   if (this.flyout_) {
     this.flyout_.position();
   }
+  /** @type {Array<Blockly.IPositionable>} */
+  var positionableEls = [];
   if (this.trashcan) {
-    this.trashcan.position();
+    positionableEls.push(this.trashcan);
   }
   if (this.zoomControls_) {
-    this.zoomControls_.position();
+    positionableEls.push(this.zoomControls_);
   }
+  if (positionableEls) {
+    var metricsManager = this.getMetricsManager();
+    var viewMetrics = metricsManager.getViewMetrics();
+    var absoluteMetrics = metricsManager.getAbsoluteMetrics();
+    var toolboxMetrics = metricsManager.getToolboxMetrics();
+    var savedPositions = [];
+    for (var i = 0, uiElement; (uiElement = positionableEls[i]); i++) {
+      uiElement.position(
+          viewMetrics, absoluteMetrics, toolboxMetrics, savedPositions);
+      savedPositions.push(uiElement.getBoundingRectangle());
+    }
+  }
+
   if (this.scrollbar) {
     this.scrollbar.resize();
   }

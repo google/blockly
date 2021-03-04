@@ -35,11 +35,11 @@ Blockly.PluginManager = function() {
 /**
  * An object storing plugin information.
  * @typedef {{
- *            id: string,
- *            plugin: !Blockly.IPlugin,
- *            types: !Array<string|!Blockly.PluginManager.Type<Blockly.IPlugin>>,
- *            weight: number
- *          }}
+ *    id: string,
+ *    plugin: !Blockly.IPlugin,
+ *    types: !Array<string|!Blockly.PluginManager.Type<Blockly.IPlugin>>,
+ *    weight: number
+ *  }}
  */
 Blockly.PluginManager.PluginData;
 

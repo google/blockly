@@ -185,8 +185,6 @@ Blockly.Mutator.prototype.createEditor_ = function() {
         Blockly.utils.toolbox.convertToolboxDefToJson(quarkXml);
   }
   this.workspace_ = new Blockly.WorkspaceSvg(workspaceOptions);
-  this.workspace_.setMetricsManager(new Blockly.MutatorMetricsManager(
-      this.workspace_, this));
   this.workspace_.isMutator = true;
   this.workspace_.addChangeListener(Blockly.Events.disableOrphans);
 
@@ -261,8 +259,7 @@ Blockly.Mutator.prototype.resizeBubble_ = function() {
     // Resize the bubble.
     this.bubble_.setBubbleSize(
         width + doubleBorderWidth, height + doubleBorderWidth);
-    this.svgDialog_.setAttribute('width', this.workspaceWidth_);
-    this.svgDialog_.setAttribute('height', this.workspaceHeight_);
+    this.workspace_.setSvgSize(this.workspaceWidth_, this.workspaceHeight_);
   }
 
   if (this.block_.RTL) {

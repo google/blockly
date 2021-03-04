@@ -147,8 +147,7 @@ Blockly.MetricsManager.prototype.getToolboxMetrics = function() {
  * @public
  */
 Blockly.MetricsManager.prototype.getSvgMetrics = function() {
-  var svgSize = Blockly.svgSize(this.workspace_.getParentSvg());
-  return new Blockly.utils.Size(svgSize.width, svgSize.height);
+  return this.workspace_.getSvgSize();
 };
 
 /**
@@ -454,41 +453,3 @@ Blockly.MetricsManager.prototype.getMetrics = function() {
 Blockly.registry.register(
     Blockly.registry.Type.METRICS_MANAGER, Blockly.registry.DEFAULT,
     Blockly.MetricsManager);
-
-/**
- * Metrics manager for a mutator's workspace.
- * These metrics are mainly used to position the mutator's flyout.
- * @param {!Blockly.WorkspaceSvg} workspace The workspace associated with the
- *     mutator.
- * @param {!Blockly.Mutator} mutator The mutator to calculate metrics for.
- * @extends {Blockly.MetricsManager}
- * @constructor
- */
-Blockly.MutatorMetricsManager = function(workspace, mutator) {
-  /**
-   * The mutator that owns the workspace to calculate metrics for.
-   * @type {!Blockly.Mutator}
-   * @protected
-   */
-  this.mutator_ = mutator;
-  Blockly.MutatorMetricsManager.superClass_.constructor.call(this, workspace);
-};
-Blockly.utils.object.inherits(
-    Blockly.MutatorMetricsManager, Blockly.MetricsManager);
-
-/**
- * @override
- */
-Blockly.MutatorMetricsManager.prototype.getViewMetrics = function(
-    opt_getWorkspaceCoordinates) {
-  var scale = opt_getWorkspaceCoordinates ? this.workspace_.scale : 1;
-  var flyout = this.workspace_.getFlyout();
-  var flyoutWidth = flyout ? flyout.getWidth() : 0;
-  // TODO: Create getters for workspaceHeight_ and workspaceWidth_
-  return {
-    height: this.mutator_.workspaceHeight_ / scale,
-    width: this.mutator_.workspaceWidth_ - flyoutWidth / scale,
-    top: 0 / scale,
-    left: 0 / scale,
-  };
-};

@@ -545,17 +545,6 @@ Blockly.FlyoutMetricsManager.prototype.getScrollMetrics = function(
 };
 
 /**
- * @override
- */
-Blockly.FlyoutMetricsManager.prototype.getViewMetrics = function() {
-  if (this.flyout_.horizontalLayout) {
-    return this.getHorizontalViewMetrics_();
-  } else {
-    return this.getVerticalViewMetrics_();
-  }
-};
-
-/**
  * Gets the metrics for the visible workspace in either pixel or workspace
  * coordinates. The view width does not include the scrollbars.
  * @param {boolean=} opt_getWorkspaceCoordinates True to get the view metrics in
@@ -591,9 +580,7 @@ Blockly.FlyoutMetricsManager.prototype.getHorizontalViewMetrics_ = function() {
  * @private
  */
 Blockly.FlyoutMetricsManager.prototype.getVerticalViewMetrics_ = function() {
-  // TODO: Should not be option called option box
-  // TODO: Should be passed in if possible.
-  var optionBox = this.getBoundingBox_();
+  var boundingBox = this.getBoundingBox_();
   // TODO: need a way to get the height that does not access private variables.
   var viewHeight = this.flyout_.height_ - 2 * this.flyout_.SCROLLBAR_PADDING;
   var viewWidth = this.flyout_.width_;
@@ -604,7 +591,7 @@ Blockly.FlyoutMetricsManager.prototype.getVerticalViewMetrics_ = function() {
   return {
     height: viewHeight,
     width: viewWidth,
-    top: -this.workspace_.scrollY + optionBox.y,
+    top: -this.workspace_.scrollY + boundingBox.y,
     left: -this.workspace_.scrollX
   };
 };

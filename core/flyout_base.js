@@ -1026,15 +1026,6 @@ Blockly.Flyout.prototype.position;
 Blockly.Flyout.prototype.isDragTowardWorkspace;
 
 /**
- * Return an object with all the metrics required to size scrollbars for the
- * flyout.
- * @return {Blockly.utils.Metrics} Contains size and position metrics of the
- *     flyout.
- * @protected
- */
-Blockly.Flyout.prototype.getMetrics_;
-
-/**
  * Sets the translation of the flyout to match the scrollbars.
  * @param {!{x:number,y:number}} xyRatio Contains a y property which is a float
  *     between 0 and 1 specifying the degree of scrolling and a

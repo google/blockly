@@ -49,12 +49,11 @@ Blockly.utils.object.inherits(Blockly.HorizontalFlyout, Blockly.Flyout);
  * @protected
  */
 Blockly.HorizontalFlyout.prototype.setMetrics_ = function(xyRatio) {
-  // TODO: Should I check if the flyout is visible here.
-  var metrics = this.workspace_.getMetrics();
-  // This is a fix to an apparent race condition.
-  if (!metrics) {
+  if (!this.isVisible()) {
     return;
   }
+
+  var metrics = this.workspace_.getMetrics();
 
   if (typeof xyRatio.x == 'number') {
     this.workspace_.scrollX =

@@ -54,11 +54,10 @@ Blockly.VerticalFlyout.registryName = 'verticalFlyout';
  * @protected
  */
 Blockly.VerticalFlyout.prototype.setMetrics_ = function(xyRatio) {
-  var metrics = this.workspace_.getMetrics();
-  // This is a fix to an apparent race condition.
-  if (!metrics) {
+  if (!this.isVisible()) {
     return;
   }
+  var metrics = this.workspace_.getMetrics();
   if (typeof xyRatio.y == 'number') {
     this.workspace_.scrollY =
         -(metrics.scrollTop +
@@ -73,11 +72,10 @@ Blockly.VerticalFlyout.prototype.setMetrics_ = function(xyRatio) {
  * @return {number} X coordinate.
  */
 Blockly.VerticalFlyout.prototype.getX = function() {
-  var targetWorkspaceMetrics = this.targetWorkspace.getMetrics();
-  if (!targetWorkspaceMetrics) {
-    // Hidden components will return null.
+  if (!this.isVisible()) {
     return 0;
   }
+  var targetWorkspaceMetrics = this.targetWorkspace.getMetrics();
 
   var x = 0;
 
@@ -126,6 +124,30 @@ Blockly.VerticalFlyout.prototype.getY = function() {
 };
 
 /**
+ * Gets the height of the flyout.
+ * @return {number} Y coordinate.
+ */
+Blockly.VerticalFlyout.prototype.getHeight = function() {
+  if (!this.isVisible()) {
+    return 0;
+  } else {
+    return this.height_;
+  }
+};
+
+/**
+ * Calculates the y coordinate for the flyout position.
+ * @return {number} Y coordinate.
+ */
+Blockly.VerticalFlyout.prototype.getWidth = function() {
+  if (!this.isVisible()) {
+    return 0;
+  } else {
+    return this.width_;
+  }
+};
+
+/**
  * Move the flyout to the edge of the workspace.
  */
 Blockly.VerticalFlyout.prototype.position = function() {
@@ -133,10 +155,7 @@ Blockly.VerticalFlyout.prototype.position = function() {
     return;
   }
   var targetWorkspaceMetrics = this.targetWorkspace.getMetrics();
-  if (!targetWorkspaceMetrics) {
-    // Hidden components will return null.
-    return;
-  }
+
   // Record the height for workspace metrics.
   this.height_ = targetWorkspaceMetrics.viewHeight;
 

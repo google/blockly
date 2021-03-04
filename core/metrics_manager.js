@@ -478,6 +478,7 @@ Blockly.utils.object.inherits(
 
 /**
  * Gets the bounding box of the blocks on the flyout's workspace.
+ * This is in workspace coordinates.
  * @returns {SVGRect} The bounding box of the blocks on the workspace.
  * @private
  */
@@ -501,19 +502,14 @@ Blockly.FlyoutMetricsManager.prototype.getContentMetrics = function(
   var boundingBox = this.getBoundingBox_();
   var scale = opt_getWorkspaceCoordinates ? 1 : this.workspace_.scale;
   var margin = this.flyout_.MARGIN;
-  var contentRect = {
+
+  // CHANGE: horizontal top and left in flyout used to be 0,0
+  return {
     height: (boundingBox.height + 2 * margin) * scale,
     width: (boundingBox.width + 2 * margin) * scale,
+    top: boundingBox.y,
+    left: boundingBox.x
   };
-  // TODO: Figure out where the isVisible part should go?
-  if (this.flyout_.horizontalLayout) {
-    contentRect.top = 0;
-    contentRect.left = 0;
-  } else {
-    contentRect.top = boundingBox.y;
-    contentRect.left = boundingBox.x;
-  }
-  return contentRect;
 };
 
 /**
@@ -523,25 +519,15 @@ Blockly.FlyoutMetricsManager.prototype.getScrollMetrics = function(
     opt_getWorkspaceCoordinates) {
   var boundingBox = this.getBoundingBox_();
   var margin = this.flyout_.MARGIN;
-  // TODO: Double check this.
   var scale = opt_getWorkspaceCoordinates ? 1 : this.workspace_.scale;
 
-  // TODO: Figure out where the isVisible part should go?
-  if (this.flyout_.horizontalLayout) {
-    return {
-      height: (boundingBox.height + 2 * margin) * scale,
-      width: (boundingBox.width + 2 * margin) * scale,
-      top: 0,
-      left: 0,
-    };
-  } else {
-    return {
-      height: (boundingBox.height + 2 * margin) * scale,
-      width: (boundingBox.width + 2 * margin) * scale,
-      top: boundingBox.y - margin,
-      left: boundingBox.x - margin,
-    };
-  }
+  // CHANGE: horizontal top and left used to be 0.
+  return {
+    height: (boundingBox.height + 2 * margin) * scale,
+    width: (boundingBox.width + 2 * margin) * scale,
+    top: boundingBox.y - margin,
+    left: boundingBox.x - margin,
+  };
 };
 
 /**
@@ -555,9 +541,10 @@ Blockly.FlyoutMetricsManager.prototype.getScrollMetrics = function(
  * @private
  */
 Blockly.FlyoutMetricsManager.prototype.getHorizontalViewMetrics_ = function() {
-  // TODO: width_ and toolboxPosition_ are both private.
-  var viewWidth = this.flyout_.width_ - 2 * this.flyout_.SCROLLBAR_PADDING;
-  var viewHeight = this.flyout_.height_;
+  // TODO: toolboxPosition_ is private.
+  var viewWidth = this.flyout_.getWidth() - 2 * this.flyout_.SCROLLBAR_PADDING;
+  var viewHeight = this.flyout_.getHeight();
+
   if (this.flyout_.toolboxPosition_ == Blockly.TOOLBOX_AT_TOP) {
     viewHeight -= this.flyout_.SCROLLBAR_PADDING;
   }
@@ -579,19 +566,23 @@ Blockly.FlyoutMetricsManager.prototype.getHorizontalViewMetrics_ = function() {
  *     coordinates.
  * @private
  */
-Blockly.FlyoutMetricsManager.prototype.getVerticalViewMetrics_ = function() {
+Blockly.FlyoutMetricsManager.prototype.getVerticalViewMetrics_ = function(
+    opt_getWorkspaceCoordinates) {
+  // This is in workspace coordinates.
   var boundingBox = this.getBoundingBox_();
-  // TODO: need a way to get the height that does not access private variables.
-  var viewHeight = this.flyout_.height_ - 2 * this.flyout_.SCROLLBAR_PADDING;
-  var viewWidth = this.flyout_.width_;
-
+  var viewHeight = this.flyout_.getHeight() - 2 * this.flyout_.SCROLLBAR_PADDING;
+  var viewWidth = this.flyout_.getWidth();
+  var scale = this.workspace_.scale;
   if (!this.RTL) {
     viewWidth -= this.flyout_.SCROLLBAR_PADDING;
   }
+  // TODO: These seem like they are in different coordinate systems.
+  // boundingBox.y is in workspace coordinates, if I remember correctly
+  // this.workspace_.scrollY is in pixel units
   return {
     height: viewHeight,
     width: viewWidth,
-    top: -this.workspace_.scrollY + boundingBox.y,
+    top: -this.workspace_.scrollY,
     left: -this.workspace_.scrollX
   };
 };
@@ -599,11 +590,12 @@ Blockly.FlyoutMetricsManager.prototype.getVerticalViewMetrics_ = function() {
 /**
  * @override
  */
-Blockly.FlyoutMetricsManager.prototype.getViewMetrics = function() {
+Blockly.FlyoutMetricsManager.prototype.getViewMetrics = function(
+    opt_getWorkspaceCoordinates) {
   if (this.flyout_.horizontalLayout) {
-    return this.getHorizontalViewMetrics_();
+    return this.getHorizontalViewMetrics_(opt_getWorkspaceCoordinates);
   } else {
-    return this.getVerticalViewMetrics_();
+    return this.getVerticalViewMetrics_(opt_getWorkspaceCoordinates);
   }
 };
 

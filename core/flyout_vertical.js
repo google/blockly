@@ -47,70 +47,6 @@ Blockly.utils.object.inherits(Blockly.VerticalFlyout, Blockly.Flyout);
 Blockly.VerticalFlyout.registryName = 'verticalFlyout';
 
 /**
- * Return an object with all the metrics required to size scrollbars for the
- * flyout.  The following properties are computed:
- * .viewHeight: Height of the visible rectangle,
- * .viewWidth: Width of the visible rectangle,
- * .contentHeight: Height of the contents,
- * .contentWidth: Width of the contents,
- * .viewTop: Offset of top edge of visible rectangle from parent,
- * .contentTop: Offset of the top-most content from the y=0 coordinate,
- * .scrollTop: Offset of the scroll area top from the y=0 coordinate,
- * .absoluteTop: Top-edge of view.
- * .viewLeft: Offset of the left edge of visible rectangle from parent,
- * .contentLeft: Offset of the left-most content from the x=0 coordinate,
- * .scrollLeft:  Offset of the scroll area left from the x=0 coordinate,
- * .absoluteLeft: Left-edge of view.
- * @return {Blockly.utils.Metrics} Contains size and position metrics of the
- *     flyout.
- * @protected
- */
-Blockly.VerticalFlyout.prototype.getMetrics_ = function() {
-  if (!this.isVisible()) {
-    // Flyout is hidden.
-    return null;
-  }
-
-  try {
-    var optionBox = this.workspace_.getCanvas().getBBox();
-  } catch (e) {
-    // Firefox has trouble with hidden elements (Bug 528969).
-    var optionBox = {height: 0, y: 0, width: 0, x: 0};
-  }
-
-  // Padding for the end of the scrollbar.
-  var absoluteTop = this.SCROLLBAR_PADDING;
-  var absoluteLeft = 0;
-
-  var viewHeight = this.height_ - 2 * this.SCROLLBAR_PADDING;
-  var viewWidth = this.width_;
-  if (!this.RTL) {
-    viewWidth -= this.SCROLLBAR_PADDING;
-  }
-
-  var metrics = {
-    contentHeight: optionBox.height * this.workspace_.scale,
-    contentWidth: optionBox.width * this.workspace_.scale,
-    contentTop: optionBox.y,
-    contentLeft: optionBox.x,
-
-    scrollHeight: (optionBox.height + 2 * this.MARGIN) * this.workspace_.scale,
-    scrollWidth: (optionBox.width + 2 * this.MARGIN) * this.workspace_.scale,
-    scrollTop: optionBox.y - this.MARGIN,
-    scrollLeft: optionBox.x - this.MARGIN,
-
-    viewHeight: viewHeight,
-    viewWidth: viewWidth,
-    viewTop: -this.workspace_.scrollY + optionBox.y,
-    viewLeft: -this.workspace_.scrollX,
-
-    absoluteTop: absoluteTop,
-    absoluteLeft: absoluteLeft
-  };
-  return metrics;
-};
-
-/**
  * Sets the translation of the flyout to match the scrollbars.
  * @param {!{x:number,y:number}} xyRatio Contains a y property which is a float
  *     between 0 and 1 specifying the degree of scrolling and a
@@ -118,7 +54,7 @@ Blockly.VerticalFlyout.prototype.getMetrics_ = function() {
  * @protected
  */
 Blockly.VerticalFlyout.prototype.setMetrics_ = function(xyRatio) {
-  var metrics = this.getMetrics_();
+  var metrics = this.workspace_.getMetrics();
   // This is a fix to an apparent race condition.
   if (!metrics) {
     return;
@@ -201,7 +137,7 @@ Blockly.VerticalFlyout.prototype.position = function() {
     // Hidden components will return null.
     return;
   }
-  // Record the height for Blockly.Flyout.getMetrics_
+  // Record the height for workspace metrics.
   this.height_ = targetWorkspaceMetrics.viewHeight;
 
   var edgeWidth = this.width_ - this.CORNER_RADIUS;
@@ -264,7 +200,8 @@ Blockly.VerticalFlyout.prototype.wheel_ = function(e) {
   var scrollDelta = Blockly.utils.getScrollDeltaPixels(e);
 
   if (scrollDelta.y) {
-    var metrics = this.getMetrics_();
+    // TODO: Do I have to get all the metrics?
+    var metrics = this.workspace_.getMetrics();
     var pos = (metrics.viewTop - metrics.scrollTop) + scrollDelta.y;
     var limit = metrics.scrollHeight - metrics.viewHeight;
     pos = Math.min(pos, limit);
@@ -429,7 +366,7 @@ Blockly.VerticalFlyout.prototype.reflowInternal_ = function() {
           this.targetWorkspace.scrollX + flyoutWidth, this.targetWorkspace.scrollY);
     }
 
-    // Record the width for .getMetrics_ and .position.
+    // Record the width for workspace metrics and .position.
     this.width_ = flyoutWidth;
     this.position();
   }

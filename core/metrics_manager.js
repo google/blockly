@@ -11,6 +11,7 @@
 'use strict';
 
 goog.provide('Blockly.MetricsManager');
+goog.provide('Blockly.FlyoutMetricsManager');
 
 goog.require('Blockly.IMetricsManager');
 goog.require('Blockly.registry');
@@ -111,7 +112,8 @@ Blockly.MetricsManager.prototype.getDimensionsPx_ = function(elem) {
  * @public
  */
 Blockly.MetricsManager.prototype.getFlyoutMetrics = function(opt_own) {
-  var flyoutDimensions = this.getDimensionsPx_(this.workspace_.getFlyout(opt_own));
+  var flyoutDimensions =
+      this.getDimensionsPx_(this.workspace_.getFlyout(opt_own));
   return {
     width: flyoutDimensions.width,
     height: flyoutDimensions.height,
@@ -356,14 +358,13 @@ Blockly.MetricsManager.prototype.getScrollMetrics = function(
   var paddedContent = this.getPaddedContent_(viewMetrics, contentMetrics);
 
   // Use combination of fixed bounds and padded content to make scroll area.
-  var top = fixedEdges.top !== undefined ?
-      fixedEdges.top : paddedContent.top;
-  var left = fixedEdges.left !== undefined ?
-      fixedEdges.left : paddedContent.left;
-  var bottom = fixedEdges.bottom !== undefined ?
-      fixedEdges.bottom : paddedContent.bottom;
-  var right = fixedEdges.right !== undefined ?
-      fixedEdges.right : paddedContent.right;
+  var top = fixedEdges.top !== undefined ? fixedEdges.top : paddedContent.top;
+  var left =
+      fixedEdges.left !== undefined ? fixedEdges.left : paddedContent.left;
+  var bottom = fixedEdges.bottom !== undefined ? fixedEdges.bottom :
+                                                 paddedContent.bottom;
+  var right =
+      fixedEdges.right !== undefined ? fixedEdges.right : paddedContent.right;
 
   return {
     top: top / scale,
@@ -416,8 +417,7 @@ Blockly.MetricsManager.prototype.getMetrics = function() {
   var absoluteMetrics = this.getAbsoluteMetrics();
   var viewMetrics = this.getViewMetrics();
   var contentMetrics = this.getContentMetrics();
-  var scrollMetrics =
-      this.getScrollMetrics(false, viewMetrics, contentMetrics);
+  var scrollMetrics = this.getScrollMetrics(false, viewMetrics, contentMetrics);
 
   return {
     contentHeight: contentMetrics.height,
@@ -453,3 +453,185 @@ Blockly.MetricsManager.prototype.getMetrics = function() {
 Blockly.registry.register(
     Blockly.registry.Type.METRICS_MANAGER, Blockly.registry.DEFAULT,
     Blockly.MetricsManager);
+
+
+/**
+ * Calculate metrics for a flyout's workspace.
+ * The metrics are mainly used to size scrollbars for the flyout.
+ * @param {!Blockly.WorkspaceSvg} workspace The flyout's workspace.
+ * @param {!Blockly.IFlyout} flyout The flyout.
+ * @extends {Blockly.MetricsManager}
+ * @constructor
+ */
+Blockly.FlyoutMetricsManager = function(workspace, flyout) {
+  /**
+   * The flyout that owns the workspace to calculate metrics for.
+   * @type {!Blockly.IFlyout}
+   * @protected
+   */
+  this.flyout_ = flyout;
+
+  Blockly.FlyoutMetricsManager.superClass_.constructor.call(this, workspace);
+};
+Blockly.utils.object.inherits(
+    Blockly.FlyoutMetricsManager, Blockly.MetricsManager);
+
+/**
+ * Gets the bounding box of the blocks on the flyout's workspace.
+ * @returns {SVGRect} The bounding box of the blocks on the workspace.
+ * @private
+ */
+Blockly.FlyoutMetricsManager.prototype.getBoundingBox_ = function() {
+  try {
+    var blockBoundingBox = this.workspace_.getCanvas().getBBox();
+  } catch (e) {
+    // Firefox has trouble with hidden elements (Bug 528969).
+    // 2021 Update: It looks like this was fixed around Firefox 77 released in
+    // 2020.
+    var blockBoundingBox = {height: 0, y: 0, width: 0, x: 0};
+  }
+  return blockBoundingBox;
+};
+
+/**
+ * @override
+ */
+Blockly.FlyoutMetricsManager.prototype.getContentMetrics = function(
+    opt_getWorkspaceCoordinates) {
+  var boundingBox = this.getBoundingBox_();
+  var scale = opt_getWorkspaceCoordinates ? 1 : this.workspace_.scale;
+  var margin = this.flyout_.MARGIN;
+  var contentRect = {
+    height: (boundingBox.height + 2 * margin) * scale,
+    width: (boundingBox.width + 2 * margin) * scale,
+  };
+  // TODO: Figure out where the isVisible part should go?
+  if (this.flyout_.horizontalLayout) {
+    contentRect.top = 0;
+    contentRect.left = 0;
+  } else {
+    contentRect.top = boundingBox.y;
+    contentRect.left = boundingBox.x;
+  }
+  return contentRect;
+};
+
+/**
+ * @override
+ */
+Blockly.FlyoutMetricsManager.prototype.getScrollMetrics = function(
+    opt_getWorkspaceCoordinates) {
+  var boundingBox = this.getBoundingBox_();
+  var margin = this.flyout_.MARGIN;
+  // TODO: Double check this.
+  var scale = opt_getWorkspaceCoordinates ? 1 : this.workspace_.scale;
+
+  // TODO: Figure out where the isVisible part should go?
+  if (this.flyout_.horizontalLayout) {
+    return {
+      height: (boundingBox.height + 2 * margin) * scale,
+      width: (boundingBox.width + 2 * margin) * scale,
+      top: 0,
+      left: 0,
+    };
+  } else {
+    return {
+      height: (boundingBox.height + 2 * margin) * scale,
+      width: (boundingBox.width + 2 * margin) * scale,
+      top: boundingBox.y - margin,
+      left: boundingBox.x - margin,
+    };
+  }
+};
+
+/**
+ * @override
+ */
+Blockly.FlyoutMetricsManager.prototype.getViewMetrics = function() {
+  if (this.flyout_.horizontalLayout) {
+    return this.getHorizontalViewMetrics_();
+  } else {
+    return this.getVerticalViewMetrics_();
+  }
+};
+
+/**
+ * Gets the metrics for the visible workspace in either pixel or workspace
+ * coordinates. The view width does not include the scrollbars.
+ * @param {boolean=} opt_getWorkspaceCoordinates True to get the view metrics in
+ *     workspace coordinates, false to get them in pixel coordinates.
+ * @return {!Blockly.MetricsManager.ContainerRegion} The width, height, top and
+ *     left of the viewport in either workspace coordinates or pixel
+ *     coordinates.
+ * @private
+ */
+Blockly.FlyoutMetricsManager.prototype.getHorizontalViewMetrics_ = function() {
+  // TODO: width_ and toolboxPosition_ are both private.
+  var viewWidth = this.flyout_.width_ - 2 * this.flyout_.SCROLLBAR_PADDING;
+  var viewHeight = this.flyout_.height_;
+  if (this.flyout_.toolboxPosition_ == Blockly.TOOLBOX_AT_TOP) {
+    viewHeight -= this.flyout_.SCROLLBAR_PADDING;
+  }
+  return {
+    height: viewHeight,
+    width: viewWidth,
+    top: -this.workspace_.scrollY,
+    left: -this.workspace_.scrollX,
+  };
+};
+
+/**
+ * Gets the metrics for the visible workspace in either pixel or workspace
+ * coordinates. The view width does not include the scrollbars.
+ * @param {boolean=} opt_getWorkspaceCoordinates True to get the view metrics in
+ *     workspace coordinates, false to get them in pixel coordinates.
+ * @return {!Blockly.MetricsManager.ContainerRegion} The width, height, top and
+ *     left of the viewport in either workspace coordinates or pixel
+ *     coordinates.
+ * @private
+ */
+Blockly.FlyoutMetricsManager.prototype.getVerticalViewMetrics_ = function() {
+  // TODO: Should not be option called option box
+  // TODO: Should be passed in if possible.
+  var optionBox = this.getBoundingBox_();
+  // TODO: need a way to get the height that does not access private variables.
+  var viewHeight = this.flyout_.height_ - 2 * this.flyout_.SCROLLBAR_PADDING;
+  var viewWidth = this.flyout_.width_;
+
+  if (!this.RTL) {
+    viewWidth -= this.flyout_.SCROLLBAR_PADDING;
+  }
+  return {
+    height: viewHeight,
+    width: viewWidth,
+    top: -this.workspace_.scrollY + optionBox.y,
+    left: -this.workspace_.scrollX
+  };
+};
+
+/**
+ * @override
+ */
+Blockly.FlyoutMetricsManager.prototype.getViewMetrics = function() {
+  if (this.flyout_.horizontalLayout) {
+    return this.getHorizontalViewMetrics_();
+  } else {
+    return this.getVerticalViewMetrics_();
+  }
+};
+
+/**
+ * @override
+ */
+Blockly.FlyoutMetricsManager.prototype.getAbsoluteMetrics = function() {
+  var scrollbarPadding = this.flyout_.SCROLLBAR_PADDING;
+  var toolboxPosition = this.flyout_.toolboxPosition;
+
+  if (this.flyout_.horizontalLayout) {
+    var absoluteTop =
+        toolboxPosition == Blockly.TOOLBOX_AT_BOTTOM ? 0 : scrollbarPadding;
+    return {top: absoluteTop, left: scrollbarPadding};
+  } else {
+    return {top: scrollbarPadding, left: 0};
+  }
+};

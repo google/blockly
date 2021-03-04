@@ -18,6 +18,7 @@ goog.require('Blockly.browserEvents');
 goog.require('Blockly.Events');
 goog.require('Blockly.Events.BlockCreate');
 goog.require('Blockly.Events.VarCreate');
+goog.require('Blockly.FlyoutMetricsManager');
 goog.require('Blockly.Gesture');
 goog.require('Blockly.Marker');
 goog.require('Blockly.Scrollbar');
@@ -52,9 +53,6 @@ goog.requireType('Blockly.utils.Rect');
  * @implements {Blockly.IFlyout}
  */
 Blockly.Flyout = function(workspaceOptions) {
-  workspaceOptions.getMetrics =
-    /** @type {function():!Blockly.utils.Metrics} */ (
-      this.getMetrics_.bind(this));
   workspaceOptions.setMetrics = this.setMetrics_.bind(this);
 
   /**
@@ -62,6 +60,9 @@ Blockly.Flyout = function(workspaceOptions) {
    * @protected
    */
   this.workspace_ = new Blockly.WorkspaceSvg(workspaceOptions);
+  this.workspace_.setMetricsManager(
+      new Blockly.FlyoutMetricsManager(this.workspace_, this));
+
   this.workspace_.isFlyout = true;
   // Keep the workspace visibility consistent with the flyout's visibility.
   this.workspace_.setVisible(this.isVisible_);

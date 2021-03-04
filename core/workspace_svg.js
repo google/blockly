@@ -512,6 +512,15 @@ Blockly.WorkspaceSvg.prototype.getMetricsManager = function() {
 };
 
 /**
+ * Sets the marker manager for the workspace.
+ * @param {!Blockly.IMetricsManager} metricsManager The metrics manager.
+ */
+Blockly.WorkspaceSvg.prototype.setMetricsManager = function(metricsManager) {
+  this.metricsManager_ = metricsManager;
+  this.getMetrics = this.metricsManager_.getMetrics.bind(this.metricsManager_);
+};
+
+/**
  * Add the cursor svg to this workspaces svg group.
  * @param {SVGElement} cursorSvg The svg root of the cursor to be added to the
  *     workspace svg group.

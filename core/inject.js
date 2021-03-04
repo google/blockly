@@ -379,9 +379,14 @@ Blockly.init_ = function(mainWorkspace) {
   }
 
   if (options.moveOptions && options.moveOptions.scrollbars) {
+    var horizontalScroll = options.moveOptions.scrollbars === true ||
+        !!options.moveOptions.scrollbars.horizontal;
+    var verticalScroll = options.moveOptions.scrollbars === true ||
+        !!options.moveOptions.scrollbars.vertical;
     mainWorkspace.scrollbar =
         new Blockly.ScrollbarPair(
-            mainWorkspace, true, true, 'blocklyMainWorkspaceScrollbar');
+            mainWorkspace, horizontalScroll, verticalScroll,
+            'blocklyMainWorkspaceScrollbar');
     mainWorkspace.scrollbar.resize();
   } else {
     mainWorkspace.setMetrics({x: 0.5, y: 0.5});

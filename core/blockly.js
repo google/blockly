@@ -18,6 +18,7 @@ goog.provide('Blockly');
 
 goog.require('Blockly.browserEvents');
 goog.require('Blockly.constants');
+goog.require('Blockly.connectionTypes');
 goog.require('Blockly.Events');
 goog.require('Blockly.Events.BlockCreate');
 goog.require('Blockly.Events.FinishedLoading');
@@ -25,6 +26,7 @@ goog.require('Blockly.Events.Ui');
 goog.require('Blockly.Events.UiBase');
 goog.require('Blockly.Events.VarCreate');
 goog.require('Blockly.inject');
+goog.require('Blockly.inputTypes');
 goog.require('Blockly.Procedures');
 goog.require('Blockly.ShortcutRegistry');
 goog.require('Blockly.Tooltip');
@@ -518,3 +520,33 @@ Blockly.ALIGN_CENTRE = Blockly.constants.ALIGN.CENTRE;
  * @see Blockly.constants.ALIGN.RIGHT
  */
 Blockly.ALIGN_RIGHT = Blockly.constants.ALIGN.RIGHT;
+
+
+/**
+ * Aliases for constants used for connection and input types.
+ */
+
+/**
+ * @see Blockly.connectionTypes.INPUT_VALUE
+ */
+Blockly.INPUT_VALUE = Blockly.connectionTypes.INPUT_VALUE;
+
+/**
+ * @see Blockly.connectionTypes.OUTPUT_VALUE
+ */
+Blockly.OUTPUT_VALUE = Blockly.connectionTypes.OUTPUT_VALUE;
+
+/**
+ * @see Blockly.connectionTypes.NEXT_STATEMENT
+ */
+Blockly.NEXT_STATEMENT = Blockly.connectionTypes.NEXT_STATEMENT;
+
+/**
+ * @see Blockly.connectionTypes.PREVIOUS_STATEMENT
+ */
+Blockly.PREVIOUS_STATEMENT = Blockly.connectionTypes.PREVIOUS_STATEMENT;
+
+/**
+ * @see Blockly.inputTypes.DUMMY_INPUT
+ */
+Blockly.DUMMY_INPUT = Blockly.inputTypes.DUMMY;

@@ -219,6 +219,20 @@ Blockly.WorkspaceSvg = function(
    * @private
    */
   this.topBoundedElements_ = [];
+
+  /**
+   * The cached width of the parent svg element.
+   * @type {number}
+   * @private
+   */
+  this.cachedWidth_ = 0;
+
+  /**
+   * The cached height of the parent svg element.
+   * @type {number}
+   * @private
+   */
+  this.cachedHeight_ = 0;
 };
 Blockly.utils.object.inherits(Blockly.WorkspaceSvg, Blockly.Workspace);
 

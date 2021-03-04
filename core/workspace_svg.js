@@ -1107,9 +1107,8 @@ Blockly.WorkspaceSvg.prototype.resize = function() {
     this.flyout_.position();
   }
 
-  var positionables = /** @type {!Array<!Blockly.IPositionable>} */
-      (this.pluginManager_.getPlugins(
-          Blockly.PluginManager.Type.POSITIONABLE, true));
+  var positionables = this.pluginManager_.getPlugins(
+      Blockly.PluginManager.Type.POSITIONABLE, true);
   var metrics = this.getMetricsManager().getUiMetrics();
   var savedPositions = [];
   for (var i = 0, positionable; (positionable = positionables[i]); i++) {

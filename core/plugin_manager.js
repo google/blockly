@@ -13,8 +13,6 @@
 
 goog.provide('Blockly.PluginManager');
 
-goog.require('Blockly.IPlugin');
-
 
 /**
  * Manager for all items registered with the workspace.
@@ -35,10 +33,11 @@ Blockly.PluginManager = function() {
 };
 
 /**
+ * An object storing plugin information.
  * @typedef {{
  *            id: string,
  *            plugin: !Blockly.IPlugin,
- *            types: !Array<typeof Blockly.IPlugin>,
+ *            types: !Array<string|!Blockly.PluginManager.Type<Blockly.IPlugin>>,
  *            weight: number
  *          }}
  */
@@ -47,11 +46,12 @@ Blockly.PluginManager.PluginData;
 /**
  * Adds a plugin.
  * @param {!Blockly.PluginManager.PluginData} pluginDataObject The plugin.
+ * @template T
  */
 Blockly.PluginManager.prototype.addPlugin = function(pluginDataObject) {
   this.pluginData_[pluginDataObject.id] = pluginDataObject;
   for (var i = 0, type; (type = pluginDataObject.types[i]); i++) {
-    var typeKey = type.name;  // The map key needs to be a string
+    var typeKey = String(type).toLowerCase();
     if (this.typeToPluginId_[typeKey] === undefined) {
       this.typeToPluginId_[typeKey] = [pluginDataObject.id];
     } else {
@@ -72,13 +72,16 @@ Blockly.PluginManager.prototype.getPlugin = function(id) {
 
 /**
  * Gets all the plugins of the specified type.
- * @param {typeof Blockly.IPlugin} type The type of the plugin.
+ * @param {!Blockly.PluginManager.Type<T>} type The type of the plugin.
  * @param {boolean} sorted Whether to return list ordered by weights.
- * @return {!Array<!Blockly.IPlugin>} The plugins that match the specified type.
+ * @return {!Array<T>} The plugins that match the
+ *    specified type.
+ * @template T
  */
 Blockly.PluginManager.prototype.getPlugins = function(type, sorted) {
   var plugins = [];
-  var pluginIds = this.typeToPluginId_[type.name];
+  var typeKey = String(type).toLowerCase();
+  var pluginIds = this.typeToPluginId_[typeKey];
   for (var i = 0, id; (id = pluginIds[i]); i++) {
     plugins.push(this.pluginData_[id].plugin);
   }
@@ -89,3 +92,31 @@ Blockly.PluginManager.prototype.getPlugins = function(type, sorted) {
   }
   return plugins;
 };
+
+/**
+ * A name with the type of the element stored in the generic.
+ * @param {string} name The name of the plugin type.
+ * @constructor
+ * @template T
+ */
+Blockly.PluginManager.Type = function(name) {
+  /**
+   * @type {string}
+   * @private
+   */
+  this.name_ = name;
+};
+
+/**
+ * Returns the name of the type.
+ * @return {string} The name.
+ * @override
+ */
+Blockly.PluginManager.Type.prototype.toString = function() {
+  return this.name_;
+};
+
+/** @type {!Blockly.PluginManager.Type<!Blockly.IPositionable>} */
+Blockly.PluginManager.Type.POSITIONABLE =
+    new Blockly.PluginManager.Type('positionable');
+

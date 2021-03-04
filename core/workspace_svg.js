@@ -973,7 +973,7 @@ Blockly.WorkspaceSvg.prototype.addTrashcan = function() {
     id: 'trashcan',
     plugin: this.trashcan,
     weight: 0,
-    types: [Blockly.IPositionable]
+    types: [Blockly.PluginManager.Type.POSITIONABLE]
   });
 };
 
@@ -993,7 +993,7 @@ Blockly.WorkspaceSvg.prototype.addZoomControls = function() {
     id: 'zoomControls',
     plugin: this.zoomControls_,
     weight: 0,
-    types: [Blockly.IPositionable]
+    types: [Blockly.PluginManager.Type.POSITIONABLE]
   });
 };
 
@@ -1106,9 +1106,10 @@ Blockly.WorkspaceSvg.prototype.resize = function() {
   if (this.flyout_) {
     this.flyout_.position();
   }
-  
+
   var positionables = /** @type {!Array<!Blockly.IPositionable>} */
-      (this.pluginManager_.getPlugins(Blockly.IPositionable, true));
+      (this.pluginManager_.getPlugins(
+          Blockly.PluginManager.Type.POSITIONABLE, true));
   var metrics = this.getMetricsManager().getUiMetrics();
   var savedPositions = [];
   for (var i = 0, positionable; (positionable = positionables[i]); i++) {

@@ -14,6 +14,7 @@
 goog.provide('Blockly.ConnectionChecker');
 
 goog.require('Blockly.Connection');
+goog.require('Blockly.connectionTypes');
 goog.require('Blockly.constants');
 goog.require('Blockly.IConnectionChecker');
 goog.require('Blockly.registry');
@@ -198,9 +199,9 @@ Blockly.ConnectionChecker.prototype.doDragChecks = function(a, b, distance) {
   }
 
   switch (b.type) {
-    case Blockly.PREVIOUS_STATEMENT:
+    case Blockly.connectionTypes.PREVIOUS_STATEMENT:
       return this.canConnectToPrevious_(a, b);
-    case Blockly.OUTPUT_VALUE: {
+    case Blockly.connectionTypes.OUTPUT_VALUE: {
       // Don't offer to connect an already connected left (male) value plug to
       // an available right (female) value plug.
       if ((b.isConnected() &&
@@ -210,7 +211,7 @@ Blockly.ConnectionChecker.prototype.doDragChecks = function(a, b, distance) {
       }
       break;
     }
-    case Blockly.INPUT_VALUE: {
+    case Blockly.connectionTypes.INPUT_VALUE: {
       // Offering to connect the left (male) of a value block to an already
       // connected value pair is ok, we'll splice it in.
       // However, don't offer to splice into an immovable block.
@@ -221,7 +222,7 @@ Blockly.ConnectionChecker.prototype.doDragChecks = function(a, b, distance) {
       }
       break;
     }
-    case Blockly.NEXT_STATEMENT: {
+    case Blockly.connectionTypes.NEXT_STATEMENT: {
       // Don't let a block with no next connection bump other blocks out of the
       // stack.  But covering up a shadow block or stack of shadow blocks is
       // fine.  Similarly, replacing a terminal statement with another terminal

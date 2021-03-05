@@ -222,9 +222,6 @@ Blockly.VerticalFlyout.prototype.wheel_ = function(e) {
     // TODO: Do I have to get all the metrics?
     var metrics = this.workspace_.getMetrics();
     var pos = (metrics.viewTop - metrics.scrollTop) + scrollDelta.y;
-    var limit = metrics.scrollHeight - metrics.viewHeight;
-    pos = Math.min(pos, limit);
-    pos = Math.max(pos, 0);
     this.workspace_.scrollbar.setY(pos);
     // When the flyout moves from a wheel event, hide WidgetDiv and DropDownDiv.
     Blockly.WidgetDiv.hide();

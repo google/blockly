@@ -2206,9 +2206,10 @@ Blockly.WorkspaceSvg.prototype.scroll = function(x, y) {
   // to workspace coordinates so we have to inverse them.
   x = Math.min(x, -metrics.scrollLeft);
   y = Math.min(y, -metrics.scrollTop);
-  var maxXScroll = metrics.scrollLeft + metrics.scrollWidth - metrics.viewWidth;
-  var maxYScroll =
-      metrics.scrollTop + metrics.scrollHeight - metrics.viewHeight;
+  var maxXDisplacement = Math.max(0, metrics.scrollWidth - metrics.viewWidth);
+  var maxXScroll = metrics.scrollLeft + maxXDisplacement;
+  var maxYDisplacement = Math.max(0, metrics.scrollHeight - metrics.viewHeight);
+  var maxYScroll = metrics.scrollTop + maxYDisplacement;
   x = Math.max(x, -maxXScroll);
   y = Math.max(y, -maxYScroll);
   this.scrollX = x;

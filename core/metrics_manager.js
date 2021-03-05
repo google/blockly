@@ -501,12 +501,11 @@ Blockly.FlyoutMetricsManager.prototype.getContentMetrics = function(
     opt_getWorkspaceCoordinates) {
   var boundingBox = this.getBoundingBox_();
   var scale = opt_getWorkspaceCoordinates ? 1 : this.workspace_.scale;
-  var margin = this.flyout_.MARGIN;
 
   // CHANGE: horizontal top and left in flyout used to be 0,0
   return {
-    height: (boundingBox.height + 2 * margin) * scale,
-    width: (boundingBox.width + 2 * margin) * scale,
+    height: boundingBox.height * scale,
+    width: boundingBox.width * scale,
     top: boundingBox.y,
     left: boundingBox.x
   };
@@ -522,6 +521,7 @@ Blockly.FlyoutMetricsManager.prototype.getScrollMetrics = function(
   var scale = opt_getWorkspaceCoordinates ? 1 : this.workspace_.scale;
 
   // CHANGE: horizontal top and left used to be 0.
+  // TODO: This should use content metrics.
   return {
     height: (boundingBox.height + 2 * margin) * scale,
     width: (boundingBox.width + 2 * margin) * scale,
@@ -569,10 +569,8 @@ Blockly.FlyoutMetricsManager.prototype.getHorizontalViewMetrics_ = function() {
 Blockly.FlyoutMetricsManager.prototype.getVerticalViewMetrics_ = function(
     opt_getWorkspaceCoordinates) {
   // This is in workspace coordinates.
-  var boundingBox = this.getBoundingBox_();
   var viewHeight = this.flyout_.getHeight() - 2 * this.flyout_.SCROLLBAR_PADDING;
   var viewWidth = this.flyout_.getWidth();
-  var scale = this.workspace_.scale;
   if (!this.RTL) {
     viewWidth -= this.flyout_.SCROLLBAR_PADDING;
   }

@@ -275,7 +275,7 @@ Blockly.bumpIntoBoundsHandler_ = function(workspace) {
       }
     } else if (e.type === Blockly.Events.VIEWPORT_CHANGE) {
       var viewportEvent = /** @type {!Blockly.Events.ViewportChange} */ (e);
-      if (viewportEvent.scale !== viewportEvent.oldScale) {
+      if (viewportEvent.scale > viewportEvent.oldScale) {
         Blockly.bumpTopObjectsIntoBounds_(workspace);
       }
     }

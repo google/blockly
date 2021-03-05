@@ -114,8 +114,14 @@ Blockly.parentContainer = null;
  * Returns the dimensions of the specified SVG image.
  * @param {!SVGElement} svg SVG image.
  * @return {!Blockly.utils.Size} Contains width and height properties.
+ * @deprecated use workspace.setCachedParentSvgSize. (2021 March 5)
  */
 Blockly.svgSize = function(svg) {
+  Blockly.utils.deprecation.warn(
+      'Blockly.svgSize',
+      'March 2021',
+      'March 2022',
+      'workspace.getCachedParentSvgSize');
   svg = /** @type {?} */ (svg);
   return new Blockly.utils.Size(svg.cachedWidth_, svg.cachedHeight_);
 };

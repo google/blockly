@@ -526,15 +526,6 @@ Blockly.WorkspaceSvg.prototype.getMetricsManager = function() {
   return this.metricsManager_;
 };
 
-/**
- * Sets the marker manager for the workspace.
- * @param {!Blockly.IMetricsManager} metricsManager The metrics manager.
- */
-Blockly.WorkspaceSvg.prototype.setMetricsManager = function(metricsManager) {
-  this.metricsManager_ = metricsManager;
-  this.getMetrics = this.metricsManager_.getMetrics.bind(this.metricsManager_);
-};
-
 /*
  * Gets the plugin manager for this workspace.
  * @return {!Blockly.PluginManager} The plugin manager.
@@ -1175,8 +1166,8 @@ Blockly.WorkspaceSvg.prototype.getCanvas = function() {
 };
 
 /**
- * Sets the width of the workspace's parent svg element.
- * Caches the width and height for use with svg metrics.
+ * Caches the width and height of the workspace's parent svg element for use
+ * with svg metrics.
  * @param {number=} width The width of the parent svg element.
  * @param {number=} height The height of the parent svg element
  * @package

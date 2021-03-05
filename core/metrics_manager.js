@@ -11,7 +11,6 @@
 'use strict';
 
 goog.provide('Blockly.MetricsManager');
-goog.provide('Blockly.MutatorMetricsManager');
 
 goog.require('Blockly.IMetricsManager');
 goog.require('Blockly.registry');

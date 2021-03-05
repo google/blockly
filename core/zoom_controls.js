@@ -67,7 +67,7 @@ Blockly.ZoomControls = function(workspace) {
   this.onZoomOutWrapper_ = null;
 
   /**
-   * The vertical distance between the workspace bottom edge and the control.
+   * The starting vertical distance between the workspace edge and the control.
    * The value is initialized during `init`.
    * @type {?number}
    * @private
@@ -202,7 +202,7 @@ Blockly.ZoomControls.prototype.dispose = function() {
 /**
  * Returns the bounding rectangle of the UI element in pixel units relative to
  * the Blockly injection div.
- * @returns {!Blockly.utils.Rect} The plugin’s bounding box.
+ * @return {!Blockly.utils.Rect} The plugin’s bounding box.
  */
 Blockly.ZoomControls.prototype.getBoundingRectangle = function() {
   var bottom = this.top_ + this.HEIGHT_;
@@ -226,11 +226,11 @@ Blockly.ZoomControls.prototype.position = function(metrics, savedPositions) {
   }
   if (metrics.toolboxMetrics.position == Blockly.TOOLBOX_AT_LEFT ||
       (this.workspace_.horizontalLayout && !this.workspace_.RTL)) {
-    // Toolbox starts in the left corner.
+    // Zoom controls start in the left corner.
     this.left_ = metrics.viewMetrics.width + metrics.absoluteMetrics.left -
         this.WIDTH_ - this.MARGIN_SIDE_ - Blockly.Scrollbar.scrollbarThickness;
   } else {
-    // Toolbox starts in the right corner.
+    // Zoom controls start in the right corner.
     this.left_ = this.MARGIN_SIDE_ + Blockly.Scrollbar.scrollbarThickness;
   }
 

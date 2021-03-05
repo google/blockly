@@ -230,7 +230,7 @@ Blockly.WorkspaceSvg = function(
   /**
    * The cached size of the parent svg element.
    * Used to compute svg metrics.
-   * @type {number}
+   * @type {!Blockly.utils.Size}
    * @private
    */
   this.cachedParentSvgSize_ = new Blockly.utils.Size(0, 0);
@@ -1167,9 +1167,9 @@ Blockly.WorkspaceSvg.prototype.getCanvas = function() {
 
 /**
  * Caches the width and height of the workspace's parent svg element for use
- * with svg metrics.
- * @param {number=} width The width of the parent svg element.
- * @param {number=} height The height of the parent svg element
+ * with getSvgMetrics.
+ * @param {?number} width The width of the parent svg element.
+ * @param {?number} height The height of the parent svg element
  * @package
  */
 Blockly.WorkspaceSvg.prototype.setCachedParentSvgSize = function(width, height) {

@@ -454,27 +454,18 @@ Blockly.ZoomControls.prototype.createZoomResetSvg_ = function(rnd) {
 Blockly.ZoomControls.prototype.resetZoom_ = function(e) {
   this.workspace_.markFocused();
 
-  // Update scrollX/scrollY so that the setScale translates the workspace
-  // correctly. This is needed for single-direction scrollbars.
-  var oldScale = this.workspace_.scale;
-  var newScale = this.workspace_.options.zoomOptions.startScale;
-  var scaleChange = newScale / oldScale;
-  var metrics = this.workspace_.getMetrics();
-  var matrix = this.workspace_.getCanvas().getCTM();
-  var center = this.workspace_.getParentSvg().createSVGPoint();
-  center.x = (metrics.viewWidth / 2) + metrics.absoluteLeft;
-  center.y = (metrics.viewWidth / 2) + metrics.absoluteLeft;
-  center = center.matrixTransform(matrix.inverse());
-  var x = center.x;
-  var y = center.y;
-  matrix = matrix.translate(x * (1 - scaleChange), y * (1 - scaleChange))
-      .scale(scaleChange);
-  this.workspace_.scrollX = matrix.e;
-  this.workspace_.scrollY = matrix.f;
+  // zoom is passed amount and computes the new scale using the formula:
+  // targetScale = currentScale * Math.pow(speed, amount)
+  var targetScale = this.workspace_.options.zoomOptions.startScale;
+  var currentScale = this.workspace_.scale;
+  var speed = this.workspace_.options.zoomOptions.scaleSpeed;
+  // To compute amount:
+  // amount = log(speed, (targetScale / currentScale))
+  // Math.log computes natural logarithm (ln), to change the base, use formula:
+  // log(base, value) = ln(value) / ln(base)
+  var amount = Math.log(targetScale / currentScale) / Math.log(speed);
+  this.workspace_.zoomCenter(amount);
 
-  this.workspace_.setScale(newScale);
-  this.workspace_.beginCanvasTransition();
-  this.workspace_.scrollCenter();
   setTimeout(this.workspace_.endCanvasTransition.bind(this.workspace_), 500);
   this.fireZoomEvent_();
   Blockly.Touch.clearTouchIdentifier();  // Don't block future drags.

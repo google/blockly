@@ -224,7 +224,8 @@ Blockly.ZoomControls.prototype.position = function(metrics, savedPositions) {
   if (!this.verticalSpacing_) {
     return;
   }
-  if (metrics.toolboxMetrics.position == Blockly.TOOLBOX_AT_LEFT ||
+  if (metrics.toolboxMetrics.position ==
+          Blockly.constants.toolboxPosition.LEFT ||
       (this.workspace_.horizontalLayout && !this.workspace_.RTL)) {
     // Toolbox starts in the left corner.
     this.left_ = metrics.viewMetrics.width + metrics.absoluteMetrics.left -
@@ -239,8 +240,8 @@ Blockly.ZoomControls.prototype.position = function(metrics, savedPositions) {
   // Bottom corner placement
   var maxTop = metrics.viewMetrics.height + metrics.absoluteMetrics.top -
       this.HEIGHT_ - this.verticalSpacing_;
-  var placeBottom =
-      metrics.toolboxMetrics.position !== Blockly.TOOLBOX_AT_BOTTOM;
+  var placeBottom = metrics.toolboxMetrics.position !==
+      Blockly.constants.toolboxPosition.BOTTOM;
   this.top_ = placeBottom ? maxTop : minTop;
   if (placeBottom) {
     this.zoomInGroup_.setAttribute('transform', 'translate(0, 43)');

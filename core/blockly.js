@@ -571,3 +571,27 @@ Blockly.PREVIOUS_STATEMENT = Blockly.connectionTypes.PREVIOUS_STATEMENT;
  * @see Blockly.inputTypes.DUMMY_INPUT
  */
 Blockly.DUMMY_INPUT = Blockly.inputTypes.DUMMY;
+
+/**
+ * Aliases for toolbox positions.
+ */
+
+/**
+ * @see Blockly.constants.toolboxPosition.TOP
+ */
+Blockly.TOOLBOX_AT_TOP = Blockly.constants.toolboxPosition.TOP;
+
+/**
+ * @see Blockly.constants.toolboxPosition.BOTTOM
+ */
+Blockly.TOOLBOX_AT_BOTTOM = Blockly.constants.toolboxPosition.BOTTOM;
+
+/**
+ * @see Blockly.constants.toolboxPosition.LEFT
+ */
+Blockly.TOOLBOX_AT_LEFT = Blockly.constants.toolboxPosition.LEFT;
+
+/**
+ * @see Blockly.constants.toolboxPosition.RIGHT
+ */
+Blockly.TOOLBOX_AT_RIGHT = Blockly.constants.toolboxPosition.RIGHT;

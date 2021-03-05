@@ -444,7 +444,7 @@ suite('Toolbox', function() {
     });
     test('Horizontal toolbox at top -> Should anchor horizontal toolbox to top', function() {
       var toolbox = this.toolbox;
-      toolbox.toolboxPosition = Blockly.TOOLBOX_AT_TOP;
+      toolbox.toolboxPosition = Blockly.constants.toolboxPosition.TOP;
       toolbox.horizontalLayout_ = true;
       toolbox.position();
       checkHorizontalToolbox(toolbox);
@@ -452,7 +452,7 @@ suite('Toolbox', function() {
     });
     test('Horizontal toolbox at bottom -> Should anchor horizontal toolbox to bottom', function() {
       var toolbox = this.toolbox;
-      toolbox.toolboxPosition = Blockly.TOOLBOX_AT_BOTTOM;
+      toolbox.toolboxPosition = Blockly.constants.toolboxPosition.BOTTOM;
       toolbox.horizontalLayout_ = true;
       toolbox.position();
       checkHorizontalToolbox(toolbox);
@@ -460,7 +460,7 @@ suite('Toolbox', function() {
     });
     test('Vertical toolbox at right -> Should anchor to right', function() {
       var toolbox = this.toolbox;
-      toolbox.toolboxPosition = Blockly.TOOLBOX_AT_RIGHT;
+      toolbox.toolboxPosition = Blockly.constants.toolboxPosition.RIGHT;
       toolbox.horizontalLayout_ = false;
       toolbox.position();
       chai.assert.equal(toolbox.HtmlDiv.style.right, '0px', 'Check right');
@@ -468,7 +468,7 @@ suite('Toolbox', function() {
     });
     test('Vertical toolbox at left -> Should anchor to left', function() {
       var toolbox = this.toolbox;
-      toolbox.toolboxPosition = Blockly.TOOLBOX_AT_LEFT;
+      toolbox.toolboxPosition = Blockly.constants.toolboxPosition.LEFT;
       toolbox.horizontalLayout_ = false;
       toolbox.position();
       chai.assert.equal(toolbox.HtmlDiv.style.left, '0px', 'Check left');

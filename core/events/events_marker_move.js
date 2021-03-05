@@ -12,12 +12,12 @@
 
 goog.provide('Blockly.Events.MarkerMove');
 
+goog.require('Blockly.ASTNode');
 goog.require('Blockly.Events');
 goog.require('Blockly.Events.UiBase');
 goog.require('Blockly.registry');
 goog.require('Blockly.utils.object');
 
-goog.requireType('Blockly.ASTNode');
 goog.requireType('Blockly.Block');
 goog.requireType('Blockly.Workspace');
 

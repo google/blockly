@@ -15,6 +15,7 @@
 goog.provide('Blockly.ThemeManager');
 
 goog.require('Blockly.Theme');
+goog.require('Blockly.utils.dom');
 
 goog.requireType('Blockly.Workspace');
 goog.requireType('Blockly.WorkspaceSvg');

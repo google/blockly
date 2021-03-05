@@ -20,6 +20,7 @@ goog.require('Blockly.Events');
 goog.require('Blockly.Events.MarkerMove');
 goog.require('Blockly.utils.dom');
 goog.require('Blockly.utils.Svg');
+goog.require('Blockly.utils.svgPaths');
 
 goog.requireType('Blockly.blockRendering.ConstantProvider');
 goog.requireType('Blockly.BlockSvg');

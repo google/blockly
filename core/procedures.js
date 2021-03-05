@@ -24,6 +24,7 @@ goog.require('Blockly.Field');
 goog.require('Blockly.Msg');
 goog.require('Blockly.Names');
 goog.require('Blockly.utils.xml');
+goog.require('Blockly.Variables');
 goog.require('Blockly.Workspace');
 goog.require('Blockly.Xml');
 

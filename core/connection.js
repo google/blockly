@@ -16,11 +16,11 @@ goog.require('Blockly.connectionTypes');
 goog.require('Blockly.constants');
 goog.require('Blockly.Events');
 goog.require('Blockly.Events.BlockMove');
+goog.require('Blockly.IASTNodeLocationWithBlock');
 goog.require('Blockly.utils.deprecation');
 goog.require('Blockly.Xml');
 
 goog.requireType('Blockly.Block');
-goog.requireType('Blockly.IASTNodeLocationWithBlock');
 goog.requireType('Blockly.IConnectionChecker');
 goog.requireType('Blockly.Input');
 

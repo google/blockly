@@ -22,6 +22,7 @@ goog.require('Blockly.utils.object');
 goog.require('Blockly.utils.Rect');
 goog.require('Blockly.utils.userAgent');
 goog.require('Blockly.WidgetDiv');
+goog.require('Bockly.DropDownDiv');
 
 goog.requireType('Blockly.Options');
 goog.requireType('Blockly.utils.Coordinate');

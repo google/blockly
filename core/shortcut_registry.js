@@ -14,9 +14,9 @@
 goog.provide('Blockly.ShortcutRegistry');
 
 goog.require('Blockly.ShortcutItems');
+goog.require('Blockly.utils.KeyCodes');
 goog.require('Blockly.utils.object');
 
-goog.requireType('Blockly.utils.KeyCodes');
 goog.requireType('Blockly.Workspace');
 
 

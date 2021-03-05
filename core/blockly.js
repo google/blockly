@@ -17,8 +17,8 @@
 goog.provide('Blockly');
 
 goog.require('Blockly.browserEvents');
-goog.require('Blockly.constants');
 goog.require('Blockly.connectionTypes');
+goog.require('Blockly.constants');
 goog.require('Blockly.Events');
 goog.require('Blockly.Events.BlockCreate');
 goog.require('Blockly.Events.FinishedLoading');

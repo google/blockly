@@ -15,6 +15,7 @@ goog.provide('Blockly.IPositionable');
 
 goog.require('Blockly.IPlugin');
 
+goog.requireType('Blockly.utils.Rect');
 
 /**
  * Interface for a component that is positioned on top of the workspace.

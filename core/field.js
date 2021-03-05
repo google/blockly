@@ -15,9 +15,15 @@
 goog.provide('Blockly.Field');
 
 goog.require('Blockly.browserEvents');
+goog.require('Blockly.DropDownDiv');
 goog.require('Blockly.Events');
 goog.require('Blockly.Events.BlockChange');
 goog.require('Blockly.Gesture');
+goog.require('Blockly.IASTNodeLocationSvg');
+goog.require('Blockly.IASTNodeLocationWithBlock');
+goog.require('Blockly.IKeyboardAccessible');
+goog.require('Blockly.IRegistrable');
+goog.require('Blockly.MarkerManager');
 goog.require('Blockly.Tooltip');
 goog.require('Blockly.utils');
 goog.require('Blockly.utils.dom');
@@ -26,15 +32,12 @@ goog.require('Blockly.utils.Size');
 goog.require('Blockly.utils.style');
 goog.require('Blockly.utils.Svg');
 goog.require('Blockly.utils.userAgent');
+goog.require('Blockly.WidgetDiv');
 
 goog.requireType('Blockly.Block');
 goog.requireType('Blockly.blockRendering.ConstantProvider');
 goog.requireType('Blockly.BlockSvg');
-goog.requireType('Blockly.IASTNodeLocationSvg');
-goog.requireType('Blockly.IASTNodeLocationWithBlock');
-goog.requireType('Blockly.IKeyboardAccessible');
 goog.requireType('Blockly.Input');
-goog.requireType('Blockly.IRegistrable');
 goog.requireType('Blockly.ShortcutRegistry');
 goog.requireType('Blockly.utils.Coordinate');
 goog.requireType('Blockly.WorkspaceSvg');

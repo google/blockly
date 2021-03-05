@@ -12,16 +12,17 @@
 
 goog.provide('Blockly.blockRendering.ConstantProvider');
 
+goog.require('Blockly.blockRendering.Debug');
 goog.require('Blockly.connectionTypes');
 goog.require('Blockly.constants');
 goog.require('Blockly.utils');
 goog.require('Blockly.utils.colour');
 goog.require('Blockly.utils.dom');
+goog.require('Blockly.utils.object');
 goog.require('Blockly.utils.Svg');
 goog.require('Blockly.utils.svgPaths');
 goog.require('Blockly.utils.userAgent');
 
-goog.requireType('Blockly.blockRendering.Debug');
 goog.requireType('Blockly.RenderedConnection');
 goog.requireType('Blockly.Theme');
 

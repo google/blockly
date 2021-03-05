@@ -16,6 +16,7 @@ goog.provide('Blockly.BasicCursor');
 goog.require('Blockly.ASTNode');
 goog.require('Blockly.Cursor');
 goog.require('Blockly.registry');
+goog.require('Blockly.utils.object');
 
 
 /**

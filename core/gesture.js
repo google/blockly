@@ -25,6 +25,7 @@ goog.require('Blockly.Tooltip');
 goog.require('Blockly.Touch');
 goog.require('Blockly.utils');
 goog.require('Blockly.utils.Coordinate');
+goog.require('Blockly.Workspace');
 goog.require('Blockly.WorkspaceDragger');
 
 goog.requireType('Blockly.BlockSvg');

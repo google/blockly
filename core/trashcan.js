@@ -16,7 +16,9 @@ goog.require('Blockly.browserEvents');
 goog.require('Blockly.constants');
 goog.require('Blockly.Events');
 goog.require('Blockly.Events.TrashcanOpen');
+goog.require('Blockly.IDeleteArea');
 goog.require('Blockly.IPositionable');
+goog.require('Blockly.Options');
 goog.require('Blockly.Scrollbar');
 goog.require('Blockly.utils.dom');
 goog.require('Blockly.utils.math');
@@ -26,7 +28,6 @@ goog.require('Blockly.utils.toolbox');
 goog.require('Blockly.Xml');
 
 goog.requireType('Blockly.Events.Abstract');
-goog.requireType('Blockly.IDeleteArea');
 goog.requireType('Blockly.IFlyout');
 goog.requireType('Blockly.WorkspaceSvg');
 

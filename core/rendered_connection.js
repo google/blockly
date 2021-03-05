@@ -22,6 +22,7 @@ goog.require('Blockly.utils.deprecation');
 goog.require('Blockly.utils.dom');
 goog.require('Blockly.utils.object');
 goog.require('Blockly.utils.Svg');
+goog.require('Blockly.utils.svgPaths');
 
 goog.requireType('Blockly.Block');
 goog.requireType('Blockly.BlockSvg');

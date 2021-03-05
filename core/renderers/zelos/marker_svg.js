@@ -14,6 +14,7 @@ goog.provide('Blockly.zelos.MarkerSvg');
 
 goog.require('Blockly.blockRendering.MarkerSvg');
 goog.require('Blockly.utils.dom');
+goog.require('Blockly.utils.object');
 goog.require('Blockly.utils.Svg');
 
 goog.requireType('Blockly.ASTNode');

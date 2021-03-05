@@ -13,8 +13,8 @@
 
 goog.provide('Blockly.ISelectable');
 
-goog.requireType('Blockly.IDeletable');
-goog.requireType('Blockly.IMovable');
+goog.require('Blockly.IDeletable');
+goog.require('Blockly.IMovable');
 
 
 /**

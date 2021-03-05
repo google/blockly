@@ -13,6 +13,7 @@
 goog.provide('Blockly.Bubble');
 
 goog.require('Blockly.browserEvents');
+goog.require('Blockly.IBubble');
 goog.require('Blockly.Scrollbar');
 goog.require('Blockly.Touch');
 goog.require('Blockly.utils');
@@ -26,7 +27,6 @@ goog.require('Blockly.Workspace');
 
 goog.requireType('Blockly.BlockDragSurfaceSvg');
 goog.requireType('Blockly.BlockSvg');
-goog.requireType('Blockly.IBubble');
 goog.requireType('Blockly.MetricsManager');
 goog.requireType('Blockly.utils.Metrics');
 goog.requireType('Blockly.WorkspaceSvg');

@@ -15,6 +15,7 @@ goog.provide('Blockly.TouchGesture');
 
 goog.require('Blockly.browserEvents');
 goog.require('Blockly.Gesture');
+goog.require('Blockly.Touch');
 goog.require('Blockly.utils');
 goog.require('Blockly.utils.Coordinate');
 goog.require('Blockly.utils.object');

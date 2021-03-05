@@ -15,6 +15,7 @@ goog.provide('Blockly.Options');
 goog.require('Blockly.registry');
 goog.require('Blockly.Theme');
 goog.require('Blockly.Themes.Classic');
+goog.require('Blockly.utils.deprecation');
 goog.require('Blockly.utils.IdGenerator');
 goog.require('Blockly.utils.Metrics');
 goog.require('Blockly.utils.toolbox');

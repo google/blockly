@@ -21,6 +21,10 @@ goog.require('Blockly.utils');
 
 goog.requireType('Blockly.Block');
 goog.requireType('Blockly.Events.Abstract');
+goog.requireType('Blockly.Events.BlockCreate');
+goog.requireType('Blockly.Events.BlockMove');
+goog.requireType('Blockly.Events.CommentCreate');
+goog.requireType('Blockly.Events.CommentMove');
 goog.requireType('Blockly.Workspace');
 
 

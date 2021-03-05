@@ -12,6 +12,7 @@
 
 goog.provide('Blockly.CollapsibleToolboxCategory');
 
+goog.require('Blockly.ICollapsibleToolboxItem');
 goog.require('Blockly.registry');
 goog.require('Blockly.ToolboxCategory');
 goog.require('Blockly.ToolboxItem');
@@ -21,7 +22,6 @@ goog.require('Blockly.utils.dom');
 goog.require('Blockly.utils.object');
 goog.require('Blockly.utils.toolbox');
 
-goog.requireType('Blockly.ICollapsibleToolboxItem');
 goog.requireType('Blockly.IToolbox');
 goog.requireType('Blockly.IToolboxItem');
 

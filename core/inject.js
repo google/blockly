@@ -25,11 +25,16 @@ goog.require('Blockly.Tooltip');
 goog.require('Blockly.utils');
 goog.require('Blockly.utils.aria');
 goog.require('Blockly.utils.dom');
+goog.require('Blockly.utils.math');
 goog.require('Blockly.utils.Svg');
 goog.require('Blockly.utils.userAgent');
+goog.require('Blockly.WidgetDiv');
 goog.require('Blockly.WorkspaceDragSurfaceSvg');
 goog.require('Blockly.WorkspaceSvg');
 
+goog.requireType('Blockly.Events.Abstract');
+goog.requireType('Blockly.IBoundedElement');
+goog.requireType('Blockly.MetricsManager');
 goog.requireType('Blockly.utils.Metrics');
 goog.requireType('Blockly.Workspace');
 

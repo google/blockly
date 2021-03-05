@@ -13,8 +13,9 @@
 
 goog.provide('Blockly.IToolbox');
 
+goog.require('Blockly.IRegistrable');
+
 goog.requireType('Blockly.IFlyout');
-goog.requireType('Blockly.IRegistrable');
 goog.requireType('Blockly.IToolboxItem');
 goog.requireType('Blockly.utils.toolbox');
 goog.requireType('Blockly.WorkspaceSvg');

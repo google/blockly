@@ -13,6 +13,7 @@
 goog.provide('Blockly.browserEvents');
 
 goog.require('Blockly.Touch');
+goog.require('Blockly.utils.global');
 
 
 /**

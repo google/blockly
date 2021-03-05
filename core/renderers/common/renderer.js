@@ -19,18 +19,18 @@ goog.require('Blockly.blockRendering.IPathObject');
 goog.require('Blockly.blockRendering.MarkerSvg');
 goog.require('Blockly.blockRendering.PathObject');
 goog.require('Blockly.blockRendering.RenderInfo');
+goog.require('Blockly.Connection');
 goog.require('Blockly.connectionTypes');
 goog.require('Blockly.constants');
 goog.require('Blockly.InsertionMarkerManager');
 goog.require('Blockly.IRegistrable');
+goog.require('Blockly.utils.object');
 
 goog.requireType('Blockly.Block');
 goog.requireType('Blockly.BlockSvg');
-goog.requireType('Blockly.Connection');
 goog.requireType('Blockly.Marker');
 goog.requireType('Blockly.RenderedConnection');
 goog.requireType('Blockly.Theme');
-goog.requireType('Blockly.utils.object');
 goog.requireType('Blockly.WorkspaceSvg');
 
 

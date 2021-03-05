@@ -13,15 +13,19 @@
 goog.provide('Blockly.Flyout');
 
 goog.require('Blockly.Block');
+/** @suppress {extraRequire} */
 goog.require('Blockly.blockRendering');
 goog.require('Blockly.browserEvents');
 goog.require('Blockly.Events');
+/** @suppress {extraRequire} */
 goog.require('Blockly.Events.BlockCreate');
+/** @suppress {extraRequire} */
 goog.require('Blockly.Events.VarCreate');
+/** @suppress {extraRequire} */
 goog.require('Blockly.Gesture');
-goog.require('Blockly.Marker');
-goog.require('Blockly.Scrollbar');
+goog.require('Blockly.ScrollbarPair');
 goog.require('Blockly.Tooltip');
+/** @suppress {extraRequire} */
 goog.require('Blockly.Touch');
 goog.require('Blockly.utils');
 goog.require('Blockly.utils.Coordinate');
@@ -37,7 +41,6 @@ goog.requireType('Blockly.FlyoutButton');
 goog.requireType('Blockly.IDeleteArea');
 goog.requireType('Blockly.IFlyout');
 goog.requireType('Blockly.Options');
-goog.requireType('Blockly.ShortcutRegistry');
 goog.requireType('Blockly.utils.Metrics');
 goog.requireType('Blockly.utils.Rect');
 

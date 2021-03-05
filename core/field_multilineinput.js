@@ -15,11 +15,9 @@
 goog.provide('Blockly.FieldMultilineInput');
 
 goog.require('Blockly.Css');
-goog.require('Blockly.DropDownDiv');
 goog.require('Blockly.FieldTextInput');
 goog.require('Blockly.utils');
 goog.require('Blockly.utils.aria');
-goog.require('Blockly.utils.Coordinate');
 goog.require('Blockly.utils.dom');
 goog.require('Blockly.utils.KeyCodes');
 goog.require('Blockly.utils.object');

@@ -8,6 +8,7 @@
  * @fileoverview Default Blockly entry point. Use this to pick and choose which
  * fields and renderers to include in your Blockly bundle.
  * @author samelh@google.com (Sam El-Husseini)
+ * @suppress {extraRequire}
  */
 'use strict';
 

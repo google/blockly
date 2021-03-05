@@ -16,11 +16,16 @@ goog.require('Blockly.ASTNode');
 goog.require('Blockly.Blocks');
 goog.require('Blockly.Connection');
 goog.require('Blockly.connectionTypes');
+/** @suppress {extraRequire} */
 goog.require('Blockly.constants');
 goog.require('Blockly.Events');
+/** @suppress {extraRequire} */
 goog.require('Blockly.Events.BlockChange');
+/** @suppress {extraRequire} */
 goog.require('Blockly.Events.BlockCreate');
+/** @suppress {extraRequire} */
 goog.require('Blockly.Events.BlockDelete');
+/** @suppress {extraRequire} */
 goog.require('Blockly.Events.BlockMove');
 goog.require('Blockly.Extensions');
 goog.require('Blockly.fieldRegistry');
@@ -29,10 +34,8 @@ goog.require('Blockly.inputTypes');
 goog.require('Blockly.Tooltip');
 goog.require('Blockly.utils');
 goog.require('Blockly.utils.Coordinate');
-goog.require('Blockly.utils.deprecation');
 goog.require('Blockly.utils.object');
 goog.require('Blockly.utils.Size');
-goog.require('Blockly.utils.string');
 goog.require('Blockly.Workspace');
 
 goog.requireType('Blockly.Comment');

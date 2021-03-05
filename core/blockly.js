@@ -17,26 +17,37 @@
 goog.provide('Blockly');
 
 goog.require('Blockly.browserEvents');
+/** @suppress {extraRequire} */
 goog.require('Blockly.constants');
 goog.require('Blockly.connectionTypes');
 goog.require('Blockly.Events');
+/** @suppress {extraRequire} */
 goog.require('Blockly.Events.BlockCreate');
+/** @suppress {extraRequire} */
 goog.require('Blockly.Events.FinishedLoading');
+/** @suppress {extraRequire} */
 goog.require('Blockly.Events.Ui');
+/** @suppress {extraRequire} */
 goog.require('Blockly.Events.UiBase');
+/** @suppress {extraRequire} */
 goog.require('Blockly.Events.VarCreate');
+/** @suppress {extraRequire} */
 goog.require('Blockly.inject');
 goog.require('Blockly.inputTypes');
+/** @suppress {extraRequire} */
 goog.require('Blockly.Procedures');
 goog.require('Blockly.ShortcutRegistry');
 goog.require('Blockly.Tooltip');
+/** @suppress {extraRequire} */
 goog.require('Blockly.Touch');
 goog.require('Blockly.utils');
 goog.require('Blockly.utils.colour');
 goog.require('Blockly.utils.Size');
+/** @suppress {extraRequire} */
 goog.require('Blockly.Variables');
 goog.require('Blockly.WidgetDiv');
 goog.require('Blockly.WorkspaceSvg');
+/** @suppress {extraRequire} */
 goog.require('Blockly.Xml');
 
 goog.requireType('Blockly.BlockSvg');

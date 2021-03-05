@@ -15,12 +15,13 @@ goog.provide('Blockly.Mutator');
 
 goog.require('Blockly.Bubble');
 goog.require('Blockly.Events');
+/** @suppress {extraRequire} */
 goog.require('Blockly.Events.BlockChange');
+/** @suppress {extraRequire} */
 goog.require('Blockly.Events.BubbleOpen');
 goog.require('Blockly.Icon');
 goog.require('Blockly.utils');
 goog.require('Blockly.utils.dom');
-goog.require('Blockly.utils.global');
 goog.require('Blockly.utils.object');
 goog.require('Blockly.utils.Svg');
 goog.require('Blockly.utils.toolbox');

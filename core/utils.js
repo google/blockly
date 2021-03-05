@@ -18,6 +18,7 @@
  */
 goog.provide('Blockly.utils');
 
+/** @suppress {extraRequire} */
 goog.require('Blockly.constants');
 goog.require('Blockly.Msg');
 goog.require('Blockly.utils.colour');

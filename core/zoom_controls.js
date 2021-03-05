@@ -13,9 +13,11 @@
 goog.provide('Blockly.ZoomControls');
 
 goog.require('Blockly.browserEvents');
+/** @suppress {extraRequire} */
 goog.require('Blockly.constants');
 goog.require('Blockly.Css');
 goog.require('Blockly.Events');
+/** @suppress {extraRequire} */
 goog.require('Blockly.Events.Click');
 goog.require('Blockly.Scrollbar');
 goog.require('Blockly.Touch');

@@ -17,8 +17,10 @@
 goog.provide('Blockly.Procedures');
 
 goog.require('Blockly.Blocks');
+/** @suppress {extraRequire} */
 goog.require('Blockly.constants');
 goog.require('Blockly.Events');
+/** @suppress {extraRequire} */
 goog.require('Blockly.Events.BlockChange');
 goog.require('Blockly.Field');
 goog.require('Blockly.Msg');

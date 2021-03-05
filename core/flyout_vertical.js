@@ -22,6 +22,7 @@ goog.require('Blockly.Scrollbar');
 goog.require('Blockly.utils');
 goog.require('Blockly.utils.object');
 goog.require('Blockly.utils.Rect');
+goog.require('Blockly.utils.toolbox');
 goog.require('Blockly.WidgetDiv');
 
 goog.requireType('Blockly.Options');
@@ -150,14 +151,14 @@ Blockly.VerticalFlyout.prototype.getX = function() {
   if (this.targetWorkspace.toolboxPosition == this.toolboxPosition_) {
     // If there is a category toolbox.
     if (targetWorkspaceMetrics.toolboxWidth) {
-      if (this.toolboxPosition_ == Blockly.constants.toolboxPosition.LEFT) {
+      if (this.toolboxPosition_ == Blockly.utils.toolbox.Position.LEFT) {
         x = targetWorkspaceMetrics.toolboxWidth;
       } else {
         x = targetWorkspaceMetrics.viewWidth - this.width_;
       }
       // Simple (flyout-only) toolbox.
     } else {
-      if (this.toolboxPosition_ == Blockly.constants.toolboxPosition.LEFT) {
+      if (this.toolboxPosition_ == Blockly.utils.toolbox.Position.LEFT) {
         x = 0;
       } else {
         // The simple flyout does not cover the workspace.
@@ -166,7 +167,7 @@ Blockly.VerticalFlyout.prototype.getX = function() {
     }
     // Trashcan flyout is opposite the main flyout.
   } else {
-    if (this.toolboxPosition_ == Blockly.constants.toolboxPosition.LEFT) {
+    if (this.toolboxPosition_ == Blockly.utils.toolbox.Position.LEFT) {
       x = 0;
     } else {
       // Because the anchor point of the flyout is on the left, but we want
@@ -222,8 +223,7 @@ Blockly.VerticalFlyout.prototype.position = function() {
  * @private
  */
 Blockly.VerticalFlyout.prototype.setBackgroundPath_ = function(width, height) {
-  var atRight =
-      this.toolboxPosition_ == Blockly.constants.toolboxPosition.RIGHT;
+  var atRight = this.toolboxPosition_ == Blockly.utils.toolbox.Position.RIGHT;
   var totalWidth = width + this.CORNER_RADIUS;
 
   // Decide whether to start on the left or right.
@@ -360,7 +360,7 @@ Blockly.VerticalFlyout.prototype.getClientRect = function() {
   var BIG_NUM = 1000000000;
   var left = flyoutRect.left;
 
-  if (this.toolboxPosition_ == Blockly.constants.toolboxPosition.LEFT) {
+  if (this.toolboxPosition_ == Blockly.utils.toolbox.Position.LEFT) {
     var width = flyoutRect.width;
     return new Blockly.utils.Rect(-BIG_NUM, BIG_NUM, -BIG_NUM, left + width);
   } else {  // Right
@@ -417,7 +417,7 @@ Blockly.VerticalFlyout.prototype.reflowInternal_ = function() {
     }
 
     if (this.targetWorkspace.toolboxPosition == this.toolboxPosition_ &&
-        this.toolboxPosition_ == Blockly.constants.toolboxPosition.LEFT &&
+        this.toolboxPosition_ == Blockly.utils.toolbox.Position.LEFT &&
         !this.targetWorkspace.getToolbox()) {
       // This flyout is a simple toolbox. Reposition the workspace so that (0,0)
       // is in the correct position relative to the new absolute edge (ie

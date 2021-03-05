@@ -44,6 +44,7 @@ goog.require('Blockly.utils');
 goog.require('Blockly.utils.colour');
 goog.require('Blockly.utils.deprecation');
 goog.require('Blockly.utils.Size');
+goog.require('Blockly.utils.toolbox');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Variables');
 goog.require('Blockly.WidgetDiv');
@@ -577,21 +578,21 @@ Blockly.DUMMY_INPUT = Blockly.inputTypes.DUMMY;
  */
 
 /**
- * @see Blockly.constants.toolboxPosition.TOP
+ * @see Blockly.utils.toolbox.Position.TOP
  */
-Blockly.TOOLBOX_AT_TOP = Blockly.constants.toolboxPosition.TOP;
+Blockly.TOOLBOX_AT_TOP = Blockly.utils.toolbox.Position.TOP;
 
 /**
- * @see Blockly.constants.toolboxPosition.BOTTOM
+ * @see Blockly.utils.toolbox.Position.BOTTOM
  */
-Blockly.TOOLBOX_AT_BOTTOM = Blockly.constants.toolboxPosition.BOTTOM;
+Blockly.TOOLBOX_AT_BOTTOM = Blockly.utils.toolbox.Position.BOTTOM;
 
 /**
- * @see Blockly.constants.toolboxPosition.LEFT
+ * @see Blockly.utils.toolbox.Position.LEFT
  */
-Blockly.TOOLBOX_AT_LEFT = Blockly.constants.toolboxPosition.LEFT;
+Blockly.TOOLBOX_AT_LEFT = Blockly.utils.toolbox.Position.LEFT;
 
 /**
- * @see Blockly.constants.toolboxPosition.RIGHT
+ * @see Blockly.utils.toolbox.Position.RIGHT
  */
-Blockly.TOOLBOX_AT_RIGHT = Blockly.constants.toolboxPosition.RIGHT;
+Blockly.TOOLBOX_AT_RIGHT = Blockly.utils.toolbox.Position.RIGHT;

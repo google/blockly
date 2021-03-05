@@ -15,11 +15,11 @@ goog.provide('Blockly.MetricsManager');
 goog.require('Blockly.IMetricsManager');
 goog.require('Blockly.registry');
 goog.require('Blockly.utils.Size');
+goog.require('Blockly.utils.toolbox');
 
 goog.requireType('Blockly.IFlyout');
 goog.requireType('Blockly.IToolbox');
 goog.requireType('Blockly.utils.Metrics');
-goog.requireType('Blockly.utils.toolbox');
 goog.requireType('Blockly.WorkspaceSvg');
 
 
@@ -175,8 +175,8 @@ Blockly.MetricsManager.prototype.getAbsoluteMetrics = function() {
   var toolboxPosition =
       doesToolboxExist ? toolboxMetrics.position : flyoutMetrics.position;
 
-  var atLeft = toolboxPosition == Blockly.constants.toolboxPosition.LEFT;
-  var atTop = toolboxPosition == Blockly.constants.toolboxPosition.TOP;
+  var atLeft = toolboxPosition == Blockly.utils.toolbox.Position.LEFT;
+  var atTop = toolboxPosition == Blockly.utils.toolbox.Position.TOP;
   if (doesToolboxExist && atLeft) {
     absoluteLeft = toolboxMetrics.width;
   } else if (doesFlyoutExist && atLeft) {
@@ -216,21 +216,21 @@ Blockly.MetricsManager.prototype.getViewMetrics = function(
       doesToolboxExist ? toolboxMetrics.position : flyoutMetrics.position;
 
   if (this.workspace_.getToolbox()) {
-    if (toolboxPosition == Blockly.constants.toolboxPosition.TOP ||
-        toolboxPosition == Blockly.constants.toolboxPosition.BOTTOM) {
+    if (toolboxPosition == Blockly.utils.toolbox.Position.TOP ||
+        toolboxPosition == Blockly.utils.toolbox.Position.BOTTOM) {
       svgMetrics.height -= toolboxMetrics.height;
     } else if (
-        toolboxPosition == Blockly.constants.toolboxPosition.LEFT ||
-        toolboxPosition == Blockly.constants.toolboxPosition.RIGHT) {
+        toolboxPosition == Blockly.utils.toolbox.Position.LEFT ||
+        toolboxPosition == Blockly.utils.toolbox.Position.RIGHT) {
       svgMetrics.width -= toolboxMetrics.width;
     }
   } else if (this.workspace_.getFlyout(true)) {
-    if (toolboxPosition == Blockly.constants.toolboxPosition.TOP ||
-        toolboxPosition == Blockly.constants.toolboxPosition.BOTTOM) {
+    if (toolboxPosition == Blockly.utils.toolbox.Position.TOP ||
+        toolboxPosition == Blockly.utils.toolbox.Position.BOTTOM) {
       svgMetrics.height -= flyoutMetrics.height;
     } else if (
-        toolboxPosition == Blockly.constants.toolboxPosition.LEFT ||
-        toolboxPosition == Blockly.constants.toolboxPosition.RIGHT) {
+        toolboxPosition == Blockly.utils.toolbox.Position.LEFT ||
+        toolboxPosition == Blockly.utils.toolbox.Position.RIGHT) {
       svgMetrics.width -= flyoutMetrics.width;
     }
   }

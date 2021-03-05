@@ -611,13 +611,13 @@ Blockly.Toolbox.prototype.position = function() {
     toolboxDiv.style.height = 'auto';
     toolboxDiv.style.width = '100%';
     this.height_ = toolboxDiv.offsetHeight;
-    if (this.toolboxPosition == Blockly.constants.toolboxPosition.TOP) {
+    if (this.toolboxPosition == Blockly.utils.toolbox.Position.TOP) {
       toolboxDiv.style.top = '0';
     } else {  // Bottom
       toolboxDiv.style.bottom = '0';
     }
   } else {
-    if (this.toolboxPosition == Blockly.constants.toolboxPosition.RIGHT) {
+    if (this.toolboxPosition == Blockly.utils.toolbox.Position.RIGHT) {
       toolboxDiv.style.right = '0';
     } else {  // Left
       toolboxDiv.style.left = '0';
@@ -636,10 +636,10 @@ Blockly.Toolbox.prototype.handleToolboxItemResize = function() {
   // to the new absolute edge (ie toolbox edge).
   var workspace = this.workspace_;
   var rect = this.HtmlDiv.getBoundingClientRect();
-  var newX = this.toolboxPosition == Blockly.constants.toolboxPosition.LEFT ?
+  var newX = this.toolboxPosition == Blockly.utils.toolbox.Position.LEFT ?
       workspace.scrollX + rect.width :
       workspace.scrollX;
-  var newY = this.toolboxPosition == Blockly.constants.toolboxPosition.TOP ?
+  var newY = this.toolboxPosition == Blockly.utils.toolbox.Position.TOP ?
       workspace.scrollY + rect.height :
       workspace.scrollY;
   workspace.translate(newX, newY);

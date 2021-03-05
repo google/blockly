@@ -161,18 +161,6 @@ Blockly.OPPOSITE_TYPE[Blockly.connectionTypes.NEXT_STATEMENT] =
 Blockly.OPPOSITE_TYPE[Blockly.connectionTypes.PREVIOUS_STATEMENT] =
     Blockly.connectionTypes.NEXT_STATEMENT;
 
-
-/**
- * Enum for the position of the toolbox and/or flyout.
- * @enum {number}
- */
-Blockly.constants.toolboxPosition = {
-  TOP: 0,
-  BOTTOM: 1,
-  LEFT: 2,
-  RIGHT: 3
-};
-
 /**
  * ENUM representing that an event is not in any delete areas.
  * Null for backwards compatibility reasons.

@@ -230,6 +230,14 @@ Blockly.WorkspaceSvg = function(
    * @private
    */
   this.topBoundedElements_ = [];
+
+  /**
+   * The cached size of the parent svg element.
+   * Used to compute svg metrics.
+   * @type {!Blockly.utils.Size}
+   * @private
+   */
+  this.cachedParentSvgSize_ = new Blockly.utils.Size(0, 0);
 };
 Blockly.utils.object.inherits(Blockly.WorkspaceSvg, Blockly.Workspace);
 
@@ -730,6 +738,17 @@ Blockly.WorkspaceSvg.prototype.getSvgXY = function(element) {
 };
 
 /**
+ * Gets the size of the workspace's parent svg element.
+ * @return {!Blockly.utils.Size} The cached width and height of the workspace's
+ *     parent svg element.
+ * @package
+ */
+Blockly.WorkspaceSvg.prototype.getCachedParentSvgSize = function() {
+  var size = this.cachedParentSvgSize_;
+  return new Blockly.utils.Size(size.width, size.height);
+};
+
+/**
  * Return the position of the workspace origin relative to the injection div
  * origin in pixels.
  * The workspace origin is where a block would render at position (0, 0).
@@ -1148,6 +1167,27 @@ Blockly.WorkspaceSvg.prototype.updateScreenCalculationsIfScrolled =
  */
 Blockly.WorkspaceSvg.prototype.getCanvas = function() {
   return /** @type {!SVGGElement} */ (this.svgBlockCanvas_);
+};
+
+/**
+ * Caches the width and height of the workspace's parent svg element for use
+ * with getSvgMetrics.
+ * @param {?number} width The width of the parent svg element.
+ * @param {?number} height The height of the parent svg element
+ * @package
+ */
+Blockly.WorkspaceSvg.prototype.setCachedParentSvgSize = function(width, height) {
+  var svg = this.getParentSvg();
+  if (width) {
+    this.cachedParentSvgSize_.width = width;
+    // This is set to support the public (but deprecated) Blockly.svgSize method.
+    svg.cachedWidth_ = width;
+  }
+  if (height) {
+    this.cachedParentSvgSize_.height = height;
+    // This is set to support the public (but deprecated) Blockly.svgSize method.
+    svg.cachedHeight_ = height;
+  }
 };
 
 /**

@@ -42,6 +42,7 @@ goog.require('Blockly.Tooltip');
 goog.require('Blockly.Touch');
 goog.require('Blockly.utils');
 goog.require('Blockly.utils.colour');
+goog.require('Blockly.utils.deprecation');
 goog.require('Blockly.utils.Size');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Variables');
@@ -125,8 +126,16 @@ Blockly.parentContainer = null;
  * Returns the dimensions of the specified SVG image.
  * @param {!SVGElement} svg SVG image.
  * @return {!Blockly.utils.Size} Contains width and height properties.
+ * @deprecated Use workspace.setCachedParentSvgSize. (2021 March 5)
  */
 Blockly.svgSize = function(svg) {
+  // When removing this function, remove svg.cachedWidth_ and svg.cachedHeight_
+  // from setCachedParentSvgSize.
+  Blockly.utils.deprecation.warn(
+      'Blockly.svgSize',
+      'March 2021',
+      'March 2022',
+      'workspace.getCachedParentSvgSize');
   svg = /** @type {?} */ (svg);
   return new Blockly.utils.Size(svg.cachedWidth_, svg.cachedHeight_);
 };
@@ -154,6 +163,7 @@ Blockly.svgResize = function(workspace) {
     mainWorkspace = mainWorkspace.options.parentWorkspace;
   }
   var svg = mainWorkspace.getParentSvg();
+  var cachedSize = mainWorkspace.getCachedParentSvgSize();
   var div = svg.parentNode;
   if (!div) {
     // Workspace deleted, or something.
@@ -161,13 +171,13 @@ Blockly.svgResize = function(workspace) {
   }
   var width = div.offsetWidth;
   var height = div.offsetHeight;
-  if (svg.cachedWidth_ != width) {
+  if (cachedSize.width != width) {
     svg.setAttribute('width', width + 'px');
-    svg.cachedWidth_ = width;
+    mainWorkspace.setCachedParentSvgSize(width, null);
   }
-  if (svg.cachedHeight_ != height) {
+  if (cachedSize.height != height) {
     svg.setAttribute('height', height + 'px');
-    svg.cachedHeight_ = height;
+    mainWorkspace.setCachedParentSvgSize(null, height);
   }
   mainWorkspace.resize();
 };

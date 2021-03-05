@@ -193,18 +193,16 @@ Blockly.HorizontalFlyout.prototype.getY = function() {
  * Move the flyout to the edge of the workspace.
  */
 Blockly.HorizontalFlyout.prototype.position = function() {
-  if (!this.isVisible()) {
+  if (!this.isVisible() || !this.targetWorkspace.isVisible()) {
     return;
   }
-  var targetWorkspaceMetrics = this.targetWorkspace.getMetrics();
-  if (!targetWorkspaceMetrics) {
-    // Hidden components will return null.
-    return;
-  }
-  // Record the width for Blockly.Flyout.getMetrics_.
-  this.width_ = targetWorkspaceMetrics.viewWidth;
+  var metricsManager = this.targetWorkspace.getMetricsManager();
+  var targetWorkspaceViewMetrics = metricsManager.getViewMetrics();
 
-  var edgeWidth = targetWorkspaceMetrics.viewWidth - 2 * this.CORNER_RADIUS;
+  // Record the width for Blockly.Flyout.getMetrics_.
+  this.width_ = targetWorkspaceViewMetrics.width;
+
+  var edgeWidth = targetWorkspaceViewMetrics.width - 2 * this.CORNER_RADIUS;
   var edgeHeight = this.height_ - this.CORNER_RADIUS;
   this.setBackgroundPath_(edgeWidth, edgeHeight);
 

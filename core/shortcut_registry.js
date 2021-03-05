@@ -43,7 +43,7 @@ Blockly.ShortcutRegistry = function() {
 
 /**
  * Singleton instance of this class.
- * @type {?Blockly.ShortcutItems}
+ * @type {?Blockly.ShortcutRegistry}
  */
 Blockly.ShortcutRegistry.instance_ = null;
 
@@ -124,9 +124,9 @@ Blockly.ShortcutRegistry.prototype.unregister = function(shortcutName) {
 
 /**
  * Adds a mapping between a keycode and a keyboard shortcut.
- * @param {string} keyCode The key code for the keyboard shortcut. If
- *     registering a key code with a modifier (ex: ctrl+c) use
- *     Blockly.ShortcutRegistry.getRegistry().createSerializedKey;
+ * @param {string|Blockly.utils.KeyCodes<number>} keyCode The key code for the
+ *     keyboard shortcut. If registering a key code with a modifier (ex: ctrl+c)
+ *     use Blockly.ShortcutRegistry.getRegistry().createSerializedKey;
  * @param {string} shortcutName The name of the shortcut to execute when the
  *     given keycode is pressed.
  * @param {boolean=} opt_allowCollision True to prevent an error when adding a
@@ -136,6 +136,7 @@ Blockly.ShortcutRegistry.prototype.unregister = function(shortcutName) {
  */
 Blockly.ShortcutRegistry.prototype.addKeyMapping = function(
     keyCode, shortcutName, opt_allowCollision) {
+  keyCode = String(keyCode);
   var shortcutNames = this.keyMap_[keyCode];
   if (shortcutNames && !opt_allowCollision) {
     throw new Error(

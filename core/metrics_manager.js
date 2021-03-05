@@ -517,16 +517,18 @@ Blockly.FlyoutMetricsManager.prototype.getContentMetrics = function(
 Blockly.FlyoutMetricsManager.prototype.getScrollMetrics = function(
     opt_getWorkspaceCoordinates) {
   var boundingBox = this.getBoundingBox_();
+  // Content metrics in pixel coordinates.
+  var contentMetrics = this.getContentMetrics();
   var margin = this.flyout_.MARGIN;
-  var scale = opt_getWorkspaceCoordinates ? 1 : this.workspace_.scale;
+  var scale = opt_getWorkspaceCoordinates ? this.workspace_.scale : 1;
 
   // CHANGE: horizontal top and left used to be 0.
   // TODO: This should use content metrics.
   return {
-    height: (boundingBox.height + 2 * margin) * scale,
-    width: (boundingBox.width + 2 * margin) * scale,
-    top: boundingBox.y - margin,
-    left: boundingBox.x - margin,
+    height: (contentMetrics.height + 2 * margin) / scale,
+    width: (contentMetrics.width + 2 * margin) / scale,
+    top: contentMetrics.top - margin,
+    left: contentMetrics.left - margin,
   };
 };
 

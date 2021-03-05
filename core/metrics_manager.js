@@ -219,8 +219,7 @@ Blockly.MetricsManager.prototype.getViewMetrics = function(
     if (toolboxPosition == Blockly.utils.toolbox.Position.TOP ||
         toolboxPosition == Blockly.utils.toolbox.Position.BOTTOM) {
       svgMetrics.height -= toolboxMetrics.height;
-    } else if (
-        toolboxPosition == Blockly.utils.toolbox.Position.LEFT ||
+    } else if (toolboxPosition == Blockly.utils.toolbox.Position.LEFT ||
         toolboxPosition == Blockly.utils.toolbox.Position.RIGHT) {
       svgMetrics.width -= toolboxMetrics.width;
     }
@@ -228,8 +227,7 @@ Blockly.MetricsManager.prototype.getViewMetrics = function(
     if (toolboxPosition == Blockly.utils.toolbox.Position.TOP ||
         toolboxPosition == Blockly.utils.toolbox.Position.BOTTOM) {
       svgMetrics.height -= flyoutMetrics.height;
-    } else if (
-        toolboxPosition == Blockly.utils.toolbox.Position.LEFT ||
+    } else if (toolboxPosition == Blockly.utils.toolbox.Position.LEFT ||
         toolboxPosition == Blockly.utils.toolbox.Position.RIGHT) {
       svgMetrics.width -= flyoutMetrics.width;
     }

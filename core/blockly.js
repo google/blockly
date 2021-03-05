@@ -143,7 +143,7 @@ Blockly.svgResize = function(workspace) {
     mainWorkspace = mainWorkspace.options.parentWorkspace;
   }
   var svg = mainWorkspace.getParentSvg();
-  var svgSize = mainWorkspace.getCachedParentSvgSize();
+  var cachedSize = mainWorkspace.getCachedParentSvgSize();
   var div = svg.parentNode;
   if (!div) {
     // Workspace deleted, or something.
@@ -151,11 +151,11 @@ Blockly.svgResize = function(workspace) {
   }
   var width = div.offsetWidth;
   var height = div.offsetHeight;
-  if (svgSize.width != width) {
+  if (cachedSize.width != width) {
     svg.setAttribute('width', width + 'px');
     mainWorkspace.setCachedParentSvgSize(width, null);
   }
-  if (svgSize.height != height) {
+  if (cachedSize.height != height) {
     svg.setAttribute('height', height + 'px');
     mainWorkspace.setCachedParentSvgSize(null, height);
   }

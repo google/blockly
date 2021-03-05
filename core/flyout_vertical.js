@@ -101,7 +101,7 @@ Blockly.VerticalFlyout.prototype.getMetrics_ = function() {
 
     viewHeight: viewHeight,
     viewWidth: viewWidth,
-    viewTop: -this.workspace_.scrollY + optionBox.y,
+    viewTop: -this.workspace_.scrollY,
     viewLeft: -this.workspace_.scrollX,
 
     absoluteTop: absoluteTop,
@@ -266,9 +266,6 @@ Blockly.VerticalFlyout.prototype.wheel_ = function(e) {
   if (scrollDelta.y) {
     var metrics = this.getMetrics_();
     var pos = (metrics.viewTop - metrics.scrollTop) + scrollDelta.y;
-    var limit = metrics.scrollHeight - metrics.viewHeight;
-    pos = Math.min(pos, limit);
-    pos = Math.max(pos, 0);
     this.workspace_.scrollbar.setY(pos);
     // When the flyout moves from a wheel event, hide WidgetDiv and DropDownDiv.
     Blockly.WidgetDiv.hide();

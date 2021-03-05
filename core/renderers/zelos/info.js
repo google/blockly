@@ -34,6 +34,7 @@ goog.require('Blockly.constants');
 goog.require('Blockly.FieldImage');
 goog.require('Blockly.FieldLabel');
 goog.require('Blockly.FieldTextInput');
+goog.require('Blockly.inputTypes');
 goog.require('Blockly.utils.object');
 goog.require('Blockly.zelos.BottomRow');
 goog.require('Blockly.zelos.RightConnectionShape');
@@ -137,12 +138,13 @@ Blockly.zelos.RenderInfo.prototype.shouldStartNewRow_ = function(input,
     return false;
   }
   // A statement input or an input following one always gets a new row.
-  if (input.type == Blockly.NEXT_STATEMENT ||
-      lastInput.type == Blockly.NEXT_STATEMENT) {
+  if (input.type == Blockly.inputTypes.STATEMENT ||
+      lastInput.type == Blockly.inputTypes.STATEMENT) {
     return true;
   }
   // Value and dummy inputs get new row if inputs are not inlined.
-  if (input.type == Blockly.INPUT_VALUE || input.type == Blockly.DUMMY_INPUT) {
+  if (input.type == Blockly.inputTypes.VALUE ||
+      input.type == Blockly.inputTypes.DUMMY) {
     return !this.isInline || this.isMultiRow;
   }
   return false;
@@ -276,7 +278,7 @@ Blockly.zelos.RenderInfo.prototype.addInput_ = function(input, activeRow) {
   // If we have two dummy inputs on the same row, one aligned left and the other
   // right, keep track of the right aligned dummy input so we can add padding
   // later.
-  if (input.type == Blockly.DUMMY_INPUT && activeRow.hasDummyInput &&
+  if (input.type == Blockly.inputTypes.DUMMY && activeRow.hasDummyInput &&
       activeRow.align == Blockly.constants.ALIGN.LEFT &&
       input.align == Blockly.constants.ALIGN.RIGHT) {
     activeRow.rightAlignedDummyInput = input;

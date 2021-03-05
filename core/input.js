@@ -15,6 +15,7 @@ goog.provide('Blockly.Input');
 goog.require('Blockly.Connection');
 goog.require('Blockly.constants');
 goog.require('Blockly.fieldRegistry');
+goog.require('Blockly.inputTypes');
 
 goog.requireType('Blockly.Block');
 goog.requireType('Blockly.BlockSvg');
@@ -33,7 +34,7 @@ goog.requireType('Blockly.RenderedConnection');
  * @constructor
  */
 Blockly.Input = function(type, name, block, connection) {
-  if (type != Blockly.DUMMY_INPUT && !name) {
+  if (type != Blockly.inputTypes.DUMMY && !name) {
     throw Error('Value inputs and statement inputs must have non-empty name.');
   }
   /** @type {number} */

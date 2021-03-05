@@ -13,6 +13,7 @@
 goog.provide('Blockly.Dart');
 
 goog.require('Blockly.Generator');
+goog.require('Blockly.inputTypes');
 goog.require('Blockly.utils.string');
 
 
@@ -219,7 +220,7 @@ Blockly.Dart.scrub_ = function(block, code, opt_thisOnly) {
     // Collect comments for all value arguments.
     // Don't collect comments for nested statements.
     for (var i = 0; i < block.inputList.length; i++) {
-      if (block.inputList[i].type == Blockly.INPUT_VALUE) {
+      if (block.inputList[i].type == Blockly.inputTypes.VALUE) {
         var childBlock = block.inputList[i].connection.targetBlock();
         if (childBlock) {
           comment = Blockly.Dart.allNestedComments(childBlock);

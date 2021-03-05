@@ -33,7 +33,6 @@ goog.requireType('Blockly.BlockSvg');
 goog.requireType('Blockly.Connection');
 goog.requireType('Blockly.Events.Abstract');
 goog.requireType('Blockly.utils.Coordinate');
-goog.requireType('Blockly.utils.Metrics');
 goog.requireType('Blockly.Workspace');
 
 

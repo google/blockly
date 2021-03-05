@@ -12,6 +12,7 @@
 
 goog.provide('Blockly.utils.toolbox');
 
+/** @suppress {extraRequire} */
 goog.require('Blockly.constants');
 goog.require('Blockly.Xml');
 

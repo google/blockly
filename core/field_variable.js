@@ -12,8 +12,10 @@
 
 goog.provide('Blockly.FieldVariable');
 
+/** @suppress {extraRequire} */
+/** @suppress {extraRequire} */
 goog.require('Blockly.constants');
-goog.require('Blockly.Events');
+/** @suppress {extraRequire} */
 goog.require('Blockly.Events.BlockChange');
 goog.require('Blockly.FieldDropdown');
 goog.require('Blockly.fieldRegistry');

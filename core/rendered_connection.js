@@ -14,8 +14,8 @@ goog.provide('Blockly.RenderedConnection');
 
 goog.require('Blockly.Connection');
 goog.require('Blockly.connectionTypes');
+/** @suppress {extraRequire} */
 goog.require('Blockly.constants');
-goog.require('Blockly.Events');
 goog.require('Blockly.utils');
 goog.require('Blockly.utils.Coordinate');
 goog.require('Blockly.utils.deprecation');

@@ -15,6 +15,7 @@
 goog.provide('Blockly.ConnectionDB');
 
 goog.require('Blockly.connectionTypes');
+/** @suppress {extraRequire} */
 goog.require('Blockly.constants');
 goog.require('Blockly.RenderedConnection');
 

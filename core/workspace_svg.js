@@ -16,18 +16,23 @@ goog.require('Blockly.blockRendering');
 goog.require('Blockly.BlockSvg');
 goog.require('Blockly.browserEvents');
 goog.require('Blockly.ConnectionDB');
+/** @suppress {extraRequire} */
 goog.require('Blockly.constants');
 goog.require('Blockly.ContextMenu');
 goog.require('Blockly.ContextMenuRegistry');
 goog.require('Blockly.Events');
+/** @suppress {extraRequire} */
 goog.require('Blockly.Events.BlockCreate');
+/** @suppress {extraRequire} */
 goog.require('Blockly.Events.ThemeChange');
+/** @suppress {extraRequire} */
 goog.require('Blockly.Events.ViewportChange');
 goog.require('Blockly.Gesture');
 goog.require('Blockly.Grid');
-goog.require('Blockly.IPositionable');
 goog.require('Blockly.MarkerManager');
+/** @suppress {extraRequire} */
 goog.require('Blockly.MetricsManager');
+/** @suppress {extraRequire} */
 goog.require('Blockly.Msg');
 goog.require('Blockly.Options');
 goog.require('Blockly.PluginManager');
@@ -62,7 +67,6 @@ goog.requireType('Blockly.Marker');
 goog.requireType('Blockly.ScrollbarPair');
 goog.requireType('Blockly.Theme');
 goog.requireType('Blockly.Trashcan');
-goog.requireType('Blockly.utils.Size');
 goog.requireType('Blockly.VariableModel');
 goog.requireType('Blockly.ZoomControls');
 

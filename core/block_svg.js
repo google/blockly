@@ -18,16 +18,20 @@ goog.require('Blockly.blockAnimations');
 goog.require('Blockly.blockRendering.IPathObject');
 goog.require('Blockly.browserEvents');
 goog.require('Blockly.connectionTypes');
+/** @suppress {extraRequire} */
 goog.require('Blockly.constants');
 goog.require('Blockly.ContextMenu');
 goog.require('Blockly.ContextMenuRegistry');
 goog.require('Blockly.Events');
+/** @suppress {extraRequire} */
 goog.require('Blockly.Events.BlockMove');
+/** @suppress {extraRequire} */
 goog.require('Blockly.Events.Selected');
 goog.require('Blockly.Msg');
 goog.require('Blockly.RenderedConnection');
 goog.require('Blockly.TabNavigateCursor');
 goog.require('Blockly.Tooltip');
+/** @suppress {extraRequire} */
 goog.require('Blockly.Touch');
 goog.require('Blockly.utils');
 goog.require('Blockly.utils.Coordinate');
@@ -47,7 +51,6 @@ goog.requireType('Blockly.IBoundedElement');
 goog.requireType('Blockly.ICopyable');
 goog.requireType('Blockly.Input');
 goog.requireType('Blockly.Mutator');
-goog.requireType('Blockly.ShortcutRegistry');
 goog.requireType('Blockly.Theme');
 goog.requireType('Blockly.Warning');
 goog.requireType('Blockly.WorkspaceSvg');

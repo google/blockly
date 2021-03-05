@@ -14,9 +14,13 @@ goog.provide('Blockly.WorkspaceCommentSvg');
 
 goog.require('Blockly.Css');
 goog.require('Blockly.Events');
+/** @suppress {extraRequire} */
 goog.require('Blockly.Events.CommentCreate');
+/** @suppress {extraRequire} */
 goog.require('Blockly.Events.CommentDelete');
+/** @suppress {extraRequire} */
 goog.require('Blockly.Events.CommentMove');
+/** @suppress {extraRequire} */
 goog.require('Blockly.Events.Selected');
 goog.require('Blockly.utils');
 goog.require('Blockly.utils.Coordinate');

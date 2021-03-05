@@ -18,7 +18,6 @@ goog.require('Blockly.BasicCursor');
 goog.require('Blockly.utils.object');
 
 goog.requireType('Blockly.Field');
-goog.requireType('Blockly.WorkspaceSvg');
 
 
 /**

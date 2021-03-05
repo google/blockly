@@ -14,6 +14,7 @@ goog.provide('Blockly.Warning');
 
 goog.require('Blockly.Bubble');
 goog.require('Blockly.Events');
+/** @suppress {extraRequire} */
 goog.require('Blockly.Events.BubbleOpen');
 goog.require('Blockly.Icon');
 goog.require('Blockly.utils.dom');

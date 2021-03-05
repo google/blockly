@@ -16,6 +16,7 @@
  */
 goog.provide('Blockly.ContextMenuItems');
 
+/** @suppress {extraRequire} */
 goog.require('Blockly.constants');
 goog.require('Blockly.Events');
 goog.require('Blockly.inputTypes');

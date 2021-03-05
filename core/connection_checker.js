@@ -15,6 +15,7 @@ goog.provide('Blockly.ConnectionChecker');
 
 goog.require('Blockly.Connection');
 goog.require('Blockly.connectionTypes');
+/** @suppress {extraRequire} */
 goog.require('Blockly.constants');
 goog.require('Blockly.IConnectionChecker');
 goog.require('Blockly.registry');

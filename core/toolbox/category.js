@@ -22,7 +22,6 @@ goog.require('Blockly.utils.toolbox');
 
 goog.requireType('Blockly.ICollapsibleToolboxItem');
 goog.requireType('Blockly.IToolbox');
-goog.requireType('Blockly.IToolboxItem');
 
 
 /**

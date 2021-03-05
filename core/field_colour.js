@@ -15,7 +15,7 @@ goog.provide('Blockly.FieldColour');
 goog.require('Blockly.browserEvents');
 goog.require('Blockly.Css');
 goog.require('Blockly.DropDownDiv');
-goog.require('Blockly.Events');
+/** @suppress {extraRequire} */
 goog.require('Blockly.Events.BlockChange');
 goog.require('Blockly.Field');
 goog.require('Blockly.fieldRegistry');
@@ -26,8 +26,6 @@ goog.require('Blockly.utils.IdGenerator');
 goog.require('Blockly.utils.KeyCodes');
 goog.require('Blockly.utils.object');
 goog.require('Blockly.utils.Size');
-
-goog.requireType('Blockly.ShortcutRegistry');
 
 
 /**

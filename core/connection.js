@@ -13,8 +13,10 @@
 goog.provide('Blockly.Connection');
 
 goog.require('Blockly.connectionTypes');
+/** @suppress {extraRequire} */
 goog.require('Blockly.constants');
 goog.require('Blockly.Events');
+/** @suppress {extraRequire} */
 goog.require('Blockly.Events.BlockMove');
 goog.require('Blockly.utils.deprecation');
 goog.require('Blockly.Xml');

@@ -13,8 +13,10 @@
 goog.provide('Blockly.Trashcan');
 
 goog.require('Blockly.browserEvents');
+/** @suppress {extraRequire} */
 goog.require('Blockly.constants');
 goog.require('Blockly.Events');
+/** @suppress {extraRequire} */
 goog.require('Blockly.Events.TrashcanOpen');
 goog.require('Blockly.IPositionable');
 goog.require('Blockly.Scrollbar');

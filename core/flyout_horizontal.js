@@ -275,7 +275,7 @@ Blockly.HorizontalFlyout.prototype.wheel_ = function(e) {
 
   if (delta) {
     var metrics = this.getMetrics_();
-    var pos = metrics.viewLeft + delta;
+    var pos = (metrics.viewLeft - metrics.scrollLeft) + delta;
     this.workspace_.scrollbar.setX(pos);
     // When the flyout moves from a wheel event, hide WidgetDiv and DropDownDiv.
     Blockly.WidgetDiv.hide();

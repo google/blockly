@@ -124,9 +124,9 @@ Blockly.ShortcutRegistry.prototype.unregister = function(shortcutName) {
 
 /**
  * Adds a mapping between a keycode and a keyboard shortcut.
- * @param {string|Blockly.utils.KeyCodes<number>} keyCode The key code for the
- *     keyboard shortcut. If registering a key code with a modifier (ex: ctrl+c)
- *     use Blockly.ShortcutRegistry.getRegistry().createSerializedKey;
+ * @param {string|Blockly.utils.KeyCodes} keyCode The key code for the keyboard
+ *     shortcut. If registering a key code with a modifier (ex: ctrl+c) use
+ *     Blockly.ShortcutRegistry.getRegistry().createSerializedKey;
  * @param {string} shortcutName The name of the shortcut to execute when the
  *     given keycode is pressed.
  * @param {boolean=} opt_allowCollision True to prevent an error when adding a

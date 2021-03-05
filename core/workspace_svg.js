@@ -1238,7 +1238,7 @@ Blockly.WorkspaceSvg.prototype.maybeFireViewportChangeEvent = function() {
     return;
   }
   var event = new (Blockly.Events.get(Blockly.Events.VIEWPORT_CHANGE))(top,
-      left, scale, this.id);
+      left, scale, this.id, this.oldScale_);
   this.oldScale_ = scale;
   this.oldTop_ = top;
   this.oldLeft_ = left;

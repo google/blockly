@@ -450,9 +450,21 @@ Blockly.ZoomControls.prototype.createZoomResetSvg_ = function(rnd) {
  */
 Blockly.ZoomControls.prototype.resetZoom_ = function(e) {
   this.workspace_.markFocused();
-  this.workspace_.setScale(this.workspace_.options.zoomOptions.startScale);
+
+  // zoom is passed amount and computes the new scale using the formula:
+  // targetScale = currentScale * Math.pow(speed, amount)
+  var targetScale = this.workspace_.options.zoomOptions.startScale;
+  var currentScale = this.workspace_.scale;
+  var speed = this.workspace_.options.zoomOptions.scaleSpeed;
+  // To compute amount:
+  // amount = log(speed, (targetScale / currentScale))
+  // Math.log computes natural logarithm (ln), to change the base, use formula:
+  // log(base, value) = ln(value) / ln(base)
+  var amount = Math.log(targetScale / currentScale) / Math.log(speed);
+
   this.workspace_.beginCanvasTransition();
-  this.workspace_.scrollCenter();
+  this.workspace_.zoomCenter(amount);
+
   setTimeout(this.workspace_.endCanvasTransition.bind(this.workspace_), 500);
   this.fireZoomEvent_();
   Blockly.Touch.clearTouchIdentifier();  // Don't block future drags.

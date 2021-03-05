@@ -259,7 +259,10 @@ Blockly.Mutator.prototype.resizeBubble_ = function() {
     // Resize the bubble.
     this.bubble_.setBubbleSize(
         width + doubleBorderWidth, height + doubleBorderWidth);
-    this.workspace_.setSvgSize(this.workspaceWidth_, this.workspaceHeight_);
+    this.svgDialog_.setAttribute('width', this.workspaceWidth_);
+    this.svgDialog_.setAttribute('height', this.workspaceHeight_);
+    this.workspace_.setCachedParentSvgSize(
+        this.workspaceWidth_, this.workspaceHeight_);
   }
 
   if (this.block_.RTL) {

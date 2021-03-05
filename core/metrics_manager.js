@@ -147,7 +147,7 @@ Blockly.MetricsManager.prototype.getToolboxMetrics = function() {
  * @public
  */
 Blockly.MetricsManager.prototype.getSvgMetrics = function() {
-  return this.workspace_.getSvgSize();
+  return this.workspace_.getCachedParentSvgSize();
 };
 
 /**

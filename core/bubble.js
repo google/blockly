@@ -22,13 +22,13 @@ goog.require('Blockly.utils.math');
 goog.require('Blockly.utils.Size');
 goog.require('Blockly.utils.Svg');
 goog.require('Blockly.utils.userAgent');
+/** @suppress {extraRequire} */
 goog.require('Blockly.Workspace');
 
 goog.requireType('Blockly.BlockDragSurfaceSvg');
 goog.requireType('Blockly.BlockSvg');
 goog.requireType('Blockly.IBubble');
 goog.requireType('Blockly.MetricsManager');
-goog.requireType('Blockly.utils.Metrics');
 goog.requireType('Blockly.WorkspaceSvg');
 
 

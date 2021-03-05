@@ -84,6 +84,16 @@ Blockly.MetricsManager.ContainerRegion;
 Blockly.MetricsManager.FixedEdges;
 
 /**
+ * Common metrics used for ui elements.
+ * @typedef {{
+ *            viewMetrics: !Blockly.MetricsManager.ContainerRegion,
+ *            absoluteMetrics: !Blockly.MetricsManager.AbsoluteMetrics,
+ *            toolboxMetrics: !Blockly.MetricsManager.ToolboxMetrics
+ *          }}
+ */
+Blockly.MetricsManager.UiMetrics;
+
+/**
  * Gets the dimensions of the given workspace component, in pixel coordinates.
  * @param {?Blockly.IToolbox|?Blockly.IFlyout} elem The element to get the
  *     dimensions of, or null.  It should be a toolbox or flyout, and should
@@ -148,8 +158,7 @@ Blockly.MetricsManager.prototype.getToolboxMetrics = function() {
  * @public
  */
 Blockly.MetricsManager.prototype.getSvgMetrics = function() {
-  var svgSize = Blockly.svgSize(this.workspace_.getParentSvg());
-  return new Blockly.utils.Size(svgSize.width, svgSize.height);
+  return this.workspace_.getCachedParentSvgSize();
 };
 
 /**
@@ -371,6 +380,18 @@ Blockly.MetricsManager.prototype.getScrollMetrics = function(
     left: left / scale,
     width: (right - left) / scale,
     height: (bottom - top) / scale,
+  };
+};
+
+/**
+ * Returns common metrics used by ui elements.
+ * @return {!Blockly.MetricsManager.UiMetrics} The ui metrics.
+ */
+Blockly.MetricsManager.prototype.getUiMetrics = function() {
+  return {
+    viewMetrics: this.getViewMetrics(),
+    absoluteMetrics: this.getAbsoluteMetrics(),
+    toolboxMetrics: this.getToolboxMetrics()
   };
 };
 

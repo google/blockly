@@ -12,6 +12,7 @@
 
 goog.provide('Blockly.Workspace');
 
+/** @suppress {extraRequire} */
 goog.require('Blockly.ConnectionChecker');
 goog.require('Blockly.Events');
 goog.require('Blockly.Options');

@@ -18,8 +18,6 @@ goog.require('Blockly.Marker');
 goog.require('Blockly.registry');
 goog.require('Blockly.utils.object');
 
-goog.requireType('Blockly.ShortcutRegistry');
-
 
 /**
  * Class for a cursor.

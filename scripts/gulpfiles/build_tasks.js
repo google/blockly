@@ -66,6 +66,7 @@ var JSCOMP_ERROR = [
   'duplicateMessage',
   'es5Strict',
   'externsValidation',
+  'extraRequire',
   'functionParams',
   'globalThis',
   'invalidCasts',

@@ -12,7 +12,9 @@
 
 goog.provide('Blockly.VerticalFlyout');
 
+/** @suppress {extraRequire} */
 goog.require('Blockly.Block');
+/** @suppress {extraRequire} */
 goog.require('Blockly.constants');
 goog.require('Blockly.Flyout');
 goog.require('Blockly.registry');
@@ -20,7 +22,6 @@ goog.require('Blockly.Scrollbar');
 goog.require('Blockly.utils');
 goog.require('Blockly.utils.object');
 goog.require('Blockly.utils.Rect');
-goog.require('Blockly.utils.userAgent');
 goog.require('Blockly.WidgetDiv');
 
 goog.requireType('Blockly.Options');
@@ -151,16 +152,17 @@ Blockly.VerticalFlyout.prototype.getWidth = function() {
  * Move the flyout to the edge of the workspace.
  */
 Blockly.VerticalFlyout.prototype.position = function() {
-  if (!this.isVisible()) {
+  if (!this.isVisible() || !this.targetWorkspace.isVisible()) {
     return;
   }
-  var targetWorkspaceMetrics = this.targetWorkspace.getMetrics();
+  var metricsManager = this.targetWorkspace.getMetricsManager();
+  var targetWorkspaceViewMetrics = metricsManager.getViewMetrics();
 
-  // Record the height for workspace metrics.
-  this.height_ = targetWorkspaceMetrics.viewHeight;
+  // Record the height for Blockly.Flyout.getMetrics_
+  this.height_ = targetWorkspaceViewMetrics.height;
 
   var edgeWidth = this.width_ - this.CORNER_RADIUS;
-  var edgeHeight = targetWorkspaceMetrics.viewHeight - 2 * this.CORNER_RADIUS;
+  var edgeHeight = targetWorkspaceViewMetrics.height - 2 * this.CORNER_RADIUS;
   this.setBackgroundPath_(edgeWidth, edgeHeight);
 
   var x = this.getX();

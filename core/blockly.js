@@ -17,24 +17,38 @@
 goog.provide('Blockly');
 
 goog.require('Blockly.browserEvents');
+/** @suppress {extraRequire} */
 goog.require('Blockly.constants');
+goog.require('Blockly.connectionTypes');
 goog.require('Blockly.Events');
+/** @suppress {extraRequire} */
 goog.require('Blockly.Events.BlockCreate');
+/** @suppress {extraRequire} */
 goog.require('Blockly.Events.FinishedLoading');
+/** @suppress {extraRequire} */
 goog.require('Blockly.Events.Ui');
+/** @suppress {extraRequire} */
 goog.require('Blockly.Events.UiBase');
+/** @suppress {extraRequire} */
 goog.require('Blockly.Events.VarCreate');
+/** @suppress {extraRequire} */
 goog.require('Blockly.inject');
+goog.require('Blockly.inputTypes');
+/** @suppress {extraRequire} */
 goog.require('Blockly.Procedures');
 goog.require('Blockly.ShortcutRegistry');
 goog.require('Blockly.Tooltip');
+/** @suppress {extraRequire} */
 goog.require('Blockly.Touch');
 goog.require('Blockly.utils');
 goog.require('Blockly.utils.colour');
+goog.require('Blockly.utils.deprecation');
 goog.require('Blockly.utils.Size');
+/** @suppress {extraRequire} */
 goog.require('Blockly.Variables');
 goog.require('Blockly.WidgetDiv');
 goog.require('Blockly.WorkspaceSvg');
+/** @suppress {extraRequire} */
 goog.require('Blockly.Xml');
 
 goog.requireType('Blockly.BlockSvg');
@@ -112,8 +126,16 @@ Blockly.parentContainer = null;
  * Returns the dimensions of the specified SVG image.
  * @param {!SVGElement} svg SVG image.
  * @return {!Blockly.utils.Size} Contains width and height properties.
+ * @deprecated Use workspace.setCachedParentSvgSize. (2021 March 5)
  */
 Blockly.svgSize = function(svg) {
+  // When removing this function, remove svg.cachedWidth_ and svg.cachedHeight_
+  // from setCachedParentSvgSize.
+  Blockly.utils.deprecation.warn(
+      'Blockly.svgSize',
+      'March 2021',
+      'March 2022',
+      'workspace.getCachedParentSvgSize');
   svg = /** @type {?} */ (svg);
   return new Blockly.utils.Size(svg.cachedWidth_, svg.cachedHeight_);
 };
@@ -141,6 +163,7 @@ Blockly.svgResize = function(workspace) {
     mainWorkspace = mainWorkspace.options.parentWorkspace;
   }
   var svg = mainWorkspace.getParentSvg();
+  var cachedSize = mainWorkspace.getCachedParentSvgSize();
   var div = svg.parentNode;
   if (!div) {
     // Workspace deleted, or something.
@@ -148,13 +171,13 @@ Blockly.svgResize = function(workspace) {
   }
   var width = div.offsetWidth;
   var height = div.offsetHeight;
-  if (svg.cachedWidth_ != width) {
+  if (cachedSize.width != width) {
     svg.setAttribute('width', width + 'px');
-    svg.cachedWidth_ = width;
+    mainWorkspace.setCachedParentSvgSize(width, null);
   }
-  if (svg.cachedHeight_ != height) {
+  if (cachedSize.height != height) {
     svg.setAttribute('height', height + 'px');
-    svg.cachedHeight_ = height;
+    mainWorkspace.setCachedParentSvgSize(null, height);
   }
   mainWorkspace.resize();
 };
@@ -518,3 +541,33 @@ Blockly.ALIGN_CENTRE = Blockly.constants.ALIGN.CENTRE;
  * @see Blockly.constants.ALIGN.RIGHT
  */
 Blockly.ALIGN_RIGHT = Blockly.constants.ALIGN.RIGHT;
+
+
+/**
+ * Aliases for constants used for connection and input types.
+ */
+
+/**
+ * @see Blockly.connectionTypes.INPUT_VALUE
+ */
+Blockly.INPUT_VALUE = Blockly.connectionTypes.INPUT_VALUE;
+
+/**
+ * @see Blockly.connectionTypes.OUTPUT_VALUE
+ */
+Blockly.OUTPUT_VALUE = Blockly.connectionTypes.OUTPUT_VALUE;
+
+/**
+ * @see Blockly.connectionTypes.NEXT_STATEMENT
+ */
+Blockly.NEXT_STATEMENT = Blockly.connectionTypes.NEXT_STATEMENT;
+
+/**
+ * @see Blockly.connectionTypes.PREVIOUS_STATEMENT
+ */
+Blockly.PREVIOUS_STATEMENT = Blockly.connectionTypes.PREVIOUS_STATEMENT;
+
+/**
+ * @see Blockly.inputTypes.DUMMY_INPUT
+ */
+Blockly.DUMMY_INPUT = Blockly.inputTypes.DUMMY;

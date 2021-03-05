@@ -12,6 +12,9 @@
 
 goog.provide('Blockly.constants');
 
+goog.require('Blockly.connectionTypes');
+
+
 /**
  * The multiplier for scroll wheel deltas using the line delta mode.
  * @type {number}
@@ -110,36 +113,6 @@ Blockly.SPRITE = {
 // Constants below this point are not intended to be changed.
 
 /**
- * ENUM for a right-facing value input.  E.g. 'set item to' or 'return'.
- * @const
- */
-Blockly.INPUT_VALUE = 1;
-
-/**
- * ENUM for a left-facing value output.  E.g. 'random fraction'.
- * @const
- */
-Blockly.OUTPUT_VALUE = 2;
-
-/**
- * ENUM for a down-facing block stack.  E.g. 'if-do' or 'else'.
- * @const
- */
-Blockly.NEXT_STATEMENT = 3;
-
-/**
- * ENUM for an up-facing block stack.  E.g. 'break out of loop'.
- * @const
- */
-Blockly.PREVIOUS_STATEMENT = 4;
-
-/**
- * ENUM for an dummy input.  Used to add field(s) with no input.
- * @const
- */
-Blockly.DUMMY_INPUT = 5;
-
-/**
  * Enum for alignment of inputs.
  * @enum {number}
  */
@@ -179,10 +152,14 @@ Blockly.DRAG_FREE = 2;
  * @const
  */
 Blockly.OPPOSITE_TYPE = [];
-Blockly.OPPOSITE_TYPE[Blockly.INPUT_VALUE] = Blockly.OUTPUT_VALUE;
-Blockly.OPPOSITE_TYPE[Blockly.OUTPUT_VALUE] = Blockly.INPUT_VALUE;
-Blockly.OPPOSITE_TYPE[Blockly.NEXT_STATEMENT] = Blockly.PREVIOUS_STATEMENT;
-Blockly.OPPOSITE_TYPE[Blockly.PREVIOUS_STATEMENT] = Blockly.NEXT_STATEMENT;
+Blockly.OPPOSITE_TYPE[Blockly.connectionTypes.INPUT_VALUE] =
+    Blockly.connectionTypes.OUTPUT_VALUE;
+Blockly.OPPOSITE_TYPE[Blockly.connectionTypes.OUTPUT_VALUE] =
+    Blockly.connectionTypes.INPUT_VALUE;
+Blockly.OPPOSITE_TYPE[Blockly.connectionTypes.NEXT_STATEMENT] =
+    Blockly.connectionTypes.PREVIOUS_STATEMENT;
+Blockly.OPPOSITE_TYPE[Blockly.connectionTypes.PREVIOUS_STATEMENT] =
+    Blockly.connectionTypes.NEXT_STATEMENT;
 
 
 /**

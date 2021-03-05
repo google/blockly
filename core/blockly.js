@@ -117,6 +117,8 @@ Blockly.parentContainer = null;
  * @deprecated use workspace.setCachedParentSvgSize. (2021 March 5)
  */
 Blockly.svgSize = function(svg) {
+  // When removing this function, remove svg.cachedWidth_ and svg.cachedHeight_
+  // from setCachedParentSvgSize.
   Blockly.utils.deprecation.warn(
       'Blockly.svgSize',
       'March 2021',

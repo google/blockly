@@ -526,7 +526,7 @@ Blockly.WorkspaceSvg.prototype.getMetricsManager = function() {
   return this.metricsManager_;
 };
 
-/*
+/**
  * Gets the plugin manager for this workspace.
  * @return {!Blockly.PluginManager} The plugin manager.
  * @public

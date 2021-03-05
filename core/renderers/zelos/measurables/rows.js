@@ -15,7 +15,6 @@ goog.provide('Blockly.zelos.BottomRow');
 goog.provide('Blockly.zelos.TopRow');
 
 goog.require('Blockly.blockRendering.BottomRow');
-goog.require('Blockly.blockRendering.SpacerRow');
 goog.require('Blockly.blockRendering.TopRow');
 goog.require('Blockly.utils.object');
 

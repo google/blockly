@@ -16,7 +16,9 @@ goog.provide('Blockly.Field');
 
 goog.require('Blockly.browserEvents');
 goog.require('Blockly.Events');
+/** @suppress {extraRequire} */
 goog.require('Blockly.Events.BlockChange');
+/** @suppress {extraRequire} */
 goog.require('Blockly.Gesture');
 goog.require('Blockly.Tooltip');
 goog.require('Blockly.utils');

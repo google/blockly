@@ -13,7 +13,9 @@
 goog.provide('Blockly.VariableMap');
 
 goog.require('Blockly.Events');
+/** @suppress {extraRequire} */
 goog.require('Blockly.Events.VarDelete');
+/** @suppress {extraRequire} */
 goog.require('Blockly.Events.VarRename');
 goog.require('Blockly.Msg');
 goog.require('Blockly.utils');

@@ -14,9 +14,11 @@ goog.provide('Blockly.Toolbox');
 
 goog.require('Blockly.browserEvents');
 goog.require('Blockly.CollapsibleToolboxCategory');
+/** @suppress {extraRequire} */
 goog.require('Blockly.constants');
 goog.require('Blockly.Css');
 goog.require('Blockly.Events');
+/** @suppress {extraRequire} */
 goog.require('Blockly.Events.ToolboxItemSelect');
 goog.require('Blockly.registry');
 goog.require('Blockly.Touch');

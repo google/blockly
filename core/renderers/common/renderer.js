@@ -19,6 +19,8 @@ goog.require('Blockly.blockRendering.IPathObject');
 goog.require('Blockly.blockRendering.MarkerSvg');
 goog.require('Blockly.blockRendering.PathObject');
 goog.require('Blockly.blockRendering.RenderInfo');
+goog.require('Blockly.connectionTypes');
+/** @suppress {extraRequire} */
 goog.require('Blockly.constants');
 goog.require('Blockly.InsertionMarkerManager');
 goog.require('Blockly.IRegistrable');
@@ -246,7 +248,9 @@ Blockly.blockRendering.Renderer.prototype.orphanCanConnectAtEnd =
     function(topBlock, orphanBlock, localType) {
       var orphanConnection = null;
       var lastConnection = null;
-      if (localType == Blockly.OUTPUT_VALUE) {  // We are replacing an output.
+      if (localType ==
+          Blockly.connectionTypes
+              .OUTPUT_VALUE) {  // We are replacing an output.
         orphanConnection = orphanBlock.outputConnection;
         // TODO:  I don't think this function necessarily has the correct logic,
         //  but for now it is being kept for behavioral backwards-compat.
@@ -278,22 +282,22 @@ Blockly.blockRendering.Renderer.prototype.orphanCanConnectAtEnd =
  *     to display.
  * @package
  */
-Blockly.blockRendering.Renderer.prototype.getConnectionPreviewMethod =
-    function(closest, local, topBlock) {
-      if (local.type == Blockly.OUTPUT_VALUE ||
-          local.type == Blockly.PREVIOUS_STATEMENT) {
-        if (!closest.isConnected() ||
-            this.orphanCanConnectAtEnd(
-                topBlock,
-                /** @type {!Blockly.BlockSvg} */ (closest.targetBlock()),
-                local.type)) {
-          return Blockly.InsertionMarkerManager.PREVIEW_TYPE.INSERTION_MARKER;
-        }
-        return Blockly.InsertionMarkerManager.PREVIEW_TYPE.REPLACEMENT_FADE;
-      }
-
+Blockly.blockRendering.Renderer.prototype.getConnectionPreviewMethod = function(
+    closest, local, topBlock) {
+  if (local.type == Blockly.connectionTypes.OUTPUT_VALUE ||
+      local.type == Blockly.connectionTypes.PREVIOUS_STATEMENT) {
+    if (!closest.isConnected() ||
+        this.orphanCanConnectAtEnd(
+            topBlock,
+            /** @type {!Blockly.BlockSvg} */ (closest.targetBlock()),
+            local.type)) {
       return Blockly.InsertionMarkerManager.PREVIEW_TYPE.INSERTION_MARKER;
-    };
+    }
+    return Blockly.InsertionMarkerManager.PREVIEW_TYPE.REPLACEMENT_FADE;
+  }
+
+  return Blockly.InsertionMarkerManager.PREVIEW_TYPE.INSERTION_MARKER;
+};
 
 /**
  * Render the block.

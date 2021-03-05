@@ -13,21 +13,19 @@
 
 goog.provide('Blockly.IPositionable');
 
+goog.require('Blockly.IPlugin');
+
 
 /**
  * Interface for a component that is positioned on top of the workspace.
+ * @extends {Blockly.IPlugin}
  * @interface
  */
 Blockly.IPositionable = function() {};
 
 /**
  * Positions the element. Called when the window is resized.
- * @param {!Blockly.MetricsManager.ContainerRegion} viewMetrics The workspace
- *     viewMetrics.
- * @param {!Blockly.MetricsManager.AbsoluteMetrics} absoluteMetrics The absolute
- *     metrics for the workspace.
- * @param {!Blockly.MetricsManager.ToolboxMetrics} toolboxMetrics The toolbox
- *     metrics for the workspace.
+ * @param {!Blockly.MetricsManager.UiMetrics} metrics The workspace metrics.
  * @param {!Array<Blockly.utils.Rect>} savedPositions List of rectangles that
  *     are already on the workspace.
  */
@@ -39,5 +37,3 @@ Blockly.IPositionable.prototype.position;
  * @returns {!Blockly.utils.Rect} The plugin’s bounding box.
  */
 Blockly.IPositionable.prototype.getBoundingRectangle;
-
-

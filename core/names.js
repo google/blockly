@@ -12,6 +12,7 @@
 
 goog.provide('Blockly.Names');
 
+/** @suppress {extraRequire} */
 goog.require('Blockly.constants');
 goog.require('Blockly.Msg');
 

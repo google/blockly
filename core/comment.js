@@ -16,14 +16,16 @@ goog.require('Blockly.browserEvents');
 goog.require('Blockly.Bubble');
 goog.require('Blockly.Css');
 goog.require('Blockly.Events');
+/** @suppress {extraRequire} */
 goog.require('Blockly.Events.BlockChange');
+/** @suppress {extraRequire} */
 goog.require('Blockly.Events.BubbleOpen');
 goog.require('Blockly.Icon');
-goog.require('Blockly.utils.deprecation');
 goog.require('Blockly.utils.dom');
 goog.require('Blockly.utils.object');
 goog.require('Blockly.utils.Svg');
 goog.require('Blockly.utils.userAgent');
+/** @suppress {extraRequire} */
 goog.require('Blockly.Warning');
 
 goog.requireType('Blockly.Block');

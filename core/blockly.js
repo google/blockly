@@ -17,24 +17,37 @@
 goog.provide('Blockly');
 
 goog.require('Blockly.browserEvents');
+/** @suppress {extraRequire} */
 goog.require('Blockly.constants');
+goog.require('Blockly.connectionTypes');
 goog.require('Blockly.Events');
+/** @suppress {extraRequire} */
 goog.require('Blockly.Events.BlockCreate');
+/** @suppress {extraRequire} */
 goog.require('Blockly.Events.FinishedLoading');
+/** @suppress {extraRequire} */
 goog.require('Blockly.Events.Ui');
+/** @suppress {extraRequire} */
 goog.require('Blockly.Events.UiBase');
+/** @suppress {extraRequire} */
 goog.require('Blockly.Events.VarCreate');
+/** @suppress {extraRequire} */
 goog.require('Blockly.inject');
+goog.require('Blockly.inputTypes');
+/** @suppress {extraRequire} */
 goog.require('Blockly.Procedures');
 goog.require('Blockly.ShortcutRegistry');
 goog.require('Blockly.Tooltip');
+/** @suppress {extraRequire} */
 goog.require('Blockly.Touch');
 goog.require('Blockly.utils');
 goog.require('Blockly.utils.colour');
 goog.require('Blockly.utils.Size');
+/** @suppress {extraRequire} */
 goog.require('Blockly.Variables');
 goog.require('Blockly.WidgetDiv');
 goog.require('Blockly.WorkspaceSvg');
+/** @suppress {extraRequire} */
 goog.require('Blockly.Xml');
 
 goog.requireType('Blockly.BlockSvg');
@@ -518,3 +531,33 @@ Blockly.ALIGN_CENTRE = Blockly.constants.ALIGN.CENTRE;
  * @see Blockly.constants.ALIGN.RIGHT
  */
 Blockly.ALIGN_RIGHT = Blockly.constants.ALIGN.RIGHT;
+
+
+/**
+ * Aliases for constants used for connection and input types.
+ */
+
+/**
+ * @see Blockly.connectionTypes.INPUT_VALUE
+ */
+Blockly.INPUT_VALUE = Blockly.connectionTypes.INPUT_VALUE;
+
+/**
+ * @see Blockly.connectionTypes.OUTPUT_VALUE
+ */
+Blockly.OUTPUT_VALUE = Blockly.connectionTypes.OUTPUT_VALUE;
+
+/**
+ * @see Blockly.connectionTypes.NEXT_STATEMENT
+ */
+Blockly.NEXT_STATEMENT = Blockly.connectionTypes.NEXT_STATEMENT;
+
+/**
+ * @see Blockly.connectionTypes.PREVIOUS_STATEMENT
+ */
+Blockly.PREVIOUS_STATEMENT = Blockly.connectionTypes.PREVIOUS_STATEMENT;
+
+/**
+ * @see Blockly.inputTypes.DUMMY_INPUT
+ */
+Blockly.DUMMY_INPUT = Blockly.inputTypes.DUMMY;

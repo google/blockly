@@ -12,7 +12,9 @@
 
 goog.provide('Blockly.HorizontalFlyout');
 
+/** @suppress {extraRequire} */
 goog.require('Blockly.Block');
+/** @suppress {extraRequire} */
 goog.require('Blockly.constants');
 goog.require('Blockly.Flyout');
 goog.require('Blockly.registry');
@@ -25,7 +27,6 @@ goog.require('Blockly.WidgetDiv');
 goog.requireType('Blockly.Options');
 goog.requireType('Blockly.utils.Coordinate');
 goog.requireType('Blockly.utils.Metrics');
-goog.requireType('Blockly.WorkspaceSvg');
 
 
 /**

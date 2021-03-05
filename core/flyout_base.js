@@ -21,6 +21,7 @@ goog.require('Blockly.Events.VarCreate');
 goog.require('Blockly.Gesture');
 goog.require('Blockly.Marker');
 goog.require('Blockly.Scrollbar');
+goog.require('Blockly.ScrollbarPair');
 goog.require('Blockly.Tooltip');
 goog.require('Blockly.Touch');
 goog.require('Blockly.utils');

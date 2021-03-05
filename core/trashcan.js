@@ -17,6 +17,7 @@ goog.require('Blockly.constants');
 goog.require('Blockly.Events');
 goog.require('Blockly.Events.TrashcanOpen');
 goog.require('Blockly.IPositionable');
+goog.require('Blockly.Options');
 goog.require('Blockly.Scrollbar');
 goog.require('Blockly.utils.dom');
 goog.require('Blockly.utils.math');

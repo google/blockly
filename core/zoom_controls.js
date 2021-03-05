@@ -17,12 +17,12 @@ goog.require('Blockly.constants');
 goog.require('Blockly.Css');
 goog.require('Blockly.Events');
 goog.require('Blockly.Events.Click');
+goog.require('Blockly.IPositionable');
 goog.require('Blockly.Scrollbar');
 goog.require('Blockly.Touch');
 goog.require('Blockly.utils.dom');
 goog.require('Blockly.utils.Rect');
 goog.require('Blockly.utils.Svg');
-goog.require('Blockly.IPositionable');
 
 goog.requireType('Blockly.WorkspaceSvg');
 

@@ -1176,12 +1176,12 @@ Blockly.WorkspaceSvg.prototype.setCachedParentSvgSize = function(width, height) 
   var svg = this.getParentSvg();
   if (width) {
     this.cachedParentSvgSize_.width = width;
-    // This is set to support the public Blockly.svgSize method.
+    // This is set to support the public (but deprecated) Blockly.svgSize method.
     svg.cachedWidth_ = width;
   }
   if (height) {
     this.cachedParentSvgSize_.height = height;
-    // This is set to support the public Blockly.svgSize method.
+    // This is set to support the public (but deprecated) Blockly.svgSize method.
     svg.cachedHeight_ = height;
   }
 };

@@ -33,6 +33,7 @@ goog.require('Blockly.Tooltip');
 goog.require('Blockly.Touch');
 goog.require('Blockly.utils');
 goog.require('Blockly.utils.colour');
+goog.require('Blockly.utils.deprecation');
 goog.require('Blockly.utils.Size');
 goog.require('Blockly.Variables');
 goog.require('Blockly.WidgetDiv');

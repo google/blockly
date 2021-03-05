@@ -14,7 +14,7 @@ suite('Context Menu Items', function() {
 
     // Declare a new registry to ensure default options are called.
     new Blockly.ContextMenuRegistry();
-    this.registry = Blockly.ContextMenuRegistry.registry;
+    this.registry = Blockly.ContextMenuRegistry.getRegistry();
   });
   
   teardown(function() {

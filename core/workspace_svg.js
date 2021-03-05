@@ -19,6 +19,8 @@ goog.require('Blockly.ConnectionDB');
 /** @suppress {extraRequire} */
 goog.require('Blockly.constants');
 goog.require('Blockly.ContextMenu');
+/** @suppress {extraRequire} */
+goog.require('Blockly.ContextMenuItems');
 goog.require('Blockly.ContextMenuRegistry');
 goog.require('Blockly.Events');
 /** @suppress {extraRequire} */
@@ -1826,8 +1828,9 @@ Blockly.WorkspaceSvg.prototype.showContextMenu = function(e) {
   if (this.options.readOnly || this.isFlyout) {
     return;
   }
-  var menuOptions = Blockly.ContextMenuRegistry.registry.getContextMenuOptions(
-      Blockly.ContextMenuRegistry.ScopeType.WORKSPACE, {workspace: this});
+  var menuOptions =
+      Blockly.ContextMenuRegistry.getRegistry().getContextMenuOptions(
+          Blockly.ContextMenuRegistry.ScopeType.WORKSPACE, {workspace: this});
 
   // Allow the developer to add or modify menuOptions.
   if (this.configureContextMenu) {

@@ -18,6 +18,7 @@ goog.provide('Blockly.ContextMenuItems');
 
 /** @suppress {extraRequire} */
 goog.require('Blockly.constants');
+goog.require('Blockly.ContextMenuRegistry');
 goog.require('Blockly.Events');
 goog.require('Blockly.inputTypes');
 
@@ -44,7 +45,7 @@ Blockly.ContextMenuItems.registerUndo = function() {
     id: 'undoWorkspace',
     weight: 1,
   };
-  Blockly.ContextMenuRegistry.registry.register(undoOption);
+  Blockly.ContextMenuRegistry.getRegistry().register(undoOption);
 };
 
 /** Option to redo previous action. */
@@ -65,7 +66,7 @@ Blockly.ContextMenuItems.registerRedo = function() {
     id: 'redoWorkspace',
     weight: 2,
   };
-  Blockly.ContextMenuRegistry.registry.register(redoOption);
+  Blockly.ContextMenuRegistry.getRegistry().register(redoOption);
 };
 
 /** Option to clean up blocks. */
@@ -91,7 +92,7 @@ Blockly.ContextMenuItems.registerCleanup = function() {
     id: 'cleanWorkspace',
     weight: 3,
   };
-  Blockly.ContextMenuRegistry.registry.register(cleanOption);
+  Blockly.ContextMenuRegistry.getRegistry().register(cleanOption);
 };
 
 /**
@@ -143,7 +144,7 @@ Blockly.ContextMenuItems.registerCollapse = function() {
     id:  'collapseWorkspace',
     weight:  4,
   };
-  Blockly.ContextMenuRegistry.registry.register(collapseOption);
+  Blockly.ContextMenuRegistry.getRegistry().register(collapseOption);
 };
 
 /** Option to expand all blocks. */
@@ -176,7 +177,7 @@ Blockly.ContextMenuItems.registerExpand = function() {
     id: 'expandWorkspace',
     weight: 5,
   };
-  Blockly.ContextMenuRegistry.registry.register(expandOption);
+  Blockly.ContextMenuRegistry.getRegistry().register(expandOption);
 };
 
 /**
@@ -279,7 +280,7 @@ Blockly.ContextMenuItems.registerDeleteAll = function() {
     id: 'workspaceDelete',
     weight: 6,
   };
-  Blockly.ContextMenuRegistry.registry.register(deleteOption);
+  Blockly.ContextMenuRegistry.getRegistry().register(deleteOption);
 };
 
 /**
@@ -321,7 +322,7 @@ Blockly.ContextMenuItems.registerDuplicate = function() {
     id: 'blockDuplicate',
     weight: 1,
   };
-  Blockly.ContextMenuRegistry.registry.register(duplicateOption);
+  Blockly.ContextMenuRegistry.getRegistry().register(duplicateOption);
 };
 
 /** Option to add or remove block-level comment. */
@@ -357,7 +358,7 @@ Blockly.ContextMenuItems.registerComment = function() {
     id: 'blockComment',
     weight: 2,
   };
-  Blockly.ContextMenuRegistry.registry.register(commentOption);
+  Blockly.ContextMenuRegistry.getRegistry().register(commentOption);
 };
 
 /** Option to inline variables. */
@@ -388,7 +389,7 @@ Blockly.ContextMenuItems.registerInline = function() {
     id: 'blockInline',
     weight: 3,
   };
-  Blockly.ContextMenuRegistry.registry.register(inlineOption);
+  Blockly.ContextMenuRegistry.getRegistry().register(inlineOption);
 };
 
 /** Option to collapse or expand a block. */
@@ -415,7 +416,7 @@ Blockly.ContextMenuItems.registerCollapseExpandBlock = function() {
     id: 'blockCollapseExpand',
     weight: 4,
   };
-  Blockly.ContextMenuRegistry.registry.register(collapseExpandOption);
+  Blockly.ContextMenuRegistry.getRegistry().register(collapseExpandOption);
 };
 
 /** Option to disable or enable a block. */
@@ -451,7 +452,7 @@ Blockly.ContextMenuItems.registerDisable = function() {
     id: 'blockDisable',
     weight: 5,
   };
-  Blockly.ContextMenuRegistry.registry.register(disableOption);
+  Blockly.ContextMenuRegistry.getRegistry().register(disableOption);
 };
 
 /** Option to delete a block. */
@@ -485,7 +486,7 @@ Blockly.ContextMenuItems.registerDelete = function() {
     id: 'blockDelete',
     weight: 6,
   };
-  Blockly.ContextMenuRegistry.registry.register(deleteOption);
+  Blockly.ContextMenuRegistry.getRegistry().register(deleteOption);
 };
 
 /** Option to open help for a block. */
@@ -511,7 +512,7 @@ Blockly.ContextMenuItems.registerHelp = function() {
     id: 'blockHelp',
     weight: 7,
   };
-  Blockly.ContextMenuRegistry.registry.register(helpOption);
+  Blockly.ContextMenuRegistry.getRegistry().register(helpOption);
 };
 
 /**
@@ -538,3 +539,4 @@ Blockly.ContextMenuItems.registerDefaultOptions = function() {
   Blockly.ContextMenuItems.registerBlockOptions_();
 };
 
+Blockly.ContextMenuItems.registerDefaultOptions();

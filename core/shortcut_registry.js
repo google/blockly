@@ -13,23 +13,19 @@
 
 goog.provide('Blockly.ShortcutRegistry');
 
-goog.require('Blockly.ShortcutItems');
 goog.require('Blockly.utils.object');
+goog.require('Blockly.utils.KeyCodes');
 
-goog.requireType('Blockly.utils.KeyCodes');
 goog.requireType('Blockly.Workspace');
 
 
 /**
  * Class for the registry of keyboard shortcuts. This is intended to be a
  * singleton. You should not create a new instance, and only access this class
- * from Blockly.ShortcutRegistry.registry.
+ * from Blockly.ShortcutRegistry.getRegistry().
  * @constructor
  */
 Blockly.ShortcutRegistry = function() {
-  // Singleton instance should be registered once.
-  Blockly.ShortcutRegistry.registry = this;
-
   /**
    * Registry of all keyboard shortcuts, keyed by name of shortcut.
    * @type {!Object<string, !Blockly.ShortcutRegistry.KeyboardShortcut>}
@@ -43,8 +39,23 @@ Blockly.ShortcutRegistry = function() {
    * @private
    */
   this.keyMap_ = Object.create(null);
+};
 
-  Blockly.ShortcutItems.registerDefaultShortcuts();
+/**
+ * Singleton instance of this class.
+ * @type {?Blockly.ShortcutItems}
+ */
+Blockly.ShortcutRegistry.instance_ = null;
+
+/**
+ * Gets the shortcut registry registry instance.
+ * @return {!Blockly.ShortcutRegistry} The shortcut registry.
+ */
+Blockly.ShortcutRegistry.getRegistry = function() {
+  if (Blockly.ShortcutRegistry.instance_) {
+    return Blockly.ShortcutRegistry.instance_;
+  }
+  return (Blockly.ShortcutRegistry.instance_) = new Blockly.ShortcutRegistry();
 };
 
 /**
@@ -115,7 +126,7 @@ Blockly.ShortcutRegistry.prototype.unregister = function(shortcutName) {
  * Adds a mapping between a keycode and a keyboard shortcut.
  * @param {string} keyCode The key code for the keyboard shortcut. If
  *     registering a key code with a modifier (ex: ctrl+c) use
- *     Blockly.ShortcutRegistry.registry.createSerializedKey;
+ *     Blockly.ShortcutRegistry.getRegistry().createSerializedKey;
  * @param {string} shortcutName The name of the shortcut to execute when the
  *     given keycode is pressed.
  * @param {boolean=} opt_allowCollision True to prevent an error when adding a
@@ -141,7 +152,7 @@ Blockly.ShortcutRegistry.prototype.addKeyMapping = function(
  * Removes a mapping between a keycode and a keyboard shortcut.
  * @param {string} keyCode The key code for the keyboard shortcut. If
  *     registering a key code with a modifier (ex: ctrl+c) use
- *     Blockly.ShortcutRegistry.registry.createSerializedKey;
+ *     Blockly.ShortcutRegistry.getRegistry().createSerializedKey;
  * @param {string} shortcutName The name of the shortcut to execute when the
  *     given keycode is pressed.
  * @param {boolean=} opt_quiet True to not console warn when there is no
@@ -353,6 +364,3 @@ Blockly.ShortcutRegistry.prototype.createSerializedKey = function(
   }
   return serializedKey;
 };
-
-// Creates and assigns the singleton instance.
-new Blockly.ShortcutRegistry();

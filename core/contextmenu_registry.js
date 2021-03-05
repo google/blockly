@@ -16,17 +16,13 @@
  */
 goog.provide('Blockly.ContextMenuRegistry');
 
-goog.require('Blockly.ContextMenuItems');
-
 /**
- * Class for the registry of context menu items. This is intended to be a singleton. You should
- * not create a new instance, and only access this class from Blockly.ContextMenuRegistry.registry.
+ * Class for the registry of context menu items. This is intended to be a
+ * singleton. You should not create a new instance, and only access this class
+ * from `Blockly.ContextMenuRegistry.getRegistry()`.
  * @constructor
  */
 Blockly.ContextMenuRegistry = function() {
-
-  // Singleton instance should be registered once.
-  Blockly.ContextMenuRegistry.registry = this;
 
   /**
    * Registry of all registered RegistryItems, keyed by id.
@@ -34,7 +30,24 @@ Blockly.ContextMenuRegistry = function() {
    * @private
    */
   this.registry_ = {};
-  Blockly.ContextMenuItems.registerDefaultOptions();
+};
+
+/**
+ * Singleton instance of this class.
+ * @type {?Blockly.ContextMenuRegistry}
+ */
+Blockly.ContextMenuRegistry.instance_ = null;
+
+/**
+ * Gets the context menu registry instance.
+ * @return {!Blockly.ContextMenuRegistry} The context menu registry.
+ */
+Blockly.ContextMenuRegistry.getRegistry = function() {
+  if (Blockly.ContextMenuRegistry.instance_) {
+    return Blockly.ContextMenuRegistry.instance_;
+  }
+  return (Blockly.ContextMenuRegistry.instance_) =
+             new Blockly.ContextMenuRegistry();
 };
 
 /**
@@ -81,12 +94,6 @@ Blockly.ContextMenuRegistry.RegistryItem;
  * }}
  */
 Blockly.ContextMenuRegistry.ContextMenuOption;
-
-/**
- * Singleton instance of this class. All interactions with this class should be done on this object.
- * @type {?Blockly.ContextMenuRegistry}
- */
-Blockly.ContextMenuRegistry.registry = null;
 
 /**
  * Registers a RegistryItem.
@@ -160,6 +167,3 @@ Blockly.ContextMenuRegistry.prototype.getContextMenuOptions = function(scopeType
   });
   return menuOptions;
 };
-
-// Creates and assigns the singleton instance.
-new Blockly.ContextMenuRegistry();

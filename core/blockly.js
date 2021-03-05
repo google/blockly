@@ -36,8 +36,6 @@ goog.require('Blockly.inject');
 goog.require('Blockly.inputTypes');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Procedures');
-/** @suppress {extraRequire} */
-goog.require('Blockly.ShortcutItems');
 goog.require('Blockly.ShortcutRegistry');
 goog.require('Blockly.Tooltip');
 /** @suppress {extraRequire} */

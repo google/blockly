@@ -222,12 +222,12 @@ Blockly.ShortcutRegistry.prototype.getKeyMap = function() {
 };
 
 /**
- * Gets the registry of keyboard shortcuts.
+ * Gets a copy of the keyboard shortcuts map.
  * @return {!Object<string, !Blockly.ShortcutRegistry.KeyboardShortcut>}
- *     The registry of keyboard shortcuts.
+ *     The keyboard shortcuts map.
  * @public
  */
-Blockly.ShortcutRegistry.prototype.getRegistry = function() {
+Blockly.ShortcutRegistry.prototype.getShortcuts = function() {
   return Blockly.utils.object.deepMerge(Object.create(null), this.registry_);
 };
 

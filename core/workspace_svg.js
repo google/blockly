@@ -19,8 +19,6 @@ goog.require('Blockly.ConnectionDB');
 /** @suppress {extraRequire} */
 goog.require('Blockly.constants');
 goog.require('Blockly.ContextMenu');
-/** @suppress {extraRequire} */
-goog.require('Blockly.ContextMenuItems');
 goog.require('Blockly.ContextMenuRegistry');
 goog.require('Blockly.Events');
 /** @suppress {extraRequire} */

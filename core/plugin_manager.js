@@ -79,9 +79,12 @@ Blockly.PluginManager.prototype.getPlugin = function(id) {
  * @template T
  */
 Blockly.PluginManager.prototype.getPlugins = function(type, sorted) {
-  var plugins = [];
   var typeKey = String(type).toLowerCase();
   var pluginIds = this.typeToPluginId_[typeKey];
+  if (!pluginIds) {
+    return [];
+  }
+  var plugins = [];
   if (sorted) {
     var pluginDataList = [];
     var pluginData = this.pluginData_;

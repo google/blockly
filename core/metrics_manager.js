@@ -10,8 +10,8 @@
  */
 'use strict';
 
-goog.provide('Blockly.MetricsManager');
 goog.provide('Blockly.FlyoutMetricsManager');
+goog.provide('Blockly.MetricsManager');
 
 goog.require('Blockly.IMetricsManager');
 goog.require('Blockly.registry');
@@ -367,13 +367,14 @@ Blockly.MetricsManager.prototype.getScrollMetrics = function(
   var paddedContent = this.getPaddedContent_(viewMetrics, contentMetrics);
 
   // Use combination of fixed bounds and padded content to make scroll area.
-  var top = fixedEdges.top !== undefined ? fixedEdges.top : paddedContent.top;
-  var left =
-      fixedEdges.left !== undefined ? fixedEdges.left : paddedContent.left;
-  var bottom = fixedEdges.bottom !== undefined ? fixedEdges.bottom :
-                                                 paddedContent.bottom;
-  var right =
-      fixedEdges.right !== undefined ? fixedEdges.right : paddedContent.right;
+  var top = fixedEdges.top !== undefined ?
+      fixedEdges.top : paddedContent.top;
+  var left = fixedEdges.left !== undefined ?
+      fixedEdges.left : paddedContent.left;
+  var bottom = fixedEdges.bottom !== undefined ?
+      fixedEdges.bottom : paddedContent.bottom;
+  var right = fixedEdges.right !== undefined ?
+      fixedEdges.right : paddedContent.right;
 
   return {
     top: top / scale,
@@ -475,9 +476,8 @@ Blockly.registry.register(
     Blockly.registry.Type.METRICS_MANAGER, Blockly.registry.DEFAULT,
     Blockly.MetricsManager);
 
-
 /**
- * Calculate metrics for a flyout's workspace.
+ * Calculates metrics for a flyout's workspace.
  * The metrics are mainly used to size scrollbars for the flyout.
  * @param {!Blockly.WorkspaceSvg} workspace The flyout's workspace.
  * @param {!Blockly.IFlyout} flyout The flyout.

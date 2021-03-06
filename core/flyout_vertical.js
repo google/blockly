@@ -130,30 +130,6 @@ Blockly.VerticalFlyout.prototype.getY = function() {
 };
 
 /**
- * Gets the height of the flyout.
- * @return {number} Y coordinate.
- */
-Blockly.VerticalFlyout.prototype.getHeight = function() {
-  if (!this.isVisible()) {
-    return 0;
-  } else {
-    return this.height_;
-  }
-};
-
-/**
- * Calculates the y coordinate for the flyout position.
- * @return {number} Y coordinate.
- */
-Blockly.VerticalFlyout.prototype.getWidth = function() {
-  if (!this.isVisible()) {
-    return 0;
-  } else {
-    return this.width_;
-  }
-};
-
-/**
  * Move the flyout to the edge of the workspace.
  */
 Blockly.VerticalFlyout.prototype.position = function() {

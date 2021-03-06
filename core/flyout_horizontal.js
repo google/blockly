@@ -136,7 +136,7 @@ Blockly.HorizontalFlyout.prototype.position = function() {
   var metricsManager = this.targetWorkspace.getMetricsManager();
   var targetWorkspaceViewMetrics = metricsManager.getViewMetrics();
 
-  // Record the height for workspace metrics.
+  // Record the width for workspace metrics.
   this.width_ = targetWorkspaceViewMetrics.width;
 
   var edgeWidth = targetWorkspaceViewMetrics.width - 2 * this.CORNER_RADIUS;

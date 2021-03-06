@@ -433,7 +433,7 @@ Blockly.Trashcan.prototype.emptyContents = function() {
 };
 
 /**
- * Position the trashcan.
+ * Positions the trashcan.
  * It is positioned in the opposite corner to the corner the
  * categories/toolbox starts at.
  * @param {!Blockly.MetricsManager.UiMetrics} metrics The workspace metrics.

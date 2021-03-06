@@ -212,7 +212,7 @@ Blockly.ZoomControls.prototype.getBoundingRectangle = function() {
 
 
 /**
- * Position the zoom controls.
+ * Positions the zoom controls.
  * It is positioned in the opposite corner to the corner the
  * categories/toolbox starts at.
  * @param {!Blockly.MetricsManager.UiMetrics} metrics The workspace metrics.

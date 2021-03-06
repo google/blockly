@@ -21,7 +21,7 @@ goog.provide('Blockly.PluginManager');
 Blockly.PluginManager = function() {
   /**
    * A map of the plugins registered with the workspace, mapped to id.
-   * @type {!Object<string, !Blockly.PluginManager.PluginData>}
+   * @type {!Object<string, !Blockly.PluginManager.PluginDatum>}
    */
   this.pluginData_ = {};
 
@@ -41,11 +41,11 @@ Blockly.PluginManager = function() {
  *    weight: number
  *  }}
  */
-Blockly.PluginManager.PluginData;
+Blockly.PluginManager.PluginDatum;
 
 /**
  * Adds a plugin.
- * @param {!Blockly.PluginManager.PluginData} pluginDataObject The plugin.
+ * @param {!Blockly.PluginManager.PluginDatum} pluginDataObject The plugin.
  * @template T
  */
 Blockly.PluginManager.prototype.addPlugin = function(pluginDataObject) {
@@ -82,12 +82,22 @@ Blockly.PluginManager.prototype.getPlugins = function(type, sorted) {
   var plugins = [];
   var typeKey = String(type).toLowerCase();
   var pluginIds = this.typeToPluginId_[typeKey];
-  for (var i = 0, id; pluginIds && (id = pluginIds[i]); i++) {
-    plugins.push(this.pluginData_[id].plugin);
-  }
   if (sorted) {
-    plugins.sort(function(a, b) {
+    var pluginDataList = [];
+    var pluginData = this.pluginData_;
+    pluginIds.forEach(function(id) {
+      pluginDataList.push(pluginData[id]);
+    });
+    pluginDataList.sort(function(a, b) {
       return a.weight - b.weight;
+    });
+    pluginDataList.forEach(function(pluginDatum) {
+      plugins.push(pluginDatum.plugin);
+    });
+  } else {
+    var pluginData = this.pluginData_;
+    pluginIds.forEach(function(id) {
+      plugins.push(pluginData[id].plugin);
     });
   }
   return plugins;

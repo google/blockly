@@ -995,7 +995,7 @@ Blockly.WorkspaceSvg.prototype.addTrashcan = function() {
   this.pluginManager_.addPlugin({
     id: 'trashcan',
     plugin: this.trashcan,
-    weight: 0,
+    weight: 1,
     types: [Blockly.PluginManager.Type.POSITIONABLE]
   });
 };
@@ -1015,7 +1015,7 @@ Blockly.WorkspaceSvg.prototype.addZoomControls = function() {
   this.pluginManager_.addPlugin({
     id: 'zoomControls',
     plugin: this.zoomControls_,
-    weight: 0,
+    weight: 2,
     types: [Blockly.PluginManager.Type.POSITIONABLE]
   });
 };

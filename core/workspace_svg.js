@@ -531,7 +531,7 @@ Blockly.WorkspaceSvg.prototype.getMetricsManager = function() {
 };
 
 /**
- * Sets the marker manager for the workspace.
+ * Sets the metrics manager for the workspace.
  * @param {!Blockly.IMetricsManager} metricsManager The metrics manager.
  */
 Blockly.WorkspaceSvg.prototype.setMetricsManager = function(metricsManager) {

@@ -26,7 +26,6 @@ goog.require('Blockly.WidgetDiv');
 
 goog.requireType('Blockly.Options');
 goog.requireType('Blockly.utils.Coordinate');
-goog.requireType('Blockly.utils.Metrics');
 
 
 /**
@@ -58,14 +57,18 @@ Blockly.VerticalFlyout.prototype.setMetrics_ = function(xyRatio) {
   if (!this.isVisible()) {
     return;
   }
-  var metrics = this.workspace_.getMetrics();
+  var metricsManager = this.workspace_.getMetricsManager();
+  var scrollMetrics = metricsManager.getScrollMetrics();
+  var viewMetrics = metricsManager.getViewMetrics();
+  var absoluteMetrics = metricsManager.getAbsoluteMetrics();
+
   if (typeof xyRatio.y == 'number') {
     this.workspace_.scrollY =
-        -(metrics.scrollTop +
-            (metrics.scrollHeight - metrics.viewHeight) * xyRatio.y);
+        -(scrollMetrics.top +
+            (scrollMetrics.height - viewMetrics.height) * xyRatio.y);
   }
-  this.workspace_.translate(this.workspace_.scrollX + metrics.absoluteLeft,
-      this.workspace_.scrollY + metrics.absoluteTop);
+  this.workspace_.translate(this.workspace_.scrollX + absoluteMetrics.left,
+      this.workspace_.scrollY + absoluteMetrics.top);
 };
 
 /**
@@ -76,18 +79,20 @@ Blockly.VerticalFlyout.prototype.getX = function() {
   if (!this.isVisible()) {
     return 0;
   }
-  var targetWorkspaceMetrics = this.targetWorkspace.getMetrics();
-
+  var metricsManager = this.targetWorkspace.getMetricsManager();
+  var absoluteMetrics = metricsManager.getAbsoluteMetrics();
+  var viewMetrics = metricsManager.getViewMetrics();
+  var toolboxMetrics = metricsManager.getToolboxMetrics();
   var x = 0;
 
   // If this flyout is not the trashcan flyout (e.g. toolbox or mutator).
   if (this.targetWorkspace.toolboxPosition == this.toolboxPosition_) {
     // If there is a category toolbox.
-    if (targetWorkspaceMetrics.toolboxWidth) {
+    if (toolboxMetrics.width) {
       if (this.toolboxPosition_ == Blockly.TOOLBOX_AT_LEFT) {
-        x = targetWorkspaceMetrics.toolboxWidth;
+        x = toolboxMetrics.width;
       } else {
-        x = targetWorkspaceMetrics.viewWidth - this.width_;
+        x = viewMetrics.width - this.width_;
       }
       // Simple (flyout-only) toolbox.
     } else {
@@ -95,7 +100,7 @@ Blockly.VerticalFlyout.prototype.getX = function() {
         x = 0;
       } else {
         // The simple flyout does not cover the workspace.
-        x = targetWorkspaceMetrics.viewWidth;
+        x = viewMetrics.width;
       }
     }
     // Trashcan flyout is opposite the main flyout.
@@ -107,8 +112,8 @@ Blockly.VerticalFlyout.prototype.getX = function() {
       // to align the right edge of the flyout with the right edge of the
       // blocklyDiv, we calculate the full width of the div minus the width
       // of the flyout.
-      x = targetWorkspaceMetrics.viewWidth +
-          targetWorkspaceMetrics.absoluteLeft - this.width_;
+      x = viewMetrics.width +
+          absoluteMetrics.left - this.width_;
     }
   }
 
@@ -158,7 +163,7 @@ Blockly.VerticalFlyout.prototype.position = function() {
   var metricsManager = this.targetWorkspace.getMetricsManager();
   var targetWorkspaceViewMetrics = metricsManager.getViewMetrics();
 
-  // Record the height for Blockly.Flyout.getMetrics_
+  // Record the height for workspace metrics.
   this.height_ = targetWorkspaceViewMetrics.height;
 
   var edgeWidth = this.width_ - this.CORNER_RADIUS;
@@ -221,9 +226,11 @@ Blockly.VerticalFlyout.prototype.wheel_ = function(e) {
   var scrollDelta = Blockly.utils.getScrollDeltaPixels(e);
 
   if (scrollDelta.y) {
-    // TODO: Do I have to get all the metrics?
-    var metrics = this.workspace_.getMetrics();
-    var pos = (metrics.viewTop - metrics.scrollTop) + scrollDelta.y;
+    var metricsManager = this.workspace_.getMetricsManager();
+    var scrollMetrics = metricsManager.getScrollMetrics();
+    var viewMetrics = metricsManager.getViewMetrics();
+    var pos = (viewMetrics.top - scrollMetrics.top) + scrollDelta.y;
+
     this.workspace_.scrollbar.setY(pos);
     // When the flyout moves from a wheel event, hide WidgetDiv and DropDownDiv.
     Blockly.WidgetDiv.hide();

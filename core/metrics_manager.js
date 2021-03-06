@@ -500,7 +500,8 @@ Blockly.utils.object.inherits(
 /**
  * Gets the bounding box of the blocks on the flyout's workspace.
  * This is in workspace coordinates.
- * @returns {SVGRect} The bounding box of the blocks on the workspace.
+ * @returns {!SVGRect|{height: number, y: number, width: number, x: number}} The
+ *     bounding box of the blocks on the workspace.
  * @private
  */
 Blockly.FlyoutMetricsManager.prototype.getBoundingBox_ = function() {
@@ -520,15 +521,15 @@ Blockly.FlyoutMetricsManager.prototype.getBoundingBox_ = function() {
  */
 Blockly.FlyoutMetricsManager.prototype.getContentMetrics = function(
     opt_getWorkspaceCoordinates) {
-  var boundingBox = this.getBoundingBox_();
+  // The bounding box is in workspace coordinates.
+  var blockBoundingBox = this.getBoundingBox_();
   var scale = opt_getWorkspaceCoordinates ? 1 : this.workspace_.scale;
 
-  // CHANGE: horizontal top and left in flyout used to be 0,0
   return {
-    height: boundingBox.height * scale,
-    width: boundingBox.width * scale,
-    top: boundingBox.y,
-    left: boundingBox.x
+    height: blockBoundingBox.height * scale,
+    width: blockBoundingBox.width * scale,
+    top: blockBoundingBox.y * scale,
+    left: blockBoundingBox.x * scale,
   };
 };
 
@@ -536,20 +537,16 @@ Blockly.FlyoutMetricsManager.prototype.getContentMetrics = function(
  * @override
  */
 Blockly.FlyoutMetricsManager.prototype.getScrollMetrics = function(
-    opt_getWorkspaceCoordinates) {
-  var boundingBox = this.getBoundingBox_();
-  // Content metrics in pixel coordinates.
-  var contentMetrics = this.getContentMetrics();
+    opt_getWorkspaceCoordinates, opt_viewMetrics, opt_contentMetrics) {
+  var contentMetrics = opt_contentMetrics || this.getContentMetrics();
   var margin = this.flyout_.MARGIN;
   var scale = opt_getWorkspaceCoordinates ? this.workspace_.scale : 1;
 
-  // CHANGE: horizontal top and left used to be 0.
-  // TODO: This should use content metrics.
   return {
     height: (contentMetrics.height + 2 * margin) / scale,
     width: (contentMetrics.width + 2 * margin) / scale,
-    top: contentMetrics.top - margin,
-    left: contentMetrics.left - margin,
+    top: contentMetrics.top - margin / scale,
+    left: contentMetrics.left - margin / scale,
   };
 };
 
@@ -563,19 +560,21 @@ Blockly.FlyoutMetricsManager.prototype.getScrollMetrics = function(
  *     coordinates.
  * @private
  */
-Blockly.FlyoutMetricsManager.prototype.getHorizontalViewMetrics_ = function() {
-  // TODO: toolboxPosition_ is private.
-  var viewWidth = this.flyout_.getWidth() - 2 * this.flyout_.SCROLLBAR_PADDING;
-  var viewHeight = this.flyout_.getHeight();
+Blockly.FlyoutMetricsManager.prototype.getHorizontalViewMetrics_ = function(
+    opt_getWorkspaceCoordinates) {
+  var svgMetrics = this.getSvgMetrics();
+  var scale = opt_getWorkspaceCoordinates ? this.workspace_.scale : 1;
+  var viewWidth = svgMetrics.width - 2 * this.flyout_.SCROLLBAR_PADDING;
+  var viewHeight = svgMetrics.height;
 
-  if (this.flyout_.toolboxPosition_ == Blockly.TOOLBOX_AT_TOP) {
+  if (this.workspace_.toolboxPosition == Blockly.utils.toolbox.Position.TOP) {
     viewHeight -= this.flyout_.SCROLLBAR_PADDING;
   }
   return {
-    height: viewHeight,
-    width: viewWidth,
-    top: -this.workspace_.scrollY,
-    left: -this.workspace_.scrollX,
+    height: viewHeight / scale,
+    width: viewWidth / scale,
+    top: -this.workspace_.scrollY / scale,
+    left: -this.workspace_.scrollX / scale,
   };
 };
 
@@ -591,20 +590,20 @@ Blockly.FlyoutMetricsManager.prototype.getHorizontalViewMetrics_ = function() {
  */
 Blockly.FlyoutMetricsManager.prototype.getVerticalViewMetrics_ = function(
     opt_getWorkspaceCoordinates) {
-  // This is in workspace coordinates.
-  var viewHeight = this.flyout_.getHeight() - 2 * this.flyout_.SCROLLBAR_PADDING;
-  var viewWidth = this.flyout_.getWidth();
-  if (!this.RTL) {
+  var svgMetrics = this.getSvgMetrics();
+  var scale = opt_getWorkspaceCoordinates ? this.workspace_.scale : 1;
+  var viewHeight = svgMetrics.height - 2 * this.flyout_.SCROLLBAR_PADDING;
+  var viewWidth = svgMetrics.width;
+
+  if (!this.flyout_.RTL) {
     viewWidth -= this.flyout_.SCROLLBAR_PADDING;
   }
-  // TODO: These seem like they are in different coordinate systems.
-  // boundingBox.y is in workspace coordinates, if I remember correctly
-  // this.workspace_.scrollY is in pixel units
+
   return {
-    height: viewHeight,
-    width: viewWidth,
-    top: -this.workspace_.scrollY,
-    left: -this.workspace_.scrollX
+    height: viewHeight / scale,
+    width: viewWidth / scale,
+    top: -this.workspace_.scrollY / scale,
+    left: -this.workspace_.scrollX / scale,
   };
 };
 
@@ -625,11 +624,12 @@ Blockly.FlyoutMetricsManager.prototype.getViewMetrics = function(
  */
 Blockly.FlyoutMetricsManager.prototype.getAbsoluteMetrics = function() {
   var scrollbarPadding = this.flyout_.SCROLLBAR_PADDING;
-  var toolboxPosition = this.flyout_.toolboxPosition;
+  var toolboxPosition = this.workspace_.toolboxPosition;
 
   if (this.flyout_.horizontalLayout) {
-    var absoluteTop =
-        toolboxPosition == Blockly.TOOLBOX_AT_BOTTOM ? 0 : scrollbarPadding;
+    var absoluteTop = toolboxPosition == Blockly.utils.toolbox.Position.BOTTOM ?
+        0 :
+        scrollbarPadding;
     return {top: absoluteTop, left: scrollbarPadding};
   } else {
     return {top: scrollbarPadding, left: 0};

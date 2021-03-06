@@ -42,7 +42,6 @@ goog.requireType('Blockly.FlyoutButton');
 goog.requireType('Blockly.IDeleteArea');
 goog.requireType('Blockly.IFlyout');
 goog.requireType('Blockly.Options');
-goog.requireType('Blockly.utils.Metrics');
 goog.requireType('Blockly.utils.Rect');
 
 
@@ -426,6 +425,8 @@ Blockly.Flyout.prototype.updateDisplay_ = function() {
 Blockly.Flyout.prototype.positionAt_ = function(width, height, x, y) {
   this.svgGroup_.setAttribute("width", width);
   this.svgGroup_.setAttribute("height", height);
+  this.workspace_.setCachedParentSvgSize(width, height);
+
   if (this.svgGroup_.tagName == 'svg') {
     var transform = 'translate(' + x + 'px,' + y + 'px)';
     Blockly.utils.dom.setCssTransform(this.svgGroup_, transform);

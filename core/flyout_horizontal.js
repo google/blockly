@@ -22,6 +22,7 @@ goog.require('Blockly.Scrollbar');
 goog.require('Blockly.utils');
 goog.require('Blockly.utils.object');
 goog.require('Blockly.utils.Rect');
+goog.require('Blockly.utils.toolbox');
 goog.require('Blockly.WidgetDiv');
 
 goog.requireType('Blockly.Options');
@@ -78,11 +79,11 @@ Blockly.HorizontalFlyout.prototype.getMetrics_ = function() {
 
   var absoluteTop = this.SCROLLBAR_PADDING;
   var absoluteLeft = this.SCROLLBAR_PADDING;
-  if (this.toolboxPosition_ == Blockly.TOOLBOX_AT_BOTTOM) {
+  if (this.toolboxPosition_ == Blockly.utils.toolbox.Position.BOTTOM) {
     absoluteTop = 0;
   }
   var viewHeight = this.height_;
-  if (this.toolboxPosition_ == Blockly.TOOLBOX_AT_TOP) {
+  if (this.toolboxPosition_ == Blockly.utils.toolbox.Position.TOP) {
     viewHeight -= this.SCROLLBAR_PADDING;
   }
   var viewWidth = this.width_ - 2 * this.SCROLLBAR_PADDING;
@@ -154,18 +155,19 @@ Blockly.HorizontalFlyout.prototype.getY = function() {
   }
 
   var y = 0;
+  var atTop = this.toolboxPosition_ == Blockly.utils.toolbox.Position.TOP;
   // If this flyout is not the trashcan flyout (e.g. toolbox or mutator).
   if (this.targetWorkspace.toolboxPosition == this.toolboxPosition_) {
     // If there is a category toolbox.
     if (targetWorkspaceMetrics.toolboxHeight) {
-      if (this.toolboxPosition_ == Blockly.TOOLBOX_AT_TOP) {
+      if (atTop) {
         y = targetWorkspaceMetrics.toolboxHeight;
       } else {
         y = targetWorkspaceMetrics.viewHeight - this.height_;
       }
       // Simple (flyout-only) toolbox.
     } else {
-      if (this.toolboxPosition_ == Blockly.TOOLBOX_AT_TOP) {
+      if (atTop) {
         y = 0;
       } else {
         // The simple flyout does not cover the workspace.
@@ -174,7 +176,7 @@ Blockly.HorizontalFlyout.prototype.getY = function() {
     }
     // Trashcan flyout is opposite the main flyout.
   } else {
-    if (this.toolboxPosition_ == Blockly.TOOLBOX_AT_TOP) {
+    if (atTop) {
       y = 0;
     } else {
       // Because the anchor point of the flyout is on the top, but we want
@@ -220,9 +222,9 @@ Blockly.HorizontalFlyout.prototype.position = function() {
  *     rounded corners.
  * @private
  */
-Blockly.HorizontalFlyout.prototype.setBackgroundPath_ = function(width,
-    height) {
-  var atTop = this.toolboxPosition_ == Blockly.TOOLBOX_AT_TOP;
+Blockly.HorizontalFlyout.prototype.setBackgroundPath_ = function(
+    width, height) {
+  var atTop = this.toolboxPosition_ == Blockly.utils.toolbox.Position.TOP;
   // Start at top left.
   var path = ['M 0,' + (atTop ? 0 : this.CORNER_RADIUS)];
 
@@ -377,7 +379,7 @@ Blockly.HorizontalFlyout.prototype.getClientRect = function() {
   var BIG_NUM = 1000000000;
   var top = flyoutRect.top;
 
-  if (this.toolboxPosition_ == Blockly.TOOLBOX_AT_TOP) {
+  if (this.toolboxPosition_ == Blockly.utils.toolbox.Position.TOP) {
     var height = flyoutRect.height;
     return new Blockly.utils.Rect(-BIG_NUM, top + height, -BIG_NUM, BIG_NUM);
   } else {  // Bottom.
@@ -409,7 +411,7 @@ Blockly.HorizontalFlyout.prototype.reflowInternal_ = function() {
     }
 
     if (this.targetWorkspace.toolboxPosition == this.toolboxPosition_ &&
-        this.toolboxPosition_ == Blockly.TOOLBOX_AT_TOP &&
+        this.toolboxPosition_ == Blockly.utils.toolbox.Position.TOP &&
         !this.targetWorkspace.getToolbox()) {
       // This flyout is a simple toolbox. Reposition the workspace so that (0,0)
       // is in the correct position relative to the new absolute edge (ie

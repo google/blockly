@@ -161,31 +161,6 @@ Blockly.OPPOSITE_TYPE[Blockly.connectionTypes.NEXT_STATEMENT] =
 Blockly.OPPOSITE_TYPE[Blockly.connectionTypes.PREVIOUS_STATEMENT] =
     Blockly.connectionTypes.NEXT_STATEMENT;
 
-
-/**
- * ENUM for toolbox and flyout at top of screen.
- * @const
- */
-Blockly.TOOLBOX_AT_TOP = 0;
-
-/**
- * ENUM for toolbox and flyout at bottom of screen.
- * @const
- */
-Blockly.TOOLBOX_AT_BOTTOM = 1;
-
-/**
- * ENUM for toolbox and flyout at left of screen.
- * @const
- */
-Blockly.TOOLBOX_AT_LEFT = 2;
-
-/**
- * ENUM for toolbox and flyout at right of screen.
- * @const
- */
-Blockly.TOOLBOX_AT_RIGHT = 3;
-
 /**
  * ENUM representing that an event is not in any delete areas.
  * Null for backwards compatibility reasons.

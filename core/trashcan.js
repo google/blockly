@@ -446,7 +446,7 @@ Blockly.Trashcan.prototype.position = function(metrics, savedPositions) {
     return;
   }
 
-  if (metrics.toolboxMetrics.position == Blockly.TOOLBOX_AT_LEFT ||
+  if (metrics.toolboxMetrics.position == Blockly.utils.toolbox.Position.LEFT ||
       (this.workspace_.horizontalLayout && !this.workspace_.RTL)) {
     // Toolbox starts in the left corner.
     this.left_ = metrics.viewMetrics.width + metrics.absoluteMetrics.left -
@@ -463,7 +463,7 @@ Blockly.Trashcan.prototype.position = function(metrics, savedPositions) {
   var maxTop = metrics.viewMetrics.height + metrics.absoluteMetrics.top -
       height - this.verticalSpacing_;
   var placeBottom =
-      metrics.toolboxMetrics.position !== Blockly.TOOLBOX_AT_BOTTOM;
+      metrics.toolboxMetrics.position !== Blockly.utils.toolbox.Position.BOTTOM;
   this.top_ = placeBottom ? maxTop : minTop;
 
   // Check for collision and bump if needed.
@@ -562,7 +562,8 @@ Blockly.Trashcan.prototype.animateLid_ = function() {
  * @private
  */
 Blockly.Trashcan.prototype.setLidAngle_ = function(lidAngle) {
-  var openAtRight = this.workspace_.toolboxPosition == Blockly.TOOLBOX_AT_RIGHT ||
+  var openAtRight =
+      this.workspace_.toolboxPosition == Blockly.utils.toolbox.Position.RIGHT ||
       (this.workspace_.horizontalLayout && this.workspace_.RTL);
   this.svgLid_.setAttribute('transform', 'rotate(' +
       (openAtRight ? -lidAngle : lidAngle) + ',' +

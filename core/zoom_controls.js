@@ -24,6 +24,7 @@ goog.require('Blockly.Touch');
 goog.require('Blockly.utils.dom');
 goog.require('Blockly.utils.Rect');
 goog.require('Blockly.utils.Svg');
+goog.require('Blockly.utils.toolbox');
 goog.require('Blockly.IPositionable');
 
 goog.requireType('Blockly.WorkspaceSvg');
@@ -224,7 +225,7 @@ Blockly.ZoomControls.prototype.position = function(metrics, savedPositions) {
   if (!this.verticalSpacing_) {
     return;
   }
-  if (metrics.toolboxMetrics.position == Blockly.TOOLBOX_AT_LEFT ||
+  if (metrics.toolboxMetrics.position == Blockly.utils.toolbox.Position.LEFT ||
       (this.workspace_.horizontalLayout && !this.workspace_.RTL)) {
     // Zoom controls start in the left corner.
     this.left_ = metrics.viewMetrics.width + metrics.absoluteMetrics.left -
@@ -240,7 +241,7 @@ Blockly.ZoomControls.prototype.position = function(metrics, savedPositions) {
   var maxTop = metrics.viewMetrics.height + metrics.absoluteMetrics.top -
       this.HEIGHT_ - this.verticalSpacing_;
   var placeBottom =
-      metrics.toolboxMetrics.position !== Blockly.TOOLBOX_AT_BOTTOM;
+      metrics.toolboxMetrics.position !== Blockly.utils.toolbox.Position.BOTTOM;
   this.top_ = placeBottom ? maxTop : minTop;
   if (placeBottom) {
     this.zoomInGroup_.setAttribute('transform', 'translate(0, 43)');

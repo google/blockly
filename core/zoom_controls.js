@@ -24,6 +24,7 @@ goog.require('Blockly.Touch');
 goog.require('Blockly.utils.dom');
 goog.require('Blockly.utils.Rect');
 goog.require('Blockly.utils.Svg');
+goog.require('Blockly.utils.toolbox');
 goog.require('Blockly.IPositionable');
 
 goog.requireType('Blockly.WorkspaceSvg');
@@ -67,7 +68,7 @@ Blockly.ZoomControls = function(workspace) {
   this.onZoomOutWrapper_ = null;
 
   /**
-   * The vertical distance between the workspace bottom edge and the control.
+   * The starting vertical distance between the workspace edge and the control.
    * The value is initialized during `init`.
    * @type {?number}
    * @private
@@ -202,7 +203,7 @@ Blockly.ZoomControls.prototype.dispose = function() {
 /**
  * Returns the bounding rectangle of the UI element in pixel units relative to
  * the Blockly injection div.
- * @returns {!Blockly.utils.Rect} The plugin’s bounding box.
+ * @return {!Blockly.utils.Rect} The plugin’s bounding box.
  */
 Blockly.ZoomControls.prototype.getBoundingRectangle = function() {
   var bottom = this.top_ + this.HEIGHT_;
@@ -212,7 +213,7 @@ Blockly.ZoomControls.prototype.getBoundingRectangle = function() {
 
 
 /**
- * Position the zoom controls.
+ * Positions the zoom controls.
  * It is positioned in the opposite corner to the corner the
  * categories/toolbox starts at.
  * @param {!Blockly.MetricsManager.UiMetrics} metrics The workspace metrics.
@@ -224,23 +225,23 @@ Blockly.ZoomControls.prototype.position = function(metrics, savedPositions) {
   if (!this.verticalSpacing_) {
     return;
   }
-  if (metrics.toolboxMetrics.position == Blockly.TOOLBOX_AT_LEFT ||
+  if (metrics.toolboxMetrics.position == Blockly.utils.toolbox.Position.LEFT ||
       (this.workspace_.horizontalLayout && !this.workspace_.RTL)) {
-    // Toolbox starts in the left corner.
+    // Right corner placement.
     this.left_ = metrics.viewMetrics.width + metrics.absoluteMetrics.left -
         this.WIDTH_ - this.MARGIN_SIDE_ - Blockly.Scrollbar.scrollbarThickness;
   } else {
-    // Toolbox starts in the right corner.
+    // Left corner placement.
     this.left_ = this.MARGIN_SIDE_ + Blockly.Scrollbar.scrollbarThickness;
   }
 
   // Upper corner placement
-  var minTop = this.top_ = this.verticalSpacing_;
+  var minTop = this.top_ = metrics.absoluteMetrics.top + this.verticalSpacing_;
   // Bottom corner placement
-  var maxTop = metrics.viewMetrics.height + metrics.absoluteMetrics.top -
+  var maxTop = metrics.absoluteMetrics.top + metrics.viewMetrics.height -
       this.HEIGHT_ - this.verticalSpacing_;
   var placeBottom =
-      metrics.toolboxMetrics.position !== Blockly.TOOLBOX_AT_BOTTOM;
+      metrics.toolboxMetrics.position !== Blockly.utils.toolbox.Position.BOTTOM;
   this.top_ = placeBottom ? maxTop : minTop;
   if (placeBottom) {
     this.zoomInGroup_.setAttribute('transform', 'translate(0, 43)');
@@ -450,9 +451,21 @@ Blockly.ZoomControls.prototype.createZoomResetSvg_ = function(rnd) {
  */
 Blockly.ZoomControls.prototype.resetZoom_ = function(e) {
   this.workspace_.markFocused();
-  this.workspace_.setScale(this.workspace_.options.zoomOptions.startScale);
+
+  // zoom is passed amount and computes the new scale using the formula:
+  // targetScale = currentScale * Math.pow(speed, amount)
+  var targetScale = this.workspace_.options.zoomOptions.startScale;
+  var currentScale = this.workspace_.scale;
+  var speed = this.workspace_.options.zoomOptions.scaleSpeed;
+  // To compute amount:
+  // amount = log(speed, (targetScale / currentScale))
+  // Math.log computes natural logarithm (ln), to change the base, use formula:
+  // log(base, value) = ln(value) / ln(base)
+  var amount = Math.log(targetScale / currentScale) / Math.log(speed);
+
   this.workspace_.beginCanvasTransition();
-  this.workspace_.scrollCenter();
+  this.workspace_.zoomCenter(amount);
+
   setTimeout(this.workspace_.endCanvasTransition.bind(this.workspace_), 500);
   this.fireZoomEvent_();
   Blockly.Touch.clearTouchIdentifier();  // Don't block future drags.

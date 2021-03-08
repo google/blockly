@@ -242,6 +242,7 @@
 	"LISTS_SORT_ORDER_DESCENDING": "Kemeyen",
 	"LISTS_SORT_TYPE_NUMERIC": "Amoriyal",
 	"LISTS_SORT_TYPE_TEXT": "Alfabetik",
+	"LISTS_SORT_TYPE_IGNORECASE": "alfabetik, nezeri mekerên",
 	"LISTS_SPLIT_LIST_FROM_TEXT": "metini ra lista bıkerê",
 	"LISTS_SPLIT_TEXT_FROM_LIST": "Lista ra metin bıkerê",
 	"LISTS_SPLIT_WITH_DELIMITER": "Hududoxi ya",

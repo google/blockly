@@ -46,6 +46,7 @@ goog.require('Blockly.utils.dom');
 goog.require('Blockly.utils.Metrics');
 goog.require('Blockly.utils.object');
 goog.require('Blockly.utils.Rect');
+goog.require('Blockly.utils.Size');
 goog.require('Blockly.utils.Svg');
 goog.require('Blockly.utils.toolbox');
 goog.require('Blockly.Workspace');
@@ -1005,7 +1006,7 @@ Blockly.WorkspaceSvg.prototype.addTrashcan = function() {
   this.pluginManager_.addPlugin({
     id: 'trashcan',
     plugin: this.trashcan,
-    weight: 0,
+    weight: 1,
     types: [Blockly.PluginManager.Type.POSITIONABLE]
   });
 };
@@ -1025,7 +1026,7 @@ Blockly.WorkspaceSvg.prototype.addZoomControls = function() {
   this.pluginManager_.addPlugin({
     id: 'zoomControls',
     plugin: this.zoomControls_,
-    weight: 0,
+    weight: 2,
     types: [Blockly.PluginManager.Type.POSITIONABLE]
   });
 };
@@ -1248,7 +1249,7 @@ Blockly.WorkspaceSvg.prototype.maybeFireViewportChangeEvent = function() {
     return;
   }
   var event = new (Blockly.Events.get(Blockly.Events.VIEWPORT_CHANGE))(top,
-      left, scale, this.id);
+      left, scale, this.id, this.oldScale_);
   this.oldScale_ = scale;
   this.oldTop_ = top;
   this.oldLeft_ = left;

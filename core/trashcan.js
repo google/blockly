@@ -433,7 +433,7 @@ Blockly.Trashcan.prototype.emptyContents = function() {
 };
 
 /**
- * Position the trashcan.
+ * Positions the trashcan.
  * It is positioned in the opposite corner to the corner the
  * categories/toolbox starts at.
  * @param {!Blockly.MetricsManager.UiMetrics} metrics The workspace metrics.
@@ -445,25 +445,24 @@ Blockly.Trashcan.prototype.position = function(metrics, savedPositions) {
   if (!this.verticalSpacing_) {
     return;
   }
-
-  if (metrics.toolboxMetrics.position == Blockly.TOOLBOX_AT_LEFT ||
+  if (metrics.toolboxMetrics.position == Blockly.utils.toolbox.Position.LEFT ||
       (this.workspace_.horizontalLayout && !this.workspace_.RTL)) {
-    // Toolbox starts in the left corner.
+    // Right corner placement.
     this.left_ = metrics.viewMetrics.width + metrics.absoluteMetrics.left -
         this.WIDTH_ - this.MARGIN_SIDE_ - Blockly.Scrollbar.scrollbarThickness;
   } else {
-    // Toolbox starts in the right corner.
+    // Left corner placement.
     this.left_ = this.MARGIN_SIDE_ + Blockly.Scrollbar.scrollbarThickness;
   }
 
   var height = this.BODY_HEIGHT_ + this.LID_HEIGHT_;
   // Upper corner placement
-  var minTop = this.top_ = this.verticalSpacing_;
+  var minTop = this.top_ = metrics.absoluteMetrics.top + this.verticalSpacing_;
   // Bottom corner placement
-  var maxTop = metrics.viewMetrics.height + metrics.absoluteMetrics.top -
+  var maxTop = metrics.absoluteMetrics.top + metrics.viewMetrics.height -
       height - this.verticalSpacing_;
   var placeBottom =
-      metrics.toolboxMetrics.position !== Blockly.TOOLBOX_AT_BOTTOM;
+      metrics.toolboxMetrics.position !== Blockly.utils.toolbox.Position.BOTTOM;
   this.top_ = placeBottom ? maxTop : minTop;
 
   // Check for collision and bump if needed.
@@ -491,7 +490,7 @@ Blockly.Trashcan.prototype.position = function(metrics, savedPositions) {
 /**
  * Returns the bounding rectangle of the UI element in pixel units relative to
  * the Blockly injection div.
- * @returns {!Blockly.utils.Rect} The plugin’s bounding box.
+ * @return {!Blockly.utils.Rect} The plugin’s bounding box.
  */
 Blockly.Trashcan.prototype.getBoundingRectangle = function() {
   var bottom = this.top_ + this.BODY_HEIGHT_ + this.LID_HEIGHT_;
@@ -562,7 +561,8 @@ Blockly.Trashcan.prototype.animateLid_ = function() {
  * @private
  */
 Blockly.Trashcan.prototype.setLidAngle_ = function(lidAngle) {
-  var openAtRight = this.workspace_.toolboxPosition == Blockly.TOOLBOX_AT_RIGHT ||
+  var openAtRight =
+      this.workspace_.toolboxPosition == Blockly.utils.toolbox.Position.RIGHT ||
       (this.workspace_.horizontalLayout && this.workspace_.RTL);
   this.svgLid_.setAttribute('transform', 'rotate(' +
       (openAtRight ? -lidAngle : lidAngle) + ',' +

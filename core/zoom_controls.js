@@ -213,7 +213,7 @@ Blockly.ZoomControls.prototype.getBoundingRectangle = function() {
 
 
 /**
- * Position the zoom controls.
+ * Positions the zoom controls.
  * It is positioned in the opposite corner to the corner the
  * categories/toolbox starts at.
  * @param {!Blockly.MetricsManager.UiMetrics} metrics The workspace metrics.
@@ -227,18 +227,18 @@ Blockly.ZoomControls.prototype.position = function(metrics, savedPositions) {
   }
   if (metrics.toolboxMetrics.position == Blockly.utils.toolbox.Position.LEFT ||
       (this.workspace_.horizontalLayout && !this.workspace_.RTL)) {
-    // Zoom controls start in the left corner.
+    // Right corner placement.
     this.left_ = metrics.viewMetrics.width + metrics.absoluteMetrics.left -
         this.WIDTH_ - this.MARGIN_SIDE_ - Blockly.Scrollbar.scrollbarThickness;
   } else {
-    // Zoom controls start in the right corner.
+    // Left corner placement.
     this.left_ = this.MARGIN_SIDE_ + Blockly.Scrollbar.scrollbarThickness;
   }
 
   // Upper corner placement
-  var minTop = this.top_ = this.verticalSpacing_;
+  var minTop = this.top_ = metrics.absoluteMetrics.top + this.verticalSpacing_;
   // Bottom corner placement
-  var maxTop = metrics.viewMetrics.height + metrics.absoluteMetrics.top -
+  var maxTop = metrics.absoluteMetrics.top + metrics.viewMetrics.height -
       this.HEIGHT_ - this.verticalSpacing_;
   var placeBottom =
       metrics.toolboxMetrics.position !== Blockly.utils.toolbox.Position.BOTTOM;

@@ -36,7 +36,6 @@ goog.addDependency(
       'Blockly.Events.UiBase',
       'Blockly.Events.VarCreate',
       'Blockly.Procedures',
-      'Blockly.ShortcutItems',
       'Blockly.ShortcutRegistry',
       'Blockly.Tooltip',
       'Blockly.Touch',
@@ -194,7 +193,43 @@ goog.addDependency('../../core/renderers/zelos/measurables/row_elements.js', ['B
 goog.addDependency('../../core/renderers/zelos/measurables/rows.js', ['Blockly.zelos.BottomRow', 'Blockly.zelos.TopRow'], ['Blockly.blockRendering.BottomRow', 'Blockly.blockRendering.TopRow', 'Blockly.utils.object'], {});
 goog.addDependency('../../core/renderers/zelos/path_object.js', ['Blockly.zelos.PathObject'], ['Blockly.blockRendering.PathObject', 'Blockly.utils.Svg', 'Blockly.utils.dom', 'Blockly.utils.object', 'Blockly.zelos.ConstantProvider'], {});
 goog.addDependency('../../core/renderers/zelos/renderer.js', ['Blockly.zelos.Renderer'], ['Blockly.InsertionMarkerManager', 'Blockly.blockRendering', 'Blockly.blockRendering.Renderer', 'Blockly.connectionTypes', 'Blockly.constants', 'Blockly.utils.object', 'Blockly.zelos.ConstantProvider', 'Blockly.zelos.Drawer', 'Blockly.zelos.MarkerSvg', 'Blockly.zelos.PathObject', 'Blockly.zelos.RenderInfo'], {});
-goog.addDependency('../../core/requires.js', ['Blockly.requires'], ['Blockly', 'Blockly.Comment', 'Blockly.FieldAngle', 'Blockly.FieldCheckbox', 'Blockly.FieldColour', 'Blockly.FieldDropdown', 'Blockly.FieldImage', 'Blockly.FieldLabelSerializable', 'Blockly.FieldMultilineInput', 'Blockly.FieldNumber', 'Blockly.FieldTextInput', 'Blockly.FieldVariable', 'Blockly.FlyoutButton', 'Blockly.Generator', 'Blockly.HorizontalFlyout', 'Blockly.Mutator', 'Blockly.Themes.Classic', 'Blockly.Themes.Dark', 'Blockly.Themes.Deuteranopia', 'Blockly.Themes.HighContrast', 'Blockly.Themes.Tritanopia', 'Blockly.Toolbox', 'Blockly.Trashcan', 'Blockly.VariablesDynamic', 'Blockly.VerticalFlyout', 'Blockly.Warning', 'Blockly.ZoomControls', 'Blockly.geras.Renderer', 'Blockly.thrasos.Renderer', 'Blockly.zelos.Renderer'], {});
+goog.addDependency(
+    '../../core/requires.js', ['Blockly.requires'],
+    [
+      'Blockly',
+      'Blockly.Comment',
+      'Blockly.ContextMenuItems',
+      'Blockly.FieldAngle',
+      'Blockly.FieldCheckbox',
+      'Blockly.FieldColour',
+      'Blockly.FieldDropdown',
+      'Blockly.FieldImage',
+      'Blockly.FieldLabelSerializable',
+      'Blockly.FieldMultilineInput',
+      'Blockly.FieldNumber',
+      'Blockly.FieldTextInput',
+      'Blockly.FieldVariable',
+      'Blockly.FlyoutButton',
+      'Blockly.Generator',
+      'Blockly.HorizontalFlyout',
+      'Blockly.Mutator',
+      'Blockly.ShortcutItems',
+      'Blockly.Themes.Classic',
+      'Blockly.Themes.Dark',
+      'Blockly.Themes.Deuteranopia',
+      'Blockly.Themes.HighContrast',
+      'Blockly.Themes.Tritanopia',
+      'Blockly.Toolbox',
+      'Blockly.Trashcan',
+      'Blockly.VariablesDynamic',
+      'Blockly.VerticalFlyout',
+      'Blockly.Warning',
+      'Blockly.ZoomControls',
+      'Blockly.geras.Renderer',
+      'Blockly.thrasos.Renderer',
+      'Blockly.zelos.Renderer'
+    ],
+    {});
 goog.addDependency('../../core/scrollbar.js', ['Blockly.Scrollbar', 'Blockly.ScrollbarPair'], ['Blockly.Events', 'Blockly.Touch', 'Blockly.browserEvents', 'Blockly.utils', 'Blockly.utils.Coordinate', 'Blockly.utils.Metrics', 'Blockly.utils.Svg', 'Blockly.utils.dom'], {});
 goog.addDependency(
     '../../core/shortcut_items.js', ['Blockly.ShortcutItems'],
@@ -260,7 +295,6 @@ goog.addDependency(
       'Blockly.BlockSvg',
       'Blockly.ConnectionDB',
       'Blockly.ContextMenu',
-      'Blockly.ContextMenuItems',
       'Blockly.ContextMenuRegistry',
       'Blockly.Events',
       'Blockly.Events.BlockCreate',

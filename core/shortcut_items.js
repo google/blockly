@@ -50,8 +50,8 @@ Blockly.ShortcutItems.registerEscape = function() {
       return true;
     }
   };
-  Blockly.ShortcutRegistry.getRegistry().register(escapeAction);
-  Blockly.ShortcutRegistry.getRegistry().addKeyMapping(
+  Blockly.ShortcutRegistry.registry.register(escapeAction);
+  Blockly.ShortcutRegistry.registry.addKeyMapping(
       Blockly.utils.KeyCodes.ESC, escapeAction.name);
 };
 
@@ -79,10 +79,10 @@ Blockly.ShortcutItems.registerDelete = function() {
       return true;
     }
   };
-  Blockly.ShortcutRegistry.getRegistry().register(deleteShortcut);
-  Blockly.ShortcutRegistry.getRegistry().addKeyMapping(
+  Blockly.ShortcutRegistry.registry.register(deleteShortcut);
+  Blockly.ShortcutRegistry.registry.addKeyMapping(
       Blockly.utils.KeyCodes.DELETE, deleteShortcut.name);
-  Blockly.ShortcutRegistry.getRegistry().addKeyMapping(
+  Blockly.ShortcutRegistry.registry.addKeyMapping(
       Blockly.utils.KeyCodes.BACKSPACE, deleteShortcut.name);
 };
 
@@ -104,21 +104,19 @@ Blockly.ShortcutItems.registerCopy = function() {
       return true;
     }
   };
-  Blockly.ShortcutRegistry.getRegistry().register(copyShortcut);
+  Blockly.ShortcutRegistry.registry.register(copyShortcut);
 
-  var ctrlC = Blockly.ShortcutRegistry.getRegistry().createSerializedKey(
+  var ctrlC = Blockly.ShortcutRegistry.registry.createSerializedKey(
       Blockly.utils.KeyCodes.C, [Blockly.utils.KeyCodes.CTRL]);
-  Blockly.ShortcutRegistry.getRegistry().addKeyMapping(
-      ctrlC, copyShortcut.name);
+  Blockly.ShortcutRegistry.registry.addKeyMapping(ctrlC, copyShortcut.name);
 
-  var altC = Blockly.ShortcutRegistry.getRegistry().createSerializedKey(
+  var altC = Blockly.ShortcutRegistry.registry.createSerializedKey(
       Blockly.utils.KeyCodes.C, [Blockly.utils.KeyCodes.ALT]);
-  Blockly.ShortcutRegistry.getRegistry().addKeyMapping(altC, copyShortcut.name);
+  Blockly.ShortcutRegistry.registry.addKeyMapping(altC, copyShortcut.name);
 
-  var metaC = Blockly.ShortcutRegistry.getRegistry().createSerializedKey(
+  var metaC = Blockly.ShortcutRegistry.registry.createSerializedKey(
       Blockly.utils.KeyCodes.C, [Blockly.utils.KeyCodes.META]);
-  Blockly.ShortcutRegistry.getRegistry().addKeyMapping(
-      metaC, copyShortcut.name);
+  Blockly.ShortcutRegistry.registry.addKeyMapping(metaC, copyShortcut.name);
 };
 
 /** Keyboard shortcut to copy and delete a block on ctrl+x, cmd+x, or alt+x. */
@@ -141,19 +139,19 @@ Blockly.ShortcutItems.registerCut = function() {
     }
   };
 
-  Blockly.ShortcutRegistry.getRegistry().register(cutShortcut);
+  Blockly.ShortcutRegistry.registry.register(cutShortcut);
 
-  var ctrlX = Blockly.ShortcutRegistry.getRegistry().createSerializedKey(
+  var ctrlX = Blockly.ShortcutRegistry.registry.createSerializedKey(
       Blockly.utils.KeyCodes.X, [Blockly.utils.KeyCodes.CTRL]);
-  Blockly.ShortcutRegistry.getRegistry().addKeyMapping(ctrlX, cutShortcut.name);
+  Blockly.ShortcutRegistry.registry.addKeyMapping(ctrlX, cutShortcut.name);
 
-  var altX = Blockly.ShortcutRegistry.getRegistry().createSerializedKey(
+  var altX = Blockly.ShortcutRegistry.registry.createSerializedKey(
       Blockly.utils.KeyCodes.X, [Blockly.utils.KeyCodes.ALT]);
-  Blockly.ShortcutRegistry.getRegistry().addKeyMapping(altX, cutShortcut.name);
+  Blockly.ShortcutRegistry.registry.addKeyMapping(altX, cutShortcut.name);
 
-  var metaX = Blockly.ShortcutRegistry.getRegistry().createSerializedKey(
+  var metaX = Blockly.ShortcutRegistry.registry.createSerializedKey(
       Blockly.utils.KeyCodes.X, [Blockly.utils.KeyCodes.META]);
-  Blockly.ShortcutRegistry.getRegistry().addKeyMapping(metaX, cutShortcut.name);
+  Blockly.ShortcutRegistry.registry.addKeyMapping(metaX, cutShortcut.name);
 };
 
 /** Keyboard shortcut to paste a block on ctrl+v, cmd+v, or alt+v. */
@@ -169,22 +167,19 @@ Blockly.ShortcutItems.registerPaste = function() {
     }
   };
 
-  Blockly.ShortcutRegistry.getRegistry().register(pasteShortcut);
+  Blockly.ShortcutRegistry.registry.register(pasteShortcut);
 
-  var ctrlV = Blockly.ShortcutRegistry.getRegistry().createSerializedKey(
+  var ctrlV = Blockly.ShortcutRegistry.registry.createSerializedKey(
       Blockly.utils.KeyCodes.V, [Blockly.utils.KeyCodes.CTRL]);
-  Blockly.ShortcutRegistry.getRegistry().addKeyMapping(
-      ctrlV, pasteShortcut.name);
+  Blockly.ShortcutRegistry.registry.addKeyMapping(ctrlV, pasteShortcut.name);
 
-  var altV = Blockly.ShortcutRegistry.getRegistry().createSerializedKey(
+  var altV = Blockly.ShortcutRegistry.registry.createSerializedKey(
       Blockly.utils.KeyCodes.V, [Blockly.utils.KeyCodes.ALT]);
-  Blockly.ShortcutRegistry.getRegistry().addKeyMapping(
-      altV, pasteShortcut.name);
+  Blockly.ShortcutRegistry.registry.addKeyMapping(altV, pasteShortcut.name);
 
-  var metaV = Blockly.ShortcutRegistry.getRegistry().createSerializedKey(
+  var metaV = Blockly.ShortcutRegistry.registry.createSerializedKey(
       Blockly.utils.KeyCodes.V, [Blockly.utils.KeyCodes.META]);
-  Blockly.ShortcutRegistry.getRegistry().addKeyMapping(
-      metaV, pasteShortcut.name);
+  Blockly.ShortcutRegistry.registry.addKeyMapping(metaV, pasteShortcut.name);
 };
 
 /** Keyboard shortcut to undo the previous action on ctrl+z, cmd+z, or alt+z. */
@@ -203,21 +198,19 @@ Blockly.ShortcutItems.registerUndo = function() {
       return true;
     }
   };
-  Blockly.ShortcutRegistry.getRegistry().register(undoShortcut);
+  Blockly.ShortcutRegistry.registry.register(undoShortcut);
 
-  var ctrlZ = Blockly.ShortcutRegistry.getRegistry().createSerializedKey(
+  var ctrlZ = Blockly.ShortcutRegistry.registry.createSerializedKey(
       Blockly.utils.KeyCodes.Z, [Blockly.utils.KeyCodes.CTRL]);
-  Blockly.ShortcutRegistry.getRegistry().addKeyMapping(
-      ctrlZ, undoShortcut.name);
+  Blockly.ShortcutRegistry.registry.addKeyMapping(ctrlZ, undoShortcut.name);
 
-  var altZ = Blockly.ShortcutRegistry.getRegistry().createSerializedKey(
+  var altZ = Blockly.ShortcutRegistry.registry.createSerializedKey(
       Blockly.utils.KeyCodes.Z, [Blockly.utils.KeyCodes.ALT]);
-  Blockly.ShortcutRegistry.getRegistry().addKeyMapping(altZ, undoShortcut.name);
+  Blockly.ShortcutRegistry.registry.addKeyMapping(altZ, undoShortcut.name);
 
-  var metaZ = Blockly.ShortcutRegistry.getRegistry().createSerializedKey(
+  var metaZ = Blockly.ShortcutRegistry.registry.createSerializedKey(
       Blockly.utils.KeyCodes.Z, [Blockly.utils.KeyCodes.META]);
-  Blockly.ShortcutRegistry.getRegistry().addKeyMapping(
-      metaZ, undoShortcut.name);
+  Blockly.ShortcutRegistry.registry.addKeyMapping(metaZ, undoShortcut.name);
 };
 
 /** Keyboard shortcut to redo the previous action on ctrl+shift+z, cmd+shift+z, or alt+shift+z. */
@@ -235,31 +228,29 @@ Blockly.ShortcutItems.registerRedo = function() {
       return true;
     }
   };
-  Blockly.ShortcutRegistry.getRegistry().register(redoShortcut);
+  Blockly.ShortcutRegistry.registry.register(redoShortcut);
 
-  var ctrlShiftZ = Blockly.ShortcutRegistry.getRegistry().createSerializedKey(
+  var ctrlShiftZ = Blockly.ShortcutRegistry.registry.createSerializedKey(
       Blockly.utils.KeyCodes.Z,
       [Blockly.utils.KeyCodes.SHIFT, Blockly.utils.KeyCodes.CTRL]);
-  Blockly.ShortcutRegistry.getRegistry().addKeyMapping(
+  Blockly.ShortcutRegistry.registry.addKeyMapping(
       ctrlShiftZ, redoShortcut.name);
 
-  var altShiftZ = Blockly.ShortcutRegistry.getRegistry().createSerializedKey(
+  var altShiftZ = Blockly.ShortcutRegistry.registry.createSerializedKey(
       Blockly.utils.KeyCodes.Z,
       [Blockly.utils.KeyCodes.SHIFT, Blockly.utils.KeyCodes.ALT]);
-  Blockly.ShortcutRegistry.getRegistry().addKeyMapping(
-      altShiftZ, redoShortcut.name);
+  Blockly.ShortcutRegistry.registry.addKeyMapping(altShiftZ, redoShortcut.name);
 
-  var metaShiftZ = Blockly.ShortcutRegistry.getRegistry().createSerializedKey(
+  var metaShiftZ = Blockly.ShortcutRegistry.registry.createSerializedKey(
       Blockly.utils.KeyCodes.Z,
       [Blockly.utils.KeyCodes.SHIFT, Blockly.utils.KeyCodes.META]);
-  Blockly.ShortcutRegistry.getRegistry().addKeyMapping(
+  Blockly.ShortcutRegistry.registry.addKeyMapping(
       metaShiftZ, redoShortcut.name);
 
   // Ctrl-y is redo in Windows.  Command-y is never valid on Macs.
-  var ctrlY = Blockly.ShortcutRegistry.getRegistry().createSerializedKey(
+  var ctrlY = Blockly.ShortcutRegistry.registry.createSerializedKey(
       Blockly.utils.KeyCodes.Y, [Blockly.utils.KeyCodes.CTRL]);
-  Blockly.ShortcutRegistry.getRegistry().addKeyMapping(
-      ctrlY, redoShortcut.name);
+  Blockly.ShortcutRegistry.registry.addKeyMapping(ctrlY, redoShortcut.name);
 };
 
 /**

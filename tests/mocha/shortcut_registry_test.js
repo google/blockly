@@ -193,7 +193,7 @@ suite('Keyboard Shortcut Registry Test', function() {
     });
     test('Gets a copy of the registry', function() {
       this.registry.registry_['shortcutName'] = {'name': 'shortcutName'};
-      var registrycopy = this.registry.getShortcuts();
+      var registrycopy = this.registry.getRegistry();
       registrycopy['shortcutName']['name'] = 'shortcutName1';
       chai.assert.equal(
           this.registry.registry_['shortcutName']['name'], 'shortcutName');

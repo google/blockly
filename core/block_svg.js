@@ -753,9 +753,8 @@ Blockly.BlockSvg.prototype.generateContextMenu = function() {
   if (this.workspace.options.readOnly || !this.contextMenu) {
     return null;
   }
-  var menuOptions =
-      Blockly.ContextMenuRegistry.getRegistry().getContextMenuOptions(
-          Blockly.ContextMenuRegistry.ScopeType.BLOCK, {block: this});
+  var menuOptions = Blockly.ContextMenuRegistry.registry.getContextMenuOptions(
+      Blockly.ContextMenuRegistry.ScopeType.BLOCK, {block: this});
 
   // Allow the block to add or modify menuOptions.
   if (this.customContextMenu) {

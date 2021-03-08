@@ -22,14 +22,16 @@ Blockly.PluginManager = function() {
   /**
    * A map of the plugins registered with the workspace, mapped to id.
    * @type {!Object<string, !Blockly.PluginManager.PluginDatum>}
+   * @private
    */
   this.pluginData_ = {};
 
   /**
    * A map of types to plugin ids.
    * @type {!Object<string, Array<string>>}
+   * @private
    */
-  this.typeToPluginId_ = {};
+  this.typeToPluginIds_ = {};
 };
 
 /**
@@ -52,10 +54,10 @@ Blockly.PluginManager.prototype.addPlugin = function(pluginDataObject) {
   this.pluginData_[pluginDataObject.id] = pluginDataObject;
   for (var i = 0, type; (type = pluginDataObject.types[i]); i++) {
     var typeKey = String(type).toLowerCase();
-    if (this.typeToPluginId_[typeKey] === undefined) {
-      this.typeToPluginId_[typeKey] = [pluginDataObject.id];
+    if (this.typeToPluginIds_[typeKey] === undefined) {
+      this.typeToPluginIds_[typeKey] = [pluginDataObject.id];
     } else {
-      this.typeToPluginId_[typeKey].push(pluginDataObject.id);
+      this.typeToPluginIds_[typeKey].push(pluginDataObject.id);
     }
   }
 };
@@ -80,7 +82,7 @@ Blockly.PluginManager.prototype.getPlugin = function(id) {
  */
 Blockly.PluginManager.prototype.getPlugins = function(type, sorted) {
   var typeKey = String(type).toLowerCase();
-  var pluginIds = this.typeToPluginId_[typeKey];
+  var pluginIds = this.typeToPluginIds_[typeKey];
   if (!pluginIds) {
     return [];
   }

@@ -118,8 +118,7 @@ Blockly.HorizontalFlyout.prototype.getY = function() {
       // to align the bottom edge of the flyout with the bottom edge of the
       // blocklyDiv, we calculate the full height of the div minus the height
       // of the flyout.
-      y = viewMetrics.height +
-          absoluteMetrics.top - this.height_;
+      y = viewMetrics.height + absoluteMetrics.top - this.height_;
     }
   }
 

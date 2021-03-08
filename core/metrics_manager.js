@@ -551,72 +551,25 @@ Blockly.FlyoutMetricsManager.prototype.getScrollMetrics = function(
 };
 
 /**
- * Gets the metrics for the visible workspace in either pixel or workspace
- * coordinates. The view width does not include the scrollbars.
- * @param {boolean=} opt_getWorkspaceCoordinates True to get the view metrics in
- *     workspace coordinates, false to get them in pixel coordinates.
- * @return {!Blockly.MetricsManager.ContainerRegion} The width, height, top and
- *     left of the viewport in either workspace coordinates or pixel
- *     coordinates.
- * @private
- */
-Blockly.FlyoutMetricsManager.prototype.getHorizontalViewMetrics_ = function(
-    opt_getWorkspaceCoordinates) {
-  var svgMetrics = this.getSvgMetrics();
-  var scale = opt_getWorkspaceCoordinates ? this.workspace_.scale : 1;
-  var viewWidth = svgMetrics.width - 2 * this.flyout_.SCROLLBAR_PADDING;
-  var viewHeight = svgMetrics.height;
-
-  if (this.workspace_.toolboxPosition == Blockly.utils.toolbox.Position.TOP) {
-    viewHeight -= this.flyout_.SCROLLBAR_PADDING;
-  }
-  return {
-    height: viewHeight / scale,
-    width: viewWidth / scale,
-    top: -this.workspace_.scrollY / scale,
-    left: -this.workspace_.scrollX / scale,
-  };
-};
-
-/**
- * Gets the metrics for the visible workspace in either pixel or workspace
- * coordinates. The view width does not include the scrollbars.
- * @param {boolean=} opt_getWorkspaceCoordinates True to get the view metrics in
- *     workspace coordinates, false to get them in pixel coordinates.
- * @return {!Blockly.MetricsManager.ContainerRegion} The width, height, top and
- *     left of the viewport in either workspace coordinates or pixel
- *     coordinates.
- * @private
- */
-Blockly.FlyoutMetricsManager.prototype.getVerticalViewMetrics_ = function(
-    opt_getWorkspaceCoordinates) {
-  var svgMetrics = this.getSvgMetrics();
-  var scale = opt_getWorkspaceCoordinates ? this.workspace_.scale : 1;
-  var viewHeight = svgMetrics.height - 2 * this.flyout_.SCROLLBAR_PADDING;
-  var viewWidth = svgMetrics.width;
-
-  if (!this.flyout_.RTL) {
-    viewWidth -= this.flyout_.SCROLLBAR_PADDING;
-  }
-
-  return {
-    height: viewHeight / scale,
-    width: viewWidth / scale,
-    top: -this.workspace_.scrollY / scale,
-    left: -this.workspace_.scrollX / scale,
-  };
-};
-
-/**
  * @override
  */
 Blockly.FlyoutMetricsManager.prototype.getViewMetrics = function(
     opt_getWorkspaceCoordinates) {
+  var svgMetrics = this.getSvgMetrics();
+  var scale = opt_getWorkspaceCoordinates ? this.workspace_.scale : 1;
   if (this.flyout_.horizontalLayout) {
-    return this.getHorizontalViewMetrics_(opt_getWorkspaceCoordinates);
+    var viewWidth = svgMetrics.width - 2 * this.flyout_.SCROLLBAR_PADDING;
+    var viewHeight = svgMetrics.height - this.flyout_.SCROLLBAR_PADDING;
   } else {
-    return this.getVerticalViewMetrics_(opt_getWorkspaceCoordinates);
+    var viewWidth = svgMetrics.width - this.flyout_.SCROLLBAR_PADDING;
+    var viewHeight = svgMetrics.height - 2 * this.flyout_.SCROLLBAR_PADDING;
   }
+  return {
+    height: viewHeight / scale,
+    width: viewWidth / scale,
+    top: -this.workspace_.scrollY / scale,
+    left: -this.workspace_.scrollX / scale,
+  };
 };
 
 /**
@@ -624,14 +577,14 @@ Blockly.FlyoutMetricsManager.prototype.getViewMetrics = function(
  */
 Blockly.FlyoutMetricsManager.prototype.getAbsoluteMetrics = function() {
   var scrollbarPadding = this.flyout_.SCROLLBAR_PADDING;
-  var toolboxPosition = this.workspace_.toolboxPosition;
 
   if (this.flyout_.horizontalLayout) {
-    var absoluteTop = toolboxPosition == Blockly.utils.toolbox.Position.BOTTOM ?
-        0 :
-        scrollbarPadding;
-    return {top: absoluteTop, left: scrollbarPadding};
+    // The viewWidth is svgWidth - 2 * scrollbarPadding. We want to put half
+    // of that padding to the left of the blocks.
+    return {top: 0, left: scrollbarPadding};
   } else {
+    // The viewHeight is svgHeight - 2 * scrollbarPadding. We want to put half
+    // of that padding to the top of the blocks.
     return {top: scrollbarPadding, left: 0};
   }
 };

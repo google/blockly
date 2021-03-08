@@ -122,6 +122,7 @@ Blockly.ShortcutRegistry.prototype.unregister = function(shortcutName) {
  */
 Blockly.ShortcutRegistry.prototype.addKeyMapping = function(
     keyCode, shortcutName, opt_allowCollision) {
+  keyCode = String(keyCode);
   var shortcutNames = this.keyMap_[keyCode];
   if (shortcutNames && !opt_allowCollision) {
     throw new Error(

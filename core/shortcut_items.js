@@ -16,6 +16,7 @@
  */
 goog.provide('Blockly.ShortcutItems');
 
+goog.require('Blockly.Gesture');
 goog.require('Blockly.ShortcutRegistry');
 goog.require('Blockly.utils.KeyCodes');
 

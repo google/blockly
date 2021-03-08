@@ -16,6 +16,9 @@
  */
 goog.provide('Blockly.ContextMenuRegistry');
 
+goog.requireType('Blockly.BlockSvg');
+goog.requireType('Blockly.WorkspaceSvg');
+
 
 /**
  * Class for the registry of context menu items. This is intended to be a

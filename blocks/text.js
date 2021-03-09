@@ -95,6 +95,9 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     "style": "text_blocks",
     "helpUrl": "%{BKY_TEXT_JOIN_HELPURL}",
     "tooltip": "%{BKY_TEXT_JOIN_TOOLTIP}",
+    "extensions":[
+      "jit_connection"
+    ]
   },
   {
     "type": "text_append",
@@ -766,6 +769,48 @@ Blockly.Extensions.register('text_indexOf_tooltip',
 
 Blockly.Extensions.register('text_quotes',
     Blockly.Constants.Text.TEXT_QUOTES_EXTENSION);
+
+Blockly.Extensions.register("jit_connection", function() {
+  
+  this.inputCounter = 2;
+  
+  this.finalizeConnections = function() {
+    if (this.inputList.length > 2) {
+      var toRemove = [];
+      for (var i = 1; i < this.inputList.length; i++) {
+        var targetConnection = this.inputList[i].connection.targetConnection;
+        if (!targetConnection) {
+          toRemove.push(this.inputList[i].name);
+        }
+      }
+      for (i = 0; i < toRemove.length; i++) {
+        this.removeInput(toRemove[i]);
+      }
+    }
+  };
+  
+  this.onPendingConnection = function(connection) {
+    if (connection.targetConnection) {
+      var isLastConnection = this.inputList[this.inputList.length - 1].connection == connection;
+      if (isLastConnection) {
+        this.appendValueInput('ADD' + (this.inputCounter++));
+      } else {
+        var connectionIndex;
+        for (var i = 0; i < this.inputList.length; i++) {
+          if (this.inputList[i].connection == connection) {
+            connectionIndex = i;
+          }
+        }
+        var nextInput = this.inputList[connectionIndex + 1];
+        var nextConnection = nextInput && nextInput.connection.targetConnection;
+        if (nextConnection && !nextConnection.sourceBlock_.isInsertionMarker()) {
+          this.appendValueInput('ADD' + (this.inputCounter++));
+          this.moveNumberedInputBefore(this.inputList.length - 1, connectionIndex + 1);
+        }
+      }
+    }
+  };
+});
 
 Blockly.Extensions.registerMutator('text_charAt_mutator',
     Blockly.Constants.Text.TEXT_CHARAT_MUTATOR_MIXIN,

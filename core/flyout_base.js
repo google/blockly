@@ -446,7 +446,8 @@ Blockly.Flyout.prototype.positionAt_ = function(width, height, x, y) {
     if (scrollbar.hScroll) {
       scrollbar.hScroll.setPosition(
           scrollbar.hScroll.position.x, scrollbar.hScroll.position.y);
-    } else if (scrollbar.vScroll) {
+    }
+    if (scrollbar.vScroll) {
       scrollbar.vScroll.setPosition(
           scrollbar.vScroll.position.x, scrollbar.vScroll.position.y);
 

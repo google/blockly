@@ -777,14 +777,23 @@ Blockly.Extensions.register("jit_connection", function() {
   this.finalizeConnections = function() {
     if (this.inputList.length > 2) {
       var toRemove = [];
-      for (var i = 1; i < this.inputList.length; i++) {
+      for (var i = 0; i < this.inputList.length; i++) {
         var targetConnection = this.inputList[i].connection.targetConnection;
         if (!targetConnection) {
           toRemove.push(this.inputList[i].name);
         }
       }
+      if (this.inputList.length - toRemove.length < 2) {
+        // Always show at least two inputs
+        toRemove = toRemove.slice(2);
+      }
       for (i = 0; i < toRemove.length; i++) {
         this.removeInput(toRemove[i]);
+      }
+      // The first input should have the block text. If we removed the first input,
+      // add the block text to the new first input.
+      if (this.inputList[0].fieldRow.length == 0) {
+        this.inputList[0].appendField(Blockly.Msg['TEXT_JOIN_TITLE_CREATEWITH']);
       }
     }
   };

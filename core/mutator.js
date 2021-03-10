@@ -241,8 +241,8 @@ Blockly.Mutator.prototype.resizeBubble_ = function() {
   var height = workspaceSize.height + doubleBorderWidth * 3;
   var flyout = this.workspace_.getFlyout();
   if (flyout) {
-    var flyoutMetrics = flyout.getMetrics_();
-    height = Math.max(height, flyoutMetrics.scrollHeight + 20);
+    var flyoutScrollMetrics = this.workspace_.getMetricsManager().getScrollMetrics();
+    height = Math.max(height, flyoutScrollMetrics.height + 20);
     width += flyout.getWidth();
   }
   if (this.block_.RTL) {

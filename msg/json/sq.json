@@ -2,15 +2,18 @@
 	"@metadata": {
 		"authors": [
 			"Arianit",
+			"Eraldkerciku",
 			"Liridon",
 			"아라"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "send",
+	"UNNAMED_KEY": "pa emër",
 	"TODAY": "Sot",
 	"DUPLICATE_BLOCK": "Kopjo",
 	"ADD_COMMENT": "Vendos nje Koment",
 	"REMOVE_COMMENT": "Fshij komentin",
+	"DUPLICATE_COMMENT": "Koment Dublikatë",
 	"EXTERNAL_INPUTS": "Hyrjet e jashtme",
 	"INLINE_INPUTS": "Hyrjet e brendshme",
 	"DELETE_BLOCK": "Fshij bllokun",
@@ -201,6 +204,9 @@
 	"MATH_RANDOM_FLOAT_HELPURL": "http://en.wikipedia.org/wiki/Random_number_generation",
 	"MATH_RANDOM_FLOAT_TITLE_RANDOM": "fraksioni i rastësishëm",
 	"MATH_RANDOM_FLOAT_TOOLTIP": "Kthe fraksionin e rastësishëm në mes të 0.0 (përfshirëse) dhe 1.0 (jopërfshirëse).",
+	"MATH_ATAN2_HELPURL": "https://en.wikipedia.org/wiki/Atan2",
+	"MATH_ATAN2_TITLE": "atan2 of X:%1 Y:%2",
+	"MATH_ATAN2_TOOLTIP": "Ktheni arkangjentin e pikës (X, Y) në gradë nga -180 në 180.",
 	"TEXT_TEXT_HELPURL": "http://en.wikipedia.org/wiki/String_(computer_science)",
 	"TEXT_TEXT_TOOLTIP": "Nje shkronje, fjale, ose rresht teksti.",
 	"TEXT_JOIN_TITLE_CREATEWITH": "krijo tekst me",
@@ -355,5 +361,8 @@
 	"PROCEDURES_HIGHLIGHT_DEF": "Thekso definicionin e funksionit",
 	"PROCEDURES_CREATE_DO": "Krijo '%1'",
 	"PROCEDURES_IFRETURN_TOOLTIP": "Nëse një vlerë është e saktë, atëherë kthe një vlerë të dytë.",
-	"PROCEDURES_IFRETURN_WARNING": "Paralajmërim: Ky bllok mund të përdoret vetëm brenda definicionit të funksionit."
+	"PROCEDURES_IFRETURN_WARNING": "Paralajmërim: Ky bllok mund të përdoret vetëm brenda definicionit të funksionit.",
+	"WORKSPACE_COMMENT_DEFAULT_TEXT": "Thuaj dicka...",
+	"WORKSPACE_ARIA_LABEL": "Hapësira e punës e Blockly",
+	"COLLAPSED_WARNINGS_WARNING": "Blloqet e shembura përmbajnë paralajmërime."
 }

@@ -18,6 +18,7 @@ goog.requireType('Blockly.IToolboxItem');
 goog.requireType('Blockly.utils.toolbox');
 goog.requireType('Blockly.WorkspaceSvg');
 
+
 /**
  * Class for an item in the toolbox.
  * @param {!Blockly.utils.toolbox.ToolboxItemInfo} toolboxItemDef The JSON defining the

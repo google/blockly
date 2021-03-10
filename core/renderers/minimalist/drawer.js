@@ -12,8 +12,8 @@
 goog.provide('Blockly.minimalist.Drawer');
 
 goog.require('Blockly.blockRendering.Drawer');
-goog.require('Blockly.utils.object');
 goog.require('Blockly.minimalist.RenderInfo');
+goog.require('Blockly.utils.object');
 
 
 /**

@@ -13,13 +13,10 @@
 
 goog.provide('Blockly.IMetricsManager');
 
-goog.requireType('Blockly.IFlyout');
-goog.requireType('Blockly.IToolbox');
 goog.requireType('Blockly.MetricsManager');
 goog.requireType('Blockly.utils.Metrics');
-goog.requireType('Blockly.utils.toolbox');
-
 goog.requireType('Blockly.utils.Size');
+
 
 /**
  * Interface for a metrics manager.
@@ -28,30 +25,26 @@ goog.requireType('Blockly.utils.Size');
 Blockly.IMetricsManager = function() {};
 
 /**
- * Gets the width and the height of the flyout on the workspace in pixel
- * coordinates.
- * @param {!Blockly.MetricsManager.ContainerRegion} viewMetrics An object
- *     containing height and width attributes in CSS pixels.  Together they
- *     specify the size of the visible workspace, not including areas covered up
- *     by the toolbox.
- * @return {!Blockly.MetricsManager.ContainerRegion} The dimensions of the
- *     contents of the given workspace, as an object containing
- *     - height and width in pixels
- *     - left and top in pixels relative to the workspace origin.
- * @protected
+ * Returns whether the scroll area has fixed edges.
+ * @return {boolean} Whether the scroll area has fixed edges.
+ * @package
  */
-Blockly.IMetricsManager.prototype.getContentDimensionsBounded_;
+Blockly.IMetricsManager.prototype.hasFixedEdges;
 
 /**
- * Gets the bounding box for all workspace contents, in pixel coordinates.
- * @return {!Blockly.MetricsManager.ContainerRegion} The dimensions of the
- *     contents of the given workspace in pixel coordinates, as an object
- *     containing
- *     - height and width in pixels
- *     - left and top in pixels relative to the workspace origin.
- * @protected
+ * Returns the metrics for the scroll area of the workspace.
+ * @param {boolean=} opt_getWorkspaceCoordinates True to get the scroll metrics
+ *     in workspace coordinates, false to get them in pixel coordinates.
+ * @param {!Blockly.MetricsManager.ContainerRegion=} opt_viewMetrics The view
+ *     metrics if they have been previously computed. Passing in null may cause
+ *     the view metrics to be computed again, if it is needed.
+ * @param {!Blockly.MetricsManager.ContainerRegion=} opt_contentMetrics The
+ *     content metrics if they have been previously computed. Passing in null
+ *     may cause the content metrics to be computed again, if it is needed.
+ * @return {!Blockly.MetricsManager.ContainerRegion} The metrics for the scroll
+ *    container
  */
-Blockly.IMetricsManager.prototype.getContentDimensionsExact_;
+Blockly.IMetricsManager.prototype.getScrollMetrics;
 
 /**
  * Gets the width and the height of the flyout on the workspace in pixel
@@ -107,19 +100,10 @@ Blockly.IMetricsManager.prototype.getViewMetrics;
 
 /**
  * Gets content metrics in either pixel or workspace coordinates.
- *
- * This can mean two things:
- * If the workspace has a fixed width and height then the content
- * area is rectangle around all the top bounded elements on the workspace
- * (workspace comments and blocks).
- *
- * If the workspace does not have a fixed width and height then it is the
- * metrics of the area that content can be placed.
+ * The content area is a rectangle around all the top bounded elements on the
+ * workspace (workspace comments and blocks).
  * @param {boolean=} opt_getWorkspaceCoordinates True to get the content metrics
  *     in workspace coordinates, false to get them in pixel coordinates.
- * @param {!Blockly.MetricsManager.ContainerRegion=} opt_viewMetrics The view
- *     metrics if they have been previously computed. Passing in null may cause
- *     the view metrics to be computed again, if it is needed.
  * @return {!Blockly.MetricsManager.ContainerRegion} The
  *     metrics for the content container.
  * @public

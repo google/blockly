@@ -17,6 +17,7 @@ goog.require('Blockly.Events.UiBase');
 goog.require('Blockly.registry');
 goog.require('Blockly.utils.object');
 
+
 /**
  * Class for a theme change event.
  * @param {string=} opt_themeName The theme name. Undefined for a blank event.

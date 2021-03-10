@@ -14,16 +14,15 @@
 goog.provide('Blockly.registry');
 
 goog.requireType('Blockly.blockRendering.Renderer');
+goog.requireType('Blockly.Cursor');
 goog.requireType('Blockly.Events.Abstract');
 goog.requireType('Blockly.Field');
 goog.requireType('Blockly.IConnectionChecker');
 goog.requireType('Blockly.IFlyout');
 goog.requireType('Blockly.IToolbox');
-goog.requireType('Blockly.Theme');
-
-goog.requireType('Blockly.Cursor');
 goog.requireType('Blockly.MetricsManager');
 goog.requireType('Blockly.Options');
+goog.requireType('Blockly.Theme');
 goog.requireType('Blockly.ToolboxItem');
 
 
@@ -181,12 +180,9 @@ Blockly.registry.unregister = function(type, name) {
   type = String(type).toLowerCase();
   name = name.toLowerCase();
   var typeRegistry = Blockly.registry.typeMap_[type];
-  if (!typeRegistry) {
-    console.warn('No type "' + type + '" found');
-    return;
-  }
-  if (!typeRegistry[name]) {
-    console.warn('No name "' + name + '" with type "' + type + '" found');
+  if (!typeRegistry || !typeRegistry[name]) {
+    console.warn('Unable to unregister [' + name + '][' + type + '] from the ' +
+      'registry.');
     return;
   }
   delete Blockly.registry.typeMap_[type][name];
@@ -198,20 +194,24 @@ Blockly.registry.unregister = function(type, name) {
  * @param {string|!Blockly.registry.Type<T>} type The type of the plugin.
  *     (e.g. Field, Renderer)
  * @param {string} name The plugin's name. (Ex. field_angle, geras)
+ * @param {boolean=} opt_throwIfMissing Whether or not to throw an error if we
+ *     are unable to find the plugin.
  * @return {?function(new:T, ...?)|Object} The class or object with the given
  *     name and type or null if none exists.
  * @template T
  */
-Blockly.registry.getItem_ = function(type, name) {
+Blockly.registry.getItem_ = function(type, name, opt_throwIfMissing) {
   type = String(type).toLowerCase();
   name = name.toLowerCase();
   var typeRegistry = Blockly.registry.typeMap_[type];
-  if (!typeRegistry) {
-    console.warn('No type "' + type + '" found');
-    return null;
-  }
-  if (!typeRegistry[name]) {
-    console.warn('No name "' + name + '" with type "' + type + '" found');
+  if (!typeRegistry || !typeRegistry[name]) {
+    var msg = 'Unable to find [' + name + '][' + type + '] in the registry.';
+    if (opt_throwIfMissing) {
+      throw new Error(msg + ' You must require or register a ' + type +
+        ' plugin.');
+    } else {
+      console.warn(msg);
+    }
     return null;
   }
   return typeRegistry[name];
@@ -242,13 +242,15 @@ Blockly.registry.hasItem = function(type, name) {
  * @param {string|!Blockly.registry.Type<T>} type The type of the plugin.
  *     (e.g. Field, Renderer)
  * @param {string} name The plugin's name. (Ex. field_angle, geras)
+ * @param {boolean=} opt_throwIfMissing Whether or not to throw an error if we
+ *     are unable to find the plugin.
  * @return {?function(new:T, ...?)} The class with the given name and type or
  *     null if none exists.
  * @template T
  */
-Blockly.registry.getClass = function(type, name) {
+Blockly.registry.getClass = function(type, name, opt_throwIfMissing) {
   return /** @type {?function(new:T, ...?)} */ (
-    Blockly.registry.getItem_(type, name));
+    Blockly.registry.getItem_(type, name, opt_throwIfMissing));
 };
 
 /**
@@ -256,11 +258,14 @@ Blockly.registry.getClass = function(type, name) {
  * @param {string|!Blockly.registry.Type<T>} type The type of the plugin.
  *     (e.g. Category)
  * @param {string} name The plugin's name. (Ex. logic_category)
+ * @param {boolean=} opt_throwIfMissing Whether or not to throw an error if we
+ *     are unable to find the object.
  * @returns {T} The object with the given name and type or null if none exists.
  * @template T
  */
-Blockly.registry.getObject = function(type, name) {
-  return /** @type {T} */ (Blockly.registry.getItem_(type, name));
+Blockly.registry.getObject = function(type, name, opt_throwIfMissing) {
+  return /** @type {T} */ (
+    Blockly.registry.getItem_(type, name, opt_throwIfMissing));
 };
 
 /**
@@ -269,10 +274,13 @@ Blockly.registry.getObject = function(type, name) {
  * @param {!Blockly.registry.Type<T>} type The type of the plugin.
  * @param {!Blockly.Options} options The option object to check for the given
  *     plugin.
+ * @param {boolean=} opt_throwIfMissing Whether or not to throw an error if we
+ *     are unable to find the plugin.
  * @return {?function(new:T, ...?)} The class for the plugin.
  * @template T
  */
-Blockly.registry.getClassFromOptions = function(type, options) {
+Blockly.registry.getClassFromOptions = function(type, options,
+    opt_throwIfMissing) {
   var typeName = type.toString();
   var plugin = options.plugins[typeName] || Blockly.registry.DEFAULT;
 
@@ -280,5 +288,5 @@ Blockly.registry.getClassFromOptions = function(type, options) {
   if (typeof plugin == 'function') {
     return plugin;
   }
-  return Blockly.registry.getClass(type, plugin);
+  return Blockly.registry.getClass(type, plugin, opt_throwIfMissing);
 };

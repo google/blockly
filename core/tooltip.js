@@ -21,7 +21,9 @@
  */
 goog.provide('Blockly.Tooltip');
 
+goog.require('Blockly.browserEvents');
 goog.require('Blockly.utils.string');
+
 
 /**
  * A type which can define a tooltip.
@@ -177,10 +179,10 @@ Blockly.Tooltip.createDom = function() {
  * @param {!Element} element SVG element onto which tooltip is to be bound.
  */
 Blockly.Tooltip.bindMouseEvents = function(element) {
-  element.mouseOverWrapper_ = Blockly.bindEvent_(element, 'mouseover', null,
-      Blockly.Tooltip.onMouseOver_);
-  element.mouseOutWrapper_ = Blockly.bindEvent_(element, 'mouseout', null,
-      Blockly.Tooltip.onMouseOut_);
+  element.mouseOverWrapper_ = Blockly.browserEvents.bind(
+      element, 'mouseover', null, Blockly.Tooltip.onMouseOver_);
+  element.mouseOutWrapper_ = Blockly.browserEvents.bind(
+      element, 'mouseout', null, Blockly.Tooltip.onMouseOut_);
 
   // Don't use bindEvent_ for mousemove since that would create a
   // corresponding touch handler, even though this only makes sense in the
@@ -196,8 +198,8 @@ Blockly.Tooltip.unbindMouseEvents = function(element) {
   if (!element) {
     return;
   }
-  Blockly.unbindEvent_(element.mouseOverWrapper_);
-  Blockly.unbindEvent_(element.mouseOutWrapper_);
+  Blockly.browserEvents.unbind(element.mouseOverWrapper_);
+  Blockly.browserEvents.unbind(element.mouseOutWrapper_);
   element.removeEventListener('mousemove', Blockly.Tooltip.onMouseMove_);
 };
 
@@ -349,7 +351,7 @@ Blockly.Tooltip.show_ = function() {
     div.appendChild(document.createTextNode(lines[i]));
     Blockly.Tooltip.DIV.appendChild(div);
   }
-  var rtl = Blockly.Tooltip.element_.RTL;
+  var rtl = /** @type {{RTL: boolean}} */ (Blockly.Tooltip.element_).RTL;
   var windowWidth = document.documentElement.clientWidth;
   var windowHeight = document.documentElement.clientHeight;
   // Display the tooltip.

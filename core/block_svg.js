@@ -16,24 +16,31 @@ goog.require('Blockly.ASTNode');
 goog.require('Blockly.Block');
 goog.require('Blockly.blockAnimations');
 goog.require('Blockly.blockRendering.IPathObject');
+goog.require('Blockly.browserEvents');
+goog.require('Blockly.connectionTypes');
+/** @suppress {extraRequire} */
 goog.require('Blockly.constants');
 goog.require('Blockly.ContextMenu');
 goog.require('Blockly.ContextMenuRegistry');
 goog.require('Blockly.Events');
+/** @suppress {extraRequire} */
 goog.require('Blockly.Events.BlockMove');
+/** @suppress {extraRequire} */
 goog.require('Blockly.Events.Selected');
 goog.require('Blockly.Msg');
 goog.require('Blockly.RenderedConnection');
 goog.require('Blockly.TabNavigateCursor');
 goog.require('Blockly.Tooltip');
+/** @suppress {extraRequire} */
 goog.require('Blockly.Touch');
 goog.require('Blockly.utils');
-goog.require('Blockly.utils.deprecation');
 goog.require('Blockly.utils.Coordinate');
+goog.require('Blockly.utils.deprecation');
 goog.require('Blockly.utils.dom');
 goog.require('Blockly.utils.object');
 goog.require('Blockly.utils.Rect');
 goog.require('Blockly.utils.userAgent');
+goog.require('Blockly.Xml');
 
 goog.requireType('Blockly.blockRendering.Debug');
 goog.requireType('Blockly.Comment');
@@ -44,7 +51,6 @@ goog.requireType('Blockly.IBoundedElement');
 goog.requireType('Blockly.ICopyable');
 goog.requireType('Blockly.Input');
 goog.requireType('Blockly.Mutator');
-goog.requireType('Blockly.ShortcutRegistry');
 goog.requireType('Blockly.Theme');
 goog.requireType('Blockly.Warning');
 goog.requireType('Blockly.WorkspaceSvg');
@@ -157,7 +163,7 @@ Blockly.BlockSvg.prototype.warningTextDb_ = null;
 
 /**
  * Constant for identifying rows that are to be rendered inline.
- * Don't collide with Blockly.INPUT_VALUE and friends.
+ * Don't collide with Blockly.inputTypes.
  * @const
  */
 Blockly.BlockSvg.INLINE = -1;
@@ -223,7 +229,7 @@ Blockly.BlockSvg.prototype.initSvg = function() {
   this.pathObject.updateMovable(this.isMovable());
   var svg = this.getSvgRoot();
   if (!this.workspace.options.readOnly && !this.eventsInit_ && svg) {
-    Blockly.bindEventWithChecks_(
+    Blockly.browserEvents.conditionalBind(
         svg, 'mousedown', this, this.onMouseDown_);
   }
   this.eventsInit_ = true;
@@ -309,7 +315,8 @@ Blockly.BlockSvg.prototype.select = function() {
       Blockly.Events.enable();
     }
   }
-  var event = new Blockly.Events.Selected(oldId, this.id, this.workspace.id);
+  var event = new (Blockly.Events.get(Blockly.Events.SELECTED))(oldId, this.id,
+      this.workspace.id);
   Blockly.Events.fire(event);
   Blockly.selected = this;
   this.addSelect();
@@ -322,7 +329,8 @@ Blockly.BlockSvg.prototype.unselect = function() {
   if (Blockly.selected != this) {
     return;
   }
-  var event = new Blockly.Events.Selected(this.id, null, this.workspace.id);
+  var event = new (Blockly.Events.get(Blockly.Events.SELECTED))(this.id, null,
+      this.workspace.id);
   event.workspaceId = this.workspace.id;
   Blockly.Events.fire(event);
   Blockly.selected = null;
@@ -463,7 +471,7 @@ Blockly.BlockSvg.prototype.moveBy = function(dx, dy) {
   }
   var eventsEnabled = Blockly.Events.isEnabled();
   if (eventsEnabled) {
-    var event = new Blockly.Events.BlockMove(this);
+    var event = new (Blockly.Events.get(Blockly.Events.BLOCK_MOVE))(this);
   }
   var xy = this.getRelativeToSurfaceXY();
   this.translate(xy.x + dx, xy.y + dy);
@@ -1368,8 +1376,7 @@ Blockly.BlockSvg.prototype.moveNumberedInputBefore = function(
 
 /**
  * Add a value input, statement input or local variable to this block.
- * @param {number} type Either Blockly.INPUT_VALUE or Blockly.NEXT_STATEMENT or
- *     Blockly.DUMMY_INPUT.
+ * @param {number} type One of Blockly.inputTypes.
  * @param {string} name Language-neutral identifier which may used to find this
  *     input again.  Should be unique to this block.
  * @return {!Blockly.Input} The input object created.
@@ -1583,8 +1590,8 @@ Blockly.BlockSvg.prototype.positionNearConnection = function(sourceConnection,
     targetConnection) {
   // We only need to position the new block if it's before the existing one,
   // otherwise its position is set by the previous block.
-  if (sourceConnection.type == Blockly.NEXT_STATEMENT ||
-      sourceConnection.type == Blockly.INPUT_VALUE) {
+  if (sourceConnection.type == Blockly.connectionTypes.NEXT_STATEMENT ||
+      sourceConnection.type == Blockly.connectionTypes.INPUT_VALUE) {
     var dx = targetConnection.x - sourceConnection.x;
     var dy = targetConnection.y - sourceConnection.y;
 

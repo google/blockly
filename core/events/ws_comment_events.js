@@ -22,8 +22,7 @@ goog.require('Blockly.registry');
 goog.require('Blockly.utils.Coordinate');
 goog.require('Blockly.utils.object');
 goog.require('Blockly.utils.xml');
-// TODO: Fix recursive dependency.
-// goog.require('Blockly.Xml');
+goog.require('Blockly.Xml');
 
 
 /**

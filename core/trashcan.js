@@ -95,7 +95,7 @@ Blockly.Trashcan = function(workspace) {
     var VerticalFlyout = Blockly.registry.getClassFromOptions(
         Blockly.registry.Type.FLYOUTS_VERTICAL_TOOLBOX,
         this.workspace_.options, true);
-    this.flyout_ = new VerticalFlyout(flyoutWorkspaceOptions);
+    this.flyout = new VerticalFlyout(flyoutWorkspaceOptions);
   }
   this.workspace_.addChangeListener(this.onDelete_.bind(this));
 };

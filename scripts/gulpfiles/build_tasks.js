@@ -449,6 +449,7 @@ function buildAdvancedCompilationTest() {
     'tests/compile/main.js',
     'core/**/**/*.js',
     'blocks/*.js',
+    'tests/compile/test_blocks.js',
     'generators/**/*.js'];
   return gulp.src(maybeAddClosureLibrary(srcs), {base: './'})
     .pipe(stripApacheLicense())

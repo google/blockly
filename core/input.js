@@ -21,7 +21,6 @@ goog.require('Blockly.inputTypes');
 goog.requireType('Blockly.Block');
 goog.requireType('Blockly.BlockSvg');
 goog.requireType('Blockly.Field');
-goog.requireType('Blockly.FieldDropdown');
 goog.requireType('Blockly.RenderedConnection');
 
 
@@ -122,17 +121,16 @@ Blockly.Input.prototype.insertFieldAt = function(index, field, opt_name) {
   field.name = opt_name;
   field.setVisible(this.isVisible());
 
-  var fieldDropdown = /** @type {Blockly.FieldDropdown} */ (field);
-  if (fieldDropdown.prefixField) {
+  if (field.prefixField) {
     // Add any prefix.
-    index = this.insertFieldAt(index, fieldDropdown.prefixField);
+    index = this.insertFieldAt(index, field.prefixField);
   }
   // Add the field to the field row.
   this.fieldRow.splice(index, 0, field);
   ++index;
-  if (fieldDropdown.suffixField) {
+  if (field.suffixField) {
     // Add any suffix.
-    index = this.insertFieldAt(index, fieldDropdown.suffixField);
+    index = this.insertFieldAt(index, field.suffixField);
   }
 
   if (this.sourceBlock_.rendered) {

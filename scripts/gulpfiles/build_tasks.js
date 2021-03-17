@@ -447,6 +447,7 @@ function buildLangfiles(done) {
 function buildAdvancedCompilationTest() {
   const srcs = [
     'tests/compile/main.js',
+    'tests/compile/test_blocks.js',
     'core/**/**/*.js',
     'blocks/*.js',
     'generators/**/*.js'];

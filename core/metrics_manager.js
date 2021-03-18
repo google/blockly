@@ -283,7 +283,7 @@ Blockly.MetricsManager.prototype.hasFixedEdges = function() {
  * @param {!Blockly.MetricsManager.ContainerRegion=} opt_viewMetrics The view
  *     metrics if they have been previously computed. Passing in null may cause
  *     the view metrics to be computed again, if it is needed.
- * @return {Blockly.MetricsManager.FixedEdges} The fixed edges of the scroll
+ * @return {!Blockly.MetricsManager.FixedEdges} The fixed edges of the scroll
  *     area.
  * @protected
  */

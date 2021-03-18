@@ -611,9 +611,10 @@ suite('Events', function() {
     ];
     var workspaceCommentEventTestCases = [
       {title: 'Comment change', class: Blockly.Events.CommentChange,
-        getArgs: (thisObj) => [thisObj.comment, '', 'words'],
+        getArgs: (thisObj) => [thisObj.comment, 'bar', 'foo'],
         getExpectedJson: (thisObj) => ({type: 'comment_change',
-          commentId: thisObj.comment.id, newContents: 'words'})},
+          commentId: thisObj.comment.id, oldContents: 'bar',
+          newContents: 'foo'})},
       {title: 'Comment create', class: Blockly.Events.CommentCreate,
         getArgs: (thisObj) => [thisObj.comment],
         getExpectedJson: (thisObj) => ({type: 'comment_create',

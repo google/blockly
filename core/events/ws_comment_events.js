@@ -126,6 +126,7 @@ Blockly.Events.CommentChange.prototype.type = Blockly.Events.COMMENT_CHANGE;
  */
 Blockly.Events.CommentChange.prototype.toJson = function() {
   var json = Blockly.Events.CommentChange.superClass_.toJson.call(this);
+  json['oldContents'] = this.oldContents_;
   json['newContents'] = this.newContents_;
   return json;
 };
@@ -136,6 +137,7 @@ Blockly.Events.CommentChange.prototype.toJson = function() {
  */
 Blockly.Events.CommentChange.prototype.fromJson = function(json) {
   Blockly.Events.CommentChange.superClass_.fromJson.call(this, json);
+  this.oldContents_ = json['oldContents'];
   this.newContents_ = json['newContents'];
 };
 
@@ -359,6 +361,10 @@ Blockly.Events.CommentMove.prototype.setOldCoordinate = function(xy) {
 Blockly.Events.CommentMove.prototype.toJson = function() {
   var json = Blockly.Events.CommentMove.superClass_.toJson.call(this);
   if (this.newCoordinate_) {
+    json['oldCoordinate'] = Math.round(this.oldCoordinate_.x) + ',' +
+        Math.round(this.oldCoordinate_.y);
+  }
+  if (this.newCoordinate_) {
     json['newCoordinate'] = Math.round(this.newCoordinate_.x) + ',' +
         Math.round(this.newCoordinate_.y);
   }
@@ -372,6 +378,11 @@ Blockly.Events.CommentMove.prototype.toJson = function() {
 Blockly.Events.CommentMove.prototype.fromJson = function(json) {
   Blockly.Events.CommentMove.superClass_.fromJson.call(this, json);
 
+  if (json['oldCoordinate']) {
+    var xy = json['oldCoordinate'].split(',');
+    this.oldCoordinate_ =
+        new Blockly.utils.Coordinate(Number(xy[0]), Number(xy[1]));
+  }
   if (json['newCoordinate']) {
     var xy = json['newCoordinate'].split(',');
     this.newCoordinate_ =

@@ -27,7 +27,6 @@ goog.require('Blockly.WidgetDiv');
 
 goog.requireType('Blockly.Options');
 goog.requireType('Blockly.utils.Coordinate');
-goog.requireType('Blockly.utils.Metrics');
 
 
 /**
@@ -49,70 +48,6 @@ Blockly.utils.object.inherits(Blockly.VerticalFlyout, Blockly.Flyout);
 Blockly.VerticalFlyout.registryName = 'verticalFlyout';
 
 /**
- * Return an object with all the metrics required to size scrollbars for the
- * flyout.  The following properties are computed:
- * .viewHeight: Height of the visible rectangle,
- * .viewWidth: Width of the visible rectangle,
- * .contentHeight: Height of the contents,
- * .contentWidth: Width of the contents,
- * .viewTop: Offset of top edge of visible rectangle from parent,
- * .contentTop: Offset of the top-most content from the y=0 coordinate,
- * .scrollTop: Offset of the scroll area top from the y=0 coordinate,
- * .absoluteTop: Top-edge of view.
- * .viewLeft: Offset of the left edge of visible rectangle from parent,
- * .contentLeft: Offset of the left-most content from the x=0 coordinate,
- * .scrollLeft:  Offset of the scroll area left from the x=0 coordinate,
- * .absoluteLeft: Left-edge of view.
- * @return {Blockly.utils.Metrics} Contains size and position metrics of the
- *     flyout.
- * @protected
- */
-Blockly.VerticalFlyout.prototype.getMetrics_ = function() {
-  if (!this.isVisible()) {
-    // Flyout is hidden.
-    return null;
-  }
-
-  try {
-    var optionBox = this.workspace_.getCanvas().getBBox();
-  } catch (e) {
-    // Firefox has trouble with hidden elements (Bug 528969).
-    var optionBox = {height: 0, y: 0, width: 0, x: 0};
-  }
-
-  // Padding for the end of the scrollbar.
-  var absoluteTop = this.SCROLLBAR_PADDING;
-  var absoluteLeft = 0;
-
-  var viewHeight = this.height_ - 2 * this.SCROLLBAR_PADDING;
-  var viewWidth = this.width_;
-  if (!this.RTL) {
-    viewWidth -= this.SCROLLBAR_PADDING;
-  }
-
-  var metrics = {
-    contentHeight: optionBox.height * this.workspace_.scale,
-    contentWidth: optionBox.width * this.workspace_.scale,
-    contentTop: optionBox.y,
-    contentLeft: optionBox.x,
-
-    scrollHeight: (optionBox.height + 2 * this.MARGIN) * this.workspace_.scale,
-    scrollWidth: (optionBox.width + 2 * this.MARGIN) * this.workspace_.scale,
-    scrollTop: optionBox.y - this.MARGIN,
-    scrollLeft: optionBox.x - this.MARGIN,
-
-    viewHeight: viewHeight,
-    viewWidth: viewWidth,
-    viewTop: -this.workspace_.scrollY,
-    viewLeft: -this.workspace_.scrollX,
-
-    absoluteTop: absoluteTop,
-    absoluteLeft: absoluteLeft
-  };
-  return metrics;
-};
-
-/**
  * Sets the translation of the flyout to match the scrollbars.
  * @param {!{x:number,y:number}} xyRatio Contains a y property which is a float
  *     between 0 and 1 specifying the degree of scrolling and a
@@ -120,18 +55,21 @@ Blockly.VerticalFlyout.prototype.getMetrics_ = function() {
  * @protected
  */
 Blockly.VerticalFlyout.prototype.setMetrics_ = function(xyRatio) {
-  var metrics = this.getMetrics_();
-  // This is a fix to an apparent race condition.
-  if (!metrics) {
+  if (!this.isVisible()) {
     return;
   }
+  var metricsManager = this.workspace_.getMetricsManager();
+  var scrollMetrics = metricsManager.getScrollMetrics();
+  var viewMetrics = metricsManager.getViewMetrics();
+  var absoluteMetrics = metricsManager.getAbsoluteMetrics();
+
   if (typeof xyRatio.y == 'number') {
     this.workspace_.scrollY =
-        -(metrics.scrollTop +
-            (metrics.scrollHeight - metrics.viewHeight) * xyRatio.y);
+        -(scrollMetrics.top +
+            (scrollMetrics.height - viewMetrics.height) * xyRatio.y);
   }
-  this.workspace_.translate(this.workspace_.scrollX + metrics.absoluteLeft,
-      this.workspace_.scrollY + metrics.absoluteTop);
+  this.workspace_.translate(this.workspace_.scrollX + absoluteMetrics.left,
+      this.workspace_.scrollY + absoluteMetrics.top);
 };
 
 /**
@@ -139,22 +77,23 @@ Blockly.VerticalFlyout.prototype.setMetrics_ = function(xyRatio) {
  * @return {number} X coordinate.
  */
 Blockly.VerticalFlyout.prototype.getX = function() {
-  var targetWorkspaceMetrics = this.targetWorkspace.getMetrics();
-  if (!targetWorkspaceMetrics) {
-    // Hidden components will return null.
+  if (!this.isVisible()) {
     return 0;
   }
-
+  var metricsManager = this.targetWorkspace.getMetricsManager();
+  var absoluteMetrics = metricsManager.getAbsoluteMetrics();
+  var viewMetrics = metricsManager.getViewMetrics();
+  var toolboxMetrics = metricsManager.getToolboxMetrics();
   var x = 0;
 
   // If this flyout is not the trashcan flyout (e.g. toolbox or mutator).
   if (this.targetWorkspace.toolboxPosition == this.toolboxPosition_) {
     // If there is a category toolbox.
-    if (targetWorkspaceMetrics.toolboxWidth) {
+    if (this.targetWorkspace.getToolbox()) {
       if (this.toolboxPosition_ == Blockly.utils.toolbox.Position.LEFT) {
-        x = targetWorkspaceMetrics.toolboxWidth;
+        x = toolboxMetrics.width;
       } else {
-        x = targetWorkspaceMetrics.viewWidth - this.width_;
+        x = viewMetrics.width - this.width_;
       }
       // Simple (flyout-only) toolbox.
     } else {
@@ -162,7 +101,7 @@ Blockly.VerticalFlyout.prototype.getX = function() {
         x = 0;
       } else {
         // The simple flyout does not cover the workspace.
-        x = targetWorkspaceMetrics.viewWidth;
+        x = viewMetrics.width;
       }
     }
     // Trashcan flyout is opposite the main flyout.
@@ -174,8 +113,7 @@ Blockly.VerticalFlyout.prototype.getX = function() {
       // to align the right edge of the flyout with the right edge of the
       // blocklyDiv, we calculate the full width of the div minus the width
       // of the flyout.
-      x = targetWorkspaceMetrics.viewWidth +
-          targetWorkspaceMetrics.absoluteLeft - this.width_;
+      x = viewMetrics.width + absoluteMetrics.left - this.width_;
     }
   }
 
@@ -201,7 +139,7 @@ Blockly.VerticalFlyout.prototype.position = function() {
   var metricsManager = this.targetWorkspace.getMetricsManager();
   var targetWorkspaceViewMetrics = metricsManager.getViewMetrics();
 
-  // Record the height for Blockly.Flyout.getMetrics_
+  // Record the height for workspace metrics.
   this.height_ = targetWorkspaceViewMetrics.height;
 
   var edgeWidth = this.width_ - this.CORNER_RADIUS;
@@ -264,8 +202,11 @@ Blockly.VerticalFlyout.prototype.wheel_ = function(e) {
   var scrollDelta = Blockly.utils.getScrollDeltaPixels(e);
 
   if (scrollDelta.y) {
-    var metrics = this.getMetrics_();
-    var pos = (metrics.viewTop - metrics.scrollTop) + scrollDelta.y;
+    var metricsManager = this.workspace_.getMetricsManager();
+    var scrollMetrics = metricsManager.getScrollMetrics();
+    var viewMetrics = metricsManager.getViewMetrics();
+    var pos = (viewMetrics.top - scrollMetrics.top) + scrollDelta.y;
+
     this.workspace_.scrollbar.setY(pos);
     // When the flyout moves from a wheel event, hide WidgetDiv and DropDownDiv.
     Blockly.WidgetDiv.hide();
@@ -426,7 +367,7 @@ Blockly.VerticalFlyout.prototype.reflowInternal_ = function() {
           this.targetWorkspace.scrollX + flyoutWidth, this.targetWorkspace.scrollY);
     }
 
-    // Record the width for .getMetrics_ and .position.
+    // Record the width for workspace metrics and .position.
     this.width_ = flyoutWidth;
     this.position();
   }

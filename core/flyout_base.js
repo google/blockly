@@ -21,6 +21,7 @@ goog.require('Blockly.Events');
 goog.require('Blockly.Events.BlockCreate');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Events.VarCreate');
+goog.require('Blockly.FlyoutMetricsManager');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Gesture');
 goog.require('Blockly.ScrollbarPair');
@@ -41,7 +42,6 @@ goog.requireType('Blockly.FlyoutButton');
 goog.requireType('Blockly.IDeleteArea');
 goog.requireType('Blockly.IFlyout');
 goog.requireType('Blockly.Options');
-goog.requireType('Blockly.utils.Metrics');
 goog.requireType('Blockly.utils.Rect');
 
 
@@ -55,9 +55,6 @@ goog.requireType('Blockly.utils.Rect');
  * @implements {Blockly.IFlyout}
  */
 Blockly.Flyout = function(workspaceOptions) {
-  workspaceOptions.getMetrics =
-    /** @type {function():!Blockly.utils.Metrics} */ (
-      this.getMetrics_.bind(this));
   workspaceOptions.setMetrics = this.setMetrics_.bind(this);
 
   /**
@@ -65,6 +62,9 @@ Blockly.Flyout = function(workspaceOptions) {
    * @protected
    */
   this.workspace_ = new Blockly.WorkspaceSvg(workspaceOptions);
+  this.workspace_.setMetricsManager(
+      new Blockly.FlyoutMetricsManager(this.workspace_, this));
+
   this.workspace_.isFlyout = true;
   // Keep the workspace visibility consistent with the flyout's visibility.
   this.workspace_.setVisible(this.isVisible_);
@@ -425,6 +425,8 @@ Blockly.Flyout.prototype.updateDisplay_ = function() {
 Blockly.Flyout.prototype.positionAt_ = function(width, height, x, y) {
   this.svgGroup_.setAttribute("width", width);
   this.svgGroup_.setAttribute("height", height);
+  this.workspace_.setCachedParentSvgSize(width, height);
+
   if (this.svgGroup_.tagName == 'svg') {
     var transform = 'translate(' + x + 'px,' + y + 'px)';
     Blockly.utils.dom.setCssTransform(this.svgGroup_, transform);
@@ -441,6 +443,17 @@ Blockly.Flyout.prototype.positionAt_ = function(width, height, x, y) {
     // Set the scrollbars origin to be the top left of the flyout.
     scrollbar.setOrigin(x, y);
     scrollbar.resize();
+    // If origin changed and metrics haven't changed enough to trigger
+    // reposition in resize, we need to call setPosition. See issue #4692.
+    if (scrollbar.hScroll) {
+      scrollbar.hScroll.setPosition(
+          scrollbar.hScroll.position.x, scrollbar.hScroll.position.y);
+    }
+    if (scrollbar.vScroll) {
+      scrollbar.vScroll.setPosition(
+          scrollbar.vScroll.position.x, scrollbar.vScroll.position.y);
+
+    }
   }
 };
 
@@ -1026,15 +1039,6 @@ Blockly.Flyout.prototype.position;
  * @package
  */
 Blockly.Flyout.prototype.isDragTowardWorkspace;
-
-/**
- * Return an object with all the metrics required to size scrollbars for the
- * flyout.
- * @return {Blockly.utils.Metrics} Contains size and position metrics of the
- *     flyout.
- * @protected
- */
-Blockly.Flyout.prototype.getMetrics_;
 
 /**
  * Sets the translation of the flyout to match the scrollbars.

@@ -19,8 +19,8 @@ goog.requireType('Blockly.Events.Abstract');
 goog.requireType('Blockly.Field');
 goog.requireType('Blockly.IConnectionChecker');
 goog.requireType('Blockly.IFlyout');
+goog.requireType('Blockly.IMetricsManager');
 goog.requireType('Blockly.IToolbox');
-goog.requireType('Blockly.MetricsManager');
 goog.requireType('Blockly.Options');
 goog.requireType('Blockly.Theme');
 goog.requireType('Blockly.ToolboxItem');
@@ -97,7 +97,7 @@ Blockly.registry.Type.FLYOUTS_VERTICAL_TOOLBOX =
 Blockly.registry.Type.FLYOUTS_HORIZONTAL_TOOLBOX =
     new Blockly.registry.Type('flyoutsHorizontalToolbox');
 
-/** @type {!Blockly.registry.Type<Blockly.MetricsManager>} */
+/** @type {!Blockly.registry.Type<Blockly.IMetricsManager>} */
 Blockly.registry.Type.METRICS_MANAGER =
     new Blockly.registry.Type('metricsManager');
 

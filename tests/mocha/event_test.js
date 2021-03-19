@@ -628,7 +628,7 @@ suite('Events', function() {
       {title: 'Comment move', class: Blockly.Events.CommentMove,
         getArgs: (thisObj) => [thisObj.comment],
         getExpectedJson: (thisObj) => ({type: 'comment_move',
-          commentId: thisObj.comment.id})},
+          commentId: thisObj.comment.id, oldCoordinate: '0,0'})},
     ];
     var testSuites = [
       {title: 'Variable events', testCases: variableEventTestCases,

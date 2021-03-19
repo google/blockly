@@ -217,7 +217,7 @@ Blockly.ZoomControls.prototype.getBoundingRectangle = function() {
  * It is positioned in the opposite corner to the corner the
  * categories/toolbox starts at.
  * @param {!Blockly.MetricsManager.UiMetrics} metrics The workspace metrics.
- * @param {!Array<Blockly.utils.Rect>} savedPositions List of rectangles that
+ * @param {!Array<!Blockly.utils.Rect>} savedPositions List of rectangles that
  *     are already on the workspace.
  */
 Blockly.ZoomControls.prototype.position = function(metrics, savedPositions) {

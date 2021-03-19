@@ -65,7 +65,7 @@ suite('Dropdown Fields', function() {
 
   /**
    * Asserts that the field properties are correct based on the test case.
-   * @param {!Blockly.FieldNumber} field The field to check.
+   * @param {!Blockly.FieldDropdown} field The field to check.
    * @param {!FieldValueTestCase} testCase The test case.
    */
   var validTestCaseAssertField = function(field, testCase) {

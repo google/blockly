@@ -360,7 +360,7 @@ Blockly.Events.CommentMove.prototype.setOldCoordinate = function(xy) {
 // TODO (#1266): "Full" and "minimal" serialization.
 Blockly.Events.CommentMove.prototype.toJson = function() {
   var json = Blockly.Events.CommentMove.superClass_.toJson.call(this);
-  if (this.newCoordinate_) {
+  if (this.oldCoordinate_) {
     json['oldCoordinate'] = Math.round(this.oldCoordinate_.x) + ',' +
         Math.round(this.oldCoordinate_.y);
   }

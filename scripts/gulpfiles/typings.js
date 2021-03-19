@@ -24,6 +24,14 @@ var execSync = require('child_process').execSync;
 // including Blockly Options and Google Closure typings.
 function typings() {
   const tmpDir = './typings/tmp';
+  const excludeDirs = [
+    "core/renderers/geras",
+    "core/renderers/minimalist",
+    "core/renderers/thrasos",
+    "core/renderers/zelos"
+  ];
+  // blocklySrcs should include everything under msg and core (except excludes)
+  // TODO generate blockySrcs
   const blocklySrcs = [
     "core/",
     "core/events",

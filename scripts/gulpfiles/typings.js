@@ -19,19 +19,18 @@ var execSync = require('child_process').execSync;
 
 /**
  * Recursively generates a list of file paths with the specified extension
- * contained within the specified startPath.
- * @param {string} startPath The base path to use.
+ * contained within the specified basePath.
+ * @param {string} basePath The base path to use.
  * @param {string} filter The extension name to filter for.
  * @param {Array<string>} excludePaths The paths to exclude from search.
  * @return {Array<string>} The generated file paths.
  */
-function getFilePath(startPath, filter, excludePaths) {
+function getFilePath(basePath, filter, excludePaths) {
   const files = [];
-  const dirContents = fs.readdirSync(startPath);
+  const dirContents = fs.readdirSync(basePath);
   dirContents.forEach((fn) => {
-    const filePath = path.join(startPath, fn);
+    const filePath = path.join(basePath, fn);
     const excluded =
-        !excludePaths.every((exPath) => !filePath.startsWith(exPath));
         !excludePaths.every((exPath) => !filePath.startsWith(exPath));
     if (excluded) {
       return;
@@ -72,8 +71,8 @@ function typings() {
   ]
   // Find all files that will be included in the typings file.
   let files = [];
-  blocklySrcs.forEach((startPath) => {
-    files.push(...getFilePath(startPath, '.js', excludePaths));
+  blocklySrcs.forEach((basePath) => {
+    files.push(...getFilePath(basePath, '.js', excludePaths));
   });
 
   // Generate typings file for each file.

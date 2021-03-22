@@ -12,7 +12,6 @@
 
 goog.provide('Blockly.InsertionMarkerManager');
 
-// goog.require('Blockly.Block');
 goog.require('Blockly.blockAnimations');
 goog.require('Blockly.connectionTypes');
 /** @suppress {extraRequire} */
@@ -276,7 +275,7 @@ Blockly.InsertionMarkerManager.prototype.createMarkerBlock_ = function(sourceBlo
     // child blocks here.
     for (var i = 0; i < sourceBlock.inputList.length; i++) {
       var sourceInput = sourceBlock.inputList[i];
-      if (sourceInput.name == Blockly.Block.COLLAPSED_INPUT_NAME) {
+      if (sourceInput.name == Blockly.constants.COLLAPSED_INPUT_NAME) {
         continue;  // Ignore the collapsed input.
       }
       var resultInput = result.inputList[i];

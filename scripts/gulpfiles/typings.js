@@ -17,6 +17,35 @@ var fs = require('fs');
 var rimraf = require('rimraf');
 var execSync = require('child_process').execSync;
 
+/**
+ * Recursively generates a list of file paths with the specified extension
+ * contained within the specified startPath.
+ * @param {string} startPath The base path to use.
+ * @param {string} filter The extension name to filter for.
+ * @param {Array<string>} excludePaths The paths to exclude from search.
+ * @return {Array<string>} The generated file paths.
+ */
+function getFilePath(startPath, filter, excludePaths) {
+  const files = [];
+  const dirContents = fs.readdirSync(startPath);
+  dirContents.forEach((fn) => {
+    const filePath = path.join(startPath, fn);
+    const excluded =
+        !excludePaths.every((exPath) => !filePath.startsWith(exPath));
+        !excludePaths.every((exPath) => !filePath.startsWith(exPath));
+    if (excluded) {
+      return;
+    }
+    const stat = fs.lstatSync(filePath);
+    if (stat.isDirectory()) {
+      files.push(...getFilePath(filePath, filter, excludePaths));
+    } else if (filePath.endsWith(filter)) {
+      files.push(filePath);
+    }
+  });
+  return files;
+}
+
 // Generates the TypeScript definition file (d.ts) for Blockly.
 // As well as generating the typings of each of the files under core/ and msg/,
 // the script also pulls in a number of part files from typings/parts.
@@ -24,38 +53,27 @@ var execSync = require('child_process').execSync;
 // including Blockly Options and Google Closure typings.
 function typings() {
   const tmpDir = './typings/tmp';
-  const excludeDirs = [
-    "core/renderers/geras",
-    "core/renderers/minimalist",
-    "core/renderers/thrasos",
-    "core/renderers/zelos"
-  ];
-  // blocklySrcs should include everything under msg and core (except excludes)
-  // TODO generate blockySrcs
-  const blocklySrcs = [
-    "core/",
-    "core/events",
-    "core/keyboard_nav",
-    "core/renderers/common",
-    "core/renderers/measurables",
-    "core/theme",
-    "core/toolbox",
-    "core/interfaces",
-    "core/utils",
-    "msg/"
-  ];
+
   // Clean directory if exists.
   if (fs.existsSync(tmpDir)) {
     rimraf.sync(tmpDir);
   }
   fs.mkdirSync(tmpDir);
 
+  const excludePaths = [
+    "core/renderers/geras",
+    "core/renderers/minimalist",
+    "core/renderers/thrasos",
+    "core/renderers/zelos",
+  ];
+  const blocklySrcs = [
+      'core',
+      'msg'
+  ]
   // Find all files that will be included in the typings file.
   let files = [];
-  blocklySrcs.forEach((src) => {
-    files = files.concat(fs.readdirSync(src)
-      .filter(fn => fn.endsWith('.js'))
-      .map(fn => path.join(src, fn)));
+  blocklySrcs.forEach((startPath) => {
+    files.push(...getFilePath(startPath, '.js', excludePaths));
   });
 
   // Generate typings file for each file.

@@ -90,15 +90,7 @@ function typings() {
   const srcs = [
     'typings/templates/blockly-header.template',
     'typings/templates/blockly-interfaces.template',
-    `${tmpDir}/core/**`,
-    `${tmpDir}/core/interfaces/**`,
-    `${tmpDir}/core/events/**`,
-    `${tmpDir}/core/keyboard_nav/**`,
-    `${tmpDir}/core/renderers/common/**`,
-    `${tmpDir}/core/renderers/measurables/**`,
-    `${tmpDir}/core/utils/**`,
-    `${tmpDir}/core/toolbox/**`,
-    `${tmpDir}/core/theme/**`,
+    `${tmpDir}/core/**/*`,
     `${tmpDir}/msg/**`
   ];
   return gulp.src(srcs)

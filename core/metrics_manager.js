@@ -544,16 +544,11 @@ Blockly.FlyoutMetricsManager.prototype.getScrollMetrics = function(
   var absoluteMetrics = this.getAbsoluteMetrics();
   var margin = this.flyout_.MARGIN;
   var scale = opt_getWorkspaceCoordinates ? this.workspace_.scale : 1;
-
-  var widthAdjustment = 0;
-  if (contentMetrics.left - margin !== absoluteMetrics.left) {
-    // Blocks without a tab are offset to the right and we need to add to width.
-    widthAdjustment = contentMetrics.left;
-  }
+  var leftPadding = contentMetrics.left - absoluteMetrics.left + margin;
 
   return {
     height: (contentMetrics.height + 2 * margin) / scale,
-    width: (contentMetrics.width + 2 * margin + widthAdjustment) / scale,
+    width: (contentMetrics.width + leftPadding + margin) / scale,
     top: absoluteMetrics.top / scale,
     left: absoluteMetrics.left / scale,
   };

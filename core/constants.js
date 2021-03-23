@@ -224,10 +224,10 @@ Blockly.DELETE_VARIABLE_ID = 'DELETE_VARIABLE_ID';
  * The language-neutral id given to the collapsed input.
  * @const {string}
  */
-Blockly.COLLAPSED_INPUT_NAME = '_TEMP_COLLAPSED_INPUT';
+Blockly.constants.COLLAPSED_INPUT_NAME = '_TEMP_COLLAPSED_INPUT';
 
 /**
  * The language-neutral id given to the collapsed field.
  * @const {string}
  */
-Blockly.COLLAPSED_FIELD_NAME = '_TEMP_COLLAPSED_FIELD';
+Blockly.constants.COLLAPSED_FIELD_NAME = '_TEMP_COLLAPSED_FIELD';

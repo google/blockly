@@ -541,14 +541,15 @@ Blockly.FlyoutMetricsManager.prototype.getContentMetrics = function(
 Blockly.FlyoutMetricsManager.prototype.getScrollMetrics = function(
     opt_getWorkspaceCoordinates, opt_viewMetrics, opt_contentMetrics) {
   var contentMetrics = opt_contentMetrics || this.getContentMetrics();
+  var absoluteMetrics = this.getAbsoluteMetrics();
   var margin = this.flyout_.MARGIN;
   var scale = opt_getWorkspaceCoordinates ? this.workspace_.scale : 1;
 
   return {
     height: (contentMetrics.height + 2 * margin) / scale,
     width: (contentMetrics.width + 2 * margin) / scale,
-    top: contentMetrics.top - margin / scale,
-    left: contentMetrics.left - margin / scale,
+    top: absoluteMetrics.top / scale,
+    left: absoluteMetrics.left / scale,
   };
 };
 

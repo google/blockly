@@ -456,19 +456,15 @@ Blockly.ZoomControls.prototype.resetZoom_ = function(e) {
   // targetScale = currentScale * Math.pow(speed, amount)
   var targetScale = this.workspace_.options.zoomOptions.startScale;
   var currentScale = this.workspace_.scale;
-  if (targetScale !== currentScale) {
-    var speed = this.workspace_.options.zoomOptions.scaleSpeed;
-    // To compute amount:
-    // amount = log(speed, (targetScale / currentScale))
-    // Math.log computes natural logarithm (ln), to change the base, use formula:
-    // log(base, value) = ln(value) / ln(base)
-    var amount = Math.log(targetScale / currentScale) / Math.log(speed);
-    this.workspace_.beginCanvasTransition();
-    this.workspace_.zoomCenter(amount);
-  } else {
-    this.workspace_.beginCanvasTransition();
-    this.workspace_.scrollCenter();
-  }
+  var speed = this.workspace_.options.zoomOptions.scaleSpeed;
+  // To compute amount:
+  // amount = log(speed, (targetScale / currentScale))
+  // Math.log computes natural logarithm (ln), to change the base, use formula:
+  // log(base, value) = ln(value) / ln(base)
+  var amount = Math.log(targetScale / currentScale) / Math.log(speed);
+  this.workspace_.beginCanvasTransition();
+  this.workspace_.zoomCenter(amount);
+  this.workspace_.scrollCenter();
 
   setTimeout(this.workspace_.endCanvasTransition.bind(this.workspace_), 500);
   this.fireZoomEvent_();

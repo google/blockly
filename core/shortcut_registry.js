@@ -49,10 +49,10 @@ Blockly.ShortcutRegistry = function() {
  * @enum {!Blockly.utils.KeyCodes<number>}
  */
 Blockly.ShortcutRegistry.modifierKeys = {
-  Shift: Blockly.utils.KeyCodes.SHIFT,
-  Control: Blockly.utils.KeyCodes.CTRL,
-  Alt: Blockly.utils.KeyCodes.ALT,
-  Meta: Blockly.utils.KeyCodes.META
+  'Shift': Blockly.utils.KeyCodes.SHIFT,
+  'Control': Blockly.utils.KeyCodes.CTRL,
+  'Alt': Blockly.utils.KeyCodes.ALT,
+  'Meta': Blockly.utils.KeyCodes.META
 };
 
 /**
